@@ -1,0 +1,62 @@
+<script>
+fnjs_guardar=function(formulario){
+
+	rr = 'ok';
+	//alert ("EEE "+rr);
+	if (rr=='ok') {
+		$(formulario).attr('action',"{{ url_update|raw }}");
+		$(formulario).one("submit", function() {
+			$.ajax({
+				url: $(this).attr('action'),
+				type: 'post',
+				data: $(this).serialize()
+			})
+			.done(function (rta_txt) {
+				if (rta_txt != '' && rta_txt != '\\n') {
+					alert ('{{ "respuesta"|trans }}: '+rta_txt);
+				} else {
+					{{ oPosicion.js_atras(1)|raw }}
+				}
+			});
+			return false;
+		});
+		$(formulario).trigger("submit");
+		$(formulario).off();
+	}
+}
+</script>
+<div class="card" style="width: 30rem;">
+  <div class="card-header">
+    <h5 class="card-title">{{ "Datos del Tramite"|trans }}</h5>
+  </div>
+  <div class="card-body">
+<div class="row">
+  <div class="col-12">
+      <form class="user" id="frm_tramite"  name="frm_tramite" action="" method="post">
+      {{ oHash.getCamposHtml|raw }}
+        <div class="form-group input-group col-10">
+          <div class="input-group-prepend">
+              <span class="input-group-text">{{ "Tramite"|trans }}</span>
+          </div>
+           <input type="text" class="form-control" id="tramite" name="tramite" placeholder="nombre de la tramite" value="{{ tramite }}">
+        </div>
+        <div class="form-group input-group col-8">
+          <div class="input-group-prepend">
+              <span class="input-group-text">{{ "Abreviatura"|trans }}</span>
+          </div>
+          <input type="text" class="form-control" id="breve" name="breve" placeholder="breve" value="{{ breve }}">
+        </div>
+        <div class="form-group input-group col-4">
+          <div class="input-group-prepend">
+              <span class="input-group-text">{{ "Orden"|trans }}</span>
+          </div>
+          <input type="text" class="form-control" id="orden" name="orden" placeholder="orden" value="{{ orden }}">
+        </div>
+        <div class="form-group input-group col-10">
+          <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary btn-block col-6">{{ "Guardar"|trans }}</button>
+        </div>
+      </form>
+  </div>
+</div>
+</div>
+</div>

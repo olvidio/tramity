@@ -1,0 +1,366 @@
+<!-- load the CSS files in the right order -->
+<link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
+<link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
+
+<!-- load the JS files in the right order -->
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
+
+<!-- Modal -->
+<input type=hidden id='modal_volver' value=0>
+<div class="modal fade" id="ModalFirma" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="d-flex justify-content-start">
+          <h5 class="modal-title" id="exampleModalLongTitle">{{ "Firma"|trans }}</h5>
+		</div>
+        <div class="d-flex justify-content-end">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+		</div>
+      </div>
+      <div class="modal-body">
+          <div class=row">
+          <label>Voto: </label>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            {% for row in a_firmas %}
+              <label class="btn btn-outline-secondary" >
+   				<input type="radio" name="voto_options" value="{{ row.id }}" autocomplete="off" > {{ row.valor }}
+   			  </label>
+            {% endfor %}
+          </div>
+          </div>
+          <label for="comentario" class="col-7 col-form-label">{{ "Comentario"|trans }}</label>
+          <textarea tabindex='50' rows="5" class="form-control" name='comentario' id="comentario">{{ comentario }}</textarea>
+      </div>
+      <div class="modal-footer">
+        <div class="d-flex justify-content-start">
+          <button type="button" class="btn btn-outline-info" data-dismiss="modal" onClick="fnjs_voto(event,'aclaracion_new');" >Pedir Aclaración</button>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fnjs_voto(event,'voto');" >Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form id ="form_expediente" >
+    <input type=hidden name='que' id='que' value=0>
+    <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
+    <input type=hidden name='ponente' id='ponente' value={{ id_ponente }} >
+    
+<div class="clearfix">
+	<div class="d-inline-flex float-left">
+        <div class="p-2 bg-warning text-dark font-weight-bold" >
+        {{ ponente_txt }}
+        </div>
+        <div class="p-2 bg-info" >
+        {{ tramite_txt }}
+        </div>
+        <div class="p-2 bg-warning" >
+        {{ estado_txt }}
+        </div>
+        <!--  --------------- OFICINAS --------------- -->
+        <div class="p-2 bg-white" >
+          {{ "Oficinas"|trans }}: {{ oArrayDesplFirmas.Lista|raw }}
+        </div>
+  
+    </div>
+	<div class="d-inline-flex float-right">
+        <div class="p-2 bg-warning" >
+    	{{ prioridad_txt }}
+    	</div>
+    </div>
+</div>
+<!-- Fechas -->
+<div class="clearfix">
+	<div class="d-inline-flex float-left">
+        <div class="p-2" >
+            {{ "Inicio"|trans }}: {{ f_ini_circulacion }}
+        </div>
+        <div class="p-2" >
+            {{ "reunión"|trans }}: {{ f_reunion }}
+        </div>
+        <div class="p-2" >
+            {{ "aprobación"|trans }}: {{ f_aprobacion }}
+        </div>
+    </div>
+	<div class="d-inline-flex float-right">
+        <div class="p-2 bg-warning" >
+        	{{ "contestar"|trans }}: {{ f_contestar }}
+    	</div>
+    </div>
+</div>
+
+<!--  --------------- ASUNTO --------------- -->
+<div class="row">
+	<div class="col-1">
+  	{{ "Asunto"|trans }}:
+  	</div>
+    <div class="col-11 alert alert-primary">
+      {{ asunto }}
+    </div>
+</div>
+
+
+
+<div class="row" >
+<!--  Col Izda -->
+<div class="col-8" >
+  <!--  --------------- ENTRADILLA --------------- -->
+  <div class="alert alert-primary">
+    {{ entradilla }}
+  </div>
+  <!--  --------------- COMENTARIOS --------------- -->
+  <div class="alert bg-light">
+    {{ comentarios|raw }}
+  </div>
+  
+<!--  --------------- ACCIONES --------------- -->
+{{ oEscritoLista.mostrarTabla()|raw }}
+</div>
+<!-- Fin Col Izda -->
+<!--  Col Dcha -->
+<div class="col-4" >
+<!--  --------------------  ANTECEDENTES  --------------------------  -->
+{# lista de antecedentes #}
+<div class="form-group col-md-12">
+  <label>{{ "Antecedentes"|trans }}:</label>
+</div>
+<hr>
+<div id="lista_antecedentes">
+{{ lista_antecedentes|raw }}
+</div>
+<div class="d-flex justify-content-center">
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#ModalFirma">
+  {{ "Firmar"|trans }}
+</button>
+<button type="button" class="btn btn-outline-secondary" onClick="fnjs_ver_cargos(event);" >{{ "Añadir firmas"|trans }}</button>
+</div>
+<div id="of" class="d-flex row round m-3 border rounded">
+</div>
+
+<!--  --------------------  RECORRIDO  --------------------------  -->
+<div class="form-group col-md-12">
+<label>{{ "Recorrido"|trans }}:</label>
+<ol id="lst_recorrido" class="list-group">
+  {% for row in a_recorrido %}
+	<li class="list-group-item {{ row.class }}">{{ row.valor }}</li>
+  {% endfor %}
+</ol>
+</div>
+
+
+<!-- Fin Col Dcha -->
+</div>
+<!-- Fin row -->
+
+  <!--  --------------------  BOTONES --------------------------  -->
+  <button id='btn_volver' tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+    {{ "Volver"|trans }}
+  </button>
+</form>
+
+{{ include ('_antecedentes_js.html.twig') }}
+<script type="text/javascript">
+fnjs_ver_cargos=function(event) {
+	// consultar que oficinas no estan en el recorrido
+	var id_expediente=$('#id_expediente').val();
+    var url_ajax = 'apps/tramites/controller/firma_ajax.php';
+    var param_json = { que: 'lst_cargos_libres', id_expediente: id_expediente };
+    request=$.ajax({
+        data: param_json,
+        url: url_ajax,
+        type: 'post'
+    });
+    request.done( function (json) {
+        if (json.success != true) {
+            alert (json.error_txt);
+        } else {
+            // You can create an Array from this like so:
+            var theArray = JSON.parse(json.cargos);
+            html='';
+			$.each(theArray, function(id, obj){
+				html+='<div class="custom-control custom-checkbox custom-control-inline">';
+            	html+='<input type="checkbox" class="custom-control-input" id="'+obj.id+'" >';
+            	html+='<label class="custom-control-label" for="'+obj.id+'">'+obj.sigla+'</label>';
+            	html+='</div>';
+			});
+			html+='<button class="ml-auto btn btn-secondary btn-sm" onClick="fnjs_add_cargos(event);" >';
+    		html+='{{ "ok"|trans }}';
+            html+='</button>';
+          	$("#of").html(html);
+        }
+    });
+		
+}
+
+fnjs_add_cargos=function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+	var selected = [];
+	$('#of input:checked').each(function() {
+	    selected.push($(this).attr('id'));
+	});
+	if (selected) {
+		var id_expediente=$('#id_expediente').val();
+		var url_ajax = 'apps/tramites/controller/firma_ajax.php';
+		var param_json = { que: 'add', id_expediente: id_expediente, a_cargos: selected };
+	    request=$.ajax({
+	        data: param_json,
+	        url: url_ajax,
+	        type: 'post'
+	    });
+	    request.done( function (json) {
+            if (json.success != true) {
+                alert (json.error_txt);
+            } else {
+                //cambiar recorrido.
+				fnjs_recorrido();
+	          	$("#of").html('');
+            }
+	    });
+	}
+    
+}
+
+fnjs_recorrido=function() {
+		var id_expediente=$('#id_expediente').val();
+		var url_ajax = 'apps/tramites/controller/firma_ajax.php';
+		var param_json = { que: 'recorrido', id_expediente: id_expediente };
+	    request=$.ajax({
+	        data: param_json,
+	        url: url_ajax,
+	        type: 'post'
+	    });
+	    request.done( function (json) {
+            if (json.success != true) {
+                alert (json.error_txt);
+            } else {
+	            var a_recorrido = JSON.parse(json.recorrido);
+	            html='';
+                for (row of a_recorrido) {
+                	html+='<li class="list-group-item '+row.class+' }}">'+row.valor+'</li>';
+	    		}
+                $("#lst_recorrido").html(html);
+            }
+	    });
+}
+  
+fnjs_voto=function(event,que) {
+	var err=0;
+	var comentario=$('#comentario').val();
+	var id_expediente=$('#id_expediente').val();
+    var url_ajax = 'apps/tramites/controller/firma_ajax.php';
+
+	if (que=='voto') {
+		if (!comentario) { comentario=''; }
+		var voto=$("input[name='voto_options']:checked").val();
+		if (!voto) { alert("{{ "Debe seleccionar un voto"|trans }}"); err=1; }
+    }
+	if (que=='aclaracion_new') {
+		var voto='';
+		if (!comentario) { alert("{{ "Debe llenar el campo de comentario"|trans }}"); err=1; }
+	}
+	if (err!=1) {
+		var param_json = { que: que, id_expediente: id_expediente, comentario: comentario, voto: voto };
+	    request=$.ajax({
+	        data: param_json,
+	        url: url_ajax,
+	        type: 'post'
+	    });
+	    request.done( function (json) {
+            if (json.success != true) {
+                alert (json.error_txt);
+            } else {
+                $('#modal_volver').val(1);
+            }
+	    });
+	}
+}
+
+/**
+ * Si se pone dentro de la función fnjs_voto, no acaba de cerrar bien el modal:
+ * no quita la sombra. Hay que hacerlo así para que primero acabe con el modal,
+ * y luego vuelva a la pagina que queremos.    	  
+ */
+$('#ModalFirma').on('hidden.bs.modal', function (e) {
+	var volver=$('#modal_volver').val();
+	if (volver==1) {
+		fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+	}
+});
+	
+fnjs_cancelar=function(event) {
+	// Asegurarme que es por click y no por return (posicion: 0,0)
+	var x = event.x || event.clientX;
+    var y = event.y || event.clientY;
+    if (!x && !y) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    	return false;
+    }
+    event.preventDefault(); //prevent default action 	
+	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+}
+
+/* ya está en _antecedentes_js.html.twig
+fnjs_ver_escrito=function(id_escrito) {
+    var ssfsv = 'sv';
+    var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+    var server = 'http://tramity.local'
+    var url = server+'/apps/expedientes/controller/escrito_ver.php?id_escrito='+id_escrito;
+    w=window.open(url, "sele", winPrefs);
+    w.focus();
+}
+*/
+
+fnjs_revisar_escrito=function(event,id_escrito) {
+    var winPrefs="dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+    //var server = 'http://127.0.0.1:8080'
+    //var url = server+'/p/'+id_entrada;
+    // get url
+    var url; 
+    var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
+    var param_json = { tipo_id: 'escrito', id: id_escrito };
+    
+    request=$.ajax({
+        data: param_json,
+        url: url_ajax,
+        type: 'post'
+    });
+
+    request.done( function (rta) {
+        // antes, dentro del ajax, hacia falta el responseText
+        //url=rta.responseText;
+        url=rta;
+        w=window.open(url, "sele", winPrefs);
+        w.focus();
+    });
+	request.fail(function(JqXHR, textStatus, errorThrown){
+		alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+        console.error("Hi ha un error: "+ textStatus, errorThrown);
+    });
+    
+    /*
+    request.always(function(){
+        alert("JEJE");
+        debugger;
+    });
+    */
+
+    event.preventDefault();
+	event.stopPropagation();
+	event.stopImmediatePropagation();
+	return false;
+}
+
+$(document).ready(function() {
+	tabs_hide();
+});

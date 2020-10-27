@@ -1,0 +1,27 @@
+<table class="table table-sm table-bordered">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">{{ ver_todo|raw }}</th>
+      <th scope="col">prot. local</th>
+      <th scope="col">destino</th>
+      <th scope="col">ref.</th>
+      <th scope="col">asunto</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in a_acciones %}
+    <tr>
+      <th scope="row">{{ row.link_ver|raw }}</th>
+      <td>{{ row.prot_local|raw }}</td>
+      <td>{{ row.protocolo|raw }}</td>
+      <td>{{ row.ref|raw }}</td>
+      <td>{{ row.asunto|raw }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<script type="text/javascript">
+$(document).ready(function() {
+	tabs_show('{{ vista }}','{{ filtro }}');
+});
+</script>

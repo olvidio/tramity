@@ -1,0 +1,169 @@
+<div class="d-flex flex-row justify-content-between">
+  <div class="p-2">
+    {{ sigla }}
+  </div>
+  <div class="p-2">
+    <h3>{{ "entradas"|trans }}</h3>
+  </div>
+  <div class="p-2 text-right">
+    {{ oProtOrigen.ver_txt|raw }}
+    {{ oArrayProtRef.ListaTxt|raw }}
+  </div>
+</div>
+<!--  --------------- ASUNTO --------------- -->
+<div class="col-11 alert alert-primary">
+  <label for="asunto_e" class="col-form-label">{{ "Asunto entrada"|trans }}:</label>
+    {{ asunto_e }}
+</div>
+
+<div class="d-flex flex-row justify-content-between">
+  <div class="p-2">
+    {{ "Fecha documento"|trans }}: {{ f_escrito }}
+  </div>
+  <div class="text-right row">
+      <input id="read" type="checkbox" {{ chk_leido }} data-toggle="toggle" data-on="{{ "Leído"|trans }}" 
+  	    data-off="{{ "No Leído"|trans }}" data-onstyle="success" data-offstyle="danger" />
+    <div class='col-6 date datepicker' data-provide="datepicker">
+      <input name='f_entrada' id='f_entrada' type='text' class="form-control" value="{{ f_entrada }}" />
+      <div id="f_entrada_txt"></div>
+  	</div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-3">
+  </div>
+</div>
+  
+<!--  --------------------  ESCRITO  --------------------------  -->
+<div class="row">
+<i id="prev" class="align-self-center fa fa-chevron-left fa-5x" aria-hidden="true" onclick="fnjs_prev()"></i>
+<div id="txt" class="border rounded overflow-auto" style="width: 90%; height:500px;">
+</div>
+<i id="next" class="align-self-center fa fa-chevron-right fa-5x" aria-hidden="true" onclick="fnjs_next()"></i>
+</div>
+
+<hr>
+<!--  --------------------  ADJUNTOS  --------------------------  -->
+<div class="form-group col-md-12">
+    <label for="input-adjunto">{{ "Adjuntos"|trans }}:</label>
+{% for item,nom in a_adjuntos %}
+	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_download({{ item }})">{{ nom }}</button>
+{% endfor %}
+</div>
+
+<script>
+fnjs_prev=function() {
+	fnjs_update_div('#main','{{ pagina_prev|raw }}');
+}
+
+fnjs_next=function() {
+	fnjs_update_div('#main','{{ pagina_next|raw }}');
+}
+
+$(function() {
+	$( "#f_entrada" ).datepicker( {
+		numberOfMonths: 1,
+		showButtonPanel: true
+		});
+
+});
+
+$(function(event) {
+  $('#read').change(function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+      
+	var ok=$(this).prop('checked')
+	var f_entrada =	$("#f_entrada").val();
+	if (ok) {
+	  if (!f_entrada) {
+	    // poner el dia de hoy:
+	    obj_f_entrada = new Date();
+	    f_entrada_txt=obj_f_entrada.toLocaleDateString('es-ES');
+	  } else {
+		f_entrada_txt = f_entrada;
+	  }
+	  $("#f_entrada").hide();
+	  $("#f_entrada_txt").html(f_entrada_txt);
+	} else {
+	  $("#f_entrada_txt").html('');
+	  $("#f_entrada").show();
+	}
+	alert("per desar");
+	//fnjs_guardar_f_entrada(ok);
+  })
+});
+
+fnjs_guardar_f_entrada=function(ok){
+	var id_entrada={{ id_entrada }};
+	var f_entrada =	$("#f_entrada").val();
+
+	if (ok && !f_entrada) { f_entrada='hoy'; }
+	
+	if (!ok) {
+		//borrar
+		f_entrada='';
+	}
+	
+    var url_update = 'apps/entradas/controller/entrada_update.php';
+    var param_json = { que: 'f_entrada', id_entrada: id_entrada, f_entrada: f_entrada };
+    request=$.ajax({
+        data: param_json,
+        url: url_update,
+        type: 'post'
+    });
+    request.done( function (rta) {
+        rta_txt=rta.responseText;
+        if (rta_txt==undefined) {
+            rta_txt='';
+        }
+        if (rta_txt != '' && rta_txt != '\n') {
+            alert ('error: '+rta_txt);
+        }
+    });
+	 
+}
+
+fnjs_getContent=function(n) {
+    var url; 
+    var url_doc = 'apps/etherpad/controller/getUrlEscrito.php';
+    var param_json = { tipo_id: 'entrada', id: n, modo: 'html' };
+    request=$.ajax({
+        data: param_json,
+        url: url_doc,
+        type: 'post'
+    });
+    request.done( function (rta) {
+        url=rta;
+        req=$.ajax({
+            url: url, 
+            type: 'get',
+            xhrFields: {
+                withCredentials: true
+            }
+        });
+        req.done( function(data) {
+            txt=data;
+            $('#txt').html(txt);
+        });
+    });
+}
+
+fnjs_download=function(item) {
+	url = "{{ url_download }}"+"&key="+item;
+	window.open(url);
+}
+
+
+$(document).ready(function() {
+	fnjs_getContent({{ id_entrada }});
+	tabs_hide();
+});
+</script>
+
+<!-- Bootstrap Switch Button -->
+<!--  OJO: si se pone en la página superior no funciona, alguien debe sobreescribir... -->
+<link type="text/css" rel='stylesheet' href='node_modules/bootstrap4-toggle/css/bootstrap4-toggle.min.css' />
+<script src="node_modules/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>

@@ -1,0 +1,51 @@
+<button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
+	{{ "nueva entrada"|trans }}
+</button>
+<table class="table table-sm table-bordered">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">protocol</th>
+      <th scope="col">org./dest.</th>
+      <th scope="col">ref.</th>
+      <th scope="col">categoria</th>
+      <th scope="col">asunto</th>
+
+      <th scope="col">oficinas</th>
+      <th scope="col">fecha escrito</th>
+      <th scope="col">fecha leido</th>
+      <th scope="col">fecha aprobado</th>
+      <th scope="col">fecha enviado</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in a_entradas %}
+    <tr>
+      <th scope="row">{{ row.link_mod|raw }}</th>
+      <td>{{ row.protocolo }}</td>
+      <td>{{ row.link_ver|raw }}</td>
+      <td>{{ row.referencias|raw }}</td>
+      <td>{{ row.categoria }}</td>
+      <td>{{ row.asunto }}</td>
+      <td>{{ row.ponente }}</td>
+      <td>{{ row.f_escrito }}</td>
+      <td>{{ row.f_entrada }}</td>
+      <td></td>
+      <td></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<script type="text/javascript">
+$(document).ready(function() {
+	tabs_show('{{ vista }}','{{ filtro }}');
+});
+fnjs_ver_entrada=function(id_entrada) {
+    var ssfsv = 'sv';
+    var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+    var server = 'http://tramity.local'
+    var url = server+'/apps/entradas/controller/entrada_ver.php?id_entrada='+id_entrada;
+    w=window.open(url, "sele", winPrefs);
+    w.focus();
+}
+</script>

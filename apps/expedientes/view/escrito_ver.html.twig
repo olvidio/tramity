@@ -1,0 +1,56 @@
+<!-- Bootstrap core JavaScript-->
+<script src="{{ base_url }}/node_modules/jquery/dist/jquery.min.js"></script>
+<!-- jQuery CSS -->
+<!-- CSS jQuery, bootstrap -->
+<link type="text/css" rel='stylesheet' href='{{ base_url }}/node_modules/jquery-ui/themes/base/all.css' />
+<link type="text/css" rel="stylesheet" href="{{ base_url }}/node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+
+<div id="tot" class="container-fluid mt-3">
+<div class="clearfix ">
+  <div class="d-inline-flex float-left">
+    <div class="p-2 text-dark font-weight-bold" >
+      {{ sigla }}
+    </div>
+  </div>
+  <div class="d-inline-flex float-right">
+    <div class="p-2 text-dark font-weight-bold" >
+      {{ oArrayProtDestino.ListaTxt|raw }}
+      {{ oArrayProtRef.ListaTxt|raw }}
+    </div>
+  </div>
+</div>
+<!--  --------------- ASUNTO --------------- -->
+<div class="row">
+  <div class="col-9">
+    <label for="asunto_e" class="col-form-label">{{ "Asunto"|trans }}:</label>
+      {{ asunto_e }}
+  </div>
+</div>
+<!--  --------------------  ESCRITO  --------------------------  -->
+<div class="border border-secondary rounded p-3">
+{{ escrito_html|raw }}
+</div>
+<!--  --------------------  FECHA  --------------------------  -->
+<div id="fecha" style="margin-top: 1em; margin-right:  4em; text-align: right; " >
+    <label>{{ f_escrito }}</label>
+</div>
+  
+
+<!--  --------------------  ADJUNTOS  --------------------------  -->
+{% if a_adjuntos %}
+<hr>
+<div class="form-group col-md-12">
+    <label for="input-adjunto">{{ "Adjuntos"|trans }}:</label>
+{% for item,nom in a_adjuntos %}
+	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_download({{ item }})">{{ nom }}</button>
+{% endfor %}
+</div>
+{% endif %}
+</div>
+<hr>
+<script>
+fnjs_download=function(item) {
+	url = "{{ url_download }}"+"&key="+item;
+	window.open(url);
+}
+</script>

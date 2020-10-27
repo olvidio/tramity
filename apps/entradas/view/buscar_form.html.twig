@@ -1,0 +1,14 @@
+
+<h1>{{ titulo }}</h1>
+<form id ="form_entrada" >
+    <input type=hidden name='que' id='que' value=0>
+    <input type=hidden name='id_entrada' id='id_entrada' value={{ id_entrada }} >
+    
+    
+  <div class="form-group row">
+    <label for="ponente" class="col-2 col-form-label">{{ "Ponente"|trans }}</label>
+    <div class="col-1">
+	  {{ oDesplPonente.desplegable|raw }}
+    </div>
+  </div>
+</form>

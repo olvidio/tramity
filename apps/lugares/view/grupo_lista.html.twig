@@ -1,0 +1,52 @@
+<script>
+fnjs_editar=function(){
+	$('#seleccionados').attr('action',"{{ url_form }}");
+	$('#que').val('editar');
+	fnjs_enviar_formulario('#seleccionados');
+}
+
+fnjs_eliminar=function(){
+	rta=fnjs_solo_uno('#seleccionados');
+	if (rta==1) {
+		if (confirm("{{ "¿Está seguro que desea borrar este grupo?"|trans }}") ) {
+            $('#que').val('eliminar');
+			$('#seleccionados').attr('action',"{{ url_eliminar }}");
+			$('#seleccionados').one("submit", function(event) {
+				event.preventDefault();
+				$.ajax({
+					url: $(this).attr('action'),
+					type: 'post',
+					data: $(this).serialize()
+				})
+				.done(function (rta_txt) {
+					if (rta_txt != '' && rta_txt != '\n') {
+						alert ('{{ "respuesta"|trans }}: '+rta_txt);
+					} else {
+						fnjs_actualizar();
+				   	}
+				});
+				return false;
+			});
+			$('#seleccionados').trigger("submit");
+			$('#seleccionados').off();
+		}
+	}
+}
+fnjs_actualizar=function(){
+	var url='{{ url_actualizar }}';
+	fnjs_update_div('#main',url);
+}
+fnjs_left_side_hide();
+</script>
+<h3>{{ "Lista de grupos"|trans }}</h3>
+<br>
+</form>
+<form id="seleccionados"  name="seleccionados" action="" method="post" >
+{{ oHash.getCamposHtml|raw }}
+{{ oTabla.mostrar_tabla|raw }}
+</form>
+<br>
+
+<button type="button" class="btn btn-primary btn btn-block" onclick="fnjs_update_div('#main','{{ url_nuevo }}');">
+{{ "nuevo grupo"|trans}}
+</button>

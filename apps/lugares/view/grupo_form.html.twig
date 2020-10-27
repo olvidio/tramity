@@ -1,0 +1,109 @@
+<script>
+fnjs_guardar=function(formulario){
+
+	rr = 'ok';
+	//alert ("EEE "+rr);
+	if (rr=='ok') {
+		$(formulario).attr('action',"apps/lugares/controller/grupo_update.php");
+		$(formulario).one("submit", function() {
+			$.ajax({
+				url: $(this).attr('action'),
+				type: 'post',
+				data: $(this).serialize()
+			})
+			.done(function (rta_txt) {
+				if (rta_txt != '' && rta_txt != '\\n') {
+					alert ('{{ "respuesta"|trans }}: '+rta_txt);
+				} else {
+					{{ oPosicion.js_atras(1)|raw }}
+				}
+			});
+			return false;
+		});
+		$(formulario).trigger("submit");
+		$(formulario).off();
+	}
+}
+</script>
+<div class="card" >
+  <div class="card-header">
+    <h5 class="card-title">{{ "Datos del grupo"|trans }}</h5>
+  </div>
+  <div class="card-body">
+      <form class="user" id="frm_lugar"  name="frm_lugar" action="" method="post">
+      {{ oHash.getCamposHtml|raw }}
+        <div class="form-group">
+          <label for="descripcion">{{ "Descripción"|trans }}</label>
+          <input type="text" class="form-control col-6" id="descripcion" name="descripcion" placeholder="descripcion" value="{{ descripcion }}">
+        </div>
+        <div class="form-group">
+          <label for="example">{{ "Seleccione los destinos"|trans }}:</label>
+        </div>
+        {{ oDesplLugaresCtr.checkbox(3)|raw }}
+        <hr>
+        {{ oDesplLugaresDl.checkbox(3)|raw }}
+        <hr>
+        {{ oDesplLugaresCr.checkbox(3)|raw }}
+        <div class="form-group">
+          <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary btn-block">{{ "Guardar"|trans }}</button>
+        </div>
+      </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    let lastChecked;
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleCheck));
+});
+
+function handleCheck(e) {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    let userChecksFlag = false;
+    let userUnchecksFlag = false;
+    if (e.shiftKey && this.checked) {
+        //let's start looping here
+        checkboxes.forEach(checkbox => {
+            //let's check if the current 'checkbox' is
+            //one of the references
+
+            if (checkbox === this || checkbox === lastChecked) {
+                //now we need to set the checkboxStatus to true
+                userChecksFlag = !userChecksFlag;
+                if (userChecksFlag) {
+                    console.log("Start to check the elements in the middle!")
+                    console.log(checkbox)
+
+                } else {
+                    console.log(checkbox)
+                    console.log("End here!")
+                }
+
+            } else {
+                console.log(checkbox)
+            }
+
+            //after we cross our first reference the checkboxStatus is set to true
+            //we can start 'checking' the boxes that follow the encountered reference
+            if (userChecksFlag) {
+                checkbox.checked = true; //if the status is true, we'll 'check' the checkbox
+            }
+        })
+    }
+    //similar steps for unchecking
+    if (e.shiftKey && !this.checked) {
+        checkboxes.forEach(checkbox => {
+            if (checkbox === this || checkbox === lastChecked) {
+                userUnchecksFlag = !userUnchecksFlag;
+            }
+            if (userUnchecksFlag) {
+                checkbox.checked = false;
+            }
+        })
+        lastChecked.checked = false;
+    }
+    lastChecked = this;
+}
+
+</script>

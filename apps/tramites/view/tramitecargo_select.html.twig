@@ -1,0 +1,166 @@
+<script>
+fnjs_guardar=function(formulario){
+	$('#que').val('update');
+	$(formulario).attr('action',"{{ url_ajax|raw }}");
+	$(formulario).one("submit", function() {
+		$.ajax({
+			url: $(this).attr('action'),
+			type: 'post',
+			data: $(this).serialize()
+		})
+		.done(function (rta_txt) {
+			if (rta_txt != '' && rta_txt != '\n') {
+				alert (rta_txt);
+			}
+			fnjs_actualizar();
+			$('#ModalBuscar').modal('hide');
+		});
+		return false;
+	});
+	$(formulario).trigger("submit");
+	$(formulario).off();
+}
+
+fnjs_actualizar=function(){
+	var id_tramite=$('#k_buscar').val();
+	/* obtener el listado de fases */
+	var url="{{ url_ajax }}";
+	var parametros='que=get_listado&id_tramite='+id_tramite+'{{ h_actualizar|raw }}';
+		 
+	$.ajax({
+		url: url,
+		type: 'post',
+		data: parametros
+	})
+	.done(function (rta_txt) {
+		if (rta_txt != '' && rta_txt != '\\n') {
+			/* añadir debajo de la actividad */
+			$('#div_proceso').html(rta_txt);
+			$('#id_tramite').val(id_tramite);
+		}
+	});
+}
+
+fnjs_eliminar=function(event,id_item){
+	if (confirm("{{ txt_eliminar }}")) {
+        var url="{{ url_ajax }}";
+		var parametros='que=eliminar&id_item='+id_item+'{{ h_eliminar|raw }}';
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: parametros
+		})
+		.done(function (rta_txt) {
+			if (rta_txt != '' && rta_txt != '\n') {
+				alert ('respuesta: '+rta_txt);
+			} else {
+				fnjs_actualizar();
+			}
+        });
+	}
+	event.preventDefault();
+	event.stopPropagation();
+	event.stopImmediatePropagation();
+	return false;
+}
+
+fnjs_cargar_item=function(item) {
+	var id_tramite=$('#k_buscar').val();
+    $('#id_tramite').val(id_tramite);
+    var url_ajax = 'apps/tramites/controller/tramitecargo_ajax.php';
+    var param_json = { que: 'info', id_item: item };
+    request=$.ajax({
+        data: param_json,
+        url: url_ajax,
+        type: 'post'
+    });
+    request.done( function (json) {
+    	if (json.success != true) {
+            rta_txt = json.responseText;
+            alert ('error: '+rta_txt);
+        } else {
+            // You can create an Array from this like so:
+            var data = JSON.parse(json.data);
+            $('#cargo').html(data.cargos);
+            $('#orden').val(data.orden);
+            $('#multiple').val(data.multiple);
+            $('#id_item').val(data.item);
+        }
+    });
+}
+/**
+ * borrar los datos del formulario
+ */
+fnjs_nuevo=function(item) {
+	var id_tramite=$('#k_buscar').val();
+    $('#id_tramite').val(id_tramite);
+    $('#orden').val('');
+    $('#multiple').val('1');
+    $('#id_item').val('');
+}
+fnjs_left_side_hide();
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalBuscar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar"|trans }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="frm_tramite"  name="frm_tramite" action="" method="post">
+      <input type="hidden" class="form-control" id="que" name="que" value="">
+      <input type="hidden" class="form-control" id="id_item" name="id_item" value="">
+      <input type="hidden" class="form-control" id="id_tramite" name="id_tramite" value="{{ id_tramite }}">
+      <div class="modal-body">
+        <div class="form-group input-group col-10">
+          <div class="input-group-prepend">
+              <span class="input-group-text">{{ "Cargo"|trans }}</span>
+          </div>
+          <div id='cargo'>
+          	{{ oDesplCargos.desplegable|raw }}
+          </div>
+        </div>
+        <div class="form-group input-group col-4">
+          <div class="input-group-prepend">
+              <span class="input-group-text">{{ "Orden"|trans }}</span>
+          </div>
+            <input id=orden type="text" class="form-control" id="orden_tramite" name="orden_tramite" value="{{ orden_tramite }}">
+        </div>
+        <div class="form-group input-group col-8">
+          <div class="input-group-prepend">
+              <span class="input-group-text">{{ "número mínimo de firmas"|trans }}</span>
+          </div>
+            <input type="text" class="form-control" id="multiple" name="multiple" value="{{ multiple }}">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="fnjs_guardar(this.form);" >{{ "Guardar"|trans }}</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div id='div_buscar'>
+<table>
+<thead>
+<th class=titulo_inv colspan=4>{{ "trámite"|trans|capitalize }}
+&nbsp;&nbsp;&nbsp;
+<select id="k_buscar" name="k_buscar" onchange='fnjs_actualizar();'>
+{{ oDespl.options()|raw }}
+</select>
+</th>
+</thead>
+</table>
+</div>
+<br>
+<div id='div_proceso' style="{widht: 800px;}"></div>

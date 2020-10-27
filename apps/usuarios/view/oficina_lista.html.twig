@@ -1,0 +1,49 @@
+<script>
+fnjs_nuevo=function(){
+	$('#frm_buscar').attr('action',"apps/usuarios/controller/oficina_form.php");
+	fnjs_enviar_formulario('#frm_buscar');
+}
+fnjs_eliminar=function(){
+	rta=fnjs_solo_uno('#seleccionados');
+	if (rta==1) {
+		if (confirm("{{ "¿Está seguro que desea borrar esta oficina?"|trans }}") ) {
+			var url='{{ url_ajax }}';
+			$('#seleccionados').one("submit", function() {
+				$.ajax({
+					url: url,
+					type: 'post',
+					data: $(this).serialize()
+				})
+				.done(function (rta_txt) {
+					if (rta_txt != '' && rta_txt != '\n') {
+						alert ('{{ "respuesta"|trans }}: '+rta_txt);
+					} else {
+						fnjs_actualizar();
+				   	}
+				});
+				return false;
+			});
+			$('#seleccionados').trigger("submit");
+			$('#seleccionados').off();
+		}
+	}
+}
+fnjs_actualizar=function(){
+	var url='{{ url_actualizar }}';
+	fnjs_update_div('#main',url);
+}
+fnjs_left_side_hide();
+</script>
+<h3>{{ "Lista de oficina"|trans }}</h3>
+<br>
+</form>
+<form id=seleccionados  name=seleccionados action="" method="post" >
+{{ oHash.getCamposHtml|raw }}
+{{ oTabla.mostrar_tabla|raw }}
+</form>
+<br>
+{% if permiso == 1  %} 
+    <button type="button" class="btn btn-primary btn btn-block" onclick="fnjs_update_div('#main','{{ url_nuevo }}');">
+    {{ "nueva oficina"|trans}}
+    </button>
+{%  endif %}

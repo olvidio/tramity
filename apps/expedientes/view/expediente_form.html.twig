@@ -1,0 +1,272 @@
+<!-- load the CSS files in the right order -->
+<link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
+<link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
+
+<!-- load the JS files in the right order -->
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalBuscar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar"|trans }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<div id="busqueda">
+          <!--  --------------- BUSQUEDAS --------------- -->
+          <!--  --------------- OFICINA --------------- -->
+          <div class="row">
+          <div class="col-2">
+          <label for="oficinas" class="col-1 col-form-label">{{ "Oficina"|trans }}</label>
+          </div>
+          <div class="col-2">
+            <span id="span_oficinas">
+                {{ oDesplOficinas.Desplegable|raw }}
+            </span>
+          </div>
+          </div>
+          <!--  --------------- ASUNTO --------------- -->
+          <div class="form-group row">
+            <label for="asunto" class="col-2 col-form-label">{{ "Asunto"|trans }}</label>
+            <div class="col-10">
+              <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="">
+            </div>
+          </div>
+        </div>
+        <hr>
+      	<div id="lista">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="fnjs_antecedente(event,1);" >Buscar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<h1>{{ titulo }} ({{ ponente_txt }})</h1>
+<form id ="form_expediente" >
+    <input type=hidden name='que' id='que' value=0>
+    <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
+    <input type=hidden name='ponente' id='ponente' value={{ id_ponente }} >
+    
+
+<div class="row" >
+<!--  Col Izda -->
+<div class="col-8" >
+  <!--  --------------- TRAMITE --------------- -->
+  <div class="form-group row">
+    <label for="tramite" class="col-1 col-form-label">{{ "Trámite"|trans }}</label>
+    <div class="col-3" >
+    	{{ oDesplTramites.desplegable|raw }}
+    </div>
+    <!--  --------------- VIDA --------------- -->
+    <div class="form-group col-md-3">
+      <label for="Vida">Vida</label>
+      {{ oDesplVida.desplegable|raw }}
+    </div>
+  </div>
+  <div class="form-group row">
+    <!--
+    <label for="estado" class="col-1 col-form-label">{{ "Estado"|trans }}</label>
+    <div class="col-2" >
+    	{{ oDesplEstado.desplegable|raw }}
+    </div>
+  -->
+    <label for="prioridad" class="col-1 col-form-label">{{ "Prioridad"|trans }}</label>
+    <div class="col-2" >
+    	{{ oDesplPrioridad.desplegable|raw }}
+    </div>
+    <label for="f_contestar" class="col col-3 col-form-label text-right">{{ "contestar antes de"|trans }}:</label>
+    <div class='col-3 date datepicker' data-provide="datepicker">
+      <input tabindex='41' name='f_contestar' id='f_contestar' type='text' class="form-control" value="{{ f_contestar }}" />
+    </div>
+  </div>
+  
+    <!--  --------------- FECHAS --------------- -->
+    <!-- 
+  <div class="form-group row">
+    <div class='col-2'>
+      <div class="form-group">
+        <div class='date datepicker' data-provide="datepicker">
+        <label for="f_ini_circulacion" class="col-form-label">{{ "Inicio"|trans }}</label>
+          {{ f_ini_circulacion }}
+        </div>
+      </div>
+    </div>
+    <div class='col-2'>
+      <div class="form-group">
+        <label for="f_reunion" class="col-2 col-form-label">{{ "reunión"|trans }}</label>
+        <div class='date datepicker' data-provide="datepicker">
+          <input tabindex='41' name='f_reunion' id='f_reunion' type='text' class="form-control" value="{{ f_reunion }}" />
+        </div>
+      </div>
+    </div>
+    <div class='col-2'>
+      <div class="form-group">
+    <label for="f_aprobacion" class="col-2 col-form-label">{{ "aprobación"|trans }}</label>
+        <div class='date datepicker' data-provide="datepicker">
+          <input tabindex='41' name='f_aprobacion' id='f_aprobacion' type='text' class="form-control" value="{{ f_aprobacion }}" />
+        </div>
+      </div>
+    </div>
+    -->
+  <!--  </div> -->
+    
+    <!--  --------------- ASUNTO --------------- -->
+  <div class="form-group row">
+    <label for="asunto" class="col-2 col-form-label">{{ "Asunto expediente"|trans }}</label>
+    <div class="col-10">
+      <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
+    </div>
+  </div>
+  <!--  --------------- ENTRADILLA --------------- -->
+  <div class="form-group row">
+    <label for="entradilla" class="col-2 col-form-label">{{ "Entradilla"|trans }}</label>
+    <div class='col-10'>
+      <textarea tabindex='50' rows="5" class="form-control" name='entradilla' id="entradilla">{{ entradilla }}</textarea>
+    </div>
+  </div>
+</div>
+<!-- Fin Col Izda -->
+<!--  Col Dcha -->
+<div class="col-4" >
+<!--  --------------------  ANTECEDENTES  --------------------------  -->
+{% if id_expediente %}
+    {# lista de antecedentes #}
+    <div class="form-group col-md-12">
+      <label for="">{{ "Antecedentes"|trans }}:</label>
+    </div>
+    <div class="form-group col-md-12">
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(event,1);" >
+        {{ "Entrada"|trans }}
+      </button>
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(event,2);" >
+        {{ "Expediente"|trans }}
+      </button>
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(event,3);" >
+        {{ "Escrito/propuesta"|trans }}
+      </button>
+    </div>
+    <hr>
+{% else %}
+  <div class="alert alert-warning" role="alert">
+    {{ "Para añadir un antecedente, primero debe guardar el expediente"|trans }}
+  </div>
+{% endif %}
+<div id="lista_antecedentes">
+{{ lista_antecedentes|raw }}
+</div>
+</div>
+<!-- Fin Col Dcha -->
+</div>
+<!-- Fin row -->
+
+
+  <!--  --------------- ACCIONES --------------- -->
+  
+{% if id_expediente %}
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_escrito|raw }}');">
+        {{ "nuevo escrito"|trans }}
+    </button>
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_propuesta|raw }}');">
+        {{ "nueva propuesta"|trans }}
+    </button>
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_plantilla|raw }}');">
+        {{ "nueva plantilla"|trans }}
+    </button>
+    <table class="table table-sm table-bordered">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">##</th>
+          <th scope="col">asunto</th>
+          <th scope="col">destino</th>
+          <th scope="col">tipo</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for row in a_acciones %}
+        <tr>
+          <th scope="row">{{ row.link_mod|raw }}</th>
+          <td>{{ row.link_rev|raw }}</td>
+          <td>{{ row.asunto }}</td>
+          <td>{{ row.protocolo|raw }}</td>
+          <td>{{ row.tipo }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% else %}
+  <div class="col-8 alert alert-warning" role="alert">
+    {{ "Para añadir escritos, primero debe guardar el expediente"|trans }}
+  </div>
+{% endif %}
+
+  <div class="form-group row align-items-center">
+    <!--  --------------- OFICIALES --------------- -->
+    <label for="preparar" class="col-1">{{ "Preparar"|trans }}:</label>
+    <div id="div_preparar" >
+     {% for row in a_preparar %}
+        <div class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" class="custom-control-input" name="a_preparar[]" id="{{ row.id }}" value="{{ row.id }}#{{ row.visto }}" {{ row.chk }}>
+          {% if row.visto %}
+            <label class="custom-control-label text-success" for="{{ row.id }}">{{ row.text }} ({{ "visto"|trans }})</label>
+          {% else %}
+            <label class="custom-control-label" for="{{ row.id }}">{{ row.text }}</label>
+          {% endif %}
+        </div>
+    {% endfor %}
+    </div>
+    <button tabindex='' class="btn btn-outline-secondary" onClick="fnjs_visto(event);" >
+      {{ "marcar como visto"|trans }}
+    </button>
+
+  </div>
+  <!--  --------------- FIRMAS OFICINA --------------- -->
+  <div id="div_firmas_oficina" class="form-group row">
+    <label for="firmas_oficina" class="col-sd-2">{{ "Firmas oficina"|trans }}:</label>
+    <div class="col-6">
+      <span id="span_firmas_oficina">
+      	{{ oArrayDesplFirmasOficina.ListaSelects|raw }}
+      </span>
+    </div>
+  </div>
+  <!--  --------------- OTRAS FIRMAS --------------- -->
+  <div id="div_firmas" class="form-group row">
+    <label for="firmas" class="col-sd-2">{{ "Otras Firmas"|trans }}:</label>
+    <div class="col-6">
+      <span id="span_firmas">
+      	{{ oArrayDesplFirmas.ListaSelects|raw }}
+      </span>
+    </div>
+  </div>
+  
+<!--  --------------------  BOTONES --------------------------  -->
+  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+    {{ "Cancelar"|trans }}
+  </button>
+  <button tabindex='90' class="btn btn-primary" onKeyUp="fnjs_guardar(event);" onClick="fnjs_guardar(event);" >
+    {{ "Guardar"|trans }}
+  </button>
+  <button tabindex='90' class="btn btn-success" onClick="fnjs_circular(event);" >
+    {{ "Circular"|trans }}
+  </button>
+</form>
+
+
+{{ include ('_expediente_form_js.html.twig') }}
+{{ include ('_antecedentes_js.html.twig') }}
+<script type="text/javascript">
+$(document).ready(function() {
+	tabs_hide();
+	fnjs_tramite(); // oculta a los oficiales, dependiendo del tramite
+});
+</script>

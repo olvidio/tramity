@@ -1,0 +1,394 @@
+<script type="text/javascript">
+$(function() {
+	$( "#f_plazo" ).datepicker( {
+		numberOfMonths: 1,
+		showButtonPanel: true
+		});
+
+});
+$(function() {
+	$( "#f_entrada" ).datepicker( {
+		numberOfMonths: 1,
+		showButtonPanel: true
+		});
+
+});
+$(function() {
+	$( "#f_escrito" ).datepicker( {
+		numberOfMonths: 1,
+		showButtonPanel: true
+		});
+
+});
+{{ oArrayDesplFirmas.ComprobarSelectJs|raw }}
+{{ oArrayProtRef.ComprobarSelectJs|raw }}
+
+fnjs_cancelar=function(event){
+	// Asegurarme que es por click y no por return (posicion: 0,0)
+	var x = event.x || event.clientX;
+    var y = event.y || event.clientY;
+    if (!x && !y) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    	return false;
+    }
+    event.preventDefault(); //prevent default action 	
+	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+}
+
+fnjs_guardar=function(event){
+	// Asegurarme que es por click y no por return (posicion: 0,0)
+	var x = event.x || event.clientX;
+    var y = event.y || event.clientY;
+    if (!x && !y) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    	return false;
+    }
+
+	var err=0;
+	var origen=$('#origen').val();
+	var origen_prot_num=$('#prot_num_origen').val();
+	var asunto_e=$('#asunto_e').val();
+	var f_entrada=$('#f_entrada').val();
+	var f_escrito=$('#f_escrito').val();
+	var ponente=$('#ponente').val();
+	var plazo=$('#plazo').val();
+	var id_entrada=$('#id_entrada').val();
+
+	var oficina='';
+	var i=0;
+	var selector="span#span_oficinas select";
+	$(selector).each(function(i) {
+		if ($(this).val().length) {  
+			i++;
+			if (i>1) oficina+=",";
+			oficina+=$(this).val();
+		}
+	});
+
+	if (!origen) { alert("{{ "Debe llenar el campo de origen"|trans }}"); err=1; }
+	if (!origen_prot_num) { alert("{{ "Debe llenar el campo de protocolo origen"|trans }}"); err=1; }
+	if (!asunto_e) { alert("{{ "Debe llenar el campo de asunto entrada"|trans }}"); err=1; }
+	if (!ponente) { alert("{{ "Debe llenar el campo del ponente"|trans }}"); err=1; }
+	if (!oficina) { alert("{{ "Debe llenar el campo de oficinas"|trans }}"); err=1; }
+	if (!fnjs_comprobar_fecha('#f_entrada')) { err=1; }
+	if (!f_entrada) { alert("{{ "Debe llenar el campo de fecha de entrada"|trans }}"); err=1; }
+
+	if (f_escrito) {
+		diff=fnjs_diff_fechas('#f_entrada','#f_escrito');	
+		if (diff < 0) {
+			alert("{{ "La fecha de entrada debe ser posterior a la del escrito"|trans }}");
+			err=1; 
+		}
+	}
+	
+	if (plazo=="fecha") { 
+		var f_plazo=$('#f_plazo').val();
+		if (!f_plazo) { alert("{{ "Debe llenar el campo de fecha para contestar el escrito"|trans }}"); err=1; }
+	}
+
+	if (err!=1) {
+		$('#oficinas').val(oficina);
+		$('#form_entrada').attr('action','{{ url_update }}');
+		$('#que').val('guardar');
+		$('#form_entrada').submit(function(event){
+			event.preventDefault(); //prevent default action 	
+            request=$.ajax({
+                data: $(this).serialize(),
+                url: $(this).attr('action'),
+                type: 'post',
+                dataType: 'json'
+            });
+            request.done( function (rta) {
+                //var json=rta.responseJSON;
+                var json=rta;
+                //var json = $.parseJSON(rta);
+                id = json.id_entrada;
+                if (json.success != true) {
+                    rta_txt = rta.responseText;
+                    alert ('error: '+rta_txt);
+                } else {
+                    if (id != id_entrada) {
+                        // caso de nueva entrada
+                        $.confirm({
+                            title: '{{ "datos guardados"|trans }}',
+                            content: '{{ "¿añadir escrito o adjuntos?"|trans }}',
+                            buttons: {
+                                {{ "Sí"|trans }}: function () {
+                                    // ir al form entrada.
+                                    pagina_mod = 'apps'
+                                    fnjs_update_div('#main',json.pagina_mod);
+                                },
+                                {{ "cancelar"|trans }}: function () {
+                                    //$.alert('Canceled!');
+                                },
+                                somethingElse: {
+                                    text: '{{ "otra entrada"|trans }}',
+                                    btnClass: 'btn-blue',
+                                    keys: ['enter', 'shift'],
+                                    // Nueva entrada.
+                                    action: fnjs_update_div('#main','{{ pagina_nueva|raw }}')
+                                }
+                            }
+                        });
+                    } else {
+                        alert ("{{ "datos guardados"|trans }}");
+                        // Volver a la lista...
+                        fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                    }
+                }
+            });
+		});
+		$('#form_entrada').submit();
+	} else {
+        event.preventDefault();
+	}
+}
+
+fnjs_cambiar_reservado=function(secretari){
+	var r=$('#visibilidad').val();
+	// En la clase Entradas: V_RESERVADO = 3
+	if (r==3 && !secretari) {
+		$('#asunto').val("");
+		$('#asunto').prop("disabled",false);
+		$('#detalle').val("");
+		$('#detalle').prop("disabled",false);
+	}
+}
+
+fnjs_focus_a=function(camp){
+	$(camp).focus();
+}
+
+fnjs_mas_referencias=function(e){
+	var code = (e.keyCode ? e.keyCode : e.which);
+	if(e=="x") {
+		var valor=1;
+	} else {
+		var id_campo='#'+e.currentTarget.id;
+		var valor=$(id_campo).val();
+		if(code!=9) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	}
+	if ( code==9 || e.type=="change" || e=="x") {
+		if (valor!=0) {
+			{{ oArrayProtRef.ListaSelectsJs|raw }}
+		}
+	}
+}
+
+fnjs_mas_oficinas=function(e){
+	var code = (e.keyCode ? e.keyCode : e.which);
+	if(e=="x") {
+		var valor=1;
+	} else {
+		var id_campo='#'+e.currentTarget.id;
+		var valor=$(id_campo).val();
+		if(code!=9) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	}
+	if ( code==9 || e.type=="change" || e=="x") {
+		if (valor!=0) {
+			{{ oArrayDesplFirmas.ListaSelectsJs|raw }}
+		}
+	}
+}
+
+fnjs_quitar_oficinas=function(){
+	$('#span_oficinas').html("");
+	$('#oficina_num').val(0);
+}
+fnjs_quitar_referencias=function(){
+	$('#span_ref').html("");
+	$('#ref_num').val(0);
+}
+
+fnjs_comprobar_plazo=function(campo){
+	contestar=$('#plazo');
+	if (campo=="select") {
+		cont=contestar.val();
+		if (cont=="fecha") {
+			// activo el campo input y pongo allí el cursor
+			$("#f_plazo").prop("disabled", false);
+			$('#f_plazo').focus();
+			$('#f_plazo').val('');
+		} else {
+			var hoy=new Date();
+			var fecha=new Date();
+			switch (cont) {
+				case "hoy":
+					$('#f_plazo').val('');
+					break;
+				case "rápido":
+					var dias={{ plazo_rapido }};
+					var mseconds=hoy.getTime()+dias*24*60*60*1000;
+					fecha.setTime(mseconds);
+					var mes=fecha.getMonth()+1;
+					$('#f_plazo').val(fecha.getDate()+"/"+mes+"/"+fecha.getFullYear());
+					break;
+				case "urgente":
+					var dias={{ plazo_urgente }};
+					var mseconds=hoy.getTime()+dias*24*60*60*1000;
+					fecha.setTime(mseconds);
+					var mes=fecha.getMonth()+1;
+					$('#f_plazo').val(fecha.getDate()+"/"+mes+"/"+fecha.getFullYear());
+					break;
+				case "normal":
+					var dias={{ plazo_normal }};
+					var mseconds=hoy.getTime()+dias*24*60*60*1000;
+					fecha.setTime(mseconds);
+					var mes=fecha.getMonth()+1;
+					$('#f_plazo').val(fecha.getDate()+"/"+mes+"/"+fecha.getFullYear());
+					break;
+			}
+			$('#f_plazo').prop("disabled",true);
+			$('#b_guardar').focus();
+		}
+	} else { // es el input
+		contestar.val('fecha');
+		fecha=$('#f_plazo');
+		fnjs_fecha_en_intervalo('#f_plazo');
+		$('#b_guardar').focus();
+	}
+			
+}
+
+fnjs_proto=function(e,num,any){
+	var s=0;
+	var numero;
+	var siguiente="";
+	//debugger;
+	siguiente = num.replace(/_num_/g, "_mas_"); 
+	num_escaped = num.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+	any_escaped = any.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+	siguiente_escaped = siguiente.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+	var prot_num=$(num_escaped).val();
+	var prot_any=$(any_escaped).val();
+	if (prot_num === undefined) {
+		return;
+	}
+	numero=prot_num.split("/");
+	if (numero[1]) {
+		$(num_escaped).val(numero[0]);
+		$(any_escaped).val(numero[1]);
+		prot_any=$(any).val();
+  	} else {
+		if (!prot_any) {
+			var calDate = new Date();
+  			var year  = calDate.getFullYear();
+			$(any).val(year);
+			prot_any=year;
+		}
+	}
+
+	$(siguiente_escaped).focus();
+
+	//debugger;
+	/* Para el número de origen */
+	if (num=='#origen_prot_num') {
+		que="e2";
+		id_lugar=$('#origen').val();
+		var nom_lugar=$('#origen option:selected').text();
+		if (nom_lugar=='cr') {
+			$('#grupo_destinos').show();
+		}
+		prot_num=$('#origen_prot_num').val();
+		prot_any=$('#origen_prot_any').val();
+		siguiente="#mas_ref_id_lugar";
+		var primera_ref=0;
+	}
+	/* Para el número de referencia */
+	if (num.substr(0,13)=='#ref_prot_num') {
+		/* sólo recojo información de la primera referencia */
+		if (num.substr(14,1)=='0') {
+			que="e3";
+			var nom='#ref_id_lugar_0';
+			id_lugar=$(nom).val();
+			prot_num=$(num).val();
+			prot_any=$(any).val();
+			siguiente="#f_doc_entrada";
+		} else {
+			$('#f_doc_entrada').focus();
+			return; /* no hago nada */
+		}
+	}
+
+	//var url='apps/core/comprobar_protocolo.php';
+	//var parametros='que='+que+'&id_lugar='+id_lugar+'&prot_num='+prot_num+'&prot_any='+prot_any+'&PHPSESSID=<?php echo session_id(); ?>';
+		 
+	{#
+	$.ajax({
+		url: url,
+		type: 'post',
+		data: parametros,
+		success: function (rta) {
+			//alert ('respuesta: '+rta);
+			rta2=jQuery.parseJSON(rta);
+			if (rta2.rango) { alert("{{ "nº de protocolo fuera de rango"|trans }}"); s=1; }
+			if (rta2.any) { alert("{{ "No es de este año, ni del año pasado"|trans }}"); s=1; }
+			if (rta2.repe) { alert("{{ "nº de protocolo repetido"|trans }}");  s=1; }
+			if (rta2.registrado) { alert("{{ "nº de protocolo de origen ya registrado"|trans }}");  s=1; }
+			if (rta2.anulado) {
+				alert("{{"El escrito de referencia ha sido anulado"|trans }}"+" ("+rta2.anulado+").");
+			}
+			if (rta2.salto) {
+				alert("{{ "El nº de protocolo tiene un salto de más de %s números respecto al último"|trans|format(error_prot) }}"+" ("+rta2.salto+").");
+				s=1;
+			}
+			if (que=="e3") {
+				if (rta2.asunto) {
+					//caso de escrito reservado
+					if (rta2.asunto_r) {
+						$('#asunto').val(rta2.asunto_r);
+						$('#asunto').prop("disabled",true);
+						$('#asunto_org').val(rta2.asunto);
+					} else {
+						$('#asunto').val(rta2.asunto);
+					}
+				} 
+				if (rta2.detalle) {
+					//caso de escrito reservado
+					if (rta2.detalle_r) {
+						$('#detalle').val(rta2.detalle_r);
+						$('#detalle').prop("disabled",true);
+						$('#detalle_org').val(rta2.detalle);
+					} else {
+						$('#detalle').val(rta2.detalle);
+					}
+				} 
+				if (rta2.reservado=="t") {
+					$('#reservado').prop("checked",true);
+				} else { 
+					$('#reservado').prop("checked",false);
+				}
+				if (rta2.oficinas) {
+					//pongo a 0 (por si ya habia algo)
+					fnjs_quitar_oficinas();
+					var array_of=rta2.oficinas.split(" ");
+					$.each(array_of,function(i,id_of) {
+						if (id_of) { //puede haber un espacio al final i lo cuenta.
+							$('#mas_of').val(id_of);
+							fnjs_mas_oficinas('x');
+						}
+					});
+				}
+			}
+			if (s==1) { $(num).focus(); } else { $(siguiente).focus(); }
+		}
+	});
+	#}
+	
+    e.preventDefault();
+	e.stopPropagation();
+	e.stopImmediatePropagation();
+	return false;
+}
+
+</script>

@@ -1,0 +1,21 @@
+<h2>{{ "preferencias personales"|trans }}<br></h2>
+<form id=preferencias name=preferencias action="apps/usuarios/controller/personal_update.php" method="post">
+<table>
+<tr><td>{{ "color"|trans }}:</td>
+<td>{{ "Se cambia en la configuración del pad"|trans }}
+</td></tr>
+<tr><td>{{ "idioma"|trans }}:</td>
+<td>
+{{ oDesplLocales.desplegable()|raw }}
+</td></tr>
+</table>
+<br>
+<input type="button" onclick=fnjs_enviar_formulario('#preferencias') value="guardar preferencias">
+</form>
+<br><span class="link" onclick="fnjs_update_div('#main','{{ cambio_mail }}');">{{ "cambiar el mail"|trans }}</span><br>
+<br><span class="link" onclick="fnjs_update_div('#main','{{ cambio_password }}');">{{ "cambiar el password"|trans }}</span><br>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#content").hide();
+});
+</script>

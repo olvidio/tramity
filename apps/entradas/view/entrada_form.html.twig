@@ -1,0 +1,181 @@
+<!-- load the CSS files in the right order -->
+<link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
+<link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
+
+<!-- load the JS files in the right order -->
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
+
+
+<h1>{{ titulo }}</h1>
+<form id ="form_entrada" >
+    <input type=hidden name='que' id='que' value=0>
+    <input type=hidden name='id_entrada' id='id_entrada' value={{ id_entrada }} >
+    
+<div class="row" >
+<!--  col Izda -->
+<div class="col-8" >
+  <!--  --------------- ORIGEN --------------- -->
+  <div class="form-group row" >
+  	{{ oProtOrigen.ver_desplegable|raw }}
+  </div>
+  <!--  --------------- REFERENCIAS --------------- -->
+  <div class="form-group row">
+    <label for="prot_num" class="col-2 col-form-label">
+      {{ "Referencias"|trans }}
+    </label>
+    <div class="col-10">
+      {{ oArrayProtRef.ListaSelects|raw }}
+    </div>
+  </div>
+  <!--  --------------- ASUNTO --------------- -->
+  <div class="form-group row">
+    <label for="asunto_e" class="col-3 col-form-label">{{ "Asunto entrada"|trans }}</label>
+    <div class="col-9">
+      <input tabindex='30' type="text" class="form-control" name="asunto_e" id="asunto_e" value="{{ asunto_e }}">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="asunto" class="col-3 col-form-label">{{ "Asunto secretaria"|trans }}</label>
+    <div class="col">
+      <input tabindex='40' type="text" class="form-control" name='asunto' id="asunto" value="{{ asunto }}">
+    </div>
+  </div>
+  <!--  --------------- DETALLE --------------- -->
+  <div class="form-group row">
+    <label for="detalle" class="col-2 col-form-label">{{ "Detalle"|trans }}</label>
+    <div class='col-6'>
+      <input tabindex='50' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
+    </div>
+  </div>
+  <!--  --------------- PONENTE Y OFICINAS --------------- -->
+  <div class="form-group row">
+    <label for="ponente" class="col-2">{{ "Ponente"|trans }}</label>
+    <div class="col-2">
+	  {{ oDesplPonente.desplegable|raw }}
+    </div>
+    <label for="oficinas" class="col-1">{{ "Oficinas"|trans }}</label>
+    <div class="col">
+      <span id="span_oficinas">
+      	{{ oArrayDesplFirmas.ListaSelects|raw }}
+      </span>
+    </div>
+  </div>
+  <!--  --------------- FECHAS --------------- -->
+  <div class="form-group row">
+        <label for="f_entrada" class="col col-2 col-form-label text-right">{{ "Fecha entrada"|trans }}</label>
+        <div class='col-3 date datepicker' data-provide="datepicker">
+          <input tabindex='41' name='f_entrada' id='f_entrada' type='text' class="form-control" value="{{ f_entrada }}" />
+        </div>
+	    <label for="f_escrito" class="col col-2 col-form-label text-right">{{ "Fecha escrito"|trans }}</label>
+        <div class='col-3 date datepicker' data-provide="datepicker">
+          <input tabindex='31' name='f_escrito' id='f_escrito' type='text' class="form-control" value="{{ f_escrito }}" />
+        </div>
+  </div>  
+  <!--  --------------- TIPO --------------- -->
+  <div class="form-row">
+    <div class="form-group col-md-2">
+      <label for="tipo">Categoría</label>
+      {{ oDesplCategoria.desplegable|raw }}
+    </div>
+    <div class="form-group col-md-2">
+      <label for="visibilidad">Visibilidad</label>
+      {{ oDesplVisibilidad.desplegable|raw }}
+    </div>
+    <div class="form-group col-md-6">
+      <label for="plazo">{{ "¿Es necesario contestar?"|trans }}</label>
+      {{ oDesplPlazo.desplegable|raw }}
+      <div class='col-5 date datepicker' data-provide="datepicker">
+        <input tabindex='85' name='f_plazo' id='f_plazo' type='text' class="form-control" value="" onchange="fnjs_comprobar_plazo('input')"  />
+      </div>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="visibilidad">Distribución cr</label>
+      {{ oDesplByPass.desplegable|raw }}
+    </div>
+  </div>
+  <!-- Fin Col Izda -->
+</div>
+<!--  Col Dcha -->
+<div class="col-4" >
+	<!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
+{% if id_entrada %}
+
+    {% if tipo_documento %}
+      <div class="form-group">
+        <label for="">{{ "Ver escrito"|trans }}:</label>
+        <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(event);" >
+          {{ "Etherpad"|trans }}
+        </button>
+      </div>
+    {% else %}
+    <label for="">{{ "Insertar escrito"|trans }}:</label>
+    <div class="form-group">
+      <button type="button" tabindex='100' class="btn btn-danger" onClick="fnjs_escrito(event,1);" >
+        {{ "Etherpad"|trans }}
+      </button>
+      <button type="button" tabindex='101' class="btn btn-danger" onClick="fnjs_escrito(event,2);" >
+        {{ "EtherCalc"|trans }}
+      </button>
+      <button type="button" tabindex='10' class="btn btn-danger" onClick="fnjs_escrito(event,3);" >
+        {{ "Incrustado"|trans }}
+      </button>
+    </div>
+    {% endif %}
+    <hr>
+    <div class="form-group">
+        <label for="input-adjunto">Adjuntos</label>
+        <div class="file-loading">
+            <input id="input-adjunto" name="adjuntos[]" type="file" multiple>
+        </div>
+    </div>
+{% else %}
+  <div class="alert alert-warning" role="alert">
+    {{ "Para añadir escrito, primero debe guardar la entrada"|trans }}
+  </div>
+{% endif %}
+</div>
+  <button type="button" tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+    {{ "Cancelar"|trans }}
+  </button>
+  <button type="button" tabindex='90' class="btn btn-primary" onKeyUp="fnjs_guardar(event);" onClick="fnjs_guardar(event);" >
+    {{ "Guardar"|trans }}
+  </button>
+</form>
+
+{{ include ('_entrada_form_js.html.twig') }}
+{{ include ('_entrada_escritos_js.html.twig') }}
+<script>
+$(document).ready(function() {
+	var el1 = $("#input-adjunto");
+	el1.fileinput({
+    	theme: "explorer-fas",
+        uploadUrl: "apps/entradas/controller/upload.php",
+        showUpload: false,
+        dropZoneEnabled: true,
+        dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans }}",
+        browseOnZoneClick: true,
+        dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans }}",
+        maxFileCount: 5,
+        showBrowse: true,
+        allowedPreviewTypes: false,
+        hideThumbnailContent: true,
+        // this is where the magic happens
+        uploadAsync: true,
+        uploadExtraData:{ que: 'upload_adjunto', id_entrada: '{{ id_entrada }}' },
+        removeFromPreviewOnError: true,
+        overwriteInitial: false,
+        initialPreviewAsData: false,
+     	initialPreview: [ {{ initialPreview|raw }} ],
+        initialPreviewConfig: {{ json_config|raw }},
+        initialPreviewDownloadUrl: 'apps/entradas/controller/download.php',
+    }).on("filebatchselected", function(event, files) {
+        el1.fileinput("upload");
+    });
+});
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+	tabs_hide();
+});
+</script>

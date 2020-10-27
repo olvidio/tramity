@@ -1,0 +1,88 @@
+<script>
+fnjs_guardar=function(formulario){
+	var url='{{ url }}';
+    $(formulario).attr('action',url);
+    $(formulario).one("submit", function() {
+		$.ajax({
+			url: $(this).attr('action'),
+			type: 'post',
+			data: $(this).serialize()
+		})
+		.done(function (rta_txt) {
+			if (rta_txt != '' && rta_txt != '\n') {
+				alert (rta_txt);
+			}
+        });
+        return false;
+    });
+    $(formulario).trigger("submit");
+    $(formulario).off();
+}
+</script>
+
+
+<h3>{{ "plazos"|trans }}:</h3>
+  <form id="frm_pu" name="frm_pu" action="">
+    {{ oHashPU.getCamposHtml|raw }}
+    {{ "plazo urgente"|trans }}:
+    <input type="text" size="5" name="valor" value="{{ plazo_urgente }}" >
+    {{ "días"|trans }}
+    <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  </form>
+  <form id="frm_pr" name="frm_pr" action="">
+    {{ oHashPR.getCamposHtml|raw }}
+    {{ "plazo rápido"|trans }}:
+    <input type="text" size="5" name="valor" value="{{ plazo_rapido }}" >
+    {{ "días"|trans }}
+    <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  </form>
+  <form id="frm_pn" name="frm_pn" action="">
+    {{ oHashPN.getCamposHtml|raw }}
+    {{ "plazo normal"|trans }}:
+    <input type="text" size="5" name="valor" value="{{ plazo_normal }}" >
+    {{ "días"|trans }}
+    <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  </form>
+  <form id="frm_pe" name="frm_pe" action="">
+    {{ oHashPE.getCamposHtml|raw }}
+    {{ "error en fecha"|trans }}:
+    <input type="text" size="5" name="valor" value="{{ plazo_error }}" >
+    {{ "días"|trans }}
+    <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  </form>
+<hr>
+
+<h3>{{ "sigla"|trans }}:</h3>
+<form id="frm_sigla" name="frm_sigla" action="">
+{{ oHashRL.getCamposHtml|raw }}
+<input type="text" name="valor" value="{{ sigla }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+
+<h3>{{ "idioma por defecto"|trans }}:</h3>
+<form id="frm_idioma_default" name="frm_idioma_default" action="">
+{{ oHashI.getCamposHtml|raw }}
+{{ idioma_default.desplegable|raw }}
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+
+<h3>{{ "Ámbito del esquema: centro, delegación, comisión regional"|trans }}:</h3>
+<form id="frm_dl_r" name="frm_dl_r" action="">
+{{ oHashDLR.getCamposHtml|raw }}
+<input type="radio" name="valor" value="{{ val_ctr }}" {{ chk_ctr }} >{{ "centro"|trans }}
+<input type="radio" name="valor" value="{{ val_dl }}" {{ chk_dl }} >{{ "delegación"|trans }}
+<input type="radio" name="valor" value="{{ val_cr }}" {{ chk_cr }} >{{ "comisión"|trans }}
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+
+<h3>{{ "servidor etherpad"|trans }}:</h3>
+<form id="frm_server" name="frm_server" action="">
+{{ oHashSE.getCamposHtml|raw }}
+<input type="text" name="valor" value="{{ server_etherpad }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+

@@ -1,0 +1,44 @@
+{%  if pagina_nueva %}
+<button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
+	{{ "nuevo expediente"|trans }}
+</button>
+{% endif %}
+<table class="table table-sm table-bordered">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">{{ "##"|trans }}</th>
+      <th scope="col">{{ "fecha inicio"|trans }}</th>
+      <th scope="col">{{ "estado"|trans }}</th>
+      <th scope="col">{{ "tramite"|trans }}</th>
+      <th scope="col">{{ "asunto"|trans }}</th>
+      <th scope="col">{{ "ponente"|trans }}</th>
+      
+      <th scope="col">{{ "fecha aprobación"|trans }}</th>
+      <th scope="col">{{ "fecha reunión"|trans }}</th>
+      <th scope="col">{{ "fecha contestar"|trans }}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in a_expedientes %}
+    <tr>
+      <th scope="row">{{ row.link_mod|raw }}</th>
+      <td>{{ row.link_ver|raw }}</td>
+      <td>{{ row.f_ini|raw }}</td>
+      <td>{{ row.estado|raw }}</td>
+      <td>{{ row.tramite|raw }}</td>
+      <td>{{ row.asunto|raw }}</td>
+      <td>{{ row.ponente|raw }}</td>
+      
+      <td>{{ row.f_aprobacion|raw }}</td>
+      <td>{{ row.f_reunion|raw }}</td>
+      <td>{{ row.f_contestar|raw }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<script type="text/javascript">
+$(document).ready(function() {
+	tabs_show('{{ vista }}','{{ filtro }}');
+});
+</script>

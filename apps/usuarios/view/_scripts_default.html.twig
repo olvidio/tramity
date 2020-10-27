@@ -1,0 +1,22 @@
+<!-- Custom scripts for all pages-->
+{% include '@global_js/core_ajax.js.twig' %}
+<script src="js/core_ajax.js"></script>
+{# <script src="js/sb-admin-2.js"></script> #}
+<script>
+$(document).ready(function() {
+	$('#cargando').hide();  // hide it initially
+});
+$(document).ajaxStart(function() {$('#cargando').show(); });
+$(document).ajaxStop(function() {$('#cargando').hide(); });
+
+{#
+/* Hay que ponerlo aqui, para asegurar que haya terminado de cargar todos los scripts. */
+$(document).ready(function(){
+	{% if mi_idioma %}
+        $.datepicker.setDefaults( $.datepicker.regional[ "{{ mi_idioma }}" ] );
+	{% else %}
+        $.datepicker.setDefaults( $.datepicker.regional[ "es" ] ); // Para que quede por defecto.
+	{% endif %}
+});
+#}
+</script>

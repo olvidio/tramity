@@ -1,0 +1,302 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: tramity\n"
+"POT-Creation-Date: 2020-06-08 20:31+0200\n"
+"PO-Revision-Date: 2020-06-10 09:38+0200\n"
+"Last-Translator: Daniel Serrabou <dani@moneders.net>\n"
+"Language-Team: \n"
+"Language: ca_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3.1\n"
+"X-Poedit-Basepath: ../apps\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: core/comprobar_campos.php:66
+msgid "no tiene el formato requerido"
+msgstr ""
+
+#: core/comprobar_campos.php:68
+#, php-format
+msgid "el campo \"%1$s\" \"%3$s\". Valor actual: \"%2$s\""
+msgstr ""
+
+#: core/comprobar_campos.php:80
+#, php-format
+msgid "el campo \"%1$s\" debe ser un número real, y es: \"%2$s\""
+msgstr ""
+
+#: core/comprobar_campos.php:88
+#, php-format
+msgid "el campo \"%1$s\" debe ser un número, y es: \"%2$s\""
+msgstr ""
+
+#: core/comprobar_campos.php:100 core/comprobar_campos.php:106
+#, php-format
+msgid "el campo \"%1$s\" debe ser un número entero, y es: \"%2$s\""
+msgstr ""
+
+#: core/comprobar_campos.php:114 core/comprobar_campos.php:122
+#, php-format
+msgid "el campo \"%1$s\" debe ser un texto, y es: \"%2$s\""
+msgstr ""
+
+#: core/comprobar_campos.php:128
+#, php-format
+msgid "el campo \"%1$s\" sólo puede tener %2$d cararcteres y tiene %3$d"
+msgstr ""
+
+#: core/comprobar_campos.php:141 core/comprobar_campos.php:147
+#, php-format
+msgid "el campo \"%1$s\" debe ser una fecha, y es: \"%2$s\""
+msgstr ""
+
+#: core/comprobar_campos.php:162 core/comprobar_campos.php:168
+#, php-format
+msgid "el campo \"%1$s\" debe ser una hora. Debe tener el formato hh:mm:ss. [%2$s]"
+msgstr ""
+
+#: core/comprobar_campos.php:188
+#, php-format
+msgid "el campo \"%1$s\" no puede estar vacío"
+msgstr ""
+
+#: devel/controller/factory_form.php:26
+msgid "guardar cambios"
+msgstr ""
+
+#: usuarios/controller/usuario_lista.php:43
+msgid "no tiene permisos para ver esto"
+msgstr ""
+
+#: usuarios/controller/usuario_lista.php:71
+msgid "borrar"
+msgstr ""
+
+#: usuarios/model/entity/preferencia.class.php:401
+msgid "id_usuario"
+msgstr ""
+
+#: usuarios/model/entity/preferencia.class.php:413
+msgid "tipo"
+msgstr ""
+
+#: usuarios/model/entity/preferencia.class.php:425
+msgid "preferencia"
+msgstr ""
+
+#: usuarios/model/entity/role.class.php:401
+msgid "id_ubicacion"
+msgstr ""
+
+#: usuarios/model/entity/role.class.php:413
+msgid "role"
+msgstr ""
+
+#: usuarios/model/entity/role.class.php:425
+msgid "descripcion"
+msgstr ""
+
+#: usuarios/model/entity/usuario.class.php:461
+msgid "usuario"
+msgstr "usuariiiii"
+
+#: usuarios/model/entity/usuario.class.php:473
+msgid "id_role"
+msgstr ""
+
+#: usuarios/model/entity/usuario.class.php:485
+msgid "password"
+msgstr ""
+
+#: usuarios/model/entity/usuario.class.php:497
+msgid "email"
+msgstr ""
+
+#: usuarios/model/entity/usuario.class.php:509
+msgid "nom_usuario"
+msgstr ""
+
+#: web/datetimelocal.class.php:18
+msgid "enero"
+msgstr ""
+
+#: web/datetimelocal.class.php:19
+msgid "febrero"
+msgstr ""
+
+#: web/datetimelocal.class.php:20
+msgid "marzo"
+msgstr ""
+
+#: web/datetimelocal.class.php:21
+msgid "abril"
+msgstr ""
+
+#: web/datetimelocal.class.php:22
+msgid "mayo"
+msgstr ""
+
+#: web/datetimelocal.class.php:23
+msgid "junio"
+msgstr ""
+
+#: web/datetimelocal.class.php:24
+msgid "julio"
+msgstr ""
+
+#: web/datetimelocal.class.php:25
+msgid "agosto"
+msgstr ""
+
+#: web/datetimelocal.class.php:26
+msgid "septiembre"
+msgstr ""
+
+#: web/datetimelocal.class.php:27
+msgid "octubre"
+msgstr ""
+
+#: web/datetimelocal.class.php:28
+msgid "noviembre"
+msgstr ""
+
+#: web/datetimelocal.class.php:29
+msgid "diciembre"
+msgstr ""
+
+#: web/datetimelocal.class.php:143
+msgid "lunes"
+msgstr ""
+
+#: web/datetimelocal.class.php:143
+msgid "martes"
+msgstr ""
+
+#: web/datetimelocal.class.php:143
+msgid "miércoles"
+msgstr ""
+
+#: web/datetimelocal.class.php:143
+msgid "jueves"
+msgstr ""
+
+#: web/datetimelocal.class.php:143
+msgid "viernes"
+msgstr ""
+
+#: web/datetimelocal.class.php:143
+msgid "sábado"
+msgstr ""
+
+#: web/datetimelocal.class.php:143
+msgid "domingo"
+msgstr ""
+
+#: web/datetimelocal.class.php:197
+#, php-format
+msgid "la fecha fin es igual a la fecha inicio en el periodo %s: %s"
+msgstr ""
+
+#: web/datetimelocal.class.php:202
+#, php-format
+msgid "la fecha fin es menor que la fecha inicio en el periodo %s: %s"
+msgstr ""
+
+#: web/datetimelocal.class.php:212
+#, php-format
+msgid "dias libres cerca de %s"
+msgstr ""
+
+#: web/datetimelocal.class.php:217
+#, php-format
+msgid "hay un solape cerca de %s"
+msgstr ""
+
+#: web/desplegable.class.php:73
+msgid "tiene que ser un array"
+msgstr ""
+
+#: web/hash.class.php:144
+msgid "llegan campos hidden modificados"
+msgstr ""
+
+#: web/hash.class.php:175
+msgid "llegan distinto número o nombre de los campos que se dice que se envian"
+msgstr ""
+
+#: web/hash.class.php:219
+msgid "url modificada"
+msgstr ""
+
+#: web/hash.class.php:230 web/hash.class.php:235
+msgid "problema general de seguridad"
+msgstr ""
+
+#: web/hash.class.php:236
+msgid "para ver más detalles activa el mode debug en core\\confgiGlobal"
+msgstr ""
+
+#: web/hash.class.php:270
+msgid "página con seguridad desactivada"
+msgstr ""
+
+#: web/lista.class.php:142
+msgid "no hay filas"
+msgstr ""
+
+#: web/lista.class.php:305 web/lista.class.php:891 web/lista.class.php:1062
+msgid "no hay ninguna fila"
+msgstr ""
+
+#: web/lista.class.php:851
+msgid "guardar selección de columnas"
+msgstr ""
+
+#: web/lista.class.php:853
+msgid "ver/ocultar panel de búsqueda"
+msgstr ""
+
+#: web/lista.class.php:862
+msgid "Buscar en todas las columnas"
+msgstr ""
+
+#: web/lista.class.php:964 web/lista.class.php:1117
+msgid "clic para seleccionar"
+msgstr ""
+
+#: web/lista.class.php:1080
+msgid "ordenar por..."
+msgstr ""
+
+#: usuarios/view/Copy of usuario_lista.html.twig:13
+msgid "¿Está seguro que desea borrar este usuario?"
+msgstr ""
+
+#: usuarios/view/Copy of usuario_lista.html.twig:23
+msgid "respuesta"
+msgstr ""
+
+#: usuarios/view/Copy of usuario_lista.html.twig:44
+msgid "nombre"
+msgstr ""
+
+#: usuarios/view/Copy of usuario_lista.html.twig:45
+msgid "buscar"
+msgstr "cercar"
+
+#: usuarios/view/Copy of usuario_lista.html.twig:56
+msgid "nuevo usuario"
+msgstr "nou ususariii"
+
+#: usuarios/view/admin.html.twig:49
+msgid "ausencias"
+msgstr "Ausènts"
+
+#: usuarios/view/usuario_lista.html.twig:13
+#: usuarios/view/usuario_lista.html.twig:17
+msgid "TTTTWWWWEEEETTTT"
+msgstr "UNA COSA"

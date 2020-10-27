@@ -1,0 +1,122 @@
+<script type="text/javascript">
+{{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
+{{ oArrayProtDestino.ComprobarSelectJs|raw }}
+
+fnjs_mas_grupos=function(e){
+	var code = (e.keyCode ? e.keyCode : e.which);
+	if(e=="x") {
+		var valor=1;
+	} else {
+		var id_campo='#'+e.currentTarget.id;
+		var valor=$(id_campo).val();
+		if(code!=9) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	}
+	if ( code==9 || e.type=="change" || e=="x") {
+		if (valor!=0) {
+			{{ oArrayDesplGrupo.ListaSelectsJs|raw }}
+		}
+	}
+}
+fnjs_quitar_grupos=function(){
+	$('#span_grupos').html("");
+	$('#grupos_num').val(0);
+}
+
+fnjs_mas_destinos=function(e){
+	var code = (e.keyCode ? e.keyCode : e.which);
+	if(e=="x") {
+		var valor=1;
+	} else {
+		var id_campo='#'+e.currentTarget.id;
+		var valor=$(id_campo).val();
+		if(code!=9) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	}
+	if ( code==9 || e.type=="change" || e=="x") {
+		if (valor!=0) {
+			{{ oArrayProtDestino.ListaSelectsJs|raw }}
+		}
+	}
+}
+fnjs_quitar_destinos=function(){
+	$('#span_dst').html("");
+	$('#dst_num').val(0);
+}
+
+
+$(function() {
+	$( "#f_salida" ).datepicker( {
+		numberOfMonths: 1,
+		showButtonPanel: true
+		});
+
+});
+
+fnjs_enviar=function(event){
+	// Asegurarme que es por click y no por return (posicion: 0,0)
+	var x = event.x || event.clientX;
+    var y = event.y || event.clientY;
+    if (!x && !y) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    	return false;
+    }
+
+	var err=0;
+	var asunto=$('#asunto').val();
+	var f_salida=$('#f_salida').val();
+	var id_entrada=$('#id_entrada').val();
+
+	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans }}"); err=1; }
+	if (!fnjs_comprobar_fecha('#f_salida')) { err=1; }
+	if (!f_salida) { alert("{{ "Debe llenar el campo de fecha de salida"|trans }}"); err=1; }
+	
+	if (err!=1) {
+		$('#form_enviar').attr('action','{{ url_update }}');
+		$('#que').val('enviar');
+		$('#form_enviar').submit(function(event){
+			event.preventDefault(); //prevent default action 	
+            request=$.ajax({
+                data: $(this).serialize(),
+                url: $(this).attr('action'),
+                type: 'post',
+                dataType: 'json'
+            });
+            request.done( function (rta) {
+                var json=rta;
+                if (json.success != true) {
+                    rta_txt = rta.responseText;
+                    alert ('error: '+rta_txt);
+                } else {
+                    alert ("{{ "datos guardados"|trans }}");
+                    // Volver a la lista...
+                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                }
+            });
+		});
+		$('#form_enviar').submit();
+	} else {
+        event.preventDefault();
+	}
+}
+
+fnjs_cancelar=function(event){
+	// Asegurarme que es por click y no por return (posicion: 0,0)
+	var x = event.x || event.clientX;
+    var y = event.y || event.clientY;
+    if (!x && !y) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    	return false;
+    }
+    event.preventDefault(); //prevent default action 	
+	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+}
+</script>

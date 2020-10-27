@@ -1,0 +1,235 @@
+<?php
+use core\ConfigGlobal;
+use expedientes\model\Expediente;
+use tramites\model\entity\Firma;
+use tramites\model\entity\GestorFirma;
+use usuarios\model\entity\Cargo;
+use usuarios\model\entity\GestorCargo;
+use tramites\model\entity\TramiteCargo;
+use tramites\model\entity\GestorTramiteCargo;
+
+// INICIO Cabecera global de URL de controlador *********************************
+require_once ("apps/core/global_header.inc");
+// Arxivos requeridos por esta url **********************************************
+
+// Crea los objectos de uso global **********************************************
+require_once ("apps/core/global_object.inc");
+// FIN de  Cabecera global de URL de controlador ********************************
+
+$oPosicion->recordar();
+
+$Qque = (string) \filter_input(INPUT_POST, 'que');
+
+$Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
+$Qvoto = (integer) \filter_input(INPUT_POST, 'voto');
+$Qcomentario = (string) \filter_input(INPUT_POST, 'comentario');
+
+$id_cargo = ConfigGlobal::mi_id_cargo();
+$oExpediente = new Expediente($Qid_expediente);
+$id_tramite = $oExpediente->getId_tramite();
+$id_ponente = $oExpediente->getPonente();
+
+$error_txt = '';
+$jsondata = [];
+switch ($Qque) {
+    case 'recorrido':
+        $gesCargos = new GestorCargo();
+        $aCargos =$gesCargos->getArrayCargos();
+        
+        // Comentarios y Aclaraciones
+        $aWhere = ['id_expediente' => $Qid_expediente,
+            '_ordre' => 'orden_tramite, orden_oficina ASC'
+        ];
+        $gesFirmas = new GestorFirma();
+        $cFirmas = $gesFirmas->getFirmas($aWhere);
+        $comentarios = '';
+        $a_recorrido = [];
+        $oFirma = new Firma();
+        $a_valores = $oFirma->getArrayValor('all');
+        foreach ($cFirmas as $oFirma) {
+            $a_rec = [];
+            $tipo = $oFirma->getTipo();
+            $valor = $oFirma->getValor();
+            $f_valor = $oFirma->getF_valor()->getFromLocal();
+            $id_cargo = $oFirma->getId_cargo();
+            $cargo = $aCargos[$id_cargo];
+            if (!empty($valor)) {
+                $voto = $a_valores[$valor];
+                $observ = $oFirma->getObserv();
+                $observ_ponente = $oFirma->getObserv_creador();
+                if ($tipo == Firma::TIPO_VOTO) {
+                    if (!empty($observ)) {
+                        $comentarios .= empty($comentarios)? '' : "<br>";
+                        $comentarios .= "$cargo($voto): $observ";
+                    }
+                    switch ($valor) {
+                        case Firma::V_NO:
+                        case Firma::V_RECHAZADO:
+                            $a_rec['class'] = "list-group-item-danger";
+                            break;
+                        case Firma::V_OK:
+                            $a_rec['class'] = "list-group-item-success";
+                            break;
+                        default:
+                            $a_rec['class'] = "list-group-item-info";
+                    }
+                    $a_rec['valor'] = "$f_valor $cargo [$voto]";
+                    $a_recorrido[] = $a_rec;
+                }
+                if ($tipo == Firma::TIPO_ACLARACION) {
+                    $voto = _("aclaración");
+                    $comentarios .= empty($comentarios)? '' : "<br>";
+                    $comentarios .= "$cargo($voto): $observ";
+                    if (!empty($observ_ponente)) {
+                        $comentarios .= " rta: $observ_ponente";
+                    }
+                }
+            } else {
+                if ($tipo == Firma::TIPO_VOTO) {
+                    $a_rec['class'] = "";
+                    $a_rec['valor'] = $cargo;
+                    $a_recorrido[] = $a_rec;
+                }
+            }
+        }
+        $jsondata['recorrido'] = json_encode($a_recorrido);
+        break;
+    
+    case 'add':
+        $Qa_cargos = (array)  \filter_input(INPUT_POST, 'a_cargos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        // buscar el orden del ultimo:
+        $gesTramiteCargo = new GestorTramiteCargo();
+        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS]);
+        $oTramiteCargo = $cTramiteCargos[0];
+        $orden_tramite = $oTramiteCargo->getOrden_tramite();
+        // buscar el orden dentro de las firmas
+        $aWhere = ['id_expediente' => $Qid_expediente,
+                    'orden_tramite' => $orden_tramite,
+                    '_ordre' => 'orden_oficina DESC',
+        ];
+        $gesFirmas = new GestorFirma();
+        $cFirmas = $gesFirmas->getFirmas($aWhere);
+        if (empty($cFirmas)) {
+            $orden_oficina = 0;
+        } else {
+            $oFirmaOrden = $cFirmas[0];
+            $orden_oficina = $oFirmaOrden->getOrden_oficina();
+        }
+        foreach ($Qa_cargos as $id_cargo) {
+            $orden_oficina++;
+            $oFirma = new Firma();
+            $oFirma->setId_expediente($Qid_expediente);
+            $oFirma->setId_tramite($id_tramite);
+            $oFirma->setId_cargo_creador($id_ponente);
+            $oFirma->setId_cargo($id_cargo);
+            $oFirma->setOrden_tramite($orden_tramite);
+            $oFirma->setOrden_oficina($orden_oficina);
+            // Al inicializar, sólo pongo los votos.
+            $oFirma->setTipo(Firma::TIPO_VOTO);
+            $oFirma->DBGuardar();
+        }
+        
+        break;
+    case 'lst_cargos_libres':
+        // todos los cargos
+        $gesCargos = new GestorCargo();
+        $a_todos_cargos = $gesCargos->getArrayCargos();
+        
+        $aWhere = ['id_expediente' => $Qid_expediente,
+        ];
+        $gesFirmas = new GestorFirma();
+        $cFirmas = $gesFirmas->getFirmas($aWhere);
+        $a_posibles_cargos = [];
+        foreach ($cFirmas as $oFirma) {
+            $id_cargo = $oFirma->getId_cargo();
+            unset($a_todos_cargos[$id_cargo]);
+        }
+        foreach ($a_todos_cargos as $id => $sigla) {
+            $a_posibles_cargos[] = ['id'=>$id, 'sigla'=>$sigla ];
+        }
+        $jsondata['cargos'] = json_encode($a_posibles_cargos);
+        break;
+    case 'voto':
+        $aWhere = ['id_expediente' => $Qid_expediente,
+                    'id_cargo' => $id_cargo,
+                    'tipo' => Firma::TIPO_VOTO,
+        ];
+        $gesFirmas = new GestorFirma();
+        $cFirmas = $gesFirmas->getFirmas($aWhere);
+        if (is_array($cFirmas) && count($cFirmas) == 0) {
+            $error_txt .= _("No puede Firmar");
+        } else {
+            $f_hoy_iso = date('Y-m-d');
+            $oFirma = $cFirmas[0];
+            $oFirma->DBCarregar();
+            $oFirma->setValor($Qvoto);
+            $oFirma->setObserv($Qcomentario);
+            $oFirma->setF_valor($f_hoy_iso,FALSE);
+            if ($oFirma->DBGuardar() === FALSE ) {
+                $error_txt .= $oFirma->getErrorTxt();
+            }
+        }
+        break;
+    case 'aclaracion_new':
+        $valor = Firma::V_A_NUEVA; //Nuebva aclaración.
+        $orden_tramite = 0;
+        // Comprobar que no existe:
+        $aWhere = ['id_expediente' => $Qid_expediente,
+                    'id_cargo' => $id_cargo,
+                    'tipo' => Firma::TIPO_ACLARACION,
+                    '_ordre' => 'orden_tramite DESC'
+        ];
+        $gesFirmas = new GestorFirma();
+        $cFirmas = $gesFirmas->getFirmas($aWhere);
+        if (is_array($cFirmas) && count($cFirmas) > 0) {
+            // Ya existe una aclaración. Busco la última, para saber el orden.
+            $oFirmaAclaracion = $cFirmas[0];
+            $orden = $oFirmaAclaracion->getOrden_tramite();
+            $orden_tramite = $orden + 1;
+        }
+        // orden trámite
+        $aWhere = ['id_expediente' => $Qid_expediente,
+                    'id_cargo' => $id_cargo,
+                    'tipo' => Firma::TIPO_VOTO,
+        ];
+        $gesFirmas = new GestorFirma();
+        $cFirmas = $gesFirmas->getFirmas($aWhere);
+        if (is_array($cFirmas) && count($cFirmas) == 0) {
+            $error_txt .= _("No puede Firmar");
+        } else {
+            if (empty($orden_tramite)) {
+                $oFirmaVoto = $cFirmas[0];
+                $orden = $oFirmaVoto->getOrden_tramite();
+                // 1 más del que tengo.
+                $orden_tramite = $orden + 1;
+            } else {
+                $orden_tramite = $orden_tramite + 1;
+            }
+            
+            $f_hoy_iso = date('Y-m-d');
+            $oFirma = new Firma();
+            $oFirma->setTipo(Firma::TIPO_ACLARACION);
+            $oFirma->setId_expediente($Qid_expediente);
+            $oFirma->setId_cargo($id_cargo);
+            $oFirma->setId_cargo_creador($id_ponente);
+            $oFirma->setId_tramite($id_tramite);
+            $oFirma->setOrden_tramite($orden_tramite);
+            $oFirma->setValor($valor);
+            $oFirma->setObserv($Qcomentario);
+            $oFirma->setF_valor($f_hoy_iso,FALSE);
+            if ($oFirma->DBGuardar() === FALSE ) {
+                $error_txt .= $oFirma->getErrorTxt();
+            }
+        }
+    break;
+}
+        
+if (!empty($error_txt)) {
+    $jsondata['success'] = FALSE;
+    $jsondata['error_txt'] = $error_txt;
+} else {
+    $jsondata['success'] = TRUE;
+}
+//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+header('Content-type: application/json; charset=utf-8');
+echo json_encode($jsondata);
