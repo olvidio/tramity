@@ -75,9 +75,9 @@ class Etherpad  extends Client {
     
         // depende si es en el portatil o en la dl.
         if (ConfigGlobal::SERVIDOR == 'tramity.local') {
-            $apikey = $this->apikey_dlb;
-        } else {
             $apikey = $this->apikey;
+        } else {
+            $apikey = $this->apikey_dlb;
         }
         
         parent::__construct($apikey, $this->url);
