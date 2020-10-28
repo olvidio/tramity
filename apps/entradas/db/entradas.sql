@@ -70,7 +70,7 @@ CREATE INDEX IF NOT EXISTS entrada_adjuntos_id_entrada_idx ON public.entrada_adj
 
 --- by pass
 -- OJO; Para los indices array integer ---
-CREATE EXTENSION intarray;
+CREATE EXTENSION IF NOT EXISTS intarray;
 CREATE TABLE public.entradas_bypass (
 	id_item SERIAL PRIMARY KEY,
     id_entrada integer NOT NULL,
