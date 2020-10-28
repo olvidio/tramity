@@ -21,7 +21,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: x_locales; Type: TABLE; Schema: public; Owner: orbix
+-- Name: x_locales; Type: TABLE; Schema: public; Owner: tramity
 --
 
 CREATE TABLE public.x_locales (
@@ -33,10 +33,10 @@ CREATE TABLE public.x_locales (
 );
 
 
-ALTER TABLE public.x_locales OWNER TO orbix;
+ALTER TABLE public.x_locales OWNER TO tramity;
 
 --
--- Data for Name: x_locales; Type: TABLE DATA; Schema: public; Owner: orbix
+-- Data for Name: x_locales; Type: TABLE DATA; Schema: public; Owner: tramity
 --
 
 COPY public.x_locales (id_locale, nom_locale, idioma, nom_idioma, activo) FROM stdin;
@@ -105,7 +105,7 @@ gl_ES.UTF-8	Galician_Spain	gl	Gallego	f
 
 
 --
--- Name: x_locales xidiomas_pkey; Type: CONSTRAINT; Schema: public; Owner: orbix
+-- Name: x_locales xidiomas_pkey; Type: CONSTRAINT; Schema: public; Owner: tramity
 --
 
 ALTER TABLE ONLY public.x_locales
