@@ -13,7 +13,6 @@ require_once ("apps/core/global_object.inc");
 
 // Para salir de la sesión.
 if (isset($_REQUEST['logout']) && $_REQUEST['logout'] == 'si') {
-    session_start();
     // Destruir todas las variables de sesión.
     $_SESSION = array();
     $GLOBALS = array();
