@@ -9,13 +9,13 @@ CREATE TABLE public.x_tramites (
 
 ALTER TABLE public.x_tramites OWNER TO tramity;
 
-INSERT INTO x_tramites (tramite, orden) VALUES ('de trámite (los "E-12")', 10, 'E12');
-INSERT INTO x_tramites (tramite, orden) VALUES ('ordinarios', 20, 'ord.');
-INSERT INTO x_tramites (tramite, orden) VALUES ('de despacho', 30, 'desp.');
-INSERT INTO x_tramites (tramite, orden) VALUES ('extraordinarios', 40, 'extra.');
-INSERT INTO x_tramites (tramite, orden) VALUES ('voto consultivo', 50, 'cons.');
-INSERT INTO x_tramites (tramite, orden) VALUES ('voto deliberativo', 60, 'delib.');
-INSERT INTO x_tramites (tramite, orden) VALUES ('comisión de trabajo', 70, 'c. t.');
+INSERT INTO x_tramites (tramite, orden, breve) VALUES ('de trámite (los "E-12")', 10, 'E12');
+INSERT INTO x_tramites (tramite, orden, breve) VALUES ('ordinarios', 20, 'ord.');
+INSERT INTO x_tramites (tramite, orden, breve) VALUES ('de despacho', 30, 'desp.');
+INSERT INTO x_tramites (tramite, orden, breve) VALUES ('extraordinarios', 40, 'extra.');
+INSERT INTO x_tramites (tramite, orden, breve) VALUES ('voto consultivo', 50, 'cons.');
+INSERT INTO x_tramites (tramite, orden, breve) VALUES ('voto deliberativo', 60, 'delib.');
+INSERT INTO x_tramites (tramite, orden, breve) VALUES ('comisión de trabajo', 70, 'c. t.');
 
 
 CREATE TABLE public.tramite_cargo (
@@ -25,9 +25,6 @@ CREATE TABLE public.tramite_cargo (
     id_cargo integer NOT NULL,
     multiple smallint
 );
-
-id_cargo extra: resto, todos_d
-
 
 ALTER TABLE public.tramite_cargo OWNER TO tramity;
 
