@@ -25,7 +25,8 @@ class Etherpad  extends Client {
      * @var string|null
      */ 
     private $apikey = '851fd57362e4d63df4150bee420cd28e4d471debb0c18ca2e18fc1d24a6ed1ea';
-    
+    private $apikey_dlb = 'd699adac309a229ed20237dddf3397e79313631445af6f26c6a57bbe54b77d80';
+
     /**
      * @var string|null
      */
@@ -72,7 +73,14 @@ class Etherpad  extends Client {
         $this->setId_usuario($id_usuario);
         $this->setNom_usuario($nom_usuario);
     
-        parent::__construct($this->apikey, $this->url);
+        // depende si es en el portatil o en la dl.
+        if (ConfigGlobal::SERVIDOR == 'tramity.local') {
+            $apikey = $this->apikey_dlb;
+        } else {
+            $apikey = $this->apikey;
+        }
+        
+        parent::__construct($apikey, $this->url);
     }
     
    /**
