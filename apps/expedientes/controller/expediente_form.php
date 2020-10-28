@@ -212,6 +212,7 @@ $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?
 $pag_escrito =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
 $pag_propuesta =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_PROPUESTA]));
 $pag_plantilla =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_PLANTILLA]));
+$server = ConfigGlobal::getWeb(); //http://tramity.local
 
 $a_campos = [
     'titulo' => $titulo,
@@ -261,6 +262,8 @@ $a_campos = [
     'prioridad_normal' => $prioridad_normal,
     'plazo_normal' => $plazo_normal,
     'error_fecha' => $error_fecha,
+    // parar _antecedentes_js
+    'server' => $server,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

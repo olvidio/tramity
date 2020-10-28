@@ -314,7 +314,7 @@ fnjs_cancelar=function(event) {
 fnjs_ver_escrito=function(id_escrito) {
     var ssfsv = 'sv';
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-    var server = 'http://tramity.local'
+    var server = '{{ server }}'
     var url = server+'/apps/expedientes/controller/escrito_ver.php?id_escrito='+id_escrito;
     w=window.open(url, "sele", winPrefs);
     w.focus();
@@ -323,10 +323,6 @@ fnjs_ver_escrito=function(id_escrito) {
 
 fnjs_revisar_escrito=function(event,id_escrito) {
     var winPrefs="dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-    //var server = 'http://127.0.0.1:8080'
-    //var url = server+'/p/'+id_entrada;
-    // get url
-    var url; 
     var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
     var param_json = { tipo_id: 'escrito', id: id_escrito };
     

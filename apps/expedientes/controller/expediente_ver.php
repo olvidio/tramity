@@ -162,6 +162,7 @@ $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => 'firmar']));
+$server = ConfigGlobal::getWeb(); //http://tramity.local
 
 $a_campos = [
     'id_expediente' => $Qid_expediente,
@@ -200,6 +201,7 @@ $a_campos = [
     //'a_acciones' => $a_acciones,
     //'ver_todo' => $ver_todo,
     'a_firmas' => $a_firmas,
+    'server' => $server,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

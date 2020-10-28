@@ -1,6 +1,7 @@
 <?php
 namespace expedientes\model;
 
+use core\ConfigGlobal;
 use core\ViewTwig;
 use expedientes\model\entity\GestorAccion;
 use web\Protocolo;
@@ -121,10 +122,12 @@ class EscritoLista {
             $a_acciones[] = $a_accion;
         }
         $ver_todo = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$todos_escritos');\" >"._("ver todos")."</span>";
+        $server = ConfigGlobal::getWeb(); //http://tramity.local
         
         $a_campos = [
             'a_acciones' => $a_acciones,
             'ver_todo' => $ver_todo,
+            'server' => $server,
         ];
         
         $oView = new ViewTwig('expedientes/controller');

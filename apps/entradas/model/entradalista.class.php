@@ -147,6 +147,7 @@ class EntradaLista {
         }
             
         $url_update = 'apps/entradas/controller/entrada_update.php';
+        $server = ConfigGlobal::getWeb(); //http://tramity.local
         
         $a_campos = [
             //'id_entrada' => $id_entrada,
@@ -155,6 +156,7 @@ class EntradaLista {
             'url_update' => $url_update,
             'pagina_nueva' => $pagina_nueva,
             'filtro' => $this->getFiltro(),
+            'server' => $server,
         ];
         
         $oView = new ViewTwig('entradas/controller');
