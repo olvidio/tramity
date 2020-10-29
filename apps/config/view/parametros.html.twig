@@ -85,4 +85,11 @@ fnjs_guardar=function(formulario){
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
+<h3>{{ "servidor ethercalc"|trans }}:</h3>
+<form id="frm_server_c" name="frm_server_c" action="">
+{{ oHashSEC.getCamposHtml|raw }}
+<input type="text" name="valor" value="{{ server_ethercalc }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
 

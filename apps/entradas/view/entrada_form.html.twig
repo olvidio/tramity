@@ -104,9 +104,16 @@
     {% if tipo_documento %}
       <div class="form-group">
         <label for="">{{ "Ver escrito"|trans }}:</label>
-        <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(event);" >
-          {{ "Etherpad"|trans }}
-        </button>
+	    {% if tipo_documento == 1 %}
+            <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(event);" >
+              {{ "Etherpad"|trans }}
+            </button>
+	    {% endif %}
+	    {% if tipo_documento == 2 %}
+            <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ec(event);" >
+              {{ "Ethercalc"|trans }}
+            </button>
+	    {% endif %}
       </div>
     {% else %}
     <label for="">{{ "Insertar escrito"|trans }}:</label>

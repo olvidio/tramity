@@ -130,6 +130,21 @@ $oHashSE->setArrayCamposHidden(['parametro' => $parametro]);
 $a_campos['oHashSE'] = $oHashSE;
 $a_campos['server_etherpad'] = $val_server;
 
+// ----------- Servidor de Ethercalc -------------------
+$parametro = 'server_ethercalc';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$val_server = $valor;
+
+$oHashSEC = new Hash();
+$oHashSEC->setUrl($url);
+$oHashSEC->setcamposForm('valor');
+$oHashSEC->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashSEC'] = $oHashSEC;
+$a_campos['server_ethercalc'] = $val_server;
+
 // ----------- Idioma por defecto de la dl -------------------
 $parametro = 'idioma_default';
 $oConfigSchema = new ConfigSchema($parametro);

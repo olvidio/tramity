@@ -1,5 +1,39 @@
 <script type="text/javascript">
 
+fnjs_ver_doc_ec=function(event) {
+	var id_entrada=$('#id_entrada').val();
+    var winPrefs="dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+    //var server = 'http://127.0.0.1:8080'
+    //var url = server+'/p/'+id_entrada;
+    // get url
+    var url; 
+    var url_ajax = 'apps/ethercalc/controller/getUrlEscrito.php';
+    var param_json = { tipo_id: 'entrada', id: id_entrada };
+    
+    request=$.ajax({
+        data: param_json,
+        url: url_ajax,
+        type: 'post'
+    });
+
+    request.done( function (rta) {
+        // antes, dentro del ajax, hacia falta el responseText
+        //url=rta.responseText;
+        url=rta;
+        w=window.open(url, "sele", winPrefs);
+        w.focus();
+    });
+	request.fail(function(JqXHR, textStatus, errorThrown){
+		alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+        console.error("Hi ha un error: "+ textStatus, errorThrown);
+    });
+
+    event.preventDefault();
+	event.stopPropagation();
+	event.stopImmediatePropagation();
+	return false;
+}
+
 fnjs_ver_doc_ep=function(event) {
 	var id_entrada=$('#id_entrada').val();
     var winPrefs="dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";

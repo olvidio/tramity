@@ -1,0 +1,5 @@
+
+# 2020/10/29 09:05:22 - dagd[]127.0.0.1 
+	->>  ERROR:  null value in column "id_entrada" violates not-null constraint
+DETAIL:  Failing row contains (null, null, null).
+ EntradaDocDB.insertar.execute en linea 174 de: /home/dani/tramity_local/tramity/apps/entradas/model/entity/entradadocdb.class.php

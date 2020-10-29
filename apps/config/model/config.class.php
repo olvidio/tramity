@@ -50,6 +50,12 @@ class Config {
         return $oConfigSchema->getValor();
     }
     
+    public function getServerEthercalc() {
+        $parametro = 'server_ethercalc';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
+    
     // prioridades:
     public function getPlazoUrgente() {
         $parametro = 'plazo_urgente';
