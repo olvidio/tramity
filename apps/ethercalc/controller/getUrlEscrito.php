@@ -27,6 +27,7 @@ $url = $oEthercalc->getUrl();
 
 switch ($Qmodo) {
     case 'html':
+        // Canvis per provar el git
         // Hay que evitar el CORS ( no puedo acceder al tramity.local:9001) 
         //$url = 'http://tramity.local:8080';
         //echo "$url/$padID/export/html";
