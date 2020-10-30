@@ -57,8 +57,10 @@ $oDesplTramites->setNombre('tramite');
 $oDesplTramites->setAction('fnjs_tramite()');
 
 $oExpediente = new Expediente();
+/*
 $a_estado = $oExpediente->getArrayEstado();
 $oDesplEstado = new Desplegable('estado',$a_estado,'',FALSE);
+*/
 
 $a_prioridad = $oExpediente->getArrayPrioridad();
 $oDesplPrioridad = new Desplegable('prioridad',$a_prioridad,Expediente::PRIORIDAD_UNKNOW,FALSE);
@@ -91,7 +93,7 @@ if ($Qid_expediente) {
     $id_tramite = $oExpediente->getId_tramite();
     $oDesplTramites->setOpcion_sel($id_tramite);
     $estado = $oExpediente->getEstado();
-    $oDesplEstado->setOpcion_sel($estado);
+    //$oDesplEstado->setOpcion_sel($estado);
     $prioridad = $oExpediente->getPrioridad();
     $oDesplPrioridad->setOpcion_sel($prioridad);
     
@@ -221,7 +223,8 @@ $a_campos = [
     'ponente_txt' => $ponente_txt,
     'id_ponente' => $id_ponente,
     'oDesplTramites' => $oDesplTramites,
-    'oDesplEstado' => $oDesplEstado,
+    //'oDesplEstado' => $oDesplEstado,
+    'estado' => $estado,
     'oDesplPrioridad' => $oDesplPrioridad,
     'oDesplVida' => $oDesplVida,
 

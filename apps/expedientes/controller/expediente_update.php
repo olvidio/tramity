@@ -157,6 +157,7 @@ switch($Qque) {
             $oExpediente->DBCarregar();
         } else {
             $oExpediente = new Expediente();
+            $Qestado = Expediente::ESTADO_BORRADOR;
             $nuevo = TRUE;
         }
         
