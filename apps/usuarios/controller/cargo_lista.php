@@ -90,7 +90,7 @@ $oHash->setArraycamposHidden(array('que'=>'eliminar'));
 
 $aQuery = [ 'nuevo' => 1, 'quien' => 'cargo' ];
 $url_nuevo = web\Hash::link(core\ConfigGlobal::getWeb().'/apps/usuarios/controller/cargo_form.php?'.http_build_query($aQuery));
-$url_ajax = web\Hash::link(core\ConfigGlobal::getWeb().'/apps/usuarios/controller/cargo_ajax.php');
+$url_ajax = web\Hash::link(core\ConfigGlobal::getWeb().'/apps/usuarios/controller/cargo_update.php');
 $url_actualizar = web\Hash::link(core\ConfigGlobal::getWeb().'/apps/usuarios/controller/cargo_lista.php');
 
 $a_campos = [

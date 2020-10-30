@@ -13,6 +13,17 @@ use usuarios\model\entity\Cargo;
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
 switch($Qque) {
+	case "eliminar":
+	    $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+	    if (!empty($a_sel)) { //vengo de un checkbox
+	        $Qid_cargo = (integer) strtok($a_sel[0],"#");
+	        $oCargo = new Cargo($Qid_cargo);
+	        if ($oCargo->DBEliminar() === false) {
+	            echo _("hay un error, no se ha eliminado");
+	            echo "\n".$oCargo->getErrorTxt();
+	        }
+	    }
+	    break;
 	case "guardar":
 		$Qcargo = (string) \filter_input(INPUT_POST, 'cargo');
 
