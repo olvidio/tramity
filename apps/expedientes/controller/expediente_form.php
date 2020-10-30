@@ -183,6 +183,7 @@ if ($Qid_expediente) {
     
 } else {
     $titulo=_("nuevo expediente");
+    $estado = Expediente::ESTADO_BORRADOR;
     $f_contestar = '';
     $f_ini_circulacion = '';
     $f_reunion = '';
