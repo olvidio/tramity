@@ -77,7 +77,7 @@ $oHash->setArraycamposHidden(array('que'=>'eliminar'));
 
 $aQuery = [ 'nuevo' => 1, 'quien' => 'tramite' ];
 $url_nuevo = web\Hash::link(core\ConfigGlobal::getWeb().'/apps/tramites/controller/tramite_form.php?'.http_build_query($aQuery));
-$url_ajax = web\Hash::link(core\ConfigGlobal::getWeb().'/apps/tramites/controller/tramite_ajax.php');
+$url_ajax = web\Hash::link(core\ConfigGlobal::getWeb().'/apps/tramites/controller/tramite_update.php');
 $url_actualizar = web\Hash::link(core\ConfigGlobal::getWeb().'/apps/tramites/controller/tramite_lista.php');
 
 $a_campos = [

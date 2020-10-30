@@ -13,6 +13,17 @@ use tramites\model\entity\Tramite;
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
 switch($Qque) {
+    case "eliminar":
+        $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        if (!empty($a_sel)) { //vengo de un checkbox
+            $Qid_tramite = (integer) strtok($a_sel[0],"#");
+            $oTramite = new Tramite($Qid_tramite);
+            if ($oTramite->DBEliminar() === false) {
+                echo _("hay un error, no se ha eliminado");
+                echo "\n".$oTramite->getErrorTxt();
+            }
+        }
+        break;
 	case "guardar":
 		$Qtramite = (string) \filter_input(INPUT_POST, 'tramite');
 
