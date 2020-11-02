@@ -4,6 +4,10 @@ use expedientes\model\Expediente;
 use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
+use expedientes\model\entity\Accion;
+use expedientes\model\entity\GestorAccion;
+use expedientes\model\Escrito;
+use tramites\model\entity\GestorFirma;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -38,6 +42,51 @@ $Qa_preparar = (array)  \filter_input(INPUT_POST, 'a_preparar', FILTER_DEFAULT, 
 $Qvida = (integer) \filter_input(INPUT_POST, 'vida');
 
 switch($Qque) {
+    case 'exp_eliminar':
+        $txt_err = '';
+        // Hay que borrar: el expediente, las firmas, las acciones, los escritos y los adjuntos de los escritos.
+        $gesAccion = new GestorAccion();
+        $cAcciones = $gesAccion->getAcciones(['id_expediente' => $Qid_expediente]);
+        foreach ($cAcciones as $oAccion) {
+            $id_escrito = $oAccion->getId_escrito();
+            $oEscrito = new Escrito($id_escrito);
+            $rta = $oEscrito->eliminarTodo();
+            if (!empty($rta)) { 
+                $txt_err .= $rta;
+            }
+            if ($oAccion->DBEliminar() === FALSE) {
+                $txt_err .= _("No se ha elimnado la accion");
+                $txt_err .= "<br>";
+            }
+        }
+        // firmas:
+        $gesFirmas = new  GestorFirma();
+        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente]);
+        foreach($cFirmas as $oFirma) {
+            if ($oFirma->DBEliminar() === FALSE) {
+                $txt_err .= _("No se ha elimnado la firma");
+                $txt_err .= "<br>";
+            }
+        }
+        $oExpediente = new Expediente($Qid_expediente);
+        if ($oExpediente->DBEliminar() === FALSE ) {
+            $txt_err .= _("No se ha elimnado el expediente");
+            $txt_err .= "<br>";
+        }
+        
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'visto':
         // yo soy el qur hago el click:
         $mi_id_cargo = ConfigGlobal::mi_id_cargo();
@@ -55,6 +104,8 @@ switch($Qque) {
             $oJSON->id = $id;
             if ($mi_id_cargo == $id){
                 $oJSON->visto = empty($visto)? 1 : 0;
+            } else {
+                $oJSON->visto = $visto;
             }
             
             $new_preparar[] = $oJSON;
@@ -151,17 +202,17 @@ switch($Qque) {
     case 'circular':
         // primero se guarda, y al final se guarda la fecha de hoy y se crean las firmas para el trámite
     case 'guardar':
-        $nuevo = FALSE;
         if (!empty($Qid_expediente)) {
             $oExpediente = new Expediente($Qid_expediente);
             $oExpediente->DBCarregar();
+            // Mantego al ponente como creador...
         } else {
+            // nuevo.
             $oExpediente = new Expediente();
             $Qestado = Expediente::ESTADO_BORRADOR;
-            $nuevo = TRUE;
+            $oExpediente->setPonente($Qponente);
         }
         
-        $oExpediente->setPonente($Qponente);
 
         $oExpediente->setId_tramite($Qtramite);
         $oExpediente->setEstado($Qestado);

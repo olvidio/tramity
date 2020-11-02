@@ -3,9 +3,11 @@ namespace expedientes\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use function core\is_true;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramite;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Hash;
 
@@ -61,27 +63,54 @@ class ExpedienteLista {
         $aOperador = [];
 
         switch ($this->filtro) {
-            case 'borrador':
+            case 'borrador_propio':
                 $aWhere['estado'] = Expediente::ESTADO_BORRADOR;
                 // solo los propios:
                 $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
-                //$aWhere['f_ini_circulacion'] = 'x';
-                //$aOperador['f_ini_circulacion'] = 'IS NULL';
-                //$aWhere['estado'] = Expediente::ESTADO_BORRADOR;
+                break;
+            case 'borrador_oficina':
+                $mi_cargo = ConfigGlobal::mi_id_cargo();
+                $aWhere['estado'] = Expediente::ESTADO_BORRADOR;
+                // Si es el director los ve todos, no sólo los pendientes de poner 'visto'.
+                if (is_true(ConfigGlobal::soy_dtor())) {
+                    $visto = 'todos';
+                } else {
+                    $visto = 'no_visto';
+                }
+                $gesExpedientes = new GestorExpediente();
+                $a_expedientes = $gesExpedientes->getIdExpedientesPreparar($mi_cargo,$visto);
+                if (!empty($a_expedientes)) {
+                    $aWhere['id_expediente'] = implode(',',$a_expedientes);
+                    $aOperador['id_expediente'] = 'IN';
+                } else {
+                    // para que no salga nada pongo
+                    $aWhere = [];
+                }
                 break;
             case 'firmar':
                 $aWhere['estado'] = Expediente::ESTADO_CIRCULANDO;
                 //pendientes de mi firma, pero ya circulando
                 $aWhereFirma['id_cargo'] = ConfigGlobal::mi_id_cargo();
                 $aWhereFirma['tipo'] = Firma::TIPO_VOTO;
+                $aWhereFirma['valor'] = 'x';
+                $aOperadorFirma['valor'] = 'IS NULL';
+                $gesFirmas = new GestorFirma();
+                $cFirmasNull = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+                // Sumar los firmados, pero no OK
                 $aWhereFirma['valor'] = Firma::V_VISTO .','. Firma::V_A_ESPERA;
                 $aOperadorFirma['valor'] = 'IN';
-                $gesFirmas = new GestorFirma();
-                $cFirmas = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+                $cFirmasVisto = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+                $cFirmas = $cFirmasNull + $cFirmasVisto;
                 $a_expedientes = [];
                 $this->a_expedientes_nuevos = [];
                 foreach ($cFirmas as $oFirma) {
                     $id_expediente = $oFirma->getId_expediente();
+                    $orden_tramite = $oFirma->getOrden_tramite();
+                    // Sólo a partir de que el orden_tramite anterior ya lo hayan firmado todos
+                    if (!$gesFirmas->getAnteriorOK($id_expediente,$orden_tramite)) {
+                        continue;
+                    }
+                    
                     $a_expedientes[] = $id_expediente;
                     $tipo = $oFirma->getTipo();
                     $valor = $oFirma->getValor();
@@ -122,11 +151,29 @@ class ExpedienteLista {
                 $aOperador['f_reunion'] = 'IS NOT NULL';
                 break;
             case 'circulando':
-                // solo los propios:
-                $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
-                //$aWhere['f_ini_circulacion'] = 'x';
-                //$aOperador['f_ini_circulacion'] = 'IS NOT NULL';
                 $aWhere['estado'] = Expediente::ESTADO_CIRCULANDO;
+                // Si es el director los ve todos, no sólo los pendientes de poner 'visto'.
+                if (is_true(ConfigGlobal::soy_dtor())) {
+                    // posibles oficiales de la oficina:
+                    $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+                    $id_oficina = $oCargo->getId_oficina();
+                    $gesCargos = new GestorCargo();
+                    $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+                    $a_cargos = [];
+                    foreach ($a_cargos_oficina as $id_cargo => $cargo) {
+                        $a_cargos[] = $id_cargo;
+                    }
+                    if (!empty($a_cargos)) {
+                        $aWhere['ponente'] = implode(',',$a_cargos);
+                        $aOperador['ponente'] = 'IN';
+                    } else {
+                        // para que no salga nada pongo 
+                        $aWhere = [];
+                    }
+                } else {
+                    // solo los propios:
+                    $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
+                }
                 break;
             case 'acabados':
                 // marcados por scdl con ok.
@@ -158,7 +205,8 @@ class ExpedienteLista {
         $a_estados = $oExpediente->getArrayEstado();
         
         switch ($this->filtro) {
-            case 'borrador':
+            case 'borrador_propio':
+            case 'borrador_oficina':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_form.php';
                 $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query([]));
                 break;
@@ -220,9 +268,15 @@ class ExpedienteLista {
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
                 $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_ver');\" >ver</span>";
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >mod</span>";
+                $row['link_eliminar'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_exp_eliminar('$id_expediente');\" >eliminar</span>";
                 
                 $estado = $oExpediente->getEstado();
                 $row['estado'] = $a_estados[$estado];
+                if ($estado == Expediente::ESTADO_BORRADOR) {
+                    $row['eliminar'] = 1;
+                } else {
+                    $row['eliminar'] = 0;
+                }
                 $row['prioridad'] = $oExpediente->getPrioridad();
                 $row['tramite'] = $tramite_txt;
                 
@@ -249,6 +303,10 @@ class ExpedienteLista {
         }
 
         $url_update = 'apps/expedientes/controller/expediente_update.php';
+        
+        $filtro = $this->getFiltro();
+        $url_cancel = 'apps/expedientes/controller/expediente_lista.php';
+        $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $filtro]));
 
         $a_campos = [
             //'id_expediente' => $this->id_expediente,
@@ -256,7 +314,8 @@ class ExpedienteLista {
             'a_expedientes' => $a_expedientes,
             'url_update' => $url_update,
             'pagina_nueva' => $pagina_nueva,
-            'filtro' => $this->getFiltro(),
+            'pagina_cancel' => $pagina_cancel,
+            'filtro' => $filtro,
         ];
 
         $oView = new ViewTwig('expedientes/controller');

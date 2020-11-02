@@ -35,6 +35,43 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 	/* METODES PUBLICS -----------------------------------------------------------*/
 
 	/**
+	 * Devuelve un array con los id de los expedientes que están marcados
+	 * para que los vea el id_cargo (o no los que ya ha visto si es TRUE).
+	 * 
+	 * @param integer $id_cargo
+	 * @param string $visto ['visto'|'no_visto'|'']
+	 * @return array de id_expedientes
+	 */
+	public function getIdExpedientesPreparar($id_cargo,$visto='no_visto') {
+		$oDbl = $this->getoDbl();
+		switch ($visto) {
+		    case 'visto':
+                $Where_visto = "AND items.visto=1";
+		    break;
+		    case 'no_visto':
+                $Where_visto = "AND (items.visto=0 OR items.visto IS NULL)";
+		    break;
+		    case 'todos':
+		    default:
+                $Where_visto = "";
+		}
+	    $sQuery = "SELECT e.id_expediente, e.asunto, e.ponente, e.json_preparar, items.id, items.visto 
+                    FROM expedientes e, jsonb_to_recordset(e.json_preparar) as items(id smallint,visto smallint) 
+                    WHERE items.id=$id_cargo $Where_visto";
+	    
+		if (($oDbl->query($sQuery)) === FALSE) {
+			$sClauError = 'GestorExpedienteDB.queryPreparar';
+			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+			return FALSE;
+		}
+		$a_expedientes = [];
+		foreach ($oDbl->query($sQuery) as $aDades) {
+			$id_expediente = $aDades['id_expediente'];
+    		$a_expedientes[] = $id_expediente;
+		}
+		return $a_expedientes;
+	}
+	/**
 	 * retorna l'array d'objectes de tipus ExpedienteDB
 	 *
 	 * @param string sQuery la query a executar.

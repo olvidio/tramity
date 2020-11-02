@@ -235,36 +235,62 @@ class Expediente Extends expedienteDB {
         
         foreach ($cTramiteCargos as $oTramiteCargo) {
             $id_cargo = $oTramiteCargo->getId_cargo();
-            $orden_tramite = $oTramiteCargo->getOrden_tramite();
+            $orden_tramite = $oTramiteCargo->getOrden_tramite();;
+            
             // comprobar la oficina para los cargos especiales:
-            // 1 => varias
-            // 2 => ponente
-            // 3 => todos d.
+            // 1 => ponente
+            // 2 => oficiales
+            // 3 => varias
+            // 4 => todos d.
             $oCargo = new Cargo($id_cargo);
             $id_oficina = $oCargo->getId_oficina();
             if (empty($id_oficina)) {
                 switch ($id_cargo) {
                     case Cargo::CARGO_PONENTE: // si es el ponente hay que poner su id_cargo.
+                        // El ponente es el director de la oficina del creador.
+                        $oCargo = new Cargo($id_ponente);
+                        $id_oficina = $oCargo->getId_oficina();
+                        $gesCargos = new GestorCargo();
+                        $cCargos = $gesCargos->getCargos(['id_oficina' => $id_oficina, 'director' => 't']);
+                        $oCargoDtor = $cCargos[0];
+                        $id_dtor_ponente = $oCargoDtor->getId_cargo();
                         $oFirma = new Firma();
                         $oFirma->setId_expediente($this->iid_expediente);
                         $oFirma->setId_tramite($id_tramite);
                         $oFirma->setId_cargo_creador($id_ponente);
-                        $oFirma->setId_cargo($id_ponente);
+                        $oFirma->setId_cargo($id_dtor_ponente);
                         $oFirma->setOrden_tramite($orden_tramite);
                         // Al inicializar, sólo pongo los votos.
                         $oFirma->setTipo(Firma::TIPO_VOTO);
                         $oFirma->DBGuardar();
                         break;
-                    case Cargo::CARGO_VARIAS: // si es para varias oficinas
-                        $a_resto_oficinas = $this->getResto_oficinas();
+                    case Cargo::CARGO_OFICIALES: // para los oficiales de la oficina
+                        $a_firmas_oficina = $this->getFirmas_oficina();
                         $orden_oficina = 0;
-                        foreach ($a_resto_oficinas as $id_oficina) {
+                        foreach ($a_firmas_oficina as $id_cargo) {
                             $orden_oficina++;
                             $oFirma = new Firma();
                             $oFirma->setId_expediente($this->iid_expediente);
                             $oFirma->setId_tramite($id_tramite);
                             $oFirma->setId_cargo_creador($id_ponente);
-                            $oFirma->setId_cargo($id_oficina);
+                            $oFirma->setId_cargo($id_cargo);
+                            $oFirma->setOrden_tramite($orden_tramite);
+                            $oFirma->setOrden_oficina($orden_oficina);
+                            // Al inicializar, sólo pongo los votos.
+                            $oFirma->setTipo(Firma::TIPO_VOTO);
+                            $oFirma->DBGuardar();
+                        }
+                        break;
+                    case Cargo::CARGO_VARIAS: // si es para varias oficinas
+                        $a_resto_oficinas = $this->getResto_oficinas();
+                        $orden_oficina = 0;
+                        foreach ($a_resto_oficinas as $id_cargo) {
+                            $orden_oficina++;
+                            $oFirma = new Firma();
+                            $oFirma->setId_expediente($this->iid_expediente);
+                            $oFirma->setId_tramite($id_tramite);
+                            $oFirma->setId_cargo_creador($id_ponente);
+                            $oFirma->setId_cargo($id_cargo);
                             $oFirma->setOrden_tramite($orden_tramite);
                             $oFirma->setOrden_oficina($orden_oficina);
                             // Al inicializar, sólo pongo los votos.

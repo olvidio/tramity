@@ -35,6 +35,75 @@ class GestorFirma Extends core\ClaseGestor {
 	/* METODES PUBLICS -----------------------------------------------------------*/
 
 	/**
+	 * Comprobar si el bloque de orden_tramite anterior està todo firmado.
+	 * 
+	 * @param integer $id_expediente
+	 * @param integer $orden_tramite
+	 * @return boolean 
+	 */
+    public function getAnteriorOK($id_expediente,$orden_tramite) {
+		$oDbl = $this->getoDbl();
+		$nom_tabla = $this->getNomTabla();
+        // posibles orden_tramite:
+        $sQuery = "SELECT DISTINCT orden_tramite 
+                    FROM $nom_tabla
+                    WHERE id_expediente = $id_expediente AND orden_tramite <= $orden_tramite
+                    ORDER BY orden_tramite DESC";
+		if (($oDbl->query($sQuery)) === FALSE) {
+			$sClauError = 'GestorFirma.query';
+			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+			return FALSE;
+		}
+		// el primero es el actual, el segundo (si existe) es el anterior.
+		$i = 0;
+		$num = [];
+		foreach ($oDbl->query($sQuery) as $aDades) {
+		      $i++;
+		      $num[$i] = $aDades['orden_tramite'];
+		}
+		if (empty($num[2])) { // No existe, el primero es el actual: ok
+		    return TRUE;
+		} else {
+		    $orden_anterior = $num[2];
+            $sQuery = "SELECT *
+                        FROM $nom_tabla
+                        WHERE id_expediente = $id_expediente AND orden_tramite = $orden_anterior
+                        ";
+            if (($oDbl->query($sQuery)) === FALSE) {
+                $sClauError = 'GestorFirma.query';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                return FALSE;
+            }
+            // Contar que todos sean ok:
+            foreach ($oDbl->query($sQuery) as $aDades) {
+                $tipo = $aDades['tipo'];
+                $valor = $aDades['valor'];
+                /*
+                const TIPO_VOTO          = 1;
+                const TIPO_ACLARACION    = 2;
+                // valor
+                const V_VISTO        = 1;  // leído, pensando
+                const V_ESPERA       = 2;  // distinto a no leído
+                const V_NO           = 3;  // voto negativo
+                const V_OK           = 4;  // voto positivo
+                const V_DILATA       = 22;  // sólo vcd
+                const V_RECHAZADO    = 23;  // sólo vcd
+                const V_VISTO_BUENO  = 24;  // sólo vcd VºBº
+                */
+                if ($tipo == FIRMA::TIPO_ACLARACION) {
+                    return FALSE;
+                }
+                if ($valor == Firma::V_NO OR $valor == Firma::V_OK) {
+                } else {
+                    return FALSE;
+                }
+            }
+            return TRUE;
+		}
+    }
+
+
+	/**
 	 * retorna l'array d'objectes de tipus Firma
 	 *
 	 * @param string sQuery la query a executar.

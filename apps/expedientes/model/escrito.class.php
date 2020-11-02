@@ -6,6 +6,7 @@ use etherpad\model\Etherpad;
 use expedientes\model\entity\EscritoDB;
 use expedientes\model\entity\GestorEscritoAdjunto;
 use web\Protocolo;
+use expedientes\model\entity\EscritoAdjunto;
 
 
 
@@ -63,6 +64,40 @@ class Escrito Extends EscritoDB {
         $this->setNomTabla('escritos');
     }
     
+    /**
+     * Elimina el escrito, sus adjuntos y el texto (etherpad...)
+     */
+    public function eliminarTodo() {
+        $txt_err = '';
+        // Tipo de texto:
+        if ($this->getTipo_doc() == self::TIPO_ETHERPAD) {
+            $oEtherpad = new Etherpad();
+            $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid_escrito);
+            $rta = $oEtherpad->eliminarPad();
+            if (!empty($rta)) {
+                $txt_err .= $rta;
+            }
+        }
+        // adjuntos:
+        $gesAdjuntos = new GestorEscritoAdjunto();
+        $cAdjuntos = $gesAdjuntos->getEscritoAdjuntos(['id_escrito' => $this->iid_escrito]);
+        foreach($cAdjuntos as $oAdjunto) {
+            if ($oAdjunto->DBEliminar() === FALSE) {
+                $txt_err .= _("No se ha podido eliminar un adjunto");
+                $txt_err .= "<br>";
+            }
+        }
+        // el propio escrito
+        if (parent::DBEliminar() === FALSE) {
+            $txt_err .= _("No se ha podido eliminar el escrito");
+            $txt_err .= "<br>";
+        }
+        if (empty($txt_err)) {
+            return TRUE;
+        } else {
+            return $txt_err; 
+        }
+    }
     /* METODES PUBLICS ----------------------------------------------------------*/
 
     public function getArrayCategoria() {

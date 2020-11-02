@@ -82,6 +82,9 @@ Class ConfigGlobal extends ServerConf {
 	public static function mi_usuario_cargo() {
 		return $_SESSION['session_auth']['usuario_cargo'];
 	}
+	public static function soy_dtor() {
+	    return $_SESSION['session_auth']['usuario_dtor'];
+	}
 	/**
 	 * 
 	 * @return integer  1: sv, 2 sf

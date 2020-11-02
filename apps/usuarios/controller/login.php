@@ -80,6 +80,7 @@ if ( !isset($_SESSION['session_auth'])) {
                     $usuario_cargo = '';
                 }else {
                     $usuario_cargo = $row2['cargo'];
+                    $usuario_dtor = $row2['director'];
                 }
                 $perms_activ='';
                 $mi_oficina = '';
@@ -110,6 +111,7 @@ if ( !isset($_SESSION['session_auth'])) {
                     $session_auth=array (
                         'id_usuario'=>$id_usuario,
                         'usuario_cargo'=>$usuario_cargo,
+                        'usuario_dtor'=>$usuario_dtor,
                         'id_cargo'=>$id_cargo,
                         'username'=>$_POST['username'],
                         'password'=>$_POST['password'],

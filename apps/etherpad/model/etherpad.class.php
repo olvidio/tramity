@@ -360,6 +360,21 @@ class Etherpad  extends Client {
    }
    
    
+   public function eliminarPad() {
+        $padID = $this->getPadID();
+     /*
+      *Example returns:
+      * 
+      * {code: 0, message:"ok", data: null}
+      * {code: 1, message:"padID does not exist", data: null}
+      */ 
+        $rta = $this->deletePad($padID);
+        if ($rta->getCode() == 1) {
+            $this->mostrar_error($rta);
+        }
+       
+   }
+   
    /* Crear session (link usuario-grupo)
     * creates a new session. validUntil is an unix timestamp in seconds
     */
