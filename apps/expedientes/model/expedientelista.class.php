@@ -38,6 +38,11 @@ class ExpedienteLista {
      * @var array
      */
     private $a_expedientes_nuevos = [];
+    /**
+     * 
+     * @var array
+     */
+    private $a_exp_aclaracion = [];
     
     /*
      * filtros posibles: 
@@ -88,6 +93,8 @@ class ExpedienteLista {
                 }
                 break;
             case 'firmar':
+                // añadir las que requieren aclaración.
+                
                 $aWhere['estado'] = Expediente::ESTADO_CIRCULANDO;
                 //pendientes de mi firma, pero ya circulando
                 $aWhereFirma['id_cargo'] = ConfigGlobal::mi_id_cargo();
@@ -118,6 +125,23 @@ class ExpedienteLista {
                         $this->a_expedientes_nuevos[] = $id_expediente;
                     }
                 }
+                //////// añadir las que requieren aclaración. //////////////////////////////
+                $aWhereFirma = ['valor' => Firma::V_A_NUEVA,
+                                'observ_creador' => 'x',
+                            ];
+                $aOperadorFirma = ['observ_creador' => 'IS NULL' ];
+                $cFirmasVisto = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+                $cFirmas = $cFirmasNull + $cFirmasVisto;
+                $a_exp_aclaracion = [];
+                $this->a_exp_aclaracion = [];
+                foreach ($cFirmas as $oFirma) {
+                    $id_expediente = $oFirma->getId_expediente();
+                    $orden_tramite = $oFirma->getOrden_tramite();
+                    $a_exp_aclaracion[] = $id_expediente;
+                    $this->a_exp_aclaracion[] = $id_expediente;
+                }
+                // sumar los dos: nuevos + aclaraciones.
+                $a_expedientes = $a_expedientes + $a_exp_aclaracion;
                 if (!empty($a_expedientes)) {
                     $aWhere['id_expediente'] = implode(',',$a_expedientes);
                     $aOperador['id_expediente'] = 'IN';
@@ -255,9 +279,14 @@ class ExpedienteLista {
                 
                 // negrita para los no visualizados
                 $bstrong = FALSE;
+                // marcar los que necesitan aclaración
+                $baclaracion = FALSE;
                 if ($this->filtro == 'firmar') {
                     if (in_array($id_expediente, $this->a_expedientes_nuevos)) {
                         $bstrong = TRUE;
+                    }
+                    if (in_array($id_expediente, $this->a_exp_aclaracion)) {
+                        $baclaracion = TRUE;
                     }
                 }
 
@@ -270,6 +299,11 @@ class ExpedienteLista {
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >mod</span>";
                 $row['link_eliminar'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_exp_eliminar('$id_expediente');\" >eliminar</span>";
                 
+                if ($baclaracion) {
+                    $row['class_row'] = 'bg-warning';
+                } else {
+                    $row['class_row'] = '';
+                }
                 $estado = $oExpediente->getEstado();
                 $row['estado'] = $a_estados[$estado];
                 if ($estado == Expediente::ESTADO_BORRADOR) {
@@ -289,7 +323,7 @@ class ExpedienteLista {
                 $row['entradilla'] = $oExpediente->getEntradilla();
                 
                 $id_ponente =  $oExpediente->getPonente();
-                $row['ponente'] =  $a_posibles_cargos[$id_ponente];
+                $row['ponente'] = $a_posibles_cargos[$id_ponente];
                 $row['f_ini'] =  $oExpediente->getF_ini_circulacion()->getFromLocal();
                 $row['f_aprobacion'] =  $oExpediente->getF_aprobacion()->getFromLocal();
                 $row['f_reunion'] =  $oExpediente->getF_reunion()->getFromLocal();

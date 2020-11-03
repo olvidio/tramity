@@ -242,10 +242,26 @@ class Expediente Extends expedienteDB {
             // 2 => oficiales
             // 3 => varias
             // 4 => todos d.
+            // 5 =>  vº bº vcd.
             $oCargo = new Cargo($id_cargo);
             $id_oficina = $oCargo->getId_oficina();
             if (empty($id_oficina)) {
                 switch ($id_cargo) {
+                    case Cargo::CARGO_VB_VCD: // el vº bº lo tiene que dar el vcd.
+                        $gesCargos = new GestorCargo();
+                        $cCargos = $gesCargos->getCargos(['cargo' => 'vcd']);
+                        $oCargoDtor = $cCargos[0];
+                        $id_dtor_vcd = $oCargoDtor->getId_cargo();
+                        $oFirma = new Firma();
+                        $oFirma->setId_expediente($this->iid_expediente);
+                        $oFirma->setId_tramite($id_tramite);
+                        $oFirma->setId_cargo_creador($id_ponente);
+                        $oFirma->setId_cargo($id_dtor_vcd);
+                        $oFirma->setOrden_tramite($orden_tramite);
+                        // Al inicializar, sólo pongo los votos.
+                        $oFirma->setTipo(Firma::TIPO_VOTO);
+                        $oFirma->DBGuardar();
+                        break;
                     case Cargo::CARGO_PONENTE: // si es el ponente hay que poner su id_cargo.
                         // El ponente es el director de la oficina del creador.
                         $oCargo = new Cargo($id_ponente);
@@ -319,15 +335,15 @@ class Expediente Extends expedienteDB {
                         break;
                 }
             } else {
-                    $oFirma = new Firma();
-                    $oFirma->setId_expediente($this->iid_expediente);
-                    $oFirma->setId_tramite($id_tramite);
-                    $oFirma->setId_cargo_creador($id_ponente);
-                    $oFirma->setId_cargo($id_cargo);
-                    $oFirma->setOrden_tramite($orden_tramite);
-                    // Al inicializar, sólo pongo los votos.
-                    $oFirma->setTipo(Firma::TIPO_VOTO);
-                    $oFirma->DBGuardar();
+                $oFirma = new Firma();
+                $oFirma->setId_expediente($this->iid_expediente);
+                $oFirma->setId_tramite($id_tramite);
+                $oFirma->setId_cargo_creador($id_ponente);
+                $oFirma->setId_cargo($id_cargo);
+                $oFirma->setOrden_tramite($orden_tramite);
+                // Al inicializar, sólo pongo los votos.
+                $oFirma->setTipo(Firma::TIPO_VOTO);
+                $oFirma->DBGuardar();
             }
         }
     }

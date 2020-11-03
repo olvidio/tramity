@@ -30,6 +30,7 @@ class Cargo Extends core\ClasePropiedades {
     const CARGO_OFICIALES = 2;
     const CARGO_VARIAS = 3;
     const CARGO_TODOS_DIR = 4;
+    const CARGO_VB_VCD = 5;
     
 	/* ATRIBUTS ----------------------------------------------------------------- */
 

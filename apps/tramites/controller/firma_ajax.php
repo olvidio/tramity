@@ -170,9 +170,32 @@ switch ($Qque) {
             }
         }
         break;
-    case 'aclaracion_new':
-        $valor = Firma::V_A_NUEVA; //Nuebva aclaración.
-        $orden_tramite = 0;
+    case 'respuesta':   // aclaracion_respuesta
+        $valor = Firma::V_A_RESPUESTA; //Respuesta aclaración.
+        // buscar la primera peticion vacia:
+        $aWhere = ['id_expediente' => $Qid_expediente,
+            'tipo' => Firma::TIPO_ACLARACION,
+            'observ_creador' => 'x',
+            '_ordre' => 'orden_tramite DESC',
+        ];
+        $aOperador = [
+            'observ_creador' => 'IS NULL',
+        ];
+        $gesFirmas = new GestorFirma();
+        $cFirmas = $gesFirmas->getFirmas($aWhere,$aOperador);
+        if (is_array($cFirmas) && count($cFirmas) > 0) {
+            // Ya existe una aclaración. Busco la última, para saber el orden.
+            $oFirmaAclaracion = $cFirmas[0];
+            $oFirmaAclaracion->DBCarregar();
+            $oFirmaAclaracion->setObserv_creador($Qcomentario);
+            if ($oFirmaAclaracion->DBGuardar() === FALSE ) {
+                $error_txt .= $oFirma->getErrorTxt();
+            }
+        }
+        break;
+    case 'nueva': // aclaracion_nueva
+        $valor = Firma::V_A_NUEVA; //Nueva aclaración.
+        $orden_oficina = 0;
         // Comprobar que no existe:
         $aWhere = ['id_expediente' => $Qid_expediente,
                     'id_cargo' => $id_cargo,
@@ -184,8 +207,8 @@ switch ($Qque) {
         if (is_array($cFirmas) && count($cFirmas) > 0) {
             // Ya existe una aclaración. Busco la última, para saber el orden.
             $oFirmaAclaracion = $cFirmas[0];
-            $orden = $oFirmaAclaracion->getOrden_tramite();
-            $orden_tramite = $orden + 1;
+            $orden_tramite = $oFirmaAclaracion->getOrden_tramite();
+            $orden_oficina = $oFirmaAclaracion->getOrden_oficina();
         }
         // orden trámite
         $aWhere = ['id_expediente' => $Qid_expediente,
@@ -197,13 +220,14 @@ switch ($Qque) {
         if (is_array($cFirmas) && count($cFirmas) == 0) {
             $error_txt .= _("No puede Firmar");
         } else {
-            if (empty($orden_tramite)) {
+            if (empty($orden_oficina)) {
                 $oFirmaVoto = $cFirmas[0];
-                $orden = $oFirmaVoto->getOrden_tramite();
+                $orden_tramite = $oFirmaVoto->getOrden_tramite();
+                $orden = $oFirmaVoto->getOrden_oficina();
                 // 1 más del que tengo.
-                $orden_tramite = $orden + 1;
+                $orden_oficina = $orden + 1;
             } else {
-                $orden_tramite = $orden_tramite + 1;
+                $orden_oficina = $orden_oficina + 1;
             }
             
             $f_hoy_iso = date('Y-m-d');
@@ -214,6 +238,7 @@ switch ($Qque) {
             $oFirma->setId_cargo_creador($id_ponente);
             $oFirma->setId_tramite($id_tramite);
             $oFirma->setOrden_tramite($orden_tramite);
+            $oFirma->setOrden_oficina($orden_oficina);
             $oFirma->setValor($valor);
             $oFirma->setObserv($Qcomentario);
             $oFirma->setF_valor($f_hoy_iso,FALSE);

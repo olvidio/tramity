@@ -30,6 +30,7 @@ $plazo_muy_urgente = 3;
 $error_fecha = 15;
 
 $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
+$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
 $gesCargos = new GestorCargo();
 $aCargos =$gesCargos->getArrayCargos();
@@ -52,6 +53,14 @@ $oExpediente->DBCarregar();
 $ponente_txt = '?';
 $id_ponente = $oExpediente->getPonente();
 $ponente_txt = $aCargos[$id_ponente];
+
+if ($id_ponente == ConfigGlobal::mi_id_cargo()) {
+    $aclaracion = _("Responder aclaración");
+    $aclaracion_event = 'respuesta';
+} else {
+    $aclaracion = _("Pedir aclaración");
+    $aclaracion_event = 'nueva';
+}
 
 $id_tramite = $oExpediente->getId_tramite();
 $oTramite = new Tramite($id_tramite);
@@ -161,7 +170,7 @@ $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas(event)');
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => 'firmar']));
+$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
 
 $a_campos = [
@@ -202,6 +211,8 @@ $a_campos = [
     //'ver_todo' => $ver_todo,
     'a_firmas' => $a_firmas,
     'server' => $server,
+    'aclaracion' => $aclaracion,
+    'aclaracion_event' => $aclaracion_event,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

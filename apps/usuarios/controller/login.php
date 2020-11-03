@@ -78,6 +78,7 @@ if ( !isset($_SESSION['session_auth'])) {
                 $row2=$oDBPSt->fetch(\PDO::FETCH_ASSOC);
                 if ($row2 === FALSE) { // No existe la fila.
                     $usuario_cargo = '';
+                    $usuario_dtor = '';
                 }else {
                     $usuario_cargo = $row2['cargo'];
                     $usuario_dtor = $row2['director'];

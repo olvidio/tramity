@@ -24,7 +24,7 @@
   </thead>
   <tbody>
   {% for row in a_expedientes %}
-    <tr>
+    <tr class="{{ row.class_row|raw }}">
       <th scope="row">{{ row.link_mod|raw }}</th>
       <td>{{ row.link_ver|raw }}</td>
       <td>{{ row.f_ini|raw }}</td>

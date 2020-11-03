@@ -8,6 +8,7 @@ use expedientes\model\entity\Accion;
 use expedientes\model\entity\GestorAccion;
 use expedientes\model\Escrito;
 use tramites\model\entity\GestorFirma;
+use expedientes\model\GestorExpediente;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -207,6 +208,20 @@ switch($Qque) {
             $oExpediente->DBCarregar();
             // Mantego al ponente como creador...
         } else {
+            // si falla el javascript, puede ser que se hagan varios click a 'Guardar' 
+            // y se dupliquen los espedientes. Me aseguro de que no exista uno igual:
+            $gesExpedientes = new GestorExpediente();
+            $aWhere = [ 'id_tramite' => $Qtramite,
+                        'estado' => $Qestado,
+                        'prioridad' => $Qprioridad,
+                        'asunto' => $Qasunto,
+                        'entradilla' => $Qentradilla,
+                        'f_contestar' => $Qf_contestar,
+                        ];
+            $cExpedientes = $gesExpedientes->getExpedientes($aWhere);
+            if (count($cExpedientes) > 0) {
+                exit (_("Creo que ya se ha creado"));
+            }
             // nuevo.
             $oExpediente = new Expediente();
             $Qestado = Expediente::ESTADO_BORRADOR;

@@ -56,6 +56,6 @@ CREATE INDEX expediente_firmas_id_tramite_idx ON expediente_firmas (id_tramite);
 CREATE INDEX expediente_firmas_id_cargo_idx ON expediente_firmas (id_cargo);
 CREATE INDEX expediente_firmas_tipo_idx ON expediente_firmas (tipo);
 
-ALTER TABLE public.expediente_firmas ADD CONSTRAINT exp_tramite_firmas_ukey UNIQUE (id_expediente,id_cargo,tipo);
+ALTER TABLE public.expediente_firmas ADD CONSTRAINT exp_tramite_firmas_ukey UNIQUE (id_expediente,id_cargo,tipo,orden_tramite);
 --- porque seguramente creo la tabla de expedientes después
 ALTER TABLE public.expediente_firmas ADD CONSTRAINT exp_tramite_firmas_fk FOREIGN KEY (id_expediente) REFERENCES expedientes (id_expediente) ON DELETE CASCADE;
