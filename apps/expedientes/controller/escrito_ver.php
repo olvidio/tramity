@@ -116,6 +116,11 @@ if (!empty($Qid_escrito)) {
     }
     exit();
 } else {
+    $txt_alert = _("No hay escritos");
+    $a_campos = [ 'txt_alert' => $txt_alert ];
+    $oView = new ViewTwig('expedientes/controller');
+    echo $oView->renderizar('alerta.html.twig',$a_campos);
+    /*
     $oArrayProtRef = [];
     $a_adjuntos = [];
     $asunto_e = '';
@@ -145,4 +150,5 @@ if (!empty($Qid_escrito)) {
     } else {
         echo $oView->renderizar('escrito_ver.html.twig',$a_campos);
     }
+    */
 }

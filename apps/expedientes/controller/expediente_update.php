@@ -1,14 +1,14 @@
 <?php
 use core\ConfigGlobal;
+use expedientes\model\Escrito;
 use expedientes\model\Expediente;
+use expedientes\model\GestorExpediente;
+use expedientes\model\entity\GestorAccion;
+use tramites\model\entity\Firma;
+use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use expedientes\model\entity\Accion;
-use expedientes\model\entity\GestorAccion;
-use expedientes\model\Escrito;
-use tramites\model\entity\GestorFirma;
-use expedientes\model\GestorExpediente;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -210,13 +210,15 @@ switch($Qque) {
         } else {
             // si falla el javascript, puede ser que se hagan varios click a 'Guardar' 
             // y se dupliquen los espedientes. Me aseguro de que no exista uno igual:
+            $oConverter = new core\Converter('date', $Qf_contestar);
+            $f_contestar_iso = $oConverter->toPg();
             $gesExpedientes = new GestorExpediente();
             $aWhere = [ 'id_tramite' => $Qtramite,
                         'estado' => $Qestado,
                         'prioridad' => $Qprioridad,
                         'asunto' => $Qasunto,
                         'entradilla' => $Qentradilla,
-                        'f_contestar' => $Qf_contestar,
+                        'f_contestar' => $f_contestar_iso,
                         ];
             $cExpedientes = $gesExpedientes->getExpedientes($aWhere);
             if (count($cExpedientes) > 0) {
@@ -301,15 +303,33 @@ switch($Qque) {
             $oExpediente->DBGuardar();
             // generar firmas
             $oExpediente->generarFirmas();
+            // Si soy el primero, Ya firmo.
+            $gesFirmas = new GestorFirma();
+            $oFirmaPrimera = $gesFirmas->getPrimeraFirma($id_expediente);
+            $id_primer_cargo = $oFirmaPrimera->getId_cargo();
+            if ($id_primer_cargo == ConfigGlobal::mi_id_cargo()) {
+                $f_hoy_iso = date('Y-m-d');
+                $oFirmaPrimera->setValor(Firma::V_OK);
+                $oFirmaPrimera->setObserv('');
+                $oFirmaPrimera->setF_valor($f_hoy_iso,FALSE);
+                if ($oFirmaPrimera->DBGuardar() === FALSE ) {
+                    $error_txt .= $oFirmaPrimera->getErrorTxt();
+                }
+            }
+            
         }
         // FIN CIRCULAR
         
-        $jsondata['success'] = true;
-        $jsondata['id_expediente'] = $id_expediente;
-        $a_cosas = [ 'id_expediente' => $id_expediente];
-        $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
-        $jsondata['pagina_mod'] = $pagina_mod;
-        
+        if (!empty($error_txt)) {
+            $jsondata['success'] = FALSE;
+            $jsondata['error_txt'] = $error_txt;
+        } else {
+            $jsondata['success'] = true;
+            $jsondata['id_expediente'] = $id_expediente;
+            $a_cosas = [ 'id_expediente' => $id_expediente];
+            $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
+            $jsondata['pagina_mod'] = $pagina_mod;
+        }
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);

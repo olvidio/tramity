@@ -43,6 +43,16 @@ class ExpedienteLista {
      * @var array
      */
     private $a_exp_aclaracion = [];
+    /**
+     * 
+     * @var array
+     */
+    private $a_exp_peticion = [];
+    /**
+     * 
+     * @var array
+     */
+    private $a_exp_respuesta = [];
     
     /*
      * filtros posibles: 
@@ -107,7 +117,7 @@ class ExpedienteLista {
                 $aWhereFirma['valor'] = Firma::V_VISTO .','. Firma::V_A_ESPERA;
                 $aOperadorFirma['valor'] = 'IN';
                 $cFirmasVisto = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
-                $cFirmas = $cFirmasNull + $cFirmasVisto;
+                $cFirmas = array_merge($cFirmasNull, $cFirmasVisto);
                 $a_expedientes = [];
                 $this->a_expedientes_nuevos = [];
                 foreach ($cFirmas as $oFirma) {
@@ -125,13 +135,41 @@ class ExpedienteLista {
                         $this->a_expedientes_nuevos[] = $id_expediente;
                     }
                 }
-                //////// añadir las que requieren aclaración. //////////////////////////////
-                $aWhereFirma = ['valor' => Firma::V_A_NUEVA,
+                //////// mirar los que se ha pedido aclaracion para marcarlos en ambar /////////
+                $aWhereFirma2 = ['tipo' => Firma::TIPO_ACLARACION,
+                                'valor' => Firma::V_A_NUEVA,
                                 'observ_creador' => 'x',
+                                'id_cargo' => ConfigGlobal::mi_id_cargo(),
+                            ];
+                $aOperadorFirma2 = ['observ_creador' => 'IS NULL' ];
+                $cFirmas2 = $gesFirmas->getFirmas($aWhereFirma2, $aOperadorFirma2);
+                $this->a_exp_peticion = [];
+                foreach ($cFirmas2 as $oFirma) {
+                    $id_expediente = $oFirma->getId_expediente();
+                    $this->a_exp_peticion[] = $id_expediente;
+                }
+                //////// mirar los que ya se ha contestado para marcarlos en verde /////////
+                $aWhereFirma2 = ['tipo' => Firma::TIPO_ACLARACION,
+                                'valor' => Firma::V_A_NUEVA,
+                                'observ_creador' => 'x',
+                                'id_cargo' => ConfigGlobal::mi_id_cargo(),
+                            ];
+                $aOperadorFirma2 = ['observ_creador' => 'IS NOT NULL' ];
+                $cFirmas2 = $gesFirmas->getFirmas($aWhereFirma2, $aOperadorFirma2);
+                $this->a_exp_respuesta = [];
+                foreach ($cFirmas2 as $oFirma) {
+                    $id_expediente = $oFirma->getId_expediente();
+                    $this->a_exp_respuesta[] = $id_expediente;
+                }
+                
+                //////// añadir las que requieren aclaración. //////////////////////////////
+                $aWhereFirma = ['tipo' => Firma::TIPO_ACLARACION,
+                                'valor' => Firma::V_A_NUEVA,
+                                'observ_creador' => 'x',
+                                'id_cargo_creador' => ConfigGlobal::mi_id_cargo(),
                             ];
                 $aOperadorFirma = ['observ_creador' => 'IS NULL' ];
-                $cFirmasVisto = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
-                $cFirmas = $cFirmasNull + $cFirmasVisto;
+                $cFirmas = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
                 $a_exp_aclaracion = [];
                 $this->a_exp_aclaracion = [];
                 foreach ($cFirmas as $oFirma) {
@@ -141,9 +179,9 @@ class ExpedienteLista {
                     $this->a_exp_aclaracion[] = $id_expediente;
                 }
                 // sumar los dos: nuevos + aclaraciones.
-                $a_expedientes = $a_expedientes + $a_exp_aclaracion;
-                if (!empty($a_expedientes)) {
-                    $aWhere['id_expediente'] = implode(',',$a_expedientes);
+                $a_exp_suma = array_merge($a_expedientes, $a_exp_aclaracion);
+                if (!empty($a_exp_suma)) {
+                    $aWhere['id_expediente'] = implode(',',$a_exp_suma);
                     $aOperador['id_expediente'] = 'IN';
                 } else {
                     // para que no salga nada pongo 
@@ -266,8 +304,6 @@ class ExpedienteLista {
             //lista de tramites
             $gesTramites = new GestorTramite();
             $a_tramites = $gesTramites->getArrayAbrevTramites();
-            
-            
             foreach ($cExpedientes as $oExpediente) {
                 $row = [];
                 // mirar permisos...
@@ -281,12 +317,20 @@ class ExpedienteLista {
                 $bstrong = FALSE;
                 // marcar los que necesitan aclaración
                 $baclaracion = FALSE;
+                $bpeticion = FALSE;
+                $brespuesta = FALSE;
                 if ($this->filtro == 'firmar') {
                     if (in_array($id_expediente, $this->a_expedientes_nuevos)) {
                         $bstrong = TRUE;
                     }
                     if (in_array($id_expediente, $this->a_exp_aclaracion)) {
                         $baclaracion = TRUE;
+                    }
+                    if (in_array($id_expediente, $this->a_exp_peticion)) {
+                        $bpeticion = TRUE;
+                    }
+                    if (in_array($id_expediente, $this->a_exp_respuesta)) {
+                        $brespuesta = TRUE;
                     }
                 }
 
@@ -299,8 +343,10 @@ class ExpedienteLista {
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >mod</span>";
                 $row['link_eliminar'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_exp_eliminar('$id_expediente');\" >eliminar</span>";
                 
-                if ($baclaracion) {
+                if ($baclaracion || $bpeticion) {
                     $row['class_row'] = 'bg-warning';
+                } elseif ($brespuesta) {
+                    $row['class_row'] = 'bg-success';
                 } else {
                     $row['class_row'] = '';
                 }
@@ -331,7 +377,6 @@ class ExpedienteLista {
                 
                 // mirar si tienen escrito
                 //$row['f_escrito'] = $oExpediente->getF_documento()->getFromLocal();
-
                 $a_expedientes[] = $row;
             }
         }

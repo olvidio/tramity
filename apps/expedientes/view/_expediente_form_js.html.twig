@@ -175,30 +175,46 @@ fnjs_circular=function(event){
     	return false;
     }
 
-    $('#form_expediente').attr('action','{{ url_update }}');
-    $('#que').val('circular');
-    $('#form_expediente').submit(function(event){
-        event.preventDefault(); //prevent default action 	
-        request=$.ajax({
-            data: $(this).serialize(),
-            url: $(this).attr('action'),
-            type: 'post',
-            dataType: 'json'
+    // comprobar que tiene gente para firmar
+    var err=0;
+	var firma='';
+	var i=0;
+	var selector="span#span_firmas select";
+	$(selector).each(function(i) {
+		if ($(this).val().length) {  
+			i++;
+			if (i>1) firma+=",";
+			firma+=$(this).val();
+		}
+	});
+
+	if (!firma) { alert("{{ "Debe llenar el campo de oficinas"|trans }}"); err=1; }
+	
+	if (err!=1) {
+        $('#form_expediente').attr('action','{{ url_update }}');
+        $('#que').val('circular');
+        $('#form_expediente').submit(function(event){
+            event.preventDefault(); //prevent default action 	
+            request=$.ajax({
+                data: $(this).serialize(),
+                url: $(this).attr('action'),
+                type: 'post',
+                dataType: 'json'
+            });
+            request.done( function (json) {
+                if (json.success != true) {
+                    rta_txt = json.error_txt;
+                    alert ('error: '+rta_txt);
+                } else {
+                    alert ("{{ "circulando!"|trans }}");
+                    // Volver a la lista...
+                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                }
+            });
         });
-        request.done( function (json) {
-            id = json.id_expediente;
-            if (json.success != true) {
-                rta_txt = json.responseText;
-                alert ('error: '+rta_txt);
-            } else {
-                alert ("{{ "circulando!"|trans }}");
-                // Volver a la lista...
-                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-            }
-        });
-    });
-    //$('#form_expediente').submit();
-    //$('#form_expediente').off();
+	} else {
+        event.preventDefault();
+	}
 }
 
 fnjs_guardar=function(event){
@@ -234,7 +250,6 @@ fnjs_guardar=function(event){
 	//if (!estado) { alert("{{ "Debe llenar el campo de estad"|trans }}"); err=1; }
 	if (!prioridad) { alert("{{ "Debe llenar el campo de prioridad"|trans }}"); err=1; }
 	if (!asunto) { alert("{{ "Debe llenar el campo de asunto expediente"|trans }}"); err=1; }
-	if (!firma) { alert("{{ "Debe llenar el campo de oficinas"|trans }}"); err=1; }
 	
 	if (err!=1) {
 		$('#firmas').val(firma);
@@ -249,11 +264,11 @@ fnjs_guardar=function(event){
                 dataType: 'json'
             });
             request.done( function (json) {
-                id = json.id_expediente;
                 if (json.success != true) {
-                    rta_txt = json.responseText;
+                    rta_txt = json.error_txt;
                     alert ('error: '+rta_txt);
                 } else {
+                    id = json.id_expediente;
                     if (id != id_expediente) {
                         // caso de nuevo expediente
                         $.confirm({
@@ -266,10 +281,11 @@ fnjs_guardar=function(event){
                                     fnjs_update_div('#main',json.pagina_mod);
                                 },
                                 {{ "cancelar"|trans }}: function () {
+			                        fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                                     //$.alert('Canceled!');
                                 },
                                 somethingElse: {
-                                    text: '{{ "otra expediente"|trans }}',
+                                    text: '{{ "otro expediente"|trans }}',
                                     btnClass: 'btn-blue',
                                     keys: ['enter', 'shift'],
                                     // Nueva expediente.

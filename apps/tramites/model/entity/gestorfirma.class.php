@@ -35,6 +35,35 @@ class GestorFirma Extends core\ClaseGestor {
 	/* METODES PUBLICS -----------------------------------------------------------*/
 
 	/**
+	 * devuelve el objeto Firma. El primero que tiene que firmar el expediente.
+	 * Al ponerlo a circular, si soy el primero, lo firmo directamente.
+	 *  
+	 * @param integer $id_expediente
+	 * @return object $oFirma
+	 */
+	public function getPrimeraFirma($id_expediente) {
+		$oDbl = $this->getoDbl();
+		$nom_tabla = $this->getNomTabla();
+        // posibles orden_tramite:
+        $sQuery = "SELECT * 
+                    FROM $nom_tabla
+                    WHERE id_expediente = $id_expediente
+                    ORDER BY orden_tramite, orden_oficina DESC LIMIT 1";
+		if (($oDbl->query($sQuery)) === FALSE) {
+			$sClauError = 'GestorFirma.query';
+			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+			return FALSE;
+		}
+		// el primero es el actual, el segundo (si existe) es el anterior.
+		foreach ($oDbl->query($sQuery) as $aDades) {
+			$a_pkey = array('id_item' => $aDades['id_item']);
+			$oFirma = new Firma($a_pkey);
+			$oFirma->setAllAtributes($aDades);
+		}
+		return $oFirma;
+	}
+	
+	/**
 	 * Comprobar si el bloque de orden_tramite anterior està todo firmado.
 	 * 
 	 * @param integer $id_expediente

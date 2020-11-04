@@ -207,7 +207,7 @@ class Firma Extends core\ClasePropiedades {
 	            break;
 	        case 'vcd':
                 $a_tipos = [
-                    self::V_OK => _("ok"),
+                    //self::V_OK => _("ok"),
                     self::V_NO => _("no"),
                     self::V_VISTO => _("visto"),
                     self::V_ESPERA => _("espera"),

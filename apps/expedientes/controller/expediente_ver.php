@@ -69,7 +69,11 @@ $tramite_txt = $oTramite->getTramite();
 // Valores posibles para la firma
 $oFirma = new Firma();
 $a_firmas = [];
-foreach ($oFirma->getArrayValor('voto') as $key => $valor) {
+$rango = 'voto';
+if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
+    $rango = 'vcd';
+}
+foreach ($oFirma->getArrayValor($rango) as $key => $valor) {
     $a_voto['id'] = $key;
     $a_voto['valor'] = $valor;
     $a_firmas[] = $a_voto;
