@@ -60,6 +60,7 @@ class ExpedienteLista {
     'firmar'
     'reunion'
     'circulando'
+    'distribuir'
     'acabados'
     'archivados'
     'copias'
@@ -237,6 +238,12 @@ class ExpedienteLista {
                     $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
                 }
                 break;
+            case 'distribuir':
+                // marcados por scdl con ok.
+                $aWhere['f_aprobacion'] = 'x';
+                $aOperador['f_aprobacion'] = 'IS NULL';
+                $aWhere['ok'] = 't';
+                break;
             case 'acabados':
                 // marcados por scdl con ok.
                 $aWhere['f_aprobacion'] = 'x';
@@ -281,6 +288,9 @@ class ExpedienteLista {
             case 'circulando':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 break;
+            case 'distribuir':
+                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                break;
             case 'acabados':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_form.php';
                 break;
@@ -312,6 +322,7 @@ class ExpedienteLista {
                 $row['id_expediente'] = $id_expediente;
                 $id_tramite = $oExpediente->getId_tramite();
                 $tramite_txt = $a_tramites[$id_tramite];
+                $id_ponente = $oExpediente->getPonente();
                 
                 // negrita para los no visualizados
                 $bstrong = FALSE;
@@ -339,9 +350,10 @@ class ExpedienteLista {
                 ];
                 $link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
-                $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_ver');\" >ver</span>";
-                $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >mod</span>";
-                $row['link_eliminar'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_exp_eliminar('$id_expediente');\" >eliminar</span>";
+                $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_ver');\" >"._("ver")."</span>";
+                $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >"._("mod")."</span>";
+                $row['link_eliminar'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_exp_eliminar('$id_expediente');\" >"._("eliminar")."</span>";
+                $row['link_a_borrador'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_exp_a_borrador('$id_expediente');\" >"._("a borrador")."</span>";
                 
                 if ($baclaracion || $bpeticion) {
                     $row['class_row'] = 'bg-warning';
@@ -356,6 +368,11 @@ class ExpedienteLista {
                     $row['eliminar'] = 1;
                 } else {
                     $row['eliminar'] = 0;
+                    if ($id_ponente == ConfigGlobal::mi_id_cargo()) {
+                        $row['a_borrador'] = 1;
+                    } else {
+                        $row['a_borrador'] = 0;
+                    }
                 }
                 $row['prioridad'] = $oExpediente->getPrioridad();
                 $row['tramite'] = $tramite_txt;
@@ -368,7 +385,6 @@ class ExpedienteLista {
                 
                 $row['entradilla'] = $oExpediente->getEntradilla();
                 
-                $id_ponente =  $oExpediente->getPonente();
                 $row['ponente'] = $a_posibles_cargos[$id_ponente];
                 $row['f_ini'] =  $oExpediente->getF_ini_circulacion()->getFromLocal();
                 $row['f_aprobacion'] =  $oExpediente->getF_aprobacion()->getFromLocal();

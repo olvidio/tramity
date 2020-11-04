@@ -43,6 +43,42 @@ $Qa_preparar = (array)  \filter_input(INPUT_POST, 'a_preparar', FILTER_DEFAULT, 
 $Qvida = (integer) \filter_input(INPUT_POST, 'vida');
 
 switch($Qque) {
+    case 'exp_a_borrador':
+        $txt_err = '';
+        // Hay que borrar: las firmas.
+        $gesFirmas = new  GestorFirma();
+        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente]);
+        foreach($cFirmas as $oFirma) {
+            if ($oFirma->DBEliminar() === FALSE) {
+                $txt_err .= _("No se ha elimnado la firma");
+                $txt_err .= "<br>";
+            }
+        }
+        
+        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente->DBCarregar();
+        $oExpediente->setEstado(Expediente::ESTADO_BORRADOR);
+        $asunto = $oExpediente->getAsunto();
+        $asunto_retirado = _("RETIRADO")." $asunto";
+        $oExpediente->setAsunto($asunto_retirado);
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            $txt_err .= _("No se ha podido cambiar el estado del expediente");
+            $txt_err .= "<br>";
+        }
+
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        breaK;
     case 'exp_eliminar':
         $txt_err = '';
         // Hay que borrar: el expediente, las firmas, las acciones, los escritos y los adjuntos de los escritos.
@@ -294,7 +330,8 @@ switch($Qque) {
             
         // CIRCULAR
         if ($Qque == 'circular') {
-            $f_hoy_iso = date('Y-m-d');
+            //$f_hoy_iso = date('Y-m-d');
+            $f_hoy_iso = date(\DateTimeInterface::ISO8601);
             // se pone la fecha del escrito como hoy:
             $oExpediente->setF_escritos($f_hoy_iso,FALSE);
             // Guardar fecha y cambiar estado
@@ -308,7 +345,6 @@ switch($Qque) {
             $oFirmaPrimera = $gesFirmas->getPrimeraFirma($id_expediente);
             $id_primer_cargo = $oFirmaPrimera->getId_cargo();
             if ($id_primer_cargo == ConfigGlobal::mi_id_cargo()) {
-                $f_hoy_iso = date('Y-m-d');
                 $oFirmaPrimera->setValor(Firma::V_OK);
                 $oFirmaPrimera->setObserv('');
                 $oFirmaPrimera->setF_valor($f_hoy_iso,FALSE);

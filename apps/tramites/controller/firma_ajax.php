@@ -159,7 +159,8 @@ switch ($Qque) {
         if (is_array($cFirmas) && count($cFirmas) == 0) {
             $error_txt .= _("No puede Firmar");
         } else {
-            $f_hoy_iso = date('Y-m-d');
+            //$f_hoy_iso = date('Y-m-d');
+            $f_hoy_iso = date(\DateTimeInterface::ISO8601);
             $oFirma = $cFirmas[0];
             $oFirma->DBCarregar();
             $oFirma->setValor($Qvoto);
@@ -167,6 +168,19 @@ switch ($Qque) {
             $oFirma->setF_valor($f_hoy_iso,FALSE);
             if ($oFirma->DBGuardar() === FALSE ) {
                 $error_txt .= $oFirma->getErrorTxt();
+            }
+            // comprobar que ya ha firmado todo el mundo, para 
+            // pasarlo a scdl para distribuir (ok_scdl)
+            $oUltimaFirma = $gesFirmas->esUltima($Qid_expediente);
+            $valor = $oUltimaFirma->getValor();
+            if (!empty($valor)) { // no importa el valor, si no es OK ya secretaria...
+                // marcar ok_scdl
+                $oExpediente = new Expediente($Qid_expediente);
+                $oExpediente->DBCarregar();
+                $oExpediente->setOk('t');
+                if ($oExpediente->DBGuardar() === FALSE ) {
+                    $error_txt .= $oExpediente->getErrorTxt();
+                }
             }
         }
         break;
@@ -230,7 +244,8 @@ switch ($Qque) {
                 $orden_oficina = $orden_oficina + 1;
             }
             
-            $f_hoy_iso = date('Y-m-d');
+            //$f_hoy_iso = date('Y-m-d');
+            $f_hoy_iso = date(\DateTimeInterface::ISO8601);
             $oFirma = new Firma();
             $oFirma->setTipo(Firma::TIPO_ACLARACION);
             $oFirma->setId_expediente($Qid_expediente);

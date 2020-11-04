@@ -35,6 +35,35 @@ class GestorFirma Extends core\ClaseGestor {
 	/* METODES PUBLICS -----------------------------------------------------------*/
 
 	/**
+	 * Devuelve la última firma según el trámite
+	 * 
+	 * @param integer $id_expediente
+	 * @return object $oFirma
+	 */
+	public function esUltima($id_expediente) {
+	    $tipo_voto = Firma::TIPO_VOTO; 
+		$oDbl = $this->getoDbl();
+		$nom_tabla = $this->getNomTabla();
+        // posibles orden_tramite:
+        $sQuery = "SELECT * 
+                    FROM $nom_tabla
+                    WHERE id_expediente = $id_expediente AND tipo = $tipo_voto
+                    ORDER BY orden_tramite DESC, orden_oficina DESC LIMIT 1";
+		if (($oDbl->query($sQuery)) === FALSE) {
+			$sClauError = 'GestorFirma.query';
+			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+			return FALSE;
+		}
+		// el primero es el actual, el segundo (si existe) es el anterior.
+		foreach ($oDbl->query($sQuery) as $aDades) {
+			$a_pkey = array('id_item' => $aDades['id_item']);
+			$oFirma = new Firma($a_pkey);
+			$oFirma->setAllAtributes($aDades);
+		}
+		return $oFirma;
+	}
+	
+	/**
 	 * devuelve el objeto Firma. El primero que tiene que firmar el expediente.
 	 * Al ponerlo a circular, si soy el primero, lo firmo directamente.
 	 *  
@@ -48,7 +77,7 @@ class GestorFirma Extends core\ClaseGestor {
         $sQuery = "SELECT * 
                     FROM $nom_tabla
                     WHERE id_expediente = $id_expediente
-                    ORDER BY orden_tramite, orden_oficina DESC LIMIT 1";
+                    ORDER BY orden_tramite DESC, orden_oficina DESC LIMIT 1";
 		if (($oDbl->query($sQuery)) === FALSE) {
 			$sClauError = 'GestorFirma.query';
 			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -93,10 +122,11 @@ class GestorFirma Extends core\ClaseGestor {
 		if (empty($num[2])) { // No existe, el primero es el actual: ok
 		    return TRUE;
 		} else {
+		    $tipo_voto = FIRMA::TIPO_VOTO;
 		    $orden_anterior = $num[2];
             $sQuery = "SELECT *
                         FROM $nom_tabla
-                        WHERE id_expediente = $id_expediente AND orden_tramite = $orden_anterior
+                        WHERE id_expediente = $id_expediente AND tipo = $tipo_voto AND orden_tramite = $orden_anterior
                         ";
             if (($oDbl->query($sQuery)) === FALSE) {
                 $sClauError = 'GestorFirma.query';
@@ -105,7 +135,6 @@ class GestorFirma Extends core\ClaseGestor {
             }
             // Contar que todos sean ok:
             foreach ($oDbl->query($sQuery) as $aDades) {
-                $tipo = $aDades['tipo'];
                 $valor = $aDades['valor'];
                 /*
                 const TIPO_VOTO          = 1;
@@ -119,9 +148,6 @@ class GestorFirma Extends core\ClaseGestor {
                 const V_RECHAZADO    = 23;  // sólo vcd
                 const V_VISTO_BUENO  = 24;  // sólo vcd VºBº
                 */
-                if ($tipo == FIRMA::TIPO_ACLARACION) {
-                    return FALSE;
-                }
                 if ($valor == Firma::V_NO OR $valor == Firma::V_OK) {
                 } else {
                     return FALSE;
