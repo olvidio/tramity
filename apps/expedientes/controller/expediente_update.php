@@ -43,6 +43,12 @@ $Qa_preparar = (array)  \filter_input(INPUT_POST, 'a_preparar', FILTER_DEFAULT, 
 $Qvida = (integer) \filter_input(INPUT_POST, 'vida');
 
 switch($Qque) {
+    case 'disribuir':
+        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente->DBCarregar();
+        $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
+        $oExpediente->DBGuardar();
+        break;
     case 'exp_a_borrador':
         $txt_err = '';
         // Hay que borrar: las firmas.

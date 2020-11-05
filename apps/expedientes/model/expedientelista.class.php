@@ -251,9 +251,12 @@ class ExpedienteLista {
                 $aWhere['ok'] = 't';
                 break;
             case 'acabados':
+                $aWhere['estado'] = Expediente::ESTADO_ACABADO;
+                // solo los propios:
+                $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
                 // marcados por scdl con ok.
                 $aWhere['f_aprobacion'] = 'x';
-                $aOperador['f_aprobacion'] = 'IS NOT NULL';
+                $aOperador['f_aprobacion'] = 'IS NULL';
                 $aWhere['ok'] = 't';
                 break;
             case 'archivados':

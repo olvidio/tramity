@@ -165,6 +165,42 @@ fnjs_distribuir_escrito=function(id_escrito) {
     w.focus();
 }
 
+fnjs_distribuir=function(event){
+	// Asegurarme que es por click y no por return (posicion: 0,0)
+	var x = event.x || event.clientX;
+    var y = event.y || event.clientY;
+    if (!x && !y) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    	return false;
+    }
+
+    $('#form_expediente').attr('action','{{ url_update }}');
+    $('#que').val('distribuir');
+    $('#form_expediente').submit(function(event){
+        event.preventDefault(); //prevent default action 	
+        request=$.ajax({
+            data: $(this).serialize(),
+            url: $(this).attr('action'),
+            type: 'post',
+            dataType: 'json'
+        });
+        request.done( function (json) {
+            if (json.success != true) {
+                alert ('error: '+json.mensaje);
+            } else {
+                alert ("{{ "ok distribuir"|trans }}");
+                // Volver a la lista...
+                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            }
+        });
+    });
+}
+
+
+
+/*
 fnjs_revisar_escrito=function(event,id_escrito) {
     var winPrefs="dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
     var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
@@ -188,18 +224,17 @@ fnjs_revisar_escrito=function(event,id_escrito) {
         console.error("Hi ha un error: "+ textStatus, errorThrown);
     });
     
-    /*
     request.always(function(){
         alert("JEJE");
         debugger;
     });
-    */
 
     event.preventDefault();
 	event.stopPropagation();
 	event.stopImmediatePropagation();
 	return false;
 }
+*/
 
 $(document).ready(function() {
 	tabs_hide();
