@@ -39,7 +39,7 @@ switch($Qque) {
 	    $jsondata['data'] = json_encode($a_info);
 	    if (!empty($error_txt)) {
 	        $jsondata['success'] = FALSE;
-	        $jsondata['error_txt'] = $error_txt;
+	        $jsondata['mensaje'] = $error_txt;
 	    } else {
 	        $jsondata['success'] = TRUE;
 	    }
@@ -71,7 +71,7 @@ switch($Qque) {
 	    $jsondata['data'] = json_encode($a_info);
 	    if (!empty($error_txt)) {
 	        $jsondata['success'] = FALSE;
-	        $jsondata['error_txt'] = $error_txt;
+	        $jsondata['mensaje'] = $error_txt;
 	    } else {
 	        $jsondata['success'] = TRUE;
 	    }

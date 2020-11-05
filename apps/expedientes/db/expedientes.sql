@@ -69,7 +69,8 @@ CREATE TABLE public.escritos (
     modo_envio smallint NOT NULL,
     f_salida date,
 	ok boolean,
-	tipo_doc smallint
+	tipo_doc smallint,
+	anulado boolean
 );
 
 ALTER TABLE public.escritos OWNER TO tramity;

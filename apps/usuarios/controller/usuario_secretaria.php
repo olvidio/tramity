@@ -39,7 +39,7 @@ $a_pills = [];
 
 $oExpedienteLista = new ExpedienteLista();
 // borrador = 1;
-$filtro = 'reunion';
+$filtro = 'fijar_reunion';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));

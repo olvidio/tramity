@@ -203,8 +203,7 @@ fnjs_circular=function(event){
             });
             request.done( function (json) {
                 if (json.success != true) {
-                    rta_txt = json.error_txt;
-                    alert ('error: '+rta_txt);
+                    alert ('error: '+json.mensaje);
                 } else {
                     alert ("{{ "circulando!"|trans }}");
                     // Volver a la lista...
@@ -265,8 +264,7 @@ fnjs_guardar=function(event){
             });
             request.done( function (json) {
                 if (json.success != true) {
-                    rta_txt = json.error_txt;
-                    alert ('error: '+rta_txt);
+                    alert ('error: '+json.mensaje);
                 } else {
                     id = json.id_expediente;
                     if (id != id_expediente) {

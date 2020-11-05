@@ -48,7 +48,8 @@ $a_cosas = [ 'id_escrito' => $Qid_escrito, 'slide_mode' => 'TRUE', 'mov' => 'nex
 $pagina_next = web\Hash::link($pagina.'?'.http_build_query($a_cosas));
 
 if (!empty($Qid_escrito)) {
-    
+    $base_url = core\ConfigGlobal::getWeb();
+    $url_download = $base_url.'/apps/expedientes/controller/adjunto_download.php?plugin=1';
     // Pueden ser varios escritos separados por comas:
     $a_escritos = explode(',', $Qid_escrito);
     foreach ($a_escritos as $id_escrito) {
@@ -79,8 +80,6 @@ if (!empty($Qid_escrito)) {
 
         $oView = new ViewTwig('expedientes/controller');
         if ($QSlide_mode === TRUE) {
-            $base_url = core\ConfigGlobal::getWeb();
-            $url_download = $base_url.'/apps/expedientes/controller/download.php?plugin=1';
             $a_campos = [
                 'id_escrito' => $id_escrito,
                 //'oHash' => $oHash,
@@ -90,12 +89,13 @@ if (!empty($Qid_escrito)) {
                 'f_escrito' => $f_escrito,
                 'tipo_doc' => $tipo_doc,
                 'a_adjuntos' => $a_adjuntos,
-                'url_download' => $url_download,
                 'pagina_prev' => $pagina_prev,
                 'pagina_next' => $pagina_next,
                 'base_url' => $base_url,
                 'sigla' => $sigla,
                 'escrito_html' => $escrito_html,
+                'base_url' => $base_url,
+                'url_download' => $url_download,
             ];
             echo $oView->renderizar('escrito_ver_slide.html.twig',$a_campos);
         } else {
@@ -110,6 +110,8 @@ if (!empty($Qid_escrito)) {
                 'a_adjuntos' => $a_adjuntos,
                 'sigla' => $sigla,
                 'escrito_html' => $escrito_html,
+                'base_url' => $base_url,
+                'url_download' => $url_download,
             ];
             echo $oView->renderizar('escrito_ver.html.twig',$a_campos);
         }
@@ -127,7 +129,7 @@ if (!empty($Qid_escrito)) {
     $f_escrito = '';
 
     $base_url = core\ConfigGlobal::getWeb();
-    $url_download = $base_url.'/apps/expedientes/controller/download.php?plugin=1';
+    $url_download = $base_url.'/apps/expedientes/controller/adjunto_download.php?plugin=1';
 
     $a_campos = [
         'id_escrito' => $Qid_escrito,

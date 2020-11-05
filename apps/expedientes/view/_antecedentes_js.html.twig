@@ -74,26 +74,29 @@ fnjs_antecedente=function(event,n) {
 	var id_expediente=$('#id_expediente').val();
 	var oficina_buscar=$('#oficina_buscar').val();
 	var asunto_buscar=$('#asunto_buscar').val();
+	
+	if (!n) { alert("{{ "No se ha definido el tipo de escrito"|trans }}"); err=1; }
 
-    var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
-    
-    var param_json = { que: que, id_expediente: id_expediente, asunto_buscar: asunto_buscar, oficina_buscar: oficina_buscar };
-    request=$.ajax({
-        data: param_json,
-        url: url_ajax,
-        type: 'post'
-    });
-    request.done( function (rta) {
-        //debugger;
-        //rta_txt=rta.responseText;
-        rta_txt=rta;
-        if (rta_txt==undefined) {
-            rta_txt='';
-        }
-        if (rta_txt != '' && rta_txt != '\n') {
-		    $('#lista').html(rta);
-        }
-    });
+	if (err!=1) {
+        var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
+        var param_json = { que: que, id_expediente: id_expediente, asunto_buscar: asunto_buscar, oficina_buscar: oficina_buscar };
+        request=$.ajax({
+            data: param_json,
+            url: url_ajax,
+            type: 'post'
+        });
+        request.done( function (rta) {
+            //debugger;
+            //rta_txt=rta.responseText;
+            rta_txt=rta;
+            if (rta_txt==undefined) {
+                rta_txt='';
+            }
+            if (rta_txt != '' && rta_txt != '\n') {
+                $('#lista').html(rta);
+            }
+        });
+	}
 }
 
 </script>

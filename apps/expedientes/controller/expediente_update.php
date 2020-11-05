@@ -358,7 +358,7 @@ switch($Qque) {
         
         if (!empty($error_txt)) {
             $jsondata['success'] = FALSE;
-            $jsondata['error_txt'] = $error_txt;
+            $jsondata['mensaje'] = $error_txt;
         } else {
             $jsondata['success'] = true;
             $jsondata['id_expediente'] = $id_expediente;

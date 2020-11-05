@@ -1,4 +1,5 @@
 <?php
+use function core\is_true;
 use expedientes\model\Escrito;
 use expedientes\model\entity\Accion;
 use lugares\model\entity\GestorGrupo;
@@ -102,6 +103,47 @@ switch($Qque) {
         echo json_encode($respuestas);
         
         break;
+    case 'guardar_asunto':
+        $txt_err = '';
+        if (!empty($Qid_escrito)) {
+            $oEscrito = new Escrito($Qid_escrito);
+            $oEscrito->DBCarregar();
+            $Qanular = (string) \filter_input(INPUT_POST, 'anular');
+        
+            if (is_true($Qanular)) {
+                if (strpos($Qasunto,_("ANULADO")) === FALSE) {
+                    $asunto = _("ANULADO")." $Qasunto";
+                } else {
+                    $asunto = $Qasunto;
+                }
+                $oEscrito->setAnulado('t');
+            } else {
+                $asunto = str_replace(_("ANULADO").' ', '', $Qasunto);
+                $oEscrito->setAnulado('f');
+            }
+            $oEscrito->setAsunto($asunto);
+            $oEscrito->setDetalle($Qdetalle);
+            if ($oEscrito->DBGuardar() === FALSE ) {
+                $txt_err .= _("Hay un error al guardar el escrito");
+                $txt_err .= "<br>";
+            }
+            
+        } else {
+            $txt_err = _("No existe el escrito");
+        }
+        
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
     case 'guardar':
         $nuevo = FALSE;
         if (!empty($Qid_escrito)) {

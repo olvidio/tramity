@@ -190,6 +190,12 @@ class EscritoDB Extends core\ClasePropiedades {
 	 * @var integer
 	 */
 	 protected $itipo_doc;
+	/**
+	 * anulado de EscritoDB
+	 *
+	 * @var boolean
+	 */
+	 protected $banulado;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de EscritoDB
@@ -263,9 +269,11 @@ class EscritoDB Extends core\ClasePropiedades {
 		$aDades['f_salida'] = $this->df_salida;
 		$aDades['ok'] = $this->bok;
 		$aDades['tipo_doc'] = $this->itipo_doc;
+		$aDades['anulado'] = $this->banulado;
 		array_walk($aDades, 'core\poner_null');
 		//para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
 		if ( core\is_true($aDades['ok']) ) { $aDades['ok']='true'; } else { $aDades['ok']='false'; }
+		if ( core\is_true($aDades['anulado']) ) { $aDades['anulado']='true'; } else { $aDades['anulado']='false'; }
 
 		if ($bInsert === FALSE) {
 			//UPDATE
@@ -290,7 +298,8 @@ class EscritoDB Extends core\ClasePropiedades {
 					modo_envio               = :modo_envio,
 					f_salida                 = :f_salida,
 					ok                       = :ok,
-					tipo_doc                 = :tipo_doc";
+					tipo_doc                 = :tipo_doc,
+					anulado                  = :anulado";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_escrito='$this->iid_escrito'")) === FALSE) {
 				$sClauError = 'EscritoDB.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -309,8 +318,8 @@ class EscritoDB Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(json_prot_local,json_prot_destino,json_prot_ref,id_grupos,destinos,entradilla,asunto,detalle,creador,resto_oficinas,comentarios,f_aprobacion,f_escrito,f_contestar,categoria,visibilidad,accion,modo_envio,f_salida,ok,tipo_doc)";
-			$valores="(:json_prot_local,:json_prot_destino,:json_prot_ref,:id_grupos,:destinos,:entradilla,:asunto,:detalle,:creador,:resto_oficinas,:comentarios,:f_aprobacion,:f_escrito,:f_contestar,:categoria,:visibilidad,:accion,:modo_envio,:f_salida,:ok,:tipo_doc)";		
+			$campos="(json_prot_local,json_prot_destino,json_prot_ref,id_grupos,destinos,entradilla,asunto,detalle,creador,resto_oficinas,comentarios,f_aprobacion,f_escrito,f_contestar,categoria,visibilidad,accion,modo_envio,f_salida,ok,tipo_doc,anulado)";
+			$valores="(:json_prot_local,:json_prot_destino,:json_prot_ref,:id_grupos,:destinos,:entradilla,:asunto,:detalle,:creador,:resto_oficinas,:comentarios,:f_aprobacion,:f_escrito,:f_contestar,:categoria,:visibilidad,:accion,:modo_envio,:f_salida,:ok,:tipo_doc,:anulado)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'EscritoDB.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -418,6 +427,7 @@ class EscritoDB Extends core\ClasePropiedades {
 		if (array_key_exists('f_salida',$aDades)) $this->setF_salida($aDades['f_salida'],$convert);
 		if (array_key_exists('ok',$aDades)) $this->setOk($aDades['ok']);
 		if (array_key_exists('tipo_doc',$aDades)) $this->setTipo_doc($aDades['tipo_doc']);
+		if (array_key_exists('anulado',$aDades)) $this->setAnulado($aDades['anulado']);
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -448,6 +458,7 @@ class EscritoDB Extends core\ClasePropiedades {
 		$this->setF_salida('');
 		$this->setOk('');
 		$this->setTipo_doc('');
+		$this->setAnulado('');
 		$this->setPrimary_key($aPK);
 	}
 
@@ -1036,6 +1047,25 @@ class EscritoDB Extends core\ClasePropiedades {
 	function setTipo_doc($itipo_doc='') {
 		$this->itipo_doc = $itipo_doc;
 	}
+	/**
+	 * Recupera l'atribut banulado de EscritoDB
+	 *
+	 * @return boolean banulado
+	 */
+	function getAnulado() {
+		if (!isset($this->banulado) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->banulado;
+	}
+	/**
+	 * estableix el valor de l'atribut banulado de EscritoDB
+	 *
+	 * @param boolean banulado='f' optional
+	 */
+	function setAnulado($banulado='f') {
+		$this->banulado = $banulado;
+	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
 	/**
@@ -1321,6 +1351,18 @@ class EscritoDB Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'tipo_doc'));
 		$oDatosCampo->setEtiqueta(_("tipo_doc"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut banulado de EscritoDB
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosAnulado() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'anulado'));
+		$oDatosCampo->setEtiqueta(_("anulado"));
 		return $oDatosCampo;
 	}
 }

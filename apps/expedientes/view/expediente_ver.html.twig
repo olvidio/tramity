@@ -48,10 +48,10 @@
                 {% endfor %}
               	</div>
            	</div>
-            <div class="p-6">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ "Cerrar"|trans }}</button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fnjs_voto(event,'voto');" >{{ "Guardar"|trans }}</button>
-            </div>
+        </div>
+        <div class="d-flex flex-row justify-content-end">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ "Cerrar"|trans }}</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fnjs_voto(event,'voto');" >{{ "Guardar"|trans }}</button>
         </div>
       </div>
     </div>
@@ -189,7 +189,7 @@ fnjs_ver_cargos=function(event) {
     });
     request.done( function (json) {
         if (json.success != true) {
-            alert (json.error_txt);
+            alert (json.mensaje);
         } else {
             // You can create an Array from this like so:
             var theArray = JSON.parse(json.cargos);
@@ -228,7 +228,7 @@ fnjs_add_cargos=function(event) {
 	    });
 	    request.done( function (json) {
             if (json.success != true) {
-                alert (json.error_txt);
+                alert (json.mensaje);
             } else {
                 //cambiar recorrido.
 				fnjs_recorrido();
@@ -250,7 +250,7 @@ fnjs_recorrido=function() {
 	    });
 	    request.done( function (json) {
             if (json.success != true) {
-                alert (json.error_txt);
+                alert (json.mensaje);
             } else {
 	            var a_recorrido = JSON.parse(json.recorrido);
 	            html='';
@@ -286,7 +286,7 @@ fnjs_voto=function(event,que) {
 	    });
 	    request.done( function (json) {
             if (json.success != true) {
-                alert (json.error_txt);
+                alert (json.mensaje);
             } else {
                 $('#modal_volver').val(1);
             }

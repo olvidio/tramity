@@ -58,6 +58,7 @@ class ExpedienteLista {
      * filtros posibles: 
     'borrador'
     'firmar'
+    'fijar_reunion'
     'reunion'
     'circulando'
     'distribuir'
@@ -71,6 +72,7 @@ class ExpedienteLista {
     'avisos'
     'pendientes'
     */
+    
     /**
      * 
      */
@@ -189,6 +191,9 @@ class ExpedienteLista {
                     $aWhere = [];
                 }
                 break;
+            case 'fijar_reunion':
+                $aWhere['estado'] = Expediente::ESTADO_FIJAR_REUNION;
+                break;
             case 'reunion':
                 //pendientes de mi firma, pero ya circulando, y con fecha de reunión
                 $aWhereFirma['id_cargo'] = ConfigGlobal::mi_id_cargo();
@@ -239,6 +244,7 @@ class ExpedienteLista {
                 }
                 break;
             case 'distribuir':
+                $aWhere['estado'] = Expediente::ESTADO_ACABADO;
                 // marcados por scdl con ok.
                 $aWhere['f_aprobacion'] = 'x';
                 $aOperador['f_aprobacion'] = 'IS NULL';
@@ -282,6 +288,9 @@ class ExpedienteLista {
             case 'firmar':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 break;
+            case 'fijar_reunion':
+                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                break;
             case 'reunion':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 break;
@@ -289,7 +298,7 @@ class ExpedienteLista {
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 break;
             case 'distribuir':
-                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_distribuir.php';
                 break;
             case 'acabados':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_form.php';

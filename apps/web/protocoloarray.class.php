@@ -83,7 +83,10 @@ class ProtocoloArray Extends Protocolo {
 			        $nom_lugar = $oLugar->getNombre();
 			    }
 			    
-			    $txt = "$nom_lugar ${prot_num}/${prot_any}";
+			    $txt = "$nom_lugar";
+			    if (!empty($prot_num)) {
+			        $txt .= " ${prot_num}/${prot_any}";
+			    }
 			    $txt .= !empty($prot_mas)? ", ${prot_mas}" : '';
 			    
 			    $sLista .= !empty($sLista)? "<br>" : '';
@@ -115,7 +118,10 @@ class ProtocoloArray Extends Protocolo {
 			        $nom_lugar = $oLugar->getNombre();
 			    }
 			    
-			    $txt = "$nom_lugar ${prot_num}/${prot_any}";
+			    $txt = "$nom_lugar";
+			    if (!empty($prot_num)) {
+			        $txt .= " ${prot_num}/${prot_any}";
+			    }
 			    $txt .= !empty($prot_mas)? ", ${prot_mas}" : '';
 			    
 			    $sLista .= $ref.$txt."<br>";

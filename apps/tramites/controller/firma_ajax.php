@@ -173,11 +173,16 @@ switch ($Qque) {
             // pasarlo a scdl para distribuir (ok_scdl)
             $oUltimaFirma = $gesFirmas->esUltima($Qid_expediente);
             $valor = $oUltimaFirma->getValor();
-            if (!empty($valor)) { // no importa el valor, si no es OK ya secretaria...
-                // marcar ok_scdl
+            if (!empty($valor)) { 
                 $oExpediente = new Expediente($Qid_expediente);
                 $oExpediente->DBCarregar();
-                $oExpediente->setOk('t');
+                if ($valor == Firma::V_VISTO_BUENO) { // caso "voto deliberativo".
+                    $oExpediente->setEstado(Expediente::ESTADO_FIJAR_REUNION);
+                } else { // no importa el valor, si no es OK ya secretaria...
+                    // marcar ok_scdl
+                    $oExpediente->setOk('t');
+                    $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
+                }
                 if ($oExpediente->DBGuardar() === FALSE ) {
                     $error_txt .= $oExpediente->getErrorTxt();
                 }
@@ -266,7 +271,7 @@ switch ($Qque) {
         
 if (!empty($error_txt)) {
     $jsondata['success'] = FALSE;
-    $jsondata['error_txt'] = $error_txt;
+    $jsondata['mensaje'] = $error_txt;
 } else {
     $jsondata['success'] = TRUE;
 }

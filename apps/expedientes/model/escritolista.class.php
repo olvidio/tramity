@@ -6,6 +6,7 @@ use core\ViewTwig;
 use expedientes\model\entity\GestorAccion;
 use web\Protocolo;
 use web\ProtocoloArray;
+use tramites\model\entity\Tramite;
 
 
 class EscritoLista {
@@ -69,8 +70,21 @@ class EscritoLista {
         $this->aOperador = $aOperador;
     }
 
+    private function getDistribuir() {
+        $oExpediente = new Expediente($this->id_expediente);
+        $estado = $oExpediente->getEstado();
+        if ($estado == Expediente::ESTADO_ACABADO) {
+            $bdistribuir = TRUE;
+        } else {
+            $bdistribuir = FALSE;
+        }
+        return $bdistribuir;
+    }
+    
     public function mostrarTabla() {
         $this->setCondicion();
+        
+        $bdistribuir = $this->getDistribuir();
         
         $gesAcciones = new GestorAccion();
         $cAcciones = $gesAcciones->getAcciones($this->aWhere);
@@ -86,7 +100,11 @@ class EscritoLista {
             
             $oEscrito = new Escrito($id_escrito);
             
-            $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >"._("ver")."</span>";
+            if ($bdistribuir) { 
+                $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_distribuir_escrito('$id_escrito');\" >"._("ver")."</span>";
+            } else {
+                $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >"._("ver")."</span>";
+            }
             $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito('$id_escrito');\" >"._("enviar")."</span>";
             
             $a_json_prot_destino = $oEscrito->getJson_prot_destino();

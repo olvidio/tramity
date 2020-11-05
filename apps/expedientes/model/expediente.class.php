@@ -36,8 +36,9 @@ class Expediente Extends expedienteDB {
      */
     const ESTADO_BORRADOR          = 1;
     const ESTADO_CIRCULANDO        = 2;
-    const ESTADO_ACABADO           = 3;
-    const ESTADO_TERMINADO         = 4;
+    const ESTADO_FIJAR_REUNION     = 3;
+    const ESTADO_ACABADO           = 4;
+    const ESTADO_TERMINADO         = 5;
     
     // vida (a criterio del ponente):
     /*
@@ -124,6 +125,7 @@ class Expediente Extends expedienteDB {
         $a_estado = [
             self::ESTADO_BORRADOR => _("borrador"),
             self::ESTADO_CIRCULANDO => _("circulando"),
+            self::ESTADO_FIJAR_REUNION => _("fijar reunión"),
             self::ESTADO_ACABADO => _("acabado"),
             self::ESTADO_TERMINADO => _("terminado"),
         ];
