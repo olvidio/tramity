@@ -80,7 +80,7 @@ class ProtocoloArray Extends Protocolo {
 			    
 			    if (!empty($lugar)) {
 			        $oLugar = new Lugar($lugar);
-			        $nom_lugar = $oLugar->getNombre();
+			        $nom_lugar = $oLugar->getSigla();
 			    }
 			    
 			    $txt = "$nom_lugar";
@@ -115,7 +115,7 @@ class ProtocoloArray Extends Protocolo {
 			    
 			    if (!empty($lugar)) {
 			        $oLugar = new Lugar($lugar);
-			        $nom_lugar = $oLugar->getNombre();
+			        $nom_lugar = $oLugar->getSigla();
 			    }
 			    
 			    $txt = "$nom_lugar";

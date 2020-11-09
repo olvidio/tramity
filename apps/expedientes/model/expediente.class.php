@@ -91,7 +91,7 @@ class Expediente Extends expedienteDB {
     /* METODES PUBLICS ----------------------------------------------------------*/
 
     /**
-     * pone l fecha en todos los escritos del expediente.
+     * pone la fecha en todos los escritos del expediente.
      * 
      * @param web\DateTimeLocal|string df_escrito.
      * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).

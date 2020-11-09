@@ -4,9 +4,9 @@ namespace expedientes\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use expedientes\model\entity\GestorAccion;
+use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
-use tramites\model\entity\Tramite;
 
 
 class EscritoLista {
@@ -95,17 +95,39 @@ class EscritoLista {
         $todos_escritos = '';
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
+            $id_expediente = $oAccion->getId_expediente();
             $todos_escritos .= (empty($todos_escritos))? '' : ',';
             $todos_escritos .= $id_escrito;
             
             $oEscrito = new Escrito($id_escrito);
+            $f_salida = $oEscrito->getF_salida()->getFromLocal();
+            $tipo_accion = $oEscrito->getAccion();
+            
+            if (!empty($f_salida)) {
+                $a_accion['enviar'] = _("enviado")." ($f_salida)";
+            } else {
+                if ($tipo_accion == Escrito::ACCION_ESCRITO) {
+                    $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito('$id_escrito');\" >"._("enviar")."</span>";
+                } else {
+                    $a_accion['enviar'] = "otra acción?";
+                }
+            }
             
             if ($bdistribuir) { 
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_distribuir_escrito('$id_escrito');\" >"._("ver")."</span>";
             } else {
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >"._("ver")."</span>";
             }
-            $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito('$id_escrito');\" >"._("enviar")."</span>";
+            if ($this->filtro == 'acabados') { 
+                $a_cosas =  ['id_expediente' => $id_expediente,
+                    'id_escrito' => $id_escrito,
+                    'accion' => $tipo_accion,
+                    'filtro' => $this->filtro,
+                ];
+                $pag_escrito = Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
+                
+                $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >mod</span>";
+            }
             
             $a_json_prot_destino = $oEscrito->getJson_prot_destino();
             $oArrayProtDestino = new ProtocoloArray($a_json_prot_destino,'','');
@@ -150,6 +172,7 @@ class EscritoLista {
         
         $oView = new ViewTwig('expedientes/controller');
         switch ($this->filtro) {
+            case 'acabados':
             case 'enviar':
                 return $oView->renderizar('escrito_lst_enviar.html.twig',$a_campos);
                 break;

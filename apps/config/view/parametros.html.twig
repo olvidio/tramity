@@ -60,6 +60,21 @@ fnjs_guardar=function(formulario){
 </form>
 <hr>
 
+<h3>{{ "valor inicio contadores"|trans }}:</h3>
+<form id="frm_contador" name="frm_contador" action="">
+{{ oHashC.getCamposHtml|raw }}
+{{ "para cr"|trans }}
+<input class="col-2" type="text" name="valor" value="{{ ini_contador_cr }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_contador1" name="frm_contador1" action="">
+{{ oHashC1.getCamposHtml|raw }}
+{{ "para el resto"|trans }}
+<input class="col-2" type="text" name="valor" value="{{ ini_contador }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+
 <h3>{{ "idioma por defecto"|trans }}:</h3>
 <form id="frm_idioma_default" name="frm_idioma_default" action="">
 {{ oHashI.getCamposHtml|raw }}
@@ -89,6 +104,45 @@ fnjs_guardar=function(formulario){
 <form id="frm_server_c" name="frm_server_c" action="">
 {{ oHashSEC.getCamposHtml|raw }}
 <input type="text" name="valor" value="{{ server_ethercalc }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+<h3>{{ "servidor SMTP"|trans }}:</h3>
+<form id="frm_smtp_host" name="frm_smtp_host" action="">
+{{ oHashSMTP_host.getCamposHtml|raw }}
+{{ "Host:"|trans }}
+<input type="text" name="valor" value="{{ smtp_host }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_smtp_port" name="frm_smtp_port" action="">
+{{ oHashSMTP_port.getCamposHtml|raw }}
+{{ "Port:"|trans }}
+<input type="text" name="valor" value="{{ smtp_port }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_smtp_auth" name="frm_smtp_auth" action="">
+{{ oHashSMTP_auth.getCamposHtml|raw }}
+{{ "usar autenticación:"|trans }}
+<input type="checkbox" name="valor" value="{{ val_auth }}" {{ chk_auth }} >{{ "Si"|trans }}
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_smtp_user" name="frm_smtp_user" action="">
+{{ oHashSMTP_user.getCamposHtml|raw }}
+{{ "User:"|trans }}
+<input type="text" name="valor" value="{{ smtp_user }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_smtp_pwd" name="frm_smtp_pwd" action="">
+{{ oHashSMTP_pwd.getCamposHtml|raw }}
+{{ "Password:"|trans }}
+<input type="text" name="valor" value="{{ smtp_pwd }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_smtp_secure" name="frm_smtp_secure" action="">
+{{ oHashSMTP_secure.getCamposHtml|raw }}
+{{ "seguridad:"|trans }}
+<input type="radio" name="valor" value="{{ val_tls }}" {{ chk_tls }} >{{ "tls"|trans }}
+<input type="radio" name="valor" value="{{ val_ssl }}" {{ chk_ssl }} >{{ "ssl"|trans }}
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>

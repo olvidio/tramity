@@ -2,13 +2,14 @@
 <link type="text/css" rel='stylesheet' href='../../../node_modules/bootstrap/dist/css/bootstrap.min.css' />
 
 <div class='p-2'></div>
-<div class="container p-3 my-3 bg-danger text-white">
-	{{ txt_alert }}
+<div class="container p-3 my-3 bg-danger text-white font-weight-bold">
+	{{ txt_alert|raw }}
 </div>
 
   
 <!--  --------------------  BOTONES --------------------------  -->
-  
-<button id='btn_volver' tabindex='91' class="btn btn-secondary" onClick="window.close();" >
-  {{ "Cerrar"|trans }}
-</button>
+<div class="text-center">
+  <button id='btn_volver' tabindex='91' class="btn btn-secondary" onClick="window.close();" >
+    {{ "Cerrar"|trans }}
+  </button>
+</div>

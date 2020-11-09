@@ -1,17 +1,11 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
-use expedientes\model\Escrito;
+use expedientes\model\EscritoLista;
 use expedientes\model\Expediente;
-use expedientes\model\entity\GestorAccion;
-use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
-use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use usuarios\model\entity\GestorOficina;
-use web\Protocolo;
-use expedientes\model\EscritoLista;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -24,23 +18,8 @@ require_once ("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$plazo_normal = 15;
-$plazo_urgente = 5;
-$plazo_muy_urgente = 3;
-$error_fecha = 15;
-
 $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
-
-$gesCargos = new GestorCargo();
-$aCargos =$gesCargos->getArrayCargos();
-
-$txt_option_cargos = '';
-$gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargos();
-foreach ($a_posibles_cargos as $id_cargo => $cargo) {
-    $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
-}
 
 if (empty($Qid_expediente)) {
     exit ("Error, no existe el expediente");
@@ -52,33 +31,14 @@ $oExpediente->DBCarregar();
 
 $ponente_txt = '?';
 $id_ponente = $oExpediente->getPonente();
+$gesCargos = new GestorCargo();
+$aCargos =$gesCargos->getArrayCargos();
 $ponente_txt = $aCargos[$id_ponente];
-
-if ($id_ponente == ConfigGlobal::mi_id_cargo()) {
-    $aclaracion = _("Responder aclaración");
-    $aclaracion_event = 'respuesta';
-} else {
-    $aclaracion = _("Pedir aclaración");
-    $aclaracion_event = 'nueva';
-}
 
 $id_tramite = $oExpediente->getId_tramite();
 $oTramite = new Tramite($id_tramite);
 $tramite_txt = $oTramite->getTramite();
 
-// Valores posibles para la firma
-$oFirma = new Firma();
-$a_firmas = [];
-$rango = 'voto';
-if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
-    $rango = 'vcd';
-}
-foreach ($oFirma->getArrayValor($rango) as $key => $valor) {
-    $a_voto['id'] = $key;
-    $a_voto['valor'] = $valor;
-    $a_firmas[] = $a_voto;
-}
-    
 $estado = $oExpediente->getEstado();
 $a_estado = $oExpediente->getArrayEstado();
 $estado_txt = $a_estado[$estado];
@@ -101,75 +61,23 @@ $entradilla = $oExpediente->getEntradilla();
 
 $oEscritoLista = new EscritoLista();
 $oEscritoLista->setId_expediente($Qid_expediente);
-$oEscritoLista->setFiltro('lista');
 
-// Comentarios y Aclaraciones
-$aWhere = ['id_expediente' => $Qid_expediente,
-    '_ordre' => 'orden_tramite, orden_oficina ASC'
-];
-$gesFirmas = new GestorFirma();
-$cFirmas = $gesFirmas->getFirmas($aWhere);
-$comentarios = '';
-$a_recorrido = [];
-$oFirma = new Firma();
-$a_valores = $oFirma->getArrayValor('all');
-foreach ($cFirmas as $oFirma) {
-    $a_rec = [];
-    $tipo = $oFirma->getTipo();
-    $valor = $oFirma->getValor();
-    $f_valor = $oFirma->getF_valor()->getFromLocal();
-    $id_cargo = $oFirma->getId_cargo();
-    $cargo = $aCargos[$id_cargo];
-    if (!empty($valor)) {
-        $voto = $a_valores[$valor];
-        $observ = $oFirma->getObserv();
-        $observ_ponente = $oFirma->getObserv_creador();
-        if ($tipo == Firma::TIPO_VOTO) {
-            if (!empty($observ)) {
-                $comentarios .= empty($comentarios)? '' : "<br>";
-                $comentarios .= "$cargo($voto): $observ";
-            }
-            switch ($valor) {
-                case Firma::V_NO:
-                case Firma::V_RECHAZADO:
-                    $a_rec['class'] = "list-group-item-danger";
-                    break;
-                case Firma::V_OK:
-                    $a_rec['class'] = "list-group-item-success";
-                    break;
-                default:
-                    $a_rec['class'] = "list-group-item-info";
-            }
-            $a_rec['valor'] = "$f_valor $cargo [$voto]";
-            $a_recorrido[] = $a_rec;
-        }
-        if ($tipo == Firma::TIPO_ACLARACION) {
-            $voto = _("aclaración");
-            $comentarios .= empty($comentarios)? '' : "<br>";
-            $comentarios .= "$cargo($voto): $observ";
-            if (!empty($observ_ponente)) {
-                $comentarios .= " rta: $observ_ponente";
-            }
-        }
-    } else {
-        if ($tipo == Firma::TIPO_VOTO) {
-            $a_rec['class'] = "";
-            $a_rec['valor'] = $cargo;
-            $a_recorrido[] = $a_rec;
-            // lo marco como visto (sólo el mio)
-            if ($id_cargo == ConfigGlobal::mi_id_cargo()) {
-                $oFirma->setValor(Firma::V_VISTO);
-                $oFirma->DBGuardar();
-            }
-        }
-    }
+if ($Qfiltro == 'dirtribuir') {
+    $btn_action = 'distribuir';
+    $txt_btn_success = _("Distribuir");
+    $oEscritoLista->setFiltro('lista');
+} else {
+    $btn_action = 'archivar';
+    $txt_btn_success = _("Archivar");
+    $oEscritoLista->setFiltro('acabados');
 }
 
-$oficinas = $oExpediente->getResto_oficinas();
 
-$oArrayDesplFirmas = new web\DesplegableArray($oficinas,$a_posibles_cargos,'oficinas');
-$oArrayDesplFirmas ->setBlanco('t');
-$oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas(event)');
+// Comentarios y Aclaraciones
+$gesFirmas = new GestorFirma();
+$aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
+$a_recorrido = $aRecorrido['recorrido'];
+$comentarios = $aRecorrido['comentarios'];
 
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
@@ -197,26 +105,17 @@ $a_campos = [
     'comentarios' => $comentarios,
     'a_recorrido' => $a_recorrido,
     
-    'oficinas' => $oficinas,
-    'oArrayDesplFirmas' => $oArrayDesplFirmas, 
-    'txt_option_cargos' => $txt_option_cargos,
     'lista_antecedentes' => $lista_antecedentes,
     
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
     // para la pagina js
-    'plazo_normal' => $plazo_normal,
-    'plazo_urgente' => $plazo_urgente,
-    'plazo_muy_urgente' => $plazo_muy_urgente,
-    'error_fecha' => $error_fecha,
+    'server' => $server,
     //acciones
     'oEscritoLista' => $oEscritoLista,
-    //'a_acciones' => $a_acciones,
-    //'ver_todo' => $ver_todo,
-    'a_firmas' => $a_firmas,
-    'server' => $server,
-    'aclaracion' => $aclaracion,
-    'aclaracion_event' => $aclaracion_event,
+    'firltro' => $Qfiltro,
+    'btn_action' => $btn_action,
+    'txt_btn_success' => $txt_btn_success,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

@@ -97,6 +97,32 @@ $oHashPE->setArrayCamposHidden(['parametro' => $parametro]);
 $a_campos['oHashPE'] = $oHashPE;
 $a_campos['plazo_error'] = $val_sigla;
 
+// ----------- Inicio Contador cr -------------------
+$parametro = 'ini_contador_cr';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$oHashC = new Hash();
+$oHashC->setUrl($url);
+$oHashC->setcamposForm('valor');
+$oHashC->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashC'] = $oHashC;
+$a_campos['ini_contador_cr'] = $valor;
+
+// ----------- Inicio Contador resto -------------------
+$parametro = 'ini_contador';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$oHashC1 = new Hash();
+$oHashC1->setUrl($url);
+$oHashC1->setcamposForm('valor');
+$oHashC1->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashC1'] = $oHashC1;
+$a_campos['ini_contador'] = $valor;
+
 // ----------- Nombre Sigla -------------------
 $parametro = 'sigla';
 $oConfigSchema = new ConfigSchema($parametro);
@@ -196,6 +222,95 @@ $a_campos['val_dl'] = $val_dl;
 $a_campos['chk_dl'] = $chk_dl;
 $a_campos['val_cr'] = $val_cr;
 $a_campos['chk_cr'] = $chk_cr;
+
+// ----------- Servidor SMTP -------------------
+$parametro = 'smtp_secure';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$val_tls = 'tls'; //PHPMailer::ENCRYPTION_STARTTLS;
+$chk_tls = ($valor == $val_tls)? 'checked' : ''; 
+$val_ssl = 'ssl'; //PHPMailer::ENCRYPTION_SMTPS;
+$chk_ssl = ($valor == $val_ssl)? 'checked' : ''; 
+
+$oHashSMTP_secure = new Hash();
+$oHashSMTP_secure ->setUrl($url);
+$oHashSMTP_secure ->setcamposForm('valor');
+$oHashSMTP_secure ->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashSMTP_secure'] = $oHashSMTP_secure ;
+$a_campos['val_tls'] = $val_tls;
+$a_campos['chk_tls'] = $chk_tls;
+$a_campos['val_ssl'] = $val_ssl;
+$a_campos['chk_ssl'] = $chk_ssl;
+
+$parametro = 'smtp_host';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$oHashSMTP_host = new Hash();
+$oHashSMTP_host ->setUrl($url);
+$oHashSMTP_host ->setcamposForm('valor');
+$oHashSMTP_host ->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashSMTP_host'] = $oHashSMTP_host ;
+$a_campos[$parametro] = $valor;
+
+$parametro = 'smtp_port';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$oHashSMTP_port = new Hash();
+$oHashSMTP_port ->setUrl($url);
+$oHashSMTP_port ->setcamposForm('valor');
+$oHashSMTP_port ->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashSMTP_port'] = $oHashSMTP_port ;
+$a_campos[$parametro] = $valor;
+
+$parametro = 'smtp_auth';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$val_auth = 'true';
+$chk_auth = ($valor == $val_auth)? 'checked' : ''; 
+
+$oHashSMTP_auth  = new Hash();
+$oHashSMTP_auth->setUrl($url);
+$oHashSMTP_auth->setcamposForm('valor');
+$oHashSMTP_auth->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashSMTP_auth'] = $oHashSMTP_auth;
+$a_campos['val_auth'] = $val_auth;
+$a_campos['chk_auth'] = $chk_auth;
+
+$parametro = 'smtp_user';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$oHashSMTP_user = new Hash();
+$oHashSMTP_user ->setUrl($url);
+$oHashSMTP_user ->setcamposForm('valor');
+$oHashSMTP_user ->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashSMTP_user'] = $oHashSMTP_user ;
+$a_campos[$parametro] = $valor;
+
+$parametro = 'smtp_pwd';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$oHashSMTP_pwd  = new Hash();
+$oHashSMTP_pwd  ->setUrl($url);
+$oHashSMTP_pwd  ->setcamposForm('valor');
+$oHashSMTP_pwd  ->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashSMTP_pwd'] = $oHashSMTP_pwd  ;
+$a_campos[$parametro] = $valor;
+
+
+
+
 
 $oView = new core\ViewTwig('config/controller');
 echo $oView->render('parametros.html.twig',$a_campos);

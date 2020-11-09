@@ -7,6 +7,7 @@ use usuarios\model\entity\GestorCargo;
 use web\Desplegable;
 use web\Protocolo;
 use lugares\model\entity\GestorGrupo;
+use Twig\Extension\StringLoaderExtension;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -22,6 +23,7 @@ require_once ("apps/core/global_object.inc");
 $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qid_escrito = (integer) \filter_input(INPUT_POST, 'id_escrito');
 $Qaccion = (integer) \filter_input(INPUT_POST, 'accion');
+$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
 $txt_option_ref = '';
 $gesLugares = new GestorLugar();
@@ -169,7 +171,12 @@ if (!empty($Qid_escrito)) {
 
 
 $url_update = 'apps/expedientes/controller/escrito_update.php';
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['id_expediente' => $Qid_expediente]));
+if ($Qfiltro == 'acabados') {
+    $a_cosas = ['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro];
+    $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query($a_cosas));
+} else {
+    $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['id_expediente' => $Qid_expediente]));
+}
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query([]));
 
 $a_campos = [

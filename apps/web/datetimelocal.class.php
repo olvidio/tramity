@@ -122,6 +122,18 @@ class DateTimeLocal Extends \DateTime {
      * @param string $separador (.-/)
      * @return string
      */
+    public function getFromLocalHora($separador='/') {
+        $format = $this->getFormat($separador);
+        $format .= ' H:i:s';
+        return parent::format($format);
+    }
+    
+    /**
+     * Devuelve la fecha en el formato local (según el idioma del usuario)
+     * 
+     * @param string $separador (.-/)
+     * @return string
+     */
     public function getFromLocal($separador='/') {
         $format = $this->getFormat($separador);
         return parent::format($format);

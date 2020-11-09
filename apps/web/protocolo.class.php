@@ -60,7 +60,7 @@ class Protocolo {
 	    $nom_lugar = '';
 	    if (!empty($lugar)) {
 	        $oLugar = new Lugar($this->ilugar);
-	        $nom_lugar = $oLugar->getNombre();
+	        $nom_lugar = $oLugar->getSigla();
 	    }
 	    
 	    $prot_num = empty($this->iprot_num)? '' : $this->iprot_num;

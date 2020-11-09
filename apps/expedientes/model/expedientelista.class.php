@@ -245,23 +245,18 @@ class ExpedienteLista {
                 break;
             case 'distribuir':
                 $aWhere['estado'] = Expediente::ESTADO_ACABADO;
-                // marcados por scdl con ok.
-                $aWhere['f_aprobacion'] = 'x';
-                $aOperador['f_aprobacion'] = 'IS NULL';
-                $aWhere['ok'] = 't';
+                // todavia sin marcar por scdl con ok.
+                $aWhere['ok'] = 'f';
                 break;
             case 'acabados':
                 $aWhere['estado'] = Expediente::ESTADO_ACABADO;
+                // marcados por scdl con ok.
+                $aWhere['ok'] = 't';
                 // solo los propios:
                 $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
-                // marcados por scdl con ok.
-                $aWhere['f_aprobacion'] = 'x';
-                $aOperador['f_aprobacion'] = 'IS NULL';
-                $aWhere['ok'] = 't';
                 break;
             case 'archivados':
-                $aWhere['f_aprobacion'] = 'x';
-                $aOperador['f_aprobacion'] = 'IS NOT NULL';
+                $aWhere['estado'] = Expediente::ESTADO_TERMINADO;
                 break;
             case 'copias':
                 $aWhere['f_aprobacion'] = 'x';
@@ -301,10 +296,8 @@ class ExpedienteLista {
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 break;
             case 'distribuir':
-                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_distribuir.php';
-                break;
             case 'acabados':
-                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_form.php';
+                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_distribuir.php';
                 break;
             case 'archivados':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';

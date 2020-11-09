@@ -76,6 +76,10 @@ class NullDateTimeLocal Extends \DateTime {
 	
 	public function getFromLocal() {
         return '';
+	}  
+	
+	public function getFromLocalHora() {
+	    return '';
 	}
 
 	static public function createFromFormat($format,$data, \DateTimeZone $TimeZone=NULL) {

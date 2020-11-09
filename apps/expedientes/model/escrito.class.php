@@ -7,6 +7,7 @@ use expedientes\model\entity\EscritoDB;
 use expedientes\model\entity\GestorEscritoAdjunto;
 use web\Protocolo;
 use expedientes\model\entity\EscritoAdjunto;
+use lugares\model\entity\GestorLugar;
 
 
 
@@ -62,6 +63,52 @@ class Escrito Extends EscritoDB {
         }
         $this->setoDbl($oDbl);
         $this->setNomTabla('escritos');
+    }
+    
+    /**
+     * genera el número de protocolo local. y lo guarda.
+     */
+    public function generarProtocolo($id_lugar='',$id_lugar_cr) {
+        if (empty($id_lugar_cr)) {
+            $sigla = 'cr';
+            $gesLugares = new GestorLugar();
+            $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
+            $oLugar = $cLugares[0];
+            $id_lugar_cr = $oLugar->getId_lugar();
+        }
+        if (empty($id_lugar)) {
+            $sigla = $_SESSION['oConfig']->getSigla();
+            $gesLugares = new GestorLugar();
+            $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
+            $oLugar = $cLugares[0];
+            $id_lugar = $oLugar->getId_lugar();
+        }
+        // segun si el destino es cr o resto:
+        $bCr = FALSE;
+        $aProtDst = $this->getJson_prot_destino();
+        // es un array, pero sólo debería haber uno...
+        foreach($aProtDst as $json_prot_destino) {
+            if (count(get_object_vars($json_prot_destino)) == 0) {
+                exit (_("Error no hay destino"));
+            } else {
+                $lugar = $json_prot_destino->lugar;
+                if ($lugar == $id_lugar_cr) {
+                    $bCr = TRUE;
+                } else {
+                    $bCr = FALSE;
+                }
+            }
+        }
+        $prot_num = $_SESSION['oConfig']->getContador($bCr);
+        $prot_any = date('y');
+        $prot_mas = '';
+        
+        $oProtLocal = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
+        $prot_local = $oProtLocal->getProt();
+        
+        $this->DBCarregar();
+        $this->setJson_prot_local($prot_local);
+        $this->DBGuardar();
     }
     
     /**

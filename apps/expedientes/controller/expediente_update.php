@@ -4,6 +4,7 @@ use expedientes\model\Escrito;
 use expedientes\model\Expediente;
 use expedientes\model\GestorExpediente;
 use expedientes\model\entity\GestorAccion;
+use lugares\model\entity\GestorLugar;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramiteCargo;
@@ -43,11 +44,60 @@ $Qa_preparar = (array)  \filter_input(INPUT_POST, 'a_preparar', FILTER_DEFAULT, 
 $Qvida = (integer) \filter_input(INPUT_POST, 'vida');
 
 switch($Qque) {
-    case 'disribuir':
+    case 'archivar':
+        // Se pone cuando se han enviado...
+        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente->DBCarregar();
+        $oExpediente->setEstado(Expediente::ESTADO_TERMINADO);
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            $txt_err .= _("No se ha podido cambiar el estado del expediente");
+            $txt_err .= "<br>";
+        }
+        break;
+    case 'distribuir':
         $oExpediente = new Expediente($Qid_expediente);
         $oExpediente->DBCarregar();
         $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
-        $oExpediente->DBGuardar();
+        // marcar ok_scdl
+        $oExpediente->setOk('t');
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            $txt_err .= _("No se ha podido cambiar el estado del expediente");
+            $txt_err .= "<br>";
+        }
+        // crear los números de protocolo local de los escritos.
+        // busco aquí el id_lugar para no tener que hacerlo dentro del bucle.
+        $sigla = $_SESSION['oConfig']->getSigla();
+        $gesLugares = new GestorLugar();
+        $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
+        $oLugar = $cLugares[0];
+        $id_lugar = $oLugar->getId_lugar();
+        $sigla = 'cr';
+        $gesLugares = new GestorLugar();
+        $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
+        $oLugar = $cLugares[0];
+        $id_lugar_cr = $oLugar->getId_lugar();
+        // escritos del expediente: acciones tipo escrito
+        $aWhereAccion = ['id_expediente' => $Qid_expediente, 'tipo_accion' => Escrito::ACCION_ESCRITO];
+        $gesAcciones = new GestorAccion();
+        $cAcciones = $gesAcciones->getAcciones($aWhereAccion);
+        foreach($cAcciones as $oAccion) {
+            $id_escrito = $oAccion->getId_escrito();
+            $oEscrito = new Escrito($id_escrito);
+            $oEscrito->generarProtocolo($id_lugar,$id_lugar_cr);
+        }
+
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
         break;
     case 'exp_a_borrador':
         $txt_err = '';

@@ -153,6 +153,7 @@ switch ($Qque) {
         $aWhere = ['id_expediente' => $Qid_expediente,
                     'id_cargo' => $id_cargo,
                     'tipo' => Firma::TIPO_VOTO,
+                    '_ordre' => 'orden_tramite',
         ];
         $gesFirmas = new GestorFirma();
         $cFirmas = $gesFirmas->getFirmas($aWhere);
@@ -161,8 +162,16 @@ switch ($Qque) {
         } else {
             //$f_hoy_iso = date('Y-m-d');
             $f_hoy_iso = date(\DateTimeInterface::ISO8601);
-            $oFirma = $cFirmas[0];
-            $oFirma->DBCarregar();
+            // Habrá que ver como se cambia un voto.
+            // De momento sólo se firma el primero que no tenga valor.
+            foreach ($cFirmas as $oFirma) {
+                $valor = $oFirma->getValor();
+                if ($valor == Firma::V_NO || $valor == Firma::V_OK) {
+                    continue;
+                } else {
+                    break;
+                }
+            }
             $oFirma->setValor($Qvoto);
             $oFirma->setObserv($Qcomentario);
             $oFirma->setF_valor($f_hoy_iso,FALSE);
@@ -178,10 +187,9 @@ switch ($Qque) {
                 $oExpediente->DBCarregar();
                 if ($valor == Firma::V_VISTO_BUENO) { // caso "voto deliberativo".
                     $oExpediente->setEstado(Expediente::ESTADO_FIJAR_REUNION);
-                } else { // no importa el valor, si no es OK ya secretaria...
-                    // marcar ok_scdl
-                    $oExpediente->setOk('t');
+                } else { // no importa el valor.
                     $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
+                    $oExpediente->setF_aprobacion($f_hoy_iso,FALSE); 
                 }
                 if ($oExpediente->DBGuardar() === FALSE ) {
                     $error_txt .= $oExpediente->getErrorTxt();

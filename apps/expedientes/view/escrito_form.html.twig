@@ -83,8 +83,8 @@
       </div>
     </div>
   </div>
-  <!-- Fin Col Izda -->
-</div>
+</div> <!-- Fin Col Izda -->
+
 <!--  Col Dcha -->
 <div class="col-4" >
     <!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
@@ -129,13 +129,15 @@
     {{ "Para añadir el texto, primero debe guardar los datos del escrito"|trans }}
   </div>
 {% endif %}
-</div>
+</div> <!-- Fin Col Dcha -->
+<div>
   <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
     {{ "Cancelar"|trans }}
   </button>
   <button tabindex='90' class="btn btn-primary" onKeyUp="fnjs_guardar(event);" onClick="fnjs_guardar(event);" >
     {{ "Guardar"|trans }}
   </button>
+</div>
 </form>
 {# Per ficar l'escrit, si cal #}
 <div id="prova">

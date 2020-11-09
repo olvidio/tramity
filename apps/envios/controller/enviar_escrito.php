@@ -9,8 +9,8 @@ require_once ("apps/core/global_header.inc");
 require_once ("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
+
 $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
-$Qid_entrada = 13;
 
 echo "<h1>KKKKKKKKKKK $Qid_entrada KKKKKKKKK</h1>";
 
@@ -19,8 +19,6 @@ $oEnviar = new Enviar($Qid_entrada,'entrada');
 $oEnviar->enviar();
 
 /*
-require_once(ConfigGlobal::$dir_libs.'/vendor/autoload.php');
-
 function renombrar($name){
     //cambiar '/' por '_':
     $new = str_replace('/', '_', $name);
@@ -28,9 +26,7 @@ function renombrar($name){
     return $new;
 }
 
-echo "<h1>KKKKKKKKKKK KKKKKKKKK</h1>";
 
-$Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 $Qid_entrada = 13;
 
 // a ver si ya está

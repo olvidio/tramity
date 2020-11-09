@@ -104,66 +104,10 @@ $oEscritoLista->setId_expediente($Qid_expediente);
 $oEscritoLista->setFiltro('lista');
 
 // Comentarios y Aclaraciones
-$aWhere = ['id_expediente' => $Qid_expediente,
-    '_ordre' => 'orden_tramite, orden_oficina ASC'
-];
 $gesFirmas = new GestorFirma();
-$cFirmas = $gesFirmas->getFirmas($aWhere);
-$comentarios = '';
-$a_recorrido = [];
-$oFirma = new Firma();
-$a_valores = $oFirma->getArrayValor('all');
-foreach ($cFirmas as $oFirma) {
-    $a_rec = [];
-    $tipo = $oFirma->getTipo();
-    $valor = $oFirma->getValor();
-    $f_valor = $oFirma->getF_valor()->getFromLocal();
-    $id_cargo = $oFirma->getId_cargo();
-    $cargo = $aCargos[$id_cargo];
-    if (!empty($valor)) {
-        $voto = $a_valores[$valor];
-        $observ = $oFirma->getObserv();
-        $observ_ponente = $oFirma->getObserv_creador();
-        if ($tipo == Firma::TIPO_VOTO) {
-            if (!empty($observ)) {
-                $comentarios .= empty($comentarios)? '' : "<br>";
-                $comentarios .= "$cargo($voto): $observ";
-            }
-            switch ($valor) {
-                case Firma::V_NO:
-                case Firma::V_RECHAZADO:
-                    $a_rec['class'] = "list-group-item-danger";
-                    break;
-                case Firma::V_OK:
-                    $a_rec['class'] = "list-group-item-success";
-                    break;
-                default:
-                    $a_rec['class'] = "list-group-item-info";
-            }
-            $a_rec['valor'] = "$f_valor $cargo [$voto]";
-            $a_recorrido[] = $a_rec;
-        }
-        if ($tipo == Firma::TIPO_ACLARACION) {
-            $voto = _("aclaración");
-            $comentarios .= empty($comentarios)? '' : "<br>";
-            $comentarios .= "$cargo($voto): $observ";
-            if (!empty($observ_ponente)) {
-                $comentarios .= " rta: $observ_ponente";
-            }
-        }
-    } else {
-        if ($tipo == Firma::TIPO_VOTO) {
-            $a_rec['class'] = "";
-            $a_rec['valor'] = $cargo;
-            $a_recorrido[] = $a_rec;
-            // lo marco como visto (sólo el mio)
-            if ($id_cargo == ConfigGlobal::mi_id_cargo()) {
-                $oFirma->setValor(Firma::V_VISTO);
-                $oFirma->DBGuardar();
-            }
-        }
-    }
-}
+$aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
+$a_recorrido = $aRecorrido['recorrido'];
+$comentarios = $aRecorrido['comentarios'];
 
 $oficinas = $oExpediente->getResto_oficinas();
 

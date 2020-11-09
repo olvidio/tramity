@@ -1,4 +1,6 @@
 <?php
+use core\ViewTwig;
+use envios\model\Enviar;
 use expedientes\model\Escrito;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -15,15 +17,22 @@ use expedientes\model\Escrito;
 $Qid_escrito = (integer) \filter_input(INPUT_GET, 'id');
 //$Qaccion = (integer) \filter_input(INPUT_POST, 'accion');
 
-$f_salida = date("d/m/Y");
+$f_salida = date(\DateTimeInterface::ISO8601);
 // Comprobar si tiene clave para enviar un xml, o hay que generar un pdf.
 
+// Primero intento enviar, sólo guardo la f_salida si tengo éxito
+$oEnviar = new Enviar($Qid_escrito,'escrito');
 
-$oEscrito = new Escrito($Qid_escrito);
-$oEscrito->DBCarregar();
-$oEscrito->setF_salida($f_salida);
-//$oEscrito->DBGuardar();
+$a_rta = $oEnviar->enviar();
 
-$omPdf = $oEscrito->generarPDF();
-
-$omPdf->Output("eee.pdf",'I');
+if ($a_rta['success'] === TRUE) {
+    $oEscrito = new Escrito($Qid_escrito);
+    $oEscrito->DBCarregar();
+    $oEscrito->setF_salida($f_salida,FALSE);
+    $oEscrito->DBGuardar();
+} else {
+    $txt_alert = $a_rta['mensaje'];
+    $a_campos = [ 'txt_alert' => $txt_alert ];
+    $oView = new ViewTwig('expedientes/controller');
+    echo $oView->renderizar('alerta.html.twig',$a_campos);
+}
