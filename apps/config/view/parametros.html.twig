@@ -96,14 +96,14 @@ fnjs_guardar=function(formulario){
 <h3>{{ "servidor etherpad"|trans }}:</h3>
 <form id="frm_server" name="frm_server" action="">
 {{ oHashSE.getCamposHtml|raw }}
-<input type="text" name="valor" value="{{ server_etherpad }}" >
+<input class="col-6" type="text" name="valor" value="{{ server_etherpad }}" >
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
 <h3>{{ "servidor ethercalc"|trans }}:</h3>
 <form id="frm_server_c" name="frm_server_c" action="">
 {{ oHashSEC.getCamposHtml|raw }}
-<input type="text" name="valor" value="{{ server_ethercalc }}" >
+<input class="col-6" type="text" name="valor" value="{{ server_ethercalc }}" >
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
