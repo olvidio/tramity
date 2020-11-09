@@ -62,7 +62,7 @@ $entradilla = $oExpediente->getEntradilla();
 $oEscritoLista = new EscritoLista();
 $oEscritoLista->setId_expediente($Qid_expediente);
 
-if ($Qfiltro == 'dirtribuir') {
+if ($Qfiltro == 'distribuir') {
     $btn_action = 'distribuir';
     $txt_btn_success = _("Distribuir");
     $oEscritoLista->setFiltro('lista');
