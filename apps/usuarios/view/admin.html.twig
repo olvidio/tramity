@@ -135,7 +135,7 @@
 <!-- End of Page Wrapper -->
 </div>
 
-<div id="cargando" >{{ "Cargando..."|trans }}?></div>
+<div id="cargando" >{{ "Cargando..."|trans }}</div>
 <div id="left_slide" class="left-slide">
 <span class=handle onClick="fnjs_ir_a('#ir_atras');"></span>
 </div>
@@ -184,9 +184,9 @@
 <script type='text/javascript' src='node_modules/slickgrid/controls/slick.pager.js'></script>
 
 <!-- Custom scripts for all pages-->
-{% include '@global_js/core_ajax.js.twig' %}
+<!-- vars: mi_idioma, error_fecha -->
+{% include '_scripts_default.html.twig' %}
 {% include '@global_js/slickgrid.js.twig' %}
-<script src="js/core_ajax.js"></script>
 <script src="js/sb-admin-2.js"></script>
 
 
