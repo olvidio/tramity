@@ -177,6 +177,16 @@ class Config {
         $oConfigSchema = new ConfigSchema($parametro);
         return $oConfigSchema->getValor();
     }
+    public function getFrom() {
+        $parametro = 'from';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
+    public function getReplyTo() {
+        $parametro = 'reply_to';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
     
     
 }

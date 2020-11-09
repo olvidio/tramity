@@ -108,6 +108,18 @@ fnjs_guardar=function(formulario){
 </form>
 <hr>
 <h3>{{ "servidor SMTP"|trans }}:</h3>
+<form id="frm_from" name="frm_from" action="">
+{{ oHashFrom.getCamposHtml|raw }}
+{{ "From:"|trans }}
+<input type="text" name="valor" value="{{ from }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_reply_to" name="frm_reply_to" action="">
+{{ oHashReply.getCamposHtml|raw }}
+{{ "Reply to:"|trans }}
+<input type="text" name="valor" value="{{ reply_to }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
 <form id="frm_smtp_host" name="frm_smtp_host" action="">
 {{ oHashSMTP_host.getCamposHtml|raw }}
 {{ "Host:"|trans }}

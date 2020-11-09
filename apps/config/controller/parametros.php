@@ -308,6 +308,30 @@ $oHashSMTP_pwd  ->setArrayCamposHidden(['parametro' => $parametro]);
 $a_campos['oHashSMTP_pwd'] = $oHashSMTP_pwd  ;
 $a_campos[$parametro] = $valor;
 
+$parametro = 'from';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$oHashFrom  = new Hash();
+$oHashFrom  ->setUrl($url);
+$oHashFrom  ->setcamposForm('valor');
+$oHashFrom  ->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashFrom'] = $oHashFrom  ;
+$a_campos[$parametro] = $valor;
+
+$parametro = 'reply_to';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$oHashReply  = new Hash();
+$oHashReply  ->setUrl($url);
+$oHashReply  ->setcamposForm('valor');
+$oHashReply  ->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashReply'] = $oHashReply  ;
+$a_campos[$parametro] = $valor;
+
 
 
 

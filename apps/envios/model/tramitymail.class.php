@@ -44,10 +44,13 @@ class TramityMail extends PHPMailer {
     
     public function setRecipients () {
         //Recipients
+        $from = $_SESSION['oConfig']->getFrom();
+        $replyTo = $_SESSION['oConfig']->getReplyTo();
         $sigla = $_SESSION['oConfig']->getSigla();
+        
         $tramity = "Tramity - $sigla";
-        $this->setFrom('dani@moneders.net', $tramity);
-        $this->addReplyTo('dani@moneders.net', $tramity);
+        $this->setFrom($from, $tramity);
+        $this->addReplyTo($replyTo, $tramity);
         //$oMail->addCC('cc@example.com');
         //$oMail->addBCC('bcc@example.com');
     }
