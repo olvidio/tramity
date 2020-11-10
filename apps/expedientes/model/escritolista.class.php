@@ -51,19 +51,9 @@ class EscritoLista {
 
         switch ($this->filtro) {
             case 'lista':
+            case 'acabados':
                 $aWhere['id_expediente'] = $this->id_expediente;
                 $aWhere['_ordre'] = 'tipo_accion';
-                break;
-            case 'enviar':
-                //$aWhere['estado'] = Expediente::ESTADO_ACABADO;
-                break;
-            case 'archivados':
-                $aWhere['f_aprobacion'] = 'x';
-                $aOperador['f_aprobacion'] = 'IS NOT NULL';
-                break;
-            case 'copias':
-                $aWhere['f_aprobacion'] = 'x';
-                $aOperador['f_aprobacion'] = 'IS NOT NULL';
                 break;
         }
 
