@@ -24,6 +24,14 @@ class TramityMail extends PHPMailer {
         //Server settings
         //$this->SMTPDebug = SMTP::DEBUG_SERVER;              // Enable verbose debug output
         $this->isSMTP();                                      // Send using SMTP
+        $this->SMTPOptions = [ 
+                       'ssl' => [
+                                'verify_peer' => false,
+                                'verify_peer_name' => false,
+                                'allow_self_signed' => true,
+                       ]
+                    ];
+        
         /*
         $this->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;   // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
         $this->Host       = 'smtp.gmail.com';                 // Set the SMTP server to send through
