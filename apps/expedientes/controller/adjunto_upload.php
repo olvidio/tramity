@@ -1,5 +1,4 @@
 <?php
-
 use expedientes\model\entity\EscritoAdjunto;
 
 // INICIO Cabecera global de URL de controlador *********************************

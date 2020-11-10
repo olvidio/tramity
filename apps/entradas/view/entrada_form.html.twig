@@ -142,12 +142,14 @@
   </div>
 {% endif %}
 </div>
+<div>
   <button type="button" tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
     {{ "Cancelar"|trans }}
   </button>
   <button type="button" tabindex='90' class="btn btn-primary" onKeyUp="fnjs_guardar(event);" onClick="fnjs_guardar(event);" >
     {{ "Guardar"|trans }}
   </button>
+</div>
 </form>
 
 {{ include ('_entrada_form_js.html.twig') }}

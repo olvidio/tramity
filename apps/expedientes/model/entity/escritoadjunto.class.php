@@ -71,9 +71,10 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	/**
 	 * Adjunto de EscritoAdjunto
 	 *
-	 * @var string
+	 * @var string bytea
 	 */
-	 private $sadjunto;
+	 private $adjunto;
+	 
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de EscritoAdjunto
@@ -128,7 +129,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$aDades=array();
 		$aDades['id_escrito'] = $this->iid_escrito;
 		$aDades['nom'] = $this->snom;
-		$aDades['adjunto'] = $this->sadjunto;
+		$aDades['adjunto'] = $this->adjunto;
 		array_walk($aDades, 'core\poner_null');
 
 		if ($bInsert === FALSE) {
@@ -142,8 +143,11 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			} else {
+			    $oDblSt->bindParam(":id_escrito", $aDades['id_escrito'], \PDO::PARAM_INT);
+			    $oDblSt->bindParam(":nom", $aDades['nom'], \PDO::PARAM_STR);
+			    $oDblSt->bindParam(":adjunto", $aDades['adjunto'], \PDO::PARAM_LOB);
 				try {
-					$oDblSt->execute($aDades);
+					$oDblSt->execute();
 				}
 				catch ( \PDOException $e) {
 					$err_txt=$e->errorInfo[2];
@@ -162,8 +166,15 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			} else {
+			    $id_escrito = $aDades['id_escrito'];
+			    $nom = $aDades['nom'];
+			    $adjunto = $aDades['adjunto'];
+			    
+			    $oDblSt->bindParam(1, $id_escrito, \PDO::PARAM_INT);
+			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
+			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_LOB);
 				try {
-					$oDblSt->execute($aDades);
+					$oDblSt->execute();
 				}
 				catch ( \PDOException $e) {
 					$err_txt=$e->errorInfo[2];
@@ -186,15 +197,26 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	public function DBCarregar($que=null) {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
+		$id_escrito = 0;
+		$nom = '';
+		$adjunto = '';
 		if (isset($this->iid_item)) {
-			if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_item='$this->iid_item'")) === FALSE) {
+			if (($oDblSt = $oDbl->query("SELECT id_escrito, nom, adjunto FROM $nom_tabla WHERE id_item='$this->iid_item'")) === FALSE) {
 				$sClauError = 'EscritoAdjunto.carregar';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			}
-			$aDades = $oDblSt->fetch(\PDO::FETCH_ASSOC);
-			// Para evitar posteriores cargas
-			$this->bLoaded = TRUE;
+			$oDblSt->execute();
+			$oDblSt->bindColumn(1, $id_escrito, \PDO::PARAM_INT);
+			$oDblSt->bindColumn(2, $nom, \PDO::PARAM_STR, 256);
+			$oDblSt->bindColumn(3, $adjunto, \PDO::PARAM_LOB);
+			$oDblSt->fetch(\PDO::FETCH_BOUND);
+			
+			$aDades = [ 'id_escrito' => $id_escrito,
+			    'nom' => $nom,
+			    'adjunto' => $adjunto,
+			];
+
 			switch ($que) {
 				case 'tot':
 					$this->aDades=$aDades;
@@ -239,7 +261,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	 *
 	 * @param array $aDades
 	 */
-	function setAllAtributes($aDades) {
+	function setAllAtributes($aDades,$convert=FALSE) {
 		if (!is_array($aDades)) return;
 		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
 		if (array_key_exists('id_item',$aDades)) $this->setId_item($aDades['id_item']);
@@ -363,23 +385,23 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$this->snom = $snom;
 	}
 	/**
-	 * Recupera l'atribut sadjunto de EscritoAdjunto
+	 * Recupera l'atribut adjunto de EntradaAdjunto
 	 *
-	 * @return string sadjunto
+	 * @return string adjunto
 	 */
 	function getAdjunto() {
-		if (!isset($this->sadjunto) && !$this->bLoaded) {
+		if (!isset($this->adjunto) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
-		return $this->sadjunto;
+		return $this->adjunto;
 	}
 	/**
-	 * estableix el valor de l'atribut sadjunto de EscritoAdjunto
+	 * estableix el valor de l'atribut adjunto de EntradaAdjunto
 	 *
-	 * @param string sadjunto='' optional
+	 * @param string adjunto='' optional
 	 */
-	function setAdjunto($sadjunto='') {
-		$this->sadjunto = $sadjunto;
+	function setAdjunto($adjunto='') {
+		$this->adjunto = $adjunto;
 	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
@@ -423,7 +445,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		return $oDatosCampo;
 	}
 	/**
-	 * Recupera les propietats de l'atribut sadjunto de EscritoAdjunto
+	 * Recupera les propietats de l'atribut adjunto de EscritoAdjunto
 	 * en una clase del tipus DatosCampo
 	 *
 	 * @return core\DatosCampo
