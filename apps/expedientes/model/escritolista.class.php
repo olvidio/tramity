@@ -7,6 +7,7 @@ use expedientes\model\entity\GestorAccion;
 use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
+use function core\is_true;
 
 
 class EscritoLista {
@@ -107,7 +108,12 @@ class EscritoLista {
                 $a_accion['enviar'] = _("enviado")." ($f_salida)";
             } else {
                 if ($tipo_accion == Escrito::ACCION_ESCRITO) {
+                    // si es anulado NO enviar!
+                    if (is_true($oEscrito->getAnulado())) {
+                        $a_accion['enviar'] = "-";
+                    } else {
                     $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito('$id_escrito');\" >"._("enviar")."</span>";
+                    }
                 } else {
                     $a_accion['enviar'] = "otra acción?";
                 }
@@ -165,6 +171,8 @@ class EscritoLista {
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
         $a_campos = [
+            'filtro' => $this->filtro,
+            'id_expediente' => $this->id_expediente,
             'a_acciones' => $a_acciones,
             'ver_todo' => $ver_todo,
             'server' => $server,
