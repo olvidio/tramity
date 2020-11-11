@@ -90,11 +90,13 @@ class Entrada Extends EntradaDB {
      * @see \entradas\model\entity\EntradaDB::DBGuardar()
      */
     public function DBGuardar() {
-        // El tipo y fecha documento:
-        $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
-        $oEntradaDocDB->setF_doc($this->df_doc,$this->convert);
-        $oEntradaDocDB->setTipo_doc($this->itipo_doc);
-        $oEntradaDocDB->DBGuardar();
+        // El tipo y fecha documento: (excepto si es nuevo)
+        if (!empty($this->iid_entrada)) {
+            $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
+            $oEntradaDocDB->setF_doc($this->df_doc,$this->convert);
+            $oEntradaDocDB->setTipo_doc($this->itipo_doc);
+            $oEntradaDocDB->DBGuardar();
+        }
         // El objeto padre:
         parent::DBGuardar();
     }
@@ -110,9 +112,11 @@ class Entrada Extends EntradaDB {
             return FALSE;
         }
         // El tipo y fecha documento:
-        $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
-        $this->df_doc = $oEntradaDocDB->getF_doc();
-        $this->itipo_doc = $oEntradaDocDB->getTipo_doc();
+        if (!empty($this->iid_entrada)) {
+            $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
+            $this->df_doc = $oEntradaDocDB->getF_doc();
+            $this->itipo_doc = $oEntradaDocDB->getTipo_doc();
+        }
         return TRUE;
     }
 
@@ -123,7 +127,7 @@ class Entrada Extends EntradaDB {
      * @return DateTimeLocal df_doc
      */
     function getF_documento() {
-        if (!isset($this->df_doc)) {
+        if (!isset($this->df_doc) && !empty($this->iid_entrada)) {
             $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
             $oFdoc = $oEntradaDocDB->getF_doc();
             $this->df_doc = $oFdoc;
@@ -147,7 +151,7 @@ class Entrada Extends EntradaDB {
     }
     
     public function getTipo_documento(){
-        if (!isset($this->itipo_doc)) {
+        if (!isset($this->itipo_doc) && !empty($this->iid_entrada)) {
             $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
             $this->itipo_doc = $oEntradaDocDB->getTipo_doc();
         }
