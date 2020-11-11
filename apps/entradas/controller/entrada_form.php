@@ -53,7 +53,7 @@ $a_posibles_cargos = $gesCargos->getArrayCargos();
 foreach ($a_posibles_cargos as $id_cargo => $cargo) {
     $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
 }
-$oDesplPonente = $gesCargos->getDesplCargos();
+$oDesplPonente = $gesCargos->getDesplCargos('x');
 $oDesplPonente->setNombre('ponente');
 $oDesplPonente->setTabIndex(60);
 
