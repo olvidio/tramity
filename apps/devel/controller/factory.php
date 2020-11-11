@@ -148,7 +148,7 @@ foreach($oDbl->query($sql) as $row) {
 	$tipo=$row['type'];	
 	$not_null=$row['notnull'];
 
-	$sql_get_default = "SELECT d.adsrc AS rowdefault
+	$sql_get_default = "SELECT pg_get_expr(adbin, adrelid) AS rowdefault
 				FROM pg_catalog.pg_attrdef d,
 					 pg_catalog.pg_class c,
 					 pg_catalog.pg_namespace n

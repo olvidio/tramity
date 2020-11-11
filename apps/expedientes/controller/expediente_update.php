@@ -10,6 +10,7 @@ use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
+use etiquetas\model\entity\EtiquetaExpediente;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -45,14 +46,29 @@ $Qvida = (integer) \filter_input(INPUT_POST, 'vida');
 
 switch($Qque) {
     case 'archivar':
+        $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
         $oExpediente = new Expediente($Qid_expediente);
         $oExpediente->DBCarregar();
+        // las etiquetas:
+        $oExpediente->setEtiquetas($Qa_etiquetas);
         $oExpediente->setEstado(Expediente::ESTADO_TERMINADO);
         if ($oExpediente->DBGuardar() === FALSE ) {
             $txt_err .= _("No se ha podido cambiar el estado del expediente");
             $txt_err .= "<br>";
         }
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
         break;
     case 'distribuir':
         $oExpediente = new Expediente($Qid_expediente);

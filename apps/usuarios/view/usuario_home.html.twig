@@ -1,7 +1,36 @@
-{# solo debecargarse un vez, sino hay conflicto con los dropdown bootsrtap #}
+{# solo debe cargarse un vez, sino hay conflicto con los dropdown bootsrtap #}
 {%  if not peticion_ajax %}
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Slick -->
+    <!-- OJO: IMPORTA el orden. Pueden salir avisos (en consola del navegaador) tipo: Grid.xx not defined  -->
+    <link type='text/css' rel='stylesheet' href='node_modules/slickgrid/slick.grid.css' />
+
+    <script type='text/javascript' src='node_modules/slickgrid/lib/jquery.event.drag-2.3.0.js'></script>
+    <script type='text/javascript' src='node_modules/slickgrid/lib/jquery.event.drop-2.3.0.js'></script>
+
+    <script type='text/javascript' src='node_modules/slickgrid/slick.core.js'></script>
+    <script type='text/javascript' src='node_modules/slickgrid/slick.grid.js'></script>
+    <script type='text/javascript' src='node_modules/slickgrid/slick.editors.js'></script>
+    <script type='text/javascript' src='node_modules/slickgrid/slick.formatters.js'></script>
+    <script type='text/javascript' src='node_modules/slickgrid/slick.dataview.js'></script>
+    <script type='text/javascript' src='node_modules/slickgrid/plugins/slick.autotooltips.js'></script>
+    <script type='text/javascript' src='node_modules/slickgrid/plugins/slick.cellrangedecorator.js'></script>
+    <script type='text/javascript' src='node_modules/slickgrid/plugins/slick.cellrangeselector.js'></script>
+    <script type='text/javascript' src='node_modules/slickgrid/plugins/slick.cellselectionmodel.js'></script>
+    <script type='text/javascript' src='node_modules/slickgrid/plugins/slick.checkboxselectcolumn.js'></script>
+    <script type='text/javascript' src='node_modules/slickgrid/plugins/slick.rowselectionmodel.js'></script>
+
+    <link type='text/css' rel='stylesheet' href='node_modules/slickgrid/controls/slick.columnpicker.css' />
+    <script type='text/javascript' src='node_modules/slickgrid/controls/slick.columnpicker.js'></script>
+    <link type='text/css' rel='stylesheet' href='node_modules/slickgrid/controls/slick.gridmenu.css' />
+    <script type='text/javascript' src='node_modules/slickgrid/controls/slick.gridmenu.js'></script>
+    <link type='text/css' rel='stylesheet' href='node_modules/slickgrid/controls/slick.pager.css' />
+    <script type='text/javascript' src='node_modules/slickgrid/controls/slick.pager.js'></script>
+    
+    <script src="node_modules/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
+
 {% endif %}
   {% include '_css_default.html.twig' %}
 <!-- vars: oficina, username, pagina_profile,  -->

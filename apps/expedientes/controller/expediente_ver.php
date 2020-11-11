@@ -1,17 +1,13 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
-use expedientes\model\Escrito;
+use etiquetas\model\entity\GestorEtiqueta;
+use expedientes\model\EscritoLista;
 use expedientes\model\Expediente;
-use expedientes\model\entity\GestorAccion;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
-use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use usuarios\model\entity\GestorOficina;
-use web\Protocolo;
-use expedientes\model\EscritoLista;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -109,6 +105,22 @@ $aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
 $a_recorrido = $aRecorrido['recorrido'];
 $comentarios = $aRecorrido['comentarios'];
 
+// Etiquetas
+$cEtiquetas = $oExpediente->getEtiquetasVisibles();
+/*
+$gesEtiquetas = new GestorEtiqueta();
+$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+*/
+$a_etiquetas = [];
+$a_posibles_etiquetas = [];
+foreach ($cEtiquetas as $oEtiqueta) {
+    $id_etiqueta = $oEtiqueta->getId_etiqueta();
+    $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+    $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+    $a_etiquetas[] = $id_etiqueta;
+}
+$oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas,$a_posibles_etiquetas,'etiquetas');
+
 $oficinas = $oExpediente->getResto_oficinas();
 
 $oArrayDesplFirmas = new web\DesplegableArray($oficinas,$a_posibles_cargos,'oficinas');
@@ -145,6 +157,7 @@ $a_campos = [
     'oArrayDesplFirmas' => $oArrayDesplFirmas, 
     'txt_option_cargos' => $txt_option_cargos,
     'lista_antecedentes' => $lista_antecedentes,
+    'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas, 
     
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,

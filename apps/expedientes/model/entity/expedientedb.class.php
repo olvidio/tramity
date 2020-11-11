@@ -384,7 +384,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		if (array_key_exists('prioridad',$aDades)) $this->setPrioridad($aDades['prioridad']);
 		if (array_key_exists('json_antecedentes',$aDades)) $this->setJson_antecedentes($aDades['json_antecedentes'],TRUE);
 		if (array_key_exists('json_acciones',$aDades)) $this->setJson_acciones($aDades['json_acciones'],TRUE);
-		if (array_key_exists('etiquetas',$aDades)) $this->setEtiquetas($aDades['etiquetas'],TRUE);
+		if (array_key_exists('etiquetas',$aDades)) $this->setEtiquetasIn($aDades['etiquetas'],TRUE);
 		if (array_key_exists('f_contestar',$aDades)) $this->setF_contestar($aDades['f_contestar'],$convert);
 		if (array_key_exists('estado',$aDades)) $this->setEstado($aDades['estado']);
 		if (array_key_exists('f_ini_circulacion',$aDades)) $this->setF_ini_circulacion($aDades['f_ini_circulacion'],$convert);
@@ -412,7 +412,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$this->setPrioridad('');
 		$this->setJson_antecedentes('');
 		$this->setJson_acciones('');
-		$this->setEtiquetas('');
+		$this->setEtiquetasIn('');
 		$this->setF_contestar('');
 		$this->setEstado('');
 		$this->setF_ini_circulacion('');
@@ -707,7 +707,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	 *
 	 * @return array a_etiquetas
 	 */
-	function getEtiquetas() {
+	function getEtiquetasIn() {
 		if (!isset($this->a_etiquetas) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
@@ -720,7 +720,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
      * @param boolean $db=FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
 	 *  o es una variable de php hay que convertirlo.
 	 */
-	function setEtiquetas($a_etiquetas='',$db=FALSE) {
+	function setEtiquetasIn($a_etiquetas='',$db=FALSE) {
         if ($db === FALSE) {
 	        $postgresArray = core\array_php2pg($a_etiquetas);
 	    } else {
@@ -990,7 +990,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$oExpedienteDBSet->add($this->getDatosPrioridad());
 		$oExpedienteDBSet->add($this->getDatosJson_antecedentes());
 		$oExpedienteDBSet->add($this->getDatosJson_acciones());
-		$oExpedienteDBSet->add($this->getDatosEtiquetas());
+		$oExpedienteDBSet->add($this->getDatosEtiquetasIn());
 		$oExpedienteDBSet->add($this->getDatosF_contestar());
 		$oExpedienteDBSet->add($this->getDatosEstado());
 		$oExpedienteDBSet->add($this->getDatosF_ini_circulacion());
@@ -1119,7 +1119,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	 *
 	 * @return core\DatosCampo
 	 */
-	function getDatosEtiquetas() {
+	function getDatosEtiquetasIn() {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'etiquetas'));
 		$oDatosCampo->setEtiqueta(_("etiquetas"));

@@ -116,8 +116,6 @@
     </div>
 </div>
 
-
-
 <div class="row" >
 <!--  Col Izda -->
 <div class="col-9" >
@@ -164,15 +162,22 @@
 </ol>
 </div>
 
-
 <!-- Fin Col Dcha -->
 </div>
 <!-- Fin row -->
+</div>
 
-  <!--  --------------------  BOTONES --------------------------  -->
-  <button id='btn_volver' tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+<!--  --------------------  Etiquetas --------------------------  -->
+<div class="col-12 bg-white" >
+  {{ "Etiquetas"|trans }}: {{ oArrayDesplEtiquetas.Lista|raw }}
+</div>
+        
+<!--  --------------------  BOTONES --------------------------  -->
+<div class="row col-2" >
+  <button id='btn_volver' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
     {{ "Volver"|trans }}
   </button>
+</div>
 </form>
 
 {{ include ('_antecedentes_js.html.twig') }}

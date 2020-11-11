@@ -154,6 +154,7 @@ $a_pills[$num_orden] = $pill;
 // pendientes = 13;
 
 $pagina_profile = web\Hash::link('apps/usuarios/controller/personal.php?'.http_build_query([]));
+$pagina_etiquetas = web\Hash::link('apps/etiquetas/controller/etiqueta_lista.php?'.http_build_query([]));
 
 $mi_idioma = ConfigGlobal::mi_Idioma_short();
 $a_campos = [
@@ -162,6 +163,7 @@ $a_campos = [
     'mi_idioma' => $mi_idioma,
     'error_fecha' => $_SESSION['oConfig']->getPlazoError(),
     'pagina_profile' => $pagina_profile,
+    'pagina_etiquetas' => $pagina_etiquetas,
     // para tabs
     'a_pills' => $a_pills,
     'vista' => 'home',

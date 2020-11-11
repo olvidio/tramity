@@ -1,0 +1,60 @@
+<h3>{{ "Lista de etiquetas"|trans }}</h3>
+<br>
+</form>
+<form id="seleccionados"  name="seleccionados" action="" method="post" >
+{{ oHash.getCamposHtml|raw }}
+{{ oTabla.mostrar_tabla|raw }}
+</form>
+<br>
+<div class="col-8">
+  <button class="btn btn-secondary" onClick="fnjs_update_div('body', '');" >
+    {{ "Cancelar"|trans }}
+  </button>
+  <button class="btn btn-primary" onClick="fnjs_update_div('#main','{{ url_nuevo }}');" >
+    {{ "nueva etiqueta"|trans}}
+  </button>
+</div>
+<script>
+fnjs_editar=function(){
+	$('#seleccionados').attr('action',"{{ url_form }}");
+	$('#que').val('editar');
+	fnjs_enviar_formulario('#seleccionados');
+}
+
+fnjs_eliminar=function(){
+	rta=fnjs_solo_uno('#seleccionados');
+	if (rta==1) {
+		if (confirm("{{ "¿Está seguro que desea borrar esta etiqueta?"|trans }}") ) {
+            $('#que').val('eliminar');
+			$('#seleccionados').attr('action',"{{ url_eliminar }}");
+			$('#seleccionados').one("submit", function(event) {
+				event.preventDefault();
+				$.ajax({
+					url: $(this).attr('action'),
+					type: 'post',
+					data: $(this).serialize()
+				})
+				.done(function (rta_txt) {
+					if (rta_txt != '' && rta_txt != '\n') {
+						alert ('{{ "respuesta"|trans }}: '+rta_txt);
+					} else {
+						fnjs_actualizar();
+				   	}
+				});
+				return false;
+			});
+			$('#seleccionados').trigger("submit");
+			$('#seleccionados').off();
+		}
+	}
+}
+fnjs_actualizar=function(){
+	var url='{{ url_actualizar }}';
+	fnjs_update_div('#main',url);
+}
+fnjs_left_side_hide();
+
+$(document).ready(function() {
+	tabs_hide(); 
+});
+</script>

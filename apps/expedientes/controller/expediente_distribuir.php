@@ -6,6 +6,7 @@ use expedientes\model\Expediente;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
 use usuarios\model\entity\GestorCargo;
+use etiquetas\model\entity\GestorEtiqueta;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -79,6 +80,21 @@ $aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
 $a_recorrido = $aRecorrido['recorrido'];
 $comentarios = $aRecorrido['comentarios'];
 
+// Etiquetas
+$etiquetas = ''; // No hay ninguna porque en archivar es cuando se añaden.
+$gesEtiquetas = new GestorEtiqueta();
+$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$a_posibles_etiquetas = [];
+foreach ($cEtiquetas as $oEtiqueta) {
+    $id_etiqueta = $oEtiqueta->getId_etiqueta();
+    $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+    $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+}
+$oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
+$oArrayDesplEtiquetas ->setBlanco('t');
+$oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas(event)');
+
+
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
@@ -106,7 +122,8 @@ $a_campos = [
     'a_recorrido' => $a_recorrido,
     
     'lista_antecedentes' => $lista_antecedentes,
-    
+    'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
+
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
     // para la pagina js

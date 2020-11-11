@@ -1,7 +1,12 @@
 <?php
 namespace expedientes\model;
 
+use core\ConfigGlobal;
 use entradas\model\Entrada;
+use etiquetas\model\entity\Etiqueta;
+use etiquetas\model\entity\EtiquetaExpediente;
+use etiquetas\model\entity\GestorEtiqueta;
+use etiquetas\model\entity\GestorEtiquetaExpediente;
 use expedientes\model\entity\ExpedienteDB;
 use expedientes\model\entity\GestorAccion;
 use tramites\model\entity\Firma;
@@ -90,6 +95,59 @@ class Expediente Extends expedienteDB {
     
     /* METODES PUBLICS ----------------------------------------------------------*/
 
+    public function getEtiquetasVisibles($id_cargo='') {
+        if (empty($id_cargo)) {
+            $id_cargo = ConfigGlobal::mi_id_cargo();
+        }
+        $gesEtiquetas = new GestorEtiqueta();
+        $cMisEtiquetas = $gesEtiquetas->getMisEtiquetas($id_cargo);
+        $a_mis_etiquetas = [];
+        foreach($cMisEtiquetas as $oEtiqueta) {
+            $a_mis_etiquetas[] = $oEtiqueta->getId_etiqueta();
+        }
+        $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
+        $aWhere = [ 'id_expediente' => $this->iid_expediente ];
+        $cEtiquetasExp = $gesEtiquetasExpediente->getEtiquetasExpediente($aWhere);
+        $cEtiquetas = [];
+        foreach ($cEtiquetasExp as $oEtiquetaExp) {
+            $id_etiqueta = $oEtiquetaExp->getId_etiqueta();
+            if (in_array($id_etiqueta, $a_mis_etiquetas)) {
+                $cEtiquetas[] = new Etiqueta($id_etiqueta);
+            }
+        }
+        
+        return $cEtiquetas;
+    }
+    
+    public function getEtiquetas() {
+        $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
+        $aWhere = [ 'id_expediente' => $this->iid_expediente ];
+        $cEtiquetasExp = $gesEtiquetasExpediente->getEtiquetasExpediente($aWhere);
+        $cEtiquetas = [];
+        foreach ($cEtiquetasExp as $oEtiquetaExp) {
+            $id_etiqueta = $oEtiquetaExp->getId_etiqueta();
+            $cEtiquetas[] = new Etiqueta($id_etiqueta);
+        }
+        
+        return $cEtiquetas;
+    }
+    
+    public function setEtiquetas($aEtiquetas){
+        $this->delEtiquetas();
+        $a_filter_etiquetas = array_filter($aEtiquetas); // Quita los elementos vacíos y nulos.
+        foreach ($a_filter_etiquetas as $id_etiqueta) {
+            $EtiquetaExpediente = new EtiquetaExpediente(['id_expediente' => $this->iid_expediente, 'id_etiqueta' => $id_etiqueta]);
+            $EtiquetaExpediente->DBGuardar();
+        }
+    }
+    
+    public function delEtiquetas(){
+        $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
+        if ($gesEtiquetasExpediente->deleteEtiquetasExpediente($this->iid_expediente) === FALSE) {
+            return FALSE;
+        }
+        return TRUE;
+    }
     /**
      * pone la fecha en todos los escritos del expediente.
      * 

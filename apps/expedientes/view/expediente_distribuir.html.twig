@@ -99,6 +99,20 @@
     </div>
     <!-- Fin Col Dcha -->
   </div> 
+  
+<!--  --------------- Etiquetas --------------- -->
+  <div id="div_etiquetas" class="form-group row">
+    <label for="etiquetas" class="col-sd-2">{{ "Etiquetas"|trans }}:</label>
+    <div class="col-6">
+      <span id="span_etiquetas">
+      	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
+      </span>
+    </div>
+  </div>
+  
+  
+  
+  
   <!--  --------------------  BOTONES --------------------------  -->
   <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
     {{ "Volver"|trans }}
@@ -189,6 +203,31 @@ fnjs_distribuir=function(event,que){
             }
         });
     });
+}
+
+{{ oArrayDesplEtiquetas.ComprobarSelectJs|raw }}
+fnjs_mas_etiquetas=function(e){
+	var code = (e.keyCode ? e.keyCode : e.which);
+	if(e=="x") {
+		var valor=1;
+	} else {
+		var id_campo='#'+e.currentTarget.id;
+		var valor=$(id_campo).val();
+		if(code!=9) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	}
+	if ( code==9 || e.type=="change" || e=="x") {
+		if (valor!=0) {
+			{{ oArrayDesplEtiquetas.ListaSelectsJs|raw }}
+		}
+	}
+}
+
+fnjs_quitar_etiquetas=function(){
+	$('#span_etiquetas').html("");
+	$('#etiquetas_num').val(0);
 }
 
 $(document).ready(function() {
