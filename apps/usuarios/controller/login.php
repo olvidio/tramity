@@ -129,7 +129,7 @@ if ( !isset($_SESSION['session_auth'])) {
                 //si existe, registro la sesion con la configuración
                 if ( !isset($_SESSION['config'])) { 
                     $session_config=array (
-                        'id_cargo'=>$id_cargo,
+                        'id_cargo'=>$id_cargo_default,
                         'username'=>$_POST['username'],
                         'password'=>$_POST['password'],
                         'perms_activ'=>$perms_activ,
