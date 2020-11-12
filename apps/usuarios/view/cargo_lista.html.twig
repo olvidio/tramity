@@ -3,6 +3,11 @@ fnjs_nuevo=function(){
 	$('#frm_buscar').attr('action',"apps/usuarios/controller/cargo_form.php");
 	fnjs_enviar_formulario('#frm_buscar');
 }
+fnjs_editar=function(){
+	$('#seleccionados').attr('action',"{{ url_form }}");
+	$('#que').val('editar');
+	fnjs_enviar_formulario('#seleccionados');
+}
 fnjs_eliminar=function(){
 	rta=fnjs_solo_uno('#seleccionados');
 	if (rta==1) {

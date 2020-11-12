@@ -8,7 +8,7 @@ use core;
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @created 16/6/2020
+ * @created 12/11/2020
  */
 /**
  * Classe que implementa l'entitat aux_cargos
@@ -17,7 +17,7 @@ use core;
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @created 16/6/2020
+ * @created 12/11/2020
  */
 class Cargo Extends core\ClasePropiedades {
     
@@ -49,7 +49,7 @@ class Cargo Extends core\ClasePropiedades {
 	 private $aDades;
 
 	/**
-	 * bLoaded
+	 * bLoaded de Cargo
 	 *
 	 * @var boolean
 	 */
@@ -98,6 +98,18 @@ class Cargo Extends core\ClasePropiedades {
 	 * @var boolean
 	 */
 	 private $bdirector;
+	/**
+	 * Id_usuario de Cargo
+	 *
+	 * @var integer
+	 */
+	 private $iid_usuario;
+	/**
+	 * Id_suplente de Cargo
+	 *
+	 * @var integer
+	 */
+	 private $iid_suplente;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de Cargo
@@ -155,6 +167,8 @@ class Cargo Extends core\ClasePropiedades {
 		$aDades['descripcion'] = $this->sdescripcion;
 		$aDades['id_oficina'] = $this->iid_oficina;
 		$aDades['director'] = $this->bdirector;
+		$aDades['id_usuario'] = $this->iid_usuario;
+		$aDades['id_suplente'] = $this->iid_suplente;
 		array_walk($aDades, 'core\poner_null');
 		//para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
 		if ( core\is_true($aDades['director']) ) { $aDades['director']='true'; } else { $aDades['director']='false'; }
@@ -166,7 +180,9 @@ class Cargo Extends core\ClasePropiedades {
 					cargo                    = :cargo,
 					descripcion              = :descripcion,
 					id_oficina               = :id_oficina,
-					director                 = :director";
+					director                 = :director,
+					id_usuario               = :id_usuario,
+					id_suplente              = :id_suplente";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_cargo='$this->iid_cargo'")) === FALSE) {
 				$sClauError = 'Cargo.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -185,8 +201,8 @@ class Cargo Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(id_ambito,cargo,descripcion,id_oficina,director)";
-			$valores="(:id_ambito,:cargo,:descripcion,:id_oficina,:director)";		
+			$campos="(id_ambito,cargo,descripcion,id_oficina,director,id_usuario,id_suplente)";
+			$valores="(:id_ambito,:cargo,:descripcion,:id_oficina,:director,:id_usuario,:id_suplente)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'Cargo.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -223,11 +239,11 @@ class Cargo Extends core\ClasePropiedades {
 				return FALSE;
 			}
 			$aDades = $oDblSt->fetch(\PDO::FETCH_ASSOC);
-			// Para evitar posteriores cargas
-			$this->bLoaded = TRUE;
+            // Para evitar posteriores cargas
+            $this->bLoaded = TRUE;
 			switch ($que) {
 				case 'tot':
-					$this->aDades=$aDades;
+                    $this->setAllAtributes($aDades);
 					break;
 				case 'guardar':
 					if (!$oDblSt->rowCount()) return FALSE;
@@ -278,6 +294,8 @@ class Cargo Extends core\ClasePropiedades {
 		if (array_key_exists('descripcion',$aDades)) $this->setDescripcion($aDades['descripcion']);
 		if (array_key_exists('id_oficina',$aDades)) $this->setId_oficina($aDades['id_oficina']);
 		if (array_key_exists('director',$aDades)) $this->setDirector($aDades['director']);
+		if (array_key_exists('id_usuario',$aDades)) $this->setId_usuario($aDades['id_usuario']);
+		if (array_key_exists('id_suplente',$aDades)) $this->setId_suplente($aDades['id_suplente']);
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -292,6 +310,8 @@ class Cargo Extends core\ClasePropiedades {
 		$this->setDescripcion('');
 		$this->setId_oficina('');
 		$this->setDirector('');
+		$this->setId_usuario('');
+		$this->setId_suplente('');
 		$this->setPrimary_key($aPK);
 	}
 
@@ -453,6 +473,44 @@ class Cargo Extends core\ClasePropiedades {
 	function setDirector($bdirector='f') {
 		$this->bdirector = $bdirector;
 	}
+	/**
+	 * Recupera l'atribut iid_usuario de Cargo
+	 *
+	 * @return integer iid_usuario
+	 */
+	function getId_usuario() {
+		if (!isset($this->iid_usuario) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->iid_usuario;
+	}
+	/**
+	 * estableix el valor de l'atribut iid_usuario de Cargo
+	 *
+	 * @param integer iid_usuario='' optional
+	 */
+	function setId_usuario($iid_usuario='') {
+		$this->iid_usuario = $iid_usuario;
+	}
+	/**
+	 * Recupera l'atribut iid_suplente de Cargo
+	 *
+	 * @return integer iid_suplente
+	 */
+	function getId_suplente() {
+		if (!isset($this->iid_suplente) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->iid_suplente;
+	}
+	/**
+	 * estableix el valor de l'atribut iid_suplente de Cargo
+	 *
+	 * @param integer iid_suplente='' optional
+	 */
+	function setId_suplente($iid_suplente='') {
+		$this->iid_suplente = $iid_suplente;
+	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
 	/**
@@ -467,6 +525,8 @@ class Cargo Extends core\ClasePropiedades {
 		$oCargoSet->add($this->getDatosDescripcion());
 		$oCargoSet->add($this->getDatosId_oficina());
 		$oCargoSet->add($this->getDatosDirector());
+		$oCargoSet->add($this->getDatosId_usuario());
+		$oCargoSet->add($this->getDatosId_suplente());
 		return $oCargoSet->getTot();
 	}
 
@@ -530,6 +590,30 @@ class Cargo Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'director'));
 		$oDatosCampo->setEtiqueta(_("director"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut iid_usuario de Cargo
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosId_usuario() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'id_usuario'));
+		$oDatosCampo->setEtiqueta(_("id_usuario"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut iid_suplente de Cargo
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosId_suplente() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'id_suplente'));
+		$oDatosCampo->setEtiqueta(_("id_suplente"));
 		return $oDatosCampo;
 	}
 }

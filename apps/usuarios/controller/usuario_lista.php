@@ -116,10 +116,7 @@ $a_campos = [
 			'url_eliminar' => $url_eliminar,
 			'url_actualizar' => $url_actualizar,
  			];
-/*
-$oView = new View('usuarios/controller');
-echo $oView->render('usuario_lista.phtml',$a_campos);
-*/
+
 $oView = new ViewTwig('usuarios/controller');
 echo $oView->renderizar('usuario_lista.html.twig',$a_campos);
 

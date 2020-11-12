@@ -60,29 +60,28 @@ if ( !isset($_SESSION['session_auth'])) {
         if ($row=$oDBSt->fetch(\PDO::FETCH_ASSOC)) {
             if ($oCrypt->encode($_POST['password'],$sPasswd) == $sPasswd) {
                 $id_usuario = $row['id_usuario'];
-                $id_cargo = $row['id_cargo'];
+                $id_cargo_default = $row['id_cargo'];
                 // el usuario default, y el admin no tienen cargo:
-                /*
-                //$oConfigDB = new ConfigDB('tramity');
-                //$config = $oConfigDB->getEsquema('public'); 
-                //$oConexion = new dbConnection($config);
-                //$oDBP = $oConexion->getPDO();
-                 * 
-                 */
-                $queryr="SELECT * FROM aux_cargos WHERE id_cargo = $id_cargo";
-                if (($oDBPSt= $oDB->query($queryr)) === false) {
+                // los cargos que puede tener (suplencias)
+                $query_cargos="SELECT * FROM aux_cargos 
+                                WHERE id_usuario = $id_usuario OR id_suplente = $id_usuario
+                                ORDER BY cargo";
+                if (($oDB->query($query_cargos)) === false) {
                     $sClauError = 'login_obj.prepare';
                     $_SESSION['oGestorErrores']->addErrorAppLastError($oDB, $sClauError, __LINE__, __FILE__);
                     return false;
                 }
-                $row2=$oDBPSt->fetch(\PDO::FETCH_ASSOC);
-                if ($row2 === FALSE) { // No existe la fila.
-                    $usuario_cargo = '';
-                    $usuario_dtor = '';
-                }else {
-                    $usuario_cargo = $row2['cargo'];
-                    $usuario_dtor = $row2['director'];
+                $aPosiblesCargos = [];
+                $usuario_cargo = '';
+                $usuario_dtor = '';
+                foreach ($oDB->query($query_cargos) as $aDades) {
+                    $usuario_cargo = $aDades['cargo'];
+                    $usuario_dtor = $aDades['director'];
+                    $id_cargo = $aDades['id_cargo'];
+                    $cargo = $aDades['cargo'];
+                    $aPosiblesCargos[$id_cargo] = $cargo;
                 }
+                
                 $perms_activ='';
                 $mi_oficina = '';
                 $mi_oficina_menu = '';
@@ -113,7 +112,8 @@ if ( !isset($_SESSION['session_auth'])) {
                         'id_usuario'=>$id_usuario,
                         'usuario_cargo'=>$usuario_cargo,
                         'usuario_dtor'=>$usuario_dtor,
-                        'id_cargo'=>$id_cargo,
+                        'id_cargo'=>$id_cargo_default,
+                        'aPosiblesCargos'=>$aPosiblesCargos,
                         'username'=>$_POST['username'],
                         'password'=>$_POST['password'],
                         'esquema'=>$esquema,

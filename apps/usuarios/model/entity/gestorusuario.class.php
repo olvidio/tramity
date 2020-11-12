@@ -2,6 +2,7 @@
 namespace usuarios\model\entity;
 
 use core;
+use web\Desplegable;
 /**
  * GestorUsuario
  *
@@ -35,6 +36,59 @@ class GestorUsuario Extends core\ClaseGestor {
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 
+	/**
+	 * retorna un Array
+	 * Els posibles usuarios
+	 *
+	 * @return Array
+	 */
+	function getArrayUsuarios() {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    $Where = '';
+	    $sQuery="SELECT id_usuario, usuario FROM $nom_tabla
+                $Where ORDER BY usuario";
+        if (($oDbl->query($sQuery)) === false) {
+            $sClauError = 'GestorAsignaturaTipo.lista';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return false;
+        }
+        $aOpciones=array();
+        foreach ($oDbl->query($sQuery) as $aClave) {
+            $clave=$aClave[0];
+            $val=$aClave[1];
+            $aOpciones[$clave]=$val;
+        }
+        return $aOpciones;
+	}
+	
+	/**
+	 * retorna un objecte del tipus Desplegable
+	 * Els posibles login de usuarios
+	 *
+	 * @return Desplegable
+	 */
+	function getDesplUsuarios() {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    $Where = ''; 
+	    $sQuery="SELECT id_usuario, usuario FROM $nom_tabla
+                $Where ORDER BY usuario";
+        if (($oDbl->query($sQuery)) === false) {
+            $sClauError = 'GestorAsignaturaTipo.lista';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return false;
+        }
+        $aOpciones=array();
+        foreach ($oDbl->query($sQuery) as $aClave) {
+            $clave=$aClave[0];
+            $val=$aClave[1];
+            $aOpciones[$clave]=$val;
+        }
+        return new Desplegable('',$aOpciones,'',true);
+	}
+	
 	/**
 	 * retorna l'array d'objectes de tipus Usuario
 	 *

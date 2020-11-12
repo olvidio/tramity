@@ -19,6 +19,12 @@ switch($Qque) {
         // cambiar el role actual:
 		$Qrole = (string) \filter_input(INPUT_POST, 'role');
 		$_SESSION['session_auth']['role_actual'] = $Qrole;
+		$aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
+		$id_cargo = array_search($Qrole, $aPosiblesCargos);
+		// en el caso se secretaria no tiene id:
+		if ($id_cargo !== FALSE) {
+            $_SESSION['session_auth']['id_cargo'] = $id_cargo;
+		}
         break;
 	case "eliminar":
 	    //$Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');

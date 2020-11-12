@@ -3,6 +3,7 @@ use core\ViewTwig;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\Oficina;
+use usuarios\model\entity\GestorUsuario;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -48,11 +49,15 @@ $cargo = '';
 $descripcion = '';
 $permiso = 1;
 
-$a_cabeceras=array('cargo','descripcion','director','oficina',array('name'=>'accion','formatter'=>'clickFormatter'));
-$a_botones[]=array( 'txt'=> _("borrar"), 'click'=>"fnjs_eliminar()");
+$a_cabeceras=array('cargo','descripcion','director','oficina','titular','suplente');
+$a_botones = [ ['txt'=> _("borrar"), 'click'=>"fnjs_eliminar()"],
+               ['txt'=> _("modificar"), 'click'=>"fnjs_editar()"],
+];
 
 $a_valores=array();
 $i=0;
+$gesUsuarios = new GestorUsuario();
+$aUsuarios = $gesUsuarios->getArrayUsuarios();
 foreach ($cCargos as $oCargo) {
 	$i++;
 	$id_cargo = $oCargo->getId_cargo();
@@ -61,18 +66,21 @@ foreach ($cCargos as $oCargo) {
 	$id_oficina = $oCargo->getId_oficina();
 	$director = $oCargo->getDirector();
 	$director_txt = ($director === TRUE)? _("Sí") : _("No");
-	
+	$id_usuario = $oCargo->getId_usuario();
+	$id_suplente = $oCargo->getId_suplente();
+	$usuario = empty($aUsuarios[$id_usuario])? '' : $aUsuarios[$id_usuario];
+	$suplente = empty($aUsuarios[$id_suplente])? '' : $aUsuarios[$id_suplente];
+
 	$oOficina = new Oficina($id_oficina);
 	$sigla = $oOficina->getSigla();
 	
-	$pagina=web\Hash::link(core\ConfigGlobal::getWeb().'/apps/usuarios/controller/cargo_form.php?'.http_build_query(array('quien'=>'usuario','id_cargo'=>$id_cargo)));
-
 	$a_valores[$i]['sel']="$id_cargo#";
 	$a_valores[$i][1]=$cargo;
 	$a_valores[$i][2]=$descripcion;
 	$a_valores[$i][3]=$director_txt;
 	$a_valores[$i][4]=$sigla;
-	$a_valores[$i][5]= array( 'ira'=>$pagina, 'valor'=>'editar');
+	$a_valores[$i][5]= $usuario;
+	$a_valores[$i][6]= $suplente;
 }
 if (isset($Qid_sel) && !empty($Qid_sel)) { $a_valores['select'] = $Qid_sel; }
 if (isset($Qscroll_id) && !empty($Qscroll_id)) { $a_valores['scroll_id'] = $Qscroll_id; }
@@ -90,6 +98,7 @@ $oHash->setArraycamposHidden(array('que'=>'eliminar'));
 
 $aQuery = [ 'nuevo' => 1, 'quien' => 'cargo' ];
 $url_nuevo = web\Hash::link(core\ConfigGlobal::getWeb().'/apps/usuarios/controller/cargo_form.php?'.http_build_query($aQuery));
+$url_form = web\Hash::link(core\ConfigGlobal::getWeb().'/apps/usuarios/controller/cargo_form.php');
 $url_ajax = web\Hash::link(core\ConfigGlobal::getWeb().'/apps/usuarios/controller/cargo_update.php');
 $url_actualizar = web\Hash::link(core\ConfigGlobal::getWeb().'/apps/usuarios/controller/cargo_lista.php');
 
@@ -99,6 +108,7 @@ $a_campos = [
 			'oTabla' => $oTabla,
 			'permiso' => $permiso,
 			'url_nuevo' => $url_nuevo,
+            'url_form' => $url_form,
 			'url_ajax' => $url_ajax,
 			'url_actualizar' => $url_actualizar,
  			];

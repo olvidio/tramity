@@ -33,6 +33,7 @@ if (isset($_POST['stack'])) {
 	}
 }
 
+$role = $_SESSION['session_auth']['role_actual'];
 
 $gesEtiquetas = new GestorEtiqueta();
 // Etiquetas personales + Etiquetas de la oficina

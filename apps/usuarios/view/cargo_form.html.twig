@@ -57,6 +57,19 @@ fnjs_guardar=function(formulario){
     	  </div>
         </div>
         
+		<div class="row form-group">
+          <div class="col-6">
+          <label for="example">{{ "Tirular"|trans }}</label>
+			{{ oDesplUsuarios.desplegable|raw }}
+		  </div>
+		</div>
+		 
+		<div class="row form-group">
+          <div class="col-6">
+          <label for="example">{{ "Suplente"|trans }}</label>
+			{{ oDesplSuplentes.desplegable|raw }}
+		  </div>
+		 </div>
         <div class="form-group input-group col-10">
           <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary btn-block col-6">{{ "Guardar"|trans }}</button>
         </div>

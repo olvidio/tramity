@@ -11,7 +11,7 @@ use web\Desplegable;
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @created 16/6/2020
+ * @created 12/11/2020
  */
 
 class GestorCargo Extends core\ClaseGestor {
@@ -47,24 +47,24 @@ class GestorCargo Extends core\ClaseGestor {
 	    $nom_tabla = $this->getNomTabla();
 	    
 	    //$Where = '';
-        $Where = "WHERE id_oficina > 0";
+	    $Where = "WHERE id_oficina > 0";
 	    if (!empty($id_oficina)) {
 	        $Where .= " AND id_oficina = $id_oficina";
 	    }
 	    $sQuery="SELECT id_cargo, cargo FROM $nom_tabla
                 $Where ORDER BY cargo";
-                if (($oDbl->query($sQuery)) === false) {
-                    $sClauError = 'GestorAsignaturaTipo.lista';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-                    return false;
-                }
-                $aOpciones=array();
-                foreach ($oDbl->query($sQuery) as $aClave) {
-                    $clave=$aClave[0];
-                    $val=$aClave[1];
-                    $aOpciones[$clave]=$val;
-                }
-                return $aOpciones;
+        if (($oDbl->query($sQuery)) === false) {
+            $sClauError = 'GestorAsignaturaTipo.lista';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return false;
+        }
+        $aOpciones=array();
+        foreach ($oDbl->query($sQuery) as $aClave) {
+            $clave=$aClave[0];
+            $val=$aClave[1];
+            $aOpciones[$clave]=$val;
+        }
+        return $aOpciones;
 	}
 	
 	/**
@@ -79,7 +79,7 @@ class GestorCargo Extends core\ClaseGestor {
 	    $nom_tabla = $this->getNomTabla();
 	    
 	    //$Where = '';
-        $Where = "WHERE id_oficina > 0";
+	    $Where = "WHERE id_oficina > 0";
 	    $Where .= " AND id_ambito = $id_ambito";
 	    $sQuery="SELECT id_cargo, cargo FROM $nom_tabla
                 $Where ORDER BY director DESC, cargo";
@@ -111,12 +111,12 @@ class GestorCargo Extends core\ClaseGestor {
 	    
 	    $Where = '';
 	    if (!empty($id_ambito)) {
-            $Where = "WHERE id_ambito = $id_ambito";
+	        $Where = "WHERE id_ambito = $id_ambito";
 	        if (!empty($id_oficina)) {
 	            if ($id_oficina == 'x') {
-	               $Where .= " AND (id_oficina IS NOT NULL AND id_oficina != 0)";
+	                $Where .= " AND (id_oficina IS NOT NULL AND id_oficina != 0)";
 	            } else {
-	               $Where .= " AND id_oficina = $id_oficina";
+	                $Where .= " AND id_oficina = $id_oficina";
 	            }
 	        }
 	    } else {
@@ -124,7 +124,7 @@ class GestorCargo Extends core\ClaseGestor {
 	            if ($id_oficina == 'x') {
 	                $Where .= "WHERE (id_oficina IS NOT NULL AND id_oficina != 0)";
 	            } else {
-                    $Where .= "WHERE id_oficina = $id_oficina";
+	                $Where .= "WHERE id_oficina = $id_oficina";
 	            }
 	        }
 	        
@@ -194,7 +194,7 @@ class GestorCargo Extends core\ClaseGestor {
 		$sCondi = implode(' AND ',$aCondi);
 		if ($sCondi!='') $sCondi = " WHERE ".$sCondi;
 		$sOrdre = '';
-        $sLimit='';
+        $sLimit = '';
 		if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') $sOrdre = ' ORDER BY '.$aWhere['_ordre'];
 		if (isset($aWhere['_ordre'])) unset($aWhere['_ordre']);
 		if (isset($aWhere['_limit']) && $aWhere['_limit']!='') $sLimit = ' LIMIT '.$aWhere['_limit'];
@@ -212,7 +212,7 @@ class GestorCargo Extends core\ClaseGestor {
 		}
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_cargo' => $aDades['id_cargo']);
-			$oCargo= new Cargo($a_pkey);
+			$oCargo = new Cargo($a_pkey);
 			$oCargo->setAllAtributes($aDades);
 			$oCargoSet->add($oCargo);
 		}

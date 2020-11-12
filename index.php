@@ -39,10 +39,13 @@ if (empty($_SESSION['session_auth']['role_actual'])) {
 $role_actual = $_SESSION['session_auth']['role_actual'];
 
 //oficinas adicionales (suplencias..)
+$a_roles_posibles = [];
+$aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
+foreach($aPosiblesCargos as $id_cargo => $cargo) {
+    $a_roles_posibles[] = $cargo;
+}
 if ($username == 'scdl') {
-    $a_roles_posibles = [ 'scdl', 'secretaria'];
-} else {
-    $a_roles_posibles = [ $username ];
+    $a_roles_posibles[] = 'secretaria';
 }
 $_SESSION['session_auth']['a_roles'] = $a_roles_posibles;
 

@@ -3,6 +3,8 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
+use usuarios\model\entity\GestorUsuario;
+use usuarios\model\entity\Usuario;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -32,9 +34,9 @@ if (isset($_POST['stack'])) {
 		if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
 			$a_sel=$oPosicion2->getParametro('id_sel');
 			if (!empty($a_sel)) {
-                $Qid_usuario = (integer) strtok($a_sel[0],"#");
+                $Qid_cargo = (integer) strtok($a_sel[0],"#");
 			} else {
-                $Qid_usuario = $oPosicion2->getParametro('id_usuario');
+                $Qid_cargo = $oPosicion2->getParametro('id_cargo');
 			    $Qquien = $oPosicion2->getParametro('quien');
 			}
 			$Qscroll_id = $oPosicion2->getParametro('scroll_id');
@@ -43,20 +45,17 @@ if (isset($_POST['stack'])) {
 	}
 } elseif (!empty($a_sel)) { //vengo de un checkbox
 	$Qque = (string) \filter_input(INPUT_POST, 'que');
-	if ($Qque != 'del_grupmenu') { //En el caso de venir de borrar un grupmenu, no hago nada
-	    $Qid_usuario = (integer) strtok($a_sel[0],"#");
-		// el scroll id es de la página anterior, hay que guardarlo allí
-		$oPosicion->addParametro('id_sel',$a_sel,1);
-		$Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');
-		$oPosicion->addParametro('scroll_id',$Qscroll_id,1);
-	}
+    $Qid_cargo = (integer) strtok($a_sel[0],"#");
+    // el scroll id es de la página anterior, hay que guardarlo allí
+    $oPosicion->addParametro('id_sel',$a_sel,1);
+    $Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');
+    $oPosicion->addParametro('scroll_id',$Qscroll_id,1);
 }
 $oPosicion->setParametros(array('id_cargo'=>$Qid_cargo),1);
 
 $oCargo = new Cargo();
 
-$txt_guardar=_("guardar datos usuario");
-$oSelects = array();
+$txt_guardar=_("guardar datos cargo");
 if (!empty($Qid_cargo)) {
     $que = 'guardar';
     $oCargo->setId_cargo($Qid_cargo);
@@ -67,6 +66,8 @@ if (!empty($Qid_cargo)) {
     $id_oficina = $oCargo->getId_oficina();
     $director = $oCargo->getDirector();
     $chk_director = ($director === TRUE)? 'checked' : ''; 
+    $id_usuario = $oCargo->getId_usuario();
+    $id_suplente = $oCargo->getId_suplente();
 } else {
     $que = 'nuevo';
     $Qid_cargo = '';
@@ -75,12 +76,25 @@ if (!empty($Qid_cargo)) {
     $id_ambito = $oCargo::AMBITO_DL; // segun configuración de la aplicacion;
     $id_oficina = '';
     $chk_director = '';
+    $id_usuario = '';
+    $id_suplente = '';
 }
 
 $oGOficinas = new GestorOficina();
 $oDesplOficinas= $oGOficinas->getListaOficinas();
 $oDesplOficinas->setOpcion_sel($id_oficina);
 $oDesplOficinas->setNombre('id_oficina');
+
+$gesUsuarios = new GestorUsuario();
+$oDesplUsuarios = $gesUsuarios->getDesplUsuarios();
+$oDesplUsuarios->setNombre('id_usuario');
+$oDesplUsuarios->setOpcion_sel($id_usuario);
+
+$oDesplSuplentes = $gesUsuarios->getDesplUsuarios();
+$oDesplSuplentes->setNombre('id_suplente');
+$oDesplSuplentes->setOpcion_sel($id_suplente);
+
+
 
 $camposForm = 'que!cargo!descripcion!id_oficina';
 $oHash = new web\Hash();
@@ -103,6 +117,8 @@ $a_campos = [
             'cargo' => $cargo,
             'descripcion' => $descripcion,
             'oDesplOficinas' => $oDesplOficinas,
+            'oDesplUsuarios' => $oDesplUsuarios,
+            'oDesplSuplentes' => $oDesplSuplentes,
             'chk_director' => $chk_director,
             'url_update' => $url_update,
             'txt_guardar' => $txt_guardar,

@@ -8,7 +8,7 @@ CREATE TABLE aux_usuarios (
     email text,
     nom_usuario text
 );
-COMMENT ON COLUMN aux_usuarios.id_cargo IS 'corresponde al cargo';
+COMMENT ON COLUMN aux_usuarios.id_cargo IS 'corresponde al cargo por defecto o preferido';
 CREATE INDEX ON aux_usuarios ((lower(usuario)));
 ALTER TABLE aux_usuarios OWNER TO tramity;
 
@@ -25,7 +25,9 @@ CREATE TABLE aux_cargos (
     cargo character varying(20) NOT NULL,
     descripcion text,
     id_oficina integer NOT NULL,
-    director boolean NOT NULL DEFAULT 't'
+    director boolean NOT NULL DEFAULT 't',
+    id_usuario integer,
+    id_suplente integer
 );
 
 COMMENT ON COLUMN aux_cargos.id_cargo IS 'corresponde al cargo';
