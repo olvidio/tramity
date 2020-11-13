@@ -60,7 +60,25 @@ if ( !isset($_SESSION['session_auth'])) {
         if ($row=$oDBSt->fetch(\PDO::FETCH_ASSOC)) {
             if ($oCrypt->encode($_POST['password'],$sPasswd) == $sPasswd) {
                 $id_usuario = $row['id_usuario'];
-                $id_cargo_default = $row['id_cargo'];
+                $id_cargo_titular = $row['id_cargo'];
+                // Comprobar que no hay suplente:
+                $query_cargos="SELECT * FROM aux_cargos 
+                                WHERE id_cargo = $id_cargo_titular ";
+                if (($stmt=$oDB->query($query_cargos)) === false) {
+                    $sClauError = 'login_obj.prepare';
+                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDB, $sClauError, __LINE__, __FILE__);
+                    return false;
+                }
+                $aCargo = $stmt->fetch(\PDO::FETCH_ASSOC);
+                if (!empty($aCargo['id_suplente'])) {
+                    $txt_alert = _("Está asignado un suplente a este cargo");
+                    $a_campos = [ 'txt_alert' => $txt_alert, 'btn_cerrar' => FALSE];
+                    $oView = new ViewTwig('expedientes/controller');
+                    echo $oView->renderizar('alerta.html.twig',$a_campos);
+                    //exit();
+                }
+                
+                
                 // el usuario default, y el admin no tienen cargo:
                 // los cargos que puede tener (suplencias)
                 $query_cargos="SELECT * FROM aux_cargos 
@@ -112,7 +130,7 @@ if ( !isset($_SESSION['session_auth'])) {
                         'id_usuario'=>$id_usuario,
                         'usuario_cargo'=>$usuario_cargo,
                         'usuario_dtor'=>$usuario_dtor,
-                        'id_cargo'=>$id_cargo_default,
+                        'id_cargo'=>$id_cargo_titular,
                         'aPosiblesCargos'=>$aPosiblesCargos,
                         'username'=>$_POST['username'],
                         'password'=>$_POST['password'],
@@ -129,7 +147,7 @@ if ( !isset($_SESSION['session_auth'])) {
                 //si existe, registro la sesion con la configuración
                 if ( !isset($_SESSION['config'])) { 
                     $session_config=array (
-                        'id_cargo'=>$id_cargo_default,
+                        'id_cargo'=>$id_cargo_titular,
                         'username'=>$_POST['username'],
                         'password'=>$_POST['password'],
                         'perms_activ'=>$perms_activ,

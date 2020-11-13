@@ -119,38 +119,7 @@ if (!empty($Qid_escrito)) {
     exit();
 } else {
     $txt_alert = _("No hay escritos");
-    $a_campos = [ 'txt_alert' => $txt_alert ];
+    $a_campos = [ 'txt_alert' => $txt_alert, 'btn_cerrar' => TRUE ];
     $oView = new ViewTwig('expedientes/controller');
     echo $oView->renderizar('alerta.html.twig',$a_campos);
-    /*
-    $oArrayProtRef = [];
-    $a_adjuntos = [];
-    $asunto_e = '';
-    $f_escrito = '';
-
-    $base_url = core\ConfigGlobal::getWeb();
-    $url_download = $base_url.'/apps/expedientes/controller/adjunto_download.php?plugin=1';
-
-    $a_campos = [
-        'id_escrito' => $Qid_escrito,
-        //'oHash' => $oHash,
-        'oArrayProtDestino' => $oArrayProtDestino,
-        'oArrayProtRef' => $oArrayProtRef,
-        'asunto_e' => $asunto_e,
-        'f_escrito' => $f_escrito,
-        'a_adjuntos' => $a_adjuntos,
-        'url_download' => $url_download,
-        'pagina_prev' => $pagina_prev,
-        'pagina_next' => $pagina_next,
-        'base_url' => $base_url,
-        'sigla' => $sigla,
-    ];
-
-    $oView = new ViewTwig('expedientes/controller');
-    if ($QSlide_mode === TRUE) {
-        echo $oView->renderizar('escrito_ver_slide.html.twig',$a_campos);
-    } else {
-        echo $oView->renderizar('escrito_ver.html.twig',$a_campos);
-    }
-    */
 }
