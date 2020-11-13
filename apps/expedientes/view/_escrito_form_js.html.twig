@@ -57,7 +57,7 @@ fnjs_guardar=function(event){
 	if (err!=1) {
 		$('#form_escrito').attr('action','{{ url_update }}');
 		$('#que').val('guardar');
-		$('#form_escrito').submit(function(event){
+		$('#form_escrito').one("submit", function(event){
 			event.preventDefault(); //prevent default action 	
             request=$.ajax({
                 data: $(this).serialize(),
@@ -83,18 +83,11 @@ fnjs_guardar=function(event){
                                     pagina_mod = 'apps'
                                     fnjs_update_div('#main',json.pagina_mod);
                                 },
-                                {{ "cancelar"|trans }}: function () {
+                                {{ "No"|trans }}: function () {
                                     //$.alert('Canceled!');
                                     alert ("{{ "datos guardados"|trans }}");
                                     // Volver a la lista...
                                     fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                                },
-                                somethingElse: {
-                                    text: '{{ "otro expediente"|trans }}',
-                                    btnClass: 'btn-blue',
-                                    keys: ['enter', 'shift'],
-                                    // Nuevo expediente.
-                                    action: fnjs_update_div('#main','{{ pagina_nueva|raw }}')
                                 }
                             }
                         });

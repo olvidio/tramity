@@ -45,7 +45,7 @@ fnjs_cancelar=function(event){
 
 fnjs_guardar=function(event){
     $('#frm_etiqueta').attr('action',"apps/etiquetas/controller/etiqueta_update.php");
-    $('#frm_etiqueta').submit(function(event) {
+    $('#frm_etiqueta').one("submit", function(event) {
     	event.preventDefault(); //prevent default action 	
     	request=$.ajax({
             url: $(this).attr('action'),

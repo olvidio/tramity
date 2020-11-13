@@ -91,7 +91,7 @@ fnjs_guardar=function(event){
     
     $('#form_asunto').attr('action','{{ url_update }}');
     $('#que').val('guardar_asunto');
-    $('#form_asunto').submit(function(event){
+    $('#form_asunto').one("submit", function(event){
         event.preventDefault(); //prevent default action 	
         request=$.ajax({
             data: $(this).serialize(),

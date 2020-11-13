@@ -185,7 +185,7 @@ fnjs_distribuir=function(event,que){
 
     $('#form_expediente').attr('action','{{ url_update }}');
     $('#que').val(que);
-    $('#form_expediente').submit(function(event){
+    $('#form_expediente').one("submit", function(event){
         event.preventDefault(); //prevent default action 	
         request=$.ajax({
             data: $(this).serialize(),

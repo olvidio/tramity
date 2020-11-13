@@ -30,7 +30,6 @@ $Qtramite = (integer) \filter_input(INPUT_POST, 'tramite');
 $Qestado = (integer) \filter_input(INPUT_POST, 'estado');
 $Qprioridad = (integer) \filter_input(INPUT_POST, 'prioridad');
 
-$Qf_ini_circulacion = (string) \filter_input(INPUT_POST, 'f_ini_circulacion');
 $Qf_reunion = (string) \filter_input(INPUT_POST, 'f_reunion');
 $Qf_aprobacion = (string) \filter_input(INPUT_POST, 'f_aprobacion');
 $Qf_contestar = (string) \filter_input(INPUT_POST, 'f_contestar');
@@ -318,16 +317,18 @@ switch($Qque) {
         } else {
             // si falla el javascript, puede ser que se hagan varios click a 'Guardar' 
             // y se dupliquen los espedientes. Me aseguro de que no exista uno igual:
-            $oConverter = new core\Converter('date', $Qf_contestar);
-            $f_contestar_iso = $oConverter->toPg();
             $gesExpedientes = new GestorExpediente();
             $aWhere = [ 'id_tramite' => $Qtramite,
                         'estado' => $Qestado,
                         'prioridad' => $Qprioridad,
                         'asunto' => $Qasunto,
                         'entradilla' => $Qentradilla,
-                        'f_contestar' => $f_contestar_iso,
                         ];
+            if (!empty($Qf_contestar)) {
+                $oConverter = new core\Converter('date', $Qf_contestar);
+                $f_contestar_iso = $oConverter->toPg();
+                $aWhere['f_contestar'] = $f_contestar_iso;
+            }
             $cExpedientes = $gesExpedientes->getExpedientes($aWhere);
             if (count($cExpedientes) > 0) {
                 exit (_("Creo que ya se ha creado"));
@@ -442,6 +443,5 @@ switch($Qque) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        
         break;
 }

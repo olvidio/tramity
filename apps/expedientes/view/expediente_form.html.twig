@@ -90,38 +90,7 @@
       <input tabindex='41' name='f_contestar' id='f_contestar' type='text' class="form-control" value="{{ f_contestar }}" />
     </div>
   </div>
-  
-    <!--  --------------- FECHAS --------------- -->
-    <!-- 
-  <div class="form-group row">
-    <div class='col-2'>
-      <div class="form-group">
-        <div class='date datepicker' data-provide="datepicker">
-        <label for="f_ini_circulacion" class="col-form-label">{{ "Inicio"|trans }}</label>
-          {{ f_ini_circulacion }}
-        </div>
-      </div>
-    </div>
-    <div class='col-2'>
-      <div class="form-group">
-        <label for="f_reunion" class="col-2 col-form-label">{{ "reunión"|trans }}</label>
-        <div class='date datepicker' data-provide="datepicker">
-          <input tabindex='41' name='f_reunion' id='f_reunion' type='text' class="form-control" value="{{ f_reunion }}" />
-        </div>
-      </div>
-    </div>
-    <div class='col-2'>
-      <div class="form-group">
-    <label for="f_aprobacion" class="col-2 col-form-label">{{ "aprobación"|trans }}</label>
-        <div class='date datepicker' data-provide="datepicker">
-          <input tabindex='41' name='f_aprobacion' id='f_aprobacion' type='text' class="form-control" value="{{ f_aprobacion }}" />
-        </div>
-      </div>
-    </div>
-    -->
-  <!--  </div> -->
-    
-    <!--  --------------- ASUNTO --------------- -->
+  <!--  --------------- ASUNTO --------------- -->
   <div class="form-group row">
     <label for="asunto" class="col-2 col-form-label">{{ "Asunto expediente"|trans }}</label>
     <div class="col-10">
@@ -182,6 +151,9 @@
     </button>
     <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_plantilla|raw }}');">
         {{ "nueva plantilla"|trans }}
+    </button>
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_respuesta|raw }}');">
+        {{ "contestar entrada"|trans }}
     </button>
     <table class="table table-sm table-bordered">
       <thead class="thead-light">

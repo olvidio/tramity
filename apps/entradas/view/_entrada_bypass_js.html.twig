@@ -80,7 +80,7 @@ fnjs_enviar=function(event){
 	if (err!=1) {
 		$('#form_enviar').attr('action','{{ url_update }}');
 		$('#que').val('enviar');
-		$('#form_enviar').submit(function(event){
+		$('#form_enviar').one("submit", function(event){
 			event.preventDefault(); //prevent default action 	
             request=$.ajax({
                 data: $(this).serialize(),

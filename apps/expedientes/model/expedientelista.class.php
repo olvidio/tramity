@@ -280,8 +280,9 @@ class ExpedienteLista {
         switch ($this->filtro) {
             case 'borrador_propio':
             case 'borrador_oficina':
+                $a_cosas = [ 'filtro' => $this->getFiltro() ];
+                $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_form.php';
-                $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query([]));
                 break;
             case 'firmar':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';

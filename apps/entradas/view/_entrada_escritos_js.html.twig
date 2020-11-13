@@ -83,7 +83,7 @@ fnjs_escrito=function(event,n) {
         //debugger;
         // grabar el tipo de doc
         var url_doc = 'apps/entradas/controller/entrada_ajax.php';
-        var param_json = { id_entrada: id_entrada, f_escrito: f_escrito, tipo_doc: n };
+        var param_json = { que: 'guardar', id_entrada: id_entrada, f_escrito: f_escrito, tipo_doc: n };
         request=$.ajax({
             data: param_json,
             url: url_doc,

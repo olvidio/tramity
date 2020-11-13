@@ -19,7 +19,12 @@ namespace core;
  * @return string pg_array 
  */
 function array_php2pg($phpArray=[]) {
-    return "{".join(",",$phpArray)."}";
+    // el join no va si el array esta vacio
+    if (empty($phpArray)) {
+        return "{}";
+    } else {
+        return "{".join(",",$phpArray)."}";
+    }
 }
 
 /**

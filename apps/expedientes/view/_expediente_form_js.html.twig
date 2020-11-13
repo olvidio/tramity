@@ -138,7 +138,7 @@ fnjs_visto=function(event){
     }
     $('#form_expediente').attr('action','{{ url_update }}');
     $('#que').val('visto');
-    $('#form_expediente').submit(function(event){
+    $('#form_expediente').one("submit", function(event){
         event.preventDefault(); //prevent default action 	
         request=$.ajax({
             data: $(this).serialize(),
@@ -193,7 +193,7 @@ fnjs_circular=function(event){
 	if (err!=1) {
         $('#form_expediente').attr('action','{{ url_update }}');
         $('#que').val('circular');
-        $('#form_expediente').submit(function(event){
+        $('#form_expediente').one("submit", function(event){
             event.preventDefault(); //prevent default action 	
             request=$.ajax({
                 data: $(this).serialize(),
@@ -254,7 +254,7 @@ fnjs_guardar=function(event){
 		$('#firmas').val(firma);
 		$('#form_expediente').attr('action','{{ url_update }}');
 		$('#que').val('guardar');
-		$('#form_expediente').submit(function(event){
+		$('#form_expediente').one("submit", function(event){
 			event.preventDefault(); //prevent default action 	
             request=$.ajax({
                 data: $(this).serialize(),
@@ -278,16 +278,8 @@ fnjs_guardar=function(event){
                                     pagina_mod = 'apps'
                                     fnjs_update_div('#main',json.pagina_mod);
                                 },
-                                {{ "cancelar"|trans }}: function () {
-			                        fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                                    //$.alert('Canceled!');
-                                },
-                                somethingElse: {
-                                    text: '{{ "otro expediente"|trans }}',
-                                    btnClass: 'btn-blue',
-                                    keys: ['enter', 'shift'],
-                                    // Nueva expediente.
-                                    action: fnjs_update_div('#main','{{ pagina_nueva|raw }}')
+                                {{ "No"|trans }}: function () {
+                                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                                 }
                             }
                         });

@@ -33,7 +33,65 @@ class GestorEntradaDB Extends core\ClaseGestor {
 
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
-
+	
+	function getEntradasByLugarDB($id_lugar, $aWhere=array(),$aOperators=array()) {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        $oEntradaDBSet = new core\Set();
+        
+        /* {"any": 20, "mas": null, "num": 15, "lugar": 58}
+        $sQuery = "SELECT t.*
+                        FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_origen) as items(any smallint, mas text, num smallint, lugar integer)
+                        WHERE items.id=$id_lugar";
+        */
+        
+		$oCondicion = new core\Condicion();
+        $aCondi = array();
+        foreach ($aWhere as $camp => $val) {
+            if ($camp == '_ordre') continue;
+            if ($camp == '_limit') continue;
+            $sOperador = isset($aOperators[$camp])? $aOperators[$camp] : '';
+            if ($a = $oCondicion->getCondicion($camp,$sOperador,$val)) $aCondi[]=$a;
+            // operadores que no requieren valores
+            if ($sOperador == 'BETWEEN' || $sOperador == 'IS NULL' || $sOperador == 'IS NOT NULL' || $sOperador == 'OR') unset($aWhere[$camp]);
+            if ($sOperador == 'IN' || $sOperador == 'NOT IN') unset($aWhere[$camp]);
+            if ($sOperador == 'TXT') unset($aWhere[$camp]);
+        }
+        $sCondi = implode(' AND ',$aCondi);
+        $sCondi = " WHERE items.id=$id_lugar ";
+        if ($sCondi!='') $sCondi .= " AND ".$sCondi;
+        
+        $sOrdre = '';
+        $sLimit = '';
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') $sOrdre = ' ORDER BY '.$aWhere['_ordre'];
+        if (isset($aWhere['_ordre'])) unset($aWhere['_ordre']);
+        if (isset($aWhere['_limit']) && $aWhere['_limit']!='') $sLimit = ' LIMIT '.$aWhere['_limit'];
+        if (isset($aWhere['_limit'])) unset($aWhere['_limit']);
+        
+        $sQry = "SELECT * FROM $nom_tabla ".$sCondi.$sOrdre.$sLimit;
+        $sQry = "SELECT t.*
+                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_origen) as items(year smallint, mas text, num smallint, lugar integer)
+                        WHERE items.lugar=$id_lugar";
+        
+        if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
+            $sClauError = 'GestorEntradaDB.llistar.prepare';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        if (($oDblSt->execute($aWhere)) === FALSE) {
+            $sClauError = 'GestorEntradaDB.llistar.execute';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        foreach ($oDblSt as $aDades) {
+            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
+            $oEntradaDB = new EntradaDB($a_pkey);
+            $oEntradaDB->setAllAtributes($aDades);
+            $oEntradaDBSet->add($oEntradaDB);
+        }
+        return $oEntradaDBSet->getTot();
+	}
+	
 	/**
 	 * retorna l'array d'objectes de tipus EntradaDB
 	 *

@@ -1,13 +1,12 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
+use entradas\model\Entrada;
 use expedientes\model\Escrito;
+use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\GestorCargo;
 use web\Desplegable;
-use web\Protocolo;
-use lugares\model\entity\GestorGrupo;
-use Twig\Extension\StringLoaderExtension;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -134,13 +133,38 @@ if (!empty($Qid_escrito)) {
     }
     
 } else {
-    $entradilla = '';
-    $asunto = '';
-    $detalle = '';
-    $f_escrito = '';
-    $initialPreview = '';
-    $json_config = '{}';
-    $tipo_doc = '';
+    // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
+    $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+    if (!empty($Qid_entrada)) {
+        $Qaccion = Escrito::ACCION_ESCRITO;
+        $oEntrada = new Entrada($Qid_entrada);
+        $asunto = $oEntrada->getAsunto();
+        $detalle = $oEntrada->getDetalle();
+        // ProtocoloArray espera un array.
+        $json_prot_dst[] = $oEntrada->getJson_prot_origen();
+        $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
+        $oArrayProtDestino->setBlanco('t');
+        $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+        
+        $entradilla = '';
+        $f_escrito = '';
+        $initialPreview = '';
+        $json_config = '{}';
+        $tipo_doc = '';
+    } else {
+        $entradilla = '';
+        $asunto = '';
+        $detalle = '';
+        $f_escrito = '';
+        $initialPreview = '';
+        $json_config = '{}';
+        $tipo_doc = '';
+
+        $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
+        $oArrayProtDestino ->setBlanco('t');
+        $oArrayProtDestino ->setAccionConjunto('fnjs_mas_destinos(event)');
+
+    }
     $titulo = _("nuevo");
     switch ($Qaccion) {
         case Escrito::ACCION_ESCRITO:
@@ -158,10 +182,6 @@ if (!empty($Qid_escrito)) {
     $oArrayDesplGrupo->setBlanco('t');
     $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
     
-    $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
-    $oArrayProtDestino ->setBlanco('t');
-    $oArrayProtDestino ->setAccionConjunto('fnjs_mas_destinos(event)');
-
     $oArrayProtRef = new web\ProtocoloArray('',$a_posibles_lugares,'referencias');
     $oArrayProtRef ->setBlanco('t');
     $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');

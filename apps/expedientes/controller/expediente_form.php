@@ -4,12 +4,12 @@ use core\ViewTwig;
 use expedientes\model\Escrito;
 use expedientes\model\Expediente;
 use expedientes\model\entity\GestorAccion;
+use lugares\model\entity\GestorGrupo;
 use tramites\model\entity\GestorTramite;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use usuarios\model\entity\GestorOficina;
 use web\Desplegable;
 use web\Protocolo;
-use lugares\model\entity\GestorGrupo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -35,16 +35,16 @@ $prioridad_normal = Expediente::PRIORIDAD_NORMAL;
 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 
-$id_ponente = '';
-$ponente_txt = ConfigGlobal::mi_usuario_cargo();
-$gesCargos = new GestorCargo();
-$cCargos =$gesCargos->getCargos(['cargo' => $ponente_txt]);
-if (!empty($cCargos[0])) {
-    $id_ponente = $cCargos[0]->getId_cargo();
-    $id_oficina = $cCargos[0]->getId_oficina();
+$id_ponente = ConfigGlobal::mi_id_cargo();
+$oCargo =new Cargo($id_ponente);
+$ponente_txt = '';
+if (!empty($oCargo)) {
+    $id_oficina = $oCargo->getId_oficina();
+    $ponente_txt = $oCargo->getCargo();
 }
 
 // preparar
+$gesCargos = new GestorCargo();
 $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
 $a_preparar = [];
 foreach ($a_cargos_oficina as $id_cargo => $cargo) {
@@ -215,6 +215,7 @@ $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?
 $pag_escrito =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
 $pag_propuesta =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_PROPUESTA]));
 $pag_plantilla =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_PLANTILLA]));
+$pag_respuesta =  web\Hash::link('apps/entradas/controller/buscar_form.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
 
 $a_campos = [
@@ -252,6 +253,7 @@ $a_campos = [
     'pag_escrito' => $pag_escrito,
     'pag_propuesta' => $pag_propuesta,
     'pag_plantilla' => $pag_plantilla,
+    'pag_respuesta' => $pag_respuesta,
     //búsquedas
     'oDesplOficinas' => $oDesplOficinas,
     // preparar
