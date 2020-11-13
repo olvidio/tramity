@@ -41,7 +41,7 @@ $role_actual = $_SESSION['session_auth']['role_actual'];
 //oficinas adicionales (suplencias..)
 $a_roles_posibles = [];
 $aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
-foreach($aPosiblesCargos as $id_cargo => $cargo) {
+foreach($aPosiblesCargos as $cargo) {
     $a_roles_posibles[] = $cargo;
 }
 if ($username == 'scdl') {

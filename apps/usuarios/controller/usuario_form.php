@@ -56,7 +56,7 @@ if (isset($_POST['stack'])) {
 $oPosicion->setParametros(array('id_usuario'=>$Qid_usuario),1);
 
 $oGCargos = new GestorCargo();
-$oDesplCargos= $oGCargos->getDesplCargos('x');
+$oDesplCargos= $oGCargos->getDesplCargosUsuario($Qid_usuario);
 $oDesplCargos->setNombre('id_cargo');
 
 if (!empty($Qid_usuario)) {
