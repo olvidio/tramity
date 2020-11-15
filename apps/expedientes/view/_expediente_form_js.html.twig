@@ -177,6 +177,7 @@ fnjs_circular=function(event){
 
     // comprobar que tiene gente para firmar
     var err=0;
+    /*
 	var firma='';
 	var i=0;
 	var selector="span#span_firmas select";
@@ -189,6 +190,7 @@ fnjs_circular=function(event){
 	});
 
 	if (!firma) { alert("{{ "Debe llenar el campo de oficinas"|trans }}"); err=1; }
+	*/
 	
 	if (err!=1) {
         $('#form_expediente').attr('action','{{ url_update }}');

@@ -2,7 +2,9 @@
 namespace tramites\model\entity;
 use core\ConfigGlobal;
 use core;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
+use usuarios\model\entity\Usuario;
 /**
  * GestorFirma
  *
@@ -12,7 +14,7 @@ use usuarios\model\entity\GestorCargo;
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @created 19/6/2020
+ * @created 14/11/2020
  */
 
 class GestorFirma Extends core\ClaseGestor {
@@ -35,7 +37,40 @@ class GestorFirma Extends core\ClaseGestor {
 
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
-
+	
+	/**
+	 * devuelve el orden_tramite para el cargo tipo ultimo firmado con ok,no
+	 * 
+	 * @param integer $orden_tramite
+	 */
+	public function getOrdenCargo($id_expediente,$cargo_tipo) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    $tipo_voto = FIRMA::TIPO_VOTO;
+	    $valor_ok = Firma::V_OK;
+	    $valor_no = Firma::V_NO;
+	    $valor_vb = Firma::V_VISTO_BUENO;
+	    
+	    $sQuery = "SELECT *
+                    FROM $nom_tabla
+                    WHERE id_expediente = $id_expediente AND cargo_tipo = $cargo_tipo AND tipo = $tipo_voto
+                        AND (valor = $valor_ok OR valor = $valor_no OR valor = $valor_vb)
+                    ORDER BY orden_tramite DESC, orden_oficina DESC LIMIT 1";
+	    if (($stmt = $oDbl->query($sQuery)) === FALSE) {
+	        $sClauError = 'GestorFirma.query';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+	    $aFirma = $stmt->fetch(\PDO::FETCH_ASSOC);
+	    if (!empty($aFirma)) {
+	        return FALSE;
+	    }
+	    $orden_tramite = $aFirma['orden_tramite'];
+	    
+	    return $orden_tramite;
+	}
+	
 	public function getRecorrido($id_expediente) {
 	    $gesCargos = new GestorCargo();
 	    $aCargos =$gesCargos->getArrayCargos();
@@ -47,11 +82,16 @@ class GestorFirma Extends core\ClaseGestor {
 	    $a_recorrido = [];
 	    $oFirma = new Firma();
 	    $a_valores = $oFirma->getArrayValor('all');
+        $flag = 0; // Para evitar marcar como visto a más de uno.
 	    foreach ($cFirmas as $oFirma) {
 	        $a_rec = [];
 	        $tipo = $oFirma->getTipo();
 	        $valor = $oFirma->getValor();
-	        $f_valor = $oFirma->getF_valor()->getFromLocalHora();
+	        $oFvalor = $oFirma->getF_valor();
+	        $f_valor = empty($oFvalor)? '' : $oFvalor->getFromLocalHora();
+	        $id_usuario = $oFirma->getId_usuario();
+	        $oUsuario = new Usuario($id_usuario);
+	        $nom_usuario = $oUsuario->getNom_usuario();
 	        $id_cargo = $oFirma->getId_cargo();
 	        $cargo = $aCargos[$id_cargo];
 	        if (!empty($valor)) {
@@ -62,6 +102,7 @@ class GestorFirma Extends core\ClaseGestor {
 	                if (!empty($observ)) {
 	                    $comentarios .= empty($comentarios)? '' : "<br>";
 	                    $comentarios .= "$cargo($voto): $observ";
+	                    $comentarios .= " $cargo($nom_usuario) [$voto]: $observ";
 	                }
 	                switch ($valor) {
 	                    case Firma::V_NO:
@@ -74,7 +115,7 @@ class GestorFirma Extends core\ClaseGestor {
 	                    default:
 	                        $a_rec['class'] = "list-group-item-info";
 	                }
-	                $a_rec['valor'] = "$f_valor $cargo [$voto]";
+	                $a_rec['valor'] = "$f_valor $cargo($nom_usuario) [$voto]";
 	                $a_recorrido[] = $a_rec;
 	            }
 	            if ($tipo == Firma::TIPO_ACLARACION) {
@@ -90,8 +131,9 @@ class GestorFirma Extends core\ClaseGestor {
 	                $a_rec['class'] = "";
 	                $a_rec['valor'] = $cargo;
 	                $a_recorrido[] = $a_rec;
-	                // lo marco como visto (sólo el mio)
-	                if ($id_cargo == ConfigGlobal::mi_id_cargo()) {
+	                // lo marco como visto (sólo el mio). Si hay más de uno sólo debería ser el primero vacío
+	                if ($flag == 0 && $id_cargo == ConfigGlobal::mi_id_cargo()) {
+	                    $flag = 1;
 	                    $oFirma->setValor(Firma::V_VISTO);
 	                    $oFirma->DBGuardar();
 	                }
@@ -100,134 +142,236 @@ class GestorFirma Extends core\ClaseGestor {
 	    }
 	    
 	    return ['recorrido' => $a_recorrido,
-	               'comentarios' => $comentarios,
-	           ];
+	        'comentarios' => $comentarios,
+	    ];
 	}
 	
 	/**
-	 * Devuelve la última firma según el trámite
-	 * 
+	 * Devuelve boolean
+	 * comprobar la ultima firma es el vº bº del vcd
+     * pasarlo a scdl para fijar reunión
+	 *
 	 * @param integer $id_expediente
-	 * @return object $oFirma
+	 * @return boolean
 	 */
-	public function esUltima($id_expediente) {
-	    $tipo_voto = Firma::TIPO_VOTO; 
-		$oDbl = $this->getoDbl();
-		$nom_tabla = $this->getNomTabla();
-        // posibles orden_tramite:
-        $sQuery = "SELECT * 
-                    FROM $nom_tabla
-                    WHERE id_expediente = $id_expediente AND tipo = $tipo_voto
-                    ORDER BY orden_tramite DESC, orden_oficina DESC LIMIT 1";
-		if (($oDbl->query($sQuery)) === FALSE) {
-			$sClauError = 'GestorFirma.query';
-			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-			return FALSE;
-		}
-		// el primero es el actual, el segundo (si existe) es el anterior.
-		foreach ($oDbl->query($sQuery) as $aDades) {
-			$a_pkey = array('id_item' => $aDades['id_item']);
-			$oFirma = new Firma($a_pkey);
-			$oFirma->setAllAtributes($aDades);
-		}
-		return $oFirma;
+	public function paraReunion($id_expediente) {
+	    $oFirmaUltimaOk = $this->getUltimaOk($id_expediente);
+	    
+	    $valor = $oFirmaUltimaOk->getValor();
+	    $cargo_tipo = $oFirmaUltimaOk->getCargo_tipo();
+	    
+	    if ($cargo_tipo == Cargo::CARGO_VB_VCD && $valor == Firma::V_VISTO_BUENO) {
+	        return TRUE;
+	    } else {
+	        return FALSE;
+	    }
 	}
 	
+	/**
+	 * Devuelve boolean
+	 * comprobar que ya ha firmado todo el mundo, para 
+     * pasarlo a scdl para distribuir (ok_scdl)
+	 * 
+	 *
+	 * @param integer $id_expediente
+	 * @return boolean
+	 */
+	public function paraDistribuir($id_expediente) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    // El tramite no debe incluir el vºbº del vcd:
+	    $cargo_tipo_vcd = Cargo::CARGO_VB_VCD;
+	    $sQuery = "SELECT *
+                    FROM $nom_tabla
+                    WHERE id_expediente = $id_expediente AND cargo_tipo = $cargo_tipo_vcd
+                    ORDER BY orden_tramite, orden_oficina LIMIT 1";
+	    if (($stmt = $oDbl->query($sQuery)) === FALSE) {
+	        $sClauError = 'GestorFirma.query';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+	    if (!empty($stmt->fetch(\PDO::FETCH_ASSOC))) {
+	        return FALSE;
+	    }
+	    
+	    // Buscar el orden tramite de secretaria, y comprobar que todos los anteriores son ok.
+	    $cargo_tipo_secretaria = Cargo::CARGO_SECRETARIA;
+	    $sQuery = "SELECT *
+                    FROM $nom_tabla
+                    WHERE id_expediente = $id_expediente AND cargo_tipo = $cargo_tipo_secretaria AND valor IS NULL
+                    ORDER BY orden_tramite, orden_oficina LIMIT 1";
+	    if (($stmt = $oDbl->query($sQuery)) === FALSE) {
+	        $sClauError = 'GestorFirma.query';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+	    $aFirma = $stmt->fetch(\PDO::FETCH_ASSOC);
+	    if (!empty($aFirma['orden_tramite'])) {
+	        $orden_tramite_secretaria = $aFirma['orden_tramite'];
+	        // mirar los anteriores:
+	        $aOrdenTramite = $this->arrayOrdenTramite($id_expediente);
+	        krsort($aOrdenTramite);
+	        foreach (array_keys($aOrdenTramite) as $orden_tramite) {
+	            if ($orden_tramite > $orden_tramite_secretaria) continue;
+	            if (!$this->getAnteriorOK($id_expediente, $orden_tramite)) {
+	                // no está completo. devuelve FALSE
+	                return FALSE;
+	            }
+	        }
+	    }
+	    return TRUE;
+	}
+	
+	private function arrayOrdenTramite($id_expediente) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    // posibles orden_tramite:
+	    $sQuery = "SELECT DISTINCT orden_tramite, cargo_tipo
+                    FROM $nom_tabla
+                    WHERE id_expediente = $id_expediente
+                    ORDER BY orden_tramite DESC";
+	    if (($oDbl->query($sQuery)) === FALSE) {
+	        $sClauError = 'GestorFirma.query';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+	    // el primero es el actual, el segundo (si existe) es el anterior.
+	    $aOrdenTramite = [];
+	    foreach ($oDbl->query($sQuery) as $aDades) {
+	        $orden_tramite = $aDades['orden_tramite'];
+	        $cargo_tipo = $aDades['cargo_tipo'];
+	        $aOrdenTramite[$orden_tramite] = $cargo_tipo;
+	    }
+	    return $aOrdenTramite;
+	}
+
 	/**
 	 * devuelve el objeto Firma. El primero que tiene que firmar el expediente.
 	 * Al ponerlo a circular, si soy el primero, lo firmo directamente.
-	 *  
+	 *
 	 * @param integer $id_expediente
 	 * @return object $oFirma
 	 */
 	public function getPrimeraFirma($id_expediente) {
-		$oDbl = $this->getoDbl();
-		$nom_tabla = $this->getNomTabla();
-        // posibles orden_tramite:
-        $sQuery = "SELECT * 
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    // posibles orden_tramite:
+	    $sQuery = "SELECT *
                     FROM $nom_tabla
                     WHERE id_expediente = $id_expediente
                     ORDER BY orden_tramite, orden_oficina LIMIT 1";
-		if (($oDbl->query($sQuery)) === FALSE) {
-			$sClauError = 'GestorFirma.query';
-			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-			return FALSE;
-		}
-		// el primero es el actual, el segundo (si existe) es el anterior.
-		foreach ($oDbl->query($sQuery) as $aDades) {
-			$a_pkey = array('id_item' => $aDades['id_item']);
-			$oFirma = new Firma($a_pkey);
-			$oFirma->setAllAtributes($aDades);
-		}
-		return $oFirma;
+	    if (($oDbl->query($sQuery)) === FALSE) {
+	        $sClauError = 'GestorFirma.query';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+	    // el primero es el actual, el segundo (si existe) es el anterior.
+	    foreach ($oDbl->query($sQuery) as $aDades) {
+	        $a_pkey = array('id_item' => $aDades['id_item']);
+	        $oFirma = new Firma($a_pkey);
+	        $oFirma->setAllAtributes($aDades);
+	    }
+	    return $oFirma;
+	}
+
+	/**
+	 * devuelve el objeto Firma. La ultima firmada
+	 *
+	 * @param integer $id_expediente
+	 * @return object $oFirma
+	 */
+	public function getUltimaOk($id_expediente) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    $tipo_voto = FIRMA::TIPO_VOTO;
+        $valor_ok = Firma::V_OK;
+        $valor_no = Firma::V_NO;
+        $valor_vb = Firma::V_VISTO_BUENO;
+        
+	    // posibles orden_tramite:
+	    $sQuery = "SELECT *
+                    FROM $nom_tabla
+                    WHERE id_expediente = $id_expediente AND tipo = $tipo_voto
+                        AND (valor = $valor_ok OR valor = $valor_no OR valor = $valor_vb)
+                    ORDER BY orden_tramite DESC, orden_oficina DESC LIMIT 1";
+	    if (($oDbl->query($sQuery)) === FALSE) {
+	        $sClauError = 'GestorFirma.query';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+	    // el primero es el actual, el segundo (si existe) es el anterior.
+	    foreach ($oDbl->query($sQuery) as $aDades) {
+	        $a_pkey = array('id_item' => $aDades['id_item']);
+	        $oFirma = new Firma($a_pkey);
+	        $oFirma->setAllAtributes($aDades);
+	    }
+	    return $oFirma;
 	}
 	
 	/**
 	 * Comprobar si el bloque de orden_tramite anterior està todo firmado.
-	 * 
+	 *
 	 * @param integer $id_expediente
 	 * @param integer $orden_tramite
-	 * @return boolean 
+	 * @return boolean
 	 */
-    public function getAnteriorOK($id_expediente,$orden_tramite) {
-		$oDbl = $this->getoDbl();
-		$nom_tabla = $this->getNomTabla();
-        // posibles orden_tramite:
-        $sQuery = "SELECT DISTINCT orden_tramite 
+	public function getAnteriorOK($id_expediente,$orden_tramite_ref) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    // posibles orden_tramite:
+	    $aOrdenTramite = $this->arrayOrdenTramite($id_expediente);
+	    krsort($aOrdenTramite);
+	    $flag = 0;
+	    $orden_anterior = 0;
+	    foreach (array_keys($aOrdenTramite) as $orden_tramite) {
+	        if ($flag == 1) {
+	            $orden_anterior = $orden_tramite;
+	            break;
+	        }
+	        if ($orden_tramite > $orden_tramite_ref) continue;
+	        if ($orden_tramite == $orden_tramite_ref) {
+	            $flag = 1;
+	        }
+	    }
+	    if ($flag == 1 && empty($orden_anterior)) {
+            // No existe, el primero es el actual: ok
+	        return TRUE;
+	    }
+	    
+        $tipo_voto = FIRMA::TIPO_VOTO;
+        $sQuery = "SELECT *
                     FROM $nom_tabla
-                    WHERE id_expediente = $id_expediente AND orden_tramite <= $orden_tramite
-                    ORDER BY orden_tramite DESC";
-		if (($oDbl->query($sQuery)) === FALSE) {
-			$sClauError = 'GestorFirma.query';
-			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-			return FALSE;
-		}
-		// el primero es el actual, el segundo (si existe) es el anterior.
-		$i = 0;
-		$num = [];
-		foreach ($oDbl->query($sQuery) as $aDades) {
-		      $i++;
-		      $num[$i] = $aDades['orden_tramite'];
-		}
-		if (empty($num[2])) { // No existe, el primero es el actual: ok
-		    return TRUE;
-		} else {
-		    $tipo_voto = FIRMA::TIPO_VOTO;
-		    $orden_anterior = $num[2];
-            $sQuery = "SELECT *
-                        FROM $nom_tabla
-                        WHERE id_expediente = $id_expediente AND tipo = $tipo_voto AND orden_tramite = $orden_anterior
-                        ";
-            if (($oDbl->query($sQuery)) === FALSE) {
-                $sClauError = 'GestorFirma.query';
-                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                    WHERE id_expediente = $id_expediente AND tipo = $tipo_voto AND orden_tramite = $orden_anterior
+                    ";
+        if (($oDbl->query($sQuery)) === FALSE) {
+            $sClauError = 'GestorFirma.query';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        // Contar que todos sean ok:
+        foreach ($oDbl->query($sQuery) as $aDades) {
+            $valor = $aDades['valor'];
+            /*
+             const TIPO_VOTO          = 1;
+             const TIPO_ACLARACION    = 2;
+             // valor
+             const V_VISTO        = 1;  // leído, pensando
+             const V_ESPERA       = 2;  // distinto a no leído
+             const V_NO           = 3;  // voto negativo
+             const V_OK           = 4;  // voto positivo
+             const V_DILATA       = 22;  // sólo vcd
+             const V_RECHAZADO    = 23;  // sólo vcd
+             const V_VISTO_BUENO  = 24;  // sólo vcd VºBº
+             */
+            if ($valor == Firma::V_NO OR $valor == Firma::V_OK) {
+            } else {
                 return FALSE;
             }
-            // Contar que todos sean ok:
-            foreach ($oDbl->query($sQuery) as $aDades) {
-                $valor = $aDades['valor'];
-                /*
-                const TIPO_VOTO          = 1;
-                const TIPO_ACLARACION    = 2;
-                // valor
-                const V_VISTO        = 1;  // leído, pensando
-                const V_ESPERA       = 2;  // distinto a no leído
-                const V_NO           = 3;  // voto negativo
-                const V_OK           = 4;  // voto positivo
-                const V_DILATA       = 22;  // sólo vcd
-                const V_RECHAZADO    = 23;  // sólo vcd
-                const V_VISTO_BUENO  = 24;  // sólo vcd VºBº
-                */
-                if ($valor == Firma::V_NO OR $valor == Firma::V_OK) {
-                } else {
-                    return FALSE;
-                }
-            }
-            return TRUE;
-		}
-    }
-
-
+        }
+        return TRUE;
+	}
+	
 	/**
 	 * retorna l'array d'objectes de tipus Firma
 	 *

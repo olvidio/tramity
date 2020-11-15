@@ -44,6 +44,15 @@ $Qa_preparar = (array)  \filter_input(INPUT_POST, 'a_preparar', FILTER_DEFAULT, 
 $Qvida = (integer) \filter_input(INPUT_POST, 'vida');
 
 switch($Qque) {
+    case 'reunion':
+        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente->DBCarregar();
+        $oExpediente->setF_reunion($Qf_reunion);
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            $txt_err .= _("No se ha podido guarda la fecha de reunión");
+            $txt_err .= "<br>";
+        }
+        break;
     case 'archivar':
         $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
@@ -196,7 +205,7 @@ switch($Qque) {
         exit();
         break;
     case 'visto':
-        // yo soy el qur hago el click:
+        // yo soy el que hago el click:
         $mi_id_cargo = ConfigGlobal::mi_id_cargo();
         $oCargo = new Cargo($mi_id_cargo);
         $mi_id_oficina = $oCargo->getId_oficina();
@@ -419,10 +428,22 @@ switch($Qque) {
             $id_primer_cargo = $oFirmaPrimera->getId_cargo();
             if ($id_primer_cargo == ConfigGlobal::mi_id_cargo()) {
                 $oFirmaPrimera->setValor(Firma::V_OK);
+                $oFirmaPrimera->setId_usuario(ConfigGlobal::mi_id_usuario());
                 $oFirmaPrimera->setObserv('');
                 $oFirmaPrimera->setF_valor($f_hoy_iso,FALSE);
                 if ($oFirmaPrimera->DBGuardar() === FALSE ) {
                     $error_txt .= $oFirmaPrimera->getErrorTxt();
+                }
+                // comprobar que ya ha firmado todo el mundo, para
+                // pasarlo a scdl para distribuir (ok_scdl)
+                $bParaDistribuir = $gesFirmas->paraDistribuir($Qid_expediente);
+                if ($bParaDistribuir) {
+                    $oExpediente->DBCarregar();
+                    $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
+                    $oExpediente->setF_aprobacion($f_hoy_iso,FALSE);
+                    if ($oExpediente->DBGuardar() === FALSE ) {
+                        $error_txt .= $oExpediente->getErrorTxt();
+                    }
                 }
             }
             

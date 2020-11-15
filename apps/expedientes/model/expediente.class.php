@@ -302,11 +302,28 @@ class Expediente Extends expedienteDB {
             // 2 => oficiales
             // 3 => varias
             // 4 => todos d.
-            // 5 =>  vº bº vcd.
+            // 5 => vº bº vcd.
+            // 6 => secretaria
             $oCargo = new Cargo($id_cargo);
             $id_oficina = $oCargo->getId_oficina();
             if (empty($id_oficina)) {
                 switch ($id_cargo) {
+                    case Cargo::CARGO_SECRETARIA:
+                        $gesCargos = new GestorCargo();
+                        $cCargos = $gesCargos->getCargos(['cargo' => 'scdl']);
+                        $oCargoDtor = $cCargos[0];
+                        $id_dtor_scdl = $oCargoDtor->getId_cargo();
+                        $oFirma = new Firma();
+                        $oFirma->setId_expediente($this->iid_expediente);
+                        $oFirma->setId_tramite($id_tramite);
+                        $oFirma->setId_cargo_creador($id_ponente);
+                        $oFirma->setCargo_tipo($id_cargo);
+                        $oFirma->setId_cargo($id_dtor_scdl);
+                        $oFirma->setOrden_tramite($orden_tramite);
+                        // Al inicializar, sólo pongo los votos.
+                        $oFirma->setTipo(Firma::TIPO_VOTO);
+                        $oFirma->DBGuardar();
+                        break;
                     case Cargo::CARGO_VB_VCD: // el vº bº lo tiene que dar el vcd.
                         $gesCargos = new GestorCargo();
                         $cCargos = $gesCargos->getCargos(['cargo' => 'vcd']);
@@ -316,6 +333,7 @@ class Expediente Extends expedienteDB {
                         $oFirma->setId_expediente($this->iid_expediente);
                         $oFirma->setId_tramite($id_tramite);
                         $oFirma->setId_cargo_creador($id_ponente);
+                        $oFirma->setCargo_tipo($id_cargo);
                         $oFirma->setId_cargo($id_dtor_vcd);
                         $oFirma->setOrden_tramite($orden_tramite);
                         // Al inicializar, sólo pongo los votos.
@@ -334,6 +352,7 @@ class Expediente Extends expedienteDB {
                         $oFirma->setId_expediente($this->iid_expediente);
                         $oFirma->setId_tramite($id_tramite);
                         $oFirma->setId_cargo_creador($id_ponente);
+                        $oFirma->setCargo_tipo($id_cargo);
                         $oFirma->setId_cargo($id_dtor_ponente);
                         $oFirma->setOrden_tramite($orden_tramite);
                         // Al inicializar, sólo pongo los votos.
@@ -343,13 +362,14 @@ class Expediente Extends expedienteDB {
                     case Cargo::CARGO_OFICIALES: // para los oficiales de la oficina
                         $a_firmas_oficina = $this->getFirmas_oficina();
                         $orden_oficina = 0;
-                        foreach ($a_firmas_oficina as $id_cargo) {
+                        foreach ($a_firmas_oficina as $id_cargo_of) {
                             $orden_oficina++;
                             $oFirma = new Firma();
                             $oFirma->setId_expediente($this->iid_expediente);
                             $oFirma->setId_tramite($id_tramite);
                             $oFirma->setId_cargo_creador($id_ponente);
-                            $oFirma->setId_cargo($id_cargo);
+                            $oFirma->setCargo_tipo($id_cargo);
+                            $oFirma->setId_cargo($id_cargo_of);
                             $oFirma->setOrden_tramite($orden_tramite);
                             $oFirma->setOrden_oficina($orden_oficina);
                             // Al inicializar, sólo pongo los votos.
@@ -360,13 +380,14 @@ class Expediente Extends expedienteDB {
                     case Cargo::CARGO_VARIAS: // si es para varias oficinas
                         $a_resto_oficinas = $this->getResto_oficinas();
                         $orden_oficina = 0;
-                        foreach ($a_resto_oficinas as $id_cargo) {
+                        foreach ($a_resto_oficinas as $id_cargo_of) {
                             $orden_oficina++;
                             $oFirma = new Firma();
                             $oFirma->setId_expediente($this->iid_expediente);
                             $oFirma->setId_tramite($id_tramite);
                             $oFirma->setId_cargo_creador($id_ponente);
-                            $oFirma->setId_cargo($id_cargo);
+                            $oFirma->setCargo_tipo($id_cargo);
+                            $oFirma->setId_cargo($id_cargo_of);
                             $oFirma->setOrden_tramite($orden_tramite);
                             $oFirma->setOrden_oficina($orden_oficina);
                             // Al inicializar, sólo pongo los votos.
@@ -374,18 +395,20 @@ class Expediente Extends expedienteDB {
                             $oFirma->DBGuardar();
                         }
                         break;
-                    case Cargo::CARGO_TODOS_DIR:  // si es para todos los dir
+                    case Cargo::CARGO_TODOS_DIR:  // si es para todos los dir menos vcd
                         $gesCargos = new GestorCargo();
                         $cCargos = $gesCargos->getCargos(['director' => 't']);
                         $orden_oficina = 0;
                         foreach ($cCargos as $oCargo) {
                             $orden_oficina++;
-                            $id_cargo = $oCargo->getId_cargo();
+                            $id_cargo_of = $oCargo->getId_cargo();
+                            if ($oCargo->getCargo() == 'vcd') continue;
                             $oFirma = new Firma();
                             $oFirma->setId_expediente($this->iid_expediente);
                             $oFirma->setId_tramite($id_tramite);
                             $oFirma->setId_cargo_creador($id_ponente);
-                            $oFirma->setId_cargo($id_cargo);
+                            $oFirma->setCargo_tipo($id_cargo);
+                            $oFirma->setId_cargo($id_cargo_of);
                             $oFirma->setOrden_tramite($orden_tramite);
                             $oFirma->setOrden_oficina($orden_oficina);
                             // Al inicializar, sólo pongo los votos.
@@ -399,6 +422,7 @@ class Expediente Extends expedienteDB {
                 $oFirma->setId_expediente($this->iid_expediente);
                 $oFirma->setId_tramite($id_tramite);
                 $oFirma->setId_cargo_creador($id_ponente);
+                $oFirma->setCargo_tipo($id_cargo);
                 $oFirma->setId_cargo($id_cargo);
                 $oFirma->setOrden_tramite($orden_tramite);
                 // Al inicializar, sólo pongo los votos.

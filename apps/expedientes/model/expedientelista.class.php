@@ -10,6 +10,7 @@ use tramites\model\entity\GestorTramite;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Hash;
+use tramites\model\entity\GestorTramiteCargo;
 
 
 class ExpedienteLista {
@@ -193,30 +194,47 @@ class ExpedienteLista {
                 break;
             case 'fijar_reunion':
                 $aWhere['estado'] = Expediente::ESTADO_FIJAR_REUNION;
+                $aWhere['f_reunion'] = 'x';
+                $aOperador['f_reunion'] = 'IS NULL';
                 break;
             case 'reunion':
-                //pendientes de mi firma, pero ya circulando, y con fecha de reunión
-                $aWhereFirma['id_cargo'] = ConfigGlobal::mi_id_cargo();
-                $aWhereFirma['tipo'] = Firma::TIPO_VOTO;
-                $aWhereFirma['valor'] = Firma::V_VISTO .','. Firma::V_A_ESPERA;
-                $aOperadorFirma['valor'] = 'IN';
-                $gesFirmas = new GestorFirma();
-                $cFirmas = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
-                $a_expedientes = [];
-                $this->a_expedientes_nuevos = [];
-                foreach ($cFirmas as $oFirma) {
-                    $id_expediente = $oFirma->getId_expediente();
-                    $a_expedientes[] = $id_expediente;
-                    $tipo = $oFirma->getTipo();
-                    $valor = $oFirma->getValor();
-                    if ($tipo === Firma::TIPO_VOTO && empty($valor)) {
-                        $this->a_expedientes_nuevos[] = $id_expediente;
-                    }
-                }
-                $aWhere['f_ini_circulacion'] = 'x';
-                $aOperador['f_ini_circulacion'] = 'IS NOT NULL';
+                //pendientes de mi firma, con fecha de reunión
+                $aWhere['estado'] = Expediente::ESTADO_FIJAR_REUNION;
                 $aWhere['f_reunion'] = 'x';
                 $aOperador['f_reunion'] = 'IS NOT NULL';
+                
+                // buscar los tramites y el correspondiente orden tramite para vºbº vcd
+                $a_exp_suma = [];
+                $gesTramiteCargo = new GestorTramiteCargo();
+                $cTamitesCargo = $gesTramiteCargo->getTramiteCargos(['id_cargo' => CARGO::CARGO_VB_VCD]);
+                foreach ($cTamitesCargo as $oTramiteCargo) {
+                    $id_tramite = $oTramiteCargo->getId_tramite();
+                    $orden_tramite = $oTramiteCargo->getOrden_tramite();
+                    // para cada tipo de tramite, mirar expdientes con firmas vacias y orden_tramite > $orden_tramite
+                    $gesFirmas = new GestorFirma();
+                    $aWhereF['id_cargo'] = ConfigGlobal::mi_id_cargo();
+                    $aWhereF['id_tramite'] = $id_tramite;
+                    $aWhereF['orden_tramite'] = $orden_tramite;
+                    $aWhereF['tipo'] = Firma::TIPO_VOTO;
+                    $aWhereF['valor'] = Firma::V_OK .','. Firma::V_NO;
+                    $aOperadorF['orden_tramite'] = '>';
+                    $aOperadorF['valor'] = 'NOT IN';
+                    $cFirmasTC = $gesFirmas->getFirmas($aWhereF, $aOperadorF);
+                    $a_exp = [];
+                    foreach ($cFirmasTC as $oFirma) {
+                        $id_expediente = $oFirma->getId_expediente();
+                        $orden_tramite = $oFirma->getOrden_tramite();
+                        $a_exp[] = $id_expediente;
+                    }
+                    $a_exp_suma = array_merge($a_exp_suma, $a_exp);
+                }
+                if (!empty($a_exp_suma)) {
+                    $aWhere['id_expediente'] = implode(',',$a_exp_suma);
+                    $aOperador['id_expediente'] = 'IN';
+                } else {
+                    // para que no salga nada pongo
+                    $aWhere = [];
+                }
                 break;
             case 'circulando':
                 $aWhere['estado'] = Expediente::ESTADO_CIRCULANDO;
@@ -277,6 +295,8 @@ class ExpedienteLista {
         $oExpediente = new Expediente();
         $a_estados = $oExpediente->getArrayEstado();
         
+        $txt_ver = '';
+        $txt_mod = '';
         switch ($this->filtro) {
             case 'borrador_propio':
             case 'borrador_oficina':
@@ -288,7 +308,8 @@ class ExpedienteLista {
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 break;
             case 'fijar_reunion':
-                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/fecha_reunion.php';
+                $txt_mod = _("fecha");
                 break;
             case 'reunion':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
@@ -356,8 +377,10 @@ class ExpedienteLista {
                 ];
                 $link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
-                $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_ver');\" >"._("ver")."</span>";
-                $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >"._("mod")."</span>";
+                $txt_ver = empty($txt_ver)? _("ver") : $txt_ver;
+                $txt_mod = empty($txt_mod)? _("mod") : $txt_mod;
+                $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_ver');\" >$txt_ver</span>";
+                $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >$txt_mod</span>";
                 $row['link_eliminar'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_exp_eliminar('$id_expediente');\" >"._("eliminar")."</span>";
                 $row['link_a_borrador'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_exp_a_borrador('$id_expediente');\" >"._("a borrador")."</span>";
                 

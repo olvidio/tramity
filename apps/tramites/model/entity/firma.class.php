@@ -1,7 +1,8 @@
 <?php
 namespace tramites\model\entity;
 use core;
-use web;
+use web\DateTimeLocal;
+use web\NullDateTimeLocal;
 /**
  * Fitxer amb la Classe que accedeix a la taula expediente_firmas
  *
@@ -9,7 +10,7 @@ use web;
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @created 19/6/2020
+ * @created 14/11/2020
  */
 /**
  * Classe que implementa l'entitat expediente_firmas
@@ -18,7 +19,7 @@ use web;
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @created 19/6/2020
+ * @created 14/11/2020
  */
 class Firma Extends core\ClasePropiedades {
     
@@ -59,7 +60,7 @@ class Firma Extends core\ClasePropiedades {
 	 private $aDades;
 
 	/**
-	 * bLoaded
+	 * bLoaded de Firma
 	 *
 	 * @var boolean
 	 */
@@ -97,11 +98,23 @@ class Firma Extends core\ClasePropiedades {
 	 */
 	 private $iid_cargo_creador;
 	/**
+	 * Cargo_tipo de Firma
+	 *
+	 * @var integer
+	 */
+	 private $icargo_tipo;
+	/**
 	 * Id_cargo de Firma
 	 *
 	 * @var integer
 	 */
 	 private $iid_cargo;
+	/**
+	 * Id_usuario de Firma
+	 *
+	 * @var integer
+	 */
+	 private $iid_usuario;
 	/**
 	 * Orden_tramite de Firma
 	 *
@@ -141,7 +154,7 @@ class Firma Extends core\ClasePropiedades {
 	/**
 	 * F_valor de Firma
 	 *
-	 * @var web\DateTimeLocal
+	 * @var DateTimeLocal
 	 */
 	 private $df_valor;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
@@ -198,44 +211,44 @@ class Firma Extends core\ClasePropiedades {
 	public function getArrayValor($rango='voto') {
 	    switch ($rango) {
 	        case 'voto':
-                $a_tipos = [
-                    self::V_OK => _("ok"),
-                    self::V_NO => _("no"),
-                    self::V_VISTO => _("visto"),
-                    self::V_ESPERA => _("espera"),
-                ];
+	            $a_tipos = [
+	            self::V_OK => _("ok"),
+	            self::V_NO => _("no"),
+	            self::V_VISTO => _("visto"),
+	            self::V_ESPERA => _("espera"),
+	            ];
 	            break;
 	        case 'vcd':
-                $a_tipos = [
-                    self::V_OK => _("ok"),
-                    self::V_NO => _("no"),
-                    self::V_VISTO => _("visto"),
-                    self::V_ESPERA => _("espera"),
-                    self::V_VISTO_BUENO => _("VºBº"),
-                    self::V_DILATA => _("dilata"),
-                    self::V_RECHAZADO => _("rechazado"),
-                ];
+	            $a_tipos = [
+	            self::V_OK => _("ok"),
+	            self::V_NO => _("no"),
+	            self::V_VISTO => _("visto"),
+	            self::V_ESPERA => _("espera"),
+	            self::V_VISTO_BUENO => _("VºBº"),
+	            self::V_DILATA => _("dilata"),
+	            self::V_RECHAZADO => _("rechazado"),
+	            ];
 	            break;
 	        case 'aclaracion':
-                $a_tipos = [
-                    self::V_A_NUEVA => _("nueva"),
-                    self::V_A_RESPUESTA => _("respuesta"),
-                    self::V_A_ESPERA => _("espera"),
-                ];
+	            $a_tipos = [
+	            self::V_A_NUEVA => _("nueva"),
+	            self::V_A_RESPUESTA => _("respuesta"),
+	            self::V_A_ESPERA => _("espera"),
+	            ];
 	            break;
 	        case 'all': // todos
-                $a_tipos = [
-                    self::V_OK => _("ok"),
-                    self::V_NO => _("no"),
-                    self::V_VISTO => _("visto"),
-                    self::V_ESPERA => _("espera"),
-                    self::V_VISTO_BUENO => _("VºBº"),
-                    self::V_DILATA => _("dilata"),
-                    self::V_RECHAZADO => _("rechazado"),
-                    self::V_A_NUEVA => _("nueva"),
-                    self::V_A_RESPUESTA => _("respuesta"),
-                    self::V_A_ESPERA => _("espera"),
-                ];
+	            $a_tipos = [
+	            self::V_OK => _("ok"),
+	            self::V_NO => _("no"),
+	            self::V_VISTO => _("visto"),
+	            self::V_ESPERA => _("espera"),
+	            self::V_VISTO_BUENO => _("VºBº"),
+	            self::V_DILATA => _("dilata"),
+	            self::V_RECHAZADO => _("rechazado"),
+	            self::V_A_NUEVA => _("nueva"),
+	            self::V_A_RESPUESTA => _("respuesta"),
+	            self::V_A_ESPERA => _("espera"),
+	            ];
 	            break;
 	    }
 	    return $a_tipos;
@@ -254,7 +267,9 @@ class Firma Extends core\ClasePropiedades {
 		$aDades['id_expediente'] = $this->iid_expediente;
 		$aDades['id_tramite'] = $this->iid_tramite;
 		$aDades['id_cargo_creador'] = $this->iid_cargo_creador;
+		$aDades['cargo_tipo'] = $this->icargo_tipo;
 		$aDades['id_cargo'] = $this->iid_cargo;
+		$aDades['id_usuario'] = $this->iid_usuario;
 		$aDades['orden_tramite'] = $this->iorden_tramite;
 		$aDades['orden_oficina'] = $this->iorden_oficina;
 		$aDades['tipo'] = $this->itipo;
@@ -270,7 +285,9 @@ class Firma Extends core\ClasePropiedades {
 					id_expediente            = :id_expediente,
 					id_tramite               = :id_tramite,
 					id_cargo_creador         = :id_cargo_creador,
+					cargo_tipo               = :cargo_tipo,
 					id_cargo                 = :id_cargo,
+					id_usuario               = :id_usuario,
 					orden_tramite            = :orden_tramite,
 					orden_oficina            = :orden_oficina,
 					tipo                     = :tipo,
@@ -296,8 +313,8 @@ class Firma Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(id_expediente,id_tramite,id_cargo_creador,id_cargo,orden_tramite,orden_oficina,tipo,valor,observ_creador,observ,f_valor)";
-			$valores="(:id_expediente,:id_tramite,:id_cargo_creador,:id_cargo,:orden_tramite,:orden_oficina,:tipo,:valor,:observ_creador,:observ,:f_valor)";		
+			$campos="(id_expediente,id_tramite,id_cargo_creador,cargo_tipo,id_cargo,id_usuario,orden_tramite,orden_oficina,tipo,valor,observ_creador,observ,f_valor)";
+			$valores="(:id_expediente,:id_tramite,:id_cargo_creador,:cargo_tipo,:id_cargo,:id_usuario,:orden_tramite,:orden_oficina,:tipo,:valor,:observ_creador,:observ,:f_valor)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'Firma.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -334,11 +351,11 @@ class Firma Extends core\ClasePropiedades {
 				return FALSE;
 			}
 			$aDades = $oDblSt->fetch(\PDO::FETCH_ASSOC);
-			// Para evitar posteriores cargas
-			$this->bLoaded = TRUE;
+            // Para evitar posteriores cargas
+            $this->bLoaded = TRUE;
 			switch ($que) {
 				case 'tot':
-					$this->aDades=$aDades;
+                    $this->setAllAtributes($aDades);
 					break;
 				case 'guardar':
 					if (!$oDblSt->rowCount()) return FALSE;
@@ -387,7 +404,9 @@ class Firma Extends core\ClasePropiedades {
 		if (array_key_exists('id_expediente',$aDades)) $this->setId_expediente($aDades['id_expediente']);
 		if (array_key_exists('id_tramite',$aDades)) $this->setId_tramite($aDades['id_tramite']);
 		if (array_key_exists('id_cargo_creador',$aDades)) $this->setId_cargo_creador($aDades['id_cargo_creador']);
+		if (array_key_exists('cargo_tipo',$aDades)) $this->setCargo_tipo($aDades['cargo_tipo']);
 		if (array_key_exists('id_cargo',$aDades)) $this->setId_cargo($aDades['id_cargo']);
+		if (array_key_exists('id_usuario',$aDades)) $this->setId_usuario($aDades['id_usuario']);
 		if (array_key_exists('orden_tramite',$aDades)) $this->setOrden_tramite($aDades['orden_tramite']);
 		if (array_key_exists('orden_oficina',$aDades)) $this->setOrden_oficina($aDades['orden_oficina']);
 		if (array_key_exists('tipo',$aDades)) $this->setTipo($aDades['tipo']);
@@ -407,7 +426,9 @@ class Firma Extends core\ClasePropiedades {
 		$this->setId_expediente('');
 		$this->setId_tramite('');
 		$this->setId_cargo_creador('');
+		$this->setCargo_tipo('');
 		$this->setId_cargo('');
+		$this->setId_usuario('');
 		$this->setOrden_tramite('');
 		$this->setOrden_oficina('');
 		$this->setTipo('');
@@ -539,6 +560,25 @@ class Firma Extends core\ClasePropiedades {
 		$this->iid_cargo_creador = $iid_cargo_creador;
 	}
 	/**
+	 * Recupera l'atribut icargo_tipo de Firma
+	 *
+	 * @return integer icargo_tipo
+	 */
+	function getCargo_tipo() {
+		if (!isset($this->icargo_tipo) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->icargo_tipo;
+	}
+	/**
+	 * estableix el valor de l'atribut icargo_tipo de Firma
+	 *
+	 * @param integer icargo_tipo='' optional
+	 */
+	function setCargo_tipo($icargo_tipo='') {
+		$this->icargo_tipo = $icargo_tipo;
+	}
+	/**
 	 * Recupera l'atribut iid_cargo de Firma
 	 *
 	 * @return integer iid_cargo
@@ -556,6 +596,25 @@ class Firma Extends core\ClasePropiedades {
 	 */
 	function setId_cargo($iid_cargo='') {
 		$this->iid_cargo = $iid_cargo;
+	}
+	/**
+	 * Recupera l'atribut iid_usuario de Firma
+	 *
+	 * @return integer iid_usuario
+	 */
+	function getId_usuario() {
+		if (!isset($this->iid_usuario) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->iid_usuario;
+	}
+	/**
+	 * estableix el valor de l'atribut iid_usuario de Firma
+	 *
+	 * @param integer iid_usuario='' optional
+	 */
+	function setId_usuario($iid_usuario='') {
+		$this->iid_usuario = $iid_usuario;
 	}
 	/**
 	 * Recupera l'atribut iorden_tramite de Firma
@@ -674,14 +733,14 @@ class Firma Extends core\ClasePropiedades {
 	/**
 	 * Recupera l'atribut df_valor de Firma
 	 *
-	 * @return web\DateTimeLocal df_valor
+	 * @return DateTimeLocal df_valor
 	 */
 	function getF_valor() {
 	    if (!isset($this->df_valor) && !$this->bLoaded) {
 	        $this->DBCarregar();
 	    }
 	    if (empty($this->df_valor)) {
-	        return new web\NullDateTimeLocal();
+	        return new NullDateTimeLocal();
 	    }
 	    $oConverter = new core\Converter('date', $this->df_valor);
 	    return $oConverter->fromPg();
@@ -714,14 +773,16 @@ class Firma Extends core\ClasePropiedades {
 		$oFirmaSet->add($this->getDatosId_expediente());
 		$oFirmaSet->add($this->getDatosId_tramite());
 		$oFirmaSet->add($this->getDatosId_cargo_creador());
+		$oFirmaSet->add($this->getDatosCargo_tipo());
 		$oFirmaSet->add($this->getDatosId_cargo());
+		$oFirmaSet->add($this->getDatosId_usuario());
 		$oFirmaSet->add($this->getDatosOrden_tramite());
 		$oFirmaSet->add($this->getDatosOrden_oficina());
 		$oFirmaSet->add($this->getDatosTipo());
 		$oFirmaSet->add($this->getDatosValor());
 		$oFirmaSet->add($this->getDatosObserv_creador());
 		$oFirmaSet->add($this->getDatosObserv());
-		$oFirmaSet->add($this->getDatosF_valor());
+		$oFirmaSet->add($this->getDatodf_valor());
 		return $oFirmaSet->getTot();
 	}
 
@@ -764,6 +825,18 @@ class Firma Extends core\ClasePropiedades {
 		return $oDatosCampo;
 	}
 	/**
+	 * Recupera les propietats de l'atribut icargo_tipo de Firma
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosCargo_tipo() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'cargo_tipo'));
+		$oDatosCampo->setEtiqueta(_("cargo_tipo"));
+		return $oDatosCampo;
+	}
+	/**
 	 * Recupera les propietats de l'atribut iid_cargo de Firma
 	 * en una clase del tipus DatosCampo
 	 *
@@ -773,6 +846,18 @@ class Firma Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'id_cargo'));
 		$oDatosCampo->setEtiqueta(_("id_cargo"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut iid_usuario de Firma
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosId_usuario() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'id_usuario'));
+		$oDatosCampo->setEtiqueta(_("id_usuario"));
 		return $oDatosCampo;
 	}
 	/**

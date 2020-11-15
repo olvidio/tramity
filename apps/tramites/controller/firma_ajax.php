@@ -5,8 +5,8 @@ use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use tramites\model\entity\TramiteCargo;
 use tramites\model\entity\GestorTramiteCargo;
+use usuarios\model\entity\Usuario;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -52,6 +52,9 @@ switch ($Qque) {
             $valor = $oFirma->getValor();
             $f_valor = $oFirma->getF_valor()->getFromLocal();
             $id_cargo = $oFirma->getId_cargo();
+            $id_usuario = $oFirma->getId_usuario();
+            $oUsuario = new Usuario($id_usuario);
+            $nom_usuario = $oUsuario->getNom_usuario();
             $cargo = $aCargos[$id_cargo];
             if (!empty($valor)) {
                 $voto = $a_valores[$valor];
@@ -60,7 +63,7 @@ switch ($Qque) {
                 if ($tipo == Firma::TIPO_VOTO) {
                     if (!empty($observ)) {
                         $comentarios .= empty($comentarios)? '' : "<br>";
-                        $comentarios .= "$cargo($voto): $observ";
+                        $comentarios .= " $cargo($nom_usuario) [$voto]: $observ";
                     }
                     switch ($valor) {
                         case Firma::V_NO:
@@ -73,13 +76,13 @@ switch ($Qque) {
                         default:
                             $a_rec['class'] = "list-group-item-info";
                     }
-                    $a_rec['valor'] = "$f_valor $cargo [$voto]";
+                    $a_rec['valor'] = "$f_valor $cargo($nom_usuario) [$voto]";
                     $a_recorrido[] = $a_rec;
                 }
                 if ($tipo == Firma::TIPO_ACLARACION) {
                     $voto = _("aclaración");
                     $comentarios .= empty($comentarios)? '' : "<br>";
-                    $comentarios .= "$cargo($voto): $observ";
+                    $comentarios .= " $cargo($nom_usuario) [$voto]: $observ";
                     if (!empty($observ_ponente)) {
                         $comentarios .= " rta: $observ_ponente";
                     }
@@ -121,6 +124,7 @@ switch ($Qque) {
             $oFirma->setId_expediente($Qid_expediente);
             $oFirma->setId_tramite($id_tramite);
             $oFirma->setId_cargo_creador($id_ponente);
+            $oFirma->setCargo_tipo(Cargo::CARGO_VARIAS);
             $oFirma->setId_cargo($id_cargo);
             $oFirma->setOrden_tramite($orden_tramite);
             $oFirma->setOrden_oficina($orden_oficina);
@@ -174,23 +178,28 @@ switch ($Qque) {
             }
             $oFirma->setValor($Qvoto);
             $oFirma->setObserv($Qcomentario);
+            $oFirma->setId_usuario(ConfigGlobal::mi_id_usuario());
             $oFirma->setF_valor($f_hoy_iso,FALSE);
             if ($oFirma->DBGuardar() === FALSE ) {
                 $error_txt .= $oFirma->getErrorTxt();
             }
             // comprobar que ya ha firmado todo el mundo, para 
             // pasarlo a scdl para distribuir (ok_scdl)
-            $oUltimaFirma = $gesFirmas->esUltima($Qid_expediente);
-            $valor = $oUltimaFirma->getValor();
-            if (!empty($valor)) { 
+            $bParaDistribuir = $gesFirmas->paraDistribuir($Qid_expediente);
+            if ($bParaDistribuir) {
                 $oExpediente = new Expediente($Qid_expediente);
                 $oExpediente->DBCarregar();
-                if ($valor == Firma::V_VISTO_BUENO) { // caso "voto deliberativo".
-                    $oExpediente->setEstado(Expediente::ESTADO_FIJAR_REUNION);
-                } else { // no importa el valor.
-                    $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
-                    $oExpediente->setF_aprobacion($f_hoy_iso,FALSE); 
+                $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
+                $oExpediente->setF_aprobacion($f_hoy_iso,FALSE); 
+                if ($oExpediente->DBGuardar() === FALSE ) {
+                    $error_txt .= $oExpediente->getErrorTxt();
                 }
+            }
+            $bParaReunion = $gesFirmas->paraReunion($Qid_expediente);
+            if($bParaReunion) {
+                $oExpediente = new Expediente($Qid_expediente);
+                $oExpediente->DBCarregar();
+                $oExpediente->setEstado(Expediente::ESTADO_FIJAR_REUNION);
                 if ($oExpediente->DBGuardar() === FALSE ) {
                     $error_txt .= $oExpediente->getErrorTxt();
                 }
@@ -251,19 +260,21 @@ switch ($Qque) {
                 $oFirmaVoto = $cFirmas[0];
                 $orden_tramite = $oFirmaVoto->getOrden_tramite();
                 $orden = $oFirmaVoto->getOrden_oficina();
+                $cargo_tipo = $oFirmaVoto->getCargo_tipo();
                 // 1 más del que tengo.
                 $orden_oficina = $orden + 1;
             } else {
                 $orden_oficina = $orden_oficina + 1;
             }
             
-            //$f_hoy_iso = date('Y-m-d');
             $f_hoy_iso = date(\DateTimeInterface::ISO8601);
             $oFirma = new Firma();
             $oFirma->setTipo(Firma::TIPO_ACLARACION);
             $oFirma->setId_expediente($Qid_expediente);
+            $oFirma->setCargo_tipo($cargo_tipo);
             $oFirma->setId_cargo($id_cargo);
             $oFirma->setId_cargo_creador($id_ponente);
+            $oFirma->setId_usuario(ConfigGlobal::mi_id_usuario());
             $oFirma->setId_tramite($id_tramite);
             $oFirma->setOrden_tramite($orden_tramite);
             $oFirma->setOrden_oficina($orden_oficina);
