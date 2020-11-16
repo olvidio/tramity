@@ -69,18 +69,20 @@ class GestorCargo Extends core\ClaseGestor {
 	
 	/**
 	 * retorna un Array
-	 * Els posibles cargos (No los que no tienen oficina)
+	 * Els posibles cargos
 	 *
+	 * @param boolean $conOficina default=TRUE: sólo las que tienen ofocona. FALSE: todas.
 	 * @return Array
 	 */
-	function getArrayCargos() {
+	function getArrayCargos($conOficina=TRUE) {
 	    $id_ambito = $_SESSION['oConfig']->getAmbito();
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
 	    
-	    //$Where = '';
-	    $Where = "WHERE id_oficina > 0";
-	    $Where .= " AND id_ambito = $id_ambito";
+	    $Where = "WHERE id_ambito = $id_ambito";
+	    if ($conOficina) {
+	       $Where .= " AND id_oficina > 0";
+	    }
 	    $sQuery="SELECT id_cargo, cargo FROM $nom_tabla
                 $Where ORDER BY director DESC, cargo";
                 if (($oDbl->query($sQuery)) === false) {

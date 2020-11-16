@@ -52,6 +52,19 @@ switch($Qque) {
             $txt_err .= _("No se ha podido guarda la fecha de reunión");
             $txt_err .= "<br>";
         }
+        // firmar el paso de fijar reunion:
+        $f_hoy_iso = date(\DateTimeInterface::ISO8601);
+        $gesFirmas = new  GestorFirma();
+        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente, 'cargo_tipo' => Cargo::CARGO_REUNION]);
+        foreach($cFirmas as $oFirma) {
+            $oFirma->DBCarregar();
+            $oFirma->setValor(Firma::V_OK);
+            $oFirma->setId_usuario(ConfigGlobal::mi_id_usuario());
+            $oFirma->setF_valor($f_hoy_iso,FALSE);
+            if ($oFirma->DBGuardar() === FALSE ) {
+                $error_txt .= $oFirma->getErrorTxt();
+            }
+        }
         break;
     case 'archivar':
         $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -87,6 +100,19 @@ switch($Qque) {
         if ($oExpediente->DBGuardar() === FALSE ) {
             $txt_err .= _("No se ha podido cambiar el estado del expediente");
             $txt_err .= "<br>";
+        }
+        // firmar el paso de distribuir:
+        $f_hoy_iso = date(\DateTimeInterface::ISO8601);
+        $gesFirmas = new  GestorFirma();
+        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente, 'cargo_tipo' => Cargo::CARGO_DISTRIBUIR]);
+        foreach($cFirmas as $oFirma) {
+            $oFirma->DBCarregar();
+            $oFirma->setValor(Firma::V_OK);
+            $oFirma->setId_usuario(ConfigGlobal::mi_id_usuario());
+            $oFirma->setF_valor($f_hoy_iso,FALSE);
+            if ($oFirma->DBGuardar() === FALSE ) {
+                $error_txt .= $oFirma->getErrorTxt();
+            }
         }
         // crear los números de protocolo local de los escritos.
         // busco aquí el id_lugar para no tener que hacerlo dentro del bucle.
@@ -177,7 +203,7 @@ switch($Qque) {
             }
         }
         // firmas:
-        $gesFirmas = new  GestorFirma();
+$gesFirmas = new  GestorFirma();
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente]);
         foreach($cFirmas as $oFirma) {
             if ($oFirma->DBEliminar() === FALSE) {

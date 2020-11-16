@@ -203,6 +203,30 @@ class ExpedienteLista {
                 $aWhere['f_reunion'] = 'x';
                 $aOperador['f_reunion'] = 'IS NOT NULL';
                 
+                //pendientes de mi firma
+                $aWhereFirma['id_cargo'] = ConfigGlobal::mi_id_cargo();
+                $aWhereFirma['tipo'] = Firma::TIPO_VOTO;
+                $aWhereFirma['valor'] = 'x';
+                $aOperadorFirma['valor'] = 'IS NULL';
+                $gesFirmas = new GestorFirma();
+                $cFirmasNull = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+                // Sumar los firmados, pero no OK
+                $aWhereFirma['valor'] = Firma::V_VISTO .','. Firma::V_A_ESPERA;
+                $aOperadorFirma['valor'] = 'IN';
+                $cFirmasVisto = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+                $cFirmas = array_merge($cFirmasNull, $cFirmasVisto);
+                $a_expedientes = [];
+                foreach ($cFirmas as $oFirma) {
+                    $id_expediente = $oFirma->getId_expediente();
+                    $orden_tramite = $oFirma->getOrden_tramite();
+                    // Sólo a partir de que el orden_tramite anterior ya lo hayan firmado todos
+                    if (!$gesFirmas->getAnteriorOK($id_expediente,$orden_tramite)) {
+                        continue;
+                    }
+                    
+                    $a_expedientes[] = $id_expediente;
+                }
+                /*
                 // buscar los tramites y el correspondiente orden tramite para vºbº vcd
                 $a_exp_suma = [];
                 $gesTramiteCargo = new GestorTramiteCargo();
@@ -228,8 +252,9 @@ class ExpedienteLista {
                     }
                     $a_exp_suma = array_merge($a_exp_suma, $a_exp);
                 }
-                if (!empty($a_exp_suma)) {
-                    $aWhere['id_expediente'] = implode(',',$a_exp_suma);
+                */
+                if (!empty($a_expedientes)) {
+                    $aWhere['id_expediente'] = implode(',',$a_expedientes);
                     $aOperador['id_expediente'] = 'IN';
                 } else {
                     // para que no salga nada pongo

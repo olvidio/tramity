@@ -156,45 +156,47 @@ switch($Qque) {
             $nuevo = TRUE;
         }
         
-        // Si esta marcado como grupo de destinos, o destinos individuales. 
-        if (core\is_true($Qgrupo_dst)) {
-            $descripcion = '';
-            $gesGrupo = new GestorGrupo();
-            $a_grupos = $gesGrupo->getArrayGrupos();
-            foreach ($Qa_grupos as $id_grupo) {
-                $descripcion .= empty($descripcion)? '' : ' + ';
-                $descripcion .= $a_grupos[$id_grupo];
+        if ($Qaccion == Escrito::ACCION_ESCRITO) {
+            // Si esta marcado como grupo de destinos, o destinos individuales. 
+            if (core\is_true($Qgrupo_dst)) {
+                $descripcion = '';
+                $gesGrupo = new GestorGrupo();
+                $a_grupos = $gesGrupo->getArrayGrupos();
+                foreach ($Qa_grupos as $id_grupo) {
+                    $descripcion .= empty($descripcion)? '' : ' + ';
+                    $descripcion .= $a_grupos[$id_grupo];
+                }
+                $oEscrito->setId_grupos($Qa_grupos);
+            } else {
+                $aProtDst = [];
+                foreach ($Qa_destinos as $key => $id_lugar) {
+                    $prot_num = $Qa_prot_num_destinos[$key];
+                    $prot_any = $Qa_prot_any_destinos[$key];
+                    $prot_mas = $Qa_prot_mas_destinos[$key];
+                    
+                    if (!empty($id_lugar)) {
+                        $oProtDst = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
+                        $aProtDst[] = $oProtDst->getProt();
+                    }
+                }
+                $oEscrito->setJson_prot_destino($aProtDst);
+                $oEscrito->setId_grupos();
             }
-            $oEscrito->setId_grupos($Qa_grupos);
-        } else {
-            $aProtDst = [];
-            foreach ($Qa_destinos as $key => $id_lugar) {
-                $prot_num = $Qa_prot_num_destinos[$key];
-                $prot_any = $Qa_prot_any_destinos[$key];
-                $prot_mas = $Qa_prot_mas_destinos[$key];
+     
+            $aProtRef = [];
+            foreach ($Qa_referencias as $key => $id_lugar) {
+                $prot_num = $Qa_prot_num_referencias[$key];
+                $prot_any = $Qa_prot_any_referencias[$key];
+                $prot_mas = $Qa_prot_mas_referencias[$key];
                 
                 if (!empty($id_lugar)) {
-                    $oProtDst = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
-                    $aProtDst[] = $oProtDst->getProt();
+                    $oProtRef = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
+                    $aProtRef[] = $oProtRef->getProt();
                 }
             }
-            $oEscrito->setJson_prot_destino($aProtDst);
-            $oEscrito->setId_grupos();
+            $oEscrito->setJson_prot_ref($aProtRef);
         }
- 
-        $aProtRef = [];
-        foreach ($Qa_referencias as $key => $id_lugar) {
-            $prot_num = $Qa_prot_num_referencias[$key];
-            $prot_any = $Qa_prot_any_referencias[$key];
-            $prot_mas = $Qa_prot_mas_referencias[$key];
-            
-            if (!empty($id_lugar)) {
-                $oProtRef = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
-                $aProtRef[] = $oProtRef->getProt();
-            }
-        }
-        $oEscrito->setJson_prot_ref($aProtRef);
- 
+        
         $oEscrito->setEntradilla($Qentradilla);
         $oEscrito->setAsunto($Qasunto);
         $oEscrito->setF_escrito($Qf_escrito);

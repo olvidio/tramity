@@ -73,7 +73,7 @@ class GestorFirma Extends core\ClaseGestor {
 	
 	public function getRecorrido($id_expediente) {
 	    $gesCargos = new GestorCargo();
-	    $aCargos =$gesCargos->getArrayCargos();
+	    $aCargos =$gesCargos->getArrayCargos(FALSE);
 	    $aWhere = ['id_expediente' => $id_expediente,
 	        '_ordre' => 'orden_tramite, orden_oficina ASC'
 	    ];
@@ -179,26 +179,13 @@ class GestorFirma Extends core\ClaseGestor {
 	public function paraDistribuir($id_expediente) {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
-	    // El tramite no debe incluir el vºbº del vcd:
-	    $cargo_tipo_vcd = Cargo::CARGO_VB_VCD;
-	    $sQuery = "SELECT *
-                    FROM $nom_tabla
-                    WHERE id_expediente = $id_expediente AND cargo_tipo = $cargo_tipo_vcd
-                    ORDER BY orden_tramite, orden_oficina LIMIT 1";
-	    if (($stmt = $oDbl->query($sQuery)) === FALSE) {
-	        $sClauError = 'GestorFirma.query';
-	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-	        return FALSE;
-	    }
-	    if (!empty($stmt->fetch(\PDO::FETCH_ASSOC))) {
-	        return FALSE;
-	    }
+	    // El siguienet paso es distribuir, y ya han firmado todos:
 	    
-	    // Buscar el orden tramite de secretaria, y comprobar que todos los anteriores son ok.
-	    $cargo_tipo_secretaria = Cargo::CARGO_SECRETARIA;
+	    // Buscar el orden tramite de distribuir, y comprobar que todos los anteriores son ok.
+	    $cargo_tipo_distribuir = Cargo::CARGO_DISTRIBUIR;
 	    $sQuery = "SELECT *
                     FROM $nom_tabla
-                    WHERE id_expediente = $id_expediente AND cargo_tipo = $cargo_tipo_secretaria AND valor IS NULL
+                    WHERE id_expediente = $id_expediente AND cargo_tipo = $cargo_tipo_distribuir AND valor IS NULL
                     ORDER BY orden_tramite, orden_oficina LIMIT 1";
 	    if (($stmt = $oDbl->query($sQuery)) === FALSE) {
 	        $sClauError = 'GestorFirma.query';

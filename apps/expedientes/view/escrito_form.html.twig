@@ -17,6 +17,8 @@
 <div class="row" >
 <!--  col Izda -->
 <div class="col-8" > 
+{# No las propuestas #}
+{% if esEscrito %}
   <!--  --------------- PROTOCOLO LOCAL --------------- -->
   <div class="form-group row align-items-center">
       <div class="col-2 col-form-label">
@@ -45,6 +47,7 @@
 	    {{ oArrayProtRef.ListaSelects|raw }}
       </div>
   </div>
+  {% endif %}
   <!--  --------------- ENTRADILLA --------------- -->
   <div class="form-group row">
     <label for="entradilla" class="col-2 col-form-label">{{ "Entradilla"|trans }}</label>

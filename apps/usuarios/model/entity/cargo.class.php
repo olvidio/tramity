@@ -31,7 +31,8 @@ class Cargo Extends core\ClasePropiedades {
     const CARGO_VARIAS = 3;
     const CARGO_TODOS_DIR = 4;
     const CARGO_VB_VCD = 5;
-    const CARGO_SECRETARIA = 6;
+    const CARGO_DISTRIBUIR = 6;
+    const CARGO_REUNION = 7;
     
 	/* ATRIBUTS ----------------------------------------------------------------- */
 

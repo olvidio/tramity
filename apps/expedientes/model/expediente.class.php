@@ -303,12 +303,29 @@ class Expediente Extends expedienteDB {
             // 3 => varias
             // 4 => todos d.
             // 5 => vº bº vcd.
-            // 6 => secretaria
+            // 6 => secretaria distribuir
+            // 7 => secretaria reunion
             $oCargo = new Cargo($id_cargo);
             $id_oficina = $oCargo->getId_oficina();
             if (empty($id_oficina)) {
                 switch ($id_cargo) {
-                    case Cargo::CARGO_SECRETARIA:
+                    case Cargo::CARGO_REUNION:
+                        $gesCargos = new GestorCargo();
+                        $cCargos = $gesCargos->getCargos(['cargo' => 'scdl']);
+                        $oCargoDtor = $cCargos[0];
+                        $id_dtor_scdl = $oCargoDtor->getId_cargo();
+                        $oFirma = new Firma();
+                        $oFirma->setId_expediente($this->iid_expediente);
+                        $oFirma->setId_tramite($id_tramite);
+                        $oFirma->setId_cargo_creador($id_ponente);
+                        $oFirma->setCargo_tipo($id_cargo);
+                        $oFirma->setId_cargo($id_dtor_scdl);
+                        $oFirma->setOrden_tramite($orden_tramite);
+                        // Al inicializar, sólo pongo los votos.
+                        $oFirma->setTipo(Firma::TIPO_VOTO);
+                        $oFirma->DBGuardar();
+                        break;
+                    case Cargo::CARGO_DISTRIBUIR:
                         $gesCargos = new GestorCargo();
                         $cCargos = $gesCargos->getCargos(['cargo' => 'scdl']);
                         $oCargoDtor = $cCargos[0];

@@ -199,11 +199,13 @@ if ($Qfiltro == 'acabados') {
 }
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query([]));
 
+$esEscrtito = ($Qaccion == Escrito::ACCION_ESCRITO)? TRUE : FALSE;
 $a_campos = [
     'titulo' => $titulo,
     'id_expediente' => $Qid_expediente,
     'id_escrito' => $Qid_escrito,
     'accion' => $Qaccion,
+    'esEscrito' => $esEscrtito,
     'id_ponente' => $id_ponente,
     //'oHash' => $oHash,
     'chk_grupo_dst' => $chk_grupo_dst,
