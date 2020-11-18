@@ -244,7 +244,7 @@ class ExpedienteLista {
             case 'seg_reunion':
                 $aWhere['estado'] = Expediente::ESTADO_FIJAR_REUNION;
                 $aWhere['f_reunion'] = 'x';
-                $aOperador['f_reunion'] = 'IS NULL';
+                $aOperador['f_reunion'] = 'IS NOT NULL';
                 
                 //////// mirar los que falta alguna firma para marcarlos en color /////////
                 $gesFirmas = new GestorFirma();

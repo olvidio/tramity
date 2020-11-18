@@ -66,7 +66,7 @@ class GestorFirma Extends core\ClaseGestor {
 	    
 	    $sQuery = "SELECT f.*
                     FROM $nom_tabla f JOIN expedientes e USING (id_expediente)
-                    WHERE e.id_expediente = $id_expediente AND e.estado = $estado AND e.f_reunion IS NULL
+                    WHERE e.id_expediente = $id_expediente AND e.estado = $estado AND e.f_reunion IS NOT NULL
                         AND f.orden_tramite = $orden_tramite
                         AND f.tipo = $tipo_voto
                         AND (f.valor IS NULL OR (f.valor != $valor_ok AND f.valor != $valor_no))
@@ -102,7 +102,7 @@ class GestorFirma Extends core\ClaseGestor {
 	    
 	    $sQuery = "SELECT DISTINCT f.id_expediente
                     FROM $nom_tabla f JOIN expedientes e USING (id_expediente)
-                    WHERE e.estado = $estado AND e.f_reunion IS NULL
+                    WHERE e.estado = $estado AND e.f_reunion IS NOT NULL
                         AND f.cargo_tipo = $cargo_tipo
                         AND f.tipo = $tipo_voto
                         AND (f.valor IS NULL OR (f.valor != $valor_ok AND f.valor != $valor_no))
