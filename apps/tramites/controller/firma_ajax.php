@@ -132,7 +132,39 @@ switch ($Qque) {
             $oFirma->setTipo(Firma::TIPO_VOTO);
             $oFirma->DBGuardar();
         }
+        break;
+    case 'del':
+        $Qa_cargos = (array)  \filter_input(INPUT_POST, 'a_cargos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        foreach ($Qa_cargos as $id_cargo) {
+            $aWhere = ['id_expediente' => $Qid_expediente,
+                        'cargo_tipo' => Cargo::CARGO_TODOS_DIR,
+                        'id_cargo' => $id_cargo,
+            ];
+            $gesFirmas = new GestorFirma();
+            $cFirmas = $gesFirmas->getFirmas($aWhere);
+            foreach ($cFirmas as $oFirma) {
+                $oFirma->DBEliminar();
+            }
+        }
+        break;
+    case 'lst_falta_firma':
+        // todos los cargos
+        $gesCargos = new GestorCargo();
+        $a_cargos = $gesCargos->getArrayCargos();
         
+        $gesFirmas = new GestorFirma();
+        $aCargosFaltan = $gesFirmas->faltaFirmarReunionExpediente($Qid_expediente);
+        $a_posibles_cargos = [];
+        foreach ($aCargosFaltan as $id_cargo) {
+            // Sólo los cargos de personas, no los genereicos (sin oficina):
+            if (empty($a_cargos[$id_cargo])) {
+                continue;
+            } else {
+                $sigla = $a_cargos[$id_cargo];
+            }
+            $a_posibles_cargos[] = ['id'=>$id_cargo, 'sigla'=>$sigla ];
+        }
+        $jsondata['cargos'] = json_encode($a_posibles_cargos);
         break;
     case 'lst_cargos_libres':
         // todos los cargos

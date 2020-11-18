@@ -4,6 +4,7 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\EntradaLista;
 use expedientes\model\ExpedienteLista;
+use expedientes\model\EscritoLista;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -50,12 +51,24 @@ $filtro = 'fijar_reunion';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
+// seguimiento = 2;
+$filtro = 'seg_reunion';
+    $active = ($filtro == $Qfiltro)? 'active' : '';
+    $aQuery = [ 'filtro' => $filtro ];
+    $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
+    $num_orden = 2;
+    $text = _("seguimiento reunion");
+    $oExpedienteLista->setFiltro($filtro);
+    $num = $oExpedienteLista->getNumero();
+    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+$a_pills[$num_orden] = $pill;
+
 // firmar = 2;
 $filtro = 'seguimiento';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 2;
+    $num_orden = 7;
     $text = _("seguimiento");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
@@ -82,8 +95,9 @@ $filtro = 'enviar';
     $pag_lst = web\Hash::link('apps/expedientes/controller/escrito_lista.php?'.http_build_query($aQuery));
     $num_orden = 4;
     $text = _("enviar");
-    $oExpedienteLista->setFiltro($filtro);
-    $num = $oExpedienteLista->getNumero();
+    $oEscritoLista = new EscritoLista();
+    $oEscritoLista->setFiltro($filtro);
+    $num = $oEscritoLista->getNumero();
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
@@ -148,6 +162,8 @@ $filtro = 'enviar';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
+// ordenar:
+ksort($a_pills);
 
 $pagina_profile = web\Hash::link('apps/usuarios/controller/personal.php?'.http_build_query([]));
 $pagina_etiquetas = web\Hash::link('apps/etiquetas/controller/etiqueta_lista.php?'.http_build_query([]));

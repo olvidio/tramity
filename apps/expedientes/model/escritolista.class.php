@@ -8,6 +8,7 @@ use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
 use function core\is_true;
+use expedientes\model\entity\GestorEscritoDB;
 
 
 class EscritoLista {
@@ -181,9 +182,9 @@ class EscritoLista {
     
     public function getNumero() {
         $this->setCondicion();
-        $gesExpedientes = new GestorExpediente();
-        $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere,$this->aOperador);
-        $num = count($cExpedientes);
+        $gesEscritos = new GestorEscritoDB();
+        $cEscritos = $gesEscritos->getEscritosDB($this->aWhere,$this->aOperador);
+        $num = count($cEscritos);
     
         return $num;
     }

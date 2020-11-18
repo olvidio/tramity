@@ -6,8 +6,12 @@
 <table class="table table-sm table-bordered">
   <thead class="thead-light">
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">{{ "##"|trans }}</th>
+      {%  if a_expedientes[0].col_mod %}
+        <th scope="col">#</th>
+      {% endif %}
+      {%  if a_expedientes[0].col_ver %}
+        <th scope="col">{{ "##"|trans }}</th>
+      {% endif %}
       <th scope="col">{{ "fecha inicio"|trans }}</th>
       <th scope="col">{{ "estado"|trans }}</th>
       <th scope="col">{{ "tramite"|trans }}</th>
@@ -23,8 +27,12 @@
   <tbody>
   {% for row in a_expedientes %}
     <tr class="{{ row.class_row|raw }}">
-      <th scope="row">{{ row.link_mod|raw }}</th>
-      <td>{{ row.link_ver|raw }}</td>
+      {%  if row.col_mod %}
+        <th scope="row">{{ row.link_mod|raw }}</th>
+      {% endif %}
+      {%  if row.col_ver %}
+        <td>{{ row.link_ver|raw }}</td>
+      {% endif %}
       <td>{{ row.f_ini|raw }}</td>
       <td>{{ row.estado|raw }}</td>
       <td>{{ row.tramite|raw }}</td>

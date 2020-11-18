@@ -133,6 +133,19 @@ $url_update = 'apps/expedientes/controller/expediente_update.php';
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
 
+
+$add_del_txt = '';
+if ($Qfiltro == 'seg_reunion') {
+    $add_del = 'del';
+    // solo secretaria tiene permiso
+    if ($_SESSION['session_auth']['role_actual'] == 'secretaria') {
+        $add_del_txt = _("Quitar Firmas");
+    }
+} else {
+    $add_del = 'add';
+    $add_del_txt = _("Añadir Firmas");
+}
+
 $a_campos = [
     'id_expediente' => $Qid_expediente,
     //'oHash' => $oHash,
@@ -174,6 +187,8 @@ $a_campos = [
     'server' => $server,
     'aclaracion' => $aclaracion,
     'aclaracion_event' => $aclaracion_event,
+    'add_del' => $add_del,
+    'add_del_txt' => $add_del_txt,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

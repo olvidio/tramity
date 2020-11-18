@@ -55,11 +55,18 @@ class ExpedienteLista {
      */
     private $a_exp_respuesta = [];
     
+    /**
+     * 
+     * @var array
+     */
+    private $a_exp_reunion_falta_firma = [];
+    
     /*
      * filtros posibles: 
     'borrador'
     'firmar'
     'fijar_reunion'
+    'seg_reunion'
     'reunion'
     'circulando'
     'distribuir'
@@ -226,33 +233,6 @@ class ExpedienteLista {
                     
                     $a_expedientes[] = $id_expediente;
                 }
-                /*
-                // buscar los tramites y el correspondiente orden tramite para vºbº vcd
-                $a_exp_suma = [];
-                $gesTramiteCargo = new GestorTramiteCargo();
-                $cTamitesCargo = $gesTramiteCargo->getTramiteCargos(['id_cargo' => CARGO::CARGO_VB_VCD]);
-                foreach ($cTamitesCargo as $oTramiteCargo) {
-                    $id_tramite = $oTramiteCargo->getId_tramite();
-                    $orden_tramite = $oTramiteCargo->getOrden_tramite();
-                    // para cada tipo de tramite, mirar expdientes con firmas vacias y orden_tramite > $orden_tramite
-                    $gesFirmas = new GestorFirma();
-                    $aWhereF['id_cargo'] = ConfigGlobal::mi_id_cargo();
-                    $aWhereF['id_tramite'] = $id_tramite;
-                    $aWhereF['orden_tramite'] = $orden_tramite;
-                    $aWhereF['tipo'] = Firma::TIPO_VOTO;
-                    $aWhereF['valor'] = Firma::V_OK .','. Firma::V_NO;
-                    $aOperadorF['orden_tramite'] = '>';
-                    $aOperadorF['valor'] = 'NOT IN';
-                    $cFirmasTC = $gesFirmas->getFirmas($aWhereF, $aOperadorF);
-                    $a_exp = [];
-                    foreach ($cFirmasTC as $oFirma) {
-                        $id_expediente = $oFirma->getId_expediente();
-                        $orden_tramite = $oFirma->getOrden_tramite();
-                        $a_exp[] = $id_expediente;
-                    }
-                    $a_exp_suma = array_merge($a_exp_suma, $a_exp);
-                }
-                */
                 if (!empty($a_expedientes)) {
                     $aWhere['id_expediente'] = implode(',',$a_expedientes);
                     $aOperador['id_expediente'] = 'IN';
@@ -260,6 +240,16 @@ class ExpedienteLista {
                     // para que no salga nada pongo
                     $aWhere = [];
                 }
+                break;
+            case 'seg_reunion':
+                $aWhere['estado'] = Expediente::ESTADO_FIJAR_REUNION;
+                $aWhere['f_reunion'] = 'x';
+                $aOperador['f_reunion'] = 'IS NULL';
+                
+                //////// mirar los que falta alguna firma para marcarlos en color /////////
+                $gesFirmas = new GestorFirma();
+                $this->a_exp_reunion_falta_firma = $gesFirmas->faltaFirmarReunion();
+                
                 break;
             case 'circulando':
                 $aWhere['estado'] = Expediente::ESTADO_CIRCULANDO;
@@ -322,35 +312,58 @@ class ExpedienteLista {
         
         $txt_ver = '';
         $txt_mod = '';
+        $col_mod = 0;
+        $col_ver = 0;
         switch ($this->filtro) {
             case 'borrador_propio':
             case 'borrador_oficina':
                 $a_cosas = [ 'filtro' => $this->getFiltro() ];
                 $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_form.php';
+                $col_mod = 1;
+                $col_ver = 1;
                 break;
             case 'firmar':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                $col_mod = 1;
+                $col_ver = 1;
                 break;
             case 'fijar_reunion':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/fecha_reunion.php';
                 $txt_mod = _("fecha");
+                $col_mod = 1;
+                $col_ver = 1;
                 break;
             case 'reunion':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                $col_mod = 1;
+                $col_ver = 1;
+                break;
+            case 'seg_reunion':
+                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                $col_mod = 0;
+                $col_ver = 1;
                 break;
             case 'circulando':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                $col_mod = 1;
+                $col_ver = 1;
                 break;
             case 'distribuir':
             case 'acabados':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_distribuir.php';
+                $col_mod = 1;
+                $col_ver = 1;
                 break;
             case 'archivados':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                $col_mod = 1;
+                $col_ver = 1;
                 break;
             case 'copias':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                $col_mod = 1;
+                $col_ver = 1;
                 break;
             default:
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_form.php';
@@ -396,6 +409,13 @@ class ExpedienteLista {
                         $brespuesta = TRUE;
                     }
                 }
+                // reunion. faltan firmas:
+                $bfalta_firma = FALSE;
+                if ($this->filtro == 'seg_reunion') {
+                    if (in_array($id_expediente, $this->a_exp_reunion_falta_firma)) {
+                        $bfalta_firma = TRUE;
+                    }
+                }
 
                 $a_cosas = [ 'id_expediente' => $id_expediente,
                             'filtro' => $this->getFiltro(),
@@ -409,13 +429,17 @@ class ExpedienteLista {
                 $row['link_eliminar'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_exp_eliminar('$id_expediente');\" >"._("eliminar")."</span>";
                 $row['link_a_borrador'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_exp_a_borrador('$id_expediente');\" >"._("a borrador")."</span>";
                 
+                $row['class_row'] = '';
+                if ($bfalta_firma) {
+                    $row['class_row'] = 'bg-warning';
+                }
                 if ($baclaracion || $bpeticion) {
                     $row['class_row'] = 'bg-warning';
-                } elseif ($brespuesta) {
-                    $row['class_row'] = 'bg-success';
-                } else {
-                    $row['class_row'] = '';
                 }
+                if ($brespuesta) {
+                    $row['class_row'] = 'bg-success';
+                }
+                
                 $estado = $oExpediente->getEstado();
                 $row['estado'] = $a_estados[$estado];
                 if ($estado == Expediente::ESTADO_BORRADOR) {
@@ -444,6 +468,9 @@ class ExpedienteLista {
                 $row['f_aprobacion'] =  $oExpediente->getF_aprobacion()->getFromLocal();
                 $row['f_reunion'] =  $oExpediente->getF_reunion()->getFromLocal();
                 $row['f_contestar'] =  $oExpediente->getF_contestar()->getFromLocal();
+                
+                $row['col_mod'] = $col_mod;
+                $row['col_ver'] = $col_ver;
                 
                 // mirar si tienen escrito
                 //$row['f_escrito'] = $oExpediente->getF_documento()->getFromLocal();

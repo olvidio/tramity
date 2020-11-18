@@ -144,10 +144,14 @@
 </div>
 <hr>
 <div class="d-flex justify-content-center">
+{% if add_del == 'add' %}
 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#ModalFirma">
   {{ "Firmar"|trans }}
 </button>
-<button type="button" class="btn btn-outline-secondary" onClick="fnjs_ver_cargos(event);" >{{ "Añadir firmas"|trans }}</button>
+{%  endif %}
+{% if add_del_txt %}
+	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_ver_cargos(event,'{{ add_del }}');" >{{ add_del_txt }}</button>
+{%  endif %}
 </div>
 <div id="of" class="d-flex row round m-3 border rounded">
 </div>
@@ -182,11 +186,18 @@
 
 {{ include ('_antecedentes_js.html.twig') }}
 <script type="text/javascript">
-fnjs_ver_cargos=function(event) {
+fnjs_ver_cargos=function(event,add_del) {
+	if (add_del=='add') {
 	// consultar que oficinas no estan en el recorrido
+		que='lst_cargos_libres';
+	} 
+	if (add_del=='del') {
+	// consultar que oficinas no estan en el recorrido
+		que='lst_falta_firma';
+	} 
 	var id_expediente=$('#id_expediente').val();
     var url_ajax = 'apps/tramites/controller/firma_ajax.php';
-    var param_json = { que: 'lst_cargos_libres', id_expediente: id_expediente };
+    var param_json = { que: que, id_expediente: id_expediente };
     request=$.ajax({
         data: param_json,
         url: url_ajax,
@@ -205,7 +216,7 @@ fnjs_ver_cargos=function(event) {
             	html+='<label class="custom-control-label" for="'+obj.id+'">'+obj.sigla+'</label>';
             	html+='</div>';
 			});
-			html+='<button class="ml-auto btn btn-secondary btn-sm" onClick="fnjs_add_cargos(event);" >';
+			html+='<button class="ml-auto btn btn-secondary btn-sm" onClick="fnjs_add_cargos(event,\''+add_del+'\');" >';
     		html+='{{ "ok"|trans }}';
             html+='</button>';
           	$("#of").html(html);
@@ -214,7 +225,7 @@ fnjs_ver_cargos=function(event) {
 		
 }
 
-fnjs_add_cargos=function(event) {
+fnjs_add_cargos=function(event,add_del) {
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -225,7 +236,7 @@ fnjs_add_cargos=function(event) {
 	if (selected) {
 		var id_expediente=$('#id_expediente').val();
 		var url_ajax = 'apps/tramites/controller/firma_ajax.php';
-		var param_json = { que: 'add', id_expediente: id_expediente, a_cargos: selected };
+		var param_json = { que: add_del, id_expediente: id_expediente, a_cargos: selected };
 	    request=$.ajax({
 	        data: param_json,
 	        url: url_ajax,

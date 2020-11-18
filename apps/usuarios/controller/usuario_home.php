@@ -96,23 +96,35 @@ $filtro = 'circulando';
 $a_pills[$num_orden] = $pill;
 
 // acabados = 6;
-$filtro = 'acabados';
+$filtro = 'seg_reunion';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
     $num_orden = 6;
+    $text = _("reunion día");
+    $oExpedienteLista->setFiltro($filtro);
+    $num = $oExpedienteLista->getNumero();
+    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+$a_pills[$num_orden] = $pill;
+
+// acabados = 7;
+$filtro = 'acabados';
+    $active = ($filtro == $Qfiltro)? 'active' : '';
+    $aQuery = [ 'filtro' => $filtro ];
+    $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
+    $num_orden = 7;
     $text = _("acabados");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// archivados = 7;
+// archivados = 8;
 $filtro = 'archivados';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 7;
+    $num_orden = 8;
     $text = _("archivados");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
@@ -120,12 +132,12 @@ $filtro = 'archivados';
 $a_pills[$num_orden] = $pill;
 
 
-// copias = 8;
+// copias = 9;
 $filtro = 'copias';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 8;
+    $num_orden = 9;
     $text = _("copias");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
@@ -134,12 +146,12 @@ $a_pills[$num_orden] = $pill;
 
 
 // Entradas:
-// entradas = 9;
+// entradas = 10;
 $filtro = 'entrada';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-    $num_orden = 9;
+    $num_orden = 10;
     $text = _("entradas");
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
@@ -152,6 +164,9 @@ $a_pills[$num_orden] = $pill;
 // permanentes = 11;
 // avisos = 12;
 // pendientes = 13;
+
+// ordenar:
+ksort($a_pills);
 
 $pagina_profile = web\Hash::link('apps/usuarios/controller/personal.php?'.http_build_query([]));
 $pagina_etiquetas = web\Hash::link('apps/etiquetas/controller/etiqueta_lista.php?'.http_build_query([]));

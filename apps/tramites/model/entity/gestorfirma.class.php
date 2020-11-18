@@ -1,6 +1,7 @@
 <?php
 namespace tramites\model\entity;
 use core\ConfigGlobal;
+use expedientes\model\Expediente;
 use core;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
@@ -37,6 +38,89 @@ class GestorFirma Extends core\ClaseGestor {
 
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
+	
+	/**
+	 * devuelve un array con los id cargos que faltan por firmar el expediente para la reunión.
+	 * 
+	 * @return array 
+	 */
+	public function faltaFirmarReunionExpediente($id_expediente) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    $estado = Expediente::ESTADO_FIJAR_REUNION;
+	    //orden_tramite para las firmas de reunion (corresponde a 'todos_d' del tramite);
+	    $oExpediente = new Expediente($id_expediente);
+	    $id_tramite = $oExpediente->getId_tramite();
+	    $gesTramiteCargo = new GestorTramiteCargo();
+	    $cTramiteCargo = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $id_tramite, 'id_cargo' => Cargo::CARGO_TODOS_DIR]);
+	    if (!empty($cTramiteCargo)) {
+    	    $orden_tramite = $cTramiteCargo[0]->getOrden_tramite();
+	    } else {
+	        return FALSE;
+	    }
+	    
+	    $tipo_voto = FIRMA::TIPO_VOTO;
+	    $valor_ok = Firma::V_OK;
+	    $valor_no = Firma::V_NO;
+	    
+	    $sQuery = "SELECT f.*
+                    FROM $nom_tabla f JOIN expedientes e USING (id_expediente)
+                    WHERE e.id_expediente = $id_expediente AND e.estado = $estado AND e.f_reunion IS NULL
+                        AND f.orden_tramite = $orden_tramite
+                        AND f.tipo = $tipo_voto
+                        AND (f.valor IS NULL OR (f.valor != $valor_ok AND f.valor != $valor_no))
+                    ";
+	    if ($oDbl->query($sQuery) === FALSE) {
+	        $sClauError = 'GestorFirma.query';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+        $a_exp_faltan_firmas = [];
+	    foreach ($oDbl->query($sQuery) as $aFirma) {
+            if (empty($aFirma)) {
+                return FALSE;
+            }
+            $a_exp_faltan_firmas[] = $aFirma['id_cargo'];
+	    }
+	    return $a_exp_faltan_firmas;
+	}
+	/**
+	 * devuelve un array con el id_expediente de los que faltan firmas para la reunión.
+	 * 
+	 * @return array $a_exp_faltan_firmas
+	 */
+	public function faltaFirmarReunion() {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    $estado = Expediente::ESTADO_FIJAR_REUNION;
+	    $cargo_tipo = CArgo::CARGO_TODOS_DIR;
+	    $tipo_voto = FIRMA::TIPO_VOTO;
+	    $valor_ok = Firma::V_OK;
+	    $valor_no = Firma::V_NO;
+	    
+	    $sQuery = "SELECT DISTINCT f.id_expediente
+                    FROM $nom_tabla f JOIN expedientes e USING (id_expediente)
+                    WHERE e.estado = $estado AND e.f_reunion IS NULL
+                        AND f.cargo_tipo = $cargo_tipo
+                        AND f.tipo = $tipo_voto
+                        AND (f.valor IS NULL OR (f.valor != $valor_ok AND f.valor != $valor_no))
+                    ";
+	    if ($oDbl->query($sQuery) === FALSE) {
+	        $sClauError = 'GestorFirma.query';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+        $a_exp_faltan_firmas = [];
+	    foreach ($oDbl->query($sQuery) as $aFirma) {
+            if (empty($aFirma)) {
+                return FALSE;
+            }
+            $a_exp_faltan_firmas[] = $aFirma['id_expediente'];
+	    }
+	    return $a_exp_faltan_firmas;
+	}
 	
 	/**
 	 * devuelve el orden_tramite para el cargo tipo ultimo firmado con ok,no
