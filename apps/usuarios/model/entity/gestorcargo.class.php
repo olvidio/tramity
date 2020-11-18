@@ -71,7 +71,7 @@ class GestorCargo Extends core\ClaseGestor {
 	 * retorna un Array
 	 * Els posibles cargos
 	 *
-	 * @param boolean $conOficina default=TRUE: sólo las que tienen ofocona. FALSE: todas.
+	 * @param boolean $conOficina default=TRUE: sólo las que tienen oficina. FALSE: todas.
 	 * @return Array
 	 */
 	function getArrayCargos($conOficina=TRUE) {

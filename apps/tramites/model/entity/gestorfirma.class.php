@@ -156,6 +156,11 @@ class GestorFirma Extends core\ClaseGestor {
 	}
 	
 	public function getRecorrido($id_expediente) {
+	    // cabio el nombre para los tipo_cargo:
+	    $a_cargos_especicales[] = Cargo::CARGO_DISTRIBUIR;
+	    $a_cargos_especicales[] = Cargo::CARGO_VB_VCD;
+	    $a_cargos_especicales[] = Cargo::CARGO_REUNION;
+	    
 	    $gesCargos = new GestorCargo();
 	    $aCargos =$gesCargos->getArrayCargos(FALSE);
 	    $aWhere = ['id_expediente' => $id_expediente,
@@ -166,7 +171,6 @@ class GestorFirma Extends core\ClaseGestor {
 	    $a_recorrido = [];
 	    $oFirma = new Firma();
 	    $a_valores = $oFirma->getArrayValor('all');
-        $flag = 0; // Para evitar marcar como visto a más de uno.
 	    foreach ($cFirmas as $oFirma) {
 	        $a_rec = [];
 	        $tipo = $oFirma->getTipo();
@@ -177,8 +181,13 @@ class GestorFirma Extends core\ClaseGestor {
 	        $oUsuario = new Usuario($id_usuario);
 	        $nom_usuario = $oUsuario->getNom_usuario();
 	        $id_cargo = $oFirma->getId_cargo();
-	        $cargo = $aCargos[$id_cargo];
-	        if (!empty($valor)) {
+	        $cargo_tipo = $oFirma->getCargo_tipo();
+	        if (in_array($cargo_tipo, $a_cargos_especicales)) {
+    	        $cargo = $aCargos[$cargo_tipo];
+	        } else {
+                $cargo = $aCargos[$id_cargo];
+	        }
+	        if (!empty($valor) && ($valor != Firma::V_VISTO)) {
 	            $voto = $a_valores[$valor];
 	            $observ = $oFirma->getObserv();
 	            $observ_ponente = $oFirma->getObserv_creador();
@@ -214,13 +223,19 @@ class GestorFirma Extends core\ClaseGestor {
 	            if ($tipo == Firma::TIPO_VOTO) {
 	                $a_rec['class'] = "";
 	                $a_rec['valor'] = $cargo;
-	                $a_recorrido[] = $a_rec;
 	                // lo marco como visto (sólo el mio). Si hay más de uno sólo debería ser el primero vacío
-	                if ($flag == 0 && $id_cargo == ConfigGlobal::mi_id_cargo()) {
-	                    $flag = 1;
-	                    $oFirma->setValor(Firma::V_VISTO);
-	                    $oFirma->DBGuardar();
+	                if ($id_cargo == ConfigGlobal::mi_id_cargo()) {
+	                    $orden_tramite_ref = $oFirma->getOrden_tramite();
+	                    // sólo el siguiente en orden tramite si estan todos completos.
+                    	if ($this->getAnteriorOK($id_expediente,$orden_tramite_ref)) {
+	                       $oFirma->setValor(Firma::V_VISTO);
+	                       $oFirma->DBGuardar();
+	                    
+	                       $a_rec['class'] = "list-group-item-info";
+                    	   $a_rec['valor'] = "$f_valor $cargo($nom_usuario) [$voto]";
+                    	}
 	                }
+	                $a_recorrido[] = $a_rec;
 	            }
 	        }
 	    }
