@@ -141,6 +141,12 @@ class EscritoLista {
                 }
                 $prot_local_txt = $oProtLocal->ver_txt();
             }
+            // Tiene adjuntos?
+            $adjuntos = '';
+            $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
+            if (!empty($a_id_adjuntos)) {
+                $adjuntos = '<i class="fas fa-paperclip fa-fw"></i>';
+            }
             
             $json_ref = $oEscrito->getJson_prot_ref();
             $oArrayProtRef = new ProtocoloArray($json_ref,'','');
@@ -155,6 +161,7 @@ class EscritoLista {
             $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
             $a_accion['categoria'] = '';
             $a_accion['asunto'] = $oEscrito->getAsunto();
+            $a_accion['adjuntos'] = $adjuntos;
             
             $a_acciones[] = $a_accion;
         }

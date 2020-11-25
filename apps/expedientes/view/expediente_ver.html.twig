@@ -82,7 +82,7 @@
     </div>
 	<div class="d-inline-flex float-right">
         <div class="p-2 bg-warning" >
-    	{{ prioridad_txt }}
+    	 {{ "Prioridad"|trans }}: {{ prioridad_txt }}
     	</div>
     </div>
 </div>
@@ -101,7 +101,7 @@
     </div>
 	<div class="d-inline-flex float-right">
         <div class="p-2 bg-warning" >
-        	{{ "contestar"|trans }}: {{ f_contestar }}
+        	{{ "resolver"|trans }}: {{ f_contestar }}
     	</div>
     </div>
 </div>
@@ -120,8 +120,11 @@
 <!--  Col Izda -->
 <div class="col-9" >
   <!--  --------------- ENTRADILLA --------------- -->
+  <div class="col-1">
+  	{{ "Entradilla"|trans }}:
+  </div>
   <div class="alert alert-primary">
-    {{ entradilla }}
+    {{ entradilla|raw }}
   </div>
   <!--  --------------- COMENTARIOS --------------- -->
   <div class="alert bg-light">

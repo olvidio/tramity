@@ -81,19 +81,24 @@ $a_recorrido = $aRecorrido['recorrido'];
 $comentarios = $aRecorrido['comentarios'];
 
 // Etiquetas
+$ver_etiquetas = FALSE;
 $etiquetas = ''; // No hay ninguna porque en archivar es cuando se añaden.
-$gesEtiquetas = new GestorEtiqueta();
-$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
-$a_posibles_etiquetas = [];
-foreach ($cEtiquetas as $oEtiqueta) {
-    $id_etiqueta = $oEtiqueta->getId_etiqueta();
-    $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
-    $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+if ($_SESSION['session_auth']['role_actual'] != 'secretaria') {
+    $gesEtiquetas = new GestorEtiqueta();
+    $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+    $a_posibles_etiquetas = [];
+    foreach ($cEtiquetas as $oEtiqueta) {
+        $id_etiqueta = $oEtiqueta->getId_etiqueta();
+        $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+        $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+    }
+    $oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
+    $oArrayDesplEtiquetas ->setBlanco('t');
+    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas(event)');
+    $ver_etiquetas = TRUE;
+} else {
+    $oArrayDesplEtiquetas = new web\DesplegableArray('','','etiquetas');
 }
-$oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
-$oArrayDesplEtiquetas ->setBlanco('t');
-$oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas(event)');
-
 
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
@@ -133,6 +138,7 @@ $a_campos = [
     'firltro' => $Qfiltro,
     'btn_action' => $btn_action,
     'txt_btn_success' => $txt_btn_success,
+    'ver_etiquetas' => $ver_etiquetas,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

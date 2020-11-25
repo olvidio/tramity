@@ -101,6 +101,7 @@
   </div> 
   
 <!--  --------------- Etiquetas --------------- -->
+{% if ver_etiquetas %}
   <div id="div_etiquetas" class="form-group row">
     <label for="etiquetas" class="col-sd-2">{{ "Etiquetas"|trans }}:</label>
     <div class="col-6">
@@ -109,9 +110,7 @@
       </span>
     </div>
   </div>
-  
-  
-  
+ {% endif %}
   
   <!--  --------------------  BOTONES --------------------------  -->
   <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >

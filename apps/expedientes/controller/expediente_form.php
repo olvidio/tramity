@@ -109,6 +109,9 @@ if ($Qid_expediente) {
     $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Qid_expediente, '_ordre' => 'tipo_accion']);
     $a_acciones = [];
     
+    $oEscrito = new Escrito();
+    $aAcciones = $oEscrito->getArrayAccion();
+    
     $gesGrupos = new GestorGrupo();
     $a_grupos = $gesGrupos->getArrayGrupos();
     $oProtDestino = new Protocolo();
@@ -116,6 +119,7 @@ if ($Qid_expediente) {
     foreach ($cAcciones as $oAccion) {
         $id_escrito = $oAccion->getId_escrito();
         $tipo_accion = $oAccion->getTipo_accion();
+        $txt_tipo = $aAcciones[$tipo_accion];
         
         $oEscrito = new Escrito($id_escrito);
         
@@ -145,7 +149,7 @@ if ($Qid_expediente) {
         $a_accion['protocolo'] = $dst_txt;
         $a_accion['link_ver'] = 'v';
         $a_accion['referencias'] = '';
-        $a_accion['tipo'] = '';
+        $a_accion['tipo'] = $txt_tipo;
         $a_accion['asunto'] = $oEscrito->getAsunto();
             
         $a_acciones[] = $a_accion;

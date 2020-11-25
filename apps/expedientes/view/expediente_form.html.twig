@@ -85,7 +85,7 @@
     <div class="col-2" >
     	{{ oDesplPrioridad.desplegable|raw }}
     </div>
-    <label for="f_contestar" class="col col-3 col-form-label text-right">{{ "contestar antes de"|trans }}:</label>
+    <label for="f_contestar" class="col col-3 col-form-label text-right">{{ "resolver antes de"|trans }}:</label>
     <div class='col-3 date datepicker' data-provide="datepicker">
       <input tabindex='41' name='f_contestar' id='f_contestar' type='text' class="form-control" value="{{ f_contestar }}" />
     </div>
@@ -143,14 +143,14 @@
   <!--  --------------- ACCIONES --------------- -->
   
 {% if id_expediente %}
-    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_escrito|raw }}');">
-        {{ "nuevo escrito"|trans }}
-    </button>
     <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_propuesta|raw }}');">
         {{ "nueva propuesta"|trans }}
     </button>
     <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_plantilla|raw }}');">
-        {{ "nueva plantilla"|trans }}
+        {{ "plantilla"|trans }}
+    </button>
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_escrito|raw }}');">
+        {{ "nuevo escrito"|trans }}
     </button>
     <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_respuesta|raw }}');">
         {{ "contestar entrada"|trans }}
@@ -229,9 +229,11 @@
   <button tabindex='90' class="btn btn-primary" onKeyUp="fnjs_guardar(event);" onClick="fnjs_guardar(event);" >
     {{ "Guardar"|trans }}
   </button>
-  <button tabindex='90' class="btn btn-success" onClick="fnjs_circular(event);" >
-    {{ "Circular"|trans }}
-  </button>
+  {% if id_expediente %}
+      <button tabindex='90' class="btn btn-success" onClick="fnjs_circular(event);" >
+        {{ "Circular"|trans }}
+      </button>
+  {% endif %}
 </form>
 
 

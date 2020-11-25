@@ -231,6 +231,7 @@ class GestorFirma Extends core\ClaseGestor {
 	                       $oFirma->setValor(Firma::V_VISTO);
 	                       $oFirma->DBGuardar();
 	                    
+                           $voto = $a_valores[Firma::V_VISTO];
 	                       $a_rec['class'] = "list-group-item-info";
                     	   $a_rec['valor'] = "$f_valor $cargo($nom_usuario) [$voto]";
                     	}

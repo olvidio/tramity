@@ -1,9 +1,9 @@
 <?php
 use core\ViewTwig;
 use entradas\model\Entrada;
-use expedientes\model\Expediente;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\GestorCargo;
+use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
 
@@ -174,6 +174,10 @@ if (!empty($Qid_entrada)) {
     $oArrayDesplFirmas = new web\DesplegableArray('',$a_posibles_cargos,'oficinas');
     $oArrayDesplFirmas ->setBlanco('t');
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas(event)');
+}
+if (empty($f_entrada)) {
+    $oHoy = new DateTimeLocal();
+    $f_entrada = $oHoy->getFromLocal();
 }
 
 

@@ -62,12 +62,20 @@ $id_tramite = $oExpediente->getId_tramite();
 $oTramite = new Tramite($id_tramite);
 $tramite_txt = $oTramite->getTramite();
 
+$estado = $oExpediente->getEstado();
+$a_estado = $oExpediente->getArrayEstado();
+$estado_txt = $a_estado[$estado];
+
 // Valores posibles para la firma
 $oFirma = new Firma();
 $a_firmas = [];
 $rango = 'voto';
 if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
-    $rango = 'vcd';
+    if ($estado == Expediente::ESTADO_CIRCULANDO){
+        $rango = 'vb_vcd';
+    } else {
+        $rango = 'vcd';
+    }
 }
 foreach ($oFirma->getArrayValor($rango) as $key => $valor) {
     $a_voto['id'] = $key;
@@ -75,10 +83,6 @@ foreach ($oFirma->getArrayValor($rango) as $key => $valor) {
     $a_firmas[] = $a_voto;
 }
     
-$estado = $oExpediente->getEstado();
-$a_estado = $oExpediente->getArrayEstado();
-$estado_txt = $a_estado[$estado];
-
 $prioridad = $oExpediente->getPrioridad();
 $a_prioridad = $oExpediente->getArrayPrioridad();
 $prioridad_txt = $a_prioridad[$prioridad];

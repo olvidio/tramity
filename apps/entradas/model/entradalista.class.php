@@ -94,6 +94,7 @@ class EntradaLista {
                 break;
             default:
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query([]));
         }
         $pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
         

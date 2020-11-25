@@ -218,13 +218,22 @@ class Firma Extends core\ClasePropiedades {
 	            self::V_ESPERA => _("espera"),
 	            ];
 	            break;
+	        case 'vb_vcd':
+	            $a_tipos = [
+	            self::V_NO => _("no"),
+	            self::V_VISTO => _("visto"),
+	            self::V_ESPERA => _("espera"),
+	            self::V_VISTO_BUENO => _("VºBº"),
+	            self::V_DILATA => _("dilata"),
+	            self::V_RECHAZADO => _("rechazado"),
+	            ];
+	            break;
 	        case 'vcd':
 	            $a_tipos = [
 	            self::V_OK => _("ok"),
 	            self::V_NO => _("no"),
 	            self::V_VISTO => _("visto"),
 	            self::V_ESPERA => _("espera"),
-	            self::V_VISTO_BUENO => _("VºBº"),
 	            self::V_DILATA => _("dilata"),
 	            self::V_RECHAZADO => _("rechazado"),
 	            ];
