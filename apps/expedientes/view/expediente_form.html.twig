@@ -163,6 +163,7 @@
           <th scope="col">asunto</th>
           <th scope="col">destino</th>
           <th scope="col">tipo</th>
+          <th scope="col">adj.</th>
         </tr>
       </thead>
       <tbody>
@@ -173,6 +174,7 @@
           <td>{{ row.asunto }}</td>
           <td>{{ row.protocolo|raw }}</td>
           <td>{{ row.tipo }}</td>
+          <td>{{ row.adjuntos|raw }}</td>
         </tr>
         {% endfor %}
       </tbody>

@@ -131,9 +131,9 @@
     {% endif %}
     <hr>
     <div class="form-group">
-        <label for="input-adjunto">Adjuntos</label>
+        <label for="entrada-adjunto">Adjuntos</label>
         <div class="file-loading">
-            <input id="input-adjunto" name="adjuntos[]" type="file" multiple>
+            <input id="entrada-adjunto" name="adjuntos[]" type="file" multiple>
         </div>
     </div>
 {% else %}
@@ -156,28 +156,31 @@
 {{ include ('_entrada_escritos_js.html.twig') }}
 <script>
 $(document).ready(function() {
-	var el1 = $("#input-adjunto");
+	var el1 = $("#entrada-adjunto");
 	el1.fileinput({
     	theme: "explorer-fas",
         uploadUrl: "apps/entradas/controller/upload.php",
-        showUpload: false,
         dropZoneEnabled: true,
         dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans }}",
         browseOnZoneClick: true,
         dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans }}",
         maxFileCount: 5,
+        showUpload: false, // upload button
         showBrowse: true,
+        showRemove: false,
+        showClose: false,
         allowedPreviewTypes: false,
         hideThumbnailContent: true,
         // this is where the magic happens
-        uploadAsync: true,
-        uploadExtraData:{ que: 'upload_adjunto', id_entrada: '{{ id_entrada }}' },
+        uploadAsync: false,
+        uploadExtraData:{ que: "upload_adjunto", id_entrada: "{{ id_entrada }}" },
         removeFromPreviewOnError: true,
         overwriteInitial: false,
         initialPreviewAsData: false,
      	initialPreview: [ {{ initialPreview|raw }} ],
         initialPreviewConfig: {{ json_config|raw }},
-        initialPreviewDownloadUrl: 'apps/entradas/controller/download.php',
+        initialPreviewDownloadUrl: "apps/entradas/controller/download.php",
+        fileActionSettings: {showZoom: false, showDrag: false},
     }).on("filebatchselected", function(event, files) {
         el1.fileinput("upload");
     });

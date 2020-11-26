@@ -122,9 +122,9 @@
     {% endif %}
     <hr>
     <div class="form-group">
-        <label for="input-adjunto">Adjuntos</label>
+        <label for="escrito_adjunto">Adjuntos</label>
         <div class="file-loading">
-            <input id="input-adjunto" name="adjuntos[]" type="file" multiple>
+            <input id="escrito_adjunto" name="adjuntos[]" type="file" multiple>
         </div>
     </div>
 {% else %}
@@ -146,7 +146,7 @@
 <div id="prova">
 </div>
 </div>
-
+        
 {{ include ('_escrito_form_js.html.twig') }}
 {{ include ('_escritos_js.html.twig') }}
 <script>
@@ -162,30 +162,34 @@ fnjs_grupo=function() {
 }
 
 $(document).ready(function() {
-	fnjs_grupo();
-	var el1 = $("#input-adjunto");
+	//fnjs_grupo();
+	var el1 = $("#escrito_adjunto");
 	el1.fileinput({
     	theme: "explorer-fas",
         uploadUrl: "apps/expedientes/controller/adjunto_upload.php",
-        showUpload: false,
         dropZoneEnabled: true,
         dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans }}",
         browseOnZoneClick: true,
         dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans }}",
         maxFileCount: 5,
+        showUpload: false, // upload button
         showBrowse: true,
+        showRemove: false,
+        showClose: false,
         allowedPreviewTypes: false,
         hideThumbnailContent: true,
         // this is where the magic happens
-        uploadAsync: true,
-        uploadExtraData:{ que: 'upload_adjunto', id_escrito: '{{ id_escrito }}' },
+        uploadAsync: false,
+        uploadExtraData: { que: "upload_adjunto", id_escrito: "{{ id_escrito }}" },
         removeFromPreviewOnError: true,
         overwriteInitial: false,
         initialPreviewAsData: false,
      	initialPreview: [ {{ initialPreview|raw }} ],
         initialPreviewConfig: {{ json_config|raw }},
-        initialPreviewDownloadUrl: 'apps/expedientes/controller/adjunto_download.php',
-    }).on("filebatchselected", function(event, files) {
+        initialPreviewDownloadUrl: "apps/expedientes/controller/adjunto_download.php",
+        fileActionSettings: {showZoom: false, showDrag: false},
+    });
+	el1.on("filebatchselected", function(event, files) {
         el1.fileinput("upload");
     });
 });

@@ -145,12 +145,19 @@ if ($Qid_expediente) {
             $oArrayProtDestino = new web\ProtocoloArray($json_prot_destino,'','destinos');
             $dst_txt = $oArrayProtDestino->ListaTxtBr();
         }
+        // Tiene adjuntos?
+        $adjuntos = '';
+        $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
+        if (!empty($a_id_adjuntos)) {
+            $adjuntos = '<i class="fas fa-paperclip fa-fw"></i>';
+        }
         
         $a_accion['protocolo'] = $dst_txt;
         $a_accion['link_ver'] = 'v';
         $a_accion['referencias'] = '';
         $a_accion['tipo'] = $txt_tipo;
         $a_accion['asunto'] = $oEscrito->getAsunto();
+        $a_accion['adjuntos'] = $adjuntos;
             
         $a_acciones[] = $a_accion;
     }
