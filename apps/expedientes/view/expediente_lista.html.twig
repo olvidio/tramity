@@ -16,11 +16,18 @@
       <th scope="col">{{ "estado"|trans }}</th>
       <th scope="col">{{ "tramite"|trans }}</th>
       <th scope="col">{{ "asunto"|trans }}</th>
-      <th scope="col">{{ "ponente"|trans }}</th>
-      
-      <th scope="col">{{ "fecha aprobación"|trans }}</th>
-      <th scope="col">{{ "fecha reunión"|trans }}</th>
+      <th scope="col">{{ "oficinas"|trans }}</th>
       <th scope="col">{{ "fecha resolver"|trans }}</th>
+      {% if presentacion == 3 or presentacion == 4 %}
+          <th scope="col">{{ "fecha reunión"|trans }}</th>
+      {% endif %}
+      {% if presentacion == 2 or presentacion == 4 %}
+          <th scope="col">{{ "fecha aprobación"|trans }}</th>
+      {% endif %}
+          <th scope="col">{{ "contenido"|trans }}</th>
+      {% if presentacion != 1 %}
+          <th scope="col">{{ "etiquetas"|trans }}</th>
+      {% endif %}
       <th></th>
     </tr>
   </thead>
@@ -37,11 +44,19 @@
       <td>{{ row.estado|raw }}</td>
       <td>{{ row.tramite|raw }}</td>
       <td>{{ row.asunto|raw }}</td>
-      <td>{{ row.ponente|raw }}</td>
-      
-      <td>{{ row.f_aprobacion|raw }}</td>
-      <td>{{ row.f_reunion|raw }}</td>
+      <td>{{ row.oficinas|raw }}</td>
       <td>{{ row.f_contestar|raw }}</td>
+      {% if presentacion == 3 or presentacion == 4 %}
+          <td>{{ row.f_reunion|raw }}</td>
+      {% endif %}
+      {% if presentacion == 2 or presentacion == 4 %}
+          <td>{{ row.f_aprobacion|raw }}</td>
+      {% endif %}
+          <td>{{ row.contenido|raw }}</td>
+      {% if presentacion != 1 %}
+          <td>{{ row.etiquetas|raw }}</td>
+      {% endif %}
+      
       {%  if row.eliminar %}
           <td>{{ row.link_eliminar|raw }}</td>
       {% endif %}

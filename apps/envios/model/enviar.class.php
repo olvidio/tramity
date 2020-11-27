@@ -256,7 +256,6 @@ class Enviar {
             }
             if (empty($aDestinos)) {
                 $err_mail = _("No hay destinos para este escrito").':<br>'.$filename;
-                
             } else {
                 $err_mail = empty($err_mail)? '' : _("mail no válido para").':<br>'.$err_mail;
             }

@@ -95,6 +95,62 @@ class Expediente Extends expedienteDB {
     
     /* METODES PUBLICS ----------------------------------------------------------*/
 
+    public function getContenido() {
+        $str_contenido = '';
+        $separador = '; ';
+        // antecedentes:
+        $antecedentes_db = $this->getJson_antecedentes(TRUE);
+        if (!empty($antecedentes_db)) {
+            $a_antecedentes = $antecedentes_db;
+        } else {
+            $a_antecedentes = [];
+        }
+        $a = count($a_antecedentes);
+        if ($a > 0) {
+            $str_contenido .= empty($str_contenido)? '' : $separador;
+            $str_contenido .= "A($a)";
+        }
+        // acciones: propuestas, escritos.
+        $gesAcciones = new GestorAccion();
+        $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $this->iid_expediente]);
+        $e = 0;
+        $p = 0;
+        foreach ($cAcciones as $oAccion) {
+            /* Accion
+            const ACCION_PROPUESTA  = 1;
+            const ACCION_ESCRITO    = 2;
+            const ACCION_PLANTILLA  = 3;
+            */
+            $tipo_accion = $oAccion->getTipo_accion();
+            if ($tipo_accion == Escrito::ACCION_ESCRITO) {
+                $e++;
+            }
+            if ($tipo_accion == Escrito::ACCION_PROPUESTA) {
+                $p++;
+            }
+        }
+        if ($e > 0) {
+            $str_contenido .= empty($str_contenido)? '' : $separador;
+            $str_contenido .= "E($e)";
+        }
+        if ($p > 0) {
+            $str_contenido .= empty($str_contenido)? '' : $separador;
+            $str_contenido .= "P($p)";
+        }
+        
+        return $str_contenido;
+    }
+    
+    public function getEtiquetasVisiblesTxt($id_cargo='') {
+        $cEtiquetas = $this->getEtiquetasVisibles($id_cargo);
+        $str_etiquetas = '';
+        foreach ($cEtiquetas as $oEtiqueta) {
+            $str_etiquetas .= empty($str_etiquetas)? '' : ', ';
+            $str_etiquetas .= $oEtiqueta->getNom_etiqueta();
+        }
+        return $str_etiquetas;
+    }
+    
     public function getEtiquetasVisibles($id_cargo='') {
         if (empty($id_cargo)) {
             $id_cargo = ConfigGlobal::mi_id_cargo();
@@ -204,7 +260,7 @@ class Expediente Extends expedienteDB {
     }
     
     public function delAntecedente($json_antecedente) {
-        // obtener los antecedentes actuales:
+// obtener los antecedentes actuales:
         $antecedentes_db = $this->getJson_antecedentes(TRUE);
         if (!empty($antecedentes_db)) {
             $a_antecedentes = $antecedentes_db;

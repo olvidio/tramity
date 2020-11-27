@@ -152,6 +152,7 @@ $filtro = 'bypass';
 $a_pills[$num_orden] = $pill;
 
 // Enviar
+/*
 $filtro = 'enviar';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -161,6 +162,7 @@ $filtro = 'enviar';
     $num = 'x5';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
+*/
 
 // ordenar:
 ksort($a_pills);

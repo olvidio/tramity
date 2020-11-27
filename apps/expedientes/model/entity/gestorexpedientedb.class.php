@@ -1,5 +1,6 @@
 <?php
 namespace expedientes\model\entity;
+use expedientes\model\Expediente;
 use core;
 /**
  * GestorExpedienteDB
@@ -101,7 +102,7 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 	 * @param array aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
 	 * @return array Una col·lecció d'objectes de tipus ExpedienteDB
 	 */
-	function getExpedientesDB($aWhere=array(),$aOperators=array()) {
+	function getExpedientesDB($aWhere=array(),$aOperators=array(),$parent=FALSE) {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
 		$oExpedienteDBSet = new core\Set();
@@ -138,7 +139,11 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 		}
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_expediente' => $aDades['id_expediente']);
-			$oExpedienteDB = new ExpedienteDB($a_pkey);
+			if ($parent) {
+                $oExpedienteDB = new Expediente($a_pkey);
+			} else {
+                $oExpedienteDB = new ExpedienteDB($a_pkey);
+			}
 			$oExpedienteDB->setAllAtributes($aDades);
 			$oExpedienteDBSet->add($oExpedienteDB);
 		}

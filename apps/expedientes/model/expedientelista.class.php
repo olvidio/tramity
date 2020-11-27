@@ -314,6 +314,7 @@ class ExpedienteLista {
         $txt_mod = '';
         $col_mod = 0;
         $col_ver = 0;
+        $presentacion = 0;
         switch ($this->filtro) {
             case 'borrador_propio':
             case 'borrador_oficina':
@@ -322,48 +323,57 @@ class ExpedienteLista {
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_form.php';
                 $col_mod = 1;
                 $col_ver = 1;
+                $presentacion = 1;
                 break;
             case 'firmar':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 $col_mod = 1;
                 $col_ver = 1;
+                $presentacion = 1;
                 break;
             case 'fijar_reunion':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/fecha_reunion.php';
                 $txt_mod = _("fecha");
                 $col_mod = 1;
                 $col_ver = 1;
+                $presentacion = 1;
                 break;
             case 'reunion':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 $col_mod = 1;
                 $col_ver = 1;
+                $presentacion = 3;
                 break;
             case 'seg_reunion':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 $col_mod = 0;
                 $col_ver = 1;
+                $presentacion = 3;
                 break;
             case 'circulando':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 $col_mod = 1;
                 $col_ver = 1;
+                $presentacion = 1;
                 break;
             case 'distribuir':
             case 'acabados':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_distribuir.php';
                 $col_mod = 1;
                 $col_ver = 1;
+                $presentacion = 4;
                 break;
             case 'archivados':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 $col_mod = 1;
                 $col_ver = 1;
+                $presentacion = 2;
                 break;
             case 'copias':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 $col_mod = 1;
                 $col_ver = 1;
+                $presentacion = 2;
                 break;
             default:
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_form.php';
@@ -463,7 +473,18 @@ class ExpedienteLista {
                 
                 $row['entradilla'] = $oExpediente->getEntradilla();
                 
-                $row['ponente'] = $a_posibles_cargos[$id_ponente];
+                $a_resto_oficinas = $oExpediente->getResto_oficinas();
+                $oficinas_txt = '';
+                $oficinas_txt .= '<span class="text-danger">'.$a_posibles_cargos[$id_ponente].'</span>';
+                foreach ($a_resto_oficinas as $id_oficina) {
+                    $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
+                    $oficinas_txt .= $a_posibles_cargos[$id_oficina];
+                }
+                $row['oficinas'] = $oficinas_txt;
+                // A: contiene antecedentes, E: contiene escritos, P: contiene propuestas
+                $row['contenido'] = $oExpediente->getContenido();
+                $row['etiquetas'] = $oExpediente->getEtiquetasVisiblesTxt;
+
                 $row['f_ini'] =  $oExpediente->getF_ini_circulacion()->getFromLocal();
                 $row['f_aprobacion'] =  $oExpediente->getF_aprobacion()->getFromLocal();
                 $row['f_reunion'] =  $oExpediente->getF_reunion()->getFromLocal();
@@ -492,6 +513,7 @@ class ExpedienteLista {
             'pagina_nueva' => $pagina_nueva,
             'pagina_cancel' => $pagina_cancel,
             'filtro' => $filtro,
+            'presentacion' => $presentacion,
         ];
 
         $oView = new ViewTwig('expedientes/controller');
