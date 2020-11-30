@@ -49,4 +49,40 @@ fnjs_enviar_escrito=function(id_escrito) {
     // Actualizar vista expadiente: escrito enviado.
     fnjs_actualizar_expediente();
 }
+fnjs_distribuir_escrito=function(id_escrito) {
+    var ssfsv = 'sv';
+    var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+    var server = '{{ server }}'
+    var url = server+'/apps/expedientes/controller/escrito_distribuir.php?id_escrito='+id_escrito;
+    w=window.open(url, "sele", winPrefs);
+    w.focus();
+}
+fnjs_revisar_escrito=function(event,id_escrito) {
+    var winPrefs="dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+    var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
+    var param_json = { tipo_id: 'escrito', id: id_escrito };
+    
+    request=$.ajax({
+        data: param_json,
+        url: url_ajax,
+        type: 'post'
+    });
+
+    request.done( function (rta) {
+        // antes, dentro del ajax, hacia falta el responseText
+        //url=rta.responseText;
+        url=rta;
+        w=window.open(url, "sele", winPrefs);
+        w.focus();
+    });
+	request.fail(function(JqXHR, textStatus, errorThrown){
+		alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+        console.error("Hi ha un error: "+ textStatus, errorThrown);
+    });
+
+    event.preventDefault();
+	event.stopPropagation();
+	event.stopImmediatePropagation();
+	return false;
+}
 </script>

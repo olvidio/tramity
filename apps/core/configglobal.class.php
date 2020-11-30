@@ -157,8 +157,8 @@ Class ConfigGlobal extends ServerConf {
 	public static function permisos() {
 		//ja no val return $_SESSION['session_auth']['perms'];
 	}
-	public static function mi_oficina() {
-		return $_SESSION['session_auth']['mi_oficina'];
+	public static function mi_id_oficina() {
+		return $_SESSION['session_auth']['mi_id_oficina'];
 	}
 	public static function mi_mail() {
 		return $_SESSION['session_auth']['mail'];

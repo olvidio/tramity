@@ -1,21 +1,20 @@
+{% if secretaria %}
 <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
 	{{ "nueva entrada"|trans }}
 </button>
+{% endif %}
 <table class="table table-sm table-bordered">
   <thead class="thead-light">
     <tr>
       <th scope="col">#</th>
-      <th scope="col">protocol</th>
-      <th scope="col">org./dest.</th>
-      <th scope="col">ref.</th>
-      <th scope="col">categoria</th>
-      <th scope="col">asunto</th>
-
-      <th scope="col">oficinas</th>
-      <th scope="col">fecha escrito</th>
-      <th scope="col">fecha leido</th>
-      <th scope="col">fecha aprobado</th>
-      <th scope="col">fecha enviado</th>
+      <th scope="col">{{ "protocolo"|trans }}</th>
+      <th scope="col">{{ "org./dest."|trans }}</th>
+      <th scope="col">{{ "ref."|trans }}</th>
+      <th scope="col">{{ "categoria"|trans }}</th>
+      <th scope="col">{{ "asunto"|trans }}</th>
+      <th scope="col">{{ "oficinas"|trans }}</th>
+      <th scope="col">{{ "fecha escrito"|trans }}</th>
+      <th scope="col">{{ "contestar antes de"|trans }}</th>
     </tr>
   </thead>
   <tbody>
@@ -27,11 +26,9 @@
       <td>{{ row.referencias|raw }}</td>
       <td>{{ row.categoria }}</td>
       <td>{{ row.asunto }}</td>
-      <td>{{ row.ponente }}</td>
+      <td>{{ row.oficinas|raw }}</td>
       <td>{{ row.f_escrito }}</td>
-      <td>{{ row.f_entrada }}</td>
-      <td></td>
-      <td></td>
+      <td>{{ row.f_contestar }}</td>
     </tr>
     {% endfor %}
   </tbody>

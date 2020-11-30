@@ -191,13 +191,15 @@ if (!empty($Qid_escrito)) {
 
 
 $url_update = 'apps/expedientes/controller/escrito_update.php';
+$a_cosas = ['id_expediente' => $Qid_expediente, 
+            'filtro' => $Qfiltro
+        ];
 if ($Qfiltro == 'acabados') {
-    $a_cosas = ['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro];
     $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query($a_cosas));
 } else {
-    $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['id_expediente' => $Qid_expediente]));
+    $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
 }
-$pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query([]));
+$pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['filtro' => $Qfiltro]));
 
 $esEscrtito = ($Qaccion == Escrito::ACCION_ESCRITO)? TRUE : FALSE;
 $a_campos = [

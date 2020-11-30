@@ -13,6 +13,7 @@ use tramites\model\entity\Firma;
 use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
+use expedientes\model\entity\Accion;
 
 
 
@@ -44,6 +45,7 @@ class Expediente Extends expedienteDB {
     const ESTADO_FIJAR_REUNION     = 3;
     const ESTADO_ACABADO           = 4;
     const ESTADO_TERMINADO         = 5;
+    const ESTADO_COPIAS            = 6;
     
     // vida (a criterio del ponente):
     /*
@@ -95,6 +97,59 @@ class Expediente Extends expedienteDB {
     
     /* METODES PUBLICS ----------------------------------------------------------*/
 
+    public function copiar($destino='') {
+        // por defecto va al borrador del mismo ponente
+        if (!empty($destino)) {
+            if ($destino == 'copias') {
+                $ponente = ConfigGlobal::mi_id_cargo();
+                $estado = Expediente::ESTADO_COPIAS;
+            } else {
+                $ponente = $destino;
+                $estado = Expediente::ESTADO_BORRADOR;
+            }
+        } else {
+            $ponente = $this->getPonente();
+            $estado = Expediente::ESTADO_BORRADOR;
+        }
+        
+        $oNewExpediente = new Expediente();
+        $oNewExpediente->setPonente($ponente);
+        $oNewExpediente->setId_tramite($this->getId_tramite());
+        $oNewExpediente->setEstado($estado);
+        $oNewExpediente->setPrioridad($this->getPrioridad());
+        $oNewExpediente->setAsunto($this->getAsunto());
+        $oNewExpediente->setEntradilla($this->getEntradilla());
+        
+        // copiar antecedentes
+        $antecedentes_db = $this->getJson_antecedentes();
+        if (!empty($antecedentes_db)) {
+            $oNewExpediente->setJson_antecedentes($antecedentes_db);
+        }
+        // buscar escritos para ponerlos como antecedentes
+        $gesAcciones = new GestorAccion();
+        $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $this->iid_expediente]);
+        foreach ($cAcciones as $oAccion) {
+            /* Accion
+             const ACCION_PROPUESTA  = 1;
+             const ACCION_ESCRITO    = 2;
+             const ACCION_PLANTILLA  = 3;
+             */
+            //$tipo_accion = $oAccion->getTipo_accion();
+            $id_escrito = $oAccion->getId_escrito();
+            // tipos de antecedentes:
+            //n = 1 -> Entradas
+            //n = 2 -> Expedientes
+            //n = 3 -> Escritos-propuesta
+            $tipo_antecedente = 'escrito';
+            $antecedente = [ 'tipo'=> $tipo_antecedente, 'id' => $id_escrito ];
+            $json_antecedente = json_encode($antecedente);
+            
+            $oNewExpediente->addAntecedente($json_antecedente);
+        }
+        
+        $oNewExpediente->DBGuardar();
+    }
+    
     public function getContenido() {
         $str_contenido = '';
         $separador = '; ';

@@ -126,12 +126,13 @@ if ($Qid_expediente) {
         $a_cosas =  ['id_expediente' => $Qid_expediente,
                     'id_escrito' => $id_escrito,
                     'accion' => $tipo_accion,
+                    'filtro' => $Qfiltro,
         ];
         $pag_escrito =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
         $pag_rev =  web\Hash::link('apps/expedientes/controller/escrito_rev.php?'.http_build_query($a_cosas));
             
-        $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >mod</span>";
-        $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >rev</span>";
+        $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
+        $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >"._("rev.texto")."</span>";
         
         $aGrupos = $oEscrito->getId_grupos();
         if (!empty($aGrupos)) {

@@ -125,6 +125,19 @@ $filtro = 'pendientes';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
+// introducir entradas
+$filtro = 'introducir';
+    $active = ($filtro == $Qfiltro)? 'active' : '';
+    $aQuery = [ 'filtro' => $filtro ];
+    $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+    $num_orden = 8;
+    $text = _("introducir");
+    $oEntradaLista = new EntradaLista();
+    $oEntradaLista->setFiltro($filtro);
+    $num = $oEntradaLista->getNumero();
+    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+$a_pills[$num_orden] = $pill;
+
 // entradas
 $filtro = 'entrada_todos';
     $active = ($filtro == $Qfiltro)? 'active' : '';

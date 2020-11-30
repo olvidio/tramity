@@ -92,18 +92,16 @@ if ( !isset($_SESSION['session_auth'])) {
                 $aPosiblesCargos = [];
                 $usuario_cargo = '';
                 $usuario_dtor = '';
+                $mi_id_oficina = '';
                 foreach ($oDB->query($query_cargos) as $aDades) {
                     $usuario_cargo = $aDades['cargo'];
                     $usuario_dtor = $aDades['director'];
                     $id_cargo = $aDades['id_cargo'];
+                    $mi_id_oficina = $aDades['id_oficina'];
                     $cargo = $aDades['cargo'];
                     $aPosiblesCargos[$id_cargo] = $cargo;
                 }
                 
-                $perms_activ='';
-                $mi_oficina = '';
-                $mi_oficina_menu = '';
-
                 // si no tiene mail interior, cojo el exterior.
                 $mail = empty($mail)? $row['email'] : $mail;
                 $expire=""; //de moment, per fer servir més endevant...
@@ -111,7 +109,6 @@ if ( !isset($_SESSION['session_auth'])) {
                 if ($_POST['password'] == '1ªVegada') {
                     $expire=1;
                 }
-                
                 
                 // Idioma
                 $idioma = '';
@@ -135,9 +132,7 @@ if ( !isset($_SESSION['session_auth'])) {
                         'username'=>$_POST['username'],
                         'password'=>$_POST['password'],
                         'esquema'=>$esquema,
-                        'perms_activ'=>$perms_activ,
-                        'mi_oficina'=>$mi_oficina,
-                        'mi_oficina_menu'=>$mi_oficina_menu,
+                        'mi_id_oficina'=>$mi_id_oficina,
                         'expire'=>$expire,
                         'mail'=>$mail,
                         'idioma'=>$idioma,
@@ -150,9 +145,7 @@ if ( !isset($_SESSION['session_auth'])) {
                         'id_cargo'=>$id_cargo_titular,
                         'username'=>$_POST['username'],
                         'password'=>$_POST['password'],
-                        'perms_activ'=>$perms_activ,
-                        'mi_oficina'=>$mi_oficina,
-                        'mi_oficina_menu'=>$mi_oficina_menu,
+                        'mi_id_oficina'=>$mi_id_oficina,
                         'expire'=>$expire,
                         'mail'=>$mail,
                         'idioma'=>$idioma,

@@ -20,7 +20,7 @@ require_once ("apps/core/global_object.inc");
 $Qid_expediente = (string) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
-$oficina = ConfigGlobal::mi_oficina();
+$oficina = ConfigGlobal::mi_id_oficina();
 
 $gesOficinas = new GestorOficina();
 $oDesplOficinas = $gesOficinas->getListaOficinas();

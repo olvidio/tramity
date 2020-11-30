@@ -11,6 +11,7 @@ use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use etiquetas\model\entity\EtiquetaExpediente;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -149,6 +150,34 @@ switch($Qque) {
         echo json_encode($jsondata);
         exit();
         break;
+    case 'exp_cp_oficina':
+        $Qof_destino = (integer) \filter_input(INPUT_POST, 'of_destino');
+    case 'exp_cp_copias':
+        $copias = TRUE;
+    case 'exp_cp_borrador':
+        $txt_err = '';
+        if (is_true($copias)) {
+            $of_destino = 'copias';
+        } else {
+            $of_destino = empty($Qof_destino)? '' : $Qof_destino;
+        }
+        // copiar expdiente: poner los escritos como antecedentes.
+        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente->copiar($of_destino);
+        
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'exp_a_borrador':
         $txt_err = '';
         // Hay que borrar: las firmas.
@@ -186,6 +215,7 @@ switch($Qque) {
         exit();
         breaK;
     case 'exp_eliminar':
+        // Si hay escritos enviados, no se borran.
         $txt_err = '';
         // Hay que borrar: el expediente, las firmas, las acciones, los escritos y los adjuntos de los escritos.
         $gesAccion = new GestorAccion();
@@ -193,17 +223,21 @@ switch($Qque) {
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $oEscrito = new Escrito($id_escrito);
-            $rta = $oEscrito->eliminarTodo();
-            if (!empty($rta)) { 
-                $txt_err .= $rta;
-            }
-            if ($oAccion->DBEliminar() === FALSE) {
-                $txt_err .= _("No se ha elimnado la accion");
-                $txt_err .= "<br>";
+            // Si hay escritos enviados, no se borran.
+            $f_salida = $oEscrito->getF_salida();
+            if (empty($f_salida)) {
+                $rta = $oEscrito->eliminarTodo();
+                if (!empty($rta)) { 
+                    $txt_err .= $rta;
+                }
+                if ($oAccion->DBEliminar() === FALSE) {
+                    $txt_err .= _("No se ha elimnado la accion");
+                    $txt_err .= "<br>";
+                }
             }
         }
         // firmas:
-$gesFirmas = new  GestorFirma();
+        $gesFirmas = new  GestorFirma();
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente]);
         foreach($cFirmas as $oFirma) {
             if ($oFirma->DBEliminar() === FALSE) {

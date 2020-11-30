@@ -176,10 +176,11 @@
 </div>
 
 <!--  --------------------  Etiquetas --------------------------  -->
+{%  if ver_etiquetas %}
 <div class="col-12 bg-white" >
   {{ "Etiquetas"|trans }}: {{ oArrayDesplEtiquetas.Lista|raw }}
 </div>
-        
+{% endif %}
 <!--  --------------------  BOTONES --------------------------  -->
 <div class="row col-2" >
   <button id='btn_volver' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
@@ -350,42 +351,6 @@ fnjs_ver_escrito=function(id_escrito) {
     w.focus();
 }
 */
-
-fnjs_revisar_escrito=function(event,id_escrito) {
-    var winPrefs="dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-    var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
-    var param_json = { tipo_id: 'escrito', id: id_escrito };
-    
-    request=$.ajax({
-        data: param_json,
-        url: url_ajax,
-        type: 'post'
-    });
-
-    request.done( function (rta) {
-        // antes, dentro del ajax, hacia falta el responseText
-        //url=rta.responseText;
-        url=rta;
-        w=window.open(url, "sele", winPrefs);
-        w.focus();
-    });
-	request.fail(function(JqXHR, textStatus, errorThrown){
-		alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
-        console.error("Hi ha un error: "+ textStatus, errorThrown);
-    });
-    
-    /*
-    request.always(function(){
-        alert("JEJE");
-        debugger;
-    });
-    */
-
-    event.preventDefault();
-	event.stopPropagation();
-	event.stopImmediatePropagation();
-	return false;
-}
 
 $(document).ready(function() {
 	tabs_hide();

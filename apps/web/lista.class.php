@@ -246,7 +246,9 @@ class Lista {
         if ($sPrefs == 'html') {
             return $this->mostrar_tabla_html();
         } else {
-            return $this->mostrar_tabla_slickgrid();
+            // de momento, el slickgrid es incompatible con fileinput.js (drag and drop)
+            //return $this->mostrar_tabla_slickgrid();
+            return $this->mostrar_tabla_html();
         }
     }
     /**

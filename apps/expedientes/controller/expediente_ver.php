@@ -88,8 +88,12 @@ $a_prioridad = $oExpediente->getArrayPrioridad();
 $prioridad_txt = $a_prioridad[$prioridad];
 
 $vida = $oExpediente->getVida();
-$a_vida = $oExpediente->getArrayVida();
-$vida_txt = $a_vida[$vida];
+if (!empty($vida)) {
+    $a_vida = $oExpediente->getArrayVida();
+    $vida_txt = $a_vida[$vida];
+} else {
+    $vida_txt = '';
+}
 
 $f_contestar = $oExpediente->getF_contestar()->getFromLocal();
 $f_ini_circulacion = $oExpediente->getF_ini_circulacion()->getFromLocal();
@@ -110,20 +114,25 @@ $a_recorrido = $aRecorrido['recorrido'];
 $comentarios = $aRecorrido['comentarios'];
 
 // Etiquetas
-$cEtiquetas = $oExpediente->getEtiquetasVisibles();
-/*
-$gesEtiquetas = new GestorEtiqueta();
-$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
-*/
-$a_etiquetas = [];
-$a_posibles_etiquetas = [];
-foreach ($cEtiquetas as $oEtiqueta) {
-    $id_etiqueta = $oEtiqueta->getId_etiqueta();
-    $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
-    $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
-    $a_etiquetas[] = $id_etiqueta;
+$ver_etiquetas = FALSE;
+$oArrayDesplEtiquetas = '';
+if ($estado == Expediente::ESTADO_ACABADO) {
+    $cEtiquetas = $oExpediente->getEtiquetasVisibles();
+    /*
+    $gesEtiquetas = new GestorEtiqueta();
+    $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+    */
+    $a_etiquetas = [];
+    $a_posibles_etiquetas = [];
+    foreach ($cEtiquetas as $oEtiqueta) {
+        $id_etiqueta = $oEtiqueta->getId_etiqueta();
+        $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+        $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+        $a_etiquetas[] = $id_etiqueta;
+    }
+    $oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas,$a_posibles_etiquetas,'etiquetas');
+    $ver_etiquetas = TRUE;
 }
-$oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas,$a_posibles_etiquetas,'etiquetas');
 
 $oficinas = $oExpediente->getResto_oficinas();
 
@@ -150,6 +159,7 @@ if ($Qfiltro == 'seg_reunion') {
     $add_del_txt = _("Añadir Firmas");
 }
 
+
 $a_campos = [
     'id_expediente' => $Qid_expediente,
     //'oHash' => $oHash,
@@ -174,7 +184,8 @@ $a_campos = [
     'oArrayDesplFirmas' => $oArrayDesplFirmas, 
     'txt_option_cargos' => $txt_option_cargos,
     'lista_antecedentes' => $lista_antecedentes,
-    'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas, 
+    'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
+    'ver_etiquetas' => $ver_etiquetas,
     
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,

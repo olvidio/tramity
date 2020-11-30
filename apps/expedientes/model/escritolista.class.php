@@ -78,6 +78,9 @@ class EscritoLista {
         
         $bdistribuir = $this->getDistribuir();
         
+        $oEscrito = new Escrito();
+        $aAcciones = $oEscrito->getArrayAccion();
+        
         $gesAcciones = new GestorAccion();
         $cAcciones = $gesAcciones->getAcciones($this->aWhere);
         $a_acciones = [];
@@ -88,6 +91,9 @@ class EscritoLista {
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $id_expediente = $oAccion->getId_expediente();
+            $tipo_accion = $oAccion->getTipo_accion();
+            $txt_tipo = $aAcciones[$tipo_accion];
+            
             $todos_escritos .= (empty($todos_escritos))? '' : ',';
             $todos_escritos .= $id_escrito;
             
@@ -123,7 +129,7 @@ class EscritoLista {
                 ];
                 $pag_escrito = Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
                 
-                $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >mod</span>";
+                $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
             }
             
             $a_json_prot_destino = $oEscrito->getJson_prot_destino();
@@ -155,9 +161,10 @@ class EscritoLista {
             $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito(event,'$id_escrito');\" >";
             $prot_local .= $prot_local_txt;
             $prot_local .= "</span>";
-            
             $a_accion['prot_local'] = $prot_local;
-            $a_accion['protocolo'] = $oArrayProtDestino->ListaTxtBr();
+
+            $a_accion['tipo'] = $txt_tipo;
+            $a_accion['destino'] = $oArrayProtDestino->ListaTxtBr();
             $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
             $a_accion['categoria'] = '';
             $a_accion['asunto'] = $oEscrito->getAsunto();

@@ -53,7 +53,6 @@ fnjs_update_div=function(bloque,ref) {
 		fnjs_mostra_resposta (resposta,bloque);
 	});
 	request.fail(function(JqXHR, textStatus, errorThrown){
-	debugger;	
 		alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
         console.error("Hi ha un error: "+ textStatus, errorThrown);
     });
@@ -69,12 +68,18 @@ fnjs_borrar_posibles_atras=function() {
 }
 	
 fnjs_mostra_resposta=function(resposta,bloque) {
+	if (resposta === null) {
+		return true;
+	}
 	switch (typeof resposta) {
 		case 'object':
 			var myText=resposta.responseText;
 			break;
 		case 'string':
 			var myText=resposta.trim();
+			break;
+		case 'undefined':
+			return true;
 			break;
 	}
 	$(bloque).empty();

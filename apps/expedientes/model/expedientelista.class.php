@@ -327,34 +327,39 @@ class ExpedienteLista {
                 break;
             case 'firmar':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
-                $col_mod = 1;
+                $col_mod = 0;
                 $col_ver = 1;
                 $presentacion = 1;
+                $txt_ver = _("revisar");
                 break;
             case 'fijar_reunion':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/fecha_reunion.php';
                 $txt_mod = _("fecha");
-                $col_mod = 1;
+                $col_mod = 0;
                 $col_ver = 1;
                 $presentacion = 1;
+                $txt_ver = _("revisar");
                 break;
             case 'reunion':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
-                $col_mod = 1;
+                $col_mod = 0;
                 $col_ver = 1;
                 $presentacion = 3;
+                $txt_ver = _("revisar");
                 break;
             case 'seg_reunion':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 $col_mod = 0;
                 $col_ver = 1;
                 $presentacion = 3;
+                $txt_ver = _("revisar");
                 break;
             case 'circulando':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
-                $col_mod = 1;
+                $col_mod = 0;
                 $col_ver = 1;
                 $presentacion = 1;
+                $txt_ver = _("revisar");
                 break;
             case 'distribuir':
             case 'acabados':
@@ -365,7 +370,7 @@ class ExpedienteLista {
                 break;
             case 'archivados':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
-                $col_mod = 1;
+                $col_mod = 0;
                 $col_ver = 1;
                 $presentacion = 2;
                 break;
@@ -379,6 +384,7 @@ class ExpedienteLista {
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_form.php';
         }
         $pagina_ver = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+        $pagina_accion = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_accion.php';
 
         $a_expedientes = [];
         if (!empty($this->aWhere)) {
@@ -432,12 +438,12 @@ class ExpedienteLista {
                 ];
                 $link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
+                $link_accion = Hash::link($pagina_accion.'?'.http_build_query($a_cosas));
                 $txt_ver = empty($txt_ver)? _("ver") : $txt_ver;
                 $txt_mod = empty($txt_mod)? _("mod") : $txt_mod;
                 $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_ver');\" >$txt_ver</span>";
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >$txt_mod</span>";
-                $row['link_eliminar'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_exp_eliminar('$id_expediente');\" >"._("eliminar")."</span>";
-                $row['link_a_borrador'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_exp_a_borrador('$id_expediente');\" >"._("a borrador")."</span>";
+                $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_accion');\" >"._("acción")."</span>";
                 
                 $row['class_row'] = '';
                 if ($bfalta_firma) {
@@ -452,16 +458,6 @@ class ExpedienteLista {
                 
                 $estado = $oExpediente->getEstado();
                 $row['estado'] = $a_estados[$estado];
-                if ($estado == Expediente::ESTADO_BORRADOR) {
-                    $row['eliminar'] = 1;
-                } else {
-                    $row['eliminar'] = 0;
-                    if ($id_ponente == ConfigGlobal::mi_id_cargo()) {
-                        $row['a_borrador'] = 1;
-                    } else {
-                        $row['a_borrador'] = 0;
-                    }
-                }
                 $row['prioridad'] = $oExpediente->getPrioridad();
                 $row['tramite'] = $tramite_txt;
                 

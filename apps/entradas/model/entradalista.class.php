@@ -83,18 +83,18 @@ class EntradaLista {
         switch ($this->filtro) {
             case 'entrada_todos':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query([]));
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $this->getFiltro()]));
                 break;
             case 'entrada':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query([]));
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $this->getFiltro()]));
                 break;
             case 'bypass':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_bypass.php';
                 break;
             default:
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query([]));
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $this->getFiltro()]));
         }
         $pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
         
@@ -136,9 +136,17 @@ class EntradaLista {
                 if (!empty($detalle)) $row['asunto'] .= ' ['.$detalle.']';
                 
                 $id_ponente =  $oEntrada->getPonente();
-                $row['ponente'] =  $a_posibles_cargos[$id_ponente];
+                $a_resto_oficinas = $oEntrada->getResto_oficinas();
+                $oficinas_txt = '';
+                $oficinas_txt .= '<span class="text-danger">'.$a_posibles_cargos[$id_ponente].'</span>';
+                foreach ($a_resto_oficinas as $id_oficina) {
+                    $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
+                    $oficinas_txt .= $a_posibles_cargos[$id_oficina];
+                }
+                $row['oficinas'] = $oficinas_txt;
                 
                 $row['f_entrada'] = $oEntrada->getF_entrada()->getFromLocal();
+                $row['f_contestar'] = $oEntrada->getF_contestar()->getFromLocal();
                 
                 // mirar si tienen escrito
                 $row['f_escrito'] = $oEntrada->getF_documento()->getFromLocal();
@@ -150,6 +158,11 @@ class EntradaLista {
         $url_update = 'apps/entradas/controller/entrada_update.php';
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
+        $secretaria = FALSE;
+        if ($_SESSION['session_auth']['role_actual'] === 'secretaria') {
+            $secretaria = TRUE;
+        }
+        
         $a_campos = [
             //'id_entrada' => $id_entrada,
             //'oHash' => $oHash,
@@ -158,6 +171,7 @@ class EntradaLista {
             'pagina_nueva' => $pagina_nueva,
             'filtro' => $this->getFiltro(),
             'server' => $server,
+            'secretaria' => $secretaria,
         ];
         
         $oView = new ViewTwig('entradas/controller');

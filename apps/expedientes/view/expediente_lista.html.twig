@@ -56,13 +56,7 @@
       {% if presentacion != 1 %}
           <td>{{ row.etiquetas|raw }}</td>
       {% endif %}
-      
-      {%  if row.eliminar %}
-          <td>{{ row.link_eliminar|raw }}</td>
-      {% endif %}
-      {%  if row.a_borrador %}
-          <td>{{ row.link_a_borrador|raw }}</td>
-      {% endif %}
+      <td>{{ row.link_accion|raw }}</td>
     </tr>
     {% endfor %}
   </tbody>
@@ -71,46 +65,4 @@
 $(document).ready(function() {
 	tabs_show('{{ vista }}','{{ filtro }}');
 });
-
-fnjs_exp_a_borrador=function(id_expediente) {
-	var err=0;
-    //debugger;
-    // grabar el tipo de doc
-    var url_doc = 'apps/expedientes/controller/expediente_update.php';
-    var param_json = { que: 'exp_a_borrador', id_expediente: id_expediente };
-    request=$.ajax({
-        data: param_json,
-        url: url_doc,
-        type: 'post'
-    });
-    request.done( function (json) {
-        if (json.success != true) {
-            rta_txt = rta.mensaje;
-            alert ('error: '+rta_txt);
-        } else {
-        	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-        }
-    });
-}
-    
-fnjs_exp_eliminar=function(id_expediente) {
-	var err=0;
-    //debugger;
-    // grabar el tipo de doc
-    var url_doc = 'apps/expedientes/controller/expediente_update.php';
-    var param_json = { que: 'exp_eliminar', id_expediente: id_expediente };
-    request=$.ajax({
-        data: param_json,
-        url: url_doc,
-        type: 'post'
-    });
-    request.done( function (json) {
-        if (json.success != true) {
-            rta_txt = rta.mensaje;
-            alert ('error: '+rta_txt);
-        } else {
-        	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-        }
-    });
-}
 </script>
