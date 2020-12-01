@@ -4,7 +4,7 @@ fnjs_ver_expediente=function(id_expediente) {
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
     var server = '{{ server }}'
     var url = server+'/apps/expedientes/controller/expediente_ver.php?id_expediente='+id_expediente;
-    w=window.open(url, "sele", winPrefs);
+    w=window.open(url, "", winPrefs);
     w.focus();
 }
 
@@ -13,7 +13,7 @@ fnjs_ver_escrito=function(id_escrito) {
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
     var server = '{{ server }}'
     var url = server+'/apps/expedientes/controller/escrito_ver.php?id_escrito='+id_escrito;
-    w=window.open(url, "sele", winPrefs);
+    w=window.open(url, "", winPrefs);
     w.focus();
 }
 
@@ -22,7 +22,7 @@ fnjs_ver_entrada=function(id_entrada) {
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
     var server = '{{ server }}'
     var url = server+'/apps/entradas/controller/entrada_ver.php?id_entrada='+id_entrada;
-    w=window.open(url, "sele", winPrefs);
+    w=window.open(url, "", winPrefs);
     w.focus();
 }
 

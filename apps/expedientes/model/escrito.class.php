@@ -66,6 +66,18 @@ class Escrito Extends EscritoDB {
     }
     
     /**
+     * añadir el detalle en el asunto.
+     * tener en cuenta los permisos...
+     * 
+     * return string
+     */
+    public function getAsuntoDetalle() {
+        $detalle = $this->getDetalle();
+        $asunto_detelle = empty($detalle)? $this->getAsunto() : $this->getAsunto()." [$detalle]";
+        
+        return $asunto_detelle;
+    }
+    /**
      * genera el número de protocolo local. y lo guarda.
      */
     public function generarProtocolo($id_lugar='',$id_lugar_cr) {

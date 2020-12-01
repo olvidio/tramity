@@ -85,6 +85,19 @@ class Entrada Extends EntradaDB {
     }
     
     /**
+     * añadir el detalle en el asunto.
+     * tener en cuenta los permisos...
+     *
+     * return string
+     */
+    public function getAsuntoDetalle() {
+        $detalle = $this->getDetalle();
+        $asunto_detelle = empty($detalle)? $this->getAsunto() : $this->getAsunto()." [$detalle]";
+        
+        return $asunto_detelle;
+    }
+    
+    /**
      * Hay que gauradar dos objetos.
      * {@inheritDoc}
      * @see \entradas\model\entity\EntradaDB::DBGuardar()

@@ -131,9 +131,7 @@ class EntradaLista {
                 
                 $id_categoria = $oEntrada->getCategoria();
                 $row['categoria'] = $a_categorias[$id_categoria];
-                $row['asunto'] = $oEntrada->getAsunto();
-                $detalle = $oEntrada->getDetalle();
-                if (!empty($detalle)) $row['asunto'] .= ' ['.$detalle.']';
+                $row['asunto'] = $oEntrada->getAsuntoDetalle();
                 
                 $id_ponente =  $oEntrada->getPonente();
                 $a_resto_oficinas = $oEntrada->getResto_oficinas();

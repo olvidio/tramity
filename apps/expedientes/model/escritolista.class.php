@@ -167,7 +167,7 @@ class EscritoLista {
             $a_accion['destino'] = $oArrayProtDestino->ListaTxtBr();
             $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
             $a_accion['categoria'] = '';
-            $a_accion['asunto'] = $oEscrito->getAsunto();
+            $a_accion['asunto'] = $oEscrito->getAsuntoDetalle();
             $a_accion['adjuntos'] = $adjuntos;
             
             $a_acciones[] = $a_accion;

@@ -183,7 +183,7 @@ if (empty($f_entrada)) {
 
 $url_update = 'apps/entradas/controller/entrada_update.php';
 $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
-$pagina_nueva = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query([]));
+$pagina_nueva = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $Qfiltro]));
 
 $a_campos = [
     'titulo' => $titulo,

@@ -84,7 +84,6 @@ switch ($Qque) {
 	        $a++;
 	        $id_entrada = $oEntrada->getId_entrada();
 	        $fecha_txt = $oEntrada->getF_entrada()->getFromLocal();
-	        $asunto = $oEntrada->getAsunto();
 	        $ponente = $oEntrada->getPonente();
 	        
 	        $ponente_txt = $a_posibles_cargos[$ponente];
@@ -94,7 +93,7 @@ switch ($Qque) {
 	        
 	        $a_valores[$a][1] = $ver;
 	        $a_valores[$a][2] = $fecha_txt;
-	        $a_valores[$a][3] = $asunto;
+	        $a_valores[$a][3] = $oEntrada->getAsuntoDetalle();
 	        $a_valores[$a][4] = $ponente_txt;
 	        $a_valores[$a][5] = $add;
 	    }
@@ -133,7 +132,6 @@ switch ($Qque) {
 	        $a++;
 	        $id_expediente = $oExpediente->getId_expediente();
 	        $fecha_txt = $oExpediente->getF_aprobacion()->getFromLocal();
-	        $asunto = $oExpediente->getAsunto();
 	        $ponente = $oExpediente->getPonente();
 	        
 	        $ponente_txt = $a_posibles_cargos[$ponente];
@@ -143,7 +141,7 @@ switch ($Qque) {
 	        
 	        $a_valores[$a][1] = $ver;
 	        $a_valores[$a][2] = $fecha_txt;
-	        $a_valores[$a][3] = $asunto;
+	        $a_valores[$a][3] = $oExpediente->getAsunto();
 	        $a_valores[$a][4] = $ponente_txt;
 	        $a_valores[$a][5] = $add;
 	    }
@@ -182,7 +180,6 @@ switch ($Qque) {
 	        $a++;
 	        $id_escrito = $oEscrito->getId_escrito();
 	        $fecha_txt = $oEscrito->getF_aprobacion()->getFromLocal();
-	        $asunto = $oEscrito->getAsunto();
 	        $ponente = $oEscrito->getCreador();
 	        
 	        $ponente_txt = $a_posibles_cargos[$ponente];
@@ -192,7 +189,7 @@ switch ($Qque) {
 	        
 	        $a_valores[$a][1] = $ver;
 	        $a_valores[$a][2] = $fecha_txt;
-	        $a_valores[$a][3] = $asunto;
+	        $a_valores[$a][3] = $oEscrito->getAsuntoDetalle();
 	        $a_valores[$a][4] = $ponente_txt;
 	        $a_valores[$a][5] = $add;
 	    }

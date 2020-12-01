@@ -20,7 +20,7 @@ fnjs_ver_doc_ec=function(event) {
         // antes, dentro del ajax, hacia falta el responseText
         //url=rta.responseText;
         url=rta;
-        w=window.open(url, "sele", winPrefs);
+        w=window.open(url, "", winPrefs);
         w.focus();
     });
 	request.fail(function(JqXHR, textStatus, errorThrown){
@@ -54,7 +54,7 @@ fnjs_ver_doc_ep=function(event) {
         // antes, dentro del ajax, hacia falta el responseText
         //url=rta.responseText;
         url=rta;
-        w=window.open(url, "sele", winPrefs);
+        w=window.open(url, "", winPrefs);
         w.focus();
     });
 	request.fail(function(JqXHR, textStatus, errorThrown){
@@ -96,7 +96,7 @@ fnjs_escrito=function(event,n) {
                 alert ('error: '+rta_txt);
             } else {
                 var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-                w=window.open(url, "sele", winPrefs);
+                w=window.open(url, "", winPrefs);
                 w.focus();
             }
         });

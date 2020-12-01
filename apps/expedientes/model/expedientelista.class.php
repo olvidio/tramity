@@ -335,7 +335,7 @@ class ExpedienteLista {
             case 'fijar_reunion':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/fecha_reunion.php';
                 $txt_mod = _("fecha");
-                $col_mod = 0;
+                $col_mod = 1;
                 $col_ver = 1;
                 $presentacion = 1;
                 $txt_ver = _("revisar");

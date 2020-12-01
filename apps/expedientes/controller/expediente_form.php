@@ -157,7 +157,7 @@ if ($Qid_expediente) {
         $a_accion['link_ver'] = 'v';
         $a_accion['referencias'] = '';
         $a_accion['tipo'] = $txt_tipo;
-        $a_accion['asunto'] = $oEscrito->getAsunto();
+        $a_accion['asunto'] = $oEscrito->getAsuntoDetalle();
         $a_accion['adjuntos'] = $adjuntos;
             
         $a_acciones[] = $a_accion;

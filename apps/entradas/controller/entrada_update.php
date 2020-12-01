@@ -19,6 +19,7 @@ use entradas\model\entity\EntradaDB;
 
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
 $Qorigen = (integer) \filter_input(INPUT_POST, 'origen');
 $Qprot_num_origen = (integer) \filter_input(INPUT_POST, 'prot_num_origen');
@@ -169,13 +170,11 @@ switch($Qque) {
         
         break;
     case 'guardar':
-        $nuevo = FALSE;
         if (!empty($Qid_entrada)) {
             $oEntrada = new Entrada($Qid_entrada);
             $oEntrada->DBCarregar();
         } else {
             $oEntrada = new Entrada();
-            $nuevo = TRUE;
         }
         
         $oEntrada->setModo_entrada(Entrada::MODO_MANUAL);
@@ -216,7 +215,7 @@ switch($Qque) {
         $id_entrada = $oEntrada->getId_entrada();
         $jsondata['success'] = true;
         $jsondata['id_entrada'] = $id_entrada;
-        $a_cosas = [ 'id_entrada' => $id_entrada];
+        $a_cosas = [ 'id_entrada' => $id_entrada, 'filtro' => $Qfiltro];
         $pagina_mod = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query($a_cosas));
         $jsondata['pagina_mod'] = $pagina_mod;
         

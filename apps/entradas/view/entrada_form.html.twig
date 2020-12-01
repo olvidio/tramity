@@ -6,7 +6,6 @@
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
 
-
 <h1>{{ titulo }}</h1>
 <form id ="form_entrada" >
     <input type=hidden name='que' id='que' value=0>
@@ -71,7 +70,7 @@
         <div class='col-3 date datepicker' data-provide="datepicker">
           <input tabindex='31' name='f_escrito' id='f_escrito' type='text' class="form-control" value="{{ f_escrito }}" />
         </div>
-  </div>  
+  </div> 
   <!--  --------------- TIPO --------------- -->
   <div class="form-row">
     <div class="form-group col-md-2">
@@ -100,10 +99,9 @@
 <div class="col-4" >
 	<!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
 {% if id_entrada %}
-
     {% if tipo_documento %}
       <div class="form-group">
-        <label for="">{{ "Ver escrito"|trans }}:</label>
+        <label>{{ "Ver escrito"|trans }}:</label>
 	    {% if tipo_documento == 1 %}
             <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(event);" >
               {{ "Etherpad"|trans }}
@@ -116,7 +114,7 @@
 	    {% endif %}
       </div>
     {% else %}
-    <label for="">{{ "Insertar escrito"|trans }}:</label>
+    <label>{{ "Insertar escrito"|trans }}:</label>
     <div class="form-group">
       <button type="button" tabindex='100' class="btn btn-danger" onClick="fnjs_escrito(event,1);" >
         {{ "Etherpad"|trans }}

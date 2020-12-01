@@ -37,8 +37,10 @@ class Expediente Extends expedienteDB {
     /*
     - Borrador (antes de circular, mientras lo trabaja el ponenente)
     - Circulando (está pasando a firmas)
+    - Fijar reunión
     - Acabado (una vez firmado -aprobado o rechazado-, antes de enviar escritos...)
     - Terminado (una vez hechas todas las "acciones": enviar escritos...)
+    - Copias (para marcar que es copia de otro, y para que salga en la selección de copias).
      */
     const ESTADO_BORRADOR          = 1;
     const ESTADO_CIRCULANDO        = 2;
@@ -370,7 +372,7 @@ class Expediente Extends expedienteDB {
                 switch ($tipo) {
                     case 'entrada':
                         $oEntrada = new Entrada($id);
-                        $asunto = $oEntrada->getAsunto();
+                        $asunto = $oEntrada->getAsuntoDetalle();
                         $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada($id);\" >$asunto</span>";
                         $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >"._("quitar")."</span>";
                         break;
@@ -382,7 +384,7 @@ class Expediente Extends expedienteDB {
                         break;
                     case 'escrito':
                         $oEscrito = new Escrito($id);
-                        $asunto = $oEscrito->getAsunto();
+                        $asunto = $oEscrito->getAsuntoDetalle();
                         $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito($id);\" >$asunto</span>";
                         $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >"._("quitar")."</span>";
                         break;

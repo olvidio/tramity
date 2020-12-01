@@ -69,7 +69,6 @@ switch ($Qque) {
             $a++;
             $id_entrada = $oEntrada->getId_entrada();
             $fecha_txt = $oEntrada->getF_entrada()->getFromLocal();
-            $asunto = $oEntrada->getAsunto();
             $ponente = $oEntrada->getPonente();
             
             $ponente_txt = $a_posibles_cargos[$ponente];
@@ -82,7 +81,7 @@ switch ($Qque) {
             $a_valores[$a][1] = $ver;
             $a_valores[$a][2] = $oProtOrigen->ver_txt();
             $a_valores[$a][3] = $fecha_txt;
-            $a_valores[$a][4] = $asunto;
+            $a_valores[$a][4] = $oEntrada->getAsuntoDetalle();
             $a_valores[$a][5] = $ponente_txt;
             $a_valores[$a][6] = $add;
         }

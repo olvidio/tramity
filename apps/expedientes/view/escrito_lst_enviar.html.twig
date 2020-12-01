@@ -34,7 +34,7 @@ fnjs_ver_escrito=function(id_escrito) {
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
     var server = '{{ server }}'
     var url = server+'/apps/expedientes/controller/escrito_ver.php?id_escrito='+id_escrito;
-    w=window.open(url, "sele", winPrefs);
+    w=window.open(url, "", winPrefs);
     w.focus();
 }
 
@@ -54,7 +54,7 @@ fnjs_distribuir_escrito=function(id_escrito) {
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
     var server = '{{ server }}'
     var url = server+'/apps/expedientes/controller/escrito_distribuir.php?id_escrito='+id_escrito;
-    w=window.open(url, "sele", winPrefs);
+    w=window.open(url, "", winPrefs);
     w.focus();
 }
 fnjs_revisar_escrito=function(event,id_escrito) {
@@ -72,7 +72,7 @@ fnjs_revisar_escrito=function(event,id_escrito) {
         // antes, dentro del ajax, hacia falta el responseText
         //url=rta.responseText;
         url=rta;
-        w=window.open(url, "sele", winPrefs);
+        w=window.open(url, "", winPrefs);
         w.focus();
     });
 	request.fail(function(JqXHR, textStatus, errorThrown){
