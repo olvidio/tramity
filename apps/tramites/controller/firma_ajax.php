@@ -219,6 +219,24 @@ switch ($Qque) {
             // pasarlo a scdl para distribuir (ok_scdl)
             $bParaDistribuir = $gesFirmas->paraDistribuir($Qid_expediente);
             if ($bParaDistribuir) {
+                // guardar la firma de Cargo::CARGO_DISTRIBUIR;
+                $aWhere = ['id_expediente' => $Qid_expediente,
+                    'cargo_tipo' => Cargo::CARGO_DISTRIBUIR,
+                    'tipo' => Firma::TIPO_VOTO,
+                ];
+                $cFirmaDistribuir = $gesFirmas->getFirmas($aWhere);
+                if (is_array($cFirmaDistribuir) && count($cFirmaDistribuir) > 0) {
+                    $oFirmaDistribuir = $cFirmaDistribuir[0];
+                    $oFirmaDistribuir->setId_usuario(ConfigGlobal::mi_id_usuario());
+                    $oFirmaDistribuir->setValor($Qvoto);
+                    $oFirmaDistribuir->setF_valor($f_hoy_iso,FALSE);
+                    if ($oFirmaDistribuir->DBGuardar() === FALSE ) {
+                        $error_txt .= $oFirma->getErrorTxt();
+                    }
+                } else {
+                    $error_txt .= _("No se puede firmar el cargo_tipo distribuir");
+                }
+                // cambio el estado del expediente.
                 $oExpediente = new Expediente($Qid_expediente);
                 $oExpediente->DBCarregar();
                 $oExpediente->setEstado(Expediente::ESTADO_ACABADO);

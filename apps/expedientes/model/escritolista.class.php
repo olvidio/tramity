@@ -16,6 +16,11 @@ class EscritoLista {
      * 
      * @var string
      */
+    private $modo;
+    /**
+     * 
+     * @var string
+     */
     private $filtro;
     /**
      * 
@@ -38,9 +43,10 @@ class EscritoLista {
      */
     private $a_expedientes_nuevos = [];
     
+
     /*
      * filtros posibles: 
-    'lista'
+    'distribuir'
     'enviar'
     */
     /**
@@ -51,7 +57,7 @@ class EscritoLista {
         $aOperador = [];
 
         switch ($this->filtro) {
-            case 'lista':
+            case 'distribuir':
             case 'acabados':
                 $aWhere['id_expediente'] = $this->id_expediente;
                 $aWhere['_ordre'] = 'tipo_accion';
@@ -90,7 +96,6 @@ class EscritoLista {
         $todos_escritos = '';
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
-            $id_expediente = $oAccion->getId_expediente();
             $tipo_accion = $oAccion->getTipo_accion();
             $txt_tipo = $aAcciones[$tipo_accion];
             
@@ -100,6 +105,19 @@ class EscritoLista {
             $oEscrito = new Escrito($id_escrito);
             $f_salida = $oEscrito->getF_salida()->getFromLocal();
             $tipo_accion = $oEscrito->getAccion();
+            
+            $a_cosas =  ['id_expediente' => $this->id_expediente,
+                'id_escrito' => $id_escrito,
+                'accion' => $tipo_accion,
+                'filtro' => $this->filtro,
+                'modo' => $this->modo,
+            ];
+            $pag_escrito =  Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
+            $pag_rev =  Hash::link('apps/expedientes/controller/escrito_rev.php?'.http_build_query($a_cosas));
+            
+            $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
+            $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >"._("rev.texto")."</span>";
+            
             
             if (!empty($f_salida)) {
                 $a_accion['enviar'] = _("enviado")." ($f_salida)";
@@ -121,6 +139,7 @@ class EscritoLista {
             } else {
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >"._("ver")."</span>";
             }
+            /*
             if ($this->filtro == 'acabados') { 
                 $a_cosas =  ['id_expediente' => $id_expediente,
                     'id_escrito' => $id_escrito,
@@ -131,7 +150,7 @@ class EscritoLista {
                 
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
             }
-            
+            */
             $a_json_prot_destino = $oEscrito->getJson_prot_destino();
             $oArrayProtDestino = new ProtocoloArray($a_json_prot_destino,'','');
             $json_prot_local = $oEscrito->getJson_prot_local();
@@ -158,11 +177,15 @@ class EscritoLista {
             $oArrayProtRef = new ProtocoloArray($json_ref,'','');
             $oArrayProtRef->setRef(TRUE);
             
-            $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito(event,'$id_escrito');\" >";
-            $prot_local .= $prot_local_txt;
-            $prot_local .= "</span>";
-            $a_accion['prot_local'] = $prot_local;
+            if ($this->getModo() == 'mod') {
+                $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito(event,'$id_escrito');\" >";
+                $prot_local .= $prot_local_txt;
+                $prot_local .= "</span>";
+            } else {
+                $prot_local = $prot_local_txt;
+            }
 
+            $a_accion['prot_local'] = $prot_local;
             $a_accion['tipo'] = $txt_tipo;
             $a_accion['destino'] = $oArrayProtDestino->ListaTxtBr();
             $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
@@ -177,10 +200,12 @@ class EscritoLista {
         
         $a_campos = [
             'filtro' => $this->filtro,
+            'modo' => $this->modo,
             'id_expediente' => $this->id_expediente,
             'a_acciones' => $a_acciones,
             'ver_todo' => $ver_todo,
             'server' => $server,
+            'bdistribuir' => $bdistribuir,
         ];
         
         $oView = new ViewTwig('expedientes/controller');
@@ -203,6 +228,7 @@ class EscritoLista {
         return $num;
     }
 
+    
     /**
      * @return string
      */
@@ -233,6 +259,21 @@ class EscritoLista {
     public function setId_expediente($id_expediente)
     {
         $this->id_expediente = $id_expediente;
+    }
+    /**
+     * @return string
+     */
+    public function getModo()
+    {
+        return $this->modo;
+    }
+
+    /**
+     * @param string $modo
+     */
+    public function setModo($modo)
+    {
+        $this->modo = $modo;
     }
 
 }

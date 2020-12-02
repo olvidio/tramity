@@ -91,7 +91,7 @@ $a_pills[$num_orden] = $pill;
 // se envian escritos, no expedientes
 $filtro = 'enviar';
     $active = ($filtro == $Qfiltro)? 'active' : '';
-    $aQuery = [ 'filtro' => $filtro ];
+    $aQuery = [ 'filtro' => $filtro, 'modo' => 'mod' ];
     $pag_lst = web\Hash::link('apps/expedientes/controller/escrito_lista.php?'.http_build_query($aQuery));
     $num_orden = 4;
     $text = _("enviar");

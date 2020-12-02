@@ -292,6 +292,7 @@ class ExpedienteLista {
                 $aWhere['estado'] = Expediente::ESTADO_TERMINADO;
                 break;
             case 'copias':
+                $aWhere['estado'] = Expediente::ESTADO_COPIAS;
                 $aWhere['f_aprobacion'] = 'x';
                 $aOperador['f_aprobacion'] = 'IS NOT NULL';
                 break;
@@ -315,6 +316,8 @@ class ExpedienteLista {
         $col_mod = 0;
         $col_ver = 0;
         $presentacion = 0;
+        $pagina_ver = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+        $pagina_accion = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_accion.php';
         switch ($this->filtro) {
             case 'borrador_propio':
             case 'borrador_oficina':
@@ -364,6 +367,7 @@ class ExpedienteLista {
             case 'distribuir':
             case 'acabados':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_distribuir.php';
+                $pagina_ver = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_distribuir.php';
                 $col_mod = 1;
                 $col_ver = 1;
                 $presentacion = 4;
@@ -383,8 +387,6 @@ class ExpedienteLista {
             default:
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_form.php';
         }
-        $pagina_ver = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
-        $pagina_accion = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_accion.php';
 
         $a_expedientes = [];
         if (!empty($this->aWhere)) {
@@ -433,12 +435,17 @@ class ExpedienteLista {
                     }
                 }
 
-                $a_cosas = [ 'id_expediente' => $id_expediente,
+                $a_cosas_ver = [ 'id_expediente' => $id_expediente,
                             'filtro' => $this->getFiltro(),
-                ];
-                $link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas));
-                $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
-                $link_accion = Hash::link($pagina_accion.'?'.http_build_query($a_cosas));
+                            'modo' => 'ver',
+                            ];
+                $a_cosas_mod = [ 'id_expediente' => $id_expediente,
+                            'filtro' => $this->getFiltro(),
+                            'modo' => 'mod',
+                            ];
+                $link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas_ver));
+                $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas_mod));
+                $link_accion = Hash::link($pagina_accion.'?'.http_build_query($a_cosas_mod));
                 $txt_ver = empty($txt_ver)? _("ver") : $txt_ver;
                 $txt_mod = empty($txt_mod)? _("mod") : $txt_mod;
                 $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_ver');\" >$txt_ver</span>";

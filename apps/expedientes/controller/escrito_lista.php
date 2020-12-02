@@ -13,8 +13,10 @@ require_once ("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
 $oTabla = new EscritoLista();
 $oTabla->setFiltro($Qfiltro);
+$oTabla->setModo($Qmodo);
 
 echo $oTabla->mostrarTabla();

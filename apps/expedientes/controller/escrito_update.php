@@ -127,7 +127,6 @@ switch($Qque) {
                 $txt_err .= _("Hay un error al guardar el escrito");
                 $txt_err .= "<br>";
             }
-            
         } else {
             $txt_err = _("No existe el escrito");
         }

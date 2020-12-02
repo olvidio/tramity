@@ -21,6 +21,7 @@ require_once ("apps/core/global_object.inc");
 
 $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
 if (empty($Qid_expediente)) {
     exit ("Error, no existe el expediente");
@@ -62,11 +63,12 @@ $entradilla = $oExpediente->getEntradilla();
 
 $oEscritoLista = new EscritoLista();
 $oEscritoLista->setId_expediente($Qid_expediente);
+$oEscritoLista->setModo($Qmodo);
 
 if ($Qfiltro == 'distribuir') {
     $btn_action = 'distribuir';
     $txt_btn_success = _("Distribuir");
-    $oEscritoLista->setFiltro('lista');
+    $oEscritoLista->setFiltro('distribuir');
 } else {
     $btn_action = 'archivar';
     $txt_btn_success = _("Archivar");
@@ -97,13 +99,14 @@ if ($_SESSION['session_auth']['role_actual'] != 'secretaria') {
     $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas(event)');
     $ver_etiquetas = TRUE;
 } else {
-    $oArrayDesplEtiquetas = new web\DesplegableArray('','','etiquetas');
+    $oArrayDesplEtiquetas = new web\DesplegableArray('',[],'etiquetas');
 }
 
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
+$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro,'modo' => $Qmodo]));
+$pagina_actualizar = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro, 'modo' => $Qmodo]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
 
 $a_campos = [
@@ -131,11 +134,13 @@ $a_campos = [
 
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
+    'pagina_actualizar' => $pagina_actualizar,
     // para la pagina js
     'server' => $server,
     //acciones
     'oEscritoLista' => $oEscritoLista,
-    'firltro' => $Qfiltro,
+    'filtro' => $Qfiltro,
+    'modo' => $Qmodo,
     'btn_action' => $btn_action,
     'txt_btn_success' => $txt_btn_success,
     'ver_etiquetas' => $ver_etiquetas,

@@ -2,18 +2,29 @@
   <thead class="thead-light">
     <tr>
       <th scope="col">{{ ver_todo|raw }}</th>
-      {# <th scope="col">prot. local</th> #}
-      <th scope="col">tipo</th>
-      <th scope="col">destino</th>
-      <th scope="col">ref.</th>
-      <th scope="col">asunto</th>
-      <th scope="col">adj.</th>
+      {%  if bdistribuir %}
+	    {%  if modo == 'mod' %}
+          <th scope="col">{{ "rev.datos"|trans }}</th>
+        {% endif %}
+        <th scope="col">{{ "prot. local/rev.texto"|trans }}</th>
+      {% endif %}
+      <th scope="col">{{ "tipo"|trans }}</th>
+      <th scope="col">{{ "destino"|trans }}</th>
+      <th scope="col">{{ "ref."|trans }}</th>
+      <th scope="col">{{ "asunto"|trans }}</th>
+      <th scope="col">{{ "adj."|trans }}</th>
     </tr>
   </thead>
   <tbody>
   {% for row in a_acciones %}
     <tr>
       <th scope="row">{{ row.link_ver|raw }}</th>
+      {%  if bdistribuir %}
+	    {%  if modo == 'mod' %}
+          <td>{{ row.link_mod|raw }}</td>
+        {% endif %}
+        <td>{{ row.prot_local|raw }}</td>
+      {% endif %}
       <td>{{ row.tipo|raw }}</td>
       <td>{{ row.destino|raw }}</td>
       <td>{{ row.ref|raw }}</td>

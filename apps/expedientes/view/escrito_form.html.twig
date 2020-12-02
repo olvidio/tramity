@@ -94,7 +94,7 @@
 {% if id_escrito %}
     {% if tipo_doc == 1 %}
         <div class="form-group">
-          <label for="">{{ "Ver escrito"|trans }}:</label>
+          <label>{{ "Ver escrito"|trans }}:</label>
           <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(event);" >
             {{ "Etherpad"|trans }}
           </button>
@@ -108,7 +108,7 @@
     {% endif %}
     {% if tipo_doc is empty %}
         <div class="form-group">
-          <label for="">{{ "Insertar escrito"|trans }}:</label>
+          <label>{{ "Insertar escrito"|trans }}:</label>
           <button tabindex='100' class="btn btn-info" onClick="fnjs_add_escrito(event,1);" >
             {{ "Etherpad"|trans }}
           </button>

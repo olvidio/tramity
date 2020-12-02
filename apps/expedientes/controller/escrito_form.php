@@ -23,6 +23,7 @@ $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qid_escrito = (integer) \filter_input(INPUT_POST, 'id_escrito');
 $Qaccion = (integer) \filter_input(INPUT_POST, 'accion');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
 $txt_option_ref = '';
 $gesLugares = new GestorLugar();
@@ -192,9 +193,10 @@ if (!empty($Qid_escrito)) {
 
 $url_update = 'apps/expedientes/controller/escrito_update.php';
 $a_cosas = ['id_expediente' => $Qid_expediente, 
-            'filtro' => $Qfiltro
+            'filtro' => $Qfiltro,
+            'modo' => $Qmodo,
         ];
-if ($Qfiltro == 'acabados') {
+if ($Qfiltro == 'acabados' OR $Qfiltro == 'distribuir') {
     $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query($a_cosas));
 } else {
     $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));

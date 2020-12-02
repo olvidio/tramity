@@ -306,6 +306,7 @@ fnjs_voto=function(event,que) {
 	        type: 'post'
 	    });
 	    request.done( function (json) {
+		    debugger;
             if (json.success != true) {
                 alert (json.mensaje);
             } else {

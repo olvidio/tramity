@@ -100,10 +100,12 @@ fnjs_guardar=function(event){
             dataType: 'json'
         });
         request.done( function (json) {
-	debugger;
+            debugger;
             if (json.success != true) {
             	alert (json.mensaje);
             } else {
+                // antes actualizar el listado en la página original
+                window.opener.fnjs_actualizar();
                 // Cerrar la ventana
                 window.close();
             }

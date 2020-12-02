@@ -196,6 +196,11 @@ switch($Qque) {
         $asunto = $oExpediente->getAsunto();
         $asunto_retirado = _("RETIRADO")." $asunto";
         $oExpediente->setAsunto($asunto_retirado);
+        $oExpediente->setF_contestar('');
+        $oExpediente->setF_ini_circulacion('');
+        $oExpediente->setF_aprobacion('');
+        $oExpediente->setF_reunion('');
+        $oExpediente->setOk('f');
         if ($oExpediente->DBGuardar() === FALSE ) {
             $txt_err .= _("No se ha podido cambiar el estado del expediente");
             $txt_err .= "<br>";
