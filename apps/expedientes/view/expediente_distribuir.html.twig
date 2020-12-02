@@ -116,6 +116,11 @@
   <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
     {{ "Volver"|trans }}
   </button>
+  {% if ver_etiquetas %}
+    <button tabindex='90' class="btn btn-success" onClick="fnjs_distribuir(event,'guardar_etiquetas');" >
+      {{ txt_btn_etiquetas }}
+    </button> 
+  {% endif %}
   {% if modo == 'mod' %}
     <button tabindex='90' class="btn btn-success" onClick="fnjs_distribuir(event,'{{ btn_action }}');" >
       {{ txt_btn_success }}

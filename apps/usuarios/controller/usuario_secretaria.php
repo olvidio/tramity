@@ -39,7 +39,7 @@ $a_pills = [];
 // Expedientes:
 
 $oExpedienteLista = new ExpedienteLista();
-// borrador = 1;
+// fijar reunión = 1;
 $filtro = 'fijar_reunion';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -101,7 +101,7 @@ $filtro = 'enviar';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// acabados = 5;
+// permanantes = 5;
 $filtro = 'permanentes';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -113,7 +113,7 @@ $filtro = 'permanentes';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// archivados = 6;
+// pendientes = 6;
 $filtro = 'pendientes';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -130,7 +130,7 @@ $filtro = 'introducir';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-    $num_orden = 8;
+    $num_orden = 7;
     $text = _("introducir");
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);

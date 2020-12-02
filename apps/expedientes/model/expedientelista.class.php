@@ -374,6 +374,7 @@ class ExpedienteLista {
                 break;
             case 'archivados':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                $pagina_ver = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_distribuir.php';
                 $col_mod = 0;
                 $col_ver = 1;
                 $presentacion = 2;
@@ -486,7 +487,7 @@ class ExpedienteLista {
                 $row['oficinas'] = $oficinas_txt;
                 // A: contiene antecedentes, E: contiene escritos, P: contiene propuestas
                 $row['contenido'] = $oExpediente->getContenido();
-                $row['etiquetas'] = $oExpediente->getEtiquetasVisiblesTxt;
+                $row['etiquetas'] = $oExpediente->getEtiquetasVisiblesTxt();
 
                 $row['f_ini'] =  $oExpediente->getF_ini_circulacion()->getFromLocal();
                 $row['f_aprobacion'] =  $oExpediente->getF_aprobacion()->getFromLocal();

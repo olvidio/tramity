@@ -198,6 +198,15 @@ class Expediente Extends expedienteDB {
         return $str_contenido;
     }
     
+    public function getEtiquetasVisiblesArray($id_cargo='') {
+        $cEtiquetas = $this->getEtiquetasVisibles($id_cargo);
+        $a_etiquetas = [];
+        foreach ($cEtiquetas as $oEtiqueta) {
+            $a_etiquetas[] = $oEtiqueta->getId_etiqueta();
+        }
+        return $a_etiquetas;
+    }
+    
     public function getEtiquetasVisiblesTxt($id_cargo='') {
         $cEtiquetas = $this->getEtiquetasVisibles($id_cargo);
         $str_etiquetas = '';

@@ -44,7 +44,31 @@ $Qa_preparar = (array)  \filter_input(INPUT_POST, 'a_preparar', FILTER_DEFAULT, 
 
 $Qvida = (integer) \filter_input(INPUT_POST, 'vida');
 
+$txt_err = '';
 switch($Qque) {
+    case 'guardar_etiquetas':
+        $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        // Se pone cuando se han enviado...
+        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente->DBCarregar();
+        // las etiquetas:
+        $oExpediente->setEtiquetas($Qa_etiquetas);
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            $txt_err .= _("No se han podido guardar las etiquetas");
+        }
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'reunion':
         $oExpediente = new Expediente($Qid_expediente);
         $oExpediente->DBCarregar();

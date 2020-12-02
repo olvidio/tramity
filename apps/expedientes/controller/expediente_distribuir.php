@@ -84,7 +84,8 @@ $comentarios = $aRecorrido['comentarios'];
 
 // Etiquetas
 $ver_etiquetas = FALSE;
-$etiquetas = ''; // No hay ninguna porque en archivar es cuando se añaden.
+$etiquetas = []; // No hay ninguna porque en archivar es cuando se añaden.
+$etiquetas = $oExpediente->getEtiquetasVisiblesArray();
 if ($_SESSION['session_auth']['role_actual'] != 'secretaria') {
     $gesEtiquetas = new GestorEtiqueta();
     $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
@@ -101,6 +102,7 @@ if ($_SESSION['session_auth']['role_actual'] != 'secretaria') {
 } else {
     $oArrayDesplEtiquetas = new web\DesplegableArray('',[],'etiquetas');
 }
+$txt_btn_etiquetas = _("Guardar etiquetas");
 
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
@@ -143,6 +145,7 @@ $a_campos = [
     'modo' => $Qmodo,
     'btn_action' => $btn_action,
     'txt_btn_success' => $txt_btn_success,
+    'txt_btn_etiquetas' => $txt_btn_etiquetas,
     'ver_etiquetas' => $ver_etiquetas,
 ];
 
