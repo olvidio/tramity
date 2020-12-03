@@ -8,6 +8,7 @@ use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
 use usuarios\model\entity\GestorCargo;
+use usuarios\model\entity\Cargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -62,16 +63,30 @@ $a_estado = $oExpediente->getArrayEstado();
 $estado_txt = $a_estado[$estado];
 
 // Valores posibles para la firma
+$gesFirmas = new GestorFirma();
 $oFirma = new Firma();
 $a_firmas = [];
 $rango = 'voto';
 if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
-    if ($estado == Expediente::ESTADO_CIRCULANDO){
-        $rango = 'vb_vcd';
-    } else {
-        $rango = 'vcd';
+    // Ver cual toca
+    $aWhere = ['id_expediente' => $Qid_expediente,
+                'id_cargo' => ConfigGlobal::mi_id_cargo(),
+                '_ordre' => 'orden_tramite',
+    ];
+    $cFirmasVcd = $gesFirmas->getFirmas($aWhere);
+    foreach ($cFirmasVcd as $oFirma) {
+        $valor = $oFirma->getValor();
+        $cargo_tipo = $oFirma->getCargo_tipo();        
+        if ($valor != Firma::V_NO && $valor != Firma::V_OK &&  $valor != Firma::V_VISTO_BUENO ) {
+            if ($cargo_tipo == Cargo::CARGO_VB_VCD) {
+                $rango = 'vb_vcd';
+            } else {
+                $rango = 'vcd';
+            }
+        }
     }
 }
+
 foreach ($oFirma->getArrayValor($rango) as $key => $valor) {
     $a_voto['id'] = $key;
     $a_voto['valor'] = $valor;
@@ -104,7 +119,6 @@ $oEscritoLista->setFiltro($Qfiltro);
 $oEscritoLista->setModo('mod');
 
 // Comentarios y Aclaraciones
-$gesFirmas = new GestorFirma();
 $aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
 $a_recorrido = $aRecorrido['recorrido'];
 $comentarios = $aRecorrido['comentarios'];

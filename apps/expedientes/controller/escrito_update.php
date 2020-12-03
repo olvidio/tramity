@@ -48,6 +48,12 @@ $Qa_prot_any_referencias = (array)  \filter_input(INPUT_POST, 'prot_any_referenc
 $Qa_prot_mas_referencias = (array)  \filter_input(INPUT_POST, 'prot_mas_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 switch($Qque) {
+    case 'escrito_a_secretaria':
+        $oEscrito = new Escrito($Qid_escrito);
+        $oEscrito->DBCarregar();
+        $oEscrito->setOK(Escrito::OK_OFICINA);
+        $oEscrito->DBGuardar();
+        break;
     case 'tipo_doc':
         $Qtipo_doc = (integer) \filter_input(INPUT_POST, 'tipo_doc');
         $oEscrito = new Escrito($Qid_escrito);

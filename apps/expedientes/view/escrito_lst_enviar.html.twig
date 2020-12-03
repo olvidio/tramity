@@ -35,7 +35,7 @@
 
 <script type="text/javascript">
 fnjs_actualizar_expediente=function() {
-    var url = '/apps/expedientes/controller/expediente_distribuir.php?id_expediente={{ id_expediente }}&filtro={{ filtro }}';
+    var url = '/apps/expedientes/controller/expediente_distribuir.php?id_expediente={{ id_expediente }}&filtro={{ filtro }}&modo={{ modo }}';
 	fnjs_update_div('#main',url);
 };
 
@@ -46,6 +46,22 @@ fnjs_ver_escrito=function(id_escrito) {
     var url = server+'/apps/expedientes/controller/escrito_ver.php?id_escrito='+id_escrito;
     w=window.open(url, "", winPrefs);
     w.focus();
+}
+
+fnjs_enviar_a_secretaria=function(id_escrito) {
+    var url_ajax = 'apps/expedientes/controller/escrito_update.php';
+    var param_json = { que: 'escrito_a_secretaria', id_escrito: id_escrito };
+    
+    request=$.ajax({
+        data: param_json,
+        url: url_ajax,
+        type: 'post'
+    });
+
+    request.done( function (rta) {
+        // Actualizar vista expadiente: escrito enviado.
+        fnjs_actualizar_expediente();
+    });
 }
 
 fnjs_enviar_escrito=function(id_escrito) {

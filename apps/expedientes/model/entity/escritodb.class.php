@@ -28,6 +28,11 @@ class EscritoDB Extends core\ClasePropiedades {
     const TIPO_ETHERCALC    = 2;
     const TIPO_OTRO         = 3;
     
+    // ok
+    const OK_NO         = 1;
+    const OK_OFICINA    = 2;
+    const OK_SECRETARIA = 3;
+    
 	/* ATRIBUTS ----------------------------------------------------------------- */
 
 	/**
@@ -181,9 +186,9 @@ class EscritoDB Extends core\ClasePropiedades {
 	/**
 	 * Ok de EscritoDB
 	 *
-	 * @var boolean
+	 * @var integer
 	 */
-	 protected $bok;
+	 protected $iok;
 	/**
 	 * Tipo_doc de EscritoDB
 	 *
@@ -267,12 +272,11 @@ class EscritoDB Extends core\ClasePropiedades {
 		$aDades['accion'] = $this->iaccion;
 		$aDades['modo_envio'] = $this->imodo_envio;
 		$aDades['f_salida'] = $this->df_salida;
-		$aDades['ok'] = $this->bok;
+		$aDades['ok'] = $this->iok;
 		$aDades['tipo_doc'] = $this->itipo_doc;
 		$aDades['anulado'] = $this->banulado;
 		array_walk($aDades, 'core\poner_null');
 		//para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
-		if ( core\is_true($aDades['ok']) ) { $aDades['ok']='true'; } else { $aDades['ok']='false'; }
 		if ( core\is_true($aDades['anulado']) ) { $aDades['anulado']='true'; } else { $aDades['anulado']='false'; }
 
 		if ($bInsert === FALSE) {
@@ -1010,23 +1014,23 @@ class EscritoDB Extends core\ClasePropiedades {
 	    }
 	}
 	/**
-	 * Recupera l'atribut bok de EscritoDB
+	 * Recupera l'atribut iok de EscritoDB
 	 *
-	 * @return boolean bok
+	 * @return integer iok
 	 */
 	function getOk() {
-		if (!isset($this->bok) && !$this->bLoaded) {
+		if (!isset($this->iok) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
-		return $this->bok;
+		return $this->iok;
 	}
 	/**
-	 * estableix el valor de l'atribut bok de EscritoDB
+	 * estableix el valor de l'atribut iok de EscritoDB
 	 *
-	 * @param boolean bok='f' optional
+	 * @param integer iok
 	 */
-	function setOk($bok='f') {
-		$this->bok = $bok;
+	function setOk($iok) {
+		$this->iok = $iok;
 	}
 	/**
 	 * Recupera l'atribut itipo_doc de EscritoDB
@@ -1330,7 +1334,7 @@ class EscritoDB Extends core\ClasePropiedades {
 		return $oDatosCampo;
 	}
 	/**
-	 * Recupera les propietats de l'atribut bok de EscritoDB
+	 * Recupera les propietats de l'atribut iok de EscritoDB
 	 * en una clase del tipus DatosCampo
 	 *
 	 * @return core\DatosCampo

@@ -293,8 +293,8 @@ class ExpedienteLista {
                 break;
             case 'copias':
                 $aWhere['estado'] = Expediente::ESTADO_COPIAS;
-                $aWhere['f_aprobacion'] = 'x';
-                $aOperador['f_aprobacion'] = 'IS NOT NULL';
+                //$aWhere['f_aprobacion'] = 'x';
+                //$aOperador['f_aprobacion'] = 'IS NOT NULL';
                 break;
         }
 

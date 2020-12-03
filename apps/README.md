@@ -126,7 +126,7 @@ Entradas
 $filtro = 'introducir';
 
 8.-
-$filtro = 'entrada_todos';
+$filtro = 'e_asignar';
 
 9.- distribución cr
 $filtro = 'bypass';

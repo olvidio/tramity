@@ -29,6 +29,7 @@ if ($a_rta['success'] === TRUE) {
     $oEscrito = new Escrito($Qid_escrito);
     $oEscrito->DBCarregar();
     $oEscrito->setF_salida($f_salida,FALSE);
+    $oEscrito->setOk(Escrito::OK_SECRETARIA);
     $oEscrito->DBGuardar();
 } else {
     $txt_alert = $a_rta['mensaje'];

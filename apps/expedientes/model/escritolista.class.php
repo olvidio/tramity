@@ -71,6 +71,7 @@ class EscritoLista {
         // No enviados
         $aWhere = [ 'accion' => Escrito::ACCION_ESCRITO,
                     'f_salida' => 'x',
+                    'ok' => Escrito::OK_OFICINA,
                 ];
         $aOperador = [ 'f_salida' => 'IS NULL',
                 ];
@@ -78,6 +79,7 @@ class EscritoLista {
         // Enviados a partir de $fecha
         $aWhere = [ 'accion' => Escrito::ACCION_ESCRITO,
                     'f_salida' => $fecha,
+                    'ok' => Escrito::OK_OFICINA,
                 ];
         $aOperador = [ 'f_salida' => '>=',
                 ];
@@ -104,6 +106,7 @@ class EscritoLista {
         
         $oProtLocal = new Protocolo();
         $oProtLocal->setNombre('local');
+        $a_acciones = [];
         foreach ($cEscritos as $oEscrito) {
             $id_escrito = $oEscrito->getId_escrito();
             $f_salida = $oEscrito->getF_salida()->getFromLocal();
@@ -201,12 +204,12 @@ class EscritoLista {
         
         $gesAcciones = new GestorAccion();
         $cAcciones = $gesAcciones->getAcciones($this->aWhere);
-        $a_acciones = [];
         
         $oProtLocal = new Protocolo();
         $oProtLocal->setNombre('local');
         $todos_escritos = '';
         $prot_local_header = _("rev.texto");
+        $a_acciones = [];
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $tipo_accion = $oAccion->getTipo_accion();
@@ -240,10 +243,16 @@ class EscritoLista {
                     if (is_true($oEscrito->getAnulado())) {
                         $a_accion['enviar'] = "-";
                     } else {
-                    $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito('$id_escrito');\" >"._("enviar")."</span>";
+                        // No se envia, se pasa a secretaria
+                        $ok = $oEscrito->getOk();
+                        if ($ok == EScrito::OK_OFICINA) {
+                            $a_accion['enviar'] = _("en secretaría");
+                        } else {
+                            $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_a_secretaria('$id_escrito');\" >"._("pasar a secretaría")."</span>";
+                        }
                     }
                 } else {
-                    $a_accion['enviar'] = "otra acción?";
+                    $a_accion['enviar'] = _("otra acción?");
                 }
             }
             
@@ -254,18 +263,7 @@ class EscritoLista {
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >"._("ver")."</span>";
                 $prot_local_header = _("rev.texto");
             }
-            /*
-            if ($this->filtro == 'acabados') { 
-                $a_cosas =  ['id_expediente' => $id_expediente,
-                    'id_escrito' => $id_escrito,
-                    'accion' => $tipo_accion,
-                    'filtro' => $this->filtro,
-                ];
-                $pag_escrito = Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
-                
-                $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
-            }
-            */
+            
             $a_json_prot_destino = $oEscrito->getJson_prot_destino();
             $oArrayProtDestino = new ProtocoloArray($a_json_prot_destino,'','');
             $json_prot_local = $oEscrito->getJson_prot_local();

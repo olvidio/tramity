@@ -126,56 +126,58 @@ $filtro = 'pendientes';
 $a_pills[$num_orden] = $pill;
 
 // introducir entradas
-$filtro = 'introducir';
+$filtro = 'en_introducir';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
     $num_orden = 7;
-    $text = _("introducir");
+    $text = _("E: introducir");
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// entradas
-$filtro = 'entrada_todos';
+// asignar entradas
+$filtro = 'en_asignar';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
     $num_orden = 8;
-    $text = _("entradas");
+    $text = _("E: entradas");
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
+// Solo el scdl
+if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
+    // aceptar entradas
+    $filtro = 'en_aceptar';
+        $active = ($filtro == $Qfiltro)? 'active' : '';
+        $aQuery = [ 'filtro' => $filtro ];
+        $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+        $num_orden = 9;
+        $text = _("E: aceptar");
+        $oEntradaLista = new EntradaLista();
+        $oEntradaLista->setFiltro($filtro);
+        $num = $oEntradaLista->getNumero();
+        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+    $a_pills[$num_orden] = $pill;
+}
 // distribución cr
 $filtro = 'bypass';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-    $num_orden = 9;
+    $num_orden = 10;
     $text = _("ditribución cr");
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
-
-// Enviar
-/*
-$filtro = 'enviar';
-    $active = ($filtro == $Qfiltro)? 'active' : '';
-    $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/envios/controller/index_lista.php?'.http_build_query($aQuery));
-    $num_orden = 11;
-    $text = _("Enviar");
-    $num = 'x5';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
-$a_pills[$num_orden] = $pill;
-*/
 
 // ordenar:
 ksort($a_pills);

@@ -52,8 +52,7 @@ class EntradaLista {
         $aOperador = [];
 
         switch ($this->filtro) {
-            case 'entrada_todos':
-                // solo los propios:
+            case 'en_asignar':
                 $aWhere['modo_entrada'] = 1;
                 break;
             case 'entrada':
@@ -81,7 +80,7 @@ class EntradaLista {
         $a_posibles_cargos = $gesCargos->getArrayCargos();
         
         switch ($this->filtro) {
-            case 'entrada_todos':
+            case 'en_asignar':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
                 $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $this->getFiltro()]));
                 break;

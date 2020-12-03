@@ -146,12 +146,27 @@ $a_pills[$num_orden] = $pill;
 
 
 // Entradas:
-// entradas = 10;
-$filtro = 'entrada';
+// Sólo para vcd
+if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
+    // entradas = 10;
+    $filtro = 'en_admitir';
+        $active = ($filtro == $Qfiltro)? 'active' : '';
+        $aQuery = [ 'filtro' => $filtro ];
+        $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+        $num_orden = 10;
+        $text = _("E: admitir");
+        $oEntradaLista = new EntradaLista();
+        $oEntradaLista->setFiltro($filtro);
+        $num = $oEntradaLista->getNumero();
+        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+    $a_pills[$num_orden] = $pill;
+}
+// entradas = 11;
+$filtro = 'en_oficinas';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-    $num_orden = 10;
+    $num_orden = 11;
     $text = _("entradas");
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
@@ -159,45 +174,45 @@ $filtro = 'entrada';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// buscar = 11;
+// buscar = 12;
 $filtro = 'buscar';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-    $num_orden = 11;
+    $num_orden = 12;
     $text = _("archivo de escritos");
     $num = '';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// escritos_cr = 12;
+// escritos_cr = 13;
 $filtro = 'escritos_cr';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-    $num_orden = 12;
+    $num_orden = 13;
     $text = _("escritos de cr");
     $num = '';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// buscar = 13;
+// buscar = 14;
 $filtro = 'permanentes_cr';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-    $num_orden = 13;
+    $num_orden = 14;
     $text = _("permanentes de cr");
     $num = '';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// pendientes = 14;
+// pendientes = 15;
 $filtro = 'pendientes';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-    $num_orden = 14;
+    $num_orden = 15;
     $text = _("pendientes");
     $num = '';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];

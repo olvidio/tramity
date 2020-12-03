@@ -66,10 +66,12 @@
         <div class='col-3 date datepicker' data-provide="datepicker">
           <input tabindex='41' name='f_entrada' id='f_entrada' type='text' class="form-control" value="{{ f_entrada }}" />
         </div>
+        {% if id_entrada %}
 	    <label for="f_escrito" class="col col-2 col-form-label text-right">{{ "Fecha escrito"|trans }}</label>
         <div class='col-3 date datepicker' data-provide="datepicker">
           <input tabindex='31' name='f_escrito' id='f_escrito' type='text' class="form-control" value="{{ f_escrito }}" />
         </div>
+        {% endif %}
   </div> 
   <!--  --------------- TIPO --------------- -->
   <div class="form-row">

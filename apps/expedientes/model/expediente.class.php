@@ -308,6 +308,7 @@ class Expediente Extends expedienteDB {
             self::ESTADO_FIJAR_REUNION => _("fijar reunión"),
             self::ESTADO_ACABADO => _("acabado"),
             self::ESTADO_TERMINADO => _("terminado"),
+            self::ESTADO_COPIAS => _("copias"),
         ];
         
         return $a_estado;
