@@ -20,11 +20,6 @@ require_once ("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$plazo_normal = 15;
-$plazo_urgente = 5;
-$plazo_muy_urgente = 3;
-$error_fecha = 15;
-
 $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
@@ -106,6 +101,7 @@ $entradilla = $oExpediente->getEntradilla();
 $oEscritoLista = new EscritoLista();
 $oEscritoLista->setId_expediente($Qid_expediente);
 $oEscritoLista->setFiltro($Qfiltro);
+$oEscritoLista->setModo('mod');
 
 // Comentarios y Aclaraciones
 $gesFirmas = new GestorFirma();
@@ -189,11 +185,6 @@ $a_campos = [
     
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
-    // para la pagina js
-    'plazo_normal' => $plazo_normal,
-    'plazo_urgente' => $plazo_urgente,
-    'plazo_muy_urgente' => $plazo_muy_urgente,
-    'error_fecha' => $error_fecha,
     //acciones
     'oEscritoLista' => $oEscritoLista,
     //'a_acciones' => $a_acciones,
