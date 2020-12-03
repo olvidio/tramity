@@ -248,8 +248,10 @@ class EscritoLista {
             
             if ($bdistribuir) { 
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_distribuir_escrito('$id_escrito');\" >"._("ver")."</span>";
+                $prot_local_header = _("prot. local/rev.texto");
             } else {
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >"._("ver")."</span>";
+                $prot_local_header = _("rev.texto");
             }
             /*
             if ($this->filtro == 'acabados') { 
@@ -318,6 +320,7 @@ class EscritoLista {
             'ver_todo' => $ver_todo,
             'server' => $server,
             'bdistribuir' => $bdistribuir,
+            'prot_local_header' => $prot_local_header,
         ];
         
         $oView = new ViewTwig('expedientes/controller');

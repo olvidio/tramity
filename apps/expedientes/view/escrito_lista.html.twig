@@ -6,8 +6,8 @@
 	    {%  if modo == 'mod' %}
           <th scope="col">{{ "rev.datos"|trans }}</th>
         {% endif %}
-        <th scope="col">{{ "prot. local/rev.texto"|trans }}</th>
       {% endif %}
+      <th scope="col">{{ prot_local_header }}</th>
       <th scope="col">{{ "tipo"|trans }}</th>
       <th scope="col">{{ "destino"|trans }}</th>
       <th scope="col">{{ "ref."|trans }}</th>
@@ -23,8 +23,8 @@
 	    {%  if modo == 'mod' %}
           <td>{{ row.link_mod|raw }}</td>
         {% endif %}
-        <td>{{ row.prot_local|raw }}</td>
       {% endif %}
+      <td>{{ row.prot_local|raw }}</td>
       <td>{{ row.tipo|raw }}</td>
       <td>{{ row.destino|raw }}</td>
       <td>{{ row.ref|raw }}</td>
