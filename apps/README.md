@@ -1,8 +1,42 @@
+TRAMITY
+=======
+
+cargos
+------
+
+Toda la aplicación está centrada en los cargos: son los cargos los que firman. Cada cargo se asigna a un usuario. También puede asignarse a un único suplente.
+
+Los usuarios que tienen asignados más de un cargo, sea como titular o como suplente, pueden cambiar de cargo por un desplegable.
+
+No existe diferencia entre un usuario que actua propiamente o como suplente. Pueden actuar a la vez. La única comprobación es una alerta que avisa al entrar el usuario titular de que existe un suplente activo.
+
+Para poder definir bien los trámites, se añaden unos cargos especiales (que no tienen ni oficina ni titular):
+
+	1  ponente 
+	2  oficiales (del ponente)
+	3  varias
+	4  todos_d
+	5  vºbº vcd (listo para reunión)
+	6  distribuir (scdl distribuir)
+	7  convocar reunion
+
+Se definen las oficinas como manera de agrupar los cargos. En algunos casos se puede compartir la información entre miembros de una misma oficina. El director siempre puede ver todos los expedientes de los cargos de su oficina.
+
+lugares
+-------
+
+Con este nombre se designa a los ctr, dl y cr a los que se pueden enviar escritos. Para cada uno está prvisto que pueda tener una dirección de email donde enviar los escritos. Además se añade la opción para enviar como pdf o xml (en el caso que tengan una aplicación similar -o ésta misma- se envian los campos por separado para ser introducidos automáticamente en la aplicación). También se puede tener la clave pública para enviar cifrado.
+
+Grupos de lugares: Se pueden hacer grupos de lugares y funcinan como listas de correo. Se ha des-estimado hacer los grupos en función de los parámetros de definicion del centro: tipo de centro o tipo de labor, por la gran variabilidad...
+
 TRAMITES
 ========
 
+Los trámites se definen como una secuencia de cargos que deben ir firmando. Existen los cargos: 'oficiales', 'varias' y 'todos_d' en donde se pueden añadir o quitar para cada expediente concreto.
 
-Filtros en la genración de expedientes:
+ Al ir completando las firmas para cada fase del trámite, se va cambiado el estado del expediente, de manera que se puedan hacer listados de los expedientes aplicado diversos filtros a la hora de buscar:
+
+Filtros en la generación de expedientes:
 ---------------------------------------
 
 (Oficinas)
@@ -17,7 +51,7 @@ $filtro = 'borrador_propio';
 $filtro = 'borrador_oficina';
 
 	estado = Expediente::ESTADO_BORRADOR;
-	ponente = ( director = todos, resto = mi_cargo )
+	ponente = ( director: todos los de la oficina, resto: mi_cargo )
 
 
 3.- para firmar
@@ -52,10 +86,12 @@ firma:
 $filtro = 'circulando';
 	
 	estado = Expediente::ESTADO_CIRCULANDO;
-	ponente = ConfigGlobal::mi_id_cargo();
+	ponente = (director: todos los dla oficina, resto: id_cargo);
 
 6.-
 $filtro = 'seg_reunion'
+
+(todos). Los que falta firmar en otro color. 
 
 	estado = Expediente::ESTADO_FIJAR_REUNION;
 	f_reunion = 'IS NOT NULL';
@@ -66,18 +102,19 @@ $filtro = 'acabados'
 
 	'estado' = Expediente::ESTADO_ACABADO;
 	'ok'     = 't';	// marcados por scdl con ok.
-    'ponente' = ConfigGlobal::mi_id_cargo();  // solo los propios:
+	'ponente' = ConfigGlobal::mi_id_cargo();  // solo los propios:
 
 8.- 
 $filtro = 'archivados';
 
 	'estado' = Expediente::ESTADO_TERMINADO;
+	>>>>TODOS????????
 
 9.- 
 $filtro = 'copias';
 
 	'estado' = Expediente::ESTADO_COPIAS;
-	'f_aprobacion' = 'IS NOT NULL';
+	>>>>TODOS????????
 
 	
 10.-
@@ -108,9 +145,11 @@ $filtro = 'distribuir';
 	
 4.- SOLO ESCRITOS (No expedientes)
 $filtro = 'enviar';
-??????????
 
-
+	'accion' => Escrito::ACCION_ESCRITO,
+	'ok' => Escrito::OK_OFICINA,
+	'f_salida' => 'IS NULL', 'HOY'
+	
 5.-
 $filtro = 'permanentes';
 

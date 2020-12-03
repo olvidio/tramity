@@ -54,8 +54,8 @@ fnjs_ver_doc_ep=function(event) {
         // antes, dentro del ajax, hacia falta el responseText
         //url=rta.responseText;
         url=rta;
-        w=window.open(url, "", winPrefs);
-        w.focus();
+        win=window.open(url, "", winPrefs);
+        win.focus();
     });
 	request.fail(function(JqXHR, textStatus, errorThrown){
 		alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
@@ -96,11 +96,37 @@ fnjs_escrito=function(event,n) {
                 alert ('error: '+rta_txt);
             } else {
                 var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-                w=window.open(url, "", winPrefs);
-                w.focus();
+                win=window.open(url, "", winPrefs);
+                // Para que al cerrar la ventana se actualize ésta.
+                var timer = setInterval(function() { 
+                    if(win.closed) {
+                        clearInterval(timer);
+                        fnjs_actualizar();
+                    }
+                }, 1000);
+                win.focus();
             }
         });
 	}
 }
 
+fnjs_actualizar=function(){
+	var id_entrada=$('#id_entrada').val();
+	var filtro=$('#filtro').val();
+    var url_doc = 'apps/entradas/controller/entrada_form.php';
+    var param_json = { id_entrada: id_entrada, filtro: filtro };
+    request=$.ajax({
+        data: param_json,
+        url: url_doc,
+        type: 'post'
+    });
+	request.done( function (resposta) {
+		fnjs_mostra_resposta (resposta,"#main");
+	});
+	request.fail(function(JqXHR, textStatus, errorThrown){
+		alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+        console.error("Hi ha un error: "+ textStatus, errorThrown);
+    });
+
+}
 </script>

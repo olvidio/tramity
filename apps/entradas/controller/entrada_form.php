@@ -213,6 +213,7 @@ $a_campos = [
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
     'pagina_nueva' => $pagina_nueva,
+    'filtro' => $Qfiltro,
     // para la pagina js
     'plazo_normal' => $plazo_normal,
     'plazo_urgente' => $plazo_urgente,
