@@ -206,6 +206,7 @@ class EscritoLista {
         $oProtLocal = new Protocolo();
         $oProtLocal->setNombre('local');
         $todos_escritos = '';
+        $prot_local_header = _("rev.texto");
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $tipo_accion = $oAccion->getTipo_accion();
