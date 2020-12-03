@@ -19,4 +19,11 @@ $oTabla = new EscritoLista();
 $oTabla->setFiltro($Qfiltro);
 $oTabla->setModo($Qmodo);
 
-echo $oTabla->mostrarTabla();
+switch ($Qfiltro) {
+    case 'enviar':
+        echo $oTabla->mostrarTablaEnviar();
+        break;
+    default:
+        echo $oTabla->mostrarTabla();
+    break;
+}

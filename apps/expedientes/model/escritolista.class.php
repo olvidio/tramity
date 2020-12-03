@@ -68,6 +68,30 @@ class EscritoLista {
         $this->aOperador = $aOperador;
     }
 
+    private function getEscritosParaEnviar($fecha) {
+        if (empty($fecha)) {
+            $fecha = date(\DateTimeInterface::ISO8601);
+        }
+        $gesEscritos = new GestorEscrito();
+        // No enviados
+        $aWhere = [ 'accion' => Escrito::ACCION_ESCRITO,
+                    'f_salida' => 'x',
+                ];
+        $aOperador = [ 'f_salida' => 'IS NULL',
+                ];
+        $cEscritosNoEnviados = $gesEscritos->getEscritos($aWhere,$aOperador);
+        // Enviados a partir de $fecha
+        $aWhere = [ 'accion' => Escrito::ACCION_ESCRITO,
+                    'f_salida' => $fecha,
+                ];
+        $aOperador = [ 'f_salida' => '>=',
+                ];
+        $cEscritosEnviadosFecha = $gesEscritos->getEscritos($aWhere,$aOperador);
+        
+        $cEscritos = array_merge($cEscritosNoEnviados, $cEscritosEnviadosFecha);
+        return $cEscritos;
+    }
+
     private function getDistribuir() {
         $oExpediente = new Expediente($this->id_expediente);
         $estado = $oExpediente->getEstado();
@@ -77,6 +101,99 @@ class EscritoLista {
             $bdistribuir = FALSE;
         }
         return $bdistribuir;
+    }
+    
+    public function mostrarTablaEnviar($fecha='') {
+        
+        $cEscritos = $this->getEscritosParaEnviar($fecha);
+        
+        $oProtLocal = new Protocolo();
+        $oProtLocal->setNombre('local');
+        foreach ($cEscritos as $oEscrito) {
+            $id_escrito = $oEscrito->getId_escrito();
+            $f_salida = $oEscrito->getF_salida()->getFromLocal();
+            
+            $a_cosas =  ['id_expediente' => $this->id_expediente,
+                'id_escrito' => $id_escrito,
+                'filtro' => $this->filtro,
+                'modo' => $this->modo,
+            ];
+            $pag_escrito =  Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
+            $pag_rev =  Hash::link('apps/expedientes/controller/escrito_rev.php?'.http_build_query($a_cosas));
+            
+            $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
+            $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >"._("rev.texto")."</span>";
+            
+            
+            if (!empty($f_salida)) {
+                $a_accion['enviar'] = _("enviado")." ($f_salida)";
+            } else {
+                // si es anulado NO enviar!
+                if (is_true($oEscrito->getAnulado())) {
+                    $a_accion['enviar'] = "-";
+                } else {
+                    $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito('$id_escrito');\" >"._("enviar")."</span>";
+                }
+            }
+            
+            $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >"._("ver")."</span>";
+            
+            $a_json_prot_destino = $oEscrito->getJson_prot_destino();
+            $oArrayProtDestino = new ProtocoloArray($a_json_prot_destino,'','');
+            $json_prot_local = $oEscrito->getJson_prot_local();
+            if (count(get_object_vars($json_prot_local)) == 0) {
+                // Todavía no está definido el protocolo local;
+                $prot_local_txt = _("revisar");
+            } else {
+                $oProtLocal->setLugar($json_prot_local->lugar);
+                $oProtLocal->setProt_num($json_prot_local->num);
+                $oProtLocal->setProt_any($json_prot_local->any);
+                if (property_exists($json_prot_local, 'mas')) {
+                    $oProtLocal->setMas($json_prot_local->mas);
+                }
+                $prot_local_txt = $oProtLocal->ver_txt();
+            }
+            // Tiene adjuntos?
+            $adjuntos = '';
+            $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
+            if (!empty($a_id_adjuntos)) {
+                $adjuntos = '<i class="fas fa-paperclip fa-fw"></i>';
+            }
+            
+            $json_ref = $oEscrito->getJson_prot_ref();
+            $oArrayProtRef = new ProtocoloArray($json_ref,'','');
+            $oArrayProtRef->setRef(TRUE);
+            
+            if ($this->getModo() == 'mod') {
+                $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito(event,'$id_escrito');\" >";
+                $prot_local .= $prot_local_txt;
+                $prot_local .= "</span>";
+            } else {
+                $prot_local = $prot_local_txt;
+            }
+            
+            $a_accion['prot_local'] = $prot_local;
+            $a_accion['tipo'] = '';
+            $a_accion['destino'] = $oArrayProtDestino->ListaTxtBr();
+            $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
+            $a_accion['categoria'] = '';
+            $a_accion['asunto'] = $oEscrito->getAsuntoDetalle();
+            $a_accion['adjuntos'] = $adjuntos;
+            
+            $a_acciones[] = $a_accion;
+        }
+        
+        $server = ConfigGlobal::getWeb(); //http://tramity.local
+        
+        $a_campos = [
+            'filtro' => $this->filtro,
+            'modo' => $this->modo,
+            'a_acciones' => $a_acciones,
+            'server' => $server,
+        ];
+        
+        $oView = new ViewTwig('expedientes/controller');
+        return $oView->renderizar('escrito_lst_enviar.html.twig',$a_campos);
     }
     
     public function mostrarTabla() {
@@ -219,6 +336,13 @@ class EscritoLista {
         }
     }
     
+    public function getNumeroEnviar($fecha='') {
+        $cEscritos = $this->getEscritosParaEnviar($fecha);
+        $num = count($cEscritos);
+    
+        return $num;
+    }
+
     public function getNumero() {
         $this->setCondicion();
         $gesEscritos = new GestorEscritoDB();
@@ -238,19 +362,19 @@ class EscritoLista {
     }
 
     /**
-     * @return number
-     */
-    public function getId_expediente()
-    {
-        return $this->id_expediente;
-    }
-
-    /**
      * @param string $filtro
      */
     public function setFiltro($filtro)
     {
         $this->filtro = $filtro;
+    }
+
+    /**
+     * @return number
+     */
+    public function getId_expediente()
+    {
+        return $this->id_expediente;
     }
 
     /**

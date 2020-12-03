@@ -97,7 +97,7 @@ $filtro = 'enviar';
     $text = _("enviar");
     $oEscritoLista = new EscritoLista();
     $oEscritoLista->setFiltro($filtro);
-    $num = $oEscritoLista->getNumero();
+    $num = $oEscritoLista->getNumeroEnviar();
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
