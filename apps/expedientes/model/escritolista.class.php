@@ -56,13 +56,8 @@ class EscritoLista {
         $aWhere = [];
         $aOperador = [];
 
-        switch ($this->filtro) {
-            case 'distribuir':
-            case 'acabados':
-                $aWhere['id_expediente'] = $this->id_expediente;
-                $aWhere['_ordre'] = 'tipo_accion';
-                break;
-        }
+        $aWhere['id_expediente'] = $this->id_expediente;
+        $aWhere['_ordre'] = 'tipo_accion';
 
         $this->aWhere = $aWhere;
         $this->aOperador = $aOperador;

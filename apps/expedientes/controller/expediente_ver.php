@@ -105,7 +105,7 @@ $entradilla = $oExpediente->getEntradilla();
 
 $oEscritoLista = new EscritoLista();
 $oEscritoLista->setId_expediente($Qid_expediente);
-$oEscritoLista->setFiltro('lista');
+$oEscritoLista->setFiltro($Qfiltro);
 
 // Comentarios y Aclaraciones
 $gesFirmas = new GestorFirma();
