@@ -1,7 +1,6 @@
 <?php
 namespace entradas\model;
 
-use core\Converter;
 use entradas\model\entity\EntradaDB;
 use entradas\model\entity\EntradaDocDB;
 use entradas\model\entity\GestorEntradaAdjunto;
@@ -16,15 +15,31 @@ class Entrada Extends EntradaDB {
     // modo entrada
     const MODO_MANUAL       = 1;
     const MODO_XML          = 2;
+    
     // categoria
     const CAT_E12          = 1;
     const CAT_NORMAL       = 2;
     const CAT_PERMANATE    = 3;
+    
     // visibilidad
     const V_TODOS           = 1;  // cualquiera
     const V_PERSONAL        = 2;  // oficina y directores
     const V_RESERVADO       = 3;  // sólo directores
     const V_RESERVADO_VCD   = 4;  // sólo vcd + quien señale
+    
+    // estado
+    /*
+     - Ingresa (secretaría introduce los datos de la entrada)
+     - Admitir (vcd los mira y da el ok)
+     - Asignar (secretaría añade datos tipo: ponente... Puede que no se haya hecho el paso de ingresar)
+     - Aceptar (scdl ok)
+     - Oficinas (Las oficinas puede ver lo suyo)
+     */
+    const ESTADO_INGRESAR          = 1;
+    const ESTADO_ADMITIR           = 2;
+    const ESTADO_ASIGNAR           = 3;
+    const ESTADO_ACEPTAR           = 4;
+    const ESTADO_OFICINAS          = 5;
     
     /* PROPIEDADES -------------------------------------------------------------- */
 

@@ -136,6 +136,13 @@ class EntradaDB Extends core\ClasePropiedades {
 	 * @var boolean
 	 */
 	 protected $bbypass;
+	/**
+	 * Estado de EntradaDB
+	 *
+	 * @var integer
+	 */
+	 protected $iestado;
+	 
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de EntradaDB
@@ -201,6 +208,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		$aDades['visibilidad'] = $this->ivisibilidad;
 		$aDades['f_contestar'] = $this->df_contestar;
 		$aDades['bypass'] = $this->bbypass;
+		$aDades['estado'] = $this->iestado;
 		array_walk($aDades, 'core\poner_null');
 		//para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
 		if ( core\is_true($aDades['bypass']) ) { $aDades['bypass']='true'; } else { $aDades['bypass']='false'; }
@@ -220,7 +228,8 @@ class EntradaDB Extends core\ClasePropiedades {
 					categoria                = :categoria,
 					visibilidad              = :visibilidad,
 					f_contestar              = :f_contestar,
-					bypass                   = :bypass";
+					bypass                   = :bypass,
+					estado                   = :estado";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_entrada='$this->iid_entrada'")) === FALSE) {
 				$sClauError = 'EntradaDB.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -239,8 +248,8 @@ class EntradaDB Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(modo_entrada,json_prot_origen,asunto_entrada,json_prot_ref,ponente,resto_oficinas,asunto,f_entrada,detalle,categoria,visibilidad,f_contestar,bypass)";
-			$valores="(:modo_entrada,:json_prot_origen,:asunto_entrada,:json_prot_ref,:ponente,:resto_oficinas,:asunto,:f_entrada,:detalle,:categoria,:visibilidad,:f_contestar,:bypass)";		
+			$campos="(modo_entrada,json_prot_origen,asunto_entrada,json_prot_ref,ponente,resto_oficinas,asunto,f_entrada,detalle,categoria,visibilidad,f_contestar,bypass,estado)";
+			$valores="(:modo_entrada,:json_prot_origen,:asunto_entrada,:json_prot_ref,:ponente,:resto_oficinas,:asunto,:f_entrada,:detalle,:categoria,:visibilidad,:f_contestar,:bypass,:estado)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'EntradaDB.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -340,6 +349,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		if (array_key_exists('visibilidad',$aDades)) $this->setVisibilidad($aDades['visibilidad']);
 		if (array_key_exists('f_contestar',$aDades)) $this->setF_contestar($aDades['f_contestar'],$convert);
 		if (array_key_exists('bypass',$aDades)) $this->setBypass($aDades['bypass']);
+		if (array_key_exists('estado',$aDades)) $this->setEstado($aDades['estado']);
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -362,6 +372,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		$this->setVisibilidad('');
 		$this->setF_contestar('');
 		$this->setBypass('');
+		$this->setEstado('');
 		$this->setPrimary_key($aPK);
 	}
 
@@ -742,6 +753,25 @@ class EntradaDB Extends core\ClasePropiedades {
 	function setBypass($bbypass='f') {
 		$this->bbypass = $bbypass;
 	}
+	/**
+	 * Recupera l'atribut iestado de EntradaDB
+	 *
+	 * @return integer iestado
+	 */
+	function getEstado() {
+		if (!isset($this->iestado) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->iestado;
+	}
+	/**
+	 * estableix el valor de l'atribut iestado de EntradaDB
+	 *
+	 * @param integer iestado
+	 */
+	function setEstado($iestado) {
+		$this->iestado = $iestado;
+	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
 	/**
@@ -764,6 +794,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		$oEntradaDBSet->add($this->getDatosVisibilidad());
 		$oEntradaDBSet->add($this->getDatosF_contestar());
 		$oEntradaDBSet->add($this->getDatosBypass());
+		$oEntradaDBSet->add($this->getDatosEstado());
 		return $oEntradaDBSet->getTot();
 	}
 
@@ -923,6 +954,18 @@ class EntradaDB Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'bypass'));
 		$oDatosCampo->setEtiqueta(_("bypass"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut iestado de EntradaDB
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosEstado() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'estado'));
+		$oDatosCampo->setEtiqueta(_("estado"));
 		return $oDatosCampo;
 	}
 }

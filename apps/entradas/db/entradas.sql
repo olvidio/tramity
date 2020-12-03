@@ -12,7 +12,8 @@ CREATE TABLE public.entradas (
 	categoria smallint,
 	visibilidad smallint,
 	f_contestar date,
-	bypass boolean
+	bypass boolean,
+	estado smallint
 );
 
 ALTER TABLE public.entradas OWNER TO tramity;
@@ -21,6 +22,7 @@ CREATE INDEX IF NOT EXISTS entradas_f_entrada_idx ON public.entradas (f_entrada)
 CREATE INDEX IF NOT EXISTS entradas_f_contestar_idx ON public.entradas (f_contestar);
 CREATE INDEX IF NOT EXISTS entradas_asunto_e_idx ON public.entradas ((lower(asunto_entrada)));
 CREATE INDEX IF NOT EXISTS entradas_asunto_idx ON public.entradas ((lower(asunto)));
+CREATE INDEX IF NOT EXISTS entradas_estado_idx ON public.entradas (estado);
 
 --- docs
 CREATE TABLE public.entrada_doc (
