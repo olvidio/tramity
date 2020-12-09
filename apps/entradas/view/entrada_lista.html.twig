@@ -6,29 +6,37 @@
 <table class="table table-sm table-bordered">
   <thead class="thead-light">
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">{{ "protocolo"|trans }}</th>
+      {% if secretaria %}
+        <th scope="col">#</th>
+      {% endif %}
       <th scope="col">{{ "org./dest."|trans }}</th>
+      <th scope="col">{{ "protocolo"|trans }}</th>
       <th scope="col">{{ "ref."|trans }}</th>
       <th scope="col">{{ "categoria"|trans }}</th>
+      <th scope="col">{{ "visibilidad"|trans }}</th>
       <th scope="col">{{ "asunto"|trans }}</th>
       <th scope="col">{{ "oficinas"|trans }}</th>
       <th scope="col">{{ "fecha escrito"|trans }}</th>
       <th scope="col">{{ "contestar antes de"|trans }}</th>
+      <th scope="col">{{ "fecha entrada"|trans }}</th>
     </tr>
   </thead>
   <tbody>
   {% for row in a_entradas %}
     <tr>
-      <th scope="row">{{ row.link_mod|raw }}</th>
-      <td>{{ row.protocolo }}</td>
+      {% if secretaria %}
+        <td>{{ row.link_mod|raw }}</td>
+      {% endif %}
       <td>{{ row.link_ver|raw }}</td>
+      <td>{{ row.protocolo }}</td>
       <td>{{ row.referencias|raw }}</td>
       <td>{{ row.categoria }}</td>
+      <td>{{ row.visibilidad }}</td>
       <td>{{ row.asunto }}</td>
       <td>{{ row.oficinas|raw }}</td>
       <td>{{ row.f_escrito }}</td>
       <td>{{ row.f_contestar }}</td>
+      <td>{{ row.f_entrada }}</td>
     </tr>
     {% endfor %}
   </tbody>

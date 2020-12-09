@@ -147,6 +147,7 @@ class EntradaLista {
                 
                 // mirar si tienen escrito
                 $row['f_escrito'] = $oEntrada->getF_documento()->getFromLocal();
+                $row['visibilidad'] = $visibilidad;
                 
                 $a_entradas[] = $row;
             }

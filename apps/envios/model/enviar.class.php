@@ -179,8 +179,11 @@ class Enviar {
     }
     
     private function getDatosEscrito() {
+        $this->getDestinatarios();
         // filename
         $oEscrito = new Escrito($this->iid);
+        $this->f_salida = $oEscrito->getF_escrito()->getFromLocal('.');
+        
         $json_prot_local = $oEscrito->getJson_prot_local();
         if (count(get_object_vars($json_prot_local)) == 0) {
             $this->a_rta['success'] = FALSE;
@@ -218,6 +221,28 @@ class Enviar {
             $a_adjuntos[$adjunto_filename] = $escrito_txt;
         }
         $this->a_adjuntos = $a_adjuntos;
+    }
+    
+    /**
+     * para descargar en local
+     * 
+     * @return array|string
+     */
+    public function getPdf() {
+        if ($this->getDocumento() === FALSE) {
+            return FALSE;
+        }
+        $filename = $this->filename;
+        $filename_ext = $this->filename_ext;
+        $contentFile = $this->contentFile;
+        
+        $a_Txt = ['content' => $contentFile,
+                    'name' => $filename,
+                    'ext' => $filename_ext,
+                  ];
+        //$a_adjuntos = $this->a_adjuntos;
+        
+        return $a_Txt;
     }
     
     public function enviar() {

@@ -4,6 +4,8 @@
 <!-- CSS jQuery, bootstrap -->
 <link type="text/css" rel='stylesheet' href='{{ base_url }}/node_modules/jquery-ui/themes/base/all.css' />
 <link type="text/css" rel="stylesheet" href="{{ base_url }}/node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+<link href="{{ base_url }}/node_modules/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
 
 <div id="tot" class="container-fluid mt-3">
 <div class="clearfix ">
@@ -31,10 +33,20 @@
 {{ escrito_html|raw }}
 </div>
 <!--  --------------------  FECHA  --------------------------  -->
-<div id="fecha" style="margin-top: 1em; margin-right:  4em; text-align: right; " >
-    <label>{{ f_escrito }}</label>
+<div class="clearfix ">
+  <div class="d-inline-flex float-left">
+    <div class="p-2 text-dark font-weight-bold" >
+      <button type="button" class="btn btn-outline-secondary" onClick="fnjs_download_pdf({{ id_escrito }})">
+  	    <i class="fa fa-download" aria-hidden="true">  {{ "Descargar en pdf"|trans }}</i>
+	  </button>
+    </div>
+  </div>
+  <div class="d-inline-flex float-right">
+    <div class="p-2 text-dark font-weight-bold" >
+      {{ f_escrito }}
+    </div>
+  </div>
 </div>
-  
 
 <!--  --------------------  ADJUNTOS  --------------------------  -->
 {% if a_adjuntos %}
@@ -49,6 +61,10 @@
 </div>
 <hr>
 <script>
+fnjs_download_pdf=function(id_escrito) {
+	url = "{{ url_download_pdf }}"+"?id_escrito="+id_escrito;
+	window.open(url);
+}
 fnjs_download=function(item) {
 	url = "{{ url_download }}"+"&key="+item;
 	window.open(url);
