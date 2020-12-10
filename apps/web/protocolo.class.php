@@ -107,7 +107,7 @@ class Protocolo {
 		
         $sHtml = "";
 		if(!empty($etiqueta)) {
-            $sHtml .= '<label for="prot_num" class="col col-2 col-form-label">';
+            $sHtml .= '<label for="prot_num" class="col-2 col-form-label">';
             $sHtml .= $etiqueta;
             $sHtml .= '</label>';
 		}

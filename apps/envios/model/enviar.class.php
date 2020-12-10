@@ -139,8 +139,11 @@ class Enviar {
     }
     
     private function getDatosEntrada() {
+        $sigla = $_SESSION['oConfig']->getSigla();
         // filename
         $oEntrada = new Entrada($this->iid);
+        $this->f_salida = $oEntrada->getF_documento()->getFromLocal('.');
+        
         $json_prot_origen = $oEntrada->getJson_prot_origen();
         if (count(get_object_vars($json_prot_origen)) == 0) {
             exit (_("No hay más"));
@@ -152,7 +155,7 @@ class Enviar {
         $oProtOrigen->setMas($json_prot_origen->mas);
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
-        $a_header = [ 'left' => $this->destinos_txt,
+        $a_header = [ 'left' => $sigla,
             'center' => '',
             'right' => $oProtOrigen->ver_txt(),
         ];

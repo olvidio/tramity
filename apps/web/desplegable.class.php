@@ -14,6 +14,7 @@ class Desplegable {
 	protected $bMultiple;
 	protected $iTabIndex;
 	protected $sClase;
+	protected $sdisabled;
 
 	/* CONSTRUCTOR ------------------------------ */
 	function __construct($sNombre='',$oOpciones='',$sOpcion_sel='',$bBlanco='') {
@@ -66,14 +67,15 @@ class Desplegable {
 	}
 
 	public function desplegable() {
+        $disabled = $this->sdisabled;
 		$multiple = empty($this->bMultiple)? '' : 'multiple';
 		$tab_index = empty($this->iTabIndex)? '' : 'tabindex="'.$this->iTabIndex.'"';
 		$size = empty($this->iSize)? '' : 'size="'.$this->iSize.'"';
 		$clase = empty($this->sClase)? '' : 'class="'.$this->sClase.'"';
 		if (empty($this->sAction)) {
-			$sHtml = "<select $multiple $tab_index id=\"$this->sNombre\" name=\"$this->sNombre\" $clase $size>";
+			$sHtml = "<select $multiple $tab_index id=\"$this->sNombre\" name=\"$this->sNombre\" $clase $size $disabled>";
 		} else {
-			$sHtml = "<select $multiple $tab_index id=\"$this->sNombre\" name=\"$this->sNombre\" $clase $size onChange=\"$this->sAction\" >";
+			$sHtml = "<select $multiple $tab_index id=\"$this->sNombre\" name=\"$this->sNombre\" $clase $size $disabled onChange=\"$this->sAction\" >";
 		}
 		$sHtml .= $this->options();
 		$sHtml .= '</select>';
@@ -146,6 +148,13 @@ class Desplegable {
 	}
 	public function setTabIndex($index) {
 	    $this->iTabIndex = $index;
+	}
+	public function setDisabled($disabled=FALSE) {
+	    if ($disabled) {
+	       $this->sdisabled = 'disabled';
+	    } else {
+	       $this->sdisabled = '';
+	    }
 	}
 }
 

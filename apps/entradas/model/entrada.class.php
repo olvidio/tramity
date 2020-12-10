@@ -35,11 +35,11 @@ class Entrada Extends EntradaDB {
      - Aceptar (scdl ok)
      - Oficinas (Las oficinas puede ver lo suyo)
      */
-    const ESTADO_INGRESAR          = 1;
-    const ESTADO_ADMITIR           = 2;
-    const ESTADO_ASIGNAR           = 3;
-    const ESTADO_ACEPTAR           = 4;
-    const ESTADO_OFICINAS          = 5;
+    const ESTADO_INGRESADO          = 1;
+    const ESTADO_ADMITIDO           = 2;
+    const ESTADO_ASIGNADO           = 3;
+    const ESTADO_ACEPTADO           = 4;
+    const ESTADO_OFICINAS           = 5;
     
     /* PROPIEDADES -------------------------------------------------------------- */
 
@@ -121,7 +121,7 @@ class Entrada Extends EntradaDB {
         // El tipo y fecha documento: (excepto si es nuevo)
         if (!empty($this->iid_entrada)) {
             $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
-            $oEntradaDocDB->setF_doc($this->df_doc,$this->convert);
+            $oEntradaDocDB->setF_doc($this->df_doc,TRUE);
             $oEntradaDocDB->setTipo_doc($this->itipo_doc);
             $oEntradaDocDB->DBGuardar();
         }

@@ -63,12 +63,12 @@
   </div>
   <!--  --------------- FECHAS --------------- -->
   <div class="form-group row">
-        <label for="f_entrada" class="col col-2 col-form-label text-right">{{ "Fecha entrada"|trans }}</label>
+        <label for="f_entrada" class="col col-2 col-form-label">{{ "Fecha entrada"|trans }}</label>
         <div class='col-3 date datepicker' data-provide="datepicker">
           <input tabindex='41' name='f_entrada' id='f_entrada' type='text' class="form-control" value="{{ f_entrada }}" />
         </div>
         {% if id_entrada %}
-	    <label for="f_escrito" class="col col-2 col-form-label text-right">{{ "Fecha escrito"|trans }}</label>
+	    <label for="f_escrito" class="col col-2 col-form-label">{{ "Fecha escrito"|trans }}</label>
         <div class='col-3 date datepicker' data-provide="datepicker">
           <input tabindex='31' name='f_escrito' id='f_escrito' type='text' class="form-control" value="{{ f_escrito }}" />
         </div>
@@ -77,24 +77,28 @@
   <!--  --------------- TIPO --------------- -->
   <div class="form-row">
     <div class="form-group col-md-2">
-      <label for="tipo">Categoría</label>
+      <label for="tipo">{{ "Categoría"|trans }}</label>
       {{ oDesplCategoria.desplegable|raw }}
     </div>
     <div class="form-group col-md-2">
-      <label for="visibilidad">Visibilidad</label>
+      <label for="visibilidad">{{ "Visibilidad"|trans }}</label>
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
-    <div class="form-group col-md-6">
-      <label for="plazo">{{ "¿Es necesario contestar?"|trans }}</label>
-      {{ oDesplPlazo.desplegable|raw }}
-      <div class='col-5 date datepicker' data-provide="datepicker">
-        <input tabindex='85' name='f_plazo' id='f_plazo' type='text' class="form-control" value="" onchange="fnjs_comprobar_plazo('input')"  />
-      </div>
-    </div>
     <div class="form-group col-md-2">
-      <label for="visibilidad">Distribución cr</label>
+      <label>{{ "Distribución cr"|trans }}</label>
       {{ oDesplByPass.desplegable|raw }}
     </div>
+    <div class="form-group col-md-2">
+      <label>{{ "Admitido (vcd)"|trans }}</label>
+      {{ oDesplAdmitido.desplegable|raw }}
+    </div>
+  </div>
+  <div class="form-group row">
+      <label for="plazo" class="mr-3 mt-2">{{ "¿Es necesario contestar?"|trans }}</label>
+      {{ oDesplPlazo.desplegable|raw }}
+      <div class='col-3 date datepicker' data-provide="datepicker">
+        <input tabindex='85' name='f_plazo' id='f_plazo' type='text' class="form-control" value="" onchange="fnjs_comprobar_plazo('input')"  />
+      </div>
   </div>
   <!-- Fin Col Izda -->
 </div>

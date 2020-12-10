@@ -1,6 +1,5 @@
 <?php
 use envios\model\Enviar;
-use expedientes\model\entity\EscritoAdjunto;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -13,17 +12,14 @@ require_once ("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 // El download es via GET!!!";
-$Qid_escrito = (integer) \filter_input(INPUT_GET, 'id_escrito');
+$Qid_entrada = (integer) \filter_input(INPUT_GET, 'id_entrada');
 
-if (!empty($Qid_escrito)) {
-
-    $oEnviar = new Enviar($Qid_escrito,'escrito');
-    
+if (!empty($Qid_entrada)) {
+    $oEnviar = new Enviar($Qid_entrada,'entrada');
     $File = $oEnviar->getPdf();
-    
     $escrito = $File['content'];
     $nom = $File['ext'];
-
+    
     header('Content-Description: File Transfer');
     header('Content-Transfer-Encoding: binary');
     header('Cache-Control: public, must-revalidate, max-age=0');
@@ -36,7 +32,7 @@ if (!empty($Qid_escrito)) {
     //header("Content-Type: $ctype");
     //header("Content-Disposition: attachment; filename=\"".basename($fullPath)."\";" );
     header('Content-disposition: attachment; filename="' . $nom . '"');
-        
+    
     ob_clean();
     flush();
     echo $escrito;

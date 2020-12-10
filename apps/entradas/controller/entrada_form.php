@@ -101,6 +101,15 @@ $oDesplByPass = new Desplegable();
 $oDesplByPass->setNombre('bypass');
 $oDesplByPass->setOpciones(['f' => _("No"), 't' => _("Sí")]);
     
+$oDesplAdmitido = new Desplegable();
+$oDesplAdmitido->setNombre('admitir');
+$oDesplAdmitido->setOpciones(['f' => _("No"), 't' => _("Sí")]);
+if ($Qfiltro == 'en_asignar') {
+    $oDesplAdmitido->setOpcion_sel('t');
+} else {
+    $oDesplAdmitido->setDisabled(TRUE);
+}
+    
 if (!empty($Qid_entrada)) {
     
     $json_prot_origen = $oEntrada->getJson_prot_origen();
@@ -205,6 +214,7 @@ $a_campos = [
     'oDesplVisibilidad' => $oDesplVisibilidad,
     'oDesplPlazo' => $oDesplPlazo,
     'oDesplByPass' => $oDesplByPass,
+    'oDesplAdmitido' => $oDesplAdmitido,
     //'a_adjuntos' => $a_adjuntos,
     'initialPreview' => $initialPreview,
     'json_config' => $json_config,

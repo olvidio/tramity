@@ -126,7 +126,7 @@ $filtro = 'pendientes';
 $a_pills[$num_orden] = $pill;
 
 // introducir entradas
-$filtro = 'en_introducir';
+$filtro = 'en_ingresar';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));

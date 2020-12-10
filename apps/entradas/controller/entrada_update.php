@@ -40,6 +40,7 @@ $Qvisibiliad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 
 $Qf_plazo = (string) \filter_input(INPUT_POST, 'f_plazo');
 $Qbypass = (string) \filter_input(INPUT_POST, 'bypass');
+$QAdmitir = (string) \filter_input(INPUT_POST, 'admitir');
 
 /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
 $Qref_num = (integer) \filter_input(INPUT_POST, 'ref_num');
@@ -130,6 +131,11 @@ switch($Qque) {
         $oEntrada = new Entrada($Qid_entrada);
         $oEntrada->DBCarregar();
         $oEntrada->setF_entrada($Qf_entrada);
+        if (empty($Qf_entrada)) {
+            $oEntrada->setEstado(Entrada::ESTADO_INGRESADO);
+        } else {
+            $oEntrada->setEstado(Entrada::ESTADO_ADMITIDO);
+        }
         $oEntrada->DBGuardar();
         
         break;
@@ -209,6 +215,12 @@ switch($Qque) {
 
         //$oEntrada->setFlazo($Qf_plazo);
         $oEntrada->setBypass($Qbypass);
+        if ($QAdmitir == 't') {
+            $estado = Entrada::ESTADO_ADMITIDO;
+        } else {
+            $estado = Entrada::ESTADO_INGRESADO;
+        }
+        $oEntrada->setEstado($estado);
        
         $oEntrada->DBGuardar();
         

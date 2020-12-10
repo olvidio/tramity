@@ -39,6 +39,23 @@ Los trámites se definen como una secuencia de cargos que deben ir firmando. Exi
 Filtros en la generación de expedientes:
 ---------------------------------------
 
+Definir un campo (estado), que indique el punto del itinerario en que se encuentra:
+
+* Borrador (antes de circular, mientras lo trabaja el ponenente)
+* Circulando (está pasando a firmas)
+* Fijar reunión
+* Acabado (una vez firmado -aprobado o rechazado-, antes de enviar escritos...)
+* Terminado (una vez hechas todas las "acciones": enviar escritos...)
+* Copias (para marcar que es copia de otro, y para que salga en la selección de copias).
+
+    ESTADO_BORRADOR          = 1;
+    ESTADO_CIRCULANDO        = 2;
+    ESTADO_FIJAR_REUNION     = 3;
+    ESTADO_ACABADO           = 4;
+    ESTADO_TERMINADO         = 5;
+    ESTADO_COPIAS            = 6;
+
+
 (Oficinas)
 
 1.- Borrador
@@ -161,11 +178,25 @@ $filtro = 'pendientes';
 Entradas
 --------
 
+Definir un campo (estado) para las entradas, que indique el punto del itinerario en que se encuentra:
+
+* ingresado [introducir] (valor inicial, hasta el ok del vcd. Lo hace secretaría, o automáticamente si viene por xml)
+* admitido (una vez se da el ok del vcd)
+* asignado (secretaría añade la información: ponente, fechas etc.)
+* aceptado (ok del scdl)
+* oficinas (cada oficina ve las que le corresponden)
+	 
+    ESTADO_INGRESADO         = 1;
+    ESTADO_ADMITIDO          = 2;
+    ESTADO_ASIGNADO          = 3;
+    ESTADO_ACEPTADO          = 4;
+    ESTADO_OFICINAS          = 5;
+
 7.- introducir entradas
-$filtro = 'introducir';
+$filtro = 'en_ingresar';
 
 8.-
-$filtro = 'e_asignar';
+$filtro = 'en_asignar';
 
 9.- distribución cr
 $filtro = 'bypass';

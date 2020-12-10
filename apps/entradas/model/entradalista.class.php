@@ -52,6 +52,10 @@ class EntradaLista {
         $aOperador = [];
 
         switch ($this->filtro) {
+            case 'en_ingresar':
+            case 'en_admitir':
+                $aWhere['estado'] = Entrada::ESTADO_INGRESADO;
+                break;
             case 'en_asignar':
                 $aWhere['modo_entrada'] = 1;
                 break;
@@ -72,33 +76,46 @@ class EntradaLista {
     public function mostrarTabla() {
         $this->setCondicion();
         $pagina_nueva = '';
+        $filtro = $this->getFiltro();
         
         $oEntrada = new Entrada();
         $a_categorias = $oEntrada->getArrayCategoria();
+        $a_visibilidad = $oEntrada->getArrayVisibilidad();
         
         $gesCargos = new GestorCargo();
         $a_posibles_cargos = $gesCargos->getArrayCargos();
         
+        
+        $pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
+        $slide_mode = '';
         switch ($this->filtro) {
+            case 'en_admitir':
+                $slide_mode = 't';
+                $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
+                break;
+            case 'en_ingresar':
+                $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
+                break;
             case 'en_asignar':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $this->getFiltro()]));
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
                 break;
             case 'entrada':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $this->getFiltro()]));
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
                 break;
             case 'bypass':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_bypass.php';
                 break;
             default:
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $this->getFiltro()]));
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
         }
-        $pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
         
         $oProtOrigen = new Protocolo();
         $a_entradas = [];
+        $id_entrada = '';
         if (!empty($this->aWhere)) {
             $gesEntradas = new GestorEntrada();
             $this->aWhere['_ordre'] = 'id_entrada';
@@ -107,12 +124,14 @@ class EntradaLista {
                 $row = [];
                 // mirar permisos...
                 $visibilidad = $oEntrada->getVisibilidad();
+                $visibilidad_txt = $a_visibilidad[$visibilidad];
                 
                 $id_entrada = $oEntrada->getId_entrada();
                 $row['id_entrada'] = $id_entrada;
                 
                 $a_cosas = [ 'id_entrada' => $id_entrada,
-                              'filtro' => $this->getFiltro(),
+                              'filtro' => $filtro,
+                              'slide_mode' => $slide_mode,
                 ];
                 $link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
@@ -147,7 +166,7 @@ class EntradaLista {
                 
                 // mirar si tienen escrito
                 $row['f_escrito'] = $oEntrada->getF_documento()->getFromLocal();
-                $row['visibilidad'] = $visibilidad;
+                $row['visibilidad'] = $visibilidad_txt;
                 
                 $a_entradas[] = $row;
             }
@@ -167,13 +186,17 @@ class EntradaLista {
             'a_entradas' => $a_entradas,
             'url_update' => $url_update,
             'pagina_nueva' => $pagina_nueva,
-            'filtro' => $this->getFiltro(),
+            'filtro' => $filtro,
             'server' => $server,
             'secretaria' => $secretaria,
         ];
         
         $oView = new ViewTwig('entradas/controller');
-        return $oView->renderizar('entrada_lista.html.twig',$a_campos);
+        if ($slide_mode === 't') {
+            include ('apps/entradas/controller/entrada_ver_slide.php');
+        } else {
+            return $oView->renderizar('entrada_lista.html.twig',$a_campos);
+        }
     }
     
     public function getNumero() {
