@@ -126,7 +126,7 @@ $filtro = 'pendientes';
 $a_pills[$num_orden] = $pill;
 
 // introducir entradas
-$filtro = 'en_ingresar';
+$filtro = 'en_ingresado';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
@@ -139,12 +139,12 @@ $filtro = 'en_ingresar';
 $a_pills[$num_orden] = $pill;
 
 // asignar entradas
-$filtro = 'en_asignar';
+$filtro = 'en_admitido';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
     $num_orden = 8;
-    $text = _("E: entradas");
+    $text = _("E: asignar");
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();
@@ -154,7 +154,7 @@ $a_pills[$num_orden] = $pill;
 // Solo el scdl
 if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
     // aceptar entradas
-    $filtro = 'en_aceptar';
+    $filtro = 'en_asignado';
         $active = ($filtro == $Qfiltro)? 'active' : '';
         $aQuery = [ 'filtro' => $filtro ];
         $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));

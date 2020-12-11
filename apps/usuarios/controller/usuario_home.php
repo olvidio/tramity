@@ -149,7 +149,7 @@ $a_pills[$num_orden] = $pill;
 // Sólo para vcd
 if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
     // entradas = 10;
-    $filtro = 'en_admitir';
+    $filtro = 'en_ingresado';
         $active = ($filtro == $Qfiltro)? 'active' : '';
         $aQuery = [ 'filtro' => $filtro ];
         $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
@@ -162,7 +162,7 @@ if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
     $a_pills[$num_orden] = $pill;
 }
 // entradas = 11;
-$filtro = 'en_oficinas';
+$filtro = 'en_aceptado';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));

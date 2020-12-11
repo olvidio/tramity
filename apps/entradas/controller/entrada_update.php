@@ -6,6 +6,7 @@ use lugares\model\entity\GestorGrupo;
 use web\DateTimeLocal;
 use web\Protocolo;
 use entradas\model\entity\EntradaDB;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -215,10 +216,16 @@ switch($Qque) {
 
         //$oEntrada->setFlazo($Qf_plazo);
         $oEntrada->setBypass($Qbypass);
-        if ($QAdmitir == 't') {
-            $estado = Entrada::ESTADO_ADMITIDO;
+        if (is_true($QAdmitir)) {
+            // pasa directamente a asigado. Se supone que el admitido lo ha puesto el vcd.
+            // en caso de ponerlo secretaria, al guardar pasa igualmente a asignado.
+            $estado = Entrada::ESTADO_ASIGNADO;
         } else {
             $estado = Entrada::ESTADO_INGRESADO;
+        }
+        // si es el scdl, puede ser que pase a aceptado:
+        if ($Qfiltro == 'en_asignado') {
+            $estado = Entrada::ESTADO_ACEPTADO;
         }
         $oEntrada->setEstado($estado);
        

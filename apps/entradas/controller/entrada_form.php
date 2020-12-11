@@ -104,7 +104,13 @@ $oDesplByPass->setOpciones(['f' => _("No"), 't' => _("Sí")]);
 $oDesplAdmitido = new Desplegable();
 $oDesplAdmitido->setNombre('admitir');
 $oDesplAdmitido->setOpciones(['f' => _("No"), 't' => _("Sí")]);
-if ($Qfiltro == 'en_asignar') {
+$estado = $oEntrada->getEstado();
+if ($estado >= Entrada::ESTADO_ADMITIDO) {
+    $oDesplAdmitido->setOpcion_sel('t');
+} else {
+    $oDesplAdmitido->setOpcion_sel('f');
+}
+if ($Qfiltro == 'en_admitido') {
     $oDesplAdmitido->setOpcion_sel('t');
 } else {
     $oDesplAdmitido->setDisabled(TRUE);

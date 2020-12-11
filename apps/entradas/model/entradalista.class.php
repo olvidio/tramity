@@ -38,7 +38,10 @@ class EntradaLista {
     
     /*
      * filtros posibles: 
-    'entrada'
+    'en_ingresado':
+    'en_admitido':
+    'en_asignado':
+    'en_aceptado':
     'bypass'
     'permanentes'
     'avisos'
@@ -52,16 +55,19 @@ class EntradaLista {
         $aOperador = [];
 
         switch ($this->filtro) {
-            case 'en_ingresar':
-            case 'en_admitir':
+            case 'en_ingresado':
                 $aWhere['estado'] = Entrada::ESTADO_INGRESADO;
                 break;
-            case 'en_asignar':
-                $aWhere['modo_entrada'] = 1;
+            case 'en_admitido':
+                $aWhere['estado'] = Entrada::ESTADO_ADMITIDO;
                 break;
-            case 'entrada':
+            case 'en_asignado':
+                $aWhere['estado'] = Entrada::ESTADO_ASIGNADO;
+                break;
+            case 'en_aceptado':
                 // solo los propios:
                 $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
+                $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
                 break;
             case 'bypass':
                 // distribución cr
@@ -89,15 +95,17 @@ class EntradaLista {
         $pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
         $slide_mode = '';
         switch ($this->filtro) {
-            case 'en_admitir':
-                $slide_mode = 't';
-                $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
-                break;
-            case 'en_ingresar':
+            case 'en_ingresado':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
                 $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
+                if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
+                    $slide_mode = 't';
+                }
                 break;
-            case 'en_asignar':
+            case 'en_admitido':
+                $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
+                break;
+            case 'en_asignado':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
                 $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
                 break;
