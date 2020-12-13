@@ -83,6 +83,7 @@ if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
             } else {
                 $rango = 'vcd';
             }
+            break; // Me paro en el primero. 
         }
     }
 }
