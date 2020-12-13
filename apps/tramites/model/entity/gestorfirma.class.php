@@ -194,8 +194,7 @@ class GestorFirma Extends core\ClaseGestor {
 	            if ($tipo == Firma::TIPO_VOTO) {
 	                if (!empty($observ)) {
 	                    $comentarios .= empty($comentarios)? '' : "<br>";
-	                    $comentarios .= "$cargo($voto): $observ";
-	                    $comentarios .= " $cargo($nom_usuario) [$voto]: $observ";
+	                    $comentarios .= "$cargo($nom_usuario) [$voto]: $observ";
 	                }
 	                switch ($valor) {
 	                    case Firma::V_NO:
