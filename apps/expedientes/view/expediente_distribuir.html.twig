@@ -65,11 +65,15 @@
     <!--  Col Izda -->
     <div class="col-9" >
       <!--  --------------- ENTRADILLA --------------- -->
-      <div class="alert alert-primary">
-        {{ entradilla }}
+      <div class="col-0">
+          {{ "Entradilla"|trans }}:
+      </div>
+      <div class="col-0">
+        <textarea rows="5" class="form-control" readonly>{{ entradilla }}</textarea>
       </div>
       <!--  --------------- COMENTARIOS --------------- -->
-      <div class="alert bg-light">
+      <br>
+      <div class="col-0 alert bg-light">
         {{ comentarios|raw }}
       </div>
       

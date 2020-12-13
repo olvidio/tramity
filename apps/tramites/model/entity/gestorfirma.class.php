@@ -60,7 +60,7 @@ class GestorFirma Extends core\ClaseGestor {
 	        return FALSE;
 	    }
 	    
-	    $tipo_voto = FIRMA::TIPO_VOTO;
+	    $tipo_voto = Firma::TIPO_VOTO;
 	    $valor_ok = Firma::V_OK;
 	    $valor_no = Firma::V_NO;
 	    
@@ -95,8 +95,8 @@ class GestorFirma Extends core\ClaseGestor {
 	    $nom_tabla = $this->getNomTabla();
 	    
 	    $estado = Expediente::ESTADO_FIJAR_REUNION;
-	    $cargo_tipo = CArgo::CARGO_TODOS_DIR;
-	    $tipo_voto = FIRMA::TIPO_VOTO;
+	    $cargo_tipo = Cargo::CARGO_TODOS_DIR;
+	    $tipo_voto = Firma::TIPO_VOTO;
 	    $valor_ok = Firma::V_OK;
 	    $valor_no = Firma::V_NO;
 	    
@@ -131,7 +131,7 @@ class GestorFirma Extends core\ClaseGestor {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
 	    
-	    $tipo_voto = FIRMA::TIPO_VOTO;
+	    $tipo_voto = Firma::TIPO_VOTO;
 	    $valor_ok = Firma::V_OK;
 	    $valor_no = Firma::V_NO;
 	    $valor_vb = Firma::V_VISTO_BUENO;
@@ -371,7 +371,7 @@ class GestorFirma Extends core\ClaseGestor {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
 	    
-	    $tipo_voto = FIRMA::TIPO_VOTO;
+	    $tipo_voto = Firma::TIPO_VOTO;
         $valor_ok = Firma::V_OK;
         $valor_no = Firma::V_NO;
         $valor_vb = Firma::V_VISTO_BUENO;
@@ -426,7 +426,7 @@ class GestorFirma Extends core\ClaseGestor {
 	        return TRUE;
 	    }
 	    
-        $tipo_voto = FIRMA::TIPO_VOTO;
+        $tipo_voto = Firma::TIPO_VOTO;
         $sQuery = "SELECT *
                     FROM $nom_tabla
                     WHERE id_expediente = $id_expediente AND tipo = $tipo_voto AND orden_tramite = $orden_anterior

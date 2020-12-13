@@ -77,7 +77,7 @@ if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
     foreach ($cFirmasVcd as $oFirma) {
         $valor = $oFirma->getValor();
         $cargo_tipo = $oFirma->getCargo_tipo();        
-        if ($valor != Firma::V_NO && $valor != Firma::V_OK &&  $valor != Firma::V_VISTO_BUENO ) {
+        if (empty($valor) OR ($valor != Firma::V_NO && $valor != Firma::V_OK &&  $valor != Firma::V_VISTO_BUENO) ) {
             if ($cargo_tipo == Cargo::CARGO_VB_VCD) {
                 $rango = 'vb_vcd';
             } else {

@@ -38,7 +38,7 @@ switch ($Qque) {
         
         // Comentarios y Aclaraciones
         $aWhere = ['id_expediente' => $Qid_expediente,
-            '_ordre' => 'orden_tramite, orden_oficina ASC'
+            '_ordre' => 'orden_tramite, orden_oficina ASC, tipo ASC'
         ];
         $gesFirmas = new GestorFirma();
         $cFirmas = $gesFirmas->getFirmas($aWhere);
