@@ -286,23 +286,28 @@ switch ($Qque) {
         $aWhere = ['id_expediente' => $Qid_expediente,
                     'id_cargo' => $id_cargo,
                     'tipo' => Firma::TIPO_ACLARACION,
-                    '_ordre' => 'orden_tramite DESC'
+                    '_ordre' => 'orden_tramite'
         ];
         $gesFirmas = new GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas($aWhere);
-        if (is_array($cFirmas) && count($cFirmas) > 0) {
+        $cFirmasA = $gesFirmas->getFirmas($aWhere);
+        if (is_array($cFirmasA) && count($cFirmasA) > 0) {
             // Ya existe una aclaración. Busco la última, para saber el orden.
-            $oFirmaAclaracion = $cFirmas[0];
+            $oFirmaAclaracion = $cFirmasA[0];
             $orden_tramite = $oFirmaAclaracion->getOrden_tramite();
             $orden_oficina = $oFirmaAclaracion->getOrden_oficina();
+            $cargo_tipo = $oFirmaAclaracion->getCargo_tipo();
         }
-        // orden trámite
+        // orden trámite: Del primer voto no firmado
+        $in_valor =  Firma::V_NO.','.Firma::V_OK.','.Firma::V_RECHAZADO;
         $aWhere = ['id_expediente' => $Qid_expediente,
                     'id_cargo' => $id_cargo,
                     'tipo' => Firma::TIPO_VOTO,
+                    'valor' => $in_valor,
+                    '_ordre' => 'orden_tramite DESC, orden_oficina DESC'
         ];
+        $aOperador = ['valor' => 'NOT IN'];
         $gesFirmas = new GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas($aWhere);
+        $cFirmas = $gesFirmas->getFirmas($aWhere, $aOperador);
         if (is_array($cFirmas) && count($cFirmas) == 0) {
             $error_txt .= _("No puede Firmar");
         } else {
