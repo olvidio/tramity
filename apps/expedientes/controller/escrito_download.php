@@ -1,6 +1,6 @@
 <?php
+use core\ViewTwig;
 use envios\model\Enviar;
-use expedientes\model\entity\EscritoAdjunto;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -19,7 +19,13 @@ if (!empty($Qid_escrito)) {
 
     $oEnviar = new Enviar($Qid_escrito,'escrito');
     
-    $File = $oEnviar->getPdf();
+    if (($File = $oEnviar->getPdf()) === FALSE) {
+        $txt_alert = _("Algún error al genrar el pdf");
+        $a_campos = [ 'txt_alert' => $txt_alert, 'btn_cerrar' => TRUE ];
+        $oView = new ViewTwig('expedientes/controller');
+        echo $oView->renderizar('alerta.html.twig',$a_campos);
+        exit();
+    }
     
     $escrito = $File['content'];
     $nom = $File['ext'];

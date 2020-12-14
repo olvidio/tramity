@@ -34,6 +34,7 @@ if ($QSlide_mode === TRUE) {
     $Qid_escrito = (string) \filter_input(INPUT_GET, 'id_escrito');
 }
 
+
 $sigla = $_SESSION['oConfig']->getSigla();
 
 $oProtRef = new Protocolo();
@@ -55,10 +56,22 @@ if (!empty($Qid_escrito)) {
     $a_escritos = explode(',', $Qid_escrito);
     foreach ($a_escritos as $id_escrito) {
         $oEscrito = new Escrito($id_escrito);
+        $json_prot_local = $oEscrito->getJson_prot_local();
+        if (!empty((array)$json_prot_local)) { // Hay que pasarlo a array para ver si está vacío
+            $oProtOrigen = new Protocolo();
+            $oProtOrigen->setLugar($json_prot_local->lugar);
+            $oProtOrigen->setProt_num($json_prot_local->num);
+            $oProtOrigen->setProt_any($json_prot_local->any);
+            $oProtOrigen->setMas($json_prot_local->mas);
+            $origen_txt = $oProtOrigen->ver_txt();
+        } else {
+            $origen_txt = $sigla; 
+        }
+
         $json_prot_destino = $oEscrito->getJson_prot_destino();
         $oArrayProtDestino = new ProtocoloArray($json_prot_destino,'','destinos');
         $oArrayProtDestino->setEtiqueta('De');
-            
+
         $json_prot_ref = $oEscrito->getJson_prot_ref();
 
         $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,'','referencias');
@@ -93,7 +106,7 @@ if (!empty($Qid_escrito)) {
                 'pagina_prev' => $pagina_prev,
                 'pagina_next' => $pagina_next,
                 'base_url' => $base_url,
-                'sigla' => $sigla,
+                'origen_txt' => $origen_txt,
                 'escrito_html' => $escrito_html,
                 'base_url' => $base_url,
                 'url_download' => $url_download,
@@ -109,7 +122,7 @@ if (!empty($Qid_escrito)) {
                 'f_escrito' => $f_escrito,
                 'tipo_doc' => $tipo_doc,
                 'a_adjuntos' => $a_adjuntos,
-                'sigla' => $sigla,
+                'origen_txt' => $origen_txt,
                 'escrito_html' => $escrito_html,
                 'base_url' => $base_url,
                 'url_download' => $url_download,
