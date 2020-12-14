@@ -57,6 +57,14 @@ class gestorErrores {
 		}
 	}
 	
+	public function ver($n=0) {
+		if (isset($_SESSION['errores']) && is_array($_SESSION['errores'])) { //para la primera
+			end($_SESSION['errores']);
+			return current($_SESSION['errores']);
+		}
+		return FALSE;
+	}
+	
 	public function recordar($error) {
 		// evitar que sea muy grande
 		$this->limitar(10);

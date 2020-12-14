@@ -221,8 +221,11 @@ class Enviar {
         
         $json_prot_local = $oEscrito->getJson_prot_local();
         if (count(get_object_vars($json_prot_local)) == 0) {
+            $err_txt = "No hay protocolo local";
             $this->a_rta['success'] = FALSE;
-            $this->a_rta['mensaje'] = "No hay protocolo local";
+            $this->a_rta['mensaje'] = $err_txt;
+            $_SESSION['oGestorErrores']->addError($err_txt,'generar PDF', __LINE__, __FILE__);
+            $_SESSION['oGestorErrores']->recordar($err_txt);
             return FALSE;
         }
         $oProtOrigen = new Protocolo();
