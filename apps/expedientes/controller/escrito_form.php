@@ -64,13 +64,13 @@ $secretari=0;
 $chk_grupo_dst = '';
 $id_grupo = 0;
 
-// visibilidad
-$aOpciones = $oEscrito->getArrayVisibilidad();
+// visibilidad (usar las mismas opciones que en entradas)
+$oEntrada = new Entrada();
+$aOpciones = $oEntrada->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
 $oDesplVisibilidad->setAction("fnjs_cambiar_reservado('$secretari')");
-$oDesplVisibilidad->setTabIndex(81);
 
 if (!empty($Qid_escrito)) {
     $a_grupos = $oEscrito->getId_grupos();

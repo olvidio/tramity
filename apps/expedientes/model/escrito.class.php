@@ -22,10 +22,7 @@ class Escrito Extends EscritoDB {
     const CAT_NORMAL       = 2;
     const CAT_PERMANATE    = 3;
     // visibilidad
-    const V_TODOS           = 1;  // cualquiera
-    const V_PERSONAL        = 2;  // oficina y directores
-    const V_RESERVADO       = 3;  // sólo directores
-    const V_RESERVADO_VCD   = 4;  // sólo vcd + quien señale
+    // USAR LAS DE ENTRADADB
     
     // modo envio
     const MODO_MANUAL       = 1;
@@ -164,17 +161,6 @@ class Escrito Extends EscritoDB {
             self::CAT_NORMAL => _("normal"),
             self::CAT_E12 => _("sin numerar"),
             self::CAT_PERMANATE => _("permanente"),
-        ];
-        
-        return $a_tipos;
-    }
-    
-    public function getArrayVisibilidad() {
-        $a_tipos = [
-            self::V_TODOS => _("todos"),
-            self::V_PERSONAL => _("personal"),
-            self::V_RESERVADO => _("reservado"),
-            self::V_RESERVADO_VCD => _("vcd"),
         ];
         
         return $a_tipos;

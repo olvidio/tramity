@@ -18,7 +18,8 @@ CREATE TABLE public.expedientes (
 	vida smallint,
 	ok boolean,
     json_preparar jsonb,
-    firmas_oficina integer[]
+    firmas_oficina integer[],
+	visibilidad smallint
 );
 
 ALTER TABLE public.expedientes OWNER TO tramity;

@@ -33,6 +33,10 @@ class EscritoDB Extends core\ClasePropiedades {
     const OK_OFICINA    = 2;
     const OK_SECRETARIA = 3;
     
+    // visibilidad
+    // USAR LAS DE ENTRADADB
+    
+    
 	/* ATRIBUTS ----------------------------------------------------------------- */
 
 	/**

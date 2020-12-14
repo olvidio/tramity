@@ -1,6 +1,7 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
+use entradas\model\Entrada;
 use expedientes\model\Escrito;
 use expedientes\model\Expediente;
 use expedientes\model\entity\GestorAccion;
@@ -43,6 +44,16 @@ if (!empty($oCargo)) {
     $ponente_txt = $oCargo->getCargo();
 }
 
+// soy el secretario
+/*
+ if ($GLOBALS['oPerm']->have_perm("scl") && $GLOBALS['oPerm']->have_perm("dtor") ) {
+ $secretari=1;
+ } else {
+ $secretari=0;
+ }
+ */
+$secretari=0;
+
 // preparar
 $gesCargos = new GestorCargo();
 $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
@@ -68,6 +79,15 @@ $oDesplPrioridad->setAction('fnjs_comprobar_plazo()');
 
 $a_vida = $oExpediente->getArrayVida();
 $oDesplVida = new Desplegable('vida',$a_vida,'',FALSE);
+
+// visibilidad (usar las mismas opciones que en entradas)
+$oEntrada = new Entrada();
+$aOpciones = $oEntrada->getArrayVisibilidad();
+$oDesplVisibilidad = new Desplegable();
+$oDesplVisibilidad->setNombre('visibilidad');
+$oDesplVisibilidad->setOpciones($aOpciones);
+$oDesplVisibilidad->setAction("fnjs_cambiar_reservado('$secretari')");
+
 
 $txt_option_cargos = '';
 $a_posibles_cargos = $gesCargos->getArrayCargos();
@@ -97,6 +117,11 @@ if ($Qid_expediente) {
     $prioridad = $oExpediente->getPrioridad();
     $oDesplPrioridad->setOpcion_sel($prioridad);
     
+    $vida = $oExpediente->getVida();
+    $oDesplVida->setOpcion_sel($vida);
+    $visibilidad = $oExpediente->getVisibilidad();
+    $oDesplVisibilidad->setOpcion_sel($visibilidad);
+
     $f_contestar = $oExpediente->getF_contestar()->getFromLocal();
     $f_ini_circulacion = $oExpediente->getF_ini_circulacion()->getFromLocal();
     $f_reunion = $oExpediente->getF_reunion()->getFromLocal();
@@ -241,6 +266,7 @@ $a_campos = [
     'estado' => $estado,
     'oDesplPrioridad' => $oDesplPrioridad,
     'oDesplVida' => $oDesplVida,
+    'oDesplVisibilidad' => $oDesplVisibilidad,
 
     'f_contestar' => $f_contestar,
     'f_ini_circulacion' => $f_ini_circulacion,

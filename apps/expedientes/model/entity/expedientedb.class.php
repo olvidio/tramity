@@ -22,6 +22,12 @@ use stdClass;
  * @created 20/10/2020
  */
 class ExpedienteDB Extends core\ClasePropiedades {
+    
+    // constantes:
+    // visibilidad
+    // USAR LAS DE ENTRADADB
+    
+    
 	/* ATRIBUTS ----------------------------------------------------------------- */
 
 	/**
@@ -172,6 +178,12 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	 * @var array
 	 */
 	 protected $a_firmas_oficina;
+	/**
+	 * Visibilidad de ExpedienteDB
+	 *
+	 * @var integer
+	 */
+	 protected $ivisibilidad;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de ExpedienteDB
@@ -243,6 +255,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$aDades['ok'] = $this->bok;
 		$aDades['json_preparar'] = $this->json_preparar;
 		$aDades['firmas_oficina'] = $this->a_firmas_oficina;
+		$aDades['visibilidad'] = $this->ivisibilidad;
 		array_walk($aDades, 'core\poner_null');
 		//para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
 		if ( core\is_true($aDades['ok']) ) { $aDades['ok']='true'; } else { $aDades['ok']='false'; }
@@ -268,7 +281,8 @@ class ExpedienteDB Extends core\ClasePropiedades {
 					vida                     = :vida,
 					ok                       = :ok,
 					json_preparar            = :json_preparar,
-					firmas_oficina           = :firmas_oficina";
+					firmas_oficina           = :firmas_oficina,
+					visibilidad              = :visibilidad";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_expediente='$this->iid_expediente'")) === FALSE) {
 				$sClauError = 'ExpedienteDB.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -287,8 +301,8 @@ class ExpedienteDB Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(id_tramite,ponente,resto_oficinas,asunto,entradilla,comentarios,prioridad,json_antecedentes,json_acciones,etiquetas,f_contestar,estado,f_ini_circulacion,f_reunion,f_aprobacion,vida,ok,json_preparar,firmas_oficina)";
-			$valores="(:id_tramite,:ponente,:resto_oficinas,:asunto,:entradilla,:comentarios,:prioridad,:json_antecedentes,:json_acciones,:etiquetas,:f_contestar,:estado,:f_ini_circulacion,:f_reunion,:f_aprobacion,:vida,:ok,:json_preparar,:firmas_oficina)";		
+			$campos="(id_tramite,ponente,resto_oficinas,asunto,entradilla,comentarios,prioridad,json_antecedentes,json_acciones,etiquetas,f_contestar,estado,f_ini_circulacion,f_reunion,f_aprobacion,vida,ok,json_preparar,firmas_oficina,visibilidad)";
+			$valores="(:id_tramite,:ponente,:resto_oficinas,:asunto,:entradilla,:comentarios,:prioridad,:json_antecedentes,:json_acciones,:etiquetas,:f_contestar,:estado,:f_ini_circulacion,:f_reunion,:f_aprobacion,:vida,:ok,:json_preparar,:firmas_oficina,:visibilidad)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'ExpedienteDB.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -394,6 +408,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		if (array_key_exists('ok',$aDades)) $this->setOk($aDades['ok']);
 		if (array_key_exists('json_preparar',$aDades)) $this->setJson_preparar($aDades['json_preparar'],TRUE);
 		if (array_key_exists('firmas_oficina',$aDades)) $this->setFirmas_oficina($aDades['firmas_oficina'],TRUE);
+		if (array_key_exists('visibilidad',$aDades)) $this->setVisibilidad($aDades['visibilidad']);
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -422,6 +437,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$this->setOk('');
 		$this->setJson_preparar('');
 		$this->setFirmas_oficina('');
+		$this->setVisibilidad('');
 		$this->setPrimary_key($aPK);
 	}
 
@@ -972,6 +988,25 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	    }
         $this->a_firmas_oficina = $postgresArray;
 	}
+	/**
+	 * Recupera l'atribut ivisibilidad de ExpedienteDB
+	 *
+	 * @return integer ivisibilidad
+	 */
+	function getVisibilidad() {
+		if (!isset($this->ivisibilidad) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->ivisibilidad;
+	}
+	/**
+	 * estableix el valor de l'atribut ivisibilidad de ExpedienteDB
+	 *
+	 * @param integer ivisibilidad='' optional
+	 */
+	function setVisibilidad($ivisibilidad='') {
+		$this->ivisibilidad = $ivisibilidad;
+	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
 	/**
@@ -1000,6 +1035,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$oExpedienteDBSet->add($this->getDatosOk());
 		$oExpedienteDBSet->add($this->getDatosJson_preparar());
 		$oExpedienteDBSet->add($this->getDatosFirmas_oficina());
+		$oExpedienteDBSet->add($this->getDatosVisibilidad());
 		return $oExpedienteDBSet->getTot();
 	}
 
@@ -1231,6 +1267,18 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'firmas_oficina'));
 		$oDatosCampo->setEtiqueta(_("firmas_oficina"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut ivisibilidad de ExpedienteDB
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosVisibilidad() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'visibilidad'));
+		$oDatosCampo->setEtiqueta(_("visibilidad"));
 		return $oDatosCampo;
 	}
 }

@@ -11,6 +11,7 @@ use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Hash;
 use tramites\model\entity\GestorTramiteCargo;
+use entradas\model\Entrada;
 
 
 class ExpedienteLista {
@@ -398,6 +399,9 @@ class ExpedienteLista {
             //lista de tramites
             $gesTramites = new GestorTramite();
             $a_tramites = $gesTramites->getArrayAbrevTramites();
+            // array visibilidades
+            $oEntrada = new Entrada();
+            $a_visibilidad = $oEntrada->getArrayVisibilidad();
             foreach ($cExpedientes as $oExpediente) {
                 $row = [];
                 // mirar permisos...
@@ -468,6 +472,11 @@ class ExpedienteLista {
                 $row['estado'] = $a_estados[$estado];
                 $row['prioridad'] = $oExpediente->getPrioridad();
                 $row['tramite'] = $tramite_txt;
+
+                $visibilidad = $oExpediente->getVisibilidad();
+                $visibilidad_txt = $a_visibilidad[$visibilidad];
+                $row['visibilidad'] = $visibilidad_txt;
+
                 
                 if ($bstrong) {
                     $row['asunto'] = "<strong>".$oExpediente->getAsunto()."</strong>";

@@ -43,6 +43,7 @@ $Qa_firmas = (array)  \filter_input(INPUT_POST, 'firmas', FILTER_DEFAULT, FILTER
 $Qa_preparar = (array)  \filter_input(INPUT_POST, 'a_preparar', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 $Qvida = (integer) \filter_input(INPUT_POST, 'vida');
+$Qvisibilidad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 
 $txt_err = '';
 switch($Qque) {
@@ -481,6 +482,7 @@ switch($Qque) {
         }
 
         $oExpediente->setVida($Qvida);
+        $oExpediente->setVisibilidad($Qvisibilidad);
 
         // oficiales
         $new_preparar = [];

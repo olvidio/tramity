@@ -1,6 +1,7 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
+use entradas\model\Entrada;
 use etherpad\model\Etherpad;
 use expedientes\model\Escrito;
 use lugares\model\entity\GestorLugar;
@@ -76,13 +77,13 @@ if ($GLOBALS['oPerm']->have_perm("scl") && $GLOBALS['oPerm']->have_perm("dtor") 
 */
 $secretari=0; 
 
-// visibilidad
-$aOpciones = $oEscrito->getArrayVisibilidad();
+// visibilidad (usar las mismas opciones que en entradas)
+$oEntrada = new Entrada();
+$aOpciones = $oEntrada->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
 $oDesplVisibilidad->setAction("fnjs_cambiar_reservado('$secretari')");
-$oDesplVisibilidad->setTabIndex(81);
 
 if (!empty($Qid_escrito)) {
     
