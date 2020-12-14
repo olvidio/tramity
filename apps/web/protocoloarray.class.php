@@ -62,6 +62,45 @@ class ProtocoloArray Extends Protocolo {
 
 	/* METODES PUBLICS ----------------------------------------------------------*/
 	
+	public function ArrayListaTxtBr($id_lugar_dst_org) {
+	    $aRef['dst_org'] = '';
+	    $aRef['local'] = '';
+	    $aSeleccionados = '';
+	    if (is_object($this->sSeleccionados)) {}
+	    if (is_array($this->sSeleccionados)) {
+	        $aSeleccionados = $this->sSeleccionados;
+	    }
+	    
+	    $sLista = "";
+	    $ref = ($this->bRef)? 'ref. ' : '';
+	    if (!empty($aSeleccionados)) {
+	        foreach ($aSeleccionados as $oProt) {
+			    $lugar = $oProt->lugar;
+			    $prot_num = $oProt->num;
+			    $prot_any = $oProt->any;
+			    $prot_mas = $oProt->mas;
+			    
+                $oLugar = new Lugar($lugar);
+                $nom_lugar = $oLugar->getSigla();
+			    $txt = "$nom_lugar";
+			    if (!empty($prot_num)) {
+			        $txt .= " ${prot_num}/${prot_any}";
+			    }
+			    $txt .= !empty($prot_mas)? ", ${prot_mas}" : '';
+			    
+                if ($lugar == $id_lugar_dst_org) {
+                    $aRef['dst_org'] .= !empty($aRef['dst_org'])? "<br>" : '';
+                    $aRef['dst_org'] .= $ref.$txt;
+                } else {
+                    $aRef['local'] .= !empty($aRef['local'])? "<br>" : '';
+                    $aRef['local'] .= $ref.$txt;
+                    
+                }
+	        }
+	    }
+	    
+	    return $sLista;
+	}
 	public function ListaTxtBr() {
 	    $aSeleccionados = '';
 	    if (is_object($this->sSeleccionados)) {}

@@ -140,6 +140,18 @@ class Enviar {
         $oEntrada = new Entrada($this->iid);
         $this->f_salida = $oEntrada->getF_documento()->getFromLocal('.');
         
+        $id_org = '';
+        $json_prot_org = $oEntrada->getJson_prot_origen();
+        if (!empty((array)$json_prot_org)) {
+            $id_org = $json_prot_org->lugar;
+        }
+        
+        // referencias
+        $a_json_prot_ref = $oEntrada->getJson_prot_ref();
+        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
+        $oArrayProtRef->setRef(TRUE);
+        $aRef = $oArrayProtRef->ArrayListaTxtBr($id_org);
+        
         $json_prot_origen = $oEntrada->getJson_prot_origen();
         if (count(get_object_vars($json_prot_origen)) == 0) {
             exit (_("No hay más"));
@@ -151,9 +163,20 @@ class Enviar {
         $oProtOrigen->setMas($json_prot_origen->mas);
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
-        $a_header = [ 'left' => $sigla,
+        $destinos = $sigla;
+        if (!empty($aRef['local'])) {
+            $destinos .= '<br>';
+            $destinos .= $aRef['local'];
+        }
+        $origen_txt = $oProtOrigen->ver_txt();
+        if (!empty($aRef['dst_org'])) {
+            $origen_txt .= '<br>';
+            $origen_txt .= $aRef['dst_org'];
+        }
+
+        $a_header = [ 'left' => $destinos,
             'center' => '',
-            'right' => $oProtOrigen->ver_txt(),
+            'right' => $origen_txt
         ];
         
         $oEtherpad = new Etherpad();
@@ -183,6 +206,19 @@ class Enviar {
         $oEscrito = new Escrito($this->iid);
         $this->f_salida = $oEscrito->getF_escrito()->getFromLocal('.');
         
+        $id_dst = '';
+        $a_json_prot_dst = $oEscrito->getJson_prot_destino();
+        if (!empty((array)$a_json_prot_dst)) {
+            $json_prot_dst = $a_json_prot_dst[0];
+            $id_dst = $json_prot_dst->lugar;
+        }
+        
+        // referencias
+        $a_json_prot_ref = $oEscrito->getJson_prot_ref();
+        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
+        $oArrayProtRef->setRef(TRUE);
+        $aRef = $oArrayProtRef->ArrayListaTxtBr($id_dst);
+        
         $json_prot_local = $oEscrito->getJson_prot_local();
         if (count(get_object_vars($json_prot_local)) == 0) {
             $this->a_rta['success'] = FALSE;
@@ -196,21 +232,20 @@ class Enviar {
         $oProtOrigen->setMas($json_prot_local->mas);
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
-        // referencias
-        $a_json_prot_ref = $oEscrito->getJson_prot_ref();
-        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
-        $oArrayProtRef->setRef(TRUE);
-        $ref_txt = $oArrayProtRef->ListaTxtBr();
-        
         $destinos = $this->destinos_txt;
-        if (!empty($ref_txt)) {
+        if (!empty($aRef['dst_org'])) {
             $destinos .= '<br>';
-            $destinos .= $ref_txt;
+            $destinos .= $aRef['dst_org'];
+        }
+        $origen_txt = $oProtOrigen->ver_txt();
+        if (!empty($aRef['local'])) {
+            $origen_txt .= '<br>';
+            $origen_txt .= $aRef['local'];
         }
         
         $a_header = [ 'left' => $destinos,
             'center' => '',
-            'right' => $oProtOrigen->ver_txt(),
+            'right' => $origen_txt,
         ];
         
         $oEtherpad = new Etherpad();
