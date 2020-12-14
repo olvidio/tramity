@@ -2,6 +2,7 @@
 <form id ="form_buscar" >
     <input type=hidden name='que' id='que' value=0>
     <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
+    <input type=hidden name='filtro' id='filtro' value={{ filtro }} >
     
     
   <div class="form-group row">
@@ -79,12 +80,12 @@ fnjs_buscar=function(event){
     $('#form_buscar').submit();
 }
 
-fnjs_adjuntar_entrada=function(id_entrada,id_expediente) {
+fnjs_adjuntar_entrada=function(id_entrada,id_expediente,filtro) {
 	// adjuntar entrada a expediente (la funcion se carga al cargar el expediente)
 	fnjs_adjuntar_antecedente('entrada',id_entrada,id_expediente);
 	// ir a nuevo escrito con los valores de asunto,oficinas,  del escrito.
 	// a) consultar valores:
-    var param_json = { id_expediente: id_expediente, id_entrada: id_entrada };
+    var param_json = { id_expediente: id_expediente, id_entrada: id_entrada, filtro: filtro };
     
 	request=$.ajax({
         data: param_json,

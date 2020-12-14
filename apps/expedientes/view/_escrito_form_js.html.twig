@@ -40,6 +40,7 @@ fnjs_guardar=function(event){
 	//var destino=$('#destino').val();
 	var prot_num_destino=$('#prot_num_destino').val();
 	var asunto=$('#asunto').val();
+	var entradilla=$('#entradilla').val();
 	var ponente=$('#id_ponente').val();
 	var id_expediente=$('#id_expediente').val();
 	var id_escrito=$('#id_escrito').val();
@@ -48,9 +49,10 @@ fnjs_guardar=function(event){
 	//if (!destino) { alert("{{ "Debe llenar el campo de destino"|trans }}"); err=1; }
 	//if (!prot_num_destino) { alert("{{ "Debe llenar el campo de protocolo destino"|trans }}"); err=1; }
 	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans }}"); err=1; }
+	if (!entradilla) { alert("{{ "Debe llenar el campo entradilla"|trans }}"); err=1; }
 	if (!ponente) { alert("{{ "Debe llenar el campo del ponente"|trans }}"); err=1; }
-	if (!f_escrito) { alert("{{ "Debe llenar el campo de fecha del escrito"|trans }}"); err=1; }
-	if (!fnjs_fecha_en_intervalo('#f_escrito')) { err=1; }
+	//if (!f_escrito) { alert("{{ "Debe llenar el campo de fecha del escrito"|trans }}"); err=1; }
+	//if (!fnjs_fecha_en_intervalo('#f_escrito')) { err=1; }
 	
 	if (err!=1) {
 		$('#form_escrito').attr('action','{{ url_update }}');

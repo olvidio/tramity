@@ -16,6 +16,7 @@ use web\Protocolo;
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
+$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qid_escrito = (integer) \filter_input(INPUT_POST, 'id_escrito');
@@ -227,7 +228,7 @@ switch($Qque) {
         
         $jsondata['success'] = true;
         $jsondata['id_escrito'] = $id_escrito;
-        $a_cosas = [ 'id_escrito' => $id_escrito];
+        $a_cosas = [ 'id_escrito' => $id_escrito, 'filtro' => $Qfiltro, 'id_expediente' => $Qid_expediente];
         $pagina_mod = web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
         $jsondata['pagina_mod'] = $pagina_mod;
         

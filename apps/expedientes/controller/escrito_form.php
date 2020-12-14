@@ -209,6 +209,7 @@ $a_campos = [
     'id_expediente' => $Qid_expediente,
     'id_escrito' => $Qid_escrito,
     'accion' => $Qaccion,
+    'filtro' => $Qfiltro,
     'esEscrito' => $esEscrtito,
     'id_ponente' => $id_ponente,
     //'oHash' => $oHash,

@@ -28,6 +28,7 @@ switch ($Qque) {
         $Qid_oficina = (integer) \filter_input(INPUT_POST, 'id_oficina');
         $Qid_origen = (string) \filter_input(INPUT_POST, 'id_origen');
         $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
+        $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
         
         
         $gesEntradas = new GestorEntrada();
@@ -76,7 +77,7 @@ switch ($Qque) {
             $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
             
             $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >ver</span>";
-            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_entrada('$id_entrada','$Qid_expediente');\" >adjuntar</span>";
+            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_entrada('$id_entrada','$Qid_expediente','$Qfiltro');\" >adjuntar</span>";
             
             $a_valores[$a][1] = $ver;
             $a_valores[$a][2] = $oProtOrigen->ver_txt();

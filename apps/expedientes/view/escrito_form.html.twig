@@ -10,6 +10,7 @@
 <form id ="form_escrito" >
     <input type=hidden name='que' id='que' value=0>
     <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
+    <input type=hidden name='filtro' id='filtro' value={{ filtro }} >
     <input type=hidden name='id_escrito' id='id_escrito' value={{ id_escrito }} >
     <input type=hidden name='accion' id='accion' value={{ accion }} >
     <input type=hidden name='id_ponente' id='id_ponente' value={{ id_ponente }} >
@@ -162,7 +163,7 @@ fnjs_grupo=function() {
 }
 
 $(document).ready(function() {
-	//fnjs_grupo();
+	fnjs_grupo();
 	var el1 = $("#escrito_adjunto");
 	el1.fileinput({
     	theme: "explorer-fas",
