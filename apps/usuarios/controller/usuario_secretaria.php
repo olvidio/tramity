@@ -37,31 +37,34 @@ $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $a_pills = [];
 //Diferentes filtros:
 // Expedientes:
-
 $oExpedienteLista = new ExpedienteLista();
-// fijar reunión = 1;
-$filtro = 'fijar_reunion';
-    $active = ($filtro == $Qfiltro)? 'active' : '';
-    $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 1;
-    $text = _("fijar reunión");
-    $oExpedienteLista->setFiltro($filtro);
-    $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
-$a_pills[$num_orden] = $pill;
 
-// seguimiento = 2;
-$filtro = 'seg_reunion';
-    $active = ($filtro == $Qfiltro)? 'active' : '';
-    $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 2;
-    $text = _("seguimiento reunion");
-    $oExpedienteLista->setFiltro($filtro);
-    $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
-$a_pills[$num_orden] = $pill;
+// Sólo para scdl
+if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
+    // fijar reunión = 1;
+    $filtro = 'fijar_reunion';
+        $active = ($filtro == $Qfiltro)? 'active' : '';
+        $aQuery = [ 'filtro' => $filtro ];
+        $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
+        $num_orden = 1;
+        $text = _("fijar reunión");
+        $oExpedienteLista->setFiltro($filtro);
+        $num = $oExpedienteLista->getNumero();
+        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+    $a_pills[$num_orden] = $pill;
+
+    // seguimiento = 2;
+    $filtro = 'seg_reunion';
+        $active = ($filtro == $Qfiltro)? 'active' : '';
+        $aQuery = [ 'filtro' => $filtro ];
+        $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
+        $num_orden = 2;
+        $text = _("seguimiento reunion");
+        $oExpedienteLista->setFiltro($filtro);
+        $num = $oExpedienteLista->getNumero();
+        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+    $a_pills[$num_orden] = $pill;
+}
 
 // firmar = 2;
 $filtro = 'seguimiento';

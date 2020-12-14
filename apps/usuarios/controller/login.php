@@ -17,6 +17,9 @@ use core\MyCrypt;
 use core\ViewTwig;
 use function core\cambiar_idioma;
 use core\dbConnection;
+use expedientes\model\entity\GestorAccion;
+use Twig\TokenParser\UseTokenParser;
+use usuarios\model\entity\Usuario;
 
 
 function logout($idioma,$esquema,$error) {
@@ -71,13 +74,20 @@ if ( !isset($_SESSION['session_auth'])) {
                 }
                 $aCargo = $stmt->fetch(\PDO::FETCH_ASSOC);
                 if (!empty($aCargo['id_suplente'])) {
-                    $txt_alert = _("Está asignado un suplente a este cargo");
+                    $id_suplente = $aCargo['id_suplente'];
+                    $query="SELECT * FROM aux_usuarios WHERE id_usuario = $id_suplente";
+                    if (($stmt_suplente=$oDB->query($query)) === false) {
+                        $sClauError = 'login_obj.suplente';
+                        $_SESSION['oGestorErrores']->addErrorAppLastError($oDB, $sClauError, __LINE__, __FILE__);
+                        return false;
+                    }
+                    $aSuplente = $stmt_suplente->fetch(\PDO::FETCH_ASSOC);
+                    $nom_suplente = $aSuplente['nom_usuario'];
+                    $txt_alert = sprintf(_("(%s) está asignado como suplente a este cargo"),$nom_suplente);
                     $a_campos = [ 'txt_alert' => $txt_alert, 'btn_cerrar' => FALSE];
                     $oView = new ViewTwig('expedientes/controller');
                     echo $oView->renderizar('alerta.html.twig',$a_campos);
-                    //exit();
                 }
-                
                 
                 // el usuario default, y el admin no tienen cargo:
                 // los cargos que puede tener (suplencias)

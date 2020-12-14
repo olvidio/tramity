@@ -2,6 +2,7 @@
 // INICIO Cabecera global de URL de controlador *********************************
 use core\ConfigGlobal;
 use core\ViewTwig;
+use usuarios\model\entity\GestorOficina;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -44,7 +45,15 @@ $aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
 foreach($aPosiblesCargos as $cargo) {
     $a_roles_posibles[] = $cargo;
 }
-if ($username == 'scdl') {
+// role de 'secretaria' para los oficilaes de secretaria:
+$id_oficina_secretaria = '';
+$gesOficinas = new GestorOficina();
+$cOficinas = $gesOficinas->getOficinas(['sigla' => 'scdl']);
+if (!empty($cOficinas)) {
+    $id_oficina_secretaria = $cOficinas[0]->getId_oficina();
+}
+$mi_id_oficina = ConfigGlobal::mi_id_oficina();
+if ($id_oficina_secretaria == $mi_id_oficina) {
     $a_roles_posibles[] = 'secretaria';
 }
 $_SESSION['session_auth']['a_roles'] = $a_roles_posibles;
