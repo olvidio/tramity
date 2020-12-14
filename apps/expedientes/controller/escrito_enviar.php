@@ -31,6 +31,7 @@ if ($a_rta['success'] === TRUE) {
     $oEscrito->setF_salida($f_salida,FALSE);
     $oEscrito->setOk(Escrito::OK_SECRETARIA);
     $oEscrito->DBGuardar();
+    exit();
 } else {
     $txt_alert = $a_rta['mensaje'];
     $a_campos = [ 'txt_alert' => $txt_alert, 'btn_cerrar' => TRUE ];

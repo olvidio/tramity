@@ -196,11 +196,18 @@ $a_cosas = ['id_expediente' => $Qid_expediente,
             'filtro' => $Qfiltro,
             'modo' => $Qmodo,
         ];
-if ($Qfiltro == 'acabados' OR $Qfiltro == 'distribuir') {
-    $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query($a_cosas));
-} else {
-    $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
+switch ($Qfiltro) {
+    case 'acabados':
+    case 'distribuir':
+        $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query($a_cosas));
+        break;
+    case 'enviar':
+        $pagina_cancel = web\Hash::link('apps/expedientes/controller/escrito_lista.php?'.http_build_query($a_cosas));
+        break;
+    default: 
+        $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
 }
+
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['filtro' => $Qfiltro]));
 
 $esEscrtito = ($Qaccion == Escrito::ACCION_ESCRITO)? TRUE : FALSE;

@@ -8,9 +8,10 @@ use entradas\model\entity\EntradaBypass;
 use entradas\model\entity\GestorEntradaBypass;
 use etherpad\model\Etherpad;
 use expedientes\model\Escrito;
+use expedientes\model\entity\EscritoAdjunto;
 use lugares\model\entity\Lugar;
 use web\Protocolo;
-use expedientes\model\entity\EscritoAdjunto;
+use web\ProtocoloArray;
 
 
 class Enviar {
@@ -124,14 +125,9 @@ class Enviar {
             $destinos_txt = $oEscrito->getDescripcion();
         } else {
             //(segun individuales)
-            $destinos_txt = '';
             $a_json_prot_dst = $oEscrito->getJson_prot_destino();
-            foreach ($a_json_prot_dst as $json_prot_dst) {
-                $aMiembros[] = $json_prot_dst->lugar;
-                $oLugar = new Lugar($json_prot_dst->lugar);
-                $destinos_txt .= empty($destinos_txt)? '' : ', ';
-                $destinos_txt .= $oLugar->getNombre();
-            }
+            $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
+            $destinos_txt = $oArrayProtDestino->ListaTxtBr();
         }
         
         $this->destinos_txt = $destinos_txt;
@@ -155,9 +151,9 @@ class Enviar {
         $oProtOrigen->setMas($json_prot_origen->mas);
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
-        $a_header = [ 'left' => $oProtOrigen->ver_txt(),
+        $a_header = [ 'left' => $sigla,
             'center' => '',
-            'right' => $sigla,
+            'right' => $oProtOrigen->ver_txt(),
         ];
         
         $oEtherpad = new Etherpad();
@@ -200,9 +196,21 @@ class Enviar {
         $oProtOrigen->setMas($json_prot_local->mas);
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
-        $a_header = [ 'left' => $oProtOrigen->ver_txt(),
+        // referencias
+        $a_json_prot_ref = $oEscrito->getJson_prot_ref();
+        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
+        $oArrayProtRef->setRef(TRUE);
+        $ref_txt = $oArrayProtRef->ListaTxtBr();
+        
+        $destinos = $this->destinos_txt;
+        if (!empty($ref_txt)) {
+            $destinos .= '<br>';
+            $destinos .= $ref_txt;
+        }
+        
+        $a_header = [ 'left' => $destinos,
             'center' => '',
-            'right' => $this->destinos_txt,
+            'right' => $oProtOrigen->ver_txt(),
         ];
         
         $oEtherpad = new Etherpad();

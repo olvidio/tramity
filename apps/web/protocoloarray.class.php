@@ -70,7 +70,7 @@ class ProtocoloArray Extends Protocolo {
 	    }
 	    
 	    $sLista = "";
-	    $ref = ($this->bRef)? 'Ref. ' : '';
+	    $ref = ($this->bRef)? 'ref. ' : '';
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
 			    $lugar = $oProt->lugar;
@@ -104,7 +104,7 @@ class ProtocoloArray Extends Protocolo {
 	    }
 	    
 	    $n=0;
-	    $ref = ($this->bRef)? 'Ref. ' : '';
+	    $ref = ($this->bRef)? 'ref. ' : '';
 	    $sLista = "<div class=\"row\" >";
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
