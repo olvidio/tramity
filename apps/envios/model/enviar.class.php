@@ -155,9 +155,9 @@ class Enviar {
         $oProtOrigen->setMas($json_prot_origen->mas);
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
-        $a_header = [ 'left' => $sigla,
+        $a_header = [ 'left' => $oProtOrigen->ver_txt(),
             'center' => '',
-            'right' => $oProtOrigen->ver_txt(),
+            'right' => $sigla,
         ];
         
         $oEtherpad = new Etherpad();
@@ -200,9 +200,9 @@ class Enviar {
         $oProtOrigen->setMas($json_prot_local->mas);
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
-        $a_header = [ 'left' => $this->destinos_txt,
+        $a_header = [ 'left' => $oProtOrigen->ver_txt(),
             'center' => '',
-            'right' => $oProtOrigen->ver_txt(),
+            'right' => $this->destinos_txt,
         ];
         
         $oEtherpad = new Etherpad();
