@@ -11,7 +11,6 @@ use expedientes\model\Escrito;
 use expedientes\model\entity\EscritoAdjunto;
 use lugares\model\entity\Lugar;
 use web\Protocolo;
-use web\ProtocoloArray;
 
 
 class Enviar {
@@ -33,17 +32,17 @@ class Enviar {
     /**
      *
      * @var \DateTime
-     * 
+     *
      */
     private $f_salida;
-
+    
     private $filename;
     private $filename_ext;
     private $contentFile;
     private $a_adjuntos;
     
     private $a_rta=[];
-        
+    
     public function __construct($id='',$tipo) {
         $this->setId($id);
         $this->setTipo($tipo);
@@ -122,12 +121,12 @@ class Enviar {
         if (!empty($a_grupos)) {
             //(segun los grupos seleccionados)
             $aMiembros = $oEscrito->getDestinos();
-            $destinos_txt = $oEscrito->getDescripcion();
+            //$destinos_txt = $oEscrito->getDescripcion();
         } else {
             //(segun individuales)
-            $a_json_prot_dst = $oEscrito->getJson_prot_destino();
-            $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
-            $destinos_txt = $oArrayProtDestino->ListaTxtBr();
+            //$a_json_prot_dst = $oEscrito->getJson_prot_destino();
+            //$oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
+            //$destinos_txt = $oArrayProtDestino->ListaTxtBr();
         }
         
         //$this->destinos_txt = $destinos_txt;
@@ -135,11 +134,9 @@ class Enviar {
     }
     
     private function getDatosEntrada() {
+
+        /*
         $sigla = $_SESSION['oConfig']->getSigla();
-        // filename
-        $oEntrada = new Entrada($this->iid);
-        $this->f_salida = $oEntrada->getF_documento()->getFromLocal('.');
-        
         $id_org = '';
         $json_prot_org = $oEntrada->getJson_prot_origen();
         if (!empty((array)$json_prot_org)) {
@@ -173,16 +170,36 @@ class Enviar {
             $origen_txt .= '<br>';
             $origen_txt .= $aRef['dst_org'];
         }
-
+        
         $a_header = [ 'left' => $destinos,
             'center' => '',
             'right' => $origen_txt
         ];
+        */
+
+        $oEntrada = new Entrada($this->iid);
+        $this->f_salida = $oEntrada->getF_documento()->getFromLocal('.');
+        
+        $a_header = [ 'left' => $oEntrada->cabeceraIzquierda(),
+            'center' => '',
+            'right' => $oEntrada->cabeceraDerecha(),
+        ];
+
+        $json_prot_origen = $oEntrada->getJson_prot_origen();
+        if (count(get_object_vars($json_prot_origen)) == 0) {
+            exit (_("No hay más"));
+        }
+        $oProtOrigen = new Protocolo();
+        $oProtOrigen->setLugar($json_prot_origen->lugar);
+        $oProtOrigen->setProt_num($json_prot_origen->num);
+        $oProtOrigen->setProt_any($json_prot_origen->any);
+        $oProtOrigen->setMas($json_prot_origen->mas);
+        $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
         $oEtherpad = new Etherpad();
         $oEtherpad->setId (Etherpad::ID_ENTRADA,$this->iid);
         
-        // formato pdf:        
+        // formato pdf:
         $this->filename_ext = $this->filename.'.pdf';
         $omPdf = $oEtherpad->generarPDF($a_header,$this->f_salida);
         
@@ -202,55 +219,55 @@ class Enviar {
     
     private function getDatosEscrito() {
         /*
-        $this->getDestinatarios();
-        // filename
+         $this->getDestinatarios();
+         // filename
+         $oEscrito = new Escrito($this->iid);
+         $this->f_salida = $oEscrito->getF_escrito()->getFromLocal('.');
+         
+         $id_dst = '';
+         $a_json_prot_dst = $oEscrito->getJson_prot_destino();
+         if (!empty((array)$a_json_prot_dst)) {
+         $json_prot_dst = $a_json_prot_dst[0];
+         $id_dst = $json_prot_dst->lugar;
+         }
+         
+         // referencias
+         $a_json_prot_ref = $oEscrito->getJson_prot_ref();
+         $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
+         $oArrayProtRef->setRef(TRUE);
+         $aRef = $oArrayProtRef->ArrayListaTxtBr($id_dst);
+         
+         $json_prot_local = $oEscrito->getJson_prot_local();
+         if (count(get_object_vars($json_prot_local)) == 0) {
+         $err_txt = "No hay protocolo local";
+         $this->a_rta['success'] = FALSE;
+         $this->a_rta['mensaje'] = $err_txt;
+         $_SESSION['oGestorErrores']->addError($err_txt,'generar PDF', __LINE__, __FILE__);
+         $_SESSION['oGestorErrores']->recordar($err_txt);
+         return FALSE;
+         }
+         $oProtOrigen = new Protocolo();
+         $oProtOrigen->setLugar($json_prot_local->lugar);
+         $oProtOrigen->setProt_num($json_prot_local->num);
+         $oProtOrigen->setProt_any($json_prot_local->any);
+         $oProtOrigen->setMas($json_prot_local->mas);
+         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
+         
+         $destinos = $this->destinos_txt;
+         if (!empty($aRef['dst_org'])) {
+         $destinos .= '<br>';
+         $destinos .= $aRef['dst_org'];
+         }
+         $origen_txt = $oProtOrigen->ver_txt();
+         if (!empty($aRef['local'])) {
+         $origen_txt .= '<br>';
+         $origen_txt .= $aRef['local'];
+         }
+         */
+        
         $oEscrito = new Escrito($this->iid);
         $this->f_salida = $oEscrito->getF_escrito()->getFromLocal('.');
         
-        $id_dst = '';
-        $a_json_prot_dst = $oEscrito->getJson_prot_destino();
-        if (!empty((array)$a_json_prot_dst)) {
-            $json_prot_dst = $a_json_prot_dst[0];
-            $id_dst = $json_prot_dst->lugar;
-        }
-        
-        // referencias
-        $a_json_prot_ref = $oEscrito->getJson_prot_ref();
-        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
-        $oArrayProtRef->setRef(TRUE);
-        $aRef = $oArrayProtRef->ArrayListaTxtBr($id_dst);
-        
-        $json_prot_local = $oEscrito->getJson_prot_local();
-        if (count(get_object_vars($json_prot_local)) == 0) {
-            $err_txt = "No hay protocolo local";
-            $this->a_rta['success'] = FALSE;
-            $this->a_rta['mensaje'] = $err_txt;
-            $_SESSION['oGestorErrores']->addError($err_txt,'generar PDF', __LINE__, __FILE__);
-            $_SESSION['oGestorErrores']->recordar($err_txt);
-            return FALSE;
-        }
-        $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_local->lugar);
-        $oProtOrigen->setProt_num($json_prot_local->num);
-        $oProtOrigen->setProt_any($json_prot_local->any);
-        $oProtOrigen->setMas($json_prot_local->mas);
-        $this->filename = $this->renombrar($oProtOrigen->ver_txt());
-        
-        $destinos = $this->destinos_txt;
-        if (!empty($aRef['dst_org'])) {
-            $destinos .= '<br>';
-            $destinos .= $aRef['dst_org'];
-        }
-        $origen_txt = $oProtOrigen->ver_txt();
-        if (!empty($aRef['local'])) {
-            $origen_txt .= '<br>';
-            $origen_txt .= $aRef['local'];
-        }
-        */
-        
-        $oEscrito = new Escrito($this->iid);
-        $this->f_salida = $oEscrito->getF_escrito()->getFromLocal('.');
-
         $a_header = [ 'left' => $oEscrito->cabeceraIzquierda(),
             'center' => '',
             'right' => $oEscrito->cabeceraDerecha(),
@@ -263,11 +280,11 @@ class Enviar {
         $oProtOrigen->setProt_any($json_prot_local->any);
         $oProtOrigen->setMas($json_prot_local->mas);
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
-
+        
         $oEtherpad = new Etherpad();
         $oEtherpad->setId (Etherpad::ID_ESCRITO,$this->iid);
         
-        // formato pdf:        
+        // formato pdf:
         $this->filename_ext = $this->filename.'.pdf';
         $omPdf = $oEtherpad->generarPDF($a_header,$this->f_salida);
         
@@ -287,7 +304,7 @@ class Enviar {
     
     /**
      * para descargar en local
-     * 
+     *
      * @return array|string
      */
     public function getPdf() {
@@ -299,9 +316,9 @@ class Enviar {
         $contentFile = $this->contentFile;
         
         $a_Txt = ['content' => $contentFile,
-                    'name' => $filename,
-                    'ext' => $filename_ext,
-                  ];
+            'name' => $filename,
+            'ext' => $filename_ext,
+        ];
         //$a_adjuntos = $this->a_adjuntos;
         
         return $a_Txt;

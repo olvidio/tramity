@@ -12,8 +12,5 @@ require_once ("apps/core/global_object.inc");
 
 $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 
-echo "<h1>KKKKKKKKKKK $Qid_entrada KKKKKKKKK</h1>";
-
-
 $oEnviar = new Enviar($Qid_entrada,'entrada');
 $oEnviar->enviar();
