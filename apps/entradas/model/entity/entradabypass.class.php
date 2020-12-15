@@ -412,9 +412,8 @@ class EntradaBypass Extends core\ClasePropiedades {
 	            $oJSON = new stdClass;
 	        }
 	    }
-	    $this->json_prot_destino = $oJSON;
-	    
-	    return $this->json_prot_destino;
+	    //$this->json_prot_destino = $oJSON;
+	    return $oJSON;
 	}
 	/**
 	 * estableix el valor de l'atribut json_prot_destino de EntradaBypass

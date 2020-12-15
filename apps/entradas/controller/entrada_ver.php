@@ -41,6 +41,10 @@ $oEntrada = new Entrada($Qid_entrada);
 
 if (!empty($Qid_entrada)) {
     
+    $cabeceraIzqd = $oEntrada->cabeceraIzquierda();
+    $cabeceraDcha = $oEntrada->cabeceraDerecha();
+    
+    /*
     $json_prot_origen = $oEntrada->getJson_prot_origen();
     if (count(get_object_vars($json_prot_origen)) == 0) {
         exit (_("No hay más"));
@@ -56,6 +60,7 @@ if (!empty($Qid_entrada)) {
     $oArrayProtRef ->setBlanco('t');
     $oArrayProtRef ->setRef(TRUE);
     $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
+    */
     
     $asunto_e = $oEntrada->getAsunto_entrada();
     
@@ -70,6 +75,8 @@ if (!empty($Qid_entrada)) {
     
     $escrito_html = $oEtherpad->generarHtml();
 } else {
+    $cabeceraIzqd = '';
+    $cabeceraDcha = '';
     $oArrayProtRef = [];
     $a_adjuntos = [];
     $asunto_e = '';
@@ -91,8 +98,8 @@ $url_download_pdf = $base_url.'/apps/entradas/controller/entrada_download.php';
 $a_campos = [
     'id_entrada' => $Qid_entrada,
     //'oHash' => $oHash,
-    'oProtOrigen' => $oProtOrigen,
-    'oArrayProtRef' => $oArrayProtRef,
+    'cabeceraIzqd' => $cabeceraIzqd,
+    'cabeceraDcha' => $cabeceraDcha,
     'asunto_e' => $asunto_e,
     'f_escrito' => $f_escrito,
     'a_adjuntos' => $a_adjuntos,

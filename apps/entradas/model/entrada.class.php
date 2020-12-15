@@ -6,6 +6,9 @@ use entradas\model\entity\EntradaDocDB;
 use entradas\model\entity\GestorEntradaAdjunto;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
+use web\Protocolo;
+use web\ProtocoloArray;
+use lugares\model\entity\GestorLugar;
 
 
 class Entrada Extends EntradaDB {
@@ -98,6 +101,61 @@ class Entrada Extends EntradaDB {
         
         return $a_tipos;
     }
+    
+    public function cabeceraIzquierda() {
+        // sigla + ref
+        
+        $sigla = $_SESSION['oConfig']->getSigla();
+        $destinos_txt = $sigla;
+        $gesLugares = new GestorLugar();
+        $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
+        if (!empty($cLugares)) {
+            $id_sigla = $cLugares[0]->getId_lugar();
+        }
+
+        // referencias
+        $a_json_prot_ref = $this->getJson_prot_ref();
+        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
+        $oArrayProtRef->setRef(TRUE);
+        $aRef = $oArrayProtRef->ArrayListaTxtBr($id_sigla);
+        
+        if (!empty($aRef['dst_org'])) {
+            $destinos_txt .= '<br>';
+            $destinos_txt .= $aRef['dst_org'];
+        }
+        return $destinos_txt;
+    }
+    
+    public function cabeceraDerecha() {
+        // origen + ref
+        $id_org = '';
+        $json_prot_origen = $this->getJson_prot_origen();
+        if (!empty((array)$json_prot_origen)) {
+            $id_org = $json_prot_origen->lugar;
+        }
+        
+        // referencias
+        $a_json_prot_ref = $this->getJson_prot_ref();
+        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
+        $oArrayProtRef->setRef(TRUE);
+        $aRef = $oArrayProtRef->ArrayListaTxtBr($id_org);
+        
+        $oProtOrigen = new Protocolo();
+        $oProtOrigen->setLugar($json_prot_origen->lugar);
+        $oProtOrigen->setProt_num($json_prot_origen->num);
+        $oProtOrigen->setProt_any($json_prot_origen->any);
+        $oProtOrigen->setMas($json_prot_origen->mas);
+        
+        $origen_txt = $oProtOrigen->ver_txt();
+        
+        if (!empty($aRef['dst_org'])) {
+            $origen_txt .= '<br>';
+            $origen_txt .= $aRef['dst_org'];
+        }
+        
+        return $origen_txt;
+    }
+    
     
     /**
      * añadir el detalle en el asunto.

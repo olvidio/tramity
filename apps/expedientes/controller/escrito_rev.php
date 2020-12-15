@@ -110,17 +110,9 @@ if (!empty($Qid_escrito)) {
         }
     }
     
-    $json_prot_destino = $oEscrito->getJson_prot_destino();
-    $oArrayProtDestino = new ProtocoloArray($json_prot_destino,$a_posibles_lugares,'destino');
-    $oArrayProtDestino->setEtiqueta('Para');
-    
-    $json_prot_ref = $oEscrito->getJson_prot_ref();
+    $cabeceraIzqd = $oEscrito->cabeceraIzquierda();
+    $cabeceraDcha = $oEscrito->cabeceraDerecha();
 
-    $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares,'referencias');
-    $oArrayProtRef->setBlanco('t');
-    $oArrayProtRef->setRef(TRUE);
-    $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias(event)');
-    
     $entradilla = $oEscrito->getEntradilla();
     $asunto = $oEscrito->getAsunto();
     $detalle = $oEscrito->getDetalle();
@@ -202,10 +194,9 @@ if (!empty($Qid_escrito)) {
             break;
     }
     
-    $oArrayProtRef = new web\ProtocoloArray('',$a_posibles_lugares,'referencias');
-    $oArrayProtRef ->setBlanco('t');
-    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
-
+    $cabeceraIzqd = '';
+    $cabeceraDcha = '';
+    
     $oArrayDesplFirmas = new web\DesplegableArray('',$a_posibles_cargos,'oficinas');
     $oArrayDesplFirmas ->setBlanco('t');
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas(event)');
@@ -229,9 +220,9 @@ $a_campos = [
     'accion' => $Qaccion,
     'id_ponente' => $id_ponente,
     //'oHash' => $oHash,
-    'oProtLocal' => $oProtLocal,
-    'oArrayProtDestino' => $oArrayProtDestino,
-    'oArrayProtRef' => $oArrayProtRef,
+    'cabeceraIzqd' => $cabeceraIzqd,
+    'cabeceraDcha' => $cabeceraDcha,
+    
     'f_escrito' => $f_escrito,
     'entradilla' => $entradilla,
     'asunto' => $asunto,

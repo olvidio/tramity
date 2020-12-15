@@ -56,29 +56,10 @@ if (!empty($Qid_escrito)) {
     $a_escritos = explode(',', $Qid_escrito);
     foreach ($a_escritos as $id_escrito) {
         $oEscrito = new Escrito($id_escrito);
-        $json_prot_local = $oEscrito->getJson_prot_local();
-        if (!empty((array)$json_prot_local)) { // Hay que pasarlo a array para ver si está vacío
-            $oProtOrigen = new Protocolo();
-            $oProtOrigen->setLugar($json_prot_local->lugar);
-            $oProtOrigen->setProt_num($json_prot_local->num);
-            $oProtOrigen->setProt_any($json_prot_local->any);
-            $oProtOrigen->setMas($json_prot_local->mas);
-            $origen_txt = $oProtOrigen->ver_txt();
-        } else {
-            $origen_txt = $sigla; 
-        }
-
-        $json_prot_destino = $oEscrito->getJson_prot_destino();
-        $oArrayProtDestino = new ProtocoloArray($json_prot_destino,'','destinos');
-        $oArrayProtDestino->setEtiqueta('De');
-
-        $json_prot_ref = $oEscrito->getJson_prot_ref();
-
-        $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,'','referencias');
-        $oArrayProtRef ->setBlanco('t');
-        $oArrayProtRef ->setRef(TRUE);
-        $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
         
+        $destinos = $oEscrito->cabeceraIzquierda();
+        $origen_txt = $oEscrito->cabeceraDerecha();
+            
         $asunto_e = $oEscrito->getAsunto();
         
         $a_adjuntos = $oEscrito->getArrayIdAdjuntos();
@@ -97,8 +78,10 @@ if (!empty($Qid_escrito)) {
             $a_campos = [
                 'id_escrito' => $id_escrito,
                 //'oHash' => $oHash,
-                'oArrayProtDestino' => $oArrayProtDestino,
-                'oArrayProtRef' => $oArrayProtRef,
+                'destinos' => $destinos,
+                'origen_txt' => $origen_txt,
+                //'oArrayProtDestino' => $oArrayProtDestino,
+                //'oArrayProtRef' => $oArrayProtRef,
                 'asunto_e' => $asunto_e,
                 'f_escrito' => $f_escrito,
                 'tipo_doc' => $tipo_doc,
@@ -106,7 +89,6 @@ if (!empty($Qid_escrito)) {
                 'pagina_prev' => $pagina_prev,
                 'pagina_next' => $pagina_next,
                 'base_url' => $base_url,
-                'origen_txt' => $origen_txt,
                 'escrito_html' => $escrito_html,
                 'base_url' => $base_url,
                 'url_download' => $url_download,
@@ -116,13 +98,14 @@ if (!empty($Qid_escrito)) {
             $a_campos = [
                 'id_escrito' => $id_escrito,
                 //'oHash' => $oHash,
-                'oArrayProtDestino' => $oArrayProtDestino,
-                'oArrayProtRef' => $oArrayProtRef,
+                'destinos' => $destinos,
+                'origen_txt' => $origen_txt,
+                //'oArrayProtDestino' => $oArrayProtDestino,
+                //'oArrayProtRef' => $oArrayProtRef,
                 'asunto_e' => $asunto_e,
                 'f_escrito' => $f_escrito,
                 'tipo_doc' => $tipo_doc,
                 'a_adjuntos' => $a_adjuntos,
-                'origen_txt' => $origen_txt,
                 'escrito_html' => $escrito_html,
                 'base_url' => $base_url,
                 'url_download' => $url_download,

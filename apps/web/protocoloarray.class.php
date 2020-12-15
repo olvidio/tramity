@@ -94,13 +94,12 @@ class ProtocoloArray Extends Protocolo {
                 } else {
                     $aRef['local'] .= !empty($aRef['local'])? "<br>" : '';
                     $aRef['local'] .= $ref.$txt;
-                    
                 }
 	        }
 	    }
-	    
-	    return $sLista;
+	    return $aRef;
 	}
+
 	public function ListaTxtBr() {
 	    $aSeleccionados = '';
 	    if (is_object($this->sSeleccionados)) {}
@@ -132,7 +131,6 @@ class ProtocoloArray Extends Protocolo {
 			    $sLista .= $ref.$txt;
 	        }
 	    }
-	    
 	    return $sLista;
 	}
 	public function ListaTxt() {

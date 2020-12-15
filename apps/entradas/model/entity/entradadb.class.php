@@ -476,9 +476,8 @@ class EntradaDB Extends core\ClasePropiedades {
 	            $oJSON = new stdClass;
 	        }
 	    }
-	    $this->json_prot_origen = $oJSON;
-	    
-	    return $this->json_prot_origen;
+	    //$this->json_prot_origen = $oJSON;
+	    return $oJSON;
 	}
 	/**
 	 * estableix el valor de l'atribut json_prot_origen de EntradaDB
@@ -532,9 +531,8 @@ class EntradaDB Extends core\ClasePropiedades {
 	            $oJSON = new stdClass;
 	        }
 	    }
-	    $this->json_prot_ref = $oJSON;
-	    
-	    return $this->json_prot_ref;
+	    //$this->json_prot_ref = $oJSON;
+	    return $oJSON;
 	}
 	/**
 	 * estableix el valor de l'atribut json_prot_ref de EntradaDB

@@ -274,9 +274,7 @@ foreach($oDbl->query($sql) as $row) {
 	            $oJSON = new stdClass;
 	        }
 	    }
-	    $this->'.$tip.$nomcamp.' = $oJSON;
-	    
-	    return $this->'.$tip.$nomcamp.';
+	    return $oJSON;
 	}';
         break;
         case 'date':

@@ -1,18 +1,18 @@
 <?php
 namespace expedientes\model;
 
-use core\ConfigGlobal;
 use etherpad\model\Etherpad;
 use expedientes\model\entity\EscritoDB;
 use expedientes\model\entity\GestorEscritoAdjunto;
-use web\Protocolo;
-use expedientes\model\entity\EscritoAdjunto;
 use lugares\model\entity\GestorLugar;
+use web\Protocolo;
+use web\ProtocoloArray;
+use function GuzzleHttp\describe_type;
+use core\ConfigGlobal;
 
 
 
 class Escrito Extends EscritoDB {
-    
     /* CONST -------------------------------------------------------------- */
     // categoria, visibilidad, accion, modo_envio.
     
@@ -33,6 +33,11 @@ class Escrito Extends EscritoDB {
     const ACCION_PLANTILLA  = 3;
     
     /* PROPIEDADES -------------------------------------------------------------- */
+    /**
+     *
+     * @var string
+     */
+    private $destinos_txt;
 
     
     /* CONSTRUCTOR -------------------------------------------------------------- */
@@ -186,47 +191,96 @@ class Escrito Extends EscritoDB {
     }
     
     public function getArrayIdAdjuntos(){
-        
         $gesEscritoAdjuntos = new GestorEscritoAdjunto();
         return $gesEscritoAdjuntos->getArrayIdAdjuntos($this->iid_escrito);
     }
     
-    public function generarPDF() {
-        
-        $oProtDestino = new Protocolo();
-        $oProtDestino->setNombre('destino');
-        $oProtLocal = new Protocolo();
-        $oProtLocal->setNombre('local');
-        
-        $json_prot_destino = $this->getJson_prot_destino();
-        if (count(get_object_vars($json_prot_destino)) == 0) {
-            //exit (_("Error no hay destino"));
-        } else {
-            $oProtDestino->setLugar($json_prot_destino->lugar);
-            $oProtDestino->setProt_num($json_prot_destino->num);
-            $oProtDestino->setProt_any($json_prot_destino->any);
-            if (property_exists($json_prot_destino, 'mas')) {
-                $oProtDestino->setMas($json_prot_destino->mas);
-            }
+    public function cabeceraIzquierda() {
+        // destinos + ref
+        $id_dst = '';
+        $a_json_prot_dst = $this->getJson_prot_destino();
+        if (!empty((array)$a_json_prot_dst)) {
+            $json_prot_dst = $a_json_prot_dst[0];
+            $id_dst = $json_prot_dst->lugar;
         }
+        $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
+        $destinos_txt = $oArrayProtDestino->ListaTxtBr();
+        
+        // referencias
+        $a_json_prot_ref = $this->getJson_prot_ref();
+        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
+        $oArrayProtRef->setRef(TRUE);
+        $aRef = $oArrayProtRef->ArrayListaTxtBr($id_dst);
+        
+        if (!empty($aRef['dst_org'])) {
+            $destinos_txt .= '<br>';
+            $destinos_txt .= $aRef['dst_org'];
+        }
+        return $destinos_txt;
+    }
+    
+    private function getDestinosEscrito() {
+        $a_grupos = [];
+        $aMiembros = [];
+        if (!empty($a_grupos)) {
+            //(segun los grupos seleccionados)
+            $aMiembros = $this->getDestinos();
+            $destinos_txt = $this->getDescripcion();
+        } else {
+            //(segun individuales)
+            $a_json_prot_dst = $this->getJson_prot_destino();
+            $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
+            $destinos_txt = $oArrayProtDestino->ListaTxtBr();
+        }
+        
+        $this->destinos_txt = $destinos_txt;
+        return $aMiembros;
+    }
+    
+    public function cabeceraDerecha() {
+        // prot local + ref
+        $id_dst = '';
+        $a_json_prot_dst = $this->getJson_prot_destino();
+        if (!empty((array)$a_json_prot_dst)) {
+            $json_prot_dst = $a_json_prot_dst[0];
+            $id_dst = $json_prot_dst->lugar;
+        }
+        
+        // referencias
+        $a_json_prot_ref = $this->getJson_prot_ref();
+        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
+        $oArrayProtRef->setRef(TRUE);
+        $aRef = $oArrayProtRef->ArrayListaTxtBr($id_dst);
         
         $json_prot_local = $this->getJson_prot_local();
         if (count(get_object_vars($json_prot_local)) == 0) {
-            // Todavía no está definido el protocolo local;
-            $prot_local_txt = _("revisar");
+            $err_txt = "No hay protocolo local";
+            $_SESSION['oGestorErrores']->addError($err_txt,'generar PDF', __LINE__, __FILE__);
+            $_SESSION['oGestorErrores']->recordar($err_txt);
+
+            $origen_txt = $_SESSION['oConfig']->getSigla();
         } else {
-            $oProtLocal->setLugar($json_prot_local->lugar);
-            $oProtLocal->setProt_num($json_prot_local->num);
-            $oProtLocal->setProt_any($json_prot_local->any);
-            if (property_exists($json_prot_local, 'mas')) {
-                $oProtLocal->setMas($json_prot_local->mas);
-            }
-            $prot_local_txt = $oProtLocal->ver_txt();
+            $oProtOrigen = new Protocolo();
+            $oProtOrigen->setLugar($json_prot_local->lugar);
+            $oProtOrigen->setProt_num($json_prot_local->num);
+            $oProtOrigen->setProt_any($json_prot_local->any);
+            $oProtOrigen->setMas($json_prot_local->mas);
+            
+            $origen_txt = $oProtOrigen->ver_txt();
         }
         
-        $a_header = [ 'left' => $oProtDestino->ver_txt(),
+        if (!empty($aRef['local'])) {
+            $origen_txt .= '<br>';
+            $origen_txt .= $aRef['local'];
+        }
+        
+        return $origen_txt;
+    }
+    
+    public function generarPDF() {
+        $a_header = [ 'left' => $this->cabeceraIzquierda(),
                     'center' => '',
-                    'right' => $prot_local_txt,
+                    'right' => $this->cabeceraDerecha(),
                   ];
         
         $oEtherpad = new Etherpad();
@@ -237,41 +291,9 @@ class Escrito Extends EscritoDB {
     }
     
     public function generarHtml() {
-        
-        $oProtDestino = new Protocolo();
-        $oProtDestino->setNombre('destino');
-        $oProtLocal = new Protocolo();
-        $oProtLocal->setNombre('local');
-        
-        $json_prot_destino = $this->getJson_prot_destino();
-        if (count(get_object_vars($json_prot_destino)) == 0) {
-            //exit (_("Error no hay destino"));
-        } else {
-            $oProtDestino->setLugar($json_prot_destino->lugar);
-            $oProtDestino->setProt_num($json_prot_destino->num);
-            $oProtDestino->setProt_any($json_prot_destino->any);
-            if (property_exists($json_prot_destino, 'mas')) {
-                $oProtDestino->setMas($json_prot_destino->mas);
-            }
-        }
-        
-        $json_prot_local = $this->getJson_prot_local();
-        if (count(get_object_vars($json_prot_local)) == 0) {
-            // Todavía no está definido el protocolo local;
-            $prot_local_txt = _("revisar");
-        } else {
-            $oProtLocal->setLugar($json_prot_local->lugar);
-            $oProtLocal->setProt_num($json_prot_local->num);
-            $oProtLocal->setProt_any($json_prot_local->any);
-            if (property_exists($json_prot_local, 'mas')) {
-                $oProtLocal->setMas($json_prot_local->mas);
-            }
-            $prot_local_txt = $oProtLocal->ver_txt();
-        }
-        
-        $a_header = [ 'left' => $oProtDestino->ver_txt(),
+        $a_header = [ 'left' => $this->cabeceraIzquierda(),
                     'center' => '',
-                    'right' => $prot_local_txt,
+                    'right' => $this->cabeceraDerecha(),
                   ];
         
         $oEtherpad = new Etherpad();

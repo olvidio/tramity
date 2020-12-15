@@ -662,9 +662,8 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	            $oJSON = new stdClass;
 	        }
 	    }
-	    $this->json_antecedentes = $oJSON;
-	    
-	    return $this->json_antecedentes;
+	    //$this->json_antecedentes = $oJSON;
+	    return $oJSON;
 	}
 	/**
 	 * estableix el valor de l'atribut json_antecedentes de ExpedienteDB
@@ -699,9 +698,9 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	            $oJSON = new stdClass;
 	        }
 	    }
-	    $this->json_acciones = $oJSON;
-	    
-	    return $this->json_acciones;
+	    //$this->json_acciones = $oJSON;
+	    //return $this->json_acciones;
+	    return $oJSON;
 	}
 	/**
 	 * estableix el valor de l'atribut json_acciones de ExpedienteDB
@@ -943,9 +942,9 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	            $oJSON = new stdClass;
 	        }
 	    }
-	    $this->json_preparar = $oJSON;
-	    
-	    return $this->json_preparar;
+	    //$this->json_preparar = $oJSON;
+	    //return $this->json_preparar;
+	    return $oJSON;
 	}
 	/**
 	 * estableix el valor de l'atribut json_preparar de ExpedienteDB

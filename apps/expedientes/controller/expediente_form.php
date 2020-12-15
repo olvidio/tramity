@@ -11,6 +11,7 @@ use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Desplegable;
 use web\Protocolo;
+use web\ProtocoloArray;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -168,9 +169,14 @@ if ($Qid_expediente) {
             }
         } else {
             $json_prot_destino = $oEscrito->getJson_prot_destino();
-            $oArrayProtDestino = new web\ProtocoloArray($json_prot_destino,'','destinos');
+            $oArrayProtDestino = new ProtocoloArray($json_prot_destino,'','destinos');
             $dst_txt = $oArrayProtDestino->ListaTxtBr();
         }
+        
+        $json_ref = $oEscrito->getJson_prot_ref();
+        $oArrayProtRef = new ProtocoloArray($json_ref,'','');
+        $oArrayProtRef->setRef(TRUE);
+        
         // Tiene adjuntos?
         $adjuntos = '';
         $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
@@ -180,7 +186,7 @@ if ($Qid_expediente) {
         
         $a_accion['protocolo'] = $dst_txt;
         $a_accion['link_ver'] = 'v';
-        $a_accion['referencias'] = '';
+        $a_accion['referencias'] = $oArrayProtRef->ListaTxtBr();
         $a_accion['tipo'] = $txt_tipo;
         $a_accion['asunto'] = $oEscrito->getAsuntoDetalle();
         $a_accion['adjuntos'] = $adjuntos;

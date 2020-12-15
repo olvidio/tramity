@@ -551,9 +551,9 @@ class EscritoDB Extends core\ClasePropiedades {
 	            $oJSON = new stdClass;
 	        }
 	    }
-	    $this->json_prot_local = $oJSON;
-	    
-	    return $this->json_prot_local;
+	    //$this->json_prot_local = $oJSON;
+	    //return $this->json_prot_local;
+	    return $oJSON;
 	}
 	/**
 	 * estableix el valor de l'atribut json_prot_local de EscritoDB
@@ -588,9 +588,8 @@ class EscritoDB Extends core\ClasePropiedades {
 	            $oJSON = new stdClass;
 	        }
 	    }
-	    $this->json_prot_destino = $oJSON;
-	    
-	    return $this->json_prot_destino;
+	    //$this->json_prot_destino = $oJSON;
+	    return $oJSON;
 	}
 	/**
 	 * estableix el valor de l'atribut json_prot_destino de EscritoDB
@@ -625,9 +624,8 @@ class EscritoDB Extends core\ClasePropiedades {
 	            $oJSON = new stdClass;
 	        }
 	    }
-	    $this->json_prot_ref = $oJSON;
-	    
-	    return $this->json_prot_ref;
+	    //$this->json_prot_ref = $oJSON;
+	    return $oJSON;
 	}
 	/**
 	 * estableix el valor de l'atribut json_prot_ref de EscritoDB

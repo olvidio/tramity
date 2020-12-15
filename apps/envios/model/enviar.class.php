@@ -130,7 +130,7 @@ class Enviar {
             $destinos_txt = $oArrayProtDestino->ListaTxtBr();
         }
         
-        $this->destinos_txt = $destinos_txt;
+        //$this->destinos_txt = $destinos_txt;
         return $aMiembros;
     }
     
@@ -201,6 +201,7 @@ class Enviar {
     }
     
     private function getDatosEscrito() {
+        /*
         $this->getDestinatarios();
         // filename
         $oEscrito = new Escrito($this->iid);
@@ -245,12 +246,24 @@ class Enviar {
             $origen_txt .= '<br>';
             $origen_txt .= $aRef['local'];
         }
+        */
         
-        $a_header = [ 'left' => $destinos,
+        $oEscrito = new Escrito($this->iid);
+        $this->f_salida = $oEscrito->getF_escrito()->getFromLocal('.');
+
+        $a_header = [ 'left' => $oEscrito->cabeceraIzquierda(),
             'center' => '',
-            'right' => $origen_txt,
+            'right' => $oEscrito->cabeceraDerecha(),
         ];
         
+        $json_prot_local = $oEscrito->getJson_prot_local();
+        $oProtOrigen = new Protocolo();
+        $oProtOrigen->setLugar($json_prot_local->lugar);
+        $oProtOrigen->setProt_num($json_prot_local->num);
+        $oProtOrigen->setProt_any($json_prot_local->any);
+        $oProtOrigen->setMas($json_prot_local->mas);
+        $this->filename = $this->renombrar($oProtOrigen->ver_txt());
+
         $oEtherpad = new Etherpad();
         $oEtherpad->setId (Etherpad::ID_ESCRITO,$this->iid);
         

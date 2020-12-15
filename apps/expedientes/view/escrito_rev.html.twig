@@ -13,54 +13,53 @@
     <input type=hidden name='accion' id='accion' value={{ accion }} >
     <input type=hidden name='id_ponente' id='id_ponente' value={{ id_ponente }} >
     
-<!--  col Izda -->
-<div class="row" >
-<div class="col-12" > 
-  <div class="clearfix">
-    <p class="font-weight-bold float-right">{{ oProtLocal.ver_txt|raw }}</p>
-    <button type="button" class="btn btn-secondary float-left">{{ oArrayProtDestino.ListaTxtBr|raw }}</button>
+<!--  --------------- CABECERAS --------------- -->
+<div class="clearfix ">
+  <div class="d-inline-flex float-left">
+    <div class="p-2 text-dark font-weight-bold" >
+      {{ cabeceraIzqd|raw }}
+    </div>
   </div>
-  <div class="clearfix">
-    <button type="button" class="btn btn-light float-left">{{ oArrayProtRef.ListaTxtBr|raw }}</button>
+  <div class="d-inline-flex float-right">
+    <div class="p-2 text-dark font-weight-bold align-top text-right" >
+      {{ cabeceraDcha|raw }}
+    </div>
   </div>
-  <!--  --------------- ENTRADILLA --------------- -->
-  <div class="alert alert-primary" role="alert">
-    <strong>{{ "Entradilla"|trans }}:</strong> 
-    <textarea rows="5" class="form-control" readonly>
-      {{ entradilla }}
-    </textarea>
-  </div>
-  <!--  --------------- ASUNTO --------------- -->
-  <div class="alert alert-info" role="alert">
-    <strong>{{ "Asunto"|trans }}:</strong> 
-    {{ asunto }} [{{ detalle }}]
-  </div>
-  <div class="form-group row">
-	  <label for="f_escrito" class="col-4 col-form-label">{{ "Fecha del escrito"|trans }}:
-        {{ f_escrito }}</label>
-  </div>
-
-
-<div class="row" >
-{# Per ficar l'escrit, si cal #}
-<div id="prova">
-{{ iframe|raw }}
 </div>
+<!--  --------------- ENTRADILLA --------------- -->
+<div class="alert alert-primary" role="alert">
+<strong>{{ "Entradilla"|trans }}:</strong> 
+<textarea rows="5" class="form-control" readonly>
+  {{ entradilla }}
+</textarea>
 </div>
+<!--  --------------- ASUNTO --------------- -->
+<div class="alert alert-info" role="alert">
+<strong>{{ "Asunto"|trans }}:</strong> 
+{{ asunto }} [{{ detalle }}]
+</div>
+<!--  --------------- FECHA --------------- -->
+<div class="form-group row">
+  <label for="f_escrito" class="col-4 col-form-label">{{ "Fecha del escrito"|trans }}:
+    {{ f_escrito }}</label>
+</div>
+
+<div class="row" >
+    {# Per ficar l'escrit, si cal #}
+    <div id="prova">
+    {{ iframe|raw }}
+    </div>
+</div>
+
 <br>
 <div class="row" >
-<div class="form-group row">
-  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
-    {{ "Volver"|trans }}
-  </button>
-
-</div>
+    <div class="form-group row">
+      <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+        {{ "Volver"|trans }}
+      </button>
+    </div>
 </div>
 </form>
-
-  <!-- Fin Col Izda -->
-</div>
-
 
 <script>
 fnjs_cancelar=function(event){
