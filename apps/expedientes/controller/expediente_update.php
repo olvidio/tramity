@@ -47,6 +47,29 @@ $Qvisibilidad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 
 $txt_err = '';
 switch($Qque) {
+    case 'encargar_a':
+        $Qid_oficial = (integer)  \filter_input(INPUT_POST, 'id_oficial');
+        // Se pone cuando se han enviado...
+        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente->DBCarregar();
+        $oExpediente->setEstado(Expediente::ESTADO_ACABADO_ENCARGADO);
+        $oExpediente->setPonente($Qid_oficial);
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            $txt_err .= _("No se han podido asignar el nuevo encargado");
+        }
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'guardar_etiquetas':
         $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...

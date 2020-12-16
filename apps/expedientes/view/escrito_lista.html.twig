@@ -1,6 +1,7 @@
 <table class="table table-sm table-bordered">
   <thead class="thead-light">
     <tr>
+      <th scope="col">{{ "ok"|trans }}</th>
       <th scope="col">{{ ver_todo|raw }}</th>
 	  {%  if modo == 'mod' %}
         {%  if bdistribuir %}
@@ -18,7 +19,8 @@
   <tbody>
   {% for row in a_acciones %}
     <tr>
-      <th scope="row">{{ row.link_ver|raw }}</th>
+      <th>{{ row.ok|raw }}</th>
+      <th>{{ row.link_ver|raw }}</th>
 	  {%  if modo == 'mod' %}
         {%  if bdistribuir %}
           <td>{{ row.link_mod|raw }}</td>

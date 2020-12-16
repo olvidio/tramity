@@ -120,6 +120,12 @@ if (!empty($Qid_escrito)) {
     $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
     $tipo_doc = $oEscrito->getTipo_doc();
     
+    if (empty($oEscrito->getOk()) OR $oEscrito->getOk() == Escrito::OK_NO) {
+        $chk_revisado = '';
+    } else {
+        $chk_revisado = 'checked';
+    }
+    
     $titulo = _("modificar");
     switch ($Qaccion) {
         case Escrito::ACCION_ESCRITO:
@@ -152,6 +158,7 @@ if (!empty($Qid_escrito)) {
         $initialPreview = '';
         $json_config = '{}';
         $tipo_doc = '';
+        $chk_revisado = '';
     } else {
         $entradilla = '';
         $asunto = '';
@@ -160,6 +167,7 @@ if (!empty($Qid_escrito)) {
         $initialPreview = '';
         $json_config = '{}';
         $tipo_doc = '';
+        $chk_revisado = '';
 
         $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
         $oArrayProtDestino ->setBlanco('t');
@@ -217,6 +225,7 @@ $a_campos = [
     'id_escrito' => $Qid_escrito,
     'accion' => $Qaccion,
     'filtro' => $Qfiltro,
+    'modo' => $Qmodo,
     'esEscrito' => $esEscrtito,
     'id_ponente' => $id_ponente,
     //'oHash' => $oHash,
@@ -232,6 +241,7 @@ $a_campos = [
     'detalle' => $detalle,
     'oDesplCategoria' => $oDesplCategoria,
     'oDesplVisibilidad' => $oDesplVisibilidad,
+    'chk_revisado' => $chk_revisado,
     //'a_adjuntos' => $a_adjuntos,
     'initialPreview' => $initialPreview,
     'json_config' => $json_config,

@@ -104,10 +104,24 @@
     <!-- Fin Col Dcha -->
   </div> 
   
+  {% if ver_encargar %}
+    <!--  --------------- Encargar a --------------- -->
+    <div class="form-group row align-items-center">
+        <!--  --------------- OFICIALES --------------- -->
+        <label for="id_oficial" class="col-1">{{ "Encargar a"|trans }}:</label>
+        <div id="div_oficiales" >
+            {{ oDesplOficiales.desplegable|raw }}
+        <button tabindex='' class="btn btn-outline-secondary" onClick="fnjs_encargar(event);" >
+          {{ "Encargar!"|trans }}
+        </button>
+        </div>
+    </div>
+  {% endif %}
+
 <!--  --------------- Etiquetas --------------- -->
 {% if ver_etiquetas %}
-  <div id="div_etiquetas" class="form-group row">
-    <label for="etiquetas" class="col-sd-2">{{ "Etiquetas"|trans }}:</label>
+  <div id="div_etiquetas" class="form-group row align-items-center">
+    <label for="etiquetas" class="col-1">{{ "Etiquetas"|trans }}:</label>
     <div class="col-6">
       <span id="span_etiquetas">
       	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
@@ -125,7 +139,7 @@
       {{ txt_btn_etiquetas }}
     </button> 
   {% endif %}
-  {% if modo == 'mod' %}
+  {% if modo == 'mod' and perm_distribuir %}
     <button tabindex='90' class="btn btn-success" onClick="fnjs_distribuir(event,'{{ btn_action }}');" >
       {{ txt_btn_success }}
     </button> 
@@ -135,6 +149,31 @@
 
 {{ include ('_antecedentes_js.html.twig') }}
 <script type="text/javascript">
+
+fnjs_encargar=function(event) {
+    var id_expediente=$('#id_expediente').val();
+    var id_oficial=$('#id_oficial').val();
+    var url = 'apps/expedientes/controller/expediente_update.php';
+    var param_json = { que: 'encargar_a', id_expediente: id_expediente, id_oficial: id_oficial };
+    request=$.ajax({
+        data: param_json,
+        url: url,
+        type: 'post'
+    });
+    request.done( function (json) {
+        if (json.success != true) {
+            rta_txt = rta.mensaje;
+            alert ('error: '+rta_txt);
+        } else {
+        	//fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+        }
+    });
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    return false;
+}
+
 fnjs_recorrido=function() {
 		var id_expediente=$('#id_expediente').val();
 		var url_ajax = 'apps/tramites/controller/firma_ajax.php';

@@ -32,6 +32,7 @@ $Qa_firmas = (array)  \filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILT
 
 $Qcategoria = (integer) \filter_input(INPUT_POST, 'categoria');
 $Qvisibiliad = (integer) \filter_input(INPUT_POST, 'visibilidad');
+$Qok = (string) \filter_input(INPUT_POST, 'ok');
 
 $Qgrupo_dst = (string) \filter_input(INPUT_POST, 'grupo_dst');
 // genero un vector con todos los grupos.
@@ -213,6 +214,11 @@ switch($Qque) {
 
         $oEscrito->setCategoria($Qcategoria);
         $oEscrito->setVisibilidad($Qvisibiliad);
+        if (is_true($Qok)) {
+            $oEscrito->setOK(Escrito::OK_OFICINA);
+        } else {
+            $oEscrito->setOK(Escrito::OK_NO);
+        }
 
         $oEscrito->DBGuardar();
         

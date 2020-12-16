@@ -11,6 +11,7 @@
     <input type=hidden name='que' id='que' value=0>
     <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
     <input type=hidden name='filtro' id='filtro' value={{ filtro }} >
+    <input type=hidden name='modo' id='modo' value={{ modo }} >
     <input type=hidden name='id_escrito' id='id_escrito' value={{ id_escrito }} >
     <input type=hidden name='accion' id='accion' value={{ accion }} >
     <input type=hidden name='id_ponente' id='id_ponente' value={{ id_ponente }} >
@@ -134,6 +135,7 @@
   </div>
 {% endif %}
 </div> <!-- Fin Col Dcha -->
+
 <div>
   <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
     {{ "Cancelar"|trans }}
@@ -141,6 +143,12 @@
   <button tabindex='90' class="btn btn-primary" onKeyUp="fnjs_guardar(event);" onClick="fnjs_guardar(event);" >
     {{ "Guardar"|trans }}
   </button>
+  
+<div class="ml-3 btn form-check">
+  <input type="checkbox" class="form-check-input" id="ok" name="ok" {{ chk_revisado }}>
+  <label class="form-check-label" for="ok">{{ "revisado"|trans }}</label>
+</div>
+
 </div>
 </form>
 {# Per ficar l'escrit, si cal #}

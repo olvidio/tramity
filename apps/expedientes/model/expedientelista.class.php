@@ -341,8 +341,28 @@ class ExpedienteLista {
                 break;
             case 'acabados_encargados':
                 $aWhere['estado'] = Expediente::ESTADO_ACABADO_ENCARGADO;
-                // solo los propios:
-                $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
+                // Si es el director los ve todos
+                if (is_true(ConfigGlobal::soy_dtor())) {
+                    // posibles oficiales de la oficina:
+                    $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+                    $id_oficina = $oCargo->getId_oficina();
+                    $gesCargos = new GestorCargo();
+                    $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+                    $a_cargos = [];
+                    foreach (array_keys($a_cargos_oficina) as $id_cargo) {
+                        $a_cargos[] = $id_cargo;
+                    }
+                    if (!empty($a_cargos)) {
+                        $aWhere['ponente'] = implode(',',$a_cargos);
+                        $aOperador['ponente'] = 'IN';
+                    } else {
+                        // para que no salga nada pongo 
+                        $aWhere = [];
+                    }
+                } else {
+                    // solo los propios:
+                    $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
+                }
                 break;
             case 'archivados':
                 $aWhere['estado'] = Expediente::ESTADO_TERMINADO;
@@ -454,6 +474,7 @@ class ExpedienteLista {
                 break;
             case 'distribuir':
             case 'acabados':
+            case 'acabados_encargados':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_distribuir.php';
                 $pagina_ver = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_distribuir.php';
                 $col_mod = 1;

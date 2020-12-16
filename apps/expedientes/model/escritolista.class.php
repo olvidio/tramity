@@ -170,6 +170,9 @@ class EscritoLista {
                 $prot_local = $prot_local_txt;
             }
             
+            $ok = $oEscrito->getOk();
+            
+            $a_accion['ok'] = $ok;
             $a_accion['prot_local'] = $prot_local;
             $a_accion['tipo'] = '';
             $a_accion['destino'] = $oArrayProtDestino->ListaTxtBr();
@@ -298,6 +301,13 @@ class EscritoLista {
                 $prot_local = $prot_local_txt;
             }
 
+            if (!empty($oEscrito->getOk()) && $oEscrito->getOk() != Escrito::OK_NO) {
+                $ok = '<i class="fas fa-check"></i>'; 
+            } else {
+                $ok = '';
+            }
+            
+            $a_accion['ok'] = $ok;
             $a_accion['prot_local'] = $prot_local;
             $a_accion['tipo'] = $txt_tipo;
             $a_accion['destino'] = $oArrayProtDestino->ListaTxtBr();
