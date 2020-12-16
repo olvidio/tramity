@@ -251,6 +251,31 @@ class ExpedienteLista {
                 $gesFirmas = new GestorFirma();
                 $this->a_exp_reunion_falta_firma = $gesFirmas->faltaFirmarReunion();
                 
+                //que tengan de mi firma, independiente de firmado o no
+                $aWhereFirma['id_cargo'] = ConfigGlobal::mi_id_cargo();
+                $aWhereFirma['tipo'] = Firma::TIPO_VOTO;
+                //$aWhereFirma['valor'] = 'x';
+                //$aOperadorFirma['valor'] = 'IS NULL';
+                $gesFirmas = new GestorFirma();
+                $cFirmasNull = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+                $a_expedientes = [];
+                foreach ($cFirmas as $oFirma) {
+                    $id_expediente = $oFirma->getId_expediente();
+                    $orden_tramite = $oFirma->getOrden_tramite();
+                    // Sólo a partir de que el orden_tramite anterior ya lo hayan firmado todos
+                    if (!$gesFirmas->getAnteriorOK($id_expediente,$orden_tramite)) {
+                        continue;
+                    }
+                    
+                    $a_expedientes[] = $id_expediente;
+                }
+                if (!empty($a_expedientes)) {
+                    $aWhere['id_expediente'] = implode(',',$a_expedientes);
+                    $aOperador['id_expediente'] = 'IN';
+                } else {
+                    // para que no salga nada pongo
+                    $aWhere = [];
+                }
                 break;
             case 'circulando':
                 $aWhere['estado'] = Expediente::ESTADO_CIRCULANDO;
