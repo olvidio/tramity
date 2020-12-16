@@ -4,14 +4,13 @@ namespace expedientes\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
+use entradas\model\Entrada;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramite;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Hash;
-use tramites\model\entity\GestorTramiteCargo;
-use entradas\model\Entrada;
 
 
 class ExpedienteLista {
@@ -296,7 +295,7 @@ class ExpedienteLista {
                     $gesCargos = new GestorCargo();
                     $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
                     $a_cargos = [];
-                    foreach ($a_cargos_oficina as $id_cargo => $cargo) {
+                    foreach (array_keys($a_cargos_oficina) as $id_cargo) {
                         $a_cargos[] = $id_cargo;
                     }
                     if (!empty($a_cargos)) {
@@ -317,19 +316,73 @@ class ExpedienteLista {
                 $aWhere['ok'] = 'f';
                 break;
             case 'acabados':
+                // Ahora (16/12/2020) todos los de la oficina si es dtor.
+                // sino los encargados (salto a otro estado)
                 $aWhere['estado'] = Expediente::ESTADO_ACABADO;
                 // marcados por scdl con ok.
                 $aWhere['ok'] = 't';
+                // solo los de la oficina:
+                // posibles oficiales de la oficina:
+                $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+                $id_oficina = $oCargo->getId_oficina();
+                $gesCargos = new GestorCargo();
+                $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+                $a_cargos = [];
+                foreach (array_keys($a_cargos_oficina) as $id_cargo) {
+                    $a_cargos[] = $id_cargo;
+                }
+                if (!empty($a_cargos)) {
+                    $aWhere['ponente'] = implode(',',$a_cargos);
+                    $aOperador['ponente'] = 'IN';
+                } else {
+                    // para que no salga nada pongo 
+                    $aWhere = [];
+                }
+                break;
+            case 'acabados_encargados':
+                $aWhere['estado'] = Expediente::ESTADO_ACABADO_ENCARGADO;
                 // solo los propios:
                 $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
                 break;
             case 'archivados':
                 $aWhere['estado'] = Expediente::ESTADO_TERMINADO;
+                // solo los de la oficina:
+                // posibles oficiales de la oficina:
+                $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+                $id_oficina = $oCargo->getId_oficina();
+                $gesCargos = new GestorCargo();
+                $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+                $a_cargos = [];
+                foreach (array_keys($a_cargos_oficina) as $id_cargo) {
+                    $a_cargos[] = $id_cargo;
+                }
+                if (!empty($a_cargos)) {
+                    $aWhere['ponente'] = implode(',',$a_cargos);
+                    $aOperador['ponente'] = 'IN';
+                } else {
+                    // para que no salga nada pongo 
+                    $aWhere = [];
+                }
                 break;
             case 'copias':
                 $aWhere['estado'] = Expediente::ESTADO_COPIAS;
-                //$aWhere['f_aprobacion'] = 'x';
-                //$aOperador['f_aprobacion'] = 'IS NOT NULL';
+                // solo los de la oficina:
+                // posibles oficiales de la oficina:
+                $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+                $id_oficina = $oCargo->getId_oficina();
+                $gesCargos = new GestorCargo();
+                $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+                $a_cargos = [];
+                foreach (array_keys($a_cargos_oficina) as $id_cargo) {
+                    $a_cargos[] = $id_cargo;
+                }
+                if (!empty($a_cargos)) {
+                    $aWhere['ponente'] = implode(',',$a_cargos);
+                    $aOperador['ponente'] = 'IN';
+                } else {
+                    // para que no salga nada pongo 
+                    $aWhere = [];
+                }
                 break;
         }
 

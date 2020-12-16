@@ -2,9 +2,10 @@
 // INICIO Cabecera global de URL de controlador *********************************
 use core\ConfigGlobal;
 use core\ViewTwig;
+use function core\is_true;
+use entradas\model\EntradaLista;
 use expedientes\model\ExpedienteLista;
 use usuarios\model\entity\Usuario;
-use entradas\model\EntradaLista;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -107,18 +108,32 @@ $filtro = 'seg_reunion';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// acabados = 7;
-$filtro = 'acabados';
-    $active = ($filtro == $Qfiltro)? 'active' : '';
-    $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 7;
-    $text = _("acabados");
-    $oExpedienteLista->setFiltro($filtro);
-    $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
-$a_pills[$num_orden] = $pill;
-
+if (is_true(ConfigGlobal::soy_dtor()) ) {
+    // acabados = 7;
+    $filtro = 'acabados';
+        $active = ($filtro == $Qfiltro)? 'active' : '';
+        $aQuery = [ 'filtro' => $filtro ];
+        $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
+        $num_orden = 7;
+        $text = _("acabados");
+        $oExpedienteLista->setFiltro($filtro);
+        $num = $oExpedienteLista->getNumero();
+        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+    $a_pills[$num_orden] = $pill;
+} else {
+    // acabados = 7;
+    $filtro = 'acabados_encargados';
+        $active = ($filtro == $Qfiltro)? 'active' : '';
+        $aQuery = [ 'filtro' => $filtro ];
+        $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
+        $num_orden = 7;
+        $text = _("acabados");
+        $oExpedienteLista->setFiltro($filtro);
+        $num = $oExpedienteLista->getNumero();
+        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+    $a_pills[$num_orden] = $pill;
+    
+}
 // archivados = 8;
 $filtro = 'archivados';
     $active = ($filtro == $Qfiltro)? 'active' : '';

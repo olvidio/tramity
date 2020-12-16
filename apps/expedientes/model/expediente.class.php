@@ -48,6 +48,7 @@ class Expediente Extends expedienteDB {
     const ESTADO_ACABADO           = 4;
     const ESTADO_TERMINADO         = 5;
     const ESTADO_COPIAS            = 6;
+    const ESTADO_ACABADO_ENCARGADO = 7;
     
     // vida (a criterio del ponente):
     /*
