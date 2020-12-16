@@ -212,15 +212,25 @@ class ExpedienteLista {
                 $aOperador['f_reunion'] = 'IS NOT NULL';
                 
                 //pendientes de mi firma
-                $aWhereFirma['id_cargo'] = ConfigGlobal::mi_id_cargo();
-                $aWhereFirma['tipo'] = Firma::TIPO_VOTO;
-                $aWhereFirma['valor'] = 'x';
-                $aOperadorFirma['valor'] = 'IS NULL';
+                $aWhereFirma = [
+                            'id_cargo' => ConfigGlobal::mi_id_cargo(),
+                            'tipo' => Firma::TIPO_VOTO,
+                            'valor' => 'x',
+                            ];
+                $aOperadorFirma = [
+                            'valor' => 'IS NULL',
+                            ];
                 $gesFirmas = new GestorFirma();
                 $cFirmasNull = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
                 // Sumar los firmados, pero no OK
-                $aWhereFirma['valor'] = Firma::V_VISTO .','. Firma::V_A_ESPERA;
-                $aOperadorFirma['valor'] = 'IN';
+                $aWhereFirma = [
+                            'id_cargo' => ConfigGlobal::mi_id_cargo(),
+                            'tipo' => Firma::TIPO_VOTO,
+                            'valor' =>  Firma::V_VISTO .','. Firma::V_A_ESPERA,
+                            ];
+                $aOperadorFirma = [
+                            'valor' => 'IN',
+                            ];
                 $cFirmasVisto = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
                 $cFirmas = array_merge($cFirmasNull, $cFirmasVisto);
                 $a_expedientes = [];
@@ -252,12 +262,11 @@ class ExpedienteLista {
                 $this->a_exp_reunion_falta_firma = $gesFirmas->faltaFirmarReunion();
                 
                 //que tengan de mi firma, independiente de firmado o no
-                $aWhereFirma['id_cargo'] = ConfigGlobal::mi_id_cargo();
-                $aWhereFirma['tipo'] = Firma::TIPO_VOTO;
-                //$aWhereFirma['valor'] = 'x';
-                //$aOperadorFirma['valor'] = 'IS NULL';
-                $gesFirmas = new GestorFirma();
-                $cFirmasNull = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+                $aWhereFirma = [
+                            'id_cargo' => ConfigGlobal::mi_id_cargo(),
+                            'tipo' => Firma::TIPO_VOTO,
+                            ];
+                $cFirmas = $gesFirmas->getFirmas($aWhereFirma);
                 $a_expedientes = [];
                 foreach ($cFirmas as $oFirma) {
                     $id_expediente = $oFirma->getId_expediente();
