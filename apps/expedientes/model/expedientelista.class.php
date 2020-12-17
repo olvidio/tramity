@@ -582,7 +582,7 @@ class ExpedienteLista {
                 $row['tramite'] = $tramite_txt;
 
                 $visibilidad = $oExpediente->getVisibilidad();
-                $visibilidad_txt = $a_visibilidad[$visibilidad];
+                $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '' : $a_visibilidad[$visibilidad];
                 $row['visibilidad'] = $visibilidad_txt;
 
                 
