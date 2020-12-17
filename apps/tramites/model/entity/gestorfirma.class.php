@@ -164,7 +164,8 @@ class GestorFirma Extends core\ClaseGestor {
 	    $gesCargos = new GestorCargo();
 	    $aCargos =$gesCargos->getArrayCargos(FALSE);
 	    $aWhere = ['id_expediente' => $id_expediente,
-	        '_ordre' => 'orden_tramite, orden_oficina ASC, tipo ASC'
+	        '_ordre' => 'f_valor'
+	        //'_ordre' => 'orden_tramite, orden_oficina ASC, tipo ASC'
 	    ];
 	    $cFirmas = $this->getFirmas($aWhere);
 	    $comentarios = '';
