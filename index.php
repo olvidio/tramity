@@ -2,6 +2,7 @@
 // INICIO Cabecera global de URL de controlador *********************************
 use core\ConfigGlobal;
 use core\ViewTwig;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 
 require_once ("apps/core/global_header.inc");
@@ -39,13 +40,7 @@ if (empty($_SESSION['session_auth']['role_actual'])) {
 }
 $role_actual = $_SESSION['session_auth']['role_actual'];
 
-//oficinas adicionales (suplencias..)
-$a_roles_posibles = [];
-$aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
-foreach($aPosiblesCargos as $cargo) {
-    $a_roles_posibles[] = $cargo;
-}
-// role de 'secretaria' para los oficilaes de secretaria:
+// role de 'secretaria' para los oficiales de secretaria:
 $id_oficina_secretaria = '';
 $gesOficinas = new GestorOficina();
 $cOficinas = $gesOficinas->getOficinas(['sigla' => 'scdl']);
@@ -56,8 +51,21 @@ $mi_id_oficina = ConfigGlobal::mi_id_oficina();
 if ($id_oficina_secretaria == $mi_id_oficina) {
     $a_roles_posibles[] = 'secretaria';
 }
-$_SESSION['session_auth']['a_roles'] = $a_roles_posibles;
 
+//oficinas adicionales (suplencias..)
+$a_roles_posibles = [];
+$aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
+foreach($aPosiblesCargos as $id_cargo => $cargo) {
+    $a_roles_posibles[] = $cargo;
+    // si es de se cretaria, lo añado
+    $oCargo = new Cargo($id_cargo);
+    $id_oficina_cargo = $oCargo->getId_oficina();
+    if ($id_oficina_cargo == $id_oficina_secretaria) {
+        $a_roles_posibles[] = 'secretaria';
+    }
+}
+
+$_SESSION['session_auth']['a_roles'] = $a_roles_posibles;
 ?>
 <script>
 fnjs_procesarError=function() {
