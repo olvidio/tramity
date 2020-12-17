@@ -194,15 +194,15 @@
 
   <div class="form-group row align-items-center">
     <!--  --------------- OFICIALES --------------- -->
-    <label for="preparar" class="col-1">{{ "Preparar"|trans }}:</label>
-    <div id="div_preparar" >
+    <label for="mt-3" class="col-1">{{ "Preparar"|trans }}:</label>
+    <div id="div_preparar"> {# la funcion fnjs_visto remplaza el contenido de este div. #}
      {% for row in a_preparar %}
         <div class="custom-control custom-checkbox custom-control-inline">
-          <input type="checkbox" class="custom-control-input" name="a_preparar[]" id="{{ row.id }}" value="{{ row.id }}#{{ row.visto }}" {{ row.chk }}>
+          <input type="checkbox" class="" name="a_preparar[]" id="{{ row.id }}" value="{{ row.id }}#{{ row.visto }}" {{ row.chk }}>
           {% if row.visto %}
-            <label class="custom-control-label text-success" >{{ row.text }} ({{ "visto"|trans }})</label>
+            <label class="mt-2 ml-2 text-success" >{{ row.text }} ({{ "visto"|trans }})</label>
           {% else %}
-            <label class="custom-control-label" >{{ row.text }}</label>
+            <label class="mt-2 ml-2" >{{ row.text }}</label>
           {% endif %}
         </div>
     {% endfor %}
@@ -210,11 +210,11 @@
     <button tabindex='' class="btn btn-outline-secondary" onClick="fnjs_visto(event);" >
       {{ "marcar como visto"|trans }}
     </button>
-
   </div>
+  
   <!--  --------------- FIRMAS OFICINA --------------- -->
   <div id="div_firmas_oficina" class="form-group row">
-    <label for="firmas_oficina" class="col-sd-2">{{ "Firmas oficina"|trans }}:</label>
+    <label for="firmas_oficina" class="col-2">{{ "Firmas oficina"|trans }}:</label>
     <div class="col-6">
       <span id="span_firmas_oficina">
       	{{ oArrayDesplFirmasOficina.ListaSelects|raw }}
@@ -223,7 +223,7 @@
   </div>
   <!--  --------------- OTRAS FIRMAS --------------- -->
   <div id="div_firmas" class="form-group row">
-    <label for="firmas" class="col-sd-2">{{ "Otras Firmas"|trans }}:</label>
+    <label for="firmas" class="col-2">{{ "Otras Firmas"|trans }}:</label>
     <div class="col-6">
       <span id="span_firmas">
       	{{ oArrayDesplFirmas.ListaSelects|raw }}
