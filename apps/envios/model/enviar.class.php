@@ -282,7 +282,7 @@ class Enviar {
         if (empty((array)$json_prot_local)) {
             $this->a_rta['success'] = FALSE;
             $this->a_rta['mensaje'] = _("No está definido el protocolo local");
-            return $this->a_rta;
+            return FALSE;
         }
         $oProtOrigen = new Protocolo();
         $oProtOrigen->setLugar($json_prot_local->lugar);
