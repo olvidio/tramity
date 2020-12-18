@@ -37,16 +37,9 @@ if (!empty($Qid_escrito)) {
     $a_escritos = explode(',', $Qid_escrito);
     foreach ($a_escritos as $id_escrito) {
         $oEscrito = new Escrito($id_escrito);
-        $json_prot_destino = $oEscrito->getJson_prot_destino();
-        $oArrayProtDestino = new ProtocoloArray($json_prot_destino,'','destinos');
-        $oArrayProtDestino->setEtiqueta('De');
-            
-        $json_prot_ref = $oEscrito->getJson_prot_ref();
-
-        $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,'','referencias');
-        $oArrayProtRef ->setBlanco('t');
-        $oArrayProtRef ->setRef(TRUE);
-        $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
+        
+        $destinos = $oEscrito->cabeceraIzquierda();
+        $origen_txt = $oEscrito->cabeceraDerecha();
         
         $asunto = $oEscrito->getAsunto();
         $detalle = $oEscrito->getDetalle();
@@ -73,8 +66,8 @@ if (!empty($Qid_escrito)) {
         $a_campos = [
             'id_escrito' => $id_escrito,
             //'oHash' => $oHash,
-            'oArrayProtDestino' => $oArrayProtDestino,
-            'oArrayProtRef' => $oArrayProtRef,
+            'destinos' => $destinos,
+            'origen_txt' => $origen_txt,
             'asunto' => $asunto,
             'detalle' => $detalle,
             'chk_anulado' => $chk_anulado,
