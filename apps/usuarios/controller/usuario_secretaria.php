@@ -182,18 +182,20 @@ $filtro = 'bypass';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// distribución cr
-$filtro = 'pref';
-    $active = ($filtro == $Qfiltro)? 'active' : '';
-    $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/config/controller/parametros_scdl.php?'.http_build_query($aQuery));
-    $num_orden = 90;
-    $text = _("pref");
-    $oEntradaLista = new EntradaLista();
-    $oEntradaLista->setFiltro($filtro);
-    $num = $oEntradaLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
-$a_pills[$num_orden] = $pill;
+// preferencias del scdl o suplente
+if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
+    $filtro = 'pref';
+        $active = ($filtro == $Qfiltro)? 'active' : '';
+        $aQuery = [ 'filtro' => $filtro ];
+        $pag_lst = web\Hash::link('apps/config/controller/parametros_scdl.php?'.http_build_query($aQuery));
+        $num_orden = 90;
+        $text = _("pref");
+        $oEntradaLista = new EntradaLista();
+        $oEntradaLista->setFiltro($filtro);
+        $num = 0;
+        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+    $a_pills[$num_orden] = $pill;
+}
 
 // ordenar:
 ksort($a_pills);
