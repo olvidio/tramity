@@ -54,9 +54,11 @@ class EntradaLista {
         $aWhere = [];
         $aOperador = [];
 
+        $aWhere['_ordre'] = 'id_entrada';
         switch ($this->filtro) {
             case 'en_ingresado':
                 $aWhere['estado'] = Entrada::ESTADO_INGRESADO;
+                $aWhere['_ordre'] = 'id_entrada DESC';
                 break;
             case 'en_admitido':
                 $aWhere['estado'] = Entrada::ESTADO_ADMITIDO;
@@ -92,7 +94,7 @@ class EntradaLista {
         $a_posibles_cargos = $gesCargos->getArrayCargos();
         
         
-        $pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
+        //$pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
         $slide_mode = '';
         switch ($this->filtro) {
             case 'en_ingresado':
@@ -126,7 +128,6 @@ class EntradaLista {
         $id_entrada = '';
         if (!empty($this->aWhere)) {
             $gesEntradas = new GestorEntrada();
-            $this->aWhere['_ordre'] = 'id_entrada';
             $cEntradas = $gesEntradas->getEntradas($this->aWhere,$this->aOperador);
             foreach ($cEntradas as $oEntrada) {
                 $row = [];
@@ -141,7 +142,7 @@ class EntradaLista {
                               'filtro' => $filtro,
                               'slide_mode' => $slide_mode,
                 ];
-                $link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas));
+                //$link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
                 $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >"._("ver")."</span>";
                 //$row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_ver');\" >ver</span>";
@@ -183,6 +184,8 @@ class EntradaLista {
         $url_update = 'apps/entradas/controller/entrada_update.php';
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
+        $pagina_cancel = Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $filtro]));
+        
         $secretaria = FALSE;
         if ($_SESSION['session_auth']['role_actual'] === 'secretaria') {
             $secretaria = TRUE;
@@ -197,6 +200,7 @@ class EntradaLista {
             'filtro' => $filtro,
             'server' => $server,
             'secretaria' => $secretaria,
+            'pagina_cancel' => $pagina_cancel,
         ];
         
         $oView = new ViewTwig('entradas/controller');

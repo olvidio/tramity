@@ -65,12 +65,13 @@
 	{{ txt_alert|raw }}
 </div>
 {% endif %}
+{#
 <div>
   <button type="button" tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
     {{ "Volver"|trans }}
   </button>
 </div>
-
+#}
 <script>
 fnjs_cancelar=function(event){
 	// Asegurarme que es por click y no por return (posicion: 0,0)
@@ -153,6 +154,6 @@ fnjs_download=function(item) {
 }
 
 $(document).ready(function() {
-	tabs_hide();
+	//tabs_hide();
 });
 </script>

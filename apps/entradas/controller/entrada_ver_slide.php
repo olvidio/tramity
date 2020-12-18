@@ -23,9 +23,11 @@ $QSlide_mode =  (bool) \filter_input(INPUT_POST, 'slide_mode', FILTER_VALIDATE_B
 
 if ($QSlide_mode === TRUE) {
     $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+    $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 } else {
     // porque también se puede abrir como include
     $Qid_entrada = $id_entrada;
+    $Qfiltro = $filtro;
 }
 
 if (!empty($Qid_entrada)) {
@@ -67,9 +69,9 @@ if (!empty($Qid_entrada)) {
     $oEntrada = new Entrada($Qid_entrada);
 
     $pagina = core\ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver_slide.php';
-    $a_cosas = [ 'id_entrada' => $id_prev, 'slide_mode' => 'TRUE'];
+    $a_cosas = [ 'id_entrada' => $id_prev, 'slide_mode' => 'TRUE', 'filtro' => $Qfiltro];
     $pagina_prev = web\Hash::link($pagina.'?'.http_build_query($a_cosas));
-    $a_cosas = [ 'id_entrada' => $id_next, 'slide_mode' => 'TRUE'];
+    $a_cosas = [ 'id_entrada' => $id_next, 'slide_mode' => 'TRUE', 'filtro' => $Qfiltro];
     $pagina_next = web\Hash::link($pagina.'?'.http_build_query($a_cosas));
 
     $json_prot_origen = $oEntrada->getJson_prot_origen();
@@ -130,8 +132,7 @@ $base_url = core\ConfigGlobal::getWeb();
 $url_download = $base_url.'/apps/entradas/controller/download.php?plugin=1';
 $url_download_pdf = $base_url.'/apps/entradas/controller/entrada_download.php';
 // Si no pongo filtro ya va bien (si lo pongo va al slide...)
-//$pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $filtro]));
-$pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php');
+$pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
 
 $a_campos = [
     //'oHash' => $oHash,
