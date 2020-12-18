@@ -124,9 +124,14 @@ class Enviar {
             //$destinos_txt = $oEscrito->getDescripcion();
         } else {
             //(segun individuales)
-            //$a_json_prot_dst = $oEscrito->getJson_prot_destino();
-            //$oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
-            //$destinos_txt = $oArrayProtDestino->ListaTxtBr();
+            //$destinos_txt = '';
+            $a_json_prot_dst = $oEscrito->getJson_prot_destino();
+            foreach ($a_json_prot_dst as $json_prot_dst) {
+                $aMiembros[] = $json_prot_dst->lugar;
+                //$oLugar = new Lugar($json_prot_dst->lugar);
+                //$destinos_txt .= empty($destinos_txt)? '' : ', ';
+                //$destinos_txt .= $oLugar->getNombre();
+            }
         }
         
         //$this->destinos_txt = $destinos_txt;

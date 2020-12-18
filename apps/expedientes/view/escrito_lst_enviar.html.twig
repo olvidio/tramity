@@ -65,6 +65,9 @@ fnjs_enviar_a_secretaria=function(id_escrito) {
 }
 
 fnjs_enviar_escrito=function(id_escrito) {
+    event.preventDefault();
+	event.stopPropagation();
+	event.stopImmediatePropagation();
 	//alert("enviar");
     var url;
     var url_ajax = 'apps/expedientes/controller/escrito_enviar.php';
@@ -74,6 +77,7 @@ fnjs_enviar_escrito=function(id_escrito) {
 
     // Actualizar vista expadiente: escrito enviado.
     fnjs_actualizar_expediente();
+	return false;
 }
 fnjs_distribuir_escrito=function(id_escrito) {
     var ssfsv = 'sv';
