@@ -279,6 +279,11 @@ class Enviar {
         ];
         
         $json_prot_local = $oEscrito->getJson_prot_local();
+        if (empty((array)$json_prot_local)) {
+            $this->a_rta['success'] = FALSE;
+            $this->a_rta['mensaje'] = _("No está definido el protocolo local");
+            return $this->a_rta;
+        }
         $oProtOrigen = new Protocolo();
         $oProtOrigen->setLugar($json_prot_local->lugar);
         $oProtOrigen->setProt_num($json_prot_local->num);
