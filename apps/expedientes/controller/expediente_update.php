@@ -204,15 +204,17 @@ switch($Qque) {
         $copias = TRUE;
     case 'exp_cp_borrador':
         $txt_err = '';
-        if (is_true($copias)) {
+        if (!empty($copias) && is_true($copias)) {
             $of_destino = 'copias';
         } else {
-            $of_destino = empty($Qof_destino)? '' : $Qof_destino;
+            $of_destino = empty($Qof_destino)? ConfigGlobal::mi_id_cargo() : $Qof_destino;
         }
         // copiar expdiente: poner los escritos como antecedentes.
         $oExpediente = new Expediente($Qid_expediente);
-        $oExpediente->copiar($of_destino);
-        
+        if ($oExpediente->copiar($of_destino) === FALSE ) {
+            $error_txt .= $oExpediente->getErrorTxt();
+        }
+
         if (empty($txt_err)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
