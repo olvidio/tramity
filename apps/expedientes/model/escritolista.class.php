@@ -225,21 +225,10 @@ class EscritoLista {
             $f_salida = $oEscrito->getF_salida()->getFromLocal();
             $tipo_accion = $oEscrito->getAccion();
             
-            $a_cosas =  ['id_expediente' => $this->id_expediente,
-                'id_escrito' => $id_escrito,
-                'accion' => $tipo_accion,
-                'filtro' => $this->filtro,
-                'modo' => $this->modo,
-            ];
-            $pag_escrito =  Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
-            $pag_rev =  Hash::link('apps/expedientes/controller/escrito_rev.php?'.http_build_query($a_cosas));
-            
-            $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
-            $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >"._("rev.texto")."</span>";
-            
-            
+            $enviado = FALSE;
             if (!empty($f_salida)) {
                 $a_accion['enviar'] = _("enviado")." ($f_salida)";
+                $enviado = TRUE;
             } else {
                 if ($tipo_accion == Escrito::ACCION_ESCRITO) {
                     // si es anulado NO enviar!
@@ -250,6 +239,7 @@ class EscritoLista {
                         $ok = $oEscrito->getOk();
                         if ($ok == EScrito::OK_OFICINA) {
                             $a_accion['enviar'] = _("en secretaría");
+                            $enviado = TRUE;
                         } else {
                             $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_a_secretaria('$id_escrito');\" >"._("pasar a secretaría")."</span>";
                         }
@@ -258,6 +248,22 @@ class EscritoLista {
                     $a_accion['enviar'] = _("otra acción?");
                 }
             }
+            
+            $a_cosas =  ['id_expediente' => $this->id_expediente,
+                'id_escrito' => $id_escrito,
+                'accion' => $tipo_accion,
+                'filtro' => $this->filtro,
+                'modo' => $this->modo,
+            ];
+            $pag_escrito =  Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
+            $pag_rev =  Hash::link('apps/expedientes/controller/escrito_rev.php?'.http_build_query($a_cosas));
+            
+            if ($enviado) {
+                $a_accion['link_mod'] = "-";
+            } else {
+                $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
+            }
+            $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >"._("rev.texto")."</span>";
             
             if ($bdistribuir) { 
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_distribuir_escrito('$id_escrito');\" >"._("ver")."</span>";
@@ -293,7 +299,7 @@ class EscritoLista {
             $oArrayProtRef = new ProtocoloArray($json_ref,'','');
             $oArrayProtRef->setRef(TRUE);
             
-            if ($this->getModo() == 'mod') {
+            if ($this->getModo() == 'mod' && !$enviado) {
                 $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito(event,'$id_escrito');\" >";
                 $prot_local .= $prot_local_txt;
                 $prot_local .= "</span>";

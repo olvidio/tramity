@@ -199,6 +199,17 @@ if (empty($f_entrada)) {
     $f_entrada = $oHoy->getFromLocal();
 }
 
+switch ($Qfiltro) {
+    case 'en_admitido':
+        $txt_btn_guardar = _("Asignar");
+        break;
+    case 'en_asignado':
+        $txt_btn_guardar = _("Aceptar");
+        break;
+    default:
+        $txt_btn_guardar = _("Guardar");
+        
+}
 
 $url_update = 'apps/entradas/controller/entrada_update.php';
 $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
@@ -235,6 +246,7 @@ $a_campos = [
     'pagina_cancel' => $pagina_cancel,
     'pagina_nueva' => $pagina_nueva,
     'filtro' => $Qfiltro,
+    'txt_btn_guardar' => $txt_btn_guardar,
     // para la pagina js
     'plazo_normal' => $plazo_normal,
     'plazo_urgente' => $plazo_urgente,
