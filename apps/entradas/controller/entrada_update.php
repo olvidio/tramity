@@ -39,7 +39,9 @@ $Qa_firmas = (array)  \filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILT
 $Qcategoria = (integer) \filter_input(INPUT_POST, 'categoria');
 $Qvisibiliad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 
+$Qplazo = (string) \filter_input(INPUT_POST, 'plazo');
 $Qf_plazo = (string) \filter_input(INPUT_POST, 'f_plazo');
+$Qf_contestar = (string) \filter_input(INPUT_POST, 'f_contestar');
 $Qbypass = (string) \filter_input(INPUT_POST, 'bypass');
 $QAdmitir = (string) \filter_input(INPUT_POST, 'admitir');
 
@@ -214,7 +216,37 @@ switch($Qque) {
         $oEntrada->setCategoria($Qcategoria);
         $oEntrada->setVisibilidad($Qvisibiliad);
 
-        //$oEntrada->setFlazo($Qf_plazo);
+        
+        switch ($Qplazo) {
+            case 'hoy':
+                $oEntrada->setF_contestar('');
+                break;
+            case 'normal':
+                $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
+                $periodo = 'P'.$plazo_normal.'D';
+                $oF = new DateTimeLocal();
+                $oF->add(new DateInterval($periodo));
+                $oEntrada->setF_contestar($oF);
+                break;
+            case 'rápido':
+                $plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
+                $periodo = 'P'.$plazo_rapido.'D';
+                $oF = new DateTimeLocal();
+                $oF->add(new DateInterval($periodo));
+                $oEntrada->setF_contestar($oF);
+                break;
+            case 'urgente':
+                $plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
+                $periodo = 'P'.$plazo_urgente.'D';
+                $oF = new DateTimeLocal();
+                $oF->add(new DateInterval($periodo));
+                $oEntrada->setF_contestar($oF);
+                break;
+            case 'fecha':
+                $oEntrada->setF_contestar($Qf_plazo);
+                break;
+        } 
+            
         $oEntrada->setBypass($Qbypass);
         if (is_true($QAdmitir)) {
             // pasa directamente a asigado. Se supone que el admitido lo ha puesto el vcd.

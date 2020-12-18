@@ -11,6 +11,7 @@
     <input type=hidden name='que' id='que' value=0>
     <input type=hidden name='filtro' id='filtro' value={{ filtro }} >
     <input type=hidden name='id_entrada' id='id_entrada' value={{ id_entrada }} >
+    <input type=hidden name='f_contestar' id='f_contestar' value={{ f_contestar }} >
     
 <div class="row" >
 <!--  col Izda -->
@@ -97,7 +98,7 @@
       <label for="plazo" class="mr-3 mt-2">{{ "¿Es necesario contestar?"|trans }}</label>
       {{ oDesplPlazo.desplegable|raw }}
       <div class='col-3 date datepicker' data-provide="datepicker">
-        <input tabindex='85' name='f_plazo' id='f_plazo' type='text' class="form-control" value="" onchange="fnjs_comprobar_plazo('input')"  />
+        <input tabindex='85' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_contestar }}" onchange="fnjs_comprobar_plazo('input')"  />
       </div>
   </div>
   <!-- Fin Col Izda -->

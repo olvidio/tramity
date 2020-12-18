@@ -84,16 +84,16 @@ $oDesplVisibilidad->setAction("fnjs_cambiar_reservado('$secretari')");
 $oDesplVisibilidad->setTabIndex(81);
 
 // Plazo
-$aOpciones = [
+$aOpcionesPlazo = [
     'hoy' => ucfirst(_("no")),
     'normal' => ucfirst(sprintf(_("en %s días"),$plazo_normal)),
     'rápido' => ucfirst(sprintf(_("en %s días"),$plazo_rapido)),
-    'urgente' => ucfirst(sprintf(_("en %s días"),$plazo_urgente)), 
+    'urgente' => ucfirst(sprintf(_("en %s días"),$plazo_urgente)),
     'fecha' => ucfirst(_("el día")),
 ];
 $oDesplPlazo = new Desplegable();
 $oDesplPlazo->setNombre('plazo');
-$oDesplPlazo->setOpciones($aOpciones);
+$oDesplPlazo->setOpciones($aOpcionesPlazo);
 $oDesplPlazo->setAction("fnjs_comprobar_plazo('select')");
 $oDesplPlazo->setTabIndex(82);
 
@@ -147,6 +147,10 @@ if (!empty($Qid_entrada)) {
     $oDesplCategoria->setOpcion_sel($categoria);
     $visibilidad = $oEntrada->getVisibilidad();
     $oDesplVisibilidad->setOpcion_sel($visibilidad);
+    $f_contestar = $oEntrada->getF_contestar()->getFromLocal();
+    if (!empty($f_contestar)) {
+        $oDesplPlazo->setOpcion_sel('fecha');
+    }
     $bypass = $oEntrada->getBypass();
     if ( core\is_true($bypass) ) { $bypass='t'; } else { $bypass='f'; }
     $oDesplByPass->setOpcion_sel($bypass);
@@ -219,6 +223,7 @@ $a_campos = [
     'oDesplCategoria' => $oDesplCategoria,
     'oDesplVisibilidad' => $oDesplVisibilidad,
     'oDesplPlazo' => $oDesplPlazo,
+    'f_contestar' => $f_contestar,
     'oDesplByPass' => $oDesplByPass,
     'oDesplAdmitido' => $oDesplAdmitido,
     //'a_adjuntos' => $a_adjuntos,
