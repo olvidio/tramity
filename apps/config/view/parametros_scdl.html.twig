@@ -29,4 +29,12 @@ fnjs_guardar=function(formulario){
 <br>
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
+<br>
+<form id="frm_perm_aceptar" name="frm_perm_aceptar" action="">
+{{ oHashPA.getCamposHtml|raw }}
+{{ "Los oficiales de secreataría pueden aceptar entradas:"|trans }}
+<input type="checkbox" name="valor" value="{{ val_perm_aceptar }}" {{ chk_perm_aceptar }} >{{ "Si"|trans }}
+<br>
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
 

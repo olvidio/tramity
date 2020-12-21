@@ -155,7 +155,8 @@ $filtro = 'en_admitido';
 $a_pills[$num_orden] = $pill;
 
 // Solo el scdl
-if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
+$perm_a = $_SESSION['oConfig']->getPerm_aceptar();
+if (ConfigGlobal::mi_usuario_cargo() === 'scdl' OR $perm_a) {
     // aceptar entradas
     $filtro = 'en_asignado';
         $active = ($filtro == $Qfiltro)? 'active' : '';

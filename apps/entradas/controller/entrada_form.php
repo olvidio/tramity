@@ -180,6 +180,7 @@ if (!empty($Qid_entrada)) {
     $detalle = '';
     $f_entrada = '';
     $f_escrito = '';
+    $f_contestar = '';
     $a_oficinas = [];
     $initialPreview = '';
     $json_config = '{}';

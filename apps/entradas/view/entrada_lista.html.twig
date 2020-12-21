@@ -1,6 +1,6 @@
-{% if secretaria %}
+{% if secretaria or vcd %}
 <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
-	{{ "nueva entrada"|trans }}
+	{{ txt_btn_new }}
 </button>
 {% endif %}
 <table class="table table-sm table-bordered">

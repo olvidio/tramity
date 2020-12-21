@@ -95,17 +95,20 @@ class EntradaLista {
         
         
         //$pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
-        $slide_mode = '';
         switch ($this->filtro) {
             case 'en_ingresado':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
+                $aQuery = [ 'filtro' => $filtro, 'slide_mode' => 't'];
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+                /*
                 if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
                     $slide_mode = 't';
                 }
+                */
                 break;
             case 'en_admitido':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
                 break;
             case 'en_asignado':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
@@ -140,7 +143,7 @@ class EntradaLista {
                 
                 $a_cosas = [ 'id_entrada' => $id_entrada,
                               'filtro' => $filtro,
-                              'slide_mode' => $slide_mode,
+                              'slide_mode' => $this->slide_mode,
                 ];
                 //$link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
@@ -186,9 +189,16 @@ class EntradaLista {
         
         $pagina_cancel = Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $filtro]));
         
+        $txt_btn_new = '';
         $secretaria = FALSE;
         if ($_SESSION['session_auth']['role_actual'] === 'secretaria') {
             $secretaria = TRUE;
+            $txt_btn_new = _("nueva entrada");
+        }
+        $vcd = FALSE;
+        if ($_SESSION['session_auth']['role_actual'] === 'vcd') {
+            $vcd = TRUE;
+            $txt_btn_new = _("procesar");
         }
         
         $a_campos = [
@@ -200,11 +210,13 @@ class EntradaLista {
             'filtro' => $filtro,
             'server' => $server,
             'secretaria' => $secretaria,
+            'vcd' => $vcd,
+            'txt_btn_new' => $txt_btn_new,
             'pagina_cancel' => $pagina_cancel,
         ];
         
         $oView = new ViewTwig('entradas/controller');
-        if ($slide_mode === 't') {
+        if ($this->slide_mode === 't') {
             include ('apps/entradas/controller/entrada_ver_slide.php');
         } else {
             return $oView->renderizar('entrada_lista.html.twig',$a_campos);
@@ -245,6 +257,14 @@ class EntradaLista {
     public function setFiltro($filtro)
     {
         $this->filtro = $filtro;
+    }
+
+    /**
+     * @param string $slide_mode
+     */
+    public function setSlide_mode($slide_mode)
+    {
+        $this->slide_mode = $slide_mode;
     }
 
     /**

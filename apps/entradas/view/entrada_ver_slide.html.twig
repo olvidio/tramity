@@ -3,17 +3,19 @@
     <div class="col-1">
       <i id="prev" class="align-self-center fa fa-chevron-left fa-5x" aria-hidden="true" onclick="fnjs_prev()"></i>
     </div>
-    <div class="pt-3 col-10 d-flex flex-row justify-content-between">
-      <div class="p-2">
-        {{ sigla }}
-      </div>
-      <div class="p-2">
-        <h3>{{ "entradas"|trans }}</h3>
-      </div>
-      <div class="p-2 text-right">
-        {{ oProtOrigen.ver_txt|raw }}
-        {{ oArrayProtRef.ListaTxt|raw }}
-      </div>
+    <div class="col-10">
+        <div class="clearfix ">
+          <div class="d-inline-flex float-left">
+            <div class="p-2 text-dark font-weight-bold" >
+              {{ cabeceraIzqd|raw }}
+            </div>
+          </div>
+          <div class="d-inline-flex float-right">
+            <div class="p-2 text-dark font-weight-bold align-top text-right" >
+              {{ cabeceraDcha|raw }}
+            </div>
+          </div>
+        </div>
     </div>
     <div class="col-1">
       <i id="next" class="align-self-center fa fa-chevron-right fa-5x" aria-hidden="true" onclick="fnjs_next()"></i>

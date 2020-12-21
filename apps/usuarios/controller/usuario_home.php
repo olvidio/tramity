@@ -192,7 +192,7 @@ $a_pills[$num_orden] = $pill;
 $filtro = 'buscar';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+    $pag_lst = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($aQuery));
     $num_orden = 13;
     $text = _("archivo de escritos");
     $num = '';

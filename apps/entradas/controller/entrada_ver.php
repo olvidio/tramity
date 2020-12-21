@@ -26,17 +26,6 @@ if ($Qmethod == 'GET') {
 
 $sigla = $_SESSION['oConfig']->getSigla();
 
-$oProtOrigen = new Protocolo();
-$oProtOrigen->setEtiqueta('De');
-$oProtOrigen->setNombre('origen');
-$oProtOrigen->setBlanco(TRUE);
-$oProtOrigen->setTabIndex(10);
-
-$oProtRef = new Protocolo();
-$oProtRef->setEtiqueta('Ref');
-$oProtRef->setNombre('ref');
-$oProtRef->setBlanco(TRUE);
-
 $oEntrada = new Entrada($Qid_entrada);
 
 if (!empty($Qid_entrada)) {
@@ -44,28 +33,8 @@ if (!empty($Qid_entrada)) {
     $cabeceraIzqd = $oEntrada->cabeceraIzquierda();
     $cabeceraDcha = $oEntrada->cabeceraDerecha();
     
-    /*
-    $json_prot_origen = $oEntrada->getJson_prot_origen();
-    if (count(get_object_vars($json_prot_origen)) == 0) {
-        exit (_("No hay más"));
-    }
-    $oProtOrigen->setLugar($json_prot_origen->lugar);
-    $oProtOrigen->setProt_num($json_prot_origen->num);
-    $oProtOrigen->setProt_any($json_prot_origen->any);
-    $oProtOrigen->setMas($json_prot_origen->mas);
-        
-    $json_prot_ref = $oEntrada->getJson_prot_ref();
-
-    $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,'','referencias');
-    $oArrayProtRef ->setBlanco('t');
-    $oArrayProtRef ->setRef(TRUE);
-    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
-    */
-    
     $asunto_e = $oEntrada->getAsunto_entrada();
-    
     $a_adjuntos = $oEntrada->getArrayIdAdjuntos();
-    
     // mirar si tienen escrito
     $f_escrito = $oEntrada->getF_documento()->getFromLocal();
     $f_entrada = $oEntrada->getF_entrada()->getFromLocal();

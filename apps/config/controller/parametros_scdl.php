@@ -35,6 +35,23 @@ $a_campos['oHashPD'] = $oHashPD;
 $a_campos['val_perm_distribuir'] = $val_perm_distribuir;
 $a_campos['chk_perm_distribuir'] = $chk_perm_distribuir;
 
+// ----------- permiso para el poder aceptar entradas el oficial -------------------
+$parametro = 'perm_aceptar';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$val_perm_aceptar = 't'; 
+$chk_perm_aceptar = ($valor == $val_perm_aceptar)? 'checked' : '';
+
+$oHashPA = new Hash();
+$oHashPA->setUrl($url);
+$oHashPA->setcamposForm('valor');
+$oHashPA->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashPA'] = $oHashPA;
+$a_campos['val_perm_aceptar'] = $val_perm_aceptar;
+$a_campos['chk_perm_aceptar'] = $chk_perm_aceptar;
+
 
 
 $oView = new core\ViewTwig('config/controller');

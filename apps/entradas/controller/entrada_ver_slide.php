@@ -53,42 +53,16 @@ if (!empty($Qid_entrada)) {
     $k = $key+1;
     $id_next = array_key_exists($k, $a_lst_entradas)? $a_lst_entradas[$k] : '';
 
-    $sigla = $_SESSION['oConfig']->getSigla();
-
-    $oProtOrigen = new Protocolo();
-    $oProtOrigen->setEtiqueta('De');
-    $oProtOrigen->setNombre('origen');
-    $oProtOrigen->setBlanco(TRUE);
-    $oProtOrigen->setTabIndex(10);
-
-    $oProtRef = new Protocolo();
-    $oProtRef->setEtiqueta('Ref');
-    $oProtRef->setNombre('ref');
-    $oProtRef->setBlanco(TRUE);
-
-    $oEntrada = new Entrada($Qid_entrada);
-
     $pagina = core\ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver_slide.php';
     $a_cosas = [ 'id_entrada' => $id_prev, 'slide_mode' => 'TRUE', 'filtro' => $Qfiltro];
     $pagina_prev = web\Hash::link($pagina.'?'.http_build_query($a_cosas));
     $a_cosas = [ 'id_entrada' => $id_next, 'slide_mode' => 'TRUE', 'filtro' => $Qfiltro];
     $pagina_next = web\Hash::link($pagina.'?'.http_build_query($a_cosas));
 
-    $json_prot_origen = $oEntrada->getJson_prot_origen();
-    if (count(get_object_vars($json_prot_origen)) == 0) {
-        exit (_("No hay más"));
-    }
-    $oProtOrigen->setLugar($json_prot_origen->lugar);
-    $oProtOrigen->setProt_num($json_prot_origen->num);
-    $oProtOrigen->setProt_any($json_prot_origen->any);
-    $oProtOrigen->setMas($json_prot_origen->mas);
-        
-    $json_prot_ref = $oEntrada->getJson_prot_ref();
+    $oEntrada = new Entrada($Qid_entrada);
 
-    $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,'','referencias');
-    $oArrayProtRef ->setBlanco('t');
-    $oArrayProtRef ->setRef(TRUE);
-    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
+    $cabeceraIzqd = $oEntrada->cabeceraIzquierda();
+    $cabeceraDcha = $oEntrada->cabeceraDerecha();
     
     $asunto_e = $oEntrada->getAsunto_entrada();
     
@@ -104,15 +78,14 @@ if (!empty($Qid_entrada)) {
     $escrito_html = $oEtherpad->generarHtml();
     $txt_alert = '';
 } else {
-    $oProtOrigen = [];
-    $oArrayProtRef = [];
+    $cabeceraIzqd = '';
+    $cabeceraDcha = '';
     $a_adjuntos = [];
     $asunto_e = '';
     $f_escrito = '';
     $f_entrada = '';
     $escrito_html = '';
     $txt_alert = _("No hay más registros");
-    $sigla = '';
     $pagina_prev = '';
     $pagina_next = '';
 }
@@ -137,9 +110,8 @@ $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.ht
 $a_campos = [
     //'oHash' => $oHash,
     'id_entrada' => $Qid_entrada,
-    'sigla' => $sigla,
-    'oProtOrigen' => $oProtOrigen,
-    'oArrayProtRef' => $oArrayProtRef,
+    'cabeceraIzqd' => $cabeceraIzqd,
+    'cabeceraDcha' => $cabeceraDcha,
     'asunto_e' => $asunto_e,
     'f_escrito' => $f_escrito,
     'chk_leido' => $chk_leido,

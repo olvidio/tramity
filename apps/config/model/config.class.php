@@ -195,4 +195,10 @@ class Config {
         return $oConfigSchema->getValor();
     }
     
+    public function getPerm_aceptar() {
+        $parametro = 'perm_aceptar';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
+    
 }
