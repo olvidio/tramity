@@ -94,6 +94,11 @@ fnjs_grupo=function() {
     }
 }
 
+fnjs_download=function(item) {
+	url = "{{ url_download }}"+"&key="+item;
+	window.open(url);
+}
+
 $(document).ready(function() {
 	fnjs_grupo();
 });

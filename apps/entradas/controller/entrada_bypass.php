@@ -121,6 +121,8 @@ if (empty($f_salida)) {
     $f_salida = $oHoy->getFromLocal();
 }
 
+$base_url = core\ConfigGlobal::getWeb();
+$url_download = $base_url.'/apps/entradas/controller/download.php?plugin=1';
 $url_update = 'apps/entradas/controller/entrada_update.php';
 $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => 'bypass']));
 
@@ -141,6 +143,7 @@ $a_campos = [
     
     'f_salida' => $f_salida,
     'a_adjuntos' => $a_adjuntos,
+    'url_download' => $url_download,
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
 ];

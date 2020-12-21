@@ -74,6 +74,7 @@ class EntradaLista {
             case 'bypass':
                 // distribución cr
                 $aWhere['bypass'] = 't';
+                $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
                 break;
         }
 
@@ -98,13 +99,12 @@ class EntradaLista {
         switch ($this->filtro) {
             case 'en_ingresado':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
-                $aQuery = [ 'filtro' => $filtro, 'slide_mode' => 't'];
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-                /*
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
                 if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
-                    $slide_mode = 't';
+                    //$slide_mode = 't';
+                    $aQuery = [ 'filtro' => $filtro, 'slide_mode' => 't'];
+                    $pagina_nueva = Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
                 }
-                */
                 break;
             case 'en_admitido':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
