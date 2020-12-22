@@ -11,6 +11,7 @@ use expedientes\model\Escrito;
 use expedientes\model\entity\EscritoAdjunto;
 use lugares\model\entity\Lugar;
 use web\Protocolo;
+use lugares\model\entity\Grupo;
 
 
 class Enviar {
@@ -82,32 +83,35 @@ class Enviar {
         if (count($cEntradasBypass) > 0) {
             // solo debería haber una:
             $oEntradaBypass = $cEntradasBypass[0];
-            $id_item = $oEntradaBypass->getId_item();
-        }
-        
-        $oEntradaBypass = new EntradaBypass($id_item);
-        // poner los destinos
-        
-        $a_grupos = $oEntradaBypass->getId_grupos();
-        $this->f_salida = $oEntradaBypass->getF_salida()->getFromLocal('.');
-        
-        $aMiembros = [];
-        if (!empty($a_grupos)) {
-            //(segun los grupos seleccionados)
-            $aMiembros = $oEntradaBypass->getDestinos();
-            $destinos_txt = $oEntradaBypass->getDescripcion();
-        } else {
-            //(segun individuales)
-            $destinos_txt = '';
-            $a_json_prot_dst = $oEntradaBypass->getJson_prot_destino();
-            foreach ($a_json_prot_dst as $json_prot_dst) {
-                $aMiembros[] = $json_prot_dst->lugar;
-                $oLugar = new Lugar($json_prot_dst->lugar);
-                $destinos_txt .= empty($destinos_txt)? '' : ', ';
-                $destinos_txt .= $oLugar->getNombre();
+            
+            $a_grupos = $oEntradaBypass->getId_grupos();
+            $this->f_salida = $oEntradaBypass->getF_salida()->getFromLocal('.');
+            
+            $aMiembros = [];
+            if (!empty($a_grupos)) {
+                $destinos_txt = $oEntradaBypass->getDescripcion();
+                //(segun los grupos seleccionados)
+                foreach ($a_grupos as $id_grupo) {
+                    $oGrupo = new Grupo($id_grupo);
+                    $a_miembros_g = $oGrupo->getMiembros();
+                    $aMiembros = array_merge($aMiembros, $a_miembros_g);
+                }
+                $aMiembros = array_unique($aMiembros);
+                $oEntradaBypass->setDestinos($aMiembros);
+                $oEntradaBypass->DBGuardar();
+            } else {
+                //(segun individuales)
+                $destinos_txt = '';
+                $a_json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+                foreach ($a_json_prot_dst as $json_prot_dst) {
+                    $aMiembros[] = $json_prot_dst->lugar;
+                    $oLugar = new Lugar($json_prot_dst->lugar);
+                    $destinos_txt .= empty($destinos_txt)? '' : ', ';
+                    $destinos_txt .= $oLugar->getNombre();
+                }
             }
-        }
         
+        }
         $this->destinos_txt = $destinos_txt;
         return $aMiembros;
     }
@@ -223,53 +227,6 @@ class Enviar {
     }
     
     private function getDatosEscrito() {
-        /*
-         $this->getDestinatarios();
-         // filename
-         $oEscrito = new Escrito($this->iid);
-         $this->f_salida = $oEscrito->getF_escrito()->getFromLocal('.');
-         
-         $id_dst = '';
-         $a_json_prot_dst = $oEscrito->getJson_prot_destino();
-         if (!empty((array)$a_json_prot_dst)) {
-         $json_prot_dst = $a_json_prot_dst[0];
-         $id_dst = $json_prot_dst->lugar;
-         }
-         
-         // referencias
-         $a_json_prot_ref = $oEscrito->getJson_prot_ref();
-         $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
-         $oArrayProtRef->setRef(TRUE);
-         $aRef = $oArrayProtRef->ArrayListaTxtBr($id_dst);
-         
-         $json_prot_local = $oEscrito->getJson_prot_local();
-         if (count(get_object_vars($json_prot_local)) == 0) {
-         $err_txt = "No hay protocolo local";
-         $this->a_rta['success'] = FALSE;
-         $this->a_rta['mensaje'] = $err_txt;
-         $_SESSION['oGestorErrores']->addError($err_txt,'generar PDF', __LINE__, __FILE__);
-         $_SESSION['oGestorErrores']->recordar($err_txt);
-         return FALSE;
-         }
-         $oProtOrigen = new Protocolo();
-         $oProtOrigen->setLugar($json_prot_local->lugar);
-         $oProtOrigen->setProt_num($json_prot_local->num);
-         $oProtOrigen->setProt_any($json_prot_local->any);
-         $oProtOrigen->setMas($json_prot_local->mas);
-         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
-         
-         $destinos = $this->destinos_txt;
-         if (!empty($aRef['dst_org'])) {
-         $destinos .= '<br>';
-         $destinos .= $aRef['dst_org'];
-         }
-         $origen_txt = $oProtOrigen->ver_txt();
-         if (!empty($aRef['local'])) {
-         $origen_txt .= '<br>';
-         $origen_txt .= $aRef['local'];
-         }
-         */
-        
         $oEscrito = new Escrito($this->iid);
         $this->f_salida = $oEscrito->getF_escrito()->getFromLocal('.');
         

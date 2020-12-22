@@ -67,24 +67,6 @@ $oEscritoLista = new EscritoLista();
 $oEscritoLista->setId_expediente($Qid_expediente);
 $oEscritoLista->setModo($Qmodo);
 
-if ($Qfiltro == 'distribuir') {
-    $btn_action = 'distribuir';
-    $txt_btn_success = _("Distribuir");
-    $oEscritoLista->setFiltro('distribuir');
-    $oDesplOficiales = new Desplegable('id_oficial',[],$id_ponente,TRUE);
-    $ver_encargar = FALSE;
-} else {
-    $btn_action = 'archivar';
-    $txt_btn_success = _("Archivar");
-    $oEscritoLista->setFiltro('acabados');
-    // para encargar a los oficiales
-    $id_oficina = ConfigGlobal::mi_id_oficina();
-    $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
-    $oDesplOficiales = new Desplegable('id_oficial',$a_cargos_oficina,$id_ponente,TRUE);
-    $ver_encargar = TRUE;
-}
-
-
 // Comentarios y Aclaraciones
 $gesFirmas = new GestorFirma();
 $aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
@@ -120,12 +102,31 @@ $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.ph
 $pagina_actualizar = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro, 'modo' => $Qmodo]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
 
-$perm_d = $_SESSION['oConfig']->getPerm_distribuir();
-if (ConfigGlobal::mi_usuario_cargo() === 'scdl' OR is_true($perm_d)) {
-    $perm_distribuir = TRUE;
+if ($Qfiltro == 'distribuir') {
+    $btn_action = 'distribuir';
+    $txt_btn_success = _("Distribuir");
+    $oEscritoLista->setFiltro('distribuir');
+    $oDesplOficiales = new Desplegable('id_oficial',[],$id_ponente,TRUE);
+    $ver_encargar = FALSE;
+
+    $perm_d = $_SESSION['oConfig']->getPerm_distribuir();
+    if (ConfigGlobal::mi_usuario_cargo() === 'scdl' OR is_true($perm_d)) {
+        $perm_distribuir = TRUE;
+    } else {
+        $perm_distribuir = FALSE;
+    }
 } else {
-    $perm_distribuir = FALSE;
+    $perm_distribuir = TRUE;
+    $btn_action = 'archivar';
+    $txt_btn_success = _("Archivar");
+    $oEscritoLista->setFiltro('acabados');
+    // para encargar a los oficiales
+    $id_oficina = ConfigGlobal::mi_id_oficina();
+    $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+    $oDesplOficiales = new Desplegable('id_oficial',$a_cargos_oficina,$id_ponente,TRUE);
+    $ver_encargar = TRUE;
 }
+
  
 $a_campos = [
     'id_expediente' => $Qid_expediente,

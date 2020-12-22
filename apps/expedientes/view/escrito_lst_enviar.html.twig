@@ -34,6 +34,10 @@
 </table>
 
 <script type="text/javascript">
+fnjs_actualizar_lista=function() {
+    var url = '/apps/expedientes/controller/escrito_lista.php?filtro={{ filtro }}&modo={{ modo }}';
+	fnjs_update_div('#main',url);
+};
 fnjs_actualizar_expediente=function() {
     var url = '/apps/expedientes/controller/expediente_distribuir.php?id_expediente={{ id_expediente }}&filtro={{ filtro }}&modo={{ modo }}';
 	fnjs_update_div('#main',url);
@@ -59,7 +63,7 @@ fnjs_enviar_a_secretaria=function(id_escrito) {
     });
 
     request.done( function (rta) {
-        // Actualizar vista expadiente: escrito enviado.
+        // Actualizar vista expediente: escrito enviado.
         fnjs_actualizar_expediente();
     });
 }
@@ -70,8 +74,8 @@ fnjs_enviar_escrito=function(id_escrito) {
 	event.stopImmediatePropagation();
 	//alert("enviar");
     window.open('/apps/expedientes/controller/escrito_enviar.php?id='+id_escrito, "down");
-    // Actualizar vista expadiente: escrito enviado.
-    fnjs_actualizar_expediente();
+    // Actualizar vista escritos para enviar
+    fnjs_actualizar_lista();
 	return false;
 }
 fnjs_distribuir_escrito=function(id_escrito) {
