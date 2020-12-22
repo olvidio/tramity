@@ -110,7 +110,6 @@ class Enviar {
                     $destinos_txt .= $oLugar->getNombre();
                 }
             }
-        
         }
         $this->destinos_txt = $destinos_txt;
         return $aMiembros;
@@ -120,72 +119,31 @@ class Enviar {
         $id_escrito = $this->iid;
         $oEscrito = new Escrito($id_escrito);
         
+        $a_grupos = $oEscrito->getId_grupos();
+        
         $a_grupos = [];
         $aMiembros = [];
         if (!empty($a_grupos)) {
             //(segun los grupos seleccionados)
-            $aMiembros = $oEscrito->getDestinos();
-            //$destinos_txt = $oEscrito->getDescripcion();
+            foreach ($a_grupos as $id_grupo) {
+                $oGrupo = new Grupo($id_grupo);
+                $a_miembros_g = $oGrupo->getMiembros();
+                $aMiembros = array_merge($aMiembros, $a_miembros_g);
+            }
+            $aMiembros = array_unique($aMiembros);
+            $oEscrito->setDestinos($aMiembros);
+            $oEscrito->DBGuardar();
         } else {
             //(segun individuales)
-            //$destinos_txt = '';
             $a_json_prot_dst = $oEscrito->getJson_prot_destino();
             foreach ($a_json_prot_dst as $json_prot_dst) {
                 $aMiembros[] = $json_prot_dst->lugar;
-                //$oLugar = new Lugar($json_prot_dst->lugar);
-                //$destinos_txt .= empty($destinos_txt)? '' : ', ';
-                //$destinos_txt .= $oLugar->getNombre();
             }
         }
-        
-        //$this->destinos_txt = $destinos_txt;
         return $aMiembros;
     }
     
     private function getDatosEntrada() {
-
-        /*
-        $sigla = $_SESSION['oConfig']->getSigla();
-        $id_org = '';
-        $json_prot_org = $oEntrada->getJson_prot_origen();
-        if (!empty((array)$json_prot_org)) {
-            $id_org = $json_prot_org->lugar;
-        }
-        
-        // referencias
-        $a_json_prot_ref = $oEntrada->getJson_prot_ref();
-        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
-        $oArrayProtRef->setRef(TRUE);
-        $aRef = $oArrayProtRef->ArrayListaTxtBr($id_org);
-        
-        $json_prot_origen = $oEntrada->getJson_prot_origen();
-        if (count(get_object_vars($json_prot_origen)) == 0) {
-            exit (_("No hay más"));
-        }
-        $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_origen->lugar);
-        $oProtOrigen->setProt_num($json_prot_origen->num);
-        $oProtOrigen->setProt_any($json_prot_origen->any);
-        $oProtOrigen->setMas($json_prot_origen->mas);
-        $this->filename = $this->renombrar($oProtOrigen->ver_txt());
-        
-        $destinos = $sigla;
-        if (!empty($aRef['local'])) {
-            $destinos .= '<br>';
-            $destinos .= $aRef['local'];
-        }
-        $origen_txt = $oProtOrigen->ver_txt();
-        if (!empty($aRef['dst_org'])) {
-            $origen_txt .= '<br>';
-            $origen_txt .= $aRef['dst_org'];
-        }
-        
-        $a_header = [ 'left' => $destinos,
-            'center' => '',
-            'right' => $origen_txt
-        ];
-        */
-
         $oEntrada = new Entrada($this->iid);
         $this->f_salida = $oEntrada->getF_documento()->getFromLocal('.');
         
