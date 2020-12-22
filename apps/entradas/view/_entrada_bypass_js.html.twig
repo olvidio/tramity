@@ -2,6 +2,31 @@
 {{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
 {{ oArrayProtDestino.ComprobarSelectJs|raw }}
 
+$(document).ready(function() {
+	fnjs_distr_cr();
+	fnjs_grupo();
+});
+
+fnjs_distr_cr=function() {
+    var ok=$('#bypass').val();
+    if (ok == 't') {
+      $("#dst_cr").show();
+    } else {
+      $("#dst_cr").hide();
+    }
+}
+
+fnjs_grupo=function() {
+    var ok=$('#grupo_dst').prop('checked')
+    if (ok) {
+      $("#dst_array").hide();
+      $("#dst_grupo").show();
+    } else {
+      $("#dst_array").show();
+      $("#dst_grupo").hide();
+    }
+}
+
 fnjs_mas_grupos=function(e){
 	var code = (e.keyCode ? e.keyCode : e.which);
 	if(e=="x") {
@@ -56,67 +81,4 @@ $(function() {
 		});
 
 });
-
-fnjs_enviar=function(event){
-	// Asegurarme que es por click y no por return (posicion: 0,0)
-	var x = event.x || event.clientX;
-    var y = event.y || event.clientY;
-    if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-    	return false;
-    }
-
-	var err=0;
-	var asunto=$('#asunto').val();
-	var f_salida=$('#f_salida').val();
-	var id_entrada=$('#id_entrada').val();
-
-	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans }}"); err=1; }
-	if (!fnjs_comprobar_fecha('#f_salida')) { err=1; }
-	if (!f_salida) { alert("{{ "Debe llenar el campo de fecha de salida"|trans }}"); err=1; }
-	
-	if (err!=1) {
-		$('#form_enviar').attr('action','{{ url_update }}');
-		$('#que').val('enviar');
-		$('#form_enviar').one("submit", function(event){
-			event.preventDefault(); //prevent default action 	
-            request=$.ajax({
-                data: $(this).serialize(),
-                url: $(this).attr('action'),
-                type: 'post',
-                dataType: 'json'
-            });
-            request.done( function (rta) {
-                var json=rta;
-                if (json.success != true) {
-                    rta_txt = rta.responseText;
-                    alert ('error: '+rta_txt);
-                } else {
-                    alert ("{{ "datos guardados"|trans }}");
-                    // Volver a la lista...
-                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                }
-            });
-		});
-		$('#form_enviar').submit();
-	} else {
-        event.preventDefault();
-	}
-}
-
-fnjs_cancelar=function(event){
-	// Asegurarme que es por click y no por return (posicion: 0,0)
-	var x = event.x || event.clientX;
-    var y = event.y || event.clientY;
-    if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-    	return false;
-    }
-    event.preventDefault(); //prevent default action 	
-	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-}
 </script>

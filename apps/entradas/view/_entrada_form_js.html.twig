@@ -74,7 +74,10 @@ fnjs_guardar=function(event){
 	if (!asunto_e) { alert("{{ "Debe llenar el campo de asunto entrada"|trans }}"); err=1; }
 	if (!ponente) { alert("{{ "Debe llenar el campo del ponente"|trans }}"); err=1; }
 	if (!fnjs_comprobar_fecha('#f_entrada')) { err=1; }
-	if (!f_entrada) { alert("{{ "Debe llenar el campo de fecha de entrada"|trans }}"); err=1; }
+	// La debe poner el vcd. En el caso de Introducir no hace falta la comprobación. Si en Asignar.
+	{% if comprobar_f_entrada %} 
+		if (!f_entrada) { alert("{{ "Debe llenar el campo de fecha de entrada"|trans }}"); err=1; }
+	{% endif %}
 
 	if (f_escrito) {
 		diff=fnjs_diff_fechas('#f_entrada','#f_escrito');	

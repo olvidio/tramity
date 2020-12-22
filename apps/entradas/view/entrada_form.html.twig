@@ -86,10 +86,6 @@
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
     <div class="form-group col-md-2">
-      <label>{{ "Distribución cr"|trans }}</label>
-      {{ oDesplByPass.desplegable|raw }}
-    </div>
-    <div class="form-group col-md-2">
       <label>{{ "Admitido (vcd)"|trans }}</label>
       {{ oDesplAdmitido.desplegable|raw }}
     </div>
@@ -148,7 +144,34 @@
   </div>
 {% endif %}
 </div>
-<div>
+
+<!--  --------------- DISTRIBUCION CR --------------- -->
+<div class="form-group row col-12">
+<div class="col-md-2">
+  <label>{{ "Distribución cr"|trans }}</label>
+  {{ oDesplByPass.desplegable|raw }}
+</div>
+<!--  --------------- Destinos --------------- -->
+<div id="dst_cr" class="align-items-center col-10">
+  <div class="col-2 col-form-label">
+    <label for="prot_num" class="col-2 col-form-label">
+      {{ "Destinos"|trans }}
+    </label>
+    <div class="custom-control custom-switch align-middle">
+      <input type="checkbox" class="custom-control-input" name="grupo_dst" id="grupo_dst" {{ chk_grupo_dst }} onChange="fnjs_grupo()" />
+      <label class="custom-control-label" for="grupo_dst">Grupo</label>
+    </div>
+  </div>
+  <div id="dst_array" class="col-10">
+    {{ oArrayProtDestino.ListaSelects|raw }}
+  </div>
+  <div id="dst_grupo" class="col-10">
+    {{ oArrayDesplGrupo.ListaSelects|raw }}
+  </div>
+</div>
+</div>
+
+<div class="row">
   <button type="button" tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
     {{ "Cancelar"|trans }}
   </button>
@@ -160,6 +183,7 @@
 
 {{ include ('_entrada_form_js.html.twig') }}
 {{ include ('_entrada_escritos_js.html.twig') }}
+{{ include ('_entrada_bypass_js.html.twig') }}
 <script>
 $(document).ready(function() {
 	var el1 = $("#entrada-adjunto");

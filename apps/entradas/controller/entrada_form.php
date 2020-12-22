@@ -1,6 +1,8 @@
 <?php
 use core\ViewTwig;
 use entradas\model\Entrada;
+use entradas\model\entity\GestorEntradaBypass;
+use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
@@ -33,6 +35,10 @@ $a_posibles_lugares = $gesLugares->getArrayLugares();
 foreach ($a_posibles_lugares as $id_lugar => $sigla) {
     $txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
 }
+
+$oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
+$oArrayProtDestino->setBlanco('t');
+$oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
 
 $oProtOrigen = new Protocolo();
 $oProtOrigen->setEtiqueta('De');
@@ -100,6 +106,7 @@ $oDesplPlazo->setTabIndex(82);
 $oDesplByPass = new Desplegable();
 $oDesplByPass->setNombre('bypass');
 $oDesplByPass->setOpciones(['f' => _("No"), 't' => _("Sí")]);
+$oDesplByPass->setAction("fnjs_distr_cr()");
     
 $oDesplAdmitido = new Desplegable();
 $oDesplAdmitido->setNombre('admitir');
@@ -107,8 +114,10 @@ $oDesplAdmitido->setOpciones(['f' => _("No"), 't' => _("Sí")]);
 $estado = $oEntrada->getEstado();
 if ($estado >= Entrada::ESTADO_ADMITIDO) {
     $oDesplAdmitido->setOpcion_sel('t');
+    $comprobar_f_entrada = TRUE;
 } else {
     $oDesplAdmitido->setOpcion_sel('f');
+    $comprobar_f_entrada = FALSE;
 }
 if ($Qfiltro == 'en_admitido') {
     $oDesplAdmitido->setOpcion_sel('t');
@@ -116,8 +125,10 @@ if ($Qfiltro == 'en_admitido') {
     $oDesplAdmitido->setDisabled(TRUE);
 }
     
-if (!empty($Qid_entrada)) {
+$gesGrupo = new GestorGrupo();
+$a_posibles_grupos = $gesGrupo->getArrayGrupos();
     
+if (!empty($Qid_entrada)) {
     $json_prot_origen = $oEntrada->getJson_prot_origen();
     $oProtOrigen->setLugar($json_prot_origen->lugar);
     $oProtOrigen->setProt_num($json_prot_origen->num);
@@ -173,8 +184,42 @@ if (!empty($Qid_entrada)) {
     $f_escrito = $oEntrada->getF_documento()->getFromLocal();
     $tipo_documento = $oEntrada->getTipo_documento();
     $titulo = _("modificar entrada");
-
+    
+    // a ver si ya está
+    $chk_grupo_dst = '';
+    $id_grupo = 0;
+    $gesEntradasBypass = new GestorEntradaBypass();
+    $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
+    if (count($cEntradasBypass) > 0) {
+        // solo debería haber una:
+        $oEntradaBypass = $cEntradasBypass[0];
+        $f_salida = $oEntradaBypass->getF_salida()->getFromLocal();
+        $a_grupos = $oEntradaBypass->getId_grupos();
+        if (!empty($a_grupos)) {
+            $oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');
+            $chk_grupo_dst = 'checked';
+        } else {
+            $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
+            $chk_grupo_dst = '';
+            $json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+            $oArrayProtDestino->setArray_sel($json_prot_dst);
+        }
+        $oArrayDesplGrupo->setBlanco('t');
+        $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
+        
+    } else {
+        $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
+        $oArrayDesplGrupo->setBlanco('t');
+        $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
+    }
+    
 } else {
+    $chk_grupo_dst = '';
+    $id_grupo = 0;
+    $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
+    $oArrayDesplGrupo->setBlanco('t');
+    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
+        
     $asunto_e = '';
     $asunto = '';
     $detalle = '';
@@ -253,6 +298,12 @@ $a_campos = [
     'plazo_urgente' => $plazo_urgente,
     'plazo_rapido' => $plazo_rapido,
     'error_fecha' => $error_fecha,
+    'comprobar_f_entrada' => $comprobar_f_entrada,
+    // grupo destinos
+    'chk_grupo_dst' => $chk_grupo_dst,
+    'id_grupo' => $id_grupo,
+    'oArrayDesplGrupo' => $oArrayDesplGrupo,
+    'oArrayProtDestino' => $oArrayProtDestino,
 ];
 
 $oView = new ViewTwig('entradas/controller');

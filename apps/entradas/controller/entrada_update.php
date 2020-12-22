@@ -1,12 +1,14 @@
 <?php
+use core\ViewTwig;
+use function core\is_true;
 use entradas\model\Entrada;
 use entradas\model\entity\EntradaBypass;
+use entradas\model\entity\EntradaDB;
 use entradas\model\entity\GestorEntradaBypass;
+use envios\model\Enviar;
 use lugares\model\entity\GestorGrupo;
 use web\DateTimeLocal;
 use web\Protocolo;
-use entradas\model\entity\EntradaDB;
-use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -41,12 +43,10 @@ $Qvisibiliad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 
 $Qplazo = (string) \filter_input(INPUT_POST, 'plazo');
 $Qf_plazo = (string) \filter_input(INPUT_POST, 'f_plazo');
-$Qf_contestar = (string) \filter_input(INPUT_POST, 'f_contestar');
 $Qbypass = (string) \filter_input(INPUT_POST, 'bypass');
 $QAdmitir = (string) \filter_input(INPUT_POST, 'admitir');
 
 /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
-$Qref_num = (integer) \filter_input(INPUT_POST, 'ref_num');
 $Qa_referencias = (array)  \filter_input(INPUT_POST, 'referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $Qa_prot_num_referencias = (array)  \filter_input(INPUT_POST, 'prot_num_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $Qa_prot_any_referencias = (array)  \filter_input(INPUT_POST, 'prot_any_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -55,7 +55,7 @@ $Qa_prot_mas_referencias = (array)  \filter_input(INPUT_POST, 'prot_mas_referenc
 $error_txt = '';
 $jsondata = [];
 switch($Qque) {
-    case 'enviar':
+    case 'guardar_destinos':
         $gesEntradasBypass = new GestorEntradaBypass();
         $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
         if (count($cEntradasBypass) > 0) {
@@ -247,7 +247,6 @@ switch($Qque) {
                 break;
         } 
             
-        $oEntrada->setBypass($Qbypass);
         if (is_true($QAdmitir)) {
             // pasa directamente a asigado. Se supone que el admitido lo ha puesto el vcd.
             // en caso de ponerlo secretaria, al guardar pasa igualmente a asignado.
@@ -261,15 +260,93 @@ switch($Qque) {
         }
         $oEntrada->setEstado($estado);
        
-        $oEntrada->DBGuardar();
+        $oEntrada->setBypass($Qbypass);
+        if ($oEntrada->DBGuardar() === FALSE ) {
+            $error_txt .= $oEntrada->getErrorTxt();
+        } else {
+            $id_entrada = $oEntrada->getId_entrada();
+            //////// BY PASS //////
+            if ($Qbypass) {
+                $gesEntradasBypass = new GestorEntradaBypass();
+                $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
+                if (count($cEntradasBypass) > 0) {
+                    // solo debería haber una:
+                    $oEntradaBypass = $cEntradasBypass[0];
+                    $oEntradaBypass->DBCarregar();
+                } else {
+                    $oEntradaBypass = new EntradaBypass();
+                    $oEntradaBypass->setId_entrada($Qid_entrada);
+                }
+                //Qasunto.
+                $oEntrada = new EntradaDB($Qid_entrada);
+                $oEntrada->DBCarregar();
+                $oEntrada->setAsunto($Qasunto);
+                $oEntrada->DBGuardar();
+                // destinos
+                $Qgrupo_dst = (string) \filter_input(INPUT_POST, 'grupo_dst');
+                $Qf_salida = (string) \filter_input(INPUT_POST, 'f_salida');
+                
+                // genero un vector con todos los grupos.
+                $Qa_grupos = (array)  \filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
+                $Qa_destinos = (array)  \filter_input(INPUT_POST, 'destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $Qa_prot_num_destinos = (array)  \filter_input(INPUT_POST, 'prot_num_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $Qa_prot_any_destinos = (array)  \filter_input(INPUT_POST, 'prot_any_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $Qa_prot_mas_destinos = (array)  \filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                
+                // Si esta marcado como grupo de destinos, o destinos individuales.
+                if (core\is_true($Qgrupo_dst)) {
+                    $descripcion = '';
+                    $gesGrupo = new GestorGrupo();
+                    $a_grupos = $gesGrupo->getArrayGrupos();
+                    foreach ($Qa_grupos as $id_grupo) {
+                        $descripcion .= empty($descripcion)? '' : ' + ';
+                        $descripcion .= $a_grupos[$id_grupo];
+                    }
+                    $oEntradaBypass->setId_grupos($Qa_grupos);
+                    $oEntradaBypass->setDescripcion($descripcion);
+                } else {
+                    $aProtDst = [];
+                    foreach ($Qa_destinos as $key => $id_lugar) {
+                        $prot_num = $Qa_prot_num_destinos[$key];
+                        $prot_any = $Qa_prot_any_destinos[$key];
+                        $prot_mas = $Qa_prot_mas_destinos[$key];
+                        
+                        if (!empty($id_lugar)) {
+                            $oProtDst = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
+                            $aProtDst[] = $oProtDst->getProt();
+                        }
+                    }
+                    $oEntradaBypass->setJson_prot_destino($aProtDst);
+                    $oEntradaBypass->setId_grupos();
+                    $oEntradaBypass->setDescripcion('x'); // no puede ser null.
+                }
+                if ($oEntradaBypass->DBGuardar() === FALSE ) {
+                    $error_txt .= $oEntradaBypass->getErrorTxt();
+                }
+                
+                if (!empty($error_txt)) {
+                    $jsondata['success'] = FALSE;
+                    $jsondata['mensaje'] = $error_txt;
+                } else {
+                    $jsondata['success'] = TRUE;
+                }
+            } else {
+                // borrar si hubiera habido. ( o no?)
+            }
+        }
         
-        $id_entrada = $oEntrada->getId_entrada();
-        $jsondata['success'] = true;
-        $jsondata['id_entrada'] = $id_entrada;
-        $a_cosas = [ 'id_entrada' => $id_entrada, 'filtro' => $Qfiltro];
-        $pagina_mod = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query($a_cosas));
-        $jsondata['pagina_mod'] = $pagina_mod;
         
+        if (!empty($error_txt)) {
+            $jsondata['success'] = FALSE;
+            $jsondata['mensaje'] = $error_txt;
+        } else {
+            $jsondata['success'] = TRUE;
+            $jsondata['id_entrada'] = $id_entrada;
+            $a_cosas = [ 'id_entrada' => $id_entrada, 'filtro' => $Qfiltro];
+            $pagina_mod = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query($a_cosas));
+            $jsondata['pagina_mod'] = $pagina_mod;
+        }
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);

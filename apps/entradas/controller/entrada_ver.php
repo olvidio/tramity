@@ -1,8 +1,8 @@
 <?php
 use core\ViewTwig;
+use function core\is_true;
 use entradas\model\Entrada;
 use etherpad\model\Etherpad;
-use web\Protocolo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -30,8 +30,17 @@ $oEntrada = new Entrada($Qid_entrada);
 
 if (!empty($Qid_entrada)) {
     
-    $cabeceraIzqd = $oEntrada->cabeceraIzquierda();
-    $cabeceraDcha = $oEntrada->cabeceraDerecha();
+    // En el caso de distribución cr, si ya está aceptado, el ver es ya para enviar
+    // y por tanto las cabeceras van al revés, y el destino se coge del bypass.
+    $estado = $oEntrada->getEstado();
+    $bypass = $oEntrada->getBypass();
+    if (is_true($bypass) && $estado == Entrada::ESTADO_ACEPTADO) {
+        $cabeceraIzqd = $oEntrada->cabeceraDistribucion_cr();
+        $cabeceraDcha = $oEntrada->cabeceraDerecha();
+    } else {
+        $cabeceraIzqd = $oEntrada->cabeceraIzquierda();
+        $cabeceraDcha = $oEntrada->cabeceraDerecha();
+    }
     
     $asunto_e = $oEntrada->getAsunto_entrada();
     $a_adjuntos = $oEntrada->getArrayIdAdjuntos();
@@ -46,7 +55,6 @@ if (!empty($Qid_entrada)) {
 } else {
     $cabeceraIzqd = '';
     $cabeceraDcha = '';
-    $oArrayProtRef = [];
     $a_adjuntos = [];
     $asunto_e = '';
     $f_escrito = '';

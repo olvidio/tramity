@@ -4,11 +4,13 @@ namespace entradas\model;
 use entradas\model\entity\EntradaDB;
 use entradas\model\entity\EntradaDocDB;
 use entradas\model\entity\GestorEntradaAdjunto;
+use entradas\model\entity\GestorEntradaBypass;
+use lugares\model\entity\GestorLugar;
+use lugares\model\entity\Lugar;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
 use web\ProtocoloArray;
-use lugares\model\entity\GestorLugar;
 
 
 class Entrada Extends EntradaDB {
@@ -43,6 +45,7 @@ class Entrada Extends EntradaDB {
     const ESTADO_ASIGNADO           = 3;
     const ESTADO_ACEPTADO           = 4;
     const ESTADO_OFICINAS           = 5;
+    const ESTADO_ENVIADO_CR         = 6;
     
     /* PROPIEDADES -------------------------------------------------------------- */
 
@@ -100,6 +103,44 @@ class Entrada Extends EntradaDB {
         ];
         
         return $a_tipos;
+    }
+    
+    public function cabeceraDistribucion_cr() {
+        // a ver si ya está
+        $gesEntradasBypass = new GestorEntradaBypass();
+        $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $this->iid_entrada]);
+        if (count($cEntradasBypass) > 0) {
+            // solo debería haber una:
+            $oEntradaBypass = $cEntradasBypass[0];
+            
+            // poner los destinos
+            $a_grupos = $oEntradaBypass->getId_grupos();
+            
+            $aMiembros = [];
+            if (!empty($a_grupos)) {
+                //(segun los grupos seleccionados)
+                $aMiembros = $oEntradaBypass->getDestinos();
+                $destinos_txt = $oEntradaBypass->getDescripcion();
+            } else {
+                //(segun individuales)
+                $destinos_txt = '';
+                $a_json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+                foreach ($a_json_prot_dst as $json_prot_dst) {
+                    $aMiembros[] = $json_prot_dst->lugar;
+                    $oLugar = new Lugar($json_prot_dst->lugar);
+                    $destinos_txt .= empty($destinos_txt)? '' : ', ';
+                    $destinos_txt .= $oLugar->getNombre();
+                }
+            }
+            
+            $destinos_txt;
+            //return $aMiembros;
+        } else {
+            // No hay destinos definidos.
+            $destinos_txt = _("No hay destinos");
+        }
+        
+        return $destinos_txt;
     }
     
     public function cabeceraIzquierda() {
