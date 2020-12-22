@@ -240,7 +240,8 @@ if (!empty($Qid_entrada)) {
     $oArrayDesplFirmas ->setBlanco('t');
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas(event)');
 }
-if (empty($f_entrada)) {
+
+if (empty($f_entrada) && !empty($Qid_entrada)) {
     $oHoy = new DateTimeLocal();
     $f_entrada = $oHoy->getFromLocal();
 }
