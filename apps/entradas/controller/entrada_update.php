@@ -266,7 +266,7 @@ switch($Qque) {
         } else {
             $id_entrada = $oEntrada->getId_entrada();
             //////// BY PASS //////
-            if ($Qbypass) {
+            if ($Qbypass && $Qid_entrada) {
                 $gesEntradasBypass = new GestorEntradaBypass();
                 $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
                 if (count($cEntradasBypass) > 0) {

@@ -190,15 +190,19 @@ class EntradaLista {
         $pagina_cancel = Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $filtro]));
         
         $txt_btn_new = '';
+        $btn_new = FALSE;
         $secretaria = FALSE;
         if ($_SESSION['session_auth']['role_actual'] === 'secretaria') {
             $secretaria = TRUE;
+            $btn_new = TRUE;
             $txt_btn_new = _("nueva entrada");
         }
-        $vcd = FALSE;
         if ($_SESSION['session_auth']['role_actual'] === 'vcd') {
-            $vcd = TRUE;
+            $btn_new = TRUE;
             $txt_btn_new = _("procesar");
+        }
+        if ($this->filtro == 'bypass') {
+            $btn_new = FALSE;
         }
         
         $a_campos = [
@@ -210,7 +214,7 @@ class EntradaLista {
             'filtro' => $filtro,
             'server' => $server,
             'secretaria' => $secretaria,
-            'vcd' => $vcd,
+            'btn_new' => $btn_new,
             'txt_btn_new' => $txt_btn_new,
             'pagina_cancel' => $pagina_cancel,
         ];
