@@ -241,11 +241,6 @@ if (!empty($Qid_entrada)) {
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas(event)');
 }
 
-if (empty($f_entrada) && !empty($Qid_entrada)) {
-    $oHoy = new DateTimeLocal();
-    $f_entrada = $oHoy->getFromLocal();
-}
-
 switch ($Qfiltro) {
     case 'en_admitido':
         $txt_btn_guardar = _("Asignar");
