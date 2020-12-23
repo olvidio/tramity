@@ -189,7 +189,7 @@ switch ($Qque) {
 	        
 	        $a_valores[$a][1] = $ver;
 	        $a_valores[$a][2] = $fecha_txt;
-	        $a_valores[$a][3] = $oEscrito->getAsuntoDetalle();
+	        $a_valores[$a][3] = $oEscrito->getDetalle();
 	        $a_valores[$a][4] = $ponente_txt;
 	        $a_valores[$a][5] = $add;
 	    }

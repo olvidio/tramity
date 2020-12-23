@@ -327,6 +327,11 @@ class EscritoLista {
         $ver_todo = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$todos_escritos');\" >"._("ver todos")."</span>";
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
+        if ($this->filtro == Expediente::ESTADO_BORRADOR) {
+            $ver_ok = TRUE;
+        } else {
+            $ver_ok = FALSE;
+        }
         $a_campos = [
             'filtro' => $this->filtro,
             'modo' => $this->modo,
@@ -336,6 +341,7 @@ class EscritoLista {
             'server' => $server,
             'bdistribuir' => $bdistribuir,
             'prot_local_header' => $prot_local_header,
+            'ver_ok' => $ver_ok,
         ];
         
         $oView = new ViewTwig('expedientes/controller');

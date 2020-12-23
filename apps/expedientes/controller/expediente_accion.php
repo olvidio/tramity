@@ -57,7 +57,7 @@ $oficina_ponente = $oCargo->getId_oficina();
 
 $a_botones = [];
 switch($Qfiltro) {
-    case 'borrador':
+    case 'borrador_oficina':
     case 'borrador_propio':
         //if ($estado == Expediente::ESTADO_BORRADOR) {
         // los de la oficina
@@ -97,6 +97,7 @@ switch($Qfiltro) {
                     ];
         break;
     case 'acabados':
+    case 'acabados_encargados':
     case 'copias':
         $a_botones[0] = ['accion' => 'exp_a_borrador',
                         'txt'    => _("mover a borrador"),

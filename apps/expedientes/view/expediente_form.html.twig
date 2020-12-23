@@ -44,7 +44,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onClick="fnjs_antecedente(event,1);" >Buscar</button>
+        <button type="button" class="btn btn-primary" onClick="fnjs_antecedente(event);" >{{ "Buscar"|trans }}</button>
       </div>
     </div>
   </div>
@@ -54,6 +54,7 @@
 <h1>{{ titulo }} ({{ ponente_txt }})</h1>
 <form id ="form_expediente" >
     <input type=hidden name='que' id='que' value=0>
+    <input type=hidden name='id_n' id='id_n' value=0>
     <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
     <input type=hidden name='estado' id='estado' value={{ estado }} >
     <input type=hidden name='ponente' id='ponente' value={{ id_ponente }} >

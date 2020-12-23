@@ -74,10 +74,15 @@ fnjs_adjuntar_antecedente=function(tipo,id_escrito,id_expediente) {
     $('#ModalBuscar .close').click();
 }
 	
-fnjs_antecedente=function(event,n) {
+fnjs_antecedente=function(event,n=5) {
 	//n = 1 -> Entradas
 	//n = 2 -> Expedientes
 	//n = 3 -> Escritos-propuestas
+	if (n == 5) {
+        var n=$('#id_n').val();
+	} else {
+        $('#id_n').val(n);
+	}
 	var err=0;
 	var que = 'buscar_'+n;
 	var id_expediente=$('#id_expediente').val();
