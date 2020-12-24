@@ -8,7 +8,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="ModalBuscar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar"|trans }}</h5>
@@ -21,14 +21,19 @@
           <!--  --------------- BUSQUEDAS --------------- -->
           <!--  --------------- OFICINA --------------- -->
           <div class="row">
-          <div class="col-2">
-          <label for="oficinas" class="col-1 col-form-label">{{ "Oficina"|trans }}</label>
-          </div>
-          <div class="col-2">
-            <span id="span_oficinas">
-                {{ oDesplOficinas.Desplegable|raw }}
-            </span>
-          </div>
+              <div class="col-2">
+                <label for="oficinas" class="col-1 col-form-label">{{ "Oficina"|trans }}</label>
+              </div>
+              <div class="col-2">
+                <span id="span_oficinas">
+                    {{ oDesplOficinas.Desplegable|raw }}
+                </span>
+              </div>
+              <div class="col-5">
+              </div>
+              <div class="col-2">
+                <button type="button" class="btn btn-primary" onClick="fnjs_antecedente(event);" >{{ "Buscar"|trans }}</button>
+              </div>
           </div>
           <!--  --------------- ASUNTO --------------- -->
           <div class="form-group row">
@@ -43,8 +48,6 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onClick="fnjs_antecedente(event);" >{{ "Buscar"|trans }}</button>
       </div>
     </div>
   </div>
@@ -128,7 +131,7 @@
         {{ "Expediente"|trans }}
       </button>
       <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(event,3);" >
-        {{ "Escrito/propuesta"|trans }}
+        {{ "Escrito"|trans }}
       </button>
     </div>
     <hr>

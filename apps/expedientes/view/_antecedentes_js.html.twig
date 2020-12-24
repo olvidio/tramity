@@ -3,7 +3,7 @@ fnjs_ver_expediente=function(id_expediente) {
     var ssfsv = 'sv';
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
     var server = '{{ server }}'
-    var url = server+'/apps/expedientes/controller/expediente_ver.php?id_expediente='+id_expediente;
+    var url = server+'/apps/expedientes/controller/expediente_distribuir.php?id_expediente='+id_expediente;
     w=window.open(url, "", winPrefs);
     w.focus();
 }

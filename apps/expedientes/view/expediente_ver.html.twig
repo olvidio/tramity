@@ -346,8 +346,8 @@ fnjs_cancelar=function(event) {
 fnjs_ver_escrito=function(id_escrito) {
     var ssfsv = 'sv';
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-    var server = '{{ server }}'
-    var url = server+'/apps/expedientes/controller/escrito_ver.php?id_escrito='+id_escrito;
+    var base_url = '{{ base_url }}'
+    var url = base_url+'/apps/expedientes/controller/escrito_ver.php?id_escrito='+id_escrito;
     w=window.open(url, "", winPrefs);
     w.focus();
 }

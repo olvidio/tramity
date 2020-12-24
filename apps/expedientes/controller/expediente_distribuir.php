@@ -25,6 +25,14 @@ $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
+// En el caso de ajuntos, puedo abrir una nueva ventana para ver el expediente,
+// y en ese caso el parametro viene por GET:
+$cargar_css = FALSE;
+if (empty($Qid_expediente)) {
+    $Qid_expediente = (integer) \filter_input(INPUT_GET, 'id_expediente');
+    $cargar_css = TRUE;
+}
+
 if (empty($Qid_expediente)) {
     exit ("Error, no existe el expediente");
 }
@@ -100,7 +108,7 @@ $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 $url_update = 'apps/expedientes/controller/expediente_update.php';
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro,'modo' => $Qmodo]));
 $pagina_actualizar = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro, 'modo' => $Qmodo]));
-$server = ConfigGlobal::getWeb(); //http://tramity.local
+$base_url = ConfigGlobal::getWeb(); //http://tramity.local
 
 if ($Qfiltro == 'distribuir') {
     $btn_action = 'distribuir';
@@ -157,7 +165,8 @@ $a_campos = [
     'pagina_cancel' => $pagina_cancel,
     'pagina_actualizar' => $pagina_actualizar,
     // para la pagina js
-    'server' => $server,
+    'base_url' => $base_url,
+    'cargar_css' => $cargar_css,
     //acciones
     'oEscritoLista' => $oEscritoLista,
     'filtro' => $Qfiltro,
@@ -167,6 +176,7 @@ $a_campos = [
     'txt_btn_success' => $txt_btn_success,
     'txt_btn_etiquetas' => $txt_btn_etiquetas,
     'ver_etiquetas' => $ver_etiquetas,
+    
 ];
 
 $oView = new ViewTwig('expedientes/controller');

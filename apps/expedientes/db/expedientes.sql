@@ -55,7 +55,7 @@ CREATE TABLE public.escritos (
     json_prot_ref jsonb,
     id_grupos integer[],
     destinos integer[],
-    entradilla text NOT NULL,
+    entradilla,
     asunto text NOT NULL,
 	detalle text,
     creador smallint,

@@ -77,7 +77,10 @@ switch ($Qque) {
 	    
 	    $cEntradas = $gesEntradas->getEntradas($aWhere,$aOperador);
 	    
-	    $a_cabeceras = [ '', _("fecha"), _("asunto"), _("ponente"),''];
+	    $a_cabeceras = [ '',[ 'width' => 70, 'name' => _("fecha")],
+	                       [ 'width' => 500, 'name' => _("asunto")],
+	                       [ 'width' => 50, 'name' => _("ponente")]
+	                   ,''];
 	    $a_valores = [];
 	    $a = 0;
 	    foreach ($cEntradas as $oEntrada) {
@@ -125,7 +128,10 @@ switch ($Qque) {
 	    
 	    $cExpedientes = $gesExpediente->getExpedientes($aWhere,$aOperador);
 	    
-	    $a_cabeceras = [ '', _("fecha"), _("asunto"), _("ponente"),''];
+	    $a_cabeceras = [ '',[ 'width' => 70, 'name' => _("fecha")],
+	                       [ 'width' => 500, 'name' => _("asunto")],
+	                       [ 'width' => 50, 'name' => _("ponente")]
+	                   ,''];
 	    $a_valores = [];
 	    $a = 0;
 	    foreach ($cExpedientes as $oExpediente) {
@@ -157,6 +163,9 @@ switch ($Qque) {
 	    $gesEscrito = new GestorEscritoDB();
 	    $aWhere = [];
 	    $aOperador = [];
+	    // Sólo los escritos que ya se han enviado
+        $aWhere['f_salida'] = 'x';
+	    $aOperador['f_salida'] = 'IS NOT NULL'; 
 	    if (!empty($Qoficina_buscar)) {
             $aWhere['creador'] = $Qoficina_buscar;
 	    }
@@ -173,7 +182,10 @@ switch ($Qque) {
 	    
 	    $cEscritos = $gesEscrito->getEscritosDB($aWhere,$aOperador);
 	    
-	    $a_cabeceras = [ '', _("fecha"), _("asunto"), _("ponente"),''];
+	    $a_cabeceras = [ '',[ 'width' => 70, 'name' => _("fecha")],
+	                       [ 'width' => 500, 'name' => _("asunto")],
+	                       [ 'width' => 50, 'name' => _("ponente")]
+	                   ,''];
 	    $a_valores = [];
 	    $a = 0;
 	    foreach ($cEscritos as $oEscrito) {

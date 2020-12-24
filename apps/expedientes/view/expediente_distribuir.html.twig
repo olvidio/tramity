@@ -1,3 +1,12 @@
+{% if cargar_css %}
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{ base_url }}/node_modules/jquery/dist/jquery.min.js"></script>
+    <!-- jQuery CSS -->
+    <!-- CSS jQuery, bootstrap -->
+    <link type="text/css" rel='stylesheet' href='{{ base_url }}/node_modules/jquery-ui/themes/base/all.css' />
+    <link type="text/css" rel="stylesheet" href="{{ base_url }}/node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <link href="{{ base_url }}/node_modules/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+{% endif %}
 <!-- load the CSS files in the right order 
 <link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
 <link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
@@ -103,7 +112,8 @@
     </div>
     <!-- Fin Col Dcha -->
   </div> 
-  
+{# si se carga el css, es para ver en ventana nueva, y no hacen falta los botones #} 
+{% if !cargar_css %}
   {% if ver_encargar %}
     <!--  --------------- Encargar a --------------- -->
     <div class="form-group row align-items-center">
@@ -144,6 +154,11 @@
       {{ txt_btn_success }}
     </button> 
   {% endif %}
+{% else %} {# cargar_css #}
+  <button tabindex='91' class="btn btn-secondary" onClick="window.close();" >
+    {{ "Cerrar"|trans }}
+  </button>
+{% endif %}
 </div> 
 </form>
 
