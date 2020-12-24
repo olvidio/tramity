@@ -1,12 +1,13 @@
 <?php
 
+use core\ConfigGlobal;
 use entradas\model\GestorEntrada;
 use expedientes\model\Expediente;
-use usuarios\model\entity\GestorOficina;
-use web\Lista;
 use expedientes\model\GestorExpediente;
 use expedientes\model\entity\GestorEscritoDB;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
+use web\Lista;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -202,6 +203,64 @@ switch ($Qque) {
 	        $a_valores[$a][1] = $ver;
 	        $a_valores[$a][2] = $fecha_txt;
 	        $a_valores[$a][3] = $oEscrito->getDetalle();
+	        $a_valores[$a][4] = $ponente_txt;
+	        $a_valores[$a][5] = $add;
+	    }
+	    
+	    
+	    $oLista = new Lista();
+	    $oLista->setCabeceras($a_cabeceras);
+	    $oLista->setDatos($a_valores);
+	    echo $oLista->mostrar_tabla_html();
+	    break;
+	case 'buscar_exp':
+        $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+        // Expediente de mi oficina en borrador
+	    $gesExpediente = new GestorExpediente();
+	    $aWhere = [];
+	    $aOperador = [];
+        $aWhere['estado'] = Expediente::ESTADO_BORRADOR;
+        // posibles oficiales de la oficina:
+        $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+        $id_oficina = $oCargo->getId_oficina();
+        $gesCargos = new GestorCargo();
+        $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+        $a_cargos = [];
+        foreach (array_keys($a_cargos_oficina) as $id_cargo) {
+            $a_cargos[] = $id_cargo;
+        }
+        if (!empty($a_cargos)) {
+            $aWhere['ponente'] = implode(',',$a_cargos);
+            $aOperador['ponente'] = 'IN';
+        }
+	    // por defecto, buscar sólo 15.
+	    if (empty($Qasunto_buscar)) {
+	        $aWhere['_limit'] = 15;
+	    }
+	    $aWhere['_ordre'] = 'f_aprobacion DESC';
+	    
+	    $cExpedientes = $gesExpediente->getExpedientes($aWhere,$aOperador);
+	    
+	    $a_cabeceras = [ '',[ 'width' => 70, 'name' => _("fecha")],
+	                       [ 'width' => 500, 'name' => _("asunto")],
+	                       [ 'width' => 50, 'name' => _("ponente")]
+	                   ,''];
+	    $a_valores = [];
+	    $a = 0;
+	    foreach ($cExpedientes as $oExpediente) {
+	        $a++;
+	        $id_expediente = $oExpediente->getId_expediente();
+	        $fecha_txt = $oExpediente->getF_aprobacion()->getFromLocal();
+	        $ponente = $oExpediente->getPonente();
+	        
+	        $ponente_txt = $a_posibles_cargos[$ponente];
+	        
+	        $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_expediente('$id_expediente');\" >"._("ver")."</span>";
+	        $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('entrada','$Qid_entrada','$id_expediente');\" >"._("adjuntar")."</span>";
+	        
+	        $a_valores[$a][1] = $ver;
+	        $a_valores[$a][2] = $fecha_txt;
+	        $a_valores[$a][3] = $oExpediente->getAsunto();
 	        $a_valores[$a][4] = $ponente_txt;
 	        $a_valores[$a][5] = $add;
 	    }

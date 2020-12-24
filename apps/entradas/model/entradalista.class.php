@@ -7,6 +7,8 @@ use usuarios\model\entity\GestorCargo;
 use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
+use web\DateTimeLocal;
+use entradas\model\entity\GestorEntradaBypass;
 
 
 class EntradaLista {
@@ -70,11 +72,32 @@ class EntradaLista {
                 // solo los propios:
                 $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
                 $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
+                // De una semana
+                $oHoy = new DateTimeLocal();
+                $oHoy->sub(new \DateInterval('P7D'));
+                $aWhere['f_entrada'] = $oHoy->getIso();
+                $aOperador['f_entrada'] = '>';
                 break;
             case 'bypass':
                 // distribución cr
                 $aWhere['bypass'] = 't';
                 $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
+                // que no estén enviados
+                $aWhereBypass = ['f_salida' => 'x'];
+                $aOperadorBypass = ['f_salida' => 'IS NULL'];
+                $gesEntradaBypass = new GestorEntradaBypass();
+                $cEntradasBypass = $gesEntradaBypass->getEntradasBypass($aWhereBypass, $aOperadorBypass);
+                $a_bypass = [];
+                foreach ($cEntradasBypass as $oEntradaBypass) {
+                    $a_bypass[] = $oEntradaBypass->getId_entrada();
+                }
+                if (!empty($a_bypass)) {
+                    $aWhere['id_entrada'] = implode(',',$a_bypass);
+                    $aOperador['id_entrada'] = 'IN';
+                } else {
+                    // para que no salga nada pongo
+                    $aWhere = [];
+                }
                 break;
         }
 
@@ -96,6 +119,7 @@ class EntradaLista {
         
         
         //$pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
+        $pagina_accion = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_accion.php';
         switch ($this->filtro) {
             case 'en_ingresado':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
@@ -145,11 +169,14 @@ class EntradaLista {
                               'filtro' => $filtro,
                               'slide_mode' => $this->slide_mode,
                 ];
+                
+                $link_accion = Hash::link($pagina_accion.'?'.http_build_query($a_cosas));
                 //$link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
                 $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >"._("ver")."</span>";
                 //$row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_ver');\" >ver</span>";
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >mod</span>";
+                $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_accion');\" >"._("acción")."</span>";
                 
                 $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
                 $row['protocolo'] = $oProtOrigen->ver_txt();

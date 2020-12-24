@@ -1,5 +1,7 @@
 <?php
 use core\ConfigGlobal;
+use function core\is_true;
+use entradas\model\Entrada;
 use expedientes\model\Escrito;
 use expedientes\model\Expediente;
 use expedientes\model\GestorExpediente;
@@ -10,8 +12,8 @@ use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use etiquetas\model\entity\EtiquetaExpediente;
-use function core\is_true;
+use tramites\model\entity\Tramite;
+use tramites\model\entity\TramiteCargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -47,6 +49,59 @@ $Qvisibilidad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 
 $txt_err = '';
 switch($Qque) {
+    case 'en_add_expediente':
+        // nada
+        break;
+    case 'en_expediente':
+        $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+        // Hay que crear un nunevo expediente, con un ajunto (entrada).
+        $oEntrada = new Entrada($Qid_entrada);
+        $Qasunto = $oEntrada->getAsunto_entrada();
+        
+        $Qestado = Expediente::ESTADO_BORRADOR;
+        $Qponente = ConfigGlobal::mi_id_cargo();
+        $Qtramite = 1; // Qualquiera, no puede ser null.
+        $Qprioridad = 1; // Qualquiera, no puede ser null.
+
+        $oExpediente = new Expediente();
+        $oExpediente->setPonente($Qponente);
+        $oExpediente->setEstado($Qestado);
+        $oExpediente->setId_tramite($Qtramite);
+        $oExpediente->setPrioridad($Qprioridad);
+        //$oExpediente->setF_reunion($Qf_reunion);
+        //$oExpediente->setF_aprobacion($Qf_aprobacion);
+        //$oExpediente->setF_contestar($Qf_contestar);
+        $oExpediente->setAsunto($Qasunto);
+        //$oExpediente->setEntradilla($Qentradilla);
+        //$oExpediente->setVida($Qvida);
+        $oExpediente->setVisibilidad($Qvisibilidad);
+
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            $txt_err .= _("No se han podido crear el nuevo expediente");
+            $txt_err .= "\n";
+            $txt_err .= $oExpediente->getErrorTxt();
+        }
+        
+        $antecedente = [ 'tipo'=> 'entrada', 'id' => $Qid_entrada ];
+        $json_antecedente = json_encode($antecedente);
+        $oExpediente->addAntecedente($json_antecedente);
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            $txt_err .= _("No se han podido adjuntar la entrada");
+        }
+        
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'encargar_a':
         $Qid_oficial = (integer)  \filter_input(INPUT_POST, 'id_oficial');
         // Se pone cuando se han enviado...

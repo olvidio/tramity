@@ -5,6 +5,7 @@ use expedientes\model\Expediente;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Hash;
+use entradas\model\Entrada;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -22,18 +23,31 @@ require_once ("apps/core/global_object.inc");
 $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
-if (empty($Qid_expediente)) {
-    exit ("Error, no existe el expediente");
+// Añado la opcion de poder crear un eexpediente desde entradas
+if ($Qfiltro == 'en_aceptado') {
+    $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+    $oEntrada = new Entrada($Qid_entrada);
+    $asunto = $oEntrada->getAsunto();
+    
+    $url_cancel = 'apps/entradas/controller/entrada_lista.php';
+    $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro]));
+} else {
+    if (empty($Qid_expediente) && $Qfiltro != 'en_aceptado') {
+        exit ("Error, no existe el expediente");
+    }
+
+    $oExpediente = new Expediente();
+    $oExpediente->setId_expediente($Qid_expediente);
+    $estado = $oExpediente->getEstado();
+    $asunto = $oExpediente->getAsunto();
+    $id_ponente = $oExpediente->getPonente();
+
+    $oCargo = new Cargo($id_ponente);
+    $oficina_ponente = $oCargo->getId_oficina();
+
+    $url_cancel = 'apps/expedientes/controller/expediente_lista.php';
+    $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro]));
 }
-$oExpediente = new Expediente();
-$oExpediente->setId_expediente($Qid_expediente);
-$estado = $oExpediente->getEstado();
-$asunto = $oExpediente->getAsunto();
-$id_ponente = $oExpediente->getPonente();
-
-$oCargo = new Cargo($id_ponente);
-$oficina_ponente = $oCargo->getId_oficina();
-
 
 /*
 - a "para firmar" i "circulando" el botó "mov/cop" ha de fer:
@@ -57,6 +71,18 @@ $oficina_ponente = $oCargo->getId_oficina();
 
 $a_botones = [];
 switch($Qfiltro) {
+    case 'en_aceptado':
+        //if ($estado == Expediente::ESTADO_BORRADOR) {
+        // los de la oficina
+        $a_botones[0] = ['accion' => 'en_add_expediente',
+                        'txt'    => _("añadir a un expediente"),
+                        'tipo'    => 'modal',
+                    ];
+        $a_botones[1] = ['accion' => 'en_expediente',
+                        'txt'    => _("crear un nuevo expediente"),
+                        'tipo'    => '',
+                    ];
+        break;
     case 'borrador_oficina':
     case 'borrador_propio':
         //if ($estado == Expediente::ESTADO_BORRADOR) {
@@ -125,11 +151,8 @@ if (empty($a_botones)) {
                 ];
 }
 
-
-$url_cancel = 'apps/expedientes/controller/expediente_lista.php';
-$pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro]));
-
 $a_campos = [
+    'id_entrada' => $Qid_entrada,
     'id_expediente' => $Qid_expediente,
     'filtro' => $Qfiltro,
     //'oHash' => $oHash,

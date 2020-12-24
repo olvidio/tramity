@@ -19,6 +19,7 @@
       <th scope="col">{{ "fecha escrito"|trans }}</th>
       <th scope="col">{{ "contestar antes de"|trans }}</th>
       <th scope="col">{{ "fecha entrada"|trans }}</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -37,6 +38,7 @@
       <td style="text-align: right">{{ row.f_escrito }}</td>
       <td style="text-align: right">{{ row.f_contestar }}</td>
       <td style="text-align: right">{{ row.f_entrada }}</td>
+      <td>{{ row.link_accion|raw }}</td>
     </tr>
     {% endfor %}
   </tbody>
