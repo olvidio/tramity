@@ -14,6 +14,7 @@ use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use expedientes\model\entity\Accion;
+use usuarios\model\entity\GestorCargoGrupo;
 
 
 
@@ -538,13 +539,15 @@ class Expediente Extends expedienteDB {
                         }
                         break;
                     case Cargo::CARGO_TODOS_DIR:  // si es para todos los dir menos vcd
-                        $gesCargos = new GestorCargo();
-                        $cCargos = $gesCargos->getCargos(['director' => 't']);
+                        $gesCargoGrupo = new GestorCargoGrupo();
+                        $cGrupos = $gesCargoGrupo->getCargoGrupos(['id_cargo_ref' => Cargo::CARGO_TODOS_DIR]);
+                        $aMiembros = $cGrupos[0]->getMiembros();
                         $orden_oficina = 0;
-                        foreach ($cCargos as $oCargo) {
+                        foreach ($aMiembros as $id_cargo) {
+                            $oCargo = new Cargo($id_cargo);
                             $orden_oficina++;
                             $id_cargo_of = $oCargo->getId_cargo();
-                            if ($oCargo->getCargo() == 'vcd') continue;
+                            //if ($oCargo->getCargo() == 'vcd') continue;
                             $oFirma = new Firma();
                             $oFirma->setId_expediente($this->iid_expediente);
                             $oFirma->setId_tramite($id_tramite);

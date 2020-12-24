@@ -38,7 +38,7 @@ $aOperador = array();
 // Segun la ubicación (config de la instalación)
 $aWhere['id_ambito'] = Cargo::AMBITO_DL;
 
-//$aWhere['_ordre'] = 'usuario';
+$aWhere['_ordre'] = 'director DESC, cargo';
 
 $oGesCargos = new GestorCargo();
 $cCargos = $oGesCargos->getCargos($aWhere,$aOperador);

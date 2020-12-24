@@ -63,3 +63,14 @@ CREATE TABLE usuario_preferencias (
 
 CREATE UNIQUE INDEX "usuario_preferencias_id_usuario_tipo_ukey" ON usuario_preferencias (id_usuario, tipo);
 ALTER TABLE usuario_preferencias OWNER TO tramity;
+
+CREATE TABLE public.cargos_grupos (
+    id_grupo SERIAL PRIMARY KEY,
+    id_cargo_ref integer NOT NULL,
+    descripcion text NOT NULL,
+    miembros integer[]
+);
+
+CREATE UNIQUE INDEX "cargos_grupos_id_cargo_ref_ukey" ON cargos_grupos (id_cargo_ref);
+ALTER TABLE public.cargos_grupos OWNER TO tramity;
+

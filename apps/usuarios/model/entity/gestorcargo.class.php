@@ -100,6 +100,34 @@ class GestorCargo Extends core\ClaseGestor {
 	}
 	
 	/**
+	 * retorna un Array
+	 * Els posibles cargos de ref al tramite
+	 *
+	 * @return Array
+	 */
+	function getArrayCargosRef() {
+	    $id_ambito = $_SESSION['oConfig']->getAmbito();
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    $Where = "WHERE id_ambito = $id_ambito AND (id_oficina = 0 OR id_oficina IS NULL)";
+	    $sQuery="SELECT id_cargo, cargo FROM $nom_tabla
+                $Where ORDER BY director DESC, cargo";
+                if (($oDbl->query($sQuery)) === false) {
+                    $sClauError = 'GestorAsignaturaTipo.lista';
+                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                    return false;
+                }
+                $aOpciones=array();
+                foreach ($oDbl->query($sQuery) as $aClave) {
+                    $clave=$aClave[0];
+                    $val=$aClave[1];
+                    $aOpciones[$clave]=$val;
+                }
+                return $aOpciones;
+	}
+	
+	/**
 	 * retorna un objecte del tipus Desplegable
 	 * Els posibles cargos d'un usuari
 	 *

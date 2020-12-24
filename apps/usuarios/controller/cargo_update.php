@@ -42,10 +42,14 @@ switch($Qque) {
 	    $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    if (!empty($a_sel)) { //vengo de un checkbox
 	        $Qid_cargo = (integer) strtok($a_sel[0],"#");
-	        $oCargo = new Cargo($Qid_cargo);
-	        if ($oCargo->DBEliminar() === false) {
-	            echo _("hay un error, no se ha eliminado");
-	            echo "\n".$oCargo->getErrorTxt();
+	        if ($Qid_cargo > Cargo::CARGO_REUNION) { // Al dia de hoy, es el número mayor (7)
+                $oCargo = new Cargo($Qid_cargo);
+                if ($oCargo->DBEliminar() === false) {
+                    echo _("hay un error, no se ha eliminado");
+                    echo "\n".$oCargo->getErrorTxt();
+                }
+	        } else {
+	            echo _("No se puede eliminar un cargo tipo.");
 	        }
 	    }
 	    break;
