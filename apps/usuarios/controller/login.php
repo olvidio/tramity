@@ -91,9 +91,13 @@ if ( !isset($_SESSION['session_auth'])) {
                 
                 // el usuario default, y el admin no tienen cargo:
                 // los cargos que puede tener (suplencias)
-                $query_cargos="SELECT * FROM aux_cargos 
-                                WHERE id_usuario = $id_usuario OR id_suplente = $id_usuario
-                                ORDER BY cargo";
+                $query_titular="SELECT 1 as preferido,cargo,director,id_cargo,id_oficina,cargo FROM aux_cargos 
+                                WHERE id_usuario = $id_usuario
+                                ";
+                $query_suplentes="SELECT 2 as preferido,cargo,director,id_cargo,id_oficina,cargo FROM aux_cargos 
+                                WHERE id_suplente = $id_usuario
+                                ";
+                $query_cargos = "$query_titular UNION $query_suplentes ORDER BY 1,2";
                 if (($oDB->query($query_cargos)) === false) {
                     $sClauError = 'login_obj.prepare';
                     $_SESSION['oGestorErrores']->addErrorAppLastError($oDB, $sClauError, __LINE__, __FILE__);
@@ -104,11 +108,13 @@ if ( !isset($_SESSION['session_auth'])) {
                 $usuario_dtor = '';
                 $mi_id_oficina = '';
                 foreach ($oDB->query($query_cargos) as $aDades) {
-                    $usuario_cargo = $aDades['cargo'];
-                    $usuario_dtor = $aDades['director'];
                     $id_cargo = $aDades['id_cargo'];
-                    $mi_id_oficina = $aDades['id_oficina'];
                     $cargo = $aDades['cargo'];
+                    if ($aDades['preferido'] == 1) {
+                        $usuario_cargo = $aDades['cargo'];
+                        $usuario_dtor = $aDades['director'];
+                        $mi_id_oficina = $aDades['id_oficina'];
+                    }
                     $aPosiblesCargos[$id_cargo] = $cargo;
                 }
                 

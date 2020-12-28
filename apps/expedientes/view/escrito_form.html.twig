@@ -143,12 +143,12 @@
   <button tabindex='90' class="btn btn-primary" onKeyUp="fnjs_guardar(event);" onClick="fnjs_guardar(event);" >
     {{ "Guardar"|trans }}
   </button>
-  
+{% if ver_revisado %} 
 <div class="ml-3 btn form-check">
   <input type="checkbox" class="form-check-input" id="ok" name="ok" {{ chk_revisado }}>
   <label class="form-check-label" for="ok">{{ "revisado"|trans }}</label>
 </div>
-
+{% endif %}
 </div>
 </form>
 {# Per ficar l'escrit, si cal #}

@@ -22,10 +22,10 @@ require_once ("apps/core/global_object.inc");
 
 $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 
 // Añado la opcion de poder crear un eexpediente desde entradas
 if ($Qfiltro == 'en_aceptado') {
-    $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
     $oEntrada = new Entrada($Qid_entrada);
     $asunto = $oEntrada->getAsunto();
     

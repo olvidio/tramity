@@ -164,7 +164,7 @@ class GestorFirma Extends core\ClaseGestor {
 	    $gesCargos = new GestorCargo();
 	    $aCargos =$gesCargos->getArrayCargos(FALSE);
 	    $aWhere = ['id_expediente' => $id_expediente,
-	        '_ordre' => 'f_valor'
+	        '_ordre' => 'orden_tramite, f_valor'
 	        //'_ordre' => 'orden_tramite, orden_oficina ASC, tipo ASC'
 	    ];
 	    $cFirmas = $this->getFirmas($aWhere);
@@ -451,9 +451,17 @@ class GestorFirma Extends core\ClaseGestor {
              const V_RECHAZADO    = 23;  // sólo vcd
              const V_VISTO_BUENO  = 24;  // sólo vcd VºBº
              */
-            if ($valor == Firma::V_NO OR $valor == Firma::V_OK) {
+            if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
+                /*Els expedients “rechazados”, “dilata”, “no”, “espera” del vcd. queden en un limbo.
+                 Haurien d’anar a “3. Distribuir” de Secretaria (i el Secretaria ja el distribueix a l’oficina);
+                 si te accions de sortides, no es posa número de registre. ((cfr. expedient de adl))
+                 Asunto: Afegir a l’inici RECHAZADO, DILATA, NO, ESPERA…
+                */
             } else {
-                return FALSE;
+                if ($valor == Firma::V_NO OR $valor == Firma::V_OK OR $valor == Firma::V_VISTO_BUENO) {
+                } else {
+                    return FALSE;
+                }
             }
         }
         return TRUE;

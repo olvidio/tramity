@@ -47,9 +47,12 @@ class Expediente Extends expedienteDB {
     const ESTADO_CIRCULANDO        = 2;
     const ESTADO_FIJAR_REUNION     = 3;
     const ESTADO_ACABADO           = 4;
-    const ESTADO_TERMINADO         = 5;
+    const ESTADO_ARCHIVADO         = 5;
     const ESTADO_COPIAS            = 6;
     const ESTADO_ACABADO_ENCARGADO = 7;
+    const ESTADO_RECHAZADO         = 10;
+    const ESTADO_DILATA            = 11;
+    const ESTADO_ESPERA            = 12;
     
     // vida (a criterio del ponente):
     /*
@@ -309,9 +312,12 @@ class Expediente Extends expedienteDB {
             self::ESTADO_CIRCULANDO => _("circulando"),
             self::ESTADO_FIJAR_REUNION => _("fijar reunión"),
             self::ESTADO_ACABADO => _("acabado"),
-            self::ESTADO_TERMINADO => _("terminado"),
+            self::ESTADO_ARCHIVADO => _("archivado"),
             self::ESTADO_COPIAS => _("copias"),
             self::ESTADO_ACABADO_ENCARGADO => _("encargado"),
+            self::ESTADO_RECHAZADO => _("rechazado"),
+            self::ESTADO_DILATA => _("dilata"),
+            self::ESTADO_ESPERA => _("espera"),
         ];
         
         return $a_estado;

@@ -239,7 +239,20 @@ switch ($Qque) {
                 // cambio el estado del expediente.
                 $oExpediente = new Expediente($Qid_expediente);
                 $oExpediente->DBCarregar();
-                $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
+                switch ($Qvoto) {
+                    case Firma::V_DILATA:
+                        $estado = Expediente::ESTADO_DILATA;
+                        break;
+                    case Firma::V_ESPERA:
+                        $estado = Expediente::ESTADO_ESPERA;
+                        break;
+                    case Firma::V_RECHAZADO:
+                        $estado = Expediente::ESTADO_RECHAZADO;
+                        break;
+                    default:
+                        $estado = Expediente::ESTADO_ACABADO;
+                }
+                $oExpediente->setEstado($estado);
                 $oExpediente->setF_aprobacion($f_hoy_iso,FALSE); 
                 if ($oExpediente->DBGuardar() === FALSE ) {
                     $error_txt .= $oExpediente->getErrorTxt();

@@ -177,7 +177,7 @@ switch($Qque) {
         $oExpediente->DBCarregar();
         // las etiquetas:
         $oExpediente->setEtiquetas($Qa_etiquetas);
-        $oExpediente->setEstado(Expediente::ESTADO_TERMINADO);
+        $oExpediente->setEstado(Expediente::ESTADO_ARCHIVADO);
         if ($oExpediente->DBGuardar() === FALSE ) {
             $txt_err .= _("No se ha podido cambiar el estado del expediente");
             $txt_err .= "<br>";

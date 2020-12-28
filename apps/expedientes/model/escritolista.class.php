@@ -101,7 +101,9 @@ class EscritoLista {
     }
     
     public function mostrarTablaEnviar($fecha='') {
-        
+        $oExpediente = new Expediente($this->id_expediente);
+        $estado = $oExpediente->getEstado();
+        $ok_expediente = $oExpediente->getOk();
         $cEscritos = $this->getEscritosParaEnviar($fecha);
         
         $oProtLocal = new Protocolo();
@@ -170,8 +172,12 @@ class EscritoLista {
                 $prot_local = $prot_local_txt;
             }
             
-            $ok = $oEscrito->getOk();
             
+            if (!empty($oEscrito->getOk()) && $oEscrito->getOk() != Escrito::OK_NO) {
+                $ok = '<i class="fas fa-check"></i>'; 
+            } else {
+                $ok = '';
+            }
             $a_accion['ok'] = $ok;
             $a_accion['prot_local'] = $prot_local;
             $a_accion['tipo'] = '';
@@ -186,11 +192,18 @@ class EscritoLista {
         
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
+        if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
+            OR ($estado == Expediente::ESTADO_ACABADO && is_true($ok_expediente)) ) {
+            $ver_ok = TRUE;
+        } else {
+            $ver_ok = FALSE;
+        }
         $a_campos = [
             'filtro' => $this->filtro,
             'modo' => $this->modo,
             'a_acciones' => $a_acciones,
             'server' => $server,
+            'ver_ok' => $ver_ok,
         ];
         
         $oView = new ViewTwig('expedientes/controller');
@@ -198,8 +211,11 @@ class EscritoLista {
     }
     
     public function mostrarTabla() {
-        $this->setCondicion();
+        $oExpediente = new Expediente($this->id_expediente);
+        $estado = $oExpediente->getEstado();
+        $ok_expediente = $oExpediente->getOK();
         
+        $this->setCondicion();
         $bdistribuir = $this->getDistribuir();
         
         $oEscrito = new Escrito();
@@ -327,7 +343,8 @@ class EscritoLista {
         $ver_todo = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$todos_escritos');\" >"._("ver todos")."</span>";
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
-        if ($this->filtro == Expediente::ESTADO_BORRADOR) {
+        if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
+            OR ($estado == Expediente::ESTADO_ACABADO && is_true($ok_expediente)) ) {
             $ver_ok = TRUE;
         } else {
             $ver_ok = FALSE;

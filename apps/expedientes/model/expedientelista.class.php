@@ -311,7 +311,13 @@ class ExpedienteLista {
                 }
                 break;
             case 'distribuir':
-                $aWhere['estado'] = Expediente::ESTADO_ACABADO;
+                $a_tipos_acabado = [ Expediente::ESTADO_ACABADO,
+                                     EXpediente::ESTADO_ESPERA,
+                                     EXpediente::ESTADO_DILATA,
+                                     EXpediente::ESTADO_RECHAZADO,
+                                    ];
+                $aWhere['estado'] = implode(',',$a_tipos_acabado);
+                $aOperador['estado'] = 'IN';
                 // todavia sin marcar por scdl con ok.
                 $aWhere['ok'] = 'f';
                 break;
@@ -365,7 +371,7 @@ class ExpedienteLista {
                 }
                 break;
             case 'archivados':
-                $aWhere['estado'] = Expediente::ESTADO_TERMINADO;
+                $aWhere['estado'] = Expediente::ESTADO_ARCHIVADO;
                 // solo los de la oficina:
                 // posibles oficiales de la oficina:
                 $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
@@ -519,6 +525,7 @@ class ExpedienteLista {
                 $id_tramite = $oExpediente->getId_tramite();
                 $tramite_txt = $a_tramites[$id_tramite];
                 $id_ponente = $oExpediente->getPonente();
+                $estado = $oExpediente->getEstado();
                 
                 // negrita para los no visualizados
                 $bstrong = FALSE;
@@ -575,8 +582,11 @@ class ExpedienteLista {
                 if ($brespuesta) {
                     $row['class_row'] = 'bg-success';
                 }
+                // color para los rechazados
+                if ($estado == Expediente::ESTADO_RECHAZADO) {
+                    $row['class_row'] = 'bg-warning';
+                }
                 
-                $estado = $oExpediente->getEstado();
                 $row['estado'] = $a_estados[$estado];
                 $row['prioridad'] = $oExpediente->getPrioridad();
                 $row['tramite'] = $tramite_txt;

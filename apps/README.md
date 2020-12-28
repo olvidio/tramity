@@ -52,7 +52,7 @@ Definir un campo (estado), que indique el punto del itinerario en que se encuent
     ESTADO_CIRCULANDO        = 2;
     ESTADO_FIJAR_REUNION     = 3;
     ESTADO_ACABADO           = 4;
-    ESTADO_TERMINADO         = 5;
+    ESTADO_ARCHIVADO         = 5;
     ESTADO_COPIAS            = 6;
 
 
@@ -132,7 +132,7 @@ $filtro = 'acabados'
 
 $filtro = 'archivados';
 
-	'estado' = Expediente::ESTADO_TERMINADO;
+	'estado' = Expediente::ESTADO_ARCHIVADO;
 	>>>>TODOS????????
 
 9.- copipas

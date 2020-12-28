@@ -1,8 +1,10 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
+use function core\is_true;
 use entradas\model\Entrada;
 use expedientes\model\Escrito;
+use expedientes\model\Expediente;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\GestorCargo;
@@ -204,6 +206,14 @@ $a_cosas = ['id_expediente' => $Qid_expediente,
             'filtro' => $Qfiltro,
             'modo' => $Qmodo,
         ];
+$ver_revisado = FALSE;
+$oExpediente = new Expediente($Qid_expediente);
+$estado = $oExpediente->getEstado();
+$ok_expediente = $oExpediente->getOk();
+if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
+    OR ($estado == Expediente::ESTADO_ACABADO && is_true($ok_expediente)) ) {
+    $ver_revisado = TRUE;
+}
 switch ($Qfiltro) {
     case 'acabados':
     case 'distribuir':
@@ -250,6 +260,7 @@ $a_campos = [
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
     'pagina_nueva' => $pagina_nueva,
+    'ver_revisado' => $ver_revisado,
 ];
 
 $oView = new ViewTwig('expedientes/controller');
