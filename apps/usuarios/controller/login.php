@@ -17,10 +17,6 @@ use core\MyCrypt;
 use core\ViewTwig;
 use function core\cambiar_idioma;
 use core\dbConnection;
-use expedientes\model\entity\GestorAccion;
-use Twig\TokenParser\UseTokenParser;
-use usuarios\model\entity\Usuario;
-
 
 function logout($idioma,$esquema,$error) {
     $a_campos = [];
