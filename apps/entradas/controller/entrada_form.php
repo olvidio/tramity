@@ -55,11 +55,11 @@ $oProtRef->setBlanco(TRUE);
 
 $txt_option_cargos = '';
 $gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargos();
+$a_posibles_cargos = $gesCargos->getArrayCargosDirector();
 foreach ($a_posibles_cargos as $id_cargo => $cargo) {
     $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
 }
-$oDesplPonente = $gesCargos->getDesplCargos('x');
+$oDesplPonente = $gesCargos->getDesplCargos('x', TRUE);
 $oDesplPonente->setNombre('ponente');
 $oDesplPonente->setTabIndex(60);
 

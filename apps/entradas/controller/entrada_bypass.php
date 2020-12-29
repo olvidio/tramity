@@ -23,7 +23,7 @@ require_once ("apps/core/global_object.inc");
 $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 
 $gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargos();
+$a_posibles_cargos = $gesCargos->getArrayCargosDirector();
 
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();

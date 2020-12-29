@@ -64,7 +64,7 @@ switch ($Qque) {
         $a_cabeceras = [ '', _("protocolo"), _("fecha"), _("asunto"), _("ponente"),''];
         $a_valores = [];
         $a = 0;
-        $a_posibles_cargos = $gesCargos->getArrayCargos();
+        $a_posibles_cargos = $gesCargos->getArrayCargosDirector();
         $oProtOrigen = new Protocolo();
         foreach ($cEntradas as $oEntrada) {
             $a++;

@@ -37,6 +37,33 @@ class GestorCargo Extends core\ClaseGestor {
 	
 	/**
 	 * retorna un Array
+	 * Els posibles cargos directors (per entrades)
+	 *
+	 * @return Array
+	 */
+	function getArrayCargosDirector() {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    $sQuery="SELECT id_cargo, cargo FROM $nom_tabla
+                WHERE id_oficina > 0 AND director = 't'
+                ORDER BY cargo";
+        if (($oDbl->query($sQuery)) === false) {
+            $sClauError = 'GestorAsignaturaTipo.lista';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return false;
+        }
+        $aOpciones=array();
+        foreach ($oDbl->query($sQuery) as $aClave) {
+            $clave=$aClave[0];
+            $val=$aClave[1];
+            $aOpciones[$clave]=$val;
+        }
+        return $aOpciones;
+	}
+	
+	/**
+	 * retorna un Array
 	 * Els posibles cargos de una oficina
 	 *
 	 * @param integer $id_oficina
@@ -165,9 +192,10 @@ class GestorCargo Extends core\ClaseGestor {
 	 * Els posibles cargos
 	 *
 	 * @param integer|string $id_oficina si es 'x' se omiten los que no tienen oficina
+	 * @param boolean $bdirector: true = sólo directores
 	 * @return Desplegable
 	 */
-	function getDesplCargos($id_oficina='') {
+	function getDesplCargos($id_oficina='', $bdirector=FALSE) {
 	    $id_ambito = $_SESSION['oConfig']->getAmbito();
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
@@ -191,6 +219,9 @@ class GestorCargo Extends core\ClaseGestor {
 	            }
 	        }
 	        
+	    }
+	    if ($bdirector) {
+	        $Where .= " AND director = 't'";
 	    }
 	    $sQuery="SELECT id_cargo, cargo FROM $nom_tabla
                 $Where ORDER BY cargo";

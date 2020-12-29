@@ -115,7 +115,7 @@ class EntradaLista {
         $a_visibilidad = $oEntrada->getArrayVisibilidad();
         
         $gesCargos = new GestorCargo();
-        $a_posibles_cargos = $gesCargos->getArrayCargos();
+        $a_posibles_cargos = $gesCargos->getArrayCargosDirector();
         
         
         //$pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
