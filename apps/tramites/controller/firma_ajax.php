@@ -240,6 +240,9 @@ switch ($Qque) {
                 $oExpediente = new Expediente($Qid_expediente);
                 $oExpediente->DBCarregar();
                 switch ($Qvoto) {
+                    case Firma::V_VISTO_BUENO:
+                        $estado = Expediente::ESTADO_FIJAR_REUNION;
+                        break;
                     case Firma::V_DILATA:
                         $estado = Expediente::ESTADO_DILATA;
                         break;
