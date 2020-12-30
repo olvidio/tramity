@@ -1,8 +1,9 @@
 <?php
+use busquedas\model\VerTabla;
+use function core\any_4;
+use lugares\model\entity\GestorLugar;
 
 // INICIO Cabecera global de URL de controlador *********************************
-use lugares\model\entity\GestorLugar;
-use busquedas\model\VerTabla;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -28,7 +29,7 @@ switch ($Qopcion) {
         $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
         $Qprot_any = (integer) \filter_input(INPUT_POST, 'prot_any');
         
-        $Qprot_any = empty($Qprot_any)? '' : any_4($Qprot_any);
+        $Qprot_any = empty($Qprot_any)? '' : core\any_4($Qprot_any);
         
         $oTabla = new VerTabla();
         $oTabla->setId_sigla($id_sigla);

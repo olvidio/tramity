@@ -232,6 +232,11 @@ class EntradaLista {
             $btn_new = FALSE;
         }
         
+        $ver_accion = FALSE;
+        if ($this->filtro == 'en_aceptado') {
+            $ver_accion = TRUE;
+        }
+        
         $a_campos = [
             //'id_entrada' => $id_entrada,
             //'oHash' => $oHash,
@@ -244,6 +249,7 @@ class EntradaLista {
             'btn_new' => $btn_new,
             'txt_btn_new' => $txt_btn_new,
             'pagina_cancel' => $pagina_cancel,
+            'ver_accion' => $ver_accion,
         ];
         
         $oView = new ViewTwig('entradas/controller');

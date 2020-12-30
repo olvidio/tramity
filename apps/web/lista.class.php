@@ -243,12 +243,21 @@ class Lista {
         } else {
             $sPrefs = $this->formato_tabla;
         }
-        if ($sPrefs == 'html') {
-            return $this->mostrar_tabla_html();
-        } else {
-            // de momento, el slickgrid es incompatible con fileinput.js (drag and drop)
-            //return $this->mostrar_tabla_slickgrid();
-            return $this->mostrar_tabla_html();
+        switch ($sPrefs) {
+            case 'html':
+                return $this->mostrar_tabla_html();
+            break;
+            case 'dataTable':
+                return $this->mostrar_datatable();
+                break;
+            case 'slickgrid':
+                return $this->mostrar_datatable();
+                break;
+            default:
+                // de momento, el slickgrid es incompatible con fileinput.js (drag and drop)
+                //return $this->mostrar_tabla_slickgrid();
+                //return $this->mostrar_tabla_html();
+                return $this->mostrar_datatable();
         }
     }
     /**
@@ -871,6 +880,193 @@ class Lista {
     
     
     
+    
+    /**
+     * Muestra una tabla ordenable, con  botones en la cabecera y check box en cada lina.
+     * DataTables  https://datatables.net/download/
+     *
+     *@return string Html
+     *
+     */
+    function mostrar_datatable() {
+        $a_botones = $this->aBotones;
+        $a_cabeceras = $this->aCabeceras;
+        $a_valores = $this->aDatos;
+        $id_tabla = $this->sid_tabla;
+        
+        $botones="";
+        $cabecera="";
+        $tbody="";
+        $tt="";
+        $clase="";
+        $chk="";
+        if (empty($a_valores)) {
+            return	_("no hay ninguna fila");
+        }
+        if (!empty($a_botones)) {
+            if ($a_botones=="ninguno") {
+                $b="x";
+            } else {
+                $b=0;
+                foreach ($a_botones as $a_boton) {
+                    $btn="btn".$b++;
+                    $botones .= "<INPUT id='$btn' name='$btn' type=button value=\"".$a_boton['txt']."\" onClick='".$a_boton['click']."'>";
+                }
+                $botones.="</td></tr>";
+                $botones.="<tr><td style='height: 1rem'></td></tr>";
+            }
+        }
+
+        $cab=1;
+        foreach($a_cabeceras as $Cabecera) {
+            $class = '';
+            $width = '';
+            if (is_array($Cabecera)) {
+                $name = $Cabecera['name']; // esta tiene que existir siempre
+                if (!empty($Cabecera['class'])) {
+                    $class = "class=\"${Cabecera['class']}\"";
+                }
+                if (!empty($Cabecera['width'])) {
+                    $width = "width=\"${Cabecera['width']}\"";
+                }
+                
+            } else {
+                $name = $Cabecera;
+            }
+            if (!empty($name)) {
+                $cabecera .= "<th class=cabecera $width $class >".trim($name)."</th>\n";
+            } else {
+                $cabecera .= "<th class=cabecera tipo='notext' $width $class ></th>\n";
+            }
+            $cab++;
+        }
+        $cabecera.= "</tr>\n";
+        // Para generar un id único
+        $ahora=date("Hms");
+        $f=1;
+        
+        if (isset($a_valores['select'])) {
+            $a_valores_chk = $a_valores['select'];
+            unset($a_valores['select']);
+        } else {
+            $a_valores_chk = array();
+        }
+        
+        foreach($a_valores as $num_fila=>$fila) {
+            $clase = "imp";
+            $f % 2  ? 0: $clase = "par";
+            $f++;
+            $id_fila=$f.$ahora;
+            ksort($fila);
+            if (!empty($fila['clase'])) { $clase.=" ".$fila['clase']; }
+            $tbody.="<tr id='$id_fila' class='$clase'>";
+            foreach ($fila as $col=>$valor) {
+                if ($col=="clase") { continue; }
+                if ($col=="order") { continue; }
+                if ($col=="select") { continue; }
+                if ($col=="sel") {
+                    if (empty($b)) continue; // si no hay botones (por permisos...) no tiene sentido el checkbox
+                    $col="";
+                    if(is_array($valor)) {
+                        if (!empty($valor['select'])) { $chk=$valor['select']; } else { $chk=""; }
+                        $id=$valor['id'];
+                    } else {
+                        $id=$valor;
+                    }
+                    if (!empty($id)) {
+                        if ( in_array($id, $a_valores_chk)) { $chk ='checked'; } else { $chk = ''; }
+                        $tbody.="<td tipo='sel' title='". _("clic para seleccionar")."'>";
+                        $tbody.="<input class='sel' type='checkbox' $chk  name='sel[]' id='a$id' value='$id'>";
+                        $tbody.="</td>";
+                    } else { // no hay que dibujar el checkbox, pero si la columna
+                        $tbody.="<td></td>";
+                    }
+                } elseif(is_array($valor)) {
+                    $val=$valor['valor'];
+                    if ( !empty($valor['ira']) ) {
+                        $ira=$valor['ira'];
+                        $tbody.="<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
+                    } else {
+                        $tbody.="<td>$val</td>";
+                    }
+                    if ( !empty($valor['ira2']) ) {
+                        $ira=$valor['ira2'];
+                        $tbody.="<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
+                    }
+                    if ( !empty($valor['ira3']) ) {
+                        $ira=$valor['ira3'];
+                        $tbody.="<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
+                    }
+                    if (!empty($valor['script']) ) {
+                        $ira= $valor['script'];
+                        $tbody.="<td><span class=\"link\" onclick='$ira' >$val</span></td>";
+                    }
+                    if (!empty($valor['script2']) ) {
+                        $ira=$valor['script2'];
+                        $tbody.="<td><span class=\"link\" onclick='$ira' >$val</span></td>";
+                    }
+                    if (!empty($valor['script3']) ) {
+                        $ira=$valor['script3'];
+                        $tbody.="<td><span class=\"link\" onclick='$ira' >$val</span></td>";
+                    }
+                    if (!empty($valor['span'])) {
+                        $tbody.="<td colspan='".$valor['span']."'>$val</td>";
+                    }
+                } else {
+                    // si es una fecha, pongo la clase fecha, para exportar a excel...
+                    if (preg_match("/^(\d)+[\/-]\d\d[\/-](\d\d)+$/",$valor)) {
+                        list( $d,$m,$y) = preg_split('/[:\/\.-]/',$valor);
+                        $fecha_iso=date("Y-m-d",mktime(0,0,0,$m,$d,$y));
+                        $tbody.="<td class='fecha' fecha_iso='$fecha_iso'>$valor</td>";
+                    } else {
+                        $tbody.="<td>$valor</td>";
+                    }
+                }
+            }
+            $tbody.="</tr>\n";
+        }
+        
+        if (!empty($b) && $b !== 'x') {
+            $botones="<tr class=botones><td colspan='$cab'>".$botones;
+        }
+        // No puedo poner los botones como thead y tbody porque el sorteable.js se hace un lio.
+        $tt="<table>$botones</table>\n";
+        $tt.="<table border=1  class='sortable' id='$id_tabla'>\n";
+        $tt.="<thead><tr>";
+        if (!empty($b)) $tt.="<th class='unsortable' tipo='notext'></th>";
+        $tt.="$cabecera</thead><tbody>";
+        $tt.= $tbody;
+        $tt.="</tbody></table>\n";
+        $tt.="<script>
+			$(document).ready(function() {
+                $('#$id_tabla').DataTable();
+				var h = $('input:checked');
+				if (h.length) {
+					var h = (h.offset().top) - 300;
+					$('#main').scrollTop(h);
+				}
+			});
+			</script>";
+        // para corregir las flechitas de ordenar
+        $tt.="<style>
+                table.dataTable > thead .sorting::before,
+                table.dataTable > thead .sorting::after,
+                table.dataTable > thead .sorting_asc::before,
+                table.dataTable > thead .sorting_asc::after,
+                table.dataTable > thead .sorting_desc::before,
+                table.dataTable > thead .sorting_desc::after,
+                table.dataTable > thead .sorting_asc_disabled::before,
+                table.dataTable > thead .sorting_asc_disabled::after,
+                table.dataTable > thead .sorting_desc_disabled::before,
+                table.dataTable > thead .sorting_desc_disabled::after {
+                    position: absolute;
+                    bottom: .3em !important;
+                    display: block;
+                    opacity: .3;
+                }
+            </style>";
+        return $tt;
+    }
     
     /**
      * Muestra una tabla ordenable, con  botones en la cabecera y check box en cada lina.

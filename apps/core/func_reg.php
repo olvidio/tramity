@@ -1,4 +1,6 @@
 <?php
+namespace core;
+
 /**
 * Funciones más comunes de la aplicación
 */
@@ -187,6 +189,7 @@ function permiso_detalle($id_reg,$reservado,$tipo="a",$cancilleria="f") {
 * Definición de variables globales. Las cojo del fichero registro.ini
 * La función class... está en el directorio includes.
 */
+/*
 require_once( 'class.ConfigMagik.php');
 
 // create new ConfigMagik-Object
@@ -204,6 +207,20 @@ $error_fecha=$Config->get("error_fecha","registro");
 $plazo_normal=$Config->get("plazo_normal","registro");
 $plazo_urgente=$Config->get("plazo_urgente","registro");
 $plazo_muy_urgente=$Config->get("plazo_muy_urgente","registro");
+*/
+
+$num_max_ctr=1;
+$num_max_cr=1;
+$rango_inf_dl=1;
+$rango_sup_dl=1;
+$rango_inf_cr=1;
+$rango_sup_cr=1;
+$error_prot=1;
+$error_fecha=1;
+$plazo_normal=1;
+$plazo_urgente=1;
+$plazo_muy_urgente=1;
+
 /**
 *
 * Función para buscar los movimientos de un escrito de cancillería.
@@ -370,7 +387,7 @@ function buscar_asunto_of($id_reg,$id_e_s,$cancilleria) {
 */
 function buscar_ref_uid($uid,$formato="txt"){
 	$oDBR=$GLOBALS['oDBR'];
-	if ($uid{0}=="R" && $uid{1}=="C") { //caso de registro cancillería
+	if ($uid[0]=="R" && $uid[1]=="C") { //caso de registro cancillería
 		$pos = strpos($uid, '-') - 2;
 		$id_reg=substr($uid,2,$pos);
 		//echo "ref: $id_reg<br>";
@@ -382,7 +399,7 @@ function buscar_ref_uid($uid,$formato="txt"){
 		$oDBRSt_q2=$oDBR->query($sql_ref);
 		if ($oDBRSt_q2->rowCount()) {
 			$referencias="";
-			$row=$oDBRSt_q2->fetch(PDO::FETCH_ASSOC);
+			$row=$oDBRSt_q2->fetch(\PDO::FETCH_ASSOC);
 			extract($row);
 			$origen_any=any_2($origen_any);
 			if($formato=="txt") { $ref=$origen." ".$origen_num."/".$origen_any; }
@@ -392,7 +409,7 @@ function buscar_ref_uid($uid,$formato="txt"){
 			return _("referencia a un escrito eliminado");
 		}
 
-	} else if ($uid{0}=="R") {
+	} else if ($uid[0]=="R") {
 		$pos = strpos($uid, '-') - 1;
 		$id_reg=substr($uid,1,$pos);
 		//echo "ref: $id_reg<br>";
@@ -403,7 +420,7 @@ function buscar_ref_uid($uid,$formato="txt"){
 		$oDBRSt_q2=$oDBR->query($sql_ref);
 		if ($oDBRSt_q2->rowCount()) {
 			$referencias="";
-			$row=$oDBRSt_q2->fetch(PDO::FETCH_ASSOC);
+			$row=$oDBRSt_q2->fetch(\PDO::FETCH_ASSOC);
 			extract($row);
 			$prot_any=any_2($prot_any);
 			if($formato=="txt") { $ref=$sigla." ".$prot_num."/".$prot_any; }
@@ -418,7 +435,7 @@ function buscar_ref_uid($uid,$formato="txt"){
 			$oDBRSt_q2=$oDBR->query($sql_ref);
 			if ($oDBRSt_q2->rowCount()) {
 				$referencias="";
-				$row=$oDBRSt_q2->fetch(PDO::FETCH_ASSOC);
+				$row=$oDBRSt_q2->fetch(\PDO::FETCH_ASSOC);
 				extract($row);
 				$prot_any=any_2($prot_any);
 				if($formato=="txt") { $ref=ConfigGlobal::$dele." ".$prot_num."/".$prot_any; }
@@ -543,13 +560,13 @@ function recurrencias($rrule,$dtstart,$dtend,$f_limite) {
 				case "num_ini":
 					$dia=$dias_db;
 						// Me salto los dias del mes anteriores a la fecha de inicio y los posteriores a la de fin
-						if (($dia < $day_ini && $mes == $month_ini && $any==$any_ini) || ($dia > $day_fin  && $mes == $month_fin && $any==$any_fin)) { continue;}
+						if (($dia < $day_ini && $mes == $month_ini && $any==$any_ini) || ($dia > $day_fin  && $mes == $month_fin && $any==$any_fin)) { break; }
 						$f_recurrencias[]="$dia/$mes/$any";
 					break;
 				case "num":
 					foreach ($dias_db as $dia) {
 						// Me salto los dias del mes anteriores a la fecha de inicio y los posteriores a la de fin
-						if (($dia < $day_ini && $mes == $month_ini && $any==$any_ini) || ($dia > $day_fin  && $mes == $month_fin && $any==$any_fin)) { continue;}
+						if (($dia < $day_ini && $mes == $month_ini && $any==$any_ini) || ($dia > $day_fin  && $mes == $month_fin && $any==$any_fin)) { break; }
 						$f_recurrencias[]="$dia/$mes/$any";
 					}
 					break;
@@ -567,7 +584,7 @@ function recurrencias($rrule,$dtstart,$dtend,$f_limite) {
 						$dia=date("d",strtotime($txt,mktime(0,0,0,$mes+1,1,$any)));
 					} 
 					// Me salto los dias del mes anteriores a la fecha de inicio y los posteriores a la de fin
-					if (($dia < $day_ini && $mes == $month_ini && $any==$any_ini) || ($dia > $day_fin  && $mes == $month_fin && $any==$any_fin)) { continue;}
+					if (($dia < $day_ini && $mes == $month_ini && $any==$any_ini) || ($dia > $day_fin  && $mes == $month_fin && $any==$any_fin)) { break; }
 					$f_recurrencias[]=$dia."/".$mes."/".$any;
 				break;
 				case "semana":
@@ -576,7 +593,7 @@ function recurrencias($rrule,$dtstart,$dtend,$f_limite) {
 						$letras=strtoupper(substr(date("D",mktime(0,0,0,$mes,$dia,$any)),0,2));
 						if (in_array($letras,$dias_w_db)) {
 							// Me salto los dias del mes anteriores a la fecha de inicio y los posteriores a la de fin
-							if (($dia < $day_ini && $mes == $month_ini && $any==$any_ini) || ($dia > $day_fin  && $mes == $month_fin && $any==$any_fin)) { continue;}
+							if (($dia < $day_ini && $mes == $month_ini && $any==$any_ini) || ($dia > $day_fin  && $mes == $month_fin && $any==$any_fin)) { break; }
 							$f_recurrencias[]=$dia."/".$mes."/".$any;
 						}
 					}
@@ -1632,7 +1649,7 @@ function tabla_salidas($donde,$sql,$orden,$txt_titulo="",$atras="") {
 			WHERE en.id_reg=$id_reg
 			";
 			//echo "query: $sql<br>";
-			$oEntrada=$oDBR->query($sql_1)->fetch(PDO::FETCH_OBJ);
+			$oEntrada=$oDBR->query($sql_1)->fetch(\PDO::FETCH_OBJ);
 			$origen_prot_num=$oEntrada->o_prot_num;
 			$origen_prot_any=any_2($oEntrada->o_prot_any);
 			$origen_sigla=$oEntrada->sigla;

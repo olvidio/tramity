@@ -392,7 +392,10 @@ class Expediente Extends expedienteDB {
                     case 'entrada':
                         $oEntrada = new Entrada($id);
                         $asunto = $oEntrada->getAsuntoDetalle();
-                        $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada($id);\" >$asunto</span>";
+                        $prot_local = $oEntrada->cabeceraDerecha();
+                        $nom = empty($prot_local)? '' : $prot_local;
+                        $nom .= empty($nom)? "$asunto" : ": $asunto";
+                        $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada($id);\" >$nom</span>";
                         $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >"._("quitar")."</span>";
                         break;
                     case 'expediente':
@@ -404,7 +407,10 @@ class Expediente Extends expedienteDB {
                     case 'escrito':
                         $oEscrito = new Escrito($id);
                         $asunto = $oEscrito->getAsuntoDetalle();
-                        $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito($id);\" >$asunto</span>";
+                        $prot_local = $oEscrito->cabeceraDerecha();
+                        $nom = empty($prot_local)? '' : $prot_local;
+                        $nom .= empty($nom)? "$asunto" : ": $asunto";
+                        $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito($id);\" >$nom</span>";
                         $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >"._("quitar")."</span>";
                         break;
                 }

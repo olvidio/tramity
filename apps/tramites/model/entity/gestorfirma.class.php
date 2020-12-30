@@ -205,6 +205,7 @@ class GestorFirma Extends core\ClaseGestor {
 	                    case Firma::V_OK:
 	                        $a_rec['class'] = "list-group-item-success";
 	                        break;
+	                    case Firma::V_ESPERA:
 	                    default:
 	                        $a_rec['class'] = "list-group-item-info";
 	                }

@@ -1,0 +1,264 @@
+<div id="condiciones">
+<form id="frm_buscar_7" name="frm_buscar_7" action="">
+    <input type="hidden" name="opcion" value="">
+    <table border=1>
+    <!-- Un escrito concreto --------------------------------------------- -->
+    <tr><th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans }}</th></tr>
+    <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
+        {{ oDesplLugar.desplegable|raw }}
+        <td>
+          <input id="prot_num" name="prot_num" size="12" value="" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar_7')">
+          /
+          <input id="prot_any" name="prot_any" size="5" value="" class=contenido title="{{ "año protocolo origen"|trans }}" >
+        </td></tr>
+    <tr>
+      <td colspan=5 style="text-align:right;">
+          <input id="b_buscar_7" name="b_buscar" TYPE="button" VALUE="{{ "buscar"|trans}}" onclick="fnjs_buscar('#frm_buscar_7')" >
+      </td>
+    </tr>
+    </table>
+</form>
+
+<form id="frm_buscar_1" name="frm_buscar_1" action="">
+    <input type="hidden" name="opcion" value="">
+    {{ "hay 4 opciones diferentes para buscar o listar escritos"|trans }}
+    <!-- listar por un lugar y un tiempo --------------------------------------------- -->
+    <table border=1>
+    <tr><th colspan=5 class=titulo_inv>{{ "opción 1: Listado de los últimos"|trans }}</th></tr>
+        <tr><td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans }}:</td>
+        <td>
+        {{ oDesplOrigen.desplegable|raw }}
+        </td>
+        <td class=etiqueta>{{ "antigüedad del escrito"|trans }}</td>
+        <td>
+        {{ oDesplAntiguedad.desplegable|raw }}
+        </td>
+    <td></tr>
+    <tr><td colspan=5 style="text-align:right;">
+        <input id="b_buscar_1" name="b_buscar" TYPE="button" VALUE="{{ "buscar"|trans }}" onclick="fnjs_buscar('#frm_buscar_1')" >
+    </td></tr>
+    </table>
+</form>
+
+<form id="frm_buscar_2" name="frm_buscar_2" action="">
+    <input type="hidden" name="opcion" value="">
+    <table border=1>
+    <!-- Asunto más periodo --------------------------------------------- -->
+    <tr><th colspan=5 class=titulo_inv>{{ "opción 2: Buscar por el asunto o detalle"|trans }}
+        </th></tr>
+        <tr><td class=etiqueta>{{ "¿Escribir una palabra clave"|trans }}:</td>
+        <td colspan=3><input type="Text" id="asunto" name="asunto" size="50"></td>
+        </tr>
+        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
+        <td> {{ "entre el"|trans }} <input class="fecha" type="Text" id="frm2_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm2_f_min')">
+        <td> {{ "y el"|trans }} <input class="fecha" type="Text" id="frm2_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm2_f_max')">
+        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
+        {{ oDesplOficinas.desplegable|raw }}
+        </td></tr>
+    <tr><td colspan=5 style="text-align:right;"><input id="b_buscar_2" name="b_buscar" TYPE="button" VALUE="{{ "buscar"|trans }}" onclick="fnjs_buscar('#frm_buscar_2')" ></td></tr>
+    </table>
+</form>
+
+<form id="frm_buscar_3" name="frm_buscar_3" action="">
+    <input type="hidden" name="opcion" value="">
+    <table border=1>
+    <!-- Origen, destino  más periodo --------------------------------------------- -->
+    <tr><th colspan=5 class=titulo_inv>{{ "opción 3: Listar escritos por el origen, el destino o por ambos"|trans }}</th></tr>
+        <tr><td class=etiqueta>{{ "¿A quién iba dirigido?"|trans }}:</td>
+        <td>
+        {{ oDesplDestino2.desplegable|raw }}
+        </td></tr>
+        <tr><td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans }}:</td>
+        <td>
+        {{ oDesplOrigen2.desplegable|raw }}
+        </td></tr>
+        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
+        <td> {{ "entre el"|trans }} <input class="fecha" type="Text" id="frm3_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm3_f_min')">
+        <td> {{ "y el"|trans }} <input class="fecha" type="Text" id="frm3_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('frm3_f_max')">
+        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
+        {{ oDesplOficinas.desplegable|raw }}
+        </td></tr>
+    <tr><td colspan=5 style="text-align:right;"><input id="b_buscar_3" name="b_buscar" TYPE="button" VALUE="{{ "buscar"|trans }}" onclick="fnjs_buscar('#frm_buscar_3')" ></td></tr>
+    </table>
+</form>
+
+<form id="frm_buscar_4" name="frm_buscar_4" action="">
+    <input type="hidden" id="list" name="list" value=1>
+    <input type="hidden" name="opcion" value="">
+    <input type="hidden" id="simple" name="simple" value="<?= $_POST['simple'] ?>">
+    <table border=1>
+    <!-- Listar varios escritos --------------------------------------------- -->
+    <tr><th colspan=5 class=titulo_inv>{{ "opción 4: Listar varios escritos"|trans }}</th></tr>
+    <td colspan=3>
+    <input type="radio" id="lista_origen_1" name="lista_origen" value="dl" onchange="fnjs_activar_lugar(1)">{{ "de"|trans }} {{ dele }}<br>
+    <input type="radio" id="lista_origen_2" name="lista_origen" value="de" onchange="fnjs_activar_lugar(2)">{{ "de un ctr, dl o cr concreto"|trans }}
+        {{ oDesplLugar4.desplegable|raw }}
+        <br>
+    <input type="radio" id="lista_origen_3" name="lista_origen" value="cr_dl" onchange="fnjs_activar_lugar(3)">{{ "de cr a "|trans }} {{ dele }}<br>
+    <input type="radio" id="lista_origen_4" name="lista_origen" value="cr_ctr" onchange="fnjs_activar_lugar(4)">{{ "de cr a ctr"|trans }}<br>
+    </td>
+    </tr>
+        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
+        <td> {{ "entre el"|trans }} <input class="fecha" type="Text" id="frm4_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_min')">
+        <td> {{ "y el"|trans }} <input class="fecha" type="Text" id="frm4_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_max')">
+        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td>
+        <td>
+          {{ oDesplOficinas.desplegable|raw }}
+        </td></tr>
+        <tr><td colspan=5 style="text-align:right;"><input id="b_buscar_4" name="b_buscar" TYPE="button" VALUE="{{ "buscar"|trans }}" onclick="fnjs_buscar('#frm_buscar_4')" ></td></tr>
+    </table>
+</form>
+
+</div>
+
+<table><tr>
+  <td><input id="b_listar_t" name="b_listar_t" type="button" value="{{ "ver todas las opciones"|trans }}" onclick="fnjs_ver_todos()" flag='uno'></td>
+  <td><input id="chk_anulados" name="chk_anulados" type="checkbox" onChange='fnjs_ctr_anulados()' {{ checked }}>{{ "ver ctr anulados"|trans }}</td>
+</tr></table>
+
+<div id="resultados" >
+</div>
+
+<script>
+$(function() { $( "#frm2_f_min" ).datepicker(); });
+$(function() { $( "#frm2_f_max" ).datepicker(); });
+$(function() { $( "#frm3_f_min" ).datepicker(); });
+$(function() { $( "#frm3_f_max" ).datepicker(); });
+$(function() { $( "#frm4_f_min" ).datepicker(); });
+$(function() { $( "#frm4_f_max" ).datepicker(); });
+
+fnjs_aviso_IESE=function(id){
+    var nom=$(id).val();
+    if (nom=="610") alert ("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans }}");
+}
+fnjs_proto=function(num,any,siguiente){
+    var numero;
+    var prot_num=$(num).val();
+    numero=prot_num.split("/");
+    if (numero[1]) {
+        $(num).val(numero[0]);
+        $(any).val(numero[1]);
+        $(siguiente).focus();
+    }
+}
+fnjs_sel_periodo=function(id){
+    var nom=$(id+' :selected').text();
+    
+    switch (nom) {
+        case "IESE":
+            alert ("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans }}");
+            break;
+        case "cr":
+            $('#antiguedad').val('1m');
+            break;
+        case "dlb":
+            $('#antiguedad').val('1m');
+            break;
+        default:
+            $('#antiguedad').val('3m');
+    }
+    $('#b_buscar').focus();
+}
+
+fnjs_buscar=function(formulario){
+    var form_name=$(formulario).attr('name');
+    var opcion=form_name.substr(-1);
+    if (opcion==2) {
+        if (!$('#asunto').val()) {
+            alert ("{{ "Tiene que escribir una palabra para buscar en el asunto"|trans }}");
+            return;
+        }
+    }
+    if (opcion==3) {
+        if (fnjs_compatible()) {
+            return;
+        }
+    }
+    fnjs_ver_solo(formulario);
+    // borro los posibles resultados anteriores
+    $('#resultados').html("");
+    $(formulario+' input[name="opcion"]').val(opcion);
+    $(formulario).attr('action','apps/busquedas/controller/ver_tabla.php');
+    fnjs_enviar_formulario(formulario,'#resultados');
+}
+fnjs_ver_solo=function(formulario){
+    // colección de todos los formularios
+    $('#condiciones form').each(function(i,f){
+        nom_f='#'+$(this).attr('name');
+        //alert ("f: "+nom_f+", form: "+formulario);
+        if (nom_f != formulario) {
+            $(this).hide();
+            $(this)[0].reset();
+        }
+    });
+}
+fnjs_ctr_anulados = function(){
+    anulado=$('#chk_anulados').attr('checked');
+    if (anulado == "checked") { //volver a cargar la página
+        fnjs_update_div('#main','scdl/registro/registro_buscar.php?simple=1&ctr_anulados=1');
+    } else {
+        fnjs_update_div('#main','scdl/registro/registro_buscar.php?simple=1&ctr_anulados=0');
+    }
+}
+fnjs_ver_todos=function(){
+    flag=$('#b_listar_t').attr('flag');
+    if (flag=='todo') {
+        fnjs_ver_solo('#frm_buscar_7');
+        $('#b_listar_t').attr('flag','uno');
+        $('#b_listar_t').val("{{ "ver todas las opciones"|trans }}");
+    } else {
+        // colección de todos los formularios
+        $('#condiciones form').each(function(i,f){
+            $(this).show();
+            $(this).attr('action',"");
+        });
+        $('#b_listar_t').attr('flag','todo');
+        $('#b_listar_t').val("{{ "ver menos opciones"|trans }}");
+    }
+}
+fnjs_periodo_alert=function(){
+    alert("{{ "Debe poner un periodo"|trans }}");
+    document.listas.f_lista_min.focus();
+}
+fnjs_listar=function(){
+    var f=document.listas.f_lista_min.value;
+    var f2=document.listas.f_lista_max.value;
+    if (f && f2) {
+        $('#listas').attr('action','apps/busquedas/controller/ver_tabla.php');
+        fnjs_enviar_formulario('#listas');
+    } else {
+        periodo_alert();
+    }
+}
+
+fnjs_activar_lugar=function(n){
+    if (n==2) {
+        $('#lista_origen_2').attr('checked',"true");
+    } else {
+        $('#lista_lugar').val("");
+    }
+}
+fnjs_compatible=function(){
+    var id_base=10; //valor minimo de los id_lugar
+    var destino=$('#dest_id_lugar_2').val();
+    var origen=$('#origen_id_lugar_2').val();
+    var id_dl={{ id_dl }};
+    var id_cr={{ id_cr }};
+    var err=0;
+    if (destino==id_dl && origen==id_dl) { err=1; }
+    if ((destino!=id_cr && destino!=id_dl && destino > id_base) && (origen!=id_cr && origen!=id_dl && origen > id_base)) { err=1; }
+    if (destino==id_cr && (origen!=id_dl && origen > id_base)) { err=1; }
+    
+    if (err==1) { alert("{{ "estas dos opciones no son compatibles"|trans }}"); }
+    //if (origen=="" && destino=="") {
+    if (origen < id_base && destino < id_base) {
+        err=1;
+        alert("{{ "tiene que seleccionar un origen o un destino"|trans }}");
+    }
+    return err;
+}
+
+{% if simple == 1 %}
+    fnjs_ver_solo('#frm_buscar_7');
+{% endif %}
+</script>

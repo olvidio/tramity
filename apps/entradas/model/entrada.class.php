@@ -200,13 +200,23 @@ class Entrada Extends EntradaDB {
     
     /**
      * añadir el detalle en el asunto.
+     * también el grupo de destinos (si es distrbución cr)
      * tener en cuenta los permisos...
      *
      * return string
      */
     public function getAsuntoDetalle() {
+        // 
+        $txt_grupos = '';
+        if ($this->getBypass()) {
+            $lista_grupos = $this->cabeceraDistribucion_cr();
+            $lista_grupos = empty($lista_grupos)? _("No hay destinos") : $lista_grupos;
+            $txt_grupos = "<span class=\"text-success\"> ($lista_grupos)</span>";
+        }
         $detalle = $this->getDetalle();
         $asunto_detelle = empty($detalle)? $this->getAsunto() : $this->getAsunto()." [$detalle]";
+        
+        $asunto_detelle .= $txt_grupos;
         
         return $asunto_detelle;
     }

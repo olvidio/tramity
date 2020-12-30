@@ -168,9 +168,10 @@
 <script type="text/javascript" src='node_modules/jquery-ui/ui/widgets/datepicker.js'></script>
 <script type="text/javascript" src='node_modules/jquery-ui/ui/i18n/datepicker-es.js'></script>
 <script type="text/javascript" src='node_modules/jquery-ui/ui/i18n/datepicker-ca.js'></script>
+	
 
 <!-- Slick -->
-<!-- OJO: IMPORTA el orden. Pueden salir avisos (en consola del navegador) tipo: Grid.xx not defined  -->
+<!-- OJO: IMPORTA el orden. Pueden salir avisos (en consola del navegador) tipo: Grid.xx not defined
 <link type='text/css' rel='stylesheet' href='node_modules/slickgrid/slick.grid.css' />
 
 <script type='text/javascript' src='node_modules/slickgrid/lib/firebugx.js'></script>
@@ -195,6 +196,7 @@
 <script type='text/javascript' src='node_modules/slickgrid/controls/slick.gridmenu.js'></script>
 <link type='text/css' rel='stylesheet' href='node_modules/slickgrid/controls/slick.pager.css' />
 <script type='text/javascript' src='node_modules/slickgrid/controls/slick.pager.js'></script>
+-->
 
 <!-- Custom scripts for all pages-->
 <!-- vars: mi_idioma, error_fecha -->
@@ -202,4 +204,7 @@
 {% include '@global_js/slickgrid.js.twig' %}
 <script src="js/sb-admin-2.js"></script>
 
-
+<!-- DataTables -->
+<link type="text/css" rel="stylesheet" href='node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css' />
+<script type="text/javascript" src='node_modules/datatables.net/js/jquery.dataTables.min.js'></script>
+<script type="text/javascript" src='node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js'></script>

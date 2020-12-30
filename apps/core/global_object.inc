@@ -10,6 +10,7 @@ if ( session_status()  !== PHP_SESSION_ACTIVE) {
 }
 
 require_once('func_tablas.php'); 
+require_once('func_reg.php'); 
 
 require_once('apps/usuarios/controller/login.php');
 

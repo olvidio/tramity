@@ -195,16 +195,21 @@ class Enviar {
         
         $json_prot_local = $oEscrito->getJson_prot_local();
         if (empty((array)$json_prot_local)) {
+            // Ahora si dejo (30-12-2020)
+            /*
             $this->a_rta['success'] = FALSE;
             $this->a_rta['mensaje'] = _("No está definido el protocolo local");
             return FALSE;
+            */
+            $this->filename = _("sin_protocolo");
+        } else {
+            $oProtOrigen = new Protocolo();
+            $oProtOrigen->setLugar($json_prot_local->lugar);
+            $oProtOrigen->setProt_num($json_prot_local->num);
+            $oProtOrigen->setProt_any($json_prot_local->any);
+            $oProtOrigen->setMas($json_prot_local->mas);
+            $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         }
-        $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_local->lugar);
-        $oProtOrigen->setProt_num($json_prot_local->num);
-        $oProtOrigen->setProt_any($json_prot_local->any);
-        $oProtOrigen->setMas($json_prot_local->mas);
-        $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
         $oEtherpad = new Etherpad();
         $oEtherpad->setId (Etherpad::ID_ESCRITO,$this->iid);

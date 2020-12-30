@@ -125,7 +125,7 @@ class ExpedienteLista {
                 $gesFirmas = new GestorFirma();
                 $cFirmasNull = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
                 // Sumar los firmados, pero no OK
-                $aWhereFirma['valor'] = Firma::V_VISTO .','. Firma::V_A_ESPERA;
+                $aWhereFirma['valor'] = Firma::V_VISTO .','. Firma::V_ESPERA;
                 $aOperadorFirma['valor'] = 'IN';
                 $cFirmasVisto = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
                 $cFirmas = array_merge($cFirmasNull, $cFirmasVisto);
@@ -225,7 +225,7 @@ class ExpedienteLista {
                 $aWhereFirma = [
                             'id_cargo' => ConfigGlobal::mi_id_cargo(),
                             'tipo' => Firma::TIPO_VOTO,
-                            'valor' =>  Firma::V_VISTO .','. Firma::V_A_ESPERA,
+                            'valor' =>  Firma::V_VISTO .','. Firma::V_ESPERA,
                             ];
                 $aOperadorFirma = [
                             'valor' => 'IN',

@@ -1,5 +1,5 @@
 /*!
- * bootstrap-fileinput v5.1.1
+ * bootstrap-fileinput v5.1.3
  * http://plugins.krajee.com/file-input
  *
  * Krajee default styling for bootstrap-fileinput.
@@ -241,11 +241,18 @@ input[type=file].file-loading {
     }
     .clickable {
         cursor: pointer;
+    }    
+    .kv-zoom-cache {
+        display: none;
     }
 }
 .file-preview-image {
     font: multiply($pad, 8) $font-0, $font-1, $font-2;
     color: $green;
+    width:auto;
+    height:auto;
+    max-width:100%;
+    max-height:100%;    
 }
 .krajee-default {
     &.file-preview-frame {
@@ -505,7 +512,7 @@ input[type=file].file-loading {
 .file-drop-zone {
     border: $border dashed $silver-chalice;
     border-radius: $radius;
-    height: 100%;
+    min-height: multiply($pad, 52);
     text-align: center;
     vertical-align: middle;
     margin: multiply($pad, 2.4) multiply($pad, 3) multiply($pad, 2.4) multiply($pad, 2.4);

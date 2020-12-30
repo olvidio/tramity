@@ -126,8 +126,9 @@ fnjs_enviar=function(event){
                     alert ('error: '+rta_txt);
                 } else {
                     window.open('/apps/entradas/controller/entrada_enviar.php?id='+id_entrada+'&f_salida='+f_salida, "down");
-                    // Actualizar vista expadiente: escrito enviado.
-                    fnjs_cancelar(event);
+                    // Actualizar vista expediente: escrito enviado.
+                    //fnjs_cancelar(event);
+					fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                     return false;
                 }
             });

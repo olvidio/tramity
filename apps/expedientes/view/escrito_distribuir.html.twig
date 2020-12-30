@@ -25,10 +25,12 @@
   <!--  --------------- ANULAR --------------- -->
   <div class="d-flex mb-3">
     <div class="p-3"></div>
-    <div class="p-2 custom-control custom-switch">
-      <input type="checkbox" class="custom-control-input" id="customSwitches" name="anular" {{  chk_anulado }}>
-      <label class="custom-control-label" for="customSwitches">{{ "Anular este escrito"|trans }}</label>
-    </div>
+    {% if anular %}
+        <div class="p-2 custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="customSwitches" name="anular" {{  chk_anulado }}>
+          <label class="custom-control-label" for="customSwitches">{{ "Anular este escrito"|trans }}</label>
+        </div>
+    {% endif %}
     <div class="ml-auto p-2 bd-highlight">
       <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fnjs_guardar(event);" >{{ "Guardar"|trans }}</button>
     </div>

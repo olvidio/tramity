@@ -19,7 +19,9 @@
       <th scope="col">{{ "fecha escrito"|trans }}</th>
       <th scope="col">{{ "contestar antes de"|trans }}</th>
       <th scope="col">{{ "fecha entrada"|trans }}</th>
-      <th></th>
+      {% if ver_accion %}
+        <th></th>
+      {% endif %}
     </tr>
   </thead>
   <tbody>
@@ -33,12 +35,14 @@
       <td>{{ row.referencias|raw }}</td>
       <td>{{ row.categoria }}</td>
       <td>{{ row.visibilidad }}</td>
-      <td>{{ row.asunto }}</td>
+      <td>{{ row.asunto|raw }}</td>
       <td>{{ row.oficinas|raw }}</td>
       <td style="text-align: right">{{ row.f_escrito }}</td>
       <td style="text-align: right">{{ row.f_contestar }}</td>
       <td style="text-align: right">{{ row.f_entrada }}</td>
-      <td>{{ row.link_accion|raw }}</td>
+      {% if ver_accion %}
+        <td>{{ row.link_accion|raw }}</td>
+      {% endif %}
     </tr>
     {% endfor %}
   </tbody>

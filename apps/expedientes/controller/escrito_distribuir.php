@@ -5,6 +5,8 @@ use etherpad\model\Etherpad;
 use expedientes\model\Escrito;
 use web\Protocolo;
 use web\ProtocoloArray;
+use expedientes\model\Expediente;
+use expedientes\model\entity\GestorAccion;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -30,6 +32,12 @@ $oProtRef->setNombre('ref');
 $oProtRef->setBlanco(TRUE);
 
 if (!empty($Qid_escrito)) {
+    $gesAcciones = new GestorAccion();
+    $cAccion = $gesAcciones->getAcciones(['id_escrito' => $Qid_escrito]);
+    $id_expediente = $cAccion[0]->getId_expediente();
+    $oExpediente = new Expediente($id_expediente);
+    $estado = $oExpediente->getEstado();
+    
     $base_url = core\ConfigGlobal::getWeb();
     $url_download = $base_url.'/apps/expedientes/controller/adjunto_download.php?plugin=1';
     $url_update = 'escrito_update.php';
@@ -49,6 +57,10 @@ if (!empty($Qid_escrito)) {
             $chk_anulado = 'checked'; 
         } else {
             $chk_anulado = '';
+        }
+        $anular = TRUE;
+        if ( $estado == Expediente::ESTADO_ACABADO) {
+            $anular = FALSE;
         }
         
         $a_adjuntos = $oEscrito->getArrayIdAdjuntos();
@@ -71,6 +83,7 @@ if (!empty($Qid_escrito)) {
             'asunto' => $asunto,
             'detalle' => $detalle,
             'chk_anulado' => $chk_anulado,
+            'anular' => $anular,
             'f_escrito' => $f_escrito,
             'tipo_doc' => $tipo_doc,
             'a_adjuntos' => $a_adjuntos,
