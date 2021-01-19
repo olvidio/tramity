@@ -161,12 +161,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	 */
 	 protected $ivida;
 	/**
-	 * Ok de ExpedienteDB
-	 *
-	 * @var boolean
-	 */
-	 protected $bok;
-	/**
 	 * Json_preparar de ExpedienteDB
 	 *
 	 * @var object JSON
@@ -252,13 +246,10 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$aDades['f_reunion'] = $this->df_reunion;
 		$aDades['f_aprobacion'] = $this->df_aprobacion;
 		$aDades['vida'] = $this->ivida;
-		$aDades['ok'] = $this->bok;
 		$aDades['json_preparar'] = $this->json_preparar;
 		$aDades['firmas_oficina'] = $this->a_firmas_oficina;
 		$aDades['visibilidad'] = $this->ivisibilidad;
 		array_walk($aDades, 'core\poner_null');
-		//para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
-		if ( core\is_true($aDades['ok']) ) { $aDades['ok']='true'; } else { $aDades['ok']='false'; }
 
 		if ($bInsert === FALSE) {
 			//UPDATE
@@ -279,7 +270,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 					f_reunion                = :f_reunion,
 					f_aprobacion             = :f_aprobacion,
 					vida                     = :vida,
-					ok                       = :ok,
 					json_preparar            = :json_preparar,
 					firmas_oficina           = :firmas_oficina,
 					visibilidad              = :visibilidad";
@@ -301,8 +291,8 @@ class ExpedienteDB Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(id_tramite,ponente,resto_oficinas,asunto,entradilla,comentarios,prioridad,json_antecedentes,json_acciones,etiquetas,f_contestar,estado,f_ini_circulacion,f_reunion,f_aprobacion,vida,ok,json_preparar,firmas_oficina,visibilidad)";
-			$valores="(:id_tramite,:ponente,:resto_oficinas,:asunto,:entradilla,:comentarios,:prioridad,:json_antecedentes,:json_acciones,:etiquetas,:f_contestar,:estado,:f_ini_circulacion,:f_reunion,:f_aprobacion,:vida,:ok,:json_preparar,:firmas_oficina,:visibilidad)";		
+			$campos="(id_tramite,ponente,resto_oficinas,asunto,entradilla,comentarios,prioridad,json_antecedentes,json_acciones,etiquetas,f_contestar,estado,f_ini_circulacion,f_reunion,f_aprobacion,vida,json_preparar,firmas_oficina,visibilidad)";
+			$valores="(:id_tramite,:ponente,:resto_oficinas,:asunto,:entradilla,:comentarios,:prioridad,:json_antecedentes,:json_acciones,:etiquetas,:f_contestar,:estado,:f_ini_circulacion,:f_reunion,:f_aprobacion,:vida,:json_preparar,:firmas_oficina,:visibilidad)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'ExpedienteDB.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -405,7 +395,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		if (array_key_exists('f_reunion',$aDades)) $this->setF_reunion($aDades['f_reunion'],$convert);
 		if (array_key_exists('f_aprobacion',$aDades)) $this->setF_aprobacion($aDades['f_aprobacion'],$convert);
 		if (array_key_exists('vida',$aDades)) $this->setVida($aDades['vida']);
-		if (array_key_exists('ok',$aDades)) $this->setOk($aDades['ok']);
 		if (array_key_exists('json_preparar',$aDades)) $this->setJson_preparar($aDades['json_preparar'],TRUE);
 		if (array_key_exists('firmas_oficina',$aDades)) $this->setFirmas_oficina($aDades['firmas_oficina'],TRUE);
 		if (array_key_exists('visibilidad',$aDades)) $this->setVisibilidad($aDades['visibilidad']);
@@ -434,7 +423,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$this->setF_reunion('');
 		$this->setF_aprobacion('');
 		$this->setVida('');
-		$this->setOk('');
 		$this->setJson_preparar('');
 		$this->setFirmas_oficina('');
 		$this->setVisibilidad('');
@@ -906,25 +894,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$this->ivida = $ivida;
 	}
 	/**
-	 * Recupera l'atribut bok de ExpedienteDB
-	 *
-	 * @return boolean bok
-	 */
-	function getOk() {
-		if (!isset($this->bok) && !$this->bLoaded) {
-			$this->DBCarregar();
-		}
-		return $this->bok;
-	}
-	/**
-	 * estableix el valor de l'atribut bok de ExpedienteDB
-	 *
-	 * @param boolean bok='f' optional
-	 */
-	function setOk($bok='f') {
-		$this->bok = $bok;
-	}
-	/**
 	 * Recupera l'atribut json_preparar de ExpedienteDB
 	 *
 	 * @param boolean $bArray si hay que devolver un array en vez de un objeto.
@@ -1031,7 +1000,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$oExpedienteDBSet->add($this->getDatosF_reunion());
 		$oExpedienteDBSet->add($this->getDatosF_aprobacion());
 		$oExpedienteDBSet->add($this->getDatosVida());
-		$oExpedienteDBSet->add($this->getDatosOk());
 		$oExpedienteDBSet->add($this->getDatosJson_preparar());
 		$oExpedienteDBSet->add($this->getDatosFirmas_oficina());
 		$oExpedienteDBSet->add($this->getDatosVisibilidad());
@@ -1230,18 +1198,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'vida'));
 		$oDatosCampo->setEtiqueta(_("vida"));
-		return $oDatosCampo;
-	}
-	/**
-	 * Recupera les propietats de l'atribut bok de ExpedienteDB
-	 * en una clase del tipus DatosCampo
-	 *
-	 * @return core\DatosCampo
-	 */
-	function getDatosOk() {
-		$nom_tabla = $this->getNomTabla();
-		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'ok'));
-		$oDatosCampo->setEtiqueta(_("ok"));
 		return $oDatosCampo;
 	}
 	/**

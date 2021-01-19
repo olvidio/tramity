@@ -47,9 +47,10 @@ class Expediente Extends expedienteDB {
     const ESTADO_CIRCULANDO        = 2;
     const ESTADO_FIJAR_REUNION     = 3;
     const ESTADO_ACABADO           = 4;
-    const ESTADO_ARCHIVADO         = 5;
-    const ESTADO_COPIAS            = 6;
-    const ESTADO_ACABADO_ENCARGADO = 7;
+    const ESTADO_ACABADO_ENCARGADO = 5;
+    const ESTADO_ACABADO_SECRETARIA= 6;
+    const ESTADO_ARCHIVADO         = 7;
+    const ESTADO_COPIAS            = 8;
     const ESTADO_RECHAZADO         = 10;
     const ESTADO_DILATA            = 11;
     const ESTADO_ESPERA            = 12;
@@ -564,7 +565,7 @@ class Expediente Extends expedienteDB {
                             $oFirma->setId_expediente($this->iid_expediente);
                             $oFirma->setId_tramite($id_tramite);
                             $oFirma->setId_cargo_creador($id_ponente);
-                            $oFirma->setCargo_tipo($id_cargo);
+                            $oFirma->setCargo_tipo(Cargo::CARGO_TODOS_DIR);
                             $oFirma->setId_cargo($id_cargo_of);
                             $oFirma->setOrden_tramite($orden_tramite);
                             $oFirma->setOrden_oficina($orden_oficina);

@@ -319,14 +319,11 @@ class ExpedienteLista {
                 $aWhere['estado'] = implode(',',$a_tipos_acabado);
                 $aOperador['estado'] = 'IN';
                 // todavia sin marcar por scdl con ok.
-                $aWhere['ok'] = 'f';
                 break;
             case 'acabados':
                 // Ahora (16/12/2020) todos los de la oficina si es dtor.
                 // sino los encargados (salto a otro estado)
-                $aWhere['estado'] = Expediente::ESTADO_ACABADO;
-                // marcados por scdl con ok.
-                $aWhere['ok'] = 't';
+                $aWhere['estado'] = Expediente::ESTADO_ACABADO_SECRETARIA;
                 // solo los de la oficina:
                 // posibles oficiales de la oficina:
                 $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());

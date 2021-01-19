@@ -440,6 +440,7 @@ class GestorFirma Extends core\ClaseGestor {
         // Contar que todos sean ok:
         foreach ($oDbl->query($sQuery) as $aDades) {
             $valor = $aDades['valor'];
+            $id_cargo = $aDades['id_cargo'];
             /*
              const TIPO_VOTO          = 1;
              const TIPO_ACLARACION    = 2;
@@ -452,12 +453,15 @@ class GestorFirma Extends core\ClaseGestor {
              const V_RECHAZADO    = 23;  // sólo vcd
              const V_VISTO_BUENO  = 24;  // sólo vcd VºBº
              */
-            if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
+            if (ConfigGlobal::mi_usuario_cargo() === 'vcd' && ConfigGlobal::mi_id_cargo() == $id_cargo) {
                 /*Els expedients “rechazados”, “dilata”, “no”, “espera” del vcd. queden en un limbo.
                  Haurien d’anar a “3. Distribuir” de Secretaria (i el Secretaria ja el distribueix a l’oficina);
                  si te accions de sortides, no es posa número de registre. ((cfr. expedient de adl))
                  Asunto: Afegir a l’inici RECHAZADO, DILATA, NO, ESPERA…
                 */
+                if ($valor == Firma::V_VISTO) {
+                    return FALSE;
+                }
             } else {
                 if ($valor == Firma::V_NO OR $valor == Firma::V_OK OR $valor == Firma::V_VISTO_BUENO) {
                 } else {

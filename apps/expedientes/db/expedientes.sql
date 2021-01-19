@@ -16,7 +16,6 @@ CREATE TABLE public.expedientes (
     f_reunion date,
     f_aprobacion date,
 	vida smallint,
-	ok boolean,
     json_preparar jsonb,
     firmas_oficina integer[],
 	visibilidad smallint
