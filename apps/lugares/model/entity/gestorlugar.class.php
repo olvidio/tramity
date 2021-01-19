@@ -35,6 +35,31 @@ class GestorLugar Extends core\ClaseGestor {
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
 	/**
+	 * devuelve el id de la cr (cr)
+	 */
+	public function getId_cr() {
+	    //$sigla = $_SESSION['oConfig']->getSigla();
+	    $sigla = 'cr';
+	    $cLugares = $this->getLugares(['sigla' => $sigla]);
+	    if (!empty($cLugares)) {
+	        $id_sigla = $cLugares[0]->getId_lugar();
+	    }
+	    return $id_sigla;
+	}
+	
+	/**
+	 * devuelve el id de la sigla (dlb)
+	 */
+	public function getId_sigla() {
+	    $sigla = $_SESSION['oConfig']->getSigla();
+	    $cLugares = $this->getLugares(['sigla' => $sigla]);
+	    if (!empty($cLugares)) {
+	        $id_sigla = $cLugares[0]->getId_lugar();
+	    }
+	    return $id_sigla;
+	}
+	
+	/**
 	 * retorna un array
 	 * Els posibles llocs
 	 *

@@ -1031,7 +1031,7 @@ class Lista {
         }
         // No puedo poner los botones como thead y tbody porque el sorteable.js se hace un lio.
         $tt="<table>$botones</table>\n";
-        $tt.="<table border=1  class='sortable' id='$id_tabla'>\n";
+        $tt.="<table border=\"1\" class=\"table table-compact table-striped table-hover table-responsive\" id='$id_tabla'>\n";
         $tt.="<thead><tr>";
         if (!empty($b)) $tt.="<th class='unsortable' tipo='notext'></th>";
         $tt.="$cabecera</thead><tbody>";

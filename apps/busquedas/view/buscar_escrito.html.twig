@@ -2,7 +2,7 @@
 <!-- Un escrito concreto --------------------------------------------- -->
 <form id="frm_buscar_7" name="frm_buscar_7" action="">
     <input type="hidden" name="opcion" value="">
-    <table border=1>
+    <table class="table-warning" border=1>
     <tr><th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans }}</th></tr>
     <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
         {{ oDesplLugar.desplegable|raw }}
@@ -23,7 +23,7 @@
 <form id="frm_buscar_1" name="frm_buscar_1" action="">
     <input type="hidden" name="opcion" value="">
     {{ "hay 4 opciones diferentes para buscar o listar escritos"|trans }}
-    <table border=1>
+    <table class="table-warning" border=1>
     <tr><th colspan=5 class=titulo_inv>{{ "opción 1: Listado de los últimos"|trans }}</th></tr>
         <tr><td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans }}:</td>
         <td>
@@ -43,7 +43,7 @@
 <!-- Asunto más periodo --------------------------------------------- -->
 <form id="frm_buscar_2" name="frm_buscar_2" action="">
 <input type="hidden" name="opcion" value="">
-<table border=1>
+<table class="table-warning" border=1>
 <tr><th colspan=5 class=titulo_inv>{{ "opción 2: Buscar por el asunto o detalle"|trans }}
     </th></tr>
     <tr><td class=etiqueta>{{ "¿Escribir una palabra clave"|trans }}:</td>
@@ -62,7 +62,7 @@
 <!-- Origen, destino  más periodo --------------------------------------------- -->
 <form id="frm_buscar_3" name="frm_buscar_3" action="">
     <input type="hidden" name="opcion" value="">
-    <table border=1>
+    <table  class="table-warning"border=1>
     <tr><th colspan=5 class=titulo_inv>{{ "opción 3: Listar escritos por el origen, el destino o por ambos"|trans }}</th></tr>
         <tr><td class=etiqueta>{{ "¿A quién iba dirigido?"|trans }}:</td>
         <td>
@@ -87,7 +87,7 @@
     <input type="hidden" id="list" name="list" value=1>
     <input type="hidden" name="opcion" value="">
     <input type="hidden" id="simple" name="simple" value="<?= $_POST['simple'] ?>">
-    <table border=1>
+    <table  class="table-warning" border=1>
     <tr><th colspan=5 class=titulo_inv>{{ "opción 4: Listar varios escritos"|trans }}</th></tr>
     <td colspan=3>
     <input type="radio" id="lista_origen_1" name="lista_origen" value="dl" onchange="fnjs_activar_lugar(1)">{{ "de"|trans }} {{ dele }}<br>
@@ -108,15 +108,21 @@
         <tr><td colspan=5 style="text-align:right;"><input id="b_buscar_4" name="b_buscar" TYPE="button" VALUE="{{ "buscar"|trans }}" onclick="fnjs_buscar('#frm_buscar_4')" ></td></tr>
     </table>
 </form>
+</div>
+
+<div class="row">
+  <div class="col-2">
+  	<input id="b_listar_t" name="b_listar_t" type="button" value="{{ "ver todas las opciones"|trans }}" onclick="fnjs_ver_todos()" flag='uno'>
+  </div>
+  <div class="col-2"></div>
+  <div class="col-2">
+    <input id="chk_anulados" name="chk_anulados" type="checkbox" onChange='fnjs_ctr_anulados()' {{ chk_ctr_anulados }}>
+    {{ "ver ctr anulados"|trans }}
+  </div>
 
 </div>
 
-<table><tr>
-  <td><input id="b_listar_t" name="b_listar_t" type="button" value="{{ "ver todas las opciones"|trans }}" onclick="fnjs_ver_todos()" flag='uno'></td>
-  <td><input id="chk_anulados" name="chk_anulados" type="checkbox" onChange='fnjs_ctr_anulados()' {{ chk_ctr_anulados }}>{{ "ver ctr anulados"|trans }}</td>
-</tr></table>
-
-<div id="resultados" class="col-10" >
+<div id="resultados" class="container-fluid p-3 my-3 border bg-light" >
 </div>
 
 <script>

@@ -301,6 +301,7 @@ class VerTabla {
         
         $i=0;
         $oProtLocal = new Protocolo();
+        $a_valores = [];
         foreach ($cCollection as $oEscrito) {
             $i++;
             $asunto = $oEscrito->getAsunto();
@@ -375,8 +376,9 @@ class VerTabla {
             // oficinas
             $id_ponente =  $oEscrito->getCreador();
             $a_resto_oficinas = $oEscrito->getResto_oficinas();
+            $oficina_txt = empty($a_posibles_cargos[$id_ponente])? '?' : $a_posibles_cargos[$id_ponente];
             $oficinas_txt = '';
-            $oficinas_txt .= '<span class="text-danger">'.$a_posibles_cargos[$id_ponente].'</span>';
+            $oficinas_txt .= '<span class="text-danger">'.$oficina_txt.'</span>';
             foreach ($a_resto_oficinas as $id_oficina) {
                 $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
                 $oficinas_txt .= $a_posibles_cargos[$id_oficina];

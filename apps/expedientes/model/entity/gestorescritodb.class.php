@@ -298,6 +298,66 @@ class GestorEscritoDB Extends core\ClaseGestor {
         return $oEscritoDBSet->getTot();
 	}
 	
+	function getEscritosByLocal($id_lugar, $aWhere=array(),$aOperators=array()) {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        $oEscritoDBSet = new core\Set();
+        
+        /* {"any": 20, "mas": null, "num": 15, "lugar": 58}
+        $sQuery = "SELECT t.*
+                        FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_origen) as items(any smallint, mas text, num smallint, lugar integer)
+                        WHERE items.id=$id_lugar";
+        */
+        
+		$oCondicion = new core\Condicion();
+        $aCondi = array();
+        foreach ($aWhere as $camp => $val) {
+            if ($camp == '_ordre') continue;
+            if ($camp == '_limit') continue;
+            $sOperador = isset($aOperators[$camp])? $aOperators[$camp] : '';
+            if ($a = $oCondicion->getCondicion($camp,$sOperador,$val)) $aCondi[]=$a;
+            // operadores que no requieren valores
+            if ($sOperador == 'BETWEEN' || $sOperador == 'IS NULL' || $sOperador == 'IS NOT NULL' || $sOperador == 'OR') unset($aWhere[$camp]);
+            if ($sOperador == 'IN' || $sOperador == 'NOT IN') unset($aWhere[$camp]);
+            if ($sOperador == 'TXT') unset($aWhere[$camp]);
+        }
+        $sCondi = implode(' AND ',$aCondi);
+        if (empty($sCondi)) {
+            $sCondi = " WHERE items.lugar=$id_lugar";
+        } else {
+            $sCondi = " WHERE items.lugar=$id_lugar AND ".$sCondi;
+        }
+        
+        $sOrdre = '';
+        $sLimit = '';
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') $sOrdre = ' ORDER BY '.$aWhere['_ordre'];
+        if (isset($aWhere['_ordre'])) unset($aWhere['_ordre']);
+        if (isset($aWhere['_limit']) && $aWhere['_limit']!='') $sLimit = ' LIMIT '.$aWhere['_limit'];
+        if (isset($aWhere['_limit'])) unset($aWhere['_limit']);
+        
+        $sQry = "SELECT t.*
+                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_local) as items(\"any\" smallint, mas text, num smallint, lugar integer)
+                        ".$sCondi.$sOrdre.$sLimit;
+        
+        if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
+            $sClauError = 'GestorEscritoDB.llistar.prepare';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        if (($oDblSt->execute($aWhere)) === FALSE) {
+            $sClauError = 'GestorEscritoDB.llistar.execute';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        foreach ($oDblSt as $aDades) {
+            $a_pkey = array('id_escrito' => $aDades['id_escrito']);
+            $oEscritoDB = new EscritoDB($a_pkey);
+            $oEscritoDB->setAllAtributes($aDades);
+            $oEscritoDBSet->add($oEscritoDB);
+        }
+        return $oEscritoDBSet->getTot();
+	}
+	
 	/**
 	 * retorna l'array d'objectes de tipus EscritoDB
 	 *

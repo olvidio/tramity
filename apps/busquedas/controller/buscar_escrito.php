@@ -93,6 +93,7 @@ $oDesplAntiguedad->setNombre('antiguedad');
 $oDesplAntiguedad->setBlanco(TRUE);
 $oDesplAntiguedad->setOpciones($a_antiguedad);
 
+$dele = $_SESSION['oConfig']->getSigla();
 
 $a_campos = [
     //'oHash' => $oHash,
@@ -104,6 +105,7 @@ $a_campos = [
     'oDesplDestino2' => $oDesplDestino2,
     'oDesplAntiguedad' => $oDesplAntiguedad,
     'id_dl' => $id_dl,
+    'dele' => $dele,
     'id_cr' => $id_cr,
     'simple' => $Qsimple,
     'chk_ctr_anulados' => $chk_ctr_anulados,

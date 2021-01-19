@@ -17,13 +17,8 @@ require_once ("apps/core/global_object.inc");
 $Qopcion = (integer) \filter_input(INPUT_POST, 'opcion');
 $Qmas = (integer) \filter_input(INPUT_POST, 'mas');
 
-
-$sigla = $_SESSION['oConfig']->getSigla();
 $gesLugares = new GestorLugar();
-$cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
-if (!empty($cLugares)) {
-    $id_sigla = $cLugares[0]->getId_lugar();
-}
+$id_sigla = $gesLugares->getId_sigla();
 
 $Qmas = '';
 
@@ -41,12 +36,13 @@ switch ($Qopcion) {
         $oBuscar->setProt_num($Qprot_num);
         $oBuscar->setProt_any($Qprot_any);
         
-        $cEscritos = $oBuscar->getCollection($Qopcion, $Qmas);
-        
-        $oTabla = new VerTabla();
-        $oTabla->setCollection($cEscritos);
-        
-        echo $oTabla->mostrarTabla();
+        $aCollection = $oBuscar->getCollection($Qopcion, $Qmas);
+        foreach ($aCollection as $key => $cCollection) {
+            $oTabla = new VerTabla();
+            $oTabla->setKey($key);
+            $oTabla->setCollection($cCollection);
+            echo $oTabla->mostrarTabla();
+        }
         break;
     case 1:	// Listado de los últimos
         $Qantiguedad = (string) \filter_input(INPUT_POST, 'antiguedad');
@@ -56,12 +52,13 @@ switch ($Qopcion) {
         $oBuscar->setAntiguedad($Qantiguedad);
         $oBuscar->setOrigen_id_lugar($Qorigen_id_lugar);
         
-        $cEscritos = $oBuscar->getCollection($Qopcion, $Qmas);
-        
-        $oTabla = new VerTabla();
-        $oTabla->setCollection($cEscritos);
-        
-        echo $oTabla->mostrarTabla();
+        $aCollection = $oBuscar->getCollection($Qopcion, $Qmas);
+        foreach ($aCollection as $key => $cCollection) {
+            $oTabla = new VerTabla();
+            $oTabla->setKey($key);
+            $oTabla->setCollection($cCollection);
+            echo $oTabla->mostrarTabla();
+        }
         break;
     case 2:
         // buscar en asunto, detalle, asunto oficina. + periodo + oficina
@@ -77,12 +74,14 @@ switch ($Qopcion) {
         $oBuscar->setF_min($Qf_min);
         $oBuscar->setOficina($Qoficina);
         
-        $cEscritos = $oBuscar->getCollection($Qopcion, $Qmas);
+        $aCollection = $oBuscar->getCollection($Qopcion, $Qmas);
         
-        $oTabla = new VerTabla();
-        $oTabla->setCollection($cEscritos);
-        
-        echo $oTabla->mostrarTabla();
+        foreach ($aCollection as $key => $cCollection) {
+            $oTabla = new VerTabla();
+            $oTabla->setKey($key);
+            $oTabla->setCollection($cCollection);
+            echo $oTabla->mostrarTabla();
+        }
         break;
     case 3:
         // buscar en origen, destino o ambos
@@ -108,5 +107,92 @@ switch ($Qopcion) {
             echo $oTabla->mostrarTabla();
         }
         break;
+    case 4:
+        $Qlista_origen = (string) \filter_input(INPUT_POST, 'lista_origen');
+        $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
+        $Qf_max = (string) \filter_input(INPUT_POST, 'f_max');
+        $Qf_min = (string) \filter_input(INPUT_POST, 'f_min');
+        $Qoficina = (integer) \filter_input(INPUT_POST, 'oficina');
         
+        switch ($Qlista_origen) {
+            case "dl":
+                $opcion = 41;
+                $gesLugares = new GestorLugar();
+                $id_sigla = $gesLugares->getId_sigla();
+                
+                // son todos los que tienen protocolo local
+                $oBuscar = new Buscar();
+                $oBuscar->setLocal_id_lugar($id_sigla);
+                $oBuscar->setF_max($Qf_max);
+                $oBuscar->setF_min($Qf_min);
+                $oBuscar->setOficina($Qoficina);
+                
+                $aCollection = $oBuscar->getCollection($opcion, $Qmas);
+                foreach ($aCollection as $key => $cCollection) {
+                    $oTabla = new VerTabla();
+                    $oTabla->setKey($key);
+                    $oTabla->setCollection($cCollection);
+                    echo $oTabla->mostrarTabla();
+                }
+                break;
+            case "de":
+                $opcion = 42;
+                $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
+                $oBuscar = new Buscar();
+                $oBuscar->setOrigen_id_lugar($Qid_lugar);
+                $oBuscar->setF_max($Qf_max);
+                $oBuscar->setF_min($Qf_min);
+                $oBuscar->setOficina($Qoficina);
+                
+                $aCollection = $oBuscar->getCollection($opcion, $Qmas);
+                foreach ($aCollection as $key => $cCollection) {
+                    $oTabla = new VerTabla();
+                    $oTabla->setKey($key);
+                    $oTabla->setCollection($cCollection);
+                    echo $oTabla->mostrarTabla();
+                }
+                break;
+            case "cr_dl":
+                $opcion = 43;
+                $gesLugares = new GestorLugar();
+                $id_cr = $gesLugares->getId_cr();
+                
+                // son todos los que tienen protocolo local
+                $oBuscar = new Buscar();
+                $oBuscar->setOrigen_id_lugar($id_cr);
+                $oBuscar->setF_max($Qf_max);
+                $oBuscar->setF_min($Qf_min);
+                $oBuscar->setOficina($Qoficina);
+                
+                $aCollection = $oBuscar->getCollection($opcion, $Qmas);
+                foreach ($aCollection as $key => $cCollection) {
+                    $oTabla = new VerTabla();
+                    $oTabla->setKey($key);
+                    $oTabla->setCollection($cCollection);
+                    echo $oTabla->mostrarTabla();
+                }
+                break;
+            case "cr_ctr":
+                $opcion = 44;
+                $gesLugares = new GestorLugar();
+                $id_cr = $gesLugares->getId_cr();
+                
+                // son todos los que tienen protocolo local
+                $oBuscar = new Buscar();
+                $oBuscar->setByPass(TRUE);
+                $oBuscar->setOrigen_id_lugar($id_cr);
+                $oBuscar->setF_max($Qf_max);
+                $oBuscar->setF_min($Qf_min);
+                $oBuscar->setOficina($Qoficina);
+                
+                $aCollection = $oBuscar->getCollection($opcion, $Qmas);
+                foreach ($aCollection as $key => $cCollection) {
+                    $oTabla = new VerTabla();
+                    $oTabla->setKey($key);
+                    $oTabla->setCollection($cCollection);
+                    echo $oTabla->mostrarTabla();
+                }
+                break;
+        }
+        break;
 }

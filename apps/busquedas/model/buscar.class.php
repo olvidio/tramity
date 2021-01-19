@@ -94,6 +94,12 @@ class Buscar {
     
     /**
      * 
+     * @var integer
+     */
+    private $local_id_lugar;
+    
+    /**
+     * 
      * @var DateTimeLocal
      */
     private $df_min;
@@ -102,6 +108,11 @@ class Buscar {
      * @var DateTimeLocal
      */
     private $df_max;
+    
+    /**
+     * @var boolean
+     */
+    private $bByPass=FALSE;
     
     public function __construct() {
         $this->id_sigla = 23;
@@ -135,7 +146,8 @@ class Buscar {
                                         ];
                             $gesEntradas = new GestorEntradaDB();
                             $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
-                            return $cEntradas;
+                            $aCollections['entradas'] = $cEntradas;
+                            return $aCollections;
                             break;
                     }
                     //$pag_mas="scdl/registro/registro_tabla.php?lugar=$lugar&prot_num=$prot_num&prot_any=$prot_any&opcion=$opcion&mas=1";
@@ -283,13 +295,41 @@ class Buscar {
                 break;
             case 3:
                 // buscar en origen, destino o ambos
+                $aCollections = [];
                 
-                $cEntradas = $this->buscarEntradas();
+                if (!empty($this->origen_id_lugar)) {
+                    $cEntradas = $this->buscarEntradas();
+                    $aCollections['entradas'] = $cEntradas;
+                }
+                if (!empty($this->dest_id_lugar)) {
+                    $cEscritos = $this->buscarEscritos();
+                    $aCollections['escritos'] = $cEscritos;
+                }
+                
+                return $aCollections;
+            break;
+            case 41:
+                // case "dl":
                 $cEscritos = $this->buscarEscritos();
-                
-                $aCollections['entradas'] = $cEntradas;
                 $aCollections['escritos'] = $cEscritos;
-                
+                return $aCollections;
+            break;
+            case 42:
+                //case "de":
+                $cEntradas = $this->buscarEntradas();
+                $aCollections['entradas'] = $cEntradas;
+                return $aCollections;
+            break;
+            case 43:
+                //case "de cr a dl":
+                $cEntradas = $this->buscarEntradas();
+                $aCollections['entradas'] = $cEntradas;
+                return $aCollections;
+            break;
+            case 44:
+                //case "de cr a ctr":
+                $cEntradas = $this->buscarEntradas();
+                $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
             break;
         }
@@ -314,8 +354,8 @@ class Buscar {
             $f_max = $oHoy->getIso();
         }
         if (!empty($f_min) && !empty($f_max)) {
-            $aWhere ['f_entrada'] = "'$f_min','$f_max'";
-            $aOperador ['f_entrada']  = 'BETWEEN';
+            $aWhere ['f_aprobacion'] = "'$f_min','$f_max'";
+            $aOperador ['f_aprobacion']  = 'BETWEEN';
             //$cond_ap="AND f_aprobacion >= '$f_min'";
         }
         
@@ -333,12 +373,16 @@ class Buscar {
                 $a_cargos[] = $id_cargo;
             }
             if (!empty($a_cargos)) {
+                $cEscritosPonente = [];
+                $cEscritosResto = [];
                 // dos busquedas:
                 $aWhere['creador'] = implode(',',$a_cargos);
                 $aOperador['creador'] = 'IN';
                 // A Quien se envia el escrito (escritos)
                 if (!empty($this->dest_id_lugar)) {
                     $cEscritosPonente = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+                } elseif (!empty($this->local_id_lugar)) {
+                    $cEscritosPonente = $gesEscritos->getEscritosByLocal($this->local_id_lugar,$aWhere,$aOperador);
                 } else {
                     $cEscritosPonente = $gesEscritos->getEscritos($aWhere, $aOperador);
                 }
@@ -350,8 +394,10 @@ class Buscar {
                 // A quien envia el escrito (escritos)
                 if (!empty($this->dest_id_lugar)) {
                     $cEscritosResto = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+                } elseif (!empty($this->local_id_lugar)) {
+                    $cEscritosResto = $gesEscritos->getEscritosByLocal($this->local_id_lugar,$aWhere,$aOperador);
                 } else {
-                    $cEscritos = $gesEscritos->getEscritos($aWhere, $aOperador);
+                    $cEscritosResto = $gesEscritos->getEscritos($aWhere, $aOperador);
                 }
                 
                 $cEscritos  = array_merge($cEscritosPonente, $cEscritosResto);
@@ -363,6 +409,8 @@ class Buscar {
             // A quien se envia el escrito (escritos)
             if (!empty($this->dest_id_lugar)) {
                 $cEscritos = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+            } elseif (!empty($this->local_id_lugar)) {
+                $cEscritos = $gesEscritos->getEscritosByLocal($this->local_id_lugar,$aWhere,$aOperador);
             } else {
                 $cEscritos = $gesEscritos->getEscritos($aWhere, $aOperador);
             }
@@ -396,6 +444,12 @@ class Buscar {
         if (!empty($this->asunto)) {
             $aWhere['asunto'] = $this->asunto;
             $aOperador['asunto'] = 'sin_acentos';
+        }
+        
+        if ($this->bByPass) {
+            $aWhere['bypass'] = 't';
+        } else {
+            $aWhere['bypass'] = 'f';
         }
 
         if (!empty($this->oficina)) {
@@ -560,6 +614,22 @@ class Buscar {
     public function setDest_id_lugar($dest_id_lugar)
     {
         $this->dest_id_lugar = $dest_id_lugar;
+    }
+
+    /**
+     * @param number $local_id_lugar
+     */
+    public function setLocal_id_lugar($local_id_lugar)
+    {
+        $this->local_id_lugar = $local_id_lugar;
+    }
+
+    /**
+     * @param boolean $bByPass
+     */
+    public function setByPass($ByPass)
+    {
+        $this->bByPass = $ByPass;
     }
 
     /**
