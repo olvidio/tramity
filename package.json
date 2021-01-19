@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.2",
     "bootstrap": "^4.5.0",
     "bootstrap-fileinput": "^5.1.3",
     "bootstrap4-toggle": "^3.6.1",

@@ -78,6 +78,13 @@ class NullDateTimeLocal Extends \DateTime {
         return '';
 	}  
 	
+	public function getIsoTime() {
+	    return '';
+	}
+	public function getIso() {
+	    return '';
+	}
+	
 	public function getFromLocalHora() {
 	    return '';
 	}

@@ -1062,7 +1062,7 @@ class Lista {
                     position: absolute;
                     bottom: .3em !important;
                     display: block;
-                    opacity: .3;
+                    opacity: .4;
                 }
             </style>";
         return $tt;

@@ -76,6 +76,16 @@ class Condicion {
 					 */
 					$sCondi = "$campo = ANY (:$campo)";
 					break;
+				case 'OVERLAP':
+				    // overlap (have elements in common)
+					/* Uso: pasar un array de postgres, que el php trata com una variable string:
+					 * $a_id_dir = array (1,3,7,90);
+					 * $v = "{".implode(', ',$aid_dir)."}";
+					 * $aWhere['id_direccion'] = $v;
+            		 * $aOperador['id_direccion'] = 'OVERLAP';
+					 */
+					$sCondi = "$campo && :$campo";
+					break;
 				case 'IN':
 				case 'NOT IN':
 					/* no funciona, por lo menos con los integer, lo toma como string. */

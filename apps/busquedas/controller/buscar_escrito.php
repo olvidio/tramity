@@ -5,6 +5,8 @@ use core\ViewTwig;
 use web\Desplegable;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\GestorOficina;
+use function core\is_true;
+use core\ConfigGlobal;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -13,6 +15,7 @@ require_once ("apps/core/global_header.inc");
 require_once ("apps/core/global_object.inc");
 // Crea los objectos por esta url  **********************************************
 
+$Qctr_anulados = (bool) \filter_input(INPUT_POST, 'ctr_anulados');
 $Qsimple = (integer) \filter_input(INPUT_POST, 'simple');
 $Qsimple = 1;
 
@@ -21,16 +24,14 @@ $id_dl = 12;
 // Busco el id_lugar de cr.
 $id_cr = 12;
 
-if (empty($_POST['ctr_anulados'])) {
-    $ctr_anulados = 'f';
-    $checked = '';
+if (is_true($Qctr_anulados)) {
+    $chk_ctr_anulados = 'checked';
 } else {
-    $ctr_anulados = 't';
-    $checked = 'checked';
+    $chk_ctr_anulados = '';
 }
 
 $gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayLugares($tipo_ctr='',$dl='',$region='');
+$a_lugares = $gesLugares->getArrayLugares();
 
 
 $oDesplLugar = new Desplegable();
@@ -46,8 +47,6 @@ $oDesplLugar4->setBlanco(TRUE);
 $oDesplLugar4->setOpciones($a_lugares);
 $oDesplLugar4->setAction("fnjs_activar_lugar(2)");
 
-
-
 $oDesplOrigen = new Desplegable();
 $oDesplOrigen->setNombre('origen_id_lugar');
 $oDesplOrigen->setBlanco(TRUE);
@@ -61,8 +60,6 @@ $oDesplOrigen2->setId('origen_id_lugar_2');
 $oDesplOrigen2->setBlanco(TRUE);
 $oDesplOrigen2->setOpciones($a_lugares);
 $oDesplOrigen2->setAction("fnjs_sel_periodo('#origen_id_lugar_2')");
-    
-    
     
 /*
 $opciones=array_oficinas("db");
@@ -92,7 +89,7 @@ $a_antiguedad = [
             "aa" => _("más de 2 años"),
             ];
 $oDesplAntiguedad = new Desplegable();
-$oDesplAntiguedad->setNombre('antuiguedad');
+$oDesplAntiguedad->setNombre('antiguedad');
 $oDesplAntiguedad->setBlanco(TRUE);
 $oDesplAntiguedad->setOpciones($a_antiguedad);
 
@@ -109,6 +106,7 @@ $a_campos = [
     'id_dl' => $id_dl,
     'id_cr' => $id_cr,
     'simple' => $Qsimple,
+    'chk_ctr_anulados' => $chk_ctr_anulados,
     ];
 
 $oView = new ViewTwig('busquedas/controller');
