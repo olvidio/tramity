@@ -103,7 +103,6 @@ class EscritoLista {
     public function mostrarTablaEnviar($fecha='') {
         $oExpediente = new Expediente($this->id_expediente);
         $estado = $oExpediente->getEstado();
-        $ok_expediente = $oExpediente->getOk();
         $cEscritos = $this->getEscritosParaEnviar($fecha);
         
         $oProtLocal = new Protocolo();
@@ -193,7 +192,7 @@ class EscritoLista {
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
         if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
-            OR ($estado == Expediente::ESTADO_ACABADO && is_true($ok_expediente)) ) {
+            OR ($estado == Expediente::ESTADO_ACABADO_SECRETARIA) ) {
             $ver_ok = TRUE;
         } else {
             $ver_ok = FALSE;
@@ -213,7 +212,6 @@ class EscritoLista {
     public function mostrarTabla() {
         $oExpediente = new Expediente($this->id_expediente);
         $estado = $oExpediente->getEstado();
-        $ok_expediente = $oExpediente->getOK();
         
         $this->setCondicion();
         $bdistribuir = $this->getDistribuir();
@@ -344,7 +342,7 @@ class EscritoLista {
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
         if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
-            OR ($estado == Expediente::ESTADO_ACABADO && is_true($ok_expediente)) ) {
+            OR ($estado == Expediente::ESTADO_ACABADO_SECRETARIA) ) {
             $ver_ok = TRUE;
         } else {
             $ver_ok = FALSE;

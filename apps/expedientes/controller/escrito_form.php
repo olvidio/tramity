@@ -209,9 +209,8 @@ $a_cosas = ['id_expediente' => $Qid_expediente,
 $ver_revisado = FALSE;
 $oExpediente = new Expediente($Qid_expediente);
 $estado = $oExpediente->getEstado();
-$ok_expediente = $oExpediente->getOk();
 if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
-    OR ($estado == Expediente::ESTADO_ACABADO && is_true($ok_expediente)) ) {
+    OR ($estado == Expediente::ESTADO_ACABADO_SECRETARIA) ) {
     $ver_revisado = TRUE;
 }
 switch ($Qfiltro) {
