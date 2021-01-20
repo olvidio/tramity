@@ -58,9 +58,9 @@ if (!empty($Qid_escrito)) {
         } else {
             $chk_anulado = '';
         }
-        $anular = TRUE;
+        $anular = FALSE;
         if ( $estado == Expediente::ESTADO_ACABADO) {
-            $anular = FALSE;
+            $anular = TRUE;
         }
         
         $a_adjuntos = $oEscrito->getArrayIdAdjuntos();
