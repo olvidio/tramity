@@ -5,6 +5,7 @@ use expedientes\model\Escrito;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\GestorOficina;
 use web\Desplegable;
+use expedientes\model\Expediente;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -45,13 +46,23 @@ $a_cosas = [ 'id_expediente' => $Qid_expediente,
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($a_cosas));
 $pagina_reunion= web\Hash::link('apps/expedientes/controller/expediente_update.php?'.http_build_query([]));
 
+$oExpediente = new Expediente($Qid_expediente);
+$f_reunion = $oExpediente->getF_reunion()->getIsoTime();
+$yearStart = date('Y');
+$yearEnd = $yearStart + 2;
+$hoyIso = date('Y-m-d');
+    
 $titulo = _("Fijar fecha reunión:");
-
+    
 $a_campos = [
     'id_expediente' => $Qid_expediente,
     'titulo' => $titulo,
     'pagina_cancel' => $pagina_cancel,
     'pagina_reunion' => $pagina_reunion,
+    'yearStart' => $yearStart,
+    'yearEnd' => $yearEnd,
+    'hoyIso' => $hoyIso,
+    'f_reunion' => $f_reunion,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

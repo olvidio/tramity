@@ -116,8 +116,9 @@ class DateTimeLocal Extends \DateTime {
     public function getIso() {
         return parent::format('Y-m-d');
     }
+
     /**
-     * Devuelve la fecha en el formato local (según el idioma del usuario)
+     * Devuelve la fecha (+ Hora) en el formato local (según el idioma del usuario)
      * 
      * @param string $separador (.-/)
      * @return string

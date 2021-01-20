@@ -15,6 +15,7 @@
     "datatables.net-searchbuilder-bs4": "^1.0.1",
     "jquery": "^3.5.1",
     "jquery-confirm": "^3.3.4",
+    "jquery-datetimepicker": "^2.5.21",
     "jquery-ui": "^1.12.1",
     "jquery-ui-dist": "^1.12.1",
     "jquery-ui-sortable": "^1.0.0",

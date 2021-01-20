@@ -8,6 +8,9 @@ $(document).ready(function() {
 $(document).ajaxStart(function() {$('#cargando').show(); });
 $(document).ajaxStop(function() {$('#cargando').hide(); });
 
+
+jQuery.datetimepicker.setLocale('es');
+
 {#
 /* Hay que ponerlo aqui, para asegurar que haya terminado de cargar todos los scripts. */
 $(document).ready(function(){
@@ -15,6 +18,7 @@ $(document).ready(function(){
         $.datepicker.setDefaults( $.datepicker.regional[ "{{ mi_idioma }}" ] );
 	{% else %}
         $.datepicker.setDefaults( $.datepicker.regional[ "es" ] ); // Para que quede por defecto.
+		jQuery.datetimepicker.setLocale('es');
 	{% endif %}
 });
 #}

@@ -462,8 +462,10 @@ class ExpedienteLista {
                 $txt_ver = _("revisar");
                 break;
             case 'seg_reunion':
-                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
-                $col_mod = 0;
+                //$pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/fecha_reunion.php';
+                $txt_mod = _("fecha");
+                $col_mod = 1;
                 $col_ver = 1;
                 $presentacion = 3;
                 $txt_ver = _("revisar");
@@ -618,7 +620,7 @@ class ExpedienteLista {
 
                 $row['f_ini'] =  $oExpediente->getF_ini_circulacion()->getFromLocal();
                 $row['f_aprobacion'] =  $oExpediente->getF_aprobacion()->getFromLocal();
-                $row['f_reunion'] =  $oExpediente->getF_reunion()->getFromLocal();
+                $row['f_reunion'] =  $oExpediente->getF_reunion()->getFromLocalHora();
                 $row['f_contestar'] =  $oExpediente->getF_contestar()->getFromLocal();
                 
                 $row['col_mod'] = $col_mod;

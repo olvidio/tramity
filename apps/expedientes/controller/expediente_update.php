@@ -151,7 +151,8 @@ switch($Qque) {
     case 'reunion':
         $oExpediente = new Expediente($Qid_expediente);
         $oExpediente->DBCarregar();
-        $oExpediente->setF_reunion($Qf_reunion);
+        // Si pongo la fecha con datetimepicker, ya esta en ISO (hay que poner FALSE a la conversión).
+        $oExpediente->setF_reunion($Qf_reunion,FALSE);
         if ($oExpediente->DBGuardar() === FALSE ) {
             $txt_err .= _("No se ha podido guarda la fecha de reunión");
             $txt_err .= "<br>";
