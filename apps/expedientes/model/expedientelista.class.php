@@ -597,7 +597,7 @@ class ExpedienteLista {
                     $row['class_row'] = 'bg-warning';
                 }
                 if ($estado == Expediente::ESTADO_ESPERA) {
-                    $row['class_row'] = 'bg-secondary';
+                    $row['class_row'] = 'bg-light';
                 }
                 
                 $row['estado'] = $a_estados[$estado];
