@@ -98,8 +98,6 @@ $dele = $_SESSION['oConfig']->getSigla();
 // datepicker
 $oFecha = new DateTimeLocal();
 $format = $oFecha->getFormat();
-$yearStart = date('Y');
-$yearEnd = $yearStart + 2;
 
 $a_campos = [
     //'oHash' => $oHash,

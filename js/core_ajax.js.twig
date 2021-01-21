@@ -64,11 +64,19 @@ fnjs_solo_uno=function(formulario, multiple = false) {
 <!-- Esta funcion compara cual es mayor --> 
 <!-- Devuelve: fecha en formato ISO -->
 fnjs_convert2iso=function(id1,formato) {
-	// formato = 'j/n/Y'
-	date1_string=$(id1).val();
-	var dateParts1 = date1_string.split("/");
-	// month is 0-based, that's why we need dataParts[1] - 1
-	var dateIsoString = new Date(+dateParts1[2], dateParts1[1] - 1, +dateParts1[0]); 
+	// formatos posibles del php DateTimeLocal:
+	// 'j/n/Y' o 'n/j/Y' (US)
+	date_string=$(id1).val();
+	if (!date_string) {
+		return '';
+	}
+	var dateParts = date_string.split(/[.\/-]/);
+	if (formato == 'j/n/Y') {
+		var dateIsoString = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+	} 
+	if (formato == 'n/j/Y') {
+		var dateIsoString = dateParts[2] + '/' + dateParts[0] + '/' + dateParts[1];
+	} 
 	return dateIsoString;
 }
 
