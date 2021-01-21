@@ -66,11 +66,11 @@
 {% if id_entrada %}
   <div class="form-group row">
         <label for="f_entrada" class="col col-2 col-form-label">{{ "Fecha entrada"|trans }}</label>
-        <div class='col-3 date datepicker' data-provide="datepicker">
+        <div class='col-3 date'>
           <input tabindex='41' name='f_entrada' id='f_entrada' type='text' class="form-control" value="{{ f_entrada }}" />
         </div>
 	    <label for="f_escrito" class="col col-2 col-form-label">{{ "Fecha escrito"|trans }}</label>
-        <div class='col-3 date datepicker' data-provide="datepicker">
+        <div class='col-3 date'>
           <input tabindex='31' name='f_escrito' id='f_escrito' type='text' class="form-control" value="{{ f_escrito }}" />
         </div>
   </div> 
@@ -93,7 +93,7 @@
   <div class="form-group row">
       <label for="plazo" class="mr-3 mt-2">{{ "¿Es necesario contestar?"|trans }}</label>
       {{ oDesplPlazo.desplegable|raw }}
-      <div class='col-3 date datepicker' data-provide="datepicker">
+      <div class='col-3 date'>
         <input tabindex='85' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_contestar }}" onchange="fnjs_comprobar_plazo('input')"  />
       </div>
   </div>

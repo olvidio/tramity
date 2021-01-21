@@ -9,6 +9,7 @@ use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\GestorCargo;
 use web\Desplegable;
+use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -228,6 +229,18 @@ switch ($Qfiltro) {
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['filtro' => $Qfiltro]));
 
 $esEscrtito = ($Qaccion == Escrito::ACCION_ESCRITO)? TRUE : FALSE;
+
+// datepicker
+$oFecha = new DateTimeLocal();
+$format = $oFecha->getFormat();
+$yearStart = date('Y');
+$yearEnd = $yearStart + 2;
+$error_fecha = $_SESSION['oConfig']->getPlazoError();
+$error_fecha_txt = 'P'.$error_fecha.'D';
+$oHoy = new DateTimeLocal();
+$oHoy->sub(new DateInterval($error_fecha_txt));
+$minIso = $oHoy->format('Y-m-d');
+
 $a_campos = [
     'titulo' => $titulo,
     'id_expediente' => $Qid_expediente,
@@ -260,6 +273,11 @@ $a_campos = [
     'pagina_cancel' => $pagina_cancel,
     'pagina_nueva' => $pagina_nueva,
     'ver_revisado' => $ver_revisado,
+    // datepicker
+    'format' => $format,
+    'yearStart' => $yearStart,
+    'yearEnd' => $yearEnd,
+    'minIso' => $minIso,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

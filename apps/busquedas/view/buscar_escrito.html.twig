@@ -50,8 +50,10 @@
     <td colspan=3><input type="Text" id="asunto" name="asunto" size="50"></td>
     </tr>
     <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
-    <td> {{ "entre el"|trans }} <input class="fecha" type="Text" id="frm2_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm2_f_min')">
-    <td> {{ "y el"|trans }} <input class="fecha" type="Text" id="frm2_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm2_f_max')">
+    <td> {{ "entre el"|trans }} 
+    	<input class="form-control" type="Text" id="frm2_f_min" name="f_min" size="12">
+    <td> {{ "y el"|trans }} 
+    	<input class="form-control" type="Text" id="frm2_f_max" name="f_max" size="12">
     <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
     {{ oDesplOficinas.desplegable|raw }}
     </td></tr>
@@ -126,12 +128,95 @@
 </div>
 
 <script>
-$(function() { $( "#frm2_f_min" ).datepicker(); });
-$(function() { $( "#frm2_f_max" ).datepicker(); });
-$(function() { $( "#frm3_f_min" ).datepicker(); });
-$(function() { $( "#frm3_f_max" ).datepicker(); });
-$(function() { $( "#frm4_f_min" ).datepicker(); });
-$(function() { $( "#frm4_f_max" ).datepicker(); });
+$(function() {
+	$( "#frm2_f_min" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_max_iso = fnjs_convert2iso("#frm2_f_max", '{{ formato }}');
+			this.setOptions({
+				maxDate: f_max_iso ? f_max_iso: false
+            })
+        }
+    });
+});
+    
+$(function() {
+	$( "#frm2_f_max" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_min_iso = fnjs_convert2iso("#frm2_f_min", '{{ formato }}');
+			this.setOptions({
+				minDate: f_min_iso ? f_min_iso: false
+            })
+        }
+    });
+});
+
+$(function() {
+	$( "#frm3_f_min" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_max_iso = fnjs_convert2iso("#frm3_f_max", '{{ formato }}');
+			this.setOptions({
+				maxDate: f_max_iso ? f_max_iso: false
+            })
+        }
+    });
+});
+    
+$(function() {
+	$( "#frm3_f_max" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_min_iso = fnjs_convert2iso("#frm3_f_min", '{{ formato }}');
+			this.setOptions({
+				minDate: f_min_iso ? f_min_iso: false
+            })
+        }
+    });
+});
+
+$(function() {
+	$( "#frm4_f_min" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_max_iso = fnjs_convert2iso("#frm4_f_max", '{{ formato }}');
+			this.setOptions({
+				maxDate: f_max_iso ? f_max_iso: false
+            })
+        }
+    });
+});
+    
+$(function() {
+	$( "#frm4_f_max" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_min_iso = fnjs_convert2iso("#frm4_f_min", '{{ formato }}');
+			this.setOptions({
+				minDate: f_min_iso ? f_min_iso: false
+            })
+        }
+    });
+});
 
 fnjs_aviso_IESE=function(id){
     var nom=$(id).val();

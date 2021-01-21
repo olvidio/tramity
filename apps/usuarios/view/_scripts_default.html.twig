@@ -9,17 +9,12 @@ $(document).ajaxStart(function() {$('#cargando').show(); });
 $(document).ajaxStop(function() {$('#cargando').hide(); });
 
 
-jQuery.datetimepicker.setLocale('es');
-
-{#
 /* Hay que ponerlo aqui, para asegurar que haya terminado de cargar todos los scripts. */
 $(document).ready(function(){
 	{% if mi_idioma %}
-        $.datepicker.setDefaults( $.datepicker.regional[ "{{ mi_idioma }}" ] );
+        jQuery.datetimepicker.setLocale('{{ mi_idioma }}');
 	{% else %}
-        $.datepicker.setDefaults( $.datepicker.regional[ "es" ] ); // Para que quede por defecto.
 		jQuery.datetimepicker.setLocale('es');
 	{% endif %}
 });
-#}
 </script>

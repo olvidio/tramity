@@ -9,6 +9,7 @@ use lugares\model\entity\GestorGrupo;
 use tramites\model\entity\GestorTramite;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
+use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
 use web\ProtocoloArray;
@@ -261,6 +262,17 @@ $pag_plantilla =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'
 $pag_respuesta =  web\Hash::link('apps/entradas/controller/buscar_form.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
 
+// datepicker
+$oFecha = new DateTimeLocal();
+$format = $oFecha->getFormat();
+$yearStart = date('Y');
+$yearEnd = $yearStart + 2;
+$error_fecha = $_SESSION['oConfig']->getPlazoError();
+$error_fecha_txt = 'P'.$error_fecha.'D';
+$oHoy = new DateTimeLocal();
+$oHoy->sub(new DateInterval($error_fecha_txt));
+$minIso = $oHoy->format('Y-m-d');
+
 $a_campos = [
     'titulo' => $titulo,
     'id_expediente' => $Qid_expediente,
@@ -314,6 +326,11 @@ $a_campos = [
     'error_fecha' => $error_fecha,
     // parar _antecedentes_js
     'server' => $server,
+    // datepicker
+    'format' => $format,
+    'yearStart' => $yearStart,
+    'yearEnd' => $yearEnd,
+    'minIso' => $minIso,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

@@ -75,37 +75,4 @@ fnjs_cancelar=function(event){
     event.preventDefault(); //prevent default action 	
 	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 }
-/*
-$(function() {
-	$( "#f_escrito" ).datepicker( {
-		numberOfMonths: 1,
-		showButtonPanel: true
-		});
-
-});
-fnjs_cargar_iframe=function() {
-	var modo='iframe';
-	var id_escrito=$('#id_escrito').val();
-    var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
-
-	//alert("Borrar entrada: "+id_entrada);
-    var param_json = { tipo_id: 'escrito', modo: modo, id: id_escrito };
-    request=$.ajax({
-        data: param_json,
-        url: url_ajax,
-        type: 'post'
-    });
-    request.done( function (rta) {
-        rta_txt=rta;
-        if (rta_txt==undefined) {
-            rta_txt='';
-        }
-        if (rta_txt != '' && rta_txt != '\n') {
-		    $('#prova').html(rta);
-        }
-    });
-}
-// Cuando termine de cargar
-//$( document ).ready( fnjs_cargar_iframe );
-*/
 </script>

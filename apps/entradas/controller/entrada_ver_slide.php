@@ -107,6 +107,12 @@ $url_download_pdf = $base_url.'/apps/entradas/controller/entrada_download.php';
 // Si no pongo filtro ya va bien (si lo pongo va al slide...)
 $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
 
+// datepicker
+$oFecha = new DateTimeLocal();
+$format = $oFecha->getFormat();
+$yearStart = date('Y');
+$yearEnd = $yearStart + 2;
+
 $a_campos = [
     //'oHash' => $oHash,
     'id_entrada' => $Qid_entrada,
@@ -126,6 +132,10 @@ $a_campos = [
     'url_download_pdf' => $url_download_pdf,
     'pagina_cancel' => $pagina_cancel,
     'txt_alert' => $txt_alert,
+    // datepicker
+    'format' => $format,
+    'yearStart' => $yearStart,
+    'yearEnd' => $yearEnd,
 ];
 
 $oView = new ViewTwig('entradas/controller');

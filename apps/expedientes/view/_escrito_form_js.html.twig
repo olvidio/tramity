@@ -1,9 +1,17 @@
 <script type="text/javascript">
 $(function() {
-	$( "#f_escrito" ).datepicker( {
-		numberOfMonths: 1,
-		showButtonPanel: true
-		});
+	$( "#f_escrito" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+		onShow: function(ct) {
+			this.setOptions({
+				minDate: '{{ minIso }}'
+			})
+		}
+    });
 
 });
 

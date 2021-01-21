@@ -1,30 +1,34 @@
 <script type="text/javascript">
 $(function() {
-	$( "#f_reunion" ).datepicker( {
-		numberOfMonths: 1,
-		showButtonPanel: true
-		});
+	$( "#f_aprobacion" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+    });
 
 });
+
 $(function() {
-	$( "#f_aprobacion" ).datepicker( {
-		numberOfMonths: 1,
-		showButtonPanel: true
-		});
+	$( "#f_contestar" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+    });
 
 });
-$(function() {
-	$( "#f_contestar" ).datepicker( {
-		numberOfMonths: 1,
-		showButtonPanel: true
-		});
 
-});
 $(function() {
-	$( "#f_ini_circulacion" ).datepicker( {
-		numberOfMonths: 1,
-		showButtonPanel: true
-		});
+	$( "#f_ini_circulacion" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+    });
 
 });
 

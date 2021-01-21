@@ -73,12 +73,14 @@ fnjs_quitar_destinos=function(){
 	$('#dst_num').val(0);
 }
 
-
 $(function() {
-	$( "#f_salida" ).datepicker( {
-		numberOfMonths: 1,
-		showButtonPanel: true
-		});
+	$( "#f_salida" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+    });
 
 });
 </script>

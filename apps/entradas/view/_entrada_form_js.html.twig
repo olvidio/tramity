@@ -1,25 +1,37 @@
 <script type="text/javascript">
 $(function() {
-	$( "#f_plazo" ).datepicker( {
-		numberOfMonths: 1,
-		showButtonPanel: true
-		});
+	$( "#f_plazo" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+    });
 
 });
+
 $(function() {
-	$( "#f_entrada" ).datepicker( {
-		numberOfMonths: 1,
-		showButtonPanel: true
-		});
+	$( "#f_entrada" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+    });
 
 });
+
 $(function() {
-	$( "#f_escrito" ).datepicker( {
-		numberOfMonths: 1,
-		showButtonPanel: true
-		});
+	$( "#f_escrito" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+    });
 
 });
+
 {{ oArrayDesplFirmas.ComprobarSelectJs|raw }}
 {{ oArrayProtRef.ComprobarSelectJs|raw }}
 

@@ -257,6 +257,12 @@ $url_update = 'apps/entradas/controller/entrada_update.php';
 $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
 $pagina_nueva = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $Qfiltro]));
 
+// datepicker
+$oFecha = new DateTimeLocal();
+$format = $oFecha->getFormat();
+$yearStart = date('Y');
+$yearEnd = $yearStart + 2;
+
 $a_campos = [
     'titulo' => $titulo,
     'id_entrada' => $Qid_entrada,
@@ -300,6 +306,10 @@ $a_campos = [
     'id_grupo' => $id_grupo,
     'oArrayDesplGrupo' => $oArrayDesplGrupo,
     'oArrayProtDestino' => $oArrayProtDestino,
+    // datepicker
+    'format' => $format,
+    'yearStart' => $yearStart,
+    'yearEnd' => $yearEnd,
 ];
 
 $oView = new ViewTwig('entradas/controller');

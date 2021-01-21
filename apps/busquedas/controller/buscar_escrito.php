@@ -2,11 +2,11 @@
 
 // INICIO Cabecera global de URL de controlador *********************************
 use core\ViewTwig;
-use web\Desplegable;
+use function core\is_true;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\GestorOficina;
-use function core\is_true;
-use core\ConfigGlobal;
+use web\DateTimeLocal;
+use web\Desplegable;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -95,6 +95,12 @@ $oDesplAntiguedad->setOpciones($a_antiguedad);
 
 $dele = $_SESSION['oConfig']->getSigla();
 
+// datepicker
+$oFecha = new DateTimeLocal();
+$format = $oFecha->getFormat();
+$yearStart = date('Y');
+$yearEnd = $yearStart + 2;
+
 $a_campos = [
     //'oHash' => $oHash,
     'oDesplLugar' => $oDesplLugar,
@@ -109,6 +115,8 @@ $a_campos = [
     'id_cr' => $id_cr,
     'simple' => $Qsimple,
     'chk_ctr_anulados' => $chk_ctr_anulados,
+    // datepicker
+    'format' => $format,
     ];
 
 $oView = new ViewTwig('busquedas/controller');

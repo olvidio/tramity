@@ -98,10 +98,13 @@ fnjs_next=function() {
 }
 
 $(function() {
-	$( "#f_entrada" ).datepicker( {
-		numberOfMonths: 1,
-		showButtonPanel: true
-		});
+	$( "#f_entrada" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+    });
 
 });
 

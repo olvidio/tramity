@@ -121,6 +121,12 @@ if (empty($f_salida)) {
     $f_salida = $oHoy->getFromLocal();
 }
 
+// datepicker
+$oFecha = new DateTimeLocal();
+$format = $oFecha->getFormat();
+$yearStart = date('Y');
+$yearEnd = $yearStart + 2;
+
 $base_url = core\ConfigGlobal::getWeb();
 $url_download = $base_url.'/apps/entradas/controller/download.php?plugin=1';
 $url_update = 'apps/entradas/controller/entrada_update.php';
@@ -146,6 +152,11 @@ $a_campos = [
     'url_download' => $url_download,
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
+    
+    // datepicker
+    'format' => $format,
+    'yearStart' => $yearStart,
+    'yearEnd' => $yearEnd,
 ];
 
 $oView = new ViewTwig('entradas/controller');
