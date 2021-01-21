@@ -116,7 +116,11 @@ class ExpedienteLista {
             case 'firmar':
                 // añadir las que requieren aclaración.
                 
-                $aWhere['estado'] = Expediente::ESTADO_CIRCULANDO;
+                $a_tipos_acabado = [ Expediente::ESTADO_CIRCULANDO,
+                                     Expediente::ESTADO_ESPERA,
+                                    ];
+                $aWhere['estado'] = implode(',',$a_tipos_acabado);
+                $aOperador['estado'] = 'IN';
                 //pendientes de mi firma, pero ya circulando
                 $aWhereFirma['id_cargo'] = ConfigGlobal::mi_id_cargo();
                 $aWhereFirma['tipo'] = Firma::TIPO_VOTO;
@@ -286,7 +290,11 @@ class ExpedienteLista {
                 }
                 break;
             case 'circulando':
-                $aWhere['estado'] = Expediente::ESTADO_CIRCULANDO;
+                $a_tipos_acabado = [ Expediente::ESTADO_CIRCULANDO,
+                                     Expediente::ESTADO_ESPERA,
+                                    ];
+                $aWhere['estado'] = implode(',',$a_tipos_acabado);
+                $aOperador['estado'] = 'IN';
                 // Si es el director los ve todos, no sólo los pendientes de poner 'visto'.
                 if (is_true(ConfigGlobal::soy_dtor())) {
                     // posibles oficiales de la oficina:
@@ -312,9 +320,9 @@ class ExpedienteLista {
                 break;
             case 'distribuir':
                 $a_tipos_acabado = [ Expediente::ESTADO_ACABADO,
-                                     EXpediente::ESTADO_ESPERA,
-                                     EXpediente::ESTADO_DILATA,
-                                     EXpediente::ESTADO_RECHAZADO,
+                                     Expediente::ESTADO_ESPERA,
+                                     Expediente::ESTADO_DILATA,
+                                     Expediente::ESTADO_RECHAZADO,
                                     ];
                 $aWhere['estado'] = implode(',',$a_tipos_acabado);
                 $aOperador['estado'] = 'IN';
