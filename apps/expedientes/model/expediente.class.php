@@ -309,16 +309,17 @@ class Expediente Extends expedienteDB {
     
     public function getArrayEstado() {
         $a_estado = [
-            self::ESTADO_BORRADOR => _("borrador"),
-            self::ESTADO_CIRCULANDO => _("circulando"),
-            self::ESTADO_FIJAR_REUNION => _("fijar reunión"),
-            self::ESTADO_ACABADO => _("acabado"),
-            self::ESTADO_ARCHIVADO => _("archivado"),
-            self::ESTADO_COPIAS => _("copias"),
+            self::ESTADO_BORRADOR          => _("borrador"),
+            self::ESTADO_CIRCULANDO        => _("circulando"),
+            self::ESTADO_FIJAR_REUNION     => _("fijar reunión"),
+            self::ESTADO_ACABADO           => _("acabado"),
             self::ESTADO_ACABADO_ENCARGADO => _("encargado"),
-            self::ESTADO_RECHAZADO => _("rechazado"),
-            self::ESTADO_DILATA => _("dilata"),
-            self::ESTADO_ESPERA => _("espera"),
+            self::ESTADO_ACABADO_SECRETARIA=> _("ok secretaria / distribuir"),
+            self::ESTADO_ARCHIVADO         => _("archivado"),
+            self::ESTADO_COPIAS            => _("copias"),
+            self::ESTADO_RECHAZADO         => _("rechazado"),
+            self::ESTADO_DILATA            => _("dilata"),
+            self::ESTADO_ESPERA            => _("espera"),
         ];
         
         return $a_estado;
