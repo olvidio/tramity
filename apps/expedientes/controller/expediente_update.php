@@ -199,9 +199,7 @@ switch($Qque) {
     case 'distribuir':
         $oExpediente = new Expediente($Qid_expediente);
         $oExpediente->DBCarregar();
-        $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
-        // marcar ok_scdl
-        $oExpediente->setOk('t');
+        $oExpediente->setEstado(Expediente::ESTADO_ACABADO_SECRETARIA);
         if ($oExpediente->DBGuardar() === FALSE ) {
             $txt_err .= _("No se ha podido cambiar el estado del expediente");
             $txt_err .= "<br>";
