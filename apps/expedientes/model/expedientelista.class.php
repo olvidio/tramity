@@ -596,6 +596,9 @@ class ExpedienteLista {
                 if ($estado == Expediente::ESTADO_RECHAZADO) {
                     $row['class_row'] = 'bg-warning';
                 }
+                if ($estado == Expediente::ESTADO_ESPERA) {
+                    $row['class_row'] = 'bg-secondary';
+                }
                 
                 $row['estado'] = $a_estados[$estado];
                 $row['prioridad'] = $oExpediente->getPrioridad();
