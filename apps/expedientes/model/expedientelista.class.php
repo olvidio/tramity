@@ -335,7 +335,7 @@ class ExpedienteLista {
                 break;
             case 'distribuir':
                 $a_tipos_acabado = [ Expediente::ESTADO_ACABADO,
-                                     Expediente::ESTADO_ESPERA,
+                                     Expediente::ESTADO_NO,
                                      Expediente::ESTADO_DILATA,
                                      Expediente::ESTADO_RECHAZADO,
                                     ];
