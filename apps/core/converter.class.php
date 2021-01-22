@@ -22,10 +22,10 @@ class Converter {
         switch ($type) {
             case 'date':
             case 'datetime':
-                $this->Converter = new PgTimestamp($data);
+                $this->Converter = new PgTimestamp($data,$type);
             break;
             case 'timestamp':
-                $this->Converter = new PgTimestamp($data);
+                $this->Converter = new PgTimestamp($data,$type);
             break;
             
             default:

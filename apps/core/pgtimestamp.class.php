@@ -17,9 +17,11 @@ class PgTimestamp {
     * @var $data
     */ 
     var $data;
+    var $type;
     
-    public function __construct($data)  {
+    public function __construct($data,$type)  {
         $this->data = $data;
+        $this->type = $type;
     }
     
     /**
@@ -54,8 +56,22 @@ class PgTimestamp {
         if ($this->data !== null) {
             switch ($type) {
                 case 'timestamp':
+                    $matches = [];
+                    $string = $this->data;
+                    // comprobar si el string del timestamp tiene los segundos, o solo H:m
+                    $pattern = '/((\d+)[-\/](\d+)[-\/](\d+))\s+(\d{2}):(\d{2}):*((\d{2})*)/i';
+                    preg_match($pattern, $string, $matches);
+                    // ya tiene los segundos:
+                    if (!empty($matches[7])) {
+                        $timestamp_with_seconds = $string;
+                    } else {
+                        // si faltan los segundos los añado (:00)
+                        $replacement = '$1 $5:$6:00';
+                        $timestamp_with_seconds = preg_replace($pattern, $replacement, $string);
+                    }
+                    
                     //$rta = sprintf("%s '%s'", $type, $this->checkData($this->data)->format(static::TS_FORMAT));
-                    $rta = sprintf("%s", $this->checkData($this->data)->format(static::TS_FORMAT));
+                    $rta = sprintf("%s", $this->checkData($timestamp_with_seconds)->format(static::TS_FORMAT));
                     break;
                 case 'date':
                     $rta = sprintf("%s", $this->checkData($this->data)->format(static::DATE_FORMAT));
@@ -97,7 +113,7 @@ class PgTimestamp {
     {
         if (!$data instanceof \DateTimeInterface) {
             try {
-                $data = web\DateTimeLocal::createFromLocal($data);
+                $data = web\DateTimeLocal::createFromLocal($data,$this->type);
             } catch (\Exception $e) {
                 throw new \Exception(
                     sprintf(

@@ -65,7 +65,7 @@ class DateTimeLocal Extends \DateTime {
     * @param string $separador separador entre dia, mes año
     * @return string
     */ 
-    static public function getFormat($separador='/') {
+    static public function getFormat($separador='/',$type='') {
         $idioma = $_SESSION['session_auth']['idioma'];
         # Si no hemos encontrado ningún idioma que nos convenga, mostramos la web en el idioma por defecto
         if (!isset($idioma)){ $idioma = $_SESSION['oConfig']->getIdioma_default(); }
@@ -79,13 +79,16 @@ class DateTimeLocal Extends \DateTime {
             default:
                 $format = 'j'.$separador.'n'.$separador.'Y';
         }
+        if (!empty($type) && $type == 'timestamp') {
+            $format .= ' H:i:s';
+        }
         return $format;
     }
     
-    static public function createFromLocal($data) {
+    static public function createFromLocal($data,$type='') {
         // Cambiar '-' por '/':
         $data = str_replace('-', '/', $data);
-        $format = self::getFormat();
+        $format = self::getFormat('/',$type);
         
         $extnd_dt = new static();
         $parent_dt = parent::createFromFormat($format,$data);

@@ -837,7 +837,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	 */
 	function setF_reunion($df_reunion='',$convert=TRUE) {
         if ($convert === TRUE  && !empty($df_reunion)) {
-            $oConverter = new core\Converter('date', $df_reunion);
+            $oConverter = new core\Converter('timestamp', $df_reunion);
             $this->df_reunion = $oConverter->toPg();
 	    } else {
             $this->df_reunion = $df_reunion;

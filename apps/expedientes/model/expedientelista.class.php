@@ -484,10 +484,15 @@ class ExpedienteLista {
                 $txt_ver = _("revisar");
                 break;
             case 'seg_reunion':
-                //$pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
-                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/fecha_reunion.php';
-                $txt_mod = _("fecha");
-                $col_mod = 1;
+                // Solo en el caso de secretaria:
+                if ($_SESSION['session_auth']['role_actual'] === 'secretaria') {
+                    $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/fecha_reunion.php';
+                    $txt_mod = _("fecha");
+                    $col_mod = 1;
+                } else {
+                    $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
+                    $col_mod = 0;
+                }
                 $col_ver = 1;
                 $presentacion = 3;
                 $txt_ver = _("revisar");

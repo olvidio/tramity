@@ -47,7 +47,7 @@ $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.ph
 $pagina_reunion= web\Hash::link('apps/expedientes/controller/expediente_update.php?'.http_build_query([]));
 
 $oExpediente = new Expediente($Qid_expediente);
-$f_reunion = $oExpediente->getF_reunion()->getIsoTime();
+$f_reunion = $oExpediente->getF_reunion()->getFromLocalHora();
 $yearStart = date('Y');
 $yearEnd = $yearStart + 2;
 $hoyIso = date('Y-m-d');
