@@ -54,6 +54,7 @@ class Expediente Extends expedienteDB {
     const ESTADO_RECHAZADO         = 10;
     const ESTADO_DILATA            = 11;
     const ESTADO_ESPERA            = 12;
+    const ESTADO_NO                = 13;
     
     // vida (a criterio del ponente):
     /*
@@ -320,6 +321,7 @@ class Expediente Extends expedienteDB {
             self::ESTADO_RECHAZADO         => _("rechazado"),
             self::ESTADO_DILATA            => _("dilata"),
             self::ESTADO_ESPERA            => _("espera"),
+            self::ESTADO_NO                => _("no"),
         ];
         
         return $a_estado;
@@ -337,6 +339,29 @@ class Expediente Extends expedienteDB {
         return $a_vida;
     }
     
+    /**
+     *  Añadir al asunto el estado del expediente.
+     */
+    public function getAsuntoEstado() {
+        $estado = $this->getEstado();
+        $asunto = $this->getAsunto();
+        
+        switch ($estado) {
+            case self::ESTADO_DILATA:
+                $asunto_estado = _("DILATA") ." ".$asunto;
+                break;
+            case self::ESTADO_RECHAZADO:
+                $asunto_estado = _("RECHAZADO") ." ".$asunto;
+                break;
+            case self::NO:
+                $asunto_estado = _("NO") ." ".$asunto;
+                break;
+            default:
+                $asunto_estado = $asunto;
+        }
+        
+       return $asunto_estado; 
+    }
     public function delAntecedente($json_antecedente) {
 // obtener los antecedentes actuales:
         $antecedentes_db = $this->getJson_antecedentes(TRUE);

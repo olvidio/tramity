@@ -116,11 +116,20 @@ class ExpedienteLista {
             case 'firmar':
                 // añadir las que requieren aclaración.
                 
-                $a_tipos_acabado = [ Expediente::ESTADO_CIRCULANDO,
-                                     Expediente::ESTADO_ESPERA,
-                                    ];
-                $aWhere['estado'] = implode(',',$a_tipos_acabado);
-                $aOperador['estado'] = 'IN';
+                if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
+                    $a_tipos_acabado = [ Expediente::ESTADO_NO,
+                                         Expediente::ESTADO_DILATA,
+                                         Expediente::ESTADO_RECHAZADO,
+                                        ];
+                    $aWhere['estado'] = implode(',',$a_tipos_acabado);
+                    $aOperador['estado'] = 'IN';
+                } else {
+                    $a_tipos_acabado = [ Expediente::ESTADO_CIRCULANDO,
+                                         Expediente::ESTADO_ESPERA,
+                                        ];
+                    $aWhere['estado'] = implode(',',$a_tipos_acabado);
+                    $aOperador['estado'] = 'IN';
+                }
                 //pendientes de mi firma, pero ya circulando
                 $aWhereFirma['id_cargo'] = ConfigGlobal::mi_id_cargo();
                 $aWhereFirma['tipo'] = Firma::TIPO_VOTO;
@@ -290,11 +299,16 @@ class ExpedienteLista {
                 }
                 break;
             case 'circulando':
-                $a_tipos_acabado = [ Expediente::ESTADO_CIRCULANDO,
-                                     Expediente::ESTADO_ESPERA,
-                                    ];
-                $aWhere['estado'] = implode(',',$a_tipos_acabado);
-                $aOperador['estado'] = 'IN';
+                if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
+                    $a_tipos_acabado = [ Expediente::ESTADO_CIRCULANDO,
+                                         Expediente::ESTADO_ESPERA,
+                                        ];
+                    $aWhere['estado'] = implode(',',$a_tipos_acabado);
+                    $aOperador['estado'] = 'IN';
+                } else {
+                    $aWhere['estado'] = Expediente::ESTADO_CIRCULANDO;
+                    unset($aOperador['estado']);
+                }
                 // Si es el director los ve todos, no sólo los pendientes de poner 'visto'.
                 if (is_true(ConfigGlobal::soy_dtor())) {
                     // posibles oficiales de la oficina:
@@ -610,9 +624,9 @@ class ExpedienteLista {
 
                 
                 if ($bstrong) {
-                    $row['asunto'] = "<strong>".$oExpediente->getAsunto()."</strong>";
+                    $row['asunto'] = "<strong>".$oExpediente->getAsuntoEstado()."</strong>";
                 } else {
-                    $row['asunto'] = $oExpediente->getAsunto();
+                    $row['asunto'] = $oExpediente->getAsuntoEstado();
                 }
                 
                 $row['entradilla'] = $oExpediente->getEntradilla();

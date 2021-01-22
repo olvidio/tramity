@@ -207,13 +207,21 @@ $a_cosas = ['id_expediente' => $Qid_expediente,
             'filtro' => $Qfiltro,
             'modo' => $Qmodo,
         ];
+
+$explotar = FALSE;
 $ver_revisado = FALSE;
 $oExpediente = new Expediente($Qid_expediente);
 $estado = $oExpediente->getEstado();
 if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
     OR ($estado == Expediente::ESTADO_ACABADO_SECRETARIA) ) {
     $ver_revisado = TRUE;
+    // Posibilidad de explotar en varios escritos, uno para cada ctr destino.
+    $ctr_dest = $oArrayProtDestino->getArray_sel();
+    if (count($ctr_dest) > 1 OR !empty($a_grupos)) {
+        $explotar = TRUE;
+    }
 }
+
 switch ($Qfiltro) {
     case 'acabados':
     case 'distribuir':
@@ -273,6 +281,7 @@ $a_campos = [
     'pagina_cancel' => $pagina_cancel,
     'pagina_nueva' => $pagina_nueva,
     'ver_revisado' => $ver_revisado,
+    'explotar' => $explotar,
     // datepicker
     'format' => $format,
     'yearStart' => $yearStart,

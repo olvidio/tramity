@@ -135,7 +135,6 @@ if ($Qfiltro == 'distribuir') {
     $ver_encargar = TRUE;
 }
 
- 
 $a_campos = [
     'id_expediente' => $Qid_expediente,
     //'oHash' => $oHash,
@@ -176,7 +175,6 @@ $a_campos = [
     'txt_btn_success' => $txt_btn_success,
     'txt_btn_etiquetas' => $txt_btn_etiquetas,
     'ver_etiquetas' => $ver_etiquetas,
-    
 ];
 
 $oView = new ViewTwig('expedientes/controller');

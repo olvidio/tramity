@@ -249,6 +249,9 @@ switch ($Qque) {
                     case Firma::V_ESPERA:
                         $estado = Expediente::ESTADO_ESPERA;
                         break;
+                    case Firma::V_NO:
+                        $estado = Expediente::ESTADO_NO;
+                        break;
                     case Firma::V_RECHAZADO:
                         $estado = Expediente::ESTADO_RECHAZADO;
                         break;

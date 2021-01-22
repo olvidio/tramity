@@ -150,6 +150,13 @@
 </div>
 {% endif %}
 </div>
+{% if explotar %} 
+<div>
+  <button tabindex='90' class="btn btn-danger" onClick="fnjs_explotar(event);" >
+    {{ "Explotar en un escrito para cada ctr"|trans }}
+  </button>
+</div>
+{% endif %}
 </form>
 {# Per ficar l'escrit, si cal #}
 <div id="prova">
