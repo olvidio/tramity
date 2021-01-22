@@ -120,6 +120,7 @@ class ExpedienteLista {
                     $a_tipos_acabado = [ Expediente::ESTADO_NO,
                                          Expediente::ESTADO_DILATA,
                                          Expediente::ESTADO_RECHAZADO,
+                                         Expediente::ESTADO_CIRCULANDO,
                                         ];
                     $aWhere['estado'] = implode(',',$a_tipos_acabado);
                     $aOperador['estado'] = 'IN';

@@ -21,18 +21,18 @@ use core;
  */
 class Cargo Extends core\ClasePropiedades {
     
-    const AMBITO_CG = 1;
-    const AMBITO_CR = 2;
-    const AMBITO_DL = 3;  //"dl"
+    const AMBITO_CG  = 1;
+    const AMBITO_CR  = 2;
+    const AMBITO_DL  = 3;  //"dl"
     const AMBITO_CTR = 4;
     
-    const CARGO_PONENTE = 1;
-    const CARGO_OFICIALES = 2;
-    const CARGO_VARIAS = 3;
-    const CARGO_TODOS_DIR = 4;
-    const CARGO_VB_VCD = 5;
-    const CARGO_DISTRIBUIR = 6;
-    const CARGO_REUNION = 7;
+    const CARGO_PONENTE     = 1;
+    const CARGO_OFICIALES   = 2;
+    const CARGO_VARIAS      = 3;
+    const CARGO_TODOS_DIR   = 4;
+    const CARGO_VB_VCD      = 5;
+    const CARGO_DISTRIBUIR  = 6;
+    const CARGO_REUNION     = 7;
     
 	/* ATRIBUTS ----------------------------------------------------------------- */
 

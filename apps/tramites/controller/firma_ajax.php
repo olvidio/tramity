@@ -321,7 +321,7 @@ switch ($Qque) {
             $cargo_tipo = $oFirmaAclaracion->getCargo_tipo();
         }
         // orden trámite: Del primer voto no firmado
-        $in_valor =  Firma::V_NO.','.Firma::V_D_OK.',';
+        $in_valor =  Firma::V_NO.','.Firma::V_D_NO.',';
         $in_valor .=  Firma::V_OK.','.Firma::V_D_OK.',';
         $in_valor .=  Firma::V_D_RECHAZADO;
         $aWhere = ['id_expediente' => $Qid_expediente,
