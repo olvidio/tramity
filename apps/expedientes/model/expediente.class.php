@@ -427,7 +427,7 @@ class Expediente Extends expedienteDB {
                         break;
                     case 'expediente':
                         $oExpediente = new Expediente($id);
-                        $asunto = $oExpediente->getAsunto();
+                        $asunto = $oExpediente->getAsuntoDetalle();
                         $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_expediente($id);\" >$asunto</span>";
                         $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >"._("quitar")."</span>";
                         break;

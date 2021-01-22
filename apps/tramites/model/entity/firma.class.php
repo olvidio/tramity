@@ -29,14 +29,18 @@ class Firma Extends core\ClasePropiedades {
     // tipo
     const TIPO_VOTO          = 1;
     const TIPO_ACLARACION    = 2;
-    // valor
+    // valor. Finalmente distingo los votos del vcd (_D_: director) para poder 
+    // hacer cambios de estado en el expediente más facilmente.
     const V_VISTO        = 1;  // leído, pensando
     const V_ESPERA       = 2;  // distinto a no leído
     const V_NO           = 3;  // voto negativo
     const V_OK           = 4;  // voto positivo
-    const V_DILATA       = 22;  // sólo vcd
-    const V_RECHAZADO    = 23;  // sólo vcd
-    const V_VISTO_BUENO  = 24;  // sólo vcd VºBº
+    const V_D_ESPERA       = 22;  // distinto a no leído
+    const V_D_NO           = 23;  // voto negativo
+    const V_D_OK           = 24;  // voto positivo
+    const V_D_DILATA       = 25;  // sólo vcd
+    const V_D_RECHAZADO    = 26;  // sólo vcd
+    const V_D_VISTO_BUENO  = 27;  // sólo vcd VºBº
     // del tipo aclaracion
     const V_A_NUEVA      = 51;  // Petición de aclaración
     const V_A_RESPUESTA  = 52;  // Respuesta a la petición de aclaración
@@ -214,28 +218,25 @@ class Firma Extends core\ClasePropiedades {
 	            $a_tipos = [
 	            self::V_OK => _("ok"),
 	            self::V_NO => _("no"),
-	            //self::V_VISTO => _("visto"),
 	            self::V_ESPERA => _("espera"),
 	            ];
 	            break;
 	        case 'vb_vcd':
 	            $a_tipos = [
-	            self::V_NO => _("no"),
-	            //self::V_VISTO => _("visto"),
-	            self::V_ESPERA => _("espera"),
-	            self::V_VISTO_BUENO => _("VºBº"),
-	            self::V_DILATA => _("dilata"),
-	            self::V_RECHAZADO => _("rechazado"),
+	            self::V_D_NO => _("no"),
+	            self::V_D_ESPERA => _("espera"),
+	            self::V_D_VISTO_BUENO => _("VºBº"),
+	            self::V_D_DILATA => _("dilata"),
+	            self::V_D_RECHAZADO => _("rechazado"),
 	            ];
 	            break;
 	        case 'vcd':
 	            $a_tipos = [
-	            self::V_OK => _("ok"),
-	            self::V_NO => _("no"),
-	            //self::V_VISTO => _("visto"),
-	            self::V_ESPERA => _("espera"),
-	            self::V_DILATA => _("dilata"),
-	            self::V_RECHAZADO => _("rechazado"),
+	            self::V_D_OK => _("ok"),
+	            self::V_D_NO => _("no"),
+	            self::V_D_ESPERA => _("espera"),
+	            self::V_D_DILATA => _("dilata"),
+	            self::V_D_RECHAZADO => _("rechazado"),
 	            ];
 	            break;
 	        case 'aclaracion':
@@ -251,9 +252,12 @@ class Firma Extends core\ClasePropiedades {
 	            self::V_NO => _("no"),
 	            self::V_VISTO => _("visto"),
 	            self::V_ESPERA => _("espera"),
-	            self::V_VISTO_BUENO => _("VºBº"),
-	            self::V_DILATA => _("dilata"),
-	            self::V_RECHAZADO => _("rechazado"),
+	            self::V_D_OK => _("ok"),
+	            self::V_D_NO => _("no"),
+	            self::V_D_ESPERA => _("espera"),
+	            self::V_D_VISTO_BUENO => _("VºBº"),
+	            self::V_D_DILATA => _("dilata"),
+	            self::V_D_RECHAZADO => _("rechazado"),
 	            self::V_A_NUEVA => _("nueva"),
 	            self::V_A_RESPUESTA => _("respuesta"),
 	            self::V_A_ESPERA => _("espera"),

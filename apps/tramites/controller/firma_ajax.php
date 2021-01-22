@@ -67,10 +67,12 @@ switch ($Qque) {
                     }
                     switch ($valor) {
                         case Firma::V_NO:
-                        case Firma::V_RECHAZADO:
+                        case Firma::V_D_NO:
+                        case Firma::V_D_RECHAZADO:
                             $a_rec['class'] = "list-group-item-danger";
                             break;
                         case Firma::V_OK:
+                        case Firma::V_D_OK:
                             $a_rec['class'] = "list-group-item-success";
                             break;
                         default:
@@ -202,7 +204,9 @@ switch ($Qque) {
             // De momento sólo se firma el primero que no tenga valor.
             foreach ($cFirmas as $oFirma) {
                 $valor = $oFirma->getValor();
-                if ($valor == Firma::V_NO || $valor == Firma::V_OK || $valor == Firma::V_VISTO_BUENO) {
+                if ($valor == Firma::V_NO OR $valor == Firma::V_D_NO OR
+                    $valor == Firma::V_OK OR $valor == Firma::V_D_OK OR
+                    $valor == Firma::V_D_VISTO_BUENO) {
                     continue;
                 } else {
                     break;
@@ -240,19 +244,19 @@ switch ($Qque) {
                 $oExpediente = new Expediente($Qid_expediente);
                 $oExpediente->DBCarregar();
                 switch ($Qvoto) {
-                    case Firma::V_VISTO_BUENO:
+                    case Firma::V_D_VISTO_BUENO:
                         $estado = Expediente::ESTADO_FIJAR_REUNION;
                         break;
-                    case Firma::V_DILATA:
+                    case Firma::V_D_DILATA:
                         $estado = Expediente::ESTADO_DILATA;
                         break;
-                    case Firma::V_ESPERA:
+                    case Firma::V_D_ESPERA:
                         $estado = Expediente::ESTADO_ESPERA;
                         break;
-                    case Firma::V_NO:
+                    case Firma::V_D_NO:
                         $estado = Expediente::ESTADO_NO;
                         break;
-                    case Firma::V_RECHAZADO:
+                    case Firma::V_D_RECHAZADO:
                         $estado = Expediente::ESTADO_RECHAZADO;
                         break;
                     default:
@@ -317,7 +321,9 @@ switch ($Qque) {
             $cargo_tipo = $oFirmaAclaracion->getCargo_tipo();
         }
         // orden trámite: Del primer voto no firmado
-        $in_valor =  Firma::V_NO.','.Firma::V_OK.','.Firma::V_RECHAZADO;
+        $in_valor =  Firma::V_NO.','.Firma::V_D_OK.',';
+        $in_valor .=  Firma::V_OK.','.Firma::V_D_OK.',';
+        $in_valor .=  Firma::V_D_RECHAZADO;
         $aWhere = ['id_expediente' => $Qid_expediente,
                     'id_cargo' => $id_cargo,
                     'tipo' => Firma::TIPO_VOTO,

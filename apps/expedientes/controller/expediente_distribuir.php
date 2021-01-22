@@ -68,7 +68,7 @@ $f_ini_circulacion = $oExpediente->getF_ini_circulacion()->getFromLocal();
 $f_reunion = $oExpediente->getF_reunion()->getFromLocal();
 $f_aprobacion = $oExpediente->getF_aprobacion()->getFromLocal();
 
-$asunto = $oExpediente->getAsunto();
+$asunto = $oExpediente->getAsuntoEstado();
 $entradilla = $oExpediente->getEntradilla();
 
 $oEscritoLista = new EscritoLista();

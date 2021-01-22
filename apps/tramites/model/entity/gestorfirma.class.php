@@ -134,7 +134,7 @@ class GestorFirma Extends core\ClaseGestor {
 	    $tipo_voto = Firma::TIPO_VOTO;
 	    $valor_ok = Firma::V_OK;
 	    $valor_no = Firma::V_NO;
-	    $valor_vb = Firma::V_VISTO_BUENO;
+	    $valor_vb = Firma::V_D_VISTO_BUENO;
 	    
 	    $sQuery = "SELECT *
                     FROM $nom_tabla
@@ -199,13 +199,15 @@ class GestorFirma Extends core\ClaseGestor {
 	                }
 	                switch ($valor) {
 	                    case Firma::V_NO:
-	                    case Firma::V_RECHAZADO:
+	                    case Firma::V_D_RECHAZADO:
 	                        $a_rec['class'] = "list-group-item-danger";
 	                        break;
 	                    case Firma::V_OK:
+	                    case Firma::V_D_OK:
 	                        $a_rec['class'] = "list-group-item-success";
 	                        break;
 	                    case Firma::V_ESPERA:
+	                    case Firma::V_D_ESPERA:
 	                    default:
 	                        $a_rec['class'] = "list-group-item-info";
 	                }
@@ -261,7 +263,7 @@ class GestorFirma Extends core\ClaseGestor {
 	    $valor = $oFirmaUltimaOk->getValor();
 	    $cargo_tipo = $oFirmaUltimaOk->getCargo_tipo();
 	    
-	    if ($cargo_tipo == Cargo::CARGO_VB_VCD && $valor == Firma::V_VISTO_BUENO) {
+	    if ($cargo_tipo == Cargo::CARGO_VB_VCD && $valor == Firma::V_D_VISTO_BUENO) {
 	        return TRUE;
 	    } else {
 	        return FALSE;
@@ -375,7 +377,7 @@ class GestorFirma Extends core\ClaseGestor {
 	    $tipo_voto = Firma::TIPO_VOTO;
         $valor_ok = Firma::V_OK;
         $valor_no = Firma::V_NO;
-        $valor_vb = Firma::V_VISTO_BUENO;
+        $valor_vb = Firma::V_D_VISTO_BUENO;
         
 	    // posibles orden_tramite:
 	    $sQuery = "SELECT *
@@ -442,28 +444,30 @@ class GestorFirma Extends core\ClaseGestor {
             $valor = $aDades['valor'];
             $id_cargo = $aDades['id_cargo'];
             /*
-             const TIPO_VOTO          = 1;
-             const TIPO_ACLARACION    = 2;
+             const TIPO_VOTO
+             const TIPO_ACLARACION 
              // valor
-             const V_VISTO        = 1;  // leído, pensando
-             const V_ESPERA       = 2;  // distinto a no leído
-             const V_NO           = 3;  // voto negativo
-             const V_OK           = 4;  // voto positivo
-             const V_DILATA       = 22;  // sólo vcd
-             const V_RECHAZADO    = 23;  // sólo vcd
-             const V_VISTO_BUENO  = 24;  // sólo vcd VºBº
+             /* const V_VISTO        = 1;  // leído, pensando
+                const V_ESPERA       = 2;  // distinto a no leído
+                const V_NO           = 3;  // voto negativo
+                const V_OK           = 4;  // voto positivo
+                const V_D_ESPERA       = 22;  // distinto a no leído
+                const V_D_NO           = 23;  // voto negativo
+                const V_D_OK           = 24;  // voto positivo
+                const V_D_DILATA       = 25;  // sólo vcd
+                const V_D_RECHAZADO    = 26;  // sólo vcd
+                const V_D_VISTO_BUENO  = 27;  // sólo vcd VºBº
              */
             if (ConfigGlobal::mi_usuario_cargo() === 'vcd' && ConfigGlobal::mi_id_cargo() == $id_cargo) {
-                /*Els expedients “rechazados”, “dilata”, “no”, “espera” del vcd. queden en un limbo.
-                 Haurien d’anar a “3. Distribuir” de Secretaria (i el Secretaria ja el distribueix a l’oficina);
-                 si te accions de sortides, no es posa número de registre. ((cfr. expedient de adl))
-                 Asunto: Afegir a l’inici RECHAZADO, DILATA, NO, ESPERA…
-                */
                 if ($valor == Firma::V_VISTO) {
                     return FALSE;
                 }
             } else {
-                if ($valor == Firma::V_NO OR $valor == Firma::V_OK OR $valor == Firma::V_VISTO_BUENO) {
+                if ($valor == Firma::V_NO OR 
+                    $valor == Firma::V_OK OR 
+                    $valor == Firma::V_D_NO OR 
+                    $valor == Firma::V_D_OK OR 
+                    $valor == Firma::V_D_VISTO_BUENO) {
                 } else {
                     return FALSE;
                 }

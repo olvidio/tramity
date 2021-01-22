@@ -12,8 +12,6 @@ use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use tramites\model\entity\Tramite;
-use tramites\model\entity\TramiteCargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -163,7 +161,11 @@ switch($Qque) {
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente, 'cargo_tipo' => Cargo::CARGO_REUNION]);
         foreach($cFirmas as $oFirma) {
             $oFirma->DBCarregar();
-            $oFirma->setValor(Firma::V_OK);
+            if (ConfigGlobal::mi_usuario_cargo() === 'vcd') { // No sé si hace falta??
+                $oFirma->setValor(Firma::V_D_OK);
+            } else {
+                $oFirma->setValor(Firma::V_OK);
+            }
             $oFirma->setId_usuario(ConfigGlobal::mi_id_usuario());
             $oFirma->setF_valor($f_hoy_iso,FALSE);
             if ($oFirma->DBGuardar() === FALSE ) {
@@ -210,7 +212,11 @@ switch($Qque) {
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente, 'cargo_tipo' => Cargo::CARGO_DISTRIBUIR]);
         foreach($cFirmas as $oFirma) {
             $oFirma->DBCarregar();
-            $oFirma->setValor(Firma::V_OK);
+            if (ConfigGlobal::mi_usuario_cargo() === 'vcd') { // No sé si hace falta??
+                $oFirma->setValor(Firma::V_D_OK);
+            } else {
+                $oFirma->setValor(Firma::V_OK);
+            }
             $oFirma->setId_usuario(ConfigGlobal::mi_id_usuario());
             $oFirma->setF_valor($f_hoy_iso,FALSE);
             if ($oFirma->DBGuardar() === FALSE ) {
@@ -596,7 +602,11 @@ switch($Qque) {
             $oFirmaPrimera = $gesFirmas->getPrimeraFirma($id_expediente);
             $id_primer_cargo = $oFirmaPrimera->getId_cargo();
             if ($id_primer_cargo == ConfigGlobal::mi_id_cargo()) {
-                $oFirmaPrimera->setValor(Firma::V_OK);
+                if (ConfigGlobal::mi_usuario_cargo() === 'vcd') { // No sé si hace falta??
+                    $oFirmaPrimera->setValor(Firma::V_D_OK);
+                } else {
+                    $oFirmaPrimera->setValor(Firma::V_OK);
+                }
                 $oFirmaPrimera->setId_usuario(ConfigGlobal::mi_id_usuario());
                 $oFirmaPrimera->setObserv('');
                 $oFirmaPrimera->setF_valor($f_hoy_iso,FALSE);
