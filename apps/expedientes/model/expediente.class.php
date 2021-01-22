@@ -353,7 +353,7 @@ class Expediente Extends expedienteDB {
             case self::ESTADO_RECHAZADO:
                 $asunto_estado = _("RECHAZADO") ." ".$asunto;
                 break;
-            case self::NO:
+            case self::ESTADO_NO:
                 $asunto_estado = _("NO") ." ".$asunto;
                 break;
             default:
