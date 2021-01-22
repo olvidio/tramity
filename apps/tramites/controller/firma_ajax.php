@@ -268,11 +268,31 @@ switch ($Qque) {
                     $error_txt .= $oExpediente->getErrorTxt();
                 }
             }
+            // 22/2/21. Amplio a cambiar el estado para todos los casos menos el 'ESPERA'
             $bParaReunion = $gesFirmas->paraReunion($Qid_expediente);
             if($bParaReunion) {
                 $oExpediente = new Expediente($Qid_expediente);
                 $oExpediente->DBCarregar();
-                $oExpediente->setEstado(Expediente::ESTADO_FIJAR_REUNION);
+                switch ($Qvoto) {
+                    case Firma::V_D_VISTO_BUENO:
+                        $estado = Expediente::ESTADO_FIJAR_REUNION;
+                        break;
+                    case Firma::V_D_DILATA:
+                        $estado = Expediente::ESTADO_DILATA;
+                        break;
+                    case Firma::V_D_ESPERA:
+                        $estado = Expediente::ESTADO_ESPERA;
+                        break;
+                    case Firma::V_D_NO:
+                        $estado = Expediente::ESTADO_NO;
+                        break;
+                    case Firma::V_D_RECHAZADO:
+                        $estado = Expediente::ESTADO_RECHAZADO;
+                        break;
+                    default:
+                        $estado = Expediente::ESTADO_ACABADO;
+                }
+                $oExpediente->setEstado($estado);
                 if ($oExpediente->DBGuardar() === FALSE ) {
                     $error_txt .= $oExpediente->getErrorTxt();
                 }

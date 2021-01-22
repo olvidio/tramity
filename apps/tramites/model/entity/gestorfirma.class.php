@@ -263,7 +263,11 @@ class GestorFirma Extends core\ClaseGestor {
 	    $valor = $oFirmaUltimaOk->getValor();
 	    $cargo_tipo = $oFirmaUltimaOk->getCargo_tipo();
 	    
-	    if ($cargo_tipo == Cargo::CARGO_VB_VCD && $valor == Firma::V_D_VISTO_BUENO) {
+	    if ($cargo_tipo == Cargo::CARGO_VB_VCD &&
+	        $valor == Firma::V_D_NO &&
+	        $valor == Firma::V_D_DILATA &&
+	        $valor == Firma::V_D_RECHAZADO &&
+	        $valor == Firma::V_D_VISTO_BUENO) {
 	        return TRUE;
 	    } else {
 	        return FALSE;
