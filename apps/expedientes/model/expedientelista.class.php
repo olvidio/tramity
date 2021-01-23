@@ -121,7 +121,8 @@ class ExpedienteLista {
             case 'firmar':
                 // añadir las que requieren aclaración.
                 
-                if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
+                //if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
+                if ($_SESSION['session_auth']['role_actual'] === 'secretaria') {
                     $a_tipos_acabado = [ Expediente::ESTADO_NO,
                                          Expediente::ESTADO_DILATA,
                                          Expediente::ESTADO_RECHAZADO,
