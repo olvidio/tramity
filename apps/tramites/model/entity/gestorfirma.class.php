@@ -264,10 +264,11 @@ class GestorFirma Extends core\ClaseGestor {
 	    $cargo_tipo = $oFirmaUltimaOk->getCargo_tipo();
 	    
 	    if ($cargo_tipo == Cargo::CARGO_VB_VCD &&
-	        $valor == Firma::V_D_NO &&
-	        $valor == Firma::V_D_DILATA &&
-	        $valor == Firma::V_D_RECHAZADO &&
-	        $valor == Firma::V_D_VISTO_BUENO) {
+	        ($valor == Firma::V_D_NO OR
+	        $valor == Firma::V_D_DILATA OR
+	        $valor == Firma::V_D_ESPERA OR
+	        $valor == Firma::V_D_RECHAZADO OR
+	        $valor == Firma::V_D_VISTO_BUENO) ) {
 	        return TRUE;
 	    } else {
 	        return FALSE;
@@ -379,15 +380,20 @@ class GestorFirma Extends core\ClaseGestor {
 	    $nom_tabla = $this->getNomTabla();
 	    
 	    $tipo_voto = Firma::TIPO_VOTO;
-        $valor_ok = Firma::V_OK;
-        $valor_no = Firma::V_NO;
-        $valor_vb = Firma::V_D_VISTO_BUENO;
+
+        $valors_posibles = Firma::V_OK;
+        $valors_posibles .= ','. Firma::V_NO;
+        $valors_posibles .= ','. Firma::V_D_OK;
+        $valors_posibles .= ','. Firma::V_D_NO;
+        $valors_posibles .= ','. Firma::V_D_DILATA;
+        $valors_posibles .= ','. Firma::V_D_RECHAZADO;
+        $valors_posibles .= ','. Firma::V_D_VISTO_BUENO;
         
 	    // posibles orden_tramite:
 	    $sQuery = "SELECT *
                     FROM $nom_tabla
                     WHERE id_expediente = $id_expediente AND tipo = $tipo_voto
-                        AND (valor = $valor_ok OR valor = $valor_no OR valor = $valor_vb)
+                        AND valor IN ($valors_posibles)
                     ORDER BY orden_tramite DESC, orden_oficina DESC LIMIT 1";
 	    if (($oDbl->query($sQuery)) === FALSE) {
 	        $sClauError = 'GestorFirma.query';
@@ -447,6 +453,7 @@ class GestorFirma Extends core\ClaseGestor {
         foreach ($oDbl->query($sQuery) as $aDades) {
             $valor = $aDades['valor'];
             $id_cargo = $aDades['id_cargo'];
+            $cargo_tipo = $aDades['cargo_tipo'];
             /*
              const TIPO_VOTO
              const TIPO_ACLARACION 
@@ -464,6 +471,9 @@ class GestorFirma Extends core\ClaseGestor {
              */
             if (ConfigGlobal::mi_usuario_cargo() === 'vcd' && ConfigGlobal::mi_id_cargo() == $id_cargo) {
                 if ($valor == Firma::V_VISTO) {
+                    return FALSE;
+                }
+                if ($cargo_tipo != Cargo::CARGO_VB_VCD && $valor == Firma::V_D_ESPERA) {
                     return FALSE;
                 }
             } else {

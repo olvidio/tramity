@@ -38,6 +38,11 @@ class ExpedienteLista {
      * 
      * @var array
      */
+    private $a_expedientes_espera = [];
+    /**
+     * 
+     * @var array
+     */
     private $a_expedientes_nuevos = [];
     /**
      * 
@@ -247,6 +252,7 @@ class ExpedienteLista {
                 $cFirmasVisto = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
                 $cFirmas = array_merge($cFirmasNull, $cFirmasVisto);
                 $a_expedientes = [];
+                $this->a_expedientes_espera = [];
                 foreach ($cFirmas as $oFirma) {
                     $id_expediente = $oFirma->getId_expediente();
                     $orden_tramite = $oFirma->getOrden_tramite();
@@ -255,6 +261,9 @@ class ExpedienteLista {
                         continue;
                     }
                     
+                    if ($oFirma->getValor() == Firma::V_D_ESPERA) {
+                        $this->a_expedientes_espera[] = $id_expediente;
+                    }
                     $a_expedientes[] = $id_expediente;
                 }
                 if (!empty($a_expedientes)) {
@@ -618,6 +627,11 @@ class ExpedienteLista {
                 }
                 if ($estado == Expediente::ESTADO_ESPERA) {
                     $row['class_row'] = 'bg-light';
+                }
+                if ($estado == Expediente::ESTADO_FIJAR_REUNION) {
+                    if (in_array($id_expediente, $this->a_expedientes_espera)) {
+                        $row['class_row'] = 'bg-light';
+                    }
                 }
                 
                 $row['estado'] = $a_estados[$estado];

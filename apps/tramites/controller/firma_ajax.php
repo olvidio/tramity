@@ -268,7 +268,7 @@ switch ($Qque) {
                     $error_txt .= $oExpediente->getErrorTxt();
                 }
             }
-            // 22/2/21. Amplio a cambiar el estado para todos los casos menos el 'ESPERA'
+            // 22/2/21. Amplio a cambiar el estado para todos los casos.
             $bParaReunion = $gesFirmas->paraReunion($Qid_expediente);
             if($bParaReunion) {
                 $oExpediente = new Expediente($Qid_expediente);
@@ -279,9 +279,6 @@ switch ($Qque) {
                         break;
                     case Firma::V_D_DILATA:
                         $estado = Expediente::ESTADO_DILATA;
-                        break;
-                    case Firma::V_D_ESPERA:
-                        $estado = Expediente::ESTADO_ESPERA;
                         break;
                     case Firma::V_D_NO:
                         $estado = Expediente::ESTADO_NO;
