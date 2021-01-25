@@ -60,8 +60,12 @@ $a_prioridad = $oExpediente->getArrayPrioridad();
 $prioridad_txt = $a_prioridad[$prioridad];
 
 $vida = $oExpediente->getVida();
-$a_vida = $oExpediente->getArrayVida();
-$vida_txt = $a_vida[$vida];
+if (empty($vida)) {
+    $vida_txt = '?';
+} else {
+    $a_vida = $oExpediente->getArrayVida();
+    $vida_txt = $a_vida[$vida];
+}
 
 $f_contestar = $oExpediente->getF_contestar()->getFromLocal();
 $f_ini_circulacion = $oExpediente->getF_ini_circulacion()->getFromLocal();
