@@ -1,0 +1,11 @@
+CREATE OR REPLACE FUNCTION public.sin_acentos(text)
+ RETURNS text
+ LANGUAGE plpgsql
+AS $function$DECLARE
+        test ALIAS FOR $1;
+        sin text;
+BEGIN
+        sin = translate(test,'áéíóúçàèòäëïöüÁÉÍÓÚÇÀÈÒÄËÏÖÜ','aeiousaeoaeiouAEIOUSAEOAEIOU');
+        RETURN sin;
+END;
+$function$
