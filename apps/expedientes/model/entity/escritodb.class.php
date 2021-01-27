@@ -3,6 +3,7 @@ namespace expedientes\model\entity;
 use core;
 use web;
 use stdClass;
+use Twig\RuntimeLoader\FactoryRuntimeLoader;
 /**
  * Fitxer amb la Classe que accedeix a la taula escritos
  *
@@ -218,6 +219,8 @@ class EscritoDB Extends core\ClasePropiedades {
 	 * @var string
 	 */
 	 protected $sNomTabla;
+	 
+	 protected $clone = FALSE;
 	/* CONSTRUCTOR -------------------------------------------------------------- */
 
 	/**
@@ -244,7 +247,11 @@ class EscritoDB Extends core\ClasePropiedades {
 		$this->setoDbl($oDbl);
 		$this->setNomTabla('escritos');
 	}
-
+	
+	public function __clone() {
+	    $this->clone = TRUE;
+	}
+	
 	/* METODES PUBLICS ----------------------------------------------------------*/
 
 	/**
@@ -344,7 +351,7 @@ class EscritoDB Extends core\ClasePropiedades {
 					return FALSE;
 				}
 			}
-			$this->id_escrito = $oDbl->lastInsertId('escritos_id_escrito_seq');
+			$this->iid_escrito = $oDbl->lastInsertId('escritos_id_escrito_seq');
 		}
 		$this->setAllAtributes($aDades);
 		return TRUE;
@@ -357,7 +364,7 @@ class EscritoDB Extends core\ClasePropiedades {
 	public function DBCarregar($que=null) {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
-		if (isset($this->iid_escrito)) {
+		if (isset($this->iid_escrito) && $this->clone === FALSE) {
 			if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_escrito='$this->iid_escrito'")) === FALSE) {
 				$sClauError = 'EscritoDB.carregar';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -533,6 +540,7 @@ class EscritoDB Extends core\ClasePropiedades {
 	function setId_escrito($iid_escrito) {
 		$this->iid_escrito = $iid_escrito;
 	}
+	
 	/**
 	 * Recupera l'atribut json_prot_local de EscritoDB
 	 *

@@ -36,6 +36,7 @@ class Etherpad  extends Client {
     private $nom_usuario = null;
 
     private $id_escrito = null;
+    private $text = null;
     
     
     public function setId ($tipo_id,$id) {
@@ -333,13 +334,33 @@ class Etherpad  extends Client {
         }
     }
     
+   //returns the text of a pad
+   public function getTexto($padID) {
+       $rta = $this->getText($padID);
+        if ($rta->getCode() == 0) {
+            $data = $rta->getData();
+            /* returns: {code: 0, message:"ok", data: {text:"Welcome Text"}}
+             * {code: 1, message:"padID does not exist", data: null}  
+             */
+            $texto = $data['text'];
+            return $texto;
+        } else {
+            $this->mostrar_error($rta);
+        }
+   }
+   
+   
+   
+   
    // Crear o abrir Pad
    private function crearPad() {
         $groupID = $this->getGroupId();
         $padName = $this->id_escrito;
         $padId = $groupID."$".$this->id_escrito;
+        $text = $this->text; // para el caso de clonar
+        $text = empty($this->text)? null : $this->text;
 
-        $rta = $this->createGroupPad($groupID, $padName, $text = null);
+        $rta = $this->createGroupPad($groupID, $padName, $text);
         if ($rta->getCode() == 0) {
             /* returns: {code: 0, message:"ok", data: null}
              * {code: 1, message:"pad does already exist", data: null}
@@ -350,6 +371,7 @@ class Etherpad  extends Client {
             $this->mostrar_error($rta);
         }
    }
+   
    
    public function addPerm() {
         $groupID = $this->getGroupId();
@@ -525,4 +547,13 @@ class Etherpad  extends Client {
     {
         $this->nom_usuario = $nom_usuario;
     }
+
+    /**
+     * @param string $text
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+    }
+
 }

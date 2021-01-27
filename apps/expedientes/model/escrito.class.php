@@ -2,13 +2,16 @@
 namespace expedientes\model;
 
 use etherpad\model\Etherpad;
+use expedientes\model\entity\Accion;
 use expedientes\model\entity\EscritoDB;
+use expedientes\model\entity\GestorAccion;
 use expedientes\model\entity\GestorEscritoAdjunto;
+use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
+use lugares\model\entity\Grupo;
 use web\Protocolo;
 use web\ProtocoloArray;
-use function GuzzleHttp\describe_type;
-use core\ConfigGlobal;
+use expedientes\model\entity\EscritoAdjunto;
 
 
 
@@ -301,5 +304,106 @@ class Escrito Extends EscritoDB {
         
         $f_salida = $this->getF_salida()->getFromLocal('.');
         return $oEtherpad->generarHtml($a_header,$f_salida);
+    }
+    
+    public function explotar() {
+        $aProtDst = [];
+        
+        $oEtherpad = new Etherpad();
+        $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid_escrito);
+        $padID = $oEtherpad->getPadId();
+        $txtPad = $oEtherpad->getTexto($padID);
+        
+        // Si esta marcado como grupo de destinos, o destinos individuales.
+        $aMiembros = [];
+        $a_grupos = [];
+        $a_grupos = $this->getId_grupos();
+        if (!empty($a_grupos)) {
+            //(segun los grupos seleccionados) Los grupos no tienen número de protocolo
+            foreach ($a_grupos as $id_grupo) {
+                $oGrupo = new Grupo($id_grupo);
+                $a_miembros_g = $oGrupo->getMiembros();
+                $aMiembros = array_merge($aMiembros, $a_miembros_g);
+            }
+            $aMiembros = array_unique($aMiembros);
+            
+            $aProtDst = [];
+            foreach ($aMiembros as $id_lugar) {
+                $aProtDst[] = [
+                            'lugar' => $id_lugar,
+                            'num' => '',
+                            'any' => '',
+                            'mas' => '',
+                        ];
+            }
+        } else {
+            $aProtDst = $this->getJson_prot_destino();
+        }
+        
+        // en el último destino, no lo creo nuevo sino que utilizo el 
+        // de referencia. Lo hago con el último, porque si hay algun error,
+        // pueda conservar el de referencia.
+        $max = count($aProtDst);
+        $n = 0;
+        foreach($aProtDst as $oProtDst) {
+            $n++;
+            $aProt_dst = (array) $oProtDst;
+            $aProtDestino[0] = [
+                'lugar' => $aProt_dst['lugar'],
+                'num' => $aProt_dst['num'],
+                'any' => $aProt_dst['any'],
+                'mas' => $aProt_dst['mas'],
+            ];
+            
+            if ($n < $max) {
+                $newEscrito = clone ($this);
+                // borrar todos los destinos y poner solo uno:
+                $newEscrito->setJson_prot_destino($aProtDestino);
+                $newEscrito->setId_grupos();
+                $newEscrito->DBGuardar();
+                $newId_escrito = $newEscrito->getId_escrito();
+                // asociarlo al expediente:
+                $gesAcciones = new GestorAccion();
+                $cAcciones = $gesAcciones->getAcciones(['id_escrito' => $this->iid_escrito]);
+                if (!empty($cAcciones)) {
+                    $id_expediente = $cAcciones[0]->getId_expediente();
+                    $tipo_accion = $cAcciones[0]->getTipo_accion();
+                    $oAccion = new Accion();
+                    $oAccion->setId_expediente($id_expediente);
+                    $oAccion->setTipo_accion($tipo_accion);
+                    $oAccion->setId_escrito($newId_escrito);
+                    $oAccion->DBGuardar();
+                } else {
+                    continue;
+                }
+                // canviar el id, y clonar el etherpad con el nuevo id
+                $oNewEtherpad = new Etherpad();
+                $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $newId_escrito);
+                $oNewEtherpad->setText($txtPad);
+                $oNewEtherpad->getPadId(); // Aqui crea el pad y utiliza el $txtPad
+                
+                // copiar los adjuntos
+                $a_id_adjuntos = $this->getArrayIdAdjuntos();
+                foreach (array_keys($a_id_adjuntos) as $id_item) {
+                    $Adjunto = new EscritoAdjunto($id_item);
+                    $Adjunto->DBCarregar();
+                    $newAdjunto = clone ($Adjunto);
+                    $newAdjunto->setId_escrito($newId_escrito);
+                    $newAdjunto->DBGuardar();
+                }
+                
+            } else {
+                // En el último, no clono, aprovecho el escrito y 
+                // sólo cambio los destinos:
+                if (!empty($a_grupos)) { // si es por grupo
+                    $this->setId_grupos();
+                    $this->setDestinos();
+                }
+                $this->setJson_prot_destino($aProtDestino);
+                $this->setId_grupos();
+                $this->DBGuardar();
+            }
+        }
+        return TRUE;
     }
 }

@@ -88,6 +88,8 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	 * @var string
 	 */
 	 protected $sNomTabla;
+	 
+	 protected $clone = FALSE;
 	/* CONSTRUCTOR -------------------------------------------------------------- */
 
 	/**
@@ -114,7 +116,10 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$this->setoDbl($oDbl);
 		$this->setNomTabla('escrito_adjuntos');
 	}
-
+	
+	public function __clone() {
+	    $this->clone = TRUE;
+	}
 	/* METODES PUBLICS ----------------------------------------------------------*/
 
 	/**
@@ -200,7 +205,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$id_escrito = 0;
 		$nom = '';
 		$adjunto = '';
-		if (isset($this->iid_item)) {
+		if (isset($this->iid_item) && $this->clone === FALSE) {
 			if (($oDblSt = $oDbl->query("SELECT id_escrito, nom, adjunto FROM $nom_tabla WHERE id_item='$this->iid_item'")) === FALSE) {
 				$sClauError = 'EscritoAdjunto.carregar';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);

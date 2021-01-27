@@ -244,4 +244,32 @@ switch($Qque) {
         exit();
         
         break;
+    case 'explotar':
+        $txt_err = '';
+        if (!empty($Qid_escrito)) {
+            $oEscrito = new Escrito($Qid_escrito);
+            $oEscrito->DBCarregar();
+        } else {
+            $txt_err .= _("No puede ser");
+        }
+        
+        // por cada destino
+        if ($oEscrito->explotar() !== TRUE) {
+            $txt_err .= _("Algún error al explotar");
+        }
+        
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        
+        break;
 }
