@@ -277,6 +277,26 @@ class Expediente Extends expedienteDB {
         }
         return TRUE;
     }
+    
+    /**
+     * pone la fecha de aprobación en todos los escritos del expediente.
+     * 
+     * @param web\DateTimeLocal|string df_escrito.
+     * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
+     */
+    public function setF_aprobacion_escritos($df_aprobacion,$convert=TRUE) {
+        $gesAcciones = new GestorAccion();
+        $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $this->iid_expediente]);
+        
+        foreach ($cAcciones as $oAccion) {
+            $id_escrito = $oAccion->getId_escrito();
+            $oEscrito = new Escrito($id_escrito);
+            $oEscrito->DBCarregar();
+            $oEscrito->setF_aprobacion($df_aprobacion,$convert);
+            $oEscrito->DBGuardar();
+        }
+    }
+    
     /**
      * pone la fecha en todos los escritos del expediente.
      * 

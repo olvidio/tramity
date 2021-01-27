@@ -67,7 +67,6 @@ switch($Qque) {
         $oExpediente->setId_tramite($Qtramite);
         $oExpediente->setPrioridad($Qprioridad);
         //$oExpediente->setF_reunion($Qf_reunion);
-        //$oExpediente->setF_aprobacion($Qf_aprobacion);
         //$oExpediente->setF_contestar($Qf_contestar);
         $oExpediente->setAsunto($Qasunto);
         //$oExpediente->setEntradilla($Qentradilla);
@@ -620,6 +619,7 @@ switch($Qque) {
                     $oExpediente->DBCarregar();
                     $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
                     $oExpediente->setF_aprobacion($f_hoy_iso,FALSE);
+                    $oExpediente->setF_aprobacion_escritos($f_hoy_iso,FALSE);
                     if ($oExpediente->DBGuardar() === FALSE ) {
                         $error_txt .= $oExpediente->getErrorTxt();
                     }

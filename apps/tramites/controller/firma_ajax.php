@@ -205,6 +205,7 @@ switch ($Qque) {
                 }
                 $oExpediente->setEstado($estado);
                 $oExpediente->setF_aprobacion($f_hoy_iso,FALSE); 
+                $oExpediente->setF_aprobacion_escritos($f_hoy_iso,FALSE); 
                 if ($oExpediente->DBGuardar() === FALSE ) {
                     $error_txt .= $oExpediente->getErrorTxt();
                 }
