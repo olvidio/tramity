@@ -274,7 +274,7 @@ class Buscar {
                     }
                 } else {
                     $aWhereEntrada['f_entrada'] = 'x';
-                    $aOperadorEntrada['f_entrada'] = 'IS NO NULL';
+                    $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
                 }
                 
                 if (!empty($Qorigen_id_lugar)) {
@@ -366,7 +366,7 @@ class Buscar {
             //$cond_ap="AND f_aprobacion >= '$f_min'";
         } else {
             $aWhere['f_aprobacion'] = 'x';
-            $aOperador['f_aprobacion'] = 'IS NO NULL';
+            $aOperador['f_aprobacion'] = 'IS NOT NULL';
         }
         
         if (!empty($this->asunto)) {
@@ -451,7 +451,7 @@ class Buscar {
             //$cond_ap="AND f_aprobacion >= '$f_min'";
         } else {
             $aWhere['f_entrada'] = 'x';
-            $aOperador['f_entrada'] = 'IS NO NULL';
+            $aOperador['f_entrada'] = 'IS NOT NULL';
         }
         
         if (!empty($this->asunto)) {
