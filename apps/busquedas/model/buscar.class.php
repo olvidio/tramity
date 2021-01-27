@@ -120,6 +120,10 @@ class Buscar {
     }
     
     public function getCollection($opcion,$mas) {
+        /* Siempre, obligatorio tener:
+         *  - f_entrada not null para las entradas
+         *  - f_aprobacion not null para los escritos 
+         */
         switch ($opcion) {
             case 7: // un protocolo concreto:
                 if (empty($mas)) {
@@ -268,6 +272,9 @@ class Buscar {
                         $aWhereEntrada = [ '_ordre' => 'f_entrada'];
                         $aOperadorEntrada = [];
                     }
+                } else {
+                    $aWhereEntrada['f_entrada'] = 'x';
+                    $aOperadorEntrada['f_entrada'] = 'IS NO NULL';
                 }
                 
                 if (!empty($Qorigen_id_lugar)) {
@@ -357,6 +364,9 @@ class Buscar {
             $aWhere ['f_aprobacion'] = "'$f_min','$f_max'";
             $aOperador ['f_aprobacion']  = 'BETWEEN';
             //$cond_ap="AND f_aprobacion >= '$f_min'";
+        } else {
+            $aWhere['f_aprobacion'] = 'x';
+            $aOperador['f_aprobacion'] = 'IS NO NULL';
         }
         
         if (!empty($this->asunto)) {
@@ -439,6 +449,9 @@ class Buscar {
             $aWhere ['f_entrada'] = "'$f_min','$f_max'";
             $aOperador ['f_entrada']  = 'BETWEEN';
             //$cond_ap="AND f_aprobacion >= '$f_min'";
+        } else {
+            $aWhere['f_entrada'] = 'x';
+            $aOperador['f_entrada'] = 'IS NO NULL';
         }
         
         if (!empty($this->asunto)) {
