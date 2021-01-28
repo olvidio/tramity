@@ -1,5 +1,6 @@
 <?php
 namespace expedientes\model\entity;
+use function core\any_2;
 use core;
 /**
  * GestorEscritoDB
