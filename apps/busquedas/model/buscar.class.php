@@ -138,18 +138,33 @@ class Buscar {
                 $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
                 $aCollections['entradas'] = $cEntradas;
                             
-                // Entradas: origen_prot.
-                $aWhereEscrito['f_aprobacion'] = 'x';
-                $aOperadorEscrito['f_aprobacion'] = 'IS NOT NULL';
-                $aProt_destino = [ 'id_lugar' => $this->id_lugar,
-                                  'num' => $this->prot_num,
-                                  'any' => $this->prot_any,
-                                  'mas' => $this->prot_mas,
-                            ];
-                $gesEscritos = new GestorEscrito();
-                $cEscritos = $gesEscritos->getEscritosByProtDestinoDB($aProt_destino,$aWhereEscrito,$aOperadorEscrito);
-                $aCollections['escritos'] = $cEscritos;
+                // Escritos (salidas):
+                //si el lugar es la dl, hay que buscar en el protocolo local
+                if ($this->id_lugar==$this->id_sigla) {
+                    $aWhereEscrito['f_aprobacion'] = 'x';
+                    $aOperadorEscrito['f_aprobacion'] = 'IS NOT NULL';
+                    $aProt_destino = [ 'id_lugar' => $this->id_lugar,
+                                      'num' => $this->prot_num,
+                                      'any' => $this->prot_any,
+                                      'mas' => $this->prot_mas,
+                                ];
+                    $gesEscritos = new GestorEscrito();
+                    $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_destino,$aWhereEscrito,$aOperadorEscrito);
+                    $aCollections['escritos'] = $cEscritos;
+                } else {
+                    $aWhereEscrito['f_aprobacion'] = 'x';
+                    $aOperadorEscrito['f_aprobacion'] = 'IS NOT NULL';
+                    $aProt_destino = [ 'id_lugar' => $this->id_lugar,
+                                      'num' => $this->prot_num,
+                                      'any' => $this->prot_any,
+                                      'mas' => $this->prot_mas,
+                                ];
+                    $gesEscritos = new GestorEscrito();
+                    $cEscritos = $gesEscritos->getEscritosByProtDestinoDB($aProt_destino,$aWhereEscrito,$aOperadorEscrito);
+                    $aCollections['escritos'] = $cEscritos;
+                }
 
+                
                 return $aCollections;
                 break;
             case 1:	// Listado de los últimos
