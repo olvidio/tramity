@@ -80,18 +80,18 @@ class GestorEntradaDB Extends core\ClaseGestor {
         if (!empty($aProt_orgigen['id_lugar'])) {
             $id_lugar = $aProt_orgigen['id_lugar'];
             $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.lugar=$id_lugar";
+            $Where_json .= "items.lugar='$id_lugar'";
         }
         if (!empty($aProt_orgigen['num'])) {
             $num = $aProt_orgigen['num'];
             $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.num=$num";
+            $Where_json .= "items.num='$num'";
         }
         if (!empty($aProt_orgigen['any'])) {
             $any = $aProt_orgigen['any'];
             $any_2 = any_2($any);
             $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.any=$any_2";
+            $Where_json .= "items.any='$any_2'";
         }
         if (!empty($aProt_orgigen['mas'])) {
             $mas = $aProt_orgigen['mas'];
@@ -106,7 +106,7 @@ class GestorEntradaDB Extends core\ClaseGestor {
                 $where_condi = $Where_json;
             }
         } else {
-            if (empty($Where_json)) {
+            if (!empty($Where_json)) {
                 $where_condi = $Where_json. " AND ". $sCondi;
             } else {
                 $where_condi = $sCondi;
@@ -114,8 +114,9 @@ class GestorEntradaDB Extends core\ClaseGestor {
         }
         $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi;
         
+        // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
         $sQry = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_origen) as items(\"any\" smallint, mas text, num smallint, lugar integer)
+                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_origen) as items(\"any\" text, mas text, num text, lugar text)
                         $where_condi";
         
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {

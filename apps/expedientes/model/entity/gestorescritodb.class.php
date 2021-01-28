@@ -76,22 +76,23 @@ class GestorEscritoDB Extends core\ClaseGestor {
         if (isset($aWhere['_limit'])) unset($aWhere['_limit']);
         
         // Where del prot_destino
+        // pongo tipo 'text' en todos los campos, porque si hay algun null devuelve error syntax
         $Where_json = '';
         if (!empty($aProt_local['id_lugar'])) {
             $id_lugar = $aProt_local['id_lugar'];
             $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.lugar=$id_lugar";
+            $Where_json .= "items.lugar='$id_lugar'";
         }
         if (!empty($aProt_local['num'])) {
             $num = $aProt_local['num'];
             $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.num=$num";
+            $Where_json .= "items.num='$num'";
         }
         if (!empty($aProt_local['any'])) {
             $any = $aProt_local['any'];
             $any_2 = any_2($any);
             $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.any=$any_2";
+            $Where_json .= "items.any='$any_2'";
         }
         if (!empty($aProt_local['mas'])) {
             $mas = $aProt_local['mas'];
@@ -106,7 +107,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
                 $where_condi = $Where_json;
             }
         } else {
-            if (empty($Where_json)) {
+            if (!empty($Where_json)) {
                 $where_condi = $Where_json. " AND ". $sCondi;
             } else {
                 $where_condi = $sCondi;
@@ -114,8 +115,9 @@ class GestorEscritoDB Extends core\ClaseGestor {
         }
         $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi;
         
+        // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
         $sQry = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_destino) as items(\"any\" smallint, mas text, num smallint, lugar integer)
+                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_destino) as items(\"any\" text, mas text, num text, lugar text)
                         $where_condi";
         
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
@@ -178,22 +180,23 @@ class GestorEscritoDB Extends core\ClaseGestor {
         if (isset($aWhere['_limit'])) unset($aWhere['_limit']);
         
         // Where del prot_destino
+        // pongo tipo 'text' en todos los campos, porque si hay algun null devuelve error syntax
         $Where_json = '';
         if (!empty($aProt_destino['id_lugar'])) {
             $id_lugar = $aProt_destino['id_lugar'];
             $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.lugar=$id_lugar";
+            $Where_json .= "items.lugar='$id_lugar'";
         }
         if (!empty($aProt_destino['num'])) {
             $num = $aProt_destino['num'];
             $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.num=$num";
+            $Where_json .= "items.num='$num'";
         }
         if (!empty($aProt_destino['any'])) {
             $any = $aProt_destino['any'];
             $any_2 = any_2($any);
             $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.any=$any_2";
+            $Where_json .= "items.any='$any_2'";
         }
         if (!empty($aProt_destino['mas'])) {
             $mas = $aProt_destino['mas'];
@@ -208,7 +211,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
                 $where_condi = $Where_json;
             }
         } else {
-            if (empty($Where_json)) {
+            if (!empty($Where_json)) {
                 $where_condi = $Where_json. " AND ". $sCondi;
             } else {
                 $where_condi = $sCondi;
@@ -216,8 +219,9 @@ class GestorEscritoDB Extends core\ClaseGestor {
         }
         $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi;
         
+        // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
         $sQry = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_destino) as items(\"any\" smallint, mas text, num smallint, lugar integer)
+                        FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_destino) as items(\"any\" text, mas text, num text, lugar text)
                         $where_condi";
         
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
