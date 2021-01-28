@@ -117,7 +117,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
         
         // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
         $sQry = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_destino) as items(\"any\" text, mas text, num text, lugar text)
+                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_local) as items(\"any\" text, mas text, num text, lugar text)
                         $where_condi";
         
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
