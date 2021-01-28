@@ -163,9 +163,9 @@ class GestorEntradaDB Extends core\ClaseGestor {
         }
         $sCondi = implode(' AND ',$aCondi);
         if (empty($sCondi)) {
-            $sCondi = " WHERE items.lugar=$id_lugar";
+            $sCondi = " WHERE items.lugar='$id_lugar'";
         } else {
-            $sCondi = " WHERE items.lugar=$id_lugar AND ".$sCondi;
+            $sCondi = " WHERE items.lugar='$id_lugar' AND ".$sCondi;
         }
         
         $sOrdre = '';
@@ -175,8 +175,9 @@ class GestorEntradaDB Extends core\ClaseGestor {
         if (isset($aWhere['_limit']) && $aWhere['_limit']!='') $sLimit = ' LIMIT '.$aWhere['_limit'];
         if (isset($aWhere['_limit'])) unset($aWhere['_limit']);
         
+        // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
         $sQry = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_origen) as items(\"any\" smallint, mas text, num smallint, lugar integer)
+                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_origen) as items(\"any\" text, mas text, num text, lugar text)
                         ".$sCondi.$sOrdre.$sLimit;
         
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
