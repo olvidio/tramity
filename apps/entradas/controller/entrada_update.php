@@ -185,8 +185,8 @@ switch($Qque) {
             $oEntrada = new Entrada($Qid_entrada);
             $oEntrada->DBCarregar();
             $oPermisoRegistro = new PermRegistro();
-            $perm_asunto = $oPermisoRegistro->permiso_detalle($oEscrito, 'asunto');
-            $perm_detalle = $oPermisoRegistro->permiso_detalle($oEscrito, 'detalle');
+            $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntrada, 'asunto');
+            $perm_detalle = $oPermisoRegistro->permiso_detalle($oEntrada, 'detalle');
         } else {
             $oEntrada = new Entrada();
             $perm_asunto = PermRegistro::PERM_MODIFICAR;
