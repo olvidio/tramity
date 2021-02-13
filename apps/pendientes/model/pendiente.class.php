@@ -125,7 +125,8 @@ class Pendiente {
     }
 
     public function getBaseUrl($parent_container='') {
-        $this->server = 'davical.local/caldav.php';
+        $server =  $_SESSION['oConfig']->getServerDavical();
+        $this->server = $server.'/caldav.php';
         
         $parent_container = empty($parent_container)? $this->parent_container : $parent_container;
         return 'http://'.$this->server."/".$parent_container."/".$this->resource."/";

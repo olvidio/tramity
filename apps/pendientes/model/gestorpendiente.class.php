@@ -52,7 +52,8 @@ class GestorPendiente {
     /* METODES PUBLICS ----------------------------------------------------------*/
     
     public function getBaseUrl($cal_oficina='') {
-        $this->server = 'davical.local/caldav.php';
+        $server =  $_SESSION['oConfig']->getServerDavical();
+        $this->server = $server.'/caldav.php';
         
         $cal_oficina = empty($cal_oficina)? $this->cal_oficina : $cal_oficina;
         return 'http://'.$this->server."/".$cal_oficina."/".$this->resource."/";

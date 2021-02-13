@@ -146,8 +146,11 @@ fnjs_ref_absoluta=function(base,path) {
 <?php
 switch ($role_actual) {
     case 'admin':
+        $server =  $_SESSION['oConfig']->getServerDavical();
+        $server = $server.'/index.php';
         $a_campos = [
             'error_fecha' => $_SESSION['oConfig']->getPlazoError(),
+            'server_davical' => $server,
         ];
         $oView = new ViewTwig('usuarios/controller');
         echo $oView->renderizar('admin.html.twig',$a_campos);
