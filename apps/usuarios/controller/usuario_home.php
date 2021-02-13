@@ -224,8 +224,10 @@ $a_pills[$num_orden] = $pill;
 // pendientes = 16;
 $filtro = 'pendientes';
     $active = ($filtro == $Qfiltro)? 'active' : '';
-    $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+    $aQuery = [ 'filtro' => $filtro,
+                'periodo' => 'hoy',
+            ];
+    $pag_lst = web\Hash::link('apps/pendientes/controller/pendiente_tabla.php?'.http_build_query($aQuery));
     $num_orden = 16;
     $text = _("pendientes");
     $num = '';

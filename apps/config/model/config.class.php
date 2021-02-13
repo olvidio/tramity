@@ -188,6 +188,12 @@ class Config {
         return $oConfigSchema->getValor();
     }
     
+    public function getServerDavical() {
+        $parametro = 'server_davical';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
+    
     // Parametros del scdl
     public function getPerm_distribuir() {
         $parametro = 'perm_distribuir';

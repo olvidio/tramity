@@ -198,6 +198,18 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
     $a_pills[$num_orden] = $pill;
 }
 
+// pendientes = 16;
+$filtro = 'pendientes';
+    $active = ($filtro == $Qfiltro)? 'active' : '';
+    $aQuery = [ 'filtro' => $filtro,
+                'periodo' => 'hoy',
+            ];
+    $pag_lst = web\Hash::link('apps/pendientes/controller/pendiente_tabla.php?'.http_build_query($aQuery));
+    $num_orden = 16;
+    $text = _("pendientes");
+    $num = '';
+    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+$a_pills[$num_orden] = $pill;
 // ordenar:
 ksort($a_pills);
 

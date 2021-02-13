@@ -25,6 +25,7 @@ class Converter {
                 $this->Converter = new PgTimestamp($data,$type);
             break;
             case 'timestamp':
+            case 'timestamptz':
                 $this->Converter = new PgTimestamp($data,$type);
             break;
             
@@ -39,5 +40,10 @@ class Converter {
     }
     public function toPg() {
         return $this->Converter->toPg($this->type);
+    }
+    public function toCal() {
+        $f_iso = $this->Converter->toPg($this->type);
+        $f_cal = str_replace('-', '', $f_iso);
+        return $f_cal;
     }
 }

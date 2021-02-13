@@ -332,6 +332,21 @@ $oHashReply  ->setArrayCamposHidden(['parametro' => $parametro]);
 $a_campos['oHashReply'] = $oHashReply  ;
 $a_campos[$parametro] = $valor;
 
+// ----------- Servidor de Davical -------------------
+$parametro = 'server_davical';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$val_server_davical = $valor;
+
+$oHashDavical = new Hash();
+$oHashDavical->setUrl($url);
+$oHashDavical->setcamposForm('valor');
+$oHashDavical->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashDavical'] = $oHashDavical;
+$a_campos['server_davical'] = $val_server_davical;
+
 
 
 

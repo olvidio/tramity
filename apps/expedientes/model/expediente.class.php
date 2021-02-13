@@ -11,9 +11,9 @@ use expedientes\model\entity\ExpedienteDB;
 use expedientes\model\entity\GestorAccion;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorTramiteCargo;
+use usuarios\model\PermRegistro;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use expedientes\model\entity\Accion;
 use usuarios\model\entity\GestorCargoGrupo;
 
 
@@ -360,6 +360,22 @@ class Expediente Extends expedienteDB {
     }
     
     /**
+     * Recupera l'atribut sasunto de Entrada teniendo en cuenta los permisos
+     *
+     * @return string sasunto
+     */
+    function getAsunto() {
+        $oPermiso = new PermRegistro();
+        $perm = $oPermiso->permiso_detalle($this,'asunto');
+        
+        $asunto = _("reservado");
+        if ($perm > PermRegistro::PERM_NADA) {
+            $asunto = $this->getAsuntoDB();
+        }
+        return $asunto;
+    }
+    
+    /**
      *  Añadir al asunto el estado del expediente.
      */
     public function getAsuntoEstado() {
@@ -447,7 +463,7 @@ class Expediente Extends expedienteDB {
                         break;
                     case 'expediente':
                         $oExpediente = new Expediente($id);
-                        $asunto = $oExpediente->getAsuntoDetalle();
+                        $asunto = $oExpediente->getAsunto();
                         $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_expediente($id);\" >$asunto</span>";
                         $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >"._("quitar")."</span>";
                         break;

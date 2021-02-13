@@ -599,7 +599,7 @@ class EntradaDB Extends core\ClasePropiedades {
 	 *
 	 * @return string sasunto
 	 */
-	function getAsunto() {
+	function getAsuntoDB() {
 		if (!isset($this->sasunto) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
@@ -649,7 +649,7 @@ class EntradaDB Extends core\ClasePropiedades {
 	 *
 	 * @return string sdetalle
 	 */
-	function getDetalle() {
+	function getDetalleDB() {
 		if (!isset($this->sdetalle) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}

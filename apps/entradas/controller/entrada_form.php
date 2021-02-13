@@ -4,6 +4,7 @@ use entradas\model\Entrada;
 use entradas\model\entity\GestorEntradaBypass;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
+use usuarios\model\PermRegistro;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Desplegable;
@@ -213,6 +214,12 @@ if (!empty($Qid_entrada)) {
         $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
     }
     
+    $oPermisoregistro = new PermRegistro();
+    $perm_asunto = $oPermisoregistro->permiso_detalle($oEntrada, 'asunto');
+    $perm_detalle = $oPermisoregistro->permiso_detalle($oEntrada, 'detalle');
+    $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
+    $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
+
 } else {
     $chk_grupo_dst = '';
     $id_grupo = 0;
@@ -239,6 +246,9 @@ if (!empty($Qid_entrada)) {
     $oArrayDesplFirmas = new web\DesplegableArray('',$a_posibles_cargos,'oficinas');
     $oArrayDesplFirmas ->setBlanco('t');
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas(event)');
+    
+    $asunto_readonly = '';
+    $detalle_readonly = '';
 }
 
 switch ($Qfiltro) {
@@ -275,7 +285,9 @@ $a_campos = [
     'f_entrada' => $f_entrada,
     'asunto_e' => $asunto_e,
     'asunto' => $asunto,
+    'asunto_readonly' => $asunto_readonly,
     'detalle' => $detalle,
+    'detalle_readonly' => $detalle_readonly,
     'oDesplPonente' => $oDesplPonente,
     'a_oficinas' => $a_oficinas,
     'oArrayDesplFirmas' => $oArrayDesplFirmas,  

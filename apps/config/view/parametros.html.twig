@@ -159,3 +159,10 @@ fnjs_guardar=function(formulario){
 </form>
 <hr>
 
+<h3>{{ "servidor davical"|trans }}:</h3>
+<form id="frm_server_davical" name="frm_server_davical" action="">
+{{ oHashDavical.getCamposHtml|raw }}
+<input class="col-6" type="text" name="valor" value="{{ server_davical }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>

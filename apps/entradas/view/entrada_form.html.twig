@@ -8,7 +8,10 @@
 
 <h1>{{ titulo }}</h1>
 <form id ="form_entrada" >
+    <input type=hidden name='go' id='go' value=0>
     <input type=hidden name='que' id='que' value=0>
+    <!-- sirve para cuando se genera antes que la entrada (desde una ventana adicional) -->
+	<input type='hidden' id='id_pendiente' name='id_pendiente' value=''>
     <input type=hidden name='filtro' id='filtro' value={{ filtro }} >
     <input type=hidden name='id_entrada' id='id_entrada' value={{ id_entrada }} >
     <input type=hidden name='f_contestar' id='f_contestar' value={{ f_contestar }} >
@@ -39,14 +42,14 @@
   <div class="form-group row">
     <label for="asunto" class="col-3 col-form-label">{{ "Asunto secretaria"|trans }}</label>
     <div class="col">
-      <input tabindex='40' type="text" class="form-control" name='asunto' id="asunto" value="{{ asunto }}">
+      <input {{ asunto_readonly }} tabindex='40' type="text" class="form-control" name='asunto' id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------- DETALLE --------------- -->
   <div class="form-group row">
     <label for="detalle" class="col-2 col-form-label">{{ "Detalle"|trans }}</label>
     <div class='col-6'>
-      <input tabindex='50' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
+      <input {{ detalle_readonly }} tabindex='50' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
     </div>
   </div>
   <!--  --------------- PONENTE Y OFICINAS --------------- -->
@@ -96,6 +99,9 @@
       <div class='col-3 date'>
         <input tabindex='85' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_contestar }}" onchange="fnjs_comprobar_plazo('input')"  />
       </div>
+      <button id="btn_pendiente" tabindex='120' class="btn btn-outline-secondary" onClick="fnjs_mod_pendiente();" >
+          {{ "modificar pendiente"|trans }}
+	  </button>
   </div>
   <!-- Fin Col Izda -->
 </div>
@@ -175,7 +181,7 @@
   <button type="button" tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
     {{ "Cancelar"|trans }}
   </button>
-  <button type="button" tabindex='90' class="btn btn-primary" onKeyUp="fnjs_guardar(event);" onClick="fnjs_guardar(event);" >
+  <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary" onKeyUp="fnjs_guardar(event);" onClick="fnjs_guardar(event);" >
     {{ txt_btn_guardar }}
   </button>
 </div>

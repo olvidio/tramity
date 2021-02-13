@@ -32,21 +32,36 @@ $(function() {
 
 });
 
-{{ oArrayDesplFirmas.ComprobarSelectJs|raw }}
-{{ oArrayProtRef.ComprobarSelectJs|raw }}
+fnjs_mod_pendiente=function() {
+    var err=0;
+    var ponente=$('#ponente').val();
+
+    if (!ponente) { alert("{{ "Debe indicar el ponenete para asignarle el pendiente"|trans }}"); err=1; }
+
+    if (err!=1) {
+        var winPrefs="dependent=yes,width=1200,height=800,screenX=30,screenY=30,titlebar=yes,scrollbars=yes";
+        top.newWin = window.open("", "sele", winPrefs);
+        $('#form_entrada').attr('action','apps/pendientes/controller/pendiente_form.php');
+        $('#go').val('entradas');
+        $('#form_entrada').attr('target','sele');
+        $('#form_entrada').submit();
+        $('#form_entrada').off();
+        top.newWin.focus();
+    }
+}
 
 fnjs_cancelar=function(event){
-	// Asegurarme que es por click y no por return (posicion: 0,0)
-	var x = event.x || event.clientX;
+    // Asegurarme que es por click y no por return (posicion: 0,0)
+    var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
-    	return false;
+        return false;
     }
     event.preventDefault(); //prevent default action 	
-	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 }
 
 fnjs_guardar=function(event){
@@ -177,6 +192,7 @@ fnjs_focus_a=function(camp){
 	$(camp).focus();
 }
 
+{{ oArrayProtRef.ComprobarSelectJs|raw }}
 fnjs_mas_referencias=function(e){
 	var code = (e.keyCode ? e.keyCode : e.which);
 	if(e=="x") {
@@ -195,7 +211,12 @@ fnjs_mas_referencias=function(e){
 		}
 	}
 }
+fnjs_quitar_referencias=function(){
+	$('#span_ref').html("");
+	$('#ref_num').val(0);
+}
 
+{{ oArrayDesplFirmas.ComprobarSelectJs|raw }}
 fnjs_mas_oficinas=function(e){
 	var code = (e.keyCode ? e.keyCode : e.which);
 	if(e=="x") {
@@ -214,14 +235,9 @@ fnjs_mas_oficinas=function(e){
 		}
 	}
 }
-
 fnjs_quitar_oficinas=function(){
 	$('#span_oficinas').html("");
 	$('#oficina_num').val(0);
-}
-fnjs_quitar_referencias=function(){
-	$('#span_ref').html("");
-	$('#ref_num').val(0);
 }
 
 fnjs_comprobar_plazo=function(campo){

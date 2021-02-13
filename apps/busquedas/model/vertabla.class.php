@@ -2,17 +2,14 @@
 namespace busquedas\model;
 
 use function core\any_2;
-use function core\buscar_asunto_of;
 use function core\buscar_destinos;
-use function core\buscar_oficinas;
-use function core\buscar_ref;
-use function core\date_any_2;
 use function core\permiso_detalle;
 use PDO;
 use usuarios\model\entity\GestorCargo;
 use web\Lista;
 use web\Protocolo;
 use web\ProtocoloArray;
+use usuarios\model\PermRegistro;
 
 class VerTabla {
     
@@ -169,7 +166,6 @@ class VerTabla {
                         );
         //}
 
-        $a_botones[]=array( 'txt' => _('asunto oficina'), 'click' =>"fnjs_modificar_of(\"#seleccionados_e\")" ) ;
         $a_botones[]=array( 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det(\"#seleccionados_e\")" ) ;
 
         $a_cabeceras=array( array('name'=>ucfirst(_("protocolo origen")),'formatter'=>'clickFormatter'),
@@ -186,11 +182,6 @@ class VerTabla {
         foreach ($aCollection as $oEntrada) {
             $i++;
             
-            //$perm_asunto=permiso_detalle($id_reg,$reservado,"a");
-            //$perm_detalle=permiso_detalle($id_reg,$reservado,"d");
-            $perm_asunto = 1;
-            $perm_detalle = 1;
-
             $id_entrada=$oEntrada->getId_entrada();
             $f_entrada=$oEntrada->getF_entrada();
             
@@ -213,8 +204,6 @@ class VerTabla {
             $oArrayProtRef->setRef(TRUE);
             $referencias = $oArrayProtRef->ListaTxtBr();
             
-            // permisos para el asunto
-            if ($perm_asunto==0) $asunto=_("reservado");
             // oficinas
             $id_ponente =  $oEntrada->getPonente();
             $a_resto_oficinas = $oEntrada->getResto_oficinas();
@@ -288,7 +277,6 @@ class VerTabla {
                         );
         //}
 
-        $a_botones[]=array( 'txt' => _('asunto oficina'), 'click' =>"fnjs_modificar_of(\"#seleccionados_s\")" ) ;
         $a_botones[]=array( 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det(\"#seleccionados_s\")" ) ;
                 
         $a_cabeceras=array( array('name'=>ucfirst(_("protocolo")),'formatter'=>'clickFormatter'), ucfirst(_("destinos")),  ucfirst(_("ref.")), 
@@ -329,11 +317,6 @@ class VerTabla {
             $oArrayProtRef->setRef(TRUE);
             $referencias = $oArrayProtRef->ListaTxtBr();
             
-            //$perm_asunto=permiso_detalle($id_reg,$reservado,"a");
-            //$perm_detalle=permiso_detalle($id_reg,$reservado,"d");
-            $perm_asunto = 1;
-            $perm_detalle = 1;
-            
             $id_escrito=$oEscrito->getId_escrito();
             $f_aprobacion=$oEscrito->getF_aprobacion();
             $f_escrito=$oEscrito->getF_escrito();
@@ -371,8 +354,6 @@ class VerTabla {
             $oArrayProtRef->setRef(TRUE);
             $referencias = $oArrayProtRef->ListaTxtBr();
             
-            // permisos para el asunto
-            if ($perm_asunto==0) $asunto=_("reservado");
             // oficinas
             $id_ponente =  $oEscrito->getCreador();
             $a_resto_oficinas = $oEscrito->getResto_oficinas();
@@ -385,9 +366,6 @@ class VerTabla {
             }
             $oficinas = $oficinas_txt;
             
-            // permisos para el detalle
-            if ($perm_detalle==0) $detalle=_("reservado");
-            if ($detalle && $perm_detalle>1 && $perm_asunto) $asunto.=" [".$detalle."].";
             if (!empty($anulado)) $asunto=_("ANULADO")." ($anulado) $asunto";
 
             $a_valores[$i]['sel']="$id_escrito#$e_s";

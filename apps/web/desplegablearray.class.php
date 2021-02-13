@@ -188,6 +188,10 @@ class DesplegableArray Extends Desplegable{
 
 	/* METODES PRIVATS ----------------------------------------------------------*/
 
+	public function setSeleccionados($sSeleccionados) {
+	    $this->sSeleccionados = $sSeleccionados;
+	}
+
 	public function setNomConjunto($sNomConjunto) {
 		 $this->sNomConjunto = $sNomConjunto;
 	}

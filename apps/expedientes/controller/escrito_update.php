@@ -3,6 +3,7 @@ use function core\is_true;
 use expedientes\model\Escrito;
 use expedientes\model\entity\Accion;
 use lugares\model\entity\GestorGrupo;
+use usuarios\model\PermRegistro;
 use web\DateTimeLocal;
 use web\Protocolo;
 
@@ -156,11 +157,16 @@ switch($Qque) {
         if (!empty($Qid_escrito)) {
             $oEscrito = new Escrito($Qid_escrito);
             $oEscrito->DBCarregar();
+            $oPermisoRegistro = new PermRegistro();
+            $perm_asunto = $oPermisoRegistro->permiso_detalle($oEscrito, 'asunto');
+            $perm_detalle = $oPermisoRegistro->permiso_detalle($oEscrito, 'detalle');
         } else {
             $oEscrito = new Escrito();
             $oEscrito->setAccion($Qaccion);
             $oEscrito->setModo_envio(Escrito::MODO_MANUAL);
             $nuevo = TRUE;
+            $perm_asunto = PermRegistro::PERM_MODIFICAR;
+            $perm_detalle = PermRegistro::PERM_MODIFICAR;
         }
         
         if ($Qaccion == Escrito::ACCION_ESCRITO) {
@@ -205,10 +211,14 @@ switch($Qque) {
         }
         
         $oEscrito->setEntradilla($Qentradilla);
-        $oEscrito->setAsunto($Qasunto);
         $oEscrito->setF_escrito($Qf_escrito);
+        if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
+            $oEscrito->setAsunto($Qasunto);
+        }
 
-        $oEscrito->setDetalle($Qdetalle);
+        if ($perm_detalle >= PermRegistro::PERM_MODIFICAR) {
+            $oEscrito->setDetalle($Qdetalle);
+        }
         $oEscrito->setCreador($Qid_ponente);
         $oEscrito->setResto_oficinas($Qa_firmas);
 

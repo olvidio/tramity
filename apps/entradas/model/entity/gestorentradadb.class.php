@@ -38,7 +38,7 @@ class GestorEntradaDB Extends core\ClaseGestor {
 	/**
 	 * Devuelve la colección de entradas, segun las condiciones del protcolo de entrada, más las normales
 	 * 
-	 * @param array $aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
+	 * @param array $aProt_orgigen = ['id_lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
 	 * @param array $aWhere
 	 * @param array $aOperators
 	 * @return boolean|array

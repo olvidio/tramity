@@ -410,7 +410,21 @@ class EscritoDB Extends core\ClasePropiedades {
 	}
 	
 	/* METODES ALTRES  ----------------------------------------------------------*/
-	/* METODES PRIVATS ----------------------------------------------------------*/
+	
+	/**
+	 * Para que sea compatible com metodos de Entradas.
+	 * Recupera l'atribut icreador de EscritoDB 
+	 *
+	 * @return integer icreador
+	 */
+	function getPonente() {
+		if (!isset($this->icreador) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->icreador;
+	}
+	
+		/* METODES PRIVATS ----------------------------------------------------------*/
 
 	/**
 	 * Estableix el valor de tots els atributs
@@ -726,7 +740,7 @@ class EscritoDB Extends core\ClasePropiedades {
 	 *
 	 * @return string sasunto
 	 */
-	function getAsunto() {
+	function getAsuntoDB() {
 		if (!isset($this->sasunto) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
@@ -745,7 +759,7 @@ class EscritoDB Extends core\ClasePropiedades {
 	 *
 	 * @return string sdetalle
 	 */
-	function getDetalle() {
+	function getDetalleDB() {
 		if (!isset($this->sdetalle) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}

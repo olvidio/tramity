@@ -61,7 +61,7 @@ switch ($Qopcion) {
         }
         break;
     case 2:
-        // buscar en asunto, detalle, asunto oficina. + periodo + oficina
+        // buscar en asunto, detalle, + periodo + oficina
         // las fechas.
         $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
         $Qf_max = (string) \filter_input(INPUT_POST, 'f_max');

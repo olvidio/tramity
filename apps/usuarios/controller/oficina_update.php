@@ -1,4 +1,5 @@
 <?php
+use davical\model\Davical;
 use usuarios\model\entity\Oficina;
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -45,6 +46,10 @@ switch($Qque) {
 		if ($oOficina->DBGuardar() === false) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oOficina->getErrorTxt();
+		} else {
+		    // Crear la oficina en davical.
+		    $oDavical = new Davical();
+		    $oDavical->crearOficina($Qsigla);
 		}
         break;
 	case "nuevo":
@@ -57,6 +62,10 @@ switch($Qque) {
         if ($oOficina->DBGuardar() === false) {
             echo _("hay un error, no se ha guardado");
             echo "\n".$oOficina->getErrorTxt();
+		} else {
+		    // Crear la oficina en davical.
+		    $oDavical = new Davical();
+		    $oDavical->crearOficina($Qsigla);
         }
 		break;
 }

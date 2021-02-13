@@ -11,6 +11,7 @@ use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
 use web\ProtocoloArray;
+use usuarios\model\PermRegistro;
 
 
 class Entrada Extends EntradaDB {
@@ -197,7 +198,40 @@ class Entrada Extends EntradaDB {
         return $origen_txt;
     }
     
-    
+    /**
+     * Recupera l'atribut sasunto de Entrada teniendo en cuenta los permisos
+     *
+     * @return string sasunto
+     */
+    function getAsunto() {
+        $oPermiso = new PermRegistro();
+        $perm = $oPermiso->permiso_detalle($this,'asunto');
+            
+        $a_visibilidad = $this->getArrayVisibilidad();
+        $asunto = $a_visibilidad[self::V_RESERVADO];
+        if ($perm > 0) {
+            $asunto = $this->getAsuntoDB();
+        } 
+        return $asunto;
+    }
+
+    /**
+     * Recupera l'atribut sdetalle de Entrada teniendo en cuenta los permisos
+     *
+     * @return string sdetalle
+     */
+    function getDetalle() {
+        $oPermiso = new PermRegistro();
+        $perm = $oPermiso->permiso_detalle($this,'detalle');
+            
+        $a_visibilidad = $this->getArrayVisibilidad();
+        $detalle = $a_visibilidad[self::V_RESERVADO];
+        if ($perm > 0) {
+            $detalle = $this->getDetalleDB();
+        } 
+        return $detalle;
+    }
+
     /**
      * añadir el detalle en el asunto.
      * también el grupo de destinos (si es distrbución cr)

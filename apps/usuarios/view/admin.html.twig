@@ -122,6 +122,27 @@
         </div>
       </li>
 
+      <!-- Nav Item - Davical -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDavical" aria-expanded="true" aria-controls="collapseUtilities">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>{{ "Davical"|trans }}</span>
+        </a>
+        <div id="collapseDavical" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/davical/controller/proves_index.php')" href="#">
+            	{{ "proves"|trans }}
+            </a>
+            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/davical/controller/user_lista.php')" href="#">
+            	{{ "lista usuarios"|trans }}
+            </a>
+            <a class="collapse-item" href="http://davical.local">
+                {{ "Admin"|trans }}
+            </a>
+          </div>
+        </div>
+      </li> 
+      
       <!-- Nav Item - Tables -->
       <li class="nav-item">
         <a class="nav-link" href="#" onclick="fnjs_logout()">

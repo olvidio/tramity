@@ -79,8 +79,9 @@ class DateTimeLocal Extends \DateTime {
             default:
                 $format = 'j'.$separador.'n'.$separador.'Y';
         }
-        if (!empty($type) && $type == 'timestamp') {
-            $format .= ' H:i:s';
+        if (!empty($type) && ($type == 'timestamp' OR $type == 'timestamptz') ) {
+            //$format .= ' H:i:s';
+            $format .= ' H:i:sP';
         }
         return $format;
     }

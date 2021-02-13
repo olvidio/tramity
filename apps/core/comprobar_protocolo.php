@@ -1,18 +1,19 @@
 <?php
-/**
-* Funciones más comunes de la aplicación
-*/
-// INICIO Cabecera global de URL de controlador *********************************
-	use core\ConfigGlobal;
 
-require_once ("global_header.inc");
+use function core\any_4;
+use entradas\model\GestorEntrada;
+use usuarios\model\entity\Cargo;
+
+// INICIO Cabecera global de URL de controlador *********************************
+
+
+require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
+require_once("/usr/share/awl/inc/iCalendar.php");
 
 // Crea los objectos de uso global **********************************************
-	require_once ("global_object.inc");
-// FIN de  Cabecera global de URL de controlador ********************************
-
-//include_once("func_reg.php");
+require_once ("apps/core/global_object.inc");
+// Crea los objectos para esta url  **********************************************
 
 
 /**
@@ -32,7 +33,7 @@ $aviso_salto='';
 $aviso_any='';
 $asunto='';
 $detalle='';
-$reservado='';
+$visibilidad='';
 $asunto_r='';
 $detalle_r='';
 $anulado='';
@@ -43,69 +44,77 @@ $id_pendiente = '';
 $pendiente_txt = '';
 $pendiente_uid = '';
 
+$txt_err = '';
+$Qque = (string) \filter_input(INPUT_POST, 'que');
+$Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
+$Qprot_any = (integer) \filter_input(INPUT_POST, 'prot_any');
 
-empty($_POST['prot_num'])? $prot_num="" : $prot_num=$_POST['prot_num'];
-empty($_POST['prot_any'])? $prot_any="" : $prot_any=$_POST['prot_any'];
-$prot_any=any_4($prot_any);
+$Qprot_any=any_4($Qprot_any);
 // compruebo el año (actual o -1)
 $any=date('Y');
-if ($prot_any != $any && $prot_any != $any-1) $aviso_any=1;
+if ($Qprot_any != $any && $Qprot_any != $any-1) $aviso_any=1;
 
+/*
 // id_lugar de cr
 $query_cr="SELECT id_lugar FROM lugares WHERE sigla='cr'";
 $oDBRSt_x_cr=$oDBR->prepare($query_cr);
 $oDBRSt_x_cr->execute();
 $id_cr=$oDBRSt_x_cr->fetchColumn();
+*/
 
-switch ($_POST['que']) {
+switch ($Qque) {
 	case "s1":
 	case "e1":
+	    /*
 		// compruebo si está fuera del rango para la dl (o cr si es una salida)
-		if ($_POST['que']=="s1") { $rango_inf= $rango_inf_cr; } else { $rango_inf= $rango_inf_dl; }
-		if ( $prot_num < $rango_inf || $prot_num > $rango_sup_dl) {
+		if ($Qque == "s1") { $rango_inf= $rango_inf_cr; } else { $rango_inf= $rango_inf_dl; }
+		if ( $Qprot_num < $rango_inf || $Qprot_num > $rango_sup_dl) {
 			$aviso_rango=1;
 		}
 		// compruebo si está repetido
-		$query_repe="SELECT * FROM escritos WHERE prot_num=$prot_num AND prot_any=$prot_any";
+		$query_repe="SELECT * FROM escritos WHERE prot_num=$Qprot_num AND prot_any=$Qprot_any";
 		$oDBRSt_repetido=$oDBR->query($query_repe);
 		if ($oDBRSt_repetido->rowCount()) { 
-			$prot_num="";
+			$Qprot_num="";
 			$aviso_repe=1;
 		} else {
 			// doy un aviso si el número de protocolo está x números ($error_prot) por encima del último.
 			// valores por defecto según el número
-			if ( $prot_num >= $rango_inf_cr && $prot_num < $rango_sup_cr) {
+			if ( $Qprot_num >= $rango_inf_cr && $Qprot_num < $rango_sup_cr) {
 				// id_lugar de cr
 				$query_cr="SELECT id_lugar FROM lugares WHERE sigla='cr'";
 				$oDBRSt_x_cr=$oDBR->query($query_cr);
 				$dest_id_lugar[0]=$oDBRSt_x_cr->fetchColumn();
 				// doy un aviso si el número de protocolo está x números ($error_prot) por encima del último.
-				$query_prot="SELECT prot_num FROM escritos WHERE prot_any=$prot_any AND prot_num < $rango_sup_cr ORDER BY id_reg DESC limit 1";
+				$query_prot="SELECT prot_num FROM escritos WHERE prot_any=$Qprot_any AND prot_num < $rango_sup_cr ORDER BY id_reg DESC limit 1";
 				$oDBRSt_q_ult=$oDBR->query($query_prot);
 				if ($oDBRSt_q_ult->rowCount()) {
 					$prot_ult=$oDBRSt_q_ult->fetchColumn();
-					if ($prot_num > $prot_ult + $error_prot) {
+					if ($Qprot_num > $prot_ult + $error_prot) {
 						$aviso_salto=$prot_ult." (cr)";
 					} 
 				} else {
-					$aviso_txt=sprintf(_("No existe ningún registro para el año %s."),$prot_any);
+					$aviso_txt=sprintf(_("No existe ningún registro para el año %s."),$Qprot_any);
 				}
 			} else { // > $rango_sup_cr (caso dl)
 				$dest_id_lugar[0]="";
-				$query_prot="SELECT prot_num FROM escritos WHERE prot_any=$prot_any AND prot_num >= $rango_inf_dl ORDER BY id_reg DESC limit 1";
+				$query_prot="SELECT prot_num FROM escritos WHERE prot_any=$Qprot_any AND prot_num >= $rango_inf_dl ORDER BY id_reg DESC limit 1";
 				$oDBRSt_q_ult=$oDBR->query($query_prot);
 				if ($oDBRSt_q_ult->rowCount()) {
 					$prot_ult=$oDBRSt_q_ult->fetchColumn();
-					if ($prot_num > $prot_ult + $error_prot) {
+					if ($Qprot_num > $prot_ult + $error_prot) {
 						$aviso_salto=$prot_ult." (dl)";
 					}
 				} else {
-					$aviso_txt=sprintf(_("No existe ningún registro para el año %s."),$prot_any);
+					$aviso_txt=sprintf(_("No existe ningún registro para el año %s."),$Qprot_any);
 				}
 			}
 		}
+		*/
 		break;
 	case "e2":
+	    
+	    /*
 		// de donde es:
 		$sql="SELECT tipo_ctr FROM lugares WHERE id_lugar=".$_POST['id_lugar']."";
 		$oDBRSt_q_origen=$oDBR->query($sql);
@@ -114,31 +123,33 @@ switch ($_POST['que']) {
 			case "cr":
 			case "dl":
 				// compruebo si está fuera del rango para cr o dl
-				if ( $prot_num < 1 || $prot_num > $num_max_cr) {
+				if ( $Qprot_num < 1 || $Qprot_num > $num_max_cr) {
 					$aviso_rango=1;
 				}
 				break;
 			default:
 				// compruebo si está fuera del rango para ctr
-				if ( $prot_num < 1 || $prot_num > $num_max_ctr) {
+				if ( $Qprot_num < 1 || $Qprot_num > $num_max_ctr) {
 					$aviso_rango=1;
 				}
 		}
 		// compruebo si ya está registrado
-		$query_repe="SELECT * FROM entradas WHERE id_lugar=".$_POST['id_lugar']." AND prot_num=$prot_num AND prot_any=$prot_any";
+		$query_repe="SELECT * FROM entradas WHERE id_lugar=".$_POST['id_lugar']." AND prot_num=$Qprot_num AND prot_any=$Qprot_any";
 		$oDBRSt_repetido=$oDBR->query($query_repe);
 		if ($oDBRSt_repetido->rowCount()) { 
 			$aviso_origen=1;
-		}  
+		} 
+		*/
 		break;
 	case "e3":
+	  /*
 		// para buscar los valores de la referencia
 		// compruebo si existe el escrito de referencia (sólo el primero, ordeno por anulado).
 
 	   // Busco en entradas
 	   $query_ref="SELECT d.id_reg,e.asunto,e.f_doc,e.anulado,e.detalle,e.reservado
 				   FROM entradas d join escritos e USING (id_reg)
-				  WHERE d.id_lugar=".$_POST['id_lugar']." AND d.prot_num=$prot_num AND d.prot_any=$prot_any
+				  WHERE d.id_lugar=".$_POST['id_lugar']." AND d.prot_num=$Qprot_num AND d.prot_any=$Qprot_any
 					ORDER BY e.anulado DESC	";
 	   //echo "query: $query_ref<br>";
 	   $oDBRSt_ref=$oDBR->query($query_ref);
@@ -147,7 +158,7 @@ switch ($_POST['que']) {
 	   if ($oDBRSt_ref->rowCount() == 0) {
 		  $query_ref="SELECT d.id_reg,e.asunto,e.f_doc,e.anulado,e.detalle,e.reservado
 					 FROM destinos d join escritos e USING (id_reg)
-					WHERE d.id_lugar=".$_POST['id_lugar']." AND d.prot_num=$prot_num AND d.prot_any=$prot_any
+					WHERE d.id_lugar=".$_POST['id_lugar']." AND d.prot_num=$Qprot_num AND d.prot_any=$Qprot_any
 					ORDER BY e.anulado DESC	";
 		  //echo "query: $query_ref<br>";
 		  $oDBRSt_ref=$oDBR->query($query_ref);
@@ -162,7 +173,7 @@ switch ($_POST['que']) {
 	  if (($oDBRSt_ref->rowCount() == 0) && ($oDBRSt_id_dl->rowCount() > 0)) {
 		  $query_ref="SELECT e.id_reg,e.asunto,e.f_doc,e.anulado,e.detalle,e.reservado
 					  FROM escritos e
-					  WHERE e.prot_num=$prot_num AND e.prot_any=$prot_any";
+					  WHERE e.prot_num=$Qprot_num AND e.prot_any=$Qprot_any";
 		  //echo "query: $query_ref<br>";
 		  $oDBRSt_ref=$oDBR->query($query_ref);
 	   }
@@ -184,11 +195,13 @@ switch ($_POST['que']) {
 		  foreach ($oDBR->query($query_of) as $row_of) {
 			 $oficinas_txt.=$row_of['id_oficina']." ";
 		  }
-	   }	
+	   }
+	   */	
 	   break;
 	case "s2":
-		$donde="es.prot_num='".$prot_num."'";
-		$donde.="AND es.prot_any='".$prot_any."'"; 
+	    /*
+		$donde="es.prot_num='".$Qprot_num."'";
+		$donde.="AND es.prot_any='".$Qprot_any."'"; 
 		// en entradas
 		$nueva=3; //para el boton guardar
 		// primero compruebo que no está ya aprobado:
@@ -201,7 +214,7 @@ switch ($_POST['que']) {
 			";
 		$oDBRSt_q=$oDBR->query($sql);
 		if ($oDBRSt_q->rowCount()!=0) {
-		   	$aviso_txt=sprintf(_("Ya existe una aprobación con este número: %s/%s."),$prot_num,$prot_any);
+		   	$aviso_txt=sprintf(_("Ya existe una aprobación con este número: %s/%s."),$Qprot_num,$Qprot_any);
 	   	} else {	
 			$sql= "SELECT es.id_reg,es.prot_num,es.prot_any,es.asunto,es.f_doc,es.anulado,es.reservado,es.detalle,
 				en.id_entrada,en.f_entrada,en.id_lugar as o_lugar,en.prot_num as o_prot_num,en.prot_any as o_prot_any,en.mas as o_mas,
@@ -212,12 +225,12 @@ switch ($_POST['que']) {
 			// echo "query: $sql<br>";
 			$oDBRSt_q=$oDBR->query($sql);
 			if ($oDBRSt_q->rowCount()==0) {
-				$aviso_txt=sprintf(_("No existe ninguna entrada con este número: %s/%s."),$prot_num,$prot_any);
+				$aviso_txt=sprintf(_("No existe ninguna entrada con este número: %s/%s."),$Qprot_num,$Qprot_any);
 			} else {
 				$row=$oDBRSt_q->fetch(PDO::FETCH_ASSOC);
 				$id_reg=$row["id_reg"];
-				$prot_num=$row["prot_num"];
-				$prot_any=$row["prot_any"];
+				$Qprot_num=$row["prot_num"];
+				$Qprot_any=$row["prot_any"];
 				$asunto=$row["asunto"];
 				$anulado=$row["anulado"];
 		    	$reservado=empty($row["reservado"])? 'f': 't';
@@ -256,12 +269,14 @@ switch ($_POST['que']) {
 				$datos.=",\"ref_r\": \"$r\"";
 			}
 		}
+		*/
 		break;
 	case "s3":
+	    /*
 		// compruebo si existe el escrito de referencia (sólo el primero, ordeno por anulado).
 		$query_dest="SELECT d.id_reg,e.asunto,e.anulado,e.reservado,e.detalle
 					FROM entradas d join escritos e USING (id_reg)
-					WHERE d.id_lugar=".$_POST['id_lugar']." AND d.prot_num=$prot_num AND d.prot_any=$prot_any
+					WHERE d.id_lugar=".$_POST['id_lugar']." AND d.prot_num=$Qprot_num AND d.prot_any=$Qprot_any
 					ORDER BY e.anulado DESC	";
 		//echo "query: $query_dest<br>";
 		$oDBRSt_dest=$oDBR->query($query_dest);
@@ -283,53 +298,41 @@ switch ($_POST['que']) {
 				$oficinas_txt.=$row_of['id_oficina']." ";
 			}
 		}
+		*/
 		break;
-	case "s4":
+	case "s4": //comprobado (modificar escrito registro)
+        $Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
 		// compruebo si existe el escrito de referencia (sólo el primero, ordeno por anulado).
 		// en entradas:
-		$query_ref="SELECT d.id_reg,e.asunto,e.anulado,e.reservado,e.detalle
-					FROM entradas d join escritos e USING (id_reg)
-					WHERE d.id_lugar=".$_POST['id_lugar']." AND d.prot_num=$prot_num AND d.prot_any=$prot_any
-					ORDER BY e.anulado DESC	";
-		//echo "query: $query_ref<br>";
-		$oDBRSt_ref=$oDBR->query($query_ref);
-		// o en aprobaciones, si es un escrito de dlb
-		$query_id_dl="SELECT sigla
-					FROM lugares
-					WHERE id_lugar=".$_POST['id_lugar']." AND sigla='".ConfigGlobal::$dele."' ";
-		//echo "query: $query_ref<br>";
-		$oDBRSt_id_dl=$oDBR->query($query_id_dl);
-	
-		if (!$oDBRSt_ref->rowCount() && $oDBRSt_id_dl->rowCount()) { 
-				$query_ref="SELECT e.id_reg,e.asunto,e.anulado,e.reservado,e.detalle
-						FROM escritos e 
-						WHERE e.prot_num=$prot_num AND e.prot_any=$prot_any";
-			//echo "query: $query_ref<br>";
-			$oDBRSt_ref=$oDBR->query($query_ref);
-		}
+	    $gesEntradas = new GestorEntrada();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
+	    $aProt_origen = [ 'id_lugar' => $Qid_lugar,
+                        'num' => $Qprot_num, 
+                        'any' => $Qprot_any,
+                        'mas' => '',
+                    ];
+		$cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
 		
-		if ($oDBRSt_ref->rowCount()) { 
-		   $oReferencia=$oDBRSt_ref->fetch(PDO::FETCH_OBJ);
-			  $asunto=$oReferencia->asunto;
-			  $detalle=$oReferencia->detalle;
-		      $reservado=empty($oReferencia->reservado)? 'f': 't';
-			  $anulado=$oReferencia->anulado;
-			  $id_reg =$oReferencia->id_reg;
-			$query_of="SELECT id_oficina
-						FROM oficinas
-						WHERE id_reg=$id_reg
-						GROUP BY id_oficina,responsable
-						ORDER BY responsable DESC";
-			$oDBRSt_of=$oDBR->query($query_of);
-			$oficinas_txt="";
-			foreach ($oDBRSt_of->fetchAll() as $row_of) {
-			    $oficinas_txt.= $row_of["id_oficina"]." ";
-			}
+		foreach($cEntradas as $oEntrada) {
+		    $id_entrada = $oEntrada->getId_entrada();
+		    $id_reg = $id_entrada;
+		    $asunto = $oEntrada->getAsunto();
+		    $detalle = $oEntrada->getDetalle();
+		    $visibilidad = $oEntrada->getVisibilidad();
+		    $anulado = '';
+		    $resto_oficinas = $oEntrada->getResto_oficinas();
+		    // Las entradas son cargos, hay que pasarlos a oficinas para los pendientes:
+		    $a_oficinas = [];
+		    foreach ($resto_oficinas as $id_cargo) {
+		        $oCargo = new Cargo($id_cargo);
+		        $a_oficinas[] = $oCargo->getId_oficina();
+		    }
+		    $oficinas_txt = implode(' ', $a_oficinas);
 		}
-		$datos=", \"id_reg\": \"$id_reg\" ";
+		$jsondata['id_reg'] = $id_reg;
 		break;
 	case "s5":
-		$donde="es.prot_num='".$prot_num."' AND es.prot_any='".$prot_any."'"; 
+	    /*
+		$donde="es.prot_num='".$Qprot_num."' AND es.prot_any='".$Qprot_any."'"; 
 		$dest_prot_num[0] = empty($dest_prot_num[0])? '' :$dest_prot_num[0];
 		$dest_prot_any[0] = empty($dest_prot_any[0])? '' :$dest_prot_any[0];
 		$dest_mas[0] = empty($dest_mas[0])? '' :$dest_mas[0];
@@ -343,12 +346,12 @@ switch ($_POST['que']) {
 		//echo "query: $sql<br>";
 		$oDBRSt_q=$oDBR->query($sql);
 		if ($oDBRSt_q->rowCount()==0) { 
-		   	$aviso_txt=sprintf(_("No existe ninguna aprobación con este número: %s/%s."),$prot_num,$prot_any); 
+		   	$aviso_txt=sprintf(_("No existe ninguna aprobación con este número: %s/%s."),$Qprot_num,$Qprot_any); 
 		} else {
 			$row=$oDBRSt_q->fetch(PDO::FETCH_ASSOC);
 			$id_reg=$row["id_reg"];
-			$prot_num=$row["prot_num"];
-			$prot_any=$row["prot_any"];
+			$Qprot_num=$row["prot_num"];
+			$Qprot_any=$row["prot_any"];
 			$asunto=$row["asunto"];
 			$anulado=$row["anulado"];
 		    $reservado=empty($row["reservado"])? 'f': 't';
@@ -367,7 +370,7 @@ switch ($_POST['que']) {
 			$id_modo_envio=$row["id_modo_envio"];
 			
 			if (empty($id_salida)) {
-			  	$aviso_txt=sprintf(_("No existe ninguna aprobación con este número: %s/%s."),$prot_num,$prot_any);
+			  	$aviso_txt=sprintf(_("No existe ninguna aprobación con este número: %s/%s."),$Qprot_num,$Qprot_any);
 				$aviso_aprobado=1;
 		   	} else {
 				$sql_destino= "SELECT de.id_lugar as dest_lugar,de.prot_num as dest_prot_num,
@@ -501,11 +504,13 @@ switch ($_POST['que']) {
 			//print_r($referencias);
 
 		}
+		*/
 		break;
 	case "distribucion":
+	    /*
 		$nueva=4; //para el boton guardar
-		$donde="AND en.prot_num='".$prot_num."'";
-		if (!empty($prot_any)) { $donde.="AND en.prot_any='".$prot_any."'"; }
+		$donde="AND en.prot_num='".$Qprot_num."'";
+		if (!empty($Qprot_any)) { $donde.="AND en.prot_any='".$Qprot_any."'"; }
 		// en entradas
 		$sql= "SELECT es.id_reg,en.prot_num,en.prot_any,es.asunto,es.f_doc,es.anulado,es.reservado,es.detalle,
 			ap.id_salida,ap.f_salida,ap.f_aprobacion,en.f_doc_entrada,en.id_lugar as o_lugar,u.sigla,m.descripcion,m.tipo_ctr,m.tipo_labor
@@ -515,11 +520,11 @@ switch ($_POST['que']) {
 			";
 		//echo "query: $sql<br>";
 		$oDBRSt_q=$oDBR->query($sql);
-		if ($oDBRSt_q->rowCount()==0) { $error_txt=sprintf(_("No existe ninguna entrada con este número: %s/%s."),$prot_num,$prot_any); }	
+		if ($oDBRSt_q->rowCount()==0) { $error_txt=sprintf(_("No existe ninguna entrada con este número: %s/%s."),$Qprot_num,$Qprot_any); }	
 		$row=$oDBRSt_q->fetch(PDO::FETCH_ASSOC);
 		$id_reg=$row['id_reg'];
-		$prot_num=$row['prot_num'];
-		$prot_any=$row['prot_any'];
+		$Qprot_num=$row['prot_num'];
+		$Qprot_any=$row['prot_any'];
 		$asunto=$row['asunto'];
 		$anulado=$row['anulado'];
 		$reservado=$row['reservado'];
@@ -537,7 +542,9 @@ switch ($_POST['que']) {
 		$datos=",\"id_reg\": \"$id_reg\",\"f_doc\": \"$f_doc\",\"id_salida\": \"$id_salida\",\"f_salida\": \"$f_salida\",\"f_aprobacion\": \"$f_aprobacion\",
 			\"descripcion\": \"".str_replace('"','\\"',$descripcion)."\",\"tipo_ctr\": \"$tipo_ctr\",\"tipo_labor\": \"$tipo_labor\"";
 		break;
+		*/
 	case "anular":
+	    /*
 		$pendiente_txt='';
 		$pendiente_txt_1='';
 		$pendiente_txt_2='';
@@ -555,23 +562,23 @@ switch ($_POST['que']) {
 			extract($oDBR->query($sql)->fetch(PDO::FETCH_ASSOC));
 			$lugar=$oDBR->query("SELECT sigla FROM lugares WHERE id_lugar=$id_lugar")->fetchColumn();
 			$sql="SELECT en.id_reg FROM entradas en JOIN escritos es USING (id_reg)
-					WHERE en.prot_any=$prot_any AND en.prot_num=$prot_num AND en.id_lugar=$id_lugar
+					WHERE en.prot_any=$Qprot_any AND en.prot_num=$Qprot_num AND en.id_lugar=$id_lugar
 					AND es.anulado IS NULL AND en.id_reg!=".$_POST['id_reg']."
 					";
 			$oDBRSt_q=$oDBR->query($sql);
 			$num_rows=$oDBRSt_q->rowCount();
 			if (empty($num_rows)) {
-				$pendiente_txt_1=sprintf(_("No existe ningun escrito más (y no anulado) con esta referencia: %s %s/%s."),$lugar,$prot_num,$prot_any);
+				$pendiente_txt_1=sprintf(_("No existe ningun escrito más (y no anulado) con esta referencia: %s %s/%s."),$lugar,$Qprot_num,$Qprot_any);
 				$pendiente_txt_2=_("¿Desea eliminar los pendientes asociados a este escrito?"); 
 				$pendiente_caso=1;
 			}
 			if ($num_rows > 1) {
-				$pendiente_txt_1=sprintf(_("Existe más de un escrito (no anulado) con esta referencia: %s %s/%s."),$lugar,$prot_num,$prot_any);
+				$pendiente_txt_1=sprintf(_("Existe más de un escrito (no anulado) con esta referencia: %s %s/%s."),$lugar,$Qprot_num,$Qprot_any);
 				$pendiente_caso=2;
 			}
 			if ($num_rows==1) {
 				$id_reg_nuevo=$oDBRSt_q->fetchColumn();
-				$pendiente_txt_1=sprintf(_("Existe una nueva versión de este escrito: %s %s/%s."),$lugar,$prot_num,$prot_any);
+				$pendiente_txt_1=sprintf(_("Existe una nueva versión de este escrito: %s %s/%s."),$lugar,$Qprot_num,$Qprot_any);
 				$pendiente_txt_2=_("¿Desea asociar los pendientes al escrito vigente?"); 
 				$pendiente_caso=3;
 			}
@@ -582,9 +589,90 @@ switch ($_POST['que']) {
 				, \"pendiente_txt_2\": \"".str_replace('"','\\"',$pendiente_txt_2)."\"
 				, \"pendiente_caso\": \"$pendiente_caso\"
 				, \"id_reg_nuevo\": \"$id_reg_nuevo\"";
+		*/
 		break;
+	case "can_e1":
+	    /*
+		// compruebo si está fuera del rango para la dl (o cr si es una salida)
+		if ( $Qprot_num < 200 || $Qprot_num > 1500) {
+			$aviso_rango=1;
+		}
+		// compruebo si está repetido
+		$query_repe="SELECT * FROM cancilleria_escritos WHERE prot_num=$Qprot_num AND prot_any=$Qprot_any";
+		$oDBRSt_repe=$oDBR->query($query_repe);
+		if ($oDBRSt_repe->rowCount()) { 
+			$Qprot_num="";
+			$aviso_repe=1;
+		} else {
+			// valores por defecto según el número
+			if ( $Qprot_num < 500 ) {
+				$origen="cr"; $origen_num=$Qprot_num; $origen_any=$Qprot_any;
+			} else {
+				$origen="of";
+			}
+			$datos=", \"origen\": \"$origen\"";
+		}
+		*/
+		break;
+	case "can_e2":
+	    /*
+		// compruebo si está repetido
+		$query_repe="SELECT * FROM cancilleria_escritos WHERE origen='".$_POST['id_lugar']."' AND origen_num=$Qprot_num AND origen_any=$Qprot_any";
+		//echo "sql: $query_repe<br>";
+		$oDBRSt_repe=$oDBR->query($query_repe);
+		if ($oDBRSt_repe->rowCount()) { 
+			$Qprot_num="";
+			$aviso_repe=1;
+		}
+		*/
+		break;
+	case "can_e3":
+	    /*
+		// Busco de quien es la ref.
+		$query_sigla="SELECT sigla
+					FROM lugares
+					WHERE id_lugar=".$_POST['id_lugar']." ";
+		//echo "query sigla: $query_sigla<br>";
+		$oDBRSt_q_sigla=$oDBR->query($query_sigla);
+		$sigla=$oDBRSt_q_sigla->fetchColumn();
+		switch ($sigla) {
+			case "Cancillería":
+				$query_ref="SELECT e.id_reg,e.asunto,e.f_doc,e.detalle
+							FROM cancilleria_escritos e 
+							WHERE e.prot_num=$Qprot_num AND e.prot_any=$Qprot_any";
+				break;
+			case "IESE":
+				$query_ref="SELECT e.id_reg,e.asunto,e.f_doc,e.detalle 
+							FROM cancilleria_escritos e 
+							WHERE e.origen_num=$Qprot_num AND e.origen_any=$Qprot_any";
+				break;
+		}
+		//echo "query: $query_ref<br>";
+		$oDBRSt_ref=$oDBR->query($query_ref);
+			
+		if ($oDBRSt_ref->rowCount()) { 
+		   $oReferencia=$oDBRSt_ref->fetch(PDO::FETCH_OBJ);
+			  $asunto=$oReferencia->asunto;
+			  $detalle=$oReferencia->detalle;
+			  $f_doc=$oReferencia->f_doc;
+			  $id_reg =$oReferencia->id_reg;
+			$query_of="SELECT id_oficina
+						FROM oficinas
+						WHERE id_reg=$id_reg AND cancilleria='t'
+						GROUP BY id_oficina,responsable
+						ORDER BY responsable DESC";
+			$oDBRSt_of=$oDBR->query($query_of);
+			$oficinas_txt="";
+			foreach ($oDBRSt_of->fetchAll() as $row_of) {
+			    $oficinas_txt.= $row_of["id_oficina"]." ";
+			}
+		}
+		*/
+	break;
+
 }
 
+/*
 if (!empty($id_reg)) {
 	$perm_detalle=permiso_detalle($id_reg,$reservado);
 	switch ($perm_detalle) {
@@ -598,7 +686,9 @@ if (!empty($id_reg)) {
 			break;
 	}
 }
+*/
 
+/*
 echo "{ \"que\": \"".$_POST["que"]."\",
 	 \"rango\": \"$aviso_rango\", 
 	 \"repe\": \"$aviso_repe\",
@@ -617,3 +707,36 @@ echo "{ \"que\": \"".$_POST["que"]."\",
 	 \"oficinas\": \"$oficinas_txt\",
 	 \"destino\": \"$dest_id_lugar[0]\" $datos
 	 }";
+*/
+
+$jsondata["que"] = $Qque;
+$jsondata["rango"] = "$aviso_rango"; 
+$jsondata["repe"] = "$aviso_repe";
+$jsondata["registrado"] = "$aviso_origen";
+$jsondata["aprobado"] = "$aviso_aprobado";
+$jsondata["txt"] = "$aviso_txt";
+$jsondata["error"] = "$error_txt";
+$jsondata["salto"] = "$aviso_salto";
+$jsondata["any"] ="$aviso_any";
+$jsondata["asunto"] = "".str_replace('"','\"',$asunto)."";
+$jsondata["detalle"] = "".str_replace('"','\"',$detalle)."";
+$jsondata["visibilidad"] = "$visibilidad";
+$jsondata["asunto_r"] = "".str_replace('"','\"',$asunto_r)."";
+$jsondata["detalle_r"] = "".str_replace('"','\"',$detalle_r)."";
+$jsondata["anulado"] =  "".str_replace('"','\"',$anulado)."";
+$jsondata["oficinas"] = "$oficinas_txt";
+$jsondata["destino"] = "$dest_id_lugar[0]";
+
+if (empty($txt_err)) {
+    $jsondata['success'] = true;
+    $jsondata['mensaje'] = 'ok';
+} else {
+    $jsondata['success'] = false;
+    $jsondata['mensaje'] = $txt_err;
+}
+
+//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+header('Content-type: application/json; charset=utf-8');
+echo json_encode($jsondata);
+exit();
+

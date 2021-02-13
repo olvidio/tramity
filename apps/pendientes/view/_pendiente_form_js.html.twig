@@ -1,0 +1,376 @@
+<script>
+$(function() {
+	$( "#f_plazo" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+		onShow: function(ct){
+			var f_min_iso = '{{ hoy_iso }}';
+			this.setOptions({
+				minDate: f_min_iso ? f_min_iso: false
+            })
+        }
+    });
+
+});
+$(function() {
+	$( "#f_acabado" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+		onShow: function(ct){
+			var f_max_iso = '{{ hoy_iso }}';
+			this.setOptions({
+				maxDate: f_max_iso ? f_max_iso: false
+            })
+        }
+    });
+
+});
+
+fnjs_ver_opciones=function(tipo){
+	event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+	switch (tipo) {
+		case "completa":
+			var n=$('#simple').val();
+			if (n==1) {
+				$('#mas_opciones').hide();
+				$('#opciones').html("{{ "ver ficha completa"|trans }}");
+				$('#simple').val(0);
+			} else {
+				$('#mas_opciones').show();
+				$('#opciones').html("{{ "ver ficha sencilla"|trans }}");
+				$('#simple').val(1);
+			}
+			break;
+		case "periodico":
+			var n=$('#simple_per').val();
+			if (n==1) {
+				$('#tr_f_plazo').show();
+				$('#periodico').hide();
+				$('#opciones_per').html("{{ "ver periodicidad"|trans }}");
+				$('#txt_plazo').html("{{ "plazo para contestar"|trans }}");
+				$('#simple_per').val(0);
+			} else {
+				$('#tr_f_plazo').hide();
+				$('#periodico').show();
+				$('#opciones_per').html("{{ "ocultar periodicidad"|trans }}");
+				$('#txt_plazo').html("{{ "fecha de fin"|trans }}");
+				$('#simple_per').val(1);
+			}
+			break;
+	}
+}
+
+fnjs_proto=function(num,any,indice){
+	var siguiente="xx";
+	var id_lugar=0;
+	var s=0;
+	var numero;
+	n=$(num).val();
+	numero=n.split("/");
+	if (numero[1]) {
+		$(num).val(numero[0]);
+		$(any).val(numero[1]);
+  	}
+	a1=$(num).val();
+	a2=$(any).val();
+	if (a1 && a2) {
+		// Para el número de referencia
+		if (num.substr(0,13)=='#ref_prot_num') {
+			que='s4';
+			id_lugar=$('#ref_id_lugar').val();
+			prot_num=$(num).val();
+			prot_any=$(any).val();
+			siguiente="#f_plazo";
+		}
+		var url = 'apps/core/comprobar_protocolo.php';
+		var datos = 'que='+que+'&id_lugar='+id_lugar+'&prot_num='+prot_num+'&prot_any='+prot_any;
+        request=$.ajax({
+            url: url,
+            data: datos,
+            type: 'post',
+            dataType: 'json'
+        });
+        request.done( function (json) {
+            if (json.success != true) {
+                alert ('error: '+json.mensaje);
+            } else {
+				if (json.rango) { alert("{{ "nº de protocolo fuera de rango"|trans }}"); s=1; }
+				if (json.any) { alert("{{ "No es de este año, ni del año pasado"|trans }}"); s=1; }
+				if (json.repe) { alert("{{ "nº de protocolo repetido"|trans }}");  s=1; }
+				if (json.txt) { alert(json.txt);  s=1; }
+				if (json.error) { alert(json.error);  s=1; }
+				if (json.anulado) {
+					alert("{{ "El escrito de referencia ha sido anulado"|trans }}"+" ("+json.anulado+").");
+				}
+				if (json.salto) {
+					alert("{{ "El nº de protocolo tiene un salto de más de xxx números respecto al último"|trans }}"+" ("+json.salto+").");
+					s=1;
+				}
+				if (json.asunto) {
+					$('#asunto').val(json.asunto);
+					siguiente="#f_plazo";
+				} else {
+					siguiente="#asunto";
+				}
+				if(json.id_reg) {
+					$('#id_reg').val(json.id_reg);
+				} else {
+					alert("{{ "No existe ningún escrito con este protocolo. No se guardará."|trans }}");
+				}
+				$('#detalle').val(json.detalle);
+				$('#visibilidad').val(json.visibilidad);
+				if (json.oficinas) {
+					//pongo a 0 (por si ya habia algo)
+					fnjs_quitar_oficinas();
+					count=0;
+					array_of=json.oficinas.split(" ");
+					$.each(array_of,function(i,id_of) {
+						if (id_of) { //puede haber un espacio al final i lo cuenta.
+							//if (count==0) {
+							//	$('#oficinas_mas').val(id_of);
+							//} else {
+                                $('#oficinas_mas').val(id_of);
+								fnjs_mas_oficinas('x',id_of);
+							//}
+							count++;
+						}
+					});
+				}
+			}
+			//complete: function() { if (s==1) { $(num).focus(); } else { $(siguiente).focus(); } }
+        });
+	} else {
+		alert ("{{ "Debe introducir el número de protocolo y el año"|trans }}");
+	}
+}
+
+fnjs_comprobar_status=function(){
+	var estado=$('#status').val();
+	if (estado=="COMPLETED") { 
+		$('#f_acabado').val("{{ hoy }}"); 
+	} else {
+		$('#f_acabado').val(""); 
+	}
+	$('#b_guardar').focus();
+}
+
+fnjs_cambiar_estado=function(){
+	var f_acabado=$('#f_acabado').val();
+	if (f_acabado) { 
+		//if (!fnjs_comprobar_fecha('#f_acabado')) { err=1; }
+		$('#status').val(1); 
+	} else {
+		$('#status').val(0); 
+	}
+}
+
+fnjs_guardar=function(event){
+	var err=0;
+	var go=$('#go').val();
+	var per=$('#simple_per').val();
+	var asunto=$('#asunto').val();
+	var f_plazo=$('#f_plazo').val();
+	var estado=$('#status').val();
+	var oficina=$('#id_oficina').val();
+	var calendario=$('#calendario').val();
+	
+	if (!estado) { alert("{{ "Debe llenar el campo de estado"|trans }}"); err=1; }
+	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans }}"); err=1; }
+	if (!oficina) { alert("{{ "Debe llenar el campo de oficinas"|trans }}"); err=1; }
+
+	var oficinas='';
+	var i=0;
+	var selector="span#span_oficinas select";
+	$(selector).each(function(i) {
+		if ($(this).val().length) {  
+			i++;
+			if (i>1) oficinas+=",";
+			oficinas+=$(this).val();
+		}
+	});
+
+	if (!f_plazo && per==0) {
+		txt=$('#txt_plazo').html();
+		alert("{{ "Debe llenar el campo de"| trans }} "+txt); err=1; 
+	} else {
+		txt=$('#txt_plazo').html();
+		if (f_plazo) {
+			//if (!fnjs_comprobar_fecha('#f_plazo')) {
+			//	alert(txt+" {{ "Incorrecta"|trans }}"); err=1; 
+			//}
+		}
+	}
+
+	if (err!=1) {
+		$('#oficinas').val(oficinas);
+		//$('#form_pendiente').attr('action','apps/pendientes/controller/pendiente_update_ics.php');
+		switch (go) {
+			case "entradas":
+			case "salidas": 
+			case "mov_iese": 
+				var url = 'pendiente_update_ics.php';
+				var datos = $('#form_pendiente').serialize();
+                request=$.ajax({
+                    url: url,
+                    data: datos,
+                    type: 'post',
+                    dataType: 'json'
+                });
+				request.done( function (json) {
+	                if (json.success != true) {
+	                    alert ('error: '+json.mensaje);
+		            } else {
+						window.opener.document.forms['form_entrada']['id_pendiente'].value=json.id_pendiente
+						//window.opener.document.forms['form_entrada']['f_plazo'].prop('disabled',true);
+						window.opener.document.forms['form_entrada']['f_plazo'].value=json.f_plazo;
+						window.opener.document.forms['form_entrada']['plazo'].value="fecha";
+						window.opener.document.forms['form_entrada']['btn_guardar'].focus();
+						window.close();
+			        }
+                });
+                request.fail(function(JqXHR, textStatus, errorThrown){
+                    txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
+                    alert(txt + 'An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+                    console.error("Hi ha un error: "+ textStatus, errorThrown);
+                });
+			break;
+			case "lista":
+				var url = 'apps/pendientes/controller/pendiente_update_ics.php';
+				var datos = $('#form_pendiente').serialize();
+                request=$.ajax({
+                    url: url,
+                    data: datos,
+                    type: 'post',
+                    dataType: 'json'
+                });
+				request.done( function (json) {
+	                if (json.success != true) {
+	                    alert ('error: '+json.mensaje);
+		            } else {
+                    	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+		            }
+                });
+                request.fail(function(JqXHR, textStatus, errorThrown){
+                    txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
+                    alert(txt + 'An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+                    console.error("Hi ha un error: "+ textStatus, errorThrown);
+                });
+			break;
+			default:
+				$('#form_pendiente').submit(function() {
+					$.ajax({
+						data: $(this).serialize(),
+						url: $(this).attr('action'),
+						type: 'post',
+						complete: function (rta) {
+							rta_txt=rta.responseText;
+							if (rta_txt != '' && rta_txt != '\n') {
+								alert (rta_txt);
+							} else {
+								$('#id_reg').val(0);
+								$('#form_pendiente')[0].reset();
+							}
+						}
+					});
+					return false;
+				});
+				//$('#form_pendiente').submit();
+				$('#form_pendiente').off();
+		 }
+	}
+    event.preventDefault();
+	event.stopPropagation();
+	event.stopImmediatePropagation();
+	return false;
+}
+
+fnjs_actualizar_status=function(){
+  var or=$('#status').val();
+  switch (or) {
+  case "COMPLETED":
+  	$('#status_acabado').show();
+	break;
+  default:
+  	$('#status_acabado').hide();
+	break;
+  }
+}
+
+fnjs_cancelar=function(event) {
+	var go = $('#go').val();
+	if (go == 'entradas') { // estoy en una ventana independiente
+        window.close();
+    } else {
+        // Asegurarme que es por click y no por return (posicion: 0,0)
+        var x = event.x || event.clientX;
+        var y = event.y || event.clientY;
+        if (!x && !y) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            return false;
+        }
+        event.preventDefault(); //prevent default action 	
+        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+    }
+}
+
+{{ oArrayDesplOficinas.ComprobarSelectJs|raw }}
+fnjs_mas_oficinas=function(e,of_id=1){
+	var code = (e.keyCode ? e.keyCode : e.which);
+	if(e=="x") {
+		var valor=of_id;
+		$('#oficinas_mas').val(of_id);
+	} else {
+		var id_campo='#'+e.currentTarget.id;
+		var valor=$(id_campo).val();
+		if(code!=9) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	}
+	if ( code==9 || e.type=="change" || e=="x") {
+		if (valor!=0) {
+			{{ oArrayDesplOficinas.ListaSelectsJs|raw }}
+		}
+	}
+}
+
+fnjs_quitar_oficinas=function(){
+	$('#oficinas_span').html("");
+	$('#oficina_num').val(0);
+}
+
+{{ oArrayDesplEtiquetas.ComprobarSelectJs|raw }}
+fnjs_mas_etiquetas=function(e){
+	var code = (e.keyCode ? e.keyCode : e.which);
+	if(e=="x") {
+		var valor=1;
+	} else {
+		var id_campo='#'+e.currentTarget.id;
+		var valor=$(id_campo).val();
+		if(code!=9) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	}
+	if ( code==9 || e.type=="change" || e=="x") {
+		if (valor!=0) {
+			{{ oArrayDesplEtiquetas.ListaSelectsJs|raw }}
+		}
+	}
+}
+
+fnjs_quitar_etiquetas=function(){
+	$('#etiquetas_span').html("");
+	$('#etiquetas_num').val(0);
+}
+</script>	

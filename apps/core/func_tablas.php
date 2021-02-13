@@ -98,6 +98,9 @@ function poner_null(&$valor) {
 	if (!$valor && $valor !== 0) { //admito que sea 0.
 		$valor=NULL;
 	} 
+	if ($valor === 'null') {
+		$valor=NULL;
+	} 
 }
 
 /**

@@ -46,6 +46,11 @@ if (isset($Qdb)) {
 			$oDB_txt = 'oDBT';
 			$prefix = '';
 		break;
+		case "davical":
+			$oDbl = $oDBDavical;
+			$oDB_txt = 'oDBDavical';
+			$prefix = '';
+		break;
 		default:
 			exit("Ha de dir quina base de dades");
 	}
@@ -207,6 +212,8 @@ foreach($oDbl->query($sql) as $row) {
 			$tip_val='';
 			break;
 		case 'date':
+		case 'timestamp':
+		case 'timestamptz';
 			$tipo_db='web\\DateTimeLocal';
 			$tip='d';
 			$tip_val='';
@@ -278,6 +285,8 @@ foreach($oDbl->query($sql) as $row) {
 	}';
         break;
         case 'date':
+		case 'timestamp':
+		case 'timestamptz';
         $gets.='
 	/**
 	 * Recupera l\'atribut '.$tip.$nomcamp.' de '.$clase.'
@@ -291,7 +300,7 @@ foreach($oDbl->query($sql) as $row) {
 		if (empty($this->'.$tip.$nomcamp.')) {
 			return new web\NullDateTimeLocal();
 		}
-        $oConverter = new core\Converter(\'date\', $this->'.$tip.$nomcamp.');
+        $oConverter = new core\Converter(\''.$tipo.'\', $this->'.$tip.$nomcamp.');
 		return $oConverter->fromPg();
 	}';
         break;
@@ -363,6 +372,8 @@ foreach($oDbl->query($sql) as $row) {
 	}';
 	            break;
 	        case 'date':
+            case 'timestamp':
+            case 'timestamptz';
             $gets.='
 	/**
 	 * estableix el valor de l\'atribut '.$tip.$nomcamp.' de '.$clase.'
@@ -374,7 +385,7 @@ foreach($oDbl->query($sql) as $row) {
 	 */
 	function set'.$NomCamp.'($'.$tip.$nomcamp.'=\''.$tip_val.'\',$convert=TRUE) {
         if ($convert === TRUE  && !empty($'.$tip.$nomcamp.')) {
-            $oConverter = new core\Converter(\'date\', $'.$tip.$nomcamp.');
+            $oConverter = new core\Converter(\''.$tipo.'\', $'.$tip.$nomcamp.');
             $this->'.$tip.$nomcamp.' = $oConverter->toPg();
 	    } else {
             $this->'.$tip.$nomcamp.' = $'.$tip.$nomcamp.';
@@ -422,6 +433,8 @@ foreach($oDbl->query($sql) as $row) {
             $ToEmpty.="\n\t\t".'$this->set'.$NomCamp.'(\'\');';
    	    break;
 	    case 'date':
+		case 'timestamp':
+		case 'timestamptz';
             $add_convert = TRUE;
             $exists.="\n\t\t".'if (array_key_exists(\''.$nomcamp.'\',$aDades)) $this->set'.$NomCamp.'($aDades[\''.$nomcamp.'\'],$convert);';
             $ToEmpty.="\n\t\t".'$this->set'.$NomCamp.'(\'\');';

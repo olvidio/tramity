@@ -1,15 +1,15 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
-use function core\is_true;
 use entradas\model\Entrada;
 use expedientes\model\Escrito;
 use expedientes\model\Expediente;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
+use usuarios\model\PermRegistro;
 use usuarios\model\entity\GestorCargo;
-use web\Desplegable;
 use web\DateTimeLocal;
+use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -142,6 +142,12 @@ if (!empty($Qid_escrito)) {
             break;
     }
     
+    $oPermisoregistro = new PermRegistro();
+    $perm_asunto = $oPermisoregistro->permiso_detalle($oEntrada, 'asunto');
+    $perm_detalle = $oPermisoregistro->permiso_detalle($oEntrada, 'detalle');
+    $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
+    $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
+
 } else {
     // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
     $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
@@ -199,6 +205,9 @@ if (!empty($Qid_escrito)) {
     $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
 
     $id_ponente = ConfigGlobal::mi_id_cargo();
+    
+    $asunto_readonly = '';
+    $detalle_readonly = '';
 }
 
 
@@ -268,7 +277,9 @@ $a_campos = [
     'tipo_doc' => $tipo_doc,
     'entradilla' => $entradilla,
     'asunto' => $asunto,
+    'asunto_readonly' => $asunto_readonly,
     'detalle' => $detalle,
+    'detalle_readonly' => $detalle_readonly,
     'oDesplCategoria' => $oDesplCategoria,
     'oDesplVisibilidad' => $oDesplVisibilidad,
     'chk_revisado' => $chk_revisado,

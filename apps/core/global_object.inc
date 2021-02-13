@@ -31,6 +31,11 @@ $config = $oConfigDB->getEsquema('public');
 $oConexion = new dbConnection($config);
 $oDBT = $oConexion->getPDO();
 
+// Conexión al servicdor davical (calendarios caldav).
+$oConfigDB = new ConfigDB('davical'); //de la database comun
+$config = $oConfigDB->getEsquema('public');
+$oConexion = new dbConnection($config);
+$oDBDavical = $oConexion->getPDO();
 
 
 // Datos de configuración propios de la aplicación

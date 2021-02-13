@@ -54,14 +54,14 @@
   <div class="form-group row">
     <label for="asunto" class="col-2 col-form-label">{{ "Asunto"|trans }}</label>
     <div class="col-10">
-      <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
+      <input {{ asunto_readonly }} tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------- DETALLE --------------- -->
   <div class="form-group row">
     <label for="detalle" class="col-2 col-form-label">{{ "Detalle"|trans }}</label>
     <div class='col-6'>
-      <input tabindex='50' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
+      <input {{ detalle_readonly }} tabindex='50' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
     </div>
   </div>
   <!--  --------------- ENTRADILLA --------------- -->

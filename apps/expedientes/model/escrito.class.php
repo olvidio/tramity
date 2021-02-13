@@ -3,15 +3,15 @@ namespace expedientes\model;
 
 use etherpad\model\Etherpad;
 use expedientes\model\entity\Accion;
+use expedientes\model\entity\EscritoAdjunto;
 use expedientes\model\entity\EscritoDB;
 use expedientes\model\entity\GestorAccion;
 use expedientes\model\entity\GestorEscritoAdjunto;
-use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Grupo;
+use usuarios\model\PermRegistro;
 use web\Protocolo;
 use web\ProtocoloArray;
-use expedientes\model\entity\EscritoAdjunto;
 
 
 
@@ -68,6 +68,38 @@ class Escrito Extends EscritoDB {
         }
         $this->setoDbl($oDbl);
         $this->setNomTabla('escritos');
+    }
+    
+    /**
+     * Recupera l'atribut sasunto de Entrada teniendo en cuenta los permisos
+     *
+     * @return string sasunto
+     */
+    function getAsunto() {
+        $oPermiso = new PermRegistro();
+        $perm = $oPermiso->permiso_detalle($this,'asunto');
+        
+        $asunto = '';
+        if ($perm > 0) {
+            $asunto = $this->getAsuntoDB();
+        }
+        return $asunto;
+    }
+    
+    /**
+     * Recupera l'atribut sdetalle de Escrito teniendo en cuenta los permisos
+     *
+     * @return string sdetalle
+     */
+    function getDetalle() {
+        $oPermiso = new PermRegistro();
+        $perm = $oPermiso->permiso_detalle($this,'detalle');
+        
+        $detalle = '';
+        if ($perm > 0) {
+            $detalle = $this->getDetalleDB();
+        }
+        return $detalle;
     }
     
     /**

@@ -1,5 +1,7 @@
 <?php
 use usuarios\model\entity\Cargo;
+use usuarios\model\entity\Oficina;
+use davical\model\Davical;
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -83,5 +85,15 @@ switch($Qque) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oCargo->getErrorTxt();
 		}
+		// Crear el usuario en davical. Hace falta el nombre de la oficina:
+		$oOficina = new Oficina($Qid_oficina);
+		$oficina = $oOficina->getSigla();
+		$aDatosCargo = [ 'cargo' => $Qcargo,
+                        'descripcion' => $Qdescripcion,
+                        'oficina' => $oficina,
+		          ];
+		$oDavical = new Davical();
+		$oDavical->crearUser($aDatosCargo);
+		
         break;
 }

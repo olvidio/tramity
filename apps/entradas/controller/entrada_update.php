@@ -1,12 +1,14 @@
 <?php
-use core\ViewTwig;
 use function core\is_true;
 use entradas\model\Entrada;
 use entradas\model\entity\EntradaBypass;
 use entradas\model\entity\EntradaDB;
 use entradas\model\entity\GestorEntradaBypass;
-use envios\model\Enviar;
 use lugares\model\entity\GestorGrupo;
+use pendientes\model\Pendiente;
+use usuarios\model\PermRegistro;
+use usuarios\model\entity\Cargo;
+use usuarios\model\entity\Oficina;
 use web\DateTimeLocal;
 use web\Protocolo;
 
@@ -182,8 +184,13 @@ switch($Qque) {
         if (!empty($Qid_entrada)) {
             $oEntrada = new Entrada($Qid_entrada);
             $oEntrada->DBCarregar();
+            $oPermisoRegistro = new PermRegistro();
+            $perm_asunto = $oPermisoRegistro->permiso_detalle($oEscrito, 'asunto');
+            $perm_detalle = $oPermisoRegistro->permiso_detalle($oEscrito, 'detalle');
         } else {
             $oEntrada = new Entrada();
+            $perm_asunto = PermRegistro::PERM_MODIFICAR;
+            $perm_detalle = PermRegistro::PERM_MODIFICAR;
         }
         
         $oEntrada->setModo_entrada(Entrada::MODO_MANUAL);
@@ -206,10 +213,13 @@ switch($Qque) {
  
         $oEntrada->setAsunto_entrada($Qasunto_e);
         $oEntrada->setF_documento($Qf_escrito,TRUE);
-        $oEntrada->setAsunto($Qasunto);
         $oEntrada->setF_entrada($Qf_entrada);
-
-        $oEntrada->setDetalle($Qdetalle);
+        if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
+            $oEntrada->setAsunto($Qasunto);
+        }
+        if ($perm_detalle >= PermRegistro::PERM_MODIFICAR) {
+            $oEntrada->setDetalle($Qdetalle);
+        }
         $oEntrada->setPonente($Qponente);
         $oEntrada->setResto_oficinas($Qa_firmas);
 
@@ -217,6 +227,7 @@ switch($Qque) {
         $oEntrada->setVisibilidad($Qvisibiliad);
 
         
+        // 5º Compruebo si hay que generar un pendiente
         switch ($Qplazo) {
             case 'hoy':
                 $oEntrada->setF_contestar('');
@@ -245,7 +256,7 @@ switch($Qque) {
             case 'fecha':
                 $oEntrada->setF_contestar($Qf_plazo);
                 break;
-        } 
+        }
             
         if (is_true($QAdmitir)) {
             // pasa directamente a asigado. Se supone que el admitido lo ha puesto el vcd.
@@ -265,6 +276,56 @@ switch($Qque) {
             $error_txt .= $oEntrada->getErrorTxt();
         } else {
             $id_entrada = $oEntrada->getId_entrada();
+            //////// Generar un Pendiente (hay que esperar e tener el id_entrada //////
+            if ($Qplazo != "hoy") {
+                $Qid_pendiente = (integer) \filter_input(INPUT_POST, 'id_pendiente');
+                if (empty($Qid_pendiente)) { // si id_pendiente, ya se ha guardado
+                    $f_plazo = $oEntrada->getF_contestar()->getFromLocal();
+                    $location = $oProtOrigen->ver_txt();
+                    
+                    $oCargoPonente = new Cargo($Qponente);
+                    $id_oficina = $oCargoPonente->getId_oficina();
+                    $oOficina = new Oficina($id_oficina);
+                    $oficina_ponente = $oOficina->getSigla();
+                    $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
+                    
+                    $parent_container = 'oficina_'.$oficina_ponente;
+                    $resource = 'registro';
+                    $cargo = 'secretaria';
+                    $uid = '';
+                    $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                    $oPendiente->setId_reg($id_reg);
+                    $oPendiente->setAsunto($Qasunto);
+                    $oPendiente->setStatus("NEEDS-ACTION");
+                    $oPendiente->setF_inicio($Qf_entrada);
+                    $oPendiente->setF_plazo($f_plazo);
+                    $oPendiente->setVisibilidad($Qvisibiliad);
+                    $oPendiente->setDetalle($Qdetalle);
+                    $oPendiente->setPendiente_con($Qorigen);
+                    $oPendiente->setLocation($location);
+                    $oPendiente->setId_oficina($id_oficina);
+                    // las firmas son cargos, buscar las oficinas implicadas:
+                    $oPendiente->setOficinasFromCargos($Qa_firmas);
+                    if ($oPendiente->Guardar() === FALSE ) {
+                        $error_txt .= _("No se han podido guardar el nuevo pendiente");
+                    }
+                } else {
+                    // meter el pendienteDB en davical con el id_reg que toque y borrarlo de pendienteDB.
+                    $oCargoPonente = new Cargo($Qponente);
+                    $id_oficina = $oCargoPonente->getId_oficina();
+                    $oOficina = new Oficina($id_oficina);
+                    $oficina_ponente = $oOficina->getSigla();
+                    $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
+                    
+                    $parent_container = 'oficina_'.$oficina_ponente;
+                    $resource = 'registro';
+                    $cargo = 'secretaria';
+                    $uid = '';
+                    $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                    $oPendiente->crear_de_pendienteDB($id_reg,$Qid_pendiente);
+                }
+            }
+        
             //////// BY PASS //////
             if ($Qbypass && $Qid_entrada) {
                 $gesEntradasBypass = new GestorEntradaBypass();
@@ -352,66 +413,5 @@ switch($Qque) {
         echo json_encode($jsondata);
         exit();
         
-        /*
-    case "1": //entradas
-        $oDBR->beginTransaction(); // porque a veces al dar error en insertar entrada, ya habia insertado el escrito y no hay manera de localizarlo
-        // 1º guardo escrito (devuelve el id_reg)
-        $id_reg=ins_escrito($_POST['prot_num'],$_POST['prot_any'],$asunto,$_POST['f_doc'],'entrada',$_POST['anulado'],$_POST['reservado'],$detalle);
-        // 2º guardo entrada (devuelve el id_entrada)
-        $id_entrada=ins_entrada($id_reg,$_POST['f_entrada'],$_POST['origen_id_lugar'],$_POST['origen_num'],$_POST['origen_any'],$_POST['origen_mas'],$_POST['f_doc_entrada']);
-        // 3º guardo referencias
-        ins_ref($id_reg,$ref_id_lugar,$ref_prot_num,$ref_prot_any,$ref_mas);
-        // 4º guardo oficinas implicadas
-        ins_oficinas($_POST['oficinas'],$id_reg,$id_entrada);
-        $oDBR->commit();
-        // Si es una distribución de cr, también hago la aprobación (antes estaba despues del pendiente,
-        // pero el array_shift me estropea el array de las oficinas; asi que es mejor hacer esto primero.
-        if (!empty($_POST['lista_ids'])) {
-            // 7º pongo true en aprobacion del escrito y marco el escrito como de distribucion cr
-            $sql_insert="UPDATE escritos SET aprobacion='t',distribucion_cr='t' WHERE id_reg=$id_reg";
-            //echo "sql 7: $sql_insert<br>";
-            $oDBR->query($sql_insert);
-            // 8º guardo la aprobacion (devuelve el id_salida): f_aprobacion=f_entrada
-            $id_salida=ins_salida($id_reg,$_POST['f_entrada'],$_POST['f_salida'],$_POST['descripcion'],$_POST['tipo_ctr'],$_POST['tipo_labor'],$_POST['id_modo_envio']);
-            // 9º guardo oficinas implicadas
-            ins_oficinas($_POST['oficinas'],$id_reg,$id_salida);
-            // 10º guardo los destinos
-            $id_lugar=explode(",",$_POST['lista_ids']);
-            ins_destinos($id_reg,$id_salida,$id_lugar,"","","");
-        }
-        // 5º Compruebo si hay que generar un pendiente
-        if ($_POST['plazo']!="hoy" && empty($_POST['id_pen'])) { // si id_pen, ya se ha guardado
-            switch ($_POST['plazo']) {
-                case "muy_urgente":
-                    $f_plazo= date('d/m/Y',mktime (0,0,0,date("m"),date("d")+$plazo_muy_urgente,date("Y")) );
-                    break;
-                case "urgente":
-                    $f_plazo= date('d/m/Y',mktime (0,0,0,date("m"),date("d")+$plazo_urgente,date("Y")) );
-                    break;
-                case "normal":
-                    $f_plazo= date('d/m/Y',mktime (0,0,0,date("m"),date("d")+$plazo_normal,date("Y")) );
-                    break;
-                case "fecha":
-                    empty($_POST['f_plazo'])? $f_plazo="" : $f_plazo=$_POST['f_plazo'];
-                    break;
-            }
-            // guardo pendiente
-            $status="NEEDS-ACTION";
-            $observ = empty($_POST['observ'])? '' : $_POST['observ'];
-            $oficinas = empty($_POST['oficinas'])? '' : $_POST['oficinas'];
-            $id_categoria = empty($_POST['id_categoria'])? '' : $_POST['id_categoria'];
-            $encargado = empty($_POST['encargado'])? '' : $_POST['encargado'];
-            $pendiente_con = empty($_POST['pendiente_con'])? '' : $_POST['pendiente_con'];
-            // la primera oficina es la que determina el calendario
-            $a_oficinas = explode(',',$oficinas);
-            $id_oficina = $a_oficinas[0];
-            ins_pendiente_of($id_oficina,$id_reg,$asunto,$status,"","",$f_plazo,$_POST['origen_mas'],$observ,$_POST['reservado'],$detalle,$id_categoria,$encargado,$pendiente_con,$oficinas,"");
-        }
-        // 6º si he guardado el pendiente antes que la entrada, hay que actualizar el pendiente con el id_reg
-        if (!empty($_POST['id_pen'])) {
-            guardar_pendiente($id_reg,$_POST['id_pen']);
-        }
-        break;
-        */
-        break;
+    break;
 }

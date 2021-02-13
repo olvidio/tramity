@@ -1,0 +1,64 @@
+<div id="condiciones">
+<form id="frm_que" name="frm_que" action="">
+	<input type="hidden" name="simple" value=1>
+	<input type='hidden' name='filtro' value='{{ filtro }}'>
+
+<h3>{{ "listar escritos pendientes de contestar"|trans }}</h3>
+<!--  --------------------  Calendarios --------------------------  -->
+  <div class="form-group row">
+    <label class="col-xs-1">{{ "De"|trans }}:</label>
+    <div class="col">
+		{{ oDesplCalendarios.desplegable|raw }}
+    </div>
+	<!--  --------------------  Periodo --------------------------  -->
+    <label for="periodo" class="col-xs-1">{{ "periodo"|trans }}:</label>
+    <div class="col">
+		<select tabindex=111 id=periodo name=periodo >
+		<option value="hoy" {{ sel_hoy }} >{{ "hasta la fecha"|trans }}</option>
+		<option value="semana" {{ sel_semana }} >{{ "próxima semana"|trans }}</option>
+		<option value="mes" {{ sel_mes }}>{{ "próximo mes"|trans }}</option>
+		<option value="trimestre" {{ sel_trimestre }}>{{ "próximo trimestre"|trans }}</option>
+		<option value="any" {{ sel_any }}>{{ "próximo año"|trans }}</option>
+		</select>
+	</div>
+    <!--  --------------------  Oficinas --------------------------  -->
+	{% if secretaria %}
+        <label for="id_oficina" class="col-xs-1">{{ "Oficina"|trans }}:</label>
+        <div class="col">
+              {{ oDesplOficinas.desplegable|raw }}
+        </div>
+    {% else %}
+        <input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
+    {% endif %}
+    <!--  --------------------  Encargados --------------------------  -->
+    <label for="oficina" class="col-2">{{ "¿Está asignado a alguien?"|trans }}:</label>
+    <div class="col">
+        {{ oDesplEncargados.desplegable|raw }}
+    </div>
+ 	<!--  --------------------  BOTONES --------------------------  -->
+    <div class="col">
+	  <button tabindex='90' class="btn btn-success" onClick="fnjs_buscar();" >
+        {{ "listar"|trans }}
+  	  </button>
+  	</div> 
+  </div>
+</form>
+</div>
+<hr>
+<div id="exportar" >
+<form id='seleccionados' name='seleccionados' action='' method='post'>
+	<input type='hidden' id='calendario' name='calendario' value='{{ op_calendario_default }}'>
+	<input type='hidden' name='filtro' value='{{ filtro }}'>
+	<input type='hidden' name='periodo' value='{{ periodo }}'>
+    <input type="hidden" id="id_oficina2" name="id_oficina" value="{{ id_oficina }}">
+	<input type='hidden' name='permiso' value='3'>
+	<input type='Hidden' name='go' value='lista' >
+	<input type='Hidden' id='nuevo' name='nuevo' value='' >
+	{{ oTabla.mostrar_tabla|raw }}
+</form><br>
+
+<input id="btn_nuevo" type="button" name="nuevo" onclick='fnjs_nuevo_pendiente("#seleccionados");' value="{{ "nuevo"|trans }}">
+
+</div>
+
+{{ include ('_pendiente_tabla_js.html.twig') }}

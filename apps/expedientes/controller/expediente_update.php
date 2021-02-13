@@ -12,6 +12,7 @@ use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
+use usuarios\model\PermRegistro;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -495,6 +496,8 @@ switch($Qque) {
         if (!empty($Qid_expediente)) {
             $oExpediente = new Expediente($Qid_expediente);
             $oExpediente->DBCarregar();
+            $oPermisoRegistro = new PermRegistro();
+            $perm_asunto = $oPermisoRegistro->permiso_detalle($oExpediente, 'asunto');
             // Mantego al ponente como creador...
         } else {
             // si falla el javascript, puede ser que se hagan varios click a 'Guardar' 
@@ -519,6 +522,7 @@ switch($Qque) {
             $oExpediente = new Expediente();
             $Qestado = Expediente::ESTADO_BORRADOR;
             $oExpediente->setPonente($Qponente);
+            $perm_asunto = PermRegistro::PERM_MODIFICAR;
         }
         
 
@@ -530,7 +534,9 @@ switch($Qque) {
         $oExpediente->setF_aprobacion($Qf_aprobacion);
         $oExpediente->setF_contestar($Qf_contestar);
         
-        $oExpediente->setAsunto($Qasunto);
+        if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
+            $oExpediente->setAsunto($Qasunto);
+        }
 
         $oExpediente->setEntradilla($Qentradilla);
         

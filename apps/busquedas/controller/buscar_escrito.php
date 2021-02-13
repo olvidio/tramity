@@ -61,12 +61,6 @@ $oDesplOrigen2->setBlanco(TRUE);
 $oDesplOrigen2->setOpciones($a_lugares);
 $oDesplOrigen2->setAction("fnjs_sel_periodo('#origen_id_lugar_2')");
     
-/*
-$opciones=array_oficinas("db");
-echo "<select name='oficina'  class=contenido>";
-pdo_options($opciones,$row_oficinas,1);
-echo "</select>";
-*/
 $gesOficinas = new GestorOficina();
 $a_oficinas = $gesOficinas->getArrayOficinas();
 $oDesplOficinas = new Desplegable();
