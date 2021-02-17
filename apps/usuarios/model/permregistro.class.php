@@ -299,15 +299,15 @@ class PermRegistro {
         if (array_search($id_oficina_role, $a_oficinas)) {
             $soy = empty($soy_dtor)? 'of_imp' : 'dtor_imp';
         }
-        if ($id_oficina_cargo == $id_ponente) {
+        if ($id_oficina_cargo == $id_oficina_ponente) {
             $soy = empty($soy_dtor)? 'of_pral' : 'dtor_pral';
         }
         if ($role_actual == 'secretaria') {
             $soy = empty($soy_dtor)? 'of_scl' : 'secretario';
         }
         
-        if (empty($this->array_registro_perm[$visibilidad][$soy][$que])) {
-            echo "visibilidad: $visibilidad, soy: $soy, que: $que<br>";
+        if (!isset($this->array_registro_perm[$visibilidad][$soy][$que])) {
+            echo "NO encuentro permiso para: visibilidad: $visibilidad, soy: $soy, que: $que<br>";
         }
         $permiso = $this->array_registro_perm[$visibilidad][$soy][$que];
         return $permiso;
