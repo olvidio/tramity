@@ -164,7 +164,7 @@ foreach($cPendientes as $oPendiente) {
     if (!empty($Qencargado)) { 
         if ($id_encargado != $Qencargado) { continue; }
     }
-    $encargado = !empty($id_encargado)? $a_cargos_oficina[$id_encargado] : '';
+    $encargado = !empty($id_encargado)? $a_usuarios_oficina[$id_encargado] : '';
     $t++;
     $ref = $oPendiente->getReferencias();
     $protocolo = $oPendiente->getLocation();
