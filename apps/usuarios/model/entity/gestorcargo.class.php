@@ -35,6 +35,27 @@ class GestorCargo Extends core\ClaseGestor {
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
+	public function getDirectorOficina($id_oficina) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    $sQuery="SELECT id_cargo, cargo FROM $nom_tabla
+                WHERE id_oficina=$id_oficina AND director = 't'
+                ";
+        if (($oDbl->query($sQuery)) === false) {
+            $sClauError = 'GestorAsignaturaTipo.lista';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return false;
+        }
+        $aOpciones=array();
+        foreach ($oDbl->query($sQuery) as $aClave) {
+            $clave=$aClave[0];
+            $val=$aClave[1];
+            $aOpciones[$clave]=$val;
+        }
+        //return $aOpciones;
+        return $clave;
+	}
 	/**
 	 * retorna un Array
 	 * Els posibles cargos directors (per entrades)

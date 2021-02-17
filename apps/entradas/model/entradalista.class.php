@@ -3,12 +3,13 @@ namespace entradas\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use entradas\model\entity\GestorEntradaBypass;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
+use web\DateTimeLocal;
 use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
-use web\DateTimeLocal;
-use entradas\model\entity\GestorEntradaBypass;
 
 
 class EntradaLista {
@@ -69,8 +70,31 @@ class EntradaLista {
                 $aWhere['estado'] = Entrada::ESTADO_ASIGNADO;
                 break;
             case 'en_aceptado':
-                // solo los propios:
-                $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
+                $gesCargos = new GestorCargo();
+                // solo los propios (si soy oficial miro el cargo de dtor)
+                $mi_cargo = ConfigGlobal::mi_id_cargo();
+                $oCargo = new Cargo($mi_cargo);
+                $director = $oCargo->getDirector();
+                if (is_true($director)) {
+                    $aWhere['ponente'] = $mi_cargo;
+                } else {
+                    $mi_id_oficina = $oCargo->getId_oficina();
+                    $id_dtor_oficina = $gesCargos->getDirectorOficina($mi_id_oficina);
+                    $aWhere['ponente'] = $id_dtor_oficina;
+                }
+                // + si soy oficina implicada:
+                $role_actual = $_SESSION['session_auth']['role_actual'];
+                $cCargos = $gesCargos->getCargos(['cargo' => $role_actual]);
+                if (!empty($cCargos[0])) {
+                    $id_oficina_role = $cCargos[0]->getId_oficina();
+                } else {
+                    $id_oficina_role = 0;
+                }
+                $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina_role); 
+                $a_id_cargos_oficina = array_keys($a_cargos_oficina);
+                $aWhere['resto_oficinas'] = '{'.implode(', ',$a_id_cargos_oficina).'}';
+                $aOperador['resto_oficinas'] = 'OVERLAP';
+                    
                 $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
                 // De una semana
                 $oHoy = new DateTimeLocal();
