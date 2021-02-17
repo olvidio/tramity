@@ -83,25 +83,49 @@ class EntradaLista {
                     $id_dtor_oficina = $gesCargos->getDirectorOficina($mi_id_oficina);
                     $aWhere['ponente'] = $id_dtor_oficina;
                 }
-                // + si soy oficina implicada:
+                $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
+                // De una semana
+                $oHoy = new DateTimeLocal();
+                $oHoy->sub(new \DateInterval('P70D'));
+                $aWhere['f_entrada'] = $oHoy->getIso();
+                $aOperador['f_entrada'] = '>';
+                $gesEntradas = new GestorEntrada();
+                $cEntradas = $gesEntradas->getEntradas($aWhere,$aOperador);
+                $a_entradas_ponente = [];
+                foreach ($cEntradas as $oEntrada) {
+                    $id_entrada = $oEntrada->getId_entrada();
+                    $a_entradas_ponente[] = $id_entrada;
+                }
+                
+                //////// añadir las oficina implicadas //////////////////////////////
+                $a_entradas_resto = [];
                 $role_actual = $_SESSION['session_auth']['role_actual'];
                 $cCargos = $gesCargos->getCargos(['cargo' => $role_actual]);
                 if (!empty($cCargos[0])) {
                     $id_oficina_role = $cCargos[0]->getId_oficina();
-                } else {
-                    $id_oficina_role = 0;
+                    $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina_role); 
+                    $a_id_cargos_oficina = array_keys($a_cargos_oficina);
+                    $aWhereResto['resto_oficinas'] = '{'.implode(', ',$a_id_cargos_oficina).'}';
+                    $aOperadorResto['resto_oficinas'] = 'OVERLAP';
+                    $aWhereResto['estado'] = Entrada::ESTADO_ACEPTADO;
+                    // De una semana
+                    $aWhereResto['f_entrada'] = $oHoy->getIso();
+                    $aOperadorResto['f_entrada'] = '>';
+                    $gesEntradas = new GestorEntrada();
+                    $cEntradas = $gesEntradas->getEntradas($aWhereResto,$aOperadorResto);
+                    foreach ($cEntradas as $oEntrada) {
+                        $id_entrada = $oEntrada->getId_entrada();
+                        $a_entradas_resto[] = $id_entrada;
+                    }
                 }
-                $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina_role); 
-                $a_id_cargos_oficina = array_keys($a_cargos_oficina);
-                $aWhere['resto_oficinas'] = '{'.implode(', ',$a_id_cargos_oficina).'}';
-                $aOperador['resto_oficinas'] = 'OVERLAP';
-                    
-                $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
-                // De una semana
-                $oHoy = new DateTimeLocal();
-                $oHoy->sub(new \DateInterval('P7D'));
-                $aWhere['f_entrada'] = $oHoy->getIso();
-                $aOperador['f_entrada'] = '>';
+                // sumar los dos: nuevos + aclaraciones.
+                $a_entradas_suma = array_merge($a_entradas_ponente, $a_entradas_resto);
+                $aWhere = [];
+                $aOperador = [];
+                if (!empty($a_entradas_suma)) {
+                    $aWhere['id_entrada'] = implode(',',$a_entradas_suma);
+                    $aOperador['id_entrada'] = 'IN';
+                }
                 break;
             case 'bypass':
                 // distribución cr
