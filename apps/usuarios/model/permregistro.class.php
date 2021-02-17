@@ -306,7 +306,7 @@ class PermRegistro {
             $soy = empty($soy_dtor)? 'of_scl' : 'secretario';
         }
         
-        if (empty($this->array_registro_perm[$visibilidad][$soy][$que]) {
+        if (empty($this->array_registro_perm[$visibilidad][$soy][$que])) {
             echo "visibilidad: $visibilidad, soy: $soy, que: $que<br>";
         }
         $permiso = $this->array_registro_perm[$visibilidad][$soy][$que];
