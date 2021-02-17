@@ -305,7 +305,7 @@ class PermRegistro {
             $soy = empty($soy_dtor)? 'of_scl' : 'secretario';
         }
         // caso vcd:
-        if ($role_actual === 'vcd') {
+        if ($role_actual == 'vcd') {
             $soy = 'dtor_pral';
         }
         

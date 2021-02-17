@@ -247,8 +247,9 @@ class Entrada Extends EntradaDB {
             $lista_grupos = empty($lista_grupos)? _("No hay destinos") : $lista_grupos;
             $txt_grupos = "<span class=\"text-success\"> ($lista_grupos)</span>";
         }
+        $asunto = $this->getAsunto();
         $detalle = $this->getDetalle();
-        $asunto_detelle = empty($detalle)? $this->getAsunto() : $this->getAsunto()." [$detalle]";
+        $asunto_detelle = empty($detalle)? $asunto : $asunto." [$detalle]";
         
         $asunto_detelle .= $txt_grupos;
         
