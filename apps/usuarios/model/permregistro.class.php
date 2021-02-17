@@ -294,7 +294,6 @@ class PermRegistro {
             $a_oficinas[] = $oCargo->getId_oficina();
         }
         
-        
         $soy = empty($soy_dtor)? 'of' : 'dtor';
         if (array_search($id_oficina_role, $a_oficinas)) {
             $soy = empty($soy_dtor)? 'of_imp' : 'dtor_imp';
@@ -304,6 +303,10 @@ class PermRegistro {
         }
         if ($role_actual == 'secretaria') {
             $soy = empty($soy_dtor)? 'of_scl' : 'secretario';
+        }
+        // caso vcd:
+        if ($role_actual === 'vcd') {
+            $soy = 'dtor_pral';
         }
         
         if (!isset($this->array_registro_perm[$visibilidad][$soy][$que])) {
