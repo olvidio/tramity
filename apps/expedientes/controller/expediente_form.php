@@ -225,11 +225,6 @@ if ($Qid_expediente) {
             }
         }
     }
-    
-    $oPermisoregistro = new PermRegistro();
-    $perm_asunto = $oPermisoregistro->permiso_detalle($oExpediente, 'asunto');
-    $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
-    
 } else {
     $titulo=_("nuevo expediente");
     $estado = Expediente::ESTADO_BORRADOR;
@@ -238,7 +233,6 @@ if ($Qid_expediente) {
     $f_reunion = '';
     $f_aprobacion = '';
     $asunto = '';
-    $asunto_readonly = '';
     $entradilla = '';
     $a_acciones = [];
     $oficinas = '';
@@ -298,7 +292,6 @@ $a_campos = [
     'f_aprobacion' => $f_aprobacion,
     
     'asunto' => $asunto,
-    'asunto_readonly' => $asunto_readonly,
     'entradilla' => $entradilla,
     'oficinas' => $oficinas,
     'oArrayDesplFirmasOficina' => $oArrayDesplFirmasOficina, 

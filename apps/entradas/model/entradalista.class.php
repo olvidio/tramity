@@ -86,7 +86,7 @@ class EntradaLista {
                 $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
                 // De una semana
                 $oHoy = new DateTimeLocal();
-                $oHoy->sub(new \DateInterval('P70D'));
+                $oHoy->sub(new \DateInterval('P7D'));
                 $aWhere['f_entrada'] = $oHoy->getIso();
                 $aOperador['f_entrada'] = '>';
                 $gesEntradas = new GestorEntrada();

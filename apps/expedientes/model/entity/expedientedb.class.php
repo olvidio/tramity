@@ -561,7 +561,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	 *
 	 * @return string sasunto
 	 */
-	function getAsuntoDB() {
+	function getAsunto() {
 		if (!isset($this->sasunto) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}

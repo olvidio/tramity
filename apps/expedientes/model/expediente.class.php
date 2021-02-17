@@ -11,7 +11,6 @@ use expedientes\model\entity\ExpedienteDB;
 use expedientes\model\entity\GestorAccion;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorTramiteCargo;
-use usuarios\model\PermRegistro;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorCargoGrupo;
@@ -357,22 +356,6 @@ class Expediente Extends expedienteDB {
         ];
         
         return $a_vida;
-    }
-    
-    /**
-     * Recupera l'atribut sasunto de Entrada teniendo en cuenta los permisos
-     *
-     * @return string sasunto
-     */
-    function getAsunto() {
-        $oPermiso = new PermRegistro();
-        $perm = $oPermiso->permiso_detalle($this,'asunto');
-        
-        $asunto = _("reservado");
-        if ($perm > PermRegistro::PERM_NADA) {
-            $asunto = $this->getAsuntoDB();
-        }
-        return $asunto;
     }
     
     /**
