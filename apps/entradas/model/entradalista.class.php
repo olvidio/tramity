@@ -3,6 +3,7 @@ namespace entradas\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use function core\is_true;
 use entradas\model\entity\GestorEntradaBypass;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
