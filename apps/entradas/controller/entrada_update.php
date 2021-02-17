@@ -277,9 +277,11 @@ switch($Qque) {
         } else {
             $id_entrada = $oEntrada->getId_entrada();
             //////// Generar un Pendiente (hay que esperar e tener el id_entrada //////
-            if ($Qplazo != "hoy") {
+            // Solo se genera en cuando el scdl lo acepta (filtro=en_asignado). Si no se mira esta condición
+            // se van generando pendientes cada vez que se guarda.
+            if ($Qplazo != "hoy" && $Qfiltro == 'en_asignado') {
                 $Qid_pendiente = (integer) \filter_input(INPUT_POST, 'id_pendiente');
-                if (empty($Qid_pendiente)) { // si id_pendiente, ya se ha guardado
+                if (empty($Qid_pendiente)) { // si no se ha generado el pendiente con "modificar pendiente"
                     $f_plazo = $oEntrada->getF_contestar()->getFromLocal();
                     $location = $oProtOrigen->ver_txt();
                     

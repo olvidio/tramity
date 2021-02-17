@@ -1322,4 +1322,17 @@ class Pendiente {
         
         return $aOficinas;
     }
+    
+    public function getOficinasTxtcsv($pral=TRUE) {
+        $gesOficinas = new GestorOficina();
+        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+        
+        $aOficinas = $this->getOficinasArray();
+        $oficinas_txt = '';
+        foreach($aOficinas as $id_oficina) {
+            $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
+            $oficinas_txt .= $a_posibles_oficinas[$id_oficina];
+        }
+        return $oficinas_txt;
+    }
 }

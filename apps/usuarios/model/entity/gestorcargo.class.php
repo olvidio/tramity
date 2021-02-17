@@ -64,6 +64,25 @@ class GestorCargo Extends core\ClaseGestor {
 	
 	/**
 	 * retorna un Array
+	 * Els posibles noms d'usuaris d'una oficina
+	 *
+	 * @param integer $id_oficina
+	 * @return Array [id_cargo => nom_usuario]
+	 */
+	function getArrayUsuariosOficina($id_oficina='') {
+	    $a_cargos_oficina = $this->getArrayCargosOficina($id_oficina);
+	    // pasar cargos a usuarios:
+	    $a_usuarios_oficina = [];
+	    $gesUsuarios = new GestorUsuario();
+	    foreach (array_keys($a_cargos_oficina) as $id_cargo) {
+	        $cUsuarios = $gesUsuarios->getUsuarios(['id_cargo' => $id_cargo]);
+	        $nom_usuario = $cUsuarios[0]->getNom_usuario();
+	        $a_usuarios_oficina[$id_cargo] = $nom_usuario;
+	    }
+	    return $a_usuarios_oficina;
+	}
+	/**
+	 * retorna un Array
 	 * Els posibles cargos de una oficina
 	 *
 	 * @param integer $id_oficina

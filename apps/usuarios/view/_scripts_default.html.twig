@@ -1,4 +1,10 @@
 <!-- Custom scripts for all pages-->
+<script>
+	// Variable global para todos los datetimepiker, indica el dia de inicio de la semana
+	// debe estar al inicio, para que la encuentre siempre al crear el datetimepicker
+    //Star week DatePicker. Default Sunday - 0. Monday - 1 ...
+    var globaljsVarDayStart = 1;
+</script>
 {% include '@global_js/core_ajax.js.twig' %}
 <script src="js/core_ajax.js"></script>
 <script>
@@ -14,7 +20,7 @@ $(document).ready(function(){
 	{% if mi_idioma %}
         jQuery.datetimepicker.setLocale('{{ mi_idioma }}');
 	{% else %}
-		jQuery.datetimepicker.setLocale('es');
+		jQuery.datetimepicker.setLocale('en');
 	{% endif %}
 });
 </script>

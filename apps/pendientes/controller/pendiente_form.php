@@ -2,20 +2,17 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use function core\array_status;
-use function core\fecha_YMD2DMY;
 use entradas\model\Entrada;
 use etiquetas\model\entity\GestorEtiqueta;
 use lugares\model\entity\GestorLugar;
 use pendientes\model\Pendiente;
-use function pendientes\model\Pendiente\buscar_ref_uid;
 use usuarios\model\PermRegistro;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorOficina;
+use usuarios\model\entity\GestorUsuario;
 use web\DateTimeLocal;
 use web\Desplegable;
-use Mpdf\Cache;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -102,8 +99,8 @@ $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas(event)');
 
 // para encargar a los oficiales
 $gesCargos = new GestorCargo();
-$a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
-$oDesplEncargados = new Desplegable('encargado',$a_cargos_oficina,'',TRUE);
+$a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
+$oDesplEncargados = new Desplegable('encargado',$a_usuarios_oficina,'',TRUE);
 
 $gesLugares = new GestorLugar();
 $a_lugares = $gesLugares->getArrayLugares();

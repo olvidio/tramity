@@ -173,24 +173,20 @@ switch ($Qnuevo) {
 			if (strlen($id_pendiente) > 10 ) {
 				$txt_err .= "ERROR: $id_pendiente \n";
 			} else {
-			    
-			    
                 $jsondata['id_pendiente'] = $id_pendiente;
                 $jsondata['f_plazo'] = $Qf_plazo;
-			    
-                if (empty($txt_err)) {
-                    $jsondata['success'] = true;
-                    $jsondata['mensaje'] = 'ok';
-                } else {
-                    $jsondata['success'] = false;
-                    $jsondata['mensaje'] = $txt_err;
-                }
-
-                //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
-                header('Content-type: application/json; charset=utf-8');
-                echo json_encode($jsondata);
-                exit();
 			}
+            if (empty($txt_err)) {
+                $jsondata['success'] = true;
+                $jsondata['mensaje'] = 'ok';
+            } else {
+                $jsondata['success'] = false;
+                $jsondata['mensaje'] = $txt_err;
+            }
+            //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+            header('Content-type: application/json; charset=utf-8');
+            echo json_encode($jsondata);
+            exit();
 		} else {
             $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $cargo, $Quid);
             $oPendiente->setId_reg($Qid_reg);
@@ -215,9 +211,21 @@ switch ($Qnuevo) {
             $oPendiente->setEtiquetasArray($Qa_etiquetas);
             if ($oPendiente->Guardar() === FALSE ) {
                 $txt_err .= _("No se han podido guardar el nuevo pendiente");
+			} else {
+                $jsondata['f_plazo'] = $Qf_plazo;
+			}
+            if (empty($txt_err)) {
+                $jsondata['success'] = true;
+                $jsondata['mensaje'] = 'ok';
+            } else {
+                $jsondata['success'] = false;
+                $jsondata['mensaje'] = $txt_err;
             }
+            //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+            header('Content-type: application/json; charset=utf-8');
+            echo json_encode($jsondata);
+            exit();
 		}
-		//$go='lista';
 		break;
 	case "2": //modificar pendiente
 		// 1º actualizo el escrito 
@@ -246,6 +254,17 @@ switch ($Qnuevo) {
         if ($oPendiente->Guardar() === FALSE ) {
             $txt_err .= _("No se han podido modificar el pendiente");
         }
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
 
         /*
 		// vuelvo
@@ -283,8 +302,19 @@ switch ($Qnuevo) {
 				}
 			}
 		} else {
-		    echo _("No se cual tengo que eliminar.");
+		    $txt_err .= _("No se cual tengo que eliminar.");
 		}
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
 		break;
 	case "4": //marcar com contestado
 		//vengo de un checkbox
@@ -302,32 +332,18 @@ switch ($Qnuevo) {
 				}
 			}
 		} else {
-		    echo _("No se cual tengo que eliminar.");
+		    $txt_err .= _("No se cual tengo que eliminar.");
 		}
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
 		break;
 } // fin del switch de nuevo.	
-
-
-if (empty($txt_err)) {
-    $jsondata['success'] = true;
-    $jsondata['mensaje'] = 'ok';
-} else {
-    $jsondata['success'] = false;
-    $jsondata['mensaje'] = $txt_err;
-}
-
-//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
-header('Content-type: application/json; charset=utf-8');
-echo json_encode($jsondata);
-exit();
-/*
-$go_to = empty($_POST['go_to'])? '' : $_POST['go_to'];
-if ($go=="lista" || $Qgo=="lista")  { $go_to="session@sel"; } 
-if ($Qgo=="otro")  { $go=''; } // no se mueve del formulario.
-if ($go=="") $go_to="";
-if (!empty($go_to)) {
-	include_once (ConfigGlobal::$dir_programas.'/func_web.php');
-	//echo "go_to: $go_to<br>";
-	$r=ir_a($go_to);
-}
-*/

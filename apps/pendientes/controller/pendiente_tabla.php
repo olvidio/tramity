@@ -76,9 +76,9 @@ $of_pral=$oficina;
 $cal_oficina="oficina_$oficina";
 
 $gesCargos = new GestorCargo();
-$a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+$a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
 // para el dialogo de búsquedas:
-$oDesplEncargados = new Desplegable('encargado',$a_cargos_oficina,$Qencargado,TRUE);
+$oDesplEncargados = new Desplegable('encargado',$a_usuarios_oficina,$Qencargado,TRUE);
 
 
 $gesEtiquetas = new GestorEtiqueta();
@@ -131,7 +131,8 @@ $a_cabeceras=array( ucfirst(_("protocolo")),
 					_("p"),
 					array('name'=>ucfirst(_("asunto")),'formatter'=>'clickFormatter'),
 					array('name'=>ucfirst(_("fecha plazo")),'class'=>'fecha'),
-					ucfirst(_("encargado"))
+					ucfirst(_("oficinas")),
+					ucfirst(_("encargado")),
 					);
 
 // Fetch all todos
@@ -172,6 +173,9 @@ foreach($cPendientes as $oPendiente) {
     if (!empty($asunto)) $asunto=htmlspecialchars(stripslashes($asunto),ENT_QUOTES,'utf-8');
     $plazo = $oPendiente->getF_plazo()->getFromLocal();
     $plazo_iso = $oPendiente->getF_plazo()->getIso();
+    
+    $oficinas_txt = $oPendiente->getOficinasTxtcsv();
+    
     
     $aEtiquetas = $oPendiente->getEtiquetasArray();
     $str_etiquetas = '';
@@ -218,7 +222,8 @@ foreach($cPendientes as $oPendiente) {
                 $a_valores[$recur][4]= array( 'ira'=>$pagina, 'valor'=>$asunto);
             }
             $a_valores[$recur][5]=$fecha;
-            $a_valores[$recur][6]=$encargado;
+            $a_valores[$t][6]=$oficinas_txt;
+            $a_valores[$recur][7]=$encargado;
             // para el orden
             $a_valores[$recur]['order']=$f_recur;
         }
@@ -238,7 +243,8 @@ foreach($cPendientes as $oPendiente) {
         */
         $a_valores[$t][4]=$asunto;
         $a_valores[$t][5]=$plazo;
-        $a_valores[$t][6]=$encargado;
+        $a_valores[$t][6]=$oficinas_txt;
+        $a_valores[$t][7]=$encargado;
         // para el orden
         if ($plazo!="x") {
             $a_valores[$t]['order'] = $plazo_iso;

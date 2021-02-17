@@ -6,6 +6,7 @@ $(function() {
 		format: '{{ format }}',
 		yearStart: {{ yearStart }},
 		yearEnd: {{ yearEnd }},
+		dayOfWeekStart: globaljsVarDayStart,
 		onShow: function(ct) {
 			this.setOptions({
 				minDate: '{{ minIso }}'

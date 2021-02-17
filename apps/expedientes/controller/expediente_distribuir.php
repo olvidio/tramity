@@ -134,8 +134,8 @@ if ($Qfiltro == 'distribuir') {
     $oEscritoLista->setFiltro('acabados');
     // para encargar a los oficiales
     $id_oficina = ConfigGlobal::mi_id_oficina();
-    $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
-    $oDesplOficiales = new Desplegable('id_oficial',$a_cargos_oficina,$id_ponente,TRUE);
+    $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
+    $oDesplOficiales = new Desplegable('id_oficial',$a_usuarios_oficina,$id_ponente,TRUE);
     $ver_encargar = TRUE;
 }
 

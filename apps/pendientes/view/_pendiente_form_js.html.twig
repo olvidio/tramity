@@ -6,6 +6,7 @@ $(function() {
 		format: '{{ format }}',
 		yearStart: {{ yearStart }},
 		yearEnd: {{ yearEnd }},
+		dayOfWeekStart: globaljsVarDayStart,
 		onShow: function(ct){
 			var f_min_iso = '{{ hoy_iso }}';
 			this.setOptions({
@@ -22,6 +23,7 @@ $(function() {
 		format: '{{ format }}',
 		yearStart: {{ yearStart }},
 		yearEnd: {{ yearEnd }},
+		dayOfWeekStart: globaljsVarDayStart,
 		onShow: function(ct){
 			var f_max_iso = '{{ hoy_iso }}';
 			this.setOptions({
