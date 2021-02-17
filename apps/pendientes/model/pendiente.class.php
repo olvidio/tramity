@@ -289,7 +289,7 @@ class Pendiente {
         $ref_prot_mas = empty($aDades['ref_prot_mas'])? '' :$aDades['ref_prot_mas'];
         $location = empty($aDades['location'])? '' :$aDades['location'];
         $observ = empty($aDades['observ'])? '' :$aDades['observ'];
-        $visibilidad = empty($aDades['visibilidad'])? '' :$aDades['visibilidad'];
+        $visibilidad = empty($aDades['visibilidad'])? '1' :$aDades['visibilidad'];
         $detalle = empty($aDades['detalle'])? '' :$aDades['detalle'];
         $categorias = empty($aDades['categorias'])? '' :$aDades['categorias'];
         $encargado = empty($aDades['encargado'])? '' :$aDades['encargado'];
@@ -515,7 +515,7 @@ class Pendiente {
         $ref_prot_mas = empty($aDades['ref_prot_mas'])? '' :$aDades['ref_prot_mas'];
         $location = empty($aDades['location'])? '' :$aDades['location'];
         $observ = empty($aDades['observ'])? '' :$aDades['observ'];
-        $visibilidad = empty($aDades['visibilidad'])? '' :$aDades['visibilidad'];
+        $visibilidad = empty($aDades['visibilidad'])? '1' :$aDades['visibilidad'];
         $detalle = empty($aDades['detalle'])? '' :$aDades['detalle'];
         $categorias = empty($aDades['categorias'])? '' :$aDades['categorias'];
         $encargado = empty($aDades['encargado'])? '' :$aDades['encargado'];
