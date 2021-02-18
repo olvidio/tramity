@@ -43,12 +43,9 @@ $cargar_css = FALSE;
 if (empty($Qid_oficina)) {
     $go = (string) \filter_input(INPUT_GET, 'go');
     $id_reg = (integer) \filter_input(INPUT_GET, 'id_reg');
-    $Qid_ponente = (integer) \filter_input(INPUT_GET, 'ponente');
+    $Qid_oficina = (integer) \filter_input(INPUT_GET, 'ponente');
     $Qcalendario = 'registro';
     
-    $oCargo = new Cargo($Qid_ponente);
-    $Qid_oficina = $oCargo->getId_oficina();
-   
     //if ($go=="entradas" || $go=="salidas" || $go=="mov_iese") { 
     $cargar_css = TRUE;
 } 
@@ -59,7 +56,7 @@ $gesOficinas = new GestorOficina();
 $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
 
 // solo secretaría puede ver/crear pendientes de otras oficinas
-$role_actual = $_SESSION['session_auth']['role_actual'];
+$role_actual = ConfigGlobal::role_actual();
 if ($role_actual === 'secretaria') {
     $secretaria = TRUE;
     $oDesplOficinas= $gesOficinas->getListaOficinas();
@@ -68,7 +65,7 @@ if ($role_actual === 'secretaria') {
 } else {
     $oDesplOficinas = []; // para evitar errores
     $secretaria = FALSE;
-    $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+    $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
     $id_oficina = $oCargo->getId_oficina();
 }
 
@@ -242,14 +239,15 @@ if ($go == 'entradas') {
     $oDesplVisibilidad->setOpcion_sel($visibilidad);
     
     // las oficinas	implicadas
-    $resto_cargos = (array)  \filter_input(INPUT_GET, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $resto_oficinas = (array)  \filter_input(INPUT_GET, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // Las entradas son cargos, hay que pasarlos a oficinas para los pendientes:
-    $a_oficinas = [];
-    foreach ($resto_cargos as $id_cargo) {
+    /*$a_oficinas = [];
+    foreach ($resto_oficinas as $id_oficina) {
         $oCargo = new Cargo($id_cargo);
         $a_oficinas[] = $oCargo->getId_oficina();
     }
-    $oArrayDesplOficinas->setSeleccionados($a_oficinas);
+    */
+    $oArrayDesplOficinas->setSeleccionados($resto_oficinas);
     
     $f_plazo = (string) \filter_input(INPUT_GET, 'f_plazo');
 

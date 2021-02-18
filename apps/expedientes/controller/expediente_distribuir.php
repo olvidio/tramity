@@ -89,7 +89,7 @@ $comentarios = $aRecorrido['comentarios'];
 $ver_etiquetas = FALSE;
 $etiquetas = []; // No hay ninguna porque en archivar es cuando se añaden.
 $etiquetas = $oExpediente->getEtiquetasVisiblesArray();
-if ($_SESSION['session_auth']['role_actual'] != 'secretaria') {
+if (ConfigGlobal::role_actual() != 'secretaria') {
     $gesEtiquetas = new GestorEtiqueta();
     $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
     $a_posibles_etiquetas = [];
@@ -133,7 +133,7 @@ if ($Qfiltro == 'distribuir') {
     $txt_btn_success = _("Archivar");
     $oEscritoLista->setFiltro('acabados');
     // para encargar a los oficiales
-    $id_oficina = ConfigGlobal::mi_id_oficina();
+    $id_oficina = ConfigGlobal::role_id_oficina();
     $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
     $oDesplOficiales = new Desplegable('id_oficial',$a_usuarios_oficina,$id_ponente,TRUE);
     $ver_encargar = TRUE;

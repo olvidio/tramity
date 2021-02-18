@@ -47,7 +47,7 @@ $cOficinas = $gesOficinas->getOficinas(['sigla' => 'scdl']);
 if (!empty($cOficinas)) {
     $id_oficina_secretaria = $cOficinas[0]->getId_oficina();
 }
-$mi_id_oficina = ConfigGlobal::mi_id_oficina();
+$mi_id_oficina = ConfigGlobal::role_id_oficina();
 if ($id_oficina_secretaria == $mi_id_oficina) {
     $a_roles_posibles[] = 'secretaria';
 }

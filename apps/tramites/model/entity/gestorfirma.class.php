@@ -227,7 +227,7 @@ class GestorFirma Extends core\ClaseGestor {
 	                $a_rec['class'] = "";
 	                $a_rec['valor'] = $cargo;
 	                // lo marco como visto (sólo el mio). Si hay más de uno sólo debería ser el primero vacío
-	                if ($id_cargo == ConfigGlobal::mi_id_cargo()) {
+	                if ($id_cargo == ConfigGlobal::role_id_cargo()) {
 	                    $orden_tramite_ref = $oFirma->getOrden_tramite();
 	                    // sólo el siguiente en orden tramite si estan todos completos.
                     	if ($this->getAnteriorOK($id_expediente,$orden_tramite_ref)) {
@@ -469,7 +469,7 @@ class GestorFirma Extends core\ClaseGestor {
                 const V_D_RECHAZADO    = 26;  // sólo vcd
                 const V_D_VISTO_BUENO  = 27;  // sólo vcd VºBº
              */
-            if (ConfigGlobal::mi_usuario_cargo() === 'vcd' && ConfigGlobal::mi_id_cargo() == $id_cargo) {
+            if (ConfigGlobal::mi_usuario_cargo() === 'vcd' && ConfigGlobal::role_id_cargo() == $id_cargo) {
                 if ($valor == Firma::V_VISTO) {
                     return FALSE;
                 }

@@ -221,7 +221,7 @@ switch ($Qque) {
 	    $aOperador = [];
         $aWhere['estado'] = Expediente::ESTADO_BORRADOR;
         // posibles oficiales de la oficina:
-        $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+        $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
         $id_oficina = $oCargo->getId_oficina();
         $gesCargos = new GestorCargo();
         $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);

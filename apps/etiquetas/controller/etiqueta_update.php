@@ -39,11 +39,11 @@ switch($Qque) {
         if (is_true($Qoficina)) {
             $oficina = 't';
             // buscar el id de la oficina:
-            $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+            $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
             $id_cargo = $oCargo->getId_oficina();
         } else {
             $oficina = 'f';
-            $id_cargo = ConfigGlobal::mi_id_cargo();
+            $id_cargo = ConfigGlobal::role_id_cargo();
         }
 
 		if (empty($Qnom_etiqueta)) { echo _("debe poner un nombre"); }

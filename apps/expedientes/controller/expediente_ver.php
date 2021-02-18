@@ -46,7 +46,7 @@ $ponente_txt = '?';
 $id_ponente = $oExpediente->getPonente();
 $ponente_txt = $aCargos[$id_ponente];
 
-if ($id_ponente == ConfigGlobal::mi_id_cargo()) {
+if ($id_ponente == ConfigGlobal::role_id_cargo()) {
     $aclaracion = _("Responder aclaración");
     $aclaracion_event = 'respuesta';
 } else {
@@ -70,7 +70,7 @@ $rango = 'voto';
 if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
     // Ver cual toca
     $aWhere = ['id_expediente' => $Qid_expediente,
-                'id_cargo' => ConfigGlobal::mi_id_cargo(),
+                'id_cargo' => ConfigGlobal::role_id_cargo(),
                 '_ordre' => 'orden_tramite',
     ];
     $cFirmasVcd = $gesFirmas->getFirmas($aWhere);
@@ -162,7 +162,7 @@ $add_del_txt = '';
 if ($Qfiltro == 'seg_reunion') {
     $add_del = 'del';
     // solo secretaria tiene permiso
-    if ($_SESSION['session_auth']['role_actual'] == 'secretaria') {
+    if (ConfigGlobal::role_actual() == 'secretaria') {
         $add_del_txt = _("Quitar Firmas");
     }
 } else {

@@ -39,7 +39,7 @@ $prioridad_normal = Expediente::PRIORIDAD_NORMAL;
 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 
-$id_ponente = ConfigGlobal::mi_id_cargo();
+$id_ponente = ConfigGlobal::role_id_cargo();
 $oCargo =new Cargo($id_ponente);
 $ponente_txt = '';
 if (!empty($oCargo)) {

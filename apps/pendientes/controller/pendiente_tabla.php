@@ -29,7 +29,7 @@ $Qdespl_calendario = (string) \filter_input(INPUT_POST, 'despl_calendario');
 $Qcalendario = (string) \filter_input(INPUT_POST, 'calendario');
 $Qencargado = (string) \filter_input(INPUT_POST, 'encargado');
 	
-$cargo = $_SESSION['session_auth']['role_actual'];
+$cargo = ConfigGlobal::role_actual();
 
 $aOpciones = [
     'registro' => _("registro"),
@@ -52,7 +52,7 @@ $oGOficinas = new GestorOficina();
 $a_oficinas = $oGOficinas->getArrayOficinas();
 
 // solo secretaría puede ver/crear pendientes de otras oficinas
-$role_actual = $_SESSION['session_auth']['role_actual'];
+$role_actual = ConfigGlobal::role_actual();
 if ($role_actual === 'secretaria') {
     $secretaria = 1; // NO TRUE, para eljavascript;
     $oDesplOficinas= $oGOficinas->getListaOficinas();
@@ -62,7 +62,7 @@ if ($role_actual === 'secretaria') {
 } else {
     $oDesplOficinas = []; // para evitar errores
     $secretaria = 0; // NO FALSE, para eljavascript;
-    $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+    $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
     $id_oficina = $oCargo->getId_oficina();
 }
 

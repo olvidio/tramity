@@ -6,6 +6,7 @@ use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\PermRegistro;
 use usuarios\model\entity\GestorCargo;
+use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
@@ -54,15 +55,12 @@ $oProtRef->setNombre('ref');
 $oProtRef->setOpciones($a_posibles_lugares);
 $oProtRef->setBlanco(TRUE);
 
-$txt_option_cargos = '';
-$gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargosDirector();
-foreach ($a_posibles_cargos as $id_cargo => $cargo) {
-    $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
-}
-$oDesplPonente = $gesCargos->getDesplCargos('x', TRUE);
-$oDesplPonente->setNombre('ponente');
-$oDesplPonente->setTabIndex(60);
+
+$gesOficinas = new GestorOficina();
+$a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+$oDesplPonenteOficina = $gesOficinas->getListaOficinas();
+$oDesplPonenteOficina->setNombre('ponente');
+$oDesplPonenteOficina->setTabIndex(80);
 
 $oEntrada = new Entrada($Qid_entrada);
 // tipo
@@ -148,12 +146,12 @@ if (!empty($Qid_entrada)) {
     $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
     
     $ponente = $oEntrada->getPonente();
-    $oDesplPonente->setOpcion_sel($ponente);
+    $oDesplPonenteOficina->setOpcion_sel($ponente);
     $a_oficinas = $oEntrada->getResto_oficinas();
     
-    $oArrayDesplFirmas = new web\DesplegableArray($a_oficinas,$a_posibles_cargos,'oficinas');
-    $oArrayDesplFirmas ->setBlanco('t');
-    $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas(event)');
+    $oArrayDesplOficinas = new web\DesplegableArray($a_oficinas,$a_posibles_oficinas,'oficinas');
+    $oArrayDesplOficinas->setBlanco('t');
+    $oArrayDesplOficinas->setAccionConjunto('fnjs_mas_oficinas(event)');
     
     $categoria = $oEntrada->getCategoria();
     $oDesplCategoria->setOpcion_sel($categoria);
@@ -243,9 +241,9 @@ if (!empty($Qid_entrada)) {
     $oArrayProtRef ->setBlanco('t');
     $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
 
-    $oArrayDesplFirmas = new web\DesplegableArray('',$a_posibles_cargos,'oficinas');
-    $oArrayDesplFirmas ->setBlanco('t');
-    $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas(event)');
+    $oArrayDesplOficinas = new web\DesplegableArray('',$a_posibles_oficinas,'oficinas');
+    $oArrayDesplOficinas->setBlanco('t');
+    $oArrayDesplOficinas->setAccionConjunto('fnjs_mas_oficinas(event)');
     
     $asunto_readonly = '';
     $detalle_readonly = '';
@@ -288,9 +286,9 @@ $a_campos = [
     'asunto_readonly' => $asunto_readonly,
     'detalle' => $detalle,
     'detalle_readonly' => $detalle_readonly,
-    'oDesplPonente' => $oDesplPonente,
+    'oDesplPonenteOficina' => $oDesplPonenteOficina,
     'a_oficinas' => $a_oficinas,
-    'oArrayDesplFirmas' => $oArrayDesplFirmas,  
+    'oArrayDesplOficinas' => $oArrayDesplOficinas,  
     'oDesplCategoria' => $oDesplCategoria,
     'oDesplVisibilidad' => $oDesplVisibilidad,
     'oDesplPlazo' => $oDesplPlazo,
@@ -300,7 +298,7 @@ $a_campos = [
     //'a_adjuntos' => $a_adjuntos,
     'initialPreview' => $initialPreview,
     'json_config' => $json_config,
-    'txt_option_cargos' => $txt_option_cargos,
+    //'txt_option_oficinas' => $txt_option_oficinas,
     'txt_option_ref' => $txt_option_ref,
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,

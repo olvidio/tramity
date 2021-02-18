@@ -219,7 +219,7 @@ fnjs_quitar_referencias=function(){
 	$('#ref_num').val(0);
 }
 
-{{ oArrayDesplFirmas.ComprobarSelectJs|raw }}
+{{ oArrayDesplOficinas.ComprobarSelectJs|raw }}
 fnjs_mas_oficinas=function(e){
 	var code = (e.keyCode ? e.keyCode : e.which);
 	if(e=="x") {
@@ -234,7 +234,7 @@ fnjs_mas_oficinas=function(e){
 	}
 	if ( code==9 || e.type=="change" || e=="x") {
 		if (valor!=0) {
-			{{ oArrayDesplFirmas.ListaSelectsJs|raw }}
+			{{ oArrayDesplOficinas.ListaSelectsJs|raw }}
 		}
 	}
 }

@@ -72,12 +72,31 @@ Class ConfigGlobal extends ServerConf {
 			return false;
 		}
 	}
-
+	
+	/**
+	 * Se cambia al cambiar le role
+	 * @return string
+	 */
+	public static function role_actual() {
+		return $_SESSION['session_auth']['role_actual'];
+	}
+	/**
+	 * Se cambia al cambiar le role
+	 * @return integer
+	 */
+	public static function role_id_cargo() {
+		return $_SESSION['session_auth']['id_cargo'];
+	}
+	/**
+	 * Se cambia al cambiar le role
+	 * @return integer
+	 */
+	public static function role_id_oficina() {
+		return $_SESSION['session_auth']['mi_id_oficina'];
+	}
+	
 	public static function mi_id_usuario() {
 		return $_SESSION['session_auth']['id_usuario'];
-	}
-	public static function mi_id_cargo() {
-		return $_SESSION['session_auth']['id_cargo'];
 	}
 	public static function mi_usuario_cargo() {
 		return $_SESSION['session_auth']['usuario_cargo'];
@@ -140,26 +159,7 @@ Class ConfigGlobal extends ServerConf {
 	    }
 		return $dl;
 	}
-	/**
-	 * Para los esquemas tipo 'H-H' o 'H-Hf', se tiene permiso 
-	 * para consultar a todas las dl.
-	 * 
-	 * @return boolean
-	 */
-	public static function soy_region() {
-	    $soy_region = FALSE;
-        if ( self::mi_region() === self::mi_delef() ) {
-            $soy_region = TRUE;
-        }
-        return $soy_region;
-	}
 	
-	public static function permisos() {
-		//ja no val return $_SESSION['session_auth']['perms'];
-	}
-	public static function mi_id_oficina() {
-		return $_SESSION['session_auth']['mi_id_oficina'];
-	}
 	public static function mi_mail() {
 		return $_SESSION['session_auth']['mail'];
 	}

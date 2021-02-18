@@ -1,4 +1,5 @@
 <?php
+use core\ConfigGlobal;
 use function core\montar_rrule;
 use lugares\model\entity\Lugar;
 use pendientes\model\Pendiente;
@@ -87,7 +88,7 @@ if (!empty($Qref_id_lugar)) {
 }
 
 
-$cargo = $_SESSION['session_auth']['role_actual'];
+$cargo = ConfigGlobal::role_actual();
 $txt_err = '';
 
 if (!empty($_POST['simple_per'])) { // sólo para los periodicos.

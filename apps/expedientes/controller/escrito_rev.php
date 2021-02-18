@@ -201,7 +201,7 @@ if (!empty($Qid_escrito)) {
     $oArrayDesplFirmas ->setBlanco('t');
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas(event)');
     
-    $id_ponente = ConfigGlobal::mi_id_cargo();
+    $id_ponente = ConfigGlobal::role_id_cargo();
     $iframe = '';
 }
 

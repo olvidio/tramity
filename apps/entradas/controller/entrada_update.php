@@ -38,7 +38,7 @@ $Qf_entrada = (string) \filter_input(INPUT_POST, 'f_entrada');
 
 $Qdetalle = (string) \filter_input(INPUT_POST, 'detalle');
 $Qponente = (integer) \filter_input(INPUT_POST, 'ponente');
-$Qa_firmas = (array)  \filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_oficinas = (array)  \filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 $Qcategoria = (integer) \filter_input(INPUT_POST, 'categoria');
 $Qvisibiliad = (integer) \filter_input(INPUT_POST, 'visibilidad');
@@ -221,7 +221,7 @@ switch($Qque) {
             $oEntrada->setDetalle($Qdetalle);
         }
         $oEntrada->setPonente($Qponente);
-        $oEntrada->setResto_oficinas($Qa_firmas);
+        $oEntrada->setResto_oficinas($Qa_oficinas);
 
         $oEntrada->setCategoria($Qcategoria);
         $oEntrada->setVisibilidad($Qvisibiliad);
@@ -307,7 +307,7 @@ switch($Qque) {
                     $oPendiente->setLocation($location);
                     $oPendiente->setId_oficina($id_oficina);
                     // las firmas son cargos, buscar las oficinas implicadas:
-                    $oPendiente->setOficinasFromCargos($Qa_firmas);
+                    $oPendiente->setOficinas($Qa_oficinas);
                     if ($oPendiente->Guardar() === FALSE ) {
                         $error_txt .= _("No se han podido guardar el nuevo pendiente");
                     }

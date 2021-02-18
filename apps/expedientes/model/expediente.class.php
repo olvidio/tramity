@@ -109,7 +109,7 @@ class Expediente Extends expedienteDB {
         // por defecto va al borrador del mismo ponente
         if (!empty($destino)) {
             if ($destino == 'copias') {
-                $ponente = ConfigGlobal::mi_id_cargo();
+                $ponente = ConfigGlobal::role_id_cargo();
                 $estado = Expediente::ESTADO_COPIAS;
             } else {
                 $ponente = $destino;
@@ -225,7 +225,7 @@ class Expediente Extends expedienteDB {
     
     public function getEtiquetasVisibles($id_cargo='') {
         if (empty($id_cargo)) {
-            $id_cargo = ConfigGlobal::mi_id_cargo();
+            $id_cargo = ConfigGlobal::role_id_cargo();
         }
         $gesEtiquetas = new GestorEtiqueta();
         $cMisEtiquetas = $gesEtiquetas->getMisEtiquetas($id_cargo);

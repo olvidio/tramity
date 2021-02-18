@@ -228,7 +228,7 @@ $a_campos = [
     'a_pills' => $a_pills,
     'vista' => 'scdl',
     'filtro' => $filtro,
-    'role_actual' => $_SESSION['session_auth']['role_actual'],
+    'role_actual' => ConfigGlobal::role_actual(),
     'a_roles' => $_SESSION['session_auth']['a_roles'],
     'peticion_ajax' => $peticion_ajax,
 ];

@@ -38,7 +38,7 @@ class GestorEtiqueta Extends core\ClaseGestor {
 
 	public function getMisEtiquetas($id_cargo='') {
 	    if (empty($id_cargo)) {
-	        $id_cargo = ConfigGlobal::mi_id_cargo();
+	        $id_cargo = ConfigGlobal::role_id_cargo();
 	    }
 	    $cEtiquetasPersonales = $this->getEtiquetasPersonales($id_cargo);
 	    $cEtiquetasOficina = $this->getEtiquetasMiOficina($id_cargo);
@@ -48,7 +48,7 @@ class GestorEtiqueta Extends core\ClaseGestor {
 	
 	public function getEtiquetasPersonales($id_cargo='') {
 	    if (empty($id_cargo)) {
-	        $id_cargo = ConfigGlobal::mi_id_cargo();
+	        $id_cargo = ConfigGlobal::role_id_cargo();
 	    }
 	    $aWhere = [ 'id_cargo' => $id_cargo,
 	        '_ordre' => 'nom_etiqueta',
@@ -61,7 +61,7 @@ class GestorEtiqueta Extends core\ClaseGestor {
 	    
 	public function getEtiquetasMiOficina($id_cargo='') {
 	    if (empty($id_cargo)) {
-	        $id_cargo = ConfigGlobal::mi_id_cargo();
+	        $id_cargo = ConfigGlobal::role_id_cargo();
 	    }
 	    $oCargo = new Cargo($id_cargo);
 	    $id_oficina = $oCargo->getId_oficina();

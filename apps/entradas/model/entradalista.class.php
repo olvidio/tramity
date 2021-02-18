@@ -5,12 +5,12 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
 use entradas\model\entity\GestorEntradaBypass;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
+use usuarios\model\entity\GestorOficina;
+use config\model\Config;
 
 
 class EntradaLista {
@@ -71,18 +71,8 @@ class EntradaLista {
                 $aWhere['estado'] = Entrada::ESTADO_ASIGNADO;
                 break;
             case 'en_aceptado':
-                $gesCargos = new GestorCargo();
-                // solo los propios (si soy oficial miro el cargo de dtor)
-                $mi_cargo = ConfigGlobal::mi_id_cargo();
-                $oCargo = new Cargo($mi_cargo);
-                $director = $oCargo->getDirector();
-                if (is_true($director)) {
-                    $aWhere['ponente'] = $mi_cargo;
-                } else {
-                    $mi_id_oficina = $oCargo->getId_oficina();
-                    $id_dtor_oficina = $gesCargos->getDirectorOficina($mi_id_oficina);
-                    $aWhere['ponente'] = $id_dtor_oficina;
-                }
+                $id_oficina = ConfigGlobal::role_id_oficina();
+                $aWhere['ponente'] = $id_oficina;
                 $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
                 // De una semana
                 $oHoy = new DateTimeLocal();
@@ -99,12 +89,9 @@ class EntradaLista {
                 
                 //////// añadir las oficina implicadas //////////////////////////////
                 $a_entradas_resto = [];
-                $role_actual = $_SESSION['session_auth']['role_actual'];
-                $cCargos = $gesCargos->getCargos(['cargo' => $role_actual]);
-                if (!empty($cCargos[0])) {
-                    $id_oficina_role = $cCargos[0]->getId_oficina();
-                    $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina_role); 
-                    $a_id_cargos_oficina = array_keys($a_cargos_oficina);
+                $id_oficina_role = ConfigGlobal::role_id_oficina();
+                if (!empty($id_oficina_role)) {
+                    $a_id_cargos_oficina[] = ConfigGlobal::role_id_oficina();
                     $aWhereResto['resto_oficinas'] = '{'.implode(', ',$a_id_cargos_oficina).'}';
                     $aOperadorResto['resto_oficinas'] = 'OVERLAP';
                     $aWhereResto['estado'] = Entrada::ESTADO_ACEPTADO;
@@ -163,8 +150,8 @@ class EntradaLista {
         $a_categorias = $oEntrada->getArrayCategoria();
         $a_visibilidad = $oEntrada->getArrayVisibilidad();
         
-        $gesCargos = new GestorCargo();
-        $a_posibles_cargos = $gesCargos->getArrayCargosDirector();
+        $gesOficinas = new GestorOficina();
+        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         
         
         //$pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
@@ -242,10 +229,10 @@ class EntradaLista {
                 $id_ponente =  $oEntrada->getPonente();
                 $a_resto_oficinas = $oEntrada->getResto_oficinas();
                 $oficinas_txt = '';
-                $oficinas_txt .= '<span class="text-danger">'.$a_posibles_cargos[$id_ponente].'</span>';
+                $oficinas_txt .= '<span class="text-danger">'.$a_posibles_oficinas[$id_ponente].'</span>';
                 foreach ($a_resto_oficinas as $id_oficina) {
                     $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
-                    $oficinas_txt .= $a_posibles_cargos[$id_oficina];
+                    $oficinas_txt .= $a_posibles_oficinas[$id_oficina];
                 }
                 $row['oficinas'] = $oficinas_txt;
                 
@@ -268,12 +255,12 @@ class EntradaLista {
         $txt_btn_new = '';
         $btn_new = FALSE;
         $secretaria = FALSE;
-        if ($_SESSION['session_auth']['role_actual'] === 'secretaria') {
+        if ( ConfigGlobal::role_actual() === 'secretaria') {
             $secretaria = TRUE;
             $btn_new = TRUE;
             $txt_btn_new = _("nueva entrada");
         }
-        if ($_SESSION['session_auth']['role_actual'] === 'vcd') {
+        if (ConfigGlobal::role_actual() === 'vcd') {
             $btn_new = TRUE;
             $txt_btn_new = _("procesar");
         }

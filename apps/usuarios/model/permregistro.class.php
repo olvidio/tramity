@@ -258,7 +258,7 @@ class PermRegistro {
      * @return number
      */
     function permiso_detalle($objeto,$que) {
-        $role_actual = $_SESSION['session_auth']['role_actual'];
+        $role_actual = ConfigGlobal::role_actual();
         
         $gesCargos = new GestorCargo();
         $cCargos = $gesCargos->getCargos(['cargo' => $role_actual]);
@@ -268,7 +268,7 @@ class PermRegistro {
             $id_oficina_role = 0;
         }
         
-        $id_cargo = ConfigGlobal::mi_id_cargo();
+        $id_cargo = ConfigGlobal::role_id_cargo();
         $oCargo = new Cargo($id_cargo);
         $soy_dtor = $oCargo->getDirector();
         $id_oficina_cargo = $oCargo->getId_oficina();

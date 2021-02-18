@@ -204,7 +204,7 @@ if (!empty($Qid_escrito)) {
     $oArrayProtRef ->setBlanco('t');
     $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
 
-    $id_ponente = ConfigGlobal::mi_id_cargo();
+    $id_ponente = ConfigGlobal::role_id_cargo();
     
     $asunto_readonly = '';
     $detalle_readonly = '';

@@ -87,7 +87,7 @@ switch($Qfiltro) {
     case 'borrador_propio':
         //if ($estado == Expediente::ESTADO_BORRADOR) {
         // los de la oficina
-        if ($oficina_ponente == ConfigGlobal::mi_id_oficina()) {
+        if ($oficina_ponente == ConfigGlobal::role_id_oficina()) {
             $a_botones[0] = ['accion' => 'exp_eliminar',
                             'txt'    => _("eliminar"),
                         ];
@@ -96,7 +96,7 @@ switch($Qfiltro) {
     case 'firmar':
     case 'circulando':
         // los de la oficina
-        if ($oficina_ponente == ConfigGlobal::mi_id_oficina()) {
+        if ($oficina_ponente == ConfigGlobal::role_id_oficina()) {
             $a_botones[0] = ['accion' => 'exp_a_borrador',
                             'txt'    => _("mover a borrador"),
                         ];
@@ -112,7 +112,7 @@ switch($Qfiltro) {
     case 'reunion':
     case 'seg_reunion':
         // los de la oficina
-        if ($oficina_ponente == ConfigGlobal::mi_id_oficina()) {
+        if ($oficina_ponente == ConfigGlobal::role_id_oficina()) {
             $a_botones[1] = ['accion' => 'exp_cp_borrador',
                             'txt'    => _("copiar a borrador"),
                         ];

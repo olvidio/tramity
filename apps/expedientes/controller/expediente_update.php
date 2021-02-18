@@ -58,7 +58,7 @@ switch($Qque) {
         $Qasunto = $oEntrada->getAsunto_entrada();
         
         $Qestado = Expediente::ESTADO_BORRADOR;
-        $Qponente = ConfigGlobal::mi_id_cargo();
+        $Qponente = ConfigGlobal::role_id_cargo();
         $Qtramite = 1; // Qualquiera, no puede ser null.
         $Qprioridad = 1; // Qualquiera, no puede ser null.
 
@@ -267,7 +267,7 @@ switch($Qque) {
         if (!empty($copias) && is_true($copias)) {
             $of_destino = 'copias';
         } else {
-            $of_destino = empty($Qof_destino)? ConfigGlobal::mi_id_cargo() : $Qof_destino;
+            $of_destino = empty($Qof_destino)? ConfigGlobal::role_id_cargo() : $Qof_destino;
         }
         // copiar expdiente: poner los escritos como antecedentes.
         $oExpediente = new Expediente($Qid_expediente);
@@ -380,7 +380,7 @@ switch($Qque) {
         break;
     case 'visto':
         // yo soy el que hago el click:
-        $mi_id_cargo = ConfigGlobal::mi_id_cargo();
+        $mi_id_cargo = ConfigGlobal::role_id_cargo();
         $oCargo = new Cargo($mi_id_cargo);
         $mi_id_oficina = $oCargo->getId_oficina();
         
@@ -606,7 +606,7 @@ switch($Qque) {
             $gesFirmas = new GestorFirma();
             $oFirmaPrimera = $gesFirmas->getPrimeraFirma($id_expediente);
             $id_primer_cargo = $oFirmaPrimera->getId_cargo();
-            if ($id_primer_cargo == ConfigGlobal::mi_id_cargo()) {
+            if ($id_primer_cargo == ConfigGlobal::role_id_cargo()) {
                 if (ConfigGlobal::mi_usuario_cargo() === 'vcd') { // No sé si hace falta??
                     $oFirmaPrimera->setValor(Firma::V_D_OK);
                 } else {

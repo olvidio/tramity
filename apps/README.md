@@ -63,7 +63,7 @@ Definir un campo (estado), que indique el punto del itinerario en que se encuent
 $filtro = 'borrador_propio';
 
 	estado = Expediente::ESTADO_BORRADOR;
-	ponente = ConfigGlobal::mi_id_cargo();
+	ponente = ConfigGlobal::role_id_cargo();
 
 2.- borrador (oficina)
 
@@ -83,7 +83,7 @@ expediente:
 	
 firma:
 
-	id_cargo = ConfigGlobal::mi_id_cargo();
+	id_cargo = ConfigGlobal::role_id_cargo();
 	tipo = Firma::TIPO_VOTO;
 	valor = 'IS NULL'; Firma::V_VISTO; Firma::V_A_ESPERA;
 
@@ -98,7 +98,7 @@ expediente:
 
 firma:
 
-	id_cargo = ConfigGlobal::mi_id_cargo();
+	id_cargo = ConfigGlobal::role_id_cargo();
 	tipo = Firma::TIPO_VOTO;
 	valor = 'IS NULL'; Firma::V_VISTO; Firma::V_A_ESPERA;
 	
@@ -126,7 +126,7 @@ $filtro = 'acabados'
 
 	'estado' = Expediente::ESTADO_ACABADO;
 	'ok'     = 't';	// marcados por scdl con ok.
-	'ponente' = ConfigGlobal::mi_id_cargo();  // solo los propios:
+	'ponente' = ConfigGlobal::role_id_cargo();  // solo los propios:
 
 8.- archivados
 
@@ -239,7 +239,7 @@ $filtro = 'en_ingresado';
 
 $filtro = 'en_aceptado';
 
-	$aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
+	$aWhere['ponente'] = ConfigGlobal::role_id_cargo();
 	$aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
 
 

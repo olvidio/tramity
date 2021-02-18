@@ -97,10 +97,10 @@ class ExpedienteLista {
             case 'borrador_propio':
                 $aWhere['estado'] = Expediente::ESTADO_BORRADOR;
                 // solo los propios:
-                $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
+                $aWhere['ponente'] = ConfigGlobal::role_id_cargo();
                 break;
             case 'borrador_oficina':
-                $mi_cargo = ConfigGlobal::mi_id_cargo();
+                $mi_cargo = ConfigGlobal::role_id_cargo();
                 $aWhere['estado'] = Expediente::ESTADO_BORRADOR;
                 // Si es el director los ve todos, no sólo los pendientes de poner 'visto'.
                 if (is_true(ConfigGlobal::soy_dtor())) {
@@ -121,8 +121,7 @@ class ExpedienteLista {
             case 'firmar':
                 // añadir las que requieren aclaración.
                 
-                //if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
-                if ($_SESSION['session_auth']['role_actual'] === 'secretaria') {
+                if (ConfigGlobal::role_actual() === 'secretaria') {
                     $a_tipos_acabado = [ Expediente::ESTADO_NO,
                                          Expediente::ESTADO_DILATA,
                                          Expediente::ESTADO_RECHAZADO,
@@ -138,7 +137,7 @@ class ExpedienteLista {
                     $aOperador['estado'] = 'IN';
                 }
                 //pendientes de mi firma, pero ya circulando
-                $aWhereFirma['id_cargo'] = ConfigGlobal::mi_id_cargo();
+                $aWhereFirma['id_cargo'] = ConfigGlobal::role_id_cargo();
                 $aWhereFirma['tipo'] = Firma::TIPO_VOTO;
                 $aWhereFirma['valor'] = 'x';
                 $aOperadorFirma['valor'] = 'IS NULL';
@@ -170,7 +169,7 @@ class ExpedienteLista {
                 $aWhereFirma2 = ['tipo' => Firma::TIPO_ACLARACION,
                                 'valor' => Firma::V_A_NUEVA,
                                 'observ_creador' => 'x',
-                                'id_cargo' => ConfigGlobal::mi_id_cargo(),
+                                'id_cargo' => ConfigGlobal::role_id_cargo(),
                             ];
                 $aOperadorFirma2 = ['observ_creador' => 'IS NULL' ];
                 $cFirmas2 = $gesFirmas->getFirmas($aWhereFirma2, $aOperadorFirma2);
@@ -183,7 +182,7 @@ class ExpedienteLista {
                 $aWhereFirma2 = ['tipo' => Firma::TIPO_ACLARACION,
                                 'valor' => Firma::V_A_NUEVA,
                                 'observ_creador' => 'x',
-                                'id_cargo' => ConfigGlobal::mi_id_cargo(),
+                                'id_cargo' => ConfigGlobal::role_id_cargo(),
                             ];
                 $aOperadorFirma2 = ['observ_creador' => 'IS NOT NULL' ];
                 $cFirmas2 = $gesFirmas->getFirmas($aWhereFirma2, $aOperadorFirma2);
@@ -197,7 +196,7 @@ class ExpedienteLista {
                 $aWhereFirma = ['tipo' => Firma::TIPO_ACLARACION,
                                 'valor' => Firma::V_A_NUEVA,
                                 'observ_creador' => 'x',
-                                'id_cargo_creador' => ConfigGlobal::mi_id_cargo(),
+                                'id_cargo_creador' => ConfigGlobal::role_id_cargo(),
                             ];
                 $aOperadorFirma = ['observ_creador' => 'IS NULL' ];
                 $cFirmas = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
@@ -232,7 +231,7 @@ class ExpedienteLista {
                 
                 //pendientes de mi firma
                 $aWhereFirma = [
-                            'id_cargo' => ConfigGlobal::mi_id_cargo(),
+                            'id_cargo' => ConfigGlobal::role_id_cargo(),
                             'tipo' => Firma::TIPO_VOTO,
                             'valor' => 'x',
                             ];
@@ -243,7 +242,7 @@ class ExpedienteLista {
                 $cFirmasNull = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
                 // Sumar los firmados, pero no OK
                 $aWhereFirma = [
-                            'id_cargo' => ConfigGlobal::mi_id_cargo(),
+                            'id_cargo' => ConfigGlobal::role_id_cargo(),
                             'tipo' => Firma::TIPO_VOTO,
                             'valor' =>  Firma::V_VISTO .','. Firma::V_ESPERA .','. Firma::V_D_ESPERA,
                             ];
@@ -286,7 +285,7 @@ class ExpedienteLista {
                 
                 //que tengan de mi firma, independiente de firmado o no
                 $aWhereFirma = [
-                            'id_cargo' => ConfigGlobal::mi_id_cargo(),
+                            'id_cargo' => ConfigGlobal::role_id_cargo(),
                             'tipo' => Firma::TIPO_VOTO,
                             ];
                 $cFirmas = $gesFirmas->getFirmas($aWhereFirma);
@@ -323,7 +322,7 @@ class ExpedienteLista {
                 // Si es el director los ve todos, no sólo los pendientes de poner 'visto'.
                 if (is_true(ConfigGlobal::soy_dtor())) {
                     // posibles oficiales de la oficina:
-                    $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+                    $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
                     $id_oficina = $oCargo->getId_oficina();
                     $gesCargos = new GestorCargo();
                     $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
@@ -340,7 +339,7 @@ class ExpedienteLista {
                     }
                 } else {
                     // solo los propios:
-                    $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
+                    $aWhere['ponente'] = ConfigGlobal::role_id_cargo();
                 }
                 break;
             case 'distribuir':
@@ -359,7 +358,7 @@ class ExpedienteLista {
                 $aWhere['estado'] = Expediente::ESTADO_ACABADO_SECRETARIA;
                 // solo los de la oficina:
                 // posibles oficiales de la oficina:
-                $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+                $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
                 $id_oficina = $oCargo->getId_oficina();
                 $gesCargos = new GestorCargo();
                 $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
@@ -380,7 +379,7 @@ class ExpedienteLista {
                 // Si es el director los ve todos
                 if (is_true(ConfigGlobal::soy_dtor())) {
                     // posibles oficiales de la oficina:
-                    $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+                    $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
                     $id_oficina = $oCargo->getId_oficina();
                     $gesCargos = new GestorCargo();
                     $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
@@ -397,14 +396,14 @@ class ExpedienteLista {
                     }
                 } else {
                     // solo los propios:
-                    $aWhere['ponente'] = ConfigGlobal::mi_id_cargo();
+                    $aWhere['ponente'] = ConfigGlobal::role_id_cargo();
                 }
                 break;
             case 'archivados':
                 $aWhere['estado'] = Expediente::ESTADO_ARCHIVADO;
                 // solo los de la oficina:
                 // posibles oficiales de la oficina:
-                $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+                $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
                 $id_oficina = $oCargo->getId_oficina();
                 $gesCargos = new GestorCargo();
                 $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
@@ -424,7 +423,7 @@ class ExpedienteLista {
                 $aWhere['estado'] = Expediente::ESTADO_COPIAS;
                 // solo los de la oficina:
                 // posibles oficiales de la oficina:
-                $oCargo = new Cargo(ConfigGlobal::mi_id_cargo());
+                $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
                 $id_oficina = $oCargo->getId_oficina();
                 $gesCargos = new GestorCargo();
                 $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
@@ -496,7 +495,7 @@ class ExpedienteLista {
                 break;
             case 'seg_reunion':
                 // Solo en el caso de secretaria:
-                if ($_SESSION['session_auth']['role_actual'] === 'secretaria') {
+                if (ConfigGlobal::role_actual() === 'secretaria') {
                     $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/fecha_reunion.php';
                     $txt_mod = _("fecha");
                     $col_mod = 1;

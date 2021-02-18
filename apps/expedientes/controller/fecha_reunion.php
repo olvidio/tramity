@@ -21,12 +21,12 @@ require_once ("apps/core/global_object.inc");
 $Qid_expediente = (string) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
-$oficina = ConfigGlobal::mi_id_oficina();
+$id_oficina = ConfigGlobal::role_id_oficina();
 
 $gesOficinas = new GestorOficina();
 $oDesplOficinas = $gesOficinas->getListaOficinas();
 $oDesplOficinas->setNombre('id_oficina');
-$oDesplOficinas->setOpcion_sel($oficina);
+$oDesplOficinas->setOpcion_sel($id_oficina);
 
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();

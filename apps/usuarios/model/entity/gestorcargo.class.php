@@ -97,8 +97,13 @@ class GestorCargo Extends core\ClaseGestor {
 	    $gesUsuarios = new GestorUsuario();
 	    foreach (array_keys($a_cargos_oficina) as $id_cargo) {
 	        $cUsuarios = $gesUsuarios->getUsuarios(['id_cargo' => $id_cargo]);
-	        $nom_usuario = $cUsuarios[0]->getNom_usuario();
-	        $a_usuarios_oficina[$id_cargo] = $nom_usuario;
+	        if (empty($cUsuarios[0])) {
+	            $msg = sprintf(_("No existe el usuario para el cargo %s"),$id_cargo);
+	            //echo $msg;
+	        } else {
+                $nom_usuario = $cUsuarios[0]->getNom_usuario();
+                $a_usuarios_oficina[$id_cargo] = $nom_usuario;
+	        }
 	    }
 	    return $a_usuarios_oficina;
 	}

@@ -24,7 +24,7 @@ $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qvoto = (integer) \filter_input(INPUT_POST, 'voto');
 $Qcomentario = (string) \filter_input(INPUT_POST, 'comentario');
 
-$id_cargo = ConfigGlobal::mi_id_cargo();
+$id_cargo = ConfigGlobal::role_id_cargo();
 $oExpediente = new Expediente($Qid_expediente);
 $id_tramite = $oExpediente->getId_tramite();
 $id_ponente = $oExpediente->getPonente();
