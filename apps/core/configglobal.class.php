@@ -102,7 +102,11 @@ Class ConfigGlobal extends ServerConf {
 		return $_SESSION['session_auth']['usuario_cargo'];
 	}
 	public static function soy_dtor() {
-	    return $_SESSION['session_auth']['usuario_dtor'];
+	    if (is_true($_SESSION['session_auth']['usuario_dtor'])) {
+            return TRUE;
+	    } else {
+	        return FALSE;
+	    }
 	}
 	/**
 	 * 

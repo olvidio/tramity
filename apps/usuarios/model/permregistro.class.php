@@ -259,54 +259,56 @@ class PermRegistro {
      */
     function permiso_detalle($objeto,$que) {
         $role_actual = ConfigGlobal::role_actual();
-        
-        $gesCargos = new GestorCargo();
-        $cCargos = $gesCargos->getCargos(['cargo' => $role_actual]);
-        if (!empty($cCargos[0])) {
-            $id_oficina_role = $cCargos[0]->getId_oficina();
+        // El role de secretaria no tiene oficina
+        if ($role_actual == 'secretaria') {
+            // miera el usuario actual, no el role.
+            $soy_dtor = ConfigGlobal::soy_dtor();
         } else {
-            $id_oficina_role = 0;
+            $id_oficina_role = ConfigGlobal::role_id_oficina();
+            $id_cargo_role = ConfigGlobal::role_id_cargo();
+            $oCargo = new Cargo($id_cargo_role);
+            $soy_dtor = $oCargo->getDirector();
         }
         
-        $id_cargo = ConfigGlobal::role_id_cargo();
-        $oCargo = new Cargo($id_cargo);
-        $soy_dtor = $oCargo->getDirector();
-        $id_oficina_cargo = $oCargo->getId_oficina();
-        
-        /* Al final da igual si es entrada o escrito. Tienen los mismos métodos
-        $clase = get_class($objeto);
-        if (strpos($clase, 'entrada') !== FALSE) {
-            $visibilidad = $objeto->getVisibilidad();
-            $id_ponente = $objeto->getPonente();
-            $a_resto_cargos = $objeto->getResto_oficinas();
-        }
-        */
         
         $visibilidad = $objeto->getVisibilidad();
-        $id_ponente = $objeto->getPonente();
-        $resto_cargos = $objeto->getResto_oficinas();
-        // pasar cargos a oficinas:
-        $oCargoP = new Cargo($id_ponente);
-        $id_oficina_ponente = $oCargoP->getId_oficina();
-        $a_oficinas = [];
-        foreach ($resto_cargos as $id_cargo) {
-            $oCargo = new Cargo($id_cargo);
-            $a_oficinas[] = $oCargo->getId_oficina();
+        // Entradas es por oficinas, Escritos por cargos
+        $classname = get_class($objeto);
+        $clase = substr($classname, strrpos($classname, '\\') + 1);
+        
+        if ($clase === 'Entrada') {
+            $id_oficina_pral = $objeto->getPonente();
+            $a_oficinas = $objeto->getResto_oficinas();
+        }
+
+        if ($clase === 'Escrito') {
+            $id_ponente = $objeto->getPonente();
+            $resto_cargos = $objeto->getResto_oficinas();
+            // pasar cargos a oficinas:
+            $oCargoP = new Cargo($id_ponente);
+            $id_oficina_pral = $oCargoP->getId_oficina();
+            $a_oficinas = [];
+            foreach ($resto_cargos as $id_cargo) {
+                $oCargo = new Cargo($id_cargo);
+                $a_oficinas[] = $oCargo->getId_oficina();
+            }
         }
         
         $soy = empty($soy_dtor)? 'of' : 'dtor';
-        if (array_search($id_oficina_role, $a_oficinas)) {
-            $soy = empty($soy_dtor)? 'of_imp' : 'dtor_imp';
-        }
-        if ($id_oficina_cargo == $id_oficina_ponente) {
-            $soy = empty($soy_dtor)? 'of_pral' : 'dtor_pral';
-        }
-        if ($role_actual == 'secretaria') {
-            $soy = empty($soy_dtor)? 'of_scl' : 'secretario';
-        }
-        // caso vcd:
-        if ($role_actual == 'vcd') {
-            $soy = 'dtor_pral';
+        switch ($role_actual) {
+            case 'secretaria':
+                $soy = empty($soy_dtor)? 'of_scl' : 'secretario';
+                break;
+            case 'vcd':
+                $soy = 'dtor_pral';
+                break;
+            default:
+                if (array_search($id_oficina_role, $a_oficinas)) {
+                    $soy = empty($soy_dtor)? 'of_imp' : 'dtor_imp';
+                }
+                if ($id_oficina_role == $id_oficina_pral) {
+                    $soy = empty($soy_dtor)? 'of_pral' : 'dtor_pral';
+                }
         }
         
         if (!isset($this->array_registro_perm[$visibilidad][$soy][$que])) {
