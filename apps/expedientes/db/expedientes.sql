@@ -30,20 +30,6 @@ CREATE INDEX IF NOT EXISTS expedientes_asunto_idx ON public.expedientes ((lower(
 CREATE INDEX IF NOT EXISTS expedientes_etiquetas_idx ON public.expedientes (etiquetas);
 CREATE INDEX IF NOT EXISTS expedientes_estado_idx ON public.expedientes (estado);
 
---- acciones
-CREATE TABLE public.acciones (
-    id_item SERIAL PRIMARY KEY,
-    id_expediente integer NOT NULL,
-    tipo_accion smallint NOT NULL,
-    id_escrito integer NOT NULL
-);
-
-ALTER TABLE public.acciones OWNER TO tramity;
-
-CREATE INDEX IF NOT EXISTS acciones_id_expediente ON public.acciones (id_expediente);
-CREATE INDEX IF NOT EXISTS acciones_id_escrito ON public.acciones (id_escrito);
-CREATE INDEX IF NOT EXISTS acciones_tipo_accion ON public.acciones (tipo_accion);
-
 --- escritos locales
 -- OJO; Para los indices array integer ---
 CREATE EXTENSION intarray;
@@ -94,4 +80,21 @@ CREATE TABLE public.escrito_adjuntos (
 ALTER TABLE public.escrito_adjuntos OWNER TO tramity;
 
 CREATE INDEX IF NOT EXISTS escrito_adjuntos_id_escrito_idx ON public.escrito_adjuntos (id_escrito);
+ALTER TABLE escrito_adjuntos ADD CONSTRAINT escrito_adjuntos_fk_ent FOREIGN KEY (id_escrito) REFERENCES escritos (id_escrito) ON DELETE CASCADE;
 
+--- acciones
+CREATE TABLE public.acciones (
+    id_item SERIAL PRIMARY KEY,
+    id_expediente integer NOT NULL,
+    tipo_accion smallint NOT NULL,
+    id_escrito integer NOT NULL
+);
+
+ALTER TABLE public.acciones OWNER TO tramity;
+
+CREATE INDEX IF NOT EXISTS acciones_id_expediente ON public.acciones (id_expediente);
+CREATE INDEX IF NOT EXISTS acciones_id_escrito ON public.acciones (id_escrito);
+CREATE INDEX IF NOT EXISTS acciones_tipo_accion ON public.acciones (tipo_accion);
+
+ALTER TABLE acciones ADD CONSTRAINT acciones_fk_exp FOREIGN KEY (id_expediente) REFERENCES expedientes (id_expediente) ON DELETE CASCADE;
+ALTER TABLE acciones ADD CONSTRAINT acciones_fk_esc FOREIGN KEY (id_escrito) REFERENCES escritos (id_escrito) ON DELETE CASCADE;
