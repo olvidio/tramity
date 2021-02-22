@@ -7,6 +7,7 @@ use usuarios\model\entity\GestorCargo;
 use web\Lista;
 use web\Protocolo;
 use entradas\model\Entrada;
+use usuarios\model\entity\GestorOficina;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -35,16 +36,9 @@ switch ($Qque) {
         $aWhere = [];
         $aOperador = [];
         
-        $gesCargos = new GestorCargo();
         if (!empty($Qid_oficina)) {
             // buscar los posibles ponentes de una oficina:
-            $cCargos = $gesCargos->getCargos(['id_oficina' => $Qid_oficina]);
-            $a_id_cargos = [];
-            foreach ($cCargos as $oCargo) {
-                $a_id_cargos[] = $oCargo->getId_cargo();
-            }
-            $aWhere['ponente'] =  implode(',',$a_id_cargos);
-            $aOperador['ponente'] = 'IN';
+            $aWhere['ponente'] =  $Qid_oficina;
         }
         
         if (!empty($Qasunto)) {
@@ -61,18 +55,19 @@ switch ($Qque) {
             $cEntradas = $gesEntradas->getEntradas($aWhere,$aOperador);
         }
         
-        $a_cabeceras = [ '', _("protocolo"), _("fecha"), _("asunto"), _("ponente"),''];
+        $a_cabeceras = [ '', _("protocolo"), _("fecha"), _("asunto"), _("oficina ponente"),''];
         $a_valores = [];
         $a = 0;
-        $a_posibles_cargos = $gesCargos->getArrayCargosDirector();
+        $gesOficinas = new GestorOficina();
+        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         $oProtOrigen = new Protocolo();
         foreach ($cEntradas as $oEntrada) {
             $a++;
             $id_entrada = $oEntrada->getId_entrada();
             $fecha_txt = $oEntrada->getF_entrada()->getFromLocal();
-            $ponente = $oEntrada->getPonente();
+            $id_of_ponente = $oEntrada->getPonente();
             
-            $ponente_txt = $a_posibles_cargos[$ponente];
+            $of_ponente_txt = $a_posibles_oficinas[$id_of_ponente];
             
             $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
             
@@ -83,7 +78,7 @@ switch ($Qque) {
             $a_valores[$a][2] = $oProtOrigen->ver_txt();
             $a_valores[$a][3] = $fecha_txt;
             $a_valores[$a][4] = $oEntrada->getAsuntoDetalle();
-            $a_valores[$a][5] = $ponente_txt;
+            $a_valores[$a][5] = $of_ponente_txt;
             $a_valores[$a][6] = $add;
         }
         

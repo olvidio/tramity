@@ -37,9 +37,9 @@ $(function() {
 
 fnjs_mod_pendiente=function() {
     var err=0;
-    var ponente=$('#ponente').val();
+    var of_ponente=$('#of_ponente').val();
 
-    if (!ponente) { alert("{{ "Debe indicar el ponenete para asignarle el pendiente"|trans }}"); err=1; }
+    if (!of_ponente) { alert("{{ "Debe indicar el ponenete para asignarle el pendiente"|trans }}"); err=1; }
 
     if (err!=1) {
         var winPrefs="dependent=yes,width=1200,height=800,screenX=30,screenY=30,titlebar=yes,scrollbars=yes";
@@ -84,7 +84,7 @@ fnjs_guardar=function(event){
 	var asunto_e=$('#asunto_e').val();
 	var f_entrada=$('#f_entrada').val();
 	var f_escrito=$('#f_escrito').val();
-	var ponente=$('#ponente').val();
+	var of_ponente=$('#of_ponente').val();
 	var plazo=$('#plazo').val();
 	var id_entrada=$('#id_entrada').val();
 
@@ -102,7 +102,7 @@ fnjs_guardar=function(event){
 	if (!origen) { alert("{{ "Debe llenar el campo de origen"|trans }}"); err=1; }
 	if (!origen_prot_num) { alert("{{ "Debe llenar el campo de protocolo origen"|trans }}"); err=1; }
 	if (!asunto_e) { alert("{{ "Debe llenar el campo de asunto entrada"|trans }}"); err=1; }
-	if (!ponente) { alert("{{ "Debe llenar el campo del ponente"|trans }}"); err=1; }
+	if (!of_ponente) { alert("{{ "Debe llenar el campo del ponente"|trans }}"); err=1; }
 	// La debe poner el vcd. En el caso de Introducir no hace falta la comprobación. Si en Asignar.
 	{% if comprobar_f_entrada %} 
 		if (!f_entrada) { alert("{{ "Debe llenar el campo de fecha de entrada"|trans }}"); err=1; }

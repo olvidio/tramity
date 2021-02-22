@@ -8,6 +8,7 @@ use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
+use usuarios\model\entity\GestorOficina;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -22,8 +23,8 @@ require_once ("apps/core/global_object.inc");
 
 $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 
-$gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargosDirector();
+$gesOficinas = new GestorOficina();
+$a_posibles_oficinas = $gesOficinas->getArrayOficinas();
 
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();
@@ -73,14 +74,13 @@ $asunto = $oEntrada->getAsunto();
 $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
 // oficinas:
 $oficinas_txt = '';
-$id_ponente = $oEntrada->getPonente();
-$ponente = $a_posibles_cargos[$id_ponente];
-$oficinas_txt .= $ponente;
+$id_of_ponente = $oEntrada->getPonente();
+$oficinas_txt .= $a_posibles_oficinas[$id_of_ponente];
 $a_oficinas = $oEntrada->getResto_oficinas();
-foreach ($a_oficinas as $id_cargo) {
-    $cargo = $a_posibles_cargos[$id_cargo];
+foreach ($a_oficinas as $id_id_oficina) {
+    $sigla_of = $a_posibles_oficinas[$id_id_oficina];
     $oficinas_txt .= empty($oficinas_txt)? '' : ', '; 
-    $oficinas_txt .= $cargo;
+    $oficinas_txt .= $sigla_of;
 }
 
 $a_adjuntos = $oEntrada->getArrayIdAdjuntos();

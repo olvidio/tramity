@@ -37,7 +37,7 @@ $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
 $Qf_entrada = (string) \filter_input(INPUT_POST, 'f_entrada');
 
 $Qdetalle = (string) \filter_input(INPUT_POST, 'detalle');
-$Qponente = (integer) \filter_input(INPUT_POST, 'ponente');
+$Qid_of_ponente = (integer) \filter_input(INPUT_POST, 'of_ponente');
 $Qa_oficinas = (array)  \filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 $Qcategoria = (integer) \filter_input(INPUT_POST, 'categoria');
@@ -70,9 +70,13 @@ switch($Qque) {
         }
         //Qasunto.
         $oEntrada = new EntradaDB($Qid_entrada);
-        $oEntrada->DBCarregar();
-        $oEntrada->setAsunto($Qasunto);
-        $oEntrada->DBGuardar();
+        $oPermisoRegistro = new PermRegistro();
+        $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntrada, 'asunto');
+        if ( $perm_asunto >= PermRegistro::PERM_MODIFICAR) {
+            $oEntrada->DBCarregar();
+            $oEntrada->setAsunto($Qasunto);
+            $oEntrada->DBGuardar();
+        }
         // destinos
         $Qgrupo_dst = (string) \filter_input(INPUT_POST, 'grupo_dst');
         $Qf_salida = (string) \filter_input(INPUT_POST, 'f_salida');
@@ -220,7 +224,7 @@ switch($Qque) {
         if ($perm_detalle >= PermRegistro::PERM_MODIFICAR) {
             $oEntrada->setDetalle($Qdetalle);
         }
-        $oEntrada->setPonente($Qponente);
+        $oEntrada->setPonente($Qid_of_ponente);
         $oEntrada->setResto_oficinas($Qa_oficinas);
 
         $oEntrada->setCategoria($Qcategoria);
@@ -284,11 +288,12 @@ switch($Qque) {
                 if (empty($Qid_pendiente)) { // si no se ha generado el pendiente con "modificar pendiente"
                     $f_plazo = $oEntrada->getF_contestar()->getFromLocal();
                     $location = $oProtOrigen->ver_txt();
-                    
-                    $oCargoPonente = new Cargo($Qponente);
-                    $id_oficina = $oCargoPonente->getId_oficina();
-                    $oOficina = new Oficina($id_oficina);
+                    $oOficina = new Oficina($Qid_of_ponente);
                     $oficina_ponente = $oOficina->getSigla();
+                    if (empty($oficina_ponente)) {
+                        $msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
+                        exit($msg);
+                    }
                     $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
                     
                     $parent_container = 'oficina_'.$oficina_ponente;
@@ -305,20 +310,21 @@ switch($Qque) {
                     $oPendiente->setDetalle($Qdetalle);
                     $oPendiente->setPendiente_con($Qorigen);
                     $oPendiente->setLocation($location);
-                    $oPendiente->setId_oficina($id_oficina);
+                    $oPendiente->setId_oficina($Qid_of_ponente);
                     // las firmas son cargos, buscar las oficinas implicadas:
-                    $oPendiente->setOficinas($Qa_oficinas);
+                    $oPendiente->setOficinasArray($Qa_oficinas);
                     if ($oPendiente->Guardar() === FALSE ) {
                         $error_txt .= _("No se han podido guardar el nuevo pendiente");
                     }
                 } else {
                     // meter el pendienteDB en davical con el id_reg que toque y borrarlo de pendienteDB.
-                    $oCargoPonente = new Cargo($Qponente);
-                    $id_oficina = $oCargoPonente->getId_oficina();
-                    $oOficina = new Oficina($id_oficina);
+                    $oOficina = new Oficina($Qid_of_ponente);
                     $oficina_ponente = $oOficina->getSigla();
+                    if (empty($oficina_ponente)) {
+                        $msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
+                        exit($msg);
+                    }
                     $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
-                    
                     $parent_container = 'oficina_'.$oficina_ponente;
                     $resource = 'registro';
                     $cargo = 'secretaria';
@@ -341,10 +347,12 @@ switch($Qque) {
                     $oEntradaBypass->setId_entrada($Qid_entrada);
                 }
                 //Qasunto.
-                $oEntrada = new EntradaDB($Qid_entrada);
-                $oEntrada->DBCarregar();
-                $oEntrada->setAsunto($Qasunto);
-                $oEntrada->DBGuardar();
+                if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
+                    $oEntrada = new EntradaDB($Qid_entrada);
+                    $oEntrada->DBCarregar();
+                    $oEntrada->setAsunto($Qasunto);
+                    $oEntrada->DBGuardar();
+                }
                 // destinos
                 $Qgrupo_dst = (string) \filter_input(INPUT_POST, 'grupo_dst');
                 $Qf_salida = (string) \filter_input(INPUT_POST, 'f_salida');

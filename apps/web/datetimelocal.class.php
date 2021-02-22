@@ -49,6 +49,26 @@ class DateTimeLocal Extends \DateTime {
        return $aMes_latin;
     }
     
+    /**
+     *
+     * creo un array con los dias de la semana
+     *	primero el id (en inglés), después el nombre
+     *
+     */
+    public static function arrayDiasSemana() {
+        $opciones = [
+            "MO" => _("lunes"),
+            "TU" => _("martes"),
+            "WE" => _("miércoles"),
+            "TH" => _("jueves"),
+            "FR" => _("viernes"),
+            "SA" => _("sábado"),
+            "SU" => _("domingo"),
+        ];
+        
+        return $opciones;
+    }
+    
     public function getFechaLatin() {
         $mes_latin = $this->Meses_latin();
         
@@ -157,7 +177,8 @@ class DateTimeLocal Extends \DateTime {
     
     public function format($format) {
         $english = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
-        $local = array(_("lunes"), _("martes"), _("miércoles"), _("jueves"), _("viernes"), _("sábado"), _("domingo"));
+        //$local = array(_("lunes"), _("martes"), _("miércoles"), _("jueves"), _("viernes"), _("sábado"), _("domingo"));
+        $local = array_values(self::arrayDiasSemana());
         return str_replace($english, $local, parent::format($format));
     }
     public function formatRoman() {

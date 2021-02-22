@@ -59,7 +59,7 @@ $oProtRef->setBlanco(TRUE);
 $gesOficinas = new GestorOficina();
 $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
 $oDesplPonenteOficina = $gesOficinas->getListaOficinas();
-$oDesplPonenteOficina->setNombre('ponente');
+$oDesplPonenteOficina->setNombre('of_ponente');
 $oDesplPonenteOficina->setTabIndex(80);
 
 $oEntrada = new Entrada($Qid_entrada);
@@ -145,8 +145,8 @@ if (!empty($Qid_entrada)) {
     $detalle = $oEntrada->getDetalle();
     $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
     
-    $ponente = $oEntrada->getPonente();
-    $oDesplPonenteOficina->setOpcion_sel($ponente);
+    $id_of_ponente = $oEntrada->getPonente();
+    $oDesplPonenteOficina->setOpcion_sel($id_of_ponente);
     $a_oficinas = $oEntrada->getResto_oficinas();
     
     $oArrayDesplOficinas = new web\DesplegableArray($a_oficinas,$a_posibles_oficinas,'oficinas');

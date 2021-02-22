@@ -2,8 +2,6 @@
 namespace pendientes\model;
 
 use core\Set;
-use function core\fecha_sin_time;
-use function core\recurrencias;
 use davical\model\CalDAVClient;
 
 // Arxivos requeridos por esta url **********************************************
@@ -77,12 +75,11 @@ class GestorPendiente {
         
         $oPendienteSet = new Set();
         $tt=0;
-        foreach($events as $k1=>$a_todo) {
+        foreach($events as $a_todo) {
             $tt++;
             $vcalendar[$tt] = new \iCalComponent($a_todo['data']);
         }
         
-        $recur=$tt;
         for ($t=1;$t<=$tt;$t++) {
             //print_r($vcalendar[$t]);
             
@@ -101,30 +98,26 @@ class GestorPendiente {
             $f_cal_end=$icalComp->GetPValue("DTEND");
             $rrule=$icalComp->GetPValue("RRULE");
             $observ=$icalComp->GetPValue("DESCRIPTION");
-            $visibilidad=$icalComp->GetPValue("CLASS");
+            $class=$icalComp->GetPValue("CLASS");
             $detalle=$icalComp->GetPValue("COMMENT");
             $categorias=$icalComp->GetPValue("CATEGORIES");
             $encargado=$icalComp->GetPValue("ATTENDEE");
             $ref_prot_mas=$icalComp->GetPValue("X-DLB-REF-MAS");
             $pendiente_con=$icalComp->GetPValue("X-DLB-PENDIENTE-CON");
             $id_reg=$icalComp->GetPValue("X-DLB-ID-REG");
-            $ref=$icalComp->GetPValue("LOCATION");
+            $location=$icalComp->GetPValue("LOCATION");
             $oficinas=$icalComp->GetPValue("X-DLB-OFICINAS");
 
             $a_exdates = $vcalendar[$t]->GetPropertiesByPath('/VCALENDAR/VTODO/EXDATE');
             
-            if ($visibilidad=="CONFIDENTIAL") {
-                $visibilidad="t";
-            } else {
-                $visibilidad="f";
-            }
+            $visibilidad = $oPendiente->Class_to_visibilidad($class);
             
             $oPendiente->setAsunto($asunto);
             $oPendiente->setStatus($status);
             $oPendiente->setF_acabado($f_cal_acabado);
             $oPendiente->setF_plazo($f_cal_plazo);
             $oPendiente->setF_inicio($f_cal_start);
-            //$oPendiente->setF_fin($f_cal_end);
+            $oPendiente->setF_end($f_cal_end);
             $oPendiente->setRrule($rrule);
             $oPendiente->setObserv($observ);
             $oPendiente->setVisibilidad($visibilidad);
@@ -134,36 +127,12 @@ class GestorPendiente {
             $oPendiente->setRef_prot_mas($ref_prot_mas);
             $oPendiente->setPendiente_con($pendiente_con);
             $oPendiente->setId_reg($id_reg);
-            //$oPendiente->setRef($ref);
+            $oPendiente->setLocation($location);
             $oPendiente->setOficinas($oficinas);
             $oPendiente->setExdates($a_exdates);
             
-            if (!empty($rrule)) {
-                // calcular las recurrencias que tocan.
-                $dtstart=$icalComp->GetPValue("DTSTART");
-                $dtend=$icalComp->GetPValue("DTEND");
-                $a_exdates = $vcalendar[$t]->GetPropertiesByPath('/VCALENDAR/VTODO/EXDATE');
-                $f_recurrentes=recurrencias($rrule,$dtstart,$dtend,$f_plazo);
-                //print_r($f_recurrentes);
-                foreach ($f_recurrentes as $f_recur => $fecha) {
-                    $recur++;
-                    // Quito las excepciones.
-                    if (is_array($a_exdates) ){
-                        foreach ($a_exdates as $icalprop) {
-                            // si hay más de uno separados por coma
-                            $a_fechas=preg_split('/,/',$icalprop->content);
-                            foreach ($a_fechas as $f_ex) {
-                                fecha_sin_time($f_ex); //quito la THHMMSSZ
-                                if ($f_recur==$f_ex)  continue(3);
-                            }
-                        }
-                    }
-                    $oPendiente->setF_recur($f_recur);
-                    $oPendienteSet->add($oPendiente);
-                }
-            } else {
-                $oPendienteSet->add($oPendiente);
-            }
+            // No sirve, mirar aquí la rrule, porque tiene el mismo uid, y por tanto es el mismo pendiente 
+            $oPendienteSet->add($oPendiente);
         }
         return $oPendienteSet->getTot();
     }

@@ -10,9 +10,9 @@ use usuarios\model\PermRegistro;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorOficina;
-use usuarios\model\entity\GestorUsuario;
 use web\DateTimeLocal;
 use web\Desplegable;
+use pendientes\model\Rrule;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -37,7 +37,6 @@ $Qcalendario = (string) \filter_input(INPUT_POST, 'calendario');
 $Qid_oficina = (string) \filter_input(INPUT_POST, 'id_oficina');
 $go = (string) \filter_input(INPUT_POST, 'go');
 $id_reg = (string) \filter_input(INPUT_POST, 'id_reg');
-$Qpermiso = (string) \filter_input(INPUT_POST, 'permiso');
 
 $cargar_css = FALSE;
 if (empty($Qid_oficina)) {
@@ -49,8 +48,6 @@ if (empty($Qid_oficina)) {
     //if ($go=="entradas" || $go=="salidas" || $go=="mov_iese") { 
     $cargar_css = TRUE;
 } 
-
-
 
 $gesOficinas = new GestorOficina();
 $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
@@ -130,7 +127,6 @@ $ref_prot_num='';
 $ref_prot_any='';
 
 $nuevo = empty($Qnuevo)? 1 : $nuevo=$Qnuevo;
-$any=date('y');
 $hoy = date("d/m/Y");
 $hoy_iso = date("Y-m-d");
 if ($nuevo == 1) {
@@ -179,6 +175,7 @@ if ($nuevo == 1) {
         
         $asunto = $oPendiente->getAsunto();
         $status = $oPendiente->getStatus();
+        $oDesplStatus->setOpcion_sel($status);
         $f_acabado = $oPendiente->getF_acabado()->getFromLocal();
         $f_plazo = $oPendiente->getF_plazo()->getFromLocal();
         $f_inicio = $oPendiente->getF_inicio()->getFromLocal();
@@ -261,160 +258,201 @@ if ($go == 'entradas') {
 	$display_completa="display:in-line;";
 }
 
+//////////////////////// PERIODICO ////////////////////////////////
 
-	/*
-// si vengo desde el regitro salidas
-if (!empty($_POST['dest_id_lugar'])) {
-	// estas variables quedan igual: asunto, f_acabado, f_plazo, f_retraso, id_reg
-	if (empty($status)) $status="NEEDES-ACTION";
-	//$oficinas_sel=$oficinas;
-	$ref_id_lugar=$dest_id_lugar;
-	$ref_prot_num=$dest_prot_num;
-	$ref_prot_any=$dest_prot_any;
-	$ref_prot_mas=$dest_mas;
-
-	// la primera oficina es la que determina el calendario
-	$aa_oficinas = explode(',',$_POST['oficinas']);
-	$id_oficina = array_shift($aa_oficinas);
-	$display_completa="display:in-line;";
-	$go ="salidas"; // para que vuelva a salidas.php
-
-	empty($_POST['id_pendiente'])? $uid="" : $uid=$_POST['id_pendiente'];
-	$sigla=$a_posibles_oficinas[$id_oficina];
-	$cal_oficina="oficina_$sigla";	
-
-	$nuevo=2;
-
-	$base_url=ConfigGlobal::$web_calendaris."/$cal_oficina/registro/";
-	
-	$cal = new CalDAVClient( $base_url , ConfigGlobal::usuario(), ConfigGlobal::pass() );
-	
-	$uid2=strtok($uid,'@');
-	$nom_fichero="$uid2.ics";
-	$oRef=buscar_ref_uid($uid,"object");
-	
-	// busco todos los datos del TODO
-	$todo=$cal->GetEntryByUid($uid);
-
-	$ahora=date("Ymd\THis");
-	$etag=$todo[0]['etag'];
-
-	$vcalendar = new iCalComponent($todo[0]['data']);
-	$icalComp = $vcalendar->GetComponents('VTODO');
-	$icalComp = $icalComp[0];  // If you know there's only 1 of them...
-
-	$exdates = $vcalendar->GetPropertiesByPath('/VCALENDAR/VTODO/EXDATE');
-
-	$asunto=$icalComp->GetPValue("SUMMARY");
-	$status=$icalComp->GetPValue("STATUS");
-	$carpeta=$icalComp->GetPValue("CATEGORIES");
-	
-	$detalle=$icalComp->GetPValue("COMMENT");
-	$visibilidad=$icalComp->GetPValue("CLASS");
-	$f_plazo=fecha_YMD2DMY($icalComp->GetPValue("DUE"));
-	$f_acabado=fecha_YMD2DMY($icalComp->GetPValue("COMPLETED"));
-	$observ=$icalComp->GetPValue("DESCRIPTION");
-	$encargado=$icalComp->GetPValue("ATTENDEE");
-	$pendiente_con=$icalComp->GetPValue("X-DLB-PENDIENTE-CON");
-	$ref_prot_mas=$icalComp->GetPValue("X-DLB-REF-MAS");
-	$oficinas_txt=$icalComp->GetPValue("X-DLB-OFICINAS");
-	
-	$perm_detalle=permiso_detalle_pendiente($sigla_of,$visibilidad,"d");
-
-	if (!empty($oficinas_txt)) {
-		$aa_oficinas=preg_split('/ /',$oficinas_txt);
-	}
-	// para que salga bien la referencia
-	if (is_object($oRef)) {
-		$ref_id_lugar=$oRef->id_lugar;
-		$ref_prot_num=$oRef->num;
-		$ref_prot_any=$oRefany;
-	}
-}
-*/
-/*
-// si vengo desde el regitro de cancilleria
-if ($go=="mov_iese") {
-	
-	$uid=$_REQUEST['id_pendiente'];
-	$id_reg=substr($uid, 2, strpos($uid, '-')-2);
-	$uid2=strtok($_REQUEST['id_pendiente'],'@');
-	$nom_fichero="$uid2.ics";
-	$cal_oficina=str_replace("registro_","",strtok('@'));
-	$ref=buscar_ref_uid($uid2,"object");
-
-	$oficina = str_replace("oficina_","",$cal_oficina);
-	$id_oficina=array_search($oficina, $a_posibles_oficinas);
-
-	$display_completa="display:in-line;";
-	$go ="mov_iese"; // para que vuelva a reg_iese
-
-	$nuevo=2;
-
-	$base_url=ConfigGlobal::$web_calendaris."/$cal_oficina/registro/";
-	
-	$cal = new CalDAVClient( $base_url , ConfigGlobal::usuario(), ConfigGlobal::pass() );
-	
-	// busco todos los datos del TODO
-	$todo=$cal->GetEntryByUid($uid);
-
-	$ahora=date("Ymd\THis");
-	$etag=$todo[0]['etag'];
-
-	$vcalendar = new iCalComponent($todo[0]['data']);
-	$icalComp = $vcalendar->GetComponents('VTODO');
-	$icalComp = $icalComp[0];  // If you know there's only 1 of them...
-
-	$exdates = $vcalendar->GetPropertiesByPath('/VCALENDAR/VTODO/EXDATE');
-
-	$asunto=$icalComp->GetPValue("SUMMARY");
-	$status=$icalComp->GetPValue("STATUS");
-	$carpeta=$icalComp->GetPValue("CATEGORIES");
-
-	$detalle=$icalComp->GetPValue("COMMENT");
-	$visibilidad=$icalComp->GetPValue("CLASS");
-	$f_inicio=fecha_YMD2DMY($icalComp->GetPValue("DTSTART"));
-	$f_plazo=fecha_YMD2DMY($icalComp->GetPValue("DUE"));
-	$f_acabado=fecha_YMD2DMY($icalComp->GetPValue("COMPLETED"));
-	$observ=$icalComp->GetPValue("DESCRIPTION");
-	$encargado=$icalComp->GetPValue("ATTENDEE");
-	$pendiente_con=$icalComp->GetPValue("X-DLB-PENDIENTE-CON");
-	$ref_prot_mas=$icalComp->GetPValue("X-DLB-REF-MAS");
-	$oficinas_txt=$icalComp->GetPValue("X-DLB-OFICINAS");
-	
-	$perm_detalle=permiso_detalle_pendiente($sigla_of,$visibilidad,"d");
-
-	if (!empty($oficinas_txt)) {
-		$aa_oficinas=preg_split('/ /',$oficinas_txt);
-	}
-	// para que salga bien la referencia
-	if (is_array($ref)) {
-		$ref_id_lugar=$ref['id_lugar'];
-		$ref_prot_num=$ref['num'];
-		$ref_prot_any=$ref['any'];
-	}
-}
-
-// lugares posibles:
-if (!empty($uid) && $uid[0]=="R" && $uid[1]=="C") { //caso de registro cancillería
-	//$lugares=array_lugares_can();
+/***
+ *  En $rta tengo los parametros que me sirven para ver-no ver las pestañas del periodico
+ *
+ *
+ */
+$rta='';
+$chk_m_ref='';
+$chk_m_num='';
+$chk_m_num_ini='';
+$chk_a_num_ini="";
+$chk_a_num="";
+$chk_a_ref="";
+$chk_a_num_dm="";
+$dia_w_a_db='';
+$chk_s_num_ini='';
+$chk_s_ref='';
+$chk_d_num_ini='';
+$dias_w_db='';
+$ordinal_db='';
+$dia_w_db='';
+$dia_num_db='';
+$mes_num_db='';
+$ordinal_a_db='';
+$mes_num_ref_db='';
+$a_exdates_local = [];
+$meses_db = [];
+$dias_db = [];
+if (empty($rrule)) {
+    $f_inicio='';
+    $f_until='';
+    $exdates='';
+    $periodico_tipo='';
 } else {
-	//$lugares=array_lugares();
+    $rta = Rrule::desmontar_rule($rrule);
+    if (empty($rta['until'])) {
+        $f_until = '';
+    } else {
+        $oF_until = new DateTimeLocal($rta['until']);
+        $f_until = $oF_until->getFromLocal();
+    }
+    switch ($rta['tipo']) {
+        case "d_a":
+            $display_d_a="display:in-line;";
+            $periodico_tipo="periodico_d_a";
+            switch ($rta['tipo_dia']) {
+                case "num_ini":
+                    $chk_a_num_ini="checked";
+                    $chk_a_num="";
+                    $chk_a_ref="";
+                    $chk_a_num_dm="";
+                    break;
+                case "num":
+                    $chk_a_num_ini="";
+                    $chk_a_num="checked";
+                    $chk_a_ref="";
+                    $chk_a_num_dm="";
+                    $mes_num_db=empty($rta['meses'])? '' : $rta['meses'];
+                    $dia_num_db=empty($rta['dias'])? '' : $rta['dias'];
+                    break;
+                case "ref":
+                    $chk_a_num_ini="";
+                    $chk_a_num="";
+                    $chk_a_ref="checked";
+                    $chk_a_num_dm="";
+                    $dia_w_a_db=empty($rta['dia_semana'])? '' : $rta['dia_semana'];
+                    $ordinal_a_db=empty($rta['ordinal'])? '' : $rta['ordinal'];
+                    $mes_num_ref_db=empty($rta['meses'])? '' : $rta['meses'];
+                    break;
+                case "num_dm":
+                    $chk_a_num_ini="";
+                    $chk_a_num="";
+                    $chk_a_ref="";
+                    $chk_a_num_dm="checked";
+                    $meses_db=empty($rta['meses'])? '' : preg_split('/,/',$rta['meses']);
+                    $dias_db=empty($rta['dias'])? '' : preg_split('/,/',$rta['dias']);
+                    break;
+            }
+            break;
+        case "d_m":
+            $meses_db=empty($rta['meses'])? '' : preg_split('/,/',$rta['meses']);
+            $dias_db=empty($rta['dias'])? '' : preg_split('/,/',$rta['dias']);
+            $display_d_m="display:in-line;";
+            $periodico_tipo="periodico_d_m";
+            switch ($rta['tipo_dia']) {
+                case "num_ini":
+                    $chk_m_num_ini="checked";
+                    $chk_m_num="";
+                    $chk_m_ref="";
+                    break;
+                case "num":
+                    $chk_m_num_ini="";
+                    $chk_m_num="checked";
+                    $chk_m_ref="";
+                    $dia_num_db=$rta['dias'];
+                    break;
+                case "ref":
+                    $chk_m_num_ini="";
+                    $chk_m_num="";
+                    $chk_m_ref="checked";
+                    $dia_w_db=empty($rta['dia_semana'])? '' : $rta['dia_semana'];
+                    $ordinal_db=empty($rta['ordinal'])? '' : $rta['ordinal'];
+                    break;
+            }
+            break;
+        case "d_s":
+            $display_d_s="display:in-line;";
+            $periodico_tipo="periodico_d_s";
+            switch ($rta['tipo_dia']) {
+                case "num_ini":
+                    $chk_s_num_ini="checked";
+                    $chk_s_ref="";
+                    break;
+                case "ref":
+                    $chk_s_num_ini="";
+                    $chk_s_ref="checked";
+                    $dias_w_db=empty($rta['dias'])? '' : preg_split('/,/',$rta['dias']);
+                    break;
+            }
+            break;
+        case "d_d":
+            $display_d_d="display:in-line;";
+            $periodico_tipo="periodico_d_d";
+            $chk_d_num_ini="checked";
+            break;
+    }
 }
-*/
+if (empty($display_d_a)) $display_d_a="display:none;";
+if (empty($display_d_m)) $display_d_m="display:none;";
+if (empty($display_d_s)) $display_d_s="display:none;";
+if (empty($display_d_d)) $display_d_d="display:none;";
 
-/*
-$a_encargados_sel=array();
-$permisos= explode(",",ConfigGlobal::permisos());
-$c=0;
-foreach ($permisos as $permis) {
-	if ($permis!="dtor" && $permis!="pendents") {
-		$c++;
-		if ($c > 1) array_push($a_encargados_sel,"separador#-------");
-		$a_encargados_sel=array_merge($a_encargados_sel,$a_encargados[$permis]);
-	}
+if (is_array($exdates) && !empty($exdates)) {
+    foreach ($exdates as $icalprop) {
+        // si hay más de uno separados por coma
+        $a_fechas=preg_split('/,/',$icalprop->content);
+        foreach ($a_fechas as $fecha_iso) {
+            $oFecha = new DateTimeLocal($fecha_iso); // hay que quitar 'THHMMSSZ'
+            $a_exdates_local[] = $oFecha->getFromLocal();
+        }
+    }
 }
-*/
+
+$a_meses = DateTimeLocal::Meses();
+$oDesplMesesAnual = new Desplegable('mes_num',$a_meses,'',FALSE);
+$oDesplMesesAnual->setAction("fnjs_marcar('#id_a_radio_2')");
+$oDesplMesesAnual->setOpcion_sel($mes_num_db);
+
+// ordinales:
+$a_ordinales = [
+    "1" => _("primer"),
+    "2" =>  _("segundo"),
+    "3" =>  _("tercer"),
+    "4" =>  _("cuarto"),
+    "-1" =>  _("último"),
+];
+
+$oDesplOrdinalesAnual = new Desplegable('ordinal_a',$a_ordinales,'',FALSE);
+$oDesplOrdinalesAnual->setAction("fnjs_marcar('#id_a_radio_3')");
+$oDesplOrdinalesAnual->setOpcion_sel($ordinal_a_db);
+
+$oDesplOrdinalesMes = new Desplegable('ordinal',$a_ordinales,'',FALSE);
+$oDesplOrdinalesMes->setAction("fnjs_marcar('#id_radio_3')");
+$oDesplOrdinalesMes->setOpcion_sel($ordinal_db);
+
+// dias de la semana
+$a_dias_semana = DateTimeLocal::arrayDiasSemana();
+$oDesplDiasSemanaAnual = new Desplegable('dia_semana_a',$a_dias_semana,'',FALSE);
+$oDesplDiasSemanaAnual->setAction("fnjs_marcar('#id_a_radio_3')");
+$oDesplDiasSemanaAnual->setOpcion_sel($dia_w_a_db);
+
+$oDesplDiasSemanaMes = new Desplegable('dia_semana',$a_dias_semana,'',FALSE);
+$oDesplDiasSemanaMes->setAction("fnjs_marcar('#id_radio_3')");
+$oDesplDiasSemanaMes->setOpcion_sel($dia_w_db);
+
+$oDesplDiasSemana = new Desplegable('dias_w',$a_dias_semana,'',FALSE);
+$oDesplDiasSemana->setAction("fnjs_marcar('#id_s_radio_2')");
+$oDesplDiasSemana->setOpcion_sel($dias_w_db);
+
+$oDesplMesesRef = new Desplegable('mes_num_ref',$a_meses,'',FALSE);
+$oDesplMesesRef->setAction("fnjs_marcar('#id_a_radio_3')");
+$oDesplMesesRef->setOpcion_sel($mes_num_ref_db);
+
+$oDesplMeses2 = new Desplegable('meses',$a_meses,'',FALSE);
+$oDesplMeses2->setAction("fnjs_marcar('#id_a_radio_4')");
+$oDesplMeses2->setOpcion_sel($meses_db);
+
+$a_dias = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+$oDesplDias = new Desplegable('dias',$a_dias,'',FALSE);
+$oDesplDias->setAction("fnjs_marcar('#id_a_radio_4')");
+$oDesplDias->setOpcion_sel($dias_db);
+
+///////////////////////// FIM PERIODICO ///////////////////////////
+
 
 // Si no es nuevo, no dejo modificar ni la oficina ni la referencia (protocolo)
 if ( $nuevo != 1 ) {
@@ -512,6 +550,37 @@ $a_campos = [
     'yearStart' => $yearStart,
     'yearEnd' => $yearEnd,
     'pagina_cancel' => $pagina_cancel,
+    // periodico
+	'display_periodico' => $display_periodico,
+    'periodico_tipo' => $periodico_tipo,
+    'f_inicio' => $f_inicio,
+    'f_until' => $f_until,
+    'display_d_a' => $display_d_a,
+    'chk_a_num_ini' => $chk_a_num_ini,
+    'chk_a_num' => $chk_a_num,
+    'dia_num_db' => $dia_num_db,
+    'oDesplMesesAnual' => $oDesplMesesAnual,
+    'chk_a_ref' => $chk_a_ref,
+    'chk_a_num_dm' => $chk_a_num_dm,
+    'oDesplOrdinalesAnual' => $oDesplOrdinalesAnual,
+    'oDesplDiasSemanaAnual' => $oDesplDiasSemanaAnual,
+    'oDesplMesesRef' => $oDesplMesesRef,
+    'oDesplMeses2' => $oDesplMeses2,
+    'oDesplDias' => $oDesplDias,
+    'display_d_m' => $display_d_m,
+    'chk_m_num_ini' => $chk_m_num_ini,
+    'chk_m_num' => $chk_m_num,
+    'dia_num_db' => $dia_num_db,
+    'chk_m_ref' => $chk_m_ref,
+    'oDesplOrdinalesMes' => $oDesplOrdinalesMes,
+    'oDesplDiasSemanaMes' => $oDesplDiasSemanaMes,
+    'display_d_s' => $display_d_s,
+    'chk_s_num_ini' => $chk_s_num_ini,
+    'chk_s_ref' => $chk_s_ref,
+    'oDesplDiasSemana' => $oDesplDiasSemana,
+    'display_d_d' => $display_d_d,
+    'chk_d_num_ini' => $chk_d_num_ini,
+    'a_exdates_local' => $a_exdates_local,
 ];
 
 $oView = new ViewTwig('pendientes/controller');

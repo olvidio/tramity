@@ -1,5 +1,6 @@
 <?php
 use web\DateTimeLocal;
+use pendientes\model\Rrule;
 
 /***
 *  En $rta tengo los parametros que me sirven para ver-no ver las pestañas del periodico
@@ -31,7 +32,7 @@ if (empty($rrule)) {
 	$exdates='';
 	$periodico_tipo='';
 } else {
-	$rta=desmontar_rule($rrule);
+	$rta = Rrule::desmontar_rule($rrule);
 	if (!empty($rta['until'])) {
 	    $f_until_iso = $rta['until']; //(esta en iso)
 	    $oF_ini = new DateTimeLocal($f_until_iso);

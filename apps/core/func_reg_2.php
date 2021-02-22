@@ -675,6 +675,7 @@ function fecha_YMD2DMY($fecha) {
 * Función cambiar obtener dia, mes, año de una fecha tipo 'YYYYmmddTHHmmssZ'.
 * Devuelve un array con: fecha sin hora,dia,mes,año.
 */
+/*
 function fecha_array($fecha) {
 	$fecha=substr($fecha,0,8);
 	$patterns = '/(\d{1,4})(\d{1,2})(\d{1,2})/';
@@ -682,7 +683,7 @@ function fecha_array($fecha) {
 	preg_match($patterns, $fecha, $matches);
 	return $matches;
 }
-
+*/
 
 /**
 *

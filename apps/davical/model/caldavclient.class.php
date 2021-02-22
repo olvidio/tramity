@@ -99,6 +99,7 @@ class CalDAVClient {
     $this->pass = $pass;
     $this->headers = array();
 
+    $matches = [];
     if ( preg_match( '#^(https?)://([a-z0-9.-]+)(:([0-9]+))?(/.*)$#', $base_url, $matches ) ) {
       $this->server = $matches[2];
       $this->base_url = $matches[5];
@@ -199,7 +200,7 @@ class CalDAVClient {
   /**
    * Output http request headers
    *
-   * @return HTTP headers
+   * @return string HTTP headers
    */
   function GetHttpRequest() {
       return $this->httpRequest;
@@ -207,7 +208,7 @@ class CalDAVClient {
   /**
    * Output http response headers
    *
-   * @return HTTP headers
+   * @return string HTTP headers
    */
   function GetResponseHeaders() {
       return $this->httpResponseHeaders;
@@ -215,7 +216,7 @@ class CalDAVClient {
   /**
    * Output http response body
    *
-   * @return HTTP body
+   * @return string HTTP body
    */
   function GetResponseBody() {
       return $this->httpResponseBody;
@@ -223,7 +224,7 @@ class CalDAVClient {
   /**
    * Output xml request
    *
-   * @return raw xml
+   * @return string raw xml
    */
   function GetXmlRequest() {
       return $this->xmlRequest;
@@ -231,7 +232,7 @@ class CalDAVClient {
   /**
    * Output xml response
    *
-   * @return raw xml
+   * @return string raw xml
    */
   function GetXmlResponse() {
       return $this->xmlResponse;
@@ -265,7 +266,7 @@ class CalDAVClient {
     $headers[] = "Host: ".$this->server .":".$this->port;
 
     if ( empty($this->headers['content-type']) ) $this->headers['content-type'] = "Content-type: text/plain";
-    foreach( $this->headers as $ii => $head ) {
+    foreach( $this->headers as $head ) {
       $headers[] = $head;
     }
     $headers[] = "Content-Length: " . strlen($this->body);
@@ -303,6 +304,7 @@ class CalDAVClient {
     // printf( "\n================================\n%s\n================================\n", $chunks );
     do {
       $bytes = 0;
+      $matches = [];
       if ( preg_match('{^((\r\n)?\s*([ 0-9a-fA-F]+)(;[^\n]*)?\r?\n)}', $chunks, $matches ) ) {
         $octets = $matches[3];
         $bytes = hexdec($octets);
@@ -407,6 +409,7 @@ class CalDAVClient {
     $this->DoRequest($url);
 
     $etag = null;
+    $matches = [];
     if ( preg_match( '{^ETag:\s+"([^"]*)"\s*$}im', $this->httpResponseHeaders, $matches ) ) $etag = $matches[1];
     if ( !isset($etag) || $etag == '' ) {
       printf( "No etag in:\n%s\n", $this->httpResponseHeaders );
@@ -450,13 +453,13 @@ class CalDAVClient {
   */
   function DoPROPFINDRequest( $url, $props, $depth = 0 ) {
     $this->SetDepth($depth);
-    /* todo
-    $xml = new XMLDocument( array( 'DAV:' => '', 'urn:ietf:params:xml:ns:caldav' => 'C' ) );
-    $prop = new XMLElement('prop');
+    /* todo */
+    $xml = new \XMLDocument( array( 'DAV:' => '', 'urn:ietf:params:xml:ns:caldav' => 'C' ) );
+    $prop = new \XMLElement('prop');
     foreach( $props AS $v ) {
       $xml->NSElement($prop,$v);
     }
-    */
+    
 
     $this->body = $xml->Render('propfind',$prop );
 
@@ -514,7 +517,7 @@ class CalDAVClient {
   * @param string $tagname The tag name to find the href inside of
   */
   function HrefValueInside( $tagname ) {
-    foreach( $this->xmltags[$tagname] AS $k => $v ) {
+    foreach( $this->xmltags[$tagname] AS $v ) {
       $j = $v + 1;
       if ( $this->xmlnodes[$j]['tag'] == 'DAV::href' ) {
         return rawurldecode($this->xmlnodes[$j]['value']);
@@ -610,8 +613,8 @@ class CalDAVClient {
   * @param string $url The URL to find the principal-URL from
   */
   function FindPrincipal( $url ) {
-    $xml = $this->DoPROPFINDRequest( $url, array('resourcetype', 'current-user-principal', 'owner', 'principal-URL',
-                                  'urn:ietf:params:xml:ns:caldav:calendar-home-set'), 1);
+    //$xml = $this->DoPROPFINDRequest( $url, array('resourcetype', 'current-user-principal', 'owner', 'principal-URL',
+    //                              'urn:ietf:params:xml:ns:caldav:calendar-home-set'), 1);
 
     $principal_url = $this->HrefForProp('DAV::principal');
 
@@ -641,7 +644,7 @@ class CalDAVClient {
     }
 
     $calendar_home = array();
-    foreach( $this->xmltags['urn:ietf:params:xml:ns:caldav:calendar-home-set'] AS $k => $v ) {
+    foreach( $this->xmltags['urn:ietf:params:xml:ns:caldav:calendar-home-set'] AS $v ) {
       if ( $this->xmlnodes[$v]['type'] != 'open' ) continue;
       while( $this->xmlnodes[++$v]['type'] != 'close' && $this->xmlnodes[$v]['tag'] != 'urn:ietf:params:xml:ns:caldav:calendar-home-set' ) {
 //        printf( "Tag: '%s' = '%s'\n", $this->xmlnodes[$v]['tag'], $this->xmlnodes[$v]['value']);
@@ -674,7 +677,7 @@ class CalDAVClient {
         $calendar_urls[$this->HrefForProp('urn:ietf:params:xml:ns:caldav:calendar', $k)] = 1;
       }
 
-      foreach( $this->xmltags['DAV::href'] AS $i => $hnode ) {
+      foreach( $this->xmltags['DAV::href'] AS $hnode ) {
         $href = rawurldecode($this->xmlnodes[$hnode]['value']);
 
         if ( !isset($calendar_urls[$href]) ) continue;
@@ -716,7 +719,7 @@ class CalDAVClient {
 
     $calendar = new CalendarInfo($href);
     $ok_props = $this->GetOKProps($hnode);
-    foreach( $ok_props AS $k => $v ) {
+    foreach( $ok_props AS $v ) {
       $name = preg_replace( '{^.*:}', '', $v['tag'] );
       if ( isset($v['value'] ) ) {
         $calendar->{$name} = $v['value'];
@@ -824,7 +827,7 @@ EOXML;
     $this->DoRequest( $this->calendar_url );
     $report = array();
 	if (!empty($this->xmlnodes)) { // afegit per Dani
-		foreach( $this->xmlnodes as $k => $v ) {
+		foreach( $this->xmlnodes as $v ) {
 		  if (empty($v['tag'])) continue;	
 		  switch( $v['tag'] ) {
 			case 'DAV::response':
@@ -858,8 +861,8 @@ EOXML;
   * part, where the 'href' is relative to the calendar and the event contains the
   * definition of the event in iCalendar format.
   *
-  * @param timestamp $start The start time for the period
-  * @param timestamp $finish The finish time for the period
+  * @param string timestamp $start The start time for the period
+  * @param string timestamp $finish The finish time for the period
   * @param string    $relative_url The URL relative to the base_url specified when the calendar was opened.  Default ''.
   *
   * @return array An array of the relative URLs, etags, and events, returned from DoCalendarQuery() @see DoCalendarQuery()
@@ -892,8 +895,8 @@ EOFILTER;
   * part, where the 'href' is relative to the calendar and the event contains the
   * definition of the event in iCalendar format.
   *
-  * @param timestamp $start The start time for the period
-  * @param timestamp $finish The finish time for the period
+  * @param string timestamp $start The start time for the period
+  * @param string timestamp $finish The finish time for the period
   * @param boolean   $completed Whether to include completed tasks
   * @param boolean   $cancelled Whether to include cancelled tasks
   * @param string    $relative_url The URL relative to the base_url specified when the calendar was opened.  Default ''.

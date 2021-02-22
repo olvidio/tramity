@@ -276,7 +276,8 @@ class PermRegistro {
         $classname = get_class($objeto);
         $clase = substr($classname, strrpos($classname, '\\') + 1);
         
-        if ($clase === 'Entrada') {
+        $a_oficinas = [];
+        if ($clase === 'Entrada' || $clase === 'Pendiente') {
             $id_oficina_pral = $objeto->getPonente();
             $a_oficinas = $objeto->getResto_oficinas();
         }
@@ -287,7 +288,6 @@ class PermRegistro {
             // pasar cargos a oficinas:
             $oCargoP = new Cargo($id_ponente);
             $id_oficina_pral = $oCargoP->getId_oficina();
-            $a_oficinas = [];
             foreach ($resto_cargos as $id_cargo) {
                 $oCargo = new Cargo($id_cargo);
                 $a_oficinas[] = $oCargo->getId_oficina();

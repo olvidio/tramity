@@ -47,7 +47,7 @@ fnjs_nuevo_pendiente=function(formulario){
 
 fnjs_marcar=function(formulario){
 	var s=0; // el numero de selecionados
-	var r=0; // si es reservado (por lo menos no tiene permisos para el asunto)
+	var r=0; // no tiene permisos para el detalle (reservado)
 	var p=0; // para los periodicos
 	/* selecciono los elementos con class="sel" de las tablas del id=formulario */
 	$(formulario+' input.sel').each(function(i){

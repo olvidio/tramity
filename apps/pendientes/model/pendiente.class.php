@@ -2,18 +2,16 @@
 namespace pendientes\model;
 
 use core\Converter;
-use function core\any_2;
-use function core\fecha_sin_time;
 use davical\model\CalDAVClient;
+use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
 use pendientes\model\entity\PendienteDB;
 use usuarios\model\PermRegistro;
 use usuarios\model\entity\Cargo;
+use usuarios\model\entity\GestorOficina;
+use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
-use entradas\model\Entrada;
-use Twig\TokenParser\EmbedTokenParser;
-use usuarios\model\entity\GestorOficina;
 
 // Arxivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
@@ -79,6 +77,7 @@ class Pendiente {
     private $asunto;
     private $status;
     private $f_inicio;
+    private $f_end;
     private $f_acabado;
     private $f_plazo;
     private $ref_prot_mas;
@@ -134,17 +133,8 @@ class Pendiente {
     
     public function getProtocoloOrigen() {
         $uid = $this->getUid();
-        $ref=$this->buscar_ref_uid($uid,"array");
-        /*
-        $ref_mas=$this->getRef_prot_mas();
-        if (!empty($ref_mas)) $ref.=", ".$ref_mas;
-        $pendiente_con=$this->getPendiente_con();
-        if (!empty($pendiente_con)) {
-            
-            //$ref=$a_lugares[$pendiente_con]." ($ref)";
-        }
-        */
-        return $ref;
+        $prot_origen = $this->buscar_ref_uid($uid,"array");
+        return $prot_origen;
     }
     
     public function getReferencias() {
@@ -162,7 +152,8 @@ class Pendiente {
     
     
     public function buscar_ref_uid($uid,$formato) {
-        if (($pos_ini = strpos($uid, 'REN')) !== FALSE && $pos_ini == 0) { //  Registro entradas
+        //  Registro entradas
+        if (($pos_ini = strpos($uid, 'REN')) !== FALSE && $pos_ini == 0) {
             $pos = strpos($uid, '-') - 3;
             $id_reg=substr($uid,3,$pos);
             //echo "ref: $id_reg<br>";
@@ -187,9 +178,10 @@ class Pendiente {
                 return $ref;
             }
         }
-            
-        if (($pos_ini = strpos($uid, 'RES')) !== FALSE && $pos_ini == 0) { //  Registro escritos
-            /*
+        
+        //  Registro escritos
+        /*
+        if (($pos_ini = strpos($uid, 'RES')) !== FALSE && $pos_ini == 0) {
             } else {
                 // No es una entrada, será una aprobación.
                 $sql_ref="SELECT prot_num ,prot_any
@@ -209,11 +201,12 @@ class Pendiente {
                     return _("referencia a un escrito eliminado");
                 }
             }
-            */
-            
         }
-
-        if (($pos_ini = strpos($uid, 'RC')) !== FALSE && $pos_ini == 0) { //  Registro cancillería
+        */
+        
+        //  Registro cancillería
+        /*
+        if (($pos_ini = strpos($uid, 'RC')) !== FALSE && $pos_ini == 0) {
             $pos = strpos($uid, '-') - 2;
             $id_reg=substr($uid,2,$pos);
             //echo "ref: $id_reg<br>";
@@ -236,6 +229,8 @@ class Pendiente {
             }
             
         }
+        */
+        
         // en cualquier otro caso.
         return;
     }
@@ -270,6 +265,7 @@ class Pendiente {
         //$aDades['id_oficina'] = $oPendienteDB->setId_oficina();
         $aDades['rrule'] = $oPendienteDB->getRrule();
         $aDades['f_inicio'] = $oPendienteDB->getF_inicio();
+        $aDades['f_end'] = $oPendienteDB->getF_end();
         
         $aDades['id_reg'] = $id_reg;
         
@@ -284,12 +280,12 @@ class Pendiente {
         $asunto = empty($aDades['asunto'])? '' :$aDades['asunto'];
         $status = empty($aDades['status'])? '' :$aDades['status'];
         $f_inicio = empty($aDades['f_inicio'])? '' :$aDades['f_inicio'];
+        $f_end = empty($aDades['f_end'])? '' :$aDades['f_end'];
         $f_acabado = empty($aDades['f_acabado'])? '' :$aDades['f_acabado'];
         $f_plazo = empty($aDades['f_plazo'])? '' :$aDades['f_plazo'];
         $ref_prot_mas = empty($aDades['ref_prot_mas'])? '' :$aDades['ref_prot_mas'];
         $location = empty($aDades['location'])? '' :$aDades['location'];
         $observ = empty($aDades['observ'])? '' :$aDades['observ'];
-        $visibilidad = empty($aDades['visibilidad'])? '1' :$aDades['visibilidad'];
         $detalle = empty($aDades['detalle'])? '' :$aDades['detalle'];
         $categorias = empty($aDades['categorias'])? '' :$aDades['categorias'];
         $encargado = empty($aDades['encargado'])? '' :$aDades['encargado'];
@@ -297,6 +293,11 @@ class Pendiente {
         $oficinas = empty($aDades['oficinas'])? '' :$aDades['oficinas'];
         $rrule = empty($aDades['rrule'])? '' :$aDades['rrule'];
         $exdates = empty($aDades['exdates'])? '' :$aDades['exdates'];
+        
+        $class = $this->visibilidad_to_Class($aDades['visibilidad']);
+        
+        
+        
         
         $base_url = $this->getBaseUrl();
         $cargo = $this->getCargo();
@@ -306,6 +307,11 @@ class Pendiente {
         if (!empty($f_acabado)) {
             $oConverter = new Converter('date', $f_acabado);
             $f_cal_acabado = $oConverter->toCal();
+        }
+
+        if (!empty($f_end)) {
+            $oConverter = new Converter('date', $f_end);
+            $f_cal_end = $oConverter->toCal();
         }
 
         if (!empty($rrule)) {
@@ -348,9 +354,10 @@ class Pendiente {
         $args['CREATED']=$ahora;
         if (!empty($f_plazo)) $args['DUE']=$f_cal_plazo;
         if (!empty($f_cal_inicio))  { $args['DTSTART']=$f_cal_inicio; } else { $args['DTSTART']=$f_cal_plazo; }
+        if (!empty($f_cal_end))  { $args['DTEND']=$f_cal_end; } else { $args['DTEND']=''; }
         if (!empty($rrule)) $args['RRULE']="$rrule";
         if (!empty($observ)) $args['DESCRIPTION']="$observ";
-        if (!empty($visibilidad)) $args['CLASS']="$visibilidad"; // property name - case independt
+        if (!empty($class)) $args['CLASS']="$class"; // property name - case independt
         if (!empty($detalle)) $args['COMMENT']="$detalle";
         if (!empty($categorias)) $args['CATEGORIES']="$categorias";
         if (!empty($encargado)) $args['ATTENDEE']="$encargado";
@@ -482,18 +489,31 @@ class Pendiente {
         $icalComp = $vcalendar->GetComponents('VTODO');
         $exdates = $vcalendar->GetPropertiesByPath('/VCALENDAR/VTODO/EXDATE');
         if (is_array($exdates)) {
-            // me aseguro que no está repetida
-            $repe=0;
-            foreach ($exdates as $iCalProp) {
-                // si hay más de uno separados por coma
-                $a_fechas=preg_split('/,/',$iCalProp->content);
-                foreach ($a_fechas as $f_ex) {
-                    fecha_sin_time($f_ex); //quito la THHMMSSZ
-                    if ($f_recur==$f_ex) $repe=1;
-                }
-            }
-            if (empty($repe)) {
+            if (empty($exdates)) {
                 $icalComp[0]->AddProperty('EXDATE',$f_recur);
+            } else {
+                $oF_recurrente = new DateTimeLocal($f_recur);
+                // si hay varias propiedades exdate, las unifico en una.
+                $exdates_csv = '';
+                foreach ($exdates as $iCalProp) {
+                    $exdates_csv .= empty($exdates_csv)? '' : ',';
+                    $exdates_csv .= $iCalProp->content;
+                }
+                // me aseguro que no está repetida
+                $repe=0;
+                // si hay más de uno separados por coma
+                $a_fechas=preg_split('/,/',$exdates_csv);
+                foreach ($a_fechas as $f_ex) {
+                    $oF_exception = new DateTimeLocal($f_ex);
+                    if ($oF_recurrente == $oF_exception) $repe=1;
+                }
+                if (empty($repe)) {
+                    $exdates_csv .= ','.$f_recur;
+                }
+                $new_prop = new \iCalProp();
+                $new_prop->Name('EXDATE');
+                $new_prop->Value($exdates_csv);
+                $icalComp[0]->SetProperties(array($new_prop),'EXDATE');
             }
         }
 
@@ -510,12 +530,12 @@ class Pendiente {
         $asunto = empty($aDades['asunto'])? '' :$aDades['asunto'];
         $status = empty($aDades['status'])? '' :$aDades['status'];
         $f_inicio = empty($aDades['f_inicio'])? '' :$aDades['f_inicio'];
+        $f_end = empty($aDades['f_end'])? '' :$aDades['f_end'];
         $f_acabado = empty($aDades['f_acabado'])? '' :$aDades['f_acabado'];
         $f_plazo = empty($aDades['f_plazo'])? '' :$aDades['f_plazo'];
         $ref_prot_mas = empty($aDades['ref_prot_mas'])? '' :$aDades['ref_prot_mas'];
         $location = empty($aDades['location'])? '' :$aDades['location'];
         $observ = empty($aDades['observ'])? '' :$aDades['observ'];
-        $visibilidad = empty($aDades['visibilidad'])? '1' :$aDades['visibilidad'];
         $detalle = empty($aDades['detalle'])? '' :$aDades['detalle'];
         $categorias = empty($aDades['categorias'])? '' :$aDades['categorias'];
         $encargado = empty($aDades['encargado'])? '' :$aDades['encargado'];
@@ -523,6 +543,8 @@ class Pendiente {
         $oficinas = empty($aDades['oficinas'])? '' :$aDades['oficinas'];
         $rrule = empty($aDades['rrule'])? '' :$aDades['rrule'];
         $exdates = empty($aDades['exdates'])? '' :$aDades['exdates'];
+        
+        $class = $this->visibilidad_to_Class($aDades['visibilidad']);
         
         $base_url = $this->getBaseUrl();
         $cargo = $this->getCargo();
@@ -548,6 +570,10 @@ class Pendiente {
             $oConverter = new Converter('date', $f_inicio);
             $f_cal_inicio = $oConverter->toCal();
         }
+        if (!empty($f_end)) {
+            $oConverter = new Converter('date', $f_end);
+            $f_cal_end = $oConverter->toCal();
+        }
         if (!empty($f_plazo)) {
             $oConverter = new Converter('date', $f_plazo);
             $f_cal_plazo = $oConverter->toCal();
@@ -561,9 +587,10 @@ class Pendiente {
         
         $args['DUE']=$f_cal_plazo;
         if (!empty($f_cal_inicio))  { $args['DTSTART']=$f_cal_inicio; } else { $args['DTSTART']=$f_cal_plazo; }
+        if (!empty($f_cal_end))  { $args['DTEND']=$f_cal_end; } else { $args['DTEND']=''; }
         $args['RRULE']="$rrule";
         $args['DESCRIPTION']="$observ";
-        $args['CLASS']="$visibilidad"; // property name - case independt
+        $args['CLASS']="$class"; // property name - case independt
         $args['COMMENT']="$detalle";
         $args['CATEGORIES']="$categorias";
         $args['ATTENDEE']="$encargado";
@@ -606,6 +633,7 @@ class Pendiente {
         } else {
             $args['EXDATE']="$exdates";
         }
+        
         foreach($args as $new_property => $value) {
             $new_prop = new \iCalProp();
             $new_prop->Name($new_property);
@@ -616,8 +644,9 @@ class Pendiente {
                 $icalComp[0]->ClearProperties("$new_property");
             }
         }
-         $vcalendar->SetComponents($icalComp); // OJO, le paso el array de objetos.
-         $icalendar=$vcalendar->Render();
+        
+        $vcalendar->SetComponents($icalComp); // OJO, le paso el array de objetos.
+        $icalendar=$vcalendar->Render();
         //print_r($cal);
 
         // OJO! El nombre no puede contener la '@'.
@@ -642,6 +671,7 @@ class Pendiente {
         $aDades['asunto'] = $this->asunto;
         $aDades['status'] = $this->status;
         $aDades['f_inicio'] = $this->f_inicio;
+        $aDades['f_end'] = $this->f_end;
         $aDades['f_acabado'] = $this->f_acabado;
         $aDades['f_plazo'] = $this->f_plazo;
         $aDades['ref_prot_mas'] = $this->ref_prot_mas;
@@ -665,6 +695,46 @@ class Pendiente {
             $this->ins_pendiente($aDades);
         }
     
+    }
+    
+    private function visibilidad_to_Class($visibilidad) {
+        switch ($visibilidad) {
+            case Entrada::V_TODOS:
+                $class = 'PUBLIC';
+                break;
+            case Entrada::V_PERSONAL:
+                $class = 'PRIVATE';
+                break;
+            case Entrada::V_RESERVADO:
+                $class = 'CONFIDENTIAL';
+                break;
+            case Entrada::V_RESERVADO_VCD;
+                $class = 'VCD';
+                break;
+            default:
+                $class = 'PUBLIC';
+        }
+        return $class;
+    }
+    
+    public function Class_to_visibilidad($class) {
+        switch ($class) {
+            case 'PUBLIC':
+                $visibilidad = Entrada::V_TODOS;
+                break;
+            case 'PRIVATE':
+                $visibilidad = Entrada::V_PERSONAL;
+                break;
+            case 'CONFIDENTIAL':
+                $visibilidad = Entrada::V_RESERVADO;
+                break;
+            case 'VCD':
+                $visibilidad = Entrada::V_RESERVADO_VCD;
+                break;
+            default:
+                $visibilidad = Entrada::V_TODOS;
+        }
+        return $visibilidad;
     }
     
     public function getTodoByUid() {
@@ -700,7 +770,6 @@ class Pendiente {
         $aDades['f_cal_end'] = $icalComp->GetPValue("DTEND");
         $aDades['rrule'] = $icalComp->GetPValue("RRULE");
         $aDades['observ'] = $icalComp->GetPValue("DESCRIPTION");
-        $aDades['visibilidad'] = $icalComp->GetPValue("CLASS");
         $aDades['detalle'] = $icalComp->GetPValue("COMMENT");
         $aDades['categorias'] = $icalComp->GetPValue("CATEGORIES");
         $aDades['encargado'] = $icalComp->GetPValue("ATTENDEE");
@@ -710,14 +779,12 @@ class Pendiente {
         $aDades['id_reg'] = $icalComp->GetPValue("X-DLB-ID-REG");
         $aDades['oficinas'] = $icalComp->GetPValue("X-DLB-OFICINAS");
         
+        $class = $icalComp->GetPValue("CLASS");
+        $visibilidad = $this->Class_to_visibilidad($class);
+        $aDades['visibilidad'] = $visibilidad;
+        
         $aDades['exdates'] = $vcalendar->GetPropertiesByPath('/VCALENDAR/VTODO/EXDATE');
-        /*
-        if ($visibilidad=="CONFIDENTIAL") {
-            $visibilidad="t";
-        } else {
-            $visibilidad="f";
-        }
-        */
+
         $this->setAllAtributes($aDades);
     }
     
@@ -737,7 +804,7 @@ class Pendiente {
         if (array_key_exists('f_cal_acabado',$aDades)) $this->setF_acabado($aDades['f_cal_acabado']);
         if (array_key_exists('f_cal_plazo',$aDades)) $this->setF_plazo($aDades['f_cal_plazo']);
         if (array_key_exists('f_cal_start',$aDades)) $this->setF_inicio($aDades['f_cal_start']);
-        //if (array_key_exists('f_cal_end',$aDades)) $this->setF_end($aDades['f_cal_end']);
+        if (array_key_exists('f_cal_end',$aDades)) $this->setF_end($aDades['f_cal_end']);
         if (array_key_exists('rrule',$aDades)) $this->setRrule($aDades['rrule']);
         if (array_key_exists('observ',$aDades)) $this->setObserv($aDades['observ']);
         if (array_key_exists('visibilidad',$aDades)) $this->setvisibilidad($aDades['visibilidad']);
@@ -911,16 +978,49 @@ class Pendiente {
         $a_visibilidad = $oEntrada->getArrayVisibilidad();
         $asunto = $a_visibilidad[Entrada::V_RESERVADO];
         if ($perm > 0) {
-            $asunto = $this->getAsuntoDV();
+            $asunto = $this->getAsuntoDB();
         }
         return $asunto;
     }
 
+    /**
+     * Recupera l'atribut sdetalle de Pendiente teniendo en cuenta los permisos
+     *
+     * @return string sdetalle
+     */
+    function getDetalle() {
+        $oPermiso = new PermRegistro();
+        $perm = $oPermiso->permiso_detalle($this,'detalle');
+        
+        $oEntrada = new Entrada();
+        $a_visibilidad = $oEntrada->getArrayVisibilidad();
+        $detalle = $a_visibilidad[Entrada::V_RESERVADO];
+        if ($perm > 0) {
+            $detalle = $this->getDetalleDB();
+        }
+        return $detalle;
+    }
+    
+    /**
+     * añadir el detalle en el asunto.
+     * tener en cuenta los permisos...
+     *
+     * return string
+     */
+    public function getAsuntoDetalle() {
+        //
+        $asunto = $this->getAsunto();
+        $detalle = $this->getDetalle();
+        $asunto_detelle = empty($detalle)? $asunto : $asunto." [$detalle]";
+        
+        return $asunto_detelle;
+    }
+    
 
     /**
      * @return mixed
      */
-    public function getAsuntoDV()
+    public function getAsuntoDB()
     {
         if (!isset($this->asunto) && !$this->bLoaded) {
             $this->Carregar();
@@ -976,6 +1076,29 @@ class Pendiente {
     public function setF_inicio($f_inicio)
     {
         $this->f_inicio = $f_inicio;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getF_end()
+    {
+        if (!isset($this->f_end) && !$this->bLoaded) {
+            $this->Carregar();
+        }
+        if (empty($this->f_end)) {
+            return new NullDateTimeLocal();
+        }
+        $oConverter = new Converter('date', $this->f_end);
+        return $oConverter->fromPg();
+    }
+
+    /**
+     * @param mixed $f_end
+     */
+    public function setF_end($f_end)
+    {
+        $this->f_end = $f_end;
     }
 
     /**
@@ -1103,7 +1226,7 @@ class Pendiente {
     /**
      * @return mixed
      */
-    public function getDetalle()
+    public function getDetalleDB()
     {
         if (!isset($this->detalle) && !$this->bLoaded) {
             $this->Carregar();
@@ -1243,13 +1366,26 @@ class Pendiente {
         }
         return $this->exdates;
     }
-
+    
     /**
      * @param mixed $exdates
      */
     public function setExdates($exdates)
     {
         $this->exdates = $exdates;
+    }
+
+    public function setExdatesArray($aExdates){
+        $a_filter_exdates = array_filter($aExdates); // Quita los elementos vacíos y nulos.
+        $exdates_csv = '';
+        // pasar a formato ISO
+        foreach ($a_filter_exdates as $f_local) {
+            $oConverter = new Converter('date', $f_local);
+            $f_iso = $oConverter->toPg();
+            $exdates_csv .= empty($exdates_csv)? '' : ',';
+            $exdates_csv .= $f_iso;
+        }
+        $this->exdates = $exdates_csv;
     }
 
     /**
@@ -1260,8 +1396,13 @@ class Pendiente {
         if (!isset($this->f_recur) && !$this->bLoaded) {
             $this->Carregar();
         }
-        return $this->f_recur;
+        if (empty($this->f_recur)) {
+            return new NullDateTimeLocal();
+        }
+        $oConverter = new Converter('date', $this->f_recur);
+        return $oConverter->fromPg();
     }
+
 
     /**
      * @param mixed $f_recur

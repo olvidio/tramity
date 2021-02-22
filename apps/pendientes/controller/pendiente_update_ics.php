@@ -1,10 +1,10 @@
 <?php
 use core\ConfigGlobal;
-use function core\montar_rrule;
 use lugares\model\entity\Lugar;
 use pendientes\model\Pendiente;
 use pendientes\model\entity\PendienteDB;
 use usuarios\model\entity\GestorOficina;
+use pendientes\model\Rrule;
 
 /**
 * Esta página actualiza la base de datos del registro.
@@ -63,12 +63,13 @@ $Qvisibilidad     = (string) \filter_input(INPUT_POST, 'visibilidad');
 $Qdetalle       = (string) \filter_input(INPUT_POST, 'detalle');
 $Qencargado     = (string) \filter_input(INPUT_POST, 'encargado');
 $Qpendiente_con = (string) \filter_input(INPUT_POST, 'pendiente_con');
-$Qexdates       = (string) \filter_input(INPUT_POST, 'exdates');
 $Qasunto        = (string) \filter_input(INPUT_POST, 'asunto');
+$Qsimple_per    = (string) \filter_input(INPUT_POST, 'simple_per');
 $rrule='';
 
 $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $Qa_oficinas = (array)  \filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_exdates = (array)  \filter_input(INPUT_POST, 'exdates', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 
 /* Para mantener las comillas en el asunto */
@@ -91,54 +92,55 @@ if (!empty($Qref_id_lugar)) {
 $cargo = ConfigGlobal::role_actual();
 $txt_err = '';
 
-if (!empty($_POST['simple_per'])) { // sólo para los periodicos.
-	if (!empty($_POST['f_until'])) { $request['until']=$_POST['f_until']; }
+if (!empty($Qsimple_per)) { // sólo para los periodicos.
+    $Quntil = (string) \filter_input(INPUT_POST,'until');
+    if (!empty($Quntil)) { $request['until'] = $Quntil; }
 	switch ($_POST['periodico_tipo']) {
 		case "periodico_d_a":
 			$request['tipo']="d_a";
-			$request['tipo_dia']=$_POST['tipo_dia'];
+			$request['tipo_dia']= (string) \filter_input(INPUT_POST,'tipo_dia');
 			switch($_POST['tipo_dia']){
 				case "num":
-					$request['dias']=$_POST['a_dia_num'];
-					$request['meses']=$_POST['mes_num'];
+					$request['dias']= (string) \filter_input(INPUT_POST,'a_dia_num');
+					$request['meses']= (string) \filter_input(INPUT_POST,'mes_num');
 				break;
 				case "ref":
-					$request['ordinal']=$_POST['ordinal_a'];
-					$request['dia_semana']=$_POST['dia_semana_a'];
-					$request['meses']=$_POST['mes_num_ref'];
+					$request['ordinal']= (string) \filter_input(INPUT_POST,'ordinal_a');
+					$request['dia_semana']= (string) \filter_input(INPUT_POST,'dia_semana_a');
+					$request['meses']= (string) \filter_input(INPUT_POST,'mes_num_ref');
 				break;
 				case "num_dm":
-					$request['dias']=$_POST['dias'];
-					$request['meses']=$_POST['meses'];
+					$request['dias']= (string) \filter_input(INPUT_POST,'dias');
+					$request['meses']= (string) \filter_input(INPUT_POST,'meses');
 				break;
 			}
-			$rrule=montar_rrule($request);
+			$rrule = Rrule::montar_rrule($request);
 			break;
 		case "periodico_d_m":
 			$request['tipo']="d_m";
-			$request['tipo_dia']=$_POST['tipo_dia'];
+			$request['tipo_dia']= (string) \filter_input(INPUT_POST,'tipo_dia');
 			switch($_POST['tipo_dia']){
 				case "num":
-					$request['dias']=$_POST['dia_num'];
+					$request['dias']= (string) \filter_input(INPUT_POST,'dia_num');
 				break;
 				case "ref":
-					$request['ordinal']=$_POST['ordinal'];
-					$request['dia_semana']=$_POST['dia_semana'];
+					$request['ordinal']= (string) \filter_input(INPUT_POST,'ordinal');
+					$request['dia_semana']= (string) \filter_input(INPUT_POST,'dia_semana');
 				break;
 			}
-			$rrule=montar_rrule($request);
+			$rrule = Rrule::montar_rrule($request);
 			break;
 		case "periodico_d_s":
 			$request['tipo']="d_s";
-			$request['tipo_dia']=$_POST['tipo_dia'];
-			$request['dias']=$_POST['dias_w'];
+			$request['tipo_dia'] = (string) \filter_input(INPUT_POST, 'tipo_dia');
+			$request['dias'] = (string) \filter_input(INPUT_POST, 'dias_w');
 			//print_r($_POST['dias_w']);
-			$rrule=montar_rrule($request);
+			$rrule = Rrule::montar_rrule($request);
 			break;
 		case "periodico_d_d":
 			$request['tipo']="d_d";
 			//print_r($dias_w);
-			$rrule=montar_rrule($request);
+			$rrule = Rrule::montar_rrule($request);
 			break;
 	}
 }
@@ -203,7 +205,7 @@ switch ($Qnuevo) {
             $oPendiente->setEncargado($Qencargado);
             $oPendiente->setPendiente_con($Qpendiente_con);
             $oPendiente->setRrule($rrule);
-            $oPendiente->setExdates($Qexdates);
+            $oPendiente->setExdatesArray($Qa_exdates);
             $oPendiente->setLocation($location);
             $oPendiente->setId_oficina($Qid_oficina);
             // las oficinas implicadas:
@@ -246,7 +248,7 @@ switch ($Qnuevo) {
         $oPendiente->setEncargado($Qencargado);
         $oPendiente->setPendiente_con($Qpendiente_con);
         $oPendiente->setRrule($rrule);
-        $oPendiente->setExdates($Qexdates);
+        $oPendiente->setExdatesArray($Qa_exdates);
         $oPendiente->setLocation($location);
         // las oficinas implicadas:
         $oPendiente->setOficinasArray($Qa_oficinas);
@@ -289,8 +291,9 @@ switch ($Qnuevo) {
 		break;
 	case "3": //eliminar pendiente. Lo pongo como cancelado.
 		//vengo de un checkbox
-		if (!empty($_POST['sel'])) { // puedo seleccionar más de uno.
-			foreach ($_POST['sel'] as $id) {
+        $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+		if (!empty($Qa_sel)) { // puedo seleccionar más de uno.
+			foreach ($Qa_sel as $id) {
 				$uid=strtok($id,'#');
 				$cal_oficina=strtok('#');
 				// miro si es una recursiva de un pendiente:
@@ -319,8 +322,9 @@ switch ($Qnuevo) {
 		break;
 	case "4": //marcar com contestado
 		//vengo de un checkbox
-		if (!empty($_POST['sel'])) { // puedo seleccionar más de uno.
-			foreach ($_POST['sel'] as $id) {
+        $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+		if (!empty($Qa_sel)) { // puedo seleccionar más de uno.
+			foreach ($Qa_sel as $id) {
 				$uid=strtok($id,'#');
 				$cal_oficina=strtok('#');
 				// miro si es una recursiva de un pendiente:

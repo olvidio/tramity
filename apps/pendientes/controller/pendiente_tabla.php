@@ -1,14 +1,14 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
-use function core\fecha_sin_time;
-use function core\recurrencias;
 use etiquetas\model\entity\GestorEtiqueta;
-use lugares\model\entity\GestorLugar;
 use pendientes\model\GestorPendiente;
+use pendientes\model\Rrule;
+use usuarios\model\PermRegistro;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorOficina;
+use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
 
@@ -29,8 +29,6 @@ $Qdespl_calendario = (string) \filter_input(INPUT_POST, 'despl_calendario');
 $Qcalendario = (string) \filter_input(INPUT_POST, 'calendario');
 $Qencargado = (string) \filter_input(INPUT_POST, 'encargado');
 	
-$cargo = ConfigGlobal::role_actual();
-
 $aOpciones = [
     'registro' => _("registro"),
     'oficina' => _("oficina"),
@@ -72,7 +70,6 @@ if (!empty($Qid_oficina)) {
 } elseif (!empty($id_oficina)) {
     $oficina = $a_oficinas[$id_oficina];
 }
-$of_pral=$oficina;
 $cal_oficina="oficina_$oficina";
 
 $gesCargos = new GestorCargo();
@@ -89,9 +86,6 @@ foreach ($cEtiquetas as $oEtiqueta) {
     $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
     $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
 }
-
-$gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayLugares();
 
 $sel_hoy="";
 $sel_semana="";
@@ -154,25 +148,26 @@ $aWhere = [
         'completed' => $completed,
         'cancelled' => $cancelled,
     ];
-$gesPendientes = new GestorPendiente($cal_oficina,$op_calendario_default,$cargo);
+$gesPendientes = new GestorPendiente($cal_oficina,$op_calendario_default,$role_actual);
 $cPendientes = $gesPendientes->getPendientes($aWhere);
 
 $a_valores = [];
 $t = 0;
+$oPermisoregistro = new PermRegistro();
 foreach($cPendientes as $oPendiente) {
     $id_encargado = $oPendiente->getEncargado();
+    $perm_detalle = $oPermisoregistro->permiso_detalle($oPendiente, 'detalle');
     if (!empty($Qencargado)) { 
         if ($id_encargado != $Qencargado) { continue; }
     }
     $encargado = !empty($id_encargado)? $a_usuarios_oficina[$id_encargado] : '';
     $t++;
-    $ref = $oPendiente->getReferencias();
     $protocolo = $oPendiente->getLocation();
     $rrule = $oPendiente->getRrule();
-    $asunto = $oPendiente->getAsunto();
+    $asunto = $oPendiente->getAsuntoDetalle();
     if (!empty($asunto)) $asunto=htmlspecialchars(stripslashes($asunto),ENT_QUOTES,'utf-8');
     $plazo = $oPendiente->getF_plazo()->getFromLocal();
-    $plazo_iso = $oPendiente->getF_plazo()->getIso();
+    $plazo_iso = $oPendiente->getF_plazo()->format('Ymd'); // sólo números, para poder ordenar.
     
     $oficinas_txt = $oPendiente->getOficinasTxtcsv();
     
@@ -184,16 +179,18 @@ foreach($cPendientes as $oPendiente) {
         $str_etiquetas .= empty($a_posibles_etiquetas[$id_etiqueta])? '' : $a_posibles_etiquetas[$id_etiqueta]; 
     }
     
-
     if (!empty($rrule)) {
         $periodico="p";
+        $uid = $oPendiente->getUid();
         // calcular las recurrencias que tocan.
-        $dtstart=$oPendiente->getF_inicio();
-        $dtend=$icalComp->GetPValue("DTEND");
-        $a_exdates = $oPendiente->getEx_dates();
-        $f_recurrentes=recurrencias($rrule,$dtstart,$dtend,$f_plazo);
+        $dtstart=$oPendiente->getF_inicio()->getIso();
+        $dtend=$oPendiente->getF_end()->getIso();
+        $a_exdates = $oPendiente->getExdates();
+        $f_recurrentes = Rrule::recurrencias($rrule, $dtstart, $dtend, $f_plazo);
         //print_r($f_recurrentes);
-        foreach ($f_recurrentes as $f_recur => $fecha) {
+        $recur = 0;
+        foreach ($f_recurrentes as $key => $f_iso) {
+            $oF_recurrente = new DateTimeLocal($f_iso);
             $recur++;
             // Quito las excepciones.
             if (is_array($a_exdates) ){
@@ -201,46 +198,39 @@ foreach($cPendientes as $oPendiente) {
                     // si hay más de uno separados por coma
                     $a_fechas=preg_split('/,/',$icalprop->content);
                     foreach ($a_fechas as $f_ex) {
-                        fecha_sin_time($f_ex); //quito la THHMMSSZ
-                        if ($f_recur==$f_ex)  continue(3);
+                        $oF_exception = new DateTimeLocal($f_ex);
+                        if ($oF_recurrente == $oF_exception)  continue(3);
                     }
                 }
             }
             //$a_valores[$recur]['sel']="$uid#$cal_oficina#$f_recur";
-            if ($perm_asunto==0) {
-                $a_valores[$recur]['sel']="x";
+            if ($perm_detalle >= PermRegistro::PERM_MODIFICAR) {
+                $a_valores[$recur]['sel']="$uid#$cal_oficina#$f_iso";
             } else {
-                $a_valores[$recur]['sel']="$uid#$cal_oficina#$f_recur";
+                $a_valores[$recur]['sel']="x";
             }
             $a_valores[$recur][1]=$protocolo;
             $a_valores[$recur][2]=$str_etiquetas;
             $a_valores[$recur][3]=$periodico;
-            //if ($perm_asunto==0) { // ahora solo pueden modificar los periodicos los de secretaria.
-            if (!$GLOBALS['oPerm']->have_perm("scl")) {
-                $a_valores[$recur][4]=$asunto;
-            } else {
-                $a_valores[$recur][4]= array( 'ira'=>$pagina, 'valor'=>$asunto);
-            }
-            $a_valores[$recur][5]=$fecha;
-            $a_valores[$t][6]=$oficinas_txt;
+            $a_valores[$recur][4]=$asunto;
+            $a_valores[$recur][5]=$oF_recurrente->getFromLocal();
+            $a_valores[$recur][6]=$oficinas_txt;
             $a_valores[$recur][7]=$encargado;
             // para el orden
-            $a_valores[$recur]['order']=$f_recur;
+            $a_valores[$recur]['order']=$key; // (es la fecha iso sin separador)
         }
     } else {
         $periodico="";
         $uid = $oPendiente->getUid();
-        $a_valores[$t]['sel']="$uid#$cal_oficina";
+        
+        if ($perm_detalle >= PermRegistro::PERM_MODIFICAR) {
+            $a_valores[$t]['sel'] = "$uid#$cal_oficina";
+        } else {
+            $a_valores[$t]['sel'] = "x";
+        }
         $a_valores[$t][1]=$protocolo;
         $a_valores[$t][2]=$str_etiquetas;
         $a_valores[$t][3]=$periodico;
-        /*
-        if ($perm_asunto==0) {
-            $a_valores[$t][4]=$asunto;
-        } else {
-            $a_valores[$t][4]= array( 'ira'=>$pagina, 'valor'=>$asunto);
-        }
-        */
         $a_valores[$t][4]=$asunto;
         $a_valores[$t][5]=$plazo;
         $a_valores[$t][6]=$oficinas_txt;
@@ -252,154 +242,12 @@ foreach($cPendientes as $oPendiente) {
     }
 }
 
-
-/*
-$events = $cal->GetTodos($f_inicio,$f_plazo,$completed,$cancelled);
-//print_r($events);
-$tt=0;
-foreach($events as $k1=>$a_todo) {
-	$tt++;
-	$vcalendar[$tt] = new \iCalComponent($a_todo['data']);
-}
-
-$recur=$tt;
-$a_valores = [];
-for ($t=1;$t<=$tt;$t++) {
-//print_r($vcalendar[$t]);
-	$icalComp = $vcalendar[$t]->GetComponents('VTODO');
-	$icalComp = $icalComp[0];  // If you know there's only 1 of them...
-
-	$uid=$icalComp->GetPValue("UID");
-	$ref=buscar_ref_uid($uid,"txt");
-	$ref_mas=$icalComp->GetPValue("X-DLB-REF-MAS");
-	if (!empty($ref_mas)) $ref.=", ".$ref_mas;
-	$pendiente_con=$icalComp->GetPValue("X-DLB-PENDIENTE-CON");
-	if (!empty($pendiente_con)) $ref=$a_lugares[$pendiente_con]." ($ref)";
-
-	$carpeta=$icalComp->GetPValue("CATEGORIES");
-	$asunto=$icalComp->GetPValue("SUMMARY");
-	if ($asunto=="Busy") continue;
-	if (!empty($asunto)) $asunto=htmlspecialchars(stripslashes($asunto),ENT_QUOTES,'utf-8');
-	$detalle=$icalComp->GetPValue("COMMENT");
-	$rrule=$icalComp->GetPValue("RRULE");
-	$reservado=$icalComp->GetPValue("CLASS");
-	if ($reservado=="CONFIDENTIAL") {
-		$reservado="t";
-	} else {
-		$reservado="f";
-	}
-	if ( $plazo=fecha_YMD2DMY($icalComp->GetPValue("DUE")) ) {
-	} else {
-		$plazo="x";
-	}
-	$mail=$icalComp->GetPValue("ATTENDEE");
-	if (!empty($mail)) { 
-		if ($filtro_encargado && $filtro_encargado!=$mail) continue;
-		$encargado_nom = empty($a_encargados[$mail])? $mail : $a_encargados[$mail];
-		$encargado="<span style='color:red'>$of_pral ($encargado_nom)</span>";
-	} else { 
-		if (!empty($filtro_encargado)) continue;
-		$encargado="<span style='color:red'>$of_pral</span>"; 
-	}
-
-	$oficinas=$icalComp->GetPValue("X-DLB-OFICINAS");
-	if (!empty($oficinas)) {
-		$aa_oficinas=explode(" ",$oficinas);
-		$oficinas_txt="";
-		foreach($aa_oficinas as $id) {
-			if (!empty($a_oficinas[$id])) {
-				$oficinas_txt.=",".$a_oficinas[$id];
-			}
-		}
-		$oficinas_txt = substr($oficinas_txt,1);
-		if (!empty($encargado)) { $encargado.=", $oficinas_txt"; } else { $encargado=$oficinas_txt; }
-	}
-
-	$perm_asunto=1;
-	$perm_detalle=1;
-	//$perm_asunto=permiso_detalle_pendiente($of_sigla,$reservado,"a");
-	//$perm_detalle=permiso_detalle_pendiente($of_sigla,$reservado,"d");
-	// permisos para el asunto
-	if ($perm_asunto==0) $asunto=_("reservado");
-	if ($reservado=="t" && $perm_asunto>1) $asunto= strtoupper(_("reservado"))." $asunto";
-	// permiso para el detalle
-	if ($detalle && $perm_detalle>1) $asunto.=" [". htmlspecialchars(stripslashes($detalle),ENT_QUOTES,'utf-8') ."]";
-
-	$pagina="apps/pendientes/controller/pendiente_form.php?nuevo=2&uid=$uid&cal_oficina=$cal_oficina&go=lista";
-
-	if (!empty($rrule)) { 
-		$periodico="p";
-		// calcular las recurrencias que tocan.
-		$dtstart=$icalComp->GetPValue("DTSTART");
-		$dtend=$icalComp->GetPValue("DTEND");
-		$a_exdates = $vcalendar[$t]->GetPropertiesByPath('/VCALENDAR/VTODO/EXDATE');
-		$f_recurrentes=recurrencias($rrule,$dtstart,$dtend,$f_plazo);
-		//print_r($f_recurrentes);
-		foreach ($f_recurrentes as $f_recur => $fecha) {
-			$recur++;
-			// Quito las excepciones.
-			if (is_array($a_exdates) ){
-				foreach ($a_exdates as $icalprop) {
-					// si hay más de uno separados por coma
-					$a_fechas=preg_split('/,/',$icalprop->content);
-					foreach ($a_fechas as $f_ex) {
-						fecha_sin_time($f_ex); //quito la THHMMSSZ
-						if ($f_recur==$f_ex)  continue(3);
-					}
-				}
-			}
-			//$a_valores[$recur]['sel']="$uid#$cal_oficina#$f_recur";
-			if ($perm_asunto==0) {
-				$a_valores[$recur]['sel']="x";
-			} else {
-				$a_valores[$recur]['sel']="$uid#$cal_oficina#$f_recur";
-			}
-			$a_valores[$recur][1]=$ref;
-			$a_valores[$recur][2]=$carpeta;
-			$a_valores[$recur][3]=$periodico;
-			//if ($perm_asunto==0) { // ahora solo pueden modificar los periodicos los de secretaria.
-			if (!$GLOBALS['oPerm']->have_perm("scl")) {
-				$a_valores[$recur][4]=$asunto;
-			} else {
-				$a_valores[$recur][4]= array( 'ira'=>$pagina, 'valor'=>$asunto);
-			}
-			$a_valores[$recur][5]=$fecha;
-			$a_valores[$recur][6]=$encargado;
-			// para el orden
-			$a_valores[$recur]['order']=$f_recur;
-		}
-	} else { 
-		$periodico="";
-		$a_valores[$t]['sel']="$uid#$cal_oficina";
-		if ($perm_asunto==0) {
-			$a_valores[$t]['sel']="x";
-		} else {
-			$a_valores[$t]['sel']="$uid#$cal_oficina";
-		}
-		$a_valores[$t][1]=$ref;
-		$a_valores[$t][2]=$carpeta;
-		$a_valores[$t][3]=$periodico;
-		if ($perm_asunto==0) {
-			$a_valores[$t][4]=$asunto;
-		} else {
-			$a_valores[$t][4]= array( 'ira'=>$pagina, 'valor'=>$asunto);
-		}
-		$a_valores[$t][5]=$plazo;
-		$a_valores[$t][6]=$encargado;
-		// para el orden
-		if ($plazo!="x") {
-			$a_valores[$t]['order']=fecha_DMY2YMD($plazo);
-		}
-	}
-}
-*/
 if (!empty($a_valores)) {
 	// ordenar por f_plazo:
 	// Obtain a list of columns
 	foreach ($a_valores as $key => $row) {
 		$fechas[$key]  = $row['order'];
 	}
-
 	// Sort the data with fechas descending
 	// Add $a_valores as the last parameter, to sort by the common key
 	array_multisort($fechas,SORT_NUMERIC, SORT_ASC, $a_valores);

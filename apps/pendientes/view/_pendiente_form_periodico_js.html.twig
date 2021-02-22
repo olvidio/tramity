@@ -1,0 +1,53 @@
+<script>
+$(function() {
+	$( "#f_until" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+		dayOfWeekStart: globaljsVarDayStart,
+		onShow: function(ct){
+			var f_min_iso = '{{ hoy_iso }}';
+			this.setOptions({
+				minDate: f_min_iso ? f_min_iso: false
+            })
+        }
+    });
+
+});
+$(function() {
+	$( "#f_inicio" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+		dayOfWeekStart: globaljsVarDayStart,
+		onShow: function(ct){
+			var f_max_iso = '{{ hoy_iso }}';
+			this.setOptions({
+				maxDate: f_max_iso ? f_max_iso: false
+            })
+        }
+    });
+
+});
+
+fnjs_marcar=function(id){
+	$(id).prop("checked",true);
+}
+
+fnjs_ver_tab=function(elemento){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+	var tabs=[ '#periodico_d_a', '#periodico_d_m', '#periodico_d_s', '#periodico_d_d'];
+	$.each(tabs,function(i,item){
+			$(item).hide()
+			});
+	$(elemento).show();
+	var el=elemento.substr(1);
+	$('#periodico_tipo').val(el);
+}
+</script>
