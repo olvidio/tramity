@@ -1,6 +1,7 @@
 <?php
 namespace entradas\model\entity;
 use function core\any_2;
+use entradas\model\Entrada;
 use core;
 /**
  * GestorEntradaDB
@@ -131,7 +132,7 @@ class GestorEntradaDB Extends core\ClaseGestor {
         }
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDB = new EntradaDB($a_pkey);
+            $oEntradaDB = new Entrada($a_pkey);
             $oEntradaDB->setAllAtributes($aDades);
             $oEntradaDBSet->add($oEntradaDB);
         }
@@ -192,7 +193,7 @@ class GestorEntradaDB Extends core\ClaseGestor {
         }
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDB = new EntradaDB($a_pkey);
+            $oEntradaDB = new Entrada($a_pkey);
             $oEntradaDB->setAllAtributes($aDades);
             $oEntradaDBSet->add($oEntradaDB);
         }

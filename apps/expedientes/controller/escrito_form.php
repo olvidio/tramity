@@ -143,8 +143,8 @@ if (!empty($Qid_escrito)) {
     }
     
     $oPermisoregistro = new PermRegistro();
-    $perm_asunto = $oPermisoregistro->permiso_detalle($oEntrada, 'asunto');
-    $perm_detalle = $oPermisoregistro->permiso_detalle($oEntrada, 'detalle');
+    $perm_asunto = $oPermisoregistro->permiso_detalle($oEscrito, 'asunto');
+    $perm_detalle = $oPermisoregistro->permiso_detalle($oEscrito, 'detalle');
     $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
     $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
 
