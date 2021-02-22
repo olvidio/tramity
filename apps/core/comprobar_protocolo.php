@@ -1,6 +1,6 @@
 <?php
 
-use function core\any_4;
+use function core\any_2;
 use entradas\model\GestorEntrada;
 use usuarios\model\entity\Cargo;
 
@@ -34,8 +34,6 @@ $aviso_any='';
 $asunto='';
 $detalle='';
 $visibilidad='';
-$asunto_r='';
-$detalle_r='';
 $anulado='';
 $oficinas_txt='';
 $dest_id_lugar[0]='';
@@ -49,9 +47,9 @@ $Qque = (string) \filter_input(INPUT_POST, 'que');
 $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
 $Qprot_any = (integer) \filter_input(INPUT_POST, 'prot_any');
 
-$Qprot_any=any_4($Qprot_any);
+$Qprot_any=any_2($Qprot_any);
 // compruebo el año (actual o -1)
-$any=date('Y');
+$any=date('y');
 if ($Qprot_any != $any && $Qprot_any != $any-1) $aviso_any=1;
 
 /*
@@ -314,19 +312,16 @@ switch ($Qque) {
 		
 		foreach($cEntradas as $oEntrada) {
 		    $id_entrada = $oEntrada->getId_entrada();
-		    $id_reg = $id_entrada;
+		    $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
+		    $id_of_ponente = $oEntrada->getPonente();
 		    $asunto = $oEntrada->getAsunto();
 		    $detalle = $oEntrada->getDetalle();
 		    $visibilidad = $oEntrada->getVisibilidad();
+		    // El estado de la enrtrada no tiene nada que ver con el del pendiente
+		    // $oEntrada->getEstado();
 		    $anulado = '';
 		    $resto_oficinas = $oEntrada->getResto_oficinas();
-		    // Las entradas son cargos, hay que pasarlos a oficinas para los pendientes:
-		    $a_oficinas = [];
-		    foreach ($resto_oficinas as $id_cargo) {
-		        $oCargo = new Cargo($id_cargo);
-		        $a_oficinas[] = $oCargo->getId_oficina();
-		    }
-		    $oficinas_txt = implode(' ', $a_oficinas);
+		    $oficinas_txt = implode(' ', $resto_oficinas);
 		}
 		$jsondata['id_reg'] = $id_reg;
 		break;
@@ -718,11 +713,10 @@ $jsondata["txt"] = "$aviso_txt";
 $jsondata["error"] = "$error_txt";
 $jsondata["salto"] = "$aviso_salto";
 $jsondata["any"] ="$aviso_any";
+$jsondata["id_of_ponente"] ="$id_of_ponente";
 $jsondata["asunto"] = "".str_replace('"','\"',$asunto)."";
 $jsondata["detalle"] = "".str_replace('"','\"',$detalle)."";
 $jsondata["visibilidad"] = "$visibilidad";
-$jsondata["asunto_r"] = "".str_replace('"','\"',$asunto_r)."";
-$jsondata["detalle_r"] = "".str_replace('"','\"',$detalle_r)."";
 $jsondata["anulado"] =  "".str_replace('"','\"',$anulado)."";
 $jsondata["oficinas"] = "$oficinas_txt";
 $jsondata["destino"] = "$dest_id_lugar[0]";

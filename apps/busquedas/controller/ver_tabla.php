@@ -1,6 +1,6 @@
 <?php
 use busquedas\model\VerTabla;
-use function core\any_4;
+use function core\any_2;
 use lugares\model\entity\GestorLugar;
 use busquedas\model\Buscar;
 use entradas\model\GestorEntrada;
@@ -28,7 +28,7 @@ switch ($Qopcion) {
         $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
         $Qprot_any = (integer) \filter_input(INPUT_POST, 'prot_any');
         
-        $Qprot_any = empty($Qprot_any)? '' : core\any_4($Qprot_any);
+        $Qprot_any = empty($Qprot_any)? '' : core\any_2($Qprot_any);
         
         $oBuscar = new Buscar();
         $oBuscar->setId_sigla($id_sigla);

@@ -116,16 +116,19 @@ fnjs_proto=function(num,any,indice){
 					alert("{{ "El nº de protocolo tiene un salto de más de xxx números respecto al último"|trans }}"+" ("+json.salto+").");
 					s=1;
 				}
+				if(json.id_reg) {
+					$('#id_reg').val(json.id_reg);
+				} else {
+					alert("{{ "No existe ningún escrito con este protocolo. No se guardará."|trans }}");
+				}
+				if (json.id_of_ponente) {
+					$('#id_oficina').val(json.id_of_ponente);
+				}
 				if (json.asunto) {
 					$('#asunto').val(json.asunto);
 					siguiente="#f_plazo";
 				} else {
 					siguiente="#asunto";
-				}
-				if(json.id_reg) {
-					$('#id_reg').val(json.id_reg);
-				} else {
-					alert("{{ "No existe ningún escrito con este protocolo. No se guardará."|trans }}");
 				}
 				$('#detalle').val(json.detalle);
 				$('#visibilidad').val(json.visibilidad);
@@ -136,16 +139,14 @@ fnjs_proto=function(num,any,indice){
 					array_of=json.oficinas.split(" ");
 					$.each(array_of,function(i,id_of) {
 						if (id_of) { //puede haber un espacio al final i lo cuenta.
-							//if (count==0) {
-							//	$('#oficinas_mas').val(id_of);
-							//} else {
-                                $('#oficinas_mas').val(id_of);
-								fnjs_mas_oficinas('x',id_of);
-							//}
-							count++;
+                            $('#oficinas_mas').val(id_of);
+                            fnjs_mas_oficinas('x',id_of);
 						}
 					});
 				}
+				$('#mas_opciones').show();
+				$('#opciones').html("{{ "ver ficha sencilla"|trans }}");
+				$('#simple').val(1);
 			}
 			//complete: function() { if (s==1) { $(num).focus(); } else { $(siguiente).focus(); } }
         });

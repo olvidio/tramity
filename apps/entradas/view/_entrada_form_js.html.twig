@@ -294,6 +294,7 @@ fnjs_comprobar_plazo=function(campo){
 }
 
 fnjs_proto=function(e,num,any){
+	debugger;
 	var s=0;
 	var numero;
 	var siguiente="";
@@ -316,7 +317,8 @@ fnjs_proto=function(e,num,any){
 		if (!prot_any) {
 			var calDate = new Date();
   			var year  = calDate.getFullYear();
-			$(any).val(year);
+  			var year2 = year.toString().substr(-2);
+			$(any).val(year2);
 			prot_any=year;
 		}
 	}

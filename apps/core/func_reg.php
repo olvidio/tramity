@@ -109,6 +109,7 @@ function buscar_prot_entrada($id_reg) {
 * Función para poner el año en cuatro cifras.
 *
 */
+/*
 function any_4($any) {
 	if ($any<100) {
 		if ($any < 70 ) {
@@ -121,6 +122,7 @@ function any_4($any) {
 	}
 	return $a;
 }
+*/
 
 /**
 *
