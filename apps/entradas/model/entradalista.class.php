@@ -11,6 +11,7 @@ use web\Protocolo;
 use web\ProtocoloArray;
 use usuarios\model\entity\GestorOficina;
 use config\model\Config;
+use usuarios\model\PermRegistro;
 
 
 class EntradaLista {
@@ -190,6 +191,7 @@ class EntradaLista {
         $a_entradas = [];
         $id_entrada = '';
         if (!empty($this->aWhere)) {
+            $oPermRegistro = new PermRegistro();
             $gesEntradas = new GestorEntrada();
             $cEntradas = $gesEntradas->getEntradas($this->aWhere,$this->aOperador);
             foreach ($cEntradas as $oEntrada) {
@@ -198,6 +200,7 @@ class EntradaLista {
                 $visibilidad = $oEntrada->getVisibilidad();
                 $visibilidad_txt = $a_visibilidad[$visibilidad];
                 
+                $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEntrada, 'escrito');
                 $id_entrada = $oEntrada->getId_entrada();
                 $row['id_entrada'] = $id_entrada;
                 
@@ -207,10 +210,10 @@ class EntradaLista {
                 ];
                 
                 $link_accion = Hash::link($pagina_accion.'?'.http_build_query($a_cosas));
-                //$link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
-                $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >"._("ver")."</span>";
-                //$row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_ver');\" >ver</span>";
+                if ($perm_ver_escrito >= PermRegistro::PERM_VER) {
+                    $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >"._("ver")."</span>";
+                }
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >mod</span>";
                 $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_accion');\" >"._("acción")."</span>";
                 
@@ -226,10 +229,10 @@ class EntradaLista {
                 $row['categoria'] = $a_categorias[$id_categoria];
                 $row['asunto'] = $oEntrada->getAsuntoDetalle();
                 
-                $id_ponente =  $oEntrada->getPonente();
+                $id_of_ponente =  $oEntrada->getPonente();
                 $a_resto_oficinas = $oEntrada->getResto_oficinas();
                 $oficinas_txt = '';
-                $oficinas_txt .= '<span class="text-danger">'.$a_posibles_oficinas[$id_ponente].'</span>';
+                $oficinas_txt .= '<span class="text-danger">'.$a_posibles_oficinas[$id_of_ponente].'</span>';
                 foreach ($a_resto_oficinas as $id_oficina) {
                     $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
                     $oficinas_txt .= $a_posibles_oficinas[$id_oficina];

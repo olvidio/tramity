@@ -183,6 +183,17 @@ $filtro = 'bypass';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
+// buscar = 13;
+$filtro = 'buscar';
+$active = ($filtro == $Qfiltro)? 'active' : '';
+$aQuery = [ 'filtro' => $filtro ];
+$pag_lst = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($aQuery));
+$num_orden = 13;
+$text = _("archivo de escritos");
+$num = '';
+$pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+$a_pills[$num_orden] = $pill;
+
 // preferencias del scdl o suplente
 if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
     $filtro = 'pref';

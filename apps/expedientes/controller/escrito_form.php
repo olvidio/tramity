@@ -28,6 +28,12 @@ $Qaccion = (integer) \filter_input(INPUT_POST, 'accion');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
+if ($Qfiltro == 'buscar') {
+    $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    // sólo debería seleccionar uno.
+    $Qid_escrito = $Qa_sel[0];
+}
+
 $txt_option_ref = '';
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();
@@ -238,6 +244,12 @@ switch ($Qfiltro) {
         break;
     case 'enviar':
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/escrito_lista.php?'.http_build_query($a_cosas));
+        break;
+    case 'buscar':
+        $a_cosas = [
+            'filtro' => $Qfiltro,
+        ];
+        $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($a_cosas));
         break;
     default: 
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));

@@ -1,13 +1,12 @@
 <?php
 use entradas\model\GestorEntrada;
+use entradas\model\entity\EntradaDB;
 use entradas\model\entity\EntradaDocDB;
 use ethercalc\model\Ethercalc;
 use etherpad\model\Etherpad;
-use usuarios\model\entity\GestorCargo;
+use usuarios\model\entity\GestorOficina;
 use web\Lista;
 use web\Protocolo;
-use entradas\model\Entrada;
-use usuarios\model\entity\GestorOficina;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -23,7 +22,32 @@ require_once ("apps/core/global_object.inc");
 
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
-switch ($Qque) {
+switch ($Qque) {   
+    case 'eliminar':
+        $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+        $txt_err = '';
+        if (!empty($Qid_entrada)) {
+            $oEntrada = new EntradaDB($Qid_entrada);
+            if ($oEntrada->DBEliminar() === FALSE ) {
+                $txt_err .= _("Hay un error al eliminar la entrada");
+                $txt_err .= "<br>";
+            }
+        } else {
+            $txt_err = _("No existe la entrada");
+        }
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'buscar':
         $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
         $Qid_oficina = (integer) \filter_input(INPUT_POST, 'id_oficina');

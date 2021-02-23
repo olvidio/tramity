@@ -3,7 +3,6 @@ use busquedas\model\VerTabla;
 use function core\any_2;
 use lugares\model\entity\GestorLugar;
 use busquedas\model\Buscar;
-use entradas\model\GestorEntrada;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -21,12 +20,18 @@ $gesLugares = new GestorLugar();
 $id_sigla = $gesLugares->getId_sigla();
 
 $Qmas = '';
-
+$a_condicion = []; // para poner los parámetros de la búsqueda y poder actualizar la página.
+$a_condicion['opcion'] = $Qopcion;
 switch ($Qopcion) {
     case 7: // un protocolo concreto:
         $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lugar');
         $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
         $Qprot_any = (integer) \filter_input(INPUT_POST, 'prot_any');
+
+        $a_condicion['lugar'] = $Qid_lugar;
+        $a_condicion['prot_num'] = $Qprot_num;
+        $a_condicion['Qprot_any'] = $Qprot_any;
+        $str_condicion = http_build_query($a_condicion);
         
         $Qprot_any = empty($Qprot_any)? '' : core\any_2($Qprot_any);
         
@@ -40,6 +45,7 @@ switch ($Qopcion) {
         foreach ($aCollection as $key => $cCollection) {
             $oTabla = new VerTabla();
             $oTabla->setKey($key);
+            $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             echo $oTabla->mostrarTabla();
         }
@@ -47,6 +53,10 @@ switch ($Qopcion) {
     case 1:	// Listado de los últimos
         $Qantiguedad = (string) \filter_input(INPUT_POST, 'antiguedad');
         $Qorigen_id_lugar = (integer) \filter_input(INPUT_POST, 'origen_id_lugar');
+
+        $a_condicion['antiguedad'] = $Qantiguedad;
+        $a_condicion['origen_id_lugar'] = $Qorigen_id_lugar;
+        $str_condicion = http_build_query($a_condicion);
         
         $oBuscar = new Buscar();
         $oBuscar->setAntiguedad($Qantiguedad);
@@ -56,6 +66,7 @@ switch ($Qopcion) {
         foreach ($aCollection as $key => $cCollection) {
             $oTabla = new VerTabla();
             $oTabla->setKey($key);
+            $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             echo $oTabla->mostrarTabla();
         }
@@ -68,6 +79,12 @@ switch ($Qopcion) {
         $Qf_min = (string) \filter_input(INPUT_POST, 'f_min');
         $Qoficina = (integer) \filter_input(INPUT_POST, 'oficina');
         
+        $a_condicion['asunto'] = $Qasunto;
+        $a_condicion['f_max'] = $Qf_max;
+        $a_condicion['f_min'] = $Qf_min;
+        $a_condicion['oficina'] = $Qoficina;
+        $str_condicion = http_build_query($a_condicion);
+        
         $oBuscar = new Buscar();
         $oBuscar->setAsunto($Qasunto);
         $oBuscar->setF_max($Qf_max);
@@ -79,6 +96,7 @@ switch ($Qopcion) {
         foreach ($aCollection as $key => $cCollection) {
             $oTabla = new VerTabla();
             $oTabla->setKey($key);
+            $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             echo $oTabla->mostrarTabla();
         }
@@ -90,6 +108,13 @@ switch ($Qopcion) {
         $Qf_max = (string) \filter_input(INPUT_POST, 'f_max');
         $Qf_min = (string) \filter_input(INPUT_POST, 'f_min');
         $Qoficina = (integer) \filter_input(INPUT_POST, 'oficina');
+        
+        $a_condicion['origen_id_lugar'] = $Qorigen_id_lugar;
+        $a_condicion['dest_id_lugar_2'] = $Qdest_id_lugar;
+        $a_condicion['f_max'] = $Qf_max;
+        $a_condicion['f_min'] = $Qf_min;
+        $a_condicion['oficina'] = $Qoficina;
+        $str_condicion = http_build_query($a_condicion);
         
         $oBuscar = new Buscar();
         $oBuscar->setOrigen_id_lugar($Qorigen_id_lugar);
@@ -103,6 +128,7 @@ switch ($Qopcion) {
         foreach ($aCollection as $key => $cCollection) {
             $oTabla = new VerTabla();
             $oTabla->setKey($key);
+            $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             echo $oTabla->mostrarTabla();
         }
@@ -113,6 +139,13 @@ switch ($Qopcion) {
         $Qf_max = (string) \filter_input(INPUT_POST, 'f_max');
         $Qf_min = (string) \filter_input(INPUT_POST, 'f_min');
         $Qoficina = (integer) \filter_input(INPUT_POST, 'oficina');
+        
+        $a_condicion['lista_origen'] = $Qlista_origen;
+        $a_condicion['lista_lugar'] = $Qid_lugar;
+        $a_condicion['f_max'] = $Qf_max;
+        $a_condicion['f_min'] = $Qf_min;
+        $a_condicion['oficina'] = $Qoficina;
+        $str_condicion = http_build_query($a_condicion);
         
         switch ($Qlista_origen) {
             case "dl":
@@ -131,6 +164,7 @@ switch ($Qopcion) {
                 foreach ($aCollection as $key => $cCollection) {
                     $oTabla = new VerTabla();
                     $oTabla->setKey($key);
+                    $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
                     echo $oTabla->mostrarTabla();
                 }
@@ -138,6 +172,10 @@ switch ($Qopcion) {
             case "de":
                 $opcion = 42;
                 $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
+                
+                $a_condicion['lista_lugar'] = $Qid_lugar;
+                $str_condicion = http_build_query($a_condicion);
+                
                 $oBuscar = new Buscar();
                 $oBuscar->setOrigen_id_lugar($Qid_lugar);
                 $oBuscar->setF_max($Qf_max);
@@ -148,6 +186,7 @@ switch ($Qopcion) {
                 foreach ($aCollection as $key => $cCollection) {
                     $oTabla = new VerTabla();
                     $oTabla->setKey($key);
+                    $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
                     echo $oTabla->mostrarTabla();
                 }
@@ -168,6 +207,7 @@ switch ($Qopcion) {
                 foreach ($aCollection as $key => $cCollection) {
                     $oTabla = new VerTabla();
                     $oTabla->setKey($key);
+                    $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
                     echo $oTabla->mostrarTabla();
                 }
@@ -189,6 +229,7 @@ switch ($Qopcion) {
                 foreach ($aCollection as $key => $cCollection) {
                     $oTabla = new VerTabla();
                     $oTabla->setKey($key);
+                    $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
                     echo $oTabla->mostrarTabla();
                 }

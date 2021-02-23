@@ -51,6 +51,30 @@ $Qa_prot_any_referencias = (array)  \filter_input(INPUT_POST, 'prot_any_referenc
 $Qa_prot_mas_referencias = (array)  \filter_input(INPUT_POST, 'prot_mas_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 switch($Qque) {
+    case 'eliminar':
+        $txt_err = '';
+        if (!empty($Qid_escrito)) {
+            $oEscrito = new Escrito($Qid_escrito);
+            if ($oEscrito->DBEliminar() === FALSE ) {
+                $txt_err .= _("Hay un error al eliminar el escrito");
+                $txt_err .= "<br>";
+            }
+        } else {
+            $txt_err = _("No existe el escrito");
+        }
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'escrito_a_secretaria':
         $oEscrito = new Escrito($Qid_escrito);
         $oEscrito->DBCarregar();

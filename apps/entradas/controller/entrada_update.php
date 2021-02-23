@@ -57,6 +57,11 @@ $Qa_prot_mas_referencias = (array)  \filter_input(INPUT_POST, 'prot_mas_referenc
 $error_txt = '';
 $jsondata = [];
 switch($Qque) {
+    case 'eliminar':
+        
+        $oEntrada = new EntradaDB($Qid_entrada);
+        $oEntrada->DBEliminar();
+        break;
     case 'guardar_destinos':
         $gesEntradasBypass = new GestorEntradaBypass();
         $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);

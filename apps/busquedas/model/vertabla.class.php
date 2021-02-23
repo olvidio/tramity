@@ -1,15 +1,13 @@
 <?php
 namespace busquedas\model;
 
-use function core\any_2;
-use function core\buscar_destinos;
-use function core\permiso_detalle;
-use PDO;
+use core\ConfigGlobal;
+use core\ViewTwig;
 use usuarios\model\entity\GestorCargo;
+use usuarios\model\entity\GestorOficina;
 use web\Lista;
 use web\Protocolo;
 use web\ProtocoloArray;
-use usuarios\model\PermRegistro;
 
 class VerTabla {
     
@@ -54,6 +52,13 @@ class VerTabla {
      * @var string
      */
     private $sKey;
+
+    /**
+     * condicion de la búsqueda
+     *
+     * @var string
+     */
+    private $sCondicion;
 
 
     
@@ -137,6 +142,14 @@ class VerTabla {
         $this->sKey = $key;
     }
 
+    /**
+     * @param string $sCondicion
+     */
+    public function setCondicion($condicion)
+    {
+        $this->sCondicion = $condicion;
+    }
+
     
     public function mostrarTabla() {
         $aCollection = $this->aCollection;
@@ -150,9 +163,8 @@ class VerTabla {
     // ---------------------------------- tablas ----------------------------
 
     public function tabla_entradas($aCollection) {
-        $e_s="e";
-        $gesCargos = new GestorCargo();
-        $a_posibles_cargos = $gesCargos->getArrayCargosDirector();
+        $gesOficinas = new GestorOficina();
+        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         
         /*
         $go_to="registro_tabla.php?tabla=entradas&donde=".urlencode($donde)."&sql=".urlencode($sql);
@@ -160,13 +172,13 @@ class VerTabla {
         if ($orden && $donde) $donde .= "ORDER BY " .$orden;
         */
         
-        //if ($GLOBALS['oPerm']->have_perm("scl")) { 
-            $a_botones=array( array( 'txt' => _('modificar'), 'click' =>"fnjs_modificar(\"#seleccionados_e\")" ) ,
-                        array( 'txt' => _('eliminar'), 'click' =>"fnjs_borrar(\"#seleccionados_e\")" ) 
+        if (ConfigGlobal::role_actual() === 'secretaria') { 
+            $a_botones=array( array( 'txt' => _('modificar'), 'click' =>"fnjs_modificar_entrada(\"#$this->sKey\")" ) ,
+                        array( 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_entrada(\"#$this->sKey\")" ) 
                         );
-        //}
+        }
 
-        $a_botones[]=array( 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det(\"#seleccionados_e\")" ) ;
+        $a_botones[]=array( 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_entrada(\"#$this->sKey\")" ) ;
 
         $a_cabeceras=array( array('name'=>ucfirst(_("protocolo origen")),'formatter'=>'clickFormatter'),
                             ucfirst(_("ref.")),
@@ -205,17 +217,17 @@ class VerTabla {
             $referencias = $oArrayProtRef->ListaTxtBr();
             
             // oficinas
-            $id_ponente =  $oEntrada->getPonente();
+            $id_of_ponente =  $oEntrada->getPonente();
             $a_resto_oficinas = $oEntrada->getResto_oficinas();
             $oficinas_txt = '';
-            $oficinas_txt .= '<span class="text-danger">'.$a_posibles_cargos[$id_ponente].'</span>';
+            $oficinas_txt .= '<span class="text-danger">'.$a_posibles_oficinas[$id_of_ponente].'</span>';
             foreach ($a_resto_oficinas as $id_oficina) {
                 $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
-                $oficinas_txt .= $a_posibles_cargos[$id_oficina];
+                $oficinas_txt .= $a_posibles_oficinas[$id_oficina];
             }
             $oficinas = $oficinas_txt;
             
-            $asunto = $oEntrada->getAsunto();
+            $asunto = $oEntrada->getAsuntoDetalle();
             /*
             if ($distribucion_cr=='t') {
                 $sql_1= "SELECT m.descripcion
@@ -229,7 +241,7 @@ class VerTabla {
             }
             */
             
-            $a_valores[$i]['sel']="$id_entrada#$e_s";
+            $a_valores[$i]['sel']="$id_entrada";
             $a_valores[$i][1]=$protocolo;
             //if ( $GLOBALS['oPerm']->have_perm("scdl")) {
             //    $a_valores[$i][1]=array( 'ira'=>$pagina_mod, 'valor'=>$protocolo);
@@ -238,46 +250,44 @@ class VerTabla {
             //}
             $a_valores[$i][2]=$referencias;
 
-            $pagina='';
-            $a_valores[$i][3]= array( 'ira2'=>$pagina, 'valor'=>$asunto);
+            $a_valores[$i][3]= $asunto;
             $a_valores[$i][4]=$oficinas;
             $a_valores[$i][5]='?';
             $a_valores[$i][6]=$f_entrada->getFromLocal();
         }
-        /* ---------------------------------- html --------------------------------------- */
-        $txt_titulo = '';
-        if (empty($txt_titulo)) $txt_titulo= _("escritos recibidos en la Delegación");
-        $txt="<h2 class=subtitulo>$txt_titulo</h2>";
-        if ($i==0) {
-            $txt.=_("no hay");
-        } else {
-            $txt.="<form id='seleccionados_e' name='seleccionados_e' action='' method='post'>
-                <input type='hidden' name='permiso' value='3'>
-                <input type='Hidden' name='mod' value='' >";
-            $oTabla = new Lista();
-            $oTabla->setId_tabla('func_reg_entradas');
-            $oTabla->setCabeceras($a_cabeceras);
-            $oTabla->setBotones($a_botones);
-            $oTabla->setDatos($a_valores);
-            $txt.=$oTabla->mostrar_tabla();
-            $txt.="</form><br>";
-        }
-        return $txt;
+        
+        $oTabla = new Lista();
+        $oTabla->setId_tabla('func_reg_entradas');
+        $oTabla->setCabeceras($a_cabeceras);
+        $oTabla->setBotones($a_botones);
+        $oTabla->setDatos($a_valores);
+        
+        $titulo= _("escritos recibidos en la Delegación");
+        
+        $a_campos = [
+            'titulo' => $titulo,
+            'oTabla' => $oTabla,
+            'key' => $this->sKey,
+            'condicion' => $this->sCondicion,
+            //'oHash' => $oHash,
+            ];
+        
+        $oView = new ViewTwig('busquedas/controller');
+        echo $oView->renderizar('ver_tabla.html.twig',$a_campos);
     }
 
     public function tabla_escritos($cCollection) {
         // salidas
-        $e_s="s";
         $gesCargos = new GestorCargo();
-        $a_posibles_cargos = $gesCargos->getArrayCargosDirector();
+        $a_posibles_cargos = $gesCargos->getArrayCargos();
         
-        //if ($GLOBALS['oPerm']->have_perm("scl")) { 
-            $a_botones=array( array( 'txt' => _('modificar'), 'click' =>"fnjs_modificar(\"#seleccionados_s\")" ) ,
-                        array( 'txt' => _('eliminar'), 'click' =>"fnjs_borrar(\"#seleccionados_s\")" ) 
+        if (ConfigGlobal::role_actual() === 'secretaria') { 
+            $a_botones=array( array( 'txt' => _('modificar'), 'click' =>"fnjs_modificar_escrito(\"#$this->sKey\")" ) ,
+                        array( 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_escrito(\"#$this->sKey\")" ) 
                         );
-        //}
+        }
 
-        $a_botones[]=array( 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det(\"#seleccionados_s\")" ) ;
+        $a_botones[]=array( 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_escrito(\"#$this->sKey\")" ) ;
                 
         $a_cabeceras=array( array('name'=>ucfirst(_("protocolo")),'formatter'=>'clickFormatter'), ucfirst(_("destinos")),  ucfirst(_("ref.")), 
                 array('name'=>ucfirst(_("asunto")),'formatter'=>'clickFormatter2'),
@@ -292,10 +302,8 @@ class VerTabla {
         $a_valores = [];
         foreach ($cCollection as $oEscrito) {
             $i++;
-            $asunto = $oEscrito->getAsunto();
+            $asunto = $oEscrito->getAsuntoDetalle();
             $anulado = $oEscrito->getAnulado();
-            //$reservado=$row["reservado"];
-            $detalle = $oEscrito->getDetalle();
             
             // protocolo local
             $json_prot_local = $oEscrito->getJson_prot_local();
@@ -368,7 +376,7 @@ class VerTabla {
             
             if (!empty($anulado)) $asunto=_("ANULADO")." ($anulado) $asunto";
 
-            $a_valores[$i]['sel']="$id_escrito#$e_s";
+            $a_valores[$i]['sel']="$id_escrito";
             $a_valores[$i][1]=$protocolo_local;
             /*
             if ( $GLOBALS['oPerm']->have_perm("scdl")) {
@@ -385,24 +393,24 @@ class VerTabla {
             $a_valores[$i][7]=$f_aprobacion->getFromLocal();
             $a_valores[$i][8]=$f_salida->getFromLocal();
         }
-        /* ---------------------------------- html --------------------------------------- */
-        if (empty($txt_titulo)) $txt_titulo=_("escritos aprobados en la Delegación");
-        $txt="<h2 class=subtitulo>$txt_titulo</h2>";
-        if ($i==0) {
-            $txt.=_("no hay");
-        } else {
-            $txt.="<form id='seleccionados_s' name='seleccionados_s' action='' method='post'>
-                <input type='hidden' name='permiso' value='3'>
-                <input type='Hidden' name='mod' value='' >";
-            $oTabla = new Lista();
-            $oTabla->setId_tabla('func_reg_salidas');
-            $oTabla->setCabeceras($a_cabeceras);
-            $oTabla->setBotones($a_botones);
-            $oTabla->setDatos($a_valores);
-            $txt.=$oTabla->mostrar_tabla();
-            $txt.="</form><br>";
-        }
-        return $txt;
+
+        $oTabla = new Lista();
+        $oTabla->setId_tabla('func_reg_salidas');
+        $oTabla->setCabeceras($a_cabeceras);
+        $oTabla->setBotones($a_botones);
+        $oTabla->setDatos($a_valores);
+
+        $titulo=_("escritos aprobados en la Delegación");
+        $a_campos = [
+            'titulo' => $titulo,
+            'oTabla' => $oTabla,
+            'key' => $this->sKey,
+            'condicion' => $this->sCondicion,
+            //'oHash' => $oHash,
+            ];
+        
+        $oView = new ViewTwig('busquedas/controller');
+        echo $oView->renderizar('ver_tabla.html.twig',$a_campos);
     }
 
 }

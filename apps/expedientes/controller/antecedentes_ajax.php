@@ -8,6 +8,7 @@ use expedientes\model\entity\GestorEscritoDB;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Lista;
+use usuarios\model\entity\GestorOficina;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -59,6 +60,8 @@ switch ($Qque) {
         break;
 	case 'buscar_1':
         //n = 1 -> Entradas
+        $gesOficinas = new GestorOficina();
+        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
 	    $gesEntradas = new GestorEntrada();
 	    $aWhere = [];
 	    $aOperador = [];
@@ -88,9 +91,9 @@ switch ($Qque) {
 	        $a++;
 	        $id_entrada = $oEntrada->getId_entrada();
 	        $fecha_txt = $oEntrada->getF_entrada()->getFromLocal();
-	        $ponente = $oEntrada->getPonente();
+	        $id_of_ponente = $oEntrada->getPonente();
 	        
-	        $ponente_txt = $a_posibles_cargos[$ponente];
+	        $ponente_txt = $a_posibles_oficinas[$id_of_ponente];
 	        
 	        $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >ver</span>";
 	        $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('entrada','$id_entrada','$Qid_expediente');\" >adjuntar</span>";

@@ -26,6 +26,12 @@ require_once ("apps/core/global_object.inc");
 $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
+if ($Qfiltro == 'buscar') {
+    $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    // sólo debería seleccionar uno.
+    $Qid_entrada = $Qa_sel[0];
+}
+
 $plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
 $plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
@@ -262,8 +268,14 @@ switch ($Qfiltro) {
 }
 
 $url_update = 'apps/entradas/controller/entrada_update.php';
-$pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
 $pagina_nueva = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $Qfiltro]));
+if ($Qfiltro == 'buscar') {
+    $str_condicion = (string) \filter_input(INPUT_POST, 'condicion');
+    $condicion = 'filtro='.$Qfiltro.'&'.$str_condicion;
+    $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.$condicion);
+} else {
+    $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
+}
 
 // datepicker
 $oFecha = new DateTimeLocal();

@@ -1,6 +1,7 @@
 <?php
 namespace expedientes\model\entity;
 use function core\any_2;
+use expedientes\model\Escrito;
 use core;
 /**
  * GestorEscritoDB
@@ -132,7 +133,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
         }
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new EscritoDB($a_pkey);
+            $oEscritoDB = new Escrito($a_pkey);
             $oEscritoDB->setAllAtributes($aDades);
             $oEscritoDBSet->add($oEscritoDB);
         }
@@ -236,7 +237,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
         }
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new EscritoDB($a_pkey);
+            $oEscritoDB = new Escrito($a_pkey);
             $oEscritoDB->setAllAtributes($aDades);
             $oEscritoDBSet->add($oEscritoDB);
         }
@@ -297,7 +298,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
         }
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new EscritoDB($a_pkey);
+            $oEscritoDB = new Escrito($a_pkey);
             $oEscritoDB->setAllAtributes($aDades);
             $oEscritoDBSet->add($oEscritoDB);
         }
@@ -358,7 +359,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
         }
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new EscritoDB($a_pkey);
+            $oEscritoDB = new Escrito($a_pkey);
             $oEscritoDB->setAllAtributes($aDades);
             $oEscritoDBSet->add($oEscritoDB);
         }
