@@ -3,8 +3,6 @@ namespace usuarios\model;
 use core\ConfigGlobal;
 use entradas\model\Entrada;
 use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\entity\GestorCargo;
 
 class PermRegistro {
     
@@ -13,7 +11,7 @@ class PermRegistro {
      * const V_TODOS           = 1;  // cualquiera
      * const V_PERSONAL        = 2;  // oficina y directores
      * const V_RESERVADO       = 3;  // sólo directores
-     * const V_RESERVADO_VCD   = 4;  // sólo vcd + quien señale
+     * const V_RESERVADO_VCD   = 4;  // sólo vcd
      */
     
     /* valores de permiso:
@@ -36,7 +34,7 @@ class PermRegistro {
         $personal = [];
         $reservado = [];
         $vcd = [];
-        // director de la oficna principal.
+        // director de la oficina principal.
         $todos['dtor_pral'] = [
                     'asunto'    => 1,
                     'detalle'   => 2,
@@ -283,14 +281,19 @@ class PermRegistro {
         }
 
         if ($clase === 'Escrito') {
-            $id_ponente = $objeto->getPonente();
-            $resto_cargos = $objeto->getResto_oficinas();
-            // pasar cargos a oficinas:
-            $oCargoP = new Cargo($id_ponente);
-            $id_oficina_pral = $oCargoP->getId_oficina();
-            foreach ($resto_cargos as $id_cargo) {
-                $oCargo = new Cargo($id_cargo);
-                $a_oficinas[] = $oCargo->getId_oficina();
+            // Sólo afecta a los que tengan fecah de aprobación:
+            if (empty($objeto->getF_aprobacion()->getIso())) {
+                return self::PERM_MODIFICAR; 
+            } else {
+                $id_ponente = $objeto->getPonente();
+                $resto_cargos = $objeto->getResto_oficinas();
+                // pasar cargos a oficinas:
+                $oCargoP = new Cargo($id_ponente);
+                $id_oficina_pral = $oCargoP->getId_oficina();
+                foreach ($resto_cargos as $id_cargo) {
+                    $oCargo = new Cargo($id_cargo);
+                    $a_oficinas[] = $oCargo->getId_oficina();
+                }
             }
         }
         

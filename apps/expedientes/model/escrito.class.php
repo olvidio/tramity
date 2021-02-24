@@ -72,14 +72,14 @@ class Escrito Extends EscritoDB {
     
     /**
      * Recupera l'atribut sasunto de Entrada teniendo en cuenta los permisos
+     * Solo si está aprobado
      *
      * @return string sasunto
      */
     function getAsunto() {
+        $asunto = '';
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'asunto');
-        
-        $asunto = '';
         if ($perm > 0) {
             $asunto = $this->getAsuntoDB();
         }
@@ -88,14 +88,14 @@ class Escrito Extends EscritoDB {
     
     /**
      * Recupera l'atribut sdetalle de Escrito teniendo en cuenta los permisos
+     * Solo si está aprobado
      *
      * @return string sdetalle
      */
     function getDetalle() {
+        $detalle = '';
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'detalle');
-        
-        $detalle = '';
         if ($perm > 0) {
             $detalle = $this->getDetalleDB();
         }
