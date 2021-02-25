@@ -636,7 +636,7 @@ switch($Qque) {
         // FIN CIRCULAR
         
         if (!empty($error_txt)) {
-            $jsondata['success'] = FALSE;
+            $jsondata['success'] = false;
             $jsondata['mensaje'] = $error_txt;
         } else {
             $jsondata['success'] = true;

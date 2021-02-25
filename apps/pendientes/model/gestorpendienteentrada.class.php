@@ -55,6 +55,8 @@ class GestorPendienteEntrada {
     
     /* METODES PUBLICS ----------------------------------------------------------*/
     
+    
+    
     public function getArrayUidById_entrada($id_entrada) {
         $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
         
@@ -62,40 +64,14 @@ class GestorPendienteEntrada {
         $cCalItems = $gesCalendarItems->getCalendarItemsById_reg($id_reg);
         $a_uid = [];
         foreach ($cCalItems as $oCalendarItem) {
-            $a_uid[] = $oCalendarItem->getUid();
+            $uid = $oCalendarItem->getUid();
+            $dav_name = $oCalendarItem->getDav_name();
+            // "/oficina_agd/registro/REN20-20210225T124453.ics"
+            $pos = strpos($dav_name, '/', 1);
+            $parent_container = substr($dav_name, 1, $pos - 1);
+            $a_uid[$uid] = $parent_container;
         }
         return $a_uid;
     }
-        
-        
-     /*   
-        $this->resource = 'registro';
-        $this->cargo = ConfigGlobal::role_actual();
-        $oEntrada = new Entrada($id_entrada);
-        $id_of_ponente = $oEntrada->getPonente();
-        $oOficina = new Oficina($id_of_ponente);
-        $oficina = $oOficina->getSigla();
-        
-        $this->cal_oficina="oficina_$oficina";
-        $cargo = ConfigGlobal::role_id_cargo();
-        
-        $base_url = $this->getBaseUrl();
-        $cargo = $this->cargo;
-        $pass = 'system';
-        $cal = new CalDAVClient($base_url, $cargo, $pass);
-        
-        $uid = $this->getUid();
-        $todo = $cal->GetEntryByUid($uid);
-        
-        
-    }
-    
-    public function getBaseUrl($cal_oficina='') {
-        $server =  $_SESSION['oConfig']->getServerDavical();
-        $this->server = $server.'/caldav.php';
-        
-        $cal_oficina = empty($cal_oficina)? $this->cal_oficina : $cal_oficina;
-        return 'http://'.$this->server."/".$cal_oficina."/".$this->resource."/";
-    }
-    */
+     
 }

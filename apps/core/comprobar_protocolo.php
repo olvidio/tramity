@@ -314,7 +314,8 @@ switch ($Qque) {
 		    $id_entrada = $oEntrada->getId_entrada();
 		    $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
 		    $id_of_ponente = $oEntrada->getPonente();
-		    $asunto = $oEntrada->getAsunto();
+		    // para crear un pendiente, no pongo 'reservado'
+		    $asunto = $oEntrada->getAsuntoDB();
 		    $detalle = $oEntrada->getDetalle();
 		    $visibilidad = $oEntrada->getVisibilidad();
 		    // El estado de la enrtrada no tiene nada que ver con el del pendiente

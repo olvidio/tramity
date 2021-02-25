@@ -72,13 +72,9 @@ switch ($Qque) {
             $gesPendientes = new GestorPendienteEntrada();
             $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
             if (!empty($cUids)) {
-                $id_of_ponente = $oEntrada->getPonente();
-                $oOficina = new Oficina($id_of_ponente);
-                $oficina_ponente = $oOficina->getSigla();
-                $parent_container = 'oficina_'.$oficina_ponente;
                 $resource = 'registro';
                 $cargo = 'secretaria';
-                foreach ($cUids as $uid) {
+                foreach ($cUids as $uid => $parent_container) {
                     $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
                     $oPendiente->eliminar();
                 }

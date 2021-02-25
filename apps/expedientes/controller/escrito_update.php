@@ -1,9 +1,13 @@
 <?php
 use function core\is_true;
+use entradas\model\GestorEntrada;
 use expedientes\model\Escrito;
 use expedientes\model\entity\Accion;
 use lugares\model\entity\GestorGrupo;
+use pendientes\model\GestorPendienteEntrada;
+use pendientes\model\Pendiente;
 use usuarios\model\PermRegistro;
+use usuarios\model\entity\Oficina;
 use web\DateTimeLocal;
 use web\Protocolo;
 
@@ -51,6 +55,108 @@ $Qa_prot_any_referencias = (array)  \filter_input(INPUT_POST, 'prot_any_referenc
 $Qa_prot_mas_referencias = (array)  \filter_input(INPUT_POST, 'prot_mas_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 switch($Qque) {
+    case 'contestar_pendientes':
+        $txt_err = '';
+        $oEscrito = new Escrito($Qid_escrito);
+        // buscar en los destinos.
+        $a_prot_dst = $oEscrito->getJson_prot_destino(TRUE);
+        // buscar en las ref.
+        $a_prot_ref = $oEscrito->getJson_prot_ref(TRUE);
+        $a_prot = $a_prot_dst + $a_prot_ref;
+        $gesEntradas = new GestorEntrada();
+        foreach ($a_prot as $aProt) {
+            // buscar la entrada con esta ref.
+            $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt);
+            foreach ($cEntradas as $oEntrada) {
+                $id_entrada = $oEntrada->getId_entrada();
+                $gesPendientes = new GestorPendienteEntrada();
+                $cUids = $gesPendientes->getArrayUidById_entrada($id_entrada);
+                if (!empty($cUids)) {
+                    $resource = 'registro';
+                    $cargo = 'secretaria';
+                    foreach ($cUids as $uid => $parent_container) {
+                        $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                        $status = $oPendiente->getStatus();
+                        if ($status == 'COMPLETED' OR $status == 'CANCELLED') continue;
+                        $rrule = $oPendiente->getRrule();
+                        if (empty($rrule)) {
+                            $oPendiente->marcar_contestado('contestado');
+                        } else {
+                            // los periodicos
+                            exit ("falta definir fecha para periodico");
+                            $oPendiente->marcar_excepcion($f_recur);
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = $txt_err;
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
+    case 'comprobar_pendientes':
+        $txt_err = '';
+        $mensaje = '';
+        $oEscrito = new Escrito($Qid_escrito);
+        // buscar en los destinos.
+        $a_prot_dst = $oEscrito->getJson_prot_destino(TRUE);
+        // buscar en las ref.
+        $a_prot_ref = $oEscrito->getJson_prot_ref(TRUE);
+        $a_prot = $a_prot_dst + $a_prot_ref;
+        $gesEntradas = new GestorEntrada();
+        $num_pendientes = 0;
+        foreach ($a_prot as $aProt) {
+            // buscar la entrada con esta ref.
+            $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt);
+            foreach ($cEntradas as $oEntrada) {
+                $id_entrada = $oEntrada->getId_entrada();
+                $gesPendientes = new GestorPendienteEntrada();
+                $cUids = $gesPendientes->getArrayUidById_entrada($id_entrada);
+                if (!empty($cUids)) {
+                    $resource = 'registro';
+                    $cargo = 'secretaria';
+                    foreach ($cUids as $uid => $parent_container) {
+                        $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                        $status = $oPendiente->getStatus();
+                        if ($status == 'COMPLETED' OR $status == 'CANCELLED') continue;
+                        $rrule = $oPendiente->getRrule();
+                        if (empty($rrule)) {
+                            $num_pendientes++; 
+                        } else {
+                            // los periodicos
+                        }
+                    }
+                }
+            }
+        }
+        
+        if ($num_pendientes > 0) {
+            $mensaje = sprintf(_("Tiene %s pendientes asociados"),$num_pendientes);
+        }
+        
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = $mensaje;
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'eliminar':
         $txt_err = '';
         if (!empty($Qid_escrito)) {
