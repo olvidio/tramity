@@ -1,12 +1,16 @@
 <?php
+use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
-use entradas\model\entity\EntradaDB;
 use entradas\model\entity\EntradaDocDB;
+use entradas\model\entity\GestorEntradaBypass;
 use ethercalc\model\Ethercalc;
 use etherpad\model\Etherpad;
+use pendientes\model\GestorPendienteEntrada;
+use pendientes\model\Pendiente;
 use usuarios\model\entity\GestorOficina;
 use web\Lista;
 use web\Protocolo;
+use usuarios\model\entity\Oficina;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -23,24 +27,75 @@ require_once ("apps/core/global_object.inc");
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
 switch ($Qque) {   
+    case 'comprobar': //antes de eliminar
+        $bypass_txt = '';
+        $pendientes_txt = '';
+        $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+        // Comprobar si tiene pendientes
+        $gesPendientes = new GestorPendienteEntrada();
+        $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
+        if (!empty($cUids)) {
+            $c = count($cUids);
+            $pendientes_txt = sprintf(_("Esta entrada tiene %s pendientes asociados."),$c);
+        }
+        // comprobar si tiene bypass
+        $gesByPass = new GestorEntradaBypass();
+        $cByPass = $gesByPass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
+        if (is_array($cByPass) && !empty($cByPass)) {
+            $c = count($cByPass);
+            $bypass_txt = sprintf(_("Esta entrada tiene %s envios a ctr."),$c);
+        }
+        
+        $mensaje = '';
+        if (!empty($bypass_txt)) {
+            $mensaje .= $bypass_txt;
+        }
+        if (!empty($pendientes_txt)) {
+            $mensaje .= empty($mensaje)? '' : "<br>";
+            $mensaje .= $pendientes_txt;
+        }
+
+        $jsondata['success'] = true;
+        $jsondata['mensaje'] = $mensaje;
+
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'eliminar':
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
-        $txt_err = '';
+        $error_txt = '';
         if (!empty($Qid_entrada)) {
-            $oEntrada = new EntradaDB($Qid_entrada);
+            $oEntrada = new Entrada($Qid_entrada);
+            // eliminar los pendientes
+            $gesPendientes = new GestorPendienteEntrada();
+            $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
+            if (!empty($cUids)) {
+                $id_of_ponente = $oEntrada->getPonente();
+                $oOficina = new Oficina($id_of_ponente);
+                $oficina_ponente = $oOficina->getSigla();
+                $parent_container = 'oficina_'.$oficina_ponente;
+                $resource = 'registro';
+                $cargo = 'secretaria';
+                foreach ($cUids as $uid) {
+                    $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                    $oPendiente->eliminar();
+                }
+            }
+            // eliminar la entrada y bypass
             if ($oEntrada->DBEliminar() === FALSE ) {
-                $txt_err .= _("Hay un error al eliminar la entrada");
-                $txt_err .= "<br>";
+                $error_txt .= $oEntrada->getErrorTxt();
             }
         } else {
-            $txt_err = _("No existe la entrada");
+            $error_txt = _("No existe la entrada");
         }
-        if (empty($txt_err)) {
+        if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
         } else {
             $jsondata['success'] = false;
-            $jsondata['mensaje'] = $txt_err;
+            $jsondata['mensaje'] = $error_txt;
         }
 
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -126,6 +181,7 @@ switch ($Qque) {
 
             $error = FALSE;
             if ($oEntradaDocBD->DBGuardar() === FALSE) {
+                $error_txt = $oEntradaDocBD->getErrorTxt();
                 $error = TRUE;
             }
         } else {

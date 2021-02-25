@@ -41,11 +41,9 @@ fnjs_borrar_entrada=function(formulario){
                     id_reg=array_dir[0];
                 }
             });
-
-            alert("falta comprobar los pendientes");
             
             var url_doc = 'apps/entradas/controller/entrada_ajax.php';
-            var param_json = { que: 'eliminar', id_entrada: id_reg };
+            var param_json = { que: 'comprobar', id_entrada: id_reg };
             request=$.ajax({
                 data: param_json,
                 url: url_doc,
@@ -53,15 +51,48 @@ fnjs_borrar_entrada=function(formulario){
                 dataType: 'json'
             });
             request.done( function (json) {
-            	if (json.success != 'true') {
+            	if (json.success != true) {
             		alert (json.mensaje);
                 } else {
-                    fnjs_actualizar();
+                    if (json.mensaje) {
+                        $.confirm({
+                            title: json.mensaje,
+                            content: '{{ "¿Qué quiere hacer?"|trans }}',
+                            buttons: {
+                                '{{ "Eliminar todo"|trans }}': function () {
+                                    fnjs_borrar_entrada_cascade(id_reg);
+                                },
+                                '{{ "No hacer nada"|trans }}': function () {
+                                    //$.alert('Canceled!');
+                                }
+                            }
+                    	});
+                    }
                 }
             });
         }
     }
 }
+    
+fnjs_borrar_entrada_cascade=function(id_reg){
+    var url_doc = 'apps/entradas/controller/entrada_ajax.php';
+    var param_json = { que: 'eliminar', id_entrada: id_reg };
+    request=$.ajax({
+        data: param_json,
+        url: url_doc,
+        type: 'post',
+        dataType: 'json'
+    });
+    request.done( function (json) {
+        if (json.success != true) {
+            alert (json.mensaje);
+        } else {
+            fnjs_actualizar();
+        }
+    });
+}
+
+                                    
 ////////////////  Escritos /////////////////////
 fnjs_modificar_det_escrito=function(formulario){
     rta=fnjs_solo_uno(formulario);
@@ -103,7 +134,7 @@ fnjs_borrar_escrito=function(formulario){
                 dataType: 'json'
             });
             request.done( function (json) {
-            	if (json.success != 'true') {
+            	if (json.success != true) {
             		alert (json.mensaje);
                 } else {
                     fnjs_actualizar();

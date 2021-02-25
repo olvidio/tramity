@@ -694,7 +694,10 @@ class Pendiente {
             // INSERT
             $this->ins_pendiente($aDades);
         }
+    }
     
+    public function eliminar() {
+        $this->marcar_contestado('eliminar');
     }
     
     private function visibilidad_to_Class($visibilidad) {

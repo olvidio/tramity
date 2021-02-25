@@ -89,10 +89,9 @@ fnjs_escrito=function(event,n) {
             url: url_doc,
             type: 'post'
         });
-        request.done( function (rta) {
-            json = rta;
+        request.done( function (json) {
         	url = json.url;
-        	if (json.error == 'true') {
+        	if (json.error == true) {
                 alert ('error: '+rta_txt);
             } else {
                 var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";

@@ -85,8 +85,11 @@ CREATE TABLE public.entradas_bypass (
     f_salida date,
     CONSTRAINT fk_entrada
       FOREIGN KEY(id_entrada) 
-	  REFERENCES entradas(id_entrada)
+	  REFERENCES entradas(id_entrada) ON DELETE CASCADE
 );
+
+--- ALTER TABLE "entradas_bypass" DROP CONSTRAINT "fk_entrada";
+--- ALTER TABLE entradas_bypass ADD CONSTRAINT entradas_bypass_fk_ent FOREIGN KEY (id_entrada) REFERENCES entradas (id_entrada) ON DELETE CASCADE;
 
 ALTER TABLE public.entradas_bypass OWNER TO tramity;
 

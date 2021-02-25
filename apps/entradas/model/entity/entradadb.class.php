@@ -316,7 +316,7 @@ class EntradaDB Extends core\ClasePropiedades {
 	public function DBEliminar() {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
-		if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_entrada='$this->iid_entrada' CASCADE")) === FALSE) {
+		if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_entrada='$this->iid_entrada'")) === FALSE) {
 			$sClauError = 'EntradaDB.eliminar';
 			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 			return FALSE;
