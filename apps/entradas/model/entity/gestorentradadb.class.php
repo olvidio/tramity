@@ -37,14 +37,118 @@ class GestorEntradaDB Extends core\ClaseGestor {
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
 	/**
-	 * Devuelve la colección de entradas, segun las condiciones del protcolo de entrada, más las normales
+	 * Devuelve la colección de entradas, segun las condiciones del protcolo de referencias, más las normales
 	 * 
-	 * @param array $aProt_orgigen = ['id_lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
+	 * @param array $aProt_ref = ['lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
 	 * @param array $aWhere
 	 * @param array $aOperators
 	 * @return boolean|array
 	 */
-	function getEntradasByProtOrigenDB($aProt_orgigen=[], $aWhere=[], $aOperators=[]) {
+	function getEntradasByRefDB($aProt_ref=[], $aWhere=[], $aOperators=[]) {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        $oEntradaDBSet = new core\Set();
+        
+        /* {"any": 20, "mas": null, "num": 15, "lugar": 58}
+        $sQuery = "SELECT t.*
+                        FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_origen) as items(any smallint, mas text, num smallint, lugar integer)
+                        WHERE items.id=$id_lugar";
+        */
+        
+		$oCondicion = new core\Condicion();
+        $aCondi = array();
+        foreach ($aWhere as $camp => $val) {
+            if ($camp == '_ordre') continue;
+            if ($camp == '_limit') continue;
+            $sOperador = isset($aOperators[$camp])? $aOperators[$camp] : '';
+            if ($a = $oCondicion->getCondicion($camp,$sOperador,$val)) $aCondi[]=$a;
+            // operadores que no requieren valores
+            if ($sOperador == 'BETWEEN' || $sOperador == 'IS NULL' || $sOperador == 'IS NOT NULL' || $sOperador == 'OR') unset($aWhere[$camp]);
+            if ($sOperador == 'IN' || $sOperador == 'NOT IN') unset($aWhere[$camp]);
+            if ($sOperador == 'TXT') unset($aWhere[$camp]);
+        }
+        $sCondi = implode(' AND ',$aCondi);
+        
+        $sOrdre = '';
+        $sLimit = '';
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') $sOrdre = ' ORDER BY '.$aWhere['_ordre'];
+        if (isset($aWhere['_ordre'])) unset($aWhere['_ordre']);
+        if (isset($aWhere['_limit']) && $aWhere['_limit']!='') $sLimit = ' LIMIT '.$aWhere['_limit'];
+        if (isset($aWhere['_limit'])) unset($aWhere['_limit']);
+        
+        // Where del prot_ref
+        $Where_json = '';
+        if (!empty($aProt_ref['lugar'])) {
+            $lugar = $aProt_ref['lugar'];
+            $Where_json .= empty($Where_json)? '' : ' AND ';    
+            $Where_json .= "items.lugar='$lugar'";
+        }
+        if (!empty($aProt_ref['num'])) {
+            $num = $aProt_ref['num'];
+            $Where_json .= empty($Where_json)? '' : ' AND ';    
+            $Where_json .= "items.num='$num'";
+        }
+        if (!empty($aProt_ref['any'])) {
+            $any = $aProt_ref['any'];
+            $any_2 = any_2($any);
+            $Where_json .= empty($Where_json)? '' : ' AND ';    
+            $Where_json .= "items.any='$any_2'";
+        }
+        if (!empty($aProt_ref['mas'])) {
+            $mas = $aProt_ref['mas'];
+            $Where_json .= empty($Where_json)? '' : ' AND ';    
+            $Where_json .= "items.mas='$mas'";
+        }
+        
+        if (empty($sCondi)) {
+            if (empty($Where_json)) {
+                $where_condi = '';
+            } else {
+                $where_condi = $Where_json;
+            }
+        } else {
+            if (!empty($Where_json)) {
+                $where_condi = $Where_json. " AND ". $sCondi;
+            } else {
+                $where_condi = $sCondi;
+            }
+        }
+        $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi;
+        
+        // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
+        $sQry = "SELECT t.*
+                        FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_ref) as items(\"any\" text, mas text, num text, lugar text)
+                        $where_condi";
+        
+        if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
+            $sClauError = 'GestorEntradaDB.llistar.prepare';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        if (($oDblSt->execute($aWhere)) === FALSE) {
+            $sClauError = 'GestorEntradaDB.llistar.execute';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        foreach ($oDblSt as $aDades) {
+            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
+            $oEntradaDB = new Entrada($a_pkey);
+            $oEntradaDB->setAllAtributes($aDades);
+            $oEntradaDBSet->add($oEntradaDB);
+        }
+        return $oEntradaDBSet->getTot();
+	}
+	
+	
+	/**
+	 * Devuelve la colección de entradas, segun las condiciones del protcolo de entrada, más las normales
+	 * 
+	 * @param array $aProt_origen = ['lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
+	 * @param array $aWhere
+	 * @param array $aOperators
+	 * @return boolean|array
+	 */
+	function getEntradasByProtOrigenDB($aProt_origen=[], $aWhere=[], $aOperators=[]) {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEntradaDBSet = new core\Set();
@@ -78,24 +182,24 @@ class GestorEntradaDB Extends core\ClaseGestor {
         
         // Where del prot_origen
         $Where_json = '';
-        if (!empty($aProt_orgigen['id_lugar'])) {
-            $id_lugar = $aProt_orgigen['id_lugar'];
+        if (!empty($aProt_origen['lugar'])) {
+            $lugar = $aProt_origen['lugar'];
             $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.lugar='$id_lugar'";
+            $Where_json .= "items.lugar='$lugar'";
         }
-        if (!empty($aProt_orgigen['num'])) {
-            $num = $aProt_orgigen['num'];
+        if (!empty($aProt_origen['num'])) {
+            $num = $aProt_origen['num'];
             $Where_json .= empty($Where_json)? '' : ' AND ';    
             $Where_json .= "items.num='$num'";
         }
-        if (!empty($aProt_orgigen['any'])) {
-            $any = $aProt_orgigen['any'];
+        if (!empty($aProt_origen['any'])) {
+            $any = $aProt_origen['any'];
             $any_2 = any_2($any);
             $Where_json .= empty($Where_json)? '' : ' AND ';    
             $Where_json .= "items.any='$any_2'";
         }
-        if (!empty($aProt_orgigen['mas'])) {
-            $mas = $aProt_orgigen['mas'];
+        if (!empty($aProt_origen['mas'])) {
+            $mas = $aProt_origen['mas'];
             $Where_json .= empty($Where_json)? '' : ' AND ';    
             $Where_json .= "items.mas='$mas'";
         }

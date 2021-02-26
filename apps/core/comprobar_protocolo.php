@@ -303,7 +303,7 @@ switch ($Qque) {
 		// compruebo si existe el escrito de referencia (sólo el primero, ordeno por anulado).
 		// en entradas:
 	    $gesEntradas = new GestorEntrada();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
-	    $aProt_origen = [ 'id_lugar' => $Qid_lugar,
+	    $aProt_origen = [ 'lugar' => $Qid_lugar,
                         'num' => $Qprot_num, 
                         'any' => $Qprot_any,
                         'mas' => '',

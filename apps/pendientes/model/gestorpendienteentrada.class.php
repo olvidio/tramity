@@ -1,43 +1,31 @@
 <?php
 namespace pendientes\model;
 
-use core\Set;
-use davical\model\CalDAVClient;
-use entradas\model\Entrada;
-use core\ConfigGlobal;
-use usuarios\model\entity\Oficina;
 use davical\model\entity\GestorCalendarItem;
+use entradas\model\GestorEntrada;
 
 // Arxivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
 
 class GestorPendienteEntrada {
     /**
-     * server de Pendiente
+     * num_pendientes de Pendiente
      *
-     * @var string
+     * @var integer
      */
-    private $server;
+    private $num_pendientes;
     /**
-     * resource de Pendiente
+     * a_lista_pendientes de Pendiente
      *
-     * @var string
+     * @var array
      */
-    private $resource;
+    private $a_lista_pendientes;
     /**
-     * cargo de Pendiente
+     * pendientes_uid de Pendiente
      *
      * @var string
      */
-    private $cargo;
-    /**
-     * cal_oficina de Pendiente
-     *
-     * @var string
-     */
-    private $cal_oficina;
-    
-    //$f_inicio,$f_plazo,$completed,$cancelled
+    private $pendientes_uid;
     
     
     /* CONSTRUCTOR -------------------------------------------------------------- */
@@ -55,7 +43,73 @@ class GestorPendienteEntrada {
     
     /* METODES PUBLICS ----------------------------------------------------------*/
     
+    public function getPedientesByRef($a_prot) {
+        $this->num_pendientes = 0;
+        $this->a_lista_pendientes = [];
+        $this->pendientes_uid = '';
+        
+        $gesEntradas = new GestorEntrada();
+        foreach ($a_prot as $aProt) {
+            // buscar la entrada con esta ref.
+            $cEntradas = $gesEntradas->getEntradasByRefDB($aProt);
+            $this->getInfoPendientes($cEntradas);
+        }
+        
+        $a_params =  [
+            'num_pendientes' => $this->num_pendientes,
+            'a_lista_pendientes' => $this->a_lista_pendientes,
+            'pendientes_uid' => $this->pendientes_uid,
+        ];
+        
+        return $a_params;
+    }
     
+    public function getPedientesByProtOrigen($a_prot) {
+        $this->num_pendientes = 0;
+        $this->a_lista_pendientes = [];
+        $this->pendientes_uid = '';
+        
+        $gesEntradas = new GestorEntrada();
+        foreach ($a_prot as $aProt) {
+            // buscar la entrada con esta ref.
+            $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt);
+            $this->getInfoPendientes($cEntradas);
+        }
+        
+        $a_params =  [
+            'num_pendientes' => $this->num_pendientes,
+            'a_lista_pendientes' => $this->a_lista_pendientes,
+            'pendientes_uid' => $this->pendientes_uid,
+        ];
+        
+        return $a_params;
+    }
+    
+    /**
+     * No devuelve nada porque actua directamente en las propiedades
+     * 
+     * @param array $cEntradas
+     */
+    private function getInfoPendientes($cEntradas) {
+        foreach ($cEntradas as $oEntrada) {
+            $id_entrada = $oEntrada->getId_entrada();
+            $gesPendientes = new GestorPendienteEntrada();
+            $cUids = $gesPendientes->getArrayUidById_entrada($id_entrada);
+            if (!empty($cUids)) {
+                $resource = 'registro';
+                $cargo = 'secretaria';
+                foreach ($cUids as $uid => $parent_container) {
+                    $uid_container = "$uid#$parent_container";
+                    $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                    $status = $oPendiente->getStatus();
+                    if ($status == 'COMPLETED' OR $status == 'CANCELLED') continue;
+                    $this->num_pendientes++;
+                    $this->a_lista_pendientes[] = $oPendiente->getAsunto();
+                    $this->pendientes_uid .= empty($this->pendientes_uid)? $uid_container : ','.$uid_container;
+                }
+            }
+        }
+    }
     
     public function getArrayUidById_entrada($id_entrada) {
         $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada

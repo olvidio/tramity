@@ -129,7 +129,7 @@ class Buscar {
                 // Entradas: origen_prot.
                 $aWhereEntrada['f_entrada'] = 'x';
                 $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
-                $aProt_origen = [ 'id_lugar' => $this->id_lugar,
+                $aProt_origen = [ 'lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,
                                   'any' => $this->prot_any,
                                   'mas' => $this->prot_mas,

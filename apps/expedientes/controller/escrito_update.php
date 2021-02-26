@@ -1,14 +1,15 @@
 <?php
+use core\ViewTwig;
 use function core\is_true;
-use entradas\model\GestorEntrada;
 use expedientes\model\Escrito;
 use expedientes\model\entity\Accion;
 use lugares\model\entity\GestorGrupo;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
+use pendientes\model\Rrule;
 use usuarios\model\PermRegistro;
-use usuarios\model\entity\Oficina;
 use web\DateTimeLocal;
+use web\Lista;
 use web\Protocolo;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -55,39 +56,121 @@ $Qa_prot_any_referencias = (array)  \filter_input(INPUT_POST, 'prot_any_referenc
 $Qa_prot_mas_referencias = (array)  \filter_input(INPUT_POST, 'prot_mas_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 switch($Qque) {
-    case 'contestar_pendientes':
+    case 'lista_pendientes':
         $txt_err = '';
-        $oEscrito = new Escrito($Qid_escrito);
-        // buscar en los destinos.
-        $a_prot_dst = $oEscrito->getJson_prot_destino(TRUE);
-        // buscar en las ref.
-        $a_prot_ref = $oEscrito->getJson_prot_ref(TRUE);
-        $a_prot = $a_prot_dst + $a_prot_ref;
-        $gesEntradas = new GestorEntrada();
-        foreach ($a_prot as $aProt) {
-            // buscar la entrada con esta ref.
-            $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt);
-            foreach ($cEntradas as $oEntrada) {
-                $id_entrada = $oEntrada->getId_entrada();
-                $gesPendientes = new GestorPendienteEntrada();
-                $cUids = $gesPendientes->getArrayUidById_entrada($id_entrada);
-                if (!empty($cUids)) {
-                    $resource = 'registro';
-                    $cargo = 'secretaria';
-                    foreach ($cUids as $uid => $parent_container) {
-                        $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
-                        $status = $oPendiente->getStatus();
-                        if ($status == 'COMPLETED' OR $status == 'CANCELLED') continue;
-                        $rrule = $oPendiente->getRrule();
-                        if (empty($rrule)) {
-                            $oPendiente->marcar_contestado('contestado');
-                        } else {
-                            // los periodicos
-                            exit ("falta definir fecha para periodico");
-                            $oPendiente->marcar_excepcion($f_recur);
+        $Qpendientes_uid = (string) \filter_input(INPUT_POST, 'pendientes_uid');
+        $txt_err = '';
+        $a_pendientes_uid = explode(',', $Qpendientes_uid);
+        
+        $a_valores = [];
+        $p = 0;
+        foreach ($a_pendientes_uid as $uid_container) {
+            $f_iso = '';
+            $uid = strtok($uid_container, '#');
+            $parent_container = strtok('#');
+            $oficina = str_replace('oficina_', '' , $parent_container);
+            $resource = 'registro';
+            $cargo = 'secretaria';
+            $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+            $asunto = $oPendiente->getAsunto();
+            $protocolo = $oPendiente->getLocation();
+            $f_plazo = $oPendiente->getF_plazo()->getFromLocal();
+
+            $rrule = $oPendiente->getRrule();
+            if (!empty($rrule)) {
+                // calcular las recurrencias que tocan.
+                $oF_plazo = new DateTimeLocal();
+                $f_plazo = $oF_plazo->getIsoTime();
+                $dtstart=$oPendiente->getF_inicio()->getIso();
+                $dtend=$oPendiente->getF_end()->getIso();
+                $a_exdates = $oPendiente->getExdates();
+                $f_recurrentes = Rrule::recurrencias($rrule, $dtstart, $dtend, $f_plazo);
+                //print_r($f_recurrentes);
+                $recur = 0;
+                foreach ($f_recurrentes as $key => $f_iso) {
+                    $oF_recurrente = new DateTimeLocal($f_iso);
+                    $recur++;
+                    // Quito las excepciones.
+                    if (is_array($a_exdates) ){
+                        foreach ($a_exdates as $icalprop) {
+                            // si hay más de uno separados por coma
+                            $a_fechas=preg_split('/,/',$icalprop->content);
+                            foreach ($a_fechas as $f_ex) {
+                                $oF_exception = new DateTimeLocal($f_ex);
+                                if ($oF_recurrente == $oF_exception)  continue(3);
+                            }
                         }
                     }
+                    $p++;
+                    $f_plazo = $oF_recurrente->getFromLocal();
+                    $periodico = 'p';
+
+                    $a_valores[$p]['sel']="$uid#$parent_container#$f_iso";
+                    $a_valores[$p][1]=$protocolo;
+                    $a_valores[$p][2]=$periodico;
+                    $a_valores[$p][3]=$asunto;
+                    $a_valores[$p][4]=$f_plazo;
+                    $a_valores[$p][5]=$oficina;
                 }
+            } else {
+                $p++;
+                $periodico = '';
+                
+                $a_valores[$p]['sel']="$uid#$parent_container#$f_iso";
+                $a_valores[$p][1]=$protocolo;
+                $a_valores[$p][2]=$periodico;
+                $a_valores[$p][3]=$asunto;
+                $a_valores[$p][4]=$f_plazo;
+                $a_valores[$p][5]=$oficina;
+            }
+        }
+        $a_cabeceras = [ _("protocolo"),
+                        _("p"),
+                        _("asunto"),
+                        _("fecha plazo"),
+                        _("oficina"),
+                    ];
+        $a_botones[]=array( 'txt' => _('marcar como contestado'), 'click' => "fnjs_marcar(\"#seleccionados\");" ) ;
+        
+        $oTabla = new Lista();
+        $oTabla->setId_tabla('pen_tabla');
+        $oTabla->setCabeceras($a_cabeceras);
+        $oTabla->setBotones($a_botones);
+        $oTabla->setDatos($a_valores);
+        
+        $base_url = core\ConfigGlobal::getWeb();
+        
+        $a_campos = [
+            'base_url' => $base_url,
+            'oTabla' => $oTabla,
+            'id_escrito' => $Qid_escrito,
+            'pendientes_uid' => $Qpendientes_uid,
+        ];
+        
+        $oView = new ViewTwig('pendientes/controller');
+        echo $oView->renderizar('pendiente_lista_enviar.html.twig',$a_campos);
+        
+        
+        break;
+    case 'contestar_pendientes':
+        $Qpendientes_uid = (string) \filter_input(INPUT_POST, 'pendientes_uid');
+        $txt_err = '';
+        $a_pendientes_uid = explode(',', $Qpendientes_uid);
+        $a_pendientes_uid = array_filter($a_pendientes_uid); // evitar valores nulos
+        
+        foreach ($a_pendientes_uid as $uid_container) {
+            $uid = strtok($uid_container, '#');
+            $parent_container = strtok('#');
+            $resource = 'registro';
+            $cargo = 'secretaria';
+            $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+            $rrule = $oPendiente->getRrule();
+            if (empty($rrule)) {
+               // $oPendiente->marcar_contestado('contestado');
+            } else {
+                // los periodicos
+                exit ("falta definir fecha para periodico");
+                $oPendiente->marcar_excepcion($f_recur);
             }
         }
         
@@ -110,43 +193,34 @@ switch($Qque) {
         $oEscrito = new Escrito($Qid_escrito);
         // buscar en los destinos.
         $a_prot_dst = $oEscrito->getJson_prot_destino(TRUE);
+        $gesPendientesEntrada = new GestorPendienteEntrada();
+        $a_params_dst = $gesPendientesEntrada->getPedientesByProtOrigen($a_prot_dst);
+        
         // buscar en las ref.
         $a_prot_ref = $oEscrito->getJson_prot_ref(TRUE);
-        $a_prot = $a_prot_dst + $a_prot_ref;
-        $gesEntradas = new GestorEntrada();
-        $num_pendientes = 0;
-        foreach ($a_prot as $aProt) {
-            // buscar la entrada con esta ref.
-            $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt);
-            foreach ($cEntradas as $oEntrada) {
-                $id_entrada = $oEntrada->getId_entrada();
-                $gesPendientes = new GestorPendienteEntrada();
-                $cUids = $gesPendientes->getArrayUidById_entrada($id_entrada);
-                if (!empty($cUids)) {
-                    $resource = 'registro';
-                    $cargo = 'secretaria';
-                    foreach ($cUids as $uid => $parent_container) {
-                        $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
-                        $status = $oPendiente->getStatus();
-                        if ($status == 'COMPLETED' OR $status == 'CANCELLED') continue;
-                        $rrule = $oPendiente->getRrule();
-                        if (empty($rrule)) {
-                            $num_pendientes++; 
-                        } else {
-                            // los periodicos
-                        }
-                    }
-                }
-            }
-        }
+        $a_params_ref = $gesPendientesEntrada->getPedientesByProtOrigen($a_prot_ref);
         
-        if ($num_pendientes > 0) {
-            $mensaje = sprintf(_("Tiene %s pendientes asociados"),$num_pendientes);
+        // Sumar las dos
+        $num_pendientes = $a_params_dst['num_pendientes'] + $a_params_ref['num_pendientes'];
+        $a_lista_pendientes = array_merge($a_params_dst['a_lista_pendientes'], $a_params_ref['a_lista_pendientes']);
+        $pendientes_uid = $a_params_dst['pendientes_uid'] .','. $a_params_ref['pendientes_uid'];
+        
+        if (!empty($a_lista_pendientes)) {
+            $mensaje = _("Es posible que esté relacionado con alguno de estos pendientes:");
+            $lista_pendientes = '<ol><li>';
+            $lista_pendientes .= implode('</li><li>', $a_lista_pendientes);
+            $lista_pendientes .= '</li></ol>';
+        }
+        if ($num_pendientes == 1) {
+            $mensaje = sprintf(_("Tiene %s pendiente asociado"),$num_pendientes);
         }
         
         if (empty($txt_err)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = $mensaje;
+            $jsondata['num_pendientes'] = $num_pendientes;
+            $jsondata['lista_pendientes'] = $lista_pendientes;
+            $jsondata['pendientes_uid'] = $pendientes_uid;
         } else {
             $jsondata['success'] = false;
             $jsondata['mensaje'] = $txt_err;

@@ -1,0 +1,93 @@
+
+<!-- Bootstrap core JavaScript-->
+<script src="{{ base_url }}/node_modules/jquery/dist/jquery.min.js"></script>
+<!-- jQuery CSS -->
+<!-- CSS jQuery, bootstrap -->
+<link type="text/css" rel='stylesheet' href='{{ base_url }}/node_modules/jquery-ui/themes/base/all.css' />
+<link type="text/css" rel="stylesheet" href="{{ base_url }}/node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+<!-- DataTables -->
+<link type="text/css" rel="stylesheet" href='{{ base_url_web }}/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css' />
+<script type="text/javascript" src='{{ base_url_web }}/node_modules/datatables.net/js/jquery.dataTables.min.js'></script>
+<script type="text/javascript" src='{{ base_url_web }}/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js'></script>
+
+<div class="m-3"> {# para margenes #}
+
+<hr>
+<div id="exportar" calss="">
+<form id='seleccionados' name='seleccionados' action='' method='post'>
+	<input type='Hidden' id='id_escrito' name='id_escrito' value='{{ id_escrito }}' >
+	<input type='Hidden' name='calendario' value='registro' >
+	<input type='Hidden' name='go' value='enviar' >
+	<input type='Hidden' id='nuevo' name='nuevo' value='' >
+	{{ oTabla.mostrar_tabla|raw }}
+</form><br>
+ <!--  --------------------  BOTONES --------------------------  -->
+<div>
+  <button tabindex='91' class="btn btn-secondary" onClick="window.close();" >
+    {{ "Cerrar"|trans }}
+  </button>
+  <button tabindex='90' class="btn btn-success" onClick="fnjs_enviar();" >
+    {{ "Enviar"|trans }}
+  </button> 
+</div>
+
+</div>
+
+<div >
+<form id='actualizar' name='actualizar' action='/apps/expedientes/controller/escrito_update.php' method='post'>
+	<input type='Hidden' id='id_escrito' name='id_escrito' value='{{ id_escrito }}' >
+	<input type='Hidden' name='que' value='lista_pendientes' >
+	<input type='Hidden' name='pendientes_uid' value='{{ pendientes_uid|raw }}' >
+</form>
+</div>
+
+<script type="text/javascript" >
+
+fnjs_actualizar=function(){
+	$('#actualizar').submit();
+}
+        	
+fnjs_enviar=function() {
+	var id_escrito = $('#id_escrito').val();
+    window.opener.fnjs_enviar_escrito_directo(id_escrito);
+    window.close();
+}
+
+fnjs_marcar=function(formulario){
+	var s=0; // el numero de selecionados
+	var r=0; // no tiene permisos para el detalle (reservado)
+	var p=0; // para los periodicos
+	/* selecciono los elementos con class="sel" de las tablas del id=formulario */
+	$(formulario+' input.sel').each(function(i){
+		debugger;
+		if($(this).prop('checked')== true) {
+			s++;
+			if ($(this).attr('id')=="ax") r=1;
+			a=$(this).attr('id').split("#");
+			if (a[2]) p=1;
+		}
+	});
+	
+$('#nuevo').val(4);
+	var url = '/apps/pendientes/controller/pendiente_update_ics.php';
+	var datos = $(formulario).serialize(),
+    request=$.ajax({
+        url: url,
+        data: datos,
+        type: 'post',
+        dataType: 'json'
+    });
+    request.done( function (json) {
+        if (json.success != true) {
+            alert ('error: '+json.mensaje);
+        } else {
+        	fnjs_actualizar();
+        }
+    });
+    request.fail(function(JqXHR, textStatus, errorThrown){
+        txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
+        alert(txt + 'An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+        console.error("Hi ha un error: "+ textStatus, errorThrown);
+    });
+}
+</script>
