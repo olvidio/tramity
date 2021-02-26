@@ -250,7 +250,7 @@ class Davical {
             $aData['by_principal'] = '';
             $aData['to_principal'] = $principal_id_secretaria;
             $aData['by_collection'] = $aCollection_id['registro'];
-            $aData['privileges'] = "000000000000001111111111";
+            $aData['privileges'] = "111111111111111111111111";
             $aData['is_group'] = '';
             $this->grant($aData);
         }
