@@ -1,3 +1,42 @@
+<!-- Modal -->
+<input type=hidden id='modal_tipo' value=0>
+<input type=hidden id='modal_id_reg' value=0>
+<div class="modal fade" id="ModalDetalle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="d-flex flex-row justify-content-start">
+          <h5 class="modal-title" id="exampleModalLongTitle">{{ "modifica entrada"|trans }}</h5>
+		</div>
+        <div class="d-flex flex-row justify-content-end">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+		</div>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex">
+        <div id='modal_titulo' class="mr-auto p-6">
+        </div>
+        </div>
+        <div class="p-11">
+        <textarea tabindex='50' rows="5" class="form-control" name='comentario' id="comentario"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="d-flex flex-row ">
+        </div>
+        <div class="d-flex flex-row justify-content-end">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ "Cerrar"|trans }}</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fnjs_guardar_comentario(event);" >{{ "Guardar"|trans }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <h2 class=subtitulo>{{ titulo }}</h2>
 <form id='{{ key }}' name='{{ key }}' action='' method='post'>
     <input type='hidden' name='filtro' value='buscar'>
@@ -8,13 +47,140 @@
 
 <script>
 ////////////////  Entradas /////////////////////
+fnjs_guardar_comentario=function(event){
+	var id_reg = $('#modal_id_reg').val();	
+	var tipo = $('#modal_tipo').val();	
+	var comentario = $('#comentario').val();	
+	var que_tipo='';
+	var elim_pendientes=0;
+
+	if (tipo =='detalle') {
+		que_tipo = 'modificar_detalle';
+	}
+	if (tipo =='anular') {
+		que_tipo = 'modificar_anular';
+
+		// comprobar si tiene pendientes
+        var url_doc = 'apps/entradas/controller/entrada_ajax.php';
+        var param_json = { que: 'comprobar', id_entrada: id_reg };
+        request=$.ajax({
+            data: param_json,
+            url: url_doc,
+            type: 'post',
+            dataType: 'json'
+        });
+        request.done( function (json) {
+            if (json.success != true) {
+                alert (json.mensaje);
+            } else {
+                if (json.mensaje) {
+                    $.confirm({
+                        title: json.mensaje,
+                        content: '{{ "¿Qué quiere hacer?"|trans }}',
+                        buttons: {
+                            '{{ "Eliminar todo"|trans }}': function () {
+                                elim_pendientes=1;
+                            },
+                            '{{ "No hacer nada"|trans }}': function () {
+                                elim_pendientes=0;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+	}
+	
+    var url_doc = 'apps/entradas/controller/entrada_ajax.php';
+    var param_json = { que: que_tipo, id_entrada: id_reg, text: comentario, elim_pendientes: elim_pendientes };
+    request=$.ajax({
+        data: param_json,
+        url: url_doc,
+        type: 'post',
+        dataType: 'json'
+    });
+    request.done( function (json) {
+        if (json.success != true) {
+            alert (json.mensaje);
+        } else {
+            fnjs_actualizar();
+        }
+    });
+}
 
 fnjs_modificar_det_entrada=function(formulario){
     rta=fnjs_solo_uno(formulario);
     if (rta==1) {
-        fnjs_actualizar();
-        //$(formulario).attr('action',"apps/entradas/controller/entrada_form.php");
-        //fnjs_enviar_formulario(formulario,'#main');
+        var form=$(formulario).attr('id');
+        var id_reg;
+        /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+        /* var sel=$('#'+formulario+' table .sel'); */
+        $('#'+form+' input.sel').each(function(i){
+            if($(this).prop('checked')== true) {
+                // como ya he comprobado que sólo está uno seleccionado, es este.
+                var array_dir=$(this).val().split('#');
+                id_reg=array_dir[0];
+            }
+        });
+        
+        var url_doc = 'apps/entradas/controller/entrada_ajax.php';
+        var param_json = { que: 'get_detalle', id_entrada: id_reg };
+        request=$.ajax({
+            data: param_json,
+            url: url_doc,
+            type: 'post',
+            dataType: 'json'
+        });
+        request.done( function (json) {
+            if (json.success != true) {
+                alert (json.mensaje);
+            } else {
+                if (json.detalle) {
+					$('#modal_titulo').html('{{ "Detalle"|trans }}');
+					$('#modal_id_reg').val(id_reg);	
+					$('#modal_tipo').val('detalle');	
+                    $('#comentario').val(json.detalle);
+                    $('#ModalDetalle').modal('show');
+                }
+            }
+        });
+    }
+}
+
+fnjs_anular_entrada=function(formulario){
+    rta=fnjs_solo_uno(formulario);
+    if (rta==1) {
+        var form=$(formulario).attr('id');
+        var id_reg;
+        /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+        /* var sel=$('#'+formulario+' table .sel'); */
+        $('#'+form+' input.sel').each(function(i){
+            if($(this).prop('checked')== true) {
+                // como ya he comprobado que sólo está uno seleccionado, es este.
+                var array_dir=$(this).val().split('#');
+                id_reg=array_dir[0];
+            }
+        });
+
+        var url_doc = 'apps/entradas/controller/entrada_ajax.php';
+        var param_json = { que: 'get_anular', id_entrada: id_reg };
+        request=$.ajax({
+            data: param_json,
+            url: url_doc,
+            type: 'post',
+            dataType: 'json'
+        });
+        request.done( function (json) {
+            if (json.success != true) {
+                alert (json.mensaje);
+            } else {
+                $('#modal_titulo').html('{{ "Anular (si no hya texto está activo)"|trans }}');
+                $('#modal_id_reg').val(id_reg);	
+                $('#modal_tipo').val('anular');	
+                $('#comentario').val(json.detalle);
+                $('#ModalDetalle').modal('show');
+            }
+        });
     }
 }
 fnjs_modificar_entrada=function(formulario){
@@ -31,7 +197,7 @@ fnjs_borrar_entrada=function(formulario){
         seguro=confirm("{{ "¿Está Seguro que desea borrar este registro?"|trans }}");
         if (seguro) {
             var form=$(formulario).attr('id');
-            var id_reg;
+ 			var id_reg;
             /* selecciono los elementos con class="sel" de las tablas del id=formulario */
             /* var sel=$('#'+formulario+' table .sel'); */
             $('#'+form+' input.sel').each(function(i){

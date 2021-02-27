@@ -142,6 +142,12 @@ class EntradaDB Extends core\ClasePropiedades {
 	 * @var integer
 	 */
 	 protected $iestado;
+	/**
+	 * Anulado de EntradaDB
+	 *
+	 * @var string
+	 */
+	 protected $sanulado;
 	 
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
@@ -209,6 +215,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		$aDades['f_contestar'] = $this->df_contestar;
 		$aDades['bypass'] = $this->bbypass;
 		$aDades['estado'] = $this->iestado;
+		$aDades['anulado'] = $this->sanulado;
 		array_walk($aDades, 'core\poner_null');
 		//para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
 		if ( core\is_true($aDades['bypass']) ) { $aDades['bypass']='true'; } else { $aDades['bypass']='false'; }
@@ -229,7 +236,8 @@ class EntradaDB Extends core\ClasePropiedades {
 					visibilidad              = :visibilidad,
 					f_contestar              = :f_contestar,
 					bypass                   = :bypass,
-					estado                   = :estado";
+					estado                   = :estado,
+					anulado                  = :anulado";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_entrada='$this->iid_entrada'")) === FALSE) {
 				$sClauError = 'EntradaDB.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -248,8 +256,8 @@ class EntradaDB Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(modo_entrada,json_prot_origen,asunto_entrada,json_prot_ref,ponente,resto_oficinas,asunto,f_entrada,detalle,categoria,visibilidad,f_contestar,bypass,estado)";
-			$valores="(:modo_entrada,:json_prot_origen,:asunto_entrada,:json_prot_ref,:ponente,:resto_oficinas,:asunto,:f_entrada,:detalle,:categoria,:visibilidad,:f_contestar,:bypass,:estado)";		
+			$campos="(modo_entrada,json_prot_origen,asunto_entrada,json_prot_ref,ponente,resto_oficinas,asunto,f_entrada,detalle,categoria,visibilidad,f_contestar,bypass,estado,anulado)";
+			$valores="(:modo_entrada,:json_prot_origen,:asunto_entrada,:json_prot_ref,:ponente,:resto_oficinas,:asunto,:f_entrada,:detalle,:categoria,:visibilidad,:f_contestar,:bypass,:estado,:anulado)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'EntradaDB.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -350,6 +358,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		if (array_key_exists('f_contestar',$aDades)) $this->setF_contestar($aDades['f_contestar'],$convert);
 		if (array_key_exists('bypass',$aDades)) $this->setBypass($aDades['bypass']);
 		if (array_key_exists('estado',$aDades)) $this->setEstado($aDades['estado']);
+		if (array_key_exists('anulado',$aDades)) $this->setAnulado($aDades['anulado']);
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -373,6 +382,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		$this->setF_contestar('');
 		$this->setBypass('');
 		$this->setEstado('');
+		$this->setAnulado('');
 		$this->setPrimary_key($aPK);
 	}
 
@@ -770,6 +780,25 @@ class EntradaDB Extends core\ClasePropiedades {
 	function setEstado($iestado) {
 		$this->iestado = $iestado;
 	}
+	/**
+	 * Recupera l'atribut sanulado de EntradaDB
+	 *
+	 * @return integer sanulado
+	 */
+	function getAnulado() {
+		if (!isset($this->sanulado) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->sanulado;
+	}
+	/**
+	 * estableix el valor de l'atribut sanulado de EntradaDB
+	 *
+	 * @param integer sanulado
+	 */
+	function setAnulado($sanulado) {
+		$this->sanulado = $sanulado;
+	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
 	/**
@@ -793,6 +822,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		$oEntradaDBSet->add($this->getDatosF_contestar());
 		$oEntradaDBSet->add($this->getDatosBypass());
 		$oEntradaDBSet->add($this->getDatosEstado());
+		$oEntradaDBSet->add($this->getDatosAnulado());
 		return $oEntradaDBSet->getTot();
 	}
 
@@ -964,6 +994,18 @@ class EntradaDB Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'estado'));
 		$oDatosCampo->setEtiqueta(_("estado"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut sanulado de EntradaDB
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosAnulado() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'anulado'));
+		$oDatosCampo->setEtiqueta(_("anulado"));
 		return $oDatosCampo;
 	}
 }

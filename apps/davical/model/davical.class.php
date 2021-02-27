@@ -238,11 +238,12 @@ class Davical {
         $aCollection_id = $this->crearColecciones($user_no,$oficina);
         
         // Dar al grupo, permiso distinto para cada coleccion. (el registro no borrar...)
+        // Resulta que para los evetos con CLASS= PRIVATE, si no tiene todos los privilegios no va.
         // para registro:
         $aData['by_principal'] = '';
         $aData['to_principal'] = $a_ids_grupo['principal_id'];
         $aData['by_collection'] = $aCollection_id['registro'];
-        $aData['privileges'] = "000000000001001000100101";
+        $aData['privileges'] = "111111111111111111111111";
         $aData['is_group'] = '';
         $this->grant($aData);
         // Añadir permisos para el grupo de secretaria
@@ -258,7 +259,7 @@ class Davical {
         $aData['by_principal'] = '';
         $aData['to_principal'] = $a_ids_grupo['principal_id'];
         $aData['by_collection'] = $aCollection_id['oficina'];
-        $aData['privileges'] = "000000000000001111111111";
+        $aData['privileges'] = "111111111111111111111111";
         $aData['is_group'] = '';
         $this->grant($aData);
         

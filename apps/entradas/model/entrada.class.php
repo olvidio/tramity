@@ -210,7 +210,12 @@ class Entrada Extends EntradaDB {
         $a_visibilidad = $this->getArrayVisibilidad();
         $asunto = $a_visibilidad[self::V_RESERVADO];
         if ($perm > 0) {
-            $asunto = $this->getAsuntoDB();
+            $asunto = '';
+            $anulado = $this->getAnulado();
+            if (!empty($anulado)) {
+                $asunto = _("ANULADO") . "($anulado) ";
+            }
+            $asunto .= $this->getAsuntoDB();
         } 
         return $asunto;
     }

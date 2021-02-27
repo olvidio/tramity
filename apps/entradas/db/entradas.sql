@@ -13,7 +13,8 @@ CREATE TABLE public.entradas (
 	visibilidad smallint,
 	f_contestar date,
 	bypass boolean,
-	estado smallint
+	estado smallint,
+	anulado text
 );
 
 ALTER TABLE public.entradas OWNER TO tramity;
