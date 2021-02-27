@@ -204,7 +204,7 @@ switch($Qque) {
         $num_pendientes = $a_params_dst['num_pendientes'] + $a_params_ref['num_pendientes'];
         $a_lista_pendientes = array_merge($a_params_dst['a_lista_pendientes'], $a_params_ref['a_lista_pendientes']);
         $pendientes_uid = $a_params_dst['pendientes_uid'] .','. $a_params_ref['pendientes_uid'];
-        
+        $lista_pendientes = ''; 
         if (!empty($a_lista_pendientes)) {
             $mensaje = _("Es posible que esté relacionado con alguno de estos pendientes:");
             $lista_pendientes = '<ol><li>';
