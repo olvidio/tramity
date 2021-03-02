@@ -1,32 +1,19 @@
 <?php
 namespace migration\model;
 
-use core\dbConnection;
 
 // Arxivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
 
 class Migration { 
     
-    private $oDBR;
     private $oDBT;
     
     /* CONSTRUCTOR ------------------------------ */
     function __construct() {
-        $config = [
-                'datestyle' => 'ISO,YMD',
-                'host' => 'localhost',
-                'sslmode' => 'disable',
-                'port' => 5432,
-                'dbname' => 'tramity',
-                'schema' => 'reg',
-                'user' => 'dani',
-                'password' => 'system',
-        ];
-        $oConexion = new dbConnection($config);
-        $this->oDBR = $oConexion->getPDO();
         $this->oDBT = $GLOBALS['oDBT'];
         
+        // CREATE SCHEMA IF NOT EXISTS reg
         // GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA reg TO tramity;
         // GRANT USAGE ON SCHEMA reg TO tramity;
         //ALTER SCHEMA reg OWNER TO tramity;
@@ -438,29 +425,29 @@ class Migration {
     public function crear_equivalencias_oficinas() {
         // añadir columna
         $sql = "ALTER TABLE reg.x_oficinas ADD COLUMN IF NOT EXISTS id_oficina_new integer ";
-        if ($this->oDBR->query($sql) === FALSE) {
+        if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBR, $sClauError, __LINE__, __FILE__);
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         // relacionar
         $sql = "UPDATE reg.x_oficinas SET id_oficina_new = public.x_oficinas.id_oficina
                     FROM public.x_oficinas WHERE reg.x_oficinas.sigla = public.x_oficinas.sigla ";
-        if ($this->oDBR->query($sql) === FALSE) {
+        if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBR, $sClauError, __LINE__, __FILE__);
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         
         // mirar si queda alguna oficina suelta
         $sql = "SELECT * FROM reg.x_oficinas WHERE id_oficina_new IS NULL";
-        if ($this->oDBR->query($sql) === FALSE) {
+        if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBR, $sClauError, __LINE__, __FILE__);
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         $msg = '';
-        foreach ($this->oDBR->query($sql) as $row) {
+        foreach ($this->oDBT->query($sql) as $row) {
             $msg .= "sigla: ".$row['sigla']."<br>";
         }
         
@@ -474,30 +461,30 @@ class Migration {
     public function crear_equivalencias_lugares() {
         // añadir columna
         $sql = "ALTER TABLE reg.lugares ADD COLUMN IF NOT EXISTS id_lugar_new integer ";
-        if ($this->oDBR->query($sql) === FALSE) {
+        if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBR, $sClauError, __LINE__, __FILE__);
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         
         // relacionar
         $sql = "UPDATE reg.lugares SET id_lugar_new = public.lugares.id_lugar
                     FROM public.lugares WHERE reg.lugares.sigla = public.lugares.sigla ";
-        if ($this->oDBR->query($sql) === FALSE) {
+        if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBR, $sClauError, __LINE__, __FILE__);
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         
         // mirar si queda alguna oficina suelta
         $sql = "SELECT * FROM reg.lugares WHERE id_lugar_new IS NULL";
-        if ($this->oDBR->query($sql) === FALSE) {
+        if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBR, $sClauError, __LINE__, __FILE__);
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         $msg = '';
-        foreach ($this->oDBR->query($sql) as $row) {
+        foreach ($this->oDBT->query($sql) as $row) {
             $msg .= "sigla: ".$row['sigla']."<br>";
         }
         
