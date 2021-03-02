@@ -136,6 +136,14 @@ class EntradaLista {
                     $aWhere = [];
                 }
                 break;
+            case 'escritos_cr':
+                exit ('Por hacer');
+                break;
+            case 'permanentes_cr':
+                exit ('Por hacer');
+                break;
+              default:
+                exit (_("No ha escogido ningún filtro"));
         }
 
         $this->aWhere = $aWhere;

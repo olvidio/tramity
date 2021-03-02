@@ -1,0 +1,41 @@
+  Para migrrar la base de datos del registro a Tramity:
+  
+  <ol>
+  <li> generar equivalencias de oficinas 
+      <a href="apps/migration/controller/migration.php?que=oficinas">go</a></li>
+  <li> generar equivalencias de lugares 
+      <a href="apps/migration/controller/migration.php?que=lugares">go</a></li>
+  <li> copiar entradas 
+      <a href="apps/migration/controller/migration.php?que=entradas">go</a></li>
+  <li> completar entradas 
+      <a href="apps/migration/controller/migration.php?que=entradas2">go</a></li>
+  <li> completar oficinas entradas 
+      <a href="apps/migration/controller/migration.php?que=entradas_of">go</a></li>
+  <li> completar referencias entradas (casi 3 minuts) 
+      <a href="apps/migration/controller/migration.php?que=entradas_ref">go</a></li>
+  <li> cr num bajo a permanentes 
+      <a href="apps/migration/controller/migration.php?que=entradas_permanentes">go</a></li>
+  <li> entradas distribucion cr 
+      <a href="apps/migration/controller/migration.php?que=entradas_bypass">go</a></li>
+  <li> entradas docs
+      <a href="apps/migration/controller/migration.php?que=entradas_docs">go</a></li>
+      
+  <hr>
+  <li> aprobaciones copiar a escritos
+      <a href="apps/migration/controller/migration.php?que=aprobaciones">go</a></li>
+  <li> aprobaciones destinos
+      <a href="apps/migration/controller/migration.php?que=aprobaciones_destinos">go</a></li>
+  <li> aprobaciones referencias
+      <a href="apps/migration/controller/migration.php?que=aprobaciones_referencias">go</a></li>
+  <li> aprobaciones oficinas
+      <a href="apps/migration/controller/migration.php?que=aprobaciones_oficinas">go</a></li>
+  
+  
+  
+  
+  </ol>
+  
+  <button tabindex='90' class="btn btn-success" onClick="fnjs_guardar(event);" >
+  
+    {{ "crear oficinas"|trans }}
+  </button> 
