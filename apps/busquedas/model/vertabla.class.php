@@ -166,12 +166,6 @@ class VerTabla {
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         
-        /*
-        $go_to="registro_tabla.php?tabla=entradas&donde=".urlencode($donde)."&sql=".urlencode($sql);
-        if ($orden && $sql) $sql .= "ORDER BY " .$orden;
-        if ($orden && $donde) $donde .= "ORDER BY " .$orden;
-        */
-        
         if (ConfigGlobal::role_actual() === 'secretaria') { 
             $a_botones = [
                 [ 'txt' => _('modificar'), 'click' =>"fnjs_modificar_entrada(\"#$this->sKey\")" ],
@@ -199,16 +193,6 @@ class VerTabla {
             $id_entrada=$oEntrada->getId_entrada();
             $f_entrada=$oEntrada->getF_entrada();
             
-            /*
-            $origen_sigla=$row["sigla"];
-            $origen_prot_num=$row["o_prot_num"];
-            $origen_prot_any=any_2($row["o_prot_any"]);
-            $origen_mas=$row["mas"];
-            
-            $pagina_mod="scdl/registro/registro_modificar.php?id_reg=$id_reg&e_s=$e_s";
-            $pagina="scdl/registro/asunto_of.php?nuevo=2&id_reg=$id_reg&e_s=$e_s&atras=$atras";
-            */
-            
             $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
             $protocolo = $oProtOrigen->ver_txt();
             
@@ -222,7 +206,9 @@ class VerTabla {
             $id_of_ponente =  $oEntrada->getPonente();
             $a_resto_oficinas = $oEntrada->getResto_oficinas();
             $oficinas_txt = '';
-            $oficinas_txt .= '<span class="text-danger">'.$a_posibles_oficinas[$id_of_ponente].'</span>';
+            if (!empty($id_of_ponente)) {
+                $oficinas_txt .= '<span class="text-danger">'.$a_posibles_oficinas[$id_of_ponente].'</span>';
+            }
             foreach ($a_resto_oficinas as $id_oficina) {
                 $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
                 $oficinas_txt .= $a_posibles_oficinas[$id_oficina];
@@ -230,26 +216,9 @@ class VerTabla {
             $oficinas = $oficinas_txt;
             
             $asunto = $oEntrada->getAsuntoDetalle();
-            /*
-            if ($distribucion_cr=='t') {
-                $sql_1= "SELECT m.descripcion
-                    FROM destino_multiple m 
-                    WHERE m.id_reg=$id_reg
-                    ";
-                //echo "query: $sql<br>";
-                $oDblSt_query_1=$oDbl->query($sql_1);
-                $descripcion=$oDblSt_query_1->fetchColumn();
-                $asunto.=" <font style='color: Green;'>"._("dl y")." $descripcion</font>";
-            }
-            */
             
             $a_valores[$i]['sel']="$id_entrada";
             $a_valores[$i][1]=$protocolo;
-            //if ( $GLOBALS['oPerm']->have_perm("scdl")) {
-            //    $a_valores[$i][1]=array( 'ira'=>$pagina_mod, 'valor'=>$protocolo);
-            //} else {
-            //    $a_valores[$i][1]=$protocolo;
-            //}
             $a_valores[$i][2]=$referencias;
 
             $a_valores[$i][3]= $asunto;
@@ -317,9 +286,7 @@ class VerTabla {
             }
             
             // destinos
-            $json_destino= $oEscrito->getJson_prot_destino();
-            $oArrayProtDest = new ProtocoloArray($json_destino,'','');
-            $protocolo_dst = $oArrayProtDest->ListaTxtBr();
+            $protocolo_dst = $oEscrito->getDestinosEscrito(); 
             
             // referencias
             $json_ref = $oEscrito->getJson_prot_ref();
@@ -332,31 +299,7 @@ class VerTabla {
             $f_escrito=$oEscrito->getF_escrito();
             $f_salida=$oEscrito->getF_salida();
             
-            /*
-            if ($distribucion_cr=='t') {
-                $sql_1= "SELECT en.id_lugar as o_lugar,en.prot_num as o_prot_num,en.prot_any as o_prot_any,u.sigla
-                FROM entradas en LEFT JOIN lugares u USING (id_lugar) 
-                WHERE en.id_reg=$id_reg
-                ";
-                //echo "query: $sql<br>";
-                $oEntrada=$oDbl->query($sql_1)->fetch(PDO::FETCH_OBJ);
-                $origen_prot_num=$oEntrada->o_prot_num;
-                $origen_prot_any=any_2($oEntrada->o_prot_any);
-                $origen_sigla=$oEntrada->sigla;
-                $protocolo=$origen_sigla." ".$origen_prot_num."/".$origen_prot_any;
-            }
-            */
-            
             $entradilla = $oEscrito->getEntradilla();
-            
-            /*
-            // destinos
-            if (empty($descripcion)) {
-                $destinos=buscar_destinos($id_reg);
-            } else {
-                $destinos=$descripcion;
-            }
-            */
             
             // referencias
             $json_ref = $oEscrito->getJson_prot_ref();
@@ -380,13 +323,6 @@ class VerTabla {
 
             $a_valores[$i]['sel']="$id_escrito";
             $a_valores[$i][1]=$protocolo_local;
-            /*
-            if ( $GLOBALS['oPerm']->have_perm("scdl")) {
-                $a_valores[$i][1]=array( 'ira'=>$pagina_mod, 'valor'=>$protocolo);
-            } else {
-                $a_valores[$i][1]=$protocolo;
-            }
-            */
             $a_valores[$i][2]=$protocolo_dst;
             $a_valores[$i][3]=$referencias;
             $a_valores[$i][4]=$asunto;

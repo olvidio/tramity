@@ -206,6 +206,12 @@ class EscritoDB Extends core\ClasePropiedades {
 	 * @var boolean
 	 */
 	 protected $banulado;
+	/**
+	 * descripcion de EscritoDB
+	 *
+	 * @var string
+	 */
+	 protected $sdescripcion;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de EscritoDB
@@ -286,6 +292,7 @@ class EscritoDB Extends core\ClasePropiedades {
 		$aDades['ok'] = $this->iok;
 		$aDades['tipo_doc'] = $this->itipo_doc;
 		$aDades['anulado'] = $this->banulado;
+		$aDades['descripcion'] = $this->sdescripcion;
 		array_walk($aDades, 'core\poner_null');
 		//para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
 		if ( core\is_true($aDades['anulado']) ) { $aDades['anulado']='true'; } else { $aDades['anulado']='false'; }
@@ -314,7 +321,8 @@ class EscritoDB Extends core\ClasePropiedades {
 					f_salida                 = :f_salida,
 					ok                       = :ok,
 					tipo_doc                 = :tipo_doc,
-					anulado                  = :anulado";
+					anulado                  = :anulado,
+					descripcion              = :descripcion";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_escrito='$this->iid_escrito'")) === FALSE) {
 				$sClauError = 'EscritoDB.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -333,8 +341,8 @@ class EscritoDB Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(json_prot_local,json_prot_destino,json_prot_ref,id_grupos,destinos,entradilla,asunto,detalle,creador,resto_oficinas,comentarios,f_aprobacion,f_escrito,f_contestar,categoria,visibilidad,accion,modo_envio,f_salida,ok,tipo_doc,anulado)";
-			$valores="(:json_prot_local,:json_prot_destino,:json_prot_ref,:id_grupos,:destinos,:entradilla,:asunto,:detalle,:creador,:resto_oficinas,:comentarios,:f_aprobacion,:f_escrito,:f_contestar,:categoria,:visibilidad,:accion,:modo_envio,:f_salida,:ok,:tipo_doc,:anulado)";		
+			$campos="(json_prot_local,json_prot_destino,json_prot_ref,id_grupos,destinos,entradilla,asunto,detalle,creador,resto_oficinas,comentarios,f_aprobacion,f_escrito,f_contestar,categoria,visibilidad,accion,modo_envio,f_salida,ok,tipo_doc,anulado,descripcion)";
+			$valores="(:json_prot_local,:json_prot_destino,:json_prot_ref,:id_grupos,:destinos,:entradilla,:asunto,:detalle,:creador,:resto_oficinas,:comentarios,:f_aprobacion,:f_escrito,:f_contestar,:categoria,:visibilidad,:accion,:modo_envio,:f_salida,:ok,:tipo_doc,:anulado,:descripcion)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'EscritoDB.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -457,6 +465,7 @@ class EscritoDB Extends core\ClasePropiedades {
 		if (array_key_exists('ok',$aDades)) $this->setOk($aDades['ok']);
 		if (array_key_exists('tipo_doc',$aDades)) $this->setTipo_doc($aDades['tipo_doc']);
 		if (array_key_exists('anulado',$aDades)) $this->setAnulado($aDades['anulado']);
+		if (array_key_exists('descripcion',$aDades)) $this->setDescripcion($aDades['descripcion']);
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -488,6 +497,7 @@ class EscritoDB Extends core\ClasePropiedades {
 		$this->setOk('');
 		$this->setTipo_doc('');
 		$this->setAnulado('');
+		$this->setDescripcion('');
 		$this->setPrimary_key($aPK);
 	}
 
@@ -1094,6 +1104,25 @@ class EscritoDB Extends core\ClasePropiedades {
 	function setAnulado($banulado='f') {
 		$this->banulado = $banulado;
 	}
+	/**
+	 * Recupera l'atribut sdescripcion de EscritoDB
+	 *
+	 * @return string sdescripcion
+	 */
+	function getDescripcion() {
+		if (!isset($this->sdescripcion) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->sdescripcion;
+	}
+	/**
+	 * estableix el valor de l'atribut sdescripcion de EscritoDB
+	 *
+	 * @param string sdescripcion='' optional
+	 */
+	function setDescripcion($sdescripcion='') {
+		$this->sdescripcion = $sdescripcion;
+	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
 	/**
@@ -1124,6 +1153,8 @@ class EscritoDB Extends core\ClasePropiedades {
 		$oEscritoDBSet->add($this->getDatosF_salida());
 		$oEscritoDBSet->add($this->getDatosOk());
 		$oEscritoDBSet->add($this->getDatosTipo_doc());
+		$oEscritoDBSet->add($this->getDatosAnulado());
+		$oEscritoDBSet->add($this->getDatosDescripcion());
 		return $oEscritoDBSet->getTot();
 	}
 
@@ -1391,6 +1422,18 @@ class EscritoDB Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'anulado'));
 		$oDatosCampo->setEtiqueta(_("anulado"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut sdescripcion de EscritoDB
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosDescripcion() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'descripcion'));
+		$oDatosCampo->setEtiqueta(_("descripcion"));
 		return $oDatosCampo;
 	}
 }

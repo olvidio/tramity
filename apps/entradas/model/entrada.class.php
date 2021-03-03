@@ -116,21 +116,26 @@ class Entrada Extends EntradaDB {
             
             // poner los destinos
             $a_grupos = $oEntradaBypass->getId_grupos();
+            $descripcion = $oEntradaBypass->getDescripcion();
             
             $aMiembros = [];
             if (!empty($a_grupos)) {
                 //(segun los grupos seleccionados)
                 $aMiembros = $oEntradaBypass->getDestinos();
-                $destinos_txt = $oEntradaBypass->getDescripcion();
+                $destinos_txt = $descripcion; 
             } else {
                 //(segun individuales)
                 $destinos_txt = '';
-                $a_json_prot_dst = $oEntradaBypass->getJson_prot_destino();
-                foreach ($a_json_prot_dst as $json_prot_dst) {
-                    $aMiembros[] = $json_prot_dst->lugar;
-                    $oLugar = new Lugar($json_prot_dst->lugar);
-                    $destinos_txt .= empty($destinos_txt)? '' : ', ';
-                    $destinos_txt .= $oLugar->getNombre();
+                if (!empty($descripcion)) {
+                   $destinos_txt = $descripcion; 
+                } else {
+                    $a_json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+                    foreach ($a_json_prot_dst as $json_prot_dst) {
+                        $aMiembros[] = $json_prot_dst->lugar;
+                        $oLugar = new Lugar($json_prot_dst->lugar);
+                        $destinos_txt .= empty($destinos_txt)? '' : ', ';
+                        $destinos_txt .= $oLugar->getNombre();
+                    }
                 }
             }
             

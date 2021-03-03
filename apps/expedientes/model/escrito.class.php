@@ -254,22 +254,28 @@ class Escrito Extends EscritoDB {
         return $destinos_txt;
     }
     
-    private function getDestinosEscrito() {
+    public function getDestinosEscrito() {
         $a_grupos = [];
         $aMiembros = [];
+        $destinos_txt = '';
+        $descripcion = $this->getDescripcion();
         if (!empty($a_grupos)) {
             //(segun los grupos seleccionados)
             $aMiembros = $this->getDestinos();
-            $destinos_txt = $this->getDescripcion();
+            $destinos_txt = $descripcion;
         } else {
             //(segun individuales)
-            $a_json_prot_dst = $this->getJson_prot_destino();
-            $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
-            $destinos_txt = $oArrayProtDestino->ListaTxtBr();
+            if (!empty($descripcion)) {
+                $destinos_txt = $descripcion;
+            } else {
+                $a_json_prot_dst = $this->getJson_prot_destino();
+                $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
+                $destinos_txt = $oArrayProtDestino->ListaTxtBr();
+            }
         }
         
         $this->destinos_txt = $destinos_txt;
-        return $aMiembros;
+        return $this->destinos_txt;
     }
     
     public function cabeceraDerecha() {

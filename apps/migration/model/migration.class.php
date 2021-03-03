@@ -69,6 +69,7 @@ class Migration {
     
     public function destinos_aprobaciones() {
         
+        /*
         // DESTINOS
         // para poner el id_lugar nuevo
         $sql = "ALTER TABLE reg.destinos ADD COLUMN IF NOT EXISTS id_lugar_new integer ";
@@ -94,8 +95,26 @@ class Migration {
                     AND es.id_salida = d.id_salida AND es.id_reg = d.id_reg )
                     )
                 )";
-                
-                
+        if ($this->oDBT->query($sql) === FALSE) {
+            $sClauError = 'migartion';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        */
+        
+        // copiar la descripcion para el caso de destino multiple
+        $sql = "ALTER TABLE escritos ADD COLUMN IF NOT EXISTS descripcion text";
+        if ($this->oDBT->query($sql) === FALSE) {
+            $sClauError = 'migartion';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        $sql = "UPDATE escritos x SET descripcion = sub.descripcion
+                FROM (SELECT m.descripcion, e.id_escrito
+                    FROM escritos e, reg.destino_multiple m 
+                    WHERE e.id_reg = m.id_reg
+                    ) AS sub
+                WHERE x.id_escrito = sub.id_escrito";
         if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
             $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
