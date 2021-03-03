@@ -46,6 +46,16 @@
 </form><br>
 
 <script>
+
+// Aunque ya está defindo en más sitios, pero si lo primero es mirar aqui, no la encuentra.
+fnjs_ver_entrada=function(id_entrada) {
+    var ssfsv = 'sv';
+    var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+    var server = '{{ server }}';
+    var url = server+'/apps/entradas/controller/entrada_ver.php?id_entrada='+id_entrada;
+    w=window.open(url, "", winPrefs);
+    w.focus();
+}
 ////////////////  Entradas /////////////////////
 fnjs_buscar_ver_entrada=function(formulario){
     rta=fnjs_solo_uno(formulario);
