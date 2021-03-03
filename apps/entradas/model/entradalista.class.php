@@ -1,17 +1,18 @@
 <?php
 namespace entradas\model;
 
+use busquedas\model\Buscar;
+use busquedas\model\VerTabla;
 use core\ConfigGlobal;
 use core\ViewTwig;
-use function core\is_true;
 use entradas\model\entity\GestorEntradaBypass;
+use lugares\model\entity\GestorLugar;
+use usuarios\model\PermRegistro;
+use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
-use usuarios\model\entity\GestorOficina;
-use config\model\Config;
-use usuarios\model\PermRegistro;
 
 
 class EntradaLista {
@@ -137,10 +138,32 @@ class EntradaLista {
                 }
                 break;
             case 'escritos_cr':
-                exit ('Por hacer');
-                break;
-            case 'permanentes_cr':
-                exit ('Por hacer');
+                // recibidos los ultimos 7 dias
+                $oHoy = new DateTimeLocal();
+                $oIni = new DateTimeLocal();
+                $oIni->sub(new \DateInterval('P7D'));
+
+                $gesLugares = new GestorLugar();
+                $id_cr = $gesLugares->getId_cr();
+                
+                $a_condicion['lista_lugar'] = $id_cr;
+                $str_condicion = http_build_query($a_condicion);
+                
+                // son todos los que tienen protocolo local
+                $oBuscar = new Buscar();
+                $oBuscar->setOrigen_id_lugar($id_cr);
+                $oBuscar->setF_max($oHoy->getIso(),FALSE);
+                $oBuscar->setF_min($oIni->getIso(),FALSE);
+                
+                $aCollection = $oBuscar->getCollection(2);
+                foreach ($aCollection as $key => $cCollection) {
+                    $oTabla = new VerTabla();
+                    $oTabla->setKey($key);
+                    $oTabla->setCondicion($str_condicion);
+                    $oTabla->setCollection($cCollection);
+                    echo $oTabla->mostrarTabla();
+                }
+                exit();
                 break;
               default:
                 exit (_("No ha escogido ningún filtro"));

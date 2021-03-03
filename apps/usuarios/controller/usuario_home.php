@@ -214,7 +214,7 @@ $a_pills[$num_orden] = $pill;
 $filtro = 'permanentes_cr';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+    $pag_lst = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?'.http_build_query($aQuery));
     $num_orden = 15;
     $text = _("permanentes de cr");
     $num = '';

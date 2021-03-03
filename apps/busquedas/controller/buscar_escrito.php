@@ -7,6 +7,8 @@ use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;
+use core\ConfigGlobal;
+use lugares\model\entity\Lugar;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -19,11 +21,6 @@ $Qctr_anulados = (bool) \filter_input(INPUT_POST, 'ctr_anulados');
 $Qsimple = (integer) \filter_input(INPUT_POST, 'simple');
 $Qsimple = 1;
 
-// Busco el id_lugar de la dl.
-$id_dl = 12;
-// Busco el id_lugar de cr.
-$id_cr = 12;
-
 if (is_true($Qctr_anulados)) {
     $chk_ctr_anulados = 'checked';
 } else {
@@ -32,6 +29,12 @@ if (is_true($Qctr_anulados)) {
 
 $gesLugares = new GestorLugar();
 $a_lugares = $gesLugares->getArrayLugares();
+
+// Busco el id_lugar de la dl.
+$id_siga_local = $gesLugares->getId_sigla_local();
+$sigla = $_SESSION['oConfig']->getSigla();
+// Busco el id_lugar de cr.
+$id_cr = $gesLugares->getId_cr();
 
 
 $oDesplLugar = new Desplegable();
@@ -87,7 +90,6 @@ $oDesplAntiguedad->setNombre('antiguedad');
 $oDesplAntiguedad->setBlanco(TRUE);
 $oDesplAntiguedad->setOpciones($a_antiguedad);
 
-$dele = $_SESSION['oConfig']->getSigla();
 
 // datepicker
 $oFecha = new DateTimeLocal();
@@ -102,8 +104,8 @@ $a_campos = [
     'oDesplOficinas' => $oDesplOficinas,
     'oDesplDestino2' => $oDesplDestino2,
     'oDesplAntiguedad' => $oDesplAntiguedad,
-    'id_dl' => $id_dl,
-    'dele' => $dele,
+    'id_dl' => $id_siga_local,
+    'dele' => $sigla,
     'id_cr' => $id_cr,
     'simple' => $Qsimple,
     'chk_ctr_anulados' => $chk_ctr_anulados,

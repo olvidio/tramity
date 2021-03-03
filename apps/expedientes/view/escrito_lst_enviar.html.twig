@@ -52,7 +52,7 @@ fnjs_actualizar_expediente=function() {
 fnjs_ver_escrito=function(id_escrito) {
     var ssfsv = 'sv';
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-    var server = '{{ server }}'
+    var server = '{{ server }}';
     var url = server+'/apps/expedientes/controller/escrito_ver.php?id_escrito='+id_escrito;
     w=window.open(url, "", winPrefs);
     w.focus();
@@ -199,7 +199,7 @@ fnjs_enviar_escrito_directo=function(id_escrito) {
 fnjs_distribuir_escrito=function(id_escrito) {
     var ssfsv = 'sv';
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-    var server = '{{ server }}'
+    var server = '{{ server }}';
     var url = server+'/apps/expedientes/controller/escrito_distribuir.php?id_escrito='+id_escrito;
     w=window.open(url, "", winPrefs);
     w.focus();

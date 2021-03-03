@@ -8,6 +8,7 @@ use usuarios\model\entity\GestorOficina;
 use web\Lista;
 use web\Protocolo;
 use web\ProtocoloArray;
+use entradas\model\Entrada;
 
 class VerTabla {
     
@@ -166,6 +167,10 @@ class VerTabla {
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         
+        $oEntrada = new Entrada();
+        $a_categorias = $oEntrada->getArrayCategoria();
+        $a_visibilidad = $oEntrada->getArrayVisibilidad();
+        
         if (ConfigGlobal::role_actual() === 'secretaria') { 
             $a_botones = [
                 [ 'txt' => _('modificar'), 'click' =>"fnjs_modificar_entrada(\"#$this->sKey\")" ],
@@ -174,13 +179,17 @@ class VerTabla {
                    ];
         }
 
-        $a_botones[]=array( 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_entrada(\"#$this->sKey\")" ) ;
+        $a_botones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_entrada(\"#$this->sKey\")" ];
+        $a_botones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_entrada(\"#$this->sKey\")" ];
 
         $a_cabeceras=array( array('name'=>ucfirst(_("protocolo origen")),'formatter'=>'clickFormatter'),
                             ucfirst(_("ref.")),
+                            _("categoria"),
+                            _("visibilidad"),
                             array('name'=>ucfirst(_("asunto")),'formatter'=>'clickFormatter2'),
-                            ucfirst(_("ofic.")),
+                            ucfirst(_("oficinas.")),
                             array('name'=>ucfirst(_("fecha doc.")),'class'=>'fecha'),
+                            array('name'=>ucfirst(_("contestar antes de")),'class'=>'fecha'),
                             array('name'=>ucfirst(_("fecha entrada")),'class'=>'fecha')
                             );
         
@@ -216,15 +225,24 @@ class VerTabla {
             $oficinas = $oficinas_txt;
             
             $asunto = $oEntrada->getAsuntoDetalle();
+            $categoria = $oEntrada->getCategoria();
+            $categoria_txt = empty($a_categorias[$categoria])? '' : $a_categorias[$categoria];
+            $visibilidad = $oEntrada->getVisibilidad();
+            $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '' : $a_visibilidad[$visibilidad];
+            $f_doc = $oEntrada->getF_documento();
+            $f_contestar = $oEntrada->getF_contestar();
+            
             
             $a_valores[$i]['sel']="$id_entrada";
             $a_valores[$i][1]=$protocolo;
             $a_valores[$i][2]=$referencias;
-
-            $a_valores[$i][3]= $asunto;
-            $a_valores[$i][4]=$oficinas;
-            $a_valores[$i][5]='?';
-            $a_valores[$i][6]=$f_entrada->getFromLocal();
+            $a_valores[$i][3]=$categoria_txt;
+            $a_valores[$i][4]=$visibilidad_txt;
+            $a_valores[$i][5]= $asunto;
+            $a_valores[$i][6]=$oficinas;
+            $a_valores[$i][7]=$f_doc->getFromLocal();
+            $a_valores[$i][8]=$f_contestar->getFromLocal();
+            $a_valores[$i][9]=$f_entrada->getFromLocal();
         }
         
         $oTabla = new Lista();
@@ -235,12 +253,15 @@ class VerTabla {
         
         $titulo= _("escritos recibidos en la Delegación");
         
+        $server = ConfigGlobal::getWeb(); //http://tramity.local
+        
         $a_campos = [
             'titulo' => $titulo,
             'oTabla' => $oTabla,
             'key' => $this->sKey,
             'condicion' => $this->sCondicion,
             //'oHash' => $oHash,
+            'server' => $server,
             ];
         
         $oView = new ViewTwig('busquedas/controller');
@@ -252,21 +273,30 @@ class VerTabla {
         $gesCargos = new GestorCargo();
         $a_posibles_cargos = $gesCargos->getArrayCargos();
         
+        $oEntrada = new Entrada();
+        $a_categorias = $oEntrada->getArrayCategoria();
+        $a_visibilidad = $oEntrada->getArrayVisibilidad();
+        
         if (ConfigGlobal::role_actual() === 'secretaria') { 
             $a_botones=array( array( 'txt' => _('modificar'), 'click' =>"fnjs_modificar_escrito(\"#$this->sKey\")" ) ,
                         array( 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_escrito(\"#$this->sKey\")" ) 
                         );
         }
 
-        $a_botones[]=array( 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_escrito(\"#$this->sKey\")" ) ;
-                
-        $a_cabeceras=array( array('name'=>ucfirst(_("protocolo")),'formatter'=>'clickFormatter'), ucfirst(_("destinos")),  ucfirst(_("ref.")), 
-                array('name'=>ucfirst(_("asunto")),'formatter'=>'clickFormatter2'),
-                   ucfirst(_("ofic.")),
-                array('name'=>ucfirst(_("fecha doc.")),'class'=>'fecha'),
-                array('name'=>ucfirst(_("aprobado")),'class'=>'fecha'),
-                ucfirst(_("enviado")) // no puede ser class fecha, porque a veces se añade el modo de envio.
-                   );
+        $a_botones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_escrito(\"#$this->sKey\")" ];
+        $a_botones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_escrito(\"#$this->sKey\")" ];
+
+        $a_cabeceras=array( array('name'=>ucfirst(_("protocolo origen")),'formatter'=>'clickFormatter'),
+                            ucfirst(_("destinos")),
+                            ucfirst(_("ref.")),
+                            _("categoria"),
+                            _("visibilidad"),
+                            array('name'=>ucfirst(_("asunto")),'formatter'=>'clickFormatter2'),
+                            ucfirst(_("oficinas.")),
+                            array('name'=>ucfirst(_("fecha doc.")),'class'=>'fecha'),
+                            array('name'=>ucfirst(_("fecha aprobación")),'class'=>'fecha'),
+                            ucfirst(_("enviado")), // no puede ser class fecha, porque a veces se añade el modo de envio.
+                            );
         
         $i=0;
         $oProtLocal = new Protocolo();
@@ -320,16 +350,23 @@ class VerTabla {
             $oficinas = $oficinas_txt;
             
             if (!empty($anulado)) $asunto=_("ANULADO")." ($anulado) $asunto";
+            
+            $categoria = $oEscrito->getCategoria();
+            $categoria_txt = $a_categorias[$categoria];
+            $visibilidad = $oEscrito->getVisibilidad();
+            $visibilidad_txt = $a_visibilidad[$visibilidad];
 
             $a_valores[$i]['sel']="$id_escrito";
             $a_valores[$i][1]=$protocolo_local;
             $a_valores[$i][2]=$protocolo_dst;
             $a_valores[$i][3]=$referencias;
-            $a_valores[$i][4]=$asunto;
-            $a_valores[$i][5]=$oficinas;
-            $a_valores[$i][6]=$f_escrito->getFromLocal();
-            $a_valores[$i][7]=$f_aprobacion->getFromLocal();
-            $a_valores[$i][8]=$f_salida->getFromLocal();
+            $a_valores[$i][4]=$categoria_txt;
+            $a_valores[$i][5]=$visibilidad_txt;
+            $a_valores[$i][6]=$asunto;
+            $a_valores[$i][7]=$oficinas;
+            $a_valores[$i][8]=$f_escrito->getFromLocal();
+            $a_valores[$i][9]=$f_aprobacion->getFromLocal();
+            $a_valores[$i][10]=$f_salida->getFromLocal();
         }
 
         $oTabla = new Lista();
@@ -337,7 +374,9 @@ class VerTabla {
         $oTabla->setCabeceras($a_cabeceras);
         $oTabla->setBotones($a_botones);
         $oTabla->setDatos($a_valores);
-
+        
+        $server = ConfigGlobal::getWeb(); //http://tramity.local
+        
         $titulo=_("escritos aprobados en la Delegación");
         $a_campos = [
             'titulo' => $titulo,
@@ -345,6 +384,7 @@ class VerTabla {
             'key' => $this->sKey,
             'condicion' => $this->sCondicion,
             //'oHash' => $oHash,
+            'server' => $server,
             ];
         
         $oView = new ViewTwig('busquedas/controller');

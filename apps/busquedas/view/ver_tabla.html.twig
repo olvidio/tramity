@@ -47,6 +47,24 @@
 
 <script>
 ////////////////  Entradas /////////////////////
+fnjs_buscar_ver_entrada=function(formulario){
+    rta=fnjs_solo_uno(formulario);
+    if (rta==1) {
+        var form=$(formulario).attr('id');
+        var id_reg;
+        /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+        /* var sel=$('#'+formulario+' table .sel'); */
+        $('#'+form+' input.sel').each(function(i){
+            if($(this).prop('checked')== true) {
+                // como ya he comprobado que sólo está uno seleccionado, es este.
+                var array_dir=$(this).val().split('#');
+                id_reg=array_dir[0];
+            }
+        });
+        fnjs_ver_entrada(id_reg);
+    }
+}
+
 fnjs_guardar_comentario=function(event){
 	var id_reg = $('#modal_id_reg').val();	
 	var tipo = $('#modal_tipo').val();	

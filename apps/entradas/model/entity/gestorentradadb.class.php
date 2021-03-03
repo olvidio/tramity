@@ -36,6 +36,37 @@ class GestorEntradaDB Extends core\ClaseGestor {
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
+	public function posiblesYear() {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+
+        $sql_anys="SELECT json_prot_origen -> 'any' as a 
+                    FROM $nom_tabla
+                    WHERE categoria = ". Entrada::CAT_PERMANATE ."
+                    GROUP BY a ORDER BY a";
+        
+        if (($oDblSt=$oDbl->Query($sql_anys)) === FALSE) {
+            $sClauError = 'GestorEntradaDB.llistar.execute';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        $a_anys = []; 
+        foreach ($oDblSt as $a_year) {
+            $year = trim($a_year['a'],'"') ;
+            $iyear = intval($year);
+            if ($iyear > 70) {
+                $iany = 1900 + $iyear;
+            } else {
+                $iany = 2000 + $iyear;
+            }
+            
+            $a_anys[] = $iany;
+        }
+        sort($a_anys);
+            
+        return $a_anys;
+	}
+	
 	/**
 	 * Devuelve la colección de entradas, segun las condiciones del protcolo de referencias, más las normales
 	 * 
@@ -217,7 +248,7 @@ class GestorEntradaDB Extends core\ClaseGestor {
                 $where_condi = $sCondi;
             }
         }
-        $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi;
+        $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi.' '.$sOrdre;
         
         // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
         $sQry = "SELECT t.*

@@ -8,6 +8,7 @@ use expedientes\model\GestorEscrito;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
+use entradas\model\Entrada;
 
 
 
@@ -119,12 +120,70 @@ class Buscar {
         $this->id_cr = 23;
     }
     
-    public function getCollection($opcion,$mas) {
+    public function getCollection($opcion,$mas='') {
         /* Siempre, obligatorio tener:
          *  - f_entrada not null para las entradas
          *  - f_aprobacion not null para los escritos 
          */
         switch ($opcion) {
+            // permanentes de cr
+            case 'proto':
+                // por asunto
+                if (!empty($this->asunto)) {
+                    $aWhereEntrada['asunto'] = $this->asunto;
+                    $aOperadorEntrada['asunto'] = 'sin_acentos';
+                }
+                
+                $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
+                $aWhereEntrada['_ordre'] = 'f_entrada';
+                $aWhereEntrada['f_entrada'] = 'x';
+                $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
+                $aProt_origen = [ 'lugar' => $this->id_lugar,
+                                  'num' => $this->prot_num,
+                                  'any' => $this->prot_any,
+                                  'mas' => $this->prot_mas,
+                            ];
+
+                $gesEntradas = new GestorEntradaDB();
+                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
+                $aCollections['entradas'] = $cEntradas;
+                return $aCollections;
+                break;
+            case 'any':
+                // por año
+                $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
+                $aWhereEntrada['_ordre'] = 'f_entrada';
+                $aOperadorEntrada = [];
+                $aProt_origen = [ 'lugar' => $this->id_lugar,
+                                  'num' => $this->prot_num,
+                                  'any' => $this->prot_any,
+                                  'mas' => $this->prot_mas,
+                            ];
+
+                $gesEntradas = new GestorEntradaDB();
+                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
+                $aCollections['entradas'] = $cEntradas;
+                return $aCollections;
+                break;
+            case 'oficina':
+                $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
+                $aWhereEntrada['ponente'] = $this->ponente;
+                $aWhereEntrada['_ordre'] = 'f_entrada';
+                $aOperadorEntrada = [];
+                $aProt_origen = [ 'lugar' => $this->id_lugar,
+                                  'num' => $this->prot_num,
+                                  'any' => $this->prot_any,
+                                  'mas' => $this->prot_mas,
+                            ];
+                
+                $gesEntradas = new GestorEntradaDB();
+                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
+                $aCollections['entradas'] = $cEntradas;
+                return $aCollections;
+                break;
+            case 57: // un protocolo concreto:
+                
+                break;
             case 7: // un protocolo concreto:
                 // Entradas: origen_prot.
                 $aWhereEntrada['f_entrada'] = 'x';
@@ -588,9 +647,6 @@ class Buscar {
 	 * @return DateTimeLocal df_min
 	 */
 	function getF_min() {
-	    if (!isset($this->df_min) && !$this->bLoaded) {
-	        $this->DBCarregar();
-	    }
 	    if (empty($this->df_min)) {
 	        return new NullDateTimeLocal();
 	    }
@@ -620,9 +676,6 @@ class Buscar {
 	 * @return DateTimeLocal df_max
 	 */
 	function getF_max() {
-	    if (!isset($this->df_max) && !$this->bLoaded) {
-	        $this->DBCarregar();
-	    }
 	    if (empty($this->df_max)) {
 	        return new NullDateTimeLocal();
 	    }

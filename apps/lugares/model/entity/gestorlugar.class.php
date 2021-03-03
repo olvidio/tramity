@@ -50,7 +50,7 @@ class GestorLugar Extends core\ClaseGestor {
 	/**
 	 * devuelve el id de la sigla (dlb)
 	 */
-	public function getId_sigla() {
+	public function getId_sigla_local() {
 	    $sigla = $_SESSION['oConfig']->getSigla();
 	    $cLugares = $this->getLugares(['sigla' => $sigla]);
 	    if (!empty($cLugares)) {

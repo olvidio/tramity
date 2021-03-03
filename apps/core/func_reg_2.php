@@ -753,7 +753,7 @@ function buscar_prot_entrada($id_reg) {
 */
 function any_4($any) {
 	if ($any<100) {
-		if ($any < 50 ) {
+		if ($any < 70 ) {
 			$a=2000+$any;
 		} else {
 			$a=1900+$any;

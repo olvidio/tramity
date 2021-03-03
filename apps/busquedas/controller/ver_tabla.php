@@ -17,7 +17,7 @@ $Qopcion = (integer) \filter_input(INPUT_POST, 'opcion');
 $Qmas = (integer) \filter_input(INPUT_POST, 'mas');
 
 $gesLugares = new GestorLugar();
-$id_sigla = $gesLugares->getId_sigla();
+$id_sigla_local = $gesLugares->getId_sigla_local();
 
 $Qmas = '';
 $a_condicion = []; // para poner los parámetros de la búsqueda y poder actualizar la página.
@@ -36,7 +36,7 @@ switch ($Qopcion) {
         $Qprot_any = empty($Qprot_any)? '' : core\any_2($Qprot_any);
         
         $oBuscar = new Buscar();
-        $oBuscar->setId_sigla($id_sigla);
+        $oBuscar->setId_sigla($id_sigla_local);
         $oBuscar->setId_lugar($Qid_lugar);
         $oBuscar->setProt_num($Qprot_num);
         $oBuscar->setProt_any($Qprot_any);
@@ -150,12 +150,10 @@ switch ($Qopcion) {
         switch ($Qlista_origen) {
             case "dl":
                 $opcion = 41;
-                $gesLugares = new GestorLugar();
-                $id_sigla = $gesLugares->getId_sigla();
                 
                 // son todos los que tienen protocolo local
                 $oBuscar = new Buscar();
-                $oBuscar->setLocal_id_lugar($id_sigla);
+                $oBuscar->setLocal_id_lugar($id_sigla_local);
                 $oBuscar->setF_max($Qf_max);
                 $oBuscar->setF_min($Qf_min);
                 $oBuscar->setOficina($Qoficina);

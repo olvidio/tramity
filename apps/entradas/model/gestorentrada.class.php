@@ -8,6 +8,7 @@ use entradas\model\entity\GestorEntradaDB;
 
 class GestorEntrada Extends GestorEntradaDB {
     
+
     /**
      * retorna l'array d'objectes de tipus EntradaDB
      *

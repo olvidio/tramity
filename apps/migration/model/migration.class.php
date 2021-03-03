@@ -69,7 +69,6 @@ class Migration {
     
     public function destinos_aprobaciones() {
         
-        /*
         // DESTINOS
         // para poner el id_lugar nuevo
         $sql = "ALTER TABLE reg.destinos ADD COLUMN IF NOT EXISTS id_lugar_new integer ";
@@ -100,7 +99,6 @@ class Migration {
             $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
-        */
         
         // copiar la descripcion para el caso de destino multiple
         $sql = "ALTER TABLE escritos ADD COLUMN IF NOT EXISTS descripcion text";
