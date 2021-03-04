@@ -28,9 +28,9 @@ switch ($Qopcion) {
         $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
         $Qprot_any = (integer) \filter_input(INPUT_POST, 'prot_any');
 
-        $a_condicion['lugar'] = $Qid_lugar;
+        $a_condicion['id_lugar'] = $Qid_lugar;
         $a_condicion['prot_num'] = $Qprot_num;
-        $a_condicion['Qprot_any'] = $Qprot_any;
+        $a_condicion['prot_any'] = $Qprot_any;
         $str_condicion = http_build_query($a_condicion);
         
         $Qprot_any = empty($Qprot_any)? '' : core\any_2($Qprot_any);
@@ -61,6 +61,7 @@ switch ($Qopcion) {
         $oBuscar = new Buscar();
         $oBuscar->setAntiguedad($Qantiguedad);
         $oBuscar->setOrigen_id_lugar($Qorigen_id_lugar);
+        $oBuscar->setLocal_id_lugar($id_sigla_local);
         
         $aCollection = $oBuscar->getCollection($Qopcion, $Qmas);
         foreach ($aCollection as $key => $cCollection) {
@@ -116,12 +117,35 @@ switch ($Qopcion) {
         $a_condicion['oficina'] = $Qoficina;
         $str_condicion = http_build_query($a_condicion);
         
-        $oBuscar = new Buscar();
-        $oBuscar->setOrigen_id_lugar($Qorigen_id_lugar);
-        $oBuscar->setDest_id_lugar($Qdest_id_lugar);
-        $oBuscar->setF_max($Qf_max);
-        $oBuscar->setF_min($Qf_min);
-        $oBuscar->setOficina($Qoficina);
+        // para el caso de la dl, son todas las entradas
+        $flag = 0;
+        if ($Qdest_id_lugar == $id_sigla_local) {
+            $oBuscar = new Buscar();
+            $oBuscar->setId_sigla($id_sigla_local);
+            $oBuscar->setLocal_id_lugar($id_sigla_local);
+            $oBuscar->setF_max($Qf_max);
+            $oBuscar->setF_min($Qf_min);
+            $oBuscar->setOficina($Qoficina);
+            $flag = 1;
+        }
+        if ($Qorigen_id_lugar == $id_sigla_local) {
+            // son todos los que tienen protocolo local
+            $oBuscar = new Buscar();
+            $oBuscar->setLocal_id_lugar($id_sigla_local);
+            $oBuscar->setOrigen_id_lugar($Qorigen_id_lugar);
+            $oBuscar->setF_max($Qf_max);
+            $oBuscar->setF_min($Qf_min);
+            $oBuscar->setOficina($Qoficina);
+            $flag = 1;
+        }
+        if ($flag === 0) {
+            $oBuscar = new Buscar();
+            $oBuscar->setOrigen_id_lugar($Qorigen_id_lugar);
+            $oBuscar->setDest_id_lugar($Qdest_id_lugar);
+            $oBuscar->setF_max($Qf_max);
+            $oBuscar->setF_min($Qf_min);
+            $oBuscar->setOficina($Qoficina);
+        }
         
         $aCollection = $oBuscar->getCollection($Qopcion, $Qmas);
         

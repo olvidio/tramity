@@ -7,9 +7,9 @@
     <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
         {{ oDesplLugar.desplegable|raw }}
         <td>
-          <input id="prot_num" name="prot_num" size="12" value="" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar_7')">
+          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar_7')" value="{{ prot_num }}" >
           /
-          <input id="prot_any" name="prot_any" size="5" value="" class=contenido title="{{ "año protocolo origen"|trans }}" >
+          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans }}" value="{{ prot_any }}" >
         </td></tr>
     <tr>
       <td colspan=5 style="text-align:right;">
@@ -47,13 +47,13 @@
 <tr><th colspan=5 class=titulo_inv>{{ "opción 2: Buscar por el asunto o detalle"|trans }}
     </th></tr>
     <tr><td class=etiqueta>{{ "¿Escribir una palabra clave"|trans }}:</td>
-    <td colspan=3><input type="Text" id="asunto" name="asunto" size="50"></td>
+    <td colspan=3><input type="Text" id="asunto" name="asunto" size="50" value="{{ asunto }}"></td>
     </tr>
     <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
     <td> {{ "entre el"|trans }} 
-    	<input class="form-control" type="Text" id="frm2_f_min" name="f_min" size="12">
+    	<input class="form-control" type="Text" id="frm2_f_min" name="f_min" size="12" value="{{ f_min }}">
     <td> {{ "y el"|trans }} 
-    	<input class="form-control" type="Text" id="frm2_f_max" name="f_max" size="12">
+    	<input class="form-control" type="Text" id="frm2_f_max" name="f_max" size="12" value="{{ f_max }}">
     <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
     {{ oDesplOficinas.desplegable|raw }}
     </td></tr>
@@ -75,8 +75,10 @@
         {{ oDesplOrigen2.desplegable|raw }}
         </td></tr>
         <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
-        <td> {{ "entre el"|trans }} <input class="fecha" type="Text" id="frm3_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm3_f_min')">
-        <td> {{ "y el"|trans }} <input class="fecha" type="Text" id="frm3_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('frm3_f_max')">
+        <td> {{ "entre el"|trans }} 
+          <input class="fecha" type="Text" id="frm3_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm3_f_min')" value="{{ f_min }}">
+        <td> {{ "y el"|trans }} 
+          <input class="fecha" type="Text" id="frm3_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('frm3_f_max')" value="{{ f_max }}">
         <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
         {{ oDesplOficinas.desplegable|raw }}
         </td></tr>
@@ -86,23 +88,23 @@
 
 <!-- Listar varios escritos --------------------------------------------- -->
 <form id="frm_buscar_4" name="frm_buscar_4" action="">
-    <input type="hidden" id="list" name="list" value=1>
     <input type="hidden" name="opcion" value="">
-    <input type="hidden" id="simple" name="simple" value="<?= $_POST['simple'] ?>">
     <table  class="table-warning" border=1>
     <tr><th colspan=5 class=titulo_inv>{{ "opción 4: Listar varios escritos"|trans }}</th></tr>
     <td colspan=3>
-    <input type="radio" id="lista_origen_1" name="lista_origen" value="dl" onchange="fnjs_activar_lugar(1)">{{ "de"|trans }} {{ dele }}<br>
-    <input type="radio" id="lista_origen_2" name="lista_origen" value="de" onchange="fnjs_activar_lugar(2)">{{ "de un ctr, dl o cr concreto"|trans }}
+    <input type="radio" {{ chk_lo_1 }} id="lista_origen_1" name="lista_origen" value="dl" onchange="fnjs_activar_lugar(1)">{{ "de"|trans }} {{ dele }}<br>
+    <input type="radio" {{ chk_lo_2 }} id="lista_origen_2" name="lista_origen" value="de" onchange="fnjs_activar_lugar(2)">{{ "de un ctr, dl o cr concreto"|trans }}
         {{ oDesplLugar4.desplegable|raw }}
         <br>
-    <input type="radio" id="lista_origen_3" name="lista_origen" value="cr_dl" onchange="fnjs_activar_lugar(3)">{{ "de cr a "|trans }} {{ dele }}<br>
-    <input type="radio" id="lista_origen_4" name="lista_origen" value="cr_ctr" onchange="fnjs_activar_lugar(4)">{{ "de cr a ctr"|trans }}<br>
+    <input type="radio" {{ chk_lo_3 }} id="lista_origen_3" name="lista_origen" value="cr_dl" onchange="fnjs_activar_lugar(3)">{{ "de cr a "|trans }} {{ dele }}<br>
+    <input type="radio" {{ chk_lo_4 }} id="lista_origen_4" name="lista_origen" value="cr_ctr" onchange="fnjs_activar_lugar(4)">{{ "de cr a ctr"|trans }}<br>
     </td>
     </tr>
         <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
-        <td> {{ "entre el"|trans }} <input class="fecha" type="Text" id="frm4_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_min')">
-        <td> {{ "y el"|trans }} <input class="fecha" type="Text" id="frm4_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_max')">
+        <td> {{ "entre el"|trans }} 
+          <input class="fecha" type="Text" id="frm4_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_min')" value="{{ f_min }}">
+        <td> {{ "y el"|trans }} 
+          <input class="fecha" type="Text" id="frm4_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_max')" value="{{ f_max }}">
         <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td>
         <td>
           {{ oDesplOficinas.desplegable|raw }}
@@ -357,6 +359,10 @@ fnjs_compatible=function(){
 
 {% if simple == 1 %}
     fnjs_ver_solo('#frm_buscar_7');
+{% endif %}
+{% if opcion %}
+    fnjs_ver_solo('#frm_buscar_{{ opcion }}');
+    fnjs_buscar('#frm_buscar_{{ opcion }}')
 {% endif %}
 
 $(document).ready(function() {

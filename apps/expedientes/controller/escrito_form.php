@@ -246,10 +246,11 @@ switch ($Qfiltro) {
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/escrito_lista.php?'.http_build_query($a_cosas));
         break;
     case 'buscar':
-        $a_cosas = [
-            'filtro' => $Qfiltro,
-        ];
-        $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($a_cosas));
+        $a_condicion = [];
+        $str_condicion = (string) \filter_input(INPUT_POST, 'condicion');
+        parse_str($str_condicion, $a_condicion);
+        $a_condicion['filtro'] = $Qfiltro;
+        $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($a_condicion));
         break;
     default: 
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));

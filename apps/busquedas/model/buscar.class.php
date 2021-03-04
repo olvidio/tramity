@@ -181,9 +181,6 @@ class Buscar {
                 $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
                 break;
-            case 57: // un protocolo concreto:
-                
-                break;
             case 7: // un protocolo concreto:
                 // Entradas: origen_prot.
                 $aWhereEntrada['f_entrada'] = 'x';
@@ -273,40 +270,59 @@ class Buscar {
                 if (!empty($Qorigen_id_lugar)) {
                     // Caso especial de querer ver los escritos de la dl. No se consulta en las entradas, sino salidas.
                     // se omiten los de distribución de cr.
-                    // TODO
-                    if ($Qorigen_id_lugar==$this->id_sigla) {
+                    if ($Qorigen_id_lugar==$this->local_id_lugar) {
                         $id_lugar = $Qorigen_id_lugar;
-                        $gesEscritos = new GestorEscrito();
-                        $cEscritos = $gesEscritos->getEscritosByLugarDB($id_lugar,$aWhereEscrito,$aOperadorEscrito);
+                        $this->setF_min($limite,FALSE);
+                        $cEscritos = $this->buscarEscritos();
                         $aCollections['escritos'] = $cEscritos;
                     } else {
                         $gesEntradas = new GestorEntradaDB();
                         $id_lugar = $Qorigen_id_lugar;
                         $cEntradas = $gesEntradas->getEntradasByLugarDB($id_lugar,$aWhereEntrada, $aOperadorEntrada);
+                        $aCollections['entradas'] = $cEntradas;
                     }
                 } else {
                     $gesEntradas = new GestorEntrada();
                     $cEntradas = $gesEntradas->getEntradas($aWhereEntrada, $aOperadorEntrada);
+                    $aCollections['entradas'] = $cEntradas;
                 }
-                $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
                 break;
             case 2:
+                // buscar en entradas y escritos
                 $cEntradas = $this->buscarEntradas();
                 $aCollections['entradas'] = $cEntradas;
+                $cEscritos = $this->buscarEscritos();
+                $aCollections['escritos'] = $cEscritos;
                 return $aCollections;
                 break;
             case 3:
                 // buscar en origen, destino o ambos
                 $aCollections = [];
                 
-                if (!empty($this->origen_id_lugar)) {
+                $flag = 0;
+                // para ver los recibidos en dl
+                if ($this->getId_sigla() == $this->local_id_lugar) {
                     $cEntradas = $this->buscarEntradas();
                     $aCollections['entradas'] = $cEntradas;
+                    $flag = 1;
                 }
-                if (!empty($this->dest_id_lugar)) {
+                // para ver los enviados por dl
+                if ($this->origen_id_lugar == $this->local_id_lugar) {
                     $cEscritos = $this->buscarEscritos();
                     $aCollections['escritos'] = $cEscritos;
+                    $flag = 1;
+                }
+                // otros lugares
+                if ($flag == 0) {
+                    if (!empty($this->origen_id_lugar)) {
+                        $cEntradas = $this->buscarEntradas();
+                        $aCollections['entradas'] = $cEntradas;
+                    }
+                    if (!empty($this->dest_id_lugar)) {
+                        $cEscritos = $this->buscarEscritos();
+                        $aCollections['escritos'] = $cEscritos;
+                    }
                 }
                 
                 return $aCollections;
@@ -462,40 +478,28 @@ class Buscar {
         }
 
         if (!empty($this->oficina)) {
-            // Cargos correspondientes a la oficina:
-            $gesCargos = new GestorCargo();
-            $a_cargos_oficina = $gesCargos->getArrayCargosOficina($this->oficina);
-            $a_cargos = [];
-            foreach (array_keys($a_cargos_oficina) as $id_cargo) {
-                $a_cargos[] = $id_cargo;
-            }
-            if (!empty($a_cargos)) {
-                // dos busquedas:
-                $aWhere['ponente'] = implode(',',$a_cargos);
-                $aOperador['ponente'] = 'IN';
-                // Quien envia el escrito (entradas)
-                if (!empty($this->origen_id_lugar)) {
-                    $cEntradasPonente = $gesEntradas->getEntradasByLugarDB($this->origen_id_lugar,$aWhere,$aOperador);
-                } else {
-                    $cEntradasPonente = $gesEntradas->getEntradas($aWhere, $aOperador);
-                }
-                unset($aWhere['ponente']);
-                unset($aOperador['ponente']);
-                    
-                $aWhere['resto_oficinas'] = '{'.implode(', ',$a_cargos).'}';
-                $aOperador['resto_oficinas'] = 'OVERLAP';
-                // Quien envia el escrito (entradas)
-                if (!empty($this->origen_id_lugar)) {
-                    $cEntradasResto = $gesEntradas->getEntradasByLugarDB($this->origen_id_lugar,$aWhere,$aOperador);
-                } else {
-                    $cEntradasResto = $gesEntradas->getEntradas($aWhere, $aOperador);
-                }
-                
-                $cEntradas  = array_merge($cEntradasPonente, $cEntradasResto);
+            // Entradas es por oficinas, escritos por cargos:
+            // dos busquedas:
+            $aWhere['ponente'] = $this->oficina;
+            // Quien envia el escrito (entradas)
+            if (!empty($this->origen_id_lugar)) {
+                $cEntradasPonente = $gesEntradas->getEntradasByLugarDB($this->origen_id_lugar,$aWhere,$aOperador);
             } else {
-                // para que no salga nada pongo
-                unset($aWhere['ponente']);
+                $cEntradasPonente = $gesEntradas->getEntradas($aWhere, $aOperador);
             }
+            unset($aWhere['ponente']);
+            unset($aOperador['ponente']);
+                
+            $aWhere['resto_oficinas'] = '{'.$this->oficina.'}';
+            $aOperador['resto_oficinas'] = 'OVERLAP';
+            // Quien envia el escrito (entradas)
+            if (!empty($this->origen_id_lugar)) {
+                $cEntradasResto = $gesEntradas->getEntradasByLugarDB($this->origen_id_lugar,$aWhere,$aOperador);
+            } else {
+                $cEntradasResto = $gesEntradas->getEntradas($aWhere, $aOperador);
+            }
+            
+            $cEntradas  = array_merge($cEntradasPonente, $cEntradasResto);
         } else {
             // Quien envia el escrito (entradas)
             if (!empty($this->origen_id_lugar)) {

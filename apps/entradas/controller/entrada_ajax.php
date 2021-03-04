@@ -28,6 +28,30 @@ require_once ("apps/core/global_object.inc");
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
 switch ($Qque) {   
+    case 'perm_ver':
+        $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+        $oEntrada = new Entrada($Qid_entrada);
+        $oPermiso = new PermRegistro();
+        $perm = $oPermiso->permiso_detalle($oEntrada,'asunto');
+        if ($perm < PermRegistro::PERM_VER) {
+            $mensaje = _("No tiene permiso para ver la entrada");
+        } else {
+            $mensaje = '';
+        }
+
+        if (empty($mensaje)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $mensaje;
+        }
+
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'modificar_anular':
         $error_txt = '';
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');

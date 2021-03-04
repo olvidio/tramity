@@ -270,9 +270,11 @@ switch ($Qfiltro) {
 $url_update = 'apps/entradas/controller/entrada_update.php';
 $pagina_nueva = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $Qfiltro]));
 if ($Qfiltro == 'buscar') {
+    $a_condicion = [];
     $str_condicion = (string) \filter_input(INPUT_POST, 'condicion');
-    $condicion = 'filtro='.$Qfiltro.'&'.$str_condicion;
-    $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.$condicion);
+    parse_str($str_condicion, $a_condicion);
+    $a_condicion['filtro'] = $Qfiltro;
+    $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($a_condicion));
 } else {
     $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
 }
