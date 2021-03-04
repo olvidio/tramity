@@ -257,6 +257,8 @@ class PermRegistro {
      */
     function permiso_detalle($objeto,$que) {
         $role_actual = ConfigGlobal::role_actual();
+        $id_oficina_pral = '';
+        $id_oficina_role = '';
         // El role de secretaria no tiene oficina
         if ($role_actual == 'secretaria') {
             // miera el usuario actual, no el role.

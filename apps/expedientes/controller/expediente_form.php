@@ -47,14 +47,6 @@ if (!empty($oCargo)) {
     $ponente_txt = $oCargo->getCargo();
 }
 
-// soy el secretario
-/*
- if ($GLOBALS['oPerm']->have_perm("scl") && $GLOBALS['oPerm']->have_perm("dtor") ) {
- $secretari=1;
- } else {
- $secretari=0;
- }
- */
 $secretari=0;
 
 // preparar
