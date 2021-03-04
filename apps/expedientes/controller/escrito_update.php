@@ -1,9 +1,13 @@
 <?php
-use core\ViewTwig;
+
+// INICIO Cabecera global de URL de controlador *********************************
+	use core\ViewTwig;
 use function core\is_true;
 use expedientes\model\Escrito;
+use expedientes\model\GestorEscrito;
 use expedientes\model\entity\Accion;
 use lugares\model\entity\GestorGrupo;
+use lugares\model\entity\GestorLugar;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
@@ -12,8 +16,7 @@ use web\DateTimeLocal;
 use web\Lista;
 use web\Protocolo;
 
-// INICIO Cabecera global de URL de controlador *********************************
-	require_once ("apps/core/global_header.inc");
+require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
 
 // Crea los objectos de uso global **********************************************
@@ -502,6 +505,101 @@ switch($Qque) {
             $jsondata['success'] = false;
             $jsondata['mensaje'] = $txt_err;
         }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        
+        break;
+    case 'guardar_manual':
+        $nuevo = FALSE;
+        $Qf_aprobacion = (string) \filter_input(INPUT_POST, 'f_aprobacion');
+        if (!empty($Qid_escrito)) {
+            $oEscrito = new Escrito($Qid_escrito);
+            $oEscrito->DBCarregar();
+            $oPermisoRegistro = new PermRegistro();
+            $perm_asunto = $oPermisoRegistro->permiso_detalle($oEscrito, 'asunto');
+            $perm_detalle = $oPermisoRegistro->permiso_detalle($oEscrito, 'detalle');
+        } else {
+            $nuevo = TRUE;
+            $oEscrito = new Escrito();
+            $oEscrito->setAccion(Escrito::ACCION_ESCRITO);
+            $oEscrito->setModo_envio(Escrito::MODO_MANUAL);
+            $perm_asunto = PermRegistro::PERM_MODIFICAR;
+            $perm_detalle = PermRegistro::PERM_MODIFICAR;
+        }
+        
+        // Si esta marcado como grupo de destinos, o destinos individuales. 
+        if (core\is_true($Qgrupo_dst)) {
+            $descripcion = '';
+            $gesGrupo = new GestorGrupo();
+            $a_grupos = $gesGrupo->getArrayGrupos();
+            foreach ($Qa_grupos as $id_grupo) {
+                $descripcion .= empty($descripcion)? '' : ' + ';
+                $descripcion .= $a_grupos[$id_grupo];
+            }
+            $oEscrito->setId_grupos($Qa_grupos);
+        } else {
+            $aProtDst = [];
+            foreach ($Qa_destinos as $key => $id_lugar) {
+                $prot_num = $Qa_prot_num_destinos[$key];
+                $prot_any = $Qa_prot_any_destinos[$key];
+                $prot_mas = $Qa_prot_mas_destinos[$key];
+                
+                if (!empty($id_lugar)) {
+                    $oProtDst = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
+                    $aProtDst[] = $oProtDst->getProt();
+                }
+            }
+            $oEscrito->setJson_prot_destino($aProtDst);
+            $oEscrito->setId_grupos();
+        }
+ 
+        $aProtRef = [];
+        foreach ($Qa_referencias as $key => $id_lugar) {
+            $prot_num = $Qa_prot_num_referencias[$key];
+            $prot_any = $Qa_prot_any_referencias[$key];
+            $prot_mas = $Qa_prot_mas_referencias[$key];
+            
+            if (!empty($id_lugar)) {
+                $oProtRef = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
+                $aProtRef[] = $oProtRef->getProt();
+            }
+        }
+        $oEscrito->setJson_prot_ref($aProtRef);
+        
+        $oEscrito->setEntradilla($Qentradilla);
+        $oEscrito->setF_escrito($Qf_escrito);
+        $oEscrito->setF_aprobacion($Qf_aprobacion);
+        if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
+            $oEscrito->setAsunto($Qasunto);
+        }
+
+        if ($perm_detalle >= PermRegistro::PERM_MODIFICAR) {
+            $oEscrito->setDetalle($Qdetalle);
+        }
+        $oEscrito->setCreador($Qid_ponente);
+        $oEscrito->setResto_oficinas($Qa_firmas);
+
+        $oEscrito->setCategoria($Qcategoria);
+        $oEscrito->setVisibilidad($Qvisibiliad);
+        $oEscrito->setOK(Escrito::OK_OFICINA);
+
+        $oEscrito->DBGuardar(); // OJO hay que guardar antes de generar el protocolo
+        if ($nuevo === TRUE) {
+            $oEscrito->generarProtocolo();
+        }
+        
+        $id_escrito = $oEscrito->getId_escrito();
+        $json_prot_local = $oEscrito->getJson_prot_local();
+        $oProtocolo = new Protocolo();
+        $oProtocolo->setJson($json_prot_local);
+        $protocolo_txt = $oProtocolo->ver_txt();
+        
+        $jsondata['success'] = true;
+        $jsondata['id_escrito'] = $id_escrito;
+        $jsondata['protocolo'] = $protocolo_txt;
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');

@@ -117,20 +117,13 @@ class Escrito Extends EscritoDB {
     /**
      * genera el número de protocolo local. y lo guarda.
      */
-    public function generarProtocolo($id_lugar='',$id_lugar_cr) {
+    public function generarProtocolo($id_lugar='',$id_lugar_cr='') {
+        $gesLugares = new GestorLugar();
         if (empty($id_lugar_cr)) {
-            $sigla = 'cr';
-            $gesLugares = new GestorLugar();
-            $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
-            $oLugar = $cLugares[0];
-            $id_lugar_cr = $oLugar->getId_lugar();
+            $id_lugar_cr = $gesLugares->getId_cr();
         }
         if (empty($id_lugar)) {
-            $sigla = $_SESSION['oConfig']->getSigla();
-            $gesLugares = new GestorLugar();
-            $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
-            $oLugar = $cLugares[0];
-            $id_lugar = $oLugar->getId_lugar();
+            $id_lugar = $gesLugares->getId_sigla_local();
         }
         // segun si el destino es cr o resto:
         $bCr = FALSE;

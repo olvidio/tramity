@@ -5,6 +5,7 @@ use core\ViewTwig;
 use entradas\model\EntradaLista;
 use expedientes\model\ExpedienteLista;
 use expedientes\model\EscritoLista;
+use expedientes\model\Escrito;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -218,6 +219,19 @@ $filtro = 'pendientes';
     $pag_lst = web\Hash::link('apps/pendientes/controller/pendiente_tabla.php?'.http_build_query($aQuery));
     $num_orden = 16;
     $text = _("pendientes");
+    $num = '';
+    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+$a_pills[$num_orden] = $pill;
+
+// salida manual = 20;
+$filtro = 'salida_manual';
+    $active = ($filtro == $Qfiltro)? 'active' : '';
+    $aQuery = [ 'filtro' => $filtro,
+                'accion' => Escrito::ACCION_ESCRITO,
+            ];
+    $pag_lst = web\Hash::link('apps/expedientes/controller/salida_escrito.php?'.http_build_query($aQuery));
+    $num_orden = 20;
+    $text = _("salida manual");
     $num = '';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
