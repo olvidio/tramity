@@ -136,7 +136,6 @@ class Buscar {
                 
                 $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
                 $aWhereEntrada['_ordre'] = 'f_entrada';
-                $aWhereEntrada['f_entrada'] = 'x';
                 $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
                 $aProt_origen = [ 'lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,
@@ -144,6 +143,7 @@ class Buscar {
                                   'mas' => $this->prot_mas,
                             ];
 
+                $aWhereEntrada['f_entrada'] = 'x';
                 $gesEntradas = new GestorEntradaDB();
                 $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
                 $aCollections['entradas'] = $cEntradas;
@@ -152,7 +152,6 @@ class Buscar {
             case 'any':
                 // por año
                 $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
-                $aWhereEntrada['_ordre'] = 'f_entrada';
                 $aOperadorEntrada = [];
                 $aProt_origen = [ 'lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,
@@ -160,6 +159,7 @@ class Buscar {
                                   'mas' => $this->prot_mas,
                             ];
 
+                $aWhereEntrada['_ordre'] = 'f_entrada';
                 $gesEntradas = new GestorEntradaDB();
                 $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
                 $aCollections['entradas'] = $cEntradas;
@@ -168,7 +168,6 @@ class Buscar {
             case 'oficina':
                 $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
                 $aWhereEntrada['ponente'] = $this->ponente;
-                $aWhereEntrada['_ordre'] = 'f_entrada';
                 $aOperadorEntrada = [];
                 $aProt_origen = [ 'lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,
@@ -176,6 +175,7 @@ class Buscar {
                                   'mas' => $this->prot_mas,
                             ];
                 
+                $aWhereEntrada['_ordre'] = 'f_entrada';
                 $gesEntradas = new GestorEntradaDB();
                 $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
                 $aCollections['entradas'] = $cEntradas;
@@ -190,6 +190,8 @@ class Buscar {
                                   'any' => $this->prot_any,
                                   'mas' => $this->prot_mas,
                             ];
+
+                $aWhereEntrada['_ordre'] = 'f_entrada';
                 $gesEntradas = new GestorEntradaDB();
                 $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
                 $aCollections['entradas'] = $cEntradas;
@@ -204,6 +206,7 @@ class Buscar {
                                       'any' => $this->prot_any,
                                       'mas' => $this->prot_mas,
                                 ];
+                    $aWhereEscrito['_ordre'] = 'f_aprobacion';
                     $gesEscritos = new GestorEscrito();
                     $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_destino,$aWhereEscrito,$aOperadorEscrito);
                     $aCollections['escritos'] = $cEscritos;
@@ -215,6 +218,7 @@ class Buscar {
                                       'any' => $this->prot_any,
                                       'mas' => $this->prot_mas,
                                 ];
+                    $aWhereEscrito['_ordre'] = 'f_aprobacion';
                     $gesEscritos = new GestorEscrito();
                     $cEscritos = $gesEscritos->getEscritosByProtDestinoDB($aProt_destino,$aWhereEscrito,$aOperadorEscrito);
                     $aCollections['escritos'] = $cEscritos;
@@ -254,12 +258,6 @@ class Buscar {
                     $aOperadorEntrada = [ 'f_entrada' => '>'];
                     $aWhereEscrito = [ 'f_aprobacion' => $limite, '_ordre' => 'f_aprobacion'];
                     $aOperadorEscrito = [ 'f_aprobacion' => '>'];
-                    if ($Qantiguedad=="aa") {
-                        $aWhereEntrada = [ '_ordre' => 'f_entrada'];
-                        $aOperadorEntrada = [];
-                        $aWhereEscrito = [ '_ordre' => 'f_aprobacion'];
-                        $aOperadorEscrito = [];
-                    }
                 } else {
                     $aWhereEntrada['f_entrada'] = 'x';
                     $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
@@ -276,12 +274,14 @@ class Buscar {
                         $cEscritos = $this->buscarEscritos();
                         $aCollections['escritos'] = $cEscritos;
                     } else {
+                        $aWhereEntrada['_ordre'] = 'f_entrada';
                         $gesEntradas = new GestorEntradaDB();
                         $id_lugar = $Qorigen_id_lugar;
                         $cEntradas = $gesEntradas->getEntradasByLugarDB($id_lugar,$aWhereEntrada, $aOperadorEntrada);
                         $aCollections['entradas'] = $cEntradas;
                     }
                 } else {
+                    $aWhereEntrada['_ordre'] = 'f_entrada';
                     $gesEntradas = new GestorEntrada();
                     $cEntradas = $gesEntradas->getEntradas($aWhereEntrada, $aOperadorEntrada);
                     $aCollections['entradas'] = $cEntradas;
@@ -368,6 +368,7 @@ class Buscar {
         $oF_max = $this->getF_max();
         $f_max = $oF_max->getIso();
         
+        $aWhere['_ordre'] = 'f_aprobacion';
         if (empty($f_max)) {
             $oHoy = new DateTimeLocal();
             $f_max = $oHoy->getIso();
@@ -453,6 +454,7 @@ class Buscar {
         $oF_max = $this->getF_max();
         $f_max = $oF_max->getIso();
         
+        $aWhere['_ordre'] = 'f_entrada';
         if (empty($f_max)) {
             $oHoy = new DateTimeLocal();
             $f_max = $oHoy->getIso();

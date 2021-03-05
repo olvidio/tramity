@@ -50,7 +50,7 @@ $tipo_ctr = '';
 $e_mail = '';
 $anulado = '';
 
-$a_cabeceras = [ 'sigla','dl','region','nombre','tipo_ctr','e_mail','modo envio' ];
+$a_cabeceras = [ _("sigla"), _("dl"), _("región"), _("nombre"), _("tipo_ctr"), _("e_mail"), _("modo envio"), _("anulado") ];
 $a_botones = [ ['txt'=> _("borrar"), 'click'=>"fnjs_eliminar()"],
                ['txt'=> _("modificar"), 'click'=>"fnjs_editar()"],
             ];
@@ -69,6 +69,7 @@ foreach ($cLugares as $oLugar) {
 	$tipo_ctr = $oLugar->getTipo_ctr();
 	$e_mail = $oLugar->getE_mail ();
 	$modo_envio = $oLugar->getModo_envio();
+	$anulado = $oLugar->getAnulado();
 
 	$a_valores[$i]['sel'] = "$id_lugar#";
 	$a_valores[$i][1] = $sigla;
@@ -78,6 +79,7 @@ foreach ($cLugares as $oLugar) {
 	$a_valores[$i][5] = $tipo_ctr;
 	$a_valores[$i][6] = $e_mail;
 	$a_valores[$i][7] = $a_modos_envio[$modo_envio];
+	$a_valores[$i][8] = $anulado;
 }
 if (isset($Qid_sel) && !empty($Qid_sel)) { $a_valores['select'] = $Qid_sel; }
 if (isset($Qscroll_id) && !empty($Qscroll_id)) { $a_valores['scroll_id'] = $Qscroll_id; }

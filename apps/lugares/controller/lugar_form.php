@@ -2,6 +2,7 @@
 use core\ViewTwig;
 use lugares\model\entity\Lugar;
 use web\Desplegable;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -86,6 +87,8 @@ if (!empty($Qid_lugar)) {
     $anulado = '';
     
 }
+$chk_anulado = is_true($anulado)? 'checked' : '' ;
+
 $camposForm = 'que!sigla!dl!region!nombre!tipo_ctr!e_mail';
 $oHash = new web\Hash();
 $oHash->setcamposForm($camposForm);
@@ -113,7 +116,7 @@ $a_campos = [
             'tipo_ctr' => $tipo_ctr,
             'e_mail' => $e_mail,
             'oDesplModoEnvio' => $oDesplModoEnvio,
-            'anulado' => $anulado,
+            'chk_anulado' => $chk_anulado,
             'txt_guardar' => $txt_guardar,
             'txt_eliminar' => $txt_eliminar,
             ];

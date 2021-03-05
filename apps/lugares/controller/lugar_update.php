@@ -46,6 +46,7 @@ switch($Qque) {
         $Qtipo_ctr = (string) \filter_input(INPUT_POST, 'tipo_ctr');
         $Qe_mail = (string) \filter_input(INPUT_POST, 'e_mail');
         $Qmodo_envio = (integer) \filter_input(INPUT_POST, 'modo_envio');
+        $Qanulado = (bool) \filter_input(INPUT_POST, 'anulado');
         
         $oLugar = new Lugar(array('id_lugar' => $Qid_lugar));
         $oLugar->DBCarregar();
@@ -56,6 +57,7 @@ switch($Qque) {
         $oLugar->setTipo_ctr($Qtipo_ctr);
         $oLugar->setE_mail($Qe_mail);
         $oLugar->setModo_envio($Qmodo_envio);
+        $oLugar->setAnulado($Qanulado);
 		if ($oLugar->DBGuardar() === false) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oLugar->getErrorTxt();

@@ -1,5 +1,7 @@
 <?php
 namespace lugares\model\entity;
+use core\ConfigGlobal;
+use function core\is_true;
 use core;
 /**
  * GestorLugar
@@ -60,31 +62,175 @@ class GestorLugar Extends core\ClaseGestor {
 	}
 	
 	/**
-	 * retorna un array
-	 * Els posibles llocs
+	 * retorna un array 
+	 * Els posibles llocs per buscar: també els anulados
 	 *
-	 * @return array
+	 * @param boolean $ctr_anulados
+	 * @return array   id_lugar => sigla
 	 */
-	function getArrayLugares($tipo_ctr='',$dl='',$region='') {
+	function getArrayBusquedas($ctr_anulados=FALSE) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    $mi_dl = $_SESSION['oConfig']->getSigla();
+	    
+	    $Where_anulados = is_true($ctr_anulados)? '' :  ' AND anulado=FALSE';
+	    
+        $lugares = [];
+	    // 0º dlb y cr
+	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
+                            WHERE (sigla='cr' OR sigla='$mi_dl') $Where_anulados
+                            ORDER BY sigla";
+	    foreach ($oDbl->query($query_ctr) as $aClave) {
+	        $clave=$aClave[0];
+	        $val=$aClave[1];
+	        $lugares[$clave]=$val;
+	    }
+	    // separación
+	    $lugares[1] = "--------";
+	    // 1º ctr de dl
+	    $query_ctr="SELECT id_lugar, sigla, nombre, substring(tipo_ctr from 1 for 1) as tipo FROM $nom_tabla
+                            WHERE dl='$mi_dl' AND tipo_ctr ~ '^(a|n|s)' $Where_anulados
+                            ORDER BY tipo,sigla";
+	    foreach ($oDbl->query($query_ctr) as $aClave) {
+	        $clave=$aClave[0];
+	        $val=$aClave[1];
+	        $lugares[$clave]=$val;
+	    }
+	    // 2º oc de dlb
+	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
+                            WHERE dl='$mi_dl' AND tipo_ctr ~ 'oc' $Where_anulados
+                            ORDER BY tipo_ctr,sigla";
+	    foreach ($oDbl->query($query_ctr) as $aClave) {
+	        $clave=$aClave[0];
+	        $val=$aClave[1];
+	        $lugares[$clave]=$val;
+	    }
+	    // 3º separación
+	    $lugares[1] = "--------";
+	    // 4º dl de H
+	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
+                            WHERE tipo_ctr='dl' AND region='H'  $Where_anulados
+                            ORDER BY tipo_ctr,sigla";
+	    foreach ($oDbl->query($query_ctr) as $aClave) {
+	        $clave=$aClave[0];
+	        $val=$aClave[1];
+	        $lugares[$clave]=$val;
+	    }
+	    // 5º separación
+	    $lugares[1] = "--------";
+	    // 6º cr
+	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
+                            WHERE tipo_ctr='cr' $Where_anulados
+                            ORDER BY tipo_ctr,sigla";
+	    foreach ($oDbl->query($query_ctr) as $aClave) {
+	        $clave=$aClave[0];
+	        $val=$aClave[1];
+	        $lugares[$clave]=$val;
+	    }
+	    // 7º separación
+	    $lugares[1] = "--------";
+	    // 8º dl ex
+	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
+                            WHERE tipo_ctr='dl' AND region != 'H' AND sigla != 'ro'  $Where_anulados
+                            ORDER BY tipo_ctr,sigla";
+	    foreach ($oDbl->query($query_ctr) as $aClave) {
+	        $clave=$aClave[0];
+	        $val=$aClave[1];
+	        $lugares[$clave]=$val;
+	    }
+	    // 9º separación
+	    $lugares[1] = "--------";
+	    // 10º cg
+	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
+                            WHERE sigla='cg' $Where_anulados
+                            ORDER BY sigla";
+	    foreach ($oDbl->query($query_ctr) as $aClave) {
+	        $clave=$aClave[0];
+	        $val=$aClave[1];
+	        $lugares[$clave]=$val;
+	    }
+	    
+	    return $lugares;
+	}
+
+	/**
+	 * retorna un array
+	 * Els posibles ctr de la dl
+	 *
+	 * @param boolean $ctr_anulados
+	 * @return array   id_lugar => sigla
+	 */
+	function getArrayLugaresCtr($ctr_anulados=FALSE) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    $mi_dl = $_SESSION['oConfig']->getSigla();
+	    
+	    $Where_anulados = is_true($ctr_anulados)? '' :  ' AND anulado=FALSE';
+	    
+	    $sQuery="SELECT id_lugar, sigla FROM $nom_tabla
+                 WHERE dl = '$mi_dl $Where_anulados
+                 ORDER BY sigla";
+	    if (($oDbl->query($sQuery)) === false) {
+	        $sClauError = 'GestorLugares.Array';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return false;
+	    }
+	    $aOpciones=array();
+	    foreach ($oDbl->query($sQuery) as $aClave) {
+	        $clave=$aClave[0];
+	        $val=$aClave[1];
+	        $aOpciones[$clave]=$val;
+	    }
+	    return $aOpciones;
+	}
+
+	/**
+	 * retorna un array
+	 * Els posibles dl
+	 *
+	 * @param string $tipo_ctr ('dl', 'cr')
+	 * @param boolean $ctr_anulados
+	 * @return array   id_lugar => sigla
+	 */
+	function getArrayLugaresTipo($tipo_ctr,$ctr_anulados=FALSE) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    //$mi_dl = $_SESSION['oConfig']->getSigla();
+	    $tipo_ctr = 'dl';
+	    
+	    $Where_anulados = is_true($ctr_anulados)? '' :  ' AND anulado=FALSE';
+	    
+	    $sQuery="SELECT id_lugar, sigla FROM $nom_tabla
+                 WHERE tipo_ctr = '$tipo_ctr' $Where_anulados
+                 ORDER BY sigla";
+	    if (($oDbl->query($sQuery)) === false) {
+	        $sClauError = 'GestorLugares.Array';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return false;
+	    }
+	    $aOpciones=array();
+	    foreach ($oDbl->query($sQuery) as $aClave) {
+	        $clave=$aClave[0];
+	        $val=$aClave[1];
+	        $aOpciones[$clave]=$val;
+	    }
+	    return $aOpciones;
+	}
+
+	/**
+	 * Devuelve un array con los lugares
+	 * 
+	 * @param boolean $ctr_anulados
+	 * @return array   id_lugar => sigla
+	 */
+	function getArrayLugares($ctr_anulados=FALSE) {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
 	    
-	    $Where = "WHERE anulado = 'f'";
-	    if (!empty($tipo_ctr)) {
-    	    $Where .= empty($Where)? '' : ' AND ';
-	        $Where .= "tipo_ctr = '$tipo_ctr'";
-	    }
-	    if (!empty($dl)) {
-    	    $Where .= empty($Where)? '' : ' AND ';
-	        $Where .= "dl = '$dl'";
-	    }
-	    if (!empty($region)) {
-    	    $Where .= empty($Where)? '' : ' AND ';
-	        $Where .= "region = '$region'";
-	    }
-	    //$Where2 = empty($Where)? '' : 'WHERE '.$Where;
+	    $Where_anulados = is_true($ctr_anulados)? '' :  ' WHERE anulado=FALSE';
+	    
 	    $sQuery="SELECT id_lugar, sigla FROM $nom_tabla
-                   $Where
+                 $Where_anulados
                  ORDER BY sigla";
 	    if (($oDbl->query($sQuery)) === false) {
 	        $sClauError = 'GestorLugares.Array';

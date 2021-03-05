@@ -51,7 +51,7 @@ $a_botones = [ ['txt'=> _("borrar"), 'click'=>"fnjs_eliminar()"],
             ];
 
 $gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares('','','');
+$a_posibles_lugares = $gesLugares->getArrayLugares();
 $a_valores=array();
 $i=0;
 foreach ($cGrupos as $oGrupo) {

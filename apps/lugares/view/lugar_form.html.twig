@@ -60,6 +60,10 @@ fnjs_guardar=function(formulario){
           <label for="example">{{ "modo envío"|trans }}</label>
           {{ oDesplModoEnvio.desplegable|raw }}
         </div>
+        <div class="ml-3 btn form-check">
+          <input type="checkbox" class="form-check-input" id="anulado" name="anulado" {{ chk_anulado }}>
+          <label class="form-check-label" for="anulado">{{ "anulado"|trans }}</label>
+        </div>
         
         <div class="form-group">
           <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary btn-block">{{ "Guardar"|trans }}</button>

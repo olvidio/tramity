@@ -70,7 +70,7 @@ if (is_true($Qctr_anulados)) {
 }
 
 $gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayLugares();
+$a_lugares = $gesLugares->getArrayBusquedas($Qctr_anulados);
 
 // Busco el id_lugar de la dl.
 $id_siga_local = $gesLugares->getId_sigla_local();

@@ -54,11 +54,10 @@ if (isset($_POST['stack'])) {
 }
 $oPosicion->setParametros(array('id_grupo'=>$Qid_grupo),1);
 
-$sigla = $_SESSION['oConfig']->getSigla();
 $gesLugares = new GestorLugar();
-$a_posibles_lugares_ctr= $gesLugares->getArrayLugares('',$sigla,'');
-$a_posibles_lugares_dl= $gesLugares->getArrayLugares('dl','','');
-$a_posibles_lugares_cr= $gesLugares->getArrayLugares('cr','','');
+$a_posibles_lugares_ctr= $gesLugares->getArrayLugaresCtr();
+$a_posibles_lugares_dl= $gesLugares->getArrayLugaresTipo('dl');
+$a_posibles_lugares_cr= $gesLugares->getArrayLugaresTipo('cr');
 
 
 

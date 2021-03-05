@@ -273,6 +273,11 @@ fnjs_buscar=function(formulario){
             return;
         }
     }
+    if (opcion==7) {
+        if ( !confirm("{{ "¿Seguro que quiere ver todos?"|trans }}") ) {
+            return;
+        }
+    }
     fnjs_ver_solo(formulario);
     // borro los posibles resultados anteriores
     $('#resultados').html("");
@@ -368,5 +373,4 @@ fnjs_compatible=function(){
 $(document).ready(function() {
 	tabs_show();
 });
-</script>
 </script>
