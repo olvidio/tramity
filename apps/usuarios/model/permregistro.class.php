@@ -272,6 +272,7 @@ class PermRegistro {
         
         
         $visibilidad = $objeto->getVisibilidad();
+        $visibilidad = empty($visibilidad)? Entrada::V_TODOS : $visibilidad;
         // Entradas es por oficinas, Escritos por cargos
         $classname = get_class($objeto);
         $clase = substr($classname, strrpos($classname, '\\') + 1);

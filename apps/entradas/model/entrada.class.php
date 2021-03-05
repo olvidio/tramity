@@ -158,13 +158,15 @@ class Entrada Extends EntradaDB {
         $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
         if (!empty($cLugares)) {
             $id_sigla = $cLugares[0]->getId_lugar();
-        }
 
-        // referencias
-        $a_json_prot_ref = $this->getJson_prot_ref();
-        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
-        $oArrayProtRef->setRef(TRUE);
-        $aRef = $oArrayProtRef->ArrayListaTxtBr($id_sigla);
+            // referencias
+            $a_json_prot_ref = $this->getJson_prot_ref();
+            $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
+            $oArrayProtRef->setRef(TRUE);
+            $aRef = $oArrayProtRef->ArrayListaTxtBr($id_sigla);
+        } else {
+            $aRef['dst_org'] = '??';
+        }
         
         if (!empty($aRef['dst_org'])) {
             $destinos_txt .= '<br>';
@@ -179,21 +181,23 @@ class Entrada Extends EntradaDB {
         $json_prot_origen = $this->getJson_prot_origen();
         if (!empty((array)$json_prot_origen)) {
             $id_org = $json_prot_origen->lugar;
+            
+            // referencias
+            $a_json_prot_ref = $this->getJson_prot_ref();
+            $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
+            $oArrayProtRef->setRef(TRUE);
+            $aRef = $oArrayProtRef->ArrayListaTxtBr($id_org);
+            
+            $oProtOrigen = new Protocolo();
+            $oProtOrigen->setLugar($json_prot_origen->lugar);
+            $oProtOrigen->setProt_num($json_prot_origen->num);
+            $oProtOrigen->setProt_any($json_prot_origen->any);
+            $oProtOrigen->setMas($json_prot_origen->mas);
+            
+            $origen_txt = $oProtOrigen->ver_txt();
+        } else {
+            $origen_txt = '??';
         }
-        
-        // referencias
-        $a_json_prot_ref = $this->getJson_prot_ref();
-        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
-        $oArrayProtRef->setRef(TRUE);
-        $aRef = $oArrayProtRef->ArrayListaTxtBr($id_org);
-        
-        $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_origen->lugar);
-        $oProtOrigen->setProt_num($json_prot_origen->num);
-        $oProtOrigen->setProt_any($json_prot_origen->any);
-        $oProtOrigen->setMas($json_prot_origen->mas);
-        
-        $origen_txt = $oProtOrigen->ver_txt();
         
         if (!empty($aRef['dst_org'])) {
             $origen_txt .= '<br>';

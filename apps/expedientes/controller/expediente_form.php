@@ -13,7 +13,6 @@ use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
 use web\ProtocoloArray;
-use usuarios\model\PermRegistro;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -208,14 +207,6 @@ if ($Qid_expediente) {
             }
         }
     }
-    
-    /*
-    $oPermisoregistro = new PermRegistro();
-    $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oExpediente, 'cambio');
-    if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
-        $oDesplVisibilidad->setDisabled(TRUE);
-    }
-    */
 } else {
     $titulo=_("nuevo expediente");
     $estado = Expediente::ESTADO_BORRADOR;
