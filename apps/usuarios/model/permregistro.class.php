@@ -283,7 +283,7 @@ class PermRegistro {
         }
 
         if ($clase === 'Escrito') {
-            // Sólo afecta a los que tengan fecah de aprobación:
+            // Sólo afecta a los que tengan fecha de aprobación:
             if (empty($objeto->getF_aprobacion()->getIso())) {
                 return self::PERM_MODIFICAR; 
             } else {

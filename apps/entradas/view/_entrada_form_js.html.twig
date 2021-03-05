@@ -180,17 +180,6 @@ fnjs_guardar=function(event){
 	}
 }
 
-fnjs_cambiar_reservado=function(secretari){
-	var r=$('#visibilidad').val();
-	// En la clase Entradas: V_RESERVADO = 3
-	if (r==3 && !secretari) {
-		$('#asunto').val("");
-		$('#asunto').prop("disabled",false);
-		$('#detalle').val("");
-		$('#detalle').prop("disabled",false);
-	}
-}
-
 fnjs_focus_a=function(camp){
 	$(camp).focus();
 }

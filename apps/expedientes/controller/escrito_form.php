@@ -60,16 +60,6 @@ $oDesplCategoria->setTabIndex(80);
 $gesGrupo = new GestorGrupo();
 $a_posibles_grupos = $gesGrupo->getArrayGrupos();
 
-// soy el secretario
-/*
-if ($GLOBALS['oPerm']->have_perm("scl") && $GLOBALS['oPerm']->have_perm("dtor") ) {
-    $secretari=1; 
-} else {
-    $secretari=0; 
-}
-*/
-$secretari=0; 
-
 $chk_grupo_dst = '';
 $id_grupo = 0;
 
@@ -79,7 +69,6 @@ $aOpciones = $oEntrada->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
-$oDesplVisibilidad->setAction("fnjs_cambiar_reservado('$secretari')");
 
 if (!empty($Qid_escrito)) {
     $a_grupos = $oEscrito->getId_grupos();
@@ -153,7 +142,11 @@ if (!empty($Qid_escrito)) {
     $perm_detalle = $oPermisoregistro->permiso_detalle($oEscrito, 'detalle');
     $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
     $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
-
+    
+    $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEntrada, 'cambio');
+    if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
+        $oDesplVisibilidad->setDisabled(TRUE);
+    }
 } else {
     // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
     $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');

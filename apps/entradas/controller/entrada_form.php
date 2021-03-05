@@ -76,22 +76,11 @@ $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
 $oDesplCategoria->setTabIndex(80);
 
-// soy el secretario
-/*
-if ($GLOBALS['oPerm']->have_perm("scl") && $GLOBALS['oPerm']->have_perm("dtor") ) {
-    $secretari=1; 
-} else {
-    $secretari=0; 
-}
-*/
-$secretari=0; 
-
 // visibilidad
 $aOpciones = $oEntrada->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
-$oDesplVisibilidad->setAction("fnjs_cambiar_reservado('$secretari')");
 $oDesplVisibilidad->setTabIndex(81);
 
 // Plazo
@@ -223,6 +212,11 @@ if (!empty($Qid_entrada)) {
     $perm_detalle = $oPermisoregistro->permiso_detalle($oEntrada, 'detalle');
     $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
     $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
+    
+    $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEntrada, 'cambio');
+    if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
+        $oDesplVisibilidad->setDisabled(TRUE);
+    }
 
 } else {
     $chk_grupo_dst = '';

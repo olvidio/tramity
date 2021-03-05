@@ -67,23 +67,9 @@ $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
 $oDesplCategoria->setTabIndex(80);
 
-// soy el secretario
-/*
-if ($GLOBALS['oPerm']->have_perm("scl") && $GLOBALS['oPerm']->have_perm("dtor") ) {
-    $secretari=1; 
-} else {
-    $secretari=0; 
-}
-*/
-$secretari=0; 
-
 // visibilidad (usar las mismas opciones que en entradas)
 $oEntrada = new Entrada();
 $aOpciones = $oEntrada->getArrayVisibilidad();
-$oDesplVisibilidad = new Desplegable();
-$oDesplVisibilidad->setNombre('visibilidad');
-$oDesplVisibilidad->setOpciones($aOpciones);
-$oDesplVisibilidad->setAction("fnjs_cambiar_reservado('$secretari')");
 
 if (!empty($Qid_escrito)) {
     
@@ -119,20 +105,15 @@ if (!empty($Qid_escrito)) {
     
     //Ponente;
     $id_ponente = $oEscrito->getCreador();
-    $ponente_txt = $a_posibles_cargos[$id_ponente];
-
-    $a_resto_of = $oEscrito->getResto_oficinas();
     
+    $a_resto_of = $oEscrito->getResto_oficinas();
     $oArrayDesplFirmas = new web\DesplegableArray($a_resto_of,$a_posibles_cargos,'oficinas');
     $oArrayDesplFirmas->setBlanco('t');
     $oArrayDesplFirmas->setAccionConjunto('fnjs_mas_oficinas(event)');
     
     $categoria = $oEscrito->getCategoria();
     $oDesplCategoria->setOpcion_sel($categoria);
-    $visibilidad = $oEscrito->getVisibilidad();
-    $oDesplVisibilidad->setOpcion_sel($visibilidad);
     
-    //$a_adjuntos = $oEscrito->getArrayIdAdjuntos();
     $a_adjuntos = [];
     $preview = [];
     $config = [];
@@ -177,7 +158,6 @@ if (!empty($Qid_escrito)) {
     $asunto = '';
     $detalle = '';
     $f_escrito = '';
-    $oficinas = '';
     $initialPreview = '';
     $json_config = '{}';
     //$tipo_documento = '';
@@ -206,12 +186,10 @@ if (!empty($Qid_escrito)) {
 }
 
 
-$url_update = 'apps/expedientes/controller/escrito_update.php';
 $a_cosas = ['id_expediente' => $Qid_expediente,
             'filtro' => $Qfiltro
 ];
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
-$pagina_nueva = web\Hash::link('apps/expedientes/controller/entrada_form.php?'.http_build_query(['filtro' => $Qfiltro]));
 
 $a_campos = [
     'titulo' => $titulo,

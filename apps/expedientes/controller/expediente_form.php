@@ -47,8 +47,6 @@ if (!empty($oCargo)) {
     $ponente_txt = $oCargo->getCargo();
 }
 
-$secretari=0;
-
 // preparar
 $gesCargos = new GestorCargo();
 $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
@@ -63,10 +61,6 @@ $oDesplTramites->setNombre('tramite');
 $oDesplTramites->setAction('fnjs_tramite()');
 
 $oExpediente = new Expediente();
-/*
-$a_estado = $oExpediente->getArrayEstado();
-$oDesplEstado = new Desplegable('estado',$a_estado,'',FALSE);
-*/
 
 $a_prioridad = $oExpediente->getArrayPrioridad();
 $oDesplPrioridad = new Desplegable('prioridad',$a_prioridad,Expediente::PRIORIDAD_UNKNOW,FALSE);
@@ -81,8 +75,6 @@ $aOpciones = $oEntrada->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
-$oDesplVisibilidad->setAction("fnjs_cambiar_reservado('$secretari')");
-
 
 $txt_option_cargos = '';
 $a_posibles_cargos = $gesCargos->getArrayCargos();
@@ -108,7 +100,6 @@ if ($Qid_expediente) {
     $id_tramite = $oExpediente->getId_tramite();
     $oDesplTramites->setOpcion_sel($id_tramite);
     $estado = $oExpediente->getEstado();
-    //$oDesplEstado->setOpcion_sel($estado);
     $prioridad = $oExpediente->getPrioridad();
     $oDesplPrioridad->setOpcion_sel($prioridad);
     
@@ -217,6 +208,14 @@ if ($Qid_expediente) {
             }
         }
     }
+    
+    /*
+    $oPermisoregistro = new PermRegistro();
+    $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oExpediente, 'cambio');
+    if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
+        $oDesplVisibilidad->setDisabled(TRUE);
+    }
+    */
 } else {
     $titulo=_("nuevo expediente");
     $estado = Expediente::ESTADO_BORRADOR;

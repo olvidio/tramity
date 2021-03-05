@@ -27,9 +27,10 @@ $Qid_escrito = (integer) \filter_input(INPUT_POST, 'id_escrito');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
+$msg = '';
+////////////////////  buscar si ya existe  ////////////////////////////////
 $Qprot_num = (integer) \filter_input(INPUT_POST, 'buscar_prot_num');
 $Qprot_any = (integer) \filter_input(INPUT_POST, 'buscar_prot_any');
-// buscar si ya existe
 if (!empty($Qprot_num) && !empty($Qprot_any)) {
     $gesLugares = new GestorLugar();
     $id_lugar_local = $gesLugares->getId_sigla_local();
@@ -37,15 +38,20 @@ if (!empty($Qprot_num) && !empty($Qprot_any)) {
         'num' => $Qprot_num,
         'any' => $Qprot_any,
     ];
-
+    $aWhereEscrito['f_aprobacion'] = 'x';
+    $aOperadorEscrito['f_aprobacion'] = 'IS NULL';
     $gesEscritos = new GestorEscrito();
-    $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
+    $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local,$aWhereEscrito,$aOperadorEscrito);
     if (!empty($cEscritos)) {
         $oEscrito = $cEscritos[0];
         $oEscrito->DBCarregar();
         $Qid_escrito = $oEscrito->getId_escrito();
     }
+    if (count($cEscritos) > 1) {
+        $msg = ' '._("Protocolo repetido");
+    }
 }
+////////////
 
 $txt_option_ref = '';
 $gesLugares = new GestorLugar();
@@ -81,8 +87,6 @@ $oDesplCategoria->setTabIndex(80);
 $gesGrupo = new GestorGrupo();
 $a_posibles_grupos = $gesGrupo->getArrayGrupos();
 
-$secretari=0; 
-
 $chk_grupo_dst = '';
 $id_grupo = 0;
 
@@ -92,7 +96,6 @@ $aOpciones = $oEntrada->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
-$oDesplVisibilidad->setAction("fnjs_cambiar_reservado('$secretari')");
 
 if (!empty($Qid_escrito)) {
     $a_grupos = $oEscrito->getId_grupos();
@@ -149,13 +152,18 @@ if (!empty($Qid_escrito)) {
     $oProtocolo = new Protocolo();
     $oProtocolo->setJson($oProt);
     $titulo = $oProtocolo->ver_txt();
+    $titulo .= $msg;
     
     $oPermisoregistro = new PermRegistro();
     $perm_asunto = $oPermisoregistro->permiso_detalle($oEscrito, 'asunto');
     $perm_detalle = $oPermisoregistro->permiso_detalle($oEscrito, 'detalle');
     $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
     $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
-
+    
+    $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEscrito, 'cambio');
+    if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
+        $oDesplVisibilidad->setDisabled(TRUE);
+    }
 } else {
     // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
     $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
