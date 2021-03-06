@@ -168,7 +168,7 @@ class GestorLugar Extends core\ClaseGestor {
 	    $Where_anulados = is_true($ctr_anulados)? '' :  ' AND anulado=FALSE';
 	    
 	    $sQuery="SELECT id_lugar, sigla FROM $nom_tabla
-                 WHERE dl = '$mi_dl $Where_anulados
+                 WHERE dl = '$mi_dl' $Where_anulados
                  ORDER BY sigla";
 	    if (($oDbl->query($sQuery)) === false) {
 	        $sClauError = 'GestorLugares.Array';

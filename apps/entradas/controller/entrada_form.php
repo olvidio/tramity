@@ -26,7 +26,7 @@ require_once ("apps/core/global_object.inc");
 $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
-if ($Qfiltro == 'buscar') {
+if ($Qfiltro == 'buscar' && empty($Qid_entrada)) {
     $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
     $Qid_entrada = $Qa_sel[0];
@@ -271,6 +271,7 @@ if ($Qfiltro == 'buscar') {
     $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($a_condicion));
 } else {
     $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
+    $str_condicion = '';
 }
 
 // datepicker
@@ -328,6 +329,8 @@ $a_campos = [
     'format' => $format,
     'yearStart' => $yearStart,
     'yearEnd' => $yearEnd,
+    // si vengo de buscar
+    'str_condicion' => $str_condicion,
 ];
 
 $oView = new ViewTwig('entradas/controller');

@@ -84,7 +84,7 @@ class Protocolo {
 	    $prot_any = empty($this->iprot_any)? '' : $this->iprot_any;
 	    $prot_mas = empty($this->sprot_mas)? '' : $this->sprot_mas;
 	    
-	    $id_row = "id_" . $this->sNombre;
+	    $id_row = "row_" . $this->sNombre;
 	    $id_prot_num = "prot_num_" . $this->sNombre;
 	    $id_prot_any = "prot_any_" . $this->sNombre;
 	    $id_prot_mas = "prot_mas_" . $this->sNombre;
@@ -116,7 +116,7 @@ class Protocolo {
 		if ($clasname == 'web\Protocolo') {
             $sHtml .= "<div class=\"col-10\">";
 		}
-		$sHtml .= "<div class=\"row\">";
+		$sHtml .= "<div class=\"row\" id=\"$id_row\">";
 		$sHtml .= "<div class=\"col col-4\">";
 		if (empty($this->sAction)) {
 		    $sHtml .= "<select $tab_index id=\"$this->sNombre\" name=\"$this->sNombre\" class=\"form-control\" $clase $size>";

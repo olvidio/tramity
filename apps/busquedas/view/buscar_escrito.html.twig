@@ -274,8 +274,11 @@ fnjs_buscar=function(formulario){
         }
     }
     if (opcion==7) {
-        if ( !confirm("{{ "¿Seguro que quiere ver todos?"|trans }}") ) {
-            return;
+        var num = $('#prot_num').val();
+        if (!num) {
+            if ( !confirm("{{ "¿Seguro que quiere ver todos?"|trans }}") ) {
+                return;
+            }
         }
     }
     fnjs_ver_solo(formulario);

@@ -584,7 +584,12 @@ switch($Qque) {
 
         $oEscrito->setCategoria($Qcategoria);
         $oEscrito->setVisibilidad($Qvisibiliad);
-        $oEscrito->setOK(Escrito::OK_OFICINA);
+        
+        if ($nuevo === TRUE) {
+            $oEscrito->setOK(Escrito::OK_NO);
+        } else {
+            $oEscrito->setOK(Escrito::OK_OFICINA);
+        }
 
         $oEscrito->DBGuardar(); // OJO hay que guardar antes de generar el protocolo
         if ($nuevo === TRUE) {

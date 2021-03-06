@@ -1,4 +1,14 @@
 <script type="text/javascript">
+
+$(function() {
+	$( "#referencias_mas" ).focusout(function() {
+		var valor =$("#referencias_mas").val();
+		if (!valor) {
+			$('#asunto').focus();
+		}
+    });
+});
+
 $(function() {
 	$( "#f_escrito" ).datetimepicker( {
 		timepicker: false,
@@ -13,7 +23,22 @@ $(function() {
 			})
 		}
     });
+});
 
+$(function() {
+	$( "#f_aprobacion" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		yearStart: {{ yearStart }},
+		yearEnd: {{ yearEnd }},
+		dayOfWeekStart: globaljsVarDayStart,
+		onShow: function(ct) {
+			this.setOptions({
+				minDate: '{{ minIso }}'
+			})
+		}
+    });
 });
 
 fnjs_cancelar=function(event){
@@ -56,9 +81,7 @@ fnjs_guardar=function(event){
 	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans }}"); err=1; }
 	//if (!entradilla) { alert("{{ "Debe llenar el campo entradilla"|trans }}"); err=1; }
 	if (!ponente) { alert("{{ "Debe llenar el campo del ponente"|trans }}"); err=1; }
-	if (f_aprobacion) {
-		if (!f_escrito) { alert("{{ "Debe llenar el campo de fecha del escrito"|trans }}"); err=1; }
-	}
+    if (!f_aprobacion) { alert("{{ "Debe llenar el campo de fecha aprobación"|trans }}"); err=1; }
 	
 	if (err!=1) {
 		$('#form_escrito').attr('action','{{ url_update }}');
@@ -82,7 +105,7 @@ fnjs_guardar=function(event){
                         txt = "{{ "número de protocolo"|trans }}: " + json.protocolo;
                         alert (txt);
                     } else {
-                        alert ("{{ "datos guardados"|trans }}");
+                        alert ("{{ "pasa a la pestaña enviar"|trans }}");
                         // Volver a la lista...
                         fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                     }
@@ -197,7 +220,7 @@ fnjs_quitar_firmas=function(){
 	$('#firmas_num').val(0);
 }
 
-fnjs_proto=function(num,any){
+fnjs_proto=function(event,num,any){
 	var s=0;
 	var numero;
 	var siguiente="";
@@ -241,21 +264,7 @@ fnjs_proto=function(num,any){
 		siguiente="#mas_ref_id_lugar";
 		var primera_ref=0;
 	}
-	/* Para el número de referencia */
-	if (num.substr(0,13)=='#ref_prot_num') {
-		/* sólo recojo información de la primera referencia */
-		if (num.substr(14,1)=='0') {
-			que="e3";
-			var nom='#ref_id_lugar_0';
-			id_lugar=$(nom).val();
-			prot_num=$(num).val();
-			prot_any=$(any).val();
-			siguiente="#f_doc_entrada";
-		} else {
-			$('#f_doc_entrada').focus();
-			return; /* no hago nada */
-		}
-	}
+	
 	siguiente_escaped = siguiente.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
 	$(siguiente_escaped).focus(); 
 

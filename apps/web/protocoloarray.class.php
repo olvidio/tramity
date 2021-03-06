@@ -33,12 +33,6 @@ class ProtocoloArray Extends Protocolo {
 	 */
 	 private $sAccionConjunto;
 	/**
-	 * iTabIndexIni del Desplegable
-	 *
-	 * @var integer 
-	 */
-	 private $iTabIndexIni;
-	/**
 	 * bRef del Desplegable
 	 *
 	 * @var boolean 
@@ -71,7 +65,6 @@ class ProtocoloArray Extends Protocolo {
 	        $aSeleccionados = $this->sSeleccionados;
 	    }
 	    
-	    $sLista = "";
 	    $ref = ($this->bRef)? 'ref. ' : '';
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
@@ -140,7 +133,6 @@ class ProtocoloArray Extends Protocolo {
 	        $aSeleccionados = $this->sSeleccionados;
 	    }
 	    
-	    $n=0;
 	    $ref = ($this->bRef)? 'ref. ' : '';
 	    $sLista = "<div class=\"row\" >";
 	    if (!empty($aSeleccionados)) {
@@ -197,7 +189,6 @@ class ProtocoloArray Extends Protocolo {
 			    
 				$this->sNombre = $this->sNomConjunto."[$n]";
 			    
-				if (isset($this->iTabIndexIni)) $this->iTabIndex = $this->iTabIndexIni + $n;
 				$this->sOpcion_sel = $this->ilugar;
 				$this->sAction="$fnjs_comprobar('".$this->sNombre."',$n);";
 
@@ -230,34 +221,40 @@ class ProtocoloArray Extends Protocolo {
 	 *
 	 * Esta función sirve para hacer el echo en html de un input tipo select.
 	 * Dentro de una tabla.
+	 * 
+	 * El tabindex se empieza 39 números antes del que seponga al desplegable, para poder tener 10.
+	 * por tnato la diferencia entre el anterior al desplegable y éste debe ser de 40.
 	 *
 	 * @retrun string para javascript. 	
 	 */
 	public function ListaSelectsJs() {
 
 		$fnjs_comprobar = 'fnjs_comprobar_'. $this->sNomConjunto;
+		$fnjs_next = 'fnjs_focus_num_'. $this->sNomConjunto;
 
 		$id_nom = $this->sNomConjunto;
 	    $id_prot_num = "prot_num_" . $id_nom;
 	    $id_prot_any = "prot_any_" . $id_nom;
 	    $id_prot_mas = "prot_mas_" . $id_nom;
+	    $id_row = "row_" . $id_nom;
 	    
 		$mas = $this->sNomConjunto."_mas";
 		$num = $this->sNomConjunto."_num";
 		$span = $this->sNomConjunto."_span";
 		
-		$tab = isset($this->iTabIndexIni)? $this->iTabIndexIni : 10;
+		$tab_def = isset($this->iTabIndex)? $this->iTabIndex : 40;
+		$tab = $tab_def - 39;
 		
 		$txt_js = "\n\t\t\tvar num=$('#$num');";
 		$txt_js .= "\n\t\t\tvar id_mas=$('#$mas').val();";
 		$txt_js .= "\n\t\t\tvar n=Number(num.val());";
 		$txt_js .= "\n\t\t\tvar txt;";
-		$txt_js .= "\n\t\t\tvar tab=$tab+n;";
-		$txt_js .= "\n\t\t\tvar tab1=$tab+n+1;";
-		$txt_js .= "\n\t\t\tvar tab2=$tab+n+2;";
-		$txt_js .= "\n\t\t\tvar tab3=$tab+n+3;";
+		$txt_js .= "\n\t\t\tvar tab=$tab+4*n;";
+		$txt_js .= "\n\t\t\tvar tab1=$tab+4*n+1;";
+		$txt_js .= "\n\t\t\tvar tab2=$tab+4*n+2;";
+		$txt_js .= "\n\t\t\tvar tab3=$tab+4*n+3;";
 
-		$txt_js .= "\n\t\t\ttxt = '<div class=\'row\'>';";
+		$txt_js .= "\n\t\t\ttxt = '<div class=\'row\' id=".$id_row."['+n+'] >';";
 		$txt_js .= "\n\t\t\ttxt += '<div class=\'col col-4\'>';";
 		$txt_js .= "\n\t\t\ttxt +='<select tabindex=";
 		$txt_js .= "'+tab+' id=".$id_nom."['+n+'] name=".$id_nom."['+n+'] class=\'form-control\' onChange=$fnjs_comprobar(\'".$id_nom."\','+n+');>';";
@@ -290,6 +287,7 @@ class ProtocoloArray Extends Protocolo {
 		$txt_js .= "\n\t\t\tn1=n+1;";
 		$txt_js .= "\n\t\t\tnum.val(n1);";
 		$txt_js .= "\n\t\t\t$('#$mas').val('');";
+		$txt_js .= "\n\t\t\t$fnjs_next"."('".$id_nom."',n);";
 		$txt_js .= "\n";
 			
 		return $txt_js;
@@ -305,19 +303,26 @@ class ProtocoloArray Extends Protocolo {
 	public function ComprobarSelectJs() {
 
 		$fnjs_comprobar = 'fnjs_comprobar_'. $this->sNomConjunto;
+		$fnjs_next = 'fnjs_focus_num_'. $this->sNomConjunto;
 		
 		$txt_js = "\n$fnjs_comprobar = function (nom,n) {";
-		$txt_js .= "\n\t".'var str=nom.replace(/\[/g, "\\\\[");';
-		$txt_js .= "\n\t".'str_e=str.replace(/\]/g, "\\\\]");';
-		$txt_js .= "\n\t".'var id_row="#id_"+str_e;';
-		$txt_js .= "\n\t".'var id="#"+str_e;';
+		$txt_js .= "\n\t".'var id_row="#row_"+nom+"\\\\["+n+"\\\\]";';
+		$txt_js .= "\n\t".'var id="#"+nom+"\\\\["+n+"\\\\]";';
 		$txt_js .= "\n\t".'var valor=$(id).val();';
 		$txt_js .= "\n\tif (!valor) {";
 		$txt_js .= "\n\t\t".'$(id_row).hide();';
+		$txt_js .= "\n\t} else {";
+		$txt_js .= "\n\t\t$fnjs_next"."(nom,n);";
 		$txt_js .= "\n\t}";
 		$txt_js .= "\n}";
 		$txt_js .= "\n";
-
+		
+		$txt_js .= "\n$fnjs_next = function (nom,n) {";
+		$txt_js .= "\n\t".'var id_prot_num = "#prot_num_"+nom+"\\\\["+n+"\\\\]";';
+		$txt_js .= "\n\t".'$(id_prot_num).focus();';
+		$txt_js .= "\n}";
+		$txt_js .= "\n";
+		
 		return $txt_js;
 	}
 

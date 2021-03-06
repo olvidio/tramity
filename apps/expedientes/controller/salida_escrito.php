@@ -38,10 +38,8 @@ if (!empty($Qprot_num) && !empty($Qprot_any)) {
         'num' => $Qprot_num,
         'any' => $Qprot_any,
     ];
-    $aWhereEscrito['f_aprobacion'] = 'x';
-    $aOperadorEscrito['f_aprobacion'] = 'IS NULL';
     $gesEscritos = new GestorEscrito();
-    $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local,$aWhereEscrito,$aOperadorEscrito);
+    $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
     if (!empty($cEscritos)) {
         $oEscrito = $cEscritos[0];
         $oEscrito->DBCarregar();
@@ -70,10 +68,12 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
 $oficinas = [];
 $id_ponente = '';
 $oDesplPonente = new web\Desplegable('id_ponente',$a_posibles_cargos,$id_ponente,TRUE);
+$oDesplPonente->setTabIndex(130);
 
 $oArrayDesplFirmas = new web\DesplegableArray($oficinas,$a_posibles_cargos,'oficinas');
 $oArrayDesplFirmas ->setBlanco('t');
 $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas(event)');
+$oArrayDesplFirmas->setTabIndex(140);
 
 $oEscrito = new Escrito($Qid_escrito);
 // categoria
@@ -81,7 +81,7 @@ $aOpciones = $oEscrito->getArrayCategoria();
 $oDesplCategoria = new Desplegable();
 $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
-$oDesplCategoria->setTabIndex(80);
+$oDesplCategoria->setTabIndex(150);
 
 
 $gesGrupo = new GestorGrupo();
@@ -96,6 +96,7 @@ $aOpciones = $oEntrada->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
+$oDesplVisibilidad->setTabIndex(155);
 
 if (!empty($Qid_escrito)) {
     $a_grupos = $oEscrito->getId_grupos();
@@ -110,11 +111,13 @@ if (!empty($Qid_escrito)) {
     $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
     $oArrayProtDestino->setBlanco('t');
     $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+    $oArrayProtDestino->setTabIndex(50);
     
     $json_prot_ref = $oEscrito->getJson_prot_ref();
     $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares,'referencias');
     $oArrayProtRef->setBlanco('t');
     $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias(event)');
+    $oArrayProtRef->setTabIndex(95);
     
     $entradilla = $oEscrito->getEntradilla();
     $asunto = $oEscrito->getAsunto();
@@ -176,6 +179,7 @@ if (!empty($Qid_escrito)) {
         $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
         $oArrayProtDestino->setBlanco('t');
         $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+        $oArrayProtDestino->setTabIndex(50);
         
         $entradilla = '';
         $f_escrito = '';
@@ -196,6 +200,7 @@ if (!empty($Qid_escrito)) {
         $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
         $oArrayProtDestino ->setBlanco('t');
         $oArrayProtDestino ->setAccionConjunto('fnjs_mas_destinos(event)');
+        $oArrayProtDestino->setTabIndex(50);
 
     }
     $titulo = _("nuevo");
@@ -207,6 +212,7 @@ if (!empty($Qid_escrito)) {
     $oArrayProtRef = new web\ProtocoloArray('',$a_posibles_lugares,'referencias');
     $oArrayProtRef ->setBlanco('t');
     $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
+    $oArrayProtRef->setTabIndex(95);
 
     $id_ponente = ConfigGlobal::role_id_cargo();
     
@@ -231,7 +237,7 @@ $pagina_cancel = web\Hash::link('apps/expedientes/controller/salida_escrito.php?
 
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['filtro' => $Qfiltro]));
 
-$b_guardar_txt = empty($Qid_escrito)? _("Generar protocolo") : _("Guardar");
+$b_guardar_txt = empty($Qid_escrito)? _("Generar protocolo") : _("Pasar a secretaría");
 
 // datepicker
 $oFecha = new DateTimeLocal();

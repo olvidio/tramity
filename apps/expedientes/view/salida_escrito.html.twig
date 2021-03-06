@@ -64,21 +64,21 @@
   <div class="form-group row">
     <label for="asunto" class="col-2 col-form-label">{{ "Asunto"|trans }}</label>
     <div class="col-10">
-      <input {{ asunto_readonly }} tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
+      <input {{ asunto_readonly }} tabindex='100' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------- DETALLE --------------- -->
   <div class="form-group row">
     <label for="detalle" class="col-2 col-form-label">{{ "Detalle"|trans }}</label>
     <div class='col-6'>
-      <input {{ detalle_readonly }} tabindex='50' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
+      <input {{ detalle_readonly }} tabindex='110' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
     </div>
   </div>
   <!--  --------------- ENTRADILLA --------------- -->
   <div class="form-group row">
     <label for="entradilla" class="col-2 col-form-label">{{ "Entradilla"|trans }}</label>
     <div class='col-10'>
-      <textarea tabindex='50' rows="5" class="form-control" name='entradilla' id="entradilla">{{ entradilla }}</textarea>
+      <textarea tabindex='120' rows="5" class="form-control" name='entradilla' id="entradilla">{{ entradilla }}</textarea>
     </div>
   </div>
   <!--  --------------- PONENTE Y OFICINAS --------------- -->
@@ -105,15 +105,15 @@
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
     <div class="form-group col-md-4">
-	  <label for="f_escrito">{{ "Fecha del escrito"|trans }}</label>
+	  <label for="f_aprobacion">{{ "Fecha de aprobación"|trans }}</label>
       <div class="col-8 date">
-        <input tabindex='31' name='f_escrito' id='f_escrito' type='text' class="form-control" value="{{ f_escrito }}" />
+        <input tabindex='160' name='f_aprobacion' id='f_aprobacion' type='text' class="form-control" value="{{ f_aprobacion }}" />
       </div>
     </div>
     <div class="form-group col-md-4">
-	  <label for="f_aprobacion">{{ "Fecha de aprobación"|trans }}</label>
+	  <label for="f_escrito">{{ "Fecha del escrito"|trans }}</label>
       <div class="col-8 date">
-        <input tabindex='31' name='f_aprobacion' id='f_aprobacion' type='text' class="form-control" value="{{ f_aprobacion }}" />
+        <input tabindex='170' name='f_escrito' id='f_escrito' type='text' class="form-control" value="{{ f_escrito }}" />
       </div>
     </div>
   </div>
@@ -126,7 +126,7 @@
     {% if tipo_doc == 1 %}
         <div class="form-group">
           <label>{{ "Ver escrito"|trans }}:</label>
-          <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(event);" >
+          <button tabindex='200' class="btn btn-info" onClick="fnjs_ver_doc_ep(event);" >
             {{ "Etherpad"|trans }}
           </button>
         </div>
@@ -140,13 +140,13 @@
     {% if tipo_doc is empty %}
         <div class="form-group">
           <label>{{ "Insertar escrito"|trans }}:</label>
-          <button tabindex='100' class="btn btn-info" onClick="fnjs_add_escrito(event,1);" >
+          <button tabindex='200' class="btn btn-info" onClick="fnjs_add_escrito(event,1);" >
             {{ "Etherpad"|trans }}
           </button>
-          <button tabindex='101' class="btn btn-info" onClick="fnjs_add_escrito(event,2);" >
+          <button tabindex='201' class="btn btn-info" onClick="fnjs_add_escrito(event,2);" >
             {{ "EtherCalc"|trans }}
           </button>
-          <button tabindex='10' class="btn btn-info" onClick="fnjs_add_escrito(event,3);" >
+          <button tabindex='202' class="btn btn-info" onClick="fnjs_add_escrito(event,3);" >
             {{ "Incrustado"|trans }}
           </button>
         </div>
@@ -166,10 +166,10 @@
 </div> <!-- Fin Col Dcha -->
 
 <div>
-  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+  <button tabindex='1' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
     {{ "Cancelar"|trans }}
   </button>
-  <button tabindex='90' class="btn btn-primary" onClick="fnjs_guardar(event);" >
+  <button tabindex='180' class="btn btn-primary" onClick="fnjs_guardar(event);" >
     {{ b_guardar_txt }}
   </button>
 </div>
