@@ -48,6 +48,14 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
     $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
 }
 
+$estado = 0;
+$visibilidad = 0;
+if (empty($Qid_expediente)) {
+    $oExpediente = new Expediente($Qid_expediente);
+    $visibilidad = $oExpediente->getVisibilidad();
+    $estado = $oExpediente->getEstado();
+}
+
 $oEscrito = new Escrito($Qid_escrito);
 // categoria
 $aOpciones = $oEscrito->getArrayCategoria();
@@ -55,7 +63,6 @@ $oDesplCategoria = new Desplegable();
 $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
 $oDesplCategoria->setTabIndex(80);
-
 
 $gesGrupo = new GestorGrupo();
 $a_posibles_grupos = $gesGrupo->getArrayGrupos();
@@ -69,6 +76,7 @@ $aOpciones = $oEntrada->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
+$oDesplVisibilidad->setOpcion_sel($visibilidad);
 
 if (!empty($Qid_escrito)) {
     $a_grupos = $oEscrito->getId_grupos();
@@ -160,6 +168,9 @@ if (!empty($Qid_escrito)) {
         $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
         $oArrayProtDestino->setBlanco('t');
         $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+
+        $visibilidad = $oEntrada->getVisibilidad();
+        $oDesplVisibilidad->setOpcion_sel($visibilidad);
         
         $entradilla = '';
         $f_escrito = '';
@@ -218,8 +229,6 @@ $a_cosas = ['id_expediente' => $Qid_expediente,
 
 $explotar = FALSE;
 $ver_revisado = FALSE;
-$oExpediente = new Expediente($Qid_expediente);
-$estado = $oExpediente->getEstado();
 if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
     OR ($estado == Expediente::ESTADO_ACABADO_SECRETARIA) ) {
     $ver_revisado = TRUE;
