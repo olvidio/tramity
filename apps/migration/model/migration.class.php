@@ -247,7 +247,7 @@ class Migration {
         // Poner bypass=FALSE para los de dl
         $sql= "UPDATE entradas e SET bypass = FALSE  FROM
                 (SELECT DISTINCT e2.id_entrada, e2.id_reg, e2.asunto FROM entradas e2, entrada_adjuntos ad2
-                 WHERE e2.anulado IS NULL AND e2.id_entrada = ad2.id_entrada AND ad2.dl_ctr=2
+                 WHERE e2.anulado IS NULL AND e2.id_entrada = ad2.id_entrada AND ad2.dl_ctr=1
                  ) AS sub WHERE e.id_entrada = sub.id_entrada;
                ";
         if ($this->oDBT->query($sql) === FALSE) {
