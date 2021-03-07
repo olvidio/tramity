@@ -296,9 +296,6 @@ class Pendiente {
         
         $class = $this->visibilidad_to_Class($aDades['visibilidad']);
         
-        
-        
-        
         $base_url = $this->getBaseUrl();
         $cargo = $this->getCargo();
         $pass = $this->getPasswd();
@@ -342,7 +339,7 @@ class Pendiente {
         } else {
             $uid="$ahora";
         }
-        $uid.="@registro_$this->parent_container";
+        $uid.="@".$this->resource."_".$this->parent_container;
         // Amb caldav.
         $args['UID']="$uid";
         $args['SUMMARY']="$asunto";

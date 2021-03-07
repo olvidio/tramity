@@ -236,6 +236,7 @@ $a_condicion['filtro'] = $Qfiltro;
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/salida_escrito.php?'.http_build_query($a_condicion));
 
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['filtro' => $Qfiltro]));
+$url_escrito = 'apps/expedientes/controller/salida_escrito.php';
 
 $b_guardar_txt = empty($Qid_escrito)? _("Generar protocolo") : _("Pasar a secretaría");
 
@@ -279,6 +280,7 @@ $a_campos = [
     'txt_option_cargos' => $txt_option_cargos,
     'txt_option_ref' => $txt_option_ref,
     'url_update' => $url_update,
+    'url_escrito' => $url_escrito,
     'pagina_cancel' => $pagina_cancel,
     'pagina_nueva' => $pagina_nueva,
     'ver_revisado' => $ver_revisado,

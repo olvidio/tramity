@@ -195,6 +195,38 @@ class Collection Extends core\ClasePropiedades {
 
 	/* METODES PUBLICS ----------------------------------------------------------*/
 
+	public function cambiarNombre($oficina_new, $oficina_old) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    $parent_container_new = "/".$oficina_new."/";
+	    $parent_container_old = "/".$oficina_old."/";
+	    
+	    // oficina
+	    $dav_name_new = $parent_container_new."oficina/"; 
+	    $dav_name_old = $parent_container_old."oficina/"; 
+	    $sQry = "UPDATE $nom_tabla SET parent_container='$parent_container_new', dav_name='$dav_name_new'
+                WHERE dav_name='$dav_name_old'";
+	    
+	    if (($oDbl->query($sQry)) === FALSE) {
+	        $sClauError = 'DavicalUser.cambioNombre';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+	    
+	    // registro
+	    $dav_name_new = $parent_container_new."registro/"; 
+	    $dav_name_old = $parent_container_old."registro/"; 
+	    $sQry = "UPDATE $nom_tabla SET parent_container='$parent_container_new', dav_name='$dav_name_new'
+                WHERE dav_name='$dav_name_old'";
+	    
+	    if (($oDbl->query($sQry)) === FALSE) {
+	        $sClauError = 'DavicalUser.cambioNombre';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+	}
+	
 	/**
 	 * Desa els atributs de l'objecte a la base de dades.
 	 * Si no hi ha el registre, fa el insert, si hi es fa el update.

@@ -10,6 +10,9 @@ use davical\model\entity\Principal;
 use davical\model\entity\RoleMember;
 use DateTimeZone;
 use web\DateTimeLocal;
+use davical\model\entity\CalendarItem;
+use expedientes\model\entity\GestorAccion;
+use davical\model\entity\GestorCalendarItem;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula aux_usuarios
@@ -183,7 +186,7 @@ class Davical {
         // crear el principal correspondiente:
         $oPrincipal = new Principal();
         $oPrincipal->setUser_no($user_no);
-        $default_privileges = "000000001111110000000001";
+        $default_privileges = "111111111111111111111111";
         $oPrincipal->setType_id(Principal::TYPE_PERSON);
         $oPrincipal->setDisplayname($username);
         $oPrincipal->setDefault_privileges($default_privileges);
@@ -208,7 +211,36 @@ class Davical {
     }
     
     
-    public function cambioNombreOficina($oficina) {
+    public function cambioNombreOficina($of_new, $of_old) {
+        
+        // modificar el usr correspondiente a la oficina:
+        $oficina_new = "oficina_$of_new";
+        $oficina_old = "oficina_$of_old";
+        $oUserDavical = new User();
+        $user_no = $oUserDavical->cambiarNombre($oficina_new, $oficina_old);
+
+        // modificar el principal correspondiente a la oficina:
+        $oPrincipal = new Principal();
+        $oPrincipal->cambiarNombre($user_no,$oficina_new);
+
+        // modificar el usr correspondiente al grupo:
+        $grupo_new = "grupo_$of_new";
+        $grupo_old = "grupo_$of_old";
+        
+        $oUserDavical = new User();
+        $user_no = $oUserDavical->cambiarNombre($grupo_new, $grupo_old);
+
+        // modificar el principal correspondiente a la oficina:
+        $oPrincipal = new Principal();
+        $oPrincipal->cambiarNombre($user_no,$grupo_new);
+        
+        // modificar el collection correspondiente (2 => grupo y oficina):
+        $oCollection = new Collection();
+        $oCollection->cambiarNombre($oficina_new, $oficina_old);
+        
+        // calendar_item i caldav_data (el dav_name, se cambia al cambiarlo en collection)
+        $oCalendar = new GestorCalendarItem();
+        $oCalendar->cambiarOficinaUids($oficina_new, $oficina_old);
         
     }
     
@@ -216,7 +248,7 @@ class Davical {
      * Crea una oficina:
      *  1.- un usr + principal con nombre: oficina_xxx
      *  2.- un grupo con nombre: grupo_xxx.
-     *  3.- crear dos colecciones (oficin y registro) para el principal: oficina_xxx
+     *  3.- crear dos colecciones (oficina y registro) para el principal: oficina_xxx
      *  4.- Dar permiso a cada coleccion para el grupo_xxx
      *  5.- Añadir permiso en la coleccion 'registro' para el grupo: 'grupo_scl'
      * 
@@ -413,7 +445,7 @@ class Davical {
         // crear el principal correspondiente:
         $oPrincipal = new Principal();
         $oPrincipal->setUser_no($user_no);
-        $default_privileges = "000000001111110000000001";
+        $default_privileges = "111111111111111111111111";
         $oPrincipal->setType_id(Principal::TYPE_GROUP);
         $oPrincipal->setDisplayname($username);
         $oPrincipal->setDefault_privileges($default_privileges);
@@ -484,7 +516,7 @@ class Davical {
         // crear el principal correspondiente:
         $oPrincipal = new Principal();
         $oPrincipal->setUser_no($user_no);
-        $default_privileges = "000000001111110000000001";
+        $default_privileges = "111111111111111111111111";
         $oPrincipal->setType_id(Principal::TYPE_RESOURCE);
         $oPrincipal->setDisplayname($username);
         $oPrincipal->setDefault_privileges($default_privileges);

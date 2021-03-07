@@ -34,6 +34,69 @@ class GestorCalendarItem Extends core\ClaseGestor {
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
+	public function cambiarOficinaUids($oficina_new, $oficina_old) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    /////////  registro
+	    $new = '@registro_'.$oficina_new;
+	    $old = '@registro_'.$oficina_old;
+	    
+	    $sQuery = "UPDATE $nom_tabla SET uid = replace( uid, '$old', '$new')
+                     WHERE uid ~ '$old$'; ";
+
+		if (($oDbl->query($sQuery)) === FALSE) {
+			$sClauError = 'GestorCalendarItem.query';
+			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+			return FALSE;
+		}
+		//caldav_data (el dav_name, se cambia al cambiarlo en collection)
+		$regexp = "(.*UID:.*)($oficina_old)";
+		
+	    $sQuery = "UPDATE caldav_data SET caldav_data = regexp_replace(caldav_data, '$regexp', '\1$oficina_new')
+                     WHERE dav_name ~ '^$oficina_new'; ";
+
+		if (($oDbl->query($sQuery)) === FALSE) {
+			$sClauError = 'GestorCalendarItem.query';
+			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+			return FALSE;
+		}
+	    
+	    /////////  oficina
+	    $new = '@oficina_'.$oficina_new;
+	    $old = '@oficina_'.$oficina_old;
+	    
+	    $sQuery = "UPDATE $nom_tabla SET uid = replace( uid, '$old', '$new')
+                     WHERE uid ~ '$old$'; ";
+
+		if (($oDbl->query($sQuery)) === FALSE) {
+			$sClauError = 'GestorCalendarItem.query';
+			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+			return FALSE;
+		}
+		//caldav_data (el dav_name, se cambia al cambiarlo en collection)
+		$regexp = "(.*UID:.*)($oficina_old)";
+		
+	    $sQuery = "UPDATE caldav_data SET caldav_data = regexp_replace(caldav_data, '$regexp', '\1$oficina_new')
+                     WHERE dav_name ~ '^$oficina_new'; ";
+
+		if (($oDbl->query($sQuery)) === FALSE) {
+			$sClauError = 'GestorCalendarItem.query';
+			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+			return FALSE;
+		}
+		
+		// también sync_changes (cambia los dos: oficina y registro)
+		$regexp = "^/$oficina_old/(.*)";
+		$sQry = "UPDATE sync_changes SET dav_name= regexp_replace(dav_name, '$regexp', '/$oficina_new/\1')
+                WHERE dav_name ~ '^/$oficina_old'";
+		
+		if (($oDbl->query($sQry)) === FALSE) {
+		    $sClauError = 'DavicalUser.cambioNombre';
+		    $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+		    return FALSE;
+		}
+	}
 	/**
 	 * Devuelve los Calendar items para un determiado id_reg ('REN' + id_entrada)
 	 * 

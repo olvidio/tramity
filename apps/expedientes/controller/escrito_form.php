@@ -259,6 +259,7 @@ switch ($Qfiltro) {
 }
 
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['filtro' => $Qfiltro]));
+$url_escrito = 'apps/expedientes/controller/escrito_form.php';
 
 $esEscrtito = ($Qaccion == Escrito::ACCION_ESCRITO)? TRUE : FALSE;
 
@@ -304,6 +305,7 @@ $a_campos = [
     'txt_option_cargos' => $txt_option_cargos,
     'txt_option_ref' => $txt_option_ref,
     'url_update' => $url_update,
+    'url_escrito' => $url_escrito,
     'pagina_cancel' => $pagina_cancel,
     'pagina_nueva' => $pagina_nueva,
     'ver_revisado' => $ver_revisado,

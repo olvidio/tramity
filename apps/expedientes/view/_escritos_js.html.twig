@@ -91,7 +91,7 @@ fnjs_actualizar=function(){
 	var id_escrito=$('#id_escrito').val();
 	var modo=$('#modo').val();
 	var accion=$('#accion').val();
-    var url_doc = 'apps/expedientes/controller/escrito_form.php';
+    var url_doc = '{{ url_escrito }}';
     var param_json = { accion: accion, id_escrito: id_escrito, filtro: filtro, id_expediente: id_expediente, modo: modo };
     request=$.ajax({
         data: param_json,
@@ -120,7 +120,7 @@ fnjs_add_escrito=function(event,n) {
 	
 	if (!fnjs_comprobar_fecha('#f_escrito')) { err=1; }
 	if (!f_escrito) { alert("{{ "Debe llenar el campo de fecha de escrito"|trans }}"); err=1; }
-	if (!fnjs_fecha_en_intervalo('#f_escrito')) { err=1; }
+	if (!fnjs_fecha_en_intervalo('#f_escrito')) { err=0; } // SE permite, simplemente avisa.
 	if (!n) { alert("{{ "No se ha definido el tipo de escrit"|trans }}"); err=1; }
 
 	if (err!=1) {

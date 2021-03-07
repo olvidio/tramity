@@ -131,6 +131,19 @@ class Principal Extends core\ClasePropiedades {
 
 	/* METODES PUBLICS ----------------------------------------------------------*/
 
+	public function cambiarNombre($user_no, $displayname_new) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    $sQry = "UPDATE $nom_tabla SET displayname='$displayname_new' WHERE user_no='$user_no'; ";
+	    
+	    if (($oDbl->query($sQry)) === FALSE) {
+	        $sClauError = 'DavicalUser.cambioNombre';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+	}
+	
 	/**
 	 * Desa els atributs de l'objecte a la base de dades.
 	 * Si no hi ha el registre, fa el insert, si hi es fa el update.

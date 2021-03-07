@@ -1,6 +1,15 @@
 <script type="text/javascript">
 
 $(function() {
+	$( "#destinos_mas" ).focusout(function() {
+		var valor =$("#destinos_mas").val();
+		if (!valor) {
+			$('#referencias_mas').focus();
+		}
+    });
+});
+
+$(function() {
 	$( "#referencias_mas" ).focusout(function() {
 		var valor =$("#referencias_mas").val();
 		if (!valor) {

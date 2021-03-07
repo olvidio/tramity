@@ -41,15 +41,22 @@ switch($Qque) {
         
         $oOficina = new Oficina (array('id_oficina' => $Qid_oficina));
         $oOficina->DBCarregar();
+        $sigla_old = $oOficina->getSigla();
         $oOficina->setSigla($Qsigla);
         $oOficina->setOrden($Qorden);
 		if ($oOficina->DBGuardar() === false) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oOficina->getErrorTxt();
 		} else {
-		    // Crear la oficina en davical.
-		    $oDavical = new Davical();
-		    $oDavical->crearOficina($Qsigla);
+		    if ($sigla_old != $Qsigla) {
+                // Cambiar el nombre en davical.
+                $oDavical = new Davical();
+                $oDavical->cambioNombreOficina($Qsigla,$sigla_old);
+		    } else {
+		        // revisar que existe:
+                $oDavical = new Davical();
+                $oDavical->crearOficina($Qsigla);
+		    }
 		}
         break;
 	case "nuevo":

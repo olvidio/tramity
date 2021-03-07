@@ -11,7 +11,7 @@
     <table class="table-warning" border=1>
     <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
         <td>
-          <input id="buscar_prot_num" name="buscar_prot_num" size="12" onchange="fnjs_proto('#buscar_prot_num','#buscar_prot_any')" value="" >
+          <input id="buscar_prot_num" name="buscar_prot_num" size="12" onchange="fnjs_proto(event,'#buscar_prot_num','#buscar_prot_any')" value="" >
           /
           <input id="buscar_prot_any" name="buscar_prot_any" size="5" value="" >
         </td>
@@ -180,6 +180,7 @@
 </div>
         
 {{ include ('_salida_escrito_form_js.html.twig') }}
+{{ include ('_escritos_js.html.twig') }}
 <script>
 fnjs_grupo=function() {
     var ok=$('#grupo_dst').prop('checked')

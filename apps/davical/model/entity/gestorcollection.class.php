@@ -34,6 +34,19 @@ class GestorCollection Extends core\ClaseGestor {
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 
+	public function modificarUid($oficina_new, $oficina_new) {
+	    // uid= 20210216T170424@registro_oficina_scdl
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    $sQuery = "UPDATE $nom_tabla SET uid = $uid_new WHERE uid = $uid_old";
+	    
+	    if (($oDbl->query($sQuery)) === FALSE) {
+	        $sClauError = 'GestorCollection.query';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+	}
 	/**
 	 * retorna l'array d'objectes de tipus Collection
 	 *
