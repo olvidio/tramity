@@ -5,6 +5,7 @@ use pendientes\model\Pendiente;
 use pendientes\model\entity\PendienteDB;
 use usuarios\model\entity\GestorOficina;
 use pendientes\model\Rrule;
+use web\DateTimeLocal;
 
 /**
 * Esta página actualiza la base de datos del registro.
@@ -95,11 +96,13 @@ $txt_err = '';
 if (!empty($Qsimple_per)) { // sólo para los periodicos.
     $Quntil = (string) \filter_input(INPUT_POST,'until');
     if (!empty($Quntil)) { $request['until'] = $Quntil; }
-	switch ($_POST['periodico_tipo']) {
+    $Qperiodico_tipo = (string) \filter_input(INPUT_POST, 'periodico_tipo');
+    $Qtipo_dia = (string) \filter_input(INPUT_POST, 'tipo_dia');
+	switch ($Qperiodico_tipo) {
 		case "periodico_d_a":
 			$request['tipo']="d_a";
 			$request['tipo_dia']= (string) \filter_input(INPUT_POST,'tipo_dia');
-			switch($_POST['tipo_dia']){
+			switch($Qtipo_dia){
 				case "num":
 					$request['dias']= (string) \filter_input(INPUT_POST,'a_dia_num');
 					$request['meses']= (string) \filter_input(INPUT_POST,'mes_num');
@@ -119,7 +122,13 @@ if (!empty($Qsimple_per)) { // sólo para los periodicos.
 		case "periodico_d_m":
 			$request['tipo']="d_m";
 			$request['tipo_dia']= (string) \filter_input(INPUT_POST,'tipo_dia');
-			switch($_POST['tipo_dia']){
+			switch($Qtipo_dia){
+				case "num_ini":
+				    // cojo el dia de la fecha inicio
+				    $oF_ini = DateTimeLocal::createFromLocal($Qf_inicio);
+				    $dia = $oF_ini->format('j');
+					$request['dias']= (string) $dia;
+				break;
 				case "num":
 					$request['dias']= (string) \filter_input(INPUT_POST,'dia_num');
 				break;
@@ -134,7 +143,6 @@ if (!empty($Qsimple_per)) { // sólo para los periodicos.
 			$request['tipo']="d_s";
 			$request['tipo_dia'] = (string) \filter_input(INPUT_POST, 'tipo_dia');
 			$request['dias'] = (string) \filter_input(INPUT_POST, 'dias_w');
-			//print_r($_POST['dias_w']);
 			$rrule = Rrule::montar_rrule($request);
 			break;
 		case "periodico_d_d":
@@ -268,26 +276,6 @@ switch ($Qnuevo) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-
-        /*
-		// vuelvo
-		if ($Qgo=="entradas" || $Qgo=="salidas" || $Qgo=="mov_iese") { 
-			?>
-			<!-- jQuery -->
-			<script type="text/javascript" src='<?php echo ConfigGlobal::$web_scripts.'/jquery-ui-latest/js/jquery-1.7.1.min.js'; ?>'></script>
-			<script>
-			<?php if ($go=="entradas") { ?>
-				window.opener.document.forms['form_entrada']['id_pendiente'].value=<?= $_POST['id_pendiente'] ?>;
-			<?php } ?>
-			window.close();
-			</script>
-			<?php
-		} 
-		if ($Qgo=="salidas") {
-		    $go_to="registro_salidas.php?busca_ap_prot_num=".$_POST['busca_ap_prot_num']."&busca_ap_prot_any=${_POST['busca_ap_prot_any']}";
-		}
-		$go='lista';
-		*/
 		break;
 	case "3": //eliminar pendiente. Lo pongo como cancelado.
 		//vengo de un checkbox

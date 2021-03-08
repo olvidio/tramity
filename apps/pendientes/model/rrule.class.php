@@ -372,8 +372,6 @@ class Rrule {
             case "d_m":
                 switch($request['tipo_dia']){
                     case "num_ini":
-                        $rrule="FREQ=MONTHLY";
-                        break;
                     case "num":
                         if (!empty($request['dias'])) {
                             $rrule="FREQ=MONTHLY;BYMONTHDAY=${request['dias']}";

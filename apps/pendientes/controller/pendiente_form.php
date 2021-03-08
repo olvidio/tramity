@@ -125,6 +125,7 @@ $busca_ap_any = empty($_REQUEST['busca_ap_any'])? '' : $_REQUEST['busca_ap_any']
 $ref_id_lugar='';
 $ref_prot_num='';
 $ref_prot_any='';
+$ref_prot_mas='';
 
 $nuevo = empty($Qnuevo)? 1 : $nuevo=$Qnuevo;
 $hoy = date("d/m/Y");
@@ -218,6 +219,7 @@ if ($nuevo == 1) {
             $ref_id_lugar=$a_protOrigen['lugar'];
             $ref_prot_num=$a_protOrigen['num'];
             $ref_prot_any=$a_protOrigen['any'];
+            //$ref_prot_mas=$a_protOrigen['mas']; // No cojo el del registro, el pendiente puede tener su propio 'mas'
             $oDesplLugar->setOpcion_sel($ref_id_lugar);
         }
     }
@@ -237,13 +239,6 @@ if ($go == 'entradas') {
     
     // las oficinas	implicadas
     $resto_oficinas = (array)  \filter_input(INPUT_GET, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    // Las entradas son cargos, hay que pasarlos a oficinas para los pendientes:
-    /*$a_oficinas = [];
-    foreach ($resto_oficinas as $id_oficina) {
-        $oCargo = new Cargo($id_cargo);
-        $a_oficinas[] = $oCargo->getId_oficina();
-    }
-    */
     $oArrayDesplOficinas->setSeleccionados($resto_oficinas);
     
     $f_plazo = (string) \filter_input(INPUT_GET, 'f_plazo');
