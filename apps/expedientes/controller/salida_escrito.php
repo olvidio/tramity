@@ -110,13 +110,13 @@ if (!empty($Qid_escrito)) {
     $json_prot_dst = $oEscrito->getJson_prot_destino();
     $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
     $oArrayProtDestino->setBlanco('t');
-    $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+    //$oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)'); // lo pongo en html.twig
     $oArrayProtDestino->setTabIndex(50);
     
     $json_prot_ref = $oEscrito->getJson_prot_ref();
     $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares,'referencias');
     $oArrayProtRef->setBlanco('t');
-    $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias(event)');
+    //$oArrayProtRef->setAccionConjunto('fnjs_mas_referencias(event)'); // lo pongo en html.twig
     $oArrayProtRef->setTabIndex(95);
     
     $entradilla = $oEscrito->getEntradilla();
@@ -178,9 +178,28 @@ if (!empty($Qid_escrito)) {
         $json_prot_dst[] = $oEntrada->getJson_prot_origen();
         $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
         $oArrayProtDestino->setBlanco('t');
-        $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+        //$oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
         $oArrayProtDestino->setTabIndex(50);
         
+        // los escritos van por cargos, las entradas por oficinas: pongo al director de la oficina:
+        //Ponente;
+        $id_of_ponente = $oEntrada->getPonente();
+        $gesCargos = new GestorCargo();
+        $id_ponente = $gesCargos->getDirectorOficina($id_of_ponente);
+        $oDesplPonente->setOpcion_sel($id_ponente);
+        // oficinas
+        $a_oficinas = $oEntrada->getResto_oficinas();
+        $a_resto_cargos = [];
+        foreach ($a_oficinas as $id_oficina) {
+            $a_resto_cargos[] = $gesCargos->getDirectorOficina($id_oficina);
+        }
+        $oArrayDesplFirmas->setSeleccionados($a_resto_cargos);
+        
+        $categoria = $oEntrada->getCategoria();
+        $oDesplCategoria->setOpcion_sel($categoria);
+        $visibilidad = $oEntrada->getVisibilidad();
+        $oDesplVisibilidad->setOpcion_sel($visibilidad);
+    
         $entradilla = '';
         $f_escrito = '';
         $f_aprobacion = '';
@@ -199,7 +218,7 @@ if (!empty($Qid_escrito)) {
 
         $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
         $oArrayProtDestino ->setBlanco('t');
-        $oArrayProtDestino ->setAccionConjunto('fnjs_mas_destinos(event)');
+        //$oArrayProtDestino ->setAccionConjunto('fnjs_mas_destinos(event)');
         $oArrayProtDestino->setTabIndex(50);
 
     }
@@ -211,7 +230,7 @@ if (!empty($Qid_escrito)) {
     
     $oArrayProtRef = new web\ProtocoloArray('',$a_posibles_lugares,'referencias');
     $oArrayProtRef ->setBlanco('t');
-    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
+    //$oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
     $oArrayProtRef->setTabIndex(95);
 
     $id_ponente = ConfigGlobal::role_id_cargo();
@@ -235,7 +254,7 @@ parse_str($str_condicion, $a_condicion);
 $a_condicion['filtro'] = $Qfiltro;
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/salida_escrito.php?'.http_build_query($a_condicion));
 
-$pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['filtro' => $Qfiltro]));
+$pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
 $url_escrito = 'apps/expedientes/controller/salida_escrito.php';
 
 $b_guardar_txt = empty($Qid_escrito)? _("Generar protocolo") : _("Pasar a secretaría");

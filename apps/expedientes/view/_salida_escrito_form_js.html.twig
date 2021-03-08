@@ -1,21 +1,11 @@
 <script type="text/javascript">
+var global_flag = 1;
 
 $(function() {
-	$( "#destinos_mas" ).focusout(function() {
-		var valor =$("#destinos_mas").val();
-		if (!valor) {
-			$('#referencias_mas').focus();
-		}
-    });
+	$( "#destinos_mas" ).on('change focusout', fnjs_mas_destinos );
 });
-
 $(function() {
-	$( "#referencias_mas" ).focusout(function() {
-		var valor =$("#referencias_mas").val();
-		if (!valor) {
-			$('#asunto').focus();
-		}
-    });
+	$( "#referencias_mas" ).on('change focusout', fnjs_mas_referencias );
 });
 
 $(function() {
@@ -134,18 +124,18 @@ fnjs_focus_a=function(camp){
 
 {{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
 fnjs_mas_grupos=function(e){
-	var code = (e.keyCode ? e.keyCode : e.which);
-	if(e=="x") {
+	var code = (event.keyCode ? event.keyCode : event.which);
+	if(event=="x") {
 		var valor=1;
 	} else {
-		var id_campo='#'+e.currentTarget.id;
+		var id_campo='#'+event.currentTarget.id;
 		var valor=$(id_campo).val();
 		if(code!=9) {
-			e.preventDefault();
-			e.stopPropagation();
+			event.preventDefault();
+			event.stopPropagation();
 		}
 	}
-	if ( code==9 || e.type=="change" || e=="x") {
+	if ( code==9 || event.type=="change" || event=="x") {
 		if (valor!=0) {
 			{{ oArrayDesplGrupo.ListaSelectsJs|raw }}
 		}
@@ -158,22 +148,23 @@ fnjs_quitar_grupos=function(){
 
 {{ oArrayProtDestino.ComprobarSelectJs|raw }}
 fnjs_mas_destinos=function(e){
-	var code = (e.keyCode ? e.keyCode : e.which);
-	if(e=="x") {
-		var valor=1;
-	} else {
-		var id_campo='#'+e.currentTarget.id;
-		var valor=$(id_campo).val();
-		if(code!=9) {
-			e.preventDefault();
-			e.stopPropagation();
-		}
-	}
-	if ( code==9 || e.type=="change" || e=="x") {
-		if (valor!=0) {
-			{{ oArrayProtDestino.ListaSelectsJs|raw }}
-		}
-	}
+	event.stopImmediatePropagation();
+    var id_campo='#'+e.currentTarget.id;
+    var valor=$(id_campo).val();
+    if (event.type == 'change') {
+        global_flag = 2;
+        if (valor!=0) {
+            {{ oArrayProtDestino.ListaSelectsJs|raw }}
+        } else {
+            $('#referencias_mas').focus();
+        }
+    }
+    if (event.type == 'blur') {
+        if (global_flag == 1 && valor == 0 ) {
+            $('#referencias_mas').focus();
+        }
+        global_flag = 1;
+    }
 }
 fnjs_quitar_destinos=function(){
 	$('#span_dst').html("");
@@ -183,22 +174,23 @@ fnjs_quitar_destinos=function(){
 
 {{ oArrayProtRef.ComprobarSelectJs|raw }}
 fnjs_mas_referencias=function(e){
-	var code = (e.keyCode ? e.keyCode : e.which);
-	if(e=="x") {
-		var valor=1;
-	} else {
-		var id_campo='#'+e.currentTarget.id;
-		var valor=$(id_campo).val();
-		if(code!=9) {
-			e.preventDefault();
-			e.stopPropagation();
-		}
-	}
-	if ( code==9 || e.type=="change" || e=="x") {
-		if (valor!=0) {
-			{{ oArrayProtRef.ListaSelectsJs|raw }}
-		}
-	}
+	event.stopImmediatePropagation();
+    var id_campo='#'+e.currentTarget.id;
+    var valor=$(id_campo).val();
+    if (event.type == 'change') {
+        global_flag = 2;
+        if (valor!=0) {
+            {{ oArrayProtRef.ListaSelectsJs|raw }}
+        } else {
+            $('#asunto').focus();
+        }
+    }
+    if (event.type == 'blur') {
+        if (global_flag == 1 && valor == 0 ) {
+            $('#asunto').focus();
+        }
+        global_flag = 1;
+    }
 }
 fnjs_quitar_referencias=function(){
 	$('#span_ref').html("");
@@ -261,17 +253,29 @@ fnjs_proto=function(event,num,any){
 		siguiente="#b_buscar";
 	}
 	/* Para el número de origen */
-	if (num=='#origen_prot_num') {
+	if (num=='#prot_num_destinos[0]') {
 		que="e2";
-		id_lugar=$('#origen').val();
-		var nom_lugar=$('#origen option:selected').text();
-		if (nom_lugar=='cr') {
-			$('#grupo_destinos').show();
-		}
-		prot_num=$('#origen_prot_num').val();
-		prot_any=$('#origen_prot_any').val();
-		siguiente="#mas_ref_id_lugar";
-		var primera_ref=0;
+		id_lugar=$('#destinos\\[0\\]').val();
+		prot_num=$('#prot_num_destinos\\[0\\]').val();
+        prot_any=$('#prot_any_destinos\\[0\\]').val();
+        
+        var param_json = { que: 'buscar_entrada_correspondiente', id_lugar: id_lugar, prot_num: prot_num, prot_any: prot_any };
+        request=$.ajax({
+            data: param_json,
+            url: '{{ url_update }}',
+            type: 'post',
+            dataType: 'json'
+        });
+        request.done( function (json) {
+            id = json.id_entrada;
+            if (json.success != true) {
+                alert ('error: '+json.mensaje);
+            } else {
+                url = "{{ pagina_cancel|raw }}"+"&id_entrada="+json.id_entrada;
+                // Actualizar
+                fnjs_update_div('#main', url);
+            }
+        });
 	}
 	
 	siguiente_escaped = siguiente.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");

@@ -15,6 +15,7 @@ use usuarios\model\PermRegistro;
 use web\DateTimeLocal;
 use web\Lista;
 use web\Protocolo;
+use entradas\model\GestorEntrada;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -612,4 +613,37 @@ switch($Qque) {
         exit();
         
         break;
+    case 'buscar_entrada_correspondiente':
+        $Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
+        $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
+        $Qprot_any = (integer) \filter_input(INPUT_POST, 'prot_any');
+        $aProt_origen = [ 'lugar' => $Qid_lugar,
+            'num' => $Qprot_num,
+            'any' => $Qprot_any,
+        ];
+        
+        $id_entrada = '';
+        $gesEntradas = new GestorEntrada();
+        $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
+        foreach ($cEntradas as $oEntrada) {
+            $bypass = $oEntrada->getBypass();
+            if ($bypass) continue;
+            $id_entrada = $oEntrada->getId_entrada();
+        }
+                
+        if (!empty($id_entrada)) {
+            $jsondata['success'] = true;
+            $jsondata['id_entrada'] = $id_entrada;
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = _("No se...");
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        
+        break;
+
 }

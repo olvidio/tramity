@@ -275,7 +275,7 @@ fnjs_buscar=function(formulario){
     }
     if (opcion==7) {
         var num = $('#prot_num').val();
-        if (!num) {
+        if (num === '0' || num === 0 || num === '') {
             if ( !confirm("{{ "¿Seguro que quiere ver todos?"|trans }}") ) {
                 return;
             }
