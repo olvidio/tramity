@@ -24,29 +24,38 @@ $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 
-// Añado la opcion de poder crear un eexpediente desde entradas
-if ($Qfiltro == 'en_aceptado') {
-    $oEntrada = new Entrada($Qid_entrada);
-    $asunto = $oEntrada->getAsunto();
-    
-    $url_cancel = 'apps/entradas/controller/entrada_lista.php';
-    $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro]));
-} else {
-    if (empty($Qid_expediente) && $Qfiltro != 'en_aceptado') {
-        exit ("Error, no existe el expediente");
-    }
+// Añado la opcion de poder crear un expediente desde entradas
+switch ($Qfiltro) {
+    case 'en_buscar':
+        $oEntrada = new Entrada($Qid_entrada);
+        $asunto = $oEntrada->getAsunto();
+        
+        $url_cancel = 'apps/expedientes/controller/expediente_lista.php';
+        $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => 'borrador_propio']));
+        break;
+    case 'en_aceptado':
+        $oEntrada = new Entrada($Qid_entrada);
+        $asunto = $oEntrada->getAsunto();
+        
+        $url_cancel = 'apps/entradas/controller/entrada_lista.php';
+        $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro]));
+        break;
+    default:
+        if (empty($Qid_expediente) && $Qfiltro != 'en_aceptado') {
+            exit ("Error, no existe el expediente");
+        }
 
-    $oExpediente = new Expediente();
-    $oExpediente->setId_expediente($Qid_expediente);
-    $estado = $oExpediente->getEstado();
-    $asunto = $oExpediente->getAsunto();
-    $id_ponente = $oExpediente->getPonente();
+        $oExpediente = new Expediente();
+        $oExpediente->setId_expediente($Qid_expediente);
+        $estado = $oExpediente->getEstado();
+        $asunto = $oExpediente->getAsunto();
+        $id_ponente = $oExpediente->getPonente();
 
-    $oCargo = new Cargo($id_ponente);
-    $oficina_ponente = $oCargo->getId_oficina();
+        $oCargo = new Cargo($id_ponente);
+        $oficina_ponente = $oCargo->getId_oficina();
 
-    $url_cancel = 'apps/expedientes/controller/expediente_lista.php';
-    $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro]));
+        $url_cancel = 'apps/expedientes/controller/expediente_lista.php';
+        $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro]));
 }
 
 /*
@@ -71,6 +80,7 @@ if ($Qfiltro == 'en_aceptado') {
 
 $a_botones = [];
 switch($Qfiltro) {
+    case 'en_buscar':
     case 'en_aceptado':
         //if ($estado == Expediente::ESTADO_BORRADOR) {
         // los de la oficina

@@ -172,6 +172,7 @@ if ($Qfiltro == 'seg_reunion') {
 
 $a_campos = [
     'id_expediente' => $Qid_expediente,
+    'filtro' => $Qfiltro,
     //'oHash' => $oHash,
     'ponente_txt' => $ponente_txt,
     'id_ponente' => $id_ponente,

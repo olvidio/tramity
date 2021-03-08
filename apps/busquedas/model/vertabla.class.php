@@ -171,6 +171,7 @@ class VerTabla {
         $a_categorias = $oEntrada->getArrayCategoria();
         $a_visibilidad = $oEntrada->getArrayVisibilidad();
         
+        
         if (ConfigGlobal::role_actual() === 'secretaria') { 
             $a_botones = [
                 [ 'txt' => _('modificar'), 'click' =>"fnjs_modificar_entrada(\"#$this->sKey\")" ],
@@ -181,6 +182,7 @@ class VerTabla {
 
         $a_botones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_entrada(\"#$this->sKey\")" ];
         $a_botones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_entrada(\"#$this->sKey\")" ];
+        $a_botones[] = [ 'txt' => _('accion'), 'click' =>"fnjs_buscar_accion_entrada(\"#$this->sKey\")" ];
 
         $a_cabeceras=array( array('name'=>ucfirst(_("protocolo origen")),'formatter'=>'clickFormatter'),
                             ucfirst(_("ref.")),

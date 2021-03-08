@@ -156,7 +156,7 @@ class EscritoLista {
             $adjuntos = '';
             $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
             if (!empty($a_id_adjuntos)) {
-                $adjuntos = '<i class="fas fa-paperclip fa-fw"></i>';
+                $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto(event,'$id_escrito');\"  ></i>";
             }
             
             $json_ref = $oEscrito->getJson_prot_ref();
@@ -306,7 +306,7 @@ class EscritoLista {
             $adjuntos = '';
             $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
             if (!empty($a_id_adjuntos)) {
-                $adjuntos = '<i class="fas fa-paperclip fa-fw"></i>';
+                $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto(event,'$id_escrito');\"  ></i>";
             }
             
             $json_ref = $oEscrito->getJson_prot_ref();

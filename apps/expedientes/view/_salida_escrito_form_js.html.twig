@@ -103,6 +103,8 @@ fnjs_guardar=function(event){
                     if (id != id_escrito) {
                         txt = "{{ "número de protocolo"|trans }}: " + json.protocolo;
                         alert (txt);
+                        // Volver a la lista...
+                        fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                     } else {
                         alert ("{{ "pasa a la pestaña enviar"|trans }}");
                         // Volver a la lista...
