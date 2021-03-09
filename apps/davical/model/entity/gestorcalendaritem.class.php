@@ -51,9 +51,9 @@ class GestorCalendarItem Extends core\ClaseGestor {
 			return FALSE;
 		}
 		//caldav_data (el dav_name, se cambia al cambiarlo en collection)
-		$regexp = "(.*UID:.*)($oficina_old)";
+		$regexp = "(.*UID:.*)$oficina_old";
 		
-	    $sQuery = "UPDATE caldav_data SET caldav_data = regexp_replace(caldav_data, '$regexp', '\1$oficina_new')
+	    $sQuery = "UPDATE caldav_data SET caldav_data = regexp_replace(caldav_data, '$regexp', '\\1$oficina_new')
                      WHERE dav_name ~ '^\/$oficina_new'; ";
 
 		if (($oDbl->query($sQuery)) === FALSE) {
@@ -75,9 +75,9 @@ class GestorCalendarItem Extends core\ClaseGestor {
 			return FALSE;
 		}
 		//caldav_data (el dav_name, se cambia al cambiarlo en collection)
-		$regexp = "(.*UID:.*)($oficina_old)";
+		$regexp = "(.*UID:.*)$oficina_old";
 		
-	    $sQuery = "UPDATE caldav_data SET caldav_data = regexp_replace(caldav_data, '$regexp', '\1$oficina_new')
+	    $sQuery = "UPDATE caldav_data SET caldav_data = regexp_replace(caldav_data, '$regexp', '\\1$oficina_new')
                      WHERE dav_name ~ '^\/$oficina_new'; ";
 
 		if (($oDbl->query($sQuery)) === FALSE) {
