@@ -54,7 +54,7 @@ class GestorCalendarItem Extends core\ClaseGestor {
 		$regexp = "(.*UID:.*)($oficina_old)";
 		
 	    $sQuery = "UPDATE caldav_data SET caldav_data = regexp_replace(caldav_data, '$regexp', '\1$oficina_new')
-                     WHERE dav_name ~ '^$oficina_new'; ";
+                     WHERE dav_name ~ '^\/$oficina_new'; ";
 
 		if (($oDbl->query($sQuery)) === FALSE) {
 			$sClauError = 'GestorCalendarItem.query';
@@ -78,7 +78,7 @@ class GestorCalendarItem Extends core\ClaseGestor {
 		$regexp = "(.*UID:.*)($oficina_old)";
 		
 	    $sQuery = "UPDATE caldav_data SET caldav_data = regexp_replace(caldav_data, '$regexp', '\1$oficina_new')
-                     WHERE dav_name ~ '^$oficina_new'; ";
+                     WHERE dav_name ~ '^\/$oficina_new'; ";
 
 		if (($oDbl->query($sQuery)) === FALSE) {
 			$sClauError = 'GestorCalendarItem.query';
@@ -89,7 +89,7 @@ class GestorCalendarItem Extends core\ClaseGestor {
 		// también sync_changes (cambia los dos: oficina y registro)
 		$regexp = "^/$oficina_old/(.*)";
 		$sQry = "UPDATE sync_changes SET dav_name= regexp_replace(dav_name, '$regexp', '/$oficina_new/\1')
-                WHERE dav_name ~ '^/$oficina_old'";
+                WHERE dav_name ~ '^\/$oficina_old'";
 		
 		if (($oDbl->query($sQry)) === FALSE) {
 		    $sClauError = 'DavicalUser.cambioNombre';
