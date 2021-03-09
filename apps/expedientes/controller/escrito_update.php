@@ -193,7 +193,7 @@ switch($Qque) {
             $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
             $rrule = $oPendiente->getRrule();
             if (empty($rrule)) {
-               // $oPendiente->marcar_contestado('contestado');
+                $oPendiente->marcar_contestado('contestado');
             } else {
                 // los periodicos
                 exit ("falta definir fecha para periodico");
