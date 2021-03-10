@@ -151,7 +151,7 @@ if (!empty($Qid_escrito)) {
     $padID = $oEtherpad->getPadId();
     $url = $oEtherpad->getUrl();
     
-    $iframe = "<iframe src='$url/p/$padID?showChat=false&showLineNumbers=false' width=1020 height=500></iframe>";
+    $iframe = "<iframe src='$url/p/$padID?showChat=false&showLineNumbers=false' width=1300 height=500></iframe>";
     
 } else {
     $entradilla = '';
