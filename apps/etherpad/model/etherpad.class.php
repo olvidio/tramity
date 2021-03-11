@@ -25,7 +25,7 @@ class Etherpad  extends Client {
      * @var string|null
      */ 
     private $apikey = '255a27fbe84ca4f15720a75ed58c603f2f325146eda850741bec357b0942e546';
-    private $apikey_dlb = '0e1fa73c4fb31cf92f68f514dbfa18f6be08b382cb61a25839dc365f5e8dee1d';
+    private $apikey_dlb = '7114153c4b981f57380f3bdb65444daed5e15efca3ec54ffa48f66270f927b50';
 
     /**
      * @var string|null
