@@ -55,7 +55,6 @@ fnjs_ver_doc_ep=function(event) {
         //url=rta.responseText;
         url=rta;
         win=window.open(url, "", winPrefs);
-        win.location.reload();
         win.focus();
     });
 	request.fail(function(JqXHR, textStatus, errorThrown){
