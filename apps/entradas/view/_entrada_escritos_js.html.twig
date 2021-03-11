@@ -22,6 +22,7 @@ fnjs_ver_doc_ec=function(event) {
         url=rta;
         w=window.open(url, "", winPrefs);
         w.focus();
+        w.location.reload(); // para recargar el etherpad, que la primera vez da errores
     });
 	request.fail(function(JqXHR, textStatus, errorThrown){
 		alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');

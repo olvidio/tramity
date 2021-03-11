@@ -335,6 +335,7 @@ fnjs_ver_escrito=function(id_escrito) {
     var url = server+'/apps/expedientes/controller/escrito_ver.php?id_escrito='+id_escrito;
     w=window.open(url, "", winPrefs);
     w.focus();
+    w.location.reload(); // para recargar el etherpad, que la primera vez da errores
 }
 fnjs_buscar_ver_escrito=function(formulario){
     rta=fnjs_solo_uno(formulario);
