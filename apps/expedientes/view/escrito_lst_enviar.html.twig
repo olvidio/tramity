@@ -56,7 +56,6 @@ fnjs_ver_escrito=function(id_escrito) {
     var url = server+'/apps/expedientes/controller/escrito_ver.php?id_escrito='+id_escrito;
     w=window.open(url, "", winPrefs);
     w.focus();
-    w.location.reload(); // para recargar el etherpad, que la primera vez da errores
 }
 
 fnjs_enviar_a_secretaria=function(id_escrito) {
@@ -221,7 +220,6 @@ fnjs_revisar_escrito=function(event,id_escrito) {
         url=rta;
         w=window.open(url, "", winPrefs);
         w.focus();
-        w.location.reload(); // para recargar el etherpad, que la primera vez da errores
     });
 	request.fail(function(JqXHR, textStatus, errorThrown){
 		alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
