@@ -1,0 +1,229 @@
+<div id="condiciones">
+<form id="que" name="que" action="apps/pendientes/controller/pendiente_buscar.php" method="post">
+<input type="hidden" id="calendario" name="calendario" value="{{ calendario }}" >
+<input type="hidden" id="que" name="que" value="buscar">
+
+<h2>{{ "buscar un pendiente"|trans }}</h2>
+
+  
+  {% if calendario == 'registro' %}
+  <!--  --------------- PROTOCOLO --------------- -->
+  <div class="form-group row">
+    <label class="col-2 col-form-label">{{ "¿A qué escrito hacia referencia?"|trans }}</label>
+    <div class="col-3">
+        {{ oDesplLugar.desplegable|raw }}
+    </div>
+    <div class="col-4">
+      <input id="prot_num" name="prot_num" size="12" value="{{ prot_num }}" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any')">
+      /
+      <input id="prot_any" name="prot_any" size="5" value="{{ prot_any }}" class=contenido title="{{ "año protocolo origen"|trans }}" >
+      ,<input id="prot_mas" name="prot_mas" size="10" value="{{ prot_mas }}" class=contenido title="{{ "información complementaria"|trans }}" >
+    </div>
+  </div>
+  {% endif %}
+  
+   <!--  --------------- ASUNTO --------------- -->
+  <div class="form-group row">
+    <label for="asunto_e" class="col-2 col-form-label">{{ "¿De que asunto trataba?"|trans }}</label>
+    <div class="col-8">
+      <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
+    </div>
+  </div>
+  
+  {% if secretaria %}
+  <!--  --------------------  Oficinas --------------------------  -->
+  <div class="form-group row align-items-center">
+    <label for="oficina" class="col-2">{{ "¿Cuál era la oficina responsable?"|trans }}:</label>
+    <div class="col-6">
+      	{{ oDesplOficinas.desplegable|raw }}
+    </div>
+  </div>
+  {% else %}
+	<input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
+  {% endif %}
+  
+  <!--  --------------------  Periodo --------------------------  -->
+  <div class="form-group row">
+      <label for="f_min" class="col col-2 col-form-label">{{ "periodo determinado entre"|trans }}</label>
+      <div class='col-2 date'>
+        <input tabindex='41' name='f_min' id='f_min' type='text' class="form-control" value="{{ f_min }}" />
+      </div>
+        {{ "y"|trans }}
+      <div class='col-2 date'>
+        <input tabindex='42' name='f_max' id='f_max' type='text' class="form-control" value="{{ f_max }}" />
+      </div>
+  </div> 
+  <!--  --------------------  Estados --------------------------  -->
+  <div class="form-group row">
+      <label for="f_min" class="col col-2 col-form-label">{{ "estado posibles del pendiente"|trans }}</label>
+      <div class='col-8'>
+        {{ oDesplStatus.radio(2)|raw }}
+      </div>
+  </div>
+  <!--  --------------------  Botones --------------------------  -->
+  <div class="row">
+    <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary" onClick="fnjs_buscar('#que');" >
+      {{ "buscar"|trans }}
+    </button>
+  </div>
+</form>
+</div>
+
+<div id="exportar" >
+    <form id='seleccionados' name='seleccionados' action='' method='post'>
+    <input type='hidden' name='permiso' value='3'>
+    <input type='Hidden' name='go' value='lista' >
+    <input type='Hidden' id='nuevo' name='nuevo' value='' >
+    {{ oTabla.mostrar_tabla|raw }}
+</form><br>
+</div>
+
+
+<script>
+$(function() {
+	$( "#f_min" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		dayOfWeekStart: globaljsVarDayStart,
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_max_iso = fnjs_convert2iso("#f_max", '{{ format }}');
+			this.setOptions({
+				maxDate: f_max_iso ? f_max_iso: false
+            })
+        }
+    });
+});
+    
+$(function() {
+	$( "#f_max" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		dayOfWeekStart: globaljsVarDayStart,
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_min_iso = fnjs_convert2iso("#f_min", '{{ format }}');
+			this.setOptions({
+				minDate: f_min_iso ? f_min_iso: false
+            })
+        }
+    });
+});
+
+fnjs_proto=function(num,any){
+    var numero;
+    var prot_num=$('#prot_num').val();
+    numero=prot_num.split("/");
+    if (numero[1]) {
+        $(num).val(numero[0]);
+        $(any).val(numero[1]);
+        $('#ok').focus();
+    }
+}
+
+fnjs_buscar=function(formulario){
+    $(formulario).attr('action',"apps/pendientes/controller/pendiente_buscar.php");
+    fnjs_enviar_formulario(formulario,'#main');
+}
+
+fnjs_modificar=function(formulario){
+    var s=0;
+    var r=0;
+    /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+    /* var sel=$('#'+formulario+' table .sel'); */
+    var sel=$(formulario+' input.sel');
+    $(sel).each(function(i){
+        if($(this).prop('checked')== true) {
+            s++;
+            if ($(this).attr('id')=="ax") r=1;
+        }
+    });
+    if ( s == 1 && r==1) {
+        alert ("{{ "No puede modificar este pendiente"|trans }}");
+        return false;
+    }
+    if ( s > 1 ) {
+        alert ("{{ "Sólo puede seleccionar un elemento"|trans }}");
+        return false;
+    }
+    if (s==0) {
+        alert ("{{ "No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la izquierda."|trans }}");
+        return false;
+    }
+    $('#nuevo').val(2);
+    $(formulario).attr('action',"apps/pendientes/controller/pendiente_form.php");
+    fnjs_enviar_formulario(formulario,'#main');
+    
+}
+
+fnjs_marcar=function(formulario){
+    $('#nuevo').val(4);
+    $(formulario).attr('action',"apps/pendientes/controller/pendiente_update_ics.php");
+    $(formulario).submit(function() {
+        $.ajax({
+            data: $(this).serialize(),
+            url: $(this).attr('action'),
+            type: 'post',
+                dataType: 'json',
+                complete: function (json) {
+                   if (json.success != true) {
+                       alert ('error: '+json.mensaje);
+                   }
+                }
+        });
+        return false;
+    });
+    $(formulario).submit();
+    $(formulario).off();
+    // tacho los marcados
+    /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+    /* var sel=$('#'+formulario+' table .sel'); */
+    $(formulario+' input.sel').each(function(i){
+        if($(this).prop('checked')== true){
+            $(this).parent().siblings().addClass('tachado');
+            $(this).prop('checked',false);
+        }
+    });
+}
+
+fnjs_borrar=function(formulario){
+    var seguro;
+    seguro=confirm("{{ "¿Está Seguro que desea borrar este pendiente?"|trans }}");
+    if (seguro) {
+        $('#nuevo').val(3);
+        $(formulario).attr('action',"apps/pendientes/controller/pendiente_update_ics.php");
+        $(formulario).submit(function() {
+            $.ajax({
+                data: $(this).serialize(),
+                url: $(this).attr('action'),
+                type: 'post',
+                dataType: 'json',
+                complete: function (json) {
+                   if (json.success != true) {
+                       alert ('error: '+json.mensaje);
+                   }
+                }
+            });
+            return false;
+        });
+        $(formulario).submit();
+        $(formulario).off();
+        // tacho los marcados
+        var form=$(formulario).id;
+        /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+        /* var sel=$('#'+formulario+' table .sel'); */
+        $(formulario+' input.sel').each(function(i){
+            if($(this).prop('checked')== true){
+                $(this).parent().siblings().addClass('tachado');
+                $(this).prop('checked',false);
+            }
+        });
+    }
+}
+
+</script>
+            
+
+

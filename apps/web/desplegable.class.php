@@ -32,20 +32,33 @@ class Desplegable {
 		}
 	}
 
+	public function radio($num_col='') {
+	    $num_col = empty($num_col)? 3 : $num_col;
+	    $col = "col-$num_col";
+	    if (!empty($this->sOpcion_sel)) {
+            if (is_array($this->sOpcion_sel)) { $a_sel = $this->sOpcion_sel; }
+            if (is_string($this->sOpcion_sel)) { $a_sel = explode(",", $this->sOpcion_sel); }
+	    } else {
+            $a_sel = [];
+	    }
+        $sHtml = '';
+        foreach($this->oOpciones as $key=>$val) {
+            $id = $this->sNombre.'_'.$key;
+            $name = $this->sNombre;
+            if (in_array($key, $a_sel)) { $sel = 'checked'; } else { $sel = ''; }
+            
+            $sHtml .= "<div class=\"$col form-check form-check-inline\">";
+            $sHtml .= "<input class=\"form-check-input\" type=\"radio\" name=\"$name\" id=\"$id\" value=\"$key\" $sel />";
+		    $sHtml .= "<label class=\"form-check-label\" for=\"$id\">$val</label>";
+            $sHtml .= '</div>';
+		}
+		
+		return $sHtml;
+	}
+
 	public function checkbox($num_col='') {
 	    $num_col = empty($num_col)? 3 : $num_col;
 	    $col = "col-$num_col";
-	    /*
-		$multiple = empty($this->bMultiple)? '' : 'multiple';
-		$tab_index = empty($this->iTabIndex)? '' : 'tabindex="'.$this->iTabIndex.'"';
-		$size = empty($this->iSize)? '' : 'size="'.$this->iSize.'"';
-		$clase = empty($this->sClase)? '' : 'class="'.$this->sClase.'"';
-		if (empty($this->sAction)) {
-			$sHtml = "<select $multiple $tab_index id=\"$this->sNombre\" name=\"$this->sNombre\" $clase $size>";
-		} else {
-			$sHtml = "<select $multiple $tab_index id=\"$this->sNombre\" name=\"$this->sNombre\" $clase $size onChange=\"$this->sAction\" >";
-		}
-		*/
 	    if (!empty($this->sOpcion_sel)) {
             if (is_array($this->sOpcion_sel)) { $a_sel = $this->sOpcion_sel; }
             if (is_string($this->sOpcion_sel)) { $a_sel = explode(",", $this->sOpcion_sel); }

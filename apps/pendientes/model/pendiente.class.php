@@ -100,6 +100,11 @@ class Pendiente {
     
     /**
      * Constructor de la classe.
+     * 
+     * @param string $parent_container (ej: oficina_adl)
+     * @param string $resource ('resigtro'|'oficina')
+     * @param string $cargo  (para obtener la autentificacion, permisos etc. ej: secretaria) 
+     * @param string $uid (cuando no es nuevo; para modificarlo)
      */
     function __construct($parent_container,$resource,$cargo,$uid) {
         

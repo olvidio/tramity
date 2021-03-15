@@ -13,7 +13,7 @@ use web\DateTimeLocal;
 * Se le puede pasar la varaible $nueva.
 *	Si es 1 >> inserta una nueva entrada.
 *	Si es 2 >> modifica un pendiente.
-*	Si es 3 >> elimina un pendiente: lo marca como cancelado.
+*	Si es 3 >> elimina un pendiente.
 *	Si es 4 >> marca como contestado un pendiente.
 * 
 *
@@ -277,7 +277,7 @@ switch ($Qnuevo) {
         echo json_encode($jsondata);
         exit();
 		break;
-	case "3": //eliminar pendiente. Lo pongo como cancelado.
+	case "3": //eliminar pendiente.
 		//vengo de un checkbox
         $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 		if (!empty($Qa_sel)) { // puedo seleccionar más de uno.
@@ -288,7 +288,8 @@ switch ($Qnuevo) {
 				$f_recur=strtok('#');
                 $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $cargo, $uid);
 				if (!empty($f_recur)) {
-					$oPendiente->marcar_excepcion($f_recur);
+					//$oPendiente->marcar_excepcion($f_recur);
+					$oPendiente->marcar_contestado("eliminar");
 				} else {
 					$oPendiente->marcar_contestado("eliminar");
 				}
