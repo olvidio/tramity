@@ -188,10 +188,9 @@ foreach($cPendientes as $oPendiente) {
         $a_exdates = $oPendiente->getExdates();
         $f_recurrentes = Rrule::recurrencias($rrule, $dtstart, $dtend, $f_plazo);
         //print_r($f_recurrentes);
-        $recur = 0;
         foreach ($f_recurrentes as $key => $f_iso) {
             $oF_recurrente = new DateTimeLocal($f_iso);
-            $recur++;
+            $t++;
             // Quito las excepciones.
             if (is_array($a_exdates) ){
                 foreach ($a_exdates as $icalprop) {
@@ -203,21 +202,21 @@ foreach($cPendientes as $oPendiente) {
                     }
                 }
             }
-            //$a_valores[$recur]['sel']="$uid#$cal_oficina#$f_recur";
+            //$a_valores[$t]['sel']="$uid#$cal_oficina#$f_recur";
             if ($perm_detalle >= PermRegistro::PERM_MODIFICAR) {
-                $a_valores[$recur]['sel']="$uid#$cal_oficina#$f_iso";
+                $a_valores[$t]['sel']="$uid#$cal_oficina#$f_iso";
             } else {
-                $a_valores[$recur]['sel']="x";
+                $a_valores[$t]['sel']="x";
             }
-            $a_valores[$recur][1]=$protocolo;
-            $a_valores[$recur][2]=$str_etiquetas;
-            $a_valores[$recur][3]=$periodico;
-            $a_valores[$recur][4]=$asunto;
-            $a_valores[$recur][5]=$oF_recurrente->getFromLocal();
-            $a_valores[$recur][6]=$oficinas_txt;
-            $a_valores[$recur][7]=$encargado;
+            $a_valores[$t][1]=$protocolo;
+            $a_valores[$t][2]=$str_etiquetas;
+            $a_valores[$t][3]=$periodico;
+            $a_valores[$t][4]=$asunto;
+            $a_valores[$t][5]=$oF_recurrente->getFromLocal();
+            $a_valores[$t][6]=$oficinas_txt;
+            $a_valores[$t][7]=$encargado;
             // para el orden
-            $a_valores[$recur]['order']=$key; // (es la fecha iso sin separador)
+            $a_valores[$t]['order']=$key; // (es la fecha iso sin separador)
         }
     } else {
         $periodico="";
