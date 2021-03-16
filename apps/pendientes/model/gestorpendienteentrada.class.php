@@ -71,7 +71,8 @@ class GestorPendienteEntrada {
         
         $gesEntradas = new GestorEntrada();
         foreach ($a_prot as $aProt) {
-            // buscar la entrada con esta ref.
+            // buscar la entrada con esta ref. No tengo en cuenta el 'mas' para buscar la entrada.
+            unset ($aProt['mas']);
             $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt);
             $this->getInfoPendientes($cEntradas);
         }
