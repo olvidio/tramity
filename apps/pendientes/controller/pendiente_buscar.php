@@ -85,13 +85,8 @@ if ($Qque == 'buscar') {
     $oBuscarPendiente = new BuscarPendiente();
     $oBuscarPendiente->setCalendario($Qcalendario);
 
-    if ($Qcalendario == 'registro') {
+    if ($Qcalendario == 'registro' && !empty($Qid_lugar)) {
         // buscar en el registro:
-        $a_condicion['id_lugar'] = $Qid_lugar;
-        $a_condicion['prot_num'] = $Qprot_num;
-        $a_condicion['prot_any'] = $Qprot_any;
-        $str_condicion = http_build_query($a_condicion);
-        
         $Qprot_any = empty($Qprot_any)? '' : core\any_2($Qprot_any);
         
         $oBuscar = new Buscar();
@@ -107,9 +102,11 @@ if ($Qque == 'buscar') {
                 if ($key == 'entradas') {
                     $id_reg = $oEntrada->getId_entrada();
                 }
+                /*
                 if ($key == 'escritos') {
                     $id_reg = $oEntrada->getId_escrito();
                 }
+                */
                 $aIds[] = $id_reg;
             }
         }
