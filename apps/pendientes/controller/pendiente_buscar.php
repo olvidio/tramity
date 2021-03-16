@@ -45,7 +45,7 @@ $Qf_max_enc =  (string) \filter_input(INPUT_POST, 'f_max');
 $Qf_max = urldecode($Qf_max_enc);
 
 $gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayLugares();
+$a_lugares = $gesLugares->getArrayBusquedas();
 
 $oDesplLugar = new Desplegable();
 $oDesplLugar->setNombre('id_lugar');
