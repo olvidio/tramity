@@ -889,6 +889,16 @@ class Lista {
      *
      */
     function mostrar_datatable() {
+        $fecha_format_en = FALSE;
+        $idioma = $_SESSION['session_auth']['idioma'];
+        if (!empty($idioma)) {
+            $a_idioma = explode('.',$idioma);
+            $code_lng = $a_idioma[0];
+            if ($code_lng == 'en_US') {
+                $fecha_format_en = TRUE;
+            }
+        }
+        
         $a_botones = $this->aBotones;
         $a_cabeceras = $this->aCabeceras;
         $a_valores = $this->aDatos;
@@ -1014,10 +1024,14 @@ class Lista {
                     }
                 } else {
                     // si es una fecha, pongo la clase fecha, para exportar a excel...
-                    if (preg_match("/^(\d)+[\/-]\d\d[\/-](\d\d)+$/",$valor)) {
+                    if (preg_match("/^(\d+)[\/-](\d+)[\/-](\d{2,4})$/",$valor)) {
                         list( $d,$m,$y) = preg_split('/[:\/\.-]/',$valor);
-                        $fecha_iso=date("Y-m-d",mktime(0,0,0,$m,$d,$y));
-                        $tbody.="<td class='fecha' fecha_iso='$fecha_iso'>$valor</td>";
+                        if ($fecha_format_en) {
+                            $fecha_iso=date("Y-m-d",mktime(0,0,0,$d,$m,$y));
+                        } else {
+                            $fecha_iso=date("Y-m-d",mktime(0,0,0,$m,$d,$y));
+                        }
+                        $tbody.="<td class='fecha' data-sort='$fecha_iso' fecha_iso='$fecha_iso'>$valor</td>";
                     } else {
                         $tbody.="<td>$valor</td>";
                     }
