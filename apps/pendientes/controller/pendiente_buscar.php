@@ -155,6 +155,7 @@ if ($Qque == 'buscar') {
         $plazo = $oPendiente->getF_plazo()->getFromLocal();
         $plazo_iso = $oPendiente->getF_plazo()->format('Ymd'); // sólo números, para poder ordenar.
         
+        $estado = $oPendiente->getStatus();
         $of_ponente = $oPendiente->getPonente();
         $ponente = $a_oficinas[$of_ponente];
         
@@ -185,6 +186,7 @@ if ($Qque == 'buscar') {
         $a_valores[$t][5]=$plazo;
         $a_valores[$t][6]=$ponente;
         $a_valores[$t][7]=$oficinas_txt;
+        $a_valores[$t][8]=$estado;
         // para el orden
         if ($plazo!="x") {
             $a_valores[$t]['order'] = $plazo_iso;
@@ -206,6 +208,7 @@ $a_cabeceras=array( ucfirst(_("protocolo")),
     array('name'=>ucfirst(_("fecha plazo")),'class'=>'fecha'),
     ucfirst(_("ponente")),
     ucfirst(_("oficinas")),
+    ucfirst(_("estado")),
 );
 
 $oTabla = new Lista();

@@ -86,12 +86,17 @@ switch($Qque) {
     case 'lista_pendientes':
         $txt_err = '';
         $Qpendientes_uid = (string) \filter_input(INPUT_POST, 'pendientes_uid');
+        $Qid_contestados = (string) \filter_input(INPUT_POST, 'id_contestados');
         $txt_err = '';
         $a_pendientes_uid = explode(',', $Qpendientes_uid);
+        $a_id_contestados = explode(',', $Qid_contestados);
         
+        $a_pendientes_uid_filtered = array_filter($a_pendientes_uid);
+        $a_id_contestados_filtered = array_filter($a_id_contestados);
         $a_valores = [];
         $p = 0;
-        foreach ($a_pendientes_uid as $uid_container) {
+        foreach ($a_pendientes_uid_filtered as $uid_container) {
+            if (in_array($uid_container, $a_id_contestados_filtered)) { continue; }
             $f_iso = '';
             $uid = strtok($uid_container, '#');
             $parent_container = strtok('#');

@@ -12,6 +12,7 @@
 
 <div class="m-3"> {# para margenes #}
 
+<h2>{{ "Lista de pendientes relacionados"|trans }}</h2>
 <hr>
 <div id="exportar" calss="">
 <form id='seleccionados' name='seleccionados' action='' method='post'>
@@ -38,6 +39,7 @@
 	<input type='Hidden' id='id_escrito' name='id_escrito' value='{{ id_escrito }}' >
 	<input type='Hidden' name='que' value='lista_pendientes' >
 	<input type='Hidden' name='pendientes_uid' value='{{ pendientes_uid|raw }}' >
+	<input type='Hidden' id='id_contestados' name='id_contestados' value='' >
 </form>
 </div>
 
@@ -54,21 +56,23 @@ fnjs_enviar=function() {
 }
 
 fnjs_marcar=function(formulario){
-	var s=0; // el numero de selecionados
-	var r=0; // no tiene permisos para el detalle (reservado)
+	var id_contestados='';
+	var id='';
 	var p=0; // para los periodicos
 	/* selecciono los elementos con class="sel" de las tablas del id=formulario */
 	$(formulario+' input.sel').each(function(i){
-		debugger;
 		if($(this).prop('checked')== true) {
-			s++;
 			if ($(this).attr('id')=="ax") r=1;
+			id=$(this).attr('id');
 			a=$(this).attr('id').split("#");
-			if (a[2]) p=1;
+			nom=a[0].substring(1); // quitar la 'a' inicial
+			id_contestados += nom+'#'+a[1];
+			id_contestados += ',';
 		}
 	});
-	
-$('#nuevo').val(4);
+
+	//debugger;
+	$('#nuevo').val(4);
 	var url = '/apps/pendientes/controller/pendiente_update_ics.php';
 	var datos = $(formulario).serialize(),
     request=$.ajax({
@@ -81,6 +85,7 @@ $('#nuevo').val(4);
         if (json.success != true) {
             alert ('error: '+json.mensaje);
         } else {
+            $('#id_contestados').val(id_contestados);
         	fnjs_actualizar();
         }
     });
