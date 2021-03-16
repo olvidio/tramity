@@ -50,7 +50,7 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
 
 $estado = 0;
 $visibilidad = 0;
-if (empty($Qid_expediente)) {
+if (!empty($Qid_expediente)) {
     $oExpediente = new Expediente($Qid_expediente);
     $visibilidad = $oExpediente->getVisibilidad();
     $estado = $oExpediente->getEstado();
