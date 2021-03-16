@@ -112,7 +112,8 @@ switch($Qque) {
             if (!empty($rrule)) {
                 // calcular las recurrencias que tocan.
                 $oF_plazo = new DateTimeLocal(); // + 6 meses
-                $oF_plazo->add('P6M');
+                $interval = new DateInterval('P6M');
+                $oF_plazo->add($interval);
                 $f_plazo = $oF_plazo->getIsoTime();
                 $dtstart=$oPendiente->getF_inicio()->getIso();
                 $dtend=$oPendiente->getF_end()->getIso();

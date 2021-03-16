@@ -356,7 +356,7 @@ class VerTabla {
             $categoria = $oEscrito->getCategoria();
             $categoria_txt = $a_categorias[$categoria];
             $visibilidad = $oEscrito->getVisibilidad();
-            $visibilidad_txt = $a_visibilidad[$visibilidad];
+            $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '??' : $a_visibilidad[$visibilidad];
 
             $a_valores[$i]['sel']="$id_escrito";
             $a_valores[$i][1]=$protocolo_local;

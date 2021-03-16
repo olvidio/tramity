@@ -165,7 +165,7 @@ if ($Qid_expediente) {
         $adjuntos = '';
         $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
         if (!empty($a_id_adjuntos)) {
-            $adjuntos = '<i class="fas fa-paperclip fa-fw"></i>';
+            $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto(event,'$id_escrito');\"  ></i>";
         }
         
         $a_accion['protocolo'] = $dst_txt;
