@@ -113,8 +113,8 @@ if (!empty($Qsimple_per)) { // sólo para los periodicos.
 					$request['meses']= (string) \filter_input(INPUT_POST,'mes_num_ref');
 				break;
 				case "num_dm":
-					$request['dias']= (string) \filter_input(INPUT_POST,'dias');
-					$request['meses']= (string) \filter_input(INPUT_POST,'meses');
+					$request['dias'] = (array)  \filter_input(INPUT_POST, 'dias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+					$request['meses'] = (array) \filter_input(INPUT_POST,'meses', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 				break;
 			}
 			$rrule = Rrule::montar_rrule($request);
@@ -142,7 +142,7 @@ if (!empty($Qsimple_per)) { // sólo para los periodicos.
 		case "periodico_d_s":
 			$request['tipo']="d_s";
 			$request['tipo_dia'] = (string) \filter_input(INPUT_POST, 'tipo_dia');
-			$request['dias'] = (string) \filter_input(INPUT_POST, 'dias_w');
+            $request['dias'] = (array)  \filter_input(INPUT_POST, 'dias_w', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 			$rrule = Rrule::montar_rrule($request);
 			break;
 		case "periodico_d_d":
