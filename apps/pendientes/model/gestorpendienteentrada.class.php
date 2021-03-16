@@ -9,6 +9,12 @@ require_once("/usr/share/awl/inc/iCalendar.php");
 
 class GestorPendienteEntrada {
     /**
+     * num_periodicos de Pendiente
+     *
+     * @var integer
+     */
+    private $num_periodicos;
+    /**
      * num_pendientes de Pendiente
      *
      * @var integer
@@ -43,28 +49,8 @@ class GestorPendienteEntrada {
     
     /* METODES PUBLICS ----------------------------------------------------------*/
     
-    public function getPedientesByRef($a_prot) {
-        $this->num_pendientes = 0;
-        $this->a_lista_pendientes = [];
-        $this->pendientes_uid = '';
-        
-        $gesEntradas = new GestorEntrada();
-        foreach ($a_prot as $aProt) {
-            // buscar la entrada con esta ref.
-            $cEntradas = $gesEntradas->getEntradasByRefDB($aProt);
-            $this->getInfoPendientes($cEntradas);
-        }
-        
-        $a_params =  [
-            'num_pendientes' => $this->num_pendientes,
-            'a_lista_pendientes' => $this->a_lista_pendientes,
-            'pendientes_uid' => $this->pendientes_uid,
-        ];
-        
-        return $a_params;
-    }
-    
     public function getPedientesByProtOrigen($a_prot) {
+        $this->num_periodicos = 0;
         $this->num_pendientes = 0;
         $this->a_lista_pendientes = [];
         $this->pendientes_uid = '';
@@ -73,11 +59,15 @@ class GestorPendienteEntrada {
         foreach ($a_prot as $aProt) {
             // buscar la entrada con esta ref. No tengo en cuenta el 'mas' para buscar la entrada.
             unset ($aProt['mas']);
+            // No buscar si no hay número de protocoloa (solo nombre)
+            if (empty($aProt['num'])) { continue; }
+            if (empty($aProt['any'])) { continue; }
             $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt);
             $this->getInfoPendientes($cEntradas);
         }
         
         $a_params =  [
+            'num_periodicos' => $this->num_priodicos,
             'num_pendientes' => $this->num_pendientes,
             'a_lista_pendientes' => $this->a_lista_pendientes,
             'pendientes_uid' => $this->pendientes_uid,
@@ -104,6 +94,8 @@ class GestorPendienteEntrada {
                     $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
                     $status = $oPendiente->getStatus();
                     if ($status == 'COMPLETED' OR $status == 'CANCELLED') continue;
+                    $rrule = $oPendiente->getRrule();
+                    $this->num_periodicos += empty($rrule)? 0 : 1;
                     $this->num_pendientes++;
                     $this->a_lista_pendientes[] = $oPendiente->getAsunto();
                     $this->pendientes_uid .= empty($this->pendientes_uid)? $uid_container : ','.$uid_container;

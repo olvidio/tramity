@@ -203,8 +203,7 @@ switch($Qque) {
                 $oPendiente->marcar_contestado('contestado');
             } else {
                 // los periodicos
-                exit ("falta definir fecha para periodico");
-                $oPendiente->marcar_excepcion($f_recur);
+                $txt_err .= _("falta definir fecha para periodico");
             }
         }
         
