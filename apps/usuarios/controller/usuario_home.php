@@ -199,16 +199,18 @@ $filtro = 'buscar';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// escritos_cr = 14;
-$filtro = 'escritos_cr';
-    $active = ($filtro == $Qfiltro)? 'active' : '';
-    $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-    $num_orden = 14;
-    $text = _("escritos de cr");
-    $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
-$a_pills[$num_orden] = $pill;
+if (is_true(ConfigGlobal::soy_dtor())) {
+    // escritos_cr = 14;
+    $filtro = 'escritos_cr';
+        $active = ($filtro == $Qfiltro)? 'active' : '';
+        $aQuery = [ 'filtro' => $filtro ];
+        $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+        $num_orden = 14;
+        $text = _("escritos de cr");
+        $num = '';
+        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+    $a_pills[$num_orden] = $pill;
+}
 
 // buscar = 15;
 $filtro = 'permanentes_cr';
