@@ -90,6 +90,7 @@ fnjs_enviar_escrito=function(id_escrito) {
              if (json.num_pendientes == 0) {
                  // No tiene pendientes
                 fnjs_enviar_escrito_directo(id_escrito);
+                return true;
              }
              if (json.num_pendientes == 1 && json.num_periodicos == 0) {
                  $.confirm({
@@ -105,7 +106,7 @@ fnjs_enviar_escrito=function(id_escrito) {
                      }
              	});
              }
-             if (json.num_pendientes > 1 OR json.num_periodicos > 0) {
+             if (json.num_pendientes > 1 || json.num_periodicos > 0) {
                  $.confirm({
                      title: json.mensaje,
                      content: json.lista_pendientes,
