@@ -155,7 +155,7 @@ class EntradaLista {
                 $oBuscar->setF_max($oHoy->getIso(),FALSE);
                 $oBuscar->setF_min($oIni->getIso(),FALSE);
                 
-                $aCollection = $oBuscar->getCollection(2);
+                $aCollection = $oBuscar->getCollection(5);
                 foreach ($aCollection as $key => $cCollection) {
                     $oTabla = new VerTabla();
                     $oTabla->setKey($key);

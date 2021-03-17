@@ -22,9 +22,19 @@ class GestorEntrada Extends GestorEntradaDB {
         $oEntradaDBSet = new Set();
         $oCondicion = new Condicion();
         $aCondi = array();
+        $COND_OR = '';
         foreach ($aWhere as $camp => $val) {
             if ($camp == '_ordre') continue;
             if ($camp == '_limit') continue;
+            if ($camp == 'asunto_detalle') {
+                $valor = $aWhere[$camp];
+                $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
+                $COND_OR .= " OR ";
+                $COND_OR .= "public.sin_acentos(detalle::text)  ~* public.sin_acentos('$valor'::text) )";
+                
+                unset($aWhere[$camp]);
+                continue;
+            }
             $sOperador = isset($aOperators[$camp])? $aOperators[$camp] : '';
             if ($a = $oCondicion->getCondicion($camp,$sOperador,$val)) $aCondi[]=$a;
             // operadores que no requieren valores
@@ -33,7 +43,14 @@ class GestorEntrada Extends GestorEntradaDB {
             if ($sOperador == 'TXT') unset($aWhere[$camp]);
         }
         $sCondi = implode(' AND ',$aCondi);
-        if ($sCondi!='') $sCondi = " WHERE ".$sCondi;
+        if ($sCondi != '') $sCondi = " WHERE ".$sCondi;
+        if ($COND_OR != '') {
+            if ($sCondi != '') {
+                $sCondi .= " AND ".$COND_OR;
+            } else {
+                $sCondi .= " WHERE ".$COND_OR;
+            }
+        }
         $sOrdre = '';
         $sLimit = '';
         if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') $sOrdre = ' ORDER BY '.$aWhere['_ordre'];

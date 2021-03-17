@@ -86,10 +86,20 @@ fnjs_antecedente=function(event,n=5) {
 	var err=0;
 	var que = 'buscar_'+n;
 	var id_expediente=$('#id_expediente').val();
-	var oficina_buscar=$('#oficina_buscar').val();
-	var asunto_buscar=$('#asunto_buscar').val();
+    var asunto_buscar=$('#asunto_buscar').val();
 	
 	if (!n) { alert("{{ "No se ha definido el tipo de escrito"|trans }}"); err=1; }
+
+    // mostrar oficinas o cargos segun sea entrada o expediente;
+    if (n == 1) {
+        $('#oficina_buscar_1').show();
+        $('#oficina_buscar_2').hide();
+        var oficina_buscar=$('#oficina_buscar_1').val();
+    } else {
+        $('#oficina_buscar_1').hide();
+        $('#oficina_buscar_2').show();
+        var oficina_buscar=$('#oficina_buscar_2').val();
+    }
 
 	if (err!=1) {
         var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';

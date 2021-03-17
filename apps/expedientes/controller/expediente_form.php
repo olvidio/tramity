@@ -13,6 +13,7 @@ use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
 use web\ProtocoloArray;
+use usuarios\model\entity\GestorOficina;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -90,6 +91,9 @@ foreach ($cCargos_oficina as $oCargo) {
     $a_posibles_cargos_oficina[$id_cargo] = $cargo;
     $txt_option_cargos_oficina .= "<option value=$id_cargo >$cargo</option>";
 }
+
+$gesOficinas = new GestorOficina();
+$a_posibles_oficinas = $gesOficinas->getArrayOficinas();
 
 if ($Qid_expediente) {
     $titulo=_("expediente");
@@ -190,7 +194,8 @@ if ($Qid_expediente) {
     $oArrayDesplFirmas ->setBlanco('t');
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas(event)');
 
-    $oDesplOficinas = new web\Desplegable('oficina_buscar',$a_posibles_cargos,'',TRUE);
+    $oDesplOficinas = new web\Desplegable('oficina_buscar_1',$a_posibles_oficinas,'',TRUE);
+    $oDesplCargos = new web\Desplegable('oficina_buscar_2',$a_posibles_cargos,'',TRUE);
     
     // $a_preparar[] = ['id' => $id_cargo, 'text' => $cargo, 'chk' => '', 'visto' => 0];
     $json_preparar = $oExpediente->getJson_preparar();
@@ -228,7 +233,8 @@ if ($Qid_expediente) {
     $oArrayDesplFirmas ->setBlanco('t');
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas(event)');
         
-    $oDesplOficinas = new web\Desplegable('oficina_buscar',$a_posibles_cargos,'',TRUE);
+    $oDesplOficinas = new web\Desplegable('oficina_buscar_1',$a_posibles_oficinas,'',TRUE);
+    $oDesplCargos = new web\Desplegable('oficina_buscar_2',$a_posibles_cargos,'',TRUE);
 }
 
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes();
@@ -294,6 +300,7 @@ $a_campos = [
     'pag_respuesta' => $pag_respuesta,
     //búsquedas
     'oDesplOficinas' => $oDesplOficinas,
+    'oDesplCargos' => $oDesplCargos,
     // preparar
     'a_preparar' => $a_preparar,
     // para la pagina js (prioridades)

@@ -130,8 +130,8 @@ class Buscar {
             case 'proto':
                 // por asunto
                 if (!empty($this->asunto)) {
-                    $aWhereEntrada['asunto'] = $this->asunto;
-                    $aOperadorEntrada['asunto'] = 'sin_acentos';
+                    // en este caso el operador es 'sin_acentos'
+                    $aWhereEntrada['asunto_detalle'] = $this->asunto;
                 }
                 
                 $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
@@ -292,8 +292,8 @@ class Buscar {
                 // buscar en entradas (sólo entradas 17-3-2021)
                 $cEntradas = $this->buscarEntradas();
                 $aCollections['entradas'] = $cEntradas;
-                //$cEscritos = $this->buscarEscritos();
-                //$aCollections['escritos'] = $cEscritos;
+                $cEscritos = $this->buscarEscritos();
+                $aCollections['escritos'] = $cEscritos;
                 return $aCollections;
                 break;
             case 3:
@@ -351,6 +351,12 @@ class Buscar {
                 $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
             break;
+            case 5:
+                // como 2 pero solo buscar en entradas (sólo entradas 17-3-2021)
+                $cEntradas = $this->buscarEntradas();
+                $aCollections['entradas'] = $cEntradas;
+                return $aCollections;
+                break;
         }
     
     }
@@ -383,8 +389,8 @@ class Buscar {
         }
         
         if (!empty($this->asunto)) {
-            $aWhere['asunto'] = $this->asunto;
-            $aOperador['asunto'] = 'sin_acentos';
+            // en este caso el operador es 'sin_acentos'
+            $aWhere['asunto_detalle'] = $this->asunto;
         }
 
         if (!empty($this->oficina)) {
@@ -469,8 +475,8 @@ class Buscar {
         }
         
         if (!empty($this->asunto)) {
-            $aWhere['asunto'] = $this->asunto;
-            $aOperador['asunto'] = 'sin_acentos';
+            // en este caso el operador es 'sin_acentos'
+            $aWhere['asunto_detalle'] = $this->asunto;
         }
         
         if ($this->bByPass) {

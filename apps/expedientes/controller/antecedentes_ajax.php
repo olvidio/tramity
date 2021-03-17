@@ -69,9 +69,8 @@ switch ($Qque) {
             $aWhere['ponente'] = $Qoficina_buscar;
 	    }
 	    if (!empty($Qasunto_buscar)) {
-            $aWhere['asunto'] = $Qasunto_buscar;
-            $aOperador['asunto'] = '~*';
-	        
+            // en este caso el operador es 'sin_acentos'
+	        $aWhere['asunto_detalle'] = $Qasunto_buscar;
 	    }
 	    // por defecto, buscar sólo 15.
 	    if (empty($Qasunto_buscar && empty($Qoficina_buscar))) {
@@ -93,7 +92,7 @@ switch ($Qque) {
 	        $fecha_txt = $oEntrada->getF_entrada()->getFromLocal();
 	        $id_of_ponente = $oEntrada->getPonente();
 	        
-	        $ponente_txt = $a_posibles_oficinas[$id_of_ponente];
+	        $ponente_txt = empty($a_posibles_oficinas[$id_of_ponente])? '?' : $a_posibles_oficinas[$id_of_ponente];
 	        
 	        $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >ver</span>";
 	        $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('entrada','$id_entrada','$Qid_expediente');\" >adjuntar</span>";
@@ -120,9 +119,8 @@ switch ($Qque) {
             $aWhere['ponente'] = $Qoficina_buscar;
 	    }
 	    if (!empty($Qasunto_buscar)) {
-            $aWhere['asunto'] = $Qasunto_buscar;
-            $aOperador['asunto'] = '~*';
-	        
+            // en este caso el operador es 'sin_acentos'
+	        $aWhere['asunto_detalle'] = $Qasunto_buscar;
 	    }
 	    // por defecto, buscar sólo 15.
 	    if (empty($Qasunto_buscar && empty($Qoficina_buscar))) {
@@ -176,7 +174,6 @@ switch ($Qque) {
 	    if (!empty($Qasunto_buscar)) {
             $aWhere['asunto'] = $Qasunto_buscar;
             $aOperador['asunto'] = '~*';
-	        
 	    }
 	    // por defecto, buscar sólo 15.
 	    if (empty($Qasunto_buscar && empty($Qoficina_buscar))) {
