@@ -67,7 +67,7 @@ class GestorPendienteEntrada {
         }
         
         $a_params =  [
-            'num_periodicos' => $this->num_priodicos,
+            'num_periodicos' => $this->num_periodicos,
             'num_pendientes' => $this->num_pendientes,
             'a_lista_pendientes' => $this->a_lista_pendientes,
             'pendientes_uid' => $this->pendientes_uid,
