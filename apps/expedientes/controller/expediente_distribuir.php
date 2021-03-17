@@ -135,7 +135,7 @@ if ($Qfiltro == 'distribuir') {
     // para encargar a los oficiales
     $id_oficina = ConfigGlobal::role_id_oficina();
     $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
-    $oDesplOficiales = new Desplegable('id_oficial',$a_usuarios_oficina,$id_ponente,TRUE);
+    $oDesplOficiales = new Desplegable('id_oficial',$a_usuarios_oficina,$id_ponente,FALSE);
     $ver_encargar = TRUE;
 }
 
