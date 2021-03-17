@@ -496,8 +496,6 @@ switch($Qque) {
         if (!empty($Qid_expediente)) {
             $oExpediente = new Expediente($Qid_expediente);
             $oExpediente->DBCarregar();
-            $oPermisoRegistro = new PermRegistro();
-            $perm_asunto = $oPermisoRegistro->permiso_detalle($oExpediente, 'asunto');
             // Mantego al ponente como creador...
         } else {
             // si falla el javascript, puede ser que se hagan varios click a 'Guardar' 
@@ -522,22 +520,16 @@ switch($Qque) {
             $oExpediente = new Expediente();
             $Qestado = Expediente::ESTADO_BORRADOR;
             $oExpediente->setPonente($Qponente);
-            $perm_asunto = PermRegistro::PERM_MODIFICAR;
         }
         
 
         $oExpediente->setId_tramite($Qtramite);
         $oExpediente->setEstado($Qestado);
         $oExpediente->setPrioridad($Qprioridad);
-        
         $oExpediente->setF_reunion($Qf_reunion);
         $oExpediente->setF_aprobacion($Qf_aprobacion);
         $oExpediente->setF_contestar($Qf_contestar);
-        
-        if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
-            $oExpediente->setAsunto($Qasunto);
-        }
-
+        $oExpediente->setAsunto($Qasunto);
         $oExpediente->setEntradilla($Qentradilla);
         
         // según el trámite mirar si hay que grabar oficiales y/o varios cargos.
