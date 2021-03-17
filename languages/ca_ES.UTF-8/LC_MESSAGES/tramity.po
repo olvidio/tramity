@@ -1,302 +1,4660 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tramity\n"
-"POT-Creation-Date: 2020-06-08 20:31+0200\n"
-"PO-Revision-Date: 2020-06-10 09:38+0200\n"
+"POT-Creation-Date: 2021-03-17 13:52+0100\n"
+"PO-Revision-Date: 2021-03-17 17:51+0100\n"
 "Last-Translator: Daniel Serrabou <dani@moneders.net>\n"
 "Language-Team: \n"
 "Language: ca_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-Basepath: ../apps\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
+#: busquedas/controller/buscar_escrito.php:129
+#, fuzzy
+msgid "1 mes"
+msgstr "1 mes"
+
+#: busquedas/controller/buscar_escrito.php:130
+#, fuzzy
+msgid "3 meses"
+msgstr "3 mesos"
+
+#: busquedas/controller/buscar_escrito.php:131
+#, fuzzy
+msgid "6 meses"
+msgstr "6 mesos"
+
+#: busquedas/controller/buscar_escrito.php:132
+#, fuzzy
+msgid "1 año"
+msgstr "1 any"
+
+#: busquedas/controller/buscar_escrito.php:133
+msgid "2 años"
+msgstr "2 anys"
+
+#: busquedas/controller/buscar_escrito.php:134
+#, fuzzy
+msgid "más de 2 años"
+msgstr "més de 2 anys"
+
+#: busquedas/controller/lista_permanentes.php:108
+msgid "Debe indicar el protocolo o el asunto"
+msgstr "Heu d'indicar el protocol o l'asumpte"
+
+#: busquedas/controller/lista_permanentes.php:123
+#, fuzzy
+msgid "AVISOS DE CR DE NÚMERO BAJO: por oficinas"
+msgstr "AVISOS CR DE BAIX NOMBRE: per oficines"
+
+#: busquedas/controller/lista_permanentes.php:129
+#, fuzzy, php-format
+msgid "oficina %s"
+msgstr "oficina %s"
+
+#: busquedas/controller/lista_permanentes.php:149
+#, fuzzy
+msgid "AVISOS DE CR DE NÚMERO BAJO: por años"
+msgstr "AVISOS CR DE BAIX NOMBRE: Des de fa anys"
+
+#: busquedas/controller/lista_permanentes.php:153
+#: busquedas/controller/lista_permanentes.php:166
+#, fuzzy, php-format
+msgid "año %s"
+msgstr "any %s"
+
+#: busquedas/model/vertabla.class.php:177
+#: busquedas/model/vertabla.class.php:283 davical/controller/user_lista.php:92
+#: etiquetas/controller/etiqueta_lista.php:49
+#: expedientes/controller/escrito_form.php:135
+#: lugares/controller/grupo_lista.php:50 lugares/controller/lugar_lista.php:55
+#: pendientes/controller/pendiente_buscar.php:201
+#: pendientes/controller/pendiente_tabla.php:118
+#: tramites/controller/tramitecargo_ajax.php:104
+#: usuarios/controller/cargo_grupo_lista.php:53
+#: usuarios/controller/cargo_lista.php:54
+#: usuarios/controller/usuario_lista.php:55
+msgid "modificar"
+msgstr "modificar"
+
+#: busquedas/model/vertabla.class.php:178
+#: busquedas/model/vertabla.class.php:284
+#: expedientes/controller/expediente_accion.php:102
+#: pendientes/controller/pendiente_buscar.php:202
+#: pendientes/controller/pendiente_tabla.php:120
+#: tramites/controller/tramitecargo_ajax.php:109
+msgid "eliminar"
+msgstr "eliminar"
+
+#: busquedas/model/vertabla.class.php:179
+#, fuzzy
+msgid "anular"
+msgstr "Cancel·lar"
+
+#: busquedas/model/vertabla.class.php:183
+#: busquedas/model/vertabla.class.php:288
+#: entradas/model/entity/entradadb.class.php:936
+#: expedientes/model/entity/escritodb.class.php:1256
+#: pendientes/model/entity/pendientedb.class.php:989
+#: pendientes/view/pendiente_form.html.twig:131
+msgid "detalle"
+msgstr "detall"
+
+#: busquedas/model/vertabla.class.php:184
+#: busquedas/model/vertabla.class.php:289
+#: entradas/model/entradalista.class.php:246
+#: expedientes/controller/antecedentes_ajax.php:261
+#: expedientes/model/escritolista.class.php:138
+#: expedientes/model/escritolista.class.php:283
+#: expedientes/model/escritolista.class.php:286
+#: expedientes/model/expedientelista.class.php:605
+#: expedientes/view/escrito_lst_enviar.html.twig:7
+msgid "ver"
+msgstr "veure"
+
+#: busquedas/model/vertabla.class.php:185
+#: expedientes/model/entity/escritodb.class.php:1364
+msgid "accion"
+msgstr "acció"
+
+#: busquedas/model/vertabla.class.php:187
+#: busquedas/model/vertabla.class.php:291
+#: busquedas/view/buscar_escrito.html.twig:10
+#: busquedas/view/lista_permanentes.html.twig:8
+#: pendientes/view/pendiente_buscar.html.twig:17
+#: pendientes/view/pendiente_form.html.twig:120
+#, fuzzy
+msgid "protocolo origen"
+msgstr "protocol d'origen"
+
+#: busquedas/model/vertabla.class.php:188
+#: busquedas/model/vertabla.class.php:293
+#: entradas/view/entrada_lista.html.twig:14
+#: expedientes/view/escrito_lista.html.twig:16
+#: expedientes/view/escrito_lst_enviar.html.twig:13
+#: expedientes/view/expediente_form.html.twig:174
+#, fuzzy
+msgid "ref."
+msgstr "ref. cr 1/14, 10,c)"
+
+#: busquedas/model/vertabla.class.php:189
+#: busquedas/model/vertabla.class.php:294
+#: entradas/model/entity/entradadb.class.php:948
+#: expedientes/model/entity/escritodb.class.php:1340
+#: entradas/view/entrada_lista.html.twig:15
+#, fuzzy
+msgid "categoria"
+msgstr "Categoria"
+
+#: busquedas/model/vertabla.class.php:190
+#: busquedas/model/vertabla.class.php:295
+#: entradas/model/entity/entradadb.class.php:960
+#: expedientes/model/entity/escritodb.class.php:1352
+#: expedientes/model/entity/expedientedb.class.php:1236
+#: pendientes/model/entity/pendientedb.class.php:977
+#: entradas/view/entrada_lista.html.twig:16
+#: expedientes/view/expediente_lista.html.twig:18
+#, fuzzy
+msgid "visibilidad"
+msgstr "Visibilitat"
+
+#: busquedas/model/vertabla.class.php:191
+#: busquedas/model/vertabla.class.php:296
+#: entradas/controller/entrada_ajax.php:263
+#: entradas/model/entity/entradadb.class.php:912
+#: expedientes/controller/antecedentes_ajax.php:85
+#: expedientes/controller/antecedentes_ajax.php:136
+#: expedientes/controller/antecedentes_ajax.php:190
+#: expedientes/controller/antecedentes_ajax.php:248
+#: expedientes/controller/escrito_update.php:163
+#: expedientes/model/entity/escritodb.class.php:1244
+#: expedientes/model/entity/expedientedb.class.php:1056
+#: pendientes/controller/pendiente_buscar.php:207
+#: pendientes/controller/pendiente_tabla.php:126
+#: pendientes/model/entity/pendientedb.class.php:881
+#: busquedas/view/lista_permanentes.html.twig:13
+#: entradas/view/entrada_lista.html.twig:17
+#: expedientes/view/escrito_lista.html.twig:17
+#: expedientes/view/escrito_lst_enviar.html.twig:14
+#: expedientes/view/expediente_form.html.twig:175
+#: expedientes/view/expediente_lista.html.twig:19
+#, fuzzy
+msgid "asunto"
+msgstr "Matèria"
+
+#: busquedas/model/vertabla.class.php:192
+#: busquedas/model/vertabla.class.php:297
+#, fuzzy
+msgid "oficinas."
+msgstr "per oficines"
+
+#: busquedas/model/vertabla.class.php:193
+#: busquedas/model/vertabla.class.php:298
+#, fuzzy
+msgid "fecha doc."
+msgstr "data del document."
+
+#: busquedas/model/vertabla.class.php:194
+#: entradas/view/entrada_lista.html.twig:20
+#, fuzzy
+msgid "contestar antes de"
+msgstr "resposta abans de"
+
+#: busquedas/model/vertabla.class.php:195
+#: entradas/view/entrada_lista.html.twig:21
+#, fuzzy
+msgid "fecha entrada"
+msgstr "data d'entrada"
+
+#: busquedas/model/vertabla.class.php:256
+#, fuzzy
+msgid "escritos recibidos en la Delegación"
+msgstr "escrites rebudes de la Delegació"
+
+#: busquedas/model/vertabla.class.php:292
+#: entradas/model/entity/entradabypass.class.php:593
+#: expedientes/model/entity/escritodb.class.php:1220
+#, fuzzy
+msgid "destinos"
+msgstr "Destinacions"
+
+#: busquedas/model/vertabla.class.php:299
+#: expedientes/view/expediente_lista.html.twig:26
+#, fuzzy
+msgid "fecha aprobación"
+msgstr "data d'aprovació"
+
+#: busquedas/model/vertabla.class.php:300
+#: expedientes/model/escritolista.class.php:128
+#: expedientes/model/escritolista.class.php:244
+#, fuzzy
+msgid "enviado"
+msgstr "Enviat"
+
+#: busquedas/model/vertabla.class.php:354 entradas/model/entrada.class.php:225
+#: expedientes/controller/escrito_update.php:362
+#: expedientes/controller/escrito_update.php:363
+#: expedientes/controller/escrito_update.php:369
+#, fuzzy
+msgid "ANULADO"
+msgstr "Cancel"
+
+#: busquedas/model/vertabla.class.php:382
+#, fuzzy
+msgid "escritos aprobados en la Delegación"
+msgstr "escrits aprovats a la Delegació"
+
+#: config/model/entity/configschema.class.php:339
+#: tramites/model/entity/firma.class.php:921
+msgid "valor"
+msgstr "valor"
+
 #: core/comprobar_campos.php:66
 msgid "no tiene el formato requerido"
-msgstr ""
+msgstr "no té el format requerit"
 
 #: core/comprobar_campos.php:68
 #, php-format
 msgid "el campo \"%1$s\" \"%3$s\". Valor actual: \"%2$s\""
-msgstr ""
+msgstr "el camp \"%1$s\" \"%3$s\". Valor actual: \"%2$s\""
 
 #: core/comprobar_campos.php:80
 #, php-format
 msgid "el campo \"%1$s\" debe ser un número real, y es: \"%2$s\""
-msgstr ""
+msgstr "el camp \"%1$s\" ha de ser un nombre real, i és: \"%2$s\""
 
 #: core/comprobar_campos.php:88
 #, php-format
 msgid "el campo \"%1$s\" debe ser un número, y es: \"%2$s\""
-msgstr ""
+msgstr "el camp \"%1$s\" ha de ser un nombre, i és: \"%2$s\""
 
 #: core/comprobar_campos.php:100 core/comprobar_campos.php:106
 #, php-format
 msgid "el campo \"%1$s\" debe ser un número entero, y es: \"%2$s\""
-msgstr ""
+msgstr "el camp \"%1$s\" ha de ser un nombre enter, i és: \"%2$s\""
 
 #: core/comprobar_campos.php:114 core/comprobar_campos.php:122
 #, php-format
 msgid "el campo \"%1$s\" debe ser un texto, y es: \"%2$s\""
-msgstr ""
+msgstr "el camp \"%1$s\" ha de ser un text, i és: \"%2$s\""
 
 #: core/comprobar_campos.php:128
 #, php-format
 msgid "el campo \"%1$s\" sólo puede tener %2$d cararcteres y tiene %3$d"
-msgstr ""
+msgstr "el camp \"%1$s\" només pot tenir %2$d cararcteres i en té %3$d"
 
 #: core/comprobar_campos.php:141 core/comprobar_campos.php:147
 #, php-format
 msgid "el campo \"%1$s\" debe ser una fecha, y es: \"%2$s\""
-msgstr ""
+msgstr "el camp \"%1$s\" ha de ser una data, i és: \"%2$s\""
 
 #: core/comprobar_campos.php:162 core/comprobar_campos.php:168
 #, php-format
-msgid "el campo \"%1$s\" debe ser una hora. Debe tener el formato hh:mm:ss. [%2$s]"
+msgid ""
+"el campo \"%1$s\" debe ser una hora. Debe tener el formato hh:mm:ss. [%2$s]"
 msgstr ""
+"el camp \"%1$s\" ha de ser una hora. Ha de tenir el format hh: mm: ss. [%2$s]"
 
 #: core/comprobar_campos.php:188
 #, php-format
 msgid "el campo \"%1$s\" no puede estar vacío"
-msgstr ""
+msgstr "el camp \"%1$s\" no pot estar buit"
+
+#: core/func_reg_2.php:127 pendientes/model/rrule.class.php:34
+#, fuzzy
+msgid "No hay tipo en recurrencias"
+msgstr "No hi ha cap tipus de recurrència"
+
+#: core/func_reg_2.php:1136 web/datetimelocal.class.php:18
+msgid "enero"
+msgstr "gener"
+
+#: core/func_reg_2.php:1137 web/datetimelocal.class.php:19
+msgid "febrero"
+msgstr "febrer"
+
+#: core/func_reg_2.php:1138 web/datetimelocal.class.php:20
+msgid "marzo"
+msgstr "març"
+
+#: core/func_reg_2.php:1139 web/datetimelocal.class.php:21
+msgid "abril"
+msgstr "abril"
+
+#: core/func_reg_2.php:1140 web/datetimelocal.class.php:22
+msgid "mayo"
+msgstr "maig"
+
+#: core/func_reg_2.php:1141 web/datetimelocal.class.php:23
+msgid "junio"
+msgstr "juny"
+
+#: core/func_reg_2.php:1142 web/datetimelocal.class.php:24
+msgid "julio"
+msgstr "juliol"
+
+#: core/func_reg_2.php:1143 web/datetimelocal.class.php:25
+msgid "agosto"
+msgstr "agost"
+
+#: core/func_reg_2.php:1144 web/datetimelocal.class.php:26
+msgid "septiembre"
+msgstr "setembre"
+
+#: core/func_reg_2.php:1145 web/datetimelocal.class.php:27
+msgid "octubre"
+msgstr "octubre"
+
+#: core/func_reg_2.php:1146 web/datetimelocal.class.php:28
+msgid "noviembre"
+msgstr "novembre"
+
+#: core/func_reg_2.php:1147 web/datetimelocal.class.php:29
+msgid "diciembre"
+msgstr "desembre"
+
+#: core/func_reg_2.php:1172 web/datetimelocal.class.php:60
+msgid "lunes"
+msgstr "dilluns"
+
+#: core/func_reg_2.php:1173 web/datetimelocal.class.php:61
+msgid "martes"
+msgstr "dimarts"
+
+#: core/func_reg_2.php:1174 web/datetimelocal.class.php:62
+msgid "miércoles"
+msgstr "dimecres"
+
+#: core/func_reg_2.php:1175 web/datetimelocal.class.php:63
+msgid "jueves"
+msgstr "dijous"
+
+#: core/func_reg_2.php:1176 web/datetimelocal.class.php:64
+msgid "viernes"
+msgstr "divendres"
+
+#: core/func_reg_2.php:1177 web/datetimelocal.class.php:65
+msgid "sábado"
+msgstr "dissabte"
+
+#: core/func_reg_2.php:1178 web/datetimelocal.class.php:66
+msgid "domingo"
+msgstr "diumenge"
+
+#: core/gestorerrores.class.php:80
+msgid "ya existe un registro con esta información"
+msgstr "ja existeix un registre amb aquesta informació"
+
+#: core/gestorerrores.class.php:87
+msgid "continuar"
+msgstr "continuar"
+
+#: davical/controller/user_lista.php:90
+#: etiquetas/controller/etiqueta_lista.php:48
+#: lugares/controller/grupo_lista.php:49 lugares/controller/lugar_lista.php:54
+#: tramites/controller/tramite_lista.php:45
+#: usuarios/controller/cargo_grupo_lista.php:52
+#: usuarios/controller/cargo_lista.php:53
+#: usuarios/controller/oficina_lista.php:45
+#: usuarios/controller/usuario_lista.php:53
+msgid "borrar"
+msgstr "esborrar"
+
+#: davical/controller/user_lista.php:91
+#: usuarios/controller/usuario_lista.php:54
+#, fuzzy
+msgid "cambiar password"
+msgstr "canviar el password"
+
+#: davical/controller/user_update.php:26
+#: etiquetas/controller/etiqueta_update.php:28
+#: lugares/controller/grupo_update.php:24
+#: lugares/controller/lugar_update.php:24
+#: tramites/controller/tramite_update.php:22
+#: tramites/controller/tramitecargo_ajax.php:140
+#: usuarios/controller/cargo_grupo_update.php:23
+#: usuarios/controller/cargo_update.php:50
+#: usuarios/controller/oficina_update.php:31
+#: usuarios/controller/usuario_update.php:41
+msgid "hay un error, no se ha eliminado"
+msgstr "hi ha un error, no s'ha eliminat"
+
+#: davical/controller/user_update.php:56 davical/controller/user_update.php:86
+#: davical/controller/user_update.php:109
+#: etiquetas/controller/etiqueta_update.php:61
+#: lugares/controller/grupo_update.php:46
+#: lugares/controller/lugar_update.php:62
+#: lugares/controller/lugar_update.php:86
+#: tramites/controller/tramite_update.php:41
+#: tramites/controller/tramite_update.php:55
+#: tramites/controller/tramitecargo_ajax.php:132
+#: usuarios/controller/cargo_grupo_update.php:47
+#: usuarios/controller/cargo_update.php:85
+#: usuarios/controller/oficina_update.php:48
+#: usuarios/controller/oficina_update.php:70
+#: usuarios/controller/personal_update.php:35
+#: usuarios/controller/personal_update.php:50
+#: usuarios/controller/personal_update.php:61
+#: usuarios/controller/personal_update.php:70
+#: usuarios/controller/personal_update.php:79
+#: usuarios/controller/personal_update.php:88
+#: usuarios/controller/usuario_update.php:71
+#: usuarios/controller/usuario_update.php:101
+#: usuarios/controller/usuario_update.php:124
+msgid "hay un error, no se ha guardado"
+msgstr "hi ha un error, no s'ha guardat"
+
+#: davical/controller/user_update.php:63
+#: etiquetas/controller/etiqueta_update.php:49
+#: lugares/controller/grupo_update.php:35
+#: lugares/controller/lugar_update.php:41
+#: lugares/controller/lugar_update.php:68
+#: tramites/controller/tramite_update.php:30
+#: usuarios/controller/cargo_grupo_update.php:35
+#: usuarios/controller/cargo_update.php:62
+#: usuarios/controller/oficina_update.php:38
+#: usuarios/controller/usuario_update.php:78
+msgid "debe poner un nombre"
+msgstr "ha de posar un nom"
+
+#: davical/controller/user_update.php:112
+#: usuarios/controller/usuario_update.php:127
+msgid "debe poner un nombre y el password"
+msgstr "ha de posar un nom i el password"
+
+#: davical/model/davical.class.php:85 davical/model/davical.class.php:631
+#, fuzzy, php-format
+msgid "No existe un principal del grupo para este cargo (%s) en davical"
+msgstr "No hi ha cap director de grup per a aquesta posició (%s) en"
+
+#: davical/model/davical.class.php:96
+#, fuzzy, php-format
+msgid "No existe esta oficina (%s) en davical"
+msgstr "No hi ha tal oficina (%s) en davical"
+
+#: davical/model/davical.class.php:98 davical/model/davical.class.php:107
+#: davical/model/davical.class.php:643
+#, fuzzy
+msgid "creando..."
+msgstr "Crear..."
+
+#: davical/model/davical.class.php:105 davical/model/davical.class.php:641
+#, fuzzy, php-format
+msgid "No existe un grupo para esta oficina (%s) en davical"
+msgstr "No hi ha cap grup per a aquesta oficina (%s) en"
+
+#: davical/model/davical.class.php:116 davical/model/davical.class.php:652
+#, fuzzy
+msgid "No existe un principal del grupo la oficina scdl en davical"
+msgstr "No hi ha cap principal del grup de l'oficina scdl en davical"
+
+#: davical/model/davical.class.php:203
+#, fuzzy, php-format
+msgid "Problemas al crear la persona (%s) en Davical"
+msgstr "Problemes per crear la persona (%s) a Davical"
+
+#: davical/model/davical.class.php:365
+#, fuzzy
+msgid "pendientes del registro"
+msgstr "pendent d'inscripció"
+
+#: davical/model/davical.class.php:371
+#, fuzzy
+msgid "pendientes de la oficina"
+msgstr "arracades d'oficina"
+
+#: davical/model/davical.class.php:423
+#, fuzzy
+msgid "grupo de"
+msgstr "tria un grup de centres"
+
+#: davical/model/davical.class.php:462
+#, fuzzy, php-format
+msgid "Problemas al crear el grupo (%s) en Davical"
+msgstr "Problemes per crear el grup (%s) a Davical"
+
+#: davical/model/davical.class.php:533
+#, fuzzy, php-format
+msgid "Problemas al crear el recurso (%s) en Davical"
+msgstr "Problemes per crear el recurs (%s) a Davical"
+
+#: davical/model/davical.class.php:660
+#, fuzzy
+msgid "Problemas al crear secretaria en Davical"
+msgstr "Problemes per crear secretari a Davical"
+
+#: davical/model/entity/calendaritem.class.php:1170
+#: davical/model/entity/collection.class.php:862
+#: davical/model/entity/principal.class.php:474
+#, fuzzy
+msgid "user_no"
+msgstr "user_no"
+
+#: davical/model/entity/calendaritem.class.php:1183
+#: davical/model/entity/collection.class.php:886
+#, fuzzy
+msgid "dav_name"
+msgstr "dav_name"
+
+#: davical/model/entity/calendaritem.class.php:1196
+#: davical/model/entity/collection.class.php:898
+#, fuzzy
+msgid "dav_etag"
+msgstr "dav_etag"
+
+#: davical/model/entity/calendaritem.class.php:1208
+#, fuzzy
+msgid "uid"
+msgstr "Uid"
+
+#: davical/model/entity/calendaritem.class.php:1220
+#: davical/model/entity/collection.class.php:934
+#, fuzzy
+msgid "created"
+msgstr "Creada"
+
+#: davical/model/entity/calendaritem.class.php:1232
+#, fuzzy
+msgid "last_modified"
+msgstr "last_modified"
+
+#: davical/model/entity/calendaritem.class.php:1244
+#, fuzzy
+msgid "dtstamp"
+msgstr "Preu mitjà per nit"
+
+#: davical/model/entity/calendaritem.class.php:1256
+#, fuzzy
+msgid "dtstart"
+msgstr "Inici de la dtstart"
+
+#: davical/model/entity/calendaritem.class.php:1268
+#, fuzzy
+msgid "dtend"
+msgstr "Preu mitjà per nit"
+
+#: davical/model/entity/calendaritem.class.php:1280
+#, fuzzy
+msgid "due"
+msgstr "degut a"
+
+#: davical/model/entity/calendaritem.class.php:1292
+#, fuzzy
+msgid "summary"
+msgstr "Resum"
+
+#: davical/model/entity/calendaritem.class.php:1304
+#, fuzzy
+msgid "location"
+msgstr "Ubicació"
+
+#: davical/model/entity/calendaritem.class.php:1316
+#: davical/model/entity/collection.class.php:1042
+#, fuzzy
+msgid "description"
+msgstr "Descripció"
+
+#: davical/model/entity/calendaritem.class.php:1328
+#, fuzzy
+msgid "priority"
+msgstr "Prioritat"
+
+#: davical/model/entity/calendaritem.class.php:1340
+msgid "class"
+msgstr "class"
+
+#: davical/model/entity/calendaritem.class.php:1352
+#, fuzzy
+msgid "transp"
+msgstr "Transp (Transp)"
+
+#: davical/model/entity/calendaritem.class.php:1364
+#: pendientes/model/entity/pendientedb.class.php:1049
+#, fuzzy
+msgid "rrule"
+msgstr "Preu mitjà per nit"
+
+#: davical/model/entity/calendaritem.class.php:1376
+msgid "url"
+msgstr "url"
+
+#: davical/model/entity/calendaritem.class.php:1388
+#, fuzzy
+msgid "percent_complete"
+msgstr "percent_complete"
+
+#: davical/model/entity/calendaritem.class.php:1400
+#, fuzzy
+msgid "tz_id"
+msgstr "tz_id"
+
+#: davical/model/entity/calendaritem.class.php:1412
+#: pendientes/model/entity/pendientedb.class.php:893
+msgid "status"
+msgstr "estatus"
+
+#: davical/model/entity/calendaritem.class.php:1424
+#, fuzzy
+msgid "completed"
+msgstr "Completat"
+
+#: davical/model/entity/calendaritem.class.php:1436
+#, fuzzy
+msgid "dav_id"
+msgstr "dav_id"
+
+#: davical/model/entity/calendaritem.class.php:1448
+#, fuzzy
+msgid "collection_id"
+msgstr "collection_id"
+
+#: davical/model/entity/calendaritem.class.php:1460
+#, fuzzy
+msgid "first_instance_start"
+msgstr "first_instance_start"
+
+#: davical/model/entity/calendaritem.class.php:1472
+#, fuzzy
+msgid "last_instance_end"
+msgstr "last_instance_end"
+
+#: davical/model/entity/collection.class.php:874
+#, fuzzy
+msgid "parent_container"
+msgstr "parent_container"
+
+#: davical/model/entity/collection.class.php:910
+#, fuzzy
+msgid "dav_displayname"
+msgstr "dav_displayname"
+
+#: davical/model/entity/collection.class.php:922
+#, fuzzy
+msgid "is_calendar"
+msgstr "is_calendar"
+
+#: davical/model/entity/collection.class.php:946
+#, fuzzy
+msgid "modified"
+msgstr "Modificat"
+
+#: davical/model/entity/collection.class.php:958
+#, fuzzy
+msgid "public_events_only"
+msgstr "public_events_only"
+
+#: davical/model/entity/collection.class.php:970
+#, fuzzy
+msgid "publicly_readable"
+msgstr "publicly_readable"
+
+#: davical/model/entity/collection.class.php:982
+#: davical/model/entity/principal.class.php:498
+#, fuzzy
+msgid "default_privileges"
+msgstr "default_privileges"
+
+#: davical/model/entity/collection.class.php:994
+#, fuzzy
+msgid "is_addressbook"
+msgstr "is_addressbook"
+
+#: davical/model/entity/collection.class.php:1006
+#, fuzzy
+msgid "resourcetypes"
+msgstr "tipus de recursos"
+
+#: davical/model/entity/collection.class.php:1018
+#, fuzzy
+msgid "schedule_transp"
+msgstr "schedule_transp"
+
+#: davical/model/entity/collection.class.php:1030
+#, fuzzy
+msgid "timezone"
+msgstr "Zona horària"
+
+#: davical/model/entity/grant.class.php:453
+#, fuzzy
+msgid "by_collection"
+msgstr "by_collection"
+
+#: davical/model/entity/grant.class.php:465
+#, fuzzy
+msgid "privileges"
+msgstr "Privilegis"
+
+#: davical/model/entity/grant.class.php:477
+#, fuzzy
+msgid "is_group"
+msgstr "is_group"
+
+#: davical/model/entity/groupmember.class.php:351
+#, fuzzy
+msgid "group_id"
+msgstr "group_id"
+
+#: davical/model/entity/principal.class.php:462
+#, fuzzy
+msgid "type_id"
+msgstr "type_id"
+
+#: davical/model/entity/principal.class.php:486
+#, fuzzy
+msgid "displayname"
+msgstr "Displayname"
+
+#: davical/model/entity/rolemember.class.php:360
+#, fuzzy
+msgid "role_no"
+msgstr "role_no"
+
+#: davical/model/entity/userdb.class.php:731
+#, fuzzy
+msgid "active"
+msgstr "Actiu"
+
+#: davical/model/entity/userdb.class.php:743
+#, fuzzy
+msgid "email_ok"
+msgstr "email_ok"
+
+#: davical/model/entity/userdb.class.php:755
+#, fuzzy
+msgid "joined"
+msgstr "s'ha unit a"
+
+#: davical/model/entity/userdb.class.php:767
+#, fuzzy
+msgid "updated"
+msgstr "Actualitzat"
+
+#: davical/model/entity/userdb.class.php:779
+#, fuzzy
+msgid "last_used"
+msgstr "last_used"
+
+#: davical/model/entity/userdb.class.php:791
+#, fuzzy
+msgid "username"
+msgstr "Nom"
+
+#: davical/model/entity/userdb.class.php:803
+#: usuarios/model/entity/usuario.class.php:490
+#: usuarios/view/usuario_form_pwd.phtml:53
+msgid "password"
+msgstr "password"
+
+#: davical/model/entity/userdb.class.php:815
+#, fuzzy
+msgid "fullname"
+msgstr "Nom complet"
+
+#: davical/model/entity/userdb.class.php:827
+#: usuarios/model/entity/usuario.class.php:502
+#: usuarios/view/usuario_form_pwd.phtml:55
+msgid "email"
+msgstr "email"
+
+#: davical/model/entity/userdb.class.php:839
+#, fuzzy
+msgid "config_data"
+msgstr "config_data"
+
+#: davical/model/entity/userdb.class.php:851
+#, fuzzy
+msgid "date_format_type"
+msgstr "date_format_type"
+
+#: davical/model/entity/userdb.class.php:863
+#, fuzzy
+msgid "locale"
+msgstr "Locale"
 
 #: devel/controller/factory_form.php:26
 msgid "guardar cambios"
-msgstr ""
+msgstr "guardar canvis"
 
-#: usuarios/controller/usuario_lista.php:43
-msgid "no tiene permisos para ver esto"
-msgstr ""
+#: entradas/controller/buscar_form.php:50
+#, fuzzy
+msgid "Buscar en entradas:"
+msgstr "Entrades de cerca:"
 
-#: usuarios/controller/usuario_lista.php:71
-msgid "borrar"
-msgstr ""
+#: entradas/controller/entrada_ajax.php:37
+#, fuzzy
+msgid "No tiene permiso para ver la entrada"
+msgstr "No tens permís per veure l'entrada"
 
+#: entradas/controller/entrada_ajax.php:141
+#, fuzzy
+msgid "No tiene permiso para modificar el detalle"
+msgstr "No teniu permís per canviar el detall"
+
+#: entradas/controller/entrada_ajax.php:169
+#, fuzzy, php-format
+msgid "Esta entrada tiene %s pendientes asociados."
+msgstr "Aquesta entrada té %s pistes associades."
+
+#: entradas/controller/entrada_ajax.php:176
+#, fuzzy, php-format
+msgid "Esta entrada tiene %s envios a ctr."
+msgstr "Aquesta entrada ha %s enviaments al CTR."
+
+#: entradas/controller/entrada_ajax.php:217
+#, fuzzy
+msgid "No existe la entrada"
+msgstr "No hi ha entrada"
+
+#: entradas/controller/entrada_ajax.php:263
+#: expedientes/controller/escrito_update.php:161
+#: pendientes/controller/pendiente_buscar.php:204
+#: pendientes/controller/pendiente_tabla.php:123
+#: entradas/view/entrada_lista.html.twig:13
+#, fuzzy
+msgid "protocolo"
+msgstr "Protocol"
+
+#: entradas/controller/entrada_ajax.php:263
+#: expedientes/controller/antecedentes_ajax.php:84
+#: expedientes/controller/antecedentes_ajax.php:135
+#: expedientes/controller/antecedentes_ajax.php:189
+#: expedientes/controller/antecedentes_ajax.php:247
+#: expedientes/model/expedientelista.class.php:483
+#: expedientes/model/expedientelista.class.php:500
+msgid "fecha"
+msgstr "data"
+
+#: entradas/controller/entrada_ajax.php:263
+#, fuzzy
+msgid "oficina ponente"
+msgstr "ponent de l'oficina"
+
+#: entradas/controller/entrada_bypass.php:118
+#, fuzzy
+msgid "salida distribución cr"
+msgstr "cr distribució de sortida"
+
+#: entradas/controller/entrada_form.php:88
+#: expedientes/model/expediente.class.php:343
+#: tramites/model/entity/firma.class.php:220
+#: tramites/model/entity/firma.class.php:226
+#: tramites/model/entity/firma.class.php:236
+#: tramites/model/entity/firma.class.php:252
+#: tramites/model/entity/firma.class.php:256
+#, fuzzy
+msgid "no"
+msgstr "No"
+
+#: entradas/controller/entrada_form.php:89
+#: entradas/controller/entrada_form.php:90
+#: entradas/controller/entrada_form.php:91
+#, fuzzy, php-format
+msgid "en %s días"
+msgstr "en %s dies"
+
+#: entradas/controller/entrada_form.php:92
+#, fuzzy
+msgid "el día"
+msgstr "el dia"
+
+#: entradas/controller/entrada_form.php:102
+#: entradas/controller/entrada_form.php:107
+#: usuarios/controller/cargo_lista.php:68
+#: expedientes/view/_escrito_form_js.html.twig:130
+#: expedientes/view/_expediente_form_js.html.twig:262
+msgid "No"
+msgstr "No"
+
+#: entradas/controller/entrada_form.php:102
+#: entradas/controller/entrada_form.php:107
+#: usuarios/controller/cargo_lista.php:68
+#: entradas/view/_entrada_form_js.html.twig:152
+#: expedientes/view/_escrito_form_js.html.twig:125
+#: expedientes/view/_expediente_form_js.html.twig:257
+msgid "Sí"
+msgstr "Sí"
+
+#: entradas/controller/entrada_form.php:180
+#, fuzzy
+msgid "modificar entrada"
+msgstr "modifica l'entrada"
+
+#: entradas/controller/entrada_form.php:238
+#: entradas/model/entradalista.class.php:295
+#, fuzzy
+msgid "nueva entrada"
+msgstr "nova entrada"
+
+#: entradas/controller/entrada_form.php:254
+#, fuzzy
+msgid "Asignar"
+msgstr "assignar"
+
+#: entradas/controller/entrada_form.php:257
+msgid "Aceptar"
+msgstr "Acceptar"
+
+#: entradas/controller/entrada_form.php:260
+#: busquedas/view/ver_tabla.html.twig:31
+#: etiquetas/view/etiqueta_form.html.twig:21
+#: expedientes/view/escrito_distribuir.html.twig:35
+#: expedientes/view/escrito_form.html.twig:144
+#: expedientes/view/expediente_form.html.twig:243
+#: expedientes/view/expediente_ver.html.twig:54
+#: lugares/view/grupo_form.html.twig:48 lugares/view/lugar_form.html.twig:69
+#: tramites/view/tramite_form.html.twig:56
+#: tramites/view/tramitecargo_select.html.twig:142
+#: tramites/view/zztramitecargo_form.html.twig:29
+#: usuarios/view/cargo_form.html.twig:74
+#: usuarios/view/cargo_grupo_form.html.twig:48
+#: usuarios/view/oficina_form.html.twig:50
+#: usuarios/view/usuario_form.html.twig:69
+msgid "Guardar"
+msgstr "Guardar"
+
+#: entradas/controller/entrada_update.php:299
+#: entradas/controller/entrada_update.php:329
+#, fuzzy
+msgid "No se puede determinar la ruta del calendario para añadir el pendiente"
+msgstr "No podeu determinar el camí del calendari per afegir el pendent"
+
+#: entradas/controller/entrada_update.php:322
+#: pendientes/controller/pendiente_update_ics.php:224
+#, fuzzy
+msgid "No se han podido guardar el nuevo pendiente"
+msgstr "No s'ha pogut desar el nou pendent"
+
+#: entradas/controller/entrada_ver_slide.php:88
+#, fuzzy
+msgid "No hay más registros"
+msgstr "No hi ha més registres"
+
+#: entradas/model/entity/entradabypass.class.php:545
+#, fuzzy
+msgid "id_entrada"
+msgstr "id_entrada"
+
+#: entradas/model/entity/entradabypass.class.php:557
+#: expedientes/model/entity/escritodb.class.php:1436
+#: lugares/model/entity/grupo.class.php:388
+#: usuarios/model/entity/cargo.class.php:570
+#: usuarios/model/entity/cargogrupo.class.php:430
+#, fuzzy
+msgid "descripcion"
+msgstr "Descripció"
+
+#: entradas/model/entity/entradabypass.class.php:569
+#: expedientes/model/entity/escritodb.class.php:1184
+#, fuzzy
+msgid "json_prot_destino"
+msgstr "json_prot_destino"
+
+#: entradas/model/entity/entradabypass.class.php:581
+#: expedientes/model/entity/escritodb.class.php:1208
+#, fuzzy
+msgid "id_grupos"
+msgstr "id_grupos"
+
+#: entradas/model/entity/entradabypass.class.php:605
+#: expedientes/model/entity/escritodb.class.php:1388
+#, fuzzy
+msgid "f_salida"
+msgstr "f_salida"
+
+#: entradas/model/entity/entradadb.class.php:840
+#, fuzzy
+msgid "modo_entrada"
+msgstr "modo_entrada"
+
+#: entradas/model/entity/entradadb.class.php:852
+#, fuzzy
+msgid "json_prot_origen"
+msgstr "json_prot_origen"
+
+#: entradas/model/entity/entradadb.class.php:864
+#, fuzzy
+msgid "asunto_entrada"
+msgstr "asunto_entrada"
+
+#: entradas/model/entity/entradadb.class.php:876
+#: expedientes/model/entity/escritodb.class.php:1196
+#, fuzzy
+msgid "json_prot_ref"
+msgstr "json_prot_ref"
+
+#: entradas/model/entity/entradadb.class.php:888
+#: expedientes/controller/antecedentes_ajax.php:86
+#: expedientes/controller/antecedentes_ajax.php:137
+#: expedientes/controller/antecedentes_ajax.php:191
+#: expedientes/controller/antecedentes_ajax.php:249
+#: expedientes/model/entity/expedientedb.class.php:1032
+#: pendientes/controller/pendiente_buscar.php:209
+#, fuzzy
+msgid "ponente"
+msgstr "Ponent"
+
+#: entradas/model/entity/entradadb.class.php:900
+#: expedientes/model/entity/escritodb.class.php:1280
+#: expedientes/model/entity/expedientedb.class.php:1044
+#, fuzzy
+msgid "resto_oficinas"
+msgstr "resto_oficinas"
+
+#: entradas/model/entity/entradadb.class.php:924
+#, fuzzy
+msgid "f_entrada"
+msgstr "f_entrada"
+
+#: entradas/model/entity/entradadb.class.php:972
+#: expedientes/model/entity/escritodb.class.php:1328
+#: expedientes/model/entity/expedientedb.class.php:1140
+#, fuzzy
+msgid "f_contestar"
+msgstr "f_contestar"
+
+#: entradas/model/entity/entradadb.class.php:984
+#, fuzzy
+msgid "bypass"
+msgstr "Prescindir"
+
+#: entradas/model/entity/entradadb.class.php:996
+#: expedientes/model/entity/expedientedb.class.php:1152
+#: pendientes/controller/pendiente_buscar.php:211
+#: expedientes/view/expediente_lista.html.twig:16
+#: pendientes/view/pendiente_form.html.twig:171
+msgid "estado"
+msgstr "estat"
+
+#: entradas/model/entity/entradadb.class.php:1008
+#: expedientes/model/entity/escritodb.class.php:1424
+#: lugares/controller/lugar_lista.php:53
+#: lugares/model/entity/lugar.class.php:704
+#: lugares/view/lugar_form.html.twig:65
+#, fuzzy
+msgid "anulado"
+msgstr "Cancel"
+
+#: entradas/model/entity/entradadocdb.class.php:401
+#: expedientes/model/entity/escritodb.class.php:1412
+#, fuzzy
+msgid "tipo_doc"
+msgstr "tipo_doc"
+
+#: entradas/model/entity/entradadocdb.class.php:413
+#, fuzzy
+msgid "f_doc"
+msgstr "f_doc"
+
+#: entradas/model/entrada.class.php:90 expedientes/model/escrito.class.php:194
+#: expedientes/model/expediente.class.php:320
+#: expedientes/model/expediente.class.php:351
+msgid "normal"
+msgstr "normal"
+
+#: entradas/model/entrada.class.php:91 expedientes/model/escrito.class.php:195
+#, fuzzy
+msgid "sin numerar"
+msgstr "sense numerar"
+
+#: entradas/model/entrada.class.php:92 expedientes/model/escrito.class.php:196
+#: expedientes/model/expediente.class.php:352
+#, fuzzy
+msgid "permanente"
+msgstr "Permanent"
+
+#: entradas/model/entrada.class.php:100
+msgid "todos"
+msgstr "tots"
+
+#: entradas/model/entrada.class.php:101
+#: etiquetas/controller/etiqueta_lista.php:63
+msgid "personal"
+msgstr "personal"
+
+#: entradas/model/entrada.class.php:102
+msgid "reservado"
+msgstr "reservat"
+
+#: entradas/model/entrada.class.php:103
+#, fuzzy
+msgid "vcd"
+msgstr "Vcd"
+
+#: entradas/model/entrada.class.php:146 entradas/model/entrada.class.php:261
+#, fuzzy
+msgid "No hay destinos"
+msgstr "No hi ha destinacions"
+
+#: entradas/model/entradalista.class.php:169
+#, fuzzy
+msgid "No ha escogido ningún filtro"
+msgstr "No heu triat cap filtre"
+
+#: entradas/model/entradalista.class.php:249
+#: expedientes/model/expedientelista.class.php:609
+msgid "acción"
+msgstr "acció"
+
+#: entradas/model/entradalista.class.php:299
+#, fuzzy
+msgid "procesar"
+msgstr "Procés"
+
+#: envios/model/enviar.class.php:157
+#, fuzzy
+msgid "No hay más"
+msgstr "Ja no hi ha més"
+
+#: envios/model/enviar.class.php:204
+#, fuzzy
+msgid "sin_protocolo"
+msgstr "sin_protocolo"
+
+#: envios/model/enviar.class.php:292
+#, fuzzy
+msgid "No hay destinos para este escrito"
+msgstr "No hi ha destinacions per a aquest escrit"
+
+#: envios/model/enviar.class.php:294
+#, fuzzy
+msgid "mail no válido para"
+msgstr "el correu no és vàlid per a"
+
+#: envios/model/enviar.class.php:320
+#, fuzzy
+msgid "No hay destinos válidos para este escrito"
+msgstr "No hi ha destinacions vàlides per a aquest escrit"
+
+#: ethercalc/controller/getUrlEscrito.php:20
+#: etherpad/controller/getUrlEscrito.php:20
+#, fuzzy
+msgid "Falta definir el tipo de documento etherpad"
+msgstr "Cal definir el tipus de document eteri"
+
+#: ethercalc/model/ethercalc.class.php:214
+#: etherpad/model/etherpad.class.php:300
+msgid "Debe indicar el id con SetId"
+msgstr "Heu d'introduir l'id amb SetId"
+
+#: etiquetas/controller/etiqueta_form.php:78
+#, fuzzy
+msgid "guardar datos etiqueta"
+msgstr "desa les dades de l'etiqueta"
+
+#: etiquetas/controller/etiqueta_form.php:79
+#: lugares/controller/grupo_form.php:92 lugares/controller/lugar_form.php:104
+#: usuarios/controller/usuario_form.php:101
+msgid "¿Está seguro que desea quitar este permiso?"
+msgstr "Esteu segur que voleu treure aquest permís?"
+
+#: etiquetas/controller/etiqueta_lista.php:46
+#: etiquetas/view/etiqueta_form.html.twig:13
+#, fuzzy
+msgid "etiqueta"
+msgstr "Etiqueta"
+
+#: etiquetas/controller/etiqueta_lista.php:46
+#, fuzzy
+msgid "entorno"
+msgstr "Medi ambient"
+
+#: etiquetas/controller/etiqueta_lista.php:46
+#: etiquetas/model/entity/etiqueta.class.php:424
+#: tramites/model/entity/firma.class.php:861
+#: tramites/model/entity/tramitecargo.class.php:464
+#: usuarios/model/entity/usuario.class.php:478
+#, fuzzy
+msgid "id_cargo"
+msgstr "id_cargo"
+
+#: etiquetas/controller/etiqueta_lista.php:61
+#: etiquetas/view/etiqueta_form.html.twig:14
+msgid "de la oficina"
+msgstr "de l'oficina"
+
+#: etiquetas/model/entity/etiqueta.class.php:412
+#, fuzzy
+msgid "nom_etiqueta"
+msgstr "nom_etiqueta"
+
+#: etiquetas/model/entity/etiqueta.class.php:436
+#: expedientes/controller/escrito_update.php:165
+#: pendientes/controller/pendiente_tabla.php:34
+msgid "oficina"
+msgstr "oficina"
+
+#: expedientes/controller/adjunto_revisar.php:40
+#, fuzzy
+msgid "modificar ajuntos escrito"
+msgstr "modificar els complements escrits"
+
+#: expedientes/controller/antecedentes_ajax.php:262
+#, fuzzy
+msgid "adjuntar"
+msgstr "Adjuntar"
+
+#: expedientes/controller/escrito_distribuir.php:99
+#: expedientes/controller/escrito_ver.php:119
+#, fuzzy
+msgid "No hay escritos"
+msgstr "Sense escrits"
+
+#: expedientes/controller/escrito_download.php:25
+#, fuzzy
+msgid "Algún error al genrar el pdf. Es posible que no tenga el protocolo."
+msgstr ""
+"Algun error quan genrar el pdf. És possible que no t teniu el protocol."
+
+#: expedientes/controller/escrito_form.php:138
+#, fuzzy
+msgid "modificar escrito"
+msgstr "modificar l'escriptura"
+
+#: expedientes/controller/escrito_form.php:141
+#, fuzzy
+msgid "modificar propuesta"
+msgstr "esmenar la proposta"
+
+#: expedientes/controller/escrito_form.php:144
+#, fuzzy
+msgid "modificar plantilla"
+msgstr "modifica la plantilla"
+
+#: expedientes/controller/escrito_form.php:196
+#: expedientes/controller/escrito_rev.php:164
+#: expedientes/controller/salida_escrito.php:225
+#: tramites/controller/tramitecargo_ajax.php:115
+#: pendientes/view/pendiente_tabla.html.twig:60
+msgid "nuevo"
+msgstr "nou"
+
+#: expedientes/controller/escrito_form.php:199
+#: expedientes/controller/escrito_rev.php:167
+#: expedientes/view/expediente_form.html.twig:162
+#, fuzzy
+#| msgid "nuevo usuario"
+msgid "nuevo escrito"
+msgstr "nou ususariii"
+
+#: expedientes/controller/escrito_form.php:202
+#: expedientes/controller/escrito_rev.php:170
+#: expedientes/view/expediente_form.html.twig:156
+#, fuzzy
+msgid "nueva propuesta"
+msgstr "nova proposta"
+
+#: expedientes/controller/escrito_form.php:205
+#: expedientes/controller/escrito_rev.php:173
+#, fuzzy
+msgid "nueva plantilla"
+msgstr "plantilla nova"
+
+#: expedientes/controller/escrito_rev.php:135
+#: expedientes/model/escritolista.class.php:145
+#: expedientes/model/escritolista.class.php:295
+#: expedientes/model/expedientelista.class.php:479
+#: expedientes/model/expedientelista.class.php:487
+#: expedientes/model/expedientelista.class.php:494
+#: expedientes/model/expedientelista.class.php:508
+#: expedientes/model/expedientelista.class.php:515
+#, fuzzy
+msgid "revisar"
+msgstr "Revisió"
+
+#: expedientes/controller/escrito_rev.php:138
+#, fuzzy
+msgid "revisar escrito"
+msgstr "revisió escrita"
+
+#: expedientes/controller/escrito_rev.php:141
+#, fuzzy
+msgid "revisar propuesta"
+msgstr "proposta de revisió"
+
+#: expedientes/controller/escrito_rev.php:144
+#, fuzzy
+msgid "revisar plantilla"
+msgstr "plantilla de revisió"
+
+#: expedientes/controller/escrito_update.php:68
+#, fuzzy
+msgid "No tiene permiso ver el escrito"
+msgstr "No teniu permís per veure l'escriptura"
+
+#: expedientes/controller/escrito_update.php:162
+#: pendientes/controller/pendiente_buscar.php:206
+#: pendientes/controller/pendiente_tabla.php:125
+msgid "p"
+msgstr "p"
+
+#: expedientes/controller/escrito_update.php:164
+#: pendientes/controller/pendiente_buscar.php:208
+#: pendientes/controller/pendiente_tabla.php:127
+#, fuzzy
+msgid "fecha plazo"
+msgstr "Termini"
+
+#: expedientes/controller/escrito_update.php:167
+#: pendientes/controller/pendiente_tabla.php:117
+#, fuzzy
+msgid "marcar como contestado"
+msgstr "marca com a contestada"
+
+#: expedientes/controller/escrito_update.php:206
+#, fuzzy
+msgid "falta definir fecha para periodico"
+msgstr "necessita posar cita per a diari"
+
+#: expedientes/controller/escrito_update.php:243
+#, fuzzy
+msgid "Es posible que esté relacionado con alguno de estos pendientes:"
+msgstr "Pot estar relacionada amb una d'aquestes pistes:"
+
+#: expedientes/controller/escrito_update.php:249
+#, fuzzy, php-format
+msgid "Tiene %s pendiente asociado"
+msgstr "Té %s pendent associat a ella"
+
+#: expedientes/controller/escrito_update.php:274
+#, fuzzy
+msgid "Hay un error al eliminar el escrito"
+msgstr "S'ha produït un error en suprimir l'escriptura"
+
+#: expedientes/controller/escrito_update.php:278
+#: expedientes/controller/escrito_update.php:379
+#, fuzzy
+msgid "No existe el escrito"
+msgstr "No hi ha escriptura"
+
+#: expedientes/controller/escrito_update.php:375
+#, fuzzy
+msgid "Hay un error al guardar el escrito"
+msgstr "Hi ha un error en desar l'escriptura"
+
+#: expedientes/controller/escrito_update.php:502
+#, fuzzy
+msgid "No puede ser"
+msgstr "No pot ser la mateixa casa"
+
+#: expedientes/controller/escrito_update.php:507
+#, fuzzy
+msgid "Algún error al explotar"
+msgstr "Algun error en explotar"
+
+#: expedientes/controller/escrito_update.php:647
+#, fuzzy
+msgid "No se..."
+msgstr "s'aplica a"
+
+#: expedientes/controller/expediente_accion.php:88
+#, fuzzy
+msgid "añadir a un expediente"
+msgstr "afegir a un fitxer"
+
+#: expedientes/controller/expediente_accion.php:92
+#, fuzzy
+msgid "crear un nuevo expediente"
+msgstr "crear un nou dossier"
+
+#: expedientes/controller/expediente_accion.php:111
+#: expedientes/controller/expediente_accion.php:139
+#: expedientes/controller/expediente_accion.php:147
+#, fuzzy
+msgid "mover a borrador"
+msgstr "passar a esborrany"
+
+#: expedientes/controller/expediente_accion.php:114
+#: expedientes/controller/expediente_accion.php:127
+#: expedientes/controller/expediente_accion.php:142
+#: expedientes/controller/expediente_accion.php:150
+#, fuzzy
+msgid "copiar a borrador"
+msgstr "còpia a esborrany"
+
+#: expedientes/controller/expediente_accion.php:119
+#: expedientes/controller/expediente_accion.php:132
+#, fuzzy
+msgid "copiar a copias"
+msgstr "copiar a còpies"
+
+#: expedientes/controller/expediente_accion.php:153
+#, fuzzy
+msgid "copiar a oficina"
+msgstr "còpia a l'oficina"
+
+#: expedientes/controller/expediente_accion.php:160
+#, fuzzy
+msgid "no tiene permiso"
+msgstr "No té permís per crear una activitat d'aquest tipus"
+
+#: expedientes/controller/expediente_distribuir.php:108
+#, fuzzy
+msgid "Guardar etiquetas"
+msgstr "Desa les etiquetes"
+
+#: expedientes/controller/expediente_distribuir.php:119
+#, fuzzy
+msgid "Distribuir"
+msgstr "Distribuir"
+
+#: expedientes/controller/expediente_distribuir.php:133
+#, fuzzy
+msgid "Archivar"
+msgstr "ﬁtxer"
+
+#: expedientes/controller/expediente_form.php:95
+#, fuzzy
+msgid "expediente"
+msgstr "Registre"
+
+#: expedientes/controller/expediente_form.php:144
+#: expedientes/model/escritolista.class.php:123
+#: expedientes/model/escritolista.class.php:278
+#: expedientes/view/escrito_lst_enviar.html.twig:9
+#, fuzzy
+msgid "mod.datos"
+msgstr "Mod.data (anglès)"
+
+#: expedientes/controller/expediente_form.php:145
+#: expedientes/model/escritolista.class.php:124
+#: expedientes/model/escritolista.class.php:228
+#: expedientes/model/escritolista.class.php:280
+#: expedientes/model/escritolista.class.php:287
+#, fuzzy
+msgid "rev.texto"
+msgstr "Rev.text (en anglès)"
+
+#: expedientes/controller/expediente_form.php:211
+#: expedientes/view/expediente_lista.html.twig:3
+#, fuzzy
+msgid "nuevo expediente"
+msgstr "nou fitxer"
+
+#: expedientes/controller/expediente_update.php:78
+#, fuzzy
+msgid "No se han podido crear el nuevo expediente"
+msgstr "No s'ha pogut crear el nou dossier"
+
+#: expedientes/controller/expediente_update.php:87
+#, fuzzy
+msgid "No se han podido adjuntar la entrada"
+msgstr "No s'ha pogut adjuntar l'entrada"
+
+#: expedientes/controller/expediente_update.php:111
+#, fuzzy
+msgid "No se han podido asignar el nuevo encargado"
+msgstr "No s'ha pogut assignar el nou gestor"
+
+#: expedientes/controller/expediente_update.php:134
+#, fuzzy
+msgid "No se han podido guardar las etiquetas"
+msgstr "No s'han pogut desar les etiquetes"
+
+#: expedientes/controller/expediente_update.php:155
+#, fuzzy
+msgid "No se ha podido guarda la fecha de reunión"
+msgstr "No s'ha pogut desar la data de la reunió"
+
+#: expedientes/controller/expediente_update.php:185
+#: expedientes/controller/expediente_update.php:206
+#: expedientes/controller/expediente_update.php:314
+#, fuzzy
+msgid "No se ha podido cambiar el estado del expediente"
+msgstr "No s'ha pogut canviar l'estat del fitxer"
+
+#: expedientes/controller/expediente_update.php:298
+#: expedientes/controller/expediente_update.php:358
+#, fuzzy
+msgid "No se ha elimnado la firma"
+msgstr "La signatura no s'ha elimat"
+
+#: expedientes/controller/expediente_update.php:307
+#, fuzzy
+msgid "RETIRADO"
+msgstr "Es va retirar"
+
+#: expedientes/controller/expediente_update.php:348
+#, fuzzy
+msgid "No se ha elimnado la accion"
+msgstr "L'acció no s'ha allargat"
+
+#: expedientes/controller/expediente_update.php:364
+#, fuzzy
+msgid "No se ha elimnado el expediente"
+msgstr "El fitxer no s'ha elmisat"
+
+#: expedientes/controller/expediente_update.php:437
+#: tramites/model/entity/firma.class.php:253
+#: expedientes/view/expediente_form.html.twig:207
+#, fuzzy
+msgid "visto"
+msgstr "Vist"
+
+#: expedientes/controller/expediente_update.php:519
+#, fuzzy
+msgid "Creo que ya se ha creado"
+msgstr "Crec que ja s'ha creat"
+
+#: expedientes/controller/expediente_ver.php:50
+#, fuzzy
+msgid "Responder aclaración"
+msgstr "Respondre a l'aclariment"
+
+#: expedientes/controller/expediente_ver.php:53
+#, fuzzy
+msgid "Pedir aclaración"
+msgstr "Sol·licitar aclariments"
+
+#: expedientes/controller/expediente_ver.php:166
+#, fuzzy
+msgid "Quitar Firmas"
+msgstr "Suprimeix les signatures"
+
+#: expedientes/controller/expediente_ver.php:170
+#, fuzzy
+msgid "Añadir Firmas"
+msgstr "Afegeix signatures"
+
+#: expedientes/controller/fecha_reunion.php:55
+#, fuzzy
+msgid "Fijar fecha reunión:"
+msgstr "Estableix la data de la reunió:"
+
+#: expedientes/controller/salida_escrito.php:49
+#, fuzzy
+msgid "Protocolo repetido"
+msgstr "Protocol repetit"
+
+#: expedientes/controller/salida_escrito.php:260
+#, fuzzy
+msgid "Generar protocolo"
+msgstr "Genera protocol"
+
+#: expedientes/controller/salida_escrito.php:260
+#, fuzzy
+msgid "Pasar a secretaría"
+msgstr "Passar a secretaria"
+
+#: expedientes/model/entity/accion.class.php:410
+#: tramites/model/entity/firma.class.php:813
+#, fuzzy
+msgid "id_expediente"
+msgstr "id_expediente"
+
+#: expedientes/model/entity/accion.class.php:422
+#, fuzzy
+msgid "tipo_accion"
+msgstr "tipo_accion"
+
+#: expedientes/model/entity/accion.class.php:434
+#: expedientes/model/entity/escritoadjunto.class.php:437
+#, fuzzy
+msgid "id_escrito"
+msgstr "id_escrito"
+
+#: expedientes/model/entity/escritoadjunto.class.php:449
+msgid "nom"
+msgstr "nom"
+
+#: expedientes/model/entity/escritoadjunto.class.php:461
+#, fuzzy
+msgid "adjunto"
+msgstr "Adjunta"
+
+#: expedientes/model/entity/escritodb.class.php:1172
+#, fuzzy
+msgid "json_prot_local"
+msgstr "json_prot_local"
+
+#: expedientes/model/entity/escritodb.class.php:1232
+#: expedientes/model/entity/expedientedb.class.php:1068
+#, fuzzy
+msgid "entradilla"
+msgstr "Entradilla (A prop de Entradilla)"
+
+#: expedientes/model/entity/escritodb.class.php:1268
+#, fuzzy
+msgid "creador"
+msgstr "Creador"
+
+#: expedientes/model/entity/escritodb.class.php:1292
+#: expedientes/model/entity/expedientedb.class.php:1080
+#, fuzzy
+msgid "comentarios"
+msgstr "Comentaris"
+
+#: expedientes/model/entity/escritodb.class.php:1304
+#: expedientes/model/entity/expedientedb.class.php:1188
+#, fuzzy
+msgid "f_aprobacion"
+msgstr "f_aprobacion"
+
+#: expedientes/model/entity/escritodb.class.php:1316
+#, fuzzy
+msgid "f_escrito"
+msgstr "f_escrito"
+
+#: expedientes/model/entity/escritodb.class.php:1376
+#: lugares/model/entity/lugar.class.php:668
+#, fuzzy
+msgid "modo_envio"
+msgstr "modo_envio"
+
+#: expedientes/model/entity/escritodb.class.php:1400
+#: tramites/model/entity/firma.class.php:219
+#: tramites/model/entity/firma.class.php:235
+#: tramites/model/entity/firma.class.php:251
+#: tramites/model/entity/firma.class.php:255
+#: expedientes/view/escrito_lista.html.twig:5
+#: expedientes/view/escrito_lst_enviar.html.twig:5
+#: expedientes/view/expediente_ver.html.twig:226
+msgid "ok"
+msgstr "ok"
+
+#: expedientes/model/entity/expedientedb.class.php:1020
+#: tramites/model/entity/firma.class.php:825
+#: tramites/model/entity/tramitecargo.class.php:440
+#, fuzzy
+msgid "id_tramite"
+msgstr "id_tramite"
+
+#: expedientes/model/entity/expedientedb.class.php:1092
+msgid "prioridad"
+msgstr "prioritat"
+
+#: expedientes/model/entity/expedientedb.class.php:1104
+#, fuzzy
+msgid "json_antecedentes"
+msgstr "json_antecedentes"
+
+#: expedientes/model/entity/expedientedb.class.php:1116
+#, fuzzy
+msgid "json_acciones"
+msgstr "json_acciones"
+
+#: expedientes/model/entity/expedientedb.class.php:1128
+#: pendientes/controller/pendiente_buscar.php:205
+#: pendientes/controller/pendiente_tabla.php:124
+#: pendientes/model/entity/pendientedb.class.php:1013
+#: expedientes/view/expediente_lista.html.twig:30
+#, fuzzy
+msgid "etiquetas"
+msgstr "Etiquetes"
+
+#: expedientes/model/entity/expedientedb.class.php:1164
+#, fuzzy
+msgid "f_ini_circulacion"
+msgstr "f_ini_circulacion"
+
+#: expedientes/model/entity/expedientedb.class.php:1176
+#, fuzzy
+msgid "f_reunion"
+msgstr "f_reunion"
+
+#: expedientes/model/entity/expedientedb.class.php:1200
+#, fuzzy
+msgid "vida"
+msgstr "Vida"
+
+#: expedientes/model/entity/expedientedb.class.php:1212
+#, fuzzy
+msgid "json_preparar"
+msgstr "json_preparar"
+
+#: expedientes/model/entity/expedientedb.class.php:1224
+#, fuzzy
+msgid "firmas_oficina"
+msgstr "firmas_oficina"
+
+#: expedientes/model/escrito.class.php:134
+#, fuzzy
+msgid "Error no hay destino"
+msgstr "Error: hi ha hagut un error."
+
+#: expedientes/model/escrito.class.php:175
+#, fuzzy
+msgid "No se ha podido eliminar un adjunto"
+msgstr "No s'ha pogut suprimir un fitxer adjunt"
+
+#: expedientes/model/escrito.class.php:181
+#, fuzzy
+msgid "No se ha podido eliminar el escrito"
+msgstr "No s'ha pogut suprimir l'escriptura"
+
+#: expedientes/model/escrito.class.php:204
+#, fuzzy
+msgid "manual"
+msgstr "Manual"
+
+#: expedientes/model/escrito.class.php:205
+#: lugares/model/entity/lugar.class.php:295
+#, fuzzy
+msgid "xml"
+msgstr "Xml"
+
+#: expedientes/model/escrito.class.php:213
+#, fuzzy
+msgid "propuesta"
+msgstr "Proposta"
+
+#: expedientes/model/escrito.class.php:214
+#: expedientes/view/expediente_form.html.twig:159
+#, fuzzy
+msgid "plantilla"
+msgstr "Plantilla"
+
+#: expedientes/model/escrito.class.php:215
+msgid "escrito"
+msgstr "escrit"
+
+#: expedientes/model/escritolista.class.php:134
+#: usuarios/controller/usuario_secretaria.php:101
+msgid "enviar"
+msgstr "enviar"
+
+#: expedientes/model/escritolista.class.php:255
+#, fuzzy
+msgid "en secretaría"
+msgstr "Secretaria"
+
+#: expedientes/model/escritolista.class.php:258
+#, fuzzy
+msgid "pasar a secretaría"
+msgstr "passar a la secretaria"
+
+#: expedientes/model/escritolista.class.php:262
+#, fuzzy
+msgid "otra acción?"
+msgstr "una altra acció?"
+
+#: expedientes/model/escritolista.class.php:284
+#: expedientes/view/escrito_lst_enviar.html.twig:11
+#, fuzzy
+msgid "prot. local/rev.texto"
+msgstr "Prot. text local/rev.text"
+
+#: expedientes/model/escritolista.class.php:341
+#, fuzzy
+msgid "ver todos"
+msgstr "veure tots"
+
+#: expedientes/model/expediente.class.php:321
+#, fuzzy
+msgid "rápido"
+msgstr "Ràpid"
+
+#: expedientes/model/expediente.class.php:322
+#, fuzzy
+msgid "urgente"
+msgstr "Urgent"
+
+#: expedientes/model/expediente.class.php:323
+msgid "desconocido"
+msgstr "desconegut"
+
+#: expedientes/model/expediente.class.php:324
+#, fuzzy
+msgid "otra"
+msgstr "possiblement estiguin en una altra dl"
+
+#: expedientes/model/expediente.class.php:332
+#, fuzzy
+msgid "borrador"
+msgstr "Projecte"
+
+#: expedientes/model/expediente.class.php:333
+#: usuarios/controller/usuario_home.php:93
+#, fuzzy
+msgid "circulando"
+msgstr "Circulant"
+
+#: expedientes/model/expediente.class.php:334
+#: usuarios/controller/usuario_secretaria.php:51
+#, fuzzy
+msgid "fijar reunión"
+msgstr "reunió fixada"
+
+#: expedientes/model/expediente.class.php:335
+#: pendientes/model/pendiente.class.php:123
+#, fuzzy
+msgid "acabado"
+msgstr "Acabar"
+
+#: expedientes/model/expediente.class.php:336
+#: pendientes/controller/pendiente_tabla.php:129
+#: pendientes/model/entity/pendientedb.class.php:953
+msgid "encargado"
+msgstr "encarregat"
+
+#: expedientes/model/expediente.class.php:337
+#, fuzzy
+msgid "ok secretaria / distribuir"
+msgstr "ok secretari / distribuir"
+
+#: expedientes/model/expediente.class.php:338
+#, fuzzy
+msgid "archivado"
+msgstr "Arxivat"
+
+#: expedientes/model/expediente.class.php:339
+#: usuarios/controller/usuario_home.php:155
+#, fuzzy
+msgid "copias"
+msgstr "Còpies"
+
+#: expedientes/model/expediente.class.php:340
+#: tramites/model/entity/firma.class.php:230
+#: tramites/model/entity/firma.class.php:239
+#: tramites/model/entity/firma.class.php:260
+#, fuzzy
+msgid "rechazado"
+msgstr "Rebutjat"
+
+#: expedientes/model/expediente.class.php:341
+#: tramites/model/entity/firma.class.php:229
+#: tramites/model/entity/firma.class.php:238
+#: tramites/model/entity/firma.class.php:259
+#, fuzzy
+msgid "dilata"
+msgstr "Dilats"
+
+#: expedientes/model/expediente.class.php:342
+#: tramites/model/entity/firma.class.php:221
+#: tramites/model/entity/firma.class.php:227
+#: tramites/model/entity/firma.class.php:237
+#: tramites/model/entity/firma.class.php:246
+#: tramites/model/entity/firma.class.php:254
+#: tramites/model/entity/firma.class.php:257
+#: tramites/model/entity/firma.class.php:263
+#, fuzzy
+msgid "espera"
+msgstr "en espera"
+
+#: expedientes/model/expediente.class.php:353
+#, fuzzy
+msgid "experiencia"
+msgstr "Experiència"
+
+#: expedientes/model/expediente.class.php:354
+#, fuzzy
+msgid "temporal"
+msgstr "Temporal"
+
+#: expedientes/model/expediente.class.php:355
+msgid "borrable"
+msgstr "esborrable"
+
+#: expedientes/model/expediente.class.php:370
+#, fuzzy
+msgid "DILATA"
+msgstr "Dilats"
+
+#: expedientes/model/expediente.class.php:373
+#, fuzzy
+msgid "RECHAZADO"
+msgstr "Rebutjat"
+
+#: expedientes/model/expediente.class.php:376
+#, fuzzy
+msgid "NO"
+msgstr "No"
+
+#: expedientes/model/expediente.class.php:445
+#: expedientes/model/expediente.class.php:451
+#: expedientes/model/expediente.class.php:460
+msgid "quitar"
+msgstr "treure"
+
+#: expedientes/model/expedientelista.class.php:606
+#, fuzzy
+msgid "mod"
+msgstr "Mod"
+
+#: lugares/controller/grupo_form.php:91
+#: usuarios/controller/cargo_grupo_form.php:89
+msgid "guardar datos grupo"
+msgstr "guardar dades grup"
+
+#: lugares/controller/grupo_lista.php:48
+#: usuarios/controller/cargo_grupo_lista.php:49
+msgid "descripción"
+msgstr "descripció"
+
+#: lugares/controller/grupo_lista.php:48
+#: lugares/model/entity/grupo.class.php:400
+#: usuarios/controller/cargo_grupo_lista.php:50
+#: usuarios/model/entity/cargogrupo.class.php:442
+#, fuzzy
+msgid "miembros"
+msgstr "Membres"
+
+#: lugares/controller/lugar_form.php:103
+#, fuzzy
+msgid "guardar datos lugar"
+msgstr "desa el lloc de dades"
+
+#: lugares/controller/lugar_lista.php:53
+#: lugares/model/entity/lugar.class.php:608
+#: usuarios/model/entity/oficina.class.php:380
+#: config/view/parametros.html.twig:55
+msgid "sigla"
+msgstr "sigla"
+
+#: lugares/controller/lugar_lista.php:53
+#: lugares/model/entity/lugar.class.php:620
+#: lugares/view/lugar_form.html.twig:46
+msgid "dl"
+msgstr "dl"
+
+#: lugares/controller/lugar_lista.php:53
+msgid "región"
+msgstr "regió"
+
+#: lugares/controller/lugar_lista.php:53
+#: lugares/model/entity/lugar.class.php:644
+msgid "nombre"
+msgstr "nom"
+
+#: lugares/controller/lugar_lista.php:53
+#: lugares/model/entity/lugar.class.php:656
+#, fuzzy
+msgid "tipo_ctr"
+msgstr "tipo_ctr"
+
+#: lugares/controller/lugar_lista.php:53
+#: lugares/model/entity/lugar.class.php:692
+#, fuzzy
+msgid "e_mail"
+msgstr "e-mail"
+
+#: lugares/controller/lugar_lista.php:53
+#, fuzzy
+msgid "modo envio"
+msgstr "mode d'enviament"
+
+#: lugares/model/entity/lugar.class.php:294
+#, fuzzy
+msgid "pdf"
+msgstr "PDF"
+
+#: lugares/model/entity/lugar.class.php:632
+#: lugares/view/lugar_form.html.twig:48
+#, fuzzy
+msgid "region"
+msgstr "regió H"
+
+#: lugares/model/entity/lugar.class.php:680
+#, fuzzy
+msgid "pub_key"
+msgstr "pub_key"
+
+#: pendientes/controller/pen_form_periodico.php:161
+#: pendientes/view/pendiente_form_periodico.html.twig:21
+msgid "desde"
+msgstr "des de"
+
+#: pendientes/controller/pen_form_periodico.php:163
+#: pendientes/view/pendiente_form_periodico.html.twig:23
+msgid "hasta"
+msgstr "fins"
+
+#: pendientes/controller/pen_form_periodico.php:168
+#: pendientes/view/pendiente_form_periodico.html.twig:8
+msgid "anual"
+msgstr "anual"
+
+#: pendientes/controller/pen_form_periodico.php:169
+#: pendientes/view/pendiente_form_periodico.html.twig:11
+#, fuzzy
+msgid "mensual"
+msgstr "Mensual"
+
+#: pendientes/controller/pen_form_periodico.php:170
+#: pendientes/view/pendiente_form_periodico.html.twig:14
+#, fuzzy
+msgid "semanal"
+msgstr "Setmanal"
+
+#: pendientes/controller/pen_form_periodico.php:171
+#: pendientes/view/pendiente_form_periodico.html.twig:17
+#, fuzzy
+msgid "diaria"
+msgstr "Diari"
+
+#: pendientes/controller/pen_form_periodico.php:179
+#: pendientes/view/pendiente_form_periodico.html.twig:31
+#, fuzzy
+msgid "anualmente"
+msgstr "Anualment"
+
+#: pendientes/controller/pen_form_periodico.php:180
+#: pendientes/controller/pen_form_periodico.php:261
+#: pendientes/view/pendiente_form_periodico.html.twig:36
+#: pendientes/view/pendiente_form_periodico.html.twig:85
+#, fuzzy
+msgid "El/los día/s (separados por comas)"
+msgstr "Els dies (separats per comes)"
+
+#: pendientes/controller/pen_form_periodico.php:181
+#: pendientes/controller/pen_form_periodico.php:208
+#: pendientes/view/pendiente_form_periodico.html.twig:38
+#: pendientes/view/pendiente_form_periodico.html.twig:50
+#, fuzzy
+msgid "de cada"
+msgstr "de cada ctr"
+
+#: pendientes/controller/pen_form_periodico.php:192
+#: pendientes/controller/pen_form_periodico.php:263
+#: pendientes/view/pendiente_form_periodico.html.twig:47
+#: pendientes/view/pendiente_form_periodico.html.twig:93
+#, fuzzy
+msgid "El"
+msgstr "el"
+
+#: pendientes/controller/pen_form_periodico.php:194
+#: pendientes/controller/pen_form_periodico.php:265
+#: pendientes/controller/pendiente_form.php:407
+msgid "primer"
+msgstr "primer"
+
+#: pendientes/controller/pen_form_periodico.php:195
+#: pendientes/controller/pen_form_periodico.php:266
+#: pendientes/controller/pendiente_form.php:408
+msgid "segundo"
+msgstr "segon"
+
+#: pendientes/controller/pen_form_periodico.php:196
+#: pendientes/controller/pen_form_periodico.php:267
+#: pendientes/controller/pendiente_form.php:409
+msgid "tercer"
+msgstr "tercer"
+
+#: pendientes/controller/pen_form_periodico.php:197
+#: pendientes/controller/pen_form_periodico.php:268
+#: pendientes/controller/pendiente_form.php:410
+msgid "cuarto"
+msgstr "quart"
+
+#: pendientes/controller/pen_form_periodico.php:198
+#: pendientes/controller/pen_form_periodico.php:269
+#: pendientes/controller/pendiente_form.php:411
+#, fuzzy
+msgid "último"
+msgstr "Últim"
+
+#: pendientes/controller/pen_form_periodico.php:220
+#: pendientes/view/pendiente_form_periodico.html.twig:58
+#, fuzzy
+msgid "por dias de meses"
+msgstr "durant dies de mesos"
+
+#: pendientes/controller/pen_form_periodico.php:223
+#, fuzzy
+msgid "introducir los meses"
+msgstr "introduir els mesos"
+
+#: pendientes/controller/pen_form_periodico.php:237
+#, fuzzy
+msgid "introducir los días"
+msgstr "introduïu els dies"
+
+#: pendientes/controller/pen_form_periodico.php:260
+#: pendientes/view/pendiente_form_periodico.html.twig:80
+#, fuzzy
+msgid "mensualmente"
+msgstr "Mensual"
+
+#: pendientes/controller/pen_form_periodico.php:262
+#: pendientes/controller/pen_form_periodico.php:279
+#: pendientes/view/pendiente_form_periodico.html.twig:87
+#: pendientes/view/pendiente_form_periodico.html.twig:96
+#, fuzzy
+msgid "de cada mes"
+msgstr "cada mes"
+
+#: pendientes/controller/pen_form_periodico.php:286
+#: pendientes/view/pendiente_form_periodico.html.twig:104
+#, fuzzy
+msgid "semanalmente"
+msgstr "Setmanal"
+
+#: pendientes/controller/pen_form_periodico.php:287
+#: pendientes/view/pendiente_form_periodico.html.twig:110
+#, fuzzy
+msgid "periodicidad día de la semana"
+msgstr "dia de periodicitat de la setmana"
+
+#: pendientes/controller/pen_form_periodico.php:304
+#: pendientes/view/pendiente_form_periodico.html.twig:122
+#, fuzzy
+msgid "diariamente"
+msgstr "Diari"
+
+#: pendientes/controller/pen_form_periodico.php:319
+#: pendientes/view/pendiente_form_periodico.html.twig:131
+#, fuzzy
+msgid "Son los marcados como contestados o eliminados"
+msgstr "Són els marcats com a contestats o suprimits"
+
+#: pendientes/controller/pen_form_periodico.php:320
+#, fuzzy
+msgid "Excepciones"
+msgstr "excepcions"
+
+#: pendientes/controller/pen_form_periodico.php:324
+#, fuzzy
+msgid "formato: aaaammdd[,aaaammdd,...]"
+msgstr "format: yymmdd[,yymmdd,...]"
+
+#: pendientes/controller/pendiente_buscar.php:58
+msgid "cualquiera"
+msgstr "qualsevol"
+
+#: pendientes/controller/pendiente_buscar.php:199
+#, fuzzy
+msgid "nuevo pendiente"
+msgstr "nou pendent"
+
+#: pendientes/controller/pendiente_buscar.php:200
+#, fuzzy
+msgid "marcar como terminado"
+msgstr "marca com a acabada"
+
+#: pendientes/controller/pendiente_buscar.php:210
+#: pendientes/controller/pendiente_tabla.php:128
+#: pendientes/model/entity/pendientedb.class.php:1025
+#: busquedas/view/lista_permanentes.html.twig:18
+#: entradas/view/entrada_lista.html.twig:18
+#: expedientes/view/expediente_lista.html.twig:20
+#, fuzzy
+msgid "oficinas"
+msgstr "per oficines"
+
+#: pendientes/controller/pendiente_form.php:165
+#, fuzzy
+msgid "No sé a que pendiente se refiere."
+msgstr "No sé què vols dir."
+
+#: pendientes/controller/pendiente_form.php:467
+#: pendientes/view/_pendiente_form_js.html.twig:46
+#, fuzzy
+msgid "ver ficha completa"
+msgstr "veure pestanya completa"
+
+#: pendientes/controller/pendiente_form.php:470
+#: pendientes/view/_pendiente_form_js.html.twig:50
+#: pendientes/view/_pendiente_form_js.html.twig:148
+#, fuzzy
+msgid "ver ficha sencilla"
+msgstr "veure pestanya simple"
+
+#: pendientes/controller/pendiente_form.php:476
+#: pendientes/view/_pendiente_form_js.html.twig:59
+#, fuzzy
+msgid "ver periodicidad"
+msgstr "veure periodicitat"
+
+#: pendientes/controller/pendiente_form.php:477
+#: pendientes/view/_pendiente_form_js.html.twig:60
+#, fuzzy
+msgid "plazo para contestar"
+msgstr "termini de resposta"
+
+#: pendientes/controller/pendiente_form.php:481
+#: pendientes/view/_pendiente_form_js.html.twig:65
+#, fuzzy
+msgid "ocultar periodicidad"
+msgstr "amagar la periodicitat"
+
+#: pendientes/controller/pendiente_form.php:482
+#, fuzzy
+msgid "fecha de final"
+msgstr "data de finalització"
+
+#: pendientes/controller/pendiente_tabla.php:33
+#, fuzzy
+msgid "registro"
+msgstr "Matrícula"
+
+#: pendientes/controller/pendiente_update_ics.php:266
+#, fuzzy
+msgid "No se han podido modificar el pendiente"
+msgstr "No s'ha pogut canviar el pendent"
+
+#: pendientes/controller/pendiente_update_ics.php:298
+#: pendientes/controller/pendiente_update_ics.php:329
+#, fuzzy
+msgid "No se cual tengo que eliminar."
+msgstr "No sé quin he d'eliminar."
+
+#: pendientes/model/entity/pendientedb.class.php:905
+#, fuzzy
+msgid "f_acabado"
+msgstr "f_acabado"
+
+#: pendientes/model/entity/pendientedb.class.php:917
+#, fuzzy
+msgid "f_plazo"
+msgstr "f_plazo"
+
+#: pendientes/model/entity/pendientedb.class.php:929
+#, fuzzy
+msgid "ref_mas"
+msgstr "ref_mas"
+
+#: pendientes/model/entity/pendientedb.class.php:941
+#: tramites/model/entity/firma.class.php:945
+msgid "observ"
+msgstr "observ"
+
+#: pendientes/model/entity/pendientedb.class.php:965
+#, fuzzy
+msgid "cancilleria"
+msgstr "Chancery"
+
+#: pendientes/model/entity/pendientedb.class.php:1001
+#, fuzzy
+msgid "pendiente_con"
+msgstr "pendiente_con"
+
+#: pendientes/model/entity/pendientedb.class.php:1037
+#: usuarios/model/entity/cargo.class.php:582
+#, fuzzy
+msgid "id_oficina"
+msgstr "id_oficina"
+
+#: pendientes/model/entity/pendientedb.class.php:1061
+#, fuzzy
+msgid "f_inicio"
+msgstr "f_inicio"
+
+#: pendientes/model/pendiente.class.php:122
+#, fuzzy
+msgid "iniciado"
+msgstr "Va començar"
+
+#: pendientes/model/pendiente.class.php:124
+#, fuzzy
+msgid "en proceso"
+msgstr "en procés"
+
+#: pendientes/model/pendiente.class.php:125
+#, fuzzy
+msgid "cancelado"
+msgstr "Cancel"
+
+#: pendientes/model/pendiente.class.php:764
+#, fuzzy
+msgid "No encuentro el todo"
+msgstr "No puc trobar el conjunt"
+
+#: pendientes/model/rrule.class.php:153
+#, fuzzy, php-format
+msgid "Cuidado con febrero para el día: %s"
+msgstr "Compte amb el febrer per al dia: %s"
+
+#: pendientes/model/rrule.class.php:155
+#, fuzzy
+msgid "Cuidado con los meses de menos de 31 días"
+msgstr "Compte amb mesos menys de 31 dies"
+
+#: tramites/controller/firma_ajax.php:140
+#: tramites/controller/firma_ajax.php:296
+#, fuzzy
+msgid "No puede Firmar"
+msgstr "No es pot signar"
+
+#: tramites/controller/firma_ajax.php:182
+#, fuzzy
+msgid "No se puede firmar el cargo_tipo distribuir"
+msgstr "No podeu signar el cargo_tipo distribuir"
+
+#: tramites/controller/tramite_form.php:55
+#, fuzzy
+msgid "guardar datos trámite"
+msgstr "guardar paperassa de dades"
+
+#: tramites/controller/tramite_form.php:84
+msgid "¿Está seguro que desea borrar esta tramite?"
+msgstr "Esteu segur que voleu suprimir aquest tràmit?"
+
+#: tramites/controller/tramitecargo_ajax.php:89
+#: tramites/model/entity/tramite.class.php:423
+#: usuarios/model/entity/oficina.class.php:392
+msgid "orden"
+msgstr "ordre"
+
+#: tramites/controller/tramitecargo_ajax.php:89
+#: usuarios/model/entity/cargo.class.php:558
+msgid "cargo"
+msgstr "càrrec"
+
+#: tramites/controller/tramitecargo_ajax.php:89
+#: tramites/model/entity/tramitecargo.class.php:476
+#, fuzzy
+msgid "multiple"
+msgstr "Múltiples"
+
+#: tramites/controller/tramitecargo_select.php:78
+msgid "¿Esta seguro que quitar este cargo?"
+msgstr "Esteu segur voleu treure aquest càrrec?"
+
+#: tramites/controller/tramitecargo_select.php:79
+#, fuzzy
+msgid "No ha determinado para que trámite"
+msgstr "No has determinat què faràs."
+
+#: tramites/model/entity/firma.class.php:208
+#, fuzzy
+msgid "voto"
+msgstr "Vot"
+
+#: tramites/model/entity/firma.class.php:209
+#: tramites/model/entity/gestorfirma.class.php:218
+#, fuzzy
+msgid "aclaración"
+msgstr "Aclariment"
+
+#: tramites/model/entity/firma.class.php:228
+#: tramites/model/entity/firma.class.php:258
+#, fuzzy
+msgid "VºBº"
+msgstr "Preu per nit"
+
+#: tramites/model/entity/firma.class.php:244
+#: tramites/model/entity/firma.class.php:261
+msgid "nueva"
+msgstr "nova"
+
+#: tramites/model/entity/firma.class.php:245
+#: tramites/model/entity/firma.class.php:262
+#: etiquetas/view/etiqueta_form.html.twig:57
+#: etiquetas/view/etiqueta_lista.html.twig:39
+#: lugares/view/grupo_form.html.twig:16 lugares/view/grupo_lista.html.twig:23
+#: lugares/view/lugar_form.html.twig:16 lugares/view/lugar_lista.html.twig:23
+#: tramites/view/tramite_form.html.twig:16
+#: tramites/view/tramite_lista.html.twig:19
+#: usuarios/view/cargo_form.html.twig:16
+#: usuarios/view/cargo_grupo_form.html.twig:16
+#: usuarios/view/cargo_grupo_lista.html.twig:23
+#: usuarios/view/cargo_lista.html.twig:24
+#: usuarios/view/oficina_form.html.twig:16
+#: usuarios/view/oficina_lista.html.twig:19
+#: usuarios/view/usuario_form.html.twig:15
+#: usuarios/view/usuario_lista.html.twig:29
+msgid "respuesta"
+msgstr "resposta"
+
+#: tramites/model/entity/firma.class.php:837
+#, fuzzy
+msgid "id_cargo_creador"
+msgstr "id_cargo_creador"
+
+#: tramites/model/entity/firma.class.php:849
+#, fuzzy
+msgid "cargo_tipo"
+msgstr "cargo_tipo"
+
+#: tramites/model/entity/firma.class.php:873
+#: usuarios/model/entity/cargo.class.php:606
 #: usuarios/model/entity/preferencia.class.php:401
 msgid "id_usuario"
-msgstr ""
+msgstr "id_usuario"
 
+#: tramites/model/entity/firma.class.php:885
+#: tramites/model/entity/tramitecargo.class.php:452
+#, fuzzy
+msgid "orden_tramite"
+msgstr "orden_tramite"
+
+#: tramites/model/entity/firma.class.php:897
+#, fuzzy
+msgid "orden_oficina"
+msgstr "orden_oficina"
+
+#: tramites/model/entity/firma.class.php:909
 #: usuarios/model/entity/preferencia.class.php:413
+#: expedientes/view/escrito_lista.html.twig:14
+#: expedientes/view/expediente_form.html.twig:172
 msgid "tipo"
-msgstr ""
+msgstr "tipus"
+
+#: tramites/model/entity/firma.class.php:933
+#, fuzzy
+msgid "observ_creador"
+msgstr "observ_creador"
+
+#: tramites/model/entity/firma.class.php:957
+#, fuzzy
+msgid "f_valor"
+msgstr "f_valor"
+
+#: tramites/model/entity/tramite.class.php:411
+#: expedientes/view/expediente_lista.html.twig:17
+#, fuzzy
+msgid "tramite"
+msgstr "Procés"
+
+#: tramites/model/entity/tramite.class.php:435
+msgid "breve"
+msgstr "breu"
+
+#: usuarios/controller/cargo_form.php:58
+#, fuzzy
+msgid "guardar datos cargo"
+msgstr "deseu les dades de càrrega"
+
+#: usuarios/controller/cargo_form.php:111
+msgid "¿Está seguro que desea quitar este cargo?"
+msgstr "Esteu segur que voleu treure aquest càrrec?"
+
+#: usuarios/controller/cargo_grupo_form.php:90
+msgid "¿Está seguro que desea quitar este grupo?"
+msgstr "Esteu segur que voleu suprimir aquest grup?"
+
+#: usuarios/controller/cargo_grupo_lista.php:48
+#, fuzzy
+msgid "cargo ref"
+msgstr "ref càrrec"
+
+#: usuarios/controller/cargo_update.php:26
+#, fuzzy
+msgid "Hay un error al guardar"
+msgstr "Hi ha un estalvi d'errors"
+
+#: usuarios/controller/cargo_update.php:54
+#, fuzzy
+msgid "No se puede eliminar un cargo tipo."
+msgstr "No podeu suprimir una càrrega de tipus."
+
+#: usuarios/controller/login.php:82
+#, php-format
+msgid "(%s) está asignado como suplente a este cargo"
+msgstr "(%s) està assignat com a suplent per aquest càrrec"
+
+#: usuarios/controller/login.php:170
+#, fuzzy
+msgid "Password incorrecto"
+msgstr "Contrasenya incorrecta"
+
+#: usuarios/controller/login.php:175
+#, fuzzy
+msgid "este usuario no existe"
+msgstr "aquest usuari no existeix"
+
+#: usuarios/controller/oficina_form.php:56
+#, fuzzy
+msgid "guardar datos oficina"
+msgstr "desa les dades de l'oficina"
+
+#: usuarios/controller/oficina_form.php:81
+#: usuarios/view/oficina_lista.html.twig:9
+msgid "¿Está seguro que desea borrar esta oficina?"
+msgstr "Esteu segur que voleu suprimir aquesta oficina?"
+
+#: usuarios/controller/usuario_form.php:100
+msgid "guardar datos usuario"
+msgstr "guardar dades usuari"
+
+#: usuarios/controller/usuario_form_pwd.php:32
+msgid "guardar datos"
+msgstr "guardar dades"
+
+#: usuarios/controller/usuario_form_pwd.php:33
+msgid "se ha cambiado el password"
+msgstr "ha canviat la contrasenya"
+
+#: usuarios/controller/usuario_home.php:45
+#, fuzzy
+msgid "borrador (propio)"
+msgstr "esborrany (propi)"
+
+#: usuarios/controller/usuario_home.php:57
+#, fuzzy
+msgid "borrador (oficina)"
+msgstr "esborrany (oficina)"
+
+#: usuarios/controller/usuario_home.php:69
+#, fuzzy
+msgid "para firmar"
+msgstr "Per signar"
+
+#: usuarios/controller/usuario_home.php:81
+#, fuzzy
+msgid "para reunión"
+msgstr "per a la reunió"
+
+#: usuarios/controller/usuario_home.php:105
+#, fuzzy
+msgid "reunion día"
+msgstr "dia de la reunió"
+
+#: usuarios/controller/usuario_home.php:118
+#, fuzzy
+msgid "acabados"
+msgstr "Acabats"
+
+#: usuarios/controller/usuario_home.php:130
+#, fuzzy
+msgid "acabados encargados"
+msgstr "acabats ordenats"
+
+#: usuarios/controller/usuario_home.php:142
+#, fuzzy
+msgid "archivados"
+msgstr "Arxivat"
+
+#: usuarios/controller/usuario_home.php:171
+#, fuzzy
+msgid "E: admitir"
+msgstr "E: admetre"
+
+#: usuarios/controller/usuario_home.php:184
+#, fuzzy
+msgid "entradas"
+msgstr "Entrades"
+
+#: usuarios/controller/usuario_home.php:197
+#: usuarios/controller/usuario_secretaria.php:193
+#, fuzzy
+msgid "archivo de escritos"
+msgstr "fitxer d' escriptura"
+
+#: usuarios/controller/usuario_home.php:208
+#, fuzzy
+msgid "escritos de cr"
+msgstr "escrits de cr"
+
+#: usuarios/controller/usuario_home.php:219
+#, fuzzy
+msgid "permanentes de cr"
+msgstr "cr permanent"
+
+#: usuarios/controller/usuario_home.php:232
+#: usuarios/controller/usuario_secretaria.php:126
+#: usuarios/controller/usuario_secretaria.php:221
+msgid "pendientes"
+msgstr "pendents"
+
+#: usuarios/controller/usuario_secretaria.php:63
+#, fuzzy
+msgid "seguimiento reunion"
+msgstr "reunió de seguiment"
+
+#: usuarios/controller/usuario_secretaria.php:76
+msgid "seguimiento"
+msgstr "seguiment"
+
+#: usuarios/controller/usuario_secretaria.php:88
+#, fuzzy
+msgid "distribuir"
+msgstr "Distribuir"
+
+#: usuarios/controller/usuario_secretaria.php:114
+#, fuzzy
+msgid "permanentes"
+msgstr "Permanent"
+
+#: usuarios/controller/usuario_secretaria.php:138
+#, fuzzy
+msgid "E: introducir"
+msgstr "E: Entrar"
+
+#: usuarios/controller/usuario_secretaria.php:151
+#, fuzzy
+msgid "E: asignar"
+msgstr "E: assignar"
+
+#: usuarios/controller/usuario_secretaria.php:167
+#, fuzzy
+msgid "E: aceptar"
+msgstr "E: acceptar"
+
+#: usuarios/controller/usuario_secretaria.php:180
+#, fuzzy
+msgid "ditribución cr"
+msgstr "ditribució cr"
+
+#: usuarios/controller/usuario_secretaria.php:205
+#, fuzzy
+msgid "pref"
+msgstr "Pref"
+
+#: usuarios/controller/usuario_secretaria.php:234
+#, fuzzy
+msgid "salida manual"
+msgstr "sortida manual"
+
+#: usuarios/model/entity/cargo.class.php:546
+#, fuzzy
+msgid "id_ambito"
+msgstr "id_ambito"
+
+#: usuarios/model/entity/cargo.class.php:594
+#: usuarios/view/cargo_form.html.twig:56
+#, fuzzy
+msgid "director"
+msgstr "director d'estudis"
+
+#: usuarios/model/entity/cargo.class.php:618
+#, fuzzy
+msgid "id_suplente"
+msgstr "id_suplente"
+
+#: usuarios/model/entity/cargogrupo.class.php:418
+#, fuzzy
+msgid "id_cargo_ref"
+msgstr "id_cargo_ref"
+
+#: usuarios/model/entity/gestorcargo.class.php:101
+#, fuzzy, php-format
+msgid "No existe el usuario para el cargo %s"
+msgstr "No hi ha cap usuari per al %s"
+
+#: usuarios/model/entity/locale.class.php:431
+msgid "nom_locale"
+msgstr "nom_locale"
+
+#: usuarios/model/entity/locale.class.php:445
+#: usuarios/view/personal.html.twig:7
+msgid "idioma"
+msgstr "idioma"
+
+#: usuarios/model/entity/locale.class.php:459
+msgid "nombre idioma"
+msgstr "nom llengua"
+
+#: usuarios/model/entity/locale.class.php:473
+msgid "activo"
+msgstr "actiu"
 
 #: usuarios/model/entity/preferencia.class.php:425
 msgid "preferencia"
-msgstr ""
+msgstr "preferència"
 
-#: usuarios/model/entity/role.class.php:401
-msgid "id_ubicacion"
-msgstr ""
-
-#: usuarios/model/entity/role.class.php:413
-msgid "role"
-msgstr ""
-
-#: usuarios/model/entity/role.class.php:425
-msgid "descripcion"
-msgstr ""
-
-#: usuarios/model/entity/usuario.class.php:461
+#: usuarios/model/entity/usuario.class.php:466
 msgid "usuario"
 msgstr "usuariiiii"
 
-#: usuarios/model/entity/usuario.class.php:473
-msgid "id_role"
-msgstr ""
-
-#: usuarios/model/entity/usuario.class.php:485
-msgid "password"
-msgstr ""
-
-#: usuarios/model/entity/usuario.class.php:497
-msgid "email"
-msgstr ""
-
-#: usuarios/model/entity/usuario.class.php:509
+#: usuarios/model/entity/usuario.class.php:514
+#, fuzzy
 msgid "nom_usuario"
-msgstr ""
+msgstr "nom_usuario"
 
-#: web/datetimelocal.class.php:18
-msgid "enero"
-msgstr ""
-
-#: web/datetimelocal.class.php:19
-msgid "febrero"
-msgstr ""
-
-#: web/datetimelocal.class.php:20
-msgid "marzo"
-msgstr ""
-
-#: web/datetimelocal.class.php:21
-msgid "abril"
-msgstr ""
-
-#: web/datetimelocal.class.php:22
-msgid "mayo"
-msgstr ""
-
-#: web/datetimelocal.class.php:23
-msgid "junio"
-msgstr ""
-
-#: web/datetimelocal.class.php:24
-msgid "julio"
-msgstr ""
-
-#: web/datetimelocal.class.php:25
-msgid "agosto"
-msgstr ""
-
-#: web/datetimelocal.class.php:26
-msgid "septiembre"
-msgstr ""
-
-#: web/datetimelocal.class.php:27
-msgid "octubre"
-msgstr ""
-
-#: web/datetimelocal.class.php:28
-msgid "noviembre"
-msgstr ""
-
-#: web/datetimelocal.class.php:29
-msgid "diciembre"
-msgstr ""
-
-#: web/datetimelocal.class.php:143
-msgid "lunes"
-msgstr ""
-
-#: web/datetimelocal.class.php:143
-msgid "martes"
-msgstr ""
-
-#: web/datetimelocal.class.php:143
-msgid "miércoles"
-msgstr ""
-
-#: web/datetimelocal.class.php:143
-msgid "jueves"
-msgstr ""
-
-#: web/datetimelocal.class.php:143
-msgid "viernes"
-msgstr ""
-
-#: web/datetimelocal.class.php:143
-msgid "sábado"
-msgstr ""
-
-#: web/datetimelocal.class.php:143
-msgid "domingo"
-msgstr ""
-
-#: web/datetimelocal.class.php:197
+#: web/datetimelocal.class.php:235
 #, php-format
 msgid "la fecha fin es igual a la fecha inicio en el periodo %s: %s"
-msgstr ""
+msgstr "la data de finalització és igual a la data d'inici del període %s: %s"
 
-#: web/datetimelocal.class.php:202
+#: web/datetimelocal.class.php:240
 #, php-format
 msgid "la fecha fin es menor que la fecha inicio en el periodo %s: %s"
 msgstr ""
+"la data de finalització és inferior a la data d'inici del període %s: %s"
 
-#: web/datetimelocal.class.php:212
+#: web/datetimelocal.class.php:250
 #, php-format
 msgid "dias libres cerca de %s"
-msgstr ""
+msgstr "dies lliures prop de %s"
 
-#: web/datetimelocal.class.php:217
+#: web/datetimelocal.class.php:255
 #, php-format
 msgid "hay un solape cerca de %s"
-msgstr ""
+msgstr "hi ha una superposició propera a %s"
 
-#: web/desplegable.class.php:73
+#: web/desplegable.class.php:125 web/protocolo.class.php:176
 msgid "tiene que ser un array"
-msgstr ""
+msgstr "ha de ser un array"
 
 #: web/hash.class.php:144
 msgid "llegan campos hidden modificados"
-msgstr ""
+msgstr "arriben camps hidden modificats"
 
 #: web/hash.class.php:175
 msgid "llegan distinto número o nombre de los campos que se dice que se envian"
-msgstr ""
+msgstr "arriben diferent nombre o nom dels camps que es diu que s'envien"
 
 #: web/hash.class.php:219
 msgid "url modificada"
-msgstr ""
+msgstr "url modificada"
 
 #: web/hash.class.php:230 web/hash.class.php:235
 msgid "problema general de seguridad"
-msgstr ""
+msgstr "problema general de seguretat"
 
 #: web/hash.class.php:236
 msgid "para ver más detalles activa el mode debug en core\\confgiGlobal"
-msgstr ""
+msgstr "per veure més detalls activa el model debug en core\\confgiGlobal"
 
 #: web/hash.class.php:270
 msgid "página con seguridad desactivada"
-msgstr ""
+msgstr "pàgina amb seguretat desactivada"
 
 #: web/lista.class.php:142
 msgid "no hay filas"
-msgstr ""
+msgstr "no hi ha files"
 
-#: web/lista.class.php:305 web/lista.class.php:891 web/lista.class.php:1062
+#: web/lista.class.php:316 web/lista.class.php:914 web/lista.class.php:1104
+#: web/lista.class.php:1275
 msgid "no hay ninguna fila"
-msgstr ""
+msgstr "no hi ha cap fila"
 
-#: web/lista.class.php:851
+#: web/lista.class.php:863
 msgid "guardar selección de columnas"
-msgstr ""
+msgstr "guardar selecció de columnes"
 
-#: web/lista.class.php:853
+#: web/lista.class.php:865
 msgid "ver/ocultar panel de búsqueda"
-msgstr ""
+msgstr "veure/ocultar panell de cerca"
 
-#: web/lista.class.php:862
+#: web/lista.class.php:874
 msgid "Buscar en todas las columnas"
-msgstr ""
+msgstr "Cercar en totes les columnes"
 
-#: web/lista.class.php:964 web/lista.class.php:1117
+#: web/lista.class.php:988 web/lista.class.php:1177 web/lista.class.php:1330
 msgid "clic para seleccionar"
-msgstr ""
+msgstr "clic per seleccionar"
 
-#: web/lista.class.php:1080
+#: web/lista.class.php:1293
 msgid "ordenar por..."
-msgstr ""
+msgstr "ordenar per..."
 
-#: usuarios/view/Copy of usuario_lista.html.twig:13
-msgid "¿Está seguro que desea borrar este usuario?"
-msgstr ""
+#: web/protocolo.class.php:138
+#, fuzzy
+msgid "más..."
+msgstr "Més..."
 
-#: usuarios/view/Copy of usuario_lista.html.twig:23
-msgid "respuesta"
-msgstr ""
+#: web/protocoloarray.class.php:275
+#, fuzzy
+msgid "mas..."
+msgstr "més_menys"
 
-#: usuarios/view/Copy of usuario_lista.html.twig:44
-msgid "nombre"
-msgstr ""
+#: usuarios/view/usuario_form_pwd.phtml:8
+msgid "error: password no válido"
+msgstr "error: password no vàlid"
 
-#: usuarios/view/Copy of usuario_lista.html.twig:45
+#: usuarios/view/usuario_form_pwd.phtml:12
+msgid "error: debes confirmar el password"
+msgstr "error: has de confirmar el password"
+
+#: usuarios/view/usuario_form_pwd.phtml:16
+msgid "error: passwords no coincidentes"
+msgstr "error: passwords no coincidents"
+
+#: usuarios/view/usuario_form_pwd.phtml:48
+msgid "deberías cambiar el password"
+msgstr "hauries de canviar la contrasenya"
+
+#: usuarios/view/usuario_form_pwd.phtml:54
+msgid "confirma password"
+msgstr "confirma password"
+
+#: usuarios/view/usuario_form_pwd.phtml:60
+#: entradas/view/buscar_form.html.twig:30
+#: entradas/view/entrada_bypass.html.twig:72
+#: entradas/view/entrada_form.html.twig:184
+#: etiquetas/view/etiqueta_form.html.twig:18
+#: etiquetas/view/etiqueta_lista.html.twig:11
+#: expedientes/view/escrito_form.html.twig:141
+#: expedientes/view/expediente_accion.html.twig:61
+#: expedientes/view/expediente_form.html.twig:240
+#: expedientes/view/fecha_reunion.html.twig:16
+#: expedientes/view/salida_escrito.html.twig:170
+#: usuarios/view/usuario_form.html.twig:71
+msgid "Cancelar"
+msgstr "Cancelar"
+
+#: usuarios/view/usuario_form_pwd.phtml:64
+msgid "Requerimientos del password"
+msgstr "Requisits de contrasenya"
+
+#: usuarios/view/usuario_form_pwd.phtml:66
+msgid ""
+"Los passwords no pueden contener el valor del \"login\" o de qualquiera de "
+"las palabras del \"nombre\". (no tiene en cuenta mayúsculas/minúsculas)"
+msgstr ""
+"Les contrasenyes no poden contenir el valor del \"login\" ni cap de les "
+"paraules del \"nom\". (cas insensible)"
+
+#: usuarios/view/usuario_form_pwd.phtml:67
+#, fuzzy
+msgid "El password ha de tener más de 8 carácteres"
+msgstr "La contrasenya ha de tenir més de 8 caràcters antics"
+
+#: usuarios/view/usuario_form_pwd.phtml:68
+#, fuzzy
+msgid ""
+"El password ha de tener como mínimo 3 de los segientes grupos de carácteres"
+msgstr "La contrasenya ha de tenir almenys 3 dels grups de caràcters segien"
+
+#: usuarios/view/usuario_form_pwd.phtml:70
+msgid "Mayúsculas ('A' a 'Z')"
+msgstr "Majúscules ('A' a 'Z')"
+
+#: usuarios/view/usuario_form_pwd.phtml:71
+msgid "Minúsculas ('a' a 'z')"
+msgstr "Minúscules ('a' a 'z')"
+
+#: usuarios/view/usuario_form_pwd.phtml:72
+msgid "Números ('0' a '9')"
+msgstr "Números ('0' a '9')"
+
+#: usuarios/view/usuario_form_pwd.phtml:73
+#, fuzzy
+msgid ""
+"(No pueden ser comillas dobles!!) Carácteres: ~!@#$%^&*_-+=`|(){}[]:;<>,.?/"
+msgstr ""
+"(No es poden fer cometes dobles!!) Caràcters: .!'$%'&amp;*_-+'| (){}[]:;"
+"<>,.? /"
+
+#: busquedas/view/buscar_escrito.html.twig:6
+#, fuzzy
+msgid "Buscar un escrito concreto"
+msgstr "Cerca una escriptura específica"
+
+#: busquedas/view/buscar_escrito.html.twig:7
+#: expedientes/view/salida_escrito.html.twig:12
+msgid "¿Qué protocolo tiene?"
+msgstr "Quin protocol té?"
+
+#: busquedas/view/buscar_escrito.html.twig:12
+#: busquedas/view/lista_permanentes.html.twig:10
+#: pendientes/view/pendiente_buscar.html.twig:19
+#: pendientes/view/pendiente_form.html.twig:122
+#, fuzzy
+msgid "año protocolo origen"
+msgstr "any d'origen del protocol"
+
+#: busquedas/view/buscar_escrito.html.twig:16
+#: busquedas/view/buscar_escrito.html.twig:38
+#: busquedas/view/buscar_escrito.html.twig:60
+#: busquedas/view/buscar_escrito.html.twig:85
+#: busquedas/view/buscar_escrito.html.twig:112
+#: busquedas/view/lista_permanentes.html.twig:16
+#: expedientes/view/salida_escrito.html.twig:19
+#: pendientes/view/pendiente_buscar.html.twig:66
 msgid "buscar"
 msgstr "cercar"
 
-#: usuarios/view/Copy of usuario_lista.html.twig:56
+#: busquedas/view/buscar_escrito.html.twig:25
+#, fuzzy
+msgid "hay 4 opciones diferentes para buscar o listar escritos"
+msgstr "hi ha 4 opcions diferents per cercar o llistar escrits"
+
+#: busquedas/view/buscar_escrito.html.twig:27
+#, fuzzy
+msgid "opción 1: Listado de los últimos"
+msgstr "Opció 1: Llista de les últimes"
+
+#: busquedas/view/buscar_escrito.html.twig:28
+#: busquedas/view/buscar_escrito.html.twig:73
+msgid "¿Quién enviaba el escrito?"
+msgstr "Qui ha enviat l'escrit?"
+
+#: busquedas/view/buscar_escrito.html.twig:32
+#, fuzzy
+msgid "antigüedad del escrito"
+msgstr "l'antiguitat de l'escriptura"
+
+#: busquedas/view/buscar_escrito.html.twig:47
+#, fuzzy
+msgid "opción 2: Buscar por el asunto o detalle"
+msgstr "opció 2: Cerca per tema o detall"
+
+#: busquedas/view/buscar_escrito.html.twig:49
+msgid "¿Escribir una palabra clave"
+msgstr "Escriure una paraula clau"
+
+#: busquedas/view/buscar_escrito.html.twig:52
+#: busquedas/view/buscar_escrito.html.twig:77
+#: busquedas/view/buscar_escrito.html.twig:103
+#, fuzzy
+msgid "Si se sabe, poner el periodo"
+msgstr "Si es coneix, posant el període"
+
+#: busquedas/view/buscar_escrito.html.twig:53
+#: busquedas/view/buscar_escrito.html.twig:78
+#: busquedas/view/buscar_escrito.html.twig:104
+#, fuzzy
+msgid "entre el"
+msgstr "entre els"
+
+#: busquedas/view/buscar_escrito.html.twig:55
+#: busquedas/view/buscar_escrito.html.twig:80
+#: busquedas/view/buscar_escrito.html.twig:106
+#, fuzzy
+msgid "y el"
+msgstr "i la"
+
+#: busquedas/view/buscar_escrito.html.twig:57
+#: busquedas/view/buscar_escrito.html.twig:82
+#: busquedas/view/buscar_escrito.html.twig:108
+#, fuzzy
+msgid "Si interesa, poner una oficina"
+msgstr "Si t'interessa, configura una oficina"
+
+#: busquedas/view/buscar_escrito.html.twig:68
+#, fuzzy
+msgid "opción 3: Listar escritos por el origen, el destino o por ambos"
+msgstr "opció 3: Llista escrita per origen, destinació o ambdues"
+
+#: busquedas/view/buscar_escrito.html.twig:69
+msgid "¿A quién iba dirigido?"
+msgstr "A qui es dirigia?"
+
+#: busquedas/view/buscar_escrito.html.twig:93
+#, fuzzy
+msgid "opción 4: Listar varios escritos"
+msgstr "opció 4: Llista diversos escrits"
+
+#: busquedas/view/buscar_escrito.html.twig:95
+msgid "de"
+msgstr "de"
+
+#: busquedas/view/buscar_escrito.html.twig:96
+msgid "de un ctr, dl o cr concreto"
+msgstr "d'un ctr, dl o cr en particular"
+
+#: busquedas/view/buscar_escrito.html.twig:99
+#, fuzzy
+msgid "de cr a "
+msgstr "cr a "
+
+#: busquedas/view/buscar_escrito.html.twig:100
+#, fuzzy
+msgid "de cr a ctr"
+msgstr "cr a ctr"
+
+#: busquedas/view/buscar_escrito.html.twig:119
+#: busquedas/view/buscar_escrito.html.twig:315
+#, fuzzy
+msgid "ver todas las opciones"
+msgstr "veure totes les opcions"
+
+#: busquedas/view/buscar_escrito.html.twig:124
+#, fuzzy
+msgid "ver ctr anulados"
+msgstr "veure ctr anul·lat"
+
+#: busquedas/view/buscar_escrito.html.twig:231
+#: busquedas/view/buscar_escrito.html.twig:248
+#, fuzzy
+msgid "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"
+msgstr "ATENCIÓ: També es pot consultar la inscripció exclusiva de l'IESE"
+
+#: busquedas/view/buscar_escrito.html.twig:267
+#, fuzzy
+msgid "Tiene que escribir una palabra para buscar en el asunto"
+msgstr "Vostè ha d'escriure una paraula per examinar l'assumpte"
+
+#: busquedas/view/buscar_escrito.html.twig:279
+msgid "¿Seguro que quiere ver todos?"
+msgstr "Estàs segur que vols veure'ls tots?"
+
+#: busquedas/view/buscar_escrito.html.twig:323
+#, fuzzy
+msgid "ver menos opciones"
+msgstr "veure menys opcions"
+
+#: busquedas/view/buscar_escrito.html.twig:327
+msgid "Debe poner un periodo"
+msgstr "Heu de posar un període"
+
+#: busquedas/view/buscar_escrito.html.twig:359
+#, fuzzy
+msgid "estas dos opciones no son compatibles"
+msgstr "aquestes dues opcions no són compatibles"
+
+#: busquedas/view/buscar_escrito.html.twig:363
+#, fuzzy
+msgid "tiene que seleccionar un origen o un destino"
+msgstr "heu de seleccionar una font o una destinació"
+
+#: busquedas/view/lista_permanentes.html.twig:6
+#, fuzzy
+msgid "búsquedas de escritos"
+msgstr "cerques escrites"
+
+#: busquedas/view/lista_permanentes.html.twig:7
+#, fuzzy
+msgid "número de referencia"
+msgstr "número de referència"
+
+#: busquedas/view/lista_permanentes.html.twig:17
+#, fuzzy
+msgid "años"
+msgstr "Increment de despeses 2 anys"
+
+#: busquedas/view/ver_tabla.html.twig:9
+#, fuzzy
+msgid "modifica entrada"
+msgstr "modifica l'entrada"
+
+#: busquedas/view/ver_tabla.html.twig:30 expedientes/view/alerta.html.twig:14
+#: expedientes/view/expediente_distribuir.html.twig:159
+#: expedientes/view/expediente_ver.html.twig:53
+#: pendientes/view/pendiente_lista_enviar.html.twig:28
+msgid "Cerrar"
+msgstr "Tancar"
+
+#: busquedas/view/ver_tabla.html.twig:146
+#: busquedas/view/ver_tabla.html.twig:293
+#: expedientes/view/escrito_lst_enviar.html.twig:98
+msgid "¿Qué quiere hacer?"
+msgstr "Què vols fer?"
+
+#: busquedas/view/ver_tabla.html.twig:148
+#: busquedas/view/ver_tabla.html.twig:295
+msgid "Eliminar todo"
+msgstr "Suprimir tot"
+
+#: busquedas/view/ver_tabla.html.twig:151
+#: busquedas/view/ver_tabla.html.twig:298
+#, fuzzy
+msgid "No hacer nada"
+msgstr "No fer res"
+
+#: busquedas/view/ver_tabla.html.twig:206
+#: entradas/view/entrada_form.html.twig:52
+#: expedientes/view/escrito_distribuir.html.twig:47
+#: expedientes/view/escrito_form.html.twig:62
+#: expedientes/view/salida_escrito.html.twig:72
+#, fuzzy
+msgid "Detalle"
+msgstr "detall"
+
+#: busquedas/view/ver_tabla.html.twig:244
+#, fuzzy
+msgid "Anular (si no hya texto está activo)"
+msgstr "Substitució (si no hi ha text actiu)"
+
+#: busquedas/view/ver_tabla.html.twig:264
+msgid "¿Está Seguro que desea borrar este registro?"
+msgstr "Esteu segur que voleu suprimir aquest registre?"
+
+#: busquedas/view/ver_tabla.html.twig:388
+msgid "¿Está Seguro que desea borrar este escrito?"
+msgstr "Esteu segur que voleu suprimir aquest escrit?"
+
+#: config/view/parametros.html.twig:24
+#, fuzzy
+msgid "plazos"
+msgstr "Terminis"
+
+#: config/view/parametros.html.twig:27
+#, fuzzy
+msgid "plazo urgente"
+msgstr "termini urgent"
+
+#: config/view/parametros.html.twig:29 config/view/parametros.html.twig:36
+#: config/view/parametros.html.twig:43 config/view/parametros.html.twig:50
+#, fuzzy
+msgid "días"
+msgstr "Dies d'ocupació sv"
+
+#: config/view/parametros.html.twig:30 config/view/parametros.html.twig:37
+#: config/view/parametros.html.twig:44 config/view/parametros.html.twig:51
+#: config/view/parametros.html.twig:59 config/view/parametros.html.twig:68
+#: config/view/parametros.html.twig:74 config/view/parametros.html.twig:82
+#: config/view/parametros.html.twig:92 config/view/parametros.html.twig:100
+#: config/view/parametros.html.twig:107 config/view/parametros.html.twig:115
+#: config/view/parametros.html.twig:121 config/view/parametros.html.twig:127
+#: config/view/parametros.html.twig:133 config/view/parametros.html.twig:139
+#: config/view/parametros.html.twig:145 config/view/parametros.html.twig:151
+#: config/view/parametros.html.twig:158 config/view/parametros.html.twig:166
+#: config/view/parametros_scdl.html.twig:30
+#: config/view/parametros_scdl.html.twig:38
+#: pendientes/view/pendiente_form.html.twig:194
+msgid "guardar"
+msgstr "guardar"
+
+#: config/view/parametros.html.twig:34
+#, fuzzy
+msgid "plazo rápido"
+msgstr "termini ràpid"
+
+#: config/view/parametros.html.twig:41
+#, fuzzy
+msgid "plazo normal"
+msgstr "termini normal"
+
+#: config/view/parametros.html.twig:48
+#, fuzzy
+msgid "error en fecha"
+msgstr "error en la data"
+
+#: config/view/parametros.html.twig:63
+#, fuzzy
+msgid "valor inicio contadores"
+msgstr "comptadors de valor d'inici"
+
+#: config/view/parametros.html.twig:66
+#, fuzzy
+msgid "para cr"
+msgstr "per cr"
+
+#: config/view/parametros.html.twig:72
+#, fuzzy
+msgid "para el resto"
+msgstr "per a la resta"
+
+#: config/view/parametros.html.twig:78
+msgid "idioma por defecto"
+msgstr "idioma predeterminat"
+
+#: config/view/parametros.html.twig:86
+#, fuzzy
+msgid "Ámbito del esquema: centro, delegación, comisión regional"
+msgstr "Àmbit del pla: centre, delegació, comissió regional"
+
+#: config/view/parametros.html.twig:89
+msgid "centro"
+msgstr "centre"
+
+#: config/view/parametros.html.twig:90
+msgid "delegación"
+msgstr "delegació"
+
+#: config/view/parametros.html.twig:91
+#, fuzzy
+msgid "comisión"
+msgstr "Comissió"
+
+#: config/view/parametros.html.twig:96
+#, fuzzy
+msgid "servidor etherpad"
+msgstr "servidor etherpad"
+
+#: config/view/parametros.html.twig:103
+#, fuzzy
+msgid "servidor ethercalc"
+msgstr "servidor eteri"
+
+#: config/view/parametros.html.twig:110
+#, fuzzy
+msgid "servidor SMTP"
+msgstr "Servidor SMTP"
+
+#: config/view/parametros.html.twig:113
+#, fuzzy
+msgid "From:"
+msgstr "De:"
+
+#: config/view/parametros.html.twig:119
+#, fuzzy
+msgid "Reply to:"
+msgstr "Respondre a:"
+
+#: config/view/parametros.html.twig:125
+#, fuzzy
+msgid "Host:"
+msgstr "Amfitrió:"
+
+#: config/view/parametros.html.twig:131
+#, fuzzy
+msgid "Port:"
+msgstr "Port:"
+
+#: config/view/parametros.html.twig:137
+#, fuzzy
+msgid "usar autenticación:"
+msgstr "usa l' autenticació:"
+
+#: config/view/parametros.html.twig:138
+#: config/view/parametros_scdl.html.twig:28
+#: config/view/parametros_scdl.html.twig:36
+msgid "Si"
+msgstr "Sí"
+
+#: config/view/parametros.html.twig:143
+#, fuzzy
+msgid "User:"
+msgstr "Usuari:"
+
+#: config/view/parametros.html.twig:149
+#, fuzzy
+msgid "Password:"
+msgstr "password"
+
+#: config/view/parametros.html.twig:155
+#, fuzzy
+msgid "seguridad:"
+msgstr "Seguretat:"
+
+#: config/view/parametros.html.twig:156
+#, fuzzy
+msgid "tls"
+msgstr "Tls"
+
+#: config/view/parametros.html.twig:157
+#, fuzzy
+msgid "ssl"
+msgstr "Ssl"
+
+#: config/view/parametros.html.twig:162
+#, fuzzy
+msgid "servidor davical"
+msgstr "servidor davical"
+
+#: config/view/parametros_scdl.html.twig:23
+#, fuzzy
+msgid "Parametros del scdl (los puede cambiar el suplente)"
+msgstr "Paràmetres scdl (poden ser canviats pel substitut)"
+
+#: config/view/parametros_scdl.html.twig:27
+#, fuzzy
+msgid "Los oficiales de secreataría puede distribuir:"
+msgstr "Els oficials de secreció poden distribuir:"
+
+#: config/view/parametros_scdl.html.twig:35
+#, fuzzy
+msgid "Los oficiales de secreataría pueden aceptar entradas:"
+msgstr "Els oficials de secreció poden acceptar entrades:"
+
+#: entradas/view/_entrada_escritos_js.html.twig:80
+#: expedientes/view/_escritos_js.html.twig:122
+#, fuzzy
+msgid "Debe llenar el campo de fecha de escrito"
+msgstr "Heu d'emplenar el camp de data escrita"
+
+#: entradas/view/_entrada_form_js.html.twig:42
+msgid "Debe indicar el ponenete para asignarle el pendiente"
+msgstr "Heu d'indicar el ponent per assignar-hi el pendent"
+
+#: entradas/view/_entrada_form_js.html.twig:102
+#, fuzzy
+msgid "Debe llenar el campo de origen"
+msgstr "Heu d'emplenar el camp d'origen"
+
+#: entradas/view/_entrada_form_js.html.twig:103
+#, fuzzy
+msgid "Debe llenar el campo de protocolo origen"
+msgstr "Heu d'emplenar el camp del protocol d'origen"
+
+#: entradas/view/_entrada_form_js.html.twig:104
+msgid "Debe llenar el campo de asunto entrada"
+msgstr "Heu d'emplenar el camp de l'assumpte d'entrada"
+
+#: entradas/view/_entrada_form_js.html.twig:105
+#: expedientes/view/_escrito_form_js.html.twig:97
+#: expedientes/view/_escritos_js.html.twig:22
+#: expedientes/view/_salida_escrito_form_js.html.twig:82
+msgid "Debe llenar el campo del ponente"
+msgstr "Heu d'omplir el camp del ponent"
+
+#: entradas/view/_entrada_form_js.html.twig:108
+#, fuzzy
+msgid "Debe llenar el campo de fecha de entrada"
+msgstr "Heu d'emplenar el camp de data d'entrada"
+
+#: entradas/view/_entrada_form_js.html.twig:109
+#, fuzzy
+msgid "La fecha de entrada no es correcta"
+msgstr "La data d'entrada no és correcta"
+
+#: entradas/view/_entrada_form_js.html.twig:115
+#, fuzzy
+msgid "La fecha de entrada debe ser posterior a la del escrito"
+msgstr "La data d'entrada ha de ser posterior a la de la carta"
+
+#: entradas/view/_entrada_form_js.html.twig:122
+#, fuzzy
+msgid "Debe llenar el campo de fecha para contestar el escrito"
+msgstr "Heu d'emplenar el camp de data per respondre a la carta"
+
+#: entradas/view/_entrada_form_js.html.twig:149
+#: entradas/view/_entrada_form_js.html.twig:170
+#: expedientes/view/_escrito_form_js.html.twig:122
+#: expedientes/view/_escrito_form_js.html.twig:132
+#: expedientes/view/_escrito_form_js.html.twig:139
+#: expedientes/view/_expediente_form_js.html.twig:254
+#: expedientes/view/_expediente_form_js.html.twig:268
+#, fuzzy
+msgid "datos guardados"
+msgstr "dades desades"
+
+#: entradas/view/_entrada_form_js.html.twig:150
+#: expedientes/view/_escrito_form_js.html.twig:123
+#: expedientes/view/_expediente_form_js.html.twig:255
+msgid "¿añadir escrito o adjuntos?"
+msgstr "Voleu afegir un escrit o adjunt?"
+
+#: entradas/view/_entrada_form_js.html.twig:157
+msgid "cancelar"
+msgstr "cancel·lar"
+
+#: entradas/view/_entrada_form_js.html.twig:161
+#, fuzzy
+msgid "otra entrada"
+msgstr "una altra entrada"
+
+#: entradas/view/buscar_form.html.twig:9
+#: expedientes/view/expediente_form.html.twig:25
+#: pendientes/view/pendiente_form.html.twig:69
+#: pendientes/view/pendiente_tabla.html.twig:26
+#: usuarios/view/cargo_form.html.twig:51
+#: usuarios/view/oficina_form.html.twig:39
+#, fuzzy
+msgid "Oficina"
+msgstr "oficina"
+
+#: entradas/view/buscar_form.html.twig:15
+msgid "Origen"
+msgstr "Origen"
+
+#: entradas/view/buscar_form.html.twig:22
+#: expedientes/view/escrito_distribuir.html.twig:40
+#: expedientes/view/escrito_form.html.twig:55
+#: expedientes/view/escrito_rev.html.twig:31
+#: expedientes/view/escrito_ver.html.twig:26
+#: expedientes/view/expediente_accion.html.twig:16
+#: expedientes/view/expediente_distribuir.html.twig:67
+#: expedientes/view/expediente_form.html.twig:40
+#: expedientes/view/expediente_ver.html.twig:113
+#: expedientes/view/salida_escrito.html.twig:65
+#: pendientes/view/pendiente_form.html.twig:79
+msgid "Asunto"
+msgstr "Asumpte"
+
+#: entradas/view/buscar_form.html.twig:33
+#: expedientes/view/expediente_accion.html.twig:6
+#: expedientes/view/expediente_accion.html.twig:21
+#: expedientes/view/expediente_form.html.twig:14
+#: expedientes/view/expediente_form.html.twig:35
+#: tramites/view/tramitecargo_select.html.twig:109
+msgid "Buscar"
+msgstr "Cercar"
+
+#: entradas/view/entrada_bypass.html.twig:7
+#, fuzzy
+msgid "Protocolo entrada"
+msgstr "Protocol d'entrada"
+
+#: entradas/view/entrada_bypass.html.twig:13
+#: entradas/view/entrada_form.html.twig:116
+#: expedientes/view/escrito_form.html.twig:99
+#: expedientes/view/salida_escrito.html.twig:128
+#, fuzzy
+msgid "Ver escrito"
+msgstr "Visualització escrita"
+
+#: entradas/view/entrada_bypass.html.twig:15
+#: entradas/view/entrada_form.html.twig:119
+#: entradas/view/entrada_form.html.twig:132
+#: expedientes/view/escrito_form.html.twig:101
+#: expedientes/view/escrito_form.html.twig:115
+#: expedientes/view/salida_escrito.html.twig:130
+#: expedientes/view/salida_escrito.html.twig:144
+#, fuzzy
+msgid "Etherpad"
+msgstr "Eterepad"
+
+#: entradas/view/entrada_bypass.html.twig:20
+#: entradas/view/entrada_form.html.twig:39
+#: entradas/view/entrada_ver.html.twig:24
+#: entradas/view/entrada_ver_slide.html.twig:28
+#, fuzzy
+msgid "Asunto entrada"
+msgstr "Estoig d'entrada"
+
+#: entradas/view/entrada_bypass.html.twig:26
+#: entradas/view/entrada_form.html.twig:45
+#, fuzzy
+msgid "Asunto secretaria"
+msgstr "Assumpte secretari"
+
+#: entradas/view/entrada_bypass.html.twig:33
+#: entradas/view/entrada_form.html.twig:63
+#: expedientes/view/expediente_ver.html.twig:80
+#: usuarios/view/admin.html.twig:97
+#, fuzzy
+msgid "Oficinas"
+msgstr "per oficines"
+
+#: entradas/view/entrada_bypass.html.twig:38
+msgid "Fecha salida"
+msgstr "Data sortida"
+
+#: entradas/view/entrada_bypass.html.twig:45
+#: entradas/view/entrada_ver.html.twig:53
+#: entradas/view/entrada_ver_slide.html.twig:59
+#: expedientes/view/adjunto_revisar.html.twig:19
+#: expedientes/view/escrito_distribuir.html.twig:68
+#: expedientes/view/escrito_form.html.twig:127
+#: expedientes/view/escrito_ver.html.twig:54
+#: expedientes/view/salida_escrito.html.twig:156
+#, fuzzy
+msgid "Adjuntos"
+msgstr "Adjuncions"
+
+#: entradas/view/entrada_bypass.html.twig:54
+#: entradas/view/entrada_form.html.twig:166
+#: expedientes/view/escrito_form.html.twig:28
+#: expedientes/view/salida_escrito.html.twig:39
+msgid "Destinos"
+msgstr "Destins"
+
+#: entradas/view/entrada_bypass.html.twig:75
+#: pendientes/view/pendiente_lista_enviar.html.twig:31
+msgid "Enviar"
+msgstr "Enviar"
+
+#: entradas/view/entrada_bypass.html.twig:107
+#: expedientes/view/_escrito_form_js.html.twig:95
+#: expedientes/view/_escritos_js.html.twig:20
+#: expedientes/view/_salida_escrito_form_js.html.twig:80
+#: pendientes/view/_pendiente_form_js.html.twig:189
+msgid "Debe llenar el campo de asunto"
+msgstr "Heu d'emplenar el camp de l'assumpte"
+
+#: entradas/view/entrada_bypass.html.twig:109
+#, fuzzy
+msgid "Debe llenar el campo de fecha de salida"
+msgstr "Heu d'emplenar el camp de data de sortida"
+
+#: entradas/view/entrada_form.html.twig:31
+#: expedientes/view/escrito_form.html.twig:46
+#: expedientes/view/salida_escrito.html.twig:57
+#, fuzzy
+#| msgid "ausencias"
+msgid "Referencias"
+msgstr "Ausènts"
+
+#: entradas/view/entrada_form.html.twig:59
+#, fuzzy
+msgid "Oficina ponente"
+msgstr "Oficina de ponents"
+
+#: entradas/view/entrada_form.html.twig:73
+#, fuzzy
+msgid "Fecha entrada"
+msgstr "Data d'entrada"
+
+#: entradas/view/entrada_form.html.twig:77
+#, fuzzy
+msgid "Fecha escrito"
+msgstr "Data escrita"
+
+#: entradas/view/entrada_form.html.twig:86
+#: expedientes/view/escrito_form.html.twig:77
+#: expedientes/view/salida_escrito.html.twig:100
+#, fuzzy
+msgid "Categoría"
+msgstr "categoria"
+
+#: entradas/view/entrada_form.html.twig:90
+#: expedientes/view/expediente_form.html.twig:82
+#: pendientes/view/pendiente_form.html.twig:166
+#, fuzzy
+msgid "Visibilidad"
+msgstr "Visibilitat"
+
+#: entradas/view/entrada_form.html.twig:94
+#, fuzzy
+msgid "Admitido (vcd)"
+msgstr "Suportat (vcd)"
+
+#: entradas/view/entrada_form.html.twig:99
+msgid "¿Es necesario contestar?"
+msgstr "Cal respondre?"
+
+#: entradas/view/entrada_form.html.twig:105
+#, fuzzy
+msgid "modificar pendiente"
+msgstr "modificar pendents"
+
+#: entradas/view/entrada_form.html.twig:124
+#, fuzzy
+msgid "Ethercalc"
+msgstr "Eteri"
+
+#: entradas/view/entrada_form.html.twig:129
+#: expedientes/view/escrito_form.html.twig:113
+#: expedientes/view/salida_escrito.html.twig:142
+#, fuzzy
+msgid "Insertar escrito"
+msgstr "Insereix per escrit"
+
+#: entradas/view/entrada_form.html.twig:135
+#: expedientes/view/escrito_form.html.twig:118
+#: expedientes/view/salida_escrito.html.twig:147
+#, fuzzy
+msgid "EtherCalc"
+msgstr "Etericalc"
+
+#: entradas/view/entrada_form.html.twig:138
+#: expedientes/view/escrito_form.html.twig:121
+#: expedientes/view/salida_escrito.html.twig:150
+#, fuzzy
+msgid "Incrustado"
+msgstr "Incrustat"
+
+#: entradas/view/entrada_form.html.twig:151
+#, fuzzy
+msgid "Para añadir escrito, primero debe guardar la entrada"
+msgstr "Per afegir escriptura, primer heu de desar l'entrada"
+
+#: entradas/view/entrada_form.html.twig:159
+#, fuzzy
+msgid "Distribución cr"
+msgstr "Distribució cr"
+
+#: entradas/view/entrada_form.html.twig:202
+#: expedientes/view/adjunto_revisar.html.twig:54
+#: expedientes/view/escrito_form.html.twig:187
+#: expedientes/view/salida_escrito.html.twig:203
+#, fuzzy
+msgid "Arrastrar ficheros aquí"
+msgstr "Arrossegueu els fitxers aquí"
+
+#: entradas/view/entrada_form.html.twig:204
+#: expedientes/view/adjunto_revisar.html.twig:56
+#: expedientes/view/escrito_form.html.twig:189
+#: expedientes/view/salida_escrito.html.twig:205
+#, fuzzy
+msgid "(o hacer click para seleccionar ficheros)"
+msgstr "(o feu clic per seleccionar fitxers)"
+
+#: entradas/view/entrada_lista.html.twig:19
+#, fuzzy
+msgid "fecha escrito"
+msgstr "data escrita"
+
+#: entradas/view/entrada_ver.html.twig:38
+#: expedientes/view/escrito_ver.html.twig:39
+#, fuzzy
+msgid "Descargar en pdf"
+msgstr "Descarregar en pdf"
+
+#: entradas/view/entrada_ver_slide.html.twig:36
+#, fuzzy
+msgid "Fecha documento"
+msgstr "Data del document"
+
+#: entradas/view/entrada_ver_slide.html.twig:41
+#, fuzzy
+msgid "Leido el"
+msgstr "He llegit el"
+
+#: etiquetas/view/etiqueta_form.html.twig:3
+#, fuzzy
+msgid "Datos de la etiqueta"
+msgstr "Dades de l'etiqueta"
+
+#: etiquetas/view/etiqueta_form.html.twig:9
+#, fuzzy
+msgid "Nombre de la etiqueta"
+msgstr "Nom de l'etiqueta"
+
+#: etiquetas/view/etiqueta_form.html.twig:14
+#, fuzzy
+msgid "Personal"
+msgstr "personal"
+
+#: etiquetas/view/etiqueta_lista.html.twig:1
+#, fuzzy
+msgid "Lista de etiquetas"
+msgstr "Llista d'etiquetes"
+
+#: etiquetas/view/etiqueta_lista.html.twig:14
+#, fuzzy
+msgid "nueva etiqueta"
+msgstr "nova etiqueta"
+
+#: etiquetas/view/etiqueta_lista.html.twig:27
+msgid "¿Está seguro que desea borrar esta etiqueta?"
+msgstr "Esteu segur que voleu suprimir aquesta etiqueta?"
+
+#: expedientes/view/_antecedentes_js.html.twig:92
+#, fuzzy
+msgid "No se ha definido el tipo de escrito"
+msgstr "El tipus d'escriptura no s'ha definit"
+
+#: expedientes/view/_escrito_form_js.html.twig:38
+#, fuzzy
+msgid "explotar!"
+msgstr "Explotar!"
+
+#: expedientes/view/_escrito_form_js.html.twig:64
+#, fuzzy
+msgid "escrito explotado"
+msgstr "l'escriptura explotada"
+
+#: expedientes/view/_escrito_form_js.html.twig:93
+#: expedientes/view/_escritos_js.html.twig:18
+#: expedientes/view/_salida_escrito_form_js.html.twig:78
+#, fuzzy
+msgid "Debe llenar el campo de destino"
+msgstr "Heu d'emplenar el camp de destinació"
+
+#: expedientes/view/_escrito_form_js.html.twig:94
+#: expedientes/view/_escritos_js.html.twig:19
+#: expedientes/view/_salida_escrito_form_js.html.twig:79
+#, fuzzy
+msgid "Debe llenar el campo de protocolo destino"
+msgstr "Heu d'emplenar el camp de protocol de destinació"
+
+#: expedientes/view/_escrito_form_js.html.twig:96
+#: expedientes/view/_escritos_js.html.twig:21
+#: expedientes/view/_salida_escrito_form_js.html.twig:81
+msgid "Debe llenar el campo entradilla"
+msgstr "Heu d'omplir el camp entradilla"
+
+#: expedientes/view/_escrito_form_js.html.twig:98
+#: expedientes/view/_escritos_js.html.twig:23
+#, fuzzy
+msgid "Debe llenar el campo de fecha del escrito"
+msgstr "Heu d'emplenar el camp de data de la lletra"
+
+#: expedientes/view/_escritos_js.html.twig:124
+#, fuzzy
+msgid "No se ha definido el tipo de escrit"
+msgstr "El tipus d'escriptura no s'ha definit"
+
+#: expedientes/view/_expediente_form_js.html.twig:193
+#, fuzzy
+msgid "circulando!"
+msgstr "Circulant!"
+
+#: expedientes/view/_expediente_form_js.html.twig:229
+msgid "Debe llenar el campo de tramite"
+msgstr "Heu d'omplir el camp del tràmit"
+
+#: expedientes/view/_expediente_form_js.html.twig:230
+#, fuzzy
+msgid "Debe llenar el campo de estad"
+msgstr "Heu d'emplenar el camp d'estat"
+
+#: expedientes/view/_expediente_form_js.html.twig:231
+#, fuzzy
+msgid "Debe llenar el campo de prioridad"
+msgstr "Heu d'emplenar el camp de prioritat"
+
+#: expedientes/view/_expediente_form_js.html.twig:232
+#, fuzzy
+msgid "Debe llenar el campo de asunto expediente"
+msgstr "Heu d'emplenar el fitxer de camp de tema"
+
+#: expedientes/view/_salida_escrito_form_js.html.twig:83
+#, fuzzy
+msgid "Debe llenar el campo de fecha aprobación"
+msgstr "Heu d'emplenar el camp data d'aprovació"
+
+#: expedientes/view/_salida_escrito_form_js.html.twig:104
+#, fuzzy
+msgid "número de protocolo"
+msgstr "número de protocol"
+
+#: expedientes/view/_salida_escrito_form_js.html.twig:109
+#, fuzzy
+msgid "pasa a la pestaña enviar"
+msgstr "va a la pestanya d'enviament"
+
+#: expedientes/view/adjunto_revisar.html.twig:28
+#: expedientes/view/escrito_rev.html.twig:58
+#: expedientes/view/expediente_distribuir.html.twig:145
+#: expedientes/view/expediente_ver.html.twig:188
+#: pendientes/view/pendiente_form.html.twig:191
+msgid "Volver"
+msgstr "Tornar"
+
+#: expedientes/view/escrito_distribuir.html.twig:31
+#, fuzzy
+msgid "Anular este escrito"
+msgstr "Cancel·la aquest escrit"
+
+#: expedientes/view/escrito_form.html.twig:69
+#: expedientes/view/escrito_rev.html.twig:36
+#: expedientes/view/expediente_distribuir.html.twig:78
+#: expedientes/view/expediente_form.html.twig:111
+#: expedientes/view/expediente_ver.html.twig:125
+#: expedientes/view/salida_escrito.html.twig:79
+#, fuzzy
+msgid "Entradilla"
+msgstr "Entradilla (A prop de Entradilla)"
+
+#: expedientes/view/escrito_form.html.twig:85
+#: expedientes/view/escrito_rev.html.twig:43
+#: expedientes/view/salida_escrito.html.twig:114
+#, fuzzy
+msgid "Fecha del escrito"
+msgstr "Data d'escriptura"
+
+#: expedientes/view/escrito_form.html.twig:134
+#: expedientes/view/salida_escrito.html.twig:163
+#, fuzzy
+msgid "Para añadir el texto, primero debe guardar los datos del escrito"
+msgstr "Per afegir el text, primer heu de desar les dades d'escriptura"
+
+#: expedientes/view/escrito_form.html.twig:149
+#, fuzzy
+msgid "revisado"
+msgstr "Revisada"
+
+#: expedientes/view/escrito_form.html.twig:156
+#, fuzzy
+msgid "Explotar en un escrito para cada ctr"
+msgstr "Explotar en un escrit per a cada ctr"
+
+#: expedientes/view/escrito_lista.html.twig:10
+#, fuzzy
+msgid "rev.datos"
+msgstr "Rev.data (anglès)"
+
+#: expedientes/view/escrito_lista.html.twig:15
+#: expedientes/view/escrito_lst_enviar.html.twig:12
+#: expedientes/view/expediente_form.html.twig:173
+msgid "destino"
+msgstr "destí"
+
+#: expedientes/view/escrito_lista.html.twig:18
+#: expedientes/view/expediente_form.html.twig:176
+#, fuzzy
+msgid "adj."
+msgstr "Jordi."
+
+#: expedientes/view/escrito_lst_enviar.html.twig:100
+#, fuzzy
+msgid "Marcar como contestado"
+msgstr "Marca com a resposta"
+
+#: expedientes/view/escrito_lst_enviar.html.twig:103
+#: expedientes/view/escrito_lst_enviar.html.twig:118
+#, fuzzy
+msgid "Enviar sin marcar"
+msgstr "Envia sense marcar"
+
+#: expedientes/view/escrito_lst_enviar.html.twig:114
+#, fuzzy
+msgid "Marcar alguno como contestado"
+msgstr "Marqueu-les com a respostes"
+
+#: expedientes/view/expediente_accion.html.twig:38
+#, fuzzy
+msgid "Acciones para el expediente"
+msgstr "Accions per al fitxer"
+
+#: expedientes/view/expediente_distribuir.html.twig:38
+#: expedientes/view/expediente_form.html.twig:93
+#: expedientes/view/expediente_ver.html.twig:86
+#, fuzzy
+msgid "Prioridad"
+msgstr "prioritat"
+
+#: expedientes/view/expediente_distribuir.html.twig:46
+#: expedientes/view/expediente_ver.html.twig:94
+msgid "Inicio"
+msgstr "Inici"
+
+#: expedientes/view/expediente_distribuir.html.twig:49
+#: expedientes/view/expediente_ver.html.twig:97
+msgid "reunión"
+msgstr "reunió"
+
+#: expedientes/view/expediente_distribuir.html.twig:52
+#: expedientes/view/expediente_ver.html.twig:100
+#, fuzzy
+msgid "aprobación"
+msgstr "Aprovació"
+
+#: expedientes/view/expediente_distribuir.html.twig:57
+#, fuzzy
+msgid "contestar"
+msgstr "Resposta"
+
+#: expedientes/view/expediente_distribuir.html.twig:97
+#: expedientes/view/expediente_form.html.twig:124
+#: expedientes/view/expediente_ver.html.twig:145
+#, fuzzy
+msgid "Antecedentes"
+msgstr "Fons"
+
+#: expedientes/view/expediente_distribuir.html.twig:105
+#: expedientes/view/expediente_ver.html.twig:166
+#, fuzzy
+msgid "Recorrido"
+msgstr "Viatges"
+
+#: expedientes/view/expediente_distribuir.html.twig:121
+#, fuzzy
+msgid "Encargar a"
+msgstr "Ordenar"
+
+#: expedientes/view/expediente_distribuir.html.twig:125
+#, fuzzy
+msgid "Encargar!"
+msgstr "Ordre!"
+
+#: expedientes/view/expediente_distribuir.html.twig:134
+#: expedientes/view/expediente_ver.html.twig:182
+#: pendientes/view/pendiente_form.html.twig:86
+#: usuarios/view/_nav_bar.html.twig:136
+msgid "Etiquetas"
+msgstr "Etiquetes"
+
+#: expedientes/view/expediente_distribuir.html.twig:255
+#, fuzzy
+msgid "ok distribuir"
+msgstr "d'acord distribuir"
+
+#: expedientes/view/expediente_form.html.twig:71
+#, fuzzy
+msgid "Trámite"
+msgstr "Procés"
+
+#: expedientes/view/expediente_form.html.twig:77
+#, fuzzy
+msgid "Vida"
+msgstr "Vida"
+
+#: expedientes/view/expediente_form.html.twig:88
+msgid "Estado"
+msgstr "Estat"
+
+#: expedientes/view/expediente_form.html.twig:97
+#, fuzzy
+msgid "resolver antes de"
+msgstr "resoldre abans"
+
+#: expedientes/view/expediente_form.html.twig:104
+#, fuzzy
+msgid "Asunto expediente"
+msgstr "Fitxer de cas"
+
+#: expedientes/view/expediente_form.html.twig:128
+msgid "Entrada"
+msgstr "Entrada"
+
+#: expedientes/view/expediente_form.html.twig:131
+msgid "Expediente"
+msgstr "Expedient"
+
+#: expedientes/view/expediente_form.html.twig:134
+#, fuzzy
+msgid "Escrito"
+msgstr "escrit"
+
+#: expedientes/view/expediente_form.html.twig:140
+#, fuzzy
+msgid "Para añadir un antecedente, primero debe guardar el expediente"
+msgstr "Per afegir un historial, primer heu de desar el fitxer"
+
+#: expedientes/view/expediente_form.html.twig:165
+#, fuzzy
+msgid "contestar entrada"
+msgstr "entrada de resposta"
+
+#: expedientes/view/expediente_form.html.twig:195
+#, fuzzy
+msgid "Para añadir escritos, primero debe guardar el expediente"
+msgstr "Per afegir escrits, primer heu de desar el fitxer"
+
+#: expedientes/view/expediente_form.html.twig:201
+#, fuzzy
+msgid "Preparar"
+msgstr "Preparar"
+
+#: expedientes/view/expediente_form.html.twig:215
+#, fuzzy
+msgid "marcar como visto"
+msgstr "marca com s'ha vist"
+
+#: expedientes/view/expediente_form.html.twig:221
+#, fuzzy
+msgid "Firmas oficina"
+msgstr "Firmes d'oficina"
+
+#: expedientes/view/expediente_form.html.twig:230
+#, fuzzy
+msgid "Otras Firmas"
+msgstr "Altres empreses"
+
+#: expedientes/view/expediente_form.html.twig:247
+#, fuzzy
+msgid "Circular"
+msgstr "Circular"
+
+#: expedientes/view/expediente_lista.html.twig:13
+#, fuzzy
+msgid "##"
+msgstr "##"
+
+#: expedientes/view/expediente_lista.html.twig:15
+msgid "fecha inicio"
+msgstr "data inici"
+
+#: expedientes/view/expediente_lista.html.twig:21
+#, fuzzy
+msgid "fecha resolver"
+msgstr "data de resolució"
+
+#: expedientes/view/expediente_lista.html.twig:23
+#, fuzzy
+msgid "fecha reunión"
+msgstr "data de la reunió"
+
+#: expedientes/view/expediente_lista.html.twig:28
+#, fuzzy
+msgid "contenido"
+msgstr "Contingut"
+
+#: expedientes/view/expediente_ver.html.twig:16
+#, fuzzy
+msgid "Firma"
+msgstr "Signatura"
+
+#: expedientes/view/expediente_ver.html.twig:27
+#, fuzzy
+msgid "Comentario"
+msgstr "Comentari"
+
+#: expedientes/view/expediente_ver.html.twig:42
+#, fuzzy
+msgid "Voto"
+msgstr "Vot"
+
+#: expedientes/view/expediente_ver.html.twig:105
+#, fuzzy
+msgid "resolver"
+msgstr "Resoldre"
+
+#: expedientes/view/expediente_ver.html.twig:154
+#, fuzzy
+msgid "Firmar"
+msgstr "Signar"
+
+#: expedientes/view/expediente_ver.html.twig:296
+msgid "Debe seleccionar un voto"
+msgstr "Heu de seleccionar un vot"
+
+#: expedientes/view/expediente_ver.html.twig:300
+#, fuzzy
+msgid "Debe llenar el campo de comentario"
+msgstr "Heu d'omplir el camp de comentaris"
+
+#: expedientes/view/fecha_reunion.html.twig:8
+#, fuzzy
+msgid "día de reunión"
+msgstr "dia de la reunió"
+
+#: expedientes/view/fecha_reunion.html.twig:19
+#, fuzzy
+msgid "Fijar día"
+msgstr "Defineix el dia"
+
+#: expedientes/view/salida_escrito.html.twig:86
+#, fuzzy
+msgid "Ponente"
+msgstr "Ponent"
+
+#: expedientes/view/salida_escrito.html.twig:90
+#, fuzzy
+msgid "Firmas"
+msgstr "Signatures"
+
+#: expedientes/view/salida_escrito.html.twig:108
+#, fuzzy
+msgid "Fecha de aprobación"
+msgstr "Data d'aprovació"
+
+#: lugares/view/grupo_form.html.twig:30
+#: usuarios/view/cargo_grupo_form.html.twig:30
+#, fuzzy
+msgid "Datos del grupo"
+msgstr "Dades del grup"
+
+#: lugares/view/grupo_form.html.twig:36
+#: usuarios/view/cargo_grupo_form.html.twig:40
+msgid "Descripción"
+msgstr "Descripció"
+
+#: lugares/view/grupo_form.html.twig:40
+#, fuzzy
+msgid "Seleccione los destinos"
+msgstr "Seleccioneu destinacions"
+
+#: lugares/view/grupo_lista.html.twig:11
+#: usuarios/view/cargo_grupo_lista.html.twig:11
+msgid "¿Está seguro que desea borrar este grupo?"
+msgstr "Esteu segur que voleu esborrar aquest grup?"
+
+#: lugares/view/grupo_lista.html.twig:41
+#: usuarios/view/cargo_grupo_lista.html.twig:41
+#, fuzzy
+msgid "Lista de grupos"
+msgstr "Llista de grups"
+
+#: lugares/view/grupo_lista.html.twig:51
+#: usuarios/view/cargo_grupo_lista.html.twig:53
+msgid "nuevo grupo"
+msgstr "nou grup"
+
+#: lugares/view/lugar_form.html.twig:30
+#, fuzzy
+msgid "Datos del Lugar"
+msgstr "Col·locar dades"
+
+#: lugares/view/lugar_form.html.twig:38
+#, fuzzy
+msgid "Sigla"
+msgstr "sigla"
+
+#: lugares/view/lugar_form.html.twig:42
+msgid "Nombre"
+msgstr "Nom"
+
+#: lugares/view/lugar_form.html.twig:52
+msgid "tipo de centro"
+msgstr "tipus de centre"
+
+#: lugares/view/lugar_form.html.twig:56
+msgid "e-mail"
+msgstr "e-mail"
+
+#: lugares/view/lugar_form.html.twig:60
+#, fuzzy
+msgid "modo envío"
+msgstr "mode d'enviament"
+
+#: lugares/view/lugar_lista.html.twig:11
+msgid "¿Está seguro que desea borrar este lugar?"
+msgstr "Esteu segur que voleu suprimir aquest lloc?"
+
+#: lugares/view/lugar_lista.html.twig:41
+#, fuzzy
+msgid "Lista de lugares"
+msgstr "Llista de llocs"
+
+#: lugares/view/lugar_lista.html.twig:51
+#, fuzzy
+#| msgid "nuevo usuario"
+msgid "nuevo lugar"
+msgstr "nou ususariii"
+
+#: pendientes/view/_pendiente_form_js.html.twig:66
+#, fuzzy
+msgid "fecha de fin"
+msgstr "data de finalització"
+
+#: pendientes/view/_pendiente_form_js.html.twig:107
+#, fuzzy
+msgid "nº de protocolo fuera de rango"
+msgstr "número de protocol fora de l'interval"
+
+#: pendientes/view/_pendiente_form_js.html.twig:108
+#, fuzzy
+msgid "No es de este año, ni del año pasado"
+msgstr "No és aquest any, o l'any passat."
+
+#: pendientes/view/_pendiente_form_js.html.twig:109
+#, fuzzy
+msgid "nº de protocolo repetido"
+msgstr "sense protocol repetit"
+
+#: pendientes/view/_pendiente_form_js.html.twig:113
+#, fuzzy
+msgid "El escrito de referencia ha sido anulado"
+msgstr "S'ha anul·lat la carta de referència"
+
+#: pendientes/view/_pendiente_form_js.html.twig:116
+#, fuzzy
+msgid ""
+"El nº de protocolo tiene un salto de más de xxx números respecto al último"
+msgstr "El número de protocol té un salt de més de vint números de l'últim"
+
+#: pendientes/view/_pendiente_form_js.html.twig:122
+#, fuzzy
+msgid "No existe ningún escrito con este protocolo. No se guardará."
+msgstr "No hi ha escriptura amb aquest protocol. No es guardarà."
+
+#: pendientes/view/_pendiente_form_js.html.twig:154
+msgid "Debe introducir el número de protocolo y el año"
+msgstr "Heu d'introduir el número de protocol i l'any"
+
+#: pendientes/view/_pendiente_form_js.html.twig:188
+#, fuzzy
+msgid "Debe llenar el campo de estado"
+msgstr "Heu d'emplenar el camp d'estat"
+
+#: pendientes/view/_pendiente_form_js.html.twig:190
+#, fuzzy
+msgid "Debe llenar el campo de oficinas"
+msgstr "Heu d'emplenar el camp de l'oficina"
+
+#: pendientes/view/_pendiente_form_js.html.twig:205
+msgid "Debe llenar el campo de"
+msgstr "Heu d'omplir el camp de"
+
+#: pendientes/view/_pendiente_form_js.html.twig:210
+#, fuzzy
+msgid "Incorrecta"
+msgstr "Equivocat"
+
+#: pendientes/view/_pendiente_form_js.html.twig:243
+#: pendientes/view/_pendiente_form_js.html.twig:265
+#: pendientes/view/_pendiente_tabla_js.html.twig:99
+#: pendientes/view/pendiente_lista_enviar.html.twig:93
+#, fuzzy
+msgid "probablemente no tenga permiso en el calendario"
+msgstr "probablement no té permís al calendari"
+
+#: pendientes/view/_pendiente_tabla_js.html.twig:32
+msgid "Debe seleccionar una oficina para ver sus pendientes"
+msgstr "Heu de seleccionar una oficina per veure els seus pendents"
+
+#: pendientes/view/_pendiente_tabla_js.html.twig:79
+#: pendientes/view/_pendiente_tabla_js.html.twig:128
+#: pendientes/view/pendiente_buscar.html.twig:144
+#, fuzzy
+msgid "No puede modificar este pendiente"
+msgstr "No es pot modificar aquest pendent"
+
+#: pendientes/view/_pendiente_tabla_js.html.twig:122
+#, fuzzy
+msgid "No puede modificar un pendiente periódico. Hable con secretaria."
+msgstr "No podeu modificar un pendent periòdic. Parli amb el secretari."
+
+#: pendientes/view/_pendiente_tabla_js.html.twig:132
+#, fuzzy
+msgid "Sólo puede seleccionar un elemento. Ha selecionado"
+msgstr "Només podeu seleccionar un element. Ha seleccionat"
+
+#: pendientes/view/_pendiente_tabla_js.html.twig:136
+#, fuzzy
+msgid ""
+"No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la "
+"izquierda"
+msgstr ""
+"No heu seleccionat cap fila. Heu de fer clic en algun chekbox de l'esquerra"
+
+#: pendientes/view/_pendiente_tabla_js.html.twig:147
+#: pendientes/view/pendiente_buscar.html.twig:193
+msgid "¿Está Seguro que desea borrar este pendiente?"
+msgstr "Esteu segur que voleu eliminar aquest pendent?"
+
+#: pendientes/view/_pendiente_tabla_js.html.twig:166
+#, fuzzy
+msgid "222probablemente no tenga permiso en el calendario"
+msgstr "222probably no tenen permís al calendari"
+
+#: pendientes/view/pendiente_buscar.html.twig:6
+#: pendientes/view/pendiente_tabla.html.twig:61
+#, fuzzy
+msgid "buscar un pendiente"
+msgstr "buscar una arracada"
+
+#: pendientes/view/pendiente_buscar.html.twig:12
+msgid "¿A qué escrito hacia referencia?"
+msgstr "A quin escrit feia referència?"
+
+#: pendientes/view/pendiente_buscar.html.twig:20
+#: pendientes/view/pendiente_form.html.twig:123
+#, fuzzy
+msgid "información complementaria"
+msgstr "informació complementària"
+
+#: pendientes/view/pendiente_buscar.html.twig:27
+msgid "¿De que asunto trataba?"
+msgstr "De quin asumpte es tractava?"
+
+#: pendientes/view/pendiente_buscar.html.twig:36
+msgid "¿Cuál era la oficina responsable?"
+msgstr "Quina era l'oficina responsable?"
+
+#: pendientes/view/pendiente_buscar.html.twig:47
+#, fuzzy
+msgid "periodo determinado entre"
+msgstr "període determinat entre"
+
+#: pendientes/view/pendiente_buscar.html.twig:51
+msgid "y"
+msgstr "i"
+
+#: pendientes/view/pendiente_buscar.html.twig:58
+#, fuzzy
+msgid "estado posibles del pendiente"
+msgstr "possible estat del pendent"
+
+#: pendientes/view/pendiente_buscar.html.twig:148
+#, fuzzy
+msgid "Sólo puede seleccionar un elemento"
+msgstr "Només podeu seleccionar un element"
+
+#: pendientes/view/pendiente_buscar.html.twig:152
+#, fuzzy
+msgid ""
+"No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la "
+"izquierda."
+msgstr ""
+"No heu seleccionat cap fila. Heu de fer clic en alguna caixa de formatge a "
+"l'esquerra."
+
+#: pendientes/view/pendiente_form.html.twig:50
+#, fuzzy
+msgid "entrada del registro pendiente de contestar"
+msgstr "entrada de registre pendent de resposta"
+
+#: pendientes/view/pendiente_form.html.twig:52
+#, fuzzy
+msgid "pendiente de la oficina"
+msgstr "oficina pendent"
+
+#: pendientes/view/pendiente_form.html.twig:102
+#: pendientes/view/pendiente_tabla.html.twig:34
+msgid "¿Está asignado a alguien?"
+msgstr "Està assignat a algú?"
+
+#: pendientes/view/pendiente_form.html.twig:115
+#, fuzzy
+msgid "protocolo o referencia"
+msgstr "protocol o referència"
+
+#: pendientes/view/pendiente_form.html.twig:140
+msgid "¿con quién es el pendiente?"
+msgstr "Amb qui és el pendent?"
+
+#: pendientes/view/pendiente_form.html.twig:148
+#, fuzzy
+msgid "otras oficinas implicadas"
+msgstr "altres oficines implicades"
+
+#: pendientes/view/pendiente_form.html.twig:158
+msgid "Observaciones"
+msgstr "Observacions"
+
+#: pendientes/view/pendiente_form.html.twig:176
+#, fuzzy
+msgid "fecha acabado"
+msgstr "data acabada"
+
+#: pendientes/view/pendiente_form_periodico.html.twig:4
+#, fuzzy
+msgid "Repetición"
+msgstr "repetició"
+
+#: pendientes/view/pendiente_form_periodico.html.twig:64
+#, fuzzy
+msgid "que días"
+msgstr "aquells dies"
+
+#: pendientes/view/pendiente_form_periodico.html.twig:68
+msgid "de que meses"
+msgstr "de quins mesos"
+
+#: pendientes/view/pendiente_lista_enviar.html.twig:15
+#, fuzzy
+msgid "Lista de pendientes relacionados"
+msgstr "Llista d'arracades relacionades"
+
+#: pendientes/view/pendiente_tabla.html.twig:6
+#, fuzzy
+msgid "listar escritos pendientes de contestar"
+msgstr "llistat d'escrits a respondre"
+
+#: pendientes/view/pendiente_tabla.html.twig:9
+#, fuzzy
+msgid "De"
+msgstr "de"
+
+#: pendientes/view/pendiente_tabla.html.twig:14
+msgid "periodo"
+msgstr "període"
+
+#: pendientes/view/pendiente_tabla.html.twig:17
+#, fuzzy
+msgid "hasta la fecha"
+msgstr "fins a la data"
+
+#: pendientes/view/pendiente_tabla.html.twig:18
+#, fuzzy
+msgid "próxima semana"
+msgstr "la setmana que ve"
+
+#: pendientes/view/pendiente_tabla.html.twig:19
+#, fuzzy
+msgid "próximo mes"
+msgstr "el mes que ve"
+
+#: pendientes/view/pendiente_tabla.html.twig:20
+#, fuzzy
+msgid "próximo trimestre"
+msgstr "proper trimestre"
+
+#: pendientes/view/pendiente_tabla.html.twig:21
+#, fuzzy
+msgid "próximo año"
+msgstr "l'any que ve"
+
+#: pendientes/view/pendiente_tabla.html.twig:41
+msgid "listar"
+msgstr "llistar"
+
+#: tramites/view/tramite_form.html.twig:30
+#: tramites/view/zztramitecargo_form.html.twig:3
+#, fuzzy
+msgid "Datos del Tramite"
+msgstr "Dades del tramvia"
+
+#: tramites/view/tramite_form.html.twig:39
+#, fuzzy
+msgid "Tramite"
+msgstr "Procés"
+
+#: tramites/view/tramite_form.html.twig:45
+#, fuzzy
+msgid "Abreviatura"
+msgstr "Abreviatura de regió"
+
+#: tramites/view/tramite_form.html.twig:51
+#: tramites/view/tramitecargo_select.html.twig:129
+#: tramites/view/zztramitecargo_form.html.twig:18
+#: usuarios/view/oficina_form.html.twig:45
+#, fuzzy
+msgid "Orden"
+msgstr "ordre"
+
+#: tramites/view/tramite_lista.html.twig:9
+msgid "¿Está seguro que desea borrar este trámite?"
+msgstr "Esteu segur que voleu suprimir aquest tràmit?"
+
+#: tramites/view/tramite_lista.html.twig:37
+#, fuzzy
+msgid "Lista de tramites"
+msgstr "Relació de tràmits"
+
+#: tramites/view/tramite_lista.html.twig:47
+#, fuzzy
+#| msgid "nuevo usuario"
+msgid "nuevo tramite"
+msgstr "nou ususariii"
+
+#: tramites/view/tramitecargo_select.html.twig:121
+#: tramites/view/zztramitecargo_form.html.twig:12
+#, fuzzy
+msgid "Cargo"
+msgstr "càrrec"
+
+#: tramites/view/tramitecargo_select.html.twig:135
+#: tramites/view/zztramitecargo_form.html.twig:24
+#, fuzzy
+msgid "número mínimo de firmas"
+msgstr "nombre mínim de signatures"
+
+#: tramites/view/tramitecargo_select.html.twig:156
+#, fuzzy
+msgid "trámite"
+msgstr "Procés"
+
+#: usuarios/view/_nav_bar.html.twig:132
+#, fuzzy
+msgid "Preferencias"
+msgstr "preferències"
+
+#: usuarios/view/_nav_bar.html.twig:141 usuarios/view/admin.html.twig:150
+msgid "Salir"
+msgstr "Sortir"
+
+#: usuarios/view/admin.html.twig:17 usuarios/view/admin.html.twig:140
+#, fuzzy
+msgid "Admin"
+msgstr "Admin"
+
+#: usuarios/view/admin.html.twig:35
+#, fuzzy
+msgid "Usuarios y cargos"
+msgstr "Usuaris i càrrecs"
+
+#: usuarios/view/admin.html.twig:42
+msgid "usuarios"
+msgstr "usuaris"
+
+#: usuarios/view/admin.html.twig:48
+#, fuzzy
+msgid "Lista"
+msgstr "llista"
+
+#: usuarios/view/admin.html.twig:51
+#, fuzzy
+msgid "Suplentes"
+msgstr "Alterns"
+
+#: usuarios/view/admin.html.twig:61
+#, fuzzy
+msgid "Cargos"
+msgstr "càrrecs"
+
+#: usuarios/view/admin.html.twig:66
+#, fuzzy
+msgid "lista grupos firmas"
+msgstr "llista de signatures de grups"
+
+#: usuarios/view/admin.html.twig:69
+#, fuzzy
+msgid "Buscar / modificar"
+msgstr "Cercar/modificar"
+
+#: usuarios/view/admin.html.twig:80
+#, fuzzy
+msgid "Aplicación"
+msgstr "aplicació"
+
+#: usuarios/view/admin.html.twig:87
+#, fuzzy
+msgid "Config"
+msgstr "Config"
+
+#: usuarios/view/admin.html.twig:91
+#, fuzzy
+msgid "del entorno"
+msgstr "Medi ambient"
+
+#: usuarios/view/admin.html.twig:93
+#, fuzzy
+msgid "Lugares"
+msgstr "Llocs"
+
+#: usuarios/view/admin.html.twig:95
+#, fuzzy
+msgid "Grupos de distribución"
+msgstr "Grups de distribució"
+
+#: usuarios/view/admin.html.twig:99
+#, fuzzy
+msgid "Trámites (nombres)"
+msgstr "Tràmits (noms)"
+
+#: usuarios/view/admin.html.twig:101
+#, fuzzy
+msgid "Trámites (recorrido)"
+msgstr "Tràmits (tour)"
+
+#: usuarios/view/admin.html.twig:103
+msgid "de la aplicación"
+msgstr "de l'aplicació"
+
+#: usuarios/view/admin.html.twig:105
+#, fuzzy
+msgid "Parámetros"
+msgstr "Paràmetres"
+
+#: usuarios/view/admin.html.twig:129
+#, fuzzy
+msgid "Davical"
+msgstr "Dàquic"
+
+#: usuarios/view/admin.html.twig:134
+#, fuzzy
+msgid "mitration reg"
+msgstr "mitration reg"
+
+#: usuarios/view/admin.html.twig:137
+msgid "lista usuarios"
+msgstr "llista usuaris"
+
+#: usuarios/view/admin.html.twig:172 usuarios/view/usuario_home.html.twig:55
+msgid "Cargando..."
+msgstr "Carregant..."
+
+#: usuarios/view/cargo_form.html.twig:30
+#, fuzzy
+msgid "Datos del Cargo"
+msgstr "guardar dades del càrrec"
+
+#: usuarios/view/cargo_form.html.twig:62
+#, fuzzy
+msgid "Tirular"
+msgstr "Tirular"
+
+#: usuarios/view/cargo_form.html.twig:69
+msgid "Suplente"
+msgstr "Suplent"
+
+#: usuarios/view/cargo_grupo_form.html.twig:36
+#, fuzzy
+msgid "Seleccione el cargo del tramite"
+msgstr "Seleccioneu la posició del procediment"
+
+#: usuarios/view/cargo_grupo_form.html.twig:44
+#, fuzzy
+msgid "Seleccione los cargos"
+msgstr "Seleccioneu càrrecs"
+
+#: usuarios/view/cargo_grupo_lista.html.twig:42
+#, fuzzy
+msgid ""
+"el nombre debe corresponder a un cargo sin oficina que se use en el tramite"
+msgstr ""
+"el nom ha de correspondre a una posició sense oficina utilitzada en el procés"
+
+#: usuarios/view/cargo_grupo_lista.html.twig:43
+#, fuzzy
+msgid ""
+"(Ahora mismo solo funciona con 'todos_d'. Si hubiera necesidad de más, "
+"habría que revisar el código."
+msgstr ""
+"(Ara mateix només funciona amb 'todos_d'. Si hi hagués una necessitat de "
+"més, hauríem de revisar el codi."
+
+#: usuarios/view/cargo_lista.html.twig:14
+msgid "¿Está seguro que desea borrar este cargo?"
+msgstr "Esteu segur que voleu suprimir aquest càrrec?"
+
+#: usuarios/view/cargo_lista.html.twig:42
+#, fuzzy
+msgid "Lista de cargos"
+msgstr "Llista de càrrecs"
+
+#: usuarios/view/cargo_lista.html.twig:52
+#, fuzzy
+#| msgid "nuevo usuario"
+msgid "nuevo cargo"
+msgstr "nou ususariii"
+
+#: usuarios/view/login_form.html.twig:62
+#, fuzzy
+msgid "Inicio de sesión"
+msgstr "Connexió"
+
+#: usuarios/view/login_form.html.twig:63
+msgid "Usuario"
+msgstr "Usuari"
+
+#: usuarios/view/login_form.html.twig:65
+#, fuzzy
+msgid "Password"
+msgstr "password"
+
+#: usuarios/view/login_form.html.twig:69
+#, fuzzy
+msgid "recuerdame"
+msgstr "Recorda'm"
+
+#: usuarios/view/login_form.html.twig:78
+msgid "Entrar"
+msgstr "Entrar"
+
+#: usuarios/view/oficina_form.html.twig:30
+#, fuzzy
+msgid "Datos de la Oficina"
+msgstr "Dades de l'oficina"
+
+#: usuarios/view/oficina_lista.html.twig:37
+#, fuzzy
+msgid "Lista de oficina"
+msgstr "Llista d'oficines"
+
+#: usuarios/view/oficina_lista.html.twig:47
+#, fuzzy
+msgid "nueva oficina"
+msgstr "nova oficina"
+
+#: usuarios/view/personal.html.twig:1
+msgid "preferencias personales"
+msgstr "preferències personals"
+
+#: usuarios/view/personal.html.twig:4
+#, fuzzy
+msgid "color"
+msgstr "Color"
+
+#: usuarios/view/personal.html.twig:5
+#, fuzzy
+msgid "Se cambia en la configuración del pad"
+msgstr "S'ha canviat en la configuració del coixí"
+
+#: usuarios/view/personal.html.twig:15
+msgid "cambiar el mail"
+msgstr "canviar el mail"
+
+#: usuarios/view/personal.html.twig:16
+msgid "cambiar el password"
+msgstr "canviar el password"
+
+#: usuarios/view/suplente_lista.html.twig:1
+#, fuzzy
+msgid "Lista de suplencias"
+msgstr "Llista de substitucions"
+
+#: usuarios/view/usuario_form.html.twig:43
+#, fuzzy
+msgid "Datos de Usuario"
+msgstr "Dades de l'usuari"
+
+#: usuarios/view/usuario_form.html.twig:52
+#, fuzzy
+msgid "Login"
+msgstr "login"
+
+#: usuarios/view/usuario_form.html.twig:56
+msgid "Nombre a mostrar"
+msgstr "Nom a mostrar"
+
+#: usuarios/view/usuario_form.html.twig:60
+msgid "Dirección de correo electrónico"
+msgstr "Adreça de correu electrònic"
+
+#: usuarios/view/usuario_form.html.twig:64
+#, fuzzy
+msgid "Cargo Preferido"
+msgstr "Càrrec preferit"
+
+#: usuarios/view/usuario_lista.html.twig:17
+msgid "¿Está seguro que desea borrar este usuario?"
+msgstr "Esteu segur que voleu suprimir aquest usuari?"
+
+#: usuarios/view/usuario_lista.html.twig:47
+msgid "Lista de usuarios"
+msgstr "LListat d'Usuaris"
+
+#: usuarios/view/usuario_lista.html.twig:57
 msgid "nuevo usuario"
 msgstr "nou ususariii"
 
-#: usuarios/view/admin.html.twig:49
-msgid "ausencias"
-msgstr "Ausènts"
-
-#: usuarios/view/usuario_lista.html.twig:13
-#: usuarios/view/usuario_lista.html.twig:17
-msgid "TTTTWWWWEEEETTTT"
-msgstr "UNA COSA"
+#~ msgid "TTTTWWWWEEEETTTT"
+#~ msgstr "UNA COSA"

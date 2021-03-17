@@ -979,7 +979,7 @@ class Collection Extends core\ClasePropiedades {
 	function getDatosDefault_privileges() {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'default_privileges'));
-		$oDatosCampo->setEtiqueta(_("default_privileges"));
+		$oDatosCampo->setEtiqueta(_("privilegios por defecto"));
 		return $oDatosCampo;
 	}
 	/**

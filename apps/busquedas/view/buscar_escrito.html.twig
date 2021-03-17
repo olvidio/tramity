@@ -46,7 +46,7 @@
 <table class="table-warning" border=1>
 <tr><th colspan=5 class=titulo_inv>{{ "opción 2: Buscar por el asunto o detalle"|trans }}
     </th></tr>
-    <tr><td class=etiqueta>{{ "¿Escribir una palabra clave"|trans }}:</td>
+    <tr><td class=etiqueta>{{ "Escribir una palabra clave"|trans }}:</td>
     <td colspan=3><input type="Text" id="asunto" name="asunto" size="50" value="{{ asunto }}"></td>
     </tr>
     <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
@@ -96,7 +96,7 @@
     <input type="radio" {{ chk_lo_2 }} id="lista_origen_2" name="lista_origen" value="de" onchange="fnjs_activar_lugar(2)">{{ "de un ctr, dl o cr concreto"|trans }}
         {{ oDesplLugar4.desplegable|raw }}
         <br>
-    <input type="radio" {{ chk_lo_3 }} id="lista_origen_3" name="lista_origen" value="cr_dl" onchange="fnjs_activar_lugar(3)">{{ "de cr a "|trans }} {{ dele }}<br>
+    <input type="radio" {{ chk_lo_3 }} id="lista_origen_3" name="lista_origen" value="cr_dl" onchange="fnjs_activar_lugar(3)">{{ "de cr a"|trans }} {{ dele }}<br>
     <input type="radio" {{ chk_lo_4 }} id="lista_origen_4" name="lista_origen" value="cr_ctr" onchange="fnjs_activar_lugar(4)">{{ "de cr a ctr"|trans }}<br>
     </td>
     </tr>

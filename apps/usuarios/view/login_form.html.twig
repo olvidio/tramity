@@ -7,7 +7,7 @@ document.write('');
 <meta name="description" content="">
 <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 <meta name="generator" content="Jekyll v3.8.5">
-<title>Signin Template · Bootstrap</title>
+<title>Tramity</title>
 
 
 <!-- <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/sign-in/">  -->
@@ -59,14 +59,14 @@ body {
 <body class="text-center">
 <form method="POST" class="form-signin" action="index.php">
     <img class="mb-4" src="../images/stack-dossiers.jpeg" alt="aaaaaaa" width="72" height="72">
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="username" class="sr-only">Usuario</label>
+    <h1 class="h3 mb-3 font-weight-normal">{{ "Inicio de sesión"|trans }}</h1>
+    <label for="username" class="sr-only">{{ "Usuario"|trans }}</label>
         <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required="" autofocus="">
-    <label for="password" class="sr-only">Password</label>
+    <label for="password" class="sr-only">{{ "Password"|trans }}</label>
         <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
     <div class="checkbox mb-3">
         <label>
-            <input type="checkbox" value="remember-me"> Remember me
+            <input type="checkbox" value="remember-me"> {{ "recuerdame"|trans }}
         </label>
     </div>
     <!-- Error Alert -->
@@ -75,7 +75,7 @@ body {
         <strong>Error!: </strong> {{ error }}
     </div>
     {% endif %}
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-    <p class="mt-5 mb-3 text-muted">© 2020-20xx</p>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">{{ "Entrar"|trans }}</button>
+    <p class="mt-5 mb-3 text-muted">© 2020-2021</p>
 </form>
 </body>

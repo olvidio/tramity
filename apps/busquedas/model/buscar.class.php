@@ -289,11 +289,11 @@ class Buscar {
                 return $aCollections;
                 break;
             case 2:
-                // buscar en entradas y escritos
+                // buscar en entradas (sólo entradas 17-3-2021)
                 $cEntradas = $this->buscarEntradas();
                 $aCollections['entradas'] = $cEntradas;
-                $cEscritos = $this->buscarEscritos();
-                $aCollections['escritos'] = $cEscritos;
+                //$cEscritos = $this->buscarEscritos();
+                //$aCollections['escritos'] = $cEscritos;
                 return $aCollections;
                 break;
             case 3:

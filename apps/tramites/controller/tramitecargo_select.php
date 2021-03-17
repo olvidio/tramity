@@ -75,7 +75,7 @@ $oHashMover->setUrl($url_ajax);
 $oHashMover->setCamposForm('que!id_item!orden');
 $h_mover = $oHashMover->linkSinVal();
 
-$txt_eliminar = _("¿Esta seguro que quitar este cargo?");
+$txt_eliminar = _("¿Está seguro que desea quitar este cargo?");
 $txt_clonar = _("No ha determinado para que trámite");
 
 $oGesCargo = new GestorCargo();

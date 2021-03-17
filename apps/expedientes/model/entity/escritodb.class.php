@@ -1361,7 +1361,7 @@ class EscritoDB Extends core\ClasePropiedades {
 	function getDatosAccion() {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'accion'));
-		$oDatosCampo->setEtiqueta(_("accion"));
+		$oDatosCampo->setEtiqueta(_("acción"));
 		return $oDatosCampo;
 	}
 	/**
