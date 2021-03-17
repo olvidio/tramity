@@ -81,8 +81,10 @@ switch ($Qtipo_lista) {
         $id_cr = $gesLugares->getId_cr();
 
         $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
-        $Qprot_any = (integer) \filter_input(INPUT_POST, 'prot_any');
+        $Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
         $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
+        
+        $Qprot_any = core\any_2($Qprot_any);
         
         $oBuscar = new Buscar();
         $oBuscar->setId_lugar($id_cr);
@@ -98,11 +100,9 @@ switch ($Qtipo_lista) {
         } else {
             $Qprot_num = '';
         }
-        if (!empty($Qprot_any)) {
+        if ($Qprot_any != '') { // para aceptar el 00
             $oBuscar->setProt_any($Qprot_any);
             $flag = 1;
-        } else {
-            $Qprot_any = '';
         }
         if ($flag == 0) {
             $lista = _("Debe indicar el protocolo o el asunto");

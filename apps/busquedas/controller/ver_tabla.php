@@ -26,14 +26,14 @@ switch ($Qopcion) {
     case 7: // un protocolo concreto:
         $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lugar');
         $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
-        $Qprot_any = (integer) \filter_input(INPUT_POST, 'prot_any');
+        $Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 
+        $Qprot_any = core\any_2($Qprot_any);
+        
         $a_condicion['id_lugar'] = $Qid_lugar;
         $a_condicion['prot_num'] = $Qprot_num;
         $a_condicion['prot_any'] = $Qprot_any;
         $str_condicion = http_build_query($a_condicion);
-        
-        $Qprot_any = empty($Qprot_any)? '' : core\any_2($Qprot_any);
         
         $oBuscar = new Buscar();
         $oBuscar->setId_sigla($id_sigla_local);

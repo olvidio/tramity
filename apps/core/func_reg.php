@@ -133,7 +133,12 @@ function any_2($any) {
 	if (strlen($any)==4) {
 		$a=substr($any,-2);
 	} else {
-		$a=$any;
+	    // si se ha convertido en numérico, puede faltar el 0 al inicio (05)
+	   if (strlen($any)==1) {
+		    $a='0'.$any;
+	    } else {
+		    $a=$any;
+	    }
 	}
 	return $a;
 }

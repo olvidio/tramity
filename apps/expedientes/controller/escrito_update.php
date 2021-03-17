@@ -624,7 +624,10 @@ switch($Qque) {
     case 'buscar_entrada_correspondiente':
         $Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
         $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
-        $Qprot_any = (integer) \filter_input(INPUT_POST, 'prot_any');
+        $Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+        
+        $Qprot_any = core\any_2($Qprot_any);
+        
         $aProt_origen = [ 'lugar' => $Qid_lugar,
             'num' => $Qprot_num,
             'any' => $Qprot_any,

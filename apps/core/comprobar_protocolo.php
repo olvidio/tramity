@@ -45,7 +45,7 @@ $pendiente_uid = '';
 $txt_err = '';
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
-$Qprot_any = (integer) \filter_input(INPUT_POST, 'prot_any');
+$Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 
 $Qprot_any=any_2($Qprot_any);
 // compruebo el año (actual o -1)
