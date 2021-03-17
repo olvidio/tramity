@@ -46,7 +46,7 @@ $Qvisibiliad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 $Qplazo = (string) \filter_input(INPUT_POST, 'plazo');
 $Qf_plazo = (string) \filter_input(INPUT_POST, 'f_plazo');
 $Qbypass = (string) \filter_input(INPUT_POST, 'bypass');
-$QAdmitir = (string) \filter_input(INPUT_POST, 'admitir');
+$QAdmitir_hidden = (string) \filter_input(INPUT_POST, 'admitir_hidden');
 
 /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
 $Qa_referencias = (array)  \filter_input(INPUT_POST, 'referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -267,7 +267,7 @@ switch($Qque) {
                 break;
         }
             
-        if (is_true($QAdmitir)) {
+        if (is_true($QAdmitir_hidden)) {
             // pasa directamente a asigado. Se supone que el admitido lo ha puesto el vcd.
             // en caso de ponerlo secretaria, al guardar pasa igualmente a asignado.
             $estado = Entrada::ESTADO_ASIGNADO;

@@ -105,19 +105,21 @@ $oDesplByPass->setAction("fnjs_distr_cr()");
 $oDesplAdmitido = new Desplegable();
 $oDesplAdmitido->setNombre('admitir');
 $oDesplAdmitido->setOpciones(['f' => _("No"), 't' => _("Sí")]);
+$oDesplAdmitido->setAction("fnjs_admitir();");
 $estado = $oEntrada->getEstado();
 if ($estado >= Entrada::ESTADO_ADMITIDO) {
-    $oDesplAdmitido->setOpcion_sel('t');
+    $badmitido = 't';
     $comprobar_f_entrada = TRUE;
 } else {
-    $oDesplAdmitido->setOpcion_sel('f');
+    $badmitido = 'f';
     $comprobar_f_entrada = FALSE;
 }
 if ($Qfiltro == 'en_admitido') {
-    $oDesplAdmitido->setOpcion_sel('t');
+    $badmitido = 't';
 } else {
     $oDesplAdmitido->setDisabled(TRUE);
 }
+$oDesplAdmitido->setOpcion_sel($badmitido);
     
 $gesGrupo = new GestorGrupo();
 $a_posibles_grupos = $gesGrupo->getArrayGrupos();
@@ -304,6 +306,7 @@ $a_campos = [
     'f_contestar' => $f_contestar,
     'oDesplByPass' => $oDesplByPass,
     'oDesplAdmitido' => $oDesplAdmitido,
+    'badmitido' => $badmitido,
     //'a_adjuntos' => $a_adjuntos,
     'initialPreview' => $initialPreview,
     'json_config' => $json_config,

@@ -229,7 +229,7 @@ class EntradaLista {
                 $row = [];
                 // mirar permisos...
                 $visibilidad = $oEntrada->getVisibilidad();
-                $visibilidad_txt = $a_visibilidad[$visibilidad];
+                $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '?' : $a_visibilidad[$visibilidad];
                 
                 $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEntrada, 'escrito');
                 $id_entrada = $oEntrada->getId_entrada();
