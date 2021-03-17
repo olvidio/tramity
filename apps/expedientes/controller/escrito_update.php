@@ -234,6 +234,7 @@ switch($Qque) {
         $a_params_ref = $gesPendientesEntrada->getPedientesByProtOrigen($a_prot_ref);
         
         // Sumar las dos
+        $num_periodicos = $a_params_dst['num_periodicos'] + $a_params_ref['num_periodicos'];
         $num_pendientes = $a_params_dst['num_pendientes'] + $a_params_ref['num_pendientes'];
         $a_lista_pendientes = array_merge($a_params_dst['a_lista_pendientes'], $a_params_ref['a_lista_pendientes']);
         $pendientes_uid = $a_params_dst['pendientes_uid'] .','. $a_params_ref['pendientes_uid'];
@@ -251,6 +252,7 @@ switch($Qque) {
         if (empty($txt_err)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = $mensaje;
+            $jsondata['num_periodicos'] = $num_periodicos;
             $jsondata['num_pendientes'] = $num_pendientes;
             $jsondata['lista_pendientes'] = $lista_pendientes;
             $jsondata['pendientes_uid'] = $pendientes_uid;
