@@ -1,5 +1,9 @@
 <?php
+use core\ViewTwig;
+use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\ExpedienteLista;
+use web\DateTimeLocal;
+use etiquetas\model\entity\GestorEtiquetaExpediente;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -12,11 +16,103 @@ require_once ("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-//$Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
 $oTabla = new ExpedienteLista();
 $oTabla->setFiltro($Qfiltro);
-//$oTabla->setId_expediente($Qid_expediente);
 
-echo $oTabla->mostrarTabla();
+$msg = '';
+// añadir dialogo de búsquedas
+if ($Qfiltro == 'archivados') {
+    $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
+    $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $Qperiodo =  (string) \filter_input(INPUT_POST, 'periodo');
+    
+    $gesEtiquetas = new GestorEtiqueta();
+    $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+    $a_posibles_etiquetas = [];
+    foreach ($cEtiquetas as $oEtiqueta) {
+        $id_etiqueta = $oEtiqueta->getId_etiqueta();
+        $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+        $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+    }
+    
+    $oArrayDesplEtiquetas = new web\DesplegableArray($Qa_etiquetas,$a_posibles_etiquetas,'etiquetas');
+    $oArrayDesplEtiquetas ->setBlanco('t');
+    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas(event)');
+    
+    $aWhereADD = [];
+    $aOperadorADD = [];
+    
+    if (!empty($Qa_etiquetas)) {
+        $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
+        $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($Qa_etiquetas);
+        if (!empty($cExpedientes)) {
+            $aWhereADD['id_expediente'] = implode(',',$cExpedientes);
+            $aOperadorADD['id_expediente'] = 'IN';
+        } else {
+            // No hay ninguno. No importa el resto de condiciones
+            $msg = _("No hay ningún expediente con estas etiquetas");
+        }
+    }
+    
+    if (!empty($Qasunto )) {
+        $aWhereADD['asunto'] = $Qasunto;
+        $aOperadorADD['asunto'] = 'sin_acentos';
+    }
+    $sel_mes = '';
+    $sel_mes_6 = '';
+    $sel_any_1 = '';
+    $sel_any_2 = '';
+    $sel_siempre = '';
+    switch ($Qperiodo) {
+        case "mes":
+            $sel_mes = 'selected';
+            $periodo = 'P1M';
+            break;
+        case "mes_6":
+            $sel_mes_6 = 'selected';
+            $periodo = 'P6M';
+            break;
+        case "any_1":
+            $sel_any_1 = 'selected';
+            $periodo = 'P1Y';
+            break;
+        case "any_2":
+            $sel_any_2 = 'selected';
+            $periodo = 'P2Y';
+            break;
+        case "siempre":
+            $sel_siempre = 'selected';
+            break;
+    }
+    if (!empty($Qperiodo)) {
+        $oFecha = new DateTimeLocal();
+        $oFecha->sub(new DateInterval($periodo));
+        $aWhereADD['f_aprobacion'] = $oFecha->getIso();
+        $aOperadorADD['f_aprobacion'] = '>';
+    }
+
+    $a_campos = [
+        'filtro' => $Qfiltro,
+        'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
+        'asunto' => $Qasunto,
+        'sel_mes' => $sel_mes,
+        'sel_mes_6' => $sel_mes_6,
+        'sel_any_1' => $sel_any_1,
+        'sel_any_2' => $sel_any_2,
+        'sel_siempre' => $sel_siempre,
+    ];
+    
+    $oView = new ViewTwig('expedientes/controller');
+    echo $oView->renderizar('archivados_buscar.html.twig',$a_campos);
+    
+    $oTabla->setAWhereADD($aWhereADD);
+    $oTabla->setAOperadorADD($aOperadorADD);
+}
+
+if (empty($msg)) {
+    echo $oTabla->mostrarTabla();
+} else {
+    echo $msg;
+}

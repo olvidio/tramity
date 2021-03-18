@@ -38,6 +38,16 @@ class ExpedienteLista {
      * 
      * @var array
      */
+    private $aWhereADD = [];
+    /**
+     * 
+     * @var array
+     */
+    private $aOperadorADD = [];
+    /**
+     * 
+     * @var array
+     */
     private $a_expedientes_espera = [];
     /**
      * 
@@ -400,6 +410,12 @@ class ExpedienteLista {
                 }
                 break;
             case 'archivados':
+                if (!empty($this->aWhereADD)) {
+                    $aWhere = $this->aWhereADD;
+                    if (!empty($this->aOperadorADD)) {
+                        $aOperador = $this->aOperadorADD;
+                    }
+                }
                 $aWhere['estado'] = Expediente::ESTADO_ARCHIVADO;
                 // solo los de la oficina:
                 // posibles oficiales de la oficina:
@@ -741,5 +757,38 @@ class ExpedienteLista {
     {
         $this->id_expediente = $id_expediente;
     }
+    /**
+     * @return array
+     */
+    public function getAWhereADD()
+    {
+        return $this->aWhereADD;
+    }
 
+    /**
+     * @param array $aWhereADD
+     */
+    public function setAWhereADD($aWhereADD)
+    {
+        $this->aWhereADD = $aWhereADD;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAOperadorADD()
+    {
+        return $this->aOperadorADD;
+    }
+
+    /**
+     * @param array $aOperadorADD
+     */
+    public function setAOperadorADD($aOperadorADD)
+    {
+        $this->aOperadorADD = $aOperadorADD;
+    }
+
+
+    
 }
