@@ -125,6 +125,7 @@ fnjs_guardar=function(event){
 	if (plazo=="fecha") { 
 		var f_plazo=$('#f_plazo').val();
 		if (!f_plazo) { alert("{{ "Debe llenar el campo de fecha para contestar el escrito"|trans }}"); err=1; }
+		if (!fnjs_fecha_en_intervalo('#f_plazo')) { err=0; } // Se permite, simplemente avisa.
 	}
 
 	if (err!=1) {
@@ -281,7 +282,7 @@ fnjs_comprobar_plazo=function(campo){
 	} else { // es el input
 		contestar.val('fecha');
 		fecha=$('#f_plazo');
-		fnjs_fecha_en_intervalo('#f_plazo');
+		if (!fnjs_fecha_en_intervalo('#f_plazo')) { err=0; } // Se permite, simplemente avisa.
 		$('#b_guardar').focus();
 	}
 			

@@ -100,7 +100,7 @@
       <label for="plazo" class="mr-3 mt-2">{{ "¿Es necesario contestar?"|trans }}</label>
       {{ oDesplPlazo.desplegable|raw }}
       <div class='col-3 date'>
-        <input tabindex='85' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_contestar }}" onchange="fnjs_comprobar_plazo('input')"  />
+        <input tabindex='85' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_contestar }}" />
       </div>
       <button id="btn_pendiente" tabindex='120' class="btn btn-outline-secondary" onClick="fnjs_mod_pendiente();" >
           {{ "modificar pendiente"|trans }}

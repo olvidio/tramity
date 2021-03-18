@@ -120,7 +120,7 @@ fnjs_add_escrito=function(event,n) {
 	
 	if (!fnjs_comprobar_fecha('#f_escrito')) { err=1; }
 	if (!f_escrito) { alert("{{ "Debe llenar el campo de fecha de escrito"|trans }}"); err=1; }
-	if (!fnjs_fecha_en_intervalo('#f_escrito')) { err=0; } // SE permite, simplemente avisa.
+	if (!fnjs_fecha_en_intervalo('#f_escrito')) { err=0; } // Se permite, simplemente avisa.
 	if (!n) { alert("{{ "No se ha definido el tipo de escrit"|trans }}"); err=1; }
 
 	if (err!=1) {
