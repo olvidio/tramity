@@ -19,7 +19,9 @@ namespace core;
  * @return string pg_array 
  */
 function array_php2pg($phpArray=[]) {
-    $phpArray_filtered = array_filter($phpArray);
+    if (!empty($phpArray) && is_array($phpArray)) {
+        $phpArray_filtered = array_filter($phpArray);
+    }
     // el join no va si el array esta vacio
     if (empty($phpArray_filtered)) {
         return "{}";
