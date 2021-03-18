@@ -121,7 +121,6 @@ class Enviar {
         
         $a_grupos = $oEscrito->getId_grupos();
         
-        $a_grupos = [];
         $aMiembros = [];
         if (!empty($a_grupos)) {
             //(segun los grupos seleccionados)
