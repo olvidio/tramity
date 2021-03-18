@@ -137,8 +137,7 @@ class EscritoLista {
             
             $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >"._("ver")."</span>";
             
-            $a_json_prot_destino = $oEscrito->getJson_prot_destino();
-            $oArrayProtDestino = new ProtocoloArray($a_json_prot_destino,'','');
+            $destino_txt = $oEscrito->getDestinosEscrito();
             $json_prot_local = $oEscrito->getJson_prot_local();
             if (count(get_object_vars($json_prot_local)) == 0) {
                 // Todavía no está definido el protocolo local;
@@ -180,7 +179,7 @@ class EscritoLista {
             $a_accion['ok'] = $ok;
             $a_accion['prot_local'] = $prot_local;
             $a_accion['tipo'] = '';
-            $a_accion['destino'] = $oArrayProtDestino->ListaTxtBr();
+            $a_accion['destino'] = $destino_txt;
             $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
             $a_accion['categoria'] = '';
             $a_accion['asunto'] = $oEscrito->getAsuntoDetalle();
@@ -286,9 +285,8 @@ class EscritoLista {
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >"._("ver")."</span>";
                 $prot_local_header = _("rev.texto");
             }
-            
-            $a_json_prot_destino = $oEscrito->getJson_prot_destino();
-            $oArrayProtDestino = new ProtocoloArray($a_json_prot_destino,'','');
+
+            $destino_txt = $oEscrito->getDestinosEscrito();
             $json_prot_local = $oEscrito->getJson_prot_local();
             if (count(get_object_vars($json_prot_local)) == 0) {
                 // Todavía no está definido el protocolo local;
@@ -330,7 +328,7 @@ class EscritoLista {
             $a_accion['ok'] = $ok;
             $a_accion['prot_local'] = $prot_local;
             $a_accion['tipo'] = $txt_tipo;
-            $a_accion['destino'] = $oArrayProtDestino->ListaTxtBr();
+            $a_accion['destino'] = $destino_txt;
             $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
             $a_accion['categoria'] = '';
             $a_accion['asunto'] = $oEscrito->getAsuntoDetalle();

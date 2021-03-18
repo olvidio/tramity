@@ -249,22 +249,22 @@ class Escrito Extends EscritoDB {
     
     public function getDestinosEscrito() {
         $a_grupos = [];
-        $aMiembros = [];
         $destinos_txt = '';
-        $descripcion = $this->getDescripcion();
+        
+        $a_grupos = $this->getId_grupos();
         if (!empty($a_grupos)) {
             //(segun los grupos seleccionados)
-            $aMiembros = $this->getDestinos();
-            $destinos_txt = $descripcion;
+            foreach ($a_grupos as $id_grupo) {
+                $oGrupo = new Grupo($id_grupo);
+                $descripcion_g = $oGrupo->getDescripcion();
+                $destinos_txt .= empty($destinos_txt)? '' : ', ';
+                $destinos_txt .= $descripcion_g;
+            }
         } else {
             //(segun individuales)
-            if (!empty($descripcion)) {
-                $destinos_txt = $descripcion;
-            } else {
-                $a_json_prot_dst = $this->getJson_prot_destino();
-                $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
-                $destinos_txt = $oArrayProtDestino->ListaTxtBr();
-            }
+            $a_json_prot_dst = $this->getJson_prot_destino();
+            $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
+            $destinos_txt = $oArrayProtDestino->ListaTxtBr();
         }
         
         $this->destinos_txt = $destinos_txt;

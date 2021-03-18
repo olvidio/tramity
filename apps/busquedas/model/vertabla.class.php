@@ -318,7 +318,7 @@ class VerTabla {
             }
             
             // destinos
-            $protocolo_dst = $oEscrito->getDestinosEscrito(); 
+            $destino_txt = $oEscrito->getDestinosEscrito();
             
             // referencias
             $json_ref = $oEscrito->getJson_prot_ref();
@@ -360,7 +360,7 @@ class VerTabla {
 
             $a_valores[$i]['sel']="$id_escrito";
             $a_valores[$i][1]=$protocolo_local;
-            $a_valores[$i][2]=$protocolo_dst;
+            $a_valores[$i][2]=$destino_txt;
             $a_valores[$i][3]=$referencias;
             $a_valores[$i][4]=$categoria_txt;
             $a_valores[$i][5]=$visibilidad_txt;
