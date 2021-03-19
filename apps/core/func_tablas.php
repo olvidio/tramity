@@ -178,8 +178,7 @@ function cambiar_idioma($idioma='') {
         # Si no hemos encontrado ningún idioma que nos convenga, mostramos la web en el idioma por defecto
         if (!isset($idioma)){$idioma = $_SESSION['oConfig']->getIdioma_default();}
     }
-    //$idioma=  str_replace('UTF-8', 'utf8', $idioma);
-    $idioma = 'ca_ES.UTF-8';
+    $idioma=  str_replace('UTF-8', 'utf8', $idioma);
     $domain="tramity";
     //	echo "dir: ".core\ConfigGlobal::$dir_languages."<br>";
     //	echo "domain: $domain, id: $idioma<br>";
