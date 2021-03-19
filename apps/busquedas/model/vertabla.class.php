@@ -189,7 +189,7 @@ class VerTabla {
                             _("categoria"),
                             _("visibilidad"),
                             array('name'=>ucfirst(_("asunto")),'formatter'=>'clickFormatter2'),
-                            ucfirst(_("oficinas.")),
+                            ucfirst(_("oficinas")),
                             array('name'=>ucfirst(_("fecha doc.")),'class'=>'fecha'),
                             array('name'=>ucfirst(_("contestar antes de")),'class'=>'fecha'),
                             array('name'=>ucfirst(_("fecha entrada")),'class'=>'fecha')
@@ -294,7 +294,7 @@ class VerTabla {
                             _("categoria"),
                             _("visibilidad"),
                             array('name'=>ucfirst(_("asunto")),'formatter'=>'clickFormatter2'),
-                            ucfirst(_("oficinas.")),
+                            ucfirst(_("oficinas")),
                             array('name'=>ucfirst(_("fecha doc.")),'class'=>'fecha'),
                             array('name'=>ucfirst(_("fecha aprobación")),'class'=>'fecha'),
                             ucfirst(_("enviado")), // no puede ser class fecha, porque a veces se añade el modo de envio.

@@ -295,7 +295,7 @@ switch($Qque) {
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente]);
         foreach($cFirmas as $oFirma) {
             if ($oFirma->DBEliminar() === FALSE) {
-                $txt_err .= _("No se ha elimnado la firma");
+                $txt_err .= _("No se ha eliminado la firma");
                 $txt_err .= "<br>";
             }
         }
@@ -345,7 +345,7 @@ switch($Qque) {
                     $txt_err .= $rta;
                 }
                 if ($oAccion->DBEliminar() === FALSE) {
-                    $txt_err .= _("No se ha elimnado la accion");
+                    $txt_err .= _("No se ha eliminado la accion");
                     $txt_err .= "<br>";
                 }
             }
@@ -355,13 +355,13 @@ switch($Qque) {
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente]);
         foreach($cFirmas as $oFirma) {
             if ($oFirma->DBEliminar() === FALSE) {
-                $txt_err .= _("No se ha elimnado la firma");
+                $txt_err .= _("No se ha eliminado la firma");
                 $txt_err .= "<br>";
             }
         }
         $oExpediente = new Expediente($Qid_expediente);
         if ($oExpediente->DBEliminar() === FALSE ) {
-            $txt_err .= _("No se ha elimnado el expediente");
+            $txt_err .= _("No se ha eliminado el expediente");
             $txt_err .= "<br>";
         }
         

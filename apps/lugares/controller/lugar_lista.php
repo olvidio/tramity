@@ -50,7 +50,7 @@ $tipo_ctr = '';
 $e_mail = '';
 $anulado = '';
 
-$a_cabeceras = [ _("sigla"), _("dl"), _("región"), _("nombre"), _("tipo_ctr"), _("e_mail"), _("modo envio"), _("anulado") ];
+$a_cabeceras = [ _("sigla"), _("dl"), _("región"), _("nombre"), _("tipo_ctr"), _("e_mail"), _("modo envío"), _("anulado") ];
 $a_botones = [ ['txt'=> _("borrar"), 'click'=>"fnjs_eliminar()"],
                ['txt'=> _("modificar"), 'click'=>"fnjs_editar()"],
             ];

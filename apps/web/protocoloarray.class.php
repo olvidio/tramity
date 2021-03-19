@@ -272,7 +272,7 @@ class ProtocoloArray Extends Protocolo {
 		$txt_js .= "\n\t\t\ttxt += '<input tabindex=";
 		$txt_js .= "'+tab2+' id=".$id_prot_any."['+n+'] name=".$id_prot_any."['+n+'] class=\'form-control\' >';";
 		$txt_js .= "\n\t\t\ttxt += '</div>';";
-		$txt_js .= "\n\t\t\ttxt += ' "._("mas...")." '";
+		$txt_js .= "\n\t\t\ttxt += ' "._("más...")." '";
 		$txt_js .= "\n\t\t\ttxt += '<div class=\'col col-4\'>';";
 		$txt_js .= "\n\t\t\ttxt += '<input tabindex=";
 		$txt_js .= "'+tab3+' id=".$id_prot_mas."['+n+'] name=".$id_prot_mas."['+n+'] class=\'form-control\' >';";

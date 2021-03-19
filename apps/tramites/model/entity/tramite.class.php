@@ -408,7 +408,7 @@ class Tramite Extends core\ClasePropiedades {
 	function getDatosTramite() {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'tramite'));
-		$oDatosCampo->setEtiqueta(_("tramite"));
+		$oDatosCampo->setEtiqueta(_("trámite"));
 		return $oDatosCampo;
 	}
 	/**
