@@ -177,7 +177,7 @@ $filtro = 'bypass';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
     $num_orden = 10;
-    $text = _("ditribución cr");
+    $text = _("distribución cr");
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();

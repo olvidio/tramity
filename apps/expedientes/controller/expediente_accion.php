@@ -6,6 +6,7 @@ use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Hash;
 use entradas\model\Entrada;
+use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -78,6 +79,8 @@ switch ($Qfiltro) {
     - "còpia a oficina" (fa una còpia a una altre oficina)
 */
 
+$oDesplCargosOficina = [];
+$oDesplCargos = [];
 $a_botones = [];
 switch($Qfiltro) {
     case 'en_buscar':
@@ -92,6 +95,14 @@ switch($Qfiltro) {
                         'txt'    => _("crear un nuevo expediente"),
                         'tipo'    => '',
                     ];
+        $a_botones[2] = ['accion' => 'en_pendiente',
+                        'txt'    => _("crear un nuevo pendiente de la oficina"),
+                        'tipo'    => 'modal',
+                    ];
+        
+        $gesCargos = new GestorCargo();
+        $a_posibles_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
+        $oDesplCargosOficina = new Desplegable('id_cargo',$a_posibles_cargos_oficina,'','');
         break;
     case 'borrador_oficina':
     case 'borrador_propio':
@@ -150,9 +161,12 @@ switch($Qfiltro) {
                         'txt'    => _("copiar a borrador"),
                     ];
         $a_botones[2] = ['accion' => 'exp_cp_oficina',
-                        'txt'    => _("copiar a oficina"),
+                        'txt'    => _("copiar a otro cargo"),
+                        'tipo'    => 'modal',
                     ];
-        
+        $gesCargos = new GestorCargo();
+        $a_posibles_cargos = $gesCargos->getArrayCargos(ConfigGlobal::role_id_oficina());
+        $oDesplCargos = new Desplegable('of_destino',$a_posibles_cargos,'','');
         break;
 }
 if (empty($a_botones)) {
@@ -169,6 +183,8 @@ $a_campos = [
     'asunto' => $asunto,
     'a_botones' => $a_botones,
     'pagina_cancel' => $pagina_cancel,
+    'oDesplCargosOficina' => $oDesplCargosOficina,
+    'oDesplCargos' => $oDesplCargos,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

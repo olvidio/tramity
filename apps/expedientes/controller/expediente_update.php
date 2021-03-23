@@ -7,12 +7,15 @@ use expedientes\model\Expediente;
 use expedientes\model\GestorExpediente;
 use expedientes\model\entity\GestorAccion;
 use lugares\model\entity\GestorLugar;
+use pendientes\model\Pendiente;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use usuarios\model\PermRegistro;
+use usuarios\model\entity\GestorOficina;
+use web\DateTimeLocal;
+use web\Protocolo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -48,6 +51,56 @@ $Qvisibilidad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 
 $txt_err = '';
 switch($Qque) {
+    case 'en_pendiente':
+        $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+        $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
+        $oCargo = new Cargo($Qid_cargo);
+        $cargo = $oCargo->getCargo();
+        $id_oficina = ConfigGlobal::role_id_oficina();
+        $gesOficinas = new GestorOficina();
+        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+        $sigla = $a_posibles_oficinas[$id_oficina];
+        $parent_container = "oficina_$sigla";
+        $resource = 'oficina';
+        $oHoy = new DateTimeLocal();
+        // datos de la entrada 
+        $id_reg = 'EN'.$Qid_entrada; // (para resource='registro': REN = Regitro Entrada, para 'oficina': OFEN)
+        $oEntrada = new Entrada($Qid_entrada);
+        
+        $oPendiente = new Pendiente($parent_container, $resource, $cargo);
+        $oPendiente->setId_reg($id_reg);
+        $oPendiente->setAsunto($oEntrada->getAsunto());
+        $oPendiente->setStatus("NEEDS-ACTION");
+        $oPendiente->setF_inicio($oHoy->getFromLocal());
+        $oPendiente->setF_plazo($oHoy->getFromLocal());
+        $oPendiente->setvisibilidad($Qvisibilidad);
+        $oPendiente->setDetalle($oEntrada->getDetalle());
+        $oPendiente->setEncargado($Qid_cargo);
+        $oPendiente->setId_oficina($id_oficina);
+
+        $oProtOrigen = new Protocolo();
+        $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
+        $location = $oProtOrigen->ver_txt_num();
+        
+        $oPendiente->setLocation($location);
+        $oPendiente->setRef_prot_mas($oProtOrigen->ver_txt_mas());
+        // las oficinas implicadas:
+        $oPendiente->setOficinasArray($oEntrada->getResto_oficinas());
+        if ($oPendiente->Guardar() === FALSE ) {
+            $txt_err .= _("No se han podido guardar el nuevo pendiente");
+        }
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'en_add_expediente':
         // nada
         break;
@@ -264,10 +317,14 @@ switch($Qque) {
         $copias = TRUE;
     case 'exp_cp_borrador':
         $txt_err = '';
-        if (!empty($copias) && is_true($copias)) {
-            $of_destino = 'copias';
+        if (!empty($Qof_destino)) {
+            $of_destino = $Qof_destino;
         } else {
-            $of_destino = empty($Qof_destino)? ConfigGlobal::role_id_cargo() : $Qof_destino;
+            if (!empty($copias) && is_true($copias)) {
+                $of_destino = 'copias';
+            } else {
+                $of_destino = ConfigGlobal::role_id_cargo();
+            }
         }
         // copiar expdiente: poner los escritos como antecedentes.
         $oExpediente = new Expediente($Qid_expediente);

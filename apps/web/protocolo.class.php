@@ -55,6 +55,29 @@ class Protocolo {
 	    return $oProt;
 	}
 	
+	public function ver_txt_mas() {
+	    $prot_mas = empty($this->sprot_mas)? '' : $this->sprot_mas;
+	    
+	    return $prot_mas;
+	}
+	public function ver_txt_num() {
+	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
+	    $nom_lugar = '';
+	    if (!empty($lugar)) {
+	        $oLugar = new Lugar($this->ilugar);
+	        $nom_lugar = $oLugar->getSigla();
+	    }
+	    
+	    $prot_num = empty($this->iprot_num)? '' : $this->iprot_num;
+	    $prot_any = empty($this->iprot_any)? '' : $this->iprot_any;
+	    
+	    $txt = "$nom_lugar";
+	    if (!empty($prot_num)) {
+    	    $txt .= " ${prot_num}/${prot_any}";
+	    }
+	    return $txt;
+	}
+
 	public function ver_txt() {
 	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
 	    $nom_lugar = '';

@@ -10,15 +10,36 @@
       </div>
       <div class="modal-body">
       	<div id="busqueda">
-          <!--  --------------- BUSQUEDAS --------------- -->
+          <!--  --------------- BUSQUEDAS (expedientes por asunto, oficina, cargos) --------------- -->
+          
           <!--  --------------- ASUNTO --------------- -->
-          <div class="form-group row">
+          <div class="form-group row" id="busqueda_asunto">
             <label for="asunto" class="col-2 col-form-label">{{ "Asunto"|trans }}</label>
             <div class="col-8">
               <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="">
             </div>
               <div class="col-2">
                 <button type="button" class="btn btn-primary" onClick="fnjs_buscar_expediente(event);" >{{ "Buscar"|trans }}</button>
+              </div>
+          </div>
+          <!--  --------------- Cargos de la oficina --------------- -->
+          <div class="form-group row" id="busqueda_cargos_oficina">
+            <label for="cargo" class="col-2 col-form-label">{{ "Encargar a" }}:</label>
+            <div class="col-4">
+              {{ oDesplCargosOficina.desplegable|raw }}
+            </div>
+              <div class="col-4">
+                <button type="button" class="btn btn-primary" onClick="fnjs_crear_pendiente(event);" >{{ "Crear Pendiente"|trans }}</button>
+              </div>
+          </div>
+          <!--  --------------- Cargos --------------- -->
+          <div class="form-group row" id="busqueda_cargos">
+            <label for="cargo" class="col-2 col-form-label">{{ "Copiar a otro cargo" }}:</label>
+            <div class="col-4">
+              {{ oDesplCargos.desplegable|raw }}
+            </div>
+              <div class="col-4">
+                <button type="button" class="btn btn-primary" onClick="fnjs_copiar(event);" >{{ "Copiar"|trans }}</button>
               </div>
           </div>
         </div>
@@ -43,7 +64,7 @@
 {% for row in a_botones %}
   <div class="col">
   	{% if row.tipo == 'modal' %}
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_buscar_expediente(event);" >
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_buscar(event,'{{ row.accion }}');" >
         {{ row.txt }}
       </button>
   	{% else %}
@@ -65,14 +86,10 @@
     
 <script>
 fnjs_accion=function(accion){
-	if (accion == 'exp_cp_oficina') {
-		alert ('hay que poner la funcion de escoger oficina destino');
-		return false;
-	}
 	var err=0;
     // grabar
     var url_ajax = 'apps/expedientes/controller/expediente_update.php';
-	if (accion == 'en_expediente') {
+	if (accion == 'en_expediente' || accion == 'en_pendiente') {
 	    var param_json = { que: accion, id_expediente: {{ id_expediente }}, id_entrada: {{ id_entrada }} };
 	} else {
         var param_json = { que: accion, id_expediente: {{ id_expediente }} };
@@ -104,6 +121,77 @@ fnjs_cancelar=function(event){
     }
     event.preventDefault(); //prevent default action 	
 	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+}
+
+fnjs_buscar=function(event,accion) {
+	if (accion == 'en_add_expediente') {
+		$('#busqueda_asunto').show();
+		$('#busqueda_cargos_oficina').hide();
+		$('#busqueda_cargos').hide();
+		fnjs_buscar_expediente(event);
+		return true;
+	}
+	if (accion == 'en_pendiente') {
+		$('#busqueda_asunto').hide();
+		$('#busqueda_cargos_oficina').show();
+		$('#busqueda_cargos').hide();
+		return true;
+	}
+	if (accion == 'exp_cp_oficina') {
+		$('#busqueda_asunto').hide();
+		$('#busqueda_cargos_oficina').hide();
+		$('#busqueda_cargos').show();
+		return true;
+	}
+}
+fnjs_copiar=function(event) {
+	var que='exp_cp_oficina';
+	var id_expediente={{ id_expediente }};
+	var of_destino = $('#of_destino').val();
+	
+    var url_ajax = 'apps/expedientes/controller/expediente_update.php';
+    var param_json = { que: que, id_expediente: id_expediente, of_destino: of_destino };
+    request=$.ajax({
+        data: param_json,
+        url: url_ajax,
+        type: 'post',
+        dataType: 'json'
+    });
+    request.done( function (json) {
+    	if (json.success != true) {
+    		alert (json.mensaje);
+        } else {
+            fnjs_cancelar(event);
+        }
+    });
+	
+	// close div modal
+    $('#ModalBuscar .close').click();
+}
+
+fnjs_crear_pendiente=function(event) {
+	var que='en_pendiente';
+	var id_entrada={{ id_entrada }};
+	var id_cargo = $('#id_cargo').val();
+	
+    var url_ajax = 'apps/expedientes/controller/expediente_update.php';
+    var param_json = { que: que, id_entrada: id_entrada, id_cargo: id_cargo };
+    request=$.ajax({
+        data: param_json,
+        url: url_ajax,
+        type: 'post',
+        dataType: 'json'
+    });
+    request.done( function (json) {
+    	if (json.success != true) {
+    		alert (json.mensaje);
+        } else {
+            fnjs_cancelar(event);
+        }
+    });
+	
+	// close div modal
+    $('#ModalBuscar .close').click();
 }
 
 fnjs_buscar_expediente=function(event) {

@@ -106,7 +106,7 @@ class Pendiente {
      * @param string $cargo  (para obtener la autentificacion, permisos etc. ej: secretaria) 
      * @param string $uid (cuando no es nuevo; para modificarlo)
      */
-    function __construct($parent_container,$resource,$cargo,$uid) {
+    function __construct($parent_container,$resource,$cargo,$uid=FALSE) {
         
         $this->setParent_container($parent_container);
         $this->setResource($resource);
@@ -157,10 +157,19 @@ class Pendiente {
     
     
     public function buscar_ref_uid($uid,$formato) {
+        $id_reg = 0;
         //  Registro entradas
         if (($pos_ini = strpos($uid, 'REN')) !== FALSE && $pos_ini == 0) {
             $pos = strpos($uid, '-') - 3;
             $id_reg=substr($uid,3,$pos);
+        }
+        // Tambien para los pendientes de oficina: 
+        if (($pos_ini = strpos($uid, 'OFEN')) !== FALSE && $pos_ini == 0) {
+            $pos = strpos($uid, '-') - 4;
+            $id_reg=substr($uid,4,$pos);
+        }
+        
+        if (!empty($id_reg)) {
             //echo "ref: $id_reg<br>";
             // Buscar en entradas
             $oProtOrigen = new Protocolo();
@@ -339,7 +348,12 @@ class Pendiente {
             if (($pos_ini = strpos($id_reg, 'REN')) !== FALSE && $pos_ini == 0) { //  Registro entradas
                 $uid = "$id_reg-$ahora";
             } else {
-                $uid = "R$id_reg-$ahora";
+                if ($this->resource == 'registro') {
+                    $uid = "R$id_reg-$ahora";
+                }
+                if ($this->resource == 'oficina') {
+                    $uid = "OF$id_reg-$ahora";
+                }
             }
         } else {
             $uid="$ahora";

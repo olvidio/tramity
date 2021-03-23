@@ -1062,6 +1062,7 @@ class Lista {
 			});
 			</script>";
         // para corregir las flechitas de ordenar
+        /*
         $tt.="<style>
                 table.dataTable > thead .sorting::before,
                 table.dataTable > thead .sorting::after,
@@ -1079,6 +1080,7 @@ class Lista {
                     opacity: .4;
                 }
             </style>";
+            */
         return $tt;
     }
     

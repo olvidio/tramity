@@ -3,12 +3,13 @@
 use core\ConfigGlobal;
 use entradas\model\GestorEntrada;
 use expedientes\model\Expediente;
+use expedientes\model\GestorEscrito;
 use expedientes\model\GestorExpediente;
-use expedientes\model\entity\GestorEscritoDB;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use web\Lista;
 use usuarios\model\entity\GestorOficina;
+use web\Lista;
+use web\Protocolo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -80,17 +81,21 @@ switch ($Qque) {
 	    
 	    $cEntradas = $gesEntradas->getEntradas($aWhere,$aOperador);
 	    
-	    $a_cabeceras = [ '',[ 'width' => 70, 'name' => _("fecha")],
-	                       [ 'width' => 500, 'name' => _("asunto")],
-	                       [ 'width' => 50, 'name' => _("ponente")]
-	                   ,''];
+	    $a_cabeceras = [ '',[ 'width' => 200, 'name' => _("protocolo")],
+	                       [ 'width' => 100, 'name' => _("fecha")],
+	                       [ 'width' => 600, 'name' => _("asunto")],
+	                       [ 'width' => 50, 'name' => _("ponente")],
+	                   ''];
 	    $a_valores = [];
 	    $a = 0;
+	    $oProtOrigen = new Protocolo();
 	    foreach ($cEntradas as $oEntrada) {
 	        $a++;
 	        $id_entrada = $oEntrada->getId_entrada();
 	        $fecha_txt = $oEntrada->getF_entrada()->getFromLocal();
 	        $id_of_ponente = $oEntrada->getPonente();
+	        $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
+	        $proto_txt = $oProtOrigen->ver_txt();
 	        
 	        $ponente_txt = empty($a_posibles_oficinas[$id_of_ponente])? '?' : $a_posibles_oficinas[$id_of_ponente];
 	        
@@ -98,10 +103,11 @@ switch ($Qque) {
 	        $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('entrada','$id_entrada','$Qid_expediente');\" >adjuntar</span>";
 	        
 	        $a_valores[$a][1] = $ver;
-	        $a_valores[$a][2] = $fecha_txt;
-	        $a_valores[$a][3] = $oEntrada->getAsuntoDetalle();
-	        $a_valores[$a][4] = $ponente_txt;
-	        $a_valores[$a][5] = $add;
+	        $a_valores[$a][2] = $proto_txt;
+	        $a_valores[$a][3] = $fecha_txt;
+	        $a_valores[$a][4] = $oEntrada->getAsuntoDetalle();
+	        $a_valores[$a][5] = $ponente_txt;
+	        $a_valores[$a][6] = $add;
 	    }
 	    
 	    
@@ -120,7 +126,8 @@ switch ($Qque) {
 	    }
 	    if (!empty($Qasunto_buscar)) {
             // en este caso el operador es 'sin_acentos'
-	        $aWhere['asunto_detalle'] = $Qasunto_buscar;
+	        $aWhere['asunto'] = $Qasunto_buscar;
+	        $aOperador['asunto'] = 'sin_acentos';
 	    }
 	    // por defecto, buscar sólo 15.
 	    if (empty($Qasunto_buscar && empty($Qoficina_buscar))) {
@@ -132,8 +139,9 @@ switch ($Qque) {
 	    
 	    $a_cabeceras = [ '',[ 'width' => 70, 'name' => _("fecha")],
 	                       [ 'width' => 500, 'name' => _("asunto")],
-	                       [ 'width' => 50, 'name' => _("ponente")]
-	                   ,''];
+	                       [ 'width' => 50, 'name' => _("ponente")],
+	                       [ 'width' => 50, 'name' => _("categoria")],
+	                   ''];
 	    $a_valores = [];
 	    $a = 0;
 	    foreach ($cExpedientes as $oExpediente) {
@@ -141,6 +149,7 @@ switch ($Qque) {
 	        $id_expediente = $oExpediente->getId_expediente();
 	        $fecha_txt = $oExpediente->getF_aprobacion()->getFromLocal();
 	        $ponente = $oExpediente->getPonente();
+	        $categoria = $oExpediente->getCategoria();
 	        
 	        $ponente_txt = $a_posibles_cargos[$ponente];
 	        
@@ -151,7 +160,8 @@ switch ($Qque) {
 	        $a_valores[$a][2] = $fecha_txt;
 	        $a_valores[$a][3] = $oExpediente->getAsunto();
 	        $a_valores[$a][4] = $ponente_txt;
-	        $a_valores[$a][5] = $add;
+	        $a_valores[$a][5] = $categoria_txt;
+	        $a_valores[$a][6] = $add;
 	    }
 	    
 	    
@@ -162,7 +172,7 @@ switch ($Qque) {
 	    break;
 	case 'buscar_3':
         //n = 3 -> Escrito
-	    $gesEscrito = new GestorEscritoDB();
+	    $gesEscrito = new GestorEscrito();
 	    $aWhere = [];
 	    $aOperador = [];
 	    // Sólo los escritos que ya se han enviado
@@ -172,8 +182,8 @@ switch ($Qque) {
             $aWhere['creador'] = $Qoficina_buscar;
 	    }
 	    if (!empty($Qasunto_buscar)) {
-            $aWhere['asunto'] = $Qasunto_buscar;
-            $aOperador['asunto'] = '~*';
+            $aWhere['asunto_detalle'] = $Qasunto_buscar;
+            //$aOperador['asunto'] = '~*';
 	    }
 	    // por defecto, buscar sólo 15.
 	    if (empty($Qasunto_buscar && empty($Qoficina_buscar))) {
@@ -181,30 +191,35 @@ switch ($Qque) {
 	    }
 	    $aWhere['_ordre'] = 'f_aprobacion DESC';
 	    
-	    $cEscritos = $gesEscrito->getEscritosDB($aWhere,$aOperador);
+	    $cEscritos = $gesEscrito->getEscritos($aWhere,$aOperador);
 	    
-	    $a_cabeceras = [ '',[ 'width' => 70, 'name' => _("fecha")],
-	                       [ 'width' => 500, 'name' => _("asunto")],
-	                       [ 'width' => 50, 'name' => _("ponente")]
-	                   ,''];
+	    $a_cabeceras = [ '',[ 'width' => 150, 'name' => _("protocolo")],
+	        [ 'width' => 100, 'name' => _("fecha")],
+	        [ 'width' => 650, 'name' => _("asunto")],
+	        [ 'width' => 50, 'name' => _("ponente")],
+	        ''];
 	    $a_valores = [];
 	    $a = 0;
+	    $oProtLocal = new Protocolo();
 	    foreach ($cEscritos as $oEscrito) {
 	        $a++;
 	        $id_escrito = $oEscrito->getId_escrito();
 	        $fecha_txt = $oEscrito->getF_aprobacion()->getFromLocal();
 	        $ponente = $oEscrito->getCreador();
+	        $oProtLocal->setJson($oEscrito->getJson_prot_local());
+	        $proto_txt = $oProtLocal->ver_txt();
 	        
-	        $ponente_txt = $a_posibles_cargos[$ponente];
+	        $ponente_txt = empty($a_posibles_cargos[$ponente])? '?' : $a_posibles_cargos[$ponente];
 	        
 	        $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >ver</span>";
 	        $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('escrito','$id_escrito','$Qid_expediente');\" >adjuntar</span>";
 	        
 	        $a_valores[$a][1] = $ver;
-	        $a_valores[$a][2] = $fecha_txt;
-	        $a_valores[$a][3] = $oEscrito->getDetalle();
-	        $a_valores[$a][4] = $ponente_txt;
-	        $a_valores[$a][5] = $add;
+	        $a_valores[$a][2] = $proto_txt;
+	        $a_valores[$a][3] = $fecha_txt;
+	        $a_valores[$a][4] = $oEscrito->getAsuntoDetalle();
+	        $a_valores[$a][5] = $ponente_txt;
+	        $a_valores[$a][6] = $add;
 	    }
 	    
 	    
