@@ -1,11 +1,12 @@
-<!-- Bootstrap core JavaScript-->
-<script src="{{ base_url }}/node_modules/jquery/dist/jquery.min.js"></script>
-<!-- jQuery CSS -->
-<!-- CSS jQuery, bootstrap -->
-<link type="text/css" rel='stylesheet' href='{{ base_url }}/node_modules/jquery-ui/themes/base/all.css' />
-<link type="text/css" rel="stylesheet" href="{{ base_url }}/node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
-<link href="{{ base_url }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-
+{% if primero %}
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{ base_url }}/node_modules/jquery/dist/jquery.min.js"></script>
+    <!-- jQuery CSS -->
+    <!-- CSS jQuery, bootstrap -->
+    <link type="text/css" rel='stylesheet' href='{{ base_url }}/node_modules/jquery-ui/themes/base/all.css' />
+    <link type="text/css" rel="stylesheet" href="{{ base_url }}/node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <link href="{{ base_url }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+{% endif %}
 
 <div id="tot" class="container-fluid mt-3">
 <div class="clearfix ">
@@ -59,13 +60,15 @@
 {% endif %}
 </div>
 <hr>
-<script>
-fnjs_download_pdf=function(id_escrito) {
-	url = "{{ url_download_pdf }}"+"?id_escrito="+id_escrito;
-	window.open(url);
-}
-fnjs_download=function(item) {
-	url = "{{ url_download }}"+"&key="+item;
-	window.open(url);
-}
-</script>
+{% if primero %}
+    <script>
+    fnjs_download_pdf=function(id_escrito) {
+        url = "{{ url_download_pdf }}"+"?id_escrito="+id_escrito;
+        window.open(url);
+    }
+    fnjs_download=function(item) {
+        url = "{{ url_download }}"+"&key="+item;
+        window.open(url);
+    }
+    </script>
+{% endif %}

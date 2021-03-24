@@ -54,6 +54,7 @@ if (!empty($Qid_escrito)) {
     $url_download_pdf = $base_url.'/apps/expedientes/controller/escrito_download.php';
     // Pueden ser varios escritos separados por comas:
     $a_escritos = explode(',', $Qid_escrito);
+    $primero = 1;
     foreach ($a_escritos as $id_escrito) {
         $oEscrito = new Escrito($id_escrito);
         
@@ -96,6 +97,7 @@ if (!empty($Qid_escrito)) {
             echo $oView->renderizar('escrito_ver_slide.html.twig',$a_campos);
         } else {
             $a_campos = [
+                'primero' => $primero,
                 'id_escrito' => $id_escrito,
                 //'oHash' => $oHash,
                 'destinos' => $destinos,
@@ -113,6 +115,7 @@ if (!empty($Qid_escrito)) {
             ];
             echo $oView->renderizar('escrito_ver.html.twig',$a_campos);
         }
+        $primero = 0;
     }
     exit();
 } else {

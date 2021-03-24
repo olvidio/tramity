@@ -88,7 +88,7 @@ class Etherpad  extends Client {
     * devuelve el escrito en html.
     * 
     * @param array $a_header ['left', 'center', 'right']
-    * @return \Mpdf\Mpdf
+    * @return string html
     */ 
     public function generarHtml($a_header=[],$fecha='') {
         $html = '';
@@ -102,7 +102,8 @@ class Etherpad  extends Client {
         $bodies = $dom->getElementsByTagName('body');
         // cojo el primero de la lista: sólo debería haber uno.
         $body = $bodies->item(0);
-        $txt = $body->C14N(); //innerhtml
+        //$txt = $body->C14N(); //innerhtml convierte <br> a <br></br>. Se usa lo de abajo:
+        $txt = $body->ownerDocument->saveHTML( $body );
         $txt2 = substr($txt, 6); // Quitar el tag <body> inicial
         $txt3 = substr($txt2, 0, -7); // Quitar el tag </body> final
         
