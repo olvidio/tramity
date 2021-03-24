@@ -86,6 +86,7 @@ $txt_option_cargos_oficina = '';
 $cCargos_oficina = $gesCargos->getCargos(['id_oficina' => $id_oficina]);
 $a_posibles_cargos_oficina = [];
 foreach ($cCargos_oficina as $oCargo) {
+    if ($oCargo->getDirector()) { continue; } // No pongo al director, ya está con el resto de firmas.
     $id_cargo = $oCargo->getId_cargo();
     $cargo = $oCargo->getCargo();
     $a_posibles_cargos_oficina[$id_cargo] = $cargo;

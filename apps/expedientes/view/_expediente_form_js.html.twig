@@ -171,6 +171,7 @@ fnjs_circular=function(event){
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
+    debugger;
     if (!x && !y) {
         event.preventDefault();
         event.stopPropagation();

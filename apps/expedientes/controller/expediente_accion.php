@@ -31,8 +31,13 @@ switch ($Qfiltro) {
         $oEntrada = new Entrada($Qid_entrada);
         $asunto = $oEntrada->getAsunto();
         
-        $url_cancel = 'apps/expedientes/controller/expediente_lista.php';
-        $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => 'borrador_propio']));
+        //$url_cancel = 'apps/expedientes/controller/expediente_lista.php';
+        //$pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => 'borrador_propio']));
+        $a_condicion = [];
+        $str_condicion = (string) \filter_input(INPUT_POST, 'condicion');
+        parse_str($str_condicion, $a_condicion);
+        $a_condicion['filtro'] = $Qfiltro;
+        $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($a_condicion));
         break;
     case 'en_aceptado':
         $oEntrada = new Entrada($Qid_entrada);

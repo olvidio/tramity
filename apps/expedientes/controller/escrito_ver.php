@@ -55,6 +55,11 @@ if (!empty($Qid_escrito)) {
     // Pueden ser varios escritos separados por comas:
     $a_escritos = explode(',', $Qid_escrito);
     $primero = 1;
+    $todosHtml = '';
+    $oEtherpad = new Etherpad();
+    if (count($a_escritos) > 1) {
+        $oEtherpad->setMultiple(TRUE);
+    }
     foreach ($a_escritos as $id_escrito) {
         $oEscrito = new Escrito($id_escrito);
         
@@ -69,7 +74,6 @@ if (!empty($Qid_escrito)) {
         $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
         $tipo_doc = $oEscrito->getTipo_doc();
         
-        $oEtherpad = new Etherpad();
         $oEtherpad->setId (Etherpad::ID_ESCRITO,$id_escrito);
         
         $escrito_html = $oEtherpad->generarHtml();
@@ -94,7 +98,7 @@ if (!empty($Qid_escrito)) {
                 'base_url' => $base_url,
                 'url_download' => $url_download,
             ];
-            echo $oView->renderizar('escrito_ver_slide.html.twig',$a_campos);
+            $todosHtml .= $oView->renderizar('escrito_ver_slide.html.twig',$a_campos);
         } else {
             $a_campos = [
                 'primero' => $primero,
@@ -113,10 +117,12 @@ if (!empty($Qid_escrito)) {
                 'url_download' => $url_download,
                 'url_download_pdf' => $url_download_pdf,
             ];
-            echo $oView->renderizar('escrito_ver.html.twig',$a_campos);
+            $todosHtml .= $oView->renderizar('escrito_ver.html.twig',$a_campos);
         }
         $primero = 0;
     }
+    $oEtherpad->setMultiple(FALSE);
+    echo $todosHtml;
     exit();
 } else {
     $txt_alert = _("No hay escritos");

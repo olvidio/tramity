@@ -179,8 +179,18 @@ if (!empty($Qid_escrito)) {
         $tipo_doc = '';
         $chk_revisado = '';
     } else {
+        // Valors por defecto: los del expediente:
+        if (!empty($Qid_expediente)) {
+            $oExpediente = new Expediente($Qid_expediente);
+            $asunto = $oExpediente->getAsunto();
+            $visibilidad = $oExpediente->getVisibilidad();
+            $oDesplVisibilidad->setOpcion_sel($visibilidad);
+        } else {
+            $asunto = '';
+            $visibilidad = '';
+            $oDesplVisibilidad->setOpcion_sel($visibilidad);
+        }
         $entradilla = '';
-        $asunto = '';
         $detalle = '';
         $f_escrito = '';
         $initialPreview = '';

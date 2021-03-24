@@ -57,6 +57,7 @@ fnjs_ver_entrada=function(id_entrada) {
     w.focus();
 }
 fnjs_buscar_accion_entrada=function(formulario){
+    var condicion = '{{ condicion|raw }}';
     rta=fnjs_solo_uno(formulario);
     if (rta==1) {
         var form=$(formulario).attr('id');
@@ -71,7 +72,7 @@ fnjs_buscar_accion_entrada=function(formulario){
             }
         });
         var url_doc = 'apps/expedientes/controller/expediente_accion.php';
-        var param_json = { filtro: 'en_buscar', id_entrada: id_reg };
+        var param_json = { filtro: 'en_buscar', id_entrada: id_reg, condicion: condicion };
         request=$.ajax({
             data: param_json,
             url: url_doc,

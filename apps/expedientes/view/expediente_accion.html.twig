@@ -164,7 +164,6 @@ fnjs_copiar=function(event) {
             fnjs_cancelar(event);
         }
     });
-	
 	// close div modal
     $('#ModalBuscar .close').click();
 }
@@ -183,13 +182,13 @@ fnjs_crear_pendiente=function(event) {
         dataType: 'json'
     });
     request.done( function (json) {
+        debugger;
     	if (json.success != true) {
     		alert (json.mensaje);
         } else {
             fnjs_cancelar(event);
         }
     });
-	
 	// close div modal
     $('#ModalBuscar .close').click();
 }

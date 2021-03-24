@@ -37,6 +37,7 @@ class Etherpad  extends Client {
 
     private $id_escrito = null;
     private $text = null;
+    private $multiple = FALSE;
     
     
     public function setId ($tipo_id,$id) {
@@ -486,11 +487,15 @@ class Etherpad  extends Client {
         //setcookie("sessionID", $lista_sesiones, time() + (86400 * 30), "/; SameSite=Lax"); // 86400 = 1 day
         // para php >= 7.3
         // 86400 = 1 day
-        setcookie("sessionID", $lista_sesiones, [
-                                    'expires' => time() + (86400 * 30),
+        // 3600 = 1 hora
+        if ($this->multiple === FALSE) { // espero a mandar las cookies al final.
+            setcookie("sessionID", $lista_sesiones, [
+                                    //'expires' => time() + (86400 * 30),
+                                    'expires' => time() + (3600),
                                     'path' => '/',
                                     'sameSite' => 'Lax',
                                 ]);
+        }
     }
     
     private function deleteAllSessions($authorID) {
@@ -582,5 +587,21 @@ class Etherpad  extends Client {
     {
         $this->text = $text;
     }
+    /**
+     * @return boolean
+     */
+    public function getMultiple()
+    {
+        return $this->multiple;
+    }
+
+    /**
+     * @param boolean $multiple
+     */
+    public function setMultiple($multiple)
+    {
+        $this->multiple = $multiple;
+    }
+
 
 }
