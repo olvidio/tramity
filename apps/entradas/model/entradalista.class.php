@@ -244,9 +244,9 @@ class EntradaLista {
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
                 if ($perm_ver_escrito >= PermRegistro::PERM_VER) {
                     $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >"._("ver")."</span>";
+                    $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_accion');\" >"._("acción")."</span>";
                 }
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >mod</span>";
-                $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_accion');\" >"._("acción")."</span>";
                 
                 $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
                 $row['protocolo'] = $oProtOrigen->ver_txt();
