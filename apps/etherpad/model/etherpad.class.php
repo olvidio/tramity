@@ -164,7 +164,8 @@ class Etherpad  extends Client {
         $bodies = $dom->getElementsByTagName('body');
         // cojo el primero de la lista: sólo debería haber uno.
         $body = $bodies->item(0);
-        $txt = $body->C14N(); //innerhtml
+        //$txt = $body->C14N(); //innerhtml convierte <br> a <br></br>. Se usa lo de abajo:
+        $txt = $body->ownerDocument->saveHTML( $body );
         $txt2 = substr($txt, 6); // Quitar el tag <body> inicial
         $txt3 = substr($txt2, 0, -7); // Quitar el tag </body> final
         
@@ -173,7 +174,7 @@ class Etherpad  extends Client {
         $html .= '</div>';
         
         if (!empty($fecha)) {
-            $html .= '<div id="fecha" style="margin-top: 2em; margin-right:  5em; text-align: right; " >';
+            $html .= '<div id="fecha" style="margin-top: 2em; margin-right:  0em; text-align: right; " >';
             $html .= $fecha;
             $html .= '</div>';
         }
@@ -402,15 +403,40 @@ class Etherpad  extends Client {
     * creates a new session. validUntil is an unix timestamp in seconds
     */
    public function crearSession($groupID, $authorID, $validUntil) {
-       // ara per ara, primer esborrar:
-       $this->deleteAllSessions($authorID);
-    /* Example returns:
-     *
-     * {code: 0, message:"ok", data: {sessionID: "s.s8oes9dhwrvt0zif"}}
-     * {code: 1, message:"groupID doesn't exist", data: null}
-     * {code: 1, message:"authorID doesn't exist", data: null}
-     * {code: 1, message:"validUntil is in the past", data: null}
-     */
+        // comprobar si ya está la session:
+        /* Example returns:
+         * 
+         * {code: 0,"message":"ok","data":{"s.oxf2ras6lvhv2132":{"groupID":"g.s8oes9dhwrvt0zif","authorID":"a.akf8finncvomlqva","validUntil":2312905480}}}
+         * {code: 1, message:"authorID does not exist", data: null}
+         */ 
+        $lista = $this->listSessionsOfAuthor($authorID);
+        if ($lista->getCode() == 0) {
+            $data = $lista->getData();
+            foreach ($data as $sessionID => $aData) {
+                $group = $aData['groupID'];
+                $author = $aData['authorID'];
+                $valid = $aData['validUntil'];
+                if ($group == $groupID && $author == $authorID ) {
+                    $ahora = date("U");
+                    if ($valid > $ahora) {
+                        return TRUE;
+                    }
+                }
+            }
+        } else {
+            $this->mostrar_error($lista);
+        }
+       
+        // Si no está borrón y cuenta neuva.
+        $this->deleteAllSessions($authorID);
+       
+        /* Example returns:
+         *
+         * {code: 0, message:"ok", data: {sessionID: "s.s8oes9dhwrvt0zif"}}
+         * {code: 1, message:"groupID doesn't exist", data: null}
+         * {code: 1, message:"authorID doesn't exist", data: null}
+         * {code: 1, message:"validUntil is in the past", data: null}
+         */
         $rta = $this->createSession($groupID, $authorID, $validUntil);
         if ($rta->getCode() == 0) {
            $data = $rta->getData();
