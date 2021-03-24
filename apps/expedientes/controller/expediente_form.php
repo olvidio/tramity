@@ -125,6 +125,7 @@ if ($Qid_expediente) {
     
     $oEscrito = new Escrito();
     $aAcciones = $oEscrito->getArrayAccion();
+    $aCategorias = $oEscrito->getArrayCategoria();
     
     $gesGrupos = new GestorGrupo();
     $a_grupos = $gesGrupos->getArrayGrupos();
@@ -171,11 +172,15 @@ if ($Qid_expediente) {
         if (!empty($a_id_adjuntos)) {
             $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto(event,'$id_escrito');\"  ></i>";
         }
+        // Categoria
+        $categoria = $oEscrito->getCategoria();
+        $categoria_txt = $aCategorias[$categoria]; 
         
         $a_accion['protocolo'] = $dst_txt;
         $a_accion['link_ver'] = 'v';
         $a_accion['referencias'] = $oArrayProtRef->ListaTxtBr();
         $a_accion['tipo'] = $txt_tipo;
+        $a_accion['categoria'] = $categoria_txt;
         $a_accion['asunto'] = $oEscrito->getAsuntoDetalle();
         $a_accion['adjuntos'] = $adjuntos;
             
