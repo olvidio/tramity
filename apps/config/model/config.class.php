@@ -106,6 +106,12 @@ class Config {
         }
     }
     
+    public function getBodyMail() {
+        $parametro = 'bodyMail';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
+    
     public function getSigla() {
         $parametro = 'sigla';
         $oConfigSchema = new ConfigSchema($parametro);

@@ -60,6 +60,14 @@ fnjs_guardar=function(formulario){
 </form>
 <hr>
 
+<h3>{{ "texto del mail"|trans }}:</h3>
+<form id="frm_bodymail" name="frm_bodymail" action="">
+{{ oHashBM.getCamposHtml|raw }}
+<input type="text" name="valor" value="{{ bodyMail }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+
 <h3>{{ "valor inicio contadores"|trans }}:</h3>
 <form id="frm_contador" name="frm_contador" action="">
 {{ oHashC.getCamposHtml|raw }}

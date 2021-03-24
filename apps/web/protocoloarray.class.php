@@ -93,7 +93,7 @@ class ProtocoloArray Extends Protocolo {
 	    return $aRef;
 	}
 
-	public function ListaTxtBr() {
+	public function ListaTxtBr($id_lugar='') {
 	    $aSeleccionados = '';
 	    if (is_object($this->sSeleccionados)) {}
 	    if (is_array($this->sSeleccionados)) {
@@ -112,6 +112,10 @@ class ProtocoloArray Extends Protocolo {
 			    if (!empty($lugar)) {
 			        $oLugar = new Lugar($lugar);
 			        $nom_lugar = $oLugar->getSigla();
+			    }
+			    // para sacar solo un destino
+			    if (!empty($id_lugar) && $lugar != $id_lugar) {
+			        continue;
 			    }
 			    
 			    $txt = "$nom_lugar";

@@ -141,6 +141,21 @@ $oHashRL->setArrayCamposHidden(['parametro' => $parametro]);
 $a_campos['oHashRL'] = $oHashRL;
 $a_campos['sigla'] = $val_sigla;
 
+// ----------- body del mail -------------------
+$parametro = 'bodyMail';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$val_sigla = $valor;
+
+$oHashBM = new Hash();
+$oHashBM->setUrl($url);
+$oHashBM->setcamposForm('valor');
+$oHashBM->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashBM'] = $oHashBM;
+$a_campos[$parametro] = $val_sigla;
+
 // ----------- Servidor de Etherpad -------------------
 $parametro = 'server_etherpad';
 $oConfigSchema = new ConfigSchema($parametro);
