@@ -140,7 +140,6 @@ switch ($Qque) {
 	    $a_cabeceras = [ '',[ 'width' => 70, 'name' => _("fecha")],
 	                       [ 'width' => 500, 'name' => _("asunto")],
 	                       [ 'width' => 50, 'name' => _("ponente")],
-	                       [ 'width' => 50, 'name' => _("categoria")],
 	                   ''];
 	    $a_valores = [];
 	    $a = 0;
@@ -149,7 +148,6 @@ switch ($Qque) {
 	        $id_expediente = $oExpediente->getId_expediente();
 	        $fecha_txt = $oExpediente->getF_aprobacion()->getFromLocal();
 	        $ponente = $oExpediente->getPonente();
-	        $categoria = $oExpediente->getCategoria();
 	        
 	        $ponente_txt = $a_posibles_cargos[$ponente];
 	        
@@ -160,8 +158,7 @@ switch ($Qque) {
 	        $a_valores[$a][2] = $fecha_txt;
 	        $a_valores[$a][3] = $oExpediente->getAsunto();
 	        $a_valores[$a][4] = $ponente_txt;
-	        $a_valores[$a][5] = $categoria_txt;
-	        $a_valores[$a][6] = $add;
+	        $a_valores[$a][5] = $add;
 	    }
 	    
 	    
