@@ -419,6 +419,9 @@ switch($Qque) {
                     $descripcion .= $a_grupos[$id_grupo];
                 }
                 $oEscrito->setId_grupos($Qa_grupos);
+                // borro las posibles personalizaciones:
+                $oEscrito->setDestinos('');
+                $oEscrito->setDescripcion('');
             } else {
                 $aProtDst = [];
                 foreach ($Qa_destinos as $key => $id_lugar) {

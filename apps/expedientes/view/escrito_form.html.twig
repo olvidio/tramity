@@ -37,6 +37,10 @@
       </div>
       <div id="dst_grupo" class="col-10">
 	    {{ oArrayDesplGrupo.ListaSelects|raw }}
+	    <button class="btn btn-secondary" onClick="fnjs_ver_dst(event);" >
+          {{ "modificar selección"|trans }}
+        </button>
+        {{ descripcion }}
       </div>
   </div>
   
@@ -49,7 +53,7 @@
 	    {{ oArrayProtRef.ListaSelects|raw }}
       </div>
   </div>
-  {% endif %}
+{% endif %}
   <!--  --------------- ASUNTO --------------- -->
   <div class="form-group row">
     <label for="asunto" class="col-2 col-form-label">{{ "Asunto"|trans }}</label>

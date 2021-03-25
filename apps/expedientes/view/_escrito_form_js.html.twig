@@ -16,6 +16,33 @@ $(function() {
 
 });
 
+fnjs_actualizar=function() {
+    fnjs_update_div('#main','{{ pagina_actualizar|raw }}');
+}
+
+fnjs_ver_dst=function(event){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+	var id_escrito = $('#id_escrito').val();
+	if (!id_escrito) {
+		alert ("{{ "Primero debe guardar el escrito"|trans }}");
+		return true;
+	}
+	var form = 'form_escrito';
+	var lista_grupos='';
+    /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+    /* var sel=$('#'+formulario+' table .sel'); */
+    $('select[name^=grupos]').each(function(i){
+        lista_grupos+=','+$(this).val();
+    });
+	url='apps/lugares/controller/grupo_form.php?id_escrito='+id_escrito+'&lista_grupos='+lista_grupos;
+    var winPrefs="dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+    win=window.open(url, "", winPrefs);
+    win.focus();
+}
+
+
 {{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
 {{ oArrayProtDestino.ComprobarSelectJs|raw }}
 {{ oArrayProtRef.ComprobarSelectJs|raw }}

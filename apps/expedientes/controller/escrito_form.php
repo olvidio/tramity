@@ -68,7 +68,7 @@ $gesGrupo = new GestorGrupo();
 $a_posibles_grupos = $gesGrupo->getArrayGrupos();
 
 $chk_grupo_dst = '';
-$id_grupo = 0;
+$descripcion = '';
 
 // visibilidad (usar las mismas opciones que en entradas)
 $oEntrada = new Entrada();
@@ -79,18 +79,28 @@ $oDesplVisibilidad->setOpciones($aOpciones);
 $oDesplVisibilidad->setOpcion_sel($visibilidad);
 
 if (!empty($Qid_escrito)) {
-    $a_grupos = $oEscrito->getId_grupos();
-    $oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');
-    $oArrayDesplGrupo->setBlanco('t');
-    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
-    if (!empty($a_grupos)) {
-        $chk_grupo_dst = 'checked';
-    }
-    
+    // destinos individuales
     $json_prot_dst = $oEscrito->getJson_prot_destino();
     $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
     $oArrayProtDestino->setBlanco('t');
     $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+    // si hay grupos, tienen preferencia
+    $a_grupos = $oEscrito->getId_grupos();
+    if (!empty($a_grupos)) {
+        $chk_grupo_dst = 'checked';
+    } else {
+        // puede ser un destino personalizado:
+        $destinos = $oEscrito->getDestinos();
+        if (!empty($destinos)) {
+            $a_posibles_grupos['custom'] = _("personalizado");
+            $a_grupos = 'custom';
+            $chk_grupo_dst = 'checked';
+            $descripcion = $oEscrito->getDescripcion();
+        }
+    }
+    $oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');
+    $oArrayDesplGrupo->setBlanco('t');
+    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
     
     $json_prot_ref = $oEscrito->getJson_prot_ref();
     $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares,'referencias');
@@ -273,6 +283,15 @@ $url_escrito = 'apps/expedientes/controller/escrito_form.php';
 
 $esEscrtito = ($Qaccion == Escrito::ACCION_ESCRITO)? TRUE : FALSE;
 
+// para cambiar destinos en nueva ventana. 
+$a_cosas = [
+    'filtro' => $Qfiltro,
+    'id_expediente' => $Qid_expediente,
+    'id_escrito' => $Qid_escrito,
+    'accion' => $Qaccion,
+];
+$pagina_actualizar = web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
+ 
 // datepicker
 $oFecha = new DateTimeLocal();
 $format = $oFecha->getFormat();
@@ -295,7 +314,6 @@ $a_campos = [
     'id_ponente' => $id_ponente,
     //'oHash' => $oHash,
     'chk_grupo_dst' => $chk_grupo_dst,
-    'id_grupo' => $id_grupo,
     'oArrayDesplGrupo' => $oArrayDesplGrupo,
     'oArrayProtDestino' => $oArrayProtDestino,
     'oArrayProtRef' => $oArrayProtRef,
@@ -325,6 +343,9 @@ $a_campos = [
     'yearStart' => $yearStart,
     'yearEnd' => $yearEnd,
     'minIso' => $minIso,
+    // para cambiar destinos en nueva ventana
+    'pagina_actualizar' => $pagina_actualizar, 
+    'descripcion' => $descripcion,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

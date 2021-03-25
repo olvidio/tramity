@@ -1,30 +1,13 @@
-<script>
-fnjs_guardar=function(formulario){
+{% if nueva_ventana %}
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{ base_url }}/node_modules/jquery/dist/jquery.min.js"></script>
+    <!-- jQuery CSS -->
+    <!-- CSS jQuery, bootstrap -->
+    <link type="text/css" rel='stylesheet' href='{{ base_url }}/node_modules/jquery-ui/themes/base/all.css' />
+    <link type="text/css" rel="stylesheet" href="{{ base_url }}/node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <link href="{{ base_url }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+{% endif %}
 
-	rr = 'ok';
-	//alert ("EEE "+rr);
-	if (rr=='ok') {
-		$(formulario).attr('action',"apps/lugares/controller/grupo_update.php");
-		$(formulario).one("submit", function() {
-			$.ajax({
-				url: $(this).attr('action'),
-				type: 'post',
-				data: $(this).serialize()
-			})
-			.done(function (rta_txt) {
-				if (rta_txt != '' && rta_txt != '\\n') {
-					alert ('{{ "respuesta"|trans }}: '+rta_txt);
-				} else {
-					{{ oPosicion.js_atras(1)|raw }}
-				}
-			});
-			return false;
-		});
-		$(formulario).trigger("submit");
-		$(formulario).off();
-	}
-}
-</script>
 <div class="card" >
   <div class="card-header">
     <h5 class="card-title">{{ "Datos del grupo"|trans }}</h5>
@@ -52,6 +35,31 @@ fnjs_guardar=function(formulario){
 </div>
 
 <script type="text/javascript">
+fnjs_guardar=function(formulario){
+	
+    var url = "{{ base_url }}/apps/lugares/controller/grupo_update.php";
+    var data = $(formulario).serialize();
+    
+    request = $.ajax({
+            url: url,
+            type: 'post',
+            data: data
+        });
+    request.done(function (rta) {
+        if (rta != '' && rta != '\\n') {
+            alert ('{{ "respuesta"|trans }}: '+rta);
+        } else {
+            {% if nueva_ventana %}
+                // antes actualizar el listado en la página original
+                window.opener.fnjs_actualizar();
+                window.close();
+            {% else %}
+                {{ oPosicion.js_atras(1)|raw }}
+            {% endif %}
+        }
+    });
+}
+
 $(document).ready(function() {
     let lastChecked;
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');

@@ -62,7 +62,7 @@ foreach ($cGrupos as $oGrupo) {
 	$miembros_txt = '';
 	foreach ($a_miembros as $id_lugar) {
 	    $miembros_txt .= empty($miembros_txt)? '' : ',';
-	    $miembros_txt .= $a_posibles_lugares[$id_lugar];
+	    $miembros_txt .= empty($a_posibles_lugares[$id_lugar])? '?' : $a_posibles_lugares[$id_lugar];
 	}
 
 	$a_valores[$i]['sel'] = "$id_grupo#";

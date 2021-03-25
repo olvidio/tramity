@@ -1,8 +1,9 @@
 <?php
 use core\ViewTwig;
+use expedientes\model\Escrito;
+use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Grupo;
 use web\Desplegable;
-use lugares\model\entity\GestorLugar;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -20,6 +21,16 @@ $oPosicion->recordar($Qrefresh);
 
 $Qid_grupo = (integer) \filter_input(INPUT_POST, 'id_grupo');
 $Qquien = (string) \filter_input(INPUT_POST, 'quien');
+
+// Para una ventana nueva (personalizar), vengo por GET
+$a_grupos_filtered = [];
+$Qlista_grupos = (string) \filter_input(INPUT_GET, 'lista_grupos');
+if (!empty($Qlista_grupos)) {
+    $a_lista_grupos = explode(',',$Qlista_grupos);
+    $a_grupos_filtered = array_filter($a_lista_grupos);
+}
+$Qid_escrito = (integer) \filter_input(INPUT_GET, 'id_escrito');
+
 
 $Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');
 $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -59,18 +70,37 @@ $a_posibles_lugares_ctr= $gesLugares->getArrayLugaresCtr();
 $a_posibles_lugares_dl= $gesLugares->getArrayLugaresTipo('dl');
 $a_posibles_lugares_cr= $gesLugares->getArrayLugaresTipo('cr');
 
-
-
 if (!empty($Qid_grupo)) {
-    $que_user='guardar';
+    $que='guardar';
     $oGrupo = new Grupo(array('id_grupo'=>$Qid_grupo));
 
     $descripcion = $oGrupo->getDescripcion();
     $a_miembros = $oGrupo->getMiembros();
 } else {
-    $que_user = 'nuevo';
+    $que = 'nuevo';
     $descripcion = '';
     $a_miembros = [];
+}
+$nueva_ventana = FALSE;
+// para el caso de ventana nueva: ver destinos
+if (!empty($Qid_escrito)) {
+    $nueva_ventana = TRUE;
+    $que='guardar_escrito';
+    $a_miembros = [];
+    $descripcion = '';
+    foreach ($a_grupos_filtered as $id_grupo) {
+        if ($id_grupo == 'custom') {
+            $oEscrito = new Escrito($Qid_escrito);
+            $a_miembros = $oEscrito->getDestinos();
+            $descripcion = $oEscrito->getDescripcion();
+        } else {
+            $oGrupo = new Grupo(array('id_grupo'=>$id_grupo));
+
+            $descripcion .= empty($descripcion)? '' : ', ';
+            $descripcion .= $oGrupo->getDescripcion();
+            $a_miembros = array_merge($a_miembros, $oGrupo->getMiembros());
+        }
+    }
 }
 
 $oDesplLugaresCtr = new Desplegable('lugares',$a_posibles_lugares_ctr,$a_miembros);
@@ -84,25 +114,25 @@ $oHash->setCamposChk('anulado');
 $a_camposHidden = array(
         'id_grupo' => $Qid_grupo,
         'quien' => $Qquien,
-        'que' => 'guardar',
+        'que' => $que,
+        // ventana nueva
+        'id_escrito' => $Qid_escrito,
         );
 $oHash->setArraycamposHidden($a_camposHidden);
 
-$txt_guardar=_("guardar datos grupo");
-$txt_eliminar = _("¿Está seguro que desea quitar este permiso?");
+$base_url = core\ConfigGlobal::getWeb();
 
 $a_campos = [
             'oPosicion' => $oPosicion,
             'id_grupo' => $Qid_grupo,
-            'que_user' => $que_user,
             'quien' => $Qquien,
             'oHash' => $oHash,
             'descripcion' => $descripcion,
-            'txt_guardar' => $txt_guardar,
-            'txt_eliminar' => $txt_eliminar,
             'oDesplLugaresCtr' => $oDesplLugaresCtr,           
             'oDesplLugaresDl' => $oDesplLugaresDl,           
-            'oDesplLugaresCr' => $oDesplLugaresCr,           
+            'oDesplLugaresCr' => $oDesplLugaresCr,
+            'nueva_ventana' => $nueva_ventana,
+            'base_url' => $base_url,
             ];
 
 $oView = new ViewTwig('lugares/controller');
