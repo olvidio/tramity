@@ -178,6 +178,7 @@
           <th scope="col">{{ "categoria"|trans }}</th>
           <th scope="col">{{ "asunto"|trans }}</th>
           <th scope="col">{{ "adj."|trans }}</th>
+          <th scope="col">{{ "accion"|trans }}</th>
         </tr>
       </thead>
       <tbody>
@@ -191,6 +192,7 @@
           <td>{{ row.categoria }}</td>
           <td>{{ row.asunto }}</td>
           <td>{{ row.adjuntos|raw }}</td>
+          <td>{{ row.link_del|raw }}</td>
         </tr>
         {% endfor %}
       </tbody>

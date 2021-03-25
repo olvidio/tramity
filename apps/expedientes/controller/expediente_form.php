@@ -149,6 +149,7 @@ if ($Qid_expediente) {
             
         $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
         $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >"._("rev.texto")."</span>";
+        $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >"._("eliminar")."</span>";
         
         $aGrupos = $oEscrito->getId_grupos();
         if (!empty($aGrupos)) {
@@ -256,6 +257,8 @@ $pag_plantilla =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'
 $pag_respuesta =  web\Hash::link('apps/entradas/controller/buscar_form.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
 
+$pag_actualizar = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro]));
+
 // datepicker
 $oFecha = new DateTimeLocal();
 $format = $oFecha->getFormat();
@@ -304,6 +307,7 @@ $a_campos = [
     'pag_propuesta' => $pag_propuesta,
     'pag_plantilla' => $pag_plantilla,
     'pag_respuesta' => $pag_respuesta,
+    'pag_actualizar' => $pag_actualizar,
     //búsquedas
     'oDesplOficinas' => $oDesplOficinas,
     'oDesplCargos' => $oDesplCargos,
