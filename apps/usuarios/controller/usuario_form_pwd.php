@@ -13,6 +13,8 @@ use usuarios\model\entity as usuarios;
 
 // FIN de  Cabecera global de URL de controlador ********************************
 	
+$Qpersonal = (integer) \filter_input(INPUT_POST, 'personal');
+
 $Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');
 $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 if (!empty($a_sel)) { //vengo de un checkbox
@@ -50,7 +52,11 @@ $a_camposHidden = array(
 		);
 $oHash->setArraycamposHidden($a_camposHidden);
 
-$pagina_cancel = web\Hash::link('apps/usuarios/controller/usuario_lista.php?'.http_build_query([]));
+if ($Qpersonal == 1) {
+    $pagina_cancel = web\Hash::link('apps/usuarios/controller/personal.php?'.http_build_query([]));
+} else {
+    $pagina_cancel = web\Hash::link('apps/usuarios/controller/usuario_lista.php?'.http_build_query([]));
+}
 
 $a_campos = [
 			'usuario' => $usuario,

@@ -53,13 +53,11 @@ switch($Qque) {
 		break;
 	case "guardar_pwd":
 		$Qid_usuario = (integer) \filter_input(INPUT_POST, 'id_usuario');
-        $Qemail = (string) \filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 		$Qpassword = (string) \filter_input(INPUT_POST, 'password');
 		$Qpass = (string) \filter_input(INPUT_POST, 'pass');
 		
 		$oUsuario = new Usuario(array('id_usuario' => $Qid_usuario));
 		$oUsuario->DBCarregar();
-		$oUsuario->setEmail($Qemail);
 		if (!empty($Qpassword)){
 			$oCrypt = new MyCrypt();
 			$my_passwd=$oCrypt->encode($Qpassword);

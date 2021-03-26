@@ -1,21 +1,87 @@
-<h2>{{ "preferencias personales"|trans }}<br></h2>
-<form id=preferencias name=preferencias action="apps/usuarios/controller/personal_update.php" method="post">
-<table>
-<tr><td>{{ "color"|trans }}:</td>
-<td>{{ "Se cambia en la configuración del pad"|trans }}
-</td></tr>
-<tr><td>{{ "idioma"|trans }}:</td>
-<td>
-{{ oDesplLocales.desplegable()|raw }}
-</td></tr>
-</table>
+<div class="card" style="width: 35rem;">
+  <div class="card-header">
+    <h5 class="card-title">{{ "preferencias personales"|trans }}</h5>
+  </div>
+  <div class="card-body">
+<div class="row">
+  <div class="col-12">
+    <form id=preferencias name=preferencias action="" method="post">
+      <form class="user" id="frm_usuario"  name="frm_usuario" action="" method="post">
+      {{ oHash.getCamposHtml|raw }}
+        <div class="form-group">
+          <label>{{ "color"|trans }}: </label>
+            {{ "Se cambia en la configuración del pad"|trans }}
+        </div>
+        <div class="form-group">
+          <label>{{ "idioma"|trans }}</label>
+            {{ oDesplLocales.desplegable()|raw }}
+        </div>
+        <div class="form-group">
+          <label for="example">{{ "Nombre a mostrar"|trans }}</label>
+          <input type="text" class="form-control" id="nom_usuario" name="nom_usuario" placeholder="Nombre a mostrar" value="{{ nom_usuario }}">
+        </div>
+        <div class="form-group">
+          <label for="example">{{ "Dirección de correo electrónico"|trans }}</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" value="{{ email }}">
+        </div>
+        <div class="form-group">
+          <label for="example">{{ "Cargo Preferido"|trans }}</label>
+			{{ oDesplCargos.desplegable|raw }}
+        </div>
+        
+        <div class="row form-group">
+          <button onclick="fnjs_guardar(event,this.form);" type="button" class="col-4 btn btn-primary btn-block">{{ "Guardar"|trans }}</button>
+        </div>
+      </form>
+  </div>
+</div>
+</div>
+</div>
 <br>
-<input type="button" onclick=fnjs_enviar_formulario('#preferencias') value="guardar preferencias">
-</form>
-<br><span class="link" onclick="fnjs_update_div('#main','{{ cambio_mail }}');">{{ "cambiar el mail"|trans }}</span><br>
-<br><span class="link" onclick="fnjs_update_div('#main','{{ cambio_password }}');">{{ "cambiar el password"|trans }}</span><br>
+ <button onclick="fnjs_update_div('#main','{{ cambio_password }}');" type="button" class="col-4 btn btn-primary btn-block">
+ 	{{ "cambiar el password"|trans }}
+ </button>
+<button onclick="fnjs_cancelar(event);" type="button" class="col-4 btn btn-secondary btn-block">
+    {{ "Cancelar"|trans }}
+</button>
+  
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#content").hide();
 });
+
+fnjs_guardar=function(event,formulario){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    var url_doc = 'apps/usuarios/controller/personal_update.php';
+    var data = $(formulario).serialize();
+    request=$.ajax({
+        url: url_doc,
+        data: data,
+        type: 'post'
+    });
+    request.done(function (rta_txt) {
+        if (rta_txt != '' && rta_txt != '\\n') {
+            alert ('{{ "respuesta"|trans }}: '+rta_txt);
+        } else {
+            alert ("{{ "datos guardados"|trans }}");
+            window.location.reload();
+        }
+    });
+}
+
+fnjs_cancelar=function(event){
+    // Asegurarme que es por click y no por return (posicion: 0,0)
+    var x = event.x || event.clientX;
+    var y = event.y || event.clientY;
+    if (!x && !y) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        return false;
+    }
+    event.preventDefault(); //prevent default action
+    window.location.reload();
+}
 </script>

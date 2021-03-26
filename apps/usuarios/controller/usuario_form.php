@@ -86,7 +86,7 @@ $oHash->setcamposNo('pass!password!id_ctr!id_nom!casas');
 $a_camposHidden = array(
         'id_usuario' => $Qid_usuario,
         'quien' => $Qquien,
-        'que' => 'guardar',
+        'que' => $que_user,
         );
 $oHash->setArraycamposHidden($a_camposHidden);
 
@@ -107,7 +107,6 @@ $a_campos = [
             'url_usuario_ajax' => $url_usuario_ajax,
             'id_usuario' => $Qid_usuario,
             'h1' => $h1,
-            'que_user' => $que_user,
             'quien' => $Qquien,
             'usuario' => $usuario,
             'oHash' => $oHash,

@@ -1,7 +1,7 @@
 ﻿<?php
 //namespace usuarios\controller;
 use usuarios\model\entity\GestorPreferencia;
-use usuarios\model\entity\Preferencia;
+use usuarios\model\entity\Usuario;
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -37,59 +37,29 @@ switch ($Qque) {
 		}
 		break;
 	default:
-        $Qoficina = (string) \filter_input(INPUT_POST, 'oficina');
-        $Qinicio = (string) \filter_input(INPUT_POST, 'inicio');
-
-		$Qoficina = empty($Qoficina)? 'exterior' : $Qoficina;
-		$Qinicio = empty($Qinicio)? 'exterior' : $Qinicio;
-		// Guardar página de inicio:
-		$inicio=$Qinicio."#".$Qoficina;
-		$oPref = $gesPreferencias->getMiPreferencia('inicio');
-		$oPref->setPreferencia($inicio);
-		if ($oPref->DBGuardar() === false) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oPref->getErrorTxt();
-		}
-
-		// Guardar estilo:
-		$Qestilo_color = (string) \filter_input(INPUT_POST, 'estilo_color');
-		$Qtipo_menu = (string) \filter_input(INPUT_POST, 'tipo_menu');
-		$estilo=$Qestilo_color."#".$Qtipo_menu;
-		$oPref = $gesPreferencias->getMiPreferencia('estilo');
-		$oPref->setPreferencia($estilo);
-		if ($oPref->DBGuardar() === false) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oPref->getErrorTxt();
-		}
-
-		// Guardar presentacion tablas:
-		$Qtipo_tabla = (string) \filter_input(INPUT_POST, 'tipo_tabla');
-		$oPref = $gesPreferencias->getMiPreferencia('tabla_presentacion');
-		$oPref->setPreferencia($Qtipo_tabla);
-		if ($oPref->DBGuardar() === false) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oPref->getErrorTxt();
-		}
-
-		// Guardar presentacion nombre Apellidos:
-		$QordenApellidos = (string) \filter_input(INPUT_POST, 'ordenApellidos');
-		$oPref = $gesPreferencias->getMiPreferencia('ordenApellidos');
-		$oPref->setPreferencia($QordenApellidos);
-		if ($oPref->DBGuardar() === false) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oPref->getErrorTxt();
-		}
-
 		// Guardar idioma:
 		$Qidioma_nou = (string) \filter_input(INPUT_POST, 'idioma_nou');
 		$oPref = $gesPreferencias->getMiPreferencia('idioma');
 		$oPref->setPreferencia($Qidioma_nou);
 		if ($oPref->DBGuardar() === false) {
-			echo _("hay un error, no se ha guardado");
+			echo _("hay un error, no se ha guardado idioma");
 			echo "\n".$oPref->getErrorTxt();
 		}
 
-		// volver a la página de configuración
-		$location=web\Hash::link(core\ConfigGlobal::getWeb().'/index.php?'.http_build_query(array('PHPSESSID'=>session_id())));
-		echo "<body onload=\"$location\";></body>";
+		// Guardar Nombre a Mostrar, mail, cargo preferido
+		$id_usuario= core\ConfigGlobal::mi_id_usuario();
+        $Qnom_usuario = (string) \filter_input(INPUT_POST, 'nom_usuario');
+        $Qemail = (string) \filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
+        
+        $oUsuario = new Usuario(array('id_usuario' => $id_usuario));
+        $oUsuario->DBCarregar();
+        $oUsuario->setId_cargo($Qid_cargo);
+        $oUsuario->setEmail($Qemail);
+        $oUsuario->setNom_usuario($Qnom_usuario);
+        if ($oUsuario->DBGuardar() === false) {
+            echo _("hay un error, no se ha guardado");
+            echo "\n".$oUsuario->getErrorTxt();
+        }
+        
 }

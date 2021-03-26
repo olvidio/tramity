@@ -37,8 +37,6 @@ fnjs_ver_documento=function(id_escrito){
     var winPrefs="";
     var pagina='scdl/registro/registro_documento.php?id_escrito='+id_escrito+'&act=download&PHPSESSID=<?= session_id() ?>';
     top.newWin = window.open(pagina, "abrir", winPrefs);
-    //top.newWin.document.write('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
-    //top.newWin.document.write('Location: '+pagina);
     top.newWin.focus();
 }
 fnjs_buscar=function(n){

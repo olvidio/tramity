@@ -1,8 +1,8 @@
 <?php
+use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorLocale;
 use usuarios\model\entity\GestorPreferencia;
-use usuarios\model\entity\Preferencia;
-use web\Desplegable;
+use usuarios\model\entity\Usuario;
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -42,7 +42,21 @@ $oDesplLocales = $oGesLocales->getListaLocales();
 $oDesplLocales->setNombre('idioma_nou');
 $oDesplLocales->setOpcion_sel($idioma);
 
-$cambio_password=web\Hash::link(core\ConfigGlobal::getWeb().'/apps/usuarios/controller/usuario_form_pwd.php');
+// ----------- nom usuario y mail -------------------
+$oUsuario = new Usuario(array('id_usuario'=>$id_usuario));
+
+$usuario=$oUsuario->getUsuario();
+$nom_usuario=$oUsuario->getNom_usuario();
+$email=$oUsuario->getEmail();
+$id_cargo=$oUsuario->getId_cargo();
+
+$oGCargos = new GestorCargo();
+$oDesplCargos= $oGCargos->getDesplCargosUsuario($id_usuario);
+$oDesplCargos->setNombre('id_cargo');
+$oDesplCargos->setOpcion_sel($id_cargo);
+
+
+$cambio_password = web\Hash::link('apps/usuarios/controller/usuario_form_pwd.php?'.http_build_query(['personal' => 1]));
 
 $oHash = new web\Hash();
 $oHash->setcamposForm('inicio!oficina!estilo_color!tipo_menu!tipo_tabla!ordenApellidos!idioma_nou');
@@ -51,6 +65,10 @@ $a_campos = [
 			'oHash' => $oHash,
 			'oDesplLocales' => $oDesplLocales,
 			'cambio_password' => $cambio_password,
+            'usuario' => $usuario,
+            'nom_usuario' => $nom_usuario,
+            'oDesplCargos' => $oDesplCargos,
+            'email' => $email,
  			];
 
 $oView = new core\ViewTwig('usuarios/controller');
