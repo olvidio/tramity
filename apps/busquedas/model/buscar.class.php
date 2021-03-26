@@ -308,7 +308,7 @@ class Buscar {
                     $flag = 1;
                 }
                 // para ver los enviados por dl
-                if ($this->origen_id_lugar == $this->local_id_lugar) {
+                if (!empty($this->origen_id_lugar) && $this->origen_id_lugar == $this->local_id_lugar) {
                     $cEscritos = $this->buscarEscritos();
                     $aCollections['escritos'] = $cEscritos;
                     $flag = 1;

@@ -25,8 +25,8 @@ switch($Qque) {
 		$oEscrito = new Escrito($Qid_escrito);
 		$oEscrito->DBCarregar();
 		// borrar destinos existentes
-		$oEscrito->setJson_prot_destino('');
-		$oEscrito->setId_grupos('');
+		$oEscrito->setJson_prot_destino([]);
+		$oEscrito->setId_grupos();
 		// poner nueva seleccion
 		$oEscrito->setDestinos($Qa_lugares);
 		$oEscrito->setDescripcion($Qdescripcion);
