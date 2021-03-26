@@ -25,7 +25,7 @@ fnjs_ver_dst=function(event){
     event.stopPropagation();
     event.stopImmediatePropagation();
 	var id_escrito = $('#id_escrito').val();
-	if (!id_escrito) {
+	if (!id_escrito || id_escrito == false) {
 		alert ("{{ "Primero debe guardar el escrito"|trans }}");
 		return true;
 	}
