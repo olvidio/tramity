@@ -21,16 +21,20 @@ $f_salida = date(\DateTimeInterface::ISO8601);
 // Comprobar si tiene clave para enviar un xml, o hay que generar un pdf.
 
 // Primero intento enviar, sólo guardo la f_salida si tengo éxito
+// Ahora cambio y pongo la f_salida si puedo enviar 1 o más. Los que no, salen como 
+// error, pero el escrito se marca como enviado.
 $oEnviar = new Enviar($Qid_escrito,'escrito');
 
 $a_rta = $oEnviar->enviar();
 
-if ($a_rta['success'] === TRUE) {
+if ($a_rta['marcar'] === TRUE) {
     $oEscrito = new Escrito($Qid_escrito);
     $oEscrito->DBCarregar();
     $oEscrito->setF_salida($f_salida,FALSE);
     $oEscrito->setOk(Escrito::OK_SECRETARIA);
     $oEscrito->DBGuardar();
+}
+if ($a_rta['success'] === TRUE) {
     // para que se cierre la ventana que se ha abierto:
     echo "<script type=\"text/javascript\">
              self.close();

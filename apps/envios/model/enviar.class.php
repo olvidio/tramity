@@ -300,6 +300,7 @@ class Enviar {
         $message = empty($message)? _("Ver archivos adjuntos") : $message; 
         
         $err_mail = '';
+        $num_enviados = 0;
         foreach ($aDestinos as $id_lugar) {
             ini_set( 'display_errors', 1 );
             error_reporting( E_ALL );
@@ -340,6 +341,8 @@ class Enviar {
                     $oMail->send();
                     $this->a_rta['success'] = TRUE;
                     $this->a_rta['mensaje'] = 'Message has been sent<br>';
+                    $this->a_rta['marcar'] = TRUE;
+                    $num_enviados++;
                 } catch (Exception $e) {
                     $err_mail .= empty($err_mail)? '' : '<br>';
                     $err_mail .= "Message could not be sent. Mailer Error: {$oMail->ErrorInfo}";
@@ -354,12 +357,17 @@ class Enviar {
             $err_mail = _("No hay destinos para este escrito").':<br>'.$this->filename;
             $this->a_rta['success'] = FALSE;
             $this->a_rta['mensaje'] = $err_mail;
+            $this->a_rta['marcar'] = FALSE;
             return $this->a_rta;
         }
         if (!empty($err_mail)) {
             $err_mail = _("mail no válido para").':<br>'.$err_mail;
             $this->a_rta['success'] = FALSE;
             $this->a_rta['mensaje'] = $err_mail;
+            $this->a_rta['marcar'] = FALSE;
+            if ($num_enviados > 1) {
+                $this->a_rta['marcar'] = TRUE;
+            }
         }
         return $this->a_rta;
     }
