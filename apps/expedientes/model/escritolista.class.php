@@ -9,6 +9,7 @@ use web\Protocolo;
 use web\ProtocoloArray;
 use function core\is_true;
 use expedientes\model\entity\GestorEscritoDB;
+use usuarios\model\entity\GestorCargo;
 
 
 class EscritoLista {
@@ -105,12 +106,18 @@ class EscritoLista {
         $estado = $oExpediente->getEstado();
         $cEscritos = $this->getEscritosParaEnviar($fecha);
         
+        $gesCargos = new GestorCargo();
+        $a_cargos = $gesCargos->getArrayCargos();
+        
         $oProtLocal = new Protocolo();
         $oProtLocal->setNombre('local');
         $a_acciones = [];
         foreach ($cEscritos as $oEscrito) {
             $id_escrito = $oEscrito->getId_escrito();
             $f_salida = $oEscrito->getF_salida()->getFromLocal();
+            $ponente = $oEscrito->getCreador();
+            $ponente_txt = empty($a_cargos[$ponente])? '?' : $a_cargos[$ponente];
+            
             
             $a_cosas =  ['id_expediente' => $this->id_expediente,
                 'id_escrito' => $id_escrito,
@@ -179,6 +186,7 @@ class EscritoLista {
             $a_accion['ok'] = $ok;
             $a_accion['prot_local'] = $prot_local;
             $a_accion['tipo'] = '';
+            $a_accion['ponente'] = $ponente_txt;
             $a_accion['destino'] = $destino_txt;
             $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
             $a_accion['categoria'] = '';
