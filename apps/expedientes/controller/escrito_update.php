@@ -412,16 +412,24 @@ switch($Qque) {
             // Si esta marcado como grupo de destinos, o destinos individuales. 
             if (core\is_true($Qgrupo_dst)) {
                 $descripcion = '';
+                $saltar = FALSE;
                 $gesGrupo = new GestorGrupo();
                 $a_grupos = $gesGrupo->getArrayGrupos();
                 foreach ($Qa_grupos as $id_grupo) {
+                    // si es personalizado, no cambio nada porque ya se ha guardado al personalizar
+                    if ($id_grupo == 'custom') {
+                        $saltar = TRUE;
+                        break;
+                    };
                     $descripcion .= empty($descripcion)? '' : ' + ';
                     $descripcion .= $a_grupos[$id_grupo];
                 }
-                $oEscrito->setId_grupos($Qa_grupos);
-                // borro las posibles personalizaciones:
-                $oEscrito->setDestinos('');
-                $oEscrito->setDescripcion('');
+                if ($saltar === FALSE ){
+                    $oEscrito->setId_grupos($Qa_grupos);
+                    // borro las posibles personalizaciones:
+                    $oEscrito->setDestinos('');
+                    $oEscrito->setDescripcion('');
+                }
             } else {
                 $aProtDst = [];
                 foreach ($Qa_destinos as $key => $id_lugar) {
