@@ -26,7 +26,7 @@ class Escrito Extends EscritoDB {
     const CAT_NORMAL       = 2;
     const CAT_PERMANATE    = 3;
     // visibilidad
-    // USAR LAS DE ENTRADADB
+    // USAR LAS DE ENTRADA
     
     // modo envio
     const MODO_MANUAL       = 1;

@@ -115,7 +115,8 @@ if (!empty($Qid_escrito)) {
     $id_ponente = $oEscrito->getCreador();
     $categoria = $oEscrito->getCategoria();
     $oDesplCategoria->setOpcion_sel($categoria);
-    $visibilidad = $oEscrito->getVisibilidad();
+    $visibilidad = empty($oEscrito->getVisibilidad())? $oExpediente->getVisibilidad() : $oEscrito->getVisibilidad();
+    
     $oDesplVisibilidad->setOpcion_sel($visibilidad);
     
     $a_adjuntos = $oEscrito->getArrayIdAdjuntos();
@@ -162,7 +163,7 @@ if (!empty($Qid_escrito)) {
     $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
     
     $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEntrada, 'cambio');
-    if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
+    if ($perm_cambio_visibilidad <= PermRegistro::PERM_MODIFICAR) {
         $oDesplVisibilidad->setDisabled(TRUE);
     }
 } else {
@@ -179,7 +180,7 @@ if (!empty($Qid_escrito)) {
         $oArrayProtDestino->setBlanco('t');
         $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
 
-        $visibilidad = $oEntrada->getVisibilidad();
+        $visibilidad = empty($oEntrada->getVisibilidad())? $oExpediente->getVisibilidad() : $oEntrada->getVisibilidad();
         $oDesplVisibilidad->setOpcion_sel($visibilidad);
         
         $entradilla = '';
