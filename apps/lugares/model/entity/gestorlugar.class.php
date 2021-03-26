@@ -195,8 +195,6 @@ class GestorLugar Extends core\ClaseGestor {
 	function getArrayLugaresTipo($tipo_ctr,$ctr_anulados=FALSE) {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
-	    //$mi_dl = $_SESSION['oConfig']->getSigla();
-	    $tipo_ctr = 'dl';
 	    
 	    $Where_anulados = is_true($ctr_anulados)? '' :  ' AND anulado=FALSE';
 	    
