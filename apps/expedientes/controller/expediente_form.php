@@ -151,18 +151,7 @@ if ($Qid_expediente) {
         $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >"._("rev.texto")."</span>";
         $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >"._("eliminar")."</span>";
         
-        $aGrupos = $oEscrito->getId_grupos();
-        if (!empty($aGrupos)) {
-            $dst_txt = '';
-            foreach ($aGrupos as $id_grupo) {
-                $dst_txt .= empty($dst_txt)? '' : ' + ';
-                $dst_txt .= $a_grupos[$id_grupo];
-            }
-        } else {
-            $json_prot_destino = $oEscrito->getJson_prot_destino();
-            $oArrayProtDestino = new ProtocoloArray($json_prot_destino,'','destinos');
-            $dst_txt = $oArrayProtDestino->ListaTxtBr();
-        }
+        $dst_txt = $oEscrito->getDestinosEscrito();
         
         $json_ref = $oEscrito->getJson_prot_ref();
         $oArrayProtRef = new ProtocoloArray($json_ref,'','');
@@ -178,7 +167,7 @@ if ($Qid_expediente) {
         $categoria = $oEscrito->getCategoria();
         $categoria_txt = $aCategorias[$categoria]; 
         
-        $a_accion['protocolo'] = $dst_txt;
+        $a_accion['destino'] = $dst_txt;
         $a_accion['link_ver'] = 'v';
         $a_accion['referencias'] = $oArrayProtRef->ListaTxtBr();
         $a_accion['tipo'] = $txt_tipo;

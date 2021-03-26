@@ -283,6 +283,11 @@ class Escrito Extends EscritoDB {
         $a_grupos = [];
         $destinos_txt = '';
         
+        // destinos individuales
+        $json_prot_dst = $this->getJson_prot_destino();
+        $oArrayProtDestino = new ProtocoloArray($json_prot_dst,'','destinos');
+        $destinos_txt = $oArrayProtDestino->ListaTxtBr();
+        // si hay grupos, tienen preferencia
         $a_grupos = $this->getId_grupos();
         if (!empty($a_grupos)) {
             //(segun los grupos seleccionados)
@@ -293,11 +298,13 @@ class Escrito Extends EscritoDB {
                 $destinos_txt .= $descripcion_g;
             }
         } else {
-            //(segun individuales)
-            $a_json_prot_dst = $this->getJson_prot_destino();
-            $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
-            $destinos_txt = $oArrayProtDestino->ListaTxtBr();
+            // puede ser un destino personalizado:
+            $destinos = $this->getDestinos();
+            if (!empty($destinos)) {
+                $destinos_txt = $this->getDescripcion();
+            }
         }
+        
         
         $this->destinos_txt = $destinos_txt;
         return $this->destinos_txt;
