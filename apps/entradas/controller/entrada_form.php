@@ -323,6 +323,7 @@ $a_campos = [
     'plazo_rapido' => $plazo_rapido,
     'error_fecha' => $error_fecha,
     'comprobar_f_entrada' => $comprobar_f_entrada,
+    'cat_e12' => Entrada::CAT_E12,
     // grupo destinos
     'chk_grupo_dst' => $chk_grupo_dst,
     'id_grupo' => $id_grupo,
