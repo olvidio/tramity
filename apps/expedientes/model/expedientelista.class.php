@@ -577,7 +577,7 @@ class ExpedienteLista {
                 $id_tramite = $oExpediente->getId_tramite();
                 if (empty($a_tramites[$id_tramite])) {
                     $asunto = $oExpediente->getAsuntoEstado();
-                    echo sprintf(_("No existe el trámite para el expediente %s (id:%s)"), $asunto, $id_expediente);
+                    echo sprintf(_("No existe el trámite para el expediente: '%s' (id:%s)"), $asunto, $id_expediente);
                 } else {
                     $tramite_txt = $a_tramites[$id_tramite];
                 }
