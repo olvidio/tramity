@@ -114,6 +114,11 @@ class Buscar {
      * @var boolean
      */
     private $bByPass=FALSE;
+    /**
+     * 
+     * @var string
+     */
+    private $opcion;
     
     public function __construct() {
         $this->id_sigla = 23;
@@ -125,6 +130,7 @@ class Buscar {
          *  - f_entrada not null para las entradas
          *  - f_aprobacion not null para los escritos 
          */
+        $this->opcion = $opcion;
         switch ($opcion) {
             // permanentes de cr
             case 'proto':
@@ -461,6 +467,9 @@ class Buscar {
         $f_max = $oF_max->getIso();
         
         $aWhere['_ordre'] = 'f_entrada';
+        if (empty($this->opcion) && $this->opcion == 5) {
+            $aWhere['_ordre'] = 'f_entrada DESC';
+        }
         if (empty($f_max)) {
             $oHoy = new DateTimeLocal();
             $f_max = $oHoy->getIso();

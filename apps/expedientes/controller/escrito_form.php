@@ -115,9 +115,10 @@ if (!empty($Qid_escrito)) {
     $id_ponente = $oEscrito->getCreador();
     $categoria = $oEscrito->getCategoria();
     $oDesplCategoria->setOpcion_sel($categoria);
-    $visibilidad = empty($oEscrito->getVisibilidad())? $oExpediente->getVisibilidad() : $oEscrito->getVisibilidad();
-    
-    $oDesplVisibilidad->setOpcion_sel($visibilidad);
+    if (!empty($oEscrito->getVisibilidad())) {
+        $visibilidad = $oEscrito->getVisibilidad();
+        $oDesplVisibilidad->setOpcion_sel($visibilidad);
+    }
     
     $a_adjuntos = $oEscrito->getArrayIdAdjuntos();
     $preview = [];

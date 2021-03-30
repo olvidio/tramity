@@ -24,7 +24,7 @@ fnjs_guardar=function(formulario){
 
 <form id="frm_perm_dist" name="frm_perm_dist" action="">
 {{ oHashPD.getCamposHtml|raw }}
-{{ "Los oficiales de secreataría puede distribuir:"|trans }}
+{{ "Los oficiales de secreataría pueden distribuir:"|trans }}
 <input type="checkbox" name="valor" value="{{ val_perm_distribuir }}" {{ chk_perm_distribuir }} >{{ "Si"|trans }}
 <br>
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >

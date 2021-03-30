@@ -52,6 +52,7 @@ class EntradaLista {
     'permanentes'
     'avisos'
     'pendientes'
+    'escritos_cr'
     */
     /**
      * 
