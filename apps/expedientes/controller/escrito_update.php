@@ -553,6 +553,7 @@ switch($Qque) {
         // Si esta marcado como grupo de destinos, o destinos individuales. 
         if (core\is_true($Qgrupo_dst)) {
             $descripcion = '';
+            $saltar = FALSE;
             $gesGrupo = new GestorGrupo();
             $a_grupos = $gesGrupo->getArrayGrupos();
             foreach ($Qa_grupos as $id_grupo) {

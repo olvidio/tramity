@@ -310,6 +310,36 @@ class Escrito Extends EscritoDB {
         return $this->destinos_txt;
     }
     
+    public function getDestinosIds() {
+        $a_grupos = $this->getId_grupos();
+        
+        $aMiembros = [];
+        if (!empty($a_grupos)) {
+            //(segun los grupos seleccionados)
+            foreach ($a_grupos as $id_grupo) {
+                $oGrupo = new Grupo($id_grupo);
+                $a_miembros_g = $oGrupo->getMiembros();
+                $aMiembros = array_merge($aMiembros, $a_miembros_g);
+            }
+            $aMiembros = array_unique($aMiembros);
+            // los guardo individualmente
+            $this->DBCarregar();
+            $this->setDestinos($aMiembros);
+            $this->DBGuardar();
+        } else {
+            //(segun individuales)
+            $a_json_prot_dst = $this->getJson_prot_destino();
+            foreach ($a_json_prot_dst as $json_prot_dst) {
+                $aMiembros[] = $json_prot_dst->lugar;
+            }
+        }
+        // Si no hay ni grupos ni json, miro ids
+        if (empty($aMiembros)) {
+            $aMiembros = $this->getDestinos();
+        }
+        return $aMiembros;
+    }
+    
     public function cabeceraDerecha() {
         // prot local + ref
         $id_dst = '';
@@ -377,27 +407,16 @@ class Escrito Extends EscritoDB {
     }
     
     public function explotar() {
-        $aProtDst = [];
-        
         $oEtherpad = new Etherpad();
         $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid_escrito);
         $padID = $oEtherpad->getPadId();
         $txtPad = $oEtherpad->getTexto($padID);
         
         // Si esta marcado como grupo de destinos, o destinos individuales.
-        $aMiembros = [];
-        $a_grupos = [];
-        $a_grupos = $this->getId_grupos();
-        if (!empty($a_grupos)) {
-            //(segun los grupos seleccionados) Los grupos no tienen número de protocolo
-            foreach ($a_grupos as $id_grupo) {
-                $oGrupo = new Grupo($id_grupo);
-                $a_miembros_g = $oGrupo->getMiembros();
-                $aMiembros = array_merge($aMiembros, $a_miembros_g);
-            }
-            $aMiembros = array_unique($aMiembros);
-            
-            $aProtDst = [];
+        $aProtDst = [];
+        $aProtDst = $this->getJson_prot_destino(TRUE);
+        if (empty($aProtDst)) {
+            $aMiembros = $this->getDestinosIds();
             foreach ($aMiembros as $id_lugar) {
                 $aProtDst[] = [
                             'lugar' => $id_lugar,
@@ -406,8 +425,6 @@ class Escrito Extends EscritoDB {
                             'mas' => '',
                         ];
             }
-        } else {
-            $aProtDst = $this->getJson_prot_destino();
         }
         
         // en el último destino, no lo creo nuevo sino que utilizo el 
@@ -428,6 +445,9 @@ class Escrito Extends EscritoDB {
             if ($n < $max) {
                 $newEscrito = clone ($this);
                 // borrar todos los destinos y poner solo uno:
+                // borro los grupos
+                $newEscrito->setId_grupos();
+                $newEscrito->setDestinos();
                 $newEscrito->setJson_prot_destino($aProtDestino);
                 $newEscrito->setId_grupos();
                 $newEscrito->DBGuardar();
@@ -465,10 +485,10 @@ class Escrito Extends EscritoDB {
             } else {
                 // En el último, no clono, aprovecho el escrito y 
                 // sólo cambio los destinos:
-                if (!empty($a_grupos)) { // si es por grupo
-                    $this->setId_grupos();
-                    $this->setDestinos();
-                }
+                // borro los grupos
+                $this->setId_grupos();
+                $this->setDestinos();
+                // añado destino indivdual    
                 $this->setJson_prot_destino($aProtDestino);
                 $this->setId_grupos();
                 $this->DBGuardar();

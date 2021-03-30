@@ -91,7 +91,7 @@ if (!empty($Qid_escrito)) {
     foreach ($a_grupos_filtered as $id_grupo) {
         if ($id_grupo == 'custom') {
             $oEscrito = new Escrito($Qid_escrito);
-            $a_miembros = $oEscrito->getDestinos();
+            $a_miembros = $oEscrito->getDestinosIds();
             $descripcion = $oEscrito->getDescripcion();
         } else {
             $oGrupo = new Grupo(array('id_grupo'=>$id_grupo));

@@ -135,31 +135,7 @@ class Enviar {
         $id_escrito = $this->iid;
         $oEscrito = new Escrito($id_escrito);
         
-        $a_grupos = $oEscrito->getId_grupos();
-        
-        $aMiembros = [];
-        if (!empty($a_grupos)) {
-            //(segun los grupos seleccionados)
-            foreach ($a_grupos as $id_grupo) {
-                $oGrupo = new Grupo($id_grupo);
-                $a_miembros_g = $oGrupo->getMiembros();
-                $aMiembros = array_merge($aMiembros, $a_miembros_g);
-            }
-            $aMiembros = array_unique($aMiembros);
-            $oEscrito->setDestinos($aMiembros);
-            $oEscrito->DBGuardar();
-        } else {
-            //(segun individuales)
-            $a_json_prot_dst = $oEscrito->getJson_prot_destino();
-            foreach ($a_json_prot_dst as $json_prot_dst) {
-                $aMiembros[] = $json_prot_dst->lugar;
-            }
-        }
-        // Si no hay ni grupos ni json, miro ids
-        if (empty($aMiembros)) {
-            $aMiembros = $oEscrito->getDestinos();
-        }
-        return $aMiembros;
+        return $oEscrito->getDestinosIds();
     }
     
     private function getDatosEntrada($id_lugar) {
