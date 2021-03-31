@@ -473,6 +473,10 @@ switch($Qque) {
         $oEscrito->setResto_oficinas($Qa_firmas);
 
         $oEscrito->setCategoria($Qcategoria);
+        // visibilidad: puede que esté en modo solo lectura, mirar el hiden.
+        if (empty($Qvisibiliad)) {
+            $Qvisibiliad = (integer) \filter_input(INPUT_POST, 'hidden_visibilidad');
+        }
         $oEscrito->setVisibilidad($Qvisibiliad);
         if (is_true($Qok)) {
             $oEscrito->setOK(Escrito::OK_OFICINA);

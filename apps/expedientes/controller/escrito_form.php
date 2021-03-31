@@ -163,8 +163,8 @@ if (!empty($Qid_escrito)) {
     $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
     $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
     
-    $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEntrada, 'cambio');
-    if ($perm_cambio_visibilidad <= PermRegistro::PERM_MODIFICAR) {
+    $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEscrito, 'cambio');
+    if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
         $oDesplVisibilidad->setDisabled(TRUE);
     }
 } else {
@@ -328,6 +328,7 @@ $a_campos = [
     'detalle_readonly' => $detalle_readonly,
     'oDesplCategoria' => $oDesplCategoria,
     'oDesplVisibilidad' => $oDesplVisibilidad,
+    'hidden_visibilidad' => $visibilidad,
     'chk_revisado' => $chk_revisado,
     //'a_adjuntos' => $a_adjuntos,
     'initialPreview' => $initialPreview,
