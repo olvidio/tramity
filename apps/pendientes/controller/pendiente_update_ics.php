@@ -102,6 +102,7 @@ if (!empty($Qsimple_per)) { // sólo para los periodicos.
 		case "periodico_d_a":
 			$request['tipo']="d_a";
 			$request['tipo_dia']= (string) \filter_input(INPUT_POST,'tipo_dia');
+			$request['interval']= (integer) \filter_input(INPUT_POST,'a_interval');
 			switch($Qtipo_dia){
 				case "num":
 					$request['dias']= (string) \filter_input(INPUT_POST,'a_dia_num');

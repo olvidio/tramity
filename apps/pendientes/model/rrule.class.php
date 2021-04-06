@@ -243,7 +243,8 @@ class Rrule {
                     $freq=$param;
                     break;
                 case "INTERVAL":
-                    if ($param!=1) $error=1;
+                    //if ($param!=1) $error=1;
+                    $interval=$param;
                     break;
                 case "BYMONTHDAY":
                     $dias=$param;
@@ -283,11 +284,13 @@ class Rrule {
             $rta['dia_semana']=$matches[3];
             $rta['meses']=$meses;
         }
-        if (!$error && $freq=="DAILY" && $dias && $meses) {
+        //if (!$error && $freq=="DAILY" && $dias && $meses) {
+        if (!$error && $freq=="YEARLY" && $dias && $meses) {
             $rta['tipo']="d_a";
             $rta['tipo_dia']="num_dm";
             $rta['meses']=$meses;
             $rta['dias']=$dias;
+            $rta['interval']=$interval;
         }
         if (!$error && $freq=="MONTHLY" && !$dias && !$meses && !$dia_semana) {
             $rta['tipo']="d_m";
@@ -359,10 +362,16 @@ class Rrule {
                         }
                         break;
                     case "num_dm":
+                        if (!empty($request['interval'])) {
+                            $rrule="FREQ=YEARLY;INTERVAL=${request['interval']}";
+                        } else {
+                            $rrule="FREQ=YEARLY";
+                        }
                         $dias=implode(",",$request['dias']);
                         $meses=implode(",",$request['meses']);
                         if ($dias || $meses) {
-                            $rrule="FREQ=DAILY;BYMONTH=$meses;BYMONTHDAY=$dias";
+                            //$rrule="FREQ=DAILY;BYMONTH=$meses;BYMONTHDAY=$dias";
+                            $rrule.=";BYMONTH=$meses;BYMONTHDAY=$dias";
                         } else {
                             $rrule="";
                         }

@@ -55,7 +55,9 @@
 <div class="form-group row">
   <div class="col">
 	<input type="radio" id="id_a_radio_4" name="tipo_dia" value="num_dm" {{ chk_a_num_dm }}>
-    {{ "por dias de meses"|trans }}:
+    {{ "por dias de meses, cada"|trans }}:
+	<input type="text" size="1" name="a_interval" value="{{ a_interval_db }}" onclick="fnjs_marcar('#id_a_radio_4');">
+	{{ "años"|trans }}
 	</div>
 </div>
 
@@ -135,6 +137,7 @@
     {% for fecha in a_exdates_local %}
 		<input type='text' size=10 tabindex=290 name='exdates[]' VALUE="{{ fecha }}" ">
 	{% endfor %}
+    <input type='text' size=10 tabindex=390 name='exdates[]' VALUE="{{ fecha }}" ">
   </div>
 </div>
 {% endif %}

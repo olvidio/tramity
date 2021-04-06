@@ -279,6 +279,7 @@ $dia_num_db='';
 $mes_num_db='';
 $ordinal_a_db='';
 $mes_num_ref_db='';
+$a_interval_db = '';
 $a_exdates_local = [];
 $meses_db = [];
 $dias_db = [];
@@ -330,6 +331,7 @@ if (empty($rrule)) {
                     $chk_a_num_dm="checked";
                     $meses_db=empty($rta['meses'])? '' : preg_split('/,/',$rta['meses']);
                     $dias_db=empty($rta['dias'])? '' : preg_split('/,/',$rta['dias']);
+                    $a_interval_db = empty($rta['interval'])? 1 : $rta['interval'];
                     break;
             }
             break;
@@ -450,7 +452,7 @@ $oDesplDias = new Desplegable('dias',$a_dias,'',FALSE);
 $oDesplDias->setAction("fnjs_marcar('#id_a_radio_4')");
 $oDesplDias->setOpcion_sel($dias_db);
 
-///////////////////////// FIM PERIODICO ///////////////////////////
+///////////////////////// FIN PERIODICO ///////////////////////////
 
 
 // Si no es nuevo, no dejo modificar ni la oficina ni la referencia (protocolo)
@@ -566,6 +568,7 @@ $a_campos = [
     'oDesplMesesRef' => $oDesplMesesRef,
     'oDesplMeses2' => $oDesplMeses2,
     'oDesplDias' => $oDesplDias,
+    'a_interval_db' => $a_interval_db,
     'display_d_m' => $display_d_m,
     'chk_m_num_ini' => $chk_m_num_ini,
     'chk_m_num' => $chk_m_num,

@@ -72,7 +72,11 @@ class Desplegable {
             if (in_array($key, $a_sel)) { $sel = 'checked'; } else { $sel = ''; }
             
             $sHtml .= "<div class=\"$col form-check form-check-inline\">";
-            $sHtml .= "<input class=\"form-check-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$key\" $sel />";
+            if (empty($this->sAction)) {
+                $sHtml .= "<input class=\"form-check-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$key\" $sel />";
+            }else {
+                $sHtml .= "<input class=\"form-check-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$key\" $sel onChange=\"$this->sAction\" />";
+            }
 		    $sHtml .= "<label class=\"form-check-label\" for=\"$id\">$val</label>";
             $sHtml .= '</div>';
 		}
