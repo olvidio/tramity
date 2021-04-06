@@ -29,7 +29,7 @@ fnjs_buscar=function(){
 	// comprobar que se ha selecionado una oficina (en el caso de secretaria)
 	of = $('#id_oficina').val();
 	if (!of) {
-		alert ("{{ "Debe seleccionar una oficina para ver sus pendientes"|trans }}");
+		alert ("{{ "Debe seleccionar una oficina para ver sus pendientes"|trans|raw }}");
 	} else {
         $('#frm_que').attr('action','apps/pendientes/controller/pendiente_tabla.php');
         //fnjs_enviar_formulario('#que','#resultados');
@@ -70,13 +70,13 @@ fnjs_marcar=function(formulario){
 	{# no se. Ahora dicen que si se puede...
 	if (!$GLOBALS['oPerm']->have_perm("scl")) {
 		if ( p == 1 ) {
-			alert ("{{ "No puede modificar un pendiente periódico. Hable con secretaria."|trans }}");
+			alert ("{{ "No puede modificar un pendiente periódico. Hable con secretaria."|trans|raw }}");
 			return false;
 		}
 	}
 	#}
 	if ( s == 1 && r==1) {
-		alert ("{{ "No puede modificar este pendiente"|trans }}");
+		alert ("{{ "No puede modificar este pendiente"|trans|raw }}");
 		return false;
 	}
 	$('#nuevo').val(4);
@@ -125,15 +125,15 @@ fnjs_modificar=function(formulario){
 	{% endif %}
 	
 	if ( s == 1 && r==1) {
-		alert ("{{ "No puede modificar este pendiente"|trans }}");
+		alert ("{{ "No puede modificar este pendiente"|trans|raw }}");
 		return false;
 	}
 	if ( s > 1 ) {
-		alert ("{{ "Sólo puede seleccionar un elemento. Ha selecionado"|trans }} "+s);
+		alert ("{{ "Sólo puede seleccionar un elemento. Ha selecionado"|trans|raw }} "+s);
 		return false;
 	}
 	if (s==0) {
-		alert ("{{ "No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la izquierda"|trans }}");
+		alert ("{{ "No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la izquierda"|trans|raw }}");
 		return false;
 	}
 

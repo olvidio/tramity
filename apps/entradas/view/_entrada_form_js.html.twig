@@ -44,7 +44,7 @@ fnjs_mod_pendiente=function() {
     var err=0;
     var of_ponente=$('#of_ponente').val();
 
-    if (!of_ponente) { alert("{{ "Debe indicar el ponente para asignarle el pendiente"|trans }}"); err=1; }
+    if (!of_ponente) { alert("{{ "Debe indicar el ponente para asignarle el pendiente"|trans|raw }}"); err=1; }
 
     if (err!=1) {
         var winPrefs="dependent=yes,width=1200,height=800,screenX=30,screenY=30,titlebar=yes,scrollbars=yes";
@@ -106,28 +106,28 @@ fnjs_guardar=function(event){
 	});
 	
     if (categoria != "{{ cat_e12 }}" ) { 
-        if (!origen) { alert("{{ "Debe llenar el campo de origen"|trans }}"); err=1; }
-        if (!origen_prot_num) { alert("{{ "Debe llenar el campo de protocolo origen"|trans }}"); err=1; }
+        if (!origen) { alert("{{ "Debe llenar el campo de origen"|trans|raw }}"); err=1; }
+        if (!origen_prot_num) { alert("{{ "Debe llenar el campo de protocolo origen"|trans|raw }}"); err=1; }
 	}
-	if (!asunto_e) { alert("{{ "Debe llenar el campo de asunto entrada"|trans }}"); err=1; }
-	if (!of_ponente) { alert("{{ "Debe llenar el campo del ponente"|trans }}"); err=1; }
+	if (!asunto_e) { alert("{{ "Debe llenar el campo de asunto entrada"|trans|raw }}"); err=1; }
+	if (!of_ponente) { alert("{{ "Debe llenar el campo del ponente"|trans|raw }}"); err=1; }
 	// La debe poner el vcd. En el caso de Introducir no hace falta la comprobación. Si en Asignar.
 	{% if comprobar_f_entrada %} 
-		if (!f_entrada) { alert("{{ "Debe llenar el campo de fecha de entrada"|trans }}"); err=1; }
-        if (!fnjs_comprobar_fecha('#f_entrada')) { alert("{{ "La fecha de entrada no es correcta"|trans }}"); err=1; }
+		if (!f_entrada) { alert("{{ "Debe llenar el campo de fecha de entrada"|trans|raw }}"); err=1; }
+        if (!fnjs_comprobar_fecha('#f_entrada')) { alert("{{ "La fecha de entrada no es correcta"|trans|raw }}"); err=1; }
 	{% endif %}
 
 	if (f_escrito) {
 		diff=fnjs_diff_fechas('#f_entrada','#f_escrito');	
 		if (diff < 0) {
-			alert("{{ "La fecha de entrada debe ser posterior a la del escrito"|trans }}");
+			alert("{{ "La fecha de entrada debe ser posterior a la del escrito"|trans|raw }}");
 			err=1; 
 		}
 	}
 	
 	if (plazo=="fecha") { 
 		var f_plazo=$('#f_plazo').val();
-		if (!f_plazo) { alert("{{ "Debe llenar el campo de fecha para contestar el escrito"|trans }}"); err=1; }
+		if (!f_plazo) { alert("{{ "Debe llenar el campo de fecha para contestar el escrito"|trans|raw }}"); err=1; }
 		if (!fnjs_fecha_en_intervalo('#f_plazo')) { err=0; } // Se permite, simplemente avisa.
 	}
 
@@ -177,7 +177,7 @@ fnjs_guardar=function(event){
                             }
                         });
                     } else {
-                        alert ("{{ "datos guardados"|trans }}");
+                        alert ("{{ "datos guardados"|trans|raw }}");
                         // Volver a la lista...
                         fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                     }

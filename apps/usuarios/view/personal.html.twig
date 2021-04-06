@@ -63,9 +63,9 @@ fnjs_guardar=function(event,formulario){
     });
     request.done(function (rta_txt) {
         if (rta_txt != '' && rta_txt != '\\n') {
-            alert ('{{ "respuesta"|trans }}: '+rta_txt);
+            alert ('{{ "respuesta"|trans|raw }}: '+rta_txt);
         } else {
-            alert ("{{ "datos guardados"|trans }}");
+            alert ("{{ "datos guardados"|trans|raw }}");
             window.location.reload();
         }
     });

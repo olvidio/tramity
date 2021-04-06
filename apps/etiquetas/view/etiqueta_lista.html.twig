@@ -36,7 +36,7 @@ fnjs_eliminar=function(){
 				})
 				.done(function (rta_txt) {
 					if (rta_txt != '' && rta_txt != '\n') {
-						alert ('{{ "respuesta"|trans }}: '+rta_txt);
+						alert ('{{ "respuesta"|trans|raw }}: '+rta_txt);
 					} else {
 						fnjs_actualizar();
 				   	}

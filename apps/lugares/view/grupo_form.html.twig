@@ -47,7 +47,7 @@ fnjs_guardar=function(formulario){
         });
     request.done(function (rta) {
         if (rta != '' && rta != '\\n') {
-            alert ('{{ "respuesta"|trans }}: '+rta);
+            alert ('{{ "respuesta"|trans|raw }}: '+rta);
         } else {
             {% if nueva_ventana %}
                 // antes actualizar el listado en la página original

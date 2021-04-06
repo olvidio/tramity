@@ -104,9 +104,9 @@ fnjs_enviar=function(event){
 	var f_salida=$('#f_salida').val();
 	var id_entrada=$('#id_entrada').val();
 
-	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans }}"); err=1; }
+	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans|raw }}"); err=1; }
 	if (!fnjs_comprobar_fecha('#f_salida')) { err=1; }
-	if (!f_salida) { alert("{{ "Debe llenar el campo de fecha de salida"|trans }}"); err=1; }
+	if (!f_salida) { alert("{{ "Debe llenar el campo de fecha de salida"|trans|raw }}"); err=1; }
 	
 	if (err!=1) {
 		$('#form_enviar').attr('action','{{ url_update }}');

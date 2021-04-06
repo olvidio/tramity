@@ -228,7 +228,7 @@ $(function() {
 
 fnjs_aviso_IESE=function(id){
     var nom=$(id).val();
-    if (nom=="610") alert ("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans }}");
+    if (nom=="610") alert ("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans|raw }}");
 }
 fnjs_proto=function(num,any,siguiente){
     var numero;
@@ -245,7 +245,7 @@ fnjs_sel_periodo=function(id){
     
     switch (nom) {
         case "IESE":
-            alert ("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans }}");
+            alert ("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans|raw }}");
             break;
         case "cr":
             $('#antiguedad').val('1m');
@@ -264,7 +264,7 @@ fnjs_buscar=function(formulario){
     var opcion=form_name.substr(-1);
     if (opcion==2) {
         if (!$('#asunto').val()) {
-            alert ("{{ "Tiene que escribir una palabra para buscar en el asunto"|trans }}");
+            alert ("{{ "Tiene que escribir una palabra para buscar en el asunto"|trans|raw }}");
             return;
         }
     }
@@ -324,7 +324,7 @@ fnjs_ver_todos=function(){
     }
 }
 fnjs_periodo_alert=function(){
-    alert("{{ "Debe poner un periodo"|trans }}");
+    alert("{{ "Debe poner un periodo"|trans|raw }}");
     document.listas.f_lista_min.focus();
 }
 fnjs_listar=function(){
@@ -356,11 +356,11 @@ fnjs_compatible=function(){
     if ((destino!=id_cr && destino!=id_dl && destino > id_base) && (origen!=id_cr && origen!=id_dl && origen > id_base)) { err=1; }
     if (destino==id_cr && (origen!=id_dl && origen > id_base)) { err=1; }
     
-    if (err==1) { alert("{{ "estas dos opciones no son compatibles"|trans }}"); }
+    if (err==1) { alert("{{ "estas dos opciones no son compatibles"|trans|raw }}"); }
     //if (origen=="" && destino=="") {
     if (origen < id_base && destino < id_base) {
         err=1;
-        alert("{{ "tiene que seleccionar un origen o un destino"|trans }}");
+        alert("{{ "tiene que seleccionar un origen o un destino"|trans|raw }}");
     }
     return err;
 }

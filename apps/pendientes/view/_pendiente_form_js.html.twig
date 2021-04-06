@@ -104,22 +104,22 @@ fnjs_proto=function(num,any,indice){
             if (json.success != true) {
                 alert ('error: '+json.mensaje);
             } else {
-				if (json.rango) { alert("{{ "nº de protocolo fuera de rango"|trans }}"); s=1; }
-				if (json.any) { alert("{{ "No es de este año, ni del año pasado"|trans }}"); s=1; }
-				if (json.repe) { alert("{{ "nº de protocolo repetido"|trans }}");  s=1; }
+				if (json.rango) { alert("{{ "nº de protocolo fuera de rango"|trans|raw }}"); s=1; }
+				if (json.any) { alert("{{ "No es de este año, ni del año pasado"|trans|raw }}"); s=1; }
+				if (json.repe) { alert("{{ "nº de protocolo repetido"|trans|raw }}");  s=1; }
 				if (json.txt) { alert(json.txt);  s=1; }
 				if (json.error) { alert(json.error);  s=1; }
 				if (json.anulado) {
-					alert("{{ "El escrito de referencia ha sido anulado"|trans }}"+" ("+json.anulado+").");
+					alert("{{ "El escrito de referencia ha sido anulado"|trans|raw }}"+" ("+json.anulado+").");
 				}
 				if (json.salto) {
-					alert("{{ "El nº de protocolo tiene un salto de más de xxx números respecto al último"|trans }}"+" ("+json.salto+").");
+					alert("{{ "El nº de protocolo tiene un salto de más de xxx números respecto al último"|trans|raw }}"+" ("+json.salto+").");
 					s=1;
 				}
 				if(json.id_reg) {
 					$('#id_reg').val(json.id_reg);
 				} else {
-					alert("{{ "No existe ningún escrito con este protocolo. No se guardará."|trans }}");
+					alert("{{ "No existe ningún escrito con este protocolo. No se guardará."|trans|raw }}");
 				}
 				if (json.id_of_ponente) {
 					$('#id_oficina').val(json.id_of_ponente);
@@ -151,7 +151,7 @@ fnjs_proto=function(num,any,indice){
 			//complete: function() { if (s==1) { $(num).focus(); } else { $(siguiente).focus(); } }
         });
 	} else {
-		alert ("{{ "Debe introducir el número de protocolo y el año"|trans }}");
+		alert ("{{ "Debe introducir el número de protocolo y el año"|trans|raw }}");
 	}
 }
 
@@ -185,9 +185,9 @@ fnjs_guardar=function(event){
 	var oficina=$('#id_oficina').val();
 	var calendario=$('#calendario').val();
 	
-	if (!estado) { alert("{{ "Debe llenar el campo de estado"|trans }}"); err=1; }
-	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans }}"); err=1; }
-	if (!oficina) { alert("{{ "Debe llenar el campo de oficinas"|trans }}"); err=1; }
+	if (!estado) { alert("{{ "Debe llenar el campo de estado"|trans|raw }}"); err=1; }
+	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans|raw }}"); err=1; }
+	if (!oficina) { alert("{{ "Debe llenar el campo de oficinas"|trans|raw }}"); err=1; }
 
 	var oficinas='';
 	var i=0;
@@ -207,7 +207,7 @@ fnjs_guardar=function(event){
 		txt=$('#txt_plazo').html();
 		if (f_plazo) {
 			//if (!fnjs_comprobar_fecha('#f_plazo')) {
-			//	alert(txt+" {{ "Incorrecta"|trans }}"); err=1; 
+			//	alert(txt+" {{ "Incorrecta"|trans|raw }}"); err=1; 
 			//}
 		}
 	}

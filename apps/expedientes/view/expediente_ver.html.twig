@@ -293,11 +293,11 @@ fnjs_voto=function(event,que) {
 	if (que=='voto') {
 		if (!comentario) { comentario=''; }
 		var voto=$("input[name='voto_options']:checked").val();
-		if (!voto) { alert("{{ "Debe seleccionar un voto"|trans }}"); err=1; }
+		if (!voto) { alert("{{ "Debe seleccionar un voto"|trans|raw }}"); err=1; }
     }
 	if (que=='nueva' || que=='respuesta') {
 		var voto='';
-		if (!comentario) { alert("{{ "Debe llenar el campo de comentario"|trans }}"); err=1; }
+		if (!comentario) { alert("{{ "Debe llenar el campo de comentario"|trans|raw }}"); err=1; }
 	}
 	if (err!=1) {
 		var param_json = { que: que, id_expediente: id_expediente, comentario: comentario, voto: voto };

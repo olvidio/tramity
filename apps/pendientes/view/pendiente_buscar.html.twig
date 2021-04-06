@@ -141,15 +141,15 @@ fnjs_modificar=function(formulario){
         }
     });
     if ( s == 1 && r==1) {
-        alert ("{{ "No puede modificar este pendiente"|trans }}");
+        alert ("{{ "No puede modificar este pendiente"|trans|raw }}");
         return false;
     }
     if ( s > 1 ) {
-        alert ("{{ "Sólo puede seleccionar un elemento"|trans }}");
+        alert ("{{ "Sólo puede seleccionar un elemento"|trans|raw }}");
         return false;
     }
     if (s==0) {
-        alert ("{{ "No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la izquierda."|trans }}");
+        alert ("{{ "No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la izquierda."|trans|raw }}");
         return false;
     }
     $('#nuevo').val(2);

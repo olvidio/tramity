@@ -252,7 +252,7 @@ fnjs_distribuir=function(event,que){
             if (json.success != true) {
                 alert ('error: '+json.mensaje);
             } else {
-                //alert ("{{ "ok distribuir"|trans }}");
+                //alert ("{{ "ok distribuir"|trans|raw }}");
                 // Volver a la lista...
                 fnjs_update_div('#main','{{ pagina_cancel|raw }}');
             }

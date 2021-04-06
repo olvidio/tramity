@@ -50,7 +50,7 @@ fnjs_ver_dst=function(event){
     event.stopImmediatePropagation();
 	var id_escrito = $('#id_escrito').val();
 	if (!id_escrito || id_escrito == false) {
-		alert ("{{ "Primero debe encontrar un escrito"|trans }}");
+		alert ("{{ "Primero debe encontrar un escrito"|trans|raw }}");
 		return true;
 	}
 	var form = 'form_escrito';
@@ -101,12 +101,12 @@ fnjs_guardar=function(event){
 	var f_escrito=$('#f_escrito').val();
 	var f_aprobacion=$('#f_aprobacion').val();
 
-	//if (!destino) { alert("{{ "Debe llenar el campo de destino"|trans }}"); err=1; }
-	//if (!prot_num_destino) { alert("{{ "Debe llenar el campo de protocolo destino"|trans }}"); err=1; }
-	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans }}"); err=1; }
-	//if (!entradilla) { alert("{{ "Debe llenar el campo entradilla"|trans }}"); err=1; }
-	if (!ponente) { alert("{{ "Debe llenar el campo del ponente"|trans }}"); err=1; }
-    if (!f_aprobacion) { alert("{{ "Debe llenar el campo de fecha aprobación"|trans }}"); err=1; }
+	//if (!destino) { alert("{{ "Debe llenar el campo de destino"|trans|raw }}"); err=1; }
+	//if (!prot_num_destino) { alert("{{ "Debe llenar el campo de protocolo destino"|trans|raw }}"); err=1; }
+	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans|raw }}"); err=1; }
+	//if (!entradilla) { alert("{{ "Debe llenar el campo entradilla"|trans|raw }}"); err=1; }
+	if (!ponente) { alert("{{ "Debe llenar el campo del ponente"|trans|raw }}"); err=1; }
+    if (!f_aprobacion) { alert("{{ "Debe llenar el campo de fecha aprobación"|trans|raw }}"); err=1; }
 	
 	if (err!=1) {
 		$('#form_escrito').attr('action','{{ url_update }}');
@@ -132,7 +132,7 @@ fnjs_guardar=function(event){
                         // Volver a la lista...
                         fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                     } else {
-                        alert ("{{ "pasa a la pestaña enviar"|trans }}");
+                        alert ("{{ "pasa a la pestaña enviar"|trans|raw }}");
                         // Volver a la lista...
                         fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                     }

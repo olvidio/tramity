@@ -211,7 +211,7 @@ fnjs_circular=function(event){
         if (json.success != true) {
             alert ('error: '+json.mensaje);
         } else {
-            alert ("{{ "circulando!"|trans }}");
+            alert ("{{ "circulando!"|trans|raw }}");
             // Volver a la lista...
             fnjs_update_div('#main','{{ pagina_cancel|raw }}');
         }
@@ -247,10 +247,10 @@ fnjs_guardar=function(event){
 		}
 	});
 
-	if (!tramite) { alert("{{ "Debe llenar el campo de trámite"|trans }}"); err=1; }
-	//if (!estado) { alert("{{ "Debe llenar el campo de estado"|trans }}"); err=1; }
-	if (!prioridad) { alert("{{ "Debe llenar el campo de prioridad"|trans }}"); err=1; }
-	if (!asunto) { alert("{{ "Debe llenar el campo de asunto expediente"|trans }}"); err=1; }
+	if (!tramite) { alert("{{ "Debe llenar el campo de trámite"|trans|raw }}"); err=1; }
+	//if (!estado) { alert("{{ "Debe llenar el campo de estado"|trans|raw }}"); err=1; }
+	if (!prioridad) { alert("{{ "Debe llenar el campo de prioridad"|trans|raw }}"); err=1; }
+	if (!asunto) { alert("{{ "Debe llenar el campo de asunto expediente"|trans|raw }}"); err=1; }
 	
 	if (err!=1) {
 		$('#firmas').val(firma);
@@ -286,7 +286,7 @@ fnjs_guardar=function(event){
                             }
                         });
                     } else {
-                        alert ("{{ "datos guardados"|trans }}");
+                        alert ("{{ "datos guardados"|trans|raw }}");
                         // Volver a la lista...
                         fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                     }

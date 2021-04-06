@@ -26,7 +26,7 @@ fnjs_ver_dst=function(event){
     event.stopImmediatePropagation();
 	var id_escrito = $('#id_escrito').val();
 	if (!id_escrito || id_escrito == false) {
-		alert ("{{ "Primero debe guardar el escrito"|trans }}");
+		alert ("{{ "Primero debe guardar el escrito"|trans|raw }}");
 		return true;
 	}
 	var form = 'form_escrito';
@@ -62,7 +62,7 @@ fnjs_cancelar=function(event){
 }
 
 fnjs_explotar=function(event){
-	alert("{{ "explotar!"|trans }}");
+	alert("{{ "explotar!"|trans|raw }}");
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
@@ -88,7 +88,7 @@ fnjs_explotar=function(event){
                 rta_txt = json.responseText;
                 alert ('error: '+rta_txt);
             } else {
-                //alert ("{{ "escrito explotado"|trans }}");
+                //alert ("{{ "escrito explotado"|trans|raw }}");
                 // Volver a la lista...
                 fnjs_update_div('#main','{{ pagina_cancel|raw }}');
             }
@@ -117,12 +117,12 @@ fnjs_guardar=function(event){
 	var id_escrito=$('#id_escrito').val();
 	var f_escrito=$('#f_escrito').val();
 
-	//if (!destino) { alert("{{ "Debe llenar el campo de destino"|trans }}"); err=1; }
-	//if (!prot_num_destino) { alert("{{ "Debe llenar el campo de protocolo destino"|trans }}"); err=1; }
-	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans }}"); err=1; }
-	//if (!entradilla) { alert("{{ "Debe llenar el campo entradilla"|trans }}"); err=1; }
-	if (!ponente) { alert("{{ "Debe llenar el campo del ponente"|trans }}"); err=1; }
-	//if (!f_escrito) { alert("{{ "Debe llenar el campo de fecha del escrito"|trans }}"); err=1; }
+	//if (!destino) { alert("{{ "Debe llenar el campo de destino"|trans|raw }}"); err=1; }
+	//if (!prot_num_destino) { alert("{{ "Debe llenar el campo de protocolo destino"|trans|raw }}"); err=1; }
+	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans|raw }}"); err=1; }
+	//if (!entradilla) { alert("{{ "Debe llenar el campo entradilla"|trans|raw }}"); err=1; }
+	if (!ponente) { alert("{{ "Debe llenar el campo del ponente"|trans|raw }}"); err=1; }
+	//if (!f_escrito) { alert("{{ "Debe llenar el campo de fecha del escrito"|trans|raw }}"); err=1; }
 	//if (!fnjs_fecha_en_intervalo('#f_escrito')) { err=1; }
 	
 	if (err!=1) {
@@ -156,14 +156,14 @@ fnjs_guardar=function(event){
                                 },
                                 {{ "No"|trans }}: function () {
                                     //$.alert('Canceled!');
-                                    alert ("{{ "datos guardados"|trans }}");
+                                    alert ("{{ "datos guardados"|trans|raw }}");
                                     // Volver a la lista...
                                     fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                                 }
                             }
                         });
                     } else {
-                        alert ("{{ "datos guardados"|trans }}");
+                        alert ("{{ "datos guardados"|trans|raw }}");
                         // Volver a la lista...
                         fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                     }

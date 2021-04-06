@@ -88,7 +88,7 @@ fnjs_antecedente=function(event,n=5) {
 	var id_expediente=$('#id_expediente').val();
     var asunto_buscar=$('#asunto_buscar').val();
 	
-	if (!n) { alert("{{ "No se ha definido el tipo de escrito"|trans }}"); err=1; }
+	if (!n) { alert("{{ "No se ha definido el tipo de escrito"|trans|raw }}"); err=1; }
 
     // mostrar oficinas o cargos segun sea entrada o expediente;
     if (n == 1) {
