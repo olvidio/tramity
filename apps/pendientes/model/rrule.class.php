@@ -234,6 +234,7 @@ class Rrule {
         $dias='';
         $dia_semana='';
         $freq='';
+        $interval='';
         $reglas=explode(";", $rrule);
         foreach ($reglas as $regla) {
             if (empty($regla)) { continue; }
