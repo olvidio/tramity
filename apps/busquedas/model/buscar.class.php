@@ -467,7 +467,7 @@ class Buscar {
         $f_max = $oF_max->getIso();
         
         $aWhere['_ordre'] = 'f_entrada';
-        if (empty($this->opcion) && $this->opcion == 5) {
+        if (!empty($this->opcion) && $this->opcion == 5) {
             $aWhere['_ordre'] = 'f_entrada DESC';
         }
         if (empty($f_max)) {
