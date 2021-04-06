@@ -562,6 +562,7 @@ class ExpedienteLista {
             $this->aWhere['_ordre'] = 'id_expediente';
             $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere,$this->aOperador);
                 
+            $soy_dtor = ConfigGlobal::soy_dtor();
             //lista de tramites
             $gesTramites = new GestorTramite();
             $a_tramites = $gesTramites->getArrayAbrevTramites();
@@ -571,6 +572,13 @@ class ExpedienteLista {
             foreach ($cExpedientes as $oExpediente) {
                 $row = [];
                 // mirar permisos...
+                $visibilidad = $oExpediente->getVisibilidad();
+                if ( ($visibilidad == Entrada::V_RESERVADO OR $visibilidad == Entrada::V_RESERVADO_VCD)
+                    && $soy_dtor === FALSE) {
+                        continue;
+                }
+                $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '' : $a_visibilidad[$visibilidad];
+                $row['visibilidad'] = $visibilidad_txt;
                 
                 $id_expediente = $oExpediente->getId_expediente();
                 $row['id_expediente'] = $id_expediente;
@@ -659,11 +667,6 @@ class ExpedienteLista {
                 $row['prioridad'] = $oExpediente->getPrioridad();
                 $row['tramite'] = $tramite_txt;
 
-                $visibilidad = $oExpediente->getVisibilidad();
-                $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '' : $a_visibilidad[$visibilidad];
-                $row['visibilidad'] = $visibilidad_txt;
-
-                
                 if ($bstrong) {
                     $row['asunto'] = "<strong>".$oExpediente->getAsuntoEstado()."</strong>";
                 } else {

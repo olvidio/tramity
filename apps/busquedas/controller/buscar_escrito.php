@@ -42,6 +42,9 @@ $Qlista_lugar =  (integer) \filter_input(INPUT_POST, 'lista_lugar');
 $Qid_lugar =  (integer) \filter_input(INPUT_POST, 'id_lugar');
 $Qprot_num =  (integer) \filter_input(INPUT_POST, 'prot_num');
 $Qprot_any =  (integer) \filter_input(INPUT_POST, 'prot_any');
+// para uitar el '0':
+$Qprot_num = empty($Qprot_num)? '' : $Qprot_num;
+$Qprot_any = empty($Qprot_any)? '' : $Qprot_any;
 
 
 $chk_lo_1 = '';
