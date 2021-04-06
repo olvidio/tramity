@@ -28,7 +28,7 @@ $Qaccion = (integer) \filter_input(INPUT_POST, 'accion');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
-if ($Qfiltro == 'buscar') {
+if (empty($Qid_escrito) && $Qfiltro == 'buscar') {
     $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
     $Qid_escrito = $Qa_sel[0];

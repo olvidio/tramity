@@ -49,6 +49,7 @@ fnjs_ver_doc_ep=function(event) {
 	fnjs_guardar_quiet();
 	
 	var id_escrito=$('#id_escrito').val();
+    var winPrefs="dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
     var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
     var param_json = { tipo_id: 'escrito', id: id_escrito };
     
@@ -62,7 +63,6 @@ fnjs_ver_doc_ep=function(event) {
         // antes, dentro del ajax, hacia falta el responseText
         //url=rta.responseText;
         url=rta;
-        var winPrefs="dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
         win=window.open(url, "", winPrefs);
         // Para que al cerrar la ventana se actualize ésta.
         var timer = setInterval(function() { 
