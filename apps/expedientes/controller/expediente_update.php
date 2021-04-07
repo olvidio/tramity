@@ -295,7 +295,10 @@ switch($Qque) {
         foreach($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $oEscrito = new Escrito($id_escrito);
-            $oEscrito->generarProtocolo($id_lugar,$id_lugar_cr);
+            // comprobar que no está anulado:
+            if (!is_true($oEscrito->getAnulado())) {
+                $oEscrito->generarProtocolo($id_lugar,$id_lugar_cr);
+            }
         }
 
         if (empty($txt_err)) {
