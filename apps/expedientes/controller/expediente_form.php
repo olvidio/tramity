@@ -93,9 +93,6 @@ foreach ($cCargos_oficina as $oCargo) {
     $txt_option_cargos_oficina .= "<option value=$id_cargo >$cargo</option>";
 }
 
-$gesOficinas = new GestorOficina();
-$a_posibles_oficinas = $gesOficinas->getArrayOficinas();
-
 if ($Qid_expediente) {
     $titulo=_("expediente");
     $oExpediente->setId_expediente($Qid_expediente);
@@ -190,7 +187,6 @@ if ($Qid_expediente) {
     $oArrayDesplFirmas ->setBlanco('t');
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas(event)');
 
-    $oDesplOficinas = new web\Desplegable('oficina_buscar_1',$a_posibles_oficinas,'',TRUE);
     $oDesplCargos = new web\Desplegable('oficina_buscar_2',$a_posibles_cargos,'',TRUE);
     
     // $a_preparar[] = ['id' => $id_cargo, 'text' => $cargo, 'chk' => '', 'visto' => 0];
@@ -229,7 +225,6 @@ if ($Qid_expediente) {
     $oArrayDesplFirmas ->setBlanco('t');
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas(event)');
         
-    $oDesplOficinas = new web\Desplegable('oficina_buscar_1',$a_posibles_oficinas,'',TRUE);
     $oDesplCargos = new web\Desplegable('oficina_buscar_2',$a_posibles_cargos,'',TRUE);
 }
 
@@ -297,9 +292,6 @@ $a_campos = [
     'pag_plantilla' => $pag_plantilla,
     'pag_respuesta' => $pag_respuesta,
     'pag_actualizar' => $pag_actualizar,
-    //búsquedas
-    'oDesplOficinas' => $oDesplOficinas,
-    'oDesplCargos' => $oDesplCargos,
     // preparar
     'a_preparar' => $a_preparar,
     // para la pagina js (prioridades)

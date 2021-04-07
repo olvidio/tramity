@@ -195,7 +195,7 @@ fnjs_crear_pendiente=function(event) {
 
 fnjs_buscar_expediente=function(event) {
 	var err=0;
-	var que = 'buscar_exp';
+	var que = 'buscar_expediente_borrador';
 	var id_entrada={{ id_entrada }};
 	var asunto_buscar=$('#asunto_buscar').val();
 	
@@ -209,14 +209,10 @@ fnjs_buscar_expediente=function(event) {
         });
         request.done( function (rta) {
             //debugger;
-            //rta_txt=rta.responseText;
-            rta_txt=rta;
-            if (rta_txt==undefined) {
-                rta_txt='';
+            if (rta==undefined) {
+                rta='';
             }
-            if (rta_txt != '' && rta_txt != '\n') {
-                $('#lista').html(rta);
-            }
+            $('#lista').html(rta);
         });
 	}
 }

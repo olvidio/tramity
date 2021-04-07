@@ -74,32 +74,18 @@ fnjs_adjuntar_antecedente=function(tipo,id_escrito,id_expediente) {
     $('#ModalBuscar .close').click();
 }
 	
-fnjs_antecedente=function(event,n=5) {
+fnjs_antecedente=function(event,n) {
 	//n = 1 -> Entradas
 	//n = 2 -> Expedientes
 	//n = 3 -> Escritos-propuestas
-	if (n == 5) {
-        var n=$('#id_n').val();
-	} else {
-        $('#id_n').val(n);
-	}
+    $('#id_n').val(n);
 	var err=0;
 	var que = 'buscar_'+n;
 	var id_expediente=$('#id_expediente').val();
     var asunto_buscar=$('#asunto_buscar').val();
+    var oficina_buscar=$('#oficina_buscar').val();
 	
 	if (!n) { alert("{{ "No se ha definido el tipo de escrito"|trans|raw }}"); err=1; }
-
-    // mostrar oficinas o cargos segun sea entrada o expediente;
-    if (n == 1) {
-        $('#oficina_buscar_1').show();
-        $('#oficina_buscar_2').hide();
-        var oficina_buscar=$('#oficina_buscar_1').val();
-    } else {
-        $('#oficina_buscar_1').hide();
-        $('#oficina_buscar_2').show();
-        var oficina_buscar=$('#oficina_buscar_2').val();
-    }
 
 	if (err!=1) {
         var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
@@ -111,14 +97,10 @@ fnjs_antecedente=function(event,n=5) {
         });
         request.done( function (rta) {
             //debugger;
-            //rta_txt=rta.responseText;
-            rta_txt=rta;
-            if (rta_txt==undefined) {
-                rta_txt='';
+            if (rta==undefined) {
+                rta='';
             }
-            if (rta_txt != '' && rta_txt != '\n') {
-                $('#lista').html(rta);
-            }
+            $('#modal-body').html(rta);
         });
 	}
 }

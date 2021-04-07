@@ -11,44 +11,13 @@
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar"|trans }}</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar (máximo 50 filas)"|trans }}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-      	<div id="busqueda">
-          <!--  --------------- BUSQUEDAS --------------- -->
-          <!--  --------------- OFICINA --------------- -->
-          <div class="row">
-              <div class="col-2">
-                <label for="oficinas" class="col-1 col-form-label">{{ "Oficina"|trans }}</label>
-              </div>
-              <div class="col-2">
-                <span id="span_oficinas">
-                    {{ oDesplOficinas.Desplegable|raw }}
-                </span>
-                <span id="span_cargos">
-                    {{ oDesplCargos.Desplegable|raw }}
-                </span>
-              </div>
-              <div class="col-5">
-              </div>
-              <div class="col-2">
-                <button type="button" class="btn btn-primary" onClick="fnjs_antecedente(event);" >{{ "Buscar"|trans }}</button>
-              </div>
-          </div>
-          <!--  --------------- ASUNTO --------------- -->
-          <div class="form-group row">
-            <label for="asunto" class="col-2 col-form-label">{{ "Asunto"|trans }}</label>
-            <div class="col-10">
-              <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="">
-            </div>
-          </div>
-        </div>
-        <hr>
-      	<div id="lista">
-        </div>
+      <div id="modal-body" class="modal-body">
+      	{# se carga via ajax. 3 formularios distintos: para entradas, para expedientes y para escritos #}
       </div>
       <div class="modal-footer">
       </div>
