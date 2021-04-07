@@ -191,6 +191,7 @@ switch ($Qque) {
 	    $oDesplOrigen->setAction("fnjs_sel_periodo('#origen_id_lugar')");
 	    $oDesplOrigen->setOpcion_sel($Qorigen_id_lugar);
 	    $a_campos = [
+                'id_expediente' => $Qid_expediente,
                 'oDesplOrigen' => $oDesplOrigen,
                 'oDesplOficinas' => $oDesplOficinas,
                 'oLista' => $oLista,  
@@ -340,6 +341,7 @@ switch ($Qque) {
 	    //echo $oLista->mostrar_tabla_html();
 
 	    $a_campos = [
+            'id_expediente' => $Qid_expediente,
 	        'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
 	        'asunto' => $Qasunto,
 	        'sel_mes' => $sel_mes,
@@ -478,6 +480,7 @@ switch ($Qque) {
 	    $oDesplDestino->setOpcion_sel($Qdest_id_lugar);
 	    
 	    $a_campos = [
+                'id_expediente' => $Qid_expediente,
                 'oDesplCargos' => $oDesplCargos,
                 'oDesplDestino' => $oDesplDestino,
                 'oLista' => $oLista,  
