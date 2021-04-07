@@ -14,6 +14,7 @@ use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorCargoGrupo;
+use tramites\model\entity\GestorFirma;
 
 
 
@@ -634,4 +635,5 @@ class Expediente Extends expedienteDB {
             }
         }
     }
+    
 }

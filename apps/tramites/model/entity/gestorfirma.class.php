@@ -490,6 +490,76 @@ class GestorFirma Extends core\ClaseGestor {
         return TRUE;
 	}
 	
+	public function copiarFirmas($id_expediente,$id_tramite,$id_tramite_old) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    // tipo voto:
+	    $tipo = Firma::TIPO_VOTO;
+	    $sql_update = "UPDATE $nom_tabla new 
+                            SET id_usuario=sub.id_usuario, 
+                                valor=sub.valor,
+                                observ_creador=sub.observ_creador,
+                                observ=sub.observ,
+                                f_valor=sub.f_valor
+                FROM (
+                    SELECT id_expediente, cargo_tipo, id_cargo, id_usuario, valor, observ_creador, observ, f_valor
+                    FROM $nom_tabla old
+                    WHERE old.id_expediente=$id_expediente AND old.id_tramite=$id_tramite_old AND old.valor IS NOT NULL AND old.tipo = $tipo
+                     ) AS sub
+                WHERE new.id_expediente=sub.id_expediente AND new.id_tramite=$id_tramite AND new.cargo_tipo=sub.cargo_tipo AND new.id_cargo=sub.id_cargo ;
+        ";
+	    if (($oDbl->exec($sql_update)) === FALSE) {
+	        $sClauError = 'GestorFirmas.copiarFirmas1';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+	    // tipo aclaracion:
+	    $tipo_a = Firma::TIPO_ACLARACION;
+	    // Busco las que tengo (valor is not null) y compruebo que existe la casilla para tipo=voto, y la inserto.
+	    $aWhere = [ 'valor' => 'x',
+            'id_expediente' => $id_expediente,
+	        'id_tramite' => $id_tramite_old,
+	        'tipo' => $tipo_a,
+	    ];
+	    $aOperador = [ 'valor' => 'IS NOT NULL'];
+	    $cFirmas = $this->getFirmas($aWhere,$aOperador);
+	    foreach ($cFirmas as $oFirma) {
+	        $cargo_tipo = $oFirma->getCargo_tipo();
+	        $id_cargo = $oFirma->getId_cargo();
+	        // buscar la casilla nueva
+	        $aWhereVoto = [ 
+	            'id_expediente' => $id_expediente,
+	            'id_tramite' => $id_tramite_old,
+	            'tipo' => $tipo,
+	            'cargo_tipo' => $cargo_tipo,
+	            'id_cargo' => $id_cargo,
+	        ];
+	        $cFirmasVoto = $this->getFirmas($aWhereVoto);
+	        if (!empty($cFirmasVoto)) {
+	            // existe el voto, y puedo añadir la aclaración (cambio el id_tramite):
+	            $oFirma->setId_tramite($id_tramite);
+	            $oFirma->DBGuardar();
+	        }
+	    }
+	}
+	
+	/**
+	 * Elimina todas las firmas de un expediente para un tramite
+	 * 
+	 * @param integer id_expediente
+	 * @param integer id_tramite
+	 */
+	public function borrarFirmas($id_expediente, $id_tramite) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_expediente=$id_expediente AND id_tramite = $id_tramite")) === FALSE) {
+	        $sClauError = 'GestorFirmas.borrarFirmas';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+	    return TRUE;
+	}
+	
 	/**
 	 * retorna l'array d'objectes de tipus Firma
 	 *

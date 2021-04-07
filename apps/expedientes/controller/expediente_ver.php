@@ -157,6 +157,7 @@ $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 $url_update = 'apps/expedientes/controller/expediente_update.php';
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
 $base_url = core\ConfigGlobal::getWeb();
+$pagina_cambio = web\Hash::link('apps/expedientes/controller/expediente_cambio_tramite.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro]));
 
 $add_del_txt = '';
 if ($Qfiltro == 'seg_reunion') {
@@ -170,6 +171,13 @@ if ($Qfiltro == 'seg_reunion') {
     $add_del_txt = _("Añadir Firmas");
 }
 
+// solo el scdl tiene permiso
+if (ConfigGlobal::role_actual() == 'scdl') {
+    $cmb_tramite = TRUE;
+} else {
+    $cmb_tramite = FALSE;
+}
+    
 $a_campos = [
     'id_expediente' => $Qid_expediente,
     'filtro' => $Qfiltro,
@@ -210,6 +218,8 @@ $a_campos = [
     'aclaracion_event' => $aclaracion_event,
     'add_del' => $add_del,
     'add_del_txt' => $add_del_txt,
+    'cmb_tramite' => $cmb_tramite,
+    'pagina_cambio' => $pagina_cambio,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

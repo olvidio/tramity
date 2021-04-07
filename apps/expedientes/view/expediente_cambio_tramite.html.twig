@@ -1,0 +1,68 @@
+<h1>{{ titulo }}</h1>
+<form id ="form_tramite" >
+    <input type=hidden name='que' id='que' value='cambio_tramite'>
+    <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
+    
+    
+  <div class="form-group row">
+  	<label for="tramite" class="col col-2 col-form-label text-right">{{ "nuevo trámite"|trans }}:</label>
+    <div class='col-2 date'>
+    	{{ oDesplTramites.desplegable|raw }}
+    </div>
+  </div>
+  
+  <div>
+    <button type="button" class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+      {{ "Cancelar"|trans }}
+    </button>
+    <button type="button" class="btn btn-primary" onClick="fnjs_cambio(event);" >
+      {{ "Cambiar"|trans }}
+    </button>
+  </div>
+</form>
+
+<div id="resultados"></div>
+<script>
+fnjs_cancelar=function(event){
+	// Asegurarme que es por click y no por return (posicion: 0,0)
+	var x = event.x || event.clientX;
+    var y = event.y || event.clientY;
+    if (!x && !y) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    	return false;
+    }
+    event.preventDefault(); //prevent default action 	
+	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+}
+
+fnjs_cambio=function(event){
+	// Asegurarme que es por click y no por return (posicion: 0,0)
+	var x = event.x || event.clientX;
+    var y = event.y || event.clientY;
+    if (!x && !y) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    	return false;
+    }
+
+	$('#form_tramite').attr('action','{{ pagina_update }}');
+    $('#form_tramite').one("submit", function(event){
+        event.preventDefault(); //prevent default action 	
+        request=$.ajax({
+            data: $(this).serialize(),
+            url: $(this).attr('action'),
+            type: 'post'
+            //dataType: 'json'
+        });
+        request.done( function (rta) {
+            //debugger;
+            fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+        });
+    });
+    $('#form_tramite').submit();
+}
+
+</script>

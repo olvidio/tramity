@@ -170,6 +170,11 @@
   {% endfor %}
 </ol>
 </div>
+{%  if cmb_tramite %}
+  <button tabindex='290' class="btn btn-secondary" onClick="fnjs_cambio_tramite(event);" >
+    {{ "Cambiar trámite"|trans }}
+  </button>
+{% endif %}
 
 <!-- Fin Col Dcha -->
 </div>
@@ -192,6 +197,14 @@
 
 {{ include ('_antecedentes_js.html.twig') }}
 <script type="text/javascript">
+fnjs_cambio_tramite=function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    
+    fnjs_update_div('#main','{{ pagina_cambio|raw }}');
+}
+
 fnjs_ver_cargos=function(event,add_del) {
 	if (add_del=='add') {
 	// consultar que oficinas no estan en el recorrido

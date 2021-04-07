@@ -710,4 +710,18 @@ switch($Qque) {
         echo json_encode($jsondata);
         exit();
         break;
+    case 'cambio_tramite':
+        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente->DBCarregar();
+        $id_tramite_old = $oExpediente->getId_tramite();
+        $oExpediente->setId_tramite($Qtramite);
+        $oExpediente->DBGuardar();
+        // generar firmas
+        $oExpediente->generarFirmas();
+        $gesFirmas = new GestorFirma();
+        // copiar las firmas:
+        $gesFirmas->copiarFirmas($Qid_expediente, $Qtramite, $id_tramite_old);
+        // borrar el recorrido del tramite anterior.
+        $gesFirmas->borrarFirmas($Qid_expediente, $id_tramite_old);
+        break;
 }
