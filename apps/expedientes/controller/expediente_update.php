@@ -293,10 +293,18 @@ switch($Qque) {
         $gesAcciones = new GestorAccion();
         $cAcciones = $gesAcciones->getAcciones($aWhereAccion);
         foreach($cAcciones as $oAccion) {
+            $proto = TRUE;
             $id_escrito = $oAccion->getId_escrito();
             $oEscrito = new Escrito($id_escrito);
+            // si es un e12, no hay que numerar.
+            if ($oEscrito->getCategoria() === Escrito::CAT_E12) {
+                $proto = FALSE;
+            }
             // comprobar que no está anulado:
-            if (!is_true($oEscrito->getAnulado())) {
+            if (is_true($oEscrito->getAnulado())) {
+                $proto = FALSE;
+            }
+            if ($proto) {
                 $oEscrito->generarProtocolo($id_lugar,$id_lugar_cr);
             }
         }

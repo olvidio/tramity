@@ -204,7 +204,10 @@ class Enviar {
                 $this->a_rta['mensaje'] = _("No está definido el protocolo local");
                 return FALSE;
                 */
-                $this->filename = _("sin_protocolo");
+                // genero un id: fecha + ultimos digitos del id_escrito
+                $f_hoy = date('Y-m-d');
+                $hora = date('His');
+                $this->filename = $f_hoy.'_'._("E12")."($hora)";
             } else {
                 $oProtOrigen = new Protocolo();
                 $oProtOrigen->setLugar($json_prot_local->lugar);
