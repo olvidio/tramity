@@ -58,4 +58,29 @@ fnjs_antecedente_expediente=function(event) {
         $('#modal-body').html(rta);
     });
 }
+
+{{ oArrayDesplEtiquetas.ComprobarSelectJs|raw }}
+fnjs_mas_etiquetas=function(e){
+	var code = (e.keyCode ? e.keyCode : e.which);
+	if(e=="x") {
+		var valor=1;
+	} else {
+		var id_campo='#'+e.currentTarget.id;
+		var valor=$(id_campo).val();
+		if(code!=9) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	}
+	if ( code==9 || e.type=="change" || e=="x") {
+		if (valor!=0) {
+			{{ oArrayDesplEtiquetas.ListaSelectsJs|raw }}
+		}
+	}
+}
+
+fnjs_quitar_etiquetas=function(){
+	$('#span_etiquetas').html("");
+	$('#etiquetas_num').val(0);
+}
 </script>
