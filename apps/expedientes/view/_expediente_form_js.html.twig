@@ -249,50 +249,47 @@ fnjs_guardar=function(event){
 	//if (!estado) { alert("{{ "Debe llenar el campo de estado"|trans|raw }}"); err=1; }
 	if (!prioridad) { alert("{{ "Debe llenar el campo de prioridad"|trans|raw }}"); err=1; }
 	if (!asunto) { alert("{{ "Debe llenar el campo de asunto expediente"|trans|raw }}"); err=1; }
-	
+
 	if (err!=1) {
 		$('#firmas').val(firma);
-		$('#form_expediente').attr('action','{{ url_update }}');
 		$('#que').val('guardar');
-		$('#form_expediente').one("submit", function(event){
-			event.preventDefault(); //prevent default action 	
-            request=$.ajax({
-                data: $(this).serialize(),
-                url: $(this).attr('action'),
-                type: 'post',
-                dataType: 'json'
-            });
-            request.done( function (json) {
-                if (json.success != true) {
-                    alert ('error: '+json.mensaje);
-                } else {
-                    id = json.id_expediente;
-                    if (id != id_expediente) {
-                        // caso de nuevo expediente
-                        $.confirm({
-                            title: '{{ "datos guardados"|trans }}',
-                            content: '{{ "¿añadir escrito o adjuntos?"|trans }}',
-                            buttons: {
-                                {{ "Sí"|trans }}: function () {
-                                    // ir al form expediente.
-                                    pagina_mod = 'apps'
-                                    fnjs_update_div('#main',json.pagina_mod);
-                                },
-                                {{ "No"|trans }}: function () {
-                                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                                }
+		var data=$('#form_expediente').serialize();
+		
+        request=$.ajax({
+            data: data,
+            url: "{{ url_update }}",
+            type: 'post',
+            dataType: 'json'
+        });
+        
+        request.done( function (json) {
+            if (json.success != true) {
+                alert ('error: '+json.mensaje);
+            } else {
+                id = json.id_expediente;
+                if (id != id_expediente) {
+                    // caso de nuevo expediente
+                    $.confirm({
+                        title: '{{ "datos guardados"|trans }}',
+                        content: '{{ "¿añadir escrito o adjuntos?"|trans }}',
+                        buttons: {
+                            {{ "Sí"|trans }}: function () {
+                                // ir al form expediente.
+                                pagina_mod = 'apps'
+                                fnjs_update_div('#main',json.pagina_mod);
+                            },
+                            {{ "No"|trans }}: function () {
+                                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                             }
-                        });
-                    } else {
-                        alert ("{{ "datos guardados"|trans|raw }}");
-                        // Volver a la lista...
-                        fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                    }
+                        }
+                    });
+                } else {
+                    alert ("{{ "datos guardados"|trans|raw }}");
+                    // Volver a la lista...
+                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                 }
-            });
-		});
-	} else {
-        event.preventDefault();
+            }
+        });
 	}
 }
 
