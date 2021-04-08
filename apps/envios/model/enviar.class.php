@@ -47,6 +47,7 @@ class Enviar {
      */
     private $f_salida;
     
+    private $asunto;
     private $filename;
     private $filename_ext;
     private $contentFile;
@@ -141,6 +142,7 @@ class Enviar {
     private function getDatosEntrada($id_lugar) {
         $oEntrada = new Entrada($this->iid);
         $this->f_salida = $oEntrada->getF_documento()->getFromLocal('.');
+        $this->asunto = $oEntrada->getAsunto();
         
         $a_header = [ 'left' => $oEntrada->cabeceraIzquierda(),
             'center' => '',
@@ -185,6 +187,7 @@ class Enviar {
             $oEscrito = new Escrito($this->iid);
             // f_salida
             $this->f_salida = $oEscrito->getF_escrito()->getFromLocal('.');
+            $this->asunto = $oEscrito->getAsunto();
             // Attachments
             $a_adjuntos = [];
             $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
@@ -299,7 +302,7 @@ class Enviar {
                     $filename_ext = $this->filename_ext;
                     $a_adjuntos = $this->a_adjuntos;
                     $contentFile = $this->contentFile;
-                    $subject = "$filename";
+                    $subject = "$filename ($this->asunto)";
                     // Attachments
                     //$oMail->addAttachment($File, $filename);    // Optional name
                     $oMail->addStringAttachment($contentFile, $filename_ext);    // Optional name
