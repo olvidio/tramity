@@ -39,10 +39,18 @@ class Protocolo {
 	 * @param stdClass $oProt
 	 */
 	public function setJson($oProt) {
-	    $this->ilugar = $oProt->lugar;
-	    $this->iprot_num = $oProt->num;
-	    $this->iprot_any = $oProt->any;
-	    $this->sprot_mas = $oProt->mas;
+	    // puede no tener protocolo.
+	    if (count(get_object_vars($oProt)) == 0) {
+            $this->ilugar = '';
+            $this->iprot_num = '';
+            $this->iprot_any = '';
+            $this->sprot_mas = '';
+	    } else {
+            $this->ilugar = $oProt->lugar;
+            $this->iprot_num = $oProt->num;
+            $this->iprot_any = $oProt->any;
+            $this->sprot_mas = $oProt->mas;
+	    }
 	}
 	
 	public function getProt() {
@@ -62,7 +70,7 @@ class Protocolo {
 	}
 	public function ver_txt_num() {
 	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
-	    $nom_lugar = '';
+	    $nom_lugar = _("E12");
 	    if (!empty($lugar)) {
 	        $oLugar = new Lugar($this->ilugar);
 	        $nom_lugar = $oLugar->getSigla();
@@ -80,7 +88,7 @@ class Protocolo {
 
 	public function ver_txt() {
 	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
-	    $nom_lugar = '';
+	    $nom_lugar = _("E12");
 	    if (!empty($lugar)) {
 	        $oLugar = new Lugar($this->ilugar);
 	        $nom_lugar = $oLugar->getSigla();
