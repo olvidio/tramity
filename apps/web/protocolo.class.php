@@ -70,7 +70,7 @@ class Protocolo {
 	}
 	public function ver_txt_num() {
 	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
-	    $nom_lugar = _("E12");
+	    $nom_lugar = _("sin numerar (E12)");
 	    if (!empty($lugar)) {
 	        $oLugar = new Lugar($this->ilugar);
 	        $nom_lugar = $oLugar->getSigla();
@@ -88,7 +88,7 @@ class Protocolo {
 
 	public function ver_txt() {
 	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
-	    $nom_lugar = _("E12");
+	    $nom_lugar = _("sin numerar (E12)");
 	    if (!empty($lugar)) {
 	        $oLugar = new Lugar($this->ilugar);
 	        $nom_lugar = $oLugar->getSigla();
