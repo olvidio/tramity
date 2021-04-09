@@ -61,17 +61,36 @@ switch($Qque) {
         $oAccion->setTipo_accion(Escrito::ACCION_PLANTILLA);
         $oAccion->DBGuardar();
         
+        
+        //clone:
+        $oEtherpad = new Etherpad();
+        $oEtherpad->setId(Etherpad::ID_PLANTILLA,$Qid_plantilla);
+        $sourceID = $oEtherpad->getPadId();
+        
+        $oNewEtherpad = new Etherpad();
+        $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito);
+        $destinationID = $oNewEtherpad->getPadID();
+        
+        $rta = $oEtherpad->copyPad($sourceID, $destinationID, 'true');
+        
+        /* con el Html, no hace bien los centrados (quizá más)
+         * con el Text no coje los formatos.
         // copiar etherpad:
         $oEtherpad = new Etherpad();
         $oEtherpad->setId(Etherpad::ID_PLANTILLA,$Qid_plantilla);
-        $padID = $oEtherpad->getPadId();
-        $txtPad = $oEtherpad->getTexto($padID);
+        //$padID = $oEtherpad->getPadId();
+        //$txtPad = $oEtherpad->getTexto($padID);
+        $htmlPad = $oEtherpad->getHHtml();
         
         // canviar el id, y clonar el etherpad con el nuevo id
         $oNewEtherpad = new Etherpad();
         $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito);
-        $oNewEtherpad->setText($txtPad);
+        $padId = $oNewEtherpad->getPadID();
+        //$oNewEtherpad->setText($txtPad);
+        $oNewEtherpad->setHTML($padId,$htmlPad);
         $oNewEtherpad->getPadId(); // Aqui crea el pad y utiliza el $txtPad
+        */
+        
         
         $jsondata['success'] = true;
         $jsondata['id_escrito'] = $id_escrito;

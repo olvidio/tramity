@@ -29,6 +29,7 @@ namespace etherpad\model;
  * @method Response setText($padID, $text) sets the text of a pad
  * @method Response getHTML($padID, $rev = null) returns the text of a pad formatted as HTML
  * @method Response setHTML($padID, $html) sets the HTML of a pad
+ * @method Response copyPad($sourceID, $destinationID, $force=false) copy a pad
  *
  * @method Response getChatHistory($padID, $start = null, $end = null) a part of the chat history, when start and end are given, the whole chat histroy, when no extra parameters are given
  * @method Response getChatHead($padID) returns the chatHead (last number of the last chat-message) of the pad
@@ -155,6 +156,8 @@ class Client
             'sendClientsMessage' => ['padID', 'msg'],
             'checkToken' => [],
             'listAllPads' => [],
+            // provo d'afegir...
+            'copyPad' => ['sourceID', 'destinationID', 'force'],
         ];
     }
 }

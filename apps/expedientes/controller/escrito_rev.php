@@ -100,8 +100,7 @@ if (!empty($Qid_escrito)) {
     $cabeceraDcha = $oEscrito->cabeceraDerecha();
 
     $entradilla = $oEscrito->getEntradilla();
-    $asunto = $oEscrito->getAsunto();
-    $detalle = $oEscrito->getDetalle();
+    $asunto_detalle = $oEscrito->getAsuntoDetalle();
     
     //Ponente;
     $id_ponente = $oEscrito->getCreador();
@@ -155,8 +154,7 @@ if (!empty($Qid_escrito)) {
     
 } else {
     $entradilla = '';
-    $asunto = '';
-    $detalle = '';
+    $asunto_detalle = '';
     $f_escrito = '';
     $initialPreview = '';
     $json_config = '{}';
@@ -203,8 +201,7 @@ $a_campos = [
     
     'f_escrito' => $f_escrito,
     'entradilla' => $entradilla,
-    'asunto' => $asunto,
-    'detalle' => $detalle,
+    'asunto_detalle' => $asunto_detalle,
     'iframe' => $iframe,
     //'a_adjuntos' => $a_adjuntos,
     'initialPreview' => $initialPreview,
