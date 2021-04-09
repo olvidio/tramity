@@ -17,6 +17,7 @@ class Etherpad  extends Client {
     const ID_ENTRADA       = 'entrada';
     const ID_ESCRITO       = 'escrito';
     const ID_EXPEDIENTE    = 'expediente';
+    const ID_PLANTILLA    = 'plantilla';
     
     /**
      * Se encuentra en el servidor etherpad en;
@@ -50,6 +51,9 @@ class Etherpad  extends Client {
                 break;
             case self::ID_EXPEDIENTE:
                 $prefix = 'exp';
+                break;
+            case self::ID_PLANTILLA:
+                $prefix = 'plt';
                 break;
         }
         

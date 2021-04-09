@@ -3,11 +3,11 @@
 // INICIO Cabecera global de URL de controlador *********************************
 	use core\ViewTwig;
 use function core\is_true;
+use entradas\model\GestorEntrada;
+use etherpad\model\Etherpad;
 use expedientes\model\Escrito;
-use expedientes\model\GestorEscrito;
 use expedientes\model\entity\Accion;
 use lugares\model\entity\GestorGrupo;
-use lugares\model\entity\GestorLugar;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
@@ -15,7 +15,6 @@ use usuarios\model\PermRegistro;
 use web\DateTimeLocal;
 use web\Lista;
 use web\Protocolo;
-use entradas\model\GestorEntrada;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -270,6 +269,14 @@ switch($Qque) {
         $txt_err = '';
         if (!empty($Qid_escrito)) {
             $oEscrito = new Escrito($Qid_escrito);
+            $tipo_doc = $oEscrito->getTipo_doc();
+            // borrar el Etherpad
+            if ($tipo_doc == Escrito::TIPO_ETHERPAD) {
+                $oNewEtherpad = new Etherpad();
+                $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $Qid_escrito);
+                $oNewEtherpad->eliminarPad();
+            }
+            
             if ($oEscrito->DBEliminar() === FALSE ) {
                 $txt_err .= _("Hay un error al eliminar el escrito");
                 $txt_err .= "<br>";

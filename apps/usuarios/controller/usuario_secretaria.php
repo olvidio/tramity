@@ -235,6 +235,20 @@ $filtro = 'salida_manual';
     $num = '';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
+
+// plantillas = 30;
+$filtro = 'plantillas';
+    $active = ($filtro == $Qfiltro)? 'active' : '';
+    $aQuery = [ 'filtro' => $filtro,
+                'accion' => Escrito::ACCION_PLANTILLA,
+            ];
+    $pag_lst = web\Hash::link('apps/plantillas/controller/plantilla_lista.php?'.http_build_query($aQuery));
+    $num_orden = 30;
+    $text = _("plantillas");
+    $num = '';
+    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+$a_pills[$num_orden] = $pill;
+
 // ordenar:
 ksort($a_pills);
 

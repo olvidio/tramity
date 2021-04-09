@@ -28,6 +28,7 @@ require_once ("apps/core/global_object.inc");
 
 $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
 $prioridad_fecha = Expediente::PRIORIDAD_FECHA;
 $prioridad_desconocido = Expediente::PRIORIDAD_UNKNOW;
@@ -237,7 +238,7 @@ $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?
 
 $pag_escrito =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
 $pag_propuesta =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_PROPUESTA]));
-$pag_plantilla =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_PLANTILLA]));
+$pag_plantilla =  web\Hash::link('apps/plantillas/controller/plantilla_lista_expediente.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'modo' => $Qmodo]));
 $pag_respuesta =  web\Hash::link('apps/entradas/controller/buscar_form.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
 

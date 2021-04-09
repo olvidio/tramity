@@ -276,8 +276,8 @@ switch ($Qque) {
             
             $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
             
-            $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >ver</span>";
-            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_entrada('$id_entrada','$Qid_expediente','$Qfiltro');\" >adjuntar</span>";
+            $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >"._("ver")."</span>";
+            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_entrada('$id_entrada','$Qid_expediente','$Qfiltro');\" >"._("adjuntar")."</span>";
             
             $a_valores[$a][1] = $ver;
             $a_valores[$a][2] = $oProtOrigen->ver_txt();
