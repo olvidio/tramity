@@ -61,11 +61,10 @@ class EntradaLista {
         $aWhere = [];
         $aOperador = [];
 
-        $aWhere['_ordre'] = 'id_entrada';
+        $aWhere['_ordre'] = 'f_entrada DESC';
         switch ($this->filtro) {
             case 'en_ingresado':
                 $aWhere['estado'] = Entrada::ESTADO_INGRESADO;
-                $aWhere['_ordre'] = 'id_entrada DESC';
                 break;
             case 'en_admitido':
                 $aWhere['estado'] = Entrada::ESTADO_ADMITIDO;
