@@ -277,9 +277,12 @@ class EntradaLista {
                 $row['f_escrito'] = $oEntrada->getF_documento()->getFromLocal();
                 $row['visibilidad'] = $visibilidad_txt;
                 
-                $a_entradas[] = $row;
+                $f_entrada_iso = $oEntrada->getF_entrada()->getIso();
+                $a_entradas[$f_entrada_iso] = $row;
             }
         }
+        // ordenar por f_entrada:
+        rsort($a_entradas);
             
         $url_update = 'apps/entradas/controller/entrada_update.php';
         $server = ConfigGlobal::getWeb(); //http://tramity.local
