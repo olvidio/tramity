@@ -277,7 +277,7 @@ class EntradaLista {
                 $row['f_escrito'] = $oEntrada->getF_documento()->getFromLocal();
                 $row['visibilidad'] = $visibilidad_txt;
                 
-                $f_entrada_iso = $oEntrada->getF_entrada()->getIso();
+                $f_entrada_iso = $oEntrada->getF_entrada()->getIso() . $id_entrada; // si no pongo id_entrada, sobre escribe.
                 $a_entradas[$f_entrada_iso] = $row;
             }
         }
