@@ -282,7 +282,7 @@ class EntradaLista {
             }
         }
         // ordenar por f_entrada:
-        krsort($a_entradas,SORT_NUMERIC);
+        krsort($a_entradas,SORT_STRING);
             
         $url_update = 'apps/entradas/controller/entrada_update.php';
         $server = ConfigGlobal::getWeb(); //http://tramity.local
