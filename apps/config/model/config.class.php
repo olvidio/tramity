@@ -118,6 +118,12 @@ class Config {
         return $oConfigSchema->getValor();
     }
     
+    public function getLocalidad() {
+        $parametro = 'localidad';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
+    
     public function getServerEtherpad() {
         $parametro = 'server_etherpad';
         $oConfigSchema = new ConfigSchema($parametro);

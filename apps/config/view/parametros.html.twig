@@ -58,6 +58,13 @@ fnjs_guardar=function(formulario){
 <input type="text" name="valor" value="{{ sigla }}" >
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
+<h3>{{ "localidad"|trans }}:</h3>
+{{ "para firmar documentos"|trans }}
+<form id="frm_localidad" name="frm_localidad" action="">
+{{ oHashL.getCamposHtml|raw }}
+<input type="text" name="valor" value="{{ localidad }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
 <hr>
 
 <h3>{{ "texto del mail"|trans }}:</h3>

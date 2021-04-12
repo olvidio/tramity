@@ -10,6 +10,7 @@ use expedientes\model\entity\GestorEscritoAdjunto;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
+use tramites\model\entity\GestorFirma;
 use usuarios\model\PermRegistro;
 use web\Protocolo;
 use web\ProtocoloArray;
@@ -119,6 +120,11 @@ class Escrito Extends EscritoDB {
      * genera el número de protocolo local. y lo guarda.
      */
     public function generarProtocolo($id_lugar='',$id_lugar_cr='') {
+        // si ya tiene no se toca:
+        $prot_local = $this->getJson_prot_local();
+        if (!empty(get_object_vars($prot_local))) {
+            return TRUE;
+        }
         $gesLugares = new GestorLugar();
         if (empty($id_lugar_cr)) {
             $id_lugar_cr = $gesLugares->getId_cr();
@@ -496,4 +502,79 @@ class Escrito Extends EscritoDB {
         }
         return TRUE;
     }
+    
+    /**
+     * Para los ecritos jurídicos (vienen de plantilla)
+     * 
+     * @return string
+     */
+    public function addConforme($id_expediente,$json_prot_local) {
+        
+        $html_conforme = $this->getConforme($id_expediente,$json_prot_local);
+        
+        $oEtherpad = new Etherpad();
+        $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid_escrito);
+        $padID = $oEtherpad->getPadId();
+        
+        $html_1 = $oEtherpad->getHHtml();
+        
+        $html = $html_1 . $html_conforme;
+        
+        $oEtherpad->setHTML($padID, $html);
+        
+        return $html;
+    }
+    
+    /**
+     * Para los ecritos jurídicos (vienen de plantilla)
+     * 
+     * @return string
+     */
+    public function getConforme($id_expediente,$json_prot_local) {
+        $oProtOrigen = new Protocolo();
+        $oProtOrigen->setLugar($json_prot_local->lugar);
+        $oProtOrigen->setProt_num($json_prot_local->num);
+        $oProtOrigen->setProt_any($json_prot_local->any);
+        $oProtOrigen->setMas($json_prot_local->mas);
+        $protocol_txt = $oProtOrigen->ver_txt();
+        
+        $gesFirmas = new GestorFirma();
+        $aRecorrido = $gesFirmas->getFirmasConforme($id_expediente);
+        
+        $conforme_txt = '<br>';
+        $conforme_txt .= _("Conforme").':';
+        $conforme_txt .= '<ul class="indent">';
+        //$conforme_txt .= '<li><ul class="indent"><li><ul class="indent">';
+        foreach ($aRecorrido as $firma => $fecha) {
+            $conforme_txt .= '<li>';
+            $conforme_txt .= "$firma ($fecha)";
+            $conforme_txt .= '</li>';
+            
+        }
+        $conforme_txt .= '</ul>';
+        //$conforme_txt .= '</li></ul></li></ul>';
+        
+        // protocol
+        $protocol_txt = "($protocol_txt)";
+        
+        // lugar y fecha:
+        $oF_aprobacion = $this->getF_aprobacion();
+        $dia = $oF_aprobacion->format('d');
+        $mes_txt = $oF_aprobacion->getMesLocalTxt();
+        $any = $oF_aprobacion->format('Y');
+        
+        $localidad = $_SESSION['oConfig']->getLocalidad();
+        
+        $conforme_txt .= '<p style="text-align:right">';
+        $conforme_txt .= _("El Vicario de la Delegación");
+        $conforme_txt .= '</p>';
+        
+        $conforme_txt .= "$protocol_txt";
+        $conforme_txt .= '<p style="text-align:right">';
+        $conforme_txt .= "$localidad, $dia de $mes_txt de $any";
+        $conforme_txt .= '</p>';
+        
+        return $conforme_txt;
+    }
+    
 }

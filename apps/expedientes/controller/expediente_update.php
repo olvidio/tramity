@@ -289,29 +289,43 @@ switch($Qque) {
         $oLugar = $cLugares[0];
         $id_lugar_cr = $oLugar->getId_lugar();
         // escritos del expediente: acciones tipo escrito
-        $aWhereAccion = ['id_expediente' => $Qid_expediente, 'tipo_accion' => Escrito::ACCION_ESCRITO];
+        $aWhereAccion = ['id_expediente' => $Qid_expediente, '_ordre' => 'tipo_accion' ];
         $gesAcciones = new GestorAccion();
         $cAcciones = $gesAcciones->getAcciones($aWhereAccion);
+        $json_prot_local = [];
         foreach($cAcciones as $oAccion) {
-            $proto = TRUE;
             $id_escrito = $oAccion->getId_escrito();
-            $oEscrito = new Escrito($id_escrito);
-            // si es un e12, no hay que numerar.
-            if ($oEscrito->getCategoria() === Escrito::CAT_E12) {
-                $proto = FALSE;
+            $tipo_accion = $oAccion->getTipo_accion();
+            // si es propuesta, o plantilla no genero protocolo:
+            if ($tipo_accion === Escrito::ACCION_ESCRITO) {
+                $proto = TRUE;
+                $oEscrito = new Escrito($id_escrito);
+                // si es un e12, no hay que numerar.
+                if ($oEscrito->getCategoria() === Escrito::CAT_E12) {
+                    $proto = FALSE;
+                }
+                // comprobar que no está anulado:
+                if (is_true($oEscrito->getAnulado())) {
+                    $proto = FALSE;
+                }
+                if ($proto) {
+                    $oEscrito->generarProtocolo($id_lugar,$id_lugar_cr);
+                    // para poder insertar en la plantilla.
+                    $json_prot_local = $oEscrito->getJson_prot_local();
+                }
             }
-            // comprobar que no está anulado:
-            if (is_true($oEscrito->getAnulado())) {
-                $proto = FALSE;
-            }
-            if ($proto) {
-                $oEscrito->generarProtocolo($id_lugar,$id_lugar_cr);
+            // si proviene de una plantilla, insertar el conforme en el texto:
+            // cojo el protocolo del ultimo escrito. No tiene porque ser siempre cierto.
+            if ($tipo_accion === Escrito::ACCION_PLANTILLA) {
+                $oEscritoP = new Escrito($id_escrito);
+                $html = $oEscritoP->addConforme($Qid_expediente,$json_prot_local);
             }
         }
 
         if (empty($txt_err)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
+            $jsondata['rta'] = $html;
         } else {
             $jsondata['success'] = false;
             $jsondata['mensaje'] = $txt_err;

@@ -162,6 +162,8 @@
 </div> 
 </form>
 
+<div id='resposta' ></div>
+
 {{ include ('_antecedentes_js.html.twig') }}
 <script type="text/javascript">
 
@@ -254,7 +256,8 @@ fnjs_distribuir=function(event,que){
             } else {
                 //alert ("{{ "ok distribuir"|trans|raw }}");
                 // Volver a la lista...
-                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                //fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                fnjs_mostra_resposta(json.rta,'#resposta');
             }
         });
     });

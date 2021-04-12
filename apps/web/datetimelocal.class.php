@@ -79,6 +79,17 @@ class DateTimeLocal Extends \DateTime {
         $fecha_latin="die ".$dia." mense  ".$mes_latin[$mes]."  anno  ".$any;
         return $fecha_latin;
     }
+    
+    /** 
+     * devuelve el mes en texto (según el idioma del usuario)
+     * 
+     */
+    public function getMesLocalTxt() {
+        $mes_num = parent::format('n');
+        $aMeses = self::Meses();
+        return $aMeses[$mes_num];
+    }
+    
    /**
     * Devuelve el formato de fecha según el idioma del usuario (d/m/y, o m/d/Y)
     * 

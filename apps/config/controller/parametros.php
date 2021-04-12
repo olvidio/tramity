@@ -141,6 +141,21 @@ $oHashRL->setArrayCamposHidden(['parametro' => $parametro]);
 $a_campos['oHashRL'] = $oHashRL;
 $a_campos['sigla'] = $val_sigla;
 
+// ----------- Nombre Localidad -------------------
+$parametro = 'localidad';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$val_sigla = $valor;
+
+$oHashL = new Hash();
+$oHashL->setUrl($url);
+$oHashL->setcamposForm('valor');
+$oHashL->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashL'] = $oHashL;
+$a_campos['localidad'] = $val_sigla;
+
 // ----------- body del mail -------------------
 $parametro = 'bodyMail';
 $oConfigSchema = new ConfigSchema($parametro);

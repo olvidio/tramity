@@ -155,6 +155,36 @@ class GestorFirma Extends core\ClaseGestor {
 	    return $orden_tramite;
 	}
 	
+	public function getFirmasConforme($id_expediente) {
+	    // cabio el nombre para los tipo_cargo:
+	    $a_cargos_especicales[] = Cargo::CARGO_DISTRIBUIR;
+	    $a_cargos_especicales[] = Cargo::CARGO_VB_VCD;
+	    $a_cargos_especicales[] = Cargo::CARGO_REUNION;
+	    
+	    $aWhere = ['id_expediente' => $id_expediente,
+	        '_ordre' => 'orden_tramite, f_valor'
+	    ];
+	    $cFirmas = $this->getFirmas($aWhere);
+	    $a_recorrido = [];
+	    foreach ($cFirmas as $oFirma) {
+	        $valor = $oFirma->getValor();
+	        $oFecha = $oFirma->getF_valor();
+	        $fecha = $oFecha->getFromLocal();
+	        $id_usuario = $oFirma->getId_usuario();
+            $oUsuario = new Usuario($id_usuario);
+	        $nom_usuario = $oUsuario->getNom_usuario();
+	        $cargo_tipo = $oFirma->getCargo_tipo();
+	        if (in_array($cargo_tipo, $a_cargos_especicales)) {
+    	        continue;
+	        }
+	        if (!empty($valor) && ($valor == Firma::V_OK OR $valor == Firma::V_D_OK)) {
+                $a_recorrido[$nom_usuario] = $fecha;
+	        }
+	    }
+	    
+	    return $a_recorrido;
+	}
+	
 	public function getRecorrido($id_expediente) {
 	    // cabio el nombre para los tipo_cargo:
 	    $a_cargos_especicales[] = Cargo::CARGO_DISTRIBUIR;
