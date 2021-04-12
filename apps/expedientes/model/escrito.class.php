@@ -564,6 +564,9 @@ class Escrito Extends EscritoDB {
         $any = $oF_aprobacion->format('Y');
         
         $localidad = $_SESSION['oConfig']->getLocalidad();
+        if (empty($localidad)) {
+            $localidad = _("debe indicar la localidad en la configuración");
+        }
         
         $conforme_txt .= '<p style="text-align:right">';
         $conforme_txt .= _("El Vicario de la Delegación");

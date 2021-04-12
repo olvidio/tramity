@@ -162,27 +162,27 @@ fnjs_visto=function(event){
     if (!x && !y) {
     	return false;
     }
-    $('#form_expediente').attr('action','{{ url_update }}');
+
     $('#que').val('visto');
-    $('#form_expediente').one("submit", function(event){
-        event.preventDefault(); //prevent default action 	
-        request=$.ajax({
-            data: $(this).serialize(),
-            url: $(this).attr('action'),
-            type: 'post',
-            dataType: 'json'
-        });
-        request.done( function (json) {
-            id = json.id_expediente;
-            if (json.success != true) {
-                rta_txt = json.responseText;
-                alert ('error: '+rta_txt);
-            } else {
-	            html = json.html;
-                // Volver a la lista...
-                $('#div_preparar').html(html);
-            }
-        });
+    var params=$('#form_expediente').serialize();
+    
+    request=$.ajax({
+        data: params,
+        url: '{{ url_update }}',
+        type: 'post',
+        dataType: 'json'
+    });
+    
+    request.done( function (json) {
+        id = json.id_expediente;
+        if (json.success != true) {
+            rta_txt = json.responseText;
+            alert ('error: '+rta_txt);
+        } else {
+            html = json.html;
+            // Volver a la lista...
+            $('#div_preparar').html(html);
+        }
     });
 }
 
