@@ -177,7 +177,7 @@ class GestorFirma Extends core\ClaseGestor {
 	        if (in_array($cargo_tipo, $a_cargos_especicales)) {
     	        continue;
 	        }
-	        if (!empty($valor) && ($valor == Firma::V_OK OR $valor == Firma::V_D_OK)) {
+	        if (!empty($valor) && ($valor == Firma::V_OK)) {
                 $a_recorrido[$nom_usuario] = $fecha;
 	        }
 	    }
