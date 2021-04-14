@@ -141,19 +141,16 @@ fnjs_focus_a=function(camp){
 }
 
 {{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
-fnjs_mas_grupos=function(e){
+fnjs_mas_grupos=function(){
 	var code = (event.keyCode ? event.keyCode : event.which);
-	if(event=="x") {
-		var valor=1;
-	} else {
-		var id_campo='#'+event.currentTarget.id;
-		var valor=$(id_campo).val();
-		if(code!=9) {
-			event.preventDefault();
-			event.stopPropagation();
-		}
-	}
-	if ( code==9 || event.type=="change" || event=="x") {
+    var valor=1;
+    var id_campo='#'+event.currentTarget.id;
+    var valor=$(id_campo).val();
+    if(code!=9) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+	if ( code==9 || event.type=="change") {
 		if (valor!=0) {
 			{{ oArrayDesplGrupo.ListaSelectsJs|raw }}
 		}
@@ -165,9 +162,9 @@ fnjs_quitar_grupos=function(){
 }
 
 {{ oArrayProtDestino.ComprobarSelectJs|raw }}
-fnjs_mas_destinos=function(e){
+fnjs_mas_destinos=function(){
 	event.stopImmediatePropagation();
-    var id_campo='#'+e.currentTarget.id;
+    var id_campo='#'+event.currentTarget.id;
     var valor=$(id_campo).val();
     if (event.type == 'change') {
         global_flag = 2;
@@ -191,9 +188,9 @@ fnjs_quitar_destinos=function(){
 
 
 {{ oArrayProtRef.ComprobarSelectJs|raw }}
-fnjs_mas_referencias=function(e){
+fnjs_mas_referencias=function(){
 	event.stopImmediatePropagation();
-    var id_campo='#'+e.currentTarget.id;
+    var id_campo='#'+event.currentTarget.id;
     var valor=$(id_campo).val();
     if (event.type == 'change') {
         global_flag = 2;
@@ -216,19 +213,16 @@ fnjs_quitar_referencias=function(){
 }
 
 {{ oArrayDesplFirmas.ComprobarSelectJs|raw }}
-fnjs_mas_firmas=function(e){
-	var code = (e.keyCode ? e.keyCode : e.which);
-	if(e=="x") {
-		var valor=1;
-	} else {
-		var id_campo='#'+e.currentTarget.id;
-		var valor=$(id_campo).val();
-		if(code!=9) {
-			e.preventDefault();
-			e.stopPropagation();
-		}
-	}
-	if ( code==9 || e.type=="change" || e=="x") {
+fnjs_mas_firmas=function(){
+	var code = (event.keyCode ? event.keyCode : event.which);
+    var valor=1;
+    var id_campo='#'+event.currentTarget.id;
+    var valor=$(id_campo).val();
+    if(code!=9) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+	if ( code==9 || event.type=="change") {
 		if (valor!=0) {
 			{{ oArrayDesplFirmas.ListaSelectsJs|raw }}
 		}

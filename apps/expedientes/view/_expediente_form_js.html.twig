@@ -293,19 +293,16 @@ fnjs_guardar=function(){
 	}
 }
 
-fnjs_mas_firmas=function(e){
-	var code = (e.keyCode ? e.keyCode : e.which);
-	if(e=="x") {
-		var valor=1;
-	} else {
-		var id_campo='#'+e.currentTarget.id;
-		var valor=$(id_campo).val();
-		if(code!=9) {
-			e.preventDefault();
-			e.stopPropagation();
-		}
-	}
-	if ( code==9 || e.type=="change" || e=="x") {
+fnjs_mas_firmas=function(){
+	var code = (event.keyCode ? event.keyCode : event.which);
+    var valor=1;
+    var id_campo='#'+event.currentTarget.id;
+    var valor=$(id_campo).val();
+    if(code!=9) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+	if ( code==9 || event.type=="change") {
 		if (valor!=0) {
 			{{ oArrayDesplFirmas.ListaSelectsJs|raw }}
 		}
@@ -316,19 +313,16 @@ fnjs_quitar_firmas=function(){
 	$('#firmas_num').val(0);
 }
 
-fnjs_mas_firmas_oficina=function(e){
-	var code = (e.keyCode ? e.keyCode : e.which);
-	if(e=="x") {
-		var valor=1;
-	} else {
-		var id_campo='#'+e.currentTarget.id;
-		var valor=$(id_campo).val();
-		if(code!=9) {
-			e.preventDefault();
-			e.stopPropagation();
-		}
-	}
-	if ( code==9 || e.type=="change" || e=="x") {
+fnjs_mas_firmas_oficina=function(){
+	var code = (event.keyCode ? event.keyCode : event.which);
+    var valor=1;
+    var id_campo='#'+event.currentTarget.id;
+    var valor=$(id_campo).val();
+    if(code!=9) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+	if ( code==9 || event.type=="change") {
 		if (valor!=0) {
 			{{ oArrayDesplFirmasOficina.ListaSelectsJs|raw }}
 		}

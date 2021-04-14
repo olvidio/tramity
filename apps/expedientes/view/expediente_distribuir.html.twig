@@ -259,19 +259,16 @@ fnjs_distribuir=function(que){
 }
 
 {{ oArrayDesplEtiquetas.ComprobarSelectJs|raw }}
-fnjs_mas_etiquetas=function(e){
-	var code = (e.keyCode ? e.keyCode : e.which);
-	if(e=="x") {
-		var valor=1;
-	} else {
-		var id_campo='#'+e.currentTarget.id;
-		var valor=$(id_campo).val();
-		if(code!=9) {
-			e.preventDefault();
-			e.stopPropagation();
-		}
-	}
-	if ( code==9 || e.type=="change" || e=="x") {
+fnjs_mas_etiquetas=function(){
+	var code = (event.keyCode ? event.keyCode : event.which);
+    var valor=1;
+    var id_campo='#'+event.currentTarget.id;
+    var valor=$(id_campo).val();
+    if(code!=9) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+	if ( code==9 || event.type=="change") {
 		if (valor!=0) {
 			{{ oArrayDesplEtiquetas.ListaSelectsJs|raw }}
 		}
