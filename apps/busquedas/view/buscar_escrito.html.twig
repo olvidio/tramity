@@ -112,6 +112,27 @@
         <tr><td colspan=5 style="text-align:right;"><input id="b_buscar_4" name="b_buscar" TYPE="button" VALUE="{{ "buscar"|trans }}" onclick="fnjs_buscar('#frm_buscar_4')" ></td></tr>
     </table>
 </form>
+
+<!-- Listar modelos jurídicos por fechas --------------------------------------------- -->
+<form id="frm_buscar_6" name="frm_buscar_6" action="">
+    <input type="hidden" name="opcion" value="">
+    <table  class="table-warning" border=1>
+    <tr><th colspan=5 class=titulo_inv>{{ "opción 6: Listar varios modelos jurídicos por fechas"|trans }}</th></tr>
+    <tr><td class=etiqueta>{{ "Escribir una palabra clave"|trans }}:</td>
+    <td colspan=3><input type="Text" id="asunto" name="asunto" size="50" value="{{ asunto }}"></td>
+    </tr>
+    <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
+    <td> {{ "entre el"|trans }} 
+    	<input class="form-control" type="Text" id="frm6_f_min" name="f_min" size="12" value="{{ f_min }}">
+    <td> {{ "y el"|trans }} 
+    	<input class="form-control" type="Text" id="frm6_f_max" name="f_max" size="12" value="{{ f_max }}">
+    <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
+    {{ oDesplOficinas.desplegable|raw }}
+    </td></tr>
+    <tr><td colspan=5 style="text-align:right;"><input id="b_buscar_6" name="b_buscar" TYPE="button" VALUE="{{ "buscar"|trans }}" onclick="fnjs_buscar('#frm_buscar_6')" ></td></tr>
+    </table>
+</form>
+
 </div>
 
 <div class="row">
@@ -219,6 +240,38 @@ $(function() {
 		//format: 'Y-m-d',
 		onShow: function(ct){
 			var f_min_iso = fnjs_convert2iso("#frm4_f_min", '{{ format }}');
+			this.setOptions({
+				minDate: f_min_iso ? f_min_iso: false
+            })
+        }
+    });
+});
+
+$(function() {
+	$( "#frm6_f_min" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		dayOfWeekStart: globaljsVarDayStart,
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_max_iso = fnjs_convert2iso("#frm6_f_max", '{{ format }}');
+			this.setOptions({
+				maxDate: f_max_iso ? f_max_iso: false
+            })
+        }
+    });
+});
+    
+$(function() {
+	$( "#frm6_f_max" ).datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		dayOfWeekStart: globaljsVarDayStart,
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_min_iso = fnjs_convert2iso("#frm6_f_min", '{{ format }}');
 			this.setOptions({
 				minDate: f_min_iso ? f_min_iso: false
             })

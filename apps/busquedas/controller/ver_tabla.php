@@ -3,6 +3,7 @@ use busquedas\model\VerTabla;
 use function core\any_2;
 use lugares\model\entity\GestorLugar;
 use busquedas\model\Buscar;
+use expedientes\model\Escrito;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -256,6 +257,38 @@ switch ($Qopcion) {
                     echo $oTabla->mostrarTabla();
                 }
                 break;
+        }
+        break;
+    case 6:
+        // buscar escrito con: accion = plantilla.
+        // buscar en asunto, detalle, + periodo + oficina
+        // las fechas.
+        $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
+        $Qf_max = (string) \filter_input(INPUT_POST, 'f_max');
+        $Qf_min = (string) \filter_input(INPUT_POST, 'f_min');
+        $Qoficina = (integer) \filter_input(INPUT_POST, 'oficina');
+        
+        $a_condicion['asunto'] = $Qasunto;
+        $a_condicion['f_max'] = $Qf_max;
+        $a_condicion['f_min'] = $Qf_min;
+        $a_condicion['oficina'] = $Qoficina;
+        $str_condicion = http_build_query($a_condicion);
+        
+        $oBuscar = new Buscar();
+        $oBuscar->setAccion(Escrito::ACCION_PLANTILLA);
+        $oBuscar->setAsunto($Qasunto);
+        $oBuscar->setF_max($Qf_max);
+        $oBuscar->setF_min($Qf_min);
+        $oBuscar->setOficina($Qoficina);
+        
+        $aCollection = $oBuscar->getCollection($Qopcion, $Qmas);
+        
+        foreach ($aCollection as $key => $cCollection) {
+            $oTabla = new VerTabla();
+            $oTabla->setKey($key);
+            $oTabla->setCondicion($str_condicion);
+            $oTabla->setCollection($cCollection);
+            echo $oTabla->mostrarTabla();
         }
         break;
 }

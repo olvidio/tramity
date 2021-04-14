@@ -119,10 +119,14 @@ class Buscar {
      * @var string
      */
     private $opcion;
+    /**
+     * 
+     * @var integer
+     */
+    private $accion;
+    
     
     public function __construct() {
-        $this->id_sigla = 23;
-        $this->id_cr = 23;
     }
     
     public function getCollection($opcion,$mas='') {
@@ -363,6 +367,12 @@ class Buscar {
                 $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
                 break;
+            case 6:
+                // buscar en escritos: modelo jurídico (plantilla)
+                $cEscritos = $this->buscarEscritos();
+                $aCollections['escritos'] = $cEscritos;
+                return $aCollections;
+                break;
         }
     
     }
@@ -381,6 +391,9 @@ class Buscar {
         $f_max = $oF_max->getIso();
         
         $aWhere['_ordre'] = 'f_aprobacion';
+        if (!empty($this->accion)) {
+            $aWhere['accion'] = $this->accion;
+        }
         if (empty($f_max)) {
             $oHoy = new DateTimeLocal();
             $f_max = $oHoy->getIso();
@@ -719,6 +732,23 @@ class Buscar {
 	        $this->df_max = $df_max;
 	    }
 	}
+	
+    /**
+     * @return number
+     */
+    public function getAccion()
+    {
+        return $this->accion;
+    }
+
+    /**
+     * @param number $accion
+     */
+    public function setAccion($accion)
+    {
+        $this->accion = $accion;
+    }
+
     
     
     

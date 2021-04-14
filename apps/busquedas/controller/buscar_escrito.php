@@ -7,8 +7,6 @@ use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;
-use core\ConfigGlobal;
-use lugares\model\entity\Lugar;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
