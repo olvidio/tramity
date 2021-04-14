@@ -27,7 +27,7 @@ switch($Qque) {
 		}
 		
         $oOficina = new Oficina (array('id_oficina' => $Qid_oficina));
-		if ($oOficina->DBEliminar() === false) {
+		if ($oOficina->DBEliminar() === FALSE) {
 			echo _("hay un error, no se ha eliminado");
 			echo "\n".$oOficina->getErrorTxt();
 		}
@@ -44,7 +44,7 @@ switch($Qque) {
         $sigla_old = $oOficina->getSigla();
         $oOficina->setSigla($Qsigla);
         $oOficina->setOrden($Qorden);
-		if ($oOficina->DBGuardar() === false) {
+		if ($oOficina->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oOficina->getErrorTxt();
 		} else {
@@ -66,7 +66,7 @@ switch($Qque) {
         $oOficina = new Oficina();
         $oOficina->setSigla($Qsigla);
         $oOficina->setOrden($Qorden);
-        if ($oOficina->DBGuardar() === false) {
+        if ($oOficina->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
             echo "\n".$oOficina->getErrorTxt();
 		} else {

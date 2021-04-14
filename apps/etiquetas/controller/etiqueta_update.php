@@ -24,7 +24,7 @@ switch($Qque) {
 	    if (!empty($a_sel)) { //vengo de un checkbox
             $Qid_etiqueta = (integer) strtok($a_sel[0],"#");
             $oEtiqueta = new Etiqueta($Qid_etiqueta);
-            if ($oEtiqueta->DBEliminar() === false) {
+            if ($oEtiqueta->DBEliminar() === FALSE) {
                 echo _("hay un error, no se ha eliminado");
                 echo "\n".$oEtiqueta->getErrorTxt();
             }
@@ -57,7 +57,7 @@ switch($Qque) {
         $oEtiqueta->setNom_etiqueta($Qnom_etiqueta);
         $oEtiqueta->setOficina($oficina);
         $oEtiqueta->setId_cargo($id_cargo);
-		if ($oEtiqueta->DBGuardar() === false) {
+		if ($oEtiqueta->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oEtiqueta->getErrorTxt();
 		}

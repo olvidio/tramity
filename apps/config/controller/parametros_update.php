@@ -1,5 +1,4 @@
 <?php
-
 use config\model\entity\ConfigSchema;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -17,4 +16,20 @@ $Qvalor = (string)  \filter_input(INPUT_POST, 'valor');
 
 $oConfigSchema = new ConfigSchema($Qparametro);
 $oConfigSchema->setValor($Qvalor);
-$oConfigSchema->DBGuardar();
+
+$error_txt = '';
+if ($oConfigSchema->DBGuardar() === FALSE) {
+    $error_txt = $oConfigSchema->getErrorTxt();
+}
+
+if (empty($error_txt)) {
+    $jsondata['success'] = true;
+    $jsondata['mensaje'] = 'ok';
+} else {
+    $jsondata['success'] = false;
+    $jsondata['mensaje'] = $error_txt;
+}
+//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+header('Content-type: application/json; charset=utf-8');
+echo json_encode($jsondata);
+exit();

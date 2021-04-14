@@ -20,7 +20,7 @@ switch($Qque) {
 	    if (!empty($a_sel)) { //vengo de un checkbox
             $Qid_lugar = (integer) strtok($a_sel[0],"#");
             $oLugar = new Lugar($Qid_lugar);
-            if ($oLugar->DBEliminar() === false) {
+            if ($oLugar->DBEliminar() === FALSE) {
                 echo _("hay un error, no se ha eliminado");
                 echo "\n".$oLugar->getErrorTxt();
             }
@@ -58,7 +58,7 @@ switch($Qque) {
         $oLugar->setE_mail($Qe_mail);
         $oLugar->setModo_envio($Qmodo_envio);
         $oLugar->setAnulado($Qanulado);
-		if ($oLugar->DBGuardar() === false) {
+		if ($oLugar->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oLugar->getErrorTxt();
 		}
@@ -82,7 +82,7 @@ switch($Qque) {
         $oLugar->setTipo_ctr($Qtipo_ctr);
         $oLugar->setE_mail($Qe_mail);
         $oLugar->setModo_envio($Qmodo_envio);
-		if ($oLugar->DBGuardar() === false) {
+		if ($oLugar->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oLugar->getErrorTxt();
 		}

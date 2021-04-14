@@ -37,7 +37,7 @@ switch($Qque) {
 	    if (!empty($a_sel)) { //vengo de un checkbox
             $Qid_usuario = (integer) strtok($a_sel[0],"#");
             $oUsuario = new Usuario($Qid_usuario);
-            if ($oUsuario->DBEliminar() === false) {
+            if ($oUsuario->DBEliminar() === FALSE) {
                 echo _("hay un error, no se ha eliminado");
                 echo "\n".$oUsuario->getErrorTxt();
             }
@@ -65,7 +65,7 @@ switch($Qque) {
 		} else {
 			$oUsuario->setPassword($Qpass);
 		}
-		if ($oUsuario->DBGuardar() === false) {
+		if ($oUsuario->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oUsuario->getErrorTxt();
 		}
@@ -95,7 +95,7 @@ switch($Qque) {
         } else {
             $oUsuario->setPassword($Qpass);
         }
-		if ($oUsuario->DBGuardar() === false) {
+		if ($oUsuario->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oUsuario->getErrorTxt();
 		}
@@ -118,7 +118,7 @@ switch($Qque) {
             $oUsuario->setEmail($Qemail);
             $oUsuario->setId_cargo($Qid_cargo);
             $oUsuario->setNom_usuario($Qnom_usuario);
-            if ($oUsuario->DBGuardar() === false) {
+            if ($oUsuario->DBGuardar() === FALSE) {
                 echo _("hay un error, no se ha guardado");
                 echo "\n".$oUsuario->getErrorTxt();
             }

@@ -128,7 +128,7 @@ switch($Qque) {
 		$oTramiteCargo->setId_cargo($Qid_cargo);	
 		$oTramiteCargo->setOrden_tramite($Qorden_tramite);	
 		$oTramiteCargo->setMultiple($Qmultiple);	
-		if ($oTramiteCargo->DBGuardar() === false) {
+		if ($oTramiteCargo->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oTramiteCargo->getErrorTxt();
 		}
@@ -136,7 +136,7 @@ switch($Qque) {
 	case 'eliminar':
 	    $Qid_item = (integer) \filter_input(INPUT_POST, 'id_item');
 		$oTramiteCargo = new TramiteCargo(array('id_item'=>$Qid_item));
-		if ($oTramiteCargo->DBEliminar() === false) {
+		if ($oTramiteCargo->DBEliminar() === FALSE) {
 			echo _("hay un error, no se ha eliminado");
 			echo "\n".$oTramiteCargo->getErrorTxt();
 		}

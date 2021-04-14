@@ -58,9 +58,11 @@ $error_txt = '';
 $jsondata = [];
 switch($Qque) {
     case 'eliminar':
-        
         $oEntrada = new EntradaDB($Qid_entrada);
-        $oEntrada->DBEliminar();
+        if ($oEntrada->DBEliminar() === FALSE) {
+            $error_txt .= $oEntrada->getErrorTxt();
+            exit($error_txt);
+        }
         break;
     case 'guardar_destinos':
         $gesEntradasBypass = new GestorEntradaBypass();
@@ -80,7 +82,9 @@ switch($Qque) {
         if ( $perm_asunto >= PermRegistro::PERM_MODIFICAR) {
             $oEntrada->DBCarregar();
             $oEntrada->setAsunto($Qasunto);
-            $oEntrada->DBGuardar();
+            if ($oEntrada->DBGuardar() === FALSE) {
+                $error_txt .= $oEntrada->getErrorTxt();
+            }
         }
         // destinos
         $Qgrupo_dst = (string) \filter_input(INPUT_POST, 'grupo_dst');
@@ -150,7 +154,10 @@ switch($Qque) {
         } else {
             $oEntrada->setEstado(Entrada::ESTADO_ADMITIDO);
         }
-        $oEntrada->DBGuardar();
+        if ($oEntrada->DBGuardar() === FALSE) {
+            $error_txt = $oEntrada->getErrorTxt();
+            exit($error_txt);
+        }
         
         break;
     case 'upload_adjunto':
@@ -356,7 +363,9 @@ switch($Qque) {
                     $oEntrada = new EntradaDB($Qid_entrada);
                     $oEntrada->DBCarregar();
                     $oEntrada->setAsunto($Qasunto);
-                    $oEntrada->DBGuardar();
+                    if ($oEntrada->DBGuardar() === FALSE) {
+                        $error_txt .= $oEntrada->getErrorTxt();
+                    }
                 }
                 // destinos
                 $Qgrupo_dst = (string) \filter_input(INPUT_POST, 'grupo_dst');

@@ -73,7 +73,9 @@ switch ($Qque) {
             $oFirma->setOrden_oficina($orden_oficina);
             // Al inicializar, sólo pongo los votos.
             $oFirma->setTipo(Firma::TIPO_VOTO);
-            $oFirma->DBGuardar();
+            if ($oFirma->DBGuardar() === FALSE ) {
+                $error_txt .= $oFirma->getErrorTxt();
+            }
         }
         break;
     case 'del':
@@ -86,7 +88,9 @@ switch ($Qque) {
             $gesFirmas = new GestorFirma();
             $cFirmas = $gesFirmas->getFirmas($aWhere);
             foreach ($cFirmas as $oFirma) {
-                $oFirma->DBEliminar();
+                if ($oFirma->DBEliminar() === FALSE ) {
+                    $error_txt .= $oFirma->getErrorTxt();
+                }
             }
         }
         break;
@@ -176,7 +180,7 @@ switch ($Qque) {
                     $oFirmaDistribuir->setValor($Qvoto);
                     $oFirmaDistribuir->setF_valor($f_hoy_iso,FALSE);
                     if ($oFirmaDistribuir->DBGuardar() === FALSE ) {
-                        $error_txt .= $oFirma->getErrorTxt();
+                        $error_txt .= $oFirmaDistribuir->getErrorTxt();
                     }
                 } else {
                     $error_txt .= _("No se puede firmar el cargo_tipo distribuir");

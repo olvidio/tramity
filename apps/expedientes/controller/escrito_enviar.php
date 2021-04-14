@@ -32,7 +32,9 @@ if ($a_rta['marcar'] === TRUE) {
     $oEscrito->DBCarregar();
     $oEscrito->setF_salida($f_salida,FALSE);
     $oEscrito->setOk(Escrito::OK_SECRETARIA);
-    $oEscrito->DBGuardar();
+    if ($oEscrito->DBGuardar() === FALSE) {
+        exit($oEscrito->getErrorTxt());
+    }
 }
 if ($a_rta['success'] === TRUE) {
     // para que se cierre la ventana que se ha abierto:

@@ -1,25 +1,3 @@
-<script>
-fnjs_guardar=function(formulario){
-	var url='{{ url }}';
-    $(formulario).attr('action',url);
-    $(formulario).one("submit", function() {
-		$.ajax({
-			url: $(this).attr('action'),
-			type: 'post',
-			data: $(this).serialize()
-		})
-		.done(function (rta_txt) {
-			if (rta_txt != '' && rta_txt != '\n') {
-				alert (rta_txt);
-			}
-        });
-        return false;
-    });
-    $(formulario).trigger("submit");
-    $(formulario).off();
-}
-</script>
-
 <h3>{{ "Parametros del scdl (los puede cambiar el suplente)"|trans }}:</h3>
 
 <form id="frm_perm_dist" name="frm_perm_dist" action="">
@@ -38,3 +16,23 @@ fnjs_guardar=function(formulario){
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
 
+<script>
+fnjs_guardar=function(formulario){
+	event.preventDefault();
+    datos=$(formulario).serialize();
+	request=$.ajax({
+		data: datos,
+		url: '{{ url }}',
+        type: 'post',
+        dataType: 'json'
+    });
+    request.done( function (rta) {
+        var json=rta;
+        id = json.id_escrito;
+        if (json.success != true) {
+            rta_txt = rta.responseText;
+            alert ('error: '+rta_txt);
+        }
+    });
+}
+</script>

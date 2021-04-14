@@ -31,7 +31,7 @@ switch ($Qque) {
 		}
 
 		$oPref->setPreferencia($QsPrefs);
-		if ($oPref->DBGuardar() === false) {
+		if ($oPref->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oPref->getErrorTxt();
 		}
@@ -41,7 +41,7 @@ switch ($Qque) {
 		$Qidioma_nou = (string) \filter_input(INPUT_POST, 'idioma_nou');
 		$oPref = $gesPreferencias->getMiPreferencia('idioma');
 		$oPref->setPreferencia($Qidioma_nou);
-		if ($oPref->DBGuardar() === false) {
+		if ($oPref->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado idioma");
 			echo "\n".$oPref->getErrorTxt();
 		}
@@ -57,7 +57,7 @@ switch ($Qque) {
         $oUsuario->setId_cargo($Qid_cargo);
         $oUsuario->setEmail($Qemail);
         $oUsuario->setNom_usuario($Qnom_usuario);
-        if ($oUsuario->DBGuardar() === false) {
+        if ($oUsuario->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
             echo "\n".$oUsuario->getErrorTxt();
         }

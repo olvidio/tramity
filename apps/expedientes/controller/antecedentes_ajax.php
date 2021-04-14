@@ -50,8 +50,9 @@ switch ($Qque) {
         $oExpediente = new Expediente($Qid_expediente);
         $oExpediente->DBCarregar();
         $oExpediente->delAntecedente($json_antecedente);
-        $oExpediente->DBGuardar();
-        
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            exit($oExpediente->getErrorTxt());
+        }
         echo $oExpediente->getHtmlAntecedentes();
         break;
     case 'adjuntar':
@@ -63,8 +64,9 @@ switch ($Qque) {
         $oExpediente = new Expediente($Qid_expediente);
         $oExpediente->DBCarregar();
         $oExpediente->addAntecedente($json_antecedente);
-        $oExpediente->DBGuardar();
-        
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            exit($oExpediente->getErrorTxt());
+        }
         echo $oExpediente->getHtmlAntecedentes();
         break;
 	case 'buscar_entrada':

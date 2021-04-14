@@ -18,7 +18,7 @@ switch($Qque) {
         if (!empty($a_sel)) { //vengo de un checkbox
             $Qid_tramite = (integer) strtok($a_sel[0],"#");
             $oTramite = new Tramite($Qid_tramite);
-            if ($oTramite->DBEliminar() === false) {
+            if ($oTramite->DBEliminar() === FALSE) {
                 echo _("hay un error, no se ha eliminado");
                 echo "\n".$oTramite->getErrorTxt();
             }
@@ -37,7 +37,7 @@ switch($Qque) {
         $oTramite->setTramite($Qtramite);
         $oTramite->setOrden($Qorden);
         $oTramite->setBreve($Qbreve);
-		if ($oTramite->DBGuardar() === false) {
+		if ($oTramite->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oTramite->getErrorTxt();
 		}
@@ -51,7 +51,7 @@ switch($Qque) {
         $oTramite->setTramite($Qtramite);
         $oTramite->setOrden($Qorden);
         $oTramite->setBreve($Qbreve);
-        if ($oTramite->DBGuardar() === false) {
+        if ($oTramite->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
             echo "\n".$oTramite->getErrorTxt();
         }

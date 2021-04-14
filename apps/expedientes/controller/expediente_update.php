@@ -49,7 +49,7 @@ $Qa_preparar = (array)  \filter_input(INPUT_POST, 'a_preparar', FILTER_DEFAULT, 
 $Qvida = (integer) \filter_input(INPUT_POST, 'vida');
 $Qvisibilidad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 
-$txt_err = '';
+$error_txt = '';
 switch($Qque) {
     case 'en_pendiente':
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
@@ -87,14 +87,14 @@ switch($Qque) {
         // las oficinas implicadas:
         $oPendiente->setOficinasArray($oEntrada->getResto_oficinas());
         if ($oPendiente->Guardar() === FALSE ) {
-            $txt_err .= _("No se han podido guardar el nuevo pendiente");
+            $error_txt .= _("No se han podido guardar el nuevo pendiente");
         }
-        if (empty($txt_err)) {
+        if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
         } else {
             $jsondata['success'] = false;
-            $jsondata['mensaje'] = $txt_err;
+            $jsondata['mensaje'] = $error_txt;
         }
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
@@ -128,24 +128,24 @@ switch($Qque) {
         $oExpediente->setVisibilidad($Qvisibilidad);
 
         if ($oExpediente->DBGuardar() === FALSE ) {
-            $txt_err .= _("No se han podido crear el nuevo expediente");
-            $txt_err .= "\n";
-            $txt_err .= $oExpediente->getErrorTxt();
+            $error_txt .= _("No se han podido crear el nuevo expediente");
+            $error_txt .= "\n";
+            $error_txt .= $oExpediente->getErrorTxt();
         }
         
         $antecedente = [ 'tipo'=> 'entrada', 'id' => $Qid_entrada ];
         $json_antecedente = json_encode($antecedente);
         $oExpediente->addAntecedente($json_antecedente);
         if ($oExpediente->DBGuardar() === FALSE ) {
-            $txt_err .= _("No se han podido adjuntar la entrada");
+            $error_txt .= _("No se han podido adjuntar la entrada");
         }
         
-        if (empty($txt_err)) {
+        if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
         } else {
             $jsondata['success'] = false;
-            $jsondata['mensaje'] = $txt_err;
+            $jsondata['mensaje'] = $error_txt;
         }
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -161,14 +161,14 @@ switch($Qque) {
         $oExpediente->setEstado(Expediente::ESTADO_ACABADO_ENCARGADO);
         $oExpediente->setPonente($Qid_oficial);
         if ($oExpediente->DBGuardar() === FALSE ) {
-            $txt_err .= _("No se han podido asignar el nuevo encargado");
+            $error_txt .= _("No se han podido asignar el nuevo encargado");
         }
-        if (empty($txt_err)) {
+        if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
         } else {
             $jsondata['success'] = false;
-            $jsondata['mensaje'] = $txt_err;
+            $jsondata['mensaje'] = $error_txt;
         }
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -184,14 +184,14 @@ switch($Qque) {
         // las etiquetas:
         $oExpediente->setEtiquetas($Qa_etiquetas);
         if ($oExpediente->DBGuardar() === FALSE ) {
-            $txt_err .= _("No se han podido guardar las etiquetas");
+            $error_txt .= _("No se han podido guardar las etiquetas");
         }
-        if (empty($txt_err)) {
+        if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
         } else {
             $jsondata['success'] = false;
-            $jsondata['mensaje'] = $txt_err;
+            $jsondata['mensaje'] = $error_txt;
         }
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -205,8 +205,8 @@ switch($Qque) {
         // Si pongo la fecha con datetimepicker, ya esta en ISO (hay que poner FALSE a la conversión).
         $oExpediente->setF_reunion($Qf_reunion);
         if ($oExpediente->DBGuardar() === FALSE ) {
-            $txt_err .= _("No se ha podido guarda la fecha de reunión");
-            $txt_err .= "<br>";
+            $error_txt .= _("No se ha podido guarda la fecha de reunión");
+            $error_txt .= "<br>";
         }
         // firmar el paso de fijar reunion:
         $f_hoy_iso = date(\DateTimeInterface::ISO8601);
@@ -235,15 +235,15 @@ switch($Qque) {
         $oExpediente->setEtiquetas($Qa_etiquetas);
         $oExpediente->setEstado(Expediente::ESTADO_ARCHIVADO);
         if ($oExpediente->DBGuardar() === FALSE ) {
-            $txt_err .= _("No se ha podido cambiar el estado del expediente");
-            $txt_err .= "<br>";
+            $error_txt .= _("No se ha podido cambiar el estado del expediente");
+            $error_txt .= "<br>";
         }
-        if (empty($txt_err)) {
+        if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
         } else {
             $jsondata['success'] = false;
-            $jsondata['mensaje'] = $txt_err;
+            $jsondata['mensaje'] = $error_txt;
         }
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -256,8 +256,8 @@ switch($Qque) {
         $oExpediente->DBCarregar();
         $oExpediente->setEstado(Expediente::ESTADO_ACABADO_SECRETARIA);
         if ($oExpediente->DBGuardar() === FALSE ) {
-            $txt_err .= _("No se ha podido cambiar el estado del expediente");
-            $txt_err .= "<br>";
+            $error_txt .= _("No se ha podido cambiar el estado del expediente");
+            $error_txt .= "<br>";
         }
         // firmar el paso de distribuir:
         $f_hoy_iso = date(\DateTimeInterface::ISO8601);
@@ -322,13 +322,13 @@ switch($Qque) {
             }
         }
 
-        if (empty($txt_err)) {
+        if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
             $jsondata['rta'] = $html;
         } else {
             $jsondata['success'] = false;
-            $jsondata['mensaje'] = $txt_err;
+            $jsondata['mensaje'] = $error_txt;
         }
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -341,7 +341,7 @@ switch($Qque) {
     case 'exp_cp_copias':
         $copias = TRUE;
     case 'exp_cp_borrador':
-        $txt_err = '';
+        $error_txt = '';
         if (!empty($Qof_destino)) {
             $of_destino = $Qof_destino;
         } else {
@@ -357,12 +357,12 @@ switch($Qque) {
             $error_txt .= $oExpediente->getErrorTxt();
         }
 
-        if (empty($txt_err)) {
+        if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
         } else {
             $jsondata['success'] = false;
-            $jsondata['mensaje'] = $txt_err;
+            $jsondata['mensaje'] = $error_txt;
         }
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -371,14 +371,14 @@ switch($Qque) {
         exit();
         break;
     case 'exp_a_borrador':
-        $txt_err = '';
+        $error_txt = '';
         // Hay que borrar: las firmas.
         $gesFirmas = new  GestorFirma();
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente]);
         foreach($cFirmas as $oFirma) {
             if ($oFirma->DBEliminar() === FALSE) {
-                $txt_err .= _("No se ha eliminado la firma");
-                $txt_err .= "<br>";
+                $error_txt .= _("No se ha eliminado la firma");
+                $error_txt .= "<br>";
             }
         }
         
@@ -393,16 +393,17 @@ switch($Qque) {
         $oExpediente->setF_aprobacion('');
         $oExpediente->setF_reunion('');
         if ($oExpediente->DBGuardar() === FALSE ) {
-            $txt_err .= _("No se ha podido cambiar el estado del expediente");
-            $txt_err .= "<br>";
+            $error_txt .= _("No se ha podido cambiar el estado del expediente");
+            $error_txt .= "<br>";
+            $error_txt .= $oExpediente->getErrorTxt();
         }
 
-        if (empty($txt_err)) {
+        if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
         } else {
             $jsondata['success'] = false;
-            $jsondata['mensaje'] = $txt_err;
+            $jsondata['mensaje'] = $error_txt;
         }
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -412,7 +413,7 @@ switch($Qque) {
         breaK;
     case 'exp_eliminar':
         // Si hay escritos enviados, no se borran.
-        $txt_err = '';
+        $error_txt = '';
         // Hay que borrar: el expediente, las firmas, las acciones, los escritos y los adjuntos de los escritos.
         $gesAccion = new GestorAccion();
         $cAcciones = $gesAccion->getAcciones(['id_expediente' => $Qid_expediente]);
@@ -424,11 +425,11 @@ switch($Qque) {
             if (empty($f_salida)) {
                 $rta = $oEscrito->eliminarTodo();
                 if (!empty($rta)) { 
-                    $txt_err .= $rta;
+                    $error_txt .= $rta;
                 }
                 if ($oAccion->DBEliminar() === FALSE) {
-                    $txt_err .= _("No se ha eliminado la accion");
-                    $txt_err .= "<br>";
+                    $error_txt .= _("No se ha eliminado la accion");
+                    $error_txt .= "<br>";
                 }
             }
         }
@@ -437,22 +438,22 @@ switch($Qque) {
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente]);
         foreach($cFirmas as $oFirma) {
             if ($oFirma->DBEliminar() === FALSE) {
-                $txt_err .= _("No se ha eliminado la firma");
-                $txt_err .= "<br>";
+                $error_txt .= _("No se ha eliminado la firma");
+                $error_txt .= "<br>";
             }
         }
         $oExpediente = new Expediente($Qid_expediente);
         if ($oExpediente->DBEliminar() === FALSE ) {
-            $txt_err .= _("No se ha eliminado el expediente");
-            $txt_err .= "<br>";
+            $error_txt .= _("No se ha eliminado el expediente");
+            $error_txt .= "<br>";
         }
         
-        if (empty($txt_err)) {
+        if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
         } else {
             $jsondata['success'] = false;
-            $jsondata['mensaje'] = $txt_err;
+            $jsondata['mensaje'] = $error_txt;
         }
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -484,7 +485,9 @@ switch($Qque) {
             $new_preparar[] = $oJSON;
         }
         $oExpediente->setJson_preparar($new_preparar);
-        $oExpediente->DBGuardar();
+        if ($oExpediente->DBGuardar() === FALSE) {
+            $error_txt .= $oExpediente->getErrorTxt();
+        }
         
         //para regenerar la linea de oficiales
         $gesCargos = new GestorCargo();
@@ -523,12 +526,14 @@ switch($Qque) {
             $html .= "</div>";
         }
         
-        $jsondata['success'] = true;
-        $jsondata['id_expediente'] = $Qid_expediente;
-        $jsondata['html'] = $html;
-        //$a_cosas = [ 'id_expediente' => $Qid_expediente];
-        //$pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
-        //$jsondata['pagina_mod'] = $pagina_mod;
+        if (empty($error_txt)) {
+            $jsondata['success'] = true;
+            $jsondata['id_expediente'] = $Qid_expediente;
+            $jsondata['html'] = $html;
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        }
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
@@ -660,7 +665,9 @@ switch($Qque) {
         }
         $oExpediente->setJson_preparar($new_preparar);
         
-        $oExpediente->DBGuardar();
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            $error_txt .= $oExpediente->getErrorTxt();
+        }
         
         $id_expediente = $oExpediente->getId_expediente();
             
@@ -673,7 +680,9 @@ switch($Qque) {
             // Guardar fecha y cambiar estado
             $oExpediente->setF_ini_circulacion($f_hoy_iso,FALSE);
             $oExpediente->setEstado(Expediente::ESTADO_CIRCULANDO);
-            $oExpediente->DBGuardar();
+            if ($oExpediente->DBGuardar() === FALSE ) {
+                $error_txt .= $oExpediente->getErrorTxt();
+            }
             // generar firmas
             $oExpediente->generarFirmas();
             // Si soy el primero, Ya firmo.
@@ -729,7 +738,9 @@ switch($Qque) {
         $oExpediente->DBCarregar();
         $id_tramite_old = $oExpediente->getId_tramite();
         $oExpediente->setId_tramite($Qtramite);
-        $oExpediente->DBGuardar();
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            exit($oExpediente->getErrorTxt());
+        }
         // generar firmas
         $oExpediente->generarFirmas();
         $gesFirmas = new GestorFirma();

@@ -115,7 +115,10 @@ class Enviar {
                 }
                 $aMiembros = array_unique($aMiembros);
                 $oEntradaBypass->setDestinos($aMiembros);
-                $oEntradaBypass->DBGuardar();
+                if ($oEntradaBypass->DBGuardar() === FALSE ) {
+                    $error_txt = $oEntradaBypass->getErrorTxt();
+                    exit ($error_txt);
+                }
             } else {
                 //(segun individuales)
                 $destinos_txt = '';

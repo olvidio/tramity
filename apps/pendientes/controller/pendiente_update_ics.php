@@ -178,7 +178,9 @@ switch ($Qnuevo) {
             $oPendienteDB->setOficinasArray($Qa_oficinas);
             // las etiquetas:
             $oPendienteDB->setEtiquetasArray($Qa_etiquetas);
-			$oPendienteDB->DBGuardar();
+			if ($oPendienteDB->DBGuardar() === FALSE) {
+			    $txt_err .= $oPendienteDB->getErrorTxt();
+			}
 			
 			$id_pendiente = $oPendienteDB->getId_pendiente();
 			

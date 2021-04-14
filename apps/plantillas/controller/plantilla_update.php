@@ -51,15 +51,21 @@ switch($Qque) {
         $oEscrito->setVisibilidad($Qvisibiliad);
         */
         
-        $oEscrito->DBGuardar();
-        
+        if ($oEscrito->DBGuardar() === FALSE) {
+            echo _("hay un error, no se ha guardado");
+            echo "\n".$oEscrito->getErrorTxt();
+        }
+
         $id_escrito = $oEscrito->getId_escrito();
         
         $oAccion = new Accion();
         $oAccion->setId_expediente($Qid_expediente);
         $oAccion->setId_escrito($id_escrito);
         $oAccion->setTipo_accion(Escrito::ACCION_PLANTILLA);
-        $oAccion->DBGuardar();
+        if ($oAccion->DBGuardar() === FALSE) {
+            echo _("hay un error, no se ha guardado");
+            echo "\n".$oAccion->getErrorTxt();
+        }
         
         
         //clone:
@@ -123,7 +129,7 @@ switch($Qque) {
 		$oEscrito->setDestinos($Qa_lugares);
 		$oEscrito->setDescripcion($Qnombre);
 
-		if ($oEscrito->DBGuardar() === false) {
+		if ($oEscrito->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oEscrito->getErrorTxt();
 		}
@@ -134,7 +140,7 @@ switch($Qque) {
 	    if (!empty($a_sel)) { //vengo de un checkbox
             $Qid_plantilla = (integer) strtok($a_sel[0],"#");
             $oPlantilla = new Plantilla($Qid_plantilla);
-            if ($oPlantilla->DBEliminar() === false) {
+            if ($oPlantilla->DBEliminar() === FALSE) {
                 echo _("hay un error, no se ha eliminado");
                 echo "\n".$oPlantilla->getErrorTxt();
             }
@@ -154,7 +160,7 @@ switch($Qque) {
 		}
         $oPlantilla->DBCarregar();
         $oPlantilla->setNombre($Qnombre);
-		if ($oPlantilla->DBGuardar() === false) {
+		if ($oPlantilla->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oPlantilla->getErrorTxt();
 		}

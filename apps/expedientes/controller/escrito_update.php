@@ -301,14 +301,18 @@ switch($Qque) {
         $oEscrito = new Escrito($Qid_escrito);
         $oEscrito->DBCarregar();
         $oEscrito->setOK(Escrito::OK_OFICINA);
-        $oEscrito->DBGuardar();
+        if ($oEscrito->DBGuardar() === FALSE) {
+            exit($oEscrito->getErrorTxt());
+        }
         break;
     case 'tipo_doc':
         $Qtipo_doc = (integer) \filter_input(INPUT_POST, 'tipo_doc');
         $oEscrito = new Escrito($Qid_escrito);
         $oEscrito->DBCarregar();
         $oEscrito->setTipo_doc($Qtipo_doc);
-        $oEscrito->DBGuardar();
+        if ($oEscrito->DBGuardar() === FALSE) {
+            exit($oEscrito->getErrorTxt());
+        }
         
         break;
     case 'f_escrito':
@@ -319,8 +323,9 @@ switch($Qque) {
         $oEscrito = new Escrito($Qid_escrito);
         $oEscrito->DBCarregar();
         $oEscrito->setF_escrito($Qf_escrito);
-        $oEscrito->DBGuardar();
-        
+        if ($oEscrito->DBGuardar() === FALSE) {
+            exit($oEscrito->getErrorTxt());
+        }
         break;
     case 'upload_adjunto':
         
@@ -381,6 +386,7 @@ switch($Qque) {
             if ($oEscrito->DBGuardar() === FALSE ) {
                 $txt_err .= _("Hay un error al guardar el escrito");
                 $txt_err .= "<br>";
+                $txt_err .= $oEscrito->getErrorTxt();
             }
         } else {
             $txt_err = _("No existe el escrito");
@@ -399,6 +405,7 @@ switch($Qque) {
         echo json_encode($jsondata);
         exit();
     case 'guardar':
+        $error_txt = '';
         $nuevo = FALSE;
         if (!empty($Qid_escrito)) {
             $oEscrito = new Escrito($Qid_escrito);
@@ -491,7 +498,9 @@ switch($Qque) {
             $oEscrito->setOK(Escrito::OK_NO);
         }
 
-        $oEscrito->DBGuardar();
+        if ($oEscrito->DBGuardar() === FALSE) {
+            $error_txt .= $oEscrito->getErrorTxt();
+        }
         
         $id_escrito = $oEscrito->getId_escrito();
             
@@ -500,14 +509,21 @@ switch($Qque) {
             $oAccion->setId_expediente($Qid_expediente);
             $oAccion->setId_escrito($id_escrito);
             $oAccion->setTipo_accion($Qaccion);
-            $oAccion->DBGuardar();
+            if ($oAccion->DBGuardar() === FALSE) {
+                $error_txt .= $oAccion->getErrorTxt();
+            }
         }
         
-        $jsondata['success'] = true;
-        $jsondata['id_escrito'] = $id_escrito;
-        $a_cosas = [ 'id_escrito' => $id_escrito, 'filtro' => $Qfiltro, 'id_expediente' => $Qid_expediente];
-        $pagina_mod = web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
-        $jsondata['pagina_mod'] = $pagina_mod;
+        if (empty($error_txt)) {
+            $jsondata['success'] = true;
+            $jsondata['id_escrito'] = $id_escrito;
+            $a_cosas = [ 'id_escrito' => $id_escrito, 'filtro' => $Qfiltro, 'id_expediente' => $Qid_expediente];
+            $pagina_mod = web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
+            $jsondata['pagina_mod'] = $pagina_mod;
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        }
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
@@ -633,7 +649,10 @@ switch($Qque) {
             $oEscrito->setOK(Escrito::OK_OFICINA);
         }
 
-        $oEscrito->DBGuardar(); // OJO hay que guardar antes de generar el protocolo
+        // OJO hay que guardar antes de generar el protocolo
+        if ($oEscrito->DBGuardar() === FALSE) {
+            exit($oEscrito->getErrorTxt());
+        }
         if ($nuevo === TRUE) {
             $oEscrito->generarProtocolo();
         }

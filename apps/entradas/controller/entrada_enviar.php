@@ -39,7 +39,12 @@ if ($a_rta['success'] === TRUE) {
         $oEntradaBypass->setF_salida($Qf_salida,FALSE);
         $oEntrada = new Entrada($Qid_entrada);
         $oEntrada->setEstado(Entrada::ESTADO_ENVIADO_CR);
-        $oEntrada->DBGuardar();
+        if ($oEntrada->DBGuardar() === FALSE) {
+            $error_txt = $oEntrada->getErrorTxt();
+            echo "<script type=\"text/javascript\">
+                    alert('$error_txt');
+                  </script>";
+        }
         // para que se cierre la ventana que se ha abierto:
         echo "<script type=\"text/javascript\">
                  self.close();

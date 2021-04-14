@@ -31,7 +31,7 @@ switch($Qque) {
 		$oEscrito->setDestinos($Qa_lugares);
 		$oEscrito->setDescripcion($Qdescripcion);
 
-		if ($oEscrito->DBGuardar() === false) {
+		if ($oEscrito->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oEscrito->getErrorTxt();
 		}
@@ -42,7 +42,7 @@ switch($Qque) {
 	    if (!empty($a_sel)) { //vengo de un checkbox
             $Qid_grupo = (integer) strtok($a_sel[0],"#");
             $oGrupo = new Grupo($Qid_grupo);
-            if ($oGrupo->DBEliminar() === false) {
+            if ($oGrupo->DBEliminar() === FALSE) {
                 echo _("hay un error, no se ha eliminado");
                 echo "\n".$oGrupo->getErrorTxt();
             }
@@ -64,7 +64,7 @@ switch($Qque) {
         $oGrupo->DBCarregar();
         $oGrupo->setDescripcion($Qdescripcion);
         $oGrupo->setMiembros($Qa_lugares);
-		if ($oGrupo->DBGuardar() === false) {
+		if ($oGrupo->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oGrupo->getErrorTxt();
 		}

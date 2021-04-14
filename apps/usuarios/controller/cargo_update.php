@@ -46,7 +46,7 @@ switch($Qque) {
 	        $Qid_cargo = (integer) strtok($a_sel[0],"#");
 	        if ($Qid_cargo > Cargo::CARGO_REUNION) { // Al dia de hoy, es el número mayor (7)
                 $oCargo = new Cargo($Qid_cargo);
-                if ($oCargo->DBEliminar() === false) {
+                if ($oCargo->DBEliminar() === FALSE) {
                     echo _("hay un error, no se ha eliminado");
                     echo "\n".$oCargo->getErrorTxt();
                 }
@@ -81,7 +81,7 @@ switch($Qque) {
         $oCargo->setDirector($Qdirector);
         $oCargo->setId_usuario($Qid_usuario);
         $oCargo->setId_suplente($Qid_suplente);
-		if ($oCargo->DBGuardar() === false) {
+		if ($oCargo->DBGuardar() === FALSE) {
 			echo _("hay un error, no se ha guardado");
 			echo "\n".$oCargo->getErrorTxt();
 		}
