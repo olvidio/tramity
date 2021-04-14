@@ -11,7 +11,7 @@
       </div>
       <div class="col-3">
       <label for="">{{ "Ver escrito"|trans }}:</label>
-      <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(event);" >
+      <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep();" >
           {{ "Etherpad"|trans }}
       </button>
     </div>
@@ -68,10 +68,10 @@
 </form> 
   
 </div>
-  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
     {{ "Cancelar"|trans }}
   </button>
-  <button tabindex='90' class="btn btn-primary" onKeyUp="fnjs_enviar(event);" onClick="fnjs_enviar(event);" >
+  <button tabindex='90' class="btn btn-primary" onClick="fnjs_enviar();" >
     {{ "Enviar"|trans }}
   </button>
 </form>
@@ -88,14 +88,14 @@ fnjs_download=function(item) {
 	window.open(url);
 }
 
-fnjs_enviar=function(event){
+fnjs_enviar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
     	return false;
     }
 
@@ -109,47 +109,39 @@ fnjs_enviar=function(event){
 	if (!f_salida) { alert("{{ "Debe llenar el campo de fecha de salida"|trans|raw }}"); err=1; }
 	
 	if (err!=1) {
-		$('#form_enviar').attr('action','{{ url_update }}');
 		$('#que').val('guardar_destinos');
-		$('#form_enviar').one("submit", function(event){
-			event.preventDefault(); //prevent default action 	
-            request=$.ajax({
-                data: $(this).serialize(),
-                url: $(this).attr('action'),
-                type: 'post',
-                dataType: 'json'
-            });
-            request.done( function (rta) {
-                var json=rta;
-                if (json.success != true) {
-                    rta_txt = rta.responseText;
-                    alert ('error: '+rta_txt);
-                } else {
-                    window.open('/apps/entradas/controller/entrada_enviar.php?id='+id_entrada+'&f_salida='+f_salida, "down");
-                    // Actualizar vista expediente: escrito enviado.
-                    //fnjs_cancelar(event);
-					fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                    return false;
-                }
-            });
-		});
-		$('#form_enviar').submit();
-	} else {
-        event.preventDefault();
+        datos = $('#form_enviar').serialize();	
+        
+        request=$.ajax({
+            data: $(this).serialize(),
+            url: '{{ url_update }}',
+            type: 'post',
+            dataType: 'json'
+        });
+
+        request.done( function (json) {
+            if (json.success != true) {
+            	alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+            } else {
+                window.open('/apps/entradas/controller/entrada_enviar.php?id='+id_entrada+'&f_salida='+f_salida, "down");
+                // Actualizar vista expediente: escrito enviado.
+                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                return false;
+            }
+        });
 	}
 }
 
-fnjs_cancelar=function(event){
+fnjs_cancelar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
     	return false;
     }
-    event.preventDefault(); //prevent default action 	
 	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 }
 

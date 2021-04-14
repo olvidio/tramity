@@ -150,7 +150,7 @@ $oficinas = $oExpediente->getResto_oficinas();
 
 $oArrayDesplFirmas = new web\DesplegableArray($oficinas,$a_posibles_cargos,'oficinas');
 $oArrayDesplFirmas ->setBlanco('t');
-$oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas(event)');
+$oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas()');
 
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 

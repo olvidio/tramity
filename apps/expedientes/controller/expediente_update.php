@@ -225,6 +225,19 @@ switch($Qque) {
                 $error_txt .= $oFirma->getErrorTxt();
             }
         }
+
+        if (empty($error_txt)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
         break;
     case 'archivar':
         $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -739,7 +752,7 @@ switch($Qque) {
         $id_tramite_old = $oExpediente->getId_tramite();
         $oExpediente->setId_tramite($Qtramite);
         if ($oExpediente->DBGuardar() === FALSE ) {
-            exit($oExpediente->getErrorTxt());
+            $error_txt .= $oExpediente->getErrorTxt();
         }
         // generar firmas
         $oExpediente->generarFirmas();
@@ -748,5 +761,21 @@ switch($Qque) {
         $gesFirmas->copiarFirmas($Qid_expediente, $Qtramite, $id_tramite_old);
         // borrar el recorrido del tramite anterior.
         $gesFirmas->borrarFirmas($Qid_expediente, $id_tramite_old);
+        
+        
+        if (!empty($error_txt)) {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        } else {
+            $jsondata['success'] = true;
+            $jsondata['id_expediente'] = $id_expediente;
+            $a_cosas = [ 'id_expediente' => $id_expediente];
+            $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
+            $jsondata['pagina_mod'] = $pagina_mod;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
         break;
 }

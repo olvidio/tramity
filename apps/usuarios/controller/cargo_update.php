@@ -14,31 +14,18 @@ use davical\model\Davical;
 
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
+$error_txt = '';
 switch($Qque) {
     case "suplente":
-        $txt_err = '';
         $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
         $Qid_suplente = (integer) \filter_input(INPUT_POST, 'id_suplente');
         $oCargo = new Cargo (array('id_cargo' => $Qid_cargo));
         $oCargo->DBCarregar();
         $oCargo->setId_suplente($Qid_suplente);
         if ($oCargo->DBGuardar() === FALSE ) {
-            $txt_err .= _("Hay un error al guardar");
-            $txt_err .= "<br>";
+            $error_txt .= _("hay un error al guardar");
+            $error_txt .= "\n".$oCargo->getErrorTxt();
         }
-        if (empty($txt_err)) {
-            $jsondata['success'] = true;
-            $jsondata['mensaje'] = 'ok';
-        } else {
-            $jsondata['success'] = false;
-            $jsondata['mensaje'] = $txt_err;
-        }
-
-        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
-        header('Content-type: application/json; charset=utf-8');
-        echo json_encode($jsondata);
-        exit();
-        
         break;
 	case "eliminar":
 	    $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -47,11 +34,11 @@ switch($Qque) {
 	        if ($Qid_cargo > Cargo::CARGO_REUNION) { // Al dia de hoy, es el número mayor (7)
                 $oCargo = new Cargo($Qid_cargo);
                 if ($oCargo->DBEliminar() === FALSE) {
-                    echo _("hay un error, no se ha eliminado");
-                    echo "\n".$oCargo->getErrorTxt();
+                    $error_txt .= _("hay un error, no se ha eliminado");
+                    $error_txt .= "\n".$oCargo->getErrorTxt();
                 }
 	        } else {
-	            echo _("No se puede eliminar un cargo tipo.");
+	            $error_txt .= _("No se puede eliminar un cargo tipo.");
 	        }
 	    }
 	    break;
@@ -82,8 +69,8 @@ switch($Qque) {
         $oCargo->setId_usuario($Qid_usuario);
         $oCargo->setId_suplente($Qid_suplente);
 		if ($oCargo->DBGuardar() === FALSE) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oCargo->getErrorTxt();
+            $error_txt .= _("hay un error al guardar");
+            $error_txt .= "\n".$oCargo->getErrorTxt();
 		}
 		// Crear el usuario en davical. Hace falta el nombre de la oficina:
 		$oOficina = new Oficina($Qid_oficina);
@@ -97,3 +84,17 @@ switch($Qque) {
 		
         break;
 }
+
+if (empty($error_txt)) {
+    $jsondata['success'] = true;
+    $jsondata['mensaje'] = 'ok';
+} else {
+    $jsondata['success'] = false;
+    $jsondata['mensaje'] = $error_txt;
+}
+
+//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+header('Content-type: application/json; charset=utf-8');
+echo json_encode($jsondata);
+exit();
+        

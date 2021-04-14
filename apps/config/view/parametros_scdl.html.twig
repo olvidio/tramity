@@ -26,12 +26,9 @@ fnjs_guardar=function(formulario){
         type: 'post',
         dataType: 'json'
     });
-    request.done( function (rta) {
-        var json=rta;
-        id = json.id_escrito;
-        if (json.success != true) {
-            rta_txt = rta.responseText;
-            alert ('error: '+rta_txt);
+    request.done( function (json) {
+    	if (json.success != true) {
+			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
         }
     });
 }

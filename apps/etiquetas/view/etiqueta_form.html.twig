@@ -14,10 +14,10 @@
           <input name="oficina" type="checkbox" checked data-toggle="toggle" data-on="{{ "de la oficina"|trans }}" data-off="{{ "Personal"|trans }}" data-onstyle="success" data-offstyle="danger">
         </div>
         <div class="form-group">
-          <button class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+          <button class="btn btn-secondary" onClick="fnjs_cancelar();" >
             {{ "Cancelar"|trans }}
 		  </button>
-		  <button class="btn btn-primary" onClick="fnjs_guardar(event);" >
+		  <button class="btn btn-primary" onClick="fnjs_guardar();" >
             {{ "Guardar"|trans}}
   		  </button>
         </div>
@@ -29,39 +29,40 @@
 <!--  OJO: El java script está en 'usuario_home' para que se cargue sólo una vez -->
 <link type="text/css" rel='stylesheet' href='node_modules/bootstrap4-toggle/css/bootstrap4-toggle.min.css' />
 <script>
-fnjs_cancelar=function(event){
+fnjs_cancelar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
     	return false;
     }
-    event.preventDefault(); //prevent default action 	
 	fnjs_update_div('#main',"apps/etiquetas/controller/etiqueta_lista.php");
 }
 
-fnjs_guardar=function(event){
-    $('#frm_etiqueta').attr('action',"apps/etiquetas/controller/etiqueta_update.php");
-    $('#frm_etiqueta').one("submit", function(event) {
-    	event.preventDefault(); //prevent default action 	
-    	request=$.ajax({
-            url: $(this).attr('action'),
-            type: 'post',
-            data: $(this).serialize()
-        });
-        request.done(function (rta_txt) {
-            if (rta_txt != '' && rta_txt != '\\n') {
-                alert ('{{ "respuesta"|trans|raw }}: '+rta_txt);
-            } else {
-                fnjs_update_div('#main',"apps/etiquetas/controller/etiqueta_lista.php");
-            }
-        });
-        return false;
+fnjs_guardar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    datos = $('#frm_etiqueta').serialize();
+    
+    request=$.ajax({
+        url: "apps/etiquetas/controller/etiqueta_update.php",
+        type: 'post',
+        data: datos
+    });
+
+    request.done(function (rta_txt) {
+        if (rta_txt != '' && rta_txt != '\\n') {
+            alert ('{{ "respuesta"|trans|raw }}: '+rta_txt);
+        } else {
+            fnjs_update_div('#main',"apps/etiquetas/controller/etiqueta_lista.php");
+        }
     });
 }
+
 $(document).ready(function() {
     $('input[type=checkbox][data-toggle^=toggle]').bootstrapToggle();
 });

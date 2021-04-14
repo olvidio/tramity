@@ -13,6 +13,7 @@ use usuarios\model\entity\Oficina;
 
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
+$error_txt = '';
 switch($Qque) {
 	case "eliminar":
 		$a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -28,8 +29,8 @@ switch($Qque) {
 		
         $oOficina = new Oficina (array('id_oficina' => $Qid_oficina));
 		if ($oOficina->DBEliminar() === FALSE) {
-			echo _("hay un error, no se ha eliminado");
-			echo "\n".$oOficina->getErrorTxt();
+			$error_txt .= _("hay un error, no se ha eliminado");
+            $error_txt .= "\n".$oOficina->getErrorTxt();
 		}
         break;
 	case "guardar":
@@ -45,8 +46,8 @@ switch($Qque) {
         $oOficina->setSigla($Qsigla);
         $oOficina->setOrden($Qorden);
 		if ($oOficina->DBGuardar() === FALSE) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oOficina->getErrorTxt();
+            $error_txt .= _("hay un error, no se ha guardado");
+            $error_txt .= "\n".$oOficina->getErrorTxt();
 		} else {
 		    if ($sigla_old != $Qsigla) {
                 // Cambiar el nombre en davical.
@@ -67,8 +68,8 @@ switch($Qque) {
         $oOficina->setSigla($Qsigla);
         $oOficina->setOrden($Qorden);
         if ($oOficina->DBGuardar() === FALSE) {
-            echo _("hay un error, no se ha guardado");
-            echo "\n".$oOficina->getErrorTxt();
+            $error_txt .= _("hay un error, no se ha guardado");
+            $error_txt .= "\n".$oOficina->getErrorTxt();
 		} else {
 		    // Crear la oficina en davical.
 		    $oDavical = new Davical();
@@ -76,3 +77,14 @@ switch($Qque) {
         }
 		break;
 }
+        
+if (!empty($error_txt)) {
+    $jsondata['success'] = FALSE;
+    $jsondata['mensaje'] = $error_txt;
+} else {
+    $jsondata['success'] = TRUE;
+}
+//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+header('Content-type: application/json; charset=utf-8');
+echo json_encode($jsondata);
+exit();

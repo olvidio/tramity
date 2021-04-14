@@ -38,7 +38,7 @@
       </div>
       <div id="dst_grupo" class="col-10">
 	    {{ oArrayDesplGrupo.ListaSelects|raw }}
-	    <button class="btn btn-secondary" onClick="fnjs_ver_dst(event);" >
+	    <button class="btn btn-secondary" onClick="fnjs_ver_dst();" >
           {{ "modificar selección"|trans }}
         </button>
         {{ descripcion }}
@@ -102,7 +102,7 @@
     {% if tipo_doc == 1 %}
         <div class="form-group">
           <label>{{ "Ver escrito"|trans }}:</label>
-          <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(event);" >
+          <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep();" >
             {{ "Etherpad"|trans }}
           </button>
         </div>
@@ -116,13 +116,13 @@
     {% if tipo_doc is empty %}
         <div class="form-group">
           <label>{{ "Insertar escrito"|trans }}:</label>
-          <button tabindex='100' class="btn btn-info" onClick="fnjs_add_escrito(event,1);" >
+          <button tabindex='100' class="btn btn-info" onClick="fnjs_add_escrito(1);" >
             {{ "Etherpad"|trans }}
           </button>
-          <button tabindex='101' class="btn btn-info" onClick="fnjs_add_escrito(event,2);" >
+          <button tabindex='101' class="btn btn-info" onClick="fnjs_add_escrito(2);" >
             {{ "EtherCalc"|trans }}
           </button>
-          <button tabindex='10' class="btn btn-info" onClick="fnjs_add_escrito(event,3);" >
+          <button tabindex='10' class="btn btn-info" onClick="fnjs_add_escrito(3);" >
             {{ "Incrustado"|trans }}
           </button>
         </div>
@@ -142,10 +142,10 @@
 </div> <!-- Fin Col Dcha -->
 
 <div>
-  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
     {{ "Cancelar"|trans }}
   </button>
-  <button tabindex='90' class="btn btn-primary" onKeyUp="fnjs_guardar(event);" onClick="fnjs_guardar(event);" >
+  <button tabindex='90' class="btn btn-primary" onClick="fnjs_guardar();" >
     {{ "Guardar"|trans }}
   </button>
 {% if ver_revisado %} 
@@ -157,7 +157,7 @@
 </div>
 {% if explotar %} 
 <div>
-  <button tabindex='90' class="btn btn-danger" onClick="fnjs_explotar(event);" >
+  <button tabindex='90' class="btn btn-danger" onClick="fnjs_explotar();" >
     {{ "Explotar en un escrito para cada ctr"|trans }}
   </button>
 </div>
@@ -210,7 +210,7 @@ $(document).ready(function() {
         initialPreviewDownloadUrl: "apps/expedientes/controller/adjunto_download.php",
         fileActionSettings: {showZoom: false, showDrag: false},
     });
-	el1.on("filebatchselected", function(event, files) {
+	el1.on("filebatchselected", function(files) {
         el1.fileinput("upload");
     });
 });

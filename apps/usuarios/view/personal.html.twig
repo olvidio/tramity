@@ -30,7 +30,7 @@
         </div>
         
         <div class="row form-group">
-          <button onclick="fnjs_guardar(event,this.form);" type="button" class="col-4 btn btn-primary btn-block">{{ "Guardar"|trans }}</button>
+          <button onclick="fnjs_guardar(this.form);" type="button" class="col-4 btn btn-primary btn-block">{{ "Guardar"|trans }}</button>
         </div>
       </form>
   </div>
@@ -41,7 +41,7 @@
  <button onclick="fnjs_update_div('#main','{{ cambio_password }}');" type="button" class="col-4 btn btn-primary btn-block">
  	{{ "cambiar el password"|trans }}
  </button>
-<button onclick="fnjs_cancelar(event);" type="button" class="col-4 btn btn-secondary btn-block">
+<button onclick="fnjs_cancelar();" type="button" class="col-4 btn btn-secondary btn-block">
     {{ "Cancelar"|trans }}
 </button>
   
@@ -50,7 +50,7 @@ $(document).ready(function() {
 	$("#content").hide();
 });
 
-fnjs_guardar=function(event,formulario){
+fnjs_guardar=function(formulario){
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -71,17 +71,16 @@ fnjs_guardar=function(event,formulario){
     });
 }
 
-fnjs_cancelar=function(event){
+fnjs_cancelar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
     // Asegurarme que es por click y no por return (posicion: 0,0)
     var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
         return false;
     }
-    event.preventDefault(); //prevent default action
     window.location.reload();
 }
 </script>

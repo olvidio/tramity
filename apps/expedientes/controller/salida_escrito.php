@@ -71,7 +71,7 @@ $oDesplPonente->setTabIndex(130);
 
 $oArrayDesplFirmas = new web\DesplegableArray([],$a_posibles_cargos,'oficinas');
 $oArrayDesplFirmas ->setBlanco('t');
-$oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas(event)');
+$oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas()');
 $oArrayDesplFirmas->setTabIndex(140);
 
 $oEscrito = new Escrito($Qid_escrito);
@@ -102,7 +102,7 @@ if (!empty($Qid_escrito)) {
     $json_prot_dst = $oEscrito->getJson_prot_destino();
     $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
     $oArrayProtDestino->setBlanco('t');
-    $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+    $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
     // si hay grupos, tienen preferencia
     $a_grupos = $oEscrito->getId_grupos();
     if (!empty($a_grupos)) {
@@ -119,12 +119,12 @@ if (!empty($Qid_escrito)) {
     }
     $oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');
     $oArrayDesplGrupo->setBlanco('t');
-    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
+    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
 
     $json_prot_ref = $oEscrito->getJson_prot_ref();
     $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares,'referencias');
     $oArrayProtRef->setBlanco('t');
-    $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias(event)');
+    $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias()');
     
     $entradilla = $oEscrito->getEntradilla();
     $asunto = $oEscrito->getAsunto();
@@ -186,7 +186,7 @@ if (!empty($Qid_escrito)) {
         $json_prot_dst[] = $oEntrada->getJson_prot_origen();
         $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
         $oArrayProtDestino->setBlanco('t');
-        //$oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+        //$oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
         $oArrayProtDestino->setTabIndex(50);
         
         // los escritos van por cargos, las entradas por oficinas: pongo al director de la oficina:
@@ -226,7 +226,7 @@ if (!empty($Qid_escrito)) {
 
         $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
         $oArrayProtDestino ->setBlanco('t');
-        //$oArrayProtDestino ->setAccionConjunto('fnjs_mas_destinos(event)');
+        //$oArrayProtDestino ->setAccionConjunto('fnjs_mas_destinos()');
         $oArrayProtDestino->setTabIndex(50);
 
     }
@@ -234,11 +234,11 @@ if (!empty($Qid_escrito)) {
     
     $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
     $oArrayDesplGrupo->setBlanco('t');
-    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
+    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
     
     $oArrayProtRef = new web\ProtocoloArray('',$a_posibles_lugares,'referencias');
     $oArrayProtRef ->setBlanco('t');
-    //$oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
+    //$oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias()');
     $oArrayProtRef->setTabIndex(95);
 
     $id_ponente = ConfigGlobal::role_id_cargo();

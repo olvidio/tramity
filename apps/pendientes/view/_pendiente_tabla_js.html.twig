@@ -90,7 +90,7 @@ fnjs_marcar=function(formulario){
     });
     request.done( function (json) {
         if (json.success != true) {
-            alert ('error: '+json.mensaje);
+            alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
         } else {
          	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
         }
@@ -157,7 +157,7 @@ fnjs_borrar=function(formulario){
         });
 		request.done( function (json) {
             if (json.success != true) {
-                alert ('error: '+json.mensaje);
+                alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
             } else {
             	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
             }

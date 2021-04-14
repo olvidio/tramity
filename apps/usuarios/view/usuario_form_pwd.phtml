@@ -17,25 +17,21 @@ fnjs_guardar=function(formulario){
 		return false;
 	}
 	id_usuario=$('#id_usuario').val();
-	$(formulario).attr('action',"apps/usuarios/controller/usuario_update.php");
-	$(formulario).one("submit", function() {
-		$.ajax({
-			url: $(this).attr('action'),
-			type: 'post',
-			data: $(this).serialize()
-		})
-		.done(function (rta_txt) {
-			if (rta_txt != '' && rta_txt != '\n') {
-				alert (rta_txt);
-			} else {
-				alert('<?= $txt_ok ?>');
-			}
-			fnjs_cancelar();
-		});
-		return false;
+	datos = $(formulario).serialize();	
+	request=$.ajax({
+		data: datos,
+		url: 'apps/usuarios/controller/usuario_update.php',
+		type: 'post',
+		dataType: 'json'
 	});
-	$(formulario).trigger("submit");
-	$(formulario).off();
+	request.done( function (json) {
+		if (json.success != true) {
+			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+		} else {
+            alert('<?= $txt_ok ?>');
+		}
+        fnjs_cancelar();
+	});
 }
 
 fnjs_cancelar=function(){

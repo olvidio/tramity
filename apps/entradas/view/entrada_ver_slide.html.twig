@@ -37,7 +37,7 @@
       </div>
       <div class="text-right form-group row">
         <div class="col-7 p-2 custom-control custom-switch">
-          <input type="checkbox" class="custom-control-input" id="customSwitches" onChange="fnjs_read(event)" {{  chk_leido }}>
+          <input type="checkbox" class="custom-control-input" id="customSwitches" onChange="fnjs_read()" {{  chk_leido }}>
           <label class="custom-control-label" for="customSwitches">{{ "Leido el"|trans }}</label>
         </div>
         <input class="form-control col-5" name='f_entrada' id='f_entrada' type='text' value="{{ f_entrada }}" {{ f_entrada_disabled }}/>
@@ -67,25 +67,18 @@
 	{{ txt_alert|raw }}
 </div>
 {% endif %}
-{#
-<div>
-  <button type="button" tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
-    {{ "Volver"|trans }}
-  </button>
-</div>
-#}
+
 <script>
-fnjs_cancelar=function(event){
+fnjs_cancelar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
     	return false;
     }
-    event.preventDefault(); //prevent default action 	
 	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 }
 
@@ -109,7 +102,7 @@ $(function() {
 
 });
 
-fnjs_read=function(event) {
+fnjs_read=function() {
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();

@@ -6,29 +6,25 @@ fnjs_editar=function(){
 }
 
 fnjs_eliminar=function(){
+    event.preventDefault();
 	rta=fnjs_solo_uno('#seleccionados');
 	if (rta==1) {
 		if (confirm("{{ "¿Está seguro que desea borrar este grupo?"|trans }}") ) {
             $('#que').val('eliminar');
-			$('#seleccionados').attr('action',"{{ url_eliminar }}");
-			$('#seleccionados').one("submit", function(event) {
-				event.preventDefault();
-				$.ajax({
-					url: $(this).attr('action'),
-					type: 'post',
-					data: $(this).serialize()
-				})
-				.done(function (rta_txt) {
-					if (rta_txt != '' && rta_txt != '\n') {
-						alert ('{{ "respuesta"|trans|raw }}: '+rta_txt);
-					} else {
-						fnjs_actualizar();
-				   	}
-				});
-				return false;
-			});
-			$('#seleccionados').trigger("submit");
-			$('#seleccionados').off();
+            datos = $('#seleccionados').serialize();	
+        	request=$.ajax({
+        		data: datos,
+        		url: '{{ url_eliminar }}',
+        		type: 'post',
+        		dataType: 'json'
+        	});
+        	request.done( function (json) {
+        		if (json.success != true) {
+        			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+        		} else {
+        			fnjs_actualizar();
+        		}
+        	});
 		}
 	}
 }

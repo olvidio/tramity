@@ -159,7 +159,7 @@ class Protocolo {
         $sHtml .= '</div>';
 		
 		$sHtml .= "<div class=\"col\">
-                    <input $tab_index2 type=\"text\" class=\"form-control\" id=\"$id_prot_num\" name=\"$id_prot_num\" value=\"$prot_num\" onchange=\"fnjs_proto(event,'#$id_prot_num','#$id_prot_any')\">
+                    <input $tab_index2 type=\"text\" class=\"form-control\" id=\"$id_prot_num\" name=\"$id_prot_num\" value=\"$prot_num\" onchange=\"fnjs_proto('#$id_prot_num','#$id_prot_any')\">
                     </div>";
         $sHtml .= '/';
 		$sHtml .= "<div class=\"col\">

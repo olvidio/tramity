@@ -162,7 +162,7 @@ class EscritoLista {
             $adjuntos = '';
             $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
             if (!empty($a_id_adjuntos)) {
-                $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto(event,'$id_escrito');\"  ></i>";
+                $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto('$id_escrito');\"  ></i>";
             }
             
             $json_ref = $oEscrito->getJson_prot_ref();
@@ -170,7 +170,7 @@ class EscritoLista {
             $oArrayProtRef->setRef(TRUE);
             
             if ($this->getModo() == 'mod') {
-                $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito(event,'$id_escrito');\" >";
+                $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito('$id_escrito');\" >";
                 $prot_local .= $prot_local_txt;
                 $prot_local .= "</span>";
             } else {
@@ -312,7 +312,7 @@ class EscritoLista {
             $adjuntos = '';
             $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
             if (!empty($a_id_adjuntos)) {
-                $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto(event,'$id_escrito');\"  ></i>";
+                $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto('$id_escrito');\"  ></i>";
             }
             
             $json_ref = $oEscrito->getJson_prot_ref();
@@ -320,7 +320,7 @@ class EscritoLista {
             $oArrayProtRef->setRef(TRUE);
             
             if ($this->getModo() == 'mod' && !$enviado) {
-                $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito(event,'$id_escrito');\" >";
+                $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito('$id_escrito');\" >";
                 $prot_local .= $prot_local_txt;
                 $prot_local .= "</span>";
             } else {

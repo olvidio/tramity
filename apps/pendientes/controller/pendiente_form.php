@@ -76,7 +76,7 @@ $oDesplVisibilidad->setOpciones($aOpciones);
 $a_oficinas_actuales = [];
 $oArrayDesplOficinas = new web\DesplegableArray($a_oficinas_actuales,$a_posibles_oficinas,'oficinas');
 $oArrayDesplOficinas ->setBlanco('t');
-$oArrayDesplOficinas ->setAccionConjunto('fnjs_mas_oficinas(event)');
+$oArrayDesplOficinas ->setAccionConjunto('fnjs_mas_oficinas()');
 
 $gesEtiquetas = new GestorEtiqueta();
 $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
@@ -89,7 +89,7 @@ foreach ($cEtiquetas as $oEtiqueta) {
 }
 $oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas,$a_posibles_etiquetas,'etiquetas');
 $oArrayDesplEtiquetas ->setBlanco('t');
-$oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas(event)');
+$oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
 
 // para encargar a los oficiales
 $gesCargos = new GestorCargo();

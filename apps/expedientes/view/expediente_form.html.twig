@@ -96,13 +96,13 @@
       <label>{{ "Antecedentes"|trans }}:</label>
     </div>
     <div class="form-group col-md-12">
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(event,1);" >
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(1);" >
         {{ "Entrada"|trans }}
       </button>
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(event,2);" >
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(2);" >
         {{ "Expediente"|trans }}
       </button>
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(event,3);" >
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(3);" >
         {{ "Escrito"|trans }}
       </button>
     </div>
@@ -187,7 +187,7 @@
         </div>
     {% endfor %}
     </div>
-    <button tabindex='' class="btn btn-outline-secondary" onClick="fnjs_visto(event);" >
+    <button tabindex='' class="btn btn-outline-secondary" onClick="fnjs_visto();" >
       {{ "marcar como visto"|trans }}
     </button>
   </div>
@@ -212,14 +212,14 @@
   </div>
   
 <!--  --------------------  BOTONES --------------------------  -->
-  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
     {{ "Cancelar"|trans }}
   </button>
-  <button tabindex='90' class="btn btn-primary" onKeyUp="fnjs_guardar(event);" onClick="fnjs_guardar(event);" >
+  <button tabindex='90' class="btn btn-primary" onClick="fnjs_guardar();" >
     {{ "Guardar"|trans }}
   </button>
   {% if id_expediente %}
-      <button tabindex='90' class="btn btn-success" onClick="fnjs_circular(event);" >
+      <button tabindex='90' class="btn btn-success" onClick="fnjs_circular();" >
         {{ "Circular"|trans }}
       </button>
   {% endif %}
@@ -233,7 +233,7 @@ $(document).ready(function() {
 	tabs_hide();
 	fnjs_tramite(); // oculta a los oficiales, dependiendo del tramite
 });
-fnjs_revisar_adjunto=function(event,id_escrito) {
+fnjs_revisar_adjunto=function(id_escrito) {
 	id_expediente = $('#id_expediente').val();
 	filtro = $('#filtro').val();
 	modo = $('#modo').val();

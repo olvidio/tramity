@@ -33,7 +33,7 @@
     </div>
       <!--  --------------- BOTON --------------- -->
       <div class="col-2">
-        <button type="button" class="btn btn-primary" onClick="fnjs_antecedente_expediente(event);" >{{ "Buscar"|trans }}</button>
+        <button type="button" class="btn btn-primary" onClick="fnjs_antecedente_expediente();" >{{ "Buscar"|trans }}</button>
       </div>
   </div>
   </form>
@@ -43,7 +43,7 @@
 	{{ oLista.mostrar_tabla|raw }}
 </div>
 <script>
-fnjs_antecedente_expediente=function(event) {
+fnjs_antecedente_expediente=function() {
     var data=$('#condiciones').serialize();
     var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
     request=$.ajax({

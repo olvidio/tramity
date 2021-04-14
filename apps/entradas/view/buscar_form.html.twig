@@ -26,10 +26,10 @@
   </div>
   
   <div>
-    <button type="button" class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+    <button type="button" class="btn btn-secondary" onClick="fnjs_cancelar();" >
       {{ "Cancelar"|trans }}
     </button>
-    <button type="button" class="btn btn-primary" onClick="fnjs_buscar(event);" >
+    <button type="button" class="btn btn-primary" onClick="fnjs_buscar();" >
       {{ "Buscar"|trans }}
     </button>
   </div>
@@ -37,47 +37,40 @@
 
 <div id="resultados"></div>
 <script>
-fnjs_cancelar=function(event){
+fnjs_cancelar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
     	return false;
     }
-    event.preventDefault(); //prevent default action 	
 	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 }
 
-fnjs_buscar=function(event){
+fnjs_buscar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-    	return false;
+        return false;
     }
 
-	$('#form_buscar').attr('action','{{ pagina_buscar }}');
     $('#que').val('buscar');
-    $('#form_buscar').one("submit", function(event){
-        event.preventDefault(); //prevent default action 	
-        request=$.ajax({
-            data: $(this).serialize(),
-            url: $(this).attr('action'),
-            type: 'post'
-            //dataType: 'json'
-        });
-        request.done( function (rta) {
-            //debugger;
-            $('#resultados').html(rta);
-        });
-    });
-    $('#form_buscar').submit();
+	datos = $('#form_buscar').serialize();	
+	request=$.ajax({
+		data: datos,
+		url: '{{ pagina_buscar }}',
+		type: 'post'
+	});
+	request.done( function (rta) {
+        $('#resultados').html(rta);
+	});
 }
 
 fnjs_adjuntar_entrada=function(id_entrada,id_expediente,filtro) {

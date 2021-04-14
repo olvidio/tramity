@@ -159,7 +159,7 @@ if ($Qid_expediente) {
         $adjuntos = '';
         $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
         if (!empty($a_id_adjuntos)) {
-            $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto(event,'$id_escrito');\"  ></i>";
+            $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto('$id_escrito');\"  ></i>";
         }
         // Categoria
         $categoria = $oEscrito->getCategoria();
@@ -180,13 +180,13 @@ if ($Qid_expediente) {
 
     $oArrayDesplFirmasOficina = new web\DesplegableArray($oficiales,$a_posibles_cargos_oficina,'firmas_oficina');
     $oArrayDesplFirmasOficina ->setBlanco('t');
-    $oArrayDesplFirmasOficina ->setAccionConjunto('fnjs_mas_firmas_oficina(event)');
+    $oArrayDesplFirmasOficina ->setAccionConjunto('fnjs_mas_firmas_oficina()');
 
     $oficinas = $oExpediente->getResto_oficinas();
 
     $oArrayDesplFirmas = new web\DesplegableArray($oficinas,$a_posibles_cargos,'firmas');
     $oArrayDesplFirmas ->setBlanco('t');
-    $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas(event)');
+    $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas()');
 
     $oDesplCargos = new web\Desplegable('oficina_buscar_2',$a_posibles_cargos,'',TRUE);
     
@@ -220,11 +220,11 @@ if ($Qid_expediente) {
 
     $oArrayDesplFirmasOficina = new web\DesplegableArray($oficiales,$a_posibles_cargos_oficina,'firmas_oficina');
     $oArrayDesplFirmasOficina ->setBlanco('t');
-    $oArrayDesplFirmasOficina ->setAccionConjunto('fnjs_mas_firmas_oficina(event)');
+    $oArrayDesplFirmasOficina ->setAccionConjunto('fnjs_mas_firmas_oficina()');
     
     $oArrayDesplFirmas = new web\DesplegableArray($oficinas,$a_posibles_cargos,'firmas');
     $oArrayDesplFirmas ->setBlanco('t');
-    $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas(event)');
+    $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas()');
         
     $oDesplCargos = new web\Desplegable('oficina_buscar_2',$a_posibles_cargos,'',TRUE);
 }

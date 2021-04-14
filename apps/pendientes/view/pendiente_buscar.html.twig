@@ -169,7 +169,7 @@ fnjs_marcar=function(formulario){
                 dataType: 'json',
                 complete: function (json) {
                    if (json.success != true) {
-                       alert ('error: '+json.mensaje);
+                       alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
                    }
                 }
         });
@@ -202,7 +202,7 @@ fnjs_borrar=function(formulario){
                 dataType: 'json',
                 complete: function (json) {
                    if (json.success != true) {
-                       alert ('error: '+json.mensaje);
+                       alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
                    }
                 }
             });

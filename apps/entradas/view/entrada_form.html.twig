@@ -116,12 +116,12 @@
       <div class="form-group">
         <label>{{ "Ver escrito"|trans }}:</label>
 	    {% if tipo_documento == 1 %}
-            <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(event);" >
+            <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep();" >
               {{ "Etherpad"|trans }}
             </button>
 	    {% endif %}
 	    {% if tipo_documento == 2 %}
-            <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ec(event);" >
+            <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ec();" >
               {{ "Ethercalc"|trans }}
             </button>
 	    {% endif %}
@@ -129,13 +129,13 @@
     {% else %}
     <label>{{ "Insertar escrito"|trans }}:</label>
     <div class="form-group">
-      <button type="button" tabindex='100' class="btn btn-danger" onClick="fnjs_escrito(event,1);" >
+      <button type="button" tabindex='100' class="btn btn-danger" onClick="fnjs_escrito(1);" >
         {{ "Etherpad"|trans }}
       </button>
-      <button type="button" tabindex='101' class="btn btn-danger" onClick="fnjs_escrito(event,2);" >
+      <button type="button" tabindex='101' class="btn btn-danger" onClick="fnjs_escrito(2);" >
         {{ "EtherCalc"|trans }}
       </button>
-      <button type="button" tabindex='10' class="btn btn-danger" onClick="fnjs_escrito(event,3);" >
+      <button type="button" tabindex='10' class="btn btn-danger" onClick="fnjs_escrito(3);" >
         {{ "Incrustado"|trans }}
       </button>
     </div>
@@ -180,11 +180,11 @@
 </div>
 </div>
 
-<div class="row">
-  <button type="button" tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+<div>
+  <button type="button" tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
     {{ "Cancelar"|trans }}
   </button>
-  <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary" onKeyUp="fnjs_guardar(event);" onClick="fnjs_guardar(event);" >
+  <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary" onClick="fnjs_guardar();" >
     {{ txt_btn_guardar }}
   </button>
 </div>
@@ -220,7 +220,7 @@ $(document).ready(function() {
         initialPreviewConfig: {{ json_config|raw }},
         initialPreviewDownloadUrl: "apps/entradas/controller/download.php",
         fileActionSettings: {showZoom: false, showDrag: false},
-    }).on("filebatchselected", function(event, files) {
+    }).on("filebatchselected", function(files) {
         el1.fileinput("upload");
     });
 });

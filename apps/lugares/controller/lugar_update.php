@@ -13,6 +13,7 @@ use lugares\model\entity\Lugar;
 
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
+$error_txt = '';
 switch($Qque) {
 	case "eliminar":
 	    //$Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');
@@ -21,12 +22,13 @@ switch($Qque) {
             $Qid_lugar = (integer) strtok($a_sel[0],"#");
             $oLugar = new Lugar($Qid_lugar);
             if ($oLugar->DBEliminar() === FALSE) {
-                echo _("hay un error, no se ha eliminado");
-                echo "\n".$oLugar->getErrorTxt();
+                $error_txt .= _("hay un error, no se ha eliminado");
+                $error_txt .= "\n".$oLugar->getErrorTxt();
             }
 	    }
 		
 		break;
+		/*
 	case "buscar":
 		$Qsigla = (string) \filter_input(INPUT_POST, 'sigla');
 		
@@ -34,6 +36,7 @@ switch($Qque) {
 		$cLugares = $oLugares->getLugars(array('sigla'=>$Qsigla));
 		$oLugar = $cLugares[0];
 		break;
+		*/
 	case "guardar":
         $Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
 		$Qsigla = (string) \filter_input(INPUT_POST, 'sigla');
@@ -59,8 +62,8 @@ switch($Qque) {
         $oLugar->setModo_envio($Qmodo_envio);
         $oLugar->setAnulado($Qanulado);
 		if ($oLugar->DBGuardar() === FALSE) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oLugar->getErrorTxt();
+			$error_txt .= _("hay un error, no se ha guardado");
+			$error_txt .= "\n".$oLugar->getErrorTxt();
 		}
         break;
 	case "nuevo":
@@ -83,8 +86,21 @@ switch($Qque) {
         $oLugar->setE_mail($Qe_mail);
         $oLugar->setModo_envio($Qmodo_envio);
 		if ($oLugar->DBGuardar() === FALSE) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oLugar->getErrorTxt();
+			$error_txt .= _("hay un error, no se ha guardado");
+			$error_txt .= "\n".$oLugar->getErrorTxt();
 		}
 		break;
 }
+
+if (empty($error_txt)) {
+    $jsondata['success'] = true;
+    $jsondata['mensaje'] = 'ok';
+} else {
+    $jsondata['success'] = false;
+    $jsondata['mensaje'] = $error_txt;
+}
+
+//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+header('Content-type: application/json; charset=utf-8');
+echo json_encode($jsondata);
+exit();

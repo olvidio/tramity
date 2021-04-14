@@ -15,6 +15,7 @@ use usuarios\model\entity\Cargo;
 
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
+$error_txt = '';
 switch($Qque) {
     case "role":
         // cambiar el role actual:
@@ -38,11 +39,21 @@ switch($Qque) {
             $Qid_usuario = (integer) strtok($a_sel[0],"#");
             $oUsuario = new Usuario($Qid_usuario);
             if ($oUsuario->DBEliminar() === FALSE) {
-                echo _("hay un error, no se ha eliminado");
-                echo "\n".$oUsuario->getErrorTxt();
+                $error_txt = _("hay un error, no se ha eliminado");
+                $error_txt .= "\n".$oUsuario->getErrorTxt();
             }
 	    }
-		
+	    
+	    if (!empty($error_txt)) {
+	        $jsondata['success'] = FALSE;
+	        $jsondata['mensaje'] = $error_txt;
+	    } else {
+	        $jsondata['success'] = TRUE;
+	    }
+	    //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+	    header('Content-type: application/json; charset=utf-8');
+	    echo json_encode($jsondata);
+	    exit();
 		break;
 	case "buscar":
 		$Qusuario = (string) \filter_input(INPUT_POST, 'usuario');
@@ -66,9 +77,20 @@ switch($Qque) {
 			$oUsuario->setPassword($Qpass);
 		}
 		if ($oUsuario->DBGuardar() === FALSE) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oUsuario->getErrorTxt();
+            $error_txt = _("hay un error, no se ha guardado");
+            $error_txt .= "\n".$oUsuario->getErrorTxt();
 		}
+		
+	    if (!empty($error_txt)) {
+	        $jsondata['success'] = FALSE;
+	        $jsondata['mensaje'] = $error_txt;
+	    } else {
+	        $jsondata['success'] = TRUE;
+	    }
+	    //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+	    header('Content-type: application/json; charset=utf-8');
+	    echo json_encode($jsondata);
+	    exit();
         break;
 	case "guardar":
 		$Qusuario = (string) \filter_input(INPUT_POST, 'usuario');

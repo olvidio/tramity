@@ -12,6 +12,7 @@ use usuarios\model\entity\CargoGrupo;
 
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
+$error_txt = '';
 switch($Qque) {
 	case "eliminar":
 	    //$Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');
@@ -20,8 +21,8 @@ switch($Qque) {
             $Qid_grupo = (integer) strtok($a_sel[0],"#");
             $oGrupo = new CargoGrupo($Qid_grupo);
             if ($oGrupo->DBEliminar() === FALSE) {
-                echo _("hay un error, no se ha eliminado");
-                echo "\n".$oGrupo->getErrorTxt();
+                $error_txt .= _("hay un error, no se ha eliminado");
+                $error_txt .= "\n".$oGrupo->getErrorTxt();
             }
 	    }
 		break;
@@ -44,8 +45,19 @@ switch($Qque) {
         $oGrupo->setDescripcion($Qdescripcion);
         $oGrupo->setMiembros($Qa_cargos);
 		if ($oGrupo->DBGuardar() === FALSE) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oGrupo->getErrorTxt();
+			$error_txt .= _("hay un error, no se ha guardado");
+			$error_txt .= "\n".$oGrupo->getErrorTxt();
 		}
         break;
 }
+
+if (!empty($error_txt)) {
+    $jsondata['success'] = FALSE;
+    $jsondata['mensaje'] = $error_txt;
+} else {
+    $jsondata['success'] = TRUE;
+}
+//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+header('Content-type: application/json; charset=utf-8');
+echo json_encode($jsondata);
+exit();

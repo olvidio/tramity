@@ -108,7 +108,7 @@ if (!empty($Qid_escrito)) {
     $a_resto_of = $oEscrito->getResto_oficinas();
     $oArrayDesplFirmas = new web\DesplegableArray($a_resto_of,$a_posibles_cargos,'oficinas');
     $oArrayDesplFirmas->setBlanco('t');
-    $oArrayDesplFirmas->setAccionConjunto('fnjs_mas_oficinas(event)');
+    $oArrayDesplFirmas->setAccionConjunto('fnjs_mas_oficinas()');
     
     $categoria = $oEscrito->getCategoria();
     $oDesplCategoria->setOpcion_sel($categoria);
@@ -177,7 +177,7 @@ if (!empty($Qid_escrito)) {
     
     $oArrayDesplFirmas = new web\DesplegableArray('',$a_posibles_cargos,'oficinas');
     $oArrayDesplFirmas ->setBlanco('t');
-    $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas(event)');
+    $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas()');
     
     $id_ponente = ConfigGlobal::role_id_cargo();
     $iframe = '';

@@ -241,7 +241,7 @@ switch ($Qque) {
 	    
 	    $oArrayDesplEtiquetas = new web\DesplegableArray($Qa_etiquetas,$a_posibles_etiquetas,'etiquetas');
 	    $oArrayDesplEtiquetas ->setBlanco('t');
-	    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas(event)');
+	    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
 	    
 	    if (!empty($Qa_etiquetas)) {
 	        $gesEtiquetasExpediente = new GestorEtiquetaExpediente();

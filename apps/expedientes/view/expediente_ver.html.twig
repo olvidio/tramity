@@ -27,7 +27,7 @@
           {{ "Comentario"|trans }}
         </div>
         <div class="p-6">
-          <button type="button" class="btn btn-outline-info" data-dismiss="modal" onClick="fnjs_voto(event,'{{ aclaracion_event }}');" >
+          <button type="button" class="btn btn-outline-info" data-dismiss="modal" onClick="fnjs_voto('{{ aclaracion_event }}');" >
             {{ aclaracion }}
           </button>
         </div>
@@ -51,7 +51,7 @@
         </div>
         <div class="d-flex flex-row justify-content-end">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ "Cerrar"|trans }}</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fnjs_voto(event,'voto');" >{{ "Guardar"|trans }}</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fnjs_voto('voto');" >{{ "Guardar"|trans }}</button>
         </div>
       </div>
     </div>
@@ -155,7 +155,7 @@
 </button>
 {%  endif %}
 {% if add_del_txt %}
-	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_ver_cargos(event,'{{ add_del }}');" >{{ add_del_txt }}</button>
+	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_ver_cargos('{{ add_del }}');" >{{ add_del_txt }}</button>
 {%  endif %}
 </div>
 <div id="of" class="d-flex row round m-3 border rounded">
@@ -171,7 +171,7 @@
 </ol>
 </div>
 {%  if cmb_tramite %}
-  <button tabindex='290' class="btn btn-secondary" onClick="fnjs_cambio_tramite(event);" >
+  <button tabindex='290' class="btn btn-secondary" onClick="fnjs_cambio_tramite();" >
     {{ "Cambiar trámite"|trans }}
   </button>
 {% endif %}
@@ -189,7 +189,7 @@
 {% endif %}
 <!--  --------------------  BOTONES --------------------------  -->
 <div class="row col-2" >
-  <button id='btn_volver' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+  <button id='btn_volver' class="btn btn-secondary" onClick="fnjs_cancelar();" >
     {{ "Volver"|trans }}
   </button>
 </div>
@@ -197,7 +197,7 @@
 
 {{ include ('_antecedentes_js.html.twig') }}
 <script type="text/javascript">
-fnjs_cambio_tramite=function(event) {
+fnjs_cambio_tramite=function() {
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -205,7 +205,7 @@ fnjs_cambio_tramite=function(event) {
     fnjs_update_div('#main','{{ pagina_cambio|raw }}');
 }
 
-fnjs_ver_cargos=function(event,add_del) {
+fnjs_ver_cargos=function(add_del) {
 	if (add_del=='add') {
 	// consultar que oficinas no estan en el recorrido
 		que='lst_cargos_libres';
@@ -235,7 +235,7 @@ fnjs_ver_cargos=function(event,add_del) {
             	html+='<label class="custom-control-label" for="'+obj.id+'">'+obj.sigla+'</label>';
             	html+='</div>';
 			});
-			html+='<button class="ml-auto btn btn-secondary btn-sm" onClick="fnjs_add_cargos(event,\''+add_del+'\');" >';
+			html+='<button class="ml-auto btn btn-secondary btn-sm" onClick="fnjs_add_cargos(\''+add_del+'\');" >';
     		html+='{{ "ok"|trans }}';
             html+='</button>';
           	$("#of").html(html);
@@ -244,7 +244,7 @@ fnjs_ver_cargos=function(event,add_del) {
 		
 }
 
-fnjs_add_cargos=function(event,add_del) {
+fnjs_add_cargos=function(add_del) {
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -297,7 +297,7 @@ fnjs_recorrido=function() {
 	    });
 }
   
-fnjs_voto=function(event,que) {
+fnjs_voto=function(que) {
 	var err=0;
 	var comentario=$('#comentario').val();
 	var id_expediente=$('#id_expediente').val();
@@ -342,17 +342,16 @@ $('#ModalFirma').on('hidden.bs.modal', function (e) {
 	}
 });
 	
-fnjs_cancelar=function(event) {
+fnjs_cancelar=function() {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
     	return false;
     }
-    event.preventDefault(); //prevent default action 	
 	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 }
 

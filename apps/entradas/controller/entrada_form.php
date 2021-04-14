@@ -46,7 +46,7 @@ foreach ($a_posibles_lugares as $id_lugar => $sigla) {
 
 $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
 $oArrayProtDestino->setBlanco('t');
-$oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+$oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
 
 $oProtOrigen = new Protocolo();
 $oProtOrigen->setEtiqueta('De');
@@ -135,7 +135,7 @@ if (!empty($Qid_entrada)) {
 
     $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares,'referencias');
     $oArrayProtRef ->setBlanco('t');
-    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
+    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias()');
     
     $asunto_e = $oEntrada->getAsunto_entrada();
     $asunto = $oEntrada->getAsunto();
@@ -148,7 +148,7 @@ if (!empty($Qid_entrada)) {
     
     $oArrayDesplOficinas = new web\DesplegableArray($a_oficinas,$a_posibles_oficinas,'oficinas');
     $oArrayDesplOficinas->setBlanco('t');
-    $oArrayDesplOficinas->setAccionConjunto('fnjs_mas_oficinas(event)');
+    $oArrayDesplOficinas->setAccionConjunto('fnjs_mas_oficinas()');
     
     $categoria = $oEntrada->getCategoria();
     $oDesplCategoria->setOpcion_sel($categoria);
@@ -201,12 +201,12 @@ if (!empty($Qid_entrada)) {
             $oArrayProtDestino->setArray_sel($json_prot_dst);
         }
         $oArrayDesplGrupo->setBlanco('t');
-        $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
+        $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
         
     } else {
         $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
         $oArrayDesplGrupo->setBlanco('t');
-        $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
+        $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
     }
     
     $oPermisoregistro = new PermRegistro();
@@ -225,7 +225,7 @@ if (!empty($Qid_entrada)) {
     $id_grupo = 0;
     $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
     $oArrayDesplGrupo->setBlanco('t');
-    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
+    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
         
     $asunto_e = '';
     $asunto = '';
@@ -241,11 +241,11 @@ if (!empty($Qid_entrada)) {
     
     $oArrayProtRef = new web\ProtocoloArray('',$a_posibles_lugares,'referencias');
     $oArrayProtRef ->setBlanco('t');
-    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
+    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias()');
 
     $oArrayDesplOficinas = new web\DesplegableArray('',$a_posibles_oficinas,'oficinas');
     $oArrayDesplOficinas->setBlanco('t');
-    $oArrayDesplOficinas->setAccionConjunto('fnjs_mas_oficinas(event)');
+    $oArrayDesplOficinas->setAccionConjunto('fnjs_mas_oficinas()');
     
     $asunto_readonly = '';
     $detalle_readonly = '';

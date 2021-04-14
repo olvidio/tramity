@@ -1,28 +1,19 @@
 <script>
 fnjs_guardar=function(formulario){
-
-	rr = 'ok';
-	//alert ("EEE "+rr);
-	if (rr=='ok') {
-		$(formulario).attr('action',"apps/lugares/controller/lugar_update.php");
-		$(formulario).one("submit", function() {
-			$.ajax({
-				url: $(this).attr('action'),
-				type: 'post',
-				data: $(this).serialize()
-			})
-			.done(function (rta_txt) {
-				if (rta_txt != '' && rta_txt != '\\n') {
-					alert ('{{ "respuesta"|trans|raw }}: '+rta_txt);
-				} else {
-					{{ oPosicion.js_atras(1)|raw }}
-				}
-			});
-			return false;
-		});
-		$(formulario).trigger("submit");
-		$(formulario).off();
-	}
+	datos = $(formulario).serialize();	
+	request=$.ajax({
+		data: datos,
+		url: 'apps/lugares/controller/lugar_update.php',
+		type: 'post',
+		dataType: 'json'
+	});
+	request.done( function (json) {
+		if (json.success != true) {
+			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+		} else {
+            {{ oPosicion.js_atras(1)|raw }}
+		}
+	});
 }
 </script>
 <div class="card" style="width: 35rem;">

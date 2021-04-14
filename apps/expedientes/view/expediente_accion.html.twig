@@ -19,7 +19,7 @@
               <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="">
             </div>
               <div class="col-2">
-                <button type="button" class="btn btn-primary" onClick="fnjs_buscar_expediente(event);" >{{ "Buscar"|trans }}</button>
+                <button type="button" class="btn btn-primary" onClick="fnjs_buscar_expediente();" >{{ "Buscar"|trans }}</button>
               </div>
           </div>
           <!--  --------------- Cargos de la oficina --------------- -->
@@ -29,7 +29,7 @@
               {{ oDesplCargosOficina.desplegable|raw }}
             </div>
               <div class="col-4">
-                <button type="button" class="btn btn-primary" onClick="fnjs_crear_pendiente(event);" >{{ "Crear Pendiente"|trans }}</button>
+                <button type="button" class="btn btn-primary" onClick="fnjs_crear_pendiente();" >{{ "Crear Pendiente"|trans }}</button>
               </div>
           </div>
           <!--  --------------- Cargos --------------- -->
@@ -39,7 +39,7 @@
               {{ oDesplCargos.desplegable|raw }}
             </div>
               <div class="col-4">
-                <button type="button" class="btn btn-primary" onClick="fnjs_copiar(event);" >{{ "Copiar"|trans }}</button>
+                <button type="button" class="btn btn-primary" onClick="fnjs_copiar();" >{{ "Copiar"|trans }}</button>
               </div>
           </div>
         </div>
@@ -64,7 +64,7 @@
 {% for row in a_botones %}
   <div class="col">
   	{% if row.tipo == 'modal' %}
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_buscar(event,'{{ row.accion }}');" >
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_buscar('{{ row.accion }}');" >
         {{ row.txt }}
       </button>
   	{% else %}
@@ -78,7 +78,7 @@
 
 <div class="row">
 <div class="col" style="margin: 1cm;"><!-- per quedar alineat del pills que també tenen un marge de 1cm. -->
-  <button type="button" class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+  <button type="button" class="btn btn-secondary" onClick="fnjs_cancelar();" >
     {{ "Cancelar"|trans }}
   </button>
 </div>
@@ -109,26 +109,25 @@ fnjs_accion=function(accion){
     });
 }
 
-fnjs_cancelar=function(event){
+fnjs_cancelar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
     	return false;
     }
-    event.preventDefault(); //prevent default action 	
 	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 }
 
-fnjs_buscar=function(event,accion) {
+fnjs_buscar=function(accion) {
 	if (accion == 'en_add_expediente') {
 		$('#busqueda_asunto').show();
 		$('#busqueda_cargos_oficina').hide();
 		$('#busqueda_cargos').hide();
-		fnjs_buscar_expediente(event);
+		fnjs_buscar_expediente();
 		return true;
 	}
 	if (accion == 'en_pendiente') {
@@ -144,7 +143,7 @@ fnjs_buscar=function(event,accion) {
 		return true;
 	}
 }
-fnjs_copiar=function(event) {
+fnjs_copiar=function() {
 	var que='exp_cp_oficina';
 	var id_expediente={{ id_expediente }};
 	var of_destino = $('#of_destino').val();
@@ -161,14 +160,14 @@ fnjs_copiar=function(event) {
     	if (json.success != true) {
     		alert (json.mensaje);
         } else {
-            fnjs_cancelar(event);
+            fnjs_cancelar();
         }
     });
 	// close div modal
     $('#ModalBuscar .close').click();
 }
 
-fnjs_crear_pendiente=function(event) {
+fnjs_crear_pendiente=function() {
 	var que='en_pendiente';
 	var id_entrada={{ id_entrada }};
 	var id_cargo = $('#id_cargo').val();
@@ -186,14 +185,14 @@ fnjs_crear_pendiente=function(event) {
     	if (json.success != true) {
     		alert (json.mensaje);
         } else {
-            fnjs_cancelar(event);
+            fnjs_cancelar();
         }
     });
 	// close div modal
     $('#ModalBuscar .close').click();
 }
 
-fnjs_buscar_expediente=function(event) {
+fnjs_buscar_expediente=function() {
 	var err=0;
 	var que = 'buscar_expediente_borrador';
 	var id_entrada={{ id_entrada }};

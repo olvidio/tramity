@@ -83,7 +83,7 @@ if (!empty($Qid_escrito)) {
     $json_prot_dst = $oEscrito->getJson_prot_destino();
     $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
     $oArrayProtDestino->setBlanco('t');
-    $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+    $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
     // si hay grupos, tienen preferencia
     $a_grupos = $oEscrito->getId_grupos();
     if (!empty($a_grupos)) {
@@ -100,12 +100,12 @@ if (!empty($Qid_escrito)) {
     }
     $oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');
     $oArrayDesplGrupo->setBlanco('t');
-    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
+    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
     
     $json_prot_ref = $oEscrito->getJson_prot_ref();
     $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares,'referencias');
     $oArrayProtRef->setBlanco('t');
-    $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias(event)');
+    $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias()');
     
     $entradilla = $oEscrito->getEntradilla();
     $asunto = $oEscrito->getAsunto();
@@ -179,7 +179,7 @@ if (!empty($Qid_escrito)) {
         $json_prot_dst[] = $oEntrada->getJson_prot_origen();
         $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
         $oArrayProtDestino->setBlanco('t');
-        $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+        $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
 
         $visibilidad = empty($oEntrada->getVisibilidad())? $oExpediente->getVisibilidad() : $oEntrada->getVisibilidad();
         $oDesplVisibilidad->setOpcion_sel($visibilidad);
@@ -212,7 +212,7 @@ if (!empty($Qid_escrito)) {
 
         $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
         $oArrayProtDestino ->setBlanco('t');
-        $oArrayProtDestino ->setAccionConjunto('fnjs_mas_destinos(event)');
+        $oArrayProtDestino ->setAccionConjunto('fnjs_mas_destinos()');
 
     }
     $titulo = _("nuevo");
@@ -230,11 +230,11 @@ if (!empty($Qid_escrito)) {
     
     $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
     $oArrayDesplGrupo->setBlanco('t');
-    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
+    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
     
     $oArrayProtRef = new web\ProtocoloArray('',$a_posibles_lugares,'referencias');
     $oArrayProtRef ->setBlanco('t');
-    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias(event)');
+    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias()');
 
     $id_ponente = ConfigGlobal::role_id_cargo();
     

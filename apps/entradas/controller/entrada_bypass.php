@@ -67,7 +67,7 @@ $json_prot_ref = $oEntrada->getJson_prot_ref();
 $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares,'referencias');
 $oArrayProtRef->setRef('t');
 $oArrayProtRef->setBlanco('t');
-$oArrayProtRef->setAccionConjunto('fnjs_mas_referencias(event)');
+$oArrayProtRef->setAccionConjunto('fnjs_mas_referencias()');
 
 $asunto_e = $oEntrada->getAsunto_entrada();
 $asunto = $oEntrada->getAsunto();
@@ -87,7 +87,7 @@ $a_adjuntos = $oEntrada->getArrayIdAdjuntos();
 
 $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
 $oArrayProtDestino->setBlanco('t');
-$oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos(event)');
+$oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
     
 // a ver si ya está
 $gesEntradasBypass = new GestorEntradaBypass();
@@ -107,12 +107,12 @@ if (count($cEntradasBypass) > 0) {
         $oArrayProtDestino->setArray_sel($json_prot_dst);
     }
     $oArrayDesplGrupo->setBlanco('t');
-    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
+    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
     
 } else {
     $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
     $oArrayDesplGrupo->setBlanco('t');
-    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos(event)');
+    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
 }
 
 $titulo = _("salida distribución cr");

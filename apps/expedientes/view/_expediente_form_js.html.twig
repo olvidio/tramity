@@ -60,7 +60,7 @@ fnjs_eliminar_accion=function(id_escrito){
         });
     }
 }
-fnjs_cancelar=function(event){
+fnjs_cancelar=function(){
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -152,7 +152,7 @@ fnjs_tramite=function(){
 }
 
 
-fnjs_visto=function(event){
+fnjs_visto=function(){
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -186,7 +186,7 @@ fnjs_visto=function(event){
     });
 }
 
-fnjs_circular=function(event){
+fnjs_circular=function(){
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -207,7 +207,7 @@ fnjs_circular=function(event){
     });
     request.done( function (json) {
         if (json.success != true) {
-            alert ('error: '+json.mensaje);
+        	alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
         } else {
             alert ("{{ "circulando!"|trans|raw }}");
             // Volver a la lista...
@@ -216,7 +216,7 @@ fnjs_circular=function(event){
     });
 }
 
-fnjs_guardar=function(event){
+fnjs_guardar=function(){
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -264,7 +264,7 @@ fnjs_guardar=function(event){
         
         request.done( function (json) {
             if (json.success != true) {
-                alert ('error: '+json.mensaje);
+                alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
             } else {
                 id = json.id_expediente;
                 if (id != id_expediente) {

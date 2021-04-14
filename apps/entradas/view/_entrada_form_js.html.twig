@@ -41,6 +41,15 @@ fnjs_admitir=function(){
 }
 
 fnjs_mod_pendiente=function() {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    // Asegurarme que es por click y no por return (posicion: 0,0)
+    var x = event.x || event.clientX;
+    var y = event.y || event.clientY;
+    if (!x && !y) {
+        return false;
+    }
     var err=0;
     var of_ponente=$('#of_ponente').val();
 
@@ -58,28 +67,27 @@ fnjs_mod_pendiente=function() {
     }
 }
 
-fnjs_cancelar=function(event){
+fnjs_cancelar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
     // Asegurarme que es por click y no por return (posicion: 0,0)
     var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
         return false;
     }
-    event.preventDefault(); //prevent default action 	
     fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 }
 
-fnjs_guardar=function(event){
+fnjs_guardar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
     	return false;
     }
 
@@ -133,60 +141,53 @@ fnjs_guardar=function(event){
 
 	if (err!=1) {
 		$('#oficinas').val(oficina);
-		$('#form_entrada').attr('action','{{ url_update }}');
 		$('#que').val('guardar');
-		$('#form_entrada').one("submit", function(event){
-			event.preventDefault(); //prevent default action 	
-            request=$.ajax({
-                data: $(this).serialize(),
-                url: $(this).attr('action'),
-                type: 'post',
-                dataType: 'json'
-            });
-            request.done( function (rta) {
-                //var json=rta.responseJSON;
-                var json=rta;
-                //var json = $.parseJSON(rta);
-                id = json.id_entrada;
-                if (json.success != true) {
-                    rta_txt = rta.responseText;
-                    alert ('error: '+rta_txt);
-                } else {
-                    if (id != id_entrada) {
-                        // caso de nueva entrada
-                        $.confirm({
-                            title: '{{ "datos guardados"|trans }}',
-                            content: '{{ "¿añadir escrito o adjuntos?"|trans }}',
-                            buttons: {
-                                {{ "Sí"|trans }}: function () {
-                                    // ir al form entrada.
-                                    pagina_mod = 'apps'
-                                    fnjs_update_div('#main',json.pagina_mod);
-                                },
-                                {{ "No"|trans }}: function () {
-                                    // Volver a la lista...
-                                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                                },
-                                somethingElse: {
-                                    text: '{{ "otra entrada"|trans }}',
-                                    btnClass: 'btn-blue',
-                                    keys: ['enter', 'shift'],
-                                    // Nueva entrada.
-                                    action: fnjs_update_div('#main','{{ pagina_nueva|raw }}')
-                                }
+        datos = $('#form_entrada').serialize();
+        
+        request=$.ajax({
+            data: datos,
+            url: '{{ url_update }}',
+            type: 'post',
+            dataType: 'json'
+        });
+
+        request.done( function (json) {
+            id = json.id_entrada;
+            if (json.success != true) {
+                rta_txt = json.mensaje;
+                alert ('error: '+rta_txt);
+            } else {
+                if (id != id_entrada) {
+                    // caso de nueva entrada
+                    $.confirm({
+                        title: '{{ "datos guardados"|trans }}',
+                        content: '{{ "¿añadir escrito o adjuntos?"|trans }}',
+                        buttons: {
+                            {{ "Sí"|trans }}: function () {
+                                // ir al form entrada.
+                                pagina_mod = 'apps'
+                                fnjs_update_div('#main',json.pagina_mod);
+                            },
+                            {{ "No"|trans }}: function () {
+                                // Volver a la lista...
+                                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                            },
+                            somethingElse: {
+                                text: '{{ "otra entrada"|trans }}',
+                                btnClass: 'btn-blue',
+                                keys: ['enter', 'shift'],
+                                // Nueva entrada.
+                                action: fnjs_update_div('#main','{{ pagina_nueva|raw }}')
                             }
-                        });
-                    } else {
-                        alert ("{{ "datos guardados"|trans|raw }}");
-                        // Volver a la lista...
-                        fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                    }
+                        }
+                    });
+                } else {
+                    alert ("{{ "datos guardados"|trans|raw }}");
+                    // Volver a la lista...
+                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                 }
-            });
-		});
-		$('#form_entrada').submit();
-	} else {
-        event.preventDefault();
+            }
+        });
 	}
 }
 
@@ -292,11 +293,13 @@ fnjs_comprobar_plazo=function(campo){
 			
 }
 
-fnjs_proto=function(e,num,any){
+fnjs_proto=function(num,any){
+    event.preventDefault();
+	event.stopPropagation();
+	event.stopImmediatePropagation();
 	var s=0;
 	var numero;
 	var siguiente="";
-	//debugger;
 	siguiente = num.replace(/_num_/g, "_mas_"); 
 	num_escaped = num.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
 	any_escaped = any.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
@@ -352,10 +355,6 @@ fnjs_proto=function(e,num,any){
 			return; /* no hago nada */
 		}
 	}
-
-    e.preventDefault();
-	e.stopPropagation();
-	e.stopImmediatePropagation();
 	return false;
 }
 

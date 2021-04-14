@@ -206,7 +206,7 @@ fnjs_distribuir_escrito=function(id_escrito) {
     w=window.open(url, "", winPrefs);
     w.focus();
 }
-fnjs_revisar_escrito=function(event,id_escrito) {
+fnjs_revisar_escrito=function(id_escrito) {
     var winPrefs="dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
     var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
     var param_json = { tipo_id: 'escrito', id: id_escrito };

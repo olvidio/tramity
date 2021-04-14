@@ -1,24 +1,21 @@
 <script>
 fnjs_guardar=function(formulario){
 	$('#que').val('update');
-	$(formulario).attr('action',"{{ url_ajax|raw }}");
-	$(formulario).one("submit", function() {
-		$.ajax({
-			url: $(this).attr('action'),
-			type: 'post',
-			data: $(this).serialize()
-		})
-		.done(function (rta_txt) {
-			if (rta_txt != '' && rta_txt != '\n') {
-				alert (rta_txt);
-			}
+	datos = $(formulario).serialize();	
+	request=$.ajax({
+		data: datos,
+		url: '{{ url_ajax }}',
+		type: 'post',
+		dataType: 'json'
+	});
+	request.done( function (json) {
+		if (json.success != true) {
+			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+		} else {
 			fnjs_actualizar();
 			$('#ModalBuscar').modal('hide');
-		});
-		return false;
+		}
 	});
-	$(formulario).trigger("submit");
-	$(formulario).off();
 }
 
 fnjs_actualizar=function(){
@@ -41,7 +38,7 @@ fnjs_actualizar=function(){
 	});
 }
 
-fnjs_eliminar=function(event,id_item){
+fnjs_eliminar=function(id_item){
 	if (confirm("{{ txt_eliminar }}")) {
         var url="{{ url_ajax }}";
 		var parametros='que=eliminar&id_item='+id_item+'{{ h_eliminar|raw }}';

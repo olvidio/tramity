@@ -32,19 +32,19 @@ fnjs_guardar_quiet=function() {
             type: 'post',
             dataType: 'json'
         });
-        request.done( function (rta) {
-            var json=rta;
-            id = json.id_escrito;
-            if (json.success != true) {
-                rta_txt = rta.responseText;
-                alert ('error: '+rta_txt);
-            }
-        });
+    	request.done( function (json) {
+    		if (json.success != true) {
+    			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+    		}
+    	});
     }
 }
 
 
-fnjs_ver_doc_ep=function(event) {
+fnjs_ver_doc_ep=function() {
+    event.preventDefault();
+	event.stopPropagation();
+	event.stopImmediatePropagation();
 	// primero guardar los datos que se hayan modificado, porque si pasa algo hay que volver a meterlos.
 	fnjs_guardar_quiet();
 	
@@ -79,9 +79,6 @@ fnjs_ver_doc_ep=function(event) {
         console.error("Hi ha un error: "+ textStatus, errorThrown);
     });
 
-    event.preventDefault();
-	event.stopPropagation();
-	event.stopImmediatePropagation();
 	return false;
 }
 
@@ -108,9 +105,12 @@ fnjs_actualizar=function(){
 
 }
 
-fnjs_add_escrito=function(event,n) {
+fnjs_add_escrito=function(n) {
+    event.preventDefault();
+	event.stopPropagation();
+	event.stopImmediatePropagation();
 	// primero guardar los datos que se hayan modificado, porque si pasa algo hay que volver a meterlos.
-	fnjs_guardar(event); // está en: _escrito_form_js.html  
+	fnjs_guardar(); // está en: _escrito_form_js.html  
 	//n = 1 -> etherpad
 	//n = 2 -> ethercalc
 	//n = 3 -> otros
@@ -144,7 +144,7 @@ fnjs_add_escrito=function(event,n) {
 
         switch(n) {
             case 1:
-                fnjs_ver_doc_ep(event);
+                fnjs_ver_doc_ep();
                 break;
             case 2:
                 alert('hay que programar la función para ethercalc');
@@ -154,9 +154,6 @@ fnjs_add_escrito=function(event,n) {
                 break;
         }
 	}
-    event.preventDefault();
-	event.stopPropagation();
-	event.stopImmediatePropagation();
 	return false;
 }
 

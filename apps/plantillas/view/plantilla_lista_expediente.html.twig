@@ -6,14 +6,14 @@
 <br>
 
 <div>
-  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
     {{ "Cancelar"|trans }}
   </button>
 </div>
   
 <script>
 
-fnjs_cancelar=function(event){
+fnjs_cancelar=function(){
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -23,7 +23,6 @@ fnjs_cancelar=function(event){
     if (!x && !y) {
     	return false;
     }
-    event.preventDefault(); //prevent default action 	
 	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 }
 

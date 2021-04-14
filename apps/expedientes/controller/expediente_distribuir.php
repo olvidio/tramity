@@ -100,7 +100,7 @@ if (ConfigGlobal::role_actual() != 'secretaria') {
     }
     $oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
     $oArrayDesplEtiquetas ->setBlanco('t');
-    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas(event)');
+    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
     $ver_etiquetas = TRUE;
 } else {
     $oArrayDesplEtiquetas = new web\DesplegableArray('',[],'etiquetas');

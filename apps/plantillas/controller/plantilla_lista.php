@@ -32,7 +32,7 @@ foreach ($cPlantillas as $oPlantilla) {
     $nombre = $oPlantilla->getNombre();
     
     $a_valores[$i]['sel']="$id_plantilla";
-    $mod = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_plantilla(event,'$id_plantilla');\" >";
+    $mod = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_plantilla('$id_plantilla');\" >";
     $mod .= _("modificar");
     $mod .= "</span>";
     $a_valores[$i][1]=$mod;

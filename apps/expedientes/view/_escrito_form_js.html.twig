@@ -20,7 +20,7 @@ fnjs_actualizar=function() {
     fnjs_update_div('#main','{{ pagina_actualizar|raw }}');
 }
 
-fnjs_ver_dst=function(event){
+fnjs_ver_dst=function(){
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -47,63 +47,58 @@ fnjs_ver_dst=function(event){
 {{ oArrayProtDestino.ComprobarSelectJs|raw }}
 {{ oArrayProtRef.ComprobarSelectJs|raw }}
 
-fnjs_cancelar=function(event){
+fnjs_cancelar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
     	return false;
     }
-    event.preventDefault(); //prevent default action 	
 	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 }
 
-fnjs_explotar=function(event){
+fnjs_explotar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	alert("{{ "explotar!"|trans|raw }}");
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
     	return false;
     }
 
-    $('#form_escrito').attr('action','{{ url_update }}');
     $('#que').val('explotar');
-    $('#form_escrito').one("submit", function(event){
-        event.preventDefault(); //prevent default action 	
-        request=$.ajax({
-            data: $(this).serialize(),
-            url: $(this).attr('action'),
-            type: 'post',
-            dataType: 'json'
-        });
-        request.done( function (json) {
-            if (json.success != true) {
-                rta_txt = json.responseText;
-                alert ('error: '+rta_txt);
-            } else {
-                //alert ("{{ "escrito explotado"|trans|raw }}");
-                // Volver a la lista...
-                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-            }
-        });
-    });
+	datos = $('#form_escrito').serialize();	
+	request=$.ajax({
+		data: datos,
+		url: '{{ url_update }}',
+		type: 'post',
+		dataType: 'json'
+	});
+	request.done( function (json) {
+		if (json.success != true) {
+			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+		} else {
+            //alert ("{{ "escrito explotado"|trans|raw }}");
+            // Volver a la lista...
+            fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+		}
+	});
 }
 
-fnjs_guardar=function(event){
+fnjs_guardar=function(){
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
     	return false;
     }
     
@@ -126,54 +121,45 @@ fnjs_guardar=function(event){
 	//if (!fnjs_fecha_en_intervalo('#f_escrito')) { err=1; }
 	
 	if (err!=1) {
-		$('#form_escrito').attr('action','{{ url_update }}');
 		$('#que').val('guardar');
-		$('#form_escrito').one("submit", function(event){
-			event.preventDefault(); //prevent default action 	
-            request=$.ajax({
-                data: $(this).serialize(),
-                url: $(this).attr('action'),
-                type: 'post',
-                dataType: 'json'
-            });
-            request.done( function (rta) {
-                var json=rta;
-                id = json.id_escrito;
-                if (json.success != true) {
-                    rta_txt = rta.responseText;
-                    alert ('error: '+rta_txt);
-                } else {
-                    if (id != id_escrito) {
-                        // caso de nuevo escrito
-                        $.confirm({
-                            title: '{{ "datos guardados"|trans }}',
-                            content: '{{ "¿añadir escrito o adjuntos?"|trans }}',
-                            buttons: {
-                                {{ "Sí"|trans }}: function () {
-                                    // ir al form expediente.
-                                    pagina_mod = 'apps'
-                                    fnjs_update_div('#main',json.pagina_mod);
-                                },
-                                {{ "No"|trans }}: function () {
-                                    //$.alert('Canceled!');
-                                    alert ("{{ "datos guardados"|trans|raw }}");
-                                    // Volver a la lista...
-                                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                                }
-                            }
-                        });
-                    } else {
-                        alert ("{{ "datos guardados"|trans|raw }}");
-                        // Volver a la lista...
-                        fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                    }
-                }
-            });
+		datos = $('#form_escrito').serialize();	
+		request=$.ajax({
+			data: datos,
+			url: '{{ url_update }}',
+			type: 'post',
+			dataType: 'json'
 		});
-		//$('#form_expediente').submit();
-		//$('#form_expediente').off();
-	} else {
-        event.preventDefault();
+		request.done( function (json) {
+			if (json.success != true) {
+				alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+			} else {
+                id = json.id_escrito;
+                if (id != id_escrito) {
+                    // caso de nuevo escrito
+                    $.confirm({
+                        title: '{{ "datos guardados"|trans }}',
+                        content: '{{ "¿añadir escrito o adjuntos?"|trans }}',
+                        buttons: {
+                            {{ "Sí"|trans }}: function () {
+                                // ir al form expediente.
+                                pagina_mod = 'apps'
+                                fnjs_update_div('#main',json.pagina_mod);
+                            },
+                            {{ "No"|trans }}: function () {
+                                //$.alert('Canceled!');
+                                alert ("{{ "datos guardados"|trans|raw }}");
+                                // Volver a la lista...
+                                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                            }
+                        }
+                    });
+                } else {
+                    alert ("{{ "datos guardados"|trans|raw }}");
+                    // Volver a la lista...
+                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                }
+			}
+		});
 	}
 }
 
@@ -251,7 +237,10 @@ fnjs_quitar_referencias=function(){
 	$('#ref_num').val(0);
 }
 
-fnjs_proto=function(e,num,any){
+fnjs_proto=function(num,any){
+	event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	var s=0;
 	var numero;
 	var siguiente="";
@@ -310,10 +299,6 @@ fnjs_proto=function(e,num,any){
 			return; /* no hago nada */
 		}
 	}
-
-    e.preventDefault();
-	e.stopPropagation();
-	e.stopImmediatePropagation();
 	return false;
 }
 

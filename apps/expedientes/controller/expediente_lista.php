@@ -39,7 +39,7 @@ if ($Qfiltro == 'archivados') {
     
     $oArrayDesplEtiquetas = new web\DesplegableArray($Qa_etiquetas,$a_posibles_etiquetas,'etiquetas');
     $oArrayDesplEtiquetas ->setBlanco('t');
-    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas(event)');
+    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
     
     $aWhereADD = [];
     $aOperadorADD = [];

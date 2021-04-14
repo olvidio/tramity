@@ -7,24 +7,20 @@ fnjs_eliminar=function(){
 	rta=fnjs_solo_uno('#seleccionados');
 	if (rta==1) {
 		if (confirm("{{ "¿Está seguro que desea borrar esta oficina?"|trans }}") ) {
-			var url='{{ url_ajax }}';
-			$('#seleccionados').one("submit", function() {
-				$.ajax({
-					url: url,
-					type: 'post',
-					data: $(this).serialize()
-				})
-				.done(function (rta_txt) {
-					if (rta_txt != '' && rta_txt != '\n') {
-						alert ('{{ "respuesta"|trans|raw }}: '+rta_txt);
-					} else {
-						fnjs_actualizar();
-				   	}
-				});
-				return false;
+			datos = $('#seleccionados').serialize();	
+			request=$.ajax({
+				data: datos,
+				url: '{{ url_ajax }}',
+				type: 'post',
+				dataType: 'json'
 			});
-			$('#seleccionados').trigger("submit");
-			$('#seleccionados').off();
+			request.done( function (json) {
+				if (json.success != true) {
+					alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+				} else {
+					fnjs_actualizar();
+				}
+			});
 		}
 	}
 }

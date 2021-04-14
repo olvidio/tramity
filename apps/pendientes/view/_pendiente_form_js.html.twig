@@ -102,7 +102,7 @@ fnjs_proto=function(num,any,indice){
         });
         request.done( function (json) {
             if (json.success != true) {
-                alert ('error: '+json.mensaje);
+            	alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
             } else {
 				if (json.rango) { alert("{{ "nº de protocolo fuera de rango"|trans|raw }}"); s=1; }
 				if (json.any) { alert("{{ "No es de este año, ni del año pasado"|trans|raw }}"); s=1; }
@@ -175,7 +175,10 @@ fnjs_cambiar_estado=function(){
 	}
 }
 
-fnjs_guardar=function(event){
+fnjs_guardar=function(){
+    event.preventDefault();
+	event.stopPropagation();
+	event.stopImmediatePropagation();
 	var err=0;
 	var go=$('#go').val();
 	var per=$('#simple_per').val();
@@ -229,7 +232,7 @@ fnjs_guardar=function(event){
                 });
 				request.done( function (json) {
 	                if (json.success != true) {
-	                    alert ('error: '+json.mensaje);
+	                	alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
 		            } else {
 						window.opener.document.forms['form_entrada']['id_pendiente'].value=json.id_pendiente
 						//window.opener.document.forms['form_entrada']['f_plazo'].prop('disabled',true);
@@ -256,7 +259,7 @@ fnjs_guardar=function(event){
                 });
 				request.done( function (json) {
 	                if (json.success != true) {
-	                    alert ('error: '+json.mensaje);
+	                    alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
 		            } else {
                     	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 		            }
@@ -289,9 +292,6 @@ fnjs_guardar=function(event){
 				$('#form_pendiente').off();
 		 }
 	}
-    event.preventDefault();
-	event.stopPropagation();
-	event.stopImmediatePropagation();
 	return false;
 }
 
@@ -307,7 +307,10 @@ fnjs_actualizar_status=function(){
   }
 }
 
-fnjs_cancelar=function(event) {
+fnjs_cancelar=function() {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 	var go = $('#go').val();
 	if (go == 'entradas') { // estoy en una ventana independiente
         window.close();
@@ -316,12 +319,8 @@ fnjs_cancelar=function(event) {
         var x = event.x || event.clientX;
         var y = event.y || event.clientY;
         if (!x && !y) {
-            event.preventDefault();
-            event.stopPropagation();
-            event.stopImmediatePropagation();
             return false;
         }
-        event.preventDefault(); //prevent default action 	
         fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
     }
 }

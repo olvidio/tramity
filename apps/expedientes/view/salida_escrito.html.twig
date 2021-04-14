@@ -11,7 +11,7 @@
     <table class="table-warning" border=1>
     <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
         <td>
-          <input id="buscar_prot_num" name="buscar_prot_num" size="12" onchange="fnjs_proto(event,'#buscar_prot_num','#buscar_prot_any')" value="" >
+          <input id="buscar_prot_num" name="buscar_prot_num" size="12" onchange="fnjs_proto('#buscar_prot_num','#buscar_prot_any')" value="" >
           /
           <input id="buscar_prot_any" name="buscar_prot_any" size="5" value="" >
         </td>
@@ -48,7 +48,7 @@
       </div>
       <div id="dst_grupo" class="col-10">
 	    {{ oArrayDesplGrupo.ListaSelects|raw }}
-        <button class="btn btn-secondary" onClick="fnjs_ver_dst(event);" >
+        <button class="btn btn-secondary" onClick="fnjs_ver_dst();" >
           {{ "modificar selección"|trans }}
         </button>
         {{ descripcion }}
@@ -130,7 +130,7 @@
     {% if tipo_doc == 1 %}
         <div class="form-group">
           <label>{{ "Ver escrito"|trans }}:</label>
-          <button tabindex='200' class="btn btn-info" onClick="fnjs_ver_doc_ep(event);" >
+          <button tabindex='200' class="btn btn-info" onClick="fnjs_ver_doc_ep();" >
             {{ "Etherpad"|trans }}
           </button>
         </div>
@@ -144,13 +144,13 @@
     {% if tipo_doc is empty %}
         <div class="form-group">
           <label>{{ "Insertar escrito"|trans }}:</label>
-          <button tabindex='200' class="btn btn-info" onClick="fnjs_add_escrito(event,1);" >
+          <button tabindex='200' class="btn btn-info" onClick="fnjs_add_escrito(1);" >
             {{ "Etherpad"|trans }}
           </button>
-          <button tabindex='201' class="btn btn-info" onClick="fnjs_add_escrito(event,2);" >
+          <button tabindex='201' class="btn btn-info" onClick="fnjs_add_escrito(2);" >
             {{ "EtherCalc"|trans }}
           </button>
-          <button tabindex='202' class="btn btn-info" onClick="fnjs_add_escrito(event,3);" >
+          <button tabindex='202' class="btn btn-info" onClick="fnjs_add_escrito(3);" >
             {{ "Incrustado"|trans }}
           </button>
         </div>
@@ -170,10 +170,10 @@
 </div> <!-- Fin Col Dcha -->
 
 <div>
-  <button tabindex='1' class="btn btn-secondary" onClick="fnjs_cancelar(event);" >
+  <button tabindex='1' class="btn btn-secondary" onClick="fnjs_cancelar();" >
     {{ "Cancelar"|trans }}
   </button>
-  <button tabindex='180' class="btn btn-primary" onClick="fnjs_guardar(event);" >
+  <button tabindex='180' class="btn btn-primary" onClick="fnjs_guardar();" >
     {{ b_guardar_txt }}
   </button>
 </div>
@@ -225,7 +225,7 @@ $(document).ready(function() {
         initialPreviewDownloadUrl: "apps/expedientes/controller/adjunto_download.php",
         fileActionSettings: {showZoom: false, showDrag: false},
     });
-	el1.on("filebatchselected", function(event, files) {
+	el1.on("filebatchselected", function(files) {
         el1.fileinput("upload");
     });
 });
