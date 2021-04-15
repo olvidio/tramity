@@ -24,6 +24,7 @@ fnjs_ver_dst=function(){
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
+    debugger;
 	var id_escrito = $('#id_escrito').val();
 	if (!id_escrito || id_escrito == false) {
 		alert ("{{ "Primero debe guardar el escrito"|trans|raw }}");
@@ -42,10 +43,6 @@ fnjs_ver_dst=function(){
     win.focus();
 }
 
-
-{{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
-{{ oArrayProtDestino.ComprobarSelectJs|raw }}
-{{ oArrayProtRef.ComprobarSelectJs|raw }}
 
 fnjs_cancelar=function(){
     event.preventDefault();
@@ -91,7 +88,7 @@ fnjs_explotar=function(){
 	});
 }
 
-fnjs_guardar=function(){
+fnjs_guardar=function(quiet=0){
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -133,31 +130,32 @@ fnjs_guardar=function(){
 			if (json.success != true) {
 				alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
 			} else {
-                id = json.id_escrito;
-                if (id != id_escrito) {
-                    // caso de nuevo escrito
-                    $.confirm({
-                        title: '{{ "datos guardados"|trans }}',
-                        content: '{{ "¿añadir escrito o adjuntos?"|trans }}',
-                        buttons: {
-                            {{ "Sí"|trans }}: function () {
-                                // ir al form expediente.
-                                pagina_mod = 'apps'
-                                fnjs_update_div('#main',json.pagina_mod);
-                            },
-                            {{ "No"|trans }}: function () {
-                                //$.alert('Canceled!');
-                                alert ("{{ "datos guardados"|trans|raw }}");
-                                // Volver a la lista...
-                                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+				if (quiet!=1) {
+                    id = json.id_escrito;
+                    if (id != id_escrito) {
+                        // caso de nuevo escrito
+                        $.confirm({
+                            title: '{{ "datos guardados"|trans }}',
+                            content: '{{ "¿añadir escrito o adjuntos?"|trans }}',
+                            buttons: {
+                                {{ "Sí"|trans }}: function () {
+                                    // ir al form expediente.
+                                    fnjs_update_div('#main',json.pagina_mod);
+                                },
+                                {{ "No"|trans }}: function () {
+                                    //$.alert('Canceled!');
+                                    alert ("{{ "datos guardados"|trans|raw }}");
+                                    // Volver a la lista...
+                                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                                }
                             }
-                        }
-                    });
-                } else {
-                    alert ("{{ "datos guardados"|trans|raw }}");
-                    // Volver a la lista...
-                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                }
+                        });
+                    } else {
+                        alert ("{{ "datos guardados"|trans|raw }}");
+                        // Volver a la lista...
+                        fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                    }
+				}
 			}
 		});
 	}
@@ -167,8 +165,10 @@ fnjs_focus_a=function(camp){
 	$(camp).focus();
 }
 
-fnjs_mas_grupos=function(){
-	 var valor=1;
+{{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
+fnjs_mas_grupos=function(){  
+	var code = (event.keyCode ? event.keyCode : event.which);
+	var valor=1;
     var id_campo='#'+event.currentTarget.id;
     var valor=$(id_campo).val();
     if(code!=9) {
@@ -186,6 +186,7 @@ fnjs_quitar_grupos=function(){
 	$('#grupos_num').val(0);
 }
 
+{{ oArrayProtDestino.ComprobarSelectJs|raw }}
 fnjs_mas_destinos=function(){
 	var code = (event.keyCode ? event.keyCode : event.which);
     var valor=1;
@@ -208,6 +209,7 @@ fnjs_quitar_destinos=function(){
 }
 
 
+{{ oArrayProtRef.ComprobarSelectJs|raw }}
 fnjs_mas_referencias=function(){
 	var code = (event.keyCode ? event.keyCode : event.which);
     var valor=1;
@@ -235,7 +237,6 @@ fnjs_proto=function(num,any){
 	var s=0;
 	var numero;
 	var siguiente="";
-	//debugger;
 	siguiente = num.replace(/_num_/g, "_mas_"); 
 	num_escaped = num.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
 	any_escaped = any.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");

@@ -444,6 +444,8 @@ switch($Qque) {
                     $oEscrito->setDestinos('');
                     $oEscrito->setDescripcion('');
                 }
+                // borro los individuales
+                $oEscrito->setJson_prot_destino([]);
             } else {
                 $aProtDst = [];
                 foreach ($Qa_destinos as $key => $id_lugar) {
@@ -458,6 +460,9 @@ switch($Qque) {
                 }
                 $oEscrito->setJson_prot_destino($aProtDst);
                 $oEscrito->setId_grupos();
+                // borro las posibles personalizaciones:
+                $oEscrito->setDestinos('');
+                $oEscrito->setDescripcion('');
             }
      
             $aProtRef = [];

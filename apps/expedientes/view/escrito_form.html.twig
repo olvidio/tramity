@@ -30,7 +30,7 @@
         </label>
         <div class="custom-control custom-switch align-middle">
           <input type="checkbox" class="custom-control-input" id="grupo_dst" name="grupo_dst" {{ chk_grupo_dst }} onChange="fnjs_grupo()" />
-          <label class="custom-control-label" for="grupo_dst">Grupo</label>
+          <label class="custom-control-label" for="grupo_dst">{{ "Grupo"|trans }}</label>
         </div>
       </div>
       <div id="dst_array" class="col-10">
@@ -38,7 +38,7 @@
       </div>
       <div id="dst_grupo" class="col-10">
 	    {{ oArrayDesplGrupo.ListaSelects|raw }}
-	    <button class="btn btn-secondary" onClick="fnjs_ver_dst();" >
+	    <button id="btn_grupo" class="btn btn-secondary" onClick="fnjs_ver_dst();" >
           {{ "modificar selección"|trans }}
         </button>
         {{ descripcion }}
@@ -176,9 +176,11 @@ fnjs_grupo=function() {
     if (ok) {
       $("#dst_array").hide();
       $("#dst_grupo").show();
+      $("#btn_grupo").attr('disabled', false);
     } else {
       $("#dst_array").show();
       $("#dst_grupo").hide();
+      $("#btn_grupo").attr('disabled', true);
     }
 }
 

@@ -110,7 +110,7 @@ fnjs_add_escrito=function(n) {
 	event.stopPropagation();
 	event.stopImmediatePropagation();
 	// primero guardar los datos que se hayan modificado, porque si pasa algo hay que volver a meterlos.
-	fnjs_guardar(); // está en: _escrito_form_js.html  
+	fnjs_guardar(1); // está en: _escrito_form_js.html El parametro quiet=1 es para que no pregunte nada.  
 	//n = 1 -> etherpad
 	//n = 2 -> ethercalc
 	//n = 3 -> otros
