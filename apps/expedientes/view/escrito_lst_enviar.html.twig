@@ -181,14 +181,12 @@ fnjs_marcar_contestado=function(id_escrito,pendientes_uid){
          dataType: 'json'
      });
      request.done( function (json) {
-         //debugger;
      	if (json.success != true) {
      		alert (json.mensaje);
          } else {
             fnjs_enviar_escrito_directo(id_escrito);
          }
      });
-	
 }
 
 fnjs_enviar_escrito_directo=function(id_escrito) {

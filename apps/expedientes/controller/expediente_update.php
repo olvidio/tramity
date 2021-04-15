@@ -265,12 +265,14 @@ switch($Qque) {
         exit();
         break;
     case 'distribuir':
+        $html = '';
         $oExpediente = new Expediente($Qid_expediente);
         $oExpediente->DBCarregar();
         $oExpediente->setEstado(Expediente::ESTADO_ACABADO_SECRETARIA);
         if ($oExpediente->DBGuardar() === FALSE ) {
             $error_txt .= _("No se ha podido cambiar el estado del expediente");
             $error_txt .= "<br>";
+            $error_txt .= $oExpediente->getErrorTxt();
         }
         // firmar el paso de distribuir:
         $f_hoy_iso = date(\DateTimeInterface::ISO8601);

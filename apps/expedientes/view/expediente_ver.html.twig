@@ -320,7 +320,6 @@ fnjs_voto=function(que) {
 	        type: 'post'
 	    });
 	    request.done( function (json) {
-		    //debugger;
             if (json.success != true) {
                 alert (json.mensaje);
             } else {

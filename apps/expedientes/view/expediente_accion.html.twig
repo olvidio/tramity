@@ -181,7 +181,6 @@ fnjs_crear_pendiente=function() {
         dataType: 'json'
     });
     request.done( function (json) {
-        //debugger;
     	if (json.success != true) {
     		alert (json.mensaje);
         } else {
@@ -207,7 +206,6 @@ fnjs_buscar_expediente=function() {
             type: 'post'
         });
         request.done( function (rta) {
-            //debugger;
             if (rta==undefined) {
                 rta='';
             }
