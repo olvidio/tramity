@@ -770,8 +770,8 @@ switch($Qque) {
             $jsondata['mensaje'] = $error_txt;
         } else {
             $jsondata['success'] = true;
-            $jsondata['id_expediente'] = $id_expediente;
-            $a_cosas = [ 'id_expediente' => $id_expediente];
+            $jsondata['id_expediente'] = $Qid_expediente;
+            $a_cosas = [ 'id_expediente' => $Qid_expediente];
             $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
             $jsondata['pagina_mod'] = $pagina_mod;
         }

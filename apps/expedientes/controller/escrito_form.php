@@ -261,6 +261,7 @@ if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
     }
 }
 
+$str_condicion = '';
 switch ($Qfiltro) {
     case 'acabados':
     case 'distribuir':
@@ -291,6 +292,7 @@ $a_cosas = [
     'id_expediente' => $Qid_expediente,
     'id_escrito' => $Qid_escrito,
     'accion' => $Qaccion,
+    'condicion' => $str_condicion,
 ];
 $pagina_actualizar = web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
  
@@ -349,6 +351,8 @@ $a_campos = [
     // para cambiar destinos en nueva ventana
     'pagina_actualizar' => $pagina_actualizar, 
     'descripcion' => $descripcion,
+    // si vengo de buscar
+    'str_condicion' => $str_condicion,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

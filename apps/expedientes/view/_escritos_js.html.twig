@@ -88,8 +88,9 @@ fnjs_actualizar=function(){
 	var id_escrito=$('#id_escrito').val();
 	var modo=$('#modo').val();
 	var accion=$('#accion').val();
+	var str_condicion=$('#str_condicion').val();
     var url_doc = '{{ url_escrito }}';
-    var param_json = { accion: accion, id_escrito: id_escrito, filtro: filtro, id_expediente: id_expediente, modo: modo };
+    var param_json = { accion: accion, id_escrito: id_escrito, filtro: filtro, id_expediente: id_expediente, modo: modo, condicion: str_condicion };
     request=$.ajax({
         data: param_json,
         url: url_doc,
