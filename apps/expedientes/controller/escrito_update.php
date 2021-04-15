@@ -8,13 +8,16 @@ use etherpad\model\Etherpad;
 use expedientes\model\Escrito;
 use expedientes\model\entity\Accion;
 use lugares\model\entity\GestorGrupo;
+use lugares\model\entity\GestorLugar;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
 use usuarios\model\PermRegistro;
+use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Lista;
 use web\Protocolo;
+use expedientes\model\GestorEscrito;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -678,40 +681,4 @@ switch($Qque) {
         exit();
         
         break;
-    case 'buscar_entrada_correspondiente':
-        $Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
-        $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
-        $Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
-        
-        $Qprot_any = core\any_2($Qprot_any);
-        
-        $aProt_origen = [ 'lugar' => $Qid_lugar,
-            'num' => $Qprot_num,
-            'any' => $Qprot_any,
-        ];
-        
-        $id_entrada = '';
-        $gesEntradas = new GestorEntrada();
-        $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
-        foreach ($cEntradas as $oEntrada) {
-            $bypass = $oEntrada->getBypass();
-            if ($bypass) continue;
-            $id_entrada = $oEntrada->getId_entrada();
-        }
-                
-        if (!empty($id_entrada)) {
-            $jsondata['success'] = true;
-            $jsondata['id_entrada'] = $id_entrada;
-        } else {
-            $jsondata['success'] = false;
-            $jsondata['mensaje'] = _("No se...");
-        }
-        
-        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
-        header('Content-type: application/json; charset=utf-8');
-        echo json_encode($jsondata);
-        exit();
-        
-        break;
-
 }

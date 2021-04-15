@@ -48,7 +48,7 @@
       </div>
       <div id="dst_grupo" class="col-10">
 	    {{ oArrayDesplGrupo.ListaSelects|raw }}
-        <button class="btn btn-secondary" onClick="fnjs_ver_dst();" >
+        <button id="btn_grupo" class="btn btn-secondary" onClick="fnjs_ver_dst();" >
           {{ "modificar selección"|trans }}
         </button>
         {{ descripcion }}
@@ -191,9 +191,11 @@ fnjs_grupo=function() {
     if (ok) {
       $("#dst_array").hide();
       $("#dst_grupo").show();
+      $("#btn_grupo").attr('disabled', false);
     } else {
       $("#dst_array").show();
       $("#dst_grupo").hide();
+      $("#btn_grupo").attr('disabled', true);
     }
 }
 

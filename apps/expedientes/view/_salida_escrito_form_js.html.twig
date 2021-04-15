@@ -214,19 +214,24 @@ fnjs_quitar_referencias=function(){
 
 {{ oArrayDesplFirmas.ComprobarSelectJs|raw }}
 fnjs_mas_firmas=function(){
-	var code = (event.keyCode ? event.keyCode : event.which);
-    var valor=1;
-    var id_campo='#'+event.currentTarget.id;
-    var valor=$(id_campo).val();
-    if(code!=9) {
-        event.preventDefault();
-        event.stopPropagation();
+	if (event == undefined){
+		// cuando lo disparo por javascript
+		{{ oArrayDesplFirmas.ListaSelectsJs|raw }}
+    } else {
+        var code = (event.keyCode ? event.keyCode : event.which);
+        var valor=1;
+        var id_campo='#'+event.currentTarget.id;
+        var valor=$(id_campo).val();
+        if(code!=9) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        if ( code==9 || event.type=="change") {
+            if (valor!=0) {
+                {{ oArrayDesplFirmas.ListaSelectsJs|raw }}
+            }
+        }
     }
-	if ( code==9 || event.type=="change") {
-		if (valor!=0) {
-			{{ oArrayDesplFirmas.ListaSelectsJs|raw }}
-		}
-	}
 }
 fnjs_quitar_firmas=function(){
 	$('#span_firmas').html("");
@@ -268,6 +273,7 @@ fnjs_proto=function(num,any){
 		siguiente="#b_buscar";
 	}
 	/* Para el número de origen */
+	var url_buscar_ajax='apps/busquedas/controller/buscar_ajax.php';
 	if (num=='#prot_num_destinos[0]') {
 		que="e2";
 		id_lugar=$('#destinos\\[0\\]').val();
@@ -277,7 +283,7 @@ fnjs_proto=function(num,any){
         var param_json = { que: 'buscar_entrada_correspondiente', id_lugar: id_lugar, prot_num: prot_num, prot_any: prot_any };
         request=$.ajax({
             data: param_json,
-            url: '{{ url_update }}',
+            url: url_buscar_ajax,
             type: 'post',
             dataType: 'json'
         });
@@ -291,6 +297,41 @@ fnjs_proto=function(num,any){
                 fnjs_update_div('#main', url);
             }
         });
+	}
+	/* Para el número de refereccias (si no hay numero en destino) */
+	if (num=='#prot_num_referencias[0]') {
+		prot_num_dst=$('#prot_num_destinos\\[0\\]').val();
+        if (prot_num_dst == '' || prot_num_dst == undefined) {
+            id_lugar=$('#referencias\\[0\\]').val();
+            prot_num=$('#prot_num_referencias\\[0\\]').val();
+            prot_any=$('#prot_any_referencias\\[0\\]').val();
+
+            
+            var param_json = { para: 'escrito', que: 'buscar_referencia_correspondiente', id_lugar: id_lugar, prot_num: prot_num, prot_any: prot_any };
+            request=$.ajax({
+                data: param_json,
+                url: url_buscar_ajax,
+                type: 'post',
+                dataType: 'json'
+            });
+            request.done( function (json) {
+                id = json.id_entrada;
+                if (json.success != true) {
+                    alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+                } else {
+                    $('#asunto').val(json.asunto);
+                    $('#detalle').val(json.detalle);
+                    $('#categoria').val(json.categoria);
+                    $('#visibilidad').val(json.visibilidad);
+                    $('#id_ponente').val(json.id_ponente);
+                    // varias:
+                    for (const id_firma of json.firmas) {
+                        $('#oficinas_mas').val(id_firma);
+                        $('#oficinas_mas').trigger("change");
+                	}
+                }
+            });
+        }
 	}
 	
 	siguiente_escaped = siguiente.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");

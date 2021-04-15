@@ -192,9 +192,11 @@ if (!empty($Qid_escrito)) {
         // los escritos van por cargos, las entradas por oficinas: pongo al director de la oficina:
         //Ponente;
         $id_of_ponente = $oEntrada->getPonente();
-        $gesCargos = new GestorCargo();
-        $id_ponente = $gesCargos->getDirectorOficina($id_of_ponente);
-        $oDesplPonente->setOpcion_sel($id_ponente);
+        if (!empty($id_of_ponente)) {
+            $gesCargos = new GestorCargo();
+            $id_ponente = $gesCargos->getDirectorOficina($id_of_ponente);
+            $oDesplPonente->setOpcion_sel($id_ponente);
+        }
         // oficinas
         $a_oficinas = $oEntrada->getResto_oficinas();
         $a_resto_cargos = [];
