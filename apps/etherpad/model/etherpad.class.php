@@ -92,14 +92,12 @@ class Etherpad  extends Client {
    /**
     * devuelve el escrito en html.
     * 
-    * @param array $a_header ['left', 'center', 'right']
     * @return string html
     */ 
-    public function generarHtml($a_header=[],$fecha='') {
+    public function generarHtml() {
         $html = '';
     
         $contenido = $this->getHHTML();
-        
         
         $dom = new \DOMDocument;
         $dom->loadHTML($contenido);
@@ -111,9 +109,14 @@ class Etherpad  extends Client {
         $txt = $body->ownerDocument->saveHTML( $body );
         $txt2 = substr($txt, 6); // Quitar el tag <body> inicial
         $txt3 = substr($txt2, 0, -7); // Quitar el tag </body> final
+        // eliminar dobles lineas: <br><br>
+        $txt4 = str_replace("<br><br>", "<br>", $txt3);
         
+        $html .= '<style>p { margin-top:0; margin-bottom:0; }</style>';
+
         $html .= '<div id="escrito" >';
-        $html .= $txt3;
+        $html .= '<div id="escrito" >';
+        $html .= $txt4;
         $html .= '</div>';
         
         return $html;
@@ -160,31 +163,13 @@ class Etherpad  extends Client {
         
         $footer = '{PAGENO}/{nbpg}';
         
-        $contenido = $this->getHHTML();
-        
-        
-        $dom = new \DOMDocument;
-        $dom->loadHTML($contenido);
-        // lista de los tagg 'body'
-        $bodies = $dom->getElementsByTagName('body');
-        // cojo el primero de la lista: sólo debería haber uno.
-        $body = $bodies->item(0);
-        //$txt = $body->C14N(); //innerhtml convierte <br> a <br></br>. Se usa lo de abajo:
-        $txt = $body->ownerDocument->saveHTML( $body );
-        $txt2 = substr($txt, 6); // Quitar el tag <body> inicial
-        $txt3 = substr($txt2, 0, -7); // Quitar el tag </body> final
-        
-        $html .= '<div id="escrito" >';
-        $html .= $txt3;
-        $html .= '</div>';
+        $html = $this->generarHtml();
         
         if (!empty($fecha)) {
             $html .= '<div id="fecha" style="margin-top: 2em; margin-right:  0em; text-align: right; " >';
             $html .= $fecha;
             $html .= '</div>';
         }
-        //echo $html;
-        //die();
         
         try {
             //$mpdf=new mPDF('','A4','','',10,10,10,10,6,3);

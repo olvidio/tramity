@@ -399,6 +399,7 @@ class Escrito Extends EscritoDB {
         return $oEtherpad->generarPDF($a_header,$f_salida);
     }
     
+    /*
     public function generarHtml() {
         $a_header = [ 'left' => $this->cabeceraIzquierda(),
                     'center' => '',
@@ -409,8 +410,9 @@ class Escrito Extends EscritoDB {
         $oEtherpad->setId (Etherpad::ID_ESCRITO,$this->iid_escrito);
         
         $f_salida = $this->getF_salida()->getFromLocal('.');
-        return $oEtherpad->generarHtml($a_header,$f_salida);
+        return $oEtherpad->generarHtml();
     }
+    */
     
     public function explotar() {
         $oEtherpad = new Etherpad();
