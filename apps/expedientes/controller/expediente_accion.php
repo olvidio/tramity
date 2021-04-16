@@ -121,11 +121,14 @@ switch($Qfiltro) {
         break;
     case 'firmar':
     case 'circulando':
-        // los de la oficina
-        if ($oficina_ponente == ConfigGlobal::role_id_oficina()) {
+        // sólo si soy el ponente (creador)
+        if ($id_ponente == ConfigGlobal::role_id_cargo() ) {
             $a_botones[0] = ['accion' => 'exp_a_borrador',
                             'txt'    => _("mover a borrador"),
                         ];
+        }
+        // los de la oficina
+        if ($oficina_ponente == ConfigGlobal::role_id_oficina()) {
             $a_botones[1] = ['accion' => 'exp_cp_borrador',
                             'txt'    => _("copiar a borrador"),
                         ];
@@ -151,17 +154,23 @@ switch($Qfiltro) {
     case 'acabados':
     case 'acabados_encargados':
     case 'copias':
-        $a_botones[0] = ['accion' => 'exp_a_borrador',
+        // sólo si soy el ponente (creador)
+        if ($id_ponente == ConfigGlobal::role_id_cargo() ) {
+            $a_botones[0] = ['accion' => 'exp_a_borrador',
                         'txt'    => _("mover a borrador"),
                     ];
+        }
         $a_botones[1] = ['accion' => 'exp_cp_borrador',
                         'txt'    => _("copiar a borrador"),
                     ];
         break;
     case 'archivados':
-        $a_botones[0] = ['accion' => 'exp_a_borrador',
+        // sólo si soy el ponente (creador)
+        if ($id_ponente == ConfigGlobal::role_id_cargo() ) {
+            $a_botones[0] = ['accion' => 'exp_a_borrador',
                         'txt'    => _("mover a borrador"),
                     ];
+        }
         $a_botones[1] = ['accion' => 'exp_cp_borrador',
                         'txt'    => _("copiar a borrador"),
                     ];
