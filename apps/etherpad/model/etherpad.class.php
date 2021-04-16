@@ -101,6 +101,36 @@ class Etherpad  extends Client {
         
         $dom = new \DOMDocument;
         $dom->loadHTML($contenido);
+        
+        /* Quitar las marcas de comentarios:
+         * 
+         * <span class="comment c-kvHZBxlaw3uVND0O"> donar permisos
+         * <sup><a href="#c-kvHZBxlaw3uVND0O">*</a></sup></span>
+         * 
+         */
+        $domNodeList = $dom->getElementsByTagname('span');
+        foreach ( $domNodeList as $domElement ) {
+            // mirar si es: class="comment
+            $class = $domElement->getAttribute('class');
+            if (strstr($class, 'comment')) {
+                $domNodeListChilds = $domElement->childNodes;
+                foreach ( $domNodeListChilds as $domElementChild ) {
+                    // borrar los child: <sup></sup>
+                    $nodeName = $domElementChild->nodeName;
+                    if ($nodeName == 'sup') {
+                        $domElement->removeChild($domElementChild);
+                    }
+                }
+                // Move all span tag content to its parent node just before it.
+                while ($domElement->hasChildNodes()) {
+                    $child = $domElement->removeChild($domElement->firstChild);
+                    $domElement->parentNode->insertBefore($child, $domElement);
+                }
+                // Remove the span tag.
+                $domElement->parentNode->removeChild($domElement);
+            }
+        }
+        
         // lista de los tagg 'body'
         $bodies = $dom->getElementsByTagName('body');
         // cojo el primero de la lista: sólo debería haber uno.

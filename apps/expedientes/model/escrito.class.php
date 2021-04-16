@@ -399,21 +399,6 @@ class Escrito Extends EscritoDB {
         return $oEtherpad->generarPDF($a_header,$f_salida);
     }
     
-    /*
-    public function generarHtml() {
-        $a_header = [ 'left' => $this->cabeceraIzquierda(),
-                    'center' => '',
-                    'right' => $this->cabeceraDerecha(),
-                  ];
-        
-        $oEtherpad = new Etherpad();
-        $oEtherpad->setId (Etherpad::ID_ESCRITO,$this->iid_escrito);
-        
-        $f_salida = $this->getF_salida()->getFromLocal('.');
-        return $oEtherpad->generarHtml();
-    }
-    */
-    
     public function explotar() {
         $oEtherpad = new Etherpad();
         $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid_escrito);
