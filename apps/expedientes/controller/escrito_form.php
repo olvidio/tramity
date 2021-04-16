@@ -139,12 +139,6 @@ if (!empty($Qid_escrito)) {
     $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
     $tipo_doc = $oEscrito->getTipo_doc();
     
-    if (empty($oEscrito->getOk()) OR $oEscrito->getOk() == Escrito::OK_NO) {
-        $chk_revisado = '';
-    } else {
-        $chk_revisado = 'checked';
-    }
-    
     $titulo = _("modificar");
     switch ($Qaccion) {
         case Escrito::ACCION_ESCRITO:
@@ -191,7 +185,6 @@ if (!empty($Qid_escrito)) {
         $initialPreview = '';
         $json_config = '{}';
         $tipo_doc = '';
-        $chk_revisado = '';
     } else {
         // Valors por defecto: los del expediente:
         if (!empty($Qid_expediente)) {
@@ -210,7 +203,6 @@ if (!empty($Qid_escrito)) {
         $initialPreview = '';
         $json_config = '{}';
         $tipo_doc = '';
-        $chk_revisado = '';
 
         $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
         $oArrayProtDestino ->setBlanco('t');
@@ -252,10 +244,8 @@ $a_cosas = ['id_expediente' => $Qid_expediente,
         ];
 
 $explotar = FALSE;
-$ver_revisado = FALSE;
 if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
     OR ($estado == Expediente::ESTADO_ACABADO_SECRETARIA) ) {
-    $ver_revisado = TRUE;
     // Posibilidad de explotar en varios escritos, uno para cada ctr destino.
     $ctr_dest = $oArrayProtDestino->getArray_sel();
     if (count($ctr_dest) > 1 OR !empty($a_grupos)) {
@@ -335,7 +325,6 @@ $a_campos = [
     'oDesplCategoria' => $oDesplCategoria,
     'oDesplVisibilidad' => $oDesplVisibilidad,
     'hidden_visibilidad' => $visibilidad,
-    'chk_revisado' => $chk_revisado,
     //'a_adjuntos' => $a_adjuntos,
     'initialPreview' => $initialPreview,
     'json_config' => $json_config,
@@ -345,7 +334,6 @@ $a_campos = [
     'url_escrito' => $url_escrito,
     'pagina_cancel' => $pagina_cancel,
     'pagina_nueva' => $pagina_nueva,
-    'ver_revisado' => $ver_revisado,
     'explotar' => $explotar,
     'devolver' => $devolver,
     // datepicker

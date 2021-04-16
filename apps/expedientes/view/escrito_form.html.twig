@@ -159,12 +159,6 @@
     {{ "Guardar"|trans }}
   </button>
 </div>
-{% if ver_revisado %} 
-    <div class="ml-3 btn form-check">
-      <input type="checkbox" class="form-check-input" id="ok" name="ok" {{ chk_revisado }}>
-      <label class="form-check-label" for="ok">{{ "revisado"|trans }}</label>
-    </div>
-{% endif %}
 {% if explotar %}
     <div class="col-3">
       <button tabindex='90' class="btn btn-danger" onClick="fnjs_explotar();" >
