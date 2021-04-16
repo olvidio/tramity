@@ -124,6 +124,11 @@ class Buscar {
      * @var integer
      */
     private $accion;
+    /**
+     * 
+     * @var boolean
+     */
+    private $ref;
     
     
     public function __construct() {
@@ -144,6 +149,7 @@ class Buscar {
                     $aWhereEntrada['asunto_detalle'] = $this->asunto;
                 }
                 
+                $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
                 $aWhereEntrada['_ordre'] = 'f_entrada';
                 $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
@@ -161,6 +167,7 @@ class Buscar {
                 break;
             case 'any':
                 // por año
+                $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
                 $aOperadorEntrada = [];
                 $aProt_origen = [ 'lugar' => $this->id_lugar,
@@ -176,6 +183,7 @@ class Buscar {
                 return $aCollections;
                 break;
             case 'oficina':
+                $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
                 $aWhereEntrada['ponente'] = $this->ponente;
                 $aOperadorEntrada = [];
@@ -191,6 +199,30 @@ class Buscar {
                 $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
                 break;
+            case 71: // un protocolo concreto también en ref:
+
+                $aProt_ref = [ 'id_lugar' => $this->id_lugar,
+                                  'num' => $this->prot_num,
+                                  'any' => $this->prot_any,
+                                  'mas' => $this->prot_mas,
+                            ];
+                // Entradas: origen_prot.
+                $aWhereEntrada['f_entrada'] = 'x';
+                $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
+                $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+                $aWhereEntrada['_ordre'] = 'f_entrada';
+                $gesEntradas = new GestorEntradaDB();
+                $cEntradas = $gesEntradas->getEntradasByRefDB($aProt_ref,$aWhereEntrada,$aOperadorEntrada);
+                $aCollections['entradas_ref'] = $cEntradas;
+                            
+                // Escritos (salidas):
+                $aWhereEscrito['f_aprobacion'] = 'x';
+                $aOperadorEscrito['f_aprobacion'] = 'IS NOT NULL';
+                $aWhereEscrito['_ordre'] = 'f_aprobacion';
+                $gesEscritos = new GestorEscrito();
+                $cEscritos = $gesEscritos->getEscritosByRefDB($aProt_ref,$aWhereEscrito,$aOperadorEscrito);
+                $aCollections['escritos_ref'] = $cEscritos;
+                
             case 7: // un protocolo concreto:
                 // Entradas: origen_prot.
                 $aWhereEntrada['f_entrada'] = 'x';
@@ -201,6 +233,7 @@ class Buscar {
                                   'mas' => $this->prot_mas,
                             ];
 
+                $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aWhereEntrada['_ordre'] = 'f_entrada';
                 $gesEntradas = new GestorEntradaDB();
                 $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
@@ -233,7 +266,6 @@ class Buscar {
                     $cEscritos = $gesEscritos->getEscritosByProtDestinoDB($aProt_destino,$aWhereEscrito,$aOperadorEscrito);
                     $aCollections['escritos'] = $cEscritos;
                 }
-
                 
                 return $aCollections;
                 break;
@@ -245,6 +277,7 @@ class Buscar {
                 $aWhereEscrito = [];
                 $aOperadorEscrito = [];
                 
+                $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 if (!empty($Qantiguedad)) {
                     switch ($Qantiguedad) {
                         case "1m":
@@ -264,7 +297,8 @@ class Buscar {
                             break;
                     }
                     $gesEntradas = new GestorEntrada();
-                    $aWhereEntrada = [ 'f_entrada' => $limite, '_ordre' => 'f_entrada'];
+                    $aWhereEntrada['f_entrada'] = $limite;
+                    $aWhereEntrada['_ordre'] = 'f_entrada';
                     $aOperadorEntrada = [ 'f_entrada' => '>'];
                     $aWhereEscrito = [ 'f_aprobacion' => $limite, '_ordre' => 'f_aprobacion'];
                     $aOperadorEscrito = [ 'f_aprobacion' => '>'];
@@ -312,7 +346,7 @@ class Buscar {
                 
                 $flag = 0;
                 // para ver los recibidos en dl
-                if ($this->getId_sigla() == $this->local_id_lugar) {
+                if (!empty($this->local_id_lugar) && $this->getId_sigla() == $this->local_id_lugar) {
                     $cEntradas = $this->buscarEntradas();
                     $aCollections['entradas'] = $cEntradas;
                     $flag = 1;
@@ -479,6 +513,7 @@ class Buscar {
         $oF_max = $this->getF_max();
         $f_max = $oF_max->getIso();
         
+        $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
         $aWhere['_ordre'] = 'f_entrada';
         if (!empty($this->opcion) && $this->opcion == 5) {
             $aWhere['_ordre'] = 'f_entrada DESC';
@@ -748,8 +783,21 @@ class Buscar {
     {
         $this->accion = $accion;
     }
+    
+    /**
+     * @return boolean
+     */
+    public function isRef()
+    {
+        return $this->ref;
+    }
 
-    
-    
-    
+    /**
+     * @param boolean $ref
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+    }
+
 }

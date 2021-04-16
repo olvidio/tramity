@@ -61,6 +61,11 @@ class VerTabla {
      */
     private $sCondicion;
 
+    /**
+     * 
+     * @var string
+     */
+    private $sTitulo;
 
     
     /**
@@ -154,10 +159,20 @@ class VerTabla {
     
     public function mostrarTabla() {
         $aCollection = $this->aCollection;
-        if ($this->sKey == 'entradas') {
+        if ($this->sKey == 'entradas_ref') {
+            $this->sTitulo = _("escritos recibidos en la Delegación con referencias al escrito");
             return $this->tabla_entradas($aCollection);
         }
+        if ($this->sKey == 'entradas') {
+            $this->sTitulo = _("escritos recibidos en la Delegación");
+            return $this->tabla_entradas($aCollection);
+        }
+        if ($this->sKey == 'escritos_ref') {
+            $this->sTitulo = _("escritos aprobados en la Delegación con referencias al escrito");
+            return $this->tabla_escritos($aCollection);
+        }
         if ($this->sKey == 'escritos') {
+            $this->sTitulo = _("escritos aprobados en la Delegación");
             return $this->tabla_escritos($aCollection);
         }
     }
@@ -253,12 +268,10 @@ class VerTabla {
         $oTabla->setBotones($a_botones);
         $oTabla->setDatos($a_valores);
         
-        $titulo= _("escritos recibidos en la Delegación");
-        
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
         $a_campos = [
-            'titulo' => $titulo,
+            'titulo' => $this->sTitulo,
             'oTabla' => $oTabla,
             'key' => $this->sKey,
             'condicion' => $this->sCondicion,
@@ -379,9 +392,8 @@ class VerTabla {
         
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
-        $titulo=_("escritos aprobados en la Delegación");
         $a_campos = [
-            'titulo' => $titulo,
+            'titulo' => $this->sTitulo,
             'oTabla' => $oTabla,
             'key' => $this->sKey,
             'condicion' => $this->sCondicion,

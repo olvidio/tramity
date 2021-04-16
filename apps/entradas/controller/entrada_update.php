@@ -282,7 +282,7 @@ switch($Qque) {
             $estado = Entrada::ESTADO_INGRESADO;
         }
         // si es el scdl, puede ser que pase a aceptado:
-        if ($Qfiltro == 'en_asignado') {
+        if ($Qfiltro == 'en_asignado' || $Qfiltro == 'buscar') {
             $estado = Entrada::ESTADO_ACEPTADO;
         }
         $oEntrada->setEstado($estado);

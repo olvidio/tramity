@@ -24,6 +24,35 @@ $Qmas = '';
 $a_condicion = []; // para poner los parámetros de la búsqueda y poder actualizar la página.
 $a_condicion['opcion'] = $Qopcion;
 switch ($Qopcion) {
+    case 71: // buscar en referencias (mismo formulario que 7):
+        $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lugar');
+        $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
+        $Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+
+        $Qprot_any = core\any_2($Qprot_any);
+        
+        $a_condicion['id_lugar'] = $Qid_lugar;
+        $a_condicion['prot_num'] = $Qprot_num;
+        $a_condicion['prot_any'] = $Qprot_any;
+        $str_condicion = http_build_query($a_condicion);
+        
+        $oBuscar = new Buscar();
+        $oBuscar->setRef(TRUE);
+        $oBuscar->setId_sigla($id_sigla_local);
+        $oBuscar->setId_lugar($Qid_lugar);
+        $oBuscar->setProt_num($Qprot_num);
+        $oBuscar->setProt_any($Qprot_any);
+        
+        $aCollection = $oBuscar->getCollection($Qopcion, $Qmas);
+        foreach ($aCollection as $key => $cCollection) {
+            $oTabla = new VerTabla();
+            $oTabla->setKey($key);
+            $oTabla->setCondicion($str_condicion);
+            $oTabla->setCollection($cCollection);
+            echo $oTabla->mostrarTabla();
+        }
+        
+        break;
     case 7: // un protocolo concreto:
         $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lugar');
         $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
@@ -50,6 +79,10 @@ switch ($Qopcion) {
             $oTabla->setCollection($cCollection);
             echo $oTabla->mostrarTabla();
         }
+        $btn_mas = "<button id=\"btn_mas\" type=\"button\" class=\"btn btn-primary\" onClick=\"fnjs_buscar_mas();\" >";
+        $btn_mas .= _("Buscar otros escritos con esta referencia");
+        $btn_mas .= "</button>";
+        echo $btn_mas;
         break;
     case 1:	// Listado de los últimos
         $Qantiguedad = (string) \filter_input(INPUT_POST, 'antiguedad');

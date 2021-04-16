@@ -35,7 +35,104 @@ class GestorEscritoDB Extends core\ClaseGestor {
 
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
+	
+	/**
+	 * Devuelve la colección de escritos, segun las condiciones del protcolo de referencias, más las normales
+	 *
+	 * @param array $aProt_ref = ['lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
+	 * @param array $aWhere
+	 * @param array $aOperators
+	 * @return boolean|array
+	 */
+	function getEscritosByRefDB($aProt_ref=[], $aWhere=[], $aOperators=[]) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    $oEscritoDBSet = new core\Set();
 
+		$oCondicion = new core\Condicion();
+        $aCondi = array();
+        foreach ($aWhere as $camp => $val) {
+            if ($camp == '_ordre') continue;
+            if ($camp == '_limit') continue;
+            $sOperador = isset($aOperators[$camp])? $aOperators[$camp] : '';
+            if ($a = $oCondicion->getCondicion($camp,$sOperador,$val)) $aCondi[]=$a;
+            // operadores que no requieren valores
+            if ($sOperador == 'BETWEEN' || $sOperador == 'IS NULL' || $sOperador == 'IS NOT NULL' || $sOperador == 'OR') unset($aWhere[$camp]);
+            if ($sOperador == 'IN' || $sOperador == 'NOT IN') unset($aWhere[$camp]);
+            if ($sOperador == 'TXT') unset($aWhere[$camp]);
+        }
+        $sCondi = implode(' AND ',$aCondi);
+        
+        $sOrdre = '';
+        $sLimit = '';
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') $sOrdre = ' ORDER BY '.$aWhere['_ordre'];
+        if (isset($aWhere['_ordre'])) unset($aWhere['_ordre']);
+        if (isset($aWhere['_limit']) && $aWhere['_limit']!='') $sLimit = ' LIMIT '.$aWhere['_limit'];
+        if (isset($aWhere['_limit'])) unset($aWhere['_limit']);
+        
+        // Where del prot_ref
+        $Where_json = '';
+        if (!empty($aProt_ref['lugar'])) {
+            $lugar = $aProt_ref['lugar'];
+            $Where_json .= empty($Where_json)? '' : ' AND ';
+            $Where_json .= "items.lugar='$lugar'";
+        }
+        if (!empty($aProt_ref['num'])) {
+            $num = $aProt_ref['num'];
+            $Where_json .= empty($Where_json)? '' : ' AND ';
+            $Where_json .= "items.num='$num'";
+        }
+        if (!empty($aProt_ref['any'])) {
+            $any = $aProt_ref['any'];
+            $any_2 = any_2($any);
+            $Where_json .= empty($Where_json)? '' : ' AND ';
+            $Where_json .= "items.any='$any_2'";
+        }
+        if (!empty($aProt_ref['mas'])) {
+            $mas = $aProt_ref['mas'];
+            $Where_json .= empty($Where_json)? '' : ' AND ';
+            $Where_json .= "items.mas='$mas'";
+        }
+        
+        if (empty($sCondi)) {
+            if (empty($Where_json)) {
+                $where_condi = '';
+            } else {
+                $where_condi = $Where_json;
+            }
+        } else {
+            if (!empty($Where_json)) {
+                $where_condi = $Where_json. " AND ". $sCondi;
+            } else {
+                $where_condi = $sCondi;
+            }
+        }
+        $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi;
+
+        // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
+        $sQry = "SELECT t.*
+                        FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_ref) as items(\"any\" text, mas text, num text, lugar text)
+                        $where_condi";
+                        
+        if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
+            $sClauError = 'GestorEscritoDB.llistar.prepare';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        if (($oDblSt->execute($aWhere)) === FALSE) {
+            $sClauError = 'GestorEscritoDB.llistar.execute';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        foreach ($oDblSt as $aDades) {
+            $a_pkey = array('id_escrito' => $aDades['id_escrito']);
+            $oEscritoDB = new Escrito($a_pkey);
+            $oEscritoDB->setAllAtributes($aDades);
+            $oEscritoDBSet->add($oEscritoDB);
+        }
+        return $oEscritoDBSet->getTot();
+	}
+	
 	/**
 	 * Devuelve la colección de escritos, segun las condiciones del protcolo local, más las normales
 	 * 

@@ -2,6 +2,7 @@
 <!-- Un escrito concreto --------------------------------------------- -->
 <form id="frm_buscar_7" name="frm_buscar_7" action="">
     <input type="hidden" name="opcion" value="">
+    <input type="hidden" name="mas" value="">
     <table class="table-warning" border=1>
     <tr><th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans }}</th></tr>
     <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
@@ -312,6 +313,16 @@ fnjs_sel_periodo=function(id){
     $('#b_buscar').focus();
 }
 
+fnjs_buscar_mas=function(){
+	formulario='#frm_buscar_7';
+	opcion=71;
+    fnjs_ver_solo(formulario);
+    // borro los posibles resultados anteriores
+    $('#resultados').html("");
+    $(formulario+' input[name="opcion"]').val(opcion);
+    $(formulario).attr('action','apps/busquedas/controller/ver_tabla.php');
+    fnjs_enviar_formulario(formulario,'#resultados');
+}
 fnjs_buscar=function(formulario){
     var form_name=$(formulario).attr('name');
     var opcion=form_name.substr(-1);
