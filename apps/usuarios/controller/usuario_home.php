@@ -140,8 +140,10 @@ $filtro = 'archivados';
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
     $num_orden = 9;
     $text = _("archivados");
-    $oExpedienteLista->setFiltro($filtro);
-    $num = $oExpedienteLista->getNumero();
+    // No hace falta el número:
+    //$oExpedienteLista->setFiltro($filtro);
+    //$num = $oExpedienteLista->getNumero();
+    $num = '';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
