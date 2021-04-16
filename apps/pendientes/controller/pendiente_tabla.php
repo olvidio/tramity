@@ -264,6 +264,7 @@ $a_cosas = [
     'filtro' => $Qfiltro,
     'periodo' => $Qperiodo,
     'id_oficina' => $Qid_oficina,
+    'calendario' => $op_calendario_default,
 ];
 $pagina_cancel = web\Hash::link('apps/pendientes/controller/pendiente_tabla.php?'.http_build_query($a_cosas));
 
