@@ -43,6 +43,11 @@ class EscritoLista {
      * @var array
      */
     private $a_expedientes_nuevos = [];
+    /**
+     * 
+     * @var boolean
+     */
+    private $todos_escritos_enviados;
     
 
     /*
@@ -217,6 +222,20 @@ class EscritoLista {
     }
     
     public function mostrarTabla() {
+        $a_campos = $this->getCamposTabla();
+        
+        $oView = new ViewTwig('expedientes/controller');
+        switch ($this->filtro) {
+            case 'acabados':
+            case 'enviar':
+                return $oView->renderizar('escrito_lst_enviar.html.twig',$a_campos);
+                break;
+            default:
+                return $oView->renderizar('escrito_lista.html.twig',$a_campos);
+        }
+    }
+
+    private function getCamposTabla() {
         $oExpediente = new Expediente($this->id_expediente);
         $estado = $oExpediente->getEstado();
         
@@ -234,6 +253,7 @@ class EscritoLista {
         $todos_escritos = '';
         $prot_local_header = _("rev.texto");
         $a_acciones = [];
+        $todos_escritos_enviados = TRUE;
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $tipo_accion = $oAccion->getTipo_accion();
@@ -256,7 +276,8 @@ class EscritoLista {
                     if (is_true($oEscrito->getAnulado())) {
                         $a_accion['enviar'] = "-";
                     } else {
-                        // No se envia, se pasa a secretaria
+                        // Se pasa a secretaria
+                        $todos_escritos_enviados = FALSE;
                         $ok = $oEscrito->getOk();
                         if ($ok == EScrito::OK_OFICINA) {
                             $a_accion['enviar'] = _("en secretaría");
@@ -344,6 +365,7 @@ class EscritoLista {
             
             $a_acciones[] = $a_accion;
         }
+        $this->setTodos_escritos_enviados($todos_escritos_enviados);
         $ver_todo = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$todos_escritos');\" >"._("ver todos")."</span>";
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
@@ -365,15 +387,7 @@ class EscritoLista {
             'ver_ok' => $ver_ok,
         ];
         
-        $oView = new ViewTwig('expedientes/controller');
-        switch ($this->filtro) {
-            case 'acabados':
-            case 'enviar':
-                return $oView->renderizar('escrito_lst_enviar.html.twig',$a_campos);
-                break;
-            default:
-                return $oView->renderizar('escrito_lista.html.twig',$a_campos);
-        }
+        return $a_campos;
     }
     
     public function getNumeroEnviar($fecha='') {
@@ -439,5 +453,25 @@ class EscritoLista {
     {
         $this->modo = $modo;
     }
+    
+    /**
+     * @return boolean
+     */
+    public function isTodos_escritos_enviados()
+    {
+        if (!isset($this->todos_escritos_enviados)) {
+            $this->getCamposTabla();
+        }
+        return $this->todos_escritos_enviados;
+    }
+
+    /**
+     * @param boolean $todos_escritos_enviados
+     */
+    public function setTodos_escritos_enviados($todos_escritos_enviados)
+    {
+        $this->todos_escritos_enviados = $todos_escritos_enviados;
+    }
+
 
 }

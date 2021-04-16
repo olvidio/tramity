@@ -7,6 +7,14 @@
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
 
 <h1>{{ titulo }}:</h1>
+
+{% if comentario %}
+<div class='p-2'></div>
+<div class="container p-3 my-3 bg-danger text-white font-weight-bold">
+	{{ comentario|raw }}
+</div>
+{% endif %}
+
 <form id ="form_escrito" >
     <input type=hidden name='que' id='que' value=0>
     <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
@@ -150,20 +158,30 @@
   <button tabindex='90' class="btn btn-primary" onClick="fnjs_guardar();" >
     {{ "Guardar"|trans }}
   </button>
+</div>
 {% if ver_revisado %} 
-<div class="ml-3 btn form-check">
-  <input type="checkbox" class="form-check-input" id="ok" name="ok" {{ chk_revisado }}>
-  <label class="form-check-label" for="ok">{{ "revisado"|trans }}</label>
-</div>
+    <div class="ml-3 btn form-check">
+      <input type="checkbox" class="form-check-input" id="ok" name="ok" {{ chk_revisado }}>
+      <label class="form-check-label" for="ok">{{ "revisado"|trans }}</label>
+    </div>
 {% endif %}
-</div>
-{% if explotar %} 
-<div>
-  <button tabindex='90' class="btn btn-danger" onClick="fnjs_explotar();" >
-    {{ "Explotar en un escrito para cada ctr"|trans }}
-  </button>
-</div>
+{% if explotar %}
+    <div class="col-3">
+      <button tabindex='90' class="btn btn-danger" onClick="fnjs_explotar();" >
+        {{ "Explotar en un escrito para cada ctr"|trans }}
+      </button>
+    </div>
 {% endif %}
+{% if devolver %}
+    <div class="col-2">
+      <button tabindex='90' class="btn btn-success" onClick="fnjs_enviar_a_oficina();" >
+        {{ "Devolver a la oficina"|trans }}
+      </button>
+      {# Afecta al guardar, pero solo en el caso del listado para enviar. por eso lo pongo con el if de devolver #}
+      <input type="hidden" id="ok" name="ok" value="true" >
+    </div>
+{% endif %}
+
 </form>
 {# Per ficar l'escrit, si cal #}
 <div id="prova">

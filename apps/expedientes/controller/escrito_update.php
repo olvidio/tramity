@@ -3,21 +3,18 @@
 // INICIO Cabecera global de URL de controlador *********************************
 	use core\ViewTwig;
 use function core\is_true;
-use entradas\model\GestorEntrada;
 use etherpad\model\Etherpad;
 use expedientes\model\Escrito;
 use expedientes\model\entity\Accion;
+use expedientes\model\entity\GestorAccion;
 use lugares\model\entity\GestorGrupo;
-use lugares\model\entity\GestorLugar;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
 use usuarios\model\PermRegistro;
-use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Lista;
 use web\Protocolo;
-use expedientes\model\GestorEscrito;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -272,17 +269,31 @@ switch($Qque) {
         $txt_err = '';
         if (!empty($Qid_escrito)) {
             $oEscrito = new Escrito($Qid_escrito);
-            $tipo_doc = $oEscrito->getTipo_doc();
-            // borrar el Etherpad
-            if ($tipo_doc == Escrito::TIPO_ETHERPAD) {
-                $oNewEtherpad = new Etherpad();
-                $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $Qid_escrito);
-                $oNewEtherpad->eliminarPad();
-            }
-            
-            if ($oEscrito->DBEliminar() === FALSE ) {
-                $txt_err .= _("Hay un error al eliminar el escrito");
-                $txt_err .= "<br>";
+            // Sólo se puede eliminar si no se ha enviado. Si se ha enviado se puede quitar del expediente:
+            $f_salida = $oEscrito->getF_salida()->getIso();
+            if (empty($f_salida)) {
+                $tipo_doc = $oEscrito->getTipo_doc();
+                // borrar el Etherpad
+                if ($tipo_doc == Escrito::TIPO_ETHERPAD) {
+                    $oNewEtherpad = new Etherpad();
+                    $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $Qid_escrito);
+                    $oNewEtherpad->eliminarPad();
+                }
+                
+                if ($oEscrito->DBEliminar() === FALSE ) {
+                    $txt_err .= _("Hay un error al eliminar el escrito");
+                    $txt_err .= "<br>";
+                }
+            } else {
+                $gesAcciones = new GestorAccion();
+                $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Qid_expediente, 'id_escrito' => $Qid_escrito]);
+                // debería existir sólo uno
+                $oAccion = $cAcciones[0];
+                if ($oAccion->DBEliminar() === FALSE ) {
+                    $txt_err .= _("Hay un error al quitar el escrito de expediente");
+                    $txt_err .= "<br>";
+                    $txt_err .= $oAccion->getErrorTxt();
+                }
             }
         } else {
             $txt_err = _("No existe el escrito");
@@ -303,7 +314,18 @@ switch($Qque) {
     case 'escrito_a_secretaria':
         $oEscrito = new Escrito($Qid_escrito);
         $oEscrito->DBCarregar();
+        $oEscrito->setComentarios('');
         $oEscrito->setOK(Escrito::OK_OFICINA);
+        if ($oEscrito->DBGuardar() === FALSE) {
+            exit($oEscrito->getErrorTxt());
+        }
+        break;
+    case 'escrito_a_oficina':
+        $Qcomentario = (string) \filter_input(INPUT_POST, 'comentario');
+        $oEscrito = new Escrito($Qid_escrito);
+        $oEscrito->DBCarregar();
+        $oEscrito->setComentarios($Qcomentario);
+        $oEscrito->setOK(Escrito::OK_NO);
         if ($oEscrito->DBGuardar() === FALSE) {
             exit($oEscrito->getErrorTxt());
         }
@@ -501,6 +523,7 @@ switch($Qque) {
         }
         $oEscrito->setVisibilidad($Qvisibiliad);
         if (is_true($Qok)) {
+            $oEscrito->setComentarios('');
             $oEscrito->setOK(Escrito::OK_OFICINA);
         } else {
             $oEscrito->setOK(Escrito::OK_NO);

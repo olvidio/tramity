@@ -114,6 +114,7 @@ $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.ph
 $pagina_actualizar = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro, 'modo' => $Qmodo]));
 $base_url = ConfigGlobal::getWeb(); //http://tramity.local
 
+$disable_archivar = '';
 if ($Qfiltro == 'distribuir') {
     $btn_action = 'distribuir';
     $txt_btn_success = _("Distribuir");
@@ -132,6 +133,11 @@ if ($Qfiltro == 'distribuir') {
     $btn_action = 'archivar';
     $txt_btn_success = _("Archivar");
     $oEscritoLista->setFiltro('acabados');
+    $a = $oEscritoLista->isTodos_escritos_enviados();
+    if ($oEscritoLista->isTodos_escritos_enviados()) {
+        
+    }
+    $disable_archivar = is_true($oEscritoLista->isTodos_escritos_enviados())? '' : 'disabled';
     // para encargar a los oficiales
     $id_oficina = ConfigGlobal::role_id_oficina();
     $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
@@ -179,6 +185,7 @@ $a_campos = [
     'txt_btn_success' => $txt_btn_success,
     'txt_btn_etiquetas' => $txt_btn_etiquetas,
     'ver_etiquetas' => $ver_etiquetas,
+    'disable_archivar' => $disable_archivar,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

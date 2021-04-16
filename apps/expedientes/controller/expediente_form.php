@@ -147,7 +147,13 @@ if ($Qid_expediente) {
             
         $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
         $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >"._("rev.texto")."</span>";
-        $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >"._("eliminar")."</span>";
+        // Sólo se puede eliminar si no se ha enviado. Si se ha enviado se puede quitar del expediente:
+        $f_salida = $oEscrito->getF_salida()->getIso();
+        if (empty($f_salida)) {
+            $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >"._("eliminar")."</span>";
+        } else {
+            $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >"._("quitar")."</span>";
+        }
         
         $dst_txt = $oEscrito->getDestinosEscrito();
         

@@ -150,7 +150,7 @@
     </button> 
   {% endif %}
   {% if modo == 'mod' and perm_distribuir %}
-    <button tabindex='90' class="btn btn-success" onClick="fnjs_distribuir('{{ btn_action }}');" >
+    <button tabindex='90' class="btn btn-success" onClick="fnjs_distribuir('{{ btn_action }}');" {{ disable_archivar }} >
       {{ txt_btn_success }}
     </button> 
   {% endif %}

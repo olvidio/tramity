@@ -69,6 +69,7 @@ $a_posibles_grupos = $gesGrupo->getArrayGrupos();
 
 $chk_grupo_dst = '';
 $descripcion = '';
+$comentario = '';
 
 // visibilidad (usar las mismas opciones que en entradas)
 $oEntrada = new Entrada();
@@ -167,6 +168,7 @@ if (!empty($Qid_escrito)) {
     if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
         $oDesplVisibilidad->setDisabled(TRUE);
     }
+    $comentario = $oEscrito->getComentarios();
 } else {
     // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
     $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
@@ -261,6 +263,7 @@ if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
     }
 }
 
+$devolver = FALSE;
 $str_condicion = '';
 switch ($Qfiltro) {
     case 'acabados':
@@ -268,6 +271,7 @@ switch ($Qfiltro) {
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query($a_cosas));
         break;
     case 'enviar':
+        $devolver = TRUE;
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/escrito_lista.php?'.http_build_query($a_cosas));
         break;
     case 'buscar':
@@ -343,6 +347,7 @@ $a_campos = [
     'pagina_nueva' => $pagina_nueva,
     'ver_revisado' => $ver_revisado,
     'explotar' => $explotar,
+    'devolver' => $devolver,
     // datepicker
     'format' => $format,
     'yearStart' => $yearStart,
@@ -353,6 +358,8 @@ $a_campos = [
     'descripcion' => $descripcion,
     // si vengo de buscar
     'str_condicion' => $str_condicion,
+    // para ver comentario cuando se devuelve a la oficina
+    'comentario' => $comentario,
 ];
 
 $oView = new ViewTwig('expedientes/controller');
