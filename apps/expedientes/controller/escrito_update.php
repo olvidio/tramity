@@ -15,6 +15,8 @@ use usuarios\model\PermRegistro;
 use web\DateTimeLocal;
 use web\Lista;
 use web\Protocolo;
+use core\ConfigDB;
+use core\ConfigGlobal;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -269,9 +271,10 @@ switch($Qque) {
         $txt_err = '';
         if (!empty($Qid_escrito)) {
             $oEscrito = new Escrito($Qid_escrito);
-            // Sólo se puede eliminar si no se ha enviado. Si se ha enviado se puede quitar del expediente:
+            // Sólo se puede eliminar si no se ha enviado, o si es secretaría 
+            // Si se ha enviado se puede quitar del expediente:
             $f_salida = $oEscrito->getF_salida()->getIso();
-            if (empty($f_salida)) {
+            if (empty($f_salida) || ConfigGlobal::role_actual() == 'secretaria') {
                 $tipo_doc = $oEscrito->getTipo_doc();
                 // borrar el Etherpad
                 if ($tipo_doc == Escrito::TIPO_ETHERPAD) {
