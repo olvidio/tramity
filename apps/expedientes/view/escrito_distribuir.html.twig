@@ -92,7 +92,6 @@ fnjs_guardar=function(){
 
     $('#que').val('guardar_asunto');
 	datos = $('#form_asunto').serialize();	
-	datos = $(formulario).serialize();	
 	request=$.ajax({
 		data: datos,
 		url: '{{ url_update }}',
