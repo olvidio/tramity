@@ -130,6 +130,21 @@ class Etherpad  extends Client {
                 $domElement->parentNode->removeChild($domElement);
             }
         }
+        /*
+         * Quitar los tag sin contenido. Tipico:
+         *  <p style="text-ailgn:justify"></p>
+         */
+        $xpath = new \DOMXPath($dom);
+        // Selects tags to be processed.
+        $tags_list = $xpath->query("//p|//br|//a|//strong|//img|//ul|//ol|//li|//em|//u|//s|//hr|//blockquote");
+        foreach($tags_list as $tag) {
+            // Checks and deletes tags with empty content.
+            if(  in_array($tag->tagName, ['p','a','strong','blockquote']) ){
+                if( $tag->nodeValue == "" ){
+                    $tag->parentNode->removeChild($tag);
+                }
+            }
+        }
         
         // lista de los tagg 'body'
         $bodies = $dom->getElementsByTagName('body');
@@ -140,11 +155,11 @@ class Etherpad  extends Client {
         $txt2 = substr($txt, 6); // Quitar el tag <body> inicial
         $txt3 = substr($txt2, 0, -7); // Quitar el tag </body> final
         // eliminar dobles lineas: <br><br>
-        $txt4 = str_replace("<br><br>", "<br>", $txt3);
+        //$txt4 = str_replace("<br><br>", "<br>", $txt3);
+        $txt4 = str_replace("</p><br>", "</p>", $txt3);
         
         $html .= '<style>p { margin-top:0; margin-bottom:0; }</style>';
 
-        $html .= '<div id="escrito" >';
         $html .= '<div id="escrito" >';
         $html .= $txt4;
         $html .= '</div>';
