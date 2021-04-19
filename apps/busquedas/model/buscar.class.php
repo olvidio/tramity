@@ -150,6 +150,7 @@ class Buscar {
                 }
                 
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+                $aOperadorEntrada['estado'] = '>=';
                 $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
                 $aWhereEntrada['_ordre'] = 'f_entrada';
                 $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
@@ -168,6 +169,7 @@ class Buscar {
             case 'any':
                 // por año
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+                $aOperadorEntrada['estado'] = '>=';
                 $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
                 $aOperadorEntrada = [];
                 $aProt_origen = [ 'lugar' => $this->id_lugar,
@@ -184,6 +186,7 @@ class Buscar {
                 break;
             case 'oficina':
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+                $aOperadorEntrada['estado'] = '>=';
                 $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
                 $aWhereEntrada['ponente'] = $this->ponente;
                 $aOperadorEntrada = [];
@@ -210,6 +213,7 @@ class Buscar {
                 $aWhereEntrada['f_entrada'] = 'x';
                 $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+                $aOperadorEntrada['estado'] = '>=';
                 $aWhereEntrada['_ordre'] = 'f_entrada';
                 $gesEntradas = new GestorEntradaDB();
                 $cEntradas = $gesEntradas->getEntradasByRefDB($aProt_ref,$aWhereEntrada,$aOperadorEntrada);
@@ -234,6 +238,7 @@ class Buscar {
                             ];
 
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+                $aOperadorEntrada['estado'] = '>=';
                 $aWhereEntrada['_ordre'] = 'f_entrada';
                 $gesEntradas = new GestorEntradaDB();
                 $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
@@ -278,6 +283,7 @@ class Buscar {
                 $aOperadorEscrito = [];
                 
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+                $aOperadorEntrada['estado'] = '>=';
                 if (!empty($Qantiguedad)) {
                     switch ($Qantiguedad) {
                         case "1m":
@@ -514,6 +520,7 @@ class Buscar {
         $f_max = $oF_max->getIso();
         
         $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
+        $aOperador['estado'] = '>=';
         $aWhere['_ordre'] = 'f_entrada';
         if (!empty($this->opcion) && $this->opcion == 5) {
             $aWhere['_ordre'] = 'f_entrada DESC';
