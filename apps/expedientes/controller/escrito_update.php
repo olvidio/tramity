@@ -285,14 +285,17 @@ switch($Qque) {
                     $txt_err .= "<br>";
                 }
             } else {
-                $gesAcciones = new GestorAccion();
-                $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Qid_expediente, 'id_escrito' => $Qid_escrito]);
-                // debería existir sólo uno
-                $oAccion = $cAcciones[0];
-                if ($oAccion->DBEliminar() === FALSE ) {
-                    $txt_err .= _("Hay un error al quitar el escrito de expediente");
-                    $txt_err .= "<br>";
-                    $txt_err .= $oAccion->getErrorTxt();
+                // Si está dentro de un expediente, lo quito:
+                if (!empty($Qid_expediente)) {
+                    $gesAcciones = new GestorAccion();
+                    $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Qid_expediente, 'id_escrito' => $Qid_escrito]);
+                    // debería existir sólo uno
+                    $oAccion = $cAcciones[0];
+                    if ($oAccion->DBEliminar() === FALSE ) {
+                        $txt_err .= _("Hay un error al quitar el escrito de expediente");
+                        $txt_err .= "<br>";
+                        $txt_err .= $oAccion->getErrorTxt();
+                    }
                 }
             }
         } else {
