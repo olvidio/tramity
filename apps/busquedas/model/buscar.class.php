@@ -171,7 +171,6 @@ class Buscar {
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';
                 $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
-                $aOperadorEntrada = [];
                 $aProt_origen = [ 'lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,
                                   'any' => $this->prot_any,
@@ -189,7 +188,6 @@ class Buscar {
                 $aOperadorEntrada['estado'] = '>=';
                 $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
                 $aWhereEntrada['ponente'] = $this->ponente;
-                $aOperadorEntrada = [];
                 $aProt_origen = [ 'lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,
                                   'any' => $this->prot_any,
