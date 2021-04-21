@@ -40,13 +40,16 @@ class Entrada Extends EntradaDB {
      - Asignar (secretaría añade datos tipo: ponente... Puede que no se haya hecho el paso de ingresar)
      - Aceptar (scdl ok)
      - Oficinas (Las oficinas puede ver lo suyo)
+     - Archivado (Ya no sale en las listas de la oficina)
+     - Enviado cr (Cuando se han enviado los bypass)
      */
     const ESTADO_INGRESADO          = 1;
     const ESTADO_ADMITIDO           = 2;
     const ESTADO_ASIGNADO           = 3;
     const ESTADO_ACEPTADO           = 4;
     const ESTADO_OFICINAS           = 5;
-    const ESTADO_ENVIADO_CR         = 6;
+    const ESTADO_ARCHIVADO          = 6;
+    const ESTADO_ENVIADO_CR         = 10;
     
     /* PROPIEDADES -------------------------------------------------------------- */
 

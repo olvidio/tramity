@@ -177,62 +177,79 @@ if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
         $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
     $a_pills[$num_orden] = $pill;
 }
-// entradas = 12;
-$filtro = 'en_aceptado';
+
+// Sólo para dtor
+if (is_true(ConfigGlobal::soy_dtor())) {
+    // entradas = 12;
+    $filtro = 'en_aceptado';
+        $active = ($filtro == $Qfiltro)? 'active' : '';
+        $aQuery = [ 'filtro' => $filtro ];
+        $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+        $num_orden = 12;
+        $text = _("entradas");
+        $oEntradaLista = new EntradaLista();
+        $oEntradaLista->setFiltro($filtro);
+        $num = $oEntradaLista->getNumero();
+        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+    $a_pills[$num_orden] = $pill;
+}
+
+// entradas = 13;
+$filtro = 'en_encargado';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-    $num_orden = 12;
-    $text = _("entradas");
+    $num_orden = 13;
+    $text = _("entradas encargadas");
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// buscar = 13;
+// buscar = 20;
 $filtro = 'buscar';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($aQuery));
-    $num_orden = 13;
+    $num_orden = 20;
     $text = _("archivo de escritos");
     $num = '';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
 if (is_true(ConfigGlobal::soy_dtor())) {
-    // escritos_cr = 14;
+    // escritos_cr = 21;
     $filtro = 'escritos_cr';
         $active = ($filtro == $Qfiltro)? 'active' : '';
         $aQuery = [ 'filtro' => $filtro ];
         $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-        $num_orden = 14;
+        $num_orden = 21;
         $text = _("escritos de cr");
         $num = '';
         $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
     $a_pills[$num_orden] = $pill;
 }
 
-// buscar = 15;
+// buscar = 22;
 $filtro = 'permanentes_cr';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?'.http_build_query($aQuery));
-    $num_orden = 15;
+    $num_orden = 22;
     $text = _("permanentes de cr");
     $num = '';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// pendientes = 16;
+// pendientes = 30;
 $filtro = 'pendientes';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro,
                 'periodo' => 'hoy',
             ];
     $pag_lst = web\Hash::link('apps/pendientes/controller/pendiente_tabla.php?'.http_build_query($aQuery));
-    $num_orden = 16;
+    $num_orden = 30;
     $text = _("pendientes");
     $num = '';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];

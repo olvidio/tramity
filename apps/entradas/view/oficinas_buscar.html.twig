@@ -1,0 +1,41 @@
+<div id="condiciones">
+<form id="que" name="que" action="" method="post">
+<input type="hidden" id="filtro" name="filtro" value="{{ filtro }}">
+<input type="hidden" id="que" name="que" value="buscar">
+
+
+  <h2 class="col-10 form-group row">{{ "listar entradas de oficina"|trans }}:
+   <!--  --------------- OFICINA PROPIA/RESTO --------------- -->
+    <div class="col-4">
+    <div class="form-check form-check-inline">
+      <input type="radio" class="form-check-input" name="oficina" value="propia" {{ chk_of_propia }} onClick="fnjs_buscar('#que');" >
+      <label class="form-check-label">
+      {{ "propia"|trans }}
+      </label>
+	</div>
+    <div class="form-check form-check-inline">
+      <input type="radio" class="form-check-input" name="oficina" value="resto" {{ chk_of_resto }} onClick="fnjs_buscar('#que');" >
+      <label class="form-check-label">
+      {{ "resto"|trans }}
+      </label>
+	</div>
+  </div>
+  {#
+  <!--  --------------------  Botones --------------------------  -->
+  <div class="row">
+    <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary" onClick="fnjs_buscar('#que');" >
+      {{ "buscar"|trans }}
+    </button>
+  </div>
+  #}
+  </h2>
+  
+</form>
+</div>
+
+<script>
+fnjs_buscar=function(formulario){
+    $(formulario).attr('action',"apps/entradas/controller/entrada_lista.php");
+    fnjs_enviar_formulario(formulario,'#main');
+}
+</script>

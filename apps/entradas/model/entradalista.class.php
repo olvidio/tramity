@@ -37,6 +37,16 @@ class EntradaLista {
      */
     private $aOperador;
     /**
+     *
+     * @var array
+     */
+    private $aWhereADD = [];
+    /**
+     *
+     * @var array
+     */
+    private $aOperadorADD = [];
+    /**
      * 
      * @var array
      */
@@ -72,41 +82,56 @@ class EntradaLista {
             case 'en_asignado':
                 $aWhere['estado'] = Entrada::ESTADO_ASIGNADO;
                 break;
+            case 'en_encargado':
+                $encargado =  ConfigGlobal::role_id_cargo(); // valor por defecto
+                if (!empty($this->aWhereADD['encargado'])) {
+                    $encargado = $this->aWhereADD['encargado'];
+                }
+                $aWhere['estado'] = Entrada::ESTADO_OFICINAS;
+                $aWhere['encargado'] = $encargado;
+                break;
             case 'en_aceptado':
-                $id_oficina = ConfigGlobal::role_id_oficina();
-                $aWhere['ponente'] = $id_oficina;
-                $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
-                // De una semana
-                $oHoy = new DateTimeLocal();
-                $oHoy->sub(new \DateInterval('P7D'));
-                $aWhere['f_entrada'] = $oHoy->getIso();
-                $aOperador['f_entrada'] = '>';
-                $gesEntradas = new GestorEntrada();
-                $cEntradas = $gesEntradas->getEntradas($aWhere,$aOperador);
-                $a_entradas_ponente = [];
-                foreach ($cEntradas as $oEntrada) {
-                    $id_entrada = $oEntrada->getId_entrada();
-                    $a_entradas_ponente[] = $id_entrada;
+                $oficina = 'propia'; // valor por defecto
+                if (!empty($this->aWhereADD['ponente'])) {
+                    $oficina = $this->aWhereADD['ponente'];
                 }
                 
-                //////// añadir las oficina implicadas //////////////////////////////
-                $a_entradas_resto = [];
-                $id_oficina_role = ConfigGlobal::role_id_oficina();
-                if (!empty($id_oficina_role)) {
-                    $a_id_cargos_oficina[] = ConfigGlobal::role_id_oficina();
-                    $aWhereResto['resto_oficinas'] = '{'.implode(', ',$a_id_cargos_oficina).'}';
-                    $aOperadorResto['resto_oficinas'] = 'OVERLAP';
-                    $aWhereResto['estado'] = Entrada::ESTADO_ACEPTADO;
-                    // De una semana
-                    $aWhereResto['f_entrada'] = $oHoy->getIso();
-                    $aOperadorResto['f_entrada'] = '>';
+                $a_entradas_ponente = [];
+                if ($oficina == 'propia') {
+                    $id_oficina = ConfigGlobal::role_id_oficina();
+                    $aWhere['ponente'] = $id_oficina;
+                    $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
+                    //$aOperador['estado'] = 'IN';
+                    
+                    // No marcado como visto: ESTADO_ARCHIVADO
                     $gesEntradas = new GestorEntrada();
-                    $cEntradas = $gesEntradas->getEntradas($aWhereResto,$aOperadorResto);
+                    $cEntradas = $gesEntradas->getEntradas($aWhere,$aOperador);
+                    $a_entradas_ponente = [];
                     foreach ($cEntradas as $oEntrada) {
                         $id_entrada = $oEntrada->getId_entrada();
-                        $a_entradas_resto[] = $id_entrada;
+                        $a_entradas_ponente[] = $id_entrada;
                     }
                 }
+                
+                //////// las oficina implicadas //////////////////////////////
+                $a_entradas_resto = [];
+                if ($oficina == 'resto') {
+                    $id_oficina_role = ConfigGlobal::role_id_oficina();
+                    if (!empty($id_oficina_role)) {
+                        $a_id_cargos_oficina[] = ConfigGlobal::role_id_oficina();
+                        $aWhereResto['resto_oficinas'] = '{'.implode(', ',$a_id_cargos_oficina).'}';
+                        $aOperadorResto['resto_oficinas'] = 'OVERLAP';
+                        $aWhereResto['estado'] = Entrada::ESTADO_ACEPTADO;
+                        //$aOperadorResto['estado'] = 'IN';
+                        $gesEntradas = new GestorEntrada();
+                        $cEntradas = $gesEntradas->getEntradas($aWhereResto,$aOperadorResto);
+                        foreach ($cEntradas as $oEntrada) {
+                            $id_entrada = $oEntrada->getId_entrada();
+                            $a_entradas_resto[] = $id_entrada;
+                        }
+                    }
+                }
+
                 // sumar los dos: nuevos + aclaraciones.
                 $a_entradas_suma = array_merge($a_entradas_ponente, $a_entradas_resto);
                 $aWhere = [];
@@ -188,7 +213,19 @@ class EntradaLista {
         
         //$pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
         $pagina_accion = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_accion.php';
-        switch ($this->filtro) {
+        switch ($filtro) {
+            case 'en_encargado':
+                $encargado = $this->aWhereADD['encargado'];
+                $pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
+                $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
+                $pagina_nueva = '';
+                break;
+            case 'en_aceptado':
+                $oficina = $this->aWhereADD['ponente'];
+                $pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
+                $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
+                $pagina_nueva = '';
+                break;
             case 'en_ingresado':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
                 $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
@@ -239,6 +276,12 @@ class EntradaLista {
                               'filtro' => $filtro,
                               'slide_mode' => $this->slide_mode,
                 ];
+                if ($filtro == 'en_aceptado') {
+                    $a_cosas['oficina'] = $oficina;
+                }
+                if ($filtro == 'en_encargado') {
+                    $a_cosas['encargado'] = $encargado;
+                }
                 
                 $link_accion = Hash::link($pagina_accion.'?'.http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
@@ -262,8 +305,9 @@ class EntradaLista {
                 
                 $id_of_ponente =  $oEntrada->getPonente();
                 $a_resto_oficinas = $oEntrada->getResto_oficinas();
+                $of_ponente_txt = empty($a_posibles_oficinas[$id_of_ponente])? '?' : $a_posibles_oficinas[$id_of_ponente];
                 $oficinas_txt = '';
-                $oficinas_txt .= '<span class="text-danger">'.$a_posibles_oficinas[$id_of_ponente].'</span>';
+                $oficinas_txt .= '<span class="text-danger">'.$of_ponente_txt.'</span>';
                 foreach ($a_resto_oficinas as $id_oficina) {
                     $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
                     $oficinas_txt .= $a_posibles_oficinas[$id_oficina];
@@ -287,7 +331,16 @@ class EntradaLista {
         $url_update = 'apps/entradas/controller/entrada_update.php';
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
-        $pagina_cancel = Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $filtro]));
+        $a_cosas = [ 'filtro' => $filtro,
+                      'slide_mode' => $this->slide_mode,
+        ];
+        if ($filtro == 'en_aceptado') {
+            $a_cosas['oficina'] = $oficina;
+        }
+        if ($filtro == 'en_encargado') {
+            $a_cosas['encargado'] = $encargado;
+        }
+        $pagina_cancel = Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($a_cosas));
         
         $txt_btn_new = '';
         $btn_new = FALSE;
@@ -384,5 +437,37 @@ class EntradaLista {
     {
         $this->id_entrada = $id_entrada;
     }
+    /**
+     * @return array
+     */
+    public function getAWhereADD()
+    {
+        return $this->aWhereADD;
+    }
+
+    /**
+     * @param array $aWhereADD
+     */
+    public function setAWhereADD($aWhereADD)
+    {
+        $this->aWhereADD = $aWhereADD;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAOperadorADD()
+    {
+        return $this->aOperadorADD;
+    }
+
+    /**
+     * @param array $aOperadorADD
+     */
+    public function setAOperadorADD($aOperadorADD)
+    {
+        $this->aOperadorADD = $aOperadorADD;
+    }
+
 
 }

@@ -57,6 +57,47 @@ $Qa_prot_mas_referencias = (array)  \filter_input(INPUT_POST, 'prot_mas_referenc
 $error_txt = '';
 $jsondata = [];
 switch($Qque) {
+    case 'en_asignar':
+        $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
+        $oEntrada = new EntradaDB($Qid_entrada);
+        $oEntrada->DBCarregar();
+        
+        $oEntrada->setEstado(Entrada::ESTADO_OFICINAS);
+        $oEntrada->setEncargado($Qid_cargo);
+        if ($oEntrada->DBGuardar() === FALSE) {
+            $error_txt .= $oEntrada->getErrorTxt();
+        }
+
+        if (!empty($error_txt)) {
+            $jsondata['success'] = FALSE;
+            $jsondata['mensaje'] = $error_txt;
+        } else {
+            $jsondata['success'] = TRUE;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
+    case 'en_visto':
+        $oEntrada = new EntradaDB($Qid_entrada);
+        $oEntrada->DBCarregar();
+        $oEntrada->setEstado(Entrada::ESTADO_ARCHIVADO);
+        if ($oEntrada->DBGuardar() === FALSE) {
+            $error_txt .= $oEntrada->getErrorTxt();
+        }
+
+        if (!empty($error_txt)) {
+            $jsondata['success'] = FALSE;
+            $jsondata['mensaje'] = $error_txt;
+        } else {
+            $jsondata['success'] = TRUE;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'eliminar':
         $oEntrada = new EntradaDB($Qid_entrada);
         if ($oEntrada->DBEliminar() === FALSE) {

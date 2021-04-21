@@ -148,6 +148,12 @@ class EntradaDB Extends core\ClasePropiedades {
 	 * @var string
 	 */
 	 protected $sanulado;
+	/**
+	 * Encargado de EntradaDB
+	 *
+	 * @var integer
+	 */
+	 protected $iencargado;
 	 
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
@@ -216,6 +222,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		$aDades['bypass'] = $this->bbypass;
 		$aDades['estado'] = $this->iestado;
 		$aDades['anulado'] = $this->sanulado;
+		$aDades['encargado'] = $this->iencargado;
 		array_walk($aDades, 'core\poner_null');
 		//para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
 		if ( core\is_true($aDades['bypass']) ) { $aDades['bypass']='true'; } else { $aDades['bypass']='false'; }
@@ -237,7 +244,8 @@ class EntradaDB Extends core\ClasePropiedades {
 					f_contestar              = :f_contestar,
 					bypass                   = :bypass,
 					estado                   = :estado,
-					anulado                  = :anulado";
+					anulado                  = :anulado,
+					encargado                = :encargado";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_entrada='$this->iid_entrada'")) === FALSE) {
 				$sClauError = 'EntradaDB.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -256,8 +264,8 @@ class EntradaDB Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(modo_entrada,json_prot_origen,asunto_entrada,json_prot_ref,ponente,resto_oficinas,asunto,f_entrada,detalle,categoria,visibilidad,f_contestar,bypass,estado,anulado)";
-			$valores="(:modo_entrada,:json_prot_origen,:asunto_entrada,:json_prot_ref,:ponente,:resto_oficinas,:asunto,:f_entrada,:detalle,:categoria,:visibilidad,:f_contestar,:bypass,:estado,:anulado)";		
+			$campos="(modo_entrada,json_prot_origen,asunto_entrada,json_prot_ref,ponente,resto_oficinas,asunto,f_entrada,detalle,categoria,visibilidad,f_contestar,bypass,estado,anulado,encargado)";
+			$valores="(:modo_entrada,:json_prot_origen,:asunto_entrada,:json_prot_ref,:ponente,:resto_oficinas,:asunto,:f_entrada,:detalle,:categoria,:visibilidad,:f_contestar,:bypass,:estado,:anulado,:encargado)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'EntradaDB.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -359,6 +367,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		if (array_key_exists('bypass',$aDades)) $this->setBypass($aDades['bypass']);
 		if (array_key_exists('estado',$aDades)) $this->setEstado($aDades['estado']);
 		if (array_key_exists('anulado',$aDades)) $this->setAnulado($aDades['anulado']);
+		if (array_key_exists('encargado',$aDades)) $this->setEncargado($aDades['encargado']);
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -383,6 +392,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		$this->setBypass('');
 		$this->setEstado('');
 		$this->setAnulado('');
+		$this->setEncargado('');
 		$this->setPrimary_key($aPK);
 	}
 
@@ -799,6 +809,25 @@ class EntradaDB Extends core\ClasePropiedades {
 	function setAnulado($sanulado) {
 		$this->sanulado = $sanulado;
 	}
+	/**
+	 * Recupera l'atribut iencargado de EntradaDB
+	 *
+	 * @return integer iencargado
+	 */
+	function getEncargado() {
+		if (!isset($this->iencargado) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->iencargado;
+	}
+	/**
+	 * estableix el valor de l'atribut iencargado de EntradaDB
+	 *
+	 * @param integer iencargado
+	 */
+	function setEncargado($iencargado) {
+		$this->iencargado = $iencargado;
+	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
 	/**
@@ -1006,6 +1035,18 @@ class EntradaDB Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'anulado'));
 		$oDatosCampo->setEtiqueta(_("anulado"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut iencargado de EntradaDB
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosEncargado() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'encargado'));
+		$oDatosCampo->setEtiqueta(_("encargado"));
 		return $oDatosCampo;
 	}
 }
