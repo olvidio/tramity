@@ -1,9 +1,11 @@
 <?php
+use core\ConfigGlobal;
 use core\ViewTwig;
+use function core\is_true;
 use entradas\model\EntradaLista;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Desplegable;
-use core\ConfigGlobal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -61,12 +63,22 @@ if ($Qfiltro == 'en_encargado') {
     
     $id_oficina = ConfigGlobal::role_id_oficina();
     
-    $gesCargos = new GestorCargo();
-    //$a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
-    $a_usuarios_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+    // sólo el director puede ver al resto de oficiales
+    $id_cargo = ConfigGlobal::role_id_cargo();
+    $oCargo = new Cargo($id_cargo);
+    $dtor = $oCargo->getDirector();
+    if (is_true($dtor)) {
+        $gesCargos = new GestorCargo();
+        //$a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
+        $a_usuarios_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+    } else {
+        $nom_cargo = $oCargo->getCargo();
+        $a_usuarios_oficina = [$id_cargo => $nom_cargo];
+    }
     // para el dialogo de búsquedas:
     $oDesplEncargados = new Desplegable('encargado',$a_usuarios_oficina,$Qencargado,TRUE);
     $oDesplEncargados->setAction("fnjs_buscar('#que');");
+    
     
     $aWhereADD = [];
     $aOperadorADD = [];
