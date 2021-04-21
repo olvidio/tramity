@@ -39,12 +39,13 @@ switch ($Qfiltro) {
         $a_condicion['filtro'] = $Qfiltro;
         $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($a_condicion));
         break;
-    case 'en_aceptado':
+    case 'en_encargado':
+        $Qencargado = (integer) \filter_input(INPUT_POST, 'encargado');
         $oEntrada = new Entrada($Qid_entrada);
         $asunto = $oEntrada->getAsunto();
         
         $url_cancel = 'apps/entradas/controller/entrada_lista.php';
-        $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro]));
+        $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro, 'encargado' => $Qencargado]));
         break;
     default:
         if (empty($Qid_expediente) && $Qfiltro != 'en_aceptado') {
@@ -89,7 +90,7 @@ $oDesplCargos = [];
 $a_botones = [];
 switch($Qfiltro) {
     case 'en_buscar':
-    case 'en_aceptado':
+    case 'en_encargado':
         //if ($estado == Expediente::ESTADO_BORRADOR) {
         // los de la oficina
         $a_botones[0] = ['accion' => 'en_add_expediente',

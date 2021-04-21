@@ -216,7 +216,7 @@ class EntradaLista {
         switch ($filtro) {
             case 'en_encargado':
                 $encargado = $this->aWhereADD['encargado'];
-                $pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
+                //$pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
                 $pagina_nueva = '';
                 break;
@@ -359,7 +359,7 @@ class EntradaLista {
         }
         
         $ver_accion = FALSE;
-        if ($this->filtro == 'en_aceptado') {
+        if ($this->filtro == 'en_aceptado' || $this->filtro == 'en_encargado') {
             $ver_accion = TRUE;
         }
         
