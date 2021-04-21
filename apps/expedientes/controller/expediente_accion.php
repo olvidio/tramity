@@ -105,6 +105,9 @@ switch($Qfiltro) {
                         'txt'    => _("crear un nuevo pendiente de la oficina"),
                         'tipo'    => 'modal',
                     ];
+        $a_botones[3] = ['accion' => 'en_visto',
+                        'txt'    => _("macrcar como visto"),
+                    ];
         
         $gesCargos = new GestorCargo();
         $a_posibles_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());

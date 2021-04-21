@@ -89,7 +89,7 @@ fnjs_accion=function(accion){
 	var err=0;
     // grabar
     var url_ajax = 'apps/expedientes/controller/expediente_update.php';
-	if (accion == 'en_expediente' || accion == 'en_pendiente') {
+	if (accion == 'en_expediente' || accion == 'en_pendiente' || accion == 'en_visto') {
 	    var param_json = { que: accion, id_expediente: {{ id_expediente }}, id_entrada: {{ id_entrada }} };
 	} else {
         var param_json = { que: accion, id_expediente: {{ id_expediente }} };

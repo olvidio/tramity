@@ -51,6 +51,26 @@ $Qvisibilidad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 
 $error_txt = '';
 switch($Qque) {
+    case 'en_visto': // Copiado de entradas_update.
+        $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+        $oEntrada = new Entrada($Qid_entrada);
+        $oEntrada->DBCarregar();
+        $oEntrada->setEstado(Entrada::ESTADO_ARCHIVADO);
+        if ($oEntrada->DBGuardar() === FALSE) {
+            $error_txt .= $oEntrada->getErrorTxt();
+        }
+        
+        if (!empty($error_txt)) {
+            $jsondata['success'] = FALSE;
+            $jsondata['mensaje'] = $error_txt;
+        } else {
+            $jsondata['success'] = TRUE;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'en_pendiente':
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
         $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');

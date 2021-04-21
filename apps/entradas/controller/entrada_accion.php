@@ -41,12 +41,14 @@ if ($Qoficina == 'propia') { // encargar
                 'txt'    => _("Encargar a"),
                 'tipo'    => 'modal',
             ];
+    $a_botones[1] = ['accion' => 'en_visto',
+                'txt'    => _("macrcar como visto"),
+            ];
 }
 if ($Qoficina == 'resto') { // marcar como visto
     $a_botones[0] = ['accion' => 'en_visto',
                 'txt'    => _("macrcar como visto"),
             ];
-    
 }
 
 $gesCargos = new GestorCargo();
