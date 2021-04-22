@@ -99,13 +99,10 @@ class EntradaLista {
                 $a_entradas_ponente = [];
                 if ($oficina == 'propia') {
                     $id_oficina = ConfigGlobal::role_id_oficina();
-                    $aWhere['ponente'] = $id_oficina;
-                    $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
-                    //$aOperador['estado'] = 'IN';
                     
-                    // No marcado como visto: ESTADO_ARCHIVADO
+                    // No marcado como visto:
                     $gesEntradas = new GestorEntrada();
-                    $cEntradas = $gesEntradas->getEntradas($aWhere,$aOperador);
+                    $cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina,TRUE);
                     $a_entradas_ponente = [];
                     foreach ($cEntradas as $oEntrada) {
                         $id_entrada = $oEntrada->getId_entrada();
@@ -118,13 +115,9 @@ class EntradaLista {
                 if ($oficina == 'resto') {
                     $id_oficina_role = ConfigGlobal::role_id_oficina();
                     if (!empty($id_oficina_role)) {
-                        $a_id_cargos_oficina[] = ConfigGlobal::role_id_oficina();
-                        $aWhereResto['resto_oficinas'] = '{'.implode(', ',$a_id_cargos_oficina).'}';
-                        $aOperadorResto['resto_oficinas'] = 'OVERLAP';
-                        $aWhereResto['estado'] = Entrada::ESTADO_ACEPTADO;
-                        //$aOperadorResto['estado'] = 'IN';
+                        $id_oficina = ConfigGlobal::role_id_oficina();
                         $gesEntradas = new GestorEntrada();
-                        $cEntradas = $gesEntradas->getEntradas($aWhereResto,$aOperadorResto);
+                        $cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina,FALSE);
                         foreach ($cEntradas as $oEntrada) {
                             $id_entrada = $oEntrada->getId_entrada();
                             $a_entradas_resto[] = $id_entrada;

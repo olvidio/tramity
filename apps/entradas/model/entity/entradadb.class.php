@@ -3,6 +3,7 @@ namespace entradas\model\entity;
 use core;
 use web;
 use stdClass;
+use entradas\model\Entrada;
 /**
  * Fitxer amb la Classe que accedeix a la taula entradas
  *
@@ -154,6 +155,12 @@ class EntradaDB Extends core\ClasePropiedades {
 	 * @var integer
 	 */
 	 protected $iencargado;
+	/**
+	 * Json_visto de EntradaDB
+	 *
+	 * @var object JSON
+	 */
+	 protected $json_visto;
 	 
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
@@ -223,6 +230,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		$aDades['estado'] = $this->iestado;
 		$aDades['anulado'] = $this->sanulado;
 		$aDades['encargado'] = $this->iencargado;
+		$aDades['json_visto'] = $this->json_visto;
 		array_walk($aDades, 'core\poner_null');
 		//para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
 		if ( core\is_true($aDades['bypass']) ) { $aDades['bypass']='true'; } else { $aDades['bypass']='false'; }
@@ -245,7 +253,8 @@ class EntradaDB Extends core\ClasePropiedades {
 					bypass                   = :bypass,
 					estado                   = :estado,
 					anulado                  = :anulado,
-					encargado                = :encargado";
+					encargado                = :encargado,
+					json_visto               = :json_visto";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_entrada='$this->iid_entrada'")) === FALSE) {
 				$sClauError = 'EntradaDB.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -264,8 +273,8 @@ class EntradaDB Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(modo_entrada,json_prot_origen,asunto_entrada,json_prot_ref,ponente,resto_oficinas,asunto,f_entrada,detalle,categoria,visibilidad,f_contestar,bypass,estado,anulado,encargado)";
-			$valores="(:modo_entrada,:json_prot_origen,:asunto_entrada,:json_prot_ref,:ponente,:resto_oficinas,:asunto,:f_entrada,:detalle,:categoria,:visibilidad,:f_contestar,:bypass,:estado,:anulado,:encargado)";		
+			$campos="(modo_entrada,json_prot_origen,asunto_entrada,json_prot_ref,ponente,resto_oficinas,asunto,f_entrada,detalle,categoria,visibilidad,f_contestar,bypass,estado,anulado,encargado,json_visto)";
+			$valores="(:modo_entrada,:json_prot_origen,:asunto_entrada,:json_prot_ref,:ponente,:resto_oficinas,:asunto,:f_entrada,:detalle,:categoria,:visibilidad,:f_contestar,:bypass,:estado,:anulado,:encargado,:json_visto)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'EntradaDB.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -368,6 +377,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		if (array_key_exists('estado',$aDades)) $this->setEstado($aDades['estado']);
 		if (array_key_exists('anulado',$aDades)) $this->setAnulado($aDades['anulado']);
 		if (array_key_exists('encargado',$aDades)) $this->setEncargado($aDades['encargado']);
+		if (array_key_exists('json_visto',$aDades)) $this->setJson_visto($aDades['json_visto'],TRUE);
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -393,9 +403,40 @@ class EntradaDB Extends core\ClasePropiedades {
 		$this->setEstado('');
 		$this->setAnulado('');
 		$this->setEncargado('');
+		$this->setJson_visto('');
 		$this->setPrimary_key($aPK);
 	}
 
+	/**
+	 * Comprueba si lo han visto todos y lo pone en estado Archivado
+	 * 
+	 */
+	public function comprobarVisto(){
+	    $ponente = $this->getPonente();
+	    $resto_oficinas = $this->getResto_oficinas();
+	    
+	    $a_json_visto = $this->getJson_visto(TRUE);
+	    foreach ($a_json_visto as $json_visto) {
+	        $id_oficina = $json_visto['oficina'];
+	        $visto = $json_visto['visto'];
+	        if ($visto == 'true') {
+	            if ($id_oficina == $ponente) {
+	                $ponente = '';
+	            } else {
+	                $key_of = array_search($id_oficina, $resto_oficinas);
+	                unset($resto_oficinas[$key_of]);
+	            }
+	        }
+	    }
+	    
+	    if (empty($ponente) && empty($resto_oficinas)) {
+	        $this->setEstado(Entrada::ESTADO_ARCHIVADO);
+	        $this->DBGuardar();
+	    }
+	    
+	}
+	
+	
 	/* METODES GET i SET --------------------------------------------------------*/
 
 	/**
@@ -828,6 +869,42 @@ class EntradaDB Extends core\ClasePropiedades {
 	function setEncargado($iencargado) {
 		$this->iencargado = $iencargado;
 	}
+	/**
+	 * Recupera l'atribut json_visto de EntradaDB
+	 *
+	 * @param boolean $bArray si hay que devolver un array en vez de un objeto.
+	 * @return object JSON json_visto
+	 */
+	function getJson_visto($bArray=FALSE) {
+		if (!isset($this->json_visto) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+        $oJSON = json_decode($this->json_visto,$bArray);
+	    if (empty($oJSON) OR $oJSON == '[]') {
+	        if ($bArray) {
+	            $oJSON = [];
+	        } else {
+	            $oJSON = new stdClass;
+	        }
+	    }
+	    //$this->json_visto = $oJSON;
+	    return $oJSON;
+	}
+	/**
+	 * estableix el valor de l'atribut json_visto de EntradaDB
+	 * 
+	 * @param object JSON json_visto
+     * @param boolean $db=FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
+	 *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
+	 */
+	function setJson_visto($oJSON,$db=FALSE) {
+        if ($db === FALSE) {
+	        $json = json_encode($oJSON);
+	    } else {
+	        $json = $oJSON;
+	    }
+        $this->json_visto = $json;
+	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
 	/**
@@ -852,6 +929,8 @@ class EntradaDB Extends core\ClasePropiedades {
 		$oEntradaDBSet->add($this->getDatosBypass());
 		$oEntradaDBSet->add($this->getDatosEstado());
 		$oEntradaDBSet->add($this->getDatosAnulado());
+		$oEntradaDBSet->add($this->getDatosEncargado());
+		$oEntradaDBSet->add($this->getDatosJson_visto());
 		return $oEntradaDBSet->getTot();
 	}
 
@@ -1047,6 +1126,18 @@ class EntradaDB Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'encargado'));
 		$oDatosCampo->setEtiqueta(_("encargado"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut json_visto de EntradaDB
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosJson_visto() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'json_visto'));
+		$oDatosCampo->setEtiqueta(_("json_visto"));
 		return $oDatosCampo;
 	}
 }

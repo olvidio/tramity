@@ -11,6 +11,7 @@ use usuarios\model\entity\Cargo;
 use usuarios\model\entity\Oficina;
 use web\DateTimeLocal;
 use web\Protocolo;
+use core\ConfigGlobal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -80,12 +81,24 @@ switch($Qque) {
         exit();
         break;
     case 'en_visto':
+        $Qid_oficina = ConfigGlobal::role_id_oficina();
+        $Qid_cargo = ConfigGlobal::role_id_cargo();
         $oEntrada = new EntradaDB($Qid_entrada);
         $oEntrada->DBCarregar();
-        $oEntrada->setEstado(Entrada::ESTADO_ARCHIVADO);
+        
+        $aVisto = $oEntrada->getJson_visto();
+        $oVisto = new stdClass;
+        $oVisto->oficina = $Qid_oficina;
+        $oVisto->cargo = $Qid_cargo;
+        $oVisto->visto = TRUE;
+        $aVisto[] = $oVisto;
+        
+        $oEntrada->setJson_visto($aVisto);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
         }
+        
+        $oEntrada->comprobarVisto();
 
         if (!empty($error_txt)) {
             $jsondata['success'] = FALSE;
