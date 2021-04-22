@@ -354,7 +354,7 @@ class Etherpad  extends Client {
             $config = [ 'mode' => 'utf-8',
                         'format' => 'A4-P',
                         'margin_header' => 10,
-                        'margin_top' => 20,
+                        'margin_top' => 40,
                 
             ];
             $mpdf = new \Mpdf\Mpdf($config);
