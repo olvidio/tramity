@@ -94,13 +94,17 @@ class Etherpad  extends Client {
     * 
     * @return string html
     */ 
-    public function generarHtml() {
-        $html = '';
-    
+    private function cleanHtml() {
         $contenido = $this->getHHTML();
         
         $dom = new \DOMDocument;
-        $dom->loadHTML($contenido);
+        /* la '@' sirve para evita los errores:  Warning: DOMDocument::loadHTML()
+         * 
+         * loadHTML expects valid markup, i’m afraid most page’s arn’t.
+         * You can alter the code to suppress markup errors:-
+         *      $file = @$doc->loadHTML($remote);
+         */
+        @$dom->loadHTML($contenido);
         
         /* Quitar las marcas de comentarios:
          * 
@@ -130,11 +134,27 @@ class Etherpad  extends Client {
                 $domElement->parentNode->removeChild($domElement);
             }
         }
+        
+        $xpath = new \DOMXPath($dom);
+        /* Quitar los <td> con display:none:
+         * <td class="regex-delete" name="payload" style="display:none;">{"payload":[["</td>
+         * <td class="regex-delete" name="delimCell" id="" style="display:none;">","</td>
+         * <td class="regex-delete" name="bracketAndcomma" style="display:none;">"]],"tblId":"1","tblClass":"data-tables", "tblProperties":{"borderWidth":"1","cellAttrs":[],"width":"100","rowAttrs":{},"colAttrs":[],"authors":{}}}</td>
+         */
+        // Selects tags to be processed.
+        $tags_list = $xpath->query("//td");
+        foreach($tags_list as $tag) {
+            $class = $tag->getAttribute('name');
+            if (strstr($class, 'payload') || strstr($class, 'delimCell') || strstr($class, 'bracketAndcomma')) {
+                // Remove the td tag.
+                $tag->parentNode->removeChild($tag);
+            }
+        }
+        
         /*
          * Quitar los tag sin contenido. Tipico:
          *  <p style="text-ailgn:justify"></p>
          */
-        $xpath = new \DOMXPath($dom);
         // Selects tags to be processed.
         $tags_list = $xpath->query("//p|//br|//a|//strong|//img|//ul|//ol|//li|//em|//u|//s|//hr|//blockquote");
         foreach($tags_list as $tag) {
@@ -146,8 +166,24 @@ class Etherpad  extends Client {
             }
         }
         
+        //$xpath = new \DOMXPath($dom);
+        // Quitar los atributos style
+        $tags_list = $xpath->query("//table|//tr|//td");
+        foreach($tags_list as $tag) {
+            $tag->removeAttribute('style');
+            $tag->removeAttribute('name');
+            $tag->removeAttribute('class');
+        }
+        
+        // Quitar los atributos label
+        $tags_list = $xpath->query("//label");
+        foreach($tags_list as $tag) {
+            $tag->parentNode->removeChild($tag);
+        }
+        
         // lista de los tagg 'body'
         $bodies = $dom->getElementsByTagName('body');
+        
         // cojo el primero de la lista: sólo debería haber uno.
         $body = $bodies->item(0);
         //$txt = $body->C14N(); //innerhtml convierte <br> a <br></br>. Se usa lo de abajo:
@@ -157,11 +193,84 @@ class Etherpad  extends Client {
         // eliminar dobles lineas: <br><br>
         //$txt4 = str_replace("<br><br>", "<br>", $txt3);
         $txt4 = str_replace("</p><br>", "</p>", $txt3);
+        $txt5 = str_replace("</table><br>", "</table>", $txt4);
         
-        $html .= '<style>p { margin-top:0; margin-bottom:0; }</style>';
+        //<br value="tblBreak">
+        $txt6 = str_replace("<br value=\"tblBreak\">", "", $txt5);
+        $txt7 = str_replace("</tbody></table><table><tbody>", "", $txt6);
+
+        return $txt7;
+    }
+    
+    /**
+     * Quitar todos los estilos etc de las tablas
+     * 
+     */
+    private function quitarAtributosTabla($html) {
+        $dom = new \DOMDocument;
+        /* la '@' sirve para evita los errores:  Warning: DOMDocument::loadHTML()
+         *
+         * loadHTML expects valid markup, i’m afraid most page’s arn’t.
+         * You can alter the code to suppress markup errors:-
+         *      $file = @$doc->loadHTML($remote);
+         */
+        @$dom->loadHTML($html);
+        
+        $xpath = new \DOMXPath($dom);
+        // Quitar los atributos style
+        $tags_list = $xpath->query("//table|//tr|//td");
+        foreach($tags_list as $tag) {
+            $tag->removeAttribute('style');
+            $tag->removeAttribute('name');
+            $tag->removeAttribute('class');
+            /*
+            $class = $tag->getAttribute('name');
+            if (strstr($class, 'undefined')) {
+                $tag->removeAttribute('class');
+            }
+            */
+        }
+        
+        // Quitar los atributos label
+        $tags_list = $xpath->query("//label");
+        foreach($tags_list as $tag) {
+            $tag->parentNode->removeChild($tag);
+        }
+        
+        // save html
+        //$txt = $dom->saveHTML();
+        
+        // lista de los tagg 'body'
+        $bodies = $dom->getElementsByTagName('body');
+        
+        // cojo el primero de la lista: sólo debería haber uno.
+        $body = $bodies->item(0);
+        //$txt = $body->C14N(); //innerhtml convierte <br> a <br></br>. Se usa lo de abajo:
+        $txt = $body->ownerDocument->saveHTML( $body );
+        $txt2 = substr($txt, 6); // Quitar el tag <body> inicial
+        $txt3 = substr($txt2, 0, -7); // Quitar el tag </body> final
+        
+        $txt4 = str_replace("</tbody></table><table><tbody>", "", $txt3);
+        
+        return $txt4;
+    }
+    
+   /**
+    * devuelve el escrito en html.
+    * 
+    * @return string html
+    */ 
+    public function generarHtml() {
+        $html = '';
+        $contenido = $this->cleanHtml();
+        $html .= "<style>
+                    p { margin-top:0; margin-bottom:0; }
+                    table { width: 800px; border:1px solid black; }
+                    td { padding: 2mm; border: 1px solid black; vertical-align: middle;}
+                 </style>";
 
         $html .= '<div id="escrito" >';
-        $html .= $txt4;
+        $html .= $contenido;
         $html .= '</div>';
         
         return $html;
@@ -174,12 +283,36 @@ class Etherpad  extends Client {
     * @return \Mpdf\Mpdf
     */ 
     public function generarPDF($a_header=[],$fecha='') {
-        $html = '';
+        $stylesheet = "<style>
+                TABLE { border: 1px solid black; border-collapse: collapse; }
+                TD { padding: 2mm; border: 1px solid black; vertical-align: middle;}
+                TD.header { padding: 1mm; border: 0px; vertical-align: bottom;}
+                 </style>
+                ";
+        
+        
+        $txt = $this->cleanHtml();
+        $txt2 = str_replace("<tbody>", "", $txt);
+        $html = str_replace("</tbody>", "", $txt2);
+        
+        //$html = $this->quitarAtributosTabla($html1);
         
         // convert to PDF
         require_once(ConfigGlobal::$dir_libs.'/vendor/autoload.php');
         
+        $header_html = '<table class="header" width="100%">';
+        $header_html .= '<tr>';
+        $header_html .= '<td class="header" width="33%">';
+        $header_html .= $a_header['left'];
+        $header_html .= '</td><td class="header" width="33%" align="center">';
+        $header_html .= $a_header['center'];
+        $header_html .= '</td><td class="header" width="33%" style="text-align: right;">';
+        $header_html .= $a_header['right'];
+        $header_html .= '</td></tr>';
+        $header_html .= '</table>';
+        $header_html .= '<hr>';
         
+        /*
         $header = array (
                 'L' => array (
                     'content' => $a_header['left'],
@@ -205,10 +338,10 @@ class Etherpad  extends Client {
                 ),
                 'line' => 1,
         );
+        */
         
         $footer = '{PAGENO}/{nbpg}';
         
-        $html = $this->generarHtml();
         
         if (!empty($fecha)) {
             $html .= '<div id="fecha" style="margin-top: 2em; margin-right:  0em; text-align: right; " >';
@@ -221,16 +354,23 @@ class Etherpad  extends Client {
             $config = [ 'mode' => 'utf-8',
                         'format' => 'A4-P',
                         'margin_header' => 10,
-                        'margin_top' => 40,
+                        'margin_top' => 20,
                 
             ];
             $mpdf = new \Mpdf\Mpdf($config);
+            //$mpdf->simpleTables = true;
+            //$mpdf->packTableData = true;
+            //$mpdf->keep_table_proportions = TRUE;
+            //$mpdf->shrink_tables_to_fit=1;
             $mpdf->SetDisplayMode('fullpage');
             $mpdf->list_indent_first_level = 0;	// 1 or 0 - whether to indent the first level of a list
             //$mpdf->WriteHTML('<h1>Hello world!</h1><p>Més què d\'air. Ñanyo.</p>');
-            //$mpdf->SetHTMLHeader($html_header);
-            $mpdf->SetHeader($header, 'O');
+            
+            $mpdf->SetHTMLHeader($header_html);
+            //$mpdf->SetHeader($header, 'O');
             $mpdf->SetHTMLFooter($footer);
+            
+            $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
             $mpdf->WriteHTML($html);
         
             // Other code
