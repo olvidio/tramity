@@ -106,7 +106,7 @@ switch($Qfiltro) {
                         'tipo'    => 'modal',
                     ];
         $a_botones[3] = ['accion' => 'en_visto',
-                        'txt'    => _("macrcar como visto"),
+                        'txt'    => _("marcar como visto"),
                     ];
         
         $gesCargos = new GestorCargo();

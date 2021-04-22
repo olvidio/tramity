@@ -91,20 +91,30 @@ class GestorCargo Extends core\ClaseGestor {
 	 * @return Array [id_cargo => nom_usuario]
 	 */
 	function getArrayUsuariosOficina($id_oficina='') {
-	    $a_cargos_oficina = $this->getArrayCargosOficina($id_oficina);
-	    // pasar cargos a usuarios:
-	    $a_usuarios_oficina = [];
-	    $gesUsuarios = new GestorUsuario();
-	    foreach (array_keys($a_cargos_oficina) as $id_cargo) {
-	        $cUsuarios = $gesUsuarios->getUsuarios(['id_cargo' => $id_cargo]);
-	        if (empty($cUsuarios[0])) {
-	            $msg = sprintf(_("No existe el usuario para el cargo %s"),$id_cargo);
-	            //echo $msg;
-	        } else {
-                $nom_usuario = $cUsuarios[0]->getNom_usuario();
-                $a_usuarios_oficina[$id_cargo] = $nom_usuario;
-	        }
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    //$Where = '';
+	    $Where = "WHERE id_oficina > 0";
+	    if (!empty($id_oficina)) {
+	        $Where .= " AND id_oficina = $id_oficina";
 	    }
+	    $sQuery="SELECT id_cargo, id_usuario FROM $nom_tabla
+                $Where ORDER BY cargo";
+        if (($oDbl->query($sQuery)) === false) {
+            $sClauError = 'GestorAsignaturaTipo.lista';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return false;
+        }
+
+	    $a_usuarios_oficina = [];
+        foreach ($oDbl->query($sQuery) as $aClave) {
+            $id_cargo=$aClave[0];
+            $id_usuario=$aClave[1];
+            $oUsuario = new Usuario($id_usuario);
+            $nom_usuario = $oUsuario->getNom_usuario();
+            $a_usuarios_oficina[$id_cargo] = $nom_usuario;
+        }
 	    return $a_usuarios_oficina;
 	}
 	/**

@@ -42,12 +42,12 @@ if ($Qoficina == 'propia') { // encargar
                 'tipo'    => 'modal',
             ];
     $a_botones[1] = ['accion' => 'en_visto',
-                'txt'    => _("macrcar como visto"),
+                'txt'    => _("marcar como visto"),
             ];
 }
 if ($Qoficina == 'resto') { // marcar como visto
     $a_botones[0] = ['accion' => 'en_visto',
-                'txt'    => _("macrcar como visto"),
+                'txt'    => _("marcar como visto"),
             ];
 }
 
