@@ -86,7 +86,7 @@ switch($Qque) {
         $oEntrada = new EntradaDB($Qid_entrada);
         $oEntrada->DBCarregar();
         
-        $aVisto = $oEntrada->getJson_visto();
+        $aVisto = $oEntrada->getJson_visto(TRUE);
         $oVisto = new stdClass;
         $oVisto->oficina = $Qid_oficina;
         $oVisto->cargo = $Qid_cargo;
