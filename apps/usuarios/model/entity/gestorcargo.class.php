@@ -111,6 +111,7 @@ class GestorCargo Extends core\ClaseGestor {
         foreach ($oDbl->query($sQuery) as $aClave) {
             $id_cargo=$aClave[0];
             $id_usuario=$aClave[1];
+            if (empty($id_usuario)) { continue; } // el titular puede estar en blanco.
             $oUsuario = new Usuario($id_usuario);
             $nom_usuario = $oUsuario->getNom_usuario();
             $a_usuarios_oficina[$id_cargo] = $nom_usuario;
