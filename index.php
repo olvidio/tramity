@@ -58,12 +58,14 @@ $a_roles_posibles = [];
 $aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
 foreach($aPosiblesCargos as $id_cargo => $cargo) {
     $a_roles_posibles[] = $cargo;
+    /*
     // si es de se cretaria, lo añado
     $oCargo = new Cargo($id_cargo);
     $id_oficina_cargo = $oCargo->getId_oficina();
     if ($id_oficina_cargo == $id_oficina_secretaria) {
         $a_roles_posibles[] = 'secretaria';
     }
+    */
 }
 
 $_SESSION['session_auth']['a_roles'] = $a_roles_posibles;

@@ -1,6 +1,8 @@
 <?php
+use core\ConfigGlobal;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorLocale;
+use usuarios\model\entity\GestorOficina;
 use usuarios\model\entity\GestorPreferencia;
 use usuarios\model\entity\Usuario;
 // INICIO Cabecera global de URL de controlador *********************************
