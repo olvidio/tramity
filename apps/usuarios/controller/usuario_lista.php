@@ -49,7 +49,7 @@ $email='';
 $cargo='';
 $permiso = 1;
 
-$a_cabeceras = [ 'usuario','nombre a mostrar','cargo','email',array('name'=>'accion','formatter'=>'clickFormatter') ];
+$a_cabeceras = [ 'usuario','nombre a mostrar','cargo preferido','email',array('name'=>'accion','formatter'=>'clickFormatter') ];
 $a_botones = [ ['txt'=> _("borrar"), 'click'=>"fnjs_eliminar()"],
                ['txt'=> _("cambiar password"), 'click'=>"fnjs_cmb_passwd()"],
                ['txt'=> _("modificar"), 'click'=>"fnjs_editar()"],
@@ -64,10 +64,10 @@ foreach ($oUsuarioColeccion as $oUsuario) {
 	$usuario=$oUsuario->getUsuario();
 	$nom_usuario=$oUsuario->getNom_usuario();
 	$email=$oUsuario->getEmail();
-	$id_cargo=$oUsuario->getId_cargo();
+	$id_cargo_preferido=$oUsuario->getId_cargo_preferido();
 
-	if (!empty($id_cargo)) {
-        $oCargo->setId_cargo($id_cargo);
+	if (!empty($id_cargo_preferido)) {
+        $oCargo->setId_cargo($id_cargo_preferido);
         $oCargo->DBCarregar();
         $cargo= $oCargo->getCargo();
 	} else {

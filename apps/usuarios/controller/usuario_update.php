@@ -97,7 +97,7 @@ switch($Qque) {
 
 		if (empty($Qusuario)) { echo _("debe poner un nombre"); }
         $Qid_usuario = (integer) \filter_input(INPUT_POST, 'id_usuario');
-        $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
+        $Qid_cargo_preferido = (integer) \filter_input(INPUT_POST, 'id_cargo_preferido');
         $Qemail = (string) \filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         
         $Qnom_usuario = (string) \filter_input(INPUT_POST, 'nom_usuario');
@@ -107,7 +107,7 @@ switch($Qque) {
         $oUsuario = new Usuario(array('id_usuario' => $Qid_usuario));
         $oUsuario->DBCarregar();
         $oUsuario->setUsuario($Qusuario);
-        $oUsuario->setId_cargo($Qid_cargo);
+        $oUsuario->setId_cargo_preferido($Qid_cargo_preferido);
         $oUsuario->setEmail($Qemail);
         $oUsuario->setNom_usuario($Qnom_usuario);
         if (!empty($Qpassword)){
@@ -125,7 +125,7 @@ switch($Qque) {
 	case "nuevo":
         $Qusuario = (string) \filter_input(INPUT_POST, 'usuario');
         $Qemail = (string) \filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
+        $Qid_cargo_preferido = (integer) \filter_input(INPUT_POST, 'id_cargo_preferido');
         $Qnom_usuario = (string) \filter_input(INPUT_POST, 'nom_usuario');
         $Qpassword = (string) \filter_input(INPUT_POST, 'password');
         
@@ -138,7 +138,7 @@ switch($Qque) {
                 $oUsuario->setPassword($my_passwd);
             }
             $oUsuario->setEmail($Qemail);
-            $oUsuario->setId_cargo($Qid_cargo);
+            $oUsuario->setId_cargo_preferido($Qid_cargo_preferido);
             $oUsuario->setNom_usuario($Qnom_usuario);
             if ($oUsuario->DBGuardar() === FALSE) {
                 echo _("hay un error, no se ha guardado");

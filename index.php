@@ -35,6 +35,7 @@ if (isset($_REQUEST['logout']) && $_REQUEST['logout'] == 'si') {
 }
 
 $username = $_SESSION['session_auth']['username'];
+
 if (empty($_SESSION['session_auth']['role_actual'])) {
     $_SESSION['session_auth']['role_actual'] = $username;
 }

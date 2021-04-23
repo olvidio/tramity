@@ -263,7 +263,7 @@ $pagina_etiquetas = web\Hash::link('apps/etiquetas/controller/etiqueta_lista.php
 
 $mi_idioma = ConfigGlobal::mi_Idioma_short();
 $a_campos = [
-    'oficina' => ConfigGlobal::role_actual(),
+    'role_actual' => ConfigGlobal::role_actual(),
     'username' => $username,
     'mi_idioma' => $mi_idioma,
     'error_fecha' => $_SESSION['oConfig']->getPlazoError(),
@@ -273,7 +273,6 @@ $a_campos = [
     'a_pills' => $a_pills,
     'vista' => 'home',
     'filtro' => $filtro,
-    'role_actual' => ConfigGlobal::role_actual(),
     'a_roles' => $_SESSION['session_auth']['a_roles'],
     'peticion_ajax' => $peticion_ajax,
 ];

@@ -57,7 +57,7 @@ $oPosicion->setParametros(array('id_usuario'=>$Qid_usuario),1);
 
 $oGCargos = new GestorCargo();
 $oDesplCargos= $oGCargos->getDesplCargosUsuario($Qid_usuario);
-$oDesplCargos->setNombre('id_cargo');
+$oDesplCargos->setNombre('id_cargo_preferido');
 
 if (!empty($Qid_usuario)) {
     $que_user='guardar';
@@ -67,19 +67,19 @@ if (!empty($Qid_usuario)) {
     $nom_usuario=$oUsuario->getNom_usuario();
     $pass=$oUsuario->getPassword();
     $email=$oUsuario->getEmail();
-    $id_cargo=$oUsuario->getId_cargo();
+    $id_cargo_preferido=$oUsuario->getId_cargo_preferido();
     
-    $oDesplCargos->setOpcion_sel($id_cargo);
+    $oDesplCargos->setOpcion_sel($id_cargo_preferido);
 } else {
     $que_user='nuevo';
-    $id_cargo='';
+    $id_cargo_preferido='';
     $Qid_usuario='';
     $usuario='';
     $nom_usuario='';
     $pass='';
     $email='';
 }
-$camposForm = 'que!usuario!nom_usuario!password!email!id_cargo';
+$camposForm = 'que!usuario!nom_usuario!password!email!id_cargo_preferido';
 $oHash = new web\Hash();
 $oHash->setcamposForm($camposForm);
 $oHash->setcamposNo('pass!password!id_ctr!id_nom!casas');

@@ -59,10 +59,10 @@ if ( !isset($_SESSION['session_auth'])) {
         if ($row=$oDBSt->fetch(\PDO::FETCH_ASSOC)) {
             if ($oCrypt->encode($_POST['password'],$sPasswd) == $sPasswd) {
                 $id_usuario = $row['id_usuario'];
-                $id_cargo_titular = $row['id_cargo'];
+                $id_cargo_preferido = $row['id_cargo_preferido'];
                 // Comprobar que no hay suplente:
                 $query_cargos="SELECT * FROM aux_cargos 
-                                WHERE id_cargo = $id_cargo_titular ";
+                                WHERE id_cargo = $id_cargo_preferido ";
                 if (($stmt=$oDB->query($query_cargos)) === false) {
                     $sClauError = 'login_obj.prepare';
                     $_SESSION['oGestorErrores']->addErrorAppLastError($oDB, $sClauError, __LINE__, __FILE__);
@@ -106,7 +106,13 @@ if ( !isset($_SESSION['session_auth'])) {
                 foreach ($oDB->query($query_cargos) as $aDades) {
                     $id_cargo = $aDades['id_cargo'];
                     $cargo = $aDades['cargo'];
-                    if ($aDades['preferido'] == 1) {
+                    if (!empty($id_cargo_preferido)) {
+                        if ($aDades['id_cargo'] == $id_cargo_preferido) {
+                            $usuario_cargo = $aDades['cargo'];
+                            $usuario_dtor = $aDades['director'];
+                            $mi_id_oficina = $aDades['id_oficina'];
+                        }
+                    } elseif ($aDades['preferido'] == 1 ) {
                         $usuario_cargo = $aDades['cargo'];
                         $usuario_dtor = $aDades['director'];
                         $mi_id_oficina = $aDades['id_oficina'];
@@ -139,8 +145,9 @@ if ( !isset($_SESSION['session_auth'])) {
                         'id_usuario'=>$id_usuario,
                         'usuario_cargo'=>$usuario_cargo,
                         'usuario_dtor'=>$usuario_dtor,
-                        'id_cargo'=>$id_cargo_titular,
+                        'id_cargo'=>$id_cargo_preferido,
                         'aPosiblesCargos'=>$aPosiblesCargos,
+                        'role_actual'=>$usuario_cargo,
                         'username'=>$_POST['username'],
                         'password'=>$_POST['password'],
                         'esquema'=>$esquema,
@@ -154,7 +161,7 @@ if ( !isset($_SESSION['session_auth'])) {
                 //si existe, registro la sesion con la configuración
                 if ( !isset($_SESSION['config'])) { 
                     $session_config=array (
-                        'id_cargo'=>$id_cargo_titular,
+                        'id_cargo'=>$id_cargo_preferido,
                         'username'=>$_POST['username'],
                         'password'=>$_POST['password'],
                         'mi_id_oficina'=>$mi_id_oficina,

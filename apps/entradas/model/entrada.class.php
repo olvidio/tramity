@@ -47,7 +47,7 @@ class Entrada Extends EntradaDB {
     const ESTADO_ADMITIDO           = 2;
     const ESTADO_ASIGNADO           = 3;
     const ESTADO_ACEPTADO           = 4;
-    const ESTADO_OFICINAS           = 5;
+    //const ESTADO_OFICINAS           = 5;
     const ESTADO_ARCHIVADO          = 6;
     const ESTADO_ENVIADO_CR         = 10;
     

@@ -56,11 +56,11 @@ class Usuario Extends core\ClasePropiedades {
 	 */
 	 private $susuario;
 	/**
-	 * Id_cargo de Usuario
+	 * Id_cargo_preferido de Usuario
 	 *
 	 * @var integer
 	 */
-	 private $iid_cargo;
+	 private $iid_cargo_preferido;
 	/**
 	 * Password de Usuario
 	 *
@@ -132,7 +132,7 @@ class Usuario Extends core\ClasePropiedades {
 		if ($this->DBCarregar('guardar') === FALSE) { $bInsert=TRUE; } else { $bInsert=FALSE; }
 		$aDades=array();
 		$aDades['usuario'] = $this->susuario;
-		$aDades['id_cargo'] = $this->iid_cargo;
+		$aDades['id_cargo_preferido'] = $this->iid_cargo_preferido;
 		$aDades['password'] = $this->spassword;
 		$aDades['email'] = $this->semail;
 		$aDades['nom_usuario'] = $this->snom_usuario;
@@ -142,7 +142,7 @@ class Usuario Extends core\ClasePropiedades {
 			//UPDATE
 			$update="
 					usuario                  = :usuario,
-					id_cargo                  = :id_cargo,
+					id_cargo_preferido       = :id_cargo_preferido,
 					password                 = :password,
 					email                    = :email,
 					nom_usuario              = :nom_usuario";
@@ -164,8 +164,8 @@ class Usuario Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(usuario,id_cargo,password,email,nom_usuario)";
-			$valores="(:usuario,:id_cargo,:password,:email,:nom_usuario)";		
+			$campos="(usuario,id_cargo_preferido,password,email,nom_usuario)";
+			$valores="(:usuario,:id_cargo_preferido,:password,:email,:nom_usuario)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'Usuario.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -256,7 +256,7 @@ class Usuario Extends core\ClasePropiedades {
 		if (!is_array($aDades)) return;
 		if (array_key_exists('id_usuario',$aDades)) $this->setId_usuario($aDades['id_usuario']);
 		if (array_key_exists('usuario',$aDades)) $this->setUsuario($aDades['usuario']);
-		if (array_key_exists('id_cargo',$aDades)) $this->setId_cargo($aDades['id_cargo']);
+		if (array_key_exists('id_cargo_preferido',$aDades)) $this->setId_cargo_preferido($aDades['id_cargo_preferido']);
 		if (array_key_exists('password',$aDades)) $this->setPassword($aDades['password']);
 		if (array_key_exists('email',$aDades)) $this->setEmail($aDades['email']);
 		if (array_key_exists('nom_usuario',$aDades)) $this->setNom_usuario($aDades['nom_usuario']);
@@ -269,7 +269,7 @@ class Usuario Extends core\ClasePropiedades {
 		$aPK = $this->getPrimary_key();
 		$this->setId_usuario('');
 		$this->setUsuario('');
-		$this->setId_cargo('');
+		$this->setId_cargo_preferido('');
 		$this->setPassword('');
 		$this->setEmail('');
 		$this->setNom_usuario('');
@@ -359,23 +359,23 @@ class Usuario Extends core\ClasePropiedades {
 		$this->susuario = $susuario;
 	}
 	/**
-	 * Recupera l'atribut iid_cargo de Usuario
+	 * Recupera l'atribut iid_cargo_preferido de Usuario
 	 *
-	 * @return integer iid_cargo
+	 * @return integer iid_cargo_preferido
 	 */
-	function getId_cargo() {
-		if (!isset($this->iid_cargo) && !$this->bLoaded) {
+	function getId_cargo_preferido() {
+		if (!isset($this->iid_cargo_preferido) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
-		return $this->iid_cargo;
+		return $this->iid_cargo_preferido;
 	}
 	/**
-	 * estableix el valor de l'atribut iid_cargo de Usuario
+	 * estableix el valor de l'atribut iid_cargo_preferido de Usuario
 	 *
-	 * @param integer iid_cargo='' optional
+	 * @param integer iid_cargo_preferido='' optional
 	 */
-	function setId_cargo($iid_cargo='') {
-		$this->iid_cargo = $iid_cargo;
+	function setId_cargo_preferido($iid_cargo_preferido='') {
+		$this->iid_cargo_preferido = $iid_cargo_preferido;
 	}
 	/**
 	 * Recupera l'atribut spassword de Usuario
@@ -445,7 +445,7 @@ class Usuario Extends core\ClasePropiedades {
 		$oUsuarioSet = new core\Set();
 
 		$oUsuarioSet->add($this->getDatosUsuario());
-		$oUsuarioSet->add($this->getDatosId_cargo());
+		$oUsuarioSet->add($this->getDatosId_cargo_preferido());
 		$oUsuarioSet->add($this->getDatosPassword());
 		$oUsuarioSet->add($this->getDatosEmail());
 		$oUsuarioSet->add($this->getDatosNom_usuario());
@@ -467,15 +467,15 @@ class Usuario Extends core\ClasePropiedades {
 		return $oDatosCampo;
 	}
 	/**
-	 * Recupera les propietats de l'atribut iid_cargo de Usuario
+	 * Recupera les propietats de l'atribut iid_cargo_preferido de Usuario
 	 * en una clase del tipus DatosCampo
 	 *
 	 * @return core\DatosCampo
 	 */
-	function getDatosId_cargo() {
+	function getDatosId_cargo_preferido() {
 		$nom_tabla = $this->getNomTabla();
-		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'id_cargo'));
-		$oDatosCampo->setEtiqueta(_("id_cargo"));
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'id_cargo_preferido'));
+		$oDatosCampo->setEtiqueta(_("id_cargo_preferido"));
 		return $oDatosCampo;
 	}
 	/**

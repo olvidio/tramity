@@ -50,11 +50,11 @@ switch ($Qque) {
 		$id_usuario= core\ConfigGlobal::mi_id_usuario();
         $Qnom_usuario = (string) \filter_input(INPUT_POST, 'nom_usuario');
         $Qemail = (string) \filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
+        $Qid_cargo_preferido = (integer) \filter_input(INPUT_POST, 'id_cargo_preferido');
         
         $oUsuario = new Usuario(array('id_usuario' => $id_usuario));
         $oUsuario->DBCarregar();
-        $oUsuario->setId_cargo($Qid_cargo);
+        $oUsuario->setId_cargo_preferido($Qid_cargo_preferido);
         $oUsuario->setEmail($Qemail);
         $oUsuario->setNom_usuario($Qnom_usuario);
         if ($oUsuario->DBGuardar() === FALSE) {
