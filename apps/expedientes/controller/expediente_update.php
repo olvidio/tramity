@@ -53,11 +53,30 @@ $error_txt = '';
 switch($Qque) {
     case 'en_visto': // Copiado de entradas_update.
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+        $Qid_oficina = ConfigGlobal::role_id_oficina();
+        $Qid_cargo = ConfigGlobal::role_id_cargo();
         $oEntrada = new Entrada($Qid_entrada);
         $oEntrada->DBCarregar();
-        $oEntrada->setEstado(Entrada::ESTADO_ARCHIVADO);
+        
+        $aVisto = $oEntrada->getJson_visto(TRUE);
+        $oVisto = new stdClass;
+        $oVisto->oficina = $Qid_oficina;
+        $oVisto->cargo = $Qid_cargo;
+        $oVisto->visto = TRUE;
+        $aVisto[] = $oVisto;
+        
+        $oEntrada->setJson_visto($aVisto);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
+        }
+        
+        $oEntrada->comprobarVisto();
+        
+        if (!empty($error_txt)) {
+            $jsondata['success'] = FALSE;
+            $jsondata['mensaje'] = $error_txt;
+        } else {
+            $jsondata['success'] = TRUE;
         }
         
         if (!empty($error_txt)) {

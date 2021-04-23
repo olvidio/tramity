@@ -87,8 +87,21 @@ class EntradaLista {
                 if (!empty($this->aWhereADD['encargado'])) {
                     $encargado = $this->aWhereADD['encargado'];
                 }
-                $aWhere['estado'] = Entrada::ESTADO_OFICINAS;
+                $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aWhere['encargado'] = $encargado;
+                
+                // No marcado como visto:
+                $gesEntradas = new GestorEntrada();
+                $cEntradas = $gesEntradas->getEntradasNoVistoDB($encargado,'encargado');
+                $a_entradas_encargado = [];
+                foreach ($cEntradas as $oEntrada) {
+                    $id_entrada = $oEntrada->getId_entrada();
+                    $a_entradas_encargado[] = $id_entrada;
+                }
+                if (!empty($a_entradas_encargado)) {
+                    $aWhere['id_entrada'] = implode(',',$a_entradas_encargado);
+                    $aOperador['id_entrada'] = 'IN';
+                }
                 break;
             case 'en_aceptado':
                 $oficina = 'propia'; // valor por defecto
@@ -102,7 +115,7 @@ class EntradaLista {
                     
                     // No marcado como visto:
                     $gesEntradas = new GestorEntrada();
-                    $cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina,TRUE);
+                    $cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina,'ponente');
                     $a_entradas_ponente = [];
                     foreach ($cEntradas as $oEntrada) {
                         $id_entrada = $oEntrada->getId_entrada();
@@ -117,7 +130,7 @@ class EntradaLista {
                     if (!empty($id_oficina_role)) {
                         $id_oficina = ConfigGlobal::role_id_oficina();
                         $gesEntradas = new GestorEntrada();
-                        $cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina,FALSE);
+                        $cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina,'resto');
                         foreach ($cEntradas as $oEntrada) {
                             $id_entrada = $oEntrada->getId_entrada();
                             $a_entradas_resto[] = $id_entrada;

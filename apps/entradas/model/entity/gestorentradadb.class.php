@@ -4,8 +4,8 @@ use core\ClaseGestor;
 use core\Condicion;
 use core\Set;
 use function core\any_2;
-use function core\is_true;
 use entradas\model\Entrada;
+use usuarios\model\entity\Cargo;
 
 /**
  * GestorEntradaDB
@@ -75,22 +75,33 @@ class GestorEntradaDB Extends ClaseGestor {
      * retorna l'array d'objectes de tipus EntradaDB amb visto = false
      *
      * @param integer id_oficina
-     * @param boolean ponente Si hay que buscar en el campo de ponente, o en el de resto_oficinas
+     * @param string tipo_oficina (ponente|resto|encargado) Seleccionar por
      * @return array Una col·lecció d'objectes de tipus EntradaDB
      */
-    function getEntradasNoVistoDB($oficina,$ponente=TRUE) {
+    function getEntradasNoVistoDB($oficina,$tipo_oficina) {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEntradaDBSet = new Set();
         
         $estado = Entrada::ESTADO_ACEPTADO;
         // Todas las de la oficina
-        if (is_true($ponente)) {
-            $sCondi = "ponente = $oficina AND estado = $estado";
-            $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
-        } else {
-            $sCondi = "$oficina = ANY (resto_oficinas) AND estado = $estado";
-            $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+        switch ($tipo_oficina) {
+            case 'ponente':
+                $sCondi = "ponente = $oficina AND estado = $estado";
+                $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+                break;
+            case 'resto':
+                $sCondi = "$oficina = ANY (resto_oficinas) AND estado = $estado";
+                $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+                break;
+            case 'encargado':
+                // si es encargado se le pasa el id_cargo:
+                $encargado = $oficina;
+                $oCargo = new Cargo($encargado);
+                $oficina = $oCargo->getId_oficina();
+                $sCondi = "encargado = $encargado AND estado = $estado";
+                $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+                break;
         }
         
         // Quitar las vistas
