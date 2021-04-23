@@ -240,6 +240,10 @@ switch ($Qque) {
                     $error_txt .= $oExpediente->getErrorTxt();
                 }
             }
+            // En caso de V_D_RECHAZADO o V_D_NO, anulo todos los escritos:
+            if($estado == Expediente::ESTADO_RECHAZADO || $estado == Expediente::ESTADO_NO) {
+                $oExpediente->anularEscritos();
+            }
         }
         break;
     case 'respuesta':   // aclaracion_respuesta

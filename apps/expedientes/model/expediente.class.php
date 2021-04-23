@@ -316,6 +316,23 @@ class Expediente Extends expedienteDB {
         }
     }
     
+    /**
+     * anula todos los escritos del expediente.
+     * 
+     */
+    public function anularEscritos() {
+        $gesAcciones = new GestorAccion();
+        $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $this->iid_expediente]);
+        
+        foreach ($cAcciones as $oAccion) {
+            $id_escrito = $oAccion->getId_escrito();
+            $oEscrito = new Escrito($id_escrito);
+            $oEscrito->DBCarregar();
+            $oEscrito->setAnulado(TRUE);
+            $oEscrito->DBGuardar();
+        }
+    }
+    
     public function getArrayPrioridad() {
         $a_prioridad = [
             self::PRIORIDAD_NORMAL => _("normal"),

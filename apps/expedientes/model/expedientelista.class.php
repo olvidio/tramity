@@ -651,7 +651,7 @@ class ExpedienteLista {
                 if ($estado == Expediente::ESTADO_DILATA) {
                     $row['class_row'] = 'bg-warning';
                 }
-                if ($estado == Expediente::ESTADO_RECHAZADO) {
+                if ($estado == Expediente::ESTADO_RECHAZADO || $estado == Expediente::ESTADO_NO) {
                     $row['class_row'] = 'bg-warning';
                 }
                 if ($estado == Expediente::ESTADO_ESPERA) {
