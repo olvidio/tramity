@@ -118,7 +118,7 @@ if ( !isset($_SESSION['session_auth'])) {
                         $mi_id_oficina = $aDades['id_oficina'];
                     }
                     $aPosiblesCargos[$id_cargo] = $cargo;
-                }
+                } 
                 
                 // si no tiene mail interior, cojo el exterior.
                 $mail = empty($mail)? $row['email'] : $mail;
