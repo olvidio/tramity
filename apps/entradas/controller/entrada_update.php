@@ -59,6 +59,7 @@ $error_txt = '';
 $jsondata = [];
 switch($Qque) {
     case 'en_asignar':
+        $Qid_oficina = ConfigGlobal::role_id_oficina();
         $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
         $oEntrada = new EntradaDB($Qid_entrada);
         $oEntrada->DBCarregar();
@@ -67,6 +68,23 @@ switch($Qque) {
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
         }
+        
+        // también hay que macrcarlo como visto por quien lo encarga
+        // Siempre que no sea el mismo:
+        if (ConfigGlobal::role_id_cargo() != $Qid_cargo) {
+            $aVisto = $oEntrada->getJson_visto(TRUE);
+            $oVisto = new stdClass;
+            $oVisto->oficina = $Qid_oficina;
+            $oVisto->cargo = ConfigGlobal::role_id_cargo();
+            $oVisto->visto = TRUE;
+            $aVisto[] = $oVisto;
+            
+            $oEntrada->setJson_visto($aVisto);
+            if ($oEntrada->DBGuardar() === FALSE) {
+                $error_txt .= $oEntrada->getErrorTxt();
+            }
+        }
+        
 
         if (!empty($error_txt)) {
             $jsondata['success'] = FALSE;

@@ -87,7 +87,8 @@ class GestorEntradaDB Extends ClaseGestor {
         // Todas las de la oficina
         switch ($tipo_oficina) {
             case 'ponente':
-                $sCondi = "ponente = $oficina AND estado = $estado";
+                // en el caso de la oficina ponente, lo considero visto si está encargado a alguien
+                $sCondi = "ponente = $oficina AND estado = $estado AND encargado IS NULL";
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
                 break;
             case 'resto':
