@@ -72,6 +72,8 @@
 <div id="exportar" >
     <form id='seleccionados' name='seleccionados' action='' method='post'>
     <input type='hidden' name='permiso' value='3'>
+    <input type='Hidden' name='calendario' value='{{ calendario }}' >
+    <input type='Hidden' id='seleccionados_id_oficina'  name='id_oficina' value='' >
     <input type='Hidden' name='go' value='lista' >
     <input type='Hidden' id='nuevo' name='nuevo' value='' >
     {{ oTabla.mostrar_tabla|raw }}
@@ -129,6 +131,7 @@ fnjs_buscar=function(formulario){
 }
 
 fnjs_modificar=function(formulario){
+    id_oficina=$('#id_oficina').val();
     var s=0;
     var r=0;
     /* selecciono los elementos con class="sel" de las tablas del id=formulario */
@@ -152,6 +155,7 @@ fnjs_modificar=function(formulario){
         alert ("{{ "No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la izquierda."|trans|raw }}");
         return false;
     }
+    $('#seleccionados_id_oficina').val(id_oficina);
     $('#nuevo').val(2);
     $(formulario).attr('action',"apps/pendientes/controller/pendiente_form.php");
     fnjs_enviar_formulario(formulario,'#main');
@@ -160,31 +164,21 @@ fnjs_modificar=function(formulario){
 
 fnjs_marcar=function(formulario){
     $('#nuevo').val(4);
-    $(formulario).attr('action',"apps/pendientes/controller/pendiente_update_ics.php");
-    $(formulario).submit(function() {
-        $.ajax({
-            data: $(this).serialize(),
-            url: $(this).attr('action'),
-            type: 'post',
-                dataType: 'json',
-                complete: function (json) {
-                   if (json.success != true) {
-                       alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-                   }
-                }
-        });
-        return false;
+    var url = "apps/pendientes/controller/pendiente_update_ics.php";
+    var datos = $(formulario).serialize();
+
+    request=$.ajax({
+        url: url,
+        data: datos,
+        type: 'post',
+        dataType: 'json'
     });
-    $(formulario).submit();
-    $(formulario).off();
-    // tacho los marcados
-    /* selecciono los elementos con class="sel" de las tablas del id=formulario */
-    /* var sel=$('#'+formulario+' table .sel'); */
-    $(formulario+' input.sel').each(function(i){
-        if($(this).prop('checked')== true){
-            $(this).parent().siblings().addClass('tachado');
-            $(this).prop('checked',false);
-        }
+    request.done( function (json) {
+       if (json.success != true) {
+           alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+       } else {
+           fnjs_buscar('#que');
+       }
     });
 }
 
@@ -193,34 +187,23 @@ fnjs_borrar=function(formulario){
     seguro=confirm("{{ "¿Está Seguro que desea borrar este pendiente?"|trans }}");
     if (seguro) {
         $('#nuevo').val(3);
-        $(formulario).attr('action',"apps/pendientes/controller/pendiente_update_ics.php");
-        $(formulario).submit(function() {
-            $.ajax({
-                data: $(this).serialize(),
-                url: $(this).attr('action'),
-                type: 'post',
-                dataType: 'json',
-                complete: function (json) {
-                   if (json.success != true) {
-                       alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-                   }
-                }
-            });
-            return false;
+        var url = "apps/pendientes/controller/pendiente_update_ics.php";
+        var datos = $(formulario).serialize();
+
+        request=$.ajax({
+            url: url,
+            data: datos,
+            type: 'post',
+            dataType: 'json'
         });
-        $(formulario).submit();
-        $(formulario).off();
-        // tacho los marcados
-        var form=$(formulario).id;
-        /* selecciono los elementos con class="sel" de las tablas del id=formulario */
-        /* var sel=$('#'+formulario+' table .sel'); */
-        $(formulario+' input.sel').each(function(i){
-            if($(this).prop('checked')== true){
-                $(this).parent().siblings().addClass('tachado');
-                $(this).prop('checked',false);
-            }
+        request.done( function (json) {
+           if (json.success != true) {
+               alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+           } else {
+               fnjs_buscar('#que');
+           }
         });
-    }
+	}
 }
 
 </script>

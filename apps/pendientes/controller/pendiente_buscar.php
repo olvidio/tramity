@@ -223,13 +223,13 @@ $oFecha = new DateTimeLocal();
 $format = $oFecha->getFormat();
 
 $a_campos = [
-    'calendario'   => $Qcalendario,
-    'secretaria'   => $secretaria,
+    'calendario' => $Qcalendario,
+    'secretaria' => $secretaria,
     'oDesplLugar' => $oDesplLugar,
     'oDesplOficinas' => $oDesplOficinas,
     'oDesplStatus' => $oDesplStatus,
     'asunto' => $Qasunto,
-    'id_oficina'     => $id_oficina,
+    'id_oficina' => $id_oficina,
     'oTabla' => $oTabla,
     'f_min' => $Qf_min,
     'f_max' => $Qf_max,
