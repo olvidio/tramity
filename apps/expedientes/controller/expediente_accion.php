@@ -91,6 +91,7 @@ $oDesplCargos = [];
 $a_botones = [];
 $txt_plazo = '';
 $f_plazo = '';
+$hoy_iso = '';
 switch($Qfiltro) {
     case 'en_buscar':
     case 'en_encargado':
