@@ -143,6 +143,9 @@ switch ($Qque) {
         if (is_array($cFirmas) && count($cFirmas) == 0) {
             $error_txt .= _("No puede Firmar");
         } else {
+            $oExpediente = new Expediente($Qid_expediente);
+            $oExpediente->DBCarregar();
+            $estado = $oExpediente->getEstado();
             //$f_hoy_iso = date('Y-m-d');
             $f_hoy_iso = date(\DateTimeInterface::ISO8601);
             // Habrá que ver como se cambia un voto.
@@ -217,8 +220,6 @@ switch ($Qque) {
             // 22/2/21. Amplio a cambiar el estado para todos los casos.
             $bParaReunion = $gesFirmas->paraReunion($Qid_expediente);
             if($bParaReunion) {
-                $oExpediente = new Expediente($Qid_expediente);
-                $oExpediente->DBCarregar();
                 switch ($Qvoto) {
                     case Firma::V_D_VISTO_BUENO:
                         $estado = Expediente::ESTADO_FIJAR_REUNION;
