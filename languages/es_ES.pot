@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tramity\n"
-"POT-Creation-Date: 2021-04-08 08:56+0200\n"
+"POT-Creation-Date: 2021-04-26 19:20+0200\n"
 "PO-Revision-Date: 2020-06-08 20:23+0200\n"
 "Last-Translator: Daniel Serrabou <dani@moneders.net>\n"
 "Language-Team: \n"
@@ -16,27 +16,35 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: busquedas/controller/buscar_escrito.php:132
+#: busquedas/controller/buscar_ajax.php:48
+msgid "No se..."
+msgstr ""
+
+#: busquedas/controller/buscar_ajax.php:149
+msgid "No encuentro nada con esta ref."
+msgstr ""
+
+#: busquedas/controller/buscar_escrito.php:130
 msgid "1 mes"
 msgstr ""
 
-#: busquedas/controller/buscar_escrito.php:133
+#: busquedas/controller/buscar_escrito.php:131
 msgid "3 meses"
 msgstr ""
 
-#: busquedas/controller/buscar_escrito.php:134
+#: busquedas/controller/buscar_escrito.php:132
 msgid "6 meses"
 msgstr ""
 
-#: busquedas/controller/buscar_escrito.php:135
+#: busquedas/controller/buscar_escrito.php:133
 msgid "1 año"
 msgstr ""
 
-#: busquedas/controller/buscar_escrito.php:136
+#: busquedas/controller/buscar_escrito.php:134
 msgid "2 años"
 msgstr ""
 
-#: busquedas/controller/buscar_escrito.php:137
+#: busquedas/controller/buscar_escrito.php:135
 msgid "más de 2 años"
 msgstr ""
 
@@ -63,13 +71,35 @@ msgstr ""
 msgid "año %s"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:177
-#: busquedas/model/vertabla.class.php:283 davical/controller/user_lista.php:92
+#: busquedas/controller/ver_tabla.php:83
+msgid "Buscar otros escritos con esta referencia"
+msgstr ""
+
+#: busquedas/model/vertabla.class.php:163
+msgid "escritos recibidos en la Delegación con referencias al escrito"
+msgstr ""
+
+#: busquedas/model/vertabla.class.php:167
+msgid "escritos recibidos en la Delegación"
+msgstr ""
+
+#: busquedas/model/vertabla.class.php:171
+msgid "escritos aprobados en la Delegación con referencias al escrito"
+msgstr ""
+
+#: busquedas/model/vertabla.class.php:175
+msgid "escritos aprobados en la Delegación"
+msgstr ""
+
+#: busquedas/model/vertabla.class.php:192
+#: busquedas/model/vertabla.class.php:296
+#: davical/controller/zzuser_lista.php:92
 #: etiquetas/controller/etiqueta_lista.php:49
-#: expedientes/controller/escrito_form.php:147
+#: expedientes/controller/escrito_form.php:142
 #: lugares/controller/grupo_lista.php:50 lugares/controller/lugar_lista.php:55
 #: pendientes/controller/pendiente_buscar.php:201
 #: pendientes/controller/pendiente_tabla.php:118
+#: plantillas/controller/plantilla_lista.php:36
 #: tramites/controller/tramitecargo_ajax.php:104
 #: usuarios/controller/cargo_grupo_lista.php:53
 #: usuarios/controller/cargo_lista.php:54
@@ -77,59 +107,63 @@ msgstr ""
 msgid "modificar"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:178
-#: busquedas/model/vertabla.class.php:284
-#: expedientes/controller/expediente_accion.php:118
-#: expedientes/controller/expediente_form.php:149
+#: busquedas/model/vertabla.class.php:193
+#: busquedas/model/vertabla.class.php:297
+#: expedientes/controller/expediente_accion.php:133
+#: expedientes/controller/expediente_form.php:153
 #: pendientes/controller/pendiente_buscar.php:202
 #: pendientes/controller/pendiente_tabla.php:120
+#: plantillas/controller/plantilla_lista.php:22
 #: tramites/controller/tramitecargo_ajax.php:109
 msgid "eliminar"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:179
+#: busquedas/model/vertabla.class.php:194
 msgid "anular"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:183
-#: busquedas/model/vertabla.class.php:288
-#: entradas/model/entity/entradadb.class.php:936
+#: busquedas/model/vertabla.class.php:198
+#: busquedas/model/vertabla.class.php:301
+#: entradas/model/entity/entradadb.class.php:1044
 #: expedientes/model/entity/escritodb.class.php:1256
 #: pendientes/model/entity/pendientedb.class.php:989
 #: pendientes/view/pendiente_form.html.twig:131
 msgid "detalle"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:184
-#: busquedas/model/vertabla.class.php:289
-#: entradas/model/entradalista.class.php:247
-#: expedientes/controller/antecedentes_ajax.php:540
-#: expedientes/model/escritolista.class.php:145
-#: expedientes/model/escritolista.class.php:290
-#: expedientes/model/escritolista.class.php:293
+#: busquedas/model/vertabla.class.php:199
+#: busquedas/model/vertabla.class.php:302
+#: entradas/controller/entrada_ajax.php:279
+#: entradas/model/entradalista.class.php:295
+#: expedientes/controller/antecedentes_ajax.php:542
+#: expedientes/model/escritolista.class.php:150
+#: expedientes/model/escritolista.class.php:311
+#: expedientes/model/escritolista.class.php:314
 #: expedientes/model/expedientelista.class.php:634
+#: plantillas/controller/plantilla_lista_expediente.php:28
+#: plantillas/controller/plantilla_lista_expediente.php:38
 #: expedientes/view/escrito_lst_enviar.html.twig:7
 msgid "ver"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:185
-#: entradas/model/entradalista.class.php:248
+#: busquedas/model/vertabla.class.php:200
+#: entradas/model/entradalista.class.php:296
 #: expedientes/model/entity/escritodb.class.php:1364
 #: expedientes/model/expedientelista.class.php:638
 msgid "acción"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:187
-#: busquedas/model/vertabla.class.php:291
-#: busquedas/view/buscar_escrito.html.twig:10
+#: busquedas/model/vertabla.class.php:202
+#: busquedas/model/vertabla.class.php:304
+#: busquedas/view/buscar_escrito.html.twig:11
 #: busquedas/view/lista_permanentes.html.twig:8
 #: pendientes/view/pendiente_buscar.html.twig:17
 #: pendientes/view/pendiente_form.html.twig:120
 msgid "protocolo origen"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:188
-#: busquedas/model/vertabla.class.php:293
+#: busquedas/model/vertabla.class.php:203
+#: busquedas/model/vertabla.class.php:306
 #: entradas/view/entrada_lista.html.twig:14
 #: expedientes/view/escrito_lista.html.twig:16
 #: expedientes/view/escrito_lst_enviar.html.twig:14
@@ -137,18 +171,18 @@ msgstr ""
 msgid "ref."
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:189
-#: busquedas/model/vertabla.class.php:294
-#: entradas/model/entity/entradadb.class.php:948
+#: busquedas/model/vertabla.class.php:204
+#: busquedas/model/vertabla.class.php:307
+#: entradas/model/entity/entradadb.class.php:1056
 #: expedientes/model/entity/escritodb.class.php:1340
 #: entradas/view/entrada_lista.html.twig:15
 #: expedientes/view/expediente_form.html.twig:147
 msgid "categoria"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:190
-#: busquedas/model/vertabla.class.php:295
-#: entradas/model/entity/entradadb.class.php:960
+#: busquedas/model/vertabla.class.php:205
+#: busquedas/model/vertabla.class.php:308
+#: entradas/model/entity/entradadb.class.php:1068
 #: expedientes/model/entity/escritodb.class.php:1352
 #: expedientes/model/entity/expedientedb.class.php:1236
 #: pendientes/model/entity/pendientedb.class.php:977
@@ -157,14 +191,14 @@ msgstr ""
 msgid "visibilidad"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:191
-#: busquedas/model/vertabla.class.php:296
+#: busquedas/model/vertabla.class.php:206
+#: busquedas/model/vertabla.class.php:309
 #: entradas/controller/entrada_ajax.php:263
-#: entradas/model/entity/entradadb.class.php:912
-#: expedientes/controller/antecedentes_ajax.php:144
-#: expedientes/controller/antecedentes_ajax.php:306
-#: expedientes/controller/antecedentes_ajax.php:433
-#: expedientes/controller/antecedentes_ajax.php:527
+#: entradas/model/entity/entradadb.class.php:1020
+#: expedientes/controller/antecedentes_ajax.php:146
+#: expedientes/controller/antecedentes_ajax.php:308
+#: expedientes/controller/antecedentes_ajax.php:435
+#: expedientes/controller/antecedentes_ajax.php:529
 #: expedientes/controller/escrito_update.php:163
 #: expedientes/model/entity/escritodb.class.php:1244
 #: expedientes/model/entity/expedientedb.class.php:1056
@@ -180,8 +214,7 @@ msgstr ""
 msgid "asunto"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:192
-#: busquedas/model/vertabla.class.php:297
+#: busquedas/model/vertabla.class.php:207
 #: pendientes/controller/pendiente_buscar.php:210
 #: pendientes/controller/pendiente_tabla.php:128
 #: pendientes/model/entity/pendientedb.class.php:1025
@@ -191,52 +224,48 @@ msgstr ""
 msgid "oficinas"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:193
-#: busquedas/model/vertabla.class.php:298
+#: busquedas/model/vertabla.class.php:208
+#: busquedas/model/vertabla.class.php:311
 msgid "fecha doc."
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:194
+#: busquedas/model/vertabla.class.php:209
 #: entradas/view/entrada_lista.html.twig:20
 msgid "contestar antes de"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:195
+#: busquedas/model/vertabla.class.php:210
 #: entradas/view/entrada_lista.html.twig:21
 msgid "fecha entrada"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:256
-msgid "escritos recibidos en la Delegación"
-msgstr ""
-
-#: busquedas/model/vertabla.class.php:292
+#: busquedas/model/vertabla.class.php:305
 #: entradas/model/entity/entradabypass.class.php:593
-#: expedientes/controller/antecedentes_ajax.php:435
+#: expedientes/controller/antecedentes_ajax.php:437
 #: expedientes/model/entity/escritodb.class.php:1220
 msgid "destinos"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:299
+#: busquedas/model/vertabla.class.php:310
+msgid "cargos"
+msgstr ""
+
+#: busquedas/model/vertabla.class.php:312
 #: expedientes/view/expediente_lista.html.twig:26
 msgid "fecha aprobación"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:300
-#: expedientes/model/escritolista.class.php:135
-#: expedientes/model/escritolista.class.php:251
+#: busquedas/model/vertabla.class.php:313
+#: expedientes/model/escritolista.class.php:140
+#: expedientes/model/escritolista.class.php:271
 msgid "enviado"
 msgstr ""
 
-#: busquedas/model/vertabla.class.php:354 entradas/model/entrada.class.php:225
-#: expedientes/controller/escrito_update.php:362
-#: expedientes/controller/escrito_update.php:363
-#: expedientes/controller/escrito_update.php:369
+#: busquedas/model/vertabla.class.php:367 entradas/model/entrada.class.php:228
+#: expedientes/controller/escrito_update.php:404
+#: expedientes/controller/escrito_update.php:405
+#: expedientes/controller/escrito_update.php:411
 msgid "ANULADO"
-msgstr ""
-
-#: busquedas/model/vertabla.class.php:382
-msgid "escritos aprobados en la Delegación"
 msgstr ""
 
 #: config/model/entity/configschema.class.php:339
@@ -381,7 +410,67 @@ msgstr ""
 msgid "continuar"
 msgstr ""
 
-#: davical/controller/user_lista.php:90
+#: davical/controller/user_update.php:26
+#: etiquetas/controller/etiqueta_update.php:28
+#: lugares/controller/grupo_update.php:46
+#: lugares/controller/lugar_update.php:25
+#: plantillas/controller/plantilla_update.php:144
+#: tramites/controller/tramite_update.php:22
+#: tramites/controller/tramitecargo_ajax.php:140
+#: usuarios/controller/cargo_grupo_update.php:24
+#: usuarios/controller/cargo_update.php:37
+#: usuarios/controller/oficina_update.php:32
+#: usuarios/controller/usuario_update.php:42
+msgid "hay un error, no se ha eliminado"
+msgstr ""
+
+#: davical/controller/user_update.php:56 davical/controller/user_update.php:86
+#: davical/controller/user_update.php:109
+#: etiquetas/controller/etiqueta_update.php:61
+#: lugares/controller/grupo_update.php:35
+#: lugares/controller/grupo_update.php:68
+#: lugares/controller/lugar_update.php:65
+#: lugares/controller/lugar_update.php:89
+#: plantillas/controller/plantilla_update.php:55
+#: plantillas/controller/plantilla_update.php:66
+#: plantillas/controller/plantilla_update.php:133
+#: plantillas/controller/plantilla_update.php:164
+#: tramites/controller/tramite_update.php:41
+#: tramites/controller/tramite_update.php:55
+#: tramites/controller/tramitecargo_ajax.php:132
+#: usuarios/controller/cargo_grupo_update.php:48
+#: usuarios/controller/oficina_update.php:49
+#: usuarios/controller/oficina_update.php:71
+#: usuarios/controller/personal_update.php:35
+#: usuarios/controller/personal_update.php:61
+#: usuarios/controller/usuario_update.php:80
+#: usuarios/controller/usuario_update.php:121
+#: usuarios/controller/usuario_update.php:144
+msgid "hay un error, no se ha guardado"
+msgstr ""
+
+#: davical/controller/user_update.php:63
+#: etiquetas/controller/etiqueta_update.php:49
+#: lugares/controller/grupo_update.php:23
+#: lugares/controller/grupo_update.php:57
+#: lugares/controller/lugar_update.php:44
+#: lugares/controller/lugar_update.php:71
+#: plantillas/controller/plantilla_update.php:121
+#: plantillas/controller/plantilla_update.php:154
+#: tramites/controller/tramite_update.php:30
+#: usuarios/controller/cargo_grupo_update.php:36
+#: usuarios/controller/cargo_update.php:49
+#: usuarios/controller/oficina_update.php:39
+#: usuarios/controller/usuario_update.php:98
+msgid "debe poner un nombre"
+msgstr ""
+
+#: davical/controller/user_update.php:112
+#: usuarios/controller/usuario_update.php:147
+msgid "debe poner un nombre y el password"
+msgstr ""
+
+#: davical/controller/zzuser_lista.php:90
 #: etiquetas/controller/etiqueta_lista.php:48
 #: lugares/controller/grupo_lista.php:49 lugares/controller/lugar_lista.php:54
 #: tramites/controller/tramite_lista.php:45
@@ -392,63 +481,9 @@ msgstr ""
 msgid "borrar"
 msgstr ""
 
-#: davical/controller/user_lista.php:91
+#: davical/controller/zzuser_lista.php:91
 #: usuarios/controller/usuario_lista.php:54
 msgid "cambiar password"
-msgstr ""
-
-#: davical/controller/user_update.php:26
-#: etiquetas/controller/etiqueta_update.php:28
-#: lugares/controller/grupo_update.php:46
-#: lugares/controller/lugar_update.php:24
-#: tramites/controller/tramite_update.php:22
-#: tramites/controller/tramitecargo_ajax.php:140
-#: usuarios/controller/cargo_grupo_update.php:23
-#: usuarios/controller/cargo_update.php:50
-#: usuarios/controller/oficina_update.php:31
-#: usuarios/controller/usuario_update.php:41
-msgid "hay un error, no se ha eliminado"
-msgstr ""
-
-#: davical/controller/user_update.php:56 davical/controller/user_update.php:86
-#: davical/controller/user_update.php:109
-#: etiquetas/controller/etiqueta_update.php:61
-#: lugares/controller/grupo_update.php:35
-#: lugares/controller/grupo_update.php:68
-#: lugares/controller/lugar_update.php:62
-#: lugares/controller/lugar_update.php:86
-#: tramites/controller/tramite_update.php:41
-#: tramites/controller/tramite_update.php:55
-#: tramites/controller/tramitecargo_ajax.php:132
-#: usuarios/controller/cargo_grupo_update.php:47
-#: usuarios/controller/cargo_update.php:85
-#: usuarios/controller/oficina_update.php:48
-#: usuarios/controller/oficina_update.php:70
-#: usuarios/controller/personal_update.php:35
-#: usuarios/controller/personal_update.php:61
-#: usuarios/controller/usuario_update.php:69
-#: usuarios/controller/usuario_update.php:99
-#: usuarios/controller/usuario_update.php:122
-msgid "hay un error, no se ha guardado"
-msgstr ""
-
-#: davical/controller/user_update.php:63
-#: etiquetas/controller/etiqueta_update.php:49
-#: lugares/controller/grupo_update.php:23
-#: lugares/controller/grupo_update.php:57
-#: lugares/controller/lugar_update.php:41
-#: lugares/controller/lugar_update.php:68
-#: tramites/controller/tramite_update.php:30
-#: usuarios/controller/cargo_grupo_update.php:35
-#: usuarios/controller/cargo_update.php:62
-#: usuarios/controller/oficina_update.php:38
-#: usuarios/controller/usuario_update.php:76
-msgid "debe poner un nombre"
-msgstr ""
-
-#: davical/controller/user_update.php:112
-#: usuarios/controller/usuario_update.php:125
-msgid "debe poner un nombre y el password"
 msgstr ""
 
 #: davical/model/davical.class.php:85 davical/model/davical.class.php:631
@@ -717,7 +752,7 @@ msgstr ""
 
 #: davical/model/entity/userdb.class.php:803
 #: usuarios/model/entity/usuario.class.php:490
-#: usuarios/view/usuario_form_pwd.phtml:53
+#: usuarios/view/usuario_form_pwd.phtml:49
 msgid "password"
 msgstr ""
 
@@ -750,6 +785,23 @@ msgstr ""
 msgid "Buscar en entradas:"
 msgstr ""
 
+#: entradas/controller/entrada_accion.php:41
+#: expedientes/view/expediente_distribuir.html.twig:121
+msgid "Encargar a"
+msgstr ""
+
+#: entradas/controller/entrada_accion.php:45
+#: entradas/controller/entrada_accion.php:50
+#: expedientes/controller/expediente_accion.php:114
+#: expedientes/view/expediente_form.html.twig:191
+msgid "marcar como visto"
+msgstr ""
+
+#: entradas/controller/entrada_accion.php:60
+#: expedientes/controller/expediente_accion.php:209
+msgid "no tiene permiso"
+msgstr ""
+
 #: entradas/controller/entrada_ajax.php:37
 msgid "No tiene permiso para ver la entrada"
 msgstr ""
@@ -773,8 +825,8 @@ msgid "No existe la entrada"
 msgstr ""
 
 #: entradas/controller/entrada_ajax.php:263
-#: expedientes/controller/antecedentes_ajax.php:142
-#: expedientes/controller/antecedentes_ajax.php:431
+#: expedientes/controller/antecedentes_ajax.php:144
+#: expedientes/controller/antecedentes_ajax.php:433
 #: expedientes/controller/escrito_update.php:161
 #: pendientes/controller/pendiente_buscar.php:204
 #: pendientes/controller/pendiente_tabla.php:123
@@ -783,10 +835,10 @@ msgid "protocolo"
 msgstr ""
 
 #: entradas/controller/entrada_ajax.php:263
-#: expedientes/controller/antecedentes_ajax.php:143
-#: expedientes/controller/antecedentes_ajax.php:305
-#: expedientes/controller/antecedentes_ajax.php:432
-#: expedientes/controller/antecedentes_ajax.php:526
+#: expedientes/controller/antecedentes_ajax.php:145
+#: expedientes/controller/antecedentes_ajax.php:307
+#: expedientes/controller/antecedentes_ajax.php:434
+#: expedientes/controller/antecedentes_ajax.php:528
 #: expedientes/model/expedientelista.class.php:499
 #: expedientes/model/expedientelista.class.php:516
 msgid "fecha"
@@ -796,12 +848,19 @@ msgstr ""
 msgid "oficina ponente"
 msgstr ""
 
+#: entradas/controller/entrada_ajax.php:280
+#: expedientes/controller/antecedentes_ajax.php:543
+#: plantillas/controller/plantilla_lista_expediente.php:28
+#: plantillas/controller/plantilla_lista_expediente.php:41
+msgid "adjuntar"
+msgstr ""
+
 #: entradas/controller/entrada_bypass.php:118
 msgid "salida distribución cr"
 msgstr ""
 
 #: entradas/controller/entrada_form.php:88
-#: expedientes/model/expediente.class.php:344
+#: expedientes/model/expediente.class.php:361
 #: tramites/model/entity/firma.class.php:220
 #: tramites/model/entity/firma.class.php:226
 #: tramites/model/entity/firma.class.php:236
@@ -824,18 +883,18 @@ msgstr ""
 #: entradas/controller/entrada_form.php:102
 #: entradas/controller/entrada_form.php:107
 #: usuarios/controller/cargo_lista.php:68
-#: entradas/view/_entrada_form_js.html.twig:166
-#: expedientes/view/_escrito_form_js.html.twig:157
-#: expedientes/view/_expediente_form_js.html.twig:281
+#: entradas/view/_entrada_form_js.html.twig:173
+#: expedientes/view/_escrito_form_js.html.twig:146
+#: expedientes/view/_expediente_form_js.html.twig:284
 msgid "No"
 msgstr ""
 
 #: entradas/controller/entrada_form.php:102
 #: entradas/controller/entrada_form.php:107
 #: usuarios/controller/cargo_lista.php:68
-#: entradas/view/_entrada_form_js.html.twig:161
-#: expedientes/view/_escrito_form_js.html.twig:152
-#: expedientes/view/_expediente_form_js.html.twig:276
+#: entradas/view/_entrada_form_js.html.twig:168
+#: expedientes/view/_escrito_form_js.html.twig:142
+#: expedientes/view/_expediente_form_js.html.twig:279
 msgid "Sí"
 msgstr ""
 
@@ -844,44 +903,45 @@ msgid "modificar entrada"
 msgstr ""
 
 #: entradas/controller/entrada_form.php:240
-#: entradas/model/entradalista.class.php:296
+#: entradas/model/entradalista.class.php:357
 msgid "nueva entrada"
 msgstr ""
 
-#: entradas/controller/entrada_form.php:256
+#: entradas/controller/entrada_form.php:257
 msgid "Asignar"
 msgstr ""
 
-#: entradas/controller/entrada_form.php:259
+#: entradas/controller/entrada_form.php:260
 msgid "Aceptar"
 msgstr ""
 
-#: entradas/controller/entrada_form.php:262
+#: entradas/controller/entrada_form.php:264
 #: busquedas/view/ver_tabla.html.twig:31
 #: etiquetas/view/etiqueta_form.html.twig:21
 #: expedientes/view/escrito_distribuir.html.twig:35
-#: expedientes/view/escrito_form.html.twig:149
+#: expedientes/view/escrito_form.html.twig:159
 #: expedientes/view/expediente_form.html.twig:219
 #: expedientes/view/expediente_ver.html.twig:54
-#: lugares/view/grupo_form.html.twig:31 lugares/view/lugar_form.html.twig:69
-#: tramites/view/tramite_form.html.twig:56
-#: tramites/view/tramitecargo_select.html.twig:142
+#: lugares/view/grupo_form.html.twig:31 lugares/view/lugar_form.html.twig:60
+#: plantillas/view/plantilla_form.html.twig:19
+#: tramites/view/tramite_form.html.twig:47
+#: tramites/view/tramitecargo_select.html.twig:139
 #: tramites/view/zztramitecargo_form.html.twig:29
-#: usuarios/view/cargo_form.html.twig:74
-#: usuarios/view/cargo_grupo_form.html.twig:48
-#: usuarios/view/oficina_form.html.twig:50 usuarios/view/personal.html.twig:33
+#: usuarios/view/cargo_form.html.twig:65
+#: usuarios/view/cargo_grupo_form.html.twig:39
+#: usuarios/view/oficina_form.html.twig:41 usuarios/view/personal.html.twig:33
 #: usuarios/view/usuario_form.html.twig:29
 msgid "Guardar"
 msgstr ""
 
-#: entradas/controller/entrada_update.php:299
-#: entradas/controller/entrada_update.php:329
+#: entradas/controller/entrada_update.php:377
+#: entradas/controller/entrada_update.php:407
 msgid "No se puede determinar la ruta del calendario para añadir el pendiente"
 msgstr ""
 
-#: entradas/controller/entrada_update.php:322
-#: expedientes/controller/expediente_update.php:90
-#: pendientes/controller/pendiente_update_ics.php:225
+#: entradas/controller/entrada_update.php:400
+#: expedientes/controller/expediente_update.php:132
+#: pendientes/controller/pendiente_update_ics.php:227
 msgid "No se han podido guardar el nuevo pendiente"
 msgstr ""
 
@@ -916,55 +976,55 @@ msgstr ""
 msgid "f_salida"
 msgstr ""
 
-#: entradas/model/entity/entradadb.class.php:840
+#: entradas/model/entity/entradadb.class.php:948
 msgid "modo_entrada"
 msgstr ""
 
-#: entradas/model/entity/entradadb.class.php:852
+#: entradas/model/entity/entradadb.class.php:960
 msgid "json_prot_origen"
 msgstr ""
 
-#: entradas/model/entity/entradadb.class.php:864
+#: entradas/model/entity/entradadb.class.php:972
 msgid "asunto_entrada"
 msgstr ""
 
-#: entradas/model/entity/entradadb.class.php:876
+#: entradas/model/entity/entradadb.class.php:984
 #: expedientes/model/entity/escritodb.class.php:1196
 msgid "json_prot_ref"
 msgstr ""
 
-#: entradas/model/entity/entradadb.class.php:888
-#: expedientes/controller/antecedentes_ajax.php:145
-#: expedientes/controller/antecedentes_ajax.php:307
-#: expedientes/controller/antecedentes_ajax.php:434
-#: expedientes/controller/antecedentes_ajax.php:528
+#: entradas/model/entity/entradadb.class.php:996
+#: expedientes/controller/antecedentes_ajax.php:147
+#: expedientes/controller/antecedentes_ajax.php:309
+#: expedientes/controller/antecedentes_ajax.php:436
+#: expedientes/controller/antecedentes_ajax.php:530
 #: expedientes/model/entity/expedientedb.class.php:1032
 #: pendientes/controller/pendiente_buscar.php:209
 #: expedientes/view/escrito_lst_enviar.html.twig:12
 msgid "ponente"
 msgstr ""
 
-#: entradas/model/entity/entradadb.class.php:900
+#: entradas/model/entity/entradadb.class.php:1008
 #: expedientes/model/entity/escritodb.class.php:1280
 #: expedientes/model/entity/expedientedb.class.php:1044
 msgid "resto_oficinas"
 msgstr ""
 
-#: entradas/model/entity/entradadb.class.php:924
+#: entradas/model/entity/entradadb.class.php:1032
 msgid "f_entrada"
 msgstr ""
 
-#: entradas/model/entity/entradadb.class.php:972
+#: entradas/model/entity/entradadb.class.php:1080
 #: expedientes/model/entity/escritodb.class.php:1328
 #: expedientes/model/entity/expedientedb.class.php:1140
 msgid "f_contestar"
 msgstr ""
 
-#: entradas/model/entity/entradadb.class.php:984
+#: entradas/model/entity/entradadb.class.php:1092
 msgid "bypass"
 msgstr ""
 
-#: entradas/model/entity/entradadb.class.php:996
+#: entradas/model/entity/entradadb.class.php:1104
 #: expedientes/model/entity/expedientedb.class.php:1152
 #: pendientes/controller/pendiente_buscar.php:211
 #: expedientes/view/expediente_lista.html.twig:16
@@ -972,12 +1032,23 @@ msgstr ""
 msgid "estado"
 msgstr ""
 
-#: entradas/model/entity/entradadb.class.php:1008
+#: entradas/model/entity/entradadb.class.php:1116
 #: expedientes/model/entity/escritodb.class.php:1424
 #: lugares/controller/lugar_lista.php:53
 #: lugares/model/entity/lugar.class.php:704
-#: lugares/view/lugar_form.html.twig:65
+#: lugares/view/lugar_form.html.twig:56
 msgid "anulado"
+msgstr ""
+
+#: entradas/model/entity/entradadb.class.php:1128
+#: expedientes/model/expediente.class.php:354
+#: pendientes/controller/pendiente_tabla.php:129
+#: pendientes/model/entity/pendientedb.class.php:953
+msgid "encargado"
+msgstr ""
+
+#: entradas/model/entity/entradadb.class.php:1140
+msgid "json_visto"
 msgstr ""
 
 #: entradas/model/entity/entradadocdb.class.php:401
@@ -989,67 +1060,67 @@ msgstr ""
 msgid "f_doc"
 msgstr ""
 
-#: entradas/model/entrada.class.php:90 expedientes/model/escrito.class.php:195
-#: expedientes/model/expediente.class.php:321
-#: expedientes/model/expediente.class.php:352
+#: entradas/model/entrada.class.php:93 expedientes/model/escrito.class.php:201
+#: expedientes/model/expediente.class.php:338
+#: expedientes/model/expediente.class.php:369
 msgid "normal"
 msgstr ""
 
-#: entradas/model/entrada.class.php:91 expedientes/model/escrito.class.php:196
+#: entradas/model/entrada.class.php:94 expedientes/model/escrito.class.php:202
 msgid "sin numerar"
 msgstr ""
 
-#: entradas/model/entrada.class.php:92 expedientes/model/escrito.class.php:197
-#: expedientes/model/expediente.class.php:353
+#: entradas/model/entrada.class.php:95 expedientes/model/escrito.class.php:203
+#: expedientes/model/expediente.class.php:370
 msgid "permanente"
 msgstr ""
 
-#: entradas/model/entrada.class.php:100
+#: entradas/model/entrada.class.php:103
 msgid "todos"
 msgstr ""
 
-#: entradas/model/entrada.class.php:101
+#: entradas/model/entrada.class.php:104
 #: etiquetas/controller/etiqueta_lista.php:63
 msgid "personal"
 msgstr ""
 
-#: entradas/model/entrada.class.php:102
+#: entradas/model/entrada.class.php:105
 msgid "reservado"
 msgstr ""
 
-#: entradas/model/entrada.class.php:103
+#: entradas/model/entrada.class.php:106
 msgid "vcd"
 msgstr ""
 
-#: entradas/model/entrada.class.php:146 entradas/model/entrada.class.php:261
+#: entradas/model/entrada.class.php:149 entradas/model/entrada.class.php:264
 msgid "No hay destinos"
 msgstr ""
 
-#: entradas/model/entradalista.class.php:170
+#: entradas/model/entradalista.class.php:200
 msgid "No ha escogido ningún filtro"
 msgstr ""
 
-#: entradas/model/entradalista.class.php:300
+#: entradas/model/entradalista.class.php:361
 msgid "procesar"
 msgstr ""
 
-#: envios/model/enviar.class.php:152
+#: envios/model/enviar.class.php:157
 msgid "No hay más"
 msgstr ""
 
-#: envios/model/enviar.class.php:210
+#: envios/model/enviar.class.php:216
 msgid "E12"
 msgstr ""
 
-#: envios/model/enviar.class.php:279
+#: envios/model/enviar.class.php:285
 msgid "Ver archivos adjuntos"
 msgstr ""
 
-#: envios/model/enviar.class.php:336
+#: envios/model/enviar.class.php:342
 msgid "No hay destinos para este escrito"
 msgstr ""
 
-#: envios/model/enviar.class.php:343
+#: envios/model/enviar.class.php:349
 msgid "mail no válido para"
 msgstr ""
 
@@ -1059,7 +1130,7 @@ msgid "Falta definir el tipo de documento etherpad"
 msgstr ""
 
 #: ethercalc/model/ethercalc.class.php:214
-#: etherpad/model/etherpad.class.php:303
+#: etherpad/model/etherpad.class.php:477
 msgid "Debe indicar el id con SetId"
 msgstr ""
 
@@ -1086,7 +1157,6 @@ msgstr ""
 #: etiquetas/model/entity/etiqueta.class.php:424
 #: tramites/model/entity/firma.class.php:861
 #: tramites/model/entity/tramitecargo.class.php:464
-#: usuarios/model/entity/usuario.class.php:478
 msgid "id_cargo"
 msgstr ""
 
@@ -1109,22 +1179,18 @@ msgstr ""
 msgid "modificar ajuntos escrito"
 msgstr ""
 
-#: expedientes/controller/antecedentes_ajax.php:252
-#: expedientes/controller/expediente_lista.php:55
+#: expedientes/controller/antecedentes_ajax.php:254
+#: expedientes/controller/expediente_lista.php:57
 msgid "No hay ningún expediente con estas etiquetas"
 msgstr ""
 
-#: expedientes/controller/antecedentes_ajax.php:308
+#: expedientes/controller/antecedentes_ajax.php:310
 #: expedientes/model/entity/expedientedb.class.php:1128
 #: pendientes/controller/pendiente_buscar.php:205
 #: pendientes/controller/pendiente_tabla.php:124
 #: pendientes/model/entity/pendientedb.class.php:1013
 #: expedientes/view/expediente_lista.html.twig:30
 msgid "etiquetas"
-msgstr ""
-
-#: expedientes/controller/antecedentes_ajax.php:541
-msgid "adjuntar"
 msgstr ""
 
 #: expedientes/controller/escrito_distribuir.php:99
@@ -1136,51 +1202,52 @@ msgstr ""
 msgid "Algún error al genrar el pdf. Es posible que no tenga el protocolo."
 msgstr ""
 
-#: expedientes/controller/escrito_form.php:95
+#: expedientes/controller/escrito_form.php:96
 #: expedientes/controller/salida_escrito.php:114
 msgid "personalizado"
 msgstr ""
 
-#: expedientes/controller/escrito_form.php:150
+#: expedientes/controller/escrito_form.php:145
 msgid "modificar escrito"
 msgstr ""
 
-#: expedientes/controller/escrito_form.php:153
+#: expedientes/controller/escrito_form.php:148
 msgid "modificar propuesta"
 msgstr ""
 
-#: expedientes/controller/escrito_form.php:156
+#: expedientes/controller/escrito_form.php:151
 msgid "modificar plantilla"
 msgstr ""
 
-#: expedientes/controller/escrito_form.php:218
-#: expedientes/controller/escrito_rev.php:164
-#: expedientes/controller/salida_escrito.php:233
+#: expedientes/controller/escrito_form.php:212
+#: expedientes/controller/escrito_rev.php:162
+#: expedientes/controller/salida_escrito.php:235
 #: tramites/controller/tramitecargo_ajax.php:115
 #: pendientes/view/pendiente_tabla.html.twig:60
 msgid "nuevo"
 msgstr ""
 
-#: expedientes/controller/escrito_form.php:221
-#: expedientes/controller/escrito_rev.php:167
+#: expedientes/controller/escrito_form.php:215
+#: expedientes/controller/escrito_rev.php:165
 #: expedientes/view/expediente_form.html.twig:134
 msgid "nuevo escrito"
 msgstr ""
 
-#: expedientes/controller/escrito_form.php:224
-#: expedientes/controller/escrito_rev.php:170
+#: expedientes/controller/escrito_form.php:218
+#: expedientes/controller/escrito_rev.php:168
 #: expedientes/view/expediente_form.html.twig:128
 msgid "nueva propuesta"
 msgstr ""
 
-#: expedientes/controller/escrito_form.php:227
-#: expedientes/controller/escrito_rev.php:173
+#: expedientes/controller/escrito_form.php:221
+#: expedientes/controller/escrito_rev.php:171
+#: plantillas/view/plantilla_lista.html.twig:9
 msgid "nueva plantilla"
 msgstr ""
 
-#: expedientes/controller/escrito_rev.php:135
-#: expedientes/model/escritolista.class.php:151
-#: expedientes/model/escritolista.class.php:301
+#: expedientes/controller/escrito_rev.php:134
+#: expedientes/model/escritolista.class.php:156
+#: expedientes/model/escritolista.class.php:322
 #: expedientes/model/expedientelista.class.php:495
 #: expedientes/model/expedientelista.class.php:503
 #: expedientes/model/expedientelista.class.php:510
@@ -1189,15 +1256,15 @@ msgstr ""
 msgid "revisar"
 msgstr ""
 
-#: expedientes/controller/escrito_rev.php:138
+#: expedientes/controller/escrito_rev.php:137
 msgid "revisar escrito"
 msgstr ""
 
-#: expedientes/controller/escrito_rev.php:141
+#: expedientes/controller/escrito_rev.php:140
 msgid "revisar propuesta"
 msgstr ""
 
-#: expedientes/controller/escrito_rev.php:144
+#: expedientes/controller/escrito_rev.php:143
 msgid "revisar plantilla"
 msgstr ""
 
@@ -1235,67 +1302,70 @@ msgstr ""
 msgid "Tiene %s pendiente asociado"
 msgstr ""
 
-#: expedientes/controller/escrito_update.php:274
+#: expedientes/controller/escrito_update.php:286
 msgid "Hay un error al eliminar el escrito"
 msgstr ""
 
-#: expedientes/controller/escrito_update.php:278
-#: expedientes/controller/escrito_update.php:379
+#: expedientes/controller/escrito_update.php:297
+msgid "Hay un error al quitar el escrito de expediente"
+msgstr ""
+
+#: expedientes/controller/escrito_update.php:304
+#: expedientes/controller/escrito_update.php:422
 msgid "No existe el escrito"
 msgstr ""
 
-#: expedientes/controller/escrito_update.php:375
+#: expedientes/controller/escrito_update.php:417
 msgid "Hay un error al guardar el escrito"
 msgstr ""
 
-#: expedientes/controller/escrito_update.php:517
+#: expedientes/controller/escrito_update.php:576
 msgid "No puede ser"
 msgstr ""
 
-#: expedientes/controller/escrito_update.php:522
+#: expedientes/controller/escrito_update.php:581
 msgid "Algún error al explotar"
 msgstr ""
 
-#: expedientes/controller/escrito_update.php:676
-msgid "No se..."
-msgstr ""
-
-#: expedientes/controller/expediente_accion.php:96
+#: expedientes/controller/expediente_accion.php:102
 msgid "añadir a un expediente"
 msgstr ""
 
-#: expedientes/controller/expediente_accion.php:100
+#: expedientes/controller/expediente_accion.php:106
 msgid "crear un nuevo expediente"
 msgstr ""
 
-#: expedientes/controller/expediente_accion.php:104
+#: expedientes/controller/expediente_accion.php:110
 msgid "crear un nuevo pendiente de la oficina"
 msgstr ""
 
-#: expedientes/controller/expediente_accion.php:127
-#: expedientes/controller/expediente_accion.php:155
-#: expedientes/controller/expediente_accion.php:163
+#: expedientes/controller/expediente_accion.php:117
+#: pendientes/controller/pendiente_form.php:479
+#: pendientes/view/_pendiente_form_js.html.twig:60
+msgid "plazo para contestar"
+msgstr ""
+
+#: expedientes/controller/expediente_accion.php:142
+#: expedientes/controller/expediente_accion.php:148
+#: expedientes/controller/expediente_accion.php:181
+#: expedientes/controller/expediente_accion.php:192
 msgid "mover a borrador"
 msgstr ""
 
-#: expedientes/controller/expediente_accion.php:130
-#: expedientes/controller/expediente_accion.php:143
-#: expedientes/controller/expediente_accion.php:158
-#: expedientes/controller/expediente_accion.php:166
+#: expedientes/controller/expediente_accion.php:154
+#: expedientes/controller/expediente_accion.php:167
+#: expedientes/controller/expediente_accion.php:185
+#: expedientes/controller/expediente_accion.php:196
 msgid "copiar a borrador"
 msgstr ""
 
-#: expedientes/controller/expediente_accion.php:135
-#: expedientes/controller/expediente_accion.php:148
+#: expedientes/controller/expediente_accion.php:159
+#: expedientes/controller/expediente_accion.php:172
 msgid "copiar a copias"
 msgstr ""
 
-#: expedientes/controller/expediente_accion.php:169
+#: expedientes/controller/expediente_accion.php:199
 msgid "copiar a otro cargo"
-msgstr ""
-
-#: expedientes/controller/expediente_accion.php:179
-msgid "no tiene permiso"
 msgstr ""
 
 #: expedientes/controller/expediente_cambio_tramite.php:35
@@ -1306,88 +1376,99 @@ msgstr ""
 msgid "Guardar etiquetas"
 msgstr ""
 
-#: expedientes/controller/expediente_distribuir.php:119
+#: expedientes/controller/expediente_distribuir.php:120
 msgid "Distribuir"
 msgstr ""
 
-#: expedientes/controller/expediente_distribuir.php:133
+#: expedientes/controller/expediente_distribuir.php:134
 msgid "Archivar"
 msgstr ""
 
-#: expedientes/controller/expediente_form.php:97
+#: expedientes/controller/expediente_form.php:98
 msgid "expediente"
 msgstr ""
 
-#: expedientes/controller/expediente_form.php:147
-#: expedientes/model/escritolista.class.php:130
-#: expedientes/model/escritolista.class.php:285
+#: expedientes/controller/expediente_form.php:148
+#: expedientes/model/escritolista.class.php:135
+#: expedientes/model/escritolista.class.php:306
 #: expedientes/view/escrito_lst_enviar.html.twig:9
 msgid "mod.datos"
 msgstr ""
 
-#: expedientes/controller/expediente_form.php:148
-#: expedientes/model/escritolista.class.php:131
-#: expedientes/model/escritolista.class.php:235
-#: expedientes/model/escritolista.class.php:287
-#: expedientes/model/escritolista.class.php:294
+#: expedientes/controller/expediente_form.php:149
+#: expedientes/model/escritolista.class.php:136
+#: expedientes/model/escritolista.class.php:254
+#: expedientes/model/escritolista.class.php:308
+#: expedientes/model/escritolista.class.php:315
 msgid "rev.texto"
 msgstr ""
 
-#: expedientes/controller/expediente_form.php:208
+#: expedientes/controller/expediente_form.php:155
+#: expedientes/model/expediente.class.php:463
+#: expedientes/model/expediente.class.php:469
+#: expedientes/model/expediente.class.php:478
+msgid "quitar"
+msgstr ""
+
+#: expedientes/controller/expediente_form.php:215
 #: expedientes/view/expediente_lista.html.twig:3
 msgid "nuevo expediente"
 msgstr ""
 
-#: expedientes/controller/expediente_update.php:131
+#: expedientes/controller/expediente_update.php:173
 msgid "No se han podido crear el nuevo expediente"
 msgstr ""
 
-#: expedientes/controller/expediente_update.php:140
+#: expedientes/controller/expediente_update.php:182
 msgid "No se han podido adjuntar la entrada"
 msgstr ""
 
-#: expedientes/controller/expediente_update.php:164
+#: expedientes/controller/expediente_update.php:206
 msgid "No se han podido asignar el nuevo encargado"
 msgstr ""
 
-#: expedientes/controller/expediente_update.php:187
+#: expedientes/controller/expediente_update.php:229
 msgid "No se han podido guardar las etiquetas"
 msgstr ""
 
-#: expedientes/controller/expediente_update.php:208
+#: expedientes/controller/expediente_update.php:250
 msgid "No se ha podido guarda la fecha de reunión"
 msgstr ""
 
-#: expedientes/controller/expediente_update.php:238
-#: expedientes/controller/expediente_update.php:259
-#: expedientes/controller/expediente_update.php:382
+#: expedientes/controller/expediente_update.php:293
+#: expedientes/controller/expediente_update.php:316
+#: expedientes/controller/expediente_update.php:460
 msgid "No se ha podido cambiar el estado del expediente"
 msgstr ""
 
-#: expedientes/controller/expediente_update.php:366
-#: expedientes/controller/expediente_update.php:426
+#: expedientes/controller/expediente_update.php:439
+#: expedientes/controller/expediente_update.php:520
 msgid "No se ha eliminado la firma"
 msgstr ""
 
-#: expedientes/controller/expediente_update.php:375
+#: expedientes/controller/expediente_update.php:448
 msgid "RETIRADO"
 msgstr ""
 
-#: expedientes/controller/expediente_update.php:416
+#: expedientes/controller/expediente_update.php:473
+msgid "No se ha guardado la accion"
+msgstr ""
+
+#: expedientes/controller/expediente_update.php:510
 msgid "No se ha eliminado la accion"
 msgstr ""
 
-#: expedientes/controller/expediente_update.php:432
+#: expedientes/controller/expediente_update.php:526
 msgid "No se ha eliminado el expediente"
 msgstr ""
 
-#: expedientes/controller/expediente_update.php:505
+#: expedientes/controller/expediente_update.php:601
 #: tramites/model/entity/firma.class.php:253
 #: expedientes/view/expediente_form.html.twig:183
 msgid "visto"
 msgstr ""
 
-#: expedientes/controller/expediente_update.php:585
+#: expedientes/controller/expediente_update.php:683
 msgid "Creo que ya se ha creado"
 msgstr ""
 
@@ -1415,11 +1496,11 @@ msgstr ""
 msgid "Protocolo repetido"
 msgstr ""
 
-#: expedientes/controller/salida_escrito.php:268
+#: expedientes/controller/salida_escrito.php:270
 msgid "Generar protocolo"
 msgstr ""
 
-#: expedientes/controller/salida_escrito.php:268
+#: expedientes/controller/salida_escrito.php:270
 msgid "Pasar a secretaría"
 msgstr ""
 
@@ -1526,135 +1607,141 @@ msgstr ""
 msgid "firmas_oficina"
 msgstr ""
 
-#: expedientes/model/escrito.class.php:135
+#: expedientes/model/escrito.class.php:141
 msgid "Error no hay destino"
 msgstr ""
 
-#: expedientes/model/escrito.class.php:176
+#: expedientes/model/escrito.class.php:182
 msgid "No se ha podido eliminar un adjunto"
 msgstr ""
 
-#: expedientes/model/escrito.class.php:182
+#: expedientes/model/escrito.class.php:188
 msgid "No se ha podido eliminar el escrito"
 msgstr ""
 
-#: expedientes/model/escrito.class.php:205
+#: expedientes/model/escrito.class.php:211
 msgid "manual"
 msgstr ""
 
-#: expedientes/model/escrito.class.php:206
+#: expedientes/model/escrito.class.php:212
 #: lugares/model/entity/lugar.class.php:295
 msgid "xml"
 msgstr ""
 
-#: expedientes/model/escrito.class.php:214
+#: expedientes/model/escrito.class.php:220
 msgid "propuesta"
 msgstr ""
 
-#: expedientes/model/escrito.class.php:215
+#: expedientes/model/escrito.class.php:221
 #: expedientes/view/expediente_form.html.twig:131
 msgid "plantilla"
 msgstr ""
 
-#: expedientes/model/escrito.class.php:216
+#: expedientes/model/escrito.class.php:222
 msgid "escrito"
 msgstr ""
 
-#: expedientes/model/escritolista.class.php:141
+#: expedientes/model/escrito.class.php:532
+msgid "Conforme"
+msgstr ""
+
+#: expedientes/model/escrito.class.php:555
+msgid "debe indicar la localidad en la configuración"
+msgstr ""
+
+#: expedientes/model/escrito.class.php:559
+msgid "El Vicario de la Delegación"
+msgstr ""
+
+#: expedientes/model/escritolista.class.php:146
 #: usuarios/controller/usuario_secretaria.php:101
 msgid "enviar"
 msgstr ""
 
-#: expedientes/model/escritolista.class.php:262
+#: expedientes/model/escritolista.class.php:283
 msgid "en secretaría"
 msgstr ""
 
-#: expedientes/model/escritolista.class.php:265
+#: expedientes/model/escritolista.class.php:286
 msgid "pasar a secretaría"
 msgstr ""
 
-#: expedientes/model/escritolista.class.php:269
+#: expedientes/model/escritolista.class.php:290
 msgid "otra acción?"
 msgstr ""
 
-#: expedientes/model/escritolista.class.php:291
+#: expedientes/model/escritolista.class.php:312
 #: expedientes/view/escrito_lst_enviar.html.twig:11
 msgid "prot. local/rev.texto"
 msgstr ""
 
-#: expedientes/model/escritolista.class.php:347
+#: expedientes/model/escritolista.class.php:369
 msgid "ver todos"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:322
+#: expedientes/model/expediente.class.php:339
 msgid "rápido"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:323
+#: expedientes/model/expediente.class.php:340
 msgid "urgente"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:324
+#: expedientes/model/expediente.class.php:341
 msgid "desconocido"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:325
+#: expedientes/model/expediente.class.php:342
 msgid "otra"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:333
+#: expedientes/model/expediente.class.php:350
 msgid "borrador"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:334
+#: expedientes/model/expediente.class.php:351
 #: usuarios/controller/usuario_home.php:93
 msgid "circulando"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:335
+#: expedientes/model/expediente.class.php:352
 #: usuarios/controller/usuario_secretaria.php:51
 msgid "fijar reunión"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:336
+#: expedientes/model/expediente.class.php:353
 #: pendientes/model/pendiente.class.php:123
 msgid "acabado"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:337
-#: pendientes/controller/pendiente_tabla.php:129
-#: pendientes/model/entity/pendientedb.class.php:953
-msgid "encargado"
-msgstr ""
-
-#: expedientes/model/expediente.class.php:338
+#: expedientes/model/expediente.class.php:355
 msgid "ok secretaria / distribuir"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:339
+#: expedientes/model/expediente.class.php:356
 msgid "archivado"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:340
-#: usuarios/controller/usuario_home.php:155
+#: expedientes/model/expediente.class.php:357
+#: usuarios/controller/usuario_home.php:157
 msgid "copias"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:341
+#: expedientes/model/expediente.class.php:358
 #: tramites/model/entity/firma.class.php:230
 #: tramites/model/entity/firma.class.php:239
 #: tramites/model/entity/firma.class.php:260
 msgid "rechazado"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:342
+#: expedientes/model/expediente.class.php:359
 #: tramites/model/entity/firma.class.php:229
 #: tramites/model/entity/firma.class.php:238
 #: tramites/model/entity/firma.class.php:259
 msgid "dilata"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:343
+#: expedientes/model/expediente.class.php:360
 #: tramites/model/entity/firma.class.php:221
 #: tramites/model/entity/firma.class.php:227
 #: tramites/model/entity/firma.class.php:237
@@ -1665,34 +1752,28 @@ msgstr ""
 msgid "espera"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:354
+#: expedientes/model/expediente.class.php:371
 msgid "experiencia"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:355
+#: expedientes/model/expediente.class.php:372
 msgid "temporal"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:356
+#: expedientes/model/expediente.class.php:373
 msgid "borrable"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:371
+#: expedientes/model/expediente.class.php:388
 msgid "DILATA"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:374
+#: expedientes/model/expediente.class.php:391
 msgid "RECHAZADO"
 msgstr ""
 
-#: expedientes/model/expediente.class.php:377
+#: expedientes/model/expediente.class.php:394
 msgid "NO"
-msgstr ""
-
-#: expedientes/model/expediente.class.php:446
-#: expedientes/model/expediente.class.php:452
-#: expedientes/model/expediente.class.php:461
-msgid "quitar"
 msgstr ""
 
 #: expedientes/model/expedientelista.class.php:588
@@ -1701,6 +1782,7 @@ msgid "No existe el trámite para el expediente: '%s' (id:%s)"
 msgstr ""
 
 #: expedientes/model/expedientelista.class.php:635
+#: plantillas/controller/plantilla_lista.php:25
 msgid "mod"
 msgstr ""
 
@@ -1723,13 +1805,13 @@ msgstr ""
 #: lugares/controller/lugar_lista.php:53
 #: lugares/model/entity/lugar.class.php:608
 #: usuarios/model/entity/oficina.class.php:380
-#: config/view/parametros.html.twig:55
+#: config/view/parametros.html.twig:32
 msgid "sigla"
 msgstr ""
 
 #: lugares/controller/lugar_lista.php:53
 #: lugares/model/entity/lugar.class.php:620
-#: lugares/view/lugar_form.html.twig:46
+#: lugares/view/lugar_form.html.twig:37
 msgid "dl"
 msgstr ""
 
@@ -1739,6 +1821,10 @@ msgstr ""
 
 #: lugares/controller/lugar_lista.php:53
 #: lugares/model/entity/lugar.class.php:644
+#: plantillas/controller/plantilla_lista.php:25
+#: plantillas/controller/plantilla_lista_expediente.php:28
+#: plantillas/model/entity/plantilla.class.php:350
+#: plantillas/view/plantilla_form.html.twig:9
 msgid "nombre"
 msgstr ""
 
@@ -1752,7 +1838,7 @@ msgstr ""
 msgid "e_mail"
 msgstr ""
 
-#: lugares/controller/lugar_lista.php:53 lugares/view/lugar_form.html.twig:60
+#: lugares/controller/lugar_lista.php:53 lugares/view/lugar_form.html.twig:51
 msgid "modo envío"
 msgstr ""
 
@@ -1761,7 +1847,7 @@ msgid "pdf"
 msgstr ""
 
 #: lugares/model/entity/lugar.class.php:632
-#: lugares/view/lugar_form.html.twig:48
+#: lugares/view/lugar_form.html.twig:39
 msgid "region"
 msgstr ""
 
@@ -1786,32 +1872,22 @@ msgid "No sé a que pendiente se refiere."
 msgstr ""
 
 #: pendientes/controller/pendiente_form.php:409
-#: pendientes/controller/zzpen_form_periodico.php:194
-#: pendientes/controller/zzpen_form_periodico.php:265
 msgid "primer"
 msgstr ""
 
 #: pendientes/controller/pendiente_form.php:410
-#: pendientes/controller/zzpen_form_periodico.php:195
-#: pendientes/controller/zzpen_form_periodico.php:266
 msgid "segundo"
 msgstr ""
 
 #: pendientes/controller/pendiente_form.php:411
-#: pendientes/controller/zzpen_form_periodico.php:196
-#: pendientes/controller/zzpen_form_periodico.php:267
 msgid "tercer"
 msgstr ""
 
 #: pendientes/controller/pendiente_form.php:412
-#: pendientes/controller/zzpen_form_periodico.php:197
-#: pendientes/controller/zzpen_form_periodico.php:268
 msgid "cuarto"
 msgstr ""
 
 #: pendientes/controller/pendiente_form.php:413
-#: pendientes/controller/zzpen_form_periodico.php:198
-#: pendientes/controller/zzpen_form_periodico.php:269
 msgid "último"
 msgstr ""
 
@@ -1831,11 +1907,6 @@ msgstr ""
 msgid "ver periodicidad"
 msgstr ""
 
-#: pendientes/controller/pendiente_form.php:479
-#: pendientes/view/_pendiente_form_js.html.twig:60
-msgid "plazo para contestar"
-msgstr ""
-
 #: pendientes/controller/pendiente_form.php:483
 #: pendientes/view/_pendiente_form_js.html.twig:65
 msgid "ocultar periodicidad"
@@ -1849,121 +1920,13 @@ msgstr ""
 msgid "registro"
 msgstr ""
 
-#: pendientes/controller/pendiente_update_ics.php:267
+#: pendientes/controller/pendiente_update_ics.php:269
 msgid "No se han podido modificar el pendiente"
 msgstr ""
 
-#: pendientes/controller/pendiente_update_ics.php:299
-#: pendientes/controller/pendiente_update_ics.php:330
+#: pendientes/controller/pendiente_update_ics.php:301
+#: pendientes/controller/pendiente_update_ics.php:332
 msgid "No se cual tengo que eliminar."
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:161
-#: pendientes/view/pendiente_form_periodico.html.twig:21
-msgid "desde"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:163
-#: pendientes/view/pendiente_form_periodico.html.twig:23
-msgid "hasta"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:168
-#: pendientes/view/pendiente_form_periodico.html.twig:8
-msgid "anual"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:169
-#: pendientes/view/pendiente_form_periodico.html.twig:11
-msgid "mensual"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:170
-#: pendientes/view/pendiente_form_periodico.html.twig:14
-msgid "semanal"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:171
-#: pendientes/view/pendiente_form_periodico.html.twig:17
-msgid "diaria"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:179
-#: pendientes/view/pendiente_form_periodico.html.twig:31
-msgid "anualmente"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:180
-#: pendientes/controller/zzpen_form_periodico.php:261
-#: pendientes/view/pendiente_form_periodico.html.twig:36
-#: pendientes/view/pendiente_form_periodico.html.twig:87
-msgid "El/los día/s (separados por comas)"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:181
-#: pendientes/controller/zzpen_form_periodico.php:208
-#: pendientes/view/pendiente_form_periodico.html.twig:38
-#: pendientes/view/pendiente_form_periodico.html.twig:50
-msgid "de cada"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:192
-#: pendientes/controller/zzpen_form_periodico.php:263
-#: pendientes/view/pendiente_form_periodico.html.twig:47
-#: pendientes/view/pendiente_form_periodico.html.twig:95
-msgid "El"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:220
-msgid "por dias de meses"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:223
-msgid "introducir los meses"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:237
-msgid "introducir los días"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:260
-#: pendientes/view/pendiente_form_periodico.html.twig:82
-msgid "mensualmente"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:262
-#: pendientes/controller/zzpen_form_periodico.php:279
-#: pendientes/view/pendiente_form_periodico.html.twig:89
-#: pendientes/view/pendiente_form_periodico.html.twig:98
-msgid "de cada mes"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:286
-#: pendientes/view/pendiente_form_periodico.html.twig:106
-msgid "semanalmente"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:287
-#: pendientes/view/pendiente_form_periodico.html.twig:112
-msgid "periodicidad día de la semana"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:304
-#: pendientes/view/pendiente_form_periodico.html.twig:124
-msgid "diariamente"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:319
-#: pendientes/view/pendiente_form_periodico.html.twig:133
-msgid "Son los marcados como contestados o eliminados"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:320
-msgid "Excepciones"
-msgstr ""
-
-#: pendientes/controller/zzpen_form_periodico.php:324
-msgid "formato: aaaammdd[,aaaammdd,...]"
 msgstr ""
 
 #: pendientes/model/entity/pendientedb.class.php:905
@@ -2025,12 +1988,21 @@ msgstr ""
 msgid "Cuidado con los meses de menos de 31 días"
 msgstr ""
 
-#: tramites/controller/firma_ajax.php:140
-#: tramites/controller/firma_ajax.php:296
+#: plantillas/controller/plantilla_lista.php:21
+msgid "cambiar nombre"
+msgstr ""
+
+#: plantillas/controller/plantilla_lista.php:54
+#: plantillas/controller/plantilla_lista_expediente.php:62
+msgid "Plantillas de la Delegación"
+msgstr ""
+
+#: tramites/controller/firma_ajax.php:144
+#: tramites/controller/firma_ajax.php:305
 msgid "No puede Firmar"
 msgstr ""
 
-#: tramites/controller/firma_ajax.php:182
+#: tramites/controller/firma_ajax.php:189
 msgid "No se puede firmar el cargo_tipo distribuir"
 msgstr ""
 
@@ -2073,7 +2045,7 @@ msgid "voto"
 msgstr ""
 
 #: tramites/model/entity/firma.class.php:209
-#: tramites/model/entity/gestorfirma.class.php:218
+#: tramites/model/entity/gestorfirma.class.php:248
 msgid "aclaración"
 msgstr ""
 
@@ -2089,17 +2061,43 @@ msgstr ""
 
 #: tramites/model/entity/firma.class.php:245
 #: tramites/model/entity/firma.class.php:262
-#: etiquetas/view/etiqueta_form.html.twig:57
-#: etiquetas/view/etiqueta_lista.html.twig:39
+#: config/view/parametros_scdl.html.twig:31
+#: entradas/view/_entrada_form_js.html.twig:345
+#: entradas/view/entrada_bypass.html.twig:124
+#: etiquetas/view/etiqueta_form.html.twig:59
+#: etiquetas/view/etiqueta_lista.html.twig:40
+#: expedientes/view/_escrito_form_js.html.twig:83
+#: expedientes/view/_escrito_form_js.html.twig:132
+#: expedientes/view/_escritos_js.html.twig:37
+#: expedientes/view/_expediente_form_js.html.twig:213
+#: expedientes/view/_expediente_form_js.html.twig:270
+#: expedientes/view/_salida_escrito_form_js.html.twig:123
+#: expedientes/view/_salida_escrito_form_js.html.twig:295
+#: expedientes/view/_salida_escrito_form_js.html.twig:322
+#: expedientes/view/escrito_distribuir.html.twig:103
+#: expedientes/view/expediente_cambio_tramite.html.twig:60
+#: expedientes/view/expediente_distribuir.html.twig:253
+#: expedientes/view/fecha_reunion.html.twig:62
 #: lugares/view/grupo_form.html.twig:50 lugares/view/grupo_lista.html.twig:23
-#: lugares/view/lugar_form.html.twig:16 lugares/view/lugar_lista.html.twig:23
-#: tramites/view/tramite_form.html.twig:16
+#: lugares/view/lugar_form.html.twig:12 lugares/view/lugar_lista.html.twig:23
+#: pendientes/view/_pendiente_form_js.html.twig:105
+#: pendientes/view/_pendiente_form_js.html.twig:235
+#: pendientes/view/_pendiente_form_js.html.twig:262
+#: pendientes/view/_pendiente_tabla_js.html.twig:93
+#: pendientes/view/_pendiente_tabla_js.html.twig:160
+#: pendientes/view/pendiente_buscar.html.twig:178
+#: pendientes/view/pendiente_buscar.html.twig:201
+#: pendientes/view/pendiente_lista_enviar.html.twig:85
+#: plantillas/view/plantilla_form.html.twig:39
+#: plantillas/view/plantilla_lista.html.twig:32
+#: tramites/view/tramite_form.html.twig:12
 #: tramites/view/tramite_lista.html.twig:19
-#: usuarios/view/cargo_form.html.twig:16
-#: usuarios/view/cargo_grupo_form.html.twig:16
+#: tramites/view/tramitecargo_select.html.twig:13
+#: usuarios/view/cargo_form.html.twig:12
+#: usuarios/view/cargo_grupo_form.html.twig:12
 #: usuarios/view/cargo_grupo_lista.html.twig:23
 #: usuarios/view/cargo_lista.html.twig:24
-#: usuarios/view/oficina_form.html.twig:16
+#: usuarios/view/oficina_form.html.twig:12
 #: usuarios/view/oficina_lista.html.twig:19 usuarios/view/personal.html.twig:66
 #: usuarios/view/usuario_form.html.twig:53
 #: usuarios/view/usuario_lista.html.twig:29
@@ -2146,7 +2144,7 @@ msgstr ""
 
 #: tramites/model/entity/tramite.class.php:411
 #: expedientes/view/expediente_lista.html.twig:17
-#: tramites/view/tramitecargo_select.html.twig:156
+#: tramites/view/tramitecargo_select.html.twig:153
 msgid "trámite"
 msgstr ""
 
@@ -2171,10 +2169,11 @@ msgid "cargo ref"
 msgstr ""
 
 #: usuarios/controller/cargo_update.php:26
-msgid "Hay un error al guardar"
+#: usuarios/controller/cargo_update.php:72
+msgid "hay un error al guardar"
 msgstr ""
 
-#: usuarios/controller/cargo_update.php:54
+#: usuarios/controller/cargo_update.php:41
 msgid "No se puede eliminar un cargo tipo."
 msgstr ""
 
@@ -2183,11 +2182,11 @@ msgstr ""
 msgid "(%s) está asignado como suplente a este cargo"
 msgstr ""
 
-#: usuarios/controller/login.php:170
+#: usuarios/controller/login.php:177
 msgid "Password incorrecto"
 msgstr ""
 
-#: usuarios/controller/login.php:175
+#: usuarios/controller/login.php:182
 msgid "este usuario no existe"
 msgstr ""
 
@@ -2248,28 +2247,32 @@ msgstr ""
 msgid "archivados"
 msgstr ""
 
-#: usuarios/controller/usuario_home.php:171
+#: usuarios/controller/usuario_home.php:173
 msgid "E: admitir"
 msgstr ""
 
-#: usuarios/controller/usuario_home.php:184
+#: usuarios/controller/usuario_home.php:189
 msgid "entradas"
 msgstr ""
 
-#: usuarios/controller/usuario_home.php:197
+#: usuarios/controller/usuario_home.php:203
+msgid "entradas encargadas"
+msgstr ""
+
+#: usuarios/controller/usuario_home.php:216
 #: usuarios/controller/usuario_secretaria.php:193
 msgid "archivo de escritos"
 msgstr ""
 
-#: usuarios/controller/usuario_home.php:209
+#: usuarios/controller/usuario_home.php:228
 msgid "escritos de cr"
 msgstr ""
 
-#: usuarios/controller/usuario_home.php:221
+#: usuarios/controller/usuario_home.php:240
 msgid "permanentes de cr"
 msgstr ""
 
-#: usuarios/controller/usuario_home.php:234
+#: usuarios/controller/usuario_home.php:253
 #: usuarios/controller/usuario_secretaria.php:126
 #: usuarios/controller/usuario_secretaria.php:221
 msgid "pendientes"
@@ -2315,12 +2318,16 @@ msgstr ""
 msgid "salida manual"
 msgstr ""
 
+#: usuarios/controller/usuario_secretaria.php:247
+msgid "plantillas"
+msgstr ""
+
 #: usuarios/model/entity/cargo.class.php:546
 msgid "id_ambito"
 msgstr ""
 
 #: usuarios/model/entity/cargo.class.php:594
-#: usuarios/view/cargo_form.html.twig:56
+#: usuarios/view/cargo_form.html.twig:47
 msgid "director"
 msgstr ""
 
@@ -2330,11 +2337,6 @@ msgstr ""
 
 #: usuarios/model/entity/cargogrupo.class.php:418
 msgid "id_cargo_ref"
-msgstr ""
-
-#: usuarios/model/entity/gestorcargo.class.php:101
-#, php-format
-msgid "No existe el usuario para el cargo %s"
 msgstr ""
 
 #: usuarios/model/entity/locale.class.php:431
@@ -2362,31 +2364,35 @@ msgstr ""
 msgid "usuario"
 msgstr ""
 
+#: usuarios/model/entity/usuario.class.php:478
+msgid "id_cargo_preferido"
+msgstr ""
+
 #: usuarios/model/entity/usuario.class.php:514
 msgid "nom_usuario"
 msgstr ""
 
-#: web/datetimelocal.class.php:235
+#: web/datetimelocal.class.php:246
 #, php-format
 msgid "la fecha fin es igual a la fecha inicio en el periodo %s: %s"
 msgstr ""
 
-#: web/datetimelocal.class.php:240
+#: web/datetimelocal.class.php:251
 #, php-format
 msgid "la fecha fin es menor que la fecha inicio en el periodo %s: %s"
 msgstr ""
 
-#: web/datetimelocal.class.php:250
+#: web/datetimelocal.class.php:261
 #, php-format
 msgid "dias libres cerca de %s"
 msgstr ""
 
-#: web/datetimelocal.class.php:255
+#: web/datetimelocal.class.php:266
 #, php-format
 msgid "hay un solape cerca de %s"
 msgstr ""
 
-#: web/desplegable.class.php:129 web/protocolo.class.php:199
+#: web/desplegable.class.php:129 web/protocolo.class.php:207
 msgid "tiene que ser un array"
 msgstr ""
 
@@ -2443,7 +2449,11 @@ msgstr ""
 msgid "ordenar por..."
 msgstr ""
 
-#: web/protocolo.class.php:161 web/protocoloarray.class.php:279
+#: web/protocolo.class.php:73 web/protocolo.class.php:91
+msgid "sin numerar (E12)"
+msgstr ""
+
+#: web/protocolo.class.php:169 web/protocoloarray.class.php:279
 msgid "más..."
 msgstr ""
 
@@ -2459,83 +2469,87 @@ msgstr ""
 msgid "error: passwords no coincidentes"
 msgstr ""
 
-#: usuarios/view/usuario_form_pwd.phtml:48
+#: usuarios/view/usuario_form_pwd.phtml:44
 msgid "deberías cambiar el password"
 msgstr ""
 
-#: usuarios/view/usuario_form_pwd.phtml:54
+#: usuarios/view/usuario_form_pwd.phtml:50
 msgid "confirma password"
 msgstr ""
 
-#: usuarios/view/usuario_form_pwd.phtml:59
+#: usuarios/view/usuario_form_pwd.phtml:55
 #: entradas/view/buscar_form.html.twig:30
+#: entradas/view/entrada_accion.html.twig:61
 #: entradas/view/entrada_bypass.html.twig:72
-#: entradas/view/entrada_form.html.twig:185
+#: entradas/view/entrada_form.html.twig:187
 #: etiquetas/view/etiqueta_form.html.twig:18
 #: etiquetas/view/etiqueta_lista.html.twig:11
-#: expedientes/view/escrito_form.html.twig:146
-#: expedientes/view/expediente_accion.html.twig:82
+#: expedientes/view/escrito_form.html.twig:156
+#: expedientes/view/expediente_accion.html.twig:91
 #: expedientes/view/expediente_cambio_tramite.html.twig:16
 #: expedientes/view/expediente_form.html.twig:216
 #: expedientes/view/fecha_reunion.html.twig:16
 #: expedientes/view/salida_escrito.html.twig:174
+#: plantillas/view/plantilla_form.html.twig:16
+#: plantillas/view/plantilla_lista_expediente.html.twig:10
 #: usuarios/view/personal.html.twig:45 usuarios/view/usuario_form.html.twig:31
 msgid "Cancelar"
 msgstr ""
 
-#: usuarios/view/usuario_form_pwd.phtml:63
+#: usuarios/view/usuario_form_pwd.phtml:59
 msgid "Requerimientos del password"
 msgstr ""
 
-#: usuarios/view/usuario_form_pwd.phtml:65
+#: usuarios/view/usuario_form_pwd.phtml:61
 msgid "Los passwords no pueden contener el valor del \"login\" o de qualquiera de las palabras del \"nombre\". (no tiene en cuenta mayúsculas/minúsculas)"
 msgstr ""
 
-#: usuarios/view/usuario_form_pwd.phtml:66
+#: usuarios/view/usuario_form_pwd.phtml:62
 msgid "El password ha de tener más de 8 carácteres"
 msgstr ""
 
-#: usuarios/view/usuario_form_pwd.phtml:67
+#: usuarios/view/usuario_form_pwd.phtml:63
 msgid "El password ha de tener como mínimo 3 de los segientes grupos de carácteres"
 msgstr ""
 
-#: usuarios/view/usuario_form_pwd.phtml:69
+#: usuarios/view/usuario_form_pwd.phtml:65
 msgid "Mayúsculas ('A' a 'Z')"
 msgstr ""
 
-#: usuarios/view/usuario_form_pwd.phtml:70
+#: usuarios/view/usuario_form_pwd.phtml:66
 msgid "Minúsculas ('a' a 'z')"
 msgstr ""
 
-#: usuarios/view/usuario_form_pwd.phtml:71
+#: usuarios/view/usuario_form_pwd.phtml:67
 msgid "Números ('0' a '9')"
 msgstr ""
 
-#: usuarios/view/usuario_form_pwd.phtml:72
+#: usuarios/view/usuario_form_pwd.phtml:68
 msgid "(No pueden ser comillas dobles!!) Carácteres: ~!@#$%^&*_-+=`|(){}[]:;<>,.?/"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:6
+#: busquedas/view/buscar_escrito.html.twig:7
 msgid "Buscar un escrito concreto"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:7
+#: busquedas/view/buscar_escrito.html.twig:8
 #: expedientes/view/salida_escrito.html.twig:12
 msgid "¿Qué protocolo tiene?"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:12
+#: busquedas/view/buscar_escrito.html.twig:13
 #: busquedas/view/lista_permanentes.html.twig:10
 #: pendientes/view/pendiente_buscar.html.twig:19
 #: pendientes/view/pendiente_form.html.twig:122
 msgid "año protocolo origen"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:16
-#: busquedas/view/buscar_escrito.html.twig:38
-#: busquedas/view/buscar_escrito.html.twig:60
-#: busquedas/view/buscar_escrito.html.twig:85
-#: busquedas/view/buscar_escrito.html.twig:112
+#: busquedas/view/buscar_escrito.html.twig:17
+#: busquedas/view/buscar_escrito.html.twig:39
+#: busquedas/view/buscar_escrito.html.twig:61
+#: busquedas/view/buscar_escrito.html.twig:86
+#: busquedas/view/buscar_escrito.html.twig:113
+#: busquedas/view/buscar_escrito.html.twig:133
 #: busquedas/view/lista_permanentes.html.twig:16
 #: expedientes/view/archivados_buscar.html.twig:38
 #: expedientes/view/salida_escrito.html.twig:19
@@ -2543,120 +2557,129 @@ msgstr ""
 msgid "buscar"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:25
+#: busquedas/view/buscar_escrito.html.twig:26
 msgid "hay 4 opciones diferentes para buscar o listar escritos"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:27
+#: busquedas/view/buscar_escrito.html.twig:28
 msgid "opción 1: Listado de los últimos"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:28
-#: busquedas/view/buscar_escrito.html.twig:73
+#: busquedas/view/buscar_escrito.html.twig:29
+#: busquedas/view/buscar_escrito.html.twig:74
 #: expedientes/view/modal_buscar_entradas.html.twig:26
 msgid "¿Quién enviaba el escrito?"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:32
+#: busquedas/view/buscar_escrito.html.twig:33
 msgid "antigüedad del escrito"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:47
+#: busquedas/view/buscar_escrito.html.twig:48
 msgid "opción 2: Buscar por el asunto o detalle"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:49
+#: busquedas/view/buscar_escrito.html.twig:50
+#: busquedas/view/buscar_escrito.html.twig:122
 msgid "Escribir una palabra clave"
-msgstr ""
-
-#: busquedas/view/buscar_escrito.html.twig:52
-#: busquedas/view/buscar_escrito.html.twig:77
-#: busquedas/view/buscar_escrito.html.twig:103
-msgid "Si se sabe, poner el periodo"
 msgstr ""
 
 #: busquedas/view/buscar_escrito.html.twig:53
 #: busquedas/view/buscar_escrito.html.twig:78
 #: busquedas/view/buscar_escrito.html.twig:104
+#: busquedas/view/buscar_escrito.html.twig:125
+msgid "Si se sabe, poner el periodo"
+msgstr ""
+
+#: busquedas/view/buscar_escrito.html.twig:54
+#: busquedas/view/buscar_escrito.html.twig:79
+#: busquedas/view/buscar_escrito.html.twig:105
+#: busquedas/view/buscar_escrito.html.twig:126
 msgid "entre el"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:55
-#: busquedas/view/buscar_escrito.html.twig:80
-#: busquedas/view/buscar_escrito.html.twig:106
+#: busquedas/view/buscar_escrito.html.twig:56
+#: busquedas/view/buscar_escrito.html.twig:81
+#: busquedas/view/buscar_escrito.html.twig:107
+#: busquedas/view/buscar_escrito.html.twig:128
 msgid "y el"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:57
-#: busquedas/view/buscar_escrito.html.twig:82
-#: busquedas/view/buscar_escrito.html.twig:108
+#: busquedas/view/buscar_escrito.html.twig:58
+#: busquedas/view/buscar_escrito.html.twig:83
+#: busquedas/view/buscar_escrito.html.twig:109
+#: busquedas/view/buscar_escrito.html.twig:130
 msgid "Si interesa, poner una oficina"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:68
+#: busquedas/view/buscar_escrito.html.twig:69
 msgid "opción 3: Listar escritos por el origen, el destino o por ambos"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:69
+#: busquedas/view/buscar_escrito.html.twig:70
 #: expedientes/view/modal_buscar_escritos.html.twig:26
 msgid "¿A quién iba dirigido?"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:93
+#: busquedas/view/buscar_escrito.html.twig:94
 msgid "opción 4: Listar varios escritos"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:95
+#: busquedas/view/buscar_escrito.html.twig:96
 msgid "de"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:96
+#: busquedas/view/buscar_escrito.html.twig:97
 msgid "de un ctr, dl o cr concreto"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:99
+#: busquedas/view/buscar_escrito.html.twig:100
 msgid "de cr a"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:100
+#: busquedas/view/buscar_escrito.html.twig:101
 msgid "de cr a ctr"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:119
-#: busquedas/view/buscar_escrito.html.twig:315
+#: busquedas/view/buscar_escrito.html.twig:121
+msgid "opción 6: Listar varios modelos jurídicos por fechas"
+msgstr ""
+
+#: busquedas/view/buscar_escrito.html.twig:141
+#: busquedas/view/buscar_escrito.html.twig:379
 msgid "ver todas las opciones"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:124
+#: busquedas/view/buscar_escrito.html.twig:146
 msgid "ver ctr anulados"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:231
-#: busquedas/view/buscar_escrito.html.twig:248
+#: busquedas/view/buscar_escrito.html.twig:285
+#: busquedas/view/buscar_escrito.html.twig:302
 msgid "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:267
+#: busquedas/view/buscar_escrito.html.twig:331
 msgid "Tiene que escribir una palabra para buscar en el asunto"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:279
+#: busquedas/view/buscar_escrito.html.twig:343
 msgid "¿Seguro que quiere ver todos?"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:323
+#: busquedas/view/buscar_escrito.html.twig:387
 msgid "ver menos opciones"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:327
+#: busquedas/view/buscar_escrito.html.twig:391
 msgid "Debe poner un periodo"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:359
+#: busquedas/view/buscar_escrito.html.twig:423
 msgid "estas dos opciones no son compatibles"
 msgstr ""
 
-#: busquedas/view/buscar_escrito.html.twig:363
+#: busquedas/view/buscar_escrito.html.twig:427
 msgid "tiene que seleccionar un origen o un destino"
 msgstr ""
 
@@ -2703,7 +2726,7 @@ msgstr ""
 #: busquedas/view/ver_tabla.html.twig:207
 #: entradas/view/entrada_form.html.twig:52
 #: expedientes/view/escrito_distribuir.html.twig:47
-#: expedientes/view/escrito_form.html.twig:67
+#: expedientes/view/escrito_form.html.twig:77
 #: expedientes/view/salida_escrito.html.twig:76
 msgid "Detalle"
 msgstr ""
@@ -2721,222 +2744,230 @@ msgstr ""
 msgid "¿Está Seguro que desea borrar este escrito?"
 msgstr ""
 
-#: config/view/parametros.html.twig:24
+#: config/view/parametros.html.twig:1
 msgid "plazos"
 msgstr ""
 
-#: config/view/parametros.html.twig:27
+#: config/view/parametros.html.twig:4
 msgid "plazo urgente"
 msgstr ""
 
-#: config/view/parametros.html.twig:29 config/view/parametros.html.twig:36
-#: config/view/parametros.html.twig:43 config/view/parametros.html.twig:50
+#: config/view/parametros.html.twig:6 config/view/parametros.html.twig:13
+#: config/view/parametros.html.twig:20 config/view/parametros.html.twig:27
 msgid "días"
 msgstr ""
 
-#: config/view/parametros.html.twig:30 config/view/parametros.html.twig:37
-#: config/view/parametros.html.twig:44 config/view/parametros.html.twig:51
-#: config/view/parametros.html.twig:59 config/view/parametros.html.twig:67
-#: config/view/parametros.html.twig:76 config/view/parametros.html.twig:82
-#: config/view/parametros.html.twig:90 config/view/parametros.html.twig:100
-#: config/view/parametros.html.twig:108 config/view/parametros.html.twig:115
-#: config/view/parametros.html.twig:123 config/view/parametros.html.twig:129
-#: config/view/parametros.html.twig:135 config/view/parametros.html.twig:141
-#: config/view/parametros.html.twig:147 config/view/parametros.html.twig:153
-#: config/view/parametros.html.twig:159 config/view/parametros.html.twig:166
-#: config/view/parametros.html.twig:174
-#: config/view/parametros_scdl.html.twig:30
-#: config/view/parametros_scdl.html.twig:38
+#: config/view/parametros.html.twig:7 config/view/parametros.html.twig:14
+#: config/view/parametros.html.twig:21 config/view/parametros.html.twig:28
+#: config/view/parametros.html.twig:36 config/view/parametros.html.twig:43
+#: config/view/parametros.html.twig:51 config/view/parametros.html.twig:60
+#: config/view/parametros.html.twig:66 config/view/parametros.html.twig:74
+#: config/view/parametros.html.twig:84 config/view/parametros.html.twig:92
+#: config/view/parametros.html.twig:99 config/view/parametros.html.twig:107
+#: config/view/parametros.html.twig:113 config/view/parametros.html.twig:119
+#: config/view/parametros.html.twig:125 config/view/parametros.html.twig:131
+#: config/view/parametros.html.twig:137 config/view/parametros.html.twig:143
+#: config/view/parametros.html.twig:150 config/view/parametros.html.twig:158
+#: config/view/parametros_scdl.html.twig:8
+#: config/view/parametros_scdl.html.twig:16
 #: pendientes/view/pendiente_form.html.twig:194
 msgid "guardar"
 msgstr ""
 
-#: config/view/parametros.html.twig:34
+#: config/view/parametros.html.twig:11
 msgid "plazo rápido"
 msgstr ""
 
-#: config/view/parametros.html.twig:41
+#: config/view/parametros.html.twig:18
 msgid "plazo normal"
 msgstr ""
 
-#: config/view/parametros.html.twig:48
+#: config/view/parametros.html.twig:25
 msgid "error en fecha"
 msgstr ""
 
-#: config/view/parametros.html.twig:63
+#: config/view/parametros.html.twig:38
+msgid "localidad"
+msgstr ""
+
+#: config/view/parametros.html.twig:39
+msgid "para firmar documentos"
+msgstr ""
+
+#: config/view/parametros.html.twig:47
 msgid "texto del mail"
 msgstr ""
 
-#: config/view/parametros.html.twig:71
+#: config/view/parametros.html.twig:55
 msgid "valor inicio contadores"
 msgstr ""
 
-#: config/view/parametros.html.twig:74
+#: config/view/parametros.html.twig:58
 msgid "para cr"
 msgstr ""
 
-#: config/view/parametros.html.twig:80
+#: config/view/parametros.html.twig:64
 msgid "para el resto"
 msgstr ""
 
-#: config/view/parametros.html.twig:86
+#: config/view/parametros.html.twig:70
 msgid "idioma por defecto"
 msgstr ""
 
-#: config/view/parametros.html.twig:94
+#: config/view/parametros.html.twig:78
 msgid "Ámbito del esquema: centro, delegación, comisión regional"
 msgstr ""
 
-#: config/view/parametros.html.twig:97
+#: config/view/parametros.html.twig:81
 msgid "centro"
 msgstr ""
 
-#: config/view/parametros.html.twig:98
+#: config/view/parametros.html.twig:82
 msgid "delegación"
 msgstr ""
 
-#: config/view/parametros.html.twig:99
+#: config/view/parametros.html.twig:83
 msgid "comisión"
 msgstr ""
 
-#: config/view/parametros.html.twig:104
+#: config/view/parametros.html.twig:88
 msgid "servidor etherpad"
 msgstr ""
 
-#: config/view/parametros.html.twig:111
+#: config/view/parametros.html.twig:95
 msgid "servidor ethercalc"
 msgstr ""
 
-#: config/view/parametros.html.twig:118
+#: config/view/parametros.html.twig:102
 msgid "servidor SMTP"
 msgstr ""
 
-#: config/view/parametros.html.twig:121
+#: config/view/parametros.html.twig:105
 msgid "From:"
 msgstr ""
 
-#: config/view/parametros.html.twig:127
+#: config/view/parametros.html.twig:111
 msgid "Reply to:"
 msgstr ""
 
-#: config/view/parametros.html.twig:133
+#: config/view/parametros.html.twig:117
 msgid "Host:"
 msgstr ""
 
-#: config/view/parametros.html.twig:139
+#: config/view/parametros.html.twig:123
 msgid "Port:"
 msgstr ""
 
-#: config/view/parametros.html.twig:145
+#: config/view/parametros.html.twig:129
 msgid "usar autenticación:"
 msgstr ""
 
-#: config/view/parametros.html.twig:146
-#: config/view/parametros_scdl.html.twig:28
-#: config/view/parametros_scdl.html.twig:36
+#: config/view/parametros.html.twig:130 config/view/parametros_scdl.html.twig:6
+#: config/view/parametros_scdl.html.twig:14
 msgid "Si"
 msgstr ""
 
-#: config/view/parametros.html.twig:151
+#: config/view/parametros.html.twig:135
 msgid "User:"
 msgstr ""
 
-#: config/view/parametros.html.twig:157
+#: config/view/parametros.html.twig:141
 msgid "Password:"
 msgstr ""
 
-#: config/view/parametros.html.twig:163
+#: config/view/parametros.html.twig:147
 msgid "seguridad:"
 msgstr ""
 
-#: config/view/parametros.html.twig:164
+#: config/view/parametros.html.twig:148
 msgid "tls"
 msgstr ""
 
-#: config/view/parametros.html.twig:165
+#: config/view/parametros.html.twig:149
 msgid "ssl"
 msgstr ""
 
-#: config/view/parametros.html.twig:170
+#: config/view/parametros.html.twig:154
 msgid "servidor davical"
 msgstr ""
 
-#: config/view/parametros_scdl.html.twig:23
+#: config/view/parametros_scdl.html.twig:1
 msgid "Parametros del scdl (los puede cambiar el suplente)"
 msgstr ""
 
-#: config/view/parametros_scdl.html.twig:27
+#: config/view/parametros_scdl.html.twig:5
 msgid "Los oficiales de secreataría pueden distribuir:"
 msgstr ""
 
-#: config/view/parametros_scdl.html.twig:35
+#: config/view/parametros_scdl.html.twig:13
 msgid "Los oficiales de secreataría pueden aceptar entradas:"
 msgstr ""
 
 #: entradas/view/_entrada_escritos_js.html.twig:80
-#: expedientes/view/_escrito_form_js.html.twig:125
+#: expedientes/view/_escrito_form_js.html.twig:118
 #: expedientes/view/_escritos_js.html.twig:23
-#: expedientes/view/_escritos_js.html.twig:122
+#: expedientes/view/_escritos_js.html.twig:123
 msgid "Debe llenar el campo de fecha del escrito"
 msgstr ""
 
-#: entradas/view/_entrada_form_js.html.twig:47
+#: entradas/view/_entrada_form_js.html.twig:56
 msgid "Debe indicar el ponente para asignarle el pendiente"
 msgstr ""
 
-#: entradas/view/_entrada_form_js.html.twig:109
+#: entradas/view/_entrada_form_js.html.twig:119
 msgid "Debe llenar el campo de origen"
 msgstr ""
 
-#: entradas/view/_entrada_form_js.html.twig:110
+#: entradas/view/_entrada_form_js.html.twig:120
 msgid "Debe llenar el campo de protocolo origen"
 msgstr ""
 
-#: entradas/view/_entrada_form_js.html.twig:112
+#: entradas/view/_entrada_form_js.html.twig:122
 msgid "Debe llenar el campo de asunto entrada"
 msgstr ""
 
-#: entradas/view/_entrada_form_js.html.twig:113
-#: expedientes/view/_escrito_form_js.html.twig:124
+#: entradas/view/_entrada_form_js.html.twig:123
+#: expedientes/view/_escrito_form_js.html.twig:117
 #: expedientes/view/_escritos_js.html.twig:22
-#: expedientes/view/_salida_escrito_form_js.html.twig:108
+#: expedientes/view/_salida_escrito_form_js.html.twig:109
 msgid "Debe llenar el campo del ponente"
 msgstr ""
 
-#: entradas/view/_entrada_form_js.html.twig:116
+#: entradas/view/_entrada_form_js.html.twig:126
 msgid "Debe llenar el campo de fecha de entrada"
 msgstr ""
 
-#: entradas/view/_entrada_form_js.html.twig:117
+#: entradas/view/_entrada_form_js.html.twig:127
 msgid "La fecha de entrada no es correcta"
 msgstr ""
 
-#: entradas/view/_entrada_form_js.html.twig:123
+#: entradas/view/_entrada_form_js.html.twig:133
 msgid "La fecha de entrada debe ser posterior a la del escrito"
 msgstr ""
 
-#: entradas/view/_entrada_form_js.html.twig:130
+#: entradas/view/_entrada_form_js.html.twig:140
 msgid "Debe llenar el campo de fecha para contestar el escrito"
 msgstr ""
 
-#: entradas/view/_entrada_form_js.html.twig:158
-#: entradas/view/_entrada_form_js.html.twig:180
-#: expedientes/view/_escrito_form_js.html.twig:149
-#: expedientes/view/_escrito_form_js.html.twig:159
-#: expedientes/view/_escrito_form_js.html.twig:166
-#: expedientes/view/_expediente_form_js.html.twig:273
-#: expedientes/view/_expediente_form_js.html.twig:287
+#: entradas/view/_entrada_form_js.html.twig:165
+#: entradas/view/_entrada_form_js.html.twig:187
+#: expedientes/view/_escrito_form_js.html.twig:139
+#: expedientes/view/_escrito_form_js.html.twig:148
+#: expedientes/view/_escrito_form_js.html.twig:155
+#: expedientes/view/_expediente_form_js.html.twig:276
+#: expedientes/view/_expediente_form_js.html.twig:290
+#: plantillas/view/plantilla_form.html.twig:41
 #: usuarios/view/personal.html.twig:68
 msgid "datos guardados"
 msgstr ""
 
-#: entradas/view/_entrada_form_js.html.twig:159
-#: expedientes/view/_escrito_form_js.html.twig:150
-#: expedientes/view/_expediente_form_js.html.twig:274
+#: entradas/view/_entrada_form_js.html.twig:166
+#: expedientes/view/_escrito_form_js.html.twig:140
+#: expedientes/view/_expediente_form_js.html.twig:277
 msgid "¿añadir escrito o adjuntos?"
 msgstr ""
 
-#: entradas/view/_entrada_form_js.html.twig:171
+#: entradas/view/_entrada_form_js.html.twig:178
 msgid "otra entrada"
 msgstr ""
 
@@ -2944,8 +2975,8 @@ msgstr ""
 #: expedientes/view/modal_buscar_entradas.html.twig:33
 #: pendientes/view/pendiente_form.html.twig:69
 #: pendientes/view/pendiente_tabla.html.twig:26
-#: usuarios/view/cargo_form.html.twig:51
-#: usuarios/view/oficina_form.html.twig:39
+#: usuarios/view/cargo_form.html.twig:42
+#: usuarios/view/oficina_form.html.twig:30
 msgid "Oficina"
 msgstr ""
 
@@ -2955,7 +2986,7 @@ msgstr ""
 
 #: entradas/view/buscar_form.html.twig:22
 #: expedientes/view/escrito_distribuir.html.twig:40
-#: expedientes/view/escrito_form.html.twig:60
+#: expedientes/view/escrito_form.html.twig:70
 #: expedientes/view/escrito_rev.html.twig:31
 #: expedientes/view/escrito_ver.html.twig:27
 #: expedientes/view/expediente_accion.html.twig:17
@@ -2975,8 +3006,24 @@ msgstr ""
 #: expedientes/view/modal_buscar_entradas.html.twig:40
 #: expedientes/view/modal_buscar_escritos.html.twig:40
 #: expedientes/view/modal_buscar_expedientes.html.twig:36
-#: tramites/view/tramitecargo_select.html.twig:109
+#: tramites/view/tramitecargo_select.html.twig:106
 msgid "Buscar"
+msgstr ""
+
+#: entradas/view/encargados_buscar.html.twig:6
+msgid "listar entradas encargadas a"
+msgstr ""
+
+#: entradas/view/entrada_accion.html.twig:6
+msgid "Asignar entrada"
+msgstr ""
+
+#: entradas/view/entrada_accion.html.twig:22
+msgid "Encargar"
+msgstr ""
+
+#: entradas/view/entrada_accion.html.twig:38
+msgid "Acciones para la entrada"
 msgstr ""
 
 #: entradas/view/entrada_bypass.html.twig:7
@@ -2984,17 +3031,17 @@ msgid "Protocolo entrada"
 msgstr ""
 
 #: entradas/view/entrada_bypass.html.twig:13
-#: entradas/view/entrada_form.html.twig:117
-#: expedientes/view/escrito_form.html.twig:104
+#: entradas/view/entrada_form.html.twig:119
+#: expedientes/view/escrito_form.html.twig:114
 #: expedientes/view/salida_escrito.html.twig:132
 msgid "Ver escrito"
 msgstr ""
 
 #: entradas/view/entrada_bypass.html.twig:15
-#: entradas/view/entrada_form.html.twig:120
-#: entradas/view/entrada_form.html.twig:133
-#: expedientes/view/escrito_form.html.twig:106
-#: expedientes/view/escrito_form.html.twig:120
+#: entradas/view/entrada_form.html.twig:122
+#: entradas/view/entrada_form.html.twig:135
+#: expedientes/view/escrito_form.html.twig:116
+#: expedientes/view/escrito_form.html.twig:130
 #: expedientes/view/salida_escrito.html.twig:134
 #: expedientes/view/salida_escrito.html.twig:148
 msgid "Etherpad"
@@ -3028,15 +3075,15 @@ msgstr ""
 #: entradas/view/entrada_ver_slide.html.twig:59
 #: expedientes/view/adjunto_revisar.html.twig:19
 #: expedientes/view/escrito_distribuir.html.twig:68
-#: expedientes/view/escrito_form.html.twig:132
+#: expedientes/view/escrito_form.html.twig:142
 #: expedientes/view/escrito_ver.html.twig:55
 #: expedientes/view/salida_escrito.html.twig:160
 msgid "Adjuntos"
 msgstr ""
 
 #: entradas/view/entrada_bypass.html.twig:54
-#: entradas/view/entrada_form.html.twig:167
-#: expedientes/view/escrito_form.html.twig:29
+#: entradas/view/entrada_form.html.twig:169
+#: expedientes/view/escrito_form.html.twig:39
 #: expedientes/view/salida_escrito.html.twig:39
 msgid "Destinos"
 msgstr ""
@@ -3047,10 +3094,10 @@ msgid "Enviar"
 msgstr ""
 
 #: entradas/view/entrada_bypass.html.twig:107
-#: expedientes/view/_escrito_form_js.html.twig:122
+#: expedientes/view/_escrito_form_js.html.twig:115
 #: expedientes/view/_escritos_js.html.twig:20
-#: expedientes/view/_salida_escrito_form_js.html.twig:106
-#: pendientes/view/_pendiente_form_js.html.twig:189
+#: expedientes/view/_salida_escrito_form_js.html.twig:107
+#: pendientes/view/_pendiente_form_js.html.twig:192
 msgid "Debe llenar el campo de asunto"
 msgstr ""
 
@@ -3059,7 +3106,7 @@ msgid "Debe llenar el campo de fecha de salida"
 msgstr ""
 
 #: entradas/view/entrada_form.html.twig:31
-#: expedientes/view/escrito_form.html.twig:51
+#: expedientes/view/escrito_form.html.twig:61
 #: expedientes/view/salida_escrito.html.twig:61
 msgid "Referencias"
 msgstr ""
@@ -3077,7 +3124,7 @@ msgid "Fecha escrito"
 msgstr ""
 
 #: entradas/view/entrada_form.html.twig:86
-#: expedientes/view/escrito_form.html.twig:82
+#: expedientes/view/escrito_form.html.twig:92
 #: expedientes/view/salida_escrito.html.twig:104
 msgid "Categoría"
 msgstr ""
@@ -3092,55 +3139,55 @@ msgstr ""
 msgid "Admitido (vcd)"
 msgstr ""
 
-#: entradas/view/entrada_form.html.twig:100
+#: entradas/view/entrada_form.html.twig:101
 msgid "¿Es necesario contestar?"
 msgstr ""
 
-#: entradas/view/entrada_form.html.twig:106
+#: entradas/view/entrada_form.html.twig:107
 msgid "modificar pendiente"
 msgstr ""
 
-#: entradas/view/entrada_form.html.twig:125
+#: entradas/view/entrada_form.html.twig:127
 msgid "Ethercalc"
 msgstr ""
 
-#: entradas/view/entrada_form.html.twig:130
-#: expedientes/view/escrito_form.html.twig:118
+#: entradas/view/entrada_form.html.twig:132
+#: expedientes/view/escrito_form.html.twig:128
 #: expedientes/view/salida_escrito.html.twig:146
 msgid "Insertar escrito"
 msgstr ""
 
-#: entradas/view/entrada_form.html.twig:136
-#: expedientes/view/escrito_form.html.twig:123
+#: entradas/view/entrada_form.html.twig:138
+#: expedientes/view/escrito_form.html.twig:133
 #: expedientes/view/salida_escrito.html.twig:151
 msgid "EtherCalc"
 msgstr ""
 
-#: entradas/view/entrada_form.html.twig:139
-#: expedientes/view/escrito_form.html.twig:126
+#: entradas/view/entrada_form.html.twig:141
+#: expedientes/view/escrito_form.html.twig:136
 #: expedientes/view/salida_escrito.html.twig:154
 msgid "Incrustado"
 msgstr ""
 
-#: entradas/view/entrada_form.html.twig:152
+#: entradas/view/entrada_form.html.twig:154
 msgid "Para añadir escrito, primero debe guardar la entrada"
 msgstr ""
 
-#: entradas/view/entrada_form.html.twig:160
+#: entradas/view/entrada_form.html.twig:162
 msgid "Distribución cr"
 msgstr ""
 
-#: entradas/view/entrada_form.html.twig:203
-#: expedientes/view/adjunto_revisar.html.twig:54
-#: expedientes/view/escrito_form.html.twig:192
-#: expedientes/view/salida_escrito.html.twig:207
+#: entradas/view/entrada_form.html.twig:205
+#: expedientes/view/adjunto_revisar.html.twig:55
+#: expedientes/view/escrito_form.html.twig:208
+#: expedientes/view/salida_escrito.html.twig:209
 msgid "Arrastrar ficheros aquí"
 msgstr ""
 
-#: entradas/view/entrada_form.html.twig:205
-#: expedientes/view/adjunto_revisar.html.twig:56
-#: expedientes/view/escrito_form.html.twig:194
-#: expedientes/view/salida_escrito.html.twig:209
+#: entradas/view/entrada_form.html.twig:207
+#: expedientes/view/adjunto_revisar.html.twig:57
+#: expedientes/view/escrito_form.html.twig:210
+#: expedientes/view/salida_escrito.html.twig:211
 msgid "(o hacer click para seleccionar ficheros)"
 msgstr ""
 
@@ -3159,6 +3206,18 @@ msgstr ""
 
 #: entradas/view/entrada_ver_slide.html.twig:41
 msgid "Leido el"
+msgstr ""
+
+#: entradas/view/oficinas_buscar.html.twig:7
+msgid "listar entradas de oficina"
+msgstr ""
+
+#: entradas/view/oficinas_buscar.html.twig:13
+msgid "propia"
+msgstr ""
+
+#: entradas/view/oficinas_buscar.html.twig:19
+msgid "resto"
 msgstr ""
 
 #: etiquetas/view/etiqueta_form.html.twig:3
@@ -3181,12 +3240,12 @@ msgstr ""
 msgid "nueva etiqueta"
 msgstr ""
 
-#: etiquetas/view/etiqueta_lista.html.twig:27
+#: etiquetas/view/etiqueta_lista.html.twig:28
 msgid "¿Está seguro que desea borrar esta etiqueta?"
 msgstr ""
 
-#: expedientes/view/_antecedentes_js.html.twig:86
-#: expedientes/view/_escritos_js.html.twig:124
+#: expedientes/view/_antecedentes_js.html.twig:82
+#: expedientes/view/_escritos_js.html.twig:125
 msgid "No se ha definido el tipo de escrito"
 msgstr ""
 
@@ -3198,46 +3257,54 @@ msgstr ""
 msgid "explotar!"
 msgstr ""
 
-#: expedientes/view/_escrito_form_js.html.twig:91
+#: expedientes/view/_escrito_form_js.html.twig:85
 msgid "escrito explotado"
 msgstr ""
 
-#: expedientes/view/_escrito_form_js.html.twig:120
+#: expedientes/view/_escrito_form_js.html.twig:113
 #: expedientes/view/_escritos_js.html.twig:18
-#: expedientes/view/_salida_escrito_form_js.html.twig:104
+#: expedientes/view/_salida_escrito_form_js.html.twig:105
 msgid "Debe llenar el campo de destino"
 msgstr ""
 
-#: expedientes/view/_escrito_form_js.html.twig:121
+#: expedientes/view/_escrito_form_js.html.twig:114
 #: expedientes/view/_escritos_js.html.twig:19
-#: expedientes/view/_salida_escrito_form_js.html.twig:105
+#: expedientes/view/_salida_escrito_form_js.html.twig:106
 msgid "Debe llenar el campo de protocolo destino"
 msgstr ""
 
-#: expedientes/view/_escrito_form_js.html.twig:123
+#: expedientes/view/_escrito_form_js.html.twig:116
 #: expedientes/view/_escritos_js.html.twig:21
-#: expedientes/view/_salida_escrito_form_js.html.twig:107
+#: expedientes/view/_salida_escrito_form_js.html.twig:108
 msgid "Debe llenar el campo entradilla"
 msgstr ""
 
-#: expedientes/view/_expediente_form_js.html.twig:212
+#: expedientes/view/_escrito_form_js.html.twig:172
+msgid "Devolver"
+msgstr ""
+
+#: expedientes/view/_escrito_form_js.html.twig:173
+msgid "Escriba un comentario para la oficina"
+msgstr ""
+
+#: expedientes/view/_expediente_form_js.html.twig:215
 msgid "circulando!"
 msgstr ""
 
-#: expedientes/view/_expediente_form_js.html.twig:248
+#: expedientes/view/_expediente_form_js.html.twig:251
 msgid "Debe llenar el campo de trámite"
 msgstr ""
 
-#: expedientes/view/_expediente_form_js.html.twig:249
-#: pendientes/view/_pendiente_form_js.html.twig:188
+#: expedientes/view/_expediente_form_js.html.twig:252
+#: pendientes/view/_pendiente_form_js.html.twig:191
 msgid "Debe llenar el campo de estado"
 msgstr ""
 
-#: expedientes/view/_expediente_form_js.html.twig:250
+#: expedientes/view/_expediente_form_js.html.twig:253
 msgid "Debe llenar el campo de prioridad"
 msgstr ""
 
-#: expedientes/view/_expediente_form_js.html.twig:251
+#: expedientes/view/_expediente_form_js.html.twig:254
 msgid "Debe llenar el campo de asunto expediente"
 msgstr ""
 
@@ -3245,15 +3312,15 @@ msgstr ""
 msgid "Primero debe encontrar un escrito"
 msgstr ""
 
-#: expedientes/view/_salida_escrito_form_js.html.twig:109
+#: expedientes/view/_salida_escrito_form_js.html.twig:110
 msgid "Debe llenar el campo de fecha aprobación"
 msgstr ""
 
-#: expedientes/view/_salida_escrito_form_js.html.twig:130
+#: expedientes/view/_salida_escrito_form_js.html.twig:127
 msgid "número de protocolo"
 msgstr ""
 
-#: expedientes/view/_salida_escrito_form_js.html.twig:135
+#: expedientes/view/_salida_escrito_form_js.html.twig:132
 msgid "pasa a la pestaña enviar"
 msgstr ""
 
@@ -3330,12 +3397,16 @@ msgstr ""
 msgid "Anular este escrito"
 msgstr ""
 
-#: expedientes/view/escrito_form.html.twig:42
+#: expedientes/view/escrito_form.html.twig:43
+msgid "Grupo"
+msgstr ""
+
+#: expedientes/view/escrito_form.html.twig:52
 #: expedientes/view/salida_escrito.html.twig:52
 msgid "modificar selección"
 msgstr ""
 
-#: expedientes/view/escrito_form.html.twig:74
+#: expedientes/view/escrito_form.html.twig:84
 #: expedientes/view/escrito_rev.html.twig:36
 #: expedientes/view/expediente_distribuir.html.twig:78
 #: expedientes/view/expediente_form.html.twig:83
@@ -3344,23 +3415,23 @@ msgstr ""
 msgid "Entradilla"
 msgstr ""
 
-#: expedientes/view/escrito_form.html.twig:90
+#: expedientes/view/escrito_form.html.twig:100
 #: expedientes/view/escrito_rev.html.twig:43
 #: expedientes/view/salida_escrito.html.twig:118
 msgid "Fecha del escrito"
 msgstr ""
 
-#: expedientes/view/escrito_form.html.twig:139
+#: expedientes/view/escrito_form.html.twig:149
 #: expedientes/view/salida_escrito.html.twig:167
 msgid "Para añadir el texto, primero debe guardar los datos del escrito"
 msgstr ""
 
-#: expedientes/view/escrito_form.html.twig:154
-msgid "revisado"
+#: expedientes/view/escrito_form.html.twig:165
+msgid "Explotar en un escrito para cada ctr"
 msgstr ""
 
-#: expedientes/view/escrito_form.html.twig:161
-msgid "Explotar en un escrito para cada ctr"
+#: expedientes/view/escrito_form.html.twig:172
+msgid "Devolver a la oficina"
 msgstr ""
 
 #: expedientes/view/escrito_lista.html.twig:10
@@ -3391,20 +3462,20 @@ msgstr ""
 msgid "Marcar alguno como contestado"
 msgstr ""
 
-#: expedientes/view/expediente_accion.html.twig:32
+#: expedientes/view/expediente_accion.html.twig:40
 msgid "Crear Pendiente"
 msgstr ""
 
-#: expedientes/view/expediente_accion.html.twig:42
+#: expedientes/view/expediente_accion.html.twig:51
 msgid "Copiar"
 msgstr ""
 
-#: expedientes/view/expediente_accion.html.twig:59
+#: expedientes/view/expediente_accion.html.twig:68
 msgid "Acciones para el expediente"
 msgstr ""
 
 #: expedientes/view/expediente_cambio_tramite.html.twig:8
-#: tramites/view/tramite_lista.html.twig:47
+#: tramites/view/tramite_lista.html.twig:43
 msgid "nuevo trámite"
 msgstr ""
 
@@ -3448,10 +3519,6 @@ msgstr ""
 msgid "Recorrido"
 msgstr ""
 
-#: expedientes/view/expediente_distribuir.html.twig:121
-msgid "Encargar a"
-msgstr ""
-
 #: expedientes/view/expediente_distribuir.html.twig:125
 msgid "Encargar!"
 msgstr ""
@@ -3465,7 +3532,7 @@ msgid "Buscar (máximo 50 filas)"
 msgstr ""
 
 #: expedientes/view/expediente_form.html.twig:43
-#: tramites/view/tramite_form.html.twig:39
+#: tramites/view/tramite_form.html.twig:30
 msgid "Trámite"
 msgstr ""
 
@@ -3515,10 +3582,6 @@ msgstr ""
 
 #: expedientes/view/expediente_form.html.twig:177
 msgid "Preparar"
-msgstr ""
-
-#: expedientes/view/expediente_form.html.twig:191
-msgid "marcar como visto"
 msgstr ""
 
 #: expedientes/view/expediente_form.html.twig:197
@@ -3590,7 +3653,7 @@ msgid "Fijar día"
 msgstr ""
 
 #: expedientes/view/modal_buscar_escritos.html.twig:33
-#: tramites/view/tramitecargo_select.html.twig:121
+#: tramites/view/tramitecargo_select.html.twig:118
 #: tramites/view/zztramitecargo_form.html.twig:12
 msgid "Cargo"
 msgstr ""
@@ -3608,12 +3671,12 @@ msgid "Fecha de aprobación"
 msgstr ""
 
 #: lugares/view/grupo_form.html.twig:13
-#: usuarios/view/cargo_grupo_form.html.twig:30
+#: usuarios/view/cargo_grupo_form.html.twig:21
 msgid "Datos del grupo"
 msgstr ""
 
 #: lugares/view/grupo_form.html.twig:19
-#: usuarios/view/cargo_grupo_form.html.twig:40
+#: usuarios/view/cargo_grupo_form.html.twig:31
 msgid "Descripción"
 msgstr ""
 
@@ -3621,50 +3684,50 @@ msgstr ""
 msgid "Seleccione los destinos"
 msgstr ""
 
-#: lugares/view/grupo_lista.html.twig:11
-#: usuarios/view/cargo_grupo_lista.html.twig:11
+#: lugares/view/grupo_lista.html.twig:12
+#: usuarios/view/cargo_grupo_lista.html.twig:12
 msgid "¿Está seguro que desea borrar este grupo?"
 msgstr ""
 
-#: lugares/view/grupo_lista.html.twig:41
-#: usuarios/view/cargo_grupo_lista.html.twig:41
+#: lugares/view/grupo_lista.html.twig:37
+#: usuarios/view/cargo_grupo_lista.html.twig:37
 msgid "Lista de grupos"
 msgstr ""
 
-#: lugares/view/grupo_lista.html.twig:51
-#: usuarios/view/cargo_grupo_lista.html.twig:53
+#: lugares/view/grupo_lista.html.twig:47
+#: usuarios/view/cargo_grupo_lista.html.twig:49
 msgid "nuevo grupo"
 msgstr ""
 
-#: lugares/view/lugar_form.html.twig:30
+#: lugares/view/lugar_form.html.twig:21
 msgid "Datos del Lugar"
 msgstr ""
 
-#: lugares/view/lugar_form.html.twig:38
+#: lugares/view/lugar_form.html.twig:29
 msgid "Sigla"
 msgstr ""
 
-#: lugares/view/lugar_form.html.twig:42
+#: lugares/view/lugar_form.html.twig:33
 msgid "Nombre"
 msgstr ""
 
-#: lugares/view/lugar_form.html.twig:52
+#: lugares/view/lugar_form.html.twig:43
 msgid "tipo de centro"
 msgstr ""
 
-#: lugares/view/lugar_form.html.twig:56
+#: lugares/view/lugar_form.html.twig:47
 msgid "e-mail"
 msgstr ""
 
-#: lugares/view/lugar_lista.html.twig:11
+#: lugares/view/lugar_lista.html.twig:12
 msgid "¿Está seguro que desea borrar este lugar?"
 msgstr ""
 
-#: lugares/view/lugar_lista.html.twig:41
+#: lugares/view/lugar_lista.html.twig:37
 msgid "Lista de lugares"
 msgstr ""
 
-#: lugares/view/lugar_lista.html.twig:51
+#: lugares/view/lugar_lista.html.twig:47
 msgid "nuevo lugar"
 msgstr ""
 
@@ -3700,22 +3763,22 @@ msgstr ""
 msgid "Debe introducir el número de protocolo y el año"
 msgstr ""
 
-#: pendientes/view/_pendiente_form_js.html.twig:190
+#: pendientes/view/_pendiente_form_js.html.twig:193
 msgid "Debe llenar el campo de oficinas"
 msgstr ""
 
-#: pendientes/view/_pendiente_form_js.html.twig:205
+#: pendientes/view/_pendiente_form_js.html.twig:208
 msgid "Debe llenar el campo de"
 msgstr ""
 
-#: pendientes/view/_pendiente_form_js.html.twig:210
+#: pendientes/view/_pendiente_form_js.html.twig:213
 msgid "Incorrecta"
 msgstr ""
 
-#: pendientes/view/_pendiente_form_js.html.twig:243
-#: pendientes/view/_pendiente_form_js.html.twig:265
+#: pendientes/view/_pendiente_form_js.html.twig:246
+#: pendientes/view/_pendiente_form_js.html.twig:268
 #: pendientes/view/_pendiente_tabla_js.html.twig:99
-#: pendientes/view/pendiente_lista_enviar.html.twig:93
+#: pendientes/view/pendiente_lista_enviar.html.twig:92
 msgid "probablemente no tenga permiso en el calendario"
 msgstr ""
 
@@ -3725,7 +3788,7 @@ msgstr ""
 
 #: pendientes/view/_pendiente_tabla_js.html.twig:79
 #: pendientes/view/_pendiente_tabla_js.html.twig:128
-#: pendientes/view/pendiente_buscar.html.twig:144
+#: pendientes/view/pendiente_buscar.html.twig:147
 msgid "No puede modificar este pendiente"
 msgstr ""
 
@@ -3742,7 +3805,7 @@ msgid "No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la
 msgstr ""
 
 #: pendientes/view/_pendiente_tabla_js.html.twig:147
-#: pendientes/view/pendiente_buscar.html.twig:193
+#: pendientes/view/pendiente_buscar.html.twig:187
 msgid "¿Está Seguro que desea borrar este pendiente?"
 msgstr ""
 
@@ -3780,11 +3843,11 @@ msgstr ""
 msgid "estado posibles del pendiente"
 msgstr ""
 
-#: pendientes/view/pendiente_buscar.html.twig:148
+#: pendientes/view/pendiente_buscar.html.twig:151
 msgid "Sólo puede seleccionar un elemento"
 msgstr ""
 
-#: pendientes/view/pendiente_buscar.html.twig:152
+#: pendientes/view/pendiente_buscar.html.twig:155
 msgid "No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la izquierda."
 msgstr ""
 
@@ -3825,6 +3888,49 @@ msgstr ""
 msgid "Repetición"
 msgstr ""
 
+#: pendientes/view/pendiente_form_periodico.html.twig:8
+msgid "anual"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:11
+msgid "mensual"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:14
+msgid "semanal"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:17
+msgid "diaria"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:21
+msgid "desde"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:23
+msgid "hasta"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:31
+msgid "anualmente"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:36
+#: pendientes/view/pendiente_form_periodico.html.twig:87
+msgid "El/los día/s (separados por comas)"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:38
+#: pendientes/view/pendiente_form_periodico.html.twig:50
+msgid "de cada"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:47
+#: pendientes/view/pendiente_form_periodico.html.twig:95
+msgid "El"
+msgstr ""
+
 #: pendientes/view/pendiente_form_periodico.html.twig:58
 msgid "por dias de meses, cada"
 msgstr ""
@@ -3835,6 +3941,31 @@ msgstr ""
 
 #: pendientes/view/pendiente_form_periodico.html.twig:70
 msgid "de que meses"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:82
+msgid "mensualmente"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:89
+#: pendientes/view/pendiente_form_periodico.html.twig:98
+msgid "de cada mes"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:106
+msgid "semanalmente"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:112
+msgid "periodicidad día de la semana"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:124
+msgid "diariamente"
+msgstr ""
+
+#: pendientes/view/pendiente_form_periodico.html.twig:133
+msgid "Son los marcados como contestados o eliminados"
 msgstr ""
 
 #: pendientes/view/pendiente_lista_enviar.html.twig:15
@@ -3873,18 +4004,26 @@ msgstr ""
 msgid "listar"
 msgstr ""
 
-#: tramites/view/tramite_form.html.twig:30
+#: plantillas/view/plantilla_form.html.twig:3
+msgid "Datos de la plantilla"
+msgstr ""
+
+#: plantillas/view/plantilla_lista.html.twig:21
+msgid "¿Está seguro que desea borrar esta plantilla?"
+msgstr ""
+
+#: tramites/view/tramite_form.html.twig:21
 msgid "Datos del Trámite"
 msgstr ""
 
-#: tramites/view/tramite_form.html.twig:45
+#: tramites/view/tramite_form.html.twig:36
 msgid "Abreviatura"
 msgstr ""
 
-#: tramites/view/tramite_form.html.twig:51
-#: tramites/view/tramitecargo_select.html.twig:129
+#: tramites/view/tramite_form.html.twig:42
+#: tramites/view/tramitecargo_select.html.twig:126
 #: tramites/view/zztramitecargo_form.html.twig:18
-#: usuarios/view/oficina_form.html.twig:45
+#: usuarios/view/oficina_form.html.twig:36
 msgid "Orden"
 msgstr ""
 
@@ -3892,11 +4031,11 @@ msgstr ""
 msgid "¿Está seguro que desea borrar este trámite?"
 msgstr ""
 
-#: tramites/view/tramite_lista.html.twig:37
+#: tramites/view/tramite_lista.html.twig:33
 msgid "Lista de tramites"
 msgstr ""
 
-#: tramites/view/tramitecargo_select.html.twig:135
+#: tramites/view/tramitecargo_select.html.twig:132
 #: tramites/view/zztramitecargo_form.html.twig:24
 msgid "número mínimo de firmas"
 msgstr ""
@@ -3997,31 +4136,31 @@ msgstr ""
 msgid "Cargando..."
 msgstr ""
 
-#: usuarios/view/cargo_form.html.twig:30
+#: usuarios/view/cargo_form.html.twig:21
 msgid "Datos del Cargo"
 msgstr ""
 
-#: usuarios/view/cargo_form.html.twig:62
+#: usuarios/view/cargo_form.html.twig:53
 msgid "Titular"
 msgstr ""
 
-#: usuarios/view/cargo_form.html.twig:69
+#: usuarios/view/cargo_form.html.twig:60
 msgid "Suplente"
 msgstr ""
 
-#: usuarios/view/cargo_grupo_form.html.twig:36
+#: usuarios/view/cargo_grupo_form.html.twig:27
 msgid "Seleccione el cargo del trámite"
 msgstr ""
 
-#: usuarios/view/cargo_grupo_form.html.twig:44
+#: usuarios/view/cargo_grupo_form.html.twig:35
 msgid "Seleccione los cargos"
 msgstr ""
 
-#: usuarios/view/cargo_grupo_lista.html.twig:42
+#: usuarios/view/cargo_grupo_lista.html.twig:38
 msgid "el nombre debe corresponder a un cargo sin oficina que se use en el trámite"
 msgstr ""
 
-#: usuarios/view/cargo_grupo_lista.html.twig:43
+#: usuarios/view/cargo_grupo_lista.html.twig:39
 msgid "(Ahora mismo solo funciona con 'todos_d'. Si hubiera necesidad de más, habría que revisar el código."
 msgstr ""
 
@@ -4029,11 +4168,11 @@ msgstr ""
 msgid "¿Está seguro que desea borrar este cargo?"
 msgstr ""
 
-#: usuarios/view/cargo_lista.html.twig:42
+#: usuarios/view/cargo_lista.html.twig:38
 msgid "Lista de cargos"
 msgstr ""
 
-#: usuarios/view/cargo_lista.html.twig:52
+#: usuarios/view/cargo_lista.html.twig:48
 msgid "nuevo cargo"
 msgstr ""
 
@@ -4057,15 +4196,15 @@ msgstr ""
 msgid "Entrar"
 msgstr ""
 
-#: usuarios/view/oficina_form.html.twig:30
+#: usuarios/view/oficina_form.html.twig:21
 msgid "Datos de la Oficina"
 msgstr ""
 
-#: usuarios/view/oficina_lista.html.twig:37
+#: usuarios/view/oficina_lista.html.twig:33
 msgid "Lista de oficina"
 msgstr ""
 
-#: usuarios/view/oficina_lista.html.twig:47
+#: usuarios/view/oficina_lista.html.twig:43
 msgid "nueva oficina"
 msgstr ""
 
@@ -4109,14 +4248,14 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: usuarios/view/usuario_lista.html.twig:17
+#: usuarios/view/usuario_lista.html.twig:18
 msgid "¿Está seguro que desea borrar este usuario?"
 msgstr ""
 
-#: usuarios/view/usuario_lista.html.twig:47
+#: usuarios/view/usuario_lista.html.twig:43
 msgid "Lista de usuarios"
 msgstr ""
 
-#: usuarios/view/usuario_lista.html.twig:57
+#: usuarios/view/usuario_lista.html.twig:53
 msgid "nuevo usuario"
 msgstr ""
