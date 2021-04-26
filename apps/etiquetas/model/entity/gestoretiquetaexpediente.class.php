@@ -37,21 +37,26 @@ class GestorEtiquetaExpediente Extends core\ClaseGestor {
 	public function getArrayExpedientes($a_etiquetas) {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
-	    
-	    $valor = implode(',',$a_etiquetas);
-	    $where = " id_etiqueta IN ($valor)";
-	    $sQuery = "SELECT DISTINCT id_expediente
-                    FROM $nom_tabla
-                    WHERE $where ";
-	    
-	    if (($oDbl->query($sQuery)) === FALSE) {
-	        $sClauError = 'GestorExpedienteDB.queryPreparar';
-	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-	        return FALSE;
-	    }
-	    $a_expedientes = [];
-	    foreach ($oDbl->query($sQuery) as $aDades) {
-	        $a_expedientes[] = $aDades['id_expediente'];
+	    // Filtering the array
+	    $a_etiquetas_filtered = array_filter($a_etiquetas);
+	    if (!empty($a_etiquetas_filtered)) {
+            $valor = implode(',',$a_etiquetas_filtered);
+            $where = " id_etiqueta IN ($valor)";
+            $sQuery = "SELECT DISTINCT id_expediente
+                        FROM $nom_tabla
+                        WHERE $where ";
+            
+            if (($oDbl->query($sQuery)) === FALSE) {
+                $sClauError = 'GestorExpedienteDB.queryPreparar';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                return FALSE;
+            }
+            $a_expedientes = [];
+            foreach ($oDbl->query($sQuery) as $aDades) {
+                $a_expedientes[] = $aDades['id_expediente'];
+            }
+	    } else {
+	        $a_expedientes = [];
 	    }
 	    return $a_expedientes;
 	    

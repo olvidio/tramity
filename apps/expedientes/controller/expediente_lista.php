@@ -27,6 +27,8 @@ if ($Qfiltro == 'archivados') {
     $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
     $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $Qperiodo =  (string) \filter_input(INPUT_POST, 'periodo');
+
+    $a_etiquetas_filtered = array_filter($Qa_etiquetas);
     
     $gesEtiquetas = new GestorEtiqueta();
     $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
@@ -37,16 +39,16 @@ if ($Qfiltro == 'archivados') {
         $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
     }
     
-    $oArrayDesplEtiquetas = new web\DesplegableArray($Qa_etiquetas,$a_posibles_etiquetas,'etiquetas');
+    $oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas_filtered,$a_posibles_etiquetas,'etiquetas');
     $oArrayDesplEtiquetas ->setBlanco('t');
     $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
     
     $aWhereADD = [];
     $aOperadorADD = [];
-    
-    if (!empty($Qa_etiquetas)) {
+
+    if (!empty($a_etiquetas_filtered)) {
         $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
-        $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($Qa_etiquetas);
+        $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($a_etiquetas_filtered);
         if (!empty($cExpedientes)) {
             $aWhereADD['id_expediente'] = implode(',',$cExpedientes);
             $aOperadorADD['id_expediente'] = 'IN';
