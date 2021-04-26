@@ -1,7 +1,8 @@
 <?php
 
 // INICIO Cabecera global de URL de controlador *********************************
-	use core\ViewTwig;
+use core\ConfigGlobal;
+use core\ViewTwig;
 use function core\is_true;
 use etherpad\model\Etherpad;
 use expedientes\model\Escrito;
@@ -15,8 +16,6 @@ use usuarios\model\PermRegistro;
 use web\DateTimeLocal;
 use web\Lista;
 use web\Protocolo;
-use core\ConfigDB;
-use core\ConfigGlobal;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************

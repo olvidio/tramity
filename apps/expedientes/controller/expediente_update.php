@@ -309,6 +309,7 @@ switch($Qque) {
         $html = '';
         $oExpediente = new Expediente($Qid_expediente);
         $oExpediente->DBCarregar();
+        $estado_original = $oExpediente->getEstado();
         $oExpediente->setEstado(Expediente::ESTADO_ACABADO_SECRETARIA);
         if ($oExpediente->DBGuardar() === FALSE ) {
             $error_txt .= _("No se ha podido cambiar el estado del expediente");
@@ -361,7 +362,7 @@ switch($Qque) {
                     $proto = FALSE;
                 }
                 // comprobar que no está anulado:
-                if (is_true($oEscrito->getAnulado())) {
+                if (is_true($oEscrito->getAnulado()) OR $estado_original == Expediente::ESTADO_DILATA ) {
                     $proto = FALSE;
                 }
                 if ($proto) {
