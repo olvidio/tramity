@@ -670,7 +670,7 @@ class ExpedienteLista {
                 
                 // color prioridad:
                 if ($prioridad == Expediente::PRIORIDAD_URGENTE) {
-                    $row['class_row'] = 'bg-danger text-white';
+                    $row['class_row'] = 'bg-light text-danger';
                 }
 
                 if ($bstrong) {
