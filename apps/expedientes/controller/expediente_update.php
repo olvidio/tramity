@@ -103,6 +103,7 @@ switch($Qque) {
         $parent_container = "oficina_$sigla";
         $resource = 'oficina';
         $oHoy = new DateTimeLocal();
+        $Qf_plazo = empty($Qf_plazo)? $oHoy->getFromLocal() : $Qf_plazo; 
         // datos de la entrada 
         $id_reg = 'EN'.$Qid_entrada; // (para resource='registro': REN = Regitro Entrada, para 'oficina': OFEN)
         $oEntrada = new Entrada($Qid_entrada);
