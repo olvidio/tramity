@@ -664,8 +664,14 @@ class ExpedienteLista {
                 }
                 
                 $row['estado'] = $a_estados[$estado];
-                $row['prioridad'] = $oExpediente->getPrioridad();
+                $prioridad = $oExpediente->getPrioridad();
+                $row['prioridad'] = $prioridad;
                 $row['tramite'] = $tramite_txt;
+                
+                // color prioridad:
+                if ($prioridad == Expediente::PRIORIDAD_URGENTE) {
+                    $row['class_row'] = 'bg-danger text-white';
+                }
 
                 if ($bstrong) {
                     $row['asunto'] = "<strong>".$oExpediente->getAsuntoEstado()."</strong>";
