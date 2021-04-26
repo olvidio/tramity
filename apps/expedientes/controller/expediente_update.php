@@ -50,6 +50,7 @@ $Qvida = (integer) \filter_input(INPUT_POST, 'vida');
 $Qvisibilidad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 
 $error_txt = '';
+$nuevo_creador = '';
 switch($Qque) {
     case 'en_visto': // Copiado de entradas_update.
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
@@ -427,6 +428,7 @@ switch($Qque) {
         echo json_encode($jsondata);
         exit();
         break;
+    case 'exp_a_borrador_cmb_creador':
     case 'exp_a_borrador':
         $error_txt = '';
         // Hay que borrar: las firmas.
@@ -449,10 +451,30 @@ switch($Qque) {
         $oExpediente->setF_ini_circulacion('');
         $oExpediente->setF_aprobacion('');
         $oExpediente->setF_reunion('');
+        
+        if ($Qque == 'exp_a_borrador_cmb_creador' ) {
+            $nuevo_creador = ConfigGlobal::role_id_cargo();
+            $oExpediente->setPonente($nuevo_creador);
+        }
         if ($oExpediente->DBGuardar() === FALSE ) {
             $error_txt .= _("No se ha podido cambiar el estado del expediente");
             $error_txt .= "<br>";
             $error_txt .= $oExpediente->getErrorTxt();
+        }
+        // cambiar también el creador de todos los escritos:
+        if ($Qque == 'exp_a_borrador_cmb_creador' ) {
+            $gesAccion = new GestorAccion();
+            $cAcciones = $gesAccion->getAcciones(['id_expediente' => $Qid_expediente]);
+            foreach ($cAcciones as $oAccion) {
+                $id_escrito = $oAccion->getId_escrito();
+                $oEscrito = new Escrito($id_escrito);
+                $oEscrito->setCreador($nuevo_creador);
+                if ($oAccion->DBGuardar() === FALSE) {
+                    $error_txt .= _("No se ha guardado la accion");
+                    $error_txt .= "<br>";
+                    $error_txt .= $oAccion->getErrorTxt();
+                }
+            }
         }
 
         if (empty($error_txt)) {

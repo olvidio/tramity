@@ -136,11 +136,15 @@ switch($Qfiltro) {
         break;
     case 'firmar':
     case 'circulando':
-        // sólo si soy el ponente (creador) o dtor de la oficina
-        if ($id_ponente == ConfigGlobal::role_id_cargo()
-             OR ($oficina_ponente == ConfigGlobal::role_id_oficina() && ConfigGlobal::soy_dtor()) ) {
-            
+        // sólo si soy el ponente (creador)
+        if ($id_ponente == ConfigGlobal::role_id_cargo()) {
                 $a_botones[0] = ['accion' => 'exp_a_borrador',
+                            'txt'    => _("mover a borrador"),
+                        ];
+        }
+        // Si soy dtor de la oficina, al mover debo cambiar el creador.
+        if ($oficina_ponente == ConfigGlobal::role_id_oficina() && ConfigGlobal::soy_dtor() ) {
+                $a_botones[0] = ['accion' => 'exp_a_borrador_cmb_creador',
                             'txt'    => _("mover a borrador"),
                         ];
         }
