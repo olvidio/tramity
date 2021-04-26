@@ -93,6 +93,7 @@ switch($Qque) {
     case 'en_pendiente':
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
         $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
+        $Qf_plazo = (string) \filter_input(INPUT_POST, 'f_plazo');
         $oCargo = new Cargo($Qid_cargo);
         $cargo = $oCargo->getCargo();
         $id_oficina = ConfigGlobal::role_id_oficina();
@@ -111,7 +112,7 @@ switch($Qque) {
         $oPendiente->setAsunto($oEntrada->getAsunto());
         $oPendiente->setStatus("NEEDS-ACTION");
         $oPendiente->setF_inicio($oHoy->getFromLocal());
-        $oPendiente->setF_plazo($oHoy->getFromLocal());
+        $oPendiente->setF_plazo($Qf_plazo);
         $oPendiente->setvisibilidad($Qvisibilidad);
         $oPendiente->setDetalle($oEntrada->getDetalle());
         $oPendiente->setEncargado($Qid_cargo);

@@ -1,12 +1,13 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
+use entradas\model\Entrada;
 use expedientes\model\Expediente;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use web\Hash;
-use entradas\model\Entrada;
+use web\DateTimeLocal;
 use web\Desplegable;
+use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -88,6 +89,8 @@ switch ($Qfiltro) {
 $oDesplCargosOficina = [];
 $oDesplCargos = [];
 $a_botones = [];
+$txt_plazo = '';
+$f_plazo = '';
 switch($Qfiltro) {
     case 'en_buscar':
     case 'en_encargado':
@@ -108,6 +111,12 @@ switch($Qfiltro) {
         $a_botones[3] = ['accion' => 'en_visto',
                         'txt'    => _("marcar como visto"),
                     ];
+        
+        $txt_plazo= _("plazo para contestar");
+        $oHoy = new DateTimeLocal();
+        $hoy_iso = $oHoy->getIso();
+        $f_plazo = $oHoy->getFromLocal();
+
         
         $gesCargos = new GestorCargo();
         $a_posibles_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
@@ -193,6 +202,12 @@ if (empty($a_botones)) {
                 ];
 }
 
+// datepicker
+$oFecha = new DateTimeLocal();
+$format = $oFecha->getFormat();
+$yearStart = date('Y');
+$yearEnd = $yearStart + 2;
+
 $a_campos = [
     'id_entrada' => $Qid_entrada,
     'id_expediente' => $Qid_expediente,
@@ -203,6 +218,14 @@ $a_campos = [
     'pagina_cancel' => $pagina_cancel,
     'oDesplCargosOficina' => $oDesplCargosOficina,
     'oDesplCargos' => $oDesplCargos,
+    // para crea pendiente:
+    'txt_plazo' => $txt_plazo,
+    'f_plazo' => $f_plazo,
+    'hoy_iso' => $hoy_iso,
+    // datepicker
+    'format' => $format,
+    'yearStart' => $yearStart,
+    'yearEnd' => $yearEnd,
 ];
 
 $oView = new ViewTwig('expedientes/controller');
