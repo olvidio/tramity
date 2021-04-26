@@ -119,7 +119,7 @@ switch($Qfiltro) {
 
         
         $gesCargos = new GestorCargo();
-        $a_posibles_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
+        $a_posibles_cargos_oficina = $gesCargos->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina());
         $oDesplCargosOficina = new Desplegable('id_cargo',$a_posibles_cargos_oficina,'','');
         break;
     case 'borrador_oficina':

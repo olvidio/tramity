@@ -99,7 +99,7 @@ class GestorCargo Extends core\ClaseGestor {
 	    if (!empty($id_oficina)) {
 	        $Where .= " AND id_oficina = $id_oficina";
 	    }
-	    $sQuery="SELECT id_cargo, id_usuario FROM $nom_tabla
+	    $sQuery="SELECT id_cargo, id_usuario, cargo FROM $nom_tabla
                 $Where ORDER BY cargo";
         if (($oDbl->query($sQuery)) === false) {
             $sClauError = 'GestorAsignaturaTipo.lista';
@@ -111,10 +111,11 @@ class GestorCargo Extends core\ClaseGestor {
         foreach ($oDbl->query($sQuery) as $aClave) {
             $id_cargo=$aClave[0];
             $id_usuario=$aClave[1];
+            $cargo=$aClave[2];
             if (empty($id_usuario)) { continue; } // el titular puede estar en blanco.
             $oUsuario = new Usuario($id_usuario);
             $nom_usuario = $oUsuario->getNom_usuario();
-            $a_usuarios_oficina[$id_cargo] = $nom_usuario;
+            $a_usuarios_oficina[$id_cargo] = "$nom_usuario ($cargo)";
         }
 	    return $a_usuarios_oficina;
 	}

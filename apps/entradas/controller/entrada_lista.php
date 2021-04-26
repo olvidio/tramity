@@ -69,14 +69,13 @@ if ($Qfiltro == 'en_encargado') {
     $dtor = $oCargo->getDirector();
     if (is_true($dtor)) {
         $gesCargos = new GestorCargo();
-        //$a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
-        $a_usuarios_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+        $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
     } else {
         $nom_cargo = $oCargo->getCargo();
         $a_usuarios_oficina = [$id_cargo => $nom_cargo];
     }
     // para el dialogo de búsquedas:
-    $oDesplEncargados = new Desplegable('encargado',$a_usuarios_oficina,$Qencargado,TRUE);
+    $oDesplEncargados = new Desplegable('encargado',$a_usuarios_oficina,$Qencargado,FALSE);
     $oDesplEncargados->setAction("fnjs_buscar('#que');");
     
     

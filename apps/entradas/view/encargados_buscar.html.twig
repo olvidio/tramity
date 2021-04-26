@@ -1,9 +1,9 @@
 <div id="condiciones">
 <form id="que" name="que" action="" method="post">
-<input type="hidden" id="filtro" name="filtro" value="{{ filtro }}">
-<input type="hidden" id="que" name="que" value="buscar">
-
-  <h3 class="col-10 form-group row">{{ "listar entradas encargadas a"|trans }}:
+  <input type="hidden" id="filtro" name="filtro" value="{{ filtro }}">
+  <input type="hidden" id="que" name="que" value="buscar">
+  <div class="col-10 form-group row">
+    <h3>{{ "listar entradas encargadas a"|trans }}:</h3>
     <!--  --------------------  Encargados --------------------------  -->
     <div class="col-3">
       {{ oDesplEncargados.desplegable|raw }}
@@ -16,7 +16,7 @@
       </button>
     </div>
     #}
-  </h3>
+  </div>
 </form>
 </div>
 
