@@ -8,6 +8,7 @@ use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Hash;
+use config\model\Config;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -135,9 +136,11 @@ switch($Qfiltro) {
         break;
     case 'firmar':
     case 'circulando':
-        // sólo si soy el ponente (creador)
-        if ($id_ponente == ConfigGlobal::role_id_cargo() ) {
-            $a_botones[0] = ['accion' => 'exp_a_borrador',
+        // sólo si soy el ponente (creador) o dtor de la oficina
+        if ($id_ponente == ConfigGlobal::role_id_cargo()
+             OR ($oficina_ponente == ConfigGlobal::role_id_oficina() && ConfigGlobal::soy_dtor()) ) {
+            
+                $a_botones[0] = ['accion' => 'exp_a_borrador',
                             'txt'    => _("mover a borrador"),
                         ];
         }
