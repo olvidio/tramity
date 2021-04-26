@@ -251,12 +251,14 @@ if (!empty($Qid_entrada)) {
     $detalle_readonly = '';
 }
 
+$ver_pendiente = FALSE;
 switch ($Qfiltro) {
     case 'en_admitido':
         $txt_btn_guardar = _("Asignar");
         break;
     case 'en_asignado':
         $txt_btn_guardar = _("Aceptar");
+        $ver_pendiente = TRUE;
         break;
     default:
         $txt_btn_guardar = _("Guardar");
@@ -304,6 +306,7 @@ $a_campos = [
     'oDesplVisibilidad' => $oDesplVisibilidad,
     'oDesplPlazo' => $oDesplPlazo,
     'f_contestar' => $f_contestar,
+    'ver_pendiente' => $ver_pendiente,
     'oDesplByPass' => $oDesplByPass,
     'oDesplAdmitido' => $oDesplAdmitido,
     'badmitido' => $badmitido,

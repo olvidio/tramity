@@ -96,6 +96,7 @@
       {{ oDesplAdmitido.desplegable|raw }}
     </div>
   </div>
+{% if ver_pendiente %}
   <div class="form-group row">
       <label for="plazo" class="mr-3 mt-2">{{ "¿Es necesario contestar?"|trans }}</label>
       {{ oDesplPlazo.desplegable|raw }}
@@ -106,6 +107,7 @@
           {{ "modificar pendiente"|trans }}
 	  </button>
   </div>
+{% endif %}
   <!-- Fin Col Izda -->
 </div>
 <!--  Col Dcha -->

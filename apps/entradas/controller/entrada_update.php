@@ -1,4 +1,5 @@
 <?php
+use core\ConfigGlobal;
 use function core\is_true;
 use entradas\model\Entrada;
 use entradas\model\entity\EntradaBypass;
@@ -7,11 +8,9 @@ use entradas\model\entity\GestorEntradaBypass;
 use lugares\model\entity\GestorGrupo;
 use pendientes\model\Pendiente;
 use usuarios\model\PermRegistro;
-use usuarios\model\entity\Cargo;
 use usuarios\model\entity\Oficina;
 use web\DateTimeLocal;
 use web\Protocolo;
-use core\ConfigGlobal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -366,54 +365,56 @@ switch($Qque) {
             //////// Generar un Pendiente (hay que esperar e tener el id_entrada //////
             // Solo se genera en cuando el scdl lo acepta (filtro=en_asignado). Si no se mira esta condición
             // se van generando pendientes cada vez que se guarda.
-            if ($Qplazo != "hoy" && $Qfiltro == 'en_asignado') {
-                $Qid_pendiente = (integer) \filter_input(INPUT_POST, 'id_pendiente');
-                if (empty($Qid_pendiente)) { // si no se ha generado el pendiente con "modificar pendiente"
-                    $f_plazo = $oEntrada->getF_contestar()->getFromLocal();
-                    $location = $oProtOrigen->ver_txt();
-                    $oOficina = new Oficina($Qid_of_ponente);
-                    $oficina_ponente = $oOficina->getSigla();
-                    if (empty($oficina_ponente)) {
-                        $msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
-                        exit($msg);
+            if ($Qfiltro == 'en_asignado') {
+                if ($Qplazo != "hoy") {
+                    $Qid_pendiente = (integer) \filter_input(INPUT_POST, 'id_pendiente');
+                    if (empty($Qid_pendiente)) { // si no se ha generado el pendiente con "modificar pendiente"
+                        $f_plazo = $oEntrada->getF_contestar()->getFromLocal();
+                        $location = $oProtOrigen->ver_txt();
+                        $oOficina = new Oficina($Qid_of_ponente);
+                        $oficina_ponente = $oOficina->getSigla();
+                        if (empty($oficina_ponente)) {
+                            $msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
+                            exit($msg);
+                        }
+                        $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
+                        
+                        $parent_container = 'oficina_'.$oficina_ponente;
+                        $resource = 'registro';
+                        $cargo = 'secretaria';
+                        $uid = '';
+                        $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                        $oPendiente->setId_reg($id_reg);
+                        $oPendiente->setAsunto($Qasunto);
+                        $oPendiente->setStatus("NEEDS-ACTION");
+                        $oPendiente->setF_inicio($Qf_entrada);
+                        $oPendiente->setF_plazo($f_plazo);
+                        $oPendiente->setVisibilidad($Qvisibiliad);
+                        $oPendiente->setDetalle($Qdetalle);
+                        $oPendiente->setPendiente_con($Qorigen);
+                        $oPendiente->setLocation($location);
+                        $oPendiente->setId_oficina($Qid_of_ponente);
+                        // las firmas son cargos, buscar las oficinas implicadas:
+                        $oPendiente->setOficinasArray($Qa_oficinas);
+                        if ($oPendiente->Guardar() === FALSE ) {
+                            $error_txt .= _("No se han podido guardar el nuevo pendiente");
+                        }
+                    } else {
+                        // meter el pendienteDB en davical con el id_reg que toque y borrarlo de pendienteDB.
+                        $oOficina = new Oficina($Qid_of_ponente);
+                        $oficina_ponente = $oOficina->getSigla();
+                        if (empty($oficina_ponente)) {
+                            $msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
+                            exit($msg);
+                        }
+                        $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
+                        $parent_container = 'oficina_'.$oficina_ponente;
+                        $resource = 'registro';
+                        $cargo = 'secretaria';
+                        $uid = '';
+                        $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                        $oPendiente->crear_de_pendienteDB($id_reg,$Qid_pendiente);
                     }
-                    $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
-                    
-                    $parent_container = 'oficina_'.$oficina_ponente;
-                    $resource = 'registro';
-                    $cargo = 'secretaria';
-                    $uid = '';
-                    $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
-                    $oPendiente->setId_reg($id_reg);
-                    $oPendiente->setAsunto($Qasunto);
-                    $oPendiente->setStatus("NEEDS-ACTION");
-                    $oPendiente->setF_inicio($Qf_entrada);
-                    $oPendiente->setF_plazo($f_plazo);
-                    $oPendiente->setVisibilidad($Qvisibiliad);
-                    $oPendiente->setDetalle($Qdetalle);
-                    $oPendiente->setPendiente_con($Qorigen);
-                    $oPendiente->setLocation($location);
-                    $oPendiente->setId_oficina($Qid_of_ponente);
-                    // las firmas son cargos, buscar las oficinas implicadas:
-                    $oPendiente->setOficinasArray($Qa_oficinas);
-                    if ($oPendiente->Guardar() === FALSE ) {
-                        $error_txt .= _("No se han podido guardar el nuevo pendiente");
-                    }
-                } else {
-                    // meter el pendienteDB en davical con el id_reg que toque y borrarlo de pendienteDB.
-                    $oOficina = new Oficina($Qid_of_ponente);
-                    $oficina_ponente = $oOficina->getSigla();
-                    if (empty($oficina_ponente)) {
-                        $msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
-                        exit($msg);
-                    }
-                    $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
-                    $parent_container = 'oficina_'.$oficina_ponente;
-                    $resource = 'registro';
-                    $cargo = 'secretaria';
-                    $uid = '';
-                    $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
-                    $oPendiente->crear_de_pendienteDB($id_reg,$Qid_pendiente);
                 }
             }
         
