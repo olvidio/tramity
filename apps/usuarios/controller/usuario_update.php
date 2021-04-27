@@ -129,13 +129,15 @@ switch($Qque) {
         $Qnom_usuario = (string) \filter_input(INPUT_POST, 'nom_usuario');
         $Qpassword = (string) \filter_input(INPUT_POST, 'password');
         
-        if ($Qusuario && $Qpassword) {
+        if ($Qusuario) {
             $oUsuario = new Usuario();
             $oUsuario->setUsuario($Qusuario);
             if (!empty($Qpassword)){
                 $oCrypt = new MyCrypt();
                 $my_passwd=$oCrypt->encode($Qpassword);
                 $oUsuario->setPassword($my_passwd);
+            } else {
+                 echo _("debe añadir un password");
             }
             $oUsuario->setEmail($Qemail);
             $oUsuario->setId_cargo_preferido($Qid_cargo_preferido);
@@ -144,6 +146,8 @@ switch($Qque) {
                 echo _("hay un error, no se ha guardado");
                 echo "\n".$oUsuario->getErrorTxt();
             }
-        } else { echo _("debe poner un nombre y el password"); }
+        } else {
+            echo _("debe poner un nombre de usuario");
+        }
 		break;
 }
