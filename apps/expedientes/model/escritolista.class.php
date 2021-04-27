@@ -3,13 +3,14 @@ namespace expedientes\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use function core\is_true;
 use expedientes\model\entity\GestorAccion;
+use expedientes\model\entity\GestorEscritoDB;
+use usuarios\model\PermRegistro;
+use usuarios\model\entity\GestorCargo;
 use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
-use function core\is_true;
-use expedientes\model\entity\GestorEscritoDB;
-use usuarios\model\entity\GestorCargo;
 
 
 class EscritoLista {
@@ -117,7 +118,13 @@ class EscritoLista {
         $oProtLocal = new Protocolo();
         $oProtLocal->setNombre('local');
         $a_acciones = [];
+        $oPermRegistro = new PermRegistro();
         foreach ($cEscritos as $oEscrito) {
+            $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEscrito, 'escrito');
+            if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+                continue;
+            }
+            
             $id_escrito = $oEscrito->getId_escrito();
             $f_salida = $oEscrito->getF_salida()->getFromLocal();
             $ponente = $oEscrito->getCreador();
