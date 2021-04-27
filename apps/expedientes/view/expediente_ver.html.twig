@@ -235,6 +235,17 @@ fnjs_ver_cargos=function(add_del) {
             	html+='<label class="custom-control-label" for="'+obj.id+'">'+obj.sigla+'</label>';
             	html+='</div>';
 			});
+			if (json.cargos_repetir != undefined) {
+                var theArray2 = JSON.parse(json.cargos_repetir);
+                html+='<div style="background-color: honeydew;">';
+                $.each(theArray2, function(id, obj){
+                    html+='<div class="custom-control custom-checkbox custom-control-inline">';
+                    html+='<input type="checkbox" class="custom-control-input" id="'+obj.id+'" >';
+                    html+='<label class="custom-control-label" for="'+obj.id+'">'+obj.sigla+'</label>';
+                    html+='</div>';
+                });
+                html+='</div>';
+        	}
 			html+='<button class="ml-auto btn btn-secondary btn-sm" onClick="fnjs_add_cargos(\''+add_del+'\');" >';
     		html+='{{ "ok"|trans }}';
             html+='</button>';

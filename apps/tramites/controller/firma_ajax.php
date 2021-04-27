@@ -123,14 +123,23 @@ switch ($Qque) {
         $gesFirmas = new GestorFirma();
         $cFirmas = $gesFirmas->getFirmas($aWhere);
         $a_posibles_cargos = [];
+        $a_cargos_repetidos = [];
+        $a_cargos_repetir = [];
         foreach ($cFirmas as $oFirma) {
             $id_cargo = $oFirma->getId_cargo();
+            if (!empty($a_todos_cargos[$id_cargo])) {
+                $a_cargos_repetidos[$id_cargo] = $a_todos_cargos[$id_cargo];
+            }
             unset($a_todos_cargos[$id_cargo]);
         }
         foreach ($a_todos_cargos as $id => $sigla) {
             $a_posibles_cargos[] = ['id'=>$id, 'sigla'=>$sigla ];
         }
+        foreach ($a_cargos_repetidos as $id => $sigla) {
+            $a_cargos_repetir[] = ['id'=>$id, 'sigla'=>$sigla ];
+        }
         $jsondata['cargos'] = json_encode($a_posibles_cargos);
+        $jsondata['cargos_repetir'] = json_encode($a_cargos_repetir);
         break;
     case 'voto':
         $aWhere = ['id_expediente' => $Qid_expediente,
