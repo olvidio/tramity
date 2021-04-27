@@ -1,4 +1,13 @@
 <script type="text/javascript">
+var global_flag = 1;
+
+$(function() {
+	$( "#destinos_mas" ).on('change focusout', fnjs_mas_destinos );
+});
+$(function() {
+	$( "#referencias_mas" ).on('change focusout', fnjs_mas_referencias );
+});
+
 $(function() {
 	$( "#f_plazo" ).datetimepicker( {
 		timepicker: false,
@@ -199,19 +208,23 @@ fnjs_focus_a=function(camp){
 
 {{ oArrayProtRef.ComprobarSelectJs|raw }}
 fnjs_mas_referencias=function(){
-	var code = (event.keyCode ? event.keyCode : event.which);
-    var valor=1;
+	event.stopImmediatePropagation();
     var id_campo='#'+event.currentTarget.id;
     var valor=$(id_campo).val();
-    if(code!=9) {
-        event.preventDefault();
-        event.stopPropagation();
+    if (event.type == 'change') {
+        global_flag = 2;
+        if (valor!=0) {
+            {{ oArrayProtRef.ListaSelectsJs|raw }}
+        } else {
+            $('#asunto').focus();
+        }
     }
-	if ( code==9 || event.type=="change") {
-		if (valor!=0) {
-			{{ oArrayProtRef.ListaSelectsJs|raw }}
-		}
-	}
+    if (event.type == 'blur') {
+        if (global_flag == 1 && valor == 0 ) {
+            $('#asunto').focus();
+        }
+        global_flag = 1;
+    }
 }
 fnjs_quitar_referencias=function(){
 	$('#span_ref').html("");
@@ -327,35 +340,38 @@ fnjs_proto=function(num,any){
 	
 	/* Para el número de referencias */
 	if (num=='#prot_num_referencias[0]') {
-        id_lugar=$('#referencias\\[0\\]').val();
-        prot_num=$('#prot_num_referencias\\[0\\]').val();
-        prot_any=$('#prot_any_referencias\\[0\\]').val();
+		prot_num_dst=$('#prot_num_destinos\\[0\\]').val();
+        if (prot_num_dst == '' || prot_num_dst == undefined) {
+            id_lugar=$('#referencias\\[0\\]').val();
+            prot_num=$('#prot_num_referencias\\[0\\]').val();
+            prot_any=$('#prot_any_referencias\\[0\\]').val();
 
-        var url_buscar_ajax='apps/busquedas/controller/buscar_ajax.php';
-        var param_json = { para: 'entrada', que: 'buscar_referencia_correspondiente', id_lugar: id_lugar, prot_num: prot_num, prot_any: prot_any };
-        request=$.ajax({
-            data: param_json,
-            url: url_buscar_ajax,
-            type: 'post',
-            dataType: 'json'
-        });
-        request.done( function (json) {
-            id = json.id_entrada;
-            if (json.success != true) {
-                alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-            } else {
-                $('#asunto').val(json.asunto);
-                $('#detalle').val(json.detalle);
-                $('#categoria').val(json.categoria);
-                $('#visibilidad').val(json.visibilidad);
-                $('#of_ponente').val(json.id_ponente);
-                // varias:
-                for (const id_oficina of json.oficinas) {
-                    $('#oficinas_mas').val(id_oficina);
-                    $('#oficinas_mas').trigger("change");
+            var url_buscar_ajax='apps/busquedas/controller/buscar_ajax.php';
+            var param_json = { para: 'entrada', que: 'buscar_referencia_correspondiente', id_lugar: id_lugar, prot_num: prot_num, prot_any: prot_any };
+            request=$.ajax({
+                data: param_json,
+                url: url_buscar_ajax,
+                type: 'post',
+                dataType: 'json'
+            });
+            request.done( function (json) {
+                id = json.id_entrada;
+                if (json.success != true) {
+                    alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+                } else {
+                    $('#asunto').val(json.asunto);
+                    $('#detalle').val(json.detalle);
+                    $('#categoria').val(json.categoria);
+                    $('#visibilidad').val(json.visibilidad);
+                    $('#of_ponente').val(json.id_ponente);
+                    // varias:
+                    for (const id_oficina of json.oficinas) {
+                        $('#oficinas_mas').val(id_oficina);
+                        $('#oficinas_mas').trigger("change");
+                    }
                 }
-            }
-        });
+            });
+        }
 	}
 	
 	siguiente_escaped = siguiente.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");

@@ -1,6 +1,5 @@
 <script type="text/javascript">
 {{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
-{{ oArrayProtDestino.ComprobarSelectJs|raw }}
 
 $(document).ready(function() {
 	fnjs_distr_cr();
@@ -47,20 +46,25 @@ fnjs_quitar_grupos=function(){
 	$('#grupos_num').val(0);
 }
 
+{{ oArrayProtDestino.ComprobarSelectJs|raw }}
 fnjs_mas_destinos=function(){
-	var code = (event.keyCode ? event.keyCode : event.which);
-    var valor=1;
+	event.stopImmediatePropagation();
     var id_campo='#'+event.currentTarget.id;
     var valor=$(id_campo).val();
-    if(code!=9) {
-        event.preventDefault();
-        event.stopPropagation();
+    if (event.type == 'change') {
+        global_flag = 2;
+        if (valor!=0) {
+            {{ oArrayProtDestino.ListaSelectsJs|raw }}
+        } else {
+            $('#referencias_mas').focus();
+        }
     }
-	if ( code==9 || event.type=="change") {
-		if (valor!=0) {
-			{{ oArrayProtDestino.ListaSelectsJs|raw }}
-		}
-	}
+    if (event.type == 'blur') {
+        if (global_flag == 1 && valor == 0 ) {
+            $('#referencias_mas').focus();
+        }
+        global_flag = 1;
+    }
 }
 fnjs_quitar_destinos=function(){
 	$('#span_dst').html("");

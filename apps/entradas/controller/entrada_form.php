@@ -252,6 +252,17 @@ if (!empty($Qid_entrada)) {
     $detalle_readonly = '';
 }
 
+$oProtOrigen->setTabIndex(50);
+$oArrayProtRef->setTabIndex(95);
+$oDesplPonenteOficina->setTabIndex(130);
+$oArrayDesplOficinas->setTabIndex(140);
+$oDesplCategoria->setTabIndex(160);
+$oDesplVisibilidad->setTabIndex(165);
+$oDesplAdmitido->setTabIndex(170);
+$oDesplPlazo->setTabIndex(180);
+$oDesplByPass->setTabIndex(190);
+$oArrayProtDestino->setTabIndex(200);
+
 $ver_pendiente = FALSE;
 switch ($Qfiltro) {
     case 'en_admitido':
