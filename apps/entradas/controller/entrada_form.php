@@ -230,6 +230,7 @@ if (!empty($Qid_entrada)) {
     $asunto_e = '';
     $asunto = '';
     $detalle = '';
+    $visibilidad = Entrada::V_TODOS;
     $f_entrada = '';
     $f_escrito = '';
     $f_contestar = '';
@@ -304,6 +305,7 @@ $a_campos = [
     'oArrayDesplOficinas' => $oArrayDesplOficinas,  
     'oDesplCategoria' => $oDesplCategoria,
     'oDesplVisibilidad' => $oDesplVisibilidad,
+    'hidden_visibilidad' => $visibilidad,
     'oDesplPlazo' => $oDesplPlazo,
     'f_contestar' => $f_contestar,
     'ver_pendiente' => $ver_pendiente,

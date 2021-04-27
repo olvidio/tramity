@@ -310,6 +310,10 @@ switch($Qque) {
         $oEntrada->setResto_oficinas($Qa_oficinas);
 
         $oEntrada->setCategoria($Qcategoria);
+        // visibilidad: puede que esté en modo solo lectura, mirar el hiden.
+        if (empty($Qvisibiliad)) {
+            $Qvisibiliad = (integer) \filter_input(INPUT_POST, 'hidden_visibilidad');
+        }
         $oEntrada->setVisibilidad($Qvisibiliad);
 
         
