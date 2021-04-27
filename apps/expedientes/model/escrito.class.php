@@ -14,6 +14,7 @@ use tramites\model\entity\GestorFirma;
 use usuarios\model\PermRegistro;
 use web\Protocolo;
 use web\ProtocoloArray;
+use entradas\model\Entrada;
 
 
 
@@ -74,30 +75,39 @@ class Escrito Extends EscritoDB {
     
     /**
      * Recupera l'atribut sasunto de Entrada teniendo en cuenta los permisos
-     * Solo si está aprobado
      *
      * @return string sasunto
      */
     function getAsunto() {
-        $asunto = '';
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'asunto');
+        
+        $oEntrada = new Entrada();
+        $a_visibilidad = $oEntrada->getArrayVisibilidad();
+        $asunto = $a_visibilidad[Entrada::V_RESERVADO];
         if ($perm > 0) {
-            $asunto = $this->getAsuntoDB();
+            $asunto = '';
+            $anulado = $this->getAnulado();
+            if (!empty($anulado)) {
+                $asunto = _("ANULADO") . "($anulado) ";
+            }
+            $asunto .= $this->getAsuntoDB();
         }
         return $asunto;
     }
     
     /**
-     * Recupera l'atribut sdetalle de Escrito teniendo en cuenta los permisos
-     * Solo si está aprobado
+     * Recupera l'atribut sdetalle de Entrada teniendo en cuenta los permisos
      *
      * @return string sdetalle
      */
     function getDetalle() {
-        $detalle = '';
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'detalle');
+        
+        $oEntrada = new Entrada();
+        $a_visibilidad = $oEntrada->getArrayVisibilidad();
+        $detalle = $a_visibilidad[Entrada::V_RESERVADO];
         if ($perm > 0) {
             $detalle = $this->getDetalleDB();
         }

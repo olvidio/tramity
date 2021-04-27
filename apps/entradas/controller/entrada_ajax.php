@@ -292,7 +292,12 @@ switch ($Qque) {
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         $oProtOrigen = new Protocolo();
+        $oPermRegistro = new PermRegistro();
         foreach ($cEntradas as $oEntrada) {
+            $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEntrada, 'escrito');
+            if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+                continue;
+            }
             $a++;
             $id_entrada = $oEntrada->getId_entrada();
             $fecha_txt = $oEntrada->getF_entrada()->getFromLocal();
