@@ -90,34 +90,23 @@ switch ($Qque) {
 	        $aWhere['asunto_detalle'] = $Qasunto;
 	    }
 
-	    $sel_mes = '';
-	    $sel_mes_6 = '';
-	    $sel_any_1 = '';
-	    $sel_any_2 = '';
-	    $sel_siempre = '';
 	    switch ($Qperiodo) {
 	        case "mes":
-	            $sel_mes = 'selected';
 	            $periodo = 'P1M';
 	            break;
 	        case "mes_6":
-	            $sel_mes_6 = 'selected';
 	            $periodo = 'P6M';
 	            break;
 	        case "any_1":
-	            $sel_any_1 = 'selected';
 	            $periodo = 'P1Y';
 	            break;
 	        case "any_2":
-	            $sel_any_2 = 'selected';
 	            $periodo = 'P2Y';
 	            break;
 	        case "siempre":
-	            $sel_siempre = 'selected';
 	            $periodo = '';
 	            break;
 	        default:
-	            $sel_mes = 'selected';
 	            $periodo = 'P1M';
 	    }
 	    if (!empty($periodo)) {
@@ -198,11 +187,6 @@ switch ($Qque) {
                 'oDesplOficinas' => $oDesplOficinas,
                 'oLista' => $oLista,  
                 'asunto' => $Qasunto,
-                'sel_mes' => $sel_mes,
-                'sel_mes_6' => $sel_mes_6,
-                'sel_any_1' => $sel_any_1,
-                'sel_any_2' => $sel_any_2,
-                'sel_siempre' => $sel_siempre,
              ];
 	    $oView = new ViewTwig('expedientes/controller');
 	    echo $oView->renderizar('modal_buscar_entradas.html.twig',$a_campos);

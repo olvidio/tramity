@@ -7,11 +7,11 @@ use ethercalc\model\Ethercalc;
 use etherpad\model\Etherpad;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
+use usuarios\model\PermRegistro;
 use usuarios\model\entity\GestorOficina;
+use web\DateTimeLocal;
 use web\Lista;
 use web\Protocolo;
-use usuarios\model\entity\Oficina;
-use usuarios\model\PermRegistro;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -235,6 +235,7 @@ switch ($Qque) {
         $Qid_origen = (string) \filter_input(INPUT_POST, 'id_origen');
         $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
         $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+        $Qperiodo = (string) \filter_input(INPUT_POST, 'periodo');
         
         
         $gesEntradas = new GestorEntrada();
@@ -249,7 +250,32 @@ switch ($Qque) {
         if (!empty($Qasunto)) {
             $aWhere['asunto'] = $Qasunto;
             $aOperador['asunto'] = '~*';
-            
+        }
+        
+        switch ($Qperiodo) {
+            case "mes":
+                $periodo = 'P1M';
+                break;
+            case "mes_6":
+                $periodo = 'P6M';
+                break;
+            case "any_1":
+                $periodo = 'P1Y';
+                break;
+            case "any_2":
+                $periodo = 'P2Y';
+                break;
+            case "siempre":
+                $periodo = '';
+                break;
+            default:
+                $periodo = 'P1M';
+        }
+        if (!empty($periodo)) {
+            $oFecha = new DateTimeLocal();
+            $oFecha->sub(new DateInterval($periodo));
+            $aWhere['f_entrada'] = $oFecha->getIso();
+            $aOperador['f_entrada'] = '>';
         }
         
         $aWhere['_ordre'] = 'f_entrada DESC';
