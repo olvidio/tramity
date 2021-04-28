@@ -401,17 +401,11 @@ switch($Qque) {
             $Qanular = (string) \filter_input(INPUT_POST, 'anular');
         
             if (is_true($Qanular)) {
-                if (strpos($Qasunto,_("ANULADO")) === FALSE) {
-                    $asunto = _("ANULADO")." $Qasunto";
-                } else {
-                    $asunto = $Qasunto;
-                }
                 $oEscrito->setAnulado('t');
             } else {
-                $asunto = str_replace(_("ANULADO").' ', '', $Qasunto);
                 $oEscrito->setAnulado('f');
             }
-            $oEscrito->setAsunto($asunto);
+            $oEscrito->setAsunto($Qasunto);
             $oEscrito->setDetalle($Qdetalle);
             if ($oEscrito->DBGuardar() === FALSE ) {
                 $txt_err .= _("Hay un error al guardar el escrito");
