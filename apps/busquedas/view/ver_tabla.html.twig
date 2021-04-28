@@ -317,7 +317,7 @@ fnjs_borrar_entrada=function(formulario){
                     id_reg=array_dir[0];
                 }
             });
-            
+
             var url_doc = 'apps/entradas/controller/entrada_ajax.php';
             var param_json = { que: 'comprobar', id_entrada: id_reg };
             request=$.ajax({
@@ -343,6 +343,8 @@ fnjs_borrar_entrada=function(formulario){
                                 }
                             }
                     	});
+                    } else {
+                        fnjs_borrar_entrada_cascade(id_reg);
                     }
                 }
             });
