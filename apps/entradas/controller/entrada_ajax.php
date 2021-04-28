@@ -32,7 +32,7 @@ switch ($Qque) {
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
         $oEntrada = new Entrada($Qid_entrada);
         $oPermiso = new PermRegistro();
-        $perm = $oPermiso->permiso_detalle($oEntrada,'asunto');
+        $perm = $oPermiso->permiso_detalle($oEntrada,'escrito');
         if ($perm < PermRegistro::PERM_VER) {
             $mensaje = _("No tiene permiso para ver la entrada");
         } else {
