@@ -80,6 +80,16 @@ fnjs_escrito=function(n) {
 	if (!f_escrito) { alert("{{ "Debe llenar el campo de fecha del escrito"|trans|raw }}"); err=1; }
 
 	if (err!=1) {
+        // guardar la entrada (se puede haber modificado alún campo)
+		$('#que').val('guardar');
+        datos = $('#form_entrada').serialize();
+        
+        request=$.ajax({
+            data: datos,
+            url: '{{ url_update }}',
+            type: 'post',
+            dataType: 'json'
+        });
         // grabar el tipo de doc
         var url_doc = 'apps/entradas/controller/entrada_ajax.php';
         var param_json = { que: 'guardar', id_entrada: id_entrada, f_escrito: f_escrito, tipo_doc: n };
