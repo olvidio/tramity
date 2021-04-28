@@ -573,7 +573,7 @@ class ExpedienteLista {
                 $row = [];
                 // mirar permisos...
                 $visibilidad = $oExpediente->getVisibilidad();
-                if ( ($visibilidad == Entrada::V_RESERVADO OR $visibilidad == Entrada::V_RESERVADO_VCD)
+                if ( ($visibilidad == Entrada::V_DIRECTORES OR $visibilidad == Entrada::V_RESERVADO OR $visibilidad == Entrada::V_RESERVADO_VCD)
                     && $soy_dtor === FALSE) {
                         continue;
                 }
