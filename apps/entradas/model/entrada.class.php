@@ -30,8 +30,9 @@ class Entrada Extends EntradaDB {
     // visibilidad
     const V_TODOS           = 1;  // cualquiera
     const V_PERSONAL        = 2;  // oficina y directores
-    const V_RESERVADO       = 3;  // sólo directores
-    const V_RESERVADO_VCD   = 4;  // sólo vcd + quien señale
+    const V_DIRECTORES      = 3;  // sólo directores
+    const V_RESERVADO       = 4;  // sólo directores, añade no ver a los directores de otras oficinas no implicadas
+    const V_RESERVADO_VCD   = 5;  // sólo vcd + quien señale
     
     // estado
     /*
@@ -102,6 +103,7 @@ class Entrada Extends EntradaDB {
         $a_tipos = [
             self::V_TODOS => _("todos"),
             self::V_PERSONAL => _("personal"),
+            self::V_DIRECTORES => _("directores"),
             self::V_RESERVADO => _("reservado"),
             self::V_RESERVADO_VCD => _("vcd"),
         ];

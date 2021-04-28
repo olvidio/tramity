@@ -724,6 +724,7 @@ class Pendiente {
             case Entrada::V_PERSONAL:
                 $class = 'PRIVATE';
                 break;
+            case Entrada::V_DIRECTORES:
             case Entrada::V_RESERVADO:
                 $class = 'CONFIDENTIAL';
                 break;
@@ -745,7 +746,8 @@ class Pendiente {
                 $visibilidad = Entrada::V_PERSONAL;
                 break;
             case 'CONFIDENTIAL':
-                $visibilidad = Entrada::V_RESERVADO;
+                $visibilidad = Entrada::V_DIRECTORES;
+                //$visibilidad = Entrada::V_RESERVADO; // solo añade no ver a los directores de otras oficinas no implicadas
                 break;
             case 'VCD':
                 $visibilidad = Entrada::V_RESERVADO_VCD;

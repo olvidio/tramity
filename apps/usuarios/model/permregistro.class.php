@@ -10,8 +10,9 @@ class PermRegistro {
      * // visibilidad
      * const V_TODOS           = 1;  // cualquiera
      * const V_PERSONAL        = 2;  // oficina y directores
-     * const V_RESERVADO       = 3;  // sólo directores
-     * const V_RESERVADO_VCD   = 4;  // sólo vcd
+     * const V_DIRECTORES      = 3;  // sólo directores
+     * const V_RESERVADO       = 4;  // sólo directores, añade no ver a los directores de otras oficinas no implicadas
+     * const V_RESERVADO_VCD   = 5;  // sólo vcd
      */
     
     /* valores de permiso:
@@ -47,6 +48,12 @@ class PermRegistro {
                     'escrito'   => 1,
                     'cambio'    => 4,
         ];
+        $directores['dtor_pral'] = [
+                    'asunto'    => 1,
+                    'detalle'   => 2,
+                    'escrito'   => 1,
+                    'cambio'    => 4,
+        ];
         $reservado['dtor_pral'] = [
                     'asunto'    => 1,
                     'detalle'   => 2,
@@ -67,6 +74,12 @@ class PermRegistro {
                     'cambio'    => 0,
         ];
         $personal['dtor_imp'] = [
+                    'asunto'    => 1,
+                    'detalle'   => 1,
+                    'escrito'   => 1,
+                    'cambio'    => 0,
+        ];
+        $directores['dtor_imp'] = [
                     'asunto'    => 1,
                     'detalle'   => 1,
                     'escrito'   => 1,
@@ -97,10 +110,16 @@ class PermRegistro {
                     'escrito'   => 1,
                     'cambio'    => 0,
         ];
-        $reservado['dtor'] = [
+        $directores['dtor'] = [
                     'asunto'    => 1,
                     'detalle'   => 1,
                     'escrito'   => 1,
+                    'cambio'    => 0,
+        ];
+        $reservado['dtor'] = [
+                    'asunto'    => 1,
+                    'detalle'   => 0,
+                    'escrito'   => 0,
                     'cambio'    => 0,
         ];
         $vcd['dtor'] = [
@@ -122,6 +141,12 @@ class PermRegistro {
                     'escrito'   => 2,
                     'cambio'    => 4,
         ];
+        $directores['secretario'] = [
+                    'asunto'    => 2,
+                    'detalle'   => 2,
+                    'escrito'   => 2,
+                    'cambio'    => 4,
+        ];
         $reservado['secretario'] = [
                     'asunto'    => 2,
                     'detalle'   => 2,
@@ -129,10 +154,10 @@ class PermRegistro {
                     'cambio'    => 4,
         ];
         $vcd['secretario'] = [
-                    'asunto'    => 0,
-                    'detalle'   => 0,
-                    'escrito'   => 0,
-                    'cambio'    => 0,
+                    'asunto'    => 2,
+                    'detalle'   => 2,
+                    'escrito'   => 2,
+                    'cambio'    => 4,
         ];
         // oficiales de secretaría.
         $todos['of_scl'] = [
@@ -145,6 +170,12 @@ class PermRegistro {
                     'asunto'    => 2,
                     'detalle'   => 2,
                     'escrito'   => 2,
+                    'cambio'    => 4,
+        ];
+        $directores['of_scl'] = [
+                    'asunto'    => 0,
+                    'detalle'   => 0,
+                    'escrito'   => 0,
                     'cambio'    => 0,
         ];
         $reservado['of_scl'] = [
@@ -172,6 +203,12 @@ class PermRegistro {
                     'escrito'   => 1,
                     'cambio'    => 0,
         ];
+        $directores['of_pral'] = [
+                    'asunto'    => 0,
+                    'detalle'   => 0,
+                    'escrito'   => 0,
+                    'cambio'    => 0,
+        ];
         $reservado['of_pral'] = [
                     'asunto'    => 0,
                     'detalle'   => 0,
@@ -193,8 +230,14 @@ class PermRegistro {
         ];
         $personal['of_imp'] = [
                     'asunto'    => 1,
-                    'detalle'   => 1,
-                    'escrito'   => 1,
+                    'detalle'   => 0,
+                    'escrito'   => 0,
+                    'cambio'    => 0,
+        ];
+        $directores['of_imp'] = [
+                    'asunto'    => 0,
+                    'detalle'   => 0,
+                    'escrito'   => 0,
                     'cambio'    => 0,
         ];
         $reservado['of_imp'] = [
@@ -222,6 +265,12 @@ class PermRegistro {
                     'escrito'   => 0,
                     'cambio'    => 0,
         ];
+        $directores['of'] = [
+                    'asunto'    => 0,
+                    'detalle'   => 0,
+                    'escrito'   => 0,
+                    'cambio'    => 0,
+        ];
         $reservado['of'] = [
                     'asunto'    => 0,
                     'detalle'   => 0,
@@ -237,6 +286,7 @@ class PermRegistro {
 
         $this->array_registro_perm[Entrada::V_TODOS] = $todos;
         $this->array_registro_perm[Entrada::V_PERSONAL] = $personal;
+        $this->array_registro_perm[Entrada::V_DIRECTORES] = $directores;
         $this->array_registro_perm[Entrada::V_RESERVADO] = $reservado;
         $this->array_registro_perm[Entrada::V_RESERVADO_VCD] = $vcd;
         
