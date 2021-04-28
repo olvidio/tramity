@@ -157,6 +157,35 @@ switch ($Qque) {
         echo json_encode($jsondata);
         exit();
         break;
+    case 'comprobar_pdte': //antes de eliminar
+        $bypass_txt = '';
+        $pendientes_txt = '';
+        $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+        // Comprobar si tiene pendientes
+        $gesPendientes = new GestorPendienteEntrada();
+        $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
+        if (!empty($cUids)) {
+            $c = count($cUids);
+            $pendientes_txt = sprintf(_("Esta entrada tiene %s pendientes asociados."),$c);
+        }
+        
+        $mensaje = '';
+        if (!empty($bypass_txt)) {
+            $mensaje .= $bypass_txt;
+        }
+        if (!empty($pendientes_txt)) {
+            $mensaje .= empty($mensaje)? '' : "<br>";
+            $mensaje .= $pendientes_txt;
+        }
+
+        $jsondata['success'] = true;
+        $jsondata['mensaje'] = $mensaje;
+
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'comprobar': //antes de eliminar
         $bypass_txt = '';
         $pendientes_txt = '';

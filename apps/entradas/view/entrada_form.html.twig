@@ -45,7 +45,12 @@
   <div class="form-group row">
     <label for="asunto" class="col-3 col-form-label">{{ "Asunto secretaria"|trans }}</label>
     <div class="col">
-      <input {{ asunto_readonly }} tabindex='105' type="text" class="form-control" name='asunto' id="asunto" value="{{ asunto }}">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">{{ anulado_txt }}</div>
+          </div>
+          <input {{ asunto_readonly }} tabindex='105' type="text" class="form-control" name='asunto' id="asunto" value="{{ asunto }}">
+        </div>
     </div>
   </div>
   <!--  --------------- DETALLE --------------- -->

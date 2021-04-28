@@ -138,7 +138,11 @@ if (!empty($Qid_entrada)) {
     $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias()');
     
     $asunto_e = $oEntrada->getAsunto_entrada();
-    $asunto = $oEntrada->getAsunto();
+    $asunto = $oEntrada->getAsuntoDB();
+    $anulado_txt = $oEntrada->getAnulado();
+    if (!empty($anulado_txt)) {
+        $anulado_txt = _("ANULADO") . "($anulado_txt) ";
+    }
     $detalle = $oEntrada->getDetalle();
     $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
     
@@ -229,6 +233,7 @@ if (!empty($Qid_entrada)) {
         
     $asunto_e = '';
     $asunto = '';
+    $anulado_txt = '';
     $detalle = '';
     $visibilidad = Entrada::V_TODOS;
     $f_entrada = '';
@@ -308,6 +313,7 @@ $a_campos = [
     'f_entrada' => $f_entrada,
     'asunto_e' => $asunto_e,
     'asunto' => $asunto,
+    'anulado_txt' => $anulado_txt,
     'asunto_readonly' => $asunto_readonly,
     'detalle' => $detalle,
     'detalle_readonly' => $detalle_readonly,
