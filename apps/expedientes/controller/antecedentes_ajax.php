@@ -140,8 +140,8 @@ switch ($Qque) {
 	    $oProtOrigen = new Protocolo();
 	    $oPermRegistro = new PermRegistro();
 	    foreach ($cEntradas as $oEntrada) {
-	        $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEntrada, 'escrito');
-	        if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+	        $perm_ver_entrada = $oPermRegistro->permiso_detalle($oEntrada, 'escrito');
+	        if ($perm_ver_entrada < PermRegistro::PERM_VER) {
 	            continue;
 	        }
 	        $a++;
