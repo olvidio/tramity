@@ -461,19 +461,22 @@ switch($Qque) {
             $error_txt .= "<br>";
             $error_txt .= $oExpediente->getErrorTxt();
         }
+        // Si hay escritos anulados, quitar el 'anulado'
         // cambiar también el creador de todos los escritos:
-        if ($Qque == 'exp_a_borrador_cmb_creador' ) {
-            $gesAccion = new GestorAccion();
-            $cAcciones = $gesAccion->getAcciones(['id_expediente' => $Qid_expediente]);
-            foreach ($cAcciones as $oAccion) {
-                $id_escrito = $oAccion->getId_escrito();
-                $oEscrito = new Escrito($id_escrito);
+        $gesAccion = new GestorAccion();
+        $cAcciones = $gesAccion->getAcciones(['id_expediente' => $Qid_expediente]);
+        foreach ($cAcciones as $oAccion) {
+            $id_escrito = $oAccion->getId_escrito();
+            $oEscrito = new Escrito($id_escrito);
+            $oEscrito->DBCarregar();
+            $oEscrito->setAnulado('f');
+            if ($Qque == 'exp_a_borrador_cmb_creador' ) {
                 $oEscrito->setCreador($nuevo_creador);
-                if ($oAccion->DBGuardar() === FALSE) {
-                    $error_txt .= _("No se ha guardado la accion");
-                    $error_txt .= "<br>";
-                    $error_txt .= $oAccion->getErrorTxt();
-                }
+            }
+            if ($oEscrito->DBGuardar() === FALSE) {
+                $error_txt .= _("No se ha guardado el escrito");
+                $error_txt .= "<br>";
+                $error_txt .= $oAccion->getErrorTxt();
             }
         }
 
