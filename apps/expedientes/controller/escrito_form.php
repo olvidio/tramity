@@ -70,6 +70,7 @@ $a_posibles_grupos = $gesGrupo->getArrayGrupos();
 $chk_grupo_dst = '';
 $descripcion = '';
 $comentario = '';
+$anulado_txt = '';
 
 // visibilidad (usar las mismas opciones que en entradas)
 $oEntrada = new Entrada();
@@ -110,6 +111,10 @@ if (!empty($Qid_escrito)) {
     
     $entradilla = $oEscrito->getEntradilla();
     $asunto = $oEscrito->getAsunto();
+    $anulado = $oEscrito->getAnulado();
+    if ($anulado === TRUE) {
+        $anulado_txt = _("ANULADO");
+    }
     $detalle = $oEscrito->getDetalle();
     
     //Ponente;
@@ -319,6 +324,7 @@ $a_campos = [
     'tipo_doc' => $tipo_doc,
     'entradilla' => $entradilla,
     'asunto' => $asunto,
+    'anulado_txt' => $anulado_txt,
     'asunto_readonly' => $asunto_readonly,
     'detalle' => $detalle,
     'detalle_readonly' => $detalle_readonly,

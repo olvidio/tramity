@@ -86,12 +86,7 @@ class Escrito Extends EscritoDB {
         $a_visibilidad = $oEntrada->getArrayVisibilidad();
         $asunto = $a_visibilidad[Entrada::V_RESERVADO];
         if ($perm > 0) {
-            $asunto = '';
-            $anulado = $this->getAnulado();
-            if (!empty($anulado)) {
-                $asunto = _("ANULADO") . "($anulado) ";
-            }
-            $asunto .= $this->getAsuntoDB();
+            $asunto = $this->getAsuntoDB();
         }
         return $asunto;
     }
