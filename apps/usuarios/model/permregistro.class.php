@@ -359,7 +359,7 @@ class PermRegistro {
                 $soy = 'dtor_pral';
                 break;
             default:
-                if (array_search($id_oficina_role, $a_oficinas)) {
+                if (in_array($id_oficina_role, $a_oficinas)) {
                     $soy = empty($soy_dtor)? 'of_imp' : 'dtor_imp';
                 }
                 if ($id_oficina_role == $id_oficina_pral) {
