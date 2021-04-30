@@ -84,6 +84,11 @@ class GestorEntradaDB Extends ClaseGestor {
         $oEntradaDBSet = new Set();
         
         $estado = Entrada::ESTADO_ACEPTADO;
+        
+        // Quitar las vistas
+        $Where_json = "items.oficina='$oficina'";
+        $Where_json .= " AND items.visto = 'true'";
+        
         // Todas las de la oficina
         switch ($tipo_oficina) {
             case 'ponente':
@@ -102,12 +107,10 @@ class GestorEntradaDB Extends ClaseGestor {
                 $oficina = $oCargo->getId_oficina();
                 $sCondi = "encargado = $encargado AND estado = $estado";
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+                $Where_json .= " AND items.cargo='$encargado'";
                 break;
         }
         
-        // Quitar las vistas
-        $Where_json = "items.oficina='$oficina'";
-        $Where_json .= " AND items.visto = 'true'";
         
         if (empty($sCondi)) {
             if (empty($Where_json)) {
