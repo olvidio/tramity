@@ -168,14 +168,14 @@ fnjs_copiar=function() {
         dataType: 'json'
     });
     request.done( function (json) {
+        // close div modal
+        $('#ModalBuscar .close').click();
     	if (json.success != true) {
     		alert (json.mensaje);
         } else {
             fnjs_cancelar();
         }
     });
-	// close div modal
-    $('#ModalBuscar .close').click();
 }
 
 fnjs_crear_pendiente=function() {
@@ -193,14 +193,14 @@ fnjs_crear_pendiente=function() {
         dataType: 'json'
     });
     request.done( function (json) {
+        // close div modal
+        $('#ModalBuscar .close').click();
     	if (json.success != true) {
     		alert (json.mensaje);
         } else {
             fnjs_cancelar();
         }
     });
-	// close div modal
-    $('#ModalBuscar .close').click();
 }
 
 fnjs_buscar_expediente=function() {
@@ -239,6 +239,8 @@ fnjs_adjuntar_antecedente=function(tipo,id_escrito,id_expediente) {
         type: 'post'
     });
     request.done( function (rta) {
+        // close div modal
+        $('#ModalBuscar .close').click();
         rta_txt=rta;
         if (rta_txt==undefined) {
             rta_txt='';
@@ -247,9 +249,6 @@ fnjs_adjuntar_antecedente=function(tipo,id_escrito,id_expediente) {
 		    $('#lista_antecedentes').html(rta);
         }
     });
-	
-	// close div modal
-    $('#ModalBuscar .close').click();
 }
 
 $(function() {

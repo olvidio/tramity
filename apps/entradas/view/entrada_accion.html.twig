@@ -74,6 +74,8 @@ fnjs_accion=function(accion){
         dataType: 'json'
     });
     request.done( function (json) {
+        // close div modal
+        $('#ModalBuscar .close').click();
         if (json.success != true) {
             rta_txt = json.mensaje;
             alert ('error: '+rta_txt);
@@ -81,8 +83,6 @@ fnjs_accion=function(accion){
         	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
         }
     });
-	// close div modal
-    $('#ModalBuscar .close').click();
 }
 
 fnjs_encargar=function() {
@@ -99,14 +99,14 @@ fnjs_encargar=function() {
         dataType: 'json'
     });
     request.done( function (json) {
+        // close div modal
+        $('#ModalBuscar .close').click();
     	if (json.success != true) {
     		alert (json.mensaje);
         } else {
             fnjs_update_div('#main','{{ pagina_cancel|raw }}');
         }
     });
-	// close div modal
-    $('#ModalBuscar .close').click();
 }
 
 fnjs_cancelar=function(){

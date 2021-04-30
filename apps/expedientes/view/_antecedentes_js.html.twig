@@ -57,6 +57,8 @@ fnjs_adjuntar_antecedente=function(tipo,id_escrito,id_expediente) {
         type: 'post'
     });
     request.done( function (rta) {
+        // close div modal
+        $('#ModalBuscar .close').click();
         rta_txt=rta;
         if (rta_txt==undefined) {
             rta_txt='';
@@ -65,9 +67,6 @@ fnjs_adjuntar_antecedente=function(tipo,id_escrito,id_expediente) {
 		    $('#lista_antecedentes').html(rta);
         }
     });
-	
-	// close div modal
-    $('#ModalBuscar .close').click();
 }
 	
 fnjs_antecedente=function(n) {
