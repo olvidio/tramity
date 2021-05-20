@@ -57,7 +57,7 @@ class GestorExpedienteDB Extends core\ClaseGestor {
                 $Where_visto = "";
 		}
 	    $sQuery = "SELECT e.id_expediente, e.asunto, e.ponente, e.json_preparar, items.id, items.visto 
-                    FROM expedientes e, jsonb_to_recordset(e.json_preparar) as items(id smallint,visto smallint) 
+                    FROM expedientes e, jsonb_to_recordset(e.json_preparar) as items(id smallint,visto bool) 
                     WHERE items.id=$id_cargo $Where_visto";
 	    
 		if (($oDbl->query($sQuery)) === FALSE) {
