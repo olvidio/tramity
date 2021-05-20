@@ -559,6 +559,7 @@ switch($Qque) {
             $oJSON = new stdClass;
             $oJSON->id = $id;
             if ($mi_id_cargo == $id){
+                // es un toggle: si esta 1 pongo 0 y al revés.
                 $oJSON->visto = empty($visto)? 1 : 0;
             } else {
                 $oJSON->visto = $visto;

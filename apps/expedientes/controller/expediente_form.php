@@ -126,8 +126,6 @@ if ($Qid_expediente) {
     $aAcciones = $oEscrito->getArrayAccion();
     $aCategorias = $oEscrito->getArrayCategoria();
     
-    $gesGrupos = new GestorGrupo();
-    $a_grupos = $gesGrupos->getArrayGrupos();
     $oProtDestino = new Protocolo();
     $oProtDestino->setNombre('destino');
     foreach ($cAcciones as $oAccion) {
@@ -194,8 +192,6 @@ if ($Qid_expediente) {
     $oArrayDesplFirmas ->setBlanco('t');
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas()');
 
-    $oDesplCargos = new web\Desplegable('oficina_buscar_2',$a_posibles_cargos,'',TRUE);
-    
     // $a_preparar[] = ['id' => $id_cargo, 'text' => $cargo, 'chk' => '', 'visto' => 0];
     $json_preparar = $oExpediente->getJson_preparar();
     foreach ($json_preparar as $oficial) {
@@ -232,7 +228,6 @@ if ($Qid_expediente) {
     $oArrayDesplFirmas ->setBlanco('t');
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas()');
         
-    $oDesplCargos = new web\Desplegable('oficina_buscar_2',$a_posibles_cargos,'',TRUE);
 }
 
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes();
