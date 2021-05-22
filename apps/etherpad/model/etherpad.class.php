@@ -585,6 +585,7 @@ class Etherpad  extends Client {
          * {code: 1, message:"authorID does not exist", data: null}
          */ 
         $lista = $this->listSessionsOfAuthor($authorID);
+        echo "$lista";
         if ($lista->getCode() == 0) {
             $data = $lista->getData();
             foreach ($data as $sessionID => $aData) {
