@@ -494,7 +494,10 @@ class Buscar {
         } else {
             // A quien se envia el escrito (escritos)
             if (!empty($this->dest_id_lugar)) {
-                $cEscritos = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+                $cEscritosJson = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+                // añadir los envios a grupos:
+                $cEscritosGrupos = $gesEscritos->getEscritosByLugarDeGrupo($this->dest_id_lugar,$aWhere,$aOperador);
+                $cEscritos = $cEscritosJson + $cEscritosGrupos; 
             } elseif (!empty($this->local_id_lugar)) {
                 $cEscritos = $gesEscritos->getEscritosByLocal($this->local_id_lugar,$aWhere,$aOperador);
             } else {

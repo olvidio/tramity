@@ -235,7 +235,7 @@ class Escrito Extends EscritoDB {
         return $gesEscritoAdjuntos->getArrayIdAdjuntos($this->iid_escrito);
     }
     
-    public function cabeceraIzquierda() {
+    public function cabeceraIzquierda($id_lugar_de_grupo='') {
         // destinos + ref
         // destinos:
         $a_grupos = [];
@@ -244,12 +244,18 @@ class Escrito Extends EscritoDB {
         
         $a_grupos = $this->getId_grupos();
         if (!empty($a_grupos)) {
-            //(según los grupos seleccionados)
-            foreach ($a_grupos as $id_grupo) {
-                $oGrupo = new Grupo($id_grupo);
-                $descripcion_g = $oGrupo->getDescripcion();
+            if (!empty($id_lugar_de_grupo)) {
+                $oLugar = new Lugar($id_lugar_de_grupo);
                 $destinos_txt .= empty($destinos_txt)? '' : ', ';
-                $destinos_txt .= $descripcion_g;
+                $destinos_txt .= $oLugar->getSigla();
+            } else {
+                //(según los grupos seleccionados)
+                foreach ($a_grupos as $id_grupo) {
+                    $oGrupo = new Grupo($id_grupo);
+                    $descripcion_g = $oGrupo->getDescripcion();
+                    $destinos_txt .= empty($destinos_txt)? '' : ', ';
+                    $destinos_txt .= $descripcion_g;
+                }
             }
         } else {
             $a_json_prot_dst = $this->getJson_prot_destino();

@@ -19,6 +19,11 @@ class Enviar {
      *
      * @var object
      */
+    private $oEscrito;
+    /**
+     *
+     * @var object
+     */
     private $oEtherpad;
     /**
      *
@@ -187,13 +192,13 @@ class Enviar {
     private function getDatosEscrito($id_lugar) {
         // para no tener que repetir todo cuando hay multiples destinos
         if ($this->bLoaded === FALSE) {
-            $oEscrito = new Escrito($this->iid);
+            $this->oEscrito = new Escrito($this->iid);
             // f_salida
-            $this->f_salida = $oEscrito->getF_escrito()->getFromLocal('.');
-            $this->asunto = $oEscrito->getAsunto();
+            $this->f_salida = $this->oEscrito->getF_escrito()->getFromLocal('.');
+            $this->asunto = $this->oEscrito->getAsunto();
             // Attachments
             $a_adjuntos = [];
-            $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
+            $a_id_adjuntos = $this->oEscrito->getArrayIdAdjuntos();
             foreach ($a_id_adjuntos as $item => $adjunto_filename) {
                 $oEscritoAdjunto = new EscritoAdjunto($item);
                 $escrito = $oEscritoAdjunto->getAdjunto();
@@ -202,7 +207,7 @@ class Enviar {
             }
             $this->a_adjuntos = $a_adjuntos;
             // nombre del archivo
-            $json_prot_local = $oEscrito->getJson_prot_local();
+            $json_prot_local = $this->oEscrito->getJson_prot_local();
             if (empty((array)$json_prot_local)) {
                 // Ahora si dejo (30-12-2020)
                 /*
@@ -226,12 +231,11 @@ class Enviar {
             $oEtherpad = new Etherpad();
             $oEtherpad->setId (Etherpad::ID_ESCRITO,$this->iid);
             $this->oEtherpad = $oEtherpad;
-            // cabeceras
-            $this->cabecera_izq = $oEscrito->cabeceraIzquierda();
-            $this->cabecera_dcha = $oEscrito->cabeceraDerecha();
-            
             $this->bLoaded = TRUE;
         }
+        // cabeceras fuera del if loaded, para cambiarlas para cada ctr del grupo
+        $this->cabecera_izq = $this->oEscrito->cabeceraIzquierda($id_lugar);
+        $this->cabecera_dcha = $this->oEscrito->cabeceraDerecha();
         
         if (empty($id_lugar)) {
             $a_header = [ 'left' => $this->cabecera_izq,
@@ -336,7 +340,6 @@ class Enviar {
                 $err_mail .= empty($err_mail)? '' : '<br>';
                 $err_mail .= $oLugar->getNombre() ."($email)";
             }
-        
         }
         if (empty($aDestinos)) {
             $err_mail = _("No hay destinos para este escrito").':<br>'.$this->filename;
