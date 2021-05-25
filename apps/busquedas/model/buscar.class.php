@@ -497,7 +497,7 @@ class Buscar {
                 $cEscritosJson = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
                 // añadir los envios a grupos:
                 $cEscritosGrupos = $gesEscritos->getEscritosByLugarDeGrupo($this->dest_id_lugar,$aWhere,$aOperador);
-                $cEscritos = $cEscritosJson + $cEscritosGrupos; 
+                $cEscritos = array_merge($cEscritosJson, $cEscritosGrupos); 
             } elseif (!empty($this->local_id_lugar)) {
                 $cEscritos = $gesEscritos->getEscritosByLocal($this->local_id_lugar,$aWhere,$aOperador);
             } else {
