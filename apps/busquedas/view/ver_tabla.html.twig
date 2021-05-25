@@ -167,6 +167,8 @@ fnjs_guardar_comentario=function(){
                             }
                         }
                     });
+                } else {
+                    fnjs_guardar_comentario2(que_tipo,id_reg,comentario,elim_pendientes);
                 }
             }
         });
@@ -266,7 +268,7 @@ fnjs_anular_entrada=function(formulario){
             if (json.success != true) {
                 alert (json.mensaje);
             } else {
-                $('#modal_titulo').html('{{ "Anular (si no hya texto está activo)"|trans }}');
+                $('#modal_titulo').html('{{ "Anular (si no hay texto está activo)"|trans }}');
                 $('#modal_id_reg').val(id_reg);	
                 $('#modal_tipo').val('anular');	
                 $('#comentario').val(json.detalle);

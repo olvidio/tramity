@@ -25,7 +25,7 @@ $a_condicion = []; // para poner los parámetros de la búsqueda y poder actuali
 $a_condicion['opcion'] = $Qopcion;
 switch ($Qopcion) {
     case 71: // buscar en referencias (mismo formulario que 7):
-        $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lugar');
+        $Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
         $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
         $Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 
@@ -54,7 +54,7 @@ switch ($Qopcion) {
         
         break;
     case 7: // un protocolo concreto:
-        $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lugar');
+        $Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
         $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
         $Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 

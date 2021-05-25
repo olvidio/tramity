@@ -81,10 +81,10 @@ $id_cr = $gesLugares->getId_cr();
 
 
 $oDesplLugar = new Desplegable();
-$oDesplLugar->setNombre('lugar');
+$oDesplLugar->setNombre('id_lugar');
 $oDesplLugar->setBlanco(TRUE);
 $oDesplLugar->setOpciones($a_lugares);
-$oDesplLugar->setAction("fnjs_aviso_IESE('#lugar')");
+$oDesplLugar->setAction("fnjs_aviso_IESE('#id_lugar')");
 $oDesplLugar->setOpcion_sel($Qid_lugar);
 
 //select id='lista_lugar' name='lista_lugar' class=contenido onchange="fnjs_activar_lugar(2)">
