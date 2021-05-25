@@ -237,11 +237,12 @@ class Enviar {
         $this->cabecera_izq = $this->oEscrito->cabeceraIzquierda($id_lugar);
         $this->cabecera_dcha = $this->oEscrito->cabeceraDerecha();
         
-        if (empty($id_lugar)) {
+        //if (empty($id_lugar)) {
             $a_header = [ 'left' => $this->cabecera_izq,
                 'center' => '',
                 'right' => $this->cabecera_dcha,
             ];
+            /*
         } else {
             $oLugar = new Lugar($id_lugar);
             $cabecera_izq = $oLugar->getSigla();
@@ -249,8 +250,8 @@ class Enviar {
                 'center' => '',
                 'right' => $this->cabecera_dcha,
             ];
-            
         }
+        */
         
         // formato pdf:
         $this->filename_ext = $this->filename.'.pdf';
