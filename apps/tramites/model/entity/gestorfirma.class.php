@@ -245,11 +245,12 @@ class GestorFirma Extends core\ClaseGestor {
 	                $a_recorrido[] = $a_rec;
 	            }
 	            if ($tipo == Firma::TIPO_ACLARACION) {
-	                $voto = _("aclaración");
+	                $voto = '<span class="font-weight-bold">'._("aclaración").'</span>';
 	                $comentarios .= empty($comentarios)? '' : "<br>";
 	                $comentarios .= "$cargo($voto): $observ";
 	                if (!empty($observ_ponente)) {
-	                    $comentarios .= " rta: $observ_ponente";
+	                    $comentarios .= ' '.'<span class="font-weight-bold">'._("respuesta").": </span>";
+	                    $comentarios .= " $observ_ponente";
 	                }
 	            }
 	        } else {
