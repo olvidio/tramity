@@ -154,8 +154,8 @@ switch($Qque) {
         
         $Qestado = Expediente::ESTADO_BORRADOR;
         $Qponente = ConfigGlobal::role_id_cargo();
-        $Qtramite = 1; // Qualquiera, no puede ser null.
-        $Qprioridad = 1; // Qualquiera, no puede ser null.
+        $Qtramite = 2; // Ordinario, no puede ser null.
+        $Qprioridad = Expediente::PRIORIDAD_NORMAL; // no puede ser null.
 
         $oExpediente = new Expediente();
         $oExpediente->setPonente($Qponente);
