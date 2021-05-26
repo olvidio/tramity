@@ -18,23 +18,12 @@ require_once ("apps/core/global_object.inc");
  * En concreto hay un problema con bootstrap.js y popper.js
  */
 $peticion_ajax = 0;
-$server_software = strtolower($_SERVER['SERVER_SOFTWARE']);
-if (strpos($server_software, 'apache') !== FALSE ) {
-    if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
-    {
-        // handle request as AJAX
-        $peticion_ajax = 1;
-    }
+//$server_software = strtolower($_SERVER['SERVER_SOFTWARE']);
+if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+{
+    // handle request as AJAX
+    $peticion_ajax = 1;
 }
-if (strpos($server_software, 'nginx') !== FALSE ) {
-    echo "nginx";
-    if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
-    {
-        // handle request as AJAX
-        $peticion_ajax = 1;
-    }
-}
-    echo "ajax: $peticion_ajax";
 
 $username = $_SESSION['session_auth']['username'];
 $oUsuario = new Usuario(ConfigGlobal::mi_id_usuario());
