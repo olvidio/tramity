@@ -14,7 +14,7 @@ $(document).ready(function() {
 $(document).ajaxStart(function() {$('#cargando').show(); });
 $(document).ajaxStop(function() {$('#cargando').hide(); });
 
-
+    
 /* Hay que ponerlo aqui, para asegurar que haya terminado de cargar todos los scripts. */
 $(document).ready(function(){
 	{% if mi_idioma %}
@@ -23,4 +23,34 @@ $(document).ready(function(){
 		jQuery.datetimepicker.setLocale('en');
 	{% endif %}
 });
+
+jQuery.event.special.touchstart = {
+    setup: function( _, ns, handle ){
+      if ( ns.includes("noPreventDefault") ) {
+        this.addEventListener("touchstart", handle, { passive: false });
+      } else {
+        this.addEventListener("touchstart", handle, { passive: true });
+      }
+    }
+};
+jQuery.event.special.touchmove = {
+    setup: function( _, ns, handle ){
+      if ( ns.includes("noPreventDefault") ) {
+        this.addEventListener("touchmove", handle, { passive: false });
+      } else {
+        this.addEventListener("touchmove", handle, { passive: true });
+      }
+    }
+};
+jQuery.event.special.mousewheel = {
+  setup: function( _, ns, handle ){
+    this.addEventListener("mousewheel", handle, { passive: true });
+  }
+};
+
+/*
+    document.addEventListener('touchstart', handle, {passive: true});
+    document.addEventListener('touchmove', handle, {passive: true});
+    document.addEventListener('wheel', handle, {passive: true});
+    */
 </script>

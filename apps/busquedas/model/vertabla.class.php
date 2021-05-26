@@ -156,6 +156,14 @@ class VerTabla {
         $this->sCondicion = $condicion;
     }
 
+    /**
+     * @param string $sFiltro
+     */
+    public function setFiltro($filtro)
+    {
+        $this->sFiltro = $filtro;
+    }
+
     
     public function mostrarTabla() {
         $aCollection = $this->aCollection;
@@ -277,6 +285,7 @@ class VerTabla {
             'condicion' => $this->sCondicion,
             //'oHash' => $oHash,
             'server' => $server,
+            'filtro' => $this->sFiltro,
             ];
         
         $oView = new ViewTwig('busquedas/controller');

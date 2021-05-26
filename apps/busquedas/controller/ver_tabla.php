@@ -20,6 +20,7 @@ $Qmas = (integer) \filter_input(INPUT_POST, 'mas');
 $gesLugares = new GestorLugar();
 $id_sigla_local = $gesLugares->getId_sigla_local();
 
+$filtro = 'en_buscar';
 $Qmas = '';
 $a_condicion = []; // para poner los parámetros de la búsqueda y poder actualizar la página.
 $a_condicion['opcion'] = $Qopcion;
@@ -49,6 +50,7 @@ switch ($Qopcion) {
             $oTabla->setKey($key);
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
+            $oTabla->setFiltro($filtro);
             echo $oTabla->mostrarTabla();
         }
         
@@ -77,6 +79,7 @@ switch ($Qopcion) {
             $oTabla->setKey($key);
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
+            $oTabla->setFiltro($filtro);
             echo $oTabla->mostrarTabla();
         }
         $btn_mas = "<button id=\"btn_mas\" type=\"button\" class=\"btn btn-primary\" onClick=\"fnjs_buscar_mas();\" >";
@@ -103,6 +106,7 @@ switch ($Qopcion) {
             $oTabla->setKey($key);
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
+            $oTabla->setFiltro($filtro);
             echo $oTabla->mostrarTabla();
         }
         break;
@@ -133,6 +137,7 @@ switch ($Qopcion) {
             $oTabla->setKey($key);
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
+            $oTabla->setFiltro($filtro);
             echo $oTabla->mostrarTabla();
         }
         break;
@@ -188,6 +193,7 @@ switch ($Qopcion) {
             $oTabla->setKey($key);
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
+            $oTabla->setFiltro($filtro);
             echo $oTabla->mostrarTabla();
         }
         break;
@@ -222,6 +228,7 @@ switch ($Qopcion) {
                     $oTabla->setKey($key);
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
+                    $oTabla->setFiltro($filtro);
                     echo $oTabla->mostrarTabla();
                 }
                 break;
@@ -244,6 +251,7 @@ switch ($Qopcion) {
                     $oTabla->setKey($key);
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
+                    $oTabla->setFiltro($filtro);
                     echo $oTabla->mostrarTabla();
                 }
                 break;
@@ -265,6 +273,7 @@ switch ($Qopcion) {
                     $oTabla->setKey($key);
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
+                    $oTabla->setFiltro($filtro);
                     echo $oTabla->mostrarTabla();
                 }
                 break;
@@ -287,6 +296,7 @@ switch ($Qopcion) {
                     $oTabla->setKey($key);
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
+                    $oTabla->setFiltro($filtro);
                     echo $oTabla->mostrarTabla();
                 }
                 break;
@@ -321,6 +331,7 @@ switch ($Qopcion) {
             $oTabla->setKey($key);
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
+            $oTabla->setFiltro($filtro);
             echo $oTabla->mostrarTabla();
         }
         break;

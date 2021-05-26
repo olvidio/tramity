@@ -48,7 +48,7 @@
 <tr><th colspan=5 class=titulo_inv>{{ "opción 2: Buscar por el asunto o detalle"|trans }}
     </th></tr>
     <tr><td class=etiqueta>{{ "Escribir una palabra clave"|trans }}:</td>
-    <td colspan=3><input type="Text" id="asunto" name="asunto" size="50" value="{{ asunto }}"></td>
+    <td colspan=3><input type="Text" id="asunto_2" name="asunto" size="50" value="{{ asunto }}"></td>
     </tr>
     <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
     <td> {{ "entre el"|trans }} 
@@ -56,7 +56,7 @@
     <td> {{ "y el"|trans }} 
     	<input class="form-control" type="Text" id="frm2_f_max" name="f_max" size="12" value="{{ f_max }}">
     <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
-    {{ oDesplOficinas.desplegable|raw }}
+    {{ oDesplOficinas2.desplegable|raw }}
     </td></tr>
 <tr><td colspan=5 style="text-align:right;"><input id="b_buscar_2" name="b_buscar" TYPE="button" VALUE="{{ "buscar"|trans }}" onclick="fnjs_buscar('#frm_buscar_2')" ></td></tr>
     </table>
@@ -81,7 +81,7 @@
         <td> {{ "y el"|trans }} 
           <input class="fecha" type="Text" id="frm3_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('frm3_f_max')" value="{{ f_max }}">
         <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
-        {{ oDesplOficinas.desplegable|raw }}
+        {{ oDesplOficinas3.desplegable|raw }}
         </td></tr>
     <tr><td colspan=5 style="text-align:right;"><input id="b_buscar_3" name="b_buscar" TYPE="button" VALUE="{{ "buscar"|trans }}" onclick="fnjs_buscar('#frm_buscar_3')" ></td></tr>
     </table>
@@ -108,7 +108,7 @@
           <input class="fecha" type="Text" id="frm4_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_max')" value="{{ f_max }}">
         <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td>
         <td>
-          {{ oDesplOficinas.desplegable|raw }}
+          {{ oDesplOficinas4.desplegable|raw }}
         </td></tr>
         <tr><td colspan=5 style="text-align:right;"><input id="b_buscar_4" name="b_buscar" TYPE="button" VALUE="{{ "buscar"|trans }}" onclick="fnjs_buscar('#frm_buscar_4')" ></td></tr>
     </table>
@@ -120,7 +120,7 @@
     <table  class="table-warning" border=1>
     <tr><th colspan=5 class=titulo_inv>{{ "opción 6: Listar varios modelos jurídicos por fechas"|trans }}</th></tr>
     <tr><td class=etiqueta>{{ "Escribir una palabra clave"|trans }}:</td>
-    <td colspan=3><input type="Text" id="asunto" name="asunto" size="50" value="{{ asunto }}"></td>
+    <td colspan=3><input type="Text" id="asunto_6" name="asunto" size="50" value="{{ asunto }}"></td>
     </tr>
     <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
     <td> {{ "entre el"|trans }} 
@@ -128,7 +128,7 @@
     <td> {{ "y el"|trans }} 
     	<input class="form-control" type="Text" id="frm6_f_max" name="f_max" size="12" value="{{ f_max }}">
     <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
-    {{ oDesplOficinas.desplegable|raw }}
+    {{ oDesplOficinas6.desplegable|raw }}
     </td></tr>
     <tr><td colspan=5 style="text-align:right;"><input id="b_buscar_6" name="b_buscar" TYPE="button" VALUE="{{ "buscar"|trans }}" onclick="fnjs_buscar('#frm_buscar_6')" ></td></tr>
     </table>
@@ -327,7 +327,7 @@ fnjs_buscar=function(formulario){
     var form_name=$(formulario).attr('name');
     var opcion=form_name.substr(-1);
     if (opcion==2) {
-        if (!$('#asunto').val()) {
+        if (!$('#asunto_2').val()) {
             alert ("{{ "Tiene que escribir una palabra para buscar en el asunto"|trans|raw }}");
             return;
         }

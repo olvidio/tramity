@@ -38,7 +38,7 @@
 
 <h2 class=subtitulo>{{ titulo }}</h2>
 <form id='{{ key }}' name='{{ key }}' action='' method='post'>
-    <input type='hidden' name='filtro' value='buscar'>
+    <input type='hidden' id='filtro' name='filtro' value='{{ filtro }}'>
     <input type='hidden' name='condicion' value='{{ condicion|raw }}'>
     <input type='hidden' name='que' value=''>
     {{ oTabla.mostrar_tabla|raw }}
@@ -71,6 +71,9 @@ fnjs_buscar_accion_entrada=function(formulario){
                 id_reg=array_dir[0];
             }
         });
+		var filtro = $('#filtro').val();
+        debugger;
+        
         var url_doc = 'apps/entradas/controller/entrada_ajax.php';
         var param_json = { que: 'perm_ver', id_entrada: id_reg };
         request=$.ajax({
@@ -84,7 +87,7 @@ fnjs_buscar_accion_entrada=function(formulario){
                 alert (json.mensaje);
             } else {
                 var url_doc = 'apps/expedientes/controller/expediente_accion.php';
-                var param_json = { filtro: 'en_buscar', id_entrada: id_reg, condicion: condicion };
+                var param_json = { filtro: filtro, id_entrada: id_reg, condicion: condicion };
                 request=$.ajax({
                     data: param_json,
                     url: url_doc,

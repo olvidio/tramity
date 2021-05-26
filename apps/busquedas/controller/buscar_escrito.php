@@ -113,11 +113,33 @@ $oDesplOrigen2->setOpcion_sel($Qorigen_id_lugar);
     
 $gesOficinas = new GestorOficina();
 $a_oficinas = $gesOficinas->getArrayOficinas();
-$oDesplOficinas = new Desplegable();
-$oDesplOficinas->setNombre('oficina');
-$oDesplOficinas->setBlanco(TRUE);
-$oDesplOficinas->setOpciones($a_oficinas);
-$oDesplOficinas->setOpcion_sel($Qoficina);
+$oDesplOficinas2 = new Desplegable();
+$oDesplOficinas2->setNombre('oficina');
+$oDesplOficinas2->setId('oficina_2');
+$oDesplOficinas2->setBlanco(TRUE);
+$oDesplOficinas2->setOpciones($a_oficinas);
+$oDesplOficinas2->setOpcion_sel($Qoficina);
+
+$oDesplOficinas3 = new Desplegable();
+$oDesplOficinas3->setNombre('oficina');
+$oDesplOficinas3->setId('oficina_3');
+$oDesplOficinas3->setBlanco(TRUE);
+$oDesplOficinas3->setOpciones($a_oficinas);
+$oDesplOficinas3->setOpcion_sel($Qoficina);
+
+$oDesplOficinas4 = new Desplegable();
+$oDesplOficinas4->setNombre('oficina');
+$oDesplOficinas4->setId('oficina_4');
+$oDesplOficinas4->setBlanco(TRUE);
+$oDesplOficinas4->setOpciones($a_oficinas);
+$oDesplOficinas4->setOpcion_sel($Qoficina);
+
+$oDesplOficinas6 = new Desplegable();
+$oDesplOficinas6->setNombre('oficina');
+$oDesplOficinas6->setId('oficina_6');
+$oDesplOficinas6->setBlanco(TRUE);
+$oDesplOficinas6->setOpciones($a_oficinas);
+$oDesplOficinas6->setOpcion_sel($Qoficina);
 
 //<select id="dest_id_lugar_2" name="dest_id_lugar" class=contenido onchange="fnjs_aviso_IESE('#dest_id_lugar_2')">
 $oDesplDestino2 = new Desplegable();
@@ -156,9 +178,12 @@ $a_campos = [
     'oDesplLugar4' => $oDesplLugar4,
     'oDesplOrigen' => $oDesplOrigen,
     'oDesplOrigen2' => $oDesplOrigen2,
-    'oDesplOficinas' => $oDesplOficinas,
+    'oDesplOficinas2' => $oDesplOficinas2,
     'oDesplDestino2' => $oDesplDestino2,
     'oDesplAntiguedad' => $oDesplAntiguedad,
+    'oDesplOficinas3' => $oDesplOficinas3,
+    'oDesplOficinas4' => $oDesplOficinas4,
+    'oDesplOficinas6' => $oDesplOficinas6,
     'id_dl' => $id_siga_local,
     'dele' => $sigla,
     'id_cr' => $id_cr,

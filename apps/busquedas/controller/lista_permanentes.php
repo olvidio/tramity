@@ -30,6 +30,7 @@ if (empty($Qtipo_lista)) {
  $Qprot_num = '';
  $Qprot_any = '';
  $Qasunto = '';
+ $filtro = 'permanentes_cr';
     
 $titulo = '';
 $lista = '';
@@ -55,6 +56,7 @@ switch ($Qtipo_lista) {
             $oTabla = new VerTabla();
             $oTabla->setKey($key);
             $oTabla->setCollection($cCollection);
+            $oTabla->setFiltro($filtro);
         }
         break;
     case 'oficina':
@@ -73,6 +75,7 @@ switch ($Qtipo_lista) {
             $oTabla = new VerTabla();
             $oTabla->setKey($key);
             $oTabla->setCollection($cCollection);
+            $oTabla->setFiltro($filtro);
         }
         break;
     case 'proto': // un protocolo concreto:
@@ -112,6 +115,7 @@ switch ($Qtipo_lista) {
                 $oTabla = new VerTabla();
                 $oTabla->setKey($key);
                 $oTabla->setCollection($cCollection);
+                $oTabla->setFiltro($filtro);
             }
         }
         break;

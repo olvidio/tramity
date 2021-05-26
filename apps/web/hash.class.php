@@ -35,6 +35,10 @@ class Hash {
 	 */
 	private $aCamposHidden;
 	/**
+	 * para poder tener un id distinto para un mismo nombre de campo hidden
+	 */
+	private $prefix;
+	/**
 	 * camposNo de Seguridad
 	 * Lista de campos separados por '!'.
 	 * campos a no tener en quenta para el hash.
@@ -683,6 +687,7 @@ class Hash {
 	 * @return string html
 	 */
 	private function getCamposHiddenHtml() {
+	    $prefix = empty($this->prefix)? '' : $this->prefix.'_';
 		$aCamposHidden = $this->aCamposHidden;
 		$sCamposHiddenHtml = '';
 		foreach ($aCamposHidden as $campo=>$valor) {
@@ -690,12 +695,12 @@ class Hash {
 		        $i = 0;
 		        foreach ($valor as $val) {
 		            $nom = $campo."[$i]";
-                    $sCamposHiddenHtml .= "<input type=\"hidden\" id=\"$nom\" name=\"$nom\" value=\"$val\">\n";
+                    $sCamposHiddenHtml .= "<input type=\"hidden\" id=\"$prefix$nom\" name=\"$nom\" value=\"$val\">\n";
                     $i++;
 		        }
 		        
 		    } else {
-			    $sCamposHiddenHtml .= "<input type=\"hidden\" id=\"$campo\" name=\"$campo\" value=\"$valor\">\n";
+			    $sCamposHiddenHtml .= "<input type=\"hidden\" id=\"$prefix$campo\" name=\"$campo\" value=\"$valor\">\n";
 		    }
 		}
 		return $sCamposHiddenHtml;
@@ -940,5 +945,22 @@ class Hash {
 		}
 		return $aParam;
 	}
+	
+	
+    /**
+     * @return mixed
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
 
+    /**
+     * @param mixed $prefix
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+    }
+	
 }

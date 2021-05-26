@@ -29,6 +29,7 @@ $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 
 // Añado la opcion de poder crear un expediente desde entradas
 switch ($Qfiltro) {
+    case 'permanentes_cr':
     case 'en_buscar':
         $oEntrada = new Entrada($Qid_entrada);
         $asunto = $oEntrada->getAsunto();
@@ -39,7 +40,14 @@ switch ($Qfiltro) {
         $str_condicion = (string) \filter_input(INPUT_POST, 'condicion');
         parse_str($str_condicion, $a_condicion);
         $a_condicion['filtro'] = $Qfiltro;
-        $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($a_condicion));
+        switch ($Qfiltro) {
+            case 'en_buscar':
+                $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($a_condicion));
+                break;
+            case 'permanentes_cr':
+                $pagina_cancel = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?'.http_build_query($a_condicion));
+                break;
+        }
         break;
     case 'en_encargado':
         $Qencargado = (integer) \filter_input(INPUT_POST, 'encargado');

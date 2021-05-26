@@ -192,6 +192,7 @@ class EntradaLista {
                     $oTabla->setKey($key);
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
+                    $oTabla->setFiltro($this->filtro);
                     echo $oTabla->mostrarTabla();
                 }
                 exit();
