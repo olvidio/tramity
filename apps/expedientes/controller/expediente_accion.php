@@ -104,6 +104,8 @@ $txt_plazo = '';
 $f_plazo = '';
 $hoy_iso = '';
 switch($Qfiltro) {
+    case 'escritos_cr':
+    case 'permanentes_cr':
     case 'en_buscar':
     case 'en_encargado':
         //if ($estado == Expediente::ESTADO_BORRADOR) {
