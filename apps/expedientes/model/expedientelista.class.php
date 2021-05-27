@@ -294,11 +294,7 @@ class ExpedienteLista {
                 $this->a_exp_reunion_falta_firma = $gesFirmas->faltaFirmarReunion();
                 
                 //que tengan de mi firma, independiente de firmado o no
-                $aWhereFirma = [
-                            'id_cargo' => ConfigGlobal::role_id_cargo(),
-                            'tipo' => Firma::TIPO_VOTO,
-                            ];
-                $cFirmas = $gesFirmas->getFirmas($aWhereFirma);
+                $cFirmas = $gesFirmas->getFirmasReunion(ConfigGlobal::role_id_cargo());
                 $a_expedientes = [];
                 foreach ($cFirmas as $oFirma) {
                     $id_expediente = $oFirma->getId_expediente();
@@ -732,6 +728,7 @@ class ExpedienteLista {
         $this->setCondicion();
         if (!empty($this->aWhere)) {
             $gesExpedientes = new GestorExpediente();
+            $this->aWhere['_ordre'] = 'id_expediente';
             $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere,$this->aOperador);
             $num = count($cExpedientes);
         } else {

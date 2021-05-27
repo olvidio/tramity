@@ -85,6 +85,46 @@ class GestorFirma Extends core\ClaseGestor {
 	    }
 	    return $a_exp_faltan_firmas;
 	}
+	
+	/**
+	 * devuelve un array con el id_expediente de los que tengan la firma de id_cargo
+	 * independiente de firmado o no. Pero de los pendientes reunion
+	 * 
+	 * @return array $a_exp_faltan_firmas
+	 */
+	public function getFirmasReunion($id_cargo) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+		$oFirmaSet = new core\Set();
+	    
+	    $estado = Expediente::ESTADO_FIJAR_REUNION;
+	    $cargo_tipo = Cargo::CARGO_TODOS_DIR;
+	    $tipo_voto = Firma::TIPO_VOTO;
+	    $valor_ok = Firma::V_OK;
+	    $valor_no = Firma::V_NO;
+	    
+	    $sQuery = "SELECT DISTINCT f.id_expediente
+                    FROM $nom_tabla f JOIN expedientes e USING (id_expediente)
+                    WHERE e.estado = $estado AND e.f_reunion IS NOT NULL
+                        AND f.id_cargo = $id_cargo
+                        AND f.cargo_tipo = $cargo_tipo
+                        AND f.tipo = $tipo_voto
+                        AND (f.valor IS NULL OR (f.valor != $valor_ok AND f.valor != $valor_no))
+                    ";
+	    if (($oDblSt = $oDbl->query($sQuery)) === FALSE) {
+	        $sClauError = 'GestorFirma.query';
+	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	        return FALSE;
+	    }
+		foreach ($oDblSt as $aDades) {
+			$a_pkey = array('id_item' => $aDades['id_item']);
+			$oFirma = new Firma($a_pkey);
+			$oFirma->setAllAtributes($aDades);
+			$oFirmaSet->add($oFirma);
+		}
+		return $oFirmaSet->getTot();
+	}
+	
 	/**
 	 * devuelve un array con el id_expediente de los que faltan firmas para la reunión.
 	 * 
