@@ -42,12 +42,14 @@ switch ($Qfiltro) {
         parse_str($str_condicion, $a_condicion);
         $a_condicion['filtro'] = $Qfiltro;
         switch ($Qfiltro) {
-            case 'escritos_cr':
             case 'en_buscar':
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($a_condicion));
                 break;
             case 'permanentes_cr':
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?'.http_build_query($a_condicion));
+                break;
+            case 'escritos_cr':
+                $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($a_condicion));
                 break;
         }
         break;
