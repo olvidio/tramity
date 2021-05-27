@@ -186,6 +186,8 @@ fnjs_crear_pendiente=function() {
 	
     var url_ajax = 'apps/expedientes/controller/expediente_update.php';
     var param_json = { que: que, id_entrada: id_entrada, id_cargo: id_cargo, f_plazo: f_plazo };
+
+    debugger;
     request=$.ajax({
         data: param_json,
         url: url_ajax,
@@ -193,6 +195,7 @@ fnjs_crear_pendiente=function() {
         dataType: 'json'
     });
     request.done( function (json) {
+        debugger;
         // close div modal
         $('#ModalBuscar .close').click();
     	if (json.success != true) {
