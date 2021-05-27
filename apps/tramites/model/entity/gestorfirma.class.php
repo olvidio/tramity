@@ -100,7 +100,7 @@ class GestorFirma Extends core\ClaseGestor {
 	    $estado = Expediente::ESTADO_FIJAR_REUNION;
 	    $tipo_voto = Firma::TIPO_VOTO;
 	    
-	    $sQuery = "SELECT DISTINCT f.id_expediente
+	    $sQuery = "SELECT DISTINCT f.*
                     FROM $nom_tabla f JOIN expedientes e USING (id_expediente)
                     WHERE e.estado = $estado AND e.f_reunion IS NOT NULL
                         AND f.id_cargo = $id_cargo
