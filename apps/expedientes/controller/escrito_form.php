@@ -28,7 +28,7 @@ $Qaccion = (integer) \filter_input(INPUT_POST, 'accion');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
-if (empty($Qid_escrito) && $Qfiltro == 'buscar') {
+if (empty($Qid_escrito) && $Qfiltro == 'en_buscar') {
     $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
     $Qid_escrito = $Qa_sel[0];
@@ -269,7 +269,7 @@ switch ($Qfiltro) {
         $devolver = TRUE;
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/escrito_lista.php?'.http_build_query($a_cosas));
         break;
-    case 'buscar':
+    case 'en_buscar':
         $a_condicion = [];
         $str_condicion = (string) \filter_input(INPUT_POST, 'condicion');
         parse_str($str_condicion, $a_condicion);

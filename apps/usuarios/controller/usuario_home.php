@@ -209,7 +209,7 @@ $filtro = 'en_encargado';
 $a_pills[$num_orden] = $pill;
 
 // buscar = 20;
-$filtro = 'buscar';
+$filtro = 'en_buscar';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($aQuery));

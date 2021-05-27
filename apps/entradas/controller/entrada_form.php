@@ -284,7 +284,7 @@ switch ($Qfiltro) {
 
 $url_update = 'apps/entradas/controller/entrada_update.php';
 $pagina_nueva = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $Qfiltro]));
-if ($Qfiltro == 'buscar') {
+if ($Qfiltro == 'en_buscar') {
     $a_condicion = [];
     $str_condicion = (string) \filter_input(INPUT_POST, 'condicion');
     parse_str($str_condicion, $a_condicion);

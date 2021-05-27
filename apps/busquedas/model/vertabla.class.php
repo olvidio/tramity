@@ -408,6 +408,7 @@ class VerTabla {
             'condicion' => $this->sCondicion,
             //'oHash' => $oHash,
             'server' => $server,
+            'filtro' => $this->sFiltro,
             ];
         
         $oView = new ViewTwig('busquedas/controller');

@@ -185,7 +185,7 @@ $filtro = 'bypass';
 $a_pills[$num_orden] = $pill;
 
 // buscar = 13;
-$filtro = 'buscar';
+$filtro = 'en_buscar';
 $active = ($filtro == $Qfiltro)? 'active' : '';
 $aQuery = [ 'filtro' => $filtro ];
 $pag_lst = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($aQuery));
