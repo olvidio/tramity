@@ -26,7 +26,7 @@ require_once ("apps/core/global_object.inc");
 $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
-if ($Qfiltro == 'buscar' && empty($Qid_entrada)) {
+if ($Qfiltro == 'en_buscar' && empty($Qid_entrada)) {
     $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
     $Qid_entrada = $Qa_sel[0];
