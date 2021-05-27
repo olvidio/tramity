@@ -75,7 +75,7 @@ fnjs_accion=function(accion){
     });
     request.done( function (json) {
         // close div modal
-        $('#ModalBuscar .close').click();
+        $('#ModalBuscar').modal('hide');
         if (json.success != true) {
             rta_txt = json.mensaje;
             alert ('error: '+rta_txt);
@@ -100,7 +100,7 @@ fnjs_encargar=function() {
     });
     request.done( function (json) {
         // close div modal
-        $('#ModalBuscar .close').click();
+        $('#ModalBuscar').modal('hide');
     	if (json.success != true) {
     		alert (json.mensaje);
         } else {
@@ -123,4 +123,9 @@ fnjs_cancelar=function(){
     }
 	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 }
+
+$(".modal").on('hide.bs.modal', function (e) {
+    $(document.body).removeClass('modal-open');
+    $('.modal-backdrop').remove();
+});
 </script>
