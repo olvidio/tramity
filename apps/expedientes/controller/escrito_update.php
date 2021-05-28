@@ -60,10 +60,56 @@ $Qa_prot_any_referencias = (array)  \filter_input(INPUT_POST, 'prot_any_referenc
 $Qa_prot_mas_referencias = (array)  \filter_input(INPUT_POST, 'prot_mas_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 switch($Qque) {
+    case 'modificar_detalle':
+        $error_txt = '';
+        $oEscrito = new Escrito($Qid_escrito);
+        $Qdetalle = (string) \filter_input(INPUT_POST, 'text');
+        $oEscrito->DBCarregar();
+        $oEscrito->setDetalle($Qdetalle);
+        if ($oEscrito->DBGuardar() === FALSE) {
+            $error_txt = $oEscrito->getErrorTxt();
+        }
+        if (empty($error_txt)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
+    case 'get_detalle':
+        $oEscrito = new Escrito($Qid_escrito);
+        $oPermiso = new PermRegistro();
+        $perm = $oPermiso->permiso_detalle($oEscrito,'detalle');
+        if ($perm < PermRegistro::PERM_MODIFICAR) {
+            $mensaje = _("No tiene permiso para modificar el detalle");
+        } else {
+            $detalle = $oEscrito->getDetalle();
+            $mensaje = '';
+        }
+        
+        if (empty($mensaje)) {
+            $jsondata['success'] = true;
+            $jsondata['detalle'] = $detalle;
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $mensaje;
+        }
+        
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'perm_ver':
         $oEscrito = new Escrito($Qid_escrito);
         $oPermiso = new PermRegistro();
-        $perm = $oPermiso->permiso_detalle($oEscrito,'asunto');
+        $perm = $oPermiso->permiso_detalle($oEscrito,'escrito');
         if ($perm < PermRegistro::PERM_VER) {
             $mensaje = _("No tiene permiso ver el escrito");
         } else {
