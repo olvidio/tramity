@@ -359,12 +359,19 @@ switch($Qque) {
         if ($Qfiltro == 'en_asignado' || $Qfiltro == 'en_buscar') {
             $estado = Entrada::ESTADO_ACEPTADO;
         }
+        
+        if ($Qfiltro == 'en_buscar') { // NO tocar el estado
+            $estado = $oEntrada->getEstado();
+            $id_entrada = $Qid_entrada;
+        }
         $oEntrada->setEstado($estado);
        
         $oEntrada->setBypass($Qbypass);
         if ($oEntrada->DBGuardar() === FALSE ) {
             $error_txt .= $oEntrada->getErrorTxt();
-        } else {
+        }
+        
+        if (empty($error_txt) && $Qfiltro != 'en_buscar') {
             $id_entrada = $oEntrada->getId_entrada();
             //////// Generar un Pendiente (hay que esperar e tener el id_entrada //////
             // Solo se genera en cuando el scdl lo acepta (filtro=en_asignado). Si no se mira esta condición
