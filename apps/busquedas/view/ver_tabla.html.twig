@@ -184,6 +184,8 @@ fnjs_guardar_comentario=function(){
 		que_tipo = 'modificar_detalle';
         fnjs_guardar_comentario_escrito(que_tipo,id_reg,comentario);
 	}
+    // close div modal
+    $('#ModalDetalle').modal('hide');
 }
 
 fnjs_guardar_comentario2=function(que_tipo,id_reg,comentario,elim_pendientes) {
@@ -573,4 +575,10 @@ fnjs_actualizar=function(){
     });
 
 }
+
+
+$(".modal").on('hide.bs.modal', function (e) {
+    $(document.body).removeClass('modal-open');
+    $('.modal-backdrop').remove();
+});
 </script>
