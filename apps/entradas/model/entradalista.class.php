@@ -327,8 +327,8 @@ class EntradaLista {
                 // mirar si tienen escrito
                 $row['f_escrito'] = $oEntrada->getF_documento()->getFromLocal();
                 $row['visibilidad'] = $visibilidad_txt;
-                
-                $f_entrada_iso = $oEntrada->getF_entrada()->getIso() . $id_entrada; // si no pongo id_entrada, sobre escribe.
+                // para ordenar. Si no añado id_entrada, sobre escribe.
+                $f_entrada_iso = $oEntrada->getF_entrada()->getIso() . $id_entrada;
                 $a_entradas[$f_entrada_iso] = $row;
             }
         }

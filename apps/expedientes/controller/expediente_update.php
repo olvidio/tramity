@@ -60,11 +60,24 @@ switch($Qque) {
         $oEntrada->DBCarregar();
         
         $aVisto = $oEntrada->getJson_visto(TRUE);
-        $oVisto = new stdClass;
-        $oVisto->oficina = $Qid_oficina;
-        $oVisto->cargo = $Qid_cargo;
-        $oVisto->visto = TRUE;
-        $aVisto[] = $oVisto;
+        // Si ya está no hay que añadirlo, sino modificarlo:
+        $flag = FALSE;
+        foreach($aVisto as $key => $oVisto) {
+            $oficina = $oVisto['oficina'];
+            $cargo = $oVisto['cargo'];
+            if ($oficina == $Qid_oficina AND $cargo == $Qid_cargo) {
+                $oVisto['visto'] = TRUE;
+                $aVisto[$key] = $oVisto;
+                $flag = TRUE;
+            }
+        }
+        if ($flag === FALSE) {
+            $oVisto = new stdClass;
+            $oVisto->oficina = $Qid_oficina;
+            $oVisto->cargo = $Qid_cargo;
+            $oVisto->visto = TRUE;
+            $aVisto[] = $oVisto;
+        }
         
         $oEntrada->setJson_visto($aVisto);
         if ($oEntrada->DBGuardar() === FALSE) {
@@ -72,13 +85,6 @@ switch($Qque) {
         }
         
         $oEntrada->comprobarVisto();
-        
-        if (!empty($error_txt)) {
-            $jsondata['success'] = FALSE;
-            $jsondata['mensaje'] = $error_txt;
-        } else {
-            $jsondata['success'] = TRUE;
-        }
         
         if (!empty($error_txt)) {
             $jsondata['success'] = FALSE;
