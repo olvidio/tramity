@@ -107,6 +107,8 @@ class GestorEntradaDB Extends ClaseGestor {
                 $oficina = $oCargo->getId_oficina();
                 $sCondi = "encargado = $encargado AND estado = $estado";
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+                $Where_json = "items.oficina='$oficina'";
+                $Where_json .= " AND items.visto = 'true'";
                 $Where_json .= " AND items.cargo='$encargado'";
                 break;
         }
