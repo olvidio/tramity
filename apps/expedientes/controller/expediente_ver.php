@@ -46,12 +46,16 @@ $ponente_txt = '?';
 $id_ponente = $oExpediente->getPonente();
 $ponente_txt = $aCargos[$id_ponente];
 
+$firma_txt = _("Firmar");
 if ($id_ponente == ConfigGlobal::role_id_cargo()) {
     $aclaracion = _("Responder aclaración");
     $aclaracion_event = 'respuesta';
+    $bool_aclaracion = TRUE;
+    $firma_txt = _("Responder");
 } else {
     $aclaracion = _("Pedir aclaración");
     $aclaracion_event = 'nueva';
+    $bool_aclaracion = FALSE;
 }
 
 $id_tramite = $oExpediente->getId_tramite();
@@ -211,11 +215,12 @@ $a_campos = [
     //acciones
     'oEscritoLista' => $oEscritoLista,
     //'a_acciones' => $a_acciones,
-    //'ver_todo' => $ver_todo,
+    'firma_txt' => $firma_txt,
     'a_firmas' => $a_firmas,
     'base_url' => $base_url,
     'aclaracion' => $aclaracion,
     'aclaracion_event' => $aclaracion_event,
+    'bool_aclaracion' => $bool_aclaracion,
     'add_del' => $add_del,
     'add_del_txt' => $add_del_txt,
     'cmb_tramite' => $cmb_tramite,

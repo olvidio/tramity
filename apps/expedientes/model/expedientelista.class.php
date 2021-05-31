@@ -209,6 +209,15 @@ class ExpedienteLista {
                                 'id_cargo_creador' => ConfigGlobal::role_id_cargo(),
                             ];
                 $aOperadorFirma = ['observ_creador' => 'IS NULL' ];
+                // 31.5.2021 Que tmabién el dtor de la oficina pueda responder.
+                $gesCargos = new GestorCargo();
+                $a_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
+                if (ConfigGlobal::soy_dtor()) {
+                    $ids_cargos = array_keys($a_cargos_oficina);
+                    $aWhereFirma['id_cargo_creador'] = implode(',', $ids_cargos);
+                    $aOperadorFirma['id_cargo_creador'] = 'IN';
+                }
+                
                 $cFirmas = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
                 $a_exp_aclaracion = [];
                 $this->a_exp_aclaracion = [];
