@@ -281,7 +281,6 @@ class Buscar {
                 $aOperadorEscrito = [];
                 
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
-                $aOperador['estado'] = '>=';
                 $aOperadorEntrada['estado'] = '>=';
                 if (!empty($Qantiguedad)) {
                     switch ($Qantiguedad) {
@@ -304,9 +303,10 @@ class Buscar {
                     $gesEntradas = new GestorEntrada();
                     $aWhereEntrada['f_entrada'] = $limite;
                     $aWhereEntrada['_ordre'] = 'f_entrada';
-                    $aOperadorEntrada = [ 'f_entrada' => '>'];
-                    $aWhereEscrito = [ 'f_aprobacion' => $limite, '_ordre' => 'f_aprobacion'];
-                    $aOperadorEscrito = [ 'f_aprobacion' => '>'];
+                    $aOperadorEntrada[ 'f_entrada'] = '>';
+                    $aWhereEscrito['f_aprobacion'] = $limite;
+                    $aWhereEscrito['_ordre'] = 'f_aprobacion';
+                    $aOperadorEscrito['f_aprobacion'] = '>';
                 } else {
                     $aWhereEntrada['f_entrada'] = 'x';
                     $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
