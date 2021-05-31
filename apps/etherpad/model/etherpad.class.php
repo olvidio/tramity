@@ -599,7 +599,9 @@ class Etherpad  extends Client {
                 }
             }
         } else {
-            $this->mostrar_error($lista);
+            // Da igual, porque borro todo. En alguna instalación da el error:
+            //  *Error: wrong parameters sessionID does not exist**
+            //$this->mostrar_error($lista);
         }
        
         // Si no está borrón y cuenta neuva.
@@ -653,7 +655,9 @@ class Etherpad  extends Client {
            }
            $lista_sesiones =  implode(',', $a_sesiones);
         } else {
-            $this->mostrar_error($rta);
+            // Da igual, porque borro todo. En alguna instalación da el error:
+            //  *Error: wrong parameters sessionID does not exist**
+            //$this->mostrar_error($rta);
         }
         // añadir la session actual:
         $lista_sesiones .= empty($lista_sesiones)? $sessionID : ",$sessionID";
@@ -686,7 +690,9 @@ class Etherpad  extends Client {
                }
            }
         } else {
-            $this->mostrar_error($rta);
+            // Da igual, porque borro todo. En alguna instalación da el error:
+            //  *Error: wrong parameters sessionID does not exist**
+            //$this->mostrar_error($rta);
         }
         
     }
