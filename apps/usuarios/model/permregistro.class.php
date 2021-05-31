@@ -3,6 +3,8 @@ namespace usuarios\model;
 use core\ConfigGlobal;
 use entradas\model\Entrada;
 use usuarios\model\entity\Cargo;
+use Mpdf\Cache;
+use usuarios\model\entity\GestorCargo;
 
 class PermRegistro {
     
@@ -365,6 +367,16 @@ class PermRegistro {
                 if ($id_oficina_role == $id_oficina_pral) {
                     $soy = empty($soy_dtor)? 'of_pral' : 'dtor_pral';
                 }
+        }
+        // para el sd, como vcd excepto si la oficina es vcd.
+        // Lo pongo fuera de switch para aprovechar el dafault.
+        if ($role_actual == 'sd') {
+            $gesCargo = new GestorCargo();
+            $cCargos = $gesCargo->getArrayCargos(['cargo' => 'vcd']);
+            $id_oficina_vcd = $cCargos[0]->getId_oficina();
+            if ($id_oficina_pral != $id_oficina_vcd) {
+                $soy = 'dtor_pral';
+            }
         }
         
         if (!isset($this->array_registro_perm[$visibilidad][$soy][$que])) {
