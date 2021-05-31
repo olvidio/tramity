@@ -372,7 +372,7 @@ class PermRegistro {
         // Lo pongo fuera de switch para aprovechar el dafault.
         if ($role_actual == 'sd') {
             $gesCargo = new GestorCargo();
-            $cCargos = $gesCargo->getArrayCargos(['cargo' => 'vcd']);
+            $cCargos = $gesCargo->getCargos(['cargo' => 'vcd']);
             $id_oficina_vcd = $cCargos[0]->getId_oficina();
             if ($id_oficina_pral != $id_oficina_vcd) {
                 $soy = 'dtor_pral';
