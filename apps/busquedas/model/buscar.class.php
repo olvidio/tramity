@@ -281,6 +281,7 @@ class Buscar {
                 $aOperadorEscrito = [];
                 
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+                $aOperador['estado'] = '>=';
                 $aOperadorEntrada['estado'] = '>=';
                 if (!empty($Qantiguedad)) {
                     switch ($Qantiguedad) {

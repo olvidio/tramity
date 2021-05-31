@@ -26,6 +26,7 @@ $Qorigen_id_lugar =  (integer) \filter_input(INPUT_POST, 'origen_id_lugar');
 $Qantiguedad =  (string) \filter_input(INPUT_POST, 'antiguedad');
 //2
 $Qasunto =  (string) \filter_input(INPUT_POST, 'asunto');
+$Qasunto = urldecode($Qasunto);
 $Qf_min_enc =  (string) \filter_input(INPUT_POST, 'f_min');
 $Qf_min = urldecode($Qf_min_enc);
 $Qf_max_enc =  (string) \filter_input(INPUT_POST, 'f_max');
