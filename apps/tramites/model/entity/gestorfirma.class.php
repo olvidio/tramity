@@ -233,6 +233,7 @@ class GestorFirma Extends core\ClaseGestor {
 	        //'_ordre' => 'orden_tramite, orden_oficina ASC, tipo ASC'
 	    ];
 	    $cFirmas = $this->getFirmas($aWhere);
+	    $responder = FALSE;
 	    $comentarios = '';
 	    $a_recorrido = [];
 	    $oFirma = new Firma();
@@ -286,6 +287,8 @@ class GestorFirma Extends core\ClaseGestor {
 	                if (!empty($observ_ponente)) {
 	                    $comentarios .= ' '.'<span class="font-weight-bold">'._("respuesta").": </span>";
 	                    $comentarios .= " $observ_ponente";
+	                } else {
+	                    $responder = TRUE;
 	                }
 	            }
 	        } else {
@@ -312,6 +315,7 @@ class GestorFirma Extends core\ClaseGestor {
 	    
 	    return ['recorrido' => $a_recorrido,
 	        'comentarios' => $comentarios,
+	        'responder' => $responder,
 	    ];
 	}
 	

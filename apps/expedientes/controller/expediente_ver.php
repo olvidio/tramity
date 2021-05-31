@@ -46,18 +46,6 @@ $ponente_txt = '?';
 $id_ponente = $oExpediente->getPonente();
 $ponente_txt = $aCargos[$id_ponente];
 
-$firma_txt = _("Firmar");
-if ($id_ponente == ConfigGlobal::role_id_cargo()) {
-    $aclaracion = _("Responder aclaración");
-    $aclaracion_event = 'respuesta';
-    $bool_aclaracion = TRUE;
-    $firma_txt = _("Responder");
-} else {
-    $aclaracion = _("Pedir aclaración");
-    $aclaracion_event = 'nueva';
-    $bool_aclaracion = FALSE;
-}
-
 $id_tramite = $oExpediente->getId_tramite();
 $oTramite = new Tramite($id_tramite);
 $tramite_txt = $oTramite->getTramite();
@@ -128,6 +116,28 @@ $oEscritoLista->setModo('mod');
 $aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
 $a_recorrido = $aRecorrido['recorrido'];
 $comentarios = $aRecorrido['comentarios'];
+$responder = $aRecorrido['responder'];
+
+// firmar o responder
+$firma_txt = _("Firmar");
+if ($responder) {
+    $a_cargos_oficina = [];
+    if (ConfigGlobal::soy_dtor()) {
+        $a_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
+    }
+    
+    if ($id_ponente == ConfigGlobal::role_id_cargo() OR array_key_exists($id_ponente, $a_cargos_oficina)) {
+        $aclaracion = _("Responder aclaración");
+        $aclaracion_event = 'respuesta';
+        $bool_aclaracion = TRUE;
+        $firma_txt = _("Responder");
+    }
+} else {
+    $aclaracion = _("Pedir aclaración");
+    $aclaracion_event = 'nueva';
+    $bool_aclaracion = FALSE;
+}
+
 
 // Etiquetas
 $ver_etiquetas = FALSE;
