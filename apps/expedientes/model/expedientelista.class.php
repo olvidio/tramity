@@ -479,6 +479,7 @@ class ExpedienteLista {
         $txt_mod = '';
         $col_mod = 0;
         $col_ver = 0;
+        $ver_f_ini = TRUE;
         $presentacion = 0;
         $pagina_ver = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
         $pagina_accion = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_accion.php';
@@ -491,6 +492,7 @@ class ExpedienteLista {
                 $col_mod = 1;
                 $col_ver = 1;
                 $presentacion = 1;
+                $ver_f_ini = FALSE;
                 break;
             case 'firmar':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
@@ -668,7 +670,6 @@ class ExpedienteLista {
                     }
                 }
                 
-                $row['estado'] = $a_estados[$estado];
                 $prioridad = $oExpediente->getPrioridad();
                 $row['prioridad'] = $prioridad;
                 $row['tramite'] = $tramite_txt;
@@ -703,9 +704,6 @@ class ExpedienteLista {
                 $row['f_reunion'] =  $oExpediente->getF_reunion()->getFromLocalHora();
                 $row['f_contestar'] =  $oExpediente->getF_contestar()->getFromLocal();
                 
-                $row['col_mod'] = $col_mod;
-                $row['col_ver'] = $col_ver;
-                
                 // para ordenar. Si no añado id_expediente, sobre escribe.
                 if (empty($oExpediente->getF_aprobacion()->getIso())) {
                     if (empty($oExpediente->getF_ini_circulacion()->getIso())) {
@@ -738,6 +736,9 @@ class ExpedienteLista {
             'pagina_cancel' => $pagina_cancel,
             'filtro' => $filtro,
             'presentacion' => $presentacion,
+            'ver_f_ini' => $ver_f_ini,
+            'col_mod' => $col_mod,
+            'col_ver' => $col_ver,
         ];
 
         $oView = new ViewTwig('expedientes/controller');

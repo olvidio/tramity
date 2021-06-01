@@ -6,14 +6,15 @@
 <table class="table table-sm table-bordered">
   <thead class="thead-light">
     <tr>
-      {%  if a_expedientes[0].col_mod %}
+      {%  if col_mod %}
         <th scope="col">#</th>
       {% endif %}
-      {%  if a_expedientes[0].col_ver %}
+      {%  if col_ver %}
         <th scope="col">{{ "##"|trans }}</th>
       {% endif %}
-      <th scope="col">{{ "fecha inicio"|trans }}</th>
-      <th scope="col">{{ "estado"|trans }}</th>
+      {% if ver_f_ini %}
+        <th scope="col">{{ "fecha inicio"|trans }}</th>
+      {% endif %}
       <th scope="col">{{ "trámite"|trans }}</th>
       <th scope="col">{{ "visibilidad"|trans }}</th>
       <th scope="col">{{ "asunto"|trans }}</th>
@@ -35,14 +36,15 @@
   <tbody>
   {% for row in a_expedientes %}
     <tr class="{{ row.class_row|raw }}">
-      {%  if row.col_mod %}
+      {%  if col_mod %}
         <th scope="row">{{ row.link_mod|raw }}</th>
       {% endif %}
-      {%  if row.col_ver %}
+      {%  if col_ver %}
         <td>{{ row.link_ver|raw }}</td>
       {% endif %}
-      <td>{{ row.f_ini|raw }}</td>
-      <td>{{ row.estado|raw }}</td>
+      {% if ver_f_ini %}
+        <td>{{ row.f_ini|raw }}</td>
+      {% endif %}
       <td>{{ row.tramite|raw }}</td>
       <td>{{ row.visibilidad|raw }}</td>
       <td>{{ row.asunto|raw }}</td>
