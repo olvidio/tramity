@@ -60,8 +60,8 @@ switch($Qque) {
         
         // Si es de la dl busco en escritos, sino en entradas:
         $gesLugares = new GestorLugar();
-        $id_siga_local = $gesLugares->getId_sigla_local();
-        if ($Qid_lugar == $id_siga_local) {
+        $id_sigla_local = $gesLugares->getId_sigla_local();
+        if ($Qid_lugar == $id_sigla_local) {
             // Escritos
             $gesLugares = new GestorLugar();
             $aProt_local = [ 'id_lugar' => $Qid_lugar,

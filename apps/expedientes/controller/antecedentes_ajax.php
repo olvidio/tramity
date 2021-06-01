@@ -77,6 +77,8 @@ switch ($Qque) {
 	    $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    $Qperiodo =  (string) \filter_input(INPUT_POST, 'periodo');
 	    $Qorigen_id_lugar =  (integer) \filter_input(INPUT_POST, 'origen_id_lugar');
+	    $Qorigen_prot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
+	    $Qorigen_prot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 	    
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
@@ -124,9 +126,18 @@ switch ($Qque) {
 	    $aWhere['_ordre'] = 'f_entrada DESC';
 	    
 	    if (!empty($Qorigen_id_lugar)) {
-	            $gesEntradas = new GestorEntradaDB();
+	            $gesEntradas = new GestorEntrada();
 	            $id_lugar = $Qorigen_id_lugar;
-	            $cEntradas = $gesEntradas->getEntradasByLugarDB($id_lugar,$aWhere, $aOperador);
+	            if (!empty($Qorigen_prot_num) && !empty($Qorigen_prot_any)) {
+	                // No tengo en quenta las otras condiciones de la búsqueda
+	                $aProt_origen = [ 'lugar' => $Qorigen_id_lugar,
+	                    'num' => $Qorigen_prot_num,
+	                    'any' => $Qorigen_prot_any,
+	                ];
+	                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
+	            } else {
+	               $cEntradas = $gesEntradas->getEntradasByLugarDB($id_lugar,$aWhere, $aOperador);
+	            }
         } else {
             $cEntradas = $gesEntradas->getEntradas($aWhere,$aOperador);
         }
@@ -188,6 +199,8 @@ switch ($Qque) {
                 'oDesplOficinas' => $oDesplOficinas,
                 'oLista' => $oLista,  
                 'asunto' => $Qasunto,
+	            'prot_num' => $Qorigen_prot_num,
+	            'prot_any' => $Qorigen_prot_any,
              ];
 	    $oView = new ViewTwig('expedientes/controller');
 	    echo $oView->renderizar('modal_buscar_entradas.html.twig',$a_campos);
@@ -349,6 +362,8 @@ switch ($Qque) {
 	    $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    $Qperiodo =  (string) \filter_input(INPUT_POST, 'periodo');
 	    $Qdest_id_lugar =  (integer) \filter_input(INPUT_POST, 'dest_id_lugar');
+	    $Qlocal_prot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
+	    $Qlocal_prot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 	    
 	    $gesEscrito = new GestorEscrito();
 	    $aWhere = [];
@@ -408,9 +423,9 @@ switch ($Qque) {
 	    $aWhere['_ordre'] = 'f_aprobacion DESC';
 	    
 	    if (!empty($Qdest_id_lugar)) {
-	            $gesEscritos = new GestorEscrito();
-	            $id_lugar = $Qdest_id_lugar;
-	            $cEscritos = $gesEscritos->getEscritosByLugarDB($id_lugar,$aWhere,$aOperador);
+            $gesEscritos = new GestorEscrito();
+            $id_lugar = $Qdest_id_lugar;
+            $cEscritos = $gesEscritos->getEscritosByLugarDB($id_lugar,$aWhere,$aOperador);
         } else {
             $cEscritos1 = $gesEscrito->getEscritos($aWhere,$aOperador);
             // añadir los modelos jurídicos (tipo_doc=3) y sin f_salida
@@ -421,6 +436,18 @@ switch ($Qque) {
             $aWhereModeloJ['accion'] = Escrito::ACCION_PLANTILLA;
             $cEscritosJ = $gesEscrito->getEscritos($aWhereModeloJ,$aOperadorModeloJ);
             $cEscritos = array_merge($cEscritos1, $cEscritosJ);
+        }
+        
+        // No tengo en quenta las otras condiciones de la búsqueda
+        if (!empty($Qlocal_prot_num) && !empty($Qlocal_prot_any)) {
+            $gesLugares = new GestorLugar();
+            $id_sigla_local = $gesLugares->getId_sigla_local();
+            $aProt_local = [ 'lugar' => $id_sigla_local,
+                'num' => $Qlocal_prot_num,
+                'any' => $Qlocal_prot_any,
+            ];
+            $gesEscritos = new GestorEscrito();
+            $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
         }
 	    
 	    $a_cabeceras = [ '',[ 'width' => 150, 'name' => _("protocolo")],
@@ -474,6 +501,8 @@ switch ($Qque) {
 	    $oDesplDestino->setOpciones($a_lugares);
 	    $oDesplDestino->setOpcion_sel($Qdest_id_lugar);
 	    
+	    $sigla = $_SESSION['oConfig']->getSigla();
+	    
 	    $a_campos = [
                 'id_expediente' => $Qid_expediente,
                 'oDesplCargos' => $oDesplCargos,
@@ -485,6 +514,9 @@ switch ($Qque) {
                 'sel_any_1' => $sel_any_1,
                 'sel_any_2' => $sel_any_2,
                 'sel_siempre' => $sel_siempre,
+                'sigla' => $sigla,
+	            'prot_num' => $Qlocal_prot_num,
+	            'prot_any' => $Qlocal_prot_any,
                 ];
 	    $oView = new ViewTwig('expedientes/controller');
 	    echo $oView->renderizar('modal_buscar_escritos.html.twig',$a_campos);

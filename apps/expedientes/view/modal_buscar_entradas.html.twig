@@ -13,7 +13,7 @@
   <!--  --------------------  Periodo --------------------------  -->
   <div id="div_periodo" class="form-group row">
     <label for="periodo" class="col-1 col-form-label">{{ "periodo"|trans }}:</label>
-    <div class="col-4">
+    <div class="col-2">
 		<select tabindex=111 id=periodo name=periodo >
 		<option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans }}</option>
 		<option value="mes_6" {{ sel_mes_6 }}>{{ "hace 6 meses"|trans }}</option>
@@ -23,9 +23,12 @@
 		</select>
 	</div>
       <!--  --------------------  origen --------------------------  -->
-    <label for="periodo" class="col-2 col-form-label">{{ "¿Quién enviaba el escrito?"|trans }}:</label>
-    <div class="col-5">
+    <label for="periodo" class="col-3 col-form-label">{{ "¿Quién enviaba el escrito?"|trans }}:</label>
+    <div class="col-6">
         {{ oDesplOrigen.desplegable|raw }}
+          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#btn_1')" value="{{ prot_num }}" >
+          /
+          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans }}" value="{{ prot_any }}" >
     </div>
   </div>
   <!--  --------------- OFICINA --------------- -->
@@ -37,7 +40,7 @@
         </span>
       </div>
       <div class="col-2">
-        <button type="button" class="btn btn-primary" onClick="fnjs_antecedente_entrada();" >{{ "Buscar"|trans }}</button>
+        <button id="btn_1" type="button" class="btn btn-primary" onClick="fnjs_antecedente_entrada();" >{{ "Buscar"|trans }}</button>
       </div>
   </div>
   </form>
@@ -61,5 +64,16 @@ fnjs_antecedente_entrada=function() {
         }
         $('#modal-body').html(rta);
     });
+}
+
+fnjs_proto=function(num,any,siguiente){
+    var numero;
+    var prot_num=$(num).val();
+    numero=prot_num.split("/");
+    if (numero[1]) {
+        $(num).val(numero[0]);
+        $(any).val(numero[1]);
+        $(siguiente).focus();
+    }
 }
 </script>
