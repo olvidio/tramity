@@ -706,10 +706,21 @@ class ExpedienteLista {
                 $row['col_mod'] = $col_mod;
                 $row['col_ver'] = $col_ver;
                 
-                // mirar si tienen escrito
-                //$row['f_escrito'] = $oExpediente->getF_documento()->getFromLocal();
-                $a_expedientes[] = $row;
+                // para ordenar. Si no añado id_expediente, sobre escribe.
+                if (empty($oExpediente->getF_aprobacion()->getIso())) {
+                    if (empty($oExpediente->getF_ini_circulacion()->getIso())) {
+                        $num_orden = 'a' . "0000-00-00";
+                    } else {
+                        $num_orden = 'b' . $oExpediente->getF_ini_circulacion()->getIso();
+                    }
+                } else {
+                    $num_orden = 'c' . $oExpediente->getF_aprobacion()->getIso();
+                }
+                $num_orden = $num_orden . $id_expediente;
+                
+                $a_expedientes[$num_orden] = $row;
             }
+            krsort($a_expedientes,SORT_STRING);
         }
 
         $url_update = 'apps/expedientes/controller/expediente_update.php';
