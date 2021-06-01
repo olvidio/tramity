@@ -7,6 +7,7 @@ use entradas\model\GestorEntrada;
 use entradas\model\entity\GestorEntradaDB;
 use etiquetas\model\entity\GestorEtiqueta;
 use etiquetas\model\entity\GestorEtiquetaExpediente;
+use expedientes\model\Escrito;
 use expedientes\model\Expediente;
 use expedientes\model\GestorEscrito;
 use expedientes\model\GestorExpediente;
@@ -411,7 +412,15 @@ switch ($Qque) {
 	            $id_lugar = $Qdest_id_lugar;
 	            $cEscritos = $gesEscritos->getEscritosByLugarDB($id_lugar,$aWhere,$aOperador);
         } else {
-            $cEscritos = $gesEscrito->getEscritos($aWhere,$aOperador);
+            $cEscritos1 = $gesEscrito->getEscritos($aWhere,$aOperador);
+            // añadir los modelos jurídicos (tipo_doc=3) y sin f_salida
+            $aWhereModeloJ = $aWhere;
+            $aOperadorModeloJ = $aOperador;
+            unset($aWhereModeloJ['f_salida']);
+            unset($aOperadorModeloJ['f_salida']);
+            $aWhereModeloJ['accion'] = Escrito::ACCION_PLANTILLA;
+            $cEscritosJ = $gesEscrito->getEscritos($aWhereModeloJ,$aOperadorModeloJ);
+            $cEscritos = array_merge($cEscritos1, $cEscritosJ);
         }
 	    
 	    $a_cabeceras = [ '',[ 'width' => 150, 'name' => _("protocolo")],
