@@ -193,6 +193,9 @@ switch ($Qque) {
 	    $oDesplOrigen->setOpciones($a_lugares);
 	    $oDesplOrigen->setAction("fnjs_sel_periodo('#origen_id_lugar')");
 	    $oDesplOrigen->setOpcion_sel($Qorigen_id_lugar);
+
+	    // para que no ponga '0'
+	    $Qorigen_prot_num = empty($Qorigen_prot_num)? '' : $Qorigen_prot_num;
 	    $a_campos = [
                 'id_expediente' => $Qid_expediente,
                 'oDesplOrigen' => $oDesplOrigen,
@@ -503,6 +506,8 @@ switch ($Qque) {
 	    
 	    $sigla = $_SESSION['oConfig']->getSigla();
 	    
+	    // para que no ponga '0'
+	    $Qlocal_prot_num = empty($Qlocal_prot_num)? '' : $Qlocal_prot_num;
 	    $a_campos = [
                 'id_expediente' => $Qid_expediente,
                 'oDesplCargos' => $oDesplCargos,
