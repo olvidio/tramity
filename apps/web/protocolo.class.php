@@ -1,9 +1,9 @@
 <?php
 namespace web;
 
+use function core\any_2;
 use stdClass;
 use lugares\model\entity\Lugar;
-use Twig\Node\Expression\ParentExpression;
 
 class Protocolo {
 	protected $aPrimary_key;
@@ -30,7 +30,10 @@ class Protocolo {
 	function __construct($ilugar='',$iprot_num='',$iprot_any='',$sprot_mas='') {
         if (isset($ilugar) && $ilugar !== '') $this->ilugar = $ilugar;
         if (isset($iprot_num) && $iprot_num !== '') $this->iprot_num = $iprot_num;
-        if (isset($iprot_any) && $iprot_any !== '') $this->iprot_any = $iprot_any;
+        if (isset($iprot_any) && $iprot_any !== '') {
+            // asegurar que tenga dos cifras:
+            $this->iprot_any = any_2($iprot_any);
+        }
         if (isset($sprot_mas) && $sprot_mas !== '') $this->sprot_mas = $sprot_mas;
 	}
 	
