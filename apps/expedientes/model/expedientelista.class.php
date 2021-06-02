@@ -472,8 +472,8 @@ class ExpedienteLista {
         
         $gesCargos = new GestorCargo();
         $a_posibles_cargos = $gesCargos->getArrayCargos();
+        $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina(),TRUE);
         $oExpediente = new Expediente();
-        $a_estados = $oExpediente->getArrayEstado();
         
         $txt_ver = '';
         $txt_mod = '';
@@ -544,7 +544,7 @@ class ExpedienteLista {
                 $pagina_ver = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_distribuir.php';
                 $col_mod = 1;
                 $col_ver = 1;
-                $presentacion = 4;
+                $presentacion = 5;
                 break;
             case 'archivados':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
@@ -695,6 +695,11 @@ class ExpedienteLista {
                     $oficinas_txt .= $a_posibles_cargos[$id_oficina];
                 }
                 $row['oficinas'] = $oficinas_txt;
+                // nombre encargado (ponente)
+                if ($this->filtro == 'acabados_encargados' OR $this->filtro == 'acabados') {
+                    $nom_encargado = $a_usuarios_oficina[$id_ponente];
+                }
+                $row['nom_encargado'] = $nom_encargado;
                 // A: contiene antecedentes, E: contiene escritos, P: contiene propuestas
                 $row['contenido'] = $oExpediente->getContenido();
                 $row['etiquetas'] = $oExpediente->getEtiquetasVisiblesTxt();

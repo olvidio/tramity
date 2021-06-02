@@ -20,15 +20,18 @@
       <th scope="col">{{ "asunto"|trans }}</th>
       <th scope="col">{{ "oficinas"|trans }}</th>
       <th scope="col">{{ "fecha resolver"|trans }}</th>
-      {% if presentacion == 3 or presentacion == 4 %}
+      {% if presentacion == 3 or presentacion == 4 or presentacion == 5 %}
           <th scope="col">{{ "fecha reunión"|trans }}</th>
       {% endif %}
-      {% if presentacion == 2 or presentacion == 4 %}
+      {% if presentacion == 2 or presentacion == 4 or presentacion == 5 %}
           <th scope="col">{{ "fecha aprobación"|trans }}</th>
       {% endif %}
           <th scope="col">{{ "contenido"|trans }}</th>
       {% if presentacion != 1 %}
           <th scope="col">{{ "etiquetas"|trans }}</th>
+      {% endif %}
+      {% if presentacion == 5 %}
+          <th scope="col">{{ "encargado"|trans }}</th>
       {% endif %}
       <th></th>
     </tr>
@@ -50,15 +53,18 @@
       <td>{{ row.asunto|raw }}</td>
       <td>{{ row.oficinas|raw }}</td>
       <td>{{ row.f_contestar|raw }}</td>
-      {% if presentacion == 3 or presentacion == 4 %}
+      {% if presentacion == 3 or presentacion == 4 or presentacion == 5 %}
           <td>{{ row.f_reunion|raw }}</td>
       {% endif %}
-      {% if presentacion == 2 or presentacion == 4 %}
+      {% if presentacion == 2 or presentacion == 4 or presentacion == 5 %}
           <td>{{ row.f_aprobacion|raw }}</td>
       {% endif %}
           <td>{{ row.contenido|raw }}</td>
       {% if presentacion != 1 %}
           <td>{{ row.etiquetas|raw }}</td>
+      {% endif %}
+      {% if presentacion == 5 %}
+          <td>{{ row.nom_encargado|raw }}</td>
       {% endif %}
       <td>{{ row.link_accion|raw }}</td>
     </tr>

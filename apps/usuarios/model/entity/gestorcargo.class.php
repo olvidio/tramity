@@ -90,7 +90,7 @@ class GestorCargo Extends core\ClaseGestor {
 	 * @param integer $id_oficina
 	 * @return Array [id_cargo => nom_usuario]
 	 */
-	function getArrayUsuariosOficina($id_oficina='') {
+	function getArrayUsuariosOficina($id_oficina='',$sin_cargo=FALSE) {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
 	    
@@ -115,7 +115,11 @@ class GestorCargo Extends core\ClaseGestor {
             if (empty($id_usuario)) { continue; } // el titular puede estar en blanco.
             $oUsuario = new Usuario($id_usuario);
             $nom_usuario = $oUsuario->getNom_usuario();
-            $a_usuarios_oficina[$id_cargo] = "$nom_usuario ($cargo)";
+            if ($sin_cargo) {
+                $a_usuarios_oficina[$id_cargo] = "$nom_usuario";
+            } else {
+                $a_usuarios_oficina[$id_cargo] = "$nom_usuario ($cargo)";
+            }
         }
 	    return $a_usuarios_oficina;
 	}
