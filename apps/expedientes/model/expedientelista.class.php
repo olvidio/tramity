@@ -698,8 +698,8 @@ class ExpedienteLista {
                 // nombre encargado (ponente)
                 if ($this->filtro == 'acabados_encargados' OR $this->filtro == 'acabados') {
                     $nom_encargado = $a_usuarios_oficina[$id_ponente];
+                    $row['nom_encargado'] = $nom_encargado;
                 }
-                $row['nom_encargado'] = $nom_encargado;
                 // A: contiene antecedentes, E: contiene escritos, P: contiene propuestas
                 $row['contenido'] = $oExpediente->getContenido();
                 $row['etiquetas'] = $oExpediente->getEtiquetasVisiblesTxt();
