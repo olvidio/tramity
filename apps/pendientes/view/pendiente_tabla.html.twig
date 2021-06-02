@@ -1,18 +1,23 @@
-<div id="condiciones">
 <form id="frm_que" name="frm_que" action="">
 	<input type="hidden" name="simple" value=1>
 	<input type='hidden' name='filtro' value='{{ filtro }}'>
 
-<h3>{{ "listar escritos pendientes de contestar"|trans }}</h3>
-<!--  --------------------  Calendarios --------------------------  -->
-  <div class="form-group row">
-    <label class="col-xs-1">{{ "De"|trans }}:</label>
-    <div class="col">
+<div class="form-group row" id="condiciones">
+<div class="col-2">
+  <h3>{{ "listar pendientes"|trans }}</h3>
+</div>
+	{% if secretaria %}
+    <!--  --------------------  Calendarios --------------------------  -->
+      <label class="col-xs-1">{{ "De"|trans }}:</label>
+      <div class="col">
 		{{ oDesplCalendarios.desplegable|raw }}
-    </div>
+      </div>
+    
+    {% endif %}
 	<!--  --------------------  Periodo --------------------------  -->
+<div class="row col-10">
     <label for="periodo" class="col-xs-1">{{ "periodo"|trans }}:</label>
-    <div class="col">
+    <div class="col-2">
 		<select tabindex=111 id=periodo name=periodo >
 		<option value="hoy" {{ sel_hoy }} >{{ "hasta la fecha"|trans }}</option>
 		<option value="semana" {{ sel_semana }} >{{ "próxima semana"|trans }}</option>
@@ -24,30 +29,31 @@
     <!--  --------------------  Oficinas --------------------------  -->
 	{% if secretaria %}
         <label for="id_oficina" class="col-xs-1">{{ "Oficina"|trans }}:</label>
-        <div class="col">
+        <div class="col-1">
               {{ oDesplOficinas.desplegable|raw }}
         </div>
     {% else %}
         <input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
     {% endif %}
     <!--  --------------------  Encargados --------------------------  -->
-    <label for="oficina" class="col-2">{{ "¿Está asignado a alguien?"|trans }}:</label>
-    <div class="col">
+    <label class="col-3">{{ "¿Está asignado a alguien?"|trans }}:</label>
+    <div class="col-3">
         {{ oDesplEncargados.desplegable|raw }}
     </div>
  	<!--  --------------------  BOTONES --------------------------  -->
-    <div class="col">
+    <div class="col-1">
 	  <button tabindex='90' class="btn btn-success" onClick="fnjs_buscar();" >
         {{ "listar"|trans }}
   	  </button>
   	</div> 
-  </div>
-</form>
 </div>
+</div>
+</form>
+
 <hr>
 <div id="exportar" >
 <form id='seleccionados' name='seleccionados' action='' method='post'>
-	<input type='hidden' id='calendario' name='calendario' value='{{ op_calendario_default }}'>
+	<!--  <input type='hidden' id='calendario' name='calendario' value='{# op_calendario_default #}'> -->
 	<input type='hidden' name='filtro' value='{{ filtro }}'>
 	<input type='hidden' name='periodo' value='{{ periodo }}'>
     <input type="hidden" id="id_oficina2" name="id_oficina" value="{{ id_oficina }}">
