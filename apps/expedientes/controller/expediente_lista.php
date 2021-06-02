@@ -25,6 +25,7 @@ $msg = '';
 // añadir dialogo de búsquedas
 if ($Qfiltro == 'archivados') {
     $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
+    $QandOr = (string) \filter_input(INPUT_POST, 'andOr');
     $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $Qperiodo =  (string) \filter_input(INPUT_POST, 'periodo');
 
@@ -46,9 +47,14 @@ if ($Qfiltro == 'archivados') {
     $aWhereADD = [];
     $aOperadorADD = [];
 
+    $chk_and = ($QandOr == 'AND')? 'checked' : '';
+    $chk_or = ($QandOr == 'OR')? 'checked' : '';
+    // por defecto 'AND':
+    $chk_and = empty($QandOr)? 'checked' : '';
+    
     if (!empty($a_etiquetas_filtered)) {
         $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
-        $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($a_etiquetas_filtered);
+        $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($a_etiquetas_filtered,$QandOr);
         if (!empty($cExpedientes)) {
             $aWhereADD['id_expediente'] = implode(',',$cExpedientes);
             $aOperadorADD['id_expediente'] = 'IN';
@@ -98,6 +104,8 @@ if ($Qfiltro == 'archivados') {
     $a_campos = [
         'filtro' => $Qfiltro,
         'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
+        'chk_and' => $chk_and,
+        'chk_or' => $chk_or,
         'asunto' => $Qasunto,
         'sel_mes' => $sel_mes,
         'sel_mes_6' => $sel_mes_6,

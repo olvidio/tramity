@@ -212,6 +212,7 @@ switch ($Qque) {
 	case 'buscar_2':
         //n = 2 -> Expediente
 	    $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
+	    $QandOr = (string) \filter_input(INPUT_POST, 'andOr');
 	    $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    $Qperiodo =  (string) \filter_input(INPUT_POST, 'periodo');
 	    
@@ -244,9 +245,14 @@ switch ($Qque) {
 	    $oArrayDesplEtiquetas ->setBlanco('t');
 	    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
 	    
+	    $chk_and = ($QandOr == 'AND')? 'checked' : '';
+	    $chk_or = ($QandOr == 'OR')? 'checked' : '';
+	    // por defecto 'AND':
+	    $chk_and = empty($QandOr)? 'checked' : '';
+	    
 	    if (!empty($Qa_etiquetas)) {
 	        $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
-	        $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($Qa_etiquetas);
+	        $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($Qa_etiquetas,$QandOr);
 	        if (!empty($cExpedientes)) {
 	            $aWhere['id_expediente'] = implode(',',$cExpedientes);
 	            $aOperador['id_expediente'] = 'IN';
@@ -346,6 +352,8 @@ switch ($Qque) {
 	    $a_campos = [
             'id_expediente' => $Qid_expediente,
 	        'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
+	        'chk_and' => $chk_and,
+	        'chk_or' => $chk_or,
 	        'asunto' => $Qasunto,
 	        'sel_mes' => $sel_mes,
 	        'sel_mes_6' => $sel_mes_6,

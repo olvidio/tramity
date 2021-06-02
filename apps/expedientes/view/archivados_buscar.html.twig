@@ -15,6 +15,20 @@
   <!--  --------------- Etiquetas --------------- -->
   <div id="div_etiquetas" class="form-group row align-items-center">
     <label for="etiquetas" class="col-1">{{ "Etiquetas"|trans }}:</label>
+    <div class="col-1">
+        <div class="col-6">
+          <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
+          <label class="form-check-label">
+          {{ "alguna"|trans }}
+          </label>
+        </div>
+        <div class="col-6">
+          <input type="radio" class="form-check-input" name="andOr" value="AND" {{ chk_and }} >
+          <label class="form-check-label">
+          {{ "todas"|trans }}
+          </label>
+        </div>
+	</div>
     <div class="col-6">
       <span id="span_etiquetas">
       	{{ oArrayDesplEtiquetas.ListaSelects|raw }}

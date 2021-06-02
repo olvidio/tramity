@@ -34,17 +34,28 @@ class GestorEtiquetaExpediente Extends core\ClaseGestor {
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
-	public function getArrayExpedientes($a_etiquetas) {
+	public function getArrayExpedientes($a_etiquetas,$andOr='OR') {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
 	    // Filtering the array
 	    $a_etiquetas_filtered = array_filter($a_etiquetas);
 	    if (!empty($a_etiquetas_filtered)) {
-            $valor = implode(',',$a_etiquetas_filtered);
-            $where = " id_etiqueta IN ($valor)";
-            $sQuery = "SELECT DISTINCT id_expediente
+            if ($andOr == 'AND') {
+                $sQuery = '';
+                foreach ($a_etiquetas_filtered as $etiqueta) {
+                    $sql = "SELECT DISTINCT id_expediente
+                        FROM $nom_tabla
+                        WHERE id_etiqueta = $etiqueta";
+                    $sQuery .=  empty($sQuery)? $sql : " INTERSECT $sql";
+                }
+                
+            } else {
+                $valor = implode(',',$a_etiquetas_filtered);
+                $where = " id_etiqueta IN ($valor)";
+                $sQuery = "SELECT DISTINCT id_expediente
                         FROM $nom_tabla
                         WHERE $where ";
+            }
             
             if (($oDbl->query($sQuery)) === FALSE) {
                 $sClauError = 'GestorExpedienteDB.queryPreparar';
