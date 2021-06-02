@@ -195,6 +195,12 @@ class EscritoLista {
             } else {
                 $ok = '';
             }
+
+            $asunto_detalle = $oEscrito->getAsuntoDetalle();
+            if (is_true($oEscrito->getAnulado())) {
+                $anulado_txt = _("ANULADO");
+                $asunto_detalle = $anulado_txt.' '.$asunto_detalle;
+            }
             $a_accion['ok'] = $ok;
             $a_accion['prot_local'] = $prot_local;
             $a_accion['tipo'] = '';
@@ -202,7 +208,7 @@ class EscritoLista {
             $a_accion['destino'] = $destino_txt;
             $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
             $a_accion['categoria'] = '';
-            $a_accion['asunto'] = $oEscrito->getAsuntoDetalle();
+            $a_accion['asunto'] = $asunto_detalle;
             $a_accion['adjuntos'] = $adjuntos;
             
             $a_acciones[] = $a_accion;
@@ -373,7 +379,7 @@ class EscritoLista {
             $a_accion['destino'] = $destino_txt;
             $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
             $a_accion['categoria'] = '';
-            $a_accion['asunto'] = $oEscrito->getAsuntoDetalle();
+            $a_accion['asunto'] = $asunto_detalle;
             $a_accion['adjuntos'] = $adjuntos;
             
             $a_acciones[] = $a_accion;
