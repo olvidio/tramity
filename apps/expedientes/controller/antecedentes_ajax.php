@@ -245,10 +245,9 @@ switch ($Qque) {
 	    $oArrayDesplEtiquetas ->setBlanco('t');
 	    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
 	    
-	    $chk_and = ($QandOr == 'AND')? 'checked' : '';
 	    $chk_or = ($QandOr == 'OR')? 'checked' : '';
 	    // por defecto 'AND':
-	    $chk_and = empty($QandOr)? 'checked' : '';
+        $chk_and = (($QandOr == 'AND') OR empty($QandOr))? 'checked' : '';
 	    
 	    if (!empty($Qa_etiquetas)) {
 	        $gesEtiquetasExpediente = new GestorEtiquetaExpediente();

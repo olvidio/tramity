@@ -47,10 +47,9 @@ if ($Qfiltro == 'archivados') {
     $aWhereADD = [];
     $aOperadorADD = [];
 
-    $chk_and = ($QandOr == 'AND')? 'checked' : '';
     $chk_or = ($QandOr == 'OR')? 'checked' : '';
     // por defecto 'AND':
-    $chk_and = empty($QandOr)? 'checked' : '';
+    $chk_and = (($QandOr == 'AND') OR empty($QandOr))? 'checked' : '';
     
     if (!empty($a_etiquetas_filtered)) {
         $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
