@@ -250,6 +250,7 @@ $filtro = 'pendientes';
                 'periodo' => 'hoy',
             ];
     $pag_lst = web\Hash::link('apps/pendientes/controller/pendiente_tabla.php?'.http_build_query($aQuery));
+    $pagina_inicio = $pag_lst; 
     $num_orden = 30;
     $text = _("pendientes");
     $num = '';
@@ -276,6 +277,7 @@ $a_campos = [
     'filtro' => $filtro,
     'a_roles' => $_SESSION['session_auth']['a_roles'],
     'peticion_ajax' => $peticion_ajax,
+    'pagina_inicio' => $pagina_inicio,
 ];
 $oView = new ViewTwig('usuarios/controller');
 
