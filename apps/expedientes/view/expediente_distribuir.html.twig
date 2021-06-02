@@ -127,7 +127,11 @@
         </div>
     </div>
   {% endif %}
-
+<!--  --------------- VISIBILIDAD --------------- -->
+  <div id="div_visibilidad" class="form-group row align-items-center">
+    <label for="Visibilidad" class="col-1">{{ "Visibilidad"|trans }}:</label>
+      {{ oDesplVisibilidad.desplegable|raw }}
+  </div>
 <!--  --------------- Etiquetas --------------- -->
 {% if ver_etiquetas %}
   <div id="div_etiquetas" class="form-group row align-items-center">

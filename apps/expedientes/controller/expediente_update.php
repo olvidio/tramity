@@ -231,6 +231,7 @@ switch($Qque) {
         $oExpediente->DBCarregar();
         // las etiquetas:
         $oExpediente->setEtiquetas($Qa_etiquetas);
+        $oExpediente->setVisibilidad($Qvisibilidad);
         if ($oExpediente->DBGuardar() === FALSE ) {
             $error_txt .= _("No se han podido guardar las etiquetas");
         }

@@ -2,6 +2,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
+use entradas\model\Entrada;
 use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\EscritoLista;
 use expedientes\model\Expediente;
@@ -74,6 +75,7 @@ $f_aprobacion = $oExpediente->getF_aprobacion()->getFromLocal();
 
 $asunto = $oExpediente->getAsuntoEstado();
 $entradilla = $oExpediente->getEntradilla();
+$visibilidad = $oExpediente->getVisibilidad();
 
 $oEscritoLista = new EscritoLista();
 $oEscritoLista->setId_expediente($Qid_expediente);
@@ -84,6 +86,14 @@ $gesFirmas = new GestorFirma();
 $aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
 $a_recorrido = $aRecorrido['recorrido'];
 $comentarios = $aRecorrido['comentarios'];
+
+// visibilidad (usar las mismas opciones que en entradas)
+$oEntrada = new Entrada();
+$aOpciones = $oEntrada->getArrayVisibilidad();
+$oDesplVisibilidad = new Desplegable();
+$oDesplVisibilidad->setNombre('visibilidad');
+$oDesplVisibilidad->setOpciones($aOpciones);
+$oDesplVisibilidad->setOpcion_sel($visibilidad);
 
 // Etiquetas
 $ver_etiquetas = FALSE;
@@ -162,6 +172,7 @@ $a_campos = [
     'a_recorrido' => $a_recorrido,
     
     'lista_antecedentes' => $lista_antecedentes,
+    'oDesplVisibilidad' => $oDesplVisibilidad,
     'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
     'oDesplOficiales' => $oDesplOficiales, 
     'ver_encargar' => $ver_encargar,
