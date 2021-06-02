@@ -72,10 +72,10 @@ switch($Qque) {
         // Siempre que no sea el mismo:
         if (ConfigGlobal::role_id_cargo() != $Qid_cargo) {
             $aVisto = $oEntrada->getJson_visto(TRUE);
-            $oVisto = new stdClass;
-            $oVisto->oficina = $Qid_oficina;
-            $oVisto->cargo = ConfigGlobal::role_id_cargo();
-            $oVisto->visto = TRUE;
+            $oVisto = [];
+            $oVisto['oficina'] = $Qid_oficina;
+            $oVisto['cargo'] = ConfigGlobal::role_id_cargo();
+            $oVisto['visto'] = TRUE;
             $aVisto[] = $oVisto;
             
             $oEntrada->setJson_visto($aVisto);
@@ -103,10 +103,10 @@ switch($Qque) {
         $oEntrada->DBCarregar();
         
         $aVisto = $oEntrada->getJson_visto(TRUE);
-        $oVisto = new stdClass;
-        $oVisto->oficina = $Qid_oficina;
-        $oVisto->cargo = $Qid_cargo;
-        $oVisto->visto = TRUE;
+        $oVisto = [];
+        $oVisto['oficina'] = $Qid_oficina;
+        $oVisto['cargo'] = $Qid_cargo;
+        $oVisto['visto'] = TRUE;
         $aVisto[] = $oVisto;
         
         $oEntrada->setJson_visto($aVisto);
