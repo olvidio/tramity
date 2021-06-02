@@ -361,6 +361,12 @@ class EscritoLista {
                 $ok = '';
             }
             
+            $asunto_detalle = $oEscrito->getAsuntoDetalle();
+            if (is_true($oEscrito->getAnulado())) {
+                $anulado_txt = _("ANULADO");
+                $asunto_detalle = $anulado_txt.' '.$asunto_detalle;
+            }
+                    
             $a_accion['ok'] = $ok;
             $a_accion['prot_local'] = $prot_local;
             $a_accion['tipo'] = $txt_tipo;
