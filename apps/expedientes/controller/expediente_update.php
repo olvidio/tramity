@@ -749,6 +749,8 @@ switch($Qque) {
             $visto = strtok('#');
             $oJSON = new stdClass;
             $oJSON->id = $id;
+            // hay que asegurar que sea integer y no 'false'
+            $visto = empty($visto)? 0 : 1;
             $oJSON->visto = $visto;
             
             $new_preparar[] = $oJSON;
