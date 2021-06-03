@@ -343,4 +343,29 @@ switch ($Qnuevo) {
         echo json_encode($jsondata);
         exit();
 		break;
+	case "5": // modificar eetiequetas y encargados
+        $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $cargo, $Quid);
+        if (!empty($Qid_reg)) {
+            $oPendiente->setId_reg($Qid_reg);
+        }
+        $oPendiente->Carregar();
+        // Encargados
+        $oPendiente->setEncargado($Qencargado);
+        // las etiquetas:
+        $oPendiente->setEtiquetasArray($Qa_etiquetas);
+        if ($oPendiente->Guardar() === FALSE ) {
+            $txt_err .= _("No se han podido modificar el pendiente");
+        }
+        if (empty($txt_err)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $txt_err;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+	    break;
 } // fin del switch de nuevo.	

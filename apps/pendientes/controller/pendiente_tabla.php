@@ -126,6 +126,7 @@ $a_cabeceras=array( ucfirst(_("protocolo")),
 					array('name'=>ucfirst(_("fecha plazo")),'class'=>'fecha'),
 					ucfirst(_("oficinas")),
 					ucfirst(_("encargado")),
+					ucfirst(_("calendario")),
 					);
 
 // Fetch all todos
@@ -168,6 +169,7 @@ $a_valores = [];
 $t = 0;
 $oPermisoregistro = new PermRegistro();
 foreach($cPendientes as $oPendiente) {
+    $resource = $oPendiente->getResource();
     $id_encargado = $oPendiente->getEncargado();
     $perm_detalle = $oPermisoregistro->permiso_detalle($oPendiente, 'detalle');
     if (!empty($Qencargado)) { 
@@ -228,6 +230,7 @@ foreach($cPendientes as $oPendiente) {
             $a_valores[$t][5]=$oF_recurrente->getFromLocal();
             $a_valores[$t][6]=$oficinas_txt;
             $a_valores[$t][7]=$encargado;
+            $a_valores[$t][8]=$resource;
             // para el orden
             $a_valores[$t]['order']=$key; // (es la fecha iso sin separador)
         }
@@ -247,6 +250,7 @@ foreach($cPendientes as $oPendiente) {
         $a_valores[$t][5]=$plazo;
         $a_valores[$t][6]=$oficinas_txt;
         $a_valores[$t][7]=$encargado;
+        $a_valores[$t][8]=$resource;
         // para el orden
         if ($plazo!="x") {
             $a_valores[$t]['order'] = $plazo_iso;

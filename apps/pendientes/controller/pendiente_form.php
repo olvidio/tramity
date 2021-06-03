@@ -39,6 +39,7 @@ $go = (string) \filter_input(INPUT_POST, 'go');
 $id_reg = (string) \filter_input(INPUT_POST, 'id_reg');
 
 $cargar_css = FALSE;
+
 if (empty($Qid_oficina)) {
     $go = (string) \filter_input(INPUT_GET, 'go');
     $id_reg = (integer) \filter_input(INPUT_GET, 'id_reg');
@@ -157,6 +158,9 @@ if ($nuevo == 1) {
         if (!empty($_POST['sel'])) { //vengo de un checkbox
             $uid=strtok($_POST['sel'][0],'#');
             $cal_oficina=strtok('#');
+            // deduzco el calendario:
+            $calendario_of = substr($uid, strpos($uid,'@')+1);
+            $Qcalendario = substr($calendario_of, 0, strpos($calendario_of,'_'));
         } else {
             empty($_POST['uid'])? $uid="" : $uid=$_POST['uid'];
             empty($_POST['cal_oficina'])? $cal_oficina="" : $cal_oficina=$_POST['cal_oficina'];
@@ -171,7 +175,7 @@ if ($nuevo == 1) {
                 $id_reg=substr($uid,3,$pos);
             }
         }
-            
+
         $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $role_actual, $uid) ;
         
         $asunto = $oPendiente->getAsunto();
@@ -583,7 +587,37 @@ $a_campos = [
     'display_d_d' => $display_d_d,
     'chk_d_num_ini' => $chk_d_num_ini,
     'a_exdates_local' => $a_exdates_local,
+    // para modificar etiquetas
+    'status' => $status,
 ];
 
 $oView = new ViewTwig('pendientes/controller');
-echo $oView->renderizar('pendiente_form.html.twig',$a_campos);
+if (!empty($periodico_tipo) && $secretaria === FALSE ) {
+    $a_campos = [
+        'base_url_web' => $base_url_web,
+        'cargar_css'   => $cargar_css,
+        'calendario'   => $Qcalendario,
+        'secretaria'   => $secretaria,
+        'uid'          => $uid,
+        'cal_oficina'  => $cal_oficina,
+        'go'           => $go,
+        'busca_ap_num' => $busca_ap_num,
+        'busca_ap_any' => $busca_ap_any,
+        'id_reg'       => $id_reg,
+        'simple'       => $simple,
+        'simple_per'   => $simple_per,
+        
+        'id_oficina'   => $id_oficina,
+        'asunto'       => $asunto,
+        'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
+        'oDesplEncargados' => $oDesplEncargados,
+
+        'pagina_cancel' => $pagina_cancel,
+        // para modificar etiquetas
+        'status' => $status,
+        'nuevo' => 5,
+    ];
+    echo $oView->renderizar('pendiente_form_etiquetas.html.twig',$a_campos);
+} else {
+    echo $oView->renderizar('pendiente_form.html.twig',$a_campos);
+}
