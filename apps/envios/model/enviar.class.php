@@ -267,7 +267,6 @@ class Enviar {
             'name' => $filename,
             'ext' => $filename_ext,
         ];
-        //$a_adjuntos = $this->a_adjuntos;
         
         return $a_Txt;
     }
@@ -301,10 +300,10 @@ class Enviar {
                     $contentFile = $this->contentFile;
                     $subject = "$filename ($this->asunto)";
                     // Attachments
-                    //$oMail->addAttachment($File, $filename);    // Optional name
+                    ////$oMail->addAttachment($File, $filename);    // Optional name
                     $oMail->addStringAttachment($contentFile, $filename_ext);    // Optional name
-                    //$oMail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-                    //$oMail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+                    ////$oMail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+                    ////$oMail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
                     
                     // adjuntos:
                     foreach ($a_adjuntos as $adjunto_filename => $escrito_txt) {
@@ -315,7 +314,7 @@ class Enviar {
                     $oMail->isHTML(true);                                  // Set email format to HTML
                     $oMail->Subject = $subject;
                     $oMail->Body    = $message;
-                    //$oMail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                    ////$oMail->AltBody = 'This is the body in plain text for non-HTML mail clients';
                     
                     $oMail->send();
                     $this->a_rta['success'] = TRUE;

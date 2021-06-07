@@ -242,13 +242,13 @@ class Escrito Extends EscritoDB {
         $destinos_txt = '';
         $id_dst = '';
         
-        $a_grupos = $this->getId_grupos();
-        if (!empty($a_grupos)) {
-            if (!empty($id_lugar_de_grupo)) {
-                $oLugar = new Lugar($id_lugar_de_grupo);
-                $destinos_txt .= empty($destinos_txt)? '' : ', ';
-                $destinos_txt .= $oLugar->getSigla();
-            } else {
+        if (!empty($id_lugar_de_grupo)) {
+            $oLugar = new Lugar($id_lugar_de_grupo);
+            $destinos_txt .= empty($destinos_txt)? '' : ', ';
+            $destinos_txt .= $oLugar->getSigla();
+        } else {
+            $a_grupos = $this->getId_grupos();
+            if (!empty($a_grupos)) {
                 //(según los grupos seleccionados)
                 foreach ($a_grupos as $id_grupo) {
                     $oGrupo = new Grupo($id_grupo);
@@ -256,18 +256,19 @@ class Escrito Extends EscritoDB {
                     $destinos_txt .= empty($destinos_txt)? '' : ', ';
                     $destinos_txt .= $descripcion_g;
                 }
+            } else {
+                $a_json_prot_dst = $this->getJson_prot_destino();
+                if (!empty((array)$a_json_prot_dst)) {
+                    $json_prot_dst = $a_json_prot_dst[0];
+                    $id_dst = $json_prot_dst->lugar;
+                }
+                //(segun individuales)
+                $a_json_prot_dst = $this->getJson_prot_destino();
+                $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
+                $destinos_txt = $oArrayProtDestino->ListaTxtBr();
             }
-        } else {
-            $a_json_prot_dst = $this->getJson_prot_destino();
-            if (!empty((array)$a_json_prot_dst)) {
-                $json_prot_dst = $a_json_prot_dst[0];
-                $id_dst = $json_prot_dst->lugar;
-            }
-            //(segun individuales)
-            $a_json_prot_dst = $this->getJson_prot_destino();
-            $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
-            $destinos_txt = $oArrayProtDestino->ListaTxtBr();
         }
+
         // Si no hay ni grupos ni json, miro ids
         if (empty($destinos_txt)) {
             $descripcion_g = $this->getDescripcion();
