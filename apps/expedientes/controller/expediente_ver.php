@@ -120,6 +120,9 @@ $responder = $aRecorrido['responder'];
 
 // firmar o responder
 $firma_txt = _("Firmar");
+$aclaracion = '';
+$aclaracion_event = '';
+$bool_aclaracion = FALSE;
 if ($responder) {
     $a_cargos_oficina = [];
     if (ConfigGlobal::soy_dtor()) {
