@@ -1,19 +1,15 @@
+<div id="condiciones">
 <form id="frm_que" name="frm_que" action="">
 	<input type="hidden" name="simple" value=1>
 	<input type='hidden' name='filtro' value='{{ filtro }}'>
 
-<div class="form-group row" id="condiciones">
-<div class="col-2">
-  <h3>{{ "listar pendientes"|trans }}</h3>
-</div>
-	{% if secretaria %}
-    <!--  --------------------  Calendarios --------------------------  -->
-      <label class="col-xs-1">{{ "De"|trans }}:</label>
-      <div class="col">
+<h3>{{ "listar escritos pendientes de contestar"|trans }}</h3>
+<!--  --------------------  Calendarios --------------------------  -->
+  <div class="form-group row">
+    <label class="col-xs-1">{{ "De"|trans }}:</label>
+    <div class="col">
 		{{ oDesplCalendarios.desplegable|raw }}
-      </div>
-    
-    {% endif %}
+    </div>
 	<!--  --------------------  Periodo --------------------------  -->
 <div class="row col-10">
     <label for="periodo" class="col-xs-1">{{ "periodo"|trans }}:</label>
@@ -46,14 +42,13 @@
         {{ "listar"|trans }}
   	  </button>
   	</div> 
-</div>
-</div>
+  </div>
 </form>
-
+</div>
 <hr>
 <div id="exportar" >
 <form id='seleccionados' name='seleccionados' action='' method='post'>
-	<!--  <input type='hidden' id='calendario' name='calendario' value='{# op_calendario_default #}'> -->
+	<input type='hidden' id='calendario' name='calendario' value='{{ op_calendario_default }}'>
 	<input type='hidden' name='filtro' value='{{ filtro }}'>
 	<input type='hidden' name='periodo' value='{{ periodo }}'>
     <input type="hidden" id="id_oficina2" name="id_oficina" value="{{ id_oficina }}">

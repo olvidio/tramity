@@ -29,7 +29,6 @@ $Qdespl_calendario = (string) \filter_input(INPUT_POST, 'despl_calendario');
 $Qcalendario = (string) \filter_input(INPUT_POST, 'calendario');
 $Qencargado = (string) \filter_input(INPUT_POST, 'encargado');
 	
-
 $aOpciones = [
     'registro' => _("registro"),
     'oficina' => _("oficina"),
@@ -37,13 +36,15 @@ $aOpciones = [
 
 if (!empty($Qcalendario)) {
     $op_calendario_default = $Qcalendario;
+} else {
+    $op_calendario_default = empty($Qdespl_calendario)? 'registro' : $Qdespl_calendario;
 }
 
 $oDesplCalendarios = new Desplegable();
 $oDesplCalendarios->setNombre('despl_calendario');
 $oDesplCalendarios->setOpciones($aOpciones);
+$oDesplCalendarios->setOpcion_sel($op_calendario_default);
 $oDesplCalendarios->setAction('fnjs_calendario()');
-
 
 $oGOficinas = new GestorOficina();
 $a_oficinas = $oGOficinas->getArrayOficinas();
@@ -148,22 +149,8 @@ $aWhere = [
         'completed' => $completed,
         'cancelled' => $cancelled,
     ];
-$gesPendientesReg = new GestorPendiente($cal_oficina,'registro',$role_actual);
-$cPendientesReg = $gesPendientesReg->getPendientes($aWhere);
-
-$gesPendientesOf = new GestorPendiente($cal_oficina,'oficina',$role_actual);
-$cPendientesOf = $gesPendientesOf->getPendientes($aWhere);
-
-if (ConfigGlobal::role_actual() == 'secretaria') {
-    $op_calendario_default = empty($Qdespl_calendario)? 'registro' : $Qdespl_calendario;
-    $oDesplCalendarios->setOpcion_sel($op_calendario_default);
-
-    $gesPendientes = new GestorPendiente($cal_oficina,$op_calendario_default,$role_actual);
-    $cPendientes = $gesPendientes->getPendientes($aWhere);
-} else {
-    $op_calendario_default = '';
-    $cPendientes = array_merge($cPendientesReg, $cPendientesOf);
-}
+$gesPendientes = new GestorPendiente($cal_oficina,$op_calendario_default,$role_actual);
+$cPendientes = $gesPendientes->getPendientes($aWhere);
 
 $a_valores = [];
 $t = 0;
