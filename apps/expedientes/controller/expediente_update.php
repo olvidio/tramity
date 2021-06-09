@@ -758,18 +758,15 @@ switch($Qque) {
         
         if ($oExpediente->DBGuardar() === FALSE ) {
             $error_txt .= $oExpediente->getErrorTxt();
+        } else {
+            $id_expediente = $oExpediente->getId_expediente();
+            // las etiquetas, después de tener el id_expediente (si es nuevo):
+            $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+            $oExpediente->setEtiquetas($Qa_etiquetas);
+            if ($oExpediente->DBGuardar() === FALSE ) {
+                $error_txt .= $oExpediente->getErrorTxt();
+            }
         }
-        
-        $id_expediente = $oExpediente->getId_expediente();
-            
-        
-        // las etiquetas, después de tener el id_expediente (si es nuevo):
-        $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $oExpediente->setEtiquetas($Qa_etiquetas);
-        if ($oExpediente->DBGuardar() === FALSE ) {
-            $error_txt .= $oExpediente->getErrorTxt();
-        }
-        
         
         // CIRCULAR
         if ($Qque == 'circular') {

@@ -119,12 +119,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	 */
 	 protected $json_acciones;
 	/**
-	 * Etiquetas de ExpedienteDB
-	 *
-	 * @var array
-	 */
-	 protected $a_etiquetas;
-	/**
 	 * F_contestar de ExpedienteDB
 	 *
 	 * @var web\DateTimeLocal
@@ -239,7 +233,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$aDades['prioridad'] = $this->iprioridad;
 		$aDades['json_antecedentes'] = $this->json_antecedentes;
 		$aDades['json_acciones'] = $this->json_acciones;
-		$aDades['etiquetas'] = $this->a_etiquetas;
 		$aDades['f_contestar'] = $this->df_contestar;
 		$aDades['estado'] = $this->iestado;
 		$aDades['f_ini_circulacion'] = $this->df_ini_circulacion;
@@ -263,7 +256,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 					prioridad                = :prioridad,
 					json_antecedentes        = :json_antecedentes,
 					json_acciones            = :json_acciones,
-					etiquetas                = :etiquetas,
 					f_contestar              = :f_contestar,
 					estado                   = :estado,
 					f_ini_circulacion        = :f_ini_circulacion,
@@ -291,8 +283,8 @@ class ExpedienteDB Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(id_tramite,ponente,resto_oficinas,asunto,entradilla,comentarios,prioridad,json_antecedentes,json_acciones,etiquetas,f_contestar,estado,f_ini_circulacion,f_reunion,f_aprobacion,vida,json_preparar,firmas_oficina,visibilidad)";
-			$valores="(:id_tramite,:ponente,:resto_oficinas,:asunto,:entradilla,:comentarios,:prioridad,:json_antecedentes,:json_acciones,:etiquetas,:f_contestar,:estado,:f_ini_circulacion,:f_reunion,:f_aprobacion,:vida,:json_preparar,:firmas_oficina,:visibilidad)";		
+			$campos="(id_tramite,ponente,resto_oficinas,asunto,entradilla,comentarios,prioridad,json_antecedentes,json_acciones,f_contestar,estado,f_ini_circulacion,f_reunion,f_aprobacion,vida,json_preparar,firmas_oficina,visibilidad)";
+			$valores="(:id_tramite,:ponente,:resto_oficinas,:asunto,:entradilla,:comentarios,:prioridad,:json_antecedentes,:json_acciones,:f_contestar,:estado,:f_ini_circulacion,:f_reunion,:f_aprobacion,:vida,:json_preparar,:firmas_oficina,:visibilidad)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'ExpedienteDB.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -388,7 +380,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		if (array_key_exists('prioridad',$aDades)) $this->setPrioridad($aDades['prioridad']);
 		if (array_key_exists('json_antecedentes',$aDades)) $this->setJson_antecedentes($aDades['json_antecedentes'],TRUE);
 		if (array_key_exists('json_acciones',$aDades)) $this->setJson_acciones($aDades['json_acciones'],TRUE);
-		if (array_key_exists('etiquetas',$aDades)) $this->setEtiquetasIn($aDades['etiquetas'],TRUE);
 		if (array_key_exists('f_contestar',$aDades)) $this->setF_contestar($aDades['f_contestar'],$convert);
 		if (array_key_exists('estado',$aDades)) $this->setEstado($aDades['estado']);
 		if (array_key_exists('f_ini_circulacion',$aDades)) $this->setF_ini_circulacion($aDades['f_ini_circulacion'],$convert);
@@ -416,7 +407,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$this->setPrioridad('');
 		$this->setJson_antecedentes('');
 		$this->setJson_acciones('');
-		$this->setEtiquetasIn('');
 		$this->setF_contestar('');
 		$this->setEstado('');
 		$this->setF_ini_circulacion('');
@@ -706,32 +696,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
         $this->json_acciones = $json;
 	}
 	/**
-	 * Recupera l'atribut a_etiquetas de ExpedienteDB
-	 *
-	 * @return array a_etiquetas
-	 */
-	function getEtiquetasIn() {
-		if (!isset($this->a_etiquetas) && !$this->bLoaded) {
-			$this->DBCarregar();
-		}
-        return core\array_pg2php($this->a_etiquetas);
-	}
-	/**
-	 * estableix el valor de l'atribut a_etiquetas de ExpedienteDB
-	 * 
-	 * @param array a_etiquetas
-     * @param boolean $db=FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
-	 *  o es una variable de php hay que convertirlo.
-	 */
-	function setEtiquetasIn($a_etiquetas='',$db=FALSE) {
-        if ($db === FALSE) {
-	        $postgresArray = core\array_php2pg($a_etiquetas);
-	    } else {
-	        $postgresArray = $a_etiquetas;
-	    }
-        $this->a_etiquetas = $postgresArray;
-	}
-	/**
 	 * Recupera l'atribut df_contestar de ExpedienteDB
 	 *
 	 * @return web\DateTimeLocal df_contestar
@@ -993,7 +957,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$oExpedienteDBSet->add($this->getDatosPrioridad());
 		$oExpedienteDBSet->add($this->getDatosJson_antecedentes());
 		$oExpedienteDBSet->add($this->getDatosJson_acciones());
-		$oExpedienteDBSet->add($this->getDatosEtiquetasIn());
 		$oExpedienteDBSet->add($this->getDatosF_contestar());
 		$oExpedienteDBSet->add($this->getDatosEstado());
 		$oExpedienteDBSet->add($this->getDatosF_ini_circulacion());
@@ -1114,18 +1077,6 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'json_acciones'));
 		$oDatosCampo->setEtiqueta(_("json_acciones"));
-		return $oDatosCampo;
-	}
-	/**
-	 * Recupera les propietats de l'atribut a_etiquetas de ExpedienteDB
-	 * en una clase del tipus DatosCampo
-	 *
-	 * @return core\DatosCampo
-	 */
-	function getDatosEtiquetasIn() {
-		$nom_tabla = $this->getNomTabla();
-		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'etiquetas'));
-		$oDatosCampo->setEtiqueta(_("etiquetas"));
 		return $oDatosCampo;
 	}
 	/**
