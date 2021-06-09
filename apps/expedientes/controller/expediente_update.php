@@ -698,10 +698,6 @@ switch($Qque) {
             $Qestado = Expediente::ESTADO_BORRADOR;
             $oExpediente->setPonente($Qponente);
         }
-        
-        // las etiquetas:
-        $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $oExpediente->setEtiquetas($Qa_etiquetas);
 
         $oExpediente->setId_tramite($Qtramite);
         $oExpediente->setEstado($Qestado);
@@ -766,6 +762,15 @@ switch($Qque) {
         
         $id_expediente = $oExpediente->getId_expediente();
             
+        
+        // las etiquetas, después de tener el id_expediente (si es nuevo):
+        $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $oExpediente->setEtiquetas($Qa_etiquetas);
+        if ($oExpediente->DBGuardar() === FALSE ) {
+            $error_txt .= $oExpediente->getErrorTxt();
+        }
+        
+        
         // CIRCULAR
         if ($Qque == 'circular') {
             //$f_hoy_iso = date('Y-m-d');

@@ -296,6 +296,27 @@ fnjs_guardar=function(){
 	}
 }
 
+{{ oArrayDesplEtiquetas.ComprobarSelectJs|raw }}
+fnjs_mas_etiquetas=function(){
+	var code = (event.keyCode ? event.keyCode : event.which);
+    var valor=1;
+    var id_campo='#'+event.currentTarget.id;
+    var valor=$(id_campo).val();
+    if(code!=9) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+	if ( code==9 || event.type=="change") {
+		if (valor!=0) {
+			{{ oArrayDesplEtiquetas.ListaSelectsJs|raw }}
+		}
+	}
+}
+fnjs_quitar_etiquetas=function(){
+	$('#span_etiquetas').html("");
+	$('#etiquetas_num').val(0);
+}
+
 fnjs_mas_firmas=function(){
 	var code = (event.keyCode ? event.keyCode : event.which);
     var valor=1;
