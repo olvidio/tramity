@@ -16,6 +16,11 @@ use web\Hash;
 class ExpedienteLista {
     /**
      * 
+     * @var integer
+     */
+    private $prioridad_sel=0;
+    /**
+     * 
      * @var string
      */
     private $filtro;
@@ -105,11 +110,23 @@ class ExpedienteLista {
 
         switch ($this->filtro) {
             case 'borrador_propio':
+                if (!empty($this->aWhereADD)) {
+                    $aWhere = $this->aWhereADD;
+                    if (!empty($this->aOperadorADD)) {
+                        $aOperador = $this->aOperadorADD;
+                    }
+                }
                 $aWhere['estado'] = Expediente::ESTADO_BORRADOR;
                 // solo los propios:
                 $aWhere['ponente'] = ConfigGlobal::role_id_cargo();
                 break;
             case 'borrador_oficina':
+                if (!empty($this->aWhereADD)) {
+                    $aWhere = $this->aWhereADD;
+                    if (!empty($this->aOperadorADD)) {
+                        $aOperador = $this->aOperadorADD;
+                    }
+                }
                 $mi_cargo = ConfigGlobal::role_id_cargo();
                 $aWhere['estado'] = Expediente::ESTADO_BORRADOR;
                 // Si es el director los ve todos, no sólo los pendientes de poner 'visto'.
@@ -486,12 +503,12 @@ class ExpedienteLista {
         switch ($this->filtro) {
             case 'borrador_propio':
             case 'borrador_oficina':
-                $a_cosas = [ 'filtro' => $this->getFiltro() ];
+                $a_cosas = [ 'filtro' => $this->getFiltro(), 'prioridad_sel' => $this->prioridad_sel ];
                 $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_form.php';
                 $col_mod = 1;
                 $col_ver = 1;
-                $presentacion = 1;
+                $presentacion = 6; // añado las etiquetas
                 $ver_f_ini = FALSE;
                 break;
             case 'firmar':
@@ -629,10 +646,12 @@ class ExpedienteLista {
 
                 $a_cosas_ver = [ 'id_expediente' => $id_expediente,
                             'filtro' => $this->getFiltro(),
+                            'prioridad_sel' => $this->prioridad_sel,
                             'modo' => 'ver',
                             ];
                 $a_cosas_mod = [ 'id_expediente' => $id_expediente,
                             'filtro' => $this->getFiltro(),
+                            'prioridad_sel' => $this->prioridad_sel,
                             'modo' => 'mod',
                             ];
                 $link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas_ver));
@@ -730,7 +749,7 @@ class ExpedienteLista {
         
         $filtro = $this->getFiltro();
         $url_cancel = 'apps/expedientes/controller/expediente_lista.php';
-        $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $filtro]));
+        $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $filtro, 'prioridad_sel' => $this->prioridad_sel]));
 
         $a_campos = [
             //'id_expediente' => $this->id_expediente,
@@ -785,6 +804,14 @@ class ExpedienteLista {
     public function setFiltro($filtro)
     {
         $this->filtro = $filtro;
+    }
+
+    /**
+     * @param string $prioridad_sel
+     */
+    public function setPrioridad_sel($prioridad_sel)
+    {
+        $this->prioridad_sel = $prioridad_sel;
     }
 
     /**

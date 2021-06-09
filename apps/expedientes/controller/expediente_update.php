@@ -699,6 +699,9 @@ switch($Qque) {
             $oExpediente->setPonente($Qponente);
         }
         
+        // las etiquetas:
+        $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $oExpediente->setEtiquetas($Qa_etiquetas);
 
         $oExpediente->setId_tramite($Qtramite);
         $oExpediente->setEstado($Qestado);

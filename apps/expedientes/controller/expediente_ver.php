@@ -23,6 +23,7 @@ require_once ("apps/core/global_object.inc");
 
 $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qprioridad_sel = (integer) \filter_input(INPUT_POST, 'prioridad_sel');
 
 $gesCargos = new GestorCargo();
 $aCargos =$gesCargos->getArrayCargos();
@@ -172,9 +173,9 @@ $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas()');
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
+$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
 $base_url = core\ConfigGlobal::getWeb();
-$pagina_cambio = web\Hash::link('apps/expedientes/controller/expediente_cambio_tramite.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro]));
+$pagina_cambio = web\Hash::link('apps/expedientes/controller/expediente_cambio_tramite.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
 
 $add_del_txt = '';
 if ($Qfiltro == 'seg_reunion') {
@@ -198,6 +199,7 @@ if (ConfigGlobal::role_actual() == 'scdl') {
 $a_campos = [
     'id_expediente' => $Qid_expediente,
     'filtro' => $Qfiltro,
+    'prioridad_sel' => $Qprioridad_sel,
     //'oHash' => $oHash,
     'ponente_txt' => $ponente_txt,
     'id_ponente' => $id_ponente,

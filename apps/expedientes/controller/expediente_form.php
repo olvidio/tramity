@@ -2,10 +2,10 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\Entrada;
+use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\Escrito;
 use expedientes\model\Expediente;
 use expedientes\model\entity\GestorAccion;
-use lugares\model\entity\GestorGrupo;
 use tramites\model\entity\GestorTramite;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
@@ -13,7 +13,6 @@ use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
 use web\ProtocoloArray;
-use usuarios\model\entity\GestorOficina;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -28,6 +27,7 @@ require_once ("apps/core/global_object.inc");
 
 $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qprioridad_sel = (integer) \filter_input(INPUT_POST, 'prioridad_sel');
 $Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
 $prioridad_fecha = Expediente::PRIORIDAD_FECHA;
@@ -77,6 +77,17 @@ $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
 
+// Etiquetas
+$etiquetas = []; // No hay ninguna porque en archivar es cuando se añaden.
+$gesEtiquetas = new GestorEtiqueta();
+$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$a_posibles_etiquetas = [];
+foreach ($cEtiquetas as $oEtiqueta) {
+    $id_etiqueta = $oEtiqueta->getId_etiqueta();
+    $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+    $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+}
+
 $txt_option_cargos = '';
 $a_posibles_cargos = $gesCargos->getArrayCargos();
 foreach ($a_posibles_cargos as $id_cargo => $cargo) {
@@ -110,6 +121,11 @@ if ($Qid_expediente) {
     $visibilidad = $oExpediente->getVisibilidad();
     $oDesplVisibilidad->setOpcion_sel($visibilidad);
 
+    $etiquetas = $oExpediente->getEtiquetasVisiblesArray();
+    $oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
+    $oArrayDesplEtiquetas ->setBlanco('t');
+    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
+
     $f_contestar = $oExpediente->getF_contestar()->getFromLocal();
     $f_ini_circulacion = $oExpediente->getF_ini_circulacion()->getFromLocal();
     $f_reunion = $oExpediente->getF_reunion()->getFromLocal();
@@ -139,6 +155,7 @@ if ($Qid_expediente) {
                     'id_escrito' => $id_escrito,
                     'accion' => $tipo_accion,
                     'filtro' => $Qfiltro,
+                    'prioridad_sel' => $Qprioridad_sel,
         ];
         $pag_escrito =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
         $pag_rev =  web\Hash::link('apps/expedientes/controller/escrito_rev.php?'.http_build_query($a_cosas));
@@ -220,6 +237,10 @@ if ($Qid_expediente) {
     $oficinas = '';
     $oficiales = '';
 
+    $oArrayDesplEtiquetas = new web\DesplegableArray([],$a_posibles_etiquetas,'etiquetas');
+    $oArrayDesplEtiquetas ->setBlanco('t');
+    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
+
     $oArrayDesplFirmasOficina = new web\DesplegableArray($oficiales,$a_posibles_cargos_oficina,'firmas_oficina');
     $oArrayDesplFirmasOficina ->setBlanco('t');
     $oArrayDesplFirmasOficina ->setAccionConjunto('fnjs_mas_firmas_oficina()');
@@ -234,16 +255,16 @@ $lista_antecedentes = $oExpediente->getHtmlAntecedentes();
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
 $url_ajax = 'apps/tramites/controller/tramitecargo_ajax.php';
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
+$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query([]));
 
 $pag_escrito =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
 $pag_propuesta =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_PROPUESTA]));
-$pag_plantilla =  web\Hash::link('apps/plantillas/controller/plantilla_lista_expediente.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'modo' => $Qmodo]));
-$pag_respuesta =  web\Hash::link('apps/entradas/controller/buscar_form.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro]));
+$pag_plantilla =  web\Hash::link('apps/plantillas/controller/plantilla_lista_expediente.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'modo' => $Qmodo, 'prioridad_sel' => $Qprioridad_sel]));
+$pag_respuesta =  web\Hash::link('apps/entradas/controller/buscar_form.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
 
-$pag_actualizar = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro]));
+$pag_actualizar = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
 
 // datepicker
 $oFecha = new DateTimeLocal();
@@ -255,6 +276,7 @@ $error_fecha_txt = 'P'.$error_fecha.'D';
 $oHoy = new DateTimeLocal();
 $oHoy->sub(new DateInterval($error_fecha_txt));
 $minIso = $oHoy->format('Y-m-d');
+
 
 $a_campos = [
     'titulo' => $titulo,
@@ -268,6 +290,7 @@ $a_campos = [
     'oDesplPrioridad' => $oDesplPrioridad,
     'oDesplVida' => $oDesplVida,
     'oDesplVisibilidad' => $oDesplVisibilidad,
+    'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
 
     'f_contestar' => $f_contestar,
     'f_ini_circulacion' => $f_ini_circulacion,

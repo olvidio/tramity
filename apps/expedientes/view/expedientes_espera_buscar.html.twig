@@ -1,0 +1,60 @@
+<div id="condiciones">
+<form id="que" name="que" action="" method="post">
+<input type="hidden" id="filtro" name="filtro" value="{{ filtro }}">
+<input type="hidden" id="que" name="que" value="buscar">
+
+
+  <h3 class="col-10 form-group row">{{ "listar expedientes borrador"|trans }}:
+   <!--  --------------- OFICINA PROPIA/RESTO --------------- -->
+    <div class="col-4">
+    <div class="form-check form-check-inline">
+      <input type="radio" class="form-check-input" name="prioridad_sel" value="1" {{ chk_resto }} onClick="fnjs_buscar('#que');" >
+      <label class="form-check-label">
+      {{ "normal"|trans }}
+      </label>
+	</div>
+    <div class="form-check form-check-inline">
+      <input type="radio" class="form-check-input" name="prioridad_sel" value="6" {{ chk_espera }} onClick="fnjs_buscar('#que');" >
+      <label class="form-check-label">
+      {{ "en espera"|trans }}
+      </label>
+	</div>
+  </div>
+  </h3>
+  <!--  --------------- Etiquetas --------------- -->
+  <div id="div_etiquetas" class="form-group row align-items-center">
+    <label for="etiquetas" class="col-1">{{ "Etiquetas"|trans }}:</label>
+    <div class="col-1">
+        <div class="col-6">
+          <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
+          <label class="form-check-label">
+          {{ "alguna"|trans }}
+          </label>
+        </div>
+        <div class="col-6">
+          <input type="radio" class="form-check-input" name="andOr" value="AND" {{ chk_and }} >
+          <label class="form-check-label">
+          {{ "todas"|trans }}
+          </label>
+        </div>
+	</div>
+    <div class="col-6">
+      <span id="span_etiquetas">
+      	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
+      </span>
+    </div>
+    <!--  --------------------  Botones --------------------------  -->
+      <div class="row">
+        <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary" onClick="fnjs_buscar('#que');" >
+          {{ "filtrar"|trans }}
+        </button>
+      </div>
+</form>
+</div>
+
+<script>
+fnjs_buscar=function(formulario){
+    $(formulario).attr('action',"apps/expedientes/controller/expediente_lista.php");
+    fnjs_enviar_formulario(formulario,'#main');
+}
+</script>

@@ -39,36 +39,44 @@
 <!--  Col Izda -->
 <div class="col-9" >
   <!--  --------------- TRAMITE --------------- -->
-  <div class="form-group row">
-    <label for="tramite" class="col-1 col-form-label">{{ "Trámite"|trans }}</label>
-    <div class="col-3" >
+  <div class="form-group row mb-0">
+    <label for="tramite" class="form-group mb-0 col-1 col-form-label">{{ "Trámite"|trans }}</label>
+    <div class="form-group mb-0 col-3" >
     	{{ oDesplTramites.desplegable|raw }}
     </div>
     <!--  --------------- VIDA --------------- -->
-    <div class="form-group col-md-3">
+    <div class="form-group mb-0 col-md-3">
       <label for="Vida">{{ "Vida"|trans }}</label>
       {{ oDesplVida.desplegable|raw }}
     </div>
     <!--  --------------- VISIBILIDAD --------------- -->
-    <div class="form-group col-md-3">
+    <div class="form-group mb-0 col-md-3">
       <label for="Visibilidad">{{ "Visibilidad"|trans }}</label>
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
   </div>
-  <div class="form-group row">
+  <div class="form-group mb-0 row">
     <!--
     <label for="estado" class="col-1 col-form-label">{{ "Estado"|trans }}</label>
     <div class="col-2" >
     	{{ oDesplEstado.desplegable|raw }}
     </div>
   -->
-    <label for="prioridad" class="col-1 col-form-label">{{ "Prioridad"|trans }}</label>
-    <div class="col-2" >
+    <label for="prioridad" class="form-group mb-0 col-1 col-form-label">{{ "Prioridad"|trans }}</label>
+    <div class="form-group mb-0 col-2" >
     	{{ oDesplPrioridad.desplegable|raw }}
     </div>
     <label for="f_contestar" class="col col-3 col-form-label text-right">{{ "resolver antes de"|trans }}:</label>
-    <div class='col-3 date'>
+    <div class='form-group mb-0 col-3 date'>
       <input tabindex='41' name='f_contestar' id='f_contestar' type='text' class="form-control" value="{{ f_contestar }}" />
+    </div>
+  </div>
+  <div id="div_etiquetas" class="form-group mb-0 row align-items-center">
+    <label for="etiquetas" class="col-1">{{ "Etiquetas"|trans }}:</label>
+    <div class="form-group mb-0 col-6">
+      <span id="span_etiquetas">
+      	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
+      </span>
     </div>
   </div>
   <!--  --------------- ASUNTO --------------- -->

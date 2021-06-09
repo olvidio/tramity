@@ -34,6 +34,7 @@ class Expediente Extends expedienteDB {
     const PRIORIDAD_NORMAL       = 3;
     const PRIORIDAD_UNKNOW       = 4;
     const PRIORIDAD_FECHA        = 5;
+    const PRIORIDAD_ESPERA       = 6;
     // estado
     /*
     - Borrador (antes de circular, mientras lo trabaja el ponenente)
@@ -340,6 +341,7 @@ class Expediente Extends expedienteDB {
             self::PRIORIDAD_URGENTE => _("urgente"),
             self::PRIORIDAD_UNKNOW => _("desconocido"),
             self::PRIORIDAD_FECHA => _("otra"),
+            self::PRIORIDAD_ESPERA => _("en espera"),
         ];
         
         return $a_prioridad;
