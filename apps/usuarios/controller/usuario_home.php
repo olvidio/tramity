@@ -257,6 +257,7 @@ $filtro = 'pendientes';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
+/*
 // documentos = 40;
 $filtro = 'documentos';
     $active = ($filtro == $Qfiltro)? 'active' : '';
@@ -268,6 +269,7 @@ $filtro = 'documentos';
     $num = '';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
+*/
 
 // ordenar:
 ksort($a_pills);
