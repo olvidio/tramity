@@ -16,18 +16,18 @@
           <h5 class="modal-title" id="exampleModalLongTitle">{{ "Firma"|trans }}</h5>
 		</div>
         <div class="d-flex flex-row justify-content-end">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
 		</div>
       </div>
       <div class="modal-body">
         <div class="d-flex">
-        <div class="mr-auto p-6">
+        <div class="me-auto p-6">
           {{ "Comentario"|trans }}
         </div>
         <div class="p-6">
-          <button type="button" class="btn btn-outline-info" data-dismiss="modal" onClick="fnjs_voto('{{ aclaracion_event }}');" >
+          <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal" onClick="fnjs_voto('{{ aclaracion_event }}');" >
             {{ aclaracion }}
           </button>
         </div>
@@ -40,10 +40,10 @@
       <div class="modal-footer">
         <div class="d-flex flex-row ">
             <div class="mr">
-              <label>{{ "voto"|trans }}: </label>
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="form-label">{{ "voto"|trans }}: </label>
+                <div class="btn-group btn-group-toggle" data-bs-toggle="buttons">
                 {% for row in a_firmas %}
-                  <label class="btn btn-outline-secondary" >
+                  <label class="btn btn-outline-secondary form-label" >
                        <input type="radio" name="voto_options" value="{{ row.id }}" autocomplete="off" > {{ row.valor }}
                      </label>
                 {% endfor %}
@@ -51,8 +51,8 @@
            	</div>
         </div>
         <div class="d-flex flex-row justify-content-end">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ "Cerrar"|trans }}</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fnjs_voto('voto');" >{{ "Guardar"|trans }}</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Cerrar"|trans }}</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="fnjs_voto('voto');" >{{ "Guardar"|trans }}</button>
         </div>
         {% endif %}
       </div>
@@ -68,8 +68,8 @@
     <input type=hidden name='ponente' id='ponente' value={{ id_ponente }} >
     
 <div class="clearfix">
-	<div class="d-inline-flex float-left">
-        <div class="p-2 bg-warning text-dark font-weight-bold" >
+	<div class="d-inline-flex float-start">
+        <div class="p-2 bg-warning text-dark fw-bold" >
         {{ ponente_txt }}
         </div>
         <div class="p-2 bg-info" >
@@ -84,7 +84,7 @@
         </div>
   
     </div>
-	<div class="d-inline-flex float-right">
+	<div class="d-inline-flex float-end">
         <div class="p-2 bg-warning" >
     	 {{ "Prioridad"|trans }}: {{ prioridad_txt }}
     	</div>
@@ -92,7 +92,7 @@
 </div>
 <!-- Fechas -->
 <div class="clearfix">
-	<div class="d-inline-flex float-left">
+	<div class="d-inline-flex float-start">
         <div class="p-2" >
             {{ "Inicio"|trans }}: {{ f_ini_circulacion }}
         </div>
@@ -103,7 +103,7 @@
             {{ "aprobación"|trans }}: {{ f_aprobacion }}
         </div>
     </div>
-	<div class="d-inline-flex float-right">
+	<div class="d-inline-flex float-end">
         <div class="p-2 bg-warning" >
         	{{ "resolver"|trans }}: {{ f_contestar }}
     	</div>
@@ -144,8 +144,8 @@
 <div class="col-3" >
 <!--  --------------------  ANTECEDENTES  --------------------------  -->
 {# lista de antecedentes #}
-<div class="form-group col-md-12">
-  <label>{{ "Antecedentes"|trans }}:</label>
+<div class="mb-3 col-md-12">
+  <label class="form-label">{{ "Antecedentes"|trans }}:</label>
   <div id="lista_antecedentes">
     {{ lista_antecedentes|raw }}
   </div>
@@ -153,7 +153,7 @@
 <hr>
 <div class="d-flex justify-content-center">
 {% if add_del == 'add' %}
-<button type="button" class="btn btn-success" data-toggle="modal" data-target="#ModalFirma">
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalFirma">
   {{ firma_txt }}
 </button>
 {%  endif %}
@@ -165,8 +165,8 @@
 </div>
 
 <!--  --------------------  RECORRIDO  --------------------------  -->
-<div class="form-group col-md-12">
-<label>{{ "Recorrido"|trans }}:</label>
+<div class="mb-3 col-md-12">
+<label class="form-label">{{ "Recorrido"|trans }}:</label>
 <ol id="lst_recorrido" class="list-group">
   {% for row in a_recorrido %}
 	<li class="list-group-item {{ row.class }}">{{ row.valor }}</li>
@@ -233,23 +233,23 @@ fnjs_ver_cargos=function(add_del) {
             var theArray = JSON.parse(json.cargos);
             html='';
 			$.each(theArray, function(id, obj){
-				html+='<div class="custom-control custom-checkbox custom-control-inline">';
-            	html+='<input type="checkbox" class="custom-control-input" id="'+obj.id+'" >';
-            	html+='<label class="custom-control-label" for="'+obj.id+'">'+obj.sigla+'</label>';
+				html+='<div class="form-check custom-checkbox form-check-inline">';
+            	html+='<input type="checkbox" class="form-check-input" id="'+obj.id+'" >';
+            	html+='<label class="form-check-label" for="'+obj.id+'">'+obj.sigla+'</label>';
             	html+='</div>';
 			});
 			if (json.cargos_repetir != undefined) {
                 var theArray2 = JSON.parse(json.cargos_repetir);
                 html+='<div style="background-color: honeydew;">';
                 $.each(theArray2, function(id, obj){
-                    html+='<div class="custom-control custom-checkbox custom-control-inline">';
-                    html+='<input type="checkbox" class="custom-control-input" id="'+obj.id+'" >';
-                    html+='<label class="custom-control-label" for="'+obj.id+'">'+obj.sigla+'</label>';
+                    html+='<div class="form-check custom-checkbox form-check-inline">';
+                    html+='<input type="checkbox" class="form-check-input" id="'+obj.id+'" >';
+                    html+='<label class="form-check-label" for="'+obj.id+'">'+obj.sigla+'</label>';
                     html+='</div>';
                 });
                 html+='</div>';
         	}
-			html+='<button class="ml-auto btn btn-secondary btn-sm" onClick="fnjs_add_cargos(\''+add_del+'\');" >';
+			html+='<button class="ms-auto btn btn-secondary btn-sm" onClick="fnjs_add_cargos(\''+add_del+'\');" >';
     		html+='{{ "ok"|trans }}';
             html+='</button>';
           	$("#of").html(html);

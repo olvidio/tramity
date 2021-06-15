@@ -5,15 +5,15 @@
   <div class="card-body">
       <form class="user" id="frm_etiqueta"  name="frm_etiqueta" action="" method="post">
       {{ oHash.getCamposHtml|raw }}
-        <div class="form-group">
-          <label for="descripcion">{{ "Nombre de la etiqueta"|trans }}</label>
+        <div class="mb-3">
+          <label for="descripcion" class="form-label">{{ "Nombre de la etiqueta"|trans }}</label>
           <input type="text" class="form-control col-6" id="nom_etiqueta" name="nom_etiqueta" placeholder="nom_etiqueta" value="{{ nom_etiqueta }}">
         </div>
-        <div class="form-group">
-          <label for="example">{{ "etiqueta"|trans }}:</label>
-          <input name="oficina" type="checkbox" checked data-toggle="toggle" data-on="{{ "de la oficina"|trans }}" data-off="{{ "Personal"|trans }}" data-onstyle="success" data-offstyle="danger">
+        <div class="mb-3">
+          <label for="example" class="form-label">{{ "etiqueta"|trans }}:</label>
+          <input name="oficina" type="checkbox" checked data-bs-toggle="toggle" data-on="{{ "de la oficina"|trans }}" data-off="{{ "Personal"|trans }}" data-onstyle="success" data-offstyle="danger">
         </div>
-        <div class="form-group">
+        <div class="mb-3">
           <button class="btn btn-secondary" onClick="fnjs_cancelar();" >
             {{ "Cancelar"|trans }}
 		  </button>
@@ -27,7 +27,7 @@
 <!-- Bootstrap Switch Button -->
 <!--  OJO: si se pone en la página superior no funciona, alguien debe sobreescribir... -->
 <!--  OJO: El java script está en 'usuario_home' para que se cargue sólo una vez -->
-<link type="text/css" rel='stylesheet' href='node_modules/bootstrap4-toggle/css/bootstrap4-toggle.min.css' />
+<link type="text/css" rel='stylesheet' href='node_modules/mdb-ui-kit/css/mdb.min.css' />
 <script>
 fnjs_cancelar=function(){
     event.preventDefault();
@@ -64,6 +64,6 @@ fnjs_guardar=function(){
 }
 
 $(document).ready(function() {
-    $('input[type=checkbox][data-toggle^=toggle]').bootstrapToggle();
+    $('input[type=checkbox][data-bs-toggle^=toggle]').bootstrapToggle();
 });
 </script>

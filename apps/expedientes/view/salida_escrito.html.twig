@@ -33,14 +33,14 @@
 <!--  col Izda -->
 <div class="col-8" > 
   <!--  --------------- DESTINOS --------------- -->
-  <div class="form-group row align-items-center">
-      <div class="col-2 col-form-label">
-        <label for="prot_num" class="col-2 col-form-label">
+  <div class="mb-3 row align-items-center">
+      <div class="col-2 form-label">
+        <label for="prot_num" class="col-2 form-label">
           {{ "Destinos"|trans }}
         </label>
-        <div class="custom-control custom-switch align-middle">
-          <input type="checkbox" class="custom-control-input" id="grupo_dst" name="grupo_dst" {{ chk_grupo_dst }} onChange="fnjs_grupo()" />
-          <label class="custom-control-label" for="grupo_dst">Grupo</label>
+        <div class="form-check form-switch align-middle">
+          <input type="checkbox" class="form-check-input" id="grupo_dst" name="grupo_dst" {{ chk_grupo_dst }} onChange="fnjs_grupo()" />
+          <label class="form-check-label" for="grupo_dst">Grupo</label>
         </div>
       </div>
       <div id="dst_array" class="col-10">
@@ -56,8 +56,8 @@
   </div>
   
   <!--  --------------- REFERENCIAS --------------- -->
-  <div class="form-group row">
-      <label for="prot_num" class="col-2 col-form-label">
+  <div class="mb-3 row">
+      <label for="prot_num" class="col-2 form-label">
         {{ "Referencias"|trans }}
       </label>
       <div class="col-10">
@@ -65,33 +65,33 @@
       </div>
   </div>
   <!--  --------------- ASUNTO --------------- -->
-  <div class="form-group row">
-    <label for="asunto" class="col-2 col-form-label">{{ "Asunto"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="asunto" class="col-2 form-label">{{ "Asunto"|trans }}</label>
     <div class="col-10">
       <input {{ asunto_readonly }} tabindex='100' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------- DETALLE --------------- -->
-  <div class="form-group row">
-    <label for="detalle" class="col-2 col-form-label">{{ "Detalle"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="detalle" class="col-2 form-label">{{ "Detalle"|trans }}</label>
     <div class='col-6'>
       <input {{ detalle_readonly }} tabindex='110' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
     </div>
   </div>
   <!--  --------------- ENTRADILLA --------------- -->
-  <div class="form-group row">
-    <label for="entradilla" class="col-2 col-form-label">{{ "Entradilla"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="entradilla" class="col-2 form-label">{{ "Entradilla"|trans }}</label>
     <div class='col-10'>
       <textarea tabindex='120' rows="5" class="form-control" name='entradilla' id="entradilla">{{ entradilla }}</textarea>
     </div>
   </div>
   <!--  --------------- PONENTE Y OFICINAS --------------- -->
-  <div class="form-group row">
-    <label for="ponente" class="col-2">{{ "Ponente"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="ponente" class="col-2 form-label">{{ "Ponente"|trans }}</label>
     <div class="col-2">
 	  {{ oDesplPonente.desplegable|raw }}
     </div>
-    <label for="firmas" class="col-1">{{ "Firmas"|trans }}</label>
+    <label for="firmas" class="col-1 form-label">{{ "Firmas"|trans }}</label>
     <div class="col">
       <span id="span_firmas">
       	{{ oArrayDesplFirmas.ListaSelects|raw }}
@@ -99,23 +99,23 @@
     </div>
   </div>
   <!--  --------------- CATEGORIA --------------- -->
-  <div class="form-row">
-    <div class="form-group col-md-2">
-      <label for="categoria">{{ "Categoría"|trans }}</label>
+  <div class="row">
+    <div class="mb-3 col-md-2">
+      <label for="categoria" class="form-label">{{ "Categoría"|trans }}</label>
       {{ oDesplCategoria.desplegable|raw }}
     </div>
-    <div class="form-group col-md-2">
-      <label for="visibilidad">Visibilidad</label>
+    <div class="mb-3 col-md-2">
+      <label for="visibilidad" class="form-label">Visibilidad</label>
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
-    <div class="form-group col-md-4">
-	  <label for="f_aprobacion">{{ "Fecha de aprobación"|trans }}</label>
+    <div class="mb-3 col-md-4">
+	  <label for="f_aprobacion" class="form-label">{{ "Fecha de aprobación"|trans }}</label>
       <div class="col-8 date">
         <input tabindex='160' name='f_aprobacion' id='f_aprobacion' type='text' class="form-control" value="{{ f_aprobacion }}" />
       </div>
     </div>
-    <div class="form-group col-md-4">
-	  <label for="f_escrito">{{ "Fecha del escrito"|trans }}</label>
+    <div class="mb-3 col-md-4">
+	  <label for="f_escrito" class="form-label">{{ "Fecha del escrito"|trans }}</label>
       <div class="col-8 date">
         <input tabindex='170' name='f_escrito' id='f_escrito' type='text' class="form-control" value="{{ f_escrito }}" />
       </div>
@@ -128,8 +128,8 @@
     <!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
 {% if id_escrito %}
     {% if tipo_doc == 1 %}
-        <div class="form-group">
-          <label>{{ "Ver escrito"|trans }}:</label>
+        <div class="mb-3">
+          <label class="form-label">{{ "Ver escrito"|trans }}:</label>
           <button tabindex='200' class="btn btn-info" onClick="fnjs_ver_doc_ep();" >
             {{ "Etherpad"|trans }}
           </button>
@@ -142,8 +142,8 @@
         <p>incrustado</p>
     {% endif %}
     {% if tipo_doc is empty %}
-        <div class="form-group">
-          <label>{{ "Insertar escrito"|trans }}:</label>
+        <div class="mb-3">
+          <label class="form-label">{{ "Insertar escrito"|trans }}:</label>
           <button tabindex='200' class="btn btn-info" onClick="fnjs_add_escrito(1);" >
             {{ "Etherpad"|trans }}
           </button>
@@ -156,8 +156,8 @@
         </div>
     {% endif %}
     <hr>
-    <div class="form-group">
-        <label for="escrito_adjunto">{{ "Adjuntos"|trans }}</label>
+    <div class="mb-3">
+        <label for="escrito_adjunto" class="form-label">{{ "Adjuntos"|trans }}</label>
         <div class="file-loading">
             <input id="escrito_adjunto" name="adjuntos[]" type="file" multiple>
         </div>

@@ -2,20 +2,12 @@
 <form id="que" name="que" action="" method="post">
   <input type="hidden" id="filtro" name="filtro" value="{{ filtro }}">
   <input type="hidden" id="que" name="que" value="buscar">
-  <div class="col-10 form-group row">
-    <h3>{{ "listar entradas encargadas a"|trans }}:</h3>
-    <!--  --------------------  Encargados --------------------------  -->
-    <div class="col-3">
+  <!--  --------------------  Encargados --------------------------  -->
+  <div class="mb-3 row">
+    <label class="form-label col-4 fs-2">{{ "listar entradas encargadas a"|trans }}:</label>
+    <div class="col-3 mt-3">
       {{ oDesplEncargados.desplegable|raw }}
     </div>
-    {#
-    <!--  --------------------  Botones --------------------------  -->
-    <div class="col-3">
-      <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary" onClick="fnjs_buscar('#que');" >
-        {{ "buscar"|trans }}
-      </button>
-    </div>
-    #}
   </div>
 </form>
 </div>

@@ -257,6 +257,18 @@ $filtro = 'pendientes';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
+// documentos = 40;
+$filtro = 'documentos';
+    $active = ($filtro == $Qfiltro)? 'active' : '';
+    $aQuery = [ 'filtro' => $filtro,
+            ];
+    $pag_lst = web\Hash::link('apps/documentos/controller/documentos_lista.php?'.http_build_query($aQuery));
+    $num_orden = 40;
+    $text = _("documentos");
+    $num = '';
+    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
+$a_pills[$num_orden] = $pill;
+
 // ordenar:
 ksort($a_pills);
 

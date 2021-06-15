@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar"|trans }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -13,8 +13,8 @@
           <!--  --------------- BUSQUEDAS (expedientes por asunto, oficina, cargos) --------------- -->
           
           <!--  --------------- ASUNTO --------------- -->
-          <div class="form-group row" id="busqueda_asunto">
-            <label for="asunto" class="col-2 col-form-label">{{ "Asunto"|trans }}</label>
+          <div class="mb-3 row" id="busqueda_asunto">
+            <label for="asunto" class="col-2 form-label">{{ "Asunto"|trans }}</label>
             <div class="col-8">
               <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="">
             </div>
@@ -23,16 +23,16 @@
               </div>
           </div>
           <!--  --------------- Cargos de la oficina --------------- -->
-          <div class="form-group" id="busqueda_cargos_oficina">
+          <div class="mb-3" id="busqueda_cargos_oficina">
           <div class="row" >
-            <label for="cargo" class="col-2 col-form-label">{{ "Encargar a" }}:</label>
+            <label for="cargo" class="col-2 form-label">{{ "Encargar a" }}:</label>
             <div class="col-3">
               {{ oDesplCargosOficina.desplegable|raw }}
             </div>
           </div>
           <div class="row" >
               <!--  --------------------  Plazo --------------------------  -->
-            <label id="txt_plazo" for="f_plazo" class="col col-3 col-form-label">{{ txt_plazo }}:</label>
+            <label id="txt_plazo" for="f_plazo" class="col col-3 form-label">{{ txt_plazo }}:</label>
             <div class='col-3 date'>
               <input tabindex='30' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_plazo }}"  onchange="fnjs_comprobar_fecha('#f_plazo')" />
             </div>
@@ -42,8 +42,8 @@
           </div>
           </div>
           <!--  --------------- Cargos --------------- -->
-          <div class="form-group row" id="busqueda_cargos">
-            <label for="cargo" class="col-2 col-form-label">{{ "Copiar a otro cargo" }}:</label>
+          <div class="mb-3 row" id="busqueda_cargos">
+            <label for="cargo" class="col-2 form-label">{{ "Copiar a otro cargo" }}:</label>
             <div class="col-4">
               {{ oDesplCargos.desplegable|raw }}
             </div>
@@ -73,7 +73,7 @@
 {% for row in a_botones %}
   <div class="col">
   	{% if row.tipo == 'modal' %}
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_buscar('{{ row.accion }}');" >
+      <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_buscar('{{ row.accion }}');" >
         {{ row.txt }}
       </button>
   	{% else %}

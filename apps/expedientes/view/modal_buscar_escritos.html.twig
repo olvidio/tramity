@@ -4,15 +4,15 @@
 	<input type="hidden" name="que" value='buscar_escrito' />
 	<input type="hidden" name="id_expediente" value='{{ id_expediente }}' />
   <!--  --------------- ASUNTO --------------- -->
-  <div class="form-group row">
-    <label for="asunto" class="col-1 col-form-label">{{ "Asunto"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans }}</label>
     <div class="col-10">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------------  Periodo --------------------------  -->
-  <div id="div_periodo" class="form-group row">
-    <label for="periodo" class="col-1 col-form-label">{{ "periodo"|trans }}:</label>
+  <div id="div_periodo" class="mb-3 row">
+    <label for="periodo" class="col-1 form-label">{{ "periodo"|trans }}:</label>
     <div class="col-4">
 		<select tabindex=111 id=periodo name=periodo >
 		<option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans }}</option>
@@ -23,14 +23,14 @@
 		</select>
 	</div>
       <!--  --------------------  origen --------------------------  -->
-    <label for="periodo" class="col-2 col-form-label">{{ "¿A quién iba dirigido?"|trans }}:</label>
+    <label for="periodo" class="col-2 form-label">{{ "¿A quién iba dirigido?"|trans }}:</label>
     <div class="col-5">
         {{ oDesplDestino.desplegable|raw }}
     </div>
   </div>
   <!--  --------------- OFICINA --------------- -->
-  <div id="div_oficinas" class="form-group row">
-      <label for="oficinas" class="col-1 col-form-label">{{ "Cargo"|trans }}</label>
+  <div id="div_oficinas" class="mb-3 row">
+      <label for="oficinas" class="col-1 form-label">{{ "Cargo"|trans }}</label>
       <div class="col-2">
         <span id="span_cargos">
             {{ oDesplCargos.Desplegable|raw }}

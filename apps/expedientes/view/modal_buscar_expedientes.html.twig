@@ -4,15 +4,15 @@
 	<input type="hidden" name="que" value='buscar_expediente' />
 	<input type="hidden" name="id_expediente" value='{{ id_expediente }}' />
   <!--  --------------- ASUNTO --------------- -->
-  <div class="form-group row">
-    <label for="asunto" class="col-1 col-form-label">{{ "Asunto"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans }}</label>
     <div class="col-10">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------------  Periodo --------------------------  -->
-  <div id="div_periodo" class="form-group row">
-    <label for="periodo" class="col-1 col-form-label">{{ "periodo"|trans }}:</label>
+  <div id="div_periodo" class="mb-3 row">
+    <label for="periodo" class="col-1 form-label">{{ "periodo"|trans }}:</label>
     <div class="col-6">
 		<select tabindex=111 id=periodo name=periodo >
 		<option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans }}</option>
@@ -24,8 +24,8 @@
 	</div>
   </div>
   <!--  --------------- Etiquetas --------------- -->
-  <div id="div_etiquetas" class="form-group row">
-    <label for="etiquetas" class="col-1 col-form-label">{{ "Etiquetas"|trans }}:</label>
+  <div id="div_etiquetas" class="mb-3 row">
+    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans }}:</label>
     <div class="col-1">
         <div class="col-6">
           <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >

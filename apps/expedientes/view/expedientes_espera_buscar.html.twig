@@ -4,27 +4,27 @@
 <input type="hidden" id="que" name="que" value="buscar">
 
 
-  <h3 class="col-10 form-group row">{{ "listar expedientes borrador"|trans }}:
+  <div class="fs-3 col-10 mb-3 row">{{ "listar expedientes borrador"|trans }}:
    <!--  --------------- OFICINA PROPIA/RESTO --------------- -->
-    <div class="col-4">
+    <div class="col-6">
     <div class="form-check form-check-inline">
-      <input type="radio" class="form-check-input" name="prioridad_sel" value="1" {{ chk_resto }} onClick="fnjs_buscar('#que');" >
+      <input type="radio" class="form-check-input fs-5 mt-3" name="prioridad_sel" value="1" {{ chk_resto }} onClick="fnjs_buscar('#que');" >
       <label class="form-check-label">
       {{ "normal"|trans }}
       </label>
 	</div>
     <div class="form-check form-check-inline">
-      <input type="radio" class="form-check-input" name="prioridad_sel" value="6" {{ chk_espera }} onClick="fnjs_buscar('#que');" >
+      <input type="radio" class="form-check-input fs-5 mt-3" name="prioridad_sel" value="6" {{ chk_espera }} onClick="fnjs_buscar('#que');" >
       <label class="form-check-label">
       {{ "en espera"|trans }}
       </label>
 	</div>
   </div>
-  </h3>
+  </div>
   <!--  --------------- Etiquetas --------------- -->
-  <div id="div_etiquetas" class="form-group row align-items-center">
-    <label for="etiquetas" class="col-1">{{ "Etiquetas"|trans }}:</label>
-    <div class="col-1">
+  <div id="div_etiquetas" class="mb-3 row align-items-center bg-light">
+    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans }}:</label>
+    <div class="col-2">
         <div class="col-6">
           <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
           <label class="form-check-label">
@@ -44,11 +44,9 @@
       </span>
     </div>
     <!--  --------------------  Botones --------------------------  -->
-      <div class="row">
-        <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary" onClick="fnjs_buscar('#que');" >
+        <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary col-2" onClick="fnjs_buscar('#que');" >
           {{ "filtrar"|trans }}
         </button>
-      </div>
 </form>
 </div>
 

@@ -11,7 +11,6 @@ use web\NullDateTimeLocal;
 use entradas\model\Entrada;
 
 
-
 class Buscar {
     /**
      * Id_sigla

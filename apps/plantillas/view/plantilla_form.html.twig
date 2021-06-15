@@ -5,8 +5,8 @@
   <div class="card-body">
       <form class="user" id="frm_plantilla"  name="frm_plantilla" action="" method="post">
       {{ oHash.getCamposHtml|raw }}
-        <div class="form-group">
-          <label for="nombre">{{ "nombre"|trans }}</label>
+        <div class="mb-3">
+          <label for="nombre" class="form-label">{{ "nombre"|trans }}</label>
           <input type="text" class="form-control col-10" id="nombre" name="nombre" placeholder="nombre" value="{{ nombre }}">
         </div>
         

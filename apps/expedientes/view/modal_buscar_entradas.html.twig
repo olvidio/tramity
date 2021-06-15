@@ -4,15 +4,15 @@
 	<input type="hidden" name="que" value='buscar_entrada' />
 	<input type="hidden" name="id_expediente" value='{{ id_expediente }}' />
   <!--  --------------- ASUNTO --------------- -->
-  <div class="form-group row">
-    <label for="asunto" class="col-1 col-form-label">{{ "Asunto"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans }}</label>
     <div class="col-10">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------------  Periodo --------------------------  -->
-  <div id="div_periodo" class="form-group row">
-    <label for="periodo" class="col-1 col-form-label">{{ "periodo"|trans }}:</label>
+  <div id="div_periodo" class="mb-3 row">
+    <label for="periodo" class="col-1 form-label">{{ "periodo"|trans }}:</label>
     <div class="col-2">
 		<select tabindex=111 id=periodo name=periodo >
 		<option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans }}</option>
@@ -23,7 +23,7 @@
 		</select>
 	</div>
       <!--  --------------------  origen --------------------------  -->
-    <label for="periodo" class="col-3 col-form-label">{{ "¿Quién enviaba el escrito?"|trans }}:</label>
+    <label for="periodo" class="col-3 form-label">{{ "¿Quién enviaba el escrito?"|trans }}:</label>
     <div class="col-6">
         {{ oDesplOrigen.desplegable|raw }}
           <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#btn_1')" value="{{ prot_num }}" >
@@ -32,8 +32,8 @@
     </div>
   </div>
   <!--  --------------- OFICINA --------------- -->
-  <div id="div_oficinas" class="form-group row">
-      <label for="oficinas" class="col-1 col-form-label">{{ "Oficina"|trans }}</label>
+  <div id="div_oficinas" class="mb-3 row">
+      <label for="oficinas" class="col-1 form-label">{{ "Oficina"|trans }}</label>
       <div class="col-9">
         <span id="span_oficinas">
             {{ oDesplOficinas.Desplegable|raw }}

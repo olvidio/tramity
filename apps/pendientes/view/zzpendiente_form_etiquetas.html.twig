@@ -26,9 +26,9 @@
       
     <link href="{{ base_url_web }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <!-- DataTables -->
-	<link type="text/css" rel="stylesheet" href='node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css' />
+	<link type="text/css" rel="stylesheet" href='node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css' />
 	<script type="text/javascript" src='node_modules/datatables.net/js/jquery.dataTables.min.js'></script>
-	<script type="text/javascript" src='node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js'></script>
+	<script type="text/javascript" src='node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js'></script>
 
     <div class="m-3"> {# para margenes #}
 {% endif %}
@@ -59,14 +59,14 @@
 <div>
 	<input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
   <!--  --------------- ASUNTO --------------- -->
-  <div class="form-group row">
-    <label for="asunto_e" class="col-1 col-form-label">{{ "Asunto"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="asunto_e" class="col-1 form-label">{{ "Asunto"|trans }}</label>
     <div class="col-9">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}" disabled>
     </div>
   </div>
   <!--  --------------------  Etiquetas --------------------------  -->
-  <div id="div_etiquetas" class="form-group row align-items-center">
+  <div id="div_etiquetas" class="mb-3 row align-items-center">
     <label for="etiquetas" class="col-1">{{ "Etiquetas"|trans }}:</label>
     <div class="col-6">
       <span id="span_etiquetas">
@@ -75,7 +75,7 @@
     </div>
   </div
   <!--  --------------------  Encargado --------------------------  -->
-  <div class="form-group row align-items-center">
+  <div class="mb-3 row align-items-center">
     <label for="oficina" class="col-2">{{ "¿Está asignado a alguien?"|trans }}:</label>
     <div class="col-6">
 	  {{ oDesplEncargados.desplegable|raw }}

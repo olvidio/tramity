@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">{{ "Asignar entrada"|trans }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -13,8 +13,8 @@
           <!--  --------------- BUSQUEDAS (entradas por asunto, oficina, cargos) --------------- -->
           
           <!--  --------------- Cargos de la oficina --------------- -->
-          <div class="form-group row" id="busqueda_cargos_oficina">
-            <label for="cargo" class="col-2 col-form-label">{{ "Encargar a" }}:</label>
+          <div class="mb-3 row" id="busqueda_cargos_oficina">
+            <label for="cargo" class="col-2 form-label">{{ "Encargar a" }}:</label>
             <div class="col-4">
               {{ oDesplCargosOficina.desplegable|raw }}
             </div>
@@ -43,7 +43,7 @@
 {% for row in a_botones %}
   <div class="col">
   	{% if row.tipo == 'modal' %}
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_buscar('{{ row.accion }}');" >
+      <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_buscar('{{ row.accion }}');" >
         {{ row.txt }}
       </button>
   	{% else %}

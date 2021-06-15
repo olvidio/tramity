@@ -25,26 +25,20 @@ fnjs_guardar=function(formulario){
   <div class="col-12">
       <form class="user" id="frm_tramite"  name="frm_tramite" action="" method="post">
       {{ oHash.getCamposHtml|raw }}
-        <div class="form-group input-group col-10">
-          <div class="input-group-prepend">
-              <span class="input-group-text">{{ "Trámite"|trans }}</span>
-          </div>
+        <div class="mb-3 input-group col-10">
+           <span class="input-group-text">{{ "Trámite"|trans }}</span>
            <input type="text" class="form-control" id="tramite" name="tramite" placeholder="nombre del trámite" value="{{ tramite }}">
         </div>
-        <div class="form-group input-group col-8">
-          <div class="input-group-prepend">
-              <span class="input-group-text">{{ "Abreviatura"|trans }}</span>
-          </div>
+        <div class="mb-3 input-group col-8">
+          <span class="input-group-text">{{ "Abreviatura"|trans }}</span>
           <input type="text" class="form-control" id="breve" name="breve" placeholder="breve" value="{{ breve }}">
         </div>
-        <div class="form-group input-group col-4">
-          <div class="input-group-prepend">
-              <span class="input-group-text">{{ "Orden"|trans }}</span>
-          </div>
+        <div class="mb-3 input-group col-4">
+          <span class="input-group-text">{{ "Orden"|trans }}</span>
           <input type="text" class="form-control" id="orden" name="orden" placeholder="orden" value="{{ orden }}">
         </div>
-        <div class="form-group input-group col-10">
-          <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary btn-block col-6">{{ "Guardar"|trans }}</button>
+        <div class="mb-3 input-group col-10">
+          <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary w-100 col-6">{{ "Guardar"|trans }}</button>
         </div>
       </form>
   </div>

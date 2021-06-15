@@ -10,13 +10,13 @@
 
 <div id="tot" class="container-fluid mt-3">
 <div class="clearfix ">
-  <div class="d-inline-flex float-left">
-    <div class="p-2 text-dark font-weight-bold" >
+  <div class="d-inline-flex float-start">
+    <div class="p-2 text-dark fw-bold" >
       {{ destinos|raw }}
     </div>
   </div>
-  <div class="d-inline-flex float-right">
-    <div class="p-2 text-dark font-weight-bold align-top text-right" >
+  <div class="d-inline-flex float-end">
+    <div class="p-2 text-dark fw-bold align-top text-end" >
       {{ origen_txt|raw }}
     </div>
   </div>
@@ -24,7 +24,7 @@
 <!--  --------------- ASUNTO --------------- -->
 <div class="row">
   <div class="col-9">
-    <label for="asunto_e" class="col-form-label">{{ "Asunto"|trans }}:</label>
+    <label for="asunto_e" class="form-label">{{ "Asunto"|trans }}:</label>
       {{ asunto_e }}
   </div>
 </div>
@@ -34,15 +34,15 @@
 </div>
 <!--  --------------------  DOWNLOAD Y FECHA  --------------------------  -->
 <div class="clearfix ">
-  <div class="d-inline-flex float-left">
-    <div class="p-2 text-dark font-weight-bold" >
+  <div class="d-inline-flex float-start">
+    <div class="p-2 text-dark fw-bold" >
       <button type="button" class="btn btn-outline-secondary" onClick="fnjs_download_pdf({{ id_escrito }})">
   	    <i class="fa fa-download" aria-hidden="true">  {{ "Descargar en pdf"|trans }}</i>
 	  </button>
     </div>
   </div>
-  <div class="d-inline-flex float-right">
-    <div class="p-2 text-dark font-weight-bold" >
+  <div class="d-inline-flex float-end">
+    <div class="p-2 text-dark fw-bold" >
       {{ f_escrito }}
     </div>
   </div>
@@ -51,8 +51,8 @@
 <!--  --------------------  ADJUNTOS  --------------------------  -->
 {% if a_adjuntos %}
 <hr>
-<div class="form-group col-md-12">
-    <label for="input-adjunto">{{ "Adjuntos"|trans }}:</label>
+<div class="mb-3 col-md-12">
+    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans }}:</label>
 {% for item,nom in a_adjuntos %}
 	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_download({{ item }})">{{ nom }}</button>
 {% endfor %}

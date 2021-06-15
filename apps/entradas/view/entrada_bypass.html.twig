@@ -4,58 +4,58 @@
   <!-- hace falta para poder ver el ecrito (fnjs_ver_doc_ep)  -->
   <input type=hidden name='id_entrada' id='id_entrada' value={{ id_entrada }} >
   <div class="row col-10">
-      <label class="col-2 col-form-label">{{ "Protocolo entrada"|trans }}</label>
+      <label class="col-2 form-label">{{ "Protocolo entrada"|trans }}</label>
       <div class="col-7 alert alert-warning" role="alert">
       {{ oProtOrigen.ver_txt|raw }}
       {{ oArrayProtRef.ListaTxt|raw }}
       </div>
       <div class="col-3">
-      <label for="">{{ "Ver escrito"|trans }}:</label>
+      <label class="form-label">{{ "Ver escrito"|trans }}:</label>
       <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep();" >
           {{ "Etherpad"|trans }}
       </button>
     </div>
   </div>
   <div class="row col-10">
-    <label for="asunto_e" class="col-2 col-form-label">{{ "Asunto entrada"|trans }}</label>
+    <label for="asunto_e" class="col-2 form-label">{{ "Asunto entrada"|trans }}</label>
     <div class="col-10 alert alert-warning" role="alert">
       {{ asunto_e }}
     </div>
   </div>
   <div class="row col-10">
-    <label for="asunto" class="col-2 col-form-label">{{ "Asunto secretaria"|trans }}</label>
+    <label for="asunto" class="col-2 form-label">{{ "Asunto secretaria"|trans }}</label>
     <div class="col-10 alert alert-warning" role="alert">
       <input tabindex='50' type="text" class="form-control" name='asunto' id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------- PONENTE Y OFICINAS --------------- -->
   <div class="row col-10">
-    <label for="asunto_e" class="col-2 col-form-label">{{ "Oficinas"|trans }}</label>
+    <label for="asunto_e" class="col-2 form-label">{{ "Oficinas"|trans }}</label>
     <div class="col-4 alert alert-warning" role="alert">
       {{ oficinas_txt }}
     </div>
     <!--  --------------- FECHA SALIDA --------------- -->
-    <label for="f_salida" class="col col-2 col-form-label text-right">{{ "Fecha salida"|trans }}</label>
+    <label for="f_salida" class="col col-2 form-label text-end">{{ "Fecha salida"|trans }}</label>
     <div class='col-2 date'>
       <input tabindex='41' name='f_salida' id='f_salida' type='text' class="form-control" value="{{ f_salida }}" />
     </div>
   </div>
   <!--  --------------------  ADJUNTOS  --------------------------  -->
-  <div class="form-group col-md-12">
-    <label for="input-adjunto">{{ "Adjuntos"|trans }}:</label>
+  <div class="mb-3 col-md-12">
+    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans }}:</label>
   {% for item,nom in a_adjuntos %}
 	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_download({{ item }})">{{ nom }}</button>
   {% endfor %}
   </div>
   <!--  --------------- Destinos --------------- -->
-  <div class="form-group row align-items-center col-8">
-      <div class="col-2 col-form-label">
-        <label for="prot_num" class="col-2 col-form-label">
+  <div class="mb-3 row align-items-center col-8">
+      <div class="col-2 form-label">
+        <label for="prot_num" class="col-2 form-label">
           {{ "Destinos"|trans }}
         </label>
-        <div class="custom-control custom-switch align-middle">
-          <input type="checkbox" class="custom-control-input" name="grupo_dst" id="grupo_dst" {{ chk_grupo_dst }} onChange="fnjs_grupo()" />
-          <label class="custom-control-label" for="grupo_dst">Grupo</label>
+        <div class="form-check form-switch align-middle">
+          <input type="checkbox" class="form-check-input" name="grupo_dst" id="grupo_dst" {{ chk_grupo_dst }} onChange="fnjs_grupo()" />
+          <label class="form-check-label" for="grupo_dst">Grupo</label>
         </div>
       </div>
       <div id="dst_array" class="col-10">

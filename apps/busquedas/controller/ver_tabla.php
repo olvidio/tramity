@@ -1,9 +1,8 @@
 <?php
-use busquedas\model\VerTabla;
-use function core\any_2;
-use lugares\model\entity\GestorLugar;
 use busquedas\model\Buscar;
+use busquedas\model\VerTabla;
 use expedientes\model\Escrito;
+use lugares\model\entity\GestorLugar;
 
 // INICIO Cabecera global de URL de controlador *********************************
 

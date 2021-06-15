@@ -7,13 +7,13 @@
 
 <div id="tot" class="container-fluid mt-3">
 <div class="clearfix ">
-  <div class="d-inline-flex float-left">
-    <div class="p-2 text-dark font-weight-bold" >
+  <div class="d-inline-flex float-start">
+    <div class="p-2 text-dark fw-bold" >
       {{ destinos|raw }}
     </div>
   </div>
-  <div class="d-inline-flex float-right">
-    <div class="p-2 text-dark font-weight-bold align-top text-right" >
+  <div class="d-inline-flex float-end">
+    <div class="p-2 text-dark fw-bold align-top text-end" >
       {{ origen_txt|raw }}
     </div>
   </div>
@@ -26,25 +26,25 @@
   <div class="d-flex mb-3">
     <div class="p-3"></div>
     {% if anular %}
-        <div class="p-2 custom-control custom-switch">
-          <input type="checkbox" class="custom-control-input" id="customSwitches" name="anular" {{  chk_anulado }}>
-          <label class="custom-control-label" for="customSwitches">{{ "Anular este escrito"|trans }}</label>
+        <div class="p-2 form-check form-switch">
+          <input type="checkbox" class="form-check-input" id="customSwitches" name="anular" {{  chk_anulado }}>
+          <label class="form-check-label" for="customSwitches">{{ "Anular este escrito"|trans }}</label>
         </div>
     {% endif %}
-    <div class="ml-auto p-2 bd-highlight">
-      <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fnjs_guardar();" >{{ "Guardar"|trans }}</button>
+    <div class="ms-auto p-2 bd-highlight">
+      <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="fnjs_guardar();" >{{ "Guardar"|trans }}</button>
     </div>
   </div>
   <!--  --------------- ASUNTO --------------- -->
-  <div class="form-group row">
-    <label for="asunto" class="col-1 col-form-label">{{ "Asunto"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans }}</label>
     <div class="col-11">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------- DETALLE --------------- -->
-  <div class="form-group row">
-    <label for="detalle" class="col-1 col-form-label">{{ "Detalle"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="detalle" class="col-1 form-label">{{ "Detalle"|trans }}</label>
     <div class='col-11'>
       <input tabindex='50' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
     </div>
@@ -57,15 +57,15 @@
 </div>
 <!--  --------------------  FECHA  --------------------------  -->
 <div id="fecha" style="margin-top: 1em; margin-right:  4em; text-align: right; " >
-    <label>{{ f_escrito }}</label>
+    <label class="form-label">{{ f_escrito }}</label>
 </div>
   
 
 <!--  --------------------  ADJUNTOS  --------------------------  -->
 {% if a_adjuntos %}
 <hr>
-<div class="form-group col-md-12">
-    <label for="input-adjunto">{{ "Adjuntos"|trans }}:</label>
+<div class="mb-3 col-md-12">
+    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans }}:</label>
 {% for item,nom in a_adjuntos %}
 	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_download({{ item }})">{{ nom }}</button>
 {% endfor %}

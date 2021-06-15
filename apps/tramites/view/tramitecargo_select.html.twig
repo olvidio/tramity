@@ -104,7 +104,7 @@ fnjs_left_side_hide();
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar"|trans }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -113,29 +113,23 @@ fnjs_left_side_hide();
       <input type="hidden" class="form-control" id="id_item" name="id_item" value="">
       <input type="hidden" class="form-control" id="id_tramite" name="id_tramite" value="{{ id_tramite }}">
       <div class="modal-body">
-        <div class="form-group input-group col-10">
-          <div class="input-group-prepend">
-              <span class="input-group-text">{{ "Cargo"|trans }}</span>
-          </div>
+        <div class="mb-3 input-group col-10">
+          <span class="input-group-text">{{ "Cargo"|trans }}</span>
           <div id='cargo'>
           	{{ oDesplCargos.desplegable|raw }}
           </div>
         </div>
-        <div class="form-group input-group col-4">
-          <div class="input-group-prepend">
-              <span class="input-group-text">{{ "Orden"|trans }}</span>
-          </div>
+        <div class="mb-3 input-group col-4">
+            <span class="input-group-text">{{ "Orden"|trans }}</span>
             <input id=orden type="text" class="form-control" id="orden_tramite" name="orden_tramite" value="{{ orden_tramite }}">
         </div>
-        <div class="form-group input-group col-8">
-          <div class="input-group-prepend">
-              <span class="input-group-text">{{ "número mínimo de firmas"|trans }}</span>
-          </div>
+        <div class="mb-3 input-group col-8">
+            <span class="input-group-text">{{ "número mínimo de firmas"|trans }}</span>
             <input type="text" class="form-control" id="multiple" name="multiple" value="{{ multiple }}">
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" onClick="fnjs_guardar(this.form);" >{{ "Guardar"|trans }}</button>
       </div>
       </form>

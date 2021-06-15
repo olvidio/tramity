@@ -129,7 +129,7 @@ switch ($Qtipo_lista) {
         foreach ($cOficinas as $id_oficina => $sigla) {
             $ira = "apps/busquedas/controller/lista_permanentes.php?tipo_lista=oficina&id_oficina=$id_oficina";
             
-            $lista .= "<button onclick=\"fnjs_update_div('#main','$ira')\" type=\"button\" class=\"btn btn-primary btn-block col-2\">";
+            $lista .= "<button onclick=\"fnjs_update_div('#main','$ira')\" type=\"button\" class=\"col-2 btn btn-outline-primary m-2\">";
             $lista .= sprintf(_("oficina %s"),$sigla);
             $lista .= "</button>";
         }
@@ -153,7 +153,7 @@ switch ($Qtipo_lista) {
         $titulo = _("AVISOS DE CR DE NÚMERO BAJO: por años");
         foreach ($a_anys as $any) {
             $ira="apps/busquedas/controller/lista_permanentes.php?tipo_lista=any&any=$any";
-            $btn = "<button onclick=\"fnjs_update_div('#main','$ira')\" type=\"button\" class=\"btn btn-outline-primary \" >";
+            $btn = "<button onclick=\"fnjs_update_div('#main','$ira')\" type=\"button\" class=\"col-1 btn btn-outline-primary \" >";
             $btn .= sprintf(_("año %s"),$any);
             $btn .= "</button>";
             $lista_any[$any] = $btn;
@@ -166,7 +166,7 @@ switch ($Qtipo_lista) {
                 if (!empty($lista_any[$any_lista])) {
                     $txt = $lista_any[$any_lista] ;
                 } else {
-                    $btn = "<button type=\"button\" class=\"btn btn-outline-secondary\" disabled >";
+                    $btn = "<button type=\"button\" class=\"col-1 btn btn-outline-secondary\" disabled >";
                     $btn .= sprintf(_("año %s"),$any_lista);
                     $btn .= "</button>";
                     $txt = $btn;
@@ -188,6 +188,7 @@ $a_campos = [
     'tipo_lista' => $Qtipo_lista,
     'titulo' => $titulo,
     'lista' => $lista,
+    'filtro' => $filtro,
     'oTabla' => $oTabla,
 ];
 

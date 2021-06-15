@@ -8,27 +8,27 @@
       <form class="user" id="frm_usuario"  name="frm_usuario" action="" method="post">
       {{ oHash.getCamposHtml|raw }}
       <input type="hidden" name="pass" value="{{ pass }}">
-        <div class="form-group">
-          <label for="example">{{ "Login"|trans }}</label>
+        <div class="mb-3">
+          <label for="example" class="form-label">{{ "Login"|trans }}</label>
           <input type="text" class="form-control col-6" id="usuario" name="usuario" placeholder="Login Name" value="{{ usuario }}">
         </div>
-        <div class="form-group">
-          <label for="example">{{ "Nombre a mostrar"|trans }}</label>
+        <div class="mb-3">
+          <label for="example" class="form-label">{{ "Nombre a mostrar"|trans }}</label>
           <input type="text" class="form-control" id="nom_usuario" name="nom_usuario" placeholder="Nombre a mostrar" value="{{ nom_usuario }}">
         </div>
-        <div class="form-group">
-          <label for="example">{{ "Dirección de correo electrónico"|trans }}</label>
+        <div class="mb-3">
+          <label for="example" class="form-label">{{ "Dirección de correo electrónico"|trans }}</label>
           <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" value="{{ email }}">
         </div>
-        <div class="form-group">
-          <label for="example">{{ "Cargo Preferido"|trans }}</label>
+        <div class="mb-3">
+          <label for="example" class="form-label">{{ "Cargo Preferido"|trans }}</label>
 			{{ oDesplCargos.desplegable|raw }}
         </div>
         
-        <div class="row form-group">
-          <button onclick="fnjs_guardar(this.form);" type="button" class="col-4 btn btn-primary btn-block">{{ "Guardar"|trans }}</button>
+        <div class="row mb-3">
+          <button onclick="fnjs_guardar(this.form);" type="button" class="col-4 btn btn-primary w-100">{{ "Guardar"|trans }}</button>
           <div class="col-1"></div>
-          <button onclick="fnjs_cancelar();" type="button" class="col-4 btn btn-secondary btn-block">{{ "Cancelar"|trans }}</button>
+          <button onclick="fnjs_cancelar();" type="button" class="col-4 btn btn-secondary w-100">{{ "Cancelar"|trans }}</button>
         </div>
       </form>
   </div>

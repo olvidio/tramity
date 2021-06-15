@@ -25,21 +25,17 @@ fnjs_guardar=function(formulario){
   <div class="col-12">
       <form class="user" id="frm_cargo"  name="frm_cargo" action="" method="post">
       {{ oHash.getCamposHtml|raw }}
-        <div class="form-group input-group col-6">
-          <div class="input-group-prepend">
-              <span class="input-group-text">Cargo</span>
-          </div>
+        <div class="mb-3 input-group col-6">
+           <span class="input-group-text">Cargo</span>
            <input type="text" class="form-control" id="cargo" name="cargo" placeholder="nombre del cargo" value="{{ cargo }}">
         </div>
-        <div class="form-group input-group col-10">
-          <div class="input-group-prepend">
-              <span class="input-group-text">Descripción</span>
-          </div>
+        <div class="mb-3 input-group col-10">
+            <span class="input-group-text">Descripción</span>
             <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="descripcion" value="{{ descripcion }}">
         </div>
-		<div class="row form-group">
+		<div class="row mb-3">
           <div class="col-6">
-          <label for="example">{{ "Oficina"|trans }}</label>
+          <label for="example" class="form-label">{{ "Oficina"|trans }}</label>
 			{{ oDesplOficinas.desplegable|raw }}
 		  </div>
           <div class="col-6">
@@ -48,21 +44,21 @@ fnjs_guardar=function(formulario){
     	  </div>
         </div>
         
-		<div class="row form-group">
+		<div class="row mb-3">
           <div class="col-6">
-          <label for="example">{{ "Titular"|trans }}</label>
+          <label for="example" class="form-label">{{ "Titular"|trans }}</label>
 			{{ oDesplUsuarios.desplegable|raw }}
 		  </div>
 		</div>
 		 
-		<div class="row form-group">
+		<div class="row mb-3">
           <div class="col-6">
-          <label for="example">{{ "Suplente"|trans }}</label>
+          <label for="example" class="form-label">{{ "Suplente"|trans }}</label>
 			{{ oDesplSuplentes.desplegable|raw }}
 		  </div>
 		 </div>
-        <div class="form-group input-group col-10">
-          <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary btn-block col-6">{{ "Guardar"|trans }}</button>
+        <div class="mb-3 input-group col-10">
+          <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary w-100 col-6">{{ "Guardar"|trans }}</button>
         </div>
       </form>
   </div>

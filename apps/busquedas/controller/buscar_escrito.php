@@ -15,6 +15,7 @@ require_once ("apps/core/global_header.inc");
 require_once ("apps/core/global_object.inc");
 // Crea los objectos por esta url  **********************************************
 
+$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qctr_anulados = (bool) \filter_input(INPUT_POST, 'ctr_anulados');
 //$Qsimple = (integer) \filter_input(INPUT_POST, 'simple');
 //$Qsimple = 1;
@@ -190,6 +191,7 @@ $a_campos = [
     'id_cr' => $id_cr,
     'simple' => $simple,
     'chk_ctr_anulados' => $chk_ctr_anulados,
+    'filtro' => $Qfiltro,
     'opcion' => $Qopcion,
     'simple' => $simple,
     'asunto' => $Qasunto,

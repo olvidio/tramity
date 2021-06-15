@@ -5,14 +5,13 @@
 
 <h3>{{ "listar escritos pendientes de contestar"|trans }}</h3>
 <!--  --------------------  Calendarios --------------------------  -->
-  <div class="form-group row">
-    <label class="col-xs-1">{{ "De"|trans }}:</label>
-    <div class="col">
+  <div class="mt-4 row bg-light">
+    <label class="col-1 form-label">{{ "De"|trans }}:</label>
+    <div class="col-1">
 		{{ oDesplCalendarios.desplegable|raw }}
     </div>
 	<!--  --------------------  Periodo --------------------------  -->
-<div class="row col-10">
-    <label for="periodo" class="col-xs-1">{{ "periodo"|trans }}:</label>
+    <label for="periodo" class="col-1 form-label">{{ "periodo"|trans }}:</label>
     <div class="col-2">
 		<select tabindex=111 id=periodo name=periodo >
 		<option value="hoy" {{ sel_hoy }} >{{ "hasta la fecha"|trans }}</option>
@@ -24,7 +23,7 @@
 	</div>
     <!--  --------------------  Oficinas --------------------------  -->
 	{% if secretaria %}
-        <label for="id_oficina" class="col-xs-1">{{ "Oficina"|trans }}:</label>
+        <label for="id_oficina" class="col-xs-1 form-label">{{ "Oficina"|trans }}:</label>
         <div class="col-1">
               {{ oDesplOficinas.desplegable|raw }}
         </div>
@@ -32,12 +31,12 @@
         <input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
     {% endif %}
     <!--  --------------------  Encargados --------------------------  -->
-    <label class="col-3">{{ "¿Está asignado a alguien?"|trans }}:</label>
-    <div class="col-3">
+    <label class="col-2 form-label">{{ "¿Está asignado a alguien?"|trans }}:</label>
+    <div class="col-2">
         {{ oDesplEncargados.desplegable|raw }}
     </div>
  	<!--  --------------------  BOTONES --------------------------  -->
-    <div class="col-1">
+    <div class="col-2">
 	  <button tabindex='90' class="btn btn-success" onClick="fnjs_buscar();" >
         {{ "listar"|trans }}
   	  </button>
@@ -64,3 +63,8 @@
 </div>
 
 {{ include ('_pendiente_tabla_js.html.twig') }}
+<script type="text/javascript">
+$(document).ready(function() {
+	tabs_show('{{ vista }}','{{ filtro }}');
+});
+</script>

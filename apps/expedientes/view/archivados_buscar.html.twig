@@ -6,16 +6,16 @@
 <h2>{{ "listar expedientes"|trans }}</h2>
 
    <!--  --------------- ASUNTO --------------- -->
-  <div class="form-group row">
-    <label for="asunto" class="col-2 col-form-label">{{ "¿De que asunto trataba?"|trans }}</label>
-    <div class="col-8">
+  <div class="mb-3 row">
+    <label for="asunto" class="col-2 form-label">{{ "¿De que asunto trataba?"|trans }}</label>
+    <div class="col-9">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------- Etiquetas --------------- -->
-  <div id="div_etiquetas" class="form-group row align-items-center">
-    <label for="etiquetas" class="col-1">{{ "Etiquetas"|trans }}:</label>
-    <div class="col-1">
+  <div id="div_etiquetas" class="mb-3 row align-items-center bg-light">
+    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans }}:</label>
+    <div class="col-2">
         <div class="col-6">
           <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
           <label class="form-check-label">
@@ -35,8 +35,9 @@
       </span>
     </div>
   <!--  --------------------  Periodo --------------------------  -->
-    <label for="periodo" class="col-xs-1">{{ "periodo"|trans }}:</label>
-    <div class="col">
+  <div class="mt-3 d-flex flex-row justify-content-between">
+    <div class="col-3">
+    <label for="periodo" class="col-2 form-label">{{ "periodo"|trans }}:</label>
 		<select tabindex=111 id=periodo name=periodo >
 		<option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans }}</option>
 		<option value="mes_6" {{ sel_mes_6 }}>{{ "hace 6 meses"|trans }}</option>
@@ -45,12 +46,11 @@
 		<option value="siempre" {{ sel_siempre }} >{{ "siempre"|trans }}</option>
 		</select>
 	</div>
-  </div>
-  <!--  --------------------  Botones --------------------------  -->
-  <div class="row">
-    <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary" onClick="fnjs_buscar('#que');" >
+    <!--  --------------------  Botones --------------------------  -->
+    <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary col-2 justify-content-end" onClick="fnjs_buscar('#que');" >
       {{ "buscar"|trans }}
     </button>
+  </div>
   </div>
 </form>
 </div>

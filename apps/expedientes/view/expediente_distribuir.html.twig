@@ -22,8 +22,8 @@
 
 <!-- oficina... linea1 -->
 <div class="clearfix">
-	<div class="d-inline-flex float-left">
-        <div class="p-2 bg-warning text-dark font-weight-bold" >
+	<div class="d-inline-flex float-start">
+        <div class="p-2 bg-warning text-dark fw-bold" >
         {{ ponente_txt }}
         </div>
         <div class="p-2 bg-info" >
@@ -33,7 +33,7 @@
         {{ estado_txt }}
         </div>
     </div>
-    <div class="d-inline-flex float-right">
+    <div class="d-inline-flex float-end">
         <div class="p-2 bg-warning" >
     	 {{ "Prioridad"|trans }}: {{ prioridad_txt }}
     	</div>
@@ -41,7 +41,7 @@
 </div>
 <!-- Fechas linea2 -->
 <div class="clearfix">
-	<div class="d-inline-flex float-left">
+	<div class="d-inline-flex float-start">
         <div class="p-2" >
             {{ "Inicio"|trans }}: {{ f_ini_circulacion }}
         </div>
@@ -52,7 +52,7 @@
             {{ "aprobación"|trans }}: {{ f_aprobacion }}
         </div>
     </div>
-	<div class="d-inline-flex float-right">
+	<div class="d-inline-flex float-end">
         <div class="p-2 bg-warning" >
         	{{ "contestar"|trans }}: {{ f_contestar }}
     	</div>
@@ -93,16 +93,16 @@
     <!--  Col Dcha -->
     <div class="col-3" >
       <!--  --------------------  ANTECEDENTES  --------------------------  -->
-      <div class="form-group col-md-12">
-        <label>{{ "Antecedentes"|trans }}:</label>
+      <div class="mb-3 col-md-12">
+        <label class="form-label">{{ "Antecedentes"|trans }}:</label>
         <div id="lista_antecedentes">
           {{ lista_antecedentes|raw }}
         </div>
       </div>
       <hr>
       <!--  --------------------  RECORRIDO  --------------------------  -->
-      <div class="form-group col-md-12">
-      <label>{{ "Recorrido"|trans }}:</label>
+      <div class="mb-3 col-md-12">
+      <label class="form-label">{{ "Recorrido"|trans }}:</label>
         <ol id="lst_recorrido" class="list-group">
         {% for row in a_recorrido %}
           <li class="list-group-item {{ row.class }}">{{ row.valor }}</li>
@@ -116,26 +116,28 @@
 {% if not cargar_css %}
   {% if ver_encargar %}
     <!--  --------------- Encargar a --------------- -->
-    <div class="form-group row align-items-center">
+    <div class="mb-2 row align-items-center">
         <!--  --------------- OFICIALES --------------- -->
-        <label for="id_oficial" class="col-1">{{ "Encargar a"|trans }}:</label>
-        <div id="div_oficiales" >
+        <label for="id_oficial" class="col-1 form-label">{{ "Encargar a"|trans }}:</label>
+        <div id="div_oficiales" class="col-5">
             {{ oDesplOficiales.desplegable|raw }}
-        <button tabindex='' class="btn btn-outline-secondary" onClick="fnjs_encargar();" >
-          {{ "Encargar!"|trans }}
-        </button>
+          <button tabindex='' class="btn btn-outline-secondary col" onClick="fnjs_encargar();" >
+            {{ "Encargar!"|trans }}
+          </button>
         </div>
     </div>
   {% endif %}
 <!--  --------------- VISIBILIDAD --------------- -->
-  <div id="div_visibilidad" class="form-group row align-items-center">
-    <label for="Visibilidad" class="col-1">{{ "Visibilidad"|trans }}:</label>
+  <div id="div_visibilidad" class="mb-2 row align-items-center">
+    <label for="Visibilidad" class="col-1 form-label">{{ "Visibilidad"|trans }}:</label>
+    <div class="col-3">
       {{ oDesplVisibilidad.desplegable|raw }}
+    </div>
   </div>
 <!--  --------------- Etiquetas --------------- -->
 {% if ver_etiquetas %}
-  <div id="div_etiquetas" class="form-group row align-items-center">
-    <label for="etiquetas" class="col-1">{{ "Etiquetas"|trans }}:</label>
+  <div id="div_etiquetas" class="mb-3 row align-items-center">
+    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans }}:</label>
     <div class="col-6">
       <span id="span_etiquetas">
       	{{ oArrayDesplEtiquetas.ListaSelects|raw }}

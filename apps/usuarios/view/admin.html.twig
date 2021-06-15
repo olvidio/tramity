@@ -37,11 +37,11 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item active">
-        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+        <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
           <i class="fas fa-fw fa-folder"></i>
           <span>{{ "usuarios"|trans }}</span>
         </a>
-        <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Usuarios Components:</h6>
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/usuarios/controller/usuario_lista.php')" href="#">
@@ -56,11 +56,11 @@
 
       <!-- Nav Item - Charts -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCargos" aria-expanded="true" aria-controls="collapseUtilities">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCargos" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-fw fa-folder"></i>
           <span>{{ "Cargos"|trans }}</span>
         </a>
-        <div id="collapseCargos" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div id="collapseCargos" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/usuarios/controller/cargo_grupo_lista.php')" href="#">
             	{{ "lista grupos firmas"|trans }}
@@ -82,11 +82,11 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
           <span>{{ "Config"|trans }}</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">{{ "del entorno"|trans }}:</h6>
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/lugares/controller/lugar_lista.php')" href="#">
@@ -109,11 +109,11 @@
 
       <!-- Nav Item - Utilities Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-fw fa-wrench"></i>
           <span>Utilities</span>
         </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-bs-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/devel/controller/factory_form.php')" href="#">factory</a>
@@ -124,11 +124,11 @@
 
       <!-- Nav Item - Davical -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDavical" aria-expanded="true" aria-controls="collapseUtilities">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDavical" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-fw fa-folder"></i>
           <span>{{ "Davical"|trans }}</span>
         </a>
-        <div id="collapseDavical" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div id="collapseDavical" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/migration/controller/migration_index.php')" href="#">
             	{{ "mitration reg"|trans }}
@@ -226,6 +226,6 @@
 <script src="js/sb-admin-2.js"></script>
 
 <!-- DataTables -->
-<link type="text/css" rel="stylesheet" href='node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css' />
+<link type="text/css" rel="stylesheet" href='node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css' />
 <script type="text/javascript" src='node_modules/datatables.net/js/jquery.dataTables.min.js'></script>
-<script type="text/javascript" src='node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js'></script>
+<script type="text/javascript" src='node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js'></script>

@@ -5,13 +5,13 @@
     </div>
     <div class="col-10">
         <div class="clearfix ">
-          <div class="d-inline-flex float-left">
-            <div class="p-2 text-dark font-weight-bold" >
+          <div class="d-inline-flex float-start">
+            <div class="p-2 text-dark fw-bold" >
               {{ cabeceraIzqd|raw }}
             </div>
           </div>
-          <div class="d-inline-flex float-right">
-            <div class="p-2 text-dark font-weight-bold align-top text-right" >
+          <div class="d-inline-flex float-end">
+            <div class="p-2 text-dark fw-bold align-top text-end" >
               {{ cabeceraDcha|raw }}
             </div>
           </div>
@@ -24,46 +24,47 @@
 
 <!--  --------------- ASUNTO --------------- -->
 <div class="row">
-    <div class="ml-3 col-11 alert alert-primary">
-      <label for="asunto_e" class="col-form-label">{{ "Asunto entrada"|trans }}:</label>
+    <div class="ms-3 col-11 alert alert-primary">
+      <label for="asunto_e" class="form-label">{{ "Asunto entrada"|trans }}:</label>
         {{ asunto_e }}
     </div>
 </div>
 
 <div class="row">
-    <div class="ml-3 col-11 d-flex flex-row justify-content-between">
+    <div class="ms-3 col-11 d-flex flex-row justify-content-between">
       <div class="p-2">
         {{ "Fecha documento"|trans }}: {{ f_escrito }}
       </div>
-      <div class="text-right form-group row">
-        <div class="col-7 p-2 custom-control custom-switch">
-          <input type="checkbox" class="custom-control-input" id="customSwitches" onChange="fnjs_read()" {{  chk_leido }}>
-          <label class="custom-control-label" for="customSwitches">{{ "Leido el"|trans }}</label>
+      <div class="row text-end mb-3 justify-content-end">
+        <div class="col-3 p-2 form-check form-switch">
+          <input type="checkbox" class="form-check-input" id="customSwitches" onChange="fnjs_read()" {{  chk_leido }}>
+          <label class="form-check-label" for="customSwitches">{{ "Leido el"|trans }}</label>
         </div>
-        <input class="form-control col-5" name='f_entrada' id='f_entrada' type='text' value="{{ f_entrada }}" {{ f_entrada_disabled }}/>
-      </div>
-	</div>
+        <div class="col-5">
+          <input class="form-control col-2" name='f_entrada' id='f_entrada' type='text' value="{{ f_entrada }}" {{ f_entrada_disabled }}/>
+        </div>
+	  </div>
 	</div>
 </div>
   
 <!--  --------------------  ESCRITO  --------------------------  -->
 <div class="row">
-  <div class="ml-3 col-11 border rounded overflow-auto" id="txt" style="width: 100%; height:500px;">
+  <div class="ms-3 col-11 border rounded overflow-auto" id="txt" style="width: 100%; height:500px;">
   {{ escrito_html|raw }}
   </div>
 </div>
 
 <hr>
 <!--  --------------------  ADJUNTOS  --------------------------  -->
-<div class="form-group col-md-12">
-    <label for="input-adjunto">{{ "Adjuntos"|trans }}:</label>
+<div class="mb-3 col-md-12">
+    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans }}:</label>
 {% for item,nom in a_adjuntos %}
 	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_download({{ item }})">{{ nom }}</button>
 {% endfor %}
 </div>
 {% else %}
 <div class='p-2'></div>
-<div class="container p-3 my-3 bg-danger text-white font-weight-bold">
+<div class="container p-3 my-3 bg-danger text-white fw-bold">
 	{{ txt_alert|raw }}
 </div>
 {% endif %}

@@ -1,0 +1,45 @@
+<div id="condiciones">
+<form id="que" name="que" action="" method="post">
+<input type="hidden" id="filtro" name="filtro" value="{{ filtro }}">
+<input type="hidden" id="que" name="que" value="buscar">
+
+
+  <h3 class="col-10 mb-3 row">{{ "listar documentos"|trans }}:
+  </h3>
+  <!--  --------------- Etiquetas --------------- -->
+  <div id="div_etiquetas" class="row align-items-center">
+    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans }}:</label>
+    <div class="col-2">
+        <div class="col-6">
+          <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
+          <label class="form-check-label">
+          {{ "alguna"|trans }}
+          </label>
+        </div>
+        <div class="col-6">
+          <input type="radio" class="form-check-input" name="andOr" value="AND" {{ chk_and }} >
+          <label class="form-check-label">
+          {{ "todas"|trans }}
+          </label>
+        </div>
+	</div>
+    <div class="col-6">
+      <span id="span_etiquetas">
+      	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
+      </span>
+    </div>
+    <!--  --------------------  Botones --------------------------  -->
+      <div class="col-2">
+        <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary" onClick="fnjs_buscar('#que');" >
+          {{ "filtrar"|trans }}
+        </button>
+      </div>
+</form>
+</div>
+
+<script>
+fnjs_buscar=function(formulario){
+    $(formulario).attr('action',"apps/documentos/controller/documentos_lista.php");
+    fnjs_enviar_formulario(formulario,'#main');
+}
+</script>

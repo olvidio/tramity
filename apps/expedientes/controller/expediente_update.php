@@ -606,12 +606,12 @@ switch($Qque) {
                     $visto = '';
                 }
             }
-            $html .= "<div class=\"custom-control custom-checkbox custom-control-inline\">";
-            $html .= "<input type=\"checkbox\" class=\"custom-control-input\" name=\"a_preparar[]\" id=\"$id2\" value=\"$id2#$visto\" $chk>";
+            $html .= "<div class=\"form-check custom-checkbox form-check-inline\">";
+            $html .= "<input type=\"checkbox\" class=\"form-check-input\" name=\"a_preparar[]\" id=\"$id2\" value=\"$id2#$visto\" $chk>";
             if ($visto) {
-                $html .= "<label class=\"custom-control-label text-success\" for=\"$id2\">$text ("._("visto").")</label>";
+                $html .= "<label class=\"form-check-label text-success\" for=\"$id2\">$text ("._("visto").")</label>";
             } else {
-                $html .= "<label class=\"custom-control-label\" for=\"$id2\">$text</label>";
+                $html .= "<label class=\"form-check-label\" for=\"$id2\">$text</label>";
             }
             $html .= "</div>";
         }

@@ -100,18 +100,18 @@ switch($Qque) {
 			$txt.="<tr><td>($orden)</td><td>$cargo</td><td>$multiple</td>";
 			
 			$txt.='<td>';
-			$txt.='<button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onclick=fnjs_cargar_item('.$id_item.')>';
+			$txt.='<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onclick=fnjs_cargar_item('.$id_item.')>';
 			$txt.= _("modificar");
 			$txt.='</button>';
 			$txt.='</td>';
 			$txt.='<td>';
-			$txt.='<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#ModalBuscar" onclick=fnjs_eliminar('.$id_item.')>';
+			$txt.='<button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onclick=fnjs_eliminar('.$id_item.')>';
 			$txt.= _("eliminar");
 			$txt.='</button>';
 			$txt.='</td><tr>';
 		}
 		$txt.='</table><br>';
-        $txt.='<button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_nuevo()">';
+        $txt.='<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_nuevo()">';
         $txt.= _("nuevo");
         $txt.='</button>';
 		echo $txt;

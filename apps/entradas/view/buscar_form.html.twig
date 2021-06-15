@@ -5,28 +5,28 @@
     <input type=hidden name='filtro' id='filtro' value={{ filtro }} >
     
     
-  <div class="form-group row">
-    <label for="ponente" class="col-2 col-form-label">{{ "Oficina"|trans }}</label>
+  <div class="row">
+    <label for="ponente" class="col-2 form-label">{{ "Oficina"|trans }}</label>
     <div class="col-1">
 	  {{ oDesplOficinas.desplegable|raw }}
     </div>
   </div>
-  <div class="form-group row">
-    <label for="ponente" class="col-2 col-form-label">{{ "Origen"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="ponente" class="col-2 form-label">{{ "Origen"|trans }}</label>
     <div class="col-1">
 	  {{ oDesplLugares.desplegable|raw }}
     </div>
   </div>
   <!--  --------------- ASUNTO --------------- -->
-  <div class="form-group row">
-    <label for="asunto" class="col-2 col-form-label">{{ "Asunto"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="asunto" class="col-2 form-label">{{ "Asunto"|trans }}</label>
     <div class="col-8">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="">
     </div>
   </div>
   <!--  --------------------  Periodo --------------------------  -->
-  <div id="div_periodo" class="form-group row">
-    <label for="periodo" class="col-2 col-form-label">{{ "periodo"|trans }}:</label>
+  <div id="div_periodo" class="mb-3 row">
+    <label for="periodo" class="col-2 form-label">{{ "periodo"|trans }}:</label>
     <div class="col-5">
 		<select tabindex=111 id=periodo name=periodo >
 		<option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans }}</option>

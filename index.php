@@ -144,6 +144,7 @@ fnjs_ref_absoluta=function(base,path) {
 	return url;
 }
 </script>
+<body>
 <?php
 switch ($role_actual) {
     case 'admin':
@@ -162,3 +163,5 @@ switch ($role_actual) {
     default:
         include_once 'apps/usuarios/controller/usuario_home.php';
 }
+?>
+</body>

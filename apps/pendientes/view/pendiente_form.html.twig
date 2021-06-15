@@ -5,7 +5,7 @@
 
     <script src="{{ base_url_web }}/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="{{ base_url_web }}/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ base_url_web }}/node_modules/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
+    <script src="{{ base_url_web }}/node_modules/mdb-ui-kit/js/mdb.min.js"></script>
     <!-- CSS jQuery-confirm -->
     <link type="text/css" rel='stylesheet' href='{{ base_url_web }}/node_modules/jquery-confirm/dist/jquery-confirm.min.css' />
     <script src="{{ base_url_web }}/node_modules/jquery-confirm/dist/jquery-confirm.min.js"></script>
@@ -26,9 +26,9 @@
       
     <link href="{{ base_url_web }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <!-- DataTables -->
-	<link type="text/css" rel="stylesheet" href='node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css' />
+	<link type="text/css" rel="stylesheet" href='node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css' />
 	<script type="text/javascript" src='node_modules/datatables.net/js/jquery.dataTables.min.js'></script>
-	<script type="text/javascript" src='node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js'></script>
+	<script type="text/javascript" src='node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js'></script>
 
     <div class="m-3"> {# para margenes #}
 {% endif %}
@@ -65,8 +65,8 @@
 <div>
   {% if secretaria %}
   <!--  --------------------  Oficinas --------------------------  -->
-  <div class="form-group row align-items-center">
-    <label for="oficina" class="col-1">{{ "Oficina"|trans }}:</label>
+  <div class="mb-3 row align-items-center">
+    <label for="oficina" class="col-1 form-label">{{ "Oficina"|trans }}:</label>
     <div class="col-6">
       	{{ oDesplOficinas.desplegable|raw }}
     </div>
@@ -75,15 +75,15 @@
 	<input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
   {% endif %}
   <!--  --------------- ASUNTO --------------- -->
-  <div class="form-group row">
-    <label for="asunto_e" class="col-1 col-form-label">{{ "Asunto"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="asunto_e" class="col-1 form-label">{{ "Asunto"|trans }}</label>
     <div class="col-9">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------------  Etiquetas --------------------------  -->
-  <div id="div_etiquetas" class="form-group row align-items-center">
-    <label for="etiquetas" class="col-1">{{ "Etiquetas"|trans }}:</label>
+  <div id="div_etiquetas" class="mb-3 row align-items-center">
+    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans }}:</label>
     <div class="col-6">
       <span id="span_etiquetas">
       	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
@@ -91,15 +91,15 @@
     </div>
   </div
   <!--  --------------------  Plazo --------------------------  -->
-  <div class="form-group row" style="{{ display_plazo }}" >
-        <label id="txt_plazo" for="f_plazo" class="col col-2 col-form-label">{{ txt_plazo }}:</label>
+  <div class="mb-3 row" style="{{ display_plazo }}" >
+        <label id="txt_plazo" for="f_plazo" class="col col-2 form-label">{{ txt_plazo }}:</label>
         <div class='col-2 date'>
           <input tabindex='30' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_plazo }}"  onchange="fnjs_comprobar_fecha('#f_plazo')" />
         </div>
   </div> 
   <!--  --------------------  Encargado --------------------------  -->
-  <div class="form-group row align-items-center">
-    <label for="oficina" class="col-2">{{ "¿Está asignado a alguien?"|trans }}:</label>
+  <div class="mb-3 row align-items-center">
+    <label for="oficina" class="col-2 form-label">{{ "¿Está asignado a alguien?"|trans }}:</label>
     <div class="col-6">
 	  {{ oDesplEncargados.desplegable|raw }}
     </div>
@@ -111,8 +111,8 @@
 <div id=mas_opciones style="{{ display_completa }}">
 
   <!--  --------------- PROTOCOLO --------------- -->
-  <div class="form-group row">
-    <label class="col-2 col-form-label">{{ "protocolo o referencia"|trans }}</label>
+  <div class="mb-3 row">
+    <label class="col-2 form-label">{{ "protocolo o referencia"|trans }}</label>
     <div class="col-3">
         {{ oDesplLugar.desplegable|raw }}
     </div>
@@ -127,8 +127,8 @@
 {% if perm_detalle < 2 %}
 	<input type="hidden" tabindex="-1" id="detalle" name="detalle" style="width:100%;" value="{{ detalle }}" />
 {% else %}
-  <div class="form-group row">
-    <label for="detalle" class="col-1 col-form-label">{{ "detalle"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="detalle" class="col-1 form-label">{{ "detalle"|trans }}</label>
     <div class="col-9">
       <input tabindex='30' type="text" class="form-control" name="detalle" id="detalle" value="{{ detalle }}">
     </div>
@@ -136,16 +136,16 @@
 {% endif %}
 {% if calendario == 'oficina' %}
   <!--  --------------- DESTINO --------------- -->
-  <div class="form-group row">
-    <label class="col-3 col-form-label">{{ "¿con quién es el pendiente?"|trans }}</label>
+  <div class="mb-3 row">
+    <label class="col-3 form-label">{{ "¿con quién es el pendiente?"|trans }}</label>
     <div class="col-3">
         {{ oDesplLugar1.desplegable|raw }}
     </div>
   </div>
 {% endif %}
   <!--  --------------- Oficinas implicadas --------------- -->
-  <div class="form-group row">
-	<label for="oficinas" class="col-3">{{ "otras oficinas implicadas"|trans }}</label>
+  <div class="mb-3 row">
+	<label for="oficinas" class="col-3 form-label">{{ "otras oficinas implicadas"|trans }}</label>
     <div class="col">
       <span id="span_oficinas">
       	{{ oArrayDesplOficinas.ListaSelects|raw }}
@@ -154,26 +154,26 @@
   </div>
 
   <!--  --------------- OBSERVACIONES --------------- -->
-  <div class="form-group row">
-    <label for="observ" class="col-2 col-form-label">{{ "Observaciones"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="observ" class="col-2 form-label">{{ "Observaciones"|trans }}</label>
     <div class='col-10'>
       <textarea tabindex='50' rows="5" class="form-control" name='observ' id="observ">{{ observ }}</textarea>
     </div>
   </div>
   
-  <div class="form-group row">
+  <div class="mb-3 row">
     <!--  --------------- VISIBILIDAD --------------- -->
-    <label class="col-1 col-form-label">{{ "Visibilidad"|trans }}</label>
+    <label class="col-1 form-label">{{ "Visibilidad"|trans }}</label>
     <div class="col-2">
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
     <!--  --------------- STATUS --------------- -->
-    <label class="col-1 col-form-label">{{ "estado"|trans }}</label>
+    <label class="col-1 form-label">{{ "estado"|trans }}</label>
     <div class="col-2">
         {{ oDesplStatus.desplegable|raw }}
     </div>
 	<!--  --------------------  fecha --------------------------  -->
-    <label for="f_acabado" class="col col-2 col-form-label">{{ "fecha acabado"|trans }}:</label>
+    <label for="f_acabado" class="col col-2 form-label">{{ "fecha acabado"|trans }}:</label>
     <div class='col-2 date'>
       <input tabindex='30' name='f_acabado' id='f_acabado' type='text' class="form-control" value="{{ f_acabado }}"  onchange="fnjs_cambiar_estado()" />
     </div>

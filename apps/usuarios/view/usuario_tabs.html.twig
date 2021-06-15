@@ -1,11 +1,12 @@
-
 <ul class="nav nav-pills" id="pills-tab" role="tablist">
 {% for pill in a_pills %}
   <li class="nav-item">
-    <a data-toggle="pill" class="nav-link {{ pill.active }} " href="#" onClick="fnjs_update_div('#main','{{ pill.pag_lst }}');">
+    {# <a data-bs-toggle="pill" class="nav-link {{ pill.active }}" href="#" onClick="fnjs_update_div('#main','{{ pill.pag_lst }}');"> #}
+    
+    <button class="nav-link {{ pill.active }}" onClick="fnjs_update_div('#main','{{ pill.pag_lst }}');">
 	{{ pill.orden }}.- {{ pill.text }}
     {% if pill.num %}
-		<span class="badge badge-pill badge-danger">{{ pill.num }}</span>
+		<span class="badge rounded-pill bg-danger">{{ pill.num }}</span>
 	{% endif %}
     </a>
   </li>
@@ -13,14 +14,14 @@
   <li class="nav-item">
   {% if a_roles|length > 1 %}
     <div class="dropdown">
-      <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{ role_actual }}
-      </a>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
       {% for role in a_roles %}
-        <a class="dropdown-item" href="#" onClick="fnjs_cmb_role('{{ role }}')">{{ role }}</a>
+        <a class="dropdown-item" href="" onClick="fnjs_cmb_role('{{ role }}')">{{ role }}</a>
       {% endfor %}
-      </div>
+      </ul>
     </div>
   {% else %}
     <a class="nav-link disabled" href="#">
@@ -31,7 +32,6 @@
   </li>
 </ul>
 <!-- End of Page content -->
-
 
 <script type="text/javascript">
 fnjs_cmb_role=function(role){

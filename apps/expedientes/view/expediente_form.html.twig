@@ -12,7 +12,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar (máximo 50 filas)"|trans }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -39,56 +39,56 @@
 <!--  Col Izda -->
 <div class="col-9" >
   <!--  --------------- TRAMITE --------------- -->
-  <div class="form-group row mb-0">
-    <label for="tramite" class="form-group mb-0 col-1 col-form-label">{{ "Trámite"|trans }}</label>
-    <div class="form-group mb-0 col-3" >
+  <div class="row mb-0">
+    <label for="tramite" class="mb-0 col-1 form-label">{{ "Trámite"|trans }}</label>
+    <div class="mb-0 col-3" >
     	{{ oDesplTramites.desplegable|raw }}
     </div>
     <!--  --------------- VIDA --------------- -->
-    <div class="form-group mb-0 col-md-3">
-      <label for="Vida">{{ "Vida"|trans }}</label>
+    <div class="mb-0 col-md-3">
+      <label for="Vida" class="form-label">{{ "Vida"|trans }}</label>
       {{ oDesplVida.desplegable|raw }}
     </div>
     <!--  --------------- VISIBILIDAD --------------- -->
-    <div class="form-group mb-0 col-md-3">
-      <label for="Visibilidad">{{ "Visibilidad"|trans }}</label>
+    <div class="mb-0 col-md-3">
+      <label for="Visibilidad" class="form-label">{{ "Visibilidad"|trans }}</label>
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
   </div>
-  <div class="form-group mb-0 row">
+  <div class="mb-0 row">
     <!--
-    <label for="estado" class="col-1 col-form-label">{{ "Estado"|trans }}</label>
+    <label for="estado" class="col-1 form-label">{{ "Estado"|trans }}</label>
     <div class="col-2" >
     	{{ oDesplEstado.desplegable|raw }}
     </div>
   -->
-    <label for="prioridad" class="form-group mb-0 col-1 col-form-label">{{ "Prioridad"|trans }}</label>
-    <div class="form-group mb-0 col-2" >
+    <label for="prioridad" class="mb-0 col-1 form-label">{{ "Prioridad"|trans }}</label>
+    <div class="mb-0 col-2" >
     	{{ oDesplPrioridad.desplegable|raw }}
     </div>
-    <label for="f_contestar" class="col col-3 col-form-label text-right">{{ "resolver antes de"|trans }}:</label>
-    <div class='form-group mb-0 col-3 date'>
+    <label for="f_contestar" class="col col-3 form-label text-end">{{ "resolver antes de"|trans }}:</label>
+    <div class='mb-0 col-3 date'>
       <input tabindex='41' name='f_contestar' id='f_contestar' type='text' class="form-control" value="{{ f_contestar }}" />
     </div>
   </div>
-  <div id="div_etiquetas" class="form-group mb-0 row align-items-center">
-    <label for="etiquetas" class="col-1">{{ "Etiquetas"|trans }}:</label>
-    <div class="form-group mb-0 col-6">
+  <div id="div_etiquetas" class="mb-0 row align-items-center">
+    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans }}:</label>
+    <div class="mb-0 col-6">
       <span id="span_etiquetas">
       	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
       </span>
     </div>
   </div>
   <!--  --------------- ASUNTO --------------- -->
-  <div class="form-group row">
-    <label for="asunto" class="col-2 col-form-label">{{ "Asunto expediente"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="asunto" class="col-2 form-label">{{ "Asunto expediente"|trans }}</label>
     <div class="col-10">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------- ENTRADILLA --------------- -->
-  <div class="form-group row">
-    <label for="entradilla" class="col-2 col-form-label">{{ "Entradilla"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="entradilla" class="col-2 form-label">{{ "Entradilla"|trans }}</label>
     <div class='col-10'>
       <textarea tabindex='50' rows="5" class="form-control" name='entradilla' id="entradilla">{{ entradilla }}</textarea>
     </div>
@@ -100,17 +100,17 @@
 <!--  --------------------  ANTECEDENTES  --------------------------  -->
 {% if id_expediente %}
     {# lista de antecedentes #}
-    <div class="form-group col-md-12">
-      <label>{{ "Antecedentes"|trans }}:</label>
+    <div class="mb-3 col-md-12">
+      <label class="form-label">{{ "Antecedentes"|trans }}:</label>
     </div>
-    <div class="form-group col-md-12">
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(1);" >
+    <div class="mb-3 col-md-12">
+      <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(1);" >
         {{ "Entrada"|trans }}
       </button>
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(2);" >
+      <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(2);" >
         {{ "Expediente"|trans }}
       </button>
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalBuscar" onClick="fnjs_antecedente(3);" >
+      <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(3);" >
         {{ "Escrito"|trans }}
       </button>
     </div>
@@ -180,29 +180,29 @@
   </div>
 {% endif %}
 
-  <div class="form-group row align-items-center">
+  <div class="mb-2 row align-items-center">
     <!--  --------------- OFICIALES --------------- -->
-    <label for="mt-3" class="col-1">{{ "Preparar"|trans }}:</label>
-    <div id="div_preparar"> {# la funcion fnjs_visto remplaza el contenido de este div. #}
+    <label for="mt-3" class="col-1 form-label">{{ "Preparar"|trans }}:</label>
+    <div id="div_preparar" class="col"> {# la funcion fnjs_visto remplaza el contenido de este div. #}
      {% for row in a_preparar %}
-        <div class="custom-control custom-checkbox custom-control-inline">
+        <div class="form-check custom-checkbox form-check-inline">
           <input type="checkbox" class="" name="a_preparar[]" id="{{ row.id }}" value="{{ row.id }}#{{ row.visto }}" {{ row.chk }}>
           {% if row.visto %}
-            <label class="mt-2 ml-2 text-success" >{{ row.text }} ({{ "visto"|trans }})</label>
+            <label class="mt-2 ms-2 text-success form-label" >{{ row.text }} ({{ "visto"|trans }})</label>
           {% else %}
-            <label class="mt-2 ml-2" >{{ row.text }}</label>
+            <label class="mt-2 ms-2 form-label" >{{ row.text }}</label>
           {% endif %}
         </div>
     {% endfor %}
-    </div>
-    <button tabindex='' class="btn btn-outline-secondary" onClick="fnjs_visto();" >
+    <button tabindex='' class="col-2 btn btn-outline-secondary" onClick="fnjs_visto();" >
       {{ "marcar como visto"|trans }}
     </button>
+    </div>
   </div>
   
   <!--  --------------- FIRMAS OFICINA --------------- -->
-  <div id="div_firmas_oficina" class="form-group row">
-    <label for="firmas_oficina" class="col-md-1">{{ "Firmas oficina"|trans }}:</label>
+  <div id="div_firmas_oficina" class="mb-2 row">
+    <label for="firmas_oficina" class="col-md-1 form-label">{{ "Firmas oficina"|trans }}:</label>
     <div class="col-6">
       <span id="span_firmas_oficina">
       	{{ oArrayDesplFirmasOficina.ListaSelects|raw }}
@@ -210,8 +210,8 @@
     </div>
   </div>
   <!--  --------------- OTRAS FIRMAS --------------- -->
-  <div id="div_firmas" class="form-group row">
-    <label for="firmas" class="col-md-1">{{ "Otras Firmas"|trans }}:</label>
+  <div id="div_firmas" class="mb-3 row">
+    <label for="firmas" class="col-md-1 form-label">{{ "Otras Firmas"|trans }}:</label>
     <div class="col-6">
       <span id="span_firmas">
       	{{ oArrayDesplFirmas.ListaSelects|raw }}

@@ -56,7 +56,7 @@ class DesplegableArray Extends Desplegable{
 	
 	/**
 	 *
-	 * Esta función sirve para hacer el echo en html de la lista de selecciondos
+	 * Esta función sirve para hacer el echo en html de la lista de seleccionados
 	 * usando bootstrap.
 	 *
 	 * @return string html 
@@ -72,11 +72,11 @@ class DesplegableArray Extends Desplegable{
     		$a_opciones = $this->oOpciones;
         }
 	    
-		$sLista = "<div class=\"btn-group btn-group-toggle\" data-toggle=\"buttons\">";
+		$sLista = "<div class=\"btn-group btn-group-toggle\" data-bs-toggle=\"buttons\">";
 		if (!empty($aSeleccionados)) {
 			foreach ($aSeleccionados as $id) {
-				$sLista .= "<label class=\"btn btn-outline-secondary\" >";
-				$sLista .= "<input type=\"radio\" name=\"$nom\" id=\"$id\" autocomplete=\"off\" >";
+				$sLista .= "<label class=\"btn btn-outline-secondary form-label\" >";
+				//$sLista .= "<input type=\"radio\" name=\"$nom\" id=\"$id\" autocomplete=\"off\" >";
 				$sLista .= $a_opciones[$id];
 				$sLista .= "</label>";
 			}

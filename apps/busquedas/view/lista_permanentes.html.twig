@@ -28,6 +28,9 @@
 </div>
 
 <script>
+$(document).ready(function() {
+	tabs_show('{{ vista }}','{{ filtro }}');
+});
 fnjs_ver_mas=function(n){
     var des=["descripcion_"+n,"dl_"+n,"ctr_"+n,"oficinas_"+n];
     jQuery.each(des,function(i,el){ if ($('#'+el).length) { $('#'+el).toggle(); } });

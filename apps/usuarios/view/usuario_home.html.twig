@@ -1,12 +1,11 @@
-{# solo debe cargarse un vez, sino hay conflicto con los dropdown bootsrtap #}
 {%  if not peticion_ajax %}
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="node_modules/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
+    {# <script src="xxxnode_modules/mdb-ui-kit/js/mdb.min.js"></script> #}
 {% endif %}
 
 {% include '_css_default.html.twig' %}
-<!-- vars: oficina, username, pagina_profile,  -->
+<!-- vars: oficina, username, pagina_profile, -->
 {% include '_nav_bar.html.twig' %}
 
 <!-- Page content -->
@@ -22,11 +21,8 @@
 </div> <!-- End of content -->
 
 <div id="cargando" >{{ "Cargando..."|trans }}</div>
-<div id="left_slide" class="left-slide">
-	<span class=handle onClick="fnjs_ir_a('#ir_atras');"></span>
-</div>     
-
 <!-- Custom scripts for all pages-->
+{# solo debe cargarse un vez, sino hay conflicto con los dropdown bootsrtap #}
 <!-- vars: mi_idioma, error_fecha -->
 {% include '_scripts_default.html.twig' %}
 <script>

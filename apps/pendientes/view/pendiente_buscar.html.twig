@@ -8,8 +8,8 @@
   
   {% if calendario == 'registro' %}
   <!--  --------------- PROTOCOLO --------------- -->
-  <div class="form-group row">
-    <label class="col-2 col-form-label">{{ "¿A qué escrito hacia referencia?"|trans }}</label>
+  <div class="mb-3 row">
+    <label class="col-2 form-label">{{ "¿A qué escrito hacia referencia?"|trans }}</label>
     <div class="col-3">
         {{ oDesplLugar.desplegable|raw }}
     </div>
@@ -23,8 +23,8 @@
   {% endif %}
   
    <!--  --------------- ASUNTO --------------- -->
-  <div class="form-group row">
-    <label for="asunto_e" class="col-2 col-form-label">{{ "¿De que asunto trataba?"|trans }}</label>
+  <div class="mb-3 row">
+    <label for="asunto_e" class="col-2 form-label">{{ "¿De que asunto trataba?"|trans }}</label>
     <div class="col-8">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
     </div>
@@ -32,8 +32,8 @@
   
   {% if secretaria %}
   <!--  --------------------  Oficinas --------------------------  -->
-  <div class="form-group row align-items-center">
-    <label for="oficina" class="col-2">{{ "¿Cuál era la oficina responsable?"|trans }}:</label>
+  <div class="mb-3 row align-items-center">
+    <label for="oficina" class="col-2 form-label">{{ "¿Cuál era la oficina responsable?"|trans }}:</label>
     <div class="col-6">
       	{{ oDesplOficinas.desplegable|raw }}
     </div>
@@ -43,8 +43,8 @@
   {% endif %}
   
   <!--  --------------------  Periodo --------------------------  -->
-  <div class="form-group row">
-      <label for="f_min" class="col col-2 col-form-label">{{ "periodo determinado entre"|trans }}</label>
+  <div class="mb-3 row">
+      <label for="f_min" class="col col-2 form-label">{{ "periodo determinado entre"|trans }}</label>
       <div class='col-2 date'>
         <input tabindex='41' name='f_min' id='f_min' type='text' class="form-control" value="{{ f_min }}" />
       </div>
@@ -54,8 +54,8 @@
       </div>
   </div> 
   <!--  --------------------  Estados --------------------------  -->
-  <div class="form-group row">
-      <label for="f_min" class="col col-2 col-form-label">{{ "estado posibles del pendiente"|trans }}</label>
+  <div class="mb-3 row">
+      <label for="f_min" class="col col-2 form-label">{{ "estado posibles del pendiente"|trans }}</label>
       <div class='col-8'>
         {{ oDesplStatus.radio(2)|raw }}
       </div>
