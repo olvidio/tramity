@@ -3,7 +3,6 @@ namespace usuarios\model;
 use core\ConfigGlobal;
 use entradas\model\Entrada;
 use usuarios\model\entity\Cargo;
-use Mpdf\Cache;
 use usuarios\model\entity\GestorCargo;
 
 class PermRegistro {

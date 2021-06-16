@@ -47,13 +47,9 @@ class GestorCargo Extends core\ClaseGestor {
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return false;
         }
-        $aOpciones=array();
         foreach ($oDbl->query($sQuery) as $aClave) {
             $clave=$aClave[0];
-            $val=$aClave[1];
-            $aOpciones[$clave]=$val;
         }
-        //return $aOpciones;
         return $clave;
 	}
 	/**
@@ -153,6 +149,29 @@ class GestorCargo Extends core\ClaseGestor {
             $aOpciones[$clave]=$val;
         }
         return $aOpciones;
+	}
+	
+	/**
+	 * retorna un Array
+	 * Els posibles cargos(nom usuario)
+	 *
+	 * @param boolean $conOficina default=TRUE: sólo las que tienen oficina. FALSE: todas.
+	 * @return Array [ id_cargo => sigla(nombre usuario) ]
+	 */
+	function getArrayCargosConUsuario($conOficina=TRUE) {
+        $aOpciones = $this->getArrayCargos($conOficina);
+        $a_cargos_usuario = [];
+        foreach ($aOpciones as $id_cargo => $sigla) {
+            // buscar el usuario para cada cargo
+            $oCargo = new Cargo($id_cargo);
+            $id_suplente = $oCargo->getId_suplente();
+            $id_usuario = $oCargo->getId_usuario();
+            $id_nom = empty($id_suplente)? $id_usuario : $id_suplente;
+            $oUsuario = new Usuario($id_nom);
+            $nom_usuario = $oUsuario->getNom_usuario();
+            $a_cargos_usuario[$id_cargo] = "$sigla($nom_usuario)";
+        }
+        return $a_cargos_usuario;    
 	}
 	
 	/**

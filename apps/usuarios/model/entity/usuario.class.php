@@ -385,7 +385,6 @@ class Usuario Extends core\ClasePropiedades {
 	function getPassword() {
 		if (!isset($this->spassword) && !$this->bLoaded) {
 			$this->DBCarregar();
-			$oDBSt->bindColumn('password', $sPasswd, \PDO::PARAM_STR);
 		}
 		return $this->spassword;
 	}

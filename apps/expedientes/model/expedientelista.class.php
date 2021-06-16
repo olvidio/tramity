@@ -671,7 +671,7 @@ class ExpedienteLista {
                     $row['class_row'] = 'bg-warning';
                 }
                 if ($brespuesta) {
-                    $row['class_row'] = 'bg-success';
+                    $row['class_row'] = 'bg-success text-white';
                 }
                 // color para los rechazados
                 if ($estado == Expediente::ESTADO_DILATA) {

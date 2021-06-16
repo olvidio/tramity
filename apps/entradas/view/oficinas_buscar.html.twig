@@ -4,17 +4,17 @@
 <input type="hidden" id="que" name="que" value="buscar">
 
 
-  <h3 class="col-10 mb-3 row">{{ "listar entradas de oficina"|trans }}:
+  <div class="fs-4 col-10 mb-3 row">{{ "listar entradas de oficina"|trans }}:
    <!--  --------------- OFICINA PROPIA/RESTO --------------- -->
     <div class="col-4">
     <div class="form-check form-check-inline">
-      <input type="radio" class="form-check-input" name="oficina" value="propia" {{ chk_of_propia }} onClick="fnjs_buscar('#que');" >
+      <input type="radio" class="form-check-input fs-5 mt-2" name="oficina" value="propia" {{ chk_of_propia }} onClick="fnjs_buscar('#que');" >
       <label class="form-check-label">
       {{ "propia"|trans }}
       </label>
 	</div>
     <div class="form-check form-check-inline">
-      <input type="radio" class="form-check-input" name="oficina" value="resto" {{ chk_of_resto }} onClick="fnjs_buscar('#que');" >
+      <input type="radio" class="form-check-input fs-5 mt-2" name="oficina" value="resto" {{ chk_of_resto }} onClick="fnjs_buscar('#que');" >
       <label class="form-check-label">
       {{ "resto"|trans }}
       </label>

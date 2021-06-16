@@ -6,18 +6,17 @@
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
 
-<!-- Modal -->
+<!-- Modal-->
 <input type=hidden id='modal_volver' value=0>
-<div class="modal fade" id="ModalFirma" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal fade" id="ModalFirma" tabindex="-1" aria-labelledby="ModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex flex-row justify-content-start">
-          <h5 class="modal-title" id="exampleModalLongTitle">{{ "Firma"|trans }}</h5>
+          <h5 class="modal-title" id="ModalTitle">{{ "Firma"|trans }}</h5>
 		</div>
         <div class="d-flex flex-row justify-content-end">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
         </button>
 		</div>
       </div>
@@ -41,11 +40,10 @@
         <div class="d-flex flex-row ">
             <div class="mr">
               <label class="form-label">{{ "voto"|trans }}: </label>
-                <div class="btn-group btn-group-toggle" data-bs-toggle="buttons">
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                 {% for row in a_firmas %}
-                  <label class="btn btn-outline-secondary form-label" >
-                       <input type="radio" name="voto_options" value="{{ row.id }}" autocomplete="off" > {{ row.valor }}
-                     </label>
+                  <input type="radio" class="btn-check" id="voto_{{ loop.index }}" name="voto_options" autocomplete="off" value="{{ row.id }}">
+                  <label class="btn btn-outline-primary" for="voto_{{ loop.index }}" > {{ row.valor }}</label>
                 {% endfor %}
               	</div>
            	</div>
@@ -59,7 +57,8 @@
     </div>
   </div>
 </div>
-
+ 
+ 
 <form id ="form_expediente" >
     <input type=hidden name='que' id='que' value=0>
     <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
@@ -232,12 +231,14 @@ fnjs_ver_cargos=function(add_del) {
             // You can create an Array from this like so:
             var theArray = JSON.parse(json.cargos);
             html='';
+            html+='<div>';
 			$.each(theArray, function(id, obj){
 				html+='<div class="form-check custom-checkbox form-check-inline">';
             	html+='<input type="checkbox" class="form-check-input" id="'+obj.id+'" >';
             	html+='<label class="form-check-label" for="'+obj.id+'">'+obj.sigla+'</label>';
             	html+='</div>';
 			});
+            html+='</div>';
 			if (json.cargos_repetir != undefined) {
                 var theArray2 = JSON.parse(json.cargos_repetir);
                 html+='<div style="background-color: honeydew;">';

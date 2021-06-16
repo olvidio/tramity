@@ -116,7 +116,7 @@ switch ($Qque) {
     case 'lst_cargos_libres':
         // todos los cargos
         $gesCargos = new GestorCargo();
-        $a_todos_cargos = $gesCargos->getArrayCargos();
+        $a_todos_cargos = $gesCargos->getArrayCargosConUsuario();
         
         $aWhere = ['id_expediente' => $Qid_expediente,
         ];

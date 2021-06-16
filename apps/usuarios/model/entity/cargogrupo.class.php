@@ -1,7 +1,6 @@
 <?php
 namespace usuarios\model\entity;
 use core;
-use stdClass;
 /**
  * Fitxer amb la Classe que accedeix a la taula cargos_grupos
  *

@@ -102,12 +102,14 @@
   </div>
 {% if ver_pendiente %}
   <div class="mb-3 row">
-      <label for="plazo" class="me-3 mt-2">{{ "¿Es necesario contestar?"|trans }}</label>
+      <label for="plazo" class="col-3 me-3 mt-2">{{ "¿Es necesario contestar?"|trans }}</label>
+      <div class="col-2">
       {{ oDesplPlazo.desplegable|raw }}
-      <div class='col-3 date'>
+      </div>
+      <div class='col-2 date'>
         <input tabindex='185' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_contestar }}" />
       </div>
-      <button id="btn_pendiente" tabindex='188' class="btn btn-outline-secondary" onClick="fnjs_mod_pendiente();" >
+      <button id="btn_pendiente" tabindex='188' class="col-2 btn btn-outline-secondary" onClick="fnjs_mod_pendiente();" >
           {{ "modificar pendiente"|trans }}
 	  </button>
   </div>

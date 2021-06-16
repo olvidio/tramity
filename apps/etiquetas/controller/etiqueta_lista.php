@@ -4,6 +4,8 @@ use core\ViewTwig;
 use function core\is_true;
 use etiquetas\model\entity\GestorEtiqueta;
 use usuarios\model\entity\Cargo;
+use usuarios\model\entity\GestorOficina;
+use usuarios\model\entity\GestorCargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -43,19 +45,23 @@ $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
 $id_etiqueta = '';
 $nom_etiqueta = '';
 
-$a_cabeceras = [ ['name'=>_("etiqueta"),'width'=>30], _("entorno"), _("id_cargo") ];
+$a_cabeceras = [ ['name'=>_("etiqueta"),'width'=>800],
+                 ['name'=>_("entorno"),'width'=>100],
+                 ['name'=>_("cargo"),'width'=>50] ];
 
 $a_botones = [ ['txt'=> _("borrar"), 'click'=>"fnjs_eliminar()"],
                ['txt'=> _("modificar"), 'click'=>"fnjs_editar()"],
             ];
 
+$gesCargos = new GestorCargo();
+$a_cargos = $gesCargos->getArrayCargos(TRUE);
 $a_valores=array();
 $i=0;
 foreach ($cEtiquetas as $oEtiqueta) {
 	$i++;
 	$id_etiqueta = $oEtiqueta->getId_etiqueta();
 	$nom_etiqueta = $oEtiqueta->getNom_etiqueta();
-	$id_oficina = $oEtiqueta->getId_cargo();
+	$id_cargo = $oEtiqueta->getId_cargo();
 	$oficina = $oEtiqueta->getOficina();
 	if (is_true($oficina)) {
 	    $oficina_txt = _("de la oficina");
@@ -66,7 +72,7 @@ foreach ($cEtiquetas as $oEtiqueta) {
 	$a_valores[$i]['sel'] = "$id_etiqueta#";
 	$a_valores[$i][1] = $nom_etiqueta;
 	$a_valores[$i][2] = $oficina_txt;
-	$a_valores[$i][3] = $id_oficina;
+	$a_valores[$i][3] = empty($a_cargos[$id_cargo])? $id_cargo : $a_cargos[$id_cargo];
 }
 if (isset($Qid_sel) && !empty($Qid_sel)) { $a_valores['select'] = $Qid_sel; }
 if (isset($Qscroll_id) && !empty($Qscroll_id)) { $a_valores['scroll_id'] = $Qscroll_id; }

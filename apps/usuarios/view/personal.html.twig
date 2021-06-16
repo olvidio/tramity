@@ -38,13 +38,14 @@
 </div>
 </div>
 <br>
- <button onclick="fnjs_update_div('#main','{{ cambio_password }}');" type="button" class="col-4 btn btn-primary w-100">
+ <button onclick="fnjs_update_div('#main','{{ cambio_password }}');" class="col-4 btn btn-primary mb-3">
  	{{ "cambiar el password"|trans }}
  </button>
-<button onclick="fnjs_cancelar();" type="button" class="col-4 btn btn-secondary w-100">
+<br>
+<button onclick="fnjs_cancelar();" class="col-4 btn btn-secondary">
     {{ "Cancelar"|trans }}
 </button>
-  
+
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#content").hide();
