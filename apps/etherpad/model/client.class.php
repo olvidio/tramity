@@ -52,10 +52,14 @@ namespace etherpad\model;
  *
  * @method Response listAllPads() lists all pads on this epl instance
  *
+ * @method copyPadWithoutHistory(sourceID, destinationID, force=false). copies a pad without copying the history and chat.
+ *                                                If force is true and the destination pad exists, it will be overwritten.
+ *                                                
+ * @method movePad(sourceID, destinationID, force=false). moves a pad. If force is true and the destination pad exists, it will be overwritten.
  */
 class Client
 {
-    const API_VERSION = '1.2.13';
+    const API_VERSION = '1.2.15';
 
     /**
      * @var string|null
@@ -110,6 +114,47 @@ class Client
 
         return $padID;
     }
+    
+    /*
+     Response Format
+     #
+     
+     Responses are valid JSON in the following format:
+     
+     {
+     "code": number,
+     "message": string,
+     "data": obj
+     }
+     
+     code a return code
+     0 everything ok
+     1 wrong parameters
+     2 internal error
+     3 no such function
+     4 no or wrong API Key
+     message a status message. Its ok if everything is fine, else it contains an error message
+     data the payload
+     */
+    
+    public function mostrar_error($rta) {
+        $a_codes = [
+            0 => 'everything ok',
+            1 => 'wrong parameters',
+            2 => 'internal error',
+            3 => 'no such function',
+            4 => 'no or wrong API Key',
+        ];
+        $code = $rta->getCode();
+        $message = $rta->getMessage();
+        
+        $html = "*Error: ". $a_codes[$code];
+        $html .= "<br>";
+        $html .= $message;
+        $html .= "**<br>";
+        
+        echo $html;
+    }
 
     /**
      * Array that holds the available methods and their required parameter names
@@ -160,6 +205,11 @@ class Client
             // provo d'afegir...
             'copyPad' => ['sourceID', 'destinationID', 'force'],
             'appendText' => ['padID', 'text'],
+            'copyPadWithoutHistory' => ['sourceID', 'destinationID', 'force'],
+            'movePad' => ['sourceID', 'destinationID', 'force'],
+            'mostrar_error' => [],
         ];
+        
+        
     }
 }

@@ -158,7 +158,7 @@ fnjs_guardar=function(){
         request=$.ajax({
             data: datos,
             url: '{{ url_update }}',
-            type: 'post',
+            method: 'POST',
             dataType: 'json'
         });
 
@@ -351,7 +351,7 @@ fnjs_proto=function(num,any){
             request=$.ajax({
                 data: param_json,
                 url: url_buscar_ajax,
-                type: 'post',
+                method: 'POST',
                 dataType: 'json'
             });
             request.done( function (json) {

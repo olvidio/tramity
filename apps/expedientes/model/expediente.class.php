@@ -15,6 +15,7 @@ use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorCargoGrupo;
 use tramites\model\entity\GestorFirma;
+use documentos\model\Documento;
 
 
 
@@ -131,9 +132,9 @@ class Expediente Extends expedienteDB {
         $oNewExpediente->setEntradilla($this->getEntradilla());
         
         // copiar antecedentes
-        $antecedentes_db = $this->getJson_antecedentes();
-        if (!empty($antecedentes_db)) {
-            $oNewExpediente->setJson_antecedentes($antecedentes_db);
+        $aAntecedentes = $this->getJson_antecedentes(TRUE);
+        if (!empty($aAntecedentes)) {
+            $oNewExpediente->setJson_antecedentes($aAntecedentes);
         }
         // buscar escritos para ponerlos como antecedentes
         $gesAcciones = new GestorAccion();
@@ -151,10 +152,9 @@ class Expediente Extends expedienteDB {
             //n = 2 -> Expedientes
             //n = 3 -> Escritos-propuesta
             $tipo_antecedente = 'escrito';
-            $antecedente = [ 'tipo'=> $tipo_antecedente, 'id' => $id_escrito ];
-            $json_antecedente = json_encode($antecedente);
+            $a_antecedente = [ 'tipo'=> $tipo_antecedente, 'id' => $id_escrito ];
             
-            $oNewExpediente->addAntecedente($json_antecedente);
+            $oNewExpediente->addAntecedente($a_antecedente);
         }
         
         $oNewExpediente->DBGuardar();
@@ -164,13 +164,8 @@ class Expediente Extends expedienteDB {
         $str_contenido = '';
         $separador = '; ';
         // antecedentes:
-        $antecedentes_db = $this->getJson_antecedentes(TRUE);
-        if (!empty($antecedentes_db)) {
-            $a_antecedentes = $antecedentes_db;
-        } else {
-            $a_antecedentes = [];
-        }
-        $a = count($a_antecedentes);
+        $aAntecedentes = $this->getJson_antecedentes(TRUE);
+        $a = count($aAntecedentes);
         if ($a > 0) {
             $str_contenido .= empty($str_contenido)? '' : $separador;
             $str_contenido .= "A($a)";
@@ -401,25 +396,18 @@ class Expediente Extends expedienteDB {
         
        return $asunto_estado; 
     }
-    public function delAntecedente($json_antecedente) {
-// obtener los antecedentes actuales:
-        $antecedentes_db = $this->getJson_antecedentes(TRUE);
-        if (!empty($antecedentes_db)) {
-            $a_antecedentes = $antecedentes_db;
-        } else {
-            $a_antecedentes = [];
-        }
-        $oDel = json_decode($json_antecedente);
-        $id_ref = $oDel->id;
-        $tipo_ref = $oDel->tipo;
+    public function delAntecedente($a_antecedente) {
+        // obtener los antecedentes actuales:
+        $aAntecedentes = $this->getJson_antecedentes(TRUE);
         $a_2 = [];
-        foreach ($a_antecedentes as $antecedente) {
-            $oAnt = json_decode($antecedente);
-            $id = $oAnt->id;
-            $tipo = $oAnt->tipo;
+        $id_ref = $a_antecedente['id'];
+        $tipo_ref = $a_antecedente['tipo'];
+        foreach ($aAntecedentes as $antecedente) {
+            $id = $antecedente['id'];
+            $tipo = $antecedente['tipo'];
             if ($id == $id_ref && $tipo == $tipo_ref) {
-                // OJO con la función unset no va bien, porque el array resultante costa de indices.
-                //unset($a_antecedentes[$k]);
+                // OJO con la función unset no va bien, porque el array resultante consta de indices.
+                //unset($aAntecedentes[$k]);
             } else {
                 $a_2[] = $antecedente;
             }
@@ -427,33 +415,26 @@ class Expediente Extends expedienteDB {
         $this->setJson_antecedentes($a_2);
     }
     
-    public function addAntecedente($json_antecedente) {
+    public function addAntecedente($a_antecedente) {
         // obtener los antecedentes actuales:
-        $antecedentes_db = $this->getJson_antecedentes(TRUE);
-        if (!empty($antecedentes_db)) {
-            $a_antecedentes = $antecedentes_db;
-        } else {
-            $a_antecedentes = [];
-        }
+        $aAntecedentes = $this->getJson_antecedentes(TRUE);
             
-        $a_antecedentes[] = $json_antecedente;
-        $this->setJson_antecedentes($a_antecedentes);
+        $aAntecedentes[] = $a_antecedente;
+        $this->setJson_antecedentes($aAntecedentes);
         
     }
     
     public function getHtmlAntecedentes($quitar =TRUE) {
         // devolver la lista completa (para sobreescribir)
         $html = '';
-        $antecedentes_db = $this->getJson_antecedentes();
-        if (!empty($antecedentes_db)) {
-            $a_antecedentes = $antecedentes_db;
+        $aAntecedentes = $this->getJson_antecedentes(TRUE);
+        if (!empty($aAntecedentes)) {
             $html = '<ol>';
-            foreach ($a_antecedentes as $antecedente) {
+            foreach ($aAntecedentes as $antecedente) {
                 $link_mod = '-';
                 $link_del = '';
-                $json_ante = json_decode($antecedente);
-                $id = $json_ante->id;
-                $tipo = $json_ante->tipo;
+                $id = $antecedente['id'];
+                $tipo = $antecedente['tipo'];
                 switch ($tipo) {
                     case 'entrada':
                         $oEntrada = new Entrada($id);
@@ -477,6 +458,14 @@ class Expediente Extends expedienteDB {
                         $nom = empty($prot_local)? '' : $prot_local;
                         $nom .= empty($nom)? "$asunto" : ": $asunto";
                         $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito($id);\" >$nom</span>";
+                        $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >"._("quitar")."</span>";
+                        break;
+                    case 'documento':
+                        $oDocumento = new Documento($id);
+                        $tipo_doc = $oDocumento->getTipo_doc();
+                        $nom = $oDocumento->getNom();
+                        $nom = empty($nom)? _("este documento se ha eliminado") : $nom;
+                        $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_documento($id,$tipo_doc);\" >$nom</span>";
                         $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >"._("quitar")."</span>";
                         break;
                 }

@@ -4,7 +4,7 @@ fnjs_guardar=function(formulario){
 	request=$.ajax({
 		data: datos,
 		url: 'apps/usuarios/controller/cargo_grupo_update.php',
-		type: 'post',
+		method: 'POST',
 		dataType: 'json'
 	});
 	request.done( function (json) {

@@ -12,6 +12,7 @@ use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
 use web\Protocolo;
 use web\ProtocoloArray;
+use documentos\model\Documento;
 
 
 class Enviar {
@@ -201,9 +202,21 @@ class Enviar {
             $a_id_adjuntos = $this->oEscrito->getArrayIdAdjuntos();
             foreach ($a_id_adjuntos as $item => $adjunto_filename) {
                 $oEscritoAdjunto = new EscritoAdjunto($item);
-                $escrito = $oEscritoAdjunto->getAdjunto();
-                $escrito_txt = stream_get_contents($escrito);
-                $a_adjuntos[$adjunto_filename] = $escrito_txt;
+                $tipo_doc = $oEscritoAdjunto->getTipo_doc();
+                switch ($tipo_doc) {
+                    case Documento::DOC_UPLOAD:
+                        $escrito = $oEscritoAdjunto->getAdjunto();
+                        $escrito_txt = stream_get_contents($escrito);
+                        $a_adjuntos[$adjunto_filename] = $escrito_txt;
+                        break;
+                    case Documento::DOC_ETHERPAD:
+                        $id_adjunto = $oEscritoAdjunto->getId_item();
+                        $oEtherpadAdj = new Etherpad();
+                        $oEtherpadAdj->setId (Etherpad::ID_ADJUNTO,$id_adjunto);
+                        $escrito_txt = $oEtherpadAdj->generarPDF();
+                        $a_adjuntos[$adjunto_filename] = $escrito_txt;
+                        break;
+                }
             }
             $this->a_adjuntos = $a_adjuntos;
             // nombre del archivo

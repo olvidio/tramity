@@ -46,7 +46,7 @@ fnjs_guardar=function(formulario){
     request=$.ajax({
         url: url_doc,
         data: data,
-        type: 'post'
+        method: 'POST'
     });
     request.done(function (rta_txt) {
         if (rta_txt != '' && rta_txt != '\\n') {

@@ -72,7 +72,8 @@ CREATE TABLE public.escrito_adjuntos (
 	id_item SERIAL PRIMARY KEY,
     id_escrito integer NOT NULL,
     nom text,
-    adjunto bytea NOT NULL
+	tipo_doc smallint,
+    adjunto bytea
 );
 
 ALTER TABLE public.escrito_adjuntos OWNER TO tramity;

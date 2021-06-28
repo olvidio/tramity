@@ -1,10 +1,19 @@
 <!-- load the CSS files in the right order -->
 <link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
 <link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
+<!-- para hacer lineas más pequeñas en el file input -->
+<link href="css/custom_file_input.css" rel="stylesheet" type="text/css">
 
 <!-- load the JS files in the right order -->
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
+
+<!-- Para reducir la ventana file-input: sólo se puede subir un archivo -->
+<style>
+.file-drop-zone {
+    min-height: 100px !important;
+}
+</style>
 
 <h1>{{ titulo }}:</h1>
 
@@ -14,6 +23,7 @@
     <input type=hidden name='id_doc' id='id_doc' value={{ id_doc }} >
     <input type=hidden name='accion' id='accion' value={{ accion }} >
     <input type=hidden name='id_ponente' id='id_ponente' value={{ id_ponente }} >
+    <input type=hidden name='tipo_doc' id='tipo_doc' value={{ tipo_doc }} >
     
 <div class="col-10" > 
   <!--  --------------- ASUNTO --------------- -->
@@ -78,11 +88,13 @@
             {{ "Etherpad"|trans }}
           </button>
           </div>
+          {#
 		  <div class='col-2'>
           <button disabled tabindex='101' class="btn btn-info" onClick="fnjs_add_doc(2);" >
             {{ "EtherCalc"|trans }}
           </button>
           </div>
+          #}
 		  <div class='col-2'>
           <button tabindex='10' class="btn btn-info" onClick="fnjs_add_doc(3);" >
             {{ "Incrustado"|trans }}
@@ -113,20 +125,14 @@
 
 </form>
 </div>
-        
-        {#
-{{ include ('_escrito_form_js.html.twig') }}
-#}
 {{ include ('_documentos_js.html.twig') }}
 <script>
-
 $(document).ready(function() {
 	{% if tipo_doc != 3 %}
         $('#upload').hide();
 	{% endif %}
-	var id_doc=$('#id_doc');
 	var el1 = $("#escrito_adjunto");
-el1.fileinput({
+    el1.fileinput({
     	theme: "explorer-fas",
         uploadUrl: "apps/documentos/controller/adjunto_upload.php",
         dropZoneEnabled: true,
@@ -134,6 +140,7 @@ el1.fileinput({
         browseOnZoneClick: true,
         dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans }}",
         maxFileCount: 1,
+        validateInitialCount: true,
         showUpload: false, // upload button
         showBrowse: true,
         showRemove: false,
@@ -142,10 +149,10 @@ el1.fileinput({
         hideThumbnailContent: true,
         // this is where the magic happens
         uploadAsync: false,
-        //uploadExtraData: { que: "upload_adjunto", id_doc: "{{ id_doc }}" },
-        uploadExtraData: { que: "upload_adjunto", id_doc: id_doc },
+        uploadExtraData: { que: "upload_adjunto" },
         removeFromPreviewOnError: true,
         overwriteInitial: false,
+        initialPreviewCount: 1,
         initialPreviewAsData: false,
      	initialPreview: [ {{ initialPreview|raw }} ],
         initialPreviewConfig: {{ json_config|raw }},
@@ -154,6 +161,9 @@ el1.fileinput({
     });
 	el1.on("filebatchselected", function(files) {
         el1.fileinput("upload");
+    });
+    el1.on('filebatchpreupload', function (event, data, jqXHR) {
+        data.formdata.append('id_doc', $("#id_doc").val());
     });
 });
 </script>

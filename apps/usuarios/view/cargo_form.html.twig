@@ -4,7 +4,7 @@ fnjs_guardar=function(formulario){
 	request=$.ajax({
 		data: datos,
 		url: '{{ url_update }}',
-		type: 'post',
+		method: 'POST',
 		dataType: 'json'
 	});
 	request.done( function (json) {

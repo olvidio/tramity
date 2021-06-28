@@ -4,7 +4,6 @@ namespace etherpad\model;
 use GuzzleHttp\Client as HttpClient;
 use Psr\Http\Message\ResponseInterface;
 use core\ConfigGlobal;
-use GuzzleHttp;
 
 require_once(ConfigGlobal::$dir_libs.'/vendor/autoload.php');
 
@@ -50,10 +49,19 @@ class Request
     {
         $client = new HttpClient(['base_uri' => $this->url]);
 
+        /* Ahora se permite via POST
         return $client->get(
             $this->getUrlPath(),
             [
                 'query' => $this->getParams(),
+            ]
+        );
+        */
+        return $client->post(
+            $this->getUrlPath(),
+            [
+                'query' => $this->getParams(),
+                'verify' => false,
             ]
         );
     }

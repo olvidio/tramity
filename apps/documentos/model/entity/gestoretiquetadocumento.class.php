@@ -34,6 +34,46 @@ class GestorEtiquetaDocumento Extends core\ClaseGestor {
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
+	public function getArrayDocumentos($a_etiquetas,$andOr='OR') {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    // Filtering the array
+	    $a_etiquetas_filtered = array_filter($a_etiquetas);
+	    if (!empty($a_etiquetas_filtered)) {
+	        if ($andOr == 'AND') {
+	            $sQuery = '';
+	            foreach ($a_etiquetas_filtered as $etiqueta) {
+	                $sql = "SELECT DISTINCT id_doc
+                        FROM $nom_tabla
+                        WHERE id_etiqueta = $etiqueta";
+	                $sQuery .=  empty($sQuery)? $sql : " INTERSECT $sql";
+	            }
+	            
+	        } else {
+	            $valor = implode(',',$a_etiquetas_filtered);
+	            $where = " id_etiqueta IN ($valor)";
+	            $sQuery = "SELECT DISTINCT id_doc
+                        FROM $nom_tabla
+                        WHERE $where ";
+	        }
+	        
+	        if (($oDbl->query($sQuery)) === FALSE) {
+	            $sClauError = 'GestorExpedienteDB.queryPreparar';
+	            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+	            return FALSE;
+	        }
+	        $a_docuementos = [];
+	        foreach ($oDbl->query($sQuery) as $aDades) {
+	            $a_docuementos[] = $aDades['id_doc'];
+	        }
+	    } else {
+	        $a_docuementos = [];
+	    }
+	    return $a_docuementos;
+	    
+	}
+	
+	
 	public function deleteEtiquetasDocumento($id_doc) {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();

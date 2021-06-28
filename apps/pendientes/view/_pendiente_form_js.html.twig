@@ -97,7 +97,7 @@ fnjs_proto=function(num,any,indice){
         request=$.ajax({
             url: url,
             data: datos,
-            type: 'post',
+            method: 'POST',
             dataType: 'json'
         });
         request.done( function (json) {
@@ -227,7 +227,7 @@ fnjs_guardar=function(){
                 request=$.ajax({
                     url: url,
                     data: datos,
-                    type: 'post',
+                    method: 'POST',
                     dataType: 'json'
                 });
 				request.done( function (json) {
@@ -254,7 +254,7 @@ fnjs_guardar=function(){
                 request=$.ajax({
                     url: url,
                     data: datos,
-                    type: 'post',
+                    method: 'POST',
                     dataType: 'json'
                 });
 				request.done( function (json) {
@@ -275,7 +275,7 @@ fnjs_guardar=function(){
 					$.ajax({
 						data: $(this).serialize(),
 						url: $(this).attr('action'),
-						type: 'post',
+						method: 'POST',
 						complete: function (rta) {
 							rta_txt=rta.responseText;
 							if (rta_txt != '' && rta_txt != '\n') {

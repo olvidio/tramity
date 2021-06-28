@@ -170,7 +170,7 @@ fnjs_marcar=function(formulario){
     request=$.ajax({
         url: url,
         data: datos,
-        type: 'post',
+        method: 'POST',
         dataType: 'json'
     });
     request.done( function (json) {
@@ -193,7 +193,7 @@ fnjs_borrar=function(formulario){
         request=$.ajax({
             url: url,
             data: datos,
-            type: 'post',
+            method: 'POST',
             dataType: 'json'
         });
         request.done( function (json) {

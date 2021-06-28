@@ -24,7 +24,7 @@ fnjs_eliminar_plantilla=function(){
         	request=$.ajax({
         		data: datos,
         		url: '{{ url_eliminar }}',
-        		type: 'post',
+        		method: 'POST',
         		dataType: 'json'
         	});
         	request.done( function (json) {
@@ -50,7 +50,7 @@ fnjs_revisar_plantilla=function(id_plantilla) {
     request=$.ajax({
         data: param_json,
         url: url_ajax,
-        type: 'post'
+        method: 'POST'
     });
 
     request.done( function (rta) {

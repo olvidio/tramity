@@ -133,7 +133,7 @@ class Pendiente {
         $this->server = $server.'/caldav.php';
         
         $parent_container = empty($parent_container)? $this->parent_container : $parent_container;
-        return 'http://'.$this->server."/".$parent_container."/".$this->resource."/";
+        return $this->server."/".$parent_container."/".$this->resource."/";
     }
     
     public function getProtocoloOrigen() {

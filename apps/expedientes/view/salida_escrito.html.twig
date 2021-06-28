@@ -1,6 +1,8 @@
 <!-- load the CSS files in the right order -->
 <link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
 <link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
+<!-- para hacer lineas más pequeñas en el file input -->
+<link href="css/custom_file_input.css" rel="stylesheet" type="text/css">
 
 <!-- load the JS files in the right order -->
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
@@ -145,13 +147,10 @@
         <div class="mb-3">
           <label class="form-label">{{ "Insertar escrito"|trans }}:</label>
           <button tabindex='200' class="btn btn-info" onClick="fnjs_add_escrito(1);" >
-            {{ "Etherpad"|trans }}
+            {{ "Nuevo Etherpad"|trans }}
           </button>
-          <button tabindex='201' class="btn btn-info" onClick="fnjs_add_escrito(2);" >
-            {{ "EtherCalc"|trans }}
-          </button>
-          <button tabindex='202' class="btn btn-info" onClick="fnjs_add_escrito(3);" >
-            {{ "Incrustado"|trans }}
+          <button tabindex='201' class="btn btn-info" onClick="fnjs_add_escrito(4);" >
+            {{ "Documento"|trans }}
           </button>
         </div>
     {% endif %}

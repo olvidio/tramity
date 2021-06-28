@@ -4,7 +4,6 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
-use entradas\model\entity\GestorEntradaDB;
 use etiquetas\model\entity\GestorEtiqueta;
 use etiquetas\model\entity\GestorEtiquetaExpediente;
 use expedientes\model\Escrito;
@@ -20,6 +19,8 @@ use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
 use web\Protocolo;
+use documentos\model\GestorDocumento;
+use documentos\model\entity\GestorEtiquetaDocumento;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -46,11 +47,10 @@ switch ($Qque) {
         $Qid_escrito = (integer) \filter_input(INPUT_POST, 'id_escrito');
         $Qtipo_antecedente = (string) \filter_input(INPUT_POST, 'tipo_doc');
         
-        $antecedente = [ 'tipo'=> $Qtipo_antecedente, 'id' => $Qid_escrito ];
-        $json_antecedente = json_encode($antecedente);
+        $a_antecedente = [ 'tipo'=> $Qtipo_antecedente, 'id' => $Qid_escrito ];
         $oExpediente = new Expediente($Qid_expediente);
         $oExpediente->DBCarregar();
-        $oExpediente->delAntecedente($json_antecedente);
+        $oExpediente->delAntecedente($a_antecedente);
         if ($oExpediente->DBGuardar() === FALSE ) {
             exit($oExpediente->getErrorTxt());
         }
@@ -60,11 +60,10 @@ switch ($Qque) {
         $Qid_escrito = (integer) \filter_input(INPUT_POST, 'id_escrito');
         $Qtipo_antecedente = (string) \filter_input(INPUT_POST, 'tipo_doc');
         
-        $antecedente = [ 'tipo'=> $Qtipo_antecedente, 'id' => $Qid_escrito ];
-        $json_antecedente = json_encode($antecedente);
+        $a_antecedente = [ 'tipo'=> $Qtipo_antecedente, 'id' => $Qid_escrito ];
         $oExpediente = new Expediente($Qid_expediente);
         $oExpediente->DBCarregar();
-        $oExpediente->addAntecedente($json_antecedente);
+        $oExpediente->addAntecedente($a_antecedente);
         if ($oExpediente->DBGuardar() === FALSE ) {
             exit($oExpediente->getErrorTxt());
         }
@@ -532,6 +531,163 @@ switch ($Qque) {
                 ];
 	    $oView = new ViewTwig('expedientes/controller');
 	    echo $oView->renderizar('modal_buscar_escritos.html.twig',$a_campos);
+	    break;
+	case 'buscar_documento':
+	case 'buscar_4':
+        //n = 4 -> Documento
+	    $Qnom = (string) \filter_input(INPUT_POST, 'nom');
+	    $QandOr = (string) \filter_input(INPUT_POST, 'andOr');
+	    $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+	    $Qperiodo =  (string) \filter_input(INPUT_POST, 'periodo');
+	    
+	    $gesDocumento = new GestorDocumento();
+	    $aWhere = [];
+	    $aOperador = [];
+	    // sólo los de mi oficina:
+	    $id_oficina = ConfigGlobal::role_id_oficina();
+	    $gesCargos = new GestorCargo();
+	    $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+	    $a_cargos = [];
+	    foreach (array_keys($a_cargos_oficina) as $id_cargo) {
+	        $a_cargos[] = $id_cargo;
+	    }
+	    if (!empty($a_cargos)) {
+	        $aWhere['creador'] = implode(',',$a_cargos);
+	        $aOperador['creador'] = 'IN';
+	    }
+	    
+	    $gesEtiquetas = new GestorEtiqueta();
+	    $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+	    $a_posibles_etiquetas = [];
+	    foreach ($cEtiquetas as $oEtiqueta) {
+	        $id_etiqueta = $oEtiqueta->getId_etiqueta();
+	        $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+	        $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+	    }
+	    
+	    $oArrayDesplEtiquetas = new web\DesplegableArray($Qa_etiquetas,$a_posibles_etiquetas,'etiquetas');
+	    $oArrayDesplEtiquetas ->setBlanco('t');
+	    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
+	    
+	    $chk_or = ($QandOr == 'OR')? 'checked' : '';
+	    // por defecto 'AND':
+        $chk_and = (($QandOr == 'AND') OR empty($QandOr))? 'checked' : '';
+	    
+	    if (!empty($Qa_etiquetas)) {
+	        $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
+	        $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($Qa_etiquetas,$QandOr);
+	        if (!empty($cDocumentos)) {
+	            $aWhere['id_doc'] = implode(',',$cDocumentos);
+	            $aOperador['id_doc'] = 'IN';
+	        } else {
+	            // No hay ninguno. No importa el resto de condiciones
+	            exit(_("No hay ningún documento con estas etiquetas"));
+	        }
+	    }
+	    
+	    if (!empty($Qnom )) {
+	        $aWhere['nom'] = $Qnom;
+	        $aOperador['nom'] = 'sin_acentos';
+	    }
+	    $sel_mes = '';
+	    $sel_mes_6 = '';
+	    $sel_any_1 = '';
+	    $sel_any_2 = '';
+	    $sel_siempre = '';
+	    switch ($Qperiodo) {
+	        case "mes":
+	            $sel_mes = 'selected';
+	            $periodo = 'P1M';
+	            break;
+	        case "mes_6":
+	            $sel_mes_6 = 'selected';
+	            $periodo = 'P6M';
+	            break;
+	        case "any_1":
+	            $sel_any_1 = 'selected';
+	            $periodo = 'P1Y';
+	            break;
+	        case "any_2":
+	            $sel_any_2 = 'selected';
+	            $periodo = 'P2Y';
+	            break;
+	        case "siempre":
+	            $sel_siempre = 'selected';
+	            $periodo = '';
+	            break;
+	        default:
+	            $sel_mes = 'selected';
+	            $periodo = 'P1M';
+	    }
+	    if (!empty($periodo)) {
+	        $oFecha = new DateTimeLocal();
+	        $oFecha->sub(new DateInterval($periodo));
+	        $aWhere['f_upload'] = $oFecha->getIso();
+	        $aOperador['f_upload'] = '>';
+	    }
+	    
+	    // por defecto, buscar sólo 50.
+	    if (empty($Qnom && empty($Qoficina_buscar))) {
+	        $aWhere['_limit'] = 50;
+	    }
+	    $aWhere['_ordre'] = 'f_upload DESC';
+	    
+	    $cDocumentos = $gesDocumento->getDocumentos($aWhere,$aOperador);
+	    
+	    $a_cabeceras = [ '',[ 'width' => 70, 'name' => _("fecha")],
+	                       [ 'width' => 500, 'name' => _("nombre")],
+	                       [ 'width' => 50, 'name' => _("ponente")],
+	                       [ 'width' => 50, 'name' => _("etiquetas")],
+	                   ''];
+	    $a_valores = [];
+	    $a = 0;
+	    foreach ($cDocumentos as $oDocumento) {
+	        $a++;
+	        // mirar permisos...
+	        $visibilidad = $oDocumento->getVisibilidad();
+	        if ( ($visibilidad == Entrada::V_DIRECTORES OR $visibilidad == Entrada::V_RESERVADO OR $visibilidad == Entrada::V_RESERVADO_VCD)
+	            && ConfigGlobal::soy_dtor() === FALSE) {
+	                continue;
+	        }
+	        $id_doc = $oDocumento->getId_doc();
+	        $fecha_txt = $oDocumento->getF_upload()->getFromLocal();
+	        $ponente = $oDocumento->getCreador();
+	        
+	        $ponente_txt = $a_posibles_cargos[$ponente];
+	        
+	        $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_documento('$id_doc');\" >ver</span>";
+	        $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('documento','$id_doc','$Qid_expediente');\" >adjuntar</span>";
+	        
+	        $a_valores[$a][1] = $ver;
+	        $a_valores[$a][2] = $fecha_txt;
+	        $a_valores[$a][3] = $oDocumento->getNom();
+	        $a_valores[$a][4] = $ponente_txt;
+	        $a_valores[$a][5] = $oDocumento->getEtiquetasVisiblesTxt();
+	        $a_valores[$a][6] = $add;
+	    }
+	    
+	    
+	    $oLista = new Lista();
+	    $oLista->setCabeceras($a_cabeceras);
+	    $oLista->setDatos($a_valores);
+	    //echo $oLista->mostrar_tabla_html();
+
+	    $a_campos = [
+            'id_expediente' => $Qid_expediente,
+	        'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
+	        'chk_and' => $chk_and,
+	        'chk_or' => $chk_or,
+	        'nom' => $Qnom,
+	        'sel_mes' => $sel_mes,
+	        'sel_mes_6' => $sel_mes_6,
+	        'sel_any_1' => $sel_any_1,
+	        'sel_any_2' => $sel_any_2,
+	        'sel_siempre' => $sel_siempre,
+            'oLista' => $oLista,  
+	    ];
+	    
+	    $oView = new ViewTwig('expedientes/controller');
+	    echo $oView->renderizar('modal_buscar_documentos.html.twig',$a_campos);
 	    break;
 	case 'buscar_expediente_borrador':
         $Qasunto_buscar = (string) \filter_input(INPUT_POST, 'asunto_buscar');

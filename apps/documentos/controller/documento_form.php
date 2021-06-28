@@ -1,10 +1,7 @@
 <?php
-use core\ConfigGlobal;
 use core\ViewTwig;
 use documentos\model\Documento;
 use etiquetas\model\entity\GestorEtiqueta;
-use expedientes\model\Escrito;
-use usuarios\model\entity\GestorCargo;
 use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -21,7 +18,8 @@ require_once ("apps/core/global_object.inc");
 $Qid_doc = (integer) \filter_input(INPUT_POST, 'id_doc');
 $Qaccion = (integer) \filter_input(INPUT_POST, 'accion');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
-
+$QandOr = (string) \filter_input(INPUT_POST, 'andOr');
+$Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 /*
 if (empty($Qid_doc)) {
     $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -30,14 +28,6 @@ if (empty($Qid_doc)) {
 }
 */
 
-$txt_option_cargos = '';
-$gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargos();
-foreach ($a_posibles_cargos as $id_cargo => $cargo) {
-    $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
-}
-
-$estado = 0;
 $visibilidad = 0;
 
 $oDocumento = new Documento($Qid_doc);
@@ -70,7 +60,7 @@ if (!empty($Qid_doc)) {
     $documento = $oDocumento->getDocumento();
     
     //Ponente;
-    $id_ponente = $oDocumento->getCreador();
+    //$id_ponente = $oDocumento->getCreador();
     if (!empty($oDocumento->getVisibilidad())) {
         $visibilidad = $oDocumento->getVisibilidad();
         $oDesplVisibilidad->setOpcion_sel($visibilidad);
@@ -104,7 +94,7 @@ if (!empty($Qid_doc)) {
 
     $f_mod = '';
     $titulo = _("nuevo documento");
-    $id_ponente = ConfigGlobal::role_id_cargo();
+    //$id_ponente = ConfigGlobal::role_id_cargo();
     
     
     $oArrayDesplEtiquetas = new web\DesplegableArray([],$a_posibles_etiquetas,'etiquetas');
@@ -115,27 +105,24 @@ if (!empty($Qid_doc)) {
 $initialPreview = implode(',',$preview);
 $json_config = json_encode($config);
 
+// poner '' en vez de 0
+$tipo_doc = empty($tipo_doc)? '' : $tipo_doc;
+
 $url_update = 'apps/documentos/controller/documento_update.php';
 $a_cosas = [
             'filtro' => $Qfiltro,
+            'andOr' => $QandOr,
+            'etiquetas' => $Qa_etiquetas,
         ];
 
 $pagina_cancel = web\Hash::link('apps/documentos/controller/documentos_lista.php?'.http_build_query($a_cosas));
 
-// para cambiar destinos en nueva ventana. 
-$a_cosas = [
-    'filtro' => $Qfiltro,
-    'id_doc' => $Qid_doc,
-    'accion' => $Qaccion,
-];
-$pagina_actualizar = web\Hash::link('apps/documentos/controller/documento_form.php?'.http_build_query($a_cosas));
- 
 $a_campos = [
+    //'oHash' => $oHash,
     'titulo' => $titulo,
     'id_doc' => $Qid_doc,
     'accion' => $Qaccion,
     'filtro' => $Qfiltro,
-    //'oHash' => $oHash,
     'f_mod' => $f_mod,
     'tipo_doc' => $tipo_doc,
     'nom' => $nom,
@@ -143,10 +130,11 @@ $a_campos = [
     'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
     'initialPreview' => $initialPreview,
     'json_config' => $json_config,
-//    'txt_option_cargos' => $txt_option_cargos,
+    // para js
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
-//    'pagina_nueva' => $pagina_nueva,
+    'etiquetas' => $Qa_etiquetas,
+    'andOr' => $QandOr,
 
 ];
 

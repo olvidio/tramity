@@ -7,14 +7,6 @@
     <link type="text/css" rel="stylesheet" href="{{ base_url }}/node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
     <link href="{{ base_url }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 {% endif %}
-<!-- load the CSS files in the right order 
-<link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
-<link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
--->
-<!-- load the JS files in the right order
-<script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
-<script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
- -->
 <form id ="form_expediente" >
     <input type=hidden name='que' id='que' value=0>
     <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
@@ -184,7 +176,7 @@ fnjs_encargar=function() {
     request=$.ajax({
         data: param_json,
         url: url,
-        type: 'post'
+        method: 'POST'
     });
     request.done( function (json) {
         if (json.success != true) {
@@ -204,7 +196,7 @@ fnjs_recorrido=function() {
 	    request=$.ajax({
 	        data: param_json,
 	        url: url_ajax,
-	        type: 'post'
+	        method: 'POST'
 	    });
 	    request.done( function (json) {
             if (json.success != true) {
@@ -251,7 +243,7 @@ fnjs_distribuir=function(que){
 	request=$.ajax({
 		data: datos,
 		url: '{{ url_update }}',
-		type: 'post',
+		method: 'POST',
 		dataType: 'json'
 	});
 	request.done( function (json) {

@@ -4,11 +4,7 @@ namespace core;
 Class ConfigGlobal extends ServerConf {
     
 	public static function getWebPort() {
-	    if (!empty($_SERVER['PRIVATE']) && $_SERVER['PRIVATE'] == 'sf') {
-	        return self::$web_port_sf;
-	    } else {
-	        return self::$web_port;
-	    }
+        return self::$web_port;
 	}
 	
 	public static function getWebPath() {

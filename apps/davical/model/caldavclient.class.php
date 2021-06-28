@@ -277,8 +277,19 @@ class CalDAVClient {
 
     $this->httpResponse = '';
     $this->xmlResponse = '';
-
-    $fip = fsockopen( $this->protocol . '://' . $this->server, $this->port, $errno, $errstr, _FSOCK_TIMEOUT); //error handling?
+    
+    $errno = '';
+    $errstr = '';
+    $options = [
+        'ssl' => [
+            'verify_peer_name' => true,
+            'verify_peer'      => true,
+            'allow_self_signed' => true,
+        ]
+    ];
+    $context = stream_context_create($options);
+    
+    $fip = stream_socket_client( $this->protocol . '://' . $this->server.':'.$this->port, $errno, $errstr, _FSOCK_TIMEOUT, STREAM_CLIENT_CONNECT, $context); //error handling?
     if ( !(get_resource_type($fip) == 'stream') ) return false;
     if ( !fwrite($fip, $this->httpRequest."\r\n\r\n".$this->body) ) { fclose($fip); return false; }
 	//echo "<br>dani<br>".$this->httpRequest."\r\n\r\n".$this->body."<br>\n";

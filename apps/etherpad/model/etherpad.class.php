@@ -11,13 +11,14 @@ use core\ConfigGlobal;
 */
 
 class Etherpad  extends Client {
-    const API_VERSION = '1.2.13';
     
     // Tipos de id
-    const ID_ENTRADA       = 'entrada';
-    const ID_ESCRITO       = 'escrito';
-    const ID_EXPEDIENTE    = 'expediente';
-    const ID_PLANTILLA    = 'plantilla';
+    const ID_ADJUNTO     = 'adjunto';
+    const ID_DOCUMENTO   = 'documento';
+    const ID_ENTRADA     = 'entrada';
+    const ID_ESCRITO     = 'escrito';
+    const ID_EXPEDIENTE  = 'expediente';
+    const ID_PLANTILLA   = 'plantilla';
     
     /**
      * Se encuentra en el servidor etherpad en;
@@ -43,6 +44,12 @@ class Etherpad  extends Client {
     
     public function setId ($tipo_id,$id) {
         switch ($tipo_id) {
+            case self::ID_ADJUNTO:
+                $prefix = 'adj';
+                break;
+            case self::ID_DOCUMENTO:
+                $prefix = 'doc';
+                break;
             case self::ID_ENTRADA:
                 $prefix = 'ent';
                 break;
@@ -300,17 +307,21 @@ class Etherpad  extends Client {
         // convert to PDF
         require_once(ConfigGlobal::$dir_libs.'/vendor/autoload.php');
         
-        $header_html = '<table class="header" width="100%">';
-        $header_html .= '<tr>';
-        $header_html .= '<td class="header" width="33%">';
-        $header_html .= $a_header['left'];
-        $header_html .= '</td><td class="header" width="33%" align="center">';
-        $header_html .= $a_header['center'];
-        $header_html .= '</td><td class="header" width="33%" style="text-align: right;">';
-        $header_html .= $a_header['right'];
-        $header_html .= '</td></tr>';
-        $header_html .= '</table>';
-        $header_html .= '<hr>';
+        if (!empty($a_header)) {
+            $header_html = '<table class="header" width="100%">';
+            $header_html .= '<tr>';
+            $header_html .= '<td class="header" width="33%">';
+            $header_html .= $a_header['left'];
+            $header_html .= '</td><td class="header" width="33%" align="center">';
+            $header_html .= $a_header['center'];
+            $header_html .= '</td><td class="header" width="33%" style="text-align: right;">';
+            $header_html .= $a_header['right'];
+            $header_html .= '</td></tr>';
+            $header_html .= '</table>';
+            $header_html .= '<hr>';
+        } else {
+            $header_html = '';
+        }
         
         /*
         $header = array (
@@ -366,7 +377,9 @@ class Etherpad  extends Client {
             $mpdf->list_indent_first_level = 0;	// 1 or 0 - whether to indent the first level of a list
             //$mpdf->WriteHTML('<h1>Hello world!</h1><p>Més què d\'air. Ñanyo.</p>');
             
-            $mpdf->SetHTMLHeader($header_html);
+            if (!empty($header_html)) {
+                $mpdf->SetHTMLHeader($header_html);
+            }
             //$mpdf->SetHeader($header, 'O');
             $mpdf->SetHTMLFooter($footer);
             
@@ -379,47 +392,6 @@ class Etherpad  extends Client {
             // Process the exception, log, print etc.
             echo $e->getMessage();
         }
-    }
-    
-    /*
-     Response Format
-     #
-     
-     Responses are valid JSON in the following format:
-     
-     {
-     "code": number,
-     "message": string,
-     "data": obj
-     }
-     
-     code a return code
-     0 everything ok
-     1 wrong parameters
-     2 internal error
-     3 no such function
-     4 no or wrong API Key
-     message a status message. Its ok if everything is fine, else it contains an error message
-     data the payload
-     */
-    
-    private function mostrar_error($rta) {
-        $a_codes = [
-            0 => 'everything ok',
-            1 => 'wrong parameters',
-            2 => 'internal error',
-            3 => 'no such function',
-            4 => 'no or wrong API Key',
-        ];
-        $code = $rta->getCode();
-        $message = $rta->getMessage();
-        
-        $html = "*Error: ". $a_codes[$code];
-        $html .= "<br>";
-        $html .= $message;
-        $html .= "**<br>";
-        
-        echo $html;
     }
     
     public function getHHtml() {
@@ -470,7 +442,6 @@ class Etherpad  extends Client {
        }
        return $groupID;
    } 
-    
    
    public function getPadID() {
        if (empty($this->id_escrito)) {
@@ -530,7 +501,7 @@ class Etherpad  extends Client {
    
    
    // Crear o abrir Pad
-   private function crearPad() {
+   public function crearPad() {
         $groupID = $this->getGroupId();
         $padName = $this->id_escrito;
         $padId = $groupID."$".$this->id_escrito;
@@ -647,7 +618,7 @@ class Etherpad  extends Client {
              * {code: 1, message:"authorID does not exist", data: null}
              */    
            $a_sesiones = [];
-           foreach ($data as $session => $a_info) {
+           foreach (array_keys($data) as $session) {
                // evitar duplicar sesión
                if ($session != $sessionID) {
                    $a_sesiones[] = $session;
@@ -685,7 +656,7 @@ class Etherpad  extends Client {
              * {code: 1, message:"authorID does not exist", data: null}
              */
            if (is_array($data)) {
-               foreach ($data as $session => $a_info) {
+               foreach (array_keys($data) as $session) {
                    $this->borrarSesion($session);
                }
            }

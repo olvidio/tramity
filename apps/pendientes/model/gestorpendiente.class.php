@@ -54,7 +54,7 @@ class GestorPendiente {
         $this->server = $server.'/caldav.php';
         
         $cal_oficina = empty($cal_oficina)? $this->cal_oficina : $cal_oficina;
-        return 'http://'.$this->server."/".$cal_oficina."/".$this->resource."/";
+        return $this->server."/".$cal_oficina."/".$this->resource."/";
     }
     
     public function getPendientes($aWhere) {

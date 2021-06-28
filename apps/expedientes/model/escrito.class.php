@@ -15,6 +15,7 @@ use usuarios\model\PermRegistro;
 use web\Protocolo;
 use web\ProtocoloArray;
 use entradas\model\Entrada;
+use documentos\model\Documento;
 
 
 
@@ -230,10 +231,36 @@ class Escrito Extends EscritoDB {
         return $a_tipos;
     }
     
-    public function getArrayIdAdjuntos(){
+    public function getArrayIdAdjuntos($tipo_doc=''){
         $gesEscritoAdjuntos = new GestorEscritoAdjunto();
-        return $gesEscritoAdjuntos->getArrayIdAdjuntos($this->iid_escrito);
+        return $gesEscritoAdjuntos->getArrayIdAdjuntos($this->iid_escrito,$tipo_doc);
     }
+    
+    
+    public function getHtmlAdjuntos($quitar =TRUE) {
+        // devolver la lista completa (para sobreescribir)
+        $html = '';
+        $a_adjuntos = $this->getArrayIdAdjuntos(Documento::DOC_ETHERPAD);
+        if (!empty($a_adjuntos)) {
+            $html = '<ol>';
+            foreach ($a_adjuntos as $id_adjunto => $nom) {
+                $link_mod = '-';
+                $link_del = '';
+                
+                $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_adjunto($id_adjunto);\" >$nom</span>";
+                $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_adjunto('$id_adjunto');\" >"._("borrar")."</span>";
+                
+                if ($quitar === TRUE) {
+                    $html .= "<li>$link_mod   $link_del</li>";
+                } else {
+                    $html .= "<li>$link_mod</li>";
+                }
+            }
+            $html .= '</ol>';
+        }
+        return $html;
+    }
+    
     
     public function cabeceraIzquierda($id_lugar_de_grupo='') {
         // destinos + ref

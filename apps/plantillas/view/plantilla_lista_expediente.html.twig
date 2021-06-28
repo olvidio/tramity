@@ -44,7 +44,7 @@ fnjs_adjuntar_plantilla=function(id_plantilla,id_expediente,filtro) {
 	request=$.ajax({
         data: param_json,
         url: '{{ url_update|raw }}',
-        type: 'post',
+        method: 'POST',
         dataType: 'json'
     });
 

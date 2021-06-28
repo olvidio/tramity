@@ -26,6 +26,21 @@ $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, 
 $error_txt = '';
 $jsondata = [];
 switch($Qque) {
+    case 'tipo_doc':
+        if (!empty($Qid_doc)) {
+            $oHoy = new DateTimeLocal();
+            $hoy_iso = $oHoy->getIso();
+            
+            $oDocumento = new Documento($Qid_doc);
+            $oDocumento->DBCarregar();
+            $oDocumento->setTipo_doc($Qtipo_doc);
+            $oDocumento->setF_upload($hoy_iso,FALSE);
+
+            if ($oDocumento->DBGuardar() === FALSE ) {
+                $error_txt .= $oDocumento->getErrorTxt();
+            }
+        }
+        break;
     case 'eliminar':
         $oDocumento = new DocumentoDB($Qid_doc);
         if ($oDocumento->DBEliminar() === FALSE) {
@@ -88,6 +103,7 @@ switch($Qque) {
             $error_txt .= $oDocumento->getErrorTxt();
         }
         $id_doc = $oDocumento->getId_doc();
+        $tipo_doc = $oDocumento->getTipo_doc();
         
         // las etiquetas despues de guardar el documento:
         $oDocumento->setEtiquetas($Qa_etiquetas);
@@ -98,6 +114,7 @@ switch($Qque) {
         } else {
             $jsondata['success'] = TRUE;
             $jsondata['id_doc'] = $id_doc;
+            $jsondata['tipo_doc'] = $tipo_doc;
             $a_cosas = [ 'id_doc' => $id_doc, 'filtro' => $Qfiltro];
             $pagina_mod = web\Hash::link('apps/documentos/controller/documento_form.php?'.http_build_query($a_cosas));
             $jsondata['pagina_mod'] = $pagina_mod;

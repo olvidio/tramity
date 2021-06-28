@@ -10,6 +10,7 @@ use usuarios\model\PermRegistro;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Desplegable;
+use documentos\model\Documento;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -126,7 +127,8 @@ if (!empty($Qid_escrito)) {
         $oDesplVisibilidad->setOpcion_sel($visibilidad);
     }
     
-    $a_adjuntos = $oEscrito->getArrayIdAdjuntos();
+    // Adjuntos Upload
+    $a_adjuntos = $oEscrito->getArrayIdAdjuntos(Documento::DOC_UPLOAD);
     $preview = [];
     $config = [];
     foreach ($a_adjuntos as $id_item => $nom) {
@@ -241,6 +243,8 @@ if (!empty($Qid_escrito)) {
     $detalle_readonly = '';
 }
 
+// Adjuntos Etherpad
+$lista_adjuntos_etherpad = $oEscrito->getHtmlAdjuntos();
 
 $url_update = 'apps/expedientes/controller/escrito_update.php';
 $a_cosas = ['id_expediente' => $Qid_expediente, 
@@ -333,6 +337,7 @@ $a_campos = [
     'hidden_visibilidad' => $visibilidad,
     //'a_adjuntos' => $a_adjuntos,
     'initialPreview' => $initialPreview,
+    'lista_adjuntos_etherpad' => $lista_adjuntos_etherpad,
     'json_config' => $json_config,
     'txt_option_cargos' => $txt_option_cargos,
     'txt_option_ref' => $txt_option_ref,

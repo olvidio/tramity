@@ -5,7 +5,7 @@ fnjs_guardar=function(formulario){
 	request=$.ajax({
 		data: datos,
 		url: '{{ url_ajax }}',
-		type: 'post',
+		method: 'POST',
 		dataType: 'json'
 	});
 	request.done( function (json) {
@@ -26,7 +26,7 @@ fnjs_actualizar=function(){
 		 
 	$.ajax({
 		url: url,
-		type: 'post',
+		method: 'POST',
 		data: parametros
 	})
 	.done(function (rta_txt) {
@@ -44,7 +44,7 @@ fnjs_eliminar=function(id_item){
 		var parametros='que=eliminar&id_item='+id_item+'{{ h_eliminar|raw }}';
         $.ajax({
             url: url,
-            type: 'post',
+            method: 'POST',
             data: parametros
 		})
 		.done(function (rta_txt) {
@@ -69,7 +69,7 @@ fnjs_cargar_item=function(item) {
     request=$.ajax({
         data: param_json,
         url: url_ajax,
-        type: 'post'
+        method: 'POST'
     });
     request.done( function (json) {
     	if (json.success != true) {

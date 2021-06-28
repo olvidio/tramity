@@ -74,6 +74,12 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	 * @var string bytea
 	 */
 	 private $adjunto;
+	/**
+	 * tipo_doc de EscritoAdjunto
+	 *
+	 * @var integer
+	 */
+	 private $itipo_doc;
 	 
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
@@ -135,6 +141,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$aDades['id_escrito'] = $this->iid_escrito;
 		$aDades['nom'] = $this->snom;
 		$aDades['adjunto'] = $this->adjunto;
+		$aDades['tipo_doc'] = $this->itipo_doc;
 		array_walk($aDades, 'core\poner_null');
 
 		if ($bInsert === FALSE) {
@@ -142,7 +149,8 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 			$update="
 					id_escrito               = :id_escrito,
 					nom                      = :nom,
-					adjunto                  = :adjunto";
+					adjunto                  = :adjunto,
+                    tipo_doc                 = :tipo_doc";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_item='$this->iid_item'")) === FALSE) {
 				$sClauError = 'EscritoAdjunto.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -151,6 +159,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 			    $oDblSt->bindParam(":id_escrito", $aDades['id_escrito'], \PDO::PARAM_INT);
 			    $oDblSt->bindParam(":nom", $aDades['nom'], \PDO::PARAM_STR);
 			    $oDblSt->bindParam(":adjunto", $aDades['adjunto'], \PDO::PARAM_LOB);
+			    $oDblSt->bindParam(":tipo_doc", $aDades['tipo_doc'], \PDO::PARAM_INT);
 				try {
 					$oDblSt->execute();
 				}
@@ -164,8 +173,8 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(id_escrito,nom,adjunto)";
-			$valores="(:id_escrito,:nom,:adjunto)";		
+			$campos="(id_escrito,nom,adjunto,tipo_doc)";
+			$valores="(:id_escrito,:nom,:adjunto,:tipo_doc)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'EscritoAdjunto.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -174,10 +183,12 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 			    $id_escrito = $aDades['id_escrito'];
 			    $nom = $aDades['nom'];
 			    $adjunto = $aDades['adjunto'];
+			    $tipo_doc = $aDades['tipo_doc'];
 			    
 			    $oDblSt->bindParam(1, $id_escrito, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
 			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_LOB);
+			    $oDblSt->bindParam(4, $tipo_doc, \PDO::PARAM_INT);
 				try {
 					$oDblSt->execute();
 				}
@@ -205,8 +216,9 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$id_escrito = 0;
 		$nom = '';
 		$adjunto = '';
+		$tipo_doc = 1;
 		if (isset($this->iid_item) && $this->clone === FALSE) {
-			if (($oDblSt = $oDbl->query("SELECT id_escrito, nom, adjunto FROM $nom_tabla WHERE id_item='$this->iid_item'")) === FALSE) {
+			if (($oDblSt = $oDbl->query("SELECT id_escrito, nom, adjunto,tipo_doc FROM $nom_tabla WHERE id_item='$this->iid_item'")) === FALSE) {
 				$sClauError = 'EscritoAdjunto.carregar';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
@@ -215,11 +227,13 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 			$oDblSt->bindColumn(1, $id_escrito, \PDO::PARAM_INT);
 			$oDblSt->bindColumn(2, $nom, \PDO::PARAM_STR, 256);
 			$oDblSt->bindColumn(3, $adjunto, \PDO::PARAM_LOB);
+			$oDblSt->bindColumn(4, $tipo_doc, \PDO::PARAM_INT);
 			$oDblSt->fetch(\PDO::FETCH_BOUND);
 			
 			$aDades = [ 'id_escrito' => $id_escrito,
 			    'nom' => $nom,
 			    'adjunto' => $adjunto,
+			    'tipo_doc' => $tipo_doc,
 			];
 
 			switch ($que) {
@@ -273,6 +287,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		if (array_key_exists('id_escrito',$aDades)) $this->setId_escrito($aDades['id_escrito']);
 		if (array_key_exists('nom',$aDades)) $this->setNom($aDades['nom']);
 		if (array_key_exists('adjunto',$aDades)) $this->setAdjunto($aDades['adjunto']);
+		if (array_key_exists('tipo_doc',$aDades)) $this->setTipo_doc($aDades['tipo_doc']);
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -285,6 +300,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$this->setId_escrito('');
 		$this->setNom('');
 		$this->setAdjunto('');
+		$this->setTipo_doc('');
 		$this->setPrimary_key($aPK);
 	}
 
@@ -408,6 +424,25 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	function setAdjunto($adjunto='') {
 		$this->adjunto = $adjunto;
 	}
+	/**
+	 * Recupera l'atribut itipo_doc de Documento
+	 *
+	 * @return integer itipo_doc
+	 */
+	function getTipo_doc() {
+	    if (!isset($this->itipo_doc) && !$this->bLoaded) {
+	        $this->DBCarregar();
+	    }
+	    return $this->itipo_doc;
+	}
+	/**
+	 * estableix el valor de l'atribut itipo_doc de Documento
+	 *
+	 * @param integer itipo_doc='' optional
+	 */
+	function setTipo_doc($tipo_doc='') {
+	    $this->itipo_doc = $tipo_doc;
+	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
 	/**
@@ -420,6 +455,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$oEscritoAdjuntoSet->add($this->getDatosId_escrito());
 		$oEscritoAdjuntoSet->add($this->getDatosNom());
 		$oEscritoAdjuntoSet->add($this->getDatosAdjunto());
+		$oDocumentoSet->add($this->getDatosTipo_doc());
 		return $oEscritoAdjuntoSet->getTot();
 	}
 
@@ -460,5 +496,17 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'adjunto'));
 		$oDatosCampo->setEtiqueta(_("adjunto"));
 		return $oDatosCampo;
+	}
+	/**
+	* Recupera les propietats de l'atribut itipo_doc de Documento
+	* en una clase del tipus DatosCampo
+	*
+	* @return core\DatosCampo
+	*/
+	function getDatosTipo_doc() {
+	    $nom_tabla = $this->getNomTabla();
+	    $oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'tipo_doc'));
+	    $oDatosCampo->setEtiqueta(_("tipo_doc"));
+	    return $oDatosCampo;
 	}
 }

@@ -15,7 +15,7 @@ fnjs_eliminar=function(){
         	request=$.ajax({
         		data: datos,
         		url: '{{ url_eliminar }}',
-        		type: 'post',
+        		method: 'POST',
         		dataType: 'json'
         	});
         	request.done( function (json) {

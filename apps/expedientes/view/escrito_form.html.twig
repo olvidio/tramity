@@ -1,10 +1,30 @@
 <!-- load the CSS files in the right order -->
 <link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
 <link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
+<!-- para hacer lineas más pequeñas en el file input -->
+<link href="css/custom_file_input.css" rel="stylesheet" type="text/css">
 
 <!-- load the JS files in the right order -->
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalBuscar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar (máximo 50 filas)"|trans }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div id="modal-body" class="modal-body">
+      	{# se carga via ajax. 3 formularios distintos: para entradas, para expedientes y para escritos #}
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
 
 <h1>{{ titulo }}:</h1>
 
@@ -106,54 +126,6 @@
       </div>
     </div>
   </div>
-</div> <!-- Fin Col Izda -->
-
-<!--  Col Dcha -->
-<div class="col-4" >
-    <!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
-{% if id_escrito %}
-    {% if tipo_doc == 1 %}
-        <div class="mb-3">
-          <label class="form-label">{{ "Ver escrito"|trans }}:</label>
-          <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep();" >
-            {{ "Etherpad"|trans }}
-          </button>
-        </div>
-    {% endif %}
-    {% if tipo_doc == 2 %}
-        <p>etherCalc</p>
-    {% endif %}
-    {% if tipo_doc == 3 %}
-        <p>incrustado</p>
-    {% endif %}
-    {% if tipo_doc is empty %}
-        <div class="mb-3">
-          <label class="form-label">{{ "Insertar escrito"|trans }}:</label>
-          <button tabindex='100' class="btn btn-info" onClick="fnjs_add_escrito(1);" >
-            {{ "Etherpad"|trans }}
-          </button>
-          <button tabindex='101' class="btn btn-info" onClick="fnjs_add_escrito(2);" >
-            {{ "EtherCalc"|trans }}
-          </button>
-          <button tabindex='10' class="btn btn-info" onClick="fnjs_add_escrito(3);" >
-            {{ "Incrustado"|trans }}
-          </button>
-        </div>
-    {% endif %}
-    <hr>
-    <div class="mb-3">
-        <label for="escrito_adjunto" class="form-label">{{ "Adjuntos"|trans }}</label>
-        <div class="file-loading">
-            <input id="escrito_adjunto" name="adjuntos[]" type="file" multiple>
-        </div>
-    </div>
-{% else %}
-  <div class="alert alert-warning" role="alert">
-    {{ "Para añadir el texto, primero debe guardar los datos del escrito"|trans }}
-  </div>
-{% endif %}
-</div> <!-- Fin Col Dcha -->
-
 <div>
   <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
     {{ "Cancelar"|trans }}
@@ -178,6 +150,63 @@
       <input type="hidden" id="ok" name="ok" value="true" >
     </div>
 {% endif %}
+</div> <!-- Fin Col Izda -->
+
+<!--  Col Dcha -->
+<div class="col-4" >
+    <!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
+{% if id_escrito %}
+    {% if tipo_doc == 1 or tipo_doc == 4 %}
+        <div class="mb-2">
+          <label class="form-label">{{ "Ver escrito"|trans }}:</label>
+          <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep();" >
+            {{ "Etherpad"|trans }}
+          </button>
+        </div>
+    {% endif %}
+    {% if tipo_doc == 2 %}
+        <p>etherCalc</p>
+    {% endif %}
+    {% if tipo_doc == 3 %}
+        <p>incrustado</p>
+    {% endif %}
+    {% if tipo_doc is empty %}
+        <div class="mb-3">
+          <label class="form-label">{{ "Insertar escrito"|trans }}:</label>
+          <button tabindex='100' class="btn btn-info" onClick="fnjs_add_escrito(1);" >
+            {{ "Nuevo Etherpad"|trans }}
+          </button>
+          <button tabindex='101' type="button" class="btn btn-info me-1" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(5);" >
+            {{ "Buscar en Documentos"|trans }}
+          </button>
+        </div>
+    {% endif %}
+    <hr class="mt-1">
+    <div class="mb-3">
+    	<div class="clearfix mb-3">
+          <div class="d-inline-flex float-start align-self-center">
+            <label for="escrito_adjunto" class="form-label">{{ "Adjuntos"|trans }}:</label>
+	  	  </div>
+          <div class="d-inline-flex float-end align-self-center">
+            <button type="button" class="btn btn-info me-1" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(4);" >
+            {{ "Buscar en Documentos"|trans }}
+            </button>
+	  	  </div>
+        </div>
+        <div id="lista_adjuntos_etherpad">
+            {{ lista_adjuntos_etherpad|raw }}
+        </div>
+        <div class="file-loading">
+            <input id="escrito_adjunto" name="adjuntos[]" type="file" multiple>
+        </div>
+    </div>
+{% else %}
+  <div class="alert alert-warning" role="alert">
+    {{ "Para añadir el texto, primero debe guardar los datos del escrito"|trans }}
+  </div>
+{% endif %}
+</div> <!-- Fin Col Dcha -->
+
 
 </form>
 {# Per ficar l'escrit, si cal #}

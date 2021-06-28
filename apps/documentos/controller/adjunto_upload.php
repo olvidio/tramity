@@ -48,6 +48,7 @@ function upload() {
                 $oDocumento = new Documento($Qid_doc);
                 $oDocumento->DBCarregar();
                 $oDocumento->setNombre_fichero($fileName);
+                $oDocumento->setTipo_doc(Documento::DOC_UPLOAD);
                 $oDocumento->setDocumento($contenido_doc);
                 $oDocumento->setF_upload($hoy_iso,FALSE);
                 

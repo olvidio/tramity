@@ -7,12 +7,13 @@ use documentos\model\entity\GestorEtiquetaDocumento;
 use etiquetas\model\entity\Etiqueta;
 use etiquetas\model\entity\GestorEtiqueta;
 use documentos\model\entity\DocumentoDB;
+use expedientes\model\GestorExpediente;
 
 class Documento Extends DocumentoDB {
     
     /* CONST -------------------------------------------------------------- */
     
-    // tipo doc 
+    // tipo doc  OJO también se usa para loas adjuntos.
     /*
     1 -> etherpad
 	2 -> ethercalc
@@ -39,6 +40,35 @@ class Documento Extends DocumentoDB {
         return $a_tipos;
     }
     
+    public function getArrayTipos() {
+        $a_tipos = [
+            self::DOC_ETHERPAD => _("etherpad"),
+            self::DOC_ETHERCALC => _("etheclac"),
+            self::DOC_UPLOAD => _("incrustado"),
+        ];
+        
+        return $a_tipos;
+    }
+    
+    
+    /**
+     * Comprueba si se puede elimnar el documento: Que no esté como antecedente en algún
+     *     expediente.
+     *
+     * @param integer $id
+     * @return string mensaje de error.
+     */
+    public function comprobarEliminar($id){
+        $gesExpedientes = new GestorExpediente();
+        $error_txt = '';
+        $tipo = 'documento';
+        $a_id_expedientes = $gesExpedientes->getIdExpedientesConAntecedente($id, $tipo);
+        if (!empty($a_id_expedientes)) {
+            $error_txt .= _("Este documento está como antecedente");
+        }
+        
+        return $error_txt;
+    }
     
     public function getEtiquetasVisiblesArray($id_cargo='') {
         $cEtiquetas = $this->getEtiquetasVisibles($id_cargo);

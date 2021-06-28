@@ -29,8 +29,7 @@ Class ServerConf {
 	public static $debug=TRUE;
 
 	public static $web_server='//'.self::SERVIDOR;
-	public static $web_port=':80';
-	public static $web_port_sf=':10936';
+	public static $web_port=':443';
 	public static $web_path='/'.self::WEBDIR;
 	
 	public static $dir_web=self::DIR;

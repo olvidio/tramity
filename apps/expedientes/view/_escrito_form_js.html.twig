@@ -75,7 +75,7 @@ fnjs_explotar=function(){
 	request=$.ajax({
 		data: datos,
 		url: '{{ url_update }}',
-		type: 'post',
+		method: 'POST',
 		dataType: 'json'
 	});
 	request.done( function (json) {
@@ -124,7 +124,7 @@ fnjs_guardar=function(quiet=0){
 		request=$.ajax({
 			data: datos,
 			url: '{{ url_update }}',
-			type: 'post',
+			method: 'POST',
 			dataType: 'json'
 		});
 		request.done( function (json) {
@@ -180,7 +180,7 @@ fnjs_enviar_a_oficina=function() {
         request=$.ajax({
             data: param_json,
             url: url_ajax,
-            type: 'post'
+            method: 'POST'
         });
 
         request.done( function (rta) {

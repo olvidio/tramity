@@ -30,44 +30,18 @@ class DocumentoLista {
      */
     private $aOperador;
     /**
-     *
+     * 
      * @var array
      */
-    private $aWhereADD = [];
-    /**
-     *
-     * @var array
-     */
-    private $aOperadorADD = [];
-    
+    private $aEtiquetas;
     /**
      * 
+     * @var string
      */
-    private function setCondicion() {
-        $aWhere = [];
-        $aOperador = [];
-
-        $aWhere['_ordre'] = 'f_upload DESC';
-        switch ($this->filtro) {
-            case 'en_ingresado':
-                $aWhere['estado'] = Documento::ESTADO_INGRESADO;
-                break;
-            case 'en_admitido':
-                $aWhere['estado'] = Documento::ESTADO_ADMITIDO;
-                break;
-            case 'en_asignado':
-                $aWhere['estado'] = Documento::ESTADO_ASIGNADO;
-                break;
-              default:
-                //exit (_("No ha escogido ningún filtro"));
-        }
-
-        $this->aWhere = $aWhere;
-        $this->aOperador = $aOperador;
-    }
+    private $andOr;
+    
 
     public function mostrarTabla() {
-        $this->setCondicion();
         $pagina_nueva = '';
         $filtro = $this->getFiltro();
         
@@ -76,11 +50,12 @@ class DocumentoLista {
         
         $pagina_accion = ConfigGlobal::getWeb().'/apps/documentos/controller/expediente_accion.php';
         $pagina_mod = ConfigGlobal::getWeb().'/apps/documentos/controller/documento_form.php';
-        $pagina_nueva = Hash::link('apps/documentos/controller/documento_form.php?'.http_build_query(['filtro' => $filtro]));
         
         $a_documentos = [];
         $id_doc = '';
         if (!empty($this->aWhere)) {
+            $oDocumento = new Documento();
+            $aTipoDoc = $oDocumento->getArrayTipos();
             $gesDocumentos = new GestorDocumento();
             $cDocumentos = $gesDocumentos->getDocumentos($this->aWhere,$this->aOperador);
             foreach ($cDocumentos as $oDocumento) {
@@ -94,16 +69,27 @@ class DocumentoLista {
                 
                 $a_cosas = [ 'id_doc' => $id_doc,
                               'filtro' => $filtro,
+                              'etiquetas' => $this->aEtiquetas,
+                              'andOr' => $this->andOr,
                 ];
                 
                 $link_accion = Hash::link($pagina_accion.'?'.http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
-                $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_ver_documento('$id_doc');\" >"._("texto")."</span>";
+                
+                $tipo_doc = $oDocumento->getTipo_doc();
+                if ( $tipo_doc == Documento::DOC_ETHERPAD ){
+                    $url_download = '';
+                    $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_revisar_documento('$id_doc');\" >"._("editar")."</span>";
+                } elseif ($tipo_doc == Documento::DOC_UPLOAD) {
+                    $url_download = Hash::link('apps/documentos/controller/adjunto_download.php?'.http_build_query(['key' => $id_doc]));
+                    $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"window.open('$url_download');\" >"._("descargar")."</span>";
+                }
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >"._("datos")."</span>";
                 
                 $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_accion');\" >"._("acción")."</span>";
                 
-                
+                $tipo_doc = $oDocumento->getTipo_doc(); 
+                $tipo_doc_txt = empty($aTipoDoc[$tipo_doc])? $tipo_doc : $aTipoDoc[$tipo_doc]; 
                 $id_creador =  $oDocumento->getCreador();
                 
                 $row['creador'] = $id_creador;
@@ -111,6 +97,7 @@ class DocumentoLista {
                 $row['f_mod'] = $oDocumento->getF_upload()->getFromLocal();
                 $row['visibilidad'] = $visibilidad_txt;
                 $row['etiquetas'] = $oDocumento->getEtiquetasVisiblesTxt();
+                $row['tipo'] = $tipo_doc_txt;
                 // para ordenar. Si no añado id_doc, sobre escribe.
                 $f_mod_iso = $oDocumento->getF_upload()->getIso() . $id_doc;
                 $a_documentos[$f_mod_iso] = $row;
@@ -123,9 +110,11 @@ class DocumentoLista {
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
         $a_cosas = [ 'filtro' => $filtro,
+                      'etiquetas' => $this->aEtiquetas,
+                      'andOr' => $this->andOr,
         ];
         $pagina_cancel = Hash::link('apps/documentos/controller/documentos_lista.php?'.http_build_query($a_cosas));
-        
+        $pagina_nueva = Hash::link('apps/documentos/controller/documento_form.php?'.http_build_query($a_cosas));
         
         $a_campos = [
             //'oHash' => $oHash,
@@ -187,34 +176,66 @@ class DocumentoLista {
     /**
      * @return array
      */
-    public function getAWhereADD()
+    public function getAWhere()
     {
-        return $this->aWhereADD;
+        return $this->aWhere;
     }
 
     /**
-     * @param array $aWhereADD
+     * @param array $aWhere
      */
-    public function setAWhereADD($aWhereADD)
+    public function setAWhere($aWhere)
     {
-        $this->aWhereADD = $aWhereADD;
+        $this->aWhere = $aWhere;
     }
 
     /**
      * @return array
      */
-    public function getAOperadorADD()
+    public function getAOperador()
     {
-        return $this->aOperadorADD;
+        return $this->aOperador;
     }
 
     /**
-     * @param array $aOperadorADD
+     * @param array $aOperador
      */
-    public function setAOperadorADD($aOperadorADD)
+    public function setAOperador($aOperador)
     {
-        $this->aOperadorADD = $aOperadorADD;
+        $this->aOperador = $aOperador;
     }
+    /**
+     * @return array
+     */
+    public function getEtiquetas()
+    {
+        return $this->aEtiquetas;
+    }
+
+    /**
+     * @param array $aEtiquetas
+     */
+    public function setEtiquetas($aEtiquetas)
+    {
+        $this->aEtiquetas = $aEtiquetas;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAndOr()
+    {
+        return $this->andOr;
+    }
+
+    /**
+     * @param string $andOr
+     */
+    public function setAndOr($andOr)
+    {
+        $this->andOr = $andOr;
+    }
+
 
 
 }

@@ -106,7 +106,7 @@ fnjs_accion=function(accion){
     request=$.ajax({
         data: param_json,
         url: url_ajax,
-        type: 'post'
+        method: 'POST'
     });
     request.done( function (json) {
         if (json.success != true) {
@@ -164,7 +164,7 @@ fnjs_copiar=function() {
     request=$.ajax({
         data: param_json,
         url: url_ajax,
-        type: 'post',
+        method: 'POST',
         dataType: 'json'
     });
     request.done( function (json) {
@@ -190,7 +190,7 @@ fnjs_crear_pendiente=function() {
     request=$.ajax({
         data: param_json,
         url: url_ajax,
-        type: 'post',
+        method: 'POST',
         dataType: 'json'
     });
     request.done( function (json) {
@@ -216,7 +216,7 @@ fnjs_buscar_expediente=function() {
         request=$.ajax({
             data: param_json,
             url: url_ajax,
-            type: 'post'
+            method: 'POST'
         });
         request.done( function (rta) {
             if (rta==undefined) {
@@ -237,7 +237,7 @@ fnjs_adjuntar_antecedente=function(tipo,id_escrito,id_expediente) {
     request=$.ajax({
         data: param_json,
         url: url_ajax,
-        type: 'post'
+        method: 'POST'
     });
     request.done( function (rta) {
         // close div modal

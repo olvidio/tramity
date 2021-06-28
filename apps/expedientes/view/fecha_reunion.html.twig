@@ -54,7 +54,7 @@ fnjs_reunion=function(){
 	request=$.ajax({
 		data: datos,
 		url: '{{ pagina_reunion }}',
-		type: 'post',
+		method: 'POST',
 		dataType: 'json'
 	});
 	request.done( function (json) {

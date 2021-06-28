@@ -52,7 +52,7 @@ fnjs_cambio=function(){
 	request=$.ajax({
 		data: datos,
 		url: '{{ pagina_update }}',
-		type: 'post',
+		method: 'POST',
 		dataType: 'json'
 	});
 	request.done( function (json) {

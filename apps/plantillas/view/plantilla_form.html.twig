@@ -31,7 +31,7 @@ fnjs_guardar=function(formulario){
     
     request = $.ajax({
             url: url,
-            type: 'post',
+            method: 'POST',
             data: data
         });
     request.done(function (rta) {

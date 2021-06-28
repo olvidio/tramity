@@ -36,6 +36,34 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 	/* METODES PUBLICS -----------------------------------------------------------*/
 
 	/**
+	 * Devuelve un array con el id_expediente que tengan un antecedente determionado.
+	 * 
+	 * @param integer $id
+	 * @param string $tipoa (entrada|expediente|escrito|documento)
+	 * @return array de id_expedientes
+	 */
+	public function getIdExpedientesConAntecedente($id,$tipo) {
+		$oDbl = $this->getoDbl();
+	    
+	    $sQuery = "SELECT e.id_expediente, e.asunto, e.ponente, e.json_antecedentes, items.id, items.tipo
+                    FROM expedientes e, jsonb_to_recordset(e.json_antecedentes) as items(id smallint,tipo text) 
+                    WHERE items.id=$id AND items.tipo='$tipo' ";
+	    
+		if (($oDbl->query($sQuery)) === FALSE) {
+			$sClauError = 'GestorExpedienteDB.queryPreparar';
+			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+			return FALSE;
+		}
+		$a_expedientes = [];
+		foreach ($oDbl->query($sQuery) as $aDades) {
+			$id_expediente = $aDades['id_expediente'];
+    		$a_expedientes[] = $id_expediente;
+		}
+		return $a_expedientes;
+	    
+	}
+	
+	/**
 	 * Devuelve un array con los id de los expedientes que están marcados
 	 * para que los vea el id_cargo (o no los que ya ha visto si es TRUE).
 	 * 

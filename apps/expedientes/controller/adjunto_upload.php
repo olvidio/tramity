@@ -1,5 +1,6 @@
 <?php
 use expedientes\model\entity\EscritoAdjunto;
+use documentos\model\Documento;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -54,6 +55,7 @@ function upload() {
                 $oEscritoAdjunto->setId_escrito($Qid_escrito);
                 $oEscritoAdjunto->setNom($fileName);
                 $oEscritoAdjunto->setAdjunto($contenido_doc);
+                $oEscritoAdjunto->setTipo_doc(Documento::DOC_UPLOAD);
                 
                 if ($oEscritoAdjunto->DBGuardar() !== FALSE) {
                     $id_item = $oEscritoAdjunto->getId_item();

@@ -1,6 +1,8 @@
 <!-- load the CSS files in the right order -->
 <link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
 <link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
+<!-- para hacer lineas más pequeñas en el file input -->
+<link href="css/custom_file_input.css" rel="stylesheet" type="text/css">
 
 <!-- load the JS files in the right order -->
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
@@ -13,7 +15,6 @@
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar (máximo 50 filas)"|trans }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div id="modal-body" class="modal-body">
@@ -100,21 +101,24 @@
 <!--  --------------------  ANTECEDENTES  --------------------------  -->
 {% if id_expediente %}
     {# lista de antecedentes #}
-    <div class="mb-3 col-md-12">
+    <div class="mb-1 col-md-12">
       <label class="form-label">{{ "Antecedentes"|trans }}:</label>
     </div>
-    <div class="mb-3 col-md-12">
-      <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(1);" >
+    <div class="col-md-12">
+      <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(1);" >
         {{ "Entrada"|trans }}
       </button>
-      <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(2);" >
+      <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(2);" >
         {{ "Expediente"|trans }}
       </button>
-      <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(3);" >
+      <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(3);" >
         {{ "Escrito"|trans }}
       </button>
+      <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(4);" >
+        {{ "Documento"|trans }}
+      </button>
     </div>
-    <hr>
+    <hr class="mt-1">
 {% else %}
   <div class="alert alert-warning" role="alert">
     {{ "Para añadir un antecedente, primero debe guardar el expediente"|trans }}
@@ -251,7 +255,7 @@ fnjs_revisar_adjunto=function(id_escrito) {
     request=$.ajax({
         data: param_json,
         url: url_ajax,
-        type: 'post'
+        method: 'POST'
     });
 
     request.done( function (rta) {

@@ -34,12 +34,13 @@ class GestorEscritoAdjunto Extends core\ClaseGestor {
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
-	public function getArrayIdAdjuntos($id_escrito) {
+	public function getArrayIdAdjuntos($id_escrito, $tipo_doc='') {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
 	    $aAdjuntos = [];
 	    
-	    $sQry = "SELECT * FROM $nom_tabla WHERE id_escrito = $id_escrito ";
+	    $whereTipo = empty($tipo_doc)? '' : " AND tipo_doc = $tipo_doc ";
+	    $sQry = "SELECT * FROM $nom_tabla WHERE id_escrito = $id_escrito $whereTipo";
 	    if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
 	        $sClauError = 'GestorEscritoAdjunto.llistar.prepare';
 	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);

@@ -933,6 +933,7 @@ class Hash {
 	private static function string2array($sParam,$and='&') {
 		$aParam = array();
 		if (!empty($sParam)) { //si no hay no hace falta ordenar nada.
+		    $sParam = urldecode($sParam);
 			$aParejas = explode($and,$sParam);
 			foreach($aParejas as $pareja) {
 				$alist = explode('=',$pareja);

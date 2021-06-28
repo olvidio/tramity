@@ -60,7 +60,7 @@ fnjs_revisar_escrito=function(id_escrito) {
     request=$.ajax({
         data: param_json,
         url: url_ajax,
-        type: 'post'
+        method: 'POST'
     });
 
     request.done( function (rta) {
@@ -90,7 +90,7 @@ fnjs_revisar_adjunto=function(id_escrito) {
     request=$.ajax({
         data: param_json,
         url: url_ajax,
-        type: 'post'
+        method: 'POST'
     });
 
     request.done( function (rta) {

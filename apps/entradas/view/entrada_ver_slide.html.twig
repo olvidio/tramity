@@ -136,7 +136,7 @@ fnjs_guardar_f_entrada=function(ok){
     request=$.ajax({
         data: param_json,
         url: url_update,
-        type: 'post'
+        method: 'POST'
     });
     request.done( function (rta) {
         rta_txt=rta.responseText;

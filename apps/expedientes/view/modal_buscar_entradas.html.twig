@@ -56,7 +56,7 @@ fnjs_antecedente_entrada=function() {
     request=$.ajax({
         data: data,
         url: url_ajax,
-        type: 'post'
+        method: 'POST'
     });
     request.done( function (rta) {
         if (rta==undefined) {

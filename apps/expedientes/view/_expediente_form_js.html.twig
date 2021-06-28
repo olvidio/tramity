@@ -49,7 +49,7 @@ fnjs_eliminar_accion=function(id_escrito){
         request=$.ajax({
             data: param_json,
             url: url_doc,
-            type: 'post',
+            method: 'POST',
             dataType: 'json'
         });
         request.done( function (json) {
@@ -132,7 +132,7 @@ fnjs_tramite=function(){
     request=$.ajax({
         data: param_json,
         url: url,
-        type: 'post'
+        method: 'POST'
     });
     request.done( function (json) {
         if (json.success != true) {
@@ -172,7 +172,7 @@ fnjs_visto=function(){
     request=$.ajax({
         data: params,
         url: '{{ url_update }}',
-        type: 'post',
+        method: 'POST',
         dataType: 'json'
     });
     
@@ -205,7 +205,7 @@ fnjs_circular=function(){
     request=$.ajax({
         data: datos,
         url: '{{ url_update }}',
-        type: 'post',
+        method: 'POST',
         dataType: 'json'
     });
     request.done( function (json) {
@@ -261,7 +261,7 @@ fnjs_guardar=function(){
         request=$.ajax({
             data: data,
             url: "{{ url_update }}",
-            type: 'post',
+            method: 'POST',
             dataType: 'json'
         });
         

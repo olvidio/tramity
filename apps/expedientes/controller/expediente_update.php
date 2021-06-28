@@ -181,9 +181,8 @@ switch($Qque) {
             $error_txt .= $oExpediente->getErrorTxt();
         }
         
-        $antecedente = [ 'tipo'=> 'entrada', 'id' => $Qid_entrada ];
-        $json_antecedente = json_encode($antecedente);
-        $oExpediente->addAntecedente($json_antecedente);
+        $a_antecedente = [ 'tipo'=> 'entrada', 'id' => $Qid_entrada ];
+        $oExpediente->addAntecedente($a_antecedente);
         if ($oExpediente->DBGuardar() === FALSE ) {
             $error_txt .= _("No se han podido adjuntar la entrada");
         }

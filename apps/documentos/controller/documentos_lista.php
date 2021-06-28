@@ -2,6 +2,7 @@
 use core\ViewTwig;
 use documentos\model\DocumentoLista;
 use etiquetas\model\entity\GestorEtiqueta;
+use documentos\model\entity\GestorEtiquetaDocumento;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -25,12 +26,24 @@ $QandOr = (string) \filter_input(INPUT_POST, 'andOr');
 $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $a_etiquetas_filtered = array_filter($Qa_etiquetas);
 
-$aWhereADD = [];
-$aOperadorADD = [];
+$aWhere = [];
+$aOperador = [];
 
 $chk_or = ($QandOr == 'OR')? 'checked' : '';
 // por defecto 'AND':
 $chk_and = (($QandOr == 'AND') OR empty($QandOr))? 'checked' : '';
+
+if (!empty($a_etiquetas_filtered)) {
+    $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
+    $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($a_etiquetas_filtered,$QandOr);
+    if (!empty($cDocumentos)) {
+        $aWhere['id_doc'] = implode(',',$cDocumentos);
+        $aOperador['id_doc'] = 'IN';
+    } else {
+        // No hay ninguno. No importa el resto de condiciones
+        $msg = _("No hay ningún documento con estas etiquetas");
+    }
+}
 
 $gesEtiquetas = new GestorEtiqueta();
 $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
@@ -56,8 +69,10 @@ $a_campos = [
 $oView = new ViewTwig('documentos/controller');
 echo $oView->renderizar('documentos_buscar.html.twig',$a_campos);
 
-$oTabla->setAWhereADD($aWhereADD);
-$oTabla->setAOperadorADD($aOperadorADD);
+$oTabla->setAndOr($QandOr);
+$oTabla->setEtiquetas($a_etiquetas_filtered);
+$oTabla->setAWhere($aWhere);
+$oTabla->setAOperador($aOperador);
 
 if (empty($msg)) {
     echo $oTabla->mostrarTabla();

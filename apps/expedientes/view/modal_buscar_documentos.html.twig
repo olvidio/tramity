@@ -1,13 +1,13 @@
 <div id="busqueda">
   <!--  --------------- BUSQUEDAS --------------- -->
   <form id=condiciones>
-	<input type="hidden" name="que" value='buscar_expediente' />
-	<input type="hidden" name="id_expediente" value='{{ id_expediente }}' />
+	<input type="hidden" name="que" value='buscar_documento' />
+	<input type="hidden" name="id_doc" value='{{ id_doc }}' />
   <!--  --------------- ASUNTO --------------- -->
   <div class="mb-3 row">
-    <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans }}</label>
+    <label for="nom" class="col-1 form-label">{{ "Nombre"|trans }}</label>
     <div class="col-10">
-      <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="{{ asunto }}">
+      <input tabindex='30' type="text" class="form-control" name="nom" id="nom_buscar" value="{{ nom }}">
     </div>
   </div>
   <!--  --------------------  Periodo --------------------------  -->
@@ -47,7 +47,7 @@
     </div>
       <!--  --------------- BOTON --------------- -->
       <div class="col-2">
-        <button type="button" class="btn btn-primary" onClick="fnjs_antecedente_expediente();" >{{ "Buscar"|trans }}</button>
+        <button type="button" class="btn btn-primary" onClick="fnjs_listar_documentos();" >{{ "Buscar"|trans }}</button>
       </div>
   </div>
   </form>
@@ -57,7 +57,7 @@
 	{{ oLista.mostrar_tabla|raw }}
 </div>
 <script>
-fnjs_antecedente_expediente=function() {
+fnjs_listar_documentos=function() {
     var data=$('#condiciones').serialize();
     var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
     request=$.ajax({

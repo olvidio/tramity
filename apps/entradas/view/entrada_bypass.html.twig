@@ -115,7 +115,7 @@ fnjs_enviar=function(){
         request=$.ajax({
             data: datos,
             url: '{{ url_update }}',
-            type: 'post',
+            method: 'POST',
             dataType: 'json'
         });
 

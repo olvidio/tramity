@@ -80,7 +80,7 @@ fnjs_buscar=function(){
 	request=$.ajax({
 		data: datos,
 		url: '{{ pagina_buscar }}',
-		type: 'post'
+		method: 'POST'
 	});
 	request.done( function (rta) {
         $('#resultados').html(rta);
@@ -97,7 +97,7 @@ fnjs_adjuntar_entrada=function(id_entrada,id_expediente,filtro) {
 	request=$.ajax({
         data: param_json,
         url: '{{ url_escrito|raw }}',
-        type: 'post',
+        method: 'POST',
         dataType: 'html'
     });
     request.done( function (html) {

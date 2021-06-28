@@ -70,7 +70,7 @@ fnjs_accion=function(accion){
     request=$.ajax({
         data: param_json,
         url: url_ajax,
-        type: 'post',
+        method: 'POST',
         dataType: 'json'
     });
     request.done( function (json) {
@@ -95,7 +95,7 @@ fnjs_encargar=function() {
     request=$.ajax({
         data: param_json,
         url: url_ajax,
-        type: 'post',
+        method: 'POST',
         dataType: 'json'
     });
     request.done( function (json) {
