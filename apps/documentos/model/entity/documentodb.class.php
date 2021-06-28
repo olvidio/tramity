@@ -158,8 +158,13 @@ class DocumentoDB Extends core\ClasePropiedades {
 		$aDades['visibilidad'] = $this->ivisibilidad;
 		$aDades['tipo_doc'] = $this->itipo_doc;
 		$aDades['f_upload'] = $this->df_upload;
-		$aDades['documento'] = $this->documento;
 		array_walk($aDades, 'core\poner_null');
+		
+		if (is_resource($this->documento)) {
+		    $aDades['documento'] = stream_get_contents($this->documento);
+		} else {
+            $aDades['documento'] = $this->documento;
+		}
 
 		if ($bInsert === FALSE) {
 			//UPDATE
@@ -273,7 +278,7 @@ class DocumentoDB Extends core\ClasePropiedades {
                     'visibilidad' => $visibilidad,
                     'tipo_doc' => $tipo_doc,
                     'f_upload' => $f_upload,
-                    'documento' => $documento,
+			        'documento' => $documento,
                     ];
 			
 			switch ($que) {

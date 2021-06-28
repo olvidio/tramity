@@ -77,10 +77,11 @@ class DocumentoLista {
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
                 
                 $tipo_doc = $oDocumento->getTipo_doc();
+                $contenido = $oDocumento->getDocumento();
                 if ( $tipo_doc == Documento::DOC_ETHERPAD ){
                     $url_download = '';
                     $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_revisar_documento('$id_doc');\" >"._("editar")."</span>";
-                } elseif ($tipo_doc == Documento::DOC_UPLOAD) {
+                } elseif ($tipo_doc == Documento::DOC_UPLOAD && !empty($contenido)) {
                     $url_download = Hash::link('apps/documentos/controller/adjunto_download.php?'.http_build_query(['key' => $id_doc]));
                     $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"window.open('$url_download');\" >"._("descargar")."</span>";
                 }

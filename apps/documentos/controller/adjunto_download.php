@@ -54,7 +54,10 @@ if (!empty($Qid_doc)) {
 
     ob_clean();
     flush();
-    echo fpassthru($escrito);
+    if (!empty($escrito)) {
+        echo fpassthru($escrito);
+    }
+        
     exit();
 } else {
     $error = TRUE;
