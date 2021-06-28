@@ -96,9 +96,10 @@ class DocumentoDB Extends core\ClasePropiedades {
 	/**
 	 * Documento de Documento
 	 *
-	 * @var web\DateTimeLocal
+	 * @var string bytea
+	 * 
 	 */
-	 protected $ddocumento;
+	 protected $documento;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de Documento
@@ -157,7 +158,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 		$aDades['visibilidad'] = $this->ivisibilidad;
 		$aDades['tipo_doc'] = $this->itipo_doc;
 		$aDades['f_upload'] = $this->df_upload;
-		$aDades['documento'] = $this->ddocumento;
+		$aDades['documento'] = $this->documento;
 		array_walk($aDades, 'core\poner_null');
 
 		if ($bInsert === FALSE) {
@@ -250,7 +251,7 @@ class DocumentoDB Extends core\ClasePropiedades {
         $documento = '';
 
 		if (isset($this->iid_doc)) {
-			if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_doc='$this->iid_doc'")) === FALSE) {
+			if (($oDblSt = $oDbl->query("SELECT nom,nombre_fichero,creador,visibilidad,tipo_doc,f_upload,documento FROM $nom_tabla WHERE id_doc='$this->iid_doc'")) === FALSE) {
 				$sClauError = 'Documento.carregar';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
@@ -275,11 +276,9 @@ class DocumentoDB Extends core\ClasePropiedades {
                     'documento' => $documento,
                     ];
 			
-            // Para evitar posteriores cargas
-            $this->bLoaded = TRUE;
 			switch ($que) {
 				case 'tot':
-                    $this->setAllAtributes($aDades);
+                    $this->aDades=$aDades;
 					break;
 				case 'guardar':
 					if (!$oDblSt->rowCount()) return FALSE;
@@ -541,23 +540,23 @@ class DocumentoDB Extends core\ClasePropiedades {
 	    }
 	}
 	/**
-	 * Recupera l'atribut ddocumento de Documento
+	 * Recupera l'atribut documento de Documento
 	 *
-	 * @return web\DateTimeLocal ddocumento
+	 * @return web\DateTimeLocal documento
 	 */
 	function getDocumento() {
-		if (!isset($this->ddocumento) && !$this->bLoaded) {
+		if (!isset($this->documento) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
-		return $this->ddocumento;
+		return $this->documento;
 	}
 	/**
-	 * estableix el valor de l'atribut ddocumento de Documento
+	 * estableix el valor de l'atribut documento de Documento
 	 *
-	 * @param web\DateTimeLocal ddocumento='' optional
+	 * @param web\DateTimeLocal documento='' optional
 	 */
-	function setDocumento($ddocumento='') {
-		$this->ddocumento = $ddocumento;
+	function setDocumento($documento='') {
+		$this->documento = $documento;
 	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
@@ -652,7 +651,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 		return $oDatosCampo;
 	}
 	/**
-	 * Recupera les propietats de l'atribut ddocumento de Documento
+	 * Recupera les propietats de l'atribut documento de Documento
 	 * en una clase del tipus DatosCampo
 	 *
 	 * @return core\DatosCampo

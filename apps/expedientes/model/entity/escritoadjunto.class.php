@@ -455,7 +455,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$oEscritoAdjuntoSet->add($this->getDatosId_escrito());
 		$oEscritoAdjuntoSet->add($this->getDatosNom());
 		$oEscritoAdjuntoSet->add($this->getDatosAdjunto());
-		$oDocumentoSet->add($this->getDatosTipo_doc());
+		$oEscritoAdjuntoSet->add($this->getDatosTipo_doc());
 		return $oEscritoAdjuntoSet->getTot();
 	}
 
