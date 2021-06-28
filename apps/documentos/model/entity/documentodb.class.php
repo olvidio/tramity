@@ -175,6 +175,13 @@ class DocumentoDB Extends core\ClasePropiedades {
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			} else {
+			    $oDblSt->bindParam(":nom", $aDades['nom'], \PDO::PARAM_STR);
+			    $oDblSt->bindParam(":nombre_fichero", $aDades['nombre_fichero'], \PDO::PARAM_STR);
+			    $oDblSt->bindParam(":creador", $aDades['creador'], \PDO::PARAM_INT);
+			    $oDblSt->bindParam(":visibilidad", $aDades['visibilidad'], \PDO::PARAM_INT);
+			    $oDblSt->bindParam(":tipo_doc", $aDades['tipo_doc'], \PDO::PARAM_INT);
+			    $oDblSt->bindParam(":f_upload", $aDades['f_upload'], \PDO::PARAM_STR);
+			    $oDblSt->bindParam(":documento", $aDades['documento'], \PDO::PARAM_LOB);
 				try {
 					$oDblSt->execute($aDades);
 				}
@@ -195,6 +202,21 @@ class DocumentoDB Extends core\ClasePropiedades {
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			} else {
+			    $nom = $aDades['nom'];
+			    $nombre_fichero = $aDades['nombre_fichero'];
+			    $creador = $aDades['creador'];
+			    $visibilidad = $aDades['visibilidad'];
+			    $tipo_doc = $aDades['tipo_doc'];
+			    $f_upload = $aDades['f_upload'];
+			    $documento = $aDades['documento'];
+
+                $oDblSt->bindParam(1, $nom, \PDO::PARAM_STR);
+			    $oDblSt->bindParam(2, $nombre_fichero, \PDO::PARAM_STR);
+			    $oDblSt->bindParam(3, $creador, \PDO::PARAM_INT);
+			    $oDblSt->bindParam(4, $visibilidad, \PDO::PARAM_INT);
+			    $oDblSt->bindParam(5, $tipo_doc, \PDO::PARAM_INT);
+			    $oDblSt->bindParam(6, $f_upload, \PDO::PARAM_STR);
+			    $oDblSt->bindParam(7, $documento, \PDO::PARAM_LOB);
 				try {
 					$oDblSt->execute($aDades);
 				}
@@ -219,13 +241,40 @@ class DocumentoDB Extends core\ClasePropiedades {
 	public function DBCarregar($que=null) {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
+        $nom = '';
+        $nombre_fichero = '';
+        $creador = '';
+        $visibilidad = '';
+        $tipo_doc = '';
+        $f_upload = '';
+        $documento = '';
+
 		if (isset($this->iid_doc)) {
 			if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_doc='$this->iid_doc'")) === FALSE) {
 				$sClauError = 'Documento.carregar';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			}
-			$aDades = $oDblSt->fetch(\PDO::FETCH_ASSOC);
+			$oDblSt->execute();
+			$oDblSt->bindColumn(1, $nom, \PDO::PARAM_STR);
+			$oDblSt->bindColumn(2, $nombre_fichero, \PDO::PARAM_STR);
+			$oDblSt->bindColumn(3, $creador, \PDO::PARAM_INT);
+			$oDblSt->bindColumn(4, $visibilidad, \PDO::PARAM_INT);
+			$oDblSt->bindColumn(5, $tipo_doc, \PDO::PARAM_INT);
+			$oDblSt->bindColumn(6, $f_upload, \PDO::PARAM_STR);
+			$oDblSt->bindColumn(7, $documento, \PDO::PARAM_LOB);
+			$oDblSt->fetch(\PDO::FETCH_BOUND);
+			
+			$aDades = [
+                    'nom' => $nom,
+                    'nombre_fichero' => $nombre_fichero,
+                    'creador' => $creador,
+                    'visibilidad' => $visibilidad,
+                    'tipo_doc' => $tipo_doc,
+                    'f_upload' => $f_upload,
+                    'documento' => $documento,
+                    ];
+			
             // Para evitar posteriores cargas
             $this->bLoaded = TRUE;
 			switch ($que) {
