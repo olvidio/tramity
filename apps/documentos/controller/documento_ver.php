@@ -48,7 +48,6 @@ if (!empty($Qid_doc)) {
 
 
 $base_url = core\ConfigGlobal::getWeb();
-$url_download_pdf = $base_url.'/apps/documentos/controller/adjunto_download.php';
 
 $a_campos = [
     'id_doc' => $Qid_doc,
@@ -57,7 +56,6 @@ $a_campos = [
     'f_upload' => $f_upload,
     'base_url' => $base_url,
     'escrito_html' => $escrito_html,
-    'url_download_pdf' => $url_download_pdf,
 ];
 
 $oView = new ViewTwig('documentos/controller');
