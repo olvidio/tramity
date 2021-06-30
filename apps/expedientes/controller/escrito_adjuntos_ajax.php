@@ -125,7 +125,8 @@ switch ($Qque) {
                     $error_txt .= $gesEtherpad->moveDocToAdjunto($Qid_doc, $id_item, TRUE);
                     break;
                 case Documento::DOC_UPLOAD:
-                    $contenido_doc = $oDocumento->getDocumento();
+                    $contenido_encoded = $oDocumento->getDocumentoTxt();
+                    $contenido_doc = base64_decode($contenido_encoded);
                     $fileName = $oDocumento->getNombre_fichero();
                     
                     // gravar en adjuntos escrito
@@ -268,14 +269,13 @@ switch ($Qque) {
 	    
 	    $cDocumentos = $gesDocumento->getDocumentos($aWhere,$aOperador);
 	    
-	    $a_cabeceras = [ '',[ 'width' => 70, 'name' => _("fecha")],
+	    $a_cabeceras = [ [ 'width' => 70, 'name' => _("fecha")],
 	                       [ 'width' => 500, 'name' => _("nombre")],
 	                       [ 'width' => 50, 'name' => _("ponente")],
 	                       [ 'width' => 50, 'name' => _("etiquetas")],
 	                   ''];
 	    
 	    $txt_ajuntar = ($Qtipo_n == 5)? _("abrir") : _("adjuntar");
-	    $txt_ver = _("ver");
 	    $a_valores = [];
 	    $a = 0;
 	    foreach ($cDocumentos as $oDocumento) {
@@ -296,19 +296,17 @@ switch ($Qque) {
 	        
 	        $ponente_txt = $a_posibles_cargos[$ponente];
 	        
-	        $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_documento('$id_doc');\" >$txt_ver</span>";
 	        if ($Qtipo_n == 5) {
                 $add = "<span class=\"btn btn-link\" onclick=\"fnjs_insertar_documento('documento','$id_doc','$Qid_escrito');\" >$txt_ajuntar</span>";
 	        } else {
                 $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_documento('documento','$id_doc','$Qid_escrito');\" >$txt_ajuntar</span>";
 	        }
 	        
-	        $a_valores[$a][1] = $ver;
-	        $a_valores[$a][2] = $fecha_txt;
-	        $a_valores[$a][3] = $oDocumento->getNom();
-	        $a_valores[$a][4] = $ponente_txt;
-	        $a_valores[$a][5] = $oDocumento->getEtiquetasVisiblesTxt();
-	        $a_valores[$a][6] = $add;
+	        $a_valores[$a][1] = $fecha_txt;
+	        $a_valores[$a][2] = $oDocumento->getNom();
+	        $a_valores[$a][3] = $ponente_txt;
+	        $a_valores[$a][4] = $oDocumento->getEtiquetasVisiblesTxt();
+	        $a_valores[$a][5] = $add;
 	    }
 	    
 	    

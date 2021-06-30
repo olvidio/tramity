@@ -634,7 +634,7 @@ switch ($Qque) {
 	    
 	    $cDocumentos = $gesDocumento->getDocumentos($aWhere,$aOperador);
 	    
-	    $a_cabeceras = [ '',[ 'width' => 70, 'name' => _("fecha")],
+	    $a_cabeceras = [ [ 'width' => 70, 'name' => _("fecha")],
 	                       [ 'width' => 500, 'name' => _("nombre")],
 	                       [ 'width' => 50, 'name' => _("ponente")],
 	                       [ 'width' => 50, 'name' => _("etiquetas")],
@@ -655,15 +655,13 @@ switch ($Qque) {
 	        
 	        $ponente_txt = $a_posibles_cargos[$ponente];
 	        
-	        $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_documento('$id_doc');\" >ver</span>";
 	        $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('documento','$id_doc','$Qid_expediente');\" >adjuntar</span>";
 	        
-	        $a_valores[$a][1] = $ver;
-	        $a_valores[$a][2] = $fecha_txt;
-	        $a_valores[$a][3] = $oDocumento->getNom();
-	        $a_valores[$a][4] = $ponente_txt;
-	        $a_valores[$a][5] = $oDocumento->getEtiquetasVisiblesTxt();
-	        $a_valores[$a][6] = $add;
+	        $a_valores[$a][1] = $fecha_txt;
+	        $a_valores[$a][2] = $oDocumento->getNom();
+	        $a_valores[$a][3] = $ponente_txt;
+	        $a_valores[$a][4] = $oDocumento->getEtiquetasVisiblesTxt();
+	        $a_valores[$a][5] = $add;
 	    }
 	    
 	    

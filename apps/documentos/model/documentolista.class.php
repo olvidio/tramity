@@ -77,7 +77,9 @@ class DocumentoLista {
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
                 
                 $tipo_doc = $oDocumento->getTipo_doc();
-                $contenido = $oDocumento->getDocumentoTxt();
+                $contenido_encoded = $oDocumento->getDocumentoTxt();
+                $contenido = base64_decode($contenido_encoded);
+
                 if ( $tipo_doc == Documento::DOC_ETHERPAD ){
                     $url_download = '';
                     $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_revisar_documento('$id_doc');\" >"._("editar")."</span>";
