@@ -183,8 +183,7 @@ class Enviar {
         $a_id_adjuntos = $oEntrada->getArrayIdAdjuntos();
         foreach ($a_id_adjuntos as $item => $adjunto_filename) {
             $oEntradaAdjunto = new EntradaAdjunto($item);
-            $escrito = $oEntradaAdjunto->getAdjunto();
-            $escrito_txt = stream_get_contents($escrito);
+            $escrito_txt = $oEntradaAdjunto->getAdjuntoTxt();
             $a_adjuntos[$adjunto_filename] = $escrito_txt;
         }
         $this->a_adjuntos = $a_adjuntos;
@@ -205,8 +204,7 @@ class Enviar {
                 $tipo_doc = $oEscritoAdjunto->getTipo_doc();
                 switch ($tipo_doc) {
                     case Documento::DOC_UPLOAD:
-                        $escrito = $oEscritoAdjunto->getAdjunto();
-                        $escrito_txt = stream_get_contents($escrito);
+                        $escrito_txt = $oEscritoAdjunto->getAdjuntoTxt();
                         $a_adjuntos[$adjunto_filename] = $escrito_txt;
                         break;
                     case Documento::DOC_ETHERPAD:
