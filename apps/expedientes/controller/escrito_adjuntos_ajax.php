@@ -1,5 +1,4 @@
 <?php
-
 use core\ConfigGlobal;
 use core\ViewTwig;
 use documentos\model\Documento;
@@ -7,7 +6,6 @@ use documentos\model\GestorDocumento;
 use documentos\model\entity\GestorEtiquetaDocumento;
 use entradas\model\Entrada;
 use etiquetas\model\entity\GestorEtiqueta;
-use expedientes\model\Expediente;
 use expedientes\model\entity\EscritoAdjunto;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
@@ -15,7 +13,6 @@ use web\Lista;
 use etherpad\model\GestorEtherpad;
 use expedientes\model\Escrito;
 use etherpad\model\Etherpad;
-use expedientes\model\GestorExpediente;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -169,7 +166,7 @@ switch ($Qque) {
 	case 'buscar_5':
         //n = 4 -> Documento Upload y Etherpad (adjuntar)
         //n = 5 -> Documento Etherpad (insertar)
-	    $Qtipo_n = (string) \filter_input(INPUT_POST, 'tipo_n');
+        $Qtipo_n = (string) \filter_input(INPUT_POST, 'tipo_n');
 	    $Qnom = (string) \filter_input(INPUT_POST, 'nom');
 	    $QandOr = (string) \filter_input(INPUT_POST, 'andOr');
 	    $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -326,7 +323,8 @@ switch ($Qque) {
 	        'sel_any_1' => $sel_any_1,
 	        'sel_any_2' => $sel_any_2,
 	        'sel_siempre' => $sel_siempre,
-            'oLista' => $oLista,  
+            'oLista' => $oLista,
+	        'tipo_n' => $Qtipo_n,
 	    ];
 	    
 	    $oView = new ViewTwig('expedientes/controller');

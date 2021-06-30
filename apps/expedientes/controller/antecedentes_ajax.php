@@ -2,6 +2,9 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use documentos\model\Documento;
+use documentos\model\GestorDocumento;
+use documentos\model\entity\GestorEtiquetaDocumento;
 use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
 use etiquetas\model\entity\GestorEtiqueta;
@@ -19,8 +22,6 @@ use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
 use web\Protocolo;
-use documentos\model\GestorDocumento;
-use documentos\model\entity\GestorEtiquetaDocumento;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -535,6 +536,8 @@ switch ($Qque) {
 	case 'buscar_documento':
 	case 'buscar_4':
         //n = 4 -> Documento
+	    //n = 5 -> Documento Etherpad (insertar)
+	    $Qtipo_n = (string) \filter_input(INPUT_POST, 'tipo_n');
 	    $Qnom = (string) \filter_input(INPUT_POST, 'nom');
 	    $QandOr = (string) \filter_input(INPUT_POST, 'andOr');
 	    $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -642,13 +645,17 @@ switch ($Qque) {
 	    $a_valores = [];
 	    $a = 0;
 	    foreach ($cDocumentos as $oDocumento) {
-	        $a++;
+	        // Si sólo quiero los etherpad, quitar el resto:
+	        if ($Qtipo_n == 5 && $oDocumento->getTipo_doc() != Documento::DOC_ETHERPAD) {
+	            continue;
+	        }
 	        // mirar permisos...
 	        $visibilidad = $oDocumento->getVisibilidad();
 	        if ( ($visibilidad == Entrada::V_DIRECTORES OR $visibilidad == Entrada::V_RESERVADO OR $visibilidad == Entrada::V_RESERVADO_VCD)
 	            && ConfigGlobal::soy_dtor() === FALSE) {
 	                continue;
 	        }
+	        $a++;
 	        $id_doc = $oDocumento->getId_doc();
 	        $fecha_txt = $oDocumento->getF_upload()->getFromLocal();
 	        $ponente = $oDocumento->getCreador();
