@@ -1,5 +1,4 @@
 <?php
-
 use documentos\model\Documento;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -18,46 +17,28 @@ $Qid_doc = (integer) \filter_input(INPUT_GET, 'key');
 
 if (!empty($Qid_doc)) {
     $oDocumento = new Documento($Qid_doc);
-    $escrito = $oDocumento->getDocumento();
     $nombre_fichero = $oDocumento->getNombre_fichero();
+    $res_documento = $oDocumento->getDocumentoResource();
 
-    $extension = '';
-    // Determine Content Type
-    switch ($extension) {
-        case "pdf": $ctype="application/pdf"; break;
-        case "exe": $ctype="application/octet-stream"; break;
-        case "zip": $ctype="application/zip"; break;
-        case "rtf": $ctype="application/msword"; break;
-        case "doc": $ctype="application/msword"; break;
-        case "xls": $ctype="application/vnd.ms-excel"; break;
-        case "ppt": $ctype="application/vnd.ms-powerpoint"; break;
-        case "gif": $ctype="image/gif"; break;
-        case "png": $ctype="image/png"; break;
-        case "jpeg":
-        case "jpg": $ctype="image/jpg"; break;
-        //default: $ctype="application/force-download";
-        default: $ctype="application/octet-stream";
-    }
-    
-    header('Content-Description: File Transfer');
-    header('Content-Transfer-Encoding: binary');
-    header('Cache-Control: public, must-revalidate, max-age=0');
-    header("Pragma: public"); // required
-    header("Expires: 0");
-    header("Cache-Control: private",false); // required for certain browsers
-    header('Content-Type: application/force-download');
-    header('Content-Type: application/octet-stream', false);
-    header('Content-Type: application/download', false);
-    //header("Content-Type: $ctype");
-    //header("Content-Disposition: attachment; filename=\"".basename($fullPath)."\";" );
-    header('Content-disposition: attachment; filename="' . $nombre_fichero . '"');
+    if (!empty($res_documento)) {
+        rewind($res_documento);
+        $doc_encoded = stream_get_contents($res_documento);
+        $doc = base64_decode($doc_encoded);
 
-    ob_clean();
-    flush();
-    if (!empty($escrito)) {
-        echo fpassthru($escrito);
+        header('Content-Description: File Transfer');
+        header('Content-Transfer-Encoding: binary');
+        header('Cache-Control: public, must-revalidate, max-age=0');
+        header("Pragma: public"); // required
+        header("Expires: 0");
+        header("Cache-Control: private",false); // required for certain browsers
+        header('Content-Type: application/force-download');
+        //header('Content-Type: application/octet-stream', false);
+        header('Content-Type: application/download', false);
+        header('Content-disposition: attachment; filename="' . $nombre_fichero . '"');
+        ob_clean();
+        flush();
+        echo $doc;
     }
-        
     exit();
 } else {
     $error = TRUE;

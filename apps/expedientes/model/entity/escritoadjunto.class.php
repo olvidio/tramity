@@ -73,7 +73,8 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	 *
 	 * @var string bytea
 	 */
-	 private $adjunto;
+	 private $adjunto_id_res;
+	 private $adjunto_txt;
 	/**
 	 * tipo_doc de EscritoAdjunto
 	 *
@@ -140,8 +141,8 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$aDades=array();
 		$aDades['id_escrito'] = $this->iid_escrito;
 		$aDades['nom'] = $this->snom;
-		$aDades['adjunto'] = $this->adjunto;
 		$aDades['tipo_doc'] = $this->itipo_doc;
+		$aDades['adjunto'] = $this->getAdjuntoTxt();
 		array_walk($aDades, 'core\poner_null');
 
 		if ($bInsert === FALSE) {
@@ -156,10 +157,15 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			} else {
-			    $oDblSt->bindParam(":id_escrito", $aDades['id_escrito'], \PDO::PARAM_INT);
-			    $oDblSt->bindParam(":nom", $aDades['nom'], \PDO::PARAM_STR);
-			    $oDblSt->bindParam(":adjunto", $aDades['adjunto'], \PDO::PARAM_LOB);
-			    $oDblSt->bindParam(":tipo_doc", $aDades['tipo_doc'], \PDO::PARAM_INT);
+			    $id_escrito = $aDades['id_escrito'];
+			    $nom = $aDades['nom'];
+			    $adjunto = $aDades['adjunto'];
+			    $tipo_doc = $aDades['tipo_doc'];
+			    
+			    $oDblSt->bindParam(1, $id_escrito, \PDO::PARAM_INT);
+			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
+			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_LOB);
+			    $oDblSt->bindParam(4, $tipo_doc, \PDO::PARAM_INT);
 				try {
 					$oDblSt->execute();
 				}
@@ -235,10 +241,12 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 			    'adjunto' => $adjunto,
 			    'tipo_doc' => $tipo_doc,
 			];
-
+			
+			// Para evitar posteriores cargas
+			$this->bLoaded = TRUE;
 			switch ($que) {
 				case 'tot':
-					$this->aDades=$aDades;
+				    $this->setAllAtributes($aDades);
 					break;
 				case 'guardar':
 					if (!$oDblSt->rowCount()) return FALSE;
@@ -410,11 +418,29 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	 *
 	 * @return string adjunto
 	 */
-	function getAdjunto() {
-		if (!isset($this->adjunto) && !$this->bLoaded) {
+	function getAdjuntoTxt() {
+	    $adjunto = '';
+		if (!isset($this->adjunto_txt) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
-		return $this->adjunto;
+		if (empty($this->adjunto_txt)) {
+		    if (!empty($this->adjunto_id_res)) {
+                $adjunto = stream_get_contents($this->adjunto_id_res);
+		    }
+		} else {
+		    $adjunto = $this->adjunto_txt;
+		}
+		return $adjunto;
+	}/**
+	 * Recupera l'atribut adjunto de EntradaAdjunto
+	 *
+	 * @return string adjunto
+	 */
+	function getAdjuntoResource() {
+		if (!isset($this->adjunto_id_res) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->adjunto_id_res;
 	}
 	/**
 	 * estableix el valor de l'atribut adjunto de EntradaAdjunto
@@ -422,7 +448,15 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	 * @param string adjunto='' optional
 	 */
 	function setAdjunto($adjunto='') {
-		$this->adjunto = $adjunto;
+	    if (is_resource($adjunto)) {
+	        $this->adjunto_id_res = $adjunto;
+	    } else {
+	        if (empty($adjunto)) {
+	            $this->adjunto_txt = '';
+	        } else {
+                $this->adjunto_txt = $adjunto;
+	        }
+	    }
 	}
 	/**
 	 * Recupera l'atribut itipo_doc de Documento

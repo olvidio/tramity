@@ -41,7 +41,11 @@ function upload() {
             //Make sure we have a file path
             if ($tmpFilePath != ""){
                 
-                $contenido_doc=file_get_contents($tmpFilePath);
+                //$contenido_doc=file_get_contents($tmpFilePath);
+                $fp = fopen($tmpFilePath, 'rb');
+                $contenido_doc = fread($fp, filesize($tmpFilePath));
+                $contenido_encoded = base64_encode($contenido_doc);
+                
                 $oHoy = new DateTimeLocal();
                 $hoy_iso = $oHoy->getIso();
                 
@@ -49,7 +53,7 @@ function upload() {
                 $oDocumento->DBCarregar();
                 $oDocumento->setNombre_fichero($fileName);
                 $oDocumento->setTipo_doc(Documento::DOC_UPLOAD);
-                $oDocumento->setDocumento($contenido_doc);
+                $oDocumento->setDocumento($contenido_encoded);
                 $oDocumento->setF_upload($hoy_iso,FALSE);
                 
                 if ($oDocumento->DBGuardar() !== FALSE) {

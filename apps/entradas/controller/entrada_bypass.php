@@ -128,7 +128,7 @@ $yearStart = date('Y');
 $yearEnd = $yearStart + 2;
 
 $base_url = core\ConfigGlobal::getWeb();
-$url_download = $base_url.'/apps/entradas/controller/download.php?plugin=1';
+$url_download = $base_url.'/apps/entradas/controller/download.php';
 $url_update = 'apps/entradas/controller/entrada_update.php';
 $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => 'bypass']));
 

@@ -39,7 +39,7 @@ if (!empty($Qid_escrito)) {
     $estado = $oExpediente->getEstado();
     
     $base_url = core\ConfigGlobal::getWeb();
-    $url_download = $base_url.'/apps/expedientes/controller/adjunto_download.php?plugin=1';
+    $url_download = $base_url.'/apps/expedientes/controller/adjunto_download.php';
     $url_update = 'escrito_update.php';
     // Pueden ser varios escritos separados por comas:
     $a_escritos = explode(',', $Qid_escrito);

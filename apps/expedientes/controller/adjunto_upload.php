@@ -37,7 +37,7 @@ function upload() {
         for ($i = 0; $i < $total; $i++) {
             $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
             $fileName = $_FILES[$input]['name'][$i]; // the file name
-            $fileSize = $_FILES[$input]['size'][$i]; // the file size
+            //$fileSize = $_FILES[$input]['size'][$i]; // the file size
             
             //Make sure we have a file path
             if ($tmpFilePath != "" && $Qid_escrito){
@@ -47,6 +47,7 @@ function upload() {
                 if (!empty($Qid_item)) {
                     // update
                     $oEscritoAdjunto = new EscritoAdjunto($Qid_item);
+                    $oEscritoAdjunto->DBCarregar();
                 } else {
                     // new
                     $oEscritoAdjunto = new EscritoAdjunto();
@@ -54,8 +55,8 @@ function upload() {
                 
                 $oEscritoAdjunto->setId_escrito($Qid_escrito);
                 $oEscritoAdjunto->setNom($fileName);
-                $oEscritoAdjunto->setAdjunto($contenido_doc);
                 $oEscritoAdjunto->setTipo_doc(Documento::DOC_UPLOAD);
+                $oEscritoAdjunto->setAdjunto($contenido_doc);
                 
                 if ($oEscritoAdjunto->DBGuardar() !== FALSE) {
                     $id_item = $oEscritoAdjunto->getId_item();

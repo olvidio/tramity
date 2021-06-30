@@ -57,7 +57,7 @@ if (!empty($Qid_doc)) {
     // destinos individuales
     $nom = $oDocumento->getNom();
     $nombre_fichero = $oDocumento->getNombre_fichero();
-    $documento = $oDocumento->getDocumento();
+    $documento = $oDocumento->getDocumentoTxt();
     
     //Ponente;
     //$id_ponente = $oDocumento->getCreador();

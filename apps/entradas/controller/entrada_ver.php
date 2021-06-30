@@ -69,7 +69,7 @@ if (!empty($f_entrada)) {
 }
 
 $base_url = core\ConfigGlobal::getWeb();
-$url_download = $base_url.'/apps/entradas/controller/download.php?plugin=1';
+$url_download = $base_url.'/apps/entradas/controller/download.php';
 $url_download_pdf = $base_url.'/apps/entradas/controller/entrada_download.php';
 
 $a_campos = [

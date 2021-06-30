@@ -99,7 +99,8 @@ class DocumentoDB Extends core\ClasePropiedades {
 	 * @var string bytea
 	 * 
 	 */
-	 protected $documento;
+	 protected $documento_id_res;
+	 protected $documento_txt;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de Documento
@@ -158,13 +159,8 @@ class DocumentoDB Extends core\ClasePropiedades {
 		$aDades['visibilidad'] = $this->ivisibilidad;
 		$aDades['tipo_doc'] = $this->itipo_doc;
 		$aDades['f_upload'] = $this->df_upload;
+        $aDades['documento'] = $this->getDocumentoTxt();
 		array_walk($aDades, 'core\poner_null');
-		
-		if (is_resource($this->documento)) {
-		    $aDades['documento'] = stream_get_contents($this->documento);
-		} else {
-            $aDades['documento'] = $this->documento;
-		}
 
 		if ($bInsert === FALSE) {
 			//UPDATE
@@ -181,13 +177,21 @@ class DocumentoDB Extends core\ClasePropiedades {
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			} else {
-			    $oDblSt->bindParam(":nom", $aDades['nom'], \PDO::PARAM_STR);
-			    $oDblSt->bindParam(":nombre_fichero", $aDades['nombre_fichero'], \PDO::PARAM_STR);
-			    $oDblSt->bindParam(":creador", $aDades['creador'], \PDO::PARAM_INT);
-			    $oDblSt->bindParam(":visibilidad", $aDades['visibilidad'], \PDO::PARAM_INT);
-			    $oDblSt->bindParam(":tipo_doc", $aDades['tipo_doc'], \PDO::PARAM_INT);
-			    $oDblSt->bindParam(":f_upload", $aDades['f_upload'], \PDO::PARAM_STR);
-			    $oDblSt->bindParam(":documento", $aDades['documento'], \PDO::PARAM_LOB);
+			    $nom = $aDades['nom'];
+			    $nombre_fichero = $aDades['nombre_fichero'];
+			    $creador = $aDades['creador'];
+			    $visibilidad = $aDades['visibilidad'];
+			    $tipo_doc = $aDades['tipo_doc'];
+			    $f_upload = $aDades['f_upload'];
+			    $documento = $aDades['documento'];
+
+                $oDblSt->bindParam(1, $nom, \PDO::PARAM_STR);
+			    $oDblSt->bindParam(2, $nombre_fichero, \PDO::PARAM_STR);
+			    $oDblSt->bindParam(3, $creador, \PDO::PARAM_INT);
+			    $oDblSt->bindParam(4, $visibilidad, \PDO::PARAM_INT);
+			    $oDblSt->bindParam(5, $tipo_doc, \PDO::PARAM_INT);
+			    $oDblSt->bindParam(6, $f_upload, \PDO::PARAM_STR);
+			    $oDblSt->bindParam(7, $documento, \PDO::PARAM_LOB);
 				try {
 					$oDblSt->execute($aDades);
 				}
@@ -281,9 +285,11 @@ class DocumentoDB Extends core\ClasePropiedades {
 			        'documento' => $documento,
                     ];
 			
+			// Para evitar posteriores cargas
+			$this->bLoaded = TRUE;
 			switch ($que) {
 				case 'tot':
-                    $this->aDades=$aDades;
+				    $this->setAllAtributes($aDades);
 					break;
 				case 'guardar':
 					if (!$oDblSt->rowCount()) return FALSE;
@@ -547,21 +553,48 @@ class DocumentoDB Extends core\ClasePropiedades {
 	/**
 	 * Recupera l'atribut documento de Documento
 	 *
-	 * @return web\DateTimeLocal documento
+	 * @return string documento
 	 */
-	function getDocumento() {
-		if (!isset($this->documento) && !$this->bLoaded) {
+	function getDocumentoTxt() {
+		$documento = '';
+		if (!isset($this->documento_txt) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
-		return $this->documento;
+		if (empty($this->documento_txt)) {
+            if (!empty($this->documento_id_res)) {
+		      $documento = stream_get_contents($this->documento_id_res);
+            }
+		} else {
+		    $documento = $this->documento_txt;
+		}
+		return $documento;
+	}
+	/**
+	 * Recupera l'atribut documento de Documento
+	 *
+	 * @return string documento
+	 */
+	function getDocumentoResource() {
+		if (!isset($this->documento_id_res) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->documento_id_res;
 	}
 	/**
 	 * estableix el valor de l'atribut documento de Documento
 	 *
-	 * @param web\DateTimeLocal documento='' optional
+	 * @param string documento='' optional
 	 */
 	function setDocumento($documento='') {
-		$this->documento = $documento;
+	    if (is_resource($documento)) {
+	        $this->documento_id_res = $documento;
+	    } else {
+	        if (empty($documento)) { 
+	            $this->documento_txt = '';
+	        } else {
+	           $this->documento_txt = $documento;
+	        }
+	    }
 	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 

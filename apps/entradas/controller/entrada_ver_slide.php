@@ -102,7 +102,7 @@ if (!empty($f_entrada)) {
 }
 
 $base_url = core\ConfigGlobal::getWeb();
-$url_download = $base_url.'/apps/entradas/controller/download.php?plugin=1';
+$url_download = $base_url.'/apps/entradas/controller/download.php';
 $url_download_pdf = $base_url.'/apps/entradas/controller/entrada_download.php';
 // Si no pongo filtro ya va bien (si lo pongo va al slide...)
 $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $Qfiltro]));

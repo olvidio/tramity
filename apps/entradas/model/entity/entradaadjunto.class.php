@@ -76,7 +76,8 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 	 *
 	 * @var string bytea
 	 */
-	 private $adjunto;
+	 private $adjunto_id_res;
+	 private $adjunto_txt;
 	 
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
@@ -132,7 +133,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		$aDades=array();
 		$aDades['id_entrada'] = $this->iid_entrada;
 		$aDades['nom'] = $this->snom;
-		$aDades['adjunto'] = $this->adjunto;
+        $aDades['adjunto'] = $this->getAdjuntoTxt();
 		array_walk($aDades, 'core\poner_null');
 
 		if ($bInsert === FALSE) {
@@ -146,9 +147,13 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			} else {
-			    $oDblSt->bindParam(":id_entrada", $aDades['id_entrada'], \PDO::PARAM_INT);
-			    $oDblSt->bindParam(":nom", $aDades['nom'], \PDO::PARAM_STR);
-			    $oDblSt->bindParam(":adjunto", $aDades['adjunto'], \PDO::PARAM_LOB);
+			    $id_entrada = $aDades['id_entrada'];
+			    $nom = $aDades['nom'];
+			    $adjunto = $aDades['adjunto'];
+			    
+			    $oDblSt->bindParam(1, $id_entrada, \PDO::PARAM_INT);
+			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
+			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_LOB);
 				try {
 					$oDblSt->execute();
 				}
@@ -173,11 +178,6 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 			    $nom = $aDades['nom'];
 			    $adjunto = $aDades['adjunto'];
 			    
-			    /*
-			    $oDblSt->bindParam(":id_entrada", $id_entrada, \PDO::PARAM_INT);
-			    $oDblSt->bindParam(":nom", $nom, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(":adjunto", $adjunto, \PDO::PARAM_LOB);
-			    */
 			    $oDblSt->bindParam(1, $id_entrada, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
 			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_LOB);
@@ -227,7 +227,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 			
 			switch ($que) {
 				case 'tot':
-					$this->aDades=$aDades;
+				    $this->setAllAtributes($aDades);
 					break;
 				case 'guardar':
 					if (!$oDblSt->rowCount()) return FALSE;
@@ -397,11 +397,30 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 	 *
 	 * @return string adjunto
 	 */
-	function getAdjunto() {
-		if (!isset($this->adjunto) && !$this->bLoaded) {
+	function getAdjuntoTxt() {
+	    $adjunto = '';
+		if (!isset($this->adjunto_txt) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
-		return $this->adjunto;
+		if (empty($this->adjunto_txt)) {
+		    if (!empty($this->adjunto_id_res)) {
+		        $adjunto = stream_get_contents($this->adjunto_id_res);
+		    }
+		} else {
+		    $adjunto = $this->adjunto_txt;
+		}
+		return $adjunto;
+	}
+	/**
+	 * Recupera l'atribut adjunto de EntradaAdjunto
+	 *
+	 * @return string adjunto
+	 */
+	function getAdjuntoResource() {
+		if (!isset($this->adjunto_id_res) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->adjunto_id_res;
 	}
 	/**
 	 * estableix el valor de l'atribut adjunto de EntradaAdjunto
@@ -409,7 +428,15 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 	 * @param string adjunto='' optional
 	 */
 	function setAdjunto($adjunto='') {
-		$this->adjunto = $adjunto;
+		if (is_resource($adjunto)) {
+		    $this->adjunto_id_res = $adjunto;
+		} else {
+		    if (empty($adjunto)) {
+		        $this->adjunto_txt = '';
+		    } else {
+                $this->adjunto_txt = $adjunto;
+		    }
+		}
 	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
