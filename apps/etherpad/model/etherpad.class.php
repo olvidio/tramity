@@ -638,11 +638,20 @@ class Etherpad  extends Client {
         // 86400 = 1 day
         // 3600 = 1 hora
         if ($this->multiple === FALSE) { // espero a mandar las cookies al final.
+            // Coger el nombre del dominio para que sirva para tramity.red.local y etherpad.red.local
+            //const SERVIDOR = 'tramity.red.local';
+            $regs = [];
+            $host = ConfigGlobal::SERVIDOR;
+            preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $host, $regs);
+            $domain = $regs['domain'];
+            
             setcookie("sessionID", $lista_sesiones, [
                                     //'expires' => time() + (86400 * 30),
                                     'expires' => time() + (3600),
                                     'path' => '/',
-                                    'sameSite' => 'Lax',
+                                    'sameSite' => 'Strict',
+                                    'Secure' => 'Secure',
+                                    'domain' => $domain,
                                 ]);
         }
     }
