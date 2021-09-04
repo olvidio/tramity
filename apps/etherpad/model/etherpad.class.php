@@ -565,7 +565,10 @@ class Etherpad  extends Client {
                 if ($group == $groupID && $author == $authorID ) {
                     $ahora = date("U");
                     if ($valid > $ahora) {
-                        return TRUE;
+                        // Además hay que asegurar que está también la cookie
+                        if(isset($_COOKIE["sessionID"])){
+                            return TRUE;
+                        }
                     }
                 }
             }
