@@ -750,7 +750,9 @@ class ExpedienteLista {
         $filtro = $this->getFiltro();
         $url_cancel = 'apps/expedientes/controller/expediente_lista.php';
         $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $filtro, 'prioridad_sel' => $this->prioridad_sel]));
-
+        
+        $vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+        
         $a_campos = [
             //'id_expediente' => $this->id_expediente,
             //'oHash' => $oHash,
@@ -763,6 +765,8 @@ class ExpedienteLista {
             'ver_f_ini' => $ver_f_ini,
             'col_mod' => $col_mod,
             'col_ver' => $col_ver,
+            // tabs_show
+            'vista' => $vista,
         ];
 
         $oView = new ViewTwig('expedientes/controller');

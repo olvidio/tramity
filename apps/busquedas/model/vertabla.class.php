@@ -278,6 +278,8 @@ class VerTabla {
         
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
+        $vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+        
         $a_campos = [
             'titulo' => $this->sTitulo,
             'oTabla' => $oTabla,
@@ -286,6 +288,8 @@ class VerTabla {
             //'oHash' => $oHash,
             'server' => $server,
             'filtro' => $this->sFiltro,
+            // tabs_show
+            'vista' => $vista,
             ];
         
         $oView = new ViewTwig('busquedas/controller');

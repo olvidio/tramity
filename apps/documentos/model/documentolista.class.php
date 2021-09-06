@@ -119,6 +119,8 @@ class DocumentoLista {
         $pagina_cancel = Hash::link('apps/documentos/controller/documentos_lista.php?'.http_build_query($a_cosas));
         $pagina_nueva = Hash::link('apps/documentos/controller/documento_form.php?'.http_build_query($a_cosas));
         
+        $vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+        
         $a_campos = [
             //'oHash' => $oHash,
             'a_documentos' => $a_documentos,
@@ -127,6 +129,8 @@ class DocumentoLista {
             'filtro' => $filtro,
             'server' => $server,
             'pagina_cancel' => $pagina_cancel,
+            // tabs_show
+            'vista' => $vista,
         ];
         
         $oView = new ViewTwig('documentos/controller');

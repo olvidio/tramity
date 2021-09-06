@@ -272,6 +272,7 @@ $a_cosas = [
 ];
 $pagina_cancel = web\Hash::link('apps/pendientes/controller/pendiente_tabla.php?'.http_build_query($a_cosas));
 
+$vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
 
 $a_campos = [
     'secretaria'   => $secretaria,
@@ -289,6 +290,8 @@ $a_campos = [
     'periodo' => $Qperiodo,
     'op_calendario_default' => $op_calendario_default,
     'pagina_cancel' => $pagina_cancel,
+    // tabs_show
+    'vista' => $vista,
 ];
 
 $oView = new ViewTwig('pendientes/controller');

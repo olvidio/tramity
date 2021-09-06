@@ -35,6 +35,7 @@
 
 <script type="text/javascript">
 fnjs_cmb_role=function(role){
+    debugger;
 	//cambio las etiquetas:
 	$("#dropdownMenuLink").html(role);
     var url_ajax = 'apps/usuarios/controller/usuario_update.php';
@@ -53,8 +54,8 @@ tabs_hide=function(){
 	$('#tabs').hide();
 }
 tabs_show=function(vista,filtro=''){
-	// por defecto...
-    var url_ajax = 'apps/usuarios/controller/usuario_home.php';
+    var url_ajax = '';
+    debugger;
 	if (vista == 'home') {
         url_ajax = 'apps/usuarios/controller/usuario_home.php';
     }

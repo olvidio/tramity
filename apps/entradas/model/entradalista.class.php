@@ -370,6 +370,8 @@ class EntradaLista {
             $ver_accion = TRUE;
         }
         
+        $vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+        
         $a_campos = [
             //'id_entrada' => $id_entrada,
             //'oHash' => $oHash,
@@ -383,7 +385,8 @@ class EntradaLista {
             'txt_btn_new' => $txt_btn_new,
             'pagina_cancel' => $pagina_cancel,
             'ver_accion' => $ver_accion,
-            'vista' => 'home',
+            //tabs_show
+            'vista' => $vista,
         ];
         
         $oView = new ViewTwig('entradas/controller');

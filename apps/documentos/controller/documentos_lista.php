@@ -21,7 +21,6 @@ $Qque = (string) \filter_input(INPUT_POST, 'que');
 $oTabla = new DocumentoLista();
 $oTabla->setFiltro($Qfiltro);
 
-$msg = '';
 // añadir dialogo de búsquedas
 $QandOr = (string) \filter_input(INPUT_POST, 'andOr');
 $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -46,9 +45,6 @@ if (!empty($a_etiquetas_filtered)) {
 if (!empty($cDocumentos)) {
     $aWhere['id_doc'] = implode(',',$cDocumentos);
     $aOperador['id_doc'] = 'IN';
-} else {
-    // No hay ninguno. No importa el resto de condiciones
-    $msg = _("No hay ningún documento");
 }
 
 $gesEtiquetas = new GestorEtiqueta();
@@ -80,8 +76,4 @@ $oTabla->setEtiquetas($a_etiquetas_filtered);
 $oTabla->setAWhere($aWhere);
 $oTabla->setAOperador($aOperador);
 
-if (empty($msg)) {
-    echo $oTabla->mostrarTabla();
-} else {
-    echo $msg;
-}
+echo $oTabla->mostrarTabla();

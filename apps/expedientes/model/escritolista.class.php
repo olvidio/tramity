@@ -394,6 +394,9 @@ class EscritoLista {
         } else {
             $ver_ok = FALSE;
         }
+        
+        $vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+        
         $a_campos = [
             'filtro' => $this->filtro,
             'modo' => $this->modo,
@@ -404,6 +407,8 @@ class EscritoLista {
             'bdistribuir' => $bdistribuir,
             'prot_local_header' => $prot_local_header,
             'ver_ok' => $ver_ok,
+            // tabs_show
+            'vista' => $vista,
         ];
         
         return $a_campos;

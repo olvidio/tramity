@@ -1,6 +1,7 @@
 <?php
 
 // INICIO Cabecera global de URL de controlador *********************************
+use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
 use lugares\model\entity\GestorLugar;
@@ -174,6 +175,8 @@ if (!empty($Qopcion)) {
 $oFecha = new DateTimeLocal();
 $format = $oFecha->getFormat();
 
+$vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+
 $a_campos = [
     //'oHash' => $oHash,
     'oDesplLugar' => $oDesplLugar,
@@ -205,6 +208,8 @@ $a_campos = [
     'prot_any' => $Qprot_any,
     // datepicker
     'format' => $format,
+    // tabs_show
+    'vista' => $vista,
     ];
 
 $oView = new ViewTwig('busquedas/controller');

@@ -3,6 +3,7 @@
 // INICIO Cabecera global de URL de controlador *********************************
 use busquedas\model\Buscar;
 use busquedas\model\VerTabla;
+use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\any_2;
 use entradas\model\GestorEntrada;
@@ -177,8 +178,7 @@ switch ($Qtipo_lista) {
         }
 }
 
-        
-
+$vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
 
 $a_campos = [
     //'oHash' => $oHash,
@@ -190,6 +190,8 @@ $a_campos = [
     'lista' => $lista,
     'filtro' => $filtro,
     'oTabla' => $oTabla,
+    // tabs_show
+    'vista' => $vista,
 ];
 
 $oView = new ViewTwig('busquedas/controller');

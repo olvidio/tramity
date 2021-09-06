@@ -26,11 +26,11 @@ switch($Qque) {
 		// en el caso se secretaria no tiene id:
 		if ($id_cargo !== FALSE) {
             $_SESSION['session_auth']['id_cargo'] = $id_cargo;
+            // Oficina actual:
+            $oUsuario = new Cargo($id_cargo);
+            $id_oficina_actual = $oUsuario->getId_oficina();
+            $_SESSION['session_auth']['mi_id_oficina'] = $id_oficina_actual;
 		}
-		// Oficina actual:
-		$oUsuario = new Cargo($id_cargo);
-		$id_oficina_actual = $oUsuario->getId_oficina();
-		$_SESSION['session_auth']['mi_id_oficina'] = $id_oficina_actual;
         break;
 	case "eliminar":
 	    //$Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');
