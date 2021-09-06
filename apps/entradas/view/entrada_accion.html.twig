@@ -5,7 +5,6 @@
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">{{ "Asignar entrada"|trans }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
@@ -75,7 +74,7 @@ fnjs_accion=function(accion){
     });
     request.done( function (json) {
         // close div modal
-        $('#ModalBuscar').modal('hide');
+		$('#ModalBuscar').modal('hide');
         if (json.success != true) {
             rta_txt = json.mensaje;
             alert ('error: '+rta_txt);
@@ -124,8 +123,12 @@ fnjs_cancelar=function(){
 	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
 }
 
+/* NO SE de donde se copió, pero al cerrar el modal da un error y 
+además quita las barras scroll de la pagina.
+
 $(".modal").on('hide.bs.modal', function (e) {
     $(document.body).removeClass('modal-open');
     $('.modal-backdrop').remove();
 });
+*/
 </script>

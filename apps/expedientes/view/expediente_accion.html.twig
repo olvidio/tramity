@@ -5,7 +5,6 @@
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar"|trans }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
@@ -269,8 +268,12 @@ $(function() {
     });
 });
 
+/* NO SE de donde se copió, pero al cerrar el modal da un error y 
+además quita las barras scroll de la pagina.
+
 $(".modal").on('hide.bs.modal', function (e) {
     $(document.body).removeClass('modal-open');
     $('.modal-backdrop').remove();
 });
+*/
 </script>

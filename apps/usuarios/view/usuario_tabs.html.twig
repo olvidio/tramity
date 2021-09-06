@@ -53,13 +53,13 @@ tabs_hide=function(){
 	$('#tabs').hide();
 }
 tabs_show=function(vista,filtro=''){
-	// recalcular...
-	//var id_expediente=$('#id_expediente').val();
+	// por defecto...
+    var url_ajax = 'apps/usuarios/controller/usuario_home.php';
 	if (vista == 'home') {
-        var url_ajax = 'apps/usuarios/controller/usuario_home.php';
+        url_ajax = 'apps/usuarios/controller/usuario_home.php';
     }
 	if (vista == 'secretaria') {
-        var url_ajax = 'apps/usuarios/controller/usuario_secretaria.php';
+        url_ajax = 'apps/usuarios/controller/usuario_secretaria.php';
     }
     var param_json = { tabs: 'si', filtro: filtro };
     request=$.ajax({

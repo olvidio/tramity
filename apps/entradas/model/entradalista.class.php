@@ -383,6 +383,7 @@ class EntradaLista {
             'txt_btn_new' => $txt_btn_new,
             'pagina_cancel' => $pagina_cancel,
             'ver_accion' => $ver_accion,
+            'vista' => 'home',
         ];
         
         $oView = new ViewTwig('entradas/controller');
