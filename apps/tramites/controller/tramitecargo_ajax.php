@@ -14,10 +14,10 @@ require_once ("apps/core/global_object.inc");
 
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
+$error_txt = '';
 switch($Qque) {
     case 'info_firmas':
 	    $Qid_tramite = (integer) \filter_input(INPUT_POST, 'id_tramite');
-        $error_txt = '';
         $oficiales = FALSE;
         $aWhere = ['id_tramite' => $Qid_tramite, 'id_cargo' => Cargo::CARGO_OFICIALES];
 	    $gesTramiteCargo = new GestorTramiteCargo();
@@ -37,20 +37,9 @@ switch($Qque) {
 	    ];
 	    
 	    $jsondata['data'] = json_encode($a_info);
-	    if (!empty($error_txt)) {
-	        $jsondata['success'] = FALSE;
-	        $jsondata['mensaje'] = $error_txt;
-	    } else {
-	        $jsondata['success'] = TRUE;
-	    }
-	    //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
-	    header('Content-type: application/json; charset=utf-8');
-	    echo json_encode($jsondata);
-	    
         break;
     case 'info':
 	    $Qid_item = (integer) \filter_input(INPUT_POST, 'id_item');
-        $error_txt = '';
         $oGesCargo = new GestorCargo();
         $oDesplCargos = $oGesCargo->getDesplCargos();
         $oDesplCargos->setNombre('id_cargo');
@@ -69,16 +58,6 @@ switch($Qque) {
 	    ];
 	    
 	    $jsondata['data'] = json_encode($a_info);
-	    if (!empty($error_txt)) {
-	        $jsondata['success'] = FALSE;
-	        $jsondata['mensaje'] = $error_txt;
-	    } else {
-	        $jsondata['success'] = TRUE;
-	    }
-	    //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
-	    header('Content-type: application/json; charset=utf-8');
-	    echo json_encode($jsondata);
-	    
         break;
 	case 'get_listado':
 	    $Qid_tramite = (integer) \filter_input(INPUT_POST, 'id_tramite');
@@ -115,6 +94,7 @@ switch($Qque) {
         $txt.= _("nuevo");
         $txt.='</button>';
 		echo $txt;
+		exit();
 		break;
 	case 'update':
 	    $Qid_item = (integer) \filter_input(INPUT_POST, 'id_item');
@@ -129,16 +109,27 @@ switch($Qque) {
 		$oTramiteCargo->setOrden_tramite($Qorden_tramite);	
 		$oTramiteCargo->setMultiple($Qmultiple);	
 		if ($oTramiteCargo->DBGuardar() === FALSE) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oTramiteCargo->getErrorTxt();
+			$error_txt .= $oTramiteCargo->getErrorTxt();
 		}
 		break;
 	case 'eliminar':
 	    $Qid_item = (integer) \filter_input(INPUT_POST, 'id_item');
 		$oTramiteCargo = new TramiteCargo(array('id_item'=>$Qid_item));
 		if ($oTramiteCargo->DBEliminar() === FALSE) {
-			echo _("hay un error, no se ha eliminado");
-			echo "\n".$oTramiteCargo->getErrorTxt();
+			$error_txt .= $oTramiteCargo->getErrorTxt();
 		}
 		break;
 }
+
+if (empty($error_txt)) {
+    $jsondata['success'] = true;
+    $jsondata['mensaje'] = 'ok';
+} else {
+    $jsondata['success'] = false;
+    $jsondata['mensaje'] = $error_txt;
+}
+
+//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+header('Content-type: application/json; charset=utf-8');
+echo json_encode($jsondata);
+exit();
