@@ -34,6 +34,28 @@ class GestorEtiquetaDocumento Extends core\ClaseGestor {
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
+	public function getArrayDocumentosTodos() {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+
+        $sQuery = "SELECT DISTINCT id_doc
+            FROM $nom_tabla
+            ";
+            
+        if (($oDbl->query($sQuery)) === FALSE) {
+            $sClauError = 'GestorExpedienteDB.queryPreparar';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        $a_documentos = [];
+        foreach ($oDbl->query($sQuery) as $aDades) {
+            $a_documentos[] = $aDades['id_doc'];
+        }
+
+	    return $a_documentos;
+	    
+	}
+	
 	public function getArrayDocumentos($a_etiquetas,$andOr='OR') {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
@@ -62,14 +84,14 @@ class GestorEtiquetaDocumento Extends core\ClaseGestor {
 	            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 	            return FALSE;
 	        }
-	        $a_docuementos = [];
+	        $a_documentos = [];
 	        foreach ($oDbl->query($sQuery) as $aDades) {
-	            $a_docuementos[] = $aDades['id_doc'];
+	            $a_documentos[] = $aDades['id_doc'];
 	        }
 	    } else {
-	        $a_docuementos = [];
+	        $a_documentos = [];
 	    }
-	    return $a_docuementos;
+	    return $a_documentos;
 	    
 	}
 	

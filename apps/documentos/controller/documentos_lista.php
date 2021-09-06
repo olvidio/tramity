@@ -16,6 +16,7 @@ require_once ("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qque = (string) \filter_input(INPUT_POST, 'que');
 
 $oTabla = new DocumentoLista();
 $oTabla->setFiltro($Qfiltro);
@@ -33,16 +34,21 @@ $chk_or = ($QandOr == 'OR')? 'checked' : '';
 // por defecto 'AND':
 $chk_and = (($QandOr == 'AND') OR empty($QandOr))? 'checked' : '';
 
+$cDocumentos = [];
 if (!empty($a_etiquetas_filtered)) {
     $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
     $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($a_etiquetas_filtered,$QandOr);
-    if (!empty($cDocumentos)) {
-        $aWhere['id_doc'] = implode(',',$cDocumentos);
-        $aOperador['id_doc'] = 'IN';
-    } else {
-        // No hay ninguno. No importa el resto de condiciones
-        $msg = _("No hay ningún documento con estas etiquetas");
-    }
+} elseif($Qque == 'todos') {
+    $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
+    $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentosTodos();
+}
+
+if (!empty($cDocumentos)) {
+    $aWhere['id_doc'] = implode(',',$cDocumentos);
+    $aOperador['id_doc'] = 'IN';
+} else {
+    // No hay ninguno. No importa el resto de condiciones
+    $msg = _("No hay ningún documento");
 }
 
 $gesEtiquetas = new GestorEtiqueta();

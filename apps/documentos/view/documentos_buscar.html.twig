@@ -1,5 +1,5 @@
 <div id="condiciones">
-<form id="que" name="que" action="" method="post">
+<form id="frm_que" name="frm_que" action="" method="post">
 <input type="hidden" id="filtro" name="filtro" value="{{ filtro }}">
 <input type="hidden" id="que" name="que" value="buscar">
 
@@ -29,16 +29,28 @@
       </span>
     </div>
     <!--  --------------------  Botones --------------------------  -->
-      <div class="col-2">
-        <button id="btn_guardar" type="button" tabindex='90' class="w-100 btn btn-primary" onClick="fnjs_buscar('#que');" >
-          {{ "ver lista"|trans }}
-        </button>
+      <div class="row col-3">
+        <div class="col-6">
+          <button id="btn_buscar" type="button" tabindex='90' class="w-100 btn btn-primary" onClick="fnjs_buscar('#frm_que');" >
+            {{ "ver lista"|trans }}
+          </button>
+        </div>
+        <div class="col-6">
+          <button id="btn_buscar_all" type="button" tabindex='91' class="w-100 btn btn-primary" onClick="fnjs_buscar_todos('#frm_que');" >
+            {{ "ver todos"|trans }}
+          </button>
+        </div>
       </div>
 </form>
 </div>
 
 {{ include ('_documentos_js.html.twig') }}
 <script>
+fnjs_buscar_todos=function(formulario){
+    $('#que').val('todos');
+    $(formulario).attr('action',"apps/documentos/controller/documentos_lista.php");
+    fnjs_enviar_formulario(formulario,'#main');
+}
 fnjs_buscar=function(formulario){
     $(formulario).attr('action',"apps/documentos/controller/documentos_lista.php");
     fnjs_enviar_formulario(formulario,'#main');
