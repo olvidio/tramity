@@ -31,6 +31,7 @@ switch($Qque) {
             $id_oficina_actual = $oUsuario->getId_oficina();
             $_SESSION['session_auth']['mi_id_oficina'] = $id_oficina_actual;
 		}
+		echo "role cambiado a $Qrole";
         break;
 	case "eliminar":
 	    //$Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');

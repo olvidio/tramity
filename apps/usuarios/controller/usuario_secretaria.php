@@ -3,9 +3,10 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\EntradaLista;
-use expedientes\model\ExpedienteLista;
-use expedientes\model\EscritoLista;
 use expedientes\model\Escrito;
+use expedientes\model\EscritoLista;
+use expedientes\model\ExpedienteLista;
+use usuarios\model\entity\Usuario;
 
 require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -25,12 +26,8 @@ if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED
 }
 
 $username = $_SESSION['session_auth']['username'];
-//oficinas adicionales (suplencias..)
-/*
-if ($username == 'scdl') {
-    $a_roles_posibles = [ 'scdl', 'secretaria'];
-}
-*/
+$oUsuario = new Usuario(ConfigGlobal::mi_id_usuario());
+$username = empty($oUsuario->getNom_usuario())? $username : $oUsuario->getNom_usuario();
 
 $Qtabs = (string) \filter_input(INPUT_POST, 'tabs');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
@@ -255,10 +252,11 @@ ksort($a_pills);
 
 $pagina_profile = web\Hash::link('apps/usuarios/controller/personal.php?'.http_build_query([]));
 $pagina_etiquetas = web\Hash::link('apps/etiquetas/controller/etiqueta_lista.php?'.http_build_query([]));
+$url_ajax = web\Hash::link('apps/usuarios/controller/usuario_update.php');
 
 $mi_idioma = ConfigGlobal::mi_Idioma_short();
 $a_campos = [
-    'oficina' => 'Secretaría',
+    'role_actual' => ConfigGlobal::role_actual(),
     'username' => $username,
     'mi_idioma' => $mi_idioma,
     'error_fecha' => $_SESSION['oConfig']->getPlazoError(),
@@ -266,12 +264,13 @@ $a_campos = [
     'pagina_etiquetas' => $pagina_etiquetas,
     // para tabs
     'a_pills' => $a_pills,
-    'vista' => 'scdl',
+    'vista' => 'secretaria',
     'filtro' => $filtro,
-    'role_actual' => ConfigGlobal::role_actual(),
     'a_roles' => $_SESSION['session_auth']['a_roles'],
     'peticion_ajax' => $peticion_ajax,
     'pagina_inicio' => $pagina_inicio,
+    // problemas con https
+    'url_ajax' => $url_ajax,
 ];
 $oView = new ViewTwig('usuarios/controller');
 

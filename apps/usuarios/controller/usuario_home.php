@@ -274,6 +274,7 @@ ksort($a_pills);
 
 $pagina_profile = web\Hash::link('apps/usuarios/controller/personal.php?'.http_build_query([]));
 $pagina_etiquetas = web\Hash::link('apps/etiquetas/controller/etiqueta_lista.php?'.http_build_query([]));
+$url_ajax = web\Hash::link('apps/usuarios/controller/usuario_update.php');
 
 $mi_idioma = ConfigGlobal::mi_Idioma_short();
 $a_campos = [
@@ -290,6 +291,8 @@ $a_campos = [
     'a_roles' => $_SESSION['session_auth']['a_roles'],
     'peticion_ajax' => $peticion_ajax,
     'pagina_inicio' => $pagina_inicio,
+    // problemas con https
+    'url_ajax' => $url_ajax,
 ];
 $oView = new ViewTwig('usuarios/controller');
 
