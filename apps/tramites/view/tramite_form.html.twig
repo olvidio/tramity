@@ -1,6 +1,6 @@
 <script>
 fnjs_guardar=function(formulario){
-	datos = $('#seleccionados').serialize();	
+	var datos = $(formulario).serialize();	
 	request=$.ajax({
 		data: datos,
 		url: '{{ url_update }}',

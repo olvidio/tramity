@@ -12,6 +12,7 @@ use tramites\model\entity\Tramite;
 
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
+$error_txt = '';
 switch($Qque) {
     case "eliminar":
         $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -19,8 +20,7 @@ switch($Qque) {
             $Qid_tramite = (integer) strtok($a_sel[0],"#");
             $oTramite = new Tramite($Qid_tramite);
             if ($oTramite->DBEliminar() === FALSE) {
-                echo _("hay un error, no se ha eliminado");
-                echo "\n".$oTramite->getErrorTxt();
+                $error_txt .= $oTramite->getErrorTxt();
             }
         }
         break;
@@ -38,8 +38,7 @@ switch($Qque) {
         $oTramite->setOrden($Qorden);
         $oTramite->setBreve($Qbreve);
 		if ($oTramite->DBGuardar() === FALSE) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oTramite->getErrorTxt();
+			$error_txt .= $oTramite->getErrorTxt();
 		}
         break;
 	case "nuevo":
@@ -52,8 +51,20 @@ switch($Qque) {
         $oTramite->setOrden($Qorden);
         $oTramite->setBreve($Qbreve);
         if ($oTramite->DBGuardar() === FALSE) {
-            echo _("hay un error, no se ha guardado");
-            echo "\n".$oTramite->getErrorTxt();
+			$error_txt .= $oTramite->getErrorTxt();
         }
 		break;
 }
+		
+if (empty($error_txt)) {
+    $jsondata['success'] = true;
+    $jsondata['mensaje'] = 'ok';
+} else {
+    $jsondata['success'] = false;
+    $jsondata['mensaje'] = $error_txt;
+}
+
+//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+header('Content-type: application/json; charset=utf-8');
+echo json_encode($jsondata);
+exit();
