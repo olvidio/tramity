@@ -35,11 +35,15 @@
 
 <script type="text/javascript">
 fnjs_cmb_role=function(role){
+	if (event != null) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    }
+	
 	//cambio las etiquetas:
 	$("#dropdownMenuLink").html(role);
 	
-	/* Hay problemas aleatorios al mandar esta url. Hay que añadir el https y pasa menos */
-    //var url_ajax = 'https://tramity.local/apps/usuarios/controller/usuario_update.php';
     var url_ajax = '{{ url_ajax }}';
     var param_json = { que: 'role', role:role };
     request=$.ajax({
@@ -47,12 +51,10 @@ fnjs_cmb_role=function(role){
         url: url_ajax,
         method: 'POST'
     });
-    /* creo que no hace falta...
+    //alert('Cambio de role');
     request.done( function (rta) {
-    	alert('BROME');
         fnjs_update_div('body', '');
     });
-    */
 }
 
 tabs_hide=function(){
