@@ -1,5 +1,6 @@
 <?php
 namespace documentos\model\entity;
+use etiquetas\model\entity\GestorEtiqueta;
 use core;
 /**
  * GestorEtiquetaDocumento
@@ -35,24 +36,16 @@ class GestorEtiquetaDocumento Extends core\ClaseGestor {
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
 	public function getArrayDocumentosTodos() {
-	    $oDbl = $this->getoDbl();
-	    $nom_tabla = $this->getNomTabla();
+	    // todas las etiquetas del usuario actual:
+	    $gesEtiquetas = new GestorEtiqueta();
+	    $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+	    $a_etiquetas = [];
+	    foreach ($cEtiquetas as $oEtiqueta) {
+	        $id_etiqueta = $oEtiqueta->getId_etiqueta();
+	        $a_etiquetas[]=$id_etiqueta;
+	    }
 
-        $sQuery = "SELECT DISTINCT id_doc
-            FROM $nom_tabla
-            ";
-            
-        if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'GestorExpedienteDB.queryPreparar';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        $a_documentos = [];
-        foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_documentos[] = $aDades['id_doc'];
-        }
-
-	    return $a_documentos;
+	    return $this->getArrayDocumentos($a_etiquetas);
 	    
 	}
 	
