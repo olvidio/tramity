@@ -732,10 +732,13 @@ class EscritoDB Extends core\ClasePropiedades {
 	 * @return string sentradilla
 	 */
 	function getEntradilla() {
+	    /*
 		if (!isset($this->sentradilla) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
 		return $this->sentradilla;
+		*/
+		return "Si veus això avisa al Dani";
 	}
 	/**
 	 * estableix el valor de l'atribut sentradilla de EscritoDB

@@ -158,10 +158,12 @@ if ($Qid_expediente) {
                     'prioridad_sel' => $Qprioridad_sel,
         ];
         $pag_escrito =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
-        $pag_rev =  web\Hash::link('apps/expedientes/controller/escrito_rev.php?'.http_build_query($a_cosas));
-            
+        //$pag_rev =  web\Hash::link('apps/expedientes/controller/escrito_rev.php?'.http_build_query($a_cosas));
+        
         $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
-        $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >"._("rev.texto")."</span>";
+        //$a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >"._("rev.texto")."</span>";
+        $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito('$id_escrito');\" >"._("rev.texto")."</span>";
+            
         // Sólo se puede eliminar si no se ha enviado. Si se ha enviado se puede quitar del expediente:
         $f_salida = $oEscrito->getF_salida()->getIso();
         if (empty($f_salida)) {
