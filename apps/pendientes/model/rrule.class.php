@@ -148,12 +148,15 @@ class Rrule {
                         break;
                     case "num":
                         foreach ($dias_db as $dia) {
+                            $txt_alert = '';
                             $dia = trim($dia);
-                            if ($dia > 28) {
+                            if ($mes == 2 && $dia > 28) {
                                 $txt_alert = sprintf(_("Cuidado con febrero para el día: %s"),$dia);
-                                if ($dia > 30) {
-                                    $txt_alert = _("Cuidado con los meses de menos de 31 días");
-                                }
+                            }
+                            if ($dia > 30 && in_array($mes, [4,6,9,11])) {
+                                $txt_alert = _("Cuidado con los meses de menos de 31 días");
+                            }
+                            if (!empty($txt_alert)) {
                                 $a_campos = [ 'txt_alert' => $txt_alert ];
                                 $oView = new ViewTwig('expedientes/controller');
                                 echo $oView->renderizar('alerta.html.twig',$a_campos);
