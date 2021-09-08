@@ -114,18 +114,6 @@ $filtro = 'permanentes';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
 $a_pills[$num_orden] = $pill;
 
-// pendientes = 6;
-$filtro = 'pendientes';
-    $active = ($filtro == $Qfiltro)? 'active' : '';
-    $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 6;
-    $text = _("pendientes");
-    $oExpedienteLista->setFiltro($filtro);
-    $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active];
-$a_pills[$num_orden] = $pill;
-
 // introducir entradas
 $filtro = 'en_ingresado';
     $active = ($filtro == $Qfiltro)? 'active' : '';
