@@ -1,31 +1,42 @@
 <div class="mb-3 row">
 <input type='hidden' id='periodico_tipo' name='periodico_tipo' value='{{ periodico_tipo }}'>
-  <div class="col-1">
-	<h2>{{ "Repetición"|trans }}</h2>
+  <div class="col-2">
+	<h2>{{ "Repetición"|trans }}:</h2>
   </div>
-  <div class="col-1"></div>
-<button id="btn_d_a" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_tab('#periodico_d_a')">
-    {{ "anual"|trans }}
-</button>
-<button id="btn_d_m" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_tab('#periodico_d_m')">
-    {{ "mensual"| trans }}
-</button>
-<button id="btn_d_s" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_tab('#periodico_d_s')">
-    {{ "semanal"|trans }}
-</button>
-<button id="btn_d_d" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_tab('#periodico_d_d')">
-    {{ "diaria"|trans }}
-</button>
+  <div class="col-2">
+	<label class="col-3 form-label">{{ "desde"|trans }}</label>
+		<input tabindex="100" id="f_inicio" name="f_inicio" size="12" value="{{ f_inicio }}" class="fecha" onchange="fnjs_cambiar_estado()">
+  </div>
+  <div class="col-2">
+	<label class="col-3 form-label">{{ "hasta"|trans }}</label>
+		<input tabindex="10" id="f_until" name="f_until" size="12" value="{{ f_until }}" class="fecha" onchange="fnjs_cambiar_estado()">
+  </div>
 </div>
 <div class="mb-3 row">
-	<label class="col-1 form-label">{{ "desde"|trans }}</label>
-		<input tabindex="100" id="f_inicio" name="f_inicio" size="12" value="{{ f_inicio }}" class="fecha" onchange="fnjs_cambiar_estado()">
-	<label class="col-1 form-label">{{ "hasta"|trans }}</label>
-		<input tabindex="10" id="f_until" name="f_until" size="12" value="{{ f_until }}" class="fecha" onchange="fnjs_cambiar_estado()">
+  <div class="col-1">
+    <button id="btn_d_a" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_tab('#periodico_d_a')">
+      {{ "anual"|trans }}
+    </button>
+  </div>
+  <div class="col-1">
+    <button id="btn_d_m" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_tab('#periodico_d_m')">
+        {{ "mensual"| trans }}
+    </button>
+  </div>
+  <div class="col-1">
+    <button id="btn_d_s" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_tab('#periodico_d_s')">
+        {{ "semanal"|trans }}
+    </button>
+  </div>
+  <div class="col-1">
+    <button id="btn_d_d" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_tab('#periodico_d_d')">
+        {{ "diaria"|trans }}
+    </button>
 </div>
 
+
 <!-- *********************************** Peridico dia del año *************************************** -->
-<div id="periodico_d_a" style="{{ display_d_a }}">
+<div id="periodico_d_a" style="{{ display_d_a }}" class="mt-4">
 <div class="mb-3 row">
   <div class="col-5"><input type="radio" id="id_a_radio_1" name="tipo_dia" value="num_ini" {{ chk_a_num_ini }}>
     {{ "anualmente"|trans }}
@@ -76,7 +87,7 @@
   
 </div>
 <!-- *********************************** Periodico dia del mes *************************************** -->
-<div id="periodico_d_m" style="{{ display_d_m }}">
+<div id="periodico_d_m" style="{{ display_d_m }}" class="mt-4">
     <div class="mb-3 row">
       <div class="col-5"><input type="radio" id="id_radio_1" name="tipo_dia" value="num_ini" {{ chk_m_num_ini }}>
         {{ "mensualmente"|trans }}
@@ -100,7 +111,7 @@
     </div>
 </div>
 <!-- *********************************** Periodico dia de la semana *************************************** -->
-<div id="periodico_d_s" style="{{ display_d_s }}">
+<div id="periodico_d_s" style="{{ display_d_s }}" class="mt-4">
     <div class="mb-3 row">
       <div class="col-5"><input type="radio" id="id_s_radio_1" name="tipo_dia" value="num_ini" {{ chk_s_num_ini }}>
         {{ "semanalmente"|trans }}
@@ -118,7 +129,7 @@
 	</div>
 </div>
 <!-- *********************************** Periodico diario *************************************** -->
-<div id="periodico_d_d" style="{{ display_d_d }}">
+<div id="periodico_d_d" style="{{ display_d_d }}" class="mt-4">
     <div class="mb-3 row">
       <div class="col-5"><input type="radio" id="id_d_radio_1" name="tipo_dia" value="num_ini" {{ chk_d_num_ini }}>
         {{ "diariamente"|trans }}
