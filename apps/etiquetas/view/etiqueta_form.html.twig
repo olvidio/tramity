@@ -10,9 +10,21 @@
           <input type="text" class="form-control col-6" id="nom_etiqueta" name="nom_etiqueta" placeholder="nom_etiqueta" value="{{ nom_etiqueta }}">
         </div>
         <div class="mb-3">
-          <label for="example" class="form-label">{{ "etiqueta"|trans }}:</label>
-          <input name="oficina" type="checkbox" checked data-bs-toggle="toggle" data-on="{{ "de la oficina"|trans }}" data-off="{{ "Personal"|trans }}" data-onstyle="success" data-offstyle="danger">
+          <label for="example" class="form-label">{{ "entorno"|trans }}:</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="oficina" value=1 id="oficina1" {{ chk_oficina }}>
+            <label class="form-check-label" for="oficina1">
+              {{ "de la oficina"|trans }}
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="oficina" value=0 id="oficina2" {{ chk_personal }}>
+            <label class="form-check-label" for="oficina2">
+              {{ "Personal"|trans }}
+            </label>
+          </div>
         </div>
+        
         <div class="mb-3">
           <button class="btn btn-secondary" onClick="fnjs_cancelar();" >
             {{ "Cancelar"|trans }}
@@ -24,10 +36,7 @@
       </form>
   </div>
 </div>
-<!-- Bootstrap Switch Button -->
-<!--  OJO: si se pone en la página superior no funciona, alguien debe sobreescribir... -->
-<!--  OJO: El java script está en 'usuario_home' para que se cargue sólo una vez -->
-<link type="text/css" rel='stylesheet' href='node_modules/mdb-ui-kit/css/mdb.min.css' />
+
 <script>
 fnjs_cancelar=function(){
     event.preventDefault();
@@ -62,8 +71,4 @@ fnjs_guardar=function(){
         }
     });
 }
-
-$(document).ready(function() {
-    $('input[type=checkbox][data-bs-toggle^=toggle]').bootstrapToggle();
-});
 </script>

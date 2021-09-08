@@ -3,6 +3,7 @@ use core\ViewTwig;
 use etiquetas\model\entity\Etiqueta;
 use lugares\model\entity\GestorLugar;
 use web\Desplegable;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -54,29 +55,36 @@ if (isset($_POST['stack'])) {
 }
 $oPosicion->setParametros(array('id_etiqueta'=>$Qid_etiqueta),1);
 
+$chk_oficina = 'checked';
+$chk_personal = '';
 if (!empty($Qid_etiqueta)) {
     $que_user='guardar';
     $oEtiqueta = new Etiqueta(array('id_etiqueta'=>$Qid_etiqueta));
 
     $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+    $oficina = $oEtiqueta->getOficina();
+    if (is_true($oficina)) {
+        $chk_oficina = 'checked';
+        $chk_personal = '';
+    } else {
+        $chk_oficina = '';
+        $chk_personal = 'checked';
+    }
 } else {
     $que_user = 'nuevo';
     $nom_etiqueta = '';
 }
 
-$camposForm = 'que!sigla!dl!region!nombre!tipo_ctr!tipo_labor';
+$camposForm = 'que!nom_etiqueta';
 $oHash = new web\Hash();
 $oHash->setcamposForm($camposForm);
-$oHash->setCamposChk('anulado');
+$oHash->setCamposChk('oficina');
 $a_camposHidden = array(
         'id_etiqueta' => $Qid_etiqueta,
         'quien' => $Qquien,
         'que' => 'guardar',
         );
 $oHash->setArraycamposHidden($a_camposHidden);
-
-$txt_guardar=_("guardar datos etiqueta");
-$txt_eliminar = _("¿Está seguro que desea quitar este permiso?");
 
 $a_campos = [
             'oPosicion' => $oPosicion,
@@ -85,8 +93,8 @@ $a_campos = [
             'quien' => $Qquien,
             'oHash' => $oHash,
             'nom_etiqueta' => $nom_etiqueta,
-            'txt_guardar' => $txt_guardar,
-            'txt_eliminar' => $txt_eliminar,
+            'chk_oficina' => $chk_oficina,
+            'chk_personal' => $chk_personal,
             ];
 
 $oView = new ViewTwig('etiquetas/controller');
