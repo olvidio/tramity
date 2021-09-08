@@ -71,6 +71,7 @@ $a_campos = [
 $oView = new ViewTwig('documentos/controller');
 echo $oView->renderizar('documentos_buscar.html.twig',$a_campos);
 
+$oTabla->setQue($Qque);
 $oTabla->setAndOr($QandOr);
 $oTabla->setEtiquetas($a_etiquetas_filtered);
 $oTabla->setAWhere($aWhere);

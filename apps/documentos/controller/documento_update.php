@@ -45,8 +45,17 @@ switch($Qque) {
         $oDocumento = new DocumentoDB($Qid_doc);
         if ($oDocumento->DBEliminar() === FALSE) {
             $error_txt .= $oDocumento->getErrorTxt();
-            exit($error_txt);
         }
+        if (!empty($error_txt)) {
+            $jsondata['success'] = FALSE;
+            $jsondata['mensaje'] = $error_txt;
+        } else {
+            $jsondata['success'] = TRUE;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
         break;
     case 'upload_adjunto':
         

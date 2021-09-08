@@ -24,7 +24,7 @@
       <td>{{ row.etiquetas|raw }}</td>
       <td>{{ row.f_mod|raw }}</td>
       <td>{{ row.tipo|raw }}</td>
-      <td>{{ row.accion|raw }}</td>
+      <td>{{ row.link_accion|raw }}</td>
     </tr>
     {% endfor %}
   </tbody>
@@ -58,5 +58,25 @@ fnjs_revisar_documento=function(id_doc) {
 	event.stopPropagation();
 	event.stopImmediatePropagation();
 	return false;
+}
+
+fnjs_eliminar_documento=function(id_documento){
+    seguro=confirm("{{ "¿Está Seguro que desea borrar este documento?"|trans }}");
+    if (seguro) {
+        var param_json = { que: 'eliminar', id_doc: id_documento };
+        request=$.ajax({
+            data: param_json,
+            url: '{{ url_update|raw }}',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done( function (json) {
+        	if (json.success != true) {
+        		alert (json.mensaje);
+            } else {
+                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            }
+        });
+    }
 }
 </script>

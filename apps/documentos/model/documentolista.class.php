@@ -39,6 +39,11 @@ class DocumentoLista {
      * @var string
      */
     private $andOr;
+    /**
+     * 
+     * @var string
+     */
+    private $que;
     
 
     public function mostrarTabla() {
@@ -48,7 +53,6 @@ class DocumentoLista {
         $oDocumento = new Documento();
         $a_visibilidad = $oDocumento->getArrayVisibilidad();
         
-        $pagina_accion = ConfigGlobal::getWeb().'/apps/documentos/controller/expediente_accion.php';
         $pagina_mod = ConfigGlobal::getWeb().'/apps/documentos/controller/documento_form.php';
         
         $a_documentos = [];
@@ -72,8 +76,6 @@ class DocumentoLista {
                               'etiquetas' => $this->aEtiquetas,
                               'andOr' => $this->andOr,
                 ];
-                
-                $link_accion = Hash::link($pagina_accion.'?'.http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
                 
                 $tipo_doc = $oDocumento->getTipo_doc();
@@ -89,7 +91,7 @@ class DocumentoLista {
                 }
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >"._("datos")."</span>";
                 
-                $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_accion');\" >"._("acción")."</span>";
+                $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_eliminar_documento('$id_doc');\" >"._("eliminar")."</span>";
                 
                 $tipo_doc = $oDocumento->getTipo_doc(); 
                 $tipo_doc_txt = empty($aTipoDoc[$tipo_doc])? $tipo_doc : $aTipoDoc[$tipo_doc]; 
@@ -115,6 +117,7 @@ class DocumentoLista {
         $a_cosas = [ 'filtro' => $filtro,
                       'etiquetas' => $this->aEtiquetas,
                       'andOr' => $this->andOr,
+                      'que' => $this->que,
         ];
         $pagina_cancel = Hash::link('apps/documentos/controller/documentos_lista.php?'.http_build_query($a_cosas));
         $pagina_nueva = Hash::link('apps/documentos/controller/documento_form.php?'.http_build_query($a_cosas));
@@ -242,7 +245,19 @@ class DocumentoLista {
     {
         $this->andOr = $andOr;
     }
+    /**
+     * @return string
+     */
+    public function getQue()
+    {
+        return $this->que;
+    }
 
-
-
+    /**
+     * @param string $que
+     */
+    public function setQue($que)
+    {
+        $this->que = $que;
+    }
 }
