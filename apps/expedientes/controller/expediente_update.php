@@ -262,7 +262,7 @@ switch($Qque) {
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente, 'cargo_tipo' => Cargo::CARGO_REUNION]);
         foreach($cFirmas as $oFirma) {
             $oFirma->DBCarregar();
-            if (ConfigGlobal::mi_usuario_cargo() === 'vcd') { // No sé si hace falta??
+            if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
                 $oFirma->setValor(Firma::V_D_OK);
             } else {
                 $oFirma->setValor(Firma::V_OK);
@@ -329,7 +329,7 @@ switch($Qque) {
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente, 'cargo_tipo' => Cargo::CARGO_DISTRIBUIR]);
         foreach($cFirmas as $oFirma) {
             $oFirma->DBCarregar();
-            if (ConfigGlobal::mi_usuario_cargo() === 'vcd') { // No sé si hace falta??
+            if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
                 $oFirma->setValor(Firma::V_D_OK);
             } else {
                 $oFirma->setValor(Firma::V_OK);
@@ -786,7 +786,7 @@ switch($Qque) {
             $oFirmaPrimera = $gesFirmas->getPrimeraFirma($id_expediente);
             $id_primer_cargo = $oFirmaPrimera->getId_cargo();
             if ($id_primer_cargo == ConfigGlobal::role_id_cargo()) {
-                if (ConfigGlobal::mi_usuario_cargo() === 'vcd') { // No sé si hace falta??
+                if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
                     $oFirmaPrimera->setValor(Firma::V_D_OK);
                 } else {
                     $oFirmaPrimera->setValor(Firma::V_OK);

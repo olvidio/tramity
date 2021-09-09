@@ -164,7 +164,7 @@ $a_pills[$num_orden] = $pill;
 
 // Entradas:
 // Sólo para vcd
-if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
+if (ConfigGlobal::role_actual() === 'vcd') {
     // entradas = 11;
     $filtro = 'en_ingresado';
         $active = ($filtro == $Qfiltro)? 'active' : '';

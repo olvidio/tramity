@@ -539,7 +539,7 @@ class GestorFirma Extends core\ClaseGestor {
                 const V_D_RECHAZADO    = 26;  // sólo vcd
                 const V_D_VISTO_BUENO  = 27;  // sólo vcd VºBº
              */
-            if (ConfigGlobal::mi_usuario_cargo() === 'vcd' && ConfigGlobal::role_id_cargo() == $id_cargo) {
+            if (ConfigGlobal::role_actual() === 'vcd' && ConfigGlobal::role_id_cargo() == $id_cargo) {
                 if ($valor == Firma::V_VISTO) {
                     return FALSE;
                 }

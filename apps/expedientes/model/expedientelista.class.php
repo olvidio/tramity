@@ -341,7 +341,7 @@ class ExpedienteLista {
                 }
                 break;
             case 'circulando':
-                if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
+                if (ConfigGlobal::role_actual() === 'vcd') {
                     $a_tipos_acabado = [ Expediente::ESTADO_CIRCULANDO,
                                          Expediente::ESTADO_ESPERA,
                                         ];

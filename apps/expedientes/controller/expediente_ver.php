@@ -60,7 +60,7 @@ $gesFirmas = new GestorFirma();
 $oFirma = new Firma();
 $a_firmas = [];
 $rango = 'voto';
-if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
+if (ConfigGlobal::role_actual() === 'vcd') {
     // Ver cual toca
     $aWhere = ['id_expediente' => $Qid_expediente,
                 'id_cargo' => ConfigGlobal::role_id_cargo(),

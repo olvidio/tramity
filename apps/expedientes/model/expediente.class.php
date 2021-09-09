@@ -614,7 +614,6 @@ class Expediente Extends expedienteDB {
                             $oCargo = new Cargo($id_cargo);
                             $orden_oficina++;
                             $id_cargo_of = $oCargo->getId_cargo();
-                            //if ($oCargo->getCargo() == 'vcd') continue;
                             $oFirma = new Firma();
                             $oFirma->setId_expediente($this->iid_expediente);
                             $oFirma->setId_tramite($id_tramite);

@@ -236,7 +236,7 @@ class EntradaLista {
             case 'en_ingresado':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
                 $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
-                if (ConfigGlobal::mi_usuario_cargo() === 'vcd') {
+                if (ConfigGlobal::role_actual() === 'vcd') {
                     //$slide_mode = 't';
                     $aQuery = [ 'filtro' => $filtro, 'slide_mode' => 't'];
                     $pagina_nueva = Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
