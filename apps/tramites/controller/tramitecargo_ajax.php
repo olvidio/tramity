@@ -84,7 +84,7 @@ switch($Qque) {
 			$txt.='</button>';
 			$txt.='</td>';
 			$txt.='<td>';
-			$txt.='<button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onclick=fnjs_eliminar('.$id_item.')>';
+			$txt.='<button type="button" class="btn btn-outline-danger" onclick=fnjs_eliminar('.$id_item.')>';
 			$txt.= _("eliminar");
 			$txt.='</button>';
 			$txt.='</td><tr>';

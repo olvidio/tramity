@@ -39,26 +39,27 @@ fnjs_actualizar=function(){
 }
 
 fnjs_eliminar=function(id_item){
-	if (confirm("{{ txt_eliminar }}")) {
-        var url="{{ url_ajax }}";
-		var parametros='que=eliminar&id_item='+id_item+'{{ h_eliminar|raw }}';
-        $.ajax({
-            url: url,
-            method: 'POST',
-            data: parametros
-		})
-		.done(function (rta_txt) {
-			if (rta_txt != '' && rta_txt != '\n') {
-				alert ('respuesta: '+rta_txt);
-			} else {
-				fnjs_actualizar();
-			}
-        });
-	}
 	event.preventDefault();
 	event.stopPropagation();
 	event.stopImmediatePropagation();
-	return false;
+	
+	if (confirm("{{ txt_eliminar }}")) {
+		var parametros='que=eliminar&id_item='+id_item+'{{ h_eliminar|raw }}';
+        request=$.ajax({
+            data: parametros,
+            url: '{{ url_ajax }}',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done( function (json) {
+            if (json.success != true) {
+                alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+            } else {
+                fnjs_actualizar();
+                $('#ModalBuscar').modal('hide');
+            }
+        });
+	}
 }
 
 fnjs_cargar_item=function(item) {
