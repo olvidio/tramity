@@ -16,6 +16,7 @@ require_once ("apps/core/global_object.inc");
 $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qid_escrito = (integer) \filter_input(INPUT_POST, 'id_escrito');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
 
 $oEscrito = new Escrito($Qid_escrito);
@@ -43,8 +44,14 @@ if (!empty($Qid_escrito)) {
 
 $a_cosas = [ 'id_expediente' => $Qid_expediente,
     'filtro' => $Qfiltro,
+    'modo' => $Qmodo,
 ];
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_ver.php?'.http_build_query($a_cosas));
+
+if ($Qfiltro == 'distribuir') {
+    $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query($a_cosas));
+} else {
+    $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_ver.php?'.http_build_query($a_cosas));
+}
     
     
 $a_campos = [
