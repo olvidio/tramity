@@ -42,7 +42,10 @@ function upload() {
             //Make sure we have a file path
             if ($tmpFilePath != "" && $Qid_escrito){
                 
-                $contenido_doc=file_get_contents($tmpFilePath);
+                //$contenido_doc=file_get_contents($tmpFilePath);
+                $fp = fopen($tmpFilePath, 'rb');
+                $contenido_doc = fread($fp, filesize($tmpFilePath));
+                $contenido_encoded = base64_encode($contenido_doc);
                 
                 if (!empty($Qid_item)) {
                     // update
@@ -56,7 +59,7 @@ function upload() {
                 $oEscritoAdjunto->setId_escrito($Qid_escrito);
                 $oEscritoAdjunto->setNom($fileName);
                 $oEscritoAdjunto->setTipo_doc(Documento::DOC_UPLOAD);
-                $oEscritoAdjunto->setAdjunto($contenido_doc);
+                $oEscritoAdjunto->setAdjunto($contenido_encoded);
                 
                 if ($oEscritoAdjunto->DBGuardar() !== FALSE) {
                     $id_item = $oEscritoAdjunto->getId_item();
