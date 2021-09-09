@@ -89,7 +89,7 @@ fnjs_explotar=function(){
 	});
 }
 
-fnjs_guardar=function(quiet=0){
+fnjs_guardar_escrito=function(quiet=0){
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -101,8 +101,6 @@ fnjs_guardar=function(quiet=0){
     }
     
 	var err=0;
-	//var destino=$('#destino').val();
-	var prot_num_destino=$('#prot_num_destino').val();
 	var asunto=$('#asunto').val();
 	var entradilla=$('#entradilla').val();
 	var ponente=$('#id_ponente').val();
@@ -110,8 +108,47 @@ fnjs_guardar=function(quiet=0){
 	var id_escrito=$('#id_escrito').val();
 	var f_escrito=$('#f_escrito').val();
 
-	//if (!destino) { alert("{{ "Debe llenar el campo de destino"|trans|raw }}"); err=1; }
-	//if (!prot_num_destino) { alert("{{ "Debe llenar el campo de protocolo destino"|trans|raw }}"); err=1; }
+	{% if esEscrito %}
+        // grupo_dst + grupos[0]
+        if($('#grupo_dst').is(':checked')) {
+            var form = 'form_escrito';
+            var lista_grupos='';
+            /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+            /* var sel=$('#'+formulario+' table .sel'); */
+            $('select[name^=grupos]').each(function(i){
+                   if ($(this).val() !== '') { 
+	                   if (lista_grupos !== '') { 
+                    	lista_grupos+=',';
+                    }
+                    lista_grupos+=$(this).val();
+                }
+            });
+           if (lista_grupos === '') { 
+               alert("{{ "Debe poner al menos un grupo de destinos"|trans|raw }}");
+               err=1;
+           }
+        } else {
+        // destinos[0]
+            var form = 'form_escrito';
+            var lista_destinos='';
+            /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+            /* var sel=$('#'+formulario+' table .sel'); */
+            $('select[name^=destinos]').each(function(i){
+                   if ($(this).val() !== '') { 
+	                   if (lista_destinos !== '') { 
+                    	lista_destinos+=',';
+                    }
+                    lista_destinos+=$(this).val();
+                }
+            });
+           if (lista_destinos === '') { 
+               alert("{{ "Debe poner al menos un destino"|trans|raw }}");
+               err=1;
+           }
+        
+        }
+	{% endif %}
+	
 	if (!asunto) { alert("{{ "Debe llenar el campo de asunto"|trans|raw }}"); err=1; }
 	//if (!entradilla) { alert("{{ "Debe llenar el campo entradilla"|trans|raw }}"); err=1; }
 	if (!ponente) { alert("{{ "Debe llenar el campo del ponente"|trans|raw }}"); err=1; }
