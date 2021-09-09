@@ -130,11 +130,13 @@ class EscritoLista {
             $ponente = $oEscrito->getCreador();
             $ponente_txt = empty($a_cargos[$ponente])? '?' : $a_cargos[$ponente];
             
+            $tipo_accion = $oEscrito->getAccion();
             
             $a_cosas =  ['id_expediente' => $this->id_expediente,
                 'id_escrito' => $id_escrito,
                 'filtro' => $this->filtro,
                 'modo' => $this->modo,
+                'accion' => $tipo_accion,
             ];
             $pag_escrito =  Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
             $pag_rev =  Hash::link('apps/expedientes/controller/escrito_rev.php?'.http_build_query($a_cosas));
