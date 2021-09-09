@@ -583,6 +583,31 @@ class GestorFirma Extends core\ClaseGestor {
 	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 	        return FALSE;
 	    }
+	    
+	    // Añadir los votos que se han ido añadiendo posteriormente, y no están en el tramite como tal.
+	    // cargo_tipo varias:
+	    $cargo_tipo = Cargo::CARGO_VARIAS;
+	    $aWhere = [ 'valor' => 'x',
+	        'id_expediente' => $id_expediente,
+	        'id_tramite' => $id_tramite_old,
+	        'cargo_tipo' => $cargo_tipo,
+	    ];
+	    $aOperador = [ 'valor' => 'IS NOT NULL'];
+	    $cFirmasVarias = $this->getFirmas($aWhere,$aOperador);
+	    // Buscar el orden-tramite de Varias:
+	    $gesTramiteCargo = new GestorTramiteCargo();
+	    $cTramiteCargo = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS]);
+	    if (!empty($cTramiteCargo)) {
+	        $orden_tramite = $cTramiteCargo[0]->getOrden_tramite();
+	    } else {
+	        return FALSE;
+	    }
+	    foreach ($cFirmasVarias as $oFirma) {
+	        $oFirma->setId_tramite($id_tramite);
+	        $oFirma->setOrden_tramite($orden_tramite);
+	        $oFirma->DBGuardar();
+	    }
+	    
 	    // tipo aclaracion:
 	    $tipo_a = Firma::TIPO_ACLARACION;
 	    // Busco las que tengo (valor is not null) y compruebo que existe la casilla para tipo=voto, y la inserto.
