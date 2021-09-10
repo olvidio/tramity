@@ -565,6 +565,8 @@ class GestorFirma Extends core\ClaseGestor {
 	    $nom_tabla = $this->getNomTabla();
 	    // tipo voto:
 	    $tipo = Firma::TIPO_VOTO;
+	    $cargo_tipo = Cargo::CARGO_VARIAS;
+	    
 	    $sql_update = "UPDATE $nom_tabla new 
                             SET id_usuario=sub.id_usuario, 
                                 valor=sub.valor,
@@ -584,28 +586,35 @@ class GestorFirma Extends core\ClaseGestor {
 	        return FALSE;
 	    }
 	    
-	    // Añadir los votos que se han ido añadiendo posteriormente, y no están en el tramite como tal.
+	    // Añadir los votos que se han ido añadiendo posteriormente, y no están en el tramite como tal (resto_oficinas).
 	    // cargo_tipo varias:
-	    $cargo_tipo = Cargo::CARGO_VARIAS;
-	    $aWhere = [ 'valor' => 'x',
+	    $aWhere = [ //'valor' => 'x',
 	        'id_expediente' => $id_expediente,
 	        'id_tramite' => $id_tramite_old,
 	        'cargo_tipo' => $cargo_tipo,
 	    ];
-	    $aOperador = [ 'valor' => 'IS NOT NULL'];
+	    //$aOperador = [ 'valor' => 'IS NOT NULL'];
+	    $aOperador = [ ];
 	    $cFirmasVarias = $this->getFirmas($aWhere,$aOperador);
 	    // Buscar el orden-tramite de Varias:
 	    $gesTramiteCargo = new GestorTramiteCargo();
 	    $cTramiteCargo = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS]);
 	    if (!empty($cTramiteCargo)) {
 	        $orden_tramite = $cTramiteCargo[0]->getOrden_tramite();
+	        $oExpediente = new Expediente($id_expediente);
+            $a_resto_oficinas = $oExpediente->getResto_oficinas();
+            foreach ($cFirmasVarias as $oFirma) {
+                $id_cargo = $oFirma->getId_cargo();
+                if (in_array($id_cargo,$a_resto_oficinas)) {
+                    continue;
+                }
+                $oFirma->setId_tramite($id_tramite);
+                $oFirma->setOrden_tramite($orden_tramite);
+                $oFirma->DBGuardar();
+            }
+            
 	    } else {
-	        return FALSE;
-	    }
-	    foreach ($cFirmasVarias as $oFirma) {
-	        $oFirma->setId_tramite($id_tramite);
-	        $oFirma->setOrden_tramite($orden_tramite);
-	        $oFirma->DBGuardar();
+	        // No tiene 'varias' en el recorrido 
 	    }
 	    
 	    // tipo aclaracion:
