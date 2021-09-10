@@ -38,7 +38,7 @@ $a_pills = [];
 $oExpedienteLista = new ExpedienteLista();
 
 // Sólo para scdl
-if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
+if (ConfigGlobal::role_actual() === 'scdl') {
     // fijar reunión = 1;
     $filtro = 'fijar_reunion';
         $active = ($filtro == $Qfiltro)? 'active' : '';
