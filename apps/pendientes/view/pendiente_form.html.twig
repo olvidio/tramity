@@ -186,13 +186,17 @@
 </div>
 
   <!--  --------------------  BOTONES --------------------------  -->
-<div>
-  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Volver"|trans }}
-  </button>
-  <button tabindex='90' class="btn btn-success" onClick="fnjs_guardar();" >
-    {{ "guardar"|trans }}
-  </button> 
+<div class="row">
+  <div class="col-2">
+    <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
+      {{ "Volver"|trans }}
+    </button>
+  </div>
+  <div class="col-2">
+    <button tabindex='90' class="btn btn-success" onClick="fnjs_guardar_pendiente();" >
+      {{ "guardar"|trans }}
+    </button> 
+  </div>
 </div>
 </form>
 

@@ -175,10 +175,11 @@ fnjs_cambiar_estado=function(){
 	}
 }
 
-fnjs_guardar=function(){
+fnjs_guardar_pendiente=function(){
     event.preventDefault();
 	event.stopPropagation();
 	event.stopImmediatePropagation();
+	
 	var err=0;
 	var go=$('#go').val();
 	var per=$('#simple_per').val();
