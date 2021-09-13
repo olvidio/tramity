@@ -230,42 +230,6 @@ switch($Qque) {
         }
         
         break;
-    case 'upload_adjunto':
-        
-        if (empty($_FILES['adjuntos'])) {
-            // Devolvemos un array asociativo con la clave error en formato JSON como respuesta
-            echo json_encode(['error'=>'No hay ficheros para realizar upload.']);
-            // Cancelamos el resto del script
-            return;
-        }
-        $respuestas = [];
-        $ficheros = $_FILES['adjuntos'];
-        
-        $a_error = $ficheros['error'];
-        $a_names = $ficheros['name'];
-        $a_tmp = $ficheros['tmp_name'];
-        foreach ($a_names as $key => $name) {
-            if ($a_error[$key] > 0) {
-                $respuestas = [ "error" => $a_error[$key] ];
-            } else {
-                $path_parts = pathinfo($name);
-                
-                $nom=$path_parts['filename'];
-                // puede no existir la extension
-                $extension=empty($path_parts['extension'])? '' : $path_parts['extension'];
-
-                $userfile= $a_tmp[$key];
-                
-                $fichero=file_get_contents($userfile);
-                
-            }
-            $respuestas = ["ok" => "Ja está"];
-            
-            // Devolvemos el array asociativo en formato JSON como respuesta
-        }
-        echo json_encode($respuestas);
-        
-        break;
     case 'guardar':
         if (!empty($Qid_entrada)) {
             $oEntrada = new Entrada($Qid_entrada);

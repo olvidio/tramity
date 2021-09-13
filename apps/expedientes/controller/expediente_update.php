@@ -630,6 +630,7 @@ switch($Qque) {
         //exit();
 
         break;
+    /* creo que no se usa
     case 'upload_antecedente':
         
         if (empty($_FILES['adjuntos'])) {
@@ -666,6 +667,7 @@ switch($Qque) {
         echo json_encode($respuestas);
         
         break;
+        */
     case 'circular':
         // primero se guarda, y al final se guarda la fecha de hoy y se crean las firmas para el trámite
     case 'guardar':

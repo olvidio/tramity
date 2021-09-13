@@ -41,7 +41,10 @@ function upload() {
             //Make sure we have a file path
             if ($tmpFilePath != "" && $Qid_entrada){
                 
-                $contenido_doc=file_get_contents($tmpFilePath);
+                //$contenido_doc=file_get_contents($tmpFilePath);
+                $fp = fopen($tmpFilePath, 'rb');
+                $contenido_doc = fread($fp, filesize($tmpFilePath));
+                $contenido_encoded = base64_encode($contenido_doc);
                 
                 if (!empty($Qid_item)) {
                     // update
@@ -53,7 +56,7 @@ function upload() {
                 
                 $oEntradaAdjunto->setId_entrada($Qid_entrada);
                 $oEntradaAdjunto->setNom($fileName);
-                $oEntradaAdjunto->setAdjunto($contenido_doc);
+                $oEntradaAdjunto->setAdjunto($contenido_encoded);
                 
                 if ($oEntradaAdjunto->DBGuardar() !== FALSE) {
                     $id_item = $oEntradaAdjunto->getId_item();
