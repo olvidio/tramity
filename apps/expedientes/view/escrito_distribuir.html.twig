@@ -32,7 +32,7 @@
         </div>
     {% endif %}
     <div class="ms-auto p-2 bd-highlight">
-      <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="fnjs_guardar();" >{{ "Guardar"|trans }}</button>
+      <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="fnjs_guardar_distribuir();" >{{ "Guardar"|trans }}</button>
     </div>
   </div>
   <!--  --------------- ASUNTO --------------- -->
@@ -79,7 +79,7 @@ fnjs_download=function(item) {
 	window.open(url);
 }
 
-fnjs_guardar=function(){
+fnjs_guardar_distribuir=function(){
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
