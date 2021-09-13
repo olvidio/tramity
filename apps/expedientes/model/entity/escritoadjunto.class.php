@@ -425,7 +425,8 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		}
 		if (empty($this->adjunto_txt)) {
 		    if (!empty($this->adjunto_id_res)) {
-                $adjunto = stream_get_contents($this->adjunto_id_res);
+                $adjunto_encoded = stream_get_contents($this->adjunto_id_res);
+                $adjunto = base64_decode($adjunto_encoded);
 		    }
 		} else {
 		    $adjunto = $this->adjunto_txt;
