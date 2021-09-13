@@ -37,8 +37,10 @@ $a_pills = [];
 // Expedientes:
 $oExpedienteLista = new ExpedienteLista();
 
-// Sólo para scdl
-if (ConfigGlobal::role_actual() === 'scdl') {
+// Sólo para scdl o suplente
+$aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
+$id_cargo = array_search('scdl', $aPosiblesCargos);
+if (!empty($id_cargo)) {
     // fijar reunión = 1;
     $filtro = 'fijar_reunion';
         $active = ($filtro == $Qfiltro)? 'active' : '';
