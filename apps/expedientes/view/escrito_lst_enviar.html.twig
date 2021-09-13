@@ -42,6 +42,10 @@
 </table>
 
 <script type="text/javascript">
+$(document).ready(function() {
+	tabs_show('{{ vista }}','{{ filtro }}');
+});
+
 fnjs_actualizar_lista=function() {
     var url = '/apps/expedientes/controller/escrito_lista.php?filtro={{ filtro }}&modo={{ modo }}';
 	fnjs_update_div('#main',url);

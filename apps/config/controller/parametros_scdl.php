@@ -13,6 +13,7 @@ use web\Hash;
 	require_once ("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
+$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
 $url = 'apps/config/controller/parametros_update.php';
 $a_campos = [ 'url' => $url];
@@ -52,7 +53,7 @@ $a_campos['oHashPA'] = $oHashPA;
 $a_campos['val_perm_aceptar'] = $val_perm_aceptar;
 $a_campos['chk_perm_aceptar'] = $chk_perm_aceptar;
 
-
+$a_campos['filtro'] = $Qfiltro;
 
 $oView = new core\ViewTwig('config/controller');
 echo $oView->render('parametros_scdl.html.twig',$a_campos);

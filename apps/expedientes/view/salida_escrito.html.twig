@@ -185,6 +185,10 @@
 {{ include ('_salida_escrito_form_js.html.twig') }}
 {{ include ('_escritos_js.html.twig') }}
 <script>
+$(document).ready(function() {
+	tabs_show('{{ vista }}','{{ filtro }}');
+});
+
 fnjs_grupo=function() {
     var ok=$('#grupo_dst').prop('checked')
     if (ok) {

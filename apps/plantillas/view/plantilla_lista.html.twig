@@ -9,6 +9,10 @@
 {{ "nueva plantilla"|trans}}
 </button>
 <script>
+$(document).ready(function() {
+	tabs_show('{{ vista }}','{{ filtro }}');
+});
+
 fnjs_datos_plantilla=function(){
 	$('#seleccionados').attr('action',"{{ url_form }}");
 	fnjs_enviar_formulario('#seleccionados');

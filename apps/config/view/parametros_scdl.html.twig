@@ -17,6 +17,10 @@
 </form>
 
 <script>
+$(document).ready(function() {
+	tabs_show('{{ vista }}','{{ filtro }}');
+});
+
 fnjs_guardar=function(formulario){
 	event.preventDefault();
     datos=$(formulario).serialize();
