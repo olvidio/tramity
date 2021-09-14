@@ -562,8 +562,8 @@ class DocumentoDB Extends core\ClasePropiedades {
 		}
 		if (empty($this->documento_txt)) {
             if (!empty($this->documento_id_res)) {
-		      $documento_encoded = stream_get_contents($this->documento_id_res);
-		      $documento = base64_decode($documento_encoded);
+		      $documento = stream_get_contents($this->documento_id_res);
+		      $this->documento_txt = $documento;
             }
 		} else {
 		    $documento = $this->documento_txt;

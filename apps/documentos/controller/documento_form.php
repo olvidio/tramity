@@ -57,7 +57,7 @@ if (!empty($Qid_doc)) {
     // destinos individuales
     $nom = $oDocumento->getNom();
     $nombre_fichero = $oDocumento->getNombre_fichero();
-    $documento_encoded = $oDocumento->getDocumentoTxt();
+    $documento_txt = $oDocumento->getDocumentoTxt();
     
     //Ponente;
     //$id_ponente = $oDocumento->getCreador();
@@ -76,7 +76,7 @@ if (!empty($Qid_doc)) {
     
     $titulo = _("modificar");
 
-    if (!empty($documento_encoded)) {
+    if (!empty($documento_txt)) {
         $preview[] = "'$nombre_fichero'";
         $config[] = [
             'key' => $Qid_doc,
