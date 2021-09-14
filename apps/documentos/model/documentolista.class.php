@@ -75,6 +75,7 @@ class DocumentoLista {
                               'filtro' => $filtro,
                               'etiquetas' => $this->aEtiquetas,
                               'andOr' => $this->andOr,
+                              'que' => $this->que,
                 ];
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
                 

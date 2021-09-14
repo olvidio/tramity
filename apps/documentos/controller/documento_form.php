@@ -20,6 +20,7 @@ $Qaccion = (integer) \filter_input(INPUT_POST, 'accion');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $QandOr = (string) \filter_input(INPUT_POST, 'andOr');
 $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qque = (string) \filter_input(INPUT_POST, 'que');
 /*
 if (empty($Qid_doc)) {
     $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -113,6 +114,7 @@ $a_cosas = [
             'filtro' => $Qfiltro,
             'andOr' => $QandOr,
             'etiquetas' => $Qa_etiquetas,
+            'que' => $Qque,
         ];
 
 $pagina_cancel = web\Hash::link('apps/documentos/controller/documentos_lista.php?'.http_build_query($a_cosas));

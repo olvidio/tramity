@@ -29,18 +29,21 @@ $a_etiquetas_filtered = array_filter($Qa_etiquetas);
 $aWhere = [];
 $aOperador = [];
 
+$cDocumentos = [];
+if($Qque == 'todos') {
+    $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
+    $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentosTodos();
+    // borro las etiqutas seleccionadas
+    $a_etiquetas_filtered = [];
+    $QandOr = 'AND';
+} elseif (!empty($a_etiquetas_filtered)) {
+    $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
+    $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($a_etiquetas_filtered,$QandOr);
+}
+
 $chk_or = ($QandOr == 'OR')? 'checked' : '';
 // por defecto 'AND':
 $chk_and = (($QandOr == 'AND') OR empty($QandOr))? 'checked' : '';
-
-$cDocumentos = [];
-if (!empty($a_etiquetas_filtered)) {
-    $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
-    $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($a_etiquetas_filtered,$QandOr);
-} elseif($Qque == 'todos') {
-    $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
-    $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentosTodos();
-}
 
 if (!empty($cDocumentos)) {
     $aWhere['id_doc'] = implode(',',$cDocumentos);
@@ -64,6 +67,7 @@ $a_campos = [
     'filtro' => $Qfiltro,
     'chk_and' => $chk_and,
     'chk_or' => $chk_or,
+    'que' => $Qque,
     'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
     
 ];
