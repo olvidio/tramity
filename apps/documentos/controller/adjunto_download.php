@@ -23,7 +23,13 @@ if (!empty($Qid_doc)) {
     if (!empty($res_documento)) {
         rewind($res_documento);
         $doc_encoded = stream_get_contents($res_documento);
-        $doc = base64_decode($doc_encoded);
+        if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
+            //echo '$data is valid';
+            $doc = base64_decode($doc_encoded);
+        } else {
+            //ºecho '$data is NOT valid';
+            $doc = $doc_encoded;
+        }
 
         header('Content-Description: File Transfer');
         header('Content-Transfer-Encoding: binary');

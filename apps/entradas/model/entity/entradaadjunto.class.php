@@ -404,8 +404,14 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		}
 		if (empty($this->adjunto_txt)) {
 		    if (!empty($this->adjunto_id_res)) {
-		        $adjunto_encoded = stream_get_contents($this->adjunto_id_res);
-		        $adjunto = base64_decode($adjunto_encoded);
+		        $doc_encoded = stream_get_contents($this->adjunto_id_res);
+		        if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
+		            //echo '$data is valid';
+		            $adjunto = base64_decode($doc_encoded);
+		        } else {
+		            //ºecho '$data is NOT valid';
+		            $adjunto = $doc_encoded;
+		        }
 		    }
 		} else {
 		    $adjunto = $this->adjunto_txt;
