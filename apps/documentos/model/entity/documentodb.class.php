@@ -592,6 +592,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 	    } else {
 	        if (empty($documento)) { 
 	            $this->documento_txt = '';
+	            $this->documento_id_res = '';
 	        } else {
 	           $this->documento_txt = $documento;
 	        }

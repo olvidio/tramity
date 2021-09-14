@@ -18,10 +18,12 @@ $Qid_doc = (integer) \filter_input(INPUT_POST, 'key');
 
 if (!empty($Qid_doc)) {
     $oDocumento = new Documento($Qid_doc);
+    $oDocumento->DBCarregar('');
 
     /* The deleteUrl server action must send data via AJAX request as a JSON response {error: BOOLEAN_VALUE} */
     $error = FALSE;
-    if ($oDocumento->DBEliminar() === FALSE) {
+    $oDocumento->setDocumento('');
+    if ($oDocumento->DBGuardar() === FALSE) {
         $error = TRUE;
     }
 } else {
