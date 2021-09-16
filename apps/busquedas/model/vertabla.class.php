@@ -381,9 +381,10 @@ class VerTabla {
             
             $categoria = $oEscrito->getCategoria();
             if (!empty($categoria) && empty($a_categorias[$categoria])) {
-                echo sprintf(_("No se encuentra la categoría: %s para el escrito: %s"),$categoria,$protocolo_local);
+                $categoria_txt = _("No se encuentra la categoría");
+            } else {
+                $categoria_txt = $a_categorias[$categoria];
             }
-            $categoria_txt = $a_categorias[$categoria];
             $visibilidad = $oEscrito->getVisibilidad();
             $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '??' : $a_visibilidad[$visibilidad];
 
