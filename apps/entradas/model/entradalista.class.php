@@ -101,6 +101,8 @@ class EntradaLista {
                 if (!empty($a_entradas_encargado)) {
                     $aWhere['id_entrada'] = implode(',',$a_entradas_encargado);
                     $aOperador['id_entrada'] = 'IN';
+                } else {
+                    $aWhere['id_entrada'] = 1;
                 }
                 break;
             case 'en_aceptado':
