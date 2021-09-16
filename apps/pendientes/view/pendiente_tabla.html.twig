@@ -21,23 +21,31 @@
 		<option value="any" {{ sel_any }}>{{ "próximo año"|trans }}</option>
 		</select>
 	</div>
+  </div>
+  <div class="mt-2 row bg-light">
     <!--  --------------------  Oficinas --------------------------  -->
 	{% if secretaria %}
-        <label for="id_oficina" class="col-xs-1 form-label">{{ "Oficina"|trans }}:</label>
-        <div class="col-1">
-              {{ oDesplOficinas.desplegable|raw }}
+      <div class="row col-2">
+        <div class="col-5">
+          <label for="id_oficina" class="col-xs-1 form-label">{{ "Oficina"|trans }}:</label>
         </div>
+        <div class="col-5">
+          {{ oDesplOficinas.desplegable|raw }}
+        </div>
+      </div>
     {% else %}
-        <input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
+      <input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
     {% endif %}
     <!--  --------------------  Encargados --------------------------  -->
-    <label class="col-2 form-label">{{ "¿Está asignado a alguien?"|trans }}:</label>
-    <div class="col-2">
+    <div class="row col-6">
+      <label class="col-5 form-label">{{ "¿Está asignado a alguien?"|trans }}:</label>
+      <div class="col-5">
         {{ oDesplEncargados.desplegable|raw }}
+      </div>
     </div>
  	<!--  --------------------  BOTONES --------------------------  -->
-    <div class="col-2">
-	  <button tabindex='90' class="btn btn-success" onClick="fnjs_buscar();" >
+    <div class="col-3">
+	  <button tabindex='90' class="p-2 btn btn-success" onClick="fnjs_buscar();" >
         {{ "listar"|trans }}
   	  </button>
   	</div> 
