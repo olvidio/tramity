@@ -380,7 +380,9 @@ class VerTabla {
             if (!empty($anulado)) $asunto=_("ANULADO")." ($anulado) $asunto";
             
             $categoria = $oEscrito->getCategoria();
-            if (!empty($categoria) && empty($a_categorias[$categoria])) {
+            if (empty($categoria)) {
+                $categoria_txt = _("Sin definir la categoría");
+            } elseif (empty($a_categorias[$categoria])) {
                 $categoria_txt = _("No se encuentra la categoría");
             } else {
                 $categoria_txt = $a_categorias[$categoria];
