@@ -80,6 +80,12 @@ class ExpedienteLista {
      * @var array
      */
     private $a_exp_reunion_falta_firma = [];
+
+    /**
+     * 
+     * @var array
+     */
+    private $a_exp_reunion_falta_mi_firma = [];
     
     /*
      * filtros posibles: 
@@ -276,6 +282,7 @@ class ExpedienteLista {
                             ];
                 $gesFirmas = new GestorFirma();
                 $cFirmasNull = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+                
                 // Sumar los firmados, pero no OK
                 $aWhereFirma = [
                             'id_cargo' => ConfigGlobal::role_id_cargo(),
@@ -299,7 +306,41 @@ class ExpedienteLista {
                     
                     if ($oFirma->getValor() == Firma::V_D_ESPERA) {
                         $this->a_expedientes_espera[] = $id_expediente;
+                    } else {
+                        $this->a_exp_reunion_falta_mi_firma[] = $id_expediente;
                     }
+                    $a_expedientes[] = $id_expediente;
+                }
+                if (!empty($a_expedientes)) {
+                    $aWhere['id_expediente'] = implode(',',$a_expedientes);
+                    $aOperador['id_expediente'] = 'IN';
+                } else {
+                    // para que no salga nada pongo
+                    $aWhere = [];
+                }
+                /*
+                break;
+            case 'seg_reunion':
+                $aWhere['estado'] = Expediente::ESTADO_FIJAR_REUNION;
+                $aWhere['f_reunion'] = 'x';
+                $aOperador['f_reunion'] = 'IS NOT NULL';
+                */
+                
+                //////// mirar los que falta alguna firma para marcarlos en color /////////
+                $gesFirmas = new GestorFirma();
+                $this->a_exp_reunion_falta_firma = $gesFirmas->faltaFirmarReunion();
+                
+                //que tengan de mi firma, independiente de firmado o no
+                $cFirmas = $gesFirmas->getFirmasReunion(ConfigGlobal::role_id_cargo());
+                $a_expedientes = [];
+                foreach ($cFirmas as $oFirma) {
+                    $id_expediente = $oFirma->getId_expediente();
+                    $orden_tramite = $oFirma->getOrden_tramite();
+                    // Sólo a partir de que el orden_tramite anterior ya lo hayan firmado todos
+                    if (!$gesFirmas->getAnteriorOK($id_expediente,$orden_tramite)) {
+                        continue;
+                    }
+                    
                     $a_expedientes[] = $id_expediente;
                 }
                 if (!empty($a_expedientes)) {
@@ -637,8 +678,12 @@ class ExpedienteLista {
                     }
                 }
                 // reunion. faltan firmas:
+                $bfalta_mi_firma = FALSE;
                 $bfalta_firma = FALSE;
                 if ($this->filtro == 'seg_reunion') {
+                    if (in_array($id_expediente, $this->a_exp_reunion_falta_mi_firma)) {
+                        $bfalta_mi_firma = TRUE;
+                    }
                     if (in_array($id_expediente, $this->a_exp_reunion_falta_firma)) {
                         $bfalta_firma = TRUE;
                     }
@@ -664,6 +709,9 @@ class ExpedienteLista {
                 $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_accion');\" >"._("acción")."</span>";
                 
                 $row['class_row'] = '';
+                if ($bfalta_mi_firma) {
+                    $row['class_row'] = 'bg-light';
+                }
                 if ($bfalta_firma) {
                     $row['class_row'] = 'bg-warning';
                 }

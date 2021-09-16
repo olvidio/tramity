@@ -102,7 +102,7 @@ $filtro = 'circulando';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// acabados = 6;
+/*
 $filtro = 'seg_reunion';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -114,6 +114,7 @@ $filtro = 'seg_reunion';
     $num = $oExpedienteLista->getNumero();
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
+*/
 
 if (is_true(ConfigGlobal::soy_dtor()) ) {
     // acabados = 7;
