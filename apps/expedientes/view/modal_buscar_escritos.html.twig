@@ -46,6 +46,10 @@
       <div class="col-2">
         <button id="btn_1" type="button" class="btn btn-primary" onClick="fnjs_antecedente_escrito();" >{{ "Buscar"|trans }}</button>
       </div>
+      <div class="col-2 ps-3 pt-1">
+        <input id="chk_anulados" name="chk_anulados" type="checkbox" onChange='fnjs_ctr_anulados()' {{ chk_ctr_anulados }}>
+          {{ "ver ctr anulados"|trans }}
+      </div>
   </div>
   </form>
 </div>
@@ -54,6 +58,14 @@
 	{{ oLista.mostrar_tabla|raw }}
 </div>
 <script>
+fnjs_ctr_anulados = function(){
+    anulado=$('#chk_anulados').prop("checked");
+    if (anulado == true) { //volver a cargar la página
+        fnjs_update_div('#modal-body','apps/expedientes/controller/antecedentes_ajax.php?que=buscar_escrito&id_expediente={{ id_expediente }}&chk_anulados=1');
+    } else {
+        fnjs_update_div('#modal-body','apps/expedientes/controller/antecedentes_ajax.php?que=buscar_escrito&id_expediente={{ id_expediente }}&chk_anulados=0');
+    }
+}
 fnjs_antecedente_escrito=function() {
 	var data=$('#condiciones').serialize();
     var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';

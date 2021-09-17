@@ -313,6 +313,7 @@ switch ($Qque) {
 	    //echo $oLista->mostrar_tabla_html();
 
 	    $a_campos = [
+	        'para' => 'adjunto',
             'id_escrito' => $Qid_escrito,
 	        'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
 	        'chk_and' => $chk_and,

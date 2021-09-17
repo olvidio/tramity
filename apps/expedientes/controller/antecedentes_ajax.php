@@ -2,6 +2,7 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use function core\is_true;
 use documentos\model\Documento;
 use documentos\model\GestorDocumento;
 use documentos\model\entity\GestorEtiquetaDocumento;
@@ -79,6 +80,7 @@ switch ($Qque) {
 	    $Qorigen_id_lugar =  (integer) \filter_input(INPUT_POST, 'origen_id_lugar');
 	    $Qorigen_prot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
 	    $Qorigen_prot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+	    $Qchk_anulados = (bool) \filter_input(INPUT_POST, 'chk_anulados');
 	    
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
@@ -186,14 +188,21 @@ switch ($Qque) {
 	    $oDesplOficinas = new web\Desplegable('oficina_buscar',$a_posibles_oficinas,$Qoficina_buscar,TRUE);
 
 	    $gesLugares = new GestorLugar();
-	    $a_lugares = $gesLugares->getArrayBusquedas();
+	    $a_lugares = $gesLugares->getArrayBusquedas($Qchk_anulados);
+	    
 	    $oDesplOrigen = new Desplegable();
 	    $oDesplOrigen->setNombre('origen_id_lugar');
 	    $oDesplOrigen->setBlanco(TRUE);
 	    $oDesplOrigen->setOpciones($a_lugares);
 	    $oDesplOrigen->setAction("fnjs_sel_periodo('#origen_id_lugar')");
 	    $oDesplOrigen->setOpcion_sel($Qorigen_id_lugar);
-
+	    
+	    if (is_true($Qchk_anulados)) {
+	        $chk_ctr_anulados = 'checked';
+	    } else {
+	        $chk_ctr_anulados = '';
+	    }
+	    
 	    // para que no ponga '0'
 	    $Qorigen_prot_num = empty($Qorigen_prot_num)? '' : $Qorigen_prot_num;
 	    $a_campos = [
@@ -204,6 +213,7 @@ switch ($Qque) {
                 'asunto' => $Qasunto,
 	            'prot_num' => $Qorigen_prot_num,
 	            'prot_any' => $Qorigen_prot_any,
+	            'chk_ctr_anulados' => $chk_ctr_anulados,
              ];
 	    $oView = new ViewTwig('expedientes/controller');
 	    echo $oView->renderizar('modal_buscar_entradas.html.twig',$a_campos);
@@ -374,6 +384,7 @@ switch ($Qque) {
 	    $Qdest_id_lugar =  (integer) \filter_input(INPUT_POST, 'dest_id_lugar');
 	    $Qlocal_prot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
 	    $Qlocal_prot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+	    $Qchk_anulados = (bool) \filter_input(INPUT_POST, 'chk_anulados');
 	    
 	    $gesEscrito = new GestorEscrito();
 	    $aWhere = [];
@@ -504,12 +515,18 @@ switch ($Qque) {
 	    $oDesplCargos = new web\Desplegable('oficina_buscar',$a_posibles_cargos,$Qoficina_buscar,TRUE);
 	    
 	    $gesLugares = new GestorLugar();
-	    $a_lugares = $gesLugares->getArrayBusquedas();
+	    $a_lugares = $gesLugares->getArrayBusquedas($Qchk_anulados);
 	    $oDesplDestino = new Desplegable();
 	    $oDesplDestino->setNombre('dest_id_lugar');
 	    $oDesplDestino->setBlanco(TRUE);
 	    $oDesplDestino->setOpciones($a_lugares);
 	    $oDesplDestino->setOpcion_sel($Qdest_id_lugar);
+	    
+	    if (is_true($Qchk_anulados)) {
+	        $chk_ctr_anulados = 'checked';
+	    } else {
+	        $chk_ctr_anulados = '';
+	    }
 	    
 	    $sigla = $_SESSION['oConfig']->getSigla();
 	    
@@ -529,6 +546,7 @@ switch ($Qque) {
                 'sigla' => $sigla,
 	            'prot_num' => $Qlocal_prot_num,
 	            'prot_any' => $Qlocal_prot_any,
+	            'chk_ctr_anulados' => $chk_ctr_anulados,
                 ];
 	    $oView = new ViewTwig('expedientes/controller');
 	    echo $oView->renderizar('modal_buscar_escritos.html.twig',$a_campos);
@@ -598,10 +616,6 @@ switch ($Qque) {
 	    $sel_any_2 = '';
 	    $sel_siempre = '';
 	    switch ($Qperiodo) {
-	        case "mes":
-	            $sel_mes = 'selected';
-	            $periodo = 'P1M';
-	            break;
 	        case "mes_6":
 	            $sel_mes_6 = 'selected';
 	            $periodo = 'P6M';
@@ -619,6 +633,7 @@ switch ($Qque) {
 	            $periodo = '';
 	            break;
 	        default:
+	        case "mes":
 	            $sel_mes = 'selected';
 	            $periodo = 'P1M';
 	    }

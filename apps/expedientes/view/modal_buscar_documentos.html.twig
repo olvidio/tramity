@@ -48,7 +48,7 @@
     </div>
       <!--  --------------- BOTON --------------- -->
       <div class="col-2">
-        <button type="button" class="btn btn-primary" onClick="fnjs_listar_documentos();" >{{ "Buscar"|trans }}</button>
+        <button type="button" class="btn btn-primary" onClick="fnjs_listar_documentos('{{ para }}');" >{{ "Buscar"|trans }}</button>
       </div>
   </div>
   </form>
@@ -65,9 +65,14 @@ $(document).ready(function() {
 	$('#slow_load').hide();  // hide it initially
 });
 
-fnjs_listar_documentos=function() {
+fnjs_listar_documentos=function(para) {
     var data=$('#condiciones').serialize();
-    var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
+    if (para == 'adjunto') {
+    	var url_ajax = 'apps/expedientes/controller/escrito_adjuntos_ajax.php';
+    }
+    if (para == 'antecedente') {
+    	var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
+	}
     request=$.ajax({
         data: data,
         url: url_ajax,
