@@ -36,16 +36,6 @@ class GestorPendienteEntrada {
     
     /* CONSTRUCTOR -------------------------------------------------------------- */
     
-    /**
-     * Constructor de la classe.
-     */
-    /*
-    function __construct($cal_oficina,$calendario,$cargo) {
-        $this->cal_oficina = $cal_oficina;
-        $this->resource = $calendario;
-        $this->cargo = $cargo;
-    }
-    */
     
     /* METODES PUBLICS ----------------------------------------------------------*/
     
@@ -93,7 +83,7 @@ class GestorPendienteEntrada {
                     $uid_container = "$uid#$parent_container";
                     $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
                     $status = $oPendiente->getStatus();
-                    if ($status == 'COMPLETED' OR $status == 'CANCELLED') continue;
+                    if (empty($status) OR $status == 'COMPLETED' OR $status == 'CANCELLED') { continue; }
                     $rrule = $oPendiente->getRrule();
                     $this->num_periodicos += empty($rrule)? 0 : 1;
                     $this->num_pendientes++;

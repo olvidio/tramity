@@ -777,7 +777,10 @@ class Pendiente {
         $aDades = [];
         $todo = $this->getTodoByUid();
         if (empty($todo)) {
-            exit (_("No encuentro el todo"));
+            $err_txt=_("No encuentro el todo");
+            $sClauError = 'Pendiente.carregar';
+            $_SESSION['oGestorErrores']->addError($err_txt, $sClauError, __LINE__, __FILE__);
+            return FALSE;
         }
         $vcalendar = new \iCalComponent($todo[0]['data']);
         $icalComp = $vcalendar->GetComponents('VTODO');

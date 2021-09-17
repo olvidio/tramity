@@ -27,8 +27,8 @@
   <button tabindex='91' class="btn btn-secondary" onClick="window.close();" >
     {{ "Cerrar"|trans }}
   </button>
-  <button tabindex='90' class="btn btn-success" onClick="fnjs_enviar();" >
-    {{ "Enviar"|trans }}
+  <button tabindex='90' class="btn btn-success" onClick="fnjs_marcar_i_enviar();" >
+    {{ "Marcar como contestado y enviar"|trans }}
   </button> 
 </div>
 
@@ -55,7 +55,8 @@ fnjs_enviar=function() {
     window.close();
 }
 
-fnjs_marcar=function(formulario){
+fnjs_marcar_i_enviar=function(formulario){
+	var id_escrito = $('#id_escrito').val();
 	var id_contestados='';
 	var id='';
 	var p=0; // para los periodicos
@@ -85,7 +86,9 @@ fnjs_marcar=function(formulario){
             alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
         } else {
             $('#id_contestados').val(id_contestados);
-        	fnjs_actualizar();
+            window.opener.fnjs_enviar_escrito_directo(id_escrito);
+            window.close();
+        	//fnjs_actualizar();
         }
     });
     request.fail(function(JqXHR, textStatus, errorThrown){

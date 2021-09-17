@@ -154,7 +154,8 @@ class gestorErrores {
 		$esquema = ConfigGlobal::mi_region_dl();
 		$ahora = date("Y/m/d H:i:s");
 		$id_user = $user."[$esquema]$ip ";
-		$txt="\n".$ahora." - ".$id_user."->>  ".$err."\n $sClauError en linea $line de: $file\n";
+		$txt = "\n# ".$ahora." - ".$id_user;
+		$txt.= "\n\t->>  ".$err."\n $sClauError en linea $line de: $file\n";
 		
 		$filename = $this->filename;
 		if (!$handle = fopen($filename, 'a')) {
