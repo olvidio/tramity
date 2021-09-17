@@ -680,7 +680,7 @@ class ExpedienteLista {
                 // reunion. faltan firmas:
                 $bfalta_mi_firma = FALSE;
                 $bfalta_firma = FALSE;
-                if ($this->filtro == 'seg_reunion') {
+                if ($this->filtro == 'reunion' OR $this->filtro == 'seg_reunion') {
                     if (in_array($id_expediente, $this->a_exp_reunion_falta_mi_firma)) {
                         $bfalta_mi_firma = TRUE;
                     }
