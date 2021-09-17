@@ -173,12 +173,12 @@
         <p>incrustado</p>
     {% endif %}
     {% if tipo_doc is empty %}
-        <div class="mb-3">
-          <label class="form-label">{{ "Insertar escrito"|trans }}:</label>
-          <button tabindex='100' class="btn btn-info" onClick="fnjs_add_escrito(1);" >
-            {{ "Nuevo Etherpad"|trans }}
+        <div class="row mb-3">
+          <label class="col-4 form-label">{{ "Insertar Etherpad"|trans }}:</label>
+          <button tabindex='100' class="col-2 btn btn-info" onClick="fnjs_add_escrito(1);" >
+            {{ "Nuevo"|trans }}
           </button>
-          <button tabindex='101' type="button" class="btn btn-info me-1" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(5);" >
+          <button tabindex='101' type="button" class="col-4 btn btn-info ms-3 me-1" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(5);" >
             {{ "Buscar en Documentos"|trans }}
           </button>
         </div>
@@ -219,6 +219,7 @@
 {{ include ('_escrito_form_js.html.twig') }}
 {{ include ('_escritos_js.html.twig') }}
 <script>
+
 fnjs_grupo=function() {
     var ok=$('#grupo_dst').prop('checked')
     if (ok) {

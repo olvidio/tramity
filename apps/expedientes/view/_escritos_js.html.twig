@@ -1,6 +1,5 @@
 <script type="text/javascript">
 /****** PARA los botones de añadir adjuntos desde documentos  **********************/
-
 fnjs_insertar_documento=function(tipo,id_doc,id_escrito) {
 	// avisar que lo va a borra de documentos:
 	seguro=confirm("{{ "AVISO: esto quitará el documento de la carpeta de documentos. Si quiere conservarlo debería hacer una copia."|trans }}");
@@ -13,9 +12,12 @@ fnjs_insertar_documento=function(tipo,id_doc,id_escrito) {
             url: url_ajax,
             method: 'POST'
         });
+        // alertar de que el proceso de copiar el etherpad puede ser lento
+        $('#slow_load').show();
         request.done( function (json) {
             // close div modal
             $('#ModalBuscar').modal('hide');
+            $('#slow_load').hide();
             if (json.success != true) {
                 alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
             } else {

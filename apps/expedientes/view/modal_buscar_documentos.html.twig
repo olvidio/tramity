@@ -57,7 +57,14 @@
 <div id="lista">
 	{{ oLista.mostrar_tabla|raw }}
 </div>
+<div id="slow_load" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+ <img class="mb-4" src="../images/loading.gif" alt="cargando" width="32" height="32">
+</div>
 <script>
+$(document).ready(function() {
+	$('#slow_load').hide();  // hide it initially
+});
+
 fnjs_listar_documentos=function() {
     var data=$('#condiciones').serialize();
     var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';

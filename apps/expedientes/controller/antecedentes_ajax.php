@@ -682,6 +682,7 @@ switch ($Qque) {
 	        'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
 	        'chk_and' => $chk_and,
 	        'chk_or' => $chk_or,
+	        'tipo_n' => $Qtipo_n,
 	        'nom' => $Qnom,
 	        'sel_mes' => $sel_mes,
 	        'sel_mes_6' => $sel_mes_6,
