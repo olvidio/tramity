@@ -710,9 +710,9 @@ class ExpedienteLista {
                 
                 $row['class_row'] = '';
                 if ($bfalta_mi_firma) {
-                    $row['class_row'] = 'bg-light';
+                    $row['class_row'] = 'bg-warning';
                 }
-                if ($bfalta_firma) {
+                if (ConfigGlobal::role_actual() == 'secretaria' && $bfalta_firma) {
                     $row['class_row'] = 'bg-warning';
                 }
                 if ($baclaracion || $bpeticion) {
