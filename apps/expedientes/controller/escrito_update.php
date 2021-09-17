@@ -211,11 +211,12 @@ switch($Qque) {
                         _("oficina"),
                     ];
         //$a_botones[]=array( 'txt' => _('marcar como contestado'), 'click' => "fnjs_marcar(\"#seleccionados\");" ) ;
+        $a_botones='ninguno'; // para que si ponga los checkboxs
         
         $oTabla = new Lista();
         $oTabla->setId_tabla('pen_tabla');
         $oTabla->setCabeceras($a_cabeceras);
-        //$oTabla->setBotones($a_botones);
+        $oTabla->setBotones($a_botones);
         $oTabla->setDatos($a_valores);
         
         $base_url = core\ConfigGlobal::getWeb();
