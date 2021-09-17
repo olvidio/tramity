@@ -10,7 +10,16 @@
       <div class="modal-body">
       	<div id="busqueda">
           <!--  --------------- BUSQUEDAS (expedientes por asunto, oficina, cargos) --------------- -->
-          
+          <!--  --------------- ENCARGADO --------------- -->
+          <div class="mb-3 row" id="busqueda_encargado">
+            <label for="cargo" class="col-2 form-label">{{ "Encargar a" }}:</label>
+            <div class="col-4">
+              {{ oDesplCargosOficina.desplegable|raw }}
+            </div>
+              <div class="col-4">
+                <button type="button" class="btn btn-primary" onClick="fnjs_encargar();" >{{ "Encargar"|trans }}</button>
+              </div>
+          </div>
           <!--  --------------- ASUNTO --------------- -->
           <div class="mb-3 row" id="busqueda_asunto">
             <label for="asunto" class="col-2 form-label">{{ "Asunto"|trans }}</label>
@@ -133,7 +142,16 @@ fnjs_cancelar=function(){
 }
 
 fnjs_buscar=function(accion) {
+	if (accion == 'en_add_encargado') {
+		$('#busqueda_encargado').show();
+		$('#busqueda_asunto').hide();
+		$('#busqueda_cargos_oficina').hide();
+		$('#busqueda_cargos').hide();
+        $('#lista').html('');
+		return true;
+	}
 	if (accion == 'en_add_expediente') {
+		$('#busqueda_encargado').hide();
 		$('#busqueda_asunto').show();
 		$('#busqueda_cargos_oficina').hide();
 		$('#busqueda_cargos').hide();
@@ -141,12 +159,14 @@ fnjs_buscar=function(accion) {
 		return true;
 	}
 	if (accion == 'en_pendiente') {
+		$('#busqueda_encargado').hide();
 		$('#busqueda_asunto').hide();
 		$('#busqueda_cargos_oficina').show();
 		$('#busqueda_cargos').hide();
 		return true;
 	}
 	if (accion == 'exp_cp_oficina') {
+		$('#busqueda_encargado').hide();
 		$('#busqueda_asunto').hide();
 		$('#busqueda_cargos_oficina').hide();
 		$('#busqueda_cargos').show();
@@ -160,6 +180,30 @@ fnjs_copiar=function() {
 	
     var url_ajax = 'apps/expedientes/controller/expediente_update.php';
     var param_json = { que: que, id_expediente: id_expediente, of_destino: of_destino };
+    request=$.ajax({
+        data: param_json,
+        url: url_ajax,
+        method: 'POST',
+        dataType: 'json'
+    });
+    request.done( function (json) {
+        // close div modal
+        $('#ModalBuscar').modal('hide');
+    	if (json.success != true) {
+    		alert (json.mensaje);
+        } else {
+            fnjs_cancelar();
+        }
+    });
+}
+
+fnjs_encargar=function() {
+	var que='en_asignar';
+	var id_entrada={{ id_entrada }};
+	var id_cargo=$('#id_cargo').val();
+	
+    var url_ajax = 'apps/entradas/controller/entrada_update.php';
+    var param_json = { que: que, id_entrada: id_entrada, id_cargo: id_cargo };
     request=$.ajax({
         data: param_json,
         url: url_ajax,

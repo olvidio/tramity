@@ -106,6 +106,12 @@ $txt_plazo = '';
 $f_plazo = '';
 $hoy_iso = '';
 switch($Qfiltro) {
+    case 'en_encargado':
+        $a_botones[4] = ['accion' => 'en_add_encargado',
+                        'txt'    => _("Encargar a"),
+                        'tipo'    => 'modal',
+                    ];
+        
     case 'escritos_cr':
     case 'permanentes_cr':
     case 'en_buscar':

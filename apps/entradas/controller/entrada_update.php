@@ -62,28 +62,79 @@ switch($Qque) {
         $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
         $oEntrada = new EntradaDB($Qid_entrada);
         $oEntrada->DBCarregar();
+        // comprobar si es un cambio (ya estaba encargado a alguien)
+        $encargado_old = $oEntrada->getEncargado();
         
         $oEntrada->setEncargado($Qid_cargo);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
         }
         
-        // también hay que macrcarlo como visto por quien lo encarga
+        // también hay que marcarlo como visto por quien lo encarga
         // Siempre que no sea el mismo:
         if (ConfigGlobal::role_id_cargo() != $Qid_cargo) {
+            $flag_encontrado = FALSE;
             $aVisto = $oEntrada->getJson_visto(TRUE);
-            $oVisto = [];
-            $oVisto['oficina'] = $Qid_oficina;
-            $oVisto['cargo'] = ConfigGlobal::role_id_cargo();
-            $oVisto['visto'] = TRUE;
-            $aVisto[] = $oVisto;
-            
+            foreach ($aVisto as $key => $oVisto) {
+                if ($oVisto['oficina'] == $Qid_oficina) {
+                    if ($oVisto['cargo'] == $Qid_cargo) {
+                        $aVisto[$key]['visto'] = TRUE;
+                        $flag_encontrado = TRUE;
+                    }
+                }
+            }
+            if (!$flag_encontrado) {
+                $oVisto = [];
+                $oVisto['oficina'] = $Qid_oficina;
+                $oVisto['cargo'] = $encargado_old;
+                $oVisto['visto'] = TRUE;
+                $aVisto[] = $oVisto;
+            }
             $oEntrada->setJson_visto($aVisto);
             if ($oEntrada->DBGuardar() === FALSE) {
                 $error_txt .= $oEntrada->getErrorTxt();
             }
         }
         
+        // Si es un cambio: marcar visto al anterior
+        if (!empty($encargado_old)) {
+            $flag_encontrado = FALSE;
+            $aVisto = $oEntrada->getJson_visto(TRUE);
+            foreach ($aVisto as $key => $oVisto) {
+                if ($oVisto['oficina'] == $Qid_oficina) {
+                    if ($oVisto['cargo'] == $Qid_cargo) {
+                        $aVisto[$key]['visto'] = TRUE;
+                        $flag_encontrado = TRUE;
+                    }
+                }
+            }
+            if (!$flag_encontrado) {
+                $oVisto = [];
+                $oVisto['oficina'] = $Qid_oficina;
+                $oVisto['cargo'] = $encargado_old;
+                $oVisto['visto'] = TRUE;
+                $aVisto[] = $oVisto;
+            }
+            
+            $oEntrada->setJson_visto($aVisto);
+            if ($oEntrada->DBGuardar() === FALSE) {
+                $error_txt .= $oEntrada->getErrorTxt();
+            }
+        }
+        // y en cualquier caso: desmarcar al nuevo (podria estar marcado previamente)
+        $aVisto = $oEntrada->getJson_visto(TRUE);
+        foreach ($aVisto as $key => $oVisto) {
+            if ($oVisto['oficina'] == $Qid_oficina) {
+                if ($oVisto['cargo'] == $Qid_cargo) {
+                    $aVisto[$key]['visto'] = FALSE;
+                }
+            }
+        }
+        
+        $oEntrada->setJson_visto($aVisto);
+        if ($oEntrada->DBGuardar() === FALSE) {
+            $error_txt .= $oEntrada->getErrorTxt();
+        }
 
         if (!empty($error_txt)) {
             $jsondata['success'] = FALSE;
