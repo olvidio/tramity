@@ -369,7 +369,7 @@ switch($Qque) {
                     $proto = FALSE;
                 }
                 // comprobar que no está anulado:
-                if (is_true($oEscrito->getAnulado()) OR $estado_original == Expediente::ESTADO_DILATA ) {
+                if (is_true($oEscrito->getAnulado()) || $estado_original == Expediente::ESTADO_DILATA ) {
                     $proto = FALSE;
                 }
                 if ($proto) {

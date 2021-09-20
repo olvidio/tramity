@@ -43,7 +43,7 @@ if($Qque == 'todos') {
 
 $chk_or = ($QandOr == 'OR')? 'checked' : '';
 // por defecto 'AND':
-$chk_and = (($QandOr == 'AND') OR empty($QandOr))? 'checked' : '';
+$chk_and = (($QandOr == 'AND') || empty($QandOr))? 'checked' : '';
 
 if (!empty($cDocumentos)) {
     $aWhere['id_doc'] = implode(',',$cDocumentos);

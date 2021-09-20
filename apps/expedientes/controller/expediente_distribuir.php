@@ -133,7 +133,7 @@ if ($Qfiltro == 'distribuir') {
     $ver_encargar = FALSE;
 
     $perm_d = $_SESSION['oConfig']->getPerm_distribuir();
-    if (ConfigGlobal::mi_usuario_cargo() === 'scdl' OR is_true($perm_d)) {
+    if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || is_true($perm_d)) {
         $perm_distribuir = TRUE;
     } else {
         $perm_distribuir = FALSE;

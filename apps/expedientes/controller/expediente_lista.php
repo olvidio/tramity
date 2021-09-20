@@ -50,7 +50,7 @@ if ($Qfiltro == 'archivados') {
 
     $chk_or = ($QandOr == 'OR')? 'checked' : '';
     // por defecto 'AND':
-    $chk_and = (($QandOr == 'AND') OR empty($QandOr))? 'checked' : '';
+    $chk_and = (($QandOr == 'AND') || empty($QandOr))? 'checked' : '';
     
     if (!empty($a_etiquetas_filtered)) {
         $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
@@ -122,7 +122,7 @@ if ($Qfiltro == 'archivados') {
 }
 
 // añadir dialogo de búsquedas
-if ($Qfiltro == 'borrador_oficina' OR $Qfiltro == 'borrador_propio') {
+if ($Qfiltro == 'borrador_oficina' || $Qfiltro == 'borrador_propio') {
     $Qprioridad_sel = (integer) \filter_input(INPUT_POST, 'prioridad_sel');
     $QandOr = (string) \filter_input(INPUT_POST, 'andOr');
     $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -146,7 +146,7 @@ if ($Qfiltro == 'borrador_oficina' OR $Qfiltro == 'borrador_propio') {
     
     $chk_or = ($QandOr == 'OR')? 'checked' : '';
     // por defecto 'AND':
-    $chk_and = (($QandOr == 'AND') OR empty($QandOr))? 'checked' : '';
+    $chk_and = (($QandOr == 'AND') || empty($QandOr))? 'checked' : '';
     
     if (!empty($a_etiquetas_filtered)) {
         $gesEtiquetasExpediente = new GestorEtiquetaExpediente();

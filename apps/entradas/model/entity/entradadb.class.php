@@ -530,7 +530,7 @@ class EntradaDB Extends core\ClasePropiedades {
 			$this->DBCarregar();
 		}
         $oJSON = json_decode($this->json_prot_origen,$bArray);
-	    if (empty($oJSON) OR $oJSON == '[]') {
+	    if (empty($oJSON) || $oJSON == '[]') {
 	        if ($bArray) {
 	            $oJSON = [];
 	        } else {
@@ -585,7 +585,7 @@ class EntradaDB Extends core\ClasePropiedades {
 			$this->DBCarregar();
 		}
         $oJSON = json_decode($this->json_prot_ref,$bArray);
-	    if (empty($oJSON) OR $oJSON == '[]') {
+	    if (empty($oJSON) || $oJSON == '[]') {
 	        if ($bArray) {
 	            $oJSON = [];
 	        } else {
@@ -880,7 +880,7 @@ class EntradaDB Extends core\ClasePropiedades {
 			$this->DBCarregar();
 		}
         $oJSON = json_decode($this->json_visto,$bArray);
-	    if (empty($oJSON) OR $oJSON == '[]') {
+	    if (empty($oJSON) || $oJSON == '[]') {
 	        if ($bArray) {
 	            $oJSON = [];
 	        } else {

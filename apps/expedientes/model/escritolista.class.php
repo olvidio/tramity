@@ -219,7 +219,7 @@ class EscritoLista {
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
         if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
-            OR ($estado == Expediente::ESTADO_ACABADO_SECRETARIA) ) {
+            || ($estado == Expediente::ESTADO_ACABADO_SECRETARIA) ) {
             $ver_ok = TRUE;
         } else {
             $ver_ok = FALSE;
@@ -391,7 +391,7 @@ class EscritoLista {
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
         if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
-            OR ($estado == Expediente::ESTADO_ACABADO_SECRETARIA) ) {
+            || ($estado == Expediente::ESTADO_ACABADO_SECRETARIA) ) {
             $ver_ok = TRUE;
         } else {
             $ver_ok = FALSE;

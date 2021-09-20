@@ -70,7 +70,7 @@ if (ConfigGlobal::role_actual() === 'vcd') {
     foreach ($cFirmasVcd as $oFirma) {
         $valor = $oFirma->getValor();
         $cargo_tipo = $oFirma->getCargo_tipo();        
-        if (empty($valor) OR 
+        if (empty($valor) ||
             ($valor != Firma::V_D_NO && $valor != Firma::V_D_OK &&  $valor != Firma::V_D_VISTO_BUENO) ) {
             if ($cargo_tipo == Cargo::CARGO_VB_VCD) {
                 $rango = 'vb_vcd';
@@ -130,7 +130,7 @@ if ($responder) {
         $a_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
     }
     
-    if ($id_ponente == ConfigGlobal::role_id_cargo() OR array_key_exists($id_ponente, $a_cargos_oficina)) {
+    if ($id_ponente == ConfigGlobal::role_id_cargo() || array_key_exists($id_ponente, $a_cargos_oficina)) {
         $aclaracion = _("Responder aclaración");
         $aclaracion_event = 'respuesta';
         $bool_aclaracion = TRUE;

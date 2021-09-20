@@ -638,7 +638,7 @@ class ExpedienteLista {
                 $row = [];
                 // mirar permisos...
                 $visibilidad = $oExpediente->getVisibilidad();
-                if ( ($visibilidad == Entrada::V_DIRECTORES OR $visibilidad == Entrada::V_RESERVADO OR $visibilidad == Entrada::V_RESERVADO_VCD)
+                if ( ($visibilidad == Entrada::V_DIRECTORES || $visibilidad == Entrada::V_RESERVADO || $visibilidad == Entrada::V_RESERVADO_VCD)
                     && $soy_dtor === FALSE) {
                         continue;
                 }
@@ -680,7 +680,7 @@ class ExpedienteLista {
                 // reunion. faltan firmas:
                 $bfalta_mi_firma = FALSE;
                 $bfalta_firma = FALSE;
-                if ($this->filtro == 'reunion' OR $this->filtro == 'seg_reunion') {
+                if ($this->filtro == 'reunion' || $this->filtro == 'seg_reunion') {
                     if (in_array($id_expediente, $this->a_exp_reunion_falta_mi_firma)) {
                         $bfalta_mi_firma = TRUE;
                     }
@@ -763,7 +763,7 @@ class ExpedienteLista {
                 }
                 $row['oficinas'] = $oficinas_txt;
                 // nombre encargado (ponente)
-                if ($this->filtro == 'acabados_encargados' OR $this->filtro == 'acabados') {
+                if ($this->filtro == 'acabados_encargados' || $this->filtro == 'acabados') {
                     $nom_encargado = $a_usuarios_oficina[$id_ponente];
                     $row['nom_encargado'] = $nom_encargado;
                 }

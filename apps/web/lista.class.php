@@ -364,7 +364,7 @@ class Lista {
         $sColumnsVisible = '[';
         $sColFilters = '[';
         $aFields = array();
-        if ($b !== 0 OR $b === 'x') {
+        if ($b !== 0 || $b === 'x') {
             $c++;
             $width = isset($aColsWidth['sel'])? $aColsWidth['sel'] : 30;
             $sColumns.= "{id: \"sel\", name: \"sel\", field: \"sel\", width:$width, sortable: false, formatter: checkboxSelectionFormatter}";

@@ -70,7 +70,7 @@ class Posicion {
 	 * @var integer $n número de posiciones a retroceder.
 	 */
 	public function go($n=0) {
-		if ($n == 0 OR !is_array($_SESSION['position'])) return;
+		if ($n == 0 || !is_array($_SESSION['position'])) return;
 
 		$aPosition = end($_SESSION['position']);
 		for ($i=0; $i < $n; $i++) {

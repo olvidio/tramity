@@ -633,7 +633,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 			$this->DBCarregar();
 		}
         $oJSON = json_decode($this->json_antecedentes,$bArray);
-	    if (empty($oJSON) OR $oJSON == '[]') {
+	    if (empty($oJSON) || $oJSON == '[]') {
 	        if ($bArray) {
 	            $oJSON = [];
 	        } else {
@@ -669,7 +669,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 			$this->DBCarregar();
 		}
         $oJSON = json_decode($this->json_acciones,$bArray);
-	    if (empty($oJSON) OR $oJSON == '[]') {
+	    if (empty($oJSON) || $oJSON == '[]') {
 	        if ($bArray) {
 	            $oJSON = [];
 	        } else {
@@ -868,7 +868,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 			$this->DBCarregar();
 		}
         $oJSON = json_decode($this->json_preparar,$bArray);
-	    if (empty($oJSON) OR $oJSON == '[]') {
+	    if (empty($oJSON) || $oJSON == '[]') {
 	        if ($bArray) {
 	            $oJSON = [];
 	        } else {

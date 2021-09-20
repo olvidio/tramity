@@ -334,10 +334,10 @@ class GestorFirma Extends core\ClaseGestor {
 	    $cargo_tipo = $oFirmaUltimaOk->getCargo_tipo();
 	    
 	    if ($cargo_tipo == Cargo::CARGO_VB_VCD &&
-	        ($valor == Firma::V_D_NO OR
-	        $valor == Firma::V_D_DILATA OR
-	        $valor == Firma::V_D_ESPERA OR
-	        $valor == Firma::V_D_RECHAZADO OR
+	        ($valor == Firma::V_D_NO ||
+	        $valor == Firma::V_D_DILATA ||
+	        $valor == Firma::V_D_ESPERA ||
+	        $valor == Firma::V_D_RECHAZADO ||
 	        $valor == Firma::V_D_VISTO_BUENO) ) {
 	        return TRUE;
 	    } else {
@@ -547,10 +547,10 @@ class GestorFirma Extends core\ClaseGestor {
                     return FALSE;
                 }
             } else {
-                if ($valor == Firma::V_NO OR 
-                    $valor == Firma::V_OK OR 
-                    $valor == Firma::V_D_NO OR 
-                    $valor == Firma::V_D_OK OR 
+                if ($valor == Firma::V_NO || 
+                    $valor == Firma::V_OK || 
+                    $valor == Firma::V_D_NO || 
+                    $valor == Firma::V_D_OK || 
                     $valor == Firma::V_D_VISTO_BUENO) {
                 } else {
                     return FALSE;

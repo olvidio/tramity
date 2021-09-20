@@ -405,7 +405,7 @@ class EntradaBypass Extends core\ClasePropiedades {
 			$this->DBCarregar();
 		}
         $oJSON = json_decode($this->json_prot_destino,$bArray);
-	    if (empty($oJSON) OR $oJSON == '[]') {
+	    if (empty($oJSON) || $oJSON == '[]') {
 	        if ($bArray) {
 	            $oJSON = [];
 	        } else {

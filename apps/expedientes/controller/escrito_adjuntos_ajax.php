@@ -203,7 +203,7 @@ switch ($Qque) {
 	    
 	    $chk_or = ($QandOr == 'OR')? 'checked' : '';
 	    // por defecto 'AND':
-        $chk_and = (($QandOr == 'AND') OR empty($QandOr))? 'checked' : '';
+        $chk_and = (($QandOr == 'AND') || empty($QandOr))? 'checked' : '';
 	    
 	    if (!empty($Qa_etiquetas)) {
 	        $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
@@ -282,7 +282,7 @@ switch ($Qque) {
 	        }
 	        // mirar permisos...
 	        $visibilidad = $oDocumento->getVisibilidad();
-	        if ( ($visibilidad == Entrada::V_DIRECTORES OR $visibilidad == Entrada::V_RESERVADO OR $visibilidad == Entrada::V_RESERVADO_VCD)
+	        if ( ($visibilidad == Entrada::V_DIRECTORES || $visibilidad == Entrada::V_RESERVADO || $visibilidad == Entrada::V_RESERVADO_VCD)
 	            && ConfigGlobal::soy_dtor() === FALSE) {
 	                continue;
 	        }

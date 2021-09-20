@@ -161,8 +161,8 @@ switch ($Qque) {
             // De momento sólo se firma el primero que no tenga valor.
             foreach ($cFirmas as $oFirma) {
                 $valor = $oFirma->getValor();
-                if ($valor == Firma::V_NO OR $valor == Firma::V_D_NO OR
-                    $valor == Firma::V_OK OR $valor == Firma::V_D_OK OR
+                if ($valor == Firma::V_NO || $valor == Firma::V_D_NO ||
+                    $valor == Firma::V_OK || $valor == Firma::V_D_OK ||
                     $valor == Firma::V_D_VISTO_BUENO) {
                     continue;
                 } else {

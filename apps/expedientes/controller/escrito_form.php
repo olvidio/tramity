@@ -254,10 +254,10 @@ $a_cosas = ['id_expediente' => $Qid_expediente,
 
 $explotar = FALSE;
 if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
-    OR ($estado == Expediente::ESTADO_ACABADO_SECRETARIA) ) {
+    || ($estado == Expediente::ESTADO_ACABADO_SECRETARIA) ) {
     // Posibilidad de explotar en varios escritos, uno para cada ctr destino.
     $ctr_dest = $oArrayProtDestino->getArray_sel();
-    if (count($ctr_dest) > 1 OR !empty($a_grupos)) {
+    if (count($ctr_dest) > 1 || !empty($a_grupos)) {
         $explotar = TRUE;
     }
 }

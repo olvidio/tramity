@@ -274,7 +274,7 @@ foreach($oDbl->query($sql) as $row) {
 			$this->DBCarregar();
 		}
         $oJSON = json_decode($this->'.$tip.$nomcamp.',$bArray);
-	    if (empty($oJSON) OR $oJSON == \'[]\') {
+	    if (empty($oJSON) || $oJSON == \'[]\') {
 	        if ($bArray) {
 	            $oJSON = [];
 	        } else {
