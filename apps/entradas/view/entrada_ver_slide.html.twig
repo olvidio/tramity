@@ -1,7 +1,7 @@
 {% if id_entrada %}
 <div class="row col-12 mb-4">
     <div class="col-1">
-      <i id="prev" class="align-self-center fa fa-chevron-left fa-5x" aria-hidden="true" onclick="fnjs_prev()"></i>
+      <i id="prev" class="align-self-center fa fa-chevron-left fa-3x" aria-hidden="true" onclick="fnjs_prev()"></i>
     </div>
     <div class="col-10">
         <div class="clearfix ">
@@ -9,6 +9,12 @@
             <div class="p-2 text-dark fw-bold" >
               {{ cabeceraIzqd|raw }}
             </div>
+          </div>
+          <div class="d-inline-flex w-75">
+              <div class="ps-5 input-group mb-3">
+                  <span class="input-group-text" id="inputGroup-sizing-default">{{ "Nota (detalle)"|trans }}:</span>
+                  <input type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}" onChange="fnjs_detalle()" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+              </div>
           </div>
           <div class="d-inline-flex float-end">
             <div class="p-2 text-dark fw-bold align-top text-end" >
@@ -18,7 +24,7 @@
         </div>
     </div>
     <div class="col-1">
-      <i id="next" class="align-self-center fa fa-chevron-right fa-5x" aria-hidden="true" onclick="fnjs_next()"></i>
+      <i id="next" class="align-self-center fa fa-chevron-right fa-3x" aria-hidden="true" onclick="fnjs_next()"></i>
     </div>
 </div>
 
@@ -49,7 +55,7 @@
   
 <!--  --------------------  ESCRITO  --------------------------  -->
 <div class="row">
-  <div class="ms-3 col-11 border rounded overflow-auto" id="txt" style="width: 100%; height:500px;">
+  <div class="ms-3 col-11 border rounded overflow-auto" id="txt" style="height:300px;">
   {{ escrito_html|raw }}
   </div>
 </div>
@@ -133,6 +139,28 @@ fnjs_guardar_f_entrada=function(ok){
 	
     var url_update = 'apps/entradas/controller/entrada_update.php';
     var param_json = { que: 'f_entrada', id_entrada: id_entrada, f_entrada: f_entrada };
+    request=$.ajax({
+        data: param_json,
+        url: url_update,
+        method: 'POST'
+    });
+    request.done( function (rta) {
+        rta_txt=rta.responseText;
+        if (rta_txt==undefined) {
+            rta_txt='';
+        }
+        if (rta_txt != '' && rta_txt != '\n') {
+            alert ('error: '+rta_txt);
+        }
+    });
+}
+
+fnjs_detalle=function(){
+	var id_entrada="{{ id_entrada }}";
+	var detalle =	$("#detalle").val();
+
+    var url_update = 'apps/entradas/controller/entrada_update.php';
+    var param_json = { que: 'detalle', id_entrada: id_entrada, detalle: detalle };
     request=$.ajax({
         data: param_json,
         url: url_update,

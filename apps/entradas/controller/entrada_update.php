@@ -279,7 +279,15 @@ switch($Qque) {
             $error_txt = $oEntrada->getErrorTxt();
             exit($error_txt);
         }
-        
+        break;
+    case 'detalle':
+        $oEntrada = new Entrada($Qid_entrada);
+        $oEntrada->DBCarregar();
+        $oEntrada->setDetalle($Qdetalle);
+        if ($oEntrada->DBGuardar() === FALSE) {
+            $error_txt = $oEntrada->getErrorTxt();
+            exit($error_txt);
+        }
         break;
     case 'guardar':
         if (!empty($Qid_entrada)) {

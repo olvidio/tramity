@@ -65,6 +65,7 @@ if (!empty($Qid_entrada)) {
     $cabeceraDcha = $oEntrada->cabeceraDerecha();
     
     $asunto_e = $oEntrada->getAsunto_entrada();
+    $detalle = $oEntrada->getDetalle();
     
     $a_adjuntos = $oEntrada->getArrayIdAdjuntos();
     
@@ -82,6 +83,7 @@ if (!empty($Qid_entrada)) {
     $cabeceraDcha = '';
     $a_adjuntos = [];
     $asunto_e = '';
+    $detalle = '';
     $f_escrito = '';
     $f_entrada = '';
     $escrito_html = '';
@@ -119,6 +121,7 @@ $a_campos = [
     'cabeceraIzqd' => $cabeceraIzqd,
     'cabeceraDcha' => $cabeceraDcha,
     'asunto_e' => $asunto_e,
+    'detalle' => $detalle,
     'f_escrito' => $f_escrito,
     'chk_leido' => $chk_leido,
     'f_entrada' => $f_entrada,
