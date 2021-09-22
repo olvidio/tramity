@@ -59,7 +59,7 @@
 <div class="col-7" > <!-- COL IZQ --> 
   <!--  --------------- Visibilidad --------------- -->
   <div class="mb-3 row">
-    <label for="visibilidad" class="col-2 form-label">{{ "Visibilidad"|trans }}:</label>
+    <label for="visibilidad" class="col-3 form-label">{{ "Visibilidad"|trans }}:</label>
     <div class='col-3'>
         {{ oDesplVisibilidad.desplegable|raw }}
       </div>
@@ -79,23 +79,16 @@
     {% endif %}
     {% if tipo_doc == 3 %}
         <label class="col-3 form-label">{{ "Tipo de documento"|trans }}:</label>
-        <label class="col-2 form-label">{{ "incrustado"|raw }}</label>
+        <label class="col-3 form-label">{{ "incrustado"|raw }}</label>
     {% endif %}
     {% if tipo_doc is empty %}
         <label class="col-3 form-label">{{ "Insertar escrito"|trans }}:</label>
-		  <div class='col-2'>
+		  <div class='col-3'>
           <button tabindex='100' class="btn btn-info" onClick="fnjs_add_doc(1);" >
             {{ "Etherpad"|trans }}
           </button>
           </div>
-          {#
-		  <div class='col-2'>
-          <button disabled tabindex='101' class="btn btn-info" onClick="fnjs_add_doc(2);" >
-            {{ "EtherCalc"|trans }}
-          </button>
-          </div>
-          #}
-		  <div class='col-2'>
+		  <div class='col-3'>
           <button tabindex='10' class="btn btn-info" onClick="fnjs_add_doc(3);" >
             {{ "Incrustado"|trans }}
           </button>
@@ -115,12 +108,12 @@
 
 
 <div>
-  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Cancelar"|trans }}
-  </button>
-  <button tabindex='90' class="btn btn-primary" onClick="fnjs_guardar_documento();" >
-    {{ "Guardar"|trans }}
-  </button>
+    <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
+      {{ "Cancelar"|trans }}
+    </button>
+    <button tabindex='90' class="btn btn-primary" onClick="fnjs_guardar_documento();" >
+      {{ "Guardar"|trans }}
+    </button>
 </div>
 
 </form>

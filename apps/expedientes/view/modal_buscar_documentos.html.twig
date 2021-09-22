@@ -4,6 +4,7 @@
 	<input type="hidden" name="que" value='buscar_documento' />
 	<input type="hidden" name="id_doc" value='{{ id_doc }}' />
 	<input type="hidden" name="tipo_n" value='{{ tipo_n }}' />
+	<input type="hidden" name="id_expediente" value='{{ id_expediente }}' />
   <!--  --------------- ASUNTO --------------- -->
   <div class="mb-3 row">
     <label for="nom" class="col-1 form-label">{{ "Nombre"|trans }}</label>
@@ -47,9 +48,15 @@
       </span>
     </div>
       <!--  --------------- BOTON --------------- -->
-      <div class="col-2">
-        <button type="button" class="btn btn-primary" onClick="fnjs_listar_documentos('{{ para }}');" >{{ "Buscar"|trans }}</button>
+      <div class="col-1">
+        <button type="button" class="btn btn-primary" onClick="fnjs_listar_documentos();" >{{ "Buscar"|trans }}</button>
       </div>
+      {%  if id_expediente %}
+      {# doy la opción de crear uno nuevo desde aquí, si es como anteceedente para un expediente #}
+          <div class="col-1">
+            <button type="button" class="btn btn-secondary" onClick="fnjs_new_documento('{{ id_expediente }}');" >{{ "Nuevo"|trans }}</button>
+          </div>
+      {% endif %}
   </div>
   </form>
 </div>
@@ -65,14 +72,26 @@ $(document).ready(function() {
 	$('#slow_load').hide();  // hide it initially
 });
 
-fnjs_listar_documentos=function(para) {
+fnjs_new_documento=function(id_expediente) {
     var data=$('#condiciones').serialize();
-    if (para == 'adjunto') {
-    	var url_ajax = 'apps/expedientes/controller/escrito_adjuntos_ajax.php';
-    }
-    if (para == 'antecedente') {
-    	var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
-	}
+    var url_ajax = 'apps/documentos/controller/documento_form.php';
+
+    request=$.ajax({
+        data: data,
+        url: url_ajax,
+        method: 'POST'
+    });
+    request.done( function (rta) {
+        if (rta==undefined) {
+            rta='';
+        }
+        $('#modal-body').html(rta);
+    });
+}
+
+fnjs_listar_documentos=function() {
+    var data=$('#condiciones').serialize();
+    var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
     request=$.ajax({
         data: data,
         url: url_ajax,

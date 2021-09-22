@@ -12,7 +12,15 @@ fnjs_cancelar=function(){
             return false;
         }
     }
-	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+    // si está en el modal de buscar documentos, lo que hay que hacer es cerrar el modal:
+    // si no está #id_expediente, da undefined.
+    var id_expediente=$('#id_expediente').val();
+    if (id_expediente != undefined) {
+    	// close div modal
+        $('#ModalBuscar').modal('hide');
+    } else {
+        fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+    }
 }
 
 fnjs_guardar_documento=function(quiet=0){
@@ -44,14 +52,24 @@ fnjs_guardar_documento=function(quiet=0){
 
 	if (!nom) { alert("{{ "Debe llenar el campo de nom"|trans|raw }}"); err=1; }
 	if (!etiquetas) { alert("{{ "Debe poner como mínimo una etiqueta"|trans|raw }}"); err=1; }
-	
+
+	// si está en el modal de buscar documentos, al final hay que ponerolo como antecedente
+    // si no está #id_expediente, da undefined.
+    var id_expediente=$('#id_expediente').val();
+    var id_doc=$('#id_doc').val();
+    
 	if (err!=1) {
         $.when(fnjs_guardar_datos()).pipe(fnjs_guardar_success).then(function () {
-                if (quiet!=1) {
-                    alert ("{{ "datos guardados"|trans|raw }}");
-                    // Volver a la lista...
-                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-				}
+    			if (id_expediente != undefined) {
+        			// está en _antecedentes_js.html.twig
+    				fnjs_adjuntar_antecedente('documento',id_doc,id_expediente);
+    			} else {
+                    if (quiet!=1) {
+                        alert ("{{ "datos guardados"|trans|raw }}");
+                        // Volver a la lista...
+                        fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                    }
+    			}
             },
             function (error) { alert (error); return false; }
             );
