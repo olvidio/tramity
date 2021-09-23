@@ -155,6 +155,10 @@ fnjs_ver_doc_ep=function() {
     var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
     var param_json = { tipo_id: 'documento', id: id_doc };
     
+	// si está en el modal de buscar documentos, al final hay que ponerolo como antecedente
+    // si no está #id_expediente, da undefined.
+    var id_expediente=$('#id_expediente').val();
+    
     request=$.ajax({
         data: param_json,
         url: url_ajax,
@@ -167,7 +171,12 @@ fnjs_ver_doc_ep=function() {
         var timer = setInterval(function() { 
             if(win.closed) {
                 clearInterval(timer);
-                fnjs_actualizar();
+    			if (id_expediente != undefined) {
+        			// está en _antecedentes_js.html.twig
+    				fnjs_adjuntar_antecedente('documento',id_doc,id_expediente);
+    			} else {
+                	fnjs_actualizar();
+    			}
             }
         }, 1000);
         win.focus();
