@@ -172,6 +172,8 @@ switch ($Qque) {
 	    $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    $Qperiodo =  (string) \filter_input(INPUT_POST, 'periodo');
 	    
+        $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
+	    
 	    $gesDocumento = new GestorDocumento();
 	    $aWhere = [];
 	    $aOperador = [];
@@ -314,6 +316,7 @@ switch ($Qque) {
 
 	    $a_campos = [
 	        'para' => 'adjunto',
+            'id_expediente' => $Qid_expediente,
             'id_escrito' => $Qid_escrito,
 	        'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
 	        'chk_and' => $chk_and,
