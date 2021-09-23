@@ -35,18 +35,20 @@ $Qperiodo = (string) \filter_input(INPUT_POST, 'periodo');
 $Qnuevo = (string) \filter_input(INPUT_POST, 'nuevo');
 $Qcalendario = (string) \filter_input(INPUT_POST, 'calendario');
 $Qid_oficina = (string) \filter_input(INPUT_POST, 'id_oficina');
-$go = (string) \filter_input(INPUT_POST, 'go');
 $id_reg = (string) \filter_input(INPUT_POST, 'id_reg');
 
 $cargar_css = FALSE;
 
-if (empty($Qid_oficina)) {
-    $go = (string) \filter_input(INPUT_GET, 'go');
+// estoy en una ventana independiente
+$go = (string) \filter_input(INPUT_GET, 'go');
+if (empty($go)) {
+    $go = (string) \filter_input(INPUT_POST, 'go');
+}
+if ($go=="entradas" || $go=="salidas" || $go=="mov_iese") { 
     $id_reg = (integer) \filter_input(INPUT_GET, 'id_reg');
     $Qid_oficina = (integer) \filter_input(INPUT_GET, 'ponente');
     $Qcalendario = 'registro';
     
-    //if ($go=="entradas" || $go=="salidas" || $go=="mov_iese") { 
     $cargar_css = TRUE;
 } else {
     $Qcalendario = 'oficina';
