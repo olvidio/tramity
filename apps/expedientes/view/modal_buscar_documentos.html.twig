@@ -52,7 +52,7 @@
       <div class="col-1">
         <button type="button" class="btn btn-primary" onClick="fnjs_listar_documentos();" >{{ "Buscar"|trans }}</button>
       </div>
-      {%  if id_expediente %}
+      {%  if not para == 'adjunto' %}
       {# doy la opción de crear uno nuevo desde aquí, si es como anteceedente para un expediente #}
           <div class="col-1">
             <button type="button" class="btn btn-secondary" onClick="fnjs_new_documento('{{ id_expediente }}');" >{{ "Nuevo"|trans }}</button>
