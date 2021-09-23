@@ -61,7 +61,7 @@ fnjs_eliminar_accion=function(id_escrito){
         });
     }
 }
-fnjs_cancelar=function(){
+fnjs_cancelar_expediente=function(){
     if (event != undefined) {
         event.preventDefault();
         event.stopPropagation();
@@ -166,7 +166,7 @@ fnjs_visto=function(){
     	return false;
     }
 
-    $('#que').val('visto');
+    $('#frm_exp_que').val('visto');
     var params=$('#form_expediente').serialize();
     
     request=$.ajax({
@@ -200,7 +200,7 @@ fnjs_circular=function(){
     	return false;
     }
 
-    $('#que').val('circular');
+    $('#frm_exp_que').val('circular');
     datos = $('#form_expediente').serialize();	
     request=$.ajax({
         data: datos,
@@ -255,7 +255,7 @@ fnjs_guardar_expediente=function(){
 
 	if (err!=1) {
 		$('#firmas').val(firma);
-		$('#que').val('guardar');
+		$('#frm_exp_que').val('guardar');
 		var data=$('#form_expediente').serialize();
 		
         request=$.ajax({

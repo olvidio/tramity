@@ -29,7 +29,7 @@
 
 <h1>{{ titulo }} ({{ ponente_txt }})</h1>
 <form id ="form_expediente" >
-    <input type=hidden name='que' id='que' value=0>
+    <input type=hidden name='que' id='frm_exp_que' value=0>
     <input type=hidden name='id_n' id='id_n' value=0>
     <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
     <input type=hidden name='estado' id='estado' value={{ estado }} >
@@ -224,7 +224,7 @@
   </div>
   
 <!--  --------------------  BOTONES --------------------------  -->
-  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
+  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar_expediente();" >
     {{ "Cancelar"|trans }}
   </button>
   <button tabindex='90' class="btn btn-primary" onClick="fnjs_guardar_expediente();" >
