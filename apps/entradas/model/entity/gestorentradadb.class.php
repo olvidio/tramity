@@ -406,7 +406,11 @@ class GestorEntradaDB Extends ClaseGestor {
         }
         $sOrdre = '';
         $sLimit = '';
-        if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') $sOrdre = ' ORDER BY '.$aWhere['_ordre'];
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] != '' ) {
+            $sOrdre = ' ORDER BY '.$aWhere['_ordre'];
+        } else {
+            $sOrdre = " ORDER BY CASE WHEN anulado IS NULL THEN 1 WHEN anulado = '' THEN 1 ELSE 2 END , t.f_entrada DESC";
+        }
         if (isset($aWhere['_ordre'])) unset($aWhere['_ordre']);
         if (isset($aWhere['_limit']) && $aWhere['_limit']!='') $sLimit = ' LIMIT '.$aWhere['_limit'];
         if (isset($aWhere['_limit'])) unset($aWhere['_limit']);
