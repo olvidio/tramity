@@ -51,7 +51,7 @@ if ($go=="entradas" || $go=="salidas" || $go=="mov_iese") {
     
     $cargar_css = TRUE;
 } else {
-    $Qcalendario = 'oficina';
+    $Qcalendario = empty($Qcalendario)? 'oficina' : $Qcalendario;
 }
 
 $gesOficinas = new GestorOficina();
