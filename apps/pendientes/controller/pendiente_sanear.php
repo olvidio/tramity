@@ -71,6 +71,7 @@ $oBuscarPendiente = new BuscarPendiente();
 $oBuscarPendiente->setCalendario('registro');
 // tabla
 foreach ($cEntradasAnuladas as $oEntrada) {
+    $id_entrada = $oEntrada->getId_entrada();
     $row = [];
     $row['id_entrada'] = $id_entrada;
     
@@ -100,8 +101,7 @@ foreach ($cEntradasAnuladas as $oEntrada) {
     $row['f_contestar'] = $oEntrada->getF_contestar()->getFromLocal();
     
     // Pendientes de la entrada:
-    $aIds[] = $id_entrada;
-    $oBuscarPendiente->setId_reg($aIds); 
+    $oBuscarPendiente->setId_reg([$id_entrada]); 
     $cPendientes = $oBuscarPendiente->getPendientes();
     $lst_pendientes = '';
     foreach ($cPendientes as $oPendiente) {
@@ -125,7 +125,7 @@ foreach ($cEntradasAnuladas as $oEntrada) {
             $periodico="";
         }
         
-        $lst_pendientes .= empty($lst_pendientes)? '' : "\n";
+        $lst_pendientes .= empty($lst_pendientes)? '' : "<br>";
         $lst_pendientes .= $protocolo."::".$periodico."::".$asunto."::".$estado;
     }
     
