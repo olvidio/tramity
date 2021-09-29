@@ -1,5 +1,5 @@
 <div id="condiciones">
-<form id="que" name="que" action="apps/pendientes/controller/pendiente_buscar.php" method="post">
+<form id="frm_que" name="frm_que" action="apps/pendientes/controller/pendiente_buscar.php" method="post">
 <input type="hidden" id="calendario" name="calendario" value="{{ calendario }}" >
 <input type="hidden" id="que" name="que" value="buscar">
 
@@ -62,7 +62,7 @@
   </div>
   <!--  --------------------  Botones --------------------------  -->
   <div class="row">
-    <button id="btn_guardar" type="button" tabindex='90' class="col-1 btn btn-primary" onClick="fnjs_buscar('#que');" >
+    <button id="btn_guardar" type="button" tabindex='90' class="col-1 btn btn-primary" onClick="fnjs_buscar('#frm_que');" >
       {{ "buscar"|trans }}
     </button>
   </div>
@@ -177,7 +177,7 @@ fnjs_marcar=function(formulario){
        if (json.success != true) {
            alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
        } else {
-           fnjs_buscar('#que');
+           fnjs_buscar('#frm_que');
        }
     });
 }
@@ -200,7 +200,7 @@ fnjs_borrar=function(formulario){
            if (json.success != true) {
                alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
            } else {
-               fnjs_buscar('#que');
+               fnjs_buscar('#frm_que');
            }
         });
 	}

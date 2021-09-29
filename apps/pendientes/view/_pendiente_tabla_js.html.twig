@@ -37,6 +37,24 @@ fnjs_buscar=function(){
 	}
 }
 
+fnjs_sanear_pendiente=function(formulario){
+	cal = $('#despl_calendario').val();
+	$('#calendario').val(cal);
+	of = $('#id_oficina').val();
+	$('#id_oficina2').val(of);
+	$(formulario).attr('action',"apps/pendientes/controller/pendiente_sanear.php");
+	fnjs_enviar_formulario(formulario,'#main');
+}
+
+fnjs_migrar_pendiente=function(formulario){
+	cal = $('#despl_calendario').val();
+	$('#calendario').val(cal);
+	of = $('#id_oficina').val();
+	$('#id_oficina2').val(of);
+	$(formulario).attr('action',"apps/pendientes/controller/pendiente_migrar.php");
+	fnjs_enviar_formulario(formulario,'#main');
+}
+
 fnjs_buscar_pendiente=function(formulario){
 	cal = $('#despl_calendario').val();
 	$('#calendario').val(cal);

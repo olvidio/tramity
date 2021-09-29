@@ -83,14 +83,15 @@ class GestorPendiente {
         for ($t=1;$t<=$tt;$t++) {
             //print_r($vcalendar[$t]);
             
-            $icalComp = $vcalendar[$t]->GetComponents('VTODO');
-            $icalComp = $icalComp[0];  // If you know there's only 1 of them...
+            $a_icalComp = $vcalendar[$t]->GetComponents('VTODO');
+            if (empty($a_icalComp)) { continue; }
+            $icalComp = $a_icalComp[0];  // If you know there's only 1 of them...
             
             $uid=$icalComp->GetPValue("UID");
             $oPendiente= new Pendiente($this->cal_oficina,$this->resource,$this->cargo,$uid);
             
             $asunto=$icalComp->GetPValue("SUMMARY");
-            if ($asunto=="Busy") continue;
+            if ($asunto=="Busy") { continue; }
             $status=$icalComp->GetPValue("STATUS");
             $f_cal_acabado=$icalComp->GetPValue("COMPLETED");
             $f_cal_plazo=$icalComp->GetPValue("DUE");
