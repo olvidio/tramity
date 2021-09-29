@@ -103,7 +103,7 @@ foreach ($cEntradasAnuladas as $oEntrada) {
     $aIds[] = $id_entrada;
     $oBuscarPendiente->setId_reg($aIds); 
     $cPendientes = $oBuscarPendiente->getPendientes();
-    $a_valores = [];
+    $lst_pendientes = '';
     foreach ($cPendientes as $oPendiente) {
         /*
         $uid = $oPendiente->getUid();
@@ -125,10 +125,11 @@ foreach ($cEntradasAnuladas as $oEntrada) {
             $periodico="";
         }
         
-        $a_valores[] = $protocolo."::".$periodico."::".$asunto."::".$estado;
+        $lst_pendientes .= empty($lst_pendientes)? '' : "\n";
+        $lst_pendientes .= $protocolo."::".$periodico."::".$asunto."::".$estado;
     }
     
-    $row['pendientes'] = $a_valores;
+    $row['pendientes'] = $lst_pendientes;
     
     // para ordenar. Si no añado id_entrada, sobre escribe.
     $f_entrada_iso = $oEntrada->getF_entrada()->getIso() . $id_entrada;

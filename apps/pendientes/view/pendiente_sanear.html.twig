@@ -27,11 +27,7 @@
       <td style="text-align: right">{{ row.f_escrito }}</td>
       <td style="text-align: right">{{ row.f_contestar }}</td>
       <td style="text-align: right">{{ row.f_entrada }}</td>
-      <td>
-      {% for key, pdt in row.pendientes %}
-      		{{ key }}=> {{ pdt|nl2br }}
-      {% endfor %}
-      </td>
+      <td>{{ row.pendientes|raw }}</td>
     </tr>
     {% endfor %}
   </tbody>
