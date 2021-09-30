@@ -35,8 +35,6 @@ if (isset($_POST['stack'])) {
 	}
 }
 
-$role = ConfigGlobal::role_actual();
-
 $gesEtiquetas = new GestorEtiqueta();
 // Etiquetas personales + Etiquetas de la oficina
 $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
@@ -55,6 +53,8 @@ $a_botones = [ ['txt'=> _("borrar"), 'click'=>"fnjs_eliminar()"],
 
 $gesCargos = new GestorCargo();
 $a_cargos = $gesCargos->getArrayCargos(TRUE);
+$gesOficinas = new GestorOficina();
+$a_oficinas = $gesOficinas->getArrayOficinas();
 $a_valores=array();
 $i=0;
 foreach ($cEtiquetas as $oEtiqueta) {
@@ -65,14 +65,16 @@ foreach ($cEtiquetas as $oEtiqueta) {
 	$oficina = $oEtiqueta->getOficina();
 	if (is_true($oficina)) {
 	    $oficina_txt = _("de la oficina");
+	    $cargo_txt = empty($a_oficinas[$id_cargo])? $id_cargo : $a_oficinas[$id_cargo];
 	} else {
 	    $oficina_txt = _("personal");
+	    $cargo_txt = empty($a_cargos[$id_cargo])? $id_cargo : $a_cargos[$id_cargo];
 	}
 
 	$a_valores[$i]['sel'] = "$id_etiqueta#";
 	$a_valores[$i][1] = $nom_etiqueta;
 	$a_valores[$i][2] = $oficina_txt;
-	$a_valores[$i][3] = empty($a_cargos[$id_cargo])? $id_cargo : $a_cargos[$id_cargo];
+	$a_valores[$i][3] = $cargo_txt;
 }
 if (isset($Qid_sel) && !empty($Qid_sel)) { $a_valores['select'] = $Qid_sel; }
 if (isset($Qscroll_id) && !empty($Qscroll_id)) { $a_valores['scroll_id'] = $Qscroll_id; }
