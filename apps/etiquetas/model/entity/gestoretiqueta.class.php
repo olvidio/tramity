@@ -51,6 +51,7 @@ class GestorEtiqueta Extends core\ClaseGestor {
 	        $id_cargo = ConfigGlobal::role_id_cargo();
 	    }
 	    $aWhere = [ 'id_cargo' => $id_cargo,
+	        'oficina' => 'f',
 	        '_ordre' => 'nom_etiqueta',
 	    ];
 	    $aOperador = [];
@@ -67,6 +68,7 @@ class GestorEtiqueta Extends core\ClaseGestor {
 	    $id_oficina = $oCargo->getId_oficina();
 	    
 	    $aWhere = [ 'id_cargo' => $id_oficina,
+	        'oficina' => 't',
 	        '_ordre' => 'nom_etiqueta',
 	    ];
 	    $aOperador = [];
