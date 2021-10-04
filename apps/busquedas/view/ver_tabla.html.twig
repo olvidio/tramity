@@ -285,7 +285,7 @@ fnjs_anular_entrada=function(formulario){
                 id_reg=array_dir[0];
             }
         });
-
+        
         var url_doc = 'apps/entradas/controller/entrada_ajax.php';
         var param_json = { que: 'get_anular', id_entrada: id_reg };
         request=$.ajax({
@@ -578,9 +578,12 @@ fnjs_actualizar=function(){
 
 }
 
+/* NO SE de donde se copió, pero al cerrar el modal da un error y 
+además quita las barras scroll de la pagina.
 
 $(".modal").on('hide.bs.modal', function (e) {
     $(document.body).removeClass('modal-open');
     $('.modal-backdrop').remove();
 });
+*/
 </script>
