@@ -234,6 +234,10 @@ class EntradaDB Extends core\ClasePropiedades {
 		array_walk($aDades, 'core\poner_null');
 		//para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
 		if ( core\is_true($aDades['bypass']) ) { $aDades['bypass']='true'; } else { $aDades['bypass']='false'; }
+		// asegurar que tiene fecha de entrada:
+		if (empty($aDades['f_entrada'])) {
+		    $aDades['f_entrada'] = date('Y-m-d');
+		}
 
 		if ($bInsert === FALSE) {
 			//UPDATE
