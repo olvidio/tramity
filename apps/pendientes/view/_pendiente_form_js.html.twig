@@ -262,7 +262,8 @@ fnjs_guardar_pendiente=function(){
 	                if (json.success != true) {
 	                    alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
 		            } else {
-                    	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                    	//fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                        {{ oPosicion.js_atras(1)|raw }}
 		            }
                 });
                 request.fail(function(JqXHR, textStatus, errorThrown){
