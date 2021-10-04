@@ -15,6 +15,7 @@ use usuarios\model\entity\Oficina;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
+use entradas\model\Entrada;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -31,6 +32,7 @@ require_once ("apps/core/global_object.inc");
 
 $oPosicion->recordar();
 
+$explicacion_bypass = _("Está mal! No deberia asociar un pendiente a una entrada de distribución cr (bypass)");
 
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 $Qcalendario = (string) \filter_input(INPUT_POST, 'calendario');
@@ -154,6 +156,19 @@ if ($Qque == 'buscar') {
         $rrule = $oPendiente->getRrule();
         $asunto = $oPendiente->getAsuntoDetalle();
         if (!empty($asunto)) $asunto=htmlspecialchars(stripslashes($asunto),ENT_QUOTES,'utf-8');
+        
+        /* Para mostrar errores algunos se han asociado al bypass */
+        $matches = [];
+        preg_match('/REN(\d*?)-.*/', $uid, $matches);
+        $id_entrada = empty($matches[1])? '' : $matches[1];
+        if (!empty($id_entrada)) {
+            $oEntrada = new Entrada($id_entrada);
+            $bypass = $oEntrada->getBypass();
+            if ($bypass) {
+                $asunto = "<span class=\"text-danger\" title=\"$explicacion_bypass\">BYPASS</span> " . $asunto;
+            }
+        }
+        
         $plazo = $oPendiente->getF_plazo()->getFromLocal();
         $plazo_iso = $oPendiente->getF_plazo()->format('Ymd'); // sólo números, para poder ordenar.
         

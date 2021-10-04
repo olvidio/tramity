@@ -69,6 +69,17 @@ if (empty($msg)) {
     $id_entrada_org = $oEntrada->getId_entrada();
     $id_reg_org = 'REN'.$id_entrada_org; // REN = Regitro Entrada
     $id_of_ponente_org = $oEntrada->getPonente();
+    // location
+    $location_org = '';
+    $oProtLocal = new Protocolo();
+    $json_prot_origen = $oEntrada->getJson_prot_origen();
+    if (!empty(get_object_vars($json_prot_origen))) {
+        $oProtLocal->setLugar($json_prot_origen->lugar);
+        $oProtLocal->setProt_num($json_prot_origen->num);
+        $oProtLocal->setProt_any($json_prot_origen->any);
+        //mas: No cojo el del registro, el pendiente puede tener su propio 'mas'
+        $location_org = $oProtLocal->ver_txt();
+    }
 }
 
 // buscar id_entrada del prot destino
@@ -100,7 +111,7 @@ if (empty($msg)) {
     $id_reg_dst = 'REN'.$id_entrada_dst; // REN = Regitro Entrada
     $id_of_ponente_dst = $oEntrada->getPonente();
     // location
-    $location = '';
+    $location_dst = '';
     $oProtLocal = new Protocolo();
     $json_prot_origen = $oEntrada->getJson_prot_origen();
     if (!empty(get_object_vars($json_prot_origen))) {
@@ -108,7 +119,7 @@ if (empty($msg)) {
         $oProtLocal->setProt_num($json_prot_origen->num);
         $oProtLocal->setProt_any($json_prot_origen->any);
         //mas: No cojo el del registro, el pendiente puede tener su propio 'mas'
-        $location = $oProtLocal->ver_txt();
+        $location_dst = $oProtLocal->ver_txt();
     }
 }
 
@@ -127,7 +138,8 @@ if (empty($msg)) {
     $oDavicalMigrar->setOficina($oficina_txt);
     $oDavicalMigrar->setId_reg_org($id_reg_org);
     $oDavicalMigrar->setId_reg_dst($id_reg_dst);
-    $oDavicalMigrar->setLocation($location);
+    $oDavicalMigrar->setLocation_org($location_org);
+    $oDavicalMigrar->setLocation_dst($location_dst);
     if ($oDavicalMigrar->migrar() === FALSE) {
         $msg .= _("No se ha podido trasladar...");
     }

@@ -49,7 +49,14 @@ class DavicalMigrar {
      *
      * @var string
      */
-    private $location;
+    private $location_org;
+    
+    /**
+     * location_dst de DavicalMigrar
+     *
+     * @var string
+     */
+    private $location_dst;
     
     /*
     dav_name		/oficina_scdl/registro/REN532689-20210316T101739.ics
@@ -95,8 +102,10 @@ class DavicalMigrar {
         if ($this->migrarSyncChanges() === FALSE ) {
             return FALSE;
         }
+        
         return TRUE;
     }
+    
     
     /**
      * Hay que cambiar el campo dav_name y uid
@@ -110,19 +119,19 @@ class DavicalMigrar {
     private function migrarCalendar_item() {
         $oDbl = $this->getoDbl();
         
-        $dav_name_org = $this->getDavNameOrg();
         $dav_name_dst = $this->getDavNameDst();
         
         $uid_org = $this->getUidOrg();
         $uid_dst = $this->getUidDst();
         
-        $location = $this->getLocation();
+        $location_org = $this->getLocation_org();
+        $location_dst = $this->getLocation_dst();
         
         // El dav_name se ha cambiado al cambiar la tabla caldav_data
         //            SET dav_name = replace(dav_name,'$dav_name_org','$dav_name_dst'),
         $sQuery = "UPDATE calendar_item 
                     SET uid = replace(uid,'$uid_org','$uid_dst'),
-                        location = '$location'
+                        location = replace(location,'$location_org','$location_dst')
                     WHERE dav_name ~ '^$dav_name_dst'";
         
         if (($oDbl->query($sQuery)) === FALSE) {
@@ -182,7 +191,7 @@ class DavicalMigrar {
         $uid_org = 'UID:'.$this->getUidOrg();
         $uid_dst = 'UID:'.$this->getUidDst();
         
-        $location = $this->getLocation();
+        $location = $this->getLocation_dst();
         
         // hay que hacerlas en orden, para no perder el Where: dav_name.
         $sQuery_1 = "UPDATE caldav_data
@@ -325,20 +334,32 @@ class DavicalMigrar {
     /**
      * @return string
      */
-    public function getLocation()
+    public function getLocation_dst()
     {
-        return $this->location;
+        return $this->location_dst;
     }
 
     /**
      * @param string $location
      */
-    public function setLocation($location)
+    public function setLocation_dst($location_dst)
     {
-        $this->location = $location;
+        $this->location_dst = $location_dst;
+    }
+    /**
+     * @return string
+     */
+    public function getLocation_org()
+    {
+        return $this->location_org;
     }
 
+    /**
+     * @param string $location_org
+     */
+    public function setLocation_org($location_org)
+    {
+        $this->location_org = $location_org;
+    }
 
-    
-    
 }
