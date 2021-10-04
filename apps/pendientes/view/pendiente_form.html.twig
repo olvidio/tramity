@@ -113,14 +113,21 @@
   <!--  --------------- PROTOCOLO --------------- -->
   <div class="mb-3 row">
     <label class="col-2 form-label">{{ "protocolo o referencia"|trans }}</label>
-    <div class="col-2">
+    <div class="col-2 me-3">
         {{ oDesplLugar.desplegable|raw }}
     </div>
-    <div class="col-6">
-      <input id="ref_prot_num" name="ref_prot_num" size="12" value="{{ ref_prot_num }}" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#ref_prot_num','#ref_prot_any','#b_buscar_7')">
+    <div class="row col-6">
+      <div class="col-2">
+        <input id="ref_prot_num" name="ref_prot_num" value="{{ ref_prot_num }}" class="text-end form-control form-control-sm" title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#ref_prot_num','#ref_prot_any','#b_buscar_7')">
+      </div>
       /
-      <input id="ref_prot_any" name="ref_prot_any" size="5" value="{{ ref_prot_any }}" class=contenido title="{{ "año protocolo origen"|trans }}" >
-      ,<input id="ref_prot_mas" name="ref_prot_mas" size="50" value="{{ ref_prot_mas }}" class=contenido title="{{ "información complementaria"|trans }}" >
+      <div class="col-1">
+        <input id="ref_prot_any" name="ref_prot_any" value="{{ ref_prot_any }}" class="form-control form-control-sm" title="{{ "año protocolo origen"|trans }}" >
+      </div>
+      ,
+      <div class="col-4">
+        <input id="ref_prot_mas" name="ref_prot_mas" value="{{ ref_prot_mas }}" class="form-control form-control-sm" title="{{ "información complementaria"|trans }}" >
+      </div>
     </div>
   </div>
   <!--  --------------- DETALLE --------------- -->

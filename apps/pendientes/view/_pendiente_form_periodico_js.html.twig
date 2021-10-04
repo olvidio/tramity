@@ -38,7 +38,7 @@ fnjs_marcar=function(id){
 	$(id).prop("checked",true);
 }
 
-fnjs_ver_tab=function(elemento){
+fnjs_ver_tab=function(elemento,btn){
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -49,5 +49,27 @@ fnjs_ver_tab=function(elemento){
 	$(elemento).show();
 	var el=elemento.substr(1);
 	$('#periodico_tipo').val(el);
+	// activar el button:
+	var btns=[ '#btn_d_a', '#btn_d_m', '#btn_d_s', '#btn_d_d'];
+	$.each(btns,function(i,item){
+			$(item).removeClass('active')
+			});
+	$(btn).addClass('active');
 }
+
+/* activar el boton correspondiente*/
+$(document).ready(function(){
+	 {% if periodico_tipo == "periodico_d_a" %}
+        $('#btn_d_a').addClass('active');
+	 {% endif %}
+	 {% if periodico_tipo == "periodico_d_m" %}
+        $('#btn_d_m').addClass('active');
+	 {% endif %}
+	 {% if periodico_tipo == "periodico_d_s" %}
+        $('#btn_d_s').addClass('active');
+	 {% endif %}
+	 {% if periodico_tipo == "periodico_d_d" %}
+        $('#btn_d_d').addClass('active');
+	 {% endif %}
+}); 
 </script>

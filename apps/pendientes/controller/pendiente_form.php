@@ -512,6 +512,7 @@ if (!empty($oDesplOficinas)) {
 }
     
 $a_campos = [
+    'oPosicion'    => $oPosicion,
     'base_url_web' => $base_url_web,
     'cargar_css'   => $cargar_css,
     'calendario'   => $Qcalendario,
@@ -596,6 +597,7 @@ $a_campos = [
 $oView = new ViewTwig('pendientes/controller');
 if (!empty($periodico_tipo) && $secretaria === FALSE ) {
     $a_campos = [
+        'oPosicion'    => $oPosicion,
         'base_url_web' => $base_url_web,
         'cargar_css'   => $cargar_css,
         'calendario'   => $Qcalendario,
@@ -622,6 +624,7 @@ if (!empty($periodico_tipo) && $secretaria === FALSE ) {
     echo $oView->renderizar('pendiente_form_etiquetas.html.twig',$a_campos);
 } else {
     $a_campos = [
+        'oPosicion'    => $oPosicion,
         'base_url_web' => $base_url_web,
         'cargar_css'   => $cargar_css,
         'calendario'   => $Qcalendario,

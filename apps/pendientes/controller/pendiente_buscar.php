@@ -29,6 +29,8 @@ require_once ("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
+$oPosicion->recordar();
+
 
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 $Qcalendario = (string) \filter_input(INPUT_POST, 'calendario');
@@ -222,7 +224,23 @@ $oTabla->setDatos($a_valores);
 $oFecha = new DateTimeLocal();
 $format = $oFecha->getFormat();
 
+$aGoBack = [
+        'que' => $Qque,
+        'calendario' => $Qcalendario,
+        'asunto' => $Qasunto,
+        'status' => $Qstatus,
+        'id_lugar' => $Qid_lugar,
+        'prot_num' => $Qprot_num,
+        'prot_any' => $Qprot_any,
+        'prot_mas' => $Qprot_mas,
+        'id_oficina' => $Qid_oficina,
+        'f_min_enc' => $Qf_min_enc,
+        'f_max_enc' => $Qf_max_enc,
+        ];
+$oPosicion->setParametros($aGoBack,1);
+
 $a_campos = [
+    'oPosicion' => $oPosicion,
     'calendario' => $Qcalendario,
     'secretaria' => $secretaria,
     'oDesplLugar' => $oDesplLugar,
