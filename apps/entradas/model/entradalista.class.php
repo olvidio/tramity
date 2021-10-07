@@ -393,6 +393,9 @@ class EntradaLista {
         
         $oView = new ViewTwig('entradas/controller');
         if ($this->slide_mode === 't') {
+            // poner la primera id_entrada, sino empieza por el final:
+            $row = reset($a_entradas);
+            $id_entrada = empty($row['id_entrada'])? '' : $row['id_entrada'];
             include ('apps/entradas/controller/entrada_ver_slide.php');
         } else {
             return $oView->renderizar('entrada_lista.html.twig',$a_campos);

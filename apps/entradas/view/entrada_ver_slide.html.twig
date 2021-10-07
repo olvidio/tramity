@@ -1,3 +1,9 @@
+<div class="row">
+<div class="col-2"></div>
+<div class="col-6 mb-2 bg-warning text-white text-center fw-bold">
+	{{ txt_alert|raw }}
+</div>
+</div>
 {% if id_entrada %}
 <div class="row col-12 mb-4">
     <div class="col-1">
@@ -68,11 +74,6 @@
 	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_download({{ item }})">{{ nom }}</button>
 {% endfor %}
 </div>
-{% else %}
-<div class='p-2'></div>
-<div class="container p-3 my-3 bg-danger text-white fw-bold">
-	{{ txt_alert|raw }}
-</div>
 {% endif %}
 
 <script>
@@ -123,19 +124,15 @@ fnjs_read=function() {
 	} else {
 	  $("#f_entrada").prop('disabled', false);
 	}
-	fnjs_guardar_f_entrada(ok);
+	fnjs_guardar_f_entrada();
 };
 
-fnjs_guardar_f_entrada=function(ok){
+fnjs_guardar_f_entrada=function(){
 	var id_entrada="{{ id_entrada }}";
 	var f_entrada =	$("#f_entrada").val();
 
-	if (ok && !f_entrada) { f_entrada='hoy'; }
-	
-	if (!ok) {
-		//borrar
-		f_entrada='';
-	}
+	// obligo a cambiarla, porque la pueden poner los de secretaria provisionalmente
+	f_entrada='hoy';
 	
     var url_update = 'apps/entradas/controller/entrada_update.php';
     var param_json = { que: 'f_entrada', id_entrada: id_entrada, f_entrada: f_entrada };

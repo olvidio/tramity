@@ -5,6 +5,7 @@ use etherpad\model\Etherpad;
 use web\Protocolo;
 use entradas\model\GestorEntrada;
 use web\DateTimeLocal;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -30,6 +31,7 @@ if ($QSlide_mode === TRUE) {
     $Qfiltro = $filtro;
 }
 
+$txt_alert = '';
 if (!empty($Qid_entrada)) {
     // Paso los id siguiente y previo, porque si sólo paso los movimientos,
     // al haber guardado la entrada como admitida, ya no está en la lista y no puedo saber la siguiente.
@@ -52,6 +54,18 @@ if (!empty($Qid_entrada)) {
     // siguiente
     $k = $key+1;
     $id_next = array_key_exists($k, $a_lst_entradas)? $a_lst_entradas[$k] : '';
+    // para dar la vuelta:
+    if (empty($id_prev) && empty($id_next)) {
+        $txt_alert = _("No hay más entradas");
+    } else {
+        $txt_alert = "$key / $i";
+    }
+    if (empty($id_next)) {
+        $id_next = reset($a_lst_entradas);
+    }
+    if (empty($id_prev)) {
+        $id_prev = end($a_lst_entradas);
+    }
 
     $pagina = core\ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver_slide.php';
     $a_cosas = [ 'id_entrada' => $id_prev, 'slide_mode' => 'TRUE', 'filtro' => $Qfiltro];
@@ -77,7 +91,6 @@ if (!empty($Qid_entrada)) {
     $oEtherpad->setId (Etherpad::ID_ENTRADA,$Qid_entrada);
     
     $escrito_html = $oEtherpad->generarHtml();
-    $txt_alert = '';
 } else {
     $cabeceraIzqd = '';
     $cabeceraDcha = '';
@@ -87,21 +100,18 @@ if (!empty($Qid_entrada)) {
     $f_escrito = '';
     $f_entrada = '';
     $escrito_html = '';
-    $txt_alert = _("No hay más registros");
     $pagina_prev = '';
     $pagina_next = '';
+    $txt_alert = _("No se encuentran registros");
 }
 
-if (!empty($f_entrada)) {
-    $chk_leido = 'checked';
-    $f_entrada_disabled = 'disabled';
-} else {
-    $chk_leido = '';
-    $f_entrada_disabled = '';
-    //$f_entrada = date(\DateTimeInterface::ISO8601); //hoy
-    $oF_entrada = new DateTimeLocal();
-    $f_entrada = $oF_entrada->getFromLocal();
-}
+// Si o si la fecha de hoy
+//$chk_leido = 'checked';
+//$f_entrada_disabled = 'disabled';
+$chk_leido = '';
+$f_entrada_disabled = '';
+$oF_entrada = new DateTimeLocal();
+$f_entrada = $oF_entrada->getFromLocal();
 
 $base_url = core\ConfigGlobal::getWeb();
 $url_download = $base_url.'/apps/entradas/controller/download.php';
