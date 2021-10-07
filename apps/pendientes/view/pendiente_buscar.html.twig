@@ -14,7 +14,7 @@
         {{ oDesplLugar.desplegable|raw }}
     </div>
     <div class="col-4">
-      <input id="prot_num" name="prot_num" size="12" value="{{ prot_num }}" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any')">
+      <input id="prot_num" name="prot_num" size="12" value="{{ prot_num }}" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#btn_guardar')">
       /
       <input id="prot_any" name="prot_any" size="5" value="{{ prot_any }}" class=contenido title="{{ "año protocolo origen"|trans }}" >
       ,<input id="prot_mas" name="prot_mas" size="10" value="{{ prot_mas }}" class=contenido title="{{ "información complementaria"|trans }}" >
@@ -62,7 +62,10 @@
   </div>
   <!--  --------------------  Botones --------------------------  -->
   <div class="row">
-    <button id="btn_guardar" type="button" tabindex='90' class="col-1 btn btn-primary" onClick="fnjs_buscar('#frm_que');" >
+    <button id="btn_cancelar" type="button" tabindex='90' class="m-3 col-1 btn btn-secondary" onClick="fnjs_cancelar();" >
+      {{ "cancelar"|trans }}
+    </button>
+    <button id="btn_guardar" type="button" tabindex='92' class="m-3 col-1 btn btn-primary" onClick="fnjs_buscar('#frm_que');" >
       {{ "buscar"|trans }}
     </button>
   </div>
@@ -114,14 +117,14 @@ $(function() {
     });
 });
 
-fnjs_proto=function(num,any){
+fnjs_proto=function(num,any,siguiente){
     var numero;
-    var prot_num=$('#prot_num').val();
+    var prot_num=$(num).val();
     numero=prot_num.split("/");
     if (numero[1]) {
         $(num).val(numero[0]);
         $(any).val(numero[1]);
-        $('#ok').focus();
+        $(siguiente).focus();
     }
 }
 

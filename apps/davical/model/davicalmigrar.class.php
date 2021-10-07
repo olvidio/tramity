@@ -195,7 +195,7 @@ class DavicalMigrar {
         
         // hay que hacerlas en orden, para no perder el Where: dav_name.
         $sQuery_1 = "UPDATE caldav_data
-                    SET caldav_data = REGEXP_REPLACE(caldav_data,'LOCATION:(.*?)\r','LOCATION:$location\r')
+                    SET caldav_data = REGEXP_REPLACE(caldav_data,'LOCATION:(.*?)(,.*)\r','LOCATION:$location\2\r')
                     WHERE dav_name ~ '^$dav_name_org'";
         
         $sQuery_2 = "UPDATE caldav_data

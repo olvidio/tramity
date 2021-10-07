@@ -27,6 +27,8 @@ require_once ("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
+$oPosicion->recordar();
+
 // Si vengo del formulario de entradas, abro una ventana nueva y
 // los parametros vienen por GET.
 

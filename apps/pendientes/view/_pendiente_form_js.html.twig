@@ -323,8 +323,8 @@ fnjs_cancelar=function() {
         if (!x && !y) {
             return false;
         }
-        //fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
-        {{ oPosicion.js_atras(1)|raw }}
+        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+        //{{ oPosicion.js_atras(1)|raw }}
     }
 }
 
