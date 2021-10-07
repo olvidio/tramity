@@ -418,10 +418,20 @@ class Expediente Extends expedienteDB {
     public function addAntecedente($a_antecedente) {
         // obtener los antecedentes actuales:
         $aAntecedentes = $this->getJson_antecedentes(TRUE);
-            
         $aAntecedentes[] = $a_antecedente;
-        $this->setJson_antecedentes($aAntecedentes);
         
+        // evitar repeticiones:
+        $aAntecedentes_uniq = [];
+        $key_array = [];
+        $i = 0;
+        foreach($aAntecedentes as $aAntecedente) {
+            if (!in_array($aAntecedente['id'], $key_array)) {
+                $key_array[$i] = $aAntecedente['id'];
+                $aAntecedentes_uniq[$i] = $aAntecedente;
+            }
+            $i++;
+        }
+        $this->setJson_antecedentes($aAntecedentes_uniq);
     }
     
     public function getHtmlAntecedentes($quitar =TRUE) {

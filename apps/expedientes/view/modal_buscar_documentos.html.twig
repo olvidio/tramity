@@ -65,13 +65,7 @@
 <div id="lista">
 	{{ oLista.mostrar_tabla|raw }}
 </div>
-<div id="slow_load" style="display: flex; justify-content: center; align-items: center; text-align: center;">
- <img class="mb-4" src="../images/loading.gif" alt="cargando" width="32" height="32">
-</div>
 <script>
-$(document).ready(function() {
-	$('#slow_load').hide();  // hide it initially
-});
 
 fnjs_new_documento=function(id_expediente) {
     var data=$('#condiciones').serialize();

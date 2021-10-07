@@ -31,30 +31,40 @@ $gesCargos = new GestorCargo();
 $a_posibles_cargos = $gesCargos->getArrayCargos();
 $error_txt = '';
 switch ($Qque) {
+    case 'insertar_copia':
     case 'insertar':
         $Qid_doc = (integer) \filter_input(INPUT_POST, 'id_doc');
+        $Qforce = (string) \filter_input(INPUT_POST, 'force');
         
-        $gesEtherpad = new GestorEtherpad();
-        $error_txt .= $gesEtherpad->moveDocToEscrito($Qid_doc, $Qid_escrito, TRUE);
-        
-        if (empty($error_txt)) {
-            // borrar el documento:
-            $oDocumento = new Documento($Qid_doc);
+        $oDocumento = new Documento($Qid_doc);
+        if ($Qforce == 'false') {
             // Avisar si está como antecedente en algun sitio:
             $error_txt .= $oDocumento->comprobarEliminar($Qid_doc);
-            if (empty($error_txt)) {
+            if (!empty($error_txt))  {
+                $jsondata['err_tipo'] = 'antecedente';
+            }
+        }
+        
+        if (empty($error_txt)) {
+            $gesEtherpad = new GestorEtherpad();
+            if ($Qque == 'insertar_copia') {
+                $error_txt .= $gesEtherpad->copyDocToEscrito($Qid_doc, $Qid_escrito, TRUE);
+            } elseif ($Qque == 'insertar') {
+                $error_txt .= $gesEtherpad->moveDocToEscrito($Qid_doc, $Qid_escrito, TRUE);
+                // borrar el documento:
                 $oDocumento = new Documento($Qid_doc);
                 if ($oDocumento->DBEliminar() === FALSE) {
                     $error_txt .= ($oDocumento->getErrorTxt());
                 }
-                $oEscrito = new Escrito($Qid_escrito);
-                $oEscrito->DBCarregar();
-                $oEscrito->setTipo_doc(Documento::DOC_ETHERPAD);
-                if ($oEscrito->DBGuardar() === FALSE) {
-                    $error_txt .= ($oEscrito->getErrorTxt());
-                }
+            }
+            $oEscrito = new Escrito($Qid_escrito);
+            $oEscrito->DBCarregar();
+            $oEscrito->setTipo_doc(Documento::DOC_ETHERPAD);
+            if ($oEscrito->DBGuardar() === FALSE) {
+                $error_txt .= ($oEscrito->getErrorTxt());
             }
         }
+        
         if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
@@ -94,14 +104,21 @@ switch ($Qque) {
         $oEscrito = new Escrito($Qid_escrito);
         echo $oEscrito->getHtmlAdjuntos();
         break;
+    case 'adjuntar_copia':
     case 'adjuntar':
         $Qid_doc = (integer) \filter_input(INPUT_POST, 'id_doc');
+        $Qforce = (string) \filter_input(INPUT_POST, 'force');
         // recuperar el documento
         $oDocumento = new Documento($Qid_doc);
         $tipo_doc = $oDocumento->getTipo_doc();
         
-        // Avisar si está como antecedente en algun sitio:
-        $error_txt .= $oDocumento->comprobarEliminar($Qid_doc);
+        if ($Qforce == 'false') {
+            // Avisar si está como antecedente en algun sitio:
+            $error_txt .= $oDocumento->comprobarEliminar($Qid_doc);
+            if (!empty($error_txt))  {
+                $jsondata['err_tipo'] = 'antecedente';
+            }
+        }
         if (empty($error_txt)) {
             switch ($tipo_doc) {
                 case Documento::DOC_ETHERPAD:
@@ -119,7 +136,11 @@ switch ($Qque) {
                     $id_item = $oEscritoAdjunto->getId_item();
                     
                     $gesEtherpad = new GestorEtherpad();
-                    $error_txt .= $gesEtherpad->moveDocToAdjunto($Qid_doc, $id_item, TRUE);
+                    if ($Qque == 'adjuntar_copia') {
+                        $error_txt .= $gesEtherpad->copyDocToAdjunto($Qid_doc, $id_item, TRUE);
+                    } elseif ($Qque == 'adjuntar') {
+                        $error_txt .= $gesEtherpad->moveDocToAdjunto($Qid_doc, $id_item, TRUE);
+                    }
                     break;
                 case Documento::DOC_UPLOAD:
                     $contenido_encoded = $oDocumento->getDocumentoTxt();
@@ -137,12 +158,14 @@ switch ($Qque) {
                     if ($oEscritoAdjunto->DBGuardar() === FALSE) {
                         $error_txt .= $oEscritoAdjunto->getErrorTxt();
                     }
-                    // NO sirve el metodo ¡refresh' del fileinput parar cambiar la lista de docuemntos.
+                    // NO sirve el metodo 'refresh' del fileinput parar cambiar la lista de docuemntos.
                     // habrá que refrescar toda la página
                     
-                    // borrar de documentos
-                    if ($oDocumento->DBEliminar() === FALSE) {
-                        $error_txt .= $oDocumento->getErrorTxt();    
+                    if ($Qque == 'adjuntar') {
+                        // borrar de documentos
+                        if ($oDocumento->DBEliminar() === FALSE) {
+                            $error_txt .= $oDocumento->getErrorTxt();    
+                        }
                     }
                     break;
             }
@@ -296,9 +319,9 @@ switch ($Qque) {
 	        $ponente_txt = $a_posibles_cargos[$ponente];
 	        
 	        if ($Qtipo_n == 5) {
-                $add = "<span class=\"btn btn-link\" onclick=\"fnjs_insertar_documento('documento','$id_doc','$Qid_escrito');\" >$txt_ajuntar</span>";
+                $add = "<span class=\"btn btn-link\" onclick=\"fnjs_confirm_insertar_documento('documento','$id_doc','$Qid_escrito');\" >$txt_ajuntar</span>";
 	        } else {
-                $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_documento('documento','$id_doc','$Qid_escrito');\" >$txt_ajuntar</span>";
+                $add = "<span class=\"btn btn-link\" onclick=\"fnjs_confirm_adjuntar_documento('documento','$id_doc','$Qid_escrito');\" >$txt_ajuntar</span>";
 	        }
 	        
 	        $a_valores[$a][1] = $fecha_txt;
