@@ -306,6 +306,10 @@ if (empty($rrule)) {
         $oF_until = new DateTimeLocal($rta['until']);
         $f_until = $oF_until->getFromLocal();
     }
+    if (empty($rta['until'])) {
+        $msg = sprintf (_("pasa algo con el pendiente periódico: %s"),$asunto);
+        exit ($msg);
+    }
     switch ($rta['tipo']) {
         case "d_a":
             $display_d_a="display:in-line;";
