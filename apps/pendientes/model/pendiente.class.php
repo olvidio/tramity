@@ -384,7 +384,7 @@ class Pendiente {
             $args['X-DLB-ID-REG']="$id_reg";
             
             $ref=$this->buscar_ref_uid($uid,"txt");
-            if (!empty($ref_prot_mas)) $ref.=", ".$ref_prot_mas;
+            //if (!empty($ref_prot_mas)) $ref.=", ".$ref_prot_mas;
             $args['LOCATION']="$ref";
         }
         
@@ -617,7 +617,7 @@ class Pendiente {
             $args['X-DLB-ID-REG']="$id_reg";
             
             $ref=$this->buscar_ref_uid($uid,"txt");
-            if (!empty($ref_prot_mas)) $ref.=", ".$ref_prot_mas;
+            //if (!empty($ref_prot_mas)) $ref.=", ".$ref_prot_mas;
             $args['LOCATION']="$ref";
         } else {
             $args['X-DLB-ID-REG']="";
@@ -842,6 +842,19 @@ class Pendiente {
         if (array_key_exists('oficinas',$aDades)) $this->setOficinas($aDades['oficinas']);
         
         if (array_key_exists('exdates',$aDades)) $this->setExdates($aDades['exdates']);
+    }
+    
+    
+    /**
+     * Devuelve el protocolo: location + prot_mas
+     * 
+     * @return string
+     */
+    public function getProtocolo() {
+        $protocolo = $this->getLocation();
+        $protocolo .= empty($this->getRef_prot_mas())? '' : ', '.$this->getRef_prot_mas();
+        
+        return $protocolo;
     }
     /* METODES GET SET ----------------------------------------------------------------- */
     /**

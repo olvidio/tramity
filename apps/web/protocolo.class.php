@@ -89,23 +89,15 @@ class Protocolo {
 	    return $txt;
 	}
 
+	/**
+	 * Para generar el texto del protocolo.
+	 * 
+	 * @return string
+	 */
 	public function ver_txt() {
-	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
-	    $nom_lugar = _("sin numerar (E12)");
-	    if (!empty($lugar)) {
-	        $oLugar = new Lugar($this->ilugar);
-	        $nom_lugar = $oLugar->getSigla();
-	    }
 	    
-	    $prot_num = empty($this->iprot_num)? '' : $this->iprot_num;
-	    $prot_any = empty($this->iprot_any)? '' : $this->iprot_any;
-	    $prot_mas = empty($this->sprot_mas)? '' : $this->sprot_mas;
-	    
-	    $txt = "$nom_lugar";
-	    if (!empty($prot_num)) {
-    	    $txt .= " ${prot_num}/${prot_any}";
-	    }
-	    $txt .= !empty($prot_mas)? ", ${prot_mas}" : '';
+	    $txt = $this->ver_txt_num();
+        $txt .= !empty($this->ver_txt_mas())? ", ".$this->ver_txt_mas() : '';
 	    
 	    return $txt;
 	}

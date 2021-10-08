@@ -152,9 +152,7 @@ if ($Qque == 'buscar') {
         $pos = strpos($uid, '_', 1);
         $parent_container = substr($uid, $pos + 1);
         
-        $protocolo = $oPendiente->getLocation();
-        $ref_prot_mas = $oPendiente->getRef_prot_mas();
-        $protocolo .= empty($ref_prot_mas)? '' : ', '.$ref_prot_mas;
+        $protocolo = $oPendiente->getProtocolo();
         $rrule = $oPendiente->getRrule();
         $asunto = $oPendiente->getAsuntoDetalle();
         if (!empty($asunto)) $asunto=htmlspecialchars(stripslashes($asunto),ENT_QUOTES,'utf-8');

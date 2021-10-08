@@ -404,7 +404,8 @@ switch($Qque) {
                     $Qid_pendiente = (integer) \filter_input(INPUT_POST, 'id_pendiente');
                     if (empty($Qid_pendiente)) { // si no se ha generado el pendiente con "modificar pendiente"
                         $f_plazo = $oEntrada->getF_contestar()->getFromLocal();
-                        $location = $oProtOrigen->ver_txt();
+                        $location = $oProtOrigen->ver_txt_num();
+                        $prot_mas = $oProtOrigen->ver_txt_mas();
                         $oOficina = new Oficina($Qid_of_ponente);
                         $oficina_ponente = $oOficina->getSigla();
                         if (empty($oficina_ponente)) {
@@ -427,6 +428,7 @@ switch($Qque) {
                         $oPendiente->setDetalle($Qdetalle);
                         $oPendiente->setPendiente_con($Qorigen);
                         $oPendiente->setLocation($location);
+                        $oPendiente->setRef_prot_mas($prot_mas);
                         $oPendiente->setId_oficina($Qid_of_ponente);
                         // las firmas son cargos, buscar las oficinas implicadas:
                         $oPendiente->setOficinasArray($Qa_oficinas);

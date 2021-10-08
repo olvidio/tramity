@@ -84,7 +84,6 @@ if (!empty($Qref_id_lugar)) {
     $location = $oLugar->getSigla();
     $location .= empty($Qref_prot_num)? '' : ' '.$Qref_prot_num;
     $location .= empty($Qref_prot_any)? '' : '/'.$Qref_prot_any;
-    $location .= empty($Qref_prot_mas)? '' : ' '.$Qref_prot_mas;
 } else {
     $location = '';
 }

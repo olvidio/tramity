@@ -112,7 +112,7 @@ foreach ($cEntradasAnuladas as $oEntrada) {
         $parent_container = substr($uid, $pos + 1);
         */
         
-        $protocolo = $oPendiente->getLocation();
+        $protocolo = $oPendiente->getProtocolo();
         $rrule = $oPendiente->getRrule();
         $asunto = $oPendiente->getAsuntoDetalle();
         if (!empty($asunto)) { $asunto=htmlspecialchars(stripslashes($asunto),ENT_QUOTES,'utf-8'); }

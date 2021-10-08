@@ -151,7 +151,7 @@ switch($Qque) {
             $cargo = 'secretaria';
             $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
             $asunto = $oPendiente->getAsunto();
-            $protocolo = $oPendiente->getLocation();
+            $protocolo = $oPendiente->getProtocolo();
             $f_plazo = $oPendiente->getF_plazo()->getFromLocal();
 
             $rrule = $oPendiente->getRrule();
