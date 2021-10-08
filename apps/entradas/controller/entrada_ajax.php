@@ -351,7 +351,7 @@ switch ($Qque) {
         $oLista = new Lista();
         $oLista->setCabeceras($a_cabeceras);
         $oLista->setDatos($a_valores);
-        echo $oLista->mostrar_tabla_html();
+        echo $oLista->mostrar_tabla();
         break;
     case 'guardar':
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');

@@ -1,33 +1,31 @@
 <h1>{{ titulo }}</h1>
 <form id ="form_buscar" >
-    <input type=hidden name='que' id='que' value=0>
+    <input type=hidden name='que' id='que' value=''>
     <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
-    <input type=hidden name='filtro' id='filtro' value={{ filtro }} >
+    <input type=hidden name='filtro' id='filtro' value="{{ filtro }}" >
     
-    
-  <div class="row">
-    <label for="ponente" class="col-2 form-label">{{ "Oficina"|trans }}</label>
-    <div class="col-1">
-	  {{ oDesplOficinas.desplegable|raw }}
-    </div>
-  </div>
-  <div class="mb-3 row">
-    <label for="ponente" class="col-2 form-label">{{ "Origen"|trans }}</label>
-    <div class="col-1">
-	  {{ oDesplLugares.desplegable|raw }}
-    </div>
-  </div>
   <!--  --------------- ASUNTO --------------- -->
   <div class="mb-3 row">
-    <label for="asunto" class="col-2 form-label">{{ "Asunto"|trans }}</label>
-    <div class="col-8">
-      <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="">
+    <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans }}</label>
+    <div class="col-10">
+      <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="{{ asunto }}">
     </div>
   </div>
-  <!--  --------------------  Periodo --------------------------  -->
-  <div id="div_periodo" class="mb-3 row">
-    <label for="periodo" class="col-2 form-label">{{ "periodo"|trans }}:</label>
-    <div class="col-5">
+  
+  <div class="mb-3 row">
+    <!--  --------------- OFICINA --------------- -->
+    <div id="div_oficinas" class="col-2">
+      <label for="oficinas" class="col-1 form-label">{{ "Oficina"|trans }}</label>
+      <div class="col-2">
+        <span id="span_oficinas">
+            {{ oDesplOficinas.Desplegable|raw }}
+        </span>
+      </div>
+    </div>
+    <!--  --------------------  Periodo --------------------------  -->
+    <div id="div_periodo" class="col-2">
+      <label for="periodo" class="col-1 form-label">{{ "periodo"|trans }}:</label>
+      <div class="col-2">
 		<select tabindex=111 id=periodo name=periodo >
 		<option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans }}</option>
 		<option value="mes_6" {{ sel_mes_6 }}>{{ "hace 6 meses"|trans }}</option>
@@ -35,20 +33,53 @@
 		<option value="any_2" {{ sel_any_2 }} >{{ "hace 2 año"|trans }}</option>
 		<option value="siempre" {{ sel_siempre }} >{{ "siempre"|trans }}</option>
 		</select>
-	</div>
+	  </div>
+    </div>
+    <!--  --------------------  origen --------------------------  -->
+    <div id="div_proto" class="col-8">
+      <label class="col-3 form-label">{{ "¿Quién enviaba el escrito?"|trans }}:</label>
+      <div class="row">
+        <div class="col-6">
+        {{ oDesplOrigen.desplegable|raw }}
+          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#btn_1')" value="{{ prot_num }}" >
+          /
+          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans }}" value="{{ prot_any }}" >
+        </div>
+        <div class="col-2 ps-3 pt-1">
+          <input id="chk_anulados" name="chk_anulados" type="checkbox" onChange='fnjs_ctr_anulados()' {{ chk_ctr_anulados }}>
+            {{ "ver ctr anulados"|trans }}
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div>
-    <button type="button" class="btn btn-secondary" onClick="fnjs_cancelar();" >
-      {{ "Cancelar"|trans }}
-    </button>
-    <button type="button" class="btn btn-primary" onClick="fnjs_buscar();" >
-      {{ "Buscar"|trans }}
-    </button>
+  <!--  --------------------  botones --------------------------  -->
+  <div class="row">
+    <div class="col-1">
+      <button type="button" class="btn btn-secondary" onClick="fnjs_cancelar();" >
+        {{ "Cancelar"|trans }}
+      </button>
+    </div>
+    <div class="col-1">
+      <button type="button" class="btn btn-primary" onClick="fnjs_buscar();" >
+        {{ "Buscar"|trans }}
+      </button>
+    </div>
   </div>
 </form>
-<div id="resultados"></div>
+
+<div id="resultados" class="mt-5">
+	{{ oLista.mostrar_tabla|raw }}
+</div>
+
 <script>
+fnjs_ctr_anulados = function(){
+    anulado=$('#chk_anulados').prop("checked");
+    if (anulado == true) { //volver a cargar la página
+        fnjs_update_div('#main','apps/entradas/controller/buscar_form.php?id_expediente={{ id_expediente }}&chk_anulados=1');
+    } else {
+        fnjs_update_div('#main','apps/entradas/controller/buscar_form.php?id_expediente={{ id_expediente }}&chk_anulados=0');
+    }
+}
 fnjs_cancelar=function(){
     if (event != undefined) {
         event.preventDefault();
@@ -103,5 +134,16 @@ fnjs_adjuntar_entrada=function(id_entrada,id_expediente,filtro) {
     request.done( function (html) {
         $('#main').html(html);
     });
+}
+
+fnjs_proto=function(num,any,siguiente){
+    var numero;
+    var prot_num=$(num).val();
+    numero=prot_num.split("/");
+    if (numero[1]) {
+        $(num).val(numero[0]);
+        $(any).val(numero[1]);
+        $(siguiente).focus();
+    }
 }
 </script>

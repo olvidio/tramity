@@ -22,6 +22,8 @@ require_once ("apps/core/global_object.inc");
 // Crea los objectos por esta url  **********************************************
 // FIN de  Cabecera global de URL de controlador ********************************
 
+$oPosicion->recordar();
+
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qperiodo = (string) \filter_input(INPUT_POST, 'periodo');
 $Qid_oficina = (string) \filter_input(INPUT_POST, 'id_oficina');
