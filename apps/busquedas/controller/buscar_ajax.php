@@ -36,7 +36,9 @@ switch($Qque) {
         $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
         foreach ($cEntradas as $oEntrada) {
             $bypass = $oEntrada->getBypass();
-            if ($bypass) continue;
+            $anulado = $oEntrada->getAnulado();
+            if ($bypass) { continue; }
+            if (!empty($anulado)) { continue; }
             $id_entrada = $oEntrada->getId_entrada();
         }
                 
