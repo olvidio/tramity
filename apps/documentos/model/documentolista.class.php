@@ -50,16 +50,15 @@ class DocumentoLista {
         $pagina_nueva = '';
         $filtro = $this->getFiltro();
         
-        $oDocumento = new Documento();
-        $a_visibilidad = $oDocumento->getArrayVisibilidad();
+        $oDocumentoGenerico = new Documento();
+        $a_visibilidad = $oDocumentoGenerico->getArrayVisibilidad();
         
         $pagina_mod = ConfigGlobal::getWeb().'/apps/documentos/controller/documento_form.php';
         
         $a_documentos = [];
         $id_doc = '';
         if (!empty($this->aWhere)) {
-            $oDocumento = new Documento();
-            $aTipoDoc = $oDocumento->getArrayTipos();
+            $aTipoDoc = $oDocumentoGenerico->getArrayTipos();
             $gesDocumentos = new GestorDocumento();
             $cDocumentos = $gesDocumentos->getDocumentos($this->aWhere,$this->aOperador);
             foreach ($cDocumentos as $oDocumento) {

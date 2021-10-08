@@ -33,7 +33,7 @@ $cDocumentos = [];
 if($Qque == 'todos') {
     $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
     $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentosTodos();
-    // borro las etiqutas seleccionadas
+    // borro las etiquetas seleccionadas
     $a_etiquetas_filtered = [];
     $QandOr = 'AND';
 } elseif (!empty($a_etiquetas_filtered)) {

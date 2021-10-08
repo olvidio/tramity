@@ -70,6 +70,7 @@ $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
 $oBuscarPendiente = new BuscarPendiente();
 $oBuscarPendiente->setCalendario('registro');
 // tabla
+$a_entradas = [];
 foreach ($cEntradasAnuladas as $oEntrada) {
     $id_entrada = $oEntrada->getId_entrada();
     $row = [];
@@ -135,8 +136,11 @@ foreach ($cEntradasAnuladas as $oEntrada) {
     $f_entrada_iso = $oEntrada->getF_entrada()->getIso() . $id_entrada;
     $a_entradas[$f_entrada_iso] = $row;
 }
-// ordenar por f_entrada:
-krsort($a_entradas,SORT_STRING);
+
+if (!empty($a_entradas)) {
+    // ordenar por f_entrada:
+    krsort($a_entradas,SORT_STRING);
+}
 
 
 $a_cosas = [
