@@ -120,7 +120,7 @@ $a_cabeceras = [ '',[ 'width' => 200, 'name' => _("protocolo")],
         $ponente_txt = empty($a_posibles_oficinas[$id_of_ponente])? '?' : $a_posibles_oficinas[$id_of_ponente];
         
         $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >ver</span>";
-        $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('entrada','$id_entrada','$Qid_expediente');\" >adjuntar</span>";
+        $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_entrada('$id_entrada','$Qid_expediente','$Qfiltro');\" >adjuntar</span>";
         
         $a_valores[$a][1] = $ver;
         $a_valores[$a][2] = $proto_txt;

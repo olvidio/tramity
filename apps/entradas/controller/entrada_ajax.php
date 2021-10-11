@@ -260,12 +260,14 @@ switch ($Qque) {
         break;
     case 'buscar':
         $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
-        $Qid_oficina = (integer) \filter_input(INPUT_POST, 'id_oficina');
-        $Qid_origen = (string) \filter_input(INPUT_POST, 'id_origen');
+        $Qid_oficina = (integer) \filter_input(INPUT_POST, 'oficina_buscar');
         $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
         $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
         $Qperiodo = (string) \filter_input(INPUT_POST, 'periodo');
         
+        $Qorigen_id_lugar =  (integer) \filter_input(INPUT_POST, 'origen_id_lugar');
+        $Qorigen_prot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
+        $Qorigen_prot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
         
         $gesEntradas = new GestorEntrada();
         $aWhere = [];
@@ -309,8 +311,19 @@ switch ($Qque) {
         
         $aWhere['_ordre'] = 'f_entrada DESC';
         
-        if (!empty($Qid_origen)) {
-            $cEntradas = $gesEntradas->getEntradasByLugarDB($Qid_origen,$aWhere,$aOperador);
+        if (!empty($Qorigen_id_lugar)) {
+            $gesEntradas = new GestorEntrada();
+            $id_lugar = $Qorigen_id_lugar;
+            if (!empty($Qorigen_prot_num) && !empty($Qorigen_prot_any)) {
+                // No tengo en quenta las otras condiciones de la búsqueda
+                $aProt_origen = [ 'lugar' => $Qorigen_id_lugar,
+                    'num' => $Qorigen_prot_num,
+                    'any' => $Qorigen_prot_any,
+                ];
+                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
+            } else {
+                $cEntradas = $gesEntradas->getEntradasByLugarDB($id_lugar,$aWhere, $aOperador);
+            }
         } else {
             $cEntradas = $gesEntradas->getEntradas($aWhere,$aOperador);
         }
