@@ -1,5 +1,7 @@
 <?php
 namespace documentos\model\entity;
+use core\ConfigGlobal;
+use documentos\model\Documento;
 use etiquetas\model\entity\GestorEtiqueta;
 use core;
 /**
@@ -54,6 +56,7 @@ class GestorEtiquetaDocumento Extends core\ClaseGestor {
 	    $nom_tabla = $this->getNomTabla();
 	    // Filtering the array
 	    $a_etiquetas_filtered = array_filter($a_etiquetas);
+	        	        
 	    if (!empty($a_etiquetas_filtered)) {
 	        if ($andOr == 'AND') {
 	            $sQuery = '';

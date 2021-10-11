@@ -65,6 +65,14 @@ class DocumentoLista {
                 $row = [];
                 // mirar permisos...
                 $visibilidad = $oDocumento->getVisibilidad();
+                $creador = $oDocumento->getCreador();
+                
+                if (ConfigGlobal::soy_dtor() === FALSE &&
+                    $creador == ConfigGlobal::role_id_cargo() &&
+                    $visibilidad == Documento::V_PERSONAL ) {
+                    continue;
+                }
+                
                 $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '?' : $a_visibilidad[$visibilidad];
                 
                 $id_doc = $oDocumento->getId_doc();

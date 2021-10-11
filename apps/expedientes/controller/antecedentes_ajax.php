@@ -23,6 +23,7 @@ use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
 use web\Protocolo;
+use config\model\Config;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -666,8 +667,10 @@ switch ($Qque) {
 	        }
 	        // mirar permisos...
 	        $visibilidad = $oDocumento->getVisibilidad();
-	        if ( ($visibilidad == Entrada::V_DIRECTORES || $visibilidad == Entrada::V_RESERVADO || $visibilidad == Entrada::V_RESERVADO_VCD)
-	            && ConfigGlobal::soy_dtor() === FALSE) {
+	        
+            if ( $visibilidad == Documento::V_PERSONAL &&
+	               ConfigGlobal::soy_dtor() === FALSE &&
+	               $oDocumento->getCreador() == ConfigGlobal::role_id_cargo() ) {
 	                continue;
 	        }
 	        $a++;

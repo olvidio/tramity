@@ -307,10 +307,11 @@ switch ($Qque) {
 	        }
 	        // mirar permisos...
 	        $visibilidad = $oDocumento->getVisibilidad();
-	        if ( ($visibilidad == Entrada::V_DIRECTORES || $visibilidad == Entrada::V_RESERVADO || $visibilidad == Entrada::V_RESERVADO_VCD)
-	            && ConfigGlobal::soy_dtor() === FALSE) {
+	        if ( $visibilidad == Documento::V_PERSONAL &&
+	            ConfigGlobal::soy_dtor() === FALSE &&
+	            $oDocumento->getCreador() == ConfigGlobal::role_id_cargo() ) {
 	                continue;
-	        }
+            }
 	        $a++;
 	        $id_doc = $oDocumento->getId_doc();
 	        $fecha_txt = $oDocumento->getF_upload()->getFromLocal();
