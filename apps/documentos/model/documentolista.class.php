@@ -6,6 +6,7 @@ use core\ViewTwig;
 use usuarios\model\PermRegistro;
 use web\Hash;
 use web\ProtocoloArray;
+use usuarios\model\entity\GestorCargo;
 
 
 class DocumentoLista {
@@ -55,6 +56,9 @@ class DocumentoLista {
         
         $pagina_mod = ConfigGlobal::getWeb().'/apps/documentos/controller/documento_form.php';
         
+        $gesCargos = new GestorCargo();
+        $a_cargos = $gesCargos->getArrayCargos();
+        
         $a_documentos = [];
         $id_doc = '';
         if (!empty($this->aWhere)) {
@@ -68,7 +72,7 @@ class DocumentoLista {
                 $creador = $oDocumento->getCreador();
                 
                 if (ConfigGlobal::soy_dtor() === FALSE &&
-                    $creador == ConfigGlobal::role_id_cargo() &&
+                    $creador != ConfigGlobal::role_id_cargo() &&
                     $visibilidad == Documento::V_PERSONAL ) {
                     continue;
                 }
@@ -103,8 +107,13 @@ class DocumentoLista {
                 $tipo_doc = $oDocumento->getTipo_doc(); 
                 $tipo_doc_txt = empty($aTipoDoc[$tipo_doc])? $tipo_doc : $aTipoDoc[$tipo_doc]; 
                 $id_creador =  $oDocumento->getCreador();
+                $creador = empty($a_cargos[$id_creador])? '' : $a_cargos[$id_creador];
+                if (empty($creador)) {
+                    echo "OJO! Corregir el documento. No se sabe quien lo ha creado";
+                    echo "<br>";
+                }
                 
-                $row['creador'] = $id_creador;
+                $row['creador'] = $creador;
                 $row['nom'] = $oDocumento->getNom();
                 $row['f_mod'] = $oDocumento->getF_upload()->getFromLocal();
                 $row['visibilidad'] = $visibilidad_txt;

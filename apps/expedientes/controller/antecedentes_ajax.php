@@ -332,7 +332,9 @@ switch ($Qque) {
 	        $a++;
 	        // mirar permisos...
 	        $visibilidad = $oExpediente->getVisibilidad();
-	        if ( ($visibilidad == Entrada::V_DIRECTORES || $visibilidad == Entrada::V_RESERVADO || $visibilidad == Entrada::V_RESERVADO_VCD)
+	        if ( ($visibilidad == Entrada::V_DIRECTORES ||
+	               $visibilidad == Entrada::V_RESERVADO ||
+	               $visibilidad == Entrada::V_RESERVADO_VCD)
 	            && ConfigGlobal::soy_dtor() === FALSE) {
 	                continue;
 	        }
@@ -655,7 +657,7 @@ switch ($Qque) {
 	    
 	    $a_cabeceras = [ [ 'width' => 70, 'name' => _("fecha")],
 	                       [ 'width' => 500, 'name' => _("nombre")],
-	                       [ 'width' => 50, 'name' => _("ponente")],
+	                       [ 'width' => 50, 'name' => _("creador")],
 	                       [ 'width' => 50, 'name' => _("etiquetas")],
 	                   ''];
 	    $a_valores = [];
@@ -667,24 +669,25 @@ switch ($Qque) {
 	        }
 	        // mirar permisos...
 	        $visibilidad = $oDocumento->getVisibilidad();
-	        
-            if ( $visibilidad == Documento::V_PERSONAL &&
-	               ConfigGlobal::soy_dtor() === FALSE &&
-	               $oDocumento->getCreador() == ConfigGlobal::role_id_cargo() ) {
+
+	        if (ConfigGlobal::soy_dtor() === FALSE &&
+	            $oDocumento->getCreador() != ConfigGlobal::role_id_cargo() &&
+	            $visibilidad == Documento::V_PERSONAL ) {
 	                continue;
 	        }
+	            
 	        $a++;
 	        $id_doc = $oDocumento->getId_doc();
 	        $fecha_txt = $oDocumento->getF_upload()->getFromLocal();
-	        $ponente = $oDocumento->getCreador();
+	        $id_creador = $oDocumento->getCreador();
 	        
-	        $ponente_txt = $a_posibles_cargos[$ponente];
+	        $creador = $a_posibles_cargos[$id_creador];
 	        
 	        $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('documento','$id_doc','$Qid_expediente');\" >adjuntar</span>";
 	        
 	        $a_valores[$a][1] = $fecha_txt;
 	        $a_valores[$a][2] = $oDocumento->getNom();
-	        $a_valores[$a][3] = $ponente_txt;
+	        $a_valores[$a][3] = $creador;
 	        $a_valores[$a][4] = $oDocumento->getEtiquetasVisiblesTxt();
 	        $a_valores[$a][5] = $add;
 	    }
