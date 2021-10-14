@@ -300,15 +300,15 @@ if (empty($rrule)) {
     $periodico_tipo='';
 } else {
     $rta = Rrule::desmontar_rule($rrule);
+    if (empty($rta)) {
+        $msg = sprintf (_("pasa algo con el pendiente periódico: %s"),$asunto);
+        exit ($msg);
+    }
     if (empty($rta['until'])) {
         $f_until = '';
     } else {
         $oF_until = new DateTimeLocal($rta['until']);
         $f_until = $oF_until->getFromLocal();
-    }
-    if (empty($rta['until'])) {
-        $msg = sprintf (_("pasa algo con el pendiente periódico: %s"),$asunto);
-        exit ($msg);
     }
     switch ($rta['tipo']) {
         case "d_a":
