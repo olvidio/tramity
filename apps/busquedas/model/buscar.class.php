@@ -318,8 +318,7 @@ class Buscar {
                     } else {
                         $aWhereEntrada['_ordre'] = 'f_entrada';
                         $gesEntradas = new GestorEntradaDB();
-                        $id_lugar = $Qorigen_id_lugar;
-                        $cEntradas = $gesEntradas->getEntradasByLugarDB($id_lugar,$aWhereEntrada, $aOperadorEntrada);
+                        $cEntradas = $gesEntradas->getEntradasByLugarDB($Qorigen_id_lugar,$aWhereEntrada, $aOperadorEntrada);
                         $aCollections['entradas'] = $cEntradas;
                     }
                 } else {

@@ -3,6 +3,7 @@ namespace expedientes\model\entity;
 use function core\any_2;
 use expedientes\model\Escrito;
 use core;
+use core\ConfigGlobal;
 /**
  * GestorEscritoDB
  *
@@ -544,30 +545,76 @@ class GestorEscritoDB Extends core\ClaseGestor {
         $sQry = "SELECT t.*
                         FROM $nom_tabla t, jsonb_to_record(t.json_prot_local) as items(\"any\" text, mas text, num text, lugar text)
                         ".$sCondi.$sOrdre.$sLimit;
-        
-        try {
-            if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-                $sClauError = 'GestorEscritoDB.llistar.prepare';
-                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-                return FALSE;
-            }
-            if (($oDblSt->execute($aWhere)) === FALSE) {
-                $sClauError = 'GestorEscritoDB.llistar.execute';
-                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                return FALSE;
-            }
-        
-            foreach ($oDblSt as $aDades) {
-                $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-                $oEscritoDB = new Escrito($a_pkey);
-                $oEscritoDB->setAllAtributes($aDades);
-                $oEscritoDBSet->add($oEscritoDB);
-            }
-            return $oEscritoDBSet->getTot();
-        } catch (\PDOException $exception) {
-            echo _("Demasiadas filas a mostrar. No hay memoria suficiente");
-            exit();
+        /*
+        if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
+            $sClauError = 'GestorEscritoDB.llistar.prepare';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return FALSE;
         }
+        if (($oDblSt->execute($aWhere)) === FALSE) {
+            $sClauError = 'GestorEscritoDB.llistar.execute';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+    
+        foreach ($oDblSt as $aDades) {
+            $a_pkey = array('id_escrito' => $aDades['id_escrito']);
+            $oEscritoDB = new Escrito($a_pkey);
+            $oEscritoDB->setAllAtributes($aDades);
+            $oEscritoDBSet->add($oEscritoDB);
+        }
+        */
+        
+        // Se usa la utilidad CURSOR del Postgresql para evitar colapsar la memoria del servidor
+        // cuando se busca un número muy grande de registros (más de 20.000)
+        
+        foreach ($this->fetchCursor($sQry) as $row ) {
+            $a_pkey = array('id_escrito' => $row['id_escrito']);
+            $oEscritoDB = new Escrito($a_pkey);
+            $oEscritoDB->setAllAtributes($row);
+            $oEscritoDBSet->add($oEscritoDB);
+            
+        }
+        
+        return $oEscritoDBSet->getTot();
+	}
+	
+	private function fetchCursor($sql, $idCol = false) {
+        $pdo = $this->getoDbl();
+	    /*
+	     nextCursorId() is an undefined function, but
+	     the objective of it is to create a unique Id for each cursor.
+	     */
+	    try {
+	        $cursorID = 'cursor_'.ConfigGlobal::mi_id_usuario();
+            $pdo->beginTransaction();
+	        $pdo->exec("DECLARE $cursorID CURSOR FOR $sql ");
+        
+	        $stm = $pdo->prepare("FETCH NEXT FROM $cursorID");
+            $stm->execute();
+	        if ($stm) {
+	            while ($row = $stm->fetch(\PDO::FETCH_ASSOC)) {
+	                if (is_string($idCol) && array_key_exists($idCol, $row)) {
+	                    yield $row[$idCol] => $row;
+	                } else {
+	                    yield $row;
+	                }
+                    $stm->execute();
+	            }
+	        }
+	    } catch (\Exception $e) {
+	        // Anything you want [*Parece que no hace nada!!]
+	        echo "Demasiados registros";
+	        echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+	    } finally {
+	        /*
+	         Do some clean up after the loop is done.
+	         This is in a "finally" block because if you break the parent loop, it still gets called.
+	         */
+	        $pdo->exec("CLOSE $cursorID");
+            $pdo->commit();
+	        return;
+	    }
 	}
 	
 	/**

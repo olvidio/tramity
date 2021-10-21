@@ -345,6 +345,16 @@ fnjs_buscar=function(formulario){
             return;
         }
     }
+    if (opcion==1) {
+        var origen=$('#origen_id_lugar').val();
+        var antiguedad=$('#antiguedad').val();
+        debugger;
+        if (antiguedad === 'aa' && origen == '{{ id_dl }}') {
+            if ( !confirm("{{ "Puede tardar bastante. Ralentiza el servidor (afecta a otros usuarios). Si hay más de 20.000 puede dar error"|trans }}") ) {
+                return;
+            }
+        }
+    }
     if (opcion==7) {
         var num = $('#prot_num').val();
         if (num === '0' || num === 0 || num === '') {

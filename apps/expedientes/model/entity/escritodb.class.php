@@ -383,12 +383,14 @@ class EscritoDB Extends core\ClasePropiedades {
             $this->bLoaded = TRUE;
 			switch ($que) {
 				case 'tot':
+                    $oDblSt->closeCursor();
                     $this->setAllAtributes($aDades);
 					break;
 				case 'guardar':
-					if (!$oDblSt->rowCount()) return FALSE;
+				    if (!$oDblSt->rowCount()) { return FALSE; }
 					break;
                 default:
+                    $oDblSt->closeCursor();
 					// En el caso de no existir esta fila, $aDades = FALSE:
 					if ($aDades === FALSE) {
 						$this->setNullAllAtributes();
