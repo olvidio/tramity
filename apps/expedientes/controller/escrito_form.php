@@ -158,8 +158,7 @@ if (!empty($Qid_escrito)) {
             $titulo = _("modificar plantilla");
             break;
         default:
-            $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-            exit ($err_switch);
+            $titulo = _("modificar entrada");
     }
     
     $oPermisoregistro = new PermRegistro();
