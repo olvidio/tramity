@@ -364,8 +364,7 @@ switch($Qque) {
                 $oEntrada->setF_contestar($Qf_plazo);
                 break;
             default:
-                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-                exit ($err_switch);
+                // Si no hay $Qplazo, No pongo ninguna fecha a contestar
         }
             
         if (is_true($QAdmitir_hidden)) {
