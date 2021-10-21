@@ -555,13 +555,18 @@ class GestorEscritoDB Extends core\ClaseGestor {
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
-        foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new Escrito($a_pkey);
-            $oEscritoDB->setAllAtributes($aDades);
-            $oEscritoDBSet->add($oEscritoDB);
+        try {
+            foreach ($oDblSt as $aDades) {
+                $a_pkey = array('id_escrito' => $aDades['id_escrito']);
+                $oEscritoDB = new Escrito($a_pkey);
+                $oEscritoDB->setAllAtributes($aDades);
+                $oEscritoDBSet->add($oEscritoDB);
+            }
+            return $oEscritoDBSet->getTot();
+        } catch (\PDOException $exception) {
+            echo $exception->getMessage() . PHP_EOL;
+            exit();
         }
-        return $oEscritoDBSet->getTot();
 	}
 	
 	/**
