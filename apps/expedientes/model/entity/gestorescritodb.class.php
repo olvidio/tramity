@@ -565,7 +565,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
             }
             return $oEscritoDBSet->getTot();
         } catch (\PDOException $exception) {
-            echo $exception->getMessage() . PHP_EOL;
+            echo _("Demasiadas filas a mostrar. No hay memoria suficiente");
             exit();
         }
 	}
