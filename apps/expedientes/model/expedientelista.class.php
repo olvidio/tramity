@@ -111,6 +111,8 @@ class ExpedienteLista {
      * 
      */
     private function setCondicion() {
+        $aWhere = [];
+        $aOperador = [];
         switch ($this->filtro) {
             case 'borrador_propio':
                 if (!empty($this->aWhereADD)) {
