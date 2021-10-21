@@ -545,17 +545,18 @@ class GestorEscritoDB Extends core\ClaseGestor {
                         FROM $nom_tabla t, jsonb_to_record(t.json_prot_local) as items(\"any\" text, mas text, num text, lugar text)
                         ".$sCondi.$sOrdre.$sLimit;
         
-        if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorEscritoDB.llistar.prepare';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorEscritoDB.llistar.execute';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
         try {
+            if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
+                $sClauError = 'GestorEscritoDB.llistar.prepare';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                return FALSE;
+            }
+            if (($oDblSt->execute($aWhere)) === FALSE) {
+                $sClauError = 'GestorEscritoDB.llistar.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
+            }
+        
             foreach ($oDblSt as $aDades) {
                 $a_pkey = array('id_escrito' => $aDades['id_escrito']);
                 $oEscritoDB = new Escrito($a_pkey);
