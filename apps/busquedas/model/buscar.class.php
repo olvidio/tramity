@@ -287,6 +287,10 @@ class Buscar {
                         case "2a":
                             $limite = date("Y-m-d",mktime(0, 0, 0, date("m"),date("d"),date("Y")-2));
                             break;
+                        case "aa":
+                            // más de 2 años.
+                            $limite = '1928-10-02';
+                            break;
                         default:
                             $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
                             exit ($err_switch);
