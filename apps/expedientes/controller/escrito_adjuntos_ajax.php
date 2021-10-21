@@ -308,7 +308,7 @@ switch ($Qque) {
 	        
 	        if (ConfigGlobal::soy_dtor() === FALSE
 	            && $visibilidad == Documento::V_PERSONAL
-	            && $oDocumento->getCreador() == ConfigGlobal::role_id_cargo()
+	            && $oDocumento->getCreador() != ConfigGlobal::role_id_cargo()
 	            ) {
 	                continue;
             }
