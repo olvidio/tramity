@@ -111,9 +111,6 @@ class ExpedienteLista {
      * 
      */
     private function setCondicion() {
-        $aWhere = [];
-        $aOperador = [];
-
         switch ($this->filtro) {
             case 'borrador_propio':
                 if (!empty($this->aWhereADD)) {
@@ -518,8 +515,8 @@ class ExpedienteLista {
                 }
                 break;
             default:
-                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-                exit ($err_switch);
+                $aWhere = [];
+                $aOperador = [];
         }
 
         $this->aWhere = $aWhere;
