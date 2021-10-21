@@ -64,8 +64,10 @@ switch ($Qlista_origen) {
         $chk_lo_4 = 'checked';
         break;
     default:
-        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-        exit ($err_switch);
+        $chk_lo_1 = '';
+        $chk_lo_2 = '';
+        $chk_lo_3 = '';
+        $chk_lo_4 = '';
 }
 
 if (is_true($Qctr_anulados)) {
