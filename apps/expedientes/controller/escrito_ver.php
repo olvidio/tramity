@@ -34,9 +34,6 @@ if ($QSlide_mode === TRUE) {
     $Qid_escrito = (string) \filter_input(INPUT_GET, 'id_escrito');
 }
 
-
-$sigla = $_SESSION['oConfig']->getSigla();
-
 $oProtRef = new Protocolo();
 $oProtRef->setEtiqueta('Ref');
 $oProtRef->setNombre('ref');

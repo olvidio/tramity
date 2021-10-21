@@ -306,7 +306,7 @@ class PermRegistro {
      * @param string  $que (aunto|detalle|escrito|cambio)
      * @return number
      */
-    function permiso_detalle($objeto,$que) {
+    public function permiso_detalle($objeto,$que) {
         $role_actual = ConfigGlobal::role_actual();
         $id_oficina_pral = '';
         $id_oficina_role = '';
@@ -381,8 +381,8 @@ class PermRegistro {
         if (!isset($this->array_registro_perm[$visibilidad][$soy][$que])) {
             echo "NO encuentro permiso para: visibilidad: $visibilidad, soy: $soy, que: $que<br>";
         }
-        $permiso = $this->array_registro_perm[$visibilidad][$soy][$que];
-        return $permiso;
+        
+        return $this->array_registro_perm[$visibilidad][$soy][$que];
     }
     
 }

@@ -157,7 +157,7 @@ class UserDB Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'user_no') && $val_id !== '') $this->iuser_no = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'user_no') && $val_id !== '') { $this->iuser_no = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -315,21 +315,21 @@ class UserDB Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades,$convert=FALSE) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('user_no',$aDades)) $this->setUser_no($aDades['user_no']);
-		if (array_key_exists('active',$aDades)) $this->setActive($aDades['active']);
-		if (array_key_exists('email_ok',$aDades)) $this->setEmail_ok($aDades['email_ok'],$convert);
-		if (array_key_exists('joined',$aDades)) $this->setJoined($aDades['joined'],$convert);
-		if (array_key_exists('updated',$aDades)) $this->setUpdated($aDades['updated'],$convert);
-		if (array_key_exists('last_used',$aDades)) $this->setLast_used($aDades['last_used'],$convert);
-		if (array_key_exists('username',$aDades)) $this->setUsername($aDades['username']);
-		if (array_key_exists('password',$aDades)) $this->setPassword($aDades['password']);
-		if (array_key_exists('fullname',$aDades)) $this->setFullname($aDades['fullname']);
-		if (array_key_exists('email',$aDades)) $this->setEmail($aDades['email']);
-		if (array_key_exists('config_data',$aDades)) $this->setConfig_data($aDades['config_data']);
-		if (array_key_exists('date_format_type',$aDades)) $this->setDate_format_type($aDades['date_format_type']);
-		if (array_key_exists('locale',$aDades)) $this->setLocale($aDades['locale']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('user_no',$aDades)) { $this->setUser_no($aDades['user_no']); }
+		if (array_key_exists('active',$aDades)) { $this->setActive($aDades['active']); }
+		if (array_key_exists('email_ok',$aDades)) { $this->setEmail_ok($aDades['email_ok'],$convert); }
+		if (array_key_exists('joined',$aDades)) { $this->setJoined($aDades['joined'],$convert); }
+		if (array_key_exists('updated',$aDades)) { $this->setUpdated($aDades['updated'],$convert); }
+		if (array_key_exists('last_used',$aDades)) { $this->setLast_used($aDades['last_used'],$convert); }
+		if (array_key_exists('username',$aDades)) { $this->setUsername($aDades['username']); }
+		if (array_key_exists('password',$aDades)) { $this->setPassword($aDades['password']); }
+		if (array_key_exists('fullname',$aDades)) { $this->setFullname($aDades['fullname']); }
+		if (array_key_exists('email',$aDades)) { $this->setEmail($aDades['email']); }
+		if (array_key_exists('config_data',$aDades)) { $this->setConfig_data($aDades['config_data']); }
+		if (array_key_exists('date_format_type',$aDades)) { $this->setDate_format_type($aDades['date_format_type']); }
+		if (array_key_exists('locale',$aDades)) { $this->setLocale($aDades['locale']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -387,7 +387,7 @@ class UserDB Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'user_no') && $val_id !== '') $this->iuser_no = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'user_no') && $val_id !== '') { $this->iuser_no = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

@@ -62,10 +62,6 @@ class View {
 		$out2 = ob_get_contents();
 
 		ob_end_clean();
-
-//		var_dump($out2);
-        //$renderedView = ob_get_clean();
-        //return $renderedView;
         echo $out2;
     }
 }

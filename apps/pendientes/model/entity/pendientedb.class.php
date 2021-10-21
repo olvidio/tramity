@@ -181,7 +181,7 @@ class PendienteDB Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_pendiente') && $val_id !== '') $this->iid_pendiente = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_pendiente') && $val_id !== '') { $this->iid_pendiente = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -347,25 +347,25 @@ class PendienteDB Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades,$convert=FALSE) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_pendiente',$aDades)) $this->setId_pendiente($aDades['id_pendiente']);
-		if (array_key_exists('asunto',$aDades)) $this->setAsunto($aDades['asunto']);
-		if (array_key_exists('status',$aDades)) $this->setStatus($aDades['status']);
-		if (array_key_exists('f_acabado',$aDades)) $this->setF_acabado($aDades['f_acabado'],$convert);
-		if (array_key_exists('f_plazo',$aDades)) $this->setF_plazo($aDades['f_plazo'],$convert);
-		if (array_key_exists('ref_mas',$aDades)) $this->setRef_mas($aDades['ref_mas']);
-		if (array_key_exists('observ',$aDades)) $this->setObserv($aDades['observ']);
-		if (array_key_exists('encargado',$aDades)) $this->setEncargado($aDades['encargado']);
-		if (array_key_exists('cancilleria',$aDades)) $this->setCancilleria($aDades['cancilleria']);
-		if (array_key_exists('visibilidad',$aDades)) $this->setVisibilidad($aDades['visibilidad']);
-		if (array_key_exists('detalle',$aDades)) $this->setDetalle($aDades['detalle']);
-		if (array_key_exists('pendiente_con',$aDades)) $this->setPendiente_con($aDades['pendiente_con']);
-		if (array_key_exists('etiquetas',$aDades)) $this->setEtiquetas($aDades['etiquetas']);
-		if (array_key_exists('oficinas',$aDades)) $this->setOficinas($aDades['oficinas']);
-		if (array_key_exists('id_oficina',$aDades)) $this->setId_oficina($aDades['id_oficina']);
-		if (array_key_exists('rrule',$aDades)) $this->setRrule($aDades['rrule']);
-		if (array_key_exists('f_inicio',$aDades)) $this->setF_inicio($aDades['f_inicio'],$convert);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_pendiente',$aDades)) { $this->setId_pendiente($aDades['id_pendiente']); }
+		if (array_key_exists('asunto',$aDades)) { $this->setAsunto($aDades['asunto']); }
+		if (array_key_exists('status',$aDades)) { $this->setStatus($aDades['status']); }
+		if (array_key_exists('f_acabado',$aDades)) { $this->setF_acabado($aDades['f_acabado'],$convert); }
+		if (array_key_exists('f_plazo',$aDades)) { $this->setF_plazo($aDades['f_plazo'],$convert); }
+		if (array_key_exists('ref_mas',$aDades)) { $this->setRef_mas($aDades['ref_mas']); }
+		if (array_key_exists('observ',$aDades)) { $this->setObserv($aDades['observ']); }
+		if (array_key_exists('encargado',$aDades)) { $this->setEncargado($aDades['encargado']); }
+		if (array_key_exists('cancilleria',$aDades)) { $this->setCancilleria($aDades['cancilleria']); }
+		if (array_key_exists('visibilidad',$aDades)) { $this->setVisibilidad($aDades['visibilidad']); }
+		if (array_key_exists('detalle',$aDades)) { $this->setDetalle($aDades['detalle']); }
+		if (array_key_exists('pendiente_con',$aDades)) { $this->setPendiente_con($aDades['pendiente_con']); }
+		if (array_key_exists('etiquetas',$aDades)) { $this->setEtiquetas($aDades['etiquetas']); }
+		if (array_key_exists('oficinas',$aDades)) { $this->setOficinas($aDades['oficinas']); }
+		if (array_key_exists('id_oficina',$aDades)) { $this->setId_oficina($aDades['id_oficina']); }
+		if (array_key_exists('rrule',$aDades)) { $this->setRrule($aDades['rrule']); }
+		if (array_key_exists('f_inicio',$aDades)) { $this->setF_inicio($aDades['f_inicio'],$convert); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -427,7 +427,7 @@ class PendienteDB Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_pendiente') && $val_id !== '') $this->iid_pendiente = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_pendiente') && $val_id !== '') { $this->iid_pendiente = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -806,37 +806,11 @@ class PendienteDB Extends core\ClasePropiedades {
 	    $this->setiquetas = $etiquetas_csv;
 	}
 	
-	public function getEtiquetasArray() {
-	    if (!isset($this->setiquetas) && !$this->bLoaded) {
-	        $this->Carregar();
-	    }
-	    if (empty($this->setiquetas)) {
-	        $aEtiquetas = [];
-	    } else {
-	        $aEtiquetas = explode(",", $this->setiquetas);
-	    }
-	    
-	    return $aEtiquetas;
-	}
-	
 	public function setOficinasArray($aOficinas){
 	    $a_filter_oficinas = array_filter($aOficinas); // Quita los elementos vacíos y nulos.
 	    $oficinas_csv = implode(",", $a_filter_oficinas);
 	    
 	    $this->oficinas = $oficinas_csv;
-	}
-	
-	public function getOficinasArray() {
-	    if (!isset($this->oficinas) && !$this->bLoaded) {
-	        $this->Carregar();
-	    }
-	    if (empty($this->oficinas)) {
-	        $aOficinas = [];
-	    } else {
-	        $aOficinas = explode(",", $this->oficinas);
-	    }
-	    
-	    return $aOficinas;
 	}
 	
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/

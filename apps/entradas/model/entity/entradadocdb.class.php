@@ -105,7 +105,7 @@ class EntradaDocDB Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_entrada') && $val_id !== '') $this->iid_entrada = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_entrada') && $val_id !== '') { $this->iid_entrada = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -241,11 +241,11 @@ class EntradaDocDB Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades,$convert=FALSE) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_entrada',$aDades)) $this->setId_entrada($aDades['id_entrada']);
-		if (array_key_exists('tipo_doc',$aDades)) $this->setTipo_doc($aDades['tipo_doc']);
-		if (array_key_exists('f_doc',$aDades)) $this->setF_doc($aDades['f_doc'],$convert);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_entrada',$aDades)) { $this->setId_entrada($aDades['id_entrada']); }
+		if (array_key_exists('tipo_doc',$aDades)) { $this->setTipo_doc($aDades['tipo_doc']); }
+		if (array_key_exists('f_doc',$aDades)) { $this->setF_doc($aDades['f_doc'],$convert); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -293,7 +293,7 @@ class EntradaDocDB Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_entrada') && $val_id !== '') $this->iid_entrada = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_entrada') && $val_id !== '') { $this->iid_entrada = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

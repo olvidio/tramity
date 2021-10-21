@@ -59,14 +59,6 @@ class ViewTwig extends Environment {
 		    'debug' => true,
 		    'auto_reload' => true,
 		    ];
-		//$options = [];
-		
-		// this is for the filter |trans
-		/*
-		$filter = new TwigFilter('trans', function (Environment $env, $context, $string) {
-		    return Translation::TransGetText($string, $context);
-		}, ['needs_context' => true, 'needs_environment' => true]);
-		  */  
 		$filter = new TwigFilter('trans', function (Environment $env, $context, $string) {
 		    return Translation::TransGetText($string, []);
 		}, ['needs_context' => true, 'needs_environment' => true]);
@@ -86,10 +78,8 @@ class ViewTwig extends Environment {
 		$base_dir = $_SERVER['DOCUMENT_ROOT'] . $dir_apps;
 		$new_dir ='js';
 		
-        $dir_templates  = $base_dir . DIRECTORY_SEPARATOR . $new_dir;
-        
-        return $dir_templates;
-		
+        // dir_templates
+        return $base_dir . DIRECTORY_SEPARATOR . $new_dir;
 	}
 	
 	private function setAbsolutePath($dirname) {
@@ -108,9 +98,9 @@ class ViewTwig extends Environment {
 
         $new_dir = preg_replace($patterns, $replacements, $dirname);
         $new_dir = str_replace('\\', DIRECTORY_SEPARATOR, $new_dir);
-        $dir_templates  = $base_dir . DIRECTORY_SEPARATOR . $new_dir;
         
-        return $dir_templates;
+        // dir_templates
+        return $base_dir . DIRECTORY_SEPARATOR . $new_dir;
 	}
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	

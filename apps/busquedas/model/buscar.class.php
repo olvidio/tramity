@@ -20,13 +20,6 @@ class Buscar {
     private $id_sigla;
 
     /**
-     * Id_cr
-     *
-     * @var integer
-     */
-    private $id_cr;
-
-    /**
      * Id_lugar
      *
      * @var integer
@@ -128,10 +121,6 @@ class Buscar {
      * @var boolean
      */
     private $ref;
-    
-    
-    public function __construct() {
-    }
     
     public function getCollection($opcion,$mas='') {
         /* Siempre, obligatorio tener:
@@ -298,8 +287,10 @@ class Buscar {
                         case "2a":
                             $limite = date("Y-m-d",mktime(0, 0, 0, date("m"),date("d"),date("Y")-2));
                             break;
+                        default:
+                            $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                            exit ($err_switch);
                     }
-                    $gesEntradas = new GestorEntrada();
                     $aWhereEntrada['f_entrada'] = $limite;
                     $aWhereEntrada['_ordre'] = 'f_entrada';
                     $aOperadorEntrada[ 'f_entrada'] = '>';
@@ -317,7 +308,6 @@ class Buscar {
                     // Caso especial de querer ver los escritos de la dl. No se consulta en las entradas, sino salidas.
                     // se omiten los de distribución de cr.
                     if ($Qorigen_id_lugar==$this->local_id_lugar) {
-                        $id_lugar = $Qorigen_id_lugar;
                         $this->setF_min($limite,FALSE);
                         $cEscritos = $this->buscarEscritos();
                         $aCollections['escritos'] = $cEscritos;
@@ -381,36 +371,18 @@ class Buscar {
                 $aCollections['escritos'] = $cEscritos;
                 return $aCollections;
             break;
-            case 42:
-                //case "de":
+            case 42: //case "de":
+            case 43: //case "de cr a dl":
+            case 44: //case "de cr a ctr":
+            case 5: // como 2 pero solo buscar en entradas (sólo entradas 17-3-2021)
+            case 6: // buscar en escritos: modelo jurídico (plantilla)
                 $cEntradas = $this->buscarEntradas();
                 $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
             break;
-            case 43:
-                //case "de cr a dl":
-                $cEntradas = $this->buscarEntradas();
-                $aCollections['entradas'] = $cEntradas;
-                return $aCollections;
-            break;
-            case 44:
-                //case "de cr a ctr":
-                $cEntradas = $this->buscarEntradas();
-                $aCollections['entradas'] = $cEntradas;
-                return $aCollections;
-            break;
-            case 5:
-                // como 2 pero solo buscar en entradas (sólo entradas 17-3-2021)
-                $cEntradas = $this->buscarEntradas();
-                $aCollections['entradas'] = $cEntradas;
-                return $aCollections;
-                break;
-            case 6:
-                // buscar en escritos: modelo jurídico (plantilla)
-                $cEscritos = $this->buscarEscritos();
-                $aCollections['escritos'] = $cEscritos;
-                return $aCollections;
-                break;
+            default:
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
         }
     
     }
@@ -439,7 +411,6 @@ class Buscar {
         if (!empty($f_min) && !empty($f_max)) {
             $aWhere ['f_aprobacion'] = "'$f_min','$f_max'";
             $aOperador ['f_aprobacion']  = 'BETWEEN';
-            //$cond_ap="AND f_aprobacion >= '$f_min'";
         } else {
             $aWhere['f_aprobacion'] = 'x';
             $aOperador['f_aprobacion'] = 'IS NOT NULL';
@@ -533,7 +504,6 @@ class Buscar {
         if (!empty($f_min) && !empty($f_max)) {
             $aWhere ['f_entrada'] = "'$f_min','$f_max'";
             $aOperador ['f_entrada']  = 'BETWEEN';
-            //$cond_ap="AND f_aprobacion >= '$f_min'";
         } else {
             $aWhere['f_entrada'] = 'x';
             $aOperador['f_entrada'] = 'IS NOT NULL';

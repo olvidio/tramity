@@ -115,23 +115,23 @@ class GestorLocale Extends core\ClaseGestor {
 		$oCondicion = new core\Condicion();
 		$aCondi = array();
 		foreach ($aWhere as $camp => $val) {
-			if ($camp == '_ordre') continue;
-			if ($camp == '_limit') continue;
+			if ($camp == '_ordre') { continue; }
+			if ($camp == '_limit') { continue; }
 			$sOperador = isset($aOperators[$camp])? $aOperators[$camp] : '';
-			if ($a = $oCondicion->getCondicion($camp,$sOperador,$val)) $aCondi[]=$a;
+			if ($a = $oCondicion->getCondicion($camp,$sOperador,$val)) { $aCondi[]=$a; }
 			// operadores que no requieren valores
-			if ($sOperador == 'BETWEEN' || $sOperador == 'IS NULL' || $sOperador == 'IS NOT NULL' || $sOperador == 'OR') unset($aWhere[$camp]);
-			if ($sOperador == 'IN' || $sOperador == 'NOT IN') unset($aWhere[$camp]);
-			if ($sOperador == 'TXT') unset($aWhere[$camp]);
+			if ($sOperador == 'BETWEEN' || $sOperador == 'IS NULL' || $sOperador == 'IS NOT NULL' || $sOperador == 'OR') { unset($aWhere[$camp]); }
+			if ($sOperador == 'IN' || $sOperador == 'NOT IN') { unset($aWhere[$camp]); }
+			if ($sOperador == 'TXT') { unset($aWhere[$camp]); }
 		}
 		$sCondi = implode(' AND ',$aCondi);
-		if ($sCondi!='') $sCondi = " WHERE ".$sCondi;
+		if ($sCondi!='') { $sCondi = " WHERE ".$sCondi; }
 		$sOrdre = '';
         $sLimit='';
-		if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') $sOrdre = ' ORDER BY '.$aWhere['_ordre'];
-		if (isset($aWhere['_ordre'])) unset($aWhere['_ordre']);
-		if (isset($aWhere['_limit']) && $aWhere['_limit']!='') $sLimit = ' LIMIT '.$aWhere['_limit'];
-		if (isset($aWhere['_limit'])) unset($aWhere['_limit']);
+		if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') { $sOrdre = ' ORDER BY '.$aWhere['_ordre']; }
+		if (isset($aWhere['_ordre'])) { unset($aWhere['_ordre']); }
+		if (isset($aWhere['_limit']) && $aWhere['_limit']!='') { $sLimit = ' LIMIT '.$aWhere['_limit']; }
+		if (isset($aWhere['_limit'])) { unset($aWhere['_limit']); }
 		$sQry = "SELECT * FROM $nom_tabla ".$sCondi.$sOrdre.$sLimit;
 		if (($oDblSt = $oDbl->prepare($sQry)) === false) {
 			$sClauError = 'GestorLocale.llistar.prepare';

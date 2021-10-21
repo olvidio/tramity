@@ -41,11 +41,6 @@ class EscritoLista {
     private $aOperador;
     /**
      * 
-     * @var array
-     */
-    private $a_expedientes_nuevos = [];
-    /**
-     * 
      * @var boolean
      */
     private $todos_escritos_enviados;
@@ -92,8 +87,7 @@ class EscritoLista {
                 ];
         $cEscritosEnviadosFecha = $gesEscritos->getEscritos($aWhere,$aOperador);
         
-        $cEscritos = array_merge($cEscritosNoEnviados, $cEscritosEnviadosFecha);
-        return $cEscritos;
+        return array_merge($cEscritosNoEnviados, $cEscritosEnviadosFecha);
     }
 
     private function getDistribuir() {
@@ -418,18 +412,14 @@ class EscritoLista {
     
     public function getNumeroEnviar($fecha='') {
         $cEscritos = $this->getEscritosParaEnviar($fecha);
-        $num = count($cEscritos);
-    
-        return $num;
+        return count($cEscritos);
     }
 
     public function getNumero() {
         $this->setCondicion();
         $gesEscritos = new GestorEscritoDB();
         $cEscritos = $gesEscritos->getEscritosDB($this->aWhere,$this->aOperador);
-        $num = count($cEscritos);
-    
-        return $num;
+        return count($cEscritos);
     }
 
     

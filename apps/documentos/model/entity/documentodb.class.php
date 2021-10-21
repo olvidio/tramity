@@ -129,7 +129,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_doc') && $val_id !== '') $this->iid_doc = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_doc') && $val_id !== '') { $this->iid_doc = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -292,7 +292,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 				    $this->setAllAtributes($aDades);
 					break;
 				case 'guardar':
-					if (!$oDblSt->rowCount()) return FALSE;
+				    if (!$oDblSt->rowCount()) { return FALSE; }
 					break;
                 default:
 					// En el caso de no existir esta fila, $aDades = FALSE:
@@ -332,16 +332,16 @@ class DocumentoDB Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades,$convert=FALSE) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_doc',$aDades)) $this->setId_doc($aDades['id_doc']);
-		if (array_key_exists('nom',$aDades)) $this->setNom($aDades['nom']);
-		if (array_key_exists('nombre_fichero',$aDades)) $this->setNombre_fichero($aDades['nombre_fichero']);
-		if (array_key_exists('creador',$aDades)) $this->setCreador($aDades['creador']);
-		if (array_key_exists('visibilidad',$aDades)) $this->setVisibilidad($aDades['visibilidad']);
-		if (array_key_exists('tipo_doc',$aDades)) $this->setTipo_doc($aDades['tipo_doc']);
-		if (array_key_exists('f_upload',$aDades)) $this->setF_upload($aDades['f_upload'],$convert);
-		if (array_key_exists('documento',$aDades)) $this->setDocumento($aDades['documento']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_doc',$aDades)) { $this->setId_doc($aDades['id_doc']); }
+		if (array_key_exists('nom',$aDades)) { $this->setNom($aDades['nom']); }
+		if (array_key_exists('nombre_fichero',$aDades)) { $this->setNombre_fichero($aDades['nombre_fichero']); }
+		if (array_key_exists('creador',$aDades)) { $this->setCreador($aDades['creador']); }
+		if (array_key_exists('visibilidad',$aDades)) { $this->setVisibilidad($aDades['visibilidad']); }
+		if (array_key_exists('tipo_doc',$aDades)) { $this->setTipo_doc($aDades['tipo_doc']); }
+		if (array_key_exists('f_upload',$aDades)) { $this->setF_upload($aDades['f_upload'],$convert); }
+		if (array_key_exists('documento',$aDades)) { $this->setDocumento($aDades['documento']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -394,7 +394,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_doc') && $val_id !== '') $this->iid_doc = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_doc') && $val_id !== '') { $this->iid_doc = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

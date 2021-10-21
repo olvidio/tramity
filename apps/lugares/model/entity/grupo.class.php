@@ -97,7 +97,7 @@ class Grupo Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_grupo') && $val_id !== '') $this->iid_grupo = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_grupo') && $val_id !== '') { $this->iid_grupo = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -233,11 +233,11 @@ class Grupo Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_grupo',$aDades)) $this->setId_grupo($aDades['id_grupo']);
-		if (array_key_exists('descripcion',$aDades)) $this->setDescripcion($aDades['descripcion']);
-		if (array_key_exists('miembros',$aDades)) $this->setMiembros($aDades['miembros'],TRUE);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_grupo',$aDades)) { $this->setId_grupo($aDades['id_grupo']); }
+		if (array_key_exists('descripcion',$aDades)) { $this->setDescripcion($aDades['descripcion']); }
+		if (array_key_exists('miembros',$aDades)) { $this->setMiembros($aDades['miembros'],TRUE); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -285,7 +285,7 @@ class Grupo Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_grupo') && $val_id !== '') $this->iid_grupo = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_grupo') && $val_id !== '') { $this->iid_grupo = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

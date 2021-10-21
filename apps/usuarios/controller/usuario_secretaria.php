@@ -19,7 +19,9 @@ require_once ("apps/core/global_object.inc");
  * En concreto hay un problema con bootstrap.js y popper.js
  */
 $peticion_ajax = 0;
-if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+if(isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+    && !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
 {
     // handle request as AJAX
     $peticion_ajax = 1;
@@ -54,7 +56,7 @@ if (!empty($id_cargo)) {
 $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
     $a_pills[$num_orden] = $pill;
 
-    // seguimiento = 2;
+    // seguimiento = 2
     $filtro = 'seg_reunion';
         $active = ($filtro == $Qfiltro)? 'active' : '';
         $aQuery = [ 'filtro' => $filtro ];
@@ -68,7 +70,7 @@ $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' =>
     $a_pills[$num_orden] = $pill;
 }
 
-// firmar = 2;
+// firmar = 2
 $filtro = 'seguimiento';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -81,7 +83,7 @@ $filtro = 'seguimiento';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// reunion = 3;
+// reunion = 3
 $filtro = 'distribuir';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -94,7 +96,7 @@ $filtro = 'distribuir';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// circular = 4;
+// circular = 4
 // se envian escritos, no expedientes
 $filtro = 'enviar';
     $active = ($filtro == $Qfiltro)? 'active' : '';
@@ -108,20 +110,6 @@ $filtro = 'enviar';
     $num = $oEscritoLista->getNumeroEnviar();
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
-
-// permanantes = 5;
-/*   "PESTAÑA A ELIMINAR: JA ESTÀ "PERMANENTES DE CR" EN CADA OFICINA"
-$filtro = 'permanentes';
-    $active = ($filtro == $Qfiltro)? 'active' : '';
-    $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 5;
-    $text = _("permanentes");
-    $oExpedienteLista->setFiltro($filtro);
-    $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
-*/
 
 // introducir entradas
 $filtro = 'en_ingresado';
@@ -182,7 +170,7 @@ $filtro = 'bypass';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// buscar = 13;
+// buscar = 13
 $filtro = 'en_buscar';
 $active = ($filtro == $Qfiltro)? 'active' : '';
 $aQuery = [ 'filtro' => $filtro ];
@@ -210,7 +198,7 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
     $a_pills[$num_orden] = $pill;
 }
 
-// pendientes = 16;
+// pendientes = 16
 $filtro = 'pendientes';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro,
@@ -225,7 +213,7 @@ $filtro = 'pendientes';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// salida manual = 20;
+// salida manual = 20
 $filtro = 'salida_manual';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro,
@@ -239,7 +227,7 @@ $filtro = 'salida_manual';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// plantillas = 30;
+// plantillas = 30
 $filtro = 'plantillas';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro,

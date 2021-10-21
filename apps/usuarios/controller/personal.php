@@ -22,7 +22,7 @@ $id_usuario= core\ConfigGlobal::mi_id_usuario();
 
 // ----------- Color -------------------
 $aPref = $oGesPref->getPreferencias(array('id_usuario'=>$id_usuario,'tipo'=>'color'));
-if (is_array($aPref) && count($aPref) > 0) {
+if (is_array($aPref) && !empty($aPref)) {
 	$oPreferencia = $aPref[0];
 	$color = $oPreferencia->getPreferencia();
 } else {
@@ -32,7 +32,7 @@ if (is_array($aPref) && count($aPref) > 0) {
 // ----------- Idioma -------------------
 //Tengo la variable $idioma en ConfigGlobal, pero vuelvo a consultarla 
 $aPref = $oGesPref->getPreferencias(array('id_usuario'=>$id_usuario,'tipo'=>'idioma'));
-if (is_array($aPref) && count($aPref) > 0) {
+if (is_array($aPref) && !empty($aPref)) {
 	$oPreferencia = $aPref[0];
 	$preferencia = $oPreferencia->getPreferencia();
 	list($idioma) = preg_split('/#/',$preferencia);

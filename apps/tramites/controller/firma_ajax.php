@@ -36,7 +36,6 @@ switch ($Qque) {
         $gesFirmas = new GestorFirma();
         $aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
         $a_recorrido = $aRecorrido['recorrido'];
-        //$comentarios = $aRecorrido['comentarios'];
         
         $jsondata['recorrido'] = json_encode($a_recorrido);
         break;
@@ -149,23 +148,21 @@ switch ($Qque) {
         ];
         $gesFirmas = new GestorFirma();
         $cFirmas = $gesFirmas->getFirmas($aWhere);
-        if (is_array($cFirmas) && count($cFirmas) == 0) {
+        if (is_array($cFirmas) && empty($cFirmas)) {
             $error_txt .= _("No puede Firmar");
         } else {
             $oExpediente = new Expediente($Qid_expediente);
             $oExpediente->DBCarregar();
             $estado = $oExpediente->getEstado();
-            //$f_hoy_iso = date('Y-m-d');
             $f_hoy_iso = date(\DateTimeInterface::ISO8601);
             // Habrá que ver como se cambia un voto.
             // De momento sólo se firma el primero que no tenga valor.
             foreach ($cFirmas as $oFirma) {
                 $valor = $oFirma->getValor();
-                if ($valor == Firma::V_NO || $valor == Firma::V_D_NO ||
+                if (!($valor == Firma::V_NO || $valor == Firma::V_D_NO ||
                     $valor == Firma::V_OK || $valor == Firma::V_D_OK ||
-                    $valor == Firma::V_D_VISTO_BUENO) {
-                    continue;
-                } else {
+                    $valor == Firma::V_D_VISTO_BUENO))
+                {
                     break;
                 }
             }
@@ -186,7 +183,7 @@ switch ($Qque) {
                     'tipo' => Firma::TIPO_VOTO,
                 ];
                 $cFirmaDistribuir = $gesFirmas->getFirmas($aWhere);
-                if (is_array($cFirmaDistribuir) && count($cFirmaDistribuir) > 0) {
+                if (is_array($cFirmaDistribuir) && !empty($cFirmaDistribuir)) {
                     $oFirmaDistribuir = $cFirmaDistribuir[0];
                     $oFirmaDistribuir->setId_usuario(ConfigGlobal::mi_id_usuario());
                     $oFirmaDistribuir->setValor($Qvoto);
@@ -269,7 +266,7 @@ switch ($Qque) {
         ];
         $gesFirmas = new GestorFirma();
         $cFirmas = $gesFirmas->getFirmas($aWhere,$aOperador);
-        if (is_array($cFirmas) && count($cFirmas) > 0) {
+        if (is_array($cFirmas) && !empty($cFirmas)) {
             // Ya existe una aclaración. Busco la última, para saber el orden.
             $oFirmaAclaracion = $cFirmas[0];
             $oFirmaAclaracion->DBCarregar();
@@ -290,7 +287,7 @@ switch ($Qque) {
         ];
         $gesFirmas = new GestorFirma();
         $cFirmasA = $gesFirmas->getFirmas($aWhere);
-        if (is_array($cFirmasA) && count($cFirmasA) > 0) {
+        if (is_array($cFirmasA) && !empty($cFirmasA)) {
             // Ya existe una aclaración. Busco la última, para saber el orden.
             $oFirmaAclaracion = $cFirmasA[0];
             $orden_tramite = $oFirmaAclaracion->getOrden_tramite();
@@ -310,7 +307,7 @@ switch ($Qque) {
         $aOperador = ['valor' => 'NOT IN'];
         $gesFirmas = new GestorFirma();
         $cFirmas = $gesFirmas->getFirmas($aWhere, $aOperador);
-        if (is_array($cFirmas) && count($cFirmas) == 0) {
+        if (is_array($cFirmas) && empty($cFirmas)) {
             $error_txt .= _("No puede Firmar");
         } else {
             if (empty($orden_oficina)) {
@@ -343,6 +340,9 @@ switch ($Qque) {
             }
         }
     break;
+    default:
+        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_switch);
 }
         
 if (!empty($error_txt)) {

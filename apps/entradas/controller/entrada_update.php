@@ -76,11 +76,9 @@ switch($Qque) {
             $flag_encontrado = FALSE;
             $aVisto = $oEntrada->getJson_visto(TRUE);
             foreach ($aVisto as $key => $oVisto) {
-                if ($oVisto['oficina'] == $Qid_oficina) {
-                    if ($oVisto['cargo'] == $Qid_cargo) {
-                        $aVisto[$key]['visto'] = TRUE;
-                        $flag_encontrado = TRUE;
-                    }
+                if ( ($oVisto['oficina'] == $Qid_oficina) && ($oVisto['cargo'] == $Qid_cargo) ) {
+                    $aVisto[$key]['visto'] = TRUE;
+                    $flag_encontrado = TRUE;
                 }
             }
             if (!$flag_encontrado) {
@@ -101,11 +99,9 @@ switch($Qque) {
             $flag_encontrado = FALSE;
             $aVisto = $oEntrada->getJson_visto(TRUE);
             foreach ($aVisto as $key => $oVisto) {
-                if ($oVisto['oficina'] == $Qid_oficina) {
-                    if ($oVisto['cargo'] == $Qid_cargo) {
-                        $aVisto[$key]['visto'] = TRUE;
-                        $flag_encontrado = TRUE;
-                    }
+                if ($oVisto['oficina'] == $Qid_oficina && $oVisto['cargo'] == $Qid_cargo) {
+                    $aVisto[$key]['visto'] = TRUE;
+                    $flag_encontrado = TRUE;
                 }
             }
             if (!$flag_encontrado) {
@@ -124,10 +120,8 @@ switch($Qque) {
         // y en cualquier caso: desmarcar al nuevo (podria estar marcado previamente)
         $aVisto = $oEntrada->getJson_visto(TRUE);
         foreach ($aVisto as $key => $oVisto) {
-            if ($oVisto['oficina'] == $Qid_oficina) {
-                if ($oVisto['cargo'] == $Qid_cargo) {
-                    $aVisto[$key]['visto'] = FALSE;
-                }
+            if ($oVisto['oficina'] == $Qid_oficina && $oVisto['cargo'] == $Qid_cargo) {
+                $aVisto[$key]['visto'] = FALSE;
             }
         }
         
@@ -188,7 +182,7 @@ switch($Qque) {
     case 'guardar_destinos':
         $gesEntradasBypass = new GestorEntradaBypass();
         $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
-        if (count($cEntradasBypass) > 0) {
+        if (!empty($cEntradasBypass)) {
             // solo debería haber una:
             $oEntradaBypass = $cEntradasBypass[0];
             $oEntradaBypass->DBCarregar();
@@ -369,6 +363,9 @@ switch($Qque) {
             case 'fecha':
                 $oEntrada->setF_contestar($Qf_plazo);
                 break;
+            default:
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
         }
             
         if (is_true($QAdmitir_hidden)) {
@@ -458,7 +455,7 @@ switch($Qque) {
             if (is_true($Qbypass) && !empty($Qid_entrada)) {
                 $gesEntradasBypass = new GestorEntradaBypass();
                 $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
-                if (count($cEntradasBypass) > 0) {
+                if (!empty($cEntradasBypass)) {
                     // solo debería haber una:
                     $oEntradaBypass = $cEntradasBypass[0];
                     $oEntradaBypass->DBCarregar();
@@ -546,4 +543,7 @@ switch($Qque) {
         exit();
         
     break;
+    default:
+        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_switch);
 }

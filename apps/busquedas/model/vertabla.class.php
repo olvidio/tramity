@@ -166,22 +166,26 @@ class VerTabla {
 
     
     public function mostrarTabla() {
-        $aCollection = $this->aCollection;
-        if ($this->sKey == 'entradas_ref') {
-            $this->sTitulo = _("escritos recibidos en la Delegación con referencias al escrito");
-            return $this->tabla_entradas($aCollection);
-        }
-        if ($this->sKey == 'entradas') {
-            $this->sTitulo = _("escritos recibidos en la Delegación");
-            return $this->tabla_entradas($aCollection);
-        }
-        if ($this->sKey == 'escritos_ref') {
-            $this->sTitulo = _("escritos aprobados en la Delegación con referencias al escrito");
-            return $this->tabla_escritos($aCollection);
-        }
-        if ($this->sKey == 'escritos') {
-            $this->sTitulo = _("escritos aprobados en la Delegación");
-            return $this->tabla_escritos($aCollection);
+        switch ($this->sKey) {
+            case 'entradas_ref':
+                $this->sTitulo = _("escritos recibidos en la Delegación con referencias al escrito");
+                $this->tabla_entradas($this->aCollection);
+                break;
+            case 'entradas':
+                $this->sTitulo = _("escritos recibidos en la Delegación");
+                $this->tabla_entradas($this->aCollection);
+                break;
+            case 'escritos_ref':
+                $this->sTitulo = _("escritos aprobados en la Delegación con referencias al escrito");
+                $this->tabla_escritos($this->aCollection);
+                break;
+            case 'escritos':
+                $this->sTitulo = _("escritos aprobados en la Delegación");
+                $this->tabla_escritos($this->aCollection);
+                break;
+            default:
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
         }
     }
     // ---------------------------------- tablas ----------------------------
@@ -346,18 +350,10 @@ class VerTabla {
             // destinos
             $destino_txt = $oEscrito->getDestinosEscrito();
             
-            // referencias
-            $json_ref = $oEscrito->getJson_prot_ref();
-            $oArrayProtRef = new ProtocoloArray($json_ref,'','');
-            $oArrayProtRef->setRef(TRUE);
-            $referencias = $oArrayProtRef->ListaTxtBr();
-            
             $id_escrito=$oEscrito->getId_escrito();
             $f_aprobacion=$oEscrito->getF_aprobacion();
             $f_escrito=$oEscrito->getF_escrito();
             $f_salida=$oEscrito->getF_salida();
-            
-            $entradilla = $oEscrito->getEntradilla();
             
             // referencias
             $json_ref = $oEscrito->getJson_prot_ref();
@@ -377,7 +373,7 @@ class VerTabla {
             }
             $oficinas = $oficinas_txt;
             
-            if (!empty($anulado)) $asunto=_("ANULADO")." ($anulado) $asunto";
+            if (!empty($anulado)) { $asunto=_("ANULADO")." ($anulado) $asunto"; }
             
             $categoria = $oEscrito->getCategoria();
             if (empty($categoria)) {

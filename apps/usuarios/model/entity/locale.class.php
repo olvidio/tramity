@@ -101,7 +101,7 @@ class Locale Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_locale') && $val_id !== '') $this->sid_locale = (string)$val_id; // evitem SQL injection fent cast a string
+				if (($nom_id == 'id_locale') && $val_id !== '') { $this->sid_locale = (string)$val_id; } // evitem SQL injection fent cast a string
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -243,12 +243,12 @@ class Locale Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_locale',$aDades)) $this->setId_locale($aDades['id_locale']);
-		if (array_key_exists('nom_locale',$aDades)) $this->setNom_locale($aDades['nom_locale']);
-		if (array_key_exists('idioma',$aDades)) $this->setIdioma($aDades['idioma']);
-		if (array_key_exists('nom_idioma',$aDades)) $this->setNom_idioma($aDades['nom_idioma']);
-		if (array_key_exists('activo',$aDades)) $this->setActivo($aDades['activo']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_locale',$aDades)) { $this->setId_locale($aDades['id_locale']); }
+		if (array_key_exists('nom_locale',$aDades)) { $this->setNom_locale($aDades['nom_locale']); }
+		if (array_key_exists('idioma',$aDades)) { $this->setIdioma($aDades['idioma']); }
+		if (array_key_exists('nom_idioma',$aDades)) { $this->setNom_idioma($aDades['nom_idioma']); }
+		if (array_key_exists('activo',$aDades)) { $this->setActivo($aDades['activo']); }
 	}
 
 	/**

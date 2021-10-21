@@ -83,7 +83,9 @@ class ConfigSchema Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'parametro') && $val_id !== '') $this->sparametro = (string)$val_id; // evitem SQL injection fent cast a string
+			    if (($nom_id == 'parametro') && $val_id !== '') {
+			        $this->sparametro = (string)$val_id; // evitem SQL injection fent cast a string
+			    }
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -106,7 +108,7 @@ class ConfigSchema Extends core\ClasePropiedades {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
 		if ($this->DBCarregar('guardar') === FALSE) { $bInsert=TRUE; } else { $bInsert=FALSE; }
-		$aDades=array();
+		$aDades = [];
 		$aDades['valor'] = $this->svalor;
 		array_walk($aDades, 'core\poner_null');
 
@@ -177,7 +179,7 @@ class ConfigSchema Extends core\ClasePropiedades {
 					$this->aDades=$aDades;
 					break;
 				case 'guardar':
-					if (!$oDblSt->rowCount()) return FALSE;
+				    if (!$oDblSt->rowCount()) { return FALSE; }
 					break;
 				default:
 					// En el caso de no existir esta fila, $aDades = FALSE:
@@ -217,9 +219,9 @@ class ConfigSchema Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('parametro',$aDades)) $this->setParametro($aDades['parametro']);
-		if (array_key_exists('valor',$aDades)) $this->setValor($aDades['valor']);
+	    if (!is_array($aDades)) { return; }
+		if (array_key_exists('parametro',$aDades)) { $this->setParametro($aDades['parametro']); }
+		if (array_key_exists('valor',$aDades)) { $this->setValor($aDades['valor']); }
 	}
 
 	/**
@@ -269,7 +271,7 @@ class ConfigSchema Extends core\ClasePropiedades {
 	    if (is_array($a_id)) {
 	        $this->aPrimary_key = $a_id;
 	        foreach($a_id as $nom_id=>$val_id) {
-	            if (($nom_id == 'parametro') && $val_id !== '') $this->sparametro = $val_id;
+	            if (($nom_id == 'parametro') && $val_id !== '') { $this->sparametro = $val_id; }
 	        }
 	    }
 	}

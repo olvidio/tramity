@@ -108,7 +108,7 @@ class TramiteCargo Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_item') && $val_id !== '') $this->iid_item = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -248,13 +248,13 @@ class TramiteCargo Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_item',$aDades)) $this->setId_item($aDades['id_item']);
-		if (array_key_exists('id_tramite',$aDades)) $this->setId_tramite($aDades['id_tramite']);
-		if (array_key_exists('orden_tramite',$aDades)) $this->setOrden_tramite($aDades['orden_tramite']);
-		if (array_key_exists('id_cargo',$aDades)) $this->setId_cargo($aDades['id_cargo']);
-		if (array_key_exists('multiple',$aDades)) $this->setMultiple($aDades['multiple']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_item',$aDades)) { $this->setId_item($aDades['id_item']); }
+		if (array_key_exists('id_tramite',$aDades)) { $this->setId_tramite($aDades['id_tramite']); }
+		if (array_key_exists('orden_tramite',$aDades)) { $this->setOrden_tramite($aDades['orden_tramite']); }
+		if (array_key_exists('id_cargo',$aDades)) { $this->setId_cargo($aDades['id_cargo']); }
+		if (array_key_exists('multiple',$aDades)) { $this->setMultiple($aDades['multiple']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -304,7 +304,7 @@ class TramiteCargo Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_item') && $val_id !== '') $this->iid_item = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

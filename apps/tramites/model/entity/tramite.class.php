@@ -103,7 +103,7 @@ class Tramite Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_tramite') && $val_id !== '') $this->iid_tramite = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_tramite') && $val_id !== '') { $this->iid_tramite = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -241,12 +241,12 @@ class Tramite Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_tramite',$aDades)) $this->setId_tramite($aDades['id_tramite']);
-		if (array_key_exists('tramite',$aDades)) $this->setTramite($aDades['tramite']);
-		if (array_key_exists('orden',$aDades)) $this->setOrden($aDades['orden']);
-		if (array_key_exists('breve',$aDades)) $this->setBreve($aDades['breve']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_tramite',$aDades)) { $this->setId_tramite($aDades['id_tramite']); }
+		if (array_key_exists('tramite',$aDades)) { $this->setTramite($aDades['tramite']); }
+		if (array_key_exists('orden',$aDades)) { $this->setOrden($aDades['orden']); }
+		if (array_key_exists('breve',$aDades)) { $this->setBreve($aDades['breve']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -295,7 +295,7 @@ class Tramite Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_tramite') && $val_id !== '') $this->iid_tramite = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_tramite') && $val_id !== '') { $this->iid_tramite = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

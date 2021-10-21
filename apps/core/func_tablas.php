@@ -53,20 +53,12 @@ function array_pg2php($postgresArray) {
 */
 function urlsafe_b64encode($string) {
     $data = base64_encode($string);
-    //$data = str_replace(array('+','/','='),array('-','_',''),$data);
     $data = str_replace(array('+','/','='),array('-','_','.'),$data);
     return $data;
 }
 
 function urlsafe_b64decode($string) {
     $data = str_replace(array('-','_','.'),array('+','/','='),$string);
-	/*
-    $data = str_replace(array('-','_'),array('+','/'),$string);
-    $mod4 = strlen($data) % 4;
-    if ($mod4) {
-        $data .= substr('====', $mod4);
-    }
-	*/
     return base64_decode($data);
 }
 
@@ -167,8 +159,6 @@ function cambiar_idioma($idioma='') {
                         if (substr($a_idiomas[$i], 0, 2) == "es"){$idioma = "es_ES.UTF-8";}
                         if (substr($a_idiomas[$i], 0, 2) == "en"){$idioma = "en_US.UTF-8";}
                         if (substr($a_idiomas[$i], 0, 2) == "de"){$idioma = "de_DE.UTF-8";}
-                        //if (substr($a_idiomas[$i], 0, 2) == "en"){$idioma = "en";}
-                        //if (substr($a_idiomas[$i], 0, 2) == "fr"){$idioma = "fr";}
                     }
                 }
             }
@@ -180,8 +170,6 @@ function cambiar_idioma($idioma='') {
     }
     $idioma=  str_replace('UTF-8', 'utf8', $idioma);
     $domain="tramity";
-    //	echo "dir: ".core\ConfigGlobal::$dir_languages."<br>";
-    //	echo "domain: $domain, id: $idioma<br>";
     setlocale(LC_MESSAGES, "");
     putenv("LC_ALL=''");
     putenv("LANGUAGE=");

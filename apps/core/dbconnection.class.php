@@ -53,8 +53,6 @@ class dbConnection {
 		$oDB = new \PDO($dsn);
 		$oDB->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		$oDB->exec("SET search_path TO \"$esquema\"");
-		/* le paso la gestión a la clase web\datetimelocal */
-		//$oDB->exec("SET DATESTYLE TO '$datestyle'");
 		return $oDB;
 	}
 	
@@ -89,9 +87,7 @@ class dbConnection {
         }
         
         $password_encoded = urlencode ($password);
-        $dsn = "postgresql://$user:$password_encoded@$host:$port/".$dbname.$str_conexio;
-        
-        return $dsn;
+        return "postgresql://$user:$password_encoded@$host:$port/".$dbname.$str_conexio;
     }
 	
 	public function getPDOListas() {
@@ -104,8 +100,6 @@ class dbConnection {
 		$str_conexio .= ", array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING)";
 		$oDB = new \PDO($str_conexio);
 		*/
-		$oDB = new \PDO($str_conexio,$config['user'], $config['password'], array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING, \PDO::ATTR_TIMEOUT => 3));
-		
-		return $oDB;
+		return new \PDO($str_conexio,$config['user'], $config['password'], array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING, \PDO::ATTR_TIMEOUT => 3));
 	}
 }

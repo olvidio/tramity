@@ -118,7 +118,7 @@ if (!empty($Qid_escrito)) {
     }
     $detalle = $oEscrito->getDetalle();
     
-    //Ponente;
+    // Ponente
     $id_ponente = $oEscrito->getCreador();
     $categoria = $oEscrito->getCategoria();
     $oDesplCategoria->setOpcion_sel($categoria);
@@ -157,6 +157,9 @@ if (!empty($Qid_escrito)) {
         case Escrito::ACCION_PLANTILLA:
             $titulo = _("modificar plantilla");
             break;
+        default:
+            $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_switch);
     }
     
     $oPermisoregistro = new PermRegistro();
@@ -227,6 +230,9 @@ if (!empty($Qid_escrito)) {
         case Escrito::ACCION_PLANTILLA:
             $titulo = _("nueva plantilla");
             break;
+        default:
+            $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_switch);
     }
     
     $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');

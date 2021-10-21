@@ -18,20 +18,10 @@ require_once ("apps/core/global_object.inc");
 // Crea los objectos por esta url  **********************************************
 
 $Qtipo_lista = (string) \filter_input(INPUT_POST, 'tipo_lista');
-/*
-if (empty($Qtipo_lista)) {
-    $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
-    if (!empty($Qasunto)) {
-        $Qtipo_lista = 4;
-    } else {
-        $Qtipo_lista = 7;
-    }
-}
-*/
- $Qprot_num = '';
- $Qprot_any = '';
- $Qasunto = '';
- $filtro = 'permanentes_cr';
+$Qprot_num = '';
+$Qprot_any = '';
+$Qasunto = '';
+$filtro = 'permanentes_cr';
     
 $titulo = '';
 $lista = '';

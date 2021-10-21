@@ -37,7 +37,6 @@ switch($Qque) {
 		}
         break;
 	case "eliminar":
-	    //$Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');
 	    $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    if (!empty($a_sel)) { //vengo de un checkbox
             $Qid_grupo = (integer) strtok($a_sel[0],"#");

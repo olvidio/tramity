@@ -32,22 +32,18 @@ class Documento Extends DocumentoDB {
     const V_OFICINA      = 2;
     
     public function getArrayVisibilidad() {
-        $a_tipos = [
+        return [
             self::V_OFICINA => _("oficina"),
             self::V_PERSONAL => _("personal"),
         ];
-        
-        return $a_tipos;
     }
     
     public function getArrayTipos() {
-        $a_tipos = [
+        return [
             self::DOC_ETHERPAD => _("etherpad"),
             self::DOC_ETHERCALC => _("etheclac"),
             self::DOC_UPLOAD => _("incrustado"),
         ];
-        
-        return $a_tipos;
     }
     
     

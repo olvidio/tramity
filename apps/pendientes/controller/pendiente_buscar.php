@@ -94,7 +94,6 @@ if ($Qque == 'buscar') {
         $Qprot_any = empty($Qprot_any)? '' : core\any_2($Qprot_any);
         
         $oBuscar = new Buscar();
-        //$oBuscar->setId_sigla($id_sigla_local);
         $oBuscar->setId_lugar($Qid_lugar);
         $oBuscar->setProt_num($Qprot_num);
         $oBuscar->setProt_any($Qprot_any);
@@ -106,11 +105,6 @@ if ($Qque == 'buscar') {
                 if ($key == 'entradas') {
                     $id_reg = $oEntrada->getId_entrada();
                 }
-                /*
-                if ($key == 'escritos') {
-                    $id_reg = $oEntrada->getId_escrito();
-                }
-                */
                 $aIds[] = $id_reg;
             }
         }
@@ -155,7 +149,7 @@ if ($Qque == 'buscar') {
         $protocolo = $oPendiente->getProtocolo();
         $rrule = $oPendiente->getRrule();
         $asunto = $oPendiente->getAsuntoDetalle();
-        if (!empty($asunto)) $asunto=htmlspecialchars(stripslashes($asunto),ENT_QUOTES,'utf-8');
+        if (!empty($asunto)) { $asunto=htmlspecialchars(stripslashes($asunto),ENT_QUOTES,'utf-8'); }
         
         /* Para mostrar errores algunos se han asociado al bypass */
         $matches = [];

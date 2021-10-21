@@ -29,8 +29,6 @@ if (!empty($Qid_entrada)) {
     header('Content-Type: application/force-download');
     header('Content-Type: application/octet-stream', false);
     header('Content-Type: application/download', false);
-    //header("Content-Type: $ctype");
-    //header("Content-Disposition: attachment; filename=\"".basename($fullPath)."\";" );
     header('Content-disposition: attachment; filename="' . $nom . '"');
     
     ob_clean();

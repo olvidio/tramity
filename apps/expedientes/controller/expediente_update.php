@@ -51,7 +51,7 @@ $Qvisibilidad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 
 $error_txt = '';
 $nuevo_creador = '';
-switch($Qque) {
+switch ($Qque) {
     case 'en_visto': // Copiado de entradas_update.
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
         $Qid_oficina = ConfigGlobal::role_id_oficina();
@@ -65,7 +65,7 @@ switch($Qque) {
         foreach($aVisto as $key => $oVisto) {
             $oficina = $oVisto['oficina'];
             $cargo = $oVisto['cargo'];
-            if ($oficina == $Qid_oficina AND $cargo == $Qid_cargo) {
+            if ($oficina == $Qid_oficina && $cargo == $Qid_cargo) {
                 $oVisto['visto'] = TRUE;
                 $aVisto[$key] = $oVisto;
                 $flag = TRUE;
@@ -168,11 +168,7 @@ switch($Qque) {
         $oExpediente->setEstado($Qestado);
         $oExpediente->setId_tramite($Qtramite);
         $oExpediente->setPrioridad($Qprioridad);
-        //$oExpediente->setF_reunion($Qf_reunion);
-        //$oExpediente->setF_contestar($Qf_contestar);
         $oExpediente->setAsunto($Qasunto);
-        //$oExpediente->setEntradilla($Qentradilla);
-        //$oExpediente->setVida($Qvida);
         $oExpediente->setVisibilidad($Qvisibilidad);
 
         if ($oExpediente->DBGuardar() === FALSE ) {
@@ -592,7 +588,6 @@ switch($Qque) {
             $text = $oficial2['text'];
             foreach ($json_preparar as $oficial) {
                 $id = $oficial->id;
-                //$chk = $oficial->chk; 
                 $visto_db = empty($oficial->visto)? 0 : $oficial->visto;
                 // marcar las que estan.
                 if ($id == $id2) {
@@ -627,47 +622,7 @@ switch($Qque) {
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
-        //exit();
-
         break;
-    /* creo que no se usa
-    case 'upload_antecedente':
-        
-        if (empty($_FILES['adjuntos'])) {
-            // Devolvemos un array asociativo con la clave error en formato JSON como respuesta
-            echo json_encode(['error'=>'No hay ficheros para realizar upload.']);
-            // Cancelamos el resto del script
-            return;
-        }
-        $respuestas = [];
-        $ficheros = $_FILES['adjuntos'];
-        
-        $a_error = $ficheros['error'];
-        $a_names = $ficheros['name'];
-        $a_tmp = $ficheros['tmp_name'];
-        foreach ($a_names as $key => $name) {
-            if ($a_error[$key] > 0) {
-                $respuestas = [ "error" => $a_error[$key] ];
-            } else {
-                $path_parts = pathinfo($name);
-                
-                $nom=$path_parts['filename'];
-                // puede no existir la extension
-                $extension=empty($path_parts['extension'])? '' : $path_parts['extension'];
-
-                $userfile= $a_tmp[$key];
-                
-                $fichero=file_get_contents($userfile);
-                
-            }
-            $respuestas = ["ok" => "Ja está"];
-            
-            // Devolvemos el array asociativo en formato JSON como respuesta
-        }
-        echo json_encode($respuestas);
-        
-        break;
-        */
     case 'circular':
         // primero se guarda, y al final se guarda la fecha de hoy y se crean las firmas para el trámite
     case 'guardar':
@@ -771,7 +726,6 @@ switch($Qque) {
         
         // CIRCULAR
         if ($Qque == 'circular') {
-            //$f_hoy_iso = date('Y-m-d');
             $f_hoy_iso = date(\DateTimeInterface::ISO8601);
             // se pone la fecha del escrito como hoy:
             $oExpediente->setF_escritos($f_hoy_iso,FALSE);
@@ -863,4 +817,7 @@ switch($Qque) {
         echo json_encode($jsondata);
         exit();
         break;
+    default:
+        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_switch);
 }

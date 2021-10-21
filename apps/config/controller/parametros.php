@@ -25,7 +25,7 @@ $a_campos = [ 'url' => $url];
  - Normal (2 semanas)
  - A determinar
  */
-//const PRIORIDAD_URGENTE = 3;
+
 $parametro = 'plazo_urgente';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
@@ -43,7 +43,6 @@ $oHashPU->setArrayCamposHidden(['parametro' => $parametro]);
 $a_campos['oHashPU'] = $oHashPU;
 $a_campos['plazo_urgente'] = $val_sigla;
 
-// const PRIORIDAD_RAPIDO = 7;
 $parametro = 'plazo_rapido';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
@@ -61,7 +60,6 @@ $oHashPR->setArrayCamposHidden(['parametro' => $parametro]);
 $a_campos['oHashPR'] = $oHashPR;
 $a_campos['plazo_rapido'] = $val_sigla;
 
-// const PRIORIDAD_NORMAL = 14;
 $parametro = 'plazo_normal';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
@@ -212,7 +210,6 @@ $oDeplIdiomas->setNombre('valor');
 $oDeplIdiomas->setOpcion_sel($valor);
 
 if (empty($valor)) {
-    //$valor = "es_ES.UTF-8";
     $oDeplIdiomas->setOpcion_sel('es_ES.UTF-8');
 }
 $val_idioma_default = $oDeplIdiomas;
@@ -231,7 +228,7 @@ $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
 if (empty($valor)) {
-    $valor = Cargo::AMBITO_DL;  //"dl";
+    $valor = Cargo::AMBITO_DL;  // "dl"
 }
 $val_ctr = Cargo::AMBITO_CTR;
 $chk_ctr = ($valor == $val_ctr)? 'checked' : ''; 
@@ -258,9 +255,9 @@ $parametro = 'smtp_secure';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
-$val_tls = 'tls'; //PHPMailer::ENCRYPTION_STARTTLS;
+$val_tls = 'tls'; // PHPMailer::ENCRYPTION_STARTTLS
 $chk_tls = ($valor == $val_tls)? 'checked' : ''; 
-$val_ssl = 'ssl'; //PHPMailer::ENCRYPTION_SMTPS;
+$val_ssl = 'ssl'; // PHPMailer::ENCRYPTION_SMTPS
 $chk_ssl = ($valor == $val_ssl)? 'checked' : ''; 
 
 $oHashSMTP_secure = new Hash();

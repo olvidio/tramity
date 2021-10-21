@@ -56,14 +56,12 @@ class GestorPendienteEntrada {
             $this->getInfoPendientes($cEntradas);
         }
         
-        $a_params =  [
+        return [
             'num_periodicos' => $this->num_periodicos,
             'num_pendientes' => $this->num_pendientes,
             'a_lista_pendientes' => $this->a_lista_pendientes,
             'pendientes_uid' => $this->pendientes_uid,
         ];
-        
-        return $a_params;
     }
     
     /**

@@ -61,5 +61,4 @@ switch ($Qque) {
             echo _("hay un error, no se ha guardado");
             echo "\n".$oUsuario->getErrorTxt();
         }
-        
 }

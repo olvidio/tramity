@@ -90,7 +90,7 @@ class Plantilla Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_plantilla') && $val_id !== '') $this->iid_plantilla = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_plantilla') && $val_id !== '') { $this->iid_plantilla = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -224,10 +224,10 @@ class Plantilla Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_plantilla',$aDades)) $this->setId_plantilla($aDades['id_plantilla']);
-		if (array_key_exists('nombre',$aDades)) $this->setNombre($aDades['nombre']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_plantilla',$aDades)) { $this->setId_plantilla($aDades['id_plantilla']); }
+		if (array_key_exists('nombre',$aDades)) { $this->setNombre($aDades['nombre']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -274,7 +274,7 @@ class Plantilla Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_plantilla') && $val_id !== '') $this->iid_plantilla = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_plantilla') && $val_id !== '') { $this->iid_plantilla = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

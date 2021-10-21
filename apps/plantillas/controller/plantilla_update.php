@@ -43,13 +43,6 @@ switch($Qque) {
 
         // El sunto no puede ser nulo (cojo el nombre de la plantilla)
         $oEscrito->setAsunto($asunto);
-        /* nada
-        $oEscrito->setEntradilla('');
-        $oEscrito->setDetalle($Qdetalle);
-        $oEscrito->setResto_oficinas($Qa_firmas);
-        $oEscrito->setCategoria($Qcategoria);
-        $oEscrito->setVisibilidad($Qvisibiliad);
-        */
         
         if ($oEscrito->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
@@ -135,7 +128,6 @@ switch($Qque) {
 		}
         break;
 	case "eliminar":
-	    //$Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');
 	    $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    if (!empty($a_sel)) { //vengo de un checkbox
             $Qid_plantilla = (integer) strtok($a_sel[0],"#");
@@ -165,4 +157,7 @@ switch($Qque) {
 			echo "\n".$oPlantilla->getErrorTxt();
 		}
         break;
+	default:
+	    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+	    exit ($err_switch);
 }

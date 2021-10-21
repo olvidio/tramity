@@ -36,11 +36,9 @@ Class ConfigGlobal extends ServerConf {
 	
 	public static function is_dmz() {
 	    $dmz = self::$dmz;
-	    if ($dmz) {
-            if (!empty($_SERVER['PRIVATE']) && $_SERVER['PRIVATE'] == 'sf') {
-                $dmz = FALSE;
-            }
-	    }
+	    if ($dmz && !empty($_SERVER['PRIVATE']) && $_SERVER['PRIVATE'] == 'sf') {
+            $dmz = FALSE;
+        }
         return $dmz;
 	}
 	
@@ -49,21 +47,13 @@ Class ConfigGlobal extends ServerConf {
 	}
 
 	public static function is_mod_installed($id_mod) {
-		if (array_key_exists($id_mod,$_SESSION['config']['mod_installed'])) {
-			return true;
-		} else {
-			return false;
-		}
+		return array_key_exists($id_mod,$_SESSION['config']['mod_installed']);
 	}
 	
 	public static function is_app_installed($nom_app) {
 		if (!empty($_SESSION['config']['a_apps'][$nom_app])) {
 			$id_app = $_SESSION['config']['a_apps'][$nom_app];
-			if (in_array($id_app,$_SESSION['config']['app_installed'])) {
-				return true;
-			} else {
-				return false;
-			}
+			return in_array($id_app,$_SESSION['config']['app_installed']);
 		} else {
 			return false;
 		}
@@ -98,11 +88,7 @@ Class ConfigGlobal extends ServerConf {
 		return $_SESSION['session_auth']['usuario_cargo'];
 	}
 	public static function soy_dtor() {
-	    if (is_true($_SESSION['session_auth']['usuario_dtor'])) {
-            return TRUE;
-	    } else {
-	        return FALSE;
-	    }
+	    return is_true($_SESSION['session_auth']['usuario_dtor']);
 	}
 	/**
 	 * 
@@ -125,8 +111,7 @@ Class ConfigGlobal extends ServerConf {
 	}
 	public static function mi_region() {
 		$a_reg = explode('-',$_SESSION['session_auth']['esquema']);
-		$reg = $a_reg[0]; 
-		return $reg;
+		return $a_reg[0]; 
 	}
 	public static function mi_dele() {
 		$a_reg = explode('-',$_SESSION['session_auth']['esquema']);

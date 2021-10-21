@@ -161,13 +161,14 @@ switch ($Qque) {
                     // NO sirve el metodo 'refresh' del fileinput parar cambiar la lista de docuemntos.
                     // habrá que refrescar toda la página
                     
-                    if ($Qque == 'adjuntar') {
-                        // borrar de documentos
-                        if ($oDocumento->DBEliminar() === FALSE) {
-                            $error_txt .= $oDocumento->getErrorTxt();    
-                        }
+                    // borrar de documentos
+                    if ($Qque == 'adjuntar' && $oDocumento->DBEliminar() === FALSE) {
+                        $error_txt .= $oDocumento->getErrorTxt();    
                     }
                     break;
+                default:
+                    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_switch);
             }
         }
         
@@ -252,10 +253,6 @@ switch ($Qque) {
 	    $sel_any_2 = '';
 	    $sel_siempre = '';
 	    switch ($Qperiodo) {
-	        case "mes":
-	            $sel_mes = 'selected';
-	            $periodo = 'P1M';
-	            break;
 	        case "mes_6":
 	            $sel_mes_6 = 'selected';
 	            $periodo = 'P6M';
@@ -272,6 +269,7 @@ switch ($Qque) {
 	            $sel_siempre = 'selected';
 	            $periodo = '';
 	            break;
+	        case "mes":
 	        default:
 	            $sel_mes = 'selected';
 	            $periodo = 'P1M';
@@ -307,17 +305,19 @@ switch ($Qque) {
 	        }
 	        // mirar permisos...
 	        $visibilidad = $oDocumento->getVisibilidad();
-	        if ( $visibilidad == Documento::V_PERSONAL &&
-	            ConfigGlobal::soy_dtor() === FALSE &&
-	            $oDocumento->getCreador() == ConfigGlobal::role_id_cargo() ) {
+	        
+	        if (ConfigGlobal::soy_dtor() === FALSE
+	            && $visibilidad == Documento::V_PERSONAL
+	            && $oDocumento->getCreador() == ConfigGlobal::role_id_cargo()
+	            ) {
 	                continue;
             }
 	        $a++;
 	        $id_doc = $oDocumento->getId_doc();
 	        $fecha_txt = $oDocumento->getF_upload()->getFromLocal();
-	        $ponente = $oDocumento->getCreador();
+	        $id_creador = $oDocumento->getCreador();
 	        
-	        $ponente_txt = $a_posibles_cargos[$ponente];
+	        $creador = $a_posibles_cargos[$id_creador];
 	        
 	        if ($Qtipo_n == 5) {
                 $add = "<span class=\"btn btn-link\" onclick=\"fnjs_confirm_insertar_documento('documento','$id_doc','$Qid_escrito');\" >$txt_ajuntar</span>";
@@ -327,16 +327,14 @@ switch ($Qque) {
 	        
 	        $a_valores[$a][1] = $fecha_txt;
 	        $a_valores[$a][2] = $oDocumento->getNom();
-	        $a_valores[$a][3] = $ponente_txt;
+	        $a_valores[$a][3] = $creador;
 	        $a_valores[$a][4] = $oDocumento->getEtiquetasVisiblesTxt();
 	        $a_valores[$a][5] = $add;
 	    }
 	    
-	    
 	    $oLista = new Lista();
 	    $oLista->setCabeceras($a_cabeceras);
 	    $oLista->setDatos($a_valores);
-	    //echo $oLista->mostrar_tabla_html();
 
 	    $a_campos = [
 	        'para' => 'adjunto',
@@ -358,4 +356,7 @@ switch ($Qque) {
 	    $oView = new ViewTwig('expedientes/controller');
 	    echo $oView->renderizar('modal_buscar_documentos.html.twig',$a_campos);
 	    break;
+	default:
+	    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+	    exit ($err_switch);
 }

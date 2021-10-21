@@ -429,18 +429,18 @@ foreach($oDbl->query($sql) as $row) {
 	    case 'json':
 	    case 'jsonb':
             $add_JSON = TRUE;
-            $exists.="\n\t\t".'if (array_key_exists(\''.$nomcamp.'\',$aDades)) $this->set'.$NomCamp.'($aDades[\''.$nomcamp.'\'],TRUE);';
+            $exists.="\n\t\t".'if (array_key_exists(\''.$nomcamp.'\',$aDades)) { $this->set'.$NomCamp.'($aDades[\''.$nomcamp.'\'],TRUE); }';
             $ToEmpty.="\n\t\t".'$this->set'.$NomCamp.'(\'\');';
    	    break;
 	    case 'date':
 		case 'timestamp':
 		case 'timestamptz';
             $add_convert = TRUE;
-            $exists.="\n\t\t".'if (array_key_exists(\''.$nomcamp.'\',$aDades)) $this->set'.$NomCamp.'($aDades[\''.$nomcamp.'\'],$convert);';
+            $exists.="\n\t\t".'if (array_key_exists(\''.$nomcamp.'\',$aDades)) { $this->set'.$NomCamp.'($aDades[\''.$nomcamp.'\'],$convert); }';
             $ToEmpty.="\n\t\t".'$this->set'.$NomCamp.'(\'\');';
    	    break;
         default:
-            $exists.="\n\t\t".'if (array_key_exists(\''.$nomcamp.'\',$aDades)) $this->set'.$NomCamp.'($aDades[\''.$nomcamp.'\']);';
+            $exists.="\n\t\t".'if (array_key_exists(\''.$nomcamp.'\',$aDades)) { $this->set'.$NomCamp.'($aDades[\''.$nomcamp.'\']); }';
             $ToEmpty.="\n\t\t".'$this->set'.$NomCamp.'(\'\');';
    	}
 
@@ -540,13 +540,13 @@ foreach($aClaus2 as $clau=>$nom_clau) {
 	if ($i>0) $claus_if.="\n";
 	switch (substr($nom_clau,0,1)) {
 		case 'i':
-			$claus_if.="\t\t\t\t".'if (($nom_id == \''.$clau.'\') && $val_id !== \'\') $this->'.$nom_clau.' = (int)$val_id; // evitem SQL injection fent cast a integer';
+			$claus_if.="\t\t\t\t".'if (($nom_id == \''.$clau.'\') && $val_id !== \'\') { $this->'.$nom_clau.' = (int)$val_id; } // evitem SQL injection fent cast a integer';
 		break;
 		case 's':
-			$claus_if.="\t\t\t\t".'if (($nom_id == \''.$clau.'\') && $val_id !== \'\') $this->'.$nom_clau.' = (string)$val_id; // evitem SQL injection fent cast a string';
+			$claus_if.="\t\t\t\t".'if (($nom_id == \''.$clau.'\') && $val_id !== \'\') { $this->'.$nom_clau.' = (string)$val_id; } // evitem SQL injection fent cast a string';
 		break;
 		case 'b':
-			$claus_if.="\t\t\t\t".'if (($nom_id == \''.$clau.'\') && $val_id !== \'\') $this->'.$nom_clau.' = (bool)$val_id; // evitem SQL injection fent cast a boolean';
+			$claus_if.="\t\t\t\t".'if (($nom_id == \''.$clau.'\') && $val_id !== \'\') { $this->'.$nom_clau.' = (bool)$val_id; } // evitem SQL injection fent cast a boolean';
 		break;
 	}
 	// si no es auto
@@ -751,8 +751,8 @@ if ($add_convert === TRUE) {
 } else {
     $txt.="\n\t".'function setAllAtributes($aDades) {';
 }
-$txt.="\n\t\t".'if (!is_array($aDades)) return;
-		if (array_key_exists(\'id_schema\',$aDades)) $this->setId_schema($aDades[\'id_schema\']);';
+$txt.="\n\t\t".'if (!is_array($aDades)) { return; }
+		if (array_key_exists(\'id_schema\',$aDades)) { $this->setId_schema($aDades[\'id_schema\']); }';
 
 $txt.=$exists;
 $txt.="\n\t".'}';
@@ -933,24 +933,24 @@ $txt2.='
 		$aCondi = array();';
 $txt2.='
 		foreach ($aWhere as $camp => $val) {
-			if ($camp == \'_ordre\') continue;
-			if ($camp == \'_limit\') continue;
+			if ($camp == \'_ordre\') { continue; }
+			if ($camp == \'_limit\') { continue; }
 			$sOperador = isset($aOperators[$camp])? $aOperators[$camp] : \'\';
-			if ($a = $oCondicion->getCondicion($camp,$sOperador,$val)) $aCondi[]=$a;
+			if ($a = $oCondicion->getCondicion($camp,$sOperador,$val)) { $aCondi[]=$a; }
 			// operadores que no requieren valores
-			if ($sOperador == \'BETWEEN\' || $sOperador == \'IS NULL\' || $sOperador == \'IS NOT NULL\' || $sOperador == \'OR\') unset($aWhere[$camp]);
-            if ($sOperador == \'IN\' || $sOperador == \'NOT IN\') unset($aWhere[$camp]);
-            if ($sOperador == \'TXT\') unset($aWhere[$camp]);
+			if ($sOperador == \'BETWEEN\' || $sOperador == \'IS NULL\' || $sOperador == \'IS NOT NULL\' || $sOperador == \'OR\') { unset($aWhere[$camp]); }
+            if ($sOperador == \'IN\' || $sOperador == \'NOT IN\') { unset($aWhere[$camp]); }
+            if ($sOperador == \'TXT\') { unset($aWhere[$camp]); }
 		}';
 
 $txt2.="\n\t\t".'$sCondi = implode(\' AND \',$aCondi);
-		if ($sCondi!=\'\') $sCondi = " WHERE ".$sCondi;
+		if ($sCondi!=\'\') { $sCondi = " WHERE ".$sCondi; }
 		$sOrdre = \'\';
         $sLimit = \'\';
-		if (isset($aWhere[\'_ordre\']) && $aWhere[\'_ordre\']!=\'\') $sOrdre = \' ORDER BY \'.$aWhere[\'_ordre\'];
-		if (isset($aWhere[\'_ordre\'])) unset($aWhere[\'_ordre\']);
-		if (isset($aWhere[\'_limit\']) && $aWhere[\'_limit\']!=\'\') $sLimit = \' LIMIT \'.$aWhere[\'_limit\'];
-		if (isset($aWhere[\'_limit\'])) unset($aWhere[\'_limit\']);
+		if (isset($aWhere[\'_ordre\']) && $aWhere[\'_ordre\']!=\'\') { $sOrdre = \' ORDER BY \'.$aWhere[\'_ordre\']; }
+		if (isset($aWhere[\'_ordre\'])) { unset($aWhere[\'_ordre\']); }
+		if (isset($aWhere[\'_limit\']) && $aWhere[\'_limit\']!=\'\') { $sLimit = \' LIMIT \'.$aWhere[\'_limit\']; }
+		if (isset($aWhere[\'_limit\'])) { unset($aWhere[\'_limit\']); }
 		$sQry = "SELECT * FROM $nom_tabla ".$sCondi.$sOrdre.$sLimit;
 		if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
 			$sClauError = \''.$gestor.'.llistar.prepare\';

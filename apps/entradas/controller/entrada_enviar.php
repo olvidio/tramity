@@ -32,7 +32,7 @@ $a_rta = $oEnviar->enviar();
 if ($a_rta['success'] === TRUE) {
     $gesEntradasBypass = new GestorEntradaBypass();
     $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
-    if (count($cEntradasBypass) > 0) {
+    if (!empty($cEntradasBypass)) {
         // solo debería haber una:
         $oEntradaBypass = $cEntradasBypass[0];
         $oEntradaBypass->DBCarregar();

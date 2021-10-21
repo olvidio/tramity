@@ -200,7 +200,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_expediente') && $val_id !== '') $this->iid_expediente = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_expediente') && $val_id !== '') { $this->iid_expediente = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -368,27 +368,27 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades,$convert=FALSE) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_expediente',$aDades)) $this->setId_expediente($aDades['id_expediente']);
-		if (array_key_exists('id_tramite',$aDades)) $this->setId_tramite($aDades['id_tramite']);
-		if (array_key_exists('ponente',$aDades)) $this->setPonente($aDades['ponente']);
-		if (array_key_exists('resto_oficinas',$aDades)) $this->setResto_oficinas($aDades['resto_oficinas'],TRUE);
-		if (array_key_exists('asunto',$aDades)) $this->setAsunto($aDades['asunto']);
-		if (array_key_exists('entradilla',$aDades)) $this->setEntradilla($aDades['entradilla']);
-		if (array_key_exists('comentarios',$aDades)) $this->setComentarios($aDades['comentarios']);
-		if (array_key_exists('prioridad',$aDades)) $this->setPrioridad($aDades['prioridad']);
-		if (array_key_exists('json_antecedentes',$aDades)) $this->setJson_antecedentes($aDades['json_antecedentes'],TRUE);
-		if (array_key_exists('json_acciones',$aDades)) $this->setJson_acciones($aDades['json_acciones'],TRUE);
-		if (array_key_exists('f_contestar',$aDades)) $this->setF_contestar($aDades['f_contestar'],$convert);
-		if (array_key_exists('estado',$aDades)) $this->setEstado($aDades['estado']);
-		if (array_key_exists('f_ini_circulacion',$aDades)) $this->setF_ini_circulacion($aDades['f_ini_circulacion'],$convert);
-		if (array_key_exists('f_reunion',$aDades)) $this->setF_reunion($aDades['f_reunion'],$convert);
-		if (array_key_exists('f_aprobacion',$aDades)) $this->setF_aprobacion($aDades['f_aprobacion'],$convert);
-		if (array_key_exists('vida',$aDades)) $this->setVida($aDades['vida']);
-		if (array_key_exists('json_preparar',$aDades)) $this->setJson_preparar($aDades['json_preparar'],TRUE);
-		if (array_key_exists('firmas_oficina',$aDades)) $this->setFirmas_oficina($aDades['firmas_oficina'],TRUE);
-		if (array_key_exists('visibilidad',$aDades)) $this->setVisibilidad($aDades['visibilidad']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_expediente',$aDades)) { $this->setId_expediente($aDades['id_expediente']); }
+		if (array_key_exists('id_tramite',$aDades)) { $this->setId_tramite($aDades['id_tramite']); }
+		if (array_key_exists('ponente',$aDades)) { $this->setPonente($aDades['ponente']); }
+		if (array_key_exists('resto_oficinas',$aDades)) { $this->setResto_oficinas($aDades['resto_oficinas'],TRUE); }
+		if (array_key_exists('asunto',$aDades)) { $this->setAsunto($aDades['asunto']); }
+		if (array_key_exists('entradilla',$aDades)) { $this->setEntradilla($aDades['entradilla']); }
+		if (array_key_exists('comentarios',$aDades)) { $this->setComentarios($aDades['comentarios']); }
+		if (array_key_exists('prioridad',$aDades)) { $this->setPrioridad($aDades['prioridad']); }
+		if (array_key_exists('json_antecedentes',$aDades)) { $this->setJson_antecedentes($aDades['json_antecedentes'],TRUE); }
+		if (array_key_exists('json_acciones',$aDades)) { $this->setJson_acciones($aDades['json_acciones'],TRUE); }
+		if (array_key_exists('f_contestar',$aDades)) { $this->setF_contestar($aDades['f_contestar'],$convert); }
+		if (array_key_exists('estado',$aDades)) { $this->setEstado($aDades['estado']); }
+		if (array_key_exists('f_ini_circulacion',$aDades)) { $this->setF_ini_circulacion($aDades['f_ini_circulacion'],$convert); }
+		if (array_key_exists('f_reunion',$aDades)) { $this->setF_reunion($aDades['f_reunion'],$convert); }
+		if (array_key_exists('f_aprobacion',$aDades)) { $this->setF_aprobacion($aDades['f_aprobacion'],$convert); }
+		if (array_key_exists('vida',$aDades)) { $this->setVida($aDades['vida']); }
+		if (array_key_exists('json_preparar',$aDades)) { $this->setJson_preparar($aDades['json_preparar'],TRUE); }
+		if (array_key_exists('firmas_oficina',$aDades)) { $this->setFirmas_oficina($aDades['firmas_oficina'],TRUE); }
+		if (array_key_exists('visibilidad',$aDades)) { $this->setVisibilidad($aDades['visibilidad']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -452,7 +452,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_expediente') && $val_id !== '') $this->iid_expediente = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_expediente') && $val_id !== '') { $this->iid_expediente = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

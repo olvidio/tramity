@@ -24,10 +24,10 @@ if (!empty($Qid_item)) {
         rewind($res_adjunto);
         $doc_encoded = stream_get_contents($res_adjunto);
         if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
-            //echo '$data is valid';
+            // $data is valid
             $doc = base64_decode($doc_encoded);
         } else {
-            //ºecho '$data is NOT valid';
+            // $data is NOT valid
             $doc = $doc_encoded;
         }
     
@@ -38,7 +38,6 @@ if (!empty($Qid_item)) {
         header("Expires: 0");
         header("Cache-Control: private",false); // required for certain browsers
         header('Content-Type: application/force-download');
-        //header('Content-Type: application/octet-stream', false);
         header('Content-Type: application/download', false);
         header('Content-disposition: attachment; filename="' . $nom . '"');
         ob_clean();

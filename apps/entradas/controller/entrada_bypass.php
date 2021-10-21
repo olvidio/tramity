@@ -92,7 +92,7 @@ $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
 // a ver si ya está
 $gesEntradasBypass = new GestorEntradaBypass();
 $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
-if (count($cEntradasBypass) > 0) {
+if (!empty($cEntradasBypass)) {
     // solo debería haber una:
     $oEntradaBypass = $cEntradasBypass[0];
     $f_salida = $oEntradaBypass->getF_salida()->getFromLocal();

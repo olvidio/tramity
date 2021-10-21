@@ -11,10 +11,9 @@ namespace web;
  * @created 26/11/2010
  */
 class DateTimeLocal Extends \DateTime {
-    private $oData;
     
     public static function Meses() {
-		$aMeses = [
+		return [
 			'1'=>_("enero"),
             '2'=>_("febrero"),
             '3'=>_("marzo"),
@@ -28,11 +27,10 @@ class DateTimeLocal Extends \DateTime {
             '11'=>_("noviembre"),
             '12'=>_("diciembre")
 		];
-        return $aMeses;
     }
     
     public static function Meses_latin() {
-        $aMes_latin = [
+        return [
 				'1'=>'ianuario',
 				'2'=>'februario',
 				'3'=>'martio',
@@ -46,7 +44,6 @@ class DateTimeLocal Extends \DateTime {
 				'11'=>'novembri',
 				'12'=>'decembri',
             ];
-       return $aMes_latin;
     }
     
     /**
@@ -56,7 +53,7 @@ class DateTimeLocal Extends \DateTime {
      *
      */
     public static function arrayDiasSemana() {
-        $opciones = [
+        return [
             "MO" => _("lunes"),
             "TU" => _("martes"),
             "WE" => _("miércoles"),
@@ -65,8 +62,6 @@ class DateTimeLocal Extends \DateTime {
             "SA" => _("sábado"),
             "SU" => _("domingo"),
         ];
-        
-        return $opciones;
     }
     
     public function getFechaLatin() {
@@ -76,8 +71,7 @@ class DateTimeLocal Extends \DateTime {
         $mes = parent::format('n'); //sin ceros iniciales
         $any = parent::format('Y');
         
-        $fecha_latin="die ".$dia." mense  ".$mes_latin[$mes]."  anno  ".$any;
-        return $fecha_latin;
+        return "die ".$dia." mense  ".$mes_latin[$mes]."  anno  ".$any;
     }
     
     /** 
@@ -102,7 +96,6 @@ class DateTimeLocal Extends \DateTime {
         if (!isset($idioma)){ $idioma = $_SESSION['oConfig']->getIdioma_default(); }
         $a_idioma = explode('.',$idioma);
         $code_lng = $a_idioma[0];
-        //$code_char = $a_idioma[1];
         switch ($code_lng) {
             case 'en_US':
                 $format = 'n'.$separador.'j'.$separador.'Y';
@@ -111,7 +104,6 @@ class DateTimeLocal Extends \DateTime {
                 $format = 'j'.$separador.'n'.$separador.'Y';
         }
         if (!empty($type) && ($type == 'timestamp' || $type == 'timestamptz') ) {
-            //$format .= ' H:i:s';
             $format .= ' H:i:sP';
         }
         return $format;
@@ -188,7 +180,6 @@ class DateTimeLocal Extends \DateTime {
     
     public function format($format) {
         $english = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
-        //$local = array(_("lunes"), _("martes"), _("miércoles"), _("jueves"), _("viernes"), _("sábado"), _("domingo"));
         $local = array_values(self::arrayDiasSemana());
         return str_replace($english, $local, parent::format($format));
     }
@@ -204,15 +195,7 @@ class DateTimeLocal Extends \DateTime {
     public function duracion($oDateDiff) {
         $interval = $this->diff($oDateDiff);
         $horas = $interval->format('%a')*24 +$interval->format('%h')+$interval->format('%i')/60+$interval->format('%s')/3600;
-        /*
-         $dias=$horas/24;
-         $e_dias=($dias % $horas);
-         $dec=round(($dias-$e_dias),1);
-         if ($dec > 0.1) { $dec=0.5; } else { $dec=0; }
-         return ($e_dias+$dec);
-         */
-        $dias=round($horas/24,2);
-        return $dias;
+        return round($horas/24,2);
     }
     public function duracionAjustada($oDateDiff) {
         $interval = $this->diff($oDateDiff);
@@ -243,7 +226,7 @@ class DateTimeLocal Extends \DateTime {
             if ($oF_fin == $oF_ini) {
                 $fecha = $oF_fin->getFromLocal();
                 $error_txt .= empty($error_txt)? '' : '<br>';
-                $error_txt .= sprinitf(_("la fecha fin es igual a la fecha inicio en el periodo %s: %s"),$i);
+                $error_txt .= sprinitf(_("la fecha fin es igual a la fecha inicio en el periodo %s: %s"),$i,$fecha);
             }
             if ($oF_fin < $oF_ini) {
                 $fecha = $oF_ini->getFromLocal();

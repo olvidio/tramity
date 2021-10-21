@@ -28,11 +28,10 @@ class Converter {
             case 'timestamptz':
                 $this->Converter = new PgTimestamp($data,$type);
             break;
-            
             default:
-                ;
-            break;
-        };
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
+        }
     }
     
     public function fromPg() {
@@ -43,7 +42,6 @@ class Converter {
     }
     public function toCal() {
         $f_iso = $this->Converter->toPg($this->type);
-        $f_cal = str_replace('-', '', $f_iso);
-        return $f_cal;
+        return str_replace('-', '', $f_iso);
     }
 }

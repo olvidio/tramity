@@ -246,7 +246,6 @@ class ExpedienteLista {
                 $this->a_exp_aclaracion = [];
                 foreach ($cFirmas as $oFirma) {
                     $id_expediente = $oFirma->getId_expediente();
-                    $orden_tramite = $oFirma->getOrden_tramite();
                     $a_exp_aclaracion[] = $id_expediente;
                     $this->a_exp_aclaracion[] = $id_expediente;
                 }
@@ -518,6 +517,9 @@ class ExpedienteLista {
                     $aWhere = [];
                 }
                 break;
+            default:
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
         }
 
         $this->aWhere = $aWhere;
@@ -553,6 +555,7 @@ class ExpedienteLista {
                 $ver_f_ini = FALSE;
                 break;
             case 'firmar':
+            case 'circulando':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
                 $col_mod = 0;
                 $col_ver = 1;
@@ -586,13 +589,6 @@ class ExpedienteLista {
                 }
                 $col_ver = 1;
                 $presentacion = 3;
-                $txt_ver = _("revisar");
-                break;
-            case 'circulando':
-                $pagina_mod = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_ver.php';
-                $col_mod = 0;
-                $col_ver = 1;
-                $presentacion = 1;
                 $txt_ver = _("revisar");
                 break;
             case 'distribuir':

@@ -22,13 +22,13 @@ class Desplegable {
 		if (is_array($sNombre)) { //le puedo pasar los parámetros que quiera por el array
 			$this->aPrimary_key = $sNombre;
 			foreach($sNombre as $nom_id=>$val_id) {
-				if($val_id !== '') $this->$nom_id = $val_id;
+			    if($val_id !== '') { $this->$nom_id = $val_id; }
 			}
 		} else {
-			if (isset($sNombre) && $sNombre !== '') $this->sNombre = $sNombre;
-			if (isset($oOpciones) && $oOpciones !== '') $this->oOpciones = $oOpciones;
-			if (isset($sOpcion_sel) && $sOpcion_sel !== '') $this->sOpcion_sel = $sOpcion_sel;
-			if (isset($bBlanco) && $bBlanco !== '') $this->bBlanco = $bBlanco;
+		    if (isset($sNombre) && $sNombre !== '') { $this->sNombre = $sNombre; }
+		    if (isset($oOpciones) && $oOpciones !== '') { $this->oOpciones = $oOpciones; }
+		    if (isset($sOpcion_sel) && $sOpcion_sel !== '') { $this->sOpcion_sel = $sOpcion_sel; }
+		    if (isset($bBlanco) && $bBlanco !== '') { $this->bBlanco = $bBlanco; }
 		}
 	}
 
@@ -115,14 +115,14 @@ class Desplegable {
 			foreach($this->oOpciones as $row) {
 				if (!isset($row[1])) { $a = 0; } else { $a = 1; } // para el caso de sólo tener un valor.
 				if ($row[0] == $this->sOpcion_sel) { $sel = 'selected'; } else { $sel = ''; }
-				if (!empty($this->aOpcion_no) && is_array($this->aOpcion_no) && in_array($row[0], $this->aOpcion_no)) continue;
+				if (!empty($this->aOpcion_no) && is_array($this->aOpcion_no) && in_array($row[0], $this->aOpcion_no)) { continue; }
 				$txt .= "<option value=\"$row[0]\" $sel>$row[$a]</option>";
 			}
 		} else if (is_array($this->oOpciones)) {
 			reset($this->oOpciones);
 			foreach($this->oOpciones as $key=>$val) {
 				if ((string)$key === (string)$this->sOpcion_sel) { $sel = 'selected'; } else { $sel = ''; }
-				if (!empty($this->aOpcion_no) && is_array($this->aOpcion_no) && in_array($row[0], $this->aOpcion_no)) continue;
+				if (!empty($this->aOpcion_no) && in_array($key, $this->aOpcion_no)) { continue; }
 				$txt .= "<option value=\"$key\" $sel>$val</option>";
 			}
 		} else {

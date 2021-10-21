@@ -112,7 +112,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_item') && $val_id !== '') $this->iid_item = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -289,13 +289,13 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades,$convert=FALSE) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_item',$aDades)) $this->setId_item($aDades['id_item']);
-		if (array_key_exists('id_escrito',$aDades)) $this->setId_escrito($aDades['id_escrito']);
-		if (array_key_exists('nom',$aDades)) $this->setNom($aDades['nom']);
-		if (array_key_exists('adjunto',$aDades)) $this->setAdjunto($aDades['adjunto']);
-		if (array_key_exists('tipo_doc',$aDades)) $this->setTipo_doc($aDades['tipo_doc']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_item',$aDades)) { $this->setId_item($aDades['id_item']); }
+		if (array_key_exists('id_escrito',$aDades)) { $this->setId_escrito($aDades['id_escrito']); }
+		if (array_key_exists('nom',$aDades)) { $this->setNom($aDades['nom']); }
+		if (array_key_exists('adjunto',$aDades)) { $this->setAdjunto($aDades['adjunto']); }
+		if (array_key_exists('tipo_doc',$aDades)) { $this->setTipo_doc($aDades['tipo_doc']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -345,7 +345,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_item') && $val_id !== '') $this->iid_item = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

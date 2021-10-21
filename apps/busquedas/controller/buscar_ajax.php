@@ -112,7 +112,7 @@ switch($Qque) {
             $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
             foreach ($cEntradas as $oEntrada) {
                 $bypass = $oEntrada->getBypass();
-                if ($bypass) continue;
+                if ($bypass) { continue; }
                 $id_entrada = $oEntrada->getId_entrada();
                 $jsondata['asunto'] = $oEntrada->getAsunto();
                 $jsondata['detalle'] = $oEntrada->getDetalle();
@@ -130,7 +130,7 @@ switch($Qque) {
                 }
                 if ($Qpara == 'escrito') {
                     $gesCargos = new GestorCargo();
-                    //Ponente;
+                    // Ponente
                     $id_ponente = $gesCargos->getDirectorOficina($id_of_ponente);
                     // oficinas
                     $a_oficinas = $oEntrada->getResto_oficinas();
@@ -155,6 +155,8 @@ switch($Qque) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        
         break;
+    default:
+        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_switch);
 }

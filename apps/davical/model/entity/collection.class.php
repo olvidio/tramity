@@ -181,7 +181,7 @@ class Collection Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'collection_id') && $val_id !== '') $this->icollection_id = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'collection_id') && $val_id !== '') { $this->icollection_id = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -382,25 +382,25 @@ class Collection Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades,$convert=FALSE) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('user_no',$aDades)) $this->setUser_no($aDades['user_no']);
-		if (array_key_exists('parent_container',$aDades)) $this->setParent_container($aDades['parent_container']);
-		if (array_key_exists('dav_name',$aDades)) $this->setDav_name($aDades['dav_name']);
-		if (array_key_exists('dav_etag',$aDades)) $this->setDav_etag($aDades['dav_etag']);
-		if (array_key_exists('dav_displayname',$aDades)) $this->setDav_displayname($aDades['dav_displayname']);
-		if (array_key_exists('is_calendar',$aDades)) $this->setIs_calendar($aDades['is_calendar']);
-		if (array_key_exists('created',$aDades)) $this->setCreated($aDades['created'],$convert);
-		if (array_key_exists('modified',$aDades)) $this->setModified($aDades['modified'],$convert);
-		if (array_key_exists('public_events_only',$aDades)) $this->setPublic_events_only($aDades['public_events_only']);
-		if (array_key_exists('publicly_readable',$aDades)) $this->setPublicly_readable($aDades['publicly_readable']);
-		if (array_key_exists('collection_id',$aDades)) $this->setCollection_id($aDades['collection_id']);
-		if (array_key_exists('default_privileges',$aDades)) $this->setDefault_privileges($aDades['default_privileges']);
-		if (array_key_exists('is_addressbook',$aDades)) $this->setIs_addressbook($aDades['is_addressbook']);
-		if (array_key_exists('resourcetypes',$aDades)) $this->setResourcetypes($aDades['resourcetypes']);
-		if (array_key_exists('schedule_transp',$aDades)) $this->setSchedule_transp($aDades['schedule_transp']);
-		if (array_key_exists('timezone',$aDades)) $this->setTimezone($aDades['timezone']);
-		if (array_key_exists('description',$aDades)) $this->setDescription($aDades['description']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('user_no',$aDades)) { $this->setUser_no($aDades['user_no']); }
+		if (array_key_exists('parent_container',$aDades)) { $this->setParent_container($aDades['parent_container']); }
+		if (array_key_exists('dav_name',$aDades)) { $this->setDav_name($aDades['dav_name']); }
+		if (array_key_exists('dav_etag',$aDades)) { $this->setDav_etag($aDades['dav_etag']); }
+		if (array_key_exists('dav_displayname',$aDades)) { $this->setDav_displayname($aDades['dav_displayname']); }
+		if (array_key_exists('is_calendar',$aDades)) { $this->setIs_calendar($aDades['is_calendar']); }
+		if (array_key_exists('created',$aDades)) { $this->setCreated($aDades['created'],$convert); }
+		if (array_key_exists('modified',$aDades)) { $this->setModified($aDades['modified'],$convert); }
+		if (array_key_exists('public_events_only',$aDades)) { $this->setPublic_events_only($aDades['public_events_only']); }
+		if (array_key_exists('publicly_readable',$aDades)) { $this->setPublicly_readable($aDades['publicly_readable']); }
+		if (array_key_exists('collection_id',$aDades)) { $this->setCollection_id($aDades['collection_id']); }
+		if (array_key_exists('default_privileges',$aDades)) { $this->setDefault_privileges($aDades['default_privileges']); }
+		if (array_key_exists('is_addressbook',$aDades)) { $this->setIs_addressbook($aDades['is_addressbook']); }
+		if (array_key_exists('resourcetypes',$aDades)) { $this->setResourcetypes($aDades['resourcetypes']); }
+		if (array_key_exists('schedule_transp',$aDades)) { $this->setSchedule_transp($aDades['schedule_transp']); }
+		if (array_key_exists('timezone',$aDades)) { $this->setTimezone($aDades['timezone']); }
+		if (array_key_exists('description',$aDades)) { $this->setDescription($aDades['description']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -462,7 +462,7 @@ class Collection Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'collection_id') && $val_id !== '') $this->icollection_id = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'collection_id') && $val_id !== '') { $this->icollection_id = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

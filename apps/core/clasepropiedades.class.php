@@ -80,11 +80,11 @@ abstract class ClasePropiedades {
 
     public function __get($nombre) {
     	$metodo = 'get' . ucfirst($nombre);
-    	if (method_exists($this, $metodo))  return $this->$metodo();
+    	if (method_exists($this, $metodo)) { return $this->$metodo(); }
     }
     public function __set($nombre, $valor) {
       $metodo = 'set' . ucfirst($nombre);
-      if (method_exists($this, $metodo)) $this->$metodo($valor);
+      if (method_exists($this, $metodo)) { $this->$metodo($valor); }
 	}
 
 	/**
@@ -106,4 +106,3 @@ abstract class ClasePropiedades {
 	}
 
 }
-?>

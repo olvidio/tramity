@@ -235,7 +235,7 @@ class CalendarItem Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'dav_id') && $val_id !== '') $this->idav_id = (integer)$val_id; // evitem SQL injection fent cast a string
+			    if (($nom_id == 'dav_id') && $val_id !== '') { $this->idav_id = (integer)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		}
 		$this->setoDbl($oDbl);
@@ -412,34 +412,34 @@ class CalendarItem Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades,$convert=FALSE) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('user_no',$aDades)) $this->setUser_no($aDades['user_no']);
-		if (array_key_exists('dav_name',$aDades)) $this->setDav_name($aDades['dav_name']);
-		if (array_key_exists('dav_etag',$aDades)) $this->setDav_etag($aDades['dav_etag']);
-		if (array_key_exists('uid',$aDades)) $this->setUid($aDades['uid']);
-		if (array_key_exists('created',$aDades)) $this->setCreated($aDades['created'],$convert);
-		if (array_key_exists('last_modified',$aDades)) $this->setLast_modified($aDades['last_modified'],$convert);
-		if (array_key_exists('dtstamp',$aDades)) $this->setDtstamp($aDades['dtstamp'],$convert);
-		if (array_key_exists('dtstart',$aDades)) $this->setDtstart($aDades['dtstart'],$convert);
-		if (array_key_exists('dtend',$aDades)) $this->setDtend($aDades['dtend'],$convert);
-		if (array_key_exists('due',$aDades)) $this->setDue($aDades['due'],$convert);
-		if (array_key_exists('summary',$aDades)) $this->setSummary($aDades['summary']);
-		if (array_key_exists('location',$aDades)) $this->setLocation($aDades['location']);
-		if (array_key_exists('description',$aDades)) $this->setDescription($aDades['description']);
-		if (array_key_exists('priority',$aDades)) $this->setPriority($aDades['priority']);
-		if (array_key_exists('class',$aDades)) $this->setClass($aDades['class']);
-		if (array_key_exists('transp',$aDades)) $this->setTransp($aDades['transp']);
-		if (array_key_exists('rrule',$aDades)) $this->setRrule($aDades['rrule']);
-		if (array_key_exists('url',$aDades)) $this->setUrl($aDades['url']);
-		if (array_key_exists('percent_complete',$aDades)) $this->setPercent_complete($aDades['percent_complete']);
-		if (array_key_exists('tz_id',$aDades)) $this->setTz_id($aDades['tz_id']);
-		if (array_key_exists('status',$aDades)) $this->setStatus($aDades['status']);
-		if (array_key_exists('completed',$aDades)) $this->setCompleted($aDades['completed'],$convert);
-		if (array_key_exists('dav_id',$aDades)) $this->setDav_id($aDades['dav_id']);
-		if (array_key_exists('collection_id',$aDades)) $this->setCollection_id($aDades['collection_id']);
-		if (array_key_exists('first_instance_start',$aDades)) $this->setFirst_instance_start($aDades['first_instance_start'],$convert);
-		if (array_key_exists('last_instance_end',$aDades)) $this->setLast_instance_end($aDades['last_instance_end'],$convert);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('user_no',$aDades)) { $this->setUser_no($aDades['user_no']); }
+		if (array_key_exists('dav_name',$aDades)) { $this->setDav_name($aDades['dav_name']); }
+		if (array_key_exists('dav_etag',$aDades)) { $this->setDav_etag($aDades['dav_etag']); }
+		if (array_key_exists('uid',$aDades)) { $this->setUid($aDades['uid']); }
+		if (array_key_exists('created',$aDades)) { $this->setCreated($aDades['created'],$convert); }
+		if (array_key_exists('last_modified',$aDades)) { $this->setLast_modified($aDades['last_modified'],$convert); }
+		if (array_key_exists('dtstamp',$aDades)) { $this->setDtstamp($aDades['dtstamp'],$convert); }
+		if (array_key_exists('dtstart',$aDades)) { $this->setDtstart($aDades['dtstart'],$convert); }
+		if (array_key_exists('dtend',$aDades)) { $this->setDtend($aDades['dtend'],$convert); }
+		if (array_key_exists('due',$aDades)) { $this->setDue($aDades['due'],$convert); }
+		if (array_key_exists('summary',$aDades)) { $this->setSummary($aDades['summary']); }
+		if (array_key_exists('location',$aDades)) { $this->setLocation($aDades['location']); }
+		if (array_key_exists('description',$aDades)) { $this->setDescription($aDades['description']); }
+		if (array_key_exists('priority',$aDades)) { $this->setPriority($aDades['priority']); }
+		if (array_key_exists('class',$aDades)) { $this->setClass($aDades['class']); }
+		if (array_key_exists('transp',$aDades)) { $this->setTransp($aDades['transp']); }
+		if (array_key_exists('rrule',$aDades)) { $this->setRrule($aDades['rrule']); }
+		if (array_key_exists('url',$aDades)) { $this->setUrl($aDades['url']); }
+		if (array_key_exists('percent_complete',$aDades)) { $this->setPercent_complete($aDades['percent_complete']); }
+		if (array_key_exists('tz_id',$aDades)) { $this->setTz_id($aDades['tz_id']); }
+		if (array_key_exists('status',$aDades)) { $this->setStatus($aDades['status']); }
+		if (array_key_exists('completed',$aDades)) { $this->setCompleted($aDades['completed'],$convert); }
+		if (array_key_exists('dav_id',$aDades)) { $this->setDav_id($aDades['dav_id']); }
+		if (array_key_exists('collection_id',$aDades)) { $this->setCollection_id($aDades['collection_id']); }
+		if (array_key_exists('first_instance_start',$aDades)) { $this->setFirst_instance_start($aDades['first_instance_start'],$convert); }
+		if (array_key_exists('last_instance_end',$aDades)) { $this->setLast_instance_end($aDades['last_instance_end'],$convert); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -510,7 +510,7 @@ class CalendarItem Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'dav_id') && $val_id !== '') $this->idav_id = (integer)$val_id; // evitem SQL injection fent cast a string
+			    if (($nom_id == 'dav_id') && $val_id !== '') { $this->idav_id = (integer)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		}
 	}

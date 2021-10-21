@@ -96,7 +96,7 @@ class Oficina Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_oficina') && $val_id !== '') $this->iid_oficina = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_oficina') && $val_id !== '') { $this->iid_oficina = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -232,11 +232,11 @@ class Oficina Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_oficina',$aDades)) $this->setId_oficina($aDades['id_oficina']);
-		if (array_key_exists('sigla',$aDades)) $this->setSigla($aDades['sigla']);
-		if (array_key_exists('orden',$aDades)) $this->setOrden($aDades['orden']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_oficina',$aDades)) { $this->setId_oficina($aDades['id_oficina']); }
+		if (array_key_exists('sigla',$aDades)) { $this->setSigla($aDades['sigla']); }
+		if (array_key_exists('orden',$aDades)) { $this->setOrden($aDades['orden']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -284,7 +284,7 @@ class Oficina Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_oficina') && $val_id !== '') $this->iid_oficina = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_oficina') && $val_id !== '') { $this->iid_oficina = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

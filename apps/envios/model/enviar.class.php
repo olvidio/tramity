@@ -61,11 +61,10 @@ class Enviar {
     
     private $cabecera_izq;
     private $cabecera_dcha;
-    private $oArrayProtDestino;
     
     private $a_rta=[];
     
-    public function __construct($id='',$tipo) {
+    public function __construct($id,$tipo) {
         $this->setId($id);
         $this->setTipo($tipo);
     }
@@ -91,10 +90,10 @@ class Enviar {
     
     private function getDocumento($id_lugar='') {
         if ($this->tipo == 'entrada') {
-            return $this->getDatosEntrada($id_lugar);
+            $this->getDatosEntrada();
         }
         if ($this->tipo == 'escrito') {
-            return $this->getDatosEscrito($id_lugar);
+            $this->getDatosEscrito($id_lugar);
         }
     }
     
@@ -103,7 +102,7 @@ class Enviar {
         // a ver si ya está
         $gesEntradasBypass = new GestorEntradaBypass();
         $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $id_entrada]);
-        if (count($cEntradasBypass) > 0) {
+        if (!empty($cEntradasBypass)) {
             // solo debería haber una:
             $oEntradaBypass = $cEntradasBypass[0];
             
@@ -148,7 +147,7 @@ class Enviar {
         return $oEscrito->getDestinosIds();
     }
     
-    private function getDatosEntrada($id_lugar) {
+    private function getDatosEntrada() {
         $oEntrada = new Entrada($this->iid);
         $this->f_salida = $oEntrada->getF_documento()->getFromLocal('.');
         $this->asunto = $oEntrada->getAsunto();
@@ -214,6 +213,9 @@ class Enviar {
                         $escrito_txt = $oEtherpadAdj->generarPDF();
                         $a_adjuntos[$adjunto_filename] = $escrito_txt;
                         break;
+                    default:
+                        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                        exit ($err_switch);
                 }
             }
             $this->a_adjuntos = $a_adjuntos;
@@ -258,7 +260,6 @@ class Enviar {
         $omPdf = $this->oEtherpad->generarPDF($a_header,$this->f_salida);
         
         $this->contentFile = $omPdf->Output($this->filename_ext,'S');
-        
     }
     
     /**
@@ -267,19 +268,16 @@ class Enviar {
      * @return array|string
      */
     public function getPdf() {
-        if ($this->getDocumento() === FALSE) {
-            return FALSE;
-        }
+        $this->getDocumento();
+        
         $filename = $this->filename;
         $filename_ext = $this->filename_ext;
         $contentFile = $this->contentFile;
         
-        $a_Txt = ['content' => $contentFile,
+        return ['content' => $contentFile,
             'name' => $filename,
             'ext' => $filename_ext,
         ];
-        
-        return $a_Txt;
     }
     
     public function enviar() {
@@ -362,7 +360,6 @@ class Enviar {
     
     private function renombrar($string) {
         //cambiar '/' por '_':
-        $new = str_replace('/', '_', $string);
-        return $new;
+        return str_replace('/', '_', $string);
     }
 }

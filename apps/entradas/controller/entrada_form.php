@@ -190,10 +190,9 @@ if (!empty($Qid_entrada)) {
     $id_grupo = 0;
     $gesEntradasBypass = new GestorEntradaBypass();
     $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
-    if (count($cEntradasBypass) > 0) {
+    if (!empty($cEntradasBypass)) {
         // solo debería haber una:
         $oEntradaBypass = $cEntradasBypass[0];
-        $f_salida = $oEntradaBypass->getF_salida()->getFromLocal();
         $a_grupos = $oEntradaBypass->getId_grupos();
         if (!empty($a_grupos)) {
             $oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');

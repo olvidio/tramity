@@ -36,7 +36,6 @@ class PgTimestamp {
         $data = trim($this->data);
         if($data !== '') {
             $oFecha = new web\DateTimeLocal($data);
-            //$fecha = $oFecha->createFromLocal($data);
         } else {
             $oFecha = null;
         }
@@ -93,24 +92,15 @@ class PgTimestamp {
                         $zond_m = empty($matches[9])? '' : $matches[9];
                     }
                     
-                    /*
-                    // comprobar si el string del timestamp tiene los segundos, o solo H:m
-                    $pattern = '/((\d+)[-\/](\d+)[-\/](\d+))\s+(\d{2}):(\d{2}):*((\d{2})*)/i';
-                    preg_match($pattern, $string, $matches);
-                    */
-                    
                     // Ya lo pongo en ISO 
                     // ya tiene los segundos:
                     if (!empty($s)) {
                         $timestamp_with_seconds = "$y-$m-${d} $h:$min:$s$zone_full";
                     } else {
                         // si faltan los segundos los añado (:00)
-                        //$replacement = '$1 $5:$6:00';
-                        //$timestamp_with_seconds = preg_replace($pattern, $replacement, $string);
                         $timestamp_with_seconds = "$y-$m-${d} $h:$min:00$zone_full";
                     }
                     
-                    //$rta = sprintf("%s '%s'", $type, $this->checkData($this->data)->format(static::TS_FORMAT));
                     $rta = sprintf("%s", $this->checkData($timestamp_with_seconds)->format(static::TS_FORMAT));
                     break;
                 case 'date':

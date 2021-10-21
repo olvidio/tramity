@@ -40,6 +40,9 @@ class Ethercalc {
             case self::ID_EXPEDIENTE:
                 $prefix = 'exp';
                 break;
+            default:
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
         }
         
         $this->id_escrito = $prefix.$id;
@@ -53,7 +56,6 @@ class Ethercalc {
         if (empty($url)) {
             $url = $_SESSION['oConfig']->getServerEthercalc();
         }
-        //$this->url = 'http://127.0.0.1:8000';
         $this->url = $url;
         
         if (empty($id_usuario)) {
@@ -159,11 +161,8 @@ class Ethercalc {
             $html .= $fecha;
             $html .= '</div>';
         }
-        //echo $html;
-        //die();
         
         try {
-            //$mpdf=new mPDF('','A4','','',10,10,10,10,6,3);
             $config = [ 'mode' => 'utf-8',
                         'format' => 'A4-P',
                         'margin_header' => 10,
@@ -201,8 +200,7 @@ class Ethercalc {
              * {code: 0, message:"ok", data: {html:"Welcome Text<br>More Text"}}
              * {code: 1, message:"padID does not exist", data: null}
              */
-            $html = $data['html'];
-            return $html;
+            return $data['html'];
         } else {
             $this->mostrar_error($rta);
         }
@@ -220,9 +218,7 @@ class Ethercalc {
    }
    
     public function getId_pad() {
-        $padId = 'calc'.$this->id_escrito;
-    
-        return $padId;
+        return 'calc'.$this->id_escrito;
     }
     
     /*----------------------------------------------------------------------------------------*/

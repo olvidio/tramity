@@ -11,7 +11,7 @@ use web;
  * @created 21/9/2010
  */
 
-class gestorErrores {
+class GestorErrores {
 	/* ATRIBUTS ----------------------------------------------------------------- */
 
 	/**
@@ -21,12 +21,6 @@ class gestorErrores {
 	 */
 	 private $aDades;
 
-	/**
-	 * bLoaded
-	 *
-	 * @var boolean
-	 */
-	 private $bLoaded = FALSE;
 
 	 private $filename;
 
@@ -45,8 +39,7 @@ class gestorErrores {
 	private function limitar($n=10) {
 		// Cuando hay el doble, borro $n.
 		if (isset($_SESSION['errores'])) { // No sé poruqe no deja poner todo junto
-			if (is_array($_SESSION['errores']) & (count($_SESSION['errores']) > 2*$n)) {
-				$eee = 'a borrra!!';
+			if (is_array($_SESSION['errores']) && (count($_SESSION['errores']) > 2*$n)) {
 				array_splice($_SESSION['errores'], -$n); // negativo empieza por el final.
 				// hay que cambiar el indice stack
 				end($_SESSION['errores']);

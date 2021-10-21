@@ -122,7 +122,7 @@ class EntradaBypass Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_item') && $val_id !== '') $this->iid_item = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -266,15 +266,15 @@ class EntradaBypass Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades,$convert=FALSE) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_item',$aDades)) $this->setId_item($aDades['id_item']);
-		if (array_key_exists('id_entrada',$aDades)) $this->setId_entrada($aDades['id_entrada']);
-		if (array_key_exists('descripcion',$aDades)) $this->setDescripcion($aDades['descripcion']);
-		if (array_key_exists('json_prot_destino',$aDades)) $this->setJson_prot_destino($aDades['json_prot_destino'],TRUE);
-		if (array_key_exists('id_grupos',$aDades)) $this->setId_grupos($aDades['id_grupos'],TRUE);
-		if (array_key_exists('destinos',$aDades)) $this->setDestinos($aDades['destinos'],TRUE);
-		if (array_key_exists('f_salida',$aDades)) $this->setF_salida($aDades['f_salida'],$convert);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_item',$aDades)) { $this->setId_item($aDades['id_item']); }
+		if (array_key_exists('id_entrada',$aDades)) { $this->setId_entrada($aDades['id_entrada']); }
+		if (array_key_exists('descripcion',$aDades)) { $this->setDescripcion($aDades['descripcion']); }
+		if (array_key_exists('json_prot_destino',$aDades)) { $this->setJson_prot_destino($aDades['json_prot_destino'],TRUE); }
+		if (array_key_exists('id_grupos',$aDades)) { $this->setId_grupos($aDades['id_grupos'],TRUE); }
+		if (array_key_exists('destinos',$aDades)) { $this->setDestinos($aDades['destinos'],TRUE); }
+		if (array_key_exists('f_salida',$aDades)) { $this->setF_salida($aDades['f_salida'],$convert); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -326,7 +326,7 @@ class EntradaBypass Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_item') && $val_id !== '') $this->iid_item = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

@@ -33,26 +33,17 @@ class Rrule {
         $rta=self::desmontar_rule($rrule);
         if (empty($rta['tipo'])) { echo _('No hay tipo en recurrencias'); return array(); }
         // si hay un "UNTIL", lo pongo como fecha fin.
-        if (!empty($rta['until'])) $dtend=$rta['until']; // si hay un "UNTIL", lo pongo como fecha fin.
+        if (!empty($rta['until'])) { $dtend=$rta['until']; } // si hay un "UNTIL", lo pongo como fecha fin.
         
         $any_actual=date("Y");
-        /*
-        if (strstr($f_limite,'T')) {
-            list( $f_limite,$y,$m,$d) = fecha_array($f_limite);
-            $f_limite=date("Ymd",mktime(0,0,0,$m,$d,$y));
-        }
-        */
         $oF_limite = new DateTimeLocal($f_limite);
         $f_limite = $oF_limite->getIso();
         // Si no existe f_fin del periódico, hago que sea igual al fin del periodo escogido:
         if (empty($dtend)) {
             $dtend=$f_limite;
         } else {
-            if ($dtend > $f_limite) $dtend=$f_limite;
+            if ($dtend > $f_limite) { $dtend=$f_limite; }
         }
-        // paso del formato YmdT000000Z a Y,m,d
-        //list( $dtend,$any_fin,$month_fin,$day_fin) = fecha_array($dtend);
-        //list( $dtstart,$any_ini,$month_ini,$day_ini) = fecha_array($dtstart);
         $oF_end = new DateTimeLocal($dtend);
         $any_fin = $oF_end->format('Y');
         $month_fin = $oF_end->format('m');
@@ -86,6 +77,9 @@ class Rrule {
                         $dias_db=explode(",",$rta['dias']);
                         $tipo_dia="num";
                         break;
+                    default:
+                        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                        exit ($err_switch);
                 }
                 break;
             case "d_m":
@@ -104,6 +98,9 @@ class Rrule {
                         $ordinal_db=$rta['ordinal'];
                         $tipo_dia="ref";
                         break;
+                    default:
+                        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                        exit ($err_switch);
                 }
                 break;
             case "d_s":
@@ -119,6 +116,9 @@ class Rrule {
                         $dias_w_db=explode(",",$rta['dias']);
                         $tipo_dia="semana";
                         break;
+                    default:
+                        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                        exit ($err_switch);
                 }
                 break;
             case "d_d":
@@ -126,6 +126,9 @@ class Rrule {
                 $dias_db=$day_ini; // cojo el dia de la fecha inicio.
                 $tipo_dia="todos";
                 break;
+            default:
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
         }
         // caso de dias y meses
         // antes tendría que mirar por cada año. Desde el actual hasta el fin de la condicion.
@@ -134,7 +137,7 @@ class Rrule {
             // Me salto los años anteriores a la fecha de inicio
             if ( $any < $any_ini || $any > $any_fin) { continue;}
             // por cada mes miro que dias
-            if (!is_array($meses_db)) continue;
+            if (!is_array($meses_db)) { continue; }
             foreach ($meses_db as $mes) {
                 $mes = trim($mes);
                 // Me salto los meses anteriores a la fecha de inicio y los posteriores a la de fin
@@ -167,7 +170,6 @@ class Rrule {
                         }
                         break;
                     case "ref":
-                        //echo "bd: $ordinal_db, $dia_w_db<br>";
                         if ($ordinal_db > 0) {
                             $dia_w_txt=$a_dias_w[$dia_w_db];
                             $txt="$ordinal_db $dia_w_txt";
@@ -201,11 +203,12 @@ class Rrule {
                             $f_recurrencias[] = "$any-$mes-$dia";
                         }
                         break;
+                    default:
+                        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                        exit ($err_switch);
                 }
             }
         }
-        //print_r($f_recurrencias);
-        //return $f_recurrencias;
         /*********** Ordenar  **********************/
         if (count($f_recurrencias)) {
             // ordenar por f_plazo:
@@ -247,7 +250,6 @@ class Rrule {
                     $freq=$param;
                     break;
                 case "INTERVAL":
-                    //if ($param!=1) $error=1;
                     $interval=$param;
                     break;
                 case "BYMONTHDAY":
@@ -262,9 +264,12 @@ class Rrule {
                 case "UNTIL":
                     $f_until=$param;
                     break;
+                default:
+                    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_switch);
             }
         }
-        if (!empty($f_until)) $rta['until']=$f_until;
+        if (!empty($f_until)) { $rta['until']=$f_until; }
         
         if (!$error && $freq=="YEARLY" && !$dias && !$meses && !$dia_semana) {
             $rta['tipo']="d_a";
@@ -339,10 +344,9 @@ class Rrule {
      *
      */
     public static function montar_rrule($request) {
-        //print_r($request);
-        switch($request['tipo']){
+        switch ($request['tipo']) {
             case "d_a":
-                switch($request['tipo_dia']){
+                switch ($request['tipo_dia']) {
                     case "num_ini":
                         $rrule="FREQ=YEARLY";
                         break;
@@ -374,12 +378,14 @@ class Rrule {
                         $dias=implode(",",$request['dias']);
                         $meses=implode(",",$request['meses']);
                         if ($dias || $meses) {
-                            //$rrule="FREQ=DAILY;BYMONTH=$meses;BYMONTHDAY=$dias";
                             $rrule.=";BYMONTH=$meses;BYMONTHDAY=$dias";
                         } else {
                             $rrule="";
                         }
                         break;
+                    default:
+                        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                        exit ($err_switch);
                 }
                 break;
             case "d_m":
@@ -402,6 +408,9 @@ class Rrule {
                             $rrule="";
                         }
                         break;
+                    default:
+                        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                        exit ($err_switch);
                 }
                 break;
             case "d_s":
@@ -417,13 +426,18 @@ class Rrule {
                             $rrule="";
                         }
                         break;
+                    default:
+                        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                        exit ($err_switch);
                 }
                 break;
             case "d_d":
                 $rrule="FREQ=DAILY";
                 break;
+            default:
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
         }
-        //echo "rrule: $rrule<br>";
         if (!empty($request['until'])) {
             list($d_f_until,$m_f_until,$a_f_until) = preg_split('/[\.\/-]/', $request['until']);
             $f_cal_until=date("Ymd",mktime(0,0,0,$m_f_until,$d_f_until,$a_f_until));

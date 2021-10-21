@@ -189,7 +189,7 @@ class Firma Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_item') && $val_id !== '') $this->iid_item = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -411,22 +411,22 @@ class Firma Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades,$convert=FALSE) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_item',$aDades)) $this->setId_item($aDades['id_item']);
-		if (array_key_exists('id_expediente',$aDades)) $this->setId_expediente($aDades['id_expediente']);
-		if (array_key_exists('id_tramite',$aDades)) $this->setId_tramite($aDades['id_tramite']);
-		if (array_key_exists('id_cargo_creador',$aDades)) $this->setId_cargo_creador($aDades['id_cargo_creador']);
-		if (array_key_exists('cargo_tipo',$aDades)) $this->setCargo_tipo($aDades['cargo_tipo']);
-		if (array_key_exists('id_cargo',$aDades)) $this->setId_cargo($aDades['id_cargo']);
-		if (array_key_exists('id_usuario',$aDades)) $this->setId_usuario($aDades['id_usuario']);
-		if (array_key_exists('orden_tramite',$aDades)) $this->setOrden_tramite($aDades['orden_tramite']);
-		if (array_key_exists('orden_oficina',$aDades)) $this->setOrden_oficina($aDades['orden_oficina']);
-		if (array_key_exists('tipo',$aDades)) $this->setTipo($aDades['tipo']);
-		if (array_key_exists('valor',$aDades)) $this->setValor($aDades['valor']);
-		if (array_key_exists('observ_creador',$aDades)) $this->setObserv_creador($aDades['observ_creador']);
-		if (array_key_exists('observ',$aDades)) $this->setObserv($aDades['observ']);
-		if (array_key_exists('f_valor',$aDades)) $this->setF_valor($aDades['f_valor'],$convert);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_item',$aDades)) { $this->setId_item($aDades['id_item']); }
+		if (array_key_exists('id_expediente',$aDades)) { $this->setId_expediente($aDades['id_expediente']); }
+		if (array_key_exists('id_tramite',$aDades)) { $this->setId_tramite($aDades['id_tramite']); }
+		if (array_key_exists('id_cargo_creador',$aDades)) { $this->setId_cargo_creador($aDades['id_cargo_creador']); }
+		if (array_key_exists('cargo_tipo',$aDades)) { $this->setCargo_tipo($aDades['cargo_tipo']); }
+		if (array_key_exists('id_cargo',$aDades)) { $this->setId_cargo($aDades['id_cargo']); }
+		if (array_key_exists('id_usuario',$aDades)) { $this->setId_usuario($aDades['id_usuario']); }
+		if (array_key_exists('orden_tramite',$aDades)) { $this->setOrden_tramite($aDades['orden_tramite']); }
+		if (array_key_exists('orden_oficina',$aDades)) { $this->setOrden_oficina($aDades['orden_oficina']); }
+		if (array_key_exists('tipo',$aDades)) { $this->setTipo($aDades['tipo']); }
+		if (array_key_exists('valor',$aDades)) { $this->setValor($aDades['valor']); }
+		if (array_key_exists('observ_creador',$aDades)) { $this->setObserv_creador($aDades['observ_creador']); }
+		if (array_key_exists('observ',$aDades)) { $this->setObserv($aDades['observ']); }
+		if (array_key_exists('f_valor',$aDades)) { $this->setF_valor($aDades['f_valor'],$convert); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -485,7 +485,7 @@ class Firma Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_item') && $val_id !== '') $this->iid_item = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

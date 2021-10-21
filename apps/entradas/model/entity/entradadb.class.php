@@ -190,7 +190,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_entrada') && $val_id !== '') $this->iid_entrada = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_entrada') && $val_id !== '') { $this->iid_entrada = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -362,26 +362,26 @@ class EntradaDB Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades,$convert=FALSE) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_entrada',$aDades)) $this->setId_entrada($aDades['id_entrada']);
-		if (array_key_exists('modo_entrada',$aDades)) $this->setModo_entrada($aDades['modo_entrada']);
-		if (array_key_exists('json_prot_origen',$aDades)) $this->setJson_prot_origen($aDades['json_prot_origen'],TRUE);
-		if (array_key_exists('asunto_entrada',$aDades)) $this->setAsunto_entrada($aDades['asunto_entrada']);
-		if (array_key_exists('json_prot_ref',$aDades)) $this->setJson_prot_ref($aDades['json_prot_ref'],TRUE);
-		if (array_key_exists('ponente',$aDades)) $this->setPonente($aDades['ponente']);
-		if (array_key_exists('resto_oficinas',$aDades)) $this->setResto_oficinas($aDades['resto_oficinas'],TRUE);
-		if (array_key_exists('asunto',$aDades)) $this->setAsunto($aDades['asunto']);
-		if (array_key_exists('f_entrada',$aDades)) $this->setF_entrada($aDades['f_entrada'],$convert);
-		if (array_key_exists('detalle',$aDades)) $this->setDetalle($aDades['detalle']);
-		if (array_key_exists('categoria',$aDades)) $this->setCategoria($aDades['categoria']);
-		if (array_key_exists('visibilidad',$aDades)) $this->setVisibilidad($aDades['visibilidad']);
-		if (array_key_exists('f_contestar',$aDades)) $this->setF_contestar($aDades['f_contestar'],$convert);
-		if (array_key_exists('bypass',$aDades)) $this->setBypass($aDades['bypass']);
-		if (array_key_exists('estado',$aDades)) $this->setEstado($aDades['estado']);
-		if (array_key_exists('anulado',$aDades)) $this->setAnulado($aDades['anulado']);
-		if (array_key_exists('encargado',$aDades)) $this->setEncargado($aDades['encargado']);
-		if (array_key_exists('json_visto',$aDades)) $this->setJson_visto($aDades['json_visto'],TRUE);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_entrada',$aDades)) { $this->setId_entrada($aDades['id_entrada']); }
+		if (array_key_exists('modo_entrada',$aDades)) { $this->setModo_entrada($aDades['modo_entrada']); }
+		if (array_key_exists('json_prot_origen',$aDades)) { $this->setJson_prot_origen($aDades['json_prot_origen'],TRUE); }
+		if (array_key_exists('asunto_entrada',$aDades)) { $this->setAsunto_entrada($aDades['asunto_entrada']); }
+		if (array_key_exists('json_prot_ref',$aDades)) { $this->setJson_prot_ref($aDades['json_prot_ref'],TRUE); }
+		if (array_key_exists('ponente',$aDades)) { $this->setPonente($aDades['ponente']); }
+		if (array_key_exists('resto_oficinas',$aDades)) { $this->setResto_oficinas($aDades['resto_oficinas'],TRUE); }
+		if (array_key_exists('asunto',$aDades)) { $this->setAsunto($aDades['asunto']); }
+		if (array_key_exists('f_entrada',$aDades)) { $this->setF_entrada($aDades['f_entrada'],$convert); }
+		if (array_key_exists('detalle',$aDades)) { $this->setDetalle($aDades['detalle']); }
+		if (array_key_exists('categoria',$aDades)) { $this->setCategoria($aDades['categoria']); }
+		if (array_key_exists('visibilidad',$aDades)) { $this->setVisibilidad($aDades['visibilidad']); }
+		if (array_key_exists('f_contestar',$aDades)) { $this->setF_contestar($aDades['f_contestar'],$convert); }
+		if (array_key_exists('bypass',$aDades)) { $this->setBypass($aDades['bypass']); }
+		if (array_key_exists('estado',$aDades)) { $this->setEstado($aDades['estado']); }
+		if (array_key_exists('anulado',$aDades)) { $this->setAnulado($aDades['anulado']); }
+		if (array_key_exists('encargado',$aDades)) { $this->setEncargado($aDades['encargado']); }
+		if (array_key_exists('json_visto',$aDades)) { $this->setJson_visto($aDades['json_visto'],TRUE); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -474,7 +474,7 @@ class EntradaDB Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_entrada') && $val_id !== '') $this->iid_entrada = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_entrada') && $val_id !== '') { $this->iid_entrada = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

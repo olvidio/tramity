@@ -240,4 +240,7 @@ switch($Qque) {
         $oRoleMember->DBGuardar();
         
         break;
+    default:
+        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_switch);
 }

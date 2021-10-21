@@ -242,7 +242,7 @@ class EscritoDB Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_escrito') && $val_id !== '') $this->iid_escrito = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_escrito') && $val_id !== '') { $this->iid_escrito = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -440,32 +440,32 @@ class EscritoDB Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades,$convert=FALSE) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_escrito',$aDades)) $this->setId_escrito($aDades['id_escrito']);
-		if (array_key_exists('json_prot_local',$aDades)) $this->setJson_prot_local($aDades['json_prot_local'],TRUE);
-		if (array_key_exists('json_prot_destino',$aDades)) $this->setJson_prot_destino($aDades['json_prot_destino'],TRUE);
-		if (array_key_exists('json_prot_ref',$aDades)) $this->setJson_prot_ref($aDades['json_prot_ref'],TRUE);
-		if (array_key_exists('id_grupos',$aDades)) $this->setId_grupos($aDades['id_grupos'],TRUE);
-		if (array_key_exists('destinos',$aDades)) $this->setDestinos($aDades['destinos'],TRUE);
-		if (array_key_exists('entradilla',$aDades)) $this->setEntradilla($aDades['entradilla']);
-		if (array_key_exists('asunto',$aDades)) $this->setAsunto($aDades['asunto']);
-		if (array_key_exists('detalle',$aDades)) $this->setDetalle($aDades['detalle']);
-		if (array_key_exists('creador',$aDades)) $this->setCreador($aDades['creador']);
-		if (array_key_exists('resto_oficinas',$aDades)) $this->setResto_oficinas($aDades['resto_oficinas'],TRUE);
-		if (array_key_exists('comentarios',$aDades)) $this->setComentarios($aDades['comentarios']);
-		if (array_key_exists('f_aprobacion',$aDades)) $this->setF_aprobacion($aDades['f_aprobacion'],$convert);
-		if (array_key_exists('f_escrito',$aDades)) $this->setF_escrito($aDades['f_escrito'],$convert);
-		if (array_key_exists('f_contestar',$aDades)) $this->setF_contestar($aDades['f_contestar'],$convert);
-		if (array_key_exists('categoria',$aDades)) $this->setCategoria($aDades['categoria']);
-		if (array_key_exists('visibilidad',$aDades)) $this->setVisibilidad($aDades['visibilidad']);
-		if (array_key_exists('accion',$aDades)) $this->setAccion($aDades['accion']);
-		if (array_key_exists('modo_envio',$aDades)) $this->setModo_envio($aDades['modo_envio']);
-		if (array_key_exists('f_salida',$aDades)) $this->setF_salida($aDades['f_salida'],$convert);
-		if (array_key_exists('ok',$aDades)) $this->setOk($aDades['ok']);
-		if (array_key_exists('tipo_doc',$aDades)) $this->setTipo_doc($aDades['tipo_doc']);
-		if (array_key_exists('anulado',$aDades)) $this->setAnulado($aDades['anulado']);
-		if (array_key_exists('descripcion',$aDades)) $this->setDescripcion($aDades['descripcion']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_escrito',$aDades)) { $this->setId_escrito($aDades['id_escrito']); }
+		if (array_key_exists('json_prot_local',$aDades)) { $this->setJson_prot_local($aDades['json_prot_local'],TRUE); }
+		if (array_key_exists('json_prot_destino',$aDades)) { $this->setJson_prot_destino($aDades['json_prot_destino'],TRUE); }
+		if (array_key_exists('json_prot_ref',$aDades)) { $this->setJson_prot_ref($aDades['json_prot_ref'],TRUE); }
+		if (array_key_exists('id_grupos',$aDades)) { $this->setId_grupos($aDades['id_grupos'],TRUE); }
+		if (array_key_exists('destinos',$aDades)) { $this->setDestinos($aDades['destinos'],TRUE); }
+		if (array_key_exists('entradilla',$aDades)) { $this->setEntradilla($aDades['entradilla']); }
+		if (array_key_exists('asunto',$aDades)) { $this->setAsunto($aDades['asunto']); }
+		if (array_key_exists('detalle',$aDades)) { $this->setDetalle($aDades['detalle']); }
+		if (array_key_exists('creador',$aDades)) { $this->setCreador($aDades['creador']); }
+		if (array_key_exists('resto_oficinas',$aDades)) { $this->setResto_oficinas($aDades['resto_oficinas'],TRUE); }
+		if (array_key_exists('comentarios',$aDades)) { $this->setComentarios($aDades['comentarios']); }
+		if (array_key_exists('f_aprobacion',$aDades)) { $this->setF_aprobacion($aDades['f_aprobacion'],$convert); }
+		if (array_key_exists('f_escrito',$aDades)) { $this->setF_escrito($aDades['f_escrito'],$convert); }
+		if (array_key_exists('f_contestar',$aDades)) { $this->setF_contestar($aDades['f_contestar'],$convert); }
+		if (array_key_exists('categoria',$aDades)) { $this->setCategoria($aDades['categoria']); }
+		if (array_key_exists('visibilidad',$aDades)) { $this->setVisibilidad($aDades['visibilidad']); }
+		if (array_key_exists('accion',$aDades)) { $this->setAccion($aDades['accion']); }
+		if (array_key_exists('modo_envio',$aDades)) { $this->setModo_envio($aDades['modo_envio']); }
+		if (array_key_exists('f_salida',$aDades)) { $this->setF_salida($aDades['f_salida'],$convert); }
+		if (array_key_exists('ok',$aDades)) { $this->setOk($aDades['ok']); }
+		if (array_key_exists('tipo_doc',$aDades)) { $this->setTipo_doc($aDades['tipo_doc']); }
+		if (array_key_exists('anulado',$aDades)) { $this->setAnulado($aDades['anulado']); }
+		if (array_key_exists('descripcion',$aDades)) { $this->setDescripcion($aDades['descripcion']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -534,7 +534,7 @@ class EscritoDB Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_escrito') && $val_id !== '') $this->iid_escrito = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_escrito') && $val_id !== '') { $this->iid_escrito = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

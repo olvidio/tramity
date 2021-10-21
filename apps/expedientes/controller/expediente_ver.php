@@ -148,10 +148,6 @@ $ver_etiquetas = FALSE;
 $oArrayDesplEtiquetas = '';
 if ($estado == Expediente::ESTADO_ACABADO) {
     $cEtiquetas = $oExpediente->getEtiquetasVisibles();
-    /*
-    $gesEtiquetas = new GestorEtiqueta();
-    $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
-    */
     $a_etiquetas = [];
     $a_posibles_etiquetas = [];
     foreach ($cEtiquetas as $oEtiqueta) {

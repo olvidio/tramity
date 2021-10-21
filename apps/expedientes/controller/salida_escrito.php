@@ -132,7 +132,7 @@ if (!empty($Qid_escrito)) {
     $oficinas = $oEscrito->getResto_oficinas();
     $oArrayDesplFirmas->setSeleccionados($oficinas);
     
-    //Ponente;
+    // Ponente
     $id_ponente = $oEscrito->getCreador();
     $oDesplPonente->setOpcion_sel($id_ponente);
     $categoria = $oEscrito->getCategoria();
@@ -186,11 +186,10 @@ if (!empty($Qid_escrito)) {
         $json_prot_dst[] = $oEntrada->getJson_prot_origen();
         $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
         $oArrayProtDestino->setBlanco('t');
-        //$oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
         $oArrayProtDestino->setTabIndex(50);
         
         // los escritos van por cargos, las entradas por oficinas: pongo al director de la oficina:
-        //Ponente;
+        // Ponente
         $id_of_ponente = $oEntrada->getPonente();
         if (!empty($id_of_ponente)) {
             $gesCargos = new GestorCargo();
@@ -228,7 +227,6 @@ if (!empty($Qid_escrito)) {
 
         $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
         $oArrayProtDestino ->setBlanco('t');
-        //$oArrayProtDestino ->setAccionConjunto('fnjs_mas_destinos()');
         $oArrayProtDestino->setTabIndex(50);
 
     }
@@ -240,7 +238,6 @@ if (!empty($Qid_escrito)) {
     
     $oArrayProtRef = new web\ProtocoloArray('',$a_posibles_lugares,'referencias');
     $oArrayProtRef ->setBlanco('t');
-    //$oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias()');
     $oArrayProtRef->setTabIndex(95);
 
     $id_ponente = ConfigGlobal::role_id_cargo();

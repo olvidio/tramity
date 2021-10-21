@@ -74,10 +74,6 @@ class Expediente Extends expedienteDB {
     
     /* PROPIEDADES -------------------------------------------------------------- */
 
-    private $escrito;
-    
-    private $df_doc;
-    private $itipo_doc;
     
     /* CONSTRUCTOR -------------------------------------------------------------- */
     
@@ -94,7 +90,7 @@ class Expediente Extends expedienteDB {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach($a_id as $nom_id=>$val_id) {
-                if (($nom_id == 'id_expediente') && $val_id !== '') $this->iid_expediente = (int)$val_id; // evitem SQL injection fent cast a integer
+                if (($nom_id == 'id_expediente') && $val_id !== '') { $this->iid_expediente = (int)$val_id; } // evitem SQL injection fent cast a integer
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
@@ -140,12 +136,6 @@ class Expediente Extends expedienteDB {
         $gesAcciones = new GestorAccion();
         $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $this->iid_expediente]);
         foreach ($cAcciones as $oAccion) {
-            /* Accion
-             const ACCION_PROPUESTA  = 1;
-             const ACCION_ESCRITO    = 2;
-             const ACCION_PLANTILLA  = 3;
-             */
-            //$tipo_accion = $oAccion->getTipo_accion();
             $id_escrito = $oAccion->getId_escrito();
             // tipos de antecedentes:
             //n = 1 -> Entradas
@@ -330,7 +320,7 @@ class Expediente Extends expedienteDB {
     }
     
     public function getArrayPrioridad() {
-        $a_prioridad = [
+        return [
             self::PRIORIDAD_NORMAL => _("normal"),
             self::PRIORIDAD_RAPIDO => _("rápido"),
             self::PRIORIDAD_URGENTE => _("urgente"),
@@ -338,12 +328,10 @@ class Expediente Extends expedienteDB {
             self::PRIORIDAD_FECHA => _("otra"),
             self::PRIORIDAD_ESPERA => _("en espera"),
         ];
-        
-        return $a_prioridad;
     }
     
     public function getArrayEstado() {
-        $a_estado = [
+        return [
             self::ESTADO_BORRADOR          => _("borrador"),
             self::ESTADO_CIRCULANDO        => _("circulando"),
             self::ESTADO_FIJAR_REUNION     => _("fijar reunión"),
@@ -357,20 +345,16 @@ class Expediente Extends expedienteDB {
             self::ESTADO_ESPERA            => _("espera"),
             self::ESTADO_NO                => _("no"),
         ];
-        
-        return $a_estado;
     }
     
     public function getArrayVida() {
-        $a_vida = [
+        return [
             self::VIDA_NORMAL => _("normal"),
             self::VIDA_PERMANENTE => _("permanente"),
             self::VIDA_EXPERIENCIA => _("experiencia"),
             self::VIDA_TEMPORAL => _("temporal"),
             self::VIDA_BORRABLE => _("borrable"),
         ];
-        
-        return $a_vida;
     }
     
     /**
@@ -396,6 +380,7 @@ class Expediente Extends expedienteDB {
         
        return $asunto_estado; 
     }
+    
     public function delAntecedente($a_antecedente) {
         // obtener los antecedentes actuales:
         $aAntecedentes = $this->getJson_antecedentes(TRUE);
@@ -478,6 +463,9 @@ class Expediente Extends expedienteDB {
                         $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_documento($id,$tipo_doc);\" >$nom</span>";
                         $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >"._("quitar")."</span>";
                         break;
+                    default:
+                        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                        exit ($err_switch);
                 }
                 if ($quitar === TRUE) {
                     $html .= "<li>$link_mod   $link_del</li>";
@@ -498,7 +486,7 @@ class Expediente Extends expedienteDB {
         
         foreach ($cTramiteCargos as $oTramiteCargo) {
             $id_cargo = $oTramiteCargo->getId_cargo();
-            $orden_tramite = $oTramiteCargo->getOrden_tramite();;
+            $orden_tramite = $oTramiteCargo->getOrden_tramite();
             
             // comprobar la oficina para los cargos especiales:
             // 1 => ponente
@@ -513,21 +501,6 @@ class Expediente Extends expedienteDB {
             if (empty($id_oficina)) {
                 switch ($id_cargo) {
                     case Cargo::CARGO_REUNION:
-                        $gesCargos = new GestorCargo();
-                        $cCargos = $gesCargos->getCargos(['cargo' => 'scdl']);
-                        $oCargoDtor = $cCargos[0];
-                        $id_dtor_scdl = $oCargoDtor->getId_cargo();
-                        $oFirma = new Firma();
-                        $oFirma->setId_expediente($this->iid_expediente);
-                        $oFirma->setId_tramite($id_tramite);
-                        $oFirma->setId_cargo_creador($id_ponente);
-                        $oFirma->setCargo_tipo($id_cargo);
-                        $oFirma->setId_cargo($id_dtor_scdl);
-                        $oFirma->setOrden_tramite($orden_tramite);
-                        // Al inicializar, sólo pongo los votos.
-                        $oFirma->setTipo(Firma::TIPO_VOTO);
-                        $oFirma->DBGuardar();
-                        break;
                     case Cargo::CARGO_DISTRIBUIR:
                         $gesCargos = new GestorCargo();
                         $cCargos = $gesCargos->getCargos(['cargo' => 'scdl']);
@@ -637,6 +610,9 @@ class Expediente Extends expedienteDB {
                             $oFirma->DBGuardar();
                         }
                         break;
+                    default:
+                        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                        exit ($err_switch);
                 }
             } else {
                 $oFirma = new Firma();

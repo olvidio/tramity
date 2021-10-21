@@ -158,10 +158,8 @@ if ($Qid_expediente) {
                     'prioridad_sel' => $Qprioridad_sel,
         ];
         $pag_escrito =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
-        //$pag_rev =  web\Hash::link('apps/expedientes/controller/escrito_rev.php?'.http_build_query($a_cosas));
         
         $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
-        //$a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >"._("rev.texto")."</span>";
         $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito('$id_escrito');\" >"._("rev.texto")."</span>";
             
         // Sólo se puede eliminar si no se ha enviado. Si se ha enviado se puede quitar del expediente:
@@ -211,11 +209,9 @@ if ($Qid_expediente) {
     $oArrayDesplFirmas ->setBlanco('t');
     $oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_firmas()');
 
-    // $a_preparar[] = ['id' => $id_cargo, 'text' => $cargo, 'chk' => '', 'visto' => 0];
     $json_preparar = $oExpediente->getJson_preparar();
     foreach ($json_preparar as $oficial) {
         $id = $oficial->id;
-        //$chk = $oficial->chk;
         $visto = empty($oficial->visto)? 0 : $oficial->visto;
         // marcar las que estan.
         foreach ($a_preparar as $key => $oficial2) {

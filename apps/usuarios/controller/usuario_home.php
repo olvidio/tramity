@@ -18,8 +18,9 @@ require_once ("apps/core/global_object.inc");
  * En concreto hay un problema con bootstrap.js y popper.js
  */
 $peticion_ajax = 0;
-//$server_software = strtolower($_SERVER['SERVER_SOFTWARE']);
-if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+if(isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+    && !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
 {
     // handle request as AJAX
     $peticion_ajax = 1;
@@ -37,7 +38,6 @@ $a_pills = [];
 // Expedientes:
 
 $oExpedienteLista = new ExpedienteLista();
-// borrador_propio = 1;
 $filtro = 'borrador_propio';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -50,7 +50,7 @@ $filtro = 'borrador_propio';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// borrador_oficina = 2;
+// borrador_oficina = 2
 $filtro = 'borrador_oficina';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -63,7 +63,7 @@ $filtro = 'borrador_oficina';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// firmar = 3;
+// firmar = 3
 $filtro = 'firmar';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -76,7 +76,7 @@ $filtro = 'firmar';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// reunion = 4;
+// reunion = 4
 $filtro = 'reunion';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -89,7 +89,7 @@ $filtro = 'reunion';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// circular = 5;
+// circular = 5
 $filtro = 'circulando';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -102,22 +102,8 @@ $filtro = 'circulando';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-/*
-$filtro = 'seg_reunion';
-    $active = ($filtro == $Qfiltro)? 'active' : '';
-    $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 6;
-    $text = _("reunion día");
-    $explicacion = _("Expedientes ya firmados para una próxima reunión");
-    $oExpedienteLista->setFiltro($filtro);
-    $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
-*/
-
 if (is_true(ConfigGlobal::soy_dtor()) ) {
-    // acabados = 7;
+    // acabados = 7
     $filtro = 'acabados';
         $active = ($filtro == $Qfiltro)? 'active' : '';
         $aQuery = [ 'filtro' => $filtro ];
@@ -130,7 +116,7 @@ if (is_true(ConfigGlobal::soy_dtor()) ) {
         $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
     $a_pills[$num_orden] = $pill;
 }
-// acabados = 7.1;
+// acabados = 7.1
 $filtro = 'acabados_encargados';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -143,7 +129,7 @@ $filtro = 'acabados_encargados';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
     
-// archivados = 9;
+// archivados = 9
 $filtro = 'archivados';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -159,7 +145,7 @@ $filtro = 'archivados';
 $a_pills[$num_orden] = $pill;
 
 
-// copias = 10;
+// copias = 10
 $filtro = 'copias';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -176,7 +162,7 @@ $a_pills[$num_orden] = $pill;
 // Entradas:
 // Sólo para vcd
 if (ConfigGlobal::role_actual() === 'vcd') {
-    // entradas = 11;
+    // entradas = 11
     $filtro = 'en_ingresado';
         $active = ($filtro == $Qfiltro)? 'active' : '';
         $aQuery = [ 'filtro' => $filtro ];
@@ -193,7 +179,7 @@ if (ConfigGlobal::role_actual() === 'vcd') {
 
 // Sólo para dtor
 if (is_true(ConfigGlobal::soy_dtor())) {
-    // entradas = 12;
+    // entradas = 12
     $filtro = 'en_aceptado';
         $active = ($filtro == $Qfiltro)? 'active' : '';
         $aQuery = [ 'filtro' => $filtro ];
@@ -208,7 +194,7 @@ if (is_true(ConfigGlobal::soy_dtor())) {
     $a_pills[$num_orden] = $pill;
 }
 
-// entradas = 13;
+// entradas = 13
 $filtro = 'en_encargado';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -222,7 +208,7 @@ $filtro = 'en_encargado';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// buscar = 20;
+// buscar = 20
 $filtro = 'en_buscar';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -235,7 +221,7 @@ $filtro = 'en_buscar';
 $a_pills[$num_orden] = $pill;
 
 if (is_true(ConfigGlobal::soy_dtor())) {
-    // escritos_cr = 21;
+    // escritos_cr = 21
     $filtro = 'escritos_cr';
         $active = ($filtro == $Qfiltro)? 'active' : '';
         $aQuery = [ 'filtro' => $filtro ];
@@ -248,7 +234,7 @@ if (is_true(ConfigGlobal::soy_dtor())) {
     $a_pills[$num_orden] = $pill;
 }
 
-// buscar = 22;
+// buscar = 22
 $filtro = 'permanentes_cr';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
@@ -260,7 +246,7 @@ $filtro = 'permanentes_cr';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// pendientes = 30;
+// pendientes = 30
 $filtro = 'pendientes';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro,
@@ -275,7 +261,7 @@ $filtro = 'pendientes';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-// documentos = 40;
+// documentos = 40
 $filtro = 'documentos';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro,

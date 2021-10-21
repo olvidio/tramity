@@ -16,7 +16,6 @@ namespace tramity\apps\core {
         $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.class.php';
         $base_dir = $_SERVER['DOCUMENT_ROOT'] . $dir_apps;
         $fileName = $base_dir . DIRECTORY_SEPARATOR . $fileName;
-        //echo "inc: ". $fileName."<br>";
         
         //Aclararse que pasa con apc, include/require vs spl_autoload.
        if (file_exists($fileName) && include($fileName)) {
@@ -32,7 +31,6 @@ namespace tramity\apps\core {
 namespace tramity\apps {
     //permisos/login_inc
     use core\mycrypt;
-    //use permisos\model\perm;
 
     use core\clasepropiedades;
     use core\datoscampo;
@@ -40,5 +38,4 @@ namespace tramity\apps {
     use core\set;
 
     use core\configglobal;
-    //use core\gestorerrores;
 }

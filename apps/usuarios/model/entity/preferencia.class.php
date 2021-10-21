@@ -95,7 +95,7 @@ class Preferencia Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_item') && $val_id !== '') $this->iid_item = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -233,11 +233,11 @@ class Preferencia Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_item',$aDades)) $this->setId_item($aDades['id_item']);
-		if (array_key_exists('id_usuario',$aDades)) $this->setId_usuario($aDades['id_usuario']);
-		if (array_key_exists('tipo',$aDades)) $this->setTipo($aDades['tipo']);
-		if (array_key_exists('preferencia',$aDades)) $this->setPreferencia($aDades['preferencia']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_item',$aDades)) { $this->setId_item($aDades['id_item']); }
+		if (array_key_exists('id_usuario',$aDades)) { $this->setId_usuario($aDades['id_usuario']); }
+		if (array_key_exists('tipo',$aDades)) { $this->setTipo($aDades['tipo']); }
+		if (array_key_exists('preferencia',$aDades)) { $this->setPreferencia($aDades['preferencia']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -285,7 +285,7 @@ class Preferencia Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_item') && $val_id !== '') $this->iid_item = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

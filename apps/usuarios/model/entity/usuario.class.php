@@ -107,7 +107,7 @@ class Usuario Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_usuario') && $val_id !== '') $this->iid_usuario = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_usuario') && $val_id !== '') { $this->iid_usuario = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -253,13 +253,13 @@ class Usuario Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_usuario',$aDades)) $this->setId_usuario($aDades['id_usuario']);
-		if (array_key_exists('usuario',$aDades)) $this->setUsuario($aDades['usuario']);
-		if (array_key_exists('id_cargo_preferido',$aDades)) $this->setId_cargo_preferido($aDades['id_cargo_preferido']);
-		if (array_key_exists('password',$aDades)) $this->setPassword($aDades['password']);
-		if (array_key_exists('email',$aDades)) $this->setEmail($aDades['email']);
-		if (array_key_exists('nom_usuario',$aDades)) $this->setNom_usuario($aDades['nom_usuario']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_usuario',$aDades)) { $this->setId_usuario($aDades['id_usuario']); }
+		if (array_key_exists('usuario',$aDades)) { $this->setUsuario($aDades['usuario']); }
+		if (array_key_exists('id_cargo_preferido',$aDades)) { $this->setId_cargo_preferido($aDades['id_cargo_preferido']); }
+		if (array_key_exists('password',$aDades)) { $this->setPassword($aDades['password']); }
+		if (array_key_exists('email',$aDades)) { $this->setEmail($aDades['email']); }
+		if (array_key_exists('nom_usuario',$aDades)) { $this->setNom_usuario($aDades['nom_usuario']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -309,7 +309,7 @@ class Usuario Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_usuario') && $val_id !== '') $this->iid_usuario = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_usuario') && $val_id !== '') { $this->iid_usuario = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

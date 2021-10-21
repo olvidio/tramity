@@ -102,7 +102,7 @@ if (!empty($Qsimple_per)) { // sólo para los periodicos.
 			$request['tipo']="d_a";
 			$request['tipo_dia']= (string) \filter_input(INPUT_POST,'tipo_dia');
 			$request['interval']= (integer) \filter_input(INPUT_POST,'a_interval');
-			switch($Qtipo_dia){
+			switch ($Qtipo_dia) {
 				case "num":
 					$request['dias']= (string) \filter_input(INPUT_POST,'a_dia_num');
 					$request['meses']= (string) \filter_input(INPUT_POST,'mes_num');
@@ -116,13 +116,16 @@ if (!empty($Qsimple_per)) { // sólo para los periodicos.
 					$request['dias'] = (array)  \filter_input(INPUT_POST, 'dias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 					$request['meses'] = (array) \filter_input(INPUT_POST,'meses', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 				break;
+				default:
+				    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+				    exit ($err_switch);
 			}
 			$rrule = Rrule::montar_rrule($request);
 			break;
 		case "periodico_d_m":
 			$request['tipo']="d_m";
 			$request['tipo_dia']= (string) \filter_input(INPUT_POST,'tipo_dia');
-			switch($Qtipo_dia){
+			switch ($Qtipo_dia) {
 				case "num_ini":
 				    // cojo el dia de la fecha inicio
 				    $oF_ini = DateTimeLocal::createFromLocal($Qf_inicio);
@@ -136,6 +139,9 @@ if (!empty($Qsimple_per)) { // sólo para los periodicos.
 					$request['ordinal']= (string) \filter_input(INPUT_POST,'ordinal');
 					$request['dia_semana']= (string) \filter_input(INPUT_POST,'dia_semana');
 				break;
+				default:
+				    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+				    exit ($err_switch);
 			}
 			$rrule = Rrule::montar_rrule($request);
 			break;
@@ -147,9 +153,11 @@ if (!empty($Qsimple_per)) { // sólo para los periodicos.
 			break;
 		case "periodico_d_d":
 			$request['tipo']="d_d";
-			//print_r($dias_w);
 			$rrule = Rrule::montar_rrule($request);
 			break;
+		default:
+		    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+		    exit ($err_switch);
 	}
 }
 
@@ -157,7 +165,7 @@ switch ($Qnuevo) {
 	case "1": //nuevo pendiente
 		// si vengo de entradas, primero lo guardo en una tabla temporal hasta que sepa el id_reg
 		if ($Qgo=="entradas") { 
-			if (empty($Qf_plazo)) $Qf_plazo=$Qf_inicio; // En el caso de periodico, no tengo fecha plazo.
+		    if (empty($Qf_plazo)) { $Qf_plazo=$Qf_inicio; } // En el caso de periodico, no tengo fecha plazo.
 			    
 			$oPendienteDB = new PendienteDB();
 			$oPendienteDB->setAsunto($asunto);
@@ -289,12 +297,7 @@ switch ($Qnuevo) {
 				// miro si es una recursiva de un pendiente:
 				$f_recur=strtok('#');
                 $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $cargo, $uid);
-				if (!empty($f_recur)) {
-					//$oPendiente->marcar_excepcion($f_recur);
-					$oPendiente->marcar_contestado("eliminar");
-				} else {
-					$oPendiente->marcar_contestado("eliminar");
-				}
+                $oPendiente->marcar_contestado("eliminar");
 			}
 		} else {
 		    $txt_err .= _("No se cual tengo que eliminar.");
@@ -367,4 +370,7 @@ switch ($Qnuevo) {
         echo json_encode($jsondata);
         exit();
 	    break;
+	default:
+	    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+	    exit ($err_switch);
 } // fin del switch de nuevo.	

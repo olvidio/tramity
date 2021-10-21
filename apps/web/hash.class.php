@@ -844,7 +844,6 @@ class Hash {
 		$sPath = (substr($sPath,0,1) == '/')? $sPath : '/'.$sPath;
 		if (strpos($sPath,$_SERVER["SERVER_NAME"]) === false) {
 			if (strpos($sPath,ConfigGlobal::$web_path) === false) {
-				//$sPath = ConfigGlobal::getWebPath().$sPath;
 				$sPath = ConfigGlobal::getWeb().$sPath;
 			} else {
 				$sPath = ConfigGlobal::$web_server.ConfigGlobal::getWebPort().$sPath;

@@ -100,7 +100,7 @@ class RoleMember Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'user_no') && $val_id !== '') $this->iuser_no = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'user_no') && $val_id !== '') { $this->iuser_no = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -234,10 +234,10 @@ class RoleMember Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('role_no',$aDades)) $this->setRole_no($aDades['role_no']);
-		if (array_key_exists('user_no',$aDades)) $this->setUser_no($aDades['user_no']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('role_no',$aDades)) { $this->setRole_no($aDades['role_no']); }
+		if (array_key_exists('user_no',$aDades)) { $this->setUser_no($aDades['user_no']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -284,7 +284,7 @@ class RoleMember Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'user_no') && $val_id !== '') $this->iuser_no = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'user_no') && $val_id !== '') { $this->iuser_no = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

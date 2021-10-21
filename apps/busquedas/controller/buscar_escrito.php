@@ -18,8 +18,6 @@ require_once ("apps/core/global_object.inc");
 
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qctr_anulados = (bool) \filter_input(INPUT_POST, 'ctr_anulados');
-//$Qsimple = (integer) \filter_input(INPUT_POST, 'simple');
-//$Qsimple = 1;
 
 // vengo de modificar algo, quiero volver a la lista
 $Qopcion =  (integer) \filter_input(INPUT_POST, 'opcion');
@@ -65,6 +63,9 @@ switch ($Qlista_origen) {
     case 'cr_ctr':
         $chk_lo_4 = 'checked';
         break;
+    default:
+        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_switch);
 }
 
 if (is_true($Qctr_anulados)) {

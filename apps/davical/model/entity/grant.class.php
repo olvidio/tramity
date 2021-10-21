@@ -266,13 +266,13 @@ class Grant Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('by_principal',$aDades)) $this->setBy_principal($aDades['by_principal']);
-		if (array_key_exists('by_collection',$aDades)) $this->setBy_collection($aDades['by_collection']);
-		if (array_key_exists('to_principal',$aDades)) $this->setTo_principal($aDades['to_principal']);
-		if (array_key_exists('privileges',$aDades)) $this->setPrivileges($aDades['privileges']);
-		if (array_key_exists('is_group',$aDades)) $this->setIs_group($aDades['is_group']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('by_principal',$aDades)) { $this->setBy_principal($aDades['by_principal']); }
+		if (array_key_exists('by_collection',$aDades)) { $this->setBy_collection($aDades['by_collection']); }
+		if (array_key_exists('to_principal',$aDades)) { $this->setTo_principal($aDades['to_principal']); }
+		if (array_key_exists('privileges',$aDades)) { $this->setPrivileges($aDades['privileges']); }
+		if (array_key_exists('is_group',$aDades)) { $this->setIs_group($aDades['is_group']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -322,8 +322,8 @@ class Grant Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'by_principal') && $val_id !== '') $this->iby_principal = (int)$val_id; // evitem SQL injection fent cast a integer
-				if (($nom_id == 'to_principal') && $val_id !== '') $this->ito_principal = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'by_principal') && $val_id !== '') { $this->iby_principal = (int)$val_id; } // evitem SQL injection fent cast a integer
+				if (($nom_id == 'to_principal') && $val_id !== '') { $this->ito_principal = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		}
 	}

@@ -38,6 +38,9 @@ if (!empty($Qid_doc)) {
             break;
         case $oDocumento::DOC_UPLOAD:
             break;
+        default:
+            $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_switch);
     }
     
 } else {

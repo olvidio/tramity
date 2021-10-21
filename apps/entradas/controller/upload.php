@@ -36,12 +36,10 @@ function upload() {
         for ($i = 0; $i < $total; $i++) {
             $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
             $fileName = $_FILES[$input]['name'][$i]; // the file name
-            $fileSize = $_FILES[$input]['size'][$i]; // the file size
             
             //Make sure we have a file path
             if ($tmpFilePath != "" && $Qid_entrada){
                 
-                //$contenido_doc=file_get_contents($tmpFilePath);
                 $fp = fopen($tmpFilePath, 'rb');
                 $contenido_doc = fread($fp, filesize($tmpFilePath));
                 $contenido_encoded = base64_encode($contenido_doc);

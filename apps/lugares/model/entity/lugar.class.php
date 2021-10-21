@@ -144,7 +144,7 @@ class Lugar Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_lugar') && $val_id !== '') $this->iid_lugar = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_lugar') && $val_id !== '') { $this->iid_lugar = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -306,18 +306,18 @@ class Lugar Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_lugar',$aDades)) $this->setId_lugar($aDades['id_lugar']);
-		if (array_key_exists('sigla',$aDades)) $this->setSigla($aDades['sigla']);
-		if (array_key_exists('dl',$aDades)) $this->setDl($aDades['dl']);
-		if (array_key_exists('region',$aDades)) $this->setRegion($aDades['region']);
-		if (array_key_exists('nombre',$aDades)) $this->setNombre($aDades['nombre']);
-		if (array_key_exists('tipo_ctr',$aDades)) $this->setTipo_ctr($aDades['tipo_ctr']);
-		if (array_key_exists('modo_envio',$aDades)) $this->setModo_envio($aDades['modo_envio']);
-		if (array_key_exists('pub_key',$aDades)) $this->setPub_key($aDades['pub_key']);
-		if (array_key_exists('e_mail',$aDades)) $this->setE_mail($aDades['e_mail']);
-		if (array_key_exists('anulado',$aDades)) $this->setAnulado($aDades['anulado']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_lugar',$aDades)) { $this->setId_lugar($aDades['id_lugar']); }
+		if (array_key_exists('sigla',$aDades)) { $this->setSigla($aDades['sigla']); }
+		if (array_key_exists('dl',$aDades)) { $this->setDl($aDades['dl']); }
+		if (array_key_exists('region',$aDades)) { $this->setRegion($aDades['region']); }
+		if (array_key_exists('nombre',$aDades)) { $this->setNombre($aDades['nombre']); }
+		if (array_key_exists('tipo_ctr',$aDades)) { $this->setTipo_ctr($aDades['tipo_ctr']); }
+		if (array_key_exists('modo_envio',$aDades)) { $this->setModo_envio($aDades['modo_envio']); }
+		if (array_key_exists('pub_key',$aDades)) { $this->setPub_key($aDades['pub_key']); }
+		if (array_key_exists('e_mail',$aDades)) { $this->setE_mail($aDades['e_mail']); }
+		if (array_key_exists('anulado',$aDades)) { $this->setAnulado($aDades['anulado']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -372,7 +372,7 @@ class Lugar Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_lugar') && $val_id !== '') $this->iid_lugar = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_lugar') && $val_id !== '') { $this->iid_lugar = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

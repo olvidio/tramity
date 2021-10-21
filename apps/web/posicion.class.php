@@ -56,7 +56,7 @@ class Posicion {
 	 *
 	 */
 	private function goEnd() {
-		if (!is_array($_SESSION['position'])) return;
+	    if (!is_array($_SESSION['position'])) { return; }
 		$aPosition = end($_SESSION['position']);
 		$this->stack = key($_SESSION['position']);
 		$this->surl = $aPosition['url'];
@@ -70,7 +70,7 @@ class Posicion {
 	 * @var integer $n número de posiciones a retroceder.
 	 */
 	public function go($n=0) {
-		if ($n == 0 || !is_array($_SESSION['position'])) return;
+	    if ($n == 0 || !is_array($_SESSION['position'])) { return; }
 
 		$aPosition = end($_SESSION['position']);
 		for ($i=0; $i < $n; $i++) {
@@ -102,7 +102,6 @@ class Posicion {
 	public function goStack($stack='*') { //pongo '*' para distinguirlo del 0.
 		if (isset($_SESSION['position'][$stack])) {
 			$aPosition = $_SESSION['position'][$stack];
-			//$this->stack = key($_SESSION['position']);
 			$this->stack = $aPosition['stack'];
 			$this->surl = $aPosition['url'];
 			$this->sbloque = $aPosition['bloque'];
@@ -300,7 +299,7 @@ class Posicion {
 	private function limitar($n=10) {
 		// Cuando hay el doble, borro $n.
 		if (isset($_SESSION['position'])) { // No sé poruqe no deja poner todo junto
-			if (is_array($_SESSION['position']) & (count($_SESSION['position']) > 2*$n)) {
+			if (is_array($_SESSION['position']) && (count($_SESSION['position']) > 2*$n)) {
 				$eee = 'a borrra!!';
 				array_splice($_SESSION['position'], -$n); // negativo empieza por el final.
 				// hay que cambiar el indice stack

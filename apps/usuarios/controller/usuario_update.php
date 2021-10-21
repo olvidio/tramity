@@ -34,7 +34,6 @@ switch($Qque) {
 		echo "role cambiado a $Qrole";
         break;
 	case "eliminar":
-	    //$Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');
 	    $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    if (!empty($a_sel)) { //vengo de un checkbox
             $Qid_usuario = (integer) strtok($a_sel[0],"#");
@@ -151,4 +150,7 @@ switch($Qque) {
             echo _("debe poner un nombre de usuario");
         }
 		break;
+	default:
+	    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+	    exit ($err_switch);
 }

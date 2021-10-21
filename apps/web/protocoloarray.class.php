@@ -14,13 +14,6 @@ class ProtocoloArray Extends Protocolo {
 	 private $sSeleccionados;
 
 	/**
-	 * oPosibles del Desplegable
-	 *
-	 * @var object 
-	 */
-	 private $oPosibles;
-
-	/**
 	 * sNomConjunto del Desplegable
 	 *
 	 * @var string 
@@ -48,9 +41,9 @@ class ProtocoloArray Extends Protocolo {
 	 *
 	 */
 	function __construct($id,$Opciones,$Nom) {
-		if (isset($id) && $id !== '') $this->sSeleccionados = $id;
-		if (isset($Opciones) && $Opciones !== '') $this->oOpciones = $Opciones;
-		if (isset($Nom) && $Nom !== '') $this->sNomConjunto = $Nom;
+	    if (isset($id) && $id !== '') { $this->sSeleccionados = $id; }
+	    if (isset($Opciones) && $Opciones !== '') { $this->oOpciones = $Opciones; }
+	    if (isset($Nom) && $Nom !== '') { $this->sNomConjunto = $Nom; }
 		
 	}
 
@@ -60,7 +53,6 @@ class ProtocoloArray Extends Protocolo {
 	    $aRef['dst_org'] = '';
 	    $aRef['local'] = '';
 	    $aSeleccionados = '';
-	    if (is_object($this->sSeleccionados)) {}
 	    if (is_array($this->sSeleccionados)) {
 	        $aSeleccionados = $this->sSeleccionados;
 	    }
@@ -95,7 +87,6 @@ class ProtocoloArray Extends Protocolo {
 
 	public function ListaTxtBr($id_lugar='') {
 	    $aSeleccionados = '';
-	    if (is_object($this->sSeleccionados)) {}
 	    if (is_array($this->sSeleccionados)) {
 	        $aSeleccionados = $this->sSeleccionados;
 	    }
@@ -132,7 +123,6 @@ class ProtocoloArray Extends Protocolo {
 	}
 	public function ListaTxt() {
 	    $aSeleccionados = '';
-	    if (is_object($this->sSeleccionados)) {}
 	    if (is_array($this->sSeleccionados)) {
 	        $aSeleccionados = $this->sSeleccionados;
 	    }
@@ -174,7 +164,6 @@ class ProtocoloArray Extends Protocolo {
 	 */
 	public function ListaSelects() {
 		$aSeleccionados = '';
-		if (is_object($this->sSeleccionados)) {}
 		if (is_array($this->sSeleccionados)) {
     		$aSeleccionados = $this->sSeleccionados;
 		}
@@ -196,9 +185,7 @@ class ProtocoloArray Extends Protocolo {
 				$this->sOpcion_sel = $this->ilugar;
 				$this->sAction="$fnjs_comprobar('".$this->sNombre."',$n);";
 
-				//$sLista .= "<div class=\"row\">";
 				$sLista .= $this->ver_desplegable();
-				//$sLista .= "</div>";
 				$n++;
 			}
 		}
@@ -333,8 +320,7 @@ class ProtocoloArray Extends Protocolo {
 	/* METODES  ----------------------------------------------------------*/
 	
 	public function getArray_sel() {
-	    $SelecArray = (array) $this->sSeleccionados;
-	    return $SelecArray;
+	    return (array) $this->sSeleccionados;
 	}
 
 	public function setArray_sel($seleccionados='') {

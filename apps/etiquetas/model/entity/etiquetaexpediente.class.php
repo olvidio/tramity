@@ -90,8 +90,8 @@ class EtiquetaExpediente Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_etiqueta') && $val_id !== '') $this->iid_etiqueta = (int)$val_id; // evitem SQL injection fent cast a integer
-				if (($nom_id == 'id_expediente') && $val_id !== '') $this->iid_expediente = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_etiqueta') && $val_id !== '') { $this->iid_etiqueta = (int)$val_id; } // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_expediente') && $val_id !== '') { $this->iid_expediente = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		}
 		$this->setoDbl($oDbl);
@@ -219,10 +219,10 @@ class EtiquetaExpediente Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_etiqueta',$aDades)) $this->setId_etiqueta($aDades['id_etiqueta']);
-		if (array_key_exists('id_expediente',$aDades)) $this->setId_expediente($aDades['id_expediente']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_etiqueta',$aDades)) { $this->setId_etiqueta($aDades['id_etiqueta']); }
+		if (array_key_exists('id_expediente',$aDades)) { $this->setId_expediente($aDades['id_expediente']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -269,8 +269,8 @@ class EtiquetaExpediente Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_etiqueta') && $val_id !== '') $this->iid_etiqueta = (int)$val_id; // evitem SQL injection fent cast a integer
-				if (($nom_id == 'id_expediente') && $val_id !== '') $this->iid_expediente = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_etiqueta') && $val_id !== '') { $this->iid_etiqueta = (int)$val_id; } // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_expediente') && $val_id !== '') { $this->iid_expediente = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		}
 	}

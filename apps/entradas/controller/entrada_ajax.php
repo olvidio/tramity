@@ -27,7 +27,7 @@ require_once ("apps/core/global_object.inc");
 
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
-switch ($Qque) {   
+switch ($Qque) {
     case 'perm_ver':
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
         $oEntrada = new Entrada($Qid_entrada);
@@ -371,8 +371,6 @@ switch ($Qque) {
         $Qf_escrito = (string) \filter_input(INPUT_POST, 'f_escrito');
         $Qtipo_doc = (integer) \filter_input(INPUT_POST, 'tipo_doc');
 
-        //$Qtipo = EntradaDocDB::TIPO_ETHERPAD;
-
         if (!empty($Qid_entrada)) {
             $oEntradaDocBD = new EntradaDocDB($Qid_entrada);
             $oEntradaDocBD->setF_doc($Qf_escrito);
@@ -416,10 +414,16 @@ switch ($Qque) {
                     $jsondata['error'] = false;
                     $jsondata['url'] = $fullUrl;
                     break;
+                default:
+                    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_switch);
             }
         }
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         break;
+    default:
+        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_switch);
 }

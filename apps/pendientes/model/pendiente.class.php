@@ -7,7 +7,6 @@ use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
 use pendientes\model\entity\PendienteDB;
 use usuarios\model\PermRegistro;
-use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
@@ -118,46 +117,37 @@ class Pendiente {
     /* METODES PUBLICS ----------------------------------------------------------*/
 
     static public function getArrayStatus() {
-        $a_tipos = [
+        return [
             "NEEDS-ACTION" => _("iniciado"),
             "COMPLETED" =>  _("acabado"),
             "IN-PROCESS" =>  _("en proceso"),
             "CANCELLED" =>  _("cancelado"),
         ];
-        
-        return $a_tipos;
     }
 
     public function getBaseUrl($parent_container='') {
-        $server =  $_SESSION['oConfig']->getServerDavical();
-        $this->server = $server.'/caldav.php';
+        $server_base =  $_SESSION['oConfig']->getServerDavical();
+        $this->server = $server_base.'/caldav.php';
         
         $parent_container = empty($parent_container)? $this->parent_container : $parent_container;
         return $this->server."/".$parent_container."/".$this->resource."/";
     }
     
     public function getProtocoloOrigen() {
-        $uid = $this->getUid();
-        $prot_origen = $this->buscar_ref_uid($uid,"array");
-        return $prot_origen;
+        return $this->buscar_ref_uid($this->getUid(),"array");
     }
     
     public function getReferencias() {
-        $uid = $this->getUid();
-        $ref=$this->buscar_ref_uid($uid,"txt");
+        $ref=$this->buscar_ref_uid($this->getUid(),"txt");
         $ref_mas=$this->getRef_prot_mas();
-        if (!empty($ref_mas)) $ref.=", ".$ref_mas;
-        $pendiente_con=$this->getPendiente_con();
-        if (!empty($pendiente_con)) {
-            
-            //$ref=$a_lugares[$pendiente_con]." ($ref)";
-        }
+        if (!empty($ref_mas)) { $ref.=", ".$ref_mas; }
         return $ref;
     }
     
     
-    public function buscar_ref_uid($uid,$formato) {
+    private function buscar_ref_uid($uid,$formato) {
         $id_reg = 0;
+        $ref = '';
         //  Registro entradas
         if (($pos_ini = strpos($uid, 'REN')) !== FALSE && $pos_ini == 0) {
             $pos = strpos($uid, '-') - 3;
@@ -189,64 +179,9 @@ class Pendiente {
                 if($formato=="array"){
                     $ref = (array) $oProtOrigen->getProt();
                 }
-                return $ref;
             }
         }
-        
-        //  Registro escritos
-        /*
-        if (($pos_ini = strpos($uid, 'RES')) !== FALSE && $pos_ini == 0) {
-            } else {
-                // No es una entrada, será una aprobación.
-                $sql_ref="SELECT prot_num ,prot_any
-					FROM escritos
-					WHERE id_reg=$id_reg
-					";
-                $oDBRSt_q2=$oDBR->query($sql_ref);
-                if ($oDBRSt_q2->rowCount()) {
-                    $referencias="";
-                    $row=$oDBRSt_q2->fetch(\PDO::FETCH_ASSOC);
-                    extract($row);
-                    $prot_any=any_2($prot_any);
-                    if($formato=="txt") { $ref=ConfigGlobal::$dele." ".$prot_num."/".$prot_any; }
-                    if($formato=="array"){ $ref['id_lugar']=$id_lugar; $ref['sigla']=ConfigGlobal::$dele; $ref['num']=$prot_num; $ref['any']=$prot_any; }
-                    return $ref;
-                } else {
-                    return _("referencia a un escrito eliminado");
-                }
-            }
-        }
-        */
-        
-        //  Registro cancillería
-        /*
-        if (($pos_ini = strpos($uid, 'RC')) !== FALSE && $pos_ini == 0) {
-            $pos = strpos($uid, '-') - 2;
-            $id_reg=substr($uid,2,$pos);
-            //echo "ref: $id_reg<br>";
-            $sql_ref="SELECT origen, origen_num ,origen_any
-				FROM cancilleria_escritos
-				WHERE id_reg=$id_reg
-				";
-            //echo "sql: $sql_ref<br>";
-            $oDBRSt_q2=$oDBR->query($sql_ref);
-            if ($oDBRSt_q2->rowCount()) {
-                $referencias="";
-                $row=$oDBRSt_q2->fetch(\PDO::FETCH_ASSOC);
-                extract($row);
-                $origen_any=any_2($origen_any);
-                if($formato=="txt") { $ref=$origen." ".$origen_num."/".$origen_any; }
-                if($formato=="array"){ $ref['id_lugar']=$origen; $ref['sigla']=$origen; $ref['num']=$origen_num; $ref['any']=$origen_any; }
-                return $ref;
-            } else {
-                return _("referencia a un escrito eliminado");
-            }
-            
-        }
-        */
-        
-        // en cualquier otro caso.
-        return;
+        return $ref;
     }
     
     
@@ -276,7 +211,6 @@ class Pendiente {
         $aDades['encargado'] = $oPendienteDB->getEncargado();
         $aDades['pendiente_con'] = $oPendienteDB->getPendiente_con();
         $aDades['oficinas'] = $oPendienteDB->getOficinas();
-        //$aDades['id_oficina'] = $oPendienteDB->setId_oficina();
         $aDades['rrule'] = $oPendienteDB->getRrule();
         $aDades['f_inicio'] = $oPendienteDB->getF_inicio();
         $aDades['f_end'] = $oPendienteDB->getF_end();
@@ -368,23 +302,21 @@ class Pendiente {
             $args['STATUS']="COMPLETED";
         }
         $args['CREATED']=$ahora;
-        if (!empty($f_plazo)) $args['DUE']=$f_cal_plazo;
-        if (!empty($f_cal_inicio))  { $args['DTSTART']=$f_cal_inicio; } else { $args['DTSTART']=$f_cal_plazo; }
-        if (!empty($f_cal_end))  { $args['DTEND']=$f_cal_end; } else { $args['DTEND']=''; }
-        if (!empty($rrule)) $args['RRULE']="$rrule";
-        if (!empty($observ)) $args['DESCRIPTION']="$observ";
-        if (!empty($class)) $args['CLASS']="$class"; // property name - case independt
-        if (!empty($detalle)) $args['COMMENT']="$detalle";
-        if (!empty($categorias)) $args['CATEGORIES']="$categorias";
-        if (!empty($encargado)) $args['ATTENDEE']="$encargado";
-        if (!empty($ref_prot_mas)) $args['X-DLB-REF-MAS']="$ref_prot_mas";
-        if (!empty($location)) $args['LOCATION']="$location";
-        if (!empty($pendiente_con)) $args['X-DLB-PENDIENTE-CON']="$pendiente_con";
+        if (!empty($f_plazo)) { $args['DUE']=$f_cal_plazo; }
+        if (!empty($f_cal_inicio)) { $args['DTSTART']=$f_cal_inicio; } else { $args['DTSTART']=$f_cal_plazo; }
+        if (!empty($f_cal_end)) { $args['DTEND']=$f_cal_end; } else { $args['DTEND']=''; }
+        if (!empty($rrule)) { $args['RRULE']="$rrule"; }
+        if (!empty($observ)) { $args['DESCRIPTION']="$observ"; }
+        if (!empty($class)) { $args['CLASS']="$class"; } // property name - case independt
+        if (!empty($detalle)) { $args['COMMENT']="$detalle"; }
+        if (!empty($categorias)) { $args['CATEGORIES']="$categorias"; }
+        if (!empty($encargado)) { $args['ATTENDEE']="$encargado"; }
+        if (!empty($ref_prot_mas)) { $args['X-DLB-REF-MAS']="$ref_prot_mas"; }
+        if (!empty($location)) { $args['LOCATION']="$location"; }
+        if (!empty($pendiente_con)) { $args['X-DLB-PENDIENTE-CON']="$pendiente_con"; }
         if (!empty($id_reg)) {
             $args['X-DLB-ID-REG']="$id_reg";
-            
             $ref=$this->buscar_ref_uid($uid,"txt");
-            //if (!empty($ref_prot_mas)) $ref.=", ".$ref_prot_mas;
             $args['LOCATION']="$ref";
         }
         
@@ -476,14 +408,15 @@ class Pendiente {
             case "eliminar":
                 $cal->DoDELETERequest( $base_url.$nom_fichero, $etag );
             break;
+            default:
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
         }
         if ($que != "eliminar") {
             $vcalendar->SetComponents($icalComp); // OJO, le paso el array de objetos.
             $icalendar=$vcalendar->Render();
-            //print_r($icalendar);
-            //echo "<br>nom: $nom_fichero<br>cal: $icalendar<br>tag: $etag<br>";
             $rta = $cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
-            if (strlen($rta) > 32 ) print_r($rta);
+            if (strlen($rta) > 32 ) { print_r($rta); }
         }
     }
 
@@ -535,10 +468,8 @@ class Pendiente {
 
         $vcalendar->SetComponents($icalComp); // OJO, le paso el array de objetos.
         $icalendar=$vcalendar->Render();
-        //print_r($icalendar);
-        //echo "<br>nom: $nom_fichero<br>cal: $icalendar<br>tag: $etag<br>";
         $rta=$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
-        if (strlen($rta) > 32 ) print_r($rta);
+        if (strlen($rta) > 32 ) { print_r($rta); }
     }
 
     private function update_pendiente($uid,$aDades) {
@@ -617,7 +548,6 @@ class Pendiente {
             $args['X-DLB-ID-REG']="$id_reg";
             
             $ref=$this->buscar_ref_uid($uid,"txt");
-            //if (!empty($ref_prot_mas)) $ref.=", ".$ref_prot_mas;
             $args['LOCATION']="$ref";
         } else {
             $args['X-DLB-ID-REG']="";
@@ -663,14 +593,12 @@ class Pendiente {
         
         $vcalendar->SetComponents($icalComp); // OJO, le paso el array de objetos.
         $icalendar=$vcalendar->Render();
-        //print_r($cal);
 
         // OJO! El nombre no puede contener la '@'.
         $uid2=strtok($uid,'@');
         $nom_fichero="$uid2.ics";
-        //echo "DoPUTRequest( $nom_fichero,$icalendar,$etag)<br>";
         $rta=$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
-        if (strlen($rta) > 32 ) print_r($rta);
+        if (strlen($rta) > 32 ) { print_r($rta); }
     }
 
     
@@ -680,7 +608,7 @@ class Pendiente {
      *
      */
     public function Guardar() {
-        if (($uid=$this->getUid()) === FALSE) { $bInsert=TRUE; } else { $bInsert=FALSE; }
+        if ($this->getUid() === FALSE) { $bInsert=TRUE; } else { $bInsert=FALSE; }
         $aDades = [];
         
         $aDades['id_reg'] = $this->id_reg;
@@ -705,7 +633,7 @@ class Pendiente {
 
         if ($bInsert === FALSE) {
             //UPDATE
-            $this->update_pendiente($uid,$aDades);
+            $this->update_pendiente($this->getUid(),$aDades);
         } else {
             // INSERT
             $this->ins_pendiente($aDades);
@@ -760,14 +688,10 @@ class Pendiente {
     
     public function getTodoByUid() {
         $base_url = $this->getBaseUrl();
-        $cargo = $this->getCargo();
         $pass = $this->getPasswd();
-        $cal = new CalDAVClient($base_url, $cargo, $pass);
+        $cal = new CalDAVClient($base_url, $this->getCargo(), $pass);
         
-        $uid = $this->getUid();
-        $todo = $cal->GetEntryByUid($uid);
-        
-        return $todo;
+        return $cal->GetEntryByUid($this->getUid());
     }
         
         
@@ -817,31 +741,31 @@ class Pendiente {
      *
      * @param array $aDades
      */
-    function setAllAtributes($aDades) {
-        if (!is_array($aDades)) return;
-        if (array_key_exists('id_pendiente',$aDades)) $this->setId_pendiente($aDades['id_pendiente']);
-        if (array_key_exists('asunto',$aDades)) $this->setAsunto($aDades['asunto']);
-        if (array_key_exists('status',$aDades)) $this->setStatus($aDades['status']);
+    private function setAllAtributes($aDades) {
+        if (!is_array($aDades)) { return; }
+        if (array_key_exists('id_pendiente',$aDades)) { $this->setId_pendiente($aDades['id_pendiente']); }
+        if (array_key_exists('asunto',$aDades)) { $this->setAsunto($aDades['asunto']); }
+        if (array_key_exists('status',$aDades)) { $this->setStatus($aDades['status']); }
         
-        if (array_key_exists('asunto',$aDades)) $this->setAsunto($aDades['asunto']);
-        if (array_key_exists('status',$aDades)) $this->setStatus($aDades['status']);
-        if (array_key_exists('f_cal_acabado',$aDades)) $this->setF_acabado($aDades['f_cal_acabado']);
-        if (array_key_exists('f_cal_plazo',$aDades)) $this->setF_plazo($aDades['f_cal_plazo']);
-        if (array_key_exists('f_cal_start',$aDades)) $this->setF_inicio($aDades['f_cal_start']);
-        if (array_key_exists('f_cal_end',$aDades)) $this->setF_end($aDades['f_cal_end']);
-        if (array_key_exists('rrule',$aDades)) $this->setRrule($aDades['rrule']);
-        if (array_key_exists('observ',$aDades)) $this->setObserv($aDades['observ']);
-        if (array_key_exists('visibilidad',$aDades)) $this->setvisibilidad($aDades['visibilidad']);
-        if (array_key_exists('detalle',$aDades)) $this->setDetalle($aDades['detalle']);
-        if (array_key_exists('categorias',$aDades)) $this->setCategorias($aDades['categorias']);
-        if (array_key_exists('encargado',$aDades)) $this->setEncargado($aDades['encargado']);
-        if (array_key_exists('ref_prot_mas',$aDades)) $this->setRef_prot_mas($aDades['ref_prot_mas']);
-        if (array_key_exists('location',$aDades)) $this->setLocation($aDades['location']);
-        if (array_key_exists('pendiente_con',$aDades)) $this->setPendiente_con($aDades['pendiente_con']);
-        if (array_key_exists('id_reg',$aDades)) $this->setId_reg($aDades['id_reg']);
-        if (array_key_exists('oficinas',$aDades)) $this->setOficinas($aDades['oficinas']);
+        if (array_key_exists('asunto',$aDades)) { $this->setAsunto($aDades['asunto']); }
+        if (array_key_exists('status',$aDades)) { $this->setStatus($aDades['status']); }
+        if (array_key_exists('f_cal_acabado',$aDades)) { $this->setF_acabado($aDades['f_cal_acabado']); }
+        if (array_key_exists('f_cal_plazo',$aDades)) { $this->setF_plazo($aDades['f_cal_plazo']); }
+        if (array_key_exists('f_cal_start',$aDades)) { $this->setF_inicio($aDades['f_cal_start']); }
+        if (array_key_exists('f_cal_end',$aDades)) { $this->setF_end($aDades['f_cal_end']); }
+        if (array_key_exists('rrule',$aDades)) { $this->setRrule($aDades['rrule']); }
+        if (array_key_exists('observ',$aDades)) { $this->setObserv($aDades['observ']); }
+        if (array_key_exists('visibilidad',$aDades)) { $this->setvisibilidad($aDades['visibilidad']); }
+        if (array_key_exists('detalle',$aDades)) { $this->setDetalle($aDades['detalle']); }
+        if (array_key_exists('categorias',$aDades)) { $this->setCategorias($aDades['categorias']); }
+        if (array_key_exists('encargado',$aDades)) { $this->setEncargado($aDades['encargado']); }
+        if (array_key_exists('ref_prot_mas',$aDades)) { $this->setRef_prot_mas($aDades['ref_prot_mas']); }
+        if (array_key_exists('location',$aDades)) { $this->setLocation($aDades['location']); }
+        if (array_key_exists('pendiente_con',$aDades)) { $this->setPendiente_con($aDades['pendiente_con']); }
+        if (array_key_exists('id_reg',$aDades)) { $this->setId_reg($aDades['id_reg']); }
+        if (array_key_exists('oficinas',$aDades)) { $this->setOficinas($aDades['oficinas']); }
         
-        if (array_key_exists('exdates',$aDades)) $this->setExdates($aDades['exdates']);
+        if (array_key_exists('exdates',$aDades)) { $this->setExdates($aDades['exdates']); }
     }
     
     
@@ -961,7 +885,7 @@ class Pendiente {
      */
     public function getId_reg()
     {
-        if (!isset($this->asunto) && !$this->bLoaded) {
+        if (!isset($this->id_reg) && !$this->bLoaded) {
             $this->Carregar();
         }
         return $this->id_reg;
@@ -982,13 +906,11 @@ class Pendiente {
      */
     public function getPonente()
     {
-       $parent_container = $this->getParent_container();
-       $a_container = explode('_', $parent_container);
+       $a_container = explode('_', $this->getParent_container());
        $nom_oficina = $a_container[1];
        $gesOficinas = new GestorOficina();
        $cOficinas = $gesOficinas->getOficinas(['sigla' => $nom_oficina]);
-       $id_oficina = $cOficinas[0]->getId_oficina();
-       return $id_oficina;
+       return $cOficinas[0]->getId_oficina();
     }
 
     /**
@@ -1013,11 +935,11 @@ class Pendiente {
         
         $oEntrada = new Entrada();
         $a_visibilidad = $oEntrada->getArrayVisibilidad();
-        $asunto = $a_visibilidad[Entrada::V_RESERVADO];
+        $local_asunto = $a_visibilidad[Entrada::V_RESERVADO];
         if ($perm > 0) {
-            $asunto = $this->getAsuntoDB();
+            $local_asunto = $this->getAsuntoDB();
         }
-        return $asunto;
+        return $local_asunto;
     }
 
     /**
@@ -1031,11 +953,11 @@ class Pendiente {
         
         $oEntrada = new Entrada();
         $a_visibilidad = $oEntrada->getArrayVisibilidad();
-        $detalle = $a_visibilidad[Entrada::V_RESERVADO];
+        $local_detalle = $a_visibilidad[Entrada::V_RESERVADO];
         if ($perm > 0) {
-            $detalle = $this->getDetalleDB();
+            $local_detalle = $this->getDetalleDB();
         }
-        return $detalle;
+        return $local_detalle;
     }
     
     /**
@@ -1045,12 +967,7 @@ class Pendiente {
      * return string
      */
     public function getAsuntoDetalle() {
-        //
-        $asunto = $this->getAsunto();
-        $detalle = $this->getDetalle();
-        $asunto_detelle = empty($detalle)? $asunto : $asunto." [$detalle]";
-        
-        return $asunto_detelle;
+        return empty($this->getDetalle())? $this->getAsunto() : $this->getAsunto()." [".$this->getDetalle()."]";
     }
     
 
@@ -1469,18 +1386,6 @@ class Pendiente {
         return $aEtiquetas;
     }
 
-    public function setOficinasFromCargos($aCargos){
-        $a_oficinas = [];
-        foreach ($aCargos as $id_cargo) {
-            $oCargo = new Cargo($id_cargo);
-            $a_oficinas[] = $oCargo->getId_oficina();
-        }
-        $a_filter_oficinas = array_filter($a_oficinas); // Quita los elementos vacíos y nulos.
-        $oficinas_csv = implode(",", $a_filter_oficinas);
-        
-        $this->oficinas = $oficinas_csv;
-    }
-    
     public function setOficinasArray($aOficinas){
         $a_filter_oficinas = array_filter($aOficinas); // Quita los elementos vacíos y nulos.
         $oficinas_csv = implode(",", $a_filter_oficinas);
@@ -1501,7 +1406,7 @@ class Pendiente {
         return $aOficinas;
     }
     
-    public function getOficinasTxtcsv($pral=TRUE) {
+    public function getOficinasTxtcsv() {
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         

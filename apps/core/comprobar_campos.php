@@ -1,5 +1,7 @@
 <?php
 namespace core;
+use web\DateTimeLocal;
+    
 /**
 * Esta página sirve para comprobar que los valores de los campos de
 * un formulario, se corresponden con el tipo de datos de la base de datos.
@@ -28,7 +30,6 @@ $Qcc_obj = (string) \filter_input(INPUT_POST, 'cc_obj');
 if (!empty($Qcc_obj)) {
 	$Object = new $Qcc_obj;
 	$oDbl = $Object->getoDbl();
-	$tabla = $Object->getNomTabla();
 	// selecciono las restricciones anotadas en el objeto: getDatosCampos().
 	$cDatosCampos = $Object->getDatosCampos();
 }
@@ -59,19 +60,16 @@ foreach ($cDatosCampos as $oDatosCampo) {
 		$valor=trim($_POST[$nomcamp_post]);
 		if (!empty($valor)) {
 			$vacio=0;
-			if (!empty($reg_exp)) {
-				if (preg_match ($reg_exp, $valor)==1) {
-				} else {
-					$reg_text = $oDatosCampo->getRegExpText();
-					$reg_text = !empty($reg_text)? $reg_text : _("no tiene el formato requerido");
+			if (!empty($reg_exp) && (preg_match ($reg_exp, $valor)!=1) ) {
+                $reg_text = $oDatosCampo->getRegExpText();
+                $reg_text = !empty($reg_text)? $reg_text : _("no tiene el formato requerido");
 
-					$errores[]=array('txt'=>_("el campo \"%1\$s\" \"%3\$s\". Valor actual: \"%2\$s\""),
-							   'camp'=>$nomcamp,
-							   'etiqueta'=>$etiqueta,
-							   'val'=>array($valor),
-							   'regexptxt'=>$reg_text);
-				}
-			}
+                $errores[]=array('txt'=>_("el campo \"%1\$s\" \"%3\$s\". Valor actual: \"%2\$s\""),
+                           'camp'=>$nomcamp,
+                           'etiqueta'=>$etiqueta,
+                           'val'=>array($valor),
+                           'regexptxt'=>$reg_text);
+            }
 
 			switch($tipo) {
 				case 'float4':
@@ -94,7 +92,6 @@ foreach ($cDatosCampos as $oDatosCampo) {
 				case 'int8':
 				case 'int4':
 				case 'int2':
-					//$valor=(int)$valor;
 					if (is_numeric($valor)) {
 						if ((int)$valor != $valor) {
 						   $errores[]=array('txt'=>_("el campo \"%1\$s\" debe ser un número entero, y es: \"%2\$s\""),
@@ -134,30 +131,24 @@ foreach ($cDatosCampos as $oDatosCampo) {
 					}
 					break;
 				case 'date':
-					if (preg_match ("/^([0-9]{1,2})[\/-]([0-9]{1,2})[\/-]([0-9]{2}|[0-9]{4})$/", $valor, $parts)==1) {
-						//check weather the date is valid of not
-						if(checkdate($parts[2],$parts[1],$parts[3])) {
-						} else {
-						   $errores[]=array('txt'=>_("el campo \"%1\$s\" debe ser una fecha, y es: \"%2\$s\""),
-								   'camp'=>$nomcamp,
-								   'etiqueta'=>$etiqueta,
-								   'val'=>array($valor));
-						}
-					} else {
-					   $errores[]=array('txt'=>_("el campo \"%1\$s\" debe ser una fecha, y es: \"%2\$s\""),
-								   'camp'=>$nomcamp,
-								   'etiqueta'=>$etiqueta,
-								   'val'=>array($valor));
-					}
+                    //check weather the date is valid of not
+                    try {
+                        $dateTimeObject = DateTimeLocal::createFromLocal($valor);
+                    } catch (\Exception $exc) {
+                       $errores[]=array('txt'=>_("el campo \"%1\$s\" debe ser una fecha, y es: \"%2\$s\""),
+                               'camp'=>$nomcamp,
+                               'etiqueta'=>$etiqueta,
+                               'val'=>array($valor));
+                    }
 					break;
 				case 'time':
 					$err=0;
 					if (!empty($valor)) {
 					    $parts = [];
 						if (preg_match ("/^([0-9]{1,2}):([0-9]{1,2})(:([0-9]{1,2}))?$/", $valor, $parts)==1) {
-							if ($parts[1]>24) $err=1;
-							if ($parts[2]>60) $err=1;
-							if (!empty($parts[4]) && $parts[4]>60) $err=1;
+						    if ($parts[1]>24) { $err=1; }
+						    if ($parts[2]>60) { $err=1; }
+						    if (!empty($parts[4]) && $parts[4]>60) { $err=1; }
 							if ($err==1) {
 							   $errores[]=array('txt'=>_("el campo \"%1\$s\" debe ser una hora. Debe tener el formato hh:mm:ss. [%2\$s]"),
 								   'camp'=>$nomcamp,
@@ -172,6 +163,9 @@ foreach ($cDatosCampos as $oDatosCampo) {
 						}
 					}
 					break;
+				default:
+				    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+				    exit ($err_switch);
 			}
 		} else {
 			$vacio=1;
@@ -179,18 +173,17 @@ foreach ($cDatosCampos as $oDatosCampo) {
 	} else {
 		$vacio= ($tipo=='bool')? 0 : 1; // en el caso de checkbox entiendo que no valor = false.
 	}
-	if ($vacio==1) {
-		// Es necesario?
-		if ($not_null) {
-			//tiene un valor por defecto?
-			$default = $oDatosCampo->datos_campo($oDbl,'valor');
-			if (empty($default)) {
-			   $errores[]=array('txt'=>_("el campo \"%1\$s\" no puede estar vacío"),
-				   'camp'=>$nomcamp,
-				   'etiqueta'=>$etiqueta,
-				   'val'=>array());
-			}
-		}
+
+    // Es necesario?
+	if ($vacio==1 && $not_null) {
+        //tiene un valor por defecto?
+        $default = $oDatosCampo->datos_campo($oDbl,'valor');
+        if (empty($default)) {
+           $errores[]=array('txt'=>_("el campo \"%1\$s\" no puede estar vacío"),
+               'camp'=>$nomcamp,
+               'etiqueta'=>$etiqueta,
+               'val'=>array());
+        }
 	}
 }
 
@@ -209,7 +202,7 @@ if (!empty($errores)) {
 		$nomcampo = empty($etiqueta)? $camp : $etiqueta;
 
 		array_unshift($valores,$nomcampo);
-		if (!empty($regexptext)) array_push($valores,$regexptext);
+		if (!empty($regexptext)) { array_push($valores,$regexptext); }
 		$error_txt .= vsprintf($txt,$valores)."\n";
 	}
 	echo trim($error_txt);

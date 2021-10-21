@@ -140,7 +140,7 @@ class Cargo Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_cargo') && $val_id !== '') $this->iid_cargo = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_cargo') && $val_id !== '') { $this->iid_cargo = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -288,16 +288,16 @@ class Cargo Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('id_cargo',$aDades)) $this->setId_cargo($aDades['id_cargo']);
-		if (array_key_exists('id_ambito',$aDades)) $this->setId_ambito($aDades['id_ambito']);
-		if (array_key_exists('cargo',$aDades)) $this->setCargo($aDades['cargo']);
-		if (array_key_exists('descripcion',$aDades)) $this->setDescripcion($aDades['descripcion']);
-		if (array_key_exists('id_oficina',$aDades)) $this->setId_oficina($aDades['id_oficina']);
-		if (array_key_exists('director',$aDades)) $this->setDirector($aDades['director']);
-		if (array_key_exists('id_usuario',$aDades)) $this->setId_usuario($aDades['id_usuario']);
-		if (array_key_exists('id_suplente',$aDades)) $this->setId_suplente($aDades['id_suplente']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('id_cargo',$aDades)) { $this->setId_cargo($aDades['id_cargo']); }
+		if (array_key_exists('id_ambito',$aDades)) { $this->setId_ambito($aDades['id_ambito']); }
+		if (array_key_exists('cargo',$aDades)) { $this->setCargo($aDades['cargo']); }
+		if (array_key_exists('descripcion',$aDades)) { $this->setDescripcion($aDades['descripcion']); }
+		if (array_key_exists('id_oficina',$aDades)) { $this->setId_oficina($aDades['id_oficina']); }
+		if (array_key_exists('director',$aDades)) { $this->setDirector($aDades['director']); }
+		if (array_key_exists('id_usuario',$aDades)) { $this->setId_usuario($aDades['id_usuario']); }
+		if (array_key_exists('id_suplente',$aDades)) { $this->setId_suplente($aDades['id_suplente']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -350,7 +350,7 @@ class Cargo Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_cargo') && $val_id !== '') $this->iid_cargo = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_cargo') && $val_id !== '') { $this->iid_cargo = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

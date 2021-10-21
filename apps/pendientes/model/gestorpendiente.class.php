@@ -50,8 +50,8 @@ class GestorPendiente {
     /* METODES PUBLICS ----------------------------------------------------------*/
     
     public function getBaseUrl($cal_oficina='') {
-        $server =  $_SESSION['oConfig']->getServerDavical();
-        $this->server = $server.'/caldav.php';
+        $server_base =  $_SESSION['oConfig']->getServerDavical();
+        $this->server = $server_base.'/caldav.php';
         
         $cal_oficina = empty($cal_oficina)? $this->cal_oficina : $cal_oficina;
         return $this->server."/".$cal_oficina."/".$this->resource."/";
@@ -70,7 +70,6 @@ class GestorPendiente {
         $cal = new CalDAVClient($base_url, $cargo, $pass);
         
         $events = $cal->GetTodos($f_inicio,$f_plazo,$completed,$cancelled);
-        //print_r($events);
         
         
         $oPendienteSet = new Set();
@@ -81,8 +80,6 @@ class GestorPendiente {
         }
         
         for ($t=1;$t<=$tt;$t++) {
-            //print_r($vcalendar[$t]);
-            
             $a_icalComp = $vcalendar[$t]->GetComponents('VTODO');
             if (empty($a_icalComp)) { continue; }
             $icalComp = $a_icalComp[0];  // If you know there's only 1 of them...

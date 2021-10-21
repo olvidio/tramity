@@ -54,8 +54,6 @@ class Entrada Extends EntradaDB {
     
     /* PROPIEDADES -------------------------------------------------------------- */
 
-    private $escrito;
-    
     private $df_doc;
     private $convert;
     private $itipo_doc;
@@ -75,7 +73,7 @@ class Entrada Extends EntradaDB {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach($a_id as $nom_id=>$val_id) {
-                if (($nom_id == 'id_entrada') && $val_id !== '') $this->iid_entrada = (int)$val_id; // evitem SQL injection fent cast a integer
+                if (($nom_id == 'id_entrada') && $val_id !== '') { $this->iid_entrada = (int)$val_id; } // evitem SQL injection fent cast a integer
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
@@ -90,32 +88,28 @@ class Entrada Extends EntradaDB {
     /* METODES PUBLICS ----------------------------------------------------------*/
 
     public function getArrayCategoria() {
-        $a_tipos = [
+        return [
             self::CAT_NORMAL => _("normal"),
             self::CAT_E12 => _("sin numerar"),
             self::CAT_PERMANATE => _("permanente"),
         ];
-        
-        return $a_tipos;
     }
     
     public function getArrayVisibilidad() {
-        $a_tipos = [
+        return [
             self::V_TODOS => _("todos"),
             self::V_PERSONAL => _("personal"),
             self::V_DIRECTORES => _("directores"),
             self::V_RESERVADO => _("reservado"),
             self::V_RESERVADO_VCD => _("vcd"),
         ];
-        
-        return $a_tipos;
     }
     
     public function cabeceraDistribucion_cr() {
         // a ver si ya está
         $gesEntradasBypass = new GestorEntradaBypass();
         $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $this->iid_entrada]);
-        if (count($cEntradasBypass) > 0) {
+        if (!empty($cEntradasBypass)) {
             // solo debería haber una:
             $oEntradaBypass = $cEntradasBypass[0];
             
@@ -123,10 +117,8 @@ class Entrada Extends EntradaDB {
             $a_grupos = $oEntradaBypass->getId_grupos();
             $descripcion = $oEntradaBypass->getDescripcion();
             
-            $aMiembros = [];
             if (!empty($a_grupos)) {
                 //(segun los grupos seleccionados)
-                $aMiembros = $oEntradaBypass->getDestinos();
                 $destinos_txt = $descripcion; 
             } else {
                 //(segun individuales)
@@ -136,7 +128,6 @@ class Entrada Extends EntradaDB {
                 } else {
                     $a_json_prot_dst = $oEntradaBypass->getJson_prot_destino();
                     foreach ($a_json_prot_dst as $json_prot_dst) {
-                        $aMiembros[] = $json_prot_dst->lugar;
                         $oLugar = new Lugar($json_prot_dst->lugar);
                         $destinos_txt .= empty($destinos_txt)? '' : ', ';
                         $destinos_txt .= $oLugar->getNombre();
@@ -145,7 +136,6 @@ class Entrada Extends EntradaDB {
             }
             
             $destinos_txt;
-            //return $aMiembros;
         } else {
             // No hay destinos definidos.
             $destinos_txt = _("No hay destinos");

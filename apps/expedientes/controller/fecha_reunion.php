@@ -30,11 +30,7 @@ $oDesplOficinas->setOpcion_sel($id_oficina);
 
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();
-/*
-foreach ($a_posibles_lugares as $id_lugar => $sigla) {
-    $txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
-}
-*/
+
 $oDesplLugares = new Desplegable();
 $oDesplLugares->setNombre('id_origen');
 $oDesplLugares->setOpciones($a_posibles_lugares);

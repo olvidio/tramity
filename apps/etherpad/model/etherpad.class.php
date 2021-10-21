@@ -62,6 +62,9 @@ class Etherpad  extends Client {
             case self::ID_PLANTILLA:
                 $prefix = 'plt';
                 break;
+            default:
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
         }
         
         $this->id_escrito = $prefix.$id;
@@ -75,7 +78,6 @@ class Etherpad  extends Client {
         if (empty($url)) {
             $url = $_SESSION['oConfig']->getServerEtherpad();
         }
-        //$this->url = 'http://127.0.0.1:9001';
         $this->url = $url;
         
         if (empty($id_usuario)) {
@@ -166,10 +168,8 @@ class Etherpad  extends Client {
         $tags_list = $xpath->query("//p|//br|//a|//strong|//img|//ul|//ol|//li|//em|//u|//s|//hr|//blockquote");
         foreach($tags_list as $tag) {
             // Checks and deletes tags with empty content.
-            if(  in_array($tag->tagName, ['p','a','strong','blockquote']) ){
-                if( $tag->nodeValue == "" ){
-                    $tag->parentNode->removeChild($tag);
-                }
+            if(  in_array($tag->tagName, ['p','a','strong','blockquote']) && $tag->nodeValue == "" ){
+                $tag->parentNode->removeChild($tag);
             }
         }
         
@@ -204,9 +204,8 @@ class Etherpad  extends Client {
         
         //<br value="tblBreak">
         $txt6 = str_replace("<br value=\"tblBreak\">", "", $txt5);
-        $txt7 = str_replace("</tbody></table><table><tbody>", "", $txt6);
-
-        return $txt7;
+        
+        return str_replace("</tbody></table><table><tbody>", "", $txt6);
     }
     
     /**
@@ -230,12 +229,6 @@ class Etherpad  extends Client {
             $tag->removeAttribute('style');
             $tag->removeAttribute('name');
             $tag->removeAttribute('class');
-            /*
-            $class = $tag->getAttribute('name');
-            if (strstr($class, 'undefined')) {
-                $tag->removeAttribute('class');
-            }
-            */
         }
         
         // Quitar los atributos label
@@ -257,9 +250,7 @@ class Etherpad  extends Client {
         $txt2 = substr($txt, 6); // Quitar el tag <body> inicial
         $txt3 = substr($txt2, 0, -7); // Quitar el tag </body> final
         
-        $txt4 = str_replace("</tbody></table><table><tbody>", "", $txt3);
-        
-        return $txt4;
+        return str_replace("</tbody></table><table><tbody>", "", $txt3);
     }
     
    /**
@@ -302,8 +293,6 @@ class Etherpad  extends Client {
         $txt2 = str_replace("<tbody>", "", $txt);
         $html = str_replace("</tbody>", "", $txt2);
         
-        //$html = $this->quitarAtributosTabla($html1);
-        
         // convert to PDF
         require_once(ConfigGlobal::$dir_libs.'/vendor/autoload.php');
         
@@ -323,36 +312,7 @@ class Etherpad  extends Client {
             $header_html = '';
         }
         
-        /*
-        $header = array (
-                'L' => array (
-                    'content' => $a_header['left'],
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color'=>'#000000'
-                ),
-                'C' => array (
-                    'content' => $a_header['center'],
-                    'content' => '',
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color'=>'#000000'
-                ),
-                'R' => array (
-                    'content' => $a_header['right'],
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color'=>'#000000'
-                ),
-                'line' => 1,
-        );
-        */
-        
         $footer = '{PAGENO}/{nbpg}';
-        
         
         if (!empty($fecha)) {
             $html .= '<div id="fecha" style="margin-top: 2em; margin-right:  0em; text-align: right; " >';
@@ -361,7 +321,6 @@ class Etherpad  extends Client {
         }
         
         try {
-            //$mpdf=new mPDF('','A4','','',10,10,10,10,6,3);
             $config = [ 'mode' => 'utf-8',
                         'format' => 'A4-P',
                         'margin_header' => 10,
@@ -369,18 +328,12 @@ class Etherpad  extends Client {
                 
             ];
             $mpdf = new \Mpdf\Mpdf($config);
-            //$mpdf->simpleTables = true;
-            //$mpdf->packTableData = true;
-            //$mpdf->keep_table_proportions = TRUE;
-            //$mpdf->shrink_tables_to_fit=1;
             $mpdf->SetDisplayMode('fullpage');
             $mpdf->list_indent_first_level = 0;	// 1 or 0 - whether to indent the first level of a list
-            //$mpdf->WriteHTML('<h1>Hello world!</h1><p>Més què d\'air. Ñanyo.</p>');
             
             if (!empty($header_html)) {
                 $mpdf->SetHTMLHeader($header_html);
             }
-            //$mpdf->SetHeader($header, 'O');
             $mpdf->SetHTMLFooter($footer);
             
             $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
@@ -490,8 +443,7 @@ class Etherpad  extends Client {
             /* returns: {code: 0, message:"ok", data: {text:"Welcome Text"}}
              * {code: 1, message:"padID does not exist", data: null}  
              */
-            $texto = $data['text'];
-            return $texto;
+            return $data['text'];
         } else {
             $this->mostrar_error($rta);
         }
@@ -505,10 +457,10 @@ class Etherpad  extends Client {
         $groupID = $this->getGroupId();
         $padName = $this->id_escrito;
         $padId = $groupID."$".$this->id_escrito;
-        $text = $this->text; // para el caso de clonar
-        $text = empty($this->text)? null : $this->text;
+        // para el caso de clonar
+        $text_clone = empty($this->text)? null : $this->text;
 
-        $rta = $this->createGroupPad($groupID, $padName, $text);
+        $rta = $this->createGroupPad($groupID, $padName, $text_clone);
         if ($rta->getCode() == 0) {
             /* returns: {code: 0, message:"ok", data: null}
              * {code: 1, message:"pad does already exist", data: null}
@@ -564,11 +516,9 @@ class Etherpad  extends Client {
                 $valid = $aData['validUntil'];
                 if ($group == $groupID && $author == $authorID ) {
                     $ahora = date("U");
-                    if ($valid > $ahora) {
-                        // Además hay que asegurar que está también la cookie
-                        if(isset($_COOKIE["sessionID"])){
-                            return TRUE;
-                        }
+                    // Además hay que asegurar que está también la cookie
+                    if ($valid > $ahora && isset($_COOKIE["sessionID"]) ){
+                        return TRUE;
                     }
                 }
             }

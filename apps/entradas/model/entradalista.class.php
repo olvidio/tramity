@@ -46,11 +46,6 @@ class EntradaLista {
      * @var array
      */
     private $aOperadorADD = [];
-    /**
-     * 
-     * @var array
-     */
-    private $a_entradaas_nuevos = [];
     
     /*
      * filtros posibles: 
@@ -220,12 +215,10 @@ class EntradaLista {
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         
         
-        //$pagina_ver = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
         $pagina_accion = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_accion.php';
         switch ($filtro) {
             case 'en_encargado':
                 $encargado = $this->aWhereADD['encargado'];
-                //$pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
                 $pagina_nueva = '';
                 break;
@@ -239,19 +232,12 @@ class EntradaLista {
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
                 $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
                 if (ConfigGlobal::role_actual() === 'vcd') {
-                    //$slide_mode = 't';
                     $aQuery = [ 'filtro' => $filtro, 'slide_mode' => 't'];
                     $pagina_nueva = Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
                 }
                 break;
             case 'en_admitido':
-                $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
-                break;
             case 'en_asignado':
-                $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
-                break;
             case 'entrada':
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
                 $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));

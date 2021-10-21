@@ -21,13 +21,6 @@ $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $QandOr = (string) \filter_input(INPUT_POST, 'andOr');
 $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $Qque = (string) \filter_input(INPUT_POST, 'que');
-/*
-if (empty($Qid_doc)) {
-    $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    // sólo debería seleccionar uno.
-    $Qid_doc = $Qa_sel[0];
-}
-*/
 
 $visibilidad = 0;
 
@@ -60,8 +53,6 @@ if (!empty($Qid_doc)) {
     $nombre_fichero = $oDocumento->getNombre_fichero();
     $documento_txt = $oDocumento->getDocumentoTxt();
     
-    //Ponente;
-    //$id_ponente = $oDocumento->getCreador();
     if (!empty($oDocumento->getVisibilidad())) {
         $visibilidad = $oDocumento->getVisibilidad();
         $oDesplVisibilidad->setOpcion_sel($visibilidad);
@@ -95,8 +86,6 @@ if (!empty($Qid_doc)) {
 
     $f_mod = '';
     $titulo = _("nuevo documento");
-    //$id_ponente = ConfigGlobal::role_id_cargo();
-    
     
     $oArrayDesplEtiquetas = new web\DesplegableArray([],$a_posibles_etiquetas,'etiquetas');
     $oArrayDesplEtiquetas ->setBlanco('t');

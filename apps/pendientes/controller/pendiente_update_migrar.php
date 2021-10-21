@@ -52,7 +52,7 @@ $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhere,$aOpe
 
 $msg = '';
 if (is_array($cEntradas)) {
-    if (count($cEntradas) == 0) {
+    if (empty($cEntradas)) {
         $msg .= _("No se encuentra ninguna entrada con el protocolo origen");
         $msg .= "\n";
     } elseif (count($cEntradas) > 1) {
@@ -93,7 +93,7 @@ $aOperador = ['anulado' => 'IS NULL'];
 $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_dst,$aWhere,$aOperador);
 
 if (is_array($cEntradas)) {
-    if (count($cEntradas) == 0) {
+    if (empty($cEntradas)) {
         $msg .= _("No se encuentra ninguna entrada con el protocolo destino");
         $msg .= "\n";
     } elseif (count($cEntradas) > 1) {

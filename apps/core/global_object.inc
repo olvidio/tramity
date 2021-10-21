@@ -15,7 +15,7 @@ require_once('func_reg.php');
 require_once('apps/usuarios/controller/login.php');
 
 
-$_SESSION['oGestorErrores'] = new  gestorErrores();
+$_SESSION['oGestorErrores'] = new  GestorErrores();
 
 /*
  * Definir Conexiones
@@ -25,7 +25,6 @@ $_SESSION['oGestorErrores'] = new  gestorErrores();
  * De esta manera (no persistente) se cierra la conexión cada vez que acaba el script.
  * 
  */
-
 $oConfigDB = new ConfigDB('tramity'); //de la database comun
 $config = $oConfigDB->getEsquema('public');
 $oConexion = new dbConnection($config);
@@ -37,14 +36,10 @@ $config = $oConfigDB->getEsquema('public');
 $oConexion = new dbConnection($config);
 $oDBDavical = $oConexion->getPDO();
 
-
 // Datos de configuración propios de la aplicación
 $_SESSION['oConfig'] = new Config();
 
-
 // Para validar los parametros enviados via POST
 $oValidator = new Hash();
-//echo $oValidator->validatePost($_POST);
-
 
 $oPosicion = new Posicion($_SERVER['PHP_SELF'],$_POST);

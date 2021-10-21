@@ -28,13 +28,13 @@ class Protocolo {
 	
 	/* CONSTRUCTOR ------------------------------ */
 	function __construct($ilugar='',$iprot_num='',$iprot_any='',$sprot_mas='') {
-        if (isset($ilugar) && $ilugar !== '') $this->ilugar = $ilugar;
-        if (isset($iprot_num) && $iprot_num !== '') $this->iprot_num = $iprot_num;
+	    if (isset($ilugar) && $ilugar !== '') { $this->ilugar = $ilugar; }
+	    if (isset($iprot_num) && $iprot_num !== '') { $this->iprot_num = $iprot_num; }
         if (isset($iprot_any) && $iprot_any !== '') {
             // asegurar que tenga dos cifras:
             $this->iprot_any = any_2($iprot_any);
         }
-        if (isset($sprot_mas) && $sprot_mas !== '') $this->sprot_mas = $sprot_mas;
+        if (isset($sprot_mas) && $sprot_mas !== '') { $this->sprot_mas = $sprot_mas; }
 	}
 	
 	/**
@@ -67,10 +67,9 @@ class Protocolo {
 	}
 	
 	public function ver_txt_mas() {
-	    $prot_mas = empty($this->sprot_mas)? '' : $this->sprot_mas;
-	    
-	    return $prot_mas;
+	    return empty($this->sprot_mas)? '' : $this->sprot_mas;
 	}
+	
 	public function ver_txt_num() {
 	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
 	    $nom_lugar = _("sin numerar (E12)");
@@ -104,7 +103,7 @@ class Protocolo {
 
 	public function ver_desplegable() {
 	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
-	    if (!empty($lugar)) $this->sOpcion_sel = $lugar;
+	    if (!empty($lugar)) { $this->sOpcion_sel = $lugar; }
 	    
 	    $prot_num = empty($this->iprot_num)? '' : $this->iprot_num;
 	    $prot_any = empty($this->iprot_any)? '' : $this->iprot_any;
@@ -188,14 +187,24 @@ class Protocolo {
 			foreach($this->oOpciones as $row) {
 				if (!isset($row[1])) { $a = 0; } else { $a = 1; } // para el caso de sólo tener un valor.
 				if ($row[0] == $this->sOpcion_sel) { $sel = 'selected'; } else { $sel = ''; }
-				if (!empty($this->aOpcion_no) && is_array($this->aOpcion_no) && in_array($row[0], $this->aOpcion_no)) continue;
+				if (!empty($this->aOpcion_no) 
+				    && is_array($this->aOpcion_no)
+				    && in_array($row[0], $this->aOpcion_no)
+				    ) {
+				        continue;
+				}
 				$txt .= "<option value=\"$row[0]\" $sel>$row[$a]</option>";
 			}
 		} else if (is_array($this->oOpciones)) {
 			reset($this->oOpciones);
 			foreach($this->oOpciones as $key=>$val) {
 				if ((string)$key === (string)$this->sOpcion_sel) { $sel = 'selected'; } else { $sel = ''; }
-				if (!empty($this->aOpcion_no) && is_array($this->aOpcion_no) && in_array($row[0], $this->aOpcion_no)) continue;
+				if (!empty($this->aOpcion_no)
+				    && is_array($this->aOpcion_no)
+				    && in_array($key, $this->aOpcion_no)
+				    ) {
+				        continue;
+				}
 				$txt .= "<option value=\"$key\" $sel>$val</option>";
 			}
 		} else {

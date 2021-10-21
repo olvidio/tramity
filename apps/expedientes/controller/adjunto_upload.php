@@ -41,8 +41,6 @@ function upload() {
             
             //Make sure we have a file path
             if ($tmpFilePath != "" && $Qid_escrito){
-                
-                //$contenido_doc=file_get_contents($tmpFilePath);
                 $fp = fopen($tmpFilePath, 'rb');
                 $contenido_doc = fread($fp, filesize($tmpFilePath));
                 $contenido_encoded = base64_encode($contenido_doc);

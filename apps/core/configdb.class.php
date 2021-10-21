@@ -15,13 +15,13 @@ class ConfigDB {
 	}
 	
 	public function getEsquema($esquema) {
-		$data = $this->data['default'];
-		$data['schema'] = $esquema;
+		$data_default = $this->data['default'];
+		$data_default['schema'] = $esquema;
 		//sobreescribir los valores default
 		foreach ($this->data[$esquema] as $key => $value){
-			$data[$key] = $value;
+			$data_default[$key] = $value;
 		}
-		return $data;
+		return $data_default;
 	}
 
 	public function setDataBase($database) {

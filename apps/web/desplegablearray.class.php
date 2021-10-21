@@ -11,13 +11,6 @@ class DesplegableArray Extends Desplegable{
 	 private $sSeleccionados;
 
 	/**
-	 * oPosibles del Desplegable
-	 *
-	 * @var object 
-	 */
-	 private $oPosibles;
-
-	/**
 	 * sNomConjunto del Desplegable
 	 *
 	 * @var string 
@@ -45,9 +38,9 @@ class DesplegableArray Extends Desplegable{
 	 *
 	 */
 	function __construct($id,$Opciones,$Nom) {
-		if (isset($id) && $id !== '') $this->sSeleccionados = $id;
-		if (isset($Opciones) && $Opciones !== '') $this->oOpciones = $Opciones;
-		if (isset($Nom) && $Nom !== '') $this->sNomConjunto = $Nom;
+	    if (isset($id) && $id !== '') { $this->sSeleccionados = $id; }
+	    if (isset($Opciones) && $Opciones !== '') { $this->oOpciones = $Opciones; }
+	    if (isset($Nom) && $Nom !== '') { $this->sNomConjunto = $Nom; }
 		
 	}
 
@@ -63,10 +56,8 @@ class DesplegableArray Extends Desplegable{
 	 */
 	public function Lista() {
 		$aSeleccionados = '';
-		if (is_object($this->sSeleccionados)) {}
 		if (is_array($this->sSeleccionados)) { $aSeleccionados = $this->sSeleccionados; }
 		if (is_string($this->sSeleccionados)) { $aSeleccionados = explode(",", $this->sSeleccionados); }
-		$nom = $this->sNomConjunto;
 		
         if (is_array($this->oOpciones)) {
     		$a_opciones = $this->oOpciones;
@@ -76,7 +67,6 @@ class DesplegableArray Extends Desplegable{
 		if (!empty($aSeleccionados)) {
 			foreach ($aSeleccionados as $id) {
 				$sLista .= "<label class=\"btn btn-outline-secondary form-label\" >";
-				//$sLista .= "<input type=\"radio\" name=\"$nom\" id=\"$id\" autocomplete=\"off\" >";
 				$sLista .= $a_opciones[$id];
 				$sLista .= "</label>";
 			}
@@ -98,7 +88,6 @@ class DesplegableArray Extends Desplegable{
 		$fnjs_comprobar =  'fnjs_comprobar_'. $this->sNomConjunto;
 
 		$aSeleccionados = '';
-		if (is_object($this->sSeleccionados)) {}
 		if (is_array($this->sSeleccionados)) { $aSeleccionados = $this->sSeleccionados; }
 		if (is_string($this->sSeleccionados)) { $aSeleccionados = explode(",", $this->sSeleccionados); }
 
@@ -108,7 +97,7 @@ class DesplegableArray Extends Desplegable{
 		if (!empty($aSeleccionados)) {
 			foreach ($aSeleccionados as $id) {
 				$this->sNombre = $this->sNomConjunto."[$n]";
-				if (isset($this->iTabIndexIni)) $this->iTabIndex = $this->iTabIndexIni + $n;
+				if (isset($this->iTabIndexIni)) { $this->iTabIndex = $this->iTabIndexIni + $n; }
 				$this->sOpcion_sel = $id;
 				$this->sAction="$fnjs_comprobar('".$this->sNomConjunto."',$n);";
 

@@ -62,7 +62,7 @@ class Escrito Extends EscritoDB {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach($a_id as $nom_id=>$val_id) {
-                if (($nom_id == 'id_escrito') && $val_id !== '') $this->iid_escrito = (int)$val_id; // evitem SQL injection fent cast a integer
+                if (($nom_id == 'id_escrito') && $val_id !== '') { $this->iid_escrito = (int)$val_id; } // evitem SQL injection fent cast a integer
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
@@ -118,9 +118,7 @@ class Escrito Extends EscritoDB {
      */
     public function getAsuntoDetalle() {
         $detalle = $this->getDetalle();
-        $asunto_detelle = empty($detalle)? $this->getAsunto() : $this->getAsunto()." [$detalle]";
-        
-        return $asunto_detelle;
+        return empty($detalle)? $this->getAsunto() : $this->getAsunto()." [$detalle]";
     }
     /**
      * genera el número de protocolo local. y lo guarda.
@@ -203,32 +201,26 @@ class Escrito Extends EscritoDB {
     /* METODES PUBLICS ----------------------------------------------------------*/
 
     public function getArrayCategoria() {
-        $a_tipos = [
+        return [
             self::CAT_NORMAL => _("normal"),
             self::CAT_E12 => _("sin numerar"),
             self::CAT_PERMANATE => _("permanente"),
         ];
-        
-        return $a_tipos;
     }
     
     public function getArrayModoEnvio() {
-        $a_tipos = [
+        return [
             self::MODO_MANUAL => _("manual"),
             self::MODO_XML => _("xml"),
         ];
-        
-        return $a_tipos;
     }
     
     public function getArrayAccion() {
-        $a_tipos = [
+        return [
             self::ACCION_PROPUESTA => _("propuesta"),
             self::ACCION_PLANTILLA => _("plantilla"),
             self::ACCION_ESCRITO => _("escrito"),
         ];
-        
-        return $a_tipos;
     }
     
     public function getArrayIdAdjuntos($tipo_doc=''){
@@ -244,9 +236,6 @@ class Escrito Extends EscritoDB {
         if (!empty($a_adjuntos)) {
             $html = '<ol>';
             foreach ($a_adjuntos as $id_adjunto => $nom) {
-                $link_mod = '-';
-                $link_del = '';
-                
                 $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_adjunto($id_adjunto);\" >$nom</span>";
                 $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_adjunto('$id_adjunto');\" >"._("borrar")."</span>";
                 

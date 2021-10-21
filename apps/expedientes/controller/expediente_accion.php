@@ -35,8 +35,6 @@ switch ($Qfiltro) {
         $oEntrada = new Entrada($Qid_entrada);
         $asunto = $oEntrada->getAsunto();
         
-        //$url_cancel = 'apps/expedientes/controller/expediente_lista.php';
-        //$pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => 'borrador_propio']));
         $a_condicion = [];
         $str_condicion = (string) \filter_input(INPUT_POST, 'condicion');
         parse_str($str_condicion, $a_condicion);
@@ -51,6 +49,9 @@ switch ($Qfiltro) {
             case 'escritos_cr':
                 $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($a_condicion));
                 break;
+            default:
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
         }
         break;
     case 'en_encargado':
@@ -68,7 +69,6 @@ switch ($Qfiltro) {
 
         $oExpediente = new Expediente();
         $oExpediente->setId_expediente($Qid_expediente);
-        $estado = $oExpediente->getEstado();
         $asunto = $oExpediente->getAsunto();
         $id_ponente = $oExpediente->getPonente();
 
@@ -105,19 +105,15 @@ $a_botones = [];
 $txt_plazo = '';
 $f_plazo = '';
 $hoy_iso = '';
-switch($Qfiltro) {
+switch ($Qfiltro) {
     case 'en_encargado':
         $a_botones[4] = ['accion' => 'en_add_encargado',
                         'txt'    => _("Encargar a"),
                         'tipo'    => 'modal',
                     ];
-        
     case 'escritos_cr':
     case 'permanentes_cr':
     case 'en_buscar':
-    case 'en_encargado':
-        //if ($estado == Expediente::ESTADO_BORRADOR) {
-        // los de la oficina
         $a_botones[0] = ['accion' => 'en_add_expediente',
                         'txt'    => _("añadir a un expediente"),
                         'tipo'    => 'modal',
@@ -132,13 +128,13 @@ switch($Qfiltro) {
                     ];
         $a_botones[3] = ['accion' => 'en_visto',
                         'txt'    => _("marcar como visto"),
+                        'tipo'    => '',
                     ];
         
         $txt_plazo= _("plazo para contestar");
         $oHoy = new DateTimeLocal();
         $hoy_iso = $oHoy->getIso();
         $f_plazo = $oHoy->getFromLocal();
-
         
         $gesCargos = new GestorCargo();
         $a_posibles_cargos_oficina = $gesCargos->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina());
@@ -146,7 +142,6 @@ switch($Qfiltro) {
         break;
     case 'borrador_oficina':
     case 'borrador_propio':
-        //if ($estado == Expediente::ESTADO_BORRADOR) {
         // los de la oficina
         if ($oficina_ponente == ConfigGlobal::role_id_oficina()) {
             $a_botones[0] = ['accion' => 'exp_eliminar',
@@ -223,7 +218,11 @@ switch($Qfiltro) {
         $a_posibles_cargos = $gesCargos->getArrayCargos(ConfigGlobal::role_id_oficina());
         $oDesplCargos = new Desplegable('of_destino',$a_posibles_cargos,'','');
         break;
+    default:
+        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_switch);
 }
+
 if (empty($a_botones)) {
     $a_botones[] = ['accion' => '',
                     'txt'    => _("no tiene permiso"),

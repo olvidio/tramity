@@ -32,7 +32,6 @@ switch ($Qmodo) {
         echo "$url/p/$padID/export/html";
         break;
     case 'iframe':
-        //echo "$url/p/$padID?showChat=false&showLineNumbers=false";
         echo "<iframe src='$url/p/$padID?showChat=false&showLineNumbers=false' width=1020 height=500></iframe>";
         break;
     default:

@@ -113,6 +113,9 @@ if (!empty($Qperiodo)) {
 		case "any":
 			$limite = date("Ymd",mktime(0, 0, 0, date("m"),date("d"),date("Y")+1));
 			break;
+		default:
+		    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+		    exit ($err_switch);
 	}
 }
 
@@ -135,7 +138,6 @@ $a_cabeceras=array( ucfirst(_("protocolo")),
 // Fetch all todos
 $f_inicio="19950101T000000Z";
 if (empty($limite)) {
-	//$f_plazo=date("Ymd\T000000\Z");
 	$f_plazo=date("Ymd\T230000\Z");
 } else {
 	$f_plazo=$limite."T000000Z";
@@ -161,15 +163,13 @@ foreach($cPendientes as $oPendiente) {
     $resource = $oPendiente->getResource();
     $id_encargado = $oPendiente->getEncargado();
     $perm_detalle = $oPermisoregistro->permiso_detalle($oPendiente, 'detalle');
-    if (!empty($Qencargado)) { 
-        if ($id_encargado != $Qencargado) { continue; }
-    }
+    if (!empty($Qencargado) && $id_encargado != $Qencargado) { continue; }
     $encargado = !empty($id_encargado)? $a_usuarios_oficina[$id_encargado] : '';
     $t++;
     $protocolo = $oPendiente->getProtocolo();
     $rrule = $oPendiente->getRrule();
     $asunto = $oPendiente->getAsuntoDetalle();
-    if (!empty($asunto)) $asunto=htmlspecialchars(stripslashes($asunto),ENT_QUOTES,'utf-8');
+    if (!empty($asunto)) { $asunto=htmlspecialchars(stripslashes($asunto),ENT_QUOTES,'utf-8'); }
     $plazo = $oPendiente->getF_plazo()->getFromLocal();
     $plazo_iso = $oPendiente->getF_plazo()->format('Ymd'); // sólo números, para poder ordenar.
     
@@ -191,7 +191,6 @@ foreach($cPendientes as $oPendiente) {
         $dtend=$oPendiente->getF_end()->getIso();
         $a_exdates = $oPendiente->getExdates();
         $f_recurrentes = Rrule::recurrencias($rrule, $dtstart, $dtend, $f_plazo);
-        //print_r($f_recurrentes);
         foreach ($f_recurrentes as $key => $f_iso) {
             $oF_recurrente = new DateTimeLocal($f_iso);
             $t++;
@@ -202,11 +201,10 @@ foreach($cPendientes as $oPendiente) {
                     $a_fechas=preg_split('/,/',$icalprop->content);
                     foreach ($a_fechas as $f_ex) {
                         $oF_exception = new DateTimeLocal($f_ex);
-                        if ($oF_recurrente == $oF_exception)  continue(3);
+                        if ($oF_recurrente == $oF_exception) { continue(3); }
                     }
                 }
             }
-            //$a_valores[$t]['sel']="$uid#$cal_oficina#$f_recur";
             if ($perm_detalle >= PermRegistro::PERM_MODIFICAR) {
                 $a_valores[$t]['sel']="$uid#$cal_oficina#$f_iso";
             } else {

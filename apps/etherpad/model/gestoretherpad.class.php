@@ -13,7 +13,7 @@ class GestorEtherpad {
         $oNewEtherpad->setId(Etherpad::ID_ADJUNTO, $id_adjunto);
         $destinationID = $oNewEtherpad->getPadID();
         
-        $rta = $oEtherpad->copyPadWithoutHistory($sourceID, $destinationID, 'true');
+        $rta = $oEtherpad->copyPadWithoutHistory($sourceID, $destinationID, $force);
         if ($rta->getCode() == 0) {
             /* Example returns:
              * {code: 0, message:"ok", data: null}
@@ -53,7 +53,7 @@ class GestorEtherpad {
         $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $id_escritp);
         $destinationID = $oNewEtherpad->getPadID();
         
-        $rta = $oEtherpad->copyPadWithoutHistory($sourceID, $destinationID, 'true');
+        $rta = $oEtherpad->copyPadWithoutHistory($sourceID, $destinationID, $force);
         if ($rta->getCode() == 0) {
             /* Example returns:
              * {code: 0, message:"ok", data: null}

@@ -165,7 +165,6 @@ switch($Qque) {
                 $dtend=$oPendiente->getF_end()->getIso();
                 $a_exdates = $oPendiente->getExdates();
                 $f_recurrentes = Rrule::recurrencias($rrule, $dtstart, $dtend, $f_plazo);
-                //print_r($f_recurrentes);
                 $recur = 0;
                 foreach ($f_recurrentes as $key => $f_iso) {
                     $oF_recurrente = new DateTimeLocal($f_iso);
@@ -177,7 +176,7 @@ switch($Qque) {
                             $a_fechas=preg_split('/,/',$icalprop->content);
                             foreach ($a_fechas as $f_ex) {
                                 $oF_exception = new DateTimeLocal($f_ex);
-                                if ($oF_recurrente == $oF_exception)  continue(3);
+                                if ($oF_recurrente == $oF_exception) { continue(3); }
                             }
                         }
                     }
@@ -471,7 +470,7 @@ switch($Qque) {
                     if ($id_grupo == 'custom') {
                         $saltar = TRUE;
                         break;
-                    };
+                    }
                     $descripcion .= empty($descripcion)? '' : ' + ';
                     $descripcion .= $a_grupos[$id_grupo];
                 }
@@ -631,7 +630,7 @@ switch($Qque) {
                 if ($id_grupo == 'custom') {
                     $saltar = TRUE;
                     break;
-                };
+                }
                 $descripcion .= empty($descripcion)? '' : ' + ';
                 $descripcion .= $a_grupos[$id_grupo];
             }
@@ -716,4 +715,7 @@ switch($Qque) {
         exit();
         
         break;
+    default:
+        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_switch);
 }

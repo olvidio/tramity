@@ -15,7 +15,6 @@ $Qque = (string) \filter_input(INPUT_POST, 'que');
 $error_txt = '';
 switch($Qque) {
 	case "eliminar":
-	    //$Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');
 	    $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    if (!empty($a_sel)) { //vengo de un checkbox
             $Qid_grupo = (integer) strtok($a_sel[0],"#");
@@ -49,6 +48,9 @@ switch($Qque) {
 			$error_txt .= "\n".$oGrupo->getErrorTxt();
 		}
         break;
+	default:
+	    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+	    exit ($err_switch);
 }
 
 if (!empty($error_txt)) {

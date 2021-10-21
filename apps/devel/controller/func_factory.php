@@ -30,7 +30,7 @@ function primaryKey($oDB,$tabla) {
 	$row = $oDBSt_resultado->fetch(\PDO::FETCH_ASSOC);
 	$claves = explode (" ",$row['indkey']);
 	$oid_tabla = $row['oid'];
-	if (empty($oid_tabla)) exit ('Quizà falta definir la clave primaria');
+	if (empty($oid_tabla)) { exit ('Quizà falta definir la clave primaria'); }
 	foreach ($claves as $clave) {
 		$query_nom="select attname
 					from pg_attribute

@@ -31,9 +31,6 @@ if (isset($_POST['stack'])) {
 	}
 }
 
-
-//$oPosicion->setParametros(array('username'=>$Qusername),1);
-
 $aWhere['_ordre'] = 'descripcion';
 $aOperador = [];
 

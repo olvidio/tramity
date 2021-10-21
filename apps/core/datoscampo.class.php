@@ -109,7 +109,7 @@ class DatosCampo {
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
 				$nom_id='s'.$nom_id;
-				if ($val_id !== '') $this->$nom_id = $val_id;
+				if ($val_id !== '') { $this->$nom_id = $val_id; }
 			}
 		}
 	}
@@ -154,7 +154,6 @@ class DatosCampo {
 					and a.attname = '$camp'
 				ORDER BY a.attnum
 			";
-			//echo "query: ($sql_get_fields)";
 			$oDBSt_res_fields=$oDB->query($sql_get_fields);
 			if ($oDBSt_res_fields === false) {
 				$sClauError = 'DatosCampo.datos_campo';
@@ -175,7 +174,7 @@ class DatosCampo {
 			$null=$row['notnull'];
 
 			//respuesta a lo que se pide
-			switch ($que){
+			switch ($que) {
 				case "longitud" :
 				  return $llarg;
 				  break;
@@ -187,7 +186,7 @@ class DatosCampo {
 					break;
 				case "valor":
 					$rowdefault = '';
-					if ($row['atthasdef'] == true) {
+					if (is_true($row['atthasdef'])) {
 					/*  valores por defecto
 					/ creo  que las posibilidades son:
 						número
@@ -206,27 +205,22 @@ class DatosCampo {
 						$rowdefault = "";
 					} else {
 						$rowdefault = $oDBSt_def_res->fetchColumn();
+						$matches = [];
 						$rta=preg_match_all("/^'([\w]+)'::(.*)/", $rowdefault, $matches, PREG_SET_ORDER);
-						/*
-						foreach ($matches as $val) {
-							echo "matched: " . $val[0] . "\n";
-							echo "part 1: " . $val[1] . "\n";
-							echo "part 2: " . $val[3] . "\n";
-							echo "part 3: " . $val[4] . "\n\n";
-						}
-						*/
 						if (!empty($rta)) {
 							$rowdefault=$matches[0][1];
 						} elseif (strstr($rowdefault,'(')) {
 							$rowdefault="function";
 						}
 					}
-					//echo "$camp ::: $rta; default: $rowdefault<br>";
 					return $rowdefault;
 					} else {
 						return '';
 					}
 					break;
+				default:
+				    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+				    exit ($err_switch);
 			} 
 		}
 	}
@@ -251,9 +245,6 @@ class DatosCampo {
 	 * @return string snom_tabla
 	 */
 	function getNom_tabla() {
-		if (!isset($this->snom_tabla)) {
-			//$this->DBCarregar();
-		}
 		return $this->snom_tabla;
 	}
 	/**
@@ -270,9 +261,6 @@ class DatosCampo {
 	 * @return string snom_camp
 	 */
 	function getNom_camp() {
-		if (!isset($this->snom_camp)) {
-			//$this->DBCarregar();
-		}
 		return $this->snom_camp;
 	}
 	/**
@@ -289,9 +277,6 @@ class DatosCampo {
 	 * @return string setiqueta
 	 */
 	function getEtiqueta() {
-		if (!isset($this->setiqueta)) {
-			//$this->DBCarregar();
-		}
 		return $this->setiqueta;
 	}
 	/**
@@ -327,9 +312,6 @@ class DatosCampo {
 	 * @return string stipodb
 	 */
 	function getTipoDb() {
-		if (!isset($this->stipodb)) {
-			//$this->DBCarregar();
-		}
 		return $this->stipodb;
 	}
 	/**
@@ -346,9 +328,6 @@ class DatosCampo {
 	 * @return string stipo
 	 */
 	function getTipo() {
-		if (!isset($this->stipo)) {
-			//$this->DBCarregar();
-		}
 		return $this->stipo;
 	}
 	/**
@@ -365,9 +344,6 @@ class DatosCampo {
 	 * @return string sargument
 	 */
 	function getArgument() {
-		if (!isset($this->sargument)) {
-			//$this->DBCarregar();
-		}
 		return $this->sargument;
 	}
 	/**
@@ -384,9 +360,6 @@ class DatosCampo {
 	 * @return string sargument2
 	 */
 	function getArgument2() {
-		if (!isset($this->sargument2)) {
-			//$this->DBCarregar();
-		}
 		return $this->sargument2;
 	}
 	/**
@@ -403,9 +376,6 @@ class DatosCampo {
 	 * @return string sargument3
 	 */
 	function getArgument3() {
-		if (!isset($this->sargument3)) {
-			//$this->DBCarregar();
-		}
 		return $this->sargument3;
 	}
 	/**
@@ -422,9 +392,6 @@ class DatosCampo {
 	 * @return string saccion
 	 */
 	function getAccion() {
-		if (!isset($this->saccion)) {
-			//$this->DBCarregar();
-		}
 		return $this->saccion;
 	}
 	/**
@@ -441,9 +408,6 @@ class DatosCampo {
 	 * @return string sdepende
 	 */
 	function getDepende() {
-		if (!isset($this->sdepende)) {
-			//$this->DBCarregar();
-		}
 		return $this->sdepende;
 	}
 	/**
@@ -460,9 +424,6 @@ class DatosCampo {
 	 * @return array alista
 	 */
 	function getLista() {
-		if (!isset($this->alista)) {
-			//$this->DBCarregar();
-		}
 		return $this->alista;
 	}
 	/**
@@ -479,9 +440,6 @@ class DatosCampo {
 	 * @return string sRegExp
 	 */
 	function getRegExp() {
-		if (!isset($this->sRegExp)) {
-			//$this->DBCarregar();
-		}
 		return $this->sRegExp;
 	}
 	/**
@@ -498,9 +456,6 @@ class DatosCampo {
 	 * @return string sRegExpText
 	 */
 	function getRegExpText() {
-		if (!isset($this->sRegExpText)) {
-			//$this->DBCarregar();
-		}
 		return $this->sRegExpText;
 	}
 	/**
@@ -512,4 +467,3 @@ class DatosCampo {
 		$this->sRegExpText = $sRegExpText;
 	}
 }
-?>

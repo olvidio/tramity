@@ -102,7 +102,7 @@ if (!empty($Qid_escrito)) {
     $entradilla = $oEscrito->getEntradilla();
     $asunto_detalle = $oEscrito->getAsuntoDetalle();
     
-    //Ponente;
+    // Ponente
     $id_ponente = $oEscrito->getCreador();
     
     $a_resto_of = $oEscrito->getResto_oficinas();
@@ -130,7 +130,6 @@ if (!empty($Qid_escrito)) {
     // mirar si tienen escrito
     $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
     
-    //$tipo_documento = $oEscrito->getTipo();
     $titulo = _("revisar");
     switch ($Qaccion) {
         case Escrito::ACCION_ESCRITO:
@@ -142,6 +141,9 @@ if (!empty($Qid_escrito)) {
         case Escrito::ACCION_PLANTILLA:
             $titulo = _("revisar plantilla");
             break;
+        default:
+            $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_switch);
     }
     
     
@@ -158,7 +160,6 @@ if (!empty($Qid_escrito)) {
     $f_escrito = '';
     $initialPreview = '';
     $json_config = '{}';
-    //$tipo_documento = '';
     $titulo = _("nuevo");
     switch ($Qaccion) {
         case Escrito::ACCION_ESCRITO:
@@ -170,6 +171,9 @@ if (!empty($Qid_escrito)) {
         case Escrito::ACCION_PLANTILLA:
             $titulo = _("nueva plantilla");
             break;
+        default:
+            $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_switch);
     }
     
     $cabeceraIzqd = '';

@@ -117,7 +117,7 @@ class Principal Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'principal_id') && $val_id !== '') $this->iprincipal_id = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'principal_id') && $val_id !== '') { $this->iprincipal_id = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
@@ -270,13 +270,13 @@ class Principal Extends core\ClasePropiedades {
 	 * @param array $aDades
 	 */
 	function setAllAtributes($aDades) {
-		if (!is_array($aDades)) return;
-		if (array_key_exists('id_schema',$aDades)) $this->setId_schema($aDades['id_schema']);
-		if (array_key_exists('principal_id',$aDades)) $this->setPrincipal_id($aDades['principal_id']);
-		if (array_key_exists('type_id',$aDades)) $this->setType_id($aDades['type_id']);
-		if (array_key_exists('user_no',$aDades)) $this->setUser_no($aDades['user_no']);
-		if (array_key_exists('displayname',$aDades)) $this->setDisplayname($aDades['displayname']);
-		if (array_key_exists('default_privileges',$aDades)) $this->setDefault_privileges($aDades['default_privileges']);
+		if (!is_array($aDades)) { return; }
+		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
+		if (array_key_exists('principal_id',$aDades)) { $this->setPrincipal_id($aDades['principal_id']); }
+		if (array_key_exists('type_id',$aDades)) { $this->setType_id($aDades['type_id']); }
+		if (array_key_exists('user_no',$aDades)) { $this->setUser_no($aDades['user_no']); }
+		if (array_key_exists('displayname',$aDades)) { $this->setDisplayname($aDades['displayname']); }
+		if (array_key_exists('default_privileges',$aDades)) { $this->setDefault_privileges($aDades['default_privileges']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -326,7 +326,7 @@ class Principal Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'principal_id') && $val_id !== '') $this->iprincipal_id = (int)$val_id; // evitem SQL injection fent cast a integer
+				if (($nom_id == 'principal_id') && $val_id !== '') { $this->iprincipal_id = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {

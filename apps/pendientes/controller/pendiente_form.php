@@ -117,8 +117,6 @@ $oDesplLugar1->setNombre('pendiente_con');
 $oDesplLugar1->setBlanco(TRUE);
 $oDesplLugar1->setOpciones($a_lugares);
 
-//echo "mi_of: $mi_oficina<br>";
-
 $a_status=Pendiente::getArrayStatus();
 $oDesplStatus = new Desplegable();
 $oDesplStatus->setNombre('status');
@@ -155,7 +153,6 @@ if ($nuevo == 1) {
 	$pendiente_con = '';
 	$perm_detalle = '';
 	$ref_prot_mas = '';
-	//$go = ($go != 'entradas')? 'otro': $go;
 	$go = ($go != 'entradas')? 'lista': $go;
 } else {
     $go = 'lista';
@@ -175,11 +172,9 @@ if ($nuevo == 1) {
             echo _("No sé a que pendiente se refiere.");
             exit();
         } 
-        if (empty($id_reg)) {
-            if (($pos_ini = strpos($uid, 'REN')) !== FALSE && $pos_ini == 0) { //  Registro entradas
-                $pos = strpos($uid, '-') - 3;
-                $id_reg=substr($uid,3,$pos);
-            }
+        if (empty($id_reg) && ($pos_ini = strpos($uid, 'REN')) !== FALSE && $pos_ini == 0) { //  Registro entradas
+            $pos = strpos($uid, '-') - 3;
+            $id_reg=substr($uid,3,$pos);
         }
 
         $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $role_actual, $uid) ;
@@ -347,6 +342,9 @@ if (empty($rrule)) {
                     $dias_db=empty($rta['dias'])? '' : preg_split('/,/',$rta['dias']);
                     $a_interval_db = empty($rta['interval'])? 1 : $rta['interval'];
                     break;
+                default:
+                    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_switch);
             }
             break;
         case "d_m":
@@ -373,6 +371,9 @@ if (empty($rrule)) {
                     $dia_w_db=empty($rta['dia_semana'])? '' : $rta['dia_semana'];
                     $ordinal_db=empty($rta['ordinal'])? '' : $rta['ordinal'];
                     break;
+                default:
+                    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_switch);
             }
             break;
         case "d_s":
@@ -388,6 +389,9 @@ if (empty($rrule)) {
                     $chk_s_ref="checked";
                     $dias_w_db=empty($rta['dias'])? '' : preg_split('/,/',$rta['dias']);
                     break;
+                default:
+                    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_switch);
             }
             break;
         case "d_d":
@@ -395,12 +399,15 @@ if (empty($rrule)) {
             $periodico_tipo="periodico_d_d";
             $chk_d_num_ini="checked";
             break;
+        default:
+            $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_switch);
     }
 }
-if (empty($display_d_a)) $display_d_a="display:none;";
-if (empty($display_d_m)) $display_d_m="display:none;";
-if (empty($display_d_s)) $display_d_s="display:none;";
-if (empty($display_d_d)) $display_d_d="display:none;";
+if (empty($display_d_a)) { $display_d_a="display:none;"; }
+if (empty($display_d_m)) { $display_d_m="display:none;"; }
+if (empty($display_d_s)) { $display_d_s="display:none;"; }
+if (empty($display_d_d)) { $display_d_d="display:none;"; }
 
 if (is_array($exdates) && !empty($exdates)) {
     foreach ($exdates as $icalprop) {
