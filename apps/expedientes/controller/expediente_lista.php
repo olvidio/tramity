@@ -96,7 +96,7 @@ if ($Qfiltro == 'archivados') {
         default:
             // no hace falta, ya se borran todas los $sel_ antes del switch
     }
-    if (!empty($Qperiodo)) {
+    if (!empty($Qperiodo) && $Qperiodo != 'siempre') {
         $oFecha = new DateTimeLocal();
         $oFecha->sub(new DateInterval($periodo));
         $aWhereADD['f_aprobacion'] = $oFecha->getIso();
