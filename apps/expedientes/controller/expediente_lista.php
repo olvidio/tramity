@@ -94,8 +94,7 @@ if ($Qfiltro == 'archivados') {
             $sel_siempre = 'selected';
             break;
         default:
-            $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-            exit ($err_switch);
+            // no hace falta, ya se borran todas los $sel_ antes del switch
     }
     if (!empty($Qperiodo)) {
         $oFecha = new DateTimeLocal();

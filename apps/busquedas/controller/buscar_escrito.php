@@ -64,10 +64,7 @@ switch ($Qlista_origen) {
         $chk_lo_4 = 'checked';
         break;
     default:
-        $chk_lo_1 = '';
-        $chk_lo_2 = '';
-        $chk_lo_3 = '';
-        $chk_lo_4 = '';
+        // no hace falta, ya se borran todas los $chk_ antes del switch
 }
 
 if (is_true($Qctr_anulados)) {
