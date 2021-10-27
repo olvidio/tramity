@@ -1,6 +1,8 @@
 <?php
 namespace core;
 
+/* canvis per veure si esl posa al seu lloc */
+
 /**
  * Básicamente la conexión a la base de datos, con los passwd para cada esquema.
  * @author dani
