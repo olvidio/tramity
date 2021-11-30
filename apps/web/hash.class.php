@@ -846,7 +846,7 @@ class Hash {
 			if (strpos($sPath,ConfigGlobal::$web_path) === false) {
 				$sPath = ConfigGlobal::getWeb().$sPath;
 			} else {
-				$sPath = ConfigGlobal::$web_server.ConfigGlobal::getWebPort().$sPath;
+				$sPath = ConfigGlobal::getWeb().ConfigGlobal::getWebPort().$sPath;
 			}
 		}
 		return $sPath;

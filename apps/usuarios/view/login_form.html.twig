@@ -1,79 +1,76 @@
 <script type="text/javascript">
-document.open();
+/* Cuando hay un timeout, la página normalmente se carga en algún div mediante ajax, como
+ * respuesta a una petición. Para que ocupe toda la ventana, se hace por javascript,
+ * reescribiendo todo el contenido con document.write() una vez está dentro de la página
+ * que ha generado la petición.
+ */
+ 
+window.onload=newContent(); 
+
+function newContent() {
+    document.open();
+    document.write("<head id='login_head'>\
+    <meta charset='utf-8'>\
+    <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>\
+    <title>Tramity</title>\
+    \
+    <!-- Bootstrap core CSS -->\
+    <link href='../node_modules/bootstrap/dist/css/bootstrap.min.css' rel='stylesheet' >\
+    \
+    <style>\
+    body {\
+        display: -ms-flexbox;\
+        display: flex;\
+        -ms-flex-align: center;\
+        align-items: center;\
+        padding-top: 40px;\
+        padding-bottom: 40px;\
+        background-color: #f5f5f5;\
+    }\
+    .form-signin {\
+        width: 100%;\
+        max-width: 330px;\
+        padding: 15px;\
+        margin: auto;\
+    }\
+    .bd-placeholder-img {\
+        font-size: 1.125rem;\
+        text-anchor: middle;\
+        -webkit-user-select: none;\
+        -moz-user-select: none;\
+        -ms-user-select: none;\
+        user-select: none;\
+    }\
+    @media (min-width: 768px) {\
+        .bd-placeholder-img-lg {\
+            font-size: 3.5rem;\
+        }\
+    }\
+    </style>\
+    </head>\
+    ");
+
+    document.write("<body id='login_body' class='text-center'>\
+    <form method='POST' class='form-signin' action='index.php'>\
+        <img class='mb-4' src='../images/stack-dossiers.jpeg' alt='aaaaaaa' width='72' height='72'>\
+        <h1 class='h3 mb-3 fw-normal'>{{ "Inicio de sesión"|trans }}</h1>\
+        <label for='username' class='visually-hidden'>{{ "Usuario"|trans }}</label>\
+            <input type='text' id='username' name='username' class='form-control' placeholder='Usuario' required='' autofocus='' autocomplete='username' >\
+        <label for='password' class='visually-hidden'>{{ "Password"|trans }}</label>\
+            <input type='password' id='password' name='password' class='form-control' placeholder='Password' required='' autocomplete='new-password' >\
+        <!-- Error Alert -->\
+        {% if error %}
+        <div class='alert alert-danger alert-dismissible fade show'>\
+            <strong>Error!: </strong> {{ error }}\
+        </div>\
+        {% endif %}
+        <button class='btn btn-lg btn-primary w-100 mt-3' type='submit'>{{ "Entrar"|trans }}</button>\
+        <p class='mt-5 mb-3 text-muted'>© 2020-2021</p>\
+    </form>\
+    </body>\
+    ");
+
+    document.close();
+}
 </script>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-<meta name="generator" content="Jekyll v3.8.5">
-<title>Tramity</title>
 
-<!-- Bootstrap core CSS -->
-<link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" >
-
-<!-- jQuery -->
-<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js" ></script>
-
-
-<style>
-body {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-align: center;
-    align-items: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    background-color: #f5f5f5;
-
-}
-.form-signin {
-    width: 100%;
-    max-width: 330px;
-    padding: 15px;
-    margin: auto;
-
-}
-
-.bd-placeholder-img {
-    font-size: 1.125rem;
-    text-anchor: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-@media (min-width: 768px) {
-    .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-    }
-}
-</style>
-</head>
-
-<body class="text-center">
-<form method="POST" class="form-signin" action="index.php">
-    <img class="mb-4" src="../images/stack-dossiers.jpeg" alt="aaaaaaa" width="72" height="72">
-    <h1 class="h3 mb-3 fw-normal">{{ "Inicio de sesión"|trans }}</h1>
-    <label for="username" class="visually-hidden">{{ "Usuario"|trans }}</label>
-        <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required="" autofocus="" autocomplete="username" >
-    <label for="password" class="visually-hidden">{{ "Password"|trans }}</label>
-        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="" autocomplete="new-password" >
-    <!--
-    <div class="checkbox mb-3">
-        <label class="form-label">
-            <input type="checkbox" value="remember-me"> {{ "recuerdame"|trans }}
-        </label>
-    </div>
-   -->
-    <!-- Error Alert -->
-    {% if error %}
-    <div class="alert alert-danger alert-dismissible fade show">
-        <strong>Error!: </strong> {{ error }}
-    </div>
-    {% endif %}
-    <button class="btn btn-lg btn-primary w-100 mt-3" type="submit">{{ "Entrar"|trans }}</button>
-    <p class="mt-5 mb-3 text-muted">© 2020-2021</p>
-</form>
-</body>

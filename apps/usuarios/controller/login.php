@@ -17,6 +17,7 @@ use core\MyCrypt;
 use core\ViewTwig;
 use function core\cambiar_idioma;
 use core\dbConnection;
+use function core\is_true;
 
 function logout($idioma,$esquema,$error) {
     $a_campos = [];
@@ -27,18 +28,70 @@ function logout($idioma,$esquema,$error) {
     echo $oView->render('login_form.html.twig',$a_campos);
 }
 
+function posibles_esquemas() {
+    $oConfigDB = new ConfigDB('tramity'); 
+    $config = $oConfigDB->getEsquema('public'); 
+    $oConexion = new dbConnection($config);
+    $oDB = $oConexion->getPDO();
+
+    $sQuery = "select nspname from pg_namespace where nspowner > 1000 AND nspname !~ '^zz' ORDER BY nspname";
+    if (($oDblSt = $oDB->query($sQuery)) === false) {
+        $sClauError = 'Schemas.lista';
+        $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+        return false;
+    }
+    $a_esquemas = ['admin'];
+    if (is_object($oDblSt)) {
+        $oDblSt->execute();
+        foreach($oDblSt as $row) {
+            $a_esquemas[] = $row[0];
+        }
+    }
+    return $a_esquemas;
+}
+
+$esquema_web = getenv('ESQUEMA');
+// Si el esquema no se pasa por directorio de la URL,
+// está en el nombre del servidor:
+if (empty($esquema_web)) {
+    $servername = $_SERVER['SERVER_NAME'];
+    $host = '.'.ConfigGlobal::SERVIDOR;
+    $esquema_web = str_replace($host, '', $servername);
+}
+
+
+
 if ( !isset($_SESSION['session_auth'])) { 
 	//el segon cop tinc el nom i el password
     $idioma='';
 	if (isset($_POST['username']) && isset($_POST['password'])) {
         $mail='';
-
+        
+        $esquema = empty($_POST['esquema'])? $esquema_web : $_POST['esquema'];
+        
+        // Comprobar si existe el esquema:
+        $a_esquemas = posibles_esquemas();
+        if (!in_array($esquema_web, $a_esquemas)) {
+            $error = sprintf(_("Todavía NO se ha creado la entidad: %s"),$esquema_web);   
+            logout($idioma,$esquema_web,$error);
+            die();
+        }
+		
         $aWhere = array('usuario'=>$_POST['username']);
-        $esquema = empty($_POST['esquema'])? '' : $_POST['esquema'];
+        
         $oConfigDB = new ConfigDB('tramity'); 
-        $config = $oConfigDB->getEsquema('public'); 
-        $oConexion = new dbConnection($config);
-        $oDB = $oConexion->getPDO();
+        
+        if (!empty($esquema) && $esquema != 'admin') {
+            /* Si para todos los esquemas uso el mismo usuario de conexión a la DB (tramity), no hace falta: */
+            $config = $oConfigDB->getEsquema($esquema);
+            $oConexion = new dbConnection($config);
+            $oDB = $oConexion->getPDO();
+        } else {
+            $config = $oConfigDB->getEsquema('public'); 
+            $oConexion = new dbConnection($config);
+            $oDB = $oConexion->getPDO();
+        }
+        
         $query="SELECT * FROM aux_usuarios WHERE usuario = :usuario";
         if (($oDBSt= $oDB->prepare($query)) === false) {
             $sClauError = 'login_obj.prepare';
@@ -61,73 +114,81 @@ if ( !isset($_SESSION['session_auth'])) {
                 $id_usuario = $row['id_usuario'];
                 $id_cargo_preferido = $row['id_cargo_preferido'];
                 // Comprobar que no hay suplente:
-                $query_cargos="SELECT * FROM aux_cargos 
-                                WHERE id_cargo = $id_cargo_preferido ";
-                if (($stmt=$oDB->query($query_cargos)) === false) {
-                    $sClauError = 'login_obj.prepare';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDB, $sClauError, __LINE__, __FILE__);
-                    return false;
-                }
-                $aCargo = $stmt->fetch(\PDO::FETCH_ASSOC);
-                if (!empty($aCargo['id_suplente'])) {
-                    $id_suplente = $aCargo['id_suplente'];
-                    $query="SELECT * FROM aux_usuarios WHERE id_usuario = $id_suplente";
-                    if (($stmt_suplente=$oDB->query($query)) === false) {
-                        $sClauError = 'login_obj.suplente';
+                // NO para el admin:
+                if ($esquema == 'admin') {
+                    $usuario_cargo = '';
+                    $usuario_dtor = '';
+                    $aPosiblesCargos[1] = 'admin';
+                    $mi_id_oficina = '';
+                    $expire = '';
+                } else {
+                    $query_cargos="SELECT * FROM aux_cargos 
+                                    WHERE id_cargo = $id_cargo_preferido ";
+                    if (($stmt=$oDB->query($query_cargos)) === false) {
+                        $sClauError = 'login_obj.prepare';
                         $_SESSION['oGestorErrores']->addErrorAppLastError($oDB, $sClauError, __LINE__, __FILE__);
                         return false;
                     }
-                    $aSuplente = $stmt_suplente->fetch(\PDO::FETCH_ASSOC);
-                    $nom_suplente = $aSuplente['nom_usuario'];
-                    $txt_alert = sprintf(_("(%s) está asignado como suplente a este cargo"),$nom_suplente);
-                    $a_campos = [ 'txt_alert' => $txt_alert, 'btn_cerrar' => FALSE];
-                    $oView = new ViewTwig('expedientes/controller');
-                    echo $oView->renderizar('alerta.html.twig',$a_campos);
-                }
-                
-                // el usuario default, y el admin no tienen cargo:
-                // los cargos que puede tener (suplencias)
-                $query_titular="SELECT 1 as preferido,cargo,director,id_cargo,id_oficina,cargo FROM aux_cargos 
-                                WHERE id_usuario = $id_usuario
-                                ";
-                $query_suplentes="SELECT 2 as preferido,cargo,director,id_cargo,id_oficina,cargo FROM aux_cargos 
-                                WHERE id_suplente = $id_usuario
-                                ";
-                $query_cargos = "$query_titular UNION $query_suplentes ORDER BY 1,2";
-                if (($oDB->query($query_cargos)) === false) {
-                    $sClauError = 'login_obj.prepare';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDB, $sClauError, __LINE__, __FILE__);
-                    return false;
-                }
-                $aPosiblesCargos = [];
-                $usuario_cargo = '';
-                $usuario_dtor = '';
-                $mi_id_oficina = '';
-                foreach ($oDB->query($query_cargos) as $aDades) {
-                    $id_cargo = $aDades['id_cargo'];
-                    $cargo = $aDades['cargo'];
-                    if (!empty($id_cargo_preferido)) {
-                        if ($aDades['id_cargo'] == $id_cargo_preferido) {
+                    $aCargo = $stmt->fetch(\PDO::FETCH_ASSOC);
+                    if (!empty($aCargo['id_suplente'])) {
+                        $id_suplente = $aCargo['id_suplente'];
+                        $query="SELECT * FROM aux_usuarios WHERE id_usuario = $id_suplente";
+                        if (($stmt_suplente=$oDB->query($query)) === false) {
+                            $sClauError = 'login_obj.suplente';
+                            $_SESSION['oGestorErrores']->addErrorAppLastError($oDB, $sClauError, __LINE__, __FILE__);
+                            return false;
+                        }
+                        $aSuplente = $stmt_suplente->fetch(\PDO::FETCH_ASSOC);
+                        $nom_suplente = $aSuplente['nom_usuario'];
+                        $txt_alert = sprintf(_("(%s) está asignado como suplente a este cargo"),$nom_suplente);
+                        $a_campos = [ 'txt_alert' => $txt_alert, 'btn_cerrar' => FALSE];
+                        $oView = new ViewTwig('expedientes/controller');
+                        echo $oView->renderizar('alerta.html.twig',$a_campos);
+                    }
+                    
+                    // el usuario default, y el admin no tienen cargo:
+                    // los cargos que puede tener (suplencias)
+                    $query_titular="SELECT 1 as preferido,cargo,director,id_cargo,id_oficina,cargo FROM aux_cargos 
+                                    WHERE id_usuario = $id_usuario
+                                    ";
+                    $query_suplentes="SELECT 2 as preferido,cargo,director,id_cargo,id_oficina,cargo FROM aux_cargos 
+                                    WHERE id_suplente = $id_usuario
+                                    ";
+                    $query_cargos = "$query_titular UNION $query_suplentes ORDER BY 1,2";
+                    if (($oDB->query($query_cargos)) === false) {
+                        $sClauError = 'login_obj.prepare';
+                        $_SESSION['oGestorErrores']->addErrorAppLastError($oDB, $sClauError, __LINE__, __FILE__);
+                        return false;
+                    }
+                    $aPosiblesCargos = [];
+                    $usuario_cargo = '';
+                    $usuario_dtor = '';
+                    $mi_id_oficina = '';
+                    foreach ($oDB->query($query_cargos) as $aDades) {
+                        $id_cargo = $aDades['id_cargo'];
+                        $cargo = $aDades['cargo'];
+                        if (!empty($id_cargo_preferido)) {
+                            if ($aDades['id_cargo'] == $id_cargo_preferido) {
+                                $usuario_cargo = $aDades['cargo'];
+                                $usuario_dtor = $aDades['director'];
+                                $mi_id_oficina = $aDades['id_oficina'];
+                            }
+                        } elseif ($aDades['preferido'] == 1 ) {
                             $usuario_cargo = $aDades['cargo'];
                             $usuario_dtor = $aDades['director'];
                             $mi_id_oficina = $aDades['id_oficina'];
                         }
-                    } elseif ($aDades['preferido'] == 1 ) {
-                        $usuario_cargo = $aDades['cargo'];
-                        $usuario_dtor = $aDades['director'];
-                        $mi_id_oficina = $aDades['id_oficina'];
+                        $aPosiblesCargos[$id_cargo] = $cargo;
+                    } 
+                    
+                    // si no tiene mail interior, cojo el exterior.
+                    $mail = empty($mail)? $row['email'] : $mail;
+                    $expire=""; //de moment, per fer servir més endevant...
+                    // Para obligar a cambiar el password
+                    if ($_POST['password'] == '1ªVegada') {
+                        $expire=1;
                     }
-                    $aPosiblesCargos[$id_cargo] = $cargo;
-                } 
-                
-                // si no tiene mail interior, cojo el exterior.
-                $mail = empty($mail)? $row['email'] : $mail;
-                $expire=""; //de moment, per fer servir més endevant...
-                // Para obligar a cambiar el password
-                if ($_POST['password'] == '1ªVegada') {
-                    $expire=1;
                 }
-                
                 // Idioma
                 $idioma = '';
                 $query_idioma = sprintf( "select * from usuario_preferencias where id_usuario = '%s' and tipo = '%s' ",$id_usuario,"idioma");
@@ -183,12 +244,18 @@ if ( !isset($_SESSION['session_auth'])) {
             logout($idioma,$esquema,$error);
             die();
         }
-	} else { // el primer cop
-        $error = 0;
+	} else { // el primer cop o temps expirat
+        $error = '';
         $idioma = 'ca';
-        $esquema = '';
 		cambiar_idioma($idioma);	
-        logout($idioma,$esquema,$error);
+		
+        // Comprobar si existe el esquema:
+        $a_esquemas = posibles_esquemas();
+        if (!in_array($esquema_web, $a_esquemas)) {
+            $error = sprintf(_("Todavía NO se ha creado la entidad: %s"),$esquema_web);   
+        }
+        
+        logout($idioma,$esquema_web,$error);
 		die();
 	}
 } else {

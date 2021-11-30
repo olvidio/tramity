@@ -11,6 +11,7 @@ use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
+use usuarios\model\entity\Cargo;
 
 // Arxivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
@@ -35,11 +36,11 @@ class Pendiente {
      */
     private $server;
     /**
-     * resource de Pendiente
+     * calendario de Pendiente
      *
      * @var string
      */
-    private $resource;
+    private $calendario;
     /**
      * cargo de Pendiente
      *
@@ -101,14 +102,14 @@ class Pendiente {
      * Constructor de la classe.
      * 
      * @param string $parent_container (ej: oficina_adl)
-     * @param string $resource ('resigtro'|'oficina')
+     * @param string $calendario ('resigtro'|'oficina')
      * @param string $cargo  (para obtener la autentificacion, permisos etc. ej: secretaria) 
      * @param string $uid (cuando no es nuevo; para modificarlo)
      */
-    function __construct($parent_container,$resource,$cargo,$uid=FALSE) {
+    function __construct($parent_container,$calendario,$cargo,$uid=FALSE) {
         
         $this->setParent_container($parent_container);
-        $this->setResource($resource);
+        $this->setCalendario($calendario);
         $this->setCargo($cargo);
         $this->setUid($uid);
         $this->setPasswd('system');
@@ -130,7 +131,7 @@ class Pendiente {
         $this->server = $server_base.'/caldav.php';
         
         $parent_container = empty($parent_container)? $this->parent_container : $parent_container;
-        return $this->server."/".$parent_container."/".$this->resource."/";
+        return $this->server."/".$parent_container."/".$this->calendario."/";
     }
     
     public function getProtocoloOrigen() {
@@ -282,17 +283,17 @@ class Pendiente {
             if (($pos_ini = strpos($id_reg, 'REN')) !== FALSE && $pos_ini == 0) { //  Registro entradas
                 $uid = "$id_reg-$ahora";
             } else {
-                if ($this->resource == 'registro') {
+                if ($this->calendario == 'registro') {
                     $uid = "R$id_reg-$ahora";
                 }
-                if ($this->resource == 'oficina') {
+                if ($this->calendario == 'oficina') {
                     $uid = "OF$id_reg-$ahora";
                 }
             }
         } else {
             $uid="$ahora";
         }
-        $uid.="@".$this->resource."_".$this->parent_container;
+        $uid.="@".$this->calendario."_".$this->parent_container;
         // Amb caldav.
         $args['UID']="$uid";
         $args['SUMMARY']="$asunto";
@@ -800,17 +801,17 @@ class Pendiente {
     /**
      * @return string
      */
-    public function getResource()
+    public function getCalendario()
     {
-        return $this->resource;
+        return $this->calendario;
     }
 
     /**
      * @param string $sresource
      */
-    public function setResource($resource)
+    public function setCalendario($calendario)
     {
-        $this->resource = $resource;
+        $this->calendario = $calendario;
     }
 
     /**
@@ -906,11 +907,20 @@ class Pendiente {
      */
     public function getPonente()
     {
+        //[[0] => dlb, [1] => oficina, [2] => scdl]
        $a_container = explode('_', $this->getParent_container());
-       $nom_oficina = $a_container[1];
-       $gesOficinas = new GestorOficina();
-       $cOficinas = $gesOficinas->getOficinas(['sigla' => $nom_oficina]);
-       return $cOficinas[0]->getId_oficina();
+       if (count($a_container) > 2) {
+           // es una dl
+           $nom_oficina = $a_container[2];
+           $gesOficinas = new GestorOficina();
+           $cOficinas = $gesOficinas->getOficinas(['sigla' => $nom_oficina]);
+           $id_of_ponente = $cOficinas[0]->getId_oficina();
+       } else {
+           // es un ctr
+           $nom_oficina = $a_container[0];
+           $id_of_ponente = Cargo::OFICINA_ESQUEMA;
+       }
+       return $id_of_ponente;
     }
 
     /**
@@ -1407,14 +1417,21 @@ class Pendiente {
     }
     
     public function getOficinasTxtcsv() {
-        $gesOficinas = new GestorOficina();
-        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
-        
-        $aOficinas = $this->getOficinasArray();
-        $oficinas_txt = '';
-        foreach($aOficinas as $id_oficina) {
-            $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
-            $oficinas_txt .= $a_posibles_oficinas[$id_oficina];
+        $a_container = explode('_', $this->getParent_container());
+        if (count($a_container) > 2) {
+           // es una dl
+            $gesOficinas = new GestorOficina();
+            $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+            
+            $aOficinas = $this->getOficinasArray();
+            $oficinas_txt = '';
+            foreach($aOficinas as $id_oficina) {
+                $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
+                $oficinas_txt .= empty($a_posibles_oficinas[$id_oficina])? '?' : $a_posibles_oficinas[$id_oficina];
+            }
+        } else {
+           // es un ctr
+           $oficinas_txt = $a_container[0];
         }
         return $oficinas_txt;
     }

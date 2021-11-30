@@ -4,6 +4,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
+use davical\model\Davical;
 use etherpad\model\Etherpad;
 use expedientes\model\Escrito;
 use expedientes\model\entity\Accion;
@@ -32,7 +33,6 @@ $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qid_escrito = (integer) \filter_input(INPUT_POST, 'id_escrito');
 $Qaccion = (integer) \filter_input(INPUT_POST, 'accion');
 
-$Qentradilla = (string) \filter_input(INPUT_POST, 'entradilla');
 $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
 $Qf_escrito = (string) \filter_input(INPUT_POST, 'f_escrito');
 
@@ -147,9 +147,10 @@ switch($Qque) {
             $uid = strtok($uid_container, '#');
             $parent_container = strtok('#');
             $oficina = str_replace('oficina_', '' , $parent_container);
-            $resource = 'registro';
-            $cargo = 'secretaria';
-            $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+            $calendario = 'registro';
+            $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+            $user_davical = $oDavical->getUsernameDavicalSecretaria();
+            $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
             $asunto = $oPendiente->getAsunto();
             $protocolo = $oPendiente->getProtocolo();
             $f_plazo = $oPendiente->getF_plazo()->getFromLocal();
@@ -241,9 +242,10 @@ switch($Qque) {
         foreach ($a_pendientes_uid as $uid_container) {
             $uid = strtok($uid_container, '#');
             $parent_container = strtok('#');
-            $resource = 'registro';
-            $cargo = 'secretaria';
-            $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+            $calendario = 'registro';
+            $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+            $user_davical = $oDavical->getUsernameDavicalSecretaria();
+            $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
             $rrule = $oPendiente->getRrule();
             if (empty($rrule)) {
                 $oPendiente->marcar_contestado('contestado');
@@ -515,7 +517,6 @@ switch($Qque) {
             $oEscrito->setJson_prot_ref($aProtRef);
         }
         
-        $oEscrito->setEntradilla($Qentradilla);
         $oEscrito->setF_escrito($Qf_escrito);
         if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
             $oEscrito->setAsunto($Qasunto);
@@ -669,7 +670,6 @@ switch($Qque) {
         }
         $oEscrito->setJson_prot_ref($aProtRef);
         
-        $oEscrito->setEntradilla($Qentradilla);
         $oEscrito->setF_escrito($Qf_escrito);
         $oEscrito->setF_aprobacion($Qf_aprobacion);
         if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {

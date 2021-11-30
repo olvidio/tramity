@@ -14,7 +14,9 @@ CREATE TABLE public.entradas (
 	f_contestar date,
 	bypass boolean,
 	estado smallint,
-	anulado text
+	anulado text,
+	encargado integer,  
+ 	json_visto jsonb    
 );
 
 ALTER TABLE public.entradas OWNER TO tramity;
@@ -36,7 +38,7 @@ ALTER TABLE public.entrada_doc OWNER TO tramity;
 
 CREATE INDEX IF NOT EXISTS entrada_doc_f_doc_idx ON public.entrada_doc (f_doc);
 CREATE INDEX IF NOT EXISTS entrada_doc_tipo_doc_idx ON public.entrada_doc (tipo_doc);
-ALTER TABLE entrada_doc ADD CONSTRAINT entrada_doc_fk_ent FOREIGN KEY (id_entrada) REFERENCES entradas (id_entrada) ON DELETE CASCADE;
+ALTER TABLE public.entrada_doc ADD CONSTRAINT entrada_doc_fk_ent FOREIGN KEY (id_entrada) REFERENCES public.entradas (id_entrada) ON DELETE CASCADE;
 
 CREATE TABLE public.entrada_doc_json (
     id_doc SERIAL PRIMARY KEY,
@@ -71,29 +73,4 @@ CREATE TABLE public.entrada_adjuntos (
 ALTER TABLE public.entrada_adjuntos OWNER TO tramity;
 
 CREATE INDEX IF NOT EXISTS entrada_adjuntos_id_entrada_idx ON public.entrada_adjuntos (id_entrada);
-ALTER TABLE entrada_adjuntos ADD CONSTRAINT entrada_adjuntos_fk_ent FOREIGN KEY (id_entrada) REFERENCES entradas (id_entrada) ON DELETE CASCADE;
-
---- by pass
--- OJO; Para los indices array integer ---
-CREATE EXTENSION IF NOT EXISTS intarray;
-CREATE TABLE public.entradas_bypass (
-	id_item SERIAL PRIMARY KEY,
-    id_entrada integer NOT NULL,
-    descripcion text NOT NULL,
-    json_prot_destino jsonb,
-    id_grupos integer[],
-    destinos integer[],
-    f_salida date,
-    CONSTRAINT fk_entrada
-      FOREIGN KEY(id_entrada) 
-	  REFERENCES entradas(id_entrada) ON DELETE CASCADE
-);
-
---- ALTER TABLE "entradas_bypass" DROP CONSTRAINT "fk_entrada";
---- ALTER TABLE entradas_bypass ADD CONSTRAINT entradas_bypass_fk_ent FOREIGN KEY (id_entrada) REFERENCES entradas (id_entrada) ON DELETE CASCADE;
-
-ALTER TABLE public.entradas_bypass OWNER TO tramity;
-
-CREATE INDEX IF NOT EXISTS entradas_bypass_id_entrada_idx ON public.entradas_bypass (id_entrada);
-CREATE INDEX IF NOT EXISTS entradas_bypass_destinos_idx ON public.entradas_bypass USING GIN (destinos gin__int_ops);
-CREATE INDEX IF NOT EXISTS entradas_bypass_id_grupos_idx ON public.entradas_bypass USING GIN (id_grupos gin__int_ops);
+ALTER TABLE public.entrada_adjuntos ADD CONSTRAINT entrada_adjuntos_fk_ent FOREIGN KEY (id_entrada) REFERENCES public.entradas (id_entrada) ON DELETE CASCADE;

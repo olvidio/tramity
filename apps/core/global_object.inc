@@ -5,15 +5,48 @@ use config\model\Config;
 use web\Hash;
 use web\Posicion;
 
-if ( session_status()  !== PHP_SESSION_ACTIVE) {
-	session_start(); // if no active session we start a new one
+function logout($idioma,$esquema,$error) {
+    $a_campos = [];
+    $a_campos['error'] = $error;
+    $a_campos['idioma'] = $idioma;
+    $a_campos['url'] = ConfigGlobal::getWeb();
+    
+    $oView = new ViewTwig('usuarios\controller');
+    echo $oView->render('login_form.html.twig',$a_campos);
+}
+
+if ( session_status() !== PHP_SESSION_ACTIVE) {
+    // Configure timeout to 15 minutes
+    $timeout = 900;
+    
+    // Set the maxlifetime of session
+    ini_set( "session.gc_maxlifetime", $timeout );
+    
+    // Also set the session cookie timeout
+    ini_set( "session.cookie_lifetime", $timeout );
+    
+    // Now start the session
+    session_start();
+    
+    // Update the timeout of session cookie
+    $sessionName = session_name();
+    $domain = ConfigGlobal::getDomain();
+    
+    if( isset( $_COOKIE[ $sessionName ] ) ) {
+        setcookie( $sessionName, $_COOKIE[ $sessionName ], [
+            'expires' => time() + $timeout,
+            'path' => '/',
+            'sameSite' => 'Strict',
+            'Secure' => 'Secure',
+            'domain' => $domain,
+        ]);
+    }
 }
 
 require_once('func_tablas.php'); 
 require_once('func_reg.php'); 
 
 require_once('apps/usuarios/controller/login.php');
-
 
 $_SESSION['oGestorErrores'] = new  GestorErrores();
 
@@ -26,9 +59,24 @@ $_SESSION['oGestorErrores'] = new  GestorErrores();
  * 
  */
 $oConfigDB = new ConfigDB('tramity'); //de la database comun
+$esquema = ConfigGlobal::getEsquema();
+if (!empty($esquema) && $esquema != 'admin') {
+    /* Si para todos los esquemas uso el mismo usuario de conexión a la DB (tramity), no hace falta: */
+    $config = $oConfigDB->getEsquema($esquema);
+    $oConexion = new dbConnection($config);
+    $oDBT = $oConexion->getPDO();
+} else {
+    $config = $oConfigDB->getEsquema('public');
+    $oConexion = new dbConnection($config);
+    $oDBT = $oConexion->getPDO();
+}
+
+// para las tablas comunes: lugares, entidades, x_locales
 $config = $oConfigDB->getEsquema('public');
 $oConexion = new dbConnection($config);
-$oDBT = $oConexion->getPDO();
+$oDBP = $oConexion->getPDO();
+
+
 
 // Conexión al servicdor davical (calendarios caldav).
 $oConfigDB = new ConfigDB('davical'); //de la database comun

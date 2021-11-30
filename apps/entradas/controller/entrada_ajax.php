@@ -1,4 +1,5 @@
 <?php
+use davical\model\Davical;
 use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
 use entradas\model\entity\EntradaDocDB;
@@ -69,10 +70,11 @@ switch ($Qque) {
             $gesPendientes = new GestorPendienteEntrada();
             $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
             if (!empty($cUids)) {
-                $resource = 'registro';
-                $cargo = 'secretaria';
+                $calendario = 'registro';
+                $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+                $user_davical = $oDavical->getUsernameDavicalSecretaria();
                 foreach ($cUids as $uid => $parent_container) {
-                    $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                    $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
                     $oPendiente->eliminar();
                 }
             }
@@ -231,10 +233,11 @@ switch ($Qque) {
             $gesPendientes = new GestorPendienteEntrada();
             $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
             if (!empty($cUids)) {
-                $resource = 'registro';
-                $cargo = 'secretaria';
+                $calendario = 'registro';
+                $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+                $user_davical = $oDavical->getUsernameDavicalSecretaria();
                 foreach ($cUids as $uid => $parent_container) {
-                    $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                    $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
                     $oPendiente->eliminar();
                 }
             }

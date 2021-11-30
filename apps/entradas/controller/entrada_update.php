@@ -1,6 +1,7 @@
 <?php
 use core\ConfigGlobal;
 use function core\is_true;
+use davical\model\Davical;
 use entradas\model\Entrada;
 use entradas\model\entity\EntradaBypass;
 use entradas\model\entity\EntradaDB;
@@ -402,19 +403,14 @@ switch($Qque) {
                         $f_plazo = $oEntrada->getF_contestar()->getFromLocal();
                         $location = $oProtOrigen->ver_txt_num();
                         $prot_mas = $oProtOrigen->ver_txt_mas();
-                        $oOficina = new Oficina($Qid_of_ponente);
-                        $oficina_ponente = $oOficina->getSigla();
-                        if (empty($oficina_ponente)) {
-                            $msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
-                            exit($msg);
-                        }
-                        $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
                         
-                        $parent_container = 'oficina_'.$oficina_ponente;
-                        $resource = 'registro';
-                        $cargo = 'secretaria';
+                        $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
+                        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+                        $parent_container = $oDavical->getNombreRecurso($Qid_of_ponente);
+                        $calendario = 'registro';
+                        $user_davical = $oDavical->getUsernameDavicalSecretaria();
                         $uid = '';
-                        $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                        $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
                         $oPendiente->setId_reg($id_reg);
                         $oPendiente->setAsunto($Qasunto);
                         $oPendiente->setStatus("NEEDS-ACTION");
@@ -433,18 +429,13 @@ switch($Qque) {
                         }
                     } else {
                         // meter el pendienteDB en davical con el id_reg que toque y borrarlo de pendienteDB.
-                        $oOficina = new Oficina($Qid_of_ponente);
-                        $oficina_ponente = $oOficina->getSigla();
-                        if (empty($oficina_ponente)) {
-                            $msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
-                            exit($msg);
-                        }
                         $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
-                        $parent_container = 'oficina_'.$oficina_ponente;
-                        $resource = 'registro';
-                        $cargo = 'secretaria';
+                        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+                        $parent_container = $oDavical->getNombreRecurso($Qid_of_ponente);
+                        $calendario = 'registro';
+                        $user_davical = $oDavical->getUsernameDavicalSecretaria();
                         $uid = '';
-                        $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                        $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
                         $oPendiente->crear_de_pendienteDB($id_reg,$Qid_pendiente);
                     }
                 }

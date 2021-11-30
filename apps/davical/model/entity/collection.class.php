@@ -2,6 +2,7 @@
 namespace davical\model\entity;
 use core;
 use web;
+use usuarios\model\entity\Cargo;
 /**
  * Fitxer amb la Classe que accedeix a la taula collection
  *
@@ -215,15 +216,17 @@ class Collection Extends core\ClasePropiedades {
 	    }
 	    
 	    // registro
-	    $dav_name_new = $parent_container_new."registro/"; 
-	    $dav_name_old = $parent_container_old."registro/"; 
-	    $sQry = "UPDATE $nom_tabla SET parent_container='$parent_container_new', dav_name='$dav_name_new'
-                WHERE dav_name='$dav_name_old'";
-	    
-	    if (($oDbl->query($sQry)) === FALSE) {
-	        $sClauError = 'DavicalUser.cambioNombre';
-	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-	        return FALSE;
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+            $dav_name_new = $parent_container_new."registro/"; 
+            $dav_name_old = $parent_container_old."registro/"; 
+            $sQry = "UPDATE $nom_tabla SET parent_container='$parent_container_new', dav_name='$dav_name_new'
+                    WHERE dav_name='$dav_name_old'";
+            
+            if (($oDbl->query($sQry)) === FALSE) {
+                $sClauError = 'DavicalUser.cambioNombre';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                return FALSE;
+            }
 	    }
 	}
 	

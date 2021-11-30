@@ -62,6 +62,9 @@ tabs_hide=function(){
 }
 tabs_show=function(vista,filtro=''){
     var url_ajax = '';
+	if (vista == 'ctr') {
+        url_ajax = 'apps/usuarios/controller/usuario_ctr.php';
+    }
 	if (vista == 'home') {
         url_ajax = 'apps/usuarios/controller/usuario_home.php';
     }

@@ -1,0 +1,50 @@
+<script>
+fnjs_editar=function(){
+	rta=fnjs_solo_uno('#seleccionados');
+	if (rta==1) {
+        $('#seleccionados').attr('action',"{{ url_form }}");
+        $('#que').val('editar');
+        fnjs_enviar_formulario('#seleccionados');
+	}
+}
+
+fnjs_eliminar=function(){
+    event.preventDefault();
+	rta=fnjs_solo_uno('#seleccionados');
+	if (rta==1) {
+		if (confirm("{{ "¿Está seguro que desea borrar esta entidad?"|trans }}") ) {
+            $('#que').val('eliminar');
+            datos = $('#seleccionados').serialize();	
+        	request=$.ajax({
+        		data: datos,
+        		url: '{{ url_eliminar }}',
+        		method: 'POST',
+        		dataType: 'json'
+        	});
+        	request.done( function (json) {
+        		if (json.success != true) {
+        			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+        		} else {
+                    fnjs_actualizar();
+            	}
+        	});
+		}
+	}
+}
+fnjs_actualizar=function(){
+	var url='{{ url_actualizar }}';
+	fnjs_update_div('#main',url);
+}
+fnjs_left_side_hide();
+</script>
+<h3>{{ "Lista de usuarios"|trans }}</h3>
+<br>
+</form>
+<form id="seleccionados"  name="seleccionados" action="" method="post" >
+{{ oHash.getCamposHtml|raw }}
+{{ oTabla.mostrar_tabla|raw }}
+</form>
+<br>
+<button type="button" class="btn btn-primary btn w-100" onclick="fnjs_update_div('#main','{{ url_nuevo }}');">
+{{ "nueva entidad"|trans}}
+</button>

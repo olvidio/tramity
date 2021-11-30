@@ -167,19 +167,21 @@ fnjs_ver_doc_ep=function() {
 
     request.done( function (url) {
         win=window.open(url, "", winPrefs);
-        // Para que al cerrar la ventana se actualize ésta.
-        var timer = setInterval(function() { 
-            if(win.closed) {
-                clearInterval(timer);
-    			if (id_expediente != undefined) {
-        			// está en _antecedentes_js.html.twig
-    				fnjs_adjuntar_antecedente('documento',id_doc,id_expediente);
-    			} else {
-                	fnjs_actualizar();
-    			}
-            }
-        }, 1000);
-        win.focus();
+        if (win) {
+            // Para que al cerrar la ventana se actualize ésta.
+            var timer = setInterval(function() { 
+                if(win.closed) {
+                    clearInterval(timer);
+                    if (id_expediente != undefined) {
+                        // está en _antecedentes_js.html.twig
+                        fnjs_adjuntar_antecedente('documento',id_doc,id_expediente);
+                    } else {
+                        fnjs_actualizar();
+                    }
+                }
+            }, 1000);
+            win.focus();
+        }
     });
 
 	request.fail(function(JqXHR, textStatus, errorThrown){

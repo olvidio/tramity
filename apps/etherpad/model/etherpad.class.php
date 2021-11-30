@@ -2,6 +2,7 @@
 namespace etherpad\model;
 
 use core\ConfigGlobal;
+use web\StringLocal;
 
 /**
  * INFO EN:
@@ -43,6 +44,10 @@ class Etherpad  extends Client {
     
     
     public function setId ($tipo_id,$id) {
+        // Añado el nombre del centro. De forma normalizada, pues a saber que puede tener el nombre:
+        $sigla = $_SESSION['oConfig']->getSigla();
+        $nom_ctr = StringLocal::lowerNormalized($sigla);
+        
         switch ($tipo_id) {
             case self::ID_ADJUNTO:
                 $prefix = 'adj';
@@ -67,7 +72,7 @@ class Etherpad  extends Client {
                 exit ($err_switch);
         }
         
-        $this->id_escrito = $prefix.$id;
+        $this->id_escrito = $nom_ctr.$prefix.$id;
         
         return $this->id_escrito;
     }

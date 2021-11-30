@@ -115,9 +115,7 @@ if ($Qque == 'buscar') {
     }
 
     if (!empty($Qid_oficina)) { 
-        $oOficina = new Oficina($Qid_oficina);
-        $sigla_oficina = $oOficina->getSigla();
-        $oBuscarPendiente->setOficina($sigla_oficina); 
+        $oBuscarPendiente->setId_oficina($Qid_oficina); 
     }
     if (!empty($Qasunto)) { $oBuscarPendiente->setAsunto($Qasunto); }
     if (!empty($Qf_min)) { $oBuscarPendiente->setF_min($Qf_min); }
@@ -132,7 +130,6 @@ if ($Qque == 'buscar') {
         $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
         $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
     }
-
 
     $cPendientes = $oBuscarPendiente->getPendientes();
     $a_valores = [];
@@ -166,7 +163,10 @@ if ($Qque == 'buscar') {
         $plazo = $oPendiente->getF_plazo()->getFromLocal();
         $plazo_iso = $oPendiente->getF_plazo()->format('Ymd'); // sólo números, para poder ordenar.
         
-        $estado = $oPendiente->getStatus();
+        $status = $oPendiente->getStatus();
+        $a_status=Pendiente::getArrayStatus();
+        $estado = $a_status[$status];
+        
         $of_ponente = $oPendiente->getPonente();
         $ponente = $a_oficinas[$of_ponente];
         
@@ -195,8 +195,10 @@ if ($Qque == 'buscar') {
         $a_valores[$t][3]=$periodico;
         $a_valores[$t][4]=$asunto;
         $a_valores[$t][5]=$plazo;
-        $a_valores[$t][6]=$ponente;
-        $a_valores[$t][7]=$oficinas_txt;
+        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+            $a_valores[$t][6]=$ponente;
+            $a_valores[$t][7]=$oficinas_txt;
+        }
         $a_valores[$t][8]=$estado;
         // para el orden
         if ($plazo!="x") {
@@ -217,10 +219,12 @@ $a_cabeceras=array( ucfirst(_("protocolo")),
     _("p"),
     array('name'=>ucfirst(_("asunto")),'formatter'=>'clickFormatter'),
     array('name'=>ucfirst(_("fecha plazo")),'class'=>'fecha'),
-    ucfirst(_("ponente")),
-    ucfirst(_("oficinas")),
-    ucfirst(_("estado")),
-);
+    );
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+    $a_cabeceras[] = ucfirst(_("ponente"));
+    $a_cabeceras[] = ucfirst(_("oficinas"));
+}
+$a_cabeceras[] = ucfirst(_("estado"));
 
 $oTabla = new Lista();
 $oTabla->setId_tabla('pen_tabla');

@@ -1,6 +1,7 @@
 <?php
 namespace pendientes\model;
 
+use davical\model\Davical;
 use davical\model\entity\GestorCalendarItem;
 use entradas\model\GestorEntrada;
 
@@ -75,11 +76,12 @@ class GestorPendienteEntrada {
             $gesPendientes = new GestorPendienteEntrada();
             $cUids = $gesPendientes->getArrayUidById_entrada($id_entrada);
             if (!empty($cUids)) {
-                $resource = 'registro';
-                $cargo = 'secretaria';
+                $calendario = 'registro';
+                $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+                $user_davical = $oDavical->getUsernameDavicalSecretaria();
                 foreach ($cUids as $uid => $parent_container) {
                     $uid_container = "$uid#$parent_container";
-                    $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                    $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
                     $status = $oPendiente->getStatus();
                     if (empty($status) || $status == 'COMPLETED' || $status == 'CANCELLED') { continue; }
                     $rrule = $oPendiente->getRrule();

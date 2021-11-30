@@ -3,6 +3,7 @@ namespace pendientes\model;
 
 use core\Set;
 use davical\model\CalDAVClient;
+use davical\model\Davical;
 
 // Arxivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
@@ -15,17 +16,17 @@ class GestorPendiente {
      */
     private $server;
     /**
-     * resource de Pendiente
+     * calendario de Pendiente
      *
      * @var string
      */
-    private $resource;
+    private $calendario;
     /**
-     * cargo de Pendiente
+     * user_davical de Pendiente
      *
      * @var string
      */
-    private $cargo;
+    private $user_davical;
     /**
      * cal_oficina de Pendiente
      *
@@ -41,10 +42,12 @@ class GestorPendiente {
     /**
      * Constructor de la classe.
      */
-    function __construct($cal_oficina,$calendario,$cargo) {
+    function __construct($cal_oficina,$calendario,$id_cargo) {
         $this->cal_oficina = $cal_oficina;
-        $this->resource = $calendario;
-        $this->cargo = $cargo;
+        $this->calendario = $calendario;
+        
+        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+        $this->user_davical = $oDavical->getUsernameDavical($id_cargo);
     }
     
     /* METODES PUBLICS ----------------------------------------------------------*/
@@ -54,7 +57,7 @@ class GestorPendiente {
         $this->server = $server_base.'/caldav.php';
         
         $cal_oficina = empty($cal_oficina)? $this->cal_oficina : $cal_oficina;
-        return $this->server."/".$cal_oficina."/".$this->resource."/";
+        return $this->server."/".$cal_oficina."/".$this->calendario."/";
     }
     
     public function getPendientes($aWhere) {
@@ -65,9 +68,8 @@ class GestorPendiente {
         $cancelled = empty($aWhere['cancelled'])? 'false' : $aWhere['cancelled'];
         
         $base_url = $this->getBaseUrl();
-        $cargo = $this->cargo;
         $pass = 'system';
-        $cal = new CalDAVClient($base_url, $cargo, $pass);
+        $cal = new CalDAVClient($base_url, $this->user_davical, $pass);
         
         $events = $cal->GetTodos($f_inicio,$f_plazo,$completed,$cancelled);
         
@@ -85,7 +87,7 @@ class GestorPendiente {
             $icalComp = $a_icalComp[0];  // If you know there's only 1 of them...
             
             $uid=$icalComp->GetPValue("UID");
-            $oPendiente= new Pendiente($this->cal_oficina,$this->resource,$this->cargo,$uid);
+            $oPendiente= new Pendiente($this->cal_oficina,$this->calendario,$this->user_davical,$uid);
             
             $asunto=$icalComp->GetPValue("SUMMARY");
             if ($asunto=="Busy") { continue; }

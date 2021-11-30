@@ -25,8 +25,6 @@ CREATE TABLE public.etiquetas_documento (
  );
  	
 ALTER TABLE public.etiquetas_documento OWNER TO tramity;
-CREATE INDEX IF NOT EXISTS etiquetas_documento_pkey ON public.etiquetas_documento (id_etiqueta, id_doc);
 
-
-ALTER TABLE etiquetas_documento ADD CONSTRAINT etiquetas_documento_fk_exp FOREIGN KEY (id_doc) REFERENCES documentos (id_doc) ON DELETE CASCADE;
-ALTER TABLE etiquetas_documento ADD CONSTRAINT etiquetas_documento_fk_eti FOREIGN KEY (id_etiqueta) REFERENCES etiquetas (id_etiqueta) ON DELETE CASCADE;
+ALTER TABLE public.etiquetas_documento ADD CONSTRAINT etiquetas_documento_fk_exp FOREIGN KEY (id_doc) REFERENCES public.documentos (id_doc) ON DELETE CASCADE;
+ALTER TABLE public.etiquetas_documento ADD CONSTRAINT etiquetas_documento_fk_eti FOREIGN KEY (id_etiqueta) REFERENCES public.etiquetas (id_etiqueta) ON DELETE CASCADE;

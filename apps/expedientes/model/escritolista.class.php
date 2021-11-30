@@ -391,7 +391,7 @@ class EscritoLista {
             $ver_ok = FALSE;
         }
         
-        $vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+        $vista = ConfigGlobal::getVista();
         
         $a_campos = [
             'filtro' => $this->filtro,

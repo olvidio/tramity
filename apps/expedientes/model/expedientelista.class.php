@@ -236,8 +236,10 @@ class ExpedienteLista {
                 $a_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
                 if (ConfigGlobal::soy_dtor()) {
                     $ids_cargos = array_keys($a_cargos_oficina);
-                    $aWhereFirma['id_cargo_creador'] = implode(',', $ids_cargos);
-                    $aOperadorFirma['id_cargo_creador'] = 'IN';
+                    if (!empty($ids_cargos)) {
+                        $aWhereFirma['id_cargo_creador'] = implode(',', $ids_cargos);
+                        $aOperadorFirma['id_cargo_creador'] = 'IN';
+                    }
                 }
                 
                 $cFirmas = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
@@ -750,11 +752,12 @@ class ExpedienteLista {
                 $row['entradilla'] = $oExpediente->getEntradilla();
                 
                 $a_resto_oficinas = $oExpediente->getResto_oficinas();
+                $cargo_txt = empty($a_posibles_cargos[$id_ponente])? '?' : $a_posibles_cargos[$id_ponente];
                 $oficinas_txt = '';
-                $oficinas_txt .= '<span class="text-danger">'.$a_posibles_cargos[$id_ponente].'</span>';
+                $oficinas_txt .= '<span class="text-danger">'.$cargo_txt.'</span>';
                 foreach ($a_resto_oficinas as $id_oficina) {
                     $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
-                    $oficinas_txt .= $a_posibles_cargos[$id_oficina];
+                    $oficinas_txt .= empty($a_posibles_cargos[$id_oficina])? '?' : $a_posibles_cargos[$id_oficina];
                 }
                 $row['oficinas'] = $oficinas_txt;
                 // nombre encargado (ponente)
@@ -794,7 +797,7 @@ class ExpedienteLista {
         $url_cancel = 'apps/expedientes/controller/expediente_lista.php';
         $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $filtro, 'prioridad_sel' => $this->prioridad_sel]));
         
-        $vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+        $vista = ConfigGlobal::getVista();
         
         $a_campos = [
             //'id_expediente' => $this->id_expediente,

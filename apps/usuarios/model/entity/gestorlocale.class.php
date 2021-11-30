@@ -27,7 +27,7 @@ class GestorLocale Extends core\ClaseGestor {
 	 *
 	 */
 	function __construct() {
-		$oDbl = $GLOBALS['oDBT'];
+		$oDbl = $GLOBALS['oDBP'];
 		$this->setoDbl($oDbl);
 		$this->setNomTabla('x_locales');
 	}

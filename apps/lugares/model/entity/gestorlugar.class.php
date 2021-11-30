@@ -28,7 +28,7 @@ class GestorLugar Extends core\ClaseGestor {
 	 *
 	 */
 	function __construct() {
-		$oDbl = $GLOBALS['oDBT'];
+		$oDbl = $GLOBALS['oDBP'];
 		$this->setoDbl($oDbl);
 		$this->setNomTabla('lugares');
 	}
@@ -59,6 +59,71 @@ class GestorLugar Extends core\ClaseGestor {
 	        $id_sigla = $cLugares[0]->getId_lugar();
 	    }
 	    return $id_sigla;
+	}
+	
+	/**
+	 * devuelve la sigla (o el id) de la entidad superior (dl para los centros, cr para las dl)
+	 *  
+	 * @param boolean $id Si quero el id o la sigla.
+	 * @return string|integer
+	 */
+	public function getSigla_superior($sigla_base,$id=FALSE) {
+	    $rta = '';
+	    $cLugares = $this->getLugares(['sigla' => $sigla_base]);
+	    if (!empty($cLugares)) {
+	        $region = $cLugares[0]->getRegion();
+	        $dl = $cLugares[0]->getDl();
+	        $tipo_ctr = $cLugares[0]->getTipo_ctr();
+	        switch ($tipo_ctr) {
+	            case 'dl':
+	                $tipo_sup = 'cr';
+                    $aWhere = ['tipo_ctr' => $tipo_sup,
+                               'region' => $region,
+                               'sigla' => $region, // quitar cancilleria...
+                    ];
+	                break;
+	            case 'cr':
+	                $tipo_sup = 'cg';
+                    $aWhere = ['tipo_ctr' => $tipo_sup,
+                               'region' => $region,
+                               'dl' => $dl,
+                               'sigla' => $dl,
+                    ];
+	                break;
+	            case 'cg':
+	                $tipo_sup = 'vat';
+                    $aWhere = ['tipo_ctr' => $tipo_sup,
+                               'region' => $region,
+                               'dl' => $dl
+                    ];
+	                break;
+	            default:   // 'ctr', am, nj, igl...
+	                $tipo_sup = 'dl';
+                    $aWhere = ['tipo_ctr' => $tipo_sup,
+                               'region' => $region,
+                               'dl' => $dl,
+                               'sigla' => $dl, // quitar dlbf, cancilleria...
+                    ];
+	                break;
+	                
+	        }
+	            
+	        $cLugarSup = $this->getLugares($aWhere);
+            if (!empty($cLugarSup)) {
+                if ($id) {
+                    $rta = $cLugarSup[0]->getId_lugar();
+                } else {
+                    $rta = ($tipo_sup == 'cr')? $tipo_sup : $cLugarSup[0]->getSigla();
+                }
+            }
+	        
+	    }
+	    
+	    if (empty($rta)) {
+	        return '?';
+	    } else {
+            return $rta;
+	    }
 	}
 	
 	/**

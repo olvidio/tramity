@@ -37,12 +37,14 @@ $plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 
-$txt_option_ref = '';
+//$txt_option_ref = '';
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();
+/*
 foreach ($a_posibles_lugares as $id_lugar => $sigla) {
     $txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
 }
+*/
 
 $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
 $oArrayProtDestino->setBlanco('t');
@@ -332,7 +334,7 @@ $a_campos = [
     'initialPreview' => $initialPreview,
     'json_config' => $json_config,
     //'txt_option_oficinas' => $txt_option_oficinas,
-    'txt_option_ref' => $txt_option_ref,
+    //'txt_option_ref' => $txt_option_ref,
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
     'pagina_nueva' => $pagina_nueva,

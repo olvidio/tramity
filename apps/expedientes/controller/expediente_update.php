@@ -1,6 +1,7 @@
 <?php
 use core\ConfigGlobal;
 use function core\is_true;
+use davical\model\Davical;
 use entradas\model\Entrada;
 use expedientes\model\Escrito;
 use expedientes\model\Expediente;
@@ -14,6 +15,7 @@ use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorOficina;
+use usuarios\model\entity\Oficina;
 use web\DateTimeLocal;
 use web\Protocolo;
 
@@ -101,21 +103,23 @@ switch ($Qque) {
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
         $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
         $Qf_plazo = (string) \filter_input(INPUT_POST, 'f_plazo');
+        
         $oCargo = new Cargo($Qid_cargo);
-        $cargo = $oCargo->getCargo();
-        $id_oficina = ConfigGlobal::role_id_oficina();
-        $gesOficinas = new GestorOficina();
-        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
-        $sigla = $a_posibles_oficinas[$id_oficina];
-        $parent_container = "oficina_$sigla";
-        $resource = 'oficina';
+        $id_oficina = $oCargo->getId_oficina();
+        
+        // nombre normalizado del usuario y oficina:
+        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+        $user_davical = $oDavical->getUsernameDavical($Qid_cargo);
+        $parent_container = $oDavical->getNombreRecurso($id_oficina);
+        
+        $calendario = 'oficina';
         $oHoy = new DateTimeLocal();
         $Qf_plazo = empty($Qf_plazo)? $oHoy->getFromLocal() : $Qf_plazo; 
         // datos de la entrada 
-        $id_reg = 'EN'.$Qid_entrada; // (para resource='registro': REN = Regitro Entrada, para 'oficina': OFEN)
+        $id_reg = 'EN'.$Qid_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': OFEN)
         $oEntrada = new Entrada($Qid_entrada);
         
-        $oPendiente = new Pendiente($parent_container, $resource, $cargo);
+        $oPendiente = new Pendiente($parent_container, $calendario, $user_davical);
         $oPendiente->setId_reg($id_reg);
         $oPendiente->setAsunto($oEntrada->getAsunto());
         $oPendiente->setStatus("NEEDS-ACTION");

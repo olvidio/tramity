@@ -11,6 +11,7 @@ use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Desplegable;
 use documentos\model\Documento;
+use usuarios\model\entity\Cargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -35,12 +36,49 @@ if (empty($Qid_escrito) && $Qfiltro == 'en_buscar') {
     $Qid_escrito = $Qa_sel[0];
 }
 
-$txt_option_ref = '';
 $gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
-foreach ($a_posibles_lugares as $id_lugar => $sigla) {
-    $txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
+if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
+    $a_posibles_lugares = $gesLugares->getArrayLugares();
+    $a_posibles_lugares_ref = $gesLugares->getArrayLugares();
+    /*
+    $txt_option_ref = '';
+    foreach ($a_posibles_lugares as $id_lugar => $sigla) {
+        $txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
+    }
+    */
+    
+    $gesGrupo = new GestorGrupo();
+    $a_posibles_grupos = $gesGrupo->getArrayGrupos();
+    $json_prot_dst = '';
+} else {
+    $a_posibles_grupos = [];
+    
+    $sigla_local = $_SESSION['oConfig']->getSigla();
+    $id_sigla_local = $gesLugares->getId_sigla_local();
+    
+    $id_sup = $gesLugares->getSigla_superior($sigla_local,TRUE);
+    $sigla_sup = $gesLugares->getSigla_superior($sigla_local);
+    
+    $id_sup2 = $gesLugares->getSigla_superior($sigla_sup,TRUE);
+    $sigla_sup2 = $gesLugares->getSigla_superior($sigla_sup);
+    
+    $a_posibles_lugares = [$id_sup => $sigla_sup];
+    
+    $oJSON = new stdClass;
+    
+    $oJSON->lugar = $id_sup;
+    $oJSON->any = date('y');
+    $oJSON->num = '';
+    $oJSON->mas = '';
+    $json_prot_dst[0] = $oJSON;
+        
+    $a_posibles_lugares_ref = [
+                                $id_sigla_local => $sigla_local,
+                                $id_sup => $sigla_sup,
+                                $id_sup2 => $sigla_sup2,
+                            ];
 }
+
 
 $txt_option_cargos = '';
 $gesCargos = new GestorCargo();
@@ -65,8 +103,6 @@ $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
 $oDesplCategoria->setTabIndex(80);
 
-$gesGrupo = new GestorGrupo();
-$a_posibles_grupos = $gesGrupo->getArrayGrupos();
 
 $chk_grupo_dst = '';
 $descripcion = '';
@@ -106,11 +142,10 @@ if (!empty($Qid_escrito)) {
     $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
     
     $json_prot_ref = $oEscrito->getJson_prot_ref();
-    $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares,'referencias');
+    $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares_ref,'referencias');
     $oArrayProtRef->setBlanco('t');
     $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias()');
     
-    $entradilla = $oEscrito->getEntradilla();
     $asunto = $oEscrito->getAsunto();
     $anulado = $oEscrito->getAnulado();
     if ($anulado === TRUE) {
@@ -189,7 +224,6 @@ if (!empty($Qid_escrito)) {
         $visibilidad = empty($oEntrada->getVisibilidad())? $oExpediente->getVisibilidad() : $oEntrada->getVisibilidad();
         $oDesplVisibilidad->setOpcion_sel($visibilidad);
         
-        $entradilla = '';
         $f_escrito = '';
         $initialPreview = '';
         $json_config = '{}';
@@ -206,16 +240,18 @@ if (!empty($Qid_escrito)) {
             $visibilidad = '';
             $oDesplVisibilidad->setOpcion_sel($visibilidad);
         }
-        $entradilla = '';
         $detalle = '';
         $f_escrito = '';
         $initialPreview = '';
         $json_config = '{}';
         $tipo_doc = '';
 
-        $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
+        $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
         $oArrayProtDestino ->setBlanco('t');
         $oArrayProtDestino ->setAccionConjunto('fnjs_mas_destinos()');
+        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+            $oArrayProtDestino->setAdd(FALSE);
+        }
 
     }
     $titulo = _("nuevo");
@@ -238,7 +274,7 @@ if (!empty($Qid_escrito)) {
     $oArrayDesplGrupo->setBlanco('t');
     $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
     
-    $oArrayProtRef = new web\ProtocoloArray('',$a_posibles_lugares,'referencias');
+    $oArrayProtRef = new web\ProtocoloArray('',$a_posibles_lugares_ref,'referencias');
     $oArrayProtRef ->setBlanco('t');
     $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias()');
 
@@ -315,56 +351,106 @@ $oHoy = new DateTimeLocal();
 $oHoy->sub(new DateInterval($error_fecha_txt));
 $minIso = $oHoy->format('Y-m-d');
 
-$a_campos = [
-    'titulo' => $titulo,
-    'id_expediente' => $Qid_expediente,
-    'id_escrito' => $Qid_escrito,
-    'accion' => $Qaccion,
-    'filtro' => $Qfiltro,
-    'modo' => $Qmodo,
-    'esEscrito' => $esEscrtito,
-    'id_ponente' => $id_ponente,
-    //'oHash' => $oHash,
-    'chk_grupo_dst' => $chk_grupo_dst,
-    'oArrayDesplGrupo' => $oArrayDesplGrupo,
-    'oArrayProtDestino' => $oArrayProtDestino,
-    'oArrayProtRef' => $oArrayProtRef,
-    'f_escrito' => $f_escrito,
-    'tipo_doc' => $tipo_doc,
-    'entradilla' => $entradilla,
-    'asunto' => $asunto,
-    'anulado_txt' => $anulado_txt,
-    'asunto_readonly' => $asunto_readonly,
-    'detalle' => $detalle,
-    'detalle_readonly' => $detalle_readonly,
-    'oDesplCategoria' => $oDesplCategoria,
-    'oDesplVisibilidad' => $oDesplVisibilidad,
-    'hidden_visibilidad' => $visibilidad,
-    //'a_adjuntos' => $a_adjuntos,
-    'initialPreview' => $initialPreview,
-    'lista_adjuntos_etherpad' => $lista_adjuntos_etherpad,
-    'json_config' => $json_config,
-    'txt_option_cargos' => $txt_option_cargos,
-    'txt_option_ref' => $txt_option_ref,
-    'url_update' => $url_update,
-    'url_escrito' => $url_escrito,
-    'pagina_cancel' => $pagina_cancel,
-    'pagina_nueva' => $pagina_nueva,
-    'explotar' => $explotar,
-    'devolver' => $devolver,
-    // datepicker
-    'format' => $format,
-    'yearStart' => $yearStart,
-    'yearEnd' => $yearEnd,
-    'minIso' => $minIso,
-    // para cambiar destinos en nueva ventana
-    'pagina_actualizar' => $pagina_actualizar, 
-    'descripcion' => $descripcion,
-    // si vengo de buscar
-    'str_condicion' => $str_condicion,
-    // para ver comentario cuando se devuelve a la oficina
-    'comentario' => $comentario,
-];
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    $a_campos = [
+        'titulo' => $titulo,
+        'id_expediente' => $Qid_expediente,
+        'id_escrito' => $Qid_escrito,
+        'accion' => $Qaccion,
+        'filtro' => $Qfiltro,
+        'modo' => $Qmodo,
+        'esEscrito' => $esEscrtito,
+        'id_ponente' => $id_ponente,
+        //'oHash' => $oHash,
+        'oArrayProtDestino' => $oArrayProtDestino,
+        'oArrayProtRef' => $oArrayProtRef,
+        'f_escrito' => $f_escrito,
+        'tipo_doc' => $tipo_doc,
+        'asunto' => $asunto,
+        'anulado_txt' => $anulado_txt,
+        'asunto_readonly' => $asunto_readonly,
+        'detalle' => $detalle,
+        'detalle_readonly' => $detalle_readonly,
+        'oDesplCategoria' => $oDesplCategoria,
+        'oDesplVisibilidad' => $oDesplVisibilidad,
+        'hidden_visibilidad' => $visibilidad,
+        //'a_adjuntos' => $a_adjuntos,
+        'initialPreview' => $initialPreview,
+        'lista_adjuntos_etherpad' => $lista_adjuntos_etherpad,
+        'json_config' => $json_config,
+        'txt_option_cargos' => $txt_option_cargos,
+        'url_update' => $url_update,
+        'url_escrito' => $url_escrito,
+        'pagina_cancel' => $pagina_cancel,
+        'pagina_nueva' => $pagina_nueva,
+        'explotar' => $explotar,
+        'devolver' => $devolver,
+        // datepicker
+        'format' => $format,
+        'yearStart' => $yearStart,
+        'yearEnd' => $yearEnd,
+        'minIso' => $minIso,
+        // para cambiar destinos en nueva ventana
+        'pagina_actualizar' => $pagina_actualizar, 
+        // si vengo de buscar
+        'str_condicion' => $str_condicion,
+        // para ver comentario cuando se devuelve a la oficina
+        'comentario' => $comentario,
+    ];
 
-$oView = new ViewTwig('expedientes/controller');
-echo $oView->renderizar('escrito_form.html.twig',$a_campos);
+    $oView = new ViewTwig('expedientes/controller');
+    echo $oView->renderizar('escrito_form_ctr.html.twig',$a_campos);
+} else {
+    $a_campos = [
+        'titulo' => $titulo,
+        'id_expediente' => $Qid_expediente,
+        'id_escrito' => $Qid_escrito,
+        'accion' => $Qaccion,
+        'filtro' => $Qfiltro,
+        'modo' => $Qmodo,
+        'esEscrito' => $esEscrtito,
+        'id_ponente' => $id_ponente,
+        //'oHash' => $oHash,
+        'chk_grupo_dst' => $chk_grupo_dst,
+        'oArrayDesplGrupo' => $oArrayDesplGrupo,
+        'oArrayProtDestino' => $oArrayProtDestino,
+        'oArrayProtRef' => $oArrayProtRef,
+        'f_escrito' => $f_escrito,
+        'tipo_doc' => $tipo_doc,
+        'asunto' => $asunto,
+        'anulado_txt' => $anulado_txt,
+        'asunto_readonly' => $asunto_readonly,
+        'detalle' => $detalle,
+        'detalle_readonly' => $detalle_readonly,
+        'oDesplCategoria' => $oDesplCategoria,
+        'oDesplVisibilidad' => $oDesplVisibilidad,
+        'hidden_visibilidad' => $visibilidad,
+        //'a_adjuntos' => $a_adjuntos,
+        'initialPreview' => $initialPreview,
+        'lista_adjuntos_etherpad' => $lista_adjuntos_etherpad,
+        'json_config' => $json_config,
+        'txt_option_cargos' => $txt_option_cargos,
+        //'txt_option_ref' => $txt_option_ref,
+        'url_update' => $url_update,
+        'url_escrito' => $url_escrito,
+        'pagina_cancel' => $pagina_cancel,
+        'pagina_nueva' => $pagina_nueva,
+        'explotar' => $explotar,
+        'devolver' => $devolver,
+        // datepicker
+        'format' => $format,
+        'yearStart' => $yearStart,
+        'yearEnd' => $yearEnd,
+        'minIso' => $minIso,
+        // para cambiar destinos en nueva ventana
+        'pagina_actualizar' => $pagina_actualizar, 
+        'descripcion' => $descripcion,
+        // si vengo de buscar
+        'str_condicion' => $str_condicion,
+        // para ver comentario cuando se devuelve a la oficina
+        'comentario' => $comentario,
+    ];
+
+    $oView = new ViewTwig('expedientes/controller');
+    echo $oView->renderizar('escrito_form.html.twig',$a_campos);
+}

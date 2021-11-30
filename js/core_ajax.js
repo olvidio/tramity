@@ -82,9 +82,14 @@ fnjs_mostra_resposta=function(resposta,bloque) {
 			return true;
 			break;
 	}
-	$(bloque).empty();
-	$(bloque).append(myText);
-	fnjs_cambiar_link(bloque); 
+	if( $(bloque).length ) {
+		$(bloque).empty();
+		$(bloque).append(myText);
+		fnjs_cambiar_link(bloque);
+	}  else {
+		// si no existe aviso posible error
+		alert("No existe el bloque: "+bloque);
+	}
 }
 
 

@@ -1,6 +1,8 @@
 <?php
 namespace core;
 
+use usuarios\model\entity\Cargo;
+
 Class ConfigGlobal extends ServerConf {
     
 	public static function getWebPort() {
@@ -8,18 +10,31 @@ Class ConfigGlobal extends ServerConf {
 	}
 	
 	public static function getWebPath() {
-	    $path = self::$web_path;
+        $path = '';
         if (!empty($_SERVER['ESQUEMA'])) {
             $path .= '/'.$_SERVER['ESQUEMA'];
         }
-        $path = '';
         return $path;
 	}
-	public static function getWeb() {
-		return self::$web_server.self::getWebPort().self::getWebPath();
+	
+	public static function getDomain() {
+        // Coger el nombre del dominio para que sirva para tramity.red.local y etherpad.red.local
+        $regs = [];
+        $host = $_SERVER['SERVER_NAME'];
+        preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $host, $regs);
+        
+        return $regs['domain'];
 	}
-	public static function getWeb_scripts() {
-	    return self::getWeb().'/scripts';
+	
+	public static function getEsquema() {
+	    $servername = $_SERVER['SERVER_NAME'];
+	    $host = '.'.self::SERVIDOR;
+	    return str_replace($host, '', $servername);
+	}
+		
+	public static function getWeb() {
+		//return self::$web_server.self::getWebPort().self::getWebPath();
+	    return '//'.$_SERVER['SERVER_NAME'].self::getWebPort().self::getWebPath();
 	}
 	public static function getWeb_NodeScripts() {
 	    return self::getWeb().'/node_modules';
@@ -30,51 +45,27 @@ Class ConfigGlobal extends ServerConf {
 	public static function getWeb_icons() {
 	    return self::getWeb().'/images';
 	}
-	public static function getWeb_udm() {
-	    return self::getWeb().'/scripts/udm4-php/udm-resources/';
-	}
-	
-	public static function is_dmz() {
-	    $dmz = self::$dmz;
-	    if ($dmz && !empty($_SERVER['PRIVATE']) && $_SERVER['PRIVATE'] == 'sf') {
-            $dmz = FALSE;
-        }
-        return $dmz;
-	}
 	
 	public static function is_debug_mode() {
         return self::$debug;
 	}
 
-	public static function is_mod_installed($id_mod) {
-		return array_key_exists($id_mod,$_SESSION['config']['mod_installed']);
-	}
-	
-	public static function is_app_installed($nom_app) {
-		if (!empty($_SESSION['config']['a_apps'][$nom_app])) {
-			$id_app = $_SESSION['config']['a_apps'][$nom_app];
-			return in_array($id_app,$_SESSION['config']['app_installed']);
-		} else {
-			return false;
-		}
-	}
-	
 	/**
-	 * Se cambia al cambiar le role
+	 * Se cambia al cambiar el role
 	 * @return string
 	 */
 	public static function role_actual() {
 		return $_SESSION['session_auth']['role_actual'];
 	}
 	/**
-	 * Se cambia al cambiar le role
+	 * Se cambia al cambiar el role
 	 * @return integer
 	 */
 	public static function role_id_cargo() {
 		return $_SESSION['session_auth']['id_cargo'];
 	}
 	/**
-	 * Se cambia al cambiar le role
+	 * Se cambia al cambiar el role
 	 * @return integer
 	 */
 	public static function role_id_oficina() {
@@ -90,59 +81,33 @@ Class ConfigGlobal extends ServerConf {
 	public static function soy_dtor() {
 	    return is_true($_SESSION['session_auth']['usuario_dtor']);
 	}
-	/**
-	 * 
-	 * @return integer  1: sv, 2 sf
-	 */
-	public static function mi_sfsv() {
-		return $_SESSION['session_auth']['sfsv'];
+	
+	
+	public static function getVista() {
+	    if (ConfigGlobal::role_actual() === 'secretaria') {
+	        $vista = 'secretaria';
+	    } else {
+	        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+	            $vista = 'home';
+	        }
+	        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+	            $vista = 'ctr';
+	        }
+	    }
+	    return $vista;
 	}
+	
+	
+	
+	
 	public static function mi_usuario() {
 		return $_SESSION['session_auth']['username'];
 	}
 	public static function mi_pass() {
 		return $_SESSION['session_auth']['password'];
 	}
-	public static function mi_id_schema() {
-		return $_SESSION['session_auth']['mi_id_schema'];
-	}
-	public static function mi_region_dl() {
+	public static function mi_schema() {
 		return $_SESSION['session_auth']['esquema'];
-	}
-	public static function mi_region() {
-		$a_reg = explode('-',$_SESSION['session_auth']['esquema']);
-		return $a_reg[0]; 
-	}
-	public static function mi_dele() {
-		$a_reg = explode('-',$_SESSION['session_auth']['esquema']);
-		$dl = substr($a_reg[1],0,-1); // quito la v o la f.
-        if ($dl == 'cr') {
-		    $dl .= self::mi_region();
-		}
-		return $dl;
-	}
-	/**
-	 * Añado la f en caso de sf.
-	 * Quizá se debería hacer en la función de mi_dele(),
-	 * pero de momento vamos a ir cambiando poco a poco
-	 * (de momento he cambiado todo lo que  tiene que ver con dl_org de actividades)
-	 * Añado el parametro: isfsv, para el caso de des, poder acceder a sf.
-	 * 
-	 * @param $isfsv
-	 * @return string
-	 */
-	public static function mi_delef($isfsv='') {
-	    $dl = self::mi_dele();
-	    if (!empty($isfsv)) {
-	        if ($isfsv == 2) {
-                $dl .= 'f';
-	        }
-	    } else {
-            if (self::mi_sfsv() == 2) {
-                $dl .= 'f';
-            }
-	    }
-		return $dl;
 	}
 	
 	public static function mi_mail() {

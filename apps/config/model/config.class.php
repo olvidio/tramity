@@ -1,6 +1,7 @@
 <?php
 namespace config\model;
 use config\model\entity\ConfigSchema;
+use config\model\entity\ConfigSchemaPublic;
 
 /**
  * Classe 
@@ -126,13 +127,13 @@ class Config {
     
     public function getServerEtherpad() {
         $parametro = 'server_etherpad';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     
     public function getServerEthercalc() {
         $parametro = 'server_ethercalc';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     
@@ -161,32 +162,32 @@ class Config {
     // SMTP server:
     public function getSMTPSecure() {
         $parametro = 'smtp_secure';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     public function getSMTPHost() {
         $parametro = 'smtp_host';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     public function getSMTPPort() {
         $parametro = 'smtp_port';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     public function getSMTPAuth() {
         $parametro = 'smtp_auth';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     public function getSMTPUser() {
         $parametro = 'smtp_user';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     public function getSMTPPwd() {
         $parametro = 'smtp_pwd';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     public function getFrom() {
@@ -202,7 +203,7 @@ class Config {
     
     public function getServerDavical() {
         $parametro = 'server_davical';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     

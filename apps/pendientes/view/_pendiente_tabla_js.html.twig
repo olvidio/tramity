@@ -135,7 +135,7 @@ fnjs_modificar=function(formulario){
 		}
 	});
 	
-	{% if not secretaria %}
+	{% if not perm_periodico %}
 		if ( p == 1 ) {
 			alert ("{{ "No puede modificar un pendiente periódico. Hable con secretaria."| trans }}");
 			return false;

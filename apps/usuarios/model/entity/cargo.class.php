@@ -34,6 +34,8 @@ class Cargo Extends core\ClasePropiedades {
     const CARGO_DISTRIBUIR  = 6;
     const CARGO_REUNION     = 7;
     
+    const OFICINA_ESQUEMA   = -10;
+    
 	/* ATRIBUTS ----------------------------------------------------------------- */
 
 	/**

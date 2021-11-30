@@ -26,12 +26,20 @@ class ProtocoloArray Extends Protocolo {
 	 */
 	 private $sAccionConjunto;
 	/**
+	 * para añadir (o no) la palabra 'ref' delante del texto.
+	 * 
 	 * bRef del Desplegable
 	 *
 	 * @var boolean 
 	 */
 	 private $bRef=FALSE;
 
+	 /**
+	  * Para añadir (o no) una opción más en blanco.
+	  * 
+	  * @var boolean
+	  */
+	 private $bAdd = TRUE;
 
 
 	/* CONSTRUCTOR -------------------------------------------------------------- */
@@ -192,18 +200,20 @@ class ProtocoloArray Extends Protocolo {
 		$sLista .= "</div>";
 		
 		// para que me salga una opción más en blanco
-        $this->ilugar = '';
-        $this->iprot_num = '';
-        $this->iprot_any = '';
-        $this->sprot_mas = '';
-		$this->sNombre = $this->sNomConjunto."_mas";
-		$this->sAction = $this->sAccionConjunto;
-		$this->sOpcion_sel = '';
-		
-        $sLista .= "<div class=\"row\">";
-		$sLista .= $this->ver_desplegable();
-        $sLista .= "</div>";
-		$sLista .= "<input type=hidden name='".$this->sNomConjunto."_num' id='".$this->sNomConjunto."_num' value=$n>";
+		if ($this->bAdd) {
+            $this->ilugar = '';
+            $this->iprot_num = '';
+            $this->iprot_any = '';
+            $this->sprot_mas = '';
+            $this->sNombre = $this->sNomConjunto."_mas";
+            $this->sAction = $this->sAccionConjunto;
+            $this->sOpcion_sel = '';
+            
+            $sLista .= "<div class=\"row\">";
+            $sLista .= $this->ver_desplegable();
+            $sLista .= "</div>";
+            $sLista .= "<input type=hidden name='".$this->sNomConjunto."_num' id='".$this->sNomConjunto."_num' value=$n>";
+		}
 		
 		return $sLista;
 	}
@@ -338,4 +348,20 @@ class ProtocoloArray Extends Protocolo {
 	public function setAccionConjunto($sAccionConjunto) {
 		$this->sAccionConjunto = $sAccionConjunto;
 	}
+    /**
+     * @return boolean
+     */
+    public function isAdd()
+    {
+        return $this->bAdd;
+    }
+
+    /**
+     * @param boolean $bAdd
+     */
+    public function setAdd($bAdd)
+    {
+        $this->bAdd = $bAdd;
+    }
+
 }

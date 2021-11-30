@@ -48,13 +48,16 @@ fnjs_guardar=function(formulario){
         data: data,
         method: 'POST'
     });
-    request.done(function (rta_txt) {
-        if (rta_txt != '' && rta_txt != '\\n') {
-            alert ('{{ "respuesta"|trans|raw }}: '+rta_txt);
-        } else {
+    request.done( function (json) {
+		if (json.success != true) {
+			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+		} else {
+			if (json.alert != undefined) {
+				alert ('{{ "alerta"|trans|raw }}: '+json.alert);
+			}
             {{ oPosicion.js_atras(1)|raw }}
-        }
-    });
+		}
+	});
 }
 
 fnjs_cancelar=function(){

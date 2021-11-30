@@ -6,6 +6,9 @@ use pendientes\model\entity\PendienteDB;
 use usuarios\model\entity\GestorOficina;
 use pendientes\model\Rrule;
 use web\DateTimeLocal;
+use davical\model\Davical;
+use usuarios\model\entity\Oficina;
+use usuarios\model\entity\Cargo;
 
 /**
 * Esta página actualiza la base de datos del registro.
@@ -48,10 +51,8 @@ $Qf_plazo       = (string) \filter_input(INPUT_POST, 'f_plazo');
 $Qcal_oficina   = (string) \filter_input(INPUT_POST, 'cal_oficina');
 $Qid_oficina    = (string) \filter_input(INPUT_POST, 'id_oficina');
 if (empty($Qcal_oficina) && !empty($Qid_oficina)) { // si soy secretaria puede ser que haya definido la oficina posteriormente
-    $gesOficinas = new GestorOficina();
-    $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
-    $sigla = $a_posibles_oficinas[$Qid_oficina];
-    $Qcal_oficina="oficina_$sigla";	
+    $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+    $Qcal_oficina = $oDavical->getNombreRecurso($Qid_oficina);
 }
 
 $Qref_id_lugar  = (string) \filter_input(INPUT_POST, 'ref_id_lugar');
@@ -88,10 +89,12 @@ if (!empty($Qref_id_lugar)) {
     $location = '';
 }
 
+// nombre normalizado del usuario y oficina:
+$id_cargo_role = ConfigGlobal::role_id_cargo();
+$oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+$user_davical = $oDavical->getUsernameDavical($id_cargo_role);
 
-$cargo = ConfigGlobal::role_actual();
 $txt_err = '';
-
 if (!empty($Qsimple_per)) { // sólo para los periodicos.
     $Quntil = (string) \filter_input(INPUT_POST,'until');
     if (!empty($Quntil)) { $request['until'] = $Quntil; }
@@ -209,7 +212,7 @@ switch ($Qnuevo) {
             echo json_encode($jsondata);
             exit();
 		} else {
-            $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $cargo, $Quid);
+            $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $user_davical, $Quid);
             $oPendiente->setId_reg($Qid_reg);
             $oPendiente->setAsunto($asunto);
             $oPendiente->setStatus($Qstatus);
@@ -250,7 +253,7 @@ switch ($Qnuevo) {
 		break;
 	case "2": //modificar pendiente
 		// 1º actualizo el escrito 
-        $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $cargo, $Quid);
+        $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $user_davical, $Quid);
         if (!empty($Qid_reg)) {
             $oPendiente->setId_reg($Qid_reg);
         }
@@ -296,7 +299,7 @@ switch ($Qnuevo) {
 				$cal_oficina=strtok('#');
 				// miro si es una recursiva de un pendiente:
 				$f_recur=strtok('#');
-                $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $cargo, $uid);
+                $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $user_davical, $uid);
                 $oPendiente->marcar_contestado("eliminar");
 			}
 		} else {
@@ -323,7 +326,7 @@ switch ($Qnuevo) {
 				$cal_oficina=strtok('#');
 				// miro si es una recursiva de un pendiente:
 				$f_recur=strtok('#');
-                $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $cargo, $uid);
+                $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $user_davical, $uid);
 				if (!empty($f_recur)) {
 					$oPendiente->marcar_excepcion($f_recur);
 				} else {
@@ -346,7 +349,7 @@ switch ($Qnuevo) {
         exit();
 		break;
 	case "5": // modificar eetiequetas y encargados
-        $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $cargo, $Quid);
+        $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $user_davical, $Quid);
         if (!empty($Qid_reg)) {
             $oPendiente->setId_reg($Qid_reg);
         }

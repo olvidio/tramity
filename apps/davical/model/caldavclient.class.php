@@ -145,7 +145,7 @@ class CalDAVClient {
   * @param int $depth  The depth, default to infinity
   */
   function SetUserAgent( $user_agent = null ) {
-    if ( !isset($user_agent) ) $user_agent = $this->user_agent;
+      if ( !isset($user_agent) ) { $user_agent = $this->user_agent; }
     $this->user_agent = $user_agent;
   }
 
@@ -421,7 +421,7 @@ class CalDAVClient {
 
     $etag = null;
     $matches = [];
-    if ( preg_match( '{^ETag:\s+"([^"]*)"\s*$}im', $this->httpResponseHeaders, $matches ) ) $etag = $matches[1];
+    if ( preg_match( '{^ETag:\s+"([^"]*)"\s*$}im', $this->httpResponseHeaders, $matches ) ) { $etag = $matches[1]; }
     if ( !isset($etag) || $etag == '' ) {
       printf( "No etag in:\n%s\n", $this->httpResponseHeaders );
       $save_request = $this->httpRequest;
@@ -501,7 +501,7 @@ class CalDAVClient {
   */
   function CalendarHomeSet( $urls = null ) {
     if ( isset($urls) ) {
-      if ( ! is_array($urls) ) $urls = array($urls);
+        if ( ! is_array($urls) ) { $urls = array($urls); }
       $this->calendar_home_set = $urls;
     }
     return $this->calendar_home_set;
@@ -515,7 +515,7 @@ class CalDAVClient {
   */
   function CalendarUrls( $urls = null ) {
     if ( isset($urls) ) {
-      if ( ! is_array($urls) ) $urls = array($urls);
+        if ( ! is_array($urls) ) { $urls = array($urls); }
       $this->calendar_urls = $urls;
     }
     return $this->calendar_urls;
@@ -624,9 +624,6 @@ class CalDAVClient {
   * @param string $url The URL to find the principal-URL from
   */
   function FindPrincipal( $url ) {
-    //$xml = $this->DoPROPFINDRequest( $url, array('resourcetype', 'current-user-principal', 'owner', 'principal-URL',
-    //                              'urn:ietf:params:xml:ns:caldav:calendar-home-set'), 1);
-
     $principal_url = $this->HrefForProp('DAV::principal');
 
     if ( !isset($principal_url) ) {
@@ -656,11 +653,11 @@ class CalDAVClient {
 
     $calendar_home = array();
     foreach( $this->xmltags['urn:ietf:params:xml:ns:caldav:calendar-home-set'] AS $v ) {
-      if ( $this->xmlnodes[$v]['type'] != 'open' ) continue;
+        if ( $this->xmlnodes[$v]['type'] != 'open' ) { continue; }
       while( $this->xmlnodes[++$v]['type'] != 'close' && $this->xmlnodes[$v]['tag'] != 'urn:ietf:params:xml:ns:caldav:calendar-home-set' ) {
-//        printf( "Tag: '%s' = '%s'\n", $this->xmlnodes[$v]['tag'], $this->xmlnodes[$v]['value']);
-        if ( $this->xmlnodes[$v]['tag'] == 'DAV::href' && isset($this->xmlnodes[$v]['value']) )
-          $calendar_home[] = rawurldecode($this->xmlnodes[$v]['value']);
+          if ( $this->xmlnodes[$v]['tag'] == 'DAV::href' && isset($this->xmlnodes[$v]['value']) ) {
+              $calendar_home[] = rawurldecode($this->xmlnodes[$v]['value']);
+          }
       }
     }
 
@@ -691,14 +688,11 @@ class CalDAVClient {
       foreach( $this->xmltags['DAV::href'] AS $hnode ) {
         $href = rawurldecode($this->xmlnodes[$hnode]['value']);
 
-        if ( !isset($calendar_urls[$href]) ) continue;
-
-//        printf("Seems '%s' is a calendar.\n", $href );
+        if ( !isset($calendar_urls[$href]) ) { continue; }
 
         $calendar = new CalendarInfo($href);
         $ok_props = $this->GetOKProps($hnode);
         foreach( $ok_props AS $v ) {
-//          printf("Looking at: %s[%s]\n", $href, $v['tag'] );
           switch( $v['tag'] ) {
             case 'http://calendarserver.org/ns/:getctag':
               $calendar->getctag = $v['value'];
@@ -720,7 +714,7 @@ class CalDAVClient {
   * Find the calendars, from the calendar_home_set
   */
   function GetCalendarDetails( $url = null ) {
-    if ( isset($url) ) $this->SetCalendar($url);
+      if ( isset($url) ) { $this->SetCalendar($url); }
 
     $calendar_properties = array( 'resourcetype', 'displayname', 'http://calendarserver.org/ns/:getctag', 'urn:ietf:params:xml:ns:caldav:calendar-timezone', 'supported-report-set' );
     $this->DoPROPFINDRequest( $this->calendar_url, $calendar_properties, 0);
@@ -735,9 +729,6 @@ class CalDAVClient {
       if ( isset($v['value'] ) ) {
         $calendar->{$name} = $v['value'];
       }
-/*      else {
-        printf( "Calendar property '%s' has no text content\n", $v['tag'] );
-      }*/
     }
 
     return $calendar;
@@ -769,7 +760,7 @@ class CalDAVClient {
   */
   function CalendarMultiget( $event_hrefs, $url = null ) {
 
-    if ( isset($url) ) $this->SetCalendar($url);
+      if ( isset($url) ) { $this->SetCalendar($url); }
 
     $hrefs = '';
     foreach( $event_hrefs AS $k => $href ) {
@@ -792,7 +783,6 @@ EOXML;
     if ( isset($this->xmltags['urn:ietf:params:xml:ns:caldav:calendar-data']) ) {
       foreach( $this->xmltags['urn:ietf:params:xml:ns:caldav:calendar-data'] AS $k => $v ) {
         $href = $this->HrefForProp('urn:ietf:params:xml:ns:caldav:calendar-data', $k);
-//        echo "Calendar-data:\n"; print_r($this->xmlnodes[$v]);
         $events[$href] = $this->xmlnodes[$v]['value'];
       }
     }
@@ -880,11 +870,11 @@ EOXML;
   */
   function GetEvents( $start = null, $finish = null, $relative_url = '' ) {
     $filter = "";
-    if ( isset($start) && isset($finish) )
+    if ( isset($start) && isset($finish) ) {
         $range = "<C:time-range start=\"$start\" end=\"$finish\"/>";
-    else
+    } else {
         $range = '';
-
+    }
     $filter = <<<EOFILTER
   <C:filter>
     <C:comp-filter name="VCALENDAR">
@@ -947,7 +937,6 @@ EOFILTER;
 EOFILTER;
 
 	} else {
-		$filter = 'hola';
 		$filter = '<C:filter>
 		<C:comp-filter name="VCALENDAR">
 			<C:comp-filter name="VTODO">
@@ -1022,10 +1011,6 @@ EOFILTER;
   * @return string The iCalendar of the calendar entry
   */
   function GetEntryByHref( $href ) {
-    /*
-	$href = str_replace( rawurlencode('/'),'/',rawurlencode($href));
-	*/
-	//echo "dsani: $href<br>";
    	$relative_url = '';
 	  $filter = "";
     if ( $href ) {
@@ -1038,8 +1023,6 @@ EOFILTER;
     }
 
     return $this->DoCalendarQuery($filter, $relative_url.$href);
-
-    //return $this->DoGETRequest( $href );
   }
 
 }

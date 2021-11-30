@@ -175,7 +175,7 @@ if (!empty($Qopcion)) {
 $oFecha = new DateTimeLocal();
 $format = $oFecha->getFormat();
 
-$vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+$vista = ConfigGlobal::getVista();
 
 $a_campos = [
     //'oHash' => $oHash,

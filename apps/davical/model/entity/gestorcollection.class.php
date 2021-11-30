@@ -34,7 +34,7 @@ class GestorCollection Extends core\ClaseGestor {
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 
-	public function modificarUid($oficina_new, $oficina_new) {
+	public function modificarUid($uid_new, $uid_old) {
 	    // uid= 20210216T170424@registro_oficina_scdl
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();

@@ -24,7 +24,7 @@
       <li class="nav-item">
         <a class="nav-link" href="index.html">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span></a>
+          <span>{{ "Dashboard"|trans }}</span></a>
       </li>
 
       <!-- Divider -->
@@ -32,7 +32,7 @@
       
       <!-- Heading -->
       <div class="sidebar-heading">
-        {{ "Usuarios y cargos"|trans }}
+        {{ "Local (ctr o dl)"|trans }}
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
@@ -43,58 +43,53 @@
         </a>
         <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Usuarios Components:</h6>
+            <h6 class="collapse-header">{{ "Usuarios Components"|trans }}:</h6>
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/usuarios/controller/usuario_lista.php')" href="#">
                 {{ "Lista"|trans }}
             </a>
+            {% if is_ambito_dl %}
             <a class="collapse-item active" onclick="fnjs_update_div('#main','apps/usuarios/controller/suplente_lista.php')" href="#">
                 {{ "Suplentes"|trans }}
             </a>
+            {% endif %}
           </div>
         </div>
       </li>
 
       <!-- Nav Item - Charts -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCargos" aria-expanded="true" aria-controls="collapseUtilities">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCargos" aria-expanded="true" aria-controls="collapseCargos">
           <i class="fas fa-fw fa-folder"></i>
           <span>{{ "Cargos"|trans }}</span>
         </a>
         <div id="collapseCargos" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
+            {% if is_ambito_dl %}
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/usuarios/controller/cargo_grupo_lista.php')" href="#">
             	{{ "lista grupos firmas"|trans }}
             </a>
+            {% endif %}
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/usuarios/controller/cargo_lista.php')" href="#">
                 {{ "Buscar / modificar"|trans }}
             </a>
           </div>
         </div>
-      </li>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        {{ "Aplicación"|trans }}
-      </div>
-
-      <!-- Nav Item - Pages Collapse Menu -->
+	  </li>
+      <!-- Nav Item - Parametros -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseConfig" aria-expanded="true" aria-controls="collapseConfig">
           <i class="fas fa-fw fa-cog"></i>
           <span>{{ "Config"|trans }}</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+        <div id="collapseConfig" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">{{ "del entorno"|trans }}:</h6>
-            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/lugares/controller/lugar_lista.php')" href="#">
-                {{ "Lugares"|trans }}</a>
+            {% if is_ambito_dl %}
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/lugares/controller/grupo_lista.php')" href="#">
                 {{ "Grupos de distribución"|trans }}</a>
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/usuarios/controller/oficina_lista.php')" href="#">
                 {{ "Oficinas"|trans }}</a>
+            {% endif %}
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/tramites/controller/tramite_lista.php')" href="#">
                 {{ "Trámites (nombres)"|trans }}</a>
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/tramites/controller/tramitecargo_select.php')" href="#">
@@ -105,44 +100,12 @@
                 {{ "Parámetros"|trans }}</a>
           </div>
         </div>
+        
       </li>
 
-      <!-- Nav Item - Utilities Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-fw fa-wrench"></i>
-          <span>Utilities</span>
-        </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-bs-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/devel/controller/factory_form.php')" href="#">factory</a>
-            <a class="collapse-item" href="#">generar claves</a>
-          </div>
-        </div>
-      </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider">
 
-      <!-- Nav Item - Davical -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDavical" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>{{ "Davical"|trans }}</span>
-        </a>
-        <div id="collapseDavical" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/migration/controller/migration_index.php')" href="#">
-            	{{ "mitration reg"|trans }}
-            </a>
-            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/davical/controller/user_lista.php')" href="#">
-            	{{ "lista usuarios"|trans }}
-            </a>
-            <a class="collapse-item" href="{{ server_davical }}">
-                {{ "Admin"|trans }}
-            </a>
-          </div>
-        </div>
-      </li> 
-      
       <!-- Nav Item - Tables -->
       <li class="nav-item">
         <a class="nav-link" href="#" onclick="fnjs_logout()">
@@ -159,6 +122,7 @@
       </div>
 
     </ul>
+    
     <!-- End of Sidebar -->
     <!-- Page content -->
     <div id="main" style="margin: 1cm;">
@@ -190,34 +154,6 @@
 <!-- jQuery -->
 <script type="text/javascript" src="node_modules/jquery-ui-sortable/jquery-ui.min.js"></script>
 <script type="text/javascript" src='node_modules/jquery-ui-dist/jquery-ui.min.js'></script>
- 
-<!-- Slick -->
-<!-- OJO: IMPORTA el orden. Pueden salir avisos (en consola del navegador) tipo: Grid.xx not defined
-<link type='text/css' rel='stylesheet' href='node_modules/slickgrid/slick.grid.css' />
-
-<script type='text/javascript' src='node_modules/slickgrid/lib/firebugx.js'></script>
-<script type='text/javascript' src='node_modules/slickgrid/lib/jquery.event.drag-2.3.0.js'></script>
-<script type='text/javascript' src='node_modules/slickgrid/lib/jquery.event.drop-2.3.0.js'></script>
-
-<script type='text/javascript' src='node_modules/slickgrid/slick.core.js'></script>
-<script type='text/javascript' src='node_modules/slickgrid/slick.grid.js'></script>
-<script type='text/javascript' src='node_modules/slickgrid/slick.editors.js'></script>
-<script type='text/javascript' src='node_modules/slickgrid/slick.formatters.js'></script>
-<script type='text/javascript' src='node_modules/slickgrid/slick.dataview.js'></script>
-<script type='text/javascript' src='node_modules/slickgrid/plugins/slick.autotooltips.js'></script>
-<script type='text/javascript' src='node_modules/slickgrid/plugins/slick.cellrangedecorator.js'></script>
-<script type='text/javascript' src='node_modules/slickgrid/plugins/slick.cellrangeselector.js'></script>
-<script type='text/javascript' src='node_modules/slickgrid/plugins/slick.cellselectionmodel.js'></script>
-<script type='text/javascript' src='node_modules/slickgrid/plugins/slick.checkboxselectcolumn.js'></script>
-<script type='text/javascript' src='node_modules/slickgrid/plugins/slick.rowselectionmodel.js'></script>
-
-<link type='text/css' rel='stylesheet' href='node_modules/slickgrid/controls/slick.columnpicker.css' />
-<script type='text/javascript' src='node_modules/slickgrid/controls/slick.columnpicker.js'></script>
-<link type='text/css' rel='stylesheet' href='node_modules/slickgrid/controls/slick.gridmenu.css' />
-<script type='text/javascript' src='node_modules/slickgrid/controls/slick.gridmenu.js'></script>
-<link type='text/css' rel='stylesheet' href='node_modules/slickgrid/controls/slick.pager.css' />
-<script type='text/javascript' src='node_modules/slickgrid/controls/slick.pager.js'></script>
--->
 
 <!-- Custom scripts for all pages-->
 <!-- vars: mi_idioma, error_fecha -->

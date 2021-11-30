@@ -55,26 +55,27 @@ class GestorEtiqueta Extends core\ClaseGestor {
 	        '_ordre' => 'nom_etiqueta',
 	    ];
 	    $aOperador = [];
-	    $cEtiquetasPersonales = $this->getEtiquetas($aWhere,$aOperador);
-	    
-	    return $cEtiquetasPersonales;
+	    return $this->getEtiquetas($aWhere,$aOperador);
 	}
 	    
 	public function getEtiquetasMiOficina($id_cargo='') {
 	    if (empty($id_cargo)) {
 	        $id_cargo = ConfigGlobal::role_id_cargo();
 	    }
-	    $oCargo = new Cargo($id_cargo);
-	    $id_oficina = $oCargo->getId_oficina();
+	    
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+            $oCargo = new Cargo($id_cargo);
+            $id_oficina = $oCargo->getId_oficina();
+	    } else {
+	        $id_oficina = Cargo::OFICINA_ESQUEMA;
+	    }
 	    
 	    $aWhere = [ 'id_cargo' => $id_oficina,
 	        'oficina' => 't',
 	        '_ordre' => 'nom_etiqueta',
 	    ];
 	    $aOperador = [];
-	    $cEtiquetasOficina = $this->getEtiquetas($aWhere,$aOperador);
-	    
-	    return $cEtiquetasOficina;
+	    return $this->getEtiquetas($aWhere,$aOperador);
 	}
 	/**
 	 * retorna l'array d'objectes de tipus Etiqueta

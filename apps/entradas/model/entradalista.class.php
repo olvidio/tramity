@@ -305,7 +305,7 @@ class EntradaLista {
                 $oficinas_txt .= '<span class="text-danger">'.$of_ponente_txt.'</span>';
                 foreach ($a_resto_oficinas as $id_oficina) {
                     $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
-                    $oficinas_txt .= $a_posibles_oficinas[$id_oficina];
+                    $oficinas_txt .= empty($a_posibles_oficinas[$id_oficina])? '?' : $a_posibles_oficinas[$id_oficina];
                 }
                 $row['oficinas'] = $oficinas_txt;
                 
@@ -358,7 +358,7 @@ class EntradaLista {
             $ver_accion = TRUE;
         }
         
-        $vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+        $vista = ConfigGlobal::getVista();
         
         $a_campos = [
             //'id_entrada' => $id_entrada,

@@ -329,14 +329,16 @@ fnjs_ver_doc_ep=function() {
         //url=rta.responseText;
         url=rta;
         win=window.open(url, "", winPrefs);
-        // Para que al cerrar la ventana se actualize ésta.
-        var timer = setInterval(function() { 
-            if(win.closed) {
-                clearInterval(timer);
-                fnjs_actualizar();
-            }
-        }, 1000);
-        win.focus();
+        if(win) { // si no existe es null.
+            // Para que al cerrar la ventana se actualize ésta.
+            var timer = setInterval(function() { 
+                if(win.closed) {
+                    clearInterval(timer);
+                    fnjs_actualizar();
+                }
+            }, 1000);
+            win.focus();
+        }
     });
 
 	request.fail(function(JqXHR, textStatus, errorThrown){

@@ -29,11 +29,12 @@ $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 // ----------- Sigla local -------------------
 $sigla_local = $_SESSION['oConfig']->getSigla();
 $id_lugar_local = '';
-$txt_option_ref = '';
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();
+
+//$txt_option_ref = '';
 foreach ($a_posibles_lugares as $id_lugar => $sigla) {
-    $txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
+    //$txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
     if ($sigla == $sigla_local) {
         $id_lugar_local = $id_lugar;
     }
@@ -211,7 +212,7 @@ $a_campos = [
     'initialPreview' => $initialPreview,
     'json_config' => $json_config,
     'txt_option_cargos' => $txt_option_cargos,
-    'txt_option_ref' => $txt_option_ref,
+    //'txt_option_ref' => $txt_option_ref,
     
     'pagina_cancel' => $pagina_cancel,
 ];

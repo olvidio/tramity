@@ -168,7 +168,7 @@ switch ($Qtipo_lista) {
         }
 }
 
-$vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+$vista = ConfigGlobal::getVista();
 
 $a_campos = [
     //'oHash' => $oHash,

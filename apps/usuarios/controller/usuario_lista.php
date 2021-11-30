@@ -3,6 +3,7 @@ use core\ViewTwig;
 use usuarios\model\entity\GestorUsuario;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\Usuario;
+use core\ConfigGlobal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -46,7 +47,12 @@ $email='';
 $cargo='';
 $permiso = 1;
 
-$a_cabeceras = [ 'usuario','nombre a mostrar','cargo preferido','email',array('name'=>'accion','formatter'=>'clickFormatter') ];
+$a_cabeceras = [ 'usuario',
+                'nombre a mostrar',
+                'cargo preferido',
+                'email',
+                //array('name'=>'accion','formatter'=>'clickFormatter'),
+            ];
 $a_botones = [ ['txt'=> _("borrar"), 'click'=>"fnjs_eliminar()"],
                ['txt'=> _("cambiar password"), 'click'=>"fnjs_cmb_passwd()"],
                ['txt'=> _("modificar"), 'click'=>"fnjs_editar()"],
@@ -63,7 +69,7 @@ foreach ($oUsuarioColeccion as $oUsuario) {
 	$email=$oUsuario->getEmail();
 	$id_cargo_preferido=$oUsuario->getId_cargo_preferido();
 
-	if (!empty($id_cargo_preferido)) {
+	if (!empty($id_cargo_preferido) && ConfigGlobal::getEsquema() != 'admin') {
         $oCargo->setId_cargo($id_cargo_preferido);
         $oCargo->DBCarregar();
         $cargo= $oCargo->getCargo();
@@ -71,14 +77,14 @@ foreach ($oUsuarioColeccion as $oUsuario) {
 	    $cargo = '?';
 	}
 
-	$pagina=web\Hash::link(core\ConfigGlobal::getWeb().'/apps/usuarios/controller/usuario_form.php?'.http_build_query(array('quien'=>'usuario','id_usuario'=>$id_usuario)));
+	//$pagina=web\Hash::link(core\ConfigGlobal::getWeb().'/apps/usuarios/controller/usuario_form.php?'.http_build_query(array('quien'=>'usuario','id_usuario'=>$id_usuario)));
 
 	$a_valores[$i]['sel']="$id_usuario#";
 	$a_valores[$i][1]=$usuario;
 	$a_valores[$i][2]=$nom_usuario;
 	$a_valores[$i][3]=$cargo;
 	$a_valores[$i][5]=$email;
-	$a_valores[$i][6]= array( 'ira'=>$pagina, 'valor'=>'editar');
+	//$a_valores[$i][6]= array( 'ira'=>$pagina, 'valor'=>'editar');
 }
 if (isset($Qid_sel) && !empty($Qid_sel)) { $a_valores['select'] = $Qid_sel; }
 if (isset($Qscroll_id) && !empty($Qscroll_id)) { $a_valores['scroll_id'] = $Qscroll_id; }

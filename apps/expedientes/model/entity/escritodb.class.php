@@ -105,12 +105,6 @@ class EscritoDB Extends core\ClasePropiedades {
 	 */
 	 protected $a_destinos;
 	/**
-	 * Entradilla de EscritoDB
-	 *
-	 * @var string
-	 */
-	 protected $sentradilla;
-	/**
 	 * Asunto de EscritoDB
 	 *
 	 * @var string
@@ -275,7 +269,6 @@ class EscritoDB Extends core\ClasePropiedades {
 		$aDades['json_prot_ref'] = $this->json_prot_ref;
 		$aDades['id_grupos'] = $this->a_id_grupos;
 		$aDades['destinos'] = $this->a_destinos;
-		$aDades['entradilla'] = $this->sentradilla;
 		$aDades['asunto'] = $this->sasunto;
 		$aDades['detalle'] = $this->sdetalle;
 		$aDades['creador'] = $this->icreador;
@@ -305,7 +298,6 @@ class EscritoDB Extends core\ClasePropiedades {
 					json_prot_ref            = :json_prot_ref,
 					id_grupos                = :id_grupos,
 					destinos                 = :destinos,
-					entradilla               = :entradilla,
 					asunto                   = :asunto,
 					detalle                  = :detalle,
 					creador                  = :creador,
@@ -341,8 +333,8 @@ class EscritoDB Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(json_prot_local,json_prot_destino,json_prot_ref,id_grupos,destinos,entradilla,asunto,detalle,creador,resto_oficinas,comentarios,f_aprobacion,f_escrito,f_contestar,categoria,visibilidad,accion,modo_envio,f_salida,ok,tipo_doc,anulado,descripcion)";
-			$valores="(:json_prot_local,:json_prot_destino,:json_prot_ref,:id_grupos,:destinos,:entradilla,:asunto,:detalle,:creador,:resto_oficinas,:comentarios,:f_aprobacion,:f_escrito,:f_contestar,:categoria,:visibilidad,:accion,:modo_envio,:f_salida,:ok,:tipo_doc,:anulado,:descripcion)";		
+			$campos="(json_prot_local,json_prot_destino,json_prot_ref,id_grupos,destinos,asunto,detalle,creador,resto_oficinas,comentarios,f_aprobacion,f_escrito,f_contestar,categoria,visibilidad,accion,modo_envio,f_salida,ok,tipo_doc,anulado,descripcion)";
+			$valores="(:json_prot_local,:json_prot_destino,:json_prot_ref,:id_grupos,:destinos,:asunto,:detalle,:creador,:resto_oficinas,:comentarios,:f_aprobacion,:f_escrito,:f_contestar,:categoria,:visibilidad,:accion,:modo_envio,:f_salida,:ok,:tipo_doc,:anulado,:descripcion)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'EscritoDB.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -450,7 +442,6 @@ class EscritoDB Extends core\ClasePropiedades {
 		if (array_key_exists('json_prot_ref',$aDades)) { $this->setJson_prot_ref($aDades['json_prot_ref'],TRUE); }
 		if (array_key_exists('id_grupos',$aDades)) { $this->setId_grupos($aDades['id_grupos'],TRUE); }
 		if (array_key_exists('destinos',$aDades)) { $this->setDestinos($aDades['destinos'],TRUE); }
-		if (array_key_exists('entradilla',$aDades)) { $this->setEntradilla($aDades['entradilla']); }
 		if (array_key_exists('asunto',$aDades)) { $this->setAsunto($aDades['asunto']); }
 		if (array_key_exists('detalle',$aDades)) { $this->setDetalle($aDades['detalle']); }
 		if (array_key_exists('creador',$aDades)) { $this->setCreador($aDades['creador']); }
@@ -482,7 +473,6 @@ class EscritoDB Extends core\ClasePropiedades {
 		$this->setJson_prot_ref('');
 		$this->setId_grupos();
 		$this->setDestinos('');
-		$this->setEntradilla('');
 		$this->setAsunto('');
 		$this->setDetalle('');
 		$this->setCreador('');
@@ -727,28 +717,6 @@ class EscritoDB Extends core\ClasePropiedades {
 	        $postgresArray = $a_destinos;
 	    }
         $this->a_destinos = $postgresArray;
-	}
-	/**
-	 * Recupera l'atribut sentradilla de EscritoDB
-	 *
-	 * @return string sentradilla
-	 */
-	function getEntradilla() {
-	    /*
-		if (!isset($this->sentradilla) && !$this->bLoaded) {
-			$this->DBCarregar();
-		}
-		return $this->sentradilla;
-		*/
-		return "Si veus això avisa al Dani";
-	}
-	/**
-	 * estableix el valor de l'atribut sentradilla de EscritoDB
-	 *
-	 * @param string sentradilla='' optional
-	 */
-	function setEntradilla($sentradilla='') {
-		$this->sentradilla = $sentradilla;
 	}
 	/**
 	 * Recupera l'atribut sasunto de EscritoDB
@@ -1142,7 +1110,6 @@ class EscritoDB Extends core\ClasePropiedades {
 		$oEscritoDBSet->add($this->getDatosJson_prot_ref());
 		$oEscritoDBSet->add($this->getDatosId_grupos());
 		$oEscritoDBSet->add($this->getDatosDestinos());
-		$oEscritoDBSet->add($this->getDatosEntradilla());
 		$oEscritoDBSet->add($this->getDatosAsunto());
 		$oEscritoDBSet->add($this->getDatosDetalle());
 		$oEscritoDBSet->add($this->getDatosCreador());
@@ -1223,18 +1190,6 @@ class EscritoDB Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'destinos'));
 		$oDatosCampo->setEtiqueta(_("destinos"));
-		return $oDatosCampo;
-	}
-	/**
-	 * Recupera les propietats de l'atribut sentradilla de EscritoDB
-	 * en una clase del tipus DatosCampo
-	 *
-	 * @return core\DatosCampo
-	 */
-	function getDatosEntradilla() {
-		$nom_tabla = $this->getNomTabla();
-		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'entradilla'));
-		$oDatosCampo->setEtiqueta(_("entradilla"));
 		return $oDatosCampo;
 	}
 	/**

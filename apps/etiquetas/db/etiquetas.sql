@@ -15,6 +15,6 @@ CREATE TABLE public.etiquetas_expediente (
 
 ALTER TABLE public.etiquetas_expediente OWNER TO tramity;
 
-ALTER TABLE etiquetas_expediente ADD CONSTRAINT etiquetas_expediente_fk_exp FOREIGN KEY (id_expediente) REFERENCES expedientes (id_expediente) ON DELETE CASCADE;
-ALTER TABLE etiquetas_expediente ADD CONSTRAINT etiquetas_expediente_fk_eti FOREIGN KEY (id_etiqueta) REFERENCES etiquetas (id_etiqueta) ON DELETE CASCADE;
+ALTER TABLE public.etiquetas_expediente ADD CONSTRAINT etiquetas_expediente_fk_exp FOREIGN KEY (id_expediente) REFERENCES public.expedientes (id_expediente) ON DELETE CASCADE;
+ALTER TABLE public.etiquetas_expediente ADD CONSTRAINT etiquetas_expediente_fk_eti FOREIGN KEY (id_etiqueta) REFERENCES public.etiquetas (id_etiqueta) ON DELETE CASCADE;
 

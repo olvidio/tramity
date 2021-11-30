@@ -369,7 +369,7 @@ class PermRegistro {
         }
         // para el sd, como vcd excepto si la oficina es vcd.
         // Lo pongo fuera de switch para aprovechar el dafault.
-        if ($role_actual == 'sd') {
+        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL && $role_actual == 'sd') {
             $gesCargo = new GestorCargo();
             $cCargos = $gesCargo->getCargos(['cargo' => 'vcd']);
             $id_oficina_vcd = $cCargos[0]->getId_oficina();

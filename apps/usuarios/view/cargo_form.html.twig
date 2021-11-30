@@ -26,21 +26,23 @@ fnjs_guardar=function(formulario){
       <form class="user" id="frm_cargo"  name="frm_cargo" action="" method="post">
       {{ oHash.getCamposHtml|raw }}
         <div class="mb-3 input-group col-6">
-           <span class="input-group-text">Cargo</span>
+           <span class="input-group-text">{{ "Cargo"|trans }}</span>
            <input type="text" class="form-control" id="cargo" name="cargo" placeholder="nombre del cargo" value="{{ cargo }}">
         </div>
         <div class="mb-3 input-group col-10">
-            <span class="input-group-text">Descripción</span>
+            <span class="input-group-text">{{ "Descripción"|trans }}</span>
             <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="descripcion" value="{{ descripcion }}">
         </div>
 		<div class="row mb-3">
+		  {%  if hay_oficina %}
           <div class="col-6">
           <label for="example" class="form-label">{{ "Oficina"|trans }}</label>
 			{{ oDesplOficinas.desplegable|raw }}
 		  </div>
+		  {% endif %}
           <div class="col-6">
-		  <input type="checkbox" class="form-check-input" id="director" name="director" {{ chk_director }}>
-    	  <label class="form-check-label" for="director">{{ "director"|trans }}</label>
+		    <input type="checkbox" class="col-form-check-input" id="director" name="director" {{ chk_director }}>
+    	    <label class="col-form-label" for="director">{{ "director"|trans }}</label>
     	  </div>
         </div>
         
