@@ -368,17 +368,17 @@ class Buscar {
                 
                 return $aCollections;
             break;
-            case 41:
-                // case "dl":
+            case 41: // case "dl":
+            case 6: // buscar en escritos: modelo jurídico (plantilla)
                 $cEscritos = $this->buscarEscritos();
                 $aCollections['escritos'] = $cEscritos;
                 return $aCollections;
+                break;
             break;
             case 42: //case "de":
             case 43: //case "de cr a dl":
             case 44: //case "de cr a ctr":
             case 5: // como 2 pero solo buscar en entradas (sólo entradas 17-3-2021)
-            case 6: // buscar en escritos: modelo jurídico (plantilla)
                 $cEntradas = $this->buscarEntradas();
                 $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
