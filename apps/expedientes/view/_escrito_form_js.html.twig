@@ -21,9 +21,11 @@ fnjs_actualizar=function() {
 }
 
 fnjs_ver_dst=function(){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	var id_escrito = $('#id_escrito').val();
 	if (!id_escrito || id_escrito == false) {
 		alert ("{{ "Primero debe guardar el escrito"|trans|raw }}");
@@ -44,7 +46,7 @@ fnjs_ver_dst=function(){
 
 
 fnjs_cancelar=function(){
-    if (event != undefined) {
+	if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -59,16 +61,18 @@ fnjs_cancelar=function(){
 }
 
 fnjs_explotar=function(){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-	alert("{{ "explotar!"|trans|raw }}");
-	// Asegurarme que es por click y no por return (posicion: 0,0)
-	var x = event.x || event.clientX;
-    var y = event.y || event.clientY;
-    if (!x && !y) {
-    	return false;
-    }
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        alert("{{ "explotar!"|trans|raw }}");
+        // Asegurarme que es por click y no por return (posicion: 0,0)
+        var x = event.x || event.clientX;
+        var y = event.y || event.clientY;
+        if (!x && !y) {
+            return false;
+        }
+	}
 
     $('#que').val('explotar');
 	datos = $('#form_escrito').serialize();	
@@ -90,9 +94,11 @@ fnjs_explotar=function(){
 }
 
 fnjs_guardar_escrito=function(quiet=0){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
@@ -200,9 +206,11 @@ fnjs_guardar_escrito=function(quiet=0){
 }
 
 fnjs_enviar_a_oficina=function() {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	// pedir una explicación (la funcion está en: js/core_ajax.js)
 	modalPrompt({
       type: "prompt",
@@ -297,9 +305,11 @@ fnjs_quitar_referencias=function(){
 }
 
 fnjs_proto=function(num,any){
-	event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	var s=0;
 	var numero;
 	var siguiente="";

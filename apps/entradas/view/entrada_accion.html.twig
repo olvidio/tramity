@@ -109,7 +109,7 @@ fnjs_encargar=function() {
 }
 
 fnjs_cancelar=function(){
-    if (event != undefined) {
+    if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();

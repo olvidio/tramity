@@ -168,9 +168,11 @@
 <script type="text/javascript">
 
 fnjs_encargar=function() {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
     var id_expediente=$('#id_expediente').val();
     var id_oficial=$('#id_oficial').val();
     var url = 'apps/expedientes/controller/expediente_update.php';
@@ -215,7 +217,7 @@ fnjs_recorrido=function() {
 }
   
 fnjs_cancelar=function(){
-    if (event != undefined) {
+	if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -230,9 +232,11 @@ fnjs_cancelar=function(){
 }
 
 fnjs_distribuir=function(que){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;

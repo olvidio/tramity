@@ -52,9 +52,11 @@ $(document).ready(function() {
 });
 
 fnjs_guardar=function(formulario){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    }
     var url_doc = 'apps/usuarios/controller/personal_update.php';
     var data = $(formulario).serialize();
     request=$.ajax({
@@ -73,7 +75,7 @@ fnjs_guardar=function(formulario){
 }
 
 fnjs_cancelar=function(){
-    if (event != undefined) {
+    if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();

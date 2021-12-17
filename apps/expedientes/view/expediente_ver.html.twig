@@ -262,9 +262,11 @@ fnjs_ver_cargos=function(add_del) {
 }
 
 fnjs_add_cargos=function(add_del) {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	var selected = [];
 	$('#of input:checked').each(function() {
 	    selected.push($(this).attr('id'));
@@ -359,7 +361,7 @@ $('#ModalFirma').on('hidden.bs.modal', function () {
 });
 
 fnjs_cancelar=function(){
-    if (event != undefined) {
+	if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
