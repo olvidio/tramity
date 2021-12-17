@@ -54,7 +54,8 @@ $esquema_web = getenv('ESQUEMA');
 // Si el esquema no se pasa por directorio de la URL,
 // está en el nombre del servidor:
 if (empty($esquema_web)) {
-    $servername = $_SERVER['SERVER_NAME'];
+    //$servername = $_SERVER['SERVER_NAME'];
+    $servername = $_SERVER['HTTP_HOST'];
     $host = '.'.ConfigGlobal::SERVIDOR;
     $esquema_web = str_replace($host, '', $servername);
 }

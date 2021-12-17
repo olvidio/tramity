@@ -204,6 +204,7 @@
     </div>
   </div>
   
+  {% if vista_dl %}
   <!--  --------------- FIRMAS OFICINA --------------- -->
   <div id="div_firmas_oficina" class="mb-2 row">
     <label for="firmas_oficina" class="col-md-1 form-label">{{ "Firmas oficina"|trans }}:</label>
@@ -222,6 +223,7 @@
       </span>
     </div>
   </div>
+  {% endif %}
   
 <!--  --------------------  BOTONES --------------------------  -->
   <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar_expediente();" >
@@ -230,7 +232,7 @@
   <button tabindex='90' class="btn btn-primary" onClick="fnjs_guardar_expediente();" >
     {{ "Guardar"|trans }}
   </button>
-  {% if id_expediente %}
+  {% if vista_dl and id_expediente %}
       <button tabindex='90' class="btn btn-success" onClick="fnjs_circular();" >
         {{ "Circular"|trans }}
       </button>

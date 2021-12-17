@@ -2,6 +2,7 @@
 namespace ethercalc\model;
 
 use core\ConfigGlobal;
+use web\StringLocal;
 
 /**
  * INFO EN:
@@ -30,6 +31,10 @@ class Ethercalc {
     
     
     public function setId ($tipo_id,$id) {
+        // Añado el nombre del centro. De forma normalizada, pues a saber que puede tener el nombre:
+        $sigla = $_SESSION['oConfig']->getSigla();
+        $nom_ctr = StringLocal::lowerNormalized($sigla);
+        
         switch ($tipo_id) {
             case self::ID_ENTRADA:
                 $prefix = 'ent';
@@ -44,8 +49,7 @@ class Ethercalc {
                 $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_switch);
         }
-        
-        $this->id_escrito = $prefix.$id;
+        $this->id_escrito = $nom_ctr."*".$prefix.$id;
         
         return $this->id_escrito;
     }

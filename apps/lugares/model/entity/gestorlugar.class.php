@@ -3,6 +3,7 @@ namespace lugares\model\entity;
 use core\ConfigGlobal;
 use function core\is_true;
 use core;
+use usuarios\model\entity\Cargo;
 /**
  * GestorLugar
  *
@@ -40,13 +41,34 @@ class GestorLugar Extends core\ClaseGestor {
 	 * devuelve el id de la cr (cr)
 	 */
 	public function getId_cr() {
-	    //$sigla = $_SESSION['oConfig']->getSigla();
-	    $sigla = 'cr';
-	    $cLugares = $this->getLugares(['sigla' => $sigla]);
-	    if (!empty($cLugares)) {
-	        $id_sigla = $cLugares[0]->getId_lugar();
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+            $mi_ctr = $_SESSION['oConfig']->getSigla();
+            $mi_dl = $this->getSigla_superior($mi_ctr);
+            $mi_cr = $this->getSigla_superior($mi_dl);
 	    }
-	    return $id_sigla;
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+            $mi_dl = $_SESSION['oConfig']->getSigla();
+            $mi_cr = $this->getSigla_superior($mi_dl);
+	    }
+
+	    // 0º dlb y cr y el propio ctr
+	    $lugares = [];
+	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
+                            WHERE sigla='$mi_cr' AND anulado = FALSE
+                            ORDER BY sigla";
+	    foreach ($oDbl->query($query_ctr) as $aClave) {
+	        $clave=$aClave[0];
+	        $lugares[] = $clave;
+	    }
+	    
+	    if (is_array($lugares) && count($lugares) == 1) {
+	        return $lugares[0];
+	    } else {
+	        exit (_("Error al buscar el id de cr"));
+	    }
 	}
 	
 	/**
@@ -134,6 +156,46 @@ class GestorLugar Extends core\ClaseGestor {
 	 * @return array   id_lugar => sigla
 	 */
 	function getArrayBusquedas($ctr_anulados=FALSE) {
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+            return $this->getArrayBusquedasCtr();
+	    } else {
+            return $this->getArrayBusquedasDl($ctr_anulados);
+	    }
+	}
+	/**
+	 * retorna un array 
+	 * Els posibles llocs per buscar en el cas del ctr
+	 *
+	 * @return array   id_lugar => sigla
+	 */
+	function getArrayBusquedasCtr() {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    $mi_ctr = $_SESSION['oConfig']->getSigla();
+	    $mi_dl = $this->getSigla_superior($mi_ctr);
+	    $mi_cr = $this->getSigla_superior($mi_dl);
+	    
+        $lugares = [];
+	    // 0º dlb y cr y el propio ctr
+	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
+                            WHERE (sigla='$mi_cr' OR sigla='$mi_dl' OR sigla='$mi_ctr') AND anulado = FALSE
+                            ORDER BY sigla";
+	    foreach ($oDbl->query($query_ctr) as $aClave) {
+	        $clave=$aClave[0];
+	        $val=$aClave[1];
+	        $lugares[$clave]=$val;
+	    }
+	    
+	    return $lugares;
+	}
+	/**
+	 * retorna un array 
+	 * Els posibles llocs per buscar: també els anulados
+	 *
+	 * @param boolean $ctr_anulados
+	 * @return array   id_lugar => sigla
+	 */
+	function getArrayBusquedasDl($ctr_anulados=FALSE) {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
 	    $mi_dl = $_SESSION['oConfig']->getSigla();

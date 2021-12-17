@@ -20,21 +20,20 @@ Class ConfigGlobal extends ServerConf {
 	public static function getDomain() {
         // Coger el nombre del dominio para que sirva para tramity.red.local y etherpad.red.local
         $regs = [];
-        $host = $_SERVER['SERVER_NAME'];
+        $host = $_SERVER['HTTP_HOST'];
         preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $host, $regs);
         
         return $regs['domain'];
 	}
 	
 	public static function getEsquema() {
-	    $servername = $_SERVER['SERVER_NAME'];
+	    $servername = $_SERVER['HTTP_HOST'];
 	    $host = '.'.self::SERVIDOR;
 	    return str_replace($host, '', $servername);
 	}
 		
 	public static function getWeb() {
-		//return self::$web_server.self::getWebPort().self::getWebPath();
-	    return '//'.$_SERVER['SERVER_NAME'].self::getWebPort().self::getWebPath();
+	    return '//'.$_SERVER['HTTP_HOST'].self::getWebPort().self::getWebPath();
 	}
 	public static function getWeb_NodeScripts() {
 	    return self::getWeb().'/node_modules';

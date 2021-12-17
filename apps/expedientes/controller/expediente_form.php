@@ -275,8 +275,14 @@ $oHoy = new DateTimeLocal();
 $oHoy->sub(new DateInterval($error_fecha_txt));
 $minIso = $oHoy->format('Y-m-d');
 
+// para reducir la vista en el caso de los ctr
+$vista_dl = TRUE;
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    $vista_dl = FALSE;
+}
 
 $a_campos = [
+    'vista_dl' => $vista_dl,
     'titulo' => $titulo,
     'id_expediente' => $Qid_expediente,
     //'oHash' => $oHash,

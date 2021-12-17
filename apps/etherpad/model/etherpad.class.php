@@ -72,7 +72,7 @@ class Etherpad  extends Client {
                 exit ($err_switch);
         }
         
-        $this->id_escrito = $nom_ctr.$prefix.$id;
+        $this->id_escrito = $nom_ctr."*".$prefix.$id;
         
         return $this->id_escrito;
     }

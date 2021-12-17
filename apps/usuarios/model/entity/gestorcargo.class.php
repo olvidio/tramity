@@ -58,7 +58,7 @@ class GestorCargo Extends core\ClaseGestor {
 	 *
 	 * @return Array
 	 */
-	function getArrayCargosDirector() {
+	function zzgetArrayCargosDirector() {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
 	    
@@ -133,10 +133,13 @@ class GestorCargo Extends core\ClaseGestor {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
 	    
-	    //$Where = '';
-	    $Where = "WHERE id_oficina > 0";
-	    if (!empty($id_oficina)) {
-	        $Where .= " AND id_oficina = $id_oficina";
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+            $Where = "WHERE id_oficina = $id_oficina";
+	    } else {
+            $Where = "WHERE id_oficina > 0";
+            if (!empty($id_oficina)) {
+                $Where .= " AND id_oficina = $id_oficina";
+            }
 	    }
 	    $sQuery="SELECT id_cargo, cargo FROM $nom_tabla
                 $Where ORDER BY cargo";

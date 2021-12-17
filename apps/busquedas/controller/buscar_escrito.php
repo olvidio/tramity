@@ -5,6 +5,7 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
 use lugares\model\entity\GestorLugar;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;
@@ -177,8 +178,15 @@ $format = $oFecha->getFormat();
 
 $vista = ConfigGlobal::getVista();
 
+// para reducir la vista en el caso de los ctr
+$vista_dl = TRUE;
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    $vista_dl = FALSE;
+}
+
 $a_campos = [
     //'oHash' => $oHash,
+    'vista_dl' => $vista_dl,
     'oDesplLugar' => $oDesplLugar,
     'oDesplLugar4' => $oDesplLugar4,
     'oDesplOrigen' => $oDesplOrigen,
