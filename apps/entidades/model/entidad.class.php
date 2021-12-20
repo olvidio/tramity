@@ -112,6 +112,11 @@ class Entidad Extends EntidadDB {
         $err = ''; 
         // entradas:
         $err .= $this->ejecutarPsqlCrear('entradas');
+        // para las dl:
+        if ($this->getTipo() === self::TIPO_DL) {
+            // entradas_bypass
+            $err .= $this->ejecutarPsqlCrear('entradas',TRUE);
+        }
         // escritos:
         $err .= $this->ejecutarPsqlCrear('expedientes');
         // etiquetas:
@@ -135,8 +140,6 @@ class Entidad Extends EntidadDB {
             $err .= $this->ejecutarPsqlCrear('usuarios', TRUE);
             // lugares_grupos
             $err .= $this->ejecutarPsqlCrear('lugares', TRUE);
-            // entradas_bypass
-            $err .= $this->ejecutarPsqlCrear('entradas', TRUE);
             // insert cargos mínimos usuarios:
             $err .= $this->ejecutarPsqlInsert('usuarios', TRUE);
             $err .= $this->ejecutarPsqlInsert('config');
