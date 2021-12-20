@@ -203,20 +203,21 @@ class Entidad Extends EntidadDB {
     private function crearEsquema() {
         $oDbl = $this->getoDbl();
         $nom_schema = $this->getSchema();
+        $err_txt = '';
         $sql = "CREATE SCHEMA IF NOT EXISTS \"$nom_schema\" ";
         
         if (($oDblSt = $oDbl->prepare($sql)) === false) {
             $sClauError = 'DBRol.crearSchema.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return false;
+            $err_txt .= sprintf("ERROR AL CREAR EL ESQUEMA: $sClauError");
         } else {
             if ($oDblSt->execute() === false) {
                 $sClauError = 'DBRol.crearSchema.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                return false;
+                $err_txt .= sprintf("ERROR AL CREAR EL ESQUEMA: $sClauError");
             }
         }
-        
+        return $err_txt;
     }
     
     private function getDir() {
