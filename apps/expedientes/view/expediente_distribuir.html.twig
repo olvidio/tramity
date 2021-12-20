@@ -269,7 +269,7 @@ fnjs_mas_etiquetas=function(){
     var valor=1;
     var id_campo='#'+event.currentTarget.id;
     var valor=$(id_campo).val();
-    if(code!=9) {
+    if(code!=9 && typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
     }

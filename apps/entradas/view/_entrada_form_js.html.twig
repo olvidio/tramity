@@ -50,14 +50,16 @@ fnjs_admitir=function(){
 }
 
 fnjs_mod_pendiente=function() {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    // Asegurarme que es por click y no por return (posicion: 0,0)
-    var x = event.x || event.clientX;
-    var y = event.y || event.clientY;
-    if (!x && !y) {
-        return false;
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        // Asegurarme que es por click y no por return (posicion: 0,0)
+        var x = event.x || event.clientX;
+        var y = event.y || event.clientY;
+        if (!x && !y) {
+            return false;
+        }
     }
     var err=0;
     var of_ponente=$('#of_ponente').val();
@@ -243,7 +245,7 @@ fnjs_mas_oficinas=function(){
         var valor=1;
         var id_campo='#'+event.currentTarget.id;
         var valor=$(id_campo).val();
-        if(code!=9) {
+        if(code!=9 && typeof event !== 'undefined') {
             event.preventDefault();
             event.stopPropagation();
         }
@@ -310,9 +312,12 @@ fnjs_comprobar_plazo=function(campo){
 }
 
 fnjs_proto=function(num,any){
-    event.preventDefault();
-	event.stopPropagation();
-	event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
+
 	var s=0;
 	var numero;
 	var siguiente="";

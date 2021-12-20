@@ -22,7 +22,9 @@ $(document).ready(function() {
 });
 
 fnjs_guardar=function(formulario){
-	event.preventDefault();
+    if (typeof event !== 'undefined') {
+    	event.preventDefault();
+	}
     datos=$(formulario).serialize();
 	request=$.ajax({
 		data: datos,

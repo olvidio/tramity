@@ -232,7 +232,7 @@ fnjs_del_adjunto=function(id_adjunto) {
 }
 
 fnjs_ver_adjunto=function(id_adjunto) {
-    if (event != null) {
+    if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -305,7 +305,7 @@ fnjs_guardar_quiet=function() {
 
 
 fnjs_ver_doc_ep=function() {
-    if (event != null) {
+    if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -374,7 +374,7 @@ fnjs_actualizar=function(){
 }
 
 fnjs_add_escrito=function(n) {
-    if (event != null) {
+    if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();

@@ -23,9 +23,11 @@ fnjs_calendario=function(){
 }
 
 fnjs_buscar=function(){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	// comprobar que se ha selecionado una oficina (en el caso de secretaria)
 	of = $('#id_oficina').val();
 	if (!of) {

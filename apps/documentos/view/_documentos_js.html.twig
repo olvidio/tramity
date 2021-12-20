@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 fnjs_cancelar=function(){
-    if (event != null) {
+    if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -24,7 +24,7 @@ fnjs_cancelar=function(){
 }
 
 fnjs_guardar_documento=function(quiet=0){
-    if (event != null) {
+    if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -129,7 +129,7 @@ fnjs_guardar_success=function(data) {
 }
 
 fnjs_ver_doc_ep=function() {
-	if (event != null) {
+    if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -213,7 +213,7 @@ fnjs_actualizar=function(){
 }
 
 fnjs_add_doc=function(n) {
-    if (event != null) {
+    if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -253,7 +253,7 @@ fnjs_mas_etiquetas=function(){
     var valor=1;
     var id_campo='#'+event.currentTarget.id;
     var valor=$(id_campo).val();
-    if(code!=9) {
+    if(code!=9 && typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
     }

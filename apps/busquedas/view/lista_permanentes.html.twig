@@ -43,8 +43,6 @@ fnjs_ver_documento=function(id_escrito){
     top.newWin.focus();
 }
 fnjs_buscar=function(n){
-	//event.preventDefault();
-	//event.stopPropagation();
     $('#modifica3').attr('action','apps/busquedas/controller/lista_permanentes.php');
     $('#tipo_lista').val(n);
     fnjs_enviar_formulario('#modifica3');

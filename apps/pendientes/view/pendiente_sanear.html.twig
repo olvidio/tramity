@@ -65,9 +65,11 @@ fnjs_proto=function(num,any,siguiente){
     }
 }
 fnjs_cancelar=function() {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	var go = $('#go').val();
 	if (go == 'entradas') { // estoy en una ventana independiente
         window.close();

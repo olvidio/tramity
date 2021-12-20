@@ -9,7 +9,9 @@ fnjs_editar=function(){
 }
 
 fnjs_eliminar=function(){
-    event.preventDefault();
+    if (typeof event !== 'undefined') {
+    	event.preventDefault();
+	}
 	rta=fnjs_solo_uno('#seleccionados');
 	if (rta==1) {
 		if (confirm("{{ "¿Está seguro que desea borrar esta entidad?"|trans }}") ) {

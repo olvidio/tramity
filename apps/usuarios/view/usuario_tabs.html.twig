@@ -35,7 +35,7 @@
 
 <script type="text/javascript">
 fnjs_cmb_role=function(role){
-	if (event != null) {
+    if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();

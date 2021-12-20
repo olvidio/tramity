@@ -39,9 +39,11 @@ fnjs_actualizar=function(){
 }
 
 fnjs_eliminar=function(id_item){
-	event.preventDefault();
-	event.stopPropagation();
-	event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	
 	if (confirm("{{ txt_eliminar }}")) {
 		var parametros='que=eliminar&id_item='+id_item+'{{ h_eliminar|raw }}';

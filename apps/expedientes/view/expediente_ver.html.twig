@@ -202,9 +202,11 @@
 {{ include ('_antecedentes_js.html.twig') }}
 <script type="text/javascript">
 fnjs_cambio_tramite=function() {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
     
     fnjs_update_div('#main','{{ pagina_cambio|raw }}');
 }

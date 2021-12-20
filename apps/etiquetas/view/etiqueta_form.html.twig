@@ -39,22 +39,26 @@
 
 <script>
 fnjs_cancelar=function(){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-	// Asegurarme que es por click y no por return (posicion: 0,0)
-	var x = event.x || event.clientX;
-    var y = event.y || event.clientY;
-    if (!x && !y) {
-    	return false;
-    }
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        // Asegurarme que es por click y no por return (posicion: 0,0)
+        var x = event.x || event.clientX;
+        var y = event.y || event.clientY;
+        if (!x && !y) {
+            return false;
+        }
+	}
 	fnjs_update_div('#main',"apps/etiquetas/controller/etiqueta_lista.php");
 }
 
 fnjs_guardar=function(){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
     datos = $('#frm_etiqueta').serialize();
     
     request=$.ajax({
