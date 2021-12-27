@@ -9,7 +9,6 @@ CREATE TABLE public.expedientes (
     prioridad smallint NOT NULL,
     json_antecedentes jsonb,
     json_acciones jsonb,
-    etiquetas integer[],
 	f_contestar date,
     estado smallint NOT NULL DEFAULT 1,
     f_ini_circulacion date,
@@ -25,7 +24,6 @@ ALTER TABLE public.expedientes OWNER TO tramity;
 
 CREATE INDEX IF NOT EXISTS expedientes_asunto_idx ON public.expedientes ((lower(asunto)));
 CREATE INDEX IF NOT EXISTS expedientes_estado_idx ON public.expedientes (estado);
-CREATE INDEX IF NOT EXISTS expedientes_etiquetas_idx ON public.expedientes (etiquetas);
 CREATE INDEX IF NOT EXISTS expedientes_f_aprobacion ON public.expedientes (f_aprobacion);
 CREATE INDEX IF NOT EXISTS expedientes_f_contestar_idx ON public.expedientes (f_contestar);
 CREATE INDEX IF NOT EXISTS expedientes_f_reunion ON public.expedientes (f_reunion);

@@ -164,8 +164,10 @@ switch ($role_actual) {
     case 'admin':
         $server =  $_SESSION['oConfig']->getServerDavical();
         $server = $server.'/index.php';
+        // hay que enviar algun valor, sino el javascript da un error:
+        $error_fecha = empty($_SESSION['oConfig']->getPlazoError())? 15 : $_SESSION['oConfig']->getPlazoError();
         $a_campos = [
-            'error_fecha' => $_SESSION['oConfig']->getPlazoError(),
+            'error_fecha' => $error_fecha,
             'server_davical' => $server,
         ];
         if (ConfigGlobal::getEsquema() === 'admin') {
