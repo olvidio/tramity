@@ -89,10 +89,10 @@ class Config {
     
     private function resetContador(){
         $any_actual = date('Y');
-        $parametro = 'reset_contador';
+        $parametro = 'contador_any';
         $oConfigSchema = new ConfigSchema($parametro);
-        $any = $oConfigSchema->getValor();
-        if ($any > $any_actual) {
+        $any_contador = $oConfigSchema->getValor();
+        if ($any_actual > $any_contador) {
             $oConfigSchema->setValor($any_actual);
             $oConfigSchema->DBGuardar();
             // poner al inicio
@@ -103,6 +103,10 @@ class Config {
             $valor = $this->getIni_contador();
             $oConfigSchemaContador = new ConfigSchema('contador');
             $oConfigSchemaContador->setValor($valor);
+            $oConfigSchemaContador->DBGuardar();
+            // actualizar el contador_any
+            $oConfigSchemaContador = new ConfigSchema('contador_any');
+            $oConfigSchemaContador->setValor($any_actual);
             $oConfigSchemaContador->DBGuardar();
         }
     }
