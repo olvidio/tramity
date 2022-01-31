@@ -188,6 +188,12 @@ class Enviar {
         $this->a_adjuntos = $a_adjuntos;
     }
     
+    /**
+     * genera el pdf del escrito.
+     * Para las cabeceras hay que añadir las referencias
+     * 
+     * @param integer $id_lugar
+     */
     private function getDatosEscrito($id_lugar) {
         // para no tener que repetir todo cuando hay multiples destinos
         if ($this->bLoaded === FALSE) {
@@ -325,11 +331,13 @@ class Enviar {
                     $oMail->Body    = $message;
                     ////$oMail->AltBody = 'This is the body in plain text for non-HTML mail clients';
                     
+                    /*
                     $oMail->send();
                     $this->a_rta['success'] = TRUE;
                     $this->a_rta['mensaje'] = 'Message has been sent<br>';
                     $this->a_rta['marcar'] = TRUE;
                     $num_enviados++;
+                    */
                 } catch (Exception $e) {
                     $err_mail .= empty($err_mail)? '' : '<br>';
                     $err_mail .= "Message could not be sent. Mailer Error: {$oMail->ErrorInfo}";

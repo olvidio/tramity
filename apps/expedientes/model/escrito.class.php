@@ -250,7 +250,13 @@ class Escrito Extends EscritoDB {
         return $html;
     }
     
-    
+    /**
+     * id_lugar sólo se pasa cuando el escrito va dirigido a un grupo, y hay que generear escritos
+     * individuales para cada ctr del grupo.
+     * 
+     * @param string $id_lugar_de_grupo
+     * @return string destinos | destino + ref.
+     */
     public function cabeceraIzquierda($id_lugar_de_grupo='') {
         // destinos + ref
         // destinos:
@@ -258,13 +264,13 @@ class Escrito Extends EscritoDB {
         $destinos_txt = '';
         $id_dst = '';
         
-        if (!empty($id_lugar_de_grupo)) {
-            $oLugar = new Lugar($id_lugar_de_grupo);
-            $destinos_txt .= empty($destinos_txt)? '' : ', ';
-            $destinos_txt .= $oLugar->getSigla();
-        } else {
-            $a_grupos = $this->getId_grupos();
-            if (!empty($a_grupos)) {
+        $a_grupos = $this->getId_grupos();
+        // si es un grupo:
+        if (!empty($a_grupos)) {
+            if (!empty($id_lugar_de_grupo)) { // individual: solo añado el nombre del destino
+                $oLugar = new Lugar($id_lugar_de_grupo);
+                $destinos_txt .= $oLugar->getSigla();
+            } else {
                 //(según los grupos seleccionados)
                 foreach ($a_grupos as $id_grupo) {
                     $oGrupo = new Grupo($id_grupo);
@@ -272,31 +278,46 @@ class Escrito Extends EscritoDB {
                     $destinos_txt .= empty($destinos_txt)? '' : ', ';
                     $destinos_txt .= $descripcion_g;
                 }
+            }
+        } else { // si no es un grupo
+            $a_json_prot_dst = $this->getJson_prot_destino(TRUE);
+            if (!empty($id_lugar_de_grupo)) { // individual, con su protocolo.
+                foreach ($a_json_prot_dst as $json_prot_dst) {
+                    $id_dst = $json_prot_dst->lugar;
+                    if ($id_dst == $id_lugar_de_grupo) {
+                        $oProtDestino = new Protocolo();
+                        $oProtDestino->setJson($json_prot_dst);
+                        $destinos_txt = $oProtDestino->ver_txt();
+                    }
+                }
             } else {
-                $a_json_prot_dst = $this->getJson_prot_destino();
+                //(segun individuales)
                 if (!empty((array)$a_json_prot_dst)) {
                     $json_prot_dst = $a_json_prot_dst[0];
                     $id_dst = $json_prot_dst->lugar;
                 }
-                //(segun individuales)
-                $a_json_prot_dst = $this->getJson_prot_destino();
                 $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
                 $destinos_txt = $oArrayProtDestino->ListaTxtBr();
             }
         }
-
+        // grupos personalizados...
         // Si no hay ni grupos ni json, miro ids
         if (empty($destinos_txt)) {
-            $descripcion_g = $this->getDescripcion();
-            if (empty($descripcion_g)) {
-                $a_id_lugar = $this->getDestinos();
-                foreach ($a_id_lugar as $id_lugar) {
-                    $oLugar = new Lugar($id_lugar);
-                    $destinos_txt .= empty($destinos_txt)? '' : ', ';
-                    $destinos_txt .= $oLugar->getSigla();
-                }
+            if (!empty($id_lugar_de_grupo)) {
+                $oLugar = new Lugar($id_lugar_de_grupo);
+                $destinos_txt .= $oLugar->getSigla();
             } else {
-                $destinos_txt .= $descripcion_g;
+                $descripcion_g = $this->getDescripcion();
+                if (empty($descripcion_g)) {
+                    $a_id_lugar = $this->getDestinos();
+                    foreach ($a_id_lugar as $id_lugar) {
+                        $oLugar = new Lugar($id_lugar);
+                        $destinos_txt .= empty($destinos_txt)? '' : ', ';
+                        $destinos_txt .= $oLugar->getSigla();
+                    }
+                } else {
+                    $destinos_txt .= $descripcion_g;
+                }
             }
         }
 
