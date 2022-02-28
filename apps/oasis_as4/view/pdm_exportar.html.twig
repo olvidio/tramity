@@ -1,0 +1,13 @@
+<script>
+/* fnjs_left_side_hide(); */
+</script>
+<h3>{{ "Lista de ficheros resp plataformas pdm"|trans }}</h3>
+<h2 class='text-center'>{{ nomdock }}</h2>
+<br>
+</form>
+<form id="seleccionados"  name="seleccionados" action="" method="post" >
+{{ oHash.getCamposHtml|raw }}
+{{ oTabla.mostrar_tabla|raw }}
+</form>
+<br>
+{{ "Para generar uno nuevo, ir a 'lista pdm' para crear y borrar el init y resp de una vez"|trans}}

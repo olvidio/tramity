@@ -30,54 +30,54 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 	 *
 	 * @var array
 	 */
-	 private $aPrimary_key;
+	 protected $aPrimary_key;
 
 	/**
 	 * aDades de EntradaAdjunto
 	 *
 	 * @var array
 	 */
-	 private $aDades;
+	 protected $aDades;
 
 	/**
 	 * bLoaded
 	 *
 	 * @var boolean
 	 */
-	 private $bLoaded = FALSE;
+	 protected $bLoaded = FALSE;
 
 	/**
 	 * Id_schema de EntradaAdjunto
 	 *
 	 * @var integer
 	 */
-	 private $iid_schema;
+	 protected $iid_schema;
 
 	/**
 	 * Id_item de EntradaAdjunto
 	 *
 	 * @var integer
 	 */
-	 private $iid_item;
+	 protected $iid_item;
 	/**
 	 * Id_entrada de EntradaAdjunto
 	 *
 	 * @var integer
 	 */
-	 private $iid_entrada;
+	 protected $iid_entrada;
 	/**
 	 * Nom de EntradaAdjunto
 	 *
 	 * @var string
 	 */
-	 private $snom;
+	 protected $snom;
 	/**
 	 * Adjunto de EntradaAdjunto
 	 *
 	 * @var string bytea
 	 */
-	 private $adjunto_id_res;
-	 private $adjunto_txt;
+	 protected $adjunto_id_res;
+	 protected $adjunto_txt;
 	 
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**

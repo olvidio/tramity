@@ -13,18 +13,6 @@
 </form>
 <hr>
 <h3>{{ "servidor SMTP"|trans }}:</h3>
-<form id="frm_from" name="frm_from" action="">
-{{ oHashFrom.getCamposHtml|raw }}
-{{ "From:"|trans }}
-<input type="text" name="valor" value="{{ from }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<form id="frm_reply_to" name="frm_reply_to" action="">
-{{ oHashReply.getCamposHtml|raw }}
-{{ "Reply to:"|trans }}
-<input type="text" name="valor" value="{{ reply_to }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
 <form id="frm_smtp_host" name="frm_smtp_host" action="">
 {{ oHashSMTP_host.getCamposHtml|raw }}
 {{ "Host:"|trans }}
@@ -60,6 +48,15 @@
 {{ "seguridad:"|trans }}
 <input type="radio" name="valor" value="{{ val_tls }}" {{ chk_tls }} >  {{ "tls"|trans }}
 <input type="radio" name="valor" value="{{ val_ssl }}" {{ chk_ssl }} >  {{ "ssl"|trans }}
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+
+<h3>{{ "servidor EDI"|trans }}:</h3>
+<form id="frm_dock" name="frm_dock" action="">
+{{ oHashDock.getCamposHtml|raw }}
+{{ "directorio dock:"|trans }}
+<input class="col-10" type="text" name="valor" value="{{ dock }}" >
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>

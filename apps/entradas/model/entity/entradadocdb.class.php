@@ -36,47 +36,47 @@ class EntradaDocDB Extends core\ClasePropiedades {
 	 *
 	 * @var array
 	 */
-	 private $aPrimary_key;
+	 protected $aPrimary_key;
 
 	/**
 	 * aDades de EntradaDocDB
 	 *
 	 * @var array
 	 */
-	 private $aDades;
+	 protected $aDades;
 
 	/**
 	 * bLoaded
 	 *
 	 * @var boolean
 	 */
-	 private $bLoaded = FALSE;
+	 protected $bLoaded = FALSE;
 
 	/**
 	 * Id_schema de EntradaDocDB
 	 *
 	 * @var integer
 	 */
-	 private $iid_schema;
+	 protected $iid_schema;
 
 	/**
 	 * Id_entrada de EntradaDocDB
 	 *
 	 * @var integer
 	 */
-	 private $iid_entrada;
+	 protected $iid_entrada;
 	/**
 	 * Tipo_doc de EntradaDocDB
 	 *
 	 * @var integer
 	 */
-	 private $itipo_doc;
+	 protected $itipo_doc;
 	/**
 	 * F_doc de EntradaDocDB
 	 *
 	 * @var web\DateTimeLocal
 	 */
-	 private $df_doc;
+	 protected $df_doc;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de EntradaDocDB

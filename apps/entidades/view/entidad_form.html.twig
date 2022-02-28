@@ -46,7 +46,7 @@ fnjs_guardar=function(formulario){
         event.stopPropagation();
         event.stopImmediatePropagation();
     }
-    var url_doc = 'apps/entidades/controller/entidad_update.php';
+    var url_doc = '{{ url_update }}';
     var data = $(formulario).serialize();
     request=$.ajax({
         url: url_doc,

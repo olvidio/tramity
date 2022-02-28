@@ -335,29 +335,20 @@ $oHashSMTP_pwd  ->setArrayCamposHidden(['parametro' => $parametro]);
 $a_campos['oHashSMTP_pwd'] = $oHashSMTP_pwd  ;
 $a_campos[$parametro] = $valor;
 
-$parametro = 'from';
+// ----------- Servidor de AS4 Deck -----------------
+$parametro = 'dock';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
-$oHashFrom  = new Hash();
-$oHashFrom  ->setUrl($url);
-$oHashFrom  ->setcamposForm('valor');
-$oHashFrom  ->setArrayCamposHidden(['parametro' => $parametro]);
+$val_dock = $valor;
 
-$a_campos['oHashFrom'] = $oHashFrom  ;
-$a_campos[$parametro] = $valor;
+$oHashDock = new Hash();
+$oHashDock->setUrl($url);
+$oHashDock->setcamposForm('valor');
+$oHashDock->setArrayCamposHidden(['parametro' => $parametro]);
 
-$parametro = 'reply_to';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-$oHashReply  = new Hash();
-$oHashReply  ->setUrl($url);
-$oHashReply  ->setcamposForm('valor');
-$oHashReply  ->setArrayCamposHidden(['parametro' => $parametro]);
-
-$a_campos['oHashReply'] = $oHashReply  ;
-$a_campos[$parametro] = $valor;
+$a_campos['oHashDock'] = $oHashDock;
+$a_campos['dock'] = $val_dock;
 
 // ----------- Servidor de Davical -------------------
 $parametro = 'server_davical';

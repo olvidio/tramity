@@ -111,6 +111,15 @@ class GestorEntradaDB Extends ClaseGestor {
                 $Where_json .= " AND items.visto = 'true'";
                 $Where_json .= " AND items.cargo='$encargado'";
                 break;
+            case 'centro':
+            	// para los ctr
+				$estado = Entrada::ESTADO_INGRESADO;
+                $sCondi = "estado = $estado";
+                $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+                break;
+            default:
+            	$err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+            	exit ($err_switch);
         }
         
         

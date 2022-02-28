@@ -7,6 +7,7 @@ CREATE TABLE public.lugares (
     nombre character varying(35),
     tipo_ctr character varying(5),
     modo_envio smallint,
+    plataforma text,
     pub_key bytea,
     e_mail text,
     anulado boolean DEFAULT false NOT NULL

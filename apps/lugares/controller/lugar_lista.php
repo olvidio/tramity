@@ -47,10 +47,20 @@ $dl='';
 $region='';
 $nombre='';
 $tipo_ctr = '';
+$plataforma = '';
 $e_mail = '';
 $anulado = '';
 
-$a_cabeceras = [ _("sigla"), _("dl"), _("región"), _("nombre"), _("tipo_ctr"), _("e_mail"), _("modo envío"), _("anulado") ];
+$a_cabeceras = [ _("sigla"),
+		_("dl"),
+		_("región"),
+		_("nombre"),
+		_("tipo_ctr"),
+		_("e_mail"),
+		_("modo envío"),
+		_("plataforma"),
+		_("anulado")
+	];
 $a_botones = [ ['txt'=> _("borrar"), 'click'=>"fnjs_eliminar()"],
                ['txt'=> _("modificar"), 'click'=>"fnjs_editar()"],
             ];
@@ -67,6 +77,7 @@ foreach ($cLugares as $oLugar) {
 	$region = $oLugar->getRegion();
 	$nombre = $oLugar->getNombre();
 	$tipo_ctr = $oLugar->getTipo_ctr();
+	$plataforma = $oLugar->getPlataforma();
 	$e_mail = $oLugar->getE_mail ();
 	$modo_envio = $oLugar->getModo_envio();
 	$anulado = $oLugar->getAnulado();
@@ -79,7 +90,8 @@ foreach ($cLugares as $oLugar) {
 	$a_valores[$i][5] = $tipo_ctr;
 	$a_valores[$i][6] = $e_mail;
 	$a_valores[$i][7] = $a_modos_envio[$modo_envio];
-	$a_valores[$i][8] = $anulado;
+	$a_valores[$i][8] = $plataforma;
+	$a_valores[$i][9] = $anulado;
 }
 if (isset($Qid_sel) && !empty($Qid_sel)) { $a_valores['select'] = $Qid_sel; }
 if (isset($Qscroll_id) && !empty($Qscroll_id)) { $a_valores['scroll_id'] = $Qscroll_id; }
@@ -114,4 +126,3 @@ $a_campos = [
 
 $oView = new ViewTwig('lugares/controller');
 echo $oView->renderizar('lugar_lista.html.twig',$a_campos);
-

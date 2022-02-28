@@ -363,3 +363,8 @@ fnjs_quitar_firmas_oficina=function(){
 	$('#firmas_oficina_num').val(0);
 }
 </script>
+
+{# para los ctr #}
+{%  if not vista_dl %}
+  {% include '_escrito_enviar.html.twig' %}
+{% endif %}

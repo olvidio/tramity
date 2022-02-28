@@ -50,7 +50,25 @@
 <input type="text" name="valor" value="{{ bodyMail }}" >
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
+
+<form id="frm_from" name="frm_from" action="">
+{{ oHashFrom.getCamposHtml|raw }}
+{{ "From:"|trans }}
+<input type="text" name="valor" value="{{ from }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_reply_to" name="frm_reply_to" action="">
+{{ oHashReply.getCamposHtml|raw }}
+{{ "Reply to:"|trans }}
+<input type="text" name="valor" value="{{ reply_to }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+
 <hr>
+
+
+
+
 
 <h3>{{ "valor inicio contadores"|trans }}:</h3>
 <form id="frm_contador" name="frm_contador" action="">

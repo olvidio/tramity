@@ -47,6 +47,7 @@ switch($Qque) {
         $Qregion = (string) \filter_input(INPUT_POST, 'region');
         $Qnombre = (string) \filter_input(INPUT_POST, 'nombre');
         $Qtipo_ctr = (string) \filter_input(INPUT_POST, 'tipo_ctr');
+        $Qplataforma = (string) \filter_input(INPUT_POST, 'plataforma');
         $Qe_mail = (string) \filter_input(INPUT_POST, 'e_mail');
         $Qmodo_envio = (integer) \filter_input(INPUT_POST, 'modo_envio');
         $Qanulado = (bool) \filter_input(INPUT_POST, 'anulado');
@@ -58,6 +59,7 @@ switch($Qque) {
         $oLugar->setRegion($Qregion);
         $oLugar->setNombre($Qnombre);
         $oLugar->setTipo_ctr($Qtipo_ctr);
+        $oLugar->setPlataforma($Qplataforma);
         $oLugar->setE_mail($Qe_mail);
         $oLugar->setModo_envio($Qmodo_envio);
         $oLugar->setAnulado($Qanulado);
@@ -73,6 +75,7 @@ switch($Qque) {
         $Qregion = (string) \filter_input(INPUT_POST, 'region');
         $Qnombre = (string) \filter_input(INPUT_POST, 'nombre');
         $Qtipo_ctr = (string) \filter_input(INPUT_POST, 'tipo_ctr');
+        $Qplataforma = (string) \filter_input(INPUT_POST, 'plataforma');
         $Qe_mail = (string) \filter_input(INPUT_POST, 'e_mail');
         $Qmodo_envio = (integer) \filter_input(INPUT_POST, 'modo_envio');
         
@@ -83,6 +86,7 @@ switch($Qque) {
         $oLugar->setRegion($Qregion);
         $oLugar->setNombre($Qnombre);
         $oLugar->setTipo_ctr($Qtipo_ctr);
+        $oLugar->setPlataforma($Qplataforma);
         $oLugar->setE_mail($Qe_mail);
         $oLugar->setModo_envio($Qmodo_envio);
 		if ($oLugar->DBGuardar() === FALSE) {

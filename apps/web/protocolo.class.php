@@ -100,6 +100,37 @@ class Protocolo {
 	    
 	    return $txt;
 	}
+	
+	/**
+	 * identificador para OASIS AS4
+	 * 
+	 * 'crH-2021-3'
+	 */
+	public function conversation_id() {
+		$txt = '';
+	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
+	    if (!empty($lugar)) {
+	        $oLugar = new Lugar($this->ilugar);
+	        $nom_lugar = $oLugar->getSigla();
+	        
+			$prot_num = empty($this->iprot_num)? '' : $this->iprot_num;
+			$prot_any = empty($this->iprot_any)? '' : $this->iprot_any;
+	    
+			if (!empty($prot_num)) {
+				// pasar el año a 4 cifras:
+				if (strlen($prot_any)==2) {
+					$actual_4 = (string)date('Y');
+					$prot_any = substr($actual_4,0,2).$prot_any;
+				}
+				$txt .= "$nom_lugar-${prot_any}-${prot_num}";
+			} else {
+				$prot = date('Y-m-d');
+				$txt .= "$nom_lugar-${prot}";
+			}
+	    }
+	    
+	    return $txt;
+	}
 
 	public function ver_desplegable() {
 	    $lugar = empty($this->ilugar)? '' : $this->ilugar;

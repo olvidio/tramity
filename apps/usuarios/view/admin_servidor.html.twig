@@ -14,7 +14,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3"> {{ "Admin"|trans }} </div>
+        <div class="sidebar-brand-text mx-3"> {{ "Admin"|trans }} <br> {{ "Servidor"|trans }} </div>
       </a>
 
       <!-- Divider -->
@@ -93,6 +93,38 @@
         </div>
       </li>
 
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        {{ "HoloDeckb2b"|trans }}
+      </div>
+      
+      <!-- Nav Item - Holodeckb2b -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseHolodeck" aria-expanded="true" aria-controls="collapseDavical">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>{{ "Holodeck"|trans }}</span>
+        </a>
+        <div id="collapseHolodeck" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/oasis_as4/controller/definir_plataforma.php')" href="#">
+            	{{ "definir plataforma"|trans }}
+            </a>
+            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/oasis_as4/controller/pdm_lista.php')" href="#">
+            	{{ "lista pdm"|trans }}
+            </a>
+            <a class="collapse-item"  onclick="fnjs_update_div('#main','apps/oasis_as4/controller/pdm_exportar.php')" href="#">
+                {{ "exportar pdm local"|trans }}
+            </a>
+            <a class="collapse-item"  onclick="fnjs_update_div('#main','apps/oasis_as4/controller/pdm_importar.php')" href="#">
+                {{ "importar pdm"|trans }}
+            </a>
+          </div>
+        </div>
+      </li> 
+      
       <!-- Divider -->
       <hr class="sidebar-divider">
 

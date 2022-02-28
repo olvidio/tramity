@@ -103,6 +103,7 @@ class ProtocoloArray Extends Protocolo {
 	    $ref = ($this->bRef)? 'ref. ' : '';
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
+	        	if (!property_exists($oProt, 'lugar')) { continue; }
 			    $lugar = $oProt->lugar;
 			    $prot_num = $oProt->num;
 			    $prot_any = $oProt->any;

@@ -27,6 +27,7 @@ $oEnviar = new Enviar($Qid_escrito,'escrito');
 $a_rta = $oEnviar->enviar();
 
 if ($a_rta['marcar'] === TRUE) {
+    /*
     $oEscrito = new Escrito($Qid_escrito);
     $oEscrito->DBCarregar();
     $oEscrito->setF_salida($f_salida,FALSE);
@@ -34,6 +35,7 @@ if ($a_rta['marcar'] === TRUE) {
     if ($oEscrito->DBGuardar() === FALSE) {
         exit($oEscrito->getErrorTxt());
     }
+    */
 }
 if ($a_rta['success'] === TRUE) {
     // para que se cierre la ventana que se ha abierto:

@@ -43,9 +43,11 @@ class Etherpad  extends Client {
     private $multiple = FALSE;
     
     
-    public function setId ($tipo_id,$id) {
+    public function setId ($tipo_id,$id,$sigla='') {
         // Añado el nombre del centro. De forma normalizada, pues a saber que puede tener el nombre:
-        $sigla = $_SESSION['oConfig']->getSigla();
+    	if (empty($sigla)) {
+			$sigla = $_SESSION['oConfig']->getSigla();
+    	}
         $nom_ctr = StringLocal::lowerNormalized($sigla);
         
         switch ($tipo_id) {
@@ -277,6 +279,48 @@ class Etherpad  extends Client {
         $html .= '</div>';
         
         return $html;
+    }
+    
+    public function grabarMD($txt){
+    	$padId = $this->getPadID();
+    	
+    	// comprobar que no existe:
+    	// returns all pads of this group
+    	$rev = null;
+    	$rta = $this->setText($padId, $rev);
+    	$code = $rta->getCode();
+    	if ($code == 0) {
+    		$data = $rta->getData();
+    		/* Example returns:
+    		 * {code: 0, message:"ok", data: {text:"Welcome Text"}}
+    		 * {code: 1, message:"padID does not exist", data: null}
+    		 */
+    		$text = $data['text'];
+    		return $text;
+    	} else {
+    		$this->mostrar_error($rta);
+    	}
+    }
+    
+    public function generarMD(){
+    	$padId = $this->getPadID();
+    	
+    	// comprobar que no existe:
+    	// returns all pads of this group
+    	$rev = null;
+    	$rta = $this->getText($padId, $rev);
+    	$code = $rta->getCode();
+    	if ($code == 0) {
+    		$data = $rta->getData();
+    		/* Example returns:
+    		 * {code: 0, message:"ok", data: {text:"Welcome Text"}}
+    		 * {code: 1, message:"padID does not exist", data: null}
+    		 */
+    		$text = $data['text'];
+    		return $text;
+    	} else {
+    		$this->mostrar_error($rta);
+    	}
     }
     
    /**

@@ -48,6 +48,12 @@ if (!empty($oCargo)) {
     $ponente_txt = $oCargo->getCargo();
 }
 
+// para reducir la vista en el caso de los ctr
+$vista_dl = TRUE;
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    $vista_dl = FALSE;
+}
+
 // preparar
 $gesCargos = new GestorCargo();
 $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
@@ -169,6 +175,12 @@ if ($Qid_expediente) {
         } else {
             $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >"._("quitar")."</span>";
         }
+        // para los centros, se puede enviar desde aquí
+        if (!$vista_dl) {
+            $link_enviar = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito($id_escrito);\" >"._("enviar")."</span>";
+            $a_accion['link_del'] .= $link_enviar;
+        }
+        
         
         $dst_txt = $oEscrito->getDestinosEscrito();
         
@@ -274,12 +286,6 @@ $error_fecha_txt = 'P'.$error_fecha.'D';
 $oHoy = new DateTimeLocal();
 $oHoy->sub(new DateInterval($error_fecha_txt));
 $minIso = $oHoy->format('Y-m-d');
-
-// para reducir la vista en el caso de los ctr
-$vista_dl = TRUE;
-if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
-    $vista_dl = FALSE;
-}
 
 $a_campos = [
     'vista_dl' => $vista_dl,

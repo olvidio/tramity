@@ -2,6 +2,7 @@
 namespace config\model;
 use config\model\entity\ConfigSchema;
 use config\model\entity\ConfigSchemaPublic;
+use core\ConfigGlobal;
 
 /**
  * Classe 
@@ -203,6 +204,18 @@ class Config {
         $parametro = 'reply_to';
         $oConfigSchema = new ConfigSchema($parametro);
         return $oConfigSchema->getValor();
+    }
+    
+    public function getDock() {
+        $parametro = 'dock';
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
+		return $oConfigSchema->getValor();
+    }
+    
+    public function getNomDock() {
+        $parametro = 'nomdock';
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
+    	return $oConfigSchema->getValor();
     }
     
     public function getServerDavical() {

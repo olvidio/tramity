@@ -430,7 +430,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
                     //echo '$data is valid';
                     $adjunto = base64_decode($doc_encoded);
                 } else {
-                    //ºecho '$data is NOT valid';
+                    //echo '$data is NOT valid';
                     $adjunto = $doc_encoded;
                 }
 		    }

@@ -9,7 +9,7 @@ use entradas\model\entity\GestorEntradaBypass;
 use lugares\model\entity\GestorGrupo;
 use pendientes\model\Pendiente;
 use usuarios\model\PermRegistro;
-use usuarios\model\entity\Oficina;
+use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
 use web\Protocolo;
 
@@ -66,6 +66,10 @@ switch($Qque) {
         // comprobar si es un cambio (ya estaba encargado a alguien)
         $encargado_old = $oEntrada->getEncargado();
         
+        // Para los ctr, hay que cambiar el estado a ESTADO_ACEPTADO
+        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        	$oEntrada->setEstado(Entrada::ESTADO_ACEPTADO);
+        }
         $oEntrada->setEncargado($Qid_cargo);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
@@ -533,7 +537,7 @@ switch($Qque) {
         exit();
         
     break;
-    default:
+	default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);
 }

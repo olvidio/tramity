@@ -8,6 +8,7 @@ use core\ViewTwig;
 use entradas\model\entity\GestorEntradaBypass;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\PermRegistro;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Hash;
@@ -107,17 +108,29 @@ class EntradaLista {
                 }
                 
                 $a_entradas_ponente = [];
-                if ($oficina == 'propia') {
-                    $id_oficina = ConfigGlobal::role_id_oficina();
-                    
-                    // No marcado como visto:
-                    $gesEntradas = new GestorEntrada();
-                    $cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina,'ponente');
-                    $a_entradas_ponente = [];
-                    foreach ($cEntradas as $oEntrada) {
-                        $id_entrada = $oEntrada->getId_entrada();
-                        $a_entradas_ponente[] = $id_entrada;
-                    }
+                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					// No marcado como visto:
+					$gesEntradas = new GestorEntrada();
+					$cEntradas = $gesEntradas->getEntradasNoVistoDB('','centro');
+					$a_entradas_ponente = [];
+					foreach ($cEntradas as $oEntrada) {
+						$id_entrada = $oEntrada->getId_entrada();
+						$a_entradas_ponente[] = $id_entrada;
+					}
+                	
+                } else {
+					if ($oficina == 'propia') {
+						$id_oficina = ConfigGlobal::role_id_oficina();
+						
+						// No marcado como visto:
+						$gesEntradas = new GestorEntrada();
+						$cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina,'ponente');
+						$a_entradas_ponente = [];
+						foreach ($cEntradas as $oEntrada) {
+							$id_entrada = $oEntrada->getId_entrada();
+							$a_entradas_ponente[] = $id_entrada;
+						}
+					}
                 }
                 
                 //////// las oficina implicadas //////////////////////////////
@@ -339,8 +352,15 @@ class EntradaLista {
         
         $txt_btn_new = '';
         $btn_new = FALSE;
+        $txt_btn_dock = '';
+        $btn_dock = FALSE;
         $secretaria = FALSE;
+        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR && $this->filtro == 'en_aceptado') {
+            $btn_dock = TRUE;
+        }
+    
         if ( ConfigGlobal::role_actual() === 'secretaria') {
+            $btn_dock = TRUE;
             $secretaria = TRUE;
             $btn_new = TRUE;
             $txt_btn_new = _("nueva entrada");
@@ -348,6 +368,7 @@ class EntradaLista {
         if (ConfigGlobal::role_actual() === 'vcd') {
             $btn_new = TRUE;
             $txt_btn_new = _("procesar");
+            $btn_dock = TRUE;
         }
         if ($this->filtro == 'bypass') {
             $btn_new = FALSE;
@@ -359,6 +380,11 @@ class EntradaLista {
         }
         
         $vista = ConfigGlobal::getVista();
+        
+
+        $txt_btn_dock = _("revisar dock");
+		$pagina_cargar_dock = Hash::link('apps/entradas/controller/entrada_dock.php?'.http_build_query(['filtro' => $filtro]));
+        
         
         $a_campos = [
             //'id_entrada' => $id_entrada,
@@ -375,6 +401,11 @@ class EntradaLista {
             'ver_accion' => $ver_accion,
             //tabs_show
             'vista' => $vista,
+       		// as4
+            'btn_dock' => $btn_dock,
+            'txt_btn_dock' => $txt_btn_dock,
+        	'pagina_cargar_dock' => $pagina_cargar_dock,
+       		
         ];
         
         $oView = new ViewTwig('entradas/controller');

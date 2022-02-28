@@ -1,17 +1,18 @@
 <?php
 namespace entradas\model;
 
+use core\Converter;
 use entradas\model\entity\EntradaDB;
 use entradas\model\entity\EntradaDocDB;
 use entradas\model\entity\GestorEntradaAdjunto;
 use entradas\model\entity\GestorEntradaBypass;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
+use usuarios\model\PermRegistro;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
 use web\ProtocoloArray;
-use usuarios\model\PermRegistro;
 
 
 class Entrada Extends EntradaDB {
@@ -54,9 +55,9 @@ class Entrada Extends EntradaDB {
     
     /* PROPIEDADES -------------------------------------------------------------- */
 
-    private $df_doc;
-    private $convert;
-    private $itipo_doc;
+    protected $df_doc;
+    protected $convert;
+    protected $itipo_doc;
     
     /* CONSTRUCTOR -------------------------------------------------------------- */
     

@@ -2,6 +2,7 @@
 namespace envios\model;
 
 use PHPMailer\PHPMailer\Exception;
+use documentos\model\Documento;
 use entradas\model\Entrada;
 use entradas\model\entity\EntradaAdjunto;
 use entradas\model\entity\GestorEntradaBypass;
@@ -10,9 +11,9 @@ use expedientes\model\Escrito;
 use expedientes\model\entity\EscritoAdjunto;
 use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
+use oasis_as4\model\As4;
+use usuarios\model\entity\Cargo;
 use web\Protocolo;
-use web\ProtocoloArray;
-use documentos\model\Documento;
 
 
 class Enviar {
@@ -198,6 +199,14 @@ class Enviar {
         // para no tener que repetir todo cuando hay multiples destinos
         if ($this->bLoaded === FALSE) {
             $this->oEscrito = new Escrito($this->iid);
+            $json_prot_local = $this->oEscrito->getJson_prot_local();
+			// En el caso de los ctr, se evnia directamente sin los pasos 
+			// de cirular por secretaria, y al llegar aqui todavía no se ha generado el 
+			// número de protocolo.
+            if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR && empty((array)$json_prot_local)) {
+				$this->oEscrito->generarProtocolo();
+				$this->oEscrito->DBCarregar();
+			}
             // f_salida
             $this->f_salida = $this->oEscrito->getF_escrito()->getFromLocal('.');
             $this->asunto = $this->oEscrito->getAsunto();
@@ -226,26 +235,7 @@ class Enviar {
             }
             $this->a_adjuntos = $a_adjuntos;
             // nombre del archivo
-            $json_prot_local = $this->oEscrito->getJson_prot_local();
-            if (empty((array)$json_prot_local)) {
-                // Ahora si dejo (30-12-2020)
-                /*
-                $this->a_rta['success'] = FALSE;
-                $this->a_rta['mensaje'] = _("No está definido el protocolo local");
-                return FALSE;
-                */
-                // genero un id: fecha + ultimos digitos del id_escrito
-                $f_hoy = date('Y-m-d');
-                $hora = date('His');
-                $this->filename = $f_hoy.'_'._("E12")."($hora)";
-            } else {
-                $oProtOrigen = new Protocolo();
-                $oProtOrigen->setLugar($json_prot_local->lugar);
-                $oProtOrigen->setProt_num($json_prot_local->num);
-                $oProtOrigen->setProt_any($json_prot_local->any);
-                $oProtOrigen->setMas($json_prot_local->mas);
-                $this->filename = $this->renombrar($oProtOrigen->ver_txt());
-            }
+            $this->filename = $this->oEscrito->getNombreEscrito();
             // etherpad
             $oEtherpad = new Etherpad();
             $oEtherpad->setId (Etherpad::ID_ESCRITO,$this->iid);
@@ -287,66 +277,34 @@ class Enviar {
     }
     
     public function enviar() {
+    
         $aDestinos = $this->getDestinatarios();
         
-        $message = $_SESSION['oConfig']->getBodyMail();
-        $message = empty($message)? _("Ver archivos adjuntos") : $message; 
-        
-        $err_mail = '';
         $num_enviados = 0;
         foreach ($aDestinos as $id_lugar) {
             ini_set( 'display_errors', 1 );
             error_reporting( E_ALL );
             
-            $oMail = new TramityMail(TRUE); //passing 'true' enables exceptions
             $oLugar = new Lugar();
             $oLugar->setId_lugar($id_lugar);
             $oLugar->DBCarregar(); // obligar a recargar después de cambiar el id.
-            $email = $oLugar->getE_mail();
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $oMail->addBCC($email);
-                // generar el mail, Uno para cada destino (para poder poner bien la cabecera) en cco (bcc):
-                try {
-                    // generar un nuevo content, con la cabecera al ctr concreto.
-                    $this->getDocumento($id_lugar);
-                    $filename = $this->filename;
-                    $filename_ext = $this->filename_ext;
-                    $a_adjuntos = $this->a_adjuntos;
-                    $contentFile = $this->contentFile;
-                    $subject = "$filename ($this->asunto)";
-                    // Attachments
-                    ////$oMail->addAttachment($File, $filename);    // Optional name
-                    $oMail->addStringAttachment($contentFile, $filename_ext);    // Optional name
-                    ////$oMail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-                    ////$oMail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-                    
-                    // adjuntos:
-                    foreach ($a_adjuntos as $adjunto_filename => $escrito_txt) {
-                        $oMail->addStringAttachment($escrito_txt, $adjunto_filename);    // Optional name
-                    }
-                    
-                    // Content
-                    $oMail->isHTML(true);                                  // Set email format to HTML
-                    $oMail->Subject = $subject;
-                    $oMail->Body    = $message;
-                    ////$oMail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-                    
-                    /*
-                    $oMail->send();
-                    $this->a_rta['success'] = TRUE;
-                    $this->a_rta['mensaje'] = 'Message has been sent<br>';
-                    $this->a_rta['marcar'] = TRUE;
-                    $num_enviados++;
-                    */
-                } catch (Exception $e) {
-                    $err_mail .= empty($err_mail)? '' : '<br>';
-                    $err_mail .= "Message could not be sent. Mailer Error: {$oMail->ErrorInfo}";
-                }
-            } else {
-                $err_mail .= empty($err_mail)? '' : '<br>';
-                $err_mail .= $oLugar->getNombre() ."($email)";
+
+            $modo_envio = $oLugar->getModo_envio();
+            switch ($modo_envio) {
+                case Lugar::MODO_PDF:
+                    $email = $oLugar->getE_mail();
+                    $err_mail = $this->enviarPdf($id_lugar,$email);
+                    break;
+                case Lugar::MODO_AS4;
+                	$plataforma = $oLugar->getPlataforma();
+                    $err_mail = $this->enviarAS4($id_lugar,$plataforma);
+                    break;
+                default:
+                    $err_mail =  _("No hay destinos metodo para este destino");
             }
+            
         }
+        
         if (empty($aDestinos)) {
             $err_mail = _("No hay destinos para este escrito").':<br>'.$this->filename;
             $this->a_rta['success'] = FALSE;
@@ -364,6 +322,108 @@ class Enviar {
             }
         }
         return $this->a_rta;
+    }
+    
+    private function enviarAS4($id_lugar,$plataforma) {
+        $err_mail = '';
+        $this->getDocumento($id_lugar);
+                
+        $json_prot_org = $this->oEscrito->getJson_prot_local();
+        // Miro si en json_prot_dst hay el id_lugar
+        // y aporta más datos del protocolo
+        $a_json_prot_dst = $this->oEscrito->getJson_prot_destino(FALSE);
+        $json_prot_dst = new \stdClass();
+        foreach ($a_json_prot_dst as $json_prot_dst) {
+        	$id_dst = $json_prot_dst->lugar;
+        	if ($id_dst == $id_lugar) {
+        		break;
+        	}
+        }
+        // Puede ser que el que el id_lugar no esté en json_prot_dst,
+        // por que sea un grupo...
+        if (empty((array) $json_prot_dst)) {
+        	$oProtDst = new Protocolo($id_lugar, '', '', '');
+        	$json_prot_dst = $oProtDst->getProt();
+        }
+	    
+	    // parecido al email. debe estar en la definicion del ctr
+        $accion = 'nuevo';
+        // generar el xml
+        $oAS4 = new As4();
+        $oAS4->setPlataforma_Destino($plataforma);
+        $oAS4->setAccion($accion);
+        $oAS4->setJson_prot_org($json_prot_org);
+        $oAS4->setJson_prot_dst($json_prot_dst);
+        $oAS4->setEscrito($this->oEscrito);
+        
+        $err_mail .= $oAS4->writeOnDock($this->filename);
+        
+        if (empty($err_mail)) {
+			$this->a_rta['success'] = TRUE;
+			$this->a_rta['mensaje'] = 'AS4 Message has been sent<br>';
+			$this->a_rta['marcar'] = TRUE;
+        } else {
+			$this->a_rta['success'] = FALSE;
+			$this->a_rta['mensaje'] = 'ERROR AS4 Message has not been sent<br>';
+			$this->a_rta['marcar'] = FALSE;
+        }
+        
+        return $err_mail;
+    }
+
+    private function enviarPdf($id_lugar, $email) {
+        $err_mail = '';
+
+        $message = $_SESSION['oConfig']->getBodyMail();
+        $message = empty($message)? _("Ver archivos adjuntos") : $message; 
+        
+        $oMail = new TramityMail(TRUE); //passing 'true' enables exceptions
+        // Activo condificacción utf-8
+        $oMail->CharSet = 'UTF-8';
+        
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $oMail->addBCC($email);
+            // generar el mail, Uno para cada destino (para poder poner bien la cabecera) en cco (bcc):
+            try {
+                // generar un nuevo content, con la cabecera al ctr concreto.
+                $this->getDocumento($id_lugar);
+                $filename = $this->filename;
+                $filename_ext = $this->filename_ext;
+                $a_adjuntos = $this->a_adjuntos;
+                $contentFile = $this->contentFile;
+                $subject = "$filename ($this->asunto)";
+                // Attachments
+                ////$oMail->addAttachment($File, $filename);    // Optional name
+                $oMail->addStringAttachment($contentFile, $filename_ext);    // Optional name
+                ////$oMail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+                ////$oMail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+                
+                // adjuntos:
+                foreach ($a_adjuntos as $adjunto_filename => $escrito_txt) {
+                    $oMail->addStringAttachment($escrito_txt, $adjunto_filename);    // Optional name
+                }
+                
+                // Content
+                $oMail->isHTML(true);                                  // Set email format to HTML
+                $oMail->Subject = $subject;
+                $oMail->Body    = $message;
+                ////$oMail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                
+                $oMail->send();
+                $this->a_rta['success'] = TRUE;
+                $this->a_rta['mensaje'] = 'Message has been sent<br>';
+                $this->a_rta['marcar'] = TRUE;
+            } catch (Exception $e) {
+                $err_mail .= empty($err_mail)? '' : '<br>';
+                $err_mail .= "Message could not be sent. Mailer Error: {$oMail->ErrorInfo}";
+            }
+        } else {
+            $oLugar = new Lugar($id_lugar);
+            
+            $err_mail .= empty($err_mail)? '' : '<br>';
+            $err_mail .= $oLugar->getNombre() ."($email)";
+        }
+        return $err_mail;
     }
     
     private function renombrar($string) {

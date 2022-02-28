@@ -45,6 +45,8 @@ class Escrito Extends EscritoDB {
      * @var string
      */
     private $destinos_txt;
+    
+    private $nombre_escrito;
 
     
     /* CONSTRUCTOR -------------------------------------------------------------- */
@@ -280,7 +282,7 @@ class Escrito Extends EscritoDB {
                 }
             }
         } else { // si no es un grupo
-            $a_json_prot_dst = $this->getJson_prot_destino(TRUE);
+            $a_json_prot_dst = $this->getJson_prot_destino(FALSE);
             if (!empty($id_lugar_de_grupo)) { // individual, con su protocolo.
                 foreach ($a_json_prot_dst as $json_prot_dst) {
                     $id_dst = $json_prot_dst->lugar;
@@ -385,6 +387,7 @@ class Escrito Extends EscritoDB {
             //(segun individuales)
             $a_json_prot_dst = $this->getJson_prot_destino();
             foreach ($a_json_prot_dst as $json_prot_dst) {
+            	if (!property_exists($json_prot_dst, 'lugar')) { continue; }
                 $aMiembros[] = $json_prot_dst->lugar;
             }
         }
@@ -614,6 +617,34 @@ class Escrito Extends EscritoDB {
         $conforme_txt .= '</p>';
         
         return $conforme_txt;
+    }
+    
+    public function getNombreEscrito() {
+    	
+        $json_prot_local = $this->getJson_prot_local();
+    	// nombre del archivo
+    	if (empty((array)$json_prot_local)) {
+    		// genero un id: fecha
+    		$f_hoy = date('Y-m-d');
+    		$hora = date('His');
+    		$this->nombre_escrito = $f_hoy.'_'._("E12")."($hora)";
+    	} else {
+    		$oProtOrigen = new Protocolo();
+    		$oProtOrigen->setLugar($json_prot_local->lugar);
+    		$oProtOrigen->setProt_num($json_prot_local->num);
+    		$oProtOrigen->setProt_any($json_prot_local->any);
+    		$oProtOrigen->setMas($json_prot_local->mas);
+    		$this->nombre_escrito = $this->renombrar($oProtOrigen->ver_txt());
+    	}
+    	
+    	return $this->nombre_escrito;
+    }
+    
+    private function renombrar($string) {
+    	//cambiar ' ' por '_':
+    	$string1 = str_replace(' ', '_', $string);
+    	//cambiar '/' por '_':
+    	return str_replace('/', '_', $string1);
     }
     
 }

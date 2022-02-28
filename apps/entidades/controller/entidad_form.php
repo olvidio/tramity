@@ -89,12 +89,7 @@ $a_camposHidden = array(
         );
 $oHash->setArraycamposHidden($a_camposHidden);
 
-$url_entidad_ajax = ConfigGlobal::getWeb().'/apps/entidades/controller/entidad_ajax.php';
-$oHash1 = new web\Hash();
-$oHash1->setUrl($url_entidad_ajax);
-$oHash1->setCamposForm('que!id_entidad'); 
-$oHash1->setCamposNo('scroll_id'); 
-$h1 = $oHash1->linkSinVal();
+$url_update = ConfigGlobal::getWeb().'/apps/entidades/controller/entidad_update.php';
 
 $txt_guardar=_("guardar datos entidad");
 
@@ -102,9 +97,8 @@ $pagina_cancel = web\Hash::link('apps/entidades/controller/entidad_lista.php?'.h
 
 $a_campos = [
             'oPosicion' => $oPosicion,
-            'url_entidad_ajax' => $url_entidad_ajax,
+            'url_update' => $url_update,
             'id_entidad' => $Qid_entidad,
-            'h1' => $h1,
             'nombre' => $nombre,
             'oHash' => $oHash,
             'schema' => $schema,

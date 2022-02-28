@@ -609,7 +609,7 @@ class EscritoDB Extends core\ClasePropiedades {
 	        if ($bArray) {
 	            $oJSON = [];
 	        } else {
-	            $oJSON = new stdClass;
+	            $oJSON = [ new stdClass ];
 	        }
 	    }
 	    //$this->json_prot_destino = $oJSON;
