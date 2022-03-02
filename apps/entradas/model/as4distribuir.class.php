@@ -435,7 +435,6 @@ class As4Distribuir extends As4CollaborationInfo {
 				}
 			}
 		}
-		
 		return $aAdjuntos;
 	}
 
@@ -455,7 +454,7 @@ class As4Distribuir extends As4CollaborationInfo {
 			if ($content_type == 'multipart/mixed') { continue; }
 			$starting_pos_body = $part_data['starting-pos-body'];
 			$ending_pos_body    = $part_data['ending-pos-body'];
-			$chunked_str = substr($mime_txt,$starting_pos_body,$ending_pos_body); // copy data into array
+			$chunked_str = substr($mime_txt,$starting_pos_body,($ending_pos_body - $starting_pos_body)); // copy data into array
 			$long_str = str_replace( "\r\n", "", $chunked_str );
 			$parts[$s]['contenido'] = $long_str;
 			$parts[$s]['filename'] = empty($part_data['content-filename'])? _("sin nombre") : $part_data['content-filename'];
@@ -476,15 +475,7 @@ class As4Distribuir extends As4CollaborationInfo {
 			$oEntradaAdjunto = new EntradaEntidadAdjunto($this->getSiglaDestino());
 			$oEntradaAdjunto->setId_entrada($id_entrada);
 			$oEntradaAdjunto->setNom($filename);
-			//$oEntradaAdjunto->setAdjunto(base64_decode($contenido_encoded));
-			if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded) {
-				$doc = base64_decode($doc_encoded);
-			} else {
-				// $data is NOT valid'
-				//$doc = $doc_encoded;
-				$doc = base64_decode($doc_encoded);
-			}
-			$oEntradaAdjunto->setAdjunto($doc);
+			$oEntradaAdjunto->setAdjunto(base64_decode($doc_encoded));
 			
 			$oEntradaAdjunto->DBGuardar();
 		}

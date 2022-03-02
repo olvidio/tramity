@@ -34,10 +34,11 @@ foreach ($a_files as $filename) {
 
 // cada mensaje que llega hay que descomponer y poner en su sitio
 foreach ($a_files_mmd as $file_mmd) {
-	echo $file_mmd;
 	$xmldata = simplexml_load_file($file_mmd);
-	
 	$AS4 = new As4Distribuir($xmldata);
-	
 	$AS4->distribuir();
 }
+
+// TODO: Falta despejar la bandeja de entrada...
+
+echo _("Todos los mensajes descargados");
