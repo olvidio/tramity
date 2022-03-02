@@ -59,7 +59,7 @@ class MIMEContainer {
 		if(is_array($this->subcontainers) &&
 				(count($this->subcontainers) > 0)) {
 					
-			$headers .= "Content-Type: {$this->content_type}; charset=UTF-8 " .
+			$headers .= "Content-Type: {$this->content_type}; charset=UTF-8; " .
 			"boundary={$this->boundary}\r\n$addheaders\r\n\r\n";
 			
 			//$headers .= wordwrap("If you are reading this portion of the e-mail," .
@@ -76,7 +76,7 @@ class MIMEContainer {
 			$headers .= "--{$this->boundary}--\r\n";
 		} else {
 			
-			$headers .= "Content-Type: {$this->content_type} charset=UTF-8 \r\n" .
+			$headers .= "Content-Type: {$this->content_type} charset=UTF-8; \r\n" .
 			$addheaders . "\r\n\r\n{$this->content}";
 			
 		}
