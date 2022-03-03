@@ -16,6 +16,7 @@ class As4Distribuir extends As4CollaborationInfo {
 	private $xmldata;
 	
 	
+	private $location;
 	private $sigla_destino;
 	private $sigla_origen;
 
@@ -98,7 +99,7 @@ class As4Distribuir extends As4CollaborationInfo {
 		// comprobar que existe destino (sigla)
 		if ( in_array($this->getSiglaDestino(), $this->getEntidadesPlataforma()) ) {
 			// introducir los datos del mensaje en el tramity
-			$this->introducir();	
+			return $this->introducir();	
 		}
 	}
 	
@@ -123,7 +124,7 @@ class As4Distribuir extends As4CollaborationInfo {
 					$err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
 					exit ($err_switch);
 			}
-			
+			return TRUE;
 		}
 		
 	}
@@ -324,6 +325,7 @@ class As4Distribuir extends As4CollaborationInfo {
 		//$containment = $payload->PartInfo->attributes()->containment;
 		//$filename = $payload->PartInfo->PartProperties->property;
 		$location = $payload->PartInfo->attributes()->location;
+		$this->setLocation($location);
 
 		$this->getEscrito($location);
 	}
@@ -549,5 +551,19 @@ class As4Distribuir extends As4CollaborationInfo {
 	public function setService($service) {
 		$this->service = strtolower($service);
 	}
+	/**
+	 * @return mixed
+	 */
+	public function getLocation() {
+		return $this->location;
+	}
+
+	/**
+	 * @param mixed $location
+	 */
+	public function setLocation($location) {
+		$this->location = $location;
+	}
+
 
 }

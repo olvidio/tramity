@@ -33,12 +33,30 @@ foreach ($a_files as $filename) {
 }
 
 // cada mensaje que llega hay que descomponer y poner en su sitio
+$txt = '';
 foreach ($a_files_mmd as $file_mmd) {
 	$xmldata = simplexml_load_file($file_mmd);
 	$AS4 = new As4Distribuir($xmldata);
-	$AS4->distribuir();
+	if ($AS4->distribuir() === TRUE) {
+		// eliminar el mensaje de la bandeja de entrada
+		// nombre del fihero del body:
+		$location = $AS4->getLocation();
+		if (unlink($location) === FALSE) {
+			$txt .= sprintf(_("No se ha podido eliminar el fichero %s"), $location);
+		}
+		// el mensaje
+		if (unlink($file_mmd) === FALSE) {
+			$txt .= sprintf(_("No se ha podido eliminar el mensaje %s"), $file_mmd);
+		}
+	} else {
+		$txt .= sprintf(_("No se ha podido entregar el mensaje %s a su destinatario"), $file_mmd);
+		
+	}
+	
 }
 
-// TODO: Falta despejar la bandeja de entrada...
-
-echo _("Todos los mensajes descargados");
+if (!empty($txt)) {
+	echo $txt;	
+} else {
+	echo _("Todos los mensajes descargados");
+}
