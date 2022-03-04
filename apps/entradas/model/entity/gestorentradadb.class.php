@@ -581,7 +581,6 @@ class GestorEntradaDB Extends ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_entrada' => $aDades['id_entrada']);
 			$oEntradaDB= new EntradaDB($a_pkey);
-			$oEntradaDB->setAllAtributes($aDades);
 			$oEntradaDBSet->add($oEntradaDB);
 		}
 		return $oEntradaDBSet->getTot();
@@ -632,7 +631,6 @@ class GestorEntradaDB Extends ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_entrada' => $aDades['id_entrada']);
 			$oEntradaDB = new EntradaDB($a_pkey);
-			$oEntradaDB->setAllAtributes($aDades);
 			$oEntradaDBSet->add($oEntradaDB);
 		}
 		return $oEntradaDBSet->getTot();

@@ -51,7 +51,6 @@ class GestorEntradaBypass Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_item' => $aDades['id_item']);
 			$oEntradaBypass= new EntradaBypass($a_pkey);
-			$oEntradaBypass->setAllAtributes($aDades);
 			$oEntradaBypassSet->add($oEntradaBypass);
 		}
 		return $oEntradaBypassSet->getTot();
@@ -102,7 +101,6 @@ class GestorEntradaBypass Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_item' => $aDades['id_item']);
 			$oEntradaBypass = new EntradaBypass($a_pkey);
-			$oEntradaBypass->setAllAtributes($aDades);
 			$oEntradaBypassSet->add($oEntradaBypass);
 		}
 		return $oEntradaBypassSet->getTot();

@@ -100,6 +100,7 @@ class As4 extends As4CollaborationInfo {
     	$oPayload->setFormat(Payload::TYPE_ETHERAD_HTML);
     	$oPayload->createXmlFile();
     	
+    	$oPayload->setDeleteFilesAfterSubmit(TRUE);
     	return $oPayload->getXml($this->dom);
     }
     

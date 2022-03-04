@@ -23,6 +23,7 @@ class Payload {
     private $payload;
     private $escrito;
     private $nombre_escrito;
+	private $deleteFilesAfterSubmit = FALSE;
 
 	private $json_prot_dst;
 	private $json_prot_local;
@@ -77,7 +78,7 @@ class Payload {
 	*/
 	public function getXml($dom) {
 		$this->payload = $dom->createElement("PayloadInfo");
-		$attr = new \DOMAttr('deleteFilesAfterSubmit','false');
+		$attr = new \DOMAttr('deleteFilesAfterSubmit',$this->deleteFilesAfterSubmit);
 		$this->payload->setAttributeNode($attr);
 		
 		$location = "payloads/$this->nombre_escrito";
@@ -496,6 +497,20 @@ class Payload {
 	public function setFormat($format) {
 		$this->format = $format;
 	}
+	/**
+	 * @return boolean
+	 */
+	public function getDeleteFilesAfterSubmit() {
+		return $this->deleteFilesAfterSubmit;
+	}
+
+	/**
+	 * @param boolean $deleteFilesAfterSubmit
+	 */
+	public function setDeleteFilesAfterSubmit($deleteFilesAfterSubmit) {
+		$this->deleteFilesAfterSubmit = $deleteFilesAfterSubmit;
+	}
+
 
 
 }

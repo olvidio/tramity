@@ -51,7 +51,6 @@ class GestorPrincipal Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('principal_id' => $aDades['principal_id']);
 			$oPrincipal= new Principal($a_pkey);
-			$oPrincipal->setAllAtributes($aDades);
 			$oPrincipalSet->add($oPrincipal);
 		}
 		return $oPrincipalSet->getTot();
@@ -102,7 +101,6 @@ class GestorPrincipal Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('principal_id' => $aDades['principal_id']);
 			$oPrincipal = new Principal($a_pkey);
-			$oPrincipal->setAllAtributes($aDades);
 			$oPrincipalSet->add($oPrincipal);
 		}
 		return $oPrincipalSet->getTot();

@@ -51,7 +51,6 @@ class GestorAccion Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_item' => $aDades['id_item']);
 			$oAccion= new Accion($a_pkey);
-			$oAccion->setAllAtributes($aDades);
 			$oAccionSet->add($oAccion);
 		}
 		return $oAccionSet->getTot();
@@ -102,7 +101,6 @@ class GestorAccion Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_item' => $aDades['id_item']);
 			$oAccion = new Accion($a_pkey);
-			$oAccion->setAllAtributes($aDades);
 			$oAccionSet->add($oAccion);
 		}
 		return $oAccionSet->getTot();

@@ -106,7 +106,6 @@ class GestorEtiquetaExpediente Extends core\ClaseGestor {
 			$a_pkey = array('id_etiqueta' => $aDades['id_etiqueta'],
 							'id_expediente' => $aDades['id_expediente']);
 			$oEtiquetaExpediente= new EtiquetaExpediente($a_pkey);
-			$oEtiquetaExpediente->setAllAtributes($aDades);
 			$oEtiquetaExpedienteSet->add($oEtiquetaExpediente);
 		}
 		return $oEtiquetaExpedienteSet->getTot();
@@ -158,7 +157,6 @@ class GestorEtiquetaExpediente Extends core\ClaseGestor {
 			$a_pkey = array('id_etiqueta' => $aDades['id_etiqueta'],
 							'id_expediente' => $aDades['id_expediente']);
 			$oEtiquetaExpediente = new EtiquetaExpediente($a_pkey);
-			$oEtiquetaExpediente->setAllAtributes($aDades);
 			$oEtiquetaExpedienteSet->add($oEtiquetaExpediente);
 		}
 		return $oEtiquetaExpedienteSet->getTot();

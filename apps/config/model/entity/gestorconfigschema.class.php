@@ -51,7 +51,6 @@ class GestorConfigSchema Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('parametro' => $aDades['parametro']);
 			$oConfigSchema= new ConfigSchema($a_pkey);
-			$oConfigSchema->setAllAtributes($aDades);
 			$oConfigSchemaSet->add($oConfigSchema);
 		}
 		return $oConfigSchemaSet->getTot();
@@ -102,7 +101,6 @@ class GestorConfigSchema Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('parametro' => $aDades['parametro']);
 			$oConfigSchema= new ConfigSchema($a_pkey);
-			$oConfigSchema->setAllAtributes($aDades);
 			$oConfigSchemaSet->add($oConfigSchema);
 		}
 		return $oConfigSchemaSet->getTot();

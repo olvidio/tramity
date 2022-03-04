@@ -117,7 +117,6 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_expediente' => $aDades['id_expediente']);
 			$oExpedienteDB= new ExpedienteDB($a_pkey);
-			$oExpedienteDB->setAllAtributes($aDades);
 			$oExpedienteDBSet->add($oExpedienteDB);
 		}
 		return $oExpedienteDBSet->getTot();
@@ -172,7 +171,6 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 			} else {
                 $oExpedienteDB = new ExpedienteDB($a_pkey);
 			}
-			$oExpedienteDB->setAllAtributes($aDades);
 			$oExpedienteDBSet->add($oExpedienteDB);
 		}
 		return $oExpedienteDBSet->getTot();

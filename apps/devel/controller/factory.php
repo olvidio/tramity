@@ -910,7 +910,6 @@ $txt2.='
 $txt2.="\n\t\t\t".'$a_pkey = array('.$claus_txt2.');';
 $txt2.="\n\t\t\t".'$o'.$clase.'= new '.$clase.'($a_pkey);';
 $txt2.='
-			$o'.$clase.'->setAllAtributes($aDades);
 			$o'.$clase.'Set->add($o'.$clase.');
 		}
 		return $o'.$clase.'Set->getTot();
@@ -966,7 +965,6 @@ $txt2.="\n\t\t".'$sCondi = implode(\' AND \',$aCondi);
 $txt2.="\n\t\t\t".'$a_pkey = array('.$claus_txt2.');';
 $txt2.="\n\t\t\t".'$o'.$clase.' = new '.$clase.'($a_pkey);';
 $txt2.='
-			$o'.$clase.'->setAllAtributes($aDades);
 			$o'.$clase.'Set->add($o'.$clase.');
 		}
 		return $o'.$clase.'Set->getTot();

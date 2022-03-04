@@ -91,7 +91,7 @@ class DocumentoLista {
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
                 
                 $tipo_doc = $oDocumento->getTipo_doc();
-                $documento_txt = $oDocumento->getDocumentoTxt();
+				$documento_txt = $oDocumento->getDocumento();
 
                 if ( $tipo_doc == Documento::DOC_ETHERPAD ){
                     $url_download = '';

@@ -634,7 +634,6 @@ class GestorEscritoDB Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_escrito' => $aDades['id_escrito']);
 			$oEscritoDB= new EscritoDB($a_pkey);
-			$oEscritoDB->setAllAtributes($aDades);
 			$oEscritoDBSet->add($oEscritoDB);
 		}
 		return $oEscritoDBSet->getTot();
@@ -685,7 +684,6 @@ class GestorEscritoDB Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_escrito' => $aDades['id_escrito']);
 			$oEscritoDB = new EscritoDB($a_pkey);
-			$oEscritoDB->setAllAtributes($aDades);
 			$oEscritoDBSet->add($oEscritoDB);
 		}
 		return $oEscritoDBSet->getTot();

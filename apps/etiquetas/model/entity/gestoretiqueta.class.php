@@ -94,7 +94,6 @@ class GestorEtiqueta Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_etiqueta' => $aDades['id_etiqueta']);
 			$oEtiqueta= new Etiqueta($a_pkey);
-			$oEtiqueta->setAllAtributes($aDades);
 			$oEtiquetaSet->add($oEtiqueta);
 		}
 		return $oEtiquetaSet->getTot();
@@ -145,7 +144,6 @@ class GestorEtiqueta Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_etiqueta' => $aDades['id_etiqueta']);
 			$oEtiqueta = new Etiqueta($a_pkey);
-			$oEtiqueta->setAllAtributes($aDades);
 			$oEtiquetaSet->add($oEtiqueta);
 		}
 		return $oEtiquetaSet->getTot();

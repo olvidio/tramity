@@ -52,7 +52,6 @@ class GestorGrant Extends core\ClaseGestor {
 			$a_pkey = array('by_principal' => $aDades['by_principal'],
 							'to_principal' => $aDades['to_principal']);
 			$oGrant= new Grant($a_pkey);
-			$oGrant->setAllAtributes($aDades);
 			$oGrantSet->add($oGrant);
 		}
 		return $oGrantSet->getTot();
@@ -104,7 +103,6 @@ class GestorGrant Extends core\ClaseGestor {
 			$a_pkey = array('by_principal' => $aDades['by_principal'],
 							'to_principal' => $aDades['to_principal']);
 			$oGrant = new Grant($a_pkey);
-			$oGrant->setAllAtributes($aDades);
 			$oGrantSet->add($oGrant);
 		}
 		return $oGrantSet->getTot();

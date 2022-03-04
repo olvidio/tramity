@@ -1,5 +1,6 @@
 <?php
 use documentos\model\Documento;
+use envios\model\MimeTypeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -18,31 +19,27 @@ $Qid_doc = (integer) \filter_input(INPUT_GET, 'key');
 if (!empty($Qid_doc)) {
     $oDocumento = new Documento($Qid_doc);
     $nombre_fichero = $oDocumento->getNombre_fichero();
-    $res_documento = $oDocumento->getDocumentoResource();
-
-    if (!empty($res_documento)) {
-        rewind($res_documento);
-        $doc_encoded = stream_get_contents($res_documento);
-        if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
-            $doc = base64_decode($doc_encoded);
-        } else {
-            // $data is NOT valid'
-            $doc = $doc_encoded;
-        }
-
-        header('Content-Description: File Transfer');
-        header('Content-Transfer-Encoding: binary');
-        header('Cache-Control: public, must-revalidate, max-age=0');
-        header("Pragma: public"); // required
-        header("Expires: 0");
-        header("Cache-Control: private",false); // required for certain browsers
-        header('Content-Type: application/force-download');
-        header('Content-Type: application/download', false);
-        header('Content-disposition: attachment; filename="' . $nombre_fichero . '"');
-        ob_clean();
-        flush();
-        echo $doc;
-    }
+	$doc = $oDocumento->getDocumento();
+	
+	$file_extension = strtolower(substr(strrchr($nombre_fichero,"."),1));
+	$oMimeType = new MimeTypeLocal();
+	$ctype = $oMimeType->getMimeType($file_extension);
+	$ctype = empty($ctype)? "application/octet-stream" : $ctype;
+	
+	header('Content-Description: File Transfer');
+	header('Content-Transfer-Encoding: binary');
+	header('Cache-Control: public, must-revalidate, max-age=0');
+	header("Pragma: public"); // required
+	header("Expires: 0");
+	header("Cache-Control: private",false); // required for certain browsers
+	header('Content-Type: application/force-download');
+	header('Content-Type: application/download', false);
+	header('Content-Type: ' . $ctype);
+	header('Content-disposition: attachment; filename="' . $nombre_fichero . '"');
+	ob_clean();
+	flush();
+	echo $doc;
+    	
     exit();
 } else {
     $error = TRUE;

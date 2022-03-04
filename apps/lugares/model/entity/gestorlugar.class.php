@@ -389,7 +389,6 @@ class GestorLugar Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_lugar' => $aDades['id_lugar']);
 			$oLugar= new Lugar($a_pkey);
-			$oLugar->setAllAtributes($aDades);
 			$oLugarSet->add($oLugar);
 		}
 		return $oLugarSet->getTot();
@@ -440,7 +439,6 @@ class GestorLugar Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_lugar' => $aDades['id_lugar']);
 			$oLugar= new Lugar($a_pkey);
-			$oLugar->setAllAtributes($aDades);
 			$oLugarSet->add($oLugar);
 		}
 		return $oLugarSet->getTot();

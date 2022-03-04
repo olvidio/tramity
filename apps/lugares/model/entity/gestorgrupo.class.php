@@ -76,7 +76,6 @@ class GestorGrupo Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_grupo' => $aDades['id_grupo']);
 			$oGrupo= new Grupo($a_pkey);
-			$oGrupo->setAllAtributes($aDades);
 			$oGrupoSet->add($oGrupo);
 		}
 		return $oGrupoSet->getTot();
@@ -127,7 +126,6 @@ class GestorGrupo Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_grupo' => $aDades['id_grupo']);
 			$oGrupo = new Grupo($a_pkey);
-			$oGrupo->setAllAtributes($aDades);
 			$oGrupoSet->add($oGrupo);
 		}
 		return $oGrupoSet->getTot();
