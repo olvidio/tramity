@@ -25,7 +25,7 @@ $filtro = 'permanentes_cr';
     
 $titulo = '';
 $lista = '';
-$oTabla = '';
+$oVerTabla = '';
 switch ($Qtipo_lista) {
     case 54:
         // por asunto
@@ -44,10 +44,10 @@ switch ($Qtipo_lista) {
         $oBuscar->setProt_any($any2);
         $aCollection = $oBuscar->getCollection($Qtipo_lista);
         foreach ($aCollection as $key => $cCollection) {
-            $oTabla = new VerTabla();
-            $oTabla->setKey($key);
-            $oTabla->setCollection($cCollection);
-            $oTabla->setFiltro($filtro);
+            $oVerTabla = new VerTabla();
+            $oVerTabla->setKey($key);
+            $oVerTabla->setCollection($cCollection);
+            $oVerTabla->setFiltro($filtro);
         }
         break;
     case 'oficina':
@@ -63,10 +63,10 @@ switch ($Qtipo_lista) {
         
         $aCollection = $oBuscar->getCollection($Qtipo_lista);
         foreach ($aCollection as $key => $cCollection) {
-            $oTabla = new VerTabla();
-            $oTabla->setKey($key);
-            $oTabla->setCollection($cCollection);
-            $oTabla->setFiltro($filtro);
+            $oVerTabla = new VerTabla();
+            $oVerTabla->setKey($key);
+            $oVerTabla->setCollection($cCollection);
+            $oVerTabla->setFiltro($filtro);
         }
         break;
     case 'proto': // un protocolo concreto:
@@ -103,10 +103,10 @@ switch ($Qtipo_lista) {
         } else {
             $aCollection = $oBuscar->getCollection($Qtipo_lista);
             foreach ($aCollection as $key => $cCollection) {
-                $oTabla = new VerTabla();
-                $oTabla->setKey($key);
-                $oTabla->setCollection($cCollection);
-                $oTabla->setFiltro($filtro);
+                $oVerTabla = new VerTabla();
+                $oVerTabla->setKey($key);
+                $oVerTabla->setCollection($cCollection);
+                $oVerTabla->setFiltro($filtro);
             }
         }
         break;
@@ -179,7 +179,7 @@ $a_campos = [
     'titulo' => $titulo,
     'lista' => $lista,
     'filtro' => $filtro,
-    'oTabla' => $oTabla,
+    'oVerTabla' => $oVerTabla,
     // tabs_show
     'vista' => $vista,
 ];
