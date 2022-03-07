@@ -1,9 +1,6 @@
 <?php
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\Oficina;
-use davical\model\Davical;
-use entidades\model\entity\EntidadDB;
 use entidades\model\Entidad;
+use entidades\model\entity\EntidadDB;
 use web\StringLocal;
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -23,12 +20,17 @@ switch($Qque) {
 	    $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    if (!empty($a_sel)) { //vengo de un checkbox
 	        $Qid_entidad = (integer) strtok($a_sel[0],"#");
-            $oEntidadDB = new EntidadDB (array('id_entidad' => $Qid_entidad));
-            if ($oEntidadDB->DBEliminar() === FALSE) {
+            $oEntidad = new Entidad (array('id_entidad' => $Qid_entidad));
+            // antes de eliminar la entidaddb, hay que eliminar el schema, etherpad i davical.
+            // después perderé el nombre del esquema.
+			$error_txt .= $oEntidad->eliminarEsquema();
+			// etherpad?
+			// davical?
+			
+            if (empty($error_txt) && $oEntidad->DBEliminar() === FALSE) {
                 $error_txt .= _("hay un error, no se ha eliminado");
-                $error_txt .= "\n".$oEntidadDB->getErrorTxt();
+                $error_txt .= "\n".$oEntidad->getErrorTxt();
             }
-            //$error_txt .= _("Por el momento no está implementado. Use anular.");
 	    }
 	    break;
 	case "nuevo":

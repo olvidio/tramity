@@ -14,7 +14,8 @@ fnjs_eliminar=function(){
 	}
 	rta=fnjs_solo_uno('#seleccionados');
 	if (rta==1) {
-		if (confirm("{{ "¿Está seguro que desea borrar esta entidad?"|trans }}") ) {
+		if (confirm("{{ "Esto borrará todos los escritos."|trans }}" + "\n" + "{{ "Puede usar la opción anulado en modificar."|trans }}"
+				+ "\n" + "{{ "¿Está seguro que desea borrar esta entidad?"|trans }}") ) {
             $('#que').val('eliminar');
             datos = $('#seleccionados').serialize();	
         	request=$.ajax({

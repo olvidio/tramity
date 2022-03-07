@@ -197,9 +197,9 @@ class Payload {
 	
 	private function explodeProt($oProt, $nombre_nodo, $sufijo) {
 		$nodo = $this->dom->createElement($nombre_nodo);
-
-		if (!property_exists($oProt, 'lugar')) {
-			return;
+		
+		if (empty((array) $oProt) || !property_exists($oProt, 'lugar')) {
+			return $nodo;
 		}
 		
 		$id_lugar = $oProt->lugar;

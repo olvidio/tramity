@@ -59,6 +59,13 @@ class Entidad Extends EntidadDB {
     }
         
         
+    public function eliminarEsquema() {
+        $err = ''; 
+        $err .= $this->dropEsquema();
+        
+        return $err;
+    }
+        
     public function nuevoEsquema() {
         $err = ''; 
         $err .= $this->crearEsquema();
@@ -196,6 +203,26 @@ class Entidad Extends EntidadDB {
             && stripos($error, 'error') !== FALSE // evitar los NOTICE y otros
             && ConfigGlobal::is_debug_mode()) {
            $err_txt .= sprintf("PSQL ERROR IN COMMAND(1): %s<br> mirar: %s<br>",$command,$file_log);
+        }
+        return $err_txt;
+    }
+    
+    private function dropEsquema() {
+        $oDbl = $this->getoDbl();
+        $nom_schema = $this->getSchema();
+        $err_txt = '';
+        $sql = "DROP SCHEMA IF EXISTS \"$nom_schema\" CASCADE ";
+        
+        if (($oDblSt = $oDbl->prepare($sql)) === false) {
+            $sClauError = 'DBRol.eliminarSchema.prepare';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            $err_txt .= sprintf("ERROR AL ELIMINAR EL ESQUEMA: $sClauError");
+        } else {
+            if ($oDblSt->execute() === false) {
+                $sClauError = 'DBRol.eliminarSchema.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                $err_txt .= sprintf("ERROR AL ELIMINAR EL ESQUEMA: $sClauError");
+            }
         }
         return $err_txt;
     }
