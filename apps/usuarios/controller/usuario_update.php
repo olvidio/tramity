@@ -35,12 +35,8 @@ switch($Qque) {
             $_SESSION['session_auth']['mi_id_oficina'] = $id_oficina_actual;
             // Para el Davical:
             // nombre normalizado del usuario y oficina:
-            $oCargo = new Cargo($id_cargo);
-            $cargo_role = $oCargo->getCargo();
-            $oOficina = new Oficina($id_oficina_actual);
-            $oficina_role = $oOficina->getSigla();
             $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-            $username_davical = $oDavical->getNombreUsuario($oficina_role, $cargo_role);
+            $username_davical = $oDavical->getUsernameDavical($id_cargo);
             $_SESSION['session_auth']['username_davical'] = $username_davical;
 		}
 		$alert_txt .= sprintf(_("role cambiado a %s"),$Qrole);
