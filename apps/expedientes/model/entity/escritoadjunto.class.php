@@ -73,8 +73,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	 *
 	 * @var string bytea
 	 */
-	 private $adjunto_id_res;
-	 private $adjunto_txt;
+	 private $adjunto;
 	/**
 	 * tipo_doc de EscritoAdjunto
 	 *
@@ -142,7 +141,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$aDades['id_escrito'] = $this->iid_escrito;
 		$aDades['nom'] = $this->snom;
 		$aDades['tipo_doc'] = $this->itipo_doc;
-		$aDades['adjunto'] = $this->getAdjuntoTxt();
+		$aDades['adjunto'] = $this->getAdjunto();
 		array_walk($aDades, 'core\poner_null');
 
 		if ($bInsert === FALSE) {
@@ -164,7 +163,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 			    
 			    $oDblSt->bindParam(1, $id_escrito, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_LOB);
+			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_STR);
 			    $oDblSt->bindParam(4, $tipo_doc, \PDO::PARAM_INT);
 				try {
 					$oDblSt->execute();
@@ -193,7 +192,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 			    
 			    $oDblSt->bindParam(1, $id_escrito, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_LOB);
+			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_STR);
 			    $oDblSt->bindParam(4, $tipo_doc, \PDO::PARAM_INT);
 				try {
 					$oDblSt->execute();
@@ -232,7 +231,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 			$oDblSt->execute();
 			$oDblSt->bindColumn(1, $id_escrito, \PDO::PARAM_INT);
 			$oDblSt->bindColumn(2, $nom, \PDO::PARAM_STR, 256);
-			$oDblSt->bindColumn(3, $adjunto, \PDO::PARAM_LOB);
+			$oDblSt->bindColumn(3, $adjunto, \PDO::PARAM_STR);
 			$oDblSt->bindColumn(4, $tipo_doc, \PDO::PARAM_INT);
 			$oDblSt->fetch(\PDO::FETCH_BOUND);
 			
@@ -294,7 +293,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		if (array_key_exists('id_item',$aDades)) { $this->setId_item($aDades['id_item']); }
 		if (array_key_exists('id_escrito',$aDades)) { $this->setId_escrito($aDades['id_escrito']); }
 		if (array_key_exists('nom',$aDades)) { $this->setNom($aDades['nom']); }
-		if (array_key_exists('adjunto',$aDades)) { $this->setAdjunto($aDades['adjunto']); }
+		if (array_key_exists('adjunto',$aDades)) { $this->setAdjuntoEscaped($aDades['adjunto']); }
 		if (array_key_exists('tipo_doc',$aDades)) { $this->setTipo_doc($aDades['tipo_doc']); }
 	}	
 	/**
@@ -307,7 +306,7 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 		$this->setId_item('');
 		$this->setId_escrito('');
 		$this->setNom('');
-		$this->setAdjunto('');
+		$this->setAdjuntoEscaped('');
 		$this->setTipo_doc('');
 		$this->setPrimary_key($aPK);
 	}
@@ -418,53 +417,31 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	 *
 	 * @return string adjunto
 	 */
-	function getAdjuntoTxt() {
-	    $adjunto = '';
-		if (!isset($this->adjunto_txt) && !$this->bLoaded) {
-			$this->DBCarregar();
-		}
-		if (empty($this->adjunto_txt)) {
-		    if (!empty($this->adjunto_id_res)) {
-                $doc_encoded = stream_get_contents($this->adjunto_id_res);
-                if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
-                    //echo '$data is valid';
-                    $adjunto = base64_decode($doc_encoded);
-                } else {
-                    //echo '$data is NOT valid';
-                    $adjunto = $doc_encoded;
-                }
-		    }
-		} else {
-		    $adjunto = $this->adjunto_txt;
-		}
-		return $adjunto;
-	}/**
-	 * Recupera l'atribut adjunto de EntradaAdjunto
-	 *
-	 * @return string adjunto
-	 */
-	function getAdjuntoResource() {
-		if (!isset($this->adjunto_id_res) && !$this->bLoaded) {
-			$this->DBCarregar();
-		}
-		return $this->adjunto_id_res;
+	public function getAdjunto() {
+		return hex2bin($this->adjunto);
 	}
 	/**
 	 * estableix el valor de l'atribut adjunto de EntradaAdjunto
 	 *
 	 * @param string adjunto='' optional
 	 */
-	function setAdjunto($adjunto='') {
-	    if (is_resource($adjunto)) {
-	        $this->adjunto_id_res = $adjunto;
-	    } else {
-	        if (empty($adjunto)) {
-	            $this->adjunto_txt = '';
-	        } else {
-                $this->adjunto_txt = $adjunto;
-	        }
-	    }
+	public function setAdjunto($adjunto='') {
+		// Escape the binary data
+		$escaped = bin2hex( $adjunto );
+		$this->adjunto = $escaped;
 	}
+	
+	/**
+	 * estableix el valor de l'atribut adjunto de EntradaAdjunto
+	 * per usar amb els valors directes de la DB.
+	 *
+	 * @param string adjunto='' optional (ja convertit a hexadecimal)
+	 */
+	private function setAdjuntoEscaped($adjunto='') {
+		$this->adjunto = $adjunto;
+	}
+
+	
 	/**
 	 * Recupera l'atribut itipo_doc de Documento
 	 *

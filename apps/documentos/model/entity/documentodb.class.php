@@ -99,7 +99,6 @@ class DocumentoDB Extends core\ClasePropiedades {
 	 * @var string bytea
 	 * 
 	 */
-	 //protected $documento_id_res;
 	 protected $documento;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
@@ -555,43 +554,6 @@ class DocumentoDB Extends core\ClasePropiedades {
             $this->df_upload = $df_upload;
 	    }
 	}
-	/**
-	 * Recupera l'atribut documento de Documento
-	 *
-	 * @return string documento
-	 */
-	/*
-	function getDocumentoTxt() {
-		$documento = '';
-		if (!isset($this->documento_txt) && !$this->bLoaded) {
-			$this->DBCarregar();
-		}
-		if (empty($this->documento_txt)) {
-            if (!empty($this->documento_id_res)) {
-		      $documento = stream_get_contents($this->documento_id_res);
-		      $doc = pg_unescape_bytea($documento);
-		      
-		      $this->documento_txt = $doc;
-            }
-		} else {
-		    $documento = hex2bin($this->documento_txt);
-		}
-		return $documento;
-	}
-	*/
-	/**
-	 * Recupera l'atribut documento de Documento
-	 *
-	 * @return string documento
-	 */
-	/*
-	function getDocumentoResource() {
-		if (!isset($this->documento_id_res) && !$this->bLoaded) {
-			$this->DBCarregar();
-		}
-		return $this->documento_id_res;
-	}
-	*/
 	/**
 	 * estableix el valor de l'atribut documento de Documento
 	 *

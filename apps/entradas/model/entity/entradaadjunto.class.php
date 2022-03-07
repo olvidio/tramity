@@ -76,8 +76,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 	 *
 	 * @var string bytea
 	 */
-	 protected $adjunto_id_res;
-	 protected $adjunto_txt;
+	 protected $adjunto;
 	 
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
@@ -133,7 +132,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		$aDades=array();
 		$aDades['id_entrada'] = $this->iid_entrada;
 		$aDades['nom'] = $this->snom;
-        $aDades['adjunto'] = $this->getAdjuntoTxt();
+        $aDades['adjunto'] = $this->adjunto;
 		array_walk($aDades, 'core\poner_null');
 
 		if ($bInsert === FALSE) {
@@ -153,7 +152,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 			    
 			    $oDblSt->bindParam(1, $id_entrada, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_LOB);
+			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_STR);
 				try {
 					$oDblSt->execute();
 				}
@@ -180,7 +179,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 			    
 			    $oDblSt->bindParam(1, $id_entrada, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_LOB);
+			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_STR);
 				try {
 					$oDblSt->execute();
 				}
@@ -217,7 +216,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 			$oDblSt->execute();
 			$oDblSt->bindColumn(1, $id_entrada, \PDO::PARAM_INT);
 			$oDblSt->bindColumn(2, $nom, \PDO::PARAM_STR, 256);
-			$oDblSt->bindColumn(3, $adjunto, \PDO::PARAM_LOB);
+			$oDblSt->bindColumn(3, $adjunto, \PDO::PARAM_STR);
 			$oDblSt->fetch(\PDO::FETCH_BOUND);
 			
 			$aDades = [ 'id_entrada' => $id_entrada,
@@ -230,7 +229,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 				    $this->setAllAtributes($aDades);
 					break;
 				case 'guardar':
-					if (!$oDblSt->rowCount()) return FALSE;
+					if (!$oDblSt->rowCount()) { return FALSE; }
 					break;
                 default:
 					// En el caso de no existir esta fila, $aDades = FALSE:
@@ -275,7 +274,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		if (array_key_exists('id_item',$aDades)) { $this->setId_item($aDades['id_item']); }
 		if (array_key_exists('id_entrada',$aDades)) { $this->setId_entrada($aDades['id_entrada']); }
 		if (array_key_exists('nom',$aDades)) { $this->setNom($aDades['nom']); }
-		if (array_key_exists('adjunto',$aDades)) { $this->setAdjunto($aDades['adjunto']); }
+		if (array_key_exists('adjunto',$aDades)) { $this->setAdjuntoEscaped($aDades['adjunto']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -287,7 +286,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		$this->setId_item('');
 		$this->setId_entrada('');
 		$this->setNom('');
-		$this->setAdjunto('');
+		$this->setAdjuntoEscaped('');
 		$this->setPrimary_key($aPK);
 	}
 
@@ -393,57 +392,28 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		$this->snom = $snom;
 	}
 	/**
-	 * Recupera l'atribut adjunto de EntradaAdjunto
-	 *
-	 * @return string adjunto
-	 */
-	function getAdjuntoTxt() {
-	    $adjunto = '';
-		if (!isset($this->adjunto_txt) && !$this->bLoaded) {
-			$this->DBCarregar();
-		}
-		if (empty($this->adjunto_txt)) {
-		    if (!empty($this->adjunto_id_res)) {
-		        $doc_encoded = stream_get_contents($this->adjunto_id_res);
-		        if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
-		            //echo '$data is valid';
-		            $adjunto = base64_decode($doc_encoded);
-		        } else {
-		            //ºecho '$data is NOT valid';
-		            $adjunto = $doc_encoded;
-		        }
-		    }
-		} else {
-		    $adjunto = $this->adjunto_txt;
-		}
-		return $adjunto;
-	}
-	/**
-	 * Recupera l'atribut adjunto de EntradaAdjunto
-	 *
-	 * @return string adjunto
-	 */
-	function getAdjuntoResource() {
-		if (!isset($this->adjunto_id_res) && !$this->bLoaded) {
-			$this->DBCarregar();
-		}
-		return $this->adjunto_id_res;
-	}
-	/**
 	 * estableix el valor de l'atribut adjunto de EntradaAdjunto
 	 *
 	 * @param string adjunto='' optional
 	 */
 	function setAdjunto($adjunto='') {
-		if (is_resource($adjunto)) {
-		    $this->adjunto_id_res = $adjunto;
-		} else {
-		    if (empty($adjunto)) {
-		        $this->adjunto_txt = '';
-		    } else {
-                $this->adjunto_txt = $adjunto;
-		    }
-		}
+		// Escape the binary data
+		$escaped = bin2hex( $adjunto );
+		$this->adjunto = $escaped;
+	}
+	
+	/**
+	 * estableix el valor de l'atribut adjunto de EntradaAdjunto
+	 * per usar amb els valors directes de la DB.
+	 *
+	 * @param string adjunto='' optional (ja convertit a hexadecimal)
+	 */
+	private function setAdjuntoEscaped($adjunto='') {
+		$this->adjunto = $adjunto;
+	}
+	
+	public function getAdjunto() {
+		return hex2bin($this->adjunto);
 	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 

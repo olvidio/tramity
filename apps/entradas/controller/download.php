@@ -1,5 +1,6 @@
 <?php
 use entradas\model\entity\EntradaAdjunto;
+use envios\model\MimeTypeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -17,33 +18,27 @@ $Qid_item = (integer) \filter_input(INPUT_GET, 'key');
 
 if (!empty($Qid_item)) {
     $oEntradaAdjunto = new EntradaAdjunto($Qid_item);
-    $nom = $oEntradaAdjunto->getNom();
-    $res_adjunto = $oEntradaAdjunto->getAdjuntoResource();
+    $nombre_fichero = $oEntradaAdjunto->getNom();
+    $doc = $oEntradaAdjunto->getAdjunto();
 
-    if (!empty($res_adjunto)) {
-        rewind($res_adjunto);
-        $doc_encoded = stream_get_contents($res_adjunto);
-        if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
-            // $data is valid
-            $doc = base64_decode($doc_encoded);
-        } else {
-            // $data is NOT valid
-            $doc = $doc_encoded;
-        }
-        
-        header('Content-Description: File Transfer');
-        header('Content-Transfer-Encoding: binary');
-        header('Cache-Control: public, must-revalidate, max-age=0');
-        header("Pragma: public"); // required
-        header("Expires: 0");
-        header("Cache-Control: private",false); // required for certain browsers
-        header('Content-Type: application/force-download');
-        header('Content-Type: application/download', false);
-        header('Content-disposition: attachment; filename="' . $nom . '"');
-        ob_clean();
-        flush();
-        echo $doc;
-    }
+    $file_extension = strtolower(substr(strrchr($nombre_fichero,"."),1));
+    $oMimeType = new MimeTypeLocal();
+    $ctype = $oMimeType->getMimeType($file_extension);
+    $ctype = empty($ctype)? "application/octet-stream" : $ctype;
+
+	header('Content-Description: File Transfer');
+	header('Content-Transfer-Encoding: binary');
+	header('Cache-Control: public, must-revalidate, max-age=0');
+	header("Pragma: public"); // required
+	header("Expires: 0");
+	header("Cache-Control: private",false); // required for certain browsers
+	header('Content-Type: application/force-download');
+	header('Content-Type: application/download', false);
+	header('Content-Type: ' . $ctype);
+	header('Content-disposition: attachment; filename="' . $nombre_fichero . '"');
+	ob_clean();
+	flush();
+	echo $doc;
     exit();
 } else {
     $error = TRUE;
