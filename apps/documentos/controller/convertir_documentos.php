@@ -63,31 +63,51 @@ if ($Qque == 'escritos') {
 if ($Qque == 'entradas') {
 	// Adjuntos de entradas:
 	$gesAdjuntosEntradasOrg = new GestorEntradaAdjuntoOrg();
-	$cEntradaAdjuntosOrg = $gesAdjuntosEntradasOrg->getEntradasAdjunto();
-
-	foreach($cEntradaAdjuntosOrg as $oEntradaAdjuntoOrg) {
-		$id_item = $oEntradaAdjuntoOrg->getId_item();
-		$id_entrada = $oEntradaAdjuntoOrg->getId_entrada();
-		$nom = $oEntradaAdjuntoOrg->getNom();
-		$res_adjunto = $oEntradaAdjuntoOrg->getAdjuntoResource();
+	// Dividir en partes para que no colapse: memory ... bytes exhausted
+	//$cEntradaAdjuntosOrg = $gesAdjuntosEntradasOrg->getEntradasAdjunto();
+	
+	$cantidad = 5;
+	$anterior = 0;
+	$aWhere = [ '_ordre' => 'id_item',
+			'_limit' => $cantidad,
+			'_offset' => $anterior,
+	];
+	$cEntradaAdjuntosOrg = $gesAdjuntosEntradasOrg->getEntradasAdjunto($aWhere);
+	$num_filas = count($cEntradaAdjuntosOrg);
+	while ($num_filas > 0) {
+		$anterior += $num_filas;
 		
-		if (!empty($res_adjunto)) {
-			rewind($res_adjunto);
-			$doc_encoded = stream_get_contents($res_adjunto);
-			if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
-				// $data is valid
-				$doc = base64_decode($doc_encoded);
-			} else {
-				// $data is NOT valid
-				$doc = $doc_encoded;
-			}
-			// grabar el nuevo:
-			$oEntradaAdjunto = new EntradaAdjunto($id_item);
-			$oEntradaAdjunto->setId_entrada($id_entrada);
-			$oEntradaAdjunto->setNom($nom);
-			$oEntradaAdjunto->setAdjunto($doc);
-			$oEntradaAdjunto->DBGuardar();
-		}
+		foreach($cEntradaAdjuntosOrg as $oEntradaAdjuntoOrg) {
+			$id_item = $oEntradaAdjuntoOrg->getId_item();
+			$id_entrada = $oEntradaAdjuntoOrg->getId_entrada();
+			$nom = $oEntradaAdjuntoOrg->getNom();
+			$res_adjunto = $oEntradaAdjuntoOrg->getAdjuntoResource();
 			
+			if (!empty($res_adjunto)) {
+				rewind($res_adjunto);
+				$doc_encoded = stream_get_contents($res_adjunto);
+				if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
+					// $data is valid
+					$doc = base64_decode($doc_encoded);
+				} else {
+					// $data is NOT valid
+					$doc = $doc_encoded;
+				}
+				// grabar el nuevo:
+				$oEntradaAdjunto = new EntradaAdjunto($id_item);
+				$oEntradaAdjunto->setId_entrada($id_entrada);
+				$oEntradaAdjunto->setNom($nom);
+				$oEntradaAdjunto->setAdjunto($doc);
+				$oEntradaAdjunto->DBGuardar();
+			}
+				
+		}
+		
+		$aWhere = [ '_ordre' => 'id_item',
+				'_limit' => $cantidad,
+				'_offset' => $anterior,
+		];
+		$cEntradaAdjuntosOrg = $gesAdjuntosEntradasOrg->getEntradasAdjunto($aWhere);
+		$num_filas = count($cEntradaAdjuntosOrg);
 	}
 }
