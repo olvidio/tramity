@@ -66,7 +66,7 @@ if ($Qque == 'entradas') {
 	// Dividir en partes para que no colapse: memory ... bytes exhausted
 	//$cEntradaAdjuntosOrg = $gesAdjuntosEntradasOrg->getEntradasAdjunto();
 	
-	$cantidad = 5;
+	$cantidad = 500;
 	$anterior = 0;
 	$aWhere = [ '_ordre' => 'id_item',
 			'_limit' => $cantidad,
