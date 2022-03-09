@@ -99,6 +99,7 @@ class GestorEscritoAdjuntoOrg Extends core\ClaseGestor {
 		foreach ($aWhere as $camp => $val) {
 			if ($camp == '_ordre') { continue; }
 			if ($camp == '_limit') { continue; }
+			if ($camp == '_offset') { continue; }
 			$sOperador = isset($aOperators[$camp])? $aOperators[$camp] : '';
 			if ($a = $oCondicion->getCondicion($camp,$sOperador,$val)) { $aCondi[]=$a; }
 			// operadores que no requieren valores
@@ -110,11 +111,14 @@ class GestorEscritoAdjuntoOrg Extends core\ClaseGestor {
 		if ($sCondi!='') { $sCondi = " WHERE ".$sCondi; }
 		$sOrdre = '';
         $sLimit = '';
+        $sOffset = '';
 		if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') { $sOrdre = ' ORDER BY '.$aWhere['_ordre']; }
 		if (isset($aWhere['_ordre'])) { unset($aWhere['_ordre']); }
 		if (isset($aWhere['_limit']) && $aWhere['_limit']!='') { $sLimit = ' LIMIT '.$aWhere['_limit']; }
 		if (isset($aWhere['_limit'])) { unset($aWhere['_limit']); }
-		$sQry = "SELECT * FROM $nom_tabla ".$sCondi.$sOrdre.$sLimit;
+		if (isset($aWhere['_offset']) && $aWhere['_offset']!='') { $sOffset = ' OFFSET '.$aWhere['_offset']; }
+		if (isset($aWhere['_offset'])) { unset($aWhere['_offset']); }
+		$sQry = "SELECT * FROM $nom_tabla ".$sCondi.$sOrdre.$sLimit.$sOffset;
 		if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
 			$sClauError = 'GestorEscritoAdjunto.llistar.prepare';
 			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
