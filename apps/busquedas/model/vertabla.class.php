@@ -245,7 +245,8 @@ class VerTabla {
             $a_resto_oficinas = $oEntrada->getResto_oficinas();
             $oficinas_txt = '';
             if (!empty($id_of_ponente)) {
-                $oficinas_txt .= '<span class="text-danger">'.$a_posibles_oficinas[$id_of_ponente].'</span>';
+            	$of_ponente_txt = empty($a_posibles_oficinas[$id_of_ponente])? '??' : $a_posibles_oficinas[$id_of_ponente];
+                $oficinas_txt .= '<span class="text-danger">'.$of_ponente_txt.'</span>';
             }
             foreach ($a_resto_oficinas as $id_oficina) {
                 $oficinas_txt .= empty($oficinas_txt)? '' : ', ';

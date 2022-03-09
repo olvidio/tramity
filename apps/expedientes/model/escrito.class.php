@@ -296,7 +296,11 @@ class Escrito Extends EscritoDB {
                 //(segun individuales)
                 if (!empty((array)$a_json_prot_dst)) {
                     $json_prot_dst = $a_json_prot_dst[0];
-                    $id_dst = $json_prot_dst->lugar;
+                    if (!empty((array)$json_prot_dst)) {
+						$id_dst = $json_prot_dst->lugar;
+                    } else {
+                    	$id_dst = '';	
+                    }
                 }
                 $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
                 $destinos_txt = $oArrayProtDestino->ListaTxtBr();
@@ -404,7 +408,11 @@ class Escrito Extends EscritoDB {
         $a_json_prot_dst = $this->getJson_prot_destino();
         if (!empty((array)$a_json_prot_dst)) {
             $json_prot_dst = $a_json_prot_dst[0];
-            $id_dst = $json_prot_dst->lugar;
+			if (!empty((array)$json_prot_dst)) {
+				$id_dst = $json_prot_dst->lugar;
+			} else {
+				$id_dst = '';	
+			}
         }
         
         // referencias

@@ -1,6 +1,7 @@
 <?php
 namespace entradas\model\entity;
 use core;
+use web;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula entradas
@@ -21,77 +22,78 @@ use core;
  * @version 1.0
  * @since 29/6/2020
  */
-class EntradaAdjunto Extends core\ClasePropiedades {
+class EntradaAdjuntoOrg Extends core\ClasePropiedades {
 	/* ATRIBUTS ----------------------------------------------------------------- */
-
+	
 	/**
 	 * aPrimary_key de EntradaAdjunto
 	 *
 	 * @var array
 	 */
-	 protected $aPrimary_key;
-
+	protected $aPrimary_key;
+	
 	/**
 	 * aDades de EntradaAdjunto
 	 *
 	 * @var array
 	 */
-	 protected $aDades;
-
+	protected $aDades;
+	
 	/**
 	 * bLoaded
 	 *
 	 * @var boolean
 	 */
-	 protected $bLoaded = FALSE;
-
+	protected $bLoaded = FALSE;
+	
 	/**
 	 * Id_schema de EntradaAdjunto
 	 *
 	 * @var integer
 	 */
-	 protected $iid_schema;
-
+	protected $iid_schema;
+	
 	/**
 	 * Id_item de EntradaAdjunto
 	 *
 	 * @var integer
 	 */
-	 protected $iid_item;
+	protected $iid_item;
 	/**
 	 * Id_entrada de EntradaAdjunto
 	 *
 	 * @var integer
 	 */
-	 protected $iid_entrada;
+	protected $iid_entrada;
 	/**
 	 * Nom de EntradaAdjunto
 	 *
 	 * @var string
 	 */
-	 protected $snom;
+	protected $snom;
 	/**
 	 * Adjunto de EntradaAdjunto
 	 *
 	 * @var string bytea
 	 */
-	 protected $adjunto;
-	 
+	protected $adjunto_id_res;
+	protected $adjunto_txt;
+	
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de EntradaAdjunto
 	 *
 	 * @var object
 	 */
-	 protected $oDbl;
+	protected $oDbl;
 	/**
 	 * NomTabla de EntradaAdjunto
 	 *
 	 * @var string
 	 */
-	 protected $sNomTabla;
+	protected $sNomTabla;
 	/* CONSTRUCTOR -------------------------------------------------------------- */
-
+	
 	/**
 	 * Constructor de la classe.
 	 * Si només necessita un valor, se li pot passar un integer.
@@ -102,7 +104,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 	 */
 	function __construct($a_id='') {
 		$oDbl = $GLOBALS['oDBT'];
-		if (is_array($a_id)) { 
+		if (is_array($a_id)) {
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
 				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
@@ -114,11 +116,11 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 			}
 		}
 		$this->setoDbl($oDbl);
-		$this->setNomTabla('entrada_adjuntos');
+		$this->setNomTabla('entrada_adjuntos_org');
 	}
-
+	
 	/* METODES PUBLICS ----------------------------------------------------------*/
-
+	
 	/**
 	 * Desa els atributs de l'objecte a la base de dades.
 	 * Si no hi ha el registre, fa el insert, si hi es fa el update.
@@ -131,9 +133,9 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		$aDades=array();
 		$aDades['id_entrada'] = $this->iid_entrada;
 		$aDades['nom'] = $this->snom;
-        $aDades['adjunto'] = $this->adjunto;
+		$aDades['adjunto'] = $this->getAdjuntoTxt();
 		array_walk($aDades, 'core\poner_null');
-
+		
 		if ($bInsert === FALSE) {
 			//UPDATE
 			$update="
@@ -145,13 +147,13 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			} else {
-			    $id_entrada = $aDades['id_entrada'];
-			    $nom = $aDades['nom'];
-			    $adjunto = $aDades['adjunto'];
-			    
-			    $oDblSt->bindParam(1, $id_entrada, \PDO::PARAM_INT);
-			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_STR);
+				$id_entrada = $aDades['id_entrada'];
+				$nom = $aDades['nom'];
+				$adjunto = $aDades['adjunto'];
+				
+				$oDblSt->bindParam(1, $id_entrada, \PDO::PARAM_INT);
+				$oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
+				$oDblSt->bindParam(3, $adjunto, \PDO::PARAM_LOB);
 				try {
 					$oDblSt->execute();
 				}
@@ -166,19 +168,19 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		} else {
 			// INSERT
 			$campos="(id_entrada,nom,adjunto)";
-			$valores="(:id_entrada,:nom,:ajunto)";		
+			$valores="(:id_entrada,:nom,:ajunto)";
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'EntradaAdjunto.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			} else {
-			    $id_entrada = $aDades['id_entrada'];
-			    $nom = $aDades['nom'];
-			    $adjunto = $aDades['adjunto'];
-			    
-			    $oDblSt->bindParam(1, $id_entrada, \PDO::PARAM_INT);
-			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_STR);
+				$id_entrada = $aDades['id_entrada'];
+				$nom = $aDades['nom'];
+				$adjunto = $aDades['adjunto'];
+				
+				$oDblSt->bindParam(1, $id_entrada, \PDO::PARAM_INT);
+				$oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
+				$oDblSt->bindParam(3, $adjunto, \PDO::PARAM_LOB);
 				try {
 					$oDblSt->execute();
 				}
@@ -195,7 +197,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		$this->setAllAtributes($aDades);
 		return TRUE;
 	}
-
+	
 	/**
 	 * Carrega els camps de la base de dades com atributs de l'objecte.
 	 *
@@ -215,22 +217,22 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 			$oDblSt->execute();
 			$oDblSt->bindColumn(1, $id_entrada, \PDO::PARAM_INT);
 			$oDblSt->bindColumn(2, $nom, \PDO::PARAM_STR, 256);
-			$oDblSt->bindColumn(3, $adjunto, \PDO::PARAM_STR);
+			$oDblSt->bindColumn(3, $adjunto, \PDO::PARAM_LOB);
 			$oDblSt->fetch(\PDO::FETCH_BOUND);
 			
 			$aDades = [ 'id_entrada' => $id_entrada,
-			             'nom' => $nom,
-			             'adjunto' => $adjunto,
-			           ];
+					'nom' => $nom,
+					'adjunto' => $adjunto,
+			];
 			
 			switch ($que) {
 				case 'tot':
-				    $this->setAllAtributes($aDades);
+					$this->setAllAtributes($aDades);
 					break;
 				case 'guardar':
-					if (!$oDblSt->rowCount()) { return FALSE; }
+					if (!$oDblSt->rowCount()) return FALSE;
 					break;
-                default:
+				default:
 					// En el caso de no existir esta fila, $aDades = FALSE:
 					if ($aDades === FALSE) {
 						$this->setNullAllAtributes();
@@ -240,10 +242,10 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 			}
 			return TRUE;
 		} else {
-		   	return FALSE;
+			return FALSE;
 		}
 	}
-
+	
 	/**
 	 * Elimina el registre de la base de dades corresponent a l'objecte.
 	 *
@@ -261,7 +263,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 	
 	/* METODES ALTRES  ----------------------------------------------------------*/
 	/* METODES PRIVATS ----------------------------------------------------------*/
-
+	
 	/**
 	 * Estableix el valor de tots els atributs
 	 *
@@ -273,8 +275,8 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		if (array_key_exists('id_item',$aDades)) { $this->setId_item($aDades['id_item']); }
 		if (array_key_exists('id_entrada',$aDades)) { $this->setId_entrada($aDades['id_entrada']); }
 		if (array_key_exists('nom',$aDades)) { $this->setNom($aDades['nom']); }
-		if (array_key_exists('adjunto',$aDades)) { $this->setAdjuntoEscaped($aDades['adjunto']); }
-	}	
+		if (array_key_exists('adjunto',$aDades)) { $this->setAdjunto($aDades['adjunto']); }
+	}
 	/**
 	 * Estableix a empty el valor de tots els atributs
 	 *
@@ -285,12 +287,12 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		$this->setId_item('');
 		$this->setId_entrada('');
 		$this->setNom('');
-		$this->setAdjuntoEscaped('');
+		$this->setAdjunto('');
 		$this->setPrimary_key($aPK);
 	}
-
+	
 	/* METODES GET i SET --------------------------------------------------------*/
-
+	
 	/**
 	 * Recupera tots els atributs de EntradaAdjunto en un array
 	 *
@@ -302,7 +304,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		}
 		return $this->aDades;
 	}
-
+	
 	/**
 	 * Recupera las claus primàries de EntradaAdjunto en un array
 	 *
@@ -319,7 +321,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 	 *
 	 */
 	public function setPrimary_key($a_id='') {
-	    if (is_array($a_id)) { 
+		if (is_array($a_id)) {
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
 				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
@@ -332,7 +334,7 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		}
 	}
 	
-
+	
 	/**
 	 * Recupera l'atribut iid_item de EntradaAdjunto
 	 *
@@ -391,29 +393,58 @@ class EntradaAdjunto Extends core\ClasePropiedades {
 		$this->snom = $snom;
 	}
 	/**
+	 * Recupera l'atribut adjunto de EntradaAdjunto
+	 *
+	 * @return string adjunto
+	 */
+	function getAdjuntoTxt() {
+		$adjunto = '';
+		if (!isset($this->adjunto_txt) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		if (empty($this->adjunto_txt)) {
+			if (!empty($this->adjunto_id_res)) {
+				$doc_encoded = stream_get_contents($this->adjunto_id_res);
+				if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
+					//echo '$data is valid';
+					$adjunto = base64_decode($doc_encoded);
+				} else {
+					//ºecho '$data is NOT valid';
+					$adjunto = $doc_encoded;
+				}
+			}
+		} else {
+			$adjunto = $this->adjunto_txt;
+		}
+		return $adjunto;
+	}
+	/**
+	 * Recupera l'atribut adjunto de EntradaAdjunto
+	 *
+	 * @return string adjunto
+	 */
+	function getAdjuntoResource() {
+		if (!isset($this->adjunto_id_res) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->adjunto_id_res;
+	}
+	/**
 	 * estableix el valor de l'atribut adjunto de EntradaAdjunto
 	 *
 	 * @param string adjunto='' optional
 	 */
 	function setAdjunto($adjunto='') {
-		// Escape the binary data
-		$escaped = bin2hex( $adjunto );
-		$this->adjunto = $escaped;
-	}
-	
-	/**
-	 * estableix el valor de l'atribut adjunto de EntradaAdjunto
-	 * per usar amb els valors directes de la DB.
-	 *
-	 * @param string adjunto='' optional (ja convertit a hexadecimal)
-	 */
-	private function setAdjuntoEscaped($adjunto='') {
-		$this->adjunto = $adjunto;
-	}
-	
-	public function getAdjunto() {
-		return hex2bin($this->adjunto);
+		if (is_resource($adjunto)) {
+			$this->adjunto_id_res = $adjunto;
+		} else {
+			if (empty($adjunto)) {
+				$this->adjunto_txt = '';
+			} else {
+				$this->adjunto_txt = $adjunto;
+			}
+		}
 	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
-
+	
 }
