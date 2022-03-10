@@ -31,12 +31,10 @@ require_once ("apps/core/global_object.inc");
 $Qid_lugar_org  = (string) \filter_input(INPUT_POST, 'id_lugar_org');
 $Qprot_num_org  = (string) \filter_input(INPUT_POST, 'prot_num_org');
 $Qprot_any_org  = (string) \filter_input(INPUT_POST, 'prot_any_org');
-$Qprot_mas_org  = (string) \filter_input(INPUT_POST, 'prot_mas_org');
 
 $Qid_lugar_dst  = (string) \filter_input(INPUT_POST, 'id_lugar_dst');
 $Qprot_num_dst  = (string) \filter_input(INPUT_POST, 'prot_num_dst');
 $Qprot_any_dst  = (string) \filter_input(INPUT_POST, 'prot_any_dst');
-$Qprot_mas_dst  = (string) \filter_input(INPUT_POST, 'prot_mas_dst');
 
 $gesEntradas = new GestorEntrada();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
 
@@ -131,11 +129,11 @@ if (empty($msg) && ($id_of_ponente_dst != $id_of_ponente_org) ) {
 
 
 if (empty($msg)) {
-    $oOficina = new Oficina($id_of_ponente_org);
-    $oficina_txt = $oOficina->getSigla();
+    //$oOficina = new Oficina($id_of_ponente_org);
+    //$oficina_txt = $oOficina->getSigla();
     
     $oDavicalMigrar = new DavicalMigrar();
-    $oDavicalMigrar->setOficina($oficina_txt);
+    $oDavicalMigrar->setId_oficina($id_of_ponente_org);
     $oDavicalMigrar->setId_reg_org($id_reg_org);
     $oDavicalMigrar->setId_reg_dst($id_reg_dst);
     $oDavicalMigrar->setLocation_org($location_org);

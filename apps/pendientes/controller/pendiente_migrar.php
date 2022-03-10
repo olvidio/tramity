@@ -29,10 +29,8 @@ $oDesplLugar_dst->setNombre('id_lugar_dst');
 $oDesplLugar_dst->setBlanco(TRUE);
 $oDesplLugar_dst->setOpciones($a_lugares);
 
-
 $prot_num_org='';
 $prot_any_org='';
-$prot_mas_org='';
 
 $a_cosas = [
     'filtro' => 'pendientes',
