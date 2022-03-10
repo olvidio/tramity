@@ -4,6 +4,7 @@ use entradas\model\entity\EntradaAdjunto;
 use entradas\model\entity\GestorEntradaAdjuntoOrg;
 use expedientes\model\entity\EscritoAdjunto;
 use expedientes\model\entity\GestorEscritoAdjuntoOrg;
+use documentos\model\Documento;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -25,7 +26,8 @@ if ($Qque == 'escritos') {
 	
 	$cantidad = 5;
 	$anterior = 0;
-	$aWhere = [ '_ordre' => 'id_item',
+	$aWhere = [ 'tipo_doc' => Documento::DOC_UPLOAD,  
+			'_ordre' => 'id_item',
 			'_limit' => $cantidad,
 			'_offset' => $anterior,
 	];
