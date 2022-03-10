@@ -23,7 +23,7 @@ if ($Qque == 'escritos') {
 	$gesAdjuntosEscritoOrg = new GestorEscritoAdjuntoOrg();
 	// Dividir en partes para que no colapse: memory ... bytes exhausted
 	
-	$cantidad = 500;
+	$cantidad = 5;
 	$anterior = 0;
 	$aWhere = [ '_ordre' => 'id_item',
 			'_limit' => $cantidad,
@@ -53,10 +53,6 @@ if ($Qque == 'escritos') {
 					// $data is NOT valid
 					if (is_resource($doc_encoded)) {
 						$doc_encoded = stream_get_contents($doc_encoded);
-					}
-					if (strpos($doc_encoded,'Resource') !== FALSE) {
-						// error?
-						continue;
 					}
 					$doc = $doc_encoded;
 				}
