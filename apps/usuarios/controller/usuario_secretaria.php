@@ -84,17 +84,21 @@ $filtro = 'seguimiento';
 $a_pills[$num_orden] = $pill;
 
 // reunion = 3
-$filtro = 'distribuir';
-    $active = ($filtro == $Qfiltro)? 'active' : '';
-    $aQuery = [ 'filtro' => $filtro ];
-    $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 3;
-    $text = _("distribuir");
-    $explicacion = _("Pasar a cada oficina los expedientes que ya han circulado (scdl)");
-    $oExpedienteLista->setFiltro($filtro);
-    $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+// Solo el scdl
+$perm_distribuir = $_SESSION['oConfig']->getPerm_distribuir();
+if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_distribuir) {
+	$filtro = 'distribuir';
+		$active = ($filtro == $Qfiltro)? 'active' : '';
+		$aQuery = [ 'filtro' => $filtro ];
+		$pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
+		$num_orden = 3;
+		$text = _("distribuir");
+		$explicacion = _("Pasar a cada oficina los expedientes que ya han circulado (scdl)");
+		$oExpedienteLista->setFiltro($filtro);
+		$num = $oExpedienteLista->getNumero();
+		$pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
+}
 
 // circular = 4
 // se envian escritos, no expedientes
@@ -140,8 +144,8 @@ $filtro = 'en_admitido';
 $a_pills[$num_orden] = $pill;
 
 // Solo el scdl
-$perm_a = $_SESSION['oConfig']->getPerm_aceptar();
-if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_a) {
+$perm_aceptar = $_SESSION['oConfig']->getPerm_aceptar();
+if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_aceptar) {
     // aceptar entradas
     $filtro = 'en_asignado';
         $active = ($filtro == $Qfiltro)? 'active' : '';
