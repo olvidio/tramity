@@ -105,16 +105,16 @@
       <label class="form-label">{{ "Antecedentes"|trans }}:</label>
     </div>
     <div class="col-md-12">
-      <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(1);" >
+      <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_buscar_antecedente(1);" >
         {{ "Entrada"|trans }}
       </button>
-      <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(2);" >
+      <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_buscar_antecedente(2);" >
         {{ "Expediente"|trans }}
       </button>
-      <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(3);" >
+      <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_buscar_antecedente(3);" >
         {{ "Escrito"|trans }}
       </button>
-      <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_antecedente(4);" >
+      <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_buscar_antecedente(4);" >
         {{ "Documento"|trans }}
       </button>
     </div>
@@ -132,6 +132,11 @@
 </div>
 <!-- Fin row -->
 
+<!--  --------------- Image cargando , para cuando se copian etherpads, que es lento --------------- -->
+<div id="slow_load" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+ <img class="mb-4" src="../images/loading.gif" alt="cargando" width="32" height="32">
+</div>
+  
 
   <!--  --------------- ACCIONES --------------- -->
   
@@ -248,6 +253,7 @@
 $(document).ready(function() {
 	tabs_hide();
 	fnjs_tramite(); // oculta a los oficiales, dependiendo del tramite
+    $('#slow_load').hide();  // hide it initially
 });
 fnjs_revisar_adjunto=function(id_escrito) {
 	id_expediente = $('#id_expediente').val();

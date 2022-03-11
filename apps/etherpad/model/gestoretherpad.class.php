@@ -20,7 +20,7 @@ class GestorEtherpad {
              * {code: 1, message:"padID does not exist", data: null}
              */
         } else {
-            return $this->mostrar_error($rta);
+            return $oEtherpad->mostrar_error($rta);
         }
     }
     
@@ -40,29 +40,38 @@ class GestorEtherpad {
              * {code: 1, message:"padID does not exist", data: null}
              */
         } else {
-            return $this->mostrar_error($rta);
+            return $oEtherpadSource->mostrar_error($rta);
         }
     }
     
-    public function copyDocToEscrito($id_doc, $id_escritp, $force=false) {
+    public function copyDocToEscrito($id_doc, $id_escrito, $force=false) {
         $oEtherpad = new Etherpad();
         $oEtherpad->setId(Etherpad::ID_DOCUMENTO,$id_doc);
         $sourceID = $oEtherpad->getPadId();
         
         $oNewEtherpad = new Etherpad();
-        $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $id_escritp);
+        $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito);
         $destinationID = $oNewEtherpad->getPadID();
-        
-        $rta = $oEtherpad->copyPadWithoutHistory($sourceID, $destinationID, $force);
+       
+        // Por alguna razón el force no funciona. Hay que eliminarlo primero:
+        $rta = $oNewEtherpad->deletePad($destinationID);
         if ($rta->getCode() == 0) {
             /* Example returns:
              * {code: 0, message:"ok", data: null}
              * {code: 1, message:"padID does not exist", data: null}
              */
+			$rta = $oEtherpad->copyPadWithoutHistory($sourceID, $destinationID, $force);
+			if ($rta->getCode() == 0) {
+				/* Example returns:
+				 * {code: 0, message:"ok", data: null}
+				 * {code: 1, message:"padID does not exist", data: null}
+				 */
+			} else {
+				return $oEtherpad->mostrar_error($rta);
+			}
         } else {
-            return $this->mostrar_error($rta);
+            return $oNewEtherpad->mostrar_error($rta);
         }
-
     }
     
     public function moveDocToEscrito($id_doc, $id_escrito, $force=false) {
@@ -81,7 +90,7 @@ class GestorEtherpad {
              * {code: 1, message:"padID does not exist", data: null}
              */
         } else {
-            return $this->mostrar_error($rta);
+            return $oEtherpadSource->mostrar_error($rta);
         }
     }
     

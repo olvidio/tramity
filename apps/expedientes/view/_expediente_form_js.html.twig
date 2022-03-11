@@ -43,6 +43,7 @@ $(function() {
 fnjs_eliminar_accion=function(id_escrito){
     seguro=confirm("{{ "¿Está Seguro que desea borrar este escrito?"|trans }}");
     if (seguro) {
+        $('#slow_load').show();
         var id_expediente=$('#id_expediente').val();
     	var url_doc = "apps/expedientes/controller/escrito_update.php";
         var param_json = { que: 'eliminar', id_expediente: id_expediente, id_escrito: id_escrito };

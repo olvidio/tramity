@@ -21,6 +21,7 @@
 </div> <!-- End of content -->
 
 <div id="cargando" >{{ "Cargando..."|trans }}</div>
+
 <!-- Custom scripts for all pages-->
 {# solo debe cargarse un vez, sino hay conflicto con los dropdown bootsrtap #}
 <!-- vars: mi_idioma, error_fecha -->
@@ -30,4 +31,5 @@ window.onload = function() {
 	// cargar lista pendientes:
 	fnjs_update_div('#main', '{{ pagina_inicio }}');
 };
+
 </script>
