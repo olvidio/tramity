@@ -423,6 +423,7 @@ class Buscar {
             $aWhere['asunto_detalle'] = $this->asunto;
         }
 
+        $cEscritos = [];
         if (!empty($this->oficina)) {
             // Cargos correspondientes a la oficina:
             $gesCargos = new GestorCargo();

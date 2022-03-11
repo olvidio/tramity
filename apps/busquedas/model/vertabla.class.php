@@ -370,7 +370,7 @@ class VerTabla {
             $oficinas_txt .= '<span class="text-danger">'.$oficina_txt.'</span>';
             foreach ($a_resto_oficinas as $id_oficina) {
                 $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
-                $oficinas_txt .= $a_posibles_cargos[$id_oficina];
+                $oficinas_txt .= empty($a_posibles_cargos[$id_oficina])? '' : $a_posibles_cargos[$id_oficina];
             }
             $oficinas = $oficinas_txt;
             
