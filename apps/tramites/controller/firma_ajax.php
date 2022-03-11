@@ -167,6 +167,7 @@ switch ($Qque) {
                 }
             }
             $oFirma->setValor($Qvoto);
+            $oFirma->setValor($Qvoto);
             $oFirma->setObserv($Qcomentario);
             $oFirma->setId_usuario(ConfigGlobal::mi_id_usuario());
             $oFirma->setF_valor($f_hoy_iso,FALSE);
@@ -185,6 +186,7 @@ switch ($Qque) {
                 $cFirmaDistribuir = $gesFirmas->getFirmas($aWhere);
                 if (is_array($cFirmaDistribuir) && !empty($cFirmaDistribuir)) {
                     $oFirmaDistribuir = $cFirmaDistribuir[0];
+                    $oFirmaDistribuir->DBCarregar();
                     $oFirmaDistribuir->setId_usuario(ConfigGlobal::mi_id_usuario());
                     $oFirmaDistribuir->setValor($Qvoto);
                     $oFirmaDistribuir->setF_valor($f_hoy_iso,FALSE);

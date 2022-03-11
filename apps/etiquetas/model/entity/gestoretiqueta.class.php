@@ -70,12 +70,16 @@ class GestorEtiqueta Extends core\ClaseGestor {
 	        $id_oficina = Cargo::OFICINA_ESQUEMA;
 	    }
 	    
-	    $aWhere = [ 'id_cargo' => $id_oficina,
-	        'oficina' => 't',
-	        '_ordre' => 'nom_etiqueta',
-	    ];
-	    $aOperador = [];
-	    return $this->getEtiquetas($aWhere,$aOperador);
+	    if (empty($id_oficina)) {
+	    	return [];	
+	    } else {
+			$aWhere = [ 'id_cargo' => $id_oficina,
+				'oficina' => 't',
+				'_ordre' => 'nom_etiqueta',
+			];
+			$aOperador = [];
+			return $this->getEtiquetas($aWhere,$aOperador);
+	    }
 	}
 	/**
 	 * retorna l'array d'objectes de tipus Etiqueta

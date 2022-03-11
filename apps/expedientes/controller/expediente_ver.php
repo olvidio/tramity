@@ -185,8 +185,8 @@ if ($Qfiltro == 'seg_reunion') {
     $add_del_txt = _("Añadir Firmas");
 }
 
-// solo el scdl tiene permiso
-if (ConfigGlobal::role_actual() == 'scdl') {
+// solo el scdl tiene permiso. Ahora 11-3-22 también el sd.
+if (ConfigGlobal::role_actual() == 'scdl' || ConfigGlobal::role_actual() == 'sd') {
     $cmb_tramite = TRUE;
 } else {
     $cmb_tramite = FALSE;
