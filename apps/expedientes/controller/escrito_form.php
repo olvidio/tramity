@@ -49,7 +49,7 @@ if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
     
     $gesGrupo = new GestorGrupo();
     $a_posibles_grupos = $gesGrupo->getArrayGrupos();
-    $json_prot_dst = '';
+    $json_prot_dst = [];
 } else {
     $a_posibles_grupos = [];
     

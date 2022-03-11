@@ -148,4 +148,24 @@ fnjs_proto=function(num,any,siguiente){
         $(siguiente).focus();
     }
 }
+
+// Copiado de apps/busquedas/view/buscar_escrito.html.twig
+fnjs_sel_periodo=function(id){
+    var nom=$(id+' :selected').text();
+    
+    switch (nom) {
+        case "IESE":
+            alert ("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans|raw }}");
+            break;
+        case "cr":
+            $('#antiguedad').val('1m');
+            break;
+        case "dlb":
+            $('#antiguedad').val('1m');
+            break;
+        default:
+            $('#antiguedad').val('3m');
+    }
+    $('#b_buscar').focus();
+}
 </script>
