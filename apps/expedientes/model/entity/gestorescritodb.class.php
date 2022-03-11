@@ -568,7 +568,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
         // Se usa la utilidad CURSOR del Postgresql para evitar colapsar la memoria del servidor
         // cuando se busca un número muy grande de registros (más de 20.000)
         
-        foreach ($this->fetchCursor($sQry) as $row ) {
+        foreach ($this->fetchCursor($sQry, $aWhere) as $row ) {
             $a_pkey = array('id_escrito' => $row['id_escrito']);
             $oEscritoDB = new Escrito($a_pkey);
             $oEscritoDB->setAllAtributes($row);
@@ -579,7 +579,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
         return $oEscritoDBSet->getTot();
 	}
 	
-	private function fetchCursor($sql, $idCol = false) {
+	private function fetchCursor($sql, $aWhere, $idCol = false) {
         $pdo = $this->getoDbl();
 	    /*
 	     nextCursorId() is an undefined function, but
@@ -588,7 +588,9 @@ class GestorEscritoDB Extends core\ClaseGestor {
 	    try {
 	        $cursorID = 'cursor_'.ConfigGlobal::mi_id_usuario();
             $pdo->beginTransaction();
-	        $pdo->exec("DECLARE $cursorID CURSOR FOR $sql ");
+	        //$stm0 = $pdo->exec("DECLARE $cursorID CURSOR FOR $sql ");
+	        $stm0 = $pdo->prepare("DECLARE $cursorID CURSOR FOR $sql ");
+	        $stm0->execute($aWhere);
         
 	        $stm = $pdo->prepare("FETCH NEXT FROM $cursorID");
             $stm->execute();
@@ -604,8 +606,9 @@ class GestorEscritoDB Extends core\ClaseGestor {
 	        }
 	    } catch (\Exception $e) {
 	        // Anything you want [*Parece que no hace nada!!]
-	        echo "Demasiados registros";
-	        echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+	        echo _("Demasiados registros");
+	        echo sprintf(_("Excepción capturada: %s"),  $e->getMessage());
+	        echo "\n";
 	    } finally {
 	        /*
 	         Do some clean up after the loop is done.
