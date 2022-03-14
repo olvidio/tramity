@@ -1,6 +1,5 @@
 <?php
 namespace lugares\model\entity;
-use core\ConfigGlobal;
 use function core\is_true;
 use core;
 use usuarios\model\entity\Cargo;
@@ -18,6 +17,8 @@ use usuarios\model\entity\Cargo;
 
 class GestorLugar Extends core\ClaseGestor {
 	/* ATRIBUTS ----------------------------------------------------------------- */
+	
+	const SEPARADOR = '-------------'; 
 
 	/* CONSTRUCTOR -------------------------------------------------------------- */
 
@@ -213,7 +214,7 @@ class GestorLugar Extends core\ClaseGestor {
 	        $lugares[$clave]=$val;
 	    }
 	    // separación
-	    $lugares[1] = "--------";
+	    $lugares['separador'] = self::SEPARADOR;
 	    // 1º ctr de dl
 	    $query_ctr="SELECT id_lugar, sigla, nombre, substring(tipo_ctr from 1 for 1) as tipo FROM $nom_tabla
                             WHERE dl='$mi_dl' AND tipo_ctr ~ '^(a|n|s)' $Where_anulados
@@ -233,7 +234,7 @@ class GestorLugar Extends core\ClaseGestor {
 	        $lugares[$clave]=$val;
 	    }
 	    // 3º separación
-	    $lugares[1] = "--------";
+	    $lugares['separador3'] = self::SEPARADOR;
 	    // 4º dl de H
 	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
                             WHERE tipo_ctr='dl' AND region='H'  $Where_anulados
@@ -244,7 +245,7 @@ class GestorLugar Extends core\ClaseGestor {
 	        $lugares[$clave]=$val;
 	    }
 	    // 5º separación
-	    $lugares[1] = "--------";
+	    $lugares['separador5'] = self::SEPARADOR;
 	    // 6º cr
 	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
                             WHERE tipo_ctr='cr' $Where_anulados
@@ -255,7 +256,7 @@ class GestorLugar Extends core\ClaseGestor {
 	        $lugares[$clave]=$val;
 	    }
 	    // 7º separación
-	    $lugares[1] = "--------";
+	    $lugares['separador7'] = self::SEPARADOR;
 	    // 8º dl ex
 	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
                             WHERE tipo_ctr='dl' AND region != 'H' AND sigla != 'ro'  $Where_anulados
@@ -266,7 +267,7 @@ class GestorLugar Extends core\ClaseGestor {
 	        $lugares[$clave]=$val;
 	    }
 	    // 9º separación
-	    $lugares[1] = "--------";
+	    $lugares['separador9'] = self::SEPARADOR;
 	    // 10º cg
 	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
                             WHERE sigla='cg' $Where_anulados
