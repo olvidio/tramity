@@ -72,7 +72,7 @@ fnjs_quitar_destinos=function(){
 }
 
 $(function() {
-	$( "#f_salida" ).datetimepicker( {
+	$( "#f_salida" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',

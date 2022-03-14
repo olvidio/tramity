@@ -69,7 +69,7 @@ fnjs_reunion=function(){
 }
 
 $(function() {
-	$( "#f_reunion" ).datetimepicker( {
+	$( "#f_reunion" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: true,
 		datepicker: true,
 		format: 'd-m-Y H:i',

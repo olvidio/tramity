@@ -296,7 +296,7 @@ fnjs_adjuntar_antecedente=function(tipo,id_escrito,id_expediente) {
 }
 
 $(function() {
-	$( "#f_plazo" ).datetimepicker( {
+	$( "#f_plazo" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',

@@ -101,7 +101,7 @@ fnjs_next=function() {
 }
 
 $(function() {
-	$( "#f_entrada" ).datetimepicker( {
+	$( "#f_entrada" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',

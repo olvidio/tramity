@@ -1,6 +1,6 @@
 <script>
 $(function() {
-	$( "#f_plazo" ).datetimepicker( {
+	$( "#f_plazo" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -17,7 +17,7 @@ $(function() {
 
 });
 $(function() {
-	$( "#f_acabado" ).datetimepicker( {
+	$( "#f_acabado" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',

@@ -86,7 +86,7 @@
 
 <script>
 $(function() {
-	$( "#f_min" ).datetimepicker( {
+	$( "#f_min" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -102,7 +102,7 @@ $(function() {
 });
     
 $(function() {
-	$( "#f_max" ).datetimepicker( {
+	$( "#f_max" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',

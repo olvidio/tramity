@@ -9,7 +9,7 @@ $(function() {
 });
 
 $(function() {
-	$( "#f_plazo" ).datetimepicker( {
+	$( "#f_plazo" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -21,7 +21,7 @@ $(function() {
 });
 
 $(function() {
-	$( "#f_entrada" ).datetimepicker( {
+	$( "#f_entrada" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -33,7 +33,7 @@ $(function() {
 });
 
 $(function() {
-	$( "#f_escrito" ).datetimepicker( {
+	$( "#f_escrito" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',

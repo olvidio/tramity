@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(function() {
-	$( "#f_aprobacion" ).datetimepicker( {
+	$( "#f_aprobacion" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -12,7 +12,7 @@ $(function() {
 });
 
 $(function() {
-	$( "#f_contestar" ).datetimepicker( {
+	$( "#f_contestar" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -24,7 +24,7 @@ $(function() {
 });
 
 $(function() {
-	$( "#f_ini_circulacion" ).datetimepicker( {
+	$( "#f_ini_circulacion" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',

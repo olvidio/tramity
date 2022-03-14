@@ -9,7 +9,7 @@ $(function() {
 });
 
 $(function() {
-	$( "#f_escrito" ).datetimepicker( {
+	$( "#f_escrito" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -25,7 +25,7 @@ $(function() {
 });
 
 $(function() {
-	$( "#f_aprobacion" ).datetimepicker( {
+	$( "#f_aprobacion" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
