@@ -246,8 +246,8 @@ class Davical {
     public function cambioNombreOficina($of_new, $of_old) {
         $gesOficinas = new GestorOficina();
         $aOficinas = $gesOficinas->getArrayOficinas();
-        $id_of_new = array_search($aOficinas, $of_new);
-        $id_of_old = array_search($aOficinas, $of_old);
+        $id_of_new = array_search($of_new, $aOficinas);
+        $id_of_old = array_search($of_old, $aOficinas);
         
         $of_new_mod = $this->getNombreRecurso($id_of_new);
         $of_old_mod = $this->getNombreRecurso($id_of_old);

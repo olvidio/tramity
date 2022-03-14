@@ -440,7 +440,10 @@ class Buscar {
                 $aOperador['creador'] = 'IN';
                 // A Quien se envia el escrito (escritos)
                 if (!empty($this->dest_id_lugar)) {
-                    $cEscritosPonente = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+                    $cEscritosPonenteJson = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+					// añadir los envios a grupos:
+					$cEscritosPonenteGrupos = $gesEscritos->getEscritosByLugarDeGrupo($this->dest_id_lugar,$aWhere,$aOperador);
+					$cEscritosPonente = array_merge($cEscritosPonenteJson, $cEscritosPonenteGrupos); 
                 } elseif (!empty($this->local_id_lugar)) {
                     $cEscritosPonente = $gesEscritos->getEscritosByLocal($this->local_id_lugar,$aWhere,$aOperador);
                 } else {
@@ -453,7 +456,10 @@ class Buscar {
                 $aOperador['resto_oficinas'] = 'OVERLAP';
                 // A quien envia el escrito (escritos)
                 if (!empty($this->dest_id_lugar)) {
-                    $cEscritosResto = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+                    $cEscritosRestoJson = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+					// añadir los envios a grupos:
+					$cEscritosRestoGrupos = $gesEscritos->getEscritosByLugarDeGrupo($this->dest_id_lugar,$aWhere,$aOperador);
+					$cEscritosResto = array_merge($cEscritosRestoJson, $cEscritosRestoGrupos); 
                 } elseif (!empty($this->local_id_lugar)) {
                     $cEscritosResto = $gesEscritos->getEscritosByLocal($this->local_id_lugar,$aWhere,$aOperador);
                 } else {
