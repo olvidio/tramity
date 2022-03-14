@@ -50,7 +50,11 @@ $a_cosas = [ 'id_expediente' => $Qid_expediente,
 if ($Qfiltro == 'distribuir') {
     $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query($a_cosas));
 } else {
-    $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_ver.php?'.http_build_query($a_cosas));
+	if ($Qmodo == 'mod') {
+		$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
+	} else {
+		$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_ver.php?'.http_build_query($a_cosas));
+	}
 }
     
     

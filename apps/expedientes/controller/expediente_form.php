@@ -192,7 +192,7 @@ if ($Qid_expediente) {
         $adjuntos = '';
         $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
         if (!empty($a_id_adjuntos)) {
-            $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto('$id_escrito');\"  ></i>";
+            $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto_en_expediente('$id_escrito','mod');\"  ></i>";
         }
         // Categoria
         $categoria = $oEscrito->getCategoria();

@@ -255,10 +255,9 @@ $(document).ready(function() {
 	fnjs_tramite(); // oculta a los oficiales, dependiendo del tramite
     $('#slow_load').hide();  // hide it initially
 });
-fnjs_revisar_adjunto=function(id_escrito) {
+fnjs_revisar_adjunto_en_expediente=function(id_escrito,modo) {
 	id_expediente = $('#id_expediente').val();
 	filtro = $('#filtro').val();
-	modo = $('#modo').val();
 	
     var url_ajax = 'apps/expedientes/controller/adjunto_revisar.php';
     var param_json = { id_expediente: id_expediente, filtro: filtro, modo: modo, id_escrito: id_escrito };
