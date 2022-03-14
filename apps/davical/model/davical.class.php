@@ -244,13 +244,8 @@ class Davical {
     
     
     public function cambioNombreOficina($of_new, $of_old) {
-        $gesOficinas = new GestorOficina();
-        $aOficinas = $gesOficinas->getArrayOficinas();
-        $id_of_new = array_search($of_new, $aOficinas);
-        $id_of_old = array_search($of_old, $aOficinas);
-        
-        $of_new_mod = $this->getNombreRecurso($id_of_new);
-        $of_old_mod = $this->getNombreRecurso($id_of_old);
+        $of_new_mod = $this->getNombreRecursoPorNombre($of_new);
+        $of_old_mod = $this->getNombreRecurso($of_old);
         // modificar el usr correspondiente a la oficina:
         $oUserDavical = new User();
         $user_no = $oUserDavical->cambiarNombre($of_new_mod, $of_old_mod);
@@ -806,16 +801,23 @@ class Davical {
         if (!empty($id_oficina) && $id_oficina > 0) {
             $oOficina = new Oficina($id_oficina);
             $oficina = $oOficina->getSigla();
-            if (empty($oficina)) {
-                $msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
-                exit($msg);
-            }
-            $oficina_norm = StringLocal::lowerNormalized($oficina);
-            $nom_recurso = $sigla_norm."_oficina_".$oficina_norm;
+            $nom_recurso = $this->getNombreRecursoPorNombre($oficina);
         } else {
             $nom_recurso = $sigla_norm."_oficina";
         }
         return $nom_recurso;
+    }
+    
+    public function getNombreRecursoPorNombre($oficina) {
+        $sigla = $_SESSION['oConfig']->getSigla();
+        $sigla_norm = StringLocal::lowerNormalized($sigla);
+		if (empty($oficina)) {
+			$msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
+			exit($msg);
+		}
+		$oficina_norm = StringLocal::lowerNormalized($oficina);
+		
+		return $sigla_norm."_oficina_".$oficina_norm;
     }
     
     /**
