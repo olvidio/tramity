@@ -31,7 +31,7 @@ if ($QSlide_mode === TRUE) {
         $Qid_escrito = $Qid_escrito + 1;
     }
 } else {
-    $Qid_escrito = (string) \filter_input(INPUT_GET, 'id_escrito');
+	$Qid_escrito = (string) \filter_input(INPUT_GET, 'id_escrito');
 }
 
 $oProtRef = new Protocolo();

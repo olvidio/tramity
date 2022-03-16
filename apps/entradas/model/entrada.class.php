@@ -35,6 +35,11 @@ class Entrada Extends EntradaDB {
     const V_RESERVADO       = 4;  // sólo directores, añade no ver a los directores de otras oficinas no implicadas
     const V_RESERVADO_VCD   = 5;  // sólo vcd + quien señale
     
+    // visibilidad_dst
+    const V_DST_TODOS 			= 1; // cualquiera
+    const V_DST_DTOR 			= 7; // d
+    const V_DST_DTOR_SACD 		= 8; // d y sacd
+    
     // estado
     /*
      - Ingresa (secretaría introduce los datos de la entrada)
@@ -103,6 +108,14 @@ class Entrada Extends EntradaDB {
             self::V_DIRECTORES => _("directores"),
             self::V_RESERVADO => _("reservado"),
             self::V_RESERVADO_VCD => _("vcd"),
+        ];
+    }
+    
+    public function getArrayVisibilidadDst() {
+        return [
+            self::V_DST_TODOS => _("todos"),
+            self::V_DST_DTOR => _("d"),
+            self::V_DST_DTOR_SACD => _("d y sacd"),
         ];
     }
     

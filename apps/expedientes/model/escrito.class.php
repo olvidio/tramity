@@ -446,6 +446,28 @@ class Escrito Extends EscritoDB {
         return $origen_txt;
     }
     
+    public function getProt_local_txt() {
+    	
+        $json_prot_local = $this->getJson_prot_local();
+        if (count(get_object_vars($json_prot_local)) == 0) {
+            $err_txt = "No hay protocolo local";
+            $_SESSION['oGestorErrores']->addError($err_txt,'generar PDF', __LINE__, __FILE__);
+            $_SESSION['oGestorErrores']->recordar($err_txt);
+
+            $origen_txt = $_SESSION['oConfig']->getSigla();
+        } else {
+            $oProtOrigen = new Protocolo();
+            $oProtOrigen->setLugar($json_prot_local->lugar);
+            $oProtOrigen->setProt_num($json_prot_local->num);
+            $oProtOrigen->setProt_any($json_prot_local->any);
+            $oProtOrigen->setMas($json_prot_local->mas);
+            
+            $origen_txt = $oProtOrigen->ver_txt();
+        }
+        
+        return $origen_txt;
+    }
+    
     public function generarPDF() {
         $a_header = [ 'left' => $this->cabeceraIzquierda(),
                     'center' => '',

@@ -172,13 +172,16 @@ if ($Qid_expediente) {
         $f_salida = $oEscrito->getF_salida()->getIso();
         if (empty($f_salida)) {
             $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >"._("eliminar")."</span>";
+			// para los centros, se puede enviar desde aquí
+			if (!$vista_dl) {
+				$link_enviar = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito($id_escrito);\" >"._("enviar")."</span>";
+				$a_accion['link_del'] .= $link_enviar;
+			}
         } else {
             $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >"._("quitar")."</span>";
-        }
-        // para los centros, se puede enviar desde aquí
-        if (!$vista_dl) {
-            $link_enviar = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito($id_escrito);\" >"._("enviar")."</span>";
-            $a_accion['link_del'] .= $link_enviar;
+            $protocolo_txt = $oEscrito->getProt_local_txt();
+			$a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >$protocolo_txt</span>";
+			$a_accion['link_mod'] = _("enviado");
         }
         
         

@@ -5,6 +5,7 @@ CREATE TABLE public.aux_cargos (
     descripcion text,
     id_oficina integer NOT NULL,
     director boolean NOT NULL DEFAULT 't',
+    sacd boolean NOT NULL DEFAULT 'f',
     id_usuario integer,
     id_suplente integer
 );

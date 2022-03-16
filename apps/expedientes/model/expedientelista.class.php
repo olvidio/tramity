@@ -733,6 +733,12 @@ class ExpedienteLista {
                         $row['class_row'] = 'bg-light';
                     }
                 }
+                // En los ctrs, verde si ya lo han visto todos:
+                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                	if ($oExpediente->isVistoTodos()) {
+						$row['class_row'] = 'bg-warning';
+                	}
+                }
                 
                 $prioridad = $oExpediente->getPrioridad();
                 $row['prioridad'] = $prioridad;

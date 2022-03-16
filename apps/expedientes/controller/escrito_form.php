@@ -89,6 +89,7 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
 
 $estado = 0;
 $visibilidad = 0;
+$visibilidad_dst = Entrada::V_DST_TODOS;
 if (!empty($Qid_expediente)) {
     $oExpediente = new Expediente($Qid_expediente);
     $visibilidad = $oExpediente->getVisibilidad();
@@ -116,6 +117,30 @@ $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
 $oDesplVisibilidad->setOpcion_sel($visibilidad);
+
+$aOpciones_dst = $oEntrada->getArrayVisibilidadDst();
+$oDesplVisibilidad_dst = new Desplegable();
+$oDesplVisibilidad_dst->setNombre('visibilidad_dst');
+$oDesplVisibilidad_dst->setOpciones($aOpciones_dst);
+$oDesplVisibilidad_dst->setOpcion_sel($visibilidad_dst);
+
+// plazo para contestar al enviar.
+$plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
+$plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
+$plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
+$error_fecha = $_SESSION['oConfig']->getPlazoError();
+// Plazo
+$aOpcionesPlazo = [
+		'hoy' => ucfirst(_("no")),
+		'normal' => ucfirst(sprintf(_("en %s días"),$plazo_normal)),
+		'rápido' => ucfirst(sprintf(_("en %s días"),$plazo_rapido)),
+		'urgente' => ucfirst(sprintf(_("en %s días"),$plazo_urgente)),
+		'fecha' => ucfirst(_("el día")),
+];
+$oDesplPlazo = new Desplegable();
+$oDesplPlazo->setNombre('plazo');
+$oDesplPlazo->setOpciones($aOpcionesPlazo);
+$oDesplPlazo->setAction("fnjs_comprobar_plazo('select')");
 
 if (!empty($Qid_escrito)) {
     // destinos individuales
@@ -161,6 +186,10 @@ if (!empty($Qid_escrito)) {
         $visibilidad = $oEscrito->getVisibilidad();
         $oDesplVisibilidad->setOpcion_sel($visibilidad);
     }
+    if (!empty($oEscrito->getVisibilidad_dst())) {
+        $visibilidad_dst = $oEscrito->getVisibilidad_dst();
+        $oDesplVisibilidad_dst->setOpcion_sel($visibilidad_dst);
+    }
     
     // Adjuntos Upload
     $a_adjuntos = $oEscrito->getArrayIdAdjuntos(Documento::DOC_UPLOAD);
@@ -177,6 +206,10 @@ if (!empty($Qid_escrito)) {
     $initialPreview = implode(',',$preview);
     $json_config = json_encode($config);
     
+    $f_contestar = $oEscrito->getF_contestar()->getFromLocal();
+    if (!empty($f_contestar)) {
+    	$oDesplPlazo->setOpcion_sel('fecha');
+    }
     // mirar si tienen escrito
     $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
     $tipo_doc = $oEscrito->getTipo_doc();
@@ -224,6 +257,7 @@ if (!empty($Qid_escrito)) {
         $visibilidad = empty($oEntrada->getVisibilidad())? $oExpediente->getVisibilidad() : $oEntrada->getVisibilidad();
         $oDesplVisibilidad->setOpcion_sel($visibilidad);
         
+		$f_contestar = '';
         $f_escrito = '';
         $initialPreview = '';
         $json_config = '{}';
@@ -241,6 +275,7 @@ if (!empty($Qid_escrito)) {
             $oDesplVisibilidad->setOpcion_sel($visibilidad);
         }
         $detalle = '';
+		$f_contestar = '';
         $f_escrito = '';
         $initialPreview = '';
         $json_config = '{}';
@@ -303,6 +338,7 @@ if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
     }
 }
 
+$ver_plazo = TRUE;
 $devolver = FALSE;
 $str_condicion = '';
 switch ($Qfiltro) {
@@ -425,6 +461,15 @@ if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
         'oDesplCategoria' => $oDesplCategoria,
         'oDesplVisibilidad' => $oDesplVisibilidad,
         'hidden_visibilidad' => $visibilidad,
+    	// destino ctr
+        'oDesplVisibilidad_dst' => $oDesplVisibilidad_dst,
+    	'oDesplPlazo' => $oDesplPlazo,
+    	'f_contestar' => $f_contestar,
+    	'ver_plazo' => $ver_plazo,
+    	// para la pagina js destino ctr
+		'plazo_normal' => $plazo_normal,
+		'plazo_urgente' => $plazo_urgente,
+		'plazo_rapido' => $plazo_rapido,
         //'a_adjuntos' => $a_adjuntos,
         'initialPreview' => $initialPreview,
         'lista_adjuntos_etherpad' => $lista_adjuntos_etherpad,

@@ -63,6 +63,7 @@ switch($Qque) {
         $Qid_ambito = (integer) \filter_input(INPUT_POST, 'id_ambito');
         $Qid_oficina = (integer) \filter_input(INPUT_POST, 'id_oficina');
         $Qdirector = (bool) \filter_input(INPUT_POST, 'director');
+        $Qsacd = (bool) \filter_input(INPUT_POST, 'sacd');
         $Qid_usuario = (integer) \filter_input(INPUT_POST, 'id_usuario');
         $Qid_suplente = (integer) \filter_input(INPUT_POST, 'id_suplente');
         
@@ -81,6 +82,7 @@ switch($Qque) {
         $oCargo->setId_ambito($Qid_ambito);
         $oCargo->setId_oficina($Qid_oficina);
         $oCargo->setDirector($Qdirector);
+        $oCargo->setSacd($Qsacd);
         $oCargo->setId_usuario($Qid_usuario);
         $oCargo->setId_suplente($Qid_suplente);
 		if ($oCargo->DBGuardar() === false) {

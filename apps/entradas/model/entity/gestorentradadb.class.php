@@ -75,10 +75,11 @@ class GestorEntradaDB Extends ClaseGestor {
      * retorna l'array d'objectes de tipus EntradaDB amb visto = false
      *
      * @param integer id_oficina
-     * @param string tipo_oficina (ponente|resto|encargado) Seleccionar por
+     * @param string tipo_oficina (ponente|resto|encargado|centro) Seleccionar por
+     * @param array a_visibilidad para filtrar (caso centros?)
      * @return array Una col·lecció d'objectes de tipus EntradaDB
      */
-    function getEntradasNoVistoDB($oficina,$tipo_oficina) {
+    function getEntradasNoVistoDB($oficina,$tipo_oficina,$a_visibilidad=[]) {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEntradaDBSet = new Set();
@@ -106,6 +107,11 @@ class GestorEntradaDB Extends ClaseGestor {
                 $oCargo = new Cargo($encargado);
                 $oficina = $oCargo->getId_oficina();
                 $sCondi = "encargado = $encargado AND estado = $estado";
+                // comprobar visibilidad:
+                if (!empty($a_visibilidad)) {
+                	$visibilidad_csv = implode(',',$a_visibilidad);
+                	$sCondi .= " AND (visibilidad IN ($visibilidad_csv) OR visibilidad IS NULL)";
+                }
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
                 $Where_json = "items.oficina='$oficina'";
                 $Where_json .= " AND items.visto = 'true'";
@@ -115,6 +121,11 @@ class GestorEntradaDB Extends ClaseGestor {
             	// para los ctr
 				$estado = Entrada::ESTADO_INGRESADO;
                 $sCondi = "estado = $estado";
+                // comprobar visibilidad:
+                if (!empty($a_visibilidad)) {
+                	$visibilidad_csv = implode(',',$a_visibilidad);
+                	$sCondi .= " AND (visibilidad IN ($visibilidad_csv) OR visibilidad IS NULL)";
+                }
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
                 break;
             default:

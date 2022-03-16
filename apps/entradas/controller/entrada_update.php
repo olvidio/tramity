@@ -288,6 +288,63 @@ switch($Qque) {
             exit($error_txt);
         }
         break;
+    case 'guardar_ctr':
+        $oEntrada = new Entrada($Qid_entrada);
+        $oEntrada->DBCarregar();
+        $oEntrada->setAsunto($Qasunto);
+        $oEntrada->setDetalle($Qdetalle);
+        $oEntrada->setCategoria($Qcategoria);
+        $oEntrada->setVisibilidad($Qvisibiliad);
+		switch ($Qplazo) {
+			case 'hoy':
+				$oEntrada->setF_contestar('');
+				break;
+			case 'normal':
+				$plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
+				$periodo = 'P'.$plazo_normal.'D';
+				$oF = new DateTimeLocal();
+				$oF->add(new DateInterval($periodo));
+				$oEntrada->setF_contestar($oF);
+				break;
+			case 'rápido':
+				$plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
+				$periodo = 'P'.$plazo_rapido.'D';
+				$oF = new DateTimeLocal();
+				$oF->add(new DateInterval($periodo));
+				$oEntrada->setF_contestar($oF);
+				break;
+			case 'urgente':
+				$plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
+				$periodo = 'P'.$plazo_urgente.'D';
+				$oF = new DateTimeLocal();
+				$oF->add(new DateInterval($periodo));
+				$oEntrada->setF_contestar($oF);
+				break;
+			case 'fecha':
+				$oEntrada->setF_contestar($Qf_plazo);
+				break;
+			default:
+				// Si no hay $Qplazo, No pongo ninguna fecha a contestar
+		}
+        if ($oEntrada->DBGuardar() === FALSE) {
+            $error_txt = $oEntrada->getErrorTxt();
+            exit($error_txt);
+        }
+        if (!empty($error_txt)) {
+            $jsondata['success'] = FALSE;
+            $jsondata['mensaje'] = $error_txt;
+        } else {
+            $jsondata['success'] = TRUE;
+            $jsondata['id_entrada'] = $Qid_entrada;
+            $a_cosas = [ 'id_entrada' => $Qid_entrada, 'filtro' => $Qfiltro];
+            $pagina_mod = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query($a_cosas));
+            $jsondata['pagina_mod'] = $pagina_mod;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'guardar':
         if (!empty($Qid_entrada)) {
             $oEntrada = new Entrada($Qid_entrada);

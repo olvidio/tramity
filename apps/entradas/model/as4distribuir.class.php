@@ -74,7 +74,7 @@ class As4Distribuir extends As4CollaborationInfo {
 	 * 
 	 * @var integer
 	 */
-	private	$categoria;
+	private	$visibilidad;
 	private	$bypass;
 	
 	/**
@@ -139,10 +139,11 @@ class As4Distribuir extends As4CollaborationInfo {
 		$oEntrada->setJson_prot_origen($this->a_Prot_org);
 		$oEntrada->setJson_prot_ref($this->a_Prot_ref);
 		$oEntrada->setAsunto_entrada($this->asunto);
+		$oEntrada->setAsunto($this->asunto);
 		$oHoy = new DateTimeLocal();
 		$oEntrada->setF_entrada($oHoy);
 		$oEntrada->setF_contestar($this->oF_contestar);
-		$oEntrada->setCategoria($this->categoria);
+		$oEntrada->setVisibilidad($this->visibilidad);
 		$oficina = ConfigGlobal::role_id_oficina();
 		$oEntrada->setPonente($oficina);
 		
@@ -350,7 +351,7 @@ class As4Distribuir extends As4CollaborationInfo {
 		$this->asunto = $this->getAsunto();
 		$this->content = $this->getContent();
 		$this->type = $this->getType();
-		$this->categoria = $this->getCategoria();
+		$this->visibilidad = $this->getVisibilidad();
 		$this->a_adjuntos = $this->getAdjuntos();
 		$this->bypass = $this->getByPass();
 	}
@@ -375,8 +376,8 @@ class As4Distribuir extends As4CollaborationInfo {
 		return (string) $this->xml_escrito->bypass;
 	}
 	
-	private function getCategoria() {
-		return (string) $this->xml_escrito->categoria;
+	private function getVisibilidad() {
+		return (string) $this->xml_escrito->visibilidad;
 	}
 	
 	private function getAsunto() {

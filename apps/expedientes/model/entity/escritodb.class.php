@@ -165,6 +165,12 @@ class EscritoDB Extends core\ClasePropiedades {
 	 */
 	 protected $ivisibilidad;
 	/**
+	 * Visibilidad para destino de EscritoDB
+	 *
+	 * @var integer
+	 */
+	 protected $ivisibilidad_dst;
+	/**
 	 * Accion de EscritoDB
 	 *
 	 * @var integer
@@ -279,6 +285,7 @@ class EscritoDB Extends core\ClasePropiedades {
 		$aDades['f_contestar'] = $this->df_contestar;
 		$aDades['categoria'] = $this->icategoria;
 		$aDades['visibilidad'] = $this->ivisibilidad;
+		$aDades['visibilidad_dst'] = $this->ivisibilidad_dst;
 		$aDades['accion'] = $this->iaccion;
 		$aDades['modo_envio'] = $this->imodo_envio;
 		$aDades['f_salida'] = $this->df_salida;
@@ -308,6 +315,7 @@ class EscritoDB Extends core\ClasePropiedades {
 					f_contestar              = :f_contestar,
 					categoria                = :categoria,
 					visibilidad              = :visibilidad,
+					visibilidad_dst          = :visibilidad_dst,
 					accion                   = :accion,
 					modo_envio               = :modo_envio,
 					f_salida                 = :f_salida,
@@ -333,8 +341,8 @@ class EscritoDB Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(json_prot_local,json_prot_destino,json_prot_ref,id_grupos,destinos,asunto,detalle,creador,resto_oficinas,comentarios,f_aprobacion,f_escrito,f_contestar,categoria,visibilidad,accion,modo_envio,f_salida,ok,tipo_doc,anulado,descripcion)";
-			$valores="(:json_prot_local,:json_prot_destino,:json_prot_ref,:id_grupos,:destinos,:asunto,:detalle,:creador,:resto_oficinas,:comentarios,:f_aprobacion,:f_escrito,:f_contestar,:categoria,:visibilidad,:accion,:modo_envio,:f_salida,:ok,:tipo_doc,:anulado,:descripcion)";		
+			$campos="(json_prot_local,json_prot_destino,json_prot_ref,id_grupos,destinos,asunto,detalle,creador,resto_oficinas,comentarios,f_aprobacion,f_escrito,f_contestar,categoria,visibilidad,visibilidad_dst,accion,modo_envio,f_salida,ok,tipo_doc,anulado,descripcion)";
+			$valores="(:json_prot_local,:json_prot_destino,:json_prot_ref,:id_grupos,:destinos,:asunto,:detalle,:creador,:resto_oficinas,:comentarios,:f_aprobacion,:f_escrito,:f_contestar,:categoria,:visibilidad,:visibilidad_dst,:accion,:modo_envio,:f_salida,:ok,:tipo_doc,:anulado,:descripcion)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'EscritoDB.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -452,6 +460,7 @@ class EscritoDB Extends core\ClasePropiedades {
 		if (array_key_exists('f_contestar',$aDades)) { $this->setF_contestar($aDades['f_contestar'],$convert); }
 		if (array_key_exists('categoria',$aDades)) { $this->setCategoria($aDades['categoria']); }
 		if (array_key_exists('visibilidad',$aDades)) { $this->setVisibilidad($aDades['visibilidad']); }
+		if (array_key_exists('visibilidad_dst',$aDades)) { $this->setVisibilidad_dst($aDades['visibilidad_dst']); }
 		if (array_key_exists('accion',$aDades)) { $this->setAccion($aDades['accion']); }
 		if (array_key_exists('modo_envio',$aDades)) { $this->setModo_envio($aDades['modo_envio']); }
 		if (array_key_exists('f_salida',$aDades)) { $this->setF_salida($aDades['f_salida'],$convert); }
@@ -483,6 +492,7 @@ class EscritoDB Extends core\ClasePropiedades {
 		$this->setF_contestar('');
 		$this->setCategoria('');
 		$this->setVisibilidad('');
+		$this->setVisibilidad_dst('');
 		$this->setAccion('');
 		$this->setModo_envio('');
 		$this->setF_salida('');
@@ -950,6 +960,25 @@ class EscritoDB Extends core\ClasePropiedades {
 	 */
 	function setVisibilidad($ivisibilidad='') {
 		$this->ivisibilidad = $ivisibilidad;
+	}
+	/**
+	 * Recupera l'atribut ivisibilidad_dst de EscritoDB
+	 *
+	 * @return integer ivisibilidad_dst
+	 */
+	function getVisibilidad_dst() {
+		if (!isset($this->ivisibilidad_dst) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->ivisibilidad_dst;
+	}
+	/**
+	 * estableix el valor de l'atribut ivisibilidad_dst de EscritoDB
+	 *
+	 * @param integer ivisibilidad_dst='' optional
+	 */
+	function setVisibilidad_dst($ivisibilidad_dst='') {
+		$this->ivisibilidad_dst = $ivisibilidad_dst;
 	}
 	/**
 	 * Recupera l'atribut iaccion de EscritoDB

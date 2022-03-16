@@ -118,7 +118,7 @@
       {{ oDesplCategoria.desplegable|raw }}
     </div>
     <div class="mb-3 col-md-2">
-      <label for="visibilidad" class="form-label">Visibilidad</label>
+      <label for="visibilidad" class="form-label">{{ "Visibilidad"|trans }}</label>
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
     <div class="mb-3 col-md-4">
@@ -129,6 +129,21 @@
     </div>
   </div>
   
+{% if ver_plazo %}
+    <div class="mb-3 col-md-4">
+      <label for="visibilidad_dst" class="form-label">{{ "Visibilidad en destino"|trans }}</label>
+      {{ oDesplVisibilidad_dst.desplegable|raw }}
+    </div>
+  <div class="mb-3 row">
+      <label for="plazo" class="col-3 me-3 mt-2">{{ "¿El centro debe contestar?"|trans }}</label>
+      <div class="col-2">
+      {{ oDesplPlazo.desplegable|raw }}
+      </div>
+      <div class='col-2 date'>
+        <input tabindex='185' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_contestar }}" />
+      </div>
+  </div>
+{% endif %} 
 <!--  --------------- Image cargando , para cuando se copian etherpads, que es lento --------------- -->
 <div id="slow_load" style="display: flex; justify-content: center; align-items: center; text-align: center;">
  <img class="mb-4" src="../images/loading.gif" alt="cargando" width="32" height="32">
@@ -223,6 +238,7 @@
 </div>
         
 {{ include ('_escrito_form_js.html.twig') }}
+{{ include ('_escrito_form_dl_js.html.twig') }}
 {{ include ('_escritos_js.html.twig') }}
 <script>
 $(document).ready(function() {
@@ -230,7 +246,7 @@ $(document).ready(function() {
 });
 
 fnjs_grupo=function() {
-    var ok=$('#grupo_dst').prop('checked')
+    var ok=$('#grupo_dst').prop('checked');
     if (ok) {
       $("#dst_array").hide();
       $("#dst_grupo").show();

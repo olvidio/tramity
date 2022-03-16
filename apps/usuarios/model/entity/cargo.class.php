@@ -103,6 +103,12 @@ class Cargo Extends core\ClasePropiedades {
 	 */
 	 private $bdirector;
 	/**
+	 * Sacd de Cargo
+	 *
+	 * @var boolean
+	 */
+	 private $bsacd;
+	/**
 	 * Id_usuario de Cargo
 	 *
 	 * @var integer
@@ -171,11 +177,13 @@ class Cargo Extends core\ClasePropiedades {
 		$aDades['descripcion'] = $this->sdescripcion;
 		$aDades['id_oficina'] = $this->iid_oficina;
 		$aDades['director'] = $this->bdirector;
+		$aDades['sacd'] = $this->bsacd;
 		$aDades['id_usuario'] = $this->iid_usuario;
 		$aDades['id_suplente'] = $this->iid_suplente;
 		array_walk($aDades, 'core\poner_null');
 		//para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
 		if ( core\is_true($aDades['director']) ) { $aDades['director']='true'; } else { $aDades['director']='false'; }
+		if ( core\is_true($aDades['sacd']) ) { $aDades['sacd']='true'; } else { $aDades['sacd']='false'; }
 
 		if ($bInsert === FALSE) {
 			//UPDATE
@@ -185,6 +193,7 @@ class Cargo Extends core\ClasePropiedades {
 					descripcion              = :descripcion,
 					id_oficina               = :id_oficina,
 					director                 = :director,
+					sacd                 	 = :sacd,
 					id_usuario               = :id_usuario,
 					id_suplente              = :id_suplente";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_cargo='$this->iid_cargo'")) === FALSE) {
@@ -205,8 +214,8 @@ class Cargo Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(id_ambito,cargo,descripcion,id_oficina,director,id_usuario,id_suplente)";
-			$valores="(:id_ambito,:cargo,:descripcion,:id_oficina,:director,:id_usuario,:id_suplente)";		
+			$campos="(id_ambito,cargo,descripcion,id_oficina,director,sacd,id_usuario,id_suplente)";
+			$valores="(:id_ambito,:cargo,:descripcion,:id_oficina,:director,:sacd,:id_usuario,:id_suplente)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'Cargo.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -298,6 +307,7 @@ class Cargo Extends core\ClasePropiedades {
 		if (array_key_exists('descripcion',$aDades)) { $this->setDescripcion($aDades['descripcion']); }
 		if (array_key_exists('id_oficina',$aDades)) { $this->setId_oficina($aDades['id_oficina']); }
 		if (array_key_exists('director',$aDades)) { $this->setDirector($aDades['director']); }
+		if (array_key_exists('sacd',$aDades)) { $this->setSacd($aDades['sacd']); }
 		if (array_key_exists('id_usuario',$aDades)) { $this->setId_usuario($aDades['id_usuario']); }
 		if (array_key_exists('id_suplente',$aDades)) { $this->setId_suplente($aDades['id_suplente']); }
 	}	
@@ -314,6 +324,7 @@ class Cargo Extends core\ClasePropiedades {
 		$this->setDescripcion('');
 		$this->setId_oficina('');
 		$this->setDirector('');
+		$this->setSacd('');
 		$this->setId_usuario('');
 		$this->setId_suplente('');
 		$this->setPrimary_key($aPK);
@@ -478,6 +489,25 @@ class Cargo Extends core\ClasePropiedades {
 		$this->bdirector = $bdirector;
 	}
 	/**
+	 * Recupera l'atribut bsacd de Cargo
+	 *
+	 * @return boolean bsacd
+	 */
+	function getSacd() {
+		if (!isset($this->bsacd) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->bsacd;
+	}
+	/**
+	 * estableix el valor de l'atribut bsacd de Cargo
+	 *
+	 * @param boolean bsacd='f' optional
+	 */
+	function setSacd($bsacd='f') {
+		$this->bsacd = $bsacd;
+	}
+	/**
 	 * Recupera l'atribut iid_usuario de Cargo
 	 *
 	 * @return integer iid_usuario
@@ -594,6 +624,18 @@ class Cargo Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'director'));
 		$oDatosCampo->setEtiqueta(_("director"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut bsacd de Cargo
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosSacd() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'sacd'));
+		$oDatosCampo->setEtiqueta(_("sacd"));
 		return $oDatosCampo;
 	}
 	/**

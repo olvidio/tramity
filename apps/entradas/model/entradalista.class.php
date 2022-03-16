@@ -5,6 +5,7 @@ use busquedas\model\Buscar;
 use busquedas\model\VerTabla;
 use core\ConfigGlobal;
 use core\ViewTwig;
+use function core\is_true;
 use entradas\model\entity\GestorEntradaBypass;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\PermRegistro;
@@ -86,9 +87,26 @@ class EntradaLista {
                 $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aWhere['encargado'] = $encargado;
                 
+                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                	// visibilidad:
+					$a_visibilidad[] = Entrada::V_DST_TODOS;
+                	$id_cargo = ConfigGlobal::role_id_cargo();
+                	$oCargo = new Cargo($id_cargo);
+                	$dtor = $oCargo->getDirector();
+                	$sacd = $oCargo->getSacd();
+                	if (is_true($dtor)) {
+                		$a_visibilidad[] = Entrada::V_DST_DTOR;
+                		$a_visibilidad[] = Entrada::V_DST_DTOR_SACD;
+                	}
+                	if (is_true($sacd)) {
+                		$a_visibilidad[] = Entrada::V_DST_DTOR_SACD;
+                	}
+                } else {
+                	$a_visibilidad = [];
+                }
                 // No marcado como visto:
                 $gesEntradas = new GestorEntrada();
-                $cEntradas = $gesEntradas->getEntradasNoVistoDB($encargado,'encargado');
+                $cEntradas = $gesEntradas->getEntradasNoVistoDB($encargado,'encargado',$a_visibilidad);
                 $a_entradas_encargado = [];
                 foreach ($cEntradas as $oEntrada) {
                     $id_entrada = $oEntrada->getId_entrada();
@@ -109,9 +127,22 @@ class EntradaLista {
                 
                 $a_entradas_ponente = [];
                 if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                	// visibilidad:
+					$a_visibilidad[] = Entrada::V_DST_TODOS;
+                	$id_cargo = ConfigGlobal::role_id_cargo();
+                	$oCargo = new Cargo($id_cargo);
+                	$dtor = $oCargo->getDirector();
+                	$sacd = $oCargo->getSacd();
+                	if (is_true($dtor)) {
+                		$a_visibilidad[] = Entrada::V_DST_DTOR;
+                		$a_visibilidad[] = Entrada::V_DST_DTOR_SACD;
+                	}
+                	if (is_true($sacd)) {
+                		$a_visibilidad[] = Entrada::V_DST_DTOR_SACD;
+                	}
 					// No marcado como visto:
 					$gesEntradas = new GestorEntrada();
-					$cEntradas = $gesEntradas->getEntradasNoVistoDB('','centro');
+					$cEntradas = $gesEntradas->getEntradasNoVistoDB('','centro',$a_visibilidad);
 					$a_entradas_ponente = [];
 					foreach ($cEntradas as $oEntrada) {
 						$id_entrada = $oEntrada->getId_entrada();
@@ -222,7 +253,11 @@ class EntradaLista {
         
         $oEntrada = new Entrada();
         $a_categorias = $oEntrada->getArrayCategoria();
-        $a_visibilidad = $oEntrada->getArrayVisibilidad();
+		if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+			$a_visibilidad = $oEntrada->getArrayVisibilidadDst();
+		} else {
+			$a_visibilidad = $oEntrada->getArrayVisibilidad();
+		}
         
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
@@ -238,7 +273,11 @@ class EntradaLista {
             case 'en_aceptado':
                 $oficina = $this->aWhereADD['ponente'];
                 $pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
-                $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
+                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR ) {
+					$pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form_ctr.php';
+                } else {
+                	$pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
+                }
                 $pagina_nueva = '';
                 break;
             case 'en_ingresado':
@@ -273,7 +312,7 @@ class EntradaLista {
             foreach ($cEntradas as $oEntrada) {
                 $row = [];
                 // mirar permisos...
-                $visibilidad = $oEntrada->getVisibilidad();
+				$visibilidad = $oEntrada->getVisibilidad();
                 $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '?' : $a_visibilidad[$visibilidad];
                 
                 $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEntrada, 'escrito');
@@ -357,6 +396,9 @@ class EntradaLista {
         $secretaria = FALSE;
         if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR && $this->filtro == 'en_aceptado') {
             $btn_dock = TRUE;
+            if (ConfigGlobal::soy_dtor()) {
+            	$secretaria = TRUE;
+            }
         }
     
         if ( ConfigGlobal::role_actual() === 'secretaria') {
@@ -405,7 +447,6 @@ class EntradaLista {
             'btn_dock' => $btn_dock,
             'txt_btn_dock' => $txt_btn_dock,
         	'pagina_cargar_dock' => $pagina_cargar_dock,
-       		
         ];
         
         $oView = new ViewTwig('entradas/controller');

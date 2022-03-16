@@ -34,7 +34,7 @@ class Payload {
 	private $f_contestar;
 	private $asunto;
 	private $bypass;
-	private $categoria;
+	private $visibilidad;
 	private $a_id_adjuntos;
 	private $id_escrito;
 	
@@ -61,7 +61,7 @@ class Payload {
 		
 		$this->setAsunto($oEscrito->getAsunto());
 		$this->setId_escrito($oEscrito->getId_escrito());
-		$this->setCategoria($oEscrito->getCategoria());
+		$this->setVisibilidad($oEscrito->getVisibilidad_dst());
 
 		$this->setA_id_adjuntos($oEscrito->getArrayIdAdjuntos());
 		
@@ -116,7 +116,7 @@ class Payload {
 		$this->escrito->appendChild($this->getXmlF_contestar());
 		$this->escrito->appendChild($this->getXmlAsunto());
 		$this->escrito->appendChild($this->getXmlContent());
-		$this->escrito->appendChild($this->getXmlCategoria());
+		$this->escrito->appendChild($this->getXmlVisibilidad());
 		$this->escrito->appendChild($this->getXmlAdjuntos());
 		
 		$this->dom->preserveWhiteSpace = false;
@@ -407,15 +407,15 @@ class Payload {
 	/**
 	 * @return mixed
 	 */
-	public function getXmlCategoria() {
-		return $this->dom->createElement('categoria',$this->categoria);
+	public function getXmlVisibilidad() {
+		return $this->dom->createElement('visibilidad',$this->visibilidad);
 	}
 
 	/**
-	 * @param mixed $categoria
+	 * @param mixed $visibilidad
 	 */
-	public function setCategoria($categoria) {
-		$this->categoria = $categoria;
+	public function setVisibilidad($visibilidad) {
+		$this->visibilidad = $visibilidad;
 	}
 
 	/**
@@ -428,7 +428,7 @@ class Payload {
 			$tipo_doc = $oEscritoAdjunto->getTipo_doc();
 			switch ($tipo_doc) {
 				case Documento::DOC_UPLOAD:
-					$escrito_txt = $oEscritoAdjunto->getAdjuntoTxt();
+					$escrito_txt = $oEscritoAdjunto->getAdjunto();
 					$a_adjuntos[$adjunto_filename] = $escrito_txt;
 					break;
 				case Documento::DOC_ETHERPAD:

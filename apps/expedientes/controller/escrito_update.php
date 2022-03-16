@@ -42,6 +42,9 @@ $Qa_firmas = (array)  \filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILT
 
 $Qcategoria = (integer) \filter_input(INPUT_POST, 'categoria');
 $Qvisibiliad = (integer) \filter_input(INPUT_POST, 'visibilidad');
+$Qvisibiliad_dst = (integer) \filter_input(INPUT_POST, 'visibilidad_dst');
+$Qplazo = (string) \filter_input(INPUT_POST, 'plazo');
+$Qf_plazo = (string) \filter_input(INPUT_POST, 'f_plazo');
 $Qok = (string) \filter_input(INPUT_POST, 'ok');
 
 $Qgrupo_dst = (string) \filter_input(INPUT_POST, 'grupo_dst');
@@ -534,6 +537,40 @@ switch($Qque) {
             $Qvisibiliad = (integer) \filter_input(INPUT_POST, 'hidden_visibilidad');
         }
         $oEscrito->setVisibilidad($Qvisibiliad);
+        $oEscrito->setVisibilidad_dst($Qvisibiliad_dst);
+        
+        switch ($Qplazo) {
+        	case 'hoy':
+        		$oEscrito->setF_contestar('');
+        		break;
+        	case 'normal':
+        		$plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
+        		$periodo = 'P'.$plazo_normal.'D';
+        		$oF = new DateTimeLocal();
+        		$oF->add(new DateInterval($periodo));
+        		$oEscrito->setF_contestar($oF);
+        		break;
+        	case 'rápido':
+        		$plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
+        		$periodo = 'P'.$plazo_rapido.'D';
+        		$oF = new DateTimeLocal();
+        		$oF->add(new DateInterval($periodo));
+        		$oEscrito->setF_contestar($oF);
+        		break;
+        	case 'urgente':
+        		$plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
+        		$periodo = 'P'.$plazo_urgente.'D';
+        		$oF = new DateTimeLocal();
+        		$oF->add(new DateInterval($periodo));
+        		$oEscrito->setF_contestar($oF);
+        		break;
+        	case 'fecha':
+        		$oEscrito->setF_contestar($Qf_plazo);
+        		break;
+        	default:
+        		// Si no hay $Qplazo, No pongo ninguna fecha a contestar
+        }
+        
         if (is_true($Qok)) {
             $oEscrito->setComentarios('');
             $oEscrito->setOK(Escrito::OK_OFICINA);

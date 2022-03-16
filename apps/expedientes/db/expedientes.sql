@@ -49,6 +49,7 @@ CREATE TABLE public.escritos (
 	f_contestar date,
 	categoria smallint,
 	visibilidad smallint,
+	visibilidad_dst smallint,
     accion smallint NOT NULL,
     modo_envio smallint NOT NULL,
     f_salida date,

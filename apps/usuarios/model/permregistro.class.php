@@ -30,6 +30,7 @@ class PermRegistro {
     
     
     private $array_registro_perm = [];
+    private $soy_ctr = FALSE;
     
     private function init() {
         $todos = [];
@@ -295,7 +296,11 @@ class PermRegistro {
     }
     
     public function __construct() {
-        $this->init();
+    	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    		$this->soy_ctr = TRUE;
+    	} else {
+        	$this->init();
+    	}
     }
     
     /**
@@ -307,6 +312,9 @@ class PermRegistro {
      * @return number
      */
     public function permiso_detalle($objeto,$que) {
+    	if ($this->soy_ctr) {
+    		return 1;
+    	}
         $role_actual = ConfigGlobal::role_actual();
         $id_oficina_pral = '';
         $id_oficina_role = '';

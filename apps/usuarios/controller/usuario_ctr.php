@@ -80,22 +80,19 @@ $filtro = 'archivados';
 $a_pills[$num_orden] = $pill;
 
 
-// Sólo para dtor
-if (is_true(ConfigGlobal::soy_dtor())) {
-    // entradas = 12
-    $filtro = 'en_aceptado';
-        $active = ($filtro == $Qfiltro)? 'active' : '';
-        $aQuery = [ 'filtro' => $filtro ];
-        $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-        $num_orden = 12;
-        $text = _("correo de entrada"); //_("entradas");
-        $explicacion = _("Gestionar el correo de entrada (Director)");
-        $oEntradaLista = new EntradaLista();
-        $oEntradaLista->setFiltro($filtro);
-        $num = $oEntradaLista->getNumero();
-        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-    $a_pills[$num_orden] = $pill;
-}
+// entradas = 12
+$filtro = 'en_aceptado';
+	$active = ($filtro == $Qfiltro)? 'active' : '';
+	$aQuery = [ 'filtro' => $filtro ];
+	$pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+	$num_orden = 12;
+	$text = _("correo de entrada"); //_("entradas");
+	$explicacion = _("Gestionar el correo de entrada");
+	$oEntradaLista = new EntradaLista();
+	$oEntradaLista->setFiltro($filtro);
+	$num = $oEntradaLista->getNumero();
+	$pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+$a_pills[$num_orden] = $pill;
 
 // entradas = 13
 $filtro = 'en_encargado';
@@ -103,8 +100,8 @@ $filtro = 'en_encargado';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
     $num_orden = 13;
-    $text = _("correo del cl"); // _("entradas encargadas");
-    $explicacion = _("Ver el correo de entrada una vez aceptado por el d");
+    $text = _("correo encargado"); // _("entradas encargadas");
+    $explicacion = _("Ver el correo de entrada encargado a alguien");
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();

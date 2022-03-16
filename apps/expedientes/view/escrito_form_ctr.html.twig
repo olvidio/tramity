@@ -107,7 +107,7 @@
       {{ oDesplCategoria.desplegable|raw }}
     </div>
     <div class="mb-3 col-md-2">
-      <label for="visibilidad" class="form-label">Visibilidad</label>
+      <label for="visibilidad" class="form-label">{{ "Visibilidad"|trans }}</label>
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
     <div class="mb-3 col-md-4">
@@ -219,7 +219,7 @@ $(document).ready(function() {
 });
 
 fnjs_grupo=function() {
-    var ok=$('#grupo_dst').prop('checked')
+    var ok=$('#grupo_dst').prop('checked');
     if (ok) {
       $("#dst_array").hide();
       $("#dst_grupo").show();

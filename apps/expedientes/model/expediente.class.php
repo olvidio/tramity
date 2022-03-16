@@ -104,6 +104,17 @@ class Expediente Extends expedienteDB {
     
     /* METODES PUBLICS ----------------------------------------------------------*/
 
+    public function isVistoTodos() {
+    	// mirar si alguno que NO tiene el visto:
+    	$json_preparar = $this->getJson_preparar();
+    	foreach ($json_preparar as $oficial) {
+    		if (empty($oficial->visto)) {
+    			return FALSE;
+    		}
+    	}
+    	return TRUE;
+    }
+    
     public function copiar($destino='') {
         // por defecto va al borrador del mismo ponente
         if (!empty($destino)) {
