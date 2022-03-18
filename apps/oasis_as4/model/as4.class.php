@@ -5,6 +5,13 @@ use DOMAttr;
 use lugares\model\entity\GestorLugar;
 use web\Protocolo;
 
+/*
+ * IMPORTANTE:
+ * 
+ * Para conocer como generar los xml, mirar las definiciones xsd del holodeck en:
+ *	 	/holodeckb2b/repository/xsd
+ *
+ */
 class As4 extends As4CollaborationInfo {
     
     /**
@@ -15,6 +22,10 @@ class As4 extends As4CollaborationInfo {
     
     private $json_prot_org;
     private $json_prot_dst;
+    
+    private $lugar_destino_txt;
+    private $conversation_id;
+    private $message_id;
     
     /**
      *
@@ -58,6 +69,7 @@ class As4 extends As4CollaborationInfo {
     	$message_meta_data->setAttributeNode($attr_1);
     	
     	// añadir subnodos
+    	$message_meta_data->appendChild($this->getMessageInfo());
     	$message_meta_data->appendChild($this->getCollaborationInfo());
     	$message_meta_data->appendChild($this->getPayloadInfo());
     	$message_meta_data->appendChild($this->getMessageProperties());
@@ -65,6 +77,28 @@ class As4 extends As4CollaborationInfo {
     	return $message_meta_data;
     }
 
+    public function getMessageInfo() {
+		$json_prot_origen = $this->getJson_prot_org();
+        $oProtOrigen = new Protocolo();
+        $oProtOrigen->setLugar($json_prot_origen->lugar);
+        $oProtOrigen->setProt_num($json_prot_origen->num);
+        $oProtOrigen->setProt_any($json_prot_origen->any);
+        $oProtOrigen->setMas($json_prot_origen->mas);
+        $this->conversation_id = $oProtOrigen->conversation_id();
+        // para que sea único, en el caso de la dl, manda a varios ctr con el mismo protocolo:
+        // añadir el destino + id_escrito:
+        // destino@prot_origen@id_escrito
+    	$this->message_id = $this->getDestino_txt() .'@'. $this->conversation_id .'@'. $this->getId_escrito();
+    	
+    	// crear el nodo:
+        $message_info = $this->dom->createElement("MessageInfo");
+        
+        $messageId = $this->dom->createElement('MessageId', $this->message_id);
+        $message_info->appendChild($messageId);
+        
+        return $message_info;
+    }
+    
     public function getCollaborationInfo() {
     	$pm_id = $this->getPm_id();
         // crear el nodo:
@@ -73,18 +107,9 @@ class As4 extends As4CollaborationInfo {
         $agreement = $this->dom->createElement('AgreementRef');
         $attr = new DOMAttr('pmode', $pm_id);
         $agreement->setAttributeNode($attr);
-        
         $colaborador_info->appendChild($agreement);
-
-		$json_prot_origen = $this->getJson_prot_org();
-        $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_origen->lugar);
-        $oProtOrigen->setProt_num($json_prot_origen->num);
-        $oProtOrigen->setProt_any($json_prot_origen->any);
-        $oProtOrigen->setMas($json_prot_origen->mas);
-        $conversation_id = $oProtOrigen->conversation_id();
         
-        $conversation = $this->dom->createElement('ConversationId', $conversation_id);
+        $conversation = $this->dom->createElement('ConversationId', $this->conversation_id);
         $colaborador_info->appendChild($conversation);
         
         return $colaborador_info;
@@ -100,7 +125,7 @@ class As4 extends As4CollaborationInfo {
     	$oPayload->setFormat(Payload::TYPE_ETHERAD_HTML);
     	$oPayload->createXmlFile();
     	
-    	$oPayload->setDeleteFilesAfterSubmit(TRUE);
+    	$oPayload->setDeleteFilesAfterSubmit(FALSE);
     	return $oPayload->getXml($this->dom);
     }
     
@@ -223,5 +248,23 @@ class As4 extends As4CollaborationInfo {
 		$this->oEscrito = $oEscrito;
 	}
 
+	private function getId_escrito() {
+		return $this->oEscrito->getId_escrito();
+	}
+	
+	private function getDestino_txt() {
+    	// tabla de siglas:
+    	$gesLugares = new GestorLugar();
+    	$aLugares = $gesLugares->getArrayLugares();
+		
+    	$lugar_dst = '?';
+        if (!empty((array)$this->json_prot_dst)) {
+            $id_lugar_dst = $this->json_prot_dst->lugar;
+            $lugar_dst = empty($aLugares[$id_lugar_dst])? '' : $aLugares[$id_lugar_dst];
+        }
+        $this->lugar_destino_txt = $lugar_dst;
+
+        return $lugar_dst;
+	}
     
 }

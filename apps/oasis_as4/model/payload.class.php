@@ -7,6 +7,7 @@ use etherpad\model\Etherpad;
 use expedientes\model\entity\EscritoAdjunto;
 use lugares\model\entity\GestorLugar;
 use envios\model\MIMEAttachment;
+use function core\is_true;
 
 
 
@@ -23,7 +24,7 @@ class Payload {
     private $payload;
     private $escrito;
     private $nombre_escrito;
-	private $deleteFilesAfterSubmit = FALSE;
+	private $deleteFilesAfterSubmit = 'false';
 
 	private $json_prot_dst;
 	private $json_prot_local;
@@ -508,7 +509,11 @@ class Payload {
 	 * @param boolean $deleteFilesAfterSubmit
 	 */
 	public function setDeleteFilesAfterSubmit($deleteFilesAfterSubmit) {
-		$this->deleteFilesAfterSubmit = $deleteFilesAfterSubmit;
+		if (is_true($deleteFilesAfterSubmit)) {
+			$this->deleteFilesAfterSubmit = 'true';
+		} else {
+			$this->deleteFilesAfterSubmit = 'false';
+		}
 	}
 
 

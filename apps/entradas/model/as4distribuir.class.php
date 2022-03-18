@@ -144,6 +144,7 @@ class As4Distribuir extends As4CollaborationInfo {
 		$oEntrada->setF_entrada($oHoy);
 		$oEntrada->setF_contestar($this->oF_contestar);
 		$oEntrada->setVisibilidad($this->visibilidad);
+		$oEntrada->setCategoria(Entrada::CAT_NORMAL); // valor por defecto
 		$oficina = ConfigGlobal::role_id_oficina();
 		$oEntrada->setPonente($oficina);
 		
