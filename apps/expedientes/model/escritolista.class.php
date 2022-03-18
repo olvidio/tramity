@@ -256,6 +256,10 @@ class EscritoLista {
     }
 
     private function getCamposTabla() {
+    	// visibilidad destino (igual a Entradas)
+    	$oEntrada = new Entrada();
+    	$a_Visibilidad_dst = $oEntrada->getArrayVisibilidadDst();
+    	
         $oExpediente = new Expediente($this->id_expediente);
         $estado = $oExpediente->getEstado();
         
@@ -336,6 +340,11 @@ class EscritoLista {
             }
 
             $destino_txt = $oEscrito->getDestinosEscrito();
+			$visibilidad_dst = $oEscrito->getVisibilidad_dst();
+			if (!empty($visibilidad_dst) && $visibilidad_dst != Entrada::V_DST_TODOS) {
+            	$visibilidad_txt = $a_Visibilidad_dst[$visibilidad_dst];
+            	$destino_txt .= " ($visibilidad_txt)";
+            }
             $json_prot_local = $oEscrito->getJson_prot_local();
             if (count(get_object_vars($json_prot_local)) == 0) {
                 // Todavía no está definido el protocolo local;
