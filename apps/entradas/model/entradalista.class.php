@@ -238,6 +238,27 @@ class EntradaLista {
                 }
                 exit();
                 break;
+            case 'entradas_semana':
+                // recibidos los ultimos 15 dias
+                $oHoy = new DateTimeLocal();
+                $oIni = new DateTimeLocal();
+                $oIni->sub(new \DateInterval('P15D'));
+
+                // no filtro por origen: todos (dl y cr)
+                $oBuscar = new Buscar();
+                $oBuscar->setF_max($oHoy->getIso(),FALSE);
+                $oBuscar->setF_min($oIni->getIso(),FALSE);
+                
+                $aCollection = $oBuscar->getCollection(5);
+                foreach ($aCollection as $key => $cCollection) {
+                    $oTabla = new VerTabla();
+                    $oTabla->setKey($key);
+                    $oTabla->setCollection($cCollection);
+                    $oTabla->setFiltro($this->filtro);
+                    echo $oTabla->mostrarTabla();
+                }
+                exit();
+                break;
               default:
                 exit (_("No ha escogido ningún filtro"));
         }

@@ -120,6 +120,18 @@ $filtro = 'en_buscar';
     $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
+// entradas de la semana = 21
+$filtro = 'entradas_semana';
+	$active = ($filtro == $Qfiltro)? 'active' : '';
+	$aQuery = [ 'filtro' => $filtro ];
+	$pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+	$num_orden = 21;
+	$text = _("enetradas");
+	$explicacion = _("Correo de dl y cr de los últimos 15 días");
+	$num = '';
+	$pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+$a_pills[$num_orden] = $pill;
+
 // buscar = 22
 $filtro = 'permanentes_cr';
     $active = ($filtro == $Qfiltro)? 'active' : '';

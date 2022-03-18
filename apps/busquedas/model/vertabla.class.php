@@ -3,12 +3,13 @@ namespace busquedas\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use entradas\model\Entrada;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorOficina;
 use web\Lista;
 use web\Protocolo;
 use web\ProtocoloArray;
-use entradas\model\Entrada;
 
 class VerTabla {
     
@@ -168,19 +169,35 @@ class VerTabla {
     public function mostrarTabla() {
         switch ($this->sKey) {
             case 'entradas_ref':
-                $this->sTitulo = _("escritos recibidos en la Delegación con referencias al escrito");
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$this->sTitulo = _("escritos recibidos en el centro con referencias al escrito");
+            	} else {
+					$this->sTitulo = _("escritos recibidos en la Delegación con referencias al escrito");
+            	}
                 $this->tabla_entradas($this->aCollection);
                 break;
             case 'entradas':
-                $this->sTitulo = _("escritos recibidos en la Delegación");
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$this->sTitulo = _("escritos recibidos en el centro");
+            	} else {
+					$this->sTitulo = _("escritos recibidos en la Delegación");
+            	}
                 $this->tabla_entradas($this->aCollection);
                 break;
             case 'escritos_ref':
-                $this->sTitulo = _("escritos aprobados en la Delegación con referencias al escrito");
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$this->sTitulo = _("escritos aprobados en el centro con referencias al escrito");
+            	} else {
+					$this->sTitulo = _("escritos aprobados en la Delegación con referencias al escrito");
+            	}
                 $this->tabla_escritos($this->aCollection);
                 break;
             case 'escritos':
-                $this->sTitulo = _("escritos aprobados en la Delegación");
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$this->sTitulo = _("escritos aprobados en el centro");
+            	} else {
+					$this->sTitulo = _("escritos aprobados en la Delegación");
+            	}
                 $this->tabla_escritos($this->aCollection);
                 break;
             default:
