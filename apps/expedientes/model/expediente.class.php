@@ -107,12 +107,17 @@ class Expediente Extends expedienteDB {
     public function isVistoTodos() {
     	// mirar si alguno que NO tiene el visto:
     	$json_preparar = $this->getJson_preparar();
-    	foreach ($json_preparar as $oficial) {
-    		if (empty($oficial->visto)) {
-    			return FALSE;
-    		}
+    	$marca = TRUE;
+    	if (empty((array) $json_preparar)) {
+    		$marca = FALSE;	
+    	} else {
+			foreach ($json_preparar as $oficial) {
+				if (empty($oficial->visto)) {
+					$marca = FALSE;
+				}
+			}
     	}
-    	return TRUE;
+    	return $marca;
     }
     
     public function copiar($destino='') {

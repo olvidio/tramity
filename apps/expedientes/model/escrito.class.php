@@ -260,6 +260,9 @@ class Escrito Extends EscritoDB {
      * @return string destinos | destino + ref.
      */
     public function cabeceraIzquierda($id_lugar_de_grupo='') {
+    	// visibilidad destino (igual a Entradas)
+    	$oEntrada = new Entrada();
+    	$a_Visibilidad_dst = $oEntrada->getArrayVisibilidadDst();
         // destinos + ref
         // destinos:
         $a_grupos = [];
@@ -304,6 +307,12 @@ class Escrito Extends EscritoDB {
                 }
                 $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst,'','destinos');
                 $destinos_txt = $oArrayProtDestino->ListaTxtBr();
+                
+                $visibilidad_dst = $this->getVisibilidad_dst();
+                if (!empty($visibilidad_dst) && $visibilidad_dst != Entrada::V_DST_TODOS) {
+                	$visibilidad_txt = $a_Visibilidad_dst[$visibilidad_dst];
+                	$destinos_txt .= " ($visibilidad_txt)";
+                }
             }
         }
         // grupos personalizados...

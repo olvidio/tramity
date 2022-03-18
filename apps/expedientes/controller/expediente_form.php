@@ -150,6 +150,8 @@ if ($Qid_expediente) {
     
     $oProtDestino = new Protocolo();
     $oProtDestino->setNombre('destino');
+    // mortrar archivar si todas las acciones están envidas
+    $mostrar_archivar = TRUE;
     foreach ($cAcciones as $oAccion) {
         $id_escrito = $oAccion->getId_escrito();
         $tipo_accion = $oAccion->getTipo_accion();
@@ -177,6 +179,7 @@ if ($Qid_expediente) {
 				$link_enviar = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito($id_escrito);\" >"._("enviar")."</span>";
 				$a_accion['link_del'] .= $link_enviar;
 			}
+			$mostrar_archivar = FALSE;
         } else {
             $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >"._("quitar")."</span>";
             $protocolo_txt = $oEscrito->getProt_local_txt();
@@ -330,6 +333,7 @@ $a_campos = [
     'pag_plantilla' => $pag_plantilla,
     'pag_respuesta' => $pag_respuesta,
     'pag_actualizar' => $pag_actualizar,
+	'mostrar_archivar' => $mostrar_archivar,
     // preparar
     'a_preparar' => $a_preparar,
     // para la pagina js (prioridades)

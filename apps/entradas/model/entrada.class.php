@@ -159,10 +159,18 @@ class Entrada Extends EntradaDB {
     }
     
     public function cabeceraIzquierda() {
-        // sigla + ref
+        // sigla +(visibilidad) + ref
+    	$a_Visibilidad_dst = $this->getArrayVisibilidadDst();
         
         $sigla = $_SESSION['oConfig']->getSigla();
         $destinos_txt = $sigla;
+        
+        $visibilidad = $this->getVisibilidad();
+        if (!empty($visibilidad) && $visibilidad != Entrada::V_DST_TODOS) {
+        	$visibilidad_txt = $a_Visibilidad_dst[$visibilidad];
+        	$destinos_txt .= " ($visibilidad_txt)";
+        }
+        
         $gesLugares = new GestorLugar();
         $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
         if (!empty($cLugares)) {

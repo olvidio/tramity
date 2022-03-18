@@ -387,17 +387,29 @@ class As4Distribuir extends As4CollaborationInfo {
 	
 	private function getF_entrada() {
 		$f_entrada_iso = $this->xml_escrito->f_entrada;
-		return new DateTimeLocal($f_entrada_iso);
+		if (!empty($f_entrada_iso)) {
+			return new DateTimeLocal($f_entrada_iso);
+		} else {
+			return '';
+		}
 	}
 	
 	private function getF_escrito() {
 		$f_escrito_iso = $this->xml_escrito->f_escrito;
-		return new DateTimeLocal($f_escrito_iso);
+		if (!empty($f_escrito_iso)) {
+			return new DateTimeLocal($f_escrito_iso);
+		} else {
+			return '';
+		}
 	}
 	
 	private function getF_contestar() {
-		$f_contesta_iso = $this->xml_escrito->f_contestar;
-		return new DateTimeLocal($f_contesta_iso);
+		$f_contestar_iso = $this->xml_escrito->f_contestar;
+		if (!empty($f_contestar_iso)) {
+			return new DateTimeLocal($f_contestar_iso);
+		} else {
+			return '';
+		}
 	}
 	
 	private function getProt_dst() {

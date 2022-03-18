@@ -244,6 +244,11 @@
         {{ "Circular"|trans }}
       </button>
   {% endif %}
+  {% if not vista_dl and mostrar_archivar and id_expediente %}
+      <button tabindex='90' class="btn btn-success" onClick="fnjs_archivar();" >
+        {{ "Archivar"|trans }}
+      </button>
+  {% endif %}
 </form>
 
 

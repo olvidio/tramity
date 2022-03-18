@@ -11,6 +11,8 @@ use usuarios\model\entity\GestorCargo;
 use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
+use entradas\model\Entrada;
+use entradas\model\GestorEntrada;
 
 
 class EscritoLista {
@@ -102,6 +104,10 @@ class EscritoLista {
     }
     
     public function mostrarTablaEnviar($fecha='') {
+    	// visibilidad destino (igual a Entradas)
+    	$oEntrada = new Entrada();
+    	$a_Visibilidad_dst = $oEntrada->getArrayVisibilidadDst();
+    	
         $oExpediente = new Expediente($this->id_expediente);
         $estado = $oExpediente->getEstado();
         $cEscritos = $this->getEscritosParaEnviar($fecha);
@@ -153,6 +159,11 @@ class EscritoLista {
             $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >"._("ver")."</span>";
             
             $destino_txt = $oEscrito->getDestinosEscrito();
+			$visibilidad_dst = $oEscrito->getVisibilidad_dst();
+			if (!empty($visibilidad_dst) && $visibilidad_dst != Entrada::V_DST_TODOS) {
+            	$visibilidad_txt = $a_Visibilidad_dst[$visibilidad_dst];
+            	$destino_txt .= " ($visibilidad_txt)";
+            }
             $json_prot_local = $oEscrito->getJson_prot_local();
             if (count(get_object_vars($json_prot_local)) == 0) {
                 // Todavía no está definido el protocolo local;

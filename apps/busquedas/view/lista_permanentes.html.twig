@@ -36,12 +36,6 @@ fnjs_ver_mas=function(n){
     jQuery.each(des,function(i,el){ if ($('#'+el).length) { $('#'+el).toggle(); } });
     
 }
-fnjs_ver_documento=function(id_escrito){
-    var winPrefs="";
-    var pagina='scdl/registro/registro_documento.php?id_escrito='+id_escrito+'&act=download&PHPSESSID=<?= session_id() ?>';
-    top.newWin = window.open(pagina, "abrir", winPrefs);
-    top.newWin.focus();
-}
 fnjs_buscar=function(n){
     $('#modifica3').attr('action','apps/busquedas/controller/lista_permanentes.php');
     $('#tipo_lista').val(n);
