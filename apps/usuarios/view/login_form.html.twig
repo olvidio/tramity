@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8" >
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" >
+<!-- Bootstrap core CSS -->
+<link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" >
+<title>Tramity</title>
+</head>
+.<!-- Este caracter '.' sirve para que el navegador cierre el <head> y no de un error:
+ unbalanced tree was written using document.write()
+ -->
 <script type="text/javascript">
 /* Cuando hay un timeout, la página normalmente se carga en algún div mediante ajax, como
  * respuesta a una petición. Para que ocupe toda la ventana, se hace por javascript,
@@ -9,15 +20,9 @@ window.onload=newContent();
 
 function newContent() {
     document.open();
-    document.write("<head id='login_head'>\
-    <meta charset='utf-8'>\
-    <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>\
-    <title>Tramity</title>\
-    \
-    <!-- Bootstrap core CSS -->\
-    <link href='../node_modules/bootstrap/dist/css/bootstrap.min.css' rel='stylesheet' >\
-    \
-    <style>\
+
+    //document.write("<head id='login_head'>\
+    document.write("<style>\
     body {\
         display: -ms-flexbox;\
         display: flex;\
@@ -47,30 +52,25 @@ function newContent() {
         }\
     }\
     </style>\
-    </head>\
-    ");
-
-    document.write("<body id='login_body' class='text-center'>\
     <form method='POST' class='form-signin' action='index.php'>\
-        <img class='mb-4' src='../images/stack-dossiers.jpeg' alt='aaaaaaa' width='72' height='72'>\
+        <img class='mx-auto d-block mb-4' src='../images/stack-dossiers.jpeg' alt='aaaaaaa' width='72' height='72' />\
         <h1 class='h3 mb-3 fw-normal'>{{ "Inicio de sesión"|trans }}</h1>\
         <label for='username' class='visually-hidden'>{{ "Usuario"|trans }}</label>\
-            <input type='text' id='username' name='username' class='form-control' placeholder='Usuario' required='' autofocus='' autocomplete='username' >\
-        <label for='password' class='visually-hidden'>{{ "Password"|trans }}</label>\
-            <input type='password' id='password' name='password' class='form-control' placeholder='Password' required='' autocomplete='new-password' >\
-        <!-- Error Alert -->\
+            <input type='text' id='username' name='username' class='form-control' placeholder='Usuario' required='' autofocus='' autocomplete='username' />\
+    	<label for='password' class='visually-hidden'>{{ "Password"|trans }}</label>\
+            <input type='password' id='password' name='password' class='form-control' placeholder='Password' required='' autocomplete='new-password' />\
         {% if error %}
+        <!-- Error Alert -->\
         <div class='alert alert-danger alert-dismissible fade show'>\
             <strong>Error!: </strong> {{ error }}\
         </div>\
         {% endif %}
         <button class='btn btn-lg btn-primary w-100 mt-3' type='submit'>{{ "Entrar"|trans }}</button>\
-        <p class='mt-5 mb-3 text-muted'>© 2020-2021</p>\
+        <p class='mt-5 mb-3 text-center text-muted'>© 2020-2021</p>\
     </form>\
-    </body>\
     ");
 
     document.close();
 }
 </script>
-
+<body></body>

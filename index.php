@@ -80,6 +80,7 @@ if ($role_actual != 'admin') {
 
 $_SESSION['session_auth']['a_roles'] = $a_roles_posibles;
 ?>
+<!DOCTYPE html>
 <head>
 <script>
 fnjs_procesarError=function() {
