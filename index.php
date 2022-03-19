@@ -83,6 +83,28 @@ $_SESSION['session_auth']['a_roles'] = $a_roles_posibles;
 <!DOCTYPE html>
 <head>
 <script>
+fnjs_is_active=function() {
+	url='apps/usuarios/controller/test_status_phpsession.php';
+	var xmlHttp = new XMLHttpRequest();
+	// a pelo, porque todavía no he cargado el jQuery.
+    xmlHttp.onreadystatechange = function()
+    {
+        if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+        {
+            //debugger;
+            rta_json=JSON.parse(xmlHttp.responseText);
+            if (rta_json.success != true) {
+                fnjs_loguot();
+            }
+        }
+    }
+    xmlHttp.open("post", url); 
+    xmlHttp.send(); 
+}
+/* Cada 5 seg. comprobar que la sessión php no ha finalizado, para volver al login de entrada */
+setInterval( fnjs_is_active, 5000);
+
+
 fnjs_procesarError=function() {
 	alert("<?= _("Error de página devuelta") ?>");
 }
