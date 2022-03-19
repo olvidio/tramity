@@ -1,15 +1,8 @@
 <?php
 
-// INICIO Cabecera global de URL de controlador *********************************
-	require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
-
-// Crea los objectos de uso global **********************************************
-	require_once ("apps/core/global_object.inc");
-// FIN de  Cabecera global de URL de controlador ********************************
-
 $txt_err = '';
-if ( session_status() === PHP_SESSION_ACTIVE) {
+$sessionName = session_name();
+if( isset( $_COOKIE[ $sessionName ] ) ) {
 	$txt_err .= ''; // "active";
 } else {
 	$txt_err .= "no active";

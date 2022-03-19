@@ -91,19 +91,23 @@ fnjs_is_active=function() {
     {
         if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
         {
-            //debugger;
             rta_json=JSON.parse(xmlHttp.responseText);
             if (rta_json.success != true) {
-                fnjs_loguot();
+                fnjs_logout();
             }
         }
     }
     xmlHttp.open("post", url); 
     xmlHttp.send(); 
 }
-/* Cada 5 seg. comprobar que la sessión php no ha finalizado, para volver al login de entrada */
-setInterval( fnjs_is_active, 5000);
 
+// Cada 5 seg. comprobar que la sessión php no ha finalizado, para volver al login de entrada
+// Si es en el portatil no lo compruebo, para que haya menos cosas en los logs.
+<?php
+if (ConfigGlobal::SERVIDOR != 'tramity.local') {
+	echo "setInterval( fnjs_is_active, 5000);";
+}
+?>
 
 fnjs_procesarError=function() {
 	alert("<?= _("Error de página devuelta") ?>");
