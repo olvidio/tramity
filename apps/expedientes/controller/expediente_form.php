@@ -1,12 +1,14 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
-use entradas\model\Entrada;
 use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\Escrito;
 use expedientes\model\Expediente;
 use expedientes\model\entity\GestorAccion;
 use tramites\model\entity\GestorTramite;
+use usuarios\model\Categoria;
+use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
@@ -76,9 +78,9 @@ $oDesplPrioridad->setAction('fnjs_comprobar_plazo()');
 $a_vida = $oExpediente->getArrayVida();
 $oDesplVida = new Desplegable('vida',$a_vida,'',FALSE);
 
-// visibilidad (usar las mismas opciones que en entradas)
-$oEntrada = new Entrada();
-$aOpciones = $oEntrada->getArrayVisibilidad();
+// visibilidad
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
@@ -126,6 +128,12 @@ if ($Qid_expediente) {
     $oDesplVida->setOpcion_sel($vida);
     $visibilidad = $oExpediente->getVisibilidad();
     $oDesplVisibilidad->setOpcion_sel($visibilidad);
+    $oPermisoregistro = new PermRegistro();
+    
+    $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oExpediente, 'cambio');
+    if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
+    	$oDesplVisibilidad->setDisabled(TRUE);
+    }
 
     $etiquetas = $oExpediente->getEtiquetasVisiblesArray();
     $oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
@@ -146,7 +154,8 @@ if ($Qid_expediente) {
     
     $oEscrito = new Escrito();
     $aAcciones = $oEscrito->getArrayAccion();
-    $aCategorias = $oEscrito->getArrayCategoria();
+    $oCategoria = new Categoria();
+    $aCategorias = $oCategoria->getArrayCategoria();
     
     $oProtDestino = new Protocolo();
     $oProtDestino->setNombre('destino');
@@ -182,6 +191,7 @@ if ($Qid_expediente) {
 			$mostrar_archivar = FALSE;
         } else {
             $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >"._("quitar")."</span>";
+            
             $protocolo_txt = $oEscrito->getProt_local_txt();
 			$a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >$protocolo_txt</span>";
 			$a_accion['link_mod'] = _("enviado");

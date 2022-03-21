@@ -139,13 +139,11 @@ switch ($Qque) {
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
         $oEntrada = new Entrada($Qid_entrada);
         $mensaje = '';
-        if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
-			$oPermiso = new PermRegistro();
-			$perm = $oPermiso->permiso_detalle($oEntrada,'detalle');
-			if ($perm < PermRegistro::PERM_MODIFICAR) {
-				$mensaje = _("No tiene permiso para modificar el detalle");
-			}
-        }
+		$oPermiso = new PermRegistro();
+		$perm = $oPermiso->permiso_detalle($oEntrada,'detalle');
+		if ($perm < PermRegistro::PERM_MODIFICAR) {
+			$mensaje = _("No tiene permiso para modificar el detalle");
+		}
 
         if (empty($mensaje)) {
             $jsondata['success'] = true;

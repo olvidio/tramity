@@ -119,6 +119,7 @@ if ( !isset($_SESSION['session_auth'])) {
                 if ($esquema == 'admin') {
                     $usuario_cargo = '';
                     $usuario_dtor = '';
+                    $usuario_sacd = '';
                     $aPosiblesCargos[1] = 'admin';
                     $mi_id_oficina = '';
                     $expire = '';
@@ -149,10 +150,10 @@ if ( !isset($_SESSION['session_auth'])) {
                     
                     // el usuario default, y el admin no tienen cargo:
                     // los cargos que puede tener (suplencias)
-                    $query_titular="SELECT 1 as preferido,cargo,director,id_cargo,id_oficina,cargo FROM aux_cargos 
+                    $query_titular="SELECT 1 as preferido,cargo,director,sacd,id_cargo,id_oficina,cargo FROM aux_cargos 
                                     WHERE id_usuario = $id_usuario
                                     ";
-                    $query_suplentes="SELECT 2 as preferido,cargo,director,id_cargo,id_oficina,cargo FROM aux_cargos 
+                    $query_suplentes="SELECT 2 as preferido,cargo,director,sacd,id_cargo,id_oficina,cargo FROM aux_cargos 
                                     WHERE id_suplente = $id_usuario
                                     ";
                     $query_cargos = "$query_titular UNION $query_suplentes ORDER BY 1,2";
@@ -164,6 +165,7 @@ if ( !isset($_SESSION['session_auth'])) {
                     $aPosiblesCargos = [];
                     $usuario_cargo = '';
                     $usuario_dtor = '';
+                    $usuario_sacd = '';
                     $mi_id_oficina = '';
                     foreach ($oDB->query($query_cargos) as $aDades) {
                         $id_cargo = $aDades['id_cargo'];
@@ -172,11 +174,13 @@ if ( !isset($_SESSION['session_auth'])) {
                             if ($aDades['id_cargo'] == $id_cargo_preferido) {
                                 $usuario_cargo = $aDades['cargo'];
                                 $usuario_dtor = $aDades['director'];
+                                $usuario_sacd = $aDades['sacd'];
                                 $mi_id_oficina = $aDades['id_oficina'];
                             }
                         } elseif ($aDades['preferido'] == 1 ) {
                             $usuario_cargo = $aDades['cargo'];
                             $usuario_dtor = $aDades['director'];
+                            $usuario_sacd = $aDades['sacd'];
                             $mi_id_oficina = $aDades['id_oficina'];
                         }
                         $aPosiblesCargos[$id_cargo] = $cargo;
@@ -207,6 +211,7 @@ if ( !isset($_SESSION['session_auth'])) {
                         'id_usuario'=>$id_usuario,
                         'usuario_cargo'=>$usuario_cargo,
                         'usuario_dtor'=>$usuario_dtor,
+                        'usuario_sacd'=>$usuario_sacd,
                         'id_cargo'=>$id_cargo_preferido,
                         'aPosiblesCargos'=>$aPosiblesCargos,
                         'role_actual'=>$usuario_cargo,

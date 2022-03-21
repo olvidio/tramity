@@ -1,14 +1,14 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
-use entradas\model\Entrada;
 use etherpad\model\Etherpad;
 use expedientes\model\Escrito;
 use lugares\model\entity\GestorLugar;
+use usuarios\model\Categoria;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\GestorCargo;
 use web\Desplegable;
 use web\Protocolo;
-use web\ProtocoloArray;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -62,15 +62,16 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
 
 $oEscrito = new Escrito($Qid_escrito);
 // categoria
-$aOpciones = $oEscrito->getArrayCategoria();
+$oCategoria = new Categoria();
+$aOpciones = $oCategoria->getArrayCategoria();
 $oDesplCategoria = new Desplegable();
 $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
 $oDesplCategoria->setTabIndex(80);
 
-// visibilidad (usar las mismas opciones que en entradas)
-$oEntrada = new Entrada();
-$aOpciones = $oEntrada->getArrayVisibilidad();
+// visibilidad
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 
 if (!empty($Qid_escrito)) {
     

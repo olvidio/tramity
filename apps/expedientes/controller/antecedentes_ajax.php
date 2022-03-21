@@ -325,15 +325,13 @@ switch ($Qque) {
 	                   ''];
 	    $a_valores = [];
 	    $a = 0;
+	    $oPermiso = new PermRegistro();
 	    foreach ($cExpedientes as $oExpediente) {
 	        $a++;
 	        // mirar permisos...
 	        $visibilidad = $oExpediente->getVisibilidad();
-	        if ( ($visibilidad == Entrada::V_DIRECTORES ||
-	               $visibilidad == Entrada::V_RESERVADO ||
-	               $visibilidad == Entrada::V_RESERVADO_VCD)
-	            && ConfigGlobal::soy_dtor() === FALSE) {
-	                continue;
+	        if (!$oPermiso->isVisibleDtor($visibilidad)) {
+	        	continue;
 	        }
 	        $id_expediente = $oExpediente->getId_expediente();
 	        $fecha_txt = $oExpediente->getF_aprobacion()->getFromLocal();

@@ -126,7 +126,7 @@ $filtro = 'entradas_semana';
 	$aQuery = [ 'filtro' => $filtro ];
 	$pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
 	$num_orden = 21;
-	$text = _("enetradas");
+	$text = _("entradas");
 	$explicacion = _("Correo de dl y cr de los últimos 15 días");
 	$num = '';
 	$pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];

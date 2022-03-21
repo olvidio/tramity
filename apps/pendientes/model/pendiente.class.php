@@ -12,6 +12,8 @@ use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
 use usuarios\model\entity\Cargo;
+use core\ConfigGlobal;
+use usuarios\model\Visibilidad;
 
 // Arxivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
@@ -647,19 +649,27 @@ class Pendiente {
     
     private function visibilidad_to_Class($visibilidad) {
         switch ($visibilidad) {
-            case Entrada::V_TODOS:
+            case Visibilidad::V_TODOS:
                 $class = 'PUBLIC';
                 break;
-            case Entrada::V_PERSONAL:
+            case Visibilidad::V_PERSONAL:
                 $class = 'PRIVATE';
                 break;
-            case Entrada::V_DIRECTORES:
-            case Entrada::V_RESERVADO:
+            case Visibilidad::V_DIRECTORES:
+            case Visibilidad::V_RESERVADO:
                 $class = 'CONFIDENTIAL';
                 break;
-            case Entrada::V_RESERVADO_VCD;
+            case Visibilidad::V_RESERVADO_VCD;
                 $class = 'VCD';
                 break;
+                // para los ctr
+            case Visibilidad::V_CTR_TODOS;
+                $class = 'PUBLIC';
+				break;
+            case Visibilidad::V_CTR_DTOR;
+            case Visibilidad::V_CTR_DTOR_SACD;
+                $class = 'CONFIDENTIAL';
+				break;
             default:
                 $class = 'PUBLIC';
         }
@@ -669,20 +679,28 @@ class Pendiente {
     public function Class_to_visibilidad($class) {
         switch ($class) {
             case 'PUBLIC':
-                $visibilidad = Entrada::V_TODOS;
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$visibilidad = Visibilidad::V_CTR_TODOS;
+            	} else {
+					$visibilidad = Visibilidad::V_TODOS;
+            	}
                 break;
             case 'PRIVATE':
-                $visibilidad = Entrada::V_PERSONAL;
+                $visibilidad = Visibilidad::V_PERSONAL;
                 break;
             case 'CONFIDENTIAL':
-                $visibilidad = Entrada::V_DIRECTORES;
-                //$visibilidad = Entrada::V_RESERVADO; // solo añade no ver a los directores de otras oficinas no implicadas
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$visibilidad = Visibilidad::V_CTR_DTOR;
+            	} else {
+                	$visibilidad = Visibilidad::V_DIRECTORES;
+            	}
+                //$visibilidad = Visibilidad::V_RESERVADO; // solo añade no ver a los directores de otras oficinas no implicadas
                 break;
             case 'VCD':
-                $visibilidad = Entrada::V_RESERVADO_VCD;
+                $visibilidad = Visibilidad::V_RESERVADO_VCD;
                 break;
             default:
-                $visibilidad = Entrada::V_TODOS;
+                $visibilidad = Visibilidad::V_TODOS;
         }
         return $visibilidad;
     }
@@ -943,9 +961,7 @@ class Pendiente {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'asunto');
         
-        $oEntrada = new Entrada();
-        $a_visibilidad = $oEntrada->getArrayVisibilidad();
-        $local_asunto = $a_visibilidad[Entrada::V_RESERVADO];
+        $local_asunto = _("reservado");
         if ($perm > 0) {
             $local_asunto = $this->getAsuntoDB();
         }
@@ -961,9 +977,7 @@ class Pendiente {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'detalle');
         
-        $oEntrada = new Entrada();
-        $a_visibilidad = $oEntrada->getArrayVisibilidad();
-        $local_detalle = $a_visibilidad[Entrada::V_RESERVADO];
+        $local_detalle = _("reservado");
         if ($perm > 0) {
             $local_detalle = $this->getDetalleDB();
         }

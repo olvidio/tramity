@@ -2,12 +2,12 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
-use entradas\model\Entrada;
 use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\EscritoLista;
 use expedientes\model\Expediente;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\GestorCargo;
 use web\Desplegable;
 
@@ -87,9 +87,9 @@ $aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
 $a_recorrido = $aRecorrido['recorrido'];
 $comentarios = $aRecorrido['comentarios'];
 
-// visibilidad (usar las mismas opciones que en entradas)
-$oEntrada = new Entrada();
-$aOpciones = $oEntrada->getArrayVisibilidad();
+// visibilidad
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);

@@ -1,17 +1,19 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
+use documentos\model\Documento;
 use entradas\model\Entrada;
 use expedientes\model\Escrito;
 use expedientes\model\Expediente;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
+use usuarios\model\Categoria;
 use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Desplegable;
-use documentos\model\Documento;
-use usuarios\model\entity\Cargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -40,12 +42,6 @@ $gesLugares = new GestorLugar();
 if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
     $a_posibles_lugares = $gesLugares->getArrayLugares();
     $a_posibles_lugares_ref = $gesLugares->getArrayLugares();
-    /*
-    $txt_option_ref = '';
-    foreach ($a_posibles_lugares as $id_lugar => $sigla) {
-        $txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
-    }
-    */
     
     $gesGrupo = new GestorGrupo();
     $a_posibles_grupos = $gesGrupo->getArrayGrupos();
@@ -89,7 +85,7 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
 
 $estado = 0;
 $visibilidad = 0;
-$visibilidad_dst = Entrada::V_DST_TODOS;
+$visibilidad_dst = Visibilidad::V_CTR_TODOS;
 if (!empty($Qid_expediente)) {
     $oExpediente = new Expediente($Qid_expediente);
     $visibilidad = $oExpediente->getVisibilidad();
@@ -98,7 +94,8 @@ if (!empty($Qid_expediente)) {
 
 $oEscrito = new Escrito($Qid_escrito);
 // categoria
-$aOpciones = $oEscrito->getArrayCategoria();
+$oCategoria = new Categoria();
+$aOpciones = $oCategoria->getArrayCategoria();
 $oDesplCategoria = new Desplegable();
 $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
@@ -110,15 +107,15 @@ $descripcion = '';
 $comentario = '';
 $anulado_txt = '';
 
-// visibilidad (usar las mismas opciones que en entradas)
-$oEntrada = new Entrada();
-$aOpciones = $oEntrada->getArrayVisibilidad();
+// visibilidad
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
 $oDesplVisibilidad->setOpcion_sel($visibilidad);
 
-$aOpciones_dst = $oEntrada->getArrayVisibilidadDst();
+$aOpciones_dst = $oVisibilidad->getArrayVisibilidadCtr();
 $oDesplVisibilidad_dst = new Desplegable();
 $oDesplVisibilidad_dst->setNombre('visibilidad_dst');
 $oDesplVisibilidad_dst->setOpciones($aOpciones_dst);
@@ -229,21 +226,17 @@ if (!empty($Qid_escrito)) {
             $titulo = _("modificar entrada");
     }
     
-	if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
-		$oPermisoregistro = new PermRegistro();
-		$perm_asunto = $oPermisoregistro->permiso_detalle($oEscrito, 'asunto');
-		$perm_detalle = $oPermisoregistro->permiso_detalle($oEscrito, 'detalle');
-		$asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
-		$detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
-		
-		$perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEscrito, 'cambio');
-		if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
-			$oDesplVisibilidad->setDisabled(TRUE);
-		}
-	} else {
-		$asunto_readonly = '';
-		$detalle_readonly = '';
+	$oPermisoregistro = new PermRegistro();
+	$perm_asunto = $oPermisoregistro->permiso_detalle($oEscrito, 'asunto');
+	$perm_detalle = $oPermisoregistro->permiso_detalle($oEscrito, 'detalle');
+	$asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
+	$detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
+	
+	$perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEscrito, 'cambio');
+	if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
+		$oDesplVisibilidad->setDisabled(TRUE);
 	}
+
     $comentario = $oEscrito->getComentarios();
 } else {
     // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada

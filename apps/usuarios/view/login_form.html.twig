@@ -2,8 +2,6 @@
 <head>
 <meta charset="UTF-8" >
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" >
-<!-- Bootstrap core CSS -->
-<link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" >
 <title>Tramity</title>
 </head>
 .<!-- Este caracter '.' sirve para que el navegador cierre el <head> y no de un error:
@@ -22,7 +20,8 @@ function newContent() {
     document.open();
 
     //document.write("<head id='login_head'>\
-    document.write("<style>\
+    document.write("<link href='../node_modules/bootstrap/dist/css/bootstrap.min.css' rel='stylesheet' >\
+    <style>\
     body {\
         display: -ms-flexbox;\
         display: flex;\

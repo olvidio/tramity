@@ -80,6 +80,9 @@ Class ConfigGlobal extends ServerConf {
 	public static function soy_dtor() {
 	    return is_true($_SESSION['session_auth']['usuario_dtor']);
 	}
+	public static function soy_sacd() {
+	    return is_true($_SESSION['session_auth']['usuario_sacd']);
+	}
 	
 	
 	public static function getVista() {

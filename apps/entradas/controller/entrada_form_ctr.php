@@ -2,6 +2,8 @@
 use core\ViewTwig;
 use entradas\model\Entrada;
 use lugares\model\entity\GestorLugar;
+use usuarios\model\Categoria;
+use usuarios\model\Visibilidad;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
@@ -50,14 +52,16 @@ $oProtRef->setBlanco(TRUE);
 
 $oEntrada = new Entrada($Qid_entrada);
 // tipo
-$aOpciones = $oEntrada->getArrayCategoria();
+$oCategoria = new Categoria();
+$aOpciones = $oCategoria->getArrayCategoria();
 $oDesplCategoria = new Desplegable();
 $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
 $oDesplCategoria->setTabIndex(80);
 
 // visibilidad
-$aOpciones = $oEntrada->getArrayVisibilidadDst();
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidadCtr();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
@@ -119,7 +123,7 @@ if (!empty($Qid_entrada)) {
     $asunto = '';
     $anulado_txt = '';
     $detalle = '';
-    $visibilidad = Entrada::V_TODOS;
+    $visibilidad = Visibilidad::V_TODOS;
     $f_entrada = '';
     $f_escrito = '';
     $f_contestar = '';

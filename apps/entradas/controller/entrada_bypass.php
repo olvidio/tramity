@@ -4,11 +4,12 @@ use entradas\model\Entrada;
 use entradas\model\entity\GestorEntradaBypass;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
-use usuarios\model\entity\GestorCargo;
+use usuarios\model\Visibilidad;
+use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
-use usuarios\model\entity\GestorOficina;
+use usuarios\model\Categoria;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -31,14 +32,16 @@ $a_posibles_lugares = $gesLugares->getArrayLugares();
 
 $oEntrada = new Entrada($Qid_entrada);
 // categoria
-$aOpciones = $oEntrada->getArrayCategoria();
+$oCategoria = new Categoria();
+$aOpciones = $oCategoria->getArrayCategoria();
 $oDesplCategoria = new Desplegable();
 $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
 $oDesplCategoria->setTabIndex(80);
 
 // visibilidad
-$aOpciones = $oEntrada->getArrayVisibilidad();
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);

@@ -32,6 +32,76 @@ class PermRegistro {
     private $array_registro_perm = [];
     private $soy_ctr = FALSE;
     
+    private function init_ctr() {
+        $todos = [];
+        $director = [];
+        $director_sacd = [];
+        
+        // director.
+        $todos['dtor'] = [
+                    'asunto'    => 2,
+                    'detalle'   => 2,
+                    'escrito'   => 2,
+                    'cambio'    => 4,
+        ];
+        $director['dtor'] = [
+                    'asunto'    => 2,
+                    'detalle'   => 2,
+                    'escrito'   => 2,
+                    'cambio'    => 4,
+        ];
+        $director_sacd['dtor'] = [
+                    'asunto'    => 2,
+                    'detalle'   => 2,
+                    'escrito'   => 2,
+                    'cambio'    => 4,
+        ];
+        // sacd
+        $todos['sacd'] = [
+                    'asunto'    => 1,
+                    'detalle'   => 1,
+                    'escrito'   => 1,
+                    'cambio'    => 0,
+        ];
+        $director['sacd'] = [
+                    'asunto'    => 1,
+                    'detalle'   => 1,
+                    'escrito'   => 1,
+                    'cambio'    => 0,
+        ];
+        $director_sacd['sacd'] = [
+                    'asunto'    => 1,
+                    'detalle'   => 1,
+                    'escrito'   => 1,
+                    'cambio'    => 0,
+        ];
+        // resto.
+        $todos['resto'] = [
+                    'asunto'    => 2,
+                    'detalle'   => 2,
+                    'escrito'   => 2,
+                    'cambio'    => 0,
+        ];
+        $director['resto'] = [
+                    'asunto'    => 0,
+                    'detalle'   => 0,
+                    'escrito'   => 0,
+                    'cambio'    => 0,
+        ];
+        $director_sacd['resto'] = [
+                    'asunto'    => 0,
+                    'detalle'   => 0,
+                    'escrito'   => 0,
+                    'cambio'    => 0,
+        ];
+
+        $this->array_registro_perm[Visibilidad::V_CTR_TODOS] = $todos;
+        $this->array_registro_perm[Visibilidad::V_CTR_DTOR] = $director;
+        $this->array_registro_perm[Visibilidad::V_CTR_DTOR_SACD] = $director_sacd;
+        
+        return $this->array_registro_perm;
+    }
+    
     private function init() {
         $todos = [];
         $personal = [];
@@ -286,22 +356,56 @@ class PermRegistro {
                     'cambio'    => 0,
         ];
 
-        $this->array_registro_perm[Entrada::V_TODOS] = $todos;
-        $this->array_registro_perm[Entrada::V_PERSONAL] = $personal;
-        $this->array_registro_perm[Entrada::V_DIRECTORES] = $directores;
-        $this->array_registro_perm[Entrada::V_RESERVADO] = $reservado;
-        $this->array_registro_perm[Entrada::V_RESERVADO_VCD] = $vcd;
+        $this->array_registro_perm[Visibilidad::V_TODOS] = $todos;
+        $this->array_registro_perm[Visibilidad::V_PERSONAL] = $personal;
+        $this->array_registro_perm[Visibilidad::V_DIRECTORES] = $directores;
+        $this->array_registro_perm[Visibilidad::V_RESERVADO] = $reservado;
+        $this->array_registro_perm[Visibilidad::V_RESERVADO_VCD] = $vcd;
         
         return $this->array_registro_perm;
     }
     
     public function __construct() {
     	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
-    		$this->soy_ctr = TRUE;
+    		$this->init_ctr();
     	} else {
         	$this->init();
     	}
     }
+    
+    public function isVisibleDtor($visibilidad) {
+    	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+			$soy_dtor = ConfigGlobal::soy_dtor();
+			if ( ($visibilidad == Visibilidad::V_DIRECTORES || 
+				  $visibilidad == Visibilidad::V_RESERVADO ||
+				  $visibilidad == Visibilidad::V_RESERVADO_VCD
+				  )
+				&& $soy_dtor === FALSE)
+			{
+				$rta = FALSE;
+			} else {
+				$rta = TRUE;
+			}
+			return $rta;
+		}
+		
+    	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+			$soy_dtor = ConfigGlobal::soy_dtor();
+			$soy_sacd = ConfigGlobal::soy_sacd();
+			$rta = FALSE;
+			if ( $visibilidad == Visibilidad::V_CTR_DTOR && $soy_dtor) {
+				$rta = TRUE;
+			}
+			if ( $visibilidad == Visibilidad::V_CTR_DTOR_SACD && ($soy_dtor || $soy_sacd) ) {
+				$rta = TRUE;
+			}
+			if ( $visibilidad == Visibilidad::V_CTR_TODOS ) {
+				$rta = TRUE;
+			}
+			return $rta;
+		}
+    }
+    
     
     /**
      * Función para buscar el permiso para ver el asunto, detalle o escrito 
@@ -312,9 +416,57 @@ class PermRegistro {
      * @return number
      */
     public function permiso_detalle($objeto,$que) {
-    	if ($this->soy_ctr) {
-    		return 1;
+    	
+    	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    		$rta = $this->permiso_detalle_ctr($objeto, $que);
+    	} else {
+    		$rta = $this->permiso_detalle_dl($objeto, $que);
     	}
+    	
+        return $rta;
+    }
+    
+    
+    /**
+     * Para el ambito CTR:
+     * Función para buscar el permiso para ver el asunto, detalle o escrito 
+     * de una entrada o escrito o pendiente según quien sea yo.
+     * 
+     * @param object $oEntrada|$oEscrito|$oPendiente|oExpediente
+     * @param string  $que (aunto|detalle|escrito|cambio)
+     * @return number
+     */
+    private function permiso_detalle_ctr($objeto,$que) {
+        
+		$id_cargo_role = ConfigGlobal::role_id_cargo();
+		$oCargo = new Cargo($id_cargo_role);
+		$soy_dtor = $oCargo->getDirector();
+		$soy_sacd = $oCargo->getSacd();
+        
+        $visibilidad = $objeto->getVisibilidad();
+        $visibilidad = empty($visibilidad)? Visibilidad::V_TODOS : $visibilidad;
+        
+        
+        $soy = empty($soy_dtor)? 'resto' : 'dtor';
+        $soy = empty($soy_sacd)? $soy : 'sacd';
+        
+        if (!isset($this->array_registro_perm[$visibilidad][$soy][$que])) {
+            echo "NO encuentro permiso para: visibilidad: $visibilidad, soy: $soy, que: $que<br>";
+        }
+        
+        return $this->array_registro_perm[$visibilidad][$soy][$que];
+    }
+    
+    /**
+     * Para el ambito DL:
+     * Función para buscar el permiso para ver el asunto, detalle o escrito 
+     * de una entrada o escrito o pendiente según quien sea yo.
+     * 
+     * @param object $oEntrada|$oEscrito|$oPendiente|oExpediente
+     * @param string  $que (aunto|detalle|escrito|cambio)
+     * @return number
+     */
+    private function permiso_detalle_dl($objeto,$que) {
         $role_actual = ConfigGlobal::role_actual();
         $id_oficina_pral = '';
         $id_oficina_role = '';
@@ -331,7 +483,7 @@ class PermRegistro {
         
         
         $visibilidad = $objeto->getVisibilidad();
-        $visibilidad = empty($visibilidad)? Entrada::V_TODOS : $visibilidad;
+        $visibilidad = empty($visibilidad)? Visibilidad::V_TODOS : $visibilidad;
         // Entradas es por oficinas, Escritos por cargos
         $classname = get_class($objeto);
         $clase = substr($classname, strrpos($classname, '\\') + 1);
@@ -376,7 +528,7 @@ class PermRegistro {
                 }
         }
         // para el sd, como vcd excepto si la oficina es vcd.
-        // Lo pongo fuera de switch para aprovechar el dafault.
+        // Lo pongo fuera de switch para aprovechar el default.
         if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL && $role_actual == 'sd') {
             $gesCargo = new GestorCargo();
             $cCargos = $gesCargo->getCargos(['cargo' => 'vcd']);

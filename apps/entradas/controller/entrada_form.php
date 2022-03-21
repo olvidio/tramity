@@ -5,11 +5,12 @@ use entradas\model\entity\GestorEntradaBypass;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\PermRegistro;
-use usuarios\model\entity\GestorCargo;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
+use usuarios\model\Categoria;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -72,14 +73,16 @@ $oDesplPonenteOficina->setTabIndex(80);
 
 $oEntrada = new Entrada($Qid_entrada);
 // tipo
-$aOpciones = $oEntrada->getArrayCategoria();
+$oCategoria = new Categoria();
+$aOpciones = $oCategoria->getArrayCategoria();
 $oDesplCategoria = new Desplegable();
 $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
 $oDesplCategoria->setTabIndex(80);
 
 // visibilidad
-$aOpciones = $oEntrada->getArrayVisibilidad();
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
@@ -236,7 +239,7 @@ if (!empty($Qid_entrada)) {
     $asunto = '';
     $anulado_txt = '';
     $detalle = '';
-    $visibilidad = Entrada::V_TODOS;
+    $visibilidad = Visibilidad::V_TODOS;
     $f_entrada = '';
     $f_escrito = '';
     $f_contestar = '';
@@ -346,7 +349,7 @@ $a_campos = [
     'plazo_rapido' => $plazo_rapido,
     'error_fecha' => $error_fecha,
     'comprobar_f_entrada' => $comprobar_f_entrada,
-    'cat_e12' => Entrada::CAT_E12,
+    'cat_e12' => Categoria::CAT_E12,
     // grupo destinos
     'chk_grupo_dst' => $chk_grupo_dst,
     'id_grupo' => $id_grupo,

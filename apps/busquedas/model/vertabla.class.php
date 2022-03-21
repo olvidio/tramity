@@ -10,6 +10,8 @@ use usuarios\model\entity\GestorOficina;
 use web\Lista;
 use web\Protocolo;
 use web\ProtocoloArray;
+use usuarios\model\Visibilidad;
+use usuarios\model\Categoria;
 
 class VerTabla {
     
@@ -211,9 +213,10 @@ class VerTabla {
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         
-        $oEntrada = new Entrada();
-        $a_categorias = $oEntrada->getArrayCategoria();
-        $a_visibilidad = $oEntrada->getArrayVisibilidad();
+        $oCategoria = new Categoria();
+        $a_categorias = $oCategoria->getArrayCategoria();
+        $oVisibilidad = new Visibilidad();
+        $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
         
         
         if (ConfigGlobal::role_actual() === 'secretaria') { 
@@ -323,9 +326,10 @@ class VerTabla {
         $gesCargos = new GestorCargo();
         $a_posibles_cargos = $gesCargos->getArrayCargos();
         
-        $oEntrada = new Entrada();
-        $a_categorias = $oEntrada->getArrayCategoria();
-        $a_visibilidad = $oEntrada->getArrayVisibilidad();
+        $oCategoria = new Categoria();
+        $a_categorias = $oCategoria->getArrayCategoria();
+        $oVisibilidad = new Visibilidad();
+        $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
         
         if (ConfigGlobal::role_actual() === 'secretaria') { 
             $a_botones=array( array( 'txt' => _('modificar'), 'click' =>"fnjs_modificar_escrito(\"#$this->sKey\")" ) ,
@@ -349,7 +353,6 @@ class VerTabla {
                             );
         
         $i=0;
-        $oProtLocal = new Protocolo();
         $a_valores = [];
         foreach ($cCollection as $oEscrito) {
             $i++;
@@ -357,14 +360,7 @@ class VerTabla {
             $anulado = $oEscrito->getAnulado();
             
             // protocolo local
-            $json_prot_local = $oEscrito->getJson_prot_local();
-            if (count(get_object_vars($json_prot_local)) == 0) {
-                $protocolo_local = '';
-            } else {
-                $oProtLocal->setJson($json_prot_local);
-                $protocolo_local = $oProtLocal->ver_txt();
-            }
-            
+            $protocolo_local = $oEscrito->getProt_local_txt();
             // destinos
             $destino_txt = $oEscrito->getDestinosEscrito();
             

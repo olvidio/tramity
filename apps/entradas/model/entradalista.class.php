@@ -5,10 +5,11 @@ use busquedas\model\Buscar;
 use busquedas\model\VerTabla;
 use core\ConfigGlobal;
 use core\ViewTwig;
-use function core\is_true;
 use entradas\model\entity\GestorEntradaBypass;
 use lugares\model\entity\GestorLugar;
+use usuarios\model\Categoria;
 use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
@@ -87,23 +88,8 @@ class EntradaLista {
                 $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aWhere['encargado'] = $encargado;
                 
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
-                	// visibilidad:
-					$a_visibilidad[] = Entrada::V_DST_TODOS;
-                	$id_cargo = ConfigGlobal::role_id_cargo();
-                	$oCargo = new Cargo($id_cargo);
-                	$dtor = $oCargo->getDirector();
-                	$sacd = $oCargo->getSacd();
-                	if (is_true($dtor)) {
-                		$a_visibilidad[] = Entrada::V_DST_DTOR;
-                		$a_visibilidad[] = Entrada::V_DST_DTOR_SACD;
-                	}
-                	if (is_true($sacd)) {
-                		$a_visibilidad[] = Entrada::V_DST_DTOR_SACD;
-                	}
-                } else {
-                	$a_visibilidad = [];
-                }
+                $oVisibilidad = new Visibilidad();
+				$a_visibilidad = $oVisibilidad->getArrayCondVisibilidad();
                 // No marcado como visto:
                 $gesEntradas = new GestorEntrada();
                 $cEntradas = $gesEntradas->getEntradasNoVistoDB($encargado,'encargado',$a_visibilidad);
@@ -128,18 +114,9 @@ class EntradaLista {
                 $a_entradas_ponente = [];
                 if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
                 	// visibilidad:
-					$a_visibilidad[] = Entrada::V_DST_TODOS;
-                	$id_cargo = ConfigGlobal::role_id_cargo();
-                	$oCargo = new Cargo($id_cargo);
-                	$dtor = $oCargo->getDirector();
-                	$sacd = $oCargo->getSacd();
-                	if (is_true($dtor)) {
-                		$a_visibilidad[] = Entrada::V_DST_DTOR;
-                		$a_visibilidad[] = Entrada::V_DST_DTOR_SACD;
-                	}
-                	if (is_true($sacd)) {
-                		$a_visibilidad[] = Entrada::V_DST_DTOR_SACD;
-                	}
+					$oVisibilidad = new Visibilidad();
+					$a_visibilidad = $oVisibilidad->getArrayCondVisibilidad();
+				
 					// No marcado como visto:
 					$gesEntradas = new GestorEntrada();
 					$cEntradas = $gesEntradas->getEntradasNoVistoDB('','centro',$a_visibilidad);
@@ -272,13 +249,10 @@ class EntradaLista {
         $pagina_nueva = '';
         $filtro = $this->getFiltro();
         
-        $oEntrada = new Entrada();
-        $a_categorias = $oEntrada->getArrayCategoria();
-		if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
-			$a_visibilidad = $oEntrada->getArrayVisibilidadDst();
-		} else {
-			$a_visibilidad = $oEntrada->getArrayVisibilidad();
-		}
+        $oCategoria = new Categoria();
+        $a_categorias = $oCategoria->getArrayCategoria();
+		$oVisibilidad = new Visibilidad();
+		$a_visibilidad = $oVisibilidad->getArrayVisibilidad();
         
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();

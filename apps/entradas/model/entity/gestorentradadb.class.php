@@ -6,6 +6,7 @@ use core\Set;
 use function core\any_2;
 use entradas\model\Entrada;
 use usuarios\model\entity\Cargo;
+use usuarios\model\Categoria;
 
 /**
  * GestorEntradaDB
@@ -46,7 +47,7 @@ class GestorEntradaDB Extends ClaseGestor {
 
         $sql_anys="SELECT json_prot_origen -> 'any' as a 
                     FROM $nom_tabla
-                    WHERE categoria = ". Entrada::CAT_PERMANATE ."
+                    WHERE categoria = ". Categoria::CAT_PERMANATE ."
                     GROUP BY a ORDER BY a";
         
         if (($oDblSt=$oDbl->Query($sql_anys)) === FALSE) {

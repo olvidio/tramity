@@ -10,6 +10,7 @@ use oasis_as4\model\As4CollaborationInfo;
 use oasis_as4\model\Payload;
 use web\DateTimeLocal;
 use web\Protocolo;
+use usuarios\model\Categoria;
 
 class As4Distribuir extends As4CollaborationInfo {
 	
@@ -144,7 +145,7 @@ class As4Distribuir extends As4CollaborationInfo {
 		$oEntrada->setF_entrada($oHoy);
 		$oEntrada->setF_contestar($this->oF_contestar);
 		$oEntrada->setVisibilidad($this->visibilidad);
-		$oEntrada->setCategoria(Entrada::CAT_NORMAL); // valor por defecto
+		$oEntrada->setCategoria(Categoria::CAT_NORMAL); // valor por defecto
 		$oficina = ConfigGlobal::role_id_oficina();
 		$oEntrada->setPonente($oficina);
 		

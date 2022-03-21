@@ -3,12 +3,12 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use davical\model\Davical;
-use entradas\model\Entrada;
 use etiquetas\model\entity\GestorEtiqueta;
 use lugares\model\entity\GestorLugar;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
 use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorOficina;
@@ -83,9 +83,9 @@ if ($role_actual === 'secretaria') {
     $user_davical = $oDavical->getUsernameDavical($id_cargo_role);
 }
 
-// visibilidad (usar las mismas opciones que en entradas)
-$oEntrada = new Entrada();
-$aOpciones = $oEntrada->getArrayVisibilidad();
+// visibilidad
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);

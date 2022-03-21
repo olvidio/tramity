@@ -4,10 +4,11 @@ namespace expedientes\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
-use entradas\model\Entrada;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramite;
+use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Hash;
@@ -624,20 +625,19 @@ class ExpedienteLista {
             $this->aWhere['_ordre'] = 'id_expediente';
             $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere,$this->aOperador);
                 
-            $soy_dtor = ConfigGlobal::soy_dtor();
             //lista de tramites
             $gesTramites = new GestorTramite();
             $a_tramites = $gesTramites->getArrayAbrevTramites();
             // array visibilidades
-            $oEntrada = new Entrada();
-            $a_visibilidad = $oEntrada->getArrayVisibilidad();
+            $oVisibilidad = new Visibilidad();
+            $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
+            $oPermiso = new PermRegistro();
             foreach ($cExpedientes as $oExpediente) {
                 $row = [];
                 // mirar permisos...
                 $visibilidad = $oExpediente->getVisibilidad();
-                if ( ($visibilidad == Entrada::V_DIRECTORES || $visibilidad == Entrada::V_RESERVADO || $visibilidad == Entrada::V_RESERVADO_VCD)
-                    && $soy_dtor === FALSE) {
-                        continue;
+                if (!$oPermiso->isVisibleDtor($visibilidad)) {
+                	continue;
                 }
                 $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '' : $a_visibilidad[$visibilidad];
                 $row['visibilidad'] = $visibilidad_txt;

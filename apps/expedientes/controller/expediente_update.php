@@ -18,6 +18,7 @@ use usuarios\model\entity\GestorOficina;
 use usuarios\model\entity\Oficina;
 use web\DateTimeLocal;
 use web\Protocolo;
+use usuarios\model\Categoria;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -365,7 +366,7 @@ switch ($Qque) {
                 $proto = TRUE;
                 $oEscrito = new Escrito($id_escrito);
                 // si es un e12, no hay que numerar.
-                if ($oEscrito->getCategoria() === Escrito::CAT_E12) {
+                if ($oEscrito->getCategoria() === Categoria::CAT_E12) {
                     $proto = FALSE;
                 }
                 // comprobar que no está anulado:

@@ -1,7 +1,6 @@
 <?php
 namespace entradas\model;
 
-use core\Converter;
 use entradas\model\entity\EntradaDB;
 use entradas\model\entity\EntradaDocDB;
 use entradas\model\entity\GestorEntradaAdjunto;
@@ -9,6 +8,7 @@ use entradas\model\entity\GestorEntradaBypass;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
 use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
@@ -18,28 +18,11 @@ use web\ProtocoloArray;
 class Entrada Extends EntradaDB {
     
     /* CONST -------------------------------------------------------------- */
-    
-    // modo entrada
-    const MODO_MANUAL       = 1;
-    const MODO_XML          = 2;
-    
-    // categoria
-    const CAT_E12          = 1;
-    const CAT_NORMAL       = 2;
-    const CAT_PERMANATE    = 3;
-    
-    // visibilidad
-    const V_TODOS           = 1;  // cualquiera
-    const V_PERSONAL        = 2;  // oficina y directores
-    const V_DIRECTORES      = 3;  // sólo directores
-    const V_RESERVADO       = 4;  // sólo directores, añade no ver a los directores de otras oficinas no implicadas
-    const V_RESERVADO_VCD   = 5;  // sólo vcd + quien señale
-    
-    // visibilidad_dst
-    const V_DST_TODOS 			= 1; // cualquiera
-    const V_DST_DTOR 			= 7; // d
-    const V_DST_DTOR_SACD 		= 8; // d y sacd
-    
+	
+	// modo entrada
+	const MODO_MANUAL       = 1;
+	const MODO_XML          = 2;
+	
     // estado
     /*
      - Ingresa (secretaría introduce los datos de la entrada)
@@ -91,33 +74,7 @@ class Entrada Extends EntradaDB {
         $this->setNomTabla('entradas');
     }
     
-    /* METODES PUBLICS ----------------------------------------------------------*/
-
-    public function getArrayCategoria() {
-        return [
-            self::CAT_NORMAL => _("normal"),
-            self::CAT_E12 => _("sin numerar"),
-            self::CAT_PERMANATE => _("permanente"),
-        ];
-    }
     
-    public function getArrayVisibilidad() {
-        return [
-            self::V_TODOS => _("todos"),
-            self::V_PERSONAL => _("personal"),
-            self::V_DIRECTORES => _("directores"),
-            self::V_RESERVADO => _("reservado"),
-            self::V_RESERVADO_VCD => _("vcd"),
-        ];
-    }
-    
-    public function getArrayVisibilidadDst() {
-        return [
-            self::V_DST_TODOS => _("todos"),
-            self::V_DST_DTOR => _("d"),
-            self::V_DST_DTOR_SACD => _("d y sacd"),
-        ];
-    }
     
     public function cabeceraDistribucion_cr() {
         // a ver si ya está
@@ -160,14 +117,15 @@ class Entrada Extends EntradaDB {
     
     public function cabeceraIzquierda() {
         // sigla +(visibilidad) + ref
-    	$a_Visibilidad_dst = $this->getArrayVisibilidadDst();
+    	$oVisibilidad = new Visibilidad();
+    	$a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
         
         $sigla = $_SESSION['oConfig']->getSigla();
         $destinos_txt = $sigla;
         
         $visibilidad = $this->getVisibilidad();
-        if (!empty($visibilidad) && $visibilidad != Entrada::V_DST_TODOS) {
-        	$visibilidad_txt = $a_Visibilidad_dst[$visibilidad];
+        if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
+        	$visibilidad_txt = $a_visibilidad_dst[$visibilidad];
         	$destinos_txt .= " ($visibilidad_txt)";
         }
         
@@ -233,8 +191,7 @@ class Entrada Extends EntradaDB {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'asunto');
             
-        $a_visibilidad = $this->getArrayVisibilidad();
-        $asunto = $a_visibilidad[self::V_RESERVADO];
+        $asunto = _("reservado");
         if ($perm > 0) {
             $asunto = '';
             $anulado = $this->getAnulado();
@@ -255,8 +212,7 @@ class Entrada Extends EntradaDB {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'detalle');
             
-        $a_visibilidad = $this->getArrayVisibilidad();
-        $detalle = $a_visibilidad[self::V_RESERVADO];
+        $detalle = _("reservado");
         if ($perm > 0) {
             $detalle = $this->getDetalleDB();
         } 

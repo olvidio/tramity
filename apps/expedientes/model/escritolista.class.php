@@ -4,15 +4,15 @@ namespace expedientes\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
+use entradas\model\Entrada;
 use expedientes\model\entity\GestorAccion;
 use expedientes\model\entity\GestorEscritoDB;
 use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\GestorCargo;
 use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
-use entradas\model\Entrada;
-use entradas\model\GestorEntrada;
 
 
 class EscritoLista {
@@ -104,9 +104,9 @@ class EscritoLista {
     }
     
     public function mostrarTablaEnviar($fecha='') {
-    	// visibilidad destino (igual a Entradas)
-    	$oEntrada = new Entrada();
-    	$a_Visibilidad_dst = $oEntrada->getArrayVisibilidadDst();
+    	// visibilidad
+    	$oVisibilidad = new Visibilidad();
+    	$a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
     	
         $oExpediente = new Expediente($this->id_expediente);
         $estado = $oExpediente->getEstado();
@@ -160,23 +160,11 @@ class EscritoLista {
             
             $destino_txt = $oEscrito->getDestinosEscrito();
 			$visibilidad_dst = $oEscrito->getVisibilidad_dst();
-			if (!empty($visibilidad_dst) && $visibilidad_dst != Entrada::V_DST_TODOS) {
-            	$visibilidad_txt = $a_Visibilidad_dst[$visibilidad_dst];
+			if (!empty($visibilidad_dst) && $visibilidad_dst != Visibilidad::V_CTR_TODOS) {
+            	$visibilidad_txt = $a_visibilidad_dst[$visibilidad_dst];
             	$destino_txt .= " ($visibilidad_txt)";
             }
-            $json_prot_local = $oEscrito->getJson_prot_local();
-            if (count(get_object_vars($json_prot_local)) == 0) {
-                // Todavía no está definido el protocolo local;
-                $prot_local_txt = _("revisar");
-            } else {
-                $oProtLocal->setLugar($json_prot_local->lugar);
-                $oProtLocal->setProt_num($json_prot_local->num);
-                $oProtLocal->setProt_any($json_prot_local->any);
-                if (property_exists($json_prot_local, 'mas')) {
-                    $oProtLocal->setMas($json_prot_local->mas);
-                }
-                $prot_local_txt = $oProtLocal->ver_txt();
-            }
+            $prot_local_txt = $oEscrito->getProt_local_txt();
             // Tiene adjuntos?
             $adjuntos = '';
             $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
@@ -256,9 +244,9 @@ class EscritoLista {
     }
 
     private function getCamposTabla() {
-    	// visibilidad destino (igual a Entradas)
-    	$oEntrada = new Entrada();
-    	$a_Visibilidad_dst = $oEntrada->getArrayVisibilidadDst();
+    	// visibilidad destino
+    	$oVisibilidad = new Visibilidad();
+    	$a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
     	
         $oExpediente = new Expediente($this->id_expediente);
         $estado = $oExpediente->getEstado();
@@ -341,23 +329,12 @@ class EscritoLista {
 
             $destino_txt = $oEscrito->getDestinosEscrito();
 			$visibilidad_dst = $oEscrito->getVisibilidad_dst();
-			if (!empty($visibilidad_dst) && $visibilidad_dst != Entrada::V_DST_TODOS) {
-            	$visibilidad_txt = $a_Visibilidad_dst[$visibilidad_dst];
+			if (!empty($visibilidad_dst) && $visibilidad_dst != Visibilidad::V_CTR_TODOS) {
+            	$visibilidad_txt = $a_visibilidad_dst[$visibilidad_dst];
             	$destino_txt .= " ($visibilidad_txt)";
             }
-            $json_prot_local = $oEscrito->getJson_prot_local();
-            if (count(get_object_vars($json_prot_local)) == 0) {
-                // Todavía no está definido el protocolo local;
-                $prot_local_txt = _("revisar");
-            } else {
-                $oProtLocal->setLugar($json_prot_local->lugar);
-                $oProtLocal->setProt_num($json_prot_local->num);
-                $oProtLocal->setProt_any($json_prot_local->any);
-                if (property_exists($json_prot_local, 'mas')) {
-                    $oProtLocal->setMas($json_prot_local->mas);
-                }
-                $prot_local_txt = $oProtLocal->ver_txt();
-            }
+            
+            $prot_local_txt = $oEscrito->getProt_local_txt();
             // Tiene adjuntos?
             $adjuntos = '';
             $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();

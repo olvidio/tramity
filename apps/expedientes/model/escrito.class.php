@@ -1,6 +1,8 @@
 <?php
 namespace expedientes\model;
 
+use documentos\model\Documento;
+use entradas\model\Entrada;
 use etherpad\model\Etherpad;
 use expedientes\model\entity\Accion;
 use expedientes\model\entity\EscritoAdjunto;
@@ -12,24 +14,15 @@ use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
 use tramites\model\entity\GestorFirma;
 use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
+use usuarios\model\entity\Cargo;
 use web\Protocolo;
 use web\ProtocoloArray;
-use entradas\model\Entrada;
-use documentos\model\Documento;
 
 
 
 class Escrito Extends EscritoDB {
     /* CONST -------------------------------------------------------------- */
-    // categoria, visibilidad, accion, modo_envio.
-    
-    // = entrada
-    // categoria
-    const CAT_E12          = 1;
-    const CAT_NORMAL       = 2;
-    const CAT_PERMANATE    = 3;
-    // visibilidad
-    // USAR LAS DE ENTRADA
     
     // modo envio
     const MODO_MANUAL       = 1;
@@ -85,9 +78,7 @@ class Escrito Extends EscritoDB {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'asunto');
         
-        $oEntrada = new Entrada();
-        $a_visibilidad = $oEntrada->getArrayVisibilidad();
-        $asunto = $a_visibilidad[Entrada::V_RESERVADO];
+        $asunto = _("reservado");
         if ($perm > 0) {
             $asunto = $this->getAsuntoDB();
         }
@@ -103,9 +94,7 @@ class Escrito Extends EscritoDB {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'detalle');
         
-        $oEntrada = new Entrada();
-        $a_visibilidad = $oEntrada->getArrayVisibilidad();
-        $detalle = $a_visibilidad[Entrada::V_RESERVADO];
+        $detalle = _("reservado");
         if ($perm > 0) {
             $detalle = $this->getDetalleDB();
         }
@@ -202,14 +191,6 @@ class Escrito Extends EscritoDB {
     }
     /* METODES PUBLICS ----------------------------------------------------------*/
 
-    public function getArrayCategoria() {
-        return [
-            self::CAT_NORMAL => _("normal"),
-            self::CAT_E12 => _("sin numerar"),
-            self::CAT_PERMANATE => _("permanente"),
-        ];
-    }
-    
     public function getArrayModoEnvio() {
         return [
             self::MODO_MANUAL => _("manual"),
@@ -260,9 +241,9 @@ class Escrito Extends EscritoDB {
      * @return string destinos | destino + ref.
      */
     public function cabeceraIzquierda($id_lugar_de_grupo='') {
-    	// visibilidad destino (igual a Entradas)
-    	$oEntrada = new Entrada();
-    	$a_Visibilidad_dst = $oEntrada->getArrayVisibilidadDst();
+    	// visibilidad
+    	$oVisibilidad = new Visibilidad();
+    	$a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
         // destinos + ref
         // destinos:
         $a_grupos = [];
@@ -309,8 +290,8 @@ class Escrito Extends EscritoDB {
                 $destinos_txt = $oArrayProtDestino->ListaTxtBr();
                 
                 $visibilidad_dst = $this->getVisibilidad_dst();
-                if (!empty($visibilidad_dst) && $visibilidad_dst != Entrada::V_DST_TODOS) {
-                	$visibilidad_txt = $a_Visibilidad_dst[$visibilidad_dst];
+                if (!empty($visibilidad_dst) && $visibilidad_dst != Visibilidad::V_CTR_TODOS) {
+                	$visibilidad_txt = $a_visibilidad_dst[$visibilidad_dst];
                 	$destinos_txt .= " ($visibilidad_txt)";
                 }
             }
@@ -459,11 +440,14 @@ class Escrito Extends EscritoDB {
     	
         $json_prot_local = $this->getJson_prot_local();
         if (count(get_object_vars($json_prot_local)) == 0) {
+        	/* PARECE QUE YA NO LO USUO ASI
             $err_txt = "No hay protocolo local";
             $_SESSION['oGestorErrores']->addError($err_txt,'generar PDF', __LINE__, __FILE__);
             $_SESSION['oGestorErrores']->recordar($err_txt);
 
             $origen_txt = $_SESSION['oConfig']->getSigla();
+            */
+        	$origen_txt = _("revisar");
         } else {
             $oProtOrigen = new Protocolo();
             $oProtOrigen->setLugar($json_prot_local->lugar);
@@ -472,6 +456,16 @@ class Escrito Extends EscritoDB {
             $oProtOrigen->setMas($json_prot_local->mas);
             
             $origen_txt = $oProtOrigen->ver_txt();
+            
+            if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+            	$oVisibilidad = new Visibilidad();
+            	$a_visibilidad = $oVisibilidad->getArrayVisibilidad();
+            	$visibilidad = $this->getVisibilidad();
+            	if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
+            		$visibilidad_txt = $a_visibilidad[$visibilidad];
+            		$origen_txt .= " ($visibilidad_txt)";
+            	}
+            }
         }
         
         return $origen_txt;

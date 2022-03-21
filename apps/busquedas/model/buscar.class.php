@@ -9,6 +9,7 @@ use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use entradas\model\Entrada;
+use usuarios\model\Categoria;
 
 
 class Buscar {
@@ -139,7 +140,7 @@ class Buscar {
                 
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';
-                $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
+                $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
                 $aWhereEntrada['_ordre'] = 'f_entrada';
                 $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
                 $aProt_origen = [ 'lugar' => $this->id_lugar,
@@ -158,7 +159,7 @@ class Buscar {
                 // por año
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';
-                $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
+                $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
                 $aProt_origen = [ 'lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,
                                   'any' => $this->prot_any,
@@ -174,7 +175,7 @@ class Buscar {
             case 'oficina':
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';
-                $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
+                $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
                 $aWhereEntrada['ponente'] = $this->ponente;
                 $aProt_origen = [ 'lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,

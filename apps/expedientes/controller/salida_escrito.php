@@ -6,7 +6,9 @@ use expedientes\model\Escrito;
 use expedientes\model\GestorEscrito;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
+use usuarios\model\Categoria;
 use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Desplegable;
@@ -78,7 +80,8 @@ $oArrayDesplFirmas->setTabIndex(140);
 
 $oEscrito = new Escrito($Qid_escrito);
 // categoria
-$aOpciones = $oEscrito->getArrayCategoria();
+$oCategoria = new Categoria();
+$aOpciones = $oCategoria->getArrayCategoria();
 $oDesplCategoria = new Desplegable();
 $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
@@ -91,9 +94,9 @@ $a_posibles_grupos = $gesGrupo->getArrayGrupos();
 $chk_grupo_dst = '';
 $descripcion = '';
 
-// visibilidad (usar las mismas opciones que en entradas)
-$oEntrada = new Entrada();
-$aOpciones = $oEntrada->getArrayVisibilidad();
+// visibilidad
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
