@@ -9,6 +9,7 @@ use etherpad\model\Etherpad;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
 use usuarios\model\PermRegistro;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Lista;
@@ -137,18 +138,18 @@ switch ($Qque) {
     case 'get_detalle':
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
         $oEntrada = new Entrada($Qid_entrada);
-        $oPermiso = new PermRegistro();
-        $perm = $oPermiso->permiso_detalle($oEntrada,'detalle');
-        if ($perm < PermRegistro::PERM_MODIFICAR) {
-            $mensaje = _("No tiene permiso para modificar el detalle");
-        } else {
-            $detalle = $oEntrada->getDetalle();
-            $mensaje = '';
+        $mensaje = '';
+        if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
+			$oPermiso = new PermRegistro();
+			$perm = $oPermiso->permiso_detalle($oEntrada,'detalle');
+			if ($perm < PermRegistro::PERM_MODIFICAR) {
+				$mensaje = _("No tiene permiso para modificar el detalle");
+			}
         }
 
         if (empty($mensaje)) {
             $jsondata['success'] = true;
-            $jsondata['detalle'] = $detalle;
+            $jsondata['detalle'] = $oEntrada->getDetalle();
         } else {
             $jsondata['success'] = false;
             $jsondata['mensaje'] = $mensaje;
