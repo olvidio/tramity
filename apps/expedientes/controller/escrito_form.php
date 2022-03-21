@@ -249,6 +249,7 @@ if (!empty($Qid_escrito)) {
         $asunto = $oEntrada->getAsunto();
         $detalle = $oEntrada->getDetalle();
         // ProtocoloArray espera un array.
+        $json_prot_dst = []; // inicializar variable. Puede tener cosas.
         $json_prot_dst[] = $oEntrada->getJson_prot_origen();
         $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
         $oArrayProtDestino->setBlanco('t');
