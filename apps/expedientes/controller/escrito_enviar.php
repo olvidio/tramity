@@ -2,6 +2,7 @@
 use core\ViewTwig;
 use envios\model\Enviar;
 use expedientes\model\Escrito;
+use usuarios\model\entity\Cargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -30,6 +31,9 @@ if ($a_rta['marcar'] === TRUE) {
     $oEscrito = new Escrito($Qid_escrito);
     $oEscrito->DBCarregar();
     $oEscrito->setF_salida($f_salida,FALSE);
+    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+		$oEscrito->setF_aprobacion($f_salida,FALSE);
+    }
     $oEscrito->setOk(Escrito::OK_SECRETARIA);
     if ($oEscrito->DBGuardar() === FALSE) {
         exit($oEscrito->getErrorTxt());
