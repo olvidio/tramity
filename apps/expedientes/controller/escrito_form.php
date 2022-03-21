@@ -229,16 +229,21 @@ if (!empty($Qid_escrito)) {
             $titulo = _("modificar entrada");
     }
     
-    $oPermisoregistro = new PermRegistro();
-    $perm_asunto = $oPermisoregistro->permiso_detalle($oEscrito, 'asunto');
-    $perm_detalle = $oPermisoregistro->permiso_detalle($oEscrito, 'detalle');
-    $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
-    $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
-    
-    $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEscrito, 'cambio');
-    if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
-        $oDesplVisibilidad->setDisabled(TRUE);
-    }
+	if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
+		$oPermisoregistro = new PermRegistro();
+		$perm_asunto = $oPermisoregistro->permiso_detalle($oEscrito, 'asunto');
+		$perm_detalle = $oPermisoregistro->permiso_detalle($oEscrito, 'detalle');
+		$asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
+		$detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
+		
+		$perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEscrito, 'cambio');
+		if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
+			$oDesplVisibilidad->setDisabled(TRUE);
+		}
+	} else {
+		$asunto_readonly = '';
+		$detalle_readonly = '';
+	}
     $comentario = $oEscrito->getComentarios();
 } else {
     // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
