@@ -157,7 +157,7 @@ class Pendiente {
             $id_reg=substr($uid,3,$pos);
         }
         // Tambien para los pendientes de oficina: 
-        if (($pos_ini = strpos($uid, 'OFEN')) !== FALSE && $pos_ini == 0) {
+        if (($pos_ini = strpos($uid, 'EN')) !== FALSE && $pos_ini == 0) {
             $pos = strpos($uid, '-') - 4;
             $id_reg=substr($uid,4,$pos);
         }

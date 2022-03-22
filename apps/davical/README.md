@@ -6,7 +6,7 @@ El servidor Davical es un servidor de calendarios que se instala a parte. Desde 
 
 El servicor tiene una página de administración (https://davical.red.local) para adminstrar los usuarios, grupos, recursos y permisos entre ellos.
 
-Para poder acceder desde una aplicación de calendarios, habria que crear un nuevo usuario y darle  los permisos correspondientes. Los usuarios creados desde tramity, tienen todos el mismo password, distinto del del usuario, para que el progarama pueda acceder siempre.
+Para poder acceder desde una aplicación de calendarios, habria que crear un nuevo usuario y darle  los permisos correspondientes. Los usuarios creados desde tramity, tienen todos el mismo password, distinto del del usuario, para que el programa pueda acceder siempre.
 
 
 Para acceder a una colleccion

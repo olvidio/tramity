@@ -18,9 +18,11 @@
       <th scope="col">{{ "protocolo"|trans }}</th>
       <th scope="col">{{ "ref."|trans }}</th>
       <th scope="col">{{ "categoria"|trans }}</th>
-      <th scope="col">{{ "visibilidad"|trans }}</th>
       <th scope="col">{{ "asunto"|trans }}</th>
-      <th scope="col">{{ "oficinas"|trans }}</th>
+      {% if ver_oficina %}
+        <th scope="col">{{ "visibilidad"|trans }}</th>
+        <th scope="col">{{ "oficinas"|trans }}</th>
+      {% endif %}
       <th scope="col">{{ "fecha escrito"|trans }}</th>
       <th scope="col">{{ "contestar antes de"|trans }}</th>
       <th scope="col">{{ "fecha entrada"|trans }}</th>
@@ -39,9 +41,11 @@
       <td>{{ row.protocolo }}</td>
       <td>{{ row.referencias|raw }}</td>
       <td>{{ row.categoria }}</td>
-      <td>{{ row.visibilidad }}</td>
       <td>{{ row.asunto|raw }}</td>
-      <td>{{ row.oficinas|raw }}</td>
+      {% if ver_oficina %}
+        <td>{{ row.visibilidad }}</td>
+        <td>{{ row.oficinas|raw }}</td>
+      {% endif %}
       <td style="text-align: right">{{ row.f_escrito }}</td>
       <td style="text-align: right">{{ row.f_contestar }}</td>
       <td style="text-align: right">{{ row.f_entrada }}</td>

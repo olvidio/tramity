@@ -284,6 +284,9 @@ class Protocolo {
 	public function setTabIndex($index) {
 		$this->iTabIndex = $index;
 	}
+	public function getLugar() {
+		return $this->ilugar;
+	}
 	public function setLugar($ilugar) {
 		$this->ilugar = $ilugar;
 	}

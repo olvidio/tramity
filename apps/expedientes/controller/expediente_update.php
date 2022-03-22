@@ -117,7 +117,7 @@ switch ($Qque) {
         $oHoy = new DateTimeLocal();
         $Qf_plazo = empty($Qf_plazo)? $oHoy->getFromLocal() : $Qf_plazo; 
         // datos de la entrada 
-        $id_reg = 'EN'.$Qid_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': OFEN)
+        $id_reg = 'EN'.$Qid_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': EN)
         $oEntrada = new Entrada($Qid_entrada);
         
         $oPendiente = new Pendiente($parent_container, $calendario, $user_davical);

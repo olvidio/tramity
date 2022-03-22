@@ -1,18 +1,6 @@
 <script type="text/javascript">
 var global_flag = 1;
 
-$(function() {
-	$( "#f_plazo" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		yearStart: {{ yearStart }},
-		yearEnd: {{ yearEnd }},
-		dayOfWeekStart: globaljsVarDayStart,
-    });
-
-});
-
 fnjs_mod_pendiente=function() {
     if (typeof event !== 'undefined') {
         event.preventDefault();

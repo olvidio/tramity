@@ -258,6 +258,7 @@ class EntradaLista {
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         
         
+		$ver_oficina = TRUE;
         $pagina_accion = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_accion.php';
         switch ($filtro) {
             case 'en_encargado':
@@ -266,6 +267,7 @@ class EntradaLista {
                 $pagina_nueva = '';
                 break;
             case 'en_aceptado':
+            	$ver_oficina = FALSE;
                 $oficina = $this->aWhereADD['ponente'];
                 $pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
                 if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR ) {
@@ -276,6 +278,7 @@ class EntradaLista {
                 $pagina_nueva = '';
                 break;
             case 'en_ingresado':
+            	$ver_oficina = FALSE;
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
                 $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
                 if (ConfigGlobal::role_actual() === 'vcd') {
@@ -436,6 +439,7 @@ class EntradaLista {
             'txt_btn_new' => $txt_btn_new,
             'pagina_cancel' => $pagina_cancel,
             'ver_accion' => $ver_accion,
+            'ver_oficina' => $ver_oficina,
             //tabs_show
             'vista' => $vista,
        		// as4

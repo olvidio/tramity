@@ -75,7 +75,8 @@ if ($role_actual === 'secretaria') {
 } else {
     $oDesplOficinas = []; // para evitar errores
     $secretaria = FALSE;
-    $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
+    $id_cargo_role = ConfigGlobal::role_id_cargo();
+    $oCargo = new Cargo($id_cargo_role);
     $id_oficina = $oCargo->getId_oficina();
     // nombre normalizado del usuario y oficina:
     $id_cargo_role = ConfigGlobal::role_id_cargo();

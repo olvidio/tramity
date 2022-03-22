@@ -2,15 +2,18 @@
 namespace entradas\model;
 
 use core\ConfigGlobal;
+use davical\model\Davical;
 use entidades\model\entity\GestorEntidadesDB;
 use entradas\model\entity\EntradaDocDB;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
 use oasis_as4\model\As4CollaborationInfo;
 use oasis_as4\model\Payload;
+use pendientes\model\Pendiente;
+use usuarios\model\Categoria;
+use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
 use web\Protocolo;
-use usuarios\model\Categoria;
 
 class As4Distribuir extends As4CollaborationInfo {
 	
@@ -146,43 +149,8 @@ class As4Distribuir extends As4CollaborationInfo {
 		$oEntrada->setF_contestar($this->oF_contestar);
 		$oEntrada->setVisibilidad($this->visibilidad);
 		$oEntrada->setCategoria(Categoria::CAT_NORMAL); // valor por defecto
-		$oficina = ConfigGlobal::role_id_oficina();
-		$oEntrada->setPonente($oficina);
-		
-		/*
-		// 5º Compruebo si hay que generar un pendiente
-		switch ($Qplazo) {
-			case 'hoy':
-				$oEntrada->setF_contestar('');
-				break;
-			case 'normal':
-				$plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
-				$periodo = 'P'.$plazo_normal.'D';
-				$oF = new DateTimeLocal();
-				$oF->add(new DateInterval($periodo));
-				$oEntrada->setF_contestar($oF);
-				break;
-			case 'rápido':
-				$plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
-				$periodo = 'P'.$plazo_rapido.'D';
-				$oF = new DateTimeLocal();
-				$oF->add(new DateInterval($periodo));
-				$oEntrada->setF_contestar($oF);
-				break;
-			case 'urgente':
-				$plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
-				$periodo = 'P'.$plazo_urgente.'D';
-				$oF = new DateTimeLocal();
-				$oF->add(new DateInterval($periodo));
-				$oEntrada->setF_contestar($oF);
-				break;
-			case 'fecha':
-				$oEntrada->setF_contestar($Qf_plazo);
-				break;
-			default:
-				// Si no hay $Qplazo, No pongo ninguna fecha a contestar
-		}
-		*/
+		//$oficina = ConfigGlobal::role_id_oficina();
+		//$oEntrada->setPonente($oficina);
 		
 		$estado = Entrada::ESTADO_INGRESADO;
 		$oEntrada->setEstado($estado);
@@ -227,6 +195,44 @@ class As4Distribuir extends As4CollaborationInfo {
 			// cargar los adjuntos una vez se ha creado la entrada y se tiene el id:
 			if (!empty($this->a_adjuntos)) {
 				$this->cargarAdjunto($this->a_adjuntos, $id_entrada);	
+			}
+			if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+				// Compruebo si hay que generar un pendiente
+				if (!empty($this->oF_contestar)) {
+					$id_cargo_role = ConfigGlobal::role_id_cargo();
+					$oCargo = new Cargo($id_cargo_role);
+					$id_oficina = $oCargo->getId_oficina();
+					// nombre normalizado del usuario y oficina:
+					$oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+					$user_davical = $oDavical->getUsernameDavical($id_cargo_role);
+					$cal_oficina = $oDavical->getNombreRecurso($id_oficina);
+					$calendario = 'oficina';
+					
+					$f_entrada = $oHoy->getFromLocal();
+					$f_plazo = $this->oF_contestar->getFromLocal();
+					
+					$id_origen = $this->a_Prot_org->getLugar();
+					$location = $this->a_Prot_org->ver_txt_num();
+					$prot_mas = $this->a_Prot_org->ver_txt_mas();
+					
+					$id_reg = 'EN'.$id_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': EN)
+					$oPendiente = new Pendiente($cal_oficina, $calendario, $user_davical);
+					$oPendiente->setId_reg($id_reg);
+					$oPendiente->setAsunto($this->asunto);
+					$oPendiente->setStatus("NEEDS-ACTION");
+					$oPendiente->setF_inicio($f_entrada);
+					$oPendiente->setF_plazo($f_plazo);
+					$oPendiente->setVisibilidad($this->visibiliad);
+					$oPendiente->setPendiente_con($id_origen);
+					$oPendiente->setLocation($location);
+					$oPendiente->setRef_prot_mas($prot_mas);
+					$oPendiente->setId_oficina($id_oficina);
+					// las firmas son cargos, buscar las oficinas implicadas:
+					$oPendiente->setOficinasArray([]);
+					if ($oPendiente->Guardar() === FALSE ) {
+						$error_txt .= _("No se han podido guardar el nuevo pendiente");
+					}
+				}
 			}
 		}
 	}

@@ -111,8 +111,8 @@ class DavicalMigrar {
      * Hay que cambiar el campo dav_name y uid
      * 
      * ejemplo:
-     *      dav_name	/dlb_oficina_scdl/oficina/OFEN532557-20210526T112857.ics	/oficina_scdl/registro/REN532689-20210316T101739.ics
-     *      uid			OFEN532557-20210526T112857@registro_oficina_scdl
+     *      dav_name	/dlb_oficina_scdl/oficina/EN532557-20210526T112857.ics	/oficina_scdl/registro/REN532689-20210316T101739.ics
+     *      uid			EN532557-20210526T112857@registro_oficina_scdl
      * 
      * @return boolean
      */
@@ -146,7 +146,7 @@ class DavicalMigrar {
      * Hay que cambiar el campo dav_name
      *
      * ejemplo:
-     *      dav_name	/dlb_oficina_scdl/oficina/OFEN532557-20210526T112857.ics
+     *      dav_name	/dlb_oficina_scdl/oficina/EN532557-20210526T112857.ics
      *
      * @return boolean
      */
