@@ -3,6 +3,7 @@ use busquedas\model\Buscar;
 use busquedas\model\VerTabla;
 use expedientes\model\Escrito;
 use lugares\model\entity\GestorLugar;
+use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -337,6 +338,54 @@ switch ($Qopcion) {
             echo $oTabla->mostrarTabla();
         }
         break;
+    case 'escritos_cr':
+		// recibidos los ultimos 7 dias
+		$oHoy = new DateTimeLocal();
+		$oIni = new DateTimeLocal();
+		$oIni->sub(new \DateInterval('P7D'));
+
+		$gesLugares = new GestorLugar();
+		$id_cr = $gesLugares->getId_cr();
+
+		$a_condicion['lista_lugar'] = $id_cr;
+		$str_condicion = http_build_query($a_condicion);
+
+		// son todos los que tienen protocolo local
+		$oBuscar = new Buscar();
+		$oBuscar->setOrigen_id_lugar($id_cr);
+		$oBuscar->setF_max($oHoy->getIso(),FALSE);
+		$oBuscar->setF_min($oIni->getIso(),FALSE);
+
+		$aCollection = $oBuscar->getCollection(5);
+		foreach ($aCollection as $key => $cCollection) {
+			$oTabla = new VerTabla();
+			$oTabla->setKey($key);
+			$oTabla->setCondicion($str_condicion);
+			$oTabla->setCollection($cCollection);
+			$oTabla->setFiltro($Qopcion);
+			echo $oTabla->mostrarTabla();
+		}
+		break;
+    case 'entradas_semana':
+    	// recibidos los ultimos 15 dias
+    	$oHoy = new DateTimeLocal();
+    	$oIni = new DateTimeLocal();
+    	$oIni->sub(new \DateInterval('P15D'));
+    	
+    	// no filtro por origen: todos (dl y cr)
+    	$oBuscar = new Buscar();
+    	$oBuscar->setF_max($oHoy->getIso(),FALSE);
+    	$oBuscar->setF_min($oIni->getIso(),FALSE);
+    	
+    	$aCollection = $oBuscar->getCollection(5);
+    	foreach ($aCollection as $key => $cCollection) {
+			$oTabla = new VerTabla();
+			$oTabla->setKey($key);
+			$oTabla->setCollection($cCollection);
+			$oTabla->setFiltro($Qopcion);
+			echo $oTabla->mostrarTabla();
+    	}
+    	break;
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);

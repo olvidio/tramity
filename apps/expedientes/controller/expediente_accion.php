@@ -29,6 +29,7 @@ $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 
 // Añado la opcion de poder crear un expediente desde entradas
 switch ($Qfiltro) {
+    case 'entradas_semana':
     case 'escritos_cr':
     case 'permanentes_cr':
     case 'en_buscar':
@@ -47,7 +48,10 @@ switch ($Qfiltro) {
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?'.http_build_query($a_condicion));
                 break;
             case 'escritos_cr':
-                $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($a_condicion));
+                $pagina_cancel = web\Hash::link('apps/busquedas/controller/ver_tabla.php?'.http_build_query($a_condicion));
+                break;
+            case 'entradas_semana':
+                $pagina_cancel = web\Hash::link('apps/busquedas/controller/ver_tabla.php?'.http_build_query($a_condicion));
                 break;
             default:
                 $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
@@ -111,6 +115,7 @@ switch ($Qfiltro) {
                         'txt'    => _("Encargar a"),
                         'tipo'    => 'modal',
                     ];
+    case 'entradas_semana':
     case 'escritos_cr':
     case 'permanentes_cr':
     case 'en_buscar':
