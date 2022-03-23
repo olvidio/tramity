@@ -48,9 +48,11 @@ switch ($Qfiltro) {
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?'.http_build_query($a_condicion));
                 break;
             case 'escritos_cr':
+				$a_condicion['opcion'] = 51;
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/ver_tabla.php?'.http_build_query($a_condicion));
                 break;
             case 'entradas_semana':
+				$a_condicion['opcion'] = 52;
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/ver_tabla.php?'.http_build_query($a_condicion));
                 break;
             default:
