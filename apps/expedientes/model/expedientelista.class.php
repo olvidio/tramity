@@ -636,7 +636,7 @@ class ExpedienteLista {
                 $row = [];
                 // mirar permisos...
                 $visibilidad = $oExpediente->getVisibilidad();
-                if (!$oPermiso->isVisibleDtor($visibilidad)) {
+                if (!empty($visibilidad) && !$oPermiso->isVisibleDtor($visibilidad)) {
                 	continue;
                 }
                 $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '' : $a_visibilidad[$visibilidad];
