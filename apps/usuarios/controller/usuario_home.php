@@ -224,8 +224,7 @@ if (is_true(ConfigGlobal::soy_dtor())) {
     // escritos_cr = 21
     $filtro = 'escritos_cr';
         $active = ($filtro == $Qfiltro)? 'active' : '';
-        $aQuery = [ 'filtro' => $filtro ];
-        //$pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+        $aQuery = [ 'filtro' => $filtro, 'opcion' => 51 ];
         $pag_lst = web\Hash::link('apps/busquedas/controller/ver_tabla.php?'.http_build_query($aQuery));
         $num_orden = 21;
         $text = _("escritos de cr");

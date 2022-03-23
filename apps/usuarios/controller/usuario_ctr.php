@@ -123,8 +123,7 @@ $a_pills[$num_orden] = $pill;
 // entradas de la semana = 21
 $filtro = 'entradas_semana';
 	$active = ($filtro == $Qfiltro)? 'active' : '';
-	$aQuery = [ 'filtro' => $filtro ];
-	//$pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
+	$aQuery = [ 'filtro' => $filtro, 'opcion' => 52 ];
 	$pag_lst = web\Hash::link('apps/busquedas/controller/ver_tabla.php?'.http_build_query($aQuery));
 	$num_orden = 21;
 	$text = _("entradas");

@@ -16,11 +16,12 @@ require_once ("apps/core/global_object.inc");
 
 $Qopcion = (integer) \filter_input(INPUT_POST, 'opcion');
 $Qmas = (integer) \filter_input(INPUT_POST, 'mas');
+$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
 $gesLugares = new GestorLugar();
 $id_sigla_local = $gesLugares->getId_sigla_local();
 
-$filtro = 'en_buscar';
+$filtro = empty($Qfiltro)? 'en_buscar' : $Qfiltro;
 $Qmas = '';
 $a_condicion = []; // para poner los parámetros de la búsqueda y poder actualizar la página.
 $a_condicion['opcion'] = $Qopcion;
@@ -338,7 +339,8 @@ switch ($Qopcion) {
             echo $oTabla->mostrarTabla();
         }
         break;
-    case 'escritos_cr':
+    case 51:
+    	//'escritos_cr':
 		// recibidos los ultimos 7 dias
 		$oHoy = new DateTimeLocal();
 		$oIni = new DateTimeLocal();
@@ -362,11 +364,12 @@ switch ($Qopcion) {
 			$oTabla->setKey($key);
 			$oTabla->setCondicion($str_condicion);
 			$oTabla->setCollection($cCollection);
-			$oTabla->setFiltro($Qopcion);
+			$oTabla->setFiltro($filtro);
 			echo $oTabla->mostrarTabla();
 		}
 		break;
-    case 'entradas_semana':
+    case 52:
+    	//'entradas_semana':
     	// recibidos los ultimos 15 dias
     	$oHoy = new DateTimeLocal();
     	$oIni = new DateTimeLocal();
@@ -382,7 +385,7 @@ switch ($Qopcion) {
 			$oTabla = new VerTabla();
 			$oTabla->setKey($key);
 			$oTabla->setCollection($cCollection);
-			$oTabla->setFiltro($Qopcion);
+			$oTabla->setFiltro($filtro);
 			echo $oTabla->mostrarTabla();
     	}
     	break;
