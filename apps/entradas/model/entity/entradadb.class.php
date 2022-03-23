@@ -695,7 +695,7 @@ class EntradaDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_entrada de EntradaDB
-	 * Si df_entrada es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_entrada es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_entrada debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_entrada='' optional.
@@ -783,7 +783,7 @@ class EntradaDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_contestar de EntradaDB
-	 * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_contestar debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_contestar='' optional.

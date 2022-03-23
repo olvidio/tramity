@@ -607,7 +607,7 @@ class Collection Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut dcreated de Collection
-	 * Si dcreated es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si dcreated es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, dcreated debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string dcreated='' optional.
@@ -638,7 +638,7 @@ class Collection Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut dmodified de Collection
-	 * Si dmodified es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si dmodified es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, dmodified debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string dmodified='' optional.

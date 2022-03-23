@@ -377,7 +377,7 @@ foreach($oDbl->query($sql) as $row) {
             $gets.='
 	/**
 	 * estableix el valor de l\'atribut '.$tip.$nomcamp.' de '.$clase.'
-	 * Si '.$tip.$nomcamp.' es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si '.$tip.$nomcamp.' es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, '.$tip.$nomcamp.' debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param '.$tipo_db.'|string '.$tip.$nomcamp.'=\''.$tip_val.'\' optional.

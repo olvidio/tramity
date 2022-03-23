@@ -499,7 +499,7 @@ class EntradaBypass Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_salida de EntradaBypass
-	 * Si df_salida es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_salida es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_salida debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_salida='' optional.

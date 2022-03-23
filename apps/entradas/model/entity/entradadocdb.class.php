@@ -359,7 +359,7 @@ class EntradaDocDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_doc de EntradaDocDB
-	 * Si df_doc es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_doc es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_doc debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_doc='' optional.

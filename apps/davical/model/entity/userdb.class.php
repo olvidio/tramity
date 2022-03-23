@@ -453,7 +453,7 @@ class UserDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut demail_ok de UserDB
-	 * Si demail_ok es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si demail_ok es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, demail_ok debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string demail_ok='' optional.
@@ -484,7 +484,7 @@ class UserDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut djoined de UserDB
-	 * Si djoined es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si djoined es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, djoined debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string djoined='' optional.
@@ -515,7 +515,7 @@ class UserDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut dupdated de UserDB
-	 * Si dupdated es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si dupdated es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, dupdated debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string dupdated='' optional.
@@ -546,7 +546,7 @@ class UserDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut dlast_used de UserDB
-	 * Si dlast_used es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si dlast_used es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, dlast_used debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string dlast_used='' optional.

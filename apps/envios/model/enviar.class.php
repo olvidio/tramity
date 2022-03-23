@@ -218,7 +218,10 @@ class Enviar {
                 $tipo_doc = $oEscritoAdjunto->getTipo_doc();
                 switch ($tipo_doc) {
                     case Documento::DOC_UPLOAD:
-                        $escrito_txt = $oEscritoAdjunto->getAdjunto();
+                    	if ($escrito_txt = $oEscritoAdjunto->getAdjunto() === FALSE) {
+                        	$err_adjunto = sprintf(_("No se puede enviar el adjunto \"%s\""), $adjunto_filename);
+                        	exit ($err_adjunto);
+                    	}
                         $a_adjuntos[$adjunto_filename] = $escrito_txt;
                         break;
                     case Documento::DOC_ETHERPAD:

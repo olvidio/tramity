@@ -3,6 +3,7 @@ use core\ViewTwig;
 use envios\model\Enviar;
 use expedientes\model\Escrito;
 use usuarios\model\entity\Cargo;
+use oasis_as4\model\As4Remove;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -19,6 +20,14 @@ $Qid_escrito = (integer) \filter_input(INPUT_GET, 'id');
 
 $f_salida = date(\DateTimeInterface::ISO8601);
 // Comprobar si tiene clave para enviar un xml, o hay que generar un pdf.
+
+$rta_txt = '';
+// borrar los ya enviados:
+$oAS4Remove =  new As4Remove();
+$rta_txt = $oAS4Remove->remove_accepted();
+if (!empty($rta_txt)) {
+	exit(_("No puedo eliminar los ya enviados"));
+}
 
 // Primero intento enviar, sólo guardo la f_salida si tengo éxito
 // Ahora cambio y pongo la f_salida si puedo enviar 1 o más. Los que no, salen como 

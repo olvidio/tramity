@@ -540,7 +540,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_upload de Documento
-	 * Si df_upload es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_upload es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_upload debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_upload='' optional.

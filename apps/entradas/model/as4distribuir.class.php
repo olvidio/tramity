@@ -149,8 +149,7 @@ class As4Distribuir extends As4CollaborationInfo {
 		$oEntrada->setF_contestar($this->oF_contestar);
 		$oEntrada->setVisibilidad($this->visibilidad);
 		$oEntrada->setCategoria(Categoria::CAT_NORMAL); // valor por defecto
-		//$oficina = ConfigGlobal::role_id_oficina();
-		//$oEntrada->setPonente($oficina);
+		// dejo la oficina en blanco
 		
 		$estado = Entrada::ESTADO_INGRESADO;
 		$oEntrada->setEstado($estado);
@@ -393,7 +392,7 @@ class As4Distribuir extends As4CollaborationInfo {
 	}
 	
 	private function getF_entrada() {
-		$f_entrada_iso = $this->xml_escrito->f_entrada;
+		$f_entrada_iso = (string) $this->xml_escrito->f_entrada;
 		if (!empty($f_entrada_iso)) {
 			return new DateTimeLocal($f_entrada_iso);
 		} else {
@@ -402,7 +401,7 @@ class As4Distribuir extends As4CollaborationInfo {
 	}
 	
 	private function getF_escrito() {
-		$f_escrito_iso = $this->xml_escrito->f_escrito;
+		$f_escrito_iso = (string) $this->xml_escrito->f_escrito;
 		if (!empty($f_escrito_iso)) {
 			return new DateTimeLocal($f_escrito_iso);
 		} else {
@@ -411,7 +410,7 @@ class As4Distribuir extends As4CollaborationInfo {
 	}
 	
 	private function getF_contestar() {
-		$f_contestar_iso = $this->xml_escrito->f_contestar;
+		$f_contestar_iso = (string) $this->xml_escrito->f_contestar;
 		if (!empty($f_contestar_iso)) {
 			return new DateTimeLocal($f_contestar_iso);
 		} else {
@@ -492,13 +491,14 @@ class As4Distribuir extends As4CollaborationInfo {
 	private function cargarAdjunto($a_adjuntos, $id_entrada){
 		
 		foreach ($a_adjuntos as $adjunto) {
-			$doc_encoded = $adjunto['contenido'];
 			$filename = $adjunto['filename'];
+			$doc_encoded = $adjunto['contenido'];
+			$doc = base64_decode($doc_encoded);
 		
 			$oEntradaAdjunto = new EntradaEntidadAdjunto($this->getSiglaDestino());
 			$oEntradaAdjunto->setId_entrada($id_entrada);
 			$oEntradaAdjunto->setNom($filename);
-			$oEntradaAdjunto->setAdjunto(base64_decode($doc_encoded));
+			$oEntradaAdjunto->setAdjunto($doc);
 			
 			$oEntradaAdjunto->DBGuardar();
 		}

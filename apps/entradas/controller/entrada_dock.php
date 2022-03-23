@@ -51,7 +51,6 @@ foreach ($a_files_mmd as $file_mmd) {
 	$AS4 = new As4Distribuir($xmldata);
 	if ($AS4->distribuir() === TRUE) {
 		// eliminar el mensaje de la bandeja de entrada 
-		// TODO: SI NO DA ERROR...
 		// nombre del fihero del body:
 		$location = $AS4->getLocation();
 		if (unlink($location) === FALSE) {
@@ -84,6 +83,12 @@ foreach ($a_files_mi as $file_mmd) {
 		$txt .= $a_message_id['prot_org'];
 		$txt .= ')';
 		$txt .= '<br>';
+	} else {
+		// borrarlo
+		if (unlink($file_mmd) === FALSE) {
+			$txt .= sprintf(_("No se ha podido eliminar el mensaje info %s"), $file_mmd);
+			$txt .= '<br>';
+		}
 	}
 }
 

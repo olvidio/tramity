@@ -847,7 +847,7 @@ class EscritoDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_aprobacion de EscritoDB
-	 * Si df_aprobacion es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_aprobacion es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_aprobacion debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_aprobacion='' optional.
@@ -878,7 +878,7 @@ class EscritoDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_escrito de EscritoDB
-	 * Si df_escrito es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_escrito es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_escrito debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_escrito='' optional.
@@ -909,7 +909,7 @@ class EscritoDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_contestar de EscritoDB
-	 * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_contestar debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_contestar='' optional.
@@ -1035,7 +1035,7 @@ class EscritoDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_salida de EscritoDB
-	 * Si df_salida es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_salida es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_salida debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_salida='' optional.
