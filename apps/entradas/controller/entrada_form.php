@@ -240,6 +240,7 @@ if (!empty($Qid_entrada)) {
     $anulado_txt = '';
     $detalle = '';
     $visibilidad = Visibilidad::V_PERSONAL;
+    $oDesplVisibilidad->setOpcion_sel($visibilidad);
     $f_entrada = '';
     $f_escrito = '';
     $f_contestar = '';
