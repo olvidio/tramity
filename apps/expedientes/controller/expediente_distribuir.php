@@ -142,7 +142,8 @@ if ($Qfiltro == 'distribuir') {
     $perm_distribuir = TRUE;
     $btn_action = 'archivar';
     $txt_btn_success = _("Archivar");
-    $oEscritoLista->setFiltro('acabados');
+    //$oEscritoLista->setFiltro('acabados');
+    $oEscritoLista->setFiltro($Qfiltro);
     $disable_archivar = is_true($oEscritoLista->isTodos_escritos_enviados())? '' : 'disabled';
     // para encargar a los oficiales
     $id_oficina = ConfigGlobal::role_id_oficina();
