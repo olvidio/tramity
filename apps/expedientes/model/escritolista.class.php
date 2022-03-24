@@ -235,6 +235,7 @@ class EscritoLista {
         $oView = new ViewTwig('expedientes/controller');
         switch ($this->filtro) {
             case 'acabados':
+            case 'acabados_encargados':
             case 'enviar':
                 return $oView->renderizar('escrito_lst_enviar.html.twig',$a_campos);
                 break;

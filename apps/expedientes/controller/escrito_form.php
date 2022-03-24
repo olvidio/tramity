@@ -342,6 +342,7 @@ $devolver = FALSE;
 $str_condicion = '';
 switch ($Qfiltro) {
     case 'acabados':
+    case 'acabados_encargados':
     case 'distribuir':
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query($a_cosas));
         break;
