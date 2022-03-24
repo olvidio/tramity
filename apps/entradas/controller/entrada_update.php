@@ -60,7 +60,7 @@ $jsondata = [];
 switch($Qque) {
     case 'en_asignar':
         $Qid_oficina = ConfigGlobal::role_id_oficina();
-        $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
+        $Qid_cargo_encargado = (integer) \filter_input(INPUT_POST, 'id_cargo_encargado');
         $oEntrada = new EntradaDB($Qid_entrada);
         $oEntrada->DBCarregar();
         // comprobar si es un cambio (ya estaba encargado a alguien)
@@ -70,18 +70,18 @@ switch($Qque) {
         if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
         	$oEntrada->setEstado(Entrada::ESTADO_ACEPTADO);
         }
-        $oEntrada->setEncargado($Qid_cargo);
+        $oEntrada->setEncargado($Qid_cargo_encargado);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
         }
         
         // también hay que marcarlo como visto por quien lo encarga
         // Siempre que no sea el mismo:
-        if (ConfigGlobal::role_id_cargo() != $Qid_cargo) {
+        if (ConfigGlobal::role_id_cargo() != $Qid_cargo_encargado) {
             $flag_encontrado = FALSE;
             $aVisto = $oEntrada->getJson_visto(TRUE);
             foreach ($aVisto as $key => $oVisto) {
-                if ( ($oVisto['oficina'] == $Qid_oficina) && ($oVisto['cargo'] == $Qid_cargo) ) {
+                if ( ($oVisto['oficina'] == $Qid_oficina) && ($oVisto['cargo'] == $Qid_cargo_encargado) ) {
                     $aVisto[$key]['visto'] = TRUE;
                     $flag_encontrado = TRUE;
                 }
@@ -104,7 +104,7 @@ switch($Qque) {
             $flag_encontrado = FALSE;
             $aVisto = $oEntrada->getJson_visto(TRUE);
             foreach ($aVisto as $key => $oVisto) {
-                if ($oVisto['oficina'] == $Qid_oficina && $oVisto['cargo'] == $Qid_cargo) {
+                if ($oVisto['oficina'] == $Qid_oficina && $oVisto['cargo'] == $Qid_cargo_encargado) {
                     $aVisto[$key]['visto'] = TRUE;
                     $flag_encontrado = TRUE;
                 }
@@ -125,7 +125,7 @@ switch($Qque) {
         // y en cualquier caso: desmarcar al nuevo (podria estar marcado previamente)
         $aVisto = $oEntrada->getJson_visto(TRUE);
         foreach ($aVisto as $key => $oVisto) {
-            if ($oVisto['oficina'] == $Qid_oficina && $oVisto['cargo'] == $Qid_cargo) {
+            if ($oVisto['oficina'] == $Qid_oficina && $oVisto['cargo'] == $Qid_cargo_encargado) {
                 $aVisto[$key]['visto'] = FALSE;
             }
         }

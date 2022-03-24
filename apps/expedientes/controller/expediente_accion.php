@@ -105,7 +105,8 @@ switch ($Qfiltro) {
     - "còpia a oficina" (fa una còpia a una altre oficina)
 */
 
-$oDesplCargosOficina = [];
+$oDesplCargosOficinaPendiente = [];
+$oDesplCargosOficinaEncargado = [];
 $oDesplCargos = [];
 $a_botones = [];
 $txt_plazo = '';
@@ -146,7 +147,8 @@ switch ($Qfiltro) {
         
         $gesCargos = new GestorCargo();
         $a_posibles_cargos_oficina = $gesCargos->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina());
-        $oDesplCargosOficina = new Desplegable('id_cargo',$a_posibles_cargos_oficina,'','');
+        $oDesplCargosOficinaPendiente = new Desplegable('id_cargo_pendiente',$a_posibles_cargos_oficina,'','');
+        $oDesplCargosOficinaEncargado = new Desplegable('id_cargo_encargado',$a_posibles_cargos_oficina,'','');
         break;
     case 'borrador_oficina':
     case 'borrador_propio':
@@ -251,7 +253,8 @@ $a_campos = [
     'asunto' => $asunto,
     'a_botones' => $a_botones,
     'pagina_cancel' => $pagina_cancel,
-    'oDesplCargosOficina' => $oDesplCargosOficina,
+    'oDesplCargosOficinaPendiente' => $oDesplCargosOficinaPendiente,
+    'oDesplCargosOficinaEncargado' => $oDesplCargosOficinaEncargado,
     'oDesplCargos' => $oDesplCargos,
     // para crea pendiente:
     'txt_plazo' => $txt_plazo,

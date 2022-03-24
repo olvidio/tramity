@@ -15,7 +15,7 @@
           <div class="mb-3 row" id="busqueda_cargos_oficina">
             <label for="cargo" class="col-2 form-label">{{ "Encargar a" }}:</label>
             <div class="col-4">
-              {{ oDesplCargosOficina.desplegable|raw }}
+              {{ oDesplCargosOficinaEncargado.desplegable|raw }}
             </div>
               <div class="col-4">
                 <button type="button" class="btn btn-primary" onClick="fnjs_encargar();" >{{ "Encargar"|trans }}</button>
@@ -87,10 +87,10 @@ fnjs_accion=function(accion){
 fnjs_encargar=function() {
 	var que='en_asignar';
 	var id_entrada={{ id_entrada }};
-	var id_cargo=$('#id_cargo').val();
+	var id_cargo_encargado=$('#id_cargo_encargado').val();
 	
     var url_ajax = 'apps/entradas/controller/entrada_update.php';
-    var param_json = { que: que, id_entrada: id_entrada, id_cargo: id_cargo };
+    var param_json = { que: que, id_entrada: id_entrada, id_cargo_encargado: id_cargo_encargado };
     request=$.ajax({
         data: param_json,
         url: url_ajax,

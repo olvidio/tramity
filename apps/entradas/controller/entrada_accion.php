@@ -34,7 +34,7 @@ $protocolo = $oProtOrigen->ver_txt();
 $url_cancel = 'apps/entradas/controller/entrada_lista.php';
 $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro, 'oficina'  => $Qoficina]));
 
-$oDesplCargosOficina = [];
+$oDesplCargosOficinaEncargado = [];
 $a_botones = [];
 if ($Qoficina == 'propia') { // encargar
     $a_botones[0] = ['accion' => 'en_add_encargado',
@@ -53,7 +53,7 @@ if ($Qoficina == 'resto') { // marcar como visto
 
 $gesCargos = new GestorCargo();
 $a_posibles_cargos_oficina = $gesCargos->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina());
-$oDesplCargosOficina = new Desplegable('id_cargo',$a_posibles_cargos_oficina,'','');
+$oDesplCargosOficinaEncargado = new Desplegable('id_cargo_encargado',$a_posibles_cargos_oficina,'','');
         
 if (empty($a_botones)) {
     $a_botones[] = ['accion' => '',
@@ -69,7 +69,7 @@ $a_campos = [
     'asunto' => $asunto,
     'a_botones' => $a_botones,
     'pagina_cancel' => $pagina_cancel,
-    'oDesplCargosOficina' => $oDesplCargosOficina,
+    'oDesplCargosOficinaEncargado' => $oDesplCargosOficinaEncargado,
 ];
 
 $oView = new ViewTwig('entradas/controller');

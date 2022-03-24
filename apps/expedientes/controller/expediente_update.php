@@ -102,15 +102,15 @@ switch ($Qque) {
         break;
     case 'en_pendiente':
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
-        $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
+        $Qid_cargo_pendiente = (integer) \filter_input(INPUT_POST, 'id_cargo_pendiente');
         $Qf_plazo = (string) \filter_input(INPUT_POST, 'f_plazo');
         
-        $oCargo = new Cargo($Qid_cargo);
+        $oCargo = new Cargo($Qid_cargo_pendiente);
         $id_oficina = $oCargo->getId_oficina();
         
         // nombre normalizado del usuario y oficina:
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-        $user_davical = $oDavical->getUsernameDavical($Qid_cargo);
+        $user_davical = $oDavical->getUsernameDavical($Qid_cargo_pendiente);
         $parent_container = $oDavical->getNombreRecurso($id_oficina);
         
         $calendario = 'oficina';
@@ -128,7 +128,7 @@ switch ($Qque) {
         $oPendiente->setF_plazo($Qf_plazo);
         $oPendiente->setvisibilidad($Qvisibilidad);
         $oPendiente->setDetalle($oEntrada->getDetalle());
-        $oPendiente->setEncargado($Qid_cargo);
+        $oPendiente->setEncargado($Qid_cargo_pendiente);
         $oPendiente->setId_oficina($id_oficina);
 
         $oProtOrigen = new Protocolo();
