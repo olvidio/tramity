@@ -117,10 +117,15 @@ switch ($Qfiltro) {
                         'txt'    => _("Encargar a"),
                         'tipo'    => 'modal',
                     ];
-    case 'entradas_semana':
-    case 'escritos_cr':
     case 'permanentes_cr':
     case 'en_buscar':
+        $a_botones[3] = ['accion' => 'en_visto',
+                        'txt'    => _("marcar como visto"),
+                        'tipo'    => '',
+                    ];
+    case 'entradas_semana':
+    case 'escritos_cr':
+
         $a_botones[0] = ['accion' => 'en_add_expediente',
                         'txt'    => _("añadir a un expediente"),
                         'tipo'    => 'modal',
@@ -132,10 +137,6 @@ switch ($Qfiltro) {
         $a_botones[2] = ['accion' => 'en_pendiente',
                         'txt'    => _("crear un nuevo pendiente de la oficina"),
                         'tipo'    => 'modal',
-                    ];
-        $a_botones[3] = ['accion' => 'en_visto',
-                        'txt'    => _("marcar como visto"),
-                        'tipo'    => '',
                     ];
         
         $txt_plazo= _("plazo para contestar");
