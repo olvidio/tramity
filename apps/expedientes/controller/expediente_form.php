@@ -251,6 +251,7 @@ if ($Qid_expediente) {
         }
     }
 } else {
+	$mostrar_archivar = FALSE;
     $titulo=_("nuevo expediente");
     $estado = Expediente::ESTADO_BORRADOR;
     $f_contestar = '';
@@ -263,6 +264,13 @@ if ($Qid_expediente) {
     $oficinas = '';
     $oficiales = '';
 
+    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+		$oDesplVisibilidad->setOpcion_sel(Visibilidad::V_CTR_TODOS);
+    } else {
+		$oDesplVisibilidad->setOpcion_sel(Visibilidad::V_PERSONAL);
+    }
+    	
+    
     $oArrayDesplEtiquetas = new web\DesplegableArray([],$a_posibles_etiquetas,'etiquetas');
     $oArrayDesplEtiquetas ->setBlanco('t');
     $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
