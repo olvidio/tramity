@@ -87,8 +87,16 @@ class As4Distribuir extends As4CollaborationInfo {
 	 */
 	private $a_adjuntos;
 	
+	/**
+	 * tabla de siglas:
+	 * @var array
+	 */
+	private $aLugares;
 	
 	public function __construct($xmldata) {
+		$gesLugares = new GestorLugar();
+		$this->aLugares = $gesLugares->getArrayLugares();
+
 		$this->xmldata = $xmldata;
 		$this->explotar_xml();
 	}
@@ -210,9 +218,15 @@ class As4Distribuir extends As4CollaborationInfo {
 					$f_entrada = $oHoy->getFromLocal();
 					$f_plazo = $this->oF_contestar->getFromLocal();
 					
-					$id_origen = $this->a_Prot_org->getLugar();
-					$location = $this->a_Prot_org->ver_txt_num();
-					$prot_mas = $this->a_Prot_org->ver_txt_mas();
+					$id_origen = $this->a_Prot_org->lugar();
+					$prot_num = $this->a_Prot_org->num();
+					$prot_any = $this->a_Prot_org->any();
+
+					$location = $this->aLugares[$id_origen];
+					$location .= empty($prot_num)? '' : ' '.$prot_num;
+					$location .= empty($prot_any)? '' : '/'.$prot_any;
+					
+					$prot_mas = $this->a_Prot_org->mas();
 					
 					$id_reg = 'EN'.$id_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': EN)
 					$oPendiente = new Pendiente($cal_oficina, $calendario, $user_davical);
@@ -514,10 +528,6 @@ class As4Distribuir extends As4CollaborationInfo {
 	}
 	
 	private function xml2prot_simple($xml, $sufijo) {
-		// tabla de siglas:
-		$gesLugares = new GestorLugar();
-		$aLugares = $gesLugares->getArrayLugares();
-		
 		$lugar = '';
 		$ilugar = '';
 		$num = '';
@@ -530,7 +540,7 @@ class As4Distribuir extends As4CollaborationInfo {
 			if ($name == 'lugar_'.$sufijo) {
 				$lugar = (string) $value;
 				// pasarlo de texto al id correspondiente:
-				$ilugar = array_search($lugar, $aLugares);
+				$ilugar = array_search($lugar, $this->aLugares);
 			}
 			if ($name == 'num_'.$sufijo) {
 				$num = (string) $value;
