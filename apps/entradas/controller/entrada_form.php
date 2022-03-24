@@ -239,7 +239,7 @@ if (!empty($Qid_entrada)) {
     $asunto = '';
     $anulado_txt = '';
     $detalle = '';
-    $visibilidad = Visibilidad::V_TODOS;
+    $visibilidad = Visibilidad::V_PERSONAL;
     $f_entrada = '';
     $f_escrito = '';
     $f_contestar = '';
