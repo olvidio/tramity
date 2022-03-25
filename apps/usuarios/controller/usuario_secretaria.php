@@ -3,8 +3,8 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\EntradaLista;
-use expedientes\model\Escrito;
-use expedientes\model\EscritoLista;
+use escritos\model\Escrito;
+use escritos\model\EscritoLista;
 use expedientes\model\ExpedienteLista;
 use usuarios\model\entity\Usuario;
 

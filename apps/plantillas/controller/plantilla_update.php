@@ -1,7 +1,7 @@
 <?php
 use core\ConfigGlobal;
+use escritos\model\Escrito;
 use etherpad\model\Etherpad;
-use expedientes\model\Escrito;
 use expedientes\model\entity\Accion;
 use plantillas\model\entity\Plantilla;
 use web\DateTimeLocal;
