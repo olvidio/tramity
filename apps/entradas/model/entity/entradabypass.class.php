@@ -304,7 +304,7 @@ class EntradaBypass Extends Entrada {
 	function setNullAllAtributes() {
 		$aPK = $this->getPrimary_key();
 		$this->setId_schema('');
-		$this->setId_item('');
+		//$this->setId_item('');
 		$this->setId_entrada('');
 		$this->setDescripcion('');
 		$this->setJson_prot_destino('');

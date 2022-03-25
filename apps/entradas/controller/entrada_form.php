@@ -192,7 +192,6 @@ if (!empty($Qid_entrada)) {
     $titulo = _("modificar entrada");
     
     // a ver si ya está
-    $chk_grupo_dst = '';
     $id_grupo = 0;
 	$oEntradaBypass = new EntradaBypass($Qid_entrada);
 	$a_grupos = $oEntradaBypass->getId_grupos();
@@ -202,8 +201,10 @@ if (!empty($Qid_entrada)) {
 	} else {
 		$oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
 		$chk_grupo_dst = '';
-		$json_prot_dst = $oEntradaBypass->getJson_prot_destino();
-		$oArrayProtDestino->setArray_sel($json_prot_dst);
+		if (!empty($oEntradaBypass->getJson_prot_destino())) {
+			$json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+			$oArrayProtDestino->setArray_sel($json_prot_dst);
+		}
 	}
 	$oArrayDesplGrupo->setBlanco('t');
 	$oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');

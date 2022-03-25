@@ -99,8 +99,10 @@ if (!empty($a_grupos)) {
 } else {
 	$oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
 	$chk_grupo_dst = '';
-	$json_prot_dst = $oEntradaBypass->getJson_prot_destino();
-	$oArrayProtDestino->setArray_sel($json_prot_dst);
+	if (!empty($oEntradaBypass->getJson_prot_destino())) {
+		$json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+		$oArrayProtDestino->setArray_sel($json_prot_dst);
+	}
 }
 $oArrayDesplGrupo->setBlanco('t');
 $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
