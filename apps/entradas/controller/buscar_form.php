@@ -160,7 +160,7 @@ $a_cabeceras = [ '',[ 'width' => 200, 'name' => _("protocolo")],
                 ];
     $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
     $pagina_buscar = web\Hash::link('apps/entradas/controller/entrada_ajax.php?'.http_build_query([$a_cosas]));
-    $url_escrito = 'apps/expedientes/controller/escrito_form.php';
+    $url_escrito = 'apps/escritos/controller/escrito_form.php';
 
     // para que no ponga '0'
     $Qorigen_prot_num = empty($Qorigen_prot_num)? '' : $Qorigen_prot_num;
@@ -205,8 +205,8 @@ $a_cosas = [ 'id_expediente' => $Qid_expediente,
             ];
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
 $pagina_buscar = web\Hash::link('apps/entradas/controller/entrada_ajax.php?'.http_build_query([$a_cosas]));
-$pagina_escrito = web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
-$url_escrito = 'apps/expedientes/controller/escrito_form.php';
+$pagina_escrito = web\Hash::link('apps/escritos/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
+$url_escrito = 'apps/escritos/controller/escrito_form.php';
 
 $titulo = _("Buscar en entradas:");
 

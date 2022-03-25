@@ -1,8 +1,8 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
+use escritos\model\Escrito;
 use etiquetas\model\entity\GestorEtiqueta;
-use expedientes\model\Escrito;
 use expedientes\model\Expediente;
 use expedientes\model\entity\GestorAccion;
 use tramites\model\entity\GestorTramite;
@@ -174,7 +174,7 @@ if ($Qid_expediente) {
                     'filtro' => $Qfiltro,
                     'prioridad_sel' => $Qprioridad_sel,
         ];
-        $pag_escrito =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
+        $pag_escrito =  web\Hash::link('apps/escritos/controller/escrito_form.php?'.http_build_query($a_cosas));
         
         $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
         $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito('$id_escrito');\" >"._("rev.texto")."</span>";
@@ -292,8 +292,8 @@ $url_ajax = 'apps/tramites/controller/tramitecargo_ajax.php';
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query([]));
 
-$pag_escrito =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
-$pag_propuesta =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_PROPUESTA]));
+$pag_escrito =  web\Hash::link('apps/escritos/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
+$pag_propuesta =  web\Hash::link('apps/escritos/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_PROPUESTA]));
 $pag_plantilla =  web\Hash::link('apps/plantillas/controller/plantilla_lista_expediente.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'modo' => $Qmodo, 'prioridad_sel' => $Qprioridad_sel]));
 $pag_respuesta =  web\Hash::link('apps/entradas/controller/buscar_form.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
@@ -373,5 +373,7 @@ $a_campos = [
     'minIso' => $minIso,
 ];
 
-$oView = new ViewTwig('expedientes/controller');
+// dentro del _expediente_form_js.html.twig hay un include a  escritos/view/_escrito_enviar.html.twig
+$aditionalPaths = ['escritos' => 'escritos/view'];
+$oView = new ViewTwig('expedientes/controller',$aditionalPaths);
 echo $oView->renderizar('expediente_form.html.twig',$a_campos);

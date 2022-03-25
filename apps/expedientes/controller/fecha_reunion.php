@@ -1,11 +1,10 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
-use expedientes\model\Escrito;
+use expedientes\model\Expediente;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\GestorOficina;
 use web\Desplegable;
-use expedientes\model\Expediente;
 
 // INICIO Cabecera global de URL de controlador *********************************
 

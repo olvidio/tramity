@@ -2,7 +2,9 @@
 namespace expedientes\model;
 
 use core\ConfigGlobal;
+use documentos\model\Documento;
 use entradas\model\Entrada;
+use escritos\model\Escrito;
 use etiquetas\model\entity\Etiqueta;
 use etiquetas\model\entity\EtiquetaExpediente;
 use etiquetas\model\entity\GestorEtiqueta;
@@ -14,8 +16,6 @@ use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorCargoGrupo;
-use tramites\model\entity\GestorFirma;
-use documentos\model\Documento;
 
 
 

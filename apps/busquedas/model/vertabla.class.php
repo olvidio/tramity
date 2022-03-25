@@ -3,15 +3,14 @@ namespace busquedas\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use entradas\model\Entrada;
+use usuarios\model\Categoria;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorOficina;
 use web\Lista;
 use web\Protocolo;
 use web\ProtocoloArray;
-use usuarios\model\Visibilidad;
-use usuarios\model\Categoria;
 
 class VerTabla {
     

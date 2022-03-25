@@ -1,14 +1,13 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
-use etiquetas\model\entity\GestorEtiqueta;
-use expedientes\model\EscritoLista;
+use escritos\model\EscritoLista;
 use expedientes\model\Expediente;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
-use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\Cargo;
+use usuarios\model\entity\GestorCargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 

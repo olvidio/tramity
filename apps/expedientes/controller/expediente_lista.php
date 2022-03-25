@@ -1,10 +1,10 @@
 <?php
 use core\ViewTwig;
 use etiquetas\model\entity\GestorEtiqueta;
-use expedientes\model\ExpedienteLista;
-use web\DateTimeLocal;
 use etiquetas\model\entity\GestorEtiquetaExpediente;
 use expedientes\model\Expediente;
+use expedientes\model\ExpedienteLista;
+use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 

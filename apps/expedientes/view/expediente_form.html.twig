@@ -264,7 +264,7 @@ fnjs_revisar_adjunto_en_expediente=function(id_escrito,modo) {
 	id_expediente = $('#id_expediente').val();
 	filtro = $('#filtro').val();
 	
-    var url_ajax = 'apps/expedientes/controller/adjunto_revisar.php';
+    var url_ajax = 'apps/escritos/controller/adjunto_revisar.php';
     var param_json = { id_expediente: id_expediente, filtro: filtro, modo: modo, id_escrito: id_escrito };
     
     request=$.ajax({

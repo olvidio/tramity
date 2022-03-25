@@ -105,7 +105,7 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_distribuir) {
 $filtro = 'enviar';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro, 'modo' => 'mod' ];
-    $pag_lst = web\Hash::link('apps/expedientes/controller/escrito_lista.php?'.http_build_query($aQuery));
+    $pag_lst = web\Hash::link('apps/escritos/controller/escrito_lista.php?'.http_build_query($aQuery));
     $num_orden = 4;
     $text = _("enviar");
     $explicacion = _("Enviar escritos a los destinos correspondientes (secretaría)");
@@ -223,7 +223,7 @@ $filtro = 'salida_manual';
     $aQuery = [ 'filtro' => $filtro,
                 'accion' => Escrito::ACCION_ESCRITO,
             ];
-    $pag_lst = web\Hash::link('apps/expedientes/controller/salida_escrito.php?'.http_build_query($aQuery));
+    $pag_lst = web\Hash::link('apps/escritos/controller/salida_escrito.php?'.http_build_query($aQuery));
     $num_orden = 20;
     $text = _("salida manual");
     $explicacion =  _("Registro y envío de escritos sin circular expediente (Secretaría)");

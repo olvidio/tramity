@@ -94,7 +94,7 @@ switch($Qque) {
         $jsondata['success'] = true;
         $jsondata['id_escrito'] = $id_escrito;
         $a_cosas = [ 'id_escrito' => $id_escrito, 'id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro];
-        $pagina_mod = web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
+        $pagina_mod = web\Hash::link('apps/escritos/controller/escrito_form.php?'.http_build_query($a_cosas));
         $jsondata['pagina_mod'] = $pagina_mod;
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo

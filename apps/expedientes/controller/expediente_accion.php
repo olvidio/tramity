@@ -8,7 +8,6 @@ use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Hash;
-use config\model\Config;
 
 // INICIO Cabecera global de URL de controlador *********************************
 

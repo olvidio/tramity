@@ -2,14 +2,14 @@
 namespace busquedas\model;
 
 use core\Converter;
+use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
 use entradas\model\entity\GestorEntradaDB;
-use expedientes\model\GestorEscrito;
+use escritos\model\GestorEscrito;
+use usuarios\model\Categoria;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
-use entradas\model\Entrada;
-use usuarios\model\Categoria;
 
 
 class Buscar {

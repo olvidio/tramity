@@ -6,13 +6,12 @@ use function core\is_true;
 use documentos\model\Documento;
 use documentos\model\GestorDocumento;
 use documentos\model\entity\GestorEtiquetaDocumento;
-use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
+use escritos\model\Escrito;
+use escritos\model\GestorEscrito;
 use etiquetas\model\entity\GestorEtiqueta;
 use etiquetas\model\entity\GestorEtiquetaExpediente;
-use expedientes\model\Escrito;
 use expedientes\model\Expediente;
-use expedientes\model\GestorEscrito;
 use expedientes\model\GestorExpediente;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\PermRegistro;
@@ -23,7 +22,6 @@ use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
 use web\Protocolo;
-use config\model\Config;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");

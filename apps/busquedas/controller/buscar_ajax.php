@@ -2,7 +2,7 @@
 
 // INICIO Cabecera global de URL de controlador *********************************
 	use entradas\model\GestorEntrada;
-use expedientes\model\GestorEscrito;
+use escritos\model\GestorEscrito;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;

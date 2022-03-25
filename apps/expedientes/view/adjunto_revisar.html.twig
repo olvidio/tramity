@@ -52,7 +52,7 @@ $(document).ready(function() {
 	var el1 = $("#escrito_adjunto");
 	el1.fileinput({
     	theme: "explorer-fas",
-        uploadUrl: "apps/expedientes/controller/adjunto_upload.php",
+        uploadUrl: "apps/escritos/controller/adjunto_upload.php",
         dropZoneEnabled: true,
         dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans }}",
         browseOnZoneClick: true,
@@ -72,7 +72,7 @@ $(document).ready(function() {
         initialPreviewAsData: false,
      	initialPreview: [ {{ initialPreview|raw }} ],
         initialPreviewConfig: {{ json_config|raw }},
-        initialPreviewDownloadUrl: "apps/expedientes/controller/adjunto_download.php",
+        initialPreviewDownloadUrl: "apps/escritos/controller/adjunto_download.php",
         fileActionSettings: {showZoom: false, showDrag: false},
     });
 	el1.on("filebatchselected", function(files) {

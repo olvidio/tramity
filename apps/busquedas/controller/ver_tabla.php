@@ -1,7 +1,7 @@
 <?php
 use busquedas\model\Buscar;
 use busquedas\model\VerTabla;
-use expedientes\model\Escrito;
+use escritos\model\Escrito;
 use lugares\model\entity\GestorLugar;
 use web\DateTimeLocal;
 

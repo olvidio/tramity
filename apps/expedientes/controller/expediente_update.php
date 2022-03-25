@@ -3,7 +3,7 @@ use core\ConfigGlobal;
 use function core\is_true;
 use davical\model\Davical;
 use entradas\model\Entrada;
-use expedientes\model\Escrito;
+use escritos\model\Escrito;
 use expedientes\model\Expediente;
 use expedientes\model\GestorExpediente;
 use expedientes\model\entity\GestorAccion;
@@ -12,13 +12,11 @@ use pendientes\model\Pendiente;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramiteCargo;
+use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\entity\Oficina;
 use web\DateTimeLocal;
 use web\Protocolo;
-use usuarios\model\Categoria;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");

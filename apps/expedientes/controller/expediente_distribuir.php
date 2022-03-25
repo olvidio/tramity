@@ -2,8 +2,8 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
+use escritos\model\EscritoLista;
 use etiquetas\model\entity\GestorEtiqueta;
-use expedientes\model\EscritoLista;
 use expedientes\model\Expediente;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
