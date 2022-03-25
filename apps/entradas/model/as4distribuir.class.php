@@ -218,15 +218,15 @@ class As4Distribuir extends As4CollaborationInfo {
 					$f_entrada = $oHoy->getFromLocal();
 					$f_plazo = $this->oF_contestar->getFromLocal();
 					
-					$id_origen = $this->a_Prot_org->lugar();
-					$prot_num = $this->a_Prot_org->num();
-					$prot_any = $this->a_Prot_org->any();
+					$id_origen = $this->a_Prot_org->lugar;
+					$prot_num = $this->a_Prot_org->num;
+					$prot_any = $this->a_Prot_org->any;
 
 					$location = $this->aLugares[$id_origen];
 					$location .= empty($prot_num)? '' : ' '.$prot_num;
 					$location .= empty($prot_any)? '' : '/'.$prot_any;
 					
-					$prot_mas = $this->a_Prot_org->mas();
+					$prot_mas = $this->a_Prot_org->mas;
 					
 					$id_reg = 'EN'.$id_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': EN)
 					$oPendiente = new Pendiente($cal_oficina, $calendario, $user_davical);
