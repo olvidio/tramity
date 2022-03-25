@@ -320,7 +320,9 @@ class Pendiente {
         if (!empty($id_reg)) {
             $args['X-DLB-ID-REG']="$id_reg";
             $ref=$this->buscar_ref_uid($uid,"txt");
-            $args['LOCATION']="$ref";
+            if (!empty($ref)) {
+            	$args['LOCATION']="$ref";
+            }
         }
         
         if (!empty($oficinas)){
