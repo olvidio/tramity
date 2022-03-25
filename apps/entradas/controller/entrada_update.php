@@ -185,16 +185,8 @@ switch($Qque) {
         }
         break;
     case 'guardar_destinos':
-        $gesEntradasBypass = new GestorEntradaBypass();
-        $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
-        if (!empty($cEntradasBypass)) {
-            // solo debería haber una:
-            $oEntradaBypass = $cEntradasBypass[0];
-            $oEntradaBypass->DBCarregar();
-        } else {
-            $oEntradaBypass = new EntradaBypass();
-            $oEntradaBypass->setId_entrada($Qid_entrada);
-        }
+		$oEntradaBypass = new EntradaBypass($Qid_entrada);
+		$oEntradaBypass->DBCarregar();
         //Qasunto.
         $oEntrada = new EntradaDB($Qid_entrada);
         $oPermisoRegistro = new PermRegistro();
@@ -504,16 +496,8 @@ switch($Qque) {
         
             //////// BY PASS //////
             if (is_true($Qbypass) && !empty($Qid_entrada)) {
-                $gesEntradasBypass = new GestorEntradaBypass();
-                $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
-                if (!empty($cEntradasBypass)) {
-                    // solo debería haber una:
-                    $oEntradaBypass = $cEntradasBypass[0];
-                    $oEntradaBypass->DBCarregar();
-                } else {
-                    $oEntradaBypass = new EntradaBypass();
-                    $oEntradaBypass->setId_entrada($Qid_entrada);
-                }
+				$oEntradaBypass = new EntradaBypass($Qid_entrada);
+				$oEntradaBypass->DBCarregar();
                 //Qasunto.
                 if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
                     $oEntrada = new EntradaDB($Qid_entrada);

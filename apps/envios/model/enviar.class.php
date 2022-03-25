@@ -14,6 +14,7 @@ use lugares\model\entity\Lugar;
 use oasis_as4\model\As4;
 use usuarios\model\entity\Cargo;
 use web\Protocolo;
+use entradas\model\entity\EntradaBypass;
 
 
 class Enviar {
@@ -22,6 +23,11 @@ class Enviar {
      * @var object
      */
     private $oEscrito;
+    /**
+     *
+     * @var object
+     */
+    private $oEntrada;
     /**
      *
      * @var object
@@ -100,43 +106,36 @@ class Enviar {
     
     private function getDestinosByPass() {
         $id_entrada = $this->iid;
-        // a ver si ya está
-        $gesEntradasBypass = new GestorEntradaBypass();
-        $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $id_entrada]);
-        if (!empty($cEntradasBypass)) {
-            // solo debería haber una:
-            $oEntradaBypass = $cEntradasBypass[0];
-            
-            $a_grupos = $oEntradaBypass->getId_grupos();
-            $this->f_salida = $oEntradaBypass->getF_salida()->getFromLocal('.');
-            
-            $aMiembros = [];
-            if (!empty($a_grupos)) {
-                $destinos_txt = $oEntradaBypass->getDescripcion();
-                //(segun los grupos seleccionados)
-                foreach ($a_grupos as $id_grupo) {
-                    $oGrupo = new Grupo($id_grupo);
-                    $a_miembros_g = $oGrupo->getMiembros();
-                    $aMiembros = array_merge($aMiembros, $a_miembros_g);
-                }
-                $aMiembros = array_unique($aMiembros);
-                $oEntradaBypass->setDestinos($aMiembros);
-                if ($oEntradaBypass->DBGuardar() === FALSE ) {
-                    $error_txt = $oEntradaBypass->getErrorTxt();
-                    exit ($error_txt);
-                }
-            } else {
-                //(segun individuales)
-                $destinos_txt = '';
-                $a_json_prot_dst = $oEntradaBypass->getJson_prot_destino();
-                foreach ($a_json_prot_dst as $json_prot_dst) {
-                    $aMiembros[] = $json_prot_dst->lugar;
-                    $oLugar = new Lugar($json_prot_dst->lugar);
-                    $destinos_txt .= empty($destinos_txt)? '' : ', ';
-                    $destinos_txt .= $oLugar->getNombre();
-                }
-            }
-        }
+        $oEntradaBypass = new EntradaBypass($id_entrada);
+		$a_grupos = $oEntradaBypass->getId_grupos();
+		$this->f_salida = $oEntradaBypass->getF_salida()->getFromLocal('.');
+		
+		$aMiembros = [];
+		if (!empty($a_grupos)) {
+			$destinos_txt = $oEntradaBypass->getDescripcion();
+			//(segun los grupos seleccionados)
+			foreach ($a_grupos as $id_grupo) {
+				$oGrupo = new Grupo($id_grupo);
+				$a_miembros_g = $oGrupo->getMiembros();
+				$aMiembros = array_merge($aMiembros, $a_miembros_g);
+			}
+			$aMiembros = array_unique($aMiembros);
+			$oEntradaBypass->setDestinos($aMiembros);
+			if ($oEntradaBypass->DBGuardar() === FALSE ) {
+				$error_txt = $oEntradaBypass->getErrorTxt();
+				exit ($error_txt);
+			}
+		} else {
+			//(segun individuales)
+			$destinos_txt = '';
+			$a_json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+			foreach ($a_json_prot_dst as $json_prot_dst) {
+				$aMiembros[] = $json_prot_dst->lugar;
+				$oLugar = new Lugar($json_prot_dst->lugar);
+				$destinos_txt .= empty($destinos_txt)? '' : ', ';
+				$destinos_txt .= $oLugar->getNombre();
+			}
+		}
         $this->destinos_txt = $destinos_txt;
         return $aMiembros;
     }
@@ -149,16 +148,16 @@ class Enviar {
     }
     
     private function getDatosEntrada() {
-        $oEntrada = new Entrada($this->iid);
-        $this->f_salida = $oEntrada->getF_documento()->getFromLocal('.');
-        $this->asunto = $oEntrada->getAsunto();
+        $this->oEntrada = new Entrada($this->iid);
+        $this->f_salida = $this->oEntrada->getF_documento()->getFromLocal('.');
+        $this->asunto = $this->oEntrada->getAsunto();
         
-        $a_header = [ 'left' => $oEntrada->cabeceraIzquierda(),
+        $a_header = [ 'left' => $this->oEntrada->cabeceraIzquierda(),
             'center' => '',
-            'right' => $oEntrada->cabeceraDerecha(),
+            'right' => $this->oEntrada->cabeceraDerecha(),
         ];
 
-        $json_prot_origen = $oEntrada->getJson_prot_origen();
+        $json_prot_origen = $this->oEntrada->getJson_prot_origen();
         if (count(get_object_vars($json_prot_origen)) == 0) {
             exit (_("No hay más"));
         }
@@ -180,7 +179,7 @@ class Enviar {
         
         // Attachments
         $a_adjuntos = [];
-        $a_id_adjuntos = $oEntrada->getArrayIdAdjuntos();
+        $a_id_adjuntos = $this->oEntrada->getArrayIdAdjuntos();
         foreach ($a_id_adjuntos as $item => $adjunto_filename) {
             $oEntradaAdjunto = new EntradaAdjunto($item);
             $escrito_txt = $oEntradaAdjunto->getAdjunto();
@@ -331,10 +330,30 @@ class Enviar {
         $err_mail = '';
         $this->getDocumento($id_lugar);
                 
-        $json_prot_org = $this->oEscrito->getJson_prot_local();
-        // Miro si en json_prot_dst hay el id_lugar
-        // y aporta más datos del protocolo
-        $a_json_prot_dst = $this->oEscrito->getJson_prot_destino(FALSE);
+        if ($this->tipo == 'escrito') {
+			$json_prot_org = $this->oEscrito->getJson_prot_local();
+			// Miro si en json_prot_dst hay el id_lugar
+			// y aporta más datos del protocolo
+			$a_json_prot_dst = $this->oEscrito->getJson_prot_destino(FALSE);
+        }
+        if ($this->tipo == 'entrada') {
+        	$id_entrada = $this->oEntrada->getId_entrada();
+        	$json_prot_org = $this->oEntrada->getJson_prot_origen();
+        	$a_json_prot_dst = [];
+        	$gesEntradasBypass = new GestorEntradaBypass();
+        	$cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $id_entrada]);
+        	if (!empty($cEntradasBypass)) {
+        		// solo debería haber una:
+        		$oEntradaBypass = $cEntradasBypass[0];
+        		$a_json_prot_dst = $oEntradaBypass->getJson_prot_destino(FALSE);
+        	}
+        	// new
+        	$oEntradaBypass = new EntradaBypass();	
+        	
+        }
+        
+        
+        
         $json_prot_dst = new \stdClass();
         foreach ($a_json_prot_dst as $json_prot_dst) {
         	$id_dst = $json_prot_dst->lugar;
@@ -355,9 +374,15 @@ class Enviar {
         $oAS4 = new As4();
         $oAS4->setPlataforma_Destino($plataforma);
         $oAS4->setAccion($accion);
+        $oAS4->setTipo_escrito($this->tipo);
         $oAS4->setJson_prot_org($json_prot_org);
         $oAS4->setJson_prot_dst($json_prot_dst);
-        $oAS4->setEscrito($this->oEscrito);
+        if ($this->tipo == 'escrito') {
+        	$oAS4->setEscrito($this->oEscrito);
+        }
+        if ($this->tipo == 'entrada') {
+        	$oAS4->setEscrito($this->oEntrada);
+        }
         
         $err_mail .= $oAS4->writeOnDock($this->filename);
         

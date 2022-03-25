@@ -26,6 +26,7 @@ class As4 extends As4CollaborationInfo {
     private $lugar_destino_txt;
     private $conversation_id;
     private $message_id;
+    private $tipo_escrito;
     
     /**
      *
@@ -120,7 +121,7 @@ class As4 extends As4CollaborationInfo {
     	$oPayload = new Payload();
     	$oPayload->setJson_prot_dst($this->json_prot_dst);
     	
-    	$oPayload->setPayload($this->oEscrito);
+    	$oPayload->setPayload($this->oEscrito,$this->tipo_escrito);
     	// formato del texto: pdf|text|html
     	$oPayload->setFormat(Payload::TYPE_ETHERAD_HTML);
     	$oPayload->createXmlFile();
@@ -266,5 +267,19 @@ class As4 extends As4CollaborationInfo {
 
         return $lugar_dst;
 	}
+	/**
+	 * @return mixed
+	 */
+	public function getTipo_escrito() {
+		return $this->tipo_escrito;
+	}
+
+	/**
+	 * @param mixed $tipo_escrito 'entrada'|'escrito'
+	 */
+	public function setTipo_escrito($tipo_escrito) {
+		$this->tipo_escrito = $tipo_escrito;
+	}
+
     
 }

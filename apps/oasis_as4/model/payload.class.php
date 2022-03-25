@@ -46,7 +46,38 @@ class Payload {
 		$this->dom = new \DOMDocument('1.0', 'utf-8');
 	}
 	
-	public function setPayload($oEscrito) {
+	public function setPayload($oEscrito,$tipo_escrito) {
+		if ($tipo_escrito == 'escrito') {
+			$this->setPayloadEscrito($oEscrito);
+		}
+		if ($tipo_escrito == 'entrada') {
+			$this->setPayloadEntrada($oEscrito);
+		}
+	}
+	public function setPayloadEntrada($oEntrada) {
+		
+		$this->json_prot_local = $oEscrito->getJson_prot_local();
+		// OJO hay que coger el destino que se tiene al enviar, 
+		// no el del escrito, que puede ser a varios o un grupo.
+		//$this->json_prot_dst = $oEscrito->getJson_prot_destino();
+		
+		$this->json_prot_ref = $oEscrito->getJson_prot_ref();
+		
+		$this->setF_entrada($oEscrito->getF_escrito());
+		$this->setF_escrito($oEscrito->getF_escrito());
+		$this->setF_salida($oEscrito->getF_salida());
+		$this->setF_contestar($oEscrito->getF_contestar());
+		
+		$this->setAsunto($oEscrito->getAsunto());
+		$this->setId_escrito($oEscrito->getId_escrito());
+		$this->setVisibilidad($oEscrito->getVisibilidad_dst());
+
+		$this->setA_id_adjuntos($oEscrito->getArrayIdAdjuntos());
+		
+		$this->nombre_escrito = $oEscrito->getNombreEscrito() . '.xml';
+	}
+
+	public function setPayloadEscrito($oEscrito) {
 		
 		$this->json_prot_local = $oEscrito->getJson_prot_local();
 		// OJO hay que coger el destino que se tiene al enviar, 

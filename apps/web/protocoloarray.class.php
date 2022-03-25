@@ -334,7 +334,7 @@ class ProtocoloArray Extends Protocolo {
 	    return (array) $this->sSeleccionados;
 	}
 
-	public function setArray_sel($seleccionados='') {
+	public function setArray_sel($seleccionados=[]) {
 	    $this->sSeleccionados = $seleccionados;
 	}
 

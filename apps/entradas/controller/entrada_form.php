@@ -11,6 +11,7 @@ use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
 use usuarios\model\Categoria;
+use entradas\model\entity\EntradaBypass;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -193,29 +194,19 @@ if (!empty($Qid_entrada)) {
     // a ver si ya está
     $chk_grupo_dst = '';
     $id_grupo = 0;
-    $gesEntradasBypass = new GestorEntradaBypass();
-    $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
-    if (!empty($cEntradasBypass)) {
-        // solo debería haber una:
-        $oEntradaBypass = $cEntradasBypass[0];
-        $a_grupos = $oEntradaBypass->getId_grupos();
-        if (!empty($a_grupos)) {
-            $oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');
-            $chk_grupo_dst = 'checked';
-        } else {
-            $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
-            $chk_grupo_dst = '';
-            $json_prot_dst = $oEntradaBypass->getJson_prot_destino();
-            $oArrayProtDestino->setArray_sel($json_prot_dst);
-        }
-        $oArrayDesplGrupo->setBlanco('t');
-        $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
-        
-    } else {
-        $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
-        $oArrayDesplGrupo->setBlanco('t');
-        $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
-    }
+	$oEntradaBypass = new EntradaBypass($Qid_entrada);
+	$a_grupos = $oEntradaBypass->getId_grupos();
+	if (!empty($a_grupos)) {
+		$oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');
+		$chk_grupo_dst = 'checked';
+	} else {
+		$oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
+		$chk_grupo_dst = '';
+		$json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+		$oArrayProtDestino->setArray_sel($json_prot_dst);
+	}
+	$oArrayDesplGrupo->setBlanco('t');
+	$oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
     
     $oPermisoregistro = new PermRegistro();
     $perm_asunto = $oPermisoregistro->permiso_detalle($oEntrada, 'asunto');

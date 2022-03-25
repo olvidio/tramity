@@ -13,6 +13,7 @@ use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
 use web\ProtocoloArray;
+use function core\is_true;
 
 
 class Entrada Extends EntradaDB {
@@ -122,11 +123,13 @@ class Entrada Extends EntradaDB {
         
         $sigla = $_SESSION['oConfig']->getSigla();
         $destinos_txt = $sigla;
-        
-        $visibilidad = $this->getVisibilidad();
-        if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
-        	$visibilidad_txt = $a_visibilidad_dst[$visibilidad];
-        	$destinos_txt .= " ($visibilidad_txt)";
+        // excepción para bypass
+        if (!is_true($this->getBypass())) {
+			$visibilidad = $this->getVisibilidad();
+			if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
+				$visibilidad_txt = $a_visibilidad_dst[$visibilidad];
+				$destinos_txt .= " ($visibilidad_txt)";
+			}
         }
         
         $gesLugares = new GestorLugar();

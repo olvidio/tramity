@@ -9,7 +9,6 @@ use etherpad\model\Etherpad;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
 use usuarios\model\PermRegistro;
-use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Lista;

@@ -16,6 +16,6 @@ CREATE TABLE public.entradas_bypass (
 
 ALTER TABLE public.entradas_bypass OWNER TO tramity;
 
-CREATE INDEX IF NOT EXISTS entradas_bypass_id_entrada_idx ON public.entradas_bypass (id_entrada);
+CREATE UNIQUE INDEX IF NOT EXISTS entradas_bypass_id_entrada_idx ON public.entradas_bypass (id_entrada);
 CREATE INDEX IF NOT EXISTS entradas_bypass_destinos_idx ON public.entradas_bypass USING GIN (destinos gin__int_ops);
 CREATE INDEX IF NOT EXISTS entradas_bypass_id_grupos_idx ON public.entradas_bypass USING GIN (id_grupos gin__int_ops);

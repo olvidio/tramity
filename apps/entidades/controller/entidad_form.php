@@ -56,7 +56,7 @@ $oPosicion->setParametros(array('id_entidad'=>$Qid_entidad),1);
 $oEntidad = new Entidad(); // para los tipos
 $a_opciones_tipos = $oEntidad->getArrayTipo();
 $oDesplTipos = new Desplegable();
-$oDesplTipos->setNombre('tipo');
+$oDesplTipos->setNombre('tipo_escrito');
 $oDesplTipos->setOpciones($a_opciones_tipos);
 
 if (!empty($Qid_entidad)) {
@@ -80,7 +80,7 @@ if (!empty($Qid_entidad)) {
 }
 
 
-$camposForm = 'que!nombre!schema!tipo!anulado';
+$camposForm = 'que!nombre!schema!tipo_escrito!anulado';
 $oHash = new web\Hash();
 $oHash->setcamposForm($camposForm);
 $a_camposHidden = array(

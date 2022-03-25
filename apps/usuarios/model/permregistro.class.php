@@ -494,7 +494,7 @@ class PermRegistro {
             $a_oficinas = $objeto->getResto_oficinas();
         }
 
-        if ($clase === 'Escrito') {
+        if ($clase === 'Escrito' || $clase === 'Expediente') {
             // Sólo afecta a los que tengan fecha de aprobación:
             if (empty($objeto->getF_aprobacion()->getIso())) {
                 return self::PERM_MODIFICAR; 
