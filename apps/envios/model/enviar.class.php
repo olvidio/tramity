@@ -5,16 +5,16 @@ use PHPMailer\PHPMailer\Exception;
 use documentos\model\Documento;
 use entradas\model\Entrada;
 use entradas\model\entity\EntradaAdjunto;
+use entradas\model\entity\EntradaBypass;
 use entradas\model\entity\GestorEntradaBypass;
+use escritos\model\Escrito;
+use escritos\model\entity\EscritoAdjunto;
 use etherpad\model\Etherpad;
-use expedientes\model\Escrito;
-use expedientes\model\entity\EscritoAdjunto;
 use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
 use oasis_as4\model\As4;
 use usuarios\model\entity\Cargo;
 use web\Protocolo;
-use entradas\model\entity\EntradaBypass;
 
 
 class Enviar {

@@ -1,10 +1,8 @@
 <?php
 use core\ViewTwig;
-use entradas\model\entity\GestorEntradaBypass;
-use envios\model\Enviar;
-use expedientes\model\Escrito;
 use entradas\model\Entrada;
 use entradas\model\entity\EntradaBypass;
+use envios\model\Enviar;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");

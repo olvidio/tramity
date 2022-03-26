@@ -1,5 +1,5 @@
 <?php
-use expedientes\model\Escrito;
+use escritos\model\Escrito;
 use lugares\model\entity\Grupo;
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");

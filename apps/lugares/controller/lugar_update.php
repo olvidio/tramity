@@ -1,5 +1,4 @@
 <?php
-use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -16,7 +15,6 @@ $Qque = (string) \filter_input(INPUT_POST, 'que');
 $error_txt = '';
 switch($Qque) {
 	case "eliminar":
-	    //$Qscroll_id = (integer) \filter_input(INPUT_POST, 'scroll_id');
 	    $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    if (!empty($a_sel)) { //vengo de un checkbox
             $Qid_lugar = (integer) strtok($a_sel[0],"#");
@@ -28,15 +26,6 @@ switch($Qque) {
 	    }
 		
 		break;
-		/*
-	case "buscar":
-		$Qsigla = (string) \filter_input(INPUT_POST, 'sigla');
-		
-		$oLugares = new GestorLugar();
-		$cLugares = $oLugares->getLugars(array('sigla'=>$Qsigla));
-		$oLugar = $cLugares[0];
-		break;
-		*/
 	case "guardar":
         $Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
 		$Qsigla = (string) \filter_input(INPUT_POST, 'sigla');

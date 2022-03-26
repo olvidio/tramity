@@ -1,10 +1,10 @@
 <?php
 
+use documentos\model\Documento;
 use entradas\model\entity\EntradaAdjunto;
 use entradas\model\entity\GestorEntradaAdjuntoOrg;
-use expedientes\model\entity\EscritoAdjunto;
-use expedientes\model\entity\GestorEscritoAdjuntoOrg;
-use documentos\model\Documento;
+use escritos\model\entity\EscritoAdjunto;
+use escritos\model\entity\GestorEscritoAdjuntoOrg;
 
 // INICIO Cabecera global de URL de controlador *********************************
 

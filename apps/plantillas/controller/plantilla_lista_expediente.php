@@ -2,9 +2,9 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use escritos\model\Escrito;
 use plantillas\model\entity\GestorPlantilla;
 use web\Lista;
-use expedientes\model\Escrito;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
