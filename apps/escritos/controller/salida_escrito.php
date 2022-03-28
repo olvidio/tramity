@@ -104,7 +104,7 @@ $oDesplVisibilidad->setTabIndex(155);
 
 if (!empty($Qid_escrito)) {
     // destinos individuales
-    $json_prot_dst = $oEscrito->getJson_prot_destino();
+    $json_prot_dst = $oEscrito->getJson_prot_destino(TRUE);
     $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst,$a_posibles_lugares,'destinos');
     $oArrayProtDestino->setBlanco('t');
     $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');

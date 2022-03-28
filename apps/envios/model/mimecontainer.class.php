@@ -94,6 +94,10 @@ class MIMEContainer {
 		return $array;
 	}
 	
+	/*
+	 * Para hacer el chunk_split binarysafe, pero no funciona para
+	 * cadenas largas (500K). No váliod para los attachments
+	 */
 	public function mb_chunk_split($str, $len, $glue) {
 		if (empty($str)) { return false; }
 		$array = $this->mbStringToArray ($str);

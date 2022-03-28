@@ -268,6 +268,7 @@ class Escrito Extends EscritoDB {
             $a_json_prot_dst = $this->getJson_prot_destino(FALSE);
             if (!empty($id_lugar_de_grupo)) { // individual, con su protocolo.
                 foreach ($a_json_prot_dst as $json_prot_dst) {
+                	if (!property_exists($json_prot_dst, 'lugar')) { continue; }
                     $id_dst = $json_prot_dst->lugar;
                     if ($id_dst == $id_lugar_de_grupo) {
                         $oProtDestino = new Protocolo();
@@ -334,7 +335,7 @@ class Escrito Extends EscritoDB {
         $destinos_txt = '';
         
         // destinos individuales
-        $json_prot_dst = $this->getJson_prot_destino();
+        $json_prot_dst = $this->getJson_prot_destino(TRUE);
         $oArrayProtDestino = new ProtocoloArray($json_prot_dst,'','destinos');
         $destinos_txt = $oArrayProtDestino->ListaTxtBr();
         // si hay grupos, tienen preferencia
@@ -490,7 +491,6 @@ class Escrito Extends EscritoDB {
         $txtPad = $oEtherpad->getTexto($padID);
         
         // Si esta marcado como grupo de destinos, o destinos individuales.
-        $aProtDst = [];
         $aProtDst = $this->getJson_prot_destino(TRUE);
         if (empty($aProtDst)) {
             $aMiembros = $this->getDestinosIds();

@@ -10,9 +10,12 @@ use entradas\model\entity\GestorEntradaBypass;
 use escritos\model\Escrito;
 use escritos\model\entity\EscritoAdjunto;
 use etherpad\model\Etherpad;
+use stdClass;
+use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
 use oasis_as4\model\As4;
+use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use web\Protocolo;
 
@@ -331,7 +334,20 @@ class Enviar {
         $this->getDocumento($id_lugar);
                 
         if ($this->tipo == 'escrito') {
-			$json_prot_org = $this->oEscrito->getJson_prot_local();
+        	// Si la categoria es 'sin numerar', no hay protocolo local.
+        	// fabrico uno con sólo el lugar:
+        	if ($this->oEscrito->getCategoria() == Categoria::CAT_E12 ) {
+        		// Busco el id_lugar de la dl.
+        		$gesLugares = new GestorLugar();
+        		$id_siga_local = $gesLugares->getId_sigla_local();
+        		$json_prot_org = new stdClass;
+        		$json_prot_org->lugar = $id_siga_local;
+        		$json_prot_org->num = '';
+        		$json_prot_org->any = '';
+        		$json_prot_org->mas = '';
+        	} else {
+				$json_prot_org = $this->oEscrito->getJson_prot_local();
+        	}
 			// Miro si en json_prot_dst hay el id_lugar
 			// y aporta más datos del protocolo
 			$a_json_prot_dst = $this->oEscrito->getJson_prot_destino(FALSE);
@@ -352,10 +368,9 @@ class Enviar {
         	
         }
         
-        
-        
         $json_prot_dst = new \stdClass();
         foreach ($a_json_prot_dst as $json_prot_dst) {
+        	if (!property_exists($json_prot_dst, 'lugar')) { continue; }
         	$id_dst = $json_prot_dst->lugar;
         	if ($id_dst == $id_lugar) {
         		break;
@@ -368,7 +383,7 @@ class Enviar {
         	$json_prot_dst = $oProtDst->getProt();
         }
 	    
-	    // parecido al email. debe estar en la definicion del ctr
+	    // parecido al e-mail. debe estar en la definicion del ctr
         $accion = 'nuevo';
         // generar el xml
         $oAS4 = new As4();

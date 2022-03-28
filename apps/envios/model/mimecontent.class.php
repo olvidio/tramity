@@ -31,7 +31,8 @@ class MIMEContent extends MIMEAttachment {
 		$headers .= "Content-Transfer-Encoding: {$this->content_enc}\r\n";
 		$headers .= "Content-ID: {$this->content_id}\r\n$addheaders\r\n";
 		//$headers .= chunk_split($this->content)."\r\n";
-		$headers .= $this->mb_chunk_split($this->content, 72, "\r\n"); 
+		//$headers .= $this->mb_chunk_split($this->content, 72, "\r\n"); 
+		$headers .= chunk_split($this->content, 72, "\r\n");
 		$headers .= " \r\n \r\n"; 
 		
 		return $headers;

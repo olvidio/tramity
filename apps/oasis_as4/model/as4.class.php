@@ -79,7 +79,7 @@ class As4 extends As4CollaborationInfo {
     }
 
     public function getMessageInfo() {
-		$json_prot_origen = $this->getJson_prot_org();
+    	$json_prot_origen = $this->getJson_prot_org();
         $oProtOrigen = new Protocolo();
         $oProtOrigen->setLugar($json_prot_origen->lugar);
         $oProtOrigen->setProt_num($json_prot_origen->num);

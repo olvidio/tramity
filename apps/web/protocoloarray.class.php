@@ -68,6 +68,8 @@ class ProtocoloArray Extends Protocolo {
 	    $ref = ($this->bRef)? 'ref. ' : '';
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
+	        	$oProt = json_decode(json_encode($oProt));
+	        	if (!property_exists($oProt, 'lugar')) { continue; }
 			    $lugar = $oProt->lugar;
 			    $prot_num = $oProt->num;
 			    $prot_any = $oProt->any;
@@ -103,6 +105,7 @@ class ProtocoloArray Extends Protocolo {
 	    $ref = ($this->bRef)? 'ref. ' : '';
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
+	        	$oProt = json_decode(json_encode($oProt));
 	        	if (!property_exists($oProt, 'lugar')) { continue; }
 			    $lugar = $oProt->lugar;
 			    $prot_num = $oProt->num;
@@ -140,6 +143,8 @@ class ProtocoloArray Extends Protocolo {
 	    $sLista = "<div class=\"row\" >";
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
+	        	$oProt = json_decode(json_encode($oProt));
+	        	if (!property_exists($oProt, 'lugar')) { continue; }
 			    $lugar = $oProt->lugar;
 			    $prot_num = $oProt->num;
 			    $prot_any = $oProt->any;
@@ -184,10 +189,12 @@ class ProtocoloArray Extends Protocolo {
 		$sLista = "<div id=\"$span\" class=\"row\" >";
 		if (!empty($aSeleccionados)) {
 			foreach ($aSeleccionados as $oProt) {
-			    $this->ilugar = $oProt->lugar;
-			    $this->iprot_num = $oProt->num;
-			    $this->iprot_any = $oProt->any;
-			    $this->sprot_mas = $oProt->mas;
+	        	$oProt = json_decode(json_encode($oProt));
+	        	if (!property_exists($oProt, 'lugar')) { continue; }
+				$this->ilugar = empty($oProt->lugar)? '' : $oProt->lugar;
+			    $this->iprot_num = empty($oProt->num)? '' : $oProt->num;
+			    $this->iprot_any = empty($oProt->any)? '' : $oProt->any;
+			    $this->sprot_mas = empty($oProt->mas)? '' : $oProt->mas;
 			    
 				$this->sNombre = $this->sNomConjunto."[$n]";
 			    
