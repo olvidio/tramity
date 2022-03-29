@@ -193,7 +193,9 @@ switch ($role_actual) {
         $server = $server.'/index.php';
         // hay que enviar algun valor, sino el javascript da un error:
         $error_fecha = empty($_SESSION['oConfig']->getPlazoError())? 15 : $_SESSION['oConfig']->getPlazoError();
+    	$pagina_profile = web\Hash::link('apps/usuarios/controller/personal.php?'.http_build_query([]));
         $a_campos = [
+			'pagina_profile' => $pagina_profile,
             'error_fecha' => $error_fecha,
             'server_davical' => $server,
         ];

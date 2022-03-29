@@ -46,6 +46,7 @@ class GestorPreferencia Extends core\ClaseGestor {
 	    $cPreferencias = $gesPreferencias->getPreferencias(['id_usuario'=>$id_usuario,'tipo'=>$tipo]);
 	    if (count($cPreferencias) > 0) {
 	        $oPref = $cPreferencias[0]; // solo deberia haber uno.
+	        $oPref->DBCarregar();
 	    } else {
 	        $oPref = new Preferencia();
 	        $oPref->setId_usuario($id_usuario);

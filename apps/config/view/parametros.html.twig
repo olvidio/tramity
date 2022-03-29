@@ -1,4 +1,159 @@
-<h3>{{ "plazos"|trans }}:</h3>
+<h3>{{ "plazos para vida expedientes"|trans }}:</h3>
+    <table>
+    <tr> <th class="col-2"> {{ "Vida"|trans }} </th>
+    	 <th class="col-3"> {{ "plazo para registro"|trans }} </th>
+    	 <th class="col-3"> {{ "plazo para contenidos"|trans }} </th>
+    </tr>
+    <tr>
+        <td> {{ "Permanente"|trans }}: </td>
+        <td> 
+        <form id="frm_v_permanente_r" name="frm_v_permanente_r" action="">
+          {{ oHashVIDA_permanente_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_permanente_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_v_permanente_c" name="frm_v_permanente_c" action="">
+          {{ oHashVIDA_permanente_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_permanente_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    <tr>
+        <td> {{ "Experiencia"|trans }}: </td>
+        <td>
+        <form id="frm_v_experiencia_r" name="frm_v_experiencia_r" action="">
+          {{ oHashVIDA_experiencia_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_experiencia_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_v_experiencia_c" name="frm_v_experiencia_c" action="">
+          {{ oHashVIDA_experiencia_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_experiencia_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    <tr>
+        <td> {{ "Normal"|trans }}: </td>
+        <td>
+        <form id="frm_v_normal_r" name="frm_v_normal_r" action="">
+          {{ oHashVIDA_normal_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_normal_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_v_normal_c" name="frm_v_normal_c" action="">
+          {{ oHashVIDA_normal_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_normal_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    <tr>
+        <td> {{ "Temporal"|trans }}: </td>
+        <td>
+        <form id="frm_v_temporal_r" name="frm_v_temporal_r" action="">
+          {{ oHashVIDA_temporal_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_temporal_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_v_temporal_c" name="frm_v_temporal_c" action="">
+          {{ oHashVIDA_temporal_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_temporal_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    <tr>
+        <td> {{ "Borrable"|trans }}: </td>
+        <td>
+        <form id="frm_v_borrable_r" name="frm_v_borrable_r" action="">
+          {{ oHashVIDA_borrable_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_borrable_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_v_borrable_c" name="frm_v_borrable_c" action="">
+          {{ oHashVIDA_borrable_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_borrable_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    </table>
+
+<hr>
+
+<h3>{{ "plazos para categorias"|trans }}:</h3>
+    <table>
+    <tr> <th class="col-2"> {{ "Categoría"|trans }} </th>
+    	 <th class="col-3"> {{ "plazo para registro"|trans }} </th>
+    	 <th class="col-3"> {{ "plazo para contenidos"|trans }} </th>
+    </tr>
+    <tr>
+        <td> {{ "E12"|trans }}: </td>
+        <td> 
+        <form id="frm_c_12_r" name="frm_c_12_r" action="">
+          {{ oHashCAT_12_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ cat_e12_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_c_12_c" name="frm_c_12_c" action="">
+          {{ oHashCAT_12_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ cat_e12_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    <tr>
+        <td> {{ "Normal"|trans }}: </td>
+        <td>
+        <form id="frm_c_normal_r" name="frm_c_normal_r" action="">
+          {{ oHashCAT_normal_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ cat_normal_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_c_normal_c" name="frm_c_normal_c" action="">
+          {{ oHashCAT_normal_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ cat_normal_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    <tr>
+        <td> {{ "Permanente"|trans }}: </td>
+        <td>
+        <form id="frm_c_permanente_r" name="frm_c_permanente_r" action="">
+          {{ oHashCAT_permanente_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ cat_permanente_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_c_permanente_c" name="frm_c_permanente_c" action="">
+          {{ oHashCAT_permanente_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ cat_permanente_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    </table>
+<hr>
+
+<h3>{{ "plazos para pendientes"|trans }}:</h3>
   <form id="frm_pu" name="frm_pu" action="">
     {{ oHashPU.getCamposHtml|raw }}
     {{ "plazo urgente"|trans }}:

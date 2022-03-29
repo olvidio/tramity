@@ -26,13 +26,18 @@
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>{{ "Dashboard"|trans }}</span></a>
       </li>
-
+      <!-- Nav Item - Preferencias -->
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="fnjs_update_div('#main','{{ pagina_profile|raw }}')">
+          <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>
+          <span>{{ "Preferencias"|trans }}</span></a>
+      </li>
       <!-- Divider -->
       <hr class="sidebar-divider">
       
       <!-- Heading -->
       <div class="sidebar-heading">
-        {{ "Local (ctr o dl)"|trans }}
+        {{ "Configuración"|trans }}
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
@@ -75,15 +80,14 @@
           </div>
         </div>
 	  </li>
-      <!-- Nav Item - Parametros -->
+      <!-- Nav Item - Tramites -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseConfig" aria-expanded="true" aria-controls="collapseConfig">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTramites" aria-expanded="true" aria-controls="collapseTramites">
           <i class="fas fa-fw fa-cog"></i>
-          <span>{{ "Config"|trans }}</span>
+          <span>{{ "Trámites"|trans }}</span>
         </a>
-        <div id="collapseConfig" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
+        <div id="collapseTramites" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">{{ "del entorno"|trans }}:</h6>
             {% if is_ambito_dl %}
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/lugares/controller/grupo_lista.php')" href="#">
                 {{ "Grupos de distribución"|trans }}</a>
@@ -94,8 +98,18 @@
                 {{ "Trámites (nombres)"|trans }}</a>
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/tramites/controller/tramitecargo_select.php')" href="#">
                 {{ "Trámites (recorrido)"|trans }}</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">{{ "de la aplicación"|trans }}:</h6>
+          </div>
+        </div>
+      </li>
+                
+      <!-- Nav Item - Parametros -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseParam" aria-expanded="true" aria-controls="collapseParam">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>{{ "Parámetros"|trans }}</span>
+        </a>
+        <div id="collapseParam" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/config/controller/parametros.php')" href="#">
                 {{ "Parámetros"|trans }}</a>
           </div>
