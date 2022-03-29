@@ -250,7 +250,14 @@ class As4 extends As4CollaborationInfo {
 	}
 
 	private function getId_escrito() {
-		return $this->oEscrito->getId_escrito();
+		$id = '';
+		if ($this->tipo_escrito == 'escrito') {
+			$id = $this->oEscrito->getId_escrito();
+		}
+		if ($this->tipo_escrito == 'entrada') {
+			$id = $this->oEscrito->getId_entrada();
+		}
+		return $id;
 	}
 	
 	private function getDestino_txt() {

@@ -56,25 +56,25 @@ class Payload {
 	}
 	public function setPayloadEntrada($oEntrada) {
 		
-		$this->json_prot_local = $oEscrito->getJson_prot_local();
+		$this->json_prot_local = $oEntrada->getJson_prot_origen();
 		// OJO hay que coger el destino que se tiene al enviar, 
 		// no el del escrito, que puede ser a varios o un grupo.
 		//$this->json_prot_dst = $oEscrito->getJson_prot_destino();
 		
-		$this->json_prot_ref = $oEscrito->getJson_prot_ref();
+		$this->json_prot_ref = $oEntrada->getJson_prot_ref();
 		
-		$this->setF_entrada($oEscrito->getF_escrito());
-		$this->setF_escrito($oEscrito->getF_escrito());
-		$this->setF_salida($oEscrito->getF_salida());
-		$this->setF_contestar($oEscrito->getF_contestar());
+		$this->setF_entrada($oEntrada->getF_entrada());
+		$this->setF_escrito($oEntrada->getF_documento());
+		$this->setF_salida($oEntrada->getF_salida());
+		$this->setF_contestar($oEntrada->getF_contestar());
 		
-		$this->setAsunto($oEscrito->getAsunto());
-		$this->setId_escrito($oEscrito->getId_escrito());
-		$this->setVisibilidad($oEscrito->getVisibilidad_dst());
+		$this->setAsunto($oEntrada->getAsunto());
+		$this->setId_escrito($oEntrada->getId_entrada());
+		//$this->setVisibilidad($oEntrada->getVisibilidad_dst());
 
-		$this->setA_id_adjuntos($oEscrito->getArrayIdAdjuntos());
+		$this->setA_id_adjuntos($oEntrada->getArrayIdAdjuntos());
 		
-		$this->nombre_escrito = $oEscrito->getNombreEscrito() . '.xml';
+		$this->nombre_escrito = $oEntrada->getNombreEscrito() . '.xml';
 	}
 
 	public function setPayloadEscrito($oEscrito) {

@@ -30,7 +30,7 @@ class Enviar {
      *
      * @var object
      */
-    private $oEntrada;
+    private $oEntradaBypass;
     /**
      *
      * @var object
@@ -151,16 +151,16 @@ class Enviar {
     }
     
     private function getDatosEntrada() {
-        $this->oEntrada = new Entrada($this->iid);
-        $this->f_salida = $this->oEntrada->getF_documento()->getFromLocal('.');
-        $this->asunto = $this->oEntrada->getAsunto();
+        $this->oEntradaBypass = new EntradaBypass($this->iid);
+        $this->f_salida = $this->oEntradaBypass->getF_documento()->getFromLocal('.');
+        $this->asunto = $this->oEntradaBypass->getAsunto();
         
-        $a_header = [ 'left' => $this->oEntrada->cabeceraIzquierda(),
+        $a_header = [ 'left' => $this->oEntradaBypass->cabeceraIzquierda(),
             'center' => '',
-            'right' => $this->oEntrada->cabeceraDerecha(),
+            'right' => $this->oEntradaBypass->cabeceraDerecha(),
         ];
 
-        $json_prot_origen = $this->oEntrada->getJson_prot_origen();
+        $json_prot_origen = $this->oEntradaBypass->getJson_prot_origen();
         if (count(get_object_vars($json_prot_origen)) == 0) {
             exit (_("No hay más"));
         }
@@ -182,7 +182,7 @@ class Enviar {
         
         // Attachments
         $a_adjuntos = [];
-        $a_id_adjuntos = $this->oEntrada->getArrayIdAdjuntos();
+        $a_id_adjuntos = $this->oEntradaBypass->getArrayIdAdjuntos();
         foreach ($a_id_adjuntos as $item => $adjunto_filename) {
             $oEntradaAdjunto = new EntradaAdjunto($item);
             $escrito_txt = $oEntradaAdjunto->getAdjunto();
@@ -353,19 +353,8 @@ class Enviar {
 			$a_json_prot_dst = $this->oEscrito->getJson_prot_destino(FALSE);
         }
         if ($this->tipo == 'entrada') {
-        	$id_entrada = $this->oEntrada->getId_entrada();
-        	$json_prot_org = $this->oEntrada->getJson_prot_origen();
-        	$a_json_prot_dst = [];
-        	$gesEntradasBypass = new GestorEntradaBypass();
-        	$cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $id_entrada]);
-        	if (!empty($cEntradasBypass)) {
-        		// solo debería haber una:
-        		$oEntradaBypass = $cEntradasBypass[0];
-        		$a_json_prot_dst = $oEntradaBypass->getJson_prot_destino(FALSE);
-        	}
-        	// new
-        	$oEntradaBypass = new EntradaBypass();	
-        	
+        	$json_prot_org = $this->oEntradaBypass->getJson_prot_origen();
+			$a_json_prot_dst = $this->oEntradaBypass->getJson_prot_destino(FALSE);
         }
         
         $json_prot_dst = new \stdClass();
@@ -396,7 +385,7 @@ class Enviar {
         	$oAS4->setEscrito($this->oEscrito);
         }
         if ($this->tipo == 'entrada') {
-        	$oAS4->setEscrito($this->oEntrada);
+        	$oAS4->setEscrito($this->oEntradaBypass);
         }
         
         $err_mail .= $oAS4->writeOnDock($this->filename);

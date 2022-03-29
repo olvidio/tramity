@@ -652,7 +652,6 @@ class Escrito Extends EscritoDB {
     }
     
     public function getNombreEscrito() {
-    	
         $json_prot_local = $this->getJson_prot_local();
     	// nombre del archivo
     	if (empty((array)$json_prot_local)) {
@@ -668,7 +667,6 @@ class Escrito Extends EscritoDB {
     		$oProtOrigen->setMas($json_prot_local->mas);
     		$this->nombre_escrito = $this->renombrar($oProtOrigen->ver_txt());
     	}
-    	
     	return $this->nombre_escrito;
     }
     

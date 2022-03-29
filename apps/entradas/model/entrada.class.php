@@ -47,6 +47,8 @@ class Entrada Extends EntradaDB {
     protected $df_doc;
     protected $convert;
     protected $itipo_doc;
+
+    protected $nombre_escrito;
     
     /* CONSTRUCTOR -------------------------------------------------------------- */
     
@@ -328,6 +330,32 @@ class Entrada Extends EntradaDB {
         
         $gesEntradaAdjuntos = new GestorEntradaAdjunto();
         return $gesEntradaAdjuntos->getArrayIdAdjuntos($this->iid_entrada);
+    }
+    
+    public function getNombreEscrito() {
+    	$json_prot_local = $this->getJson_prot_origen();
+    	// nombre del archivo
+    	if (empty((array)$json_prot_local)) {
+    		// genero un id: fecha
+    		$f_hoy = date('Y-m-d');
+    		$hora = date('His');
+    		$this->nombre_escrito = $f_hoy.'_'._("E12")."($hora)";
+    	} else {
+    		$oProtOrigen = new Protocolo();
+    		$oProtOrigen->setLugar($json_prot_local->lugar);
+    		$oProtOrigen->setProt_num($json_prot_local->num);
+    		$oProtOrigen->setProt_any($json_prot_local->any);
+    		$oProtOrigen->setMas($json_prot_local->mas);
+    		$this->nombre_escrito = $this->renombrar($oProtOrigen->ver_txt());
+    	}
+    	return $this->nombre_escrito;
+    }
+    
+    private function renombrar($string) {
+    	//cambiar ' ' por '_':
+    	$string1 = str_replace(' ', '_', $string);
+    	//cambiar '/' por '_':
+    	return str_replace('/', '_', $string1);
     }
     
     
