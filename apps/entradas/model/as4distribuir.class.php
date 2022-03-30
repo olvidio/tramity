@@ -145,7 +145,6 @@ class As4Distribuir extends As4CollaborationInfo {
 		// hay que conectar con la entidad destino:
 		$siglaDestino = $this->getSiglaDestino();
 		
-		
 		$oEntrada = new EntradaEntidad($siglaDestino);
 		$oEntrada->setModo_entrada(Entrada::MODO_MANUAL);
 		$oEntrada->setJson_prot_origen($this->a_Prot_org);
@@ -177,7 +176,13 @@ class As4Distribuir extends As4CollaborationInfo {
 						$oEtherpad->getPadId(); // Aqui crea el pad y utiliza el $this->content
 						// la relacion con la entrada y la fecha
 						$oEntradaDocDB = new EntradaEntidadDoc($id_entrada,$siglaDestino);
-						$oEntradaDocDB->setF_doc($this->oF_escrito->getIso(),FALSE);
+						$oEntradaDocDB->DBCarregar();
+						if (!empty($this->oF_escrito)) {
+							$oEntradaDocDB->setF_doc($this->oF_escrito->getIso(),FALSE);
+						} else {
+							// No puede ser NULL
+							$oEntradaDocDB->setF_doc($oHoy);							
+						}
 						$oEntradaDocDB->setTipo_doc(EntradaDocDB::TIPO_ETHERPAD);
 						$oEntradaDocDB->DBGuardar();
 						break;
@@ -190,7 +195,13 @@ class As4Distribuir extends As4CollaborationInfo {
 						$oEtherpad->setHTML($pad_id, $this->content);
 						// la relacion con la entrada y la fecha
 						$oEntradaDocDB = new EntradaEntidadDoc($id_entrada,$siglaDestino);
-						$oEntradaDocDB->setF_doc($this->oF_escrito->getIso(),FALSE);
+						$oEntradaDocDB->DBCarregar();
+						if (!empty($this->oF_escrito)) {
+							$oEntradaDocDB->setF_doc($this->oF_escrito->getIso(),FALSE);
+						} else {
+							// No puede ser NULL
+							$oEntradaDocDB->setF_doc($oHoy);							
+						}
 						$oEntradaDocDB->setTipo_doc(EntradaDocDB::TIPO_ETHERPAD);
 						$oEntradaDocDB->DBGuardar();
 						break;
@@ -264,38 +275,41 @@ class As4Distribuir extends As4CollaborationInfo {
 		$num_dst = '';
 		$any_dst = '';
 		$mas_dst = '';
-		foreach($messageProperties->children() as $node_property) {
-			$name = $node_property->attributes()->name;
-			$value = $node_property;
-			
-			// origen
-			if ($name == 'lugar_org') {
-				$lugar_org = $value;
+		// para evitar el mensaje: "Node no longer exists"
+		if (@count($messageProperties->children())) {
+			foreach($messageProperties->children() as $node_property) {
+				$name = $node_property->attributes()->name;
+				$value = $node_property;
+				
+				// origen
+				if ($name == 'lugar_org') {
+					$lugar_org = $value;
+				}
+				if ($name == 'num_org') {
+					$num_org = $value;
+				}
+				if ($name == 'any_org') {
+					$any_org = $value;
+				}
+				if ($name == 'mas_org') {
+					$mas_org = $value;
+				}
+				
+				// sigla destino
+				if ($name == 'lugar_dst') {
+					$lugar_dst = $value;
+				}
+				if ($name == 'num_dst') {
+					$num_dst = $value;
+				}
+				if ($name == 'any_dst') {
+					$any_dst = $value;
+				}
+				if ($name == 'mas_dst') {
+					$mas_dst = $value;
+				}
+				
 			}
-			if ($name == 'num_org') {
-				$num_org = $value;
-			}
-			if ($name == 'any_org') {
-				$any_org = $value;
-			}
-			if ($name == 'mas_org') {
-				$mas_org = $value;
-			}
-			
-			// sigla destino
-			if ($name == 'lugar_dst') {
-				$lugar_dst = $value;
-			}
-			if ($name == 'num_dst') {
-				$num_dst = $value;
-			}
-			if ($name == 'any_dst') {
-				$any_dst = $value;
-			}
-			if ($name == 'mas_dst') {
-				$mas_dst = $value;
-			}
-			
 		}
 		$a_prot['org'] = [
 				'lugar' => $lugar_org,
@@ -520,10 +534,12 @@ class As4Distribuir extends As4CollaborationInfo {
 	
 	private function xml2prot_array($xml, $sufijo) {
 		$a_json_prot = [];
-		foreach($xml->children() as $node) {
-			$a_json_prot[] = $this->xml2prot_simple($node, $sufijo);
+		// para evitar el mensaje: "Node no longer exists"
+		if (@count($xml->children())) {
+			foreach($xml->children() as $node) {
+				$a_json_prot[] = $this->xml2prot_simple($node, $sufijo);
+			}
 		}
-		
 		return $a_json_prot;
 	}
 	
@@ -533,23 +549,26 @@ class As4Distribuir extends As4CollaborationInfo {
 		$num = '';
 		$any = '';
 		$mas = '';
-		foreach($xml->children() as $node) {
-			$name = $node->getName();
-			$value = $node;
+		// para evitar el mensaje: "Node no longer exists"
+		if (@count($xml->children())) {
+			foreach($xml->children() as $node) {
+				$name = $node->getName();
+				$value = $node;
 
-			if ($name == 'lugar_'.$sufijo) {
-				$lugar = (string) $value;
-				// pasarlo de texto al id correspondiente:
-				$ilugar = array_search($lugar, $this->aLugares);
-			}
-			if ($name == 'num_'.$sufijo) {
-				$num = (string) $value;
-			}
-			if ($name == 'any_'.$sufijo) {
-				$any = (string) $value;
-			}
-			if ($name == 'mas_'.$sufijo) {
-				$mas = (string) $value;
+				if ($name == 'lugar_'.$sufijo) {
+					$lugar = (string) $value;
+					// pasarlo de texto al id correspondiente:
+					$ilugar = array_search($lugar, $this->aLugares);
+				}
+				if ($name == 'num_'.$sufijo) {
+					$num = (string) $value;
+				}
+				if ($name == 'any_'.$sufijo) {
+					$any = (string) $value;
+				}
+				if ($name == 'mas_'.$sufijo) {
+					$mas = (string) $value;
+				}
 			}
 		}
 		

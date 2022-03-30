@@ -297,10 +297,14 @@ class GestorEscritoDB Extends core\ClaseGestor {
         }
         $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi;
         
+        $sOrdre = '';
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') { $sOrdre = ' ORDER BY '.$aWhere['_ordre']; }
+        if (isset($aWhere['_ordre'])) { unset($aWhere['_ordre']); }
+        
         // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
         $sQry = "SELECT t.*
                         FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_destino) as items(\"any\" text, mas text, num text, lugar text)
-                        $where_condi";
+                        $where_condi $sOrdre";
         
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
             $sClauError = 'GestorEscritoDB.llistar.prepare';
@@ -361,7 +365,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
                 $sCondi .= " WHERE ".$COND_OR;
             }
         }
-        $sOrdre = '';
+		$sOrdre = '';
         $sLimit = '';
         if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') { $sOrdre = ' ORDER BY '.$aWhere['_ordre']; }
         if (isset($aWhere['_ordre'])) { unset($aWhere['_ordre']); }
