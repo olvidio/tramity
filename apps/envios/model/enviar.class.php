@@ -3,10 +3,8 @@ namespace envios\model;
 
 use PHPMailer\PHPMailer\Exception;
 use documentos\model\Documento;
-use entradas\model\Entrada;
 use entradas\model\entity\EntradaAdjunto;
 use entradas\model\entity\EntradaBypass;
-use entradas\model\entity\GestorEntradaBypass;
 use escritos\model\Escrito;
 use escritos\model\entity\EscritoAdjunto;
 use etherpad\model\Etherpad;
@@ -15,6 +13,7 @@ use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
 use oasis_as4\model\As4;
+use oasis_as4\model\As4CollaborationInfo;
 use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use web\Protocolo;
@@ -73,10 +72,19 @@ class Enviar {
     private $cabecera_dcha;
     
     private $a_rta=[];
+
+    private $accion;
     
     public function __construct($id,$tipo) {
         $this->setId($id);
         $this->setTipo($tipo);
+
+        if ($this->tipo == 'escrito') {
+            $this->oEscrito = new Escrito($this->iid);
+        }
+        if ($this->tipo == 'entrada') {
+			$this->oEntradaBypass = new EntradaBypass($this->iid);
+        }
     }
     
     public function setId($id) {
@@ -91,9 +99,16 @@ class Enviar {
     
     private function getDestinatarios(){
         if ($this->tipo == 'entrada') {
+			$this->accion = As4CollaborationInfo::ACCION_DISTRIBUIR;
             return $this->getDestinosByPass();
         }
         if ($this->tipo == 'escrito') {
+        	$id_grupos = $this->oEscrito->getId_grupos();
+        	if (!empty($id_grupos)) {
+				$this->accion = As4CollaborationInfo::ACCION_DISTRIBUIR;
+        	} else {
+				$this->accion = As4CollaborationInfo::ACCION_NUEVO;
+        	}
             return $this->getDestinosEscrito();
         }
     }
@@ -108,14 +123,12 @@ class Enviar {
     }
     
     private function getDestinosByPass() {
-        $id_entrada = $this->iid;
-        $oEntradaBypass = new EntradaBypass($id_entrada);
-		$a_grupos = $oEntradaBypass->getId_grupos();
-		$this->f_salida = $oEntradaBypass->getF_salida()->getFromLocal('.');
+		$a_grupos = $this->oEntradaBypass->getId_grupos();
+		$this->f_salida = $this->oEntradaBypass->getF_salida()->getFromLocal('.');
 		
 		$aMiembros = [];
 		if (!empty($a_grupos)) {
-			$destinos_txt = $oEntradaBypass->getDescripcion();
+			$destinos_txt = $this->oEntradaBypass->getDescripcion();
 			//(segun los grupos seleccionados)
 			foreach ($a_grupos as $id_grupo) {
 				$oGrupo = new Grupo($id_grupo);
@@ -123,15 +136,15 @@ class Enviar {
 				$aMiembros = array_merge($aMiembros, $a_miembros_g);
 			}
 			$aMiembros = array_unique($aMiembros);
-			$oEntradaBypass->setDestinos($aMiembros);
-			if ($oEntradaBypass->DBGuardar() === FALSE ) {
-				$error_txt = $oEntradaBypass->getErrorTxt();
+			$this->oEntradaBypass->setDestinos($aMiembros);
+			if ($this->oEntradaBypass->DBGuardar() === FALSE ) {
+				$error_txt = $this->oEntradaBypass->getErrorTxt();
 				exit ($error_txt);
 			}
 		} else {
 			//(segun individuales)
 			$destinos_txt = '';
-			$a_json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+			$a_json_prot_dst = $this->oEntradaBypass->getJson_prot_destino();
 			foreach ($a_json_prot_dst as $json_prot_dst) {
 				$aMiembros[] = $json_prot_dst->lugar;
 				$oLugar = new Lugar($json_prot_dst->lugar);
@@ -144,14 +157,10 @@ class Enviar {
     }
     
     private function getDestinosEscrito() {
-        $id_escrito = $this->iid;
-        $oEscrito = new Escrito($id_escrito);
-        
-        return $oEscrito->getDestinosIds();
+        return $this->oEscrito->getDestinosIds();
     }
     
     private function getDatosEntrada() {
-        $this->oEntradaBypass = new EntradaBypass($this->iid);
         $this->f_salida = $this->oEntradaBypass->getF_documento()->getFromLocal('.');
         $this->asunto = $this->oEntradaBypass->getAsunto();
         
@@ -200,9 +209,9 @@ class Enviar {
     private function getDatosEscrito($id_lugar) {
         // para no tener que repetir todo cuando hay multiples destinos
         if ($this->bLoaded === FALSE) {
-            $this->oEscrito = new Escrito($this->iid);
+            //$this->oEscrito = new Escrito($this->iid);
             $json_prot_local = $this->oEscrito->getJson_prot_local();
-			// En el caso de los ctr, se evnia directamente sin los pasos 
+			// En el caso de los ctr, se envia directamente sin los pasos 
 			// de cirular por secretaria, y al llegar aqui todavía no se ha generado el 
 			// número de protocolo.
             if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR && empty((array)$json_prot_local)) {
@@ -286,6 +295,7 @@ class Enviar {
         $aDestinos = $this->getDestinatarios();
         
         $num_enviados = 0;
+        $a_lista_dst_as4 = [];
         foreach ($aDestinos as $id_lugar) {
             ini_set( 'display_errors', 1 );
             error_reporting( E_ALL );
@@ -301,14 +311,27 @@ class Enviar {
                     $err_mail = $this->enviarPdf($id_lugar,$email);
                     break;
                 case Lugar::MODO_AS4;
-                	$plataforma = $oLugar->getPlataforma();
-                    $err_mail = $this->enviarAS4($id_lugar,$plataforma);
+					$plataforma = $oLugar->getPlataforma();
+					// si la acción es distribuir, se envia el mismo escrito a un conjunto de ctr.
+					// aquí genero el array de destinos: 
+					if ($this->accion == As4CollaborationInfo::ACCION_DISTRIBUIR) {
+						$a_lista_dst_as4[$plataforma][] = $id_lugar;
+					} else {
+						$err_mail = $this->enviarAS4($id_lugar,$plataforma,$this->accion);
+					}
                     break;
                 default:
                     $err_mail =  _("No hay destinos metodo para este destino");
             }
-            
         }
+        
+        // si es distribuir, enviar en bloque por plataformas.
+		if ($this->accion == As4CollaborationInfo::ACCION_DISTRIBUIR) {
+			foreach ($a_lista_dst_as4 as $plataforma => $a_id_lugar) {
+				$err_mail = $this->enviarAS4Compartido($plataforma,$a_id_lugar);
+			}
+		}
+            
         
         if (empty($aDestinos)) {
             $err_mail = _("No hay destinos para este escrito").':<br>'.$this->filename;
@@ -329,7 +352,63 @@ class Enviar {
         return $this->a_rta;
     }
     
-    private function enviarAS4($id_lugar,$plataforma) {
+    private function enviarAS4Compartido($plataforma,$a_id_lugar) {
+        $err_mail = '';
+        $this->getDocumento();
+                
+        if ($this->tipo == 'escrito') {
+        	// Si la categoria es 'sin numerar', no hay protocolo local.
+        	// fabrico uno con sólo el lugar:
+        	if ($this->oEscrito->getCategoria() == Categoria::CAT_E12 ) {
+        		// Busco el id_lugar de la dl.
+        		$gesLugares = new GestorLugar();
+        		$id_siga_local = $gesLugares->getId_sigla_local();
+        		$json_prot_org = new stdClass;
+        		$json_prot_org->lugar = $id_siga_local;
+        		$json_prot_org->num = '';
+        		$json_prot_org->any = '';
+        		$json_prot_org->mas = '';
+        	} else {
+				$json_prot_org = $this->oEscrito->getJson_prot_local();
+        	}
+        }
+        
+        if ($this->tipo == 'entrada') {
+        	$json_prot_org = $this->oEntradaBypass->getJson_prot_origen();
+        }
+        
+        // Los destinos se añaden en el payload. No se tienen en cuenta a la hora de enviar
+        // Al recoger, se mira sie entán en la plataforma y se les añade.
+	    
+        // generar el xml
+        $oAS4 = new As4();
+        $oAS4->setPlataforma_Destino($plataforma);
+        $oAS4->setAccion($this->accion);
+        $oAS4->setTipo_escrito($this->tipo);
+        $oAS4->setJson_prot_org($json_prot_org);
+        if ($this->tipo == 'escrito') {
+        	$oAS4->setEscrito($this->oEscrito);
+        }
+        if ($this->tipo == 'entrada') {
+        	$oAS4->setEscrito($this->oEntradaBypass);
+        }
+        
+        $err_mail .= $oAS4->writeOnDock($this->filename);
+        
+        if (empty($err_mail)) {
+			$this->a_rta['success'] = TRUE;
+			$this->a_rta['mensaje'] = 'AS4 Message has been sent<br>';
+			$this->a_rta['marcar'] = TRUE;
+        } else {
+			$this->a_rta['success'] = FALSE;
+			$this->a_rta['mensaje'] = 'ERROR AS4 Message has not been sent<br>';
+			$this->a_rta['marcar'] = FALSE;
+        }
+        
+        return $err_mail;
+    }
+
+    private function enviarAS4($id_lugar,$plataforma,$accion) {
         $err_mail = '';
         $this->getDocumento($id_lugar);
                 
@@ -372,8 +451,6 @@ class Enviar {
         	$json_prot_dst = $oProtDst->getProt();
         }
 	    
-	    // parecido al e-mail. debe estar en la definicion del ctr
-        $accion = 'nuevo';
         // generar el xml
         $oAS4 = new As4();
         $oAS4->setPlataforma_Destino($plataforma);

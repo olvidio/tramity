@@ -191,7 +191,6 @@ class DocumentoDB Extends core\ClasePropiedades {
 			    $oDblSt->bindParam(4, $visibilidad, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(5, $tipo_doc, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(6, $f_upload, \PDO::PARAM_STR);
-			    //$oDblSt->bindParam(7, $documento, \PDO::PARAM_LOB);
 			    $oDblSt->bindParam(7, $documento, \PDO::PARAM_STR);
 				try {
 					$oDblSt->execute($aDades);
@@ -227,7 +226,6 @@ class DocumentoDB Extends core\ClasePropiedades {
 			    $oDblSt->bindParam(4, $visibilidad, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(5, $tipo_doc, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(6, $f_upload, \PDO::PARAM_STR);
-			    //$oDblSt->bindParam(7, $documento, \PDO::PARAM_LOB);
 			    $oDblSt->bindParam(7, $documento, \PDO::PARAM_STR);
 				try {
 					$oDblSt->execute($aDades);
@@ -275,7 +273,6 @@ class DocumentoDB Extends core\ClasePropiedades {
 			$oDblSt->bindColumn(4, $visibilidad, \PDO::PARAM_INT);
 			$oDblSt->bindColumn(5, $tipo_doc, \PDO::PARAM_INT);
 			$oDblSt->bindColumn(6, $f_upload, \PDO::PARAM_STR);
-			//$oDblSt->bindColumn(7, $documento, \PDO::PARAM_LOB);
 			$oDblSt->bindColumn(7, $documento, \PDO::PARAM_STR);
 			$oDblSt->fetch(\PDO::FETCH_BOUND);
 			
@@ -576,6 +573,9 @@ class DocumentoDB Extends core\ClasePropiedades {
 	}
 	
 	public function getDocumento() {
+		if (!isset($this->documento) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
 		return hex2bin($this->documento);
 	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/

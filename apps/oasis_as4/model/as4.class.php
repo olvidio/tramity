@@ -119,7 +119,9 @@ class As4 extends As4CollaborationInfo {
     public function getPayloadInfo() {
         
     	$oPayload = new Payload();
-    	$oPayload->setJson_prot_dst($this->json_prot_dst);
+    	$oPayload->setAccion($this->accion);
+
+		$oPayload->setJson_prot_dst($this->json_prot_dst);
     	
     	$oPayload->setPayload($this->oEscrito,$this->tipo_escrito);
     	// formato del texto: pdf|text|html
@@ -173,28 +175,32 @@ class As4 extends As4CollaborationInfo {
             }
         }
 
-        // puede ser 'sin_numerar (E12)'
-		$json_prot_dst = $this->getJson_prot_dst();
-        if (!empty((array)$json_prot_dst)) {
-            $id_lugar_dst = $json_prot_dst->lugar;
-            $lugar_dst = empty($aLugares[$id_lugar_dst])? '' : $aLugares[$id_lugar_dst];
-            $num_dst = $json_prot_dst->num;
-            $any_dst = $json_prot_dst->any;
-            $mas_dst = $json_prot_dst->mas;
-        
-            // No se admiten propiedades vacias: No se incluyen.
-            if (!empty($lugar_dst)) {
-				$message_properties->appendChild($this->newPropertyName('lugar_dst', $lugar_dst));
-            }
-            if (!empty($num_dst)) {
-				$message_properties->appendChild($this->newPropertyName('num_dst', $num_dst));
-            }
-            if (!empty($any_dst)) {
-				$message_properties->appendChild($this->newPropertyName('any_dst', $any_dst));
-            }
-            if (!empty($mas_dst)) {
-				$message_properties->appendChild($this->newPropertyName('mas_dst', $mas_dst));
-            }
+        // En el caso de distribuir, el destino es multiple y no lo pongo aquí,
+        // Estará en el mensaje.
+        if ($this->accion != 'distribuir') {
+			// puede ser 'sin_numerar (E12)'
+			$json_prot_dst = $this->getJson_prot_dst();
+			if (!empty((array)$json_prot_dst)) {
+				$id_lugar_dst = $json_prot_dst->lugar;
+				$lugar_dst = empty($aLugares[$id_lugar_dst])? '' : $aLugares[$id_lugar_dst];
+				$num_dst = $json_prot_dst->num;
+				$any_dst = $json_prot_dst->any;
+				$mas_dst = $json_prot_dst->mas;
+			
+				// No se admiten propiedades vacias: No se incluyen.
+				if (!empty($lugar_dst)) {
+					$message_properties->appendChild($this->newPropertyName('lugar_dst', $lugar_dst));
+				}
+				if (!empty($num_dst)) {
+					$message_properties->appendChild($this->newPropertyName('num_dst', $num_dst));
+				}
+				if (!empty($any_dst)) {
+					$message_properties->appendChild($this->newPropertyName('any_dst', $any_dst));
+				}
+				if (!empty($mas_dst)) {
+					$message_properties->appendChild($this->newPropertyName('mas_dst', $mas_dst));
+				}
+			}
         }
         
         return $message_properties;
@@ -265,7 +271,7 @@ class As4 extends As4CollaborationInfo {
     	$gesLugares = new GestorLugar();
     	$aLugares = $gesLugares->getArrayLugares();
 		
-    	$lugar_dst = '?';
+    	$lugar_dst = 'distribucion';
         if (!empty((array)$this->json_prot_dst)) {
             $id_lugar_dst = $this->json_prot_dst->lugar;
             $lugar_dst = empty($aLugares[$id_lugar_dst])? '' : $aLugares[$id_lugar_dst];

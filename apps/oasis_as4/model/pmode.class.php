@@ -7,12 +7,6 @@ class Pmode extends As4CollaborationInfo {
 	
 	/* CONST -------------------------------------------------------------- */
 	
-	// tipo entrada
-	const ACCION_NUEVO        = 'Nuevo';
-	const ACCION_ELIMINAR     = 'Eliminar';
-	const ACCION_ANULAR       = 'Anular';
-	const ACCION_REEMPLAZAR   = 'Reemplazar';
-	
 	/* PROPIEDADES -------------------------------------------------------------- */
 	/**
 	 *

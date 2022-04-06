@@ -418,6 +418,9 @@ class EscritoAdjunto Extends core\ClasePropiedades {
 	 * @return string adjunto
 	 */
 	public function getAdjunto() {
+		if (!isset($this->adjunto) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
 		return hex2bin($this->adjunto);
 	}
 	/**

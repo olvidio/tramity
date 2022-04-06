@@ -3,6 +3,8 @@ use core\ViewTwig;
 use function core\is_true;
 use entradas\model\Entrada;
 use etherpad\model\Etherpad;
+use entradas\model\entity\EntradaCompartida;
+use entradas\model\entity\GestorEntradaCompartidaAdjunto;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -42,15 +44,29 @@ if (!empty($Qid_entrada)) {
         $cabeceraDcha = $oEntrada->cabeceraDerecha();
     }
     
-    $asunto_e = $oEntrada->getAsunto_entrada();
-    $a_adjuntos = $oEntrada->getArrayIdAdjuntos();
-    // mirar si tienen escrito
-    $f_escrito = $oEntrada->getF_documento()->getFromLocal();
-    $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
-    
-    $oEtherpad = new Etherpad();
-    $oEtherpad->setId (Etherpad::ID_ENTRADA,$Qid_entrada);
-    
+	$asunto_e = $oEntrada->getAsunto_entrada();
+	// mirar si tienen escrito
+	$f_escrito = $oEntrada->getF_documento()->getFromLocal();
+	$f_entrada = $oEntrada->getF_entrada()->getFromLocal();
+	
+    $id_entrada_compartida = $oEntrada->getId_entrada_compartida();
+    if (!empty($id_entrada_compartida)) {
+    	/*
+    	$oEntradaCompartida = new EntradaCompartida($id_entrada_compartida);
+    	$descripcion = $oEntradaCompartida->getDescripcion();
+    	*/	
+    	$gesEntradaAdjuntos = new GestorEntradaCompartidaAdjunto();
+    	$a_adjuntos = $gesEntradaAdjuntos->getArrayIdAdjuntos($id_entrada_compartida);
+    	
+    	
+		$oEtherpad = new Etherpad();
+    	$oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada_compartida);
+    } else {
+		$a_adjuntos = $oEntrada->getArrayIdAdjuntos();
+		
+		$oEtherpad = new Etherpad();
+		$oEtherpad->setId (Etherpad::ID_ENTRADA,$Qid_entrada);
+    }
     $escrito_html = $oEtherpad->generarHtml();
 } else {
     $cabeceraIzqd = '';

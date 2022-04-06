@@ -14,6 +14,7 @@ use web\StringLocal;
 class Etherpad  extends Client {
     
     // Tipos de id
+    const ID_COMPARTIDO  = 'compartido';
     const ID_ADJUNTO     = 'adjunto';
     const ID_DOCUMENTO   = 'documento';
     const ID_ENTRADA     = 'entrada';
@@ -44,38 +45,42 @@ class Etherpad  extends Client {
     
     
     public function setId ($tipo_id,$id,$sigla='') {
-        // Añado el nombre del centro. De forma normalizada, pues a saber que puede tener el nombre:
-    	if (empty($sigla)) {
-			$sigla = $_SESSION['oConfig']->getSigla();
+    	// excepción para las entradas compartidas:
+    	if ($tipo_id == self::ID_COMPARTIDO) {
+			$prefix = 'com';
+			$this->id_escrito = $prefix.$id;
+    	} else {
+			// Añado el nombre del centro. De forma normalizada, pues a saber que puede tener el nombre:
+			if (empty($sigla)) {
+				$sigla = $_SESSION['oConfig']->getSigla();
+			}
+			$nom_ctr = StringLocal::lowerNormalized($sigla);
+			
+			switch ($tipo_id) {
+				case self::ID_ADJUNTO:
+					$prefix = 'adj';
+					break;
+				case self::ID_DOCUMENTO:
+					$prefix = 'doc';
+					break;
+				case self::ID_ENTRADA:
+					$prefix = 'ent';
+					break;
+				case self::ID_ESCRITO:
+					$prefix = 'esc';
+					break;
+				case self::ID_EXPEDIENTE:
+					$prefix = 'exp';
+					break;
+				case self::ID_PLANTILLA:
+					$prefix = 'plt';
+					break;
+				default:
+					$err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+					exit ($err_switch);
+			}
+			$this->id_escrito = $nom_ctr."*".$prefix.$id;
     	}
-        $nom_ctr = StringLocal::lowerNormalized($sigla);
-        
-        switch ($tipo_id) {
-            case self::ID_ADJUNTO:
-                $prefix = 'adj';
-                break;
-            case self::ID_DOCUMENTO:
-                $prefix = 'doc';
-                break;
-            case self::ID_ENTRADA:
-                $prefix = 'ent';
-                break;
-            case self::ID_ESCRITO:
-                $prefix = 'esc';
-                break;
-            case self::ID_EXPEDIENTE:
-                $prefix = 'exp';
-                break;
-            case self::ID_PLANTILLA:
-                $prefix = 'plt';
-                break;
-            default:
-                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-                exit ($err_switch);
-        }
-        
-        $this->id_escrito = $nom_ctr."*".$prefix.$id;
-        
         return $this->id_escrito;
     }
     

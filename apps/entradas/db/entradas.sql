@@ -1,5 +1,6 @@
 CREATE TABLE public.entradas (
     id_entrada SERIAL PRIMARY KEY,
+    id_entrada_compartida integer,
     modo_entrada integer NOT NULL,
     json_prot_origen jsonb,
     asunto_entrada text NOT NULL,

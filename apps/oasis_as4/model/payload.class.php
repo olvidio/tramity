@@ -17,6 +17,7 @@ class Payload {
 	const TYPE_ETHERAD_TXT    = 'etherpad_txt';
 	const TYPE_ETHERAD_HTML   = 'etherpad_html';
 	
+	private $accion;
 	
     private $aLugares; 
     private $dom;
@@ -38,6 +39,10 @@ class Payload {
 	private $visibilidad;
 	private $a_id_adjuntos;
 	private $id_escrito;
+
+	private $descripcion;
+	private $categoria;
+	private $destinos;
 	
 	public function __construct() {
 		$gesLugares = new GestorLugar();
@@ -55,7 +60,6 @@ class Payload {
 		}
 	}
 	public function setPayloadEntrada($oEntrada) {
-		
 		$this->json_prot_local = $oEntrada->getJson_prot_origen();
 		// OJO hay que coger el destino que se tiene al enviar, 
 		// no el del escrito, que puede ser a varios o un grupo.
@@ -75,10 +79,17 @@ class Payload {
 		$this->setA_id_adjuntos($oEntrada->getArrayIdAdjuntos());
 		
 		$this->nombre_escrito = $oEntrada->getNombreEscrito() . '.xml';
+		
+		if ($this->accion == 'distribuir') {
+			$this->json_prot_dst = $oEntrada->getJson_prot_destino();
+			///$this->descripcion = $oEntrada->getDescripcion();
+			$this->descripcion = $oEntrada->cabeceraDistribucion_cr(); // decripción más completa
+			$this->categoria = $oEntrada->getCategoria();
+			$this->destinos = $oEntrada->getDestinos();
+		}
 	}
 
 	public function setPayloadEscrito($oEscrito) {
-		
 		$this->json_prot_local = $oEscrito->getJson_prot_local();
 		// OJO hay que coger el destino que se tiene al enviar, 
 		// no el del escrito, que puede ser a varios o un grupo.
@@ -96,10 +107,18 @@ class Payload {
 		$this->setVisibilidad($oEscrito->getVisibilidad_dst());
 
 		$this->setA_id_adjuntos($oEscrito->getArrayIdAdjuntos());
-		
+
 		$this->nombre_escrito = $oEscrito->getNombreEscrito() . '.xml';
+
+		if ($this->accion == 'distribuir') {
+			$this->json_prot_dst = $oEscrito->getJson_prot_destino();
+			$this->descripcion = $oEscrito->getDestinosEscrito(); // para que salga la descripción del grupo.
+			$this->categoria = $oEscrito->getCategoria();
+			$this->destinos = $oEscrito->getDestinos();
+		}
 	}
 
+	
 	/*
 	<PartInfo containment="body" location="payloads/simple_document.xml">
 	  <PartProperties>
@@ -150,6 +169,9 @@ class Payload {
 		$this->escrito->appendChild($this->getXmlContent());
 		$this->escrito->appendChild($this->getXmlVisibilidad());
 		$this->escrito->appendChild($this->getXmlAdjuntos());
+		if ($this->accion == 'distribuir') {
+			$this->escrito->appendChild($this->getXmlCompartido());
+		}
 		
 		$this->dom->preserveWhiteSpace = false;
 		$this->dom->formatOutput = true;
@@ -390,7 +412,6 @@ class Payload {
 		switch ($this->getFormat()) {
 			case 'pdf':
 				exit ('falta para pdf');
-				return $oEtherpad->generarPDF($a_header,$f_salida);
 			case Payload::TYPE_ETHERAD_TXT:
 			case 'txt':
 				$txt = $oEtherpad->generarMD();
@@ -448,6 +469,29 @@ class Payload {
 	 */
 	public function setVisibilidad($visibilidad) {
 		$this->visibilidad = $visibilidad;
+	}
+	
+	public function getXmlCompartido() {
+		$nodo_compartido = $this->dom->createElement('compartido');
+		if (!empty($this->descripcion)) {
+			$nodo = $this->dom->createElement('descripcion',$this->descripcion);
+			$nodo_compartido->appendChild($nodo);
+		}
+		if (!empty($this->categoria)) {
+			$nodo = $this->dom->createElement('categoria',$this->categoria);
+			$nodo_compartido->appendChild($nodo);
+		}
+		if (!empty($this->destinos)) {
+			$nodo_array = $this->dom->createElement('destinos');
+			
+			foreach ($this->destinos as $id_destinno) {
+				$nodo = $this->dom->createElement('destino',$id_destinno);
+				$nodo_array->appendChild($nodo);
+			}
+			$nodo_compartido->appendChild($nodo_array);
+		}
+
+		return $nodo_compartido;
 	}
 
 	/**
@@ -546,6 +590,20 @@ class Payload {
 			$this->deleteFilesAfterSubmit = 'false';
 		}
 	}
+	/**
+	 * @return mixed
+	 */
+	public function getAccion() {
+		return $this->accion;
+	}
+
+	/**
+	 * @param mixed $accion
+	 */
+	public function setAccion($accion) {
+		$this->accion = $accion;
+	}
+
 
 
 

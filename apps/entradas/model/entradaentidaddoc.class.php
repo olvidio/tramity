@@ -43,4 +43,3 @@ class EntradaEntidadDoc Extends EntradaDocDB {
 	}
 	
 }
-    

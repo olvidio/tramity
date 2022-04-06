@@ -10,6 +10,7 @@ abstract class As4CollaborationInfo {
 	const ACCION_ELIMINAR     = 'eliminar';
 	const ACCION_ANULAR       = 'anular';
 	const ACCION_REEMPLAZAR   = 'reemplazar';
+	const ACCION_DISTRIBUIR   = 'distribuir';
 	
 	/* PROPIEDADES -------------------------------------------------------------- */
 	
@@ -24,6 +25,7 @@ abstract class As4CollaborationInfo {
 				self::ACCION_ANULAR => _("anular"),
 				self::ACCION_ELIMINAR => _("eliminar"),
 				self::ACCION_NUEVO => _("nuevo"),
+				self::ACCION_DISTRIBUIR => _("distribuir"),
 				self::ACCION_REEMPLAZAR => _("reemplazar"),
 		];
 	}

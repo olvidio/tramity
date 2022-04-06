@@ -187,15 +187,15 @@ switch($Qque) {
     case 'guardar_destinos':
 		$oEntradaBypass = new EntradaBypass($Qid_entrada);
 		$oEntradaBypass->DBCarregar();
+		// Al cargar si no existe, también borra el id_entrada, y hay que volver a asignarlo.
+		$oEntradaBypass->setId_entrada($Qid_entrada);
         //Qasunto.
-        $oEntrada = new EntradaDB($Qid_entrada);
         $oPermisoRegistro = new PermRegistro();
-        $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntrada, 'asunto');
+        $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntradaBypass, 'asunto');
         if ( $perm_asunto >= PermRegistro::PERM_MODIFICAR) {
-            $oEntrada->DBCarregar();
-            $oEntrada->setAsunto($Qasunto);
-            if ($oEntrada->DBGuardar() === FALSE) {
-                $error_txt .= $oEntrada->getErrorTxt();
+            $oEntradaBypass->setAsunto($Qasunto);
+            if ($oEntradaBypass->DBGuardar() === FALSE) {
+                $error_txt .= $oEntradaBypass->getErrorTxt();
             }
         }
         // destinos
@@ -235,7 +235,9 @@ switch($Qque) {
             }
             $oEntradaBypass->setJson_prot_destino($aProtDst);
             $oEntradaBypass->setId_grupos();
-            $oEntradaBypass->setDescripcion('x'); // no puede ser null.
+            if (empty($oEntradaBypass->getDescripcion())) {
+				$oEntradaBypass->setDescripcion('x'); // no puede ser null.
+            }
         }
         $oEntradaBypass->setF_salida($Qf_salida);
         if ($oEntradaBypass->DBGuardar() === FALSE ) {
@@ -498,6 +500,8 @@ switch($Qque) {
             if (is_true($Qbypass) && !empty($Qid_entrada)) {
 				$oEntradaBypass = new EntradaBypass($Qid_entrada);
 				$oEntradaBypass->DBCarregar();
+				// Al cargar si no existe, también borra el id_entrada, y hay que volver a asignarlo.
+				$oEntradaBypass->setId_entrada($Qid_entrada);
                 //Qasunto.
                 if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
                     $oEntrada = new EntradaDB($Qid_entrada);

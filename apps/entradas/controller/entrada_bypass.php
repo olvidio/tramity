@@ -77,7 +77,7 @@ $f_entrada = $oEntradaBypass->getF_entrada()->getFromLocal();
 // oficinas:
 $oficinas_txt = '';
 $id_of_ponente = $oEntradaBypass->getPonente();
-$oficinas_txt .= $a_posibles_oficinas[$id_of_ponente];
+$oficinas_txt .= empty($a_posibles_oficinas[$id_of_ponente])? '?' : $a_posibles_oficinas[$id_of_ponente];
 $a_oficinas = $oEntradaBypass->getResto_oficinas();
 foreach ($a_oficinas as $id_id_oficina) {
     $sigla_of = $a_posibles_oficinas[$id_id_oficina];

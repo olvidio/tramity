@@ -1,5 +1,5 @@
 <?php
-use entradas\model\As4Distribuir;
+use oasis_as4\model\As4Distribuir;
 use oasis_as4\model\As4SignalMessage;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -13,12 +13,8 @@ require_once ("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
-$Qslide_mode = (string) \filter_input(INPUT_POST, 'slide_mode');
-
 $dir = $_SESSION['oConfig']->getDock();
 $dir_dock = $dir . '/data/msg_in';  
-
 
 $a_scan = scandir($dir_dock);
 $a_files = array_diff($a_scan, ['.','..']);
@@ -49,7 +45,7 @@ $txt = '';
 foreach ($a_files_mmd as $file_mmd) {
 	$xmldata = simplexml_load_file($file_mmd);
 	$AS4 = new As4Distribuir($xmldata);
-	if ($AS4->distribuir() === TRUE) {
+	if ($AS4->introducirEnDB() === TRUE) {
 		// eliminar el mensaje de la bandeja de entrada 
 		// nombre del fihero del body:
 		$location = $AS4->getLocation();

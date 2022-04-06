@@ -290,7 +290,7 @@ class EntradaLista {
                 $row['referencias'] = $oArrayProtRef->ListaTxtBr();
                 
                 $id_categoria = $oEntrada->getCategoria();
-                $row['categoria'] = $a_categorias[$id_categoria];
+                $row['categoria'] = empty($a_categorias[$id_categoria])? '?' : $a_categorias[$id_categoria];
                 $row['asunto'] = $oEntrada->getAsuntoDetalle();
                 
                 $id_of_ponente =  $oEntrada->getPonente();
