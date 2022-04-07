@@ -27,7 +27,6 @@ echo "</div>";
 
 
 $Qid_escrito = (integer) \filter_input(INPUT_GET, 'id');
-
 $f_salida = date(\DateTimeInterface::ISO8601);
 // Comprobar si tiene clave para enviar un xml, o hay que generar un pdf.
 

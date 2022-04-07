@@ -3,6 +3,7 @@ use core\ViewTwig;
 use entradas\model\Entrada;
 use entradas\model\entity\EntradaBypass;
 use envios\model\Enviar;
+use oasis_as4\model\As4Remove;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -14,6 +15,16 @@ use envios\model\Enviar;
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
+	
+// Para enseñar el mesaje antes de terminar el script
+ob_end_flush();
+ob_implicit_flush();
+echo "<div id=\"slow_load\" style=\"display: flex; justify-content: center; align-items: center; text-align: center;\">";
+echo _("preparando escritos para enviar...");
+echo "<br>";
+echo "<img class=\"mb-4\" src=\"../images/loading.gif\" alt=\"cargando\" width=\"32\" height=\"32\">";
+echo "</div>";
+	
 
 $Qid_entrada = (integer) \filter_input(INPUT_GET, 'id');
 $Qf_salida = (string) \filter_input(INPUT_POST, 'f_salida');
@@ -21,7 +32,23 @@ $Qf_salida = (string) \filter_input(INPUT_POST, 'f_salida');
 if (empty($Qf_salida)) {
     $Qf_salida = date(\DateTimeInterface::ISO8601);
 }
-// Comprobar si tiene clave para enviar un xml, o hay que generar un pdf.
+
+$rta_txt = '';
+// borrar los ya enviados:
+$oAS4Remove =  new As4Remove();
+$rta_txt = $oAS4Remove->remove_accepted();
+if (!empty($rta_txt)) {
+	exit(_("No puedo eliminar los ya enviados"));
+}
+
+// borrar los errores:
+$oAS4Remove =  new As4Remove();
+$rta_txt = $oAS4Remove->remove_rejected();
+if (!empty($rta_txt)) {
+	$rta_txt .= "<br>";
+	$rta_txt .= _("No puedo eliminar los rechazados");
+	exit($rta_txt);
+}
 
 // Primero intento enviar, sólo guardo la f_salida si tengo éxito
 $oEnviar = new Enviar($Qid_entrada,'entrada');
