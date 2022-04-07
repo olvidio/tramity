@@ -8,6 +8,7 @@ use envios\model\MIMEContainer;
 use escritos\model\entity\EscritoAdjunto;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
+use entradas\model\entity\EntradaAdjunto;
 
 
 
@@ -40,6 +41,7 @@ class Payload {
 	private $a_id_adjuntos;
 	private $id_escrito;
 
+	private $tipo_escrito;
 	private $descripcion;
 	private $categoria;
 	private $destinos;
@@ -52,10 +54,11 @@ class Payload {
 	}
 	
 	public function setPayload($oEscrito,$tipo_escrito) {
-		if ($tipo_escrito == 'escrito') {
+		$this->tipo_escrito = $tipo_escrito;
+		if ($this->tipo_escrito == 'escrito') {
 			$this->setPayloadEscrito($oEscrito);
 		}
-		if ($tipo_escrito == 'entrada') {
+		if ($this->tipo_escrito == 'entrada') {
 			$this->setPayloadEntrada($oEscrito);
 		}
 	}
@@ -500,23 +503,30 @@ class Payload {
 	public function getXmlAdjuntos() {
 		$a_adjuntos = [];
 		foreach ($this->a_id_adjuntos as $item => $adjunto_filename) {
-			$oEscritoAdjunto = new EscritoAdjunto($item);
-			$tipo_doc = $oEscritoAdjunto->getTipo_doc();
-			switch ($tipo_doc) {
-				case Documento::DOC_UPLOAD:
-					$escrito_txt = $oEscritoAdjunto->getAdjunto();
-					$a_adjuntos[$adjunto_filename] = $escrito_txt;
-					break;
-				case Documento::DOC_ETHERPAD:
-					$id_adjunto = $oEscritoAdjunto->getId_item();
-					$oEtherpadAdj = new Etherpad();
-					$oEtherpadAdj->setId (Etherpad::ID_ADJUNTO,$id_adjunto);
-					$escrito_txt = $oEtherpadAdj->generarPDF();
-					$a_adjuntos[$adjunto_filename] = $escrito_txt;
-					break;
-				default:
-					$err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-					exit ($err_switch);
+			if ($this->tipo_escrito == 'entrada') {
+				$oEntradaAdjunto = new EntradaAdjunto($item);
+				$escrito_txt = $oEntradaAdjunto->getAdjunto();
+				$a_adjuntos[$adjunto_filename] = $escrito_txt;
+			}
+			if ($this->tipo_escrito == 'escrito') {
+				$oEscritoAdjunto = new EscritoAdjunto($item);
+				$tipo_doc = $oEscritoAdjunto->getTipo_doc();
+				switch ($tipo_doc) {
+					case Documento::DOC_UPLOAD:
+						$escrito_txt = $oEscritoAdjunto->getAdjunto();
+						$a_adjuntos[$adjunto_filename] = $escrito_txt;
+						break;
+					case Documento::DOC_ETHERPAD:
+						$id_adjunto = $oEscritoAdjunto->getId_item();
+						$oEtherpadAdj = new Etherpad();
+						$oEtherpadAdj->setId (Etherpad::ID_ADJUNTO,$id_adjunto);
+						$escrito_txt = $oEtherpadAdj->generarPDF();
+						$a_adjuntos[$adjunto_filename] = $escrito_txt;
+						break;
+					default:
+						$err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+						exit ($err_switch);
+				}
 			}
 		}
 		

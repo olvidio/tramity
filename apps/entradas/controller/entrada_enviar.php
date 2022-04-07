@@ -15,16 +15,18 @@ use oasis_as4\model\As4Remove;
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-	
+/*	
 // Para enseñar el mesaje antes de terminar el script
+// NO SE PUEDE porque al consultar el etherpad:
+// headers alredy sent...
 ob_end_flush();
 ob_implicit_flush();
-echo "<div id=\"slow_load\" style=\"display: flex; justify-content: center; align-items: center; text-align: center;\">";
+echo "<div id=\"slow_load\" style=\"display: flex; justify-content: center; align-items: center; text-align: center; margin-top: 100px;\">";
 echo _("preparando escritos para enviar...");
 echo "<br>";
-echo "<img class=\"mb-4\" src=\"../images/loading.gif\" alt=\"cargando\" width=\"32\" height=\"32\">";
+echo "<img class=\"mb-4\" src=\"../../images/loading.gif\" alt=\"cargando\" width=\"32\" height=\"32\">";
 echo "</div>";
-	
+*/
 
 $Qid_entrada = (integer) \filter_input(INPUT_GET, 'id');
 $Qf_salida = (string) \filter_input(INPUT_POST, 'f_salida');
