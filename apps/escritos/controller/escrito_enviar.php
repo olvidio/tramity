@@ -33,7 +33,9 @@ if (!empty($rta_txt)) {
 $oAS4Remove =  new As4Remove();
 $rta_txt = $oAS4Remove->remove_rejected();
 if (!empty($rta_txt)) {
-	exit(_("No puedo eliminar los rechazados"));
+	$rta_txt .= "<br>";
+	$rta_txt .= _("No puedo eliminar los rechazados");
+	exit($rta_txt);
 }
 
 // Primero intento enviar, sólo guardo la f_salida si tengo éxito

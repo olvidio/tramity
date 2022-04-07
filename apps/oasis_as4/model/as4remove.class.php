@@ -56,6 +56,9 @@ class As4Remove {
 		foreach ($this->a_files_rejected as $file_rejected) {
 			$file_err = str_replace("rejected", "err", $file_rejected);
 			$txt .= $this->getErrMsg($file_err);
+			if (unlink($file_err) === FALSE) {
+				$txt .= sprintf(_("No se ha podido eliminar el fichero %s"), $file_err);
+			}
 			
 			$this->xmldata = simplexml_load_file($file_rejected);
 				
