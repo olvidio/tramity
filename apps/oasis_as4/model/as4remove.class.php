@@ -109,7 +109,7 @@ class As4Remove {
     private function getErrMsg($file_err) {
     	$txt = '';
     	$err = file_get_contents($file_err);
-		$pattern = "/.*(Exception cause:.*\n).*/";
+		$pattern = "/(.*\n)*Exception cause:.*\n).*/";
 		$matches = [];
 		if (preg_match($pattern, $err, $matches)) {
 			$txt = _("Fichero").": $file_err<br>";
