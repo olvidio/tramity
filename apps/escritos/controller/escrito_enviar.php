@@ -29,6 +29,13 @@ if (!empty($rta_txt)) {
 	exit(_("No puedo eliminar los ya enviados"));
 }
 
+// borrar los errores:
+$oAS4Remove =  new As4Remove();
+$rta_txt = $oAS4Remove->remove_rejected();
+if (!empty($rta_txt)) {
+	exit(_("No puedo eliminar los rechazados"));
+}
+
 // Primero intento enviar, sólo guardo la f_salida si tengo éxito
 // Ahora cambio y pongo la f_salida si puedo enviar 1 o más. Los que no, salen como 
 // error, pero el escrito se marca como enviado.

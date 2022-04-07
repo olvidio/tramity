@@ -9,11 +9,14 @@ namespace oasis_as4\model;
  *
  */
 class As4Remove {
-	
+	private $bLoaded=FALSE;	
 	private $xmldata;
 	
     private $dor_dock;
     private $location;
+    
+    private $a_files_accepted;
+    private $a_files_rejected;
     
     
     public function __construct() {
@@ -22,33 +25,63 @@ class As4Remove {
     }
     
     private function getFiles() {
-		
-		$a_scan = scandir($this->dir_dock);
-		$a_files = array_diff($a_scan, ['.','..']);
-		
-		// mensajes de accepted
-		$a_files_accepted = [];
-		foreach ($a_files as $filename) {
-			$matches = [];
-			$pattern = "/(.*)\.accepted/";
+    	if (!$this->bLoaded) {
+			$a_scan = scandir($this->dir_dock);
+			$a_files = array_diff($a_scan, ['.','..']);
 			
-			if (preg_match($pattern, $filename, $matches)) {
-				$a_files_accepted[] = $this->dir_dock.'/'.$matches[0];
+			// mensajes de accepted
+			$this->a_files_accepted = [];
+			// mensajes de rejected
+			$this->a_files_rejected = [];
+			foreach ($a_files as $filename) {
+				$matches = [];
+				$pattern = "/(.*)\.accepted/";
+				if (preg_match($pattern, $filename, $matches)) {
+					$this->a_files_accepted[] = $this->dir_dock.'/'.$matches[0];
+				}
+				$pattern = "/(.*)\.rejected/";
+				if (preg_match($pattern, $filename, $matches)) {
+					$this->a_files_rejected[] = $this->dir_dock.'/'.$matches[0];
+				}
+			}
+			$this->bLoaded = TRUE;
+    	}
+    }
+    
+    public function remove_rejected() {
+		// cada mensaje buscar el error
+		// y  el payload
+		$this->getFiles();
+		$txt = '';
+		foreach ($this->a_files_rejected as $file_rejected) {
+			$file_err = str_replace("rejected", "err", $file_rejected);
+			$txt .= $this->getErrMsg($file_err);
+			
+			$this->xmldata = simplexml_load_file($file_rejected);
+				
+			$location = $this->getLocation();
+			if (!empty($location)) {
+				if (unlink($location) === FALSE) {
+					$txt .= sprintf(_("No se ha podido eliminar el fichero %s"), $location);
+				}
+			}
+			// el mensaje
+			if (unlink($file_rejected) === FALSE) {
+				$txt .= sprintf(_("No se ha podido eliminar el mensaje %s"), $file_rejected);
 			}
 		}
 		
-		return $a_files_accepted;
+		return $txt;
     }
     
     public function remove_accepted() {
 		// cada mensaje que llega hay que descomponer y borrar los payloads.
-		$a_files_accepted = $this->getFiles();
+		$this->getFiles();
 		$txt = '';
-		foreach ($a_files_accepted as $file_accepted) {
+		foreach ($this->a_files_accepted as $file_accepted) {
 			$this->xmldata = simplexml_load_file($file_accepted);
 				
 			$location = $this->getLocation();
-			
 			if (!empty($location)) {
 				if (unlink($location) === FALSE) {
 					$txt .= sprintf(_("No se ha podido eliminar el fichero %s"), $location);
@@ -70,6 +103,17 @@ class As4Remove {
     	$location = $payload->PartInfo->attributes()->location;
 		$location = $this->dir_dock.'/'.$location;
     	$this->setLocation($location);
+    }
+    
+    private function getErrMsg($file_err) {
+    	$txt = '';
+    	$err = file_get_contents($file_err);
+		$pattern = "/.*(Exception cause:.*\n).*/";
+		$matches = [];
+		if (preg_match($pattern, $err, $matches)) {
+			$txt = $matches[1];
+		}
+		return $txt;
     }
     
     /**

@@ -144,7 +144,7 @@ class As4Distribuir extends As4CollaborationInfo {
 				case As4CollaborationInfo::ACCION_DISTRIBUIR:
 					// comprobar que existe algún destino
 					if ( !empty($this->a_destinos) ) {
-						$this->entrada_compartida();
+						$success = $this->entrada_compartida();
 					} else {
 						$success = FALSE;
 					}
@@ -175,7 +175,7 @@ class As4Distribuir extends As4CollaborationInfo {
 		$oEntradaCompartida->setDestinos($this->a_destinos);
 
 		if ($oEntradaCompartida->DBGuardar() === FALSE ) {
-			exit($oEntradaCompartida->getErrorTxt());
+			return FALSE;
 		} else {
 			$id_entrada_compartida = $oEntradaCompartida->getId_entrada_compartida();
 		}
@@ -189,7 +189,7 @@ class As4Distribuir extends As4CollaborationInfo {
 			$this->cargarAdjuntoCompartido($this->a_adjuntos, $id_entrada_compartida);	
 		}
 		
-		// crear entradas individuales para cadda destino
+		// crear entradas individuales para cada destino
 		foreach ($this->a_destinos as $id_destino) {
 			$siglaDestino = $this->aLugares[$id_destino];
 			// comprobar que el destino está en la plataforma, sino, no se crea la entrada
@@ -201,6 +201,7 @@ class As4Distribuir extends As4CollaborationInfo {
 				}
 			}
 		}
+		return TRUE;
 	}
 	
 	private function nuevo() {
