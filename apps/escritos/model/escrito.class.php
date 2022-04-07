@@ -128,10 +128,10 @@ class Escrito Extends EscritoDB {
         }
         // segun si el destino es cr o resto:
         $bCr = FALSE;
-        $aProtDst = $this->getJson_prot_destino();
+        $aProtDst = $this->getJson_prot_destino(TRUE);
         // es un array, pero sólo debería haber uno...
         foreach($aProtDst as $json_prot_destino) {
-            if (count(get_object_vars($json_prot_destino)) == 0) {
+            if (empty((array)$json_prot_destino)) {
                 exit (_("Error no hay destino"));
             } else {
                 $lugar = $json_prot_destino->lugar;
