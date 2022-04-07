@@ -16,6 +16,11 @@ require_once ("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
+// mesaje espera:
+echo "preparando escritos para enviar...";
+
+
+
 $Qid_escrito = (integer) \filter_input(INPUT_GET, 'id');
 
 $f_salida = date(\DateTimeInterface::ISO8601);

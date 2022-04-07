@@ -101,8 +101,6 @@ class As4Remove {
     
     private function getPayload() {
     	$payload = $this->xmldata->PayloadInfo;
-    	//$containment = $payload->PartInfo->attributes()->containment;
-    	//$filename = $payload->PartInfo->PartProperties->property;
     	$location = $payload->PartInfo->attributes()->location;
 		$location = $this->dir_dock.'/'.$location;
     	$this->setLocation($location);
@@ -114,6 +112,7 @@ class As4Remove {
 		$pattern = "/.*(Exception cause:.*\n).*/";
 		$matches = [];
 		if (preg_match($pattern, $err, $matches)) {
+			$txt = _("Fichero").": $file_err<br>";
 			$txt = $matches[1];
 		}
 		return $txt;
