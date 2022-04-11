@@ -157,7 +157,7 @@ if ($Qque == 'documentos') {
 			$visibilidad = $oDocumentoOrg->getVisibilidad('');
 			$tipo_doc = $oDocumentoOrg->getTipo_doc('');
 			$f_upload = $oDocumentoOrg->getF_upload('');
-			$res_adjunto = $oDocumentoOrg->getResource();
+			$res_adjunto = $oDocumentoOrg->getDocumentoResource();
 			
 			if (!empty($res_adjunto)) {
 				rewind($res_adjunto);
