@@ -139,6 +139,7 @@ class DocumentoLista {
         $pagina_nueva = Hash::link('apps/documentos/controller/documento_form.php?'.http_build_query($a_cosas));
         $pagina_converter_en = Hash::link('apps/documentos/controller/convertir_documentos.php?'.http_build_query(['que'=>'entradas']));
         $pagina_converter_es = Hash::link('apps/documentos/controller/convertir_documentos.php?'.http_build_query(['que'=>'escritos']));
+        $pagina_converter_doc = Hash::link('apps/documentos/controller/convertir_documentos.php?'.http_build_query(['que'=>'documentos']));
         
         $vista = ConfigGlobal::getVista();
         
@@ -152,6 +153,7 @@ class DocumentoLista {
             'pagina_cancel' => $pagina_cancel,
             'pagina_converter_en' => $pagina_converter_en,
             'pagina_converter_es' => $pagina_converter_es,
+            'pagina_converter_doc' => $pagina_converter_doc,
             // tabs_show
             'vista' => $vista,
         ];

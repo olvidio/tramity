@@ -1,6 +1,7 @@
 <?php
 
 use documentos\model\Documento;
+use documentos\model\entity\GestorDocumentoOrg;
 use entradas\model\entity\EntradaAdjunto;
 use entradas\model\entity\GestorEntradaAdjuntoOrg;
 use escritos\model\entity\EscritoAdjunto;
@@ -128,5 +129,58 @@ if ($Qque == 'entradas') {
 		];
 		$cEntradaAdjuntosOrg = $gesAdjuntosEntradasOrg->getEntradasAdjunto($aWhere);
 		$num_filas = count($cEntradaAdjuntosOrg);
+	}
+}
+
+if ($Qque == 'documentos') {
+	// Adjuntos de entradas:
+	$gesDocumentosOrg = new GestorDocumentoOrg();
+	// Dividir en partes para que no colapse: memory ... bytes exhausted
+	//$cDocumentoAdjuntosOrg = $gesAdjuntosDocumentosOrg->getDocumentosAdjunto();
+	
+	$cantidad = 100;
+	$anterior = 0;
+	$aWhere = [ '_ordre' => 'id_item',
+			'_limit' => $cantidad,
+			'_offset' => $anterior,
+	];
+	$cDocumentoOrg = $gesDocumentosOrg->getDocumentos($aWhere);
+	$num_filas = count($cDocumentoOrg);
+	while ($num_filas > 0) {
+		$anterior += $num_filas;
+		
+		foreach($cDocumentoOrg as $oDocumentoOrg) {
+			$id_item = $oDocumentoOrg->getId_item();
+			$id_entrada = $oDocumentoOrg->getId_entrada();
+			$nom = $oDocumentoOrg->getNom();
+			$res_adjunto = $oDocumentoOrg->getResource();
+			
+			if (!empty($res_adjunto)) {
+				rewind($res_adjunto);
+				$doc_encoded = stream_get_contents($res_adjunto);
+				if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
+					// $data is valid
+					$doc = base64_decode($doc_encoded);
+				} else {
+					// $data is NOT valid
+					$doc = $doc_encoded;
+				}
+				// grabar el nuevo:
+				$oDocumento = new Documento($id_item);
+				$oDocumento->DBCarregar();
+				$oDocumento->setId_entrada($id_entrada);
+				$oDocumento->setNom($nom);
+				$oDocumento->setAdjunto($doc);
+				$oDocumento->DBGuardar();
+			}
+				
+		}
+		
+		$aWhere = [ '_ordre' => 'id_item',
+				'_limit' => $cantidad,
+				'_offset' => $anterior,
+		];
+		$cDocumentosOrg = $gesDocumentosOrg->getDocumentos($aWhere);
+		$num_filas = count($cDocumentosOrg);
 	}
 }
