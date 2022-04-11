@@ -140,7 +140,7 @@ if ($Qque == 'documentos') {
 	
 	$cantidad = 5;
 	$anterior = 0;
-	$aWhere = [ '_ordre' => 'id_item',
+	$aWhere = [ '_ordre' => 'id_doc',
 			'_limit' => $cantidad,
 			'_offset' => $anterior,
 	];
@@ -150,9 +150,13 @@ if ($Qque == 'documentos') {
 		$anterior += $num_filas;
 		
 		foreach($cDocumentoOrg as $oDocumentoOrg) {
-			$id_item = $oDocumentoOrg->getId_item();
-			$id_entrada = $oDocumentoOrg->getId_entrada();
+			$id_doc = $oDocumentoOrg->getId_doc();
 			$nom = $oDocumentoOrg->getNom();
+			$nombre_fichero = $oDocumentoOrg->getNombre_fichero();
+			$creador = $oDocumentoOrg->getCreador('');
+			$visibilidad = $oDocumentoOrg->getVisibilidad('');
+			$tipo_doc = $oDocumentoOrg->getTipo_doc('');
+			$f_upload = $oDocumentoOrg->getF_upload('');
 			$res_adjunto = $oDocumentoOrg->getResource();
 			
 			if (!empty($res_adjunto)) {
@@ -166,17 +170,21 @@ if ($Qque == 'documentos') {
 					$doc = $doc_encoded;
 				}
 				// grabar el nuevo:
-				$oDocumento = new Documento($id_item);
+				$oDocumento = new Documento($id_doc);
 				$oDocumento->DBCarregar();
-				$oDocumento->setId_entrada($id_entrada);
 				$oDocumento->setNom($nom);
-				$oDocumento->setAdjunto($doc);
+				$oDocumento->setNombre_fichero($nombre_fichero);
+				$oDocumento->setCreador($creador);
+				$oDocumento->setVisibilidad($visibilidad);
+				$oDocumento->setTipo_doc($tipo_doc);
+				$oDocumento->setF_upload($f_upload);
+				$oDocumento->setDocumento($doc);
 				$oDocumento->DBGuardar();
 			}
 				
 		}
 		
-		$aWhere = [ '_ordre' => 'id_item',
+		$aWhere = [ '_ordre' => 'id_doc',
 				'_limit' => $cantidad,
 				'_offset' => $anterior,
 		];
