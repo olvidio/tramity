@@ -1,13 +1,14 @@
 <?php
 
 $txt_err = '';
+/*
 $sessionName = session_name();
 if( isset( $_COOKIE[ $sessionName ] ) ) {
 	$txt_err .= ''; // "active";
 } else {
 	$txt_err .= "no active";
 }
-
+*/
 if (empty($txt_err)) {
 	$jsondata['success'] = true;
 	$jsondata['mensaje'] = 'ok';

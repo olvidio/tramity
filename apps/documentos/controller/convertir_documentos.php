@@ -60,6 +60,7 @@ if ($Qque == 'escritos') {
 				}
 				// grabar el nuevo:
 				$oEscritoAdjunto = new EscritoAdjunto($id_item);
+				$oEscritoAdjunto->DBCarregar();
 				$oEscritoAdjunto->setId_escrito($id_escrito);
 				$oEscritoAdjunto->setNom($nom);
 				$oEscritoAdjunto->setAdjunto($doc);
@@ -112,6 +113,7 @@ if ($Qque == 'entradas') {
 				}
 				// grabar el nuevo:
 				$oEntradaAdjunto = new EntradaAdjunto($id_item);
+				$oEntradaAdjunto->DBCarregar();
 				$oEntradaAdjunto->setId_entrada($id_entrada);
 				$oEntradaAdjunto->setNom($nom);
 				$oEntradaAdjunto->setAdjunto($doc);
