@@ -144,7 +144,7 @@ if ($Qque == 'documentos') {
 			'_limit' => $cantidad,
 			'_offset' => $anterior,
 	];
-	$cDocumentoOrg = $gesDocumentosOrg->getDocumentos($aWhere);
+	$cDocumentoOrg = $gesDocumentosOrg->getDocumentosOrg($aWhere);
 	$num_filas = count($cDocumentoOrg);
 	while ($num_filas > 0) {
 		$anterior += $num_filas;
