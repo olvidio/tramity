@@ -138,7 +138,7 @@ if ($Qque == 'documentos') {
 	// Dividir en partes para que no colapse: memory ... bytes exhausted
 	//$cDocumentoAdjuntosOrg = $gesAdjuntosDocumentosOrg->getDocumentosAdjunto();
 	
-	$cantidad = 100;
+	$cantidad = 5;
 	$anterior = 0;
 	$aWhere = [ '_ordre' => 'id_item',
 			'_limit' => $cantidad,
