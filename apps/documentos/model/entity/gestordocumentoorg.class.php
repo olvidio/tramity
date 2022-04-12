@@ -43,7 +43,7 @@ class GestorDocumentoOrg Extends core\ClaseGestor {
 	 * @param array aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
 	 * @return array Una col·lecció d'objectes de tipus Documento
 	 */
-	function getDocumentosOrg($aWhere=array(),$aOperators=array(),$parent=FALSE) {
+	function getDocumentosOrg($aWhere=array(),$aOperators=array()) {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
 		$oDocumentoSet = new core\Set();
@@ -78,14 +78,15 @@ class GestorDocumentoOrg Extends core\ClaseGestor {
 			return FALSE;
 		}
 		if (($oDblSt->execute($aWhere)) === FALSE) {
-			$sClauError = 'GestorDocumentoDB.llistar.execute';
+			$sClauError = 'GestorDocumentoOrg.llistar.execute';
 			$_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
 			return FALSE;
 		}
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_doc' => $aDades['id_doc']);
-			$oDocumentoDB = new DocumentoOrg($a_pkey);
-			$oDocumentoSet->add($oDocumentoDB);
+			$oDocumentoOrg = new DocumentoOrg($a_pkey);
+			$oDocumentoOrg->setAllAtributes($aDades);
+			$oDocumentoSet->add($oDocumentoOrg);
 		}
 		return $oDocumentoSet->getTot();
 	}
