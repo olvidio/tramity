@@ -159,16 +159,9 @@ if ($Qque == 'documentos') {
 			$f_upload = $oDocumentoOrg->getF_upload('');
 			$res_documento = $oDocumentoOrg->getDocumentoResource();
 			
-			if (!empty($res_documento)) {
-				rewind($res_documento);
-				$doc_encoded = stream_get_contents($res_documento);
-				if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
-					$doc = base64_decode($doc_encoded);
-				} else {
-					// $data is NOT valid'
-					$doc = $doc_encoded;
-				}
-				
+			if (empty($creador)) { continue; }
+			
+			if ($tipo_doc == 1) {
 				// grabar el nuevo:
 				$oDocumento = new Documento($id_doc);
 				$oDocumento->DBCarregar();
@@ -178,8 +171,31 @@ if ($Qque == 'documentos') {
 				$oDocumento->setVisibilidad($visibilidad);
 				$oDocumento->setTipo_doc($tipo_doc);
 				$oDocumento->setF_upload($f_upload);
-				$oDocumento->setDocumento($doc);
 				$oDocumento->DBGuardar();
+				unset($oDocumento);
+			} else { // tipo_doc = 3 ( no debería haber otros)
+				if (!empty($res_documento)) {
+					rewind($res_documento);
+					$doc_encoded = stream_get_contents($res_documento);
+					if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
+						$doc = base64_decode($doc_encoded);
+					} else {
+						// $data is NOT valid'
+						$doc = $doc_encoded;
+					}
+					// grabar el nuevo:
+					$oDocumento = new Documento($id_doc);
+					$oDocumento->DBCarregar();
+					$oDocumento->setNom($nom);
+					$oDocumento->setNombre_fichero($nombre_fichero);
+					$oDocumento->setCreador($creador);
+					$oDocumento->setVisibilidad($visibilidad);
+					$oDocumento->setTipo_doc($tipo_doc);
+					$oDocumento->setF_upload($f_upload);
+					$oDocumento->setDocumento($doc);
+					$oDocumento->DBGuardar();
+					unset($oDocumento);
+				}
 			}
 				
 		}
