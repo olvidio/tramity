@@ -195,8 +195,7 @@ class Enviar {
         foreach ($a_id_adjuntos as $item => $adjunto_filename) {
             $oEntradaAdjunto = new EntradaAdjunto($item);
             $escrito_txt = $oEntradaAdjunto->getAdjunto();
-			$escrito_encoded = chunk_split(base64_encode($escrito_txt));
-            $a_adjuntos[$adjunto_filename] = $escrito_encoded;
+            $a_adjuntos[$adjunto_filename] = $escrito_txt;
         }
         $this->a_adjuntos = $a_adjuntos;
     }
@@ -234,8 +233,8 @@ class Enviar {
                         	$err_adjunto = sprintf(_("No se puede enviar el adjunto \"%s\""), $adjunto_filename);
                         	exit ($err_adjunto);
                     	}
-                    	$escrito_encoded = chunk_split(base64_encode($escrito_txt));
-						$a_adjuntos[$adjunto_filename] = $escrito_encoded;
+                    	$escrito_txt = $oEscritoAdjunto->getAdjunto();
+						$a_adjuntos[$adjunto_filename] = $escrito_txt;
                         break;
                     case Documento::DOC_ETHERPAD:
                         $id_adjunto = $oEscritoAdjunto->getId_item();
