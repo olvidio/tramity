@@ -138,19 +138,19 @@ if ($Qque == 'documentos') {
 	// Dividir en partes para que no colapse: memory ... bytes exhausted
 	//$cDocumentoAdjuntosOrg = $gesAdjuntosDocumentosOrg->getDocumentosAdjunto();
 	
-	$cantidad = 10;
+	$cantidad = 3;
 	$anterior = 0;
 	$aWhere = [ 'tipo_doc' => 3, 
 			'_ordre' => 'id_doc',
 			'_limit' => $cantidad,
 			'_offset' => $anterior,
 	];
-	$cDocumentoOrg = $gesDocumentosOrg->getDocumentosOrg($aWhere);
-	$num_filas = count($cDocumentoOrg);
+	$cDocumentosOrg = $gesDocumentosOrg->getDocumentosOrg($aWhere);
+	$num_filas = count($cDocumentosOrg);
 	while ($num_filas > 0) {
 		$anterior += $num_filas;
 		
-		foreach($cDocumentoOrg as $oDocumentoOrg) {
+		foreach($cDocumentosOrg as $oDocumentoOrg) {
 			$id_doc = $oDocumentoOrg->getId_doc();
 			$nom = $oDocumentoOrg->getNom();
 			$nombre_fichero = $oDocumentoOrg->getNombre_fichero();
@@ -201,7 +201,8 @@ if ($Qque == 'documentos') {
 				
 		}
 		
-		$aWhere = [ '_ordre' => 'id_doc',
+		$aWhere = [ 'tipo_doc' => 3,
+				'_ordre' => 'id_doc',
 				'_limit' => $cantidad,
 				'_offset' => $anterior,
 		];
