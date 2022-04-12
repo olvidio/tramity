@@ -138,7 +138,7 @@ class DocumentoOrg Extends core\ClasePropiedades {
 			}
 		}
 		$this->setoDbl($oDbl);
-		$this->setNomTabla('documentos');
+		$this->setNomTabla('documentos_org');
 	}
 
 	/* METODES PUBLICS ----------------------------------------------------------*/
