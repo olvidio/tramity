@@ -205,13 +205,14 @@ class DocumentoOrg Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(nom,nombre_fichero,creador,visibilidad,tipo_doc,f_upload,documento)";
-			$valores="(:nom,:nombre_fichero,:creador,:visibilidad,:tipo_doc,:f_upload,:documento)";		
+			$campos="(id_doc,nom,nombre_fichero,creador,visibilidad,tipo_doc,f_upload,documento)";
+			$valores="(:id_doc,:nom,:nombre_fichero,:creador,:visibilidad,:tipo_doc,:f_upload,:documento)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'Documento.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			} else {
+			    $id_doc = $aDades['id_doc'];
 			    $nom = $aDades['nom'];
 			    $nombre_fichero = $aDades['nombre_fichero'];
 			    $creador = $aDades['creador'];
@@ -220,13 +221,14 @@ class DocumentoOrg Extends core\ClasePropiedades {
 			    $f_upload = $aDades['f_upload'];
 			    $documento = $aDades['documento'];
 
-                $oDblSt->bindParam(1, $nom, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(2, $nombre_fichero, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(3, $creador, \PDO::PARAM_INT);
-			    $oDblSt->bindParam(4, $visibilidad, \PDO::PARAM_INT);
-			    $oDblSt->bindParam(5, $tipo_doc, \PDO::PARAM_INT);
-			    $oDblSt->bindParam(6, $f_upload, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(7, $documento, \PDO::PARAM_LOB);
+                $oDblSt->bindParam(1, $id_doc, \PDO::PARAM_STR);
+                $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
+			    $oDblSt->bindParam(3, $nombre_fichero, \PDO::PARAM_STR);
+			    $oDblSt->bindParam(4, $creador, \PDO::PARAM_INT);
+			    $oDblSt->bindParam(5, $visibilidad, \PDO::PARAM_INT);
+			    $oDblSt->bindParam(6, $tipo_doc, \PDO::PARAM_INT);
+			    $oDblSt->bindParam(7, $f_upload, \PDO::PARAM_STR);
+			    $oDblSt->bindParam(8, $documento, \PDO::PARAM_LOB);
 				try {
 					$oDblSt->execute($aDades);
 				}
@@ -276,6 +278,7 @@ class DocumentoOrg Extends core\ClasePropiedades {
 			$oDblSt->fetch(\PDO::FETCH_BOUND);
 			
 			$aDades = [
+                    'id_doc' => $this->iid_doc,
                     'nom' => $nom,
                     'nombre_fichero' => $nombre_fichero,
                     'creador' => $creador,
