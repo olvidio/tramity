@@ -105,7 +105,7 @@ fnjs_is_active=function() {
 // Si es en el portatil no lo compruebo, para que haya menos cosas en los logs.
 <?php
 if (ConfigGlobal::SERVIDOR != 'tramity.local') {
-	//echo "setInterval( fnjs_is_active, 5000);";
+	echo "setInterval( fnjs_is_active, 5000);";
 }
 ?>
 

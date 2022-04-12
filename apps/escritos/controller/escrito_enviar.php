@@ -16,6 +16,7 @@ require_once ("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
+/* NO VA PORQUE... da error headers already sent. 
 // Para enseñar el mesaje antes de terminar el script
 ob_end_flush();
 ob_implicit_flush();
@@ -24,7 +25,7 @@ echo _("preparando escritos para enviar...");
 echo "<br>";
 echo "<img class=\"mb-4\" src=\"../images/loading.gif\" alt=\"cargando\" width=\"32\" height=\"32\">";
 echo "</div>";
-
+*/
 
 $Qid_escrito = (integer) \filter_input(INPUT_GET, 'id');
 $f_salida = date(\DateTimeInterface::ISO8601);
