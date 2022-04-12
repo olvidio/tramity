@@ -159,16 +159,20 @@ if ($Qque == 'documentos') {
 			$f_upload = $oDocumentoOrg->getF_upload('');
 			$res_adjunto = $oDocumentoOrg->getDocumentoResource();
 			
-			if (!empty($res_adjunto)) {
-				rewind($res_adjunto);
-				$doc_encoded = stream_get_contents($res_adjunto);
+			$oDocumento = new Documento($id_doc);
+			$nombre_fichero = $oDocumento->getNombre_fichero();
+			$res_documento = $oDocumento->getDocumentoResource();
+			
+			if (!empty($res_documento)) {
+				rewind($res_documento);
+				$doc_encoded = stream_get_contents($res_documento);
 				if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
-					// $data is valid
 					$doc = base64_decode($doc_encoded);
 				} else {
-					// $data is NOT valid
+					// $data is NOT valid'
 					$doc = $doc_encoded;
 				}
+				
 				// grabar el nuevo:
 				$oDocumento = new Documento($id_doc);
 				$oDocumento->DBCarregar();

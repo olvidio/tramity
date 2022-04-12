@@ -2,7 +2,6 @@
 namespace documentos\model\entity;
 
 use core;
-use documentos\model\Documento;
 /**
  * GestorDocumentoDB
  *

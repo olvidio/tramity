@@ -20,7 +20,7 @@ use web;
  * @version 1.0
  * @created 9/6/2021
  */
-class DocumentoOrg Extends core\ClasePropiedades {
+class zDocumentoOrg Extends core\ClasePropiedades {
 	/* ATRIBUTS ----------------------------------------------------------------- */
 
 	/**
@@ -99,8 +99,12 @@ class DocumentoOrg Extends core\ClasePropiedades {
 	 * @var string bytea
 	 * 
 	 */
-	 protected $documento_id_res;
-	 protected $documento_txt;
+	 protected $documento;
+	 
+	 
+	 protected $adjunto_id_res;
+	 protected $adjunto_txt;
+	 
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de Documento
@@ -138,7 +142,7 @@ class DocumentoOrg Extends core\ClasePropiedades {
 			}
 		}
 		$this->setoDbl($oDbl);
-		$this->setNomTabla('documentos');
+		$this->setNomTabla('documentos_org');
 	}
 
 	/* METODES PUBLICS ----------------------------------------------------------*/
@@ -171,7 +175,7 @@ class DocumentoOrg Extends core\ClasePropiedades {
 					visibilidad              = :visibilidad,
 					tipo_doc                 = :tipo_doc,
 					f_upload                 = :f_upload,
-					documento                = :documento";
+					documento                = :documento ";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_doc='$this->iid_doc'")) === FALSE) {
 				$sClauError = 'Documento.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -206,7 +210,7 @@ class DocumentoOrg Extends core\ClasePropiedades {
 		} else {
 			// INSERT
 			$campos="(nom,nombre_fichero,creador,visibilidad,tipo_doc,f_upload,documento)";
-			$valores="(:nom,:nombre_fichero,:creador,:visibilidad,:tipo_doc,:f_upload,:documento)";		
+			$valores="(:nom,:nombre_fichero,:creador,:visibilidad,:tipo_doc,:f_upload, :documento )";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'Documento.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -260,7 +264,8 @@ class DocumentoOrg Extends core\ClasePropiedades {
         $documento = '';
 
 		if (isset($this->iid_doc)) {
-			if (($oDblSt = $oDbl->query("SELECT nom,nombre_fichero,creador,visibilidad,tipo_doc,f_upload,documento FROM $nom_tabla WHERE id_doc='$this->iid_doc'")) === FALSE) {
+			if (($oDblSt = $oDbl->query("SELECT nom,nombre_fichero,creador,visibilidad,tipo_doc,f_upload,
+					documento FROM $nom_tabla WHERE id_doc='$this->iid_doc'")) === FALSE) {
 				$sClauError = 'Documento.carregar';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
@@ -536,7 +541,7 @@ class DocumentoOrg Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_upload de Documento
-	 * Si df_upload es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_upload es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_upload debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_upload='' optional.
@@ -551,52 +556,57 @@ class DocumentoOrg Extends core\ClasePropiedades {
 	    }
 	}
 	/**
-	 * Recupera l'atribut documento de Documento
+	 * Recupera l'atribut adjunto de EntradaAdjunto
 	 *
-	 * @return string documento
+	 * @return string adjunto
 	 */
 	function getDocumentoTxt() {
-		$documento = '';
-		if (!isset($this->documento_txt) && !$this->bLoaded) {
+		$adjunto = '';
+		if (!isset($this->adjunto_txt) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
-		if (empty($this->documento_txt)) {
-            if (!empty($this->documento_id_res)) {
-		      $documento = stream_get_contents($this->documento_id_res);
-		      $this->documento_txt = $documento;
-            }
+		if (empty($this->adjunto_txt)) {
+			if (!empty($this->adjunto_id_res)) {
+				$doc_encoded = stream_get_contents($this->adjunto_id_res);
+				if ( base64_encode(base64_decode($doc_encoded, true)) === $doc_encoded){
+					//echo '$data is valid';
+					$adjunto = base64_decode($doc_encoded);
+				} else {
+					//ºecho '$data is NOT valid';
+					$adjunto = $doc_encoded;
+				}
+			}
 		} else {
-		    $documento = $this->documento_txt;
+			$adjunto = $this->adjunto_txt;
 		}
-		return $documento;
+		return $adjunto;
 	}
 	/**
-	 * Recupera l'atribut documento de Documento
+	 * Recupera l'atribut adjunto de EntradaAdjunto
 	 *
-	 * @return string documento
+	 * @return string adjunto
 	 */
 	function getDocumentoResource() {
-		if (!isset($this->documento_id_res) && !$this->bLoaded) {
+		if (!isset($this->adjunto_id_res) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
-		return $this->documento_id_res;
+		return $this->adjunto_id_res;
 	}
 	/**
-	 * estableix el valor de l'atribut documento de Documento
+	 * estableix el valor de l'atribut adjunto de EntradaAdjunto
 	 *
-	 * @param string documento='' optional
+	 * @param string adjunto='' optional
 	 */
-	function setDocumento($documento='') {
-	    if (is_resource($documento)) {
-	        $this->documento_id_res = $documento;
-	    } else {
-	        if (empty($documento)) { 
-	            $this->documento_txt = '';
-	            $this->documento_id_res = '';
-	        } else {
-	           $this->documento_txt = $documento;
-	        }
-	    }
+	function setDocumento($adjunto='') {
+		if (is_resource($adjunto)) {
+			$this->adjunto_id_res = $adjunto;
+		} else {
+			if (empty($adjunto)) {
+				$this->adjunto_txt = '';
+			} else {
+				$this->adjunto_txt = $adjunto;
+			}
+		}
 	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
