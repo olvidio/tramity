@@ -510,6 +510,9 @@ class Enviar {
                 ////$oMail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
                 
                 // adjuntos:
+                echo "<pre>";
+                print_r($a_adjuntos);
+                echo "</pre>";
                 foreach ($a_adjuntos as $adjunto_filename => $escrito_txt) {
                     $oMail->addStringAttachment($escrito_txt, $adjunto_filename);    // Optional name
                 }
