@@ -55,7 +55,6 @@ $oEnviar = new Enviar($Qid_escrito,'escrito');
 
 $a_rta = $oEnviar->enviar();
 
-/*
 if ($a_rta['marcar'] === TRUE) {
     $oEscrito = new Escrito($Qid_escrito);
     $oEscrito->DBCarregar();
@@ -79,4 +78,3 @@ if ($a_rta['success'] === TRUE) {
     $oView = new ViewTwig('expedientes/controller');
     echo $oView->renderizar('alerta.html.twig',$a_campos);
 }
-*/
