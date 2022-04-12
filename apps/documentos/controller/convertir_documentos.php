@@ -138,7 +138,7 @@ if ($Qque == 'documentos') {
 	// Dividir en partes para que no colapse: memory ... bytes exhausted
 	//$cDocumentoAdjuntosOrg = $gesAdjuntosDocumentosOrg->getDocumentosAdjunto();
 	
-	$cantidad = 5;
+	$cantidad = 100;
 	$anterior = 0;
 	$aWhere = [ '_ordre' => 'id_doc',
 			'_limit' => $cantidad,
@@ -163,8 +163,8 @@ if ($Qque == 'documentos') {
 			
 			if ($tipo_doc == 1) {
 				// grabar el nuevo:
-				$oDocumento = new Documento($id_doc);
-				$oDocumento->DBCarregar();
+				$oDocumento = new Documento();
+				$oDocumento->setId_doc($id_doc);
 				$oDocumento->setNom($nom);
 				$oDocumento->setNombre_fichero($nombre_fichero);
 				$oDocumento->setCreador($creador);
@@ -184,8 +184,8 @@ if ($Qque == 'documentos') {
 						$doc = $doc_encoded;
 					}
 					// grabar el nuevo:
-					$oDocumento = new Documento($id_doc);
-					$oDocumento->DBCarregar();
+					$oDocumento = new Documento();
+					$oDocumento->setId_doc($id_doc);
 					$oDocumento->setNom($nom);
 					$oDocumento->setNombre_fichero($nombre_fichero);
 					$oDocumento->setCreador($creador);
