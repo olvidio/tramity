@@ -134,7 +134,7 @@ class Escrito Extends EscritoDB {
             if (empty((array)$json_prot_destino)) {
                 exit (_("Error no hay destino"));
             } else {
-                $lugar = $json_prot_destino->lugar;
+                $lugar = $json_prot_destino['lugar'];
                 if ($lugar == $id_lugar_cr) {
                     $bCr = TRUE;
                 } else {
