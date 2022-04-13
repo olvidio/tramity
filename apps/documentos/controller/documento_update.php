@@ -79,7 +79,9 @@ switch($Qque) {
         $tipo_doc = $oDocumento->getTipo_doc();
         
         // las etiquetas despues de guardar el documento:
-        $oDocumento->setEtiquetas($Qa_etiquetas);
+        if (!empty($Qa_etiquetas)) { // No puede haber un docuemento sin etiquetas
+        	$oDocumento->setEtiquetas($Qa_etiquetas);
+        }
         
         if (!empty($error_txt)) {
             $jsondata['success'] = FALSE;
