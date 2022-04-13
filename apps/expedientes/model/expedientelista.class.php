@@ -734,7 +734,7 @@ class ExpedienteLista {
                     }
                 }
                 // Si ya lo han visto todos (y hay alguno marcado):
-				if ($oExpediente->isVistoTodos()) {
+                if ($estado == Expediente::ESTADO_BORRADOR && $oExpediente->isVistoTodos()) {
 					$row['class_row'] = 'bg-warning';
 				}
                 
