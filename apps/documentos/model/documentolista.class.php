@@ -104,7 +104,6 @@ class DocumentoLista {
                 
                 $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_eliminar_documento('$id_doc');\" >"._("eliminar")."</span>";
                 
-                $tipo_doc = $oDocumento->getTipo_doc(); 
                 $tipo_doc_txt = empty($aTipoDoc[$tipo_doc])? $tipo_doc : $aTipoDoc[$tipo_doc]; 
                 $id_creador =  $oDocumento->getCreador();
                 $creador = empty($a_cargos[$id_creador])? '' : $a_cargos[$id_creador];

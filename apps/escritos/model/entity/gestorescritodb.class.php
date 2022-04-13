@@ -200,6 +200,8 @@ class GestorEscritoDB Extends core\ClaseGestor {
         }
         $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi;
         
+        if (isset($aWhere['_ordre'])) { unset($aWhere['_ordre']); }
+        if (isset($aWhere['_limit'])) { unset($aWhere['_limit']); }
         // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
         $sQry = "SELECT t.*
                         FROM $nom_tabla t, jsonb_to_record(t.json_prot_local) as items(\"any\" text, mas text, num text, lugar text)
