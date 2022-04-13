@@ -17,6 +17,7 @@ use oasis_as4\model\As4CollaborationInfo;
 use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use web\Protocolo;
+use entradas\model\Entrada;
 
 
 class Enviar {
@@ -115,7 +116,13 @@ class Enviar {
     
     private function getDocumento($id_lugar='') {
         if ($this->tipo == 'entrada') {
-            $this->getDatosEntrada();
+			// Puede que no sea bypass. Se uasa para descargar la entrada en local.
+			// Asunto_entrada no puede sernull. si lo és es que no existe.
+			if (empty($this->oEntradaBypass->getAsunto_entrada())) {
+				$this->getDatosEntrada();
+			} else {
+				$this->getDatosEntradaByPass();
+			}
         }
         if ($this->tipo == 'escrito') {
             $this->getDatosEscrito($id_lugar);
@@ -160,7 +167,7 @@ class Enviar {
         return $this->oEscrito->getDestinosIds();
     }
     
-    private function getDatosEntrada() {
+    private function getDatosEntradaByPass() {
         $this->f_salida = $this->oEntradaBypass->getF_documento()->getFromLocal('.');
         $this->asunto = $this->oEntradaBypass->getAsunto();
         
@@ -192,6 +199,47 @@ class Enviar {
         // Attachments
         $a_adjuntos = [];
         $a_id_adjuntos = $this->oEntradaBypass->getArrayIdAdjuntos();
+        foreach ($a_id_adjuntos as $item => $adjunto_filename) {
+            $oEntradaAdjunto = new EntradaAdjunto($item);
+            $escrito_txt = $oEntradaAdjunto->getAdjunto();
+            $a_adjuntos[$adjunto_filename] = $escrito_txt;
+        }
+        $this->a_adjuntos = $a_adjuntos;
+    }
+    
+    private function getDatosEntrada() {
+        $oEntrada = new Entrada($this->iid);
+        $this->f_salida = $oEntrada->getF_documento()->getFromLocal('.');
+        $this->asunto = $oEntrada->getAsunto();
+        
+        $a_header = [ 'left' => $oEntrada->cabeceraIzquierda(),
+            'center' => '',
+            'right' => $oEntrada->cabeceraDerecha(),
+        ];
+
+        $json_prot_origen = $oEntrada->getJson_prot_origen();
+        if (count(get_object_vars($json_prot_origen)) == 0) {
+            exit (_("No hay más"));
+        }
+        $oProtOrigen = new Protocolo();
+        $oProtOrigen->setLugar($json_prot_origen->lugar);
+        $oProtOrigen->setProt_num($json_prot_origen->num);
+        $oProtOrigen->setProt_any($json_prot_origen->any);
+        $oProtOrigen->setMas($json_prot_origen->mas);
+        $this->filename = $this->renombrar($oProtOrigen->ver_txt());
+        
+        $oEtherpad = new Etherpad();
+        $oEtherpad->setId (Etherpad::ID_ENTRADA,$this->iid);
+        
+        // formato pdf:
+        $this->filename_ext = $this->filename.'.pdf';
+        $omPdf = $oEtherpad->generarPDF($a_header,$this->f_salida);
+        
+        $this->contentFile = $omPdf->Output($this->filename_ext,'S');
+        
+        // Attachments
+        $a_adjuntos = [];
+        $a_id_adjuntos = $oEntrada->getArrayIdAdjuntos();
         foreach ($a_id_adjuntos as $item => $adjunto_filename) {
             $oEntradaAdjunto = new EntradaAdjunto($item);
             $escrito_txt = $oEntradaAdjunto->getAdjunto();
