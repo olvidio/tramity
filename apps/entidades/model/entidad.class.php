@@ -125,6 +125,8 @@ class Entidad Extends EntidadDB {
             $err .= $this->ejecutarPsqlCrear('entradas',TRUE);
         }
         // escritos:
+        $err .= $this->ejecutarPsqlCrear('escritos');
+        // expedientes:
         $err .= $this->ejecutarPsqlCrear('expedientes');
         // etiquetas:
         $err .= $this->ejecutarPsqlCrear('etiquetas');
