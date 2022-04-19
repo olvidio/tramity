@@ -236,12 +236,12 @@ class Entidad Extends EntidadDB {
         $sql = "DROP SCHEMA IF EXISTS \"$nom_schema\" CASCADE ";
         
         if (($oDblSt = $oDbl->prepare($sql)) === false) {
-            $sClauError = 'DBRol.eliminarSchema.prepare';
+            $sClauError = 'Entidad.eliminarSchema.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             $err_txt .= sprintf("ERROR AL ELIMINAR EL ESQUEMA: $sClauError");
         } else {
             if ($oDblSt->execute() === false) {
-                $sClauError = 'DBRol.eliminarSchema.execute';
+                $sClauError = 'Entidad.eliminarSchema.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
                 $err_txt .= sprintf("ERROR AL ELIMINAR EL ESQUEMA: $sClauError");
             }
@@ -256,12 +256,12 @@ class Entidad Extends EntidadDB {
         $sql = "CREATE SCHEMA IF NOT EXISTS \"$nom_schema\" ";
         
         if (($oDblSt = $oDbl->prepare($sql)) === false) {
-            $sClauError = 'DBRol.crearSchema.prepare';
+            $sClauError = 'Entidad.crearSchema.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             $err_txt .= sprintf("ERROR AL CREAR EL ESQUEMA: $sClauError");
         } else {
             if ($oDblSt->execute() === false) {
-                $sClauError = 'DBRol.crearSchema.execute';
+                $sClauError = 'Entidad.crearSchema.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
                 $err_txt .= sprintf("ERROR AL CREAR EL ESQUEMA: $sClauError");
             }

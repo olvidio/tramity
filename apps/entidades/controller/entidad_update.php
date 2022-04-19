@@ -73,6 +73,7 @@ switch($Qque) {
                 if ($Qque == 'nuevo') {
                     $id = $oEntidadDB->getId_entidad();
                     $oEntidad = new Entidad($id);
+                    $oEntidad->DBCarregar();
                     $error_txt = $oEntidad->nuevoEsquema();
                 }
             }
