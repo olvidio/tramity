@@ -134,7 +134,7 @@ class GestorCargo Extends core\ClaseGestor {
 	    $nom_tabla = $this->getNomTabla();
 	    
 	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
-            $Where = "WHERE id_oficina = $id_oficina";
+			$Where = "WHERE id_oficina = ".Cargo::OFICINA_ESQUEMA;
 	    } else {
             $Where = "WHERE id_oficina > 0";
             if (!empty($id_oficina)) {

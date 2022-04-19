@@ -156,6 +156,8 @@ class Entidad Extends EntidadDB {
             // insert cargos mínimos usuarios:
             $err .= $this->ejecutarPsqlInsert('usuarios');
             $err .= $this->ejecutarPsqlInsert('config');
+            // añadir la sigla en config:
+            $err .= $this->ejecutarSql("INSERT INTO public.x_config (parametro, valor) VALUES ('sigla', '$this->snombre');");
         }
 
         return $err;
@@ -205,6 +207,24 @@ class Entidad Extends EntidadDB {
             && stripos($error, 'error') !== FALSE // evitar los NOTICE y otros
             && ConfigGlobal::is_debug_mode()) {
            $err_txt .= sprintf("PSQL ERROR IN COMMAND(1): %s<br> mirar: %s<br>",$command,$file_log);
+        }
+        return $err_txt;
+    }
+    
+    private function ejecutarSql($sql) {
+        $oDbl = $this->getoDbl();
+        $err_txt = '';
+        
+        if (($oDblSt = $oDbl->prepare($sql)) === false) {
+            $sClauError = 'Entidad.sql.prepare';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            $err_txt .= sprintf("ERROR AL EJECUTAR SQL: $sClauError");
+        } else {
+            if ($oDblSt->execute() === false) {
+                $sClauError = 'Entidad.sql.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                $err_txt .= sprintf("ERROR AL EJECUTAR SQL: $sClauError");
+            }
         }
         return $err_txt;
     }
