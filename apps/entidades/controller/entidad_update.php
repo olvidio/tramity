@@ -42,7 +42,7 @@ switch($Qque) {
 		} else {
             $Qid_entidad = (integer) \filter_input(INPUT_POST, 'id_entidad');
             $Qschema = (string) \filter_input(INPUT_POST, 'schema');
-            $Qtipo = (integer) \filter_input(INPUT_POST, 'tipo');
+            $Qtipo_entidad = (integer) \filter_input(INPUT_POST, 'tipo_entidad');
             $Qanulado = (bool) \filter_input(INPUT_POST, 'anulado');
             
             if (empty($Qid_entidad)) {
@@ -62,7 +62,7 @@ switch($Qque) {
             
             $oEntidadDB->setNombre($Qnombre);
             $oEntidadDB->setSchema($schema);
-            $oEntidadDB->setTipo($Qtipo);
+            $oEntidadDB->setTipo($Qtipo_entidad);
             $oEntidadDB->setAnulado($Qanulado);
             if ($oEntidadDB->DBGuardar() === FALSE) {
                 $error_txt .= _("hay un error al guardar");

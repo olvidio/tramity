@@ -56,7 +56,7 @@ $oPosicion->setParametros(array('id_entidad'=>$Qid_entidad),1);
 $oEntidad = new Entidad(); // para los tipos
 $a_opciones_tipos = $oEntidad->getArrayTipo();
 $oDesplTipos = new Desplegable();
-$oDesplTipos->setNombre('tipo_escrito');
+$oDesplTipos->setNombre('tipo_entidad');
 $oDesplTipos->setOpciones($a_opciones_tipos);
 
 if (!empty($Qid_entidad)) {
