@@ -157,7 +157,7 @@ class Entidad Extends EntidadDB {
             $err .= $this->ejecutarPsqlInsert('usuarios');
             $err .= $this->ejecutarPsqlInsert('config');
             // añadir la sigla en config:
-            $err .= $this->ejecutarSql("INSERT INTO public.x_config (parametro, valor) VALUES ('sigla', '$this->snombre');");
+            $err .= $this->ejecutarSql("INSERT INTO public.x_config (parametro, valor) VALUES ('sigla', '$this->snombre')");
         }
 
         return $err;
@@ -215,7 +215,11 @@ class Entidad Extends EntidadDB {
         $oDbl = $this->getoDbl();
         $err_txt = '';
         
-        if (($oDblSt = $oDbl->prepare($sql)) === false) {
+		// cambiar nombre esquema
+		$nom_schema ="\"". $this->getSchema()."\"".'.';
+		$sql_txt_nou = str_replace('public.',$nom_schema,$sql);
+        
+        if (($oDblSt = $oDbl->prepare($sql_txt_nou)) === false) {
             $sClauError = 'Entidad.sql.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             $err_txt .= sprintf("ERROR AL EJECUTAR SQL: $sClauError");
