@@ -69,17 +69,26 @@ class BuscarPendiente {
     public function getPendientes() {
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
         $cond = '';
+        
+        if (!empty($this->id_reg)) {
+            $cond .= empty($cond)? '' : ' AND ';
+            $id_entradas = '';
+            foreach ($this->id_reg as $id) {
+                $id_entradas .= empty($id_entradas)? '' : ',';
+                $id_entradas .= "'REN".$id."'";
+            }
+            $cond .= "rtrim(substring(uid from '^REN.*-'),'-') IN ($id_entradas)";
+        }
+		
+		// dav_name = /oficina_agd/oficina/20210211T123510.ics
+		$parent_container = $oDavical->getNombreRecurso($this->id_oficina);
         if (!empty($this->id_oficina)) {
-            // dav_name = /oficina_agd/oficina/20210211T123510.ics
-            $parent_container = $oDavical->getNombreRecurso($this->id_oficina);
             $dav_name = '^\/'.$parent_container.'\/'.$this->calendario.'\/';
         } else {
             // por lo menos hay que limitar que sólo busque a los del ctr o la dl.
-            $sigla = $_SESSION['oConfig']->getSigla();
-            $sigla_norm = StringLocal::lowerNormalized($sigla);
-            $parent_container = "oficina_".$sigla_norm;
             $dav_name = '^\/'.$parent_container.'[^\/]*\/'.$this->calendario.'\/';
         }
+		$cond .= empty($cond)? '' : ' AND ';
         $cond .= "dav_name ~ '$dav_name'";
         
         if (!empty($this->asunto)) {
@@ -101,21 +110,9 @@ class BuscarPendiente {
             $cond .= "due < '".$this->getF_max()->getIso()."'"; 
         }
         
-        if (!empty($this->id_reg)) {
-            $cond .= empty($cond)? '' : ' AND ';
-            $id_entradas = '';
-            foreach ($this->id_reg as $id) {
-                $id_entradas .= empty($id_entradas)? '' : ',';
-                $id_entradas .= "'REN".$id."'";
-            }
-            $cond .= "rtrim(substring(uid from '^REN.*-'),'-') IN ($id_entradas)";
-        }
-        //
-        
         $sql_pen = "SELECT * FROM calendar_item WHERE $cond";
         $gesCalendarItem = new GestorCalendarItem();
         $cCalendarItems = $gesCalendarItem->getCalendarItemsQuery($sql_pen);
-        
         
         if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
             // solo secretaría puede ver/crear pendientes de otras oficinas
