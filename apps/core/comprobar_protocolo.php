@@ -2,7 +2,6 @@
 
 use function core\any_2;
 use entradas\model\GestorEntrada;
-use usuarios\model\entity\Cargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -52,7 +51,7 @@ if ($Qque == 's4') {
                     'mas' => '',
                 ];
     // No buscar los anulados:
-    $aWhere = ['anulado' => 'x'];
+	$aWhere = ['bypass' => 'f', 'anulado' => 'x'];
     $aOperador = ['anulado' => 'IS NULL'];
     $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhere,$aOperador);
     

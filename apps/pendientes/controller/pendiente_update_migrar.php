@@ -13,7 +13,6 @@
 // INICIO Cabecera global de URL de controlador *********************************
 use davical\model\DavicalMigrar;
 use entradas\model\GestorEntrada;
-use usuarios\model\entity\Oficina;
 use web\Protocolo;
 
 require_once ("apps/core/global_header.inc");

@@ -279,13 +279,15 @@ if ($go == 'entradas') {
 }
 
 /// titulo pagina ///
-if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
-    $titulo_oficina = sprintf(_("pendiente de %s"),ConfigGlobal::getEsquema());
-} else {
-    $oficina_txt = $a_posibles_oficinas[$Qid_oficina];
-    $titulo_oficina = sprintf(_("pendiente de la oficina %s"),$oficina_txt);
+$titulo_oficina = '';
+if ($Qcalendario != 'registro') {
+	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+		$titulo_oficina = sprintf(_("pendiente de %s"),ConfigGlobal::getEsquema());
+	} else {
+		$oficina_txt = $a_posibles_oficinas[$Qid_oficina];
+		$titulo_oficina = sprintf(_("pendiente de la oficina %s"),$oficina_txt);
+	}
 }
-
 
 //////////////////////// PERIODICO ////////////////////////////////
 

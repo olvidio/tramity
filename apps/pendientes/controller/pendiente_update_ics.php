@@ -1,14 +1,11 @@
 <?php
 use core\ConfigGlobal;
+use davical\model\Davical;
 use lugares\model\entity\Lugar;
 use pendientes\model\Pendiente;
-use pendientes\model\entity\PendienteDB;
-use usuarios\model\entity\GestorOficina;
 use pendientes\model\Rrule;
+use pendientes\model\entity\PendienteDB;
 use web\DateTimeLocal;
-use davical\model\Davical;
-use usuarios\model\entity\Oficina;
-use usuarios\model\entity\Cargo;
 
 /**
 * Esta página actualiza la base de datos del registro.
