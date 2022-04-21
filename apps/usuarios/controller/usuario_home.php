@@ -47,7 +47,13 @@ $filtro = 'borrador_propio';
     $explicacion = _("Expedientes de trabajo propio");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 // borrador_oficina = 2
@@ -60,7 +66,13 @@ $filtro = 'borrador_oficina';
     $explicacion = _("Expedientes para revisión de la propia oficina");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 // firmar = 3
@@ -73,7 +85,13 @@ $filtro = 'firmar';
     $explicacion =  _("Expedientes pendientes de firmar");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 // reunion = 4
@@ -86,7 +104,13 @@ $filtro = 'reunion';
     $explicacion = _("Expedientes pendientes de firmar para una próxima reunión");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 // circular = 5
@@ -99,7 +123,13 @@ $filtro = 'circulando';
     $explicacion = _("Expedientes de la oficina que están circulando");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 if (is_true(ConfigGlobal::soy_dtor()) ) {
@@ -113,7 +143,13 @@ if (is_true(ConfigGlobal::soy_dtor()) ) {
         $explicacion = _("Expedientes que han terminado de circular (directores)");
         $oExpedienteLista->setFiltro($filtro);
         $num = $oExpedienteLista->getNumero();
-        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+        $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
     $a_pills[$num_orden] = $pill;
 }
 // acabados = 7.1
@@ -126,7 +162,13 @@ $filtro = 'acabados_encargados';
     $explicacion = _("Expedientes que han circulado y se han encargado a alguien");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
     
 // archivados = 9
@@ -141,7 +183,13 @@ $filtro = 'archivados';
     //$oExpedienteLista->setFiltro($filtro);
     //$num = $oExpedienteLista->getNumero();
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 
@@ -155,7 +203,13 @@ $filtro = 'copias';
     $explicacion = _("Copias de Expedientes de otras oficinas");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 
@@ -173,7 +227,13 @@ if (ConfigGlobal::role_actual() === 'vcd') {
         $oEntradaLista = new EntradaLista();
         $oEntradaLista->setFiltro($filtro);
         $num = $oEntradaLista->getNumero();
-        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+        $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
     $a_pills[$num_orden] = $pill;
 }
 
@@ -190,7 +250,13 @@ if (is_true(ConfigGlobal::soy_dtor())) {
         $oEntradaLista = new EntradaLista();
         $oEntradaLista->setFiltro($filtro);
         $num = $oEntradaLista->getNumero();
-        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+        $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
     $a_pills[$num_orden] = $pill;
 }
 
@@ -205,7 +271,13 @@ $filtro = 'en_encargado';
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 // buscar = 20
@@ -217,7 +289,13 @@ $filtro = 'en_buscar';
     $text = _("archivo de escritos");
     $explicacion = _("Buscar Entradas, escritos, etc. registrados en secetaría");
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 if (is_true(ConfigGlobal::soy_dtor())) {
@@ -230,7 +308,13 @@ if (is_true(ConfigGlobal::soy_dtor())) {
         $text = _("escritos de cr");
         $explicacion = _("Correo de cr de la última semana (Directores)");
         $num = '';
-        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+        $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
     $a_pills[$num_orden] = $pill;
 }
 
@@ -243,7 +327,13 @@ $filtro = 'permanentes_cr';
     $text = _("permanentes de cr");
     $explicacion = _("Escritos de cr permanentes");
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 // pendientes = 30
@@ -258,7 +348,13 @@ $filtro = 'pendientes';
     $text = _("pendientes");
     $explicacion = _("Gestionar pendientes del registro y/o la oficina");
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-pendiente',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 // documentos = 40
@@ -271,7 +367,13 @@ $filtro = 'documentos';
     $text = _("documentos");
     $explicacion = _("Introducir y gestionar documentos externos a la base de datos de Tramity");
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-documento',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 // ordenar:

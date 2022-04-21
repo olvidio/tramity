@@ -53,8 +53,14 @@ if (!empty($id_cargo)) {
         $explicacion = _("asignar a cada expediente la fecha de la reunión (scdl)");
         $oExpedienteLista->setFiltro($filtro);
         $num = $oExpedienteLista->getNumero();
-$pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-    $a_pills[$num_orden] = $pill;
+		$pill = [ 'orden'=> $num_orden,
+				'text' => $text,
+				'pag_lst' => $pag_lst,
+				'num' => $num,
+				'active' => $active,
+				'class' => 'btn-expediente',
+				'explicacion' => $explicacion];
+		$a_pills[$num_orden] = $pill;
 
     // seguimiento = 2
     $filtro = 'seg_reunion';
@@ -66,8 +72,14 @@ $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' =>
         $explicacion = _("control de quiénes faltan por firmar cada expediente (scdl)");
         $oExpedienteLista->setFiltro($filtro);
         $num = $oExpedienteLista->getNumero();
-        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-    $a_pills[$num_orden] = $pill;
+        $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
+		$a_pills[$num_orden] = $pill;
 }
 
 // firmar = 2
@@ -80,8 +92,14 @@ $filtro = 'seguimiento';
     $explicacion = '';
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // reunion = 3
 // Solo el scdl
@@ -96,8 +114,14 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_distribuir) {
 		$explicacion = _("Pasar a cada oficina los expedientes que ya han circulado (scdl)");
 		$oExpedienteLista->setFiltro($filtro);
 		$num = $oExpedienteLista->getNumero();
-		$pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-	$a_pills[$num_orden] = $pill;
+		$pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
+		$a_pills[$num_orden] = $pill;
 }
 
 // circular = 4
@@ -112,8 +136,14 @@ $filtro = 'enviar';
     $oEscritoLista = new EscritoLista();
     $oEscritoLista->setFiltro($filtro);
     $num = $oEscritoLista->getNumeroEnviar();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // introducir entradas
 $filtro = 'en_ingresado';
@@ -126,8 +156,14 @@ $filtro = 'en_ingresado';
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // asignar entradas
 $filtro = 'en_admitido';
@@ -140,8 +176,14 @@ $filtro = 'en_admitido';
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // Solo el scdl
 $perm_aceptar = $_SESSION['oConfig']->getPerm_aceptar();
@@ -157,8 +199,14 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_aceptar) {
         $oEntradaLista = new EntradaLista();
         $oEntradaLista->setFiltro($filtro);
         $num = $oEntradaLista->getNumero();
-        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-    $a_pills[$num_orden] = $pill;
+        $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
+		$a_pills[$num_orden] = $pill;
 }
 // distribución cr
 $filtro = 'bypass';
@@ -171,8 +219,14 @@ $filtro = 'bypass';
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // buscar = 13
 $filtro = 'en_buscar';
@@ -183,7 +237,13 @@ $num_orden = 13;
 $text = _("archivo de escritos");
 $explicacion = _("Modificaciones en Entradas, escritos, etc. (Secretaría)");
 $num = '';
-$pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
+$pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
 // preferencias del scdl o suplente
@@ -198,8 +258,14 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
         $oEntradaLista = new EntradaLista();
         $oEntradaLista->setFiltro($filtro);
         $num = 0;
-        $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-    $a_pills[$num_orden] = $pill;
+        $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-pendiente',
+			'explicacion' => $explicacion];
+		$a_pills[$num_orden] = $pill;
 }
 
 // pendientes = 16
@@ -214,8 +280,14 @@ $filtro = 'pendientes';
     $text = _("pendientes");
     $explicacion = _("Gestión de los pendientes (Secretaría)");
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-pendiente',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // salida manual = 20
 $filtro = 'salida_manual';
@@ -228,8 +300,14 @@ $filtro = 'salida_manual';
     $text = _("salida manual");
     $explicacion =  _("Registro y envío de escritos sin circular expediente (Secretaría)");
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-pendiente',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // plantillas = 30
 $filtro = 'plantillas';
@@ -242,8 +320,14 @@ $filtro = 'plantillas';
     $text = _("plantillas");
     $explicacion =  _("Modelos jurídicos para diferentes trámites (Secretaría)");
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-pendiente',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // ordenar:
 ksort($a_pills);

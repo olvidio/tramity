@@ -47,8 +47,14 @@ $filtro = 'borrador_propio';
     $explicacion = _("Expedientes de trabajo propio");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // borrador_oficina = 2
 $filtro = 'borrador_oficina';
@@ -60,8 +66,14 @@ $filtro = 'borrador_oficina';
     $explicacion = _("Expedientes para revisión del consejo local");
     $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
     
 // archivados = 9
@@ -76,8 +88,14 @@ $filtro = 'archivados';
     //$oExpedienteLista->setFiltro($filtro);
     //$num = $oExpedienteLista->getNumero();
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-expediente',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 
 // entradas = 12
@@ -91,8 +109,14 @@ $filtro = 'en_aceptado';
 	$oEntradaLista = new EntradaLista();
 	$oEntradaLista->setFiltro($filtro);
 	$num = $oEntradaLista->getNumero();
-	$pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+	$pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // entradas = 13
 $filtro = 'en_encargado';
@@ -105,8 +129,14 @@ $filtro = 'en_encargado';
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // buscar = 20
 $filtro = 'en_buscar';
@@ -117,8 +147,14 @@ $filtro = 'en_buscar';
     $text = _("archivo de escritos");
     $explicacion = _("Buscar Entradas, escritos, etc. registrados en secetaría");
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // entradas de la semana = 21
 $filtro = 'entradas_semana';
@@ -129,8 +165,14 @@ $filtro = 'entradas_semana';
 	$text = _("entradas");
 	$explicacion = _("Correo de dl y cr (marcado como visto) de los últimos 15 días");
 	$num = '';
-	$pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+	$pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // buscar = 22
 $filtro = 'permanentes_cr';
@@ -141,8 +183,14 @@ $filtro = 'permanentes_cr';
     $text = _("permanentes de cr");
     $explicacion = _("Escritos de cr permanentes");
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-entrada',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // pendientes = 30
 $filtro = 'pendientes';
@@ -156,8 +204,14 @@ $filtro = 'pendientes';
     $text = _("pendientes");
     $explicacion = _("Gestionar pendientes del registro y/o la oficina");
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-pendiente',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // documentos = 40
 $filtro = 'documentos';
@@ -169,8 +223,14 @@ $filtro = 'documentos';
     $text = _("documentos");
     $explicacion = _("Introducir y gestionar documentos externos a la base de datos de Tramity");
     $num = '';
-    $pill = [ 'orden'=> $num_orden, 'text' => $text, 'pag_lst' => $pag_lst, 'num' => $num, 'active' => $active, 'explicacion' => $explicacion];
-$a_pills[$num_orden] = $pill;
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-documento',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
 
 // ordenar:
 ksort($a_pills);

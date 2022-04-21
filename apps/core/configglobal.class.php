@@ -17,13 +17,20 @@ Class ConfigGlobal extends ServerConf {
         return $path;
 	}
 	
+	public static function getHost() {
+        // Coger el nombre del host, con el dominio tengo lios con otros servidores.
+        // para que sirva para tramity.red.local y etherpad.red.local
+        return $_SERVER['HTTP_HOST'];
+	}
+	
 	public static function getDomain() {
         // Coger el nombre del dominio para que sirva para tramity.red.local y etherpad.red.local
         $regs = [];
         $host = $_SERVER['HTTP_HOST'];
         preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $host, $regs);
         
-        return $regs['domain'];
+        //return $regs['domain'];
+        return $host;
 	}
 	
 	public static function getEsquema() {

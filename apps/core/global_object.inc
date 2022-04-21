@@ -30,7 +30,8 @@ if ( session_status() !== PHP_SESSION_ACTIVE) {
     
     // Update the timeout of session cookie
     $sessionName = session_name();
-    $domain = ConfigGlobal::getDomain();
+    //$domain = ConfigGlobal::getDomain();
+    $domain = ConfigGlobal::getHost();
     
     if( isset( $_COOKIE[ $sessionName ] ) ) {
         setcookie( $sessionName, $_COOKIE[ $sessionName ], [
