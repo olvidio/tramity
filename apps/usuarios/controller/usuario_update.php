@@ -32,7 +32,11 @@ switch($Qque) {
             // Oficina actual:
             $oUsuario = new Cargo($id_cargo);
             $id_oficina_actual = $oUsuario->getId_oficina();
+            $bdirector = $oUsuario->getDirector();
+            $bsacd = $oUsuario->getSacd();
             $_SESSION['session_auth']['mi_id_oficina'] = $id_oficina_actual;
+            $_SESSION['session_auth']['usuario_dtor'] = $bdirector;
+            $_SESSION['session_auth']['usuario_sacd'] = $bsacd;
             // Para el Davical:
             // nombre normalizado del usuario y oficina:
             $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
