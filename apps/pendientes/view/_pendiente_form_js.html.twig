@@ -171,9 +171,9 @@ fnjs_cambiar_estado=function(){
 	var f_acabado=$('#f_acabado').val();
 	if (f_acabado) { 
 		//if (!fnjs_comprobar_fecha('#f_acabado')) { err=1; }
-		$('#status').val(1); 
+		$('#status').val("COMPLETED"); 
 	} else {
-		$('#status').val(0); 
+		$('#status').val("NEEDS-ACTION"); 
 	}
 }
 

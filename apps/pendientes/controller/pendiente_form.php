@@ -362,6 +362,8 @@ if (empty($rrule)) {
                     $chk_a_num_dm="";
                     $dia_w_a_db=empty($rta['dia_semana'])? '' : $rta['dia_semana'];
                     $ordinal_a_db=empty($rta['ordinal'])? '' : $rta['ordinal'];
+                    // Quitar el signo '+'
+                    $ordinal_a_db = (integer) $ordinal_a_db;
                     $mes_num_ref_db=empty($rta['meses'])? '' : $rta['meses'];
                     break;
                 case "num_dm":
@@ -401,6 +403,8 @@ if (empty($rrule)) {
                     $chk_m_ref="checked";
                     $dia_w_db=empty($rta['dia_semana'])? '' : $rta['dia_semana'];
                     $ordinal_db=empty($rta['ordinal'])? '' : $rta['ordinal'];
+                    // Quitar el signo '+'
+                    $ordinal_a_db = (integer) $ordinal_a_db;
                     break;
                 default:
                     $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);

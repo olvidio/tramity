@@ -60,6 +60,7 @@ $oDesplLugar->setOpcion_sel($Qid_lugar);
 $a_opciones_status = Pendiente::getArrayStatus();
 // añadr la opción de 'caulquiera' al inicio
 $all_traducido = _("cualquiera");
+$Qstatus = empty($Qstatus)? 'all' : $Qstatus;
 $a_opciones_status = array_merge(array("all" => $all_traducido), $a_opciones_status);
 $oDesplStatus = new Desplegable();
 $oDesplStatus->setNombre('status');
@@ -135,6 +136,7 @@ if ($Qque == 'buscar') {
     $a_valores = [];
     $t = 0;
     $oPermisoregistro = new PermRegistro();
+	$a_status=Pendiente::getArrayStatus();
     foreach ($cPendientes as $oPendiente) {
         $t++;
         $perm_detalle = $oPermisoregistro->permiso_detalle($oPendiente, 'detalle');
@@ -164,8 +166,7 @@ if ($Qque == 'buscar') {
         $plazo_iso = $oPendiente->getF_plazo()->format('Ymd'); // sólo números, para poder ordenar.
         
         $status = $oPendiente->getStatus();
-        $a_status=Pendiente::getArrayStatus();
-        $estado = $a_status[$status];
+        $estado = empty($a_status[$status])? '?' : $a_status[$status]; 
         
         $of_ponente = $oPendiente->getPonente();
         $ponente = $a_oficinas[$of_ponente];

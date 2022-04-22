@@ -254,6 +254,7 @@ switch ($Qnuevo) {
         if (!empty($Qid_reg)) {
             $oPendiente->setId_reg($Qid_reg);
         }
+		$oPendiente->Carregar();
         $oPendiente->setAsunto($asunto);
         $oPendiente->setStatus($Qstatus);
         $oPendiente->setF_inicio($Qf_inicio);
@@ -297,6 +298,7 @@ switch ($Qnuevo) {
 				// miro si es una recursiva de un pendiente:
 				$f_recur=strtok('#');
                 $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $user_davical, $uid);
+                $oPendiente->Carregar();
                 $oPendiente->marcar_contestado("eliminar");
 			}
 		} else {
@@ -324,6 +326,7 @@ switch ($Qnuevo) {
 				// miro si es una recursiva de un pendiente:
 				$f_recur=strtok('#');
                 $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $user_davical, $uid);
+                $oPendiente->Carregar();
 				if (!empty($f_recur)) {
 					$oPendiente->marcar_excepcion($f_recur);
 				} else {
