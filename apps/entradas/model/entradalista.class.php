@@ -212,13 +212,14 @@ class EntradaLista {
                 $pagina_nueva = '';
                 break;
             case 'en_aceptado':
-            	$ver_oficina = FALSE;
                 $oficina = $this->aWhereADD['ponente'];
                 $pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
                 if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR ) {
 					$pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form_ctr.php';
+					$ver_oficina = FALSE;
                 } else {
                 	$pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
+					$ver_oficina = TRUE;
                 }
                 $pagina_nueva = '';
                 break;
