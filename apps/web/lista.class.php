@@ -1053,7 +1053,16 @@ class Lista {
         $tt.="</tbody></table>\n";
         $tt.="<script>
 			$(document).ready(function() {
-                $('#$id_tabla').DataTable();
+                $('#$id_tabla').DataTable({
+					dom: 'Bfrtip',
+					buttons: [
+						'copyHtml5', 'excel', 'pdf', 'colvis', 'print'
+					],
+					colReorder: {
+						enable: true,
+						realtime: false
+					}
+				});
 				var h = $('input:checked');
 				if (h.length) {
 					var h = (h.offset().top) - 300;
