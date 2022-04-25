@@ -4,7 +4,11 @@
     <input type="hidden" name="opcion" value="">
     <input type="hidden" name="mas" value="">
     <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans }}</th></tr>
+    <tr class="table-danger">
+    <th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans }}
+          <input id="protocolo" name="protocolo" size="30" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_protocolo('#id_lugar','#prot_num','#prot_any','#b_buscar_7')" value="" >
+    </th>
+    </tr>
     <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
         {{ oDesplLugar.desplegable|raw }}
         <td>
@@ -312,6 +316,28 @@ fnjs_aviso_IESE=function(id){
     var nom=$(id).val();
     if (nom=="610") alert ("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans|raw }}");
 }
+/* intentar explotar el protocolo en lugar, num y año */
+fnjs_protocolo=function(lugar,num,any,siguiente){
+    var protocolo=$('#protocolo').val();
+    var expresion_regular= new RegExp('\\s*(\\w*)\\s+([0-9]+)\/([0-9]+)', 'gi');
+    var resultado = expresion_regular.exec(protocolo);
+
+    if (resultado) {
+        if (resultado[1]) {
+            //str_select = lugar+" option:contains("+resultado[1]+")";
+            $(lugar+" option").filter(function() {
+                return $(this).text() === resultado[1];
+            }).attr('selected', 'selected');
+        }
+        
+        if (resultado[2]) {
+            $(num).val(resultado[2]);
+            $(any).val(resultado[3]);
+            $(siguiente).focus();
+        }
+    }
+}
+
 fnjs_proto=function(num,any,siguiente){
     var numero;
     var prot_num=$(num).val();
