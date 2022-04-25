@@ -1,5 +1,7 @@
 <?php
+use function core\is_true;
 use entradas\model\entity\EntradaAdjunto;
+use entradas\model\entity\EntradaCompartidaAdjunto;
 use envios\model\MimeTypeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -15,12 +17,17 @@ require_once ("apps/core/global_object.inc");
 // El download es via GET!!!";
 
 $Qid_item = (integer) \filter_input(INPUT_GET, 'key');
+$Qcompartida = (integer) \filter_input(INPUT_GET, 'compartida');
 
 if (!empty($Qid_item)) {
-    $oEntradaAdjunto = new EntradaAdjunto($Qid_item);
-    $nombre_fichero = $oEntradaAdjunto->getNom();
-    $doc = $oEntradaAdjunto->getAdjunto();
-
+	if (is_true($Qcompartida)) {
+		$oEntradaAdjunto = new EntradaCompartidaAdjunto($Qid_item);
+	} else {
+		$oEntradaAdjunto = new EntradaAdjunto($Qid_item);
+	}
+	$nombre_fichero = $oEntradaAdjunto->getNom();
+	$doc = $oEntradaAdjunto->getAdjunto();
+	
     $file_extension = strtolower(substr(strrchr($nombre_fichero,"."),1));
     $oMimeType = new MimeTypeLocal();
     $ctype = $oMimeType->getMimeType($file_extension);

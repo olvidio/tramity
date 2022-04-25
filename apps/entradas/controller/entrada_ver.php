@@ -51,6 +51,7 @@ if (!empty($Qid_entrada)) {
 	
     $id_entrada_compartida = $oEntrada->getId_entrada_compartida();
     if (!empty($id_entrada_compartida)) {
+    	$bCompartida = TRUE;
     	/*
     	$oEntradaCompartida = new EntradaCompartida($id_entrada_compartida);
     	$descripcion = $oEntradaCompartida->getDescripcion();
@@ -62,6 +63,7 @@ if (!empty($Qid_entrada)) {
 		$oEtherpad = new Etherpad();
     	$oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada_compartida);
     } else {
+    	$bCompartida = FALSE;
 		$a_adjuntos = $oEntrada->getArrayIdAdjuntos();
 		
 		$oEtherpad = new Etherpad();
@@ -69,6 +71,7 @@ if (!empty($Qid_entrada)) {
     }
     $escrito_html = $oEtherpad->generarHtml();
 } else {
+	$bCompartida = FALSE;
     $cabeceraIzqd = '';
     $cabeceraDcha = '';
     $a_adjuntos = [];
@@ -103,7 +106,8 @@ $a_campos = [
     'sigla' => $sigla,
     'escrito_html' => $escrito_html,
     'url_download_pdf' => $url_download_pdf,
-];
+   	'bCompartida' => $bCompartida,
+	];
 
 $oView = new ViewTwig('entradas/controller');
 echo $oView->renderizar('entrada_ver.html.twig',$a_campos);

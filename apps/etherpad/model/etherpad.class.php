@@ -452,7 +452,7 @@ class Etherpad  extends Client {
    
    public function getPadID() {
        if (empty($this->id_escrito)) {
-           die (_("Debe indicar el id con SetId")); 
+           die (_("Debe indicar el id con setId")); 
        }
        // obtener o crear el pad
        $PadID = $this->getId_pad();

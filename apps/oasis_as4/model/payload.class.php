@@ -410,7 +410,11 @@ class Payload {
 	 */
 	public function getXmlContent() {
 		$oEtherpad = new Etherpad();
-		$oEtherpad->setId (Etherpad::ID_ESCRITO,$this->id_escrito);
+		if ($this->accion == 'distribuir') {
+			$oEtherpad->setId(Etherpad::ID_ENTRADA, $this->id_escrito);
+		} else {
+			$oEtherpad->setId(Etherpad::ID_ESCRITO, $this->id_escrito);
+		}
 		
 		switch ($this->getFormat()) {
 			case 'pdf':
@@ -418,8 +422,15 @@ class Payload {
 			case Payload::TYPE_ETHERAD_TXT:
 			case 'txt':
 				$txt = $oEtherpad->generarMD();
-				$contenido_encoded = base64_encode($txt);
-				$content = $this->dom->createElement('content',$contenido_encoded);
+				$mime = new MIMEContainer();
+				$mime->set_content_type("multipart/mixed");
+				$attachment = new MIMEAttachment();
+				$attachment->setfilename('escrito');
+				$attachment->set_content($txt);
+				$mime->add_subcontainer($attachment);
+				$contenido_mime = $mime->get_message();
+		
+				$content = $this->dom->createElement('content',$contenido_mime);
 				$attr = new \DOMAttr('type', self::TYPE_ETHERAD_TXT);
 				$content->setAttributeNode($attr);
 				return $content;
@@ -427,8 +438,15 @@ class Payload {
 			case Payload::TYPE_ETHERAD_HTML:
 			case 'html':
 				$txt = $oEtherpad->generarHtml();
-				$contenido_encoded = base64_encode($txt);
-				$content = $this->dom->createElement('content',$contenido_encoded);
+				$mime = new MIMEContainer();
+				$mime->set_content_type("multipart/mixed");
+				$attachment = new MIMEAttachment();
+				$attachment->setfilename('escrito');
+				$attachment->set_content($txt);
+				$mime->add_subcontainer($attachment);
+				$contenido_mime = $mime->get_message();
+		
+				$content = $this->dom->createElement('content',$contenido_mime);
 				$attr = new \DOMAttr('type', self::TYPE_ETHERAD_HTML);
 				$content->setAttributeNode($attr);
 				return $content;

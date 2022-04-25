@@ -49,6 +49,7 @@ foreach ($a_files_mmd as $file_mmd) {
 		// eliminar el mensaje de la bandeja de entrada 
 		// nombre del fihero del body:
 		$location = $AS4->getLocation();
+		
 		if (unlink($location) === FALSE) {
 			$txt .= sprintf(_("No se ha podido eliminar el fichero %s"), $location);
 		}

@@ -173,6 +173,7 @@ class As4Distribuir extends As4CollaborationInfo {
 		$oEntradaCompartida = new EntradaCompartida();
 		$oEntradaCompartida->setDescripcion($this->descripcion);
 		$oEntradaCompartida->setDestinos($this->a_destinos);
+		$oEntradaCompartida->setF_documento($this->oF_escrito);
 
 		if ($oEntradaCompartida->DBGuardar() === FALSE ) {
 			return FALSE;
@@ -510,8 +511,26 @@ class As4Distribuir extends As4CollaborationInfo {
 	}
 	
 	private function getContent() {
-		$contenido_encoded = (string) $this->getValorTag('content');
-		return base64_decode($contenido_encoded);
+		$xml_adjuntos = $this->dom->getElementsByTagName('content')->item(0);
+		if (!empty($xml_adjuntos)) {
+			$name = $xml_adjuntos->nodeName;
+			if ($name == 'content') {
+				$value = $xml_adjuntos->nodeValue;
+				$a_mime = $this->descomponerMime($value);
+				foreach ($a_mime as $mime) {
+					$aAdjuntos[] = $mime;
+				}
+			}
+			// normalmente el escrito es sólo uno, aunque se use el MIME/multipart
+			$escrito = $aAdjuntos[0];
+			// $filename = $escrito['filename']
+			$doc_encoded = $escrito['contenido'];
+			$doc = base64_decode($doc_encoded);
+		} else {
+			$doc = '';
+		}
+			
+		return $doc;
 	}
 	
 	private function getCompartido() {
