@@ -319,7 +319,7 @@ fnjs_aviso_IESE=function(id){
 /* intentar explotar el protocolo en lugar, num y año */
 fnjs_protocolo=function(lugar,num,any,siguiente){
     var protocolo=$('#protocolo').val();
-    var expresion_regular= new RegExp('\\s*(\\w*)\\s+([0-9]+)\/([0-9]+)', 'gi');
+    var expresion_regular= new RegExp('\\s*((\\w*\\s*)*)\\s+([0-9]+)\/([0-9]+)', 'g');
     var resultado = expresion_regular.exec(protocolo);
 
     if (resultado) {
@@ -330,9 +330,9 @@ fnjs_protocolo=function(lugar,num,any,siguiente){
             }).attr('selected', 'selected');
         }
         
-        if (resultado[2]) {
-            $(num).val(resultado[2]);
-            $(any).val(resultado[3]);
+        if (resultado[3]) {
+            $(num).val(resultado[3]);
+            $(any).val(resultado[4]);
             $(siguiente).focus();
         }
     }
