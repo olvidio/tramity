@@ -404,7 +404,7 @@ if (empty($rrule)) {
                     $dia_w_db=empty($rta['dia_semana'])? '' : $rta['dia_semana'];
                     $ordinal_db=empty($rta['ordinal'])? '' : $rta['ordinal'];
                     // Quitar el signo '+'
-                    $ordinal_a_db = (integer) $ordinal_a_db;
+                    $ordinal_db = (integer) $ordinal_db;
                     break;
                 default:
                     $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);

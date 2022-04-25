@@ -180,7 +180,7 @@ class Rrule {
                         if ($ordinal_db > 0) {
                             $dia_w_txt=$a_dias_w[$dia_w_db];
                             $txt="$ordinal_db $dia_w_txt";
-                            $dia=date("d",strtotime($txt,mktime(0,0,0,$mes,0,$any)));
+                            $dia=date("d",strtotime($txt,mktime(0,0,0,$mes,1,$any)));
                         }
                         if ($ordinal_db < 0) {
                             $dia_w_txt=$a_dias_w[$dia_w_db];
