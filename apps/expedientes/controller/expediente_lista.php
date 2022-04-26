@@ -33,7 +33,7 @@ if ($Qfiltro == 'archivados') {
     $a_condiciones = [
     		'asunto' => $Qasunto,
     		'andOr' => $QandOr,
-    		'a_etiquetas' => $Qa_etiquetas,
+    		'etiquetas' => $Qa_etiquetas,
     		'periodo' => $Qperiodo,
     ];
     $oTabla->setACondiciones($a_condiciones);
