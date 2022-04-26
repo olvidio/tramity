@@ -51,6 +51,10 @@ class ExpedienteLista {
      */
     private $aOperadorADD = [];
     /**
+     * @var array
+     */
+    private $aCondiciones = [];
+    /**
      * 
      * @var array
      */
@@ -696,6 +700,11 @@ class ExpedienteLista {
                             'prioridad_sel' => $this->prioridad_sel,
                             'modo' => 'mod',
                             ];
+                if ($this->filtro == 'archivados') {
+                	$a_cosas = $this->getACondiciones();
+                	$a_cosas_ver['condiciones'] = $a_cosas;
+                }
+                
                 $link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas_ver));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas_mod));
                 $link_accion = Hash::link($pagina_accion.'?'.http_build_query($a_cosas_mod));
@@ -906,6 +915,21 @@ class ExpedienteLista {
     {
         $this->aOperadorADD = $aOperadorADD;
     }
+    
+	/**
+	 * @return array
+	 */
+	public function getACondiciones() {
+		return $this->aCondiciones;
+	}
+
+	/**
+	 * @param array $aCondicion
+	 */
+	public function setACondiciones($aCondiciones) {
+		$this->aCondiciones = $aCondiciones;
+	}
+
 
 
     

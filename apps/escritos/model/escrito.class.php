@@ -436,18 +436,27 @@ class Escrito Extends EscritoDB {
         return $origen_txt;
     }
     
-    public function getProt_local_txt() {
-    	
+    /**
+     * Devuelve el numero de prootcolo, y si no existe, el valor 'default' que se pasacomo parámetro.
+     * 
+     * @param string $default
+     * @return string
+     */
+    public function getProt_local_txt($default='') {
         $json_prot_local = $this->getJson_prot_local();
         if (count(get_object_vars($json_prot_local)) == 0) {
-        	/* PARECE QUE YA NO LO USUO ASI
+        	/* PARECE QUE YA NO LO USO ASI
             $err_txt = "No hay protocolo local";
             $_SESSION['oGestorErrores']->addError($err_txt,'generar PDF', __LINE__, __FILE__);
             $_SESSION['oGestorErrores']->recordar($err_txt);
 
             $origen_txt = $_SESSION['oConfig']->getSigla();
             */
-        	$origen_txt = _("revisar");
+        	if (empty($default)) {
+				$origen_txt = _("revisar");
+        	} else {
+				$origen_txt = $default;
+        	}
         } else {
             $oProtOrigen = new Protocolo();
             $oProtOrigen->setLugar($json_prot_local->lugar);

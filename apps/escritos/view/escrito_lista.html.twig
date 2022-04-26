@@ -5,13 +5,15 @@
         <th scope="col">{{ "ok"|trans }}</th>
       {% endif %}
       <th scope="col">{{ ver_todo|raw }}</th>
-	  {%  if modo == 'mod' %}
+	  {%  if modo == 'mod' or filtro == 'archivados' %}
         {%  if bdistribuir %}
           <th scope="col">{{ "rev.datos"|trans }}</th>
         {% endif %}
         <th scope="col">{{ prot_local_header }}</th>
       {% endif %}
-      <th scope="col">{{ "tipo"|trans }}</th>
+	  {%  if filtro != 'archivados' %}
+      	<th scope="col">{{ "tipo"|trans }}</th>
+      {% endif %}
       <th scope="col">{{ "destino"|trans }}</th>
       <th scope="col">{{ "ref."|trans }}</th>
       <th scope="col">{{ "asunto"|trans }}</th>
@@ -22,16 +24,18 @@
   {% for row in a_acciones %}
     <tr>
 	  {%  if ver_ok %}
-        <th>{{ row.ok|raw }}</th>
+        <td>{{ row.ok|raw }}</td>
       {% endif %}
-      <th>{{ row.link_ver|raw }}</th>
-	  {%  if modo == 'mod' %}
+      <td>{{ row.link_ver|raw }}</td>
+	  {%  if modo == 'mod' or filtro == 'archivados' %}
         {%  if bdistribuir %}
           <td>{{ row.link_mod|raw }}</td>
         {% endif %}
         <td>{{ row.prot_local|raw }}</td>
       {% endif %}
-      <td>{{ row.tipo|raw }}</td>
+	  {%  if filtro != 'archivados' %}
+        <td>{{ row.tipo|raw }}</td>
+      {% endif %}
       <td>{{ row.destino|raw }}</td>
       <td>{{ row.ref|raw }}</td>
       <td>{{ row.asunto|raw }}</td>

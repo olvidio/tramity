@@ -120,7 +120,12 @@ $txt_btn_etiquetas = _("Guardar etiquetas");
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro,'modo' => $Qmodo]));
+$cosas = ['filtro' => $Qfiltro, 'modo' => $Qmodo ];
+if ($Qfiltro == 'archivados') {
+	$Qa_condiciones = (array)  \filter_input(INPUT_POST, 'condiciones', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+	$cosas = array_merge($cosas, $Qa_condiciones);
+}
+$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($cosas));
 $pagina_actualizar = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro, 'modo' => $Qmodo]));
 $base_url = ConfigGlobal::getWeb(); //http://tramity.local
 

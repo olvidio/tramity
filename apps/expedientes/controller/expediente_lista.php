@@ -30,6 +30,13 @@ if ($Qfiltro == 'archivados') {
     $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $Qperiodo =  (string) \filter_input(INPUT_POST, 'periodo');
 
+    $a_condiciones = [
+    		'asunto' => $Qasunto,
+    		'andOr' => $QandOr,
+    		'a_etiquetas' => $Qa_etiquetas,
+    		'periodo' => $Qperiodo,
+    ];
+    $oTabla->setACondiciones($a_condiciones);
     $a_etiquetas_filtered = array_filter($Qa_etiquetas);
     
     $gesEtiquetas = new GestorEtiqueta();

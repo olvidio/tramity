@@ -325,7 +325,11 @@ class EscritoLista {
                 $prot_local_header = _("prot. local/rev.texto");
             } else {
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >"._("ver")."</span>";
-                $prot_local_header = _("rev.texto");
+                if ($this->filtro == 'archivados') {
+					$prot_local_header = _("prot. local");
+                } else {
+					$prot_local_header = _("rev.texto");
+                }
             }
 
             $destino_txt = $oEscrito->getDestinosEscrito();
@@ -335,7 +339,8 @@ class EscritoLista {
             	$destino_txt .= " ($visibilidad_txt)";
             }
             
-            $prot_local_txt = $oEscrito->getProt_local_txt();
+            $default = ($this->filtro == 'archivados')? '-' : '';
+            $prot_local_txt = $oEscrito->getProt_local_txt($default);
             // Tiene adjuntos?
             $adjuntos = '';
             $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
