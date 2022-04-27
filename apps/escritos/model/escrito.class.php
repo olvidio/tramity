@@ -113,21 +113,24 @@ class Escrito Extends EscritoDB {
     /**
      * genera el número de protocolo local. y lo guarda.
      */
-    public function generarProtocolo($id_lugar='',$id_lugar_cr='') {
+    public function generarProtocolo($id_lugar='',$id_lugar_cr='',$id_lugar_iese='') {
         // si ya tiene no se toca:
         $prot_local = $this->getJson_prot_local();
         if (!empty(get_object_vars($prot_local))) {
-            return TRUE;
+            //return TRUE;
         }
         $gesLugares = new GestorLugar();
+        if (empty($id_lugar_iese)) {
+            $id_lugar_iese = $gesLugares->getId_iese();
+        }
         if (empty($id_lugar_cr)) {
             $id_lugar_cr = $gesLugares->getId_cr();
         }
         if (empty($id_lugar)) {
             $id_lugar = $gesLugares->getId_sigla_local();
         }
-        // segun si el destino es cr o resto:
-        $bCr = FALSE;
+        // segun si el destino es cr, iese o resto:
+		$lugar_contador = '';
         $aProtDst = $this->getJson_prot_destino(TRUE);
         // es un array, pero sólo debería haber uno...
         foreach($aProtDst as $json_prot_destino) {
@@ -135,14 +138,19 @@ class Escrito Extends EscritoDB {
                 exit (_("Error no hay destino"));
             } else {
                 $lugar = $json_prot_destino['lugar'];
-                if ($lugar == $id_lugar_cr) {
-                    $bCr = TRUE;
-                } else {
-                    $bCr = FALSE;
+                switch ($lugar) {
+                	case $id_lugar_cr:
+						$lugar_contador = 'cr';
+						break;
+                	case $id_lugar_iese:
+                    	$lugar_contador = 'iese';
+                    	break;
+                	default:
+						$lugar_contador = '';
                 }
             }
         }
-        $prot_num = $_SESSION['oConfig']->getContador($bCr);
+        $prot_num = $_SESSION['oConfig']->getContador($lugar_contador);
         $prot_any = date('y');
         $prot_mas = '';
         

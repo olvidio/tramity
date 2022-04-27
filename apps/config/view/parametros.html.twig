@@ -238,6 +238,12 @@
 <input class="col-2" type="text" name="valor" value="{{ ini_contador }}" >
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
+<form id="frm_contador2" name="frm_contador2" action="">
+{{ oHashC2.getCamposHtml|raw }}
+{{ "para cr"|trans }}
+<input class="col-2" type="text" name="valor" value="{{ ini_contador_iese }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
 <hr>
 
 <h3>{{ "idioma por defecto"|trans }}:</h3>

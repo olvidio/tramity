@@ -371,6 +371,19 @@ $oHashC1->setArrayCamposHidden(['parametro' => $parametro]);
 $a_campos['oHashC1'] = $oHashC1;
 $a_campos['ini_contador'] = $valor;
 
+// ----------- Inicio Contador IESE -------------------
+$parametro = 'ini_contador_iese';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$oHashC2 = new Hash();
+$oHashC2->setUrl($url);
+$oHashC2->setcamposForm('valor');
+$oHashC2->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashC2'] = $oHashC2;
+$a_campos['ini_contador_iese'] = $valor;
+
 // ----------- Nombre Sigla -------------------
 $parametro = 'sigla';
 $oConfigSchema = new ConfigSchema($parametro);

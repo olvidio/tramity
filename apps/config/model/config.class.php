@@ -52,6 +52,12 @@ class Config {
         return $oConfigSchema->getValor();
     }
     
+    public function getIni_contador_iese() {
+        $parametro = 'ini_contador_iese';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
+    
     public function getContador_cr() {
         $this->resetContador();
         $parametro = 'contador_cr';
@@ -80,9 +86,25 @@ class Config {
         return $valor_actual;
     }
     
-    public function getContador($bCr) {
-        if ($bCr) {
+    public function getContador_iese() {
+        $this->resetContador();
+        $parametro = 'contador_iese';
+        $oConfigSchema = new ConfigSchema($parametro);
+        $valor_actual = $oConfigSchema->getValor();
+        $valor_actual = empty($valor_actual)? $this->getIni_contador_iese() : $valor_actual;
+        $valor_nuevo = $valor_actual + 1;
+        
+        $oConfigSchema->setValor($valor_nuevo);
+        $oConfigSchema->DBGuardar();
+        
+        return $valor_actual;
+    }
+    
+    public function getContador($lugar='') {
+        if ($lugar == 'cr') {
             return $this->getContador_cr();
+        } elseif ($lugar == 'iese') {
+            return $this->getContador_iese(); 
         } else {
             return $this->getContador_resto(); 
         }
@@ -97,6 +119,10 @@ class Config {
             $oConfigSchema->setValor($any_actual);
             $oConfigSchema->DBGuardar();
             // poner al inicio
+            $valor = $this->getIni_contador_iese();
+            $oConfigSchemaContador = new ConfigSchema('contador_iese');
+            $oConfigSchemaContador->setValor($valor);
+            $oConfigSchemaContador->DBGuardar();
             $valor = $this->getIni_contador_cr();
             $oConfigSchemaContador = new ConfigSchema('contador_cr');
             $oConfigSchemaContador->setValor($valor);

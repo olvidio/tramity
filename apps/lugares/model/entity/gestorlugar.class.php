@@ -39,6 +39,21 @@ class GestorLugar Extends core\ClaseGestor {
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
 	/**
+	 * devuelve el id del IESE
+	 */
+	public function getId_iese() {
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+	        exit (_("Error al buscar el id del IESE"));
+	    }
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+	    	$sigla = 'IESE';
+	    	$cLugares = $this->getLugares(['sigla' => $sigla]);
+	    	$oLugar = $cLugares[0];
+	    	return $oLugar->getId_lugar();
+	    }
+	}
+	
+	/**
 	 * devuelve el id de la cr (cr)
 	 */
 	public function getId_cr() {
