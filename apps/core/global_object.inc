@@ -16,8 +16,8 @@ function logout($idioma,$esquema,$error) {
 }
 
 if ( session_status() !== PHP_SESSION_ACTIVE) {
-    // Configure timeout to 15 minutes
-    $timeout = 900;
+    // Configure timeout to 30 minutes
+    $timeout = 1800;
     
     // Set the maxlifetime of session
     ini_set( "session.gc_maxlifetime", $timeout );
