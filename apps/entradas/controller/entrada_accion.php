@@ -2,6 +2,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\Entrada;
+use etiquetas\model\entity\GestorEtiqueta;
 use usuarios\model\entity\GestorCargo;
 use web\Desplegable;
 use web\Hash;
@@ -44,6 +45,10 @@ if ($Qoficina == 'propia') { // encargar
     $a_botones[1] = ['accion' => 'en_visto',
                 'txt'    => _("marcar como visto"),
             ];
+    $a_botones[2] = ['accion' => 'en_add_etiqueta',
+    		'txt'    => _("Etiquetas"),
+    		'tipo'    => 'modal1',
+    ];
 }
 if ($Qoficina == 'resto') { // marcar como visto
     $a_botones[0] = ['accion' => 'en_visto',
@@ -61,6 +66,22 @@ if (empty($a_botones)) {
                 ];
 }
 
+// Etiquetas
+$etiquetas = []; // No hay ninguna porque en archivar es cuando se añaden.
+$gesEtiquetas = new GestorEtiqueta();
+$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$a_posibles_etiquetas = [];
+foreach ($cEtiquetas as $oEtiqueta) {
+	$id_etiqueta = $oEtiqueta->getId_etiqueta();
+	$nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+	$a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+}
+
+$etiquetas = $oEntrada->getEtiquetasVisiblesArray();
+$oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
+$oArrayDesplEtiquetas ->setBlanco('t');
+$oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
+
 $a_campos = [
     'id_entrada' => $Qid_entrada,
     'filtro' => $Qfiltro,
@@ -70,6 +91,7 @@ $a_campos = [
     'a_botones' => $a_botones,
     'pagina_cancel' => $pagina_cancel,
     'oDesplCargosOficinaEncargado' => $oDesplCargosOficinaEncargado,
+	'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
 ];
 
 $oView = new ViewTwig('entradas/controller');

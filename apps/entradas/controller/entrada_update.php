@@ -58,6 +58,39 @@ $Qa_prot_mas_referencias = (array)  \filter_input(INPUT_POST, 'prot_mas_referenc
 $error_txt = '';
 $jsondata = [];
 switch($Qque) {
+	case 'guardar_etiquetas':
+		$Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+		// si viene del serializeArray del jQuery, cada fila, a su vez es un array:
+		$a_etiquetas = [];
+		foreach ($Qa_etiquetas as $etiqueta) {
+			if (is_array($etiqueta)) {
+				$a_etiquetas[] = $etiqueta['value'];
+			} else {
+				$a_etiquetas[] = $etiqueta;
+			}
+		}
+		// Se pone cuando se han enviado...
+		$oEntrada = new Entrada($Qid_entrada);
+		$oEntrada->DBCarregar();
+		// las etiquetas:
+		$oEntrada->setEtiquetas($a_etiquetas);
+		//$oEntrada->setVisibilidad($Qvisibilidad);
+		if ($oEntrada->DBGuardar() === FALSE ) {
+			$error_txt .= _("No se han podido guardar las etiquetas");
+		}
+		if (empty($error_txt)) {
+			$jsondata['success'] = true;
+			$jsondata['mensaje'] = 'ok';
+		} else {
+			$jsondata['success'] = false;
+			$jsondata['mensaje'] = $error_txt;
+		}
+		
+		//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+		header('Content-type: application/json; charset=utf-8');
+		echo json_encode($jsondata);
+		exit();
+		break;
     case 'en_asignar':
         $Qid_oficina = ConfigGlobal::role_id_oficina();
         $Qid_cargo_encargado = (integer) \filter_input(INPUT_POST, 'id_cargo_encargado');

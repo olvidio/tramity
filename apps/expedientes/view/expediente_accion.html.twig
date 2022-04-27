@@ -70,18 +70,47 @@
   </div>
 </div>
 
+<!-- Modal2 (etiquetas) -->
+<div class="modal fade" id="ModalEtiquetas" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalLongTitle">{{ "Asignar Etiquetas a la entrada"|trans }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+          <div id="div_etiquetas" class="mb-0 row align-items-center">
+            <label for="etiquetas" class="col-2 form-label">{{ "Etiquetas"|trans }}:</label>
+            <div class="mb-0 col-6">
+              <span id="span_etiquetas">
+                  {{ oArrayDesplEtiquetas.ListaSelects|raw }}
+              </span>
+            </div>
+              <div class="col-4">
+                <button type="button" class="btn btn-primary" onClick="fnjs_guardar_etiquetas();" >{{ "Guardar"|trans }}</button>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="card w-50 mx-auto ">
   <div class="card-header">
-    <h5 class="card-title">{{ "Acciones para el expediente"|trans }}:</h5>
+    <h5 class="card-title">{{ titulo }}:</h5>
     <h5 class="card-title">{{ asunto }}</h5>
   </div>
   <div class="card-body">
 <div class="row">
 {% for row in a_botones %}
   <div class="col">
-  	{% if row.tipo == 'modal' %}
+      {% if row.tipo == 'modal' %}
       <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_buscar('{{ row.accion }}');" >
+        {{ row.txt }}
+      </button>
+    {% elseif row.tipo == 'modal1' %}
+      <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalEtiquetas" onClick="fnjs_buscar('{{ row.accion }}');" >
         {{ row.txt }}
       </button>
   	{% else %}
@@ -122,6 +151,30 @@ fnjs_accion=function(accion){
             alert ('error: '+rta_txt);
         } else {
         	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+        }
+    });
+}
+
+fnjs_guardar_etiquetas=function() {
+	var que='guardar_etiquetas';
+	var id_entrada={{ id_entrada }};
+	var etiquetas = $( "select[name^='etiquetas\\[']" ).serializeArray();
+	
+    var url_ajax = 'apps/entradas/controller/entrada_update.php';
+    var param_json = { que: que, id_entrada: id_entrada, etiquetas: etiquetas };
+    request=$.ajax({
+        data: param_json,
+        url: url_ajax,
+        method: 'POST',
+        dataType: 'json'
+    });
+    request.done( function (json) {
+        // close div modal
+        $('#ModalEtiquetas').modal('hide');
+    	if (json.success != true) {
+    		alert (json.mensaje);
+        } else {
+            fnjs_update_div('#main','{{ pagina_cancel|raw }}');
         }
     });
 }
@@ -311,6 +364,27 @@ $(function() {
         }
     });
 });
+
+{{ oArrayDesplEtiquetas.ComprobarSelectJs|raw }}
+fnjs_mas_etiquetas=function(){
+	var code = (event.keyCode ? event.keyCode : event.which);
+    var valor=1;
+    var id_campo='#'+event.currentTarget.id;
+    var valor=$(id_campo).val();
+    if(code!=9 && typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+	if ( code==9 || event.type=="change") {
+		if (valor!=0) {
+			{{ oArrayDesplEtiquetas.ListaSelectsJs|raw }}
+		}
+	}
+}
+fnjs_quitar_etiquetas=function(){
+	$('#span_etiquetas').html("");
+	$('#etiquetas_num').val(0);
+}
 
 /* NO SE de donde se copió, pero al cerrar el modal da un error y 
 además quita las barras scroll de la pagina.

@@ -4,6 +4,7 @@ use busquedas\model\VerTabla;
 use escritos\model\Escrito;
 use lugares\model\entity\GestorLugar;
 use web\DateTimeLocal;
+use etiquetas\model\entity\GestorEtiquetaEntrada;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -26,6 +27,31 @@ $Qmas = '';
 $a_condicion = []; // para poner los parámetros de la búsqueda y poder actualizar la página.
 $a_condicion['opcion'] = $Qopcion;
 switch ($Qopcion) {
+    case 8:
+        // buscar por etiquetas
+    	$QandOr = (string) \filter_input(INPUT_POST, 'andOr');
+    	$Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    	$a_etiquetas_filtered = array_filter($Qa_etiquetas);
+    	
+        $a_condicion['etiquetas'] = $a_etiquetas_filtered;
+        $a_condicion['andOr'] = $QandOr;
+        $str_condicion = http_build_query($a_condicion);
+
+        $oBuscar = new Buscar();
+        $oBuscar->setEtiquetas($a_etiquetas_filtered);
+        $oBuscar->setAndOr($QandOr);
+        
+        $aCollection = $oBuscar->getCollection($Qopcion, $Qmas);
+        
+        foreach ($aCollection as $key => $cCollection) {
+            $oTabla = new VerTabla();
+            $oTabla->setKey($key);
+            $oTabla->setCondicion($str_condicion);
+            $oTabla->setCollection($cCollection);
+            $oTabla->setFiltro($filtro);
+            echo $oTabla->mostrarTabla();
+        }
+        break;
     case 71: // buscar en referencias (mismo formulario que 7):
         $Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
         $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');

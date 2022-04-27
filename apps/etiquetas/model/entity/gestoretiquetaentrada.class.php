@@ -2,18 +2,18 @@
 namespace etiquetas\model\entity;
 use core;
 /**
- * GestorEtiquetaExpediente
+ * GestorEtiquetaEntrada
  *
- * Classe per gestionar la llista d'objectes de la clase EtiquetaExpediente
+ * Classe per gestionar la llista d'objectes de la clase EtiquetaEntrada
  *
  * @package tramity
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @created 11/11/2020
+ * @created 27/4/2022
  */
 
-class GestorEtiquetaExpediente Extends core\ClaseGestor {
+class GestorEtiquetaEntrada Extends core\ClaseGestor {
 	/* ATRIBUTS ----------------------------------------------------------------- */
 
 	/* CONSTRUCTOR -------------------------------------------------------------- */
@@ -28,100 +28,101 @@ class GestorEtiquetaExpediente Extends core\ClaseGestor {
 	function __construct() {
 		$oDbl = $GLOBALS['oDBT'];
 		$this->setoDbl($oDbl);
-		$this->setNomTabla('etiquetas_expediente');
+		$this->setNomTabla('etiquetas_entrada');
 	}
 
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
-	public function getArrayExpedientes($a_etiquetas,$andOr='OR') {
-	    $oDbl = $this->getoDbl();
-	    $nom_tabla = $this->getNomTabla();
-	    // Filtering the array
-	    $a_etiquetas_filtered = array_filter($a_etiquetas);
-	    if (!empty($a_etiquetas_filtered)) {
-            if ($andOr == 'AND') {
-                $sQuery = '';
-                foreach ($a_etiquetas_filtered as $etiqueta) {
-                    $sql = "SELECT DISTINCT id_expediente
-                        FROM $nom_tabla
-                        WHERE id_etiqueta = $etiqueta";
-                    $sQuery .=  empty($sQuery)? $sql : " INTERSECT $sql";
-                }
-                
-            } else {
-                $valor = implode(',',$a_etiquetas_filtered);
-                $where = " id_etiqueta IN ($valor)";
-                $sQuery = "SELECT DISTINCT id_expediente
-                        FROM $nom_tabla
-                        WHERE $where ";
-            }
-            
-            if (($oDbl->query($sQuery)) === FALSE) {
-                $sClauError = 'GestorEtiquetaExpediente.queryPreparar';
-                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-                return FALSE;
-            }
-            $a_expedientes = [];
-            foreach ($oDbl->query($sQuery) as $aDades) {
-                $a_expedientes[] = $aDades['id_expediente'];
-            }
-	    } else {
-	        $a_expedientes = [];
-	    }
-	    return $a_expedientes;
-	    
-	}
-	
-	public function deleteEtiquetasExpediente($id_expediente) {
+	public function getArrayEntradas($a_etiquetas,$andOr='OR') {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
-	    $sQuery = "DELETE
-                    FROM $nom_tabla
-                    WHERE id_expediente=$id_expediente";
-	    
-	    if (($oDbl->query($sQuery)) === FALSE) {
-	        $sClauError = 'GestorEtiquetaExpediente.queryPreparar';
-	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-	        return FALSE;
-	    }
-
-	    return TRUE;
+		// Filtering the array
+		$a_etiquetas_filtered = array_filter($a_etiquetas);
+		if (!empty($a_etiquetas_filtered)) {
+			if ($andOr == 'AND') {
+				$sQuery = '';
+				foreach ($a_etiquetas_filtered as $etiqueta) {
+					$sql = "SELECT DISTINCT id_entrada
+                        FROM $nom_tabla
+                        WHERE id_etiqueta = $etiqueta";
+					$sQuery .=  empty($sQuery)? $sql : " INTERSECT $sql";
+				}
+				
+			} else {
+				$valor = implode(',',$a_etiquetas_filtered);
+				$where = " id_etiqueta IN ($valor)";
+				$sQuery = "SELECT DISTINCT id_entrada
+                        FROM $nom_tabla
+                        WHERE $where ";
+			}
+			
+			if (($oDbl->query($sQuery)) === FALSE) {
+				$sClauError = 'GestorEtiquetaEntrada.queryPreparar';
+				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+				return FALSE;
+			}
+			$a_entradas = [];
+			foreach ($oDbl->query($sQuery) as $aDades) {
+				$a_entradas[] = $aDades['id_entrada'];
+			}
+		} else {
+			$a_entradas = [];
+		}
+		return $a_entradas;
+		
 	}
+	
+	public function deleteEtiquetasEntrada($id_entrada) {
+		$oDbl = $this->getoDbl();
+		$nom_tabla = $this->getNomTabla();
+		$sQuery = "DELETE
+                    FROM $nom_tabla
+                    WHERE id_entrada=$id_entrada";
+		
+		if (($oDbl->query($sQuery)) === FALSE) {
+			$sClauError = 'GestorEtiquetaEntrada.queryPreparar';
+			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+			return FALSE;
+		}
+		
+		return TRUE;
+	}
+	
 	/**
-	 * retorna l'array d'objectes de tipus EtiquetaExpediente
+	 * retorna l'array d'objectes de tipus EtiquetaEntrada
 	 *
 	 * @param string sQuery la query a executar.
-	 * @return array Una col·lecció d'objectes de tipus EtiquetaExpediente
+	 * @return array Una col·lecció d'objectes de tipus EtiquetaEntrada
 	 */
-	function getEtiquetasExpedienteQuery($sQuery='') {
+	function getEtiquetasEntradaQuery($sQuery='') {
 		$oDbl = $this->getoDbl();
-		$oEtiquetaExpedienteSet = new core\Set();
+		$oEtiquetaEntradaSet = new core\Set();
 		if (($oDbl->query($sQuery)) === FALSE) {
-			$sClauError = 'GestorEtiquetaExpediente.query';
+			$sClauError = 'GestorEtiquetaEntrada.query';
 			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 			return FALSE;
 		}
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_etiqueta' => $aDades['id_etiqueta'],
-							'id_expediente' => $aDades['id_expediente']);
-			$oEtiquetaExpediente= new EtiquetaExpediente($a_pkey);
-			$oEtiquetaExpedienteSet->add($oEtiquetaExpediente);
+							'id_entrada' => $aDades['id_entrada']);
+			$oEtiquetaEntrada= new EtiquetaEntrada($a_pkey);
+			$oEtiquetaEntradaSet->add($oEtiquetaEntrada);
 		}
-		return $oEtiquetaExpedienteSet->getTot();
+		return $oEtiquetaEntradaSet->getTot();
 	}
 
 	/**
-	 * retorna l'array d'objectes de tipus EtiquetaExpediente
+	 * retorna l'array d'objectes de tipus EtiquetaEntrada
 	 *
 	 * @param array aWhere associatiu amb els valors de les variables amb les quals farem la query
 	 * @param array aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
-	 * @return array Una col·lecció d'objectes de tipus EtiquetaExpediente
+	 * @return array Una col·lecció d'objectes de tipus EtiquetaEntrada
 	 */
-	function getEtiquetasExpediente($aWhere=array(),$aOperators=array()) {
+	function getEtiquetasEntrada($aWhere=array(),$aOperators=array()) {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
-		$oEtiquetaExpedienteSet = new core\Set();
+		$oEtiquetaEntradaSet = new core\Set();
 		$oCondicion = new core\Condicion();
 		$aCondi = array();
 		foreach ($aWhere as $camp => $val) {
@@ -144,22 +145,22 @@ class GestorEtiquetaExpediente Extends core\ClaseGestor {
 		if (isset($aWhere['_limit'])) { unset($aWhere['_limit']); }
 		$sQry = "SELECT * FROM $nom_tabla ".$sCondi.$sOrdre.$sLimit;
 		if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-			$sClauError = 'GestorEtiquetaExpediente.llistar.prepare';
+			$sClauError = 'GestorEtiquetaEntrada.llistar.prepare';
 			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 			return FALSE;
 		}
 		if (($oDblSt->execute($aWhere)) === FALSE) {
-			$sClauError = 'GestorEtiquetaExpediente.llistar.execute';
+			$sClauError = 'GestorEtiquetaEntrada.llistar.execute';
 			$_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
 			return FALSE;
 		}
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_etiqueta' => $aDades['id_etiqueta'],
-							'id_expediente' => $aDades['id_expediente']);
-			$oEtiquetaExpediente = new EtiquetaExpediente($a_pkey);
-			$oEtiquetaExpedienteSet->add($oEtiquetaExpediente);
+							'id_entrada' => $aDades['id_entrada']);
+			$oEtiquetaEntrada = new EtiquetaEntrada($a_pkey);
+			$oEtiquetaEntradaSet->add($oEtiquetaEntrada);
 		}
-		return $oEtiquetaExpedienteSet->getTot();
+		return $oEtiquetaEntradaSet->getTot();
 	}
 
 	/* METODES PROTECTED --------------------------------------------------------*/

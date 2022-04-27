@@ -1,10 +1,16 @@
 <?php
 namespace entradas\model;
 
+use core\ConfigGlobal;
+use function core\is_true;
 use entradas\model\entity\EntradaDB;
 use entradas\model\entity\EntradaDocDB;
 use entradas\model\entity\GestorEntradaAdjunto;
 use entradas\model\entity\GestorEntradaBypass;
+use etiquetas\model\entity\Etiqueta;
+use etiquetas\model\entity\EtiquetaEntrada;
+use etiquetas\model\entity\GestorEtiqueta;
+use etiquetas\model\entity\GestorEtiquetaEntrada;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
 use usuarios\model\PermRegistro;
@@ -13,7 +19,6 @@ use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
 use web\ProtocoloArray;
-use function core\is_true;
 
 
 class Entrada Extends EntradaDB {
@@ -351,6 +356,78 @@ class Entrada Extends EntradaDB {
     	return $this->nombre_escrito;
     }
     
+    public function getEtiquetasVisiblesArray($id_cargo='') {
+    	$cEtiquetas = $this->getEtiquetasVisibles($id_cargo);
+    	$a_etiquetas = [];
+    	foreach ($cEtiquetas as $oEtiqueta) {
+    		$a_etiquetas[] = $oEtiqueta->getId_etiqueta();
+    	}
+    	return $a_etiquetas;
+    }
+    
+    public function getEtiquetasVisiblesTxt($id_cargo='') {
+    	$cEtiquetas = $this->getEtiquetasVisibles($id_cargo);
+    	$str_etiquetas = '';
+    	foreach ($cEtiquetas as $oEtiqueta) {
+    		$str_etiquetas .= empty($str_etiquetas)? '' : ', ';
+    		$str_etiquetas .= $oEtiqueta->getNom_etiqueta();
+    	}
+    	return $str_etiquetas;
+    }
+    
+    public function getEtiquetasVisibles($id_cargo='') {
+    	if (empty($id_cargo)) {
+    		$id_cargo = ConfigGlobal::role_id_cargo();
+    	}
+    	$gesEtiquetas = new GestorEtiqueta();
+    	$cMisEtiquetas = $gesEtiquetas->getMisEtiquetas($id_cargo);
+    	$a_mis_etiquetas = [];
+    	foreach($cMisEtiquetas as $oEtiqueta) {
+    		$a_mis_etiquetas[] = $oEtiqueta->getId_etiqueta();
+    	}
+    	$gesEtiquetasEntrada = new GestorEtiquetaEntrada();
+    	$aWhere = [ 'id_entrada' => $this->iid_entrada ];
+    	$cEtiquetasEnt = $gesEtiquetasEntrada->getEtiquetasEntrada($aWhere);
+    	$cEtiquetas = [];
+    	foreach ($cEtiquetasEnt as $oEtiquetaEnt) {
+    		$id_etiqueta = $oEtiquetaEnt->getId_etiqueta();
+    		if (in_array($id_etiqueta, $a_mis_etiquetas)) {
+    			$cEtiquetas[] = new Etiqueta($id_etiqueta);
+    		}
+    	}
+    	
+    	return $cEtiquetas;
+    }
+    
+    public function getEtiquetas() {
+    	$gesEtiquetasEntrada = new GestorEtiquetaEntrada();
+    	$aWhere = [ 'id_entrada' => $this->iid_entrada ];
+    	$cEtiquetasExp = $gesEtiquetasEntrada->getEtiquetasEntrada($aWhere);
+    	$cEtiquetas = [];
+    	foreach ($cEtiquetasExp as $oEtiquetaExp) {
+    		$id_etiqueta = $oEtiquetaExp->getId_etiqueta();
+    		$cEtiquetas[] = new Etiqueta($id_etiqueta);
+    	}
+    	
+    	return $cEtiquetas;
+    }
+    
+    public function setEtiquetas($aEtiquetas){
+    	$this->delEtiquetas();
+    	$a_filter_etiquetas = array_filter($aEtiquetas); // Quita los elementos vacíos y nulos.
+    	foreach ($a_filter_etiquetas as $id_etiqueta) {
+    		$EtiquetaEntrada = new EtiquetaEntrada(['id_entrada' => $this->iid_entrada, 'id_etiqueta' => $id_etiqueta]);
+    		$EtiquetaEntrada->DBGuardar();
+    	}
+    }
+    
+    public function delEtiquetas(){
+    	$gesEtiquetasEntrada = new GestorEtiquetaEntrada();
+    	if ($gesEtiquetasEntrada->deleteEtiquetasEntrada($this->iid_entrada) === FALSE) {
+    		return FALSE;
+    	}
+    	return TRUE;
+    }
     private function renombrar($string) {
     	//cambiar ' ' por '_':
     	$string1 = str_replace(' ', '_', $string);

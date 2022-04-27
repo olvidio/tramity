@@ -4,6 +4,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
+use etiquetas\model\entity\GestorEtiqueta;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
@@ -45,6 +46,15 @@ $Qprot_any =  (integer) \filter_input(INPUT_POST, 'prot_any');
 // para uitar el '0':
 $Qprot_num = empty($Qprot_num)? '' : $Qprot_num;
 $Qprot_any = empty($Qprot_any)? '' : $Qprot_any;
+
+//8 
+$QandOr = (string) \filter_input(INPUT_POST, 'andOr');
+$Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$a_etiquetas_filtered = array_filter($Qa_etiquetas);
+
+$chk_or = ($QandOr == 'OR')? 'checked' : '';
+// por defecto 'AND':
+$chk_and = (($QandOr == 'AND') || empty($QandOr))? 'checked' : '';
 
 
 $chk_lo_1 = '';
@@ -166,6 +176,21 @@ $oDesplAntiguedad->setBlanco(TRUE);
 $oDesplAntiguedad->setOpciones($a_antiguedad);
 $oDesplAntiguedad->setOpcion_sel($Qantiguedad);
 
+// Opción 8: etiquetas
+$gesEtiquetas = new GestorEtiqueta();
+$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$a_posibles_etiquetas = [];
+foreach ($cEtiquetas as $oEtiqueta) {
+	$id_etiqueta = $oEtiqueta->getId_etiqueta();
+	$nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+	$a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+}
+
+$oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas_filtered,$a_posibles_etiquetas,'etiquetas');
+$oArrayDesplEtiquetas ->setBlanco('t');
+$oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
+
+
 if (!empty($Qopcion)) {
     $simple = 0;
 } else {
@@ -214,6 +239,9 @@ $a_campos = [
     'chk_lo_4' => $chk_lo_4,
     'prot_num' => $Qprot_num,
     'prot_any' => $Qprot_any,
+	'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
+	'chk_and' => $chk_and,
+	'chk_or' => $chk_or,
     // datepicker
     'format' => $format,
     // tabs_show

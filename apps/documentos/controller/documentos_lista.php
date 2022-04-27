@@ -1,8 +1,8 @@
 <?php
 use core\ViewTwig;
 use documentos\model\DocumentoLista;
-use etiquetas\model\entity\GestorEtiqueta;
 use documentos\model\entity\GestorEtiquetaDocumento;
+use etiquetas\model\entity\GestorEtiqueta;
 
 // INICIO Cabecera global de URL de controlador *********************************
 

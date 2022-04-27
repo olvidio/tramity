@@ -2,6 +2,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\Entrada;
+use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\Expediente;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
@@ -111,20 +112,28 @@ $a_botones = [];
 $txt_plazo = '';
 $f_plazo = '';
 $hoy_iso = '';
+$titulo = _("Acciones para el expediente");
 switch ($Qfiltro) {
     case 'en_encargado':
+		$titulo = _("Acciones para la entrada");
         $a_botones[4] = ['accion' => 'en_add_encargado',
                         'txt'    => _("Encargar a"),
                         'tipo'    => 'modal',
                     ];
+        $a_botones[5] = ['accion' => 'en_add_etiqueta',
+                        'txt'    => _("Etiquetas"),
+                        'tipo'    => 'modal1',
+                    ];
     case 'permanentes_cr':
     case 'en_buscar':
+		$titulo = _("Acciones para la entrada");
         $a_botones[3] = ['accion' => 'en_visto',
                         'txt'    => _("marcar como visto"),
                         'tipo'    => '',
                     ];
     case 'entradas_semana':
     case 'escritos_cr':
+		$titulo = _("Acciones para la entrada");
 
         $a_botones[0] = ['accion' => 'en_add_expediente',
                         'txt'    => _("añadir a un expediente"),
@@ -238,6 +247,22 @@ if (empty($a_botones)) {
                 ];
 }
 
+// Etiquetas
+$etiquetas = []; // No hay ninguna porque en archivar es cuando se añaden.
+$gesEtiquetas = new GestorEtiqueta();
+$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$a_posibles_etiquetas = [];
+foreach ($cEtiquetas as $oEtiqueta) {
+	$id_etiqueta = $oEtiqueta->getId_etiqueta();
+	$nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+	$a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+}
+
+$etiquetas = $oEntrada->getEtiquetasVisiblesArray();
+$oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
+$oArrayDesplEtiquetas ->setBlanco('t');
+$oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
+
 // datepicker
 $oFecha = new DateTimeLocal();
 $format = $oFecha->getFormat();
@@ -249,12 +274,14 @@ $a_campos = [
     'id_expediente' => $Qid_expediente,
     'filtro' => $Qfiltro,
     //'oHash' => $oHash,
+    'titulo' => $titulo,
     'asunto' => $asunto,
     'a_botones' => $a_botones,
     'pagina_cancel' => $pagina_cancel,
     'oDesplCargosOficinaPendiente' => $oDesplCargosOficinaPendiente,
     'oDesplCargosOficinaEncargado' => $oDesplCargosOficinaEncargado,
     'oDesplCargos' => $oDesplCargos,
+	'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
     // para crea pendiente:
     'txt_plazo' => $txt_plazo,
     'f_plazo' => $f_plazo,

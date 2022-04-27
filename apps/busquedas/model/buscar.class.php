@@ -6,6 +6,7 @@ use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
 use entradas\model\entity\GestorEntradaDB;
 use escritos\model\GestorEscrito;
+use etiquetas\model\entity\GestorEtiquetaEntrada;
 use usuarios\model\Categoria;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
@@ -123,6 +124,10 @@ class Buscar {
      */
     private $ref;
     
+    private $a_etiquetas;
+    Private $andOr;
+    
+    
     public function getCollection($opcion,$mas='') {
         /* Siempre, obligatorio tener:
          *  - f_entrada not null para las entradas
@@ -189,6 +194,19 @@ class Buscar {
                 $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
                 break;
+            case 8: // por etiquetas
+            	$gesEtiquetasEntrada = new GestorEtiquetaEntrada();
+            	$a_Id_entradas = $gesEtiquetasEntrada->getArrayEntradas($this->a_etiquetas,$this->andOr);
+            	$cEntradas = [];
+            	foreach ($a_Id_entradas as $id_entrada) {
+            		$oEntrada = new Entrada($id_entrada);
+            		$cEntradas[] = $oEntrada;
+            	}
+            	
+            	$aCollections['entradas'] = $cEntradas;
+            	
+                return $aCollections;
+            	break;
             case 71: // un protocolo concreto también en ref:
 
                 $aProt_ref = [ 'id_lugar' => $this->id_lugar,
@@ -787,5 +805,33 @@ class Buscar {
     {
         $this->ref = $ref;
     }
+	/**
+	 * @return mixed
+	 */
+	public function getEtiquetas() {
+		return $this->a_etiquetas;
+	}
+
+	/**
+	 * @param mixed $a_etiquetas
+	 */
+	public function setEtiquetas($a_etiquetas) {
+		$this->a_etiquetas = $a_etiquetas;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getAndOr() {
+		return $this->andOr;
+	}
+
+	/**
+	 * @param mixed $andOr
+	 */
+	public function setAndOr($andOr) {
+		$this->andOr = $andOr;
+	}
+
 
 }

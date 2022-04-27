@@ -138,6 +138,36 @@
     </table>
 </form>
 
+<!-- Listar Entradas por etiquetas --------------------------------------------- -->
+<form id="frm_buscar_8" name="frm_buscar_8" action="">
+    <input type="hidden" name="opcion" value="">
+    <table class="table table-warning p-2">
+    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 8: Listar entradas por etiquetas"|trans }}</th></tr>
+    <tr>
+      <td>
+        <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
+        <label class="form-check-label">
+          {{ "alguna"|trans }}
+        </label>
+        <br>
+        <input type="radio" class="form-check-input" name="andOr" value="AND" {{ chk_and }} >
+        <label class="form-check-label">
+          {{ "todas"|trans }}
+        </label>
+      </td>
+      <td colspan=4>
+        <span id="span_etiquetas">
+      	  {{ oArrayDesplEtiquetas.ListaSelects|raw }}
+        </span>
+      </td>
+    </tr>
+    <tr><td colspan=5 style="text-align:right;">
+      		<button class="btn btn-success" id="b_buscar_8" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_8')" >{{ "buscar"|trans }}</button>
+        </td>
+    </tr>
+    </table>
+</form>
+
 <!-- Listar modelos jurídicos por fechas --------------------------------------------- -->
 {%  if vista_dl %}
 <form id="frm_buscar_6" name="frm_buscar_6" action="">
@@ -501,6 +531,29 @@ fnjs_compatible=function(){
     fnjs_buscar('#frm_buscar_{{ opcion }}')
 {% endif %}
 
+
+{{ oArrayDesplEtiquetas.ComprobarSelectJs|raw }}
+fnjs_mas_etiquetas=function(){
+    var code = (event.keyCode ? event.keyCode : event.which);
+    var valor=1;
+    var id_campo='#'+event.currentTarget.id;
+    var valor=$(id_campo).val();
+    if(code!=9 && typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    if ( code==9 || event.type=="change") {
+        if (valor!=0) {
+            {{ oArrayDesplEtiquetas.ListaSelectsJs|raw }}
+        }
+    }
+}
+fnjs_quitar_etiquetas=function(){
+    $('#span_etiquetas').html("");
+    $('#etiquetas_num').val(0);
+}
+
+    
 $(document).ready(function() {
 	tabs_show('{{ vista }}','{{ filtro }}');
 });
