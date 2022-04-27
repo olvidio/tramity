@@ -84,7 +84,12 @@ class Enviar {
             $this->oEscrito = new Escrito($this->iid);
         }
         if ($this->tipo == 'entrada') {
-			$this->oEntradaBypass = new EntradaBypass($this->iid);
+        	// Los centros no tiene bypass
+        	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+				$this->oEntradaBypass = new Entrada($this->iid);
+        	} else {
+				$this->oEntradaBypass = new EntradaBypass($this->iid);
+        	}
         }
     }
     
