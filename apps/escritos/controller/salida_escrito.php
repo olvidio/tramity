@@ -131,7 +131,6 @@ if (!empty($Qid_escrito)) {
     $oArrayProtRef->setBlanco('t');
     $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias()');
     
-    $entradilla = $oEscrito->getEntradilla();
     $asunto = $oEscrito->getAsunto();
     $detalle = $oEscrito->getDetalle();
     $oficinas = $oEscrito->getResto_oficinas();
@@ -214,14 +213,12 @@ if (!empty($Qid_escrito)) {
         $visibilidad = $oEntrada->getVisibilidad();
         $oDesplVisibilidad->setOpcion_sel($visibilidad);
     
-        $entradilla = '';
         $f_escrito = '';
         $f_aprobacion = '';
         $initialPreview = '';
         $json_config = '{}';
         $tipo_doc = '';
     } else {
-        $entradilla = '';
         $asunto = '';
         $detalle = '';
         $f_escrito = '';
@@ -304,7 +301,6 @@ $a_campos = [
     'f_escrito' => $f_escrito,
     'f_aprobacion' => $f_aprobacion,
     'tipo_doc' => $tipo_doc,
-    'entradilla' => $entradilla,
     'asunto' => $asunto,
     'asunto_readonly' => $asunto_readonly,
     'detalle' => $detalle,
