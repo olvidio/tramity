@@ -28,6 +28,11 @@ class EscritoLista {
     private $filtro;
     /**
      * 
+     * @var boolean
+     */
+    private $show_tabs;
+    /**
+     * 
      * @var integer
      */
     private $id_expediente;
@@ -408,6 +413,7 @@ class EscritoLista {
             'ver_ok' => $ver_ok,
             // tabs_show
             'vista' => $vista,
+        	'show_tabs' => $this->isShow_tabs(),
         ];
         
         return $a_campos;
@@ -491,6 +497,20 @@ class EscritoLista {
     {
         $this->todos_escritos_enviados = $todos_escritos_enviados;
     }
+	/**
+	 * @return boolean
+	 */
+	public function isShow_tabs() {
+		return $this->show_tabs;
+	}
+
+	/**
+	 * @param boolean $show_tabs
+	 */
+	public function setShow_tabs($show_tabs) {
+		$this->show_tabs = $show_tabs;
+	}
+
 
 
 }

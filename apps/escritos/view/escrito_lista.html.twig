@@ -45,9 +45,11 @@
   </tbody>
 </table>
 <script type="text/javascript">
+{% if show_tabs %} //Cuando se abre una ventana via GET no existen los tabs (ver un adjunto). 
 $(document).ready(function() {
 	tabs_show('{{ vista }}','{{ filtro }}');
 });
+{% endif %}
 
 fnjs_distribuir_escrito=function(id_escrito) {
     var ssfsv = 'sv';

@@ -6,6 +6,7 @@
     <link type="text/css" rel='stylesheet' href='{{ base_url }}/node_modules/jquery-ui/themes/base/all.css' />
     <link type="text/css" rel="stylesheet" href="{{ base_url }}/node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
     <link href="{{ base_url }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <div id="main" style="margin: 1cm;"> 
 {% endif %}
 <form id ="form_expediente" >
     <input type=hidden name='que' id='que' value=0>
@@ -81,7 +82,7 @@
       </div>
       
     <!--  --------------- ACCIONES --------------- -->
-    {{ oEscritoLista.mostrarTabla()|raw }}
+      {{ oEscritoLista.mostrarTabla()|raw }}
     </div>
     <!-- Fin Col Izda -->
     <!--  Col Dcha -->
@@ -163,6 +164,10 @@
 </form>
 
 <div id='resposta' ></div>
+
+{% if cargar_css %}
+  </div>
+{% endif %}
 
 {{ include ('_antecedentes_js.html.twig') }}
 <script type="text/javascript">
@@ -289,7 +294,9 @@ fnjs_actualizar=function() {
     fnjs_update_div('#main','{{ pagina_actualizar|raw }}');
 }
 
+{% if show_tabs %} //Cuando se abre una ventana via GET no existen los tabs (ver un adjunto). 
 $(document).ready(function() {
 	tabs_hide();
 });
+{% endif %}
 </script>
