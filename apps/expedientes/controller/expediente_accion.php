@@ -258,7 +258,9 @@ foreach ($cEtiquetas as $oEtiqueta) {
 	$a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
 }
 
-$etiquetas = $oEntrada->getEtiquetasVisiblesArray();
+if (!empty($oEntrada)) {
+	$etiquetas = $oEntrada->getEtiquetasVisiblesArray();
+}
 $oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
 $oArrayDesplEtiquetas ->setBlanco('t');
 $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
