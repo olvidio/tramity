@@ -120,10 +120,6 @@ switch ($Qfiltro) {
                         'txt'    => _("Encargar a"),
                         'tipo'    => 'modal',
                     ];
-        $a_botones[5] = ['accion' => 'en_add_etiqueta',
-                        'txt'    => _("Etiquetas"),
-                        'tipo'    => 'modal1',
-                    ];
     case 'permanentes_cr':
     case 'en_buscar':
 		$titulo = _("Acciones para la entrada");
@@ -146,6 +142,10 @@ switch ($Qfiltro) {
         $a_botones[2] = ['accion' => 'en_pendiente',
                         'txt'    => _("crear un nuevo pendiente de la oficina"),
                         'tipo'    => 'modal',
+                    ];
+        $a_botones[5] = ['accion' => 'en_add_etiqueta',
+                        'txt'    => _("Etiquetas"),
+                        'tipo'    => 'modal1',
                     ];
         
         $txt_plazo= _("plazo para contestar");
