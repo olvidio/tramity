@@ -139,6 +139,9 @@ class DocumentoLista {
         $pagina_converter_en = Hash::link('apps/documentos/controller/convertir_documentos.php?'.http_build_query(['que'=>'entradas']));
         $pagina_converter_es = Hash::link('apps/documentos/controller/convertir_documentos.php?'.http_build_query(['que'=>'escritos']));
         $pagina_converter_doc = Hash::link('apps/documentos/controller/convertir_documentos.php?'.http_build_query(['que'=>'documentos']));
+        $pagina_converter_entradas = Hash::link('apps/documentos/controller/convertir_protocolos.php?'.http_build_query(['que'=>'entradas']));
+        $pagina_converter_escritos = Hash::link('apps/documentos/controller/convertir_protocolos.php?'.http_build_query(['que'=>'escritos']));
+        $pagina_converter_expedientes = Hash::link('apps/documentos/controller/convertir_protocolos.php?'.http_build_query(['que'=>'expedientes']));
         
         $vista = ConfigGlobal::getVista();
         
@@ -153,6 +156,9 @@ class DocumentoLista {
             'pagina_converter_en' => $pagina_converter_en,
             'pagina_converter_es' => $pagina_converter_es,
             'pagina_converter_doc' => $pagina_converter_doc,
+            'pagina_converter_entradas' => $pagina_converter_entradas,
+            'pagina_converter_escritos' => $pagina_converter_escritos,
+            'pagina_converter_expedientes' => $pagina_converter_expedientes,
             // tabs_show
             'vista' => $vista,
         ];

@@ -12,6 +12,15 @@
 	{{ "convertir documentos"|trans }}
 </button>
  -->
+<button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_converter_entradas|raw }}');">
+	{{ "convertir prot entradas"|trans }}
+</button>
+<button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_converter_escritos|raw }}');">
+	{{ "convertir prot escritos"|trans }}
+</button>
+<button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_converter_expedientes|raw }}');">
+	{{ "convertir prot expedientes"|trans }}
+</button>
 <table class="table table-sm table-bordered">
   <thead class="thead-light">
     <tr>

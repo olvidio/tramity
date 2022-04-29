@@ -193,7 +193,7 @@ class ProtocoloArray Extends Protocolo {
 	        	if (!property_exists($oProt, 'lugar')) { continue; }
 				$this->ilugar = empty($oProt->lugar)? '' : $oProt->lugar;
 			    $this->iprot_num = empty($oProt->num)? '' : $oProt->num;
-			    $this->iprot_any = empty($oProt->any)? '' : $oProt->any;
+			    $this->sprot_any = empty($oProt->any)? '' : $oProt->any;
 			    $this->sprot_mas = empty($oProt->mas)? '' : $oProt->mas;
 			    
 				$this->sNombre = $this->sNomConjunto."[$n]";
@@ -211,7 +211,7 @@ class ProtocoloArray Extends Protocolo {
 		if ($this->bAdd) {
             $this->ilugar = '';
             $this->iprot_num = '';
-            $this->iprot_any = '';
+            $this->sprot_any = '';
             $this->sprot_mas = '';
             $this->sNombre = $this->sNomConjunto."_mas";
             $this->sAction = $this->sAccionConjunto;

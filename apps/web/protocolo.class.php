@@ -20,10 +20,25 @@ class Protocolo {
 	protected $iTabIndex;
 	protected $sClase;
     
-	
+	/**
+	 * id del lugar
+	 * @var integer
+	 */
 	protected $ilugar;
+	/**
+	 * 
+	 * @var integer
+	 */
 	protected $iprot_num;
-	protected $iprot_any;
+	/**
+	 * Debe ser un string para permitir "00", "01" etc.
+	 * @var string
+	 */
+	protected $sprot_any;
+	/**
+	 * 
+	 * @var string
+	 */
 	protected $sprot_mas;
 	
 	/* CONSTRUCTOR ------------------------------ */
@@ -32,7 +47,7 @@ class Protocolo {
 	    if (isset($iprot_num) && $iprot_num !== '') { $this->iprot_num = $iprot_num; }
         if (isset($iprot_any) && $iprot_any !== '') {
             // asegurar que tenga dos cifras:
-            $this->iprot_any = any_2($iprot_any);
+            $this->sprot_any = any_2($iprot_any);
         }
         if (isset($sprot_mas) && $sprot_mas !== '') { $this->sprot_mas = $sprot_mas; }
 	}
@@ -46,22 +61,22 @@ class Protocolo {
 	    if (count(get_object_vars($oProt)) == 0) {
             $this->ilugar = '';
             $this->iprot_num = '';
-            $this->iprot_any = '';
+            $this->sprot_any = '';
             $this->sprot_mas = '';
 	    } else {
             $this->ilugar = $oProt->lugar;
             $this->iprot_num = $oProt->num;
-            $this->iprot_any = $oProt->any;
+            $this->sprot_any = $oProt->any;
             $this->sprot_mas = $oProt->mas;
 	    }
 	}
 	
 	public function getProt() {
 	    $oProt = new stdClass;
-	    $oProt->lugar = $this->ilugar;
-	    $oProt->num = $this->iprot_num;
-	    $oProt->any = $this->iprot_any;
-	    $oProt->mas = $this->sprot_mas;
+	    $oProt->lugar = (int) $this->ilugar;
+	    $oProt->num = (int) $this->iprot_num;
+	    $oProt->any = (string) $this->sprot_any;
+	    $oProt->mas = (string) $this->sprot_mas;
 	    
 	    return $oProt;
 	}
@@ -79,7 +94,7 @@ class Protocolo {
 	    }
 	    
 	    $prot_num = empty($this->iprot_num)? '' : $this->iprot_num;
-	    $prot_any = empty($this->iprot_any)? '' : $this->iprot_any;
+	    $prot_any = empty($this->sprot_any)? '' : $this->sprot_any;
 	    
 	    $txt = "$nom_lugar";
 	    if (!empty($prot_num)) {
@@ -114,7 +129,7 @@ class Protocolo {
 	        $nom_lugar = $oLugar->getSigla();
 	        
 			$prot_num = empty($this->iprot_num)? '' : $this->iprot_num;
-			$prot_any = empty($this->iprot_any)? '' : $this->iprot_any;
+			$prot_any = empty($this->sprot_any)? '' : $this->sprot_any;
 	    
 			if (!empty($prot_num)) {
 				// pasar el año a 4 cifras:
@@ -137,7 +152,7 @@ class Protocolo {
 	    if (!empty($lugar)) { $this->sOpcion_sel = $lugar; }
 	    
 	    $prot_num = empty($this->iprot_num)? '' : $this->iprot_num;
-	    $prot_any = empty($this->iprot_any)? '' : $this->iprot_any;
+	    $prot_any = empty($this->sprot_any)? '' : $this->sprot_any;
 	    $prot_mas = empty($this->sprot_mas)? '' : $this->sprot_mas;
 	    
 	    $id_row = "row_" . $this->sNombre;
@@ -294,7 +309,7 @@ class Protocolo {
 		$this->iprot_num = $iprot_num;
 	}
 	public function setProt_any($iprot_any) {
-		$this->iprot_any = $iprot_any;
+		$this->sprot_any = $iprot_any;
 	}
 	public function setMas($sprot_mas) {
 		$this->sprot_mas = $sprot_mas;

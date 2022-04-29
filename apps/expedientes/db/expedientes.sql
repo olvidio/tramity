@@ -29,6 +29,9 @@ CREATE INDEX IF NOT EXISTS expedientes_f_contestar_idx ON public.expedientes (f_
 CREATE INDEX IF NOT EXISTS expedientes_f_reunion ON public.expedientes (f_reunion);
 CREATE INDEX IF NOT EXISTS expedientes_ponente_idx ON public.expedientes (ponente);
 
+CREATE INDEX IF NOT EXISTS expedientes_preparar_idx ON public.expedientes USING GIN (json_preparar jsonb_path_ops);
+CREATE INDEX IF NOT EXISTS expedientes_antecedentes_idx ON public.expedientes USING GIN (json_antecedentes jsonb_path_ops);
+
 --- acciones
 CREATE TABLE public.acciones (
     id_item SERIAL PRIMARY KEY,

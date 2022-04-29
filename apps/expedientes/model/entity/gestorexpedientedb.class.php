@@ -36,18 +36,28 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 	/* METODES PUBLICS -----------------------------------------------------------*/
 
 	/**
-	 * Devuelve un array con el id_expediente que tengan un antecedente determionado.
+	 * Devuelve un array con el id_expediente que tengan un antecedente determinado.
 	 * 
 	 * @param integer $id
-	 * @param string $tipoa (entrada|expediente|escrito|documento)
+	 * @param string $tipo (entrada|expediente|escrito|documento)
 	 * @return array de id_expedientes
 	 */
 	public function getIdExpedientesConAntecedente($id,$tipo) {
 		$oDbl = $this->getoDbl();
 	    
+		$json = "\"id\":$id";
+		$json .= "\"tipo\":\"$tipo\"";
+		$Where_json = "json_antecedentes @> '[{".$json."}]'";
+		
+		/*
 	    $sQuery = "SELECT e.id_expediente, e.asunto, e.ponente, e.json_antecedentes, items.id, items.tipo
                     FROM expedientes e, jsonb_to_recordset(e.json_antecedentes) as items(id integer,tipo text) 
                     WHERE items.id=$id AND items.tipo='$tipo' ";
+        */
+
+	    $sQuery = "SELECT e.id_expediente
+                    FROM expedientes e 
+                    WHERE $Where_json ";
 	    
 		if (($oDbl->query($sQuery)) === FALSE) {
 			$sClauError = 'GestorExpedienteDB.queryPreparar';
@@ -73,20 +83,31 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 	 */
 	public function getIdExpedientesPreparar($id_cargo,$visto='no_visto') {
 		$oDbl = $this->getoDbl();
+		
+		$json = "\"id\":\"$id_cargo\"";
 		switch ($visto) {
 		    case 'visto':
-                $Where_visto = "AND items.visto=1";
+                //$Where_visto = "AND items.visto=1";
+				$json .= "\"visto\":\"1\"";
 		    break;
 		    case 'no_visto':
-                $Where_visto = "AND (items.visto=0 OR items.visto IS NULL)";
+                //$Where_visto = "AND (items.visto=0 OR items.visto IS NULL)";
+				$json .= "\"visto\":\"0\"";
 		    break;
 		    case 'todos':
 		    default:
-                $Where_visto = "";
+		    	// No añado nada.
+                //$json .= "";
 		}
+		$Where_json = "json_preparar @> '[{".$json."}]'";
+		
+		/*
 	    $sQuery = "SELECT e.id_expediente, e.asunto, e.ponente, e.json_preparar, items.id, items.visto 
                     FROM expedientes e, jsonb_to_recordset(e.json_preparar) as items(id integer,visto smallint) 
                     WHERE items.id=$id_cargo $Where_visto";
+	    */
+	    $sQuery = "SELECT e.id_expediente
+                    FROM expedientes e WHERE $Where_json ";
 	    
 		if (($oDbl->query($sQuery)) === FALSE) {
 			$sClauError = 'GestorExpedienteDB.queryPreparar';

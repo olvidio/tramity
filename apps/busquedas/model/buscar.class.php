@@ -4,10 +4,13 @@ namespace busquedas\model;
 use core\Converter;
 use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
+use entradas\model\entity\GestorEntradaCompartida;
 use entradas\model\entity\GestorEntradaDB;
 use escritos\model\GestorEscrito;
 use etiquetas\model\entity\GestorEtiquetaEntrada;
+use lugares\model\entity\GestorLugar;
 use usuarios\model\Categoria;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
@@ -162,18 +165,40 @@ class Buscar {
                 break;
             case 'any':
                 // por año
-                $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
-                $aOperadorEntrada['estado'] = '>=';
-                $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
-                $aProt_origen = [ 'lugar' => $this->id_lugar,
-                                  'num' => $this->prot_num,
-                                  'any' => $this->prot_any,
-                                  'mas' => $this->prot_mas,
-                            ];
+            	// En los centros, no busco en entradas, sino en emtradas_compartidas y 
+            	// veo si el centro está en los destinos.
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+					$aOperadorEntrada['estado'] = '>=';
+					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+					$aProt_origen = [ 'lugar' => $this->id_lugar,
+									  'num' => $this->prot_num,
+									  'any' => $this->prot_any,
+									  'mas' => $this->prot_mas,
+								];
+					$gesLugares = new GestorLugar();
+					$id_sigla_local = $gesLugares->getId_sigla_local();
+					$aWhereEntrada['detinos'] = $id_sigla_local;
+					$aOperadorEntrada['destinos'] = 'IN';
 
-                $aWhereEntrada['_ordre'] = 'f_entrada';
-                $gesEntradas = new GestorEntradaDB();
-                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
+					$aWhereEntrada['_ordre'] = 'f_entrada';
+					$gesEntradasCompartidas = new GestorEntradaCompartida();
+					$cEntradas = $gesEntradasCompartidas->getEntradasByProtOrigenyDestino($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
+            		
+            	} else {
+					$aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+					$aOperadorEntrada['estado'] = '>=';
+					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+					$aProt_origen = [ 'lugar' => $this->id_lugar,
+									  'num' => $this->prot_num,
+									  'any' => $this->prot_any,
+									  'mas' => $this->prot_mas,
+								];
+
+					$aWhereEntrada['_ordre'] = 'f_entrada';
+					$gesEntradas = new GestorEntradaDB();
+					$cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
+				}
                 $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
                 break;

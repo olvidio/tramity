@@ -28,6 +28,12 @@ CREATE INDEX IF NOT EXISTS entradas_asunto_e_idx ON public.entradas ((lower(asun
 CREATE INDEX IF NOT EXISTS entradas_asunto_idx ON public.entradas ((lower(asunto)));
 CREATE INDEX IF NOT EXISTS entradas_estado_idx ON public.entradas (estado);
 
+CREATE INDEX IF NOT EXISTS entradas_origen_idx ON public.entradas USING GIN (json_prot_origen jsonb_path_ops);
+CREATE INDEX IF NOT EXISTS entradas_ref_idx ON public.entradas USING GIN (json_prot_ref jsonb_path_ops);
+CREATE INDEX IF NOT EXISTS entradas_visto_idx ON public.entradas USING GIN (json_visto jsonb_path_ops);
+
+
+
 --- docs
 CREATE TABLE public.entrada_doc (
     id_entrada integer PRIMARY KEY,

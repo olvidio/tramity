@@ -5,7 +5,13 @@ CREATE TABLE public.entradas_compartidas (
     descripcion text NOT NULL,
     json_prot_destino jsonb,
     destinos integer[],
-    f_documento date
+    f_documento date,
+    json_prot_origen jsonb,
+    json_prot_ref jsonb,
+    categoria smallint,
+    asunto_entrada text NOT NULL,
+    f_entrada date,
+    anulado text
 );
 
 ALTER TABLE public.entradas_compartidas OWNER TO tramity;

@@ -37,6 +37,9 @@ CREATE INDEX IF NOT EXISTS escritos_f_escrito_idx ON public.escritos (f_escrito)
 CREATE INDEX IF NOT EXISTS escritos_id_grupos_idx ON public.escritos USING GIN (id_grupos gin__int_ops);
 CREATE INDEX IF NOT EXISTS excritos_destinos_idx ON public.escritos USING GIN (destinos gin__int_ops);
 
+CREATE INDEX IF NOT EXISTS escritos_local_idx ON public.escritos USING GIN (json_prot_local jsonb_path_ops);
+CREATE INDEX IF NOT EXISTS escritos_destino_idx ON public.escritos USING GIN (json_prot_destino jsonb_path_ops);
+CREATE INDEX IF NOT EXISTS escritos_ref_idx ON public.escritos USING GIN (json_prot_ref jsonb_path_ops);
 
 --- adjuntos
 CREATE TABLE public.escrito_adjuntos (

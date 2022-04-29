@@ -7,7 +7,9 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\any_2;
 use entradas\model\GestorEntrada;
+use entradas\model\entity\GestorEntradaCompartida;
 use lugares\model\entity\GestorLugar;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 
 require_once ("apps/core/global_header.inc");
@@ -128,7 +130,11 @@ switch ($Qtipo_lista) {
     case 'lst_years':
     default:
         //anys posibles:
-        $gesEntradas = new GestorEntrada();
+    	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    		$gesEntradas = new GestorEntradaCompartida();
+    	} else {
+			$gesEntradas = new GestorEntrada();
+    	}
         $a_anys = $gesEntradas->posiblesYear();
         
         $a_any_min=current($a_anys);
