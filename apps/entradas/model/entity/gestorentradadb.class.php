@@ -533,9 +533,9 @@ class GestorEntradaDB Extends ClaseGestor {
         }
         $sCondi = implode(' AND ',$aCondi);
         if (empty($sCondi)) {
-        	$sCondi = " WHERE json_prot_origen @> '[{\"lugar\":$id_lugar}]'";
+        	$sCondi = " WHERE json_prot_origen @> '{\"lugar\":$id_lugar}'";
         } else {
-        	$sCondi = " WHERE json_prot_origen @> '[{\"lugar\":$id_lugar}]' AND ".$sCondi;
+        	$sCondi = " WHERE json_prot_origen @> '{\"lugar\":$id_lugar}' AND ".$sCondi;
         }
         if ($COND_OR != '') {
             if ($sCondi != '') {
