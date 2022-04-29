@@ -7,6 +7,7 @@ use escritos\model\entity\EscritoDB;
 use expedientes\model\entity\ExpedienteDB;
 use web\Protocolo;
 use function core\is_true;
+use entradas\model\entity\EntradaDB;
 
 
 
@@ -322,7 +323,7 @@ class Convertir Extends ClaseGestor {
 		}
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_entrada' => $aDades['id_entrada']);
-			$oEntradaDB = new Entrada($a_pkey);
+			$oEntradaDB = new EntradaDB($a_pkey);
 			$oEntradaDB->setAllAtributes($aDades);
 			$oEntradaDBSet->add($oEntradaDB);
 		}
