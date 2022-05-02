@@ -40,7 +40,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
 	/**
 	 * Devuelve la colección de escritos, segun las condiciones del protcolo de referencias, más las normales
 	 *
-	 * @param array $aProt_ref = ['lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
+	 * @param array $aProt_ref = ['id_lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
 	 * @param array $aWhere
 	 * @param array $aOperators
 	 * @return boolean|array
@@ -66,10 +66,10 @@ class GestorEscritoDB Extends core\ClaseGestor {
         
         // Where del prot_ref
         $json = '';
-        if (!empty($aProt_ref['lugar'])) {
-            $lugar = $aProt_ref['lugar'];
+        if (!empty($aProt_ref['id_lugar'])) {
+            $id_lugar = $aProt_ref['id_lugar'];
             $json .= empty($json)? '' : ',';
-            $json .= "\"lugar\":$lugar";
+            $json .= "\"id_lugar\":$id_lugar";
             
         }
         if (!empty($aProt_ref['num'])) {
@@ -172,7 +172,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
         if (!empty($aProt_local['id_lugar'])) {
             $id_lugar = $aProt_local['id_lugar'];
             $json .= empty($json)? '' : ',';
-            $json .= "\"lugar\":$id_lugar";
+            $json .= "\"id_lugar\":$id_lugar";
         }
         if (!empty($aProt_local['num'])) {
             $num = $aProt_local['num'];
@@ -251,9 +251,6 @@ class GestorEscritoDB Extends core\ClaseGestor {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEscritoDBSet = new core\Set();
-        
-        /* {"any": 20, "mas": null, "num": 15, "lugar": 58} */
-        
 		$oCondicion = new core\Condicion();
         $aCondi = array();
         foreach ($aWhere as $camp => $val) {
@@ -274,7 +271,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
         if (!empty($aProt_destino['id_lugar'])) {
             $id_lugar = $aProt_destino['id_lugar'];
             $json .= empty($json)? '' : ',';
-            $json .= "\"lugar\":$id_lugar";
+            $json .= "\"id_lugar\":$id_lugar";
         }
         if (!empty($aProt_destino['num'])) {
             $num = $aProt_destino['num'];
@@ -438,9 +435,9 @@ class GestorEscritoDB Extends core\ClaseGestor {
         $sCondi = implode(' AND ',$aCondi);
         
         if (empty($sCondi)) {
-            $sCondi = " WHERE json_prot_destino @> '[{\"lugar\":$id_lugar}]'";
+            $sCondi = " WHERE json_prot_destino @> '[{\"id_lugar\":$id_lugar}]'";
         } else {
-            $sCondi = " WHERE json_prot_destino @> '[{\"lugar\":$id_lugar}]' AND ".$sCondi;
+            $sCondi = " WHERE json_prot_destino @> '[{\"id_lugar\":$id_lugar}]' AND ".$sCondi;
         }
         
         if ($COND_OR != '') {
@@ -481,9 +478,6 @@ class GestorEscritoDB Extends core\ClaseGestor {
 	function getEscritosByLocal($id_lugar, $aWhere=array(),$aOperators=array()) {
         $nom_tabla = $this->getNomTabla();
         $oEscritoDBSet = new core\Set();
-        
-        /* {"any": 20, "mas": null, "num": 15, "lugar": 58} */
-        
 		$oCondicion = new core\Condicion();
         $aCondi = array();
         $COND_OR = '';
@@ -509,9 +503,9 @@ class GestorEscritoDB Extends core\ClaseGestor {
         $sCondi = implode(' AND ',$aCondi);
 
         if (empty($sCondi)) {
-            $sCondi = " WHERE json_prot_local @> '{\"lugar\":$id_lugar}'";
+            $sCondi = " WHERE json_prot_local @> '{\"id_lugar\":$id_lugar}'";
         } else {
-            $sCondi = " WHERE json_prot_local @> '{\"lugar\":$id_lugar}' AND ".$sCondi;
+            $sCondi = " WHERE json_prot_local @> '{\"id_lugar\":$id_lugar}' AND ".$sCondi;
         }
 
         if ($COND_OR != '') {

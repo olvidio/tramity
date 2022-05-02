@@ -26,7 +26,7 @@ switch($Qque) {
     case 'buscar_entrada_correspondiente':
         $Qprot_any = core\any_2($Qprot_any);
         
-        $aProt_origen = [ 'lugar' => $Qid_lugar,
+        $aProt_origen = [ 'id_lugar' => $Qid_lugar,
             'num' => $Qprot_num,
             'any' => $Qprot_any,
         ];
@@ -102,7 +102,7 @@ switch($Qque) {
             }
         } else {
             // Entradas
-            $aProt_origen = [ 'lugar' => $Qid_lugar,
+            $aProt_origen = [ 'id_lugar' => $Qid_lugar,
                 'num' => $Qprot_num,
                 'any' => $Qprot_any,
             ];

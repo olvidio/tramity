@@ -295,7 +295,7 @@ class VerTabla {
         }
         
         $oTabla = new Lista();
-        $oTabla->setId_tabla('func_reg_entradas');
+        $oTabla->setId_tabla('ver_tabla_'.$this->sKey);
         $oTabla->setCabeceras($a_cabeceras);
         $oTabla->setBotones($a_botones);
         $oTabla->setDatos($a_valores);
@@ -413,7 +413,7 @@ class VerTabla {
         }
 
         $oTabla = new Lista();
-        $oTabla->setId_tabla('func_reg_salidas');
+        $oTabla->setId_tabla('ver_tabla_'.$this->sKey);
         $oTabla->setCabeceras($a_cabeceras);
         $oTabla->setBotones($a_botones);
         $oTabla->setDatos($a_valores);

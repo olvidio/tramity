@@ -317,7 +317,7 @@ switch ($Qque) {
             $id_lugar = $Qorigen_id_lugar;
             if (!empty($Qorigen_prot_num) && !empty($Qorigen_prot_any)) {
                 // No tengo en quenta las otras condiciones de la búsqueda
-                $aProt_origen = [ 'lugar' => $Qorigen_id_lugar,
+                $aProt_origen = [ 'id_lugar' => $Qorigen_id_lugar,
                     'num' => $Qorigen_prot_num,
                     'any' => $Qorigen_prot_any,
                 ];

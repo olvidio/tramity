@@ -226,13 +226,13 @@ switch ($Qopcion) {
         break;
     case 4:
         $Qlista_origen = (string) \filter_input(INPUT_POST, 'lista_origen');
-        $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
+        $Qlista_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
         $Qf_max = (string) \filter_input(INPUT_POST, 'f_max');
         $Qf_min = (string) \filter_input(INPUT_POST, 'f_min');
         $Qoficina = (integer) \filter_input(INPUT_POST, 'oficina');
         
         $a_condicion['lista_origen'] = $Qlista_origen;
-        $a_condicion['lista_lugar'] = $Qid_lugar;
+        $a_condicion['lista_lugar'] = $Qlista_lugar;
         $a_condicion['f_max'] = $Qf_max;
         $a_condicion['f_min'] = $Qf_min;
         $a_condicion['oficina'] = $Qoficina;
@@ -261,13 +261,13 @@ switch ($Qopcion) {
                 break;
             case "de":
                 $opcion = 42;
-                $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
+                $Qlista_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
                 
-                $a_condicion['lista_lugar'] = $Qid_lugar;
+                $a_condicion['lista_lugar'] = $Qlista_lugar;
                 $str_condicion = http_build_query($a_condicion);
                 
                 $oBuscar = new Buscar();
-                $oBuscar->setOrigen_id_lugar($Qid_lugar);
+                $oBuscar->setOrigen_id_lugar($Qlista_lugar);
                 $oBuscar->setF_max($Qf_max);
                 $oBuscar->setF_min($Qf_min);
                 $oBuscar->setOficina($Qoficina);

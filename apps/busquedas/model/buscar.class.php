@@ -151,7 +151,7 @@ class Buscar {
                 $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
                 $aWhereEntrada['_ordre'] = 'f_entrada';
                 $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
-                $aProt_origen = [ 'lugar' => $this->id_lugar,
+                $aProt_origen = [ 'id_lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,
                                   'any' => $this->prot_any,
                                   'mas' => $this->prot_mas,
@@ -171,7 +171,7 @@ class Buscar {
 					$aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
 					$aOperadorEntrada['estado'] = '>=';
 					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
-					$aProt_origen = [ 'lugar' => $this->id_lugar,
+					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
 									  'num' => $this->prot_num,
 									  'any' => $this->prot_any,
 									  'mas' => $this->prot_mas,
@@ -189,7 +189,7 @@ class Buscar {
 					$aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
 					$aOperadorEntrada['estado'] = '>=';
 					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
-					$aProt_origen = [ 'lugar' => $this->id_lugar,
+					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
 									  'num' => $this->prot_num,
 									  'any' => $this->prot_any,
 									  'mas' => $this->prot_mas,
@@ -207,7 +207,7 @@ class Buscar {
                 $aOperadorEntrada['estado'] = '>=';
                 $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
                 $aWhereEntrada['ponente'] = $this->ponente;
-                $aProt_origen = [ 'lugar' => $this->id_lugar,
+                $aProt_origen = [ 'id_lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,
                                   'any' => $this->prot_any,
                                   'mas' => $this->prot_mas,
@@ -261,7 +261,7 @@ class Buscar {
                 // Entradas: origen_prot.
                 $aWhereEntrada['f_entrada'] = 'x';
                 $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
-                $aProt_origen = [ 'lugar' => $this->id_lugar,
+                $aProt_origen = [ 'id_lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,
                                   'any' => $this->prot_any,
                                   'mas' => $this->prot_mas,

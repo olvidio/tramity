@@ -38,7 +38,7 @@ $Qprot_any_dst  = (string) \filter_input(INPUT_POST, 'prot_any_dst');
 $gesEntradas = new GestorEntrada();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
 
 // busacr id_entrada del prot origen
-$aProt_origen = [ 'lugar' => $Qid_lugar_org,
+$aProt_origen = [ 'id_lugar' => $Qid_lugar_org,
     'num' => $Qprot_num_org,
     'any' => $Qprot_any_org,
     'mas' => '',
@@ -80,7 +80,7 @@ if (empty($msg)) {
 }
 
 // buscar id_entrada del prot destino
-$aProt_dst = [ 'lugar' => $Qid_lugar_dst,
+$aProt_dst = [ 'id_lugar' => $Qid_lugar_dst,
     'num' => $Qprot_num_dst,
     'any' => $Qprot_any_dst,
     'mas' => '',

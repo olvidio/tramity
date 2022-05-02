@@ -284,7 +284,7 @@ class GestorEntradaDB Extends ClaseGestor {
 	/**
 	 * Devuelve la colección de entradas, segun las condiciones del protcolo de referencias, más las normales
 	 * 
-	 * @param array $aProt_ref = ['lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
+	 * @param array $aProt_ref = ['id_lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
 	 * @param array $aWhere
 	 * @param array $aOperators
 	 * @return boolean|array
@@ -320,10 +320,10 @@ class GestorEntradaDB Extends ClaseGestor {
         // Where del prot_ref
         $Where_json = '';
         $json = '';
-        if (!empty($aProt_ref['lugar'])) {
-            $lugar = $aProt_ref['lugar'];
+        if (!empty($aProt_ref['id_lugar'])) {
+            $id_lugar = $aProt_ref['id_lugar'];
             $json .= empty($json)? '' : ',';
-            $json .= "\"lugar\":$lugar";
+            $json .= "\"id_lugar\":$id_lugar";
         }
         if (!empty($aProt_ref['num'])) {
             $num = $aProt_ref['num'];
@@ -385,7 +385,7 @@ class GestorEntradaDB Extends ClaseGestor {
 	/**
 	 * Devuelve la colección de entradas, segun las condiciones del protcolo de entrada, más las normales
 	 * 
-	 * @param array $aProt_origen = ['lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
+	 * @param array $aProt_origen = ['id_lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
 	 * @param array $aWhere
 	 * @param array $aOperators
 	 * @return boolean|array
@@ -394,9 +394,6 @@ class GestorEntradaDB Extends ClaseGestor {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEntradaDBSet = new Set();
-        
-        /* {"any": 20, "mas": null, "num": 15, "lugar": 58} */
-        
 		$oCondicion = new Condicion();
         $aCondi = array();
         $COND_OR = '';
@@ -441,10 +438,10 @@ class GestorEntradaDB Extends ClaseGestor {
         // Where del prot_origen
         $Where_json = '';
         $json = '';
-        if (!empty($aProt_origen['lugar'])) {
-            $lugar = $aProt_origen['lugar'];
+        if (!empty($aProt_origen['id_lugar'])) {
+            $id_lugar = $aProt_origen['id_lugar'];
             $json .= empty($json)? '' : ',';
-            $json .= "\"lugar\":$lugar";
+            $json .= "\"id_lugar\":$id_lugar";
         }
         if (!empty($aProt_origen['num'])) {
             $num = $aProt_origen['num'];
@@ -506,9 +503,6 @@ class GestorEntradaDB Extends ClaseGestor {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEntradaDBSet = new Set();
-        
-        /* {"any": 20, "mas": null, "num": 15, "lugar": 58} */
-        
 		$oCondicion = new Condicion();
         $aCondi = array();
         $COND_OR = '';
@@ -533,9 +527,9 @@ class GestorEntradaDB Extends ClaseGestor {
         }
         $sCondi = implode(' AND ',$aCondi);
         if (empty($sCondi)) {
-        	$sCondi = " WHERE json_prot_origen @> '{\"lugar\":$id_lugar}'";
+        	$sCondi = " WHERE json_prot_origen @> '{\"id_lugar\":$id_lugar}'";
         } else {
-        	$sCondi = " WHERE json_prot_origen @> '{\"lugar\":$id_lugar}' AND ".$sCondi;
+        	$sCondi = " WHERE json_prot_origen @> '{\"id_lugar\":$id_lugar}' AND ".$sCondi;
         }
         if ($COND_OR != '') {
             if ($sCondi != '') {

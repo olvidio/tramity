@@ -131,7 +131,7 @@ switch ($Qque) {
 	            $id_lugar = $Qorigen_id_lugar;
 	            if (!empty($Qorigen_prot_num) && !empty($Qorigen_prot_any)) {
 	                // No tengo en quenta las otras condiciones de la búsqueda
-	                $aProt_origen = [ 'lugar' => $Qorigen_id_lugar,
+	                $aProt_origen = [ 'id_lugar' => $Qorigen_id_lugar,
 	                    'num' => $Qorigen_prot_num,
 	                    'any' => $Qorigen_prot_any,
 	                ];
@@ -455,7 +455,7 @@ switch ($Qque) {
         if (!empty($Qlocal_prot_num) && !empty($Qlocal_prot_any)) {
             $gesLugares = new GestorLugar();
             $id_sigla_local = $gesLugares->getId_sigla_local();
-            $aProt_local = [ 'lugar' => $id_sigla_local,
+            $aProt_local = [ 'id_lugar' => $id_sigla_local,
                 'num' => $Qlocal_prot_num,
                 'any' => $Qlocal_prot_any,
             ];
