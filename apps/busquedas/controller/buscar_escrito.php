@@ -22,27 +22,27 @@ $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qctr_anulados = (bool) \filter_input(INPUT_POST, 'ctr_anulados');
 
 // vengo de modificar algo, quiero volver a la lista
-$Qopcion =  (integer) \filter_input(INPUT_POST, 'opcion');
+$Qopcion = (integer) \filter_input(INPUT_POST, 'opcion');
 //3
-$Qorigen_id_lugar =  (integer) \filter_input(INPUT_POST, 'origen_id_lugar');
-$Qantiguedad =  (string) \filter_input(INPUT_POST, 'antiguedad');
+$Qorigen_id_lugar = (integer) \filter_input(INPUT_POST, 'origen_id_lugar');
+$Qantiguedad = (string) \filter_input(INPUT_POST, 'antiguedad');
 //2
-$Qasunto =  (string) \filter_input(INPUT_POST, 'asunto');
+$Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
 $Qasunto = urldecode($Qasunto);
-$Qf_min_enc =  (string) \filter_input(INPUT_POST, 'f_min');
+$Qf_min_enc = (string) \filter_input(INPUT_POST, 'f_min');
 $Qf_min = urldecode($Qf_min_enc);
-$Qf_max_enc =  (string) \filter_input(INPUT_POST, 'f_max');
+$Qf_max_enc = (string) \filter_input(INPUT_POST, 'f_max');
 $Qf_max = urldecode($Qf_max_enc);
-$Qoficina =  (string) \filter_input(INPUT_POST, 'oficina');
+$Qoficina = (string) \filter_input(INPUT_POST, 'oficina');
 //3
-$Qdest_id_lugar_2 =  (integer) \filter_input(INPUT_POST, 'dest_id_lugar_2');
+$Qdest_id_lugar_2 = (integer) \filter_input(INPUT_POST, 'dest_id_lugar_2');
 //4
-$Qlista_origen =  (string) \filter_input(INPUT_POST, 'lista_origen');
-$Qlista_lugar =  (integer) \filter_input(INPUT_POST, 'lista_lugar');
+$Qlista_origen = (string) \filter_input(INPUT_POST, 'lista_origen');
+$Qlista_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
 //7
-$Qid_lugar =  (integer) \filter_input(INPUT_POST, 'id_lugar');
-$Qprot_num =  (integer) \filter_input(INPUT_POST, 'prot_num');
-$Qprot_any =  (integer) \filter_input(INPUT_POST, 'prot_any');
+$Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
+$Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
+$Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 // para uitar el '0':
 $Qprot_num = empty($Qprot_num)? '' : $Qprot_num;
 $Qprot_any = empty($Qprot_any)? '' : $Qprot_any;
