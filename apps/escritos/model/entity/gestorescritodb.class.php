@@ -177,7 +177,7 @@ class GestorEscritoDB Extends core\ClaseGestor {
         if (!empty($aProt_local['num'])) {
             $num = $aProt_local['num'];
             $json .= empty($json)? '' : ',';
-            $json .= "\"num\":\"$num\"";
+            $json .= "\"num\":$num";
         }
         if (!empty($aProt_local['any'])) {
             $any = $aProt_local['any'];
