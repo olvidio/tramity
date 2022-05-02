@@ -71,7 +71,7 @@ if (empty($msg)) {
     $oProtLocal = new Protocolo();
     $json_prot_origen = $oEntrada->getJson_prot_origen();
     if (!empty(get_object_vars($json_prot_origen))) {
-        $oProtLocal->setLugar($json_prot_origen->lugar);
+        $oProtLocal->setLugar($json_prot_origen->id_lugar);
         $oProtLocal->setProt_num($json_prot_origen->num);
         $oProtLocal->setProt_any($json_prot_origen->any);
         //mas: No cojo el del registro, el pendiente puede tener su propio 'mas'
@@ -112,7 +112,7 @@ if (empty($msg)) {
     $oProtLocal = new Protocolo();
     $json_prot_origen = $oEntrada->getJson_prot_origen();
     if (!empty(get_object_vars($json_prot_origen))) {
-        $oProtLocal->setLugar($json_prot_origen->lugar);
+        $oProtLocal->setLugar($json_prot_origen->id_lugar);
         $oProtLocal->setProt_num($json_prot_origen->num);
         $oProtLocal->setProt_any($json_prot_origen->any);
         //mas: No cojo el del registro, el pendiente puede tener su propio 'mas'

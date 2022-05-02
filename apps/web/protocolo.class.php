@@ -64,7 +64,7 @@ class Protocolo {
             $this->sprot_any = '';
             $this->sprot_mas = '';
 	    } else {
-            $this->ilugar = $oProt->lugar;
+            $this->ilugar = $oProt->id_lugar;
             $this->iprot_num = $oProt->num;
             $this->sprot_any = $oProt->any;
             $this->sprot_mas = $oProt->mas;
@@ -73,7 +73,7 @@ class Protocolo {
 	
 	public function getProt() {
 	    $oProt = new stdClass;
-	    $oProt->lugar = (int) $this->ilugar;
+	    $oProt->id_lugar = (int) $this->ilugar;
 	    $oProt->num = (int) $this->iprot_num;
 	    $oProt->any = (string) $this->sprot_any;
 	    $oProt->mas = (string) $this->sprot_mas;
@@ -86,9 +86,9 @@ class Protocolo {
 	}
 	
 	public function ver_txt_num() {
-	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
+	    $id_lugar = empty($this->ilugar)? '' : $this->ilugar;
 	    $nom_lugar = _("sin numerar (E12)");
-	    if (!empty($lugar)) {
+	    if (!empty($id_lugar)) {
 	        $oLugar = new Lugar($this->ilugar);
 	        $nom_lugar = $oLugar->getSigla();
 	    }
@@ -123,8 +123,8 @@ class Protocolo {
 	 */
 	public function conversation_id() {
 		$txt = '';
-	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
-	    if (!empty($lugar)) {
+	    $id_lugar = empty($this->ilugar)? '' : $this->ilugar;
+	    if (!empty($id_lugar)) {
 	        $oLugar = new Lugar($this->ilugar);
 	        $nom_lugar = $oLugar->getSigla();
 	        
@@ -148,8 +148,8 @@ class Protocolo {
 	}
 
 	public function ver_desplegable() {
-	    $lugar = empty($this->ilugar)? '' : $this->ilugar;
-	    if (!empty($lugar)) { $this->sOpcion_sel = $lugar; }
+	    $id_lugar = empty($this->ilugar)? '' : $this->ilugar;
+	    if (!empty($id_lugar)) { $this->sOpcion_sel = $id_lugar; }
 	    
 	    $prot_num = empty($this->iprot_num)? '' : $this->iprot_num;
 	    $prot_any = empty($this->sprot_any)? '' : $this->sprot_any;

@@ -83,7 +83,7 @@ $oDesplPlazo->setTabIndex(82);
 
 if (!empty($Qid_entrada)) {
     $json_prot_origen = $oEntrada->getJson_prot_origen();
-    $oProtOrigen->setLugar($json_prot_origen->lugar);
+    $oProtOrigen->setLugar($json_prot_origen->id_lugar);
     $oProtOrigen->setProt_num($json_prot_origen->num);
     $oProtOrigen->setProt_any($json_prot_origen->any);
     $oProtOrigen->setMas($json_prot_origen->mas);

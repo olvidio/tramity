@@ -293,9 +293,6 @@ class GestorEntradaDB Extends ClaseGestor {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEntradaDBSet = new Set();
-        
-        /* {"any": 20, "mas": null, "num": 15, "lugar": 58} */
-        
 		$oCondicion = new Condicion();
         $aCondi = array();
         foreach ($aWhere as $camp => $val) {

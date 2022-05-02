@@ -82,7 +82,7 @@ if (!empty($Qid_escrito)) {
         if ($tipo_documento == Escrito::ACCION_ESCRITO) {
             $json_prot_origen = $oEscrito->getJson_prot_local();
             if (!empty(get_object_vars($json_prot_origen))) {
-                $oProtLocal->setLugar($json_prot_origen->lugar);
+                $oProtLocal->setLugar($json_prot_origen->id_lugar);
                 $oProtLocal->setProt_num($json_prot_origen->num);
                 $oProtLocal->setProt_any($json_prot_origen->any);
                 if (property_exists($json_prot_origen, 'mas')) {

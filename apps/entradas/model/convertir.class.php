@@ -138,7 +138,7 @@ class Convertir Extends ClaseGestor {
 				if (!empty($aProt_ref_db)) {
 					$aProtRef = [];
 					foreach ($aProt_ref_db as $a_prot_ref) {
-						$id_lugar = $a_prot_ref['lugar'];
+						$id_lugar = $a_prot_ref['id_lugar'];
 						$prot_num = $a_prot_ref['num'];
 						$prot_any = $a_prot_ref['any'];
 						$prot_mas = $a_prot_ref['mas'];
@@ -156,7 +156,7 @@ class Convertir Extends ClaseGestor {
 				if (!empty($aProt_dst_db)) {
 					$aProtDst = [];
 					foreach ($aProt_dst_db as $a_prot_dst) {
-						$id_lugar = $a_prot_dst['lugar'];
+						$id_lugar = $a_prot_dst['id_lugar'];
 						$prot_num = $a_prot_dst['num'];
 						$prot_any = $a_prot_dst['any'];
 						$prot_mas = $a_prot_dst['mas'];
@@ -172,8 +172,8 @@ class Convertir Extends ClaseGestor {
 				// tambien json_prot_local
 				$prot_local = $oEscrito->getJson_prot_local(TRUE);
 				
-				if (!empty($prot_local['lugar'])) {
-					$id_lugar = $prot_local['lugar'];
+				if (!empty($prot_local['id_lugar'])) {
+					$id_lugar = $prot_local['id_lugar'];
 					$prot_num = $prot_local['num'];
 					$prot_any = $prot_local['any'];
 					$prot_mas = $prot_local['mas'];
@@ -253,7 +253,7 @@ class Convertir Extends ClaseGestor {
 				if (!empty($aProt_ref_db)) {
 					$aProtRef = [];
 					foreach ($aProt_ref_db as $a_prot_ref) {
-						$id_lugar = $a_prot_ref['lugar'];
+						$id_lugar = $a_prot_ref['id_lugar'];
 						$prot_num = $a_prot_ref['num'];
 						$prot_any = $a_prot_ref['any'];
 						$prot_mas = $a_prot_ref['mas'];
@@ -269,7 +269,7 @@ class Convertir Extends ClaseGestor {
 				// tambien origen:
 				$prot_origen = $oEntrada->getJson_prot_origen(TRUE);
 				
-				$id_lugar = $prot_origen['lugar'];
+				$id_lugar = $prot_origen['id_lugar'];
 				$prot_num = $prot_origen['num'];
 				$prot_any = $prot_origen['any'];
 				$prot_mas = $prot_origen['mas'];

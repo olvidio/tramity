@@ -69,13 +69,13 @@ class ProtocoloArray Extends Protocolo {
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
 	        	$oProt = json_decode(json_encode($oProt));
-	        	if (!property_exists($oProt, 'lugar')) { continue; }
-			    $lugar = $oProt->lugar;
+	        	if (!property_exists($oProt, 'id_lugar')) { continue; }
+			    $id_lugar = $oProt->id_lugar;
 			    $prot_num = $oProt->num;
 			    $prot_any = $oProt->any;
 			    $prot_mas = $oProt->mas;
 			    
-                $oLugar = new Lugar($lugar);
+                $oLugar = new Lugar($id_lugar);
                 $nom_lugar = $oLugar->getSigla();
 			    $txt = "$nom_lugar";
 			    if (!empty($prot_num)) {
@@ -83,7 +83,7 @@ class ProtocoloArray Extends Protocolo {
 			    }
 			    $txt .= !empty($prot_mas)? ", ${prot_mas}" : '';
 			    
-                if ($lugar == $id_lugar_dst_org) {
+                if ($id_lugar == $id_lugar_dst_org) {
                     $aRef['dst_org'] .= !empty($aRef['dst_org'])? "<br>" : '';
                     $aRef['dst_org'] .= $ref.$txt;
                 } else {
@@ -106,18 +106,18 @@ class ProtocoloArray Extends Protocolo {
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
 	        	$oProt = json_decode(json_encode($oProt));
-	        	if (!property_exists($oProt, 'lugar')) { continue; }
-			    $lugar = $oProt->lugar;
+	        	if (!property_exists($oProt, 'id_lugar')) { continue; }
+			    $id_lugar = $oProt->id_lugar;
 			    $prot_num = $oProt->num;
 			    $prot_any = $oProt->any;
 			    $prot_mas = $oProt->mas;
 			    
-			    if (!empty($lugar)) {
-			        $oLugar = new Lugar($lugar);
+			    if (!empty($id_lugar)) {
+			        $oLugar = new Lugar($id_lugar);
 			        $nom_lugar = $oLugar->getSigla();
 			    }
 			    // para sacar solo un destino
-			    if (!empty($id_lugar) && $lugar != $id_lugar) {
+			    if (!empty($id_lugar) && $id_lugar != $id_lugar) {
 			        continue;
 			    }
 			    
@@ -144,14 +144,14 @@ class ProtocoloArray Extends Protocolo {
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
 	        	$oProt = json_decode(json_encode($oProt));
-	        	if (!property_exists($oProt, 'lugar')) { continue; }
-			    $lugar = $oProt->lugar;
+	        	if (!property_exists($oProt, 'id_lugar')) { continue; }
+			    $id_lugar = $oProt->id_lugar;
 			    $prot_num = $oProt->num;
 			    $prot_any = $oProt->any;
 			    $prot_mas = $oProt->mas;
 			    
-			    if (!empty($lugar)) {
-			        $oLugar = new Lugar($lugar);
+			    if (!empty($id_lugar)) {
+			        $oLugar = new Lugar($id_lugar);
 			        $nom_lugar = $oLugar->getSigla();
 			    }
 			    
@@ -190,8 +190,8 @@ class ProtocoloArray Extends Protocolo {
 		if (!empty($aSeleccionados)) {
 			foreach ($aSeleccionados as $oProt) {
 	        	$oProt = json_decode(json_encode($oProt));
-	        	if (!property_exists($oProt, 'lugar')) { continue; }
-				$this->ilugar = empty($oProt->lugar)? '' : $oProt->lugar;
+	        	if (!property_exists($oProt, 'id_lugar')) { continue; }
+				$this->ilugar = empty($oProt->id_lugar)? '' : $oProt->id_lugar;
 			    $this->iprot_num = empty($oProt->num)? '' : $oProt->num;
 			    $this->sprot_any = empty($oProt->any)? '' : $oProt->any;
 			    $this->sprot_mas = empty($oProt->mas)? '' : $oProt->mas;

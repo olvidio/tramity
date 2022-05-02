@@ -100,10 +100,10 @@ class Config {
         return $valor_actual;
     }
     
-    public function getContador($lugar='') {
-        if ($lugar == 'cr') {
+    public function getContador($sigla='') {
+        if ($sigla == 'cr') {
             return $this->getContador_cr();
-        } elseif ($lugar == 'iese') {
+        } elseif ($sigla == 'iese') {
             return $this->getContador_iese(); 
         } else {
             return $this->getContador_resto(); 

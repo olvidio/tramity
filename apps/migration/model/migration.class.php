@@ -57,7 +57,7 @@ class Migration {
         $id_lugar_dlb = $this->getId_local();
         $sql = "INSERT INTO escritos (json_prot_local, asunto, detalle, f_aprobacion, f_escrito, categoria, visibilidad, accion, 
                 modo_envio, f_salida, ok, id_reg, id_salida)
-            (SELECT json_build_object('any', substring(prot_any::text from '..$'), 'mas', null, 'num', prot_num, 'lugar', $id_lugar_dlb) AS json_prot_local,
+            (SELECT json_build_object('any', substring(prot_any::text from '..$'), 'mas', null, 'num', prot_num, 'id_lugar', $id_lugar_dlb) AS json_prot_local,
             e.asunto, e.detalle, a.f_aprobacion, e.f_doc, 2, CASE reservado WHEN 't' THEN 3 ELSE 1 END, 2, 1, a.f_salida, 3, a.id_reg, a.id_salida
             FROM reg.escritos e JOIN reg.aprobaciones a USING (id_reg) ); ";
         if ($this->oDBT->query($sql) === FALSE) {
@@ -88,7 +88,7 @@ class Migration {
         $sql = "UPDATE escritos es SET (json_prot_destino) =
                 (
                 select to_json(array (
-                    SELECT json_build_object('any', substring(prot_any::text from '..$'), 'mas', mas, 'num', prot_num, 'lugar', id_lugar_new) AS json_prot_destino
+                    SELECT json_build_object('any', substring(prot_any::text from '..$'), 'mas', mas, 'num', prot_num, 'id_lugar', id_lugar_new) AS json_prot_destino
                     FROM reg.destinos d
                      WHERE d.id_lugar_new IS NOT NULL
                     AND es.id_salida = d.id_salida AND es.id_reg = d.id_reg )
@@ -163,7 +163,7 @@ class Migration {
         $sql = "UPDATE escritos es SET (json_prot_ref) =
                 (
                 select to_json(array (
-                    SELECT json_build_object('any', substring(prot_any::text from '..$'), 'mas', mas, 'num', prot_num, 'lugar', id_lugar_new) AS json_prot_ref
+                    SELECT json_build_object('any', substring(prot_any::text from '..$'), 'mas', mas, 'num', prot_num, 'id_lugar', id_lugar_new) AS json_prot_ref
                     FROM reg.referencias ref
                      WHERE ref.id_lugar_new IS NOT NULL
                     AND ref.cancilleria = 'f' AND es.id_reg = ref.id_reg )
@@ -362,7 +362,7 @@ class Migration {
         $sql = "UPDATE entradas en SET (json_prot_ref) =
                 (
                 select to_json(array (
-                    SELECT json_build_object('any', substring(prot_any::text from '..$'), 'mas', mas, 'num', prot_num, 'lugar', id_lugar_new) AS json_prot_ref
+                    SELECT json_build_object('any', substring(prot_any::text from '..$'), 'mas', mas, 'num', prot_num, 'id_lugar', id_lugar_new) AS json_prot_ref
                     FROM reg.referencias ref
                      WHERE ref.id_lugar_new IS NOT NULL
                     AND ref.cancilleria = 'f' AND en.id_reg = ref.id_reg )
@@ -423,9 +423,9 @@ class Migration {
         }
 
         // pasar l'any a dues xifres:
-        // json_prot_origen => {"any": 20, "mas": null, "num": 15, "lugar": 58} 
+        // json_prot_origen => {"any": 20, "mas": null, "num": 15, "id_lugar": 58} 
         $sql = "INSERT INTO entradas (modo_entrada, json_prot_origen, f_entrada, id_reg, asunto_entrada, id_entrada_old)
-                (SELECT 5, json_build_object('any', substring(prot_any::text from '..$'), 'mas', mas, 'num', prot_num, 'lugar', id_lugar_new) AS json_prot_origen,
+                (SELECT 5, json_build_object('any', substring(prot_any::text from '..$'), 'mas', mas, 'num', prot_num, 'id_lugar', id_lugar_new) AS json_prot_origen,
                 f_entrada, id_reg, 'importado', id_entrada
                 FROM reg.entradas WHERE id_lugar_new IS NOT NULL); ";
                 

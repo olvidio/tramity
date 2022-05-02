@@ -241,7 +241,7 @@ if ($nuevo == 1) {
         // para que salga bien la referencia
         if (is_array($a_protOrigen)) {
             $display_completa="display:in-line;";
-            $ref_id_lugar=$a_protOrigen['lugar'];
+            $ref_id_lugar=$a_protOrigen['id_lugar'];
             $ref_prot_num=$a_protOrigen['num'];
             $ref_prot_any=$a_protOrigen['any'];
             //$ref_prot_mas=$a_protOrigen['mas']; // No cojo el del registro, el pendiente puede tener su propio 'mas'

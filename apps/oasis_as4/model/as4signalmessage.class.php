@@ -112,10 +112,10 @@ class As4SignalMessage {
 		$a_rta['dst'] = empty($a_message_id[0])? '' : $a_message_id[0];
 		if (!empty($a_message_id[1])) {
 			$a_prot = explode('-',$a_message_id[1]);
-			$lugar = empty($a_prot[0])? '' : $a_prot[0];
+			$nom_lugar = empty($a_prot[0])? '' : $a_prot[0];
 			$any = empty($a_prot[1])? '' : $a_prot[1];
 			$num = empty($a_prot[2])? '' : $a_prot[2];
-			$prot = $lugar . ' ' . $num . '/' . any_2($any);
+			$prot = $nom_lugar . ' ' . $num . '/' . any_2($any);
 			$a_rta['prot_org'] = $prot;
 		} else {
 			$a_rta['prot_org'] = '';

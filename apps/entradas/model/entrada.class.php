@@ -107,7 +107,7 @@ class Entrada Extends EntradaDB {
                 } else {
                     $a_json_prot_dst = $oEntradaBypass->getJson_prot_destino();
                     foreach ($a_json_prot_dst as $json_prot_dst) {
-                        $oLugar = new Lugar($json_prot_dst->lugar);
+                        $oLugar = new Lugar($json_prot_dst->id_lugar);
                         $destinos_txt .= empty($destinos_txt)? '' : ', ';
                         $destinos_txt .= $oLugar->getNombre();
                     }
@@ -165,7 +165,7 @@ class Entrada Extends EntradaDB {
         $id_org = '';
         $json_prot_origen = $this->getJson_prot_origen();
         if (!empty((array)$json_prot_origen)) {
-            $id_org = $json_prot_origen->lugar;
+            $id_org = $json_prot_origen->id_lugar;
             
             // referencias
             $a_json_prot_ref = $this->getJson_prot_ref();
@@ -174,7 +174,7 @@ class Entrada Extends EntradaDB {
             $aRef = $oArrayProtRef->ArrayListaTxtBr($id_org);
             
             $oProtOrigen = new Protocolo();
-            $oProtOrigen->setLugar($json_prot_origen->lugar);
+            $oProtOrigen->setLugar($json_prot_origen->id_lugar);
             $oProtOrigen->setProt_num($json_prot_origen->num);
             $oProtOrigen->setProt_any($json_prot_origen->any);
             $oProtOrigen->setMas($json_prot_origen->mas);
@@ -347,7 +347,7 @@ class Entrada Extends EntradaDB {
     		$this->nombre_escrito = $f_hoy.'_'._("E12")."($hora)";
     	} else {
     		$oProtOrigen = new Protocolo();
-    		$oProtOrigen->setLugar($json_prot_local->lugar);
+    		$oProtOrigen->setLugar($json_prot_local->id_lugar);
     		$oProtOrigen->setProt_num($json_prot_local->num);
     		$oProtOrigen->setProt_any($json_prot_local->any);
     		$oProtOrigen->setMas($json_prot_local->mas);

@@ -73,7 +73,7 @@ class GestorEntradaCompartida Extends ClaseGestor {
 	/**
 	 * Devuelve la colección de entradas, segun las condiciones del protcolo de entrada, más las normales
 	 * 
-	 * @param array $aProt_origen = ['lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
+	 * @param array $aProt_origen = ['id_lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
 	 * @param array $aWhere
 	 * @param array $aOperators
 	 * @return boolean|array
@@ -82,13 +82,6 @@ class GestorEntradaCompartida Extends ClaseGestor {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEntradaCompartidaSet = new Set();
-        
-        /* {"any": 20, "mas": null, "num": 15, "lugar": 58}
-        $sQuery = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_origen) as items(any smallint, mas text, num smallint, lugar integer)
-                        WHERE items.id=$id_lugar";
-        */
-        
 		$oCondicion = new Condicion();
         $aCondi = array();
         $COND_OR = '';
@@ -129,29 +122,33 @@ class GestorEntradaCompartida Extends ClaseGestor {
         if (isset($aWhere['_ordre'])) { unset($aWhere['_ordre']); }
         if (isset($aWhere['_limit']) && $aWhere['_limit']!='') { $sLimit = ' LIMIT '.$aWhere['_limit']; }
         if (isset($aWhere['_limit'])) { unset($aWhere['_limit']); }
-        
+
         // Where del prot_origen
         $Where_json = '';
-        if (!empty($aProt_origen['lugar'])) {
-            $lugar = $aProt_origen['lugar'];
-            $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.lugar='$lugar'";
+        $json = '';
+        if (!empty($aProt_origen['id_lugar'])) {
+        	$id_lugar = $aProt_origen['id_lugar'];
+        	$json .= empty($json)? '' : ',';
+        	$json .= "\"id_lugar\":$id_lugar";
         }
         if (!empty($aProt_origen['num'])) {
-            $num = $aProt_origen['num'];
-            $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.num='$num'";
+        	$num = $aProt_origen['num'];
+        	$json .= empty($json)? '' : ',';
+        	$json .= "\"num\":$num";
         }
         if (!empty($aProt_origen['any'])) {
-            $any = $aProt_origen['any'];
-            $any_2 = any_2($any);
-            $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.any='$any_2'";
+        	$any = $aProt_origen['any'];
+        	$any_2 = any_2($any);
+        	$json .= empty($json)? '' : ',';
+        	$json .= "\"any\":\"$any_2\"";
         }
         if (!empty($aProt_origen['mas'])) {
-            $mas = $aProt_origen['mas'];
-            $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.mas='$mas'";
+        	$mas = $aProt_origen['mas'];
+        	$json .= empty($json)? '' : ',';
+        	$json .= "\"mas\":\"$mas\"";
+        }
+        if (!empty($json)) {
+        	$Where_json = "json_prot_origen @> '{".$json."}'";
         }
         
         if (empty($sCondi)) {
@@ -168,11 +165,8 @@ class GestorEntradaCompartida Extends ClaseGestor {
             }
         }
         $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi.' '.$sOrdre;
-        
-        // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
-        $sQry = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_origen) as items(\"any\" text, mas text, num text, lugar text)
-                        $where_condi";
+
+        $sQry = "SELECT * FROM $nom_tabla $where_condi".$sOrdre.$sLimit;
         
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
             $sClauError = 'GestorEntradaDB.llistar.prepare';

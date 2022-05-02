@@ -238,7 +238,7 @@ class As4Distribuir extends As4CollaborationInfo {
 		$f_entrada = $oHoy->getFromLocal();
 		$f_plazo = $this->oF_contestar->getFromLocal();
 		
-		$id_origen = $this->a_Prot_org->lugar;
+		$id_origen = $this->a_Prot_org->id_lugar;
 		$prot_num = $this->a_Prot_org->num;
 		$prot_any = $this->a_Prot_org->any;
 
@@ -733,7 +733,7 @@ class As4Distribuir extends As4CollaborationInfo {
 	}
 	
 	private function xml2prot_simple($xml, $sufijo) {
-		$lugar = '';
+		$nom_lugar = '';
 		$ilugar = '';
 		$num = '';
 		$any = '';
@@ -745,9 +745,9 @@ class As4Distribuir extends As4CollaborationInfo {
 				$value = $node->nodeValue;
 
 				if ($name == 'lugar_'.$sufijo) {
-					$lugar = (string) $value;
+					$nom_lugar = (string) $value;
 					// pasarlo de texto al id correspondiente:
-					$ilugar = array_search($lugar, $this->aLugares);
+					$ilugar = array_search($nom_lugar, $this->aLugares);
 				}
 				if ($name == 'num_'.$sufijo) {
 					$num = (string) $value;

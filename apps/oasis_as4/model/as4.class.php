@@ -81,7 +81,7 @@ class As4 extends As4CollaborationInfo {
     public function getMessageInfo() {
     	$json_prot_origen = $this->getJson_prot_org();
         $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_origen->lugar);
+        $oProtOrigen->setLugar($json_prot_origen->id_lugar);
         $oProtOrigen->setProt_num($json_prot_origen->num);
         $oProtOrigen->setProt_any($json_prot_origen->any);
         $oProtOrigen->setMas($json_prot_origen->mas);
@@ -154,7 +154,7 @@ class As4 extends As4CollaborationInfo {
         
         $json_prot_org = $this->getJson_prot_org();
         if (!empty((array)$json_prot_org)) {
-            $id_lugar_org = $json_prot_org->lugar;
+            $id_lugar_org = $json_prot_org->id_lugar;
 			$lugar_org = empty($aLugares[$id_lugar_org])? '' : $aLugares[$id_lugar_org];
             $num_org = $json_prot_org->num;
             $any_org = $json_prot_org->any;
@@ -181,7 +181,7 @@ class As4 extends As4CollaborationInfo {
 			// puede ser 'sin_numerar (E12)'
 			$json_prot_dst = $this->getJson_prot_dst();
 			if (!empty((array)$json_prot_dst)) {
-				$id_lugar_dst = $json_prot_dst->lugar;
+				$id_lugar_dst = $json_prot_dst->id_lugar;
 				$lugar_dst = empty($aLugares[$id_lugar_dst])? '' : $aLugares[$id_lugar_dst];
 				$num_dst = $json_prot_dst->num;
 				$any_dst = $json_prot_dst->any;
@@ -273,7 +273,7 @@ class As4 extends As4CollaborationInfo {
 		
     	$lugar_dst = 'distribucion';
         if (!empty((array)$this->json_prot_dst)) {
-            $id_lugar_dst = $this->json_prot_dst->lugar;
+            $id_lugar_dst = $this->json_prot_dst->id_lugar;
             $lugar_dst = empty($aLugares[$id_lugar_dst])? '' : $aLugares[$id_lugar_dst];
         }
         $this->lugar_destino_txt = $lugar_dst;

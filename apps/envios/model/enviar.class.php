@@ -158,8 +158,8 @@ class Enviar {
 			$destinos_txt = '';
 			$a_json_prot_dst = $this->oEntradaBypass->getJson_prot_destino();
 			foreach ($a_json_prot_dst as $json_prot_dst) {
-				$aMiembros[] = $json_prot_dst->lugar;
-				$oLugar = new Lugar($json_prot_dst->lugar);
+				$aMiembros[] = $json_prot_dst->id_lugar;
+				$oLugar = new Lugar($json_prot_dst->id_lugar);
 				$destinos_txt .= empty($destinos_txt)? '' : ', ';
 				$destinos_txt .= $oLugar->getNombre();
 			}
@@ -186,7 +186,7 @@ class Enviar {
             exit (_("No hay más"));
         }
         $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_origen->lugar);
+        $oProtOrigen->setLugar($json_prot_origen->id_lugar);
         $oProtOrigen->setProt_num($json_prot_origen->num);
         $oProtOrigen->setProt_any($json_prot_origen->any);
         $oProtOrigen->setMas($json_prot_origen->mas);
@@ -227,7 +227,7 @@ class Enviar {
             exit (_("No hay más"));
         }
         $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_origen->lugar);
+        $oProtOrigen->setLugar($json_prot_origen->id_lugar);
         $oProtOrigen->setProt_num($json_prot_origen->num);
         $oProtOrigen->setProt_any($json_prot_origen->any);
         $oProtOrigen->setMas($json_prot_origen->mas);
@@ -418,7 +418,7 @@ class Enviar {
         		$gesLugares = new GestorLugar();
         		$id_siga_local = $gesLugares->getId_sigla_local();
         		$json_prot_org = new stdClass;
-        		$json_prot_org->lugar = $id_siga_local;
+        		$json_prot_org->id_lugar = $id_siga_local;
         		$json_prot_org->num = '';
         		$json_prot_org->any = '';
         		$json_prot_org->mas = '';
@@ -474,7 +474,7 @@ class Enviar {
         		$gesLugares = new GestorLugar();
         		$id_siga_local = $gesLugares->getId_sigla_local();
         		$json_prot_org = new stdClass;
-        		$json_prot_org->lugar = $id_siga_local;
+        		$json_prot_org->id_lugar = $id_siga_local;
         		$json_prot_org->num = '';
         		$json_prot_org->any = '';
         		$json_prot_org->mas = '';
@@ -492,8 +492,8 @@ class Enviar {
         
         $json_prot_dst = new \stdClass();
         foreach ($a_json_prot_dst as $json_prot_dst) {
-        	if (!property_exists($json_prot_dst, 'lugar')) { continue; }
-        	$id_dst = $json_prot_dst->lugar;
+        	if (!property_exists($json_prot_dst, 'id_lugar')) { continue; }
+        	$id_dst = $json_prot_dst->id_lugar;
         	if ($id_dst == $id_lugar) {
         		break;
         	}

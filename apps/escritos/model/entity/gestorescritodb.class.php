@@ -148,9 +148,6 @@ class GestorEscritoDB Extends core\ClaseGestor {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEscritoDBSet = new core\Set();
-        
-        /* {"any": 20, "mas": null, "num": "15", "lugar": 58} */
-        
 		$oCondicion = new core\Condicion();
         $aCondi = array();
         foreach ($aWhere as $camp => $val) {
@@ -403,13 +400,12 @@ class GestorEscritoDB Extends core\ClaseGestor {
         return $oEscritoDBSet->getTot();
 	    
 	}
+	
+	
 	function getEscritosByLugarDB($id_lugar, $aWhere=array(),$aOperators=array()) {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEscritoDBSet = new core\Set();
-        
-        /* {"any": 20, "mas": null, "num": 15, "lugar": 58} */
-        
 		$oCondicion = new core\Condicion();
         $aCondi = array();
         $COND_OR = '';

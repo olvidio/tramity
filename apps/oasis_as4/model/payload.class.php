@@ -255,20 +255,20 @@ class Payload {
 	private function explodeProt($oProt, $nombre_nodo, $sufijo) {
 		$nodo = $this->dom->createElement($nombre_nodo);
 		
-		if (empty((array) $oProt) || !property_exists($oProt, 'lugar')) {
+		if (empty((array) $oProt) || !property_exists($oProt, 'id_lugar')) {
 			return $nodo;
 		}
 		
-		$id_lugar = $oProt->lugar;
-		$lugar = empty($this->aLugares[$id_lugar])? '' : $this->aLugares[$id_lugar];
+		$id_lugar = $oProt->id_lugar;
+		$nom_lugar = empty($this->aLugares[$id_lugar])? '' : $this->aLugares[$id_lugar];
 		$num = $oProt->num;
 		$any = $oProt->any;
 		$mas = $oProt->mas;
 		
 		// No se admiten propiedades vacias: No se incluyen.
-		if (!empty($lugar)) {
+		if (!empty($nom_lugar)) {
 			$nombre = "lugar_$sufijo";
-			$nodo->appendChild($this->dom->createElement($nombre, $lugar));
+			$nodo->appendChild($this->dom->createElement($nombre, $nom_lugar));
 		}
 		if (!empty($num)) {
 			$nombre = "num_$sufijo";

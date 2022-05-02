@@ -347,15 +347,15 @@ fnjs_aviso_IESE=function(id){
     if (nom=="610") alert ("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans|raw }}");
 }
 /* intentar explotar el protocolo en lugar, num y año */
-fnjs_protocolo=function(lugar,num,any,siguiente){
+fnjs_protocolo=function(nom_lugar,num,any,siguiente){
     var protocolo=$('#protocolo').val();
     var expresion_regular= new RegExp('\\s*((\\w*\\s*)*)\\s+([0-9]+)\/([0-9]+)', 'g');
     var resultado = expresion_regular.exec(protocolo);
 
     if (resultado) {
         if (resultado[1]) {
-            //str_select = lugar+" option:contains("+resultado[1]+")";
-            $(lugar+" option").filter(function() {
+            //str_select = nom_lugar+" option:contains("+resultado[1]+")";
+            $(nom_lugar+" option").filter(function() {
                 return $(this).text() === resultado[1];
             }).attr('selected', 'selected');
         }

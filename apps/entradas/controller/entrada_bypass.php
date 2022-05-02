@@ -60,7 +60,7 @@ $oProtOrigen->setEtiqueta('De');
 $oProtOrigen->setNombre('origen');
 $oProtOrigen->setBlanco(TRUE);
 $oProtOrigen->setTabIndex(10);
-$oProtOrigen->setLugar($json_prot_origen->lugar);
+$oProtOrigen->setLugar($json_prot_origen->id_lugar);
 $oProtOrigen->setProt_num($json_prot_origen->num);
 $oProtOrigen->setProt_any($json_prot_origen->any);
 $oProtOrigen->setMas($json_prot_origen->mas);

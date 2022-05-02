@@ -145,8 +145,8 @@ class Escrito Extends EscritoDB {
 				if (empty((array)$json_prot_destino)) {
 					exit (_("Error no hay destino"));
 				} else {
-					$lugar = $json_prot_destino['lugar'];
-					switch ($lugar) {
+					$id_lugar_n = $json_prot_destino['id_lugar'];
+					switch ($id_lugar_n) {
 						case $id_lugar_cr:
 							$lugar_contador = 'cr';
 							break;
@@ -285,8 +285,8 @@ class Escrito Extends EscritoDB {
             $a_json_prot_dst = $this->getJson_prot_destino(FALSE);
             if (!empty($id_lugar_de_grupo)) { // individual, con su protocolo.
                 foreach ($a_json_prot_dst as $json_prot_dst) {
-                	if (!property_exists($json_prot_dst, 'lugar')) { continue; }
-                    $id_dst = $json_prot_dst->lugar;
+                	if (!property_exists($json_prot_dst, 'id_lugar')) { continue; }
+                    $id_dst = $json_prot_dst->id_lugar;
                     if ($id_dst == $id_lugar_de_grupo) {
                         $oProtDestino = new Protocolo();
                         $oProtDestino->setJson($json_prot_dst);
@@ -298,7 +298,7 @@ class Escrito Extends EscritoDB {
                 if (!empty((array)$a_json_prot_dst)) {
                     $json_prot_dst = $a_json_prot_dst[0];
                     if (!empty((array)$json_prot_dst)) {
-						$id_dst = $json_prot_dst->lugar;
+						$id_dst = $json_prot_dst->id_lugar;
                     } else {
                     	$id_dst = '';	
                     }
@@ -398,8 +398,8 @@ class Escrito Extends EscritoDB {
             //(segun individuales)
             $a_json_prot_dst = $this->getJson_prot_destino();
             foreach ($a_json_prot_dst as $json_prot_dst) {
-            	if (!property_exists($json_prot_dst, 'lugar')) { continue; }
-                $aMiembros[] = $json_prot_dst->lugar;
+            	if (!property_exists($json_prot_dst, 'id_lugar')) { continue; }
+                $aMiembros[] = $json_prot_dst->id_lugar;
             }
         }
         // Si no hay ni grupos ni json, miro ids
@@ -416,7 +416,7 @@ class Escrito Extends EscritoDB {
         if (!empty((array)$a_json_prot_dst)) {
             $json_prot_dst = $a_json_prot_dst[0];
 			if (!empty((array)$json_prot_dst)) {
-				$id_dst = $json_prot_dst->lugar;
+				$id_dst = $json_prot_dst->id_lugar;
 			} else {
 				$id_dst = '';	
 			}
@@ -437,7 +437,7 @@ class Escrito Extends EscritoDB {
             $origen_txt = $_SESSION['oConfig']->getSigla();
         } else {
             $oProtOrigen = new Protocolo();
-            $oProtOrigen->setLugar($json_prot_local->lugar);
+            $oProtOrigen->setLugar($json_prot_local->id_lugar);
             $oProtOrigen->setProt_num($json_prot_local->num);
             $oProtOrigen->setProt_any($json_prot_local->any);
             $oProtOrigen->setMas($json_prot_local->mas);
@@ -476,7 +476,7 @@ class Escrito Extends EscritoDB {
         	}
         } else {
             $oProtOrigen = new Protocolo();
-            $oProtOrigen->setLugar($json_prot_local->lugar);
+            $oProtOrigen->setLugar($json_prot_local->id_lugar);
             $oProtOrigen->setProt_num($json_prot_local->num);
             $oProtOrigen->setProt_any($json_prot_local->any);
             $oProtOrigen->setMas($json_prot_local->mas);
@@ -522,7 +522,7 @@ class Escrito Extends EscritoDB {
             $aMiembros = $this->getDestinosIds();
             foreach ($aMiembros as $id_lugar) {
                 $aProtDst[] = [
-                            'lugar' => $id_lugar,
+                            'id_lugar' => $id_lugar,
                             'num' => '',
                             'any' => '',
                             'mas' => '',
@@ -539,7 +539,7 @@ class Escrito Extends EscritoDB {
             $n++;
             $aProt_dst = (array) $oProtDst;
             $aProtDestino[0] = [
-                'lugar' => $aProt_dst['lugar'],
+                'id_lugar' => $aProt_dst['id_lugar'],
                 'num' => $aProt_dst['num'],
                 'any' => $aProt_dst['any'],
                 'mas' => $aProt_dst['mas'],
@@ -629,7 +629,7 @@ class Escrito Extends EscritoDB {
      */
     public function getConforme($id_expediente,$json_prot_local) {
         $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_local->lugar);
+        $oProtOrigen->setLugar($json_prot_local->id_lugar);
         $oProtOrigen->setProt_num($json_prot_local->num);
         $oProtOrigen->setProt_any($json_prot_local->any);
         $oProtOrigen->setMas($json_prot_local->mas);
@@ -687,7 +687,7 @@ class Escrito Extends EscritoDB {
     		$this->nombre_escrito = $f_hoy.'_'._("E12")."($hora)";
     	} else {
     		$oProtOrigen = new Protocolo();
-    		$oProtOrigen->setLugar($json_prot_local->lugar);
+    		$oProtOrigen->setLugar($json_prot_local->id_lugar);
     		$oProtOrigen->setProt_num($json_prot_local->num);
     		$oProtOrigen->setProt_any($json_prot_local->any);
     		$oProtOrigen->setMas($json_prot_local->mas);
