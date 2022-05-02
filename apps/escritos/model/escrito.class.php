@@ -117,38 +117,47 @@ class Escrito Extends EscritoDB {
         // si ya tiene no se toca:
         $prot_local = $this->getJson_prot_local();
         if (!empty(get_object_vars($prot_local))) {
-            //return TRUE;
+            return TRUE;
         }
-        $gesLugares = new GestorLugar();
-        if (empty($id_lugar_iese)) {
-            $id_lugar_iese = $gesLugares->getId_iese();
-        }
-        if (empty($id_lugar_cr)) {
-            $id_lugar_cr = $gesLugares->getId_cr();
-        }
-        if (empty($id_lugar)) {
-            $id_lugar = $gesLugares->getId_sigla_local();
-        }
-        // segun si el destino es cr, iese o resto:
-		$lugar_contador = '';
-        $aProtDst = $this->getJson_prot_destino(TRUE);
-        // es un array, pero sólo debería haber uno...
-        foreach($aProtDst as $json_prot_destino) {
-            if (empty((array)$json_prot_destino)) {
-                exit (_("Error no hay destino"));
-            } else {
-                $lugar = $json_prot_destino['lugar'];
-                switch ($lugar) {
-                	case $id_lugar_cr:
-						$lugar_contador = 'cr';
-						break;
-                	case $id_lugar_iese:
-                    	$lugar_contador = 'iese';
-                    	break;
-                	default:
-						$lugar_contador = '';
-                }
-            }
+        
+		$gesLugares = new GestorLugar();
+        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+			if (empty($id_lugar)) {
+				$id_lugar = $gesLugares->getId_sigla_local();
+			}
+			// segun si el destino es cr, iese o resto:
+			$lugar_contador = '';
+        } else {
+			if (empty($id_lugar_iese)) {
+				$id_lugar_iese = $gesLugares->getId_iese();
+			}
+			if (empty($id_lugar_cr)) {
+				$id_lugar_cr = $gesLugares->getId_cr();
+			}
+			if (empty($id_lugar)) {
+				$id_lugar = $gesLugares->getId_sigla_local();
+			}
+			// segun si el destino es cr, iese o resto:
+			$lugar_contador = '';
+			$aProtDst = $this->getJson_prot_destino(TRUE);
+			// es un array, pero sólo debería haber uno...
+			foreach($aProtDst as $json_prot_destino) {
+				if (empty((array)$json_prot_destino)) {
+					exit (_("Error no hay destino"));
+				} else {
+					$lugar = $json_prot_destino['lugar'];
+					switch ($lugar) {
+						case $id_lugar_cr:
+							$lugar_contador = 'cr';
+							break;
+						case $id_lugar_iese:
+							$lugar_contador = 'iese';
+							break;
+						default:
+							$lugar_contador = '';
+					}
+				}
+			}
         }
         $prot_num = $_SESSION['oConfig']->getContador($lugar_contador);
         $prot_any = date('y');
