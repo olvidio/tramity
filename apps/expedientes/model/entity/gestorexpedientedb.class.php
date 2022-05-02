@@ -87,12 +87,12 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 		$json = "\"id\":\"$id_cargo\"";
 		switch ($visto) {
 		    case 'visto':
-                //$Where_visto = "AND items.visto=1";
-				$json .= "\"visto\":\"1\"";
+		    	$json .= empty($json)? '' : ',';
+				$json .= "\"visto\":true";
 		    break;
 		    case 'no_visto':
-                //$Where_visto = "AND (items.visto=0 OR items.visto IS NULL)";
-				$json .= "\"visto\":\"0\"";
+		    	$json .= empty($json)? '' : ',';
+				$json .= "\"visto\":false";
 		    break;
 		    case 'todos':
 		    default:
