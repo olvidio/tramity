@@ -46,15 +46,9 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 		$oDbl = $this->getoDbl();
 	    
 		$json = "\"id\":$id";
-		$json .= "\"tipo\":\"$tipo\"";
+		$json .= ", \"tipo\":\"$tipo\"";
 		$Where_json = "json_antecedentes @> '[{".$json."}]'";
 		
-		/*
-	    $sQuery = "SELECT e.id_expediente, e.asunto, e.ponente, e.json_antecedentes, items.id, items.tipo
-                    FROM expedientes e, jsonb_to_recordset(e.json_antecedentes) as items(id integer,tipo text) 
-                    WHERE items.id=$id AND items.tipo='$tipo' ";
-        */
-
 	    $sQuery = "SELECT e.id_expediente
                     FROM expedientes e 
                     WHERE $Where_json ";
@@ -101,11 +95,6 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 		}
 		$Where_json = "json_preparar @> '[{".$json."}]'";
 		
-		/*
-	    $sQuery = "SELECT e.id_expediente, e.asunto, e.ponente, e.json_preparar, items.id, items.visto 
-                    FROM expedientes e, jsonb_to_recordset(e.json_preparar) as items(id integer,visto smallint) 
-                    WHERE items.id=$id_cargo $Where_visto";
-	    */
 	    $sQuery = "SELECT e.id_expediente
                     FROM expedientes e WHERE $Where_json ";
 	    
