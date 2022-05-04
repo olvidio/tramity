@@ -117,7 +117,7 @@ class GestorEntradaDB Extends ClaseGestor {
                 }
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
                 $json .= empty($json)? '' : ',';
-                $json .= "\"cargo\":\"$encargado\"";
+                $json .= "\"cargo\": $encargado";
                 break;
             case 'centro':
             	// para los ctr
@@ -240,7 +240,7 @@ class GestorEntradaDB Extends ClaseGestor {
         if (!empty($aVisto['cargo'])) {
             $cargo = $aVisto['cargo'];
             $json .= empty($json)? '' : ',';
-            $json .= "\"cargo\": \"$cargo\"";
+            $json .= "\"cargo\": $cargo";
         }
         if (!empty($json)) {
         	$Where_json = "json_visto @> '[{".$json."}]'";

@@ -78,15 +78,15 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 	public function getIdExpedientesPreparar($id_cargo,$visto='no_visto') {
 		$oDbl = $this->getoDbl();
 		
-		$json = "\"id\":\"$id_cargo\"";
+		$json = "\"id\": $id_cargo";
 		switch ($visto) {
 		    case 'visto':
 		    	$json .= empty($json)? '' : ',';
-				$json .= "\"visto\":true";
+				$json .= "\"visto\": true";
 		    break;
 		    case 'no_visto':
 		    	$json .= empty($json)? '' : ',';
-				$json .= "\"visto\":false";
+				$json .= "\"visto\": false";
 		    break;
 		    case 'todos':
 		    default:
