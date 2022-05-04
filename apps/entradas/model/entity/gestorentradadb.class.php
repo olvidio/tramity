@@ -89,9 +89,9 @@ class GestorEntradaDB Extends ClaseGestor {
         
         $json = '';
         // Quitar las vistas
-		$json .= "\"oficina\":\"$oficina\"";
+		$json .= "\"oficina\": $oficina";
 		$json .= empty($json)? '' : ',';
-		$json .= "\"visto\":true";
+		$json .= "\"visto\": true";
         
         // Todas las de la oficina
         switch ($tipo_oficina) {
@@ -230,17 +230,17 @@ class GestorEntradaDB Extends ClaseGestor {
         if (!empty($aVisto['oficina'])) {
             $oficina = $aVisto['oficina'];
             $json .= empty($json)? '' : ',';
-            $json .= "\"oficina\":\"$oficina\"";
+            $json .= "\"oficina\": $oficina";
         }
         if (!empty($aVisto['visto'])) {
             $visto = $aVisto['visto'];
             $json .= empty($json)? '' : ',';
-            $json .= "\"visto\":$visto";
+            $json .= "\"visto\": $visto";
         }
         if (!empty($aVisto['cargo'])) {
             $cargo = $aVisto['cargo'];
             $json .= empty($json)? '' : ',';
-            $json .= "\"cargo\":\"$cargo\"";
+            $json .= "\"cargo\": \"$cargo\"";
         }
         if (!empty($json)) {
         	$Where_json = "json_visto @> '[{".$json."}]'";
