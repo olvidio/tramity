@@ -15,6 +15,7 @@ use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
+use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
@@ -126,16 +127,25 @@ class Entrada Extends EntradaDB {
     public function cabeceraIzquierda() {
         // sigla +(visibilidad) + ref
     	$oVisibilidad = new Visibilidad();
-    	$a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
         
         $sigla = $_SESSION['oConfig']->getSigla();
         $destinos_txt = $sigla;
         // excepción para bypass
         if (!is_true($this->getBypass())) {
 			$visibilidad = $this->getVisibilidad();
-			if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
-				$visibilidad_txt = $a_visibilidad_dst[$visibilidad];
-				$destinos_txt .= " ($visibilidad_txt)";
+			// si soy dl o ctr
+			if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+				if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
+					$a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
+					$visibilidad_txt = $a_visibilidad_dst[$visibilidad];
+					$destinos_txt .= " ($visibilidad_txt)";
+				}
+			} else {
+				if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
+					$a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
+					$visibilidad_txt = $a_visibilidad_dl[$visibilidad];
+					$destinos_txt .= " ($visibilidad_txt)";
+				}
 			}
         }
         
