@@ -2,10 +2,10 @@
 namespace entradas\model\entity;
 use core\ClaseGestor;
 use core\Condicion;
+use core\ConfigGlobal;
 use core\Set;
 use function core\any_2;
 use entradas\model\Entrada;
-use usuarios\model\entity\Cargo;
 use usuarios\model\Categoria;
 
 /**
@@ -105,10 +105,7 @@ class GestorEntradaDB Extends ClaseGestor {
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
                 break;
             case 'encargado':
-                // si es encargado se le pasa el id_cargo:
-                $encargado = $oficina;
-                $oCargo = new Cargo($encargado);
-                $oficina = $oCargo->getId_oficina();
+            	$encargado =  ConfigGlobal::role_id_cargo(); // valor por defecto
                 $sCondi = "encargado = $encargado AND estado = $estado";
                 // comprobar visibilidad:
                 if (!empty($a_visibilidad)) {

@@ -86,8 +86,10 @@ class EntradaLista {
                 $oVisibilidad = new Visibilidad();
 				$a_visibilidad = $oVisibilidad->getArrayCondVisibilidad();
                 // No marcado como visto:
+				$oCargo = new Cargo($encargado);
+				$id_oficina = $oCargo->getId_oficina();
                 $gesEntradas = new GestorEntrada();
-                $cEntradas = $gesEntradas->getEntradasNoVistoDB($encargado,'encargado',$a_visibilidad);
+                $cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina,'encargado',$a_visibilidad);
                 $a_entradas_encargado = [];
                 foreach ($cEntradas as $oEntrada) {
                     $id_entrada = $oEntrada->getId_entrada();
