@@ -2,11 +2,11 @@
 namespace entradas\model\entity;
 use core\ClaseGestor;
 use core\Condicion;
-use core\ConfigGlobal;
 use core\Set;
 use function core\any_2;
 use entradas\model\Entrada;
 use usuarios\model\Categoria;
+use usuarios\model\entity\Cargo;
 
 /**
  * GestorEntradaDB
@@ -75,7 +75,7 @@ class GestorEntradaDB Extends ClaseGestor {
     /**
      * retorna l'array d'objectes de tipus EntradaDB amb visto = false
      *
-     * @param integer id_oficina
+     * @param integer id_oficina (id_encargado, en el caso de $tipo_oficina='encargado')
      * @param string tipo_oficina (ponente|resto|encargado|centro) Seleccionar por
      * @param array a_visibilidad para filtrar (caso centros?)
      * @return array Una col·lecció d'objectes de tipus EntradaDB
@@ -105,7 +105,9 @@ class GestorEntradaDB Extends ClaseGestor {
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
                 break;
             case 'encargado':
-            	$encargado =  ConfigGlobal::role_id_cargo(); // valor por defecto
+            	$encargado = $oficina;
+				$oCargo = new Cargo($encargado);
+				$id_oficina = $oCargo->getId_oficina();
                 $sCondi = "encargado = $encargado AND estado = $estado";
                 // comprobar visibilidad:
                 if (!empty($a_visibilidad)) {
@@ -113,6 +115,10 @@ class GestorEntradaDB Extends ClaseGestor {
                 	$sCondi .= " AND (visibilidad IN ($visibilidad_csv) OR visibilidad IS NULL)";
                 }
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+                // Reescribo toda la condición: hay que cambiar la oficina
+				$json = "\"oficina\": $id_oficina";
+				$json .= empty($json)? '' : ',';
+				$json .= "\"visto\": true";
                 $json .= empty($json)? '' : ',';
                 $json .= "\"cargo\": $encargado";
                 break;
