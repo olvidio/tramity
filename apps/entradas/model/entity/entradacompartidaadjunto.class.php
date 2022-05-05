@@ -1,25 +1,23 @@
 <?php
 namespace entradas\model\entity;
 use core;
-
 /**
- * Fitxer amb la Classe que accedeix a la taula entradas
+ * Fitxer amb la Classe que accedeix a la taula entrada_compartida_adjuntos
  *
  * @package tramity
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @since 29/6/2020
+ * @created 5/5/2022
  */
-
 /**
- * Classe que implementa l'entitat entradas
+ * Classe que implementa l'entitat entrada_compartida_adjuntos
  *
  * @package tramity
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @since 29/6/2020
+ * @created 5/5/2022
  */
 class EntradaCompartidaAdjunto Extends core\ClasePropiedades {
 	/* ATRIBUTS ----------------------------------------------------------------- */
@@ -29,54 +27,53 @@ class EntradaCompartidaAdjunto Extends core\ClasePropiedades {
 	 *
 	 * @var array
 	 */
-	 protected $aPrimary_key;
+	 private $aPrimary_key;
 
 	/**
 	 * aDades de EntradaCompartidaAdjunto
 	 *
 	 * @var array
 	 */
-	 protected $aDades;
+	 private $aDades;
 
 	/**
-	 * bLoaded
+	 * bLoaded de EntradaCompartidaAdjunto
 	 *
 	 * @var boolean
 	 */
-	 protected $bLoaded = FALSE;
+	 private $bLoaded = FALSE;
 
 	/**
 	 * Id_schema de EntradaCompartidaAdjunto
 	 *
 	 * @var integer
 	 */
-	 protected $iid_schema;
+	 private $iid_schema;
 
 	/**
 	 * Id_item de EntradaCompartidaAdjunto
 	 *
 	 * @var integer
 	 */
-	 protected $iid_item;
+	 private $iid_item;
 	/**
 	 * Id_entrada_compartida de EntradaCompartidaAdjunto
 	 *
 	 * @var integer
 	 */
-	 protected $iid_entrada_compartida;
+	 private $iid_entrada_compartida;
 	/**
 	 * Nom de EntradaCompartidaAdjunto
 	 *
 	 * @var string
 	 */
-	 protected $snom;
+	 private $snom;
 	/**
 	 * Adjunto de EntradaCompartidaAdjunto
 	 *
-	 * @var string bytea
+	 * @var string
 	 */
-	 protected $adjunto;
-	 
+	 private $sadjunto;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de EntradaCompartidaAdjunto
@@ -101,7 +98,7 @@ class EntradaCompartidaAdjunto Extends core\ClasePropiedades {
 	 * 						$a_id. Un array con los nombres=>valores de las claves primarias.
 	 */
 	function __construct($a_id='') {
-		$oDbl = $GLOBALS['oDBP'];
+		$oDbl = $GLOBALS['oDBT'];
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
@@ -131,29 +128,22 @@ class EntradaCompartidaAdjunto Extends core\ClasePropiedades {
 		$aDades=array();
 		$aDades['id_entrada_compartida'] = $this->iid_entrada_compartida;
 		$aDades['nom'] = $this->snom;
-        $aDades['adjunto'] = $this->adjunto;
+		$aDades['adjunto'] = $this->sadjunto;
 		array_walk($aDades, 'core\poner_null');
 
 		if ($bInsert === FALSE) {
 			//UPDATE
 			$update="
-					id_entrada_compartida = :id_entrada_compartida,
-					nom                   = :nom,
-					adjunto               = :adjunto";
+					id_entrada_compartida    = :id_entrada_compartida,
+					nom                      = :nom,
+					adjunto                  = :adjunto";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_item='$this->iid_item'")) === FALSE) {
 				$sClauError = 'EntradaCompartidaAdjunto.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			} else {
-			    $id_entrada_compartida = $aDades['id_entrada_compartida'];
-			    $nom = $aDades['nom'];
-			    $adjunto = $aDades['adjunto'];
-			    
-			    $oDblSt->bindParam(1, $id_entrada_compartida, \PDO::PARAM_INT);
-			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_STR);
 				try {
-					$oDblSt->execute();
+					$oDblSt->execute($aDades);
 				}
 				catch ( \PDOException $e) {
 					$err_txt=$e->errorInfo[2];
@@ -166,21 +156,14 @@ class EntradaCompartidaAdjunto Extends core\ClasePropiedades {
 		} else {
 			// INSERT
 			$campos="(id_entrada_compartida,nom,adjunto)";
-			$valores="(:id_entrada_compartida,:nom,:ajunto)";		
+			$valores="(:id_entrada_compartida,:nom,:adjunto)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'EntradaCompartidaAdjunto.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			} else {
-			    $id_entrada_compartida = $aDades['id_entrada_compartida'];
-			    $nom = $aDades['nom'];
-			    $adjunto = $aDades['adjunto'];
-			    
-			    $oDblSt->bindParam(1, $id_entrada_compartida, \PDO::PARAM_INT);
-			    $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_STR);
 				try {
-					$oDblSt->execute();
+					$oDblSt->execute($aDades);
 				}
 				catch ( \PDOException $e) {
 					$err_txt=$e->errorInfo[2];
@@ -203,32 +186,21 @@ class EntradaCompartidaAdjunto Extends core\ClasePropiedades {
 	public function DBCarregar($que=null) {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
-		$id_entrada_compartida = 0;
-		$nom = '';
-		$adjunto = '';
 		if (isset($this->iid_item)) {
-			if (($oDblSt = $oDbl->prepare("SELECT id_entrada_compartida, nom, adjunto FROM $nom_tabla WHERE id_item='$this->iid_item'")) === FALSE) {
+			if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_item='$this->iid_item'")) === FALSE) {
 				$sClauError = 'EntradaCompartidaAdjunto.carregar';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			}
-			$oDblSt->execute();
-			$oDblSt->bindColumn(1, $id_entrada_compartida, \PDO::PARAM_INT);
-			$oDblSt->bindColumn(2, $nom, \PDO::PARAM_STR, 256);
-			$oDblSt->bindColumn(3, $adjunto, \PDO::PARAM_STR);
-			$oDblSt->fetch(\PDO::FETCH_BOUND);
-			
-			$aDades = [ 'id_entrada_compartida' => $id_entrada_compartida,
-			             'nom' => $nom,
-			             'adjunto' => $adjunto,
-			           ];
-			
+			$aDades = $oDblSt->fetch(\PDO::FETCH_ASSOC);
+            // Para evitar posteriores cargas
+            $this->bLoaded = TRUE;
 			switch ($que) {
 				case 'tot':
-				    $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
 					break;
 				case 'guardar':
-					if (!$oDblSt->rowCount()) { return FALSE; }
+					if (!$oDblSt->rowCount()) return FALSE;
 					break;
                 default:
 					// En el caso de no existir esta fila, $aDades = FALSE:
@@ -267,13 +239,13 @@ class EntradaCompartidaAdjunto Extends core\ClasePropiedades {
 	 *
 	 * @param array $aDades
 	 */
-	function setAllAtributes($aDades,$convert=FALSE) {
+	function setAllAtributes($aDades) {
 		if (!is_array($aDades)) { return; }
 		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
 		if (array_key_exists('id_item',$aDades)) { $this->setId_item($aDades['id_item']); }
 		if (array_key_exists('id_entrada_compartida',$aDades)) { $this->setId_entrada_compartida($aDades['id_entrada_compartida']); }
 		if (array_key_exists('nom',$aDades)) { $this->setNom($aDades['nom']); }
-		if (array_key_exists('adjunto',$aDades)) { $this->setAdjuntoEscaped($aDades['adjunto']); }
+		if (array_key_exists('adjunto',$aDades)) { $this->setAdjunto($aDades['adjunto']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -285,7 +257,7 @@ class EntradaCompartidaAdjunto Extends core\ClasePropiedades {
 		$this->setId_item('');
 		$this->setId_entrada_compartida('');
 		$this->setNom('');
-		$this->setAdjuntoEscaped('');
+		$this->setAdjunto('');
 		$this->setPrimary_key($aPK);
 	}
 
@@ -366,9 +338,9 @@ class EntradaCompartidaAdjunto Extends core\ClasePropiedades {
 	/**
 	 * estableix el valor de l'atribut iid_entrada_compartida de EntradaCompartidaAdjunto
 	 *
-	 * @param integer iid_entrada_compartida
+	 * @param integer iid_entrada_compartida='' optional
 	 */
-	function setId_entrada_compartida($iid_entrada_compartida) {
+	function setId_entrada_compartida($iid_entrada_compartida='') {
 		$this->iid_entrada_compartida = $iid_entrada_compartida;
 	}
 	/**
@@ -391,32 +363,75 @@ class EntradaCompartidaAdjunto Extends core\ClasePropiedades {
 		$this->snom = $snom;
 	}
 	/**
-	 * estableix el valor de l'atribut adjunto de EntradaCompartidaAdjunto
+	 * Recupera l'atribut sadjunto de EntradaCompartidaAdjunto
 	 *
-	 * @param string adjunto='' optional
+	 * @return string sadjunto
 	 */
-	function setAdjunto($adjunto='') {
-		// Escape the binary data
-		$escaped = bin2hex( $adjunto );
-		$this->adjunto = $escaped;
-	}
-	
-	/**
-	 * estableix el valor de l'atribut adjunto de EntradaCompartidaAdjunto
-	 * per usar amb els valors directes de la DB.
-	 *
-	 * @param string adjunto='' optional (ja convertit a hexadecimal)
-	 */
-	private function setAdjuntoEscaped($adjunto='') {
-		$this->adjunto = $adjunto;
-	}
-	
-	public function getAdjunto() {
-		if (!isset($this->adjunto) && !$this->bLoaded) {
+	function getAdjunto() {
+		if (!isset($this->sadjunto) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
-		return hex2bin($this->adjunto);
+		return $this->sadjunto;
+	}
+	/**
+	 * estableix el valor de l'atribut sadjunto de EntradaCompartidaAdjunto
+	 *
+	 * @param string sadjunto='' optional
+	 */
+	function setAdjunto($sadjunto='') {
+		$this->sadjunto = $sadjunto;
 	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 
+	/**
+	 * Retorna una col·lecció d'objectes del tipus DatosCampo
+	 *
+	 */
+	function getDatosCampos() {
+		$oEntradaCompartidaAdjuntoSet = new core\Set();
+
+		$oEntradaCompartidaAdjuntoSet->add($this->getDatosId_entrada_compartida());
+		$oEntradaCompartidaAdjuntoSet->add($this->getDatosNom());
+		$oEntradaCompartidaAdjuntoSet->add($this->getDatosAdjunto());
+		return $oEntradaCompartidaAdjuntoSet->getTot();
+	}
+
+
+
+	/**
+	 * Recupera les propietats de l'atribut iid_entrada_compartida de EntradaCompartidaAdjunto
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosId_entrada_compartida() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'id_entrada_compartida'));
+		$oDatosCampo->setEtiqueta(_("id_entrada_compartida"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut snom de EntradaCompartidaAdjunto
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosNom() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'nom'));
+		$oDatosCampo->setEtiqueta(_("nom"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut sadjunto de EntradaCompartidaAdjunto
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosAdjunto() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'adjunto'));
+		$oDatosCampo->setEtiqueta(_("adjunto"));
+		return $oDatosCampo;
+	}
 }

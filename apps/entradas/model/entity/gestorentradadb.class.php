@@ -89,8 +89,6 @@ class GestorEntradaDB Extends ClaseGestor {
         
         $json = '';
         // Quitar las vistas
-		$json .= "\"oficina\": $oficina";
-		$json .= empty($json)? '' : ',';
 		$json .= "\"visto\": true";
         
         // Todas las de la oficina
@@ -99,10 +97,14 @@ class GestorEntradaDB Extends ClaseGestor {
                 // en el caso de la oficina ponente, lo considero visto si está encargado a alguien
                 $sCondi = "ponente = $oficina AND estado = $estado AND encargado IS NULL";
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+				$json .= empty($json)? '' : ',';
+				$json .= "\"oficina\": $oficina";
                 break;
             case 'resto':
                 $sCondi = "$oficina = ANY (resto_oficinas) AND estado = $estado";
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+				$json .= empty($json)? '' : ',';
+				$json .= "\"oficina\": $oficina";
                 break;
             case 'encargado':
             	$encargado = $oficina;

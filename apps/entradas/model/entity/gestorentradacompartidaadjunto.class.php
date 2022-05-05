@@ -10,7 +10,7 @@ use core;
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @created 30/3/2022
+ * @created 5/5/2022
  */
 
 class GestorEntradaCompartidaAdjunto Extends core\ClaseGestor {
@@ -26,39 +26,14 @@ class GestorEntradaCompartidaAdjunto Extends core\ClaseGestor {
 	 *
 	 */
 	function __construct() {
-		$oDbl = $GLOBALS['oDBP'];
+		$oDbl = $GLOBALS['oDBT'];
 		$this->setoDbl($oDbl);
 		$this->setNomTabla('entrada_compartida_adjuntos');
 	}
 
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
-	
-	public function getArrayIdAdjuntos($id_entrada_compartida) {
-		$oDbl = $this->getoDbl();
-		$nom_tabla = $this->getNomTabla();
-		$aAdjuntos = [];
-		
-		$sQry = "SELECT * FROM $nom_tabla WHERE id_entrada_compartida = $id_entrada_compartida ";
-		if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-			$sClauError = 'GestorEntradaCompartidaAdjunto.llistar.prepare';
-			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-			return FALSE;
-		}
-		if (($oDblSt->execute()) === FALSE) {
-			$sClauError = 'GestorEntradaCompartidaAdjunto.llistar.execute';
-			$_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-			return FALSE;
-		}
-		foreach ($oDblSt as $aDades) {
-			$id_item = $aDades['id_item'];
-			$nom = $aDades['nom'];
-			$aAdjuntos[$id_item] = $nom;
-		}
-		return $aAdjuntos;
-		
-	}
-	
+
 	/**
 	 * retorna l'array d'objectes de tipus EntradaCompartidaAdjunto
 	 *

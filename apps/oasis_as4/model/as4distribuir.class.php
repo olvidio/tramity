@@ -174,6 +174,20 @@ class As4Distribuir extends As4CollaborationInfo {
 		$oEntradaCompartida->setDescripcion($this->descripcion);
 		$oEntradaCompartida->setDestinos($this->a_destinos);
 		$oEntradaCompartida->setF_documento($this->oF_escrito);
+		
+		/* Finalmente se añaden estos campos, para poder gestionar
+		 * las entradas permanentes de cr independientemente de si el ctr
+		 * tiene una entrada particular o no. Útil en el caso de un nuevo ctr,
+		 * no hay que crear entradas con fechas antiguas, simplemente incorporarlo a la
+		 * lista de destino del escrito compartido. 
+		 */
+		$oEntradaCompartida->setJson_prot_origen($this->a_Prot_org);
+		$oEntradaCompartida->setJson_prot_ref($this->a_Prot_ref);
+		$oEntradaCompartida->setCategoria($this->categoria);
+		$oEntradaCompartida->setAsunto_entrada($this->asunto);
+		$oEntradaCompartida->setF_entrada($this->oF_entrada);
+		$oEntradaCompartida->setAnulado('');
+		
 
 		if ($oEntradaCompartida->DBGuardar() === FALSE ) {
 			return FALSE;

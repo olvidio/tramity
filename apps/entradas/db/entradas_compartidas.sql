@@ -19,6 +19,10 @@ ALTER TABLE public.entradas_compartidas OWNER TO tramity;
 CREATE UNIQUE INDEX IF NOT EXISTS entradas_compartidas_id_entrada_idx ON public.entradas_compartidas (id_entrada_compartida);
 CREATE INDEX IF NOT EXISTS entradas_compartidas_destinos_idx ON public.entradas_compartidas USING GIN (destinos gin__int_ops);
 
+CREATE INDEX IF NOT EXISTS entradas_compartidas_origen_idx ON public.entradas_compartidas USING GIN (json_prot_origen jsonb_path_ops);
+CREATE INDEX IF NOT EXISTS entradas_compartidas_ref_idx ON public.entradas_compartidas USING GIN (json_prot_ref jsonb_path_ops);
+
+
 --- adjuntos
 
 CREATE TABLE public.entrada_compartida_adjuntos (

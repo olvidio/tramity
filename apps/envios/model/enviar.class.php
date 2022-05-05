@@ -432,7 +432,7 @@ class Enviar {
         }
         
         // Los destinos se añaden en el payload. No se tienen en cuenta a la hora de enviar
-        // Al recoger, se mira sie entán en la plataforma y se les añade.
+        // Al recoger, se mira si están en la plataforma y se les añade.
 	    
         // generar el xml
         $oAS4 = new As4();
