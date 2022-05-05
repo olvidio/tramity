@@ -45,8 +45,8 @@ class GestorExpedienteDB Extends core\ClaseGestor {
 	public function getIdExpedientesConAntecedente($id,$tipo) {
 		$oDbl = $this->getoDbl();
 	    
-		$json = "\"id\":$id";
-		$json .= ", \"tipo\":\"$tipo\"";
+		$json = "\"id\": $id";
+		$json .= ", \"tipo\": \"$tipo\"";
 		$Where_json = "json_antecedentes @> '[{".$json."}]'";
 		
 	    $sQuery = "SELECT e.id_expediente

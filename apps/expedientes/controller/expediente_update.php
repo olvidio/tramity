@@ -567,7 +567,7 @@ switch ($Qque) {
             $id = strtok($oficial, '#');
             $visto = strtok('#');
             $oJSON = new stdClass;
-            $oJSON->id = $id;
+            $oJSON->id = (int) $id;
             if ($mi_id_cargo == $id){
                 // es un toggle: si esta 1 pongo 0 y al revés.
                 $oJSON->visto = is_true($visto)? FALSE : TRUE;
@@ -711,7 +711,7 @@ switch ($Qque) {
             $id = strtok($oficial, '#');
             $visto = strtok('#');
             $oJSON = new stdClass;
-            $oJSON->id = $id;
+            $oJSON->id = (int) $id;
             // hay que asegurar que sea bool
             $oJSON->visto = is_true($visto)? TRUE : FALSE;
             

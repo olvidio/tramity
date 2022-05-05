@@ -62,7 +62,7 @@ if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
     
     $oJSON = new stdClass;
     
-    $oJSON->id_lugar = $id_sup;
+    $oJSON->id_lugar = (int) $id_sup;
     $oJSON->any = date('y');
     $oJSON->num = '';
     $oJSON->mas = '';
