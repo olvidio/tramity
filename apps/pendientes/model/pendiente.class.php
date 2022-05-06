@@ -729,6 +729,13 @@ class Pendiente {
         }
         $vcalendar = new \iCalComponent($todo[0]['data']);
         $icalComp = $vcalendar->GetComponents('VTODO');
+        // error...
+        if (empty($icalComp[0])) {
+	        $base_url = $this->getBaseUrl();
+        	$cargo = $this->getCargo();
+        	$id = $this->getUid();
+        	exit ("ERROR: id: $id, cargo: $cargo, url: $base_url");
+        }
         $icalComp = $icalComp[0];  // If you know there's only 1 of them...
         
         $aDades['asunto'] = $icalComp->GetPValue("SUMMARY");
