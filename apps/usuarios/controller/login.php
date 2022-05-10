@@ -182,6 +182,7 @@ if ( !isset($_SESSION['session_auth'])) {
                             $usuario_dtor = $aDades['director'];
                             $usuario_sacd = $aDades['sacd'];
                             $mi_id_oficina = $aDades['id_oficina'];
+                            $id_cargo_preferido = $aDades['id_cargo']; 
                         }
                         $aPosiblesCargos[$id_cargo] = $cargo;
                     } 
