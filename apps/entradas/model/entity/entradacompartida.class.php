@@ -1,8 +1,15 @@
 <?php
 namespace entradas\model\entity;
+use core\ConfigGlobal;
+use etiquetas\model\entity\Etiqueta;
+use etiquetas\model\entity\GestorEtiqueta;
+use etiquetas\model\entity\GestorEtiquetaEntrada;
 use core;
-use web;
 use stdClass;
+use web;
+use lugares\model\entity\Lugar;
+use web\Protocolo;
+use web\ProtocoloArray;
 /**
  * Fitxer amb la Classe que accedeix a la taula entradas_compartidas
  *
@@ -142,7 +149,7 @@ class EntradaCompartida Extends core\ClasePropiedades {
 	 * 						$a_id. Un array con los nombres=>valores de las claves primarias.
 	 */
 	function __construct($a_id='') {
-		$oDbl = $GLOBALS['oDBT'];
+		$oDbl = $GLOBALS['oDBP'];
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
@@ -290,6 +297,91 @@ class EntradaCompartida Extends core\ClasePropiedades {
 	}
 	
 	/* METODES ALTRES  ----------------------------------------------------------*/
+	
+	public function cabeceraDistribucion_cr() {
+		$destinos_txt = '';
+		// poner los destinos
+		$descripcion = $this->getDescripcion();
+		if (!empty($descripcion)) {
+			$destinos_txt = $descripcion;
+		} else {
+			$a_json_prot_dst = $this->getJson_prot_destino();
+			foreach ($a_json_prot_dst as $json_prot_dst) {
+				$oLugar = new Lugar($json_prot_dst->id_lugar);
+				$destinos_txt .= empty($destinos_txt)? '' : ', ';
+				$destinos_txt .= $oLugar->getNombre();
+			}
+		}
+		
+		return $destinos_txt;
+	}
+	
+	public function cabeceraDerecha() {
+		// origen + ref
+		$id_org = '';
+		$json_prot_origen = $this->getJson_prot_origen();
+		if (!empty((array)$json_prot_origen)) {
+			$id_org = $json_prot_origen->id_lugar;
+			
+			// referencias
+			$a_json_prot_ref = $this->getJson_prot_ref();
+			$oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
+			$oArrayProtRef->setRef(TRUE);
+			$aRef = $oArrayProtRef->ArrayListaTxtBr($id_org);
+			
+			$oProtOrigen = new Protocolo();
+			$oProtOrigen->setLugar($json_prot_origen->id_lugar);
+			$oProtOrigen->setProt_num($json_prot_origen->num);
+			$oProtOrigen->setProt_any($json_prot_origen->any);
+			$oProtOrigen->setMas($json_prot_origen->mas);
+			
+			$origen_txt = $oProtOrigen->ver_txt();
+		} else {
+			$origen_txt = '??';
+		}
+		
+		if (!empty($aRef['dst_org'])) {
+			$origen_txt .= '<br>';
+			$origen_txt .= $aRef['dst_org'];
+		}
+		
+		return $origen_txt;
+	}
+	
+	
+	public function getEtiquetasVisiblesArray($id_cargo='') {
+		$cEtiquetas = $this->getEtiquetasVisibles($id_cargo);
+		$a_etiquetas = [];
+		foreach ($cEtiquetas as $oEtiqueta) {
+			$a_etiquetas[] = $oEtiqueta->getId_etiqueta();
+		}
+		return $a_etiquetas;
+	}
+	
+	public function getEtiquetasVisibles($id_cargo='') {
+		if (empty($id_cargo)) {
+			$id_cargo = ConfigGlobal::role_id_cargo();
+		}
+		$gesEtiquetas = new GestorEtiqueta();
+		$cMisEtiquetas = $gesEtiquetas->getMisEtiquetas($id_cargo);
+		$a_mis_etiquetas = [];
+		foreach($cMisEtiquetas as $oEtiqueta) {
+			$a_mis_etiquetas[] = $oEtiqueta->getId_etiqueta();
+		}
+		$gesEtiquetasEntrada = new GestorEtiquetaEntrada();
+		$aWhere = [ 'id_entrada' => $this->iid_entrada ];
+		$cEtiquetasEnt = $gesEtiquetasEntrada->getEtiquetasEntrada($aWhere);
+		$cEtiquetas = [];
+		foreach ($cEtiquetasEnt as $oEtiquetaEnt) {
+			$id_etiqueta = $oEtiquetaEnt->getId_etiqueta();
+			if (in_array($id_etiqueta, $a_mis_etiquetas)) {
+				$cEtiquetas[] = new Etiqueta($id_etiqueta);
+			}
+		}
+		
+		return $cEtiquetas;
+	}
+	
 	/* METODES PRIVATS ----------------------------------------------------------*/
 
 	/**

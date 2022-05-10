@@ -20,6 +20,7 @@ use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
 use web\ProtocoloArray;
+use entradas\model\entity\EntradaCompartida;
 
 
 class Entrada Extends EntradaDB {
@@ -292,24 +293,36 @@ class Entrada Extends EntradaDB {
         }
         // El tipo y fecha documento:
         if (!empty($this->iid_entrada)) {
-            $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
-            $this->df_doc = $oEntradaDocDB->getF_doc();
-            $this->itipo_doc = $oEntradaDocDB->getTipo_doc();
+        	if(!empty($this->getId_entrada_compartida())) {
+				$oEntradaCompartida = new EntradaCompartida($this->iid_entrada_compartida);
+				$oFdoc = $oEntradaCompartida->getF_documento();
+				$this->df_doc = $oFdoc;
+        	} else {
+				$oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
+				$this->df_doc = $oEntradaDocDB->getF_doc();
+				$this->itipo_doc = $oEntradaDocDB->getTipo_doc();
+        	}
         }
         return TRUE;
     }
 
     /**
      * Recupera l'atribut df_doc de Entrada
-     * de EntradaDocDB
+     * de EntradaDocDB, o si es una entrada compartida de 'EntradaCompartida'
      *
      * @return DateTimeLocal df_doc
      */
     function getF_documento() {
         if (!isset($this->df_doc) && !empty($this->iid_entrada)) {
-            $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
-            $oFdoc = $oEntradaDocDB->getF_doc();
-            $this->df_doc = $oFdoc;
+        	if(!empty($this->getId_entrada_compartida())) {
+				$oEntradaCompartida = new EntradaCompartida($this->iid_entrada_compartida);
+				$oFdoc = $oEntradaCompartida->getF_documento();
+				$this->df_doc = $oFdoc;
+        	} else {
+				$oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
+				$oFdoc = $oEntradaDocDB->getF_doc();
+				$this->df_doc = $oFdoc;
+        	}
         }
         if (empty($this->df_doc)) {
             return new NullDateTimeLocal();

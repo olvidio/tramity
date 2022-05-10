@@ -175,9 +175,9 @@ class As4 extends As4CollaborationInfo {
             }
         }
 
-        // En el caso de distribuir, el destino es multiple y no lo pongo aquí,
+        // En el caso de compartir, el destino es multiple y no lo pongo aquí,
         // Estará en el mensaje.
-        if ($this->accion != 'distribuir') {
+        if ($this->accion != As4CollaborationInfo::ACCION_COMPARTIR) {
 			// puede ser 'sin_numerar (E12)'
 			$json_prot_dst = $this->getJson_prot_dst();
 			if (!empty((array)$json_prot_dst)) {
@@ -271,7 +271,7 @@ class As4 extends As4CollaborationInfo {
     	$gesLugares = new GestorLugar();
     	$aLugares = $gesLugares->getArrayLugares();
 		
-    	$lugar_dst = 'distribucion';
+    	$lugar_dst = As4CollaborationInfo::ACCION_COMPARTIR;
         if (!empty((array)$this->json_prot_dst)) {
             $id_lugar_dst = $this->json_prot_dst->id_lugar;
             $lugar_dst = empty($aLugares[$id_lugar_dst])? '' : $aLugares[$id_lugar_dst];

@@ -9,6 +9,7 @@ use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Hash;
+use entradas\model\entity\EntradaCompartida;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -46,6 +47,11 @@ switch ($Qfiltro) {
                 break;
             case 'permanentes_cr':
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?'.http_build_query($a_condicion));
+                // En los ctr, buscar en entradas compartidas:
+                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$oEntrada = new EntradaCompartida($Qid_entrada);
+					$asunto = $oEntrada->getAsunto_entrada();
+                }
                 break;
             case 'escritos_cr':
 				$a_condicion['opcion'] = 51;

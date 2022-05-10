@@ -78,7 +78,7 @@ class GestorEntradaCompartida Extends ClaseGestor {
 	 * @param array $aOperators
 	 * @return boolean|array
 	 */
-	function getEntradasByProtOrigenDestino($aProt_origen=[], $aWhere=[], $aOperators=[]) {
+	function getEntradasByProtOrigenDestino($aProt_origen=[], $id_destino, $aWhere=[], $aOperators=[]) {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEntradaCompartidaSet = new Set();
@@ -148,7 +148,7 @@ class GestorEntradaCompartida Extends ClaseGestor {
         	$json .= "\"mas\":\"$mas\"";
         }
         if (!empty($json)) {
-        	$Where_json = "json_prot_origen @> '{".$json."}'";
+        	//$Where_json = "json_prot_origen @> '{".$json."}'";
         }
         
         if (empty($sCondi)) {
@@ -164,9 +164,14 @@ class GestorEntradaCompartida Extends ClaseGestor {
                 $where_condi = $sCondi;
             }
         }
-        $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi.' '.$sOrdre;
-
-        $sQry = "SELECT * FROM $nom_tabla $where_condi".$sOrdre.$sLimit;
+        
+        if (empty($where_condi)) {
+        	$where_condi = " WHERE '$id_destino' = ANY(destinos) ";
+        } else {
+        	$where_condi = " WHERE '$id_destino' = ANY(destinos) AND ".$where_condi;
+        }
+        
+        $sQry = "SELECT * FROM $nom_tabla $where_condi ".$sOrdre.$sLimit;
         
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
             $sClauError = 'GestorEntradaDB.llistar.prepare';
@@ -179,7 +184,7 @@ class GestorEntradaCompartida Extends ClaseGestor {
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
+            $a_pkey = array('id_entrada_compartida' => $aDades['id_entrada_compartida']);
             $oEntradaCompartida = new EntradaCompartida($a_pkey);
             $oEntradaCompartida->setAllAtributes($aDades);
             $oEntradaCompartidaSet->add($oEntradaCompartida);

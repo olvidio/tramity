@@ -168,8 +168,10 @@ class Buscar {
             	// En los centros, no busco en entradas, sino en emtradas_compartidas y 
             	// veo si el centro está en los destinos.
             	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
-					$aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
-					$aOperadorEntrada['estado'] = '>=';
+					$aWhereEntrada = [];
+					$aOperadorEntrada = [];
+					//$aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+					//$aOperadorEntrada['estado'] = '>=';
 					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
 					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
 									  'num' => $this->prot_num,
@@ -178,13 +180,12 @@ class Buscar {
 								];
 					$gesLugares = new GestorLugar();
 					$id_sigla_local = $gesLugares->getId_sigla_local();
-					$aWhereEntrada['detinos'] = $id_sigla_local;
-					$aOperadorEntrada['destinos'] = 'IN';
+					$id_destino = $id_sigla_local;
 
 					$aWhereEntrada['_ordre'] = 'f_entrada';
 					$gesEntradasCompartidas = new GestorEntradaCompartida();
-					$cEntradas = $gesEntradasCompartidas->getEntradasByProtOrigenyDestino($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
-            		
+					$cEntradas = $gesEntradasCompartidas->getEntradasByProtOrigenDestino($aProt_origen,$id_destino,$aWhereEntrada,$aOperadorEntrada);
+					$aCollections['entradas_compartidas'] = $cEntradas;
             	} else {
 					$aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
 					$aOperadorEntrada['estado'] = '>=';
@@ -198,8 +199,8 @@ class Buscar {
 					$aWhereEntrada['_ordre'] = 'f_entrada';
 					$gesEntradas = new GestorEntradaDB();
 					$cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
+					$aCollections['entradas'] = $cEntradas;
 				}
-                $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
                 break;
             case 'oficina':

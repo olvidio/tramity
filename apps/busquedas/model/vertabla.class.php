@@ -185,6 +185,14 @@ class VerTabla {
             	}
                 $this->tabla_entradas($this->aCollection);
                 break;
+            case 'entradas_compartidas':
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$this->sTitulo = _("escritos recibidos en el centro");
+            	} else {
+					$this->sTitulo = _("escritos recibidos en la Delegación");
+            	}
+                $this->tabla_entradas_compartidas($this->aCollection);
+                break;
             case 'escritos_ref':
             	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
 					$this->sTitulo = _("escritos aprobados en el centro con referencias al escrito");
@@ -207,6 +215,89 @@ class VerTabla {
         }
     }
     // ---------------------------------- tablas ----------------------------
+
+    public function tabla_entradas_compartidas($aCollection) {
+        $oCategoria = new Categoria();
+        $a_categorias = $oCategoria->getArrayCategoria();
+        
+        if (ConfigGlobal::role_actual() === 'secretaria') { 
+            $a_botones = [
+                [ 'txt' => _('modificar'), 'click' =>"fnjs_modificar_entrada(\"#$this->sKey\")" ],
+                [ 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_entrada(\"#$this->sKey\")" ], 
+                [ 'txt' => _('anular'), 'click' =>"fnjs_anular_entrada(\"#$this->sKey\")" ], 
+                   ];
+        }
+
+        $a_botones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_entrada_compartida(\"#$this->sKey\")" ];
+        /* De momento no hay ninguna accion
+        $a_botones[] = [ 'txt' => _('acción'), 'click' =>"fnjs_buscar_accion_entrada(\"#$this->sKey\")" ];
+        */
+
+        $a_cabeceras=array( array('name'=>ucfirst(_("protocolo origen")),'formatter'=>'clickFormatter'),
+                            ucfirst(_("ref.")),
+                            _("categoria"),
+                            array('name'=>ucfirst(_("asunto")),'formatter'=>'clickFormatter2'),
+                            array('name'=>ucfirst(_("fecha doc.")),'class'=>'fecha'),
+                            array('name'=>ucfirst(_("fecha entrada")),'class'=>'fecha')
+                            );
+        
+        $oProtOrigen = new Protocolo();
+        $a_valores = [];
+        $i=0;
+        foreach ($aCollection as $oEntrada) {
+            $i++;
+            
+			$id_entrada=$oEntrada->getId_entrada_compartida();
+            $f_entrada=$oEntrada->getF_entrada();
+            
+            $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
+            $protocolo = $oProtOrigen->ver_txt();
+            
+            // referencias
+            $json_ref = $oEntrada->getJson_prot_ref();
+            $oArrayProtRef = new ProtocoloArray($json_ref,'','');
+            $oArrayProtRef->setRef(TRUE);
+            $referencias = $oArrayProtRef->ListaTxtBr();
+            
+            $asunto = $oEntrada->getAsunto_entrada();
+            $categoria = $oEntrada->getCategoria();
+            $categoria_txt = empty($a_categorias[$categoria])? '' : $a_categorias[$categoria];
+            $f_doc = $oEntrada->getF_documento();
+            
+            $a_valores[$i]['sel']="$id_entrada";
+            $a_valores[$i][1]=$protocolo;
+            $a_valores[$i][2]=$referencias;
+            $a_valores[$i][3]=$categoria_txt;
+            $a_valores[$i][4]= $asunto;
+            $a_valores[$i][5]=$f_doc->getFromLocal();
+            $a_valores[$i][6]=$f_entrada->getFromLocal();
+        }
+        
+        $oTabla = new Lista();
+        $oTabla->setId_tabla('ver_tabla_'.$this->sKey);
+        $oTabla->setCabeceras($a_cabeceras);
+        $oTabla->setBotones($a_botones);
+        $oTabla->setDatos($a_valores);
+        
+        $server = ConfigGlobal::getWeb(); //http://tramity.local
+        
+        $vista = ConfigGlobal::getVista();
+        
+        $a_campos = [
+            'titulo' => $this->sTitulo,
+            'oTabla' => $oTabla,
+            'key' => $this->sKey,
+            'condicion' => $this->sCondicion,
+            //'oHash' => $oHash,
+            'server' => $server,
+            'filtro' => $this->sFiltro,
+            // tabs_show
+            'vista' => $vista,
+            ];
+        
+        $oView = new ViewTwig('busquedas/controller');
+        echo $oView->renderizar('ver_tabla.html.twig',$a_campos);
+    }
 
     public function tabla_entradas($aCollection) {
         $gesOficinas = new GestorOficina();
@@ -247,7 +338,7 @@ class VerTabla {
         foreach ($aCollection as $oEntrada) {
             $i++;
             
-            $id_entrada=$oEntrada->getId_entrada();
+			$id_entrada=$oEntrada->getId_entrada();
             $f_entrada=$oEntrada->getF_entrada();
             
             $oProtOrigen->setJson($oEntrada->getJson_prot_origen());

@@ -26,7 +26,7 @@ class GestorEntradaCompartidaAdjunto Extends core\ClaseGestor {
 	 *
 	 */
 	function __construct() {
-		$oDbl = $GLOBALS['oDBT'];
+		$oDbl = $GLOBALS['oDBP'];
 		$this->setoDbl($oDbl);
 		$this->setNomTabla('entrada_compartida_adjuntos');
 	}
@@ -34,6 +34,31 @@ class GestorEntradaCompartidaAdjunto Extends core\ClaseGestor {
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 
+	public function getArrayIdAdjuntos($id_entrada_compartida) {
+		$oDbl = $this->getoDbl();
+		$nom_tabla = $this->getNomTabla();
+		$aAdjuntos = [];
+		
+		$sQry = "SELECT * FROM $nom_tabla WHERE id_entrada_compartida = $id_entrada_compartida ";
+		if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
+			$sClauError = 'GestorEntradaAdjunto.llistar.prepare';
+			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+			return FALSE;
+		}
+		if (($oDblSt->execute()) === FALSE) {
+			$sClauError = 'GestorEntradaAdjunto.llistar.execute';
+			$_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+			return FALSE;
+		}
+		foreach ($oDblSt as $aDades) {
+			$id_item = $aDades['id_item'];
+			$nom = $aDades['nom'];
+			$aAdjuntos[$id_item] = $nom;
+		}
+		return $aAdjuntos;
+		
+	}
+	
 	/**
 	 * retorna l'array d'objectes de tipus EntradaCompartidaAdjunto
 	 *

@@ -1,4 +1,5 @@
 <?php
+use function core\is_true;
 use envios\model\Enviar;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -13,10 +14,17 @@ require_once ("apps/core/global_object.inc");
 
 // El download es via GET!!!";
 $Qid_entrada = (integer) \filter_input(INPUT_GET, 'id_entrada');
+$Qcompartida = (integer) \filter_input(INPUT_GET, 'compartida');
 
 if (!empty($Qid_entrada)) {
+	if (is_true($Qcompartida)) {
+		$bCompartida = TRUE;
+	} else {
+		$bCompartida = FALSE;
+	}
     $oEnviar = new Enviar($Qid_entrada,'entrada');
-    $File = $oEnviar->getPdf();
+    $File = $oEnviar->getPdf($bCompartida);
+    
     $escrito = $File['content'];
     $nom = $File['ext'];
     

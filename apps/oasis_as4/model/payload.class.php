@@ -83,7 +83,7 @@ class Payload {
 		
 		$this->nombre_escrito = $oEntrada->getNombreEscrito() . '.xml';
 		
-		if ($this->accion == 'distribuir') {
+		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR ) {
 			$this->json_prot_dst = $oEntrada->getJson_prot_destino();
 			///$this->descripcion = $oEntrada->getDescripcion();
 			$this->descripcion = $oEntrada->cabeceraDistribucion_cr(); // decripción más completa
@@ -113,7 +113,7 @@ class Payload {
 
 		$this->nombre_escrito = $oEscrito->getNombreEscrito() . '.xml';
 
-		if ($this->accion == 'distribuir') {
+		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR) {
 			$this->json_prot_dst = $oEscrito->getJson_prot_destino();
 			$this->descripcion = $oEscrito->getDestinosEscrito(); // para que salga la descripción del grupo.
 			$this->categoria = $oEscrito->getCategoria();
@@ -172,7 +172,7 @@ class Payload {
 		$this->escrito->appendChild($this->getXmlContent());
 		$this->escrito->appendChild($this->getXmlVisibilidad());
 		$this->escrito->appendChild($this->getXmlAdjuntos());
-		if ($this->accion == 'distribuir') {
+		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR) {
 			$this->escrito->appendChild($this->getXmlCompartido());
 		}
 		
@@ -410,8 +410,14 @@ class Payload {
 	 */
 	public function getXmlContent() {
 		$oEtherpad = new Etherpad();
-		if ($this->accion == 'distribuir') {
-			$oEtherpad->setId(Etherpad::ID_ENTRADA, $this->id_escrito);
+		/* Puede ser un bypass o simplemente una salida con múltiples destinos */
+		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR) {
+			if ($this->tipo_escrito == 'entrada') {
+				$oEtherpad->setId(Etherpad::ID_ENTRADA, $this->id_escrito);
+			}
+			if ($this->tipo_escrito == 'escrito') {
+				$oEtherpad->setId(Etherpad::ID_ESCRITO, $this->id_escrito);
+			}
 		} else {
 			$oEtherpad->setId(Etherpad::ID_ESCRITO, $this->id_escrito);
 		}

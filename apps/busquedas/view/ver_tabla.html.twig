@@ -50,11 +50,11 @@ $(document).ready(function() {
 });
 ////////////////  Entradas /////////////////////
 // Aunque ya está defindo en más sitios, pero si lo primero es mirar aqui, no la encuentra.
-fnjs_ver_entrada=function(id_entrada) {
+fnjs_ver_entrada=function(id_entrada,compartida=false) {
     var ssfsv = 'sv';
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
     var server = '{{ server }}';
-    var url = server+'/apps/entradas/controller/entrada_ver.php?id_entrada='+id_entrada;
+    var url = server+'/apps/entradas/controller/entrada_ver.php?id_entrada='+id_entrada+'&compartida='+compartida;
     w=window.open(url, "", winPrefs);
     w.focus();
 }
@@ -101,6 +101,41 @@ fnjs_buscar_accion_entrada=function(formulario){
         });
     }
 }
+fnjs_buscar_ver_entrada_compartida=function(formulario){
+    rta=fnjs_solo_uno(formulario);
+    if (rta==1) {
+        var form=$(formulario).attr('id');
+        var id_reg;
+        /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+        /* var sel=$('#'+formulario+' table .sel'); */
+        $('#'+form+' input.sel').each(function(i){
+            if($(this).prop('checked')== true) {
+                // como ya he comprobado que sólo está uno seleccionado, es este.
+                var array_dir=$(this).val().split('#');
+                id_reg=array_dir[0];
+            }
+        });
+        /* No miro los permisos
+        var url_doc = 'apps/entradas/controller/entrada_ajax.php';
+        var param_json = { que: 'perm_ver', id_entrada: id_reg };
+        request=$.ajax({
+            data: param_json,
+            url: url_doc,
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done( function (json) {
+            if (json.success != true) {
+                alert (json.mensaje);
+            } else {
+                fnjs_ver_entrada(id_reg);
+            }
+        });
+        */
+        fnjs_ver_entrada(id_reg,true);
+    }
+}
+
 fnjs_buscar_ver_entrada=function(formulario){
     rta=fnjs_solo_uno(formulario);
     if (rta==1) {

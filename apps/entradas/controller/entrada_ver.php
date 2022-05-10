@@ -21,49 +21,58 @@ require_once ("apps/core/global_object.inc");
 $Qmethod = (string) \filter_input(INPUT_SERVER, 'REQUEST_METHOD');
 if ($Qmethod == 'POST') {
     $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+    $Qcompartida = (bool) \filter_input(INPUT_POST, 'compartida');
 }
 if ($Qmethod == 'GET') {
     $Qid_entrada = (integer) \filter_input(INPUT_GET, 'id_entrada');
+    $Qcompartida = (bool) \filter_input(INPUT_GET, 'compartida');
 }
 
 $sigla = $_SESSION['oConfig']->getSigla();
 
-$oEntrada = new Entrada($Qid_entrada);
+if (is_true($Qcompartida)) {
+	$oEntrada = new EntradaCompartida($Qid_entrada);
+	$id_entrada_compartida = $Qid_entrada;
+} else {
+	$oEntrada = new Entrada($Qid_entrada);
+	$id_entrada_compartida = $oEntrada->getId_entrada_compartida();
+}
 
 if (!empty($Qid_entrada)) {
-    
-    // En el caso de distribución cr, si ya está aceptado, el ver es ya para enviar
-    // y por tanto las cabeceras van al revés, y el destino se coge del bypass.
-    $estado = $oEntrada->getEstado();
-    $bypass = $oEntrada->getBypass();
-    if (is_true($bypass) && $estado == Entrada::ESTADO_ACEPTADO) {
-        $cabeceraIzqd = $oEntrada->cabeceraDistribucion_cr();
-        $cabeceraDcha = $oEntrada->cabeceraDerecha();
-    } else {
-        $cabeceraIzqd = $oEntrada->cabeceraIzquierda();
-        $cabeceraDcha = $oEntrada->cabeceraDerecha();
-    }
     
 	$asunto_e = $oEntrada->getAsunto_entrada();
 	// mirar si tienen escrito
 	$f_escrito = $oEntrada->getF_documento()->getFromLocal();
 	$f_entrada = $oEntrada->getF_entrada()->getFromLocal();
 	
-    $id_entrada_compartida = $oEntrada->getId_entrada_compartida();
-    if (!empty($id_entrada_compartida)) {
+	if (!empty($id_entrada_compartida) ) {
     	$bCompartida = TRUE;
-    	/*
-    	$oEntradaCompartida = new EntradaCompartida($id_entrada_compartida);
-    	$descripcion = $oEntradaCompartida->getDescripcion();
-    	*/	
+    	if (is_true($Qcompartida)) {
+			$cabeceraIzqd = $oEntrada->cabeceraDistribucion_cr();
+    	} else {
+			$cabeceraIzqd = $oEntrada->cabeceraIzquierda();
+    	}
+		$cabeceraDcha = $oEntrada->cabeceraDerecha();
+		
     	$gesEntradaAdjuntos = new GestorEntradaCompartidaAdjunto();
     	$a_adjuntos = $gesEntradaAdjuntos->getArrayIdAdjuntos($id_entrada_compartida);
-    	
     	
 		$oEtherpad = new Etherpad();
     	$oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada_compartida);
     } else {
     	$bCompartida = FALSE;
+		// En el caso de distribución cr, si ya está aceptado, el ver es ya para enviar
+		// y por tanto las cabeceras van al revés, y el destino se coge del bypass.
+		$estado = $oEntrada->getEstado();
+		$bypass = $oEntrada->getBypass();
+		if (is_true($bypass) && $estado == Entrada::ESTADO_ACEPTADO) {
+			$cabeceraIzqd = $oEntrada->cabeceraDistribucion_cr();
+			$cabeceraDcha = $oEntrada->cabeceraDerecha();
+		} else {
+			$cabeceraIzqd = $oEntrada->cabeceraIzquierda();
+			$cabeceraDcha = $oEntrada->cabeceraDerecha();
+		}
+    
 		$a_adjuntos = $oEntrada->getArrayIdAdjuntos();
 		
 		$oEtherpad = new Etherpad();

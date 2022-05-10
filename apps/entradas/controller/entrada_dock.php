@@ -1,5 +1,5 @@
 <?php
-use oasis_as4\model\As4Distribuir;
+use oasis_as4\model\As4Entregar;
 use oasis_as4\model\As4SignalMessage;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -44,7 +44,7 @@ foreach ($a_files as $filename) {
 $txt = '';
 foreach ($a_files_mmd as $file_mmd) {
 	$xmldata = simplexml_load_file($file_mmd);
-	$AS4 = new As4Distribuir($xmldata);
+	$AS4 = new As4Entregar($xmldata);
 	if ($AS4->introducirEnDB() === TRUE) {
 		// eliminar el mensaje de la bandeja de entrada 
 		// nombre del fihero del body:

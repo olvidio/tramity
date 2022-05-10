@@ -62,7 +62,7 @@
 
 <script>
 fnjs_download_pdf=function(id_entrada) {
-	url = "{{ url_download_pdf }}"+"?id_entrada="+id_entrada;
+	url = "{{ url_download_pdf }}"+"?compartida={{ bCompartida }}&id_entrada="+id_entrada;
 	window.open(url);
 }
 fnjs_download=function(item) {

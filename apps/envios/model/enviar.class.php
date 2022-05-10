@@ -18,6 +18,8 @@ use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use web\Protocolo;
 use entradas\model\Entrada;
+use entradas\model\entity\EntradaCompartida;
+use entradas\model\entity\EntradaCompartidaAdjunto;
 
 
 class Enviar {
@@ -26,6 +28,11 @@ class Enviar {
      * @var object
      */
     private $oEscrito;
+    /**
+     *
+     * @var object
+     */
+    private $oEntrada;
     /**
      *
      * @var object
@@ -69,9 +76,6 @@ class Enviar {
     private $contentFile;
     private $a_adjuntos;
     
-    private $cabecera_izq;
-    private $cabecera_dcha;
-    
     private $a_rta=[];
 
     private $accion;
@@ -105,13 +109,13 @@ class Enviar {
     
     private function getDestinatarios(){
         if ($this->tipo == 'entrada') {
-			$this->accion = As4CollaborationInfo::ACCION_DISTRIBUIR;
+			$this->accion = As4CollaborationInfo::ACCION_COMPARTIR;
             return $this->getDestinosByPass();
         }
         if ($this->tipo == 'escrito') {
         	$id_grupos = $this->oEscrito->getId_grupos();
         	if (!empty($id_grupos)) {
-				$this->accion = As4CollaborationInfo::ACCION_DISTRIBUIR;
+				$this->accion = As4CollaborationInfo::ACCION_COMPARTIR;
         	} else {
 				$this->accion = As4CollaborationInfo::ACCION_NUEVO;
         	}
@@ -119,18 +123,52 @@ class Enviar {
         }
     }
     
-    private function getDocumento($id_lugar='') {
+    private function getHeader($id_lugar='') {
+    	$a_header = [];
         if ($this->tipo == 'entrada') {
 			// Puede que no sea bypass. Se uasa para descargar la entrada en local.
 			// Asunto_entrada no puede sernull. si lo és es que no existe.
 			if (empty($this->oEntradaBypass->getAsunto_entrada())) {
-				$this->getDatosEntrada();
+				
+				$a_header = [ 'left' => $this->oEntrada->cabeceraIzquierda(),
+					'center' => '',
+					'right' => $this->oEntrada->cabeceraDerecha(),
+				];
+
 			} else {
-				$this->getDatosEntradaByPass();
+				$a_header = [ 'left' => $this->oEntradaBypass->cabeceraIzquierda(),
+					'center' => '',
+					'right' => $this->oEntradaBypass->cabeceraDerecha(),
+				];
+
 			}
         }
         if ($this->tipo == 'escrito') {
-            $this->getDatosEscrito($id_lugar);
+			$a_header = [ 'left' => $this->oEscrito->cabeceraIzquierda($id_lugar),
+				'center' => '',
+				'right' => $this->oEscrito->cabeceraDerecha(),
+			];
+        }
+        
+        return $a_header;
+    }
+    
+    private function getDocumento($is_compartida = FALSE) {
+        if ($this->tipo == 'entrada') {
+        	if ($is_compartida) {
+        		$this->getDatosEntradaCompartida();
+        	} else {
+				// Puede que no sea bypass. Se uasa para descargar la entrada en local.
+				// Asunto_entrada no puede sernull. si lo és es que no existe.
+				if (empty($this->oEntradaBypass->getAsunto_entrada())) {
+					$this->getDatosEntrada();
+				} else {
+					$this->getDatosEntradaByPass();
+				}
+        	}
+        }
+        if ($this->tipo == 'escrito') {
+            $this->getDatosEscrito();
         }
     }
     
@@ -139,8 +177,9 @@ class Enviar {
 		$this->f_salida = $this->oEntradaBypass->getF_salida()->getFromLocal('.');
 		
 		$aMiembros = [];
+		$this->destinos_txt = '';
 		if (!empty($a_grupos)) {
-			$destinos_txt = $this->oEntradaBypass->getDescripcion();
+			$this->destinos_txt = $this->oEntradaBypass->getDescripcion();
 			//(segun los grupos seleccionados)
 			foreach ($a_grupos as $id_grupo) {
 				$oGrupo = new Grupo($id_grupo);
@@ -155,16 +194,14 @@ class Enviar {
 			}
 		} else {
 			//(segun individuales)
-			$destinos_txt = '';
 			$a_json_prot_dst = $this->oEntradaBypass->getJson_prot_destino();
 			foreach ($a_json_prot_dst as $json_prot_dst) {
 				$aMiembros[] = $json_prot_dst->id_lugar;
 				$oLugar = new Lugar($json_prot_dst->id_lugar);
-				$destinos_txt .= empty($destinos_txt)? '' : ', ';
-				$destinos_txt .= $oLugar->getNombre();
+				$this->destinos_txt .= empty($this->destinos_txt)? '' : ', ';
+				$this->destinos_txt .= $oLugar->getNombre();
 			}
 		}
-        $this->destinos_txt = $destinos_txt;
         return $aMiembros;
     }
     
@@ -176,11 +213,6 @@ class Enviar {
         $this->f_salida = $this->oEntradaBypass->getF_documento()->getFromLocal('.');
         $this->asunto = $this->oEntradaBypass->getAsunto();
         
-        $a_header = [ 'left' => $this->oEntradaBypass->cabeceraIzquierda(),
-            'center' => '',
-            'right' => $this->oEntradaBypass->cabeceraDerecha(),
-        ];
-
         $json_prot_origen = $this->oEntradaBypass->getJson_prot_origen();
         if (count(get_object_vars($json_prot_origen)) == 0) {
             exit (_("No hay más"));
@@ -192,37 +224,25 @@ class Enviar {
         $oProtOrigen->setMas($json_prot_origen->mas);
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
-        $oEtherpad = new Etherpad();
-        $oEtherpad->setId (Etherpad::ID_ENTRADA,$this->iid);
-        
-        // formato pdf:
-        $this->filename_ext = $this->filename.'.pdf';
-        $omPdf = $oEtherpad->generarPDF($a_header,$this->f_salida);
-        
-        $this->contentFile = $omPdf->Output($this->filename_ext,'S');
+        $this->oEtherpad = new Etherpad();
+        $this->oEtherpad->setId (Etherpad::ID_ENTRADA,$this->iid);
         
         // Attachments
-        $a_adjuntos = [];
+        $this->a_adjuntos = [];
         $a_id_adjuntos = $this->oEntradaBypass->getArrayIdAdjuntos();
         foreach ($a_id_adjuntos as $item => $adjunto_filename) {
             $oEntradaAdjunto = new EntradaAdjunto($item);
             $escrito_txt = $oEntradaAdjunto->getAdjunto();
-            $a_adjuntos[$adjunto_filename] = $escrito_txt;
+            $this->a_adjuntos[$adjunto_filename] = $escrito_txt;
         }
-        $this->a_adjuntos = $a_adjuntos;
     }
     
     private function getDatosEntrada() {
-        $oEntrada = new Entrada($this->iid);
-        $this->f_salida = $oEntrada->getF_documento()->getFromLocal('.');
-        $this->asunto = $oEntrada->getAsunto();
+        $this->oEntrada = new Entrada($this->iid);
+        $this->f_salida = $this->oEntrada->getF_documento()->getFromLocal('.');
+        $this->asunto = $this->oEntrada->getAsunto();
         
-        $a_header = [ 'left' => $oEntrada->cabeceraIzquierda(),
-            'center' => '',
-            'right' => $oEntrada->cabeceraDerecha(),
-        ];
-
-        $json_prot_origen = $oEntrada->getJson_prot_origen();
+        $json_prot_origen = $this->oEntrada->getJson_prot_origen();
         if (count(get_object_vars($json_prot_origen)) == 0) {
             exit (_("No hay más"));
         }
@@ -233,36 +253,46 @@ class Enviar {
         $oProtOrigen->setMas($json_prot_origen->mas);
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
-        $oEtherpad = new Etherpad();
-        $oEtherpad->setId (Etherpad::ID_ENTRADA,$this->iid);
-        
-        // formato pdf:
-        $this->filename_ext = $this->filename.'.pdf';
-        $omPdf = $oEtherpad->generarPDF($a_header,$this->f_salida);
-        
-        $this->contentFile = $omPdf->Output($this->filename_ext,'S');
+        $this->oEtherpad = new Etherpad();
+        $this->oEtherpad->setId (Etherpad::ID_ENTRADA,$this->iid);
         
         // Attachments
-        $a_adjuntos = [];
-        $a_id_adjuntos = $oEntrada->getArrayIdAdjuntos();
+        $this->a_adjuntos = [];
+        $a_id_adjuntos = $this->oEntrada->getArrayIdAdjuntos();
         foreach ($a_id_adjuntos as $item => $adjunto_filename) {
             $oEntradaAdjunto = new EntradaAdjunto($item);
             $escrito_txt = $oEntradaAdjunto->getAdjunto();
-            $a_adjuntos[$adjunto_filename] = $escrito_txt;
+            $this->a_adjuntos[$adjunto_filename] = $escrito_txt;
         }
-        $this->a_adjuntos = $a_adjuntos;
+    }
+    
+    private function getDatosEntradaCompartida() {
+        $this->oEntrada = new EntradaCompartida($this->iid);
+        $this->f_salida = $this->oEntrada->getF_documento()->getFromLocal('.');
+        $this->asunto = $this->oEntrada->getAsunto_entrada();
+        
+        $json_prot_origen = $this->oEntrada->getJson_prot_origen();
+        if (count(get_object_vars($json_prot_origen)) == 0) {
+            exit (_("No hay más"));
+        }
+        $oProtOrigen = new Protocolo();
+        $oProtOrigen->setLugar($json_prot_origen->id_lugar);
+        $oProtOrigen->setProt_num($json_prot_origen->num);
+        $oProtOrigen->setProt_any($json_prot_origen->any);
+        $oProtOrigen->setMas($json_prot_origen->mas);
+        $this->filename = $this->renombrar($oProtOrigen->ver_txt());
+        
+        $this->oEtherpad = new Etherpad();
+        $this->oEtherpad->setId (Etherpad::ID_COMPARTIDO,$this->iid);
     }
     
     /**
-     * genera el pdf del escrito.
-     * Para las cabeceras hay que añadir las referencias
-     * 
-     * @param integer $id_lugar
+     * Obtiene los datos de:
+     * 	asunto, f_salida, adjuntos, filename, Etherpad. 
      */
-    private function getDatosEscrito($id_lugar) {
-        // para no tener que repetir todo cuando hay multiples destinos
+    private function getDatosEscrito() {
+        // para no tener que repetir cuando hay multiples destinos
         if ($this->bLoaded === FALSE) {
-            //$this->oEscrito = new Escrito($this->iid);
             $json_prot_local = $this->oEscrito->getJson_prot_local();
 			// En el caso de los ctr, se envia directamente sin los pasos 
 			// de cirular por secretaria, y al llegar aqui todavía no se ha generado el 
@@ -275,55 +305,39 @@ class Enviar {
             $this->f_salida = $this->oEscrito->getF_escrito()->getFromLocal('.');
             $this->asunto = $this->oEscrito->getAsunto();
             // Attachments
-            $a_adjuntos = [];
+            $this->a_adjuntos = [];
             $a_id_adjuntos = $this->oEscrito->getArrayIdAdjuntos();
             foreach ($a_id_adjuntos as $item => $adjunto_filename) {
                 $oEscritoAdjunto = new EscritoAdjunto($item);
                 $tipo_doc = $oEscritoAdjunto->getTipo_doc();
                 switch ($tipo_doc) {
                     case Documento::DOC_UPLOAD:
-                    	if ($escrito_txt = $oEscritoAdjunto->getAdjunto() === FALSE) {
+                    	if ($oEscritoAdjunto->getAdjunto() === FALSE) {
                         	$err_adjunto = sprintf(_("No se puede enviar el adjunto \"%s\""), $adjunto_filename);
                         	exit ($err_adjunto);
                     	}
                     	$escrito_txt = $oEscritoAdjunto->getAdjunto();
-						$a_adjuntos[$adjunto_filename] = $escrito_txt;
+						$this->a_adjuntos[$adjunto_filename] = $escrito_txt;
                         break;
                     case Documento::DOC_ETHERPAD:
                         $id_adjunto = $oEscritoAdjunto->getId_item();
                         $oEtherpadAdj = new Etherpad();
                         $oEtherpadAdj->setId (Etherpad::ID_ADJUNTO,$id_adjunto);
                         $escrito_txt = $oEtherpadAdj->generarPDF();
-                        $a_adjuntos[$adjunto_filename] = $escrito_txt;
+                        $this->a_adjuntos[$adjunto_filename] = $escrito_txt;
                         break;
                     default:
                         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
                         exit ($err_switch);
                 }
             }
-            $this->a_adjuntos = $a_adjuntos;
             // nombre del archivo
             $this->filename = $this->oEscrito->getNombreEscrito();
             // etherpad
-            $oEtherpad = new Etherpad();
-            $oEtherpad->setId (Etherpad::ID_ESCRITO,$this->iid);
-            $this->oEtherpad = $oEtherpad;
+            $this->oEtherpad = new Etherpad();
+            $this->oEtherpad->setId (Etherpad::ID_ESCRITO,$this->iid);
             $this->bLoaded = TRUE;
         }
-        // cabeceras fuera del if loaded, para cambiarlas para cada ctr del grupo
-        $this->cabecera_izq = $this->oEscrito->cabeceraIzquierda($id_lugar);
-        $this->cabecera_dcha = $this->oEscrito->cabeceraDerecha();
-        
-        $a_header = [ 'left' => $this->cabecera_izq,
-            'center' => '',
-            'right' => $this->cabecera_dcha,
-        ];
-        
-        // formato pdf:
-        $this->filename_ext = $this->filename.'.pdf';
-        $omPdf = $this->oEtherpad->generarPDF($a_header,$this->f_salida);
-        
-        $this->contentFile = $omPdf->Output($this->filename_ext,'S');
     }
     
     /**
@@ -331,16 +345,21 @@ class Enviar {
      *
      * @return array|string
      */
-    public function getPdf() {
-        $this->getDocumento();
+    public function getPdf($is_compartida) {
+        $this->getDocumento($is_compartida);
         
-        $filename = $this->filename;
-        $filename_ext = $this->filename_ext;
-        $contentFile = $this->contentFile;
+		$a_header = [ 'left' => $this->oEntrada->cabeceraDistribucion_cr(),
+			'center' => '',
+			'right' => $this->oEntrada->cabeceraDerecha(),
+		];
+        // formato pdf:
+        $this->filename_ext = $this->filename.'.pdf';
+        $omPdf = $this->oEtherpad->generarPDF($a_header,$this->f_salida);
+        $this->contentFile = $omPdf->Output($this->filename_ext,'S');
         
-        return ['content' => $contentFile,
-            'name' => $filename,
-            'ext' => $filename_ext,
+        return ['content' => $this->contentFile,
+            'name' => $this->filename,
+            'ext' => $this->filename_ext,
         ];
     }
     
@@ -366,10 +385,10 @@ class Enviar {
                     break;
                 case Lugar::MODO_AS4;
 					$plataforma = $oLugar->getPlataforma();
-					// si la acción es distribuir, se envia el mismo escrito a un conjunto de ctr.
+					// si la acción es compartir, se envia el mismo escrito a un conjunto de ctr.
 					// aquí genero el array de destinos: 
-					if ($this->accion == As4CollaborationInfo::ACCION_DISTRIBUIR) {
-						$a_lista_dst_as4[$plataforma][] = $id_lugar;
+					if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR) {
+						$a_lista_dst_as4[] = $plataforma;
 					} else {
 						$err_mail = $this->enviarAS4($id_lugar,$plataforma,$this->accion);
 					}
@@ -379,10 +398,12 @@ class Enviar {
             }
         }
         
-        // si es distribuir, enviar en bloque por plataformas.
-		if ($this->accion == As4CollaborationInfo::ACCION_DISTRIBUIR) {
-			foreach ($a_lista_dst_as4 as $plataforma => $a_id_lugar) {
-				$err_mail = $this->enviarAS4Compartido($plataforma,$a_id_lugar);
+        // si es compartir, enviar en bloque por plataformas.
+		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR) {
+			foreach ($a_lista_dst_as4 as $plataforma) {
+				// Finalmente, los destinos se añaden en el payload. No se tienen en cuenta a la hora de enviar.
+				// Al recoger, se mira si están en la plataforma y se les añade.
+				$err_mail = $this->enviarAS4Compartido($plataforma);
 			}
 		}
             
@@ -406,7 +427,7 @@ class Enviar {
         return $this->a_rta;
     }
     
-    private function enviarAS4Compartido($plataforma,$a_id_lugar) {
+    private function enviarAS4Compartido($plataforma) {
         $err_mail = '';
         $this->getDocumento();
                 
@@ -431,7 +452,7 @@ class Enviar {
         	$json_prot_org = $this->oEntradaBypass->getJson_prot_origen();
         }
         
-        // Los destinos se añaden en el payload. No se tienen en cuenta a la hora de enviar
+        // Los destinos se añaden en el payload. No se tienen en cuenta a la hora de enviar.
         // Al recoger, se mira si están en la plataforma y se les añade.
 	    
         // generar el xml
@@ -464,7 +485,7 @@ class Enviar {
 
     private function enviarAS4($id_lugar,$plataforma,$accion) {
         $err_mail = '';
-        $this->getDocumento($id_lugar);
+        $this->getDocumento();
                 
         if ($this->tipo == 'escrito') {
         	// Si la categoria es 'sin numerar', no hay protocolo local.
@@ -549,23 +570,27 @@ class Enviar {
             // generar el mail, Uno para cada destino (para poder poner bien la cabecera) en cco (bcc):
             try {
                 // generar un nuevo content, con la cabecera al ctr concreto.
-                $this->getDocumento($id_lugar);
-                $filename = $this->filename;
-                $filename_ext = $this->filename_ext;
-                $a_adjuntos = $this->a_adjuntos;
-                $contentFile = $this->contentFile;
-                $subject = "$filename ($this->asunto)";
+                $this->getDocumento();
+
+				// formato pdf:
+				// cabeceras fuera del if loaded, para cambiarlas para cada ctr del grupo
+				$a_header = $this->getHeader($id_lugar);
+				$this->filename_ext = $this->filename.'.pdf';
+				$omPdf = $this->oEtherpad->generarPDF($a_header,$this->f_salida);
+				$this->contentFile = $omPdf->Output($this->filename_ext,'S');
+
+                $subject = "$this->filename ($this->asunto)";
                 // Attachments
                 ////$oMail->addAttachment($File, $filename);    // Optional name
-                $oMail->addStringAttachment($contentFile, $filename_ext);    // Optional name
+                $oMail->addStringAttachment($this->contentFile, $this->filename_ext);    // Optional name
                 ////$oMail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
                 ////$oMail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
                 
                 // adjuntos:
                 echo "<pre>";
-                print_r($a_adjuntos);
+                print_r($this->a_adjuntos);
                 echo "</pre>";
-                foreach ($a_adjuntos as $adjunto_filename => $escrito_txt) {
+                foreach ($this->a_adjuntos as $adjunto_filename => $escrito_txt) {
                     $oMail->addStringAttachment($escrito_txt, $adjunto_filename);    // Optional name
                 }
                 

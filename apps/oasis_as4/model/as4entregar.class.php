@@ -25,7 +25,7 @@ use entradas\model\entity\EntradaCompartidaAdjunto;
  * @author dani
  *
  */
-class As4Distribuir extends As4CollaborationInfo {
+class As4Entregar extends As4CollaborationInfo {
 	
 	private $xmldata;
 	
@@ -141,7 +141,7 @@ class As4Distribuir extends As4CollaborationInfo {
 						$success = FALSE;
 					}
 					break;
-				case As4CollaborationInfo::ACCION_DISTRIBUIR:
+				case As4CollaborationInfo::ACCION_COMPARTIR:
 					// comprobar que existe algún destino
 					if ( !empty($this->a_destinos) ) {
 						$success = $this->entrada_compartida();
@@ -508,7 +508,7 @@ class As4Distribuir extends As4CollaborationInfo {
 		$this->bypass = $this->getByPass();
 		
 		// compartido
-		if ($this->getAccion() == As4CollaborationInfo::ACCION_DISTRIBUIR) {
+		if ($this->getAccion() == As4CollaborationInfo::ACCION_COMPARTIR) {
 			$this->getCompartido();
 		}
 	}
