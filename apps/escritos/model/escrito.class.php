@@ -504,7 +504,7 @@ class Escrito Extends EscritoDB {
                   ];
         
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId (Etherpad::ID_ESCRITO,$this->iid_escrito);
+        $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid_escrito);
         
         $f_salida = $this->getF_salida()->getFromLocal('.');
         return $oEtherpad->generarPDF($a_header,$f_salida);

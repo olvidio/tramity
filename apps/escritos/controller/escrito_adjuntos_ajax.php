@@ -87,7 +87,7 @@ switch ($Qque) {
         }
         // eliminar el pad:
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_ADJUNTO,$Qid_adjunto);
+        $oEtherpad->setId(Etherpad::ID_ADJUNTO, $Qid_adjunto);
         $sourceID = $oEtherpad->getId_pad();
         
         $rta = $oEtherpad->deletePad($sourceID);

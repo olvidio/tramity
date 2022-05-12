@@ -21,11 +21,11 @@ require_once ("apps/core/global_object.inc");
 $Qmethod = (string) \filter_input(INPUT_SERVER, 'REQUEST_METHOD');
 if ($Qmethod == 'POST') {
     $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
-    $Qcompartida = (bool) \filter_input(INPUT_POST, 'compartida');
+    $Qcompartida = (string) \filter_input(INPUT_POST, 'compartida');
 }
 if ($Qmethod == 'GET') {
     $Qid_entrada = (integer) \filter_input(INPUT_GET, 'id_entrada');
-    $Qcompartida = (bool) \filter_input(INPUT_GET, 'compartida');
+    $Qcompartida = (string) \filter_input(INPUT_GET, 'compartida');
 }
 
 $sigla = $_SESSION['oConfig']->getSigla();
@@ -76,7 +76,7 @@ if (!empty($Qid_entrada)) {
 		$a_adjuntos = $oEntrada->getArrayIdAdjuntos();
 		
 		$oEtherpad = new Etherpad();
-		$oEtherpad->setId (Etherpad::ID_ENTRADA,$Qid_entrada);
+		$oEtherpad->setId(Etherpad::ID_ENTRADA, $Qid_entrada);
     }
     $escrito_html = $oEtherpad->generarHtml();
 } else {

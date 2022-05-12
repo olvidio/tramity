@@ -150,7 +150,7 @@ if (!empty($Qid_escrito)) {
     
     
     $oEtherpad = new Etherpad();
-    $oEtherpad->setId (Etherpad::ID_ESCRITO,$Qid_escrito);
+    $oEtherpad->setId(Etherpad::ID_ESCRITO, $Qid_escrito);
     $padID = $oEtherpad->getPadId();
     $url = $oEtherpad->getUrl();
     

@@ -225,7 +225,7 @@ class Enviar {
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
         $this->oEtherpad = new Etherpad();
-        $this->oEtherpad->setId (Etherpad::ID_ENTRADA,$this->iid);
+        $this->oEtherpad->setId(Etherpad::ID_ENTRADA, $this->iid);
         
         // Attachments
         $this->a_adjuntos = [];
@@ -254,7 +254,7 @@ class Enviar {
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
         $this->oEtherpad = new Etherpad();
-        $this->oEtherpad->setId (Etherpad::ID_ENTRADA,$this->iid);
+        $this->oEtherpad->setId(Etherpad::ID_ENTRADA, $this->iid);
         
         // Attachments
         $this->a_adjuntos = [];
@@ -283,7 +283,7 @@ class Enviar {
         $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
         $this->oEtherpad = new Etherpad();
-        $this->oEtherpad->setId (Etherpad::ID_COMPARTIDO,$this->iid);
+        $this->oEtherpad->setId(Etherpad::ID_COMPARTIDO, $this->iid);
     }
     
     /**
@@ -322,7 +322,7 @@ class Enviar {
                     case Documento::DOC_ETHERPAD:
                         $id_adjunto = $oEscritoAdjunto->getId_item();
                         $oEtherpadAdj = new Etherpad();
-                        $oEtherpadAdj->setId (Etherpad::ID_ADJUNTO,$id_adjunto);
+                        $oEtherpadAdj->setId(Etherpad::ID_ADJUNTO, $id_adjunto);
                         $escrito_txt = $oEtherpadAdj->generarPDF();
                         $this->a_adjuntos[$adjunto_filename] = $escrito_txt;
                         break;
@@ -335,7 +335,7 @@ class Enviar {
             $this->filename = $this->oEscrito->getNombreEscrito();
             // etherpad
             $this->oEtherpad = new Etherpad();
-            $this->oEtherpad->setId (Etherpad::ID_ESCRITO,$this->iid);
+            $this->oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid);
             $this->bLoaded = TRUE;
         }
     }

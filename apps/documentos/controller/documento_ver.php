@@ -32,7 +32,7 @@ if (!empty($Qid_doc)) {
     switch($tipo_doc) {
         case Documento::DOC_ETHERPAD:
             $oEtherpad = new Etherpad();
-            $oEtherpad->setId (Etherpad::ID_DOCUMENTO,$Qid_doc);
+            $oEtherpad->setId(Etherpad::ID_DOCUMENTO, $Qid_doc);
             
             $escrito_html = $oEtherpad->generarHtml();
             break;

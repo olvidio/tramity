@@ -6,7 +6,7 @@ class GestorEtherpad {
     
     public function copyDocToAdjunto($id_doc, $id_adjunto, $force=false) {
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_DOCUMENTO,$id_doc);
+        $oEtherpad->setId(Etherpad::ID_DOCUMENTO, $id_doc);
         $sourceID = $oEtherpad->getPadId();
         
         $oNewEtherpad = new Etherpad();
@@ -30,7 +30,7 @@ class GestorEtherpad {
         $this->copyDocToAdjunto($id_doc, $id_adjunto, $force);
         // borrar el Doc
         $oEtherpadSource = new Etherpad();
-        $oEtherpadSource->setId(Etherpad::ID_DOCUMENTO,$id_doc);
+        $oEtherpadSource->setId(Etherpad::ID_DOCUMENTO, $id_doc);
         $sourceID = $oEtherpadSource->getId_pad();
         
         $rta = $oEtherpadSource->deletePad($sourceID);
@@ -46,7 +46,7 @@ class GestorEtherpad {
     
     public function copyDocToEscrito($id_doc, $id_escrito, $force=false) {
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_DOCUMENTO,$id_doc);
+        $oEtherpad->setId(Etherpad::ID_DOCUMENTO, $id_doc);
         $sourceID = $oEtherpad->getPadId();
         
         $oNewEtherpad = new Etherpad();
@@ -80,7 +80,7 @@ class GestorEtherpad {
         $this->copyDocToEscrito($id_doc, $id_escrito, $force);
         // borrar el Doc
         $oEtherpadSource = new Etherpad();
-        $oEtherpadSource->setId(Etherpad::ID_DOCUMENTO,$id_doc);
+        $oEtherpadSource->setId(Etherpad::ID_DOCUMENTO, $id_doc);
         $sourceID = $oEtherpadSource->getId_pad();
         
         $rta = $oEtherpadSource->deletePad($sourceID);

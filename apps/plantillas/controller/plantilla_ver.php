@@ -24,7 +24,7 @@ if ($Qmethod == 'GET') {
 
 if (!empty($Qid_plantilla)) {
     $oEtherpad = new Etherpad();
-    $oEtherpad->setId (Etherpad::ID_PLANTILLA,$Qid_plantilla);
+    $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Qid_plantilla);
     
     $escrito_html = $oEtherpad->generarHtml();
 } else {

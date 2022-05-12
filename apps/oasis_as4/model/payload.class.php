@@ -543,7 +543,7 @@ class Payload {
 					case Documento::DOC_ETHERPAD:
 						$id_adjunto = $oEscritoAdjunto->getId_item();
 						$oEtherpadAdj = new Etherpad();
-						$oEtherpadAdj->setId (Etherpad::ID_ADJUNTO,$id_adjunto);
+						$oEtherpadAdj->setId(Etherpad::ID_ADJUNTO, $id_adjunto);
 						$escrito_txt = $oEtherpadAdj->generarPDF();
 						$a_adjuntos[$adjunto_filename] = $escrito_txt;
 						break;

@@ -70,7 +70,7 @@ if (!empty($Qid_escrito)) {
         $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
         $tipo_doc = $oEscrito->getTipo_doc();
         
-        $oEtherpad->setId (Etherpad::ID_ESCRITO,$id_escrito);
+        $oEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito);
         
         $escrito_html = $oEtherpad->generarHtml();
 

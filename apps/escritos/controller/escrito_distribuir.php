@@ -69,7 +69,7 @@ if (!empty($Qid_escrito)) {
         $tipo_doc = $oEscrito->getTipo_doc();
         
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId (Etherpad::ID_ESCRITO,$id_escrito);
+        $oEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito);
         
         $escrito_html = $oEtherpad->generarHtml();
 

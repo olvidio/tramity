@@ -63,7 +63,7 @@ switch($Qque) {
         
         //clone:
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_PLANTILLA,$Qid_plantilla);
+        $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Qid_plantilla);
         $sourceID = $oEtherpad->getPadId();
         
         $oNewEtherpad = new Etherpad();
@@ -76,7 +76,7 @@ switch($Qque) {
          * con el Text no coje los formatos.
         // copiar etherpad:
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_PLANTILLA,$Qid_plantilla);
+        $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Qid_plantilla);
         //$padID = $oEtherpad->getPadId();
         //$txtPad = $oEtherpad->getTexto($padID);
         $htmlPad = $oEtherpad->getHHtml();
