@@ -148,6 +148,7 @@ class As4Entregar extends As4CollaborationInfo {
 					if ( !empty($this->a_destinos) ) {
 						$success = $this->entrada_compartida();
 					} else {
+						$this->msg = _("No hay destinos");
 						$success = FALSE;
 					}
 					break;
