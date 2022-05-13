@@ -154,16 +154,6 @@ class Buscar {
 						$aOperadorEntrada['asunto_entrada'] = 'sin_acentos';
 					}
                 
-					// comprobar visibilidad:
-					if (!ConfigGlobal::soy_dtor()) {
-						$aWhereEntrada['visibilidad'] = Visibilidad::V_CTR_DTOR;
-						$aOperadorEntrada['visibilidad'] = '!=';
-						if (!ConfigGlobal::soy_sacd()) {
-							$aWhereEntrada['visibilidad'] = Visibilidad::V_CTR_DTOR_SACD;
-							$aOperadorEntrada['visibilidad'] = '!=';
-						}
-					}
-					
 					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
 					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
 									  'num' => $this->prot_num,
@@ -210,16 +200,6 @@ class Buscar {
             	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
 					$aWhereEntrada = [];
 					$aOperadorEntrada = [];
-					// comprobar visibilidad:
-					if (!ConfigGlobal::soy_dtor()) {
-						$aWhereEntrada['visibilidad'] = Visibilidad::V_CTR_DTOR;
-						$aOperadorEntrada['visibilidad'] = '!=';
-						if (!ConfigGlobal::soy_sacd()) {
-							$aWhereEntrada['visibilidad'] = Visibilidad::V_CTR_DTOR_SACD;
-							$aOperadorEntrada['visibilidad'] = '!=';
-						}
-					}
-					
 					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
 					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
 									  'num' => $this->prot_num,

@@ -472,7 +472,7 @@ class PermRegistro {
         $id_oficina_role = '';
         // El role de secretaria no tiene oficina
         if ($role_actual == 'secretaria') {
-            // miera el usuario actual, no el role.
+            // mira el usuario actual, no el role.
             $soy_dtor = ConfigGlobal::soy_dtor();
         } else {
             $id_oficina_role = ConfigGlobal::role_id_oficina();

@@ -4,6 +4,7 @@ namespace busquedas\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use usuarios\model\Categoria;
+use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
@@ -245,6 +246,7 @@ class VerTabla {
         $a_valores = [];
         $i=0;
         foreach ($aCollection as $oEntrada) {
+        	// permisos: NO TIENE el campo visibilidad.
             $i++;
             
 			$id_entrada=$oEntrada->getId_entrada_compartida();
@@ -335,7 +337,16 @@ class VerTabla {
         $oProtOrigen = new Protocolo();
         $a_valores = [];
         $i=0;
+        $oPermRegistro = new PermRegistro();
         foreach ($aCollection as $oEntrada) {
+        	// mirar permisos visibilidad:...
+        	$visibilidad = $oEntrada->getVisibilidad();
+        	$visibilidad_txt = empty($a_visibilidad[$visibilidad])? '?' : $a_visibilidad[$visibilidad];
+        	
+        	$perm_ver_escrito = $oPermRegistro->permiso_detalle($oEntrada, 'escrito');
+        	if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+        		continue;
+        	}
             $i++;
             
 			$id_entrada=$oEntrada->getId_entrada();
@@ -367,11 +378,8 @@ class VerTabla {
             $asunto = $oEntrada->getAsuntoDetalle();
             $categoria = $oEntrada->getCategoria();
             $categoria_txt = empty($a_categorias[$categoria])? '' : $a_categorias[$categoria];
-            $visibilidad = $oEntrada->getVisibilidad();
-            $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '' : $a_visibilidad[$visibilidad];
             $f_doc = $oEntrada->getF_documento();
             $f_contestar = $oEntrada->getF_contestar();
-            
             
             $a_valores[$i]['sel']="$id_entrada";
             $a_valores[$i][1]=$protocolo;
@@ -444,7 +452,16 @@ class VerTabla {
         
         $i=0;
         $a_valores = [];
+        $oPermRegistro = new PermRegistro();
         foreach ($cCollection as $oEscrito) {
+        	// mirar permisos visibilidad:...
+        	$visibilidad = $oEscrito->getVisibilidad();
+        	$visibilidad_txt = empty($a_visibilidad[$visibilidad])? '?' : $a_visibilidad[$visibilidad];
+        	
+        	$perm_ver_escrito = $oPermRegistro->permiso_detalle($oEscrito, 'escrito');
+        	if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+        		continue;
+        	}
             $i++;
             $asunto = $oEscrito->getAsuntoDetalle();
             $anulado = $oEscrito->getAnulado();
@@ -487,8 +504,6 @@ class VerTabla {
             } else {
                 $categoria_txt = $a_categorias[$categoria];
             }
-            $visibilidad = $oEscrito->getVisibilidad();
-            $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '??' : $a_visibilidad[$visibilidad];
 
             $a_valores[$i]['sel']="$id_escrito";
             $a_valores[$i][1]=$protocolo_local;
