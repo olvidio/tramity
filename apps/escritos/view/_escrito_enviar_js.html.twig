@@ -12,6 +12,11 @@ fnjs_actualizar_expediente=function() {
 	fnjs_update_div('#main',url);
 };
 
+fnjs_actualizar_expediente_form=function() {
+    var url = '/apps/expedientes/controller/expediente_form.php?id_expediente={{ id_expediente }}&filtro={{ filtro }}&modo={{ modo }}';
+	fnjs_update_div('#main',url);
+};
+
 fnjs_ver_escrito=function(id_escrito) {
     var ssfsv = 'sv';
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
@@ -152,8 +157,14 @@ fnjs_marcar_contestado=function(id_escrito,pendientes_uid){
 
 fnjs_enviar_escrito_directo=function(id_escrito) {
     window.open('/apps/escritos/controller/escrito_enviar.php?id='+id_escrito, "down");
-    // Actualizar vista escritos para enviar
-    fnjs_actualizar_lista();
+    {# para los ctr #}
+    {%  if not vista_dl %}
+        // Actualizar vista expediente
+        fnjs_actualizar_expediente_form();
+    {% else %}
+        // Actualizar vista escritos para enviar
+        fnjs_actualizar_lista();
+    {% endif %}
 	return false;
 }
 

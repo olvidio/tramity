@@ -373,7 +373,7 @@ $a_campos = [
     'minIso' => $minIso,
 ];
 
-// dentro del _expediente_form_js.html.twig hay un include a  escritos/view/_escrito_enviar.html.twig
+// dentro del _expediente_form_js.html.twig hay un include a  escritos/view/_escrito_enviar_js.html.twig
 $aditionalPaths = ['escritos' => 'escritos/view'];
 $oView = new ViewTwig('expedientes/controller',$aditionalPaths);
 echo $oView->renderizar('expediente_form.html.twig',$a_campos);

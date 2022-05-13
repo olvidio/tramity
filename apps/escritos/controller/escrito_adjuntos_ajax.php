@@ -139,6 +139,8 @@ switch ($Qque) {
                         $error_txt .= $gesEtherpad->copyDocToAdjunto($Qid_doc, $id_item, 'true');
                     } elseif ($Qque == 'adjuntar') {
                         $error_txt .= $gesEtherpad->moveDocToAdjunto($Qid_doc, $id_item, 'true');
+                        // borra de la lista de documentos:
+                        $oDocumento->DBEliminar();
                     }
                     break;
                 case Documento::DOC_UPLOAD:
