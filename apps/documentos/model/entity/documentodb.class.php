@@ -158,7 +158,6 @@ class DocumentoDB Extends core\ClasePropiedades {
 		$aDades['visibilidad'] = $this->ivisibilidad;
 		$aDades['tipo_doc'] = $this->itipo_doc;
 		$aDades['f_upload'] = $this->df_upload;
-        //$aDades['documento'] = $this->getDocumentoTxt();
         $aDades['documento'] = $this->documento;
 		array_walk($aDades, 'core\poner_null');
 

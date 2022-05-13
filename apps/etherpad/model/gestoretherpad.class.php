@@ -4,7 +4,10 @@ namespace etherpad\model;
 
 class GestorEtherpad {
     
-    public function copyDocToAdjunto($id_doc, $id_adjunto, $force=false) {
+	/**
+	 * El force conviene que sea un string
+	 */
+    public function copyDocToAdjunto($id_doc, $id_adjunto, $force='false') {
         $oEtherpad = new Etherpad();
         $oEtherpad->setId(Etherpad::ID_DOCUMENTO, $id_doc);
         $sourceID = $oEtherpad->getPadId();
@@ -24,7 +27,10 @@ class GestorEtherpad {
         }
     }
     
-    public function moveDocToAdjunto($id_doc, $id_adjunto, $force=false) {
+	/**
+	 * El force conviene que sea un string
+	 */
+    public function moveDocToAdjunto($id_doc, $id_adjunto, $force='false') {
         // No uso el comando move, para borrar la historia.
         
         $this->copyDocToAdjunto($id_doc, $id_adjunto, $force);
@@ -44,7 +50,10 @@ class GestorEtherpad {
         }
     }
     
-    public function copyDocToEscrito($id_doc, $id_escrito, $force=false) {
+	/**
+	 * El force conviene que sea un string
+	 */
+    public function copyDocToEscrito($id_doc, $id_escrito, $force='false') {
         $oEtherpad = new Etherpad();
         $oEtherpad->setId(Etherpad::ID_DOCUMENTO, $id_doc);
         $sourceID = $oEtherpad->getPadId();
@@ -54,6 +63,7 @@ class GestorEtherpad {
         $destinationID = $oNewEtherpad->getPadID();
        
         // Por alguna razón el force no funciona. Hay que eliminarlo primero:
+        // Quizá porque no se le pasaba como string. Habria que probar si ahora funciona.
         $rta = $oNewEtherpad->deletePad($destinationID);
         if ($rta->getCode() == 0) {
             /* Example returns:
@@ -74,7 +84,10 @@ class GestorEtherpad {
         }
     }
     
-    public function moveDocToEscrito($id_doc, $id_escrito, $force=false) {
+	/**
+	 * El force conviene que sea un string
+	 */
+    public function moveDocToEscrito($id_doc, $id_escrito, $force='false') {
         // No uso el comando move, para borrar la historia.
         
         $this->copyDocToEscrito($id_doc, $id_escrito, $force);

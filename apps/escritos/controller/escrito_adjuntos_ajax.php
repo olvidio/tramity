@@ -47,9 +47,9 @@ switch ($Qque) {
         if (empty($error_txt)) {
             $gesEtherpad = new GestorEtherpad();
             if ($Qque == 'insertar_copia') {
-                $error_txt .= $gesEtherpad->copyDocToEscrito($Qid_doc, $Qid_escrito, TRUE);
+                $error_txt .= $gesEtherpad->copyDocToEscrito($Qid_doc, $Qid_escrito, 'true');
             } elseif ($Qque == 'insertar') {
-                $error_txt .= $gesEtherpad->moveDocToEscrito($Qid_doc, $Qid_escrito, TRUE);
+                $error_txt .= $gesEtherpad->moveDocToEscrito($Qid_doc, $Qid_escrito, 'true');
                 // borrar el documento:
                 $oDocumento = new Documento($Qid_doc);
                 if ($oDocumento->DBEliminar() === FALSE) {
@@ -136,21 +136,20 @@ switch ($Qque) {
                     
                     $gesEtherpad = new GestorEtherpad();
                     if ($Qque == 'adjuntar_copia') {
-                        $error_txt .= $gesEtherpad->copyDocToAdjunto($Qid_doc, $id_item, TRUE);
+                        $error_txt .= $gesEtherpad->copyDocToAdjunto($Qid_doc, $id_item, 'true');
                     } elseif ($Qque == 'adjuntar') {
-                        $error_txt .= $gesEtherpad->moveDocToAdjunto($Qid_doc, $id_item, TRUE);
+                        $error_txt .= $gesEtherpad->moveDocToAdjunto($Qid_doc, $id_item, 'true');
                     }
                     break;
                 case Documento::DOC_UPLOAD:
-                    $contenido_encoded = $oDocumento->getDocumentoTxt();
-                    $contenido_doc = base64_decode($contenido_encoded);
-                    $fileName = $oDocumento->getNombre_fichero();
+                	$nombre_fichero = $oDocumento->getNombre_fichero();
+                    $contenido_doc = $oDocumento->getDocumento();
                     
                     // gravar en adjuntos escrito
                     // new
                     $oEscritoAdjunto = new EscritoAdjunto();
                     $oEscritoAdjunto->setId_escrito($Qid_escrito);
-                    $oEscritoAdjunto->setNom($fileName);
+                    $oEscritoAdjunto->setNom($nombre_fichero);
                     $oEscritoAdjunto->setAdjunto($contenido_doc);
                     $oEscritoAdjunto->setTipo_doc(Documento::DOC_UPLOAD);
                     
