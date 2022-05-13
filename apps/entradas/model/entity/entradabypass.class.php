@@ -1,9 +1,11 @@
 <?php
 namespace entradas\model\entity;
-use core;
-use web;
-use stdClass;
 use entradas\model\Entrada;
+use core;
+use stdClass;
+use web;
+use lugares\model\entity\Grupo;
+use lugares\model\entity\Lugar;
 /**
  * Fitxer amb la Classe que accedeix a la taula entradas_bypass
  *
@@ -557,6 +559,40 @@ class EntradaBypass Extends Entrada {
 	    }
 	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
+	
+	public function getDestinosByPass() {
+		$a_grupos = $this->getId_grupos();
+		
+		$aMiembros = [];
+		$destinos_txt = '';
+
+		if (!empty($a_grupos)) {
+			$destinos_txt = $this->getDescripcion();
+			//(segun los grupos seleccionados)
+			foreach ($a_grupos as $id_grupo) {
+				$oGrupo = new Grupo($id_grupo);
+				$a_miembros_g = $oGrupo->getMiembros();
+				$aMiembros = array_merge($aMiembros, $a_miembros_g);
+			}
+			$aMiembros = array_unique($aMiembros);
+			$this->setDestinos($aMiembros);
+			if ($this->DBGuardar() === FALSE ) {
+				$error_txt = $this->getErrorTxt();
+				exit ($error_txt);
+			}
+		} else {
+			//(segun individuales)
+			$a_json_prot_dst = $this->getJson_prot_destino();
+			foreach ($a_json_prot_dst as $json_prot_dst) {
+				$aMiembros[] = $json_prot_dst->id_lugar;
+				$oLugar = new Lugar($json_prot_dst->id_lugar);
+				$destinos_txt .= empty($destinos_txt)? '' : ', ';
+				$destinos_txt .= $oLugar->getNombre();
+			}
+		}
+		
+		return ['miembros' => $aMiembros, 'txt' =>$destinos_txt];
+	}
 
 	/**
 	 * Retorna una col·lecció d'objectes del tipus DatosCampo

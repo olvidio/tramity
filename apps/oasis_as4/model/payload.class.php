@@ -62,33 +62,34 @@ class Payload {
 			$this->setPayloadEntrada($oEscrito);
 		}
 	}
-	public function setPayloadEntrada($oEntrada) {
-		$this->json_prot_local = $oEntrada->getJson_prot_origen();
+	public function setPayloadEntrada($oEntradaBypass) {
+		$this->json_prot_local = $oEntradaBypass->getJson_prot_origen();
 		// OJO hay que coger el destino que se tiene al enviar, 
 		// no el del escrito, que puede ser a varios o un grupo.
 		//$this->json_prot_dst = $oEscrito->getJson_prot_destino();
 		
-		$this->json_prot_ref = $oEntrada->getJson_prot_ref();
+		$this->json_prot_ref = $oEntradaBypass->getJson_prot_ref();
 		
-		$this->setF_entrada($oEntrada->getF_entrada());
-		$this->setF_escrito($oEntrada->getF_documento());
-		$this->setF_salida($oEntrada->getF_salida());
-		$this->setF_contestar($oEntrada->getF_contestar());
+		$this->setF_entrada($oEntradaBypass->getF_entrada());
+		$this->setF_escrito($oEntradaBypass->getF_documento());
+		$this->setF_salida($oEntradaBypass->getF_salida());
+		$this->setF_contestar($oEntradaBypass->getF_contestar());
 		
-		$this->setAsunto($oEntrada->getAsunto());
-		$this->setId_escrito($oEntrada->getId_entrada());
+		$this->setAsunto($oEntradaBypass->getAsunto());
+		$this->setId_escrito($oEntradaBypass->getId_entrada());
 		//$this->setVisibilidad($oEntrada->getVisibilidad_dst());
 
-		$this->setA_id_adjuntos($oEntrada->getArrayIdAdjuntos());
+		$this->setA_id_adjuntos($oEntradaBypass->getArrayIdAdjuntos());
 		
-		$this->nombre_escrito = $oEntrada->getNombreEscrito() . '.xml';
+		$this->nombre_escrito = $oEntradaBypass->getNombreEscrito() . '.xml';
 		
 		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR ) {
-			$this->json_prot_dst = $oEntrada->getJson_prot_destino();
+			$this->json_prot_dst = $oEntradaBypass->getJson_prot_destino();
 			///$this->descripcion = $oEntrada->getDescripcion();
-			$this->descripcion = $oEntrada->cabeceraDistribucion_cr(); // decripción más completa
-			$this->categoria = $oEntrada->getCategoria();
-			$this->destinos = $oEntrada->getDestinos();
+			$this->descripcion = $oEntradaBypass->cabeceraDistribucion_cr(); // decripción más completa
+			$this->categoria = $oEntradaBypass->getCategoria();
+			$aDestinos = $oEntradaBypass->getDestinosByPass();
+			$this->destinos = $aDestinos['miembros'];
 		}
 	}
 

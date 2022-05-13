@@ -110,7 +110,9 @@ class Enviar {
     private function getDestinatarios(){
         if ($this->tipo == 'entrada') {
 			$this->accion = As4CollaborationInfo::ACCION_COMPARTIR;
-            return $this->getDestinosByPass();
+			$aDestinos = $this->oEntradaBypass->getDestinosByPass();
+			$this->destinos_txt = $aDestinos['txt'];
+            return $aDestinos['miembros'];
         }
         if ($this->tipo == 'escrito') {
         	$id_grupos = $this->oEscrito->getId_grupos();
@@ -119,7 +121,7 @@ class Enviar {
         	} else {
 				$this->accion = As4CollaborationInfo::ACCION_NUEVO;
         	}
-            return $this->getDestinosEscrito();
+			return $this->oEscrito->getDestinosIds();
         }
     }
     
@@ -170,43 +172,6 @@ class Enviar {
         if ($this->tipo == 'escrito') {
             $this->getDatosEscrito();
         }
-    }
-    
-    private function getDestinosByPass() {
-		$a_grupos = $this->oEntradaBypass->getId_grupos();
-		$this->f_salida = $this->oEntradaBypass->getF_salida()->getFromLocal('.');
-		
-		$aMiembros = [];
-		$this->destinos_txt = '';
-		if (!empty($a_grupos)) {
-			$this->destinos_txt = $this->oEntradaBypass->getDescripcion();
-			//(segun los grupos seleccionados)
-			foreach ($a_grupos as $id_grupo) {
-				$oGrupo = new Grupo($id_grupo);
-				$a_miembros_g = $oGrupo->getMiembros();
-				$aMiembros = array_merge($aMiembros, $a_miembros_g);
-			}
-			$aMiembros = array_unique($aMiembros);
-			$this->oEntradaBypass->setDestinos($aMiembros);
-			if ($this->oEntradaBypass->DBGuardar() === FALSE ) {
-				$error_txt = $this->oEntradaBypass->getErrorTxt();
-				exit ($error_txt);
-			}
-		} else {
-			//(segun individuales)
-			$a_json_prot_dst = $this->oEntradaBypass->getJson_prot_destino();
-			foreach ($a_json_prot_dst as $json_prot_dst) {
-				$aMiembros[] = $json_prot_dst->id_lugar;
-				$oLugar = new Lugar($json_prot_dst->id_lugar);
-				$this->destinos_txt .= empty($this->destinos_txt)? '' : ', ';
-				$this->destinos_txt .= $oLugar->getNombre();
-			}
-		}
-        return $aMiembros;
-    }
-    
-    private function getDestinosEscrito() {
-        return $this->oEscrito->getDestinosIds();
     }
     
     private function getDatosEntradaByPass() {
