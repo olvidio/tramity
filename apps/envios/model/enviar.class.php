@@ -211,7 +211,7 @@ class Enviar {
     
     private function getDatosEntradaByPass() {
         $this->f_salida = $this->oEntradaBypass->getF_documento()->getFromLocal('.');
-        $this->asunto = $this->oEntradaBypass->getAsunto();
+        $this->asunto = empty($this->oEntradaBypass->getAsunto())? $this->oEntradaBypass->getAsunto_entrada() : $this->oEntradaBypass->getAsunto();
         
         $json_prot_origen = $this->oEntradaBypass->getJson_prot_origen();
         if (count(get_object_vars($json_prot_origen)) == 0) {
@@ -240,7 +240,7 @@ class Enviar {
     private function getDatosEntrada() {
         $this->oEntrada = new Entrada($this->iid);
         $this->f_salida = $this->oEntrada->getF_documento()->getFromLocal('.');
-        $this->asunto = $this->oEntrada->getAsunto();
+        $this->asunto = empty($this->oEntrada->getAsunto())? $this->oEntrada->getAsunto_entrada() : $this->oEntrada->getAsunto();
         
         $json_prot_origen = $this->oEntrada->getJson_prot_origen();
         if (count(get_object_vars($json_prot_origen)) == 0) {
@@ -269,7 +269,7 @@ class Enviar {
     private function getDatosEntradaCompartida() {
         $this->oEntrada = new EntradaCompartida($this->iid);
         $this->f_salida = $this->oEntrada->getF_documento()->getFromLocal('.');
-        $this->asunto = $this->oEntrada->getAsunto_entrada();
+        $this->asunto = empty($this->oEntrada->getAsunto())? $this->oEntrada->getAsunto_entrada() : $this->oEntrada->getAsunto();
         
         $json_prot_origen = $this->oEntrada->getJson_prot_origen();
         if (count(get_object_vars($json_prot_origen)) == 0) {

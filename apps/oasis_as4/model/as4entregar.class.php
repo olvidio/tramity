@@ -27,6 +27,7 @@ use entradas\model\entity\EntradaCompartidaAdjunto;
  */
 class As4Entregar extends As4CollaborationInfo {
 	
+	private $msg;
 	private $xmldata;
 	
 	
@@ -128,6 +129,7 @@ class As4Entregar extends As4CollaborationInfo {
 	 * 
 	 */
 	public function introducirEnDB() {
+		$this->msg = '';
 		$success = TRUE;
 		// service + accion: que hay que hacer
 		if ($this->getService() == 'correo') {
@@ -169,6 +171,14 @@ class As4Entregar extends As4CollaborationInfo {
 	 * y posteriormente una entrada para cada destino, con referencia al id_entrada_compartida.
 	 */
 	private function entrada_compartida() {
+		
+		// Valores que no pueden ser NULL:
+		if (empty($this->descripcion)) {
+			$this->msg = _("La entrada no tiene descripción");	
+		}
+		if (empty($this->asunto)) {
+			$this->msg = _("La entrada no tiene asunto");	
+		}
 		
 		$oEntradaCompartida = new EntradaCompartida();
 		$oEntradaCompartida->setDescripcion($this->descripcion);
@@ -817,6 +827,20 @@ class As4Entregar extends As4CollaborationInfo {
 	public function setLocation($location) {
 		$this->location = $location;
 	}
+	/**
+	 * @return string
+	 */
+	public function getMsg() {
+		return $this->msg;
+	}
+
+	/**
+	 * @param string $msg
+	 */
+	public function setMsg($msg) {
+		$this->msg = $msg;
+	}
+
 
 
 }
