@@ -148,7 +148,7 @@ class GestorEntradaCompartida Extends ClaseGestor {
         	$json .= "\"mas\":\"$mas\"";
         }
         if (!empty($json)) {
-        	//$Where_json = "json_prot_origen @> '{".$json."}'";
+        	$Where_json = "json_prot_origen @> '{".$json."}'";
         }
         
         if (empty($sCondi)) {

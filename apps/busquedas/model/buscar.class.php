@@ -14,6 +14,8 @@ use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
+use usuarios\model\Visibilidad;
+use core\ConfigGlobal;
 
 
 class Buscar {
@@ -140,38 +142,84 @@ class Buscar {
         switch ($opcion) {
             // permanentes de cr
             case 'proto':
-                // por asunto
-                if (!empty($this->asunto)) {
-                    // en este caso el operador es 'sin_acentos'
-                    $aWhereEntrada['asunto_detalle'] = $this->asunto;
-                }
-                
-                $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
-                $aOperadorEntrada['estado'] = '>=';
-                $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
-                $aWhereEntrada['_ordre'] = 'f_entrada';
-                $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
-                $aProt_origen = [ 'id_lugar' => $this->id_lugar,
-                                  'num' => $this->prot_num,
-                                  'any' => $this->prot_any,
-                                  'mas' => $this->prot_mas,
-                            ];
-
-                $aWhereEntrada['f_entrada'] = 'x';
-                $gesEntradas = new GestorEntradaDB();
-                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
-                $aCollections['entradas'] = $cEntradas;
-                return $aCollections;
-                break;
-            case 'any':
-                // por año
             	// En los centros, no busco en entradas, sino en emtradas_compartidas y 
             	// veo si el centro está en los destinos.
             	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
 					$aWhereEntrada = [];
 					$aOperadorEntrada = [];
-					//$aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
-					//$aOperadorEntrada['estado'] = '>=';
+					// por asunto
+					if (!empty($this->asunto)) {
+						// en este caso el operador es 'sin_acentos'
+						$aWhereEntrada['asunto_entrada'] = $this->asunto;
+						$aOperadorEntrada['asunto_entrada'] = 'sin_acentos';
+					}
+                
+					// comprobar visibilidad:
+					if (!ConfigGlobal::soy_dtor()) {
+						$aWhereEntrada['visibilidad'] = Visibilidad::V_CTR_DTOR;
+						$aOperadorEntrada['visibilidad'] = '!=';
+						if (!ConfigGlobal::soy_sacd()) {
+							$aWhereEntrada['visibilidad'] = Visibilidad::V_CTR_DTOR_SACD;
+							$aOperadorEntrada['visibilidad'] = '!=';
+						}
+					}
+					
+					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
+									  'num' => $this->prot_num,
+									  'any' => $this->prot_any,
+									  'mas' => $this->prot_mas,
+								];
+					$gesLugares = new GestorLugar();
+					$id_sigla_local = $gesLugares->getId_sigla_local();
+					$id_destino = $id_sigla_local;
+
+					$aWhereEntrada['_ordre'] = 'f_entrada';
+					$gesEntradasCompartidas = new GestorEntradaCompartida();
+					$cEntradas = $gesEntradasCompartidas->getEntradasByProtOrigenDestino($aProt_origen,$id_destino,$aWhereEntrada,$aOperadorEntrada);
+					$aCollections['entradas_compartidas'] = $cEntradas;
+            	} else {
+					// por asunto
+					if (!empty($this->asunto)) {
+						// en este caso el operador es 'sin_acentos'
+						$aWhereEntrada['asunto_detalle'] = $this->asunto;
+					}
+						
+					$aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+					$aOperadorEntrada['estado'] = '>=';
+					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+					$aWhereEntrada['_ordre'] = 'f_entrada';
+					$aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
+					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
+									  'num' => $this->prot_num,
+									  'any' => $this->prot_any,
+									  'mas' => $this->prot_mas,
+								];
+
+					$aWhereEntrada['f_entrada'] = 'x';
+					$gesEntradas = new GestorEntradaDB();
+					$cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
+					$aCollections['entradas'] = $cEntradas;
+            	}
+                return $aCollections;
+                break;
+            case 'any':
+                // por año
+            	// En los centros, no busco en entradas, sino en entradas_compartidas y 
+            	// veo si el centro está en los destinos.
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$aWhereEntrada = [];
+					$aOperadorEntrada = [];
+					// comprobar visibilidad:
+					if (!ConfigGlobal::soy_dtor()) {
+						$aWhereEntrada['visibilidad'] = Visibilidad::V_CTR_DTOR;
+						$aOperadorEntrada['visibilidad'] = '!=';
+						if (!ConfigGlobal::soy_sacd()) {
+							$aWhereEntrada['visibilidad'] = Visibilidad::V_CTR_DTOR_SACD;
+							$aOperadorEntrada['visibilidad'] = '!=';
+						}
+					}
+					
 					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
 					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
 									  'num' => $this->prot_num,

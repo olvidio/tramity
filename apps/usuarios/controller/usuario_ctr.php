@@ -180,8 +180,8 @@ $filtro = 'permanentes_cr';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?'.http_build_query($aQuery));
     $num_orden = 22;
-    $text = _("permanentes de cr");
-    $explicacion = _("Escritos de cr permanentes");
+    $text = _("permanentes");
+    $explicacion = _("Escritos permanentes");
     $num = '';
     $pill = [ 'orden'=> $num_orden,
 			'text' => $text,
