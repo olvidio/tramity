@@ -51,16 +51,16 @@ foreach ($a_files_mmd as $file_mmd) {
 		$location = $AS4->getLocation();
 		
 		if (unlink($location) === FALSE) {
-			$txt .= epmty($txt)? '' : '<br>';
+			$txt .= empty($txt)? '' : '<br>';
 			$txt .= sprintf(_("No se ha podido eliminar el fichero %s"), $location);
 		}
 		// el mensaje
 		if (unlink($file_mmd) === FALSE) {
-			$txt .= epmty($txt)? '' : '<br>';
+			$txt .= empty($txt)? '' : '<br>';
 			$txt .= sprintf(_("No se ha podido eliminar el mensaje %s"), $file_mmd);
 		}
 	} else {
-		$txt .= epmty($txt)? '' : '<br>';
+		$txt .= empty($txt)? '' : '<br>';
 		$txt .= sprintf(_("No se ha podido entregar el mensaje %s a su destinatario"), $file_mmd);
 		if (!empty(($AS4->getMsg()))) {
 			$txt .= ': '.$AS4->getMsg();	
