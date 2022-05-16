@@ -196,6 +196,10 @@ if (!empty($cLugares)) {
 }
 
 $a_lugares = [$id_cr => 'cr', $id_sigla_dl => $sigla_dl];
+// por defecto cr, en el caso de dl. vacio en caso de ctr.
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+	$Qid_lugar = empty($Qid_lugar)? $id_cr : $Qid_lugar;
+}
 $oDesplLugar = new Desplegable();
 $oDesplLugar->setNombre('id_lugar');
 $oDesplLugar->setBlanco(TRUE);
