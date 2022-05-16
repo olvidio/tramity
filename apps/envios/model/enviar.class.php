@@ -234,7 +234,7 @@ class Enviar {
     private function getDatosEntradaCompartida() {
         $this->oEntrada = new EntradaCompartida($this->iid);
         $this->f_salida = $this->oEntrada->getF_documento()->getFromLocal('.');
-        $this->asunto = empty($this->oEntrada->getAsunto())? $this->oEntrada->getAsunto_entrada() : $this->oEntrada->getAsunto();
+        $this->asunto = $this->oEntrada->getAsunto_entrada();
         
         $json_prot_origen = $this->oEntrada->getJson_prot_origen();
         if (count(get_object_vars($json_prot_origen)) == 0) {
