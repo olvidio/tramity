@@ -63,6 +63,7 @@ class Enviar {
      * @var string
      */
     private $destinos_txt;
+    private $sigla_destino = '';
     /**
      *
      * @var \DateTime
@@ -253,7 +254,7 @@ class Enviar {
     
     /**
      * Obtiene los datos de:
-     * 	asunto, f_salida, adjuntos, filename, Etherpad. 
+     * 	asunto, f_salida, adjuntos, Etherpad. 
      */
     private function getDatosEscrito() {
         // para no tener que repetir cuando hay multiples destinos
@@ -296,8 +297,6 @@ class Enviar {
                         exit ($err_switch);
                 }
             }
-            // nombre del archivo
-            $this->filename = $this->oEscrito->getNombreEscrito();
             // etherpad
             $this->oEtherpad = new Etherpad();
             $this->oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid);
@@ -341,6 +340,7 @@ class Enviar {
             $oLugar = new Lugar();
             $oLugar->setId_lugar($id_lugar);
             $oLugar->DBCarregar(); // obligar a recargar después de cambiar el id.
+            $this->sigla_destino = $oLugar->getSigla();
 
             $modo_envio = $oLugar->getModo_envio();
             switch ($modo_envio) {
@@ -505,6 +505,9 @@ class Enviar {
         	$oAS4->setEscrito($this->oEntradaBypass);
         }
         
+        // nombre del archivo
+        $this->filename = $this->oEscrito->getNombreEscrito($this->sigla_destino);
+        
         $err_mail .= $oAS4->writeOnDock($this->filename);
         
         if (empty($err_mail)) {
@@ -552,9 +555,6 @@ class Enviar {
                 ////$oMail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
                 
                 // adjuntos:
-                echo "<pre>";
-                print_r($this->a_adjuntos);
-                echo "</pre>";
                 foreach ($this->a_adjuntos as $adjunto_filename => $escrito_txt) {
                     $oMail->addStringAttachment($escrito_txt, $adjunto_filename);    // Optional name
                 }

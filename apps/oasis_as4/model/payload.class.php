@@ -46,6 +46,8 @@ class Payload {
 	private $categoria;
 	private $destinos;
 	
+	private $sufijo_dst;
+	
 	public function __construct() {
 		$gesLugares = new GestorLugar();
 		$this->aLugares = $gesLugares->getArrayLugares();
@@ -53,8 +55,10 @@ class Payload {
 		$this->dom = new \DOMDocument('1.0', 'utf-8');
 	}
 	
-	public function setPayload($oEscrito,$tipo_escrito) {
+	public function setPayload($oEscrito,$tipo_escrito,$sufijo_dst='') {
 		$this->tipo_escrito = $tipo_escrito;
+		$this->sufijo_dst = $sufijo_dst;
+		
 		if ($this->tipo_escrito == 'escrito') {
 			$this->setPayloadEscrito($oEscrito);
 		}
@@ -62,6 +66,7 @@ class Payload {
 			$this->setPayloadEntrada($oEscrito);
 		}
 	}
+	
 	public function setPayloadEntrada($oEntradaBypass) {
 		$this->json_prot_local = $oEntradaBypass->getJson_prot_origen();
 		// OJO hay que coger el destino que se tiene al enviar, 
@@ -81,7 +86,7 @@ class Payload {
 
 		$this->setA_id_adjuntos($oEntradaBypass->getArrayIdAdjuntos());
 		
-		$this->nombre_escrito = $oEntradaBypass->getNombreEscrito() . '.xml';
+		$this->nombre_escrito = $oEntradaBypass->getNombreEscrito($this->sufijo_dst) . '.xml';
 		
 		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR ) {
 			$this->json_prot_dst = $oEntradaBypass->getJson_prot_destino();
@@ -112,7 +117,7 @@ class Payload {
 
 		$this->setA_id_adjuntos($oEscrito->getArrayIdAdjuntos());
 
-		$this->nombre_escrito = $oEscrito->getNombreEscrito() . '.xml';
+		$this->nombre_escrito = $oEscrito->getNombreEscrito($this->sufijo_dst) . '.xml';
 
 		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR) {
 			$this->json_prot_dst = $oEscrito->getJson_prot_destino();

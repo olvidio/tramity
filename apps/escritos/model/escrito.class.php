@@ -677,7 +677,13 @@ class Escrito Extends EscritoDB {
         return $conforme_txt;
     }
     
-    public function getNombreEscrito() {
+    /**
+     * Devuelve el nombre del escrito: dlb_2012_22
+     * 
+     * @param string $parentesi si existe se añade al nombre, entre parentesis
+     * @return string|mixed
+     */
+    public function getNombreEscrito($parentesi) {
         $json_prot_local = $this->getJson_prot_local();
     	// nombre del archivo
     	if (empty((array)$json_prot_local)) {
@@ -692,6 +698,9 @@ class Escrito Extends EscritoDB {
     		$oProtOrigen->setProt_any($json_prot_local->any);
     		$oProtOrigen->setMas($json_prot_local->mas);
     		$this->nombre_escrito = $this->renombrar($oProtOrigen->ver_txt());
+    	}
+    	if (!empty($parentesi)) {
+    		$this->nombre_escrito .= "($parentesi)";
     	}
     	return $this->nombre_escrito;
     }

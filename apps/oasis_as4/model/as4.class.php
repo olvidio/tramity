@@ -123,7 +123,7 @@ class As4 extends As4CollaborationInfo {
 
 		$oPayload->setJson_prot_dst($this->json_prot_dst);
     	
-    	$oPayload->setPayload($this->oEscrito,$this->tipo_escrito);
+    	$oPayload->setPayload($this->oEscrito,$this->tipo_escrito,$this->lugar_destino_txt);
     	// formato del texto: pdf|text|html
     	$oPayload->setFormat(Payload::TYPE_ETHERAD_HTML);
     	$oPayload->createXmlFile();

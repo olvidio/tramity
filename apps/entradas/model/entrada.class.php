@@ -360,7 +360,13 @@ class Entrada Extends EntradaDB {
         return $gesEntradaAdjuntos->getArrayIdAdjuntos($this->iid_entrada);
     }
     
-    public function getNombreEscrito() {
+    /**
+     * Devuelve el nombre del escrito: cr_15_05
+     *
+     * @param string $parentesi si existe se añade al nombre, entre parentesis
+     * @return string|mixed
+     */
+    public function getNombreEscrito($parentesi) {
     	$json_prot_local = $this->getJson_prot_origen();
     	// nombre del archivo
     	if (empty((array)$json_prot_local)) {
@@ -375,6 +381,9 @@ class Entrada Extends EntradaDB {
     		$oProtOrigen->setProt_any($json_prot_local->any);
     		$oProtOrigen->setMas($json_prot_local->mas);
     		$this->nombre_escrito = $this->renombrar($oProtOrigen->ver_txt());
+    	}
+    	if (!empty($parentesi)) {
+    		$this->nombre_escrito .= "($parentesi)";
     	}
     	return $this->nombre_escrito;
     }
