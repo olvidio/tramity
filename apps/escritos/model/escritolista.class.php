@@ -9,6 +9,7 @@ use expedientes\model\Expediente;
 use expedientes\model\entity\GestorAccion;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Hash;
 use web\Protocolo;
@@ -222,12 +223,20 @@ class EscritoLista {
         } else {
             $ver_ok = FALSE;
         }
+        
+        $vista_dl = TRUE;
+        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        	$vista_dl = FALSE;
+        }
+        
         $a_campos = [
             'filtro' => $this->filtro,
             'modo' => $this->modo,
             'a_acciones' => $a_acciones,
             'server' => $server,
             'ver_ok' => $ver_ok,
+        	// para que el javascript sepa actualizar la vista
+        	'vista_dl' => $vista_dl,
         ];
         
         $oView = new ViewTwig('escritos/controller');
