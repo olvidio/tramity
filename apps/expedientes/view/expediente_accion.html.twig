@@ -133,6 +133,18 @@
 <script>
 fnjs_accion=function(accion){
 	var err=0;
+	if (accion == 'exp_eliminar') {
+		if ( !confirm("{{ "¿Seguro que quiere eliminar todo el expediente?"|trans }}") ) {
+        	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            return;
+        }
+	}
+	if (accion == 'exp_a_borrador' || accion == 'exp_a_borrador_cmb_creador') {
+		if ( !confirm("{{ "¿Seguro que quiere pasar el expediente a borrador y:\\n - Perder todos los comentarios.\\n - Perder las firmas.?"|trans }}") ) {
+        	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            return;
+        }
+	}
     // grabar
     var url_ajax = 'apps/expedientes/controller/expediente_update.php';
 	if (accion == 'en_expediente' || accion == 'en_pendiente' || accion == 'en_visto') {

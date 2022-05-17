@@ -242,6 +242,10 @@ switch ($Qfiltro) {
         $a_posibles_cargos = $gesCargos->getArrayCargos(ConfigGlobal::role_id_oficina());
         $oDesplCargos = new Desplegable('of_destino',$a_posibles_cargos,'','');
         break;
+    case 'fijar_reunion':
+    case 'distribuir':
+    	// No hace nada.
+    	break;
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);
