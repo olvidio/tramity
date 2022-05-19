@@ -212,26 +212,30 @@ fnjs_enviar_a_oficina=function() {
         event.stopImmediatePropagation();
 	}
 	// pedir una explicación (la funcion está en: js/core_ajax.js)
-	modalPrompt({
+	{# https://www.codeply.com/go/xNh67xOVY1/bootstrap-alert%2Fconfirm%2Fprompt-using-bootstrap-modal #}
+	ezBSAlert = modalPrompt({
       type: "prompt",
       headerText: "{{ "Devolver"|trans|raw }}",
       messageText: "{{ "Escriba un comentario para la oficina"|trans|raw }}",
       alertType: "primary"
-    }).done(function (comentario) {
-        var id_escrito = $('#id_escrito').val();
-        var url_ajax = 'apps/escritos/controller/escrito_update.php';
-        var param_json = { que: 'escrito_a_oficina', id_escrito: id_escrito, comentario: comentario };
-        
-        request=$.ajax({
-            data: param_json,
-            url: url_ajax,
-            method: 'POST'
-        });
+    });
+    ezBSAlert.done(function (comentario) {
+		if (comentario) {
+            var id_escrito = $('#id_escrito').val();
+            var url_ajax = 'apps/escritos/controller/escrito_update.php';
+            var param_json = { que: 'escrito_a_oficina', id_escrito: id_escrito, comentario: comentario };
+            
+            request=$.ajax({
+                data: param_json,
+                url: url_ajax,
+                method: 'POST'
+            });
 
-        request.done( function (rta) {
-            // Volver a la lista...
-            fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-        });
+            request.done( function (rta) {
+                // Volver a la lista...
+                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            });
+		}
     });
 }
 
@@ -348,30 +352,4 @@ fnjs_proto=function(num,any){
 	}
 	return false;
 }
-
-$(document).ready(function(){
-  $("#btnAlert").on("click", function(){  	
-    var prom = modalPrompt({
-      messageText: "hello world",
-      alertType: "danger"
-    }).done(function (e) {
-      $("body").append('<div>Callback from alert</div>');
-    });
-  });   
-  
-  $("#btnConfirm").on("click", function(){  	
-    modalPrompt({
-      type: "confirm",
-      messageText: "hello world",
-      alertType: "info"
-    }).done(function (e) {
-      $("body").append('<div>Callback from confirm ' + e + '</div>');
-    });
-  });   
-
-  $("#btnPrompt").on("click", function(){  	
-    
-  });   
-  
-});
 </script>

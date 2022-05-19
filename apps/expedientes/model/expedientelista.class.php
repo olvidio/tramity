@@ -746,7 +746,11 @@ class ExpedienteLista {
                 if ($estado == Expediente::ESTADO_BORRADOR && $oExpediente->isVistoTodos()) {
 					$row['class_row'] = 'bg-warning';
 				}
-                
+                // Acabados devueletos por secretaria
+                if (($this->filtro == 'acabados_encargados' || $this->filtro == 'acabados') && $oExpediente->isDevueltoAlguno()) {
+					$row['class_row'] = 'bg-warning';
+				}
+				
                 $prioridad = $oExpediente->getPrioridad();
                 $row['prioridad'] = $prioridad;
                 $row['tramite'] = $tramite_txt;

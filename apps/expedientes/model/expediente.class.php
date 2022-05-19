@@ -104,6 +104,24 @@ class Expediente Extends expedienteDB {
     
     /* METODES PUBLICS ----------------------------------------------------------*/
 
+    public function isDevueltoAlguno() {
+    	// acciones: propuestas, escritos.
+    	$gesAcciones = new GestorAccion();
+    	$cAcciones = $gesAcciones->getAcciones(['id_expediente' => $this->iid_expediente]);
+    	$bDevuelto = FALSE;
+    	foreach ($cAcciones as $oAccion) {
+			$id_escrito = $oAccion->getId_escrito();
+			$oEscrito = new Escrito($id_escrito);
+			$comentarios = $oEscrito->getComentarios();
+			$ok = $oEscrito->getOk();
+			if ($ok === Escrito::OK_NO && !empty($comentarios)) {
+				$bDevuelto = TRUE;
+				break;
+			}
+    	}
+    	return $bDevuelto;
+    }
+    
     public function isVistoTodos() {
     	// mirar si alguno que NO tiene el visto:
     	$json_preparar = $this->getJson_preparar();

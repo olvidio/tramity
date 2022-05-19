@@ -205,7 +205,8 @@ modalPrompt=function (options) {
 			'<div class="modal-content">' +
 			'<div id="ezAlerts-header" class="modal-header ' + headClass + '">' +
 			'<h4 id="ezAlerts-title" class="modal-title">Modal title</h4>' +
-			'<button id="close-button" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' +
+			'<button id="close-button" type="button" class="close" onclick="$(\'#ezAlerts\').modal(\'hide\');" aria-hidden="true">x'+
+			'</button>' +
 			'</div>' +
 			'<div id="ezAlerts-body" class="modal-body">' +
 			'<div id="ezAlerts-message" ></div>' +
@@ -258,10 +259,15 @@ modalPrompt=function (options) {
 				break;
 			case 'prompt':
 				$('#ezAlerts-message').html(defaults.messageText + '<br /><br /><div class="form-group"><input type="' + defaults.inputFieldType + '" class="form-control" id="prompt" /></div>');
-				$('#ezAlerts-footer').html('<button class="btn btn-primary">' + defaults.okButtonText + '</button>').on('click', ".btn", function () {
-					calbackParam = $('#prompt').val();
-					$('#ezAlerts').modal('hide');
-				});
+				$('#ezAlerts-footer').html('<button id="ezok-btn" class="btn btn-primary">' + defaults.okButtonText + '</button>').on('click', ".btn", function (e) {
+						if (e.target.id === 'ezok-btn') {
+							calbackParam = $('#prompt').val();
+							$('#ezAlerts').modal('hide');
+						} else if (e.target.id === 'close-button') {
+							calbackParam = false;
+							$('#ezAlerts').modal('hide');
+						}
+					});
 				break;
 		}
    

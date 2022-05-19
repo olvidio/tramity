@@ -377,7 +377,12 @@ class EscritoLista {
             if (!empty($oEscrito->getOk()) && $oEscrito->getOk() != Escrito::OK_NO) {
                 $ok = '<i class="fas fa-check"></i>'; 
             } else {
-                $ok = '';
+            	$comentarios = $oEscrito->getComentarios();
+            	if (!empty($comentarios)) {
+					$ok = "<span class='text-danger'>"._("devuelto")."</span>";
+            	} else {
+					$ok = '';
+            	}
             }
             
             $asunto_detalle = $oEscrito->getAsuntoDetalle();
