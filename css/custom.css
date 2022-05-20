@@ -33,3 +33,10 @@
 .btn-documento.active {
    background-color: #3465a4!important;
 }
+
+/* para quitar la flecha en comlumn visible de DataTable
+Ya aparece otra */
+.dt-down-arrow {
+	display: none !important;
+}
+
