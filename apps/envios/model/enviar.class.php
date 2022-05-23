@@ -312,10 +312,19 @@ class Enviar {
     public function getPdf($is_compartida = FALSE) {
         $this->getDocumento($is_compartida);
         
-		$a_header = [ 'left' => $this->oEntrada->cabeceraDistribucion_cr(),
-			'center' => '',
-			'right' => $this->oEntrada->cabeceraDerecha(),
-		];
+        if ($this->tipo == 'escrito') {
+			$a_header = [ 'left' => $this->oEscrito->cabeceraIzquierda(),
+				'center' => '',
+				'right' => $this->oEscrito->cabeceraDerecha(),
+			];
+
+        }
+        if ($this->tipo == 'entrada') {
+			$a_header = [ 'left' => $this->oEntrada->cabeceraDistribucion_cr(),
+				'center' => '',
+				'right' => $this->oEntrada->cabeceraDerecha(),
+			];
+        }
         // formato pdf:
         $this->filename_ext = $this->filename.'.pdf';
         $omPdf = $this->oEtherpad->generarPDF($a_header,$this->f_salida);
