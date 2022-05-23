@@ -297,6 +297,8 @@ class Enviar {
                         exit ($err_switch);
                 }
             }
+			$this->filename = $this->oEscrito->getNombreEscrito($this->sigla_destino);
+            
             // etherpad
             $this->oEtherpad = new Etherpad();
             $this->oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid);
@@ -317,13 +319,16 @@ class Enviar {
 				'center' => '',
 				'right' => $this->oEscrito->cabeceraDerecha(),
 			];
-
+			// nombre del archivo
+			$this->filename = $this->oEscrito->getNombreEscrito($this->sigla_destino);
         }
+
         if ($this->tipo == 'entrada') {
 			$a_header = [ 'left' => $this->oEntrada->cabeceraDistribucion_cr(),
 				'center' => '',
 				'right' => $this->oEntrada->cabeceraDerecha(),
 			];
+			$this->filename = $this->renombrar($oProtOrigen->ver_txt());
         }
         // formato pdf:
         $this->filename_ext = $this->filename.'.pdf';
