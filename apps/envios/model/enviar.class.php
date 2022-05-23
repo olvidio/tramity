@@ -309,7 +309,7 @@ class Enviar {
      *
      * @return array|string
      */
-    public function getPdf($is_compartida) {
+    public function getPdf($is_compartida = FALSE) {
         $this->getDocumento($is_compartida);
         
 		$a_header = [ 'left' => $this->oEntrada->cabeceraDistribucion_cr(),
