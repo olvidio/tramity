@@ -1,14 +1,12 @@
 <ul class="nav nav-pills" id="pills-tab" role="tablist">
 {% for pill in a_pills %}
   <li class="nav-item">
-    {# <a data-bs-toggle="pill" class="nav-link {{ pill.active }}" href="#" onClick="fnjs_update_div('#main','{{ pill.pag_lst }}');"> #}
-    
     <button class="nav-link {{ pill.class }} {{ pill.active }}" onClick="fnjs_update_div('#main','{{ pill.pag_lst }}');"  title="{{ pill.explicacion }}">
 	{{ pill.orden }}.- {{ pill.text }}
     {% if pill.num %}
 		<span class="badge rounded-pill bg-danger">{{ pill.num }}</span>
 	{% endif %}
-    </a>
+	</button>
   </li>
   {% endfor %}
   <li class="nav-item">

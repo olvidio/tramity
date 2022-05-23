@@ -309,6 +309,25 @@ $filtro = 'salida_manual';
 			'explicacion' => $explicacion];
 	$a_pills[$num_orden] = $pill;
 
+// mantenimiento = 21
+$filtro = 'mantenimiento';
+    $active = ($filtro == $Qfiltro)? 'active' : '';
+    $aQuery = [ 'filtro' => $filtro,
+            ];
+    $pag_lst = web\Hash::link('apps/escritos/controller/mantenimiento.php?'.http_build_query($aQuery));
+    $num_orden = 21;
+    $text = _("mantenimiento");
+    $explicacion =  _("Operaciones varias (Secretaría)");
+    $num = '';
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-pendiente',
+			'explicacion' => $explicacion];
+	$a_pills[$num_orden] = $pill;
+
 // plantillas = 30
 $filtro = 'plantillas';
     $active = ($filtro == $Qfiltro)? 'active' : '';

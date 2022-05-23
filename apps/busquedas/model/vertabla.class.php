@@ -70,6 +70,15 @@ class VerTabla {
      */
     private $sTitulo;
 
+    /**
+     * Botones
+     *
+     * @var array
+     */
+    private $aBotones;
+
+    private $dt_op_dom;
+    private $dt_op_buttons;
     
     /**
      * @return number
@@ -221,19 +230,6 @@ class VerTabla {
         $oCategoria = new Categoria();
         $a_categorias = $oCategoria->getArrayCategoria();
         
-        if (ConfigGlobal::role_actual() === 'secretaria') { 
-            $a_botones = [
-                [ 'txt' => _('modificar'), 'click' =>"fnjs_modificar_entrada(\"#$this->sKey\")" ],
-                [ 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_entrada(\"#$this->sKey\")" ], 
-                [ 'txt' => _('anular'), 'click' =>"fnjs_anular_entrada(\"#$this->sKey\")" ], 
-                   ];
-        }
-
-        $a_botones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_entrada_compartida(\"#$this->sKey\")" ];
-        /* De momento no hay ninguna accion
-        $a_botones[] = [ 'txt' => _('acción'), 'click' =>"fnjs_buscar_accion_entrada(\"#$this->sKey\")" ];
-        */
-
         $a_cabeceras=array( array('name'=>ucfirst(_("protocolo origen")),'formatter'=>'clickFormatter'),
                             ucfirst(_("ref.")),
                             _("categoria"),
@@ -278,8 +274,10 @@ class VerTabla {
         $oTabla = new Lista();
         $oTabla->setId_tabla('ver_tabla_'.$this->sKey);
         $oTabla->setCabeceras($a_cabeceras);
-        $oTabla->setBotones($a_botones);
+        $oTabla->setBotones($this->aBotones);
         $oTabla->setDatos($a_valores);
+        $oTabla->setDataTable_options_dom($this->dt_op_dom);
+        $oTabla->setDataTable_options_buttons($this->dt_op_buttons);
         
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
@@ -310,19 +308,6 @@ class VerTabla {
         $oVisibilidad = new Visibilidad();
         $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
         
-        
-        if (ConfigGlobal::role_actual() === 'secretaria') { 
-            $a_botones = [
-                [ 'txt' => _('modificar'), 'click' =>"fnjs_modificar_entrada(\"#$this->sKey\")" ],
-                [ 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_entrada(\"#$this->sKey\")" ], 
-                [ 'txt' => _('anular'), 'click' =>"fnjs_anular_entrada(\"#$this->sKey\")" ], 
-                   ];
-        }
-
-        $a_botones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_entrada(\"#$this->sKey\")" ];
-        $a_botones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_entrada(\"#$this->sKey\")" ];
-        $a_botones[] = [ 'txt' => _('acción'), 'click' =>"fnjs_buscar_accion_entrada(\"#$this->sKey\")" ];
-
         $a_cabeceras=array( array('name'=>ucfirst(_("protocolo origen")),'formatter'=>'clickFormatter'),
                             ucfirst(_("ref.")),
                             _("categoria"),
@@ -396,8 +381,10 @@ class VerTabla {
         $oTabla = new Lista();
         $oTabla->setId_tabla('ver_tabla_'.$this->sKey);
         $oTabla->setCabeceras($a_cabeceras);
-        $oTabla->setBotones($a_botones);
+        $oTabla->setBotones($this->aBotones);
         $oTabla->setDatos($a_valores);
+        $oTabla->setDataTable_options_dom($this->dt_op_dom);
+        $oTabla->setDataTable_options_buttons($this->dt_op_buttons);
         
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
@@ -429,15 +416,6 @@ class VerTabla {
         $oVisibilidad = new Visibilidad();
         $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
         
-        if (ConfigGlobal::role_actual() === 'secretaria') { 
-            $a_botones=array( array( 'txt' => _('modificar'), 'click' =>"fnjs_modificar_escrito(\"#$this->sKey\")" ) ,
-                        array( 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_escrito(\"#$this->sKey\")" ) 
-                        );
-        }
-
-        $a_botones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_escrito(\"#$this->sKey\")" ];
-        $a_botones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_escrito(\"#$this->sKey\")" ];
-
         $a_cabeceras=array( array('name'=>ucfirst(_("protocolo origen")),'formatter'=>'clickFormatter'),
                             ucfirst(_("destinos")),
                             ucfirst(_("ref.")),
@@ -521,8 +499,10 @@ class VerTabla {
         $oTabla = new Lista();
         $oTabla->setId_tabla('ver_tabla_'.$this->sKey);
         $oTabla->setCabeceras($a_cabeceras);
-        $oTabla->setBotones($a_botones);
+        $oTabla->setBotones($this->aBotones);
         $oTabla->setDatos($a_valores);
+        $oTabla->setDataTable_options_dom($this->dt_op_dom);
+        $oTabla->setDataTable_options_buttons($this->dt_op_buttons);
         
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
@@ -539,5 +519,86 @@ class VerTabla {
         $oView = new ViewTwig('busquedas/controller');
         echo $oView->renderizar('ver_tabla.html.twig',$a_campos);
     }
+    
+    // ---------------------------------- botones ----------------------------
+    
+    public function setBotones($a_botones) {
+    	$this->aBotones = $a_botones;
+    }
+    
+    public function setBotonesDefault() {
+    	
+        switch ($this->sKey) {
+            case 'entradas_ref':
+            case 'entradas':
+            	if (ConfigGlobal::role_actual() === 'secretaria') {
+					$this->aBotones = [
+            				[ 'txt' => _('modificar'), 'click' =>"fnjs_modificar_entrada(\"#$this->sKey\")" ],
+            				[ 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_entrada(\"#$this->sKey\")" ],
+            				[ 'txt' => _('anular'), 'click' =>"fnjs_anular_entrada(\"#$this->sKey\")" ],
+            		];
+            	}
+            	
+            	$this->aBotones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_entrada(\"#$this->sKey\")" ];
+            	$this->aBotones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_entrada(\"#$this->sKey\")" ];
+            	$this->aBotones[] = [ 'txt' => _('acción'), 'click' =>"fnjs_buscar_accion_entrada(\"#$this->sKey\")" ];
+                break;
+            case 'entradas_compartidas':
+            	if (ConfigGlobal::role_actual() === 'secretaria') {
+            		$this->aBotones = [
+            				[ 'txt' => _('modificar'), 'click' =>"fnjs_modificar_entrada(\"#$this->sKey\")" ],
+            				[ 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_entrada(\"#$this->sKey\")" ],
+            				[ 'txt' => _('anular'), 'click' =>"fnjs_anular_entrada(\"#$this->sKey\")" ],
+            		];
+            	}
+            	$this->aBotones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_entrada_compartida(\"#$this->sKey\")" ];
+            	break;
+            case 'escritos_ref':
+            case 'escritos':
+            	if (ConfigGlobal::role_actual() === 'secretaria') {
+            		$this->aBotones = [ ['txt' => _('modificar'), 'click' =>"fnjs_modificar_escrito(\"#$this->sKey\")" ],
+            							['txt' => _('eliminar'), 'click' =>"fnjs_borrar_escrito(\"#$this->sKey\")" ],
+            						];
+            	}
+            	
+            	$this->aBotones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_escrito(\"#$this->sKey\")" ];
+            	$this->aBotones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_escrito(\"#$this->sKey\")" ];
+                break;
+            default:
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
+        }
 
+    }
+    
+    
+	/**
+	 * @return mixed
+	 */
+	public function getDataTable_options_dom() {
+		return $this->dt_op_dom;
+	}
+
+	/**
+	 * @param mixed $dt_op_dom
+	 */
+	public function setDataTable_options_dom($dt_op_dom) {
+		$this->dt_op_dom = $dt_op_dom;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getDataTable_options_buttons() {
+		return $this->dt_op_buttons;
+	}
+
+	/**
+	 * @param mixed $dt_op_buttons
+	 */
+	public function setDataTable_options_buttons($dt_op_buttons) {
+		$this->dt_op_buttons = $dt_op_buttons;
+	}
+
+    
 }

@@ -49,6 +49,7 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         break;
@@ -78,6 +79,7 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         
@@ -107,6 +109,7 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         $btn_mas = "<button id=\"btn_mas\" type=\"button\" class=\"btn btn-primary\" onClick=\"fnjs_buscar_mas();\" >";
@@ -134,6 +137,7 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         break;
@@ -165,6 +169,7 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         break;
@@ -221,6 +226,7 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         break;
@@ -256,6 +262,7 @@ switch ($Qopcion) {
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
                     $oTabla->setFiltro($filtro);
+					$oTabla->setBotonesDefault();
                     echo $oTabla->mostrarTabla();
                 }
                 break;
@@ -279,6 +286,7 @@ switch ($Qopcion) {
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
                     $oTabla->setFiltro($filtro);
+					$oTabla->setBotonesDefault();
                     echo $oTabla->mostrarTabla();
                 }
                 break;
@@ -301,6 +309,7 @@ switch ($Qopcion) {
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
                     $oTabla->setFiltro($filtro);
+					$oTabla->setBotonesDefault();
                     echo $oTabla->mostrarTabla();
                 }
                 break;
@@ -324,6 +333,7 @@ switch ($Qopcion) {
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
                     $oTabla->setFiltro($filtro);
+					$oTabla->setBotonesDefault();
                     echo $oTabla->mostrarTabla();
                 }
                 break;
@@ -362,6 +372,7 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         break;
@@ -391,6 +402,7 @@ switch ($Qopcion) {
 			$oTabla->setCondicion($str_condicion);
 			$oTabla->setCollection($cCollection);
 			$oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
 			echo $oTabla->mostrarTabla();
 		}
 		break;
@@ -412,6 +424,7 @@ switch ($Qopcion) {
 			$oTabla->setKey($key);
 			$oTabla->setCollection($cCollection);
 			$oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
 			echo $oTabla->mostrarTabla();
     	}
     	break;
