@@ -319,8 +319,6 @@ class Enviar {
 				'center' => '',
 				'right' => $this->oEscrito->cabeceraDerecha(),
 			];
-			// nombre del archivo
-			$this->filename = $this->oEscrito->getNombreEscrito($this->sigla_destino);
         }
 
         if ($this->tipo == 'entrada') {
@@ -328,7 +326,6 @@ class Enviar {
 				'center' => '',
 				'right' => $this->oEntrada->cabeceraDerecha(),
 			];
-			$this->filename = $this->renombrar($oProtOrigen->ver_txt());
         }
         // formato pdf:
         $this->filename_ext = $this->filename.'.pdf';
