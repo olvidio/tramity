@@ -183,13 +183,9 @@ class Enviar {
         if (count(get_object_vars($json_prot_origen)) == 0) {
             exit (_("No hay más"));
         }
-        $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_origen->id_lugar);
-        $oProtOrigen->setProt_num($json_prot_origen->num);
-        $oProtOrigen->setProt_any($json_prot_origen->any);
-        $oProtOrigen->setMas($json_prot_origen->mas);
-        $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
+		$this->filename = $this->oEscrito->getNombreEscrito($this->sigla_destino);
+			
         $this->oEtherpad = new Etherpad();
         $this->oEtherpad->setId(Etherpad::ID_ENTRADA, $this->iid);
         
@@ -212,13 +208,9 @@ class Enviar {
         if (count(get_object_vars($json_prot_origen)) == 0) {
             exit (_("No hay más"));
         }
-        $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_origen->id_lugar);
-        $oProtOrigen->setProt_num($json_prot_origen->num);
-        $oProtOrigen->setProt_any($json_prot_origen->any);
-        $oProtOrigen->setMas($json_prot_origen->mas);
-        $this->filename = $this->renombrar($oProtOrigen->ver_txt());
         
+		$this->filename = $this->oEntrada->getNombreEscrito($this->sigla_destino);
+			
         $this->oEtherpad = new Etherpad();
         $this->oEtherpad->setId(Etherpad::ID_ENTRADA, $this->iid);
         
@@ -241,12 +233,8 @@ class Enviar {
         if (count(get_object_vars($json_prot_origen)) == 0) {
             exit (_("No hay más"));
         }
-        $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_origen->id_lugar);
-        $oProtOrigen->setProt_num($json_prot_origen->num);
-        $oProtOrigen->setProt_any($json_prot_origen->any);
-        $oProtOrigen->setMas($json_prot_origen->mas);
-        $this->filename = $this->renombrar($oProtOrigen->ver_txt());
+
+		$this->filename = $this->oEntrada->getNombreEscrito($this->sigla_destino);
         
         $this->oEtherpad = new Etherpad();
         $this->oEtherpad->setId(Etherpad::ID_COMPARTIDO, $this->iid);
