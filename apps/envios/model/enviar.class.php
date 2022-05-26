@@ -285,13 +285,13 @@ class Enviar {
                         exit ($err_switch);
                 }
             }
-			$this->filename = $this->oEscrito->getNombreEscrito($this->sigla_destino);
             
             // etherpad
             $this->oEtherpad = new Etherpad();
             $this->oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid);
             $this->bLoaded = TRUE;
         }
+		$this->filename = $this->oEscrito->getNombreEscrito($this->sigla_destino);
     }
     
     /**
