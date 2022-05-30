@@ -1,5 +1,8 @@
 <?php
 use core\ViewTwig;
+use web\Desplegable;
+use lugares\model\entity\GestorLugar;
+use oasis_as4\model\As4CollaborationInfo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -21,7 +24,7 @@ $explicacion =  _("Envia una orden de anulación para un escrito en otra platafo
 
 $active = ''; // no sé si tiene sentido que sea 'active'
 $aQuery = [ 'filtro' => $Qfiltro,
-		'accion' => 'anular',
+		'accion' => As4CollaborationInfo::ACCION_ORDEN_ANULAR,
 ];
 $pag_lst = web\Hash::link('apps/oasis_as4/controller/buscar_escrito.php?'.http_build_query($aQuery));
 
@@ -36,14 +39,14 @@ $a_pills[$num_orden] = $pill;
 
 // nueva versión escrito
 $num_orden = 20;
-$text = _("nuevo en otras plataformas");
-$explicacion =  _("Envia una orden de  un escrito en otra plataforma");
+$text = _("reemplazar en otras plataformas");
+$explicacion =  _("Envia un escrito que reemplaza a otro en otra plataforma");
 
 $active = ''; // no sé si tiene sentido que sea 'active'
 $aQuery = [ 'filtro' => $Qfiltro,
-		'accion' => 'nv',
+		'accion' => As4CollaborationInfo::ACCION_REEMPLAZAR,
 ];
-$pag_lst = web\Hash::link('apps/escritos/controller/anular.php?'.http_build_query($aQuery));
+$pag_lst = web\Hash::link('apps/oasis_as4/controller/buscar_escrito.php?'.http_build_query($aQuery));
 
 $pill = [ 'orden'=> $num_orden,
 		'text' => $text,
@@ -53,12 +56,25 @@ $pill = [ 'orden'=> $num_orden,
 		'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
+$gesLugares = new GestorLugar();
+$a_plataformas = $gesLugares->getPlataformas();
 
+$plataforma_mantenimiento = $_SESSION['oConfig']->getPlataformaMantenimiento();
 
+$oDesplPlataformas = new Desplegable();
+$oDesplPlataformas->setNombre('plataforma');
+$oDesplPlataformas->setOpciones($a_plataformas);
+$oDesplPlataformas->setBlanco(TRUE);
+$oDesplPlataformas->setAction("fnjs_guardar_plataforma()");
+$oDesplPlataformas->setOpcion_sel($plataforma_mantenimiento);
+
+$url_ajax = 'apps/escritos/controller/mantenimiento_ajax.php';
 
 $a_campos = [ 'filtro' => $Qfiltro,
 		'btn_cerrar' => TRUE,
 		'a_pills' => $a_pills,
+		'oDesplPlataformas' => $oDesplPlataformas,
+		'url_ajax' => $url_ajax,
 	];
 
 $oView = new ViewTwig('escritos/controller');

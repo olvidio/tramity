@@ -15,9 +15,8 @@ require_once ("apps/core/global_object.inc");
 
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qctr_anulados = (bool) \filter_input(INPUT_POST, 'ctr_anulados');
+$Qaccion = (string) \filter_input(INPUT_POST, 'accion');
 
-// vengo de modificar algo, quiero volver a la lista
-$Qopcion = (integer) \filter_input(INPUT_POST, 'opcion');
 //7
 $Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
 $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
@@ -52,7 +51,7 @@ $a_campos = [
     'dele' => $sigla,
     'id_cr' => $id_cr,
     'filtro' => $Qfiltro,
-    'opcion' => $Qopcion,
+    'accion' => $Qaccion,
     'prot_num' => $Qprot_num,
     'prot_any' => $Qprot_any,
     // tabs_show

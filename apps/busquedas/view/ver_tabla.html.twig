@@ -1,6 +1,8 @@
 <!-- Modal -->
 <input type=hidden id='modal_tipo' value=0>
 <input type=hidden id='modal_id_reg' value=0>
+<!-- tipo_reg: para saber si el id_reg es de entradas o escritos -->
+<input type=hidden id='modal_tipo_reg' value=0>
 <div class="modal fade" id="ModalDetalle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -10,8 +12,7 @@
 		</div>
         <div class="d-flex flex-row justify-content-end">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+          </button>
 		</div>
       </div>
       <div class="modal-body">
@@ -48,6 +49,81 @@
 $(document).ready(function() {
 	tabs_show('{{ vista }}','{{ filtro }}');
 });
+////////////////  Ordenes a plataforma centros /////////////////////
+
+fnjs_orden_a_plataforma=function(formulario,orden) {
+    rta=fnjs_solo_uno(formulario);
+    if (rta==1) {
+        var form=$(formulario).attr('id');
+        var id_reg;
+        /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+        /* var sel=$('#'+formulario+' table .sel'); */
+        $('#'+form+' input.sel').each(function(i){
+            if($(this).prop('checked')== true) {
+                // como ya he comprobado que sólo está uno seleccionado, es este.
+                var array_dir=$(this).val().split('#');
+                id_reg=array_dir[0];
+            }
+        });
+        
+        if (orden == '{{ constant('oasis_as4\\model\\As4CollaborationInfo::ACCION_ORDEN_ANULAR') }}') {
+            fnjs_orden_anular_a_plataforma(id_reg,form);
+        }
+        if (orden == '{{ constant('oasis_as4\\model\\As4CollaborationInfo::ACCION_REEMPLAZAR') }}') {
+            fnjs_orden_reemplazar_a_plataforma(id_reg,form);
+        }
+    }
+}	
+
+fnjs_orden_anular_a_plataforma=function(id_reg,id_form) {
+    // obtener el texto de anulado de la dl. por si se quiere utilizar el mismo.
+    var url_doc = 'apps/entradas/controller/entrada_ajax.php';
+    var param_json = { que: 'get_anular', id_entrada: id_reg };
+    request=$.ajax({
+        data: param_json,
+        url: url_doc,
+        method: 'POST',
+        dataType: 'json'
+    });
+    request.done( function (json) {
+        if (json.success != true) {
+            alert (json.mensaje);
+        } else {
+            $('#exampleModalLongTitle').html('{{ "Enviar orden de anular a otra plataforma"|trans }}');
+            $('#modal_titulo').html('{{ "Anular (si no hay texto está activo)"|trans }}');
+            $('#modal_id_reg').val(id_reg);	
+            $('#modal_tipo_reg').val(id_form);	
+            $('#modal_tipo').val('{{ constant('oasis_as4\\model\\As4CollaborationInfo::ACCION_ORDEN_ANULAR') }}' );
+            $('#comentario').val(json.detalle);
+            $('#ModalDetalle').modal('show');
+        }
+    });
+		
+}
+
+fnjs_orden_reemplazar_a_plataforma=function(id_reg,id_form) {
+    var tipo_reg = id_form;
+    id_reg = tipo_reg+'#'+id_reg;
+	var que = '{{ constant('oasis_as4\\model\\As4CollaborationInfo::ACCION_REEMPLAZAR') }}';
+	var url_doc = 'apps/entradas/controller/entrada_ajax.php';
+    var param_json = { que: que, id_entrada: id_reg };
+
+    request=$.ajax({
+        data: param_json,
+        url: url_doc,
+        method: 'POST',
+        dataType: 'json'
+    });
+    
+    request.done( function (json) {
+        if (json.success != true) {
+            alert (json.mensaje);
+        } else {
+            fnjs_actualizar();
+        }
+    });
+}
+
 ////////////////  Entradas /////////////////////
 // Aunque ya está defindo en más sitios, pero si lo primero es mirar aqui, no la encuentra.
 fnjs_ver_entrada=function(id_entrada,compartida=false) {
@@ -175,6 +251,13 @@ fnjs_guardar_comentario=function(){
 	var que_tipo='';
 	var elim_pendientes=0;
 
+	if (tipo == '{{ constant('oasis_as4\\model\\As4CollaborationInfo::ACCION_ORDEN_ANULAR') }}' ) {
+        var tipo_reg = $('#modal_tipo_reg').val();	
+        id_reg = tipo_reg+'#'+id_reg;
+        elim_pendientes=0;
+        fnjs_guardar_comentario2(tipo,id_reg,comentario,elim_pendientes);
+	}
+
 	if (tipo =='anular') {
 		que_tipo = 'modificar_anular';
 
@@ -240,7 +323,12 @@ fnjs_guardar_comentario2=function(que_tipo,id_reg,comentario,elim_pendientes) {
         if (json.success != true) {
             alert (json.mensaje);
         } else {
-            fnjs_actualizar();
+			if (que_tipo == '{{ constant('oasis_as4\\model\\As4CollaborationInfo::ACCION_ORDEN_ANULAR') }}'
+				|| que_tipo == '{{ constant('oasis_as4\\model\\As4CollaborationInfo::ACCION_REEMPLAZAR') }}' ) {
+					alert('{{ "Mensaje enviado"|trans }}');
+            } else {
+                fnjs_actualizar();
+            }
         }
     });
 }

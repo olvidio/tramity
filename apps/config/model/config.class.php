@@ -263,4 +263,11 @@ class Config {
         return $oConfigSchema->getValor();
     }
     
+    // config default
+    public function getPlataformaMantenimiento() {
+        $parametro = 'plataforma_mantenimiento';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
+    
 }

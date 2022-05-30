@@ -141,7 +141,7 @@ class EntradaBypass Extends Entrada {
 
 	/**
 	 * Desa els atributs de l'objecte a la base de dades.
-	 * Si no hi ha el registre, fa el insert, si hi es fa el update.
+	 * Si no hi ha el registre, fa el insert, si hi és fa el update.
 	 *
 	 */
 	public function DBGuardar() {
@@ -231,7 +231,7 @@ class EntradaBypass Extends Entrada {
                     $this->setAllAtributes($aDades);
 					break;
 				case 'guardar':
-					if (!$oDblSt->rowCount()) return FALSE;
+					if (!$oDblSt->rowCount()) { return FALSE; }
 					break;
                 default:
 					// En el caso de no existir esta fila, $aDades = FALSE:

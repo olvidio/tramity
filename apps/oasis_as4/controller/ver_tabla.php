@@ -2,6 +2,7 @@
 use busquedas\model\Buscar;
 use busquedas\model\VerTabla;
 use lugares\model\entity\GestorLugar;
+use oasis_as4\model\As4CollaborationInfo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -12,7 +13,7 @@ require_once ("apps/core/global_header.inc");
 require_once ("apps/core/global_object.inc");
 // Crea los objectos por esta url  **********************************************
 
-$Qopcion = (integer) \filter_input(INPUT_POST, 'opcion');
+$Qaccion = (string) \filter_input(INPUT_POST, 'accion');
 $Qmas = (integer) \filter_input(INPUT_POST, 'mas');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
@@ -21,6 +22,7 @@ $id_sigla_local = $gesLugares->getId_sigla_local();
 
 $filtro = empty($Qfiltro)? 'mantenimiento' : $Qfiltro;
 $Qmas = '';
+$Qopcion = 7;
 $a_condicion = []; // para poner los parámetros de la búsqueda y poder actualizar la página.
 $a_condicion['opcion'] = $Qopcion;
 
@@ -44,9 +46,16 @@ $oBuscar->setProt_any($Qprot_any);
 
 $aCollection = $oBuscar->getCollection($Qopcion, $Qmas);
 foreach ($aCollection as $key => $cCollection) {
-	$a_botones = [
-			[ 'txt' => _('anular'), 'click' =>"fnjs_orden_anular(\"#$key\")" ],
-	];
+	if ($Qaccion == As4CollaborationInfo::ACCION_ORDEN_ANULAR) {
+		$a_botones = [
+			[ 'txt' => _('enviar orden anular'), 'click' =>"fnjs_orden_a_plataforma(\"#$key\",\"$Qaccion\")" ],
+		];
+	}
+	if ($Qaccion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
+		$a_botones = [
+			[ 'txt' => _('enviar orden reemplazar'), 'click' =>"fnjs_orden_a_plataforma(\"#$key\",\"$Qaccion\")" ],
+		];
+	}
 
 	$oTabla = new VerTabla();
 	$oTabla->setKey($key);

@@ -47,6 +47,7 @@ class Payload {
 	private $destinos;
 	
 	private $sufijo_dst;
+	private $anular_txt;
 	
 	public function __construct() {
 		$gesLugares = new GestorLugar();
@@ -67,7 +68,7 @@ class Payload {
 		}
 	}
 	
-	public function setPayloadEntrada($oEntradaBypass) {
+	private function setPayloadEntrada($oEntradaBypass) {
 		$this->json_prot_local = $oEntradaBypass->getJson_prot_origen();
 		// OJO hay que coger el destino que se tiene al enviar, 
 		// no el del escrito, que puede ser a varios o un grupo.
@@ -88,7 +89,9 @@ class Payload {
 		
 		$this->nombre_escrito = $oEntradaBypass->getNombreEscrito($this->sufijo_dst) . '.xml';
 		
-		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR ) {
+		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
+				|| $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR )
+		{
 			$this->json_prot_dst = $oEntradaBypass->getJson_prot_destino();
 			///$this->descripcion = $oEntrada->getDescripcion();
 			$this->descripcion = $oEntradaBypass->cabeceraDistribucion_cr(); // decripción más completa
@@ -98,7 +101,7 @@ class Payload {
 		}
 	}
 
-	public function setPayloadEscrito($oEscrito) {
+	private function setPayloadEscrito($oEscrito) {
 		$this->json_prot_local = $oEscrito->getJson_prot_local();
 		// OJO hay que coger el destino que se tiene al enviar, 
 		// no el del escrito, que puede ser a varios o un grupo.
@@ -119,7 +122,9 @@ class Payload {
 
 		$this->nombre_escrito = $oEscrito->getNombreEscrito($this->sufijo_dst) . '.xml';
 
-		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR) {
+		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
+				|| $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR )
+		{
 			$this->json_prot_dst = $oEscrito->getJson_prot_destino();
 			$this->descripcion = $oEscrito->getDestinosEscrito(); // para que salga la descripción del grupo.
 			$this->categoria = $oEscrito->getCategoria();
@@ -136,7 +141,7 @@ class Payload {
 	</PartInfo>
 	<PartInfo containment="attachment" mimeType="image/jpeg" location="payloads/summerflower.jpg"/>
 	*/
-	public function getXml($dom) {
+	public function createXml($dom) {
 		$this->payload = $dom->createElement("PayloadInfo");
 		$attr = new \DOMAttr('deleteFilesAfterSubmit',$this->deleteFilesAfterSubmit);
 		$this->payload->setAttributeNode($attr);
@@ -167,19 +172,33 @@ class Payload {
 		
 		$this->escrito = $this->dom->createElement("escrito");
 	
-		$this->escrito->appendChild($this->getXmlProt_dst());
-		$this->escrito->appendChild($this->getXmlProt_org());
-		$this->escrito->appendChild($this->getXmlProt_ref());
-		$this->escrito->appendChild($this->getXmlF_entrada());
-		$this->escrito->appendChild($this->getXmlF_escrito());
-		$this->escrito->appendChild($this->getXmlF_salida());
-		$this->escrito->appendChild($this->getXmlF_contestar());
-		$this->escrito->appendChild($this->getXmlAsunto());
-		$this->escrito->appendChild($this->getXmlContent());
-		$this->escrito->appendChild($this->getXmlVisibilidad());
-		$this->escrito->appendChild($this->getXmlAdjuntos());
-		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR) {
-			$this->escrito->appendChild($this->getXmlCompartido());
+		$saltar = FALSE;
+		if ($this->accion == As4CollaborationInfo::ACCION_ORDEN_ANULAR) {
+			$this->escrito->appendChild($this->createXmlAnular());
+			$saltar = TRUE;
+		}
+		if ($this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
+			$this->escrito->appendChild($this->createXmlAnular());
+		}
+		
+		$this->escrito->appendChild($this->createXmlProt_dst());
+		$this->escrito->appendChild($this->createXmlProt_org());
+		$this->escrito->appendChild($this->createXmlProt_ref());
+		
+		if (!$saltar) {
+			$this->escrito->appendChild($this->createXmlF_entrada());
+			$this->escrito->appendChild($this->createXmlF_escrito());
+			$this->escrito->appendChild($this->createXmlF_salida());
+			$this->escrito->appendChild($this->createXmlF_contestar());
+			$this->escrito->appendChild($this->createXmlAsunto());
+			$this->escrito->appendChild($this->createXmlContent());
+			$this->escrito->appendChild($this->createXmlVisibilidad());
+			$this->escrito->appendChild($this->createXmlAdjuntos());
+			if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
+				|| $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR )
+			{
+				$this->escrito->appendChild($this->createXmlCompartido());
+			}
 		}
 		
 		$this->dom->preserveWhiteSpace = false;
@@ -294,7 +313,7 @@ class Payload {
 	/**
 	 * @return mixed
 	 */
-	public function getXmlProt_dst() {
+	private function createXmlProt_dst() {
 		$oProt = $this->json_prot_dst;
 		return $this->prot2xml($oProt, 'dst');
 	}
@@ -309,7 +328,7 @@ class Payload {
 	/**
 	 * @return mixed
 	 */
-	public function getXmlProt_org() {
+	private function createXmlProt_org() {
 		$oProt = $this->json_prot_local;
 		return $this->prot2xml($oProt, 'org');
 	}
@@ -324,7 +343,7 @@ class Payload {
 	/**
 	 * @return mixed
 	 */
-	public function getXmlProt_ref() {
+	private function createXmlProt_ref() {
 		$oProt = $this->json_prot_ref;
 		return $this->prot2xml($oProt, 'ref');
 	}
@@ -339,7 +358,7 @@ class Payload {
 	/**
 	 * @return mixed
 	 */
-	public function getXmlF_entrada() {
+	private function createXmlF_entrada() {
 		$f_iso = $this->f_entrada->getIso();
 		return $this->dom->createElement('f_entrada',$f_iso);
 	}
@@ -354,7 +373,7 @@ class Payload {
 	/**
 	 * @return mixed
 	 */
-	public function getXmlF_escrito() {
+	private function createXmlF_escrito() {
 		$f_iso = $this->f_escrito->getIso();
 		return $this->dom->createElement('f_escrito',$f_iso);
 	}
@@ -370,7 +389,7 @@ class Payload {
 	/**
 	 * @return mixed
 	 */
-	public function getXmlF_salida() {
+	private function createXmlF_salida() {
 		$f_iso = $this->f_salida->getIso();
 		return $this->dom->createElement('f_salida',$f_iso);
 	}
@@ -385,7 +404,7 @@ class Payload {
 	/**
 	 * @return mixed
 	 */
-	public function getXmlF_contestar() {
+	private function createXmlF_contestar() {
 		$f_iso = $this->f_contestar->getIso();
 		return $this->dom->createElement('f_contestar',$f_iso);
 	}
@@ -400,7 +419,21 @@ class Payload {
 	/**
 	 * @return mixed
 	 */
-	public function getXmlAsunto() {
+	private function createXmlAnular() {
+		return $this->dom->createElement('anular',$this->anular_txt);
+	}
+
+	/**
+	 * @param mixed $asunto
+	 */
+	public function setAnular($text) {
+		$this->anular_txt = $text;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	private function createXmlAsunto() {
 		return $this->dom->createElement('asunto',$this->asunto);
 	}
 
@@ -414,10 +447,12 @@ class Payload {
 	/**
 	 * @return mixed
 	 */
-	public function getXmlContent() {
+	private function createXmlContent() {
 		$oEtherpad = new Etherpad();
 		/* Puede ser un bypass o simplemente una salida con múltiples destinos */
-		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR) {
+		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
+				|| $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR )
+		{
 			if ($this->tipo_escrito == 'entrada') {
 				$oEtherpad->setId(Etherpad::ID_ENTRADA, $this->id_escrito);
 			}
@@ -493,7 +528,7 @@ class Payload {
 	/**
 	 * @return mixed
 	 */
-	public function getXmlVisibilidad() {
+	private function createXmlVisibilidad() {
 		return $this->dom->createElement('visibilidad',$this->visibilidad);
 	}
 
@@ -504,7 +539,7 @@ class Payload {
 		$this->visibilidad = $visibilidad;
 	}
 	
-	public function getXmlCompartido() {
+	private function createXmlCompartido() {
 		$nodo_compartido = $this->dom->createElement('compartido');
 		if (!empty($this->descripcion)) {
 			$nodo = $this->dom->createElement('descripcion',$this->descripcion);
@@ -530,7 +565,7 @@ class Payload {
 	/**
 	 * @return mixed
 	 */
-	public function getXmlAdjuntos() {
+	private function createXmlAdjuntos() {
 		$a_adjuntos = [];
 		foreach ($this->a_id_adjuntos as $item => $adjunto_filename) {
 			if ($this->tipo_escrito == 'entrada') {

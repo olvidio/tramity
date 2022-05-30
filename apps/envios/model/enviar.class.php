@@ -109,6 +109,10 @@ class Enviar {
     }
     
     private function getDestinatarios(){
+    	if ($this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR ) {
+    		echo "AAAAAAAHHHHH!!!!!";
+    		
+    	}
         if ($this->tipo == 'entrada') {
 			$this->accion = As4CollaborationInfo::ACCION_COMPARTIR;
 			$aDestinos = $this->oEntradaBypass->getDestinosByPass();
@@ -161,7 +165,7 @@ class Enviar {
         	if ($is_compartida) {
         		$this->getDatosEntradaCompartida();
         	} else {
-				// Puede que no sea bypass. Se uasa para descargar la entrada en local.
+				// Puede que no sea bypass. Se usa para descargar la entrada en local.
 				// Asunto_entrada no puede sernull. si lo és es que no existe.
 				if (empty($this->oEntradaBypass->getAsunto_entrada())) {
 					$this->getDatosEntrada();
@@ -184,7 +188,7 @@ class Enviar {
             exit (_("No hay más"));
         }
         
-		$this->filename = $this->oEscrito->getNombreEscrito($this->sigla_destino);
+		$this->filename = $this->oEntradaBypass->getNombreEscrito($this->sigla_destino);
 			
         $this->oEtherpad = new Etherpad();
         $this->oEtherpad->setId(Etherpad::ID_ENTRADA, $this->iid);
@@ -351,19 +355,23 @@ class Enviar {
 					$plataforma = $oLugar->getPlataforma();
 					// si la acción es compartir, se envia el mismo escrito a un conjunto de ctr.
 					// aquí genero el array de destinos: 
-					if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR) {
+					if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
+							|| $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR )
+					{
 						$a_lista_dst_as4[] = $plataforma;
 					} else {
 						$err_mail = $this->enviarAS4($id_lugar,$plataforma,$this->accion);
 					}
                     break;
                 default:
-                    $err_mail =  _("No hay destinos metodo para este destino");
+                    $err_mail =  _("No hay modo de envio para este destino");
             }
         }
         
         // si es compartir, enviar en bloque por plataformas.
-		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR) {
+        if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
+        		|| $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR )
+        {
 			foreach ($a_lista_dst_as4 as $plataforma) {
 				// Finalmente, los destinos se añaden en el payload. No se tienen en cuenta a la hora de enviar.
 				// Al recoger, se mira si están en la plataforma y se les añade.
@@ -414,6 +422,21 @@ class Enviar {
         
         if ($this->tipo == 'entrada') {
         	$json_prot_org = $this->oEntradaBypass->getJson_prot_origen();
+        	// cambio el nombre del fichero. No hace falta añadir la sigla destino si es compartido.
+        	switch ($this->accion) {
+        		case As4CollaborationInfo::ACCION_ORDEN_ANULAR:
+        			$parentesi = $this->accion;
+        			break;
+        		case As4CollaborationInfo::ACCION_REEMPLAZAR:
+        			$parentesi = $this->accion;
+        			break;
+        		case As4CollaborationInfo::ACCION_COMPARTIR:
+        			$parentesi = $this->accion;
+        			break;
+        		default:
+        			$parentesi = '';
+        	}
+			$this->filename = $this->oEntradaBypass->getNombreEscrito($parentesi);
         }
         
         // Los destinos se añaden en el payload. No se tienen en cuenta a la hora de enviar.

@@ -1,7 +1,7 @@
 <div id="condiciones" class="col-9">
 <!-- Un escrito concreto --------------------------------------------- -->
 <form id="frm_buscar_7" name="frm_buscar_7" action="">
-    <input type="hidden" name="opcion" value="">
+    <input type="hidden" name="accion" value="{{ accion }}">
     <input type="hidden" name="mas" value="">
     <table class="table table-warning p-2">
     <tr class="table-danger">
@@ -24,7 +24,7 @@
     </tr>
     </table>
 </form>
-
+</div>
 
 <div id="resultados" class="container-fluid p-3 my-3 border bg-light" >
 </div>
@@ -65,18 +65,15 @@ fnjs_proto=function(num,any,siguiente){
 
 fnjs_buscar=function(formulario){
     var form_name=$(formulario).attr('name');
-    var opcion=form_name.substr(-1);
-    if (opcion==7) {
-        var num = $('#prot_num').val();
-        if (num === '0' || num === 0 || num === '') {
-            if ( !confirm("{{ "¿Seguro que quiere ver todos?"|trans }}") ) {
-                return;
-            }
+    var num = $('#prot_num').val();
+    if (num === '0' || num === 0 || num === '') {
+        if ( !confirm("{{ "¿Seguro que quiere ver todos?"|trans }}") ) {
+            return;
         }
     }
     // borro los posibles resultados anteriores
     $('#resultados').html("");
-    $(formulario+' input[name="opcion"]').val(opcion);
+    //$(formulario+' input[name="opcion"]').val(opcion);
     $(formulario).attr('action','apps/oasis_as4/controller/ver_tabla.php');
     fnjs_enviar_formulario(formulario,'#resultados');
 }

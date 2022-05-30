@@ -6,11 +6,12 @@ abstract class As4CollaborationInfo {
 	/* CONST -------------------------------------------------------------- */
 	
 	// tipo entrada
-	const ACCION_NUEVO        = 'nuevo';
-	const ACCION_ELIMINAR     = 'eliminar';
-	const ACCION_ANULAR       = 'anular';
-	const ACCION_REEMPLAZAR   = 'reemplazar';
-	const ACCION_COMPARTIR   = 'compartir';
+	const ACCION_NUEVO        	= 'nuevo';
+	const ACCION_ELIMINAR     	= 'eliminar';
+	const ACCION_ANULAR      	= 'anular';
+	const ACCION_REEMPLAZAR   	= 'reemplazar';
+	const ACCION_COMPARTIR    	= 'compartir';
+	const ACCION_ORDEN_ANULAR	= 'orden_anular';
 	
 	/* PROPIEDADES -------------------------------------------------------------- */
 	
@@ -27,6 +28,7 @@ abstract class As4CollaborationInfo {
 				self::ACCION_NUEVO => _("nuevo"),
 				self::ACCION_COMPARTIR => _("compartir"),
 				self::ACCION_REEMPLAZAR => _("reemplazar"),
+				self::ACCION_ORDEN_ANULAR => _("orden anular"),
 		];
 	}
 	protected function getPm_id() {

@@ -27,6 +27,9 @@ class As4 extends As4CollaborationInfo {
     private $conversation_id;
     private $message_id;
     private $tipo_escrito;
+
+    private $anular_txt;
+    private $filename;
     
     /**
      *
@@ -42,6 +45,7 @@ class As4 extends As4CollaborationInfo {
     }
     
     public function writeOnDock($filename) {
+    	$this->filename = $filename;
     	$err_txt = '';
         $dir = $_SESSION['oConfig']->getDock();
         $full_filename = $dir .'/data/msg_out/'. $filename .'.mmd';
@@ -49,7 +53,7 @@ class As4 extends As4CollaborationInfo {
         $this->dom->preserveWhiteSpace = false;
         $this->dom->formatOutput = true;
         
-        $this->dom->appendChild($this->getMessageMetaData());
+        $this->dom->appendChild($this->createMessageMetaData());
         
         if ( $this->dom->save($full_filename) === FALSE) {
             $err_txt .= _("Error al escribir el as4.xml");
@@ -58,7 +62,7 @@ class As4 extends As4CollaborationInfo {
     }
     
     
-    public function getMessageMetaData() {
+    private function createMessageMetaData() {
     	// crear el nodo:
     	$message_meta_data = $this->dom->createElement("MessageMetaData");
     	$attr_1 = new DOMAttr('xmlns:xsi',"http://www.w3.org/2001/XMLSchema-instance");
@@ -70,26 +74,42 @@ class As4 extends As4CollaborationInfo {
     	$message_meta_data->setAttributeNode($attr_1);
     	
     	// añadir subnodos
-    	$message_meta_data->appendChild($this->getMessageInfo());
-    	$message_meta_data->appendChild($this->getCollaborationInfo());
-    	$message_meta_data->appendChild($this->getPayloadInfo());
-    	$message_meta_data->appendChild($this->getMessageProperties());
+    	$message_meta_data->appendChild($this->createMessageInfo());
+    	$message_meta_data->appendChild($this->createCollaborationInfo());
+    	$message_meta_data->appendChild($this->createPayloadInfo());
+    	$message_meta_data->appendChild($this->createMessageProperties());
     	
     	return $message_meta_data;
     }
 
-    public function getMessageInfo() {
-    	$json_prot_origen = $this->getJson_prot_org();
-        $oProtOrigen = new Protocolo();
-        $oProtOrigen->setLugar($json_prot_origen->id_lugar);
-        $oProtOrigen->setProt_num($json_prot_origen->num);
-        $oProtOrigen->setProt_any($json_prot_origen->any);
-        $oProtOrigen->setMas($json_prot_origen->mas);
-        $this->conversation_id = $oProtOrigen->conversation_id();
-        // para que sea único, en el caso de la dl, manda a varios ctr con el mismo protocolo:
-        // añadir el destino + id_escrito:
-        // destino@prot_origen@id_escrito
-    	$this->message_id = $this->getDestino_txt() .'@'. $this->conversation_id .'@'. $this->getId_escrito();
+    private function createMessageInfo() {
+		// El campo 'conversation_id' es obligatorio para el AS4
+		$json_prot_origen = $this->getJson_prot_org();
+		if (!empty($json_prot_origen)) {
+			$oProtOrigen = new Protocolo();
+			$oProtOrigen->setLugar($json_prot_origen->id_lugar);
+			$oProtOrigen->setProt_num($json_prot_origen->num);
+			$oProtOrigen->setProt_any($json_prot_origen->any);
+			$oProtOrigen->setMas($json_prot_origen->mas);
+			$this->conversation_id = $oProtOrigen->conversation_id();
+		} else {
+			$this->conversation_id = $this->filename;
+		}
+
+        switch ($this->accion) {
+        	case As4CollaborationInfo::ACCION_ORDEN_ANULAR:
+				$this->message_id = 'orden' .'@'. $this->accion .'@'. $this->getId_escrito();
+				break;
+        	case As4CollaborationInfo::ACCION_REEMPLAZAR:
+        	case As4CollaborationInfo::ACCION_COMPARTIR:
+				$this->message_id = 'compartir' .'@'. $this->accion .'@'. $this->getId_escrito();
+				break;
+        	default:
+				// para que sea único, en el caso de la dl, manda a varios ctr con el mismo protocolo:
+				// añadir el destino + id_escrito:
+				// destino@prot_origen@id_escrito
+				$this->message_id = $this->getDestino_txt() .'@'. $this->conversation_id .'@'. $this->getId_escrito();
+        }
     	
     	// crear el nodo:
         $message_info = $this->dom->createElement("MessageInfo");
@@ -100,7 +120,7 @@ class As4 extends As4CollaborationInfo {
         return $message_info;
     }
     
-    public function getCollaborationInfo() {
+    private function createCollaborationInfo() {
     	$pm_id = $this->getPm_id();
         // crear el nodo:
         $colaborador_info = $this->dom->createElement("CollaborationInfo");
@@ -116,7 +136,7 @@ class As4 extends As4CollaborationInfo {
         return $colaborador_info;
     }
     
-    public function getPayloadInfo() {
+    private function createPayloadInfo() {
         
     	$oPayload = new Payload();
     	$oPayload->setAccion($this->accion);
@@ -124,12 +144,13 @@ class As4 extends As4CollaborationInfo {
 		$oPayload->setJson_prot_dst($this->json_prot_dst);
     	
     	$oPayload->setPayload($this->oEscrito,$this->tipo_escrito,$this->lugar_destino_txt);
+    	$oPayload->setAnular($this->getAnular_txt());
     	// formato del texto: pdf|text|html
     	$oPayload->setFormat(Payload::TYPE_ETHERAD_HTML);
     	$oPayload->createXmlFile();
     	
     	$oPayload->setDeleteFilesAfterSubmit(FALSE);
-    	return $oPayload->getXml($this->dom);
+    	return $oPayload->createXml($this->dom);
     }
     
     /**
@@ -145,7 +166,7 @@ class As4 extends As4CollaborationInfo {
 	<eb:Property name="mas_dst">a)</eb:Property>
     </eb:MessageProperties>
      */
-    public function getMessageProperties() {
+    private function createMessageProperties() {
     	// tabla de siglas:
     	$gesLugares = new GestorLugar();
     	$aLugares = $gesLugares->getArrayLugares();
@@ -177,7 +198,9 @@ class As4 extends As4CollaborationInfo {
 
         // En el caso de compartir, el destino es multiple y no lo pongo aquí,
         // Estará en el mensaje.
-        if ($this->accion != As4CollaborationInfo::ACCION_COMPARTIR) {
+		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
+				|| $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR )
+		{
 			// puede ser 'sin_numerar (E12)'
 			$json_prot_dst = $this->getJson_prot_dst();
 			if (!empty((array)$json_prot_dst)) {
@@ -222,17 +245,17 @@ class As4 extends As4CollaborationInfo {
 	}
 
 	/**
-	 * @return mixed
-	 */
-	public function getJson_prot_dst() {
-		return $this->json_prot_dst;
-	}
-
-	/**
 	 * @param mixed $json_prot_org
 	 */
 	public function setJson_prot_org($json_prot_org) {
 		$this->json_prot_org = $json_prot_org;
+	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getJson_prot_dst() {
+		return $this->json_prot_dst;
 	}
 
 	/**
@@ -254,6 +277,21 @@ class As4 extends As4CollaborationInfo {
 	public function setEscrito($oEscrito) {
 		$this->oEscrito = $oEscrito;
 	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getTipo_escrito() {
+		return $this->tipo_escrito;
+	}
+
+	/**
+	 * @param mixed $tipo_escrito 'entrada'|'escrito'
+	 */
+	public function setTipo_escrito($tipo_escrito) {
+		$this->tipo_escrito = $tipo_escrito;
+	}
+
 
 	private function getId_escrito() {
 		$id = '';
@@ -283,16 +321,15 @@ class As4 extends As4CollaborationInfo {
 	/**
 	 * @return mixed
 	 */
-	public function getTipo_escrito() {
-		return $this->tipo_escrito;
+	public function getAnular_txt() {
+		return $this->anular_txt;
 	}
 
 	/**
-	 * @param mixed $tipo_escrito 'entrada'|'escrito'
+	 * @param mixed $anular_txt
 	 */
-	public function setTipo_escrito($tipo_escrito) {
-		$this->tipo_escrito = $tipo_escrito;
+	public function setAnular_txt($anular_txt) {
+		$this->anular_txt = $anular_txt;
 	}
 
-    
 }

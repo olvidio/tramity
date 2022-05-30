@@ -361,12 +361,12 @@ class Entrada Extends EntradaDB {
     }
     
     /**
-     * Devuelve el nombre del escrito: cr_15_05
+     * Devuelve el nombre del escrito (sigla_num_año): cr_15_05
      *
      * @param string $parentesi si existe se añade al nombre, entre parentesis
      * @return string|mixed
      */
-    public function getNombreEscrito($parentesi) {
+    public function getNombreEscrito($parentesi='') {
     	$json_prot_local = $this->getJson_prot_origen();
     	// nombre del archivo
     	if (empty((array)$json_prot_local)) {

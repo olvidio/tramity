@@ -683,7 +683,7 @@ class Escrito Extends EscritoDB {
      * @param string $parentesi si existe se añade al nombre, entre parentesis
      * @return string|mixed
      */
-    public function getNombreEscrito($parentesi) {
+    public function getNombreEscrito($parentesi='') {
         $json_prot_local = $this->getJson_prot_local();
     	// nombre del archivo
     	if (empty((array)$json_prot_local)) {

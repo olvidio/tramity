@@ -8,7 +8,9 @@ use entradas\model\Entrada;
 use entradas\model\EntradaEntidad;
 use entradas\model\EntradaEntidadAdjunto;
 use entradas\model\EntradaEntidadDoc;
+use entradas\model\GestorEntrada;
 use entradas\model\entity\EntradaCompartida;
+use entradas\model\entity\EntradaCompartidaAdjunto;
 use entradas\model\entity\EntradaDocDB;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
@@ -17,7 +19,6 @@ use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
 use web\Protocolo;
-use entradas\model\entity\EntradaCompartidaAdjunto;
 
 /**
  * No se usa el simpleXml porque con los adjuntos grandes se acaba la memoria...
@@ -114,6 +115,14 @@ class As4Entregar extends As4CollaborationInfo {
 	private $aLugares;
 	private $aEntidades;
 	
+	/**
+	 * 
+	 * @var string
+	 */
+	private	$anular_txt;
+	
+	
+	
 	public function __construct($xmldata) {
 		$gesLugares = new GestorLugar();
 		$this->aLugares = $gesLugares->getArrayLugares();
@@ -155,8 +164,12 @@ class As4Entregar extends As4CollaborationInfo {
 				case As4CollaborationInfo::ACCION_ANULAR:
 					break;
 				case As4CollaborationInfo::ACCION_REEMPLAZAR:
+					$success = $this->orden_reemplazar();
 					break;
 				case As4CollaborationInfo::ACCION_ELIMINAR:
+					break;
+				case As4CollaborationInfo::ACCION_ORDEN_ANULAR:
+					$success = $this->orden_anular();
 					break;
 				default:
 					$err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
@@ -168,10 +181,26 @@ class As4Entregar extends As4CollaborationInfo {
 	}
 	
 	/**
+	 * Debe anular la entrada con este prot_origen, y seguidamente crear una nueva entrada.
+	 * 
+	 * @return boolean
+	 */
+	private function orden_reemplazar() {
+		if ($this->orden_anular()) {
+			return $this->entrada_compartida(FALSE);
+		} else {
+			return FALSE;
+		}
+	}
+					
+					
+	/**
 	 * Se debe crear una entrada_compartida en public (y adjuntos si hay)
 	 * y posteriormente una entrada para cada destino, con referencia al id_entrada_compartida.
+	 * 
+	 * @param boolean $avisoIndividual. Si se debe mandar o no la entrada a cada detino 
 	 */
-	private function entrada_compartida() {
+	private function entrada_compartida($avisoIndividual=TRUE) {
 		
 		// Valores que no pueden ser NULL:
 		if (empty($this->descripcion)) {
@@ -216,18 +245,57 @@ class As4Entregar extends As4CollaborationInfo {
 		}
 		
 		// crear entradas individuales para cada destino
-		foreach ($this->a_destinos as $id_destino) {
-			$siglaDestino = $this->aLugares[$id_destino];
-			// comprobar que el destino está en la plataforma, sino, no se crea la entrada
-			if ( in_array($siglaDestino, $this->getEntidadesPlataforma()) ) {
-				$id_entrada = $this->nuevaEntrada($siglaDestino,$id_entrada_compartida);
-				// Compruebo si hay que generar un pendiente
-				if (!empty($this->oF_contestar) && $_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR ) {
-					$this->nuevoPendiente($id_entrada);
+		if ($avisoIndividual) {
+			foreach ($this->a_destinos as $id_destino) {
+				$siglaDestino = $this->aLugares[$id_destino];
+				// comprobar que el destino está en la plataforma, sino, no se crea la entrada
+				if ( in_array($siglaDestino, $this->getEntidadesPlataforma()) ) {
+					$id_entrada = $this->nuevaEntrada($siglaDestino,$id_entrada_compartida);
+					// Compruebo si hay que generar un pendiente
+					if (!empty($this->oF_contestar) && $_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR ) {
+						$this->nuevoPendiente($id_entrada);
+					}
 				}
 			}
 		}
 		return TRUE;
+	}
+	
+	private function orden_anular() {
+		$success = FALSE;	
+		$aProt_org = [ 'id_lugar' => $this->a_Prot_org->id_lugar,
+						'num' => $this->a_Prot_org->num,
+						'any' => $this->a_Prot_org->any,
+						'mas' => '',
+					];
+				
+		$gesEntradas = new GestorEntrada();
+		$cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_org);
+		foreach ($cEntradas as $oEntrada) {
+			$anulado = $oEntrada->getAnulado();
+			if (!empty($anulado)) { continue; }
+		
+			$oEntrada->setAnulado($this->anular_txt);
+			$oEntrada->setCategoria(Categoria::CAT_NORMAL);
+			$oEntrada->DBGuardar();
+			if ($oEntrada->DBGuardar() === FALSE ) {
+				$error_txt = $oEntrada->getErrorTxt();
+				exit ($error_txt);
+			}
+			$id_entrada_compartida = $oEntrada->getId_entrada_compartida();
+			if (!empty($id_entrada_compartida)) {
+				$oEntradaCompartida = new EntradaCompartida($id_entrada_compartida);
+				$oEntradaCompartida->DBCarregar();
+				$oEntradaCompartida->setAnulado($this->anular_txt);
+				$oEntradaCompartida->setCategoria(Categoria::CAT_NORMAL);
+				if ($oEntradaCompartida->DBGuardar() === FALSE ) {
+					$error_txt = $oEntrada->getErrorTxt();
+					exit ($error_txt);
+				}
+			}
+			$success = TRUE;	
+		}
+		return $success;	
 	}
 	
 	private function nuevo() {
@@ -487,9 +555,29 @@ class As4Entregar extends As4CollaborationInfo {
 		$location = $payload->PartInfo->attributes()->location;
 		$this->setLocation($location);
 
-		$this->getEscrito($location);
+		switch ($this->accion) {
+			case As4CollaborationInfo::ACCION_ORDEN_ANULAR:
+				// propiamente no hay escrito:
+				$this->getEscritoAnular($location);
+				break;
+			case As4CollaborationInfo::ACCION_REEMPLAZAR:
+				$this->getEscritoAnular($location);
+				$this->getEscrito($location);
+				break;
+			default: 
+				$this->getEscrito($location);
+		}
 	}
 		
+	private function getEscritoAnular($location) {
+		$this->dom = new \DOMDocument('1.0', 'UTF-8');
+		$this->dom->preserveWhiteSpace = false;
+		$this->dom->load($location, LIBXML_PARSEHUGE);
+		
+		$this->a_Prot_org = $this->getProt_org();
+		$this->anular_txt = $this->getAnular();
+	}
+
 	private function getEscrito($location) {
 		//$this->xml_escrito = simplexml_load_file($location);
 		$this->dom = new \DOMDocument('1.0', 'UTF-8');
@@ -519,7 +607,9 @@ class As4Entregar extends As4CollaborationInfo {
 		$this->bypass = $this->getByPass();
 		
 		// compartido
-		if ($this->getAccion() == As4CollaborationInfo::ACCION_COMPARTIR) {
+		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
+				|| $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR )
+		{
 			$this->getCompartido();
 		}
 	}
@@ -597,6 +687,10 @@ class As4Entregar extends As4CollaborationInfo {
 	
 	private function getAsunto() {
 		return $this->getValorTag('asunto');
+	}
+	
+	private function getAnular() {
+		return $this->getValorTag('anular');
 	}
 	
 	private function getF_entrada() {

@@ -39,6 +39,33 @@ class GestorLugar Extends core\ClaseGestor {
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
 	/**
+	 * Devuelve el nombre de las posibles plataformas as4
+	 * 
+	 * @return array []
+	 */
+	public function getPlataformas() {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    $a_plataformas = [];
+	    
+	    $query_plataforma = "SELECT DISTINCT plataforma FROM $nom_tabla
+                            WHERE anulado = FALSE AND plataforma IS NOT NULL
+                            ORDER BY plataforma";
+	    foreach ($oDbl->query($query_plataforma) as $aClave) {
+	        $clave=$aClave[0];
+	        $a_plataformas[$clave] = $clave;
+	    }
+	    
+	    if (is_array($a_plataformas)) {
+	        return $a_plataformas;
+	    } else {
+	        exit (_("Error al buscar las plataformas posibles"));
+	    }
+	    
+		return $a_plataformas;
+	}
+	
+	/**
 	 * devuelve el id del IESE
 	 */
 	public function getId_iese() {
