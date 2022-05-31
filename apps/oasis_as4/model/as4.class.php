@@ -198,9 +198,9 @@ class As4 extends As4CollaborationInfo {
 
         // En el caso de compartir, el destino es multiple y no lo pongo aquí,
         // Estará en el mensaje.
-		if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
+		if ( ! ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
 				|| $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR )
-		{
+		   ) {
 			// puede ser 'sin_numerar (E12)'
 			$json_prot_dst = $this->getJson_prot_dst();
 			if (!empty((array)$json_prot_dst)) {
