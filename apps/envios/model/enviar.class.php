@@ -20,6 +20,7 @@ use web\Protocolo;
 use entradas\model\Entrada;
 use entradas\model\entity\EntradaCompartida;
 use entradas\model\entity\EntradaCompartidaAdjunto;
+use function core\is_true;
 
 
 class Enviar {
@@ -48,6 +49,7 @@ class Enviar {
      * @var boolean
      */
     private $bLoaded = FALSE;
+    private $is_Bypass;
     /**
      *
      * @var integer
@@ -95,6 +97,7 @@ class Enviar {
         	} else {
 				$this->oEntradaBypass = new EntradaBypass($this->iid);
         	}
+        	$this->is_Bypass = $this->oEntradaBypass->getBypass();
         }
     }
     
@@ -133,20 +136,16 @@ class Enviar {
     	$a_header = [];
         if ($this->tipo == 'entrada') {
 			// Puede que no sea bypass. Se uasa para descargar la entrada en local.
-			// Asunto_entrada no puede sernull. si lo és es que no existe.
-			if (empty($this->oEntradaBypass->getAsunto_entrada())) {
-				
-				$a_header = [ 'left' => $this->oEntrada->cabeceraIzquierda(),
-					'center' => '',
-					'right' => $this->oEntrada->cabeceraDerecha(),
-				];
-
-			} else {
+			if (is_true($this->is_Bypass)) {
 				$a_header = [ 'left' => $this->oEntradaBypass->cabeceraIzquierda(),
 					'center' => '',
 					'right' => $this->oEntradaBypass->cabeceraDerecha(),
 				];
-
+			} else {
+				$a_header = [ 'left' => $this->oEntrada->cabeceraIzquierda(),
+					'center' => '',
+					'right' => $this->oEntrada->cabeceraDerecha(),
+				];
 			}
         }
         if ($this->tipo == 'escrito') {
@@ -165,11 +164,10 @@ class Enviar {
         		$this->getDatosEntradaCompartida();
         	} else {
 				// Puede que no sea bypass. Se usa para descargar la entrada en local.
-				// Asunto_entrada no puede sernull. si lo és es que no existe.
-				if (empty($this->oEntradaBypass->getAsunto_entrada())) {
-					$this->getDatosEntrada();
-				} else {
+				if (is_true($this->is_Bypass)) {
 					$this->getDatosEntradaByPass();
+				} else {
+					$this->getDatosEntrada();
 				}
         	}
         }
