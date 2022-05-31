@@ -1,13 +1,17 @@
 <?php
 namespace entradas\model\entity;
 use core\ConfigGlobal;
+use function core\is_true;
 use etiquetas\model\entity\Etiqueta;
 use etiquetas\model\entity\GestorEtiqueta;
 use etiquetas\model\entity\GestorEtiquetaEntrada;
 use core;
 use stdClass;
 use web;
+use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
+use usuarios\model\Visibilidad;
+use usuarios\model\entity\Cargo;
 use web\Protocolo;
 use web\ProtocoloArray;
 /**
@@ -344,6 +348,32 @@ class EntradaCompartida Extends core\ClasePropiedades {
 			}
 		}
 		
+		return $destinos_txt;
+	}
+	
+	public function cabeceraIzquierda() {
+		// sigla + ref
+		$sigla = $_SESSION['oConfig']->getSigla();
+		$destinos_txt = $sigla;
+		
+		$gesLugares = new GestorLugar();
+		$cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
+		if (!empty($cLugares)) {
+			$id_sigla = $cLugares[0]->getId_lugar();
+			
+			// referencias
+			$a_json_prot_ref = $this->getJson_prot_ref();
+			$oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
+			$oArrayProtRef->setRef(TRUE);
+			$aRef = $oArrayProtRef->ArrayListaTxtBr($id_sigla);
+		} else {
+			$aRef['dst_org'] = '??';
+		}
+		
+		if (!empty($aRef['dst_org'])) {
+			$destinos_txt .= '<br>';
+			$destinos_txt .= $aRef['dst_org'];
+		}
 		return $destinos_txt;
 	}
 	
