@@ -311,10 +311,18 @@ class Enviar {
         }
 
         if ($this->tipo == 'entrada') {
-			$a_header = [ 'left' => $this->oEntrada->cabeceraDistribucion_cr(),
-				'center' => '',
-				'right' => $this->oEntrada->cabeceraDerecha(),
-			];
+			// Puede que no sea bypass. Se uasa para descargar la entrada en local.
+			if (is_true($this->is_Bypass)) {
+				$a_header = [ 'left' => $this->oEntradaBypass->cabeceraDistribucion_cr(),
+					'center' => '',
+					'right' => $this->oEntradaBypass->cabeceraDerecha(),
+				];
+			} else {
+				$a_header = [ 'left' => $this->oEntrada->cabeceraIzquierda(),
+					'center' => '',
+					'right' => $this->oEntrada->cabeceraDerecha(),
+				];
+			}
         }
         // formato pdf:
         $this->filename_ext = $this->filename.'.pdf';
