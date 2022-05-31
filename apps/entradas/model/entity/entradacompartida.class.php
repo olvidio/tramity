@@ -138,6 +138,9 @@ class EntradaCompartida Extends core\ClasePropiedades {
 	 * @var string
 	 */
 	 protected $sNomTabla;
+	 
+	 protected $nombre_escrito;
+	 
 	/* CONSTRUCTOR -------------------------------------------------------------- */
 
 	/**
@@ -298,6 +301,34 @@ class EntradaCompartida Extends core\ClasePropiedades {
 	
 	/* METODES ALTRES  ----------------------------------------------------------*/
 	
+    /**
+     * Devuelve el nombre del escrito (sigla_num_año): cr_15_05
+     *
+     * @param string $parentesi si existe se añade al nombre, entre parentesis
+     * @return string|mixed
+     */
+    public function getNombreEscrito($parentesi='') {
+    	$json_prot_local = $this->getJson_prot_origen();
+    	// nombre del archivo
+    	if (empty((array)$json_prot_local)) {
+    		// genero un id: fecha
+    		$f_hoy = date('Y-m-d');
+    		$hora = date('His');
+    		$this->nombre_escrito = $f_hoy.'_'._("E12")."($hora)";
+    	} else {
+    		$oProtOrigen = new Protocolo();
+    		$oProtOrigen->setLugar($json_prot_local->id_lugar);
+    		$oProtOrigen->setProt_num($json_prot_local->num);
+    		$oProtOrigen->setProt_any($json_prot_local->any);
+    		$oProtOrigen->setMas($json_prot_local->mas);
+    		$this->nombre_escrito = $this->renombrar($oProtOrigen->ver_txt());
+    	}
+    	if (!empty($parentesi)) {
+    		$this->nombre_escrito .= "($parentesi)";
+    	}
+    	return $this->nombre_escrito;
+    }
+    
 	public function cabeceraDistribucion_cr() {
 		$destinos_txt = '';
 		// poner los destinos
