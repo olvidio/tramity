@@ -348,7 +348,7 @@ class As4Entregar extends As4CollaborationInfo {
 		$oPendiente->setStatus("NEEDS-ACTION");
 		$oPendiente->setF_inicio($f_entrada);
 		$oPendiente->setF_plazo($f_plazo);
-		$oPendiente->setVisibilidad($this->visibiliad);
+		$oPendiente->setVisibilidad($this->visibilidad);
 		$oPendiente->setPendiente_con($id_origen);
 		$oPendiente->setLocation($location);
 		$oPendiente->setRef_prot_mas($prot_mas);
