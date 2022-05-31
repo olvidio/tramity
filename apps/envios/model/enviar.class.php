@@ -111,7 +111,6 @@ class Enviar {
     private function getDestinatarios(){
     	if ($this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR ) {
     		echo "AAAAAAAHHHHH!!!!!";
-    		
     	}
         if ($this->tipo == 'entrada') {
 			$this->accion = As4CollaborationInfo::ACCION_COMPARTIR;

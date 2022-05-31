@@ -50,7 +50,6 @@ foreach ($a_files_mmd as $file_mmd) {
 		// nombre del fihero del body:
 		$location = $AS4->getLocation();
 		
-		/*
 		if (unlink($location) === FALSE) {
 			$txt .= empty($txt)? '' : '<br>';
 			$txt .= sprintf(_("No se ha podido eliminar el fichero %s"), $location);
@@ -60,7 +59,6 @@ foreach ($a_files_mmd as $file_mmd) {
 			$txt .= empty($txt)? '' : '<br>';
 			$txt .= sprintf(_("No se ha podido eliminar el mensaje %s"), $file_mmd);
 		}
-		*/
 	} else {
 		$txt .= empty($txt)? '' : '<br>';
 		$txt .= sprintf(_("No se ha podido entregar el mensaje %s a su destinatario"), $file_mmd);
