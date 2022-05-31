@@ -932,4 +932,10 @@ class EntradaCompartida Extends core\ClasePropiedades {
 		$oDatosCampo->setEtiqueta(_("anulado"));
 		return $oDatosCampo;
 	}
+	private function renombrar($string) {
+		//cambiar ' ' por '_':
+		$string1 = str_replace(' ', '_', $string);
+		//cambiar '/' por '_':
+		return str_replace('/', '_', $string1);
+	}
 }
