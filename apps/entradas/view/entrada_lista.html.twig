@@ -4,10 +4,15 @@
 </button>
 {% endif %}
 {% if btn_dock %}
-<button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_cargar_dock|raw }}');">
+  <button type="button" class="btn btn-info" onClick="debugger; $('#slow_load').show(); fnjs_update_div('#main','{{ pagina_cargar_dock|raw }}');">
 	{{ txt_btn_dock }}
-</button>
+  </button>
 {% endif %}
+<!--  --------------- Image cargando , para cuando se activa el leer dock, que es lento --------------- -->
+<div id="slow_load" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+  <img class="mb-4" src="../images/loading.gif" alt="cargando" width="32" height="32"> 
+</div>
+
 <table class="table table-sm table-bordered">
   <thead class="thead-light">
     <tr>
@@ -56,9 +61,11 @@
     {% endfor %}
   </tbody>
 </table>
+
 <script type="text/javascript">
 $(document).ready(function() {
 	tabs_show('{{ vista }}','{{ filtro }}');
+	$('#slow_load').hide();  // hide it initially
 });
 fnjs_ver_entrada=function(id_entrada,compartida=false) {
     var ssfsv = 'sv';
