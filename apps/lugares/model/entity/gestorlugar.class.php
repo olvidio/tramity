@@ -41,16 +41,24 @@ class GestorLugar Extends core\ClaseGestor {
 	/**
 	 * Devuelve el nombre de las posibles plataformas as4
 	 * 
+	 * @param boolean propia. Si debe aparecer la propia plataforma en la lista o no.
 	 * @return array []
 	 */
-	public function getPlataformas() {
+	public function getPlataformas($propia=FALSE) {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
 	    $a_plataformas = [];
 	    
-	    $query_plataforma = "SELECT DISTINCT plataforma FROM $nom_tabla
-                            WHERE anulado = FALSE AND plataforma IS NOT NULL
-                            ORDER BY plataforma";
+	    $where_propia = '';
+		// Quitar la propia:
+	    if ($propia === FALSE) {
+	    	$plataforma_local = $_SESSION['oConfig']->getNomDock();
+	    	$where_propia = "AND l.plataforma != '$plataforma_local' ";
+		}
+
+	    $query_plataforma = "SELECT DISTINCT l.plataforma FROM $nom_tabla l
+                            WHERE l.anulado = FALSE AND l.plataforma IS NOT NULL $where_propia
+                            ORDER BY l.plataforma";
 	    foreach ($oDbl->query($query_plataforma) as $aClave) {
 	        $clave=$aClave[0];
 	        $a_plataformas[$clave] = $clave;

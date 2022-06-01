@@ -311,8 +311,8 @@ class Enviar {
         }
 
         if ($this->tipo == 'entrada') {
-			// Puede que no sea bypass. Se uasa para descargar la entrada en local.
-			if (is_true($this->is_Bypass)) {
+			// Puede que no sea bypass. Se usa para descargar la entrada en local.
+			if (is_true($this->is_Bypass) && $_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
 				$a_header = [ 'left' => $this->oEntradaBypass->cabeceraDistribucion_cr(),
 					'center' => '',
 					'right' => $this->oEntradaBypass->cabeceraDerecha(),

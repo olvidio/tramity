@@ -45,20 +45,22 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
-          <span>{{ "Config"|trans }}</span>
+          <span>{{ "Configuración"|trans }}</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">{{ "Usuarios admin"|trans }}:</h6>
-            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/usuarios/controller/usuario_lista.php')" href="#">
-                {{ "Lista"|trans }}
-            </a>
-            <h6 class="collapse-header">{{ "del entorno"|trans }}:</h6>
+            <h6 class="collapse-header">{{ "Lugares (ctr, dl)"|trans }}:</h6>
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/lugares/controller/lugar_lista.php')" href="#">
-                {{ "Lugares"|trans }}</a>
+                {{ "Buscar / modificar"|trans }}</a>
+            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/lugares/controller/lugar_mantenimiento.php')" href="#">
+                {{ "Enviar cambios"|trans }}</a>
             <h6 class="collapse-header">{{ "de la aplicación"|trans }}:</h6>
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/config/controller/parametros_servidor.php')" href="#">
                 {{ "Parámetros"|trans }}</a>
+            <h6 class="collapse-header">{{ "Usuarios admin"|trans }}:</h6>
+            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/usuarios/controller/usuario_lista.php')" href="#">
+                {{ "Lista de usuarios"|trans }}
+            </a>
           </div>
         </div>
       </li>

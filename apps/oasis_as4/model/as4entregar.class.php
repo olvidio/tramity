@@ -19,6 +19,7 @@ use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
 use web\Protocolo;
+use web\StringLocal;
 
 /**
  * No se usa el simpleXml porque con los adjuntos grandes se acaba la memoria...
@@ -252,7 +253,7 @@ class As4Entregar extends As4CollaborationInfo {
 					$id_entrada = $this->nuevaEntrada($siglaDestino,$id_entrada_compartida);
 					// Compruebo si hay que generar un pendiente
 					if (!empty($this->oF_contestar) && $_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR ) {
-						$this->nuevoPendiente($id_entrada);
+						$this->nuevoPendiente($id_entrada,$siglaDestino);
 					}
 				}
 			}
@@ -312,11 +313,11 @@ class As4Entregar extends As4CollaborationInfo {
 		
 		// Compruebo si hay que generar un pendiente
 		if (!empty($this->oF_contestar) && $_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR ) {
-			$this->nuevoPendiente($id_entrada);
+			$this->nuevoPendiente($id_entrada,$siglaDestino);
 		}
 	}
 	
-	private function nuevoPendiente($id_entrada) {
+	private function nuevoPendiente($id_entrada,$siglaDestino) {
 		$oHoy = new DateTimeLocal();
 		$id_cargo_role = ConfigGlobal::role_id_cargo();
 		$oCargo = new Cargo($id_cargo_role);
@@ -324,7 +325,17 @@ class As4Entregar extends As4CollaborationInfo {
 		// nombre normalizado del usuario y oficina:
 		$oDavical = new Davical($_SESSION['oConfig']->getAmbito());
 		$user_davical = $oDavical->getUsernameDavical($id_cargo_role);
-		$cal_oficina = $oDavical->getNombreRecurso($id_oficina);
+		
+		// Para dl, Hace falta el nombre de la oficina;
+		// para ctr, uso el nombre del esquema. Pero si es una entrada compartida, 
+		// hay que saber para que ctr. (no sirve el esquema que siempre es el mismo).
+		if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+			$id_oficina = Cargo::OFICINA_ESQUEMA;
+			$sigla_norm = StringLocal::lowerNormalized($siglaDestino);
+			$cal_oficina = $sigla_norm."_oficina";
+		} else {
+			$cal_oficina = $oDavical->getNombreRecurso($id_oficina);
+		}
 		$calendario = 'oficina';
 		
 		$f_entrada = $oHoy->getFromLocal();

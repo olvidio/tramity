@@ -47,11 +47,7 @@ if (!empty($Qid_entrada)) {
 	
 	if (!empty($id_entrada_compartida) ) {
     	$bCompartida = TRUE;
-    	if (is_true($Qcompartida)) {
-			$cabeceraIzqd = $oEntrada->cabeceraDistribucion_cr();
-    	} else {
-			$cabeceraIzqd = $oEntrada->cabeceraIzquierda();
-    	}
+		$cabeceraIzqd = $oEntrada->cabeceraIzquierda();
 		$cabeceraDcha = $oEntrada->cabeceraDerecha();
 		
     	$gesEntradaAdjuntos = new GestorEntradaCompartidaAdjunto();

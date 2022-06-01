@@ -14,7 +14,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3"> {{ "Admin"|trans }} <br> {{ "Entidad"|trans }} </div>
+        <div class="sidebar-brand-text mx-2"> {{ "Admin entidad"|trans }} <br> {{ entidad }} </div>
       </a>
 
       <!-- Divider -->
@@ -48,9 +48,8 @@
         </a>
         <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">{{ "Usuarios Components"|trans }}:</h6>
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/usuarios/controller/usuario_lista.php')" href="#">
-                {{ "Lista"|trans }}
+                {{ "Buscar / modificar"|trans }}
             </a>
             {% if is_ambito_dl %}
             <a class="collapse-item active" onclick="fnjs_update_div('#main','apps/usuarios/controller/suplente_lista.php')" href="#">
@@ -61,7 +60,7 @@
         </div>
       </li>
 
-      <!-- Nav Item - Charts -->
+      <!-- Nav Item - Cargos -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCargos" aria-expanded="true" aria-controls="collapseCargos">
           <i class="fas fa-fw fa-folder"></i>
@@ -80,6 +79,23 @@
           </div>
         </div>
 	  </li>
+      <!-- Nav Item - Oficinas -->
+      {% if is_ambito_dl %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOficinas" aria-expanded="true" aria-controls="collapseCargos">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>{{ "Oficinas y centros"|trans }}</span>
+        </a>
+        <div id="collapseOficinas" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/lugares/controller/grupo_lista.php')" href="#">
+                {{ "Grupos de distribución"|trans }}</a>
+            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/usuarios/controller/oficina_lista.php')" href="#">
+                {{ "Oficinas"|trans }}</a>
+          </div>
+        </div>
+	  </li>
+      {% endif %}
       <!-- Nav Item - Tramites -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTramites" aria-expanded="true" aria-controls="collapseTramites">
@@ -88,12 +104,6 @@
         </a>
         <div id="collapseTramites" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            {% if is_ambito_dl %}
-            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/lugares/controller/grupo_lista.php')" href="#">
-                {{ "Grupos de distribución"|trans }}</a>
-            <a class="collapse-item" onclick="fnjs_update_div('#main','apps/usuarios/controller/oficina_lista.php')" href="#">
-                {{ "Oficinas"|trans }}</a>
-            {% endif %}
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/tramites/controller/tramite_lista.php')" href="#">
                 {{ "Trámites (nombres)"|trans }}</a>
             <a class="collapse-item" onclick="fnjs_update_div('#main','apps/tramites/controller/tramitecargo_select.php')" href="#">
