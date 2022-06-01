@@ -31,7 +31,6 @@ class As4Entregar extends As4CollaborationInfo {
 	private $msg;
 	private $xmldata;
 	
-	
 	private $location;
 	private $sigla_destino;
 	private $sigla_origen;
