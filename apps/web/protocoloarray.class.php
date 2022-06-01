@@ -95,7 +95,7 @@ class ProtocoloArray Extends Protocolo {
 	    return $aRef;
 	}
 
-	public function ListaTxtBr($id_lugar='') {
+	public function ListaTxtBr() {
 	    $aSeleccionados = '';
 	    if (is_array($this->sSeleccionados)) {
 	        $aSeleccionados = $this->sSeleccionados;
@@ -115,6 +115,9 @@ class ProtocoloArray Extends Protocolo {
 			    if (!empty($id_lugar)) {
 			        $oLugar = new Lugar($id_lugar);
 			        $nom_lugar = $oLugar->getSigla();
+			    } else {
+			    	//Puede el id lugar no encontrar la sigla...
+			    	$nom_lugar = '?sigla';
 			    }
 			    // para sacar solo un destino
 			    if (!empty($id_lugar) && $id_lugar != $id_lugar) {
@@ -133,6 +136,7 @@ class ProtocoloArray Extends Protocolo {
 	    }
 	    return $sLista;
 	}
+	
 	public function ListaTxt() {
 	    $aSeleccionados = '';
 	    if (is_array($this->sSeleccionados)) {

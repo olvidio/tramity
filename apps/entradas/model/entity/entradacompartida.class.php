@@ -352,29 +352,7 @@ class EntradaCompartida Extends core\ClasePropiedades {
 	}
 	
 	public function cabeceraIzquierda() {
-		// sigla + ref
-		$sigla = $_SESSION['oConfig']->getSigla();
-		$destinos_txt = $sigla;
-		
-		$gesLugares = new GestorLugar();
-		$cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
-		if (!empty($cLugares)) {
-			$id_sigla = $cLugares[0]->getId_lugar();
-			
-			// referencias
-			$a_json_prot_ref = $this->getJson_prot_ref();
-			$oArrayProtRef = new ProtocoloArray($a_json_prot_ref,'','referencias');
-			$oArrayProtRef->setRef(TRUE);
-			$aRef = $oArrayProtRef->ArrayListaTxtBr($id_sigla);
-		} else {
-			$aRef['dst_org'] = '??';
-		}
-		
-		if (!empty($aRef['dst_org'])) {
-			$destinos_txt .= '<br>';
-			$destinos_txt .= $aRef['dst_org'];
-		}
-		return $destinos_txt;
+		return $this->cabeceraDistribucion_cr();
 	}
 	
 	public function cabeceraDerecha() {
