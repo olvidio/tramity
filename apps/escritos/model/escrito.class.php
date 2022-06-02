@@ -513,8 +513,7 @@ class Escrito Extends EscritoDB {
     public function explotar() {
         $oEtherpad = new Etherpad();
         $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid_escrito);
-        $padID = $oEtherpad->getPadId();
-        $txtPad = $oEtherpad->getTexto($padID);
+        $sourceID = $oEtherpad->getPadId();
         
         // Si esta marcado como grupo de destinos, o destinos individuales.
         $aProtDst = $this->getJson_prot_destino(TRUE);
@@ -572,9 +571,12 @@ class Escrito Extends EscritoDB {
                 // canviar el id, y clonar el etherpad con el nuevo id
                 $oNewEtherpad = new Etherpad();
                 $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $newId_escrito);
-                $oNewEtherpad->setText($txtPad);
-                $oNewEtherpad->getPadId(); // Aqui crea el pad y utiliza el $txtPad
-                
+                $destinationID = $oNewEtherpad->getPadID(); // Aqui crea el pad
+                /* con el Html, (setHtml) no hace bien los centrados (quizá más)
+                 * con el Text  (setText) no coje los formatos.
+                 */
+                $oEtherpad->copyPad($sourceID, $destinationID, 'true');
+
                 // copiar los adjuntos
                 $a_id_adjuntos = $this->getArrayIdAdjuntos();
                 foreach (array_keys($a_id_adjuntos) as $id_item) {
