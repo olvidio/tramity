@@ -137,6 +137,27 @@ switch ($Qtipo_lista) {
             $lista .= "</button>";
         }
         break;
+    case 'lst_todos':
+        $titulo = _("AVISOS DE CR DE NÚMERO BAJO");
+        $oBuscar = new Buscar();
+		// En los centros, no busco en entradas, sino en entradas_compartidas y
+		// veo si el centro está en los destinos.
+		if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
+			// Busco el id_lugar de cr.
+			$gesLugares = new GestorLugar();
+			$id_cr = $gesLugares->getId_cr();
+			$oBuscar->setId_lugar($id_cr);
+		}
+        
+        $aCollection = $oBuscar->getCollection($Qtipo_lista);
+        foreach ($aCollection as $key => $cCollection) {
+            $oVerTabla = new VerTabla();
+            $oVerTabla->setKey($key);
+            $oVerTabla->setCollection($cCollection);
+            $oVerTabla->setFiltro($filtro);
+            $oVerTabla->setBotonesDefault();
+        }
+        break;
     case 'lst_years':
     default:
         //anys posibles:
@@ -198,8 +219,10 @@ if (!empty($cLugares)) {
 
 $a_lugares = [$id_cr => 'cr', $id_sigla_dl => $sigla_dl];
 // por defecto cr, en el caso de dl. vacio en caso de ctr.
+$ambito_dl = FALSE;
 if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
 	$Qid_lugar = empty($Qid_lugar)? $id_cr : $Qid_lugar;
+	$ambito_dl = TRUE;
 }
 $oDesplLugar = new Desplegable();
 $oDesplLugar->setNombre('id_lugar');
@@ -220,6 +243,7 @@ $a_campos = [
     'filtro' => $filtro,
     'oVerTabla' => $oVerTabla,
 	'oDesplLugar' => $oDesplLugar,
+	'ambito_dl' => $ambito_dl,
     // tabs_show
     'vista' => $vista,
 ];

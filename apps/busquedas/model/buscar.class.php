@@ -231,6 +231,29 @@ class Buscar {
 				}
                 return $aCollections;
                 break;
+            case 'lst_todos':
+            	// En los centros, no busco en entradas, sino en entradas_compartidas y 
+            	// veo si el centro está en los destinos.
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$aWhereEntrada = [];
+					$aOperadorEntrada = [];
+					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
+									  'num' => $this->prot_num,
+									  'any' => $this->prot_any,
+									  'mas' => $this->prot_mas,
+								];
+					$gesLugares = new GestorLugar();
+					$id_sigla_local = $gesLugares->getId_sigla_local();
+					$id_destino = $id_sigla_local;
+
+					$aWhereEntrada['_ordre'] = 'f_entrada DESC';
+					$gesEntradasCompartidas = new GestorEntradaCompartida();
+					$cEntradas = $gesEntradasCompartidas->getEntradasByProtOrigenDestino($aProt_origen,$id_destino,$aWhereEntrada,$aOperadorEntrada);
+					$aCollections['entradas_compartidas'] = $cEntradas;
+            	}
+                return $aCollections;
+                break;
             case 'oficina':
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';

@@ -45,7 +45,7 @@ $nombre='';
 $tipo = '';
 $anulado = 1;
 
-$a_cabeceras = [ 'nombre','nombre esquema','tipo_escrito','anulado' ];
+$a_cabeceras = [ 'nombre','nombre esquema','tipo_entidad','anulado' ];
 $a_botones = [ ['txt'=> _("borrar"), 'click'=>"fnjs_eliminar()"],
                ['txt'=> _("modificar"), 'click'=>"fnjs_editar()"],
             ];

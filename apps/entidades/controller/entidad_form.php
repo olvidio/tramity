@@ -80,7 +80,7 @@ if (!empty($Qid_entidad)) {
 }
 
 
-$camposForm = 'que!nombre!schema!tipo_escrito!anulado';
+$camposForm = 'que!nombre!schema!tipo_entidad!anulado';
 $oHash = new web\Hash();
 $oHash->setcamposForm($camposForm);
 $a_camposHidden = array(
