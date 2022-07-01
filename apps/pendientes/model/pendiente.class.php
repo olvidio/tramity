@@ -362,20 +362,10 @@ class Pendiente {
         
         $uid2=strtok($uid,'@');
         $nom_fichero="$uid2.ics";
-        $rta='';
         $cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,'*');
-        $rta = $cal->GetResponseHeaders(); 
+        $response_headers = $cal->GetResponseHeaders(); 
         
-        $aRespuesta = [];
-        if (strlen($rta) > 32 ) {
-        	$aRespuesta['success'] = FALSE;
-        	$aRespuesta['mensaje'] = $rta;
-        } else {
-        	$aRespuesta['success'] = TRUE;
-        	$aRespuesta['mensaje'] = 'ok';
-        }
-        
-		return $aRespuesta;
+		return $this->respuesta($response_headers);
     }
 
     /**
@@ -431,20 +421,10 @@ class Pendiente {
         if ($que != "eliminar") {
             $vcalendar->SetComponents($icalComp); // OJO, le paso el array de objetos.
             $icalendar=$vcalendar->Render();
-			$rta='';
-			$rta = $cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
-			$rta = $cal->GetResponseHeaders(); 
-			
-			$aRespuesta = [];
-			if (strlen($rta) > 32 ) {
-				$aRespuesta['success'] = FALSE;
-				$aRespuesta['mensaje'] = $rta;
-			} else {
-				$aRespuesta['success'] = TRUE;
-				$aRespuesta['mensaje'] = 'ok';
-			}
-			
-			return $aRespuesta;
+			$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
+			$response_headers = $cal->GetResponseHeaders(); 
+        
+			return $this->respuesta($response_headers);
         }
     }
 
@@ -496,20 +476,10 @@ class Pendiente {
 
         $vcalendar->SetComponents($icalComp); // OJO, le paso el array de objetos.
         $icalendar=$vcalendar->Render();
-		$rta='';
-		$rta = $cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
-		$rta = $cal->GetResponseHeaders(); 
-		
-		$aRespuesta = [];
-		if (strlen($rta) > 32 ) {
-			$aRespuesta['success'] = FALSE;
-			$aRespuesta['mensaje'] = $rta;
-		} else {
-			$aRespuesta['success'] = TRUE;
-			$aRespuesta['mensaje'] = 'ok';
-		}
-		
-		return $aRespuesta;
+		$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
+        $response_headers = $cal->GetResponseHeaders(); 
+        
+		return $this->respuesta($response_headers);
     }
 
     private function update_pendiente($uid,$aDades) {
@@ -637,20 +607,10 @@ class Pendiente {
         // OJO! El nombre no puede contener la '@'.
         $uid2=strtok($uid,'@');
         $nom_fichero="$uid2.ics";
-        $rta='';
-        $rta=$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
-        $rta = $cal->GetResponseHeaders(); 
+        $cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
+        $response_headers = $cal->GetResponseHeaders(); 
         
-        $aRespuesta = [];
-        if (strlen($rta) > 32 ) {
-        	$aRespuesta['success'] = FALSE;
-        	$aRespuesta['mensaje'] = $rta;
-        } else {
-        	$aRespuesta['success'] = TRUE;
-        	$aRespuesta['mensaje'] = 'ok';
-        }
-        
-		return $aRespuesta;
+		return $this->respuesta($response_headers);
     }
 
     
@@ -856,7 +816,37 @@ class Pendiente {
         
         return $protocolo;
     }
+    
+    private function respuesta($response_headers) {
+    	$headers = array();
+    	$arr = explode("\n", $response_headers);
+		$reponse_code = '';
+    	foreach ($arr as $value) {
+    		$out = [];
+    		if( preg_match( "#HTTP/[0-9\.]+\s+([0-9]+)#",$value, $out ) ) {
+    			$reponse_code = intval($out[1]);
+    		}
+    		if(false !== ($matches = explode(':', $value, 2))) {
+    			$headers["{$matches[0]}"] = trim($matches[1]);
+    		}
+    	}
+    	
+        $aRespuesta = [];
+        //HTTP/1.1 401 Unauthorized
+        if ($reponse_code == 401 ) {
+        	$aRespuesta['success'] = FALSE;
+        	$aRespuesta['mensaje'] = $response_headers;
+        } else {
+        	$aRespuesta['success'] = TRUE;
+        	$aRespuesta['mensaje'] = 'ok';
+        }
+        
+		return $aRespuesta;
+    }
+    
     /* METODES GET SET ----------------------------------------------------------------- */
+      
+    
     /**
      * @return string
      */
