@@ -230,11 +230,15 @@ switch ($Qnuevo) {
             $oPendiente->setOficinasArray($Qa_oficinas);
             // las etiquetas:
             $oPendiente->setEtiquetasArray($Qa_etiquetas);
-            if ($oPendiente->Guardar() === FALSE ) {
+            $aRespuesta = $oPendiente->Guardar();
+            if ($aRespuesta['success'] === FALSE ) {
                 $txt_err .= _("No se han podido guardar el nuevo pendiente");
+                $txt_err .= "\n";
+                $txt_err .= $aRespuesta['mensaje'];
 			} else {
                 $jsondata['f_plazo'] = $Qf_plazo;
 			}
+			
             if (empty($txt_err)) {
                 $jsondata['success'] = true;
                 $jsondata['mensaje'] = 'ok';
@@ -273,9 +277,12 @@ switch ($Qnuevo) {
         $oPendiente->setOficinasArray($Qa_oficinas);
         // las etiquetas:
         $oPendiente->setEtiquetasArray($Qa_etiquetas);
-        if ($oPendiente->Guardar() === FALSE ) {
+		$aRespuesta = $oPendiente->Guardar();
+		if ($aRespuesta['success'] === FALSE ) {
             $txt_err .= _("No se han podido modificar el pendiente");
-        }
+			$txt_err .= "\n";
+			$txt_err .= $aRespuesta['mensaje'];
+		}
         if (empty($txt_err)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
@@ -328,9 +335,19 @@ switch ($Qnuevo) {
                 $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $user_davical, $uid);
                 $oPendiente->Carregar();
 				if (!empty($f_recur)) {
-					$oPendiente->marcar_excepcion($f_recur);
+					$aRespuesta = $oPendiente->marcar_excepcion($f_recur);
+					if ($aRespuesta['success'] === FALSE ) {
+						$txt_err .= _("No se han podido marcar como contestado");
+						$txt_err .= "\n";
+						$txt_err .= $aRespuesta['mensaje'];
+					}
 				} else {
-					$oPendiente->marcar_contestado("contestado");
+					$aRespuesta = $oPendiente->marcar_contestado("contestado");
+					if ($aRespuesta['success'] === FALSE ) {
+						$txt_err .= _("No se han podido marcar como contestado");
+						$txt_err .= "\n";
+						$txt_err .= $aRespuesta['mensaje'];
+					}
 				}
 			}
 		} else {
@@ -358,9 +375,12 @@ switch ($Qnuevo) {
         $oPendiente->setEncargado($Qencargado);
         // las etiquetas:
         $oPendiente->setEtiquetasArray($Qa_etiquetas);
-        if ($oPendiente->Guardar() === FALSE ) {
+		$aRespuesta = $oPendiente->Guardar();
+		if ($aRespuesta['success'] === FALSE ) {
             $txt_err .= _("No se han podido modificar el pendiente");
-        }
+			$txt_err .= "\n";
+			$txt_err .= $aRespuesta['mensaje'];
+		}
         if (empty($txt_err)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';

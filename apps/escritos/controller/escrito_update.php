@@ -251,7 +251,12 @@ switch($Qque) {
             $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
             $rrule = $oPendiente->getRrule();
             if (empty($rrule)) {
-                $oPendiente->marcar_contestado('contestado');
+                $aRespuesta = $oPendiente->marcar_contestado("contestado");
+                if ($aRespuesta['success'] === FALSE ) {
+                	$txt_err .= _("No se han podido marcar como contestado");
+                	$txt_err .= "\n";
+                	$txt_err .= $aRespuesta['mensaje'];
+                }
             } else {
                 // los periodicos
                 $txt_err .= _("falta definir fecha para periodico");

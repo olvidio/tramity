@@ -362,9 +362,20 @@ class Pendiente {
         
         $uid2=strtok($uid,'@');
         $nom_fichero="$uid2.ics";
-        $rta=$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,'*');
-        if (strlen($rta) > 32 ) print_r($rta);
-
+        $rta='';
+        $cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,'*');
+        $rta = $cal->GetResponseHeaders(); 
+        
+        $aRespuesta = [];
+        if (strlen($rta) > 32 ) {
+        	$aRespuesta['success'] = FALSE;
+        	$aRespuesta['mensaje'] = $rta;
+        } else {
+        	$aRespuesta['success'] = TRUE;
+        	$aRespuesta['mensaje'] = 'ok';
+        }
+        
+		return $aRespuesta;
     }
 
     /**
@@ -420,8 +431,20 @@ class Pendiente {
         if ($que != "eliminar") {
             $vcalendar->SetComponents($icalComp); // OJO, le paso el array de objetos.
             $icalendar=$vcalendar->Render();
-            $rta = $cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
-            if (strlen($rta) > 32 ) { print_r($rta); }
+			$rta='';
+			$rta = $cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
+			$rta = $cal->GetResponseHeaders(); 
+			
+			$aRespuesta = [];
+			if (strlen($rta) > 32 ) {
+				$aRespuesta['success'] = FALSE;
+				$aRespuesta['mensaje'] = $rta;
+			} else {
+				$aRespuesta['success'] = TRUE;
+				$aRespuesta['mensaje'] = 'ok';
+			}
+			
+			return $aRespuesta;
         }
     }
 
@@ -473,8 +496,20 @@ class Pendiente {
 
         $vcalendar->SetComponents($icalComp); // OJO, le paso el array de objetos.
         $icalendar=$vcalendar->Render();
-        $rta=$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
-        if (strlen($rta) > 32 ) { print_r($rta); }
+		$rta='';
+		$rta = $cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
+		$rta = $cal->GetResponseHeaders(); 
+		
+		$aRespuesta = [];
+		if (strlen($rta) > 32 ) {
+			$aRespuesta['success'] = FALSE;
+			$aRespuesta['mensaje'] = $rta;
+		} else {
+			$aRespuesta['success'] = TRUE;
+			$aRespuesta['mensaje'] = 'ok';
+		}
+		
+		return $aRespuesta;
     }
 
     private function update_pendiente($uid,$aDades) {
@@ -602,8 +637,20 @@ class Pendiente {
         // OJO! El nombre no puede contener la '@'.
         $uid2=strtok($uid,'@');
         $nom_fichero="$uid2.ics";
+        $rta='';
         $rta=$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
-        if (strlen($rta) > 32 ) { print_r($rta); }
+        $rta = $cal->GetResponseHeaders(); 
+        
+        $aRespuesta = [];
+        if (strlen($rta) > 32 ) {
+        	$aRespuesta['success'] = FALSE;
+        	$aRespuesta['mensaje'] = $rta;
+        } else {
+        	$aRespuesta['success'] = TRUE;
+        	$aRespuesta['mensaje'] = 'ok';
+        }
+        
+		return $aRespuesta;
     }
 
     
@@ -638,15 +685,16 @@ class Pendiente {
 
         if ($bInsert === FALSE) {
             //UPDATE
-            $this->update_pendiente($this->getUid(),$aDades);
+            $rta = $this->update_pendiente($this->getUid(),$aDades);
         } else {
             // INSERT
-            $this->ins_pendiente($aDades);
+            $rta = $this->ins_pendiente($aDades);
         }
+        return $rta;
     }
     
     public function eliminar() {
-        $this->marcar_contestado('eliminar');
+        return $this->marcar_contestado('eliminar');
     }
     
     private function visibilidad_to_Class($visibilidad) {

@@ -220,9 +220,9 @@ fnjs_guardar_pendiente=function(){
 		}
 	}
 
+	debugger;
 	if (err!=1) {
 		$('#oficinas').val(oficinas);
-		//$('#form_pendiente').attr('action','apps/pendientes/controller/pendiente_update_ics.php');
 		switch (go) {
 			case "entradas":
 			case "salidas": 
@@ -233,19 +233,24 @@ fnjs_guardar_pendiente=function(){
                     url: url,
                     data: datos,
                     method: 'POST',
-                    dataType: 'json'
+                    dataType: 'text'
                 });
-				request.done( function (json) {
-	                if (json.success != true) {
-	                	alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-		            } else {
-						window.opener.document.forms['form_entrada']['id_pendiente'].value=json.id_pendiente
-						//window.opener.document.forms['form_entrada']['f_plazo'].prop('disabled',true);
-						window.opener.document.forms['form_entrada']['f_plazo'].value=json.f_plazo;
-						window.opener.document.forms['form_entrada']['plazo'].value="fecha";
-						window.opener.document.forms['form_entrada']['btn_guardar'].focus();
-						window.close();
-			        }
+				request.done( function (jsonStr) {
+					try {  
+						const json = JSON.parse(jsonStr);  
+                        if (json.success != true) {
+                            alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+                        } else {
+                            window.opener.document.forms['form_entrada']['id_pendiente'].value=json.id_pendiente
+                            //window.opener.document.forms['form_entrada']['f_plazo'].prop('disabled',true);
+                            window.opener.document.forms['form_entrada']['f_plazo'].value=json.f_plazo;
+                            window.opener.document.forms['form_entrada']['plazo'].value="fecha";
+                            window.opener.document.forms['form_entrada']['btn_guardar'].focus();
+                            window.close();
+                        }
+					} catch (e) {  
+                        alert (jsonStr);
+					}
                 });
                 request.fail(function(JqXHR, textStatus, errorThrown){
                     txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
@@ -260,18 +265,22 @@ fnjs_guardar_pendiente=function(){
                     url: url,
                     data: datos,
                     method: 'POST',
-                    dataType: 'json'
+                    dataType: 'text'
                 });
-				request.done( function (json) {
-	                if (json.success != true) {
-	                    alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-		            } else {
-                    	//fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                        {{ oPosicion.js_atras(1)|raw }}
-		            }
+				request.done( function (jsonStr) {
+					try {  
+						const json = JSON.parse(jsonStr);  
+                        if (json.success != true) {
+                            alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+                        } else {
+                            {{ oPosicion.js_atras(1)|raw }}
+                        }
+					} catch (e) {  
+                        alert (jsonStr);
+					}
                 });
                 request.fail(function(JqXHR, textStatus, errorThrown){
-                    txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
+                    txt = 'xxx {{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
                     alert(txt + 'An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
                     console.error("Hi ha un error: "+ textStatus, errorThrown);
                 });

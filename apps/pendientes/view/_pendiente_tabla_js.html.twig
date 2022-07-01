@@ -106,14 +106,19 @@ fnjs_marcar=function(formulario){
         url: url,
         data: datos,
         method: 'POST',
-        dataType: 'json'
+        dataType: 'text'
     });
-    request.done( function (json) {
-        if (json.success != true) {
-            alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-        } else {
-         	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-        }
+	request.done( function (jsonStr) {
+		try {  
+			const json = JSON.parse(jsonStr);  
+            if (json.success != true) {
+                alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+            } else {
+                 fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            }
+		} catch (e) {  
+            alert (jsonStr);
+		}
     });
     request.fail(function(JqXHR, textStatus, errorThrown){
         txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
@@ -173,13 +178,18 @@ fnjs_borrar=function(formulario){
             url: url,
             data: datos,
             method: 'POST',
-            dataType: 'json'
+            dataType: 'text'
         });
-		request.done( function (json) {
-            if (json.success != true) {
-                alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-            } else {
-            	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+        request.done( function (jsonStr) {
+            try {  
+                const json = JSON.parse(jsonStr);  
+                if (json.success != true) {
+                    alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+                } else {
+                     fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                }
+            } catch (e) {  
+                alert (jsonStr);
             }
         });
         request.fail(function(JqXHR, textStatus, errorThrown){
