@@ -25,6 +25,7 @@ $Qmas = '';
 $Qopcion = 7;
 $a_condicion = []; // para poner los parámetros de la búsqueda y poder actualizar la página.
 $a_condicion['opcion'] = $Qopcion;
+$a_condicion['accion'] = $Qaccion;
 
 // un protocolo concreto:
 $Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');

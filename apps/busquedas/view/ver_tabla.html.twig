@@ -684,7 +684,11 @@ fnjs_borrar_escrito=function(formulario){
 }
 
 fnjs_actualizar=function(){
-    var url_doc = 'apps/busquedas/controller/ver_tabla.php';
+	{% if filtro == 'mantenimiento' %}
+        var url_doc = 'apps/oasis_as4/controller/ver_tabla.php';
+	{% else %}
+        var url_doc = 'apps/busquedas/controller/ver_tabla.php';
+    {% endif %}
     var param_json = '{{ condicion|raw }}';
     request=$.ajax({
         data: param_json,
