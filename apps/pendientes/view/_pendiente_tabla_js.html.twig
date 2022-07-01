@@ -90,7 +90,7 @@ fnjs_marcar=function(formulario){
 	{# no se. Ahora dicen que si se puede...
 	if (!$GLOBALS['oPerm']->have_perm("scl")) {
 		if ( p == 1 ) {
-			alert ("{{ "No puede modificar un pendiente periódico. Hable con secretaria."|trans|raw }}");
+			alert ("{{ "No puede modificar un pendiente periódico. Hable con secretaría."|trans|raw }}");
 			return false;
 		}
 	}
@@ -138,13 +138,16 @@ fnjs_modificar=function(formulario){
 			s++;
 			if ($(this).attr('id')=="ax") r=1;
 			a=$(this).attr('id').split("#");
-			if (a[2]) p=1;
+			// a los calendarios de oficina si dejo modificar
+			if (! a[1].includes('oficina')) {
+                if (a[2]) p=1;
+			}
 		}
 	});
 	
 	{% if not perm_periodico %}
 		if ( p == 1 ) {
-			alert ("{{ "No puede modificar un pendiente periódico. Hable con secretaria."| trans }}");
+			alert ("{{ "No puede modificar un pendiente periódico. Hable con secretaría."| trans }}");
 			return false;
 		}
 	{% endif %}
