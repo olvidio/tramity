@@ -1,17 +1,16 @@
 <?php
 use core\ViewTwig;
 use entradas\model\Entrada;
-use entradas\model\entity\GestorEntradaBypass;
+use entradas\model\entity\EntradaBypass;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
+use usuarios\model\Categoria;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
-use usuarios\model\Categoria;
-use entradas\model\entity\EntradaBypass;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -39,14 +38,8 @@ $plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 
-//$txt_option_ref = '';
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();
-/*
-foreach ($a_posibles_lugares as $id_lugar => $sigla) {
-    $txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
-}
-*/
 
 $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
 $oArrayProtDestino->setBlanco('t');
@@ -201,7 +194,7 @@ if (!empty($Qid_entrada)) {
 	} else {
 		$oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
 		$chk_grupo_dst = '';
-		if (!empty($oEntradaBypass->getJson_prot_destino())) {
+		if (!empty((array) $oEntradaBypass->getJson_prot_destino())) {
 			$json_prot_dst = $oEntradaBypass->getJson_prot_destino();
 			$oArrayProtDestino->setArray_sel($json_prot_dst);
 		}
