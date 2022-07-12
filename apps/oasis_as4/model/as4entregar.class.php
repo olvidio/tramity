@@ -20,6 +20,8 @@ use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
 use web\Protocolo;
 use web\StringLocal;
+use entradas\model\entity\GestorEntradaCompartida;
+use entradas\model\entity\GestorEntradaDB;
 
 /**
  * No se usa el simpleXml porque con los adjuntos grandes se acaba la memoria...
@@ -169,7 +171,7 @@ class As4Entregar extends As4CollaborationInfo {
 				case As4CollaborationInfo::ACCION_ELIMINAR:
 					break;
 				case As4CollaborationInfo::ACCION_ORDEN_ANULAR:
-					$success = $this->orden_anular();
+					$success = $this->orden_anular_entrada_compartida();
 					break;
 				default:
 					$err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
@@ -186,7 +188,7 @@ class As4Entregar extends As4CollaborationInfo {
 	 * @return boolean
 	 */
 	private function orden_reemplazar() {
-		if ($this->orden_anular()) {
+		if ($this->orden_anular_entrada_compartida()) {
 			return $this->entrada_compartida(FALSE);
 		} else {
 			return FALSE;
@@ -261,7 +263,7 @@ class As4Entregar extends As4CollaborationInfo {
 		return TRUE;
 	}
 	
-	private function orden_anular() {
+	private function orden_anular_entrada_compartida() {
 		$success = FALSE;	
 		$aProt_org = [ 'id_lugar' => $this->a_Prot_org->id_lugar,
 						'num' => $this->a_Prot_org->num,
@@ -269,26 +271,27 @@ class As4Entregar extends As4CollaborationInfo {
 						'mas' => '',
 					];
 				
-		$gesEntradas = new GestorEntrada();
-		$cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_org);
-		foreach ($cEntradas as $oEntrada) {
-			$anulado = $oEntrada->getAnulado();
+		$gesEntradasCompartidas = new GestorEntradaCompartida();
+		$cEntradasCompartidas = $gesEntradasCompartidas->getEntradasByProtOrigenDB($aProt_org);
+		foreach ($cEntradasCompartidas as $oEntradaCompartida) {
+			$anulado = $oEntradaCompartida->getAnulado();
 			if (!empty($anulado)) { continue; }
 		
-			$oEntrada->setAnulado($this->anular_txt);
-			$oEntrada->setCategoria(Categoria::CAT_NORMAL);
-			$oEntrada->DBGuardar();
-			if ($oEntrada->DBGuardar() === FALSE ) {
-				$error_txt = $oEntrada->getErrorTxt();
+			$oEntradaCompartida->setAnulado($this->anular_txt);
+			$oEntradaCompartida->setCategoria(Categoria::CAT_NORMAL);
+			if ($oEntradaCompartida->DBGuardar() === FALSE ) {
+				$error_txt = $oEntradaCompartida->getErrorTxt();
 				exit ($error_txt);
 			}
-			$id_entrada_compartida = $oEntrada->getId_entrada_compartida();
-			if (!empty($id_entrada_compartida)) {
-				$oEntradaCompartida = new EntradaCompartida($id_entrada_compartida);
-				$oEntradaCompartida->DBCarregar();
-				$oEntradaCompartida->setAnulado($this->anular_txt);
-				$oEntradaCompartida->setCategoria(Categoria::CAT_NORMAL);
-				if ($oEntradaCompartida->DBGuardar() === FALSE ) {
+			$id_entrada_compartida = $oEntradaCompartida->getId_entrada_compartida();
+			// Anular también las entradas normales:
+			$gesEntradas = new GestorEntradaDB();
+			$cEntradas = $gesEntradas->getEntradasDB(['id_entrada_compartida' => $id_entrada_compartida]);
+			foreach ($cEntradas as $oEntrada) {
+				$oEntrada->DBCarregar();
+				$oEntrada->setAnulado($this->anular_txt);
+				$oEntrada->setCategoria(Categoria::CAT_NORMAL);
+				if ($oEntrada->DBGuardar() === FALSE ) {
 					$error_txt = $oEntrada->getErrorTxt();
 					exit ($error_txt);
 				}
