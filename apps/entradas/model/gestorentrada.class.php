@@ -26,7 +26,7 @@ class GestorEntrada Extends GestorEntradaDB {
 		$categoria = Categoria::CAT_NORMAL;
 		
 		foreach ($aEntidades as $schema) {
-			$nom_tabla_entidad = $schema.'.'.$nom_tabla;
+			$nom_tabla_entidad = '"'.$schema.'".'.$nom_tabla;
 			$sQry = "UPDATE $nom_tabla_entidad SET anulado = '$anular_txt', categoria = $categoria
 					WHERE id_entrada_compartida = $id_entrada_compartida";
 			
