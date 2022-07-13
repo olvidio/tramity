@@ -285,17 +285,8 @@ class As4Entregar extends As4CollaborationInfo {
 			}
 			$id_entrada_compartida = $oEntradaCompartida->getId_entrada_compartida();
 			// Anular también las entradas normales:
-			$gesEntradas = new GestorEntradaDB();
-			$cEntradas = $gesEntradas->getEntradasDB(['id_entrada_compartida' => $id_entrada_compartida]);
-			foreach ($cEntradas as $oEntrada) {
-				$oEntrada->DBCarregar();
-				$oEntrada->setAnulado($this->anular_txt);
-				$oEntrada->setCategoria(Categoria::CAT_NORMAL);
-				if ($oEntrada->DBGuardar() === FALSE ) {
-					$error_txt = $oEntrada->getErrorTxt();
-					exit ($error_txt);
-				}
-			}
+			$gesEntradas = new GestorEntrada();
+			$gesEntradas->anularCompartidas($id_entrada_compartida, $this->anular_txt, $this->getSchemaEntidadesPlataforma());
 			$success = TRUE;	
 		}
 		return $success;	
@@ -534,6 +525,22 @@ class As4Entregar extends As4CollaborationInfo {
 		$this->sigla_destino = (string) $lugar_dst;
 		// si no existen, hay que mirar dentro del mensaje
 		return $a_prot;
+	}
+	
+	public function getSchemaEntidadesPlataforma() {
+		if (!isset($this->aEntidades)) {
+			$gesEntidades = new GestorEntidadesDB(); 
+			$cEntidades = $gesEntidades->getEntidadesDB(['anulado' => 'false']);
+			$aEntidades = [];
+			foreach ($cEntidades as $oEntidad) {
+				$id = $oEntidad->getId_entidad();
+				$schema = $oEntidad->getSchema();
+				
+				$aEntidades[$id] = $schema;
+			}
+			$this->aEntidades = $aEntidades;
+		}
+		return $this->aEntidades;
 	}
 	
 	public function getEntidadesPlataforma() {

@@ -4,17 +4,47 @@ namespace entradas\model;
 use core\Condicion;
 use core\Set;
 use entradas\model\entity\GestorEntradaDB;
+use oasis_as4\model\As4Entregar;
+use usuarios\model\Categoria;
 
 
 class GestorEntrada Extends GestorEntradaDB {
-    
-
+	
+	/**
+	 * Anula las entradas individuales en cada entidad para una entrada compartida
+	 *
+	 * @param integer $id_entrada_compartida
+	 * @param string $anular_txt
+	 * @param array $aEntidades nombre del esquema de la DB
+	 * @return boolean
+	 */
+	public function anularCompartidas($id_entrada_compartida,$anular_txt,$aEntidades) {
+		$oDbl = $this->getoDbl();
+		$nom_tabla = $this->getNomTabla();
+		// Quitar esquema al $nom_tabla
+		preg_replace('/(\w+)\.(\w+)/i', '.$2', $nom_tabla);
+		$categoria = Categoria::CAT_NORMAL;
+		
+		foreach ($aEntidades as $schema) {
+			$nom_tabla_entidad = $schema.$nom_tabla;
+			$sQry = "UPDATE $nom_tabla_entidad SET anulado = '$anular_txt', categoria = $categoria
+					WHERE id_entrada_compartida = $id_entrada_compartida";
+			
+			if (($oDbl->query($sQry)) === FALSE) {
+				$sClauError = 'GestorEntradaDB.llistar.execute';
+				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+				return FALSE;
+			}
+		}
+		return TRUE;
+	}
+	
     /**
      * retorna l'array d'objectes de tipus EntradaDB
      *
      * @param array aWhere associatiu amb els valors de les variables amb les quals farem la query
      * @param array aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
-     * @return array Una col·lecció d'objectes de tipus EntradaDB
+     * @return array Una col·lecció d'objectes de tipus Entrada
      */
     function getEntradas($aWhere=array(),$aOperators=array()) {
         $oDbl = $this->getoDbl();

@@ -9,15 +9,15 @@ CREATE TABLE public.entradas (
     resto_oficinas integer[],
     asunto text,
     f_entrada date,
-	detalle text,
-	categoria smallint,
-	visibilidad smallint,
-	f_contestar date,
-	bypass boolean,
-	estado smallint,
-	anulado text,
-	encargado integer,  
- 	json_visto jsonb    
+    detalle text,
+    categoria smallint,
+    visibilidad smallint,
+    f_contestar date,
+    bypass boolean,
+    estado smallint,
+    anulado text,
+    encargado integer,  
+    json_visto jsonb    
 );
 
 ALTER TABLE public.entradas OWNER TO tramity;

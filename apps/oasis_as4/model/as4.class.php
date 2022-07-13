@@ -4,6 +4,7 @@ namespace oasis_as4\model;
 use DOMAttr;
 use lugares\model\entity\GestorLugar;
 use web\Protocolo;
+use web\DateTimeLocal;
 
 /*
  * IMPORTANTE:
@@ -102,7 +103,9 @@ class As4 extends As4CollaborationInfo {
 				break;
         	case As4CollaborationInfo::ACCION_REEMPLAZAR:
         	case As4CollaborationInfo::ACCION_COMPARTIR:
-				$this->message_id = 'compartir' .'@'. $this->accion .'@'. $this->getId_escrito();
+				// para cambios sucesivos, añadir la fechaHora (modificaciones cr...)
+				$f_ahora_iso = date(\DateTimeInterface::ATOM);
+				$this->message_id = 'compartir' .'@'. $this->accion .'@'. $this->getId_escrito().'@'.$f_ahora_iso;
 				break;
         	default:
 				// para que sea único, en el caso de la dl, manda a varios ctr con el mismo protocolo:
