@@ -22,11 +22,11 @@ class GestorEntrada Extends GestorEntradaDB {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
 		// Quitar esquema al $nom_tabla
-		preg_replace('/(\w+)\.(\w+)/i', '.$2', $nom_tabla);
+		preg_replace('/(\w+)\.(\w+)/i', '$2', $nom_tabla);
 		$categoria = Categoria::CAT_NORMAL;
 		
 		foreach ($aEntidades as $schema) {
-			$nom_tabla_entidad = $schema.$nom_tabla;
+			$nom_tabla_entidad = $schema.'.'.$nom_tabla;
 			$sQry = "UPDATE $nom_tabla_entidad SET anulado = '$anular_txt', categoria = $categoria
 					WHERE id_entrada_compartida = $id_entrada_compartida";
 			
