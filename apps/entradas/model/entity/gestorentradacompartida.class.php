@@ -88,11 +88,9 @@ class GestorEntradaCompartida Extends ClaseGestor {
         foreach ($aWhere as $camp => $val) {
             if ($camp == '_ordre') { continue; }
             if ($camp == '_limit') { continue; }
-            if ($camp == 'asunto_detalle') {
+            if ($camp == 'asunto' || $camp == 'asunto_detalle') {
                 $valor = $aWhere[$camp];
-                $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
-                $COND_OR .= " OR ";
-                $COND_OR .= "public.sin_acentos(detalle::text)  ~* public.sin_acentos('$valor'::text) )";
+                $COND_OR = "public.sin_acentos(asunto_entrada::text)  ~* public.sin_acentos('$valor'::text)";
                 
                 unset($aWhere[$camp]);
                 continue;
@@ -210,11 +208,9 @@ class GestorEntradaCompartida Extends ClaseGestor {
         foreach ($aWhere as $camp => $val) {
             if ($camp == '_ordre') { continue; }
             if ($camp == '_limit') { continue; }
-            if ($camp == 'asunto_detalle') {
+            if ($camp == 'asunto' || $camp == 'asunto_detalle') {
                 $valor = $aWhere[$camp];
-                $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
-                $COND_OR .= " OR ";
-                $COND_OR .= "public.sin_acentos(detalle::text)  ~* public.sin_acentos('$valor'::text) )";
+                $COND_OR = "public.sin_acentos(asunto_entrada::text)  ~* public.sin_acentos('$valor'::text)";
                 
                 unset($aWhere[$camp]);
                 continue;
@@ -301,7 +297,7 @@ class GestorEntradaCompartida Extends ClaseGestor {
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
+            $a_pkey = array('id_entrada_compartida' => $aDades['id_entrada_compartida']);
             $oEntradaCompartida = new EntradaCompartida($a_pkey);
             $oEntradaCompartida->setAllAtributes($aDades);
             $oEntradaCompartidaSet->add($oEntradaCompartida);
