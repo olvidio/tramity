@@ -53,7 +53,9 @@ $filtro = 'borrador_propio';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
 
 // borrador_oficina = 2
@@ -72,7 +74,9 @@ $filtro = 'borrador_oficina';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
 
 // firmar = 3
@@ -91,7 +95,9 @@ $filtro = 'firmar';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
 
 // reunion = 4
@@ -110,7 +116,9 @@ $filtro = 'reunion';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
 
 // circular = 5
@@ -129,7 +137,9 @@ $filtro = 'circulando';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
 
 if (is_true(ConfigGlobal::soy_dtor()) ) {
@@ -149,7 +159,9 @@ if (is_true(ConfigGlobal::soy_dtor()) ) {
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+        		'explicacion' => $explicacion,
+        		'ver_orden' => TRUE,
+        ];
     $a_pills[$num_orden] = $pill;
 }
 // acabados = 7.1
@@ -168,7 +180,9 @@ $filtro = 'acabados_encargados';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
     
 // archivados = 9
@@ -189,7 +203,9 @@ $filtro = 'archivados';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
 
 
@@ -209,7 +225,9 @@ $filtro = 'copias';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
 
 
@@ -233,7 +251,9 @@ if (ConfigGlobal::role_actual() === 'vcd') {
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+        		'explicacion' => $explicacion,
+        		'ver_orden' => TRUE,
+        ];
     $a_pills[$num_orden] = $pill;
 }
 
@@ -256,7 +276,9 @@ if (is_true(ConfigGlobal::soy_dtor())) {
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+        		'explicacion' => $explicacion,
+        		'ver_orden' => TRUE,
+        ];
     $a_pills[$num_orden] = $pill;
 }
 
@@ -277,7 +299,9 @@ $filtro = 'en_encargado';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
 
 // buscar = 20
@@ -295,7 +319,9 @@ $filtro = 'en_buscar';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
 
 if (is_true(ConfigGlobal::soy_dtor())) {
@@ -314,7 +340,9 @@ if (is_true(ConfigGlobal::soy_dtor())) {
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+        		'explicacion' => $explicacion,
+        		'ver_orden' => TRUE,
+        ];
     $a_pills[$num_orden] = $pill;
 }
 
@@ -333,7 +361,9 @@ $filtro = 'permanentes_cr';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
 
 // pendientes = 30
@@ -354,7 +384,9 @@ $filtro = 'pendientes';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-pendiente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
 
 // documentos = 40
@@ -373,7 +405,9 @@ $filtro = 'documentos';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-documento',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 $a_pills[$num_orden] = $pill;
 
 // ordenar:

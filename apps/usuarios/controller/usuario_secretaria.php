@@ -59,7 +59,9 @@ if (!empty($id_cargo)) {
 				'num' => $num,
 				'active' => $active,
 				'class' => 'btn-expediente',
-				'explicacion' => $explicacion];
+				'explicacion' => $explicacion,
+				'ver_orden' => TRUE,
+		];
 		$a_pills[$num_orden] = $pill;
 
     // seguimiento = 2
@@ -78,7 +80,9 @@ if (!empty($id_cargo)) {
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+        		'explicacion' => $explicacion,
+        		'ver_orden' => TRUE,
+        ];
 		$a_pills[$num_orden] = $pill;
 }
 
@@ -98,7 +102,9 @@ $filtro = 'seguimiento';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // reunion = 3
@@ -120,7 +126,9 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_distribuir) {
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+				'explicacion' => $explicacion,
+				'ver_orden' => TRUE,
+		];
 		$a_pills[$num_orden] = $pill;
 }
 
@@ -142,7 +150,9 @@ $filtro = 'enviar';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // introducir entradas
@@ -162,7 +172,9 @@ $filtro = 'en_ingresado';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // asignar entradas
@@ -182,7 +194,9 @@ $filtro = 'en_admitido';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // Solo el scdl
@@ -205,7 +219,9 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_aceptar) {
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+        		'explicacion' => $explicacion,
+        		'ver_orden' => TRUE,
+        ];
 		$a_pills[$num_orden] = $pill;
 }
 // distribución cr
@@ -225,7 +241,9 @@ $filtro = 'bypass';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // buscar = 13
@@ -243,7 +261,9 @@ $pill = [ 'orden'=> $num_orden,
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+		'explicacion' => $explicacion,
+		'ver_orden' => TRUE,
+];
 $a_pills[$num_orden] = $pill;
 
 // preferencias del scdl o suplente
@@ -264,7 +284,9 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-pendiente',
-			'explicacion' => $explicacion];
+        		'explicacion' => $explicacion,
+        		'ver_orden' => TRUE,
+        ];
 		$a_pills[$num_orden] = $pill;
 }
 
@@ -286,7 +308,9 @@ $filtro = 'pendientes';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-pendiente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // salida manual = 20
@@ -306,7 +330,9 @@ $filtro = 'salida_manual';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-pendiente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // mantenimiento = 21
@@ -325,7 +351,9 @@ $filtro = 'mantenimiento';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-pendiente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // plantillas = 30
@@ -345,7 +373,9 @@ $filtro = 'plantillas';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-pendiente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // ordenar:

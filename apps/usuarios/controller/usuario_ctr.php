@@ -33,6 +33,11 @@ $username = empty($oUsuario->getNom_usuario())? $username : $oUsuario->getNom_us
 $Qtabs = (string) \filter_input(INPUT_POST, 'tabs');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
+// grupos de menus: dropdown
+$a_grupos = [	1 => _("Expedientes"),
+				2 => _("Entradas"),
+];
+
 $a_pills = [];
 //Diferentes filtros:
 // Expedientes:
@@ -42,7 +47,7 @@ $filtro = 'borrador_propio';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 1;
+    $num_orden = "1#1";
     $text = _("personal"); // _("borrador (propio)");
     $explicacion = _("Expedientes de trabajo propio");
     $oExpedienteLista->setFiltro($filtro);
@@ -53,7 +58,9 @@ $filtro = 'borrador_propio';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+			'explicacion' => $explicacion,
+    		'ver_orden' => false,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // borrador_oficina = 2
@@ -61,7 +68,7 @@ $filtro = 'borrador_oficina';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 2;
+    $num_orden = "1#2";
     $text = _("consejo local"); //_("borrador (oficina)");
     $explicacion = _("Expedientes para revisión del consejo local");
     $oExpedienteLista->setFiltro($filtro);
@@ -72,7 +79,9 @@ $filtro = 'borrador_oficina';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => false,
+    ];
 	$a_pills[$num_orden] = $pill;
 
     
@@ -81,7 +90,7 @@ $filtro = 'archivados';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($aQuery));
-    $num_orden = 9;
+    $num_orden = "1#3";
     $text = _("archivados");
     $explicacion = _("Expedientes de la propia oficina archivados, una vez finalizados todos los pasos");
     // No hace falta el número:
@@ -94,7 +103,9 @@ $filtro = 'archivados';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-expediente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => false,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 
@@ -103,7 +114,7 @@ $filtro = 'en_aceptado';
 	$active = ($filtro == $Qfiltro)? 'active' : '';
 	$aQuery = [ 'filtro' => $filtro ];
 	$pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-	$num_orden = 12;
+	$num_orden = '2#1';
 	$text = _("correo de entrada"); //_("entradas");
 	$explicacion = _("Gestionar el correo de entrada");
 	$oEntradaLista = new EntradaLista();
@@ -115,7 +126,9 @@ $filtro = 'en_aceptado';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+			'explicacion' => $explicacion,
+			'ver_orden' => false,
+	];
 	$a_pills[$num_orden] = $pill;
 
 // entradas = 13
@@ -123,7 +136,7 @@ $filtro = 'en_encargado';
     $active = ($filtro == $Qfiltro)? 'active' : '';
     $aQuery = [ 'filtro' => $filtro ];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($aQuery));
-    $num_orden = 13;
+	$num_orden = '2#2';
     $text = _("correo encargado"); // _("entradas encargadas");
     $explicacion = _("Ver el correo de entrada encargado a alguien");
     $oEntradaLista = new EntradaLista();
@@ -135,7 +148,9 @@ $filtro = 'en_encargado';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => false,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // buscar = 20
@@ -152,8 +167,10 @@ $filtro = 'en_buscar';
 			'pag_lst' => $pag_lst,
 			'num' => $num,
 			'active' => $active,
-			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+			'class' => 'btn-pendiente',
+    		'explicacion' => $explicacion,
+    		'ver_orden' => false,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // entradas de la semana = 21
@@ -161,7 +178,7 @@ $filtro = 'entradas_semana';
 	$active = ($filtro == $Qfiltro)? 'active' : '';
 	$aQuery = [ 'filtro' => $filtro, 'opcion' => 52 ];
 	$pag_lst = web\Hash::link('apps/busquedas/controller/ver_tabla.php?'.http_build_query($aQuery));
-	$num_orden = 21;
+	$num_orden = '2#3';
 	$text = _("entradas");
 	$explicacion = _("Correo de dl y cr (marcado como visto) de los últimos 15 días");
 	$num = '';
@@ -171,7 +188,9 @@ $filtro = 'entradas_semana';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+			'explicacion' => $explicacion,
+			'ver_orden' => false,
+	];
 	$a_pills[$num_orden] = $pill;
 
 // buscar = 22
@@ -188,8 +207,10 @@ $filtro = 'permanentes_cr';
 			'pag_lst' => $pag_lst,
 			'num' => $num,
 			'active' => $active,
-			'class' => 'btn-entrada',
-			'explicacion' => $explicacion];
+			'class' => 'btn-pendiente',
+    		'explicacion' => $explicacion,
+    		'ver_orden' => false,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // pendientes = 30
@@ -210,7 +231,9 @@ $filtro = 'pendientes';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-pendiente',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => false,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // documentos = 40
@@ -229,7 +252,9 @@ $filtro = 'documentos';
 			'num' => $num,
 			'active' => $active,
 			'class' => 'btn-documento',
-			'explicacion' => $explicacion];
+    		'explicacion' => $explicacion,
+    		'ver_orden' => false,
+    ];
 	$a_pills[$num_orden] = $pill;
 
 // ordenar:
@@ -249,6 +274,7 @@ $a_campos = [
     'pagina_etiquetas' => $pagina_etiquetas,
     // para tabs
     'a_pills' => $a_pills,
+    'a_grupos' => $a_grupos,
     'vista' => 'ctr',
     'filtro' => $filtro,
     'a_roles' => $_SESSION['session_auth']['a_roles'],
