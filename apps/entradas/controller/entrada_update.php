@@ -42,7 +42,7 @@ $Qid_of_ponente = (integer) \filter_input(INPUT_POST, 'of_ponente');
 $Qa_oficinas = (array)  \filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 $Qcategoria = (integer) \filter_input(INPUT_POST, 'categoria');
-$Qvisibiliad = (integer) \filter_input(INPUT_POST, 'visibilidad');
+$Qvisibilidad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 
 $Qplazo = (string) \filter_input(INPUT_POST, 'plazo');
 $Qf_plazo = (string) \filter_input(INPUT_POST, 'f_plazo');
@@ -321,7 +321,7 @@ switch($Qque) {
         $oEntrada->setAsunto($Qasunto);
         $oEntrada->setDetalle($Qdetalle);
         $oEntrada->setCategoria($Qcategoria);
-        $oEntrada->setVisibilidad($Qvisibiliad);
+        $oEntrada->setVisibilidad($Qvisibilidad);
 		switch ($Qplazo) {
 			case 'hoy':
 				$oEntrada->setF_contestar('');
@@ -417,10 +417,10 @@ switch($Qque) {
 
         $oEntrada->setCategoria($Qcategoria);
         // visibilidad: puede que esté en modo solo lectura, mirar el hiden.
-        if (empty($Qvisibiliad)) {
-            $Qvisibiliad = (integer) \filter_input(INPUT_POST, 'hidden_visibilidad');
+        if (empty($Qvisibilidad)) {
+            $Qvisibilidad = (integer) \filter_input(INPUT_POST, 'hidden_visibilidad');
         }
-        $oEntrada->setVisibilidad($Qvisibiliad);
+        $oEntrada->setVisibilidad($Qvisibilidad);
 
         
         // 5º Compruebo si hay que generar un pendiente
@@ -504,7 +504,7 @@ switch($Qque) {
                         $oPendiente->setStatus("NEEDS-ACTION");
                         $oPendiente->setF_inicio($Qf_entrada);
                         $oPendiente->setF_plazo($f_plazo);
-                        $oPendiente->setVisibilidad($Qvisibiliad);
+                        $oPendiente->setVisibilidad($Qvisibilidad);
                         $oPendiente->setDetalle($Qdetalle);
                         $oPendiente->setPendiente_con($Qorigen);
                         $oPendiente->setLocation($location);

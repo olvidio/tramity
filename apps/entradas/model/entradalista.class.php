@@ -213,7 +213,8 @@ class EntradaLista {
                 break;
             case 'en_aceptado':
                 $oficina = $this->aWhereADD['ponente'];
-                $pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
+                //$pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
+		        $pagina_accion = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_accion.php';
                 if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR ) {
 					$pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form_ctr.php';
 					$ver_oficina = FALSE;
@@ -323,7 +324,7 @@ class EntradaLista {
                 $a_entradas[$f_entrada_iso] = $row;
             }
         }
-        // ordenar por f_entrada:
+        // ordenar por f_entrada_iso:
         krsort($a_entradas,SORT_STRING);
             
         $url_update = 'apps/entradas/controller/entrada_update.php';

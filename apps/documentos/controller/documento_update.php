@@ -19,7 +19,7 @@ $Qid_doc = (integer) \filter_input(INPUT_POST, 'id_doc');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
 $Qnom = (string) \filter_input(INPUT_POST, 'nom');
-$Qvisibiliad = (integer) \filter_input(INPUT_POST, 'visibilidad');
+$Qvisibilidad = (integer) \filter_input(INPUT_POST, 'visibilidad');
 $Qtipo_doc = (integer) \filter_input(INPUT_POST, 'tipo_doc');
 $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
@@ -68,7 +68,7 @@ switch($Qque) {
         }
         
         $oDocumento->setNom($Qnom);
-        $oDocumento->setVisibilidad($Qvisibiliad);
+        $oDocumento->setVisibilidad($Qvisibilidad);
         $oDocumento->setTipo_doc($Qtipo_doc);
 
         

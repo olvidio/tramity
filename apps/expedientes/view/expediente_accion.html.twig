@@ -162,7 +162,13 @@ fnjs_accion=function(accion){
             rta_txt = json.mensaje;
             alert ('error: '+rta_txt);
         } else {
-        	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            // En el caso de crear expediente a partir de una entrada. Ir
+            // directo al nuevo escrito dentro del nuevo expediente.
+            if (accion == 'en_expediente') {
+                fnjs_update_div('#main','{{ pagina_contestar|raw }}');
+            } else {
+                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            }
         }
     });
 }

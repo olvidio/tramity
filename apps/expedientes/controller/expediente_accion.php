@@ -28,6 +28,7 @@ $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 
+$pagina_contestar = ''; 
 // Añado la opcion de poder crear un expediente desde entradas
 switch ($Qfiltro) {
     case 'entradas_semana':
@@ -66,6 +67,21 @@ switch ($Qfiltro) {
                 exit ($err_switch);
         }
         break;
+    case 'en_aceptado':
+    	$Qoficina = (string) \filter_input(INPUT_POST, 'oficina');
+        $oEntrada = new Entrada($Qid_entrada);
+        $asunto = $oEntrada->getAsunto();
+    	
+    	$url_cancel = 'apps/entradas/controller/entrada_lista.php';
+    	$pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro, 'oficina'  => $Qoficina]));
+		// En los ctr, ir directo a contestar:
+		if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    		$url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
+		} else {
+    		$url_contestar = $url_cancel;
+		}
+    	$pagina_contestar = Hash::link($url_contestar.'?'.http_build_query(['filtro' => $Qfiltro, 'id_entrada'  => $Qid_entrada]));
+    	break;
     case 'en_encargado':
         $Qencargado = (integer) \filter_input(INPUT_POST, 'encargado');
         $oEntrada = new Entrada($Qid_entrada);
@@ -73,6 +89,13 @@ switch ($Qfiltro) {
         
         $url_cancel = 'apps/entradas/controller/entrada_lista.php';
         $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro, 'encargado' => $Qencargado]));
+		// En los ctr, ir directo a contestar:
+		if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    		$url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
+		} else {
+    		$url_contestar = $url_cancel;
+		}
+    	$pagina_contestar = Hash::link($url_contestar.'?'.http_build_query(['filtro' => $Qfiltro, 'id_entrada'  => $Qid_entrada]));
         break;
     default:
         if (empty($Qid_expediente) && $Qfiltro != 'en_aceptado') {
@@ -120,6 +143,7 @@ $f_plazo = '';
 $hoy_iso = '';
 $titulo = _("Acciones para el expediente");
 switch ($Qfiltro) {
+    case 'en_aceptado':
     case 'en_encargado':
 		$titulo = _("Acciones para la entrada");
         $a_botones[4] = ['accion' => 'en_add_encargado',
@@ -301,7 +325,9 @@ $a_campos = [
     // datepicker
     'format' => $format,
     'yearStart' => $yearStart,
-    'yearEnd' => $yearEnd,
+	'yearEnd' => $yearEnd,	
+	//Solo para saltar directo al contestar una entrada 
+ 	'pagina_contestar' => $pagina_contestar,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

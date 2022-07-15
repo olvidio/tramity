@@ -9,15 +9,15 @@ CREATE TABLE public.expedientes (
     prioridad smallint NOT NULL,
     json_antecedentes jsonb,
     json_acciones jsonb,
-	f_contestar date,
+    f_contestar date,
     estado smallint NOT NULL DEFAULT 1,
     f_ini_circulacion date,
     f_reunion timestamp without time zone,
     f_aprobacion date,
-	vida smallint,
+    vida smallint,
     json_preparar jsonb,
     firmas_oficina integer[],
-	visibilidad smallint
+    visibilidad smallint
 );
 
 ALTER TABLE public.expedientes OWNER TO tramity;
