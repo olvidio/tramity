@@ -71,6 +71,7 @@ if (!empty($Qid_lugar)) {
     $nombre = $oLugar->getNombre();
     $tipo_ctr = $oLugar->getTipo_ctr();
     $e_mail = $oLugar->getE_mail();
+    $plataforma = $oLugar->getPlataforma();
     $anulado = $oLugar->getAnulado();
     // modo envio
     $modo_envio = $oLugar->getModo_envio();
@@ -84,12 +85,13 @@ if (!empty($Qid_lugar)) {
     $nombre='';
     $tipo_ctr = '';
     $e_mail = '';
+    $plataforma = '';
     $anulado = '';
     
 }
 $chk_anulado = is_true($anulado)? 'checked' : '' ;
 
-$camposForm = 'que!sigla!dl!region!nombre!tipo_ctr!e_mail';
+$camposForm = 'que!sigla!dl!region!nombre!tipo_ctr!e_mail!plataforma';
 $oHash = new web\Hash();
 $oHash->setcamposForm($camposForm);
 $oHash->setCamposChk('anulado');
@@ -114,6 +116,7 @@ $a_campos = [
             'region' => $region,
             'nombre' => $nombre,
             'tipo_ctr' => $tipo_ctr,
+            'plataforma' => $plataforma,
             'e_mail' => $e_mail,
             'oDesplModoEnvio' => $oDesplModoEnvio,
             'chk_anulado' => $chk_anulado,

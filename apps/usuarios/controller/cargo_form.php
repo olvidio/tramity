@@ -5,6 +5,7 @@ use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 use usuarios\model\entity\GestorUsuario;
 use usuarios\model\entity\Usuario;
+use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -66,6 +67,8 @@ if (!empty($Qid_cargo)) {
     $id_oficina = $oCargo->getId_oficina();
     $director = $oCargo->getDirector();
     $chk_director = ($director === TRUE)? 'checked' : ''; 
+    $sacd = $oCargo->getSacd();
+    $chk_sacd = ($sacd === TRUE)? 'checked' : ''; 
     $id_usuario = $oCargo->getId_usuario();
     $id_suplente = $oCargo->getId_suplente();
 } else {
@@ -73,17 +76,23 @@ if (!empty($Qid_cargo)) {
     $Qid_cargo = '';
     $cargo = '';
     $descripcion = '';
-    $id_ambito = $oCargo::AMBITO_DL; // segun configuración de la aplicacion;
+    $id_ambito = $_SESSION['oConfig']->getAmbito(); // segun configuración de la aplicacion;
     $id_oficina = '';
     $chk_director = '';
+    $chk_sacd = '';
     $id_usuario = '';
     $id_suplente = '';
 }
 
-$oGOficinas = new GestorOficina();
-$oDesplOficinas= $oGOficinas->getListaOficinas();
-$oDesplOficinas->setOpcion_sel($id_oficina);
-$oDesplOficinas->setNombre('id_oficina');
+if ($id_ambito == $oCargo::AMBITO_DL) {
+    $hay_oficina = TRUE;
+    $oGOficinas = new GestorOficina();
+    $oDesplOficinas= $oGOficinas->getListaOficinas();
+    $oDesplOficinas->setOpcion_sel($id_oficina);
+    $oDesplOficinas->setNombre('id_oficina');
+} else {
+    $hay_oficina = FALSE;
+}
 
 $gesUsuarios = new GestorUsuario();
 $oDesplUsuarios = $gesUsuarios->getDesplUsuarios();
@@ -116,14 +125,19 @@ $a_campos = [
             'oHash' => $oHash,
             'cargo' => $cargo,
             'descripcion' => $descripcion,
-            'oDesplOficinas' => $oDesplOficinas,
             'oDesplUsuarios' => $oDesplUsuarios,
             'oDesplSuplentes' => $oDesplSuplentes,
             'chk_director' => $chk_director,
+            'chk_sacd' => $chk_sacd,
             'url_update' => $url_update,
             'txt_guardar' => $txt_guardar,
             'txt_eliminar' => $txt_eliminar,
+            'hay_oficina' => $hay_oficina,
             ];
+
+if ($hay_oficina) {
+    $a_campos['oDesplOficinas'] = $oDesplOficinas;
+}
 
 $oView = new ViewTwig('usuarios/controller');
 echo $oView->renderizar('cargo_form.html.twig',$a_campos);

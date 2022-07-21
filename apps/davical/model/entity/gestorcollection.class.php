@@ -34,7 +34,7 @@ class GestorCollection Extends core\ClaseGestor {
 
 	/* METODES PUBLICS -----------------------------------------------------------*/
 
-	public function modificarUid($oficina_new, $oficina_new) {
+	public function modificarUid($uid_new, $uid_old) {
 	    // uid= 20210216T170424@registro_oficina_scdl
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
@@ -64,7 +64,6 @@ class GestorCollection Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('collection_id' => $aDades['collection_id']);
 			$oCollection= new Collection($a_pkey);
-			$oCollection->setAllAtributes($aDades);
 			$oCollectionSet->add($oCollection);
 		}
 		return $oCollectionSet->getTot();
@@ -115,7 +114,6 @@ class GestorCollection Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('collection_id' => $aDades['collection_id']);
 			$oCollection = new Collection($a_pkey);
-			$oCollection->setAllAtributes($aDades);
 			$oCollectionSet->add($oCollection);
 		}
 		return $oCollectionSet->getTot();

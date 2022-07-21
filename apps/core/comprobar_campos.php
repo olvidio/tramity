@@ -4,7 +4,7 @@ use web\DateTimeLocal;
     
 /**
 * Esta página sirve para comprobar que los valores de los campos de
-* un formulario, se corresponden con el tipo de datos de la base de datos.
+* un formulario, se corresponden con el tipo_escrito de datos de la base de datos.
 *
 * Se le debe pasar el parametro 'tabla'
 *
@@ -40,7 +40,7 @@ foreach ($cDatosCampos as $oDatosCampo) {
 	$reg_exp = $oDatosCampo->getRegExp();
 	$nomcamp = $oDatosCampo->getNom_camp();
 	$etiqueta = $oDatosCampo->getEtiqueta();
-	$tipo = $oDatosCampo->datos_campo($oDbl,'tipo');	
+	$tipo = $oDatosCampo->datos_campo($oDbl,'tipo_escrito');	
 	$not_null= $oDatosCampo->datos_campo($oDbl,'nulo');
 	$longitud = $oDatosCampo->datos_campo($oDbl,'longitud');
 

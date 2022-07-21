@@ -24,10 +24,12 @@
           <label for="example" class="form-label">{{ "Dirección de correo electrónico"|trans }}</label>
           <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" value="{{ email }}">
         </div>
+        {% if not is_admin %}
         <div class="mb-3">
           <label for="example" class="form-label">{{ "Cargo Preferido"|trans }}</label>
 			{{ oDesplCargos.desplegable|raw }}
         </div>
+        {% endif %}
         
         <div class="row mb-3">
           <button onclick="fnjs_guardar(this.form);" type="button" class="col-4 btn btn-primary w-100">{{ "Guardar"|trans }}</button>
@@ -52,9 +54,11 @@ $(document).ready(function() {
 });
 
 fnjs_guardar=function(formulario){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    }
     var url_doc = 'apps/usuarios/controller/personal_update.php';
     var data = $(formulario).serialize();
     request=$.ajax({
@@ -73,7 +77,7 @@ fnjs_guardar=function(formulario){
 }
 
 fnjs_cancelar=function(){
-    if (event != undefined) {
+    if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();

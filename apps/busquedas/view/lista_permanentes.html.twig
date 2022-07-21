@@ -1,30 +1,49 @@
 <div id='condiciones'>
 <form id="modifica3" name="modifica3" action="">
-</form>
-  <input type="hidden" id="tipo_lista" name="tipo_lista" value="xxx" form="modifica3" >
-  <table border=1>
-    <tr><th colspan=5 class=titulo_inv>{{ "búsquedas de escritos"|trans }}</th></tr>
-    <tr><td class=etiqueta>{{ "número de referencia"|trans }}:</td>
-        <td>cr <input id="prot_num" name="prot_num" size="12" value="{{ prot_num }}" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar')" form="modifica3" >
-            /
-            <input id="prot_any" name="prot_any" size="5" value="{{ prot_any }}" class=contenido title="{{ "año protocolo origen"|trans }}"  form="modifica3" >
-        </td>
-    <td>
-      {{ "asunto"|trans }}: <input type="text" name="asunto" value="{{ asunto }}" form="modifica3" \>
-    </td>
-    <td>
-      <input id="b_buscar"   name="b_buscar"   TYPE="button" VALUE="{{ "buscar"|trans }}" onclick="fnjs_buscar('proto')"  form="modifica3" >
-      <input id="b_buscar_2" name="b_buscar_2" TYPE="button" VALUE="{{ "años"|trans }}" onclick="fnjs_buscar('lst_years')"  form="modifica3" > 
-      <input id="b_buscar_3" name="b_buscar_3" TYPE="button" VALUE="{{ "oficinas"|trans }}" onclick="fnjs_buscar('lst_oficinas')"  form="modifica3" >
-    </td>
+<input type="hidden" id="tipo_lista" name="tipo_lista" value="xxx" form="modifica3" >
+<table class="table table-warning p-2 col-8">
+    <tr class="table-danger">
+    <th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans }}
+          <input id="protocolo" name="protocolo" size="30" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_protocolo('#id_lugar','#prot_num','#prot_any','#b_buscar')" value="" >
+    </th>
     </tr>
-  </table>
+    <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
+        {{ oDesplLugar.desplegable|raw }}
+          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar')" value="{{ prot_num }}" >
+          /
+          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans }}" value="{{ prot_any }}" >
+        </td>
+        <td>
+        <td class=etiqueta>{{ "Escribir una palabra clave"|trans }}:</td>
+        <td colspan=2><input type="Text" id="asunto" name="asunto" size="40" value="{{ asunto }}"></td>
+        </td>
+      </tr>
+    <tr>
+      <td>
+        {% if ambito_dl %}
+          <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button" onclick="fnjs_buscar('lst_oficinas')" >{{ "lista por oficinas"|trans }}</button>
+        {% else %}
+          <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button" onclick="fnjs_buscar('lst_todos')" >{{ "listar todos"|trans }}</button>
+        {% endif %}
+      </td>
+      <td>
+        <button class="btn btn-success" id="b_buscar_2" name="b_buscar" TYPE="button" onclick="fnjs_buscar('lst_years')" >{{ "lista por años"|trans }}</button>
+      </td>
+      <td></td>
+      <td></td>
+      <td>
+        <button class="btn btn-success" id="b_buscar" name="b_buscar" TYPE="button" onclick="fnjs_buscar('proto')" >{{ "buscar"|trans }}</button>
+      </td>
+    </tr>
+    </table>
+</form>
 </div>
+
 <br>
 <div id='resultados'>
 <h2>{{ titulo }}</h2>
 {{ lista|raw }}
-{{ oTabla.mostrarTabla|raw }}
+{{ oVerTabla.mostrarTabla|raw }}
 </div>
 
 <script>
@@ -36,15 +55,7 @@ fnjs_ver_mas=function(n){
     jQuery.each(des,function(i,el){ if ($('#'+el).length) { $('#'+el).toggle(); } });
     
 }
-fnjs_ver_documento=function(id_escrito){
-    var winPrefs="";
-    var pagina='scdl/registro/registro_documento.php?id_escrito='+id_escrito+'&act=download&PHPSESSID=<?= session_id() ?>';
-    top.newWin = window.open(pagina, "abrir", winPrefs);
-    top.newWin.focus();
-}
 fnjs_buscar=function(n){
-	//event.preventDefault();
-	//event.stopPropagation();
     $('#modifica3').attr('action','apps/busquedas/controller/lista_permanentes.php');
     $('#tipo_lista').val(n);
     fnjs_enviar_formulario('#modifica3');

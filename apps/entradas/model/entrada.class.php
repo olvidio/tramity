@@ -1,39 +1,36 @@
 <?php
 namespace entradas\model;
 
+use core\ConfigGlobal;
+use function core\is_true;
 use entradas\model\entity\EntradaDB;
 use entradas\model\entity\EntradaDocDB;
 use entradas\model\entity\GestorEntradaAdjunto;
 use entradas\model\entity\GestorEntradaBypass;
+use etiquetas\model\entity\Etiqueta;
+use etiquetas\model\entity\EtiquetaEntrada;
+use etiquetas\model\entity\GestorEtiqueta;
+use etiquetas\model\entity\GestorEtiquetaEntrada;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
+use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
+use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
 use web\ProtocoloArray;
-use usuarios\model\PermRegistro;
+use entradas\model\entity\EntradaCompartida;
 
 
 class Entrada Extends EntradaDB {
     
     /* CONST -------------------------------------------------------------- */
-    
-    // modo entrada
-    const MODO_MANUAL       = 1;
-    const MODO_XML          = 2;
-    
-    // categoria
-    const CAT_E12          = 1;
-    const CAT_NORMAL       = 2;
-    const CAT_PERMANATE    = 3;
-    
-    // visibilidad
-    const V_TODOS           = 1;  // cualquiera
-    const V_PERSONAL        = 2;  // oficina y directores
-    const V_DIRECTORES      = 3;  // sólo directores
-    const V_RESERVADO       = 4;  // sólo directores, añade no ver a los directores de otras oficinas no implicadas
-    const V_RESERVADO_VCD   = 5;  // sólo vcd + quien señale
-    
+	
+	// modo entrada
+	const MODO_MANUAL       = 1;
+	const MODO_XML          = 2;
+	
     // estado
     /*
      - Ingresa (secretaría introduce los datos de la entrada)
@@ -54,9 +51,11 @@ class Entrada Extends EntradaDB {
     
     /* PROPIEDADES -------------------------------------------------------------- */
 
-    private $df_doc;
-    private $convert;
-    private $itipo_doc;
+    protected $df_doc;
+    protected $convert;
+    protected $itipo_doc;
+
+    protected $nombre_escrito;
     
     /* CONSTRUCTOR -------------------------------------------------------------- */
     
@@ -85,25 +84,7 @@ class Entrada Extends EntradaDB {
         $this->setNomTabla('entradas');
     }
     
-    /* METODES PUBLICS ----------------------------------------------------------*/
-
-    public function getArrayCategoria() {
-        return [
-            self::CAT_NORMAL => _("normal"),
-            self::CAT_E12 => _("sin numerar"),
-            self::CAT_PERMANATE => _("permanente"),
-        ];
-    }
     
-    public function getArrayVisibilidad() {
-        return [
-            self::V_TODOS => _("todos"),
-            self::V_PERSONAL => _("personal"),
-            self::V_DIRECTORES => _("directores"),
-            self::V_RESERVADO => _("reservado"),
-            self::V_RESERVADO_VCD => _("vcd"),
-        ];
-    }
     
     public function cabeceraDistribucion_cr() {
         // a ver si ya está
@@ -128,7 +109,7 @@ class Entrada Extends EntradaDB {
                 } else {
                     $a_json_prot_dst = $oEntradaBypass->getJson_prot_destino();
                     foreach ($a_json_prot_dst as $json_prot_dst) {
-                        $oLugar = new Lugar($json_prot_dst->lugar);
+                        $oLugar = new Lugar($json_prot_dst->id_lugar);
                         $destinos_txt .= empty($destinos_txt)? '' : ', ';
                         $destinos_txt .= $oLugar->getNombre();
                     }
@@ -145,10 +126,30 @@ class Entrada Extends EntradaDB {
     }
     
     public function cabeceraIzquierda() {
-        // sigla + ref
+        // sigla +(visibilidad) + ref
+    	$oVisibilidad = new Visibilidad();
         
         $sigla = $_SESSION['oConfig']->getSigla();
         $destinos_txt = $sigla;
+        // excepción para bypass
+        if (!is_true($this->getBypass())) {
+			$visibilidad = $this->getVisibilidad();
+			// si soy dl o ctr
+			if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+				if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
+					$a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
+					$visibilidad_txt = $a_visibilidad_dst[$visibilidad];
+					$destinos_txt .= " ($visibilidad_txt)";
+				}
+			} else {
+				if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
+					$a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
+					$visibilidad_txt = $a_visibilidad_dl[$visibilidad];
+					$destinos_txt .= " ($visibilidad_txt)";
+				}
+			}
+        }
+        
         $gesLugares = new GestorLugar();
         $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
         if (!empty($cLugares)) {
@@ -175,7 +176,7 @@ class Entrada Extends EntradaDB {
         $id_org = '';
         $json_prot_origen = $this->getJson_prot_origen();
         if (!empty((array)$json_prot_origen)) {
-            $id_org = $json_prot_origen->lugar;
+            $id_org = $json_prot_origen->id_lugar;
             
             // referencias
             $a_json_prot_ref = $this->getJson_prot_ref();
@@ -184,7 +185,7 @@ class Entrada Extends EntradaDB {
             $aRef = $oArrayProtRef->ArrayListaTxtBr($id_org);
             
             $oProtOrigen = new Protocolo();
-            $oProtOrigen->setLugar($json_prot_origen->lugar);
+            $oProtOrigen->setLugar($json_prot_origen->id_lugar);
             $oProtOrigen->setProt_num($json_prot_origen->num);
             $oProtOrigen->setProt_any($json_prot_origen->any);
             $oProtOrigen->setMas($json_prot_origen->mas);
@@ -211,8 +212,7 @@ class Entrada Extends EntradaDB {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'asunto');
             
-        $a_visibilidad = $this->getArrayVisibilidad();
-        $asunto = $a_visibilidad[self::V_RESERVADO];
+        $asunto = _("reservado");
         if ($perm > 0) {
             $asunto = '';
             $anulado = $this->getAnulado();
@@ -233,8 +233,7 @@ class Entrada Extends EntradaDB {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'detalle');
             
-        $a_visibilidad = $this->getArrayVisibilidad();
-        $detalle = $a_visibilidad[self::V_RESERVADO];
+        $detalle = _("reservado");
         if ($perm > 0) {
             $detalle = $this->getDetalleDB();
         } 
@@ -294,24 +293,36 @@ class Entrada Extends EntradaDB {
         }
         // El tipo y fecha documento:
         if (!empty($this->iid_entrada)) {
-            $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
-            $this->df_doc = $oEntradaDocDB->getF_doc();
-            $this->itipo_doc = $oEntradaDocDB->getTipo_doc();
+        	if(!empty($this->getId_entrada_compartida())) {
+				$oEntradaCompartida = new EntradaCompartida($this->iid_entrada_compartida);
+				$oFdoc = $oEntradaCompartida->getF_documento();
+				$this->df_doc = $oFdoc;
+        	} else {
+				$oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
+				$this->df_doc = $oEntradaDocDB->getF_doc();
+				$this->itipo_doc = $oEntradaDocDB->getTipo_doc();
+        	}
         }
         return TRUE;
     }
 
     /**
      * Recupera l'atribut df_doc de Entrada
-     * de EntradaDocDB
+     * de EntradaDocDB, o si es una entrada compartida de 'EntradaCompartida'
      *
      * @return DateTimeLocal df_doc
      */
     function getF_documento() {
         if (!isset($this->df_doc) && !empty($this->iid_entrada)) {
-            $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
-            $oFdoc = $oEntradaDocDB->getF_doc();
-            $this->df_doc = $oFdoc;
+        	if(!empty($this->getId_entrada_compartida())) {
+				$oEntradaCompartida = new EntradaCompartida($this->iid_entrada_compartida);
+				$oFdoc = $oEntradaCompartida->getF_documento();
+				$this->df_doc = $oFdoc;
+        	} else {
+				$oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
+				$oFdoc = $oEntradaDocDB->getF_doc();
+				$this->df_doc = $oFdoc;
+        	}
         }
         if (empty($this->df_doc)) {
             return new NullDateTimeLocal();
@@ -320,7 +331,7 @@ class Entrada Extends EntradaDB {
     }
     /**
      * estableix el valor de l'atribut df_doc de EntradaDB
-     * Si df_doc es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+     * Si df_doc es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_entrada debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
      * @param DateTimeLocal|string df_doc='' optional.
@@ -347,6 +358,113 @@ class Entrada Extends EntradaDB {
         
         $gesEntradaAdjuntos = new GestorEntradaAdjunto();
         return $gesEntradaAdjuntos->getArrayIdAdjuntos($this->iid_entrada);
+    }
+    
+    /**
+     * Devuelve el nombre del escrito (sigla_num_año): cr_15_05
+     *
+     * @param string $parentesi si existe se añade al nombre, entre parentesis
+     * @return string|mixed
+     */
+    public function getNombreEscrito($parentesi='') {
+    	$json_prot_local = $this->getJson_prot_origen();
+    	// nombre del archivo
+    	if (empty((array)$json_prot_local)) {
+    		// genero un id: fecha
+    		$f_hoy = date('Y-m-d');
+    		$hora = date('His');
+    		$this->nombre_escrito = $f_hoy.'_'._("E12")."($hora)";
+    	} else {
+    		$oProtOrigen = new Protocolo();
+    		$oProtOrigen->setLugar($json_prot_local->id_lugar);
+    		$oProtOrigen->setProt_num($json_prot_local->num);
+    		$oProtOrigen->setProt_any($json_prot_local->any);
+    		$oProtOrigen->setMas($json_prot_local->mas);
+    		$this->nombre_escrito = $this->renombrar($oProtOrigen->ver_txt());
+    	}
+    	if (!empty($parentesi)) {
+    		$this->nombre_escrito .= "($parentesi)";
+    	}
+    	return $this->nombre_escrito;
+    }
+    
+    public function getEtiquetasVisiblesArray($id_cargo='') {
+    	$cEtiquetas = $this->getEtiquetasVisibles($id_cargo);
+    	$a_etiquetas = [];
+    	foreach ($cEtiquetas as $oEtiqueta) {
+    		$a_etiquetas[] = $oEtiqueta->getId_etiqueta();
+    	}
+    	return $a_etiquetas;
+    }
+    
+    public function getEtiquetasVisiblesTxt($id_cargo='') {
+    	$cEtiquetas = $this->getEtiquetasVisibles($id_cargo);
+    	$str_etiquetas = '';
+    	foreach ($cEtiquetas as $oEtiqueta) {
+    		$str_etiquetas .= empty($str_etiquetas)? '' : ', ';
+    		$str_etiquetas .= $oEtiqueta->getNom_etiqueta();
+    	}
+    	return $str_etiquetas;
+    }
+    
+    public function getEtiquetasVisibles($id_cargo='') {
+    	if (empty($id_cargo)) {
+    		$id_cargo = ConfigGlobal::role_id_cargo();
+    	}
+    	$gesEtiquetas = new GestorEtiqueta();
+    	$cMisEtiquetas = $gesEtiquetas->getMisEtiquetas($id_cargo);
+    	$a_mis_etiquetas = [];
+    	foreach($cMisEtiquetas as $oEtiqueta) {
+    		$a_mis_etiquetas[] = $oEtiqueta->getId_etiqueta();
+    	}
+    	$gesEtiquetasEntrada = new GestorEtiquetaEntrada();
+    	$aWhere = [ 'id_entrada' => $this->iid_entrada ];
+    	$cEtiquetasEnt = $gesEtiquetasEntrada->getEtiquetasEntrada($aWhere);
+    	$cEtiquetas = [];
+    	foreach ($cEtiquetasEnt as $oEtiquetaEnt) {
+    		$id_etiqueta = $oEtiquetaEnt->getId_etiqueta();
+    		if (in_array($id_etiqueta, $a_mis_etiquetas)) {
+    			$cEtiquetas[] = new Etiqueta($id_etiqueta);
+    		}
+    	}
+    	
+    	return $cEtiquetas;
+    }
+    
+    public function getEtiquetas() {
+    	$gesEtiquetasEntrada = new GestorEtiquetaEntrada();
+    	$aWhere = [ 'id_entrada' => $this->iid_entrada ];
+    	$cEtiquetasExp = $gesEtiquetasEntrada->getEtiquetasEntrada($aWhere);
+    	$cEtiquetas = [];
+    	foreach ($cEtiquetasExp as $oEtiquetaExp) {
+    		$id_etiqueta = $oEtiquetaExp->getId_etiqueta();
+    		$cEtiquetas[] = new Etiqueta($id_etiqueta);
+    	}
+    	
+    	return $cEtiquetas;
+    }
+    
+    public function setEtiquetas($aEtiquetas){
+    	$this->delEtiquetas();
+    	$a_filter_etiquetas = array_filter($aEtiquetas); // Quita los elementos vacíos y nulos.
+    	foreach ($a_filter_etiquetas as $id_etiqueta) {
+    		$EtiquetaEntrada = new EtiquetaEntrada(['id_entrada' => $this->iid_entrada, 'id_etiqueta' => $id_etiqueta]);
+    		$EtiquetaEntrada->DBGuardar();
+    	}
+    }
+    
+    public function delEtiquetas(){
+    	$gesEtiquetasEntrada = new GestorEtiquetaEntrada();
+    	if ($gesEtiquetasEntrada->deleteEtiquetasEntrada($this->iid_entrada) === FALSE) {
+    		return FALSE;
+    	}
+    	return TRUE;
+    }
+    private function renombrar($string) {
+    	//cambiar ' ' por '_':
+    	$string1 = str_replace(' ', '_', $string);
+    	//cambiar '/' por '_':
+    	return str_replace('/', '_', $string1);
     }
     
     

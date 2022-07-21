@@ -78,7 +78,7 @@
 
 <script>
 fnjs_cancelar=function(){
-    if (event != undefined) {
+    if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -101,7 +101,7 @@ fnjs_next=function() {
 }
 
 $(function() {
-	$( "#f_entrada" ).datetimepicker( {
+	$( "#f_entrada" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -113,9 +113,11 @@ $(function() {
 });
 
 fnjs_read=function() {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    }
 
 	var ok=$("#customSwitches").prop('checked')
 	var f_entrada =	$("#f_entrada").val();

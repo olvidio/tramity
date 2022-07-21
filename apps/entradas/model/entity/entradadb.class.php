@@ -60,6 +60,12 @@ class EntradaDB Extends core\ClasePropiedades {
 	 */
 	 protected $iid_entrada;
 	/**
+	 * Id_entrada_compartida de EntradaDB
+	 *
+	 * @var integer
+	 */
+	 protected $iid_entrada_compartida;
+	/**
 	 * Modo_entrada de EntradaDB
 	 *
 	 * @var integer
@@ -214,6 +220,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		if ($this->DBCarregar('guardar') === FALSE) { $bInsert=TRUE; } else { $bInsert=FALSE; }
 		$aDades=array();
+		$aDades['id_entrada_compartida'] = $this->iid_entrada_compartida;
 		$aDades['modo_entrada'] = $this->imodo_entrada;
 		$aDades['json_prot_origen'] = $this->json_prot_origen;
 		$aDades['asunto_entrada'] = $this->sasunto_entrada;
@@ -242,6 +249,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		if ($bInsert === FALSE) {
 			//UPDATE
 			$update="
+					id_entrada_compartida    = :id_entrada_compartida,
 					modo_entrada             = :modo_entrada,
 					json_prot_origen         = :json_prot_origen,
 					asunto_entrada           = :asunto_entrada,
@@ -277,8 +285,8 @@ class EntradaDB Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(modo_entrada,json_prot_origen,asunto_entrada,json_prot_ref,ponente,resto_oficinas,asunto,f_entrada,detalle,categoria,visibilidad,f_contestar,bypass,estado,anulado,encargado,json_visto)";
-			$valores="(:modo_entrada,:json_prot_origen,:asunto_entrada,:json_prot_ref,:ponente,:resto_oficinas,:asunto,:f_entrada,:detalle,:categoria,:visibilidad,:f_contestar,:bypass,:estado,:anulado,:encargado,:json_visto)";		
+			$campos="(id_entrada_compartida,modo_entrada,json_prot_origen,asunto_entrada,json_prot_ref,ponente,resto_oficinas,asunto,f_entrada,detalle,categoria,visibilidad,f_contestar,bypass,estado,anulado,encargado,json_visto)";
+			$valores="(:id_entrada_compartida,:modo_entrada,:json_prot_origen,:asunto_entrada,:json_prot_ref,:ponente,:resto_oficinas,:asunto,:f_entrada,:detalle,:categoria,:visibilidad,:f_contestar,:bypass,:estado,:anulado,:encargado,:json_visto)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'EntradaDB.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -365,6 +373,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		if (!is_array($aDades)) { return; }
 		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
 		if (array_key_exists('id_entrada',$aDades)) { $this->setId_entrada($aDades['id_entrada']); }
+		if (array_key_exists('id_entrada_compartida',$aDades)) { $this->setId_entrada_compartida($aDades['id_entrada_compartida']); }
 		if (array_key_exists('modo_entrada',$aDades)) { $this->setModo_entrada($aDades['modo_entrada']); }
 		if (array_key_exists('json_prot_origen',$aDades)) { $this->setJson_prot_origen($aDades['json_prot_origen'],TRUE); }
 		if (array_key_exists('asunto_entrada',$aDades)) { $this->setAsunto_entrada($aDades['asunto_entrada']); }
@@ -391,6 +400,7 @@ class EntradaDB Extends core\ClasePropiedades {
 		$aPK = $this->getPrimary_key();
 		$this->setId_schema('');
 		$this->setId_entrada('');
+		$this->setId_entrada_compartida('');
 		$this->setModo_entrada('');
 		$this->setJson_prot_origen('');
 		$this->setAsunto_entrada('');
@@ -503,6 +513,25 @@ class EntradaDB Extends core\ClasePropiedades {
 	 */
 	function setId_entrada($iid_entrada) {
 		$this->iid_entrada = $iid_entrada;
+	}
+	/**
+	 * Recupera l'atribut iid_entrada_compartida de EntradaDB
+	 *
+	 * @return integer iid_entrada_compartida
+	 */
+	function getId_entrada_compartida() {
+		if (!isset($this->iid_entrada_compartida) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->iid_entrada_compartida;
+	}
+	/**
+	 * estableix el valor de l'atribut iid_entrada_compartida de EntradaDB
+	 *
+	 * @param integer iid_entrada_compartida
+	 */
+	function setId_entrada_compartida($iid_entrada_compartida) {
+		$this->iid_entrada_compartida = $iid_entrada_compartida;
 	}
 	/**
 	 * Recupera l'atribut imodo_entrada de EntradaDB
@@ -695,7 +724,7 @@ class EntradaDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_entrada de EntradaDB
-	 * Si df_entrada es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_entrada es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_entrada debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_entrada='' optional.
@@ -783,7 +812,7 @@ class EntradaDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_contestar de EntradaDB
-	 * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_contestar debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_contestar='' optional.
@@ -918,6 +947,7 @@ class EntradaDB Extends core\ClasePropiedades {
 	function getDatosCampos() {
 		$oEntradaDBSet = new core\Set();
 
+		$oEntradaDBSet->add($this->getDatosId_entrada_compartida());
 		$oEntradaDBSet->add($this->getDatosModo_entrada());
 		$oEntradaDBSet->add($this->getDatosJson_prot_origen());
 		$oEntradaDBSet->add($this->getDatosAsunto_entrada());
@@ -940,6 +970,18 @@ class EntradaDB Extends core\ClasePropiedades {
 
 
 
+	/**
+	 * Recupera les propietats de l'atribut iid_entrada_compartida de EntradaDB
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosId_entrada_compartida() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'id_entrada_compartida'));
+		$oDatosCampo->setEtiqueta(_("id_entrada_compartida"));
+		return $oDatosCampo;
+	}
 	/**
 	 * Recupera les propietats de l'atribut imodo_entrada de EntradaDB
 	 * en una clase del tipus DatosCampo

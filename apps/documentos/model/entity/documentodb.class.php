@@ -99,8 +99,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 	 * @var string bytea
 	 * 
 	 */
-	 protected $documento_id_res;
-	 protected $documento_txt;
+	 protected $documento;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de Documento
@@ -159,7 +158,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 		$aDades['visibilidad'] = $this->ivisibilidad;
 		$aDades['tipo_doc'] = $this->itipo_doc;
 		$aDades['f_upload'] = $this->df_upload;
-        $aDades['documento'] = $this->getDocumentoTxt();
+        $aDades['documento'] = $this->documento;
 		array_walk($aDades, 'core\poner_null');
 
 		if ($bInsert === FALSE) {
@@ -171,7 +170,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 					visibilidad              = :visibilidad,
 					tipo_doc                 = :tipo_doc,
 					f_upload                 = :f_upload,
-					documento                = :documento";
+					documento                = :documento ";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_doc='$this->iid_doc'")) === FALSE) {
 				$sClauError = 'Documento.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -191,7 +190,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 			    $oDblSt->bindParam(4, $visibilidad, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(5, $tipo_doc, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(6, $f_upload, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(7, $documento, \PDO::PARAM_LOB);
+			    $oDblSt->bindParam(7, $documento, \PDO::PARAM_STR);
 				try {
 					$oDblSt->execute($aDades);
 				}
@@ -206,7 +205,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 		} else {
 			// INSERT
 			$campos="(nom,nombre_fichero,creador,visibilidad,tipo_doc,f_upload,documento)";
-			$valores="(:nom,:nombre_fichero,:creador,:visibilidad,:tipo_doc,:f_upload,:documento)";		
+			$valores="(:nom,:nombre_fichero,:creador,:visibilidad,:tipo_doc,:f_upload, :documento )";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'Documento.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -226,7 +225,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 			    $oDblSt->bindParam(4, $visibilidad, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(5, $tipo_doc, \PDO::PARAM_INT);
 			    $oDblSt->bindParam(6, $f_upload, \PDO::PARAM_STR);
-			    $oDblSt->bindParam(7, $documento, \PDO::PARAM_LOB);
+			    $oDblSt->bindParam(7, $documento, \PDO::PARAM_STR);
 				try {
 					$oDblSt->execute($aDades);
 				}
@@ -260,7 +259,8 @@ class DocumentoDB Extends core\ClasePropiedades {
         $documento = '';
 
 		if (isset($this->iid_doc)) {
-			if (($oDblSt = $oDbl->query("SELECT nom,nombre_fichero,creador,visibilidad,tipo_doc,f_upload,documento FROM $nom_tabla WHERE id_doc='$this->iid_doc'")) === FALSE) {
+			if (($oDblSt = $oDbl->query("SELECT nom,nombre_fichero,creador,visibilidad,tipo_doc,f_upload,
+					documento FROM $nom_tabla WHERE id_doc='$this->iid_doc'")) === FALSE) {
 				$sClauError = 'Documento.carregar';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
@@ -272,7 +272,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 			$oDblSt->bindColumn(4, $visibilidad, \PDO::PARAM_INT);
 			$oDblSt->bindColumn(5, $tipo_doc, \PDO::PARAM_INT);
 			$oDblSt->bindColumn(6, $f_upload, \PDO::PARAM_STR);
-			$oDblSt->bindColumn(7, $documento, \PDO::PARAM_LOB);
+			$oDblSt->bindColumn(7, $documento, \PDO::PARAM_STR);
 			$oDblSt->fetch(\PDO::FETCH_BOUND);
 			
 			$aDades = [
@@ -341,7 +341,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 		if (array_key_exists('visibilidad',$aDades)) { $this->setVisibilidad($aDades['visibilidad']); }
 		if (array_key_exists('tipo_doc',$aDades)) { $this->setTipo_doc($aDades['tipo_doc']); }
 		if (array_key_exists('f_upload',$aDades)) { $this->setF_upload($aDades['f_upload'],$convert); }
-		if (array_key_exists('documento',$aDades)) { $this->setDocumento($aDades['documento']); }
+		if (array_key_exists('documento',$aDades)) { $this->setDocumentoEscaped($aDades['documento']); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -357,7 +357,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 		$this->setVisibilidad('');
 		$this->setTipo_doc('');
 		$this->setF_upload('');
-		$this->setDocumento('');
+		$this->setDocumentoEscaped('');
 		$this->setPrimary_key($aPK);
 	}
 
@@ -536,7 +536,7 @@ class DocumentoDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_upload de Documento
-	 * Si df_upload es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_upload es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_upload debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_upload='' optional.
@@ -551,52 +551,31 @@ class DocumentoDB Extends core\ClasePropiedades {
 	    }
 	}
 	/**
-	 * Recupera l'atribut documento de Documento
-	 *
-	 * @return string documento
-	 */
-	function getDocumentoTxt() {
-		$documento = '';
-		if (!isset($this->documento_txt) && !$this->bLoaded) {
-			$this->DBCarregar();
-		}
-		if (empty($this->documento_txt)) {
-            if (!empty($this->documento_id_res)) {
-		      $documento = stream_get_contents($this->documento_id_res);
-		      $this->documento_txt = $documento;
-            }
-		} else {
-		    $documento = $this->documento_txt;
-		}
-		return $documento;
-	}
-	/**
-	 * Recupera l'atribut documento de Documento
-	 *
-	 * @return string documento
-	 */
-	function getDocumentoResource() {
-		if (!isset($this->documento_id_res) && !$this->bLoaded) {
-			$this->DBCarregar();
-		}
-		return $this->documento_id_res;
-	}
-	/**
 	 * estableix el valor de l'atribut documento de Documento
 	 *
 	 * @param string documento='' optional
 	 */
-	function setDocumento($documento='') {
-	    if (is_resource($documento)) {
-	        $this->documento_id_res = $documento;
-	    } else {
-	        if (empty($documento)) { 
-	            $this->documento_txt = '';
-	            $this->documento_id_res = '';
-	        } else {
-	           $this->documento_txt = $documento;
-	        }
-	    }
+	public function setDocumento($documento='') {
+		// Escape the binary data
+		$escaped = bin2hex( $documento );
+	    $this->documento = $escaped;
+	}
+	
+	/**
+	 * estableix el valor de l'atribut documento de Documento
+	 * per usar amb els valors directes de la DB.
+	 *
+	 * @param string documento='' optional (ja convertit a hexadecimal)
+	 */
+	private function setDocumentoEscaped($documento='') {
+	    $this->documento = $documento;
+	}
+	
+	public function getDocumento() {
+		if (!isset($this->documento) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return hex2bin($this->documento);
 	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
 

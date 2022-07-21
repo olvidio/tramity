@@ -1,8 +1,8 @@
 <?php
 namespace lugares\model\entity;
-use core\ConfigGlobal;
 use function core\is_true;
 use core;
+use usuarios\model\entity\Cargo;
 /**
  * GestorLugar
  *
@@ -17,6 +17,8 @@ use core;
 
 class GestorLugar Extends core\ClaseGestor {
 	/* ATRIBUTS ----------------------------------------------------------------- */
+	
+	const SEPARADOR = '-------------'; 
 
 	/* CONSTRUCTOR -------------------------------------------------------------- */
 
@@ -28,7 +30,7 @@ class GestorLugar Extends core\ClaseGestor {
 	 *
 	 */
 	function __construct() {
-		$oDbl = $GLOBALS['oDBT'];
+		$oDbl = $GLOBALS['oDBP'];
 		$this->setoDbl($oDbl);
 		$this->setNomTabla('lugares');
 	}
@@ -37,16 +39,87 @@ class GestorLugar Extends core\ClaseGestor {
 	/* METODES PUBLICS -----------------------------------------------------------*/
 	
 	/**
+	 * Devuelve el nombre de las posibles plataformas as4
+	 * 
+	 * @param boolean propia. Si debe aparecer la propia plataforma en la lista o no.
+	 * @return array []
+	 */
+	public function getPlataformas($propia=FALSE) {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    $a_plataformas = [];
+	    
+	    $where_propia = '';
+		// Quitar la propia:
+	    if ($propia === FALSE) {
+	    	$plataforma_local = $_SESSION['oConfig']->getNomDock();
+	    	$where_propia = "AND l.plataforma != '$plataforma_local' ";
+		}
+
+	    $query_plataforma = "SELECT DISTINCT l.plataforma FROM $nom_tabla l
+                            WHERE l.anulado = FALSE AND l.plataforma IS NOT NULL $where_propia
+                            ORDER BY l.plataforma";
+	    foreach ($oDbl->query($query_plataforma) as $aClave) {
+	        $clave=$aClave[0];
+	        $a_plataformas[$clave] = $clave;
+	    }
+	    
+	    if (is_array($a_plataformas)) {
+	        return $a_plataformas;
+	    } else {
+	        exit (_("Error al buscar las plataformas posibles"));
+	    }
+	    
+		return $a_plataformas;
+	}
+	
+	/**
+	 * devuelve el id del IESE
+	 */
+	public function getId_iese() {
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+	        exit (_("Error al buscar el id del IESE"));
+	    }
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+	    	$sigla = 'IESE';
+	    	$cLugares = $this->getLugares(['sigla' => $sigla]);
+	    	$oLugar = $cLugares[0];
+	    	return $oLugar->getId_lugar();
+	    }
+	}
+	
+	/**
 	 * devuelve el id de la cr (cr)
 	 */
 	public function getId_cr() {
-	    //$sigla = $_SESSION['oConfig']->getSigla();
-	    $sigla = 'cr';
-	    $cLugares = $this->getLugares(['sigla' => $sigla]);
-	    if (!empty($cLugares)) {
-	        $id_sigla = $cLugares[0]->getId_lugar();
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+            $mi_ctr = $_SESSION['oConfig']->getSigla();
+            $mi_dl = $this->getSigla_superior($mi_ctr);
+            $mi_cr = $this->getSigla_superior($mi_dl);
 	    }
-	    return $id_sigla;
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+            $mi_dl = $_SESSION['oConfig']->getSigla();
+            $mi_cr = $this->getSigla_superior($mi_dl);
+	    }
+
+	    // 0º dlb y cr y el propio ctr
+	    $lugares = [];
+	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
+                            WHERE sigla='$mi_cr' AND anulado = FALSE
+                            ORDER BY sigla";
+	    foreach ($oDbl->query($query_ctr) as $aClave) {
+	        $clave=$aClave[0];
+	        $lugares[] = $clave;
+	    }
+	    
+	    if (is_array($lugares) && count($lugares) == 1) {
+	        return $lugares[0];
+	    } else {
+	        exit (_("Error al buscar el id de cr"));
+	    }
 	}
 	
 	/**
@@ -62,6 +135,71 @@ class GestorLugar Extends core\ClaseGestor {
 	}
 	
 	/**
+	 * devuelve la sigla (o el id) de la entidad superior (dl para los centros, cr para las dl)
+	 *  
+	 * @param boolean $id Si quero el id o la sigla.
+	 * @return string|integer
+	 */
+	public function getSigla_superior($sigla_base,$id=FALSE) {
+	    $rta = '';
+	    $cLugares = $this->getLugares(['sigla' => $sigla_base]);
+	    if (!empty($cLugares)) {
+	        $region = $cLugares[0]->getRegion();
+	        $dl = $cLugares[0]->getDl();
+	        $tipo_ctr = $cLugares[0]->getTipo_ctr();
+	        switch ($tipo_ctr) {
+	            case 'dl':
+	                $tipo_sup = 'cr';
+                    $aWhere = ['tipo_ctr' => $tipo_sup,
+                               'region' => $region,
+                               'sigla' => $region, // quitar cancilleria...
+                    ];
+	                break;
+	            case 'cr':
+	                $tipo_sup = 'cg';
+                    $aWhere = ['tipo_ctr' => $tipo_sup,
+                               'region' => $region,
+                               'dl' => $dl,
+                               'sigla' => $dl,
+                    ];
+	                break;
+	            case 'cg':
+	                $tipo_sup = 'vat';
+                    $aWhere = ['tipo_ctr' => $tipo_sup,
+                               'region' => $region,
+                               'dl' => $dl
+                    ];
+	                break;
+	            default:   // 'ctr', am, nj, igl...
+	                $tipo_sup = 'dl';
+                    $aWhere = ['tipo_ctr' => $tipo_sup,
+                               'region' => $region,
+                               'dl' => $dl,
+                               'sigla' => $dl, // quitar dlbf, cancilleria...
+                    ];
+	                break;
+	                
+	        }
+	            
+	        $cLugarSup = $this->getLugares($aWhere);
+            if (!empty($cLugarSup)) {
+                if ($id) {
+                    $rta = $cLugarSup[0]->getId_lugar();
+                } else {
+                    $rta = ($tipo_sup == 'cr')? $tipo_sup : $cLugarSup[0]->getSigla();
+                }
+            }
+	        
+	    }
+	    
+	    if (empty($rta)) {
+	        return '?';
+	    } else {
+            return $rta;
+	    }
+	}
+	
+	/**
 	 * retorna un array 
 	 * Els posibles llocs per buscar: també els anulados
 	 *
@@ -69,6 +207,46 @@ class GestorLugar Extends core\ClaseGestor {
 	 * @return array   id_lugar => sigla
 	 */
 	function getArrayBusquedas($ctr_anulados=FALSE) {
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+            return $this->getArrayBusquedasCtr();
+	    } else {
+            return $this->getArrayBusquedasDl($ctr_anulados);
+	    }
+	}
+	/**
+	 * retorna un array 
+	 * Els posibles llocs per buscar en el cas del ctr
+	 *
+	 * @return array   id_lugar => sigla
+	 */
+	function getArrayBusquedasCtr() {
+	    $oDbl = $this->getoDbl();
+	    $nom_tabla = $this->getNomTabla();
+	    $mi_ctr = $_SESSION['oConfig']->getSigla();
+	    $mi_dl = $this->getSigla_superior($mi_ctr);
+	    $mi_cr = $this->getSigla_superior($mi_dl);
+	    
+        $lugares = [];
+	    // 0º dlb y cr y el propio ctr
+	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
+                            WHERE (sigla='$mi_cr' OR sigla='$mi_dl' OR sigla='$mi_ctr') AND anulado = FALSE
+                            ORDER BY sigla";
+	    foreach ($oDbl->query($query_ctr) as $aClave) {
+	        $clave=$aClave[0];
+	        $val=$aClave[1];
+	        $lugares[$clave]=$val;
+	    }
+	    
+	    return $lugares;
+	}
+	/**
+	 * retorna un array 
+	 * Els posibles llocs per buscar: també els anulados
+	 *
+	 * @param boolean $ctr_anulados
+	 * @return array   id_lugar => sigla
+	 */
+	function getArrayBusquedasDl($ctr_anulados=FALSE) {
 	    $oDbl = $this->getoDbl();
 	    $nom_tabla = $this->getNomTabla();
 	    $mi_dl = $_SESSION['oConfig']->getSigla();
@@ -86,7 +264,7 @@ class GestorLugar Extends core\ClaseGestor {
 	        $lugares[$clave]=$val;
 	    }
 	    // separación
-	    $lugares[1] = "--------";
+	    $lugares['separador'] = self::SEPARADOR;
 	    // 1º ctr de dl
 	    $query_ctr="SELECT id_lugar, sigla, nombre, substring(tipo_ctr from 1 for 1) as tipo FROM $nom_tabla
                             WHERE dl='$mi_dl' AND tipo_ctr ~ '^(a|n|s)' $Where_anulados
@@ -106,7 +284,7 @@ class GestorLugar Extends core\ClaseGestor {
 	        $lugares[$clave]=$val;
 	    }
 	    // 3º separación
-	    $lugares[1] = "--------";
+	    $lugares['separador3'] = self::SEPARADOR;
 	    // 4º dl de H
 	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
                             WHERE tipo_ctr='dl' AND region='H'  $Where_anulados
@@ -117,7 +295,7 @@ class GestorLugar Extends core\ClaseGestor {
 	        $lugares[$clave]=$val;
 	    }
 	    // 5º separación
-	    $lugares[1] = "--------";
+	    $lugares['separador5'] = self::SEPARADOR;
 	    // 6º cr
 	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
                             WHERE tipo_ctr='cr' $Where_anulados
@@ -128,7 +306,7 @@ class GestorLugar Extends core\ClaseGestor {
 	        $lugares[$clave]=$val;
 	    }
 	    // 7º separación
-	    $lugares[1] = "--------";
+	    $lugares['separador7'] = self::SEPARADOR;
 	    // 8º dl ex
 	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
                             WHERE tipo_ctr='dl' AND region != 'H' AND sigla != 'ro'  $Where_anulados
@@ -139,7 +317,7 @@ class GestorLugar Extends core\ClaseGestor {
 	        $lugares[$clave]=$val;
 	    }
 	    // 9º separación
-	    $lugares[1] = "--------";
+	    $lugares['separador9'] = self::SEPARADOR;
 	    // 10º cg
 	    $query_ctr="SELECT id_lugar, sigla, nombre FROM $nom_tabla
                             WHERE sigla='cg' $Where_anulados
@@ -262,7 +440,6 @@ class GestorLugar Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_lugar' => $aDades['id_lugar']);
 			$oLugar= new Lugar($a_pkey);
-			$oLugar->setAllAtributes($aDades);
 			$oLugarSet->add($oLugar);
 		}
 		return $oLugarSet->getTot();
@@ -313,7 +490,6 @@ class GestorLugar Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_lugar' => $aDades['id_lugar']);
 			$oLugar= new Lugar($a_pkey);
-			$oLugar->setAllAtributes($aDades);
 			$oLugarSet->add($oLugar);
 		}
 		return $oLugarSet->getTot();

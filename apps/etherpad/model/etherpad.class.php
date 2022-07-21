@@ -2,6 +2,7 @@
 namespace etherpad\model;
 
 use core\ConfigGlobal;
+use web\StringLocal;
 
 /**
  * INFO EN:
@@ -13,6 +14,7 @@ use core\ConfigGlobal;
 class Etherpad  extends Client {
     
     // Tipos de id
+    const ID_COMPARTIDO  = 'compartido';
     const ID_ADJUNTO     = 'adjunto';
     const ID_DOCUMENTO   = 'documento';
     const ID_ENTRADA     = 'entrada';
@@ -42,33 +44,43 @@ class Etherpad  extends Client {
     private $multiple = FALSE;
     
     
-    public function setId ($tipo_id,$id) {
-        switch ($tipo_id) {
-            case self::ID_ADJUNTO:
-                $prefix = 'adj';
-                break;
-            case self::ID_DOCUMENTO:
-                $prefix = 'doc';
-                break;
-            case self::ID_ENTRADA:
-                $prefix = 'ent';
-                break;
-            case self::ID_ESCRITO:
-                $prefix = 'esc';
-                break;
-            case self::ID_EXPEDIENTE:
-                $prefix = 'exp';
-                break;
-            case self::ID_PLANTILLA:
-                $prefix = 'plt';
-                break;
-            default:
-                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-                exit ($err_switch);
-        }
-        
-        $this->id_escrito = $prefix.$id;
-        
+    public function setId ($tipo_id,$id,$sigla='') {
+    	// excepción para las entradas compartidas:
+    	if ($tipo_id == self::ID_COMPARTIDO) {
+			$prefix = 'com';
+			$this->id_escrito = $prefix.$id;
+    	} else {
+			// Añado el nombre del centro. De forma normalizada, pues a saber que puede tener el nombre:
+			if (empty($sigla)) {
+				$sigla = $_SESSION['oConfig']->getSigla();
+			}
+			$nom_ctr = StringLocal::lowerNormalized($sigla);
+			
+			switch ($tipo_id) {
+				case self::ID_ADJUNTO:
+					$prefix = 'adj';
+					break;
+				case self::ID_DOCUMENTO:
+					$prefix = 'doc';
+					break;
+				case self::ID_ENTRADA:
+					$prefix = 'ent';
+					break;
+				case self::ID_ESCRITO:
+					$prefix = 'esc';
+					break;
+				case self::ID_EXPEDIENTE:
+					$prefix = 'exp';
+					break;
+				case self::ID_PLANTILLA:
+					$prefix = 'plt';
+					break;
+				default:
+					$err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+					exit ($err_switch);
+			}
+			$this->id_escrito = $nom_ctr."*".$prefix.$id;
+    	}
         return $this->id_escrito;
     }
     
@@ -274,6 +286,48 @@ class Etherpad  extends Client {
         return $html;
     }
     
+    public function grabarMD($txt){
+    	$padId = $this->getPadID();
+    	
+    	// comprobar que no existe:
+    	// returns all pads of this group
+    	$rev = null;
+    	$rta = $this->setText($padId, $rev);
+    	$code = $rta->getCode();
+    	if ($code == 0) {
+    		$data = $rta->getData();
+    		/* Example returns:
+    		 * {code: 0, message:"ok", data: {text:"Welcome Text"}}
+    		 * {code: 1, message:"padID does not exist", data: null}
+    		 */
+    		$text = $data['text'];
+    		return $text;
+    	} else {
+    		$this->mostrar_error($rta);
+    	}
+    }
+    
+    public function generarMD(){
+    	$padId = $this->getPadID();
+    	
+    	// comprobar que no existe:
+    	// returns all pads of this group
+    	$rev = null;
+    	$rta = $this->getText($padId, $rev);
+    	$code = $rta->getCode();
+    	if ($code == 0) {
+    		$data = $rta->getData();
+    		/* Example returns:
+    		 * {code: 0, message:"ok", data: {text:"Welcome Text"}}
+    		 * {code: 1, message:"padID does not exist", data: null}
+    		 */
+    		$text = $data['text'];
+    		return $text;
+    	} else {
+    		$this->mostrar_error($rta);
+    	}
+    }
+    
    /**
     * devuelve el escrito en formato PDF.
     * 
@@ -398,7 +452,7 @@ class Etherpad  extends Client {
    
    public function getPadID() {
        if (empty($this->id_escrito)) {
-           die (_("Debe indicar el id con SetId")); 
+           die (_("Debe indicar el id con setId")); 
        }
        // obtener o crear el pad
        $PadID = $this->getId_pad();

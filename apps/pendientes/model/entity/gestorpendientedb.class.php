@@ -51,7 +51,6 @@ class GestorPendienteDB Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_pendiente' => $aDades['id_pendiente']);
 			$oPendienteDB= new PendienteDB($a_pkey);
-			$oPendienteDB->setAllAtributes($aDades);
 			$oPendienteDBSet->add($oPendienteDB);
 		}
 		return $oPendienteDBSet->getTot();
@@ -102,7 +101,6 @@ class GestorPendienteDB Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_pendiente' => $aDades['id_pendiente']);
 			$oPendienteDB = new PendienteDB($a_pkey);
-			$oPendienteDB->setAllAtributes($aDades);
 			$oPendienteDBSet->add($oPendienteDB);
 		}
 		return $oPendienteDBSet->getTot();

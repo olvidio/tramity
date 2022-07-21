@@ -1,6 +1,8 @@
 <?php
 namespace core;
 
+/* canvis per veure si els posa al seu lloc */
+
 /**
  * Básicamente la conexión a la base de datos, con los passwd para cada esquema.
  * @author dani
@@ -17,9 +19,11 @@ class ConfigDB {
 	public function getEsquema($esquema) {
 		$data_default = $this->data['default'];
 		$data_default['schema'] = $esquema;
-		//sobreescribir los valores default
-		foreach ($this->data[$esquema] as $key => $value){
-			$data_default[$key] = $value;
+		//sobreescribir los valores default (si existe...)
+		if (!empty($this->data[$esquema])) {
+            foreach ($this->data[$esquema] as $key => $value){
+                $data_default[$key] = $value;
+            }
 		}
 		return $data_default;
 	}

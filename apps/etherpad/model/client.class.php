@@ -153,7 +153,8 @@ class Client
         $html .= $message;
         $html .= "**<br>";
         
-        echo $html;
+        //echo $html;
+        return $html;
     }
 
     /**

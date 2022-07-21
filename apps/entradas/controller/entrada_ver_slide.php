@@ -88,7 +88,7 @@ if (!empty($Qid_entrada)) {
     $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
     
     $oEtherpad = new Etherpad();
-    $oEtherpad->setId (Etherpad::ID_ENTRADA,$Qid_entrada);
+    $oEtherpad->setId(Etherpad::ID_ENTRADA, $Qid_entrada);
     
     $escrito_html = $oEtherpad->generarHtml();
 } else {

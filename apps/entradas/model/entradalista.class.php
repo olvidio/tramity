@@ -1,15 +1,14 @@
 <?php
 namespace entradas\model;
 
-use busquedas\model\Buscar;
-use busquedas\model\VerTabla;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\entity\GestorEntradaBypass;
-use lugares\model\entity\GestorLugar;
+use usuarios\model\Categoria;
 use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
-use web\DateTimeLocal;
 use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
@@ -57,7 +56,6 @@ class EntradaLista {
     'permanentes'
     'avisos'
     'pendientes'
-    'escritos_cr'
     */
     /**
      * 
@@ -85,9 +83,11 @@ class EntradaLista {
                 $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aWhere['encargado'] = $encargado;
                 
+                $oVisibilidad = new Visibilidad();
+				$a_visibilidad = $oVisibilidad->getArrayCondVisibilidad();
                 // No marcado como visto:
                 $gesEntradas = new GestorEntrada();
-                $cEntradas = $gesEntradas->getEntradasNoVistoDB($encargado,'encargado');
+                $cEntradas = $gesEntradas->getEntradasNoVistoDB($encargado,'encargado',$a_visibilidad);
                 $a_entradas_encargado = [];
                 foreach ($cEntradas as $oEntrada) {
                     $id_entrada = $oEntrada->getId_entrada();
@@ -107,17 +107,33 @@ class EntradaLista {
                 }
                 
                 $a_entradas_ponente = [];
-                if ($oficina == 'propia') {
-                    $id_oficina = ConfigGlobal::role_id_oficina();
-                    
-                    // No marcado como visto:
-                    $gesEntradas = new GestorEntrada();
-                    $cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina,'ponente');
-                    $a_entradas_ponente = [];
-                    foreach ($cEntradas as $oEntrada) {
-                        $id_entrada = $oEntrada->getId_entrada();
-                        $a_entradas_ponente[] = $id_entrada;
-                    }
+                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                	// visibilidad:
+					$oVisibilidad = new Visibilidad();
+					$a_visibilidad = $oVisibilidad->getArrayCondVisibilidad();
+				
+					// No marcado como visto:
+					$gesEntradas = new GestorEntrada();
+					$cEntradas = $gesEntradas->getEntradasNoVistoDB('','centro',$a_visibilidad);
+					$a_entradas_ponente = [];
+					foreach ($cEntradas as $oEntrada) {
+						$id_entrada = $oEntrada->getId_entrada();
+						$a_entradas_ponente[] = $id_entrada;
+					}
+                	
+                } else {
+					if ($oficina == 'propia') {
+						$id_oficina = ConfigGlobal::role_id_oficina();
+						
+						// No marcado como visto:
+						$gesEntradas = new GestorEntrada();
+						$cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina,'ponente');
+						$a_entradas_ponente = [];
+						foreach ($cEntradas as $oEntrada) {
+							$id_entrada = $oEntrada->getId_entrada();
+							$a_entradas_ponente[] = $id_entrada;
+						}
+					}
                 }
                 
                 //////// las oficina implicadas //////////////////////////////
@@ -165,35 +181,6 @@ class EntradaLista {
                     $aWhere = [];
                 }
                 break;
-            case 'escritos_cr':
-                // recibidos los ultimos 7 dias
-                $oHoy = new DateTimeLocal();
-                $oIni = new DateTimeLocal();
-                $oIni->sub(new \DateInterval('P7D'));
-
-                $gesLugares = new GestorLugar();
-                $id_cr = $gesLugares->getId_cr();
-                
-                $a_condicion['lista_lugar'] = $id_cr;
-                $str_condicion = http_build_query($a_condicion);
-                
-                // son todos los que tienen protocolo local
-                $oBuscar = new Buscar();
-                $oBuscar->setOrigen_id_lugar($id_cr);
-                $oBuscar->setF_max($oHoy->getIso(),FALSE);
-                $oBuscar->setF_min($oIni->getIso(),FALSE);
-                
-                $aCollection = $oBuscar->getCollection(5);
-                foreach ($aCollection as $key => $cCollection) {
-                    $oTabla = new VerTabla();
-                    $oTabla->setKey($key);
-                    $oTabla->setCondicion($str_condicion);
-                    $oTabla->setCollection($cCollection);
-                    $oTabla->setFiltro($this->filtro);
-                    echo $oTabla->mostrarTabla();
-                }
-                exit();
-                break;
               default:
                 exit (_("No ha escogido ningún filtro"));
         }
@@ -207,14 +194,16 @@ class EntradaLista {
         $pagina_nueva = '';
         $filtro = $this->getFiltro();
         
-        $oEntrada = new Entrada();
-        $a_categorias = $oEntrada->getArrayCategoria();
-        $a_visibilidad = $oEntrada->getArrayVisibilidad();
+        $oCategoria = new Categoria();
+        $a_categorias = $oCategoria->getArrayCategoria();
+		$oVisibilidad = new Visibilidad();
+		$a_visibilidad = $oVisibilidad->getArrayVisibilidad();
         
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         
         
+		$ver_oficina = TRUE;
         $pagina_accion = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_accion.php';
         switch ($filtro) {
             case 'en_encargado':
@@ -224,11 +213,19 @@ class EntradaLista {
                 break;
             case 'en_aceptado':
                 $oficina = $this->aWhereADD['ponente'];
-                $pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
-                $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
+                //$pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
+		        $pagina_accion = ConfigGlobal::getWeb().'/apps/expedientes/controller/expediente_accion.php';
+                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR ) {
+					$pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form_ctr.php';
+					$ver_oficina = FALSE;
+                } else {
+                	$pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_ver.php';
+					$ver_oficina = TRUE;
+                }
                 $pagina_nueva = '';
                 break;
             case 'en_ingresado':
+            	$ver_oficina = FALSE;
                 $pagina_mod = ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_form.php';
                 $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $filtro]));
                 if (ConfigGlobal::role_actual() === 'vcd') {
@@ -260,7 +257,7 @@ class EntradaLista {
             foreach ($cEntradas as $oEntrada) {
                 $row = [];
                 // mirar permisos...
-                $visibilidad = $oEntrada->getVisibilidad();
+				$visibilidad = $oEntrada->getVisibilidad();
                 $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '?' : $a_visibilidad[$visibilidad];
                 
                 $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEntrada, 'escrito');
@@ -278,10 +275,17 @@ class EntradaLista {
                     $a_cosas['encargado'] = $encargado;
                 }
                 
+                $id_entrada_compartida = $oEntrada->getId_entrada_compartida();
+                if (!empty($id_entrada_compartida)) {
+                	$compartida = 'true';
+                } else {
+                	$id_entrada_compartida = $id_entrada;
+                	$compartida = 'false';
+                }
                 $link_accion = Hash::link($pagina_accion.'?'.http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
                 if ($perm_ver_escrito >= PermRegistro::PERM_VER) {
-                    $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >"._("ver")."</span>";
+                    $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada_compartida',$compartida);\" >"._("ver")."</span>";
                     $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_accion');\" >"._("acción")."</span>";
                 }
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >mod</span>";
@@ -295,7 +299,7 @@ class EntradaLista {
                 $row['referencias'] = $oArrayProtRef->ListaTxtBr();
                 
                 $id_categoria = $oEntrada->getCategoria();
-                $row['categoria'] = $a_categorias[$id_categoria];
+                $row['categoria'] = empty($a_categorias[$id_categoria])? '?' : $a_categorias[$id_categoria];
                 $row['asunto'] = $oEntrada->getAsuntoDetalle();
                 
                 $id_of_ponente =  $oEntrada->getPonente();
@@ -305,7 +309,7 @@ class EntradaLista {
                 $oficinas_txt .= '<span class="text-danger">'.$of_ponente_txt.'</span>';
                 foreach ($a_resto_oficinas as $id_oficina) {
                     $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
-                    $oficinas_txt .= $a_posibles_oficinas[$id_oficina];
+                    $oficinas_txt .= empty($a_posibles_oficinas[$id_oficina])? '?' : $a_posibles_oficinas[$id_oficina];
                 }
                 $row['oficinas'] = $oficinas_txt;
                 
@@ -320,7 +324,7 @@ class EntradaLista {
                 $a_entradas[$f_entrada_iso] = $row;
             }
         }
-        // ordenar por f_entrada:
+        // ordenar por f_entrada_iso:
         krsort($a_entradas,SORT_STRING);
             
         $url_update = 'apps/entradas/controller/entrada_update.php';
@@ -339,8 +343,18 @@ class EntradaLista {
         
         $txt_btn_new = '';
         $btn_new = FALSE;
+        $txt_btn_dock = '';
+        $btn_dock = FALSE;
         $secretaria = FALSE;
+        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR && $this->filtro == 'en_aceptado') {
+            $btn_dock = TRUE;
+            if (ConfigGlobal::soy_dtor()) {
+            	$secretaria = TRUE;
+            }
+        }
+    
         if ( ConfigGlobal::role_actual() === 'secretaria') {
+            $btn_dock = TRUE;
             $secretaria = TRUE;
             $btn_new = TRUE;
             $txt_btn_new = _("nueva entrada");
@@ -348,6 +362,7 @@ class EntradaLista {
         if (ConfigGlobal::role_actual() === 'vcd') {
             $btn_new = TRUE;
             $txt_btn_new = _("procesar");
+            $btn_dock = TRUE;
         }
         if ($this->filtro == 'bypass') {
             $btn_new = FALSE;
@@ -358,7 +373,12 @@ class EntradaLista {
             $ver_accion = TRUE;
         }
         
-        $vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+        $vista = ConfigGlobal::getVista();
+        
+
+        $txt_btn_dock = _("revisar dock");
+		$pagina_cargar_dock = Hash::link('apps/entradas/controller/entrada_dock.php?'.http_build_query(['filtro' => $filtro]));
+        
         
         $a_campos = [
             //'id_entrada' => $id_entrada,
@@ -373,8 +393,13 @@ class EntradaLista {
             'txt_btn_new' => $txt_btn_new,
             'pagina_cancel' => $pagina_cancel,
             'ver_accion' => $ver_accion,
+            'ver_oficina' => $ver_oficina,
             //tabs_show
             'vista' => $vista,
+       		// as4
+            'btn_dock' => $btn_dock,
+            'txt_btn_dock' => $txt_btn_dock,
+        	'pagina_cargar_dock' => $pagina_cargar_dock,
         ];
         
         $oView = new ViewTwig('entradas/controller');

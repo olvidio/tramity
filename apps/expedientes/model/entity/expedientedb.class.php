@@ -712,7 +712,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_contestar de ExpedienteDB
-	 * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_contestar debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_contestar='' optional.
@@ -762,7 +762,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_ini_circulacion de ExpedienteDB
-	 * Si df_ini_circulacion es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_ini_circulacion es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_ini_circulacion debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_ini_circulacion='' optional.
@@ -793,7 +793,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_reunion de ExpedienteDB
-	 * Si df_reunion es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_reunion es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_reunion debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_reunion='' optional.
@@ -824,7 +824,7 @@ class ExpedienteDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_aprobacion de ExpedienteDB
-	 * Si df_aprobacion es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_aprobacion es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_aprobacion debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_aprobacion='' optional.

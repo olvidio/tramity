@@ -91,7 +91,7 @@ class DocumentoLista {
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas));
                 
                 $tipo_doc = $oDocumento->getTipo_doc();
-                $documento_txt = $oDocumento->getDocumentoTxt();
+				$documento_txt = $oDocumento->getDocumento();
 
                 if ( $tipo_doc == Documento::DOC_ETHERPAD ){
                     $url_download = '';
@@ -104,7 +104,6 @@ class DocumentoLista {
                 
                 $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_eliminar_documento('$id_doc');\" >"._("eliminar")."</span>";
                 
-                $tipo_doc = $oDocumento->getTipo_doc(); 
                 $tipo_doc_txt = empty($aTipoDoc[$tipo_doc])? $tipo_doc : $aTipoDoc[$tipo_doc]; 
                 $id_creador =  $oDocumento->getCreador();
                 $creador = empty($a_cargos[$id_creador])? '' : $a_cargos[$id_creador];
@@ -137,8 +136,11 @@ class DocumentoLista {
         ];
         $pagina_cancel = Hash::link('apps/documentos/controller/documentos_lista.php?'.http_build_query($a_cosas));
         $pagina_nueva = Hash::link('apps/documentos/controller/documento_form.php?'.http_build_query($a_cosas));
+        $pagina_converter_entradas = Hash::link('apps/documentos/controller/convertir_protocolos.php?'.http_build_query(['que'=>'entradas']));
+        $pagina_converter_escritos = Hash::link('apps/documentos/controller/convertir_protocolos.php?'.http_build_query(['que'=>'escritos']));
+        $pagina_converter_expedientes = Hash::link('apps/documentos/controller/convertir_protocolos.php?'.http_build_query(['que'=>'expedientes']));
         
-        $vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+        $vista = ConfigGlobal::getVista();
         
         $a_campos = [
             //'oHash' => $oHash,
@@ -148,6 +150,9 @@ class DocumentoLista {
             'filtro' => $filtro,
             'server' => $server,
             'pagina_cancel' => $pagina_cancel,
+            'pagina_converter_entradas' => $pagina_converter_entradas,
+            'pagina_converter_escritos' => $pagina_converter_escritos,
+            'pagina_converter_expedientes' => $pagina_converter_expedientes,
             // tabs_show
             'vista' => $vista,
         ];

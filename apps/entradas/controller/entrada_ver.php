@@ -3,6 +3,8 @@ use core\ViewTwig;
 use function core\is_true;
 use entradas\model\Entrada;
 use etherpad\model\Etherpad;
+use entradas\model\entity\EntradaCompartida;
+use entradas\model\entity\GestorEntradaCompartidaAdjunto;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -19,40 +21,62 @@ require_once ("apps/core/global_object.inc");
 $Qmethod = (string) \filter_input(INPUT_SERVER, 'REQUEST_METHOD');
 if ($Qmethod == 'POST') {
     $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+    $Qcompartida = (string) \filter_input(INPUT_POST, 'compartida');
 }
 if ($Qmethod == 'GET') {
     $Qid_entrada = (integer) \filter_input(INPUT_GET, 'id_entrada');
+    $Qcompartida = (string) \filter_input(INPUT_GET, 'compartida');
 }
 
 $sigla = $_SESSION['oConfig']->getSigla();
 
-$oEntrada = new Entrada($Qid_entrada);
+if (is_true($Qcompartida)) {
+	$oEntrada = new EntradaCompartida($Qid_entrada);
+	$id_entrada_compartida = $Qid_entrada;
+} else {
+	$oEntrada = new Entrada($Qid_entrada);
+	$id_entrada_compartida = $oEntrada->getId_entrada_compartida();
+}
 
 if (!empty($Qid_entrada)) {
     
-    // En el caso de distribución cr, si ya está aceptado, el ver es ya para enviar
-    // y por tanto las cabeceras van al revés, y el destino se coge del bypass.
-    $estado = $oEntrada->getEstado();
-    $bypass = $oEntrada->getBypass();
-    if (is_true($bypass) && $estado == Entrada::ESTADO_ACEPTADO) {
-        $cabeceraIzqd = $oEntrada->cabeceraDistribucion_cr();
-        $cabeceraDcha = $oEntrada->cabeceraDerecha();
+	$asunto_e = $oEntrada->getAsunto_entrada();
+	// mirar si tienen escrito
+	$f_escrito = $oEntrada->getF_documento()->getFromLocal();
+	$f_entrada = $oEntrada->getF_entrada()->getFromLocal();
+	
+	if (!empty($id_entrada_compartida) ) {
+    	$bCompartida = TRUE;
+		$cabeceraIzqd = $oEntrada->cabeceraIzquierda();
+		$cabeceraDcha = $oEntrada->cabeceraDerecha();
+		
+    	$gesEntradaAdjuntos = new GestorEntradaCompartidaAdjunto();
+    	$a_adjuntos = $gesEntradaAdjuntos->getArrayIdAdjuntos($id_entrada_compartida);
+    	
+		$oEtherpad = new Etherpad();
+    	$oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada_compartida);
     } else {
-        $cabeceraIzqd = $oEntrada->cabeceraIzquierda();
-        $cabeceraDcha = $oEntrada->cabeceraDerecha();
+    	$bCompartida = FALSE;
+		// En el caso de distribución cr, si ya está aceptado, el ver es ya para enviar
+		// y por tanto las cabeceras van al revés, y el destino se coge del bypass.
+		$estado = $oEntrada->getEstado();
+		$bypass = $oEntrada->getBypass();
+		if (is_true($bypass) && $estado == Entrada::ESTADO_ACEPTADO) {
+			$cabeceraIzqd = $oEntrada->cabeceraDistribucion_cr();
+			$cabeceraDcha = $oEntrada->cabeceraDerecha();
+		} else {
+			$cabeceraIzqd = $oEntrada->cabeceraIzquierda();
+			$cabeceraDcha = $oEntrada->cabeceraDerecha();
+		}
+    
+		$a_adjuntos = $oEntrada->getArrayIdAdjuntos();
+		
+		$oEtherpad = new Etherpad();
+		$oEtherpad->setId(Etherpad::ID_ENTRADA, $Qid_entrada);
     }
-    
-    $asunto_e = $oEntrada->getAsunto_entrada();
-    $a_adjuntos = $oEntrada->getArrayIdAdjuntos();
-    // mirar si tienen escrito
-    $f_escrito = $oEntrada->getF_documento()->getFromLocal();
-    $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
-    
-    $oEtherpad = new Etherpad();
-    $oEtherpad->setId (Etherpad::ID_ENTRADA,$Qid_entrada);
-    
     $escrito_html = $oEtherpad->generarHtml();
 } else {
+	$bCompartida = FALSE;
     $cabeceraIzqd = '';
     $cabeceraDcha = '';
     $a_adjuntos = [];
@@ -87,7 +111,8 @@ $a_campos = [
     'sigla' => $sigla,
     'escrito_html' => $escrito_html,
     'url_download_pdf' => $url_download_pdf,
-];
+   	'bCompartida' => $bCompartida,
+	];
 
 $oView = new ViewTwig('entradas/controller');
 echo $oView->renderizar('entrada_ver.html.twig',$a_campos);

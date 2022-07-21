@@ -105,6 +105,37 @@ class Lista {
      */
     protected $formato_tabla = '';
     
+    /**
+     * botones visibles en la Dataatble
+     * 		buttons: [
+     *  		'copyHtml5', 'excel', 'pdf', 'colvis', 'print'
+	 *			],";
+     *
+     * @var string
+     */
+    protected $dt_op_buttons = '';
+
+    /**
+     * DataTables dom init configuration options
+     * https://datatables.net/reference/option/dom
+     * 
+     *
+	 *	l - length changing input control
+	 *	f - filtering input
+	 *	t - The table!
+	 *	i - Table information summary
+	 *	p - pagination control
+	 *	r - processing display element
+	 *	B - Buttons
+	 *	R - ColReorder
+	 *	S - Scroller
+	 *	P - SearchPanes
+	 *	Q - SearchBuilder
+	 *
+     * @var string
+     */
+    protected $dt_op_dom = '';
+    
     /* CONSTRUCTOR -------------------------------------------------------------- */
     
     /**
@@ -128,6 +159,7 @@ class Lista {
         $aCabeceras=$this->aCabeceras;
         $aDatos=$this->aDatos;
         $key=$this->ikey;
+        $id_tabla = $this->sid_tabla;
         $clase = 'lista';
         //------------------------------------ html ------------------------------
         $Html="<table class=\"$clase\"><tr>";
@@ -208,13 +240,10 @@ class Lista {
      *
      */
     function listaPaginada() {
-        $aGrupos=$this->aGrupos;
-        $aCabeceras=$this->aCabeceras;
-        $aDatos=$this->aDatos;
         //------------------------------------ html ------------------------------
-        reset($aGrupos);
+        reset($this->aGrupos);
         $Html='';
-        foreach ($aGrupos as $key => $titulo) {
+        foreach ($this->aGrupos as $key => $titulo) {
             $this->ikey = $key;
             $Html.="<div class=salta_pag>";
             $Html.="<h2>$titulo</h2>";
@@ -337,22 +366,22 @@ class Lista {
             $user = $aUser[$i];
             $oPref = $gesPreferencias->getPreferenciaUsuario($user,$tipo);
             
-            if ($sPrefs=$oPref->getPreferencia()) {;
-            $aPrefs = json_decode($sPrefs, true);
-            if (!empty($aPrefs['colVisible'])) {
-                $aColsVisible = $aPrefs['colVisible'];
-                //$aColsVisible = empty($aPrefs['colVisible'])? '*' : $aPrefs['colVisible'];
-                //$aColsVisible = explode(',',$aPrefs['colVisible']);
-            }
-            $bPanelVis = ($aPrefs['panelVis'] == "si")? true: false;
-            if (!empty($aPrefs['colWidths'])) {
-                $aColsWidth = $aPrefs['colWidths'];
-            }
-            // Anchura del grid
-            $grid_width = (!empty($aPrefs['widthGrid']))? $aPrefs['widthGrid'] : '900';
-            // Altura del grid. Si no está en prefs: 0 para que calcule.
-            $grid_height = (!empty($aPrefs['heightGrid']))? $aPrefs['heightGrid'] : 0;
-            break; // sale del bucle.
+            if ($sPrefs=$oPref->getPreferencia()) {
+				$aPrefs = json_decode($sPrefs, true);
+				if (!empty($aPrefs['colVisible'])) {
+					$aColsVisible = $aPrefs['colVisible'];
+					//$aColsVisible = empty($aPrefs['colVisible'])? '*' : $aPrefs['colVisible'];
+					//$aColsVisible = explode(',',$aPrefs['colVisible']);
+				}
+				$bPanelVis = ($aPrefs['panelVis'] == "si")? true: false;
+				if (!empty($aPrefs['colWidths'])) {
+					$aColsWidth = $aPrefs['colWidths'];
+				}
+				// Anchura del grid
+				$grid_width = (!empty($aPrefs['widthGrid']))? $aPrefs['widthGrid'] : '900';
+				// Altura del grid. Si no está en prefs: 0 para que calcule.
+				$grid_height = (!empty($aPrefs['heightGrid']))? $aPrefs['heightGrid'] : 0;
+				break; // sale del bucle.
             } else { // buscar las opciones por defecto
                 continue;
             }
@@ -507,12 +536,12 @@ class Lista {
         $sData = '[';
         foreach($aFilas as $num_fila=>$fila) {
             $f++;
-            if ($f>1) $sData .= ',';
+            if ($f>1) { $sData .= ','; }
             $c=0;
             $sData .= '{';
             foreach($fila as $camp=>$valor) {
                 $c++;
-                if ($c>1) $sData .= ',';
+                if ($c>1) { $sData .= ','; }
                 // Sólo elimino los saltos de lineas. las comillas las pone bien.
                 $remove = array("\r\n", "\n", "\r");
                 $valor = str_replace($remove, ' ', $valor);
@@ -962,9 +991,8 @@ class Lista {
             $a_valores_chk = array();
         }
         
-        foreach($a_valores as $num_fila=>$fila) {
-            $clase = "imp";
-            $f % 2  ? 0: $clase = "par";
+        foreach($a_valores as $fila) {
+            $clase = ($f % 2)? "imp" : "par";
             $f++;
             $id_fila=$f.$ahora;
             ksort($fila);
@@ -975,7 +1003,7 @@ class Lista {
                 if ($col=="order") { continue; }
                 if ($col=="select") { continue; }
                 if ($col=="sel") {
-                    if (empty($b)) continue; // si no hay botones (por permisos...) no tiene sentido el checkbox
+                	if (empty($b)) { continue; } // si no hay botones (por permisos...) no tiene sentido el checkbox
                     $col="";
                     if(is_array($valor)) {
                         if (!empty($valor['select'])) { $chk=$valor['select']; } else { $chk=""; }
@@ -1043,17 +1071,29 @@ class Lista {
         if (!empty($b) && $b !== 'x') {
             $botones="<tr class=botones><td colspan='$cab'>".$botones;
         }
+        
+        
+        $dt_com = $this->getDataTable_options_dom();
+        $dt_buttons = $this->getDataTable_options_buttons();
+        
         // No puedo poner los botones como thead y tbody porque el sorteable.js se hace un lio.
         $tt="<table>$botones</table>\n";
         $tt.="<table border=\"1\" class=\"table table-compact table-striped table-bordered table-hover table-responsive\" id='$id_tabla'>\n";
         $tt.="<thead><tr>";
-        if (!empty($b)) $tt.="<th class='unsortable' tipo='notext' width='15'></th>";
+        if (!empty($b)) { $tt.="<th class='unsortable' tipo='notext' width='15'></th>"; }
         $tt.="$cabecera</thead><tbody>";
         $tt.= $tbody;
         $tt.="</tbody></table>\n";
         $tt.="<script>
 			$(document).ready(function() {
-                $('#$id_tabla').DataTable();
+                $('#$id_tabla').DataTable({
+					$dt_com
+					$dt_buttons
+					colReorder: {
+						enable: true,
+						realtime: false
+					}
+				});
 				var h = $('input:checked');
 				if (h.length) {
 					var h = (h.offset().top) - 300;
@@ -1153,9 +1193,8 @@ class Lista {
             $a_valores_chk = array();
         }
         
-        foreach($a_valores as $num_fila=>$fila) {
-            $clase = "imp";
-            $f % 2  ? 0: $clase = "par";
+        foreach($a_valores as $fila) {
+            $clase = ($f % 2)? "imp" : "par";
             $f++;
             $id_fila=$f.$ahora;
             ksort($fila);
@@ -1166,7 +1205,7 @@ class Lista {
                 if ($col=="order") { continue; }
                 if ($col=="select") { continue; }
                 if ($col=="sel") {
-                    if (empty($b)) continue; // si no hay botones (por permisos...) no tiene sentido el checkbox
+                	if (empty($b)) { continue; } // si no hay botones (por permisos...) no tiene sentido el checkbox
                     $col="";
                     if(is_array($valor)) {
                         if (!empty($valor['select'])) { $chk=$valor['select']; } else { $chk=""; }
@@ -1234,7 +1273,7 @@ class Lista {
         $tt="<table>$botones</table>\n";
         $tt.="<table border=1  class='sortable' id='$id_tabla'>\n";
         $tt.="<thead><tr>";
-        if (!empty($b)) $tt.="<th class='unsortable' tipo='notext'></th>";
+        if (!empty($b)) { $tt.="<th class='unsortable' tipo='notext'></th>"; }
         $tt.="$cabecera</thead><tbody>";
         $tt.= $tbody;
         $tt.="</tbody></table>\n";
@@ -1302,14 +1341,12 @@ class Lista {
         // Para generar un id único
         $ahora=date("Hms");
         //Grupos
-        $g=1;
         foreach ($aGrupos as $key => $titulo) {
             $tbody.="<tr><td colspan=100>$titulo</td></tr>";
             $a_valores2 = $a_valores[$key];
             $f=1;
-            foreach($a_valores2 as $num_fila=>$fila) {
-                $clase = "imp";
-                $f % 2  ? 0: $clase = "par";
+            foreach($a_valores2 as $fila) {
+                $clase = ($f % 2)? "imp" : "par";
                 $f++;
                 $id_fila=$f.$ahora;
                 ksort($fila);
@@ -1320,7 +1357,7 @@ class Lista {
                     if ($col=="order") { continue; }
                     if ($col=="select") { continue; }
                     if ($col=="sel") {
-                        if (empty($b)) continue; // si no hay botones (por permisos...) no tiene sentido el checkbox
+                    	if (empty($b)) { continue; } // si no hay botones (por permisos...) no tiene sentido el checkbox
                         $col="";
                         if(is_array($valor)) {
                             if (!empty($valor['select'])) { $chk=$valor['select']; } else { $chk=""; }
@@ -1386,7 +1423,7 @@ class Lista {
         $tt="<table>$botones</table>\n";
         $tt.="<table border=1  class='sortable' id='$id_tabla'>\n";
         $tt.="<thead><tr>";
-        if (!empty($b)) $tt.="<th class='unsortable' tipo='notext'></th>";
+        if (!empty($b)) { $tt.="<th class='unsortable' tipo='notext'></th>"; }
         $tt.="$cabecera</thead><tbody>";
         $tt.= $tbody;
         $tt.="</tbody></table>\n";
@@ -1432,4 +1469,65 @@ class Lista {
     public function setFormatoTabla($formatoTabla) {
         $this->formato_tabla = $formatoTabla;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getDataTable_options_buttons() {
+		if (empty($this->dt_op_buttons)) {
+			$this->setDataTable_options_buttonsDefault();
+		}
+		
+		return "buttons: [
+			$this->btn_jsTable
+			],";
+	}
+
+	/**
+	 * lista de valores separados por coma: 'copyHtml5', 'excel', 'pdf', 'colvis', 'print'
+	 * @param string $dt_op_buttons
+	 */
+	public function setDataTable_options_buttons($dt_op_buttons) {
+		$this->dt_op_buttons = $dt_op_buttons;
+	}
+	public function setDataTable_options_buttonsDefault() {
+		$this->btn_jsTable = "'copyHtml5', 'excel', 'pdf', 'colvis', 'print'";
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDataTable_options_dom() {
+		if (empty($this->dt_op_dom)) {
+			$this->setDataTable_options_domDefault();
+		}
+		return "dom: '$this->dt_op_dom',";
+	}
+
+	/**
+     * DataTables dom init configuration options
+     * https://datatables.net/reference/option/dom
+     * 
+     *
+	 *	l - length changing input control
+	 *	f - filtering input
+	 *	t - The table!
+	 *	i - Table information summary
+	 *	p - pagination control
+	 *	r - processing display element
+	 *	B - Buttons
+	 *	R - ColReorder
+	 *	S - Scroller
+	 *	P - SearchPanes
+	 *	Q - SearchBuilder
+	 *
+	 * @param string $dt_op_dom
+	 */
+	public function setDataTable_options_dom($dt_op_dom) {
+		$this->dt_op_dom = $dt_op_dom;
+	}
+
+	public function setDatatable_options_domDefault() {
+		$this->dt_op_dom = "Bfrtip";
+	}
 }

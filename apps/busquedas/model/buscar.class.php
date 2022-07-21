@@ -2,13 +2,20 @@
 namespace busquedas\model;
 
 use core\Converter;
+use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
+use entradas\model\entity\GestorEntradaCompartida;
 use entradas\model\entity\GestorEntradaDB;
-use expedientes\model\GestorEscrito;
+use escritos\model\GestorEscrito;
+use etiquetas\model\entity\GestorEtiquetaEntrada;
+use lugares\model\entity\GestorLugar;
+use usuarios\model\Categoria;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
-use entradas\model\Entrada;
+use usuarios\model\Visibilidad;
+use core\ConfigGlobal;
 
 
 class Buscar {
@@ -122,6 +129,10 @@ class Buscar {
      */
     private $ref;
     
+    private $a_etiquetas;
+    Private $andOr;
+    
+    
     public function getCollection($opcion,$mas='') {
         /* Siempre, obligatorio tener:
          *  - f_entrada not null para las entradas
@@ -131,52 +142,124 @@ class Buscar {
         switch ($opcion) {
             // permanentes de cr
             case 'proto':
-                // por asunto
-                if (!empty($this->asunto)) {
-                    // en este caso el operador es 'sin_acentos'
-                    $aWhereEntrada['asunto_detalle'] = $this->asunto;
-                }
+            	// En los centros, no busco en entradas, sino en emtradas_compartidas y 
+            	// veo si el centro está en los destinos.
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$aWhereEntrada = [];
+					$aOperadorEntrada = [];
+					// por asunto
+					if (!empty($this->asunto)) {
+						// en este caso el operador es 'sin_acentos'
+						$aWhereEntrada['asunto_entrada'] = $this->asunto;
+						$aOperadorEntrada['asunto_entrada'] = 'sin_acentos';
+					}
                 
-                $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
-                $aOperadorEntrada['estado'] = '>=';
-                $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
-                $aWhereEntrada['_ordre'] = 'f_entrada';
-                $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
-                $aProt_origen = [ 'lugar' => $this->id_lugar,
-                                  'num' => $this->prot_num,
-                                  'any' => $this->prot_any,
-                                  'mas' => $this->prot_mas,
-                            ];
+					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
+									  'num' => $this->prot_num,
+									  'any' => $this->prot_any,
+									  'mas' => $this->prot_mas,
+								];
+					$gesLugares = new GestorLugar();
+					$id_sigla_local = $gesLugares->getId_sigla_local();
+					$id_destino = $id_sigla_local;
 
-                $aWhereEntrada['f_entrada'] = 'x';
-                $gesEntradas = new GestorEntradaDB();
-                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
-                $aCollections['entradas'] = $cEntradas;
+					$aWhereEntrada['_ordre'] = 'f_entrada';
+					$gesEntradasCompartidas = new GestorEntradaCompartida();
+					$cEntradas = $gesEntradasCompartidas->getEntradasByProtOrigenDestino($aProt_origen,$id_destino,$aWhereEntrada,$aOperadorEntrada);
+					$aCollections['entradas_compartidas'] = $cEntradas;
+            	} else {
+					// por asunto
+					if (!empty($this->asunto)) {
+						// en este caso el operador es 'sin_acentos'
+						$aWhereEntrada['asunto_detalle'] = $this->asunto;
+					}
+						
+					$aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+					$aOperadorEntrada['estado'] = '>=';
+					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+					$aWhereEntrada['_ordre'] = 'f_entrada';
+					$aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
+					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
+									  'num' => $this->prot_num,
+									  'any' => $this->prot_any,
+									  'mas' => $this->prot_mas,
+								];
+
+					$aWhereEntrada['f_entrada'] = 'x';
+					$gesEntradas = new GestorEntradaDB();
+					$cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
+					$aCollections['entradas'] = $cEntradas;
+            	}
                 return $aCollections;
                 break;
             case 'any':
                 // por año
-                $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
-                $aOperadorEntrada['estado'] = '>=';
-                $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
-                $aProt_origen = [ 'lugar' => $this->id_lugar,
-                                  'num' => $this->prot_num,
-                                  'any' => $this->prot_any,
-                                  'mas' => $this->prot_mas,
-                            ];
+            	// En los centros, no busco en entradas, sino en entradas_compartidas y 
+            	// veo si el centro está en los destinos.
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$aWhereEntrada = [];
+					$aOperadorEntrada = [];
+					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
+									  'num' => $this->prot_num,
+									  'any' => $this->prot_any,
+									  'mas' => $this->prot_mas,
+								];
+					$gesLugares = new GestorLugar();
+					$id_sigla_local = $gesLugares->getId_sigla_local();
+					$id_destino = $id_sigla_local;
 
-                $aWhereEntrada['_ordre'] = 'f_entrada';
-                $gesEntradas = new GestorEntradaDB();
-                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
-                $aCollections['entradas'] = $cEntradas;
+					$aWhereEntrada['_ordre'] = 'f_entrada';
+					$gesEntradasCompartidas = new GestorEntradaCompartida();
+					$cEntradas = $gesEntradasCompartidas->getEntradasByProtOrigenDestino($aProt_origen,$id_destino,$aWhereEntrada,$aOperadorEntrada);
+					$aCollections['entradas_compartidas'] = $cEntradas;
+            	} else {
+					$aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
+					$aOperadorEntrada['estado'] = '>=';
+					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
+									  'num' => $this->prot_num,
+									  'any' => $this->prot_any,
+									  'mas' => $this->prot_mas,
+								];
+
+					$aWhereEntrada['_ordre'] = 'f_entrada';
+					$gesEntradas = new GestorEntradaDB();
+					$cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhereEntrada,$aOperadorEntrada);
+					$aCollections['entradas'] = $cEntradas;
+				}
+                return $aCollections;
+                break;
+            case 'lst_todos':
+            	// En los centros, no busco en entradas, sino en entradas_compartidas y 
+            	// veo si el centro está en los destinos.
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$aWhereEntrada = [];
+					$aOperadorEntrada = [];
+					$aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+					$aProt_origen = [ 'id_lugar' => $this->id_lugar,
+									  'num' => $this->prot_num,
+									  'any' => $this->prot_any,
+									  'mas' => $this->prot_mas,
+								];
+					$gesLugares = new GestorLugar();
+					$id_sigla_local = $gesLugares->getId_sigla_local();
+					$id_destino = $id_sigla_local;
+
+					$aWhereEntrada['_ordre'] = 'f_entrada DESC';
+					$gesEntradasCompartidas = new GestorEntradaCompartida();
+					$cEntradas = $gesEntradasCompartidas->getEntradasByProtOrigenDestino($aProt_origen,$id_destino,$aWhereEntrada,$aOperadorEntrada);
+					$aCollections['entradas_compartidas'] = $cEntradas;
+            	}
                 return $aCollections;
                 break;
             case 'oficina':
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';
-                $aWhereEntrada['categoria'] = Entrada::CAT_PERMANATE;
+                $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
                 $aWhereEntrada['ponente'] = $this->ponente;
-                $aProt_origen = [ 'lugar' => $this->id_lugar,
+                $aProt_origen = [ 'id_lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,
                                   'any' => $this->prot_any,
                                   'mas' => $this->prot_mas,
@@ -188,6 +271,19 @@ class Buscar {
                 $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
                 break;
+            case 8: // por etiquetas
+            	$gesEtiquetasEntrada = new GestorEtiquetaEntrada();
+            	$a_Id_entradas = $gesEtiquetasEntrada->getArrayEntradas($this->a_etiquetas,$this->andOr);
+            	$cEntradas = [];
+            	foreach ($a_Id_entradas as $id_entrada) {
+            		$oEntrada = new Entrada($id_entrada);
+            		$cEntradas[] = $oEntrada;
+            	}
+            	
+            	$aCollections['entradas'] = $cEntradas;
+            	
+                return $aCollections;
+            	break;
             case 71: // un protocolo concreto también en ref:
 
                 $aProt_ref = [ 'id_lugar' => $this->id_lugar,
@@ -217,7 +313,7 @@ class Buscar {
                 // Entradas: origen_prot.
                 $aWhereEntrada['f_entrada'] = 'x';
                 $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
-                $aProt_origen = [ 'lugar' => $this->id_lugar,
+                $aProt_origen = [ 'id_lugar' => $this->id_lugar,
                                   'num' => $this->prot_num,
                                   'any' => $this->prot_any,
                                   'mas' => $this->prot_mas,
@@ -424,6 +520,7 @@ class Buscar {
             $aWhere['asunto_detalle'] = $this->asunto;
         }
 
+        $cEscritos = [];
         if (!empty($this->oficina)) {
             // Cargos correspondientes a la oficina:
             $gesCargos = new GestorCargo();
@@ -440,7 +537,10 @@ class Buscar {
                 $aOperador['creador'] = 'IN';
                 // A Quien se envia el escrito (escritos)
                 if (!empty($this->dest_id_lugar)) {
-                    $cEscritosPonente = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+                    $cEscritosPonenteJson = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+					// añadir los envios a grupos:
+					$cEscritosPonenteGrupos = $gesEscritos->getEscritosByLugarDeGrupo($this->dest_id_lugar,$aWhere,$aOperador);
+					$cEscritosPonente = array_merge($cEscritosPonenteJson, $cEscritosPonenteGrupos); 
                 } elseif (!empty($this->local_id_lugar)) {
                     $cEscritosPonente = $gesEscritos->getEscritosByLocal($this->local_id_lugar,$aWhere,$aOperador);
                 } else {
@@ -453,7 +553,10 @@ class Buscar {
                 $aOperador['resto_oficinas'] = 'OVERLAP';
                 // A quien envia el escrito (escritos)
                 if (!empty($this->dest_id_lugar)) {
-                    $cEscritosResto = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+                    $cEscritosRestoJson = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar,$aWhere,$aOperador);
+					// añadir los envios a grupos:
+					$cEscritosRestoGrupos = $gesEscritos->getEscritosByLugarDeGrupo($this->dest_id_lugar,$aWhere,$aOperador);
+					$cEscritosResto = array_merge($cEscritosRestoJson, $cEscritosRestoGrupos); 
                 } elseif (!empty($this->local_id_lugar)) {
                     $cEscritosResto = $gesEscritos->getEscritosByLocal($this->local_id_lugar,$aWhere,$aOperador);
                 } else {
@@ -780,5 +883,33 @@ class Buscar {
     {
         $this->ref = $ref;
     }
+	/**
+	 * @return mixed
+	 */
+	public function getEtiquetas() {
+		return $this->a_etiquetas;
+	}
+
+	/**
+	 * @param mixed $a_etiquetas
+	 */
+	public function setEtiquetas($a_etiquetas) {
+		$this->a_etiquetas = $a_etiquetas;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getAndOr() {
+		return $this->andOr;
+	}
+
+	/**
+	 * @param mixed $andOr
+	 */
+	public function setAndOr($andOr) {
+		$this->andOr = $andOr;
+	}
+
 
 }

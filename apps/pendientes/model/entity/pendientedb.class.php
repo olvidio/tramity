@@ -512,7 +512,7 @@ class PendienteDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_acabado de PendienteDB
-	 * Si df_acabado es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_acabado es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_acabado debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_acabado='' optional.
@@ -543,7 +543,7 @@ class PendienteDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_plazo de PendienteDB
-	 * Si df_plazo es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_plazo es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_plazo debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_plazo='' optional.
@@ -783,7 +783,7 @@ class PendienteDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_inicio de PendienteDB
-	 * Si df_inicio es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_inicio es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_inicio debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_inicio='' optional.

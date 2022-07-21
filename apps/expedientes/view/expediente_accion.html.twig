@@ -14,7 +14,7 @@
           <div class="mb-3 row" id="busqueda_encargado">
             <label for="cargo" class="col-2 form-label">{{ "Encargar a" }}:</label>
             <div class="col-4">
-              {{ oDesplCargosOficina.desplegable|raw }}
+              {{ oDesplCargosOficinaEncargado.desplegable|raw }}
             </div>
               <div class="col-4">
                 <button type="button" class="btn btn-primary" onClick="fnjs_encargar();" >{{ "Encargar"|trans }}</button>
@@ -35,7 +35,7 @@
           <div class="row" >
             <label for="cargo" class="col-2 form-label">{{ "Encargar a" }}:</label>
             <div class="col-3">
-              {{ oDesplCargosOficina.desplegable|raw }}
+              {{ oDesplCargosOficinaPendiente.desplegable|raw }}
             </div>
           </div>
           <div class="row" >
@@ -70,18 +70,47 @@
   </div>
 </div>
 
+<!-- Modal2 (etiquetas) -->
+<div class="modal fade" id="ModalEtiquetas" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalLongTitle">{{ "Asignar Etiquetas a la entrada"|trans }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+          <div id="div_etiquetas" class="mb-0 row align-items-center">
+            <label for="etiquetas" class="col-2 form-label">{{ "Etiquetas"|trans }}:</label>
+            <div class="mb-0 col-6">
+              <span id="span_etiquetas">
+                  {{ oArrayDesplEtiquetas.ListaSelects|raw }}
+              </span>
+            </div>
+              <div class="col-4">
+                <button type="button" class="btn btn-primary" onClick="fnjs_guardar_etiquetas();" >{{ "Guardar"|trans }}</button>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="card w-50 mx-auto ">
   <div class="card-header">
-    <h5 class="card-title">{{ "Acciones para el expediente"|trans }}:</h5>
+    <h5 class="card-title">{{ titulo }}:</h5>
     <h5 class="card-title">{{ asunto }}</h5>
   </div>
   <div class="card-body">
 <div class="row">
 {% for row in a_botones %}
   <div class="col">
-  	{% if row.tipo == 'modal' %}
+      {% if row.tipo == 'modal' %}
       <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_buscar('{{ row.accion }}');" >
+        {{ row.txt }}
+      </button>
+    {% elseif row.tipo == 'modal1' %}
+      <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalEtiquetas" onClick="fnjs_buscar('{{ row.accion }}');" >
         {{ row.txt }}
       </button>
   	{% else %}
@@ -104,6 +133,18 @@
 <script>
 fnjs_accion=function(accion){
 	var err=0;
+	if (accion == 'exp_eliminar') {
+		if ( !confirm("{{ "¿Seguro que quiere eliminar todo el expediente?"|trans }}") ) {
+        	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            return;
+        }
+	}
+	if (accion == 'exp_a_borrador' || accion == 'exp_a_borrador_cmb_creador') {
+		if ( !confirm("{{ "¿Seguro que quiere pasar el expediente a borrador y:\\n - Perder todos los comentarios.\\n - Perder las firmas.?"|trans }}") ) {
+        	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            return;
+        }
+	}
     // grabar
     var url_ajax = 'apps/expedientes/controller/expediente_update.php';
 	if (accion == 'en_expediente' || accion == 'en_pendiente' || accion == 'en_visto') {
@@ -121,13 +162,43 @@ fnjs_accion=function(accion){
             rta_txt = json.mensaje;
             alert ('error: '+rta_txt);
         } else {
-        	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            // En el caso de crear expediente a partir de una entrada. Ir
+            // directo al nuevo escrito dentro del nuevo expediente.
+            if (accion == 'en_expediente') {
+                fnjs_update_div('#main','{{ pagina_contestar|raw }}');
+            } else {
+                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            }
+        }
+    });
+}
+
+fnjs_guardar_etiquetas=function() {
+	var que='guardar_etiquetas';
+	var id_entrada={{ id_entrada }};
+	var etiquetas = $( "select[name^='etiquetas\\[']" ).serializeArray();
+	
+    var url_ajax = 'apps/entradas/controller/entrada_update.php';
+    var param_json = { que: que, id_entrada: id_entrada, etiquetas: etiquetas };
+    request=$.ajax({
+        data: param_json,
+        url: url_ajax,
+        method: 'POST',
+        dataType: 'json'
+    });
+    request.done( function (json) {
+        // close div modal
+        $('#ModalEtiquetas').modal('hide');
+    	if (json.success != true) {
+    		alert (json.mensaje);
+        } else {
+            fnjs_update_div('#main','{{ pagina_cancel|raw }}');
         }
     });
 }
 
 fnjs_cancelar=function(){
-    if (event != undefined) {
+	if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -200,10 +271,10 @@ fnjs_copiar=function() {
 fnjs_encargar=function() {
 	var que='en_asignar';
 	var id_entrada={{ id_entrada }};
-	var id_cargo=$('#id_cargo').val();
+	var id_cargo_encargado=$('#id_cargo_encargado').val();
 	
     var url_ajax = 'apps/entradas/controller/entrada_update.php';
-    var param_json = { que: que, id_entrada: id_entrada, id_cargo: id_cargo };
+    var param_json = { que: que, id_entrada: id_entrada, id_cargo_encargado: id_cargo_encargado };
     request=$.ajax({
         data: param_json,
         url: url_ajax,
@@ -224,11 +295,11 @@ fnjs_encargar=function() {
 fnjs_crear_pendiente=function() {
 	var que='en_pendiente';
 	var id_entrada={{ id_entrada }};
-	var id_cargo = $('#id_cargo').val();
+	var id_cargo_pendiente = $('#id_cargo_pendiente').val();
 	var f_plazo = $('#f_plazo').val();
 	
     var url_ajax = 'apps/expedientes/controller/expediente_update.php';
-    var param_json = { que: que, id_entrada: id_entrada, id_cargo: id_cargo, f_plazo: f_plazo };
+    var param_json = { que: que, id_entrada: id_entrada, id_cargo_pendiente: id_cargo_pendiente, f_plazo: f_plazo };
 
     request=$.ajax({
         data: param_json,
@@ -296,7 +367,7 @@ fnjs_adjuntar_antecedente=function(tipo,id_escrito,id_expediente) {
 }
 
 $(function() {
-	$( "#f_plazo" ).datetimepicker( {
+	$( "#f_plazo" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -311,6 +382,27 @@ $(function() {
         }
     });
 });
+
+{{ oArrayDesplEtiquetas.ComprobarSelectJs|raw }}
+fnjs_mas_etiquetas=function(){
+	var code = (event.keyCode ? event.keyCode : event.which);
+    var valor=1;
+    var id_campo='#'+event.currentTarget.id;
+    var valor=$(id_campo).val();
+    if(code!=9 && typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+	if ( code==9 || event.type=="change") {
+		if (valor!=0) {
+			{{ oArrayDesplEtiquetas.ListaSelectsJs|raw }}
+		}
+	}
+}
+fnjs_quitar_etiquetas=function(){
+	$('#span_etiquetas').html("");
+	$('#etiquetas_num').val(0);
+}
 
 /* NO SE de donde se copió, pero al cerrar el modal da un error y 
 además quita las barras scroll de la pagina.

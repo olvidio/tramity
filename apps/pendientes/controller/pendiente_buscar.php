@@ -40,7 +40,7 @@ $Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
 $Qstatus = (string) \filter_input(INPUT_POST, 'status');
 $Qid_lugar =  (integer) \filter_input(INPUT_POST, 'id_lugar');
 $Qprot_num =  (integer) \filter_input(INPUT_POST, 'prot_num');
-$Qprot_any =  (integer) \filter_input(INPUT_POST, 'prot_any');
+$Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 $Qprot_mas =  (string) \filter_input(INPUT_POST, 'prot_mas');
 $Qid_oficina = (string) \filter_input(INPUT_POST, 'id_oficina');
 $Qf_min_enc =  (string) \filter_input(INPUT_POST, 'f_min');
@@ -60,6 +60,7 @@ $oDesplLugar->setOpcion_sel($Qid_lugar);
 $a_opciones_status = Pendiente::getArrayStatus();
 // añadr la opción de 'caulquiera' al inicio
 $all_traducido = _("cualquiera");
+$Qstatus = empty($Qstatus)? 'all' : $Qstatus;
 $a_opciones_status = array_merge(array("all" => $all_traducido), $a_opciones_status);
 $oDesplStatus = new Desplegable();
 $oDesplStatus->setNombre('status');
@@ -115,9 +116,7 @@ if ($Qque == 'buscar') {
     }
 
     if (!empty($Qid_oficina)) { 
-        $oOficina = new Oficina($Qid_oficina);
-        $sigla_oficina = $oOficina->getSigla();
-        $oBuscarPendiente->setOficina($sigla_oficina); 
+        $oBuscarPendiente->setId_oficina($Qid_oficina); 
     }
     if (!empty($Qasunto)) { $oBuscarPendiente->setAsunto($Qasunto); }
     if (!empty($Qf_min)) { $oBuscarPendiente->setF_min($Qf_min); }
@@ -133,11 +132,11 @@ if ($Qque == 'buscar') {
         $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
     }
 
-
     $cPendientes = $oBuscarPendiente->getPendientes();
     $a_valores = [];
     $t = 0;
     $oPermisoregistro = new PermRegistro();
+	$a_status=Pendiente::getArrayStatus();
     foreach ($cPendientes as $oPendiente) {
         $t++;
         $perm_detalle = $oPermisoregistro->permiso_detalle($oPendiente, 'detalle');
@@ -166,7 +165,9 @@ if ($Qque == 'buscar') {
         $plazo = $oPendiente->getF_plazo()->getFromLocal();
         $plazo_iso = $oPendiente->getF_plazo()->format('Ymd'); // sólo números, para poder ordenar.
         
-        $estado = $oPendiente->getStatus();
+        $status = $oPendiente->getStatus();
+        $estado = empty($a_status[$status])? '?' : $a_status[$status]; 
+        
         $of_ponente = $oPendiente->getPonente();
         $ponente = $a_oficinas[$of_ponente];
         
@@ -195,8 +196,10 @@ if ($Qque == 'buscar') {
         $a_valores[$t][3]=$periodico;
         $a_valores[$t][4]=$asunto;
         $a_valores[$t][5]=$plazo;
-        $a_valores[$t][6]=$ponente;
-        $a_valores[$t][7]=$oficinas_txt;
+        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+            $a_valores[$t][6]=$ponente;
+            $a_valores[$t][7]=$oficinas_txt;
+        }
         $a_valores[$t][8]=$estado;
         // para el orden
         if ($plazo!="x") {
@@ -217,10 +220,12 @@ $a_cabeceras=array( ucfirst(_("protocolo")),
     _("p"),
     array('name'=>ucfirst(_("asunto")),'formatter'=>'clickFormatter'),
     array('name'=>ucfirst(_("fecha plazo")),'class'=>'fecha'),
-    ucfirst(_("ponente")),
-    ucfirst(_("oficinas")),
-    ucfirst(_("estado")),
-);
+    );
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+    $a_cabeceras[] = ucfirst(_("ponente"));
+    $a_cabeceras[] = ucfirst(_("oficinas"));
+}
+$a_cabeceras[] = ucfirst(_("estado"));
 
 $oTabla = new Lista();
 $oTabla->setId_tabla('pen_tabla');

@@ -1,6 +1,6 @@
 <?php
 use core\ViewTwig;
-use expedientes\model\Escrito;
+use escritos\model\Escrito;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Grupo;
 use web\Desplegable;

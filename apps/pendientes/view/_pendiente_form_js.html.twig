@@ -1,6 +1,6 @@
 <script>
 $(function() {
-	$( "#f_plazo" ).datetimepicker( {
+	$( "#f_plazo" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -17,7 +17,7 @@ $(function() {
 
 });
 $(function() {
-	$( "#f_acabado" ).datetimepicker( {
+	$( "#f_acabado" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -35,9 +35,11 @@ $(function() {
 });
 
 fnjs_ver_opciones=function(tipo){
-	event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	switch (tipo) {
 		case "completa":
 			var n=$('#simple').val();
@@ -169,16 +171,18 @@ fnjs_cambiar_estado=function(){
 	var f_acabado=$('#f_acabado').val();
 	if (f_acabado) { 
 		//if (!fnjs_comprobar_fecha('#f_acabado')) { err=1; }
-		$('#status').val(1); 
+		$('#status').val("COMPLETED"); 
 	} else {
-		$('#status').val(0); 
+		$('#status').val("NEEDS-ACTION"); 
 	}
 }
 
 fnjs_guardar_pendiente=function(){
-    event.preventDefault();
-	event.stopPropagation();
-	event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	
 	var err=0;
 	var go=$('#go').val();
@@ -218,7 +222,6 @@ fnjs_guardar_pendiente=function(){
 
 	if (err!=1) {
 		$('#oficinas').val(oficinas);
-		//$('#form_pendiente').attr('action','apps/pendientes/controller/pendiente_update_ics.php');
 		switch (go) {
 			case "entradas":
 			case "salidas": 
@@ -229,19 +232,24 @@ fnjs_guardar_pendiente=function(){
                     url: url,
                     data: datos,
                     method: 'POST',
-                    dataType: 'json'
+                    dataType: 'text'
                 });
-				request.done( function (json) {
-	                if (json.success != true) {
-	                	alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-		            } else {
-						window.opener.document.forms['form_entrada']['id_pendiente'].value=json.id_pendiente
-						//window.opener.document.forms['form_entrada']['f_plazo'].prop('disabled',true);
-						window.opener.document.forms['form_entrada']['f_plazo'].value=json.f_plazo;
-						window.opener.document.forms['form_entrada']['plazo'].value="fecha";
-						window.opener.document.forms['form_entrada']['btn_guardar'].focus();
-						window.close();
-			        }
+				request.done( function (jsonStr) {
+					try {  
+						const json = JSON.parse(jsonStr);  
+                        if (json.success != true) {
+                            alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+                        } else {
+                            window.opener.document.forms['form_entrada']['id_pendiente'].value=json.id_pendiente
+                            //window.opener.document.forms['form_entrada']['f_plazo'].prop('disabled',true);
+                            window.opener.document.forms['form_entrada']['f_plazo'].value=json.f_plazo;
+                            window.opener.document.forms['form_entrada']['plazo'].value="fecha";
+                            window.opener.document.forms['form_entrada']['btn_guardar'].focus();
+                            window.close();
+                        }
+					} catch (e) {  
+                        alert (jsonStr);
+					}
                 });
                 request.fail(function(JqXHR, textStatus, errorThrown){
                     txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
@@ -256,18 +264,22 @@ fnjs_guardar_pendiente=function(){
                     url: url,
                     data: datos,
                     method: 'POST',
-                    dataType: 'json'
+                    dataType: 'text'
                 });
-				request.done( function (json) {
-	                if (json.success != true) {
-	                    alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-		            } else {
-                    	//fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                        {{ oPosicion.js_atras(1)|raw }}
-		            }
+				request.done( function (jsonStr) {
+					try {  
+						const json = JSON.parse(jsonStr);  
+                        if (json.success != true) {
+                            alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+                        } else {
+                            {{ oPosicion.js_atras(1)|raw }}
+                        }
+					} catch (e) {  
+                        alert (jsonStr);
+					}
                 });
                 request.fail(function(JqXHR, textStatus, errorThrown){
-                    txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
+                    txt = 'xxx {{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
                     alert(txt + 'An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
                     console.error("Hi ha un error: "+ textStatus, errorThrown);
                 });
@@ -310,9 +322,11 @@ fnjs_actualizar_status=function(){
 }
 
 fnjs_cancelar=function() {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	var go = $('#go').val();
 	if (go == 'entradas') { // estoy en una ventana independiente
         window.close();
@@ -360,7 +374,7 @@ fnjs_mas_etiquetas=function(){
     var valor=1;
     var id_campo='#'+event.currentTarget.id;
     var valor=$(id_campo).val();
-    if(code!=9) {
+    if(code!=9 && typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
     }

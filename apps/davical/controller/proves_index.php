@@ -40,3 +40,13 @@ Oficina
  	7: Add user (of1sg) to Oficina Tot (vsg)
 </span>
 <br>
+<hr>
+
+<span class="link" onclick="fnjs_update_div('#main','apps/davical/controller/proves.php?que=eliminar_usuario')" >
+ 	10: Eliminar Usuario
+</span>
+<br>
+<span class="link" onclick="fnjs_update_div('#main','apps/davical/controller/proves.php?que=eliminar_oficina')" >
+ 	11: Eliminar oficina
+</span>
+<br>

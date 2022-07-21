@@ -19,9 +19,9 @@ class DavicalMigrar {
     /**
      * oficina de DavicalMigrar
      *
-     * @var string
+     * @var integer
      */
-    private $oficina;
+    private $id_oficina;
     
     /**
      * dav_name de DavicalMigrar
@@ -111,8 +111,8 @@ class DavicalMigrar {
      * Hay que cambiar el campo dav_name y uid
      * 
      * ejemplo:
-     *      dav_name		/oficina_scdl/registro/REN532689-20210316T101739.ics
-     *      uid				REN532689-20210316T101739@registro_oficina_scdl
+     *      dav_name	/dlb_oficina_scdl/oficina/EN532557-20210526T112857.ics	/oficina_scdl/registro/REN532689-20210316T101739.ics
+     *      uid			EN532557-20210526T112857@registro_oficina_scdl
      * 
      * @return boolean
      */
@@ -146,7 +146,7 @@ class DavicalMigrar {
      * Hay que cambiar el campo dav_name
      *
      * ejemplo:
-     *      dav_name		/oficina_scdl/registro/REN532689-20210316T101739.ics
+     *      dav_name	/dlb_oficina_scdl/oficina/EN532557-20210526T112857.ics
      *
      * @return boolean
      */
@@ -177,6 +177,13 @@ class DavicalMigrar {
 	 *	 	             	X-DLB-ID-REG:532689
 	 *                      LOCATION:agdBalandrau 1/20\, i més\r
      *
+     *  /dlb_oficina_vsr/registro/REN533155-20210323T092822.ics
+     * 	(...)
+     *	UID:REN533155-20210323T092822@registro_dlb_oficina_vsr
+     *	LOCATION:cr 1/11\r
+     *	X-DLB-ID-REG:REN533155\r
+     *
+     *
      * @return boolean
      */
     private function migrarCaldav_data() {
@@ -193,15 +200,15 @@ class DavicalMigrar {
         
         $location = $this->getLocation_dst();
         
+        //UPDATE caldav_data SET caldav_data = REGEXP_REPLACE(caldav_data,'UID:(.?)@(.)_oficina_(.*?)\r','UID:\1@\2_dlb_oficina_\3')
         // hay que hacerlas en orden, para no perder el Where: dav_name.
         $sQuery_1 = "UPDATE caldav_data
-                    SET caldav_data = REGEXP_REPLACE(caldav_data,'LOCATION:(.*?)(,.*)\r','LOCATION:$location\2\r')
+                    SET caldav_data = REGEXP_REPLACE(caldav_data,'LOCATION:(.*?)(,.*)?\r','LOCATION:$location\\2')
                     WHERE dav_name ~ '^$dav_name_org'";
         
         $sQuery_2 = "UPDATE caldav_data
                     SET caldav_data = replace(caldav_data,'$dlb_id_org','$dlb_id_dst')
                     WHERE dav_name ~ '^$dav_name_org'";
-        
         $sQuery_3 = "UPDATE caldav_data
                     SET dav_name = replace(dav_name,'$dav_name_org','$dav_name_dst'),
                         caldav_data = replace(caldav_data,'$uid_org','$uid_dst')
@@ -243,14 +250,18 @@ class DavicalMigrar {
         return $this->getId_reg_dst()."-";
     }
     private function getDavNameOrg() {
-        $txt = "/oficina_".$this->getOficina()."/registro/".$this->getId_reg_org()."-";
+    	$oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+    	$parent_container = $oDavical->getNombreRecurso($this->id_oficina);
+    	$dav_name = '/'.$parent_container.'/registro/'.$this->getId_reg_org()."-";
         
-        return $txt;
+        return $dav_name;
     }
     private function getDavNameDst() {
-        $txt = "/oficina_".$this->getOficina()."/registro/".$this->getId_reg_dst()."-";
+    	$oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+    	$parent_container = $oDavical->getNombreRecurso($this->id_oficina);
+    	$dav_name = '/'.$parent_container.'/registro/'.$this->getId_reg_dst()."-";
         
-        return $txt;
+        return $dav_name;
     }
     /**
      * @return string
@@ -271,17 +282,17 @@ class DavicalMigrar {
     /**
      * @return string
      */
-    public function getOficina()
+    public function getId_oficina()
     {
-        return $this->oficina;
+        return $this->id_oficina;
     }
 
     /**
-     * @param string $oficina
+     * @param integer $id_oficina
      */
-    public function setOficina($oficina)
+    public function setId_oficina($id_oficina)
     {
-        $this->oficina = $oficina;
+        $this->id_oficina = $id_oficina;
     }
 
     /**

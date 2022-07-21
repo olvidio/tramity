@@ -22,10 +22,12 @@ fnjs_calendario=function(){
     $('#btn_nuevo').hide(); // para evitar que se pueda hacer nuevo antes de listar.
 }
 
-fnjs_buscar=function(){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+fnjs_buscar_lista_pendientes=function(){
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	// comprobar que se ha selecionado una oficina (en el caso de secretaria)
 	of = $('#id_oficina').val();
 	if (!of) {
@@ -88,7 +90,7 @@ fnjs_marcar=function(formulario){
 	{# no se. Ahora dicen que si se puede...
 	if (!$GLOBALS['oPerm']->have_perm("scl")) {
 		if ( p == 1 ) {
-			alert ("{{ "No puede modificar un pendiente periódico. Hable con secretaria."|trans|raw }}");
+			alert ("{{ "No puede modificar un pendiente periódico. Hable con secretaría."|trans|raw }}");
 			return false;
 		}
 	}
@@ -104,14 +106,19 @@ fnjs_marcar=function(formulario){
         url: url,
         data: datos,
         method: 'POST',
-        dataType: 'json'
+        dataType: 'text'
     });
-    request.done( function (json) {
-        if (json.success != true) {
-            alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-        } else {
-         	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-        }
+	request.done( function (jsonStr) {
+		try {  
+			const json = JSON.parse(jsonStr);  
+            if (json.success != true) {
+                alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+            } else {
+                 fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+            }
+		} catch (e) {  
+            alert (jsonStr);
+		}
     });
     request.fail(function(JqXHR, textStatus, errorThrown){
         txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
@@ -131,13 +138,16 @@ fnjs_modificar=function(formulario){
 			s++;
 			if ($(this).attr('id')=="ax") r=1;
 			a=$(this).attr('id').split("#");
-			if (a[2]) p=1;
+			// a los calendarios de oficina si dejo modificar
+			if (! a[1].includes('oficina')) {
+                if (a[2]) p=1;
+			}
 		}
 	});
 	
-	{% if not secretaria %}
+	{% if not perm_periodico %}
 		if ( p == 1 ) {
-			alert ("{{ "No puede modificar un pendiente periódico. Hable con secretaria."| trans }}");
+			alert ("{{ "No puede modificar un pendiente periódico. Hable con secretaría."| trans }}");
 			return false;
 		}
 	{% endif %}
@@ -171,13 +181,18 @@ fnjs_borrar=function(formulario){
             url: url,
             data: datos,
             method: 'POST',
-            dataType: 'json'
+            dataType: 'text'
         });
-		request.done( function (json) {
-            if (json.success != true) {
-                alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-            } else {
-            	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+        request.done( function (jsonStr) {
+            try {  
+                const json = JSON.parse(jsonStr);  
+                if (json.success != true) {
+                    alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+                } else {
+                     fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+                }
+            } catch (e) {  
+                alert (jsonStr);
             }
         });
         request.fail(function(JqXHR, textStatus, errorThrown){

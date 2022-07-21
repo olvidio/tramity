@@ -4,10 +4,11 @@ namespace expedientes\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
-use entradas\model\Entrada;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramite;
+use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Hash;
@@ -49,6 +50,10 @@ class ExpedienteLista {
      * @var array
      */
     private $aOperadorADD = [];
+    /**
+     * @var array
+     */
+    private $aCondiciones = [];
     /**
      * 
      * @var array
@@ -236,8 +241,10 @@ class ExpedienteLista {
                 $a_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
                 if (ConfigGlobal::soy_dtor()) {
                     $ids_cargos = array_keys($a_cargos_oficina);
-                    $aWhereFirma['id_cargo_creador'] = implode(',', $ids_cargos);
-                    $aOperadorFirma['id_cargo_creador'] = 'IN';
+                    if (!empty($ids_cargos)) {
+                        $aWhereFirma['id_cargo_creador'] = implode(',', $ids_cargos);
+                        $aOperadorFirma['id_cargo_creador'] = 'IN';
+                    }
                 }
                 
                 $cFirmas = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
@@ -622,20 +629,19 @@ class ExpedienteLista {
             $this->aWhere['_ordre'] = 'id_expediente';
             $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere,$this->aOperador);
                 
-            $soy_dtor = ConfigGlobal::soy_dtor();
             //lista de tramites
             $gesTramites = new GestorTramite();
             $a_tramites = $gesTramites->getArrayAbrevTramites();
             // array visibilidades
-            $oEntrada = new Entrada();
-            $a_visibilidad = $oEntrada->getArrayVisibilidad();
+            $oVisibilidad = new Visibilidad();
+            $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
+            $oPermiso = new PermRegistro();
             foreach ($cExpedientes as $oExpediente) {
                 $row = [];
                 // mirar permisos...
                 $visibilidad = $oExpediente->getVisibilidad();
-                if ( ($visibilidad == Entrada::V_DIRECTORES || $visibilidad == Entrada::V_RESERVADO || $visibilidad == Entrada::V_RESERVADO_VCD)
-                    && $soy_dtor === FALSE) {
-                        continue;
+                if (!empty($visibilidad) && !$oPermiso->isVisibleDtor($visibilidad)) {
+                	continue;
                 }
                 $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '' : $a_visibilidad[$visibilidad];
                 $row['visibilidad'] = $visibilidad_txt;
@@ -694,6 +700,11 @@ class ExpedienteLista {
                             'prioridad_sel' => $this->prioridad_sel,
                             'modo' => 'mod',
                             ];
+                if ($this->filtro == 'archivados') {
+                	$a_cosas = $this->getACondiciones();
+                	$a_cosas_ver['condiciones'] = $a_cosas;
+                }
+                
                 $link_ver = Hash::link($pagina_ver.'?'.http_build_query($a_cosas_ver));
                 $link_mod = Hash::link($pagina_mod.'?'.http_build_query($a_cosas_mod));
                 $link_accion = Hash::link($pagina_accion.'?'.http_build_query($a_cosas_mod));
@@ -731,7 +742,15 @@ class ExpedienteLista {
                         $row['class_row'] = 'bg-light';
                     }
                 }
-                
+                // Si ya lo han visto todos (y hay alguno marcado):
+                if ($estado == Expediente::ESTADO_BORRADOR && $oExpediente->isVistoTodos()) {
+					$row['class_row'] = 'bg-warning';
+				}
+                // Acabados devueletos por secretaria
+                if (($this->filtro == 'acabados_encargados' || $this->filtro == 'acabados') && $oExpediente->isDevueltoAlguno()) {
+					$row['class_row'] = 'bg-warning';
+				}
+				
                 $prioridad = $oExpediente->getPrioridad();
                 $row['prioridad'] = $prioridad;
                 $row['tramite'] = $tramite_txt;
@@ -750,11 +769,12 @@ class ExpedienteLista {
                 $row['entradilla'] = $oExpediente->getEntradilla();
                 
                 $a_resto_oficinas = $oExpediente->getResto_oficinas();
+                $cargo_txt = empty($a_posibles_cargos[$id_ponente])? '?' : $a_posibles_cargos[$id_ponente];
                 $oficinas_txt = '';
-                $oficinas_txt .= '<span class="text-danger">'.$a_posibles_cargos[$id_ponente].'</span>';
+                $oficinas_txt .= '<span class="text-danger">'.$cargo_txt.'</span>';
                 foreach ($a_resto_oficinas as $id_oficina) {
                     $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
-                    $oficinas_txt .= $a_posibles_cargos[$id_oficina];
+                    $oficinas_txt .= empty($a_posibles_cargos[$id_oficina])? '?' : $a_posibles_cargos[$id_oficina];
                 }
                 $row['oficinas'] = $oficinas_txt;
                 // nombre encargado (ponente)
@@ -794,7 +814,7 @@ class ExpedienteLista {
         $url_cancel = 'apps/expedientes/controller/expediente_lista.php';
         $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $filtro, 'prioridad_sel' => $this->prioridad_sel]));
         
-        $vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+        $vista = ConfigGlobal::getVista();
         
         $a_campos = [
             //'id_expediente' => $this->id_expediente,
@@ -899,6 +919,21 @@ class ExpedienteLista {
     {
         $this->aOperadorADD = $aOperadorADD;
     }
+    
+	/**
+	 * @return array
+	 */
+	public function getACondiciones() {
+		return $this->aCondiciones;
+	}
+
+	/**
+	 * @param array $aCondicion
+	 */
+	public function setACondiciones($aCondiciones) {
+		$this->aCondiciones = $aCondiciones;
+	}
+
 
 
     

@@ -49,7 +49,7 @@
 {% if calendario == 'registro' %}
   <h1>{{ "entrada del registro pendiente de contestar"|trans }}</h1>
 {% else %}
-  <h1>{{ "pendiente de la oficina"|trans }}</h1>
+  <h1>{{ titulo_oficina }}</h1>
 {% endif %}
 
 <button id="opciones" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_opciones('completa');" >

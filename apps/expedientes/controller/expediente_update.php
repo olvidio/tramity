@@ -1,8 +1,9 @@
 <?php
 use core\ConfigGlobal;
 use function core\is_true;
+use davical\model\Davical;
 use entradas\model\Entrada;
-use expedientes\model\Escrito;
+use escritos\model\Escrito;
 use expedientes\model\Expediente;
 use expedientes\model\GestorExpediente;
 use expedientes\model\entity\GestorAccion;
@@ -11,9 +12,9 @@ use pendientes\model\Pendiente;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramiteCargo;
+use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Protocolo;
 
@@ -99,23 +100,25 @@ switch ($Qque) {
         break;
     case 'en_pendiente':
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
-        $Qid_cargo = (integer) \filter_input(INPUT_POST, 'id_cargo');
+        $Qid_cargo_pendiente = (integer) \filter_input(INPUT_POST, 'id_cargo_pendiente');
         $Qf_plazo = (string) \filter_input(INPUT_POST, 'f_plazo');
-        $oCargo = new Cargo($Qid_cargo);
-        $cargo = $oCargo->getCargo();
-        $id_oficina = ConfigGlobal::role_id_oficina();
-        $gesOficinas = new GestorOficina();
-        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
-        $sigla = $a_posibles_oficinas[$id_oficina];
-        $parent_container = "oficina_$sigla";
-        $resource = 'oficina';
+        
+        $oCargo = new Cargo($Qid_cargo_pendiente);
+        $id_oficina = $oCargo->getId_oficina();
+        
+        // nombre normalizado del usuario y oficina:
+        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+        $user_davical = $oDavical->getUsernameDavical($Qid_cargo_pendiente);
+        $parent_container = $oDavical->getNombreRecurso($id_oficina);
+        
+        $calendario = 'oficina';
         $oHoy = new DateTimeLocal();
         $Qf_plazo = empty($Qf_plazo)? $oHoy->getFromLocal() : $Qf_plazo; 
         // datos de la entrada 
-        $id_reg = 'EN'.$Qid_entrada; // (para resource='registro': REN = Regitro Entrada, para 'oficina': OFEN)
+        $id_reg = 'EN'.$Qid_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': EN)
         $oEntrada = new Entrada($Qid_entrada);
         
-        $oPendiente = new Pendiente($parent_container, $resource, $cargo);
+        $oPendiente = new Pendiente($parent_container, $calendario, $user_davical);
         $oPendiente->setId_reg($id_reg);
         $oPendiente->setAsunto($oEntrada->getAsunto());
         $oPendiente->setStatus("NEEDS-ACTION");
@@ -123,7 +126,7 @@ switch ($Qque) {
         $oPendiente->setF_plazo($Qf_plazo);
         $oPendiente->setvisibilidad($Qvisibilidad);
         $oPendiente->setDetalle($oEntrada->getDetalle());
-        $oPendiente->setEncargado($Qid_cargo);
+        $oPendiente->setEncargado($Qid_cargo_pendiente);
         $oPendiente->setId_oficina($id_oficina);
 
         $oProtOrigen = new Protocolo();
@@ -348,6 +351,11 @@ switch ($Qque) {
         $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
         $oLugar = $cLugares[0];
         $id_lugar_cr = $oLugar->getId_lugar();
+        $sigla = 'IESE';
+        $gesLugares = new GestorLugar();
+        $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
+        $oLugar = $cLugares[0];
+        $id_lugar_iese = $oLugar->getId_lugar();
         // escritos del expediente: acciones tipo escrito
         $aWhereAccion = ['id_expediente' => $Qid_expediente, '_ordre' => 'tipo_accion' ];
         $gesAcciones = new GestorAccion();
@@ -361,7 +369,7 @@ switch ($Qque) {
                 $proto = TRUE;
                 $oEscrito = new Escrito($id_escrito);
                 // si es un e12, no hay que numerar.
-                if ($oEscrito->getCategoria() === Escrito::CAT_E12) {
+                if ($oEscrito->getCategoria() === Categoria::CAT_E12) {
                     $proto = FALSE;
                 }
                 // comprobar que no está anulado:
@@ -369,7 +377,7 @@ switch ($Qque) {
                     $proto = FALSE;
                 }
                 if ($proto) {
-                    $oEscrito->generarProtocolo($id_lugar,$id_lugar_cr);
+                    $oEscrito->generarProtocolo($id_lugar,$id_lugar_cr,$id_lugar_iese);
                     // para poder insertar en la plantilla.
                     $json_prot_local = $oEscrito->getJson_prot_local();
                 }
@@ -559,10 +567,10 @@ switch ($Qque) {
             $id = strtok($oficial, '#');
             $visto = strtok('#');
             $oJSON = new stdClass;
-            $oJSON->id = $id;
+            $oJSON->id = (int) $id;
             if ($mi_id_cargo == $id){
                 // es un toggle: si esta 1 pongo 0 y al revés.
-                $oJSON->visto = empty($visto)? 1 : 0;
+                $oJSON->visto = is_true($visto)? FALSE : TRUE;
             } else {
                 $oJSON->visto = $visto;
             }
@@ -703,10 +711,9 @@ switch ($Qque) {
             $id = strtok($oficial, '#');
             $visto = strtok('#');
             $oJSON = new stdClass;
-            $oJSON->id = $id;
-            // hay que asegurar que sea integer y no 'false'
-            $visto = empty($visto)? 0 : 1;
-            $oJSON->visto = $visto;
+            $oJSON->id = (int) $id;
+            // hay que asegurar que sea bool
+            $oJSON->visto = is_true($visto)? TRUE : FALSE;
             
             $new_preparar[] = $oJSON;
         }

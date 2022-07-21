@@ -2,7 +2,9 @@
 namespace expedientes\model;
 
 use core\ConfigGlobal;
+use documentos\model\Documento;
 use entradas\model\Entrada;
+use escritos\model\Escrito;
 use etiquetas\model\entity\Etiqueta;
 use etiquetas\model\entity\EtiquetaExpediente;
 use etiquetas\model\entity\GestorEtiqueta;
@@ -14,8 +16,6 @@ use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorCargoGrupo;
-use tramites\model\entity\GestorFirma;
-use documentos\model\Documento;
 
 
 
@@ -104,6 +104,40 @@ class Expediente Extends expedienteDB {
     
     /* METODES PUBLICS ----------------------------------------------------------*/
 
+    public function isDevueltoAlguno() {
+    	// acciones: propuestas, escritos.
+    	$gesAcciones = new GestorAccion();
+    	$cAcciones = $gesAcciones->getAcciones(['id_expediente' => $this->iid_expediente]);
+    	$bDevuelto = FALSE;
+    	foreach ($cAcciones as $oAccion) {
+			$id_escrito = $oAccion->getId_escrito();
+			$oEscrito = new Escrito($id_escrito);
+			$comentarios = $oEscrito->getComentarios();
+			$ok = $oEscrito->getOk();
+			if ($ok === Escrito::OK_NO && !empty($comentarios)) {
+				$bDevuelto = TRUE;
+				break;
+			}
+    	}
+    	return $bDevuelto;
+    }
+    
+    public function isVistoTodos() {
+    	// mirar si alguno que NO tiene el visto:
+    	$json_preparar = $this->getJson_preparar();
+    	$marca = TRUE;
+    	if (empty((array) $json_preparar)) {
+    		$marca = FALSE;	
+    	} else {
+			foreach ($json_preparar as $oficial) {
+				if (empty($oficial->visto)) {
+					$marca = FALSE;
+				}
+			}
+    	}
+    	return $marca;
+    }
+    
     public function copiar($destino='') {
         // por defecto va al borrador del mismo ponente
         if (!empty($destino)) {

@@ -18,6 +18,256 @@ $url = 'apps/config/controller/parametros_update.php';
 $a_campos = [ 'url' => $url];
 
 
+// ----------- plazos vida -------------------
+/*
+ *  // vida (a criterio del ponente):
+    /*
+    - Permanente (no borrar)
+    - Experiencia (5 años)
+    - Normal (1 mes)
+    - Temporal (1 semana)
+    - Borrable (1 día)
+    
+    const VIDA_PERMANENTE    = 1;
+    const VIDA_EXPERIENCIA   = 2;
+    const VIDA_NORMAL        = 3;
+    const VIDA_TEMPORAL      = 4;
+    const VIDA_BORRABLE      = 5;
+ */
+
+$parametro = 'vida_permanente_registro';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashVIDA_permanente_r = new Hash();
+$oHashVIDA_permanente_r->setUrl($url);
+$oHashVIDA_permanente_r->setcamposForm('valor');
+$oHashVIDA_permanente_r->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashVIDA_permanente_r'] = $oHashVIDA_permanente_r;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'vida_permanente_contenido';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashVIDA_permanente_c = new Hash();
+$oHashVIDA_permanente_c->setUrl($url);
+$oHashVIDA_permanente_c->setcamposForm('valor');
+$oHashVIDA_permanente_c->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashVIDA_permanente_c'] = $oHashVIDA_permanente_c;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'vida_experiencia_registro';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashVIDA_experiencia_r = new Hash();
+$oHashVIDA_experiencia_r->setUrl($url);
+$oHashVIDA_experiencia_r->setcamposForm('valor');
+$oHashVIDA_experiencia_r->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashVIDA_experiencia_r'] = $oHashVIDA_experiencia_r;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'vida_experiencia_contenido';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashVIDA_experiencia_c = new Hash();
+$oHashVIDA_experiencia_c->setUrl($url);
+$oHashVIDA_experiencia_c->setcamposForm('valor');
+$oHashVIDA_experiencia_c->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashVIDA_experiencia_c'] = $oHashVIDA_experiencia_c;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'vida_normal_registro';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashVIDA_normal_r = new Hash();
+$oHashVIDA_normal_r->setUrl($url);
+$oHashVIDA_normal_r->setcamposForm('valor');
+$oHashVIDA_normal_r->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashVIDA_normal_r'] = $oHashVIDA_normal_r;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'vida_normal_contenido';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashVIDA_normal_c = new Hash();
+$oHashVIDA_normal_c->setUrl($url);
+$oHashVIDA_normal_c->setcamposForm('valor');
+$oHashVIDA_normal_c->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashVIDA_normal_c'] = $oHashVIDA_normal_c;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'vida_temporal_registro';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashVIDA_temporal_r = new Hash();
+$oHashVIDA_temporal_r->setUrl($url);
+$oHashVIDA_temporal_r->setcamposForm('valor');
+$oHashVIDA_temporal_r->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashVIDA_temporal_r'] = $oHashVIDA_temporal_r;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'vida_temporal_contenido';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashVIDA_temporal_c = new Hash();
+$oHashVIDA_temporal_c->setUrl($url);
+$oHashVIDA_temporal_c->setcamposForm('valor');
+$oHashVIDA_temporal_c->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashVIDA_temporal_c'] = $oHashVIDA_temporal_c;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'vida_borrable_registro';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashVIDA_borrable_r = new Hash();
+$oHashVIDA_borrable_r->setUrl($url);
+$oHashVIDA_borrable_r->setcamposForm('valor');
+$oHashVIDA_borrable_r->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashVIDA_borrable_r'] = $oHashVIDA_borrable_r;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'vida_borrable_contenido';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashVIDA_borrable_c = new Hash();
+$oHashVIDA_borrable_c->setUrl($url);
+$oHashVIDA_borrable_c->setcamposForm('valor');
+$oHashVIDA_borrable_c->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashVIDA_borrable_c'] = $oHashVIDA_borrable_c;
+$a_campos[$parametro] = $val_sigla;
+
+
+
+// ----------- plazos categorias -------------------
+/*
+ *  const CAT_E12          = 1;
+ *	const CAT_NORMAL       = 2;
+ *	const CAT_PERMANATE    = 3;
+ */
+
+$parametro = 'cat_e12_registro';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashCAT_12_r = new Hash();
+$oHashCAT_12_r->setUrl($url);
+$oHashCAT_12_r->setcamposForm('valor');
+$oHashCAT_12_r->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashCAT_12_r'] = $oHashCAT_12_r;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'cat_e12_contenido';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashCAT_12_c = new Hash();
+$oHashCAT_12_c->setUrl($url);
+$oHashCAT_12_c->setcamposForm('valor');
+$oHashCAT_12_c->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashCAT_12_c'] = $oHashCAT_12_c;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'cat_normal_registro';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashCAT_normal_r = new Hash();
+$oHashCAT_normal_r->setUrl($url);
+$oHashCAT_normal_r->setcamposForm('valor');
+$oHashCAT_normal_r->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashCAT_normal_r'] = $oHashCAT_normal_r;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'cat_normal_contenido';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashCAT_normal_c = new Hash();
+$oHashCAT_normal_c->setUrl($url);
+$oHashCAT_normal_c->setcamposForm('valor');
+$oHashCAT_normal_c->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashCAT_normal_c'] = $oHashCAT_normal_c;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'cat_permanente_registro';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashCAT_permanente_r = new Hash();
+$oHashCAT_permanente_r->setUrl($url);
+$oHashCAT_permanente_r->setcamposForm('valor');
+$oHashCAT_permanente_r->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashCAT_permanente_r'] = $oHashCAT_permanente_r;
+$a_campos[$parametro] = $val_sigla;
+
+$parametro = 'cat_permanente_contenido';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+if (empty($valor)) {
+    $valor = "3";
+}
+$val_sigla = $valor;
+$oHashCAT_permanente_c = new Hash();
+$oHashCAT_permanente_c->setUrl($url);
+$oHashCAT_permanente_c->setcamposForm('valor');
+$oHashCAT_permanente_c->setArrayCamposHidden(['parametro' => $parametro]);
+$a_campos['oHashCAT_permanente_c'] = $oHashCAT_permanente_c;
+$a_campos[$parametro] = $val_sigla;
+
 // ----------- plazos contestar -------------------
 /*
  - Urgente (3 días)
@@ -120,6 +370,19 @@ $oHashC1->setArrayCamposHidden(['parametro' => $parametro]);
 
 $a_campos['oHashC1'] = $oHashC1;
 $a_campos['ini_contador'] = $valor;
+
+// ----------- Inicio Contador IESE -------------------
+$parametro = 'ini_contador_iese';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$oHashC2 = new Hash();
+$oHashC2->setUrl($url);
+$oHashC2->setcamposForm('valor');
+$oHashC2->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashC2'] = $oHashC2;
+$a_campos['ini_contador_iese'] = $valor;
 
 // ----------- Nombre Sigla -------------------
 $parametro = 'sigla';
@@ -251,89 +514,6 @@ $a_campos['val_cr'] = $val_cr;
 $a_campos['chk_cr'] = $chk_cr;
 
 // ----------- Servidor SMTP -------------------
-$parametro = 'smtp_secure';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-$val_tls = 'tls'; // PHPMailer::ENCRYPTION_STARTTLS
-$chk_tls = ($valor == $val_tls)? 'checked' : ''; 
-$val_ssl = 'ssl'; // PHPMailer::ENCRYPTION_SMTPS
-$chk_ssl = ($valor == $val_ssl)? 'checked' : ''; 
-
-$oHashSMTP_secure = new Hash();
-$oHashSMTP_secure ->setUrl($url);
-$oHashSMTP_secure ->setcamposForm('valor');
-$oHashSMTP_secure ->setArrayCamposHidden(['parametro' => $parametro]);
-
-$a_campos['oHashSMTP_secure'] = $oHashSMTP_secure ;
-$a_campos['val_tls'] = $val_tls;
-$a_campos['chk_tls'] = $chk_tls;
-$a_campos['val_ssl'] = $val_ssl;
-$a_campos['chk_ssl'] = $chk_ssl;
-
-$parametro = 'smtp_host';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-$oHashSMTP_host = new Hash();
-$oHashSMTP_host ->setUrl($url);
-$oHashSMTP_host ->setcamposForm('valor');
-$oHashSMTP_host ->setArrayCamposHidden(['parametro' => $parametro]);
-
-$a_campos['oHashSMTP_host'] = $oHashSMTP_host ;
-$a_campos[$parametro] = $valor;
-
-$parametro = 'smtp_port';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-$oHashSMTP_port = new Hash();
-$oHashSMTP_port ->setUrl($url);
-$oHashSMTP_port ->setcamposForm('valor');
-$oHashSMTP_port ->setArrayCamposHidden(['parametro' => $parametro]);
-
-$a_campos['oHashSMTP_port'] = $oHashSMTP_port ;
-$a_campos[$parametro] = $valor;
-
-$parametro = 'smtp_auth';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-$val_auth = 'true';
-$chk_auth = ($valor == $val_auth)? 'checked' : ''; 
-
-$oHashSMTP_auth  = new Hash();
-$oHashSMTP_auth->setUrl($url);
-$oHashSMTP_auth->setcamposForm('valor');
-$oHashSMTP_auth->setArrayCamposHidden(['parametro' => $parametro]);
-
-$a_campos['oHashSMTP_auth'] = $oHashSMTP_auth;
-$a_campos['val_auth'] = $val_auth;
-$a_campos['chk_auth'] = $chk_auth;
-
-$parametro = 'smtp_user';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-$oHashSMTP_user = new Hash();
-$oHashSMTP_user ->setUrl($url);
-$oHashSMTP_user ->setcamposForm('valor');
-$oHashSMTP_user ->setArrayCamposHidden(['parametro' => $parametro]);
-
-$a_campos['oHashSMTP_user'] = $oHashSMTP_user ;
-$a_campos[$parametro] = $valor;
-
-$parametro = 'smtp_pwd';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-$oHashSMTP_pwd  = new Hash();
-$oHashSMTP_pwd  ->setUrl($url);
-$oHashSMTP_pwd  ->setcamposForm('valor');
-$oHashSMTP_pwd  ->setArrayCamposHidden(['parametro' => $parametro]);
-
-$a_campos['oHashSMTP_pwd'] = $oHashSMTP_pwd  ;
-$a_campos[$parametro] = $valor;
 
 $parametro = 'from';
 $oConfigSchema = new ConfigSchema($parametro);

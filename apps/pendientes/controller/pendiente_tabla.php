@@ -1,6 +1,7 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
+use davical\model\Davical;
 use etiquetas\model\entity\GestorEtiqueta;
 use pendientes\model\GestorPendiente;
 use pendientes\model\Rrule;
@@ -31,15 +32,21 @@ $Qdespl_calendario = (string) \filter_input(INPUT_POST, 'despl_calendario');
 $Qcalendario = (string) \filter_input(INPUT_POST, 'calendario');
 $Qencargado = (string) \filter_input(INPUT_POST, 'encargado');
 	
-$aOpciones = [
-    'registro' => _("registro"),
-    'oficina' => _("oficina"),
-];
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+    $aOpciones = [
+        'registro' => _("registro"),
+        'oficina' => _("oficina"),
+    ];
+    $op_calendario_default = empty($Qdespl_calendario)? 'registro' : $Qdespl_calendario;
+} else {
+    $aOpciones = [
+        'oficina' => _("oficina"),
+    ];
+    $op_calendario_default = empty($Qdespl_calendario)? 'oficina' : $Qdespl_calendario;
+}
 
 if (!empty($Qcalendario)) {
     $op_calendario_default = $Qcalendario;
-} else {
-    $op_calendario_default = empty($Qdespl_calendario)? 'registro' : $Qdespl_calendario;
 }
 
 $oDesplCalendarios = new Desplegable();
@@ -48,34 +55,44 @@ $oDesplCalendarios->setOpciones($aOpciones);
 $oDesplCalendarios->setOpcion_sel($op_calendario_default);
 $oDesplCalendarios->setAction('fnjs_calendario()');
 
-$oGOficinas = new GestorOficina();
-$a_oficinas = $oGOficinas->getArrayOficinas();
+// Para dl, Hace falta el nombre de la oficina;
+// para ctr, uso el nombre del esquema:
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+    // solo secretaría puede ver/crear pendientes de otras oficinas
+    $role_actual = ConfigGlobal::role_actual();
+    if ($role_actual === 'secretaria') {
+        $secretaria = 1; // NO TRUE, para eljavascript;
+        $perm_periodico = 1; // NO TRUE, para eljavascript;
+        $gesOficinas = new GestorOficina();
+        $oDesplOficinas= $gesOficinas->getListaOficinas();
+        $oDesplOficinas->setOpcion_sel($Qid_oficina);
+        $oDesplOficinas->setNombre('id_oficina');
+        $id_oficina = '';
+    } else {
+        $oDesplOficinas = []; // para evitar errores
+        $secretaria = 0; // NO FALSE, para eljavascript;
+        $perm_periodico = 0; // NO TRUE, para eljavascript;
+        $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
+        $id_oficina = $oCargo->getId_oficina();
+    }
 
-// solo secretaría puede ver/crear pendientes de otras oficinas
-$role_actual = ConfigGlobal::role_actual();
-if ($role_actual === 'secretaria') {
-    $secretaria = 1; // NO TRUE, para eljavascript;
-    $oDesplOficinas= $oGOficinas->getListaOficinas();
-    $oDesplOficinas->setOpcion_sel($Qid_oficina);
-    $oDesplOficinas->setNombre('id_oficina');
-    $id_oficina = '';
+    if (!empty($Qid_oficina)) {
+        $id_oficina = $Qid_oficina;
+    }
 } else {
     $oDesplOficinas = []; // para evitar errores
-    $secretaria = 0; // NO FALSE, para eljavascript;
-    $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
-    $id_oficina = $oCargo->getId_oficina();
+    $role_actual = ConfigGlobal::role_actual();
+    $secretaria = 0; // NO TRUE, para eljavascript;
+    $perm_periodico = 1; // NO TRUE, para eljavascript;
+    $id_oficina = Cargo::OFICINA_ESQUEMA;
 }
-
-$oficina = '';
-if (!empty($Qid_oficina)) {
-    $oficina = $a_oficinas[$Qid_oficina];
-} elseif (!empty($id_oficina)) {
-    $oficina = $a_oficinas[$id_oficina];
-}
-$cal_oficina="oficina_$oficina";
-
 $gesCargos = new GestorCargo();
 $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
+
+$oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+$cal_oficina = $oDavical->getNombreRecurso($id_oficina);
+
+
 // para el dialogo de búsquedas:
 $oDesplEncargados = new Desplegable('encargado',$a_usuarios_oficina,$Qencargado,TRUE);
 
@@ -153,14 +170,15 @@ $aWhere = [
         'completed' => $completed,
         'cancelled' => $cancelled,
     ];
-$gesPendientes = new GestorPendiente($cal_oficina,$op_calendario_default,$role_actual);
+$id_cargo_role = ConfigGlobal::role_id_cargo();
+$gesPendientes = new GestorPendiente($cal_oficina,$op_calendario_default,$id_cargo_role);
 $cPendientes = $gesPendientes->getPendientes($aWhere);
 
 $a_valores = [];
 $t = 0;
 $oPermisoregistro = new PermRegistro();
 foreach($cPendientes as $oPendiente) {
-    $resource = $oPendiente->getResource();
+    $calendario = $oPendiente->getCalendario();
     $id_encargado = $oPendiente->getEncargado();
     $perm_detalle = $oPermisoregistro->permiso_detalle($oPendiente, 'detalle');
     if (!empty($Qencargado) && $id_encargado != $Qencargado) { continue; }
@@ -217,7 +235,7 @@ foreach($cPendientes as $oPendiente) {
             $a_valores[$t][5]=$oF_recurrente->getFromLocal();
             $a_valores[$t][6]=$oficinas_txt;
             $a_valores[$t][7]=$encargado;
-            $a_valores[$t][8]=$resource;
+            $a_valores[$t][8]=$calendario;
             // para el orden
             $a_valores[$t]['order']=$key; // (es la fecha iso sin separador)
         }
@@ -237,7 +255,7 @@ foreach($cPendientes as $oPendiente) {
         $a_valores[$t][5]=$plazo;
         $a_valores[$t][6]=$oficinas_txt;
         $a_valores[$t][7]=$encargado;
-        $a_valores[$t][8]=$resource;
+        $a_valores[$t][8]=$calendario;
         // para el orden
         if ($plazo!="x") {
             $a_valores[$t]['order'] = $plazo_iso;
@@ -272,10 +290,11 @@ $a_cosas = [
 ];
 $pagina_cancel = web\Hash::link('apps/pendientes/controller/pendiente_tabla.php?'.http_build_query($a_cosas));
 
-$vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+$vista = ConfigGlobal::getVista();
 
 $a_campos = [
     'secretaria'   => $secretaria,
+    'perm_periodico' => $perm_periodico,
     'sel_hoy'      => $sel_hoy,
     'sel_semana'   => $sel_semana,
     'sel_mes'       => $sel_mes,

@@ -53,7 +53,6 @@ class GestorDocumentoDB Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_doc' => $aDades['id_doc']);
 			$oDocumentoDB= new DocumentoDB($a_pkey);
-			$oDocumentoDB->setAllAtributes($aDades);
 			$oDocumentoSet->add($oDocumentoDB);
 		}
 		return $oDocumentoSet->getTot();
@@ -108,7 +107,6 @@ class GestorDocumentoDB Extends core\ClaseGestor {
 			} else {
                 $oDocumentoDB = new DocumentoDB($a_pkey);
 			}
-			$oDocumentoDB->setAllAtributes($aDades);
 			$oDocumentoSet->add($oDocumentoDB);
 		}
 		return $oDocumentoSet->getTot();

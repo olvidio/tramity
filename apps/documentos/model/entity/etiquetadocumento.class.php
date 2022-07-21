@@ -114,8 +114,7 @@ class EtiquetaDocumento Extends core\ClasePropiedades {
 
 		if ($bInsert === FALSE) {
 			//UPDATE
-			$update="
-";
+			$update=" ";
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_etiqueta='$this->iid_etiqueta' AND id_doc='$this->iid_doc'")) === FALSE) {
 				$sClauError = 'EtiquetaDocumento.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);

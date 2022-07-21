@@ -1,4 +1,159 @@
-<h3>{{ "plazos"|trans }}:</h3>
+<h3>{{ "plazos para vida expedientes"|trans }}:</h3>
+    <table>
+    <tr> <th class="col-2"> {{ "Vida"|trans }} </th>
+    	 <th class="col-3"> {{ "plazo para registro"|trans }} </th>
+    	 <th class="col-3"> {{ "plazo para contenidos"|trans }} </th>
+    </tr>
+    <tr>
+        <td> {{ "Permanente"|trans }}: </td>
+        <td> 
+        <form id="frm_v_permanente_r" name="frm_v_permanente_r" action="">
+          {{ oHashVIDA_permanente_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_permanente_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_v_permanente_c" name="frm_v_permanente_c" action="">
+          {{ oHashVIDA_permanente_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_permanente_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    <tr>
+        <td> {{ "Experiencia"|trans }}: </td>
+        <td>
+        <form id="frm_v_experiencia_r" name="frm_v_experiencia_r" action="">
+          {{ oHashVIDA_experiencia_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_experiencia_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_v_experiencia_c" name="frm_v_experiencia_c" action="">
+          {{ oHashVIDA_experiencia_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_experiencia_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    <tr>
+        <td> {{ "Normal"|trans }}: </td>
+        <td>
+        <form id="frm_v_normal_r" name="frm_v_normal_r" action="">
+          {{ oHashVIDA_normal_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_normal_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_v_normal_c" name="frm_v_normal_c" action="">
+          {{ oHashVIDA_normal_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_normal_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    <tr>
+        <td> {{ "Temporal"|trans }}: </td>
+        <td>
+        <form id="frm_v_temporal_r" name="frm_v_temporal_r" action="">
+          {{ oHashVIDA_temporal_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_temporal_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_v_temporal_c" name="frm_v_temporal_c" action="">
+          {{ oHashVIDA_temporal_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_temporal_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    <tr>
+        <td> {{ "Borrable"|trans }}: </td>
+        <td>
+        <form id="frm_v_borrable_r" name="frm_v_borrable_r" action="">
+          {{ oHashVIDA_borrable_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_borrable_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_v_borrable_c" name="frm_v_borrable_c" action="">
+          {{ oHashVIDA_borrable_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ vida_borrable_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    </table>
+
+<hr>
+
+<h3>{{ "plazos para categorias"|trans }}:</h3>
+    <table>
+    <tr> <th class="col-2"> {{ "Categoría"|trans }} </th>
+    	 <th class="col-3"> {{ "plazo para registro"|trans }} </th>
+    	 <th class="col-3"> {{ "plazo para contenidos"|trans }} </th>
+    </tr>
+    <tr>
+        <td> {{ "E12"|trans }}: </td>
+        <td> 
+        <form id="frm_c_12_r" name="frm_c_12_r" action="">
+          {{ oHashCAT_12_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ cat_e12_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_c_12_c" name="frm_c_12_c" action="">
+          {{ oHashCAT_12_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ cat_e12_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    <tr>
+        <td> {{ "Normal"|trans }}: </td>
+        <td>
+        <form id="frm_c_normal_r" name="frm_c_normal_r" action="">
+          {{ oHashCAT_normal_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ cat_normal_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_c_normal_c" name="frm_c_normal_c" action="">
+          {{ oHashCAT_normal_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ cat_normal_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    <tr>
+        <td> {{ "Permanente"|trans }}: </td>
+        <td>
+        <form id="frm_c_permanente_r" name="frm_c_permanente_r" action="">
+          {{ oHashCAT_permanente_r.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ cat_permanente_registro }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+        <td>
+        <form id="frm_c_permanente_c" name="frm_c_permanente_c" action="">
+          {{ oHashCAT_permanente_c.getCamposHtml|raw }}
+          <input type="text" size="5" name="valor" value="{{ cat_permanente_contenido }}" >
+	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  		</form>
+        </td>
+    </tr>
+    </table>
+<hr>
+
+<h3>{{ "plazos para pendientes"|trans }}:</h3>
   <form id="frm_pu" name="frm_pu" action="">
     {{ oHashPU.getCamposHtml|raw }}
     {{ "plazo urgente"|trans }}:
@@ -50,7 +205,25 @@
 <input type="text" name="valor" value="{{ bodyMail }}" >
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
+
+<form id="frm_from" name="frm_from" action="">
+{{ oHashFrom.getCamposHtml|raw }}
+{{ "From:"|trans }}
+<input type="text" name="valor" value="{{ from }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_reply_to" name="frm_reply_to" action="">
+{{ oHashReply.getCamposHtml|raw }}
+{{ "Reply to:"|trans }}
+<input type="text" name="valor" value="{{ reply_to }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+
 <hr>
+
+
+
+
 
 <h3>{{ "valor inicio contadores"|trans }}:</h3>
 <form id="frm_contador" name="frm_contador" action="">
@@ -65,6 +238,12 @@
 <input class="col-2" type="text" name="valor" value="{{ ini_contador }}" >
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
+<form id="frm_contador2" name="frm_contador2" action="">
+{{ oHashC2.getCamposHtml|raw }}
+{{ "para IESE"|trans }}
+<input class="col-2" type="text" name="valor" value="{{ ini_contador_iese }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
 <hr>
 
 <h3>{{ "idioma por defecto"|trans }}:</h3>
@@ -74,94 +253,21 @@
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
-
-<h3>{{ "Ámbito del esquema: centro, delegación, comisión regional"|trans }}:</h3>
+<h3>{{ "Ámbito de la entidad: centro, delegación, comisión regional"|trans }}:</h3>
 <form id="frm_dl_r" name="frm_dl_r" action="">
 {{ oHashDLR.getCamposHtml|raw }}
-<input type="radio" name="valor" value="{{ val_ctr }}" {{ chk_ctr }} >{{ "centro"|trans }}
-<input type="radio" name="valor" value="{{ val_dl }}" {{ chk_dl }} >{{ "delegación"|trans }}
-<input type="radio" name="valor" value="{{ val_cr }}" {{ chk_cr }} >{{ "comisión"|trans }}
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<hr>
-
-<h3>{{ "servidor etherpad"|trans }}:</h3>
-<form id="frm_server" name="frm_server" action="">
-{{ oHashSE.getCamposHtml|raw }}
-<input class="col-6" type="text" name="valor" value="{{ server_etherpad }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<hr>
-<h3>{{ "servidor ethercalc"|trans }}:</h3>
-<form id="frm_server_c" name="frm_server_c" action="">
-{{ oHashSEC.getCamposHtml|raw }}
-<input class="col-6" type="text" name="valor" value="{{ server_ethercalc }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<hr>
-<h3>{{ "servidor SMTP"|trans }}:</h3>
-<form id="frm_from" name="frm_from" action="">
-{{ oHashFrom.getCamposHtml|raw }}
-{{ "From:"|trans }}
-<input type="text" name="valor" value="{{ from }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<form id="frm_reply_to" name="frm_reply_to" action="">
-{{ oHashReply.getCamposHtml|raw }}
-{{ "Reply to:"|trans }}
-<input type="text" name="valor" value="{{ reply_to }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<form id="frm_smtp_host" name="frm_smtp_host" action="">
-{{ oHashSMTP_host.getCamposHtml|raw }}
-{{ "Host:"|trans }}
-<input type="text" name="valor" value="{{ smtp_host }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<form id="frm_smtp_port" name="frm_smtp_port" action="">
-{{ oHashSMTP_port.getCamposHtml|raw }}
-{{ "Port:"|trans }}
-<input type="text" name="valor" value="{{ smtp_port }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<form id="frm_smtp_auth" name="frm_smtp_auth" action="">
-{{ oHashSMTP_auth.getCamposHtml|raw }}
-{{ "usar autenticación:"|trans }}
-<input type="checkbox" name="valor" value="{{ val_auth }}" {{ chk_auth }} >{{ "Si"|trans }}
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<form id="frm_smtp_user" name="frm_smtp_user" action="">
-{{ oHashSMTP_user.getCamposHtml|raw }}
-{{ "User:"|trans }}
-<input type="text" name="valor" value="{{ smtp_user }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<form id="frm_smtp_pwd" name="frm_smtp_pwd" action="">
-{{ oHashSMTP_pwd.getCamposHtml|raw }}
-{{ "Password:"|trans }}
-<input type="text" name="valor" value="{{ smtp_pwd }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<form id="frm_smtp_secure" name="frm_smtp_secure" action="">
-{{ oHashSMTP_secure.getCamposHtml|raw }}
-{{ "seguridad:"|trans }}
-<input type="radio" name="valor" value="{{ val_tls }}" {{ chk_tls }} >{{ "tls"|trans }}
-<input type="radio" name="valor" value="{{ val_ssl }}" {{ chk_ssl }} >{{ "ssl"|trans }}
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<hr>
-
-<h3>{{ "servidor davical"|trans }}:</h3>
-<form id="frm_server_davical" name="frm_server_davical" action="">
-{{ oHashDavical.getCamposHtml|raw }}
-<input class="col-6" type="text" name="valor" value="{{ server_davical }}" >
+<input type="radio" name="valor" value="{{ val_ctr }}" {{ chk_ctr }} >  {{ "centro"|trans }}
+<input type="radio" name="valor" value="{{ val_dl }}" {{ chk_dl }} >  {{ "delegación"|trans }}
+<input type="radio" name="valor" value="{{ val_cr }}" {{ chk_cr }} >  {{ "comisión"|trans }}
 <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
 
 <script>
 fnjs_guardar=function(formulario){
-	event.preventDefault();
+    if (typeof event !== 'undefined') {
+    	event.preventDefault();
+	}
     datos=$(formulario).serialize();
 	request=$.ajax({
 		data: datos,

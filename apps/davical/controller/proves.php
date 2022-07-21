@@ -23,15 +23,22 @@ switch($Qque) {
     case 'add_user':
         $Qoficina = (string) \filter_input(INPUT_POST, 'oficina');
         $Quser = (string) \filter_input(INPUT_POST, 'user');
-        $oDavical = new Davical();
+        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
         $oDavical->crearUser($Quser);
-        $oDavical->addUserOficina($Qoficina,$Quser);
         
         break;
     case 'crear_oficina':
         $Qoficina = (string) \filter_input(INPUT_POST, 'oficina');
-        $oDavical = new Davical();
+        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
         $oDavical->crearOficina($Qoficina);
+        
+        break;
+    case 'eliminar_oficina':
+        // para ctr
+        $oficina = 'viera';
+
+        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+        $oDavical->eliminarOficina($oficina);
         
         break;
     case 'crear_coleccion':
@@ -166,78 +173,29 @@ switch($Qque) {
         
         break;
     case 'crear_usuario':
-        $Quser_no = (integer) \filter_input(INPUT_POST, 'user_no');
-        $oAhora = new DateTimeLocal('', new DateTimeZone('Europe/Madrid'));
-        $str_ahora = $oAhora->getFromLocalHora();
-        if (!empty($Quser_no)) {
-            $oUserDavical = new User($Quser_no);
-            $oUserDavical->DBCarregar();
-            $joined = $oUserDavical->getJoined()->getFromLocal();
-        } else {
-            $oUserDavical = new User();
-            $joined = $str_ahora;
-        }
-
         
-        $active = 't';
-        $email_ok = $str_ahora;
-        $updated =  $str_ahora;
-        $last_used = $str_ahora;
-        $username = 'prova1';
-        $password = '88888888';
-        $fullname = 'Prova de crear usuari';
-        $email = 'prova@lan.moneders.net';
-        $config_data = '';
-        $date_format_type = 'E';
-        $locale = 'es_ES';
+        // para ctr
+        $cargo = 'n2';
+        $oficina = 'viera';
+        $descripcion = 'cargo n1 de viera';
         
-
-        $oUserDavical->setActive($active);
-        $oUserDavical->setEmail_ok($email_ok);
-        $oUserDavical->setJoined($joined);
-        $oUserDavical->setUpdated($updated);
-        $oUserDavical->setLast_used($last_used);
-        $oUserDavical->setUsername($username);
-        $oUserDavical->setPassword($password);
-        $oUserDavical->setFullname($fullname);
-        $oUserDavical->setEmail($email);
-        $oUserDavical->setConfig_data($config_data);
-        $oUserDavical->setDate_format_type($date_format_type);
-        $oUserDavical->setLocale($locale);
-        $oUserDavical->DBGuardar();
+        $aDatosCargo = [ 'cargo' => $cargo,
+            'descripcion' => $descripcion,
+            'oficina' => $oficina,
+        ];
+        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+        $oDavical->crearUser($aDatosCargo);
+        break;
+    case 'eliminar_usuario':
+        // para ctr
+        $cargo = 'n2';
+        $oficina = 'viera';
         
-        $user_no = $oUserDavical->getUser_no();
-        
-        echo "<pre>";
-        print_r($oUserDavical);
-        echo "</pre>";
-        
-        // crear el principal correspondiente:
-        $oPrincipal = '';
-        if (!empty($Quser_no)) {
-            // buscar si ya existe
-            $gesPrincipal = new GestorPrincipal();
-            $cPrincipal = $gesPrincipal->getPrincipales(['user_no' => $Quser_no]);
-            if (!empty($cPrincipal)) {
-                $oPrincipal = $cPrincipal[0];
-                $default_privileges = $oPrincipal->getDefault_privileges();
-            }
-        }
-        if (empty($oPrincipal)) {
-            $oPrincipal = new Principal();
-            $oPrincipal->setUser_no($user_no);
-            $default_privileges = "111111111111111111111111";
-        }
-        
-        $oPrincipal->setType_id(Principal::TYPE_PERSON);
-        $oPrincipal->setDisplayname($username);
-        $oPrincipal->setDefault_privileges($default_privileges);
-        $oPrincipal->DBGuardar();
-        
-        // crear el role_member
-        $oRoleMember = new RoleMember($user_no);
-        $oRoleMember->setRole_no(RoleMember::ROLE_PUBLIC);
-        $oRoleMember->DBGuardar();
+        $aDatosCargo = [ 'cargo' => $cargo,
+            'oficina' => $oficina,
+        ];
+        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+        echo $oDavical->eliminarUser($aDatosCargo);
         
         break;
     default:

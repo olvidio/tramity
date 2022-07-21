@@ -1,0 +1,94 @@
+<h3>{{ "servidor etherpad"|trans }}:</h3>
+<form id="frm_server" name="frm_server" action="">
+{{ oHashSE.getCamposHtml|raw }}
+<input class="col-6" type="text" name="valor" value="{{ server_etherpad }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+<h3>{{ "servidor ethercalc"|trans }}:</h3>
+<form id="frm_server_c" name="frm_server_c" action="">
+{{ oHashSEC.getCamposHtml|raw }}
+<input class="col-6" type="text" name="valor" value="{{ server_ethercalc }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+<h3>{{ "servidor SMTP"|trans }}:</h3>
+<form id="frm_smtp_host" name="frm_smtp_host" action="">
+{{ oHashSMTP_host.getCamposHtml|raw }}
+{{ "Host:"|trans }}
+<input type="text" name="valor" value="{{ smtp_host }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_smtp_port" name="frm_smtp_port" action="">
+{{ oHashSMTP_port.getCamposHtml|raw }}
+{{ "Port:"|trans }}
+<input type="text" name="valor" value="{{ smtp_port }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_smtp_auth" name="frm_smtp_auth" action="">
+{{ oHashSMTP_auth.getCamposHtml|raw }}
+{{ "usar autenticación:"|trans }}
+<input type="checkbox" name="valor" value="{{ val_auth }}" {{ chk_auth }} >{{ "Si"|trans }}
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_smtp_user" name="frm_smtp_user" action="">
+{{ oHashSMTP_user.getCamposHtml|raw }}
+{{ "User:"|trans }}
+<input type="text" name="valor" value="{{ smtp_user }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_smtp_pwd" name="frm_smtp_pwd" action="">
+{{ oHashSMTP_pwd.getCamposHtml|raw }}
+{{ "Password:"|trans }}
+<input type="text" name="valor" value="{{ smtp_pwd }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<form id="frm_smtp_secure" name="frm_smtp_secure" action="">
+{{ oHashSMTP_secure.getCamposHtml|raw }}
+{{ "seguridad:"|trans }}
+<input type="radio" name="valor" value="{{ val_tls }}" {{ chk_tls }} >  {{ "tls"|trans }}
+<input type="radio" name="valor" value="{{ val_ssl }}" {{ chk_ssl }} >  {{ "ssl"|trans }}
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+
+<h3>{{ "servidor EDI"|trans }}:</h3>
+<form id="frm_dock" name="frm_dock" action="">
+{{ oHashDock.getCamposHtml|raw }}
+{{ "directorio dock:"|trans }}
+<input class="col-10" type="text" name="valor" value="{{ dock }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+
+<h3>{{ "servidor davical"|trans }}:</h3>
+<form id="frm_server_davical" name="frm_server_davical" action="">
+{{ oHashDavical.getCamposHtml|raw }}
+<input class="col-6" type="text" name="valor" value="{{ server_davical }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
+
+<script>
+fnjs_guardar=function(formulario){
+    if (typeof event !== 'undefined') {
+    	event.preventDefault();
+	}
+    datos=$(formulario).serialize();
+	request=$.ajax({
+		data: datos,
+		url: '{{ url }}',
+        method: 'POST',
+        dataType: 'json'
+    });
+    request.done( function (rta) {
+        var json=rta;
+        id = json.id_escrito;
+        if (json.success != true) {
+            rta_txt = rta.responseText;
+            alert ('error: '+rta_txt);
+        }
+    });
+}
+</script>
+

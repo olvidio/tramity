@@ -13,7 +13,6 @@
 // INICIO Cabecera global de URL de controlador *********************************
 use davical\model\DavicalMigrar;
 use entradas\model\GestorEntrada;
-use usuarios\model\entity\Oficina;
 use web\Protocolo;
 
 require_once ("apps/core/global_header.inc");
@@ -31,17 +30,15 @@ require_once ("apps/core/global_object.inc");
 $Qid_lugar_org  = (string) \filter_input(INPUT_POST, 'id_lugar_org');
 $Qprot_num_org  = (string) \filter_input(INPUT_POST, 'prot_num_org');
 $Qprot_any_org  = (string) \filter_input(INPUT_POST, 'prot_any_org');
-$Qprot_mas_org  = (string) \filter_input(INPUT_POST, 'prot_mas_org');
 
 $Qid_lugar_dst  = (string) \filter_input(INPUT_POST, 'id_lugar_dst');
 $Qprot_num_dst  = (string) \filter_input(INPUT_POST, 'prot_num_dst');
 $Qprot_any_dst  = (string) \filter_input(INPUT_POST, 'prot_any_dst');
-$Qprot_mas_dst  = (string) \filter_input(INPUT_POST, 'prot_mas_dst');
 
 $gesEntradas = new GestorEntrada();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
 
 // busacr id_entrada del prot origen
-$aProt_origen = [ 'lugar' => $Qid_lugar_org,
+$aProt_origen = [ 'id_lugar' => $Qid_lugar_org,
     'num' => $Qprot_num_org,
     'any' => $Qprot_any_org,
     'mas' => '',
@@ -74,7 +71,7 @@ if (empty($msg)) {
     $oProtLocal = new Protocolo();
     $json_prot_origen = $oEntrada->getJson_prot_origen();
     if (!empty(get_object_vars($json_prot_origen))) {
-        $oProtLocal->setLugar($json_prot_origen->lugar);
+        $oProtLocal->setLugar($json_prot_origen->id_lugar);
         $oProtLocal->setProt_num($json_prot_origen->num);
         $oProtLocal->setProt_any($json_prot_origen->any);
         //mas: No cojo el del registro, el pendiente puede tener su propio 'mas'
@@ -83,7 +80,7 @@ if (empty($msg)) {
 }
 
 // buscar id_entrada del prot destino
-$aProt_dst = [ 'lugar' => $Qid_lugar_dst,
+$aProt_dst = [ 'id_lugar' => $Qid_lugar_dst,
     'num' => $Qprot_num_dst,
     'any' => $Qprot_any_dst,
     'mas' => '',
@@ -115,7 +112,7 @@ if (empty($msg)) {
     $oProtLocal = new Protocolo();
     $json_prot_origen = $oEntrada->getJson_prot_origen();
     if (!empty(get_object_vars($json_prot_origen))) {
-        $oProtLocal->setLugar($json_prot_origen->lugar);
+        $oProtLocal->setLugar($json_prot_origen->id_lugar);
         $oProtLocal->setProt_num($json_prot_origen->num);
         $oProtLocal->setProt_any($json_prot_origen->any);
         //mas: No cojo el del registro, el pendiente puede tener su propio 'mas'
@@ -131,11 +128,11 @@ if (empty($msg) && ($id_of_ponente_dst != $id_of_ponente_org) ) {
 
 
 if (empty($msg)) {
-    $oOficina = new Oficina($id_of_ponente_org);
-    $oficina_txt = $oOficina->getSigla();
+    //$oOficina = new Oficina($id_of_ponente_org);
+    //$oficina_txt = $oOficina->getSigla();
     
     $oDavicalMigrar = new DavicalMigrar();
-    $oDavicalMigrar->setOficina($oficina_txt);
+    $oDavicalMigrar->setId_oficina($id_of_ponente_org);
     $oDavicalMigrar->setId_reg_org($id_reg_org);
     $oDavicalMigrar->setId_reg_dst($id_reg_dst);
     $oDavicalMigrar->setLocation_org($location_org);

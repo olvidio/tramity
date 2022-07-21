@@ -42,7 +42,6 @@ function upload() {
                 
                 $fp = fopen($tmpFilePath, 'rb');
                 $contenido_doc = fread($fp, filesize($tmpFilePath));
-                $contenido_encoded = base64_encode($contenido_doc);
                 
                 if (!empty($Qid_item)) {
                     // update
@@ -54,7 +53,7 @@ function upload() {
                 
                 $oEntradaAdjunto->setId_entrada($Qid_entrada);
                 $oEntradaAdjunto->setNom($fileName);
-                $oEntradaAdjunto->setAdjunto($contenido_encoded);
+                $oEntradaAdjunto->setAdjunto($contenido_doc);
                 
                 if ($oEntradaAdjunto->DBGuardar() !== FALSE) {
                     $id_item = $oEntradaAdjunto->getId_item();

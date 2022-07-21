@@ -5,6 +5,7 @@ use core\Condicion;
 use core\Set;
 use function core\any_2;
 use entradas\model\Entrada;
+use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 
 /**
@@ -46,7 +47,7 @@ class GestorEntradaDB Extends ClaseGestor {
 
         $sql_anys="SELECT json_prot_origen -> 'any' as a 
                     FROM $nom_tabla
-                    WHERE categoria = ". Entrada::CAT_PERMANATE ."
+                    WHERE categoria = ". Categoria::CAT_PERMANATE ."
                     GROUP BY a ORDER BY a";
         
         if (($oDblSt=$oDbl->Query($sql_anys)) === FALSE) {
@@ -74,20 +75,21 @@ class GestorEntradaDB Extends ClaseGestor {
     /**
      * retorna l'array d'objectes de tipus EntradaDB amb visto = false
      *
-     * @param integer id_oficina
-     * @param string tipo_oficina (ponente|resto|encargado) Seleccionar por
+     * @param integer id_oficina (id_encargado, en el caso de $tipo_oficina='encargado')
+     * @param string tipo_oficina (ponente|resto|encargado|centro) Seleccionar por
+     * @param array a_visibilidad para filtrar (caso centros?)
      * @return array Una col·lecció d'objectes de tipus EntradaDB
      */
-    function getEntradasNoVistoDB($oficina,$tipo_oficina) {
+    function getEntradasNoVistoDB($oficina,$tipo_oficina,$a_visibilidad=[]) {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEntradaDBSet = new Set();
         
         $estado = Entrada::ESTADO_ACEPTADO;
         
+        $json = '';
         // Quitar las vistas
-        $Where_json = "items.oficina='$oficina'";
-        $Where_json .= " AND items.visto = 'true'";
+		$json .= "\"visto\": true";
         
         // Todas las de la oficina
         switch ($tipo_oficina) {
@@ -95,24 +97,54 @@ class GestorEntradaDB Extends ClaseGestor {
                 // en el caso de la oficina ponente, lo considero visto si está encargado a alguien
                 $sCondi = "ponente = $oficina AND estado = $estado AND encargado IS NULL";
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+				$json .= empty($json)? '' : ',';
+				$json .= "\"oficina\": $oficina";
                 break;
             case 'resto':
                 $sCondi = "$oficina = ANY (resto_oficinas) AND estado = $estado";
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+				$json .= empty($json)? '' : ',';
+				$json .= "\"oficina\": $oficina";
                 break;
             case 'encargado':
-                // si es encargado se le pasa el id_cargo:
-                $encargado = $oficina;
-                $oCargo = new Cargo($encargado);
-                $oficina = $oCargo->getId_oficina();
+            	$encargado = $oficina;
+				$oCargo = new Cargo($encargado);
+				$id_oficina = $oCargo->getId_oficina();
                 $sCondi = "encargado = $encargado AND estado = $estado";
+                // comprobar visibilidad:
+                if (!empty($a_visibilidad)) {
+                	$visibilidad_csv = implode(',',$a_visibilidad);
+                	$sCondi .= " AND (visibilidad IN ($visibilidad_csv) OR visibilidad IS NULL)";
+                }
                 $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
-                $Where_json = "items.oficina='$oficina'";
-                $Where_json .= " AND items.visto = 'true'";
-                $Where_json .= " AND items.cargo='$encargado'";
+                // Reescribo toda la condición: hay que cambiar la oficina
+				$json = "\"oficina\": $id_oficina";
+				$json .= empty($json)? '' : ',';
+				$json .= "\"visto\": true";
+                $json .= empty($json)? '' : ',';
+                $json .= "\"cargo\": $encargado";
                 break;
+            case 'centro':
+            	// para los ctr
+				$estado = Entrada::ESTADO_INGRESADO;
+                $sCondi = "estado = $estado";
+                // comprobar visibilidad:
+                if (!empty($a_visibilidad)) {
+                	$visibilidad_csv = implode(',',$a_visibilidad);
+                	$sCondi .= " AND (visibilidad IN ($visibilidad_csv) OR visibilidad IS NULL)";
+                }
+                $select_todas = "SELECT t.* FROM $nom_tabla t WHERE $sCondi";
+                break;
+            default:
+            	$err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+            	exit ($err_switch);
         }
         
+        if (!empty($json)) {
+        	$Where_json = "json_visto @> '[{".$json."}]'";
+        } else {
+        	$Where_json = '';
+        }
         
         if (empty($sCondi)) {
             if (empty($Where_json)) {
@@ -129,10 +161,7 @@ class GestorEntradaDB Extends ClaseGestor {
         }
         $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi;
         
-        // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
-        $select_vistas = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_recordset(t.json_visto) as items(\"cargo\" text, visto text, oficina text)
-                        $where_condi";
+        $select_vistas = "SELECT * FROM $nom_tabla $where_condi";
         
         $sQry =  "$select_todas EXCEPT $select_vistas";
         
@@ -186,6 +215,13 @@ class GestorEntradaDB Extends ClaseGestor {
         }
         $sCondi = implode(' AND ',$aCondi);
 
+        if ($COND_OR != '') {
+            if ($sCondi != '') {
+                $sCondi .= " AND ".$COND_OR;
+            } else {
+                $sCondi .= " WHERE ".$COND_OR;
+            }
+        }
         $sOrdre = '';
         $sLimit = '';
         if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') { $sOrdre = ' ORDER BY '.$aWhere['_ordre']; }
@@ -195,22 +231,25 @@ class GestorEntradaDB Extends ClaseGestor {
         
         // Where del visto
         $Where_json = '';
+        $json = '';
         if (!empty($aVisto['oficina'])) {
             $oficina = $aVisto['oficina'];
-            $Where_json .= empty($Where_json)? '' : ' AND ';
-            $Where_json .= "items.oficina='$oficina'";
+            $json .= empty($json)? '' : ',';
+            $json .= "\"oficina\": $oficina";
         }
         if (!empty($aVisto['visto'])) {
             $visto = $aVisto['visto'];
-            $Where_json .= empty($Where_json)? '' : ' AND ';
-            $Where_json .= "items.visto='$visto'";
+            $json .= empty($json)? '' : ',';
+            $json .= "\"visto\": $visto";
         }
         if (!empty($aVisto['cargo'])) {
             $cargo = $aVisto['cargo'];
-            $Where_json .= empty($Where_json)? '' : ' AND ';
-            $Where_json .= "items.cargo='$cargo'";
+            $json .= empty($json)? '' : ',';
+            $json .= "\"cargo\": $cargo";
         }
-        
+        if (!empty($json)) {
+        	$Where_json = "json_visto @> '[{".$json."}]'";
+        }
         if (empty($sCondi)) {
             if (empty($Where_json)) {
                 $where_condi = '';
@@ -226,11 +265,7 @@ class GestorEntradaDB Extends ClaseGestor {
         }
         $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi;
         
-        
-        // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
-        $sQry = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_recordset(t.json_visto) as items(\"cargo\" text, visto text, oficina text)
-                        $where_condi";
+        $sQry = "SELECT * FROM $nom_tabla $where_condi".$sOrdre.$sLimit;
         
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
             $sClauError = 'GestorEntradaDB.llistar.prepare';
@@ -254,7 +289,7 @@ class GestorEntradaDB Extends ClaseGestor {
 	/**
 	 * Devuelve la colección de entradas, segun las condiciones del protcolo de referencias, más las normales
 	 * 
-	 * @param array $aProt_ref = ['lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
+	 * @param array $aProt_ref = ['id_lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
 	 * @param array $aWhere
 	 * @param array $aOperators
 	 * @return boolean|array
@@ -263,13 +298,6 @@ class GestorEntradaDB Extends ClaseGestor {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEntradaDBSet = new Set();
-        
-        /* {"any": 20, "mas": null, "num": 15, "lugar": 58}
-        $sQuery = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_origen) as items(any smallint, mas text, num smallint, lugar integer)
-                        WHERE items.id=$id_lugar";
-        */
-        
 		$oCondicion = new Condicion();
         $aCondi = array();
         foreach ($aWhere as $camp => $val) {
@@ -293,28 +321,31 @@ class GestorEntradaDB Extends ClaseGestor {
         
         // Where del prot_ref
         $Where_json = '';
-        if (!empty($aProt_ref['lugar'])) {
-            $lugar = $aProt_ref['lugar'];
-            $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.lugar='$lugar'";
+        $json = '';
+        if (!empty($aProt_ref['id_lugar'])) {
+            $id_lugar = $aProt_ref['id_lugar'];
+            $json .= empty($json)? '' : ',';
+            $json .= "\"id_lugar\":$id_lugar";
         }
         if (!empty($aProt_ref['num'])) {
             $num = $aProt_ref['num'];
-            $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.num='$num'";
+            $json .= empty($json)? '' : ',';
+            $json .= "\"num\":$num";
         }
         if (!empty($aProt_ref['any'])) {
             $any = $aProt_ref['any'];
             $any_2 = any_2($any);
-            $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.any='$any_2'";
+            $json .= empty($json)? '' : ',';
+            $json .= "\"any\":\"$any_2\"";
         }
         if (!empty($aProt_ref['mas'])) {
             $mas = $aProt_ref['mas'];
-            $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.mas='$mas'";
+            $json .= empty($json)? '' : ',';
+            $json .= "\"mas\":\"$mas\"";
         }
-        
+        if (!empty($json)) {
+        	$Where_json = "json_prot_ref @> '[{".$json."}]'";
+        }
         if (empty($sCondi)) {
             if (empty($Where_json)) {
                 $where_condi = '';
@@ -331,9 +362,7 @@ class GestorEntradaDB Extends ClaseGestor {
         $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi;
         
         // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
-        $sQry = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_ref) as items(\"any\" text, mas text, num text, lugar text)
-                        $where_condi";
+        $sQry = "SELECT * FROM $nom_tabla $where_condi".$sOrdre.$sLimit;
         
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
             $sClauError = 'GestorEntradaDB.llistar.prepare';
@@ -358,7 +387,7 @@ class GestorEntradaDB Extends ClaseGestor {
 	/**
 	 * Devuelve la colección de entradas, segun las condiciones del protcolo de entrada, más las normales
 	 * 
-	 * @param array $aProt_origen = ['lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
+	 * @param array $aProt_origen = ['id_lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
 	 * @param array $aWhere
 	 * @param array $aOperators
 	 * @return boolean|array
@@ -367,13 +396,6 @@ class GestorEntradaDB Extends ClaseGestor {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEntradaDBSet = new Set();
-        
-        /* {"any": 20, "mas": null, "num": 15, "lugar": 58}
-        $sQuery = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_origen) as items(any smallint, mas text, num smallint, lugar integer)
-                        WHERE items.id=$id_lugar";
-        */
-        
 		$oCondicion = new Condicion();
         $aCondi = array();
         $COND_OR = '';
@@ -409,7 +431,7 @@ class GestorEntradaDB Extends ClaseGestor {
         if (isset($aWhere['_ordre']) && $aWhere['_ordre'] != '' ) {
             $sOrdre = ' ORDER BY '.$aWhere['_ordre'];
         } else {
-            $sOrdre = " ORDER BY CASE WHEN anulado IS NULL THEN 1 WHEN anulado = '' THEN 1 ELSE 2 END , t.f_entrada DESC";
+            $sOrdre = " ORDER BY CASE WHEN anulado IS NULL THEN 1 WHEN anulado = '' THEN 1 ELSE 2 END , f_entrada DESC";
         }
         if (isset($aWhere['_ordre'])) { unset($aWhere['_ordre']); }
         if (isset($aWhere['_limit']) && $aWhere['_limit']!='') { $sLimit = ' LIMIT '.$aWhere['_limit']; }
@@ -417,26 +439,30 @@ class GestorEntradaDB Extends ClaseGestor {
         
         // Where del prot_origen
         $Where_json = '';
-        if (!empty($aProt_origen['lugar'])) {
-            $lugar = $aProt_origen['lugar'];
-            $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.lugar='$lugar'";
+        $json = '';
+        if (!empty($aProt_origen['id_lugar'])) {
+            $id_lugar = $aProt_origen['id_lugar'];
+            $json .= empty($json)? '' : ',';
+            $json .= "\"id_lugar\":$id_lugar";
         }
         if (!empty($aProt_origen['num'])) {
             $num = $aProt_origen['num'];
-            $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.num='$num'";
+            $json .= empty($json)? '' : ',';
+            $json .= "\"num\":$num";
         }
         if (!empty($aProt_origen['any'])) {
             $any = $aProt_origen['any'];
             $any_2 = any_2($any);
-            $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.any='$any_2'";
+            $json .= empty($json)? '' : ',';
+            $json .= "\"any\":\"$any_2\"";
         }
         if (!empty($aProt_origen['mas'])) {
             $mas = $aProt_origen['mas'];
-            $Where_json .= empty($Where_json)? '' : ' AND ';    
-            $Where_json .= "items.mas='$mas'";
+            $json .= empty($json)? '' : ',';
+            $json .= "\"mas\":\"$mas\"";
+        }
+        if (!empty($json)) {
+        	$Where_json = "json_prot_origen @> '{".$json."}'";
         }
         
         if (empty($sCondi)) {
@@ -452,13 +478,10 @@ class GestorEntradaDB Extends ClaseGestor {
                 $where_condi = $sCondi;
             }
         }
-        $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi.' '.$sOrdre;
+        $where_condi = empty($where_condi)? '' : "WHERE ".$where_condi;
         
-        // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
-        $sQry = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_origen) as items(\"any\" text, mas text, num text, lugar text)
-                        $where_condi";
-        
+        $sQry = "SELECT * FROM $nom_tabla $where_condi".$sOrdre.$sLimit;
+                        
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
             $sClauError = 'GestorEntradaDB.llistar.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -482,13 +505,6 @@ class GestorEntradaDB Extends ClaseGestor {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $oEntradaDBSet = new Set();
-        
-        /* {"any": 20, "mas": null, "num": 15, "lugar": 58}
-        $sQuery = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_recordset(t.json_prot_origen) as items(any smallint, mas text, num smallint, lugar integer)
-                        WHERE items.id=$id_lugar";
-        */
-        
 		$oCondicion = new Condicion();
         $aCondi = array();
         $COND_OR = '';
@@ -513,9 +529,9 @@ class GestorEntradaDB Extends ClaseGestor {
         }
         $sCondi = implode(' AND ',$aCondi);
         if (empty($sCondi)) {
-            $sCondi = " WHERE items.lugar='$id_lugar'";
+        	$sCondi = " WHERE json_prot_origen @> '{\"id_lugar\":$id_lugar}'";
         } else {
-            $sCondi = " WHERE items.lugar='$id_lugar' AND ".$sCondi;
+        	$sCondi = " WHERE json_prot_origen @> '{\"id_lugar\":$id_lugar}' AND ".$sCondi;
         }
         if ($COND_OR != '') {
             if ($sCondi != '') {
@@ -531,10 +547,7 @@ class GestorEntradaDB Extends ClaseGestor {
         if (isset($aWhere['_limit']) && $aWhere['_limit']!='') { $sLimit = ' LIMIT '.$aWhere['_limit']; }
         if (isset($aWhere['_limit'])) { unset($aWhere['_limit']); }
         
-        // pongo tipo 'text' en todos los campos del json, porque si hay algun null devuelve error syntax
-        $sQry = "SELECT t.*
-                        FROM $nom_tabla t, jsonb_to_record(t.json_prot_origen) as items(\"any\" text, mas text, num text, lugar text)
-                        ".$sCondi.$sOrdre.$sLimit;
+        $sQry = "SELECT * FROM $nom_tabla ".$sCondi.$sOrdre.$sLimit;
         
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
             $sClauError = 'GestorEntradaDB.llistar.prepare';
@@ -572,7 +585,6 @@ class GestorEntradaDB Extends ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_entrada' => $aDades['id_entrada']);
 			$oEntradaDB= new EntradaDB($a_pkey);
-			$oEntradaDB->setAllAtributes($aDades);
 			$oEntradaDBSet->add($oEntradaDB);
 		}
 		return $oEntradaDBSet->getTot();
@@ -623,7 +635,6 @@ class GestorEntradaDB Extends ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_entrada' => $aDades['id_entrada']);
 			$oEntradaDB = new EntradaDB($a_pkey);
-			$oEntradaDB->setAllAtributes($aDades);
 			$oEntradaDBSet->add($oEntradaDB);
 		}
 		return $oEntradaDBSet->getTot();

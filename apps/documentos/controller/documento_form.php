@@ -51,7 +51,7 @@ if (!empty($Qid_doc)) {
     // destinos individuales
     $nom = $oDocumento->getNom();
     $nombre_fichero = $oDocumento->getNombre_fichero();
-    $documento_txt = $oDocumento->getDocumentoTxt();
+    $documento_txt = $oDocumento->getDocumento();
     
     if (!empty($oDocumento->getVisibilidad())) {
         $visibilidad = $oDocumento->getVisibilidad();

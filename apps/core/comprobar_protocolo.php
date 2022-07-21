@@ -2,7 +2,6 @@
 
 use function core\any_2;
 use entradas\model\GestorEntrada;
-use usuarios\model\entity\Cargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -46,13 +45,13 @@ if ($Qque == 's4') {
     // compruebo si existe el escrito de referencia (sólo el primero, ordeno por anulado).
     // en entradas:
     $gesEntradas = new GestorEntrada();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
-    $aProt_origen = [ 'lugar' => $Qid_lugar,
+    $aProt_origen = [ 'id_lugar' => $Qid_lugar,
                     'num' => $Qprot_num, 
                     'any' => $Qprot_any,
                     'mas' => '',
                 ];
     // No buscar los anulados:
-    $aWhere = ['anulado' => 'x'];
+	$aWhere = ['bypass' => 'f', 'anulado' => 'x'];
     $aOperador = ['anulado' => 'IS NULL'];
     $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen,$aWhere,$aOperador);
     

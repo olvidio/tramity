@@ -88,7 +88,7 @@ fnjs_listar_documentos=function() {
     var data=$('#condiciones').serialize();
     var id_escrito = $('#id_escrito').val();
     if (id_escrito) {
-        var url_ajax = 'apps/expedientes/controller/escrito_adjuntos_ajax.php';
+        var url_ajax = 'apps/escritos/controller/escrito_adjuntos_ajax.php';
     } else {
         var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
     }
@@ -111,7 +111,7 @@ fnjs_mas_etiquetas=function(){
     var valor=1;
     var id_campo='#'+event.currentTarget.id;
     var valor=$(id_campo).val();
-    if(code!=9) {
+    if(code!=9 && typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
     }

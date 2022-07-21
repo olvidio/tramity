@@ -36,47 +36,47 @@ class EntradaDocDB Extends core\ClasePropiedades {
 	 *
 	 * @var array
 	 */
-	 private $aPrimary_key;
+	 protected $aPrimary_key;
 
 	/**
 	 * aDades de EntradaDocDB
 	 *
 	 * @var array
 	 */
-	 private $aDades;
+	 protected $aDades;
 
 	/**
 	 * bLoaded
 	 *
 	 * @var boolean
 	 */
-	 private $bLoaded = FALSE;
+	 protected $bLoaded = FALSE;
 
 	/**
 	 * Id_schema de EntradaDocDB
 	 *
 	 * @var integer
 	 */
-	 private $iid_schema;
+	 protected $iid_schema;
 
 	/**
 	 * Id_entrada de EntradaDocDB
 	 *
 	 * @var integer
 	 */
-	 private $iid_entrada;
+	 protected $iid_entrada;
 	/**
 	 * Tipo_doc de EntradaDocDB
 	 *
 	 * @var integer
 	 */
-	 private $itipo_doc;
+	 protected $itipo_doc;
 	/**
 	 * F_doc de EntradaDocDB
 	 *
 	 * @var web\DateTimeLocal
 	 */
-	 private $df_doc;
+	 protected $df_doc;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de EntradaDocDB
@@ -359,7 +359,7 @@ class EntradaDocDB Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_doc de EntradaDocDB
-	 * Si df_doc es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_doc es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_doc debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_doc='' optional.

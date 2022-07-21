@@ -609,7 +609,7 @@ class CalendarItem Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut dcreated de CalendarItem
-	 * Si dcreated es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si dcreated es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, dcreated debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string dcreated='' optional.
@@ -640,7 +640,7 @@ class CalendarItem Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut dlast_modified de CalendarItem
-	 * Si dlast_modified es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si dlast_modified es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, dlast_modified debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string dlast_modified='' optional.
@@ -671,7 +671,7 @@ class CalendarItem Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut ddtstamp de CalendarItem
-	 * Si ddtstamp es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si ddtstamp es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, ddtstamp debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string ddtstamp='' optional.
@@ -702,7 +702,7 @@ class CalendarItem Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut ddtstart de CalendarItem
-	 * Si ddtstart es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si ddtstart es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, ddtstart debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string ddtstart='' optional.
@@ -733,7 +733,7 @@ class CalendarItem Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut ddtend de CalendarItem
-	 * Si ddtend es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si ddtend es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, ddtend debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string ddtend='' optional.
@@ -764,7 +764,7 @@ class CalendarItem Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut ddue de CalendarItem
-	 * Si ddue es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si ddue es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, ddue debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string ddue='' optional.
@@ -1004,7 +1004,7 @@ class CalendarItem Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut dcompleted de CalendarItem
-	 * Si dcompleted es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si dcompleted es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, dcompleted debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string dcompleted='' optional.
@@ -1073,7 +1073,7 @@ class CalendarItem Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut dfirst_instance_start de CalendarItem
-	 * Si dfirst_instance_start es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si dfirst_instance_start es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, dfirst_instance_start debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string dfirst_instance_start='' optional.
@@ -1104,7 +1104,7 @@ class CalendarItem Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut dlast_instance_end de CalendarItem
-	 * Si dlast_instance_end es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si dlast_instance_end es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, dlast_instance_end debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string dlast_instance_end='' optional.

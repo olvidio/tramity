@@ -2,17 +2,18 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use entradas\model\Entrada;
+use davical\model\Davical;
 use etiquetas\model\entity\GestorEtiqueta;
 use lugares\model\entity\GestorLugar;
 use pendientes\model\Pendiente;
+use pendientes\model\Rrule;
 use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;
-use pendientes\model\Rrule;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -48,7 +49,7 @@ if (empty($go)) {
 }
 if ($go=="entradas" || $go=="salidas" || $go=="mov_iese") { 
     $id_reg = (integer) \filter_input(INPUT_GET, 'id_reg');
-    $Qid_oficina = (integer) \filter_input(INPUT_GET, 'ponente');
+    $Qid_oficina = (integer) \filter_input(INPUT_GET, 'of_ponente');
     $Qcalendario = 'registro';
     
     $cargar_css = TRUE;
@@ -65,17 +66,27 @@ if ($role_actual === 'secretaria') {
     $secretaria = TRUE;
     $oDesplOficinas= $gesOficinas->getListaOficinas();
     $oDesplOficinas->setNombre('id_oficina');
-    $id_oficina = '';
+    $id_oficina = $Qid_oficina;
+    
+    // nombre normalizado del usuario y oficina:
+    $id_cargo_role = ConfigGlobal::role_id_cargo();
+    $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+    $user_davical = $oDavical->getUsernameDavical($id_cargo_role);
 } else {
     $oDesplOficinas = []; // para evitar errores
     $secretaria = FALSE;
-    $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
+    $id_cargo_role = ConfigGlobal::role_id_cargo();
+    $oCargo = new Cargo($id_cargo_role);
     $id_oficina = $oCargo->getId_oficina();
+    // nombre normalizado del usuario y oficina:
+    $id_cargo_role = ConfigGlobal::role_id_cargo();
+    $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+    $user_davical = $oDavical->getUsernameDavical($id_cargo_role);
 }
 
-// visibilidad (usar las mismas opciones que en entradas)
-$oEntrada = new Entrada();
-$aOpciones = $oEntrada->getArrayVisibilidad();
+// visibilidad
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
@@ -137,10 +148,9 @@ $hoy = date("d/m/Y");
 $hoy_iso = date("Y-m-d");
 if ($nuevo == 1) {
 	$uid = '';
-	$id_oficina = $Qid_oficina;
 	if (!empty($id_oficina)) { // En el caso de secretaria puede estar vacío
-        $sigla = $a_posibles_oficinas[$Qid_oficina];
-        $cal_oficina = "oficina_$sigla";	
+        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+        $cal_oficina = $oDavical->getNombreRecurso($Qid_oficina);
 	} else {
 	    $cal_oficina = '';
 	}
@@ -177,7 +187,7 @@ if ($nuevo == 1) {
             $id_reg=substr($uid,3,$pos);
         }
 
-        $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $role_actual, $uid) ;
+        $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $user_davical, $uid) ;
         
         $asunto = $oPendiente->getAsunto();
         $status = $oPendiente->getStatus();
@@ -207,8 +217,18 @@ if ($nuevo == 1) {
         $aEtiquetas = $oPendiente->getEtiquetasArray();
         $oArrayDesplEtiquetas->setSeleccionados($aEtiquetas);
         
-        $sigla_of=substr($cal_oficina,8);
-        $id_oficina = array_search($sigla_of, $a_posibles_oficinas);
+        //[[0] => dlb, [1] => oficina, [2] => scdl]
+        $a_container = explode('_', $cal_oficina);
+        if (count($a_container) > 2) {
+            // es una dl
+            $sigla_of = $a_container[2];
+            $id_oficina = array_search($sigla_of, $a_posibles_oficinas);
+        } else {
+            // es un ctr
+            $sigla_of = $a_container[1];
+            $id_oficina = Cargo::OFICINA_ESQUEMA;
+        }
+        
 
         $nuevo=2;
         
@@ -221,7 +241,7 @@ if ($nuevo == 1) {
         // para que salga bien la referencia
         if (is_array($a_protOrigen)) {
             $display_completa="display:in-line;";
-            $ref_id_lugar=$a_protOrigen['lugar'];
+            $ref_id_lugar=$a_protOrigen['id_lugar'];
             $ref_prot_num=$a_protOrigen['num'];
             $ref_prot_any=$a_protOrigen['any'];
             //$ref_prot_mas=$a_protOrigen['mas']; // No cojo el del registro, el pendiente puede tener su propio 'mas'
@@ -256,6 +276,17 @@ if ($go == 'entradas') {
     
 	$perm_detalle=3;
 	$display_completa="display:in-line;";
+}
+
+/// titulo pagina ///
+$titulo_oficina = '';
+if ($Qcalendario != 'registro') {
+	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+		$titulo_oficina = sprintf(_("pendiente de %s"),ConfigGlobal::getEsquema());
+	} else {
+		$oficina_txt = $a_posibles_oficinas[$Qid_oficina];
+		$titulo_oficina = sprintf(_("pendiente de la oficina %s"),$oficina_txt);
+	}
 }
 
 //////////////////////// PERIODICO ////////////////////////////////
@@ -331,6 +362,8 @@ if (empty($rrule)) {
                     $chk_a_num_dm="";
                     $dia_w_a_db=empty($rta['dia_semana'])? '' : $rta['dia_semana'];
                     $ordinal_a_db=empty($rta['ordinal'])? '' : $rta['ordinal'];
+                    // Quitar el signo '+'
+                    $ordinal_a_db = (integer) $ordinal_a_db;
                     $mes_num_ref_db=empty($rta['meses'])? '' : $rta['meses'];
                     break;
                 case "num_dm":
@@ -370,6 +403,8 @@ if (empty($rrule)) {
                     $chk_m_ref="checked";
                     $dia_w_db=empty($rta['dia_semana'])? '' : $rta['dia_semana'];
                     $ordinal_db=empty($rta['ordinal'])? '' : $rta['ordinal'];
+                    // Quitar el signo '+'
+                    $ordinal_db = (integer) $ordinal_db;
                     break;
                 default:
                     $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
@@ -555,6 +590,7 @@ if (!empty($periodico_tipo) && $Qcalendario == 'registro' && $secretaria === FAL
 } else {
     $a_campos = [
         'oPosicion'    => $oPosicion,
+        'titulo_oficina' => $titulo_oficina,
         'base_url_web' => $base_url_web,
         'cargar_css'   => $cargar_css,
         'calendario'   => $Qcalendario,

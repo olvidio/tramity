@@ -24,7 +24,7 @@
 <div id="resultados"></div>
 <script>
 fnjs_cancelar=function(){
-    if (event != undefined) {
+	if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -39,9 +39,11 @@ fnjs_cancelar=function(){
 }
 
 fnjs_cambio=function(){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;

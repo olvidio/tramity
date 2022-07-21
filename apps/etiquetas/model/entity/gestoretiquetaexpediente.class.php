@@ -58,7 +58,7 @@ class GestorEtiquetaExpediente Extends core\ClaseGestor {
             }
             
             if (($oDbl->query($sQuery)) === FALSE) {
-                $sClauError = 'GestorExpedienteDB.queryPreparar';
+                $sClauError = 'GestorEtiquetaExpediente.queryPreparar';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -81,7 +81,7 @@ class GestorEtiquetaExpediente Extends core\ClaseGestor {
                     WHERE id_expediente=$id_expediente";
 	    
 	    if (($oDbl->query($sQuery)) === FALSE) {
-	        $sClauError = 'GestorExpedienteDB.queryPreparar';
+	        $sClauError = 'GestorEtiquetaExpediente.queryPreparar';
 	        $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 	        return FALSE;
 	    }
@@ -106,7 +106,6 @@ class GestorEtiquetaExpediente Extends core\ClaseGestor {
 			$a_pkey = array('id_etiqueta' => $aDades['id_etiqueta'],
 							'id_expediente' => $aDades['id_expediente']);
 			$oEtiquetaExpediente= new EtiquetaExpediente($a_pkey);
-			$oEtiquetaExpediente->setAllAtributes($aDades);
 			$oEtiquetaExpedienteSet->add($oEtiquetaExpediente);
 		}
 		return $oEtiquetaExpedienteSet->getTot();
@@ -158,7 +157,6 @@ class GestorEtiquetaExpediente Extends core\ClaseGestor {
 			$a_pkey = array('id_etiqueta' => $aDades['id_etiqueta'],
 							'id_expediente' => $aDades['id_expediente']);
 			$oEtiquetaExpediente = new EtiquetaExpediente($a_pkey);
-			$oEtiquetaExpediente->setAllAtributes($aDades);
 			$oEtiquetaExpedienteSet->add($oEtiquetaExpediente);
 		}
 		return $oEtiquetaExpedienteSet->getTot();

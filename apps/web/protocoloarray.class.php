@@ -26,12 +26,20 @@ class ProtocoloArray Extends Protocolo {
 	 */
 	 private $sAccionConjunto;
 	/**
+	 * para añadir (o no) la palabra 'ref' delante del texto.
+	 * 
 	 * bRef del Desplegable
 	 *
 	 * @var boolean 
 	 */
 	 private $bRef=FALSE;
 
+	 /**
+	  * Para añadir (o no) una opción más en blanco.
+	  * 
+	  * @var boolean
+	  */
+	 private $bAdd = TRUE;
 
 
 	/* CONSTRUCTOR -------------------------------------------------------------- */
@@ -60,12 +68,14 @@ class ProtocoloArray Extends Protocolo {
 	    $ref = ($this->bRef)? 'ref. ' : '';
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
-			    $lugar = $oProt->lugar;
+	        	$oProt = json_decode(json_encode($oProt));
+	        	if (!property_exists($oProt, 'id_lugar')) { continue; }
+			    $id_lugar = $oProt->id_lugar;
 			    $prot_num = $oProt->num;
 			    $prot_any = $oProt->any;
 			    $prot_mas = $oProt->mas;
 			    
-                $oLugar = new Lugar($lugar);
+                $oLugar = new Lugar($id_lugar);
                 $nom_lugar = $oLugar->getSigla();
 			    $txt = "$nom_lugar";
 			    if (!empty($prot_num)) {
@@ -73,7 +83,7 @@ class ProtocoloArray Extends Protocolo {
 			    }
 			    $txt .= !empty($prot_mas)? ", ${prot_mas}" : '';
 			    
-                if ($lugar == $id_lugar_dst_org) {
+                if ($id_lugar == $id_lugar_dst_org) {
                     $aRef['dst_org'] .= !empty($aRef['dst_org'])? "<br>" : '';
                     $aRef['dst_org'] .= $ref.$txt;
                 } else {
@@ -85,7 +95,7 @@ class ProtocoloArray Extends Protocolo {
 	    return $aRef;
 	}
 
-	public function ListaTxtBr($id_lugar='') {
+	public function ListaTxtBr() {
 	    $aSeleccionados = '';
 	    if (is_array($this->sSeleccionados)) {
 	        $aSeleccionados = $this->sSeleccionados;
@@ -95,17 +105,22 @@ class ProtocoloArray Extends Protocolo {
 	    $ref = ($this->bRef)? 'ref. ' : '';
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
-			    $lugar = $oProt->lugar;
+	        	$oProt = json_decode(json_encode($oProt));
+	        	if (!property_exists($oProt, 'id_lugar')) { continue; }
+			    $id_lugar = $oProt->id_lugar;
 			    $prot_num = $oProt->num;
 			    $prot_any = $oProt->any;
 			    $prot_mas = $oProt->mas;
 			    
-			    if (!empty($lugar)) {
-			        $oLugar = new Lugar($lugar);
+			    if (!empty($id_lugar)) {
+			        $oLugar = new Lugar($id_lugar);
 			        $nom_lugar = $oLugar->getSigla();
+			    } else {
+			    	//Puede el id lugar no encontrar la sigla...
+			    	$nom_lugar = '?sigla';
 			    }
 			    // para sacar solo un destino
-			    if (!empty($id_lugar) && $lugar != $id_lugar) {
+			    if (!empty($id_lugar) && $id_lugar != $id_lugar) {
 			        continue;
 			    }
 			    
@@ -121,6 +136,7 @@ class ProtocoloArray Extends Protocolo {
 	    }
 	    return $sLista;
 	}
+	
 	public function ListaTxt() {
 	    $aSeleccionados = '';
 	    if (is_array($this->sSeleccionados)) {
@@ -131,13 +147,15 @@ class ProtocoloArray Extends Protocolo {
 	    $sLista = "<div class=\"row\" >";
 	    if (!empty($aSeleccionados)) {
 	        foreach ($aSeleccionados as $oProt) {
-			    $lugar = $oProt->lugar;
+	        	$oProt = json_decode(json_encode($oProt));
+	        	if (!property_exists($oProt, 'id_lugar')) { continue; }
+			    $id_lugar = $oProt->id_lugar;
 			    $prot_num = $oProt->num;
 			    $prot_any = $oProt->any;
 			    $prot_mas = $oProt->mas;
 			    
-			    if (!empty($lugar)) {
-			        $oLugar = new Lugar($lugar);
+			    if (!empty($id_lugar)) {
+			        $oLugar = new Lugar($id_lugar);
 			        $nom_lugar = $oLugar->getSigla();
 			    }
 			    
@@ -175,10 +193,12 @@ class ProtocoloArray Extends Protocolo {
 		$sLista = "<div id=\"$span\" class=\"row\" >";
 		if (!empty($aSeleccionados)) {
 			foreach ($aSeleccionados as $oProt) {
-			    $this->ilugar = $oProt->lugar;
-			    $this->iprot_num = $oProt->num;
-			    $this->iprot_any = $oProt->any;
-			    $this->sprot_mas = $oProt->mas;
+	        	$oProt = json_decode(json_encode($oProt));
+	        	if (!property_exists($oProt, 'id_lugar')) { continue; }
+				$this->ilugar = empty($oProt->id_lugar)? '' : $oProt->id_lugar;
+			    $this->iprot_num = empty($oProt->num)? '' : $oProt->num;
+			    $this->sprot_any = empty($oProt->any)? '' : $oProt->any;
+			    $this->sprot_mas = empty($oProt->mas)? '' : $oProt->mas;
 			    
 				$this->sNombre = $this->sNomConjunto."[$n]";
 			    
@@ -192,18 +212,20 @@ class ProtocoloArray Extends Protocolo {
 		$sLista .= "</div>";
 		
 		// para que me salga una opción más en blanco
-        $this->ilugar = '';
-        $this->iprot_num = '';
-        $this->iprot_any = '';
-        $this->sprot_mas = '';
-		$this->sNombre = $this->sNomConjunto."_mas";
-		$this->sAction = $this->sAccionConjunto;
-		$this->sOpcion_sel = '';
-		
-        $sLista .= "<div class=\"row\">";
-		$sLista .= $this->ver_desplegable();
-        $sLista .= "</div>";
-		$sLista .= "<input type=hidden name='".$this->sNomConjunto."_num' id='".$this->sNomConjunto."_num' value=$n>";
+		if ($this->bAdd) {
+            $this->ilugar = '';
+            $this->iprot_num = '';
+            $this->sprot_any = '';
+            $this->sprot_mas = '';
+            $this->sNombre = $this->sNomConjunto."_mas";
+            $this->sAction = $this->sAccionConjunto;
+            $this->sOpcion_sel = '';
+            
+            $sLista .= "<div class=\"row\">";
+            $sLista .= $this->ver_desplegable();
+            $sLista .= "</div>";
+            $sLista .= "<input type=hidden name='".$this->sNomConjunto."_num' id='".$this->sNomConjunto."_num' value=$n>";
+		}
 		
 		return $sLista;
 	}
@@ -323,7 +345,7 @@ class ProtocoloArray Extends Protocolo {
 	    return (array) $this->sSeleccionados;
 	}
 
-	public function setArray_sel($seleccionados='') {
+	public function setArray_sel($seleccionados=[]) {
 	    $this->sSeleccionados = $seleccionados;
 	}
 
@@ -338,4 +360,20 @@ class ProtocoloArray Extends Protocolo {
 	public function setAccionConjunto($sAccionConjunto) {
 		$this->sAccionConjunto = $sAccionConjunto;
 	}
+    /**
+     * @return boolean
+     */
+    public function isAdd()
+    {
+        return $this->bAdd;
+    }
+
+    /**
+     * @param boolean $bAdd
+     */
+    public function setAdd($bAdd)
+    {
+        $this->bAdd = $bAdd;
+    }
+
 }

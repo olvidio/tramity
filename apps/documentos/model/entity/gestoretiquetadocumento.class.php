@@ -126,7 +126,6 @@ class GestorEtiquetaDocumento Extends core\ClaseGestor {
 			$a_pkey = array('id_etiqueta' => $aDades['id_etiqueta'],
 							'id_doc' => $aDades['id_doc']);
 			$oEtiquetaDocumento= new EtiquetaDocumento($a_pkey);
-			$oEtiquetaDocumento->setAllAtributes($aDades);
 			$oEtiquetaDocumentoSet->add($oEtiquetaDocumento);
 		}
 		return $oEtiquetaDocumentoSet->getTot();
@@ -178,7 +177,6 @@ class GestorEtiquetaDocumento Extends core\ClaseGestor {
 			$a_pkey = array('id_etiqueta' => $aDades['id_etiqueta'],
 							'id_doc' => $aDades['id_doc']);
 			$oEtiquetaDocumento = new EtiquetaDocumento($a_pkey);
-			$oEtiquetaDocumento->setAllAtributes($aDades);
 			$oEtiquetaDocumentoSet->add($oEtiquetaDocumento);
 		}
 		return $oEtiquetaDocumentoSet->getTot();

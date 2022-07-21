@@ -1,7 +1,7 @@
 <?php
 use core\ConfigGlobal;
+use escritos\model\Escrito;
 use etherpad\model\Etherpad;
-use expedientes\model\Escrito;
 use expedientes\model\entity\Accion;
 use plantillas\model\entity\Plantilla;
 use web\DateTimeLocal;
@@ -63,7 +63,7 @@ switch($Qque) {
         
         //clone:
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_PLANTILLA,$Qid_plantilla);
+        $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Qid_plantilla);
         $sourceID = $oEtherpad->getPadId();
         
         $oNewEtherpad = new Etherpad();
@@ -76,7 +76,7 @@ switch($Qque) {
          * con el Text no coje los formatos.
         // copiar etherpad:
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_PLANTILLA,$Qid_plantilla);
+        $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Qid_plantilla);
         //$padID = $oEtherpad->getPadId();
         //$txtPad = $oEtherpad->getTexto($padID);
         $htmlPad = $oEtherpad->getHHtml();
@@ -94,7 +94,7 @@ switch($Qque) {
         $jsondata['success'] = true;
         $jsondata['id_escrito'] = $id_escrito;
         $a_cosas = [ 'id_escrito' => $id_escrito, 'id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro];
-        $pagina_mod = web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
+        $pagina_mod = web\Hash::link('apps/escritos/controller/escrito_form.php?'.http_build_query($a_cosas));
         $jsondata['pagina_mod'] = $pagina_mod;
         
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo

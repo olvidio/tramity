@@ -27,34 +27,34 @@ class ConfigSchema Extends core\ClasePropiedades {
 	 *
 	 * @var array
 	 */
-	 private $aPrimary_key;
+	 protected $aPrimary_key;
 
 	/**
 	 * aDades de ConfigSchema
 	 *
 	 * @var array
 	 */
-	 private $aDades;
+	 protected $aDades;
 
 	/**
 	 * bLoaded
 	 *
 	 * @var boolean
 	 */
-	 private $bLoaded = FALSE;
+	 protected $bLoaded = FALSE;
 
 	/**
 	 * Parametro de ConfigSchema
 	 *
 	 * @var string
 	 */
-	 private $sparametro;
+	 protected $sparametro;
 	/**
 	 * Valor de ConfigSchema
 	 *
 	 * @var string
 	 */
-	 private $svalor;
+	 protected $svalor;
 	/* ATRIBUTS QUE NO SÓN CAMPS------------------------------------------------- */
 	/**
 	 * oDbl de ConfigSchema

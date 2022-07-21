@@ -6,7 +6,9 @@ fnjs_editar=function(){
 }
 
 fnjs_eliminar=function(){
-    event.preventDefault();
+    if (typeof event !== 'undefined') {
+    	event.preventDefault();
+	}
 	rta=fnjs_solo_uno('#seleccionados');
 	if (rta==1) {
 		if (confirm("{{ "¿Está seguro que desea borrar este grupo?"|trans }}") ) {
@@ -34,6 +36,7 @@ fnjs_actualizar=function(){
 }
 fnjs_left_side_hide();
 </script>
+<h6>{{ "Los datos referentes a centros deben modificarse desde la administración del servidor."|trans }}</h6>
 <h3>{{ "Lista de grupos"|trans }}</h3>
 <br>
 </form>

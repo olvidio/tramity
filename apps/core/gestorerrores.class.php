@@ -105,7 +105,7 @@ class GestorErrores {
 	    // Cuando ejecuto algun controlador desde la linea de comandos, no existe la ip:
 		$ip = empty($_SERVER['REMOTE_ADDR'])? 'localhost' : $_SERVER['REMOTE_ADDR'];
 		$user = ConfigGlobal::mi_usuario();
-		$esquema = ConfigGlobal::mi_region_dl();
+		$esquema = ConfigGlobal::getEsquema();
 		$ahora = date("Y/m/d H:i:s");
 		// En algunos momentos interesa la info del servidor, pero debe ser con 
 		// la conexión  PDO, no con el Statement:
@@ -144,7 +144,7 @@ class GestorErrores {
 	    // Cuando ejecuto algun controlador desde la linea de comandos, no existe la ip:
 		$ip = empty($_SERVER['REMOTE_ADDR'])? 'localhost' : $_SERVER['REMOTE_ADDR'];
 		$user = ConfigGlobal::mi_usuario();
-		$esquema = ConfigGlobal::mi_region_dl();
+		$esquema = ConfigGlobal::getEsquema();
 		$ahora = date("Y/m/d H:i:s");
 		$id_user = $user."[$esquema]$ip ";
 		$txt = "\n# ".$ahora." - ".$id_user;

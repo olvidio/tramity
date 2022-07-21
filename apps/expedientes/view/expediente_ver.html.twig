@@ -202,9 +202,11 @@
 {{ include ('_antecedentes_js.html.twig') }}
 <script type="text/javascript">
 fnjs_cambio_tramite=function() {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
     
     fnjs_update_div('#main','{{ pagina_cambio|raw }}');
 }
@@ -262,9 +264,11 @@ fnjs_ver_cargos=function(add_del) {
 }
 
 fnjs_add_cargos=function(add_del) {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	var selected = [];
 	$('#of input:checked').each(function() {
 	    selected.push($(this).attr('id'));
@@ -359,7 +363,7 @@ $('#ModalFirma').on('hidden.bs.modal', function () {
 });
 
 fnjs_cancelar=function(){
-    if (event != undefined) {
+	if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -378,7 +382,7 @@ fnjs_ver_escrito=function(id_escrito) {
     var ssfsv = 'sv';
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
     var base_url = '{{ base_url }}'
-    var url = base_url+'/apps/expedientes/controller/escrito_ver.php?id_escrito='+id_escrito;
+    var url = base_url+'/apps/escritos/controller/escrito_ver.php?id_escrito='+id_escrito;
     w=window.open(url, "", winPrefs);
     w.focus();
 }

@@ -1,5 +1,6 @@
 <?php
 // INICIO Cabecera global de URL de controlador *********************************
+use config\model\entity\ConfigSchema;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use usuarios\model\entity\Cargo;
@@ -41,34 +42,73 @@ if (empty($_SESSION['session_auth']['role_actual'])) {
 }
 $role_actual = $_SESSION['session_auth']['role_actual'];
 
-// role de 'secretaria' para los oficiales de secretaria:
-$id_oficina_secretaria = '';
-$gesOficinas = new GestorOficina();
-$cOficinas = $gesOficinas->getOficinas(['sigla' => 'scdl']);
-if (!empty($cOficinas)) {
-    $id_oficina_secretaria = $cOficinas[0]->getId_oficina();
-}
-$mi_id_oficina = ConfigGlobal::role_id_oficina();
-if ($id_oficina_secretaria == $mi_id_oficina) {
-    $a_roles_posibles[] = 'secretaria';
+
+$oConfigSchema = new ConfigSchema('ambito');
+$valor_ambito = $oConfigSchema->getValor();
+$id_ambito_dl = FALSE;
+$a_roles_posibles = [];
+if ($valor_ambito == Cargo::AMBITO_DL) {
+    $id_ambito_dl = TRUE;
+    // role de 'secretaria' para los oficiales de secretaria:
+    $id_oficina_secretaria = '';
+    $gesOficinas = new GestorOficina();
+    $cOficinas = $gesOficinas->getOficinas(['sigla' => 'scdl']);
+    if (!empty($cOficinas)) {
+        $id_oficina_secretaria = $cOficinas[0]->getId_oficina();
+    }
+    $mi_id_oficina = ConfigGlobal::role_id_oficina();
+    if ($id_oficina_secretaria == $mi_id_oficina) {
+        $a_roles_posibles[] = 'secretaria';
+    }
 }
 
 //oficinas adicionales (suplencias..)
-$a_roles_posibles = [];
-$aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
-foreach($aPosiblesCargos as $id_cargo => $cargo) {
-    $a_roles_posibles[] = $cargo;
-    // si es de secretaria, lo añado
-    $oCargo = new Cargo($id_cargo);
-    $id_oficina_cargo = $oCargo->getId_oficina();
-    if ($id_oficina_cargo == $id_oficina_secretaria) {
-        $a_roles_posibles[] = 'secretaria';
+if ($role_actual != 'admin') {
+    $aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
+    foreach($aPosiblesCargos as $id_cargo => $cargo) {
+        $a_roles_posibles[] = $cargo;
+        // si es de secretaria, lo añado
+        if ($valor_ambito === Cargo::AMBITO_DL) {
+            $oCargo = new Cargo($id_cargo);
+            $id_oficina_cargo = $oCargo->getId_oficina();
+            if ($id_oficina_cargo == $id_oficina_secretaria) {
+                $a_roles_posibles[] = 'secretaria';
+            }
+        }
     }
 }
 
 $_SESSION['session_auth']['a_roles'] = $a_roles_posibles;
 ?>
+<!DOCTYPE html>
+<head>
 <script>
+fnjs_is_active=function() {
+	url='apps/usuarios/controller/test_status_phpsession.php';
+	var xmlHttp = new XMLHttpRequest();
+	// a pelo, porque todavía no he cargado el jQuery.
+    xmlHttp.onreadystatechange = function()
+    {
+        if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+        {
+            rta_json=JSON.parse(xmlHttp.responseText);
+            if (rta_json.success != true) {
+                fnjs_logout();
+            }
+        }
+    }
+    xmlHttp.open("post", url); 
+    xmlHttp.send();
+}
+
+// Cada 5 seg. comprobar que la sessión php no ha finalizado, para volver al login de entrada
+// Si es en el portatil no lo compruebo, para que haya menos cosas en los logs.
+<?php
+if (ConfigGlobal::SERVIDOR != 'tramity.local') {
+	echo "setInterval( fnjs_is_active, 5000);";
+}
+?>
+
 fnjs_procesarError=function() {
 	alert("<?= _("Error de página devuelta") ?>");
 }
@@ -144,24 +184,42 @@ fnjs_ref_absoluta=function(base,path) {
 	return url;
 }
 </script>
+</head>
 <body>
 <?php
 switch ($role_actual) {
     case 'admin':
         $server =  $_SESSION['oConfig']->getServerDavical();
         $server = $server.'/index.php';
+        // hay que enviar algun valor, sino el javascript da un error:
+        $error_fecha = empty($_SESSION['oConfig']->getPlazoError())? 15 : $_SESSION['oConfig']->getPlazoError();
+    	$pagina_profile = web\Hash::link('apps/usuarios/controller/personal.php?'.http_build_query([]));
         $a_campos = [
-            'error_fecha' => $_SESSION['oConfig']->getPlazoError(),
+			'pagina_profile' => $pagina_profile,
+            'error_fecha' => $error_fecha,
             'server_davical' => $server,
         ];
-        $oView = new ViewTwig('usuarios/controller');
-        echo $oView->renderizar('admin.html.twig',$a_campos);
+        $entidad = ConfigGlobal::getEsquema();
+        if ($entidad === 'admin') {
+            $oView = new ViewTwig('usuarios/controller');
+            echo $oView->renderizar('admin_servidor.html.twig',$a_campos);
+        } else {
+            $a_campos['is_ambito_dl'] = $id_ambito_dl;
+            $a_campos['entidad'] = $entidad;
+            $oView = new ViewTwig('usuarios/controller');
+            echo $oView->renderizar('admin_entidad.html.twig',$a_campos);
+        }
         break; 
     case 'secretaria';
         include_once 'apps/usuarios/controller/usuario_secretaria.php';
         break;
     default:
-        include_once 'apps/usuarios/controller/usuario_home.php';
+        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+            include_once 'apps/usuarios/controller/usuario_home.php';
+        }
+        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+            include_once 'apps/usuarios/controller/usuario_ctr.php';
+        }
 }
 ?>
 </body>

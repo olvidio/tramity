@@ -4,7 +4,12 @@
     <input type="hidden" name="opcion" value="">
     <input type="hidden" name="mas" value="">
     <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans }}</th></tr>
+    <tr class="table-danger">
+    <th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans }}
+      <input id="protocolo" name="protocolo" size="30" class=contenido  onchange="fnjs_protocolo('#id_lugar','#prot_num','#prot_any','#b_buscar_7')" value=""
+          title="{{ "puede pegar el protocolo completo (ej: cr 1/15) y presionar el tabulador"|trans }}" >
+    </th>
+    </tr>
     <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
         {{ oDesplLugar.desplegable|raw }}
         <td>
@@ -23,7 +28,7 @@
 <!-- listar por un lugar y un tiempo --------------------------------------------- -->
 <form id="frm_buscar_1" name="frm_buscar_1" action="">
     <input type="hidden" name="opcion" value="">
-    {{ "hay 4 opciones diferentes para buscar o listar escritos"|trans }}
+    {{ "hay diferentes opciones para buscar o listar escritos"|trans }}
     <table class="table table-warning p-2">
     <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 1: Listado de los últimos"|trans }}</th></tr>
         <tr><td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans }}:</td>
@@ -53,11 +58,16 @@
     <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
     <td> {{ "entre el"|trans }} 
         <input class="fecha" type="Text" id="frm2_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm2_f_min')" value="{{ f_min }}">
+        </td>
     <td> {{ "y el"|trans }} 
         <input class="fecha" type="Text" id="frm2_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm2_f_max')" value="{{ f_max }}">
-    <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
-    {{ oDesplOficinas2.desplegable|raw }}
-    </td></tr>
+        </td>
+    {%  if vista_dl %}
+        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
+        {{ oDesplOficinas2.desplegable|raw }}
+        </td>
+    {% endif %}
+    </tr>
 <tr><td colspan=5 style="text-align:right;">
       <button class="btn btn-success" id="b_buscar_2" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_2')" >{{ "buscar"|trans }}</button>
     </td></tr>
@@ -65,6 +75,7 @@
 </form>
 
 <!-- Origen, destino  más periodo --------------------------------------------- -->
+{%  if vista_dl %}
 <form id="frm_buscar_3" name="frm_buscar_3" action="">
     <input type="hidden" name="opcion" value="">
     <table class="table table-warning p-2">
@@ -80,8 +91,10 @@
         <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
         <td> {{ "entre el"|trans }} 
           <input class="fecha" type="Text" id="frm3_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm3_f_min')" value="{{ f_min }}">
+          </td>
         <td> {{ "y el"|trans }} 
           <input class="fecha" type="Text" id="frm3_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('frm3_f_max')" value="{{ f_max }}">
+          </td>
         <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
         {{ oDesplOficinas3.desplegable|raw }}
         </td></tr>
@@ -90,6 +103,7 @@
     </td></tr>
     </table>
 </form>
+{% endif %}
 
 <!-- Listar varios escritos --------------------------------------------- -->
 <form id="frm_buscar_4" name="frm_buscar_4" action="">
@@ -108,19 +122,55 @@
         <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
         <td> {{ "entre el"|trans }} 
             <input class="fecha" type="Text" id="frm4_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_min')" value="{{ f_min }}">
+            </td>
         <td> {{ "y el"|trans }} 
             <input class="fecha" type="Text" id="frm4_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_max')" value="{{ f_max }}">
-        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td>
-        <td>
-          {{ oDesplOficinas4.desplegable|raw }}
-        </td></tr>
+            </td>
+        {%  if vista_dl %}
+            <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td>
+            <td>
+              {{ oDesplOficinas4.desplegable|raw }}
+            </td>
+        {% endif %}
+        </tr>
         <tr><td colspan=5 style="text-align:right;">
       <button class="btn btn-success" id="b_buscar_4" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_4')" >{{ "buscar"|trans }}</button>
     </td></tr>
     </table>
 </form>
 
+<!-- Listar Entradas por etiquetas --------------------------------------------- -->
+<form id="frm_buscar_8" name="frm_buscar_8" action="">
+    <input type="hidden" name="opcion" value="">
+    <table class="table table-warning p-2">
+    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 8: Listar entradas por etiquetas"|trans }}</th></tr>
+    <tr>
+      <td>
+        <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
+        <label class="form-check-label">
+          {{ "alguna"|trans }}
+        </label>
+        <br>
+        <input type="radio" class="form-check-input" name="andOr" value="AND" {{ chk_and }} >
+        <label class="form-check-label">
+          {{ "todas"|trans }}
+        </label>
+      </td>
+      <td colspan=4>
+        <span id="span_etiquetas">
+      	  {{ oArrayDesplEtiquetas.ListaSelects|raw }}
+        </span>
+      </td>
+    </tr>
+    <tr><td colspan=5 style="text-align:right;">
+      		<button class="btn btn-success" id="b_buscar_8" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_8')" >{{ "buscar"|trans }}</button>
+        </td>
+    </tr>
+    </table>
+</form>
+
 <!-- Listar modelos jurídicos por fechas --------------------------------------------- -->
+{%  if vista_dl %}
 <form id="frm_buscar_6" name="frm_buscar_6" action="">
     <input type="hidden" name="opcion" value="">
     <table class="table table-warning p-2">
@@ -131,8 +181,10 @@
     <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
     <td> {{ "entre el"|trans }} 
     	<input class="fecha" type="Text" id="frm6_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm6_f_min')" value="{{ f_min }}">
+    	</td>
     <td> {{ "y el"|trans }} 
     	<input class="fecha" type="Text" id="frm6_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm6_f_max')" value="{{ f_max }}">
+    	</td>
     <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
     {{ oDesplOficinas6.desplegable|raw }}
     </td></tr>
@@ -141,6 +193,7 @@
     </td></tr>
     </table>
 </form>
+{% endif %}
 
 </div>
 
@@ -148,11 +201,13 @@
   <div class="col-2">
   	<input id="b_listar_t" name="b_listar_t" type="button" value="{{ "ver todas las opciones"|trans }}" onclick="fnjs_ver_todos()" flag='uno'>
   </div>
+  {% if vista_dl %}
   <div class="col-2"></div>
   <div class="col-2">
     <input id="chk_anulados" name="chk_anulados" type="checkbox" onChange='fnjs_ctr_anulados()' {{ chk_ctr_anulados }}>
     {{ "ver ctr anulados"|trans }}
   </div>
+  {% endif %}
 
 </div>
 
@@ -161,7 +216,7 @@
 
 <script>
 $(function() {
-	$( "#frm2_f_min" ).datetimepicker( {
+	$( "#frm2_f_min" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -177,7 +232,7 @@ $(function() {
 });
     
 $(function() {
-	$( "#frm2_f_max" ).datetimepicker( {
+	$( "#frm2_f_max" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -193,7 +248,7 @@ $(function() {
 });
 
 $(function() {
-	$( "#frm3_f_min" ).datetimepicker( {
+	$( "#frm3_f_min" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -209,7 +264,7 @@ $(function() {
 });
     
 $(function() {
-	$( "#frm3_f_max" ).datetimepicker( {
+	$( "#frm3_f_max" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -225,7 +280,7 @@ $(function() {
 });
 
 $(function() {
-	$( "#frm4_f_min" ).datetimepicker( {
+	$( "#frm4_f_min" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -241,7 +296,7 @@ $(function() {
 });
     
 $(function() {
-	$( "#frm4_f_max" ).datetimepicker( {
+	$( "#frm4_f_max" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -257,7 +312,7 @@ $(function() {
 });
 
 $(function() {
-	$( "#frm6_f_min" ).datetimepicker( {
+	$( "#frm6_f_min" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -273,7 +328,7 @@ $(function() {
 });
     
 $(function() {
-	$( "#frm6_f_max" ).datetimepicker( {
+	$( "#frm6_f_max" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -292,6 +347,28 @@ fnjs_aviso_IESE=function(id){
     var nom=$(id).val();
     if (nom=="610") alert ("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans|raw }}");
 }
+/* intentar explotar el protocolo en lugar, num y año */
+fnjs_protocolo=function(nom_lugar,num,any,siguiente){
+    var protocolo=$('#protocolo').val();
+    var expresion_regular= new RegExp('\\s*((\\w*\\s*)*)\\s+([0-9]+)\/([0-9]+)', 'g');
+    var resultado = expresion_regular.exec(protocolo);
+
+    if (resultado) {
+        if (resultado[1]) {
+            //str_select = nom_lugar+" option:contains("+resultado[1]+")";
+            $(nom_lugar+" option").filter(function() {
+                return $(this).text() === resultado[1];
+            }).attr('selected', 'selected');
+        }
+        
+        if (resultado[3]) {
+            $(num).val(resultado[3]);
+            $(any).val(resultado[4]);
+            $(siguiente).focus();
+        }
+    }
+}
+
 fnjs_proto=function(num,any,siguiente){
     var numero;
     var prot_num=$(num).val();
@@ -302,6 +379,7 @@ fnjs_proto=function(num,any,siguiente){
         $(siguiente).focus();
     }
 }
+
 fnjs_sel_periodo=function(id){
     var nom=$(id+' :selected').text();
     
@@ -454,6 +532,29 @@ fnjs_compatible=function(){
     fnjs_buscar('#frm_buscar_{{ opcion }}')
 {% endif %}
 
+
+{{ oArrayDesplEtiquetas.ComprobarSelectJs|raw }}
+fnjs_mas_etiquetas=function(){
+    var code = (event.keyCode ? event.keyCode : event.which);
+    var valor=1;
+    var id_campo='#'+event.currentTarget.id;
+    var valor=$(id_campo).val();
+    if(code!=9 && typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    if ( code==9 || event.type=="change") {
+        if (valor!=0) {
+            {{ oArrayDesplEtiquetas.ListaSelectsJs|raw }}
+        }
+    }
+}
+fnjs_quitar_etiquetas=function(){
+    $('#span_etiquetas').html("");
+    $('#etiquetas_num').val(0);
+}
+
+    
 $(document).ready(function() {
 	tabs_show('{{ vista }}','{{ filtro }}');
 });

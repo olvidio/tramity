@@ -24,7 +24,7 @@
 <div id="resultados"></div>
 <script>
 fnjs_cancelar=function(){
-    if (event != undefined) {
+	if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -39,15 +39,17 @@ fnjs_cancelar=function(){
 }
 
 fnjs_reunion=function(){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-	// Asegurarme que es por click y no por return (posicion: 0,0)
-	var x = event.x || event.clientX;
-    var y = event.y || event.clientY;
-    if (!x && !y) {
-    	return false;
-    }
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        // Asegurarme que es por click y no por return (posicion: 0,0)
+        var x = event.x || event.clientX;
+        var y = event.y || event.clientY;
+        if (!x && !y) {
+            return false;
+        }
+	}
 
     $('#que').val('reunion');
 	datos = $('#form_reunion').serialize();	
@@ -67,7 +69,7 @@ fnjs_reunion=function(){
 }
 
 $(function() {
-	$( "#f_reunion" ).datetimepicker( {
+	$( "#f_reunion" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: true,
 		datepicker: true,
 		format: 'd-m-Y H:i',

@@ -120,7 +120,6 @@ class GestorCalendarItem Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('dav_id' => $aDades['dav_id']);
 			$oCalendarItem= new CalendarItem($a_pkey);
-			$oCalendarItem->setAllAtributes($aDades);
 			$oCalendarItemSet->add($oCalendarItem);
 		}
 	    return $oCalendarItemSet->getTot();
@@ -143,7 +142,6 @@ class GestorCalendarItem Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('dav_id' => $aDades['dav_id']);
 			$oCalendarItem= new CalendarItem($a_pkey);
-			$oCalendarItem->setAllAtributes($aDades);
 			$oCalendarItemSet->add($oCalendarItem);
 		}
 		return $oCalendarItemSet->getTot();
@@ -194,7 +192,6 @@ class GestorCalendarItem Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array( 'dav_id' => $aDades['dav_id']);
 			$oCalendarItem = new CalendarItem($a_pkey);
-			$oCalendarItem->setAllAtributes($aDades);
 			$oCalendarItemSet->add($oCalendarItem);
 		}
 		return $oCalendarItemSet->getTot();

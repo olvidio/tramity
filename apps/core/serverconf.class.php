@@ -27,7 +27,7 @@ Class ServerConf {
 	 */
 	public static $dmz=FALSE;  // valores: FALSE para interior, TRUE para exterior.
 	public static $debug=TRUE;
-
+	
 	public static $web_server='//'.self::SERVIDOR;
 	public static $web_port=':443';
 	public static $web_path='/'.self::WEBDIR;

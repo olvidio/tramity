@@ -1,6 +1,8 @@
 <?php
 namespace config\model;
 use config\model\entity\ConfigSchema;
+use config\model\entity\ConfigSchemaPublic;
+use core\ConfigGlobal;
 
 /**
  * Classe 
@@ -50,6 +52,12 @@ class Config {
         return $oConfigSchema->getValor();
     }
     
+    public function getIni_contador_iese() {
+        $parametro = 'ini_contador_iese';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
+    
     public function getContador_cr() {
         $this->resetContador();
         $parametro = 'contador_cr';
@@ -78,9 +86,25 @@ class Config {
         return $valor_actual;
     }
     
-    public function getContador($bCr) {
-        if ($bCr) {
+    public function getContador_iese() {
+        $this->resetContador();
+        $parametro = 'contador_iese';
+        $oConfigSchema = new ConfigSchema($parametro);
+        $valor_actual = $oConfigSchema->getValor();
+        $valor_actual = empty($valor_actual)? $this->getIni_contador_iese() : $valor_actual;
+        $valor_nuevo = $valor_actual + 1;
+        
+        $oConfigSchema->setValor($valor_nuevo);
+        $oConfigSchema->DBGuardar();
+        
+        return $valor_actual;
+    }
+    
+    public function getContador($sigla='') {
+        if ($sigla == 'cr') {
             return $this->getContador_cr();
+        } elseif ($sigla == 'iese') {
+            return $this->getContador_iese(); 
         } else {
             return $this->getContador_resto(); 
         }
@@ -95,6 +119,10 @@ class Config {
             $oConfigSchema->setValor($any_actual);
             $oConfigSchema->DBGuardar();
             // poner al inicio
+            $valor = $this->getIni_contador_iese();
+            $oConfigSchemaContador = new ConfigSchema('contador_iese');
+            $oConfigSchemaContador->setValor($valor);
+            $oConfigSchemaContador->DBGuardar();
             $valor = $this->getIni_contador_cr();
             $oConfigSchemaContador = new ConfigSchema('contador_cr');
             $oConfigSchemaContador->setValor($valor);
@@ -130,13 +158,13 @@ class Config {
     
     public function getServerEtherpad() {
         $parametro = 'server_etherpad';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     
     public function getServerEthercalc() {
         $parametro = 'server_ethercalc';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     
@@ -165,32 +193,32 @@ class Config {
     // SMTP server:
     public function getSMTPSecure() {
         $parametro = 'smtp_secure';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     public function getSMTPHost() {
         $parametro = 'smtp_host';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     public function getSMTPPort() {
         $parametro = 'smtp_port';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     public function getSMTPAuth() {
         $parametro = 'smtp_auth';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     public function getSMTPUser() {
         $parametro = 'smtp_user';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     public function getSMTPPwd() {
         $parametro = 'smtp_pwd';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     public function getFrom() {
@@ -204,9 +232,21 @@ class Config {
         return $oConfigSchema->getValor();
     }
     
+    public function getDock() {
+        $parametro = 'dock';
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
+		return $oConfigSchema->getValor();
+    }
+    
+    public function getNomDock() {
+        $parametro = 'nomdock';
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
+    	return $oConfigSchema->getValor();
+    }
+    
     public function getServerDavical() {
         $parametro = 'server_davical';
-        $oConfigSchema = new ConfigSchema($parametro);
+        $oConfigSchema = new ConfigSchemaPublic($parametro);
         return $oConfigSchema->getValor();
     }
     
@@ -219,6 +259,13 @@ class Config {
     
     public function getPerm_aceptar() {
         $parametro = 'perm_aceptar';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
+    
+    // config default
+    public function getPlataformaMantenimiento() {
+        $parametro = 'plataforma_mantenimiento';
         $oConfigSchema = new ConfigSchema($parametro);
         return $oConfigSchema->getValor();
     }

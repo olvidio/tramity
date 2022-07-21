@@ -1,8 +1,11 @@
 <?php
 namespace entradas\model\entity;
+use entradas\model\Entrada;
 use core;
-use web;
 use stdClass;
+use web;
+use lugares\model\entity\Grupo;
+use lugares\model\entity\Lugar;
 /**
  * Fitxer amb la Classe que accedeix a la taula entradas_bypass
  *
@@ -21,7 +24,7 @@ use stdClass;
  * @version 1.0
  * @created 20/10/2020
  */
-class EntradaBypass Extends core\ClasePropiedades {
+class EntradaBypass Extends Entrada {
 	/* ATRIBUTS ----------------------------------------------------------------- */
 
 	/**
@@ -29,41 +32,41 @@ class EntradaBypass Extends core\ClasePropiedades {
 	 *
 	 * @var array
 	 */
-	 private $aPrimary_key;
+	 //private $aPrimary_key;
 
 	/**
 	 * aDades de EntradaBypass
 	 *
 	 * @var array
 	 */
-	 private $aDades;
+	 //private $aDades;
 
 	/**
 	 * bLoaded de EntradaBypass
 	 *
 	 * @var boolean
 	 */
-	 private $bLoaded = FALSE;
+	 //private $bLoaded = FALSE;
 
 	/**
 	 * Id_schema de EntradaBypass
 	 *
 	 * @var integer
 	 */
-	 private $iid_schema;
+	 //private $iid_schema;
 
 	/**
 	 * Id_item de EntradaBypass
 	 *
 	 * @var integer
 	 */
-	 private $iid_item;
+	 //private $iid_item;
 	/**
 	 * Id_entrada de EntradaBypass
 	 *
 	 * @var integer
 	 */
-	 private $iid_entrada;
+	 //private $iid_entrada;
 	/**
 	 * Descripcion de EntradaBypass
 	 *
@@ -114,7 +117,7 @@ class EntradaBypass Extends core\ClasePropiedades {
 	 * Si només necessita un valor, se li pot passar un integer.
 	 * En general se li passa un array amb les claus primàries.
 	 *
-	 * @param integer|array iid_item
+	 * @param integer|array iid_entrada
 	 * 						$a_id. Un array con los nombres=>valores de las claves primarias.
 	 */
 	function __construct($a_id='') {
@@ -122,12 +125,12 @@ class EntradaBypass Extends core\ClasePropiedades {
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_entrada') && $val_id !== '') { $this->iid_entrada = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
-				$this->iid_item = intval($a_id); // evitem SQL injection fent cast a integer
-				$this->aPrimary_key = array('iid_item' => $this->iid_item);
+				$this->iid_entrada = intval($a_id); // evitem SQL injection fent cast a integer
+				$this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
 			}
 		}
 		$this->setoDbl($oDbl);
@@ -138,7 +141,7 @@ class EntradaBypass Extends core\ClasePropiedades {
 
 	/**
 	 * Desa els atributs de l'objecte a la base de dades.
-	 * Si no hi ha el registre, fa el insert, si hi es fa el update.
+	 * Si no hi ha el registre, fa el insert, si hi és fa el update.
 	 *
 	 */
 	public function DBGuardar() {
@@ -163,7 +166,7 @@ class EntradaBypass Extends core\ClasePropiedades {
 					id_grupos                = :id_grupos,
 					destinos                 = :destinos,
 					f_salida                 = :f_salida";
-			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_item='$this->iid_item'")) === FALSE) {
+			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_entrada='$this->iid_entrada'")) === FALSE) {
 				$sClauError = 'EntradaBypass.update.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
@@ -199,7 +202,7 @@ class EntradaBypass Extends core\ClasePropiedades {
 					return FALSE;
 				}
 			}
-			$this->id_item = $oDbl->lastInsertId('entradas_bypass_id_item_seq');
+			//$this->id_item = $oDbl->lastInsertId('entradas_bypass_id_item_seq');
 		}
 		$this->setAllAtributes($aDades);
 		return TRUE;
@@ -212,8 +215,10 @@ class EntradaBypass Extends core\ClasePropiedades {
 	public function DBCarregar($que=null) {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
-		if (isset($this->iid_item)) {
-			if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_item='$this->iid_item'")) === FALSE) {
+		if (isset($this->iid_entrada)) {
+			if (($oDblSt = $oDbl->query("SELECT * 
+				FROM $nom_tabla JOIN entradas USING (id_entrada) WHERE id_entrada='$this->iid_entrada'"))
+				=== FALSE) {
 				$sClauError = 'EntradaBypass.carregar';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
@@ -226,7 +231,7 @@ class EntradaBypass Extends core\ClasePropiedades {
                     $this->setAllAtributes($aDades);
 					break;
 				case 'guardar':
-					if (!$oDblSt->rowCount()) return FALSE;
+					if (!$oDblSt->rowCount()) { return FALSE; }
 					break;
                 default:
 					// En el caso de no existir esta fila, $aDades = FALSE:
@@ -249,7 +254,7 @@ class EntradaBypass Extends core\ClasePropiedades {
 	public function DBEliminar() {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
-		if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_item='$this->iid_item'")) === FALSE) {
+		if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_entrada='$this->iid_entrada'")) === FALSE) {
 			$sClauError = 'EntradaBypass.eliminar';
 			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 			return FALSE;
@@ -268,13 +273,31 @@ class EntradaBypass Extends core\ClasePropiedades {
 	function setAllAtributes($aDades,$convert=FALSE) {
 		if (!is_array($aDades)) { return; }
 		if (array_key_exists('id_schema',$aDades)) { $this->setId_schema($aDades['id_schema']); }
-		if (array_key_exists('id_item',$aDades)) { $this->setId_item($aDades['id_item']); }
+		//if (array_key_exists('id_item',$aDades)) { $this->setId_item($aDades['id_item']); }
 		if (array_key_exists('id_entrada',$aDades)) { $this->setId_entrada($aDades['id_entrada']); }
 		if (array_key_exists('descripcion',$aDades)) { $this->setDescripcion($aDades['descripcion']); }
 		if (array_key_exists('json_prot_destino',$aDades)) { $this->setJson_prot_destino($aDades['json_prot_destino'],TRUE); }
 		if (array_key_exists('id_grupos',$aDades)) { $this->setId_grupos($aDades['id_grupos'],TRUE); }
 		if (array_key_exists('destinos',$aDades)) { $this->setDestinos($aDades['destinos'],TRUE); }
 		if (array_key_exists('f_salida',$aDades)) { $this->setF_salida($aDades['f_salida'],$convert); }
+		// añado los de entradas
+		if (array_key_exists('modo_entrada',$aDades)) { $this->setModo_entrada($aDades['modo_entrada']); }
+		if (array_key_exists('json_prot_origen',$aDades)) { $this->setJson_prot_origen($aDades['json_prot_origen'],TRUE); }
+		if (array_key_exists('asunto_entrada',$aDades)) { $this->setAsunto_entrada($aDades['asunto_entrada']); }
+		if (array_key_exists('json_prot_ref',$aDades)) { $this->setJson_prot_ref($aDades['json_prot_ref'],TRUE); }
+		if (array_key_exists('ponente',$aDades)) { $this->setPonente($aDades['ponente']); }
+		if (array_key_exists('resto_oficinas',$aDades)) { $this->setResto_oficinas($aDades['resto_oficinas'],TRUE); }
+		if (array_key_exists('asunto',$aDades)) { $this->setAsunto($aDades['asunto']); }
+		if (array_key_exists('f_entrada',$aDades)) { $this->setF_entrada($aDades['f_entrada'],$convert); }
+		if (array_key_exists('detalle',$aDades)) { $this->setDetalle($aDades['detalle']); }
+		if (array_key_exists('categoria',$aDades)) { $this->setCategoria($aDades['categoria']); }
+		if (array_key_exists('visibilidad',$aDades)) { $this->setVisibilidad($aDades['visibilidad']); }
+		if (array_key_exists('f_contestar',$aDades)) { $this->setF_contestar($aDades['f_contestar'],$convert); }
+		if (array_key_exists('bypass',$aDades)) { $this->setBypass($aDades['bypass']); }
+		if (array_key_exists('estado',$aDades)) { $this->setEstado($aDades['estado']); }
+		if (array_key_exists('anulado',$aDades)) { $this->setAnulado($aDades['anulado']); }
+		if (array_key_exists('encargado',$aDades)) { $this->setEncargado($aDades['encargado']); }
+		if (array_key_exists('json_visto',$aDades)) { $this->setJson_visto($aDades['json_visto'],TRUE); }
 	}	
 	/**
 	 * Estableix a empty el valor de tots els atributs
@@ -283,7 +306,7 @@ class EntradaBypass Extends core\ClasePropiedades {
 	function setNullAllAtributes() {
 		$aPK = $this->getPrimary_key();
 		$this->setId_schema('');
-		$this->setId_item('');
+		//$this->setId_item('');
 		$this->setId_entrada('');
 		$this->setDescripcion('');
 		$this->setJson_prot_destino('');
@@ -291,6 +314,24 @@ class EntradaBypass Extends core\ClasePropiedades {
 		$this->setDestinos('');
 		$this->setF_salida('');
 		$this->setPrimary_key($aPK);
+		// añado los de entradas
+		$this->setModo_entrada('');
+		$this->setJson_prot_origen('');
+		$this->setAsunto_entrada('');
+		$this->setJson_prot_ref('');
+		$this->setPonente('');
+		$this->setResto_oficinas('');
+		$this->setAsunto('');
+		$this->setF_entrada('');
+		$this->setDetalle('');
+		$this->setCategoria('');
+		$this->setVisibilidad('');
+		$this->setF_contestar('');
+		$this->setBypass('');
+		$this->setEstado('');
+		$this->setAnulado('');
+		$this->setEncargado('');
+		$this->setJson_visto('');
 	}
 
 	/* METODES GET i SET --------------------------------------------------------*/
@@ -314,7 +355,7 @@ class EntradaBypass Extends core\ClasePropiedades {
 	 */
 	function getPrimary_key() {
 		if (!isset($this->aPrimary_key )) {
-			$this->aPrimary_key = array('id_item' => $this->iid_item);
+			$this->aPrimary_key = array('id_entrada' => $this->iid_entrada);
 		}
 		return $this->aPrimary_key;
 	}
@@ -326,12 +367,12 @@ class EntradaBypass Extends core\ClasePropiedades {
 	    if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
-				if (($nom_id == 'id_item') && $val_id !== '') { $this->iid_item = (int)$val_id; } // evitem SQL injection fent cast a integer
+				if (($nom_id == 'id_entrada') && $val_id !== '') { $this->iid_entrada = (int)$val_id; } // evitem SQL injection fent cast a integer
 			}
 		} else {
 			if (isset($a_id) && $a_id !== '') {
-				$this->iid_item = intval($a_id); // evitem SQL injection fent cast a integer
-				$this->aPrimary_key = array('iid_item' => $this->iid_item);
+				$this->iid_entrada = intval($a_id); // evitem SQL injection fent cast a integer
+				$this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
 			}
 		}
 	}
@@ -342,20 +383,24 @@ class EntradaBypass Extends core\ClasePropiedades {
 	 *
 	 * @return integer iid_item
 	 */
+	/*
 	function getId_item() {
 		if (!isset($this->iid_item) && !$this->bLoaded) {
 			$this->DBCarregar();
 		}
 		return $this->iid_item;
 	}
+	*/
 	/**
 	 * estableix el valor de l'atribut iid_item de EntradaBypass
 	 *
 	 * @param integer iid_item
 	 */
+	/*
 	function setId_item($iid_item) {
 		$this->iid_item = $iid_item;
 	}
+	*/
 	/**
 	 * Recupera l'atribut iid_entrada de EntradaBypass
 	 *
@@ -499,7 +544,7 @@ class EntradaBypass Extends core\ClasePropiedades {
 	}
 	/**
 	 * estableix el valor de l'atribut df_salida de EntradaBypass
-	 * Si df_salida es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si df_salida es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, df_salida debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param web\DateTimeLocal|string df_salida='' optional.
@@ -514,6 +559,40 @@ class EntradaBypass Extends core\ClasePropiedades {
 	    }
 	}
 	/* METODES GET i SET D'ATRIBUTS QUE NO SÓN CAMPS -----------------------------*/
+	
+	public function getDestinosByPass() {
+		$a_grupos = $this->getId_grupos();
+		
+		$aMiembros = [];
+		$destinos_txt = '';
+
+		if (!empty($a_grupos)) {
+			$destinos_txt = $this->getDescripcion();
+			//(segun los grupos seleccionados)
+			foreach ($a_grupos as $id_grupo) {
+				$oGrupo = new Grupo($id_grupo);
+				$a_miembros_g = $oGrupo->getMiembros();
+				$aMiembros = array_merge($aMiembros, $a_miembros_g);
+			}
+			$aMiembros = array_unique($aMiembros);
+			$this->setDestinos($aMiembros);
+			if ($this->DBGuardar() === FALSE ) {
+				$error_txt = $this->getErrorTxt();
+				exit ($error_txt);
+			}
+		} else {
+			//(segun individuales)
+			$a_json_prot_dst = $this->getJson_prot_destino();
+			foreach ($a_json_prot_dst as $json_prot_dst) {
+				$aMiembros[] = $json_prot_dst->id_lugar;
+				$oLugar = new Lugar($json_prot_dst->id_lugar);
+				$destinos_txt .= empty($destinos_txt)? '' : ', ';
+				$destinos_txt .= $oLugar->getNombre();
+			}
+		}
+		
+		return ['miembros' => $aMiembros, 'txt' =>$destinos_txt];
+	}
 
 	/**
 	 * Retorna una col·lecció d'objectes del tipus DatosCampo

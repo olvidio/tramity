@@ -1,4 +1,42 @@
 
 .respuesta {
-   background-color: #a3cfbb;
+   background-color: #a3cfbb !important;
 }
+
+.btn-expediente {
+   background-color: #d3d7cf !important;
+}
+
+.btn-expediente.active {
+  background-color: #555753 !important;
+  font-weight: bold !important;
+}
+
+.btn-entrada {
+  background-color: #fdf6e3 !important;
+}
+.btn-entrada.active {
+  background-color: #c17d11 !important;
+  font-weight: bold !important;
+}
+
+.btn-pendiente {
+   background-color: #ffffff !important;
+}
+.btn-pendiente.active {
+   background-color: #3465a4!important;
+}
+
+.btn-documento {
+   background-color: #ffffff !important;
+}
+.btn-documento.active {
+   background-color: #3465a4!important;
+}
+
+/* para quitar la flecha en comlumn visible de DataTable
+Ya aparece otra */
+.dt-down-arrow {
+	display: none !important;
+}
+

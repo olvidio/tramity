@@ -1,12 +1,14 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
-use entradas\model\Entrada;
+use escritos\model\Escrito;
 use etiquetas\model\entity\GestorEtiqueta;
-use expedientes\model\Escrito;
 use expedientes\model\Expediente;
 use expedientes\model\entity\GestorAccion;
 use tramites\model\entity\GestorTramite;
+use usuarios\model\Categoria;
+use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
@@ -48,6 +50,12 @@ if (!empty($oCargo)) {
     $ponente_txt = $oCargo->getCargo();
 }
 
+// para reducir la vista en el caso de los ctr
+$vista_dl = TRUE;
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    $vista_dl = FALSE;
+}
+
 // preparar
 $gesCargos = new GestorCargo();
 $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
@@ -70,9 +78,9 @@ $oDesplPrioridad->setAction('fnjs_comprobar_plazo()');
 $a_vida = $oExpediente->getArrayVida();
 $oDesplVida = new Desplegable('vida',$a_vida,'',FALSE);
 
-// visibilidad (usar las mismas opciones que en entradas)
-$oEntrada = new Entrada();
-$aOpciones = $oEntrada->getArrayVisibilidad();
+// visibilidad
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
@@ -120,6 +128,12 @@ if ($Qid_expediente) {
     $oDesplVida->setOpcion_sel($vida);
     $visibilidad = $oExpediente->getVisibilidad();
     $oDesplVisibilidad->setOpcion_sel($visibilidad);
+    $oPermisoregistro = new PermRegistro();
+    
+    $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oExpediente, 'cambio');
+    if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
+    	$oDesplVisibilidad->setDisabled(TRUE);
+    }
 
     $etiquetas = $oExpediente->getEtiquetasVisiblesArray();
     $oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
@@ -140,10 +154,13 @@ if ($Qid_expediente) {
     
     $oEscrito = new Escrito();
     $aAcciones = $oEscrito->getArrayAccion();
-    $aCategorias = $oEscrito->getArrayCategoria();
+    $oCategoria = new Categoria();
+    $aCategorias = $oCategoria->getArrayCategoria();
     
     $oProtDestino = new Protocolo();
     $oProtDestino->setNombre('destino');
+    // mortrar archivar si todas las acciones están envidas
+    $mostrar_archivar = TRUE;
     foreach ($cAcciones as $oAccion) {
         $id_escrito = $oAccion->getId_escrito();
         $tipo_accion = $oAccion->getTipo_accion();
@@ -157,7 +174,7 @@ if ($Qid_expediente) {
                     'filtro' => $Qfiltro,
                     'prioridad_sel' => $Qprioridad_sel,
         ];
-        $pag_escrito =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query($a_cosas));
+        $pag_escrito =  web\Hash::link('apps/escritos/controller/escrito_form.php?'.http_build_query($a_cosas));
         
         $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >"._("mod.datos")."</span>";
         $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito('$id_escrito');\" >"._("rev.texto")."</span>";
@@ -166,9 +183,20 @@ if ($Qid_expediente) {
         $f_salida = $oEscrito->getF_salida()->getIso();
         if (empty($f_salida)) {
             $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >"._("eliminar")."</span>";
+			// para los centros, se puede enviar desde aquí
+			if (!$vista_dl) {
+				$link_enviar = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito($id_escrito);\" >"._("enviar")."</span>";
+				$a_accion['link_del'] .= $link_enviar;
+			}
+			$mostrar_archivar = FALSE;
         } else {
             $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >"._("quitar")."</span>";
+            
+            $protocolo_txt = $oEscrito->getProt_local_txt();
+			$a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >$protocolo_txt</span>";
+			$a_accion['link_mod'] = _("enviado");
         }
+        
         
         $dst_txt = $oEscrito->getDestinosEscrito();
         
@@ -180,7 +208,7 @@ if ($Qid_expediente) {
         $adjuntos = '';
         $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
         if (!empty($a_id_adjuntos)) {
-            $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto('$id_escrito');\"  ></i>";
+            $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto_en_expediente('$id_escrito','mod');\"  ></i>";
         }
         // Categoria
         $categoria = $oEscrito->getCategoria();
@@ -223,6 +251,7 @@ if ($Qid_expediente) {
         }
     }
 } else {
+	$mostrar_archivar = FALSE;
     $titulo=_("nuevo expediente");
     $estado = Expediente::ESTADO_BORRADOR;
     $f_contestar = '';
@@ -235,6 +264,13 @@ if ($Qid_expediente) {
     $oficinas = '';
     $oficiales = '';
 
+    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+		$oDesplVisibilidad->setOpcion_sel(Visibilidad::V_CTR_TODOS);
+    } else {
+		$oDesplVisibilidad->setOpcion_sel(Visibilidad::V_PERSONAL);
+    }
+    	
+    
     $oArrayDesplEtiquetas = new web\DesplegableArray([],$a_posibles_etiquetas,'etiquetas');
     $oArrayDesplEtiquetas ->setBlanco('t');
     $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
@@ -256,8 +292,8 @@ $url_ajax = 'apps/tramites/controller/tramitecargo_ajax.php';
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query([]));
 
-$pag_escrito =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
-$pag_propuesta =  web\Hash::link('apps/expedientes/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_PROPUESTA]));
+$pag_escrito =  web\Hash::link('apps/escritos/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
+$pag_propuesta =  web\Hash::link('apps/escritos/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_PROPUESTA]));
 $pag_plantilla =  web\Hash::link('apps/plantillas/controller/plantilla_lista_expediente.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'modo' => $Qmodo, 'prioridad_sel' => $Qprioridad_sel]));
 $pag_respuesta =  web\Hash::link('apps/entradas/controller/buscar_form.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
@@ -275,8 +311,8 @@ $oHoy = new DateTimeLocal();
 $oHoy->sub(new DateInterval($error_fecha_txt));
 $minIso = $oHoy->format('Y-m-d');
 
-
 $a_campos = [
+    'vista_dl' => $vista_dl,
     'titulo' => $titulo,
     'id_expediente' => $Qid_expediente,
     //'oHash' => $oHash,
@@ -315,6 +351,7 @@ $a_campos = [
     'pag_plantilla' => $pag_plantilla,
     'pag_respuesta' => $pag_respuesta,
     'pag_actualizar' => $pag_actualizar,
+	'mostrar_archivar' => $mostrar_archivar,
     // preparar
     'a_preparar' => $a_preparar,
     // para la pagina js (prioridades)
@@ -336,5 +373,7 @@ $a_campos = [
     'minIso' => $minIso,
 ];
 
-$oView = new ViewTwig('expedientes/controller');
+// dentro del _expediente_form_js.html.twig hay un include a  escritos/view/_escrito_enviar_js.html.twig
+$aditionalPaths = ['escritos' => 'escritos/view'];
+$oView = new ViewTwig('expedientes/controller',$aditionalPaths);
 echo $oView->renderizar('expediente_form.html.twig',$a_campos);

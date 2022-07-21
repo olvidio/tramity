@@ -51,7 +51,6 @@ class GestorPlantilla Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_plantilla' => $aDades['id_plantilla']);
 			$oPlantilla= new Plantilla($a_pkey);
-			$oPlantilla->setAllAtributes($aDades);
 			$oPlantillaSet->add($oPlantilla);
 		}
 		return $oPlantillaSet->getTot();
@@ -102,7 +101,6 @@ class GestorPlantilla Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_plantilla' => $aDades['id_plantilla']);
 			$oPlantilla = new Plantilla($a_pkey);
-			$oPlantilla->setAllAtributes($aDades);
 			$oPlantillaSet->add($oPlantilla);
 		}
 		return $oPlantillaSet->getTot();

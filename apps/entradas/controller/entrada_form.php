@@ -1,11 +1,12 @@
 <?php
 use core\ViewTwig;
 use entradas\model\Entrada;
-use entradas\model\entity\GestorEntradaBypass;
+use entradas\model\entity\EntradaBypass;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
+use usuarios\model\Categoria;
 use usuarios\model\PermRegistro;
-use usuarios\model\entity\GestorCargo;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;
@@ -37,12 +38,8 @@ $plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 
-$txt_option_ref = '';
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();
-foreach ($a_posibles_lugares as $id_lugar => $sigla) {
-    $txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
-}
 
 $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
 $oArrayProtDestino->setBlanco('t');
@@ -70,14 +67,16 @@ $oDesplPonenteOficina->setTabIndex(80);
 
 $oEntrada = new Entrada($Qid_entrada);
 // tipo
-$aOpciones = $oEntrada->getArrayCategoria();
+$oCategoria = new Categoria();
+$aOpciones = $oCategoria->getArrayCategoria();
 $oDesplCategoria = new Desplegable();
 $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
 $oDesplCategoria->setTabIndex(80);
 
 // visibilidad
-$aOpciones = $oEntrada->getArrayVisibilidad();
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
@@ -126,7 +125,7 @@ $a_posibles_grupos = $gesGrupo->getArrayGrupos();
     
 if (!empty($Qid_entrada)) {
     $json_prot_origen = $oEntrada->getJson_prot_origen();
-    $oProtOrigen->setLugar($json_prot_origen->lugar);
+    $oProtOrigen->setLugar($json_prot_origen->id_lugar);
     $oProtOrigen->setProt_num($json_prot_origen->num);
     $oProtOrigen->setProt_any($json_prot_origen->any);
     $oProtOrigen->setMas($json_prot_origen->mas);
@@ -186,31 +185,22 @@ if (!empty($Qid_entrada)) {
     $titulo = _("modificar entrada");
     
     // a ver si ya está
-    $chk_grupo_dst = '';
     $id_grupo = 0;
-    $gesEntradasBypass = new GestorEntradaBypass();
-    $cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
-    if (!empty($cEntradasBypass)) {
-        // solo debería haber una:
-        $oEntradaBypass = $cEntradasBypass[0];
-        $a_grupos = $oEntradaBypass->getId_grupos();
-        if (!empty($a_grupos)) {
-            $oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');
-            $chk_grupo_dst = 'checked';
-        } else {
-            $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
-            $chk_grupo_dst = '';
-            $json_prot_dst = $oEntradaBypass->getJson_prot_destino();
-            $oArrayProtDestino->setArray_sel($json_prot_dst);
-        }
-        $oArrayDesplGrupo->setBlanco('t');
-        $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
-        
-    } else {
-        $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
-        $oArrayDesplGrupo->setBlanco('t');
-        $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
-    }
+	$oEntradaBypass = new EntradaBypass($Qid_entrada);
+	$a_grupos = $oEntradaBypass->getId_grupos();
+	if (!empty($a_grupos)) {
+		$oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');
+		$chk_grupo_dst = 'checked';
+	} else {
+		$oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
+		$chk_grupo_dst = '';
+		if (!empty((array) $oEntradaBypass->getJson_prot_destino())) {
+			$json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+			$oArrayProtDestino->setArray_sel($json_prot_dst);
+		}
+	}
+	$oArrayDesplGrupo->setBlanco('t');
+	$oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
     
     $oPermisoregistro = new PermRegistro();
     $perm_asunto = $oPermisoregistro->permiso_detalle($oEntrada, 'asunto');
@@ -234,7 +224,8 @@ if (!empty($Qid_entrada)) {
     $asunto = '';
     $anulado_txt = '';
     $detalle = '';
-    $visibilidad = Entrada::V_TODOS;
+    $visibilidad = Visibilidad::V_PERSONAL;
+    $oDesplVisibilidad->setOpcion_sel($visibilidad);
     $f_entrada = '';
     $f_escrito = '';
     $f_contestar = '';
@@ -332,7 +323,7 @@ $a_campos = [
     'initialPreview' => $initialPreview,
     'json_config' => $json_config,
     //'txt_option_oficinas' => $txt_option_oficinas,
-    'txt_option_ref' => $txt_option_ref,
+    //'txt_option_ref' => $txt_option_ref,
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
     'pagina_nueva' => $pagina_nueva,
@@ -344,7 +335,7 @@ $a_campos = [
     'plazo_rapido' => $plazo_rapido,
     'error_fecha' => $error_fecha,
     'comprobar_f_entrada' => $comprobar_f_entrada,
-    'cat_e12' => Entrada::CAT_E12,
+    'cat_e12' => Categoria::CAT_E12,
     // grupo destinos
     'chk_grupo_dst' => $chk_grupo_dst,
     'id_grupo' => $id_grupo,

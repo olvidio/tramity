@@ -34,24 +34,26 @@ if ($Qfiltro == 'en_aceptado') {
         $Qoficina = 'propia';
     }
     
-    $chk_of_propia = ($Qoficina == 'propia')? 'checked' : '';
-    $chk_of_resto = ($Qoficina == 'resto')? 'checked' : '';
-    
-    $aWhereADD = [];
-    $aOperadorADD = [];
-    $aWhereADD['ponente'] = $Qoficina;
-    
-    $a_campos = [
-        'filtro' => $Qfiltro,
-        'chk_of_propia' => $chk_of_propia,
-        'chk_of_resto' => $chk_of_resto,
-    ];
+    // para los ctr no hace falta
+    if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR ) {
+		$chk_of_propia = ($Qoficina == 'propia')? 'checked' : '';
+		$chk_of_resto = ($Qoficina == 'resto')? 'checked' : '';
+		
+		$a_campos = [
+			'filtro' => $Qfiltro,
+			'chk_of_propia' => $chk_of_propia,
+			'chk_of_resto' => $chk_of_resto,
+		];
 
-    $oView = new ViewTwig('entradas/controller');
-    echo $oView->renderizar('oficinas_buscar.html.twig',$a_campos);
+		$oView = new ViewTwig('entradas/controller');
+		echo $oView->renderizar('oficinas_buscar.html.twig',$a_campos);
 
-    $oTabla->setAWhereADD($aWhereADD);
-    $oTabla->setAOperadorADD($aOperadorADD);
+    }
+	$aWhereADD = [];
+	$aOperadorADD = [];
+	$aWhereADD['ponente'] = $Qoficina;
+	$oTabla->setAWhereADD($aWhereADD);
+	$oTabla->setAOperadorADD($aOperadorADD);
 }
 
 if ($Qfiltro == 'en_encargado') {

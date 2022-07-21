@@ -3,12 +3,15 @@ namespace busquedas\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use usuarios\model\Categoria;
+use usuarios\model\PermRegistro;
+use usuarios\model\Visibilidad;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorOficina;
 use web\Lista;
 use web\Protocolo;
 use web\ProtocoloArray;
-use entradas\model\Entrada;
 
 class VerTabla {
     
@@ -67,6 +70,15 @@ class VerTabla {
      */
     private $sTitulo;
 
+    /**
+     * Botones
+     *
+     * @var array
+     */
+    private $aBotones;
+
+    private $dt_op_dom;
+    private $dt_op_buttons;
     
     /**
      * @return number
@@ -168,19 +180,43 @@ class VerTabla {
     public function mostrarTabla() {
         switch ($this->sKey) {
             case 'entradas_ref':
-                $this->sTitulo = _("escritos recibidos en la Delegación con referencias al escrito");
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$this->sTitulo = _("escritos recibidos en el centro con referencias al escrito");
+            	} else {
+					$this->sTitulo = _("escritos recibidos en la Delegación con referencias al escrito");
+            	}
                 $this->tabla_entradas($this->aCollection);
                 break;
             case 'entradas':
-                $this->sTitulo = _("escritos recibidos en la Delegación");
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$this->sTitulo = _("escritos recibidos en el centro");
+            	} else {
+					$this->sTitulo = _("escritos recibidos en la Delegación");
+            	}
                 $this->tabla_entradas($this->aCollection);
                 break;
+            case 'entradas_compartidas':
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$this->sTitulo = _("escritos recibidos en el centro");
+            	} else {
+					$this->sTitulo = _("escritos recibidos en la Delegación");
+            	}
+                $this->tabla_entradas_compartidas($this->aCollection);
+                break;
             case 'escritos_ref':
-                $this->sTitulo = _("escritos aprobados en la Delegación con referencias al escrito");
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$this->sTitulo = _("escritos aprobados en el centro con referencias al escrito");
+            	} else {
+					$this->sTitulo = _("escritos aprobados en la Delegación con referencias al escrito");
+            	}
                 $this->tabla_escritos($this->aCollection);
                 break;
             case 'escritos':
-                $this->sTitulo = _("escritos aprobados en la Delegación");
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$this->sTitulo = _("escritos aprobados en el centro");
+            	} else {
+					$this->sTitulo = _("escritos aprobados en la Delegación");
+            	}
                 $this->tabla_escritos($this->aCollection);
                 break;
             default:
@@ -190,27 +226,88 @@ class VerTabla {
     }
     // ---------------------------------- tablas ----------------------------
 
+    public function tabla_entradas_compartidas($aCollection) {
+        $oCategoria = new Categoria();
+        $a_categorias = $oCategoria->getArrayCategoria();
+        
+        $a_cabeceras=array( array('name'=>ucfirst(_("protocolo origen")),'formatter'=>'clickFormatter'),
+                            ucfirst(_("ref.")),
+                            _("categoria"),
+                            array('name'=>ucfirst(_("asunto")),'formatter'=>'clickFormatter2'),
+                            array('name'=>ucfirst(_("fecha doc.")),'class'=>'fecha'),
+                            array('name'=>ucfirst(_("fecha entrada")),'class'=>'fecha')
+                            );
+        
+        $oProtOrigen = new Protocolo();
+        $a_valores = [];
+        $i=0;
+        foreach ($aCollection as $oEntrada) {
+        	// permisos: NO TIENE el campo visibilidad.
+            $i++;
+            
+			$id_entrada=$oEntrada->getId_entrada_compartida();
+            $f_entrada=$oEntrada->getF_entrada();
+            
+            $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
+            $protocolo = $oProtOrigen->ver_txt();
+            
+            // referencias
+            $json_ref = $oEntrada->getJson_prot_ref();
+            $oArrayProtRef = new ProtocoloArray($json_ref,'','');
+            $oArrayProtRef->setRef(TRUE);
+            $referencias = $oArrayProtRef->ListaTxtBr();
+            
+            $asunto = $oEntrada->getAsunto_entrada();
+            $categoria = $oEntrada->getCategoria();
+            $categoria_txt = empty($a_categorias[$categoria])? '' : $a_categorias[$categoria];
+            $f_doc = $oEntrada->getF_documento();
+            
+            $a_valores[$i]['sel']="$id_entrada";
+            $a_valores[$i][1]=$protocolo;
+            $a_valores[$i][2]=$referencias;
+            $a_valores[$i][3]=$categoria_txt;
+            $a_valores[$i][4]= $asunto;
+            $a_valores[$i][5]=$f_doc->getFromLocal();
+            $a_valores[$i][6]=$f_entrada->getFromLocal();
+        }
+        
+        $oTabla = new Lista();
+        $oTabla->setId_tabla('ver_tabla_'.$this->sKey);
+        $oTabla->setCabeceras($a_cabeceras);
+        $oTabla->setBotones($this->aBotones);
+        $oTabla->setDatos($a_valores);
+        $oTabla->setDataTable_options_dom($this->dt_op_dom);
+        $oTabla->setDataTable_options_buttons($this->dt_op_buttons);
+        
+        $server = ConfigGlobal::getWeb(); //http://tramity.local
+        
+        $vista = ConfigGlobal::getVista();
+        
+        $a_campos = [
+            'titulo' => $this->sTitulo,
+            'oTabla' => $oTabla,
+            'key' => $this->sKey,
+            'condicion' => $this->sCondicion,
+            //'oHash' => $oHash,
+            'server' => $server,
+            'filtro' => $this->sFiltro,
+            // tabs_show
+            'vista' => $vista,
+            ];
+        
+        $oView = new ViewTwig('busquedas/controller');
+        echo $oView->renderizar('ver_tabla.html.twig',$a_campos);
+    }
+
     public function tabla_entradas($aCollection) {
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         
-        $oEntrada = new Entrada();
-        $a_categorias = $oEntrada->getArrayCategoria();
-        $a_visibilidad = $oEntrada->getArrayVisibilidad();
+        $oCategoria = new Categoria();
+        $a_categorias = $oCategoria->getArrayCategoria();
+        $oVisibilidad = new Visibilidad();
+        $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
         
-        
-        if (ConfigGlobal::role_actual() === 'secretaria') { 
-            $a_botones = [
-                [ 'txt' => _('modificar'), 'click' =>"fnjs_modificar_entrada(\"#$this->sKey\")" ],
-                [ 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_entrada(\"#$this->sKey\")" ], 
-                [ 'txt' => _('anular'), 'click' =>"fnjs_anular_entrada(\"#$this->sKey\")" ], 
-                   ];
-        }
-
-        $a_botones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_entrada(\"#$this->sKey\")" ];
-        $a_botones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_entrada(\"#$this->sKey\")" ];
-        $a_botones[] = [ 'txt' => _('acción'), 'click' =>"fnjs_buscar_accion_entrada(\"#$this->sKey\")" ];
-
         $a_cabeceras=array( array('name'=>ucfirst(_("protocolo origen")),'formatter'=>'clickFormatter'),
                             ucfirst(_("ref.")),
                             _("categoria"),
@@ -225,10 +322,19 @@ class VerTabla {
         $oProtOrigen = new Protocolo();
         $a_valores = [];
         $i=0;
+        $oPermRegistro = new PermRegistro();
         foreach ($aCollection as $oEntrada) {
+        	// mirar permisos visibilidad:...
+        	$visibilidad = $oEntrada->getVisibilidad();
+        	$visibilidad_txt = empty($a_visibilidad[$visibilidad])? '?' : $a_visibilidad[$visibilidad];
+        	
+        	$perm_ver_escrito = $oPermRegistro->permiso_detalle($oEntrada, 'escrito');
+        	if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+        		continue;
+        	}
             $i++;
             
-            $id_entrada=$oEntrada->getId_entrada();
+			$id_entrada=$oEntrada->getId_entrada();
             $f_entrada=$oEntrada->getF_entrada();
             
             $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
@@ -245,22 +351,20 @@ class VerTabla {
             $a_resto_oficinas = $oEntrada->getResto_oficinas();
             $oficinas_txt = '';
             if (!empty($id_of_ponente)) {
-                $oficinas_txt .= '<span class="text-danger">'.$a_posibles_oficinas[$id_of_ponente].'</span>';
+            	$of_ponente_txt = empty($a_posibles_oficinas[$id_of_ponente])? '??' : $a_posibles_oficinas[$id_of_ponente];
+                $oficinas_txt .= '<span class="text-danger">'.$of_ponente_txt.'</span>';
             }
             foreach ($a_resto_oficinas as $id_oficina) {
                 $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
-                $oficinas_txt .= $a_posibles_oficinas[$id_oficina];
+                $oficinas_txt .= empty($a_posibles_oficinas[$id_oficina])? '?' : $a_posibles_oficinas[$id_oficina];
             }
             $oficinas = $oficinas_txt;
             
             $asunto = $oEntrada->getAsuntoDetalle();
             $categoria = $oEntrada->getCategoria();
             $categoria_txt = empty($a_categorias[$categoria])? '' : $a_categorias[$categoria];
-            $visibilidad = $oEntrada->getVisibilidad();
-            $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '' : $a_visibilidad[$visibilidad];
             $f_doc = $oEntrada->getF_documento();
             $f_contestar = $oEntrada->getF_contestar();
-            
             
             $a_valores[$i]['sel']="$id_entrada";
             $a_valores[$i][1]=$protocolo;
@@ -275,14 +379,16 @@ class VerTabla {
         }
         
         $oTabla = new Lista();
-        $oTabla->setId_tabla('func_reg_entradas');
+        $oTabla->setId_tabla('ver_tabla_'.$this->sKey);
         $oTabla->setCabeceras($a_cabeceras);
-        $oTabla->setBotones($a_botones);
+        $oTabla->setBotones($this->aBotones);
         $oTabla->setDatos($a_valores);
+        $oTabla->setDataTable_options_dom($this->dt_op_dom);
+        $oTabla->setDataTable_options_buttons($this->dt_op_buttons);
         
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
-        $vista = (ConfigGlobal::role_actual() === 'secretaria')? 'secretaria' : 'home';
+        $vista = ConfigGlobal::getVista();
         
         $a_campos = [
             'titulo' => $this->sTitulo,
@@ -305,19 +411,11 @@ class VerTabla {
         $gesCargos = new GestorCargo();
         $a_posibles_cargos = $gesCargos->getArrayCargos();
         
-        $oEntrada = new Entrada();
-        $a_categorias = $oEntrada->getArrayCategoria();
-        $a_visibilidad = $oEntrada->getArrayVisibilidad();
+        $oCategoria = new Categoria();
+        $a_categorias = $oCategoria->getArrayCategoria();
+        $oVisibilidad = new Visibilidad();
+        $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
         
-        if (ConfigGlobal::role_actual() === 'secretaria') { 
-            $a_botones=array( array( 'txt' => _('modificar'), 'click' =>"fnjs_modificar_escrito(\"#$this->sKey\")" ) ,
-                        array( 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_escrito(\"#$this->sKey\")" ) 
-                        );
-        }
-
-        $a_botones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_escrito(\"#$this->sKey\")" ];
-        $a_botones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_escrito(\"#$this->sKey\")" ];
-
         $a_cabeceras=array( array('name'=>ucfirst(_("protocolo origen")),'formatter'=>'clickFormatter'),
                             ucfirst(_("destinos")),
                             ucfirst(_("ref.")),
@@ -331,22 +429,23 @@ class VerTabla {
                             );
         
         $i=0;
-        $oProtLocal = new Protocolo();
         $a_valores = [];
+        $oPermRegistro = new PermRegistro();
         foreach ($cCollection as $oEscrito) {
+        	// mirar permisos visibilidad:...
+        	$visibilidad = $oEscrito->getVisibilidad();
+        	$visibilidad_txt = empty($a_visibilidad[$visibilidad])? '?' : $a_visibilidad[$visibilidad];
+        	
+        	$perm_ver_escrito = $oPermRegistro->permiso_detalle($oEscrito, 'escrito');
+        	if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+        		continue;
+        	}
             $i++;
             $asunto = $oEscrito->getAsuntoDetalle();
             $anulado = $oEscrito->getAnulado();
             
             // protocolo local
-            $json_prot_local = $oEscrito->getJson_prot_local();
-            if (count(get_object_vars($json_prot_local)) == 0) {
-                $protocolo_local = '';
-            } else {
-                $oProtLocal->setJson($json_prot_local);
-                $protocolo_local = $oProtLocal->ver_txt();
-            }
-            
+            $protocolo_local = $oEscrito->getProt_local_txt();
             // destinos
             $destino_txt = $oEscrito->getDestinosEscrito();
             
@@ -369,7 +468,7 @@ class VerTabla {
             $oficinas_txt .= '<span class="text-danger">'.$oficina_txt.'</span>';
             foreach ($a_resto_oficinas as $id_oficina) {
                 $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
-                $oficinas_txt .= $a_posibles_cargos[$id_oficina];
+                $oficinas_txt .= empty($a_posibles_cargos[$id_oficina])? '' : $a_posibles_cargos[$id_oficina];
             }
             $oficinas = $oficinas_txt;
             
@@ -383,8 +482,6 @@ class VerTabla {
             } else {
                 $categoria_txt = $a_categorias[$categoria];
             }
-            $visibilidad = $oEscrito->getVisibilidad();
-            $visibilidad_txt = empty($a_visibilidad[$visibilidad])? '??' : $a_visibilidad[$visibilidad];
 
             $a_valores[$i]['sel']="$id_escrito";
             $a_valores[$i][1]=$protocolo_local;
@@ -400,10 +497,12 @@ class VerTabla {
         }
 
         $oTabla = new Lista();
-        $oTabla->setId_tabla('func_reg_salidas');
+        $oTabla->setId_tabla('ver_tabla_'.$this->sKey);
         $oTabla->setCabeceras($a_cabeceras);
-        $oTabla->setBotones($a_botones);
+        $oTabla->setBotones($this->aBotones);
         $oTabla->setDatos($a_valores);
+        $oTabla->setDataTable_options_dom($this->dt_op_dom);
+        $oTabla->setDataTable_options_buttons($this->dt_op_buttons);
         
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
@@ -420,5 +519,86 @@ class VerTabla {
         $oView = new ViewTwig('busquedas/controller');
         echo $oView->renderizar('ver_tabla.html.twig',$a_campos);
     }
+    
+    // ---------------------------------- botones ----------------------------
+    
+    public function setBotones($a_botones) {
+    	$this->aBotones = $a_botones;
+    }
+    
+    public function setBotonesDefault() {
+    	
+        switch ($this->sKey) {
+            case 'entradas_ref':
+            case 'entradas':
+            	if (ConfigGlobal::role_actual() === 'secretaria') {
+					$this->aBotones = [
+            				[ 'txt' => _('modificar'), 'click' =>"fnjs_modificar_entrada(\"#$this->sKey\")" ],
+            				[ 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_entrada(\"#$this->sKey\")" ],
+            				[ 'txt' => _('anular'), 'click' =>"fnjs_anular_entrada(\"#$this->sKey\")" ],
+            		];
+            	}
+            	
+            	$this->aBotones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_entrada(\"#$this->sKey\")" ];
+            	$this->aBotones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_entrada(\"#$this->sKey\")" ];
+            	$this->aBotones[] = [ 'txt' => _('acción'), 'click' =>"fnjs_buscar_accion_entrada(\"#$this->sKey\")" ];
+                break;
+            case 'entradas_compartidas':
+            	if (ConfigGlobal::role_actual() === 'secretaria') {
+            		$this->aBotones = [
+            				[ 'txt' => _('modificar'), 'click' =>"fnjs_modificar_entrada(\"#$this->sKey\")" ],
+            				[ 'txt' => _('eliminar'), 'click' =>"fnjs_borrar_entrada(\"#$this->sKey\")" ],
+            				[ 'txt' => _('anular'), 'click' =>"fnjs_anular_entrada(\"#$this->sKey\")" ],
+            		];
+            	}
+            	$this->aBotones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_entrada_compartida(\"#$this->sKey\")" ];
+            	break;
+            case 'escritos_ref':
+            case 'escritos':
+            	if (ConfigGlobal::role_actual() === 'secretaria') {
+            		$this->aBotones = [ ['txt' => _('modificar'), 'click' =>"fnjs_modificar_escrito(\"#$this->sKey\")" ],
+            							['txt' => _('eliminar'), 'click' =>"fnjs_borrar_escrito(\"#$this->sKey\")" ],
+            						];
+            	}
+            	
+            	$this->aBotones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_escrito(\"#$this->sKey\")" ];
+            	$this->aBotones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_escrito(\"#$this->sKey\")" ];
+                break;
+            default:
+                $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_switch);
+        }
 
+    }
+    
+    
+	/**
+	 * @return mixed
+	 */
+	public function getDataTable_options_dom() {
+		return $this->dt_op_dom;
+	}
+
+	/**
+	 * @param mixed $dt_op_dom
+	 */
+	public function setDataTable_options_dom($dt_op_dom) {
+		$this->dt_op_dom = $dt_op_dom;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getDataTable_options_buttons() {
+		return $this->dt_op_buttons;
+	}
+
+	/**
+	 * @param mixed $dt_op_buttons
+	 */
+	public function setDataTable_options_buttons($dt_op_buttons) {
+		$this->dt_op_buttons = $dt_op_buttons;
+	}
+
+    
 }

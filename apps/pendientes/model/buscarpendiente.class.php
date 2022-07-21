@@ -2,10 +2,14 @@
 namespace pendientes\model;
 
 
+use core\ConfigGlobal;
 use core\Converter;
+use davical\model\Davical;
 use davical\model\entity\GestorCalendarItem;
+use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
+use web\StringLocal;
 
 // Arxivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
@@ -31,11 +35,11 @@ class BuscarPendiente {
      */
     private $status;
     /**
-     * oficina de BuscarPendiente
+     * id_oficina de BuscarPendiente
      *
-     * @var string
+     * @var integer
      */
-    private $oficina;
+    private $id_oficina;
     /**
      * id_reg de BuscarPendiente
      *
@@ -63,14 +67,28 @@ class BuscarPendiente {
     
     
     public function getPendientes() {
-        
+        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
         $cond = '';
-        if (!empty($this->oficina)) {
-            // dav_name = /oficina_agd/oficina/20210211T123510.ics
-            $dav_name = '^\/oficina_'.$this->oficina.'\/'.$this->calendario.'\/';
-        } else {
-            $dav_name = '^\/oficina_[^\/]*\/'.$this->calendario.'\/';
+        
+        if (!empty($this->id_reg)) {
+            $cond .= empty($cond)? '' : ' AND ';
+            $id_entradas = '';
+            foreach ($this->id_reg as $id) {
+                $id_entradas .= empty($id_entradas)? '' : ',';
+                $id_entradas .= "'REN".$id."'";
+            }
+            $cond .= "rtrim(substring(uid from '^REN.*-'),'-') IN ($id_entradas)";
         }
+		
+		// dav_name = /oficina_agd/oficina/20210211T123510.ics
+		$parent_container = $oDavical->getNombreRecurso($this->id_oficina);
+        if (!empty($this->id_oficina)) {
+            $dav_name = '^\/'.$parent_container.'\/'.$this->calendario.'\/';
+        } else {
+            // por lo menos hay que limitar que sólo busque a los del ctr o la dl.
+            $dav_name = '^\/'.$parent_container.'[^\/]*\/'.$this->calendario.'\/';
+        }
+		$cond .= empty($cond)? '' : ' AND ';
         $cond .= "dav_name ~ '$dav_name'";
         
         if (!empty($this->asunto)) {
@@ -92,20 +110,18 @@ class BuscarPendiente {
             $cond .= "due < '".$this->getF_max()->getIso()."'"; 
         }
         
-        if (!empty($this->id_reg)) {
-            $cond .= empty($cond)? '' : ' AND ';
-            $id_entradas = '';
-            foreach ($this->id_reg as $id) {
-                $id_entradas .= empty($id_entradas)? '' : ',';
-                $id_entradas .= "'REN".$id."'";
-            }
-            $cond .= "rtrim(substring(uid from '^REN.*-'),'-') IN ($id_entradas)";
-        }
-        //
-        
         $sql_pen = "SELECT * FROM calendar_item WHERE $cond";
         $gesCalendarItem = new GestorCalendarItem();
         $cCalendarItems = $gesCalendarItem->getCalendarItemsQuery($sql_pen);
+        
+        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+            // solo secretaría puede ver/crear pendientes de otras oficinas
+            $user_davical = $oDavical->getUsernameDavicalSecretaria();
+        } else {
+            // nombre normalizado del usuario y oficina:
+            $id_cargo_role = ConfigGlobal::role_id_cargo();
+            $user_davical = $oDavical->getUsernameDavical($id_cargo_role);
+        }
         
         // Buscar el uid para conseguir el Pendiente
         $cPendientes = [];
@@ -115,9 +131,9 @@ class BuscarPendiente {
             // "/oficina_agd/registro/REN20-20210225T124453.ics"
             $pos = strpos($dav_name, '/', 1);
             $parent_container = substr($dav_name, 1, $pos - 1);
-            $resource = $this->calendario;
-            $cargo = 'secretaria';
-            $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+            $calendario = $this->calendario;
+            
+            $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
             $cPendientes[] = $oPendiente;
         }
         
@@ -262,17 +278,17 @@ class BuscarPendiente {
     /**
      * @return string
      */
-    public function getOficina()
+    public function getId_oficina()
     {
-        return $this->oficina;
+        return $this->id_oficina;
     }
 
     /**
-     * @param string $oficina
+     * @param string $id_oficina
      */
-    public function setOficina($oficina)
+    public function setId_oficina($id_oficina)
     {
-        $this->oficina = $oficina;
+        $this->id_oficina = $id_oficina;
     }
 
 

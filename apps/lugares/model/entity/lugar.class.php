@@ -25,6 +25,7 @@ class Lugar Extends core\ClasePropiedades {
     // modo envio
     const MODO_PDF       = 1;
     const MODO_XML       = 2;
+    const MODO_AS4       = 3;
 	
     /* ATRIBUTS ----------------------------------------------------------------- */
 
@@ -98,6 +99,12 @@ class Lugar Extends core\ClasePropiedades {
 	 * @var integer
 	 */
 	 private $imodo_envio;
+	 /**
+	 * plataforma de Lugar
+	 *
+	 * @var string
+	 */
+	 private $splataforma;
 	/**
 	 * Pub_key de Lugar
 	 *
@@ -140,7 +147,7 @@ class Lugar Extends core\ClasePropiedades {
 	 * 						$a_id. Un array con los nombres=>valores de las claves primarias.
 	 */
 	function __construct($a_id='') {
-		$oDbl = $GLOBALS['oDBT'];
+		$oDbl = $GLOBALS['oDBP'];
 		if (is_array($a_id)) { 
 			$this->aPrimary_key = $a_id;
 			foreach($a_id as $nom_id=>$val_id) {
@@ -174,6 +181,7 @@ class Lugar Extends core\ClasePropiedades {
 		$aDades['nombre'] = $this->snombre;
 		$aDades['tipo_ctr'] = $this->stipo_ctr;
 		$aDades['modo_envio'] = $this->imodo_envio;
+		$aDades['plataforma'] = $this->splataforma;
 		$aDades['pub_key'] = $this->ipub_key;
 		$aDades['e_mail'] = $this->se_mail;
 		$aDades['anulado'] = $this->banulado;
@@ -190,6 +198,7 @@ class Lugar Extends core\ClasePropiedades {
 					nombre                   = :nombre,
 					tipo_ctr                 = :tipo_ctr,
 					modo_envio               = :modo_envio,
+					plataforma               = :plataforma,
 					pub_key                  = :pub_key,
 					e_mail                   = :e_mail,
 					anulado                  = :anulado";
@@ -211,8 +220,8 @@ class Lugar Extends core\ClasePropiedades {
 			}
 		} else {
 			// INSERT
-			$campos="(sigla,dl,region,nombre,tipo_ctr,modo_envio,pub_key,e_mail,anulado)";
-			$valores="(:sigla,:dl,:region,:nombre,:tipo_ctr,:modo_envio,:pub_key,:e_mail,:anulado)";		
+			$campos="(sigla,dl,region,nombre,tipo_ctr,modo_envio,plataforma,pub_key,e_mail,anulado)";
+			$valores="(:sigla,:dl,:region,:nombre,:tipo_ctr,:modo_envio,:plataforma,:pub_key,:e_mail,:anulado)";		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
 				$sClauError = 'Lugar.insertar.prepare';
 				$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -291,6 +300,7 @@ class Lugar Extends core\ClasePropiedades {
 	
 	public function getArrayModoEnvio() {
 	    $a_tipos = [
+	        self::MODO_AS4 => _("as4"),
 	        self::MODO_PDF => _("pdf"),
 	        self::MODO_XML => _("xml"),
 	    ];
@@ -315,6 +325,7 @@ class Lugar Extends core\ClasePropiedades {
 		if (array_key_exists('nombre',$aDades)) { $this->setNombre($aDades['nombre']); }
 		if (array_key_exists('tipo_ctr',$aDades)) { $this->setTipo_ctr($aDades['tipo_ctr']); }
 		if (array_key_exists('modo_envio',$aDades)) { $this->setModo_envio($aDades['modo_envio']); }
+		if (array_key_exists('plataforma',$aDades)) { $this->setPlataforma($aDades['plataforma']); }
 		if (array_key_exists('pub_key',$aDades)) { $this->setPub_key($aDades['pub_key']); }
 		if (array_key_exists('e_mail',$aDades)) { $this->setE_mail($aDades['e_mail']); }
 		if (array_key_exists('anulado',$aDades)) { $this->setAnulado($aDades['anulado']); }
@@ -333,6 +344,7 @@ class Lugar Extends core\ClasePropiedades {
 		$this->setNombre('');
 		$this->setTipo_ctr('');
 		$this->setModo_envio('');
+		$this->setPlataforma('');
 		$this->setPub_key('');
 		$this->setE_mail('');
 		$this->setAnulado('');
@@ -517,6 +529,25 @@ class Lugar Extends core\ClasePropiedades {
 		$this->imodo_envio = $imodo_envio;
 	}
 	/**
+	 * Recupera l'atribut splataforma de Lugar
+	 *
+	 * @return string splataforma
+	 */
+	function getPlataforma() {
+		if (!isset($this->splataforma) && !$this->bLoaded) {
+			$this->DBCarregar();
+		}
+		return $this->splataforma;
+	}
+	/**
+	 * estableix el valor de l'atribut splataforma de Lugar
+	 *
+	 * @param string splataforma='' optional
+	 */
+	function setPlataforma($splataforma='') {
+		$this->splataforma = $splataforma;
+	}
+	/**
 	 * Recupera l'atribut ipub_key de Lugar
 	 *
 	 * @return integer ipub_key
@@ -666,6 +697,18 @@ class Lugar Extends core\ClasePropiedades {
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'modo_envio'));
 		$oDatosCampo->setEtiqueta(_("modo_envio"));
+		return $oDatosCampo;
+	}
+	/**
+	 * Recupera les propietats de l'atribut splataforma de Lugar
+	 * en una clase del tipus DatosCampo
+	 *
+	 * @return core\DatosCampo
+	 */
+	function getDatosPlataforma() {
+		$nom_tabla = $this->getNomTabla();
+		$oDatosCampo = new core\DatosCampo(array('nom_tabla'=>$nom_tabla,'nom_camp'=>'plataforma'));
+		$oDatosCampo->setEtiqueta(_("plataforma"));
 		return $oDatosCampo;
 	}
 	/**

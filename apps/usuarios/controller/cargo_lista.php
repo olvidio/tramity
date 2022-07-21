@@ -4,6 +4,7 @@ use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\Oficina;
 use usuarios\model\entity\GestorUsuario;
+use core\ConfigGlobal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -36,7 +37,7 @@ $aWhere=array();
 $aOperador = array();
     
 // Segun la ubicación (config de la instalación)
-$aWhere['id_ambito'] = Cargo::AMBITO_DL;
+$aWhere['id_ambito'] = $_SESSION['oConfig']->getAmbito();
 
 $aWhere['_ordre'] = 'director DESC, cargo';
 
@@ -71,8 +72,12 @@ foreach ($cCargos as $oCargo) {
 	$usuario = empty($aUsuarios[$id_usuario])? '' : $aUsuarios[$id_usuario];
 	$suplente = empty($aUsuarios[$id_suplente])? '' : $aUsuarios[$id_suplente];
 
-	$oOficina = new Oficina($id_oficina);
-	$sigla = $oOficina->getSigla();
+	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+        $oOficina = new Oficina($id_oficina);
+        $sigla = $oOficina->getSigla();
+	} else {
+	    $sigla = $_SESSION['oConfig']->getSigla();
+	}
 	
 	$a_valores[$i]['sel']="$id_cargo#";
 	$a_valores[$i][1]=$cargo;

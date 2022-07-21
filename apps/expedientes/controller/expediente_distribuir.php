@@ -2,12 +2,12 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use function core\is_true;
-use entradas\model\Entrada;
+use escritos\model\EscritoLista;
 use etiquetas\model\entity\GestorEtiqueta;
-use expedientes\model\EscritoLista;
 use expedientes\model\Expediente;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
+use usuarios\model\Visibilidad;
 use usuarios\model\entity\GestorCargo;
 use web\Desplegable;
 
@@ -29,9 +29,12 @@ $Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 // En el caso de ajuntos, puedo abrir una nueva ventana para ver el expediente,
 // y en ese caso el parametro viene por GET:
 $cargar_css = FALSE;
+$show_tabs = TRUE;
 if (empty($Qid_expediente)) {
     $Qid_expediente = (integer) \filter_input(INPUT_GET, 'id_expediente');
     $cargar_css = TRUE;
+	$show_tabs = FALSE;
+	$Qfiltro = 'archivados';
 }
 
 if (empty($Qid_expediente)) {
@@ -80,6 +83,7 @@ $visibilidad = $oExpediente->getVisibilidad();
 $oEscritoLista = new EscritoLista();
 $oEscritoLista->setId_expediente($Qid_expediente);
 $oEscritoLista->setModo($Qmodo);
+$oEscritoLista->setShow_tabs($show_tabs);
 
 // Comentarios y Aclaraciones
 $gesFirmas = new GestorFirma();
@@ -87,9 +91,9 @@ $aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
 $a_recorrido = $aRecorrido['recorrido'];
 $comentarios = $aRecorrido['comentarios'];
 
-// visibilidad (usar las mismas opciones que en entradas)
-$oEntrada = new Entrada();
-$aOpciones = $oEntrada->getArrayVisibilidad();
+// visibilidad
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
@@ -120,7 +124,12 @@ $txt_btn_etiquetas = _("Guardar etiquetas");
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro,'modo' => $Qmodo]));
+$cosas = ['filtro' => $Qfiltro, 'modo' => $Qmodo ];
+if ($Qfiltro == 'archivados') {
+	$Qa_condiciones = (array)  \filter_input(INPUT_POST, 'condiciones', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+	$cosas = array_merge($cosas, $Qa_condiciones);
+}
+$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($cosas));
 $pagina_actualizar = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro, 'modo' => $Qmodo]));
 $base_url = ConfigGlobal::getWeb(); //http://tramity.local
 
@@ -142,7 +151,8 @@ if ($Qfiltro == 'distribuir') {
     $perm_distribuir = TRUE;
     $btn_action = 'archivar';
     $txt_btn_success = _("Archivar");
-    $oEscritoLista->setFiltro('acabados');
+    //$oEscritoLista->setFiltro('acabados');
+    $oEscritoLista->setFiltro($Qfiltro);
     $disable_archivar = is_true($oEscritoLista->isTodos_escritos_enviados())? '' : 'disabled';
     // para encargar a los oficiales
     $id_oficina = ConfigGlobal::role_id_oficina();
@@ -183,6 +193,7 @@ $a_campos = [
     // para la pagina js
     'base_url' => $base_url,
     'cargar_css' => $cargar_css,
+    'show_tabs' => $show_tabs,
     //acciones
     'oEscritoLista' => $oEscritoLista,
     'filtro' => $Qfiltro,

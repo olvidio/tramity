@@ -1,6 +1,6 @@
 <script>
 $(function() {
-	$( "#f_until" ).datetimepicker( {
+	$( "#f_until" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -17,7 +17,7 @@ $(function() {
 
 });
 $(function() {
-	$( "#f_inicio" ).datetimepicker( {
+	$( "#f_inicio" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -39,9 +39,11 @@ fnjs_marcar=function(id){
 }
 
 fnjs_ver_tab=function(elemento,btn){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	var tabs=[ '#periodico_d_a', '#periodico_d_m', '#periodico_d_s', '#periodico_d_d'];
 	$.each(tabs,function(i,item){
 			$(item).hide()

@@ -2,13 +2,14 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\Entrada;
+use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\Expediente;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Hash;
-use config\model\Config;
+use entradas\model\entity\EntradaCompartida;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -27,8 +28,10 @@ $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
 
+$pagina_contestar = ''; 
 // Añado la opcion de poder crear un expediente desde entradas
 switch ($Qfiltro) {
+    case 'entradas_semana':
     case 'escritos_cr':
     case 'permanentes_cr':
     case 'en_buscar':
@@ -45,15 +48,40 @@ switch ($Qfiltro) {
                 break;
             case 'permanentes_cr':
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?'.http_build_query($a_condicion));
+                // En los ctr, buscar en entradas compartidas:
+                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$oEntrada = new EntradaCompartida($Qid_entrada);
+					$asunto = $oEntrada->getAsunto_entrada();
+                }
                 break;
             case 'escritos_cr':
-                $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query($a_condicion));
+				$a_condicion['opcion'] = 51;
+                $pagina_cancel = web\Hash::link('apps/busquedas/controller/ver_tabla.php?'.http_build_query($a_condicion));
+                break;
+            case 'entradas_semana':
+				$a_condicion['opcion'] = 52;
+                $pagina_cancel = web\Hash::link('apps/busquedas/controller/ver_tabla.php?'.http_build_query($a_condicion));
                 break;
             default:
                 $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_switch);
         }
         break;
+    case 'en_aceptado':
+    	$Qoficina = (string) \filter_input(INPUT_POST, 'oficina');
+        $oEntrada = new Entrada($Qid_entrada);
+        $asunto = $oEntrada->getAsunto();
+    	
+    	$url_cancel = 'apps/entradas/controller/entrada_lista.php';
+    	$pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro, 'oficina'  => $Qoficina]));
+		// En los ctr, ir directo a contestar:
+		if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    		$url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
+		} else {
+    		$url_contestar = $url_cancel;
+		}
+    	$pagina_contestar = Hash::link($url_contestar.'?'.http_build_query(['filtro' => $Qfiltro, 'id_entrada'  => $Qid_entrada]));
+    	break;
     case 'en_encargado':
         $Qencargado = (integer) \filter_input(INPUT_POST, 'encargado');
         $oEntrada = new Entrada($Qid_entrada);
@@ -61,6 +89,13 @@ switch ($Qfiltro) {
         
         $url_cancel = 'apps/entradas/controller/entrada_lista.php';
         $pagina_cancel = Hash::link($url_cancel.'?'.http_build_query(['filtro' => $Qfiltro, 'encargado' => $Qencargado]));
+		// En los ctr, ir directo a contestar:
+		if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    		$url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
+		} else {
+    		$url_contestar = $url_cancel;
+		}
+    	$pagina_contestar = Hash::link($url_contestar.'?'.http_build_query(['filtro' => $Qfiltro, 'id_entrada'  => $Qid_entrada]));
         break;
     default:
         if (empty($Qid_expediente) && $Qfiltro != 'en_aceptado') {
@@ -99,21 +134,33 @@ switch ($Qfiltro) {
     - "còpia a oficina" (fa una còpia a una altre oficina)
 */
 
-$oDesplCargosOficina = [];
+$oDesplCargosOficinaPendiente = [];
+$oDesplCargosOficinaEncargado = [];
 $oDesplCargos = [];
 $a_botones = [];
 $txt_plazo = '';
 $f_plazo = '';
 $hoy_iso = '';
+$titulo = _("Acciones para el expediente");
 switch ($Qfiltro) {
+    case 'en_aceptado':
     case 'en_encargado':
+		$titulo = _("Acciones para la entrada");
         $a_botones[4] = ['accion' => 'en_add_encargado',
                         'txt'    => _("Encargar a"),
                         'tipo'    => 'modal',
                     ];
-    case 'escritos_cr':
     case 'permanentes_cr':
     case 'en_buscar':
+		$titulo = _("Acciones para la entrada");
+        $a_botones[3] = ['accion' => 'en_visto',
+                        'txt'    => _("marcar como visto"),
+                        'tipo'    => '',
+                    ];
+    case 'entradas_semana':
+    case 'escritos_cr':
+		$titulo = _("Acciones para la entrada");
+
         $a_botones[0] = ['accion' => 'en_add_expediente',
                         'txt'    => _("añadir a un expediente"),
                         'tipo'    => 'modal',
@@ -126,9 +173,9 @@ switch ($Qfiltro) {
                         'txt'    => _("crear un nuevo pendiente de la oficina"),
                         'tipo'    => 'modal',
                     ];
-        $a_botones[3] = ['accion' => 'en_visto',
-                        'txt'    => _("marcar como visto"),
-                        'tipo'    => '',
+        $a_botones[5] = ['accion' => 'en_add_etiqueta',
+                        'txt'    => _("Etiquetas"),
+                        'tipo'    => 'modal1',
                     ];
         
         $txt_plazo= _("plazo para contestar");
@@ -138,7 +185,8 @@ switch ($Qfiltro) {
         
         $gesCargos = new GestorCargo();
         $a_posibles_cargos_oficina = $gesCargos->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina());
-        $oDesplCargosOficina = new Desplegable('id_cargo',$a_posibles_cargos_oficina,'','');
+        $oDesplCargosOficinaPendiente = new Desplegable('id_cargo_pendiente',$a_posibles_cargos_oficina,'','');
+        $oDesplCargosOficinaEncargado = new Desplegable('id_cargo_encargado',$a_posibles_cargos_oficina,'','');
         break;
     case 'borrador_oficina':
     case 'borrador_propio':
@@ -218,6 +266,10 @@ switch ($Qfiltro) {
         $a_posibles_cargos = $gesCargos->getArrayCargos(ConfigGlobal::role_id_oficina());
         $oDesplCargos = new Desplegable('of_destino',$a_posibles_cargos,'','');
         break;
+    case 'fijar_reunion':
+    case 'distribuir':
+    	// No hace nada.
+    	break;
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);
@@ -228,6 +280,24 @@ if (empty($a_botones)) {
                     'txt'    => _("no tiene permiso"),
                 ];
 }
+
+// Etiquetas
+$etiquetas = []; // No hay ninguna porque en archivar es cuando se añaden.
+$gesEtiquetas = new GestorEtiqueta();
+$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$a_posibles_etiquetas = [];
+foreach ($cEtiquetas as $oEtiqueta) {
+	$id_etiqueta = $oEtiqueta->getId_etiqueta();
+	$nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+	$a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+}
+
+if (!empty($oEntrada)) {
+	$etiquetas = $oEntrada->getEtiquetasVisiblesArray();
+}
+$oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
+$oArrayDesplEtiquetas ->setBlanco('t');
+$oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
 
 // datepicker
 $oFecha = new DateTimeLocal();
@@ -240,11 +310,14 @@ $a_campos = [
     'id_expediente' => $Qid_expediente,
     'filtro' => $Qfiltro,
     //'oHash' => $oHash,
+    'titulo' => $titulo,
     'asunto' => $asunto,
     'a_botones' => $a_botones,
     'pagina_cancel' => $pagina_cancel,
-    'oDesplCargosOficina' => $oDesplCargosOficina,
+    'oDesplCargosOficinaPendiente' => $oDesplCargosOficinaPendiente,
+    'oDesplCargosOficinaEncargado' => $oDesplCargosOficinaEncargado,
     'oDesplCargos' => $oDesplCargos,
+	'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
     // para crea pendiente:
     'txt_plazo' => $txt_plazo,
     'f_plazo' => $f_plazo,
@@ -252,7 +325,9 @@ $a_campos = [
     // datepicker
     'format' => $format,
     'yearStart' => $yearStart,
-    'yearEnd' => $yearEnd,
+	'yearEnd' => $yearEnd,	
+	//Solo para saltar directo al contestar una entrada 
+ 	'pagina_contestar' => $pagina_contestar,
 ];
 
 $oView = new ViewTwig('expedientes/controller');

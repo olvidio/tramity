@@ -1,8 +1,10 @@
 <?php
 use core\MyCrypt;
-use usuarios\model\entity\GestorUsuario;
-use usuarios\model\entity\Usuario;
+use davical\model\Davical;
 use usuarios\model\entity\Cargo;
+use usuarios\model\entity\GestorUsuario;
+use usuarios\model\entity\Oficina;
+use usuarios\model\entity\Usuario;
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
 // Arxivos requeridos por esta url **********************************************
@@ -16,6 +18,7 @@ use usuarios\model\entity\Cargo;
 $Qque = (string) \filter_input(INPUT_POST, 'que');
 
 $error_txt = '';
+$alert_txt = '';
 switch($Qque) {
     case "role":
         // cambiar el role actual:
@@ -29,9 +32,18 @@ switch($Qque) {
             // Oficina actual:
             $oUsuario = new Cargo($id_cargo);
             $id_oficina_actual = $oUsuario->getId_oficina();
+            $bdirector = $oUsuario->getDirector();
+            $bsacd = $oUsuario->getSacd();
             $_SESSION['session_auth']['mi_id_oficina'] = $id_oficina_actual;
+            $_SESSION['session_auth']['usuario_dtor'] = $bdirector;
+            $_SESSION['session_auth']['usuario_sacd'] = $bsacd;
+            // Para el Davical:
+            // nombre normalizado del usuario y oficina:
+            $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+            $username_davical = $oDavical->getUsernameDavical($id_cargo);
+            $_SESSION['session_auth']['username_davical'] = $username_davical;
 		}
-		echo "role cambiado a $Qrole";
+		$alert_txt .= sprintf(_("role cambiado a %s"),$Qrole);
         break;
 	case "eliminar":
 	    $a_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -43,18 +55,7 @@ switch($Qque) {
                 $error_txt .= "\n".$oUsuario->getErrorTxt();
             }
 	    }
-	    
-	    if (!empty($error_txt)) {
-	        $jsondata['success'] = FALSE;
-	        $jsondata['mensaje'] = $error_txt;
-	    } else {
-	        $jsondata['success'] = TRUE;
-	    }
-	    //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
-	    header('Content-type: application/json; charset=utf-8');
-	    echo json_encode($jsondata);
-	    exit();
-		break;
+	   break;   
 	case "buscar":
 		$Qusuario = (string) \filter_input(INPUT_POST, 'usuario');
 		
@@ -80,22 +81,11 @@ switch($Qque) {
             $error_txt = _("hay un error, no se ha guardado");
             $error_txt .= "\n".$oUsuario->getErrorTxt();
 		}
-		
-	    if (!empty($error_txt)) {
-	        $jsondata['success'] = FALSE;
-	        $jsondata['mensaje'] = $error_txt;
-	    } else {
-	        $jsondata['success'] = TRUE;
-	    }
-	    //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
-	    header('Content-type: application/json; charset=utf-8');
-	    echo json_encode($jsondata);
-	    exit();
-        break;
+		break;
 	case "guardar":
 		$Qusuario = (string) \filter_input(INPUT_POST, 'usuario');
 
-		if (empty($Qusuario)) { echo _("debe poner un nombre"); }
+		if (empty($Qusuario)) { $error_txt .= _("debe poner un nombre"); }
         $Qid_usuario = (integer) \filter_input(INPUT_POST, 'id_usuario');
         $Qid_cargo_preferido = (integer) \filter_input(INPUT_POST, 'id_cargo_preferido');
         $Qemail = (string) \filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -118,8 +108,8 @@ switch($Qque) {
             $oUsuario->setPassword($Qpass);
         }
 		if ($oUsuario->DBGuardar() === FALSE) {
-			echo _("hay un error, no se ha guardado");
-			echo "\n".$oUsuario->getErrorTxt();
+			$error_txt .= _("hay un error, no se ha guardado");
+			$error_txt .= "\n".$oUsuario->getErrorTxt();
 		}
         break;
 	case "nuevo":
@@ -137,20 +127,34 @@ switch($Qque) {
                 $my_passwd=$oCrypt->encode($Qpassword);
                 $oUsuario->setPassword($my_passwd);
             } else {
-                 echo _("debe añadir un password");
+                 $alert_txt .= _("debe añadir un password");
             }
             $oUsuario->setEmail($Qemail);
             $oUsuario->setId_cargo_preferido($Qid_cargo_preferido);
             $oUsuario->setNom_usuario($Qnom_usuario);
             if ($oUsuario->DBGuardar() === FALSE) {
-                echo _("hay un error, no se ha guardado");
-                echo "\n".$oUsuario->getErrorTxt();
+                $error_txt .= _("hay un error, no se ha guardado");
+                $error_txt .= "\n".$oUsuario->getErrorTxt();
             }
         } else {
-            echo _("debe poner un nombre de usuario");
+            $error_txt .= _("debe poner un nombre de usuario");
         }
 		break;
 	default:
 	    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
 	    exit ($err_switch);
 }
+
+if (!empty($error_txt)) {
+    $jsondata['success'] = FALSE;
+    $jsondata['mensaje'] = $error_txt;
+} else {
+    $jsondata['success'] = TRUE;
+    if (!empty($alert_txt)) {
+        $jsondata['alert'] = $alert_txt;
+    }
+}
+//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+header('Content-type: application/json; charset=utf-8');
+echo json_encode($jsondata);
+exit();

@@ -53,6 +53,7 @@ class Rrule {
         $month_ini = $oF_start->format('m');
         $day_ini = $oF_start->format('d');
         
+        $inc_a = 1;
         switch ($rta['tipo']) {
             case "d_a":
                 switch ($rta['tipo_dia']) {
@@ -76,6 +77,12 @@ class Rrule {
                         $meses_db=explode(",",$rta['meses']);
                         $dias_db=explode(",",$rta['dias']);
                         $tipo_dia="num";
+						// Si hay interval, el incremento depende del interval,
+						// y el año de inicio debe ser el dtstart.
+						if (!empty($rta['interval'])) {
+							$inc_a = $rta['interval'];
+							$any_actual = $any_ini;
+						}
                         break;
                     default:
                         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
@@ -133,7 +140,7 @@ class Rrule {
         // caso de dias y meses
         // antes tendría que mirar por cada año. Desde el actual hasta el fin de la condicion.
         $f_recurrencias = [];
-        for ($any=$any_actual;$any<=$any_fin;$any++) {
+        for ($any=$any_actual ; $any<=$any_fin ; $any= $any+$inc_a) {
             // Me salto los años anteriores a la fecha de inicio
             if ( $any < $any_ini || $any > $any_fin) { continue;}
             // por cada mes miro que dias
@@ -173,7 +180,7 @@ class Rrule {
                         if ($ordinal_db > 0) {
                             $dia_w_txt=$a_dias_w[$dia_w_db];
                             $txt="$ordinal_db $dia_w_txt";
-                            $dia=date("d",strtotime($txt,mktime(0,0,0,$mes,0,$any)));
+                            $dia=date("d",strtotime($txt,mktime(0,0,0,$mes,1,$any)));
                         }
                         if ($ordinal_db < 0) {
                             $dia_w_txt=$a_dias_w[$dia_w_db];

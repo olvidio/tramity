@@ -11,6 +11,9 @@ use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
+use usuarios\model\entity\Cargo;
+use core\ConfigGlobal;
+use usuarios\model\Visibilidad;
 
 // Arxivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
@@ -35,11 +38,11 @@ class Pendiente {
      */
     private $server;
     /**
-     * resource de Pendiente
+     * calendario de Pendiente
      *
      * @var string
      */
-    private $resource;
+    private $calendario;
     /**
      * cargo de Pendiente
      *
@@ -101,14 +104,14 @@ class Pendiente {
      * Constructor de la classe.
      * 
      * @param string $parent_container (ej: oficina_adl)
-     * @param string $resource ('resigtro'|'oficina')
+     * @param string $calendario ('resigtro'|'oficina')
      * @param string $cargo  (para obtener la autentificacion, permisos etc. ej: secretaria) 
      * @param string $uid (cuando no es nuevo; para modificarlo)
      */
-    function __construct($parent_container,$resource,$cargo,$uid=FALSE) {
+    function __construct($parent_container,$calendario,$cargo,$uid=FALSE) {
         
         $this->setParent_container($parent_container);
-        $this->setResource($resource);
+        $this->setCalendario($calendario);
         $this->setCargo($cargo);
         $this->setUid($uid);
         $this->setPasswd('system');
@@ -130,7 +133,7 @@ class Pendiente {
         $this->server = $server_base.'/caldav.php';
         
         $parent_container = empty($parent_container)? $this->parent_container : $parent_container;
-        return $this->server."/".$parent_container."/".$this->resource."/";
+        return $this->server."/".$parent_container."/".$this->calendario."/";
     }
     
     public function getProtocoloOrigen() {
@@ -154,7 +157,7 @@ class Pendiente {
             $id_reg=substr($uid,3,$pos);
         }
         // Tambien para los pendientes de oficina: 
-        if (($pos_ini = strpos($uid, 'OFEN')) !== FALSE && $pos_ini == 0) {
+        if (($pos_ini = strpos($uid, 'EN')) !== FALSE && $pos_ini == 0) {
             $pos = strpos($uid, '-') - 4;
             $id_reg=substr($uid,4,$pos);
         }
@@ -282,17 +285,17 @@ class Pendiente {
             if (($pos_ini = strpos($id_reg, 'REN')) !== FALSE && $pos_ini == 0) { //  Registro entradas
                 $uid = "$id_reg-$ahora";
             } else {
-                if ($this->resource == 'registro') {
+                if ($this->calendario == 'registro') {
                     $uid = "R$id_reg-$ahora";
                 }
-                if ($this->resource == 'oficina') {
+                if ($this->calendario == 'oficina') {
                     $uid = "OF$id_reg-$ahora";
                 }
             }
         } else {
             $uid="$ahora";
         }
-        $uid.="@".$this->resource."_".$this->parent_container;
+        $uid.="@".$this->calendario."_".$this->parent_container;
         // Amb caldav.
         $args['UID']="$uid";
         $args['SUMMARY']="$asunto";
@@ -317,7 +320,9 @@ class Pendiente {
         if (!empty($id_reg)) {
             $args['X-DLB-ID-REG']="$id_reg";
             $ref=$this->buscar_ref_uid($uid,"txt");
-            $args['LOCATION']="$ref";
+            if (!empty($ref)) {
+            	$args['LOCATION']="$ref";
+            }
         }
         
         if (!empty($oficinas)){
@@ -357,9 +362,10 @@ class Pendiente {
         
         $uid2=strtok($uid,'@');
         $nom_fichero="$uid2.ics";
-        $rta=$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,'*');
-        if (strlen($rta) > 32 ) print_r($rta);
-
+        $cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,'*');
+        $response_headers = $cal->GetResponseHeaders(); 
+        
+		return $this->respuesta($response_headers);
     }
 
     /**
@@ -415,8 +421,10 @@ class Pendiente {
         if ($que != "eliminar") {
             $vcalendar->SetComponents($icalComp); // OJO, le paso el array de objetos.
             $icalendar=$vcalendar->Render();
-            $rta = $cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
-            if (strlen($rta) > 32 ) { print_r($rta); }
+			$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
+			$response_headers = $cal->GetResponseHeaders(); 
+        
+			return $this->respuesta($response_headers);
         }
     }
 
@@ -468,8 +476,10 @@ class Pendiente {
 
         $vcalendar->SetComponents($icalComp); // OJO, le paso el array de objetos.
         $icalendar=$vcalendar->Render();
-        $rta=$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
-        if (strlen($rta) > 32 ) { print_r($rta); }
+		$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
+        $response_headers = $cal->GetResponseHeaders(); 
+        
+		return $this->respuesta($response_headers);
     }
 
     private function update_pendiente($uid,$aDades) {
@@ -597,8 +607,10 @@ class Pendiente {
         // OJO! El nombre no puede contener la '@'.
         $uid2=strtok($uid,'@');
         $nom_fichero="$uid2.ics";
-        $rta=$cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
-        if (strlen($rta) > 32 ) { print_r($rta); }
+        $cal->DoPUTRequest( $base_url.$nom_fichero,$icalendar,$etag);
+        $response_headers = $cal->GetResponseHeaders(); 
+        
+		return $this->respuesta($response_headers);
     }
 
     
@@ -633,32 +645,41 @@ class Pendiente {
 
         if ($bInsert === FALSE) {
             //UPDATE
-            $this->update_pendiente($this->getUid(),$aDades);
+            $rta = $this->update_pendiente($this->getUid(),$aDades);
         } else {
             // INSERT
-            $this->ins_pendiente($aDades);
+            $rta = $this->ins_pendiente($aDades);
         }
+        return $rta;
     }
     
     public function eliminar() {
-        $this->marcar_contestado('eliminar');
+        return $this->marcar_contestado('eliminar');
     }
     
     private function visibilidad_to_Class($visibilidad) {
         switch ($visibilidad) {
-            case Entrada::V_TODOS:
+            case Visibilidad::V_TODOS:
                 $class = 'PUBLIC';
                 break;
-            case Entrada::V_PERSONAL:
+            case Visibilidad::V_PERSONAL:
                 $class = 'PRIVATE';
                 break;
-            case Entrada::V_DIRECTORES:
-            case Entrada::V_RESERVADO:
+            case Visibilidad::V_DIRECTORES:
+            case Visibilidad::V_RESERVADO:
                 $class = 'CONFIDENTIAL';
                 break;
-            case Entrada::V_RESERVADO_VCD;
+            case Visibilidad::V_RESERVADO_VCD;
                 $class = 'VCD';
                 break;
+                // para los ctr
+            case Visibilidad::V_CTR_TODOS;
+                $class = 'PUBLIC';
+				break;
+            case Visibilidad::V_CTR_DTOR;
+            case Visibilidad::V_CTR_DTOR_SACD;
+                $class = 'CONFIDENTIAL';
+				break;
             default:
                 $class = 'PUBLIC';
         }
@@ -668,20 +689,28 @@ class Pendiente {
     public function Class_to_visibilidad($class) {
         switch ($class) {
             case 'PUBLIC':
-                $visibilidad = Entrada::V_TODOS;
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$visibilidad = Visibilidad::V_CTR_TODOS;
+            	} else {
+					$visibilidad = Visibilidad::V_TODOS;
+            	}
                 break;
             case 'PRIVATE':
-                $visibilidad = Entrada::V_PERSONAL;
+                $visibilidad = Visibilidad::V_PERSONAL;
                 break;
             case 'CONFIDENTIAL':
-                $visibilidad = Entrada::V_DIRECTORES;
-                //$visibilidad = Entrada::V_RESERVADO; // solo añade no ver a los directores de otras oficinas no implicadas
+            	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+					$visibilidad = Visibilidad::V_CTR_DTOR;
+            	} else {
+                	$visibilidad = Visibilidad::V_DIRECTORES;
+            	}
+                //$visibilidad = Visibilidad::V_RESERVADO; // solo añade no ver a los directores de otras oficinas no implicadas
                 break;
             case 'VCD':
-                $visibilidad = Entrada::V_RESERVADO_VCD;
+                $visibilidad = Visibilidad::V_RESERVADO_VCD;
                 break;
             default:
-                $visibilidad = Entrada::V_TODOS;
+                $visibilidad = Visibilidad::V_TODOS;
         }
         return $visibilidad;
     }
@@ -708,6 +737,13 @@ class Pendiente {
         }
         $vcalendar = new \iCalComponent($todo[0]['data']);
         $icalComp = $vcalendar->GetComponents('VTODO');
+        // error...
+        if (empty($icalComp[0])) {
+	        $base_url = $this->getBaseUrl();
+        	$cargo = $this->getCargo();
+        	$id = $this->getUid();
+        	exit ("ERROR: id: $id, cargo: $cargo, url: $base_url");
+        }
         $icalComp = $icalComp[0];  // If you know there's only 1 of them...
         
         $aDades['asunto'] = $icalComp->GetPValue("SUMMARY");
@@ -780,7 +816,37 @@ class Pendiente {
         
         return $protocolo;
     }
+    
+    private function respuesta($response_headers) {
+    	$headers = array();
+    	$arr = explode("\n", $response_headers);
+		$reponse_code = '';
+    	foreach ($arr as $value) {
+    		$out = [];
+    		if( preg_match( "#HTTP/[0-9\.]+\s+([0-9]+)#",$value, $out ) ) {
+    			$reponse_code = intval($out[1]);
+    		}
+    		if(false !== ($matches = explode(':', $value, 2))) {
+    			$headers["{$matches[0]}"] = trim($matches[1]);
+    		}
+    	}
+    	
+        $aRespuesta = [];
+        //HTTP/1.1 401 Unauthorized
+        if ($reponse_code == 401 ) {
+        	$aRespuesta['success'] = FALSE;
+        	$aRespuesta['mensaje'] = $response_headers;
+        } else {
+        	$aRespuesta['success'] = TRUE;
+        	$aRespuesta['mensaje'] = 'ok';
+        }
+        
+		return $aRespuesta;
+    }
+    
     /* METODES GET SET ----------------------------------------------------------------- */
+      
+    
     /**
      * @return string
      */
@@ -800,17 +866,17 @@ class Pendiente {
     /**
      * @return string
      */
-    public function getResource()
+    public function getCalendario()
     {
-        return $this->resource;
+        return $this->calendario;
     }
 
     /**
      * @param string $sresource
      */
-    public function setResource($resource)
+    public function setCalendario($calendario)
     {
-        $this->resource = $resource;
+        $this->calendario = $calendario;
     }
 
     /**
@@ -906,11 +972,20 @@ class Pendiente {
      */
     public function getPonente()
     {
+        //[[0] => dlb, [1] => oficina, [2] => scdl]
        $a_container = explode('_', $this->getParent_container());
-       $nom_oficina = $a_container[1];
-       $gesOficinas = new GestorOficina();
-       $cOficinas = $gesOficinas->getOficinas(['sigla' => $nom_oficina]);
-       return $cOficinas[0]->getId_oficina();
+       if (count($a_container) > 2) {
+           // es una dl
+           $nom_oficina = $a_container[2];
+           $gesOficinas = new GestorOficina();
+           $cOficinas = $gesOficinas->getOficinas(['sigla' => $nom_oficina]);
+           $id_of_ponente = $cOficinas[0]->getId_oficina();
+       } else {
+           // es un ctr
+           $nom_oficina = $a_container[0];
+           $id_of_ponente = Cargo::OFICINA_ESQUEMA;
+       }
+       return $id_of_ponente;
     }
 
     /**
@@ -933,9 +1008,7 @@ class Pendiente {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'asunto');
         
-        $oEntrada = new Entrada();
-        $a_visibilidad = $oEntrada->getArrayVisibilidad();
-        $local_asunto = $a_visibilidad[Entrada::V_RESERVADO];
+        $local_asunto = _("reservado");
         if ($perm > 0) {
             $local_asunto = $this->getAsuntoDB();
         }
@@ -951,9 +1024,7 @@ class Pendiente {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this,'detalle');
         
-        $oEntrada = new Entrada();
-        $a_visibilidad = $oEntrada->getArrayVisibilidad();
-        $local_detalle = $a_visibilidad[Entrada::V_RESERVADO];
+        $local_detalle = _("reservado");
         if ($perm > 0) {
             $local_detalle = $this->getDetalleDB();
         }
@@ -1407,14 +1478,21 @@ class Pendiente {
     }
     
     public function getOficinasTxtcsv() {
-        $gesOficinas = new GestorOficina();
-        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
-        
-        $aOficinas = $this->getOficinasArray();
-        $oficinas_txt = '';
-        foreach($aOficinas as $id_oficina) {
-            $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
-            $oficinas_txt .= $a_posibles_oficinas[$id_oficina];
+        $a_container = explode('_', $this->getParent_container());
+        if (count($a_container) > 2) {
+           // es una dl
+            $gesOficinas = new GestorOficina();
+            $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+            
+            $aOficinas = $this->getOficinasArray();
+            $oficinas_txt = '';
+            foreach($aOficinas as $id_oficina) {
+                $oficinas_txt .= empty($oficinas_txt)? '' : ', ';
+                $oficinas_txt .= empty($a_posibles_oficinas[$id_oficina])? '?' : $a_posibles_oficinas[$id_oficina];
+            }
+        } else {
+           // es un ctr
+           $oficinas_txt = $a_container[0];
         }
         return $oficinas_txt;
     }

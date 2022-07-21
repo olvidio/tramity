@@ -1,10 +1,12 @@
 <?php
+use davical\model\Davical;
 use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
 use entradas\model\entity\EntradaDocDB;
 use entradas\model\entity\GestorEntradaBypass;
 use ethercalc\model\Ethercalc;
 use etherpad\model\Etherpad;
+use oasis_as4\model\As4;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
 use usuarios\model\PermRegistro;
@@ -12,6 +14,10 @@ use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Lista;
 use web\Protocolo;
+use oasis_as4\model\As4CollaborationInfo;
+use entradas\model\entity\EntradaBypass;
+use escritos\model\Escrito;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -23,11 +29,115 @@ require_once ("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-// El delete es via POST!!!";
-
 $Qque = (string) \filter_input(INPUT_POST, 'que');
-
 switch ($Qque) {
+    case As4CollaborationInfo::ACCION_REEMPLAZAR:
+    	$plataforma = $_SESSION['oConfig']->getPlataformaMantenimiento();
+        $error_txt = '';
+        // id_entrada formato: tabla#id_reg
+        $Qid_entrada = (string) \filter_input(INPUT_POST, 'id_entrada');
+        $Qelim_pendientes = (integer) \filter_input(INPUT_POST, 'elim_pendientes');
+        // En el caso de reemplazar, no se prgunta el motivo. Siempre es:
+        $Qtext = _("por n.v.");
+
+        $tipo_escritos = strtok($Qid_entrada, '#');
+        // hay que quitar la 's' del final
+        $tipo_escrito = rtrim($tipo_escritos,'s');
+        $id_entrada = strtok('#');
+    	
+        if ($tipo_escrito == 'escrito') {
+        	$oEscrito = new Escrito($id_entrada);
+        }
+        if ($tipo_escrito == 'entrada') {
+        	$oEscrito = new EntradaBypass($id_entrada);
+        	// comprobar que es bypass. Por el click podria ser una entrada normal
+        	$bypass = $oEscrito->getBypass();
+        	if (!is_true($bypass)) {
+        		$error_txt = _("Sólo se pueden reemplazar las entradas bypass");
+        	}
+        }
+        
+        if (empty($error_txt)) {
+			$oAS4 = new As4();
+			$oAS4->setPlataforma_Destino($plataforma);
+			$oAS4->setAccion(As4CollaborationInfo::ACCION_REEMPLAZAR);
+			
+			$filename = $oEscrito->getNombreEscrito(As4CollaborationInfo::ACCION_REEMPLAZAR);
+			
+			$oAS4->setEscrito($oEscrito);
+			$oAS4->setTipo_escrito($tipo_escrito);
+			$oAS4->setAnular_txt($Qtext);
+			
+			$error_txt = $oAS4->writeOnDock($filename);
+        }
+        
+        
+        if (empty($error_txt)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        }
+
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+    	break;
+    case As4CollaborationInfo::ACCION_ORDEN_ANULAR:
+    	$plataforma = $_SESSION['oConfig']->getPlataformaMantenimiento();
+        $error_txt = '';
+        // id_entrada formato: tabla#id_reg
+        $Qid_entrada = (string) \filter_input(INPUT_POST, 'id_entrada');
+        $Qtext = (string) \filter_input(INPUT_POST, 'text');
+        $Qelim_pendientes = (integer) \filter_input(INPUT_POST, 'elim_pendientes');
+
+        $tipo_escritos = strtok($Qid_entrada, '#');
+        // hay que quitar la 's' del final
+        $tipo_escrito = rtrim($tipo_escritos,'s');
+        $id_entrada = strtok('#');
+        
+        if ($tipo_escrito == 'escrito') {
+        	$oEscrito = new Escrito($id_entrada);
+        }
+        if ($tipo_escrito == 'entrada') {
+        	$oEscrito = new EntradaBypass($id_entrada);
+        	// comprobar que es bypass. Por el click podria ser una entrada normal
+        	$bypass = $oEscrito->getBypass();
+        	if (!is_true($bypass)) {
+        		$error_txt = _("Sólo se pueden anular las entradas bypass");
+        	}
+        }
+        
+        if (empty($error_txt)) {
+			$oAS4 = new As4();
+			$oAS4->setPlataforma_Destino($plataforma);
+			$oAS4->setAccion(As4CollaborationInfo::ACCION_ORDEN_ANULAR);
+			
+			$filename = $oEscrito->getNombreEscrito(As4CollaborationInfo::ACCION_ORDEN_ANULAR);
+			
+			$oAS4->setEscrito($oEscrito);
+			$oAS4->setTipo_escrito($tipo_escrito);
+			$oAS4->setAnular_txt($Qtext);
+			
+			$error_txt = $oAS4->writeOnDock($filename);
+        }
+        
+        
+        if (empty($error_txt)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        }
+
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'perm_ver':
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
         $oEntrada = new Entrada($Qid_entrada);
@@ -69,10 +179,11 @@ switch ($Qque) {
             $gesPendientes = new GestorPendienteEntrada();
             $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
             if (!empty($cUids)) {
-                $resource = 'registro';
-                $cargo = 'secretaria';
+                $calendario = 'registro';
+                $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+                $user_davical = $oDavical->getUsernameDavicalSecretaria();
                 foreach ($cUids as $uid => $parent_container) {
-                    $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                    $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
                     $oPendiente->eliminar();
                 }
             }
@@ -135,18 +246,16 @@ switch ($Qque) {
     case 'get_detalle':
         $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
         $oEntrada = new Entrada($Qid_entrada);
-        $oPermiso = new PermRegistro();
-        $perm = $oPermiso->permiso_detalle($oEntrada,'detalle');
-        if ($perm < PermRegistro::PERM_MODIFICAR) {
-            $mensaje = _("No tiene permiso para modificar el detalle");
-        } else {
-            $detalle = $oEntrada->getDetalle();
-            $mensaje = '';
-        }
+        $mensaje = '';
+		$oPermiso = new PermRegistro();
+		$perm = $oPermiso->permiso_detalle($oEntrada,'detalle');
+		if ($perm < PermRegistro::PERM_MODIFICAR) {
+			$mensaje = _("No tiene permiso para modificar el detalle");
+		}
 
         if (empty($mensaje)) {
             $jsondata['success'] = true;
-            $jsondata['detalle'] = $detalle;
+            $jsondata['detalle'] = $oEntrada->getDetalle();
         } else {
             $jsondata['success'] = false;
             $jsondata['mensaje'] = $mensaje;
@@ -231,10 +340,11 @@ switch ($Qque) {
             $gesPendientes = new GestorPendienteEntrada();
             $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
             if (!empty($cUids)) {
-                $resource = 'registro';
-                $cargo = 'secretaria';
+                $calendario = 'registro';
+                $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+                $user_davical = $oDavical->getUsernameDavicalSecretaria();
                 foreach ($cUids as $uid => $parent_container) {
-                    $oPendiente = new Pendiente($parent_container, $resource, $cargo, $uid);
+                    $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
                     $oPendiente->eliminar();
                 }
             }
@@ -316,7 +426,7 @@ switch ($Qque) {
             $id_lugar = $Qorigen_id_lugar;
             if (!empty($Qorigen_prot_num) && !empty($Qorigen_prot_any)) {
                 // No tengo en quenta las otras condiciones de la búsqueda
-                $aProt_origen = [ 'lugar' => $Qorigen_id_lugar,
+                $aProt_origen = [ 'id_lugar' => $Qorigen_id_lugar,
                     'num' => $Qorigen_prot_num,
                     'any' => $Qorigen_prot_any,
                 ];

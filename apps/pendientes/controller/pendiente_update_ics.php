@@ -1,10 +1,10 @@
 <?php
 use core\ConfigGlobal;
+use davical\model\Davical;
 use lugares\model\entity\Lugar;
 use pendientes\model\Pendiente;
-use pendientes\model\entity\PendienteDB;
-use usuarios\model\entity\GestorOficina;
 use pendientes\model\Rrule;
+use pendientes\model\entity\PendienteDB;
 use web\DateTimeLocal;
 
 /**
@@ -48,10 +48,8 @@ $Qf_plazo       = (string) \filter_input(INPUT_POST, 'f_plazo');
 $Qcal_oficina   = (string) \filter_input(INPUT_POST, 'cal_oficina');
 $Qid_oficina    = (string) \filter_input(INPUT_POST, 'id_oficina');
 if (empty($Qcal_oficina) && !empty($Qid_oficina)) { // si soy secretaria puede ser que haya definido la oficina posteriormente
-    $gesOficinas = new GestorOficina();
-    $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
-    $sigla = $a_posibles_oficinas[$Qid_oficina];
-    $Qcal_oficina="oficina_$sigla";	
+    $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+    $Qcal_oficina = $oDavical->getNombreRecurso($Qid_oficina);
 }
 
 $Qref_id_lugar  = (string) \filter_input(INPUT_POST, 'ref_id_lugar');
@@ -88,10 +86,12 @@ if (!empty($Qref_id_lugar)) {
     $location = '';
 }
 
+// nombre normalizado del usuario y oficina:
+$id_cargo_role = ConfigGlobal::role_id_cargo();
+$oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+$user_davical = $oDavical->getUsernameDavical($id_cargo_role);
 
-$cargo = ConfigGlobal::role_actual();
 $txt_err = '';
-
 if (!empty($Qsimple_per)) { // sólo para los periodicos.
     $Quntil = (string) \filter_input(INPUT_POST,'until');
     if (!empty($Quntil)) { $request['until'] = $Quntil; }
@@ -209,7 +209,7 @@ switch ($Qnuevo) {
             echo json_encode($jsondata);
             exit();
 		} else {
-            $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $cargo, $Quid);
+            $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $user_davical, $Quid);
             $oPendiente->setId_reg($Qid_reg);
             $oPendiente->setAsunto($asunto);
             $oPendiente->setStatus($Qstatus);
@@ -230,11 +230,15 @@ switch ($Qnuevo) {
             $oPendiente->setOficinasArray($Qa_oficinas);
             // las etiquetas:
             $oPendiente->setEtiquetasArray($Qa_etiquetas);
-            if ($oPendiente->Guardar() === FALSE ) {
+            $aRespuesta = $oPendiente->Guardar();
+            if ($aRespuesta['success'] === FALSE ) {
                 $txt_err .= _("No se han podido guardar el nuevo pendiente");
+                $txt_err .= "\n";
+                $txt_err .= $aRespuesta['mensaje'];
 			} else {
                 $jsondata['f_plazo'] = $Qf_plazo;
 			}
+			
             if (empty($txt_err)) {
                 $jsondata['success'] = true;
                 $jsondata['mensaje'] = 'ok';
@@ -250,10 +254,11 @@ switch ($Qnuevo) {
 		break;
 	case "2": //modificar pendiente
 		// 1º actualizo el escrito 
-        $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $cargo, $Quid);
+        $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $user_davical, $Quid);
         if (!empty($Qid_reg)) {
             $oPendiente->setId_reg($Qid_reg);
         }
+		$oPendiente->Carregar();
         $oPendiente->setAsunto($asunto);
         $oPendiente->setStatus($Qstatus);
         $oPendiente->setF_inicio($Qf_inicio);
@@ -272,9 +277,12 @@ switch ($Qnuevo) {
         $oPendiente->setOficinasArray($Qa_oficinas);
         // las etiquetas:
         $oPendiente->setEtiquetasArray($Qa_etiquetas);
-        if ($oPendiente->Guardar() === FALSE ) {
+		$aRespuesta = $oPendiente->Guardar();
+		if ($aRespuesta['success'] === FALSE ) {
             $txt_err .= _("No se han podido modificar el pendiente");
-        }
+			$txt_err .= "\n";
+			$txt_err .= $aRespuesta['mensaje'];
+		}
         if (empty($txt_err)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
@@ -296,7 +304,8 @@ switch ($Qnuevo) {
 				$cal_oficina=strtok('#');
 				// miro si es una recursiva de un pendiente:
 				$f_recur=strtok('#');
-                $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $cargo, $uid);
+                $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $user_davical, $uid);
+                $oPendiente->Carregar();
                 $oPendiente->marcar_contestado("eliminar");
 			}
 		} else {
@@ -323,11 +332,22 @@ switch ($Qnuevo) {
 				$cal_oficina=strtok('#');
 				// miro si es una recursiva de un pendiente:
 				$f_recur=strtok('#');
-                $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $cargo, $uid);
+                $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $user_davical, $uid);
+                $oPendiente->Carregar();
 				if (!empty($f_recur)) {
-					$oPendiente->marcar_excepcion($f_recur);
+					$aRespuesta = $oPendiente->marcar_excepcion($f_recur);
+					if ($aRespuesta['success'] === FALSE ) {
+						$txt_err .= _("No se han podido marcar como contestado");
+						$txt_err .= "\n";
+						$txt_err .= $aRespuesta['mensaje'];
+					}
 				} else {
-					$oPendiente->marcar_contestado("contestado");
+					$aRespuesta = $oPendiente->marcar_contestado("contestado");
+					if ($aRespuesta['success'] === FALSE ) {
+						$txt_err .= _("No se han podido marcar como contestado");
+						$txt_err .= "\n";
+						$txt_err .= $aRespuesta['mensaje'];
+					}
 				}
 			}
 		} else {
@@ -346,7 +366,7 @@ switch ($Qnuevo) {
         exit();
 		break;
 	case "5": // modificar eetiequetas y encargados
-        $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $cargo, $Quid);
+        $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $user_davical, $Quid);
         if (!empty($Qid_reg)) {
             $oPendiente->setId_reg($Qid_reg);
         }
@@ -355,9 +375,12 @@ switch ($Qnuevo) {
         $oPendiente->setEncargado($Qencargado);
         // las etiquetas:
         $oPendiente->setEtiquetasArray($Qa_etiquetas);
-        if ($oPendiente->Guardar() === FALSE ) {
+		$aRespuesta = $oPendiente->Guardar();
+		if ($aRespuesta['success'] === FALSE ) {
             $txt_err .= _("No se han podido modificar el pendiente");
-        }
+			$txt_err .= "\n";
+			$txt_err .= $aRespuesta['mensaje'];
+		}
         if (empty($txt_err)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';

@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(function() {
-	$( "#f_aprobacion" ).datetimepicker( {
+	$( "#f_aprobacion" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -12,7 +12,7 @@ $(function() {
 });
 
 $(function() {
-	$( "#f_contestar" ).datetimepicker( {
+	$( "#f_contestar" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -24,7 +24,7 @@ $(function() {
 });
 
 $(function() {
-	$( "#f_ini_circulacion" ).datetimepicker( {
+	$( "#f_ini_circulacion" ).prop('autocomplete', 'off').datetimepicker( {
 		timepicker: false,
 		datepicker: true,
 		format: '{{ format }}',
@@ -43,8 +43,9 @@ $(function() {
 fnjs_eliminar_accion=function(id_escrito){
     seguro=confirm("{{ "¿Está Seguro que desea borrar este escrito?"|trans }}");
     if (seguro) {
+        $('#slow_load').show();
         var id_expediente=$('#id_expediente').val();
-    	var url_doc = "apps/expedientes/controller/escrito_update.php";
+    	var url_doc = "apps/escritos/controller/escrito_update.php";
         var param_json = { que: 'eliminar', id_expediente: id_expediente, id_escrito: id_escrito };
         request=$.ajax({
             data: param_json,
@@ -62,7 +63,7 @@ fnjs_eliminar_accion=function(id_escrito){
     }
 }
 fnjs_cancelar_expediente=function(){
-    if (event != undefined) {
+	if (typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -156,9 +157,11 @@ fnjs_tramite=function(){
 
 
 fnjs_visto=function(){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
@@ -190,15 +193,17 @@ fnjs_visto=function(){
 }
 
 fnjs_circular=function(){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-	// Asegurarme que es por click y no por return (posicion: 0,0)
-	var x = event.x || event.clientX;
-    var y = event.y || event.clientY;
-    if (!x && !y) {
-    	return false;
-    }
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        // Asegurarme que es por click y no por return (posicion: 0,0)
+        var x = event.x || event.clientX;
+        var y = event.y || event.clientY;
+        if (!x && !y) {
+            return false;
+        }
+	}
 
     $('#frm_exp_que').val('circular');
     datos = $('#form_expediente').serialize();	
@@ -219,16 +224,50 @@ fnjs_circular=function(){
     });
 }
 
-fnjs_guardar_expediente=function(){
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+fnjs_archivar=function(){
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+	}
 	// Asegurarme que es por click y no por return (posicion: 0,0)
 	var x = event.x || event.clientX;
     var y = event.y || event.clientY;
     if (!x && !y) {
     	return false;
     }
+
+    $('#frm_exp_que').val('archivar');
+    datos = $('#form_expediente').serialize();	
+	request=$.ajax({
+		data: datos,
+		url: '{{ url_update }}',
+		method: 'POST',
+		dataType: 'json'
+	});
+	request.done( function (json) {
+		if (json.success != true) {
+			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+		} else {
+            //alert ("{{ "ok distribuir"|trans|raw }}");
+            // Volver a la lista...
+            fnjs_update_div('#main','{{ pagina_cancel|raw }}');
+		}
+	});
+}
+
+fnjs_guardar_expediente=function(){
+	if (typeof event !== 'undefined') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        // Asegurarme que es por click y no por return (posicion: 0,0)
+        var x = event.x || event.clientX;
+        var y = event.y || event.clientY;
+        if (!x && !y) {
+            return false;
+        }
+	}
 
 	var err=0;
 	var id_expediente=$('#id_expediente').val();
@@ -302,7 +341,7 @@ fnjs_mas_etiquetas=function(){
     var valor=1;
     var id_campo='#'+event.currentTarget.id;
     var valor=$(id_campo).val();
-    if(code!=9) {
+    if(code!=9 && typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
     }
@@ -322,7 +361,7 @@ fnjs_mas_firmas=function(){
     var valor=1;
     var id_campo='#'+event.currentTarget.id;
     var valor=$(id_campo).val();
-    if(code!=9) {
+    if(code!=9 && typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
     }
@@ -342,7 +381,7 @@ fnjs_mas_firmas_oficina=function(){
     var valor=1;
     var id_campo='#'+event.currentTarget.id;
     var valor=$(id_campo).val();
-    if(code!=9) {
+    if(code!=9 && typeof event !== 'undefined') {
         event.preventDefault();
         event.stopPropagation();
     }
@@ -357,3 +396,8 @@ fnjs_quitar_firmas_oficina=function(){
 	$('#firmas_oficina_num').val(0);
 }
 </script>
+
+{# para los ctr #}
+{%  if not vista_dl %}
+  {% include '@escritos/_escrito_enviar_js.html.twig' %}
+{% endif %}

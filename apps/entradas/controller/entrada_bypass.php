@@ -1,14 +1,14 @@
 <?php
 use core\ViewTwig;
-use entradas\model\Entrada;
-use entradas\model\entity\GestorEntradaBypass;
+use entradas\model\entity\EntradaBypass;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
-use usuarios\model\entity\GestorCargo;
+use usuarios\model\Categoria;
+use usuarios\model\Visibilidad;
+use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
-use usuarios\model\entity\GestorOficina;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -29,16 +29,18 @@ $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();
 
-$oEntrada = new Entrada($Qid_entrada);
+$oEntradaBypass = new EntradaBypass($Qid_entrada);
 // categoria
-$aOpciones = $oEntrada->getArrayCategoria();
+$oCategoria = new Categoria();
+$aOpciones = $oCategoria->getArrayCategoria();
 $oDesplCategoria = new Desplegable();
 $oDesplCategoria->setNombre('categoria');
 $oDesplCategoria->setOpciones($aOpciones);
 $oDesplCategoria->setTabIndex(80);
 
 // visibilidad
-$aOpciones = $oEntrada->getArrayVisibilidad();
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
@@ -52,68 +54,58 @@ $f_salida = '';
 $gesGrupo = new GestorGrupo();
 $a_posibles_grupos = $gesGrupo->getArrayGrupos();
 
-$json_prot_origen = $oEntrada->getJson_prot_origen();
+$json_prot_origen = $oEntradaBypass->getJson_prot_origen();
 $oProtOrigen = new Protocolo();
 $oProtOrigen->setEtiqueta('De');
 $oProtOrigen->setNombre('origen');
 $oProtOrigen->setBlanco(TRUE);
 $oProtOrigen->setTabIndex(10);
-$oProtOrigen->setLugar($json_prot_origen->lugar);
+$oProtOrigen->setLugar($json_prot_origen->id_lugar);
 $oProtOrigen->setProt_num($json_prot_origen->num);
 $oProtOrigen->setProt_any($json_prot_origen->any);
 $oProtOrigen->setMas($json_prot_origen->mas);
 
-$json_prot_ref = $oEntrada->getJson_prot_ref();
+$json_prot_ref = $oEntradaBypass->getJson_prot_ref();
 $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares,'referencias');
 $oArrayProtRef->setRef('t');
 $oArrayProtRef->setBlanco('t');
 $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias()');
 
-$asunto_e = $oEntrada->getAsunto_entrada();
-$asunto = $oEntrada->getAsunto();
-$f_entrada = $oEntrada->getF_entrada()->getFromLocal();
+$asunto_e = $oEntradaBypass->getAsunto_entrada();
+$asunto = $oEntradaBypass->getAsunto();
+$f_entrada = $oEntradaBypass->getF_entrada()->getFromLocal();
 // oficinas:
 $oficinas_txt = '';
-$id_of_ponente = $oEntrada->getPonente();
-$oficinas_txt .= $a_posibles_oficinas[$id_of_ponente];
-$a_oficinas = $oEntrada->getResto_oficinas();
+$id_of_ponente = $oEntradaBypass->getPonente();
+$oficinas_txt .= empty($a_posibles_oficinas[$id_of_ponente])? '?' : $a_posibles_oficinas[$id_of_ponente];
+$a_oficinas = $oEntradaBypass->getResto_oficinas();
 foreach ($a_oficinas as $id_id_oficina) {
     $sigla_of = $a_posibles_oficinas[$id_id_oficina];
     $oficinas_txt .= empty($oficinas_txt)? '' : ', '; 
     $oficinas_txt .= $sigla_of;
 }
 
-$a_adjuntos = $oEntrada->getArrayIdAdjuntos();
+$a_adjuntos = $oEntradaBypass->getArrayIdAdjuntos();
 
 $oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
 $oArrayProtDestino->setBlanco('t');
 $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
     
-// a ver si ya está
-$gesEntradasBypass = new GestorEntradaBypass();
-$cEntradasBypass = $gesEntradasBypass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
-if (!empty($cEntradasBypass)) {
-    // solo debería haber una:
-    $oEntradaBypass = $cEntradasBypass[0];
-    $f_salida = $oEntradaBypass->getF_salida()->getFromLocal();
-    $a_grupos = $oEntradaBypass->getId_grupos();
-    if (!empty($a_grupos)) {
-        $oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');
-        $chk_grupo_dst = 'checked';
-    } else {
-        $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
-        $chk_grupo_dst = '';
-        $json_prot_dst = $oEntradaBypass->getJson_prot_destino();
-        $oArrayProtDestino->setArray_sel($json_prot_dst);
-    }
-    $oArrayDesplGrupo->setBlanco('t');
-    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
-    
+$f_salida = $oEntradaBypass->getF_salida()->getFromLocal();
+$a_grupos = $oEntradaBypass->getId_grupos();
+if (!empty($a_grupos)) {
+	$oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');
+	$chk_grupo_dst = 'checked';
 } else {
-    $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
-    $oArrayDesplGrupo->setBlanco('t');
-    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
+	$oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
+	$chk_grupo_dst = '';
+	if (!empty($oEntradaBypass->getJson_prot_destino())) {
+		$json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+		$oArrayProtDestino->setArray_sel($json_prot_dst);
+	}
 }
+$oArrayDesplGrupo->setBlanco('t');
+$oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
 
 $titulo = _("salida distribución cr");
 if (empty($f_salida)) {

@@ -25,7 +25,7 @@ fnjs_ver_expediente=function(id_expediente) {
 fnjs_ver_escrito=function(id_escrito) {
     var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
     var server = '{{ server }}';
-    var url = server+'/apps/expedientes/controller/escrito_ver.php?id_escrito='+id_escrito;
+    var url = server+'/apps/escritos/controller/escrito_ver.php?id_escrito='+id_escrito;
     w=window.open(url, "", winPrefs);
     w.focus();
 }
@@ -81,7 +81,7 @@ fnjs_adjuntar_antecedente=function(tipo,id_escrito,id_expediente) {
     });
 }
 	
-fnjs_antecedente=function(n) {
+fnjs_buscar_antecedente=function(n) {
 	//n = 1 -> Entradas
 	//n = 2 -> Expedientes
 	//n = 3 -> Escritos-propuestas

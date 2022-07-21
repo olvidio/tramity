@@ -35,7 +35,7 @@
 </div>
 
 <div >
-<form id='actualizar' name='actualizar' action='/apps/expedientes/controller/escrito_update.php' method='post'>
+<form id='actualizar' name='actualizar' action='/apps/escritos/controller/escrito_update.php' method='post'>
 	<input type='Hidden' id='id_escrito' name='id_escrito' value='{{ id_escrito }}' >
 	<input type='Hidden' name='que' value='lista_pendientes' >
 	<input type='Hidden' name='pendientes_uid' value='{{ pendientes_uid|raw }}' >
@@ -73,17 +73,21 @@ fnjs_marcar_i_enviar=function(formulario){
         url: url,
         data: datos,
         method: 'POST',
-        dataType: 'json'
+        dataType: 'text'
     });
-    request.done( function (json) {
-        if (json.success != true) {
-            alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-        } else {
-            $('#id_contestados').val(id_contestados);
-            window.opener.fnjs_enviar_escrito_directo(id_escrito);
-            window.close();
-        	//fnjs_actualizar();
-        }
+	request.done( function (jsonStr) {
+		try {  
+			const json = JSON.parse(jsonStr);  
+            if (json.success != true) {
+                alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+            } else {
+                $('#id_contestados').val(id_contestados);
+                window.opener.fnjs_enviar_escrito_directo(id_escrito);
+                window.close();
+            }
+		} catch (e) {  
+            alert (jsonStr);
+		}
     });
     request.fail(function(JqXHR, textStatus, errorThrown){
         txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';

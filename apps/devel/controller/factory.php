@@ -377,7 +377,7 @@ foreach($oDbl->query($sql) as $row) {
             $gets.='
 	/**
 	 * estableix el valor de l\'atribut '.$tip.$nomcamp.' de '.$clase.'
-	 * Si '.$tip.$nomcamp.' es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getForamat().
+	 * Si '.$tip.$nomcamp.' es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, '.$tip.$nomcamp.' debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param '.$tipo_db.'|string '.$tip.$nomcamp.'=\''.$tip_val.'\' optional.
@@ -910,7 +910,6 @@ $txt2.='
 $txt2.="\n\t\t\t".'$a_pkey = array('.$claus_txt2.');';
 $txt2.="\n\t\t\t".'$o'.$clase.'= new '.$clase.'($a_pkey);';
 $txt2.='
-			$o'.$clase.'->setAllAtributes($aDades);
 			$o'.$clase.'Set->add($o'.$clase.');
 		}
 		return $o'.$clase.'Set->getTot();
@@ -966,7 +965,6 @@ $txt2.="\n\t\t".'$sCondi = implode(\' AND \',$aCondi);
 $txt2.="\n\t\t\t".'$a_pkey = array('.$claus_txt2.');';
 $txt2.="\n\t\t\t".'$o'.$clase.' = new '.$clase.'($a_pkey);';
 $txt2.='
-			$o'.$clase.'->setAllAtributes($aDades);
 			$o'.$clase.'Set->add($o'.$clase.');
 		}
 		return $o'.$clase.'Set->getTot();

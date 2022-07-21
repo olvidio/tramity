@@ -1,14 +1,13 @@
 <?php
 use core\ConfigGlobal;
 use core\ViewTwig;
-use etiquetas\model\entity\GestorEtiqueta;
-use expedientes\model\EscritoLista;
+use escritos\model\EscritoLista;
 use expedientes\model\Expediente;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
-use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\Cargo;
+use usuarios\model\entity\GestorCargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -185,8 +184,8 @@ if ($Qfiltro == 'seg_reunion') {
     $add_del_txt = _("Añadir Firmas");
 }
 
-// solo el scdl tiene permiso
-if (ConfigGlobal::role_actual() == 'scdl') {
+// solo el scdl tiene permiso. Ahora 11-3-22 también el sd.
+if (ConfigGlobal::role_actual() == 'scdl' || ConfigGlobal::role_actual() == 'sd') {
     $cmb_tramite = TRUE;
 } else {
     $cmb_tramite = FALSE;

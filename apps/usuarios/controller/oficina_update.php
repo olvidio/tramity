@@ -1,5 +1,7 @@
 <?php
+use core\ConfigGlobal;
 use davical\model\Davical;
+use usuarios\model\entity\Cargo;
 use usuarios\model\entity\Oficina;
 // INICIO Cabecera global de URL de controlador *********************************
 	require_once ("apps/core/global_header.inc");
@@ -28,9 +30,23 @@ switch($Qque) {
 		}
 		
         $oOficina = new Oficina (array('id_oficina' => $Qid_oficina));
-		if ($oOficina->DBEliminar() === FALSE) {
-			$error_txt .= _("hay un error, no se ha eliminado");
-            $error_txt .= "\n".$oOficina->getErrorTxt();
+		// hay que coger la información antes de borrar:
+		if ($oOficina->DBEliminar() === false) {
+		    $error_txt .= _("hay un error, no se ha eliminado");
+		    $error_txt .= "\n".$oOficina->getErrorTxt();
+		} else {
+		    // Eliminar el usuario en davical.
+		    // Para dl, Hace falta el nombre de la oficina:
+		    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+		        $oOficina = new Oficina($Qid_oficina);
+		        $oficina = $oOficina->getSigla();
+		    } else {
+		        $oficina = ConfigGlobal::getEsquema();
+		    }
+		    //$oficina = 'ocs';
+		    
+		    $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+		    $error_txt .= $oDavical->eliminarOficina($oficina);
 		}
         break;
 	case "guardar":
@@ -51,11 +67,11 @@ switch($Qque) {
 		} else {
 		    if ($sigla_old != $Qsigla) {
                 // Cambiar el nombre en davical.
-                $oDavical = new Davical();
+		        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
                 $oDavical->cambioNombreOficina($Qsigla,$sigla_old);
 		    } else {
 		        // revisar que existe:
-                $oDavical = new Davical();
+		        $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
                 $oDavical->crearOficina($Qsigla);
 		    }
 		}
@@ -72,7 +88,7 @@ switch($Qque) {
             $error_txt .= "\n".$oOficina->getErrorTxt();
 		} else {
 		    // Crear la oficina en davical.
-		    $oDavical = new Davical();
+		    $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
 		    $oDavical->crearOficina($Qsigla);
         }
 		break;

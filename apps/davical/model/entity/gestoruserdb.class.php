@@ -51,7 +51,6 @@ class GestorUserDB Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('user_no' => $aDades['user_no']);
 			$oUserDB= new UserDB($a_pkey);
-			$oUserDB->setAllAtributes($aDades);
 			$oUserDBSet->add($oUserDB);
 		}
 		return $oUserDBSet->getTot();
@@ -102,7 +101,6 @@ class GestorUserDB Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('user_no' => $aDades['user_no']);
 			$oUserDB = new UserDB($a_pkey);
-			$oUserDB->setAllAtributes($aDades);
 			$oUserDBSet->add($oUserDB);
 		}
 		return $oUserDBSet->getTot();

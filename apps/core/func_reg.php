@@ -21,6 +21,8 @@ require_once ("global_header.inc");
 *
 */
 function any_2($any) {
+	//convert to String
+	$any = (string) $any;
 	if (strlen($any)==4) {
 		$a=substr($any,-2);
 	} else {

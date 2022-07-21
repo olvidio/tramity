@@ -1,7 +1,10 @@
 <?php
 namespace davical\model;
 
+use core\ConfigGlobal;
 use davical\model\entity\Collection;
+use davical\model\entity\GestorCalendarItem;
+use davical\model\entity\GestorCollection;
 use davical\model\entity\GestorPrincipal;
 use davical\model\entity\GestorUserDB;
 use davical\model\entity\Grant;
@@ -9,10 +12,11 @@ use davical\model\entity\GroupMember;
 use davical\model\entity\Principal;
 use davical\model\entity\RoleMember;
 use DateTimeZone;
+use usuarios\model\entity\Cargo;
+use usuarios\model\entity\Oficina;
 use web\DateTimeLocal;
-use davical\model\entity\CalendarItem;
-use expedientes\model\entity\GestorAccion;
-use davical\model\entity\GestorCalendarItem;
+use web\StringLocal;
+use usuarios\model\entity\GestorOficina;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula aux_usuarios
@@ -34,14 +38,24 @@ use davical\model\entity\GestorCalendarItem;
  */
 class Davical {
     
+    /**
+     *  En la clase Cargo:
+     *  const AMBITO_CG  = 1;
+     *  const AMBITO_CR  = 2;
+     *  const AMBITO_DL  = 3;  //"dl"
+     *  const AMBITO_CTR = 4;
+     *
+     * @var integer
+     */
+    private $ambito;
+    
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
-    /* METODOS -------------------------------------------------------------- */
-
-    public function cambioNombreUser($user) {
+    public function __construct(int $ambito) {
         
+        $this->setAmbito($ambito);
     }
-    
+    /* METODOS -------------------------------------------------------------- */
     /**
      * realmente crea un user en davical, que corresponde a un cargo en tramity.
      * Pongo el mismo password a todos (system) para poder acceder desde el programa.
@@ -56,23 +70,25 @@ class Davical {
         $cargo = $aDatosCargo['cargo'];
         $descripcion = $aDatosCargo['descripcion'];
         $oficina = $aDatosCargo['oficina'];
-        //$password = $aDatosCargo['password'];
+        // $password = $aDatosCargo['password']
+        $oficina_mod = $this->getNombreRecurso($oficina);
+        $nom_grupo = $this->getNombreGrupo($oficina);
+        $username = $this->getNombreUsuario($cargo);
         
         $error_txt = '';
-        if (($cUsers = $this->existeUser($cargo)) === FALSE) {
+        if (($cUsers = $this->existeUser($username)) === FALSE) {
             // crear resource tipo persona
             //$aData['active'] = 't';
             //$aData['email_ok'] = null;
             //$aData['updated'] =  $str_ahora;
             //$aData['last_used'] = $str_ahora;
-            $aData['username'] = $cargo;
-            $aData['password'] = '*5SU3Y5apO*{SSHA}SQ2FNnUuR9vvBASHMJ9NlaxR9dI1U1UzWTVhcE8='; // system
-            $aData['fullname'] = $descripcion;
-            $aData['email'] = '';
             //$aData['config_data'] = '';
             //$aData['date_format_type'] = 'E';
             //$aData['locale'] = 'es_ES';
-            
+            $aData['username'] = $username;
+            $aData['password'] = '*5SU3Y5apO*{SSHA}SQ2FNnUuR9vvBASHMJ9NlaxR9dI1U1UzWTVhcE8='; // system
+            $aData['fullname'] = $descripcion;
+            $aData['email'] = '';
             
             $a_ids_cargo = $this->crearPersona($aData);
             $principal_id_person = $a_ids_cargo['principal_id'];
@@ -82,16 +98,15 @@ class Davical {
             $cPrincipales = $gesPrincipal->getPrincipales(['user_no' => $user_no]);
             if (empty($cPrincipales)) {
                 $error_txt .= "\n";
-                $error_txt .= sprintf(_("No existe un principal del grupo para este cargo (%s) en davical"),$cargo);
+                $error_txt .= sprintf(_("No existe un principal del grupo para este cargo (%s) en davical"),$username);
             } else {
                 $principal_id_person = $cPrincipales[0]->getPrincipal_id();
             }
-            
         }
         
         // Añadirlo al grupo de la oficina (si existe)
         // Comprobar si existe la oficina, o crearla.
-        if (($cUsersOficina = $this->existeOficina($oficina)) === FALSE) {
+        if ( $this->existeUser($oficina_mod) === FALSE) {
             $error_txt .= "\n";
             $error_txt .= sprintf(_("No existe esta oficina (%s) en davical"),$oficina);
             $error_txt .= "\n";
@@ -100,12 +115,12 @@ class Davical {
         }
         
         // Comprobar si existe el grupo, o crearlo.
-        if (($cGroups = $this->existeGrupo($oficina)) === FALSE) {
+        if (($cGroups = $this->existeUser($nom_grupo)) === FALSE) {
             $error_txt .= "\n";
             $error_txt .= sprintf(_("No existe un grupo para esta oficina (%s) en davical"),$oficina);
             $error_txt .= "\n";
             $error_txt .= _("creando...");
-            $a_id = $this->crearGrupo($oficina);
+            $a_id = $this->crearGrupo($nom_grupo);
             $principal_id_grupo = $a_id['principal_id'];  
         } else {
             $user_no = $cGroups[0]->getUser_no();
@@ -113,18 +128,36 @@ class Davical {
             $cPrincipales = $gesPrincipal->getPrincipales(['user_no' => $user_no]);
             if (empty($cPrincipales)) {
                 $error_txt .= "\n";
-                $error_txt .= _("No existe un principal del grupo la oficina scdl en davical");
+                $error_txt .= sprintf(_("No existe un principal del grupo la oficina %s en davical"),$oficina);
             } else {
                 $principal_id_grupo = $cPrincipales[0]->getPrincipal_id();
             }
         }
         $this->addPerson2Group($principal_id_person,$principal_id_grupo); 
         
-        
-        // return
-        if (!empty($error_txt)) {
-            echo $error_txt;
+        return $error_txt;
+    }
+
+    /**
+     * Elimina un usuario de Davical (corresponde al cargo de tramity)
+     * @param array $aDatosCargo
+     * @return string
+     */
+    public function eliminarUser($aDatosCargo) {
+        $error_txt = '';
+        $cargo = $aDatosCargo['cargo'];
+        // $password = $aDatosCargo['password']
+        $username = $this->getNombreUsuario($cargo);
+
+        if (($cUsers = $this->existeUser($username)) !== FALSE) {
+            foreach ($cUsers as $oUser) {
+                if ($oUser->DBEliminar() === FALSE) {
+                    $error_txt .= _("hay un error, no se ha eliminado");
+                    $error_txt .= "\n".$oUser->getErrorTxt();
+                }
+            }
         }
+        return $error_txt;
     }
     
     /**
@@ -204,28 +237,26 @@ class Davical {
             exit($error_txt);
         }
 
-        $a_id = ['user_no' => $user_no,
+        return ['user_no' => $user_no,
                 'principal_id' => $principal_id,  
                 ];
-        return $a_id;
     }
     
     
     public function cambioNombreOficina($of_new, $of_old) {
-        
+        $of_new_mod = $this->getNombreRecursoPorNombre($of_new);
+        $of_old_mod = $this->getNombreRecurso($of_old);
         // modificar el usr correspondiente a la oficina:
-        $oficina_new = "oficina_$of_new";
-        $oficina_old = "oficina_$of_old";
         $oUserDavical = new User();
-        $user_no = $oUserDavical->cambiarNombre($oficina_new, $oficina_old);
+        $user_no = $oUserDavical->cambiarNombre($of_new_mod, $of_old_mod);
 
         // modificar el principal correspondiente a la oficina:
         $oPrincipal = new Principal();
-        $oPrincipal->cambiarNombre($user_no,$oficina_new);
+        $oPrincipal->cambiarNombre($user_no,$of_new_mod);
 
         // modificar el usr correspondiente al grupo:
-        $grupo_new = "grupo_$of_new";
-        $grupo_old = "grupo_$of_old";
+        $grupo_new = $this->getNombreGrupo($of_new);
+        $grupo_old = $this->getNombreGrupo($of_old);
         
         $oUserDavical = new User();
         $user_no = $oUserDavical->cambiarNombre($grupo_new, $grupo_old);
@@ -236,11 +267,11 @@ class Davical {
         
         // modificar el collection correspondiente (2 => grupo y oficina):
         $oCollection = new Collection();
-        $oCollection->cambiarNombre($oficina_new, $oficina_old);
+        $oCollection->cambiarNombre($of_new_mod, $of_old_mod);
         
         // calendar_item i caldav_data (el dav_name, se cambia al cambiarlo en collection)
         $oCalendar = new GestorCalendarItem();
-        $oCalendar->cambiarOficinaUids($oficina_new, $oficina_old);
+        $oCalendar->cambiarOficinaUids($of_new_mod, $of_old_mod);
         
     }
     
@@ -257,17 +288,20 @@ class Davical {
      */
     public function crearOficina($oficina) {
         $error_txt = '';
+        $nom_oficina = $this->getNombreRecurso($oficina);
+        $nom_grupo = $this->getNombreGrupo($oficina);
+
         // si ya existe, no hacer nada.
-        if ($this->existeOficina($oficina) !== FALSE) {
+        if ($this->existeUser($nom_oficina) !== FALSE) {
             return TRUE;
         }
         // crear resource tipo: oficina_vsm
-        $a_ids_oficina = $this->crearResource($oficina);
+        $a_ids_oficina = $this->crearResource($nom_oficina);
         $user_no = $a_ids_oficina['user_no'];
-        // crear grupo tipo: vsm
-        $a_ids_grupo = $this->crearGrupo($oficina);
+        // crear grupo tipo: grupo_vsm
+        $a_ids_grupo = $this->crearGrupo($nom_grupo);
         // crear collecciones: registro y oficina
-        $aCollection_id = $this->crearColecciones($user_no,$oficina);
+        $aCollection_id = $this->crearColecciones($user_no,$nom_oficina);
         
         // Dar al grupo, permiso distinto para cada coleccion. (el registro no borrar...)
         // Resulta que para los evetos con CLASS= PRIVATE, si no tiene todos los privilegios no va.
@@ -301,6 +335,25 @@ class Davical {
         }
     }
     
+    public function eliminarOficina($oficina) {
+        $error_txt = '';
+        $nom_oficina = $this->getNombreRecurso($oficina);
+        $nom_grupo = $this->getNombreGrupo($oficina);
+        // si No existe, no hacer nada.
+        if ($this->existeUser($nom_oficina) === FALSE) {
+            return TRUE;
+        }
+        // eliminar colecciones: registro y oficina
+        $error_txt .= $this->deleteColecciones($oficina);
+        // eliminar grupo tipo: vsm
+        $error_txt .= $this->deleteGrupo($nom_grupo);
+        // eliminar resource tipo: oficina_vsm
+        $error_txt .= $this->deleteResource($nom_oficina);
+        
+        return $error_txt;
+    }
+    
+    
     /**
      * Recupera el valor del principal_id del grupo de secretaria (scdl).
      * 
@@ -308,9 +361,7 @@ class Davical {
      */
     private function getPincipalSecretaria() {
         // Comprobar si existe el grupo y el usuario.
-        $principal_id_secretaria = $this->existeSecretaria();
-        
-        return $principal_id_secretaria;
+        return $this->existeSecretaria();
     }
     
     private function grant($aData) {
@@ -339,14 +390,16 @@ class Davical {
      * @param string $oficina
      * @return array con los valores de collection_id para 'registro' y 'oficina'.
      */
-    private function crearColecciones($user_no,$oficina) {
+    private function crearColecciones($user_no,$nom_oficina) {
         $oAhora = new DateTimeLocal('', new DateTimeZone('Europe/Madrid'));
         $str_ahora = $oAhora->getFromLocalHora();
         $aData = [];
         
+        $parent_container = "/".$nom_oficina."/";
+        
         // registro  
         $aData['user_no'] = $user_no;
-        $aData['parent_container'] = "/oficina_".$oficina."/";
+        $aData['parent_container'] = $parent_container;
         $aData['dav_etag'] = -1; //weak_etag?
         $aData['is_calendar'] = 't';
         $aData['created'] = $str_ahora;
@@ -359,14 +412,15 @@ class Davical {
         $aData['schedule_transp'] = 'opaque';
         $aData['timezone'] = null;
         
-        // registro  
-        $aData['dav_name'] = '/oficina_'.$oficina.'/registro/';
-        $aData['dav_displayname'] = 'registro';
-        $aData['description'] = _("pendientes del registro");
-        $aCollection_id['registro'] = $this->crearColeccion($aData);
-        
+        // registro
+        if ($this->ambito == Cargo::AMBITO_DL) {
+            $aData['dav_name'] = $parent_container.'registro/';
+            $aData['dav_displayname'] = 'registro';
+            $aData['description'] = _("pendientes del registro");
+            $aCollection_id['registro'] = $this->crearColeccion($aData);
+        }
         // oficina  
-        $aData['dav_name'] = '/oficina_'.$oficina.'/oficina/';
+        $aData['dav_name'] = $parent_container.'oficina/';
         $aData['dav_displayname'] = 'oficina';
         $aData['description'] = _("pendientes de la oficina");
         
@@ -374,8 +428,33 @@ class Davical {
         
         return $aCollection_id;
     }
-    private function crearColeccion($aData) {
+    
+    /**
+     * Eliminar dos colecciones: una para el registro y otra para la oficina
+     * 
+     * @param string $oficina
+     * @return array con los valores de collection_id para 'registro' y 'oficina'.
+     */
+    private function deleteColecciones($nom_oficina) {
+        $error_txt = '';
+        $aData = [];
+        $parent_container = "/".$nom_oficina."/";
+        // registro
+        if ($this->ambito == Cargo::AMBITO_DL) {
+            $aData['dav_name'] = $parent_container.'registro/';
+            $aData['dav_displayname'] = 'registro';
+            $error_txt .= $this->deleteColeccion($aData);
+        }
+        // oficina
+        $aData['dav_name'] = $parent_container.'oficina/';
+        $aData['dav_displayname'] = 'oficina';
         
+        $error_txt .= $this->deleteColeccion($aData);
+        
+        return $error_txt;
+    }
+    
+    private function crearColeccion($aData) {
         $oCollection = new Collection();
         $oCollection->setUser_no($aData['user_no']);
         $oCollection->setParent_container($aData['parent_container']);
@@ -398,6 +477,24 @@ class Davical {
         return $oCollection->getCollection_id();
     }
     
+    private function deleteColeccion($aData) {
+        $error_txt = '';
+        $dav_name = $aData['dav_name'];            // $parent_container.'oficina/'
+        $displayname = $aData['dav_displayname'];  // 'oficina'
+        
+        $aWhere = [ 'dav_name' => $dav_name,
+            'dav_displayname' => $displayname,
+        ];
+        $gesCollection = new GestorCollection();
+        $cCollection = $gesCollection->getCollections($aWhere);
+        foreach ($cCollection as $oCollection) {
+            if ($oCollection->DBEliminar() === FALSE) {
+                $error_txt .= _("hay un error, no se ha eliminado");
+                $error_txt .= "\n".$oCollection->getErrorTxt();
+            }
+        }
+        return $error_txt;
+    }
     
     /**
      * Crea un resource para el grupo de la oficina. Es lo mismo que crearPersona o crearResource
@@ -407,20 +504,20 @@ class Davical {
      * @param string $oficina
      * @return number[]  array con los valores: 'user_no' y 'principal_id'  
      */
-    private function crearGrupo($oficina) {
+    private function crearGrupo($username) {
+        $error_txt = '';
         // Hay que crear un usuario
         $oAhora = new DateTimeLocal('', new DateTimeZone('Europe/Madrid'));
         $str_ahora = $oAhora->getFromLocalHora();
         $oUserDavical = new User();
         $joined = $str_ahora;
-        
+
         $active = 't';
         $email_ok = null;
         $updated =  $str_ahora;
         $last_used = $str_ahora;
-        $username = 'grupo_'.$oficina;
         $password = null;
-        $fullname = _("grupo de")." $oficina";
+        $fullname = sprintf(_("grupo de %s"), $username);
         $email = '';
         $config_data = '';
         $date_format_type = 'E';
@@ -463,10 +560,27 @@ class Davical {
             exit($error_txt);
         }
         
-        $a_id = ['user_no' => $user_no,
+        return ['user_no' => $user_no,
                 'principal_id' => $principal_id,  
                 ];
-        return $a_id;
+    }
+    
+    private function deleteGrupo($nom_grupo) {
+        $error_txt = '';
+        
+        /* Hay que borrar el Principal y el RoleMember correspondiente al user_no del User
+         * se supone que lo hace la BDR al borrar el user
+         */
+        $aWhere = [ 'username' => $nom_grupo ];
+        $gesUsers = new GestorUserDB();
+        $cUsers = $gesUsers->getUsersDB($aWhere);
+        foreach ($cUsers as $oUser) {
+            if ($oUser->DBEliminar() === FALSE) {
+                $error_txt .= _("hay un error, no se ha eliminado");
+                $error_txt .= "\n".$oUser->getErrorTxt();
+            }
+        }
+        return $error_txt;
     }
     
     /**
@@ -477,7 +591,7 @@ class Davical {
      * @param string $oficina
      * @return number[]  array con los valores: 'user_no' y 'principal_id'  
      */
-    private function crearResource($oficina) {
+    private function crearResource($username) {
         $error_txt = '';
         // Hay que crear un usuario
         $oAhora = new DateTimeLocal('', new DateTimeZone('Europe/Madrid'));
@@ -489,7 +603,6 @@ class Davical {
         $email_ok = null;
         $updated =  $str_ahora;
         $last_used = $str_ahora;
-        $username = 'oficina_'.$oficina;
         $password = null;
         $fullname = $username;
         $email = '';
@@ -534,54 +647,32 @@ class Davical {
             exit($error_txt);
         }
 
-        $a_id = ['user_no' => $user_no,
+        return ['user_no' => $user_no,
                 'principal_id' => $principal_id,  
                 ];
-        return $a_id;
     }
     
-    /**
-     * Mira si existe el resource la oficina en la tabla usr. En caso afirmativo
-     * devuelve el array con los objetos User y username='oficina_xxx' (xxx=nombre de la oficina)
-     * en caso negativo devuelve FALSE.
-     * 
-     * @param string $oficina
-     * @return boolean|array
-     */
-    private function existeOficina($oficina) {
-        // mirar si existe el resource tipo: oficina_vsm
-        $username = 'oficina_'.$oficina;
-        $gesUser = new GestorUserDB();
-        $cUsers = $gesUser->getUsersDB(['username' => $username]);
-        if (empty($cUsers)) {
-            return FALSE;
-        } else {
-            return $cUsers;
+    private function deleteResource($nom_resource) {
+        $error_txt = '';
+
+        /* Hay que borrar el Principal y el RoleMember correspondiente al user_no del User
+         * se supone que lo hace la BDR al borrar el user
+         */
+        // Hay que borrar un usuario
+        $aWhere = [ 'username' => $nom_resource ];
+        $gesUsers = new GestorUserDB();
+        $cUsers = $gesUsers->getUsersDB($aWhere);
+        foreach ($cUsers as $oUser) {
+            if ($oUser->DBEliminar() === FALSE) {
+                $error_txt .= _("hay un error, no se ha eliminado");
+                $error_txt .= "\n".$oUser->getErrorTxt();
+            }
         }
+        return $error_txt;
     }
     
     /**
-     * Mira si existe el grupo para la oficina en la tabla usr. En caso afirmativo
-     * devuelve el array con los objetos User y username='grupo_xxx' (xxx=nombre de la oficina)
-     * en caso negativo devuelve FALSE.
-     * 
-     * @param string $oficina
-     * @return boolean|array
-     */
-    private function existeGrupo($oficina) {
-        // asegurar que existe el grupo
-        // crear grupo tipo: grupo_vsm
-        $username = 'grupo_'.$oficina;
-        $gesUser = new GestorUserDB();
-        $cUsers = $gesUser->getUsersDB(['username' => $username]);
-        if (empty($cUsers)) {
-            return FALSE;
-        } else {
-            return $cUsers;
-        }
-    }
-    
-    /**
+     * Es valido para usuarios (vsm), Grupos (dlb_grupo_vsm) y Oficinas (dlb_oficina_vsm)
      * Mira si existe el usuario en la tabla usr. En caso afirmativo
      * devuelve el array con los objetos User y username=user.
      * en caso negativo devuelve FALSE.
@@ -589,10 +680,10 @@ class Davical {
      * @param string $user
      * @return boolean|array
      */
-    private function existeUser($user) {
+    private function existeUser($username) {
         // mirar si existe el user
         $gesUser = new GestorUserDB();
-        $cUsers = $gesUser->getUsersDB(['username' => $user]);
+        $cUsers = $gesUser->getUsersDB(['username' => $username]);
         if (empty($cUsers)) {
             return FALSE;
         } else {
@@ -602,22 +693,28 @@ class Davical {
     
     private function existeSecretaria() {
         $error_txt = '';
-        $user = 'secretaria';
+        $oficina = 'secretaria';
+        $cargo = 'admin';
         $descripcion = "usuario y grupo para secretaria. Tiene permiso total para todos los calendarios de registro";
+        
+        $nom_grupo = $this->getNombreGrupo($oficina);
+        $username = $this->getNombreUsuario($cargo);
+        
+        
         // mirar si existe el user
-        if (($cUsers = $this->existeUser($user)) === FALSE) {
+        if (($cUsers = $this->existeUser($username)) === FALSE) {
             // crear resource tipo persona
             //$aData['active'] = 't';
             //$aData['email_ok'] = null;
             //$aData['updated'] =  $str_ahora;
             //$aData['last_used'] = $str_ahora;
-            $aData['username'] = $user;
-            $aData['password'] = '*5SU3Y5apO*{SSHA}SQ2FNnUuR9vvBASHMJ9NlaxR9dI1U1UzWTVhcE8='; // system
-            $aData['fullname'] = $descripcion;
-            $aData['email'] = '';
             //$aData['config_data'] = '';
             //$aData['date_format_type'] = 'E';
             //$aData['locale'] = 'es_ES';
+            $aData['username'] = $username;
+            $aData['password'] = '*5SU3Y5apO*{SSHA}SQ2FNnUuR9vvBASHMJ9NlaxR9dI1U1UzWTVhcE8='; // system
+            $aData['fullname'] = $descripcion;
+            $aData['email'] = '';
             
             
             $a_ids_cargo = $this->crearPersona($aData);
@@ -628,7 +725,7 @@ class Davical {
             $cPrincipales = $gesPrincipal->getPrincipales(['user_no' => $user_no]);
             if (empty($cPrincipales)) {
                 $error_txt .= "\n";
-                $error_txt .= sprintf(_("No existe un principal del grupo para este cargo (%s) en davical"),$cargo);
+                $error_txt .= sprintf(_("No existe un principal del grupo (%s) en davical"),$username);
             } else {
                 $principal_id_person = $cPrincipales[0]->getPrincipal_id();
             }
@@ -636,12 +733,12 @@ class Davical {
         }
         // asegurar que existe el grupo
         // Comprobar si existe el grupo, o crearlo.
-        if (($cGroups = $this->existeGrupo($user)) === FALSE) {
+        if (($cGroups = $this->existeUser($nom_grupo)) === FALSE) {
             $error_txt .= "\n";
-            $error_txt .= sprintf(_("No existe un grupo para esta oficina (%s) en davical"),$user);
+            $error_txt .= sprintf(_("No existe un grupo para %s en davical"),$nom_grupo);
             $error_txt .= "\n";
             $error_txt .= _("creando...");
-            $a_id = $this->crearGrupo($user);
+            $a_id = $this->crearGrupo($nom_grupo);
             $principal_id_grupo = $a_id['principal_id'];  
         } else {
             $user_no = $cGroups[0]->getUser_no();
@@ -649,7 +746,7 @@ class Davical {
             $cPrincipales = $gesPrincipal->getPrincipales(['user_no' => $user_no]);
             if (empty($cPrincipales)) {
                 $error_txt .= "\n";
-                $error_txt .= _("No existe un principal del grupo la oficina scdl en davical");
+                $error_txt .= sprintf(_("No existe un principal del grupo para %s en davical"),$nom_grupo);
             } else {
                 $principal_id_grupo = $cPrincipales[0]->getPrincipal_id();
             }
@@ -662,5 +759,82 @@ class Davical {
         }
         return $principal_id_grupo;
     }
+    
+    
+    public function getUsernameDavical($id_cargo) {
+        // nombre normalizado del usuario y oficina:
+        $oCargo = new Cargo($id_cargo);
+        $cargo_role = $oCargo->getCargo();
+        
+        return $this->getNombreUsuario($cargo_role);
+    }
+
+    public function getUsernameDavicalSecretaria() {
+        // nombre normalizado del usuario y oficina:
+        $cargo = 'secretaria';
+        
+        return $this->getNombreUsuario($cargo);
+    }
+
+    private function getNombreUsuario($cargo) {
+        // devuelve: dlb_of2sm o agdmontagut_sd
+        $sigla = $_SESSION['oConfig']->getSigla();
+        $sigla_norm = StringLocal::lowerNormalized($sigla);
+        return $sigla_norm.'_'.$cargo;
+    }
+    
+    private function getNombreGrupo($oficina='') {
+        $sigla = $_SESSION['oConfig']->getSigla();
+        $sigla_norm = StringLocal::lowerNormalized($sigla);
+        if ($this->ambito == Cargo::AMBITO_CTR) {
+            $nom_grupo = $sigla_norm."_grupo";
+        } else {
+            $oficina_norm = StringLocal::lowerNormalized($oficina);
+            $nom_grupo = $sigla_norm."_grupo_".$oficina_norm;
+        }
+        return $nom_grupo;
+    }
+    
+    public function getNombreRecurso($id_oficina='') {
+        $sigla = $_SESSION['oConfig']->getSigla();
+        $sigla_norm = StringLocal::lowerNormalized($sigla);
+        if (!empty($id_oficina) && $id_oficina > 0) {
+            $oOficina = new Oficina($id_oficina);
+            $oficina = $oOficina->getSigla();
+            $nom_recurso = $this->getNombreRecursoPorNombre($oficina);
+        } else {
+            $nom_recurso = $sigla_norm."_oficina";
+        }
+        return $nom_recurso;
+    }
+    
+    public function getNombreRecursoPorNombre($oficina) {
+        $sigla = $_SESSION['oConfig']->getSigla();
+        $sigla_norm = StringLocal::lowerNormalized($sigla);
+		if (empty($oficina)) {
+			$msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
+			exit($msg);
+		}
+		$oficina_norm = StringLocal::lowerNormalized($oficina);
+		
+		return $sigla_norm."_oficina_".$oficina_norm;
+    }
+    
+    /**
+     * @return number
+     */
+    public function getAmbito()
+    {
+        return $this->ambito;
+    }
+
+    /**
+     * @param number $ambito
+     */
+    public function setAmbito($ambito)
+    {
+        $this->ambito = $ambito;
+    }
+
     
 }

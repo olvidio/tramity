@@ -51,7 +51,6 @@ class GestorGroupMember Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('member_id' => $aDades['member_id']);
 			$oGroupMember= new GroupMember($a_pkey);
-			$oGroupMember->setAllAtributes($aDades);
 			$oGroupMemberSet->add($oGroupMember);
 		}
 		return $oGroupMemberSet->getTot();
@@ -102,7 +101,6 @@ class GestorGroupMember Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('member_id' => $aDades['member_id']);
 			$oGroupMember = new GroupMember($a_pkey);
-			$oGroupMember->setAllAtributes($aDades);
 			$oGroupMemberSet->add($oGroupMember);
 		}
 		return $oGroupMemberSet->getTot();

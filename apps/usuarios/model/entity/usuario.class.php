@@ -213,7 +213,7 @@ class Usuario Extends core\ClasePropiedades {
 					$this->aDades=$aDades;
 					break;
 				case 'guardar':
-					if (!$oDblSt->rowCount()) return FALSE;
+				    if (!$oDblSt->rowCount()) { return FALSE; }
 					break;
                 default:
 					// En el caso de no existir esta fila, $aDades = FALSE:

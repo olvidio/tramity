@@ -6,13 +6,12 @@ use function core\is_true;
 use documentos\model\Documento;
 use documentos\model\GestorDocumento;
 use documentos\model\entity\GestorEtiquetaDocumento;
-use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
+use escritos\model\Escrito;
+use escritos\model\GestorEscrito;
 use etiquetas\model\entity\GestorEtiqueta;
 use etiquetas\model\entity\GestorEtiquetaExpediente;
-use expedientes\model\Escrito;
 use expedientes\model\Expediente;
-use expedientes\model\GestorEscrito;
 use expedientes\model\GestorExpediente;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\PermRegistro;
@@ -23,7 +22,6 @@ use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
 use web\Protocolo;
-use config\model\Config;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -133,7 +131,7 @@ switch ($Qque) {
 	            $id_lugar = $Qorigen_id_lugar;
 	            if (!empty($Qorigen_prot_num) && !empty($Qorigen_prot_any)) {
 	                // No tengo en quenta las otras condiciones de la búsqueda
-	                $aProt_origen = [ 'lugar' => $Qorigen_id_lugar,
+	                $aProt_origen = [ 'id_lugar' => $Qorigen_id_lugar,
 	                    'num' => $Qorigen_prot_num,
 	                    'any' => $Qorigen_prot_any,
 	                ];
@@ -325,15 +323,13 @@ switch ($Qque) {
 	                   ''];
 	    $a_valores = [];
 	    $a = 0;
+	    $oPermiso = new PermRegistro();
 	    foreach ($cExpedientes as $oExpediente) {
 	        $a++;
 	        // mirar permisos...
 	        $visibilidad = $oExpediente->getVisibilidad();
-	        if ( ($visibilidad == Entrada::V_DIRECTORES ||
-	               $visibilidad == Entrada::V_RESERVADO ||
-	               $visibilidad == Entrada::V_RESERVADO_VCD)
-	            && ConfigGlobal::soy_dtor() === FALSE) {
-	                continue;
+	        if (!$oPermiso->isVisibleDtor($visibilidad)) {
+	        	continue;
 	        }
 	        $id_expediente = $oExpediente->getId_expediente();
 	        $fecha_txt = $oExpediente->getF_aprobacion()->getFromLocal();
@@ -459,7 +455,7 @@ switch ($Qque) {
         if (!empty($Qlocal_prot_num) && !empty($Qlocal_prot_any)) {
             $gesLugares = new GestorLugar();
             $id_sigla_local = $gesLugares->getId_sigla_local();
-            $aProt_local = [ 'lugar' => $id_sigla_local,
+            $aProt_local = [ 'id_lugar' => $id_sigla_local,
                 'num' => $Qlocal_prot_num,
                 'any' => $Qlocal_prot_any,
             ];

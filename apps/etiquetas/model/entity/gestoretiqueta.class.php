@@ -55,26 +55,31 @@ class GestorEtiqueta Extends core\ClaseGestor {
 	        '_ordre' => 'nom_etiqueta',
 	    ];
 	    $aOperador = [];
-	    $cEtiquetasPersonales = $this->getEtiquetas($aWhere,$aOperador);
-	    
-	    return $cEtiquetasPersonales;
+	    return $this->getEtiquetas($aWhere,$aOperador);
 	}
 	    
 	public function getEtiquetasMiOficina($id_cargo='') {
 	    if (empty($id_cargo)) {
 	        $id_cargo = ConfigGlobal::role_id_cargo();
 	    }
-	    $oCargo = new Cargo($id_cargo);
-	    $id_oficina = $oCargo->getId_oficina();
 	    
-	    $aWhere = [ 'id_cargo' => $id_oficina,
-	        'oficina' => 't',
-	        '_ordre' => 'nom_etiqueta',
-	    ];
-	    $aOperador = [];
-	    $cEtiquetasOficina = $this->getEtiquetas($aWhere,$aOperador);
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+            $oCargo = new Cargo($id_cargo);
+            $id_oficina = $oCargo->getId_oficina();
+	    } else {
+	        $id_oficina = Cargo::OFICINA_ESQUEMA;
+	    }
 	    
-	    return $cEtiquetasOficina;
+	    if (empty($id_oficina)) {
+	    	return [];	
+	    } else {
+			$aWhere = [ 'id_cargo' => $id_oficina,
+				'oficina' => 't',
+				'_ordre' => 'nom_etiqueta',
+			];
+			$aOperador = [];
+			return $this->getEtiquetas($aWhere,$aOperador);
+	    }
 	}
 	/**
 	 * retorna l'array d'objectes de tipus Etiqueta
@@ -93,7 +98,6 @@ class GestorEtiqueta Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_etiqueta' => $aDades['id_etiqueta']);
 			$oEtiqueta= new Etiqueta($a_pkey);
-			$oEtiqueta->setAllAtributes($aDades);
 			$oEtiquetaSet->add($oEtiqueta);
 		}
 		return $oEtiquetaSet->getTot();
@@ -144,7 +148,6 @@ class GestorEtiqueta Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_etiqueta' => $aDades['id_etiqueta']);
 			$oEtiqueta = new Etiqueta($a_pkey);
-			$oEtiqueta->setAllAtributes($aDades);
 			$oEtiquetaSet->add($oEtiqueta);
 		}
 		return $oEtiquetaSet->getTot();

@@ -1,8 +1,10 @@
 <?php
 use busquedas\model\Buscar;
 use busquedas\model\VerTabla;
-use expedientes\model\Escrito;
+use escritos\model\Escrito;
 use lugares\model\entity\GestorLugar;
+use web\DateTimeLocal;
+use etiquetas\model\entity\GestorEtiquetaEntrada;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -15,15 +17,42 @@ require_once ("apps/core/global_object.inc");
 
 $Qopcion = (integer) \filter_input(INPUT_POST, 'opcion');
 $Qmas = (integer) \filter_input(INPUT_POST, 'mas');
+$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 
 $gesLugares = new GestorLugar();
 $id_sigla_local = $gesLugares->getId_sigla_local();
 
-$filtro = 'en_buscar';
+$filtro = empty($Qfiltro)? 'en_buscar' : $Qfiltro;
 $Qmas = '';
 $a_condicion = []; // para poner los parámetros de la búsqueda y poder actualizar la página.
 $a_condicion['opcion'] = $Qopcion;
 switch ($Qopcion) {
+    case 8:
+        // buscar por etiquetas
+    	$QandOr = (string) \filter_input(INPUT_POST, 'andOr');
+    	$Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    	$a_etiquetas_filtered = array_filter($Qa_etiquetas);
+    	
+        $a_condicion['etiquetas'] = $a_etiquetas_filtered;
+        $a_condicion['andOr'] = $QandOr;
+        $str_condicion = http_build_query($a_condicion);
+
+        $oBuscar = new Buscar();
+        $oBuscar->setEtiquetas($a_etiquetas_filtered);
+        $oBuscar->setAndOr($QandOr);
+        
+        $aCollection = $oBuscar->getCollection($Qopcion, $Qmas);
+        
+        foreach ($aCollection as $key => $cCollection) {
+            $oTabla = new VerTabla();
+            $oTabla->setKey($key);
+            $oTabla->setCondicion($str_condicion);
+            $oTabla->setCollection($cCollection);
+            $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
+            echo $oTabla->mostrarTabla();
+        }
+        break;
     case 71: // buscar en referencias (mismo formulario que 7):
         $Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
         $Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
@@ -50,6 +79,7 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         
@@ -79,6 +109,7 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         $btn_mas = "<button id=\"btn_mas\" type=\"button\" class=\"btn btn-primary\" onClick=\"fnjs_buscar_mas();\" >";
@@ -106,6 +137,7 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         break;
@@ -137,6 +169,7 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         break;
@@ -193,18 +226,19 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         break;
     case 4:
         $Qlista_origen = (string) \filter_input(INPUT_POST, 'lista_origen');
-        $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
+        $Qlista_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
         $Qf_max = (string) \filter_input(INPUT_POST, 'f_max');
         $Qf_min = (string) \filter_input(INPUT_POST, 'f_min');
         $Qoficina = (integer) \filter_input(INPUT_POST, 'oficina');
         
         $a_condicion['lista_origen'] = $Qlista_origen;
-        $a_condicion['lista_lugar'] = $Qid_lugar;
+        $a_condicion['lista_lugar'] = $Qlista_lugar;
         $a_condicion['f_max'] = $Qf_max;
         $a_condicion['f_min'] = $Qf_min;
         $a_condicion['oficina'] = $Qoficina;
@@ -228,18 +262,19 @@ switch ($Qopcion) {
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
                     $oTabla->setFiltro($filtro);
+					$oTabla->setBotonesDefault();
                     echo $oTabla->mostrarTabla();
                 }
                 break;
             case "de":
                 $opcion = 42;
-                $Qid_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
+                $Qlista_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
                 
-                $a_condicion['lista_lugar'] = $Qid_lugar;
+                $a_condicion['lista_lugar'] = $Qlista_lugar;
                 $str_condicion = http_build_query($a_condicion);
                 
                 $oBuscar = new Buscar();
-                $oBuscar->setOrigen_id_lugar($Qid_lugar);
+                $oBuscar->setOrigen_id_lugar($Qlista_lugar);
                 $oBuscar->setF_max($Qf_max);
                 $oBuscar->setF_min($Qf_min);
                 $oBuscar->setOficina($Qoficina);
@@ -251,6 +286,7 @@ switch ($Qopcion) {
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
                     $oTabla->setFiltro($filtro);
+					$oTabla->setBotonesDefault();
                     echo $oTabla->mostrarTabla();
                 }
                 break;
@@ -273,6 +309,7 @@ switch ($Qopcion) {
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
                     $oTabla->setFiltro($filtro);
+					$oTabla->setBotonesDefault();
                     echo $oTabla->mostrarTabla();
                 }
                 break;
@@ -296,6 +333,7 @@ switch ($Qopcion) {
                     $oTabla->setCondicion($str_condicion);
                     $oTabla->setCollection($cCollection);
                     $oTabla->setFiltro($filtro);
+					$oTabla->setBotonesDefault();
                     echo $oTabla->mostrarTabla();
                 }
                 break;
@@ -334,9 +372,62 @@ switch ($Qopcion) {
             $oTabla->setCondicion($str_condicion);
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
             echo $oTabla->mostrarTabla();
         }
         break;
+    case 51:
+    	//'escritos_cr':
+		// recibidos los ultimos 7 dias
+		$oHoy = new DateTimeLocal();
+		$oIni = new DateTimeLocal();
+		$oIni->sub(new \DateInterval('P7D'));
+
+		$gesLugares = new GestorLugar();
+		$id_cr = $gesLugares->getId_cr();
+
+		$a_condicion['lista_lugar'] = $id_cr;
+		$str_condicion = http_build_query($a_condicion);
+
+		// son todos los que tienen protocolo local
+		$oBuscar = new Buscar();
+		$oBuscar->setOrigen_id_lugar($id_cr);
+		$oBuscar->setF_max($oHoy->getIso(),FALSE);
+		$oBuscar->setF_min($oIni->getIso(),FALSE);
+
+		$aCollection = $oBuscar->getCollection(5);
+		foreach ($aCollection as $key => $cCollection) {
+			$oTabla = new VerTabla();
+			$oTabla->setKey($key);
+			$oTabla->setCondicion($str_condicion);
+			$oTabla->setCollection($cCollection);
+			$oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
+			echo $oTabla->mostrarTabla();
+		}
+		break;
+    case 52:
+    	//'entradas_semana':
+    	// recibidos los ultimos 15 dias
+    	$oHoy = new DateTimeLocal();
+    	$oIni = new DateTimeLocal();
+    	$oIni->sub(new \DateInterval('P15D'));
+    	
+    	// no filtro por origen: todos (dl y cr)
+    	$oBuscar = new Buscar();
+    	$oBuscar->setF_max($oHoy->getIso(),FALSE);
+    	$oBuscar->setF_min($oIni->getIso(),FALSE);
+    	
+    	$aCollection = $oBuscar->getCollection(5);
+    	foreach ($aCollection as $key => $cCollection) {
+			$oTabla = new VerTabla();
+			$oTabla->setKey($key);
+			$oTabla->setCollection($cCollection);
+			$oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
+			echo $oTabla->mostrarTabla();
+    	}
+    	break;
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);

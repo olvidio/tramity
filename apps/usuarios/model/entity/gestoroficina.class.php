@@ -2,6 +2,7 @@
 namespace usuarios\model\entity;
 use core;
 use web\Desplegable;
+use core\ConfigGlobal;
 /**
  * GestorOficina
  *
@@ -42,23 +43,29 @@ class GestorOficina Extends core\ClaseGestor {
 	 * @return array
 	 */
 	function getArrayOficinas() {
-	    $oDbl = $this->getoDbl();
-	    $nom_tabla = $this->getNomTabla();
-	    
-	    $sQuery="SELECT id_oficina, sigla FROM $nom_tabla
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+	        $clave = Cargo::OFICINA_ESQUEMA;
+	        $val = ConfigGlobal::getEsquema();
+            $aOpciones[$clave]=$val;
+	    } else {
+            $oDbl = $this->getoDbl();
+            $nom_tabla = $this->getNomTabla();
+            
+            $sQuery="SELECT id_oficina, sigla FROM $nom_tabla
                  ORDER BY orden";
-                if (($oDbl->query($sQuery)) === false) {
-                    $sClauError = 'GestorAsignaturaTipo.lista';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-                    return false;
-                }
-                $aOpciones=array();
-                foreach ($oDbl->query($sQuery) as $aClave) {
-                    $clave=$aClave[0];
-                    $val=$aClave[1];
-                    $aOpciones[$clave]=$val;
-                }
-                return $aOpciones;
+            if (($oDbl->query($sQuery)) === false) {
+                $sClauError = 'GestorAsignaturaTipo.lista';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                return false;
+            }
+            $aOpciones=array();
+            foreach ($oDbl->query($sQuery) as $aClave) {
+                $clave=$aClave[0];
+                $val=$aClave[1];
+                $aOpciones[$clave]=$val;
+            }
+	    }
+        return $aOpciones;
 	}
 	
 	
@@ -69,23 +76,29 @@ class GestorOficina Extends core\ClaseGestor {
 	 * @return Desplegable
 	 */
 	function getListaOficinas() {
-	    $oDbl = $this->getoDbl();
-	    $nom_tabla = $this->getNomTabla();
-	    
-	    $sQuery="SELECT id_oficina, sigla FROM $nom_tabla
-                 ORDER BY orden";
-                if (($oDbl->query($sQuery)) === false) {
-                    $sClauError = 'GestorAsignaturaTipo.lista';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-                    return false;
-                }
-                $aOpciones=array();
-                foreach ($oDbl->query($sQuery) as $aClave) {
-                    $clave=$aClave[0];
-                    $val=$aClave[1];
-                    $aOpciones[$clave]=$val;
-                }
-                return new Desplegable('',$aOpciones,'',true);
+	    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+	        $clave = Cargo::OFICINA_ESQUEMA;
+	        $val = ConfigGlobal::getEsquema();
+            $aOpciones[$clave]=$val;
+	    } else {
+            $oDbl = $this->getoDbl();
+            $nom_tabla = $this->getNomTabla();
+            
+            $sQuery="SELECT id_oficina, sigla FROM $nom_tabla
+                     ORDER BY orden";
+            if (($oDbl->query($sQuery)) === false) {
+                $sClauError = 'GestorAsignaturaTipo.lista';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                return false;
+            }
+            $aOpciones=array();
+            foreach ($oDbl->query($sQuery) as $aClave) {
+                $clave=$aClave[0];
+                $val=$aClave[1];
+                $aOpciones[$clave]=$val;
+            }
+	    }
+        return new Desplegable('',$aOpciones,'',true);
 	}
 	
 	/**
@@ -105,7 +118,6 @@ class GestorOficina Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_oficina' => $aDades['id_oficina']);
 			$oOficina= new Oficina($a_pkey);
-			$oOficina->setAllAtributes($aDades);
 			$oOficinaSet->add($oOficina);
 		}
 		return $oOficinaSet->getTot();
@@ -156,7 +168,6 @@ class GestorOficina Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_oficina' => $aDades['id_oficina']);
 			$oOficina= new Oficina($a_pkey);
-			$oOficina->setAllAtributes($aDades);
 			$oOficinaSet->add($oOficina);
 		}
 		return $oOficinaSet->getTot();

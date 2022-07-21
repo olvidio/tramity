@@ -46,6 +46,7 @@ class GestorPreferencia Extends core\ClaseGestor {
 	    $cPreferencias = $gesPreferencias->getPreferencias(['id_usuario'=>$id_usuario,'tipo'=>$tipo]);
 	    if (count($cPreferencias) > 0) {
 	        $oPref = $cPreferencias[0]; // solo deberia haber uno.
+	        $oPref->DBCarregar();
 	    } else {
 	        $oPref = new Preferencia();
 	        $oPref->setId_usuario($id_usuario);
@@ -82,7 +83,6 @@ class GestorPreferencia Extends core\ClaseGestor {
 		foreach ($oDbl->query($sQuery) as $aDades) {
 			$a_pkey = array('id_item' => $aDades['id_item']);
 			$oPreferencia= new Preferencia($a_pkey);
-			$oPreferencia->setAllAtributes($aDades);
 			$oPreferenciaSet->add($oPreferencia);
 		}
 		return $oPreferenciaSet->getTot();
@@ -133,7 +133,6 @@ class GestorPreferencia Extends core\ClaseGestor {
 		foreach ($oDblSt as $aDades) {
 			$a_pkey = array('id_item' => $aDades['id_item']);
 			$oPreferencia= new Preferencia($a_pkey);
-			$oPreferencia->setAllAtributes($aDades);
 			$oPreferenciaSet->add($oPreferencia);
 		}
 		return $oPreferenciaSet->getTot();
