@@ -58,6 +58,7 @@ class GestorLugar Extends core\ClaseGestor {
 
 	    $query_plataforma = "SELECT DISTINCT l.plataforma FROM $nom_tabla l
                             WHERE l.anulado = FALSE AND l.plataforma IS NOT NULL $where_propia
+							AND modo_envio = " . Lugar::MODO_AS4 . "
                             ORDER BY l.plataforma";
 	    foreach ($oDbl->query($query_plataforma) as $aClave) {
 	        $clave=$aClave[0];
