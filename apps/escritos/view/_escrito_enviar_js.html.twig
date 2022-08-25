@@ -198,7 +198,11 @@ fnjs_revisar_escrito=function(id_escrito) {
         //url=rta.responseText;
         url=rta;
         w=window.open(url, "", winPrefs);
-        w.focus();
+        if (w === null ) {
+        	alert("{{ "No se puede abrir una nueva ventana. Puede tener bloqueados los popup"|trans }}");    
+        } else {
+        	w.focus();
+        }
     });
 	request.fail(function(JqXHR, textStatus, errorThrown){
 		alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
