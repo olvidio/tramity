@@ -57,10 +57,14 @@ class Request
             ]
         );
         */
+        /* TODO cambiar el verify por  ((GuzzleHttp\RequestOptions::VERIFY)): 
+         * // Use a custom SSL certificate on disk.
+		 *    $client->request('POST', '/', ['verify' => '/path/to/cert.pem']);
+         */
         return $client->post(
             $this->getUrlPath(),
             [
-                'query' => $this->getParams(),
+                'form_params' => $this->getParams(),
                 'verify' => false,
             ]
         );
