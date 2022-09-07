@@ -110,6 +110,7 @@ $filtro = 'archivados';
 
 
 // entradas = 12
+if (is_true(ConfigGlobal::soy_dtor()) ) {
 $filtro = 'en_aceptado';
 	$active = ($filtro == $Qfiltro)? 'active' : '';
 	$aQuery = [ 'filtro' => $filtro ];
@@ -130,6 +131,7 @@ $filtro = 'en_aceptado';
 			'ver_orden' => false,
 	];
 	$a_pills[$num_orden] = $pill;
+}
 
 // entradas = 13
 $filtro = 'en_encargado';
@@ -179,8 +181,9 @@ $filtro = 'entradas_semana';
 	$aQuery = [ 'filtro' => $filtro, 'opcion' => 52 ];
 	$pag_lst = web\Hash::link('apps/busquedas/controller/ver_tabla.php?'.http_build_query($aQuery));
 	$num_orden = '2#3';
-	$text = _("entradas");
-	$explicacion = _("Correo de dl y cr (marcado como visto) de los últimos 15 días");
+	$text = _("entradas recientes");
+	$dias = $_SESSION['oConfig']->getPeriodoEntradas();
+	$explicacion = sprintf(_("Correo de dl y cr (marcado como visto o encargado) de los últimos %s días"),$dias);
 	$num = '';
 	$pill = [ 'orden'=> $num_orden,
 			'text' => $text,
@@ -192,7 +195,7 @@ $filtro = 'entradas_semana';
 			'ver_orden' => false,
 	];
 	$a_pills[$num_orden] = $pill;
-
+	
 // buscar = 22
 $filtro = 'permanentes_cr';
     $active = ($filtro == $Qfiltro)? 'active' : '';

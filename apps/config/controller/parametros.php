@@ -17,6 +17,27 @@ use web\Hash;
 $url = 'apps/config/controller/parametros_update.php';
 $a_campos = [ 'url' => $url];
 
+// ----------- periodos entradas -------------------
+/* Ver las entradas de los n días anteriores  
+ */
+
+$parametro = 'periodo_entradas';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+if (empty($valor)) {
+    $valor = "30";
+}
+$val_sigla = $valor;
+
+$oHashPEntradas = new Hash();
+$oHashPEntradas->setUrl($url);
+$oHashPEntradas->setcamposForm('valor');
+$oHashPEntradas->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashPEntradas'] = $oHashPEntradas;
+$a_campos['periodo_entradas'] = $val_sigla;
+
 
 // ----------- plazos vida -------------------
 /*

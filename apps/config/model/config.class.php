@@ -168,6 +168,11 @@ class Config {
         return $oConfigSchema->getValor();
     }
     
+    public function getPeriodoEntradas() {
+        $parametro = 'periodo_entradas';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
     // prioridades:
     public function getPlazoUrgente() {
         $parametro = 'plazo_urgente';

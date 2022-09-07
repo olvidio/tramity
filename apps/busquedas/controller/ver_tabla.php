@@ -411,7 +411,8 @@ switch ($Qopcion) {
     	// recibidos los ultimos 15 dias
     	$oHoy = new DateTimeLocal();
     	$oIni = new DateTimeLocal();
-    	$oIni->sub(new \DateInterval('P15D'));
+    	$dias = $_SESSION['oConfig']->getPeriodoEntradas();
+    	$oIni->sub(new \DateInterval("P${dias}D"));
     	
     	// no filtro por origen: todos (dl y cr)
     	$oBuscar = new Buscar();

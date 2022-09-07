@@ -1,3 +1,13 @@
+<h3>{{ "periodo para entradas"|trans }}:</h3>
+  <form id="frm_pe" name="frm_pe" action="">
+    {{ oHashPEntradas.getCamposHtml|raw }}
+    {{ "ver las entradas (ya vistas o encargadas) de los "|trans }}:
+    <input type="text" size="5" name="valor" value="{{ periodo_entradas }}" >
+    {{ "días anteriores"|trans }}
+    <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+  </form>
+<hr>
+
 <h3>{{ "plazos para vida expedientes"|trans }}:</h3>
     <table>
     <tr> <th class="col-2"> {{ "Vida"|trans }} </th>
