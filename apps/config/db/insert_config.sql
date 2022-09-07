@@ -5,3 +5,4 @@ INSERT INTO public.x_config (parametro, valor) VALUES ('plazo_rapido', 7);
 INSERT INTO public.x_config (parametro, valor) VALUES ('plazo_desconocido', 56);
 INSERT INTO public.x_config (parametro, valor) VALUES ('plazo_normal', 14);
 INSERT INTO public.x_config (parametro, valor) VALUES ('plazo_error', 21);
+INSERT INTO public.x_config (parametro, valor) VALUES ('periodo_entradas', 30);

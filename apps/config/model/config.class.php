@@ -171,7 +171,7 @@ class Config {
     public function getPeriodoEntradas() {
         $parametro = 'periodo_entradas';
         $oConfigSchema = new ConfigSchema($parametro);
-        return $oConfigSchema->getValor();
+        return empty($oConfigSchema->getValor())? 15 : $oConfigSchema->getValor();
     }
     // prioridades:
     public function getPlazoUrgente() {
