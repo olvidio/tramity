@@ -79,7 +79,8 @@
 <form id="frm_buscar_3" name="frm_buscar_3" action="">
     <input type="hidden" name="opcion" value="">
     <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 3: Listar escritos por el origen, el destino o por ambos"|trans }}</th></tr>
+    <tr class="table-danger"><th colspan=5 class=titulo_inv>
+        {{ "opción 3: Listar escritos enviados (por el destino), o recibidos (por el origen)"|trans }}</th></tr>
         <tr><td class=etiqueta>{{ "¿A quién iba dirigido?"|trans }}:</td>
         <td colspan="4">
         {{ oDesplDestino2.desplegable|raw }}
@@ -111,12 +112,19 @@
     <table class="table table-warning p-2">
     <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 4: Listar varios escritos"|trans }}</th></tr>
     <td colspan="5">
-    <input type="radio" {{ chk_lo_1 }} id="lista_origen_1" name="lista_origen" value="dl" onchange="fnjs_activar_lugar(1)">{{ "de"|trans }} {{ dele }}<br>
-    <input type="radio" {{ chk_lo_2 }} id="lista_origen_2" name="lista_origen" value="de" onchange="fnjs_activar_lugar(2)">{{ "de un ctr, dl o cr concreto"|trans }}
+    <input type="radio" {{ chk_lo_1 }} id="lista_origen_1" name="lista_origen" value="dl" onchange="fnjs_activar_lugar(1)">
+     {{ "aprobados en"|trans }} {{ dele }}
+     <br>
+    <input type="radio" {{ chk_lo_2 }} id="lista_origen_2" name="lista_origen" value="de" onchange="fnjs_activar_lugar(2)">
+     {{ "recibidos de un ctr, dl o cr concreto"|trans }}
         {{ oDesplLugar4.desplegable|raw }}
-        <br>
-    <input type="radio" {{ chk_lo_3 }} id="lista_origen_3" name="lista_origen" value="cr_dl" onchange="fnjs_activar_lugar(3)">{{ "de cr a"|trans }} {{ dele }}<br>
-    <input type="radio" {{ chk_lo_4 }} id="lista_origen_4" name="lista_origen" value="cr_ctr" onchange="fnjs_activar_lugar(4)">{{ "de cr a ctr"|trans }}<br>
+     <br>
+    <input type="radio" {{ chk_lo_3 }} id="lista_origen_3" name="lista_origen" value="cr_dl" onchange="fnjs_activar_lugar(3)">
+     {{ "de cr a"|trans }} {{ dele }}
+     <br>
+    <input type="radio" {{ chk_lo_4 }} id="lista_origen_4" name="lista_origen" value="cr_ctr" onchange="fnjs_activar_lugar(4)">
+     {{ "de cr a ctr"|trans }}
+     <br>
     </td>
     </tr>
         <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>

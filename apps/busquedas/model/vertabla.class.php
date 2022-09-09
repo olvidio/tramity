@@ -187,6 +187,10 @@ class VerTabla {
             	}
                 $this->tabla_entradas($this->aCollection);
                 break;
+            case 'entradas_bypass':
+				$this->sTitulo = _("escritos de cr para el centro");
+                $this->tabla_entradas($this->aCollection);
+                break;
             case 'entradas':
             	if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
 					$this->sTitulo = _("escritos recibidos en el centro");
@@ -529,6 +533,7 @@ class VerTabla {
     public function setBotonesDefault() {
     	
         switch ($this->sKey) {
+            case 'entradas_bypass':
             case 'entradas_ref':
             case 'entradas':
             	if (ConfigGlobal::role_actual() === 'secretaria') {

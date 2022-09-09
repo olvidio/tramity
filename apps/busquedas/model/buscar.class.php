@@ -16,6 +16,7 @@ use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use usuarios\model\Visibilidad;
 use core\ConfigGlobal;
+use entradas\model\entity\GestorEntradaBypass;
 
 
 class Buscar {
@@ -459,6 +460,9 @@ class Buscar {
                     if (!empty($this->dest_id_lugar)) {
                         $cEscritos = $this->buscarEscritos();
                         $aCollections['escritos'] = $cEscritos;
+						// añadir los de cr a ctr (bypas)
+						$cEntradasBypass = $this->buscarEntradasBypass();
+						$aCollections['entradas_bypass'] = $cEntradasBypass;
                     }
                 }
                 
@@ -653,6 +657,76 @@ class Buscar {
             // Quien envia el escrito (entradas)
             if (!empty($this->origen_id_lugar)) {
                 $cEntradas = $gesEntradas->getEntradasByLugarDB($this->origen_id_lugar,$aWhere,$aOperador);
+            } else {
+                $cEntradas = $gesEntradas->getEntradas($aWhere, $aOperador);
+            }
+        }
+        return $cEntradas;
+    }
+        
+    private function buscarEntradasBypass() {
+        $aWhere = [];
+        $aOperador = [];
+        $gesEntradas = new GestorEntradaBypass();
+        // buscar en origen, destino, o ambos. + periodo + oficina
+        // las fechas.
+        $f_min = '';
+        $f_max = '';
+        $oF_min = $this->getF_min();
+        $f_min = $oF_min->getIso();
+        $oF_max = $this->getF_max();
+        $f_max = $oF_max->getIso();
+        
+        $aWhere['estado'] = Entrada::ESTADO_ACEPTADO;
+        $aOperador['estado'] = '>=';
+        $aWhere['_ordre'] = 'f_entrada';
+        if (!empty($this->opcion) && $this->opcion == 5) {
+            $aWhere['_ordre'] = 'f_entrada DESC';
+        }
+        if (empty($f_max)) {
+            $oHoy = new DateTimeLocal();
+            $f_max = $oHoy->getIso();
+        }
+        if (!empty($f_min) && !empty($f_max)) {
+            $aWhere ['f_entrada'] = "'$f_min','$f_max'";
+            $aOperador ['f_entrada']  = 'BETWEEN';
+        } else {
+            $aWhere['f_entrada'] = 'x';
+            $aOperador['f_entrada'] = 'IS NOT NULL';
+        }
+        
+        if (!empty($this->asunto)) {
+            // en este caso el operador es 'sin_acentos'
+            $aWhere['asunto_detalle'] = $this->asunto;
+        }
+        
+        if (!empty($this->oficina)) {
+            // Entradas es por oficinas, escritos por cargos:
+            // dos busquedas:
+            $aWhere['ponente'] = $this->oficina;
+            // Quien envia el escrito (entradas)
+            if (!empty($this->origen_id_lugar)) {
+                $cEntradasPonente = $gesEntradas->getEntradasByLugarDB($this->origen_id_lugar,$aWhere,$aOperador);
+            } else {
+                $cEntradasPonente = $gesEntradas->getEntradas($aWhere, $aOperador);
+            }
+            unset($aWhere['ponente']);
+            unset($aOperador['ponente']);
+                
+            $aWhere['resto_oficinas'] = '{'.$this->oficina.'}';
+            $aOperador['resto_oficinas'] = 'OVERLAP';
+            // Destino del Bypass (entradas)
+            if (!empty($this->dest_id_lugar)) {
+                $cEntradasResto = $gesEntradas->getEntradasBypassByDestino($this->dest_id_lugar,$aWhere,$aOperador);
+            } else {
+                $cEntradasResto = $gesEntradas->getEntradas($aWhere, $aOperador);
+            }
+            
+            $cEntradas  = array_merge($cEntradasPonente, $cEntradasResto);
+        } else {
+            // Destino del Bypass (entradas)
+            if (!empty($this->dest_id_lugar)) {
+                $cEntradas = $gesEntradas->getEntradasBypassByDestino($this->dest_id_lugar,$aWhere,$aOperador);
             } else {
                 $cEntradas = $gesEntradas->getEntradas($aWhere, $aOperador);
             }
