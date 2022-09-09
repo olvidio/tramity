@@ -18,6 +18,7 @@ use oasis_as4\model\As4CollaborationInfo;
 use entradas\model\entity\EntradaBypass;
 use escritos\model\Escrito;
 use function core\is_true;
+use lugares\model\entity\GestorLugar;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once ("apps/core/global_header.inc");
@@ -256,6 +257,33 @@ switch ($Qque) {
         if (empty($mensaje)) {
             $jsondata['success'] = true;
             $jsondata['detalle'] = $oEntrada->getDetalle();
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $mensaje;
+        }
+
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
+    case 'get_destinos':
+        $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+        $oEntradaBypass = new EntradaBypass($Qid_entrada);
+        $a_destinos = $oEntradaBypass->getDestinosByPass();
+        $a_miembros = $a_destinos['miembros'];
+        $gesLugares = new GestorLugar();
+        $aLugares = $gesLugares->getArrayLugares();
+        $destinos_txt = '';
+        foreach ($a_miembros as $id_lugar) {
+        	$destinos_txt .= empty($destinos_txt)? '' : "\n";
+        	$destinos_txt .= $aLugares[$id_lugar];
+        }
+        $mensaje = '';
+
+        if (empty($mensaje)) {
+            $jsondata['success'] = true;
+            $jsondata['destinos'] = $destinos_txt;
         } else {
             $jsondata['success'] = false;
             $jsondata['mensaje'] = $mensaje;

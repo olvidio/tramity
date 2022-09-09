@@ -29,7 +29,7 @@
         </div>
         <div class="d-flex flex-row justify-content-end">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Cerrar"|trans }}</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="fnjs_guardar_comentario();" >{{ "Guardar"|trans }}</button>
+          <button id='modal_btn_guardar' type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="fnjs_guardar_comentario();" >{{ "Guardar"|trans }}</button>
         </div>
       </div>
     </div>
@@ -351,6 +351,55 @@ fnjs_guardar_comentario_escrito=function(que_tipo,id_reg,comentario) {
             fnjs_actualizar();
         }
     });
+}
+
+fnjs_buscar_ver_destinos=function(formulario, tipo_escrito){
+    rta=fnjs_solo_uno(formulario);
+    if (rta==1) {
+        var form=$(formulario).attr('id');
+        var id_reg;
+        /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+        /* var sel=$('#'+formulario+' table .sel'); */
+        $('#'+form+' input.sel').each(function(i){
+            if($(this).prop('checked')== true) {
+                // como ya he comprobado que sólo está uno seleccionado, es este.
+                var array_dir=$(this).val().split('#');
+                id_reg=array_dir[0];
+            }
+        });
+
+        if (tipo_escrito == 'entrada') {
+            var url_doc = 'apps/entradas/controller/entrada_ajax.php';
+            var param_json = { que: 'get_destinos', id_entrada: id_reg };
+        }
+        if (tipo_escrito == 'escrito') {
+            var url_doc = 'apps/escritos/controller/escrito_ajax.php';
+            var param_json = { que: 'get_destinos', id_escrito: id_reg };
+        }
+        request=$.ajax({
+            data: param_json,
+            url: url_doc,
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done( function (json) {
+            if (json.success != true) {
+                alert (json.mensaje);
+            } else {
+                if (json.destinos) {
+					$('#exampleModalLongTitle').html('{{ "Destinos del escrito"|trans }}');
+					$('#modal_titulo').html('{{ "Destinos"|trans }}');
+					$('#modal_id_reg').val(id_reg);	
+					$('#modal_tipo').val('destinos');	
+                    $('#comentario').val(json.destinos);
+                    $('#modal_btn_guardar').hide();
+                    $('#ModalDetalle').modal('show');
+                } else {
+                    alert ("{{ "No se encuentran destinos"|trans|raw }}");
+                }
+            }
+        });
+    }
 }
 
 fnjs_modificar_det_entrada=function(formulario){

@@ -547,6 +547,7 @@ class VerTabla {
             	$this->aBotones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_entrada(\"#$this->sKey\")" ];
             	$this->aBotones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_entrada(\"#$this->sKey\")" ];
             	$this->aBotones[] = [ 'txt' => _('acción'), 'click' =>"fnjs_buscar_accion_entrada(\"#$this->sKey\")" ];
+            	$this->aBotones[] = [ 'txt' => _('ver destinos'), 'click' =>"fnjs_buscar_ver_destinos(\"#$this->sKey\",\"entrada\")" ];
                 break;
             case 'entradas_compartidas':
             	if (ConfigGlobal::role_actual() === 'secretaria') {
@@ -568,6 +569,7 @@ class VerTabla {
             	
             	$this->aBotones[] = [ 'txt' => _('detalle'), 'click' =>"fnjs_modificar_det_escrito(\"#$this->sKey\")" ];
             	$this->aBotones[] = [ 'txt' => _('ver'), 'click' =>"fnjs_buscar_ver_escrito(\"#$this->sKey\")" ];
+            	$this->aBotones[] = [ 'txt' => _('ver destinos'), 'click' =>"fnjs_buscar_ver_destinos(\"#$this->sKey\",\"escrito\")" ];
                 break;
             default:
                 $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);

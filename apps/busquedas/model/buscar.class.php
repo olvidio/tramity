@@ -4,19 +4,18 @@ namespace busquedas\model;
 use core\Converter;
 use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
+use entradas\model\entity\GestorEntradaBypass;
 use entradas\model\entity\GestorEntradaCompartida;
 use entradas\model\entity\GestorEntradaDB;
 use escritos\model\GestorEscrito;
 use etiquetas\model\entity\GestorEtiquetaEntrada;
+use DateInterval;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
-use usuarios\model\Visibilidad;
-use core\ConfigGlobal;
-use entradas\model\entity\GestorEntradaBypass;
 
 
 class Buscar {
@@ -507,6 +506,12 @@ class Buscar {
         if (!empty($this->accion)) {
             $aWhere['accion'] = $this->accion;
         }
+        // No permitir todos, porque puede tardar mucho.
+        if (empty($f_min)) {
+            $oHoy = new DateTimeLocal();
+            $oHoy->sub(new DateInterval('P1Y'));
+            $f_min = $oHoy->getIso();
+        }
         if (empty($f_max)) {
             $oHoy = new DateTimeLocal();
             $f_max = $oHoy->getIso();
@@ -607,6 +612,12 @@ class Buscar {
         if (!empty($this->opcion) && $this->opcion == 5) {
             $aWhere['_ordre'] = 'f_entrada DESC';
         }
+        // No permitir todos, porque puede tardar mucho.
+        if (empty($f_min)) {
+            $oHoy = new DateTimeLocal();
+            $oHoy->sub(new DateInterval('P1Y'));
+            $f_min = $oHoy->getIso();
+        }
         if (empty($f_max)) {
             $oHoy = new DateTimeLocal();
             $f_max = $oHoy->getIso();
@@ -682,6 +693,12 @@ class Buscar {
         $aWhere['_ordre'] = 'f_entrada';
         if (!empty($this->opcion) && $this->opcion == 5) {
             $aWhere['_ordre'] = 'f_entrada DESC';
+        }
+        // No permitir todos, porque puede tardar mucho.
+        if (empty($f_min)) {
+            $oHoy = new DateTimeLocal();
+            $oHoy->sub(new DateInterval('P1Y'));
+            $f_min = $oHoy->getIso();
         }
         if (empty($f_max)) {
             $oHoy = new DateTimeLocal();
