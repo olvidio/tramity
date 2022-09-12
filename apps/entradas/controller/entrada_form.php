@@ -37,6 +37,7 @@ $plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
 $plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
+$post_max_size =  $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();
@@ -321,6 +322,7 @@ $a_campos = [
     'badmitido' => $badmitido,
     //'a_adjuntos' => $a_adjuntos,
     'initialPreview' => $initialPreview,
+	'post_max_size' => $post_max_size,
     'json_config' => $json_config,
     //'txt_option_oficinas' => $txt_option_oficinas,
     //'txt_option_ref' => $txt_option_ref,

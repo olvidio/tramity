@@ -37,11 +37,7 @@ function upload() {
             $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
             $fileName = $_FILES[$input]['name'][$i]; // the file name
             $fileSize = $_FILES[$input]['size'][$i]; // the file size
-            /* En /etc/php/7.4/fpm/php.ini
-             * post_max_size = 25M
-             * upload_max_filesize = 25M
-             */
-            if ($fileSize > 25165824) {
+            if ($fileSize > $_SESSION['oConfig']->getMax_filesize_en_bytes()) {
             	exit (_("Fichero demasiado grande"));
             }
             

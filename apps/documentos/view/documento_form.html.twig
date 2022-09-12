@@ -150,6 +150,7 @@ $(document).ready(function() {
         initialPreviewConfig: {{ json_config|raw }},
         initialPreviewDownloadUrl: "apps/documentos/controller/adjunto_download.php",
         fileActionSettings: {showZoom: false, showDrag: false},
+        maxFileSize: {{ post_max_size }},
     });
 	el1.on("filebatchselected", function(files) {
         el1.fileinput("upload");

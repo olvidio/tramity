@@ -30,6 +30,7 @@ $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
 $msg = '';
+$post_max_size =  $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 ////////////////////  buscar si ya existe  ////////////////////////////////
 $Qprot_num = (integer) \filter_input(INPUT_POST, 'buscar_prot_num');
 $Qprot_any = (integer) \filter_input(INPUT_POST, 'buscar_prot_any');
@@ -309,6 +310,7 @@ $a_campos = [
     'oDesplVisibilidad' => $oDesplVisibilidad,
     //'a_adjuntos' => $a_adjuntos,
     'initialPreview' => $initialPreview,
+	'post_max_size' => $post_max_size,
     'json_config' => $json_config,
     'txt_option_cargos' => $txt_option_cargos,
     //'txt_option_ref' => $txt_option_ref,

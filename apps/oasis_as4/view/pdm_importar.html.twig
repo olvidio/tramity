@@ -51,6 +51,7 @@ $(document).ready(function() {
         removeFromPreviewOnError: true,
         overwriteInitial: false,
         fileActionSettings: {showZoom: false, showDrag: false},
+        maxFileSize: {{ post_max_size }},
     });
 	el1.on("filebatchselected", function(files) {
         el1.fileinput("upload");

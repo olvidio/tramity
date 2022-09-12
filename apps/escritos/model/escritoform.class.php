@@ -62,6 +62,8 @@ class EscritoForm {
 	}
 
 	public function render() {
+		$post_max_size =  $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
+		
 		if (empty($this->Qid_escrito) && $this->Qfiltro == 'en_buscar') {
 			//$this->Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 			// sólo debería seleccionar uno.
@@ -440,6 +442,7 @@ class EscritoForm {
 				'hidden_visibilidad' => $visibilidad,
 				//'a_adjuntos' => $a_adjuntos,
 				'initialPreview' => $initialPreview,
+				'post_max_size' => $post_max_size,
 				'lista_adjuntos_etherpad' => $lista_adjuntos_etherpad,
 				'json_config' => $json_config,
 				'txt_option_cargos' => $txt_option_cargos,
@@ -500,6 +503,7 @@ class EscritoForm {
 				'plazo_rapido' => $plazo_rapido,
 				//'a_adjuntos' => $a_adjuntos,
 				'initialPreview' => $initialPreview,
+				'post_max_size' => $post_max_size,
 				'lista_adjuntos_etherpad' => $lista_adjuntos_etherpad,
 				'json_config' => $json_config,
 				'txt_option_cargos' => $txt_option_cargos,

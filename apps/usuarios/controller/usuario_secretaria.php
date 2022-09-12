@@ -378,6 +378,27 @@ $filtro = 'plantillas';
     ];
 	$a_pills[$num_orden] = $pill;
 
+// imprimir = 40
+$filtro = 'imprimir';
+    $active = ($filtro == $Qfiltro)? 'active' : '';
+    $aQuery = [ 'filtro' => $filtro,
+            ];
+    $pag_lst = web\Hash::link('apps/busquedas/controller/imprimir_que.php?'.http_build_query($aQuery));
+    $num_orden = 40;
+    $text = _("imprimir");
+    $explicacion =  _("Imprimir el registro (Secretaría)");
+    $num = '';
+    $pill = [ 'orden'=> $num_orden,
+			'text' => $text,
+			'pag_lst' => $pag_lst,
+			'num' => $num,
+			'active' => $active,
+			'class' => 'btn-pendiente',
+    		'explicacion' => $explicacion,
+    		'ver_orden' => TRUE,
+    ];
+	$a_pills[$num_orden] = $pill;
+
 // ordenar:
 ksort($a_pills);
 

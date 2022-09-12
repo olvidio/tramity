@@ -18,6 +18,7 @@ $Qid_escrito = (integer) \filter_input(INPUT_POST, 'id_escrito');
 $Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 $Qmodo = (string) \filter_input(INPUT_POST, 'modo');
 
+$post_max_size =  $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
 $oEscrito = new Escrito($Qid_escrito);
 
@@ -66,6 +67,7 @@ $a_campos = [
     'pagina_cancel' => $pagina_cancel,
     //'oHash' => $oHash,
     'initialPreview' => $initialPreview,
+	'post_max_size' => $post_max_size,
     'json_config' => $json_config,
 ];
 

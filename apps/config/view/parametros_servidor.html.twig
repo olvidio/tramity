@@ -1,3 +1,15 @@
+<h3>{{ "php + apache/nginx"|trans }}:</h3>
+        <pre>En /etc/php/7.4/fpm/php.ini
+             * post_max_size = 25M
+             * upload_max_filesize = 25M
+             </pre>
+<form id="frm_server_size" name="frm_server_size" action="">
+{{ oHashFS.getCamposHtml|raw }}
+{{ "tamaño máximo del fichero adjunto (en MB):"|trans }}
+<input class="col-2" type="text" name="valor" value="{{ max_filesize }}" >
+<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+</form>
+<hr>
 <h3>{{ "servidor etherpad"|trans }}:</h3>
 <form id="frm_server" name="frm_server" action="">
 {{ oHashSE.getCamposHtml|raw }}

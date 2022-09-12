@@ -27,6 +27,27 @@ class Config {
             'oE' => '&#0339;'
         );
         
+    public function getMax_filesize_en_kilobytes() {
+    	$megas = $this->getMax_filesize();
+    	if (empty($megas)) {
+    		exit (_("Falta definir el tamaño máximo del fichero a subir en la configuración del servidor"));
+    	}
+    	return $megas*1024;
+    }
+    
+    public function getMax_filesize_en_bytes() {
+    	$megas = $this->getMax_filesize();
+    	if (empty($megas)) {
+    		exit (_("Falta definir el tamaño máximo del fichero a subir en la configuración del servidor"));
+    	}
+    	return $megas*1024*1024;
+    }
+    
+    public function getMax_filesize() {
+    	$parametro = 'max_filesize';
+    	$oConfigSchema = new ConfigSchemaPublic($parametro);
+    	return $oConfigSchema->getValor();
+    }
     
     public function getIdioma_default() {
         $parametro = 'idioma_default';

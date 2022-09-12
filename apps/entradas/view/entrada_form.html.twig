@@ -230,6 +230,7 @@ $(document).ready(function() {
         initialPreviewConfig: {{ json_config|raw }},
         initialPreviewDownloadUrl: "apps/entradas/controller/download.php",
         fileActionSettings: {showZoom: false, showDrag: false},
+        maxFileSize: {{ post_max_size }},
     }).on("filebatchselected", function(files) {
         el1.fileinput("upload");
     });

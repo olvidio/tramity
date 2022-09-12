@@ -33,7 +33,10 @@ function upload() {
         for ($i = 0; $i < $total; $i++) {
             $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
             $fileName = $_FILES[$input]['name'][$i]; // the file name
-            //$fileSize = $_FILES[$input]['size'][$i]; // the file size
+            $fileSize = $_FILES[$input]['size'][$i]; // the file size
+            if ($fileSize > $_SESSION['oConfig']->getMax_filesize_en_bytes()) {
+            	exit (_("Fichero demasiado grande"));
+            }
             
             //Make sure we have a file path
             if ($tmpFilePath != ""){

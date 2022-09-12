@@ -25,6 +25,7 @@ $Qque = (string) \filter_input(INPUT_POST, 'que');
 $visibilidad = 0;
 
 $oDocumento = new Documento($Qid_doc);
+$post_max_size =  $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
 // visibilidad (usar las mismas opciones que en entradas)
 $aOpciones = $oDocumento->getArrayVisibilidad();
@@ -120,6 +121,7 @@ $a_campos = [
     'oDesplVisibilidad' => $oDesplVisibilidad,
     'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
     'initialPreview' => $initialPreview,
+	'post_max_size' => $post_max_size,
     'json_config' => $json_config,
     // para js
     'url_update' => $url_update,
