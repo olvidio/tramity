@@ -36,7 +36,14 @@ function upload() {
         for ($i = 0; $i < $total; $i++) {
             $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
             $fileName = $_FILES[$input]['name'][$i]; // the file name
-            //$fileSize = $_FILES[$input]['size'][$i]; // the file size
+            $fileSize = $_FILES[$input]['size'][$i]; // the file size
+            /* En /etc/php/7.4/fpm/php.ini
+             * post_max_size = 25M
+             * upload_max_filesize = 25M
+             */
+            if ($fileSize > 25165824) {
+            	exit (_("Fichero demasiado grande"));
+            }
             
             //Make sure we have a file path
             if ($tmpFilePath != ""){
