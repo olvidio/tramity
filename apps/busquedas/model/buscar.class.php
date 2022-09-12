@@ -725,7 +725,7 @@ class Buscar {
             if (!empty($this->origen_id_lugar)) {
                 $cEntradasPonente = $gesEntradas->getEntradasByLugarDB($this->origen_id_lugar,$aWhere,$aOperador);
             } else {
-                $cEntradasPonente = $gesEntradas->getEntradas($aWhere, $aOperador);
+                $cEntradasPonente = $gesEntradas->getEntradasBypass($aWhere, $aOperador);
             }
             unset($aWhere['ponente']);
             unset($aOperador['ponente']);
@@ -736,7 +736,7 @@ class Buscar {
             if (!empty($this->dest_id_lugar)) {
                 $cEntradasResto = $gesEntradas->getEntradasBypassByDestino($this->dest_id_lugar,$aWhere,$aOperador);
             } else {
-                $cEntradasResto = $gesEntradas->getEntradas($aWhere, $aOperador);
+                $cEntradasResto = $gesEntradas->getEntradasBypass($aWhere, $aOperador);
             }
             
             $cEntradas  = array_merge($cEntradasPonente, $cEntradasResto);
@@ -745,7 +745,7 @@ class Buscar {
             if (!empty($this->dest_id_lugar)) {
                 $cEntradas = $gesEntradas->getEntradasBypassByDestino($this->dest_id_lugar,$aWhere,$aOperador);
             } else {
-                $cEntradas = $gesEntradas->getEntradas($aWhere, $aOperador);
+                $cEntradas = $gesEntradas->getEntradasBypass($aWhere, $aOperador);
             }
         }
         return $cEntradas;
