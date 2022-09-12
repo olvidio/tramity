@@ -1,0 +1,72 @@
+<div id="condiciones" class="col-9">
+<!-- periodo --------------------------------------------- -->
+<form id="frm_buscar" name="frm_buscar" action="">
+<table class="table table-warning p-2">
+<tr class="table-danger"><th colspan=5 class="titulo_inv" >
+ {{ "Listar las entradas y salidas del registro en el periodo"|trans }}
+    </th></tr>
+    <tr><td class=etiqueta>{{ "poner el periodo"|trans }}</td>
+    <td> {{ "entre el"|trans }} 
+        <input class="fecha" type="Text" id="frm_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm_f_min')" value="{{ f_min }}">
+        </td>
+    <td> {{ "y el"|trans }} 
+        <input class="fecha" type="Text" id="frm_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm_f_max')" value="{{ f_max }}">
+        </td>
+    </tr>
+    <tr><td colspan=5 style="text-align:right;">
+      <button class="btn btn-success" id="b_buscar" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar')" >{{ "buscar"|trans }}</button>
+    </td></tr>
+    </table>
+</form>
+
+
+<div id="resultados" class="container-fluid p-3 my-3 border bg-light" >
+</div>
+
+<script>
+$(function() {
+	$( "#frm_f_min" ).prop('autocomplete', 'off').datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		dayOfWeekStart: globaljsVarDayStart,
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_max_iso = fnjs_convert2iso("#frm_f_max", '{{ format }}');
+			this.setOptions({
+				maxDate: f_max_iso ? f_max_iso: false
+            })
+        }
+    });
+});
+    
+$(function() {
+	$( "#frm_f_max" ).prop('autocomplete', 'off').datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		dayOfWeekStart: globaljsVarDayStart,
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_min_iso = fnjs_convert2iso("#frm_f_min", '{{ format }}');
+			this.setOptions({
+				minDate: f_min_iso ? f_min_iso: false
+            })
+        }
+    });
+});
+
+
+fnjs_buscar=function(formulario){
+    // borro los posibles resultados anteriores
+    $('#resultados').html("");
+    $(formulario).attr('action','apps/busquedas/controller/imprimir.php');
+    fnjs_enviar_formulario(formulario,'#resultados');
+}
+
+
+    
+$(document).ready(function() {
+	tabs_show('{{ vista }}','{{ filtro }}');
+});
+</script>

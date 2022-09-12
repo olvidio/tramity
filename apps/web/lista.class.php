@@ -136,6 +136,18 @@ class Lista {
      */
     protected $dt_op_dom = '';
     
+    /*
+     * DataTables dom init configuration options
+     * https://datatables.net/examples/basic_init/table_sorting.html
+     * 
+     * Specifies Column to use for sorting 0 = 1st Column and direction = descending - make sure you add a comma at the end
+     *   "order":[[1,"desc"],[2,"desc"],[3,"desc"],[4,"desc"],[5,"desc"]],
+     *                 
+     * @var string
+     */
+    protected $dt_op_order = '';
+    
+    
     /* CONSTRUCTOR -------------------------------------------------------------- */
     
     /**
@@ -1074,6 +1086,7 @@ class Lista {
         
         
         $dt_com = $this->getDataTable_options_dom();
+        $dt_order = $this->getDataTable_options_order();
         $dt_buttons = $this->getDataTable_options_buttons();
         
         // No puedo poner los botones como thead y tbody porque el sorteable.js se hace un lio.
@@ -1088,6 +1101,7 @@ class Lista {
 			$(document).ready(function() {
                 $('#$id_tabla').DataTable({
 					$dt_com
+					$dt_order
 					$dt_buttons
 					colReorder: {
 						enable: true,
@@ -1529,5 +1543,28 @@ class Lista {
 
 	public function setDatatable_options_domDefault() {
 		$this->dt_op_dom = "Bfrtip";
+	}
+
+	/**
+     *   "order":[[1,"desc"],[2,"desc"],[3,"desc"],[4,"desc"],[5,"desc"]],
+     *   
+	 * @return string
+	 */
+	public function getDataTable_options_order() {
+		if (empty($this->dt_op_order)) {
+			$this->setDataTable_options_orderDefault();
+		}
+		return "'order': [$this->dt_op_order],";
+	}
+
+	/*
+	 * @param string $dt_op_dom
+	 */
+	public function setDataTable_options_order($dt_op_order) {
+		$this->dt_op_order = $dt_op_order;
+	}
+
+	public function setDatatable_options_orderDefault() {
+		$this->dt_op_order = "[0, 'desc']";
 	}
 }
