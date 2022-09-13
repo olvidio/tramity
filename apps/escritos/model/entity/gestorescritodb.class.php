@@ -471,6 +471,68 @@ class GestorEscritoDB Extends core\ClaseGestor {
         return $oEscritoDBSet->getTot();
 	}
 	
+	function getEscritosNumerados($aWhere=array(),$aOperators=array()) {
+        $nom_tabla = $this->getNomTabla();
+        $oEscritoDBSet = new core\Set();
+		$oCondicion = new core\Condicion();
+        $aCondi = array();
+        $COND_OR = '';
+        foreach ($aWhere as $camp => $val) {
+            if ($camp == '_ordre') { continue; }
+            if ($camp == '_limit') { continue; }
+            if ($camp == 'asunto_detalle') {
+                $valor = $aWhere[$camp];
+                $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
+                $COND_OR .= " OR ";
+                $COND_OR .= "public.sin_acentos(detalle::text)  ~* public.sin_acentos('$valor'::text) )";
+                
+                unset($aWhere[$camp]);
+                continue;
+            }
+            $sOperador = isset($aOperators[$camp])? $aOperators[$camp] : '';
+            if ($a = $oCondicion->getCondicion($camp,$sOperador,$val)) { $aCondi[]=$a; }
+            // operadores que no requieren valores
+            if ($sOperador == 'BETWEEN' || $sOperador == 'IS NULL' || $sOperador == 'IS NOT NULL' || $sOperador == 'OR') { unset($aWhere[$camp]); }
+            if ($sOperador == 'IN' || $sOperador == 'NOT IN') { unset($aWhere[$camp]); }
+            if ($sOperador == 'TXT') { unset($aWhere[$camp]); }
+        }
+        $sCondi = implode(' AND ',$aCondi);
+
+        if (empty($sCondi)) {
+            $sCondi = " WHERE NOT (json_prot_local @> '{\"num\":0}')";
+        } else {
+            $sCondi = " WHERE NOT (json_prot_local @> '{\"num\":0}') AND ".$sCondi;
+        }
+
+        if ($COND_OR != '') {
+            if ($sCondi != '') {
+                $sCondi .= " AND ".$COND_OR;
+            } else {
+                $sCondi .= " WHERE ".$COND_OR;
+            }
+        }
+        $sOrdre = '';
+        $sLimit = '';
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre']!='') { $sOrdre = ' ORDER BY '.$aWhere['_ordre']; }
+        if (isset($aWhere['_ordre'])) { unset($aWhere['_ordre']); }
+        if (isset($aWhere['_limit']) && $aWhere['_limit']!='') { $sLimit = ' LIMIT '.$aWhere['_limit']; }
+        if (isset($aWhere['_limit'])) { unset($aWhere['_limit']); }
+        
+        $sQry = "SELECT * FROM $nom_tabla ".$sCondi.$sOrdre.$sLimit;
+        
+        // Se usa la utilidad CURSOR del Postgresql para evitar colapsar la memoria del servidor
+        // cuando se busca un número muy grande de registros (más de 20.000)
+        foreach ($this->fetchCursor($sQry, $aWhere) as $row ) {
+            $a_pkey = array('id_escrito' => $row['id_escrito']);
+            $oEscritoDB = new Escrito($a_pkey);
+            $oEscritoDB->setAllAtributes($row);
+            $oEscritoDBSet->add($oEscritoDB);
+            
+        }
+        
+        return $oEscritoDBSet->getTot();
+	}
+	
 	function getEscritosByLocal($id_lugar, $aWhere=array(),$aOperators=array()) {
         $nom_tabla = $this->getNomTabla();
         $oEscritoDBSet = new core\Set();

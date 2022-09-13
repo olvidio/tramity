@@ -122,7 +122,7 @@ class ImprimirTabla {
         		$gesCargos = new GestorCargo();
         		$a_posibles_cargos = $gesCargos->getArrayCargos();
 				foreach ($cCollection as $oEscrito) {
-					$asunto = $oEscrito->getAsuntoDetalle();
+					$asunto = $oEscrito->getAsunto();
 					$anulado = $oEscrito->getAnulado();
 					
 					// protocolo local
@@ -185,7 +185,7 @@ class ImprimirTabla {
         $oTabla->setBotones($a_botones);
         $oTabla->setDatos($a_valores);
         $oTabla->setDataTable_options_dom($this->dt_op_dom);
-        $oTabla->setDataTable_options_order('[7,"asc"],[5,"asc"]');
+        $oTabla->setDataTable_options_order('[7,"asc"],[0,"asc"]');
         
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         $vista = ConfigGlobal::getVista();

@@ -47,7 +47,7 @@ if (!empty($f_min) && !empty($f_max)) {
 	$aOperador['f_entrada'] = 'IS NOT NULL';
 }
 $gesEntradas = new GestorEntrada();
-$cEntradas = $gesEntradas->getEntradas($aWhere, $aOperador);
+$cEntradas = $gesEntradas->getEntradasNumeradas($aWhere, $aOperador);
 $aCollection['entradas'] = $cEntradas;
 // EntradasBypass
 
@@ -62,7 +62,7 @@ if (!empty($f_min) && !empty($f_max)) {
 	$aOperador['f_salida'] = 'IS NOT NULL';
 }
 $gesEscritos = new GestorEscrito();
-$cEscritos = $gesEscritos->getEscritos($aWhere,$aOperador);
+$cEscritos = $gesEscritos->getEscritosNumerados($aWhere,$aOperador);
 $aCollection['escritos'] = $cEscritos;
 
 
