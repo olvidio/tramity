@@ -174,7 +174,10 @@ class GestorEntradaBypass Extends core\ClaseGestor {
 		if (isset($aWhere['_ordre'])) { unset($aWhere['_ordre']); }
 		if (isset($aWhere['_limit']) && $aWhere['_limit']!='') { $sLimit = ' LIMIT '.$aWhere['_limit']; }
 		if (isset($aWhere['_limit'])) { unset($aWhere['_limit']); }
-		$sQry = "SELECT * FROM $nom_tabla ".$sCondi.$sOrdre.$sLimit;
+		
+		//$sQry = "SELECT * FROM $nom_tabla ".$sCondi.$sOrdre.$sLimit;
+		$sQry = "SELECT * FROM $nom_tabla JOIN entradas USING (id_entrada) ".$sCondi.$sOrdre.$sLimit;
+		
 		if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
 			$sClauError = 'GestorEntradaBypass.llistar.prepare';
 			$_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);

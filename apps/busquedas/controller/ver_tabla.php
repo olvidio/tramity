@@ -174,14 +174,12 @@ switch ($Qopcion) {
         }
         break;
     case 3:
-        // buscar en origen, destino o ambos
-        $Qorigen_id_lugar = (integer) \filter_input(INPUT_POST, 'origen_id_lugar');
+        // buscar en destino
         $Qdest_id_lugar = (integer) \filter_input(INPUT_POST, 'dest_id_lugar_2');
         $Qf_max = (string) \filter_input(INPUT_POST, 'f_max');
         $Qf_min = (string) \filter_input(INPUT_POST, 'f_min');
         $Qoficina = (integer) \filter_input(INPUT_POST, 'oficina');
         
-        $a_condicion['origen_id_lugar'] = $Qorigen_id_lugar;
         $a_condicion['dest_id_lugar_2'] = $Qdest_id_lugar;
         $a_condicion['f_max'] = $Qf_max;
         $a_condicion['f_min'] = $Qf_min;
@@ -189,7 +187,6 @@ switch ($Qopcion) {
         $str_condicion = http_build_query($a_condicion);
         
         // para el caso de la dl, son todas las entradas
-        $flag = 0;
         if ($Qdest_id_lugar == $id_sigla_local) {
             $oBuscar = new Buscar();
             $oBuscar->setId_sigla($id_sigla_local);
@@ -197,8 +194,40 @@ switch ($Qopcion) {
             $oBuscar->setF_max($Qf_max);
             $oBuscar->setF_min($Qf_min);
             $oBuscar->setOficina($Qoficina);
-            $flag = 1;
+        } else {
+            $oBuscar = new Buscar();
+            $oBuscar->setDest_id_lugar($Qdest_id_lugar);
+            $oBuscar->setF_max($Qf_max);
+            $oBuscar->setF_min($Qf_min);
+            $oBuscar->setOficina($Qoficina);
         }
+        
+        $aCollection = $oBuscar->getCollection($Qopcion, $Qmas);
+        
+        foreach ($aCollection as $key => $cCollection) {
+            $oTabla = new VerTabla();
+            $oTabla->setKey($key);
+            $oTabla->setCondicion($str_condicion);
+            $oTabla->setCollection($cCollection);
+            $oTabla->setFiltro($filtro);
+            $oTabla->setBotonesDefault();
+            echo $oTabla->mostrarTabla();
+        }
+        break;
+    case 9:
+        // buscar en origen, destino o ambos
+        $Qorigen_id_lugar = (integer) \filter_input(INPUT_POST, 'origen_id_lugar');
+        $Qf_max = (string) \filter_input(INPUT_POST, 'f_max');
+        $Qf_min = (string) \filter_input(INPUT_POST, 'f_min');
+        $Qoficina = (integer) \filter_input(INPUT_POST, 'oficina');
+        
+        $a_condicion['origen_id_lugar'] = $Qorigen_id_lugar;
+        $a_condicion['f_max'] = $Qf_max;
+        $a_condicion['f_min'] = $Qf_min;
+        $a_condicion['oficina'] = $Qoficina;
+        $str_condicion = http_build_query($a_condicion);
+        
+        // para el caso de la dl, son todas las entradas
         if ($Qorigen_id_lugar == $id_sigla_local) {
             // son todos los que tienen protocolo local
             $oBuscar = new Buscar();
@@ -207,12 +236,9 @@ switch ($Qopcion) {
             $oBuscar->setF_max($Qf_max);
             $oBuscar->setF_min($Qf_min);
             $oBuscar->setOficina($Qoficina);
-            $flag = 1;
-        }
-        if ($flag === 0) {
+        } else {
             $oBuscar = new Buscar();
             $oBuscar->setOrigen_id_lugar($Qorigen_id_lugar);
-            $oBuscar->setDest_id_lugar($Qdest_id_lugar);
             $oBuscar->setF_max($Qf_max);
             $oBuscar->setF_min($Qf_min);
             $oBuscar->setOficina($Qoficina);

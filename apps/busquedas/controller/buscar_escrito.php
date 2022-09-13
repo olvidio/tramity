@@ -155,6 +155,13 @@ $oDesplOficinas6->setBlanco(TRUE);
 $oDesplOficinas6->setOpciones($a_oficinas);
 $oDesplOficinas6->setOpcion_sel($Qoficina);
 
+$oDesplOficinas9 = new Desplegable();
+$oDesplOficinas9->setNombre('oficina');
+$oDesplOficinas9->setId('oficina_9');
+$oDesplOficinas9->setBlanco(TRUE);
+$oDesplOficinas9->setOpciones($a_oficinas);
+$oDesplOficinas9->setOpcion_sel($Qoficina);
+
 //<select id="dest_id_lugar_2" name="dest_id_lugar" class=contenido onchange="fnjs_aviso_IESE('#dest_id_lugar_2')">
 $oDesplDestino2 = new Desplegable();
 $oDesplDestino2->setNombre('dest_id_lugar_2');
@@ -222,6 +229,7 @@ $a_campos = [
     'oDesplOficinas3' => $oDesplOficinas3,
     'oDesplOficinas4' => $oDesplOficinas4,
     'oDesplOficinas6' => $oDesplOficinas6,
+    'oDesplOficinas9' => $oDesplOficinas9,
     'id_dl' => $id_siga_local,
     'dele' => $sigla,
     'id_cr' => $id_cr,

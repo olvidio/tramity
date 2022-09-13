@@ -434,28 +434,15 @@ class Buscar {
                 return $aCollections;
                 break;
             case 3:
-                // buscar en origen, destino o ambos
+                // buscar por destino
                 $aCollections = [];
                 
-                $flag = 0;
                 // para ver los recibidos en dl
                 if (!empty($this->local_id_lugar) && $this->getId_sigla() == $this->local_id_lugar) {
                     $cEntradas = $this->buscarEntradas();
                     $aCollections['entradas'] = $cEntradas;
-                    $flag = 1;
-                }
-                // para ver los enviados por dl
-                if (!empty($this->origen_id_lugar) && $this->origen_id_lugar == $this->local_id_lugar) {
-                    $cEscritos = $this->buscarEscritos();
-                    $aCollections['escritos'] = $cEscritos;
-                    $flag = 1;
-                }
-                // otros lugares
-                if ($flag == 0) {
-                    if (!empty($this->origen_id_lugar)) {
-                        $cEntradas = $this->buscarEntradas();
-                        $aCollections['entradas'] = $cEntradas;
-                    }
+                } else {
+					// otros lugares
                     if (!empty($this->dest_id_lugar)) {
                         $cEscritos = $this->buscarEscritos();
                         $aCollections['escritos'] = $cEscritos;
@@ -466,7 +453,25 @@ class Buscar {
                 }
                 
                 return $aCollections;
-            break;
+				break;
+            case 9:
+                // buscar por origen
+                $aCollections = [];
+                
+                // para ver los enviados por dl
+                if (!empty($this->origen_id_lugar) && $this->origen_id_lugar == $this->local_id_lugar) {
+                    $cEscritos = $this->buscarEscritos();
+                    $aCollections['escritos'] = $cEscritos;
+                } else {
+					// otros lugares
+                    if (!empty($this->origen_id_lugar)) {
+                        $cEntradas = $this->buscarEntradas();
+                        $aCollections['entradas'] = $cEntradas;
+                    }
+                }
+                
+                return $aCollections;
+				break;
             case 41: // case "dl":
             case 6: // buscar en escritos: modelo jurídico (plantilla)
                 $cEscritos = $this->buscarEscritos();

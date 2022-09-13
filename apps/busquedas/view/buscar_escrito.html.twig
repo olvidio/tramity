@@ -80,14 +80,10 @@
     <input type="hidden" name="opcion" value="">
     <table class="table table-warning p-2">
     <tr class="table-danger"><th colspan=5 class=titulo_inv>
-        {{ "opción 3: Listar escritos enviados (por el destino), o recibidos (por el origen)"|trans }}</th></tr>
+        {{ "opción 3a: Listar escritos enviados (por el destino)"|trans }}</th></tr>
         <tr><td class=etiqueta>{{ "¿A quién iba dirigido?"|trans }}:</td>
         <td colspan="4">
         {{ oDesplDestino2.desplegable|raw }}
-        </td></tr>
-        <tr><td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans }}:</td>
-        <td colspan="4">
-        {{ oDesplOrigen2.desplegable|raw }}
         </td></tr>
         <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
         <td> {{ "entre el"|trans }} 
@@ -101,6 +97,30 @@
         </td></tr>
     <tr><td colspan=5 style="text-align:right;">
       <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_3')" >{{ "buscar"|trans }}</button>
+    </td></tr>
+    </table>
+</form>
+<form id="frm_buscar_9" name="frm_buscar_9" action="">
+    <input type="hidden" name="opcion" value="">
+    <table class="table table-warning p-2">
+    <tr class="table-danger"><th colspan=5 class=titulo_inv>
+        {{ "opción 3b: Listar escritos  recibidos (por el origen)"|trans }}</th></tr>
+        <tr><td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans }}:</td>
+        <td colspan="4">
+        {{ oDesplOrigen2.desplegable|raw }}
+        </td></tr>
+        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
+        <td> {{ "entre el"|trans }} 
+          <input class="fecha" type="Text" id="frm9_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm9_f_min')" value="{{ f_min }}">
+          </td>
+        <td> {{ "y el"|trans }} 
+          <input class="fecha" type="Text" id="frm9_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('frm9_f_max')" value="{{ f_max }}">
+          </td>
+        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
+        {{ oDesplOficinas9.desplegable|raw }}
+        </td></tr>
+    <tr><td colspan=5 style="text-align:right;">
+      <button class="btn btn-success" id="b_buscar_9" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_9')" >{{ "buscar"|trans }}</button>
     </td></tr>
     </table>
 </form>
@@ -280,6 +300,38 @@ $(function() {
 		//format: 'Y-m-d',
 		onShow: function(ct){
 			var f_min_iso = fnjs_convert2iso("#frm3_f_min", '{{ format }}');
+			this.setOptions({
+				minDate: f_min_iso ? f_min_iso: false
+            })
+        }
+    });
+});
+
+$(function() {
+	$( "#frm9_f_min" ).prop('autocomplete', 'off').datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		dayOfWeekStart: globaljsVarDayStart,
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_max_iso = fnjs_convert2iso("#frm9_f_max", '{{ format }}');
+			this.setOptions({
+				maxDate: f_max_iso ? f_max_iso: false
+            })
+        }
+    });
+});
+    
+$(function() {
+	$( "#frm9_f_max" ).prop('autocomplete', 'off').datetimepicker( {
+		timepicker: false,
+		datepicker: true,
+		format: '{{ format }}',
+		dayOfWeekStart: globaljsVarDayStart,
+		//format: 'Y-m-d',
+		onShow: function(ct){
+			var f_min_iso = fnjs_convert2iso("#frm9_f_min", '{{ format }}');
 			this.setOptions({
 				minDate: f_min_iso ? f_min_iso: false
             })
