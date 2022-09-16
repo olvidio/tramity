@@ -3,22 +3,22 @@
 	<input type="hidden" name="simple" value=1>
 	<input type='hidden' name='filtro' value='{{ filtro }}'>
 
-<h3>{{ "listar escritos pendientes de contestar"|trans }}</h3>
+<h3>{{ "listar escritos pendientes de contestar"|trans|raw }}</h3>
 <!--  --------------------  Calendarios --------------------------  -->
   <div class="mt-4 row bg-light">
-    <label class="col-1 form-label">{{ "De"|trans }}:</label>
+    <label class="col-1 form-label">{{ "De"|trans|raw }}:</label>
     <div class="col-1">
 		{{ oDesplCalendarios.desplegable|raw }}
     </div>
 	<!--  --------------------  Periodo --------------------------  -->
-    <label for="periodo" class="col-1 form-label">{{ "periodo"|trans }}:</label>
+    <label for="periodo" class="col-1 form-label">{{ "periodo"|trans|raw }}:</label>
     <div class="col-2">
 		<select tabindex=111 id=periodo name=periodo >
-		<option value="hoy" {{ sel_hoy }} >{{ "hasta la fecha"|trans }}</option>
-		<option value="semana" {{ sel_semana }} >{{ "próxima semana"|trans }}</option>
-		<option value="mes" {{ sel_mes }}>{{ "próximo mes"|trans }}</option>
-		<option value="trimestre" {{ sel_trimestre }}>{{ "próximo trimestre"|trans }}</option>
-		<option value="any" {{ sel_any }}>{{ "próximo año"|trans }}</option>
+		<option value="hoy" {{ sel_hoy }} >{{ "hasta la fecha"|trans|raw }}</option>
+		<option value="semana" {{ sel_semana }} >{{ "próxima semana"|trans|raw }}</option>
+		<option value="mes" {{ sel_mes }}>{{ "próximo mes"|trans|raw }}</option>
+		<option value="trimestre" {{ sel_trimestre }}>{{ "próximo trimestre"|trans|raw }}</option>
+		<option value="any" {{ sel_any }}>{{ "próximo año"|trans|raw }}</option>
 		</select>
 	</div>
   </div>
@@ -27,7 +27,7 @@
 	{% if secretaria %}
       <div class="row col-2">
         <div class="col-5">
-          <label for="id_oficina" class="col-xs-1 form-label">{{ "Oficina"|trans }}:</label>
+          <label for="id_oficina" class="col-xs-1 form-label">{{ "Oficina"|trans|raw }}:</label>
         </div>
         <div class="col-5">
           {{ oDesplOficinas.desplegable|raw }}
@@ -38,7 +38,7 @@
     {% endif %}
     <!--  --------------------  Encargados --------------------------  -->
     <div class="row col-6">
-      <label class="col-5 form-label">{{ "¿Está asignado a alguien?"|trans }}:</label>
+      <label class="col-5 form-label">{{ "¿Está asignado a alguien?"|trans|raw }}:</label>
       <div class="col-5">
         {{ oDesplEncargados.desplegable|raw }}
       </div>
@@ -46,7 +46,7 @@
  	<!--  --------------------  BOTONES --------------------------  -->
     <div class="col-3">
 	  <button tabindex='90' class="p-2 btn btn-success" onClick="fnjs_buscar_lista_pendientes();" >
-        {{ "listar"|trans }}
+        {{ "listar"|trans|raw }}
   	  </button>
   	</div> 
   </div>
@@ -65,11 +65,11 @@
 	{{ oTabla.mostrar_tabla|raw }}
 </form><br>
 
-<input id="btn_nuevo" type="button" name="nuevo" onclick='fnjs_nuevo_pendiente("#seleccionados");' value="{{ "nuevo"|trans }}">
-<input id="btn_buscar" type="button" name="buscar" onclick='fnjs_buscar_pendiente("#seleccionados");' value="{{ "buscar un pendiente"|trans }}">
+<input id="btn_nuevo" type="button" name="nuevo" onclick='fnjs_nuevo_pendiente("#seleccionados");' value="{{ "nuevo"|trans|raw }}">
+<input id="btn_buscar" type="button" name="buscar" onclick='fnjs_buscar_pendiente("#seleccionados");' value="{{ "buscar un pendiente"|trans|raw }}">
 {% if secretaria %}
-    <input id="btn_migrar" type="button" name="migrar" onclick='fnjs_migrar_pendiente("#seleccionados");' value="{{ "trasladar pendientes"|trans }}">
-    <input id="btn_sanear" type="button" name="sanear" onclick='fnjs_sanear_pendiente("#seleccionados");' value="{{ "buscar pendientes de escritos anulados"|trans }}">
+    <input id="btn_migrar" type="button" name="migrar" onclick='fnjs_migrar_pendiente("#seleccionados");' value="{{ "trasladar pendientes"|trans|raw }}">
+    <input id="btn_sanear" type="button" name="sanear" onclick='fnjs_sanear_pendiente("#seleccionados");' value="{{ "buscar pendientes de escritos anulados"|trans|raw }}">
 {% endif %}
 
 </div>

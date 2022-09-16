@@ -1,21 +1,21 @@
 <div class="mb-3 row">
 <input type='hidden' id='periodico_tipo' name='periodico_tipo' value='{{ periodico_tipo }}'>
   <div class="col-2">
-	<h2>{{ "Repetición"|trans }}:</h2>
+	<h2>{{ "Repetición"|trans|raw }}:</h2>
   </div>
   <div class="col-2">
-	<label class="col-3 form-label">{{ "desde"|trans }}</label>
+	<label class="col-3 form-label">{{ "desde"|trans|raw }}</label>
 		<input tabindex="100" id="f_inicio" name="f_inicio" size="12" value="{{ f_inicio }}" class="fecha" >
   </div>
   <div class="col-2">
-	<label class="col-3 form-label">{{ "hasta"|trans }}</label>
+	<label class="col-3 form-label">{{ "hasta"|trans|raw }}</label>
 		<input tabindex="10" id="f_until" name="f_until" size="12" value="{{ f_until }}" class="fecha" >
   </div>
 </div>
 <div class="mb-3 row">
   <div class="col-1">
     <button id="btn_d_a" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_tab('#periodico_d_a','#btn_d_a')">
-      {{ "anual"|trans }}
+      {{ "anual"|trans|raw }}
     </button>
   </div>
   <div class="col-1">
@@ -25,12 +25,12 @@
   </div>
   <div class="col-1">
     <button id="btn_d_s" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_tab('#periodico_d_s','#btn_d_s')">
-        {{ "semanal"|trans }}
+        {{ "semanal"|trans|raw }}
     </button>
   </div>
   <div class="col-1">
     <button id="btn_d_d" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_tab('#periodico_d_d','#btn_d_d')">
-        {{ "diaria"|trans }}
+        {{ "diaria"|trans|raw }}
     </button>
 </div>
 
@@ -39,14 +39,14 @@
 <div id="periodico_d_a" style="{{ display_d_a }}" class="mt-4">
 <div class="mb-3 row">
   <div class="col-5"><input type="radio" id="id_a_radio_1" name="tipo_dia" value="num_ini" {{ chk_a_num_ini }}>
-    {{ "anualmente"|trans }}
+    {{ "anualmente"|trans|raw }}
   </div>
 </div>
 <div class="mb-3 row">
   <div class="col"><input type="radio" id="id_a_radio_2" name="tipo_dia" value="num" {{ chk_a_num }}>
-	{{ "El/los día/s (separados por comas)"|trans }}
+	{{ "El/los día/s (separados por comas)"|trans|raw }}
 	<input type="text" size="6" name="a_dia_num" value="{{ dia_num_db }}" onclick="fnjs_marcar('#id_a_radio_2');">
-	{{ "de cada"|trans }}
+	{{ "de cada"|trans|raw }}
 	{{ oDesplMesesAnual.desplegable|raw }}
   </div>
 </div>
@@ -55,10 +55,10 @@
 <div class="mb-3 row">
   <div class="col">
 	<input type="radio" id="id_a_radio_3" name="tipo_dia" value="ref" {{ chk_a_ref }}>
-	{{ "El"|trans }}
+	{{ "El"|trans|raw }}
 	{{ oDesplOrdinalesAnual.desplegable|raw }}
 	{{ oDesplDiasSemanaAnual.desplegable|raw }}
-	{{ "de cada"|trans }}
+	{{ "de cada"|trans|raw }}
 	{{ oDesplMesesRef.desplegable|raw }}
   </div>
 </div>
@@ -66,19 +66,19 @@
 <div class="mb-3 row">
   <div class="col">
 	<input type="radio" id="id_a_radio_4" name="tipo_dia" value="num_dm" {{ chk_a_num_dm }}>
-    {{ "por dias de meses, cada"|trans }}:
+    {{ "por dias de meses, cada"|trans|raw }}:
 	<input type="text" size="1" name="a_interval" value="{{ a_interval_db }}" onclick="fnjs_marcar('#id_a_radio_4');">
-	{{ "años"|trans }}
+	{{ "años"|trans|raw }}
 	</div>
 </div>
 
 <div class="mb-3 row">
   <div class="col-1"></div>
-  <label class="col-1 form-label">{{ "que días"|trans }}</label>
+  <label class="col-1 form-label">{{ "que días"|trans|raw }}</label>
   <div class="col-4">
 	{{ oDesplDias.checkbox|raw }}
   </div>
-  <label class="col-1 form-label">{{ "de que meses"|trans }}</label>
+  <label class="col-1 form-label">{{ "de que meses"|trans|raw }}</label>
   <div class="col-4">
 	{{ oDesplMeses2.checkbox|raw }}
   </div>
@@ -90,23 +90,23 @@
 <div id="periodico_d_m" style="{{ display_d_m }}" class="mt-4">
     <div class="mb-3 row">
       <div class="col-5"><input type="radio" id="id_radio_1" name="tipo_dia" value="num_ini" {{ chk_m_num_ini }}>
-        {{ "mensualmente"|trans }}
+        {{ "mensualmente"|trans|raw }}
       </div>
     </div>
     <div class="mb-3 row">
       <div class="col"><input type="radio" id="id_radio_2" name="tipo_dia" value="num" {{ chk_m_num }}>
-        {{ "El/los día/s (separados por comas)"|trans }}
+        {{ "El/los día/s (separados por comas)"|trans|raw }}
         <input type="text" size="6" name="dia_num" value="{{ dia_num_db }}" onclick="fnjs_marcar('#id_a_radio_2');">
-        {{ "de cada mes"|trans }}
+        {{ "de cada mes"|trans|raw }}
       </div>
     </div>
     <div class="mb-3 row">
       <div class="col">
         <input type="radio" id="id_radio_3" name="tipo_dia" value="ref" {{ chk_m_ref }}>
-        {{ "El"|trans }}
+        {{ "El"|trans|raw }}
         {{ oDesplOrdinalesMes.desplegable|raw }}
         {{ oDesplDiasSemanaMes.desplegable|raw }}
-        {{ "de cada mes"|trans }}
+        {{ "de cada mes"|trans|raw }}
       </div>
     </div>
 </div>
@@ -114,13 +114,13 @@
 <div id="periodico_d_s" style="{{ display_d_s }}" class="mt-4">
     <div class="mb-3 row">
       <div class="col-5"><input type="radio" id="id_s_radio_1" name="tipo_dia" value="num_ini" {{ chk_s_num_ini }}>
-        {{ "semanalmente"|trans }}
+        {{ "semanalmente"|trans|raw }}
       </div>
     </div>
     <div class="mb-3 row">
       <div class="col-2">
       	<input type="radio" id="id_s_radio_2" name="tipo_dia" value="ref" {{ chk_s_ref }}>
-        {{ "periodicidad día de la semana"|trans }}
+        {{ "periodicidad día de la semana"|trans|raw }}
       </div>
       <div class="col-4">
         {{ oDesplDiasSemana.checkbox|raw }}
@@ -132,7 +132,7 @@
 <div id="periodico_d_d" style="{{ display_d_d }}" class="mt-4">
     <div class="mb-3 row">
       <div class="col-5"><input type="radio" id="id_d_radio_1" name="tipo_dia" value="num_ini" {{ chk_d_num_ini }}>
-        {{ "diariamente"|trans }}
+        {{ "diariamente"|trans|raw }}
       </div>
     </div>
 </div>
@@ -141,7 +141,7 @@
 <!-- *********************************** Excepciones *************************************** -->
 {%  if a_exdates_local %}
 <div class="mb-3 row">
-  <label class="col-5 form-label">{{ "Son los marcados como contestados o eliminados"|trans }}</label>
+  <label class="col-5 form-label">{{ "Son los marcados como contestados o eliminados"|trans|raw }}</label>
 </div>
 <div class="mb-3 row">
   <div class="col-12">

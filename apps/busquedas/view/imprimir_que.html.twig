@@ -3,18 +3,18 @@
 <form id="frm_buscar" name="frm_buscar" action="">
 <table class="table table-warning p-2">
 <tr class="table-danger"><th colspan=5 class="titulo_inv" >
- {{ "Listar las entradas y salidas del registro en el periodo"|trans }}
+ {{ "Listar las entradas y salidas del registro en el periodo"|trans|raw }}
     </th></tr>
-    <tr><td class=etiqueta>{{ "poner el periodo"|trans }}</td>
-    <td> {{ "entre el"|trans }} 
+    <tr><td class=etiqueta>{{ "poner el periodo"|trans|raw }}</td>
+    <td> {{ "entre el"|trans|raw }} 
         <input class="fecha" type="Text" id="frm_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm_f_min')" value="{{ f_min }}">
         </td>
-    <td> {{ "y el"|trans }} 
+    <td> {{ "y el"|trans|raw }} 
         <input class="fecha" type="Text" id="frm_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm_f_max')" value="{{ f_max }}">
         </td>
     </tr>
     <tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar')" >{{ "buscar"|trans }}</button>
+      <button class="btn btn-success" id="b_buscar" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar')" >{{ "buscar"|trans|raw }}</button>
     </td></tr>
     </table>
 </form>

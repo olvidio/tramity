@@ -18,7 +18,7 @@ fnjs_guardar=function(formulario){
 </script>
 <div class="card" style="width: 30rem;">
   <div class="card-header">
-    <h5 class="card-title">{{ "Datos de la Oficina"|trans }}</h5>
+    <h5 class="card-title">{{ "Datos de la Oficina"|trans|raw }}</h5>
   </div>
   <div class="card-body">
 <div class="row">
@@ -26,15 +26,15 @@ fnjs_guardar=function(formulario){
       <form class="user" id="frm_oficina"  name="frm_oficina" action="" method="post">
       {{ oHash.getCamposHtml|raw }}
         <div class="mb-3 input-group col-6">
-           <span class="input-group-text">{{ "Oficina"|trans }}</span>
+           <span class="input-group-text">{{ "Oficina"|trans|raw }}</span>
            <input type="text" class="form-control" id="sigla" name="sigla" placeholder="nombre de la oficina" value="{{ sigla }}">
         </div>
         <div class="mb-3 input-group col-10">
-            <span class="input-group-text">{{ "Orden"|trans }}</span>
+            <span class="input-group-text">{{ "Orden"|trans|raw }}</span>
             <input type="text" class="form-control" id="orden" name="orden" placeholder="orden" value="{{ orden }}">
         </div>
         <div class="mb-3 input-group col-10">
-          <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary w-100 col-6">{{ "Guardar"|trans }}</button>
+          <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary w-100 col-6">{{ "Guardar"|trans|raw }}</button>
         </div>
       </form>
   </div>

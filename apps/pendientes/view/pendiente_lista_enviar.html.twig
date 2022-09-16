@@ -12,7 +12,7 @@
 
 <div class="m-3"> {# para margenes #}
 
-<h2>{{ "Lista de pendientes relacionados"|trans }}</h2>
+<h2>{{ "Lista de pendientes relacionados"|trans|raw }}</h2>
 <hr>
 <div id="exportar" calss="">
 <form id='seleccionados' name='seleccionados' action='' method='post'>
@@ -25,10 +25,10 @@
  <!--  --------------------  BOTONES --------------------------  -->
 <div>
   <button tabindex='91' class="btn btn-secondary" onClick="window.close();" >
-    {{ "Cerrar"|trans }}
+    {{ "Cerrar"|trans|raw }}
   </button>
   <button tabindex='90' class="btn btn-success" onClick="fnjs_marcar_i_enviar('#seleccionados');" >
-    {{ "Marcar como contestado y enviar"|trans }}
+    {{ "Marcar como contestado y enviar"|trans|raw }}
   </button> 
 </div>
 
@@ -90,7 +90,7 @@ fnjs_marcar_i_enviar=function(formulario){
 		}
     });
     request.fail(function(JqXHR, textStatus, errorThrown){
-        txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
+        txt = '{{ "probablemente no tenga permiso en el calendario"|trans|raw }}' + '\n';
         alert(txt + 'An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
         console.error("Hi ha un error: "+ textStatus, errorThrown);
     });

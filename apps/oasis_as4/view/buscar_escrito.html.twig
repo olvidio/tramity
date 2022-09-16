@@ -5,21 +5,21 @@
     <input type="hidden" name="mas" value="">
     <table class="table table-warning p-2">
     <tr class="table-danger">
-    <th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans }}
+    <th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans|raw }}
           <input id="protocolo" name="protocolo" size="30" class=contenido  onchange="fnjs_protocolo('#id_lugar','#prot_num','#prot_any','#b_buscar_7')" value=""
-          title="{{ "puede pegar el protocolo completo (ej: cr 1/15) y presionar el tabulador"|trans }}" >
+          title="{{ "puede pegar el protocolo completo (ej: cr 1/15) y presionar el tabulador"|trans|raw }}" >
     </th>
     </tr>
-    <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
+    <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans|raw }}:
         {{ oDesplLugar.desplegable|raw }}
         <td>
-          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar_7')" value="{{ prot_num }}" >
+          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans|raw }}" onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar_7')" value="{{ prot_num }}" >
           /
-          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans }}" value="{{ prot_any }}" >
+          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans|raw }}" value="{{ prot_any }}" >
         </td></tr>
     <tr>
       <td colspan=5 style="text-align:right;">
-        <button class="btn btn-success" id="b_buscar_7" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_7')" >{{ "buscar"|trans }}</button>
+        <button class="btn btn-success" id="b_buscar_7" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_7')" >{{ "buscar"|trans|raw }}</button>
       </td>
     </tr>
     </table>
@@ -67,7 +67,7 @@ fnjs_buscar=function(formulario){
     var form_name=$(formulario).attr('name');
     var num = $('#prot_num').val();
     if (num === '0' || num === 0 || num === '') {
-        if ( !confirm("{{ "¿Seguro que quiere ver todos?"|trans }}") ) {
+        if ( !confirm("{{ "¿Seguro que quiere ver todos?"|trans|raw }}") ) {
             return;
         }
     }

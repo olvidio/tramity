@@ -63,12 +63,12 @@ fnjs_enviar_escrito=function(id_escrito) {
              if (json.num_pendientes == 1 && json.num_periodicos == 0) {
                  $.confirm({
                      title: json.mensaje,
-                     content: '{{ "¿Qué quiere hacer?"|trans }}',
+                     content: '{{ "¿Qué quiere hacer?"|trans|raw }}',
                      buttons: {
-                         '{{ "Marcar como contestado"|trans }}': function () {
+                         '{{ "Marcar como contestado"|trans|raw }}': function () {
                             fnjs_marcar_contestado(id_escrito,json.pendientes_uid);
                          },
-                         '{{ "Enviar sin marcar"|trans }}': function () {
+                         '{{ "Enviar sin marcar"|trans|raw }}': function () {
                              fnjs_enviar_escrito_directo(id_escrito);
                          }
                      }
@@ -79,11 +79,11 @@ fnjs_enviar_escrito=function(id_escrito) {
                      title: json.mensaje,
                      content: json.lista_pendientes,
                      buttons: {
-                         '{{ "Marcar alguno como contestado"|trans }}': function () {
+                         '{{ "Marcar alguno como contestado"|trans|raw }}': function () {
                              // ver los pendientes. nueva ventana
                              fnjs_lista_pendientes(id_escrito,json.pendientes_uid);
                          },
-                         '{{ "Enviar sin marcar"|trans }}': function () {
+                         '{{ "Enviar sin marcar"|trans|raw }}': function () {
                              fnjs_enviar_escrito_directo(id_escrito);
                          }
                      }
@@ -199,7 +199,7 @@ fnjs_revisar_escrito=function(id_escrito) {
         url=rta;
         w=window.open(url, "", winPrefs);
         if (w === null ) {
-        	alert("{{ "No se puede abrir una nueva ventana. Puede tener bloqueados los popup"|trans }}");    
+        	alert("{{ "No se puede abrir una nueva ventana. Puede tener bloqueados los popup"|trans|raw }}");    
         } else {
         	w.focus();
         }

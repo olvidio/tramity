@@ -2,22 +2,22 @@
   <thead class="thead-light">
     <tr>
 	  {%  if ver_ok %}
-        <th scope="col">{{ "ok"|trans }}</th>
+        <th scope="col">{{ "ok"|trans|raw }}</th>
       {% endif %}
       <th scope="col">{{ ver_todo|raw }}</th>
 	  {%  if modo == 'mod' or filtro == 'archivados' %}
         {%  if bdistribuir %}
-          <th scope="col">{{ "rev.datos"|trans }}</th>
+          <th scope="col">{{ "rev.datos"|trans|raw }}</th>
         {% endif %}
         <th scope="col">{{ prot_local_header }}</th>
       {% endif %}
 	  {%  if filtro != 'archivados' %}
-      	<th scope="col">{{ "tipo"|trans }}</th>
+      	<th scope="col">{{ "tipo"|trans|raw }}</th>
       {% endif %}
-      <th scope="col">{{ "destino"|trans }}</th>
-      <th scope="col">{{ "ref."|trans }}</th>
-      <th scope="col">{{ "asunto"|trans }}</th>
-      <th scope="col">{{ "adj."|trans }}</th>
+      <th scope="col">{{ "destino"|trans|raw }}</th>
+      <th scope="col">{{ "ref."|trans|raw }}</th>
+      <th scope="col">{{ "asunto"|trans|raw }}</th>
+      <th scope="col">{{ "adj."|trans|raw }}</th>
     </tr>
   </thead>
   <tbody>
@@ -82,7 +82,7 @@ fnjs_revisar_escrito=function(id_escrito) {
         url=rta;
         w=window.open(url, "", winPrefs);
         if (w === null ) {
-        	alert("{{ "No se puede abrir una nueva ventana. Puede tener bloqueados los popup"|trans }}");    
+        	alert("{{ "No se puede abrir una nueva ventana. Puede tener bloqueados los popup"|trans|raw }}");    
         } else {
         	w.focus();
         }

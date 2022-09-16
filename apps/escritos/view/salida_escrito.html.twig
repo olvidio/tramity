@@ -13,7 +13,7 @@
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar (máximo 50 filas)"|trans }}</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar (máximo 50 filas)"|trans|raw }}</h5>
         <button type="button" id="btn-close" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
@@ -29,7 +29,7 @@
 <!-- Un escrito concreto --------------------------------------------- -->
 <form id="frm_buscar" name="frm_buscar" method="POST" action="apps/escritos/controller/salida_escrito.php">
     <table class="table-warning" border=1>
-    <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
+    <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans|raw }}:
         <td>
           <input id="buscar_prot_num" name="buscar_prot_num" size="12" onchange="fnjs_proto('#buscar_prot_num','#buscar_prot_any')" value="" >
           /
@@ -56,7 +56,7 @@
   <div class="mb-3 row align-items-center">
       <div class="col-2 form-label">
         <label for="prot_num" class="col-2 form-label">
-          {{ "Destinos"|trans }}
+          {{ "Destinos"|trans|raw }}
         </label>
         <div class="form-check form-switch align-middle">
           <input type="checkbox" class="form-check-input" id="grupo_dst" name="grupo_dst" {{ chk_grupo_dst }} onChange="fnjs_grupo()" />
@@ -69,7 +69,7 @@
       <div id="dst_grupo" class="col-10">
 	    {{ oArrayDesplGrupo.ListaSelects|raw }}
         <button id="btn_grupo" class="btn btn-secondary" onClick="fnjs_ver_dst();" >
-          {{ "modificar selección"|trans }}
+          {{ "modificar selección"|trans|raw }}
         </button>
         {{ descripcion }}
       </div>
@@ -78,7 +78,7 @@
   <!--  --------------- REFERENCIAS --------------- -->
   <div class="mb-3 row">
       <label for="prot_num" class="col-2 form-label">
-        {{ "Referencias"|trans }}
+        {{ "Referencias"|trans|raw }}
       </label>
       <div class="col-10">
 	    {{ oArrayProtRef.ListaSelects|raw }}
@@ -86,14 +86,14 @@
   </div>
   <!--  --------------- ASUNTO --------------- -->
   <div class="mb-3 row">
-    <label for="asunto" class="col-2 form-label">{{ "Asunto"|trans }}</label>
+    <label for="asunto" class="col-2 form-label">{{ "Asunto"|trans|raw }}</label>
     <div class="col-10">
       <input {{ asunto_readonly }} tabindex='100' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------- DETALLE --------------- -->
   <div class="mb-3 row">
-    <label for="detalle" class="col-2 form-label">{{ "Detalle"|trans }}</label>
+    <label for="detalle" class="col-2 form-label">{{ "Detalle"|trans|raw }}</label>
     <div class='col-6'>
       <input {{ detalle_readonly }} tabindex='110' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
     </div>
@@ -101,7 +101,7 @@
   {#
   <!--  --------------- ENTRADILLA --------------- -->
   <div class="mb-3 row">
-    <label for="entradilla" class="col-2 form-label">{{ "Entradilla"|trans }}</label>
+    <label for="entradilla" class="col-2 form-label">{{ "Entradilla"|trans|raw }}</label>
     <div class='col-10'>
       <textarea tabindex='120' rows="5" class="form-control" name='entradilla' id="entradilla">{{ entradilla }}</textarea>
     </div>
@@ -109,11 +109,11 @@
   #}
   <!--  --------------- PONENTE Y OFICINAS --------------- -->
   <div class="mb-3 row">
-    <label for="ponente" class="col-2 form-label">{{ "Ponente"|trans }}</label>
+    <label for="ponente" class="col-2 form-label">{{ "Ponente"|trans|raw }}</label>
     <div class="col-2">
 	  {{ oDesplPonente.desplegable|raw }}
     </div>
-    <label for="firmas" class="col-1 form-label">{{ "Firmas"|trans }}</label>
+    <label for="firmas" class="col-1 form-label">{{ "Firmas"|trans|raw }}</label>
     <div class="col">
       <span id="span_firmas">
       	{{ oArrayDesplFirmas.ListaSelects|raw }}
@@ -123,7 +123,7 @@
   <!--  --------------- CATEGORIA --------------- -->
   <div class="row">
     <div class="mb-3 col-md-2">
-      <label for="categoria" class="form-label">{{ "Categoría"|trans }}</label>
+      <label for="categoria" class="form-label">{{ "Categoría"|trans|raw }}</label>
       {{ oDesplCategoria.desplegable|raw }}
     </div>
     <div class="mb-3 col-md-2">
@@ -131,13 +131,13 @@
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
     <div class="mb-3 col-md-4">
-	  <label for="f_aprobacion" class="form-label">{{ "Fecha de aprobación"|trans }}</label>
+	  <label for="f_aprobacion" class="form-label">{{ "Fecha de aprobación"|trans|raw }}</label>
       <div class="col-8 date">
         <input tabindex='160' name='f_aprobacion' id='f_aprobacion' type='text' class="form-control" value="{{ f_aprobacion }}" />
       </div>
     </div>
     <div class="mb-3 col-md-4">
-	  <label for="f_escrito" class="form-label">{{ "Fecha del escrito"|trans }}</label>
+	  <label for="f_escrito" class="form-label">{{ "Fecha del escrito"|trans|raw }}</label>
       <div class="col-8 date">
         <input tabindex='170' name='f_escrito' id='f_escrito' type='text' class="form-control" value="{{ f_escrito }}" />
       </div>
@@ -151,9 +151,9 @@
 {% if id_escrito %}
     {% if tipo_doc == 1 or tipo_doc == 4 %}
         <div class="mb-2">
-          <label class="form-label">{{ "Ver escrito"|trans }}:</label>
+          <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
           <button tabindex='200' class="btn btn-info" onClick="fnjs_ver_doc_ep();" >
-            {{ "Etherpad"|trans }}
+            {{ "Etherpad"|trans|raw }}
           </button>
         </div>
     {% endif %}
@@ -165,23 +165,23 @@
     {% endif %}
     {% if tipo_doc is empty %}
         <div class="mb-3">
-          <label class="col-4 form-label">{{ "Insertar Etherpad"|trans }}:</label>
+          <label class="col-4 form-label">{{ "Insertar Etherpad"|trans|raw }}:</label>
           <button tabindex='200' class="col-2 btn btn-info" onClick="fnjs_add_escrito(1);" >
-            {{ "Nuevo"|trans }}
+            {{ "Nuevo"|trans|raw }}
           </button>
           <button tabindex='201' type="button" class="col-4 btn btn-info ms-3 me-1" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_add_escrito(5);" >
-            {{ "Buscar en Documentos"|trans }}
+            {{ "Buscar en Documentos"|trans|raw }}
           </button>
         </div>
     {% endif %}
     <hr class="mt-1">
     <div class="clearfix mb-3">
           <div class="d-inline-flex float-start align-self-center">
-            <label for="escrito_adjunto" class="form-label">{{ "Adjuntos"|trans }}:</label>
+            <label for="escrito_adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}:</label>
 	  	  </div>
           <div class="d-inline-flex float-end align-self-center">
             <button type="button" class="btn btn-info me-1" data-bs-toggle="modal" data-bs-target="#ModalBuscar" onClick="fnjs_buscar_antecedentes_para_escrito(4);" >
-            {{ "Buscar en Documentos"|trans }}
+            {{ "Buscar en Documentos"|trans|raw }}
             </button>
 	  	  </div>
         </div>
@@ -194,14 +194,14 @@
     </div>
 {% else %}
   <div class="alert alert-warning" role="alert">
-    {{ "Para añadir el texto, primero debe guardar los datos del escrito"|trans }}
+    {{ "Para añadir el texto, primero debe guardar los datos del escrito"|trans|raw }}
   </div>
 {% endif %}
 </div> <!-- Fin Col Dcha -->
 
 <div>
   <button tabindex='1' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Cancelar"|trans }}
+    {{ "Cancelar"|trans|raw }}
   </button>
   <button tabindex='180' class="btn btn-primary" onClick="fnjs_guardar_salida();" >
     {{ b_guardar_txt }}
@@ -241,9 +241,9 @@ $(document).ready(function() {
     	theme: "explorer-fas",
         uploadUrl: "apps/escritos/controller/adjunto_upload.php",
         dropZoneEnabled: true,
-        dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans }}",
+        dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans|raw }}",
         browseOnZoneClick: true,
-        dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans }}",
+        dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans|raw }}",
         maxFileCount: 5,
         showUpload: false, // upload button
         showBrowse: true,

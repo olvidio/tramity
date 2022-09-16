@@ -5,21 +5,21 @@
     <input type="hidden" name="mas" value="">
     <table class="table table-warning p-2">
     <tr class="table-danger">
-    <th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans }}
+    <th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans|raw }}
       <input id="protocolo" name="protocolo" size="30" class=contenido  onchange="fnjs_protocolo('#id_lugar','#prot_num','#prot_any','#b_buscar_7')" value=""
-          title="{{ "puede pegar el protocolo completo (ej: cr 1/15) y presionar el tabulador"|trans }}" >
+          title="{{ "puede pegar el protocolo completo (ej: cr 1/15) y presionar el tabulador"|trans|raw }}" >
     </th>
     </tr>
-    <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
+    <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans|raw }}:
         {{ oDesplLugar.desplegable|raw }}
         <td>
-          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar_7')" value="{{ prot_num }}" >
+          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans|raw }}" onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar_7')" value="{{ prot_num }}" >
           /
-          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans }}" value="{{ prot_any }}" >
+          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans|raw }}" value="{{ prot_any }}" >
         </td></tr>
     <tr>
       <td colspan=5 style="text-align:right;">
-        <button class="btn btn-success" id="b_buscar_7" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_7')" >{{ "buscar"|trans }}</button>
+        <button class="btn btn-success" id="b_buscar_7" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_7')" >{{ "buscar"|trans|raw }}</button>
       </td>
     </tr>
     </table>
@@ -28,20 +28,20 @@
 <!-- listar por un lugar y un tiempo --------------------------------------------- -->
 <form id="frm_buscar_1" name="frm_buscar_1" action="">
     <input type="hidden" name="opcion" value="">
-    {{ "hay diferentes opciones para buscar o listar escritos"|trans }}
+    {{ "hay diferentes opciones para buscar o listar escritos"|trans|raw }}
     <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 1: Listado de los últimos"|trans }}</th></tr>
-        <tr><td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans }}:</td>
+    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 1: Listado de los últimos"|trans|raw }}</th></tr>
+        <tr><td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans|raw }}:</td>
         <td>
         {{ oDesplOrigen.desplegable|raw }}
         </td>
-        <td class=etiqueta>{{ "antigüedad del escrito"|trans }}</td>
+        <td class=etiqueta>{{ "antigüedad del escrito"|trans|raw }}</td>
         <td>
         {{ oDesplAntiguedad.desplegable|raw }}
         </td>
     <td></tr>
     <tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar_1" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_1')" >{{ "buscar"|trans }}</button>
+      <button class="btn btn-success" id="b_buscar_1" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_1')" >{{ "buscar"|trans|raw }}</button>
     </td></tr>
 </table>
 </form>
@@ -50,26 +50,26 @@
 <form id="frm_buscar_2" name="frm_buscar_2" action="">
 <input type="hidden" name="opcion" value="">
 <table class="table table-warning p-2">
-<tr class="table-danger"><th colspan=5 class="titulo_inv" >{{ "opción 2: Buscar por el asunto o detalle"|trans }}
+<tr class="table-danger"><th colspan=5 class="titulo_inv" >{{ "opción 2: Buscar por el asunto o detalle"|trans|raw }}
     </th></tr>
-    <tr><td class=etiqueta>{{ "Escribir una palabra clave"|trans }}:</td>
+    <tr><td class=etiqueta>{{ "Escribir una palabra clave"|trans|raw }}:</td>
     <td colspan=4><input type="Text" id="asunto_2" name="asunto" size="50" value="{{ asunto }}"></td>
     </tr>
-    <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
-    <td> {{ "entre el"|trans }} 
+    <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
+    <td> {{ "entre el"|trans|raw }} 
         <input class="fecha" type="Text" id="frm2_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm2_f_min')" value="{{ f_min }}">
         </td>
-    <td> {{ "y el"|trans }} 
+    <td> {{ "y el"|trans|raw }} 
         <input class="fecha" type="Text" id="frm2_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm2_f_max')" value="{{ f_max }}">
         </td>
     {%  if vista_dl %}
-        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
+        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td><td>
         {{ oDesplOficinas2.desplegable|raw }}
         </td>
     {% endif %}
     </tr>
 <tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar_2" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_2')" >{{ "buscar"|trans }}</button>
+      <button class="btn btn-success" id="b_buscar_2" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_2')" >{{ "buscar"|trans|raw }}</button>
     </td></tr>
     </table>
 </form>
@@ -80,23 +80,23 @@
     <input type="hidden" name="opcion" value="">
     <table class="table table-warning p-2">
     <tr class="table-danger"><th colspan=5 class=titulo_inv>
-        {{ "opción 3a: Listar escritos enviados (por el destino)"|trans }}</th></tr>
-        <tr><td class=etiqueta>{{ "¿A quién iba dirigido?"|trans }}:</td>
+        {{ "opción 3a: Listar escritos enviados (por el destino)"|trans|raw }}</th></tr>
+        <tr><td class=etiqueta>{{ "¿A quién iba dirigido?"|trans|raw }}:</td>
         <td colspan="4">
         {{ oDesplDestino2.desplegable|raw }}
         </td></tr>
-        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
-        <td> {{ "entre el"|trans }} 
+        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
+        <td> {{ "entre el"|trans|raw }} 
           <input class="fecha" type="Text" id="frm3_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm3_f_min')" value="{{ f_min }}">
           </td>
-        <td> {{ "y el"|trans }} 
+        <td> {{ "y el"|trans|raw }} 
           <input class="fecha" type="Text" id="frm3_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('frm3_f_max')" value="{{ f_max }}">
           </td>
-        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
+        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td><td>
         {{ oDesplOficinas3.desplegable|raw }}
         </td></tr>
     <tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_3')" >{{ "buscar"|trans }}</button>
+      <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_3')" >{{ "buscar"|trans|raw }}</button>
     </td></tr>
     </table>
 </form>
@@ -104,23 +104,23 @@
     <input type="hidden" name="opcion" value="">
     <table class="table table-warning p-2">
     <tr class="table-danger"><th colspan=5 class=titulo_inv>
-        {{ "opción 3b: Listar escritos  recibidos (por el origen)"|trans }}</th></tr>
-        <tr><td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans }}:</td>
+        {{ "opción 3b: Listar escritos  recibidos (por el origen)"|trans|raw }}</th></tr>
+        <tr><td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans|raw }}:</td>
         <td colspan="4">
         {{ oDesplOrigen2.desplegable|raw }}
         </td></tr>
-        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
-        <td> {{ "entre el"|trans }} 
+        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
+        <td> {{ "entre el"|trans|raw }} 
           <input class="fecha" type="Text" id="frm9_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm9_f_min')" value="{{ f_min }}">
           </td>
-        <td> {{ "y el"|trans }} 
+        <td> {{ "y el"|trans|raw }} 
           <input class="fecha" type="Text" id="frm9_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('frm9_f_max')" value="{{ f_max }}">
           </td>
-        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
+        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td><td>
         {{ oDesplOficinas9.desplegable|raw }}
         </td></tr>
     <tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar_9" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_9')" >{{ "buscar"|trans }}</button>
+      <button class="btn btn-success" id="b_buscar_9" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_9')" >{{ "buscar"|trans|raw }}</button>
     </td></tr>
     </table>
 </form>
@@ -130,39 +130,39 @@
 <form id="frm_buscar_4" name="frm_buscar_4" action="">
     <input type="hidden" name="opcion" value="">
     <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 4: Listar varios escritos"|trans }}</th></tr>
+    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 4: Listar varios escritos"|trans|raw }}</th></tr>
     <td colspan="5">
     <input type="radio" {{ chk_lo_1 }} id="lista_origen_1" name="lista_origen" value="dl" onchange="fnjs_activar_lugar(1)">
-     {{ "aprobados en"|trans }} {{ dele }}
+     {{ "aprobados en"|trans|raw }} {{ dele }}
      <br>
     <input type="radio" {{ chk_lo_2 }} id="lista_origen_2" name="lista_origen" value="de" onchange="fnjs_activar_lugar(2)">
-     {{ "recibidos de un ctr, dl o cr concreto"|trans }}
+     {{ "recibidos de un ctr, dl o cr concreto"|trans|raw }}
         {{ oDesplLugar4.desplegable|raw }}
      <br>
     <input type="radio" {{ chk_lo_3 }} id="lista_origen_3" name="lista_origen" value="cr_dl" onchange="fnjs_activar_lugar(3)">
-     {{ "de cr a"|trans }} {{ dele }}
+     {{ "de cr a"|trans|raw }} {{ dele }}
      <br>
     <input type="radio" {{ chk_lo_4 }} id="lista_origen_4" name="lista_origen" value="cr_ctr" onchange="fnjs_activar_lugar(4)">
-     {{ "de cr a ctr"|trans }}
+     {{ "de cr a ctr"|trans|raw }}
      <br>
     </td>
     </tr>
-        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
-        <td> {{ "entre el"|trans }} 
+        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
+        <td> {{ "entre el"|trans|raw }} 
             <input class="fecha" type="Text" id="frm4_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_min')" value="{{ f_min }}">
             </td>
-        <td> {{ "y el"|trans }} 
+        <td> {{ "y el"|trans|raw }} 
             <input class="fecha" type="Text" id="frm4_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_max')" value="{{ f_max }}">
             </td>
         {%  if vista_dl %}
-            <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td>
+            <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td>
             <td>
               {{ oDesplOficinas4.desplegable|raw }}
             </td>
         {% endif %}
         </tr>
         <tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar_4" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_4')" >{{ "buscar"|trans }}</button>
+      <button class="btn btn-success" id="b_buscar_4" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_4')" >{{ "buscar"|trans|raw }}</button>
     </td></tr>
     </table>
 </form>
@@ -171,17 +171,17 @@
 <form id="frm_buscar_8" name="frm_buscar_8" action="">
     <input type="hidden" name="opcion" value="">
     <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 8: Listar entradas por etiquetas"|trans }}</th></tr>
+    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 8: Listar entradas por etiquetas"|trans|raw }}</th></tr>
     <tr>
       <td>
         <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
         <label class="form-check-label">
-          {{ "alguna"|trans }}
+          {{ "alguna"|trans|raw }}
         </label>
         <br>
         <input type="radio" class="form-check-input" name="andOr" value="AND" {{ chk_and }} >
         <label class="form-check-label">
-          {{ "todas"|trans }}
+          {{ "todas"|trans|raw }}
         </label>
       </td>
       <td colspan=4>
@@ -191,7 +191,7 @@
       </td>
     </tr>
     <tr><td colspan=5 style="text-align:right;">
-      		<button class="btn btn-success" id="b_buscar_8" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_8')" >{{ "buscar"|trans }}</button>
+      		<button class="btn btn-success" id="b_buscar_8" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_8')" >{{ "buscar"|trans|raw }}</button>
         </td>
     </tr>
     </table>
@@ -202,22 +202,22 @@
 <form id="frm_buscar_6" name="frm_buscar_6" action="">
     <input type="hidden" name="opcion" value="">
     <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 6: Listar varios modelos jurídicos por fechas"|trans }}</th></tr>
-    <tr><td class=etiqueta>{{ "Escribir una palabra clave"|trans }}:</td>
+    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 6: Listar varios modelos jurídicos por fechas"|trans|raw }}</th></tr>
+    <tr><td class=etiqueta>{{ "Escribir una palabra clave"|trans|raw }}:</td>
     <td colspan=4><input type="Text" id="asunto_6" name="asunto" size="50" value="{{ asunto }}"></td>
     </tr>
-    <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans }}</td>
-    <td> {{ "entre el"|trans }} 
+    <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
+    <td> {{ "entre el"|trans|raw }} 
     	<input class="fecha" type="Text" id="frm6_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm6_f_min')" value="{{ f_min }}">
     	</td>
-    <td> {{ "y el"|trans }} 
+    <td> {{ "y el"|trans|raw }} 
     	<input class="fecha" type="Text" id="frm6_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm6_f_max')" value="{{ f_max }}">
     	</td>
-    <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans }}:</td><td>
+    <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td><td>
     {{ oDesplOficinas6.desplegable|raw }}
     </td></tr>
     <tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar_6" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_6')" >{{ "buscar"|trans }}</button>
+      <button class="btn btn-success" id="b_buscar_6" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_6')" >{{ "buscar"|trans|raw }}</button>
     </td></tr>
     </table>
 </form>
@@ -227,13 +227,13 @@
 
 <div class="row">
   <div class="col-2">
-  	<input id="b_listar_t" name="b_listar_t" type="button" value="{{ "ver todas las opciones"|trans }}" onclick="fnjs_ver_todos()" flag='uno'>
+  	<input id="b_listar_t" name="b_listar_t" type="button" value="{{ "ver todas las opciones"|trans|raw }}" onclick="fnjs_ver_todos()" flag='uno'>
   </div>
   {% if vista_dl %}
   <div class="col-2"></div>
   <div class="col-2">
     <input id="chk_anulados" name="chk_anulados" type="checkbox" onChange='fnjs_ctr_anulados()' {{ chk_ctr_anulados }}>
-    {{ "ver ctr anulados"|trans }}
+    {{ "ver ctr anulados"|trans|raw }}
   </div>
   {% endif %}
 
@@ -487,7 +487,7 @@ fnjs_buscar=function(formulario){
         var origen=$('#origen_id_lugar').val();
         var antiguedad=$('#antiguedad').val();
         if (antiguedad === 'aa' && origen == '{{ id_dl }}') {
-            if ( !confirm("{{ "Puede tardar bastante. Ralentiza el servidor (afecta a otros usuarios). Si hay más de 20.000 puede dar error"|trans }}") ) {
+            if ( !confirm("{{ "Puede tardar bastante. Ralentiza el servidor (afecta a otros usuarios). Si hay más de 20.000 puede dar error"|trans|raw }}") ) {
                 return;
             }
         }
@@ -495,7 +495,7 @@ fnjs_buscar=function(formulario){
     if (opcion==7) {
         var num = $('#prot_num').val();
         if (num === '0' || num === 0 || num === '') {
-            if ( !confirm("{{ "¿Seguro que quiere ver todos?"|trans }}") ) {
+            if ( !confirm("{{ "¿Seguro que quiere ver todos?"|trans|raw }}") ) {
                 return;
             }
         }
@@ -531,7 +531,7 @@ fnjs_ver_todos=function(){
     if (flag=='todo') {
         fnjs_ver_solo('#frm_buscar_7');
         $('#b_listar_t').attr('flag','uno');
-        $('#b_listar_t').val("{{ "ver todas las opciones"|trans }}");
+        $('#b_listar_t').val("{{ "ver todas las opciones"|trans|raw }}");
     } else {
         // colección de todos los formularios
         $('#condiciones form').each(function(i,f){
@@ -539,7 +539,7 @@ fnjs_ver_todos=function(){
             $(this).attr('action',"");
         });
         $('#b_listar_t').attr('flag','todo');
-        $('#b_listar_t').val("{{ "ver menos opciones"|trans }}");
+        $('#b_listar_t').val("{{ "ver menos opciones"|trans|raw }}");
     }
 }
 fnjs_periodo_alert=function(){

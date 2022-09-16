@@ -1,6 +1,6 @@
 <div class="card" style="width: 35rem;">
   <div class="card-header">
-    <h5 class="card-title">{{ "preferencias personales"|trans }}</h5>
+    <h5 class="card-title">{{ "preferencias personales"|trans|raw }}</h5>
   </div>
   <div class="card-body">
 <div class="row">
@@ -9,30 +9,30 @@
       <form class="user" id="frm_usuario"  name="frm_usuario" action="" method="post">
       {{ oHash.getCamposHtml|raw }}
         <div class="mb-3">
-          <label class="form-label">{{ "color"|trans }}: </label>
-            {{ "Se cambia en la configuración del pad"|trans }}
+          <label class="form-label">{{ "color"|trans|raw }}: </label>
+            {{ "Se cambia en la configuración del pad"|trans|raw }}
         </div>
         <div class="mb-3">
-          <label class="form-label">{{ "idioma"|trans }}</label>
+          <label class="form-label">{{ "idioma"|trans|raw }}</label>
             {{ oDesplLocales.desplegable()|raw }}
         </div>
         <div class="mb-3">
-          <label for="example" class="form-label">{{ "Nombre a mostrar"|trans }}</label>
+          <label for="example" class="form-label">{{ "Nombre a mostrar"|trans|raw }}</label>
           <input type="text" class="form-control" id="nom_usuario" name="nom_usuario" placeholder="Nombre a mostrar" value="{{ nom_usuario }}">
         </div>
         <div class="mb-3">
-          <label for="example" class="form-label">{{ "Dirección de correo electrónico"|trans }}</label>
+          <label for="example" class="form-label">{{ "Dirección de correo electrónico"|trans|raw }}</label>
           <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" value="{{ email }}">
         </div>
         {% if not is_admin %}
         <div class="mb-3">
-          <label for="example" class="form-label">{{ "Cargo Preferido"|trans }}</label>
+          <label for="example" class="form-label">{{ "Cargo Preferido"|trans|raw }}</label>
 			{{ oDesplCargos.desplegable|raw }}
         </div>
         {% endif %}
         
         <div class="row mb-3">
-          <button onclick="fnjs_guardar(this.form);" type="button" class="col-4 btn btn-primary w-100">{{ "Guardar"|trans }}</button>
+          <button onclick="fnjs_guardar(this.form);" type="button" class="col-4 btn btn-primary w-100">{{ "Guardar"|trans|raw }}</button>
         </div>
       </form>
   </div>
@@ -41,11 +41,11 @@
 </div>
 <br>
  <button onclick="fnjs_update_div('#main','{{ cambio_password }}');" class="col-4 btn btn-primary mb-3">
- 	{{ "cambiar el password"|trans }}
+ 	{{ "cambiar el password"|trans|raw }}
  </button>
 <br>
 <button onclick="fnjs_cancelar();" class="col-4 btn btn-secondary">
-    {{ "Cancelar"|trans }}
+    {{ "Cancelar"|trans|raw }}
 </button>
 
 <script type="text/javascript">

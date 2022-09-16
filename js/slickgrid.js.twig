@@ -81,7 +81,7 @@ fnjs_slick_grid_height=function(tabla) {
 }
 fnjs_def_tabla=function(tabla) {
 	// si es la tabla por defecto, no puedo guardar las preferencias.
-	if (tabla=='uno') { alert("{{ "no puedo grabar las preferencias de la tabla. No puede tener el nombre por defecto"|trans }}: "+tabla); return; }
+	if (tabla=='uno') { alert("{{ "no puedo grabar las preferencias de la tabla. No puede tener el nombre por defecto"|trans|raw }}: "+tabla); return; }
 
 	panelVis=fnjs_slick_search_panel(tabla);
 	colsVisible=fnjs_slick_col_visible();

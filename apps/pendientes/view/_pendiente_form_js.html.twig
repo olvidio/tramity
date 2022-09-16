@@ -45,11 +45,11 @@ fnjs_ver_opciones=function(tipo){
 			var n=$('#simple').val();
 			if (n==1) {
 				$('#mas_opciones').hide();
-				$('#opciones').html("{{ "ver ficha completa"|trans }}");
+				$('#opciones').html("{{ "ver ficha completa"|trans|raw }}");
 				$('#simple').val(0);
 			} else {
 				$('#mas_opciones').show();
-				$('#opciones').html("{{ "ver ficha sencilla"|trans }}");
+				$('#opciones').html("{{ "ver ficha sencilla"|trans|raw }}");
 				$('#simple').val(1);
 			}
 			break;
@@ -58,14 +58,14 @@ fnjs_ver_opciones=function(tipo){
 			if (n==1) {
 				$('#tr_f_plazo').show();
 				$('#periodico').hide();
-				$('#opciones_per').html("{{ "ver periodicidad"|trans }}");
-				$('#txt_plazo').html("{{ "plazo para contestar"|trans }}");
+				$('#opciones_per').html("{{ "ver periodicidad"|trans|raw }}");
+				$('#txt_plazo').html("{{ "plazo para contestar"|trans|raw }}");
 				$('#simple_per').val(0);
 			} else {
 				$('#tr_f_plazo').hide();
 				$('#periodico').show();
-				$('#opciones_per').html("{{ "ocultar periodicidad"|trans }}");
-				$('#txt_plazo').html("{{ "fecha de fin"|trans }}");
+				$('#opciones_per').html("{{ "ocultar periodicidad"|trans|raw }}");
+				$('#txt_plazo').html("{{ "fecha de fin"|trans|raw }}");
 				$('#simple_per').val(1);
 			}
 			break;
@@ -147,7 +147,7 @@ fnjs_proto=function(num,any,indice){
 					});
 				}
 				$('#mas_opciones').show();
-				$('#opciones').html("{{ "ver ficha sencilla"|trans }}");
+				$('#opciones').html("{{ "ver ficha sencilla"|trans|raw }}");
 				$('#simple').val(1);
 			}
 			//complete: function() { if (s==1) { $(num).focus(); } else { $(siguiente).focus(); } }
@@ -252,7 +252,7 @@ fnjs_guardar_pendiente=function(){
 					}
                 });
                 request.fail(function(JqXHR, textStatus, errorThrown){
-                    txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
+                    txt = '{{ "probablemente no tenga permiso en el calendario"|trans|raw }}' + '\n';
                     alert(txt + 'An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
                     console.error("Hi ha un error: "+ textStatus, errorThrown);
                 });
@@ -279,7 +279,7 @@ fnjs_guardar_pendiente=function(){
 					}
                 });
                 request.fail(function(JqXHR, textStatus, errorThrown){
-                    txt = 'xxx {{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
+                    txt = 'xxx {{ "probablemente no tenga permiso en el calendario"|trans|raw }}' + '\n';
                     alert(txt + 'An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
                     console.error("Hi ha un error: "+ textStatus, errorThrown);
                 });

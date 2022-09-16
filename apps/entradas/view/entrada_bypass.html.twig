@@ -4,45 +4,45 @@
   <!-- hace falta para poder ver el ecrito (fnjs_ver_doc_ep)  -->
   <input type=hidden name='id_entrada' id='id_entrada' value={{ id_entrada }} >
   <div class="row col-10">
-      <label class="col-2 form-label">{{ "Protocolo entrada"|trans }}</label>
+      <label class="col-2 form-label">{{ "Protocolo entrada"|trans|raw }}</label>
       <div class="col-7 alert alert-warning" role="alert">
       {{ oProtOrigen.ver_txt|raw }}
       {{ oArrayProtRef.ListaTxt|raw }}
       </div>
       <div class="col-3">
-      <label class="form-label">{{ "Ver escrito"|trans }}:</label>
+      <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
       <button type="button" tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep();" >
-          {{ "Etherpad"|trans }}
+          {{ "Etherpad"|trans|raw }}
       </button>
     </div>
   </div>
   <div class="row col-10">
-    <label for="asunto_e" class="col-2 form-label">{{ "Asunto entrada"|trans }}</label>
+    <label for="asunto_e" class="col-2 form-label">{{ "Asunto entrada"|trans|raw }}</label>
     <div class="col-10 alert alert-warning" role="alert">
       {{ asunto_e }}
     </div>
   </div>
   <div class="row col-10">
-    <label for="asunto" class="col-2 form-label">{{ "Asunto secretaria"|trans }}</label>
+    <label for="asunto" class="col-2 form-label">{{ "Asunto secretaria"|trans|raw }}</label>
     <div class="col-10 alert alert-warning" role="alert">
       <input tabindex='50' type="text" class="form-control" name='asunto' id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------- PONENTE Y OFICINAS --------------- -->
   <div class="row col-10">
-    <label for="asunto_e" class="col-2 form-label">{{ "Oficinas"|trans }}</label>
+    <label for="asunto_e" class="col-2 form-label">{{ "Oficinas"|trans|raw }}</label>
     <div class="col-4 alert alert-warning" role="alert">
       {{ oficinas_txt }}
     </div>
     <!--  --------------- FECHA SALIDA --------------- -->
-    <label for="f_salida" class="col col-2 form-label text-end">{{ "Fecha salida"|trans }}</label>
+    <label for="f_salida" class="col col-2 form-label text-end">{{ "Fecha salida"|trans|raw }}</label>
     <div class='col-2 date'>
       <input tabindex='41' name='f_salida' id='f_salida' type='text' class="form-control" value="{{ f_salida }}" />
     </div>
   </div>
   <!--  --------------------  ADJUNTOS  --------------------------  -->
   <div class="mb-3 col-md-12">
-    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans }}:</label>
+    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}:</label>
   {% for item,nom in a_adjuntos %}
 	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_download({{ item }})">{{ nom }}</button>
   {% endfor %}
@@ -51,11 +51,11 @@
   <div class="mb-3 row align-items-center col-8">
       <div class="col-2 form-label">
         <label for="prot_num" class="col-2 form-label">
-          {{ "Destinos"|trans }}
+          {{ "Destinos"|trans|raw }}
         </label>
         <div class="form-check form-switch align-middle">
           <input type="checkbox" class="form-check-input" name="grupo_dst" id="grupo_dst" {{ chk_grupo_dst }} onChange="fnjs_grupo()" />
-          <label class="form-check-label" for="grupo_dst">{{ "Grupo"|trans }}</label>
+          <label class="form-check-label" for="grupo_dst">{{ "Grupo"|trans|raw }}</label>
         </div>
       </div>
       <div id="dst_array" class="col-10">
@@ -69,10 +69,10 @@
   
 </div>
   <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Cancelar"|trans }}
+    {{ "Cancelar"|trans|raw }}
   </button>
   <button tabindex='90' class="btn btn-primary" onClick="fnjs_enviar();" >
-    {{ "Enviar"|trans }}
+    {{ "Enviar"|trans|raw }}
   </button>
 </form>
 {# Per ficar l'escrit, si cal #}

@@ -121,7 +121,7 @@ fnjs_marcar=function(formulario){
 		}
     });
     request.fail(function(JqXHR, textStatus, errorThrown){
-        txt = '{{ "probablemente no tenga permiso en el calendario"|trans }}' + '\n';
+        txt = '{{ "probablemente no tenga permiso en el calendario"|trans|raw }}' + '\n';
         alert(txt + 'An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
         console.error("Hi ha un error: "+ textStatus, errorThrown);
     });
@@ -172,7 +172,7 @@ fnjs_modificar=function(formulario){
 
 fnjs_borrar=function(formulario){
 	var seguro;
-	seguro=confirm("{{ "¿Está Seguro que desea borrar este pendiente?"|trans }}");
+	seguro=confirm("{{ "¿Está Seguro que desea borrar este pendiente?"|trans|raw }}");
 	if (seguro) {
 		$('#nuevo').val(3);
 		var url = 'apps/pendientes/controller/pendiente_update_ics.php';
@@ -196,7 +196,7 @@ fnjs_borrar=function(formulario){
             }
         });
         request.fail(function(JqXHR, textStatus, errorThrown){
-            txt = '{{ "222probablemente no tenga permiso en el calendario"|trans }}' + '\n';
+            txt = '{{ "222probablemente no tenga permiso en el calendario"|trans|raw }}' + '\n';
             alert(txt + 'An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
             console.error("Hi ha un error: "+ textStatus, errorThrown);
         });

@@ -1,101 +1,101 @@
-<h3>{{ "periodo para entradas"|trans }}:</h3>
+<h3>{{ "periodo para entradas"|trans|raw }}:</h3>
   <form id="frm_pe" name="frm_pe" action="">
     {{ oHashPEntradas.getCamposHtml|raw }}
-    {{ "ver las entradas (ya vistas o encargadas) de los "|trans }}:
+    {{ "ver las entradas (ya vistas o encargadas) de los "|trans|raw }}:
     <input type="text" size="5" name="valor" value="{{ periodo_entradas }}" >
-    {{ "días anteriores"|trans }}
-    <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+    {{ "días anteriores"|trans|raw }}
+    <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   </form>
 <hr>
 
-<h3>{{ "plazos para vida expedientes"|trans }}:</h3>
+<h3>{{ "plazos para vida expedientes"|trans|raw }}:</h3>
     <table>
-    <tr> <th class="col-2"> {{ "Vida"|trans }} </th>
-    	 <th class="col-3"> {{ "plazo para registro"|trans }} </th>
-    	 <th class="col-3"> {{ "plazo para contenidos"|trans }} </th>
+    <tr> <th class="col-2"> {{ "Vida"|trans|raw }} </th>
+    	 <th class="col-3"> {{ "plazo para registro"|trans|raw }} </th>
+    	 <th class="col-3"> {{ "plazo para contenidos"|trans|raw }} </th>
     </tr>
     <tr>
-        <td> {{ "Permanente"|trans }}: </td>
+        <td> {{ "Permanente"|trans|raw }}: </td>
         <td> 
         <form id="frm_v_permanente_r" name="frm_v_permanente_r" action="">
           {{ oHashVIDA_permanente_r.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ vida_permanente_registro }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
         <td>
         <form id="frm_v_permanente_c" name="frm_v_permanente_c" action="">
           {{ oHashVIDA_permanente_c.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ vida_permanente_contenido }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
     </tr>
     <tr>
-        <td> {{ "Experiencia"|trans }}: </td>
+        <td> {{ "Experiencia"|trans|raw }}: </td>
         <td>
         <form id="frm_v_experiencia_r" name="frm_v_experiencia_r" action="">
           {{ oHashVIDA_experiencia_r.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ vida_experiencia_registro }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
         <td>
         <form id="frm_v_experiencia_c" name="frm_v_experiencia_c" action="">
           {{ oHashVIDA_experiencia_c.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ vida_experiencia_contenido }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
     </tr>
     <tr>
-        <td> {{ "Normal"|trans }}: </td>
+        <td> {{ "Normal"|trans|raw }}: </td>
         <td>
         <form id="frm_v_normal_r" name="frm_v_normal_r" action="">
           {{ oHashVIDA_normal_r.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ vida_normal_registro }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
         <td>
         <form id="frm_v_normal_c" name="frm_v_normal_c" action="">
           {{ oHashVIDA_normal_c.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ vida_normal_contenido }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
     </tr>
     <tr>
-        <td> {{ "Temporal"|trans }}: </td>
+        <td> {{ "Temporal"|trans|raw }}: </td>
         <td>
         <form id="frm_v_temporal_r" name="frm_v_temporal_r" action="">
           {{ oHashVIDA_temporal_r.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ vida_temporal_registro }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
         <td>
         <form id="frm_v_temporal_c" name="frm_v_temporal_c" action="">
           {{ oHashVIDA_temporal_c.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ vida_temporal_contenido }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
     </tr>
     <tr>
-        <td> {{ "Borrable"|trans }}: </td>
+        <td> {{ "Borrable"|trans|raw }}: </td>
         <td>
         <form id="frm_v_borrable_r" name="frm_v_borrable_r" action="">
           {{ oHashVIDA_borrable_r.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ vida_borrable_registro }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
         <td>
         <form id="frm_v_borrable_c" name="frm_v_borrable_c" action="">
           {{ oHashVIDA_borrable_c.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ vida_borrable_contenido }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
     </tr>
@@ -103,130 +103,130 @@
 
 <hr>
 
-<h3>{{ "plazos para categorias"|trans }}:</h3>
+<h3>{{ "plazos para categorias"|trans|raw }}:</h3>
     <table>
-    <tr> <th class="col-2"> {{ "Categoría"|trans }} </th>
-    	 <th class="col-3"> {{ "plazo para registro"|trans }} </th>
-    	 <th class="col-3"> {{ "plazo para contenidos"|trans }} </th>
+    <tr> <th class="col-2"> {{ "Categoría"|trans|raw }} </th>
+    	 <th class="col-3"> {{ "plazo para registro"|trans|raw }} </th>
+    	 <th class="col-3"> {{ "plazo para contenidos"|trans|raw }} </th>
     </tr>
     <tr>
-        <td> {{ "E12"|trans }}: </td>
+        <td> {{ "E12"|trans|raw }}: </td>
         <td> 
         <form id="frm_c_12_r" name="frm_c_12_r" action="">
           {{ oHashCAT_12_r.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ cat_e12_registro }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
         <td>
         <form id="frm_c_12_c" name="frm_c_12_c" action="">
           {{ oHashCAT_12_c.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ cat_e12_contenido }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
     </tr>
     <tr>
-        <td> {{ "Normal"|trans }}: </td>
+        <td> {{ "Normal"|trans|raw }}: </td>
         <td>
         <form id="frm_c_normal_r" name="frm_c_normal_r" action="">
           {{ oHashCAT_normal_r.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ cat_normal_registro }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
         <td>
         <form id="frm_c_normal_c" name="frm_c_normal_c" action="">
           {{ oHashCAT_normal_c.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ cat_normal_contenido }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
     </tr>
     <tr>
-        <td> {{ "Permanente"|trans }}: </td>
+        <td> {{ "Permanente"|trans|raw }}: </td>
         <td>
         <form id="frm_c_permanente_r" name="frm_c_permanente_r" action="">
           {{ oHashCAT_permanente_r.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ cat_permanente_registro }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
         <td>
         <form id="frm_c_permanente_c" name="frm_c_permanente_c" action="">
           {{ oHashCAT_permanente_c.getCamposHtml|raw }}
           <input type="text" size="5" name="valor" value="{{ cat_permanente_contenido }}" >
-	      <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+	      <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   		</form>
         </td>
     </tr>
     </table>
 <hr>
 
-<h3>{{ "plazos para pendientes"|trans }}:</h3>
+<h3>{{ "plazos para pendientes"|trans|raw }}:</h3>
   <form id="frm_pu" name="frm_pu" action="">
     {{ oHashPU.getCamposHtml|raw }}
-    {{ "plazo urgente"|trans }}:
+    {{ "plazo urgente"|trans|raw }}:
     <input type="text" size="5" name="valor" value="{{ plazo_urgente }}" >
-    {{ "días"|trans }}
-    <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+    {{ "días"|trans|raw }}
+    <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   </form>
   <form id="frm_pr" name="frm_pr" action="">
     {{ oHashPR.getCamposHtml|raw }}
-    {{ "plazo rápido"|trans }}:
+    {{ "plazo rápido"|trans|raw }}:
     <input type="text" size="5" name="valor" value="{{ plazo_rapido }}" >
-    {{ "días"|trans }}
-    <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+    {{ "días"|trans|raw }}
+    <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   </form>
   <form id="frm_pn" name="frm_pn" action="">
     {{ oHashPN.getCamposHtml|raw }}
-    {{ "plazo normal"|trans }}:
+    {{ "plazo normal"|trans|raw }}:
     <input type="text" size="5" name="valor" value="{{ plazo_normal }}" >
-    {{ "días"|trans }}
-    <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+    {{ "días"|trans|raw }}
+    <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   </form>
   <form id="frm_pe" name="frm_pe" action="">
     {{ oHashPE.getCamposHtml|raw }}
-    {{ "error en fecha"|trans }}:
+    {{ "error en fecha"|trans|raw }}:
     <input type="text" size="5" name="valor" value="{{ plazo_error }}" >
-    {{ "días"|trans }}
-    <input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+    {{ "días"|trans|raw }}
+    <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
   </form>
 <hr>
 
-<h3>{{ "sigla"|trans }}:</h3>
+<h3>{{ "sigla"|trans|raw }}:</h3>
 <form id="frm_sigla" name="frm_sigla" action="">
 {{ oHashRL.getCamposHtml|raw }}
 <input type="text" name="valor" value="{{ sigla }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
-<h3>{{ "localidad"|trans }}:</h3>
-{{ "para firmar documentos"|trans }}
+<h3>{{ "localidad"|trans|raw }}:</h3>
+{{ "para firmar documentos"|trans|raw }}
 <form id="frm_localidad" name="frm_localidad" action="">
 {{ oHashL.getCamposHtml|raw }}
 <input type="text" name="valor" value="{{ localidad }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
 
-<h3>{{ "texto del mail"|trans }}:</h3>
+<h3>{{ "texto del mail"|trans|raw }}:</h3>
 <form id="frm_bodymail" name="frm_bodymail" action="">
 {{ oHashBM.getCamposHtml|raw }}
 <input type="text" name="valor" value="{{ bodyMail }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 
 <form id="frm_from" name="frm_from" action="">
 {{ oHashFrom.getCamposHtml|raw }}
-{{ "From:"|trans }}
+{{ "From:"|trans|raw }}
 <input type="text" name="valor" value="{{ from }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <form id="frm_reply_to" name="frm_reply_to" action="">
 {{ oHashReply.getCamposHtml|raw }}
-{{ "Reply to:"|trans }}
+{{ "Reply to:"|trans|raw }}
 <input type="text" name="valor" value="{{ reply_to }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 
 <hr>
@@ -235,41 +235,41 @@
 
 
 
-<h3>{{ "valor inicio contadores"|trans }}:</h3>
+<h3>{{ "valor inicio contadores"|trans|raw }}:</h3>
 <form id="frm_contador" name="frm_contador" action="">
 {{ oHashC.getCamposHtml|raw }}
-{{ "para cr"|trans }}
+{{ "para cr"|trans|raw }}
 <input class="col-2" type="text" name="valor" value="{{ ini_contador_cr }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <form id="frm_contador1" name="frm_contador1" action="">
 {{ oHashC1.getCamposHtml|raw }}
-{{ "para el resto"|trans }}
+{{ "para el resto"|trans|raw }}
 <input class="col-2" type="text" name="valor" value="{{ ini_contador }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <form id="frm_contador2" name="frm_contador2" action="">
 {{ oHashC2.getCamposHtml|raw }}
-{{ "para IESE"|trans }}
+{{ "para IESE"|trans|raw }}
 <input class="col-2" type="text" name="valor" value="{{ ini_contador_iese }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
 
-<h3>{{ "idioma por defecto"|trans }}:</h3>
+<h3>{{ "idioma por defecto"|trans|raw }}:</h3>
 <form id="frm_idioma_default" name="frm_idioma_default" action="">
 {{ oHashI.getCamposHtml|raw }}
 {{ idioma_default.desplegable|raw }}
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
-<h3>{{ "Ámbito de la entidad: centro, delegación, comisión regional"|trans }}:</h3>
+<h3>{{ "Ámbito de la entidad: centro, delegación, comisión regional"|trans|raw }}:</h3>
 <form id="frm_dl_r" name="frm_dl_r" action="">
 {{ oHashDLR.getCamposHtml|raw }}
-<input type="radio" name="valor" value="{{ val_ctr }}" {{ chk_ctr }} >  {{ "centro"|trans }}
-<input type="radio" name="valor" value="{{ val_dl }}" {{ chk_dl }} >  {{ "delegación"|trans }}
-<input type="radio" name="valor" value="{{ val_cr }}" {{ chk_cr }} >  {{ "comisión"|trans }}
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="radio" name="valor" value="{{ val_ctr }}" {{ chk_ctr }} >  {{ "centro"|trans|raw }}
+<input type="radio" name="valor" value="{{ val_dl }}" {{ chk_dl }} >  {{ "delegación"|trans|raw }}
+<input type="radio" name="valor" value="{{ val_cr }}" {{ chk_cr }} >  {{ "comisión"|trans|raw }}
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
 

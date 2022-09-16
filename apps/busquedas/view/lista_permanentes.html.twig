@@ -3,36 +3,36 @@
 <input type="hidden" id="tipo_lista" name="tipo_lista" value="xxx" form="modifica3" >
 <table class="table table-warning p-2 col-8">
     <tr class="table-danger">
-    <th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans }}
-          <input id="protocolo" name="protocolo" size="30" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_protocolo('#id_lugar','#prot_num','#prot_any','#b_buscar')" value="" >
+    <th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans|raw }}
+          <input id="protocolo" name="protocolo" size="30" class=contenido title="{{ "protocolo origen"|trans|raw }}" onchange="fnjs_protocolo('#id_lugar','#prot_num','#prot_any','#b_buscar')" value="" >
     </th>
     </tr>
-    <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans }}:
+    <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans|raw }}:
         {{ oDesplLugar.desplegable|raw }}
-          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar')" value="{{ prot_num }}" >
+          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans|raw }}" onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar')" value="{{ prot_num }}" >
           /
-          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans }}" value="{{ prot_any }}" >
+          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans|raw }}" value="{{ prot_any }}" >
         </td>
         <td>
-        <td class=etiqueta>{{ "Escribir una palabra clave"|trans }}:</td>
+        <td class=etiqueta>{{ "Escribir una palabra clave"|trans|raw }}:</td>
         <td colspan=2><input type="Text" id="asunto" name="asunto" size="40" value="{{ asunto }}"></td>
         </td>
       </tr>
     <tr>
       <td>
         {% if ambito_dl %}
-          <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button" onclick="fnjs_buscar('lst_oficinas')" >{{ "lista por oficinas"|trans }}</button>
+          <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button" onclick="fnjs_buscar('lst_oficinas')" >{{ "lista por oficinas"|trans|raw }}</button>
         {% else %}
-          <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button" onclick="fnjs_buscar('lst_todos')" >{{ "listar todos"|trans }}</button>
+          <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button" onclick="fnjs_buscar('lst_todos')" >{{ "listar todos"|trans|raw }}</button>
         {% endif %}
       </td>
       <td>
-        <button class="btn btn-success" id="b_buscar_2" name="b_buscar" TYPE="button" onclick="fnjs_buscar('lst_years')" >{{ "lista por años"|trans }}</button>
+        <button class="btn btn-success" id="b_buscar_2" name="b_buscar" TYPE="button" onclick="fnjs_buscar('lst_years')" >{{ "lista por años"|trans|raw }}</button>
       </td>
       <td></td>
       <td></td>
       <td>
-        <button class="btn btn-success" id="b_buscar" name="b_buscar" TYPE="button" onclick="fnjs_buscar('proto')" >{{ "buscar"|trans }}</button>
+        <button class="btn btn-success" id="b_buscar" name="b_buscar" TYPE="button" onclick="fnjs_buscar('proto')" >{{ "buscar"|trans|raw }}</button>
       </td>
     </tr>
     </table>

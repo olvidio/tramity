@@ -11,7 +11,7 @@ fnjs_editar=function(){
 fnjs_eliminar=function(){
 	rta=fnjs_solo_uno('#seleccionados');
 	if (rta==1) {
-		if (confirm("{{ "¿Está seguro que desea borrar este cargo?"|trans }}") ) {
+		if (confirm("{{ "¿Está seguro que desea borrar este cargo?"|trans|raw }}") ) {
 			datos = $('#seleccionados').serialize();	
 			request=$.ajax({
 				data: datos,
@@ -35,7 +35,7 @@ fnjs_actualizar=function(){
 }
 fnjs_left_side_hide();
 </script>
-<h3>{{ "Lista de cargos"|trans }}</h3>
+<h3>{{ "Lista de cargos"|trans|raw }}</h3>
 <br>
 </form>
 <form id=seleccionados  name=seleccionados action="" method="post" >

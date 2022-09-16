@@ -1,19 +1,19 @@
-<h3>{{ "Parametros del scdl (los puede cambiar el suplente)"|trans }}:</h3>
+<h3>{{ "Parametros del scdl (los puede cambiar el suplente)"|trans|raw }}:</h3>
 
 <form id="frm_perm_dist" name="frm_perm_dist" action="">
 {{ oHashPD.getCamposHtml|raw }}
-{{ "Los oficiales de secreataría pueden distribuir:"|trans }}
-<input type="checkbox" name="valor" value="{{ val_perm_distribuir }}" {{ chk_perm_distribuir }} >{{ "Si"|trans }}
+{{ "Los oficiales de secreataría pueden distribuir:"|trans|raw }}
+<input type="checkbox" name="valor" value="{{ val_perm_distribuir }}" {{ chk_perm_distribuir }} >{{ "Si"|trans|raw }}
 <br>
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <br>
 <form id="frm_perm_aceptar" name="frm_perm_aceptar" action="">
 {{ oHashPA.getCamposHtml|raw }}
-{{ "Los oficiales de secreataría pueden aceptar entradas:"|trans }}
-<input type="checkbox" name="valor" value="{{ val_perm_aceptar }}" {{ chk_perm_aceptar }} >{{ "Si"|trans }}
+{{ "Los oficiales de secreataría pueden aceptar entradas:"|trans|raw }}
+<input type="checkbox" name="valor" value="{{ val_perm_aceptar }}" {{ chk_perm_aceptar }} >{{ "Si"|trans|raw }}
 <br>
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 
 <script>

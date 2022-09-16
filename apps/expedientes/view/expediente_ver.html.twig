@@ -15,7 +15,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex flex-row justify-content-start">
-          <h5 class="modal-title" id="ModalTitle">{{ "Firma"|trans }}</h5>
+          <h5 class="modal-title" id="ModalTitle">{{ "Firma"|trans|raw }}</h5>
 		</div>
         <div class="d-flex flex-row justify-content-end">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
@@ -25,7 +25,7 @@
       <div class="modal-body">
         <div class="d-flex">
         <div class="me-auto p-6">
-          {{ "Comentario"|trans }}
+          {{ "Comentario"|trans|raw }}
         </div>
         <div class="p-6">
           <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal" onClick="fnjs_voto('{{ aclaracion_event }}');" >
@@ -41,7 +41,7 @@
       <div class="modal-footer">
         <div class="d-flex flex-row ">
             <div class="mr">
-              <label class="form-label">{{ "voto"|trans }}: </label>
+              <label class="form-label">{{ "voto"|trans|raw }}: </label>
                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                 {% for row in a_firmas %}
                   <input type="radio" class="btn-check" id="voto_{{ loop.index }}" name="voto_options" autocomplete="off" value="{{ row.id }}">
@@ -51,8 +51,8 @@
            	</div>
         </div>
         <div class="d-flex flex-row justify-content-end">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Cerrar"|trans }}</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="fnjs_voto('voto');" >{{ "Guardar"|trans }}</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Cerrar"|trans|raw }}</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="fnjs_voto('voto');" >{{ "Guardar"|trans|raw }}</button>
         </div>
         {% endif %}
       </div>
@@ -81,13 +81,13 @@
         </div>
         <!--  --------------- OFICINAS --------------- -->
         <div class="p-2 bg-white" >
-          {{ "Oficinas"|trans }}: {{ oArrayDesplFirmas.Lista|raw }}
+          {{ "Oficinas"|trans|raw }}: {{ oArrayDesplFirmas.Lista|raw }}
         </div>
   
     </div>
 	<div class="d-inline-flex float-end">
         <div class="p-2 bg-warning" >
-    	 {{ "Prioridad"|trans }}: {{ prioridad_txt }}
+    	 {{ "Prioridad"|trans|raw }}: {{ prioridad_txt }}
     	</div>
     </div>
 </div>
@@ -95,18 +95,18 @@
 <div class="clearfix">
 	<div class="d-inline-flex float-start">
         <div class="p-2" >
-            {{ "Inicio"|trans }}: {{ f_ini_circulacion }}
+            {{ "Inicio"|trans|raw }}: {{ f_ini_circulacion }}
         </div>
         <div class="p-2" >
-            {{ "reunión"|trans }}: {{ f_reunion }}
+            {{ "reunión"|trans|raw }}: {{ f_reunion }}
         </div>
         <div class="p-2" >
-            {{ "aprobación"|trans }}: {{ f_aprobacion }}
+            {{ "aprobación"|trans|raw }}: {{ f_aprobacion }}
         </div>
     </div>
 	<div class="d-inline-flex float-end">
         <div class="p-2 bg-warning" >
-        	{{ "resolver"|trans }}: {{ f_contestar }}
+        	{{ "resolver"|trans|raw }}: {{ f_contestar }}
     	</div>
     </div>
 </div>
@@ -114,7 +114,7 @@
 <!--  --------------- ASUNTO --------------- -->
 <div class="row">
 	<div class="col-1">
-  	{{ "Asunto"|trans }}:
+  	{{ "Asunto"|trans|raw }}:
   	</div>
     <div class="col-11 alert alert-primary">
       {{ asunto }}
@@ -126,7 +126,7 @@
 <div class="col-9" >
   <!--  --------------- ENTRADILLA --------------- -->
   <div class="col-0">
-  	{{ "Entradilla"|trans }}:
+  	{{ "Entradilla"|trans|raw }}:
   </div>
   <div class="col-0">
     <textarea rows="5" class="form-control" readonly>{{ entradilla }}</textarea>
@@ -146,7 +146,7 @@
 <!--  --------------------  ANTECEDENTES  --------------------------  -->
 {# lista de antecedentes #}
 <div class="mb-3 col-md-12">
-  <label class="form-label">{{ "Antecedentes"|trans }}:</label>
+  <label class="form-label">{{ "Antecedentes"|trans|raw }}:</label>
   <div id="lista_antecedentes">
     {{ lista_antecedentes|raw }}
   </div>
@@ -167,7 +167,7 @@
 
 <!--  --------------------  RECORRIDO  --------------------------  -->
 <div class="mb-3 col-md-12">
-<label class="form-label">{{ "Recorrido"|trans }}:</label>
+<label class="form-label">{{ "Recorrido"|trans|raw }}:</label>
 <ol id="lst_recorrido" class="list-group">
   {% for row in a_recorrido %}
 	<li class="list-group-item {{ row.class }}">{{ row.valor }}</li>
@@ -176,7 +176,7 @@
 </div>
 {%  if cmb_tramite %}
   <button tabindex='290' class="btn btn-secondary" onClick="fnjs_cambio_tramite();" >
-    {{ "Cambiar trámite"|trans }}
+    {{ "Cambiar trámite"|trans|raw }}
   </button>
 {% endif %}
 
@@ -188,13 +188,13 @@
 <!--  --------------------  Etiquetas --------------------------  -->
 {%  if ver_etiquetas %}
 <div class="col-12 bg-white" >
-  {{ "Etiquetas"|trans }}: {{ oArrayDesplEtiquetas.Lista|raw }}
+  {{ "Etiquetas"|trans|raw }}: {{ oArrayDesplEtiquetas.Lista|raw }}
 </div>
 {% endif %}
 <!--  --------------------  BOTONES --------------------------  -->
 <div class="row col-2" >
   <button id='btn_volver' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Volver"|trans }}
+    {{ "Volver"|trans|raw }}
   </button>
 </div>
 </form>
@@ -255,7 +255,7 @@ fnjs_ver_cargos=function(add_del) {
                 html+='</div>';
         	}
 			html+='<button class="ms-auto btn btn-secondary btn-sm" onClick="fnjs_add_cargos(\''+add_del+'\');" >';
-    		html+='{{ "ok"|trans }}';
+    		html+='{{ "ok"|trans|raw }}';
             html+='</button>';
           	$("#of").html(html);
         }

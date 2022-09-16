@@ -41,7 +41,7 @@ $(function() {
 {{ oArrayProtRef.ComprobarSelectJs|raw }}
 
 fnjs_eliminar_accion=function(id_escrito){
-    seguro=confirm("{{ "¿Está Seguro que desea borrar este escrito?"|trans }}");
+    seguro=confirm("{{ "¿Está Seguro que desea borrar este escrito?"|trans|raw }}");
     if (seguro) {
         $('#slow_load').show();
         var id_expediente=$('#id_expediente').val();
@@ -312,15 +312,15 @@ fnjs_guardar_expediente=function(){
                 if (id != id_expediente) {
                     // caso de nuevo expediente
                     $.confirm({
-                        title: '{{ "datos guardados"|trans }}',
-                        content: '{{ "¿añadir escrito o adjuntos?"|trans }}',
+                        title: '{{ "datos guardados"|trans|raw }}',
+                        content: '{{ "¿añadir escrito o adjuntos?"|trans|raw }}',
                         buttons: {
-                            {{ "Sí"|trans }}: function () {
+                            {{ "Sí"|trans|raw }}: function () {
                                 // ir al form expediente.
                                 pagina_mod = 'apps'
                                 fnjs_update_div('#main',json.pagina_mod);
                             },
-                            {{ "No"|trans }}: function () {
+                            {{ "No"|trans|raw }}: function () {
                                 fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                             }
                         }

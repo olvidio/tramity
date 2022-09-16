@@ -30,7 +30,7 @@
     </div>
     <div class="d-inline-flex float-end">
         <div class="p-2 bg-warning" >
-    	 {{ "Prioridad"|trans }}: {{ prioridad_txt }}
+    	 {{ "Prioridad"|trans|raw }}: {{ prioridad_txt }}
     	</div>
     </div>
 </div>
@@ -38,18 +38,18 @@
 <div class="clearfix">
 	<div class="d-inline-flex float-start">
         <div class="p-2" >
-            {{ "Inicio"|trans }}: {{ f_ini_circulacion }}
+            {{ "Inicio"|trans|raw }}: {{ f_ini_circulacion }}
         </div>
         <div class="p-2" >
-            {{ "reunión"|trans }}: {{ f_reunion }}
+            {{ "reunión"|trans|raw }}: {{ f_reunion }}
         </div>
         <div class="p-2" >
-            {{ "aprobación"|trans }}: {{ f_aprobacion }}
+            {{ "aprobación"|trans|raw }}: {{ f_aprobacion }}
         </div>
     </div>
 	<div class="d-inline-flex float-end">
         <div class="p-2 bg-warning" >
-        	{{ "contestar"|trans }}: {{ f_contestar }}
+        	{{ "contestar"|trans|raw }}: {{ f_contestar }}
     	</div>
     </div>
 </div>
@@ -59,7 +59,7 @@
   <!--  --------------- ASUNTO --------------- -->
   <div class="row">
 	<div class="col-1">
-  	{{ "Asunto"|trans }}:
+  	{{ "Asunto"|trans|raw }}:
   	</div>
     <div class="col-11 alert alert-primary">
       {{ asunto }}
@@ -70,7 +70,7 @@
     <div class="col-9" >
       <!--  --------------- ENTRADILLA --------------- -->
       <div class="col-0">
-          {{ "Entradilla"|trans }}:
+          {{ "Entradilla"|trans|raw }}:
       </div>
       <div class="col-0">
         <textarea rows="5" class="form-control" readonly>{{ entradilla }}</textarea>
@@ -89,7 +89,7 @@
     <div class="col-3" >
       <!--  --------------------  ANTECEDENTES  --------------------------  -->
       <div class="mb-3 col-md-12">
-        <label class="form-label">{{ "Antecedentes"|trans }}:</label>
+        <label class="form-label">{{ "Antecedentes"|trans|raw }}:</label>
         <div id="lista_antecedentes">
           {{ lista_antecedentes|raw }}
         </div>
@@ -97,7 +97,7 @@
       <hr>
       <!--  --------------------  RECORRIDO  --------------------------  -->
       <div class="mb-3 col-md-12">
-      <label class="form-label">{{ "Recorrido"|trans }}:</label>
+      <label class="form-label">{{ "Recorrido"|trans|raw }}:</label>
         <ol id="lst_recorrido" class="list-group">
         {% for row in a_recorrido %}
           <li class="list-group-item {{ row.class }}">{{ row.valor }}</li>
@@ -113,18 +113,18 @@
     <!--  --------------- Encargar a --------------- -->
     <div class="mb-2 row align-items-center">
         <!--  --------------- OFICIALES --------------- -->
-        <label for="id_oficial" class="col-1 form-label">{{ "Encargar a"|trans }}:</label>
+        <label for="id_oficial" class="col-1 form-label">{{ "Encargar a"|trans|raw }}:</label>
         <div id="div_oficiales" class="col-5">
             {{ oDesplOficiales.desplegable|raw }}
           <button tabindex='' class="btn btn-outline-secondary col" onClick="fnjs_encargar();" >
-            {{ "Encargar!"|trans }}
+            {{ "Encargar!"|trans|raw }}
           </button>
         </div>
     </div>
   {% endif %}
 <!--  --------------- VISIBILIDAD --------------- -->
   <div id="div_visibilidad" class="mb-2 row align-items-center">
-    <label for="Visibilidad" class="col-1 form-label">{{ "Visibilidad"|trans }}:</label>
+    <label for="Visibilidad" class="col-1 form-label">{{ "Visibilidad"|trans|raw }}:</label>
     <div class="col-3">
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
@@ -132,7 +132,7 @@
 <!--  --------------- Etiquetas --------------- -->
 {% if ver_etiquetas %}
   <div id="div_etiquetas" class="mb-3 row align-items-center">
-    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans }}:</label>
+    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans|raw }}:</label>
     <div class="col-6">
       <span id="span_etiquetas">
       	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
@@ -143,7 +143,7 @@
   
   <!--  --------------------  BOTONES --------------------------  -->
   <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Volver"|trans }}
+    {{ "Volver"|trans|raw }}
   </button>
   {% if ver_etiquetas %}
     <button tabindex='90' class="btn btn-success" onClick="fnjs_distribuir('guardar_etiquetas');" >
@@ -157,7 +157,7 @@
   {% endif %}
 {% else %} {# cargar_css #}
   <button tabindex='91' class="btn btn-secondary" onClick="window.close();" >
-    {{ "Cerrar"|trans }}
+    {{ "Cerrar"|trans|raw }}
   </button>
 {% endif %}
 </div> 

@@ -10,17 +10,17 @@
 
 <div class="card" >
   <div class="card-header">
-    <h5 class="card-title">{{ "Datos del grupo"|trans }}</h5>
+    <h5 class="card-title">{{ "Datos del grupo"|trans|raw }}</h5>
   </div>
   <div class="card-body">
       <form class="user" id="frm_lugar"  name="frm_lugar" action="" method="post">
       {{ oHash.getCamposHtml|raw }}
         <div class="mb-3">
-          <label for="descripcion" class="form-label">{{ "Descripción"|trans }}</label>
+          <label for="descripcion" class="form-label">{{ "Descripción"|trans|raw }}</label>
           <input type="text" class="form-control col-6" id="descripcion" name="descripcion" placeholder="descripcion" value="{{ descripcion }}">
         </div>
         <div class="mb-3">
-          <label for="example" class="form-label">{{ "Seleccione los destinos"|trans }}:</label>
+          <label for="example" class="form-label">{{ "Seleccione los destinos"|trans|raw }}:</label>
         </div>
         {{ oDesplLugaresCtr.checkbox(3)|raw }}
         <hr>
@@ -28,7 +28,7 @@
         <hr>
         {{ oDesplLugaresCr.checkbox(3)|raw }}
         <div class="mb-3">
-          <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary w-100">{{ "Guardar"|trans }}</button>
+          <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary w-100">{{ "Guardar"|trans|raw }}</button>
         </div>
       </form>
   </div>

@@ -31,7 +31,7 @@
   <!--  --------------- REFERENCIAS --------------- -->
   <div class="mb-3 row">
     <label for="prot_num" class="col-2 form-label">
-      {{ "Referencias"|trans }}
+      {{ "Referencias"|trans|raw }}
     </label>
     <div class="col-10">
       {{ oArrayProtRef.ListaSelects|raw }}
@@ -39,13 +39,13 @@
   </div>
   <!--  --------------- ASUNTO --------------- -->
   <div class="mb-3 row">
-    <label for="asunto_e" class="col-3 form-label">{{ "Asunto entrada"|trans }}</label>
+    <label for="asunto_e" class="col-3 form-label">{{ "Asunto entrada"|trans|raw }}</label>
     <div class="col-9">
       <input tabindex='100' type="text" class="form-control" name="asunto_e" id="asunto_e" value="{{ asunto_e }}">
     </div>
   </div>
   <div class="mb-3 row">
-    <label for="asunto" class="col-3 form-label">{{ "Asunto secretaria"|trans }}</label>
+    <label for="asunto" class="col-3 form-label">{{ "Asunto secretaria"|trans|raw }}</label>
     <div class="col">
         <div class="input-group mb-2">
           <span class="input-group-text">{{ anulado_txt }}</span>
@@ -55,18 +55,18 @@
   </div>
   <!--  --------------- DETALLE --------------- -->
   <div class="mb-3 row">
-    <label for="detalle" class="col-2 form-label">{{ "Detalle"|trans }}</label>
+    <label for="detalle" class="col-2 form-label">{{ "Detalle"|trans|raw }}</label>
     <div class='col-6'>
       <input {{ detalle_readonly }} tabindex='110' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
     </div>
   </div>
   <!--  --------------- PONENTE Y OFICINAS --------------- -->
   <div class="mb-3 row">
-    <label for="ponente" class="col-2">{{ "Oficina ponente"|trans }}</label>
+    <label for="ponente" class="col-2">{{ "Oficina ponente"|trans|raw }}</label>
     <div class="col-2">
 	  {{ oDesplPonenteOficina.desplegable|raw }}
     </div>
-    <label for="oficinas" class="col-1">{{ "Oficinas"|trans }}</label>
+    <label for="oficinas" class="col-1">{{ "Oficinas"|trans|raw }}</label>
     <div class="col">
       <span id="span_oficinas">
       	{{ oArrayDesplOficinas.ListaSelects|raw }}
@@ -76,11 +76,11 @@
   <!--  --------------- FECHAS --------------- -->
 {% if id_entrada %}
   <div class="mb-3 row">
-        <label for="f_entrada" class="col col-2 form-label">{{ "Fecha entrada"|trans }}</label>
+        <label for="f_entrada" class="col col-2 form-label">{{ "Fecha entrada"|trans|raw }}</label>
         <div class='col-3 date'>
           <input tabindex='150' name='f_entrada' id='f_entrada' type='text' class="form-control" value="{{ f_entrada }}" />
         </div>
-	    <label for="f_escrito" class="col col-2 form-label">{{ "Fecha escrito"|trans }}</label>
+	    <label for="f_escrito" class="col col-2 form-label">{{ "Fecha escrito"|trans|raw }}</label>
         <div class='col-3 date'>
           <input tabindex='155' name='f_escrito' id='f_escrito' type='text' class="form-control" value="{{ f_escrito }}" />
         </div>
@@ -89,22 +89,22 @@
   <!--  --------------- TIPO --------------- -->
   <div class="row">
     <div class="mb-3 col-md-2">
-      <label for="tipo">{{ "Categoría"|trans }}</label>
+      <label for="tipo">{{ "Categoría"|trans|raw }}</label>
       {{ oDesplCategoria.desplegable|raw }}
     </div>
     <div class="mb-3 col-md-2">
-      <label for="visibilidad">{{ "Visibilidad"|trans }}</label>
+      <label for="visibilidad">{{ "Visibilidad"|trans|raw }}</label>
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
     <div class="mb-3 col-md-2">
       <input type="hidden" id="admitir_hidden" name="admitir_hidden" value="{{ badmitido }}" />
-      <label>{{ "Admitido (vcd)"|trans }}</label>
+      <label>{{ "Admitido (vcd)"|trans|raw }}</label>
       {{ oDesplAdmitido.desplegable|raw }}
     </div>
   </div>
 {% if ver_pendiente %}
   <div class="mb-3 row">
-      <label for="plazo" class="col-3 me-3 mt-2">{{ "¿Es necesario contestar?"|trans }}</label>
+      <label for="plazo" class="col-3 me-3 mt-2">{{ "¿Es necesario contestar?"|trans|raw }}</label>
       <div class="col-2">
       {{ oDesplPlazo.desplegable|raw }}
       </div>
@@ -112,7 +112,7 @@
         <input tabindex='185' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_contestar }}" />
       </div>
       <button id="btn_pendiente" tabindex='188' class="col-2 btn btn-outline-secondary" onClick="fnjs_mod_pendiente();" >
-          {{ "modificar pendiente"|trans }}
+          {{ "modificar pendiente"|trans|raw }}
 	  </button>
   </div>
 {% endif %}
@@ -124,29 +124,29 @@
 {% if id_entrada %}
     {% if tipo_documento %}
       <div class="mb-3">
-        <label>{{ "Ver escrito"|trans }}:</label>
+        <label>{{ "Ver escrito"|trans|raw }}:</label>
 	    {% if tipo_documento == 1 %}
             <button type="button" tabindex='300' class="btn btn-info" onClick="fnjs_ver_doc_ep();" >
-              {{ "Etherpad"|trans }}
+              {{ "Etherpad"|trans|raw }}
             </button>
 	    {% endif %}
 	    {% if tipo_documento == 2 %}
             <button type="button" tabindex='300' class="btn btn-info" onClick="fnjs_ver_doc_ec();" >
-              {{ "Ethercalc"|trans }}
+              {{ "Ethercalc"|trans|raw }}
             </button>
 	    {% endif %}
       </div>
     {% else %}
-    <label class="form-label">{{ "Insertar escrito"|trans }}:</label>
+    <label class="form-label">{{ "Insertar escrito"|trans|raw }}:</label>
     <div class="mb-3">
       <button type="button" tabindex='300' class="btn btn-danger" onClick="fnjs_escrito(1);" >
-        {{ "Etherpad"|trans }}
+        {{ "Etherpad"|trans|raw }}
       </button>
       <button type="button" tabindex='301' class="btn btn-danger" onClick="fnjs_escrito(2);" >
-        {{ "EtherCalc"|trans }}
+        {{ "EtherCalc"|trans|raw }}
       </button>
       <button type="button" tabindex='302' class="btn btn-danger" onClick="fnjs_escrito(3);" >
-        {{ "Incrustado"|trans }}
+        {{ "Incrustado"|trans|raw }}
       </button>
     </div>
     {% endif %}
@@ -159,7 +159,7 @@
     </div>
 {% else %}
   <div class="alert alert-warning" role="alert">
-    {{ "Para añadir escrito, primero debe guardar la entrada"|trans }}
+    {{ "Para añadir escrito, primero debe guardar la entrada"|trans|raw }}
   </div>
 {% endif %}
 </div>
@@ -167,14 +167,14 @@
 <!--  --------------- DISTRIBUCION CR --------------- -->
 <div class="mb-3 row col-12">
 <div class="col-md-2">
-  <label class="form-label">{{ "Distribución cr"|trans }}</label>
+  <label class="form-label">{{ "Distribución cr"|trans|raw }}</label>
   {{ oDesplByPass.desplegable|raw }}
 </div>
 <!--  --------------- Destinos --------------- -->
 <div id="dst_cr" class="align-items-center col-10">
   <div class="col-2 form-label">
     <label for="prot_num" class="col-2 form-label">
-      {{ "Destinos"|trans }}
+      {{ "Destinos"|trans|raw }}
     </label>
     <div class="form-check form-switch align-middle">
       <input type="checkbox" class="form-check-input" name="grupo_dst" id="grupo_dst" {{ chk_grupo_dst }} onChange="fnjs_grupo()" />
@@ -192,7 +192,7 @@
 
 <div>
   <button type="button" tabindex='1' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Cancelar"|trans }}
+    {{ "Cancelar"|trans|raw }}
   </button>
   <button id="btn_guardar" type="button" tabindex='220' class="btn btn-primary" onClick="fnjs_guardar_entrada();" >
     {{ txt_btn_guardar }}
@@ -210,9 +210,9 @@ $(document).ready(function() {
     	theme: "explorer-fas",
         uploadUrl: "apps/entradas/controller/upload.php",
         dropZoneEnabled: true,
-        dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans }}",
+        dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans|raw }}",
         browseOnZoneClick: true,
-        dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans }}",
+        dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans|raw }}",
         maxFileCount: 5,
         showUpload: false, // upload button
         showBrowse: true,

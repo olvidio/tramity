@@ -18,7 +18,7 @@
 <div class="col-4" >
     <hr>
     <div class="mb-3">
-        <label for="escrito_adjunto" class="form-label">{{ "Adjuntos"|trans }}</label>
+        <label for="escrito_adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}</label>
         <div class="file-loading">
             <input id="escrito_adjunto" name="adjuntos[]" type="file" multiple>
         </div>
@@ -27,7 +27,7 @@
 <!--  --------------------  BOTONES --------------------------  -->
 <div class="row col-2" >
   <button id='btn_volver' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Volver"|trans }}
+    {{ "Volver"|trans|raw }}
   </button>
 </div
 </form>
@@ -54,9 +54,9 @@ $(document).ready(function() {
     	theme: "explorer-fas",
         uploadUrl: "apps/escritos/controller/adjunto_upload.php",
         dropZoneEnabled: true,
-        dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans }}",
+        dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans|raw }}",
         browseOnZoneClick: true,
-        dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans }}",
+        dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans|raw }}",
         maxFileCount: 5,
         showUpload: false, // upload button
         showBrowse: true,

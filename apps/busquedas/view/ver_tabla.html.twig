@@ -8,7 +8,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex flex-row justify-content-start">
-          <h5 class="modal-title" id="exampleModalLongTitle">{{ "modifica entrada"|trans }}</h5>
+          <h5 class="modal-title" id="exampleModalLongTitle">{{ "modifica entrada"|trans|raw }}</h5>
 		</div>
         <div class="d-flex flex-row justify-content-end">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
@@ -28,8 +28,8 @@
         <div class="d-flex flex-row ">
         </div>
         <div class="d-flex flex-row justify-content-end">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Cerrar"|trans }}</button>
-          <button id='modal_btn_guardar' type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="fnjs_guardar_comentario();" >{{ "Guardar"|trans }}</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Cerrar"|trans|raw }}</button>
+          <button id='modal_btn_guardar' type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="fnjs_guardar_comentario();" >{{ "Guardar"|trans|raw }}</button>
         </div>
       </div>
     </div>
@@ -89,8 +89,8 @@ fnjs_orden_anular_a_plataforma=function(id_reg,id_form) {
         if (json.success != true) {
             alert (json.mensaje);
         } else {
-            $('#exampleModalLongTitle').html('{{ "Enviar orden de anular a otra plataforma"|trans }}');
-            $('#modal_titulo').html('{{ "Anular (si no hay texto está activo)"|trans }}');
+            $('#exampleModalLongTitle').html('{{ "Enviar orden de anular a otra plataforma"|trans|raw }}');
+            $('#modal_titulo').html('{{ "Anular (si no hay texto está activo)"|trans|raw }}');
             $('#modal_id_reg').val(id_reg);	
             $('#modal_tipo_reg').val(id_form);	
             $('#modal_tipo').val('{{ constant('oasis_as4\\model\\As4CollaborationInfo::ACCION_ORDEN_ANULAR') }}' );
@@ -277,13 +277,13 @@ fnjs_guardar_comentario=function(){
                 if (json.mensaje) {
                     $.confirm({
                         title: json.mensaje,
-                        content: '{{ "¿Qué quiere hacer?"|trans }}',
+                        content: '{{ "¿Qué quiere hacer?"|trans|raw }}',
                         buttons: {
-                            '{{ "Anular todos los pendientes"|trans }}': function () {
+                            '{{ "Anular todos los pendientes"|trans|raw }}': function () {
                                 elim_pendientes=1;
                                 fnjs_guardar_comentario2(que_tipo,id_reg,comentario,elim_pendientes);
                             },
-                            '{{ "No hacer nada"|trans }}': function () {
+                            '{{ "No hacer nada"|trans|raw }}': function () {
                                 elim_pendientes=0;
                                 fnjs_guardar_comentario2(que_tipo,id_reg,comentario,elim_pendientes);
                             }
@@ -325,7 +325,7 @@ fnjs_guardar_comentario2=function(que_tipo,id_reg,comentario,elim_pendientes) {
         } else {
 			if (que_tipo == '{{ constant('oasis_as4\\model\\As4CollaborationInfo::ACCION_ORDEN_ANULAR') }}'
 				|| que_tipo == '{{ constant('oasis_as4\\model\\As4CollaborationInfo::ACCION_REEMPLAZAR') }}' ) {
-					alert('{{ "Mensaje enviado"|trans }}');
+					alert('{{ "Mensaje enviado"|trans|raw }}');
             } else {
                 fnjs_actualizar();
             }
@@ -387,8 +387,8 @@ fnjs_buscar_ver_destinos=function(formulario, tipo_escrito){
                 alert (json.mensaje);
             } else {
                 if (json.destinos) {
-					$('#exampleModalLongTitle').html('{{ "Destinos del escrito"|trans }}');
-					$('#modal_titulo').html('{{ "Destinos"|trans }}');
+					$('#exampleModalLongTitle').html('{{ "Destinos del escrito"|trans|raw }}');
+					$('#modal_titulo').html('{{ "Destinos"|trans|raw }}');
 					$('#modal_id_reg').val(id_reg);	
 					$('#modal_tipo').val('destinos');	
                     $('#comentario').val(json.destinos);
@@ -430,7 +430,7 @@ fnjs_modificar_det_entrada=function(formulario){
                 alert (json.mensaje);
             } else {
                 if (json.detalle) {
-					$('#modal_titulo').html('{{ "Detalle"|trans }}');
+					$('#modal_titulo').html('{{ "Detalle"|trans|raw }}');
 					$('#modal_id_reg').val(id_reg);	
 					$('#modal_tipo').val('detalle_entrada');	
                     $('#comentario').val(json.detalle);
@@ -470,7 +470,7 @@ fnjs_anular_entrada=function(formulario){
             if (json.success != true) {
                 alert (json.mensaje);
             } else {
-                $('#modal_titulo').html('{{ "Anular (si no hay texto está activo)"|trans }}');
+                $('#modal_titulo').html('{{ "Anular (si no hay texto está activo)"|trans|raw }}');
                 $('#modal_id_reg').val(id_reg);	
                 $('#modal_tipo').val('anular');	
                 $('#comentario').val(json.detalle);
@@ -516,7 +516,7 @@ fnjs_borrar_entrada=function(formulario){
     rta=fnjs_solo_uno(formulario);
     var seguro;
     if (rta==1) {
-        seguro=confirm("{{ "¿Está Seguro que desea borrar este registro?"|trans }}");
+        seguro=confirm("{{ "¿Está Seguro que desea borrar este registro?"|trans|raw }}");
         if (seguro) {
             var form=$(formulario).attr('id');
  			var id_reg;
@@ -545,12 +545,12 @@ fnjs_borrar_entrada=function(formulario){
                     if (json.mensaje) {
                         $.confirm({
                             title: json.mensaje,
-                            content: '{{ "¿Qué quiere hacer?"|trans }}',
+                            content: '{{ "¿Qué quiere hacer?"|trans|raw }}',
                             buttons: {
-                                '{{ "Eliminar todo"|trans }}': function () {
+                                '{{ "Eliminar todo"|trans|raw }}': function () {
                                     fnjs_borrar_entrada_cascade(id_reg);
                                 },
-                                '{{ "No hacer nada"|trans }}': function () {
+                                '{{ "No hacer nada"|trans|raw }}': function () {
                                     //$.alert('Canceled!');
                                 }
                             }
@@ -652,7 +652,7 @@ fnjs_modificar_det_escrito=function(formulario){
                 alert (json.mensaje);
             } else {
                 if (json.detalle) {
- 					$('#modal_titulo').html('{{ "Detalle"|trans }}');
+ 					$('#modal_titulo').html('{{ "Detalle"|trans|raw }}');
  					$('#modal_id_reg').val(id_reg);	
  					$('#modal_tipo').val('detalle_escrito');	
                     $('#comentario').val(json.detalle);
@@ -699,7 +699,7 @@ fnjs_modificar_escrito=function(formulario){
 fnjs_borrar_escrito=function(formulario){
     rta=fnjs_solo_uno(formulario);
     if (rta==1) {
-        seguro=confirm("{{ "¿Está Seguro que desea borrar este escrito?"|trans }}");
+        seguro=confirm("{{ "¿Está Seguro que desea borrar este escrito?"|trans|raw }}");
         if (seguro) {
             var form=$(formulario).attr('id');
             var id_reg;

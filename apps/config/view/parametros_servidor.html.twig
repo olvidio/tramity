@@ -1,83 +1,83 @@
-<h3>{{ "php + apache/nginx"|trans }}:</h3>
+<h3>{{ "php + apache/nginx"|trans|raw }}:</h3>
         <pre>En /etc/php/7.4/fpm/php.ini
              * post_max_size = 25M
              * upload_max_filesize = 25M
              </pre>
 <form id="frm_server_size" name="frm_server_size" action="">
 {{ oHashFS.getCamposHtml|raw }}
-{{ "tamaño máximo del fichero adjunto (en MB):"|trans }}
+{{ "tamaño máximo del fichero adjunto (en MB):"|trans|raw }}
 <input class="col-2" type="text" name="valor" value="{{ max_filesize }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
-<h3>{{ "servidor etherpad"|trans }}:</h3>
+<h3>{{ "servidor etherpad"|trans|raw }}:</h3>
 <form id="frm_server" name="frm_server" action="">
 {{ oHashSE.getCamposHtml|raw }}
 <input class="col-6" type="text" name="valor" value="{{ server_etherpad }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
-<h3>{{ "servidor ethercalc"|trans }}:</h3>
+<h3>{{ "servidor ethercalc"|trans|raw }}:</h3>
 <form id="frm_server_c" name="frm_server_c" action="">
 {{ oHashSEC.getCamposHtml|raw }}
 <input class="col-6" type="text" name="valor" value="{{ server_ethercalc }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
-<h3>{{ "servidor SMTP"|trans }}:</h3>
+<h3>{{ "servidor SMTP"|trans|raw }}:</h3>
 <form id="frm_smtp_host" name="frm_smtp_host" action="">
 {{ oHashSMTP_host.getCamposHtml|raw }}
-{{ "Host:"|trans }}
+{{ "Host:"|trans|raw }}
 <input type="text" name="valor" value="{{ smtp_host }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <form id="frm_smtp_port" name="frm_smtp_port" action="">
 {{ oHashSMTP_port.getCamposHtml|raw }}
-{{ "Port:"|trans }}
+{{ "Port:"|trans|raw }}
 <input type="text" name="valor" value="{{ smtp_port }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <form id="frm_smtp_auth" name="frm_smtp_auth" action="">
 {{ oHashSMTP_auth.getCamposHtml|raw }}
-{{ "usar autenticación:"|trans }}
-<input type="checkbox" name="valor" value="{{ val_auth }}" {{ chk_auth }} >{{ "Si"|trans }}
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+{{ "usar autenticación:"|trans|raw }}
+<input type="checkbox" name="valor" value="{{ val_auth }}" {{ chk_auth }} >{{ "Si"|trans|raw }}
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <form id="frm_smtp_user" name="frm_smtp_user" action="">
 {{ oHashSMTP_user.getCamposHtml|raw }}
-{{ "User:"|trans }}
+{{ "User:"|trans|raw }}
 <input type="text" name="valor" value="{{ smtp_user }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <form id="frm_smtp_pwd" name="frm_smtp_pwd" action="">
 {{ oHashSMTP_pwd.getCamposHtml|raw }}
-{{ "Password:"|trans }}
+{{ "Password:"|trans|raw }}
 <input type="text" name="valor" value="{{ smtp_pwd }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <form id="frm_smtp_secure" name="frm_smtp_secure" action="">
 {{ oHashSMTP_secure.getCamposHtml|raw }}
-{{ "seguridad:"|trans }}
-<input type="radio" name="valor" value="{{ val_tls }}" {{ chk_tls }} >  {{ "tls"|trans }}
-<input type="radio" name="valor" value="{{ val_ssl }}" {{ chk_ssl }} >  {{ "ssl"|trans }}
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+{{ "seguridad:"|trans|raw }}
+<input type="radio" name="valor" value="{{ val_tls }}" {{ chk_tls }} >  {{ "tls"|trans|raw }}
+<input type="radio" name="valor" value="{{ val_ssl }}" {{ chk_ssl }} >  {{ "ssl"|trans|raw }}
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
 
-<h3>{{ "servidor EDI"|trans }}:</h3>
+<h3>{{ "servidor EDI"|trans|raw }}:</h3>
 <form id="frm_dock" name="frm_dock" action="">
 {{ oHashDock.getCamposHtml|raw }}
-{{ "directorio dock:"|trans }}
+{{ "directorio dock:"|trans|raw }}
 <input class="col-10" type="text" name="valor" value="{{ dock }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
 
-<h3>{{ "servidor davical"|trans }}:</h3>
+<h3>{{ "servidor davical"|trans|raw }}:</h3>
 <form id="frm_server_davical" name="frm_server_davical" action="">
 {{ oHashDavical.getCamposHtml|raw }}
 <input class="col-6" type="text" name="valor" value="{{ server_davical }}" >
-<input type="button" value="{{ "guardar"|trans }}" onclick="fnjs_guardar(this.form);" >
+<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
 <hr>
 

@@ -11,7 +11,7 @@ fnjs_eliminar=function(){
 	}
 	rta=fnjs_solo_uno('#seleccionados');
 	if (rta==1) {
-		if (confirm("{{ "¿Está seguro que desea borrar este grupo?"|trans }}") ) {
+		if (confirm("{{ "¿Está seguro que desea borrar este grupo?"|trans|raw }}") ) {
             $('#que').val('eliminar');
             datos = $('#seleccionados').serialize();	
         	request=$.ajax({
@@ -36,9 +36,9 @@ fnjs_actualizar=function(){
 }
 fnjs_left_side_hide();
 </script>
-<h3>{{ "Lista de grupos"|trans }}</h3>
-<h6>{{ "el nombre debe corresponder a un cargo sin oficina que se use en el trámite"|trans }}</h6>
-<h6>{{ "(Ahora mismo solo funciona con 'todos_d'. Si hubiera necesidad de más, habría que revisar el código."|trans }}</h6>
+<h3>{{ "Lista de grupos"|trans|raw }}</h3>
+<h6>{{ "el nombre debe corresponder a un cargo sin oficina que se use en el trámite"|trans|raw }}</h6>
+<h6>{{ "(Ahora mismo solo funciona con 'todos_d'. Si hubiera necesidad de más, habría que revisar el código."|trans|raw }}</h6>
 <br>
 </form>
 <form id="seleccionados"  name="seleccionados" action="" method="post" >

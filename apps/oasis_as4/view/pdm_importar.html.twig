@@ -19,7 +19,7 @@
 <h1>{{ "cargar arxivos pdm xml" }}:</h1>
 
 
-<label class="col-6 form-label">{{ "Insertar xml resp"|trans }}:</label>
+<label class="col-6 form-label">{{ "Insertar xml resp"|trans|raw }}:</label>
 <div class="col-8" > <!-- COL DCHA --> 
 <div class="mb-3" id=upload>
     <div class="file-loading">
@@ -35,9 +35,9 @@ $(document).ready(function() {
     	theme: "explorer-fas",
         uploadUrl: "apps/oasis_as4/controller/pdm_upload.php",
         dropZoneEnabled: true,
-        dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans }}",
+        dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans|raw }}",
         browseOnZoneClick: true,
-        dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans }}",
+        dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans|raw }}",
         maxFileCount: 1,
         validateInitialCount: true,
         showUpload: false, // upload button

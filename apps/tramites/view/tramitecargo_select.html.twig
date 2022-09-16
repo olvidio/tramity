@@ -106,7 +106,7 @@ fnjs_left_side_hide();
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar"|trans }}</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar"|trans|raw }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -117,23 +117,23 @@ fnjs_left_side_hide();
       <input type="hidden" class="form-control" id="id_tramite" name="id_tramite" value="{{ id_tramite }}">
       <div class="modal-body">
         <div class="mb-3 input-group col-10">
-          <span class="input-group-text">{{ "Cargo"|trans }}</span>
+          <span class="input-group-text">{{ "Cargo"|trans|raw }}</span>
           <div id='cargo'>
           	{{ oDesplCargos.desplegable|raw }}
           </div>
         </div>
         <div class="mb-3 input-group col-4">
-            <span class="input-group-text">{{ "Orden"|trans }}</span>
+            <span class="input-group-text">{{ "Orden"|trans|raw }}</span>
             <input id=orden type="text" class="form-control" id="orden_tramite" name="orden_tramite" value="{{ orden_tramite }}">
         </div>
         <div class="mb-3 input-group col-8">
-            <span class="input-group-text">{{ "número mínimo de firmas"|trans }}</span>
+            <span class="input-group-text">{{ "número mínimo de firmas"|trans|raw }}</span>
             <input type="text" class="form-control" id="multiple" name="multiple" value="{{ multiple }}">
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onClick="fnjs_guardar(this.form);" >{{ "Guardar"|trans }}</button>
+        <button type="button" class="btn btn-primary" onClick="fnjs_guardar(this.form);" >{{ "Guardar"|trans|raw }}</button>
       </div>
       </form>
     </div>

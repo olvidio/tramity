@@ -28,20 +28,20 @@
         <li>
         <a class="dropdown-item" href="#" onclick="fnjs_update_div('#main','{{ pagina_profile|raw }}')">
           <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>
-          {{ "Preferencias"|trans }}
+          {{ "Preferencias"|trans|raw }}
         </a>
         </li>
         <li>
         <a class="dropdown-item" href="#" onclick="fnjs_update_div('#main','{{ pagina_etiquetas|raw }}')">
           <i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>
-          {{ "Etiquetas"|trans }}
+          {{ "Etiquetas"|trans|raw }}
         </a>
         </li>
         <li><hr class="dropdown-divider"></li>
         <li>
         <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal" onclick="fnjs_logout()">
           <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>
-          {{ "Salir"|trans }}
+          {{ "Salir"|trans|raw }}
         </a>
         </li>
       </ul>

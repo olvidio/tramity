@@ -2,17 +2,17 @@
   <thead class="thead-light">
     <tr>
       {%  if ver_ok %}
-        <th scope="col">{{ "ok"|trans }}</th>
+        <th scope="col">{{ "ok"|trans|raw }}</th>
       {% endif %}
-      <th scope="col">{{ "ver"|trans }}</th>
+      <th scope="col">{{ "ver"|trans|raw }}</th>
       {%  if modo == 'mod' %}
-        <th scope="col">{{ "mod.datos"|trans }}</th>
+        <th scope="col">{{ "mod.datos"|trans|raw }}</th>
       {% endif %}
-      <th scope="col">{{ "prot. local/rev.texto"|trans }}</th>
-      <th scope="col">{{ "ponente"|trans }}</th>
-      <th scope="col">{{ "destino"|trans }}</th>
-      <th scope="col">{{ "ref."|trans }}</th>
-      <th scope="col">{{ "asunto"|trans }}</th>
+      <th scope="col">{{ "prot. local/rev.texto"|trans|raw }}</th>
+      <th scope="col">{{ "ponente"|trans|raw }}</th>
+      <th scope="col">{{ "destino"|trans|raw }}</th>
+      <th scope="col">{{ "ref."|trans|raw }}</th>
+      <th scope="col">{{ "asunto"|trans|raw }}</th>
       {%  if modo == 'mod' %}
         <th scope="col">{{ "enviar" }}</th>
       {% endif %}

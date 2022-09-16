@@ -5,46 +5,46 @@
 	<input type="hidden" name="id_expediente" value='{{ id_expediente }}' />
   <!--  --------------- ASUNTO --------------- -->
   <div class="mb-3 row">
-    <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans }}</label>
+    <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans|raw }}</label>
     <div class="col-10">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------------  Periodo --------------------------  -->
   <div id="div_periodo" class="mb-3 row">
-    <label for="periodo" class="col-1 form-label">{{ "periodo"|trans }}:</label>
+    <label for="periodo" class="col-1 form-label">{{ "periodo"|trans|raw }}:</label>
     <div class="col-2">
 		<select tabindex=111 id=periodo name=periodo >
-		<option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans }}</option>
-		<option value="mes_6" {{ sel_mes_6 }}>{{ "hace 6 meses"|trans }}</option>
-		<option value="any_1" {{ sel_any_1 }} >{{ "hace 1 año"|trans }}</option>
-		<option value="any_2" {{ sel_any_2 }} >{{ "hace 2 año"|trans }}</option>
-		<option value="siempre" {{ sel_siempre }} >{{ "siempre"|trans }}</option>
+		<option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans|raw }}</option>
+		<option value="mes_6" {{ sel_mes_6 }}>{{ "hace 6 meses"|trans|raw }}</option>
+		<option value="any_1" {{ sel_any_1 }} >{{ "hace 1 año"|trans|raw }}</option>
+		<option value="any_2" {{ sel_any_2 }} >{{ "hace 2 año"|trans|raw }}</option>
+		<option value="siempre" {{ sel_siempre }} >{{ "siempre"|trans|raw }}</option>
 		</select>
 	</div>
       <!--  --------------------  origen --------------------------  -->
-    <label for="periodo" class="col-3 form-label">{{ "¿Quién enviaba el escrito?"|trans }}:</label>
+    <label for="periodo" class="col-3 form-label">{{ "¿Quién enviaba el escrito?"|trans|raw }}:</label>
     <div class="col-6">
         {{ oDesplOrigen.desplegable|raw }}
-          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#prot_num','#prot_any','#btn_1')" value="{{ prot_num }}" >
+          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans|raw }}" onchange="fnjs_proto('#prot_num','#prot_any','#btn_1')" value="{{ prot_num }}" >
           /
-          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans }}" value="{{ prot_any }}" >
+          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans|raw }}" value="{{ prot_any }}" >
     </div>
   </div>
   <!--  --------------- OFICINA --------------- -->
   <div id="div_oficinas" class="mb-3 row">
-      <label for="oficinas" class="col-1 form-label">{{ "Oficina"|trans }}</label>
+      <label for="oficinas" class="col-1 form-label">{{ "Oficina"|trans|raw }}</label>
       <div class="col-7">
         <span id="span_oficinas">
             {{ oDesplOficinas.Desplegable|raw }}
         </span>
       </div>
       <div class="col-1">
-        <button id="btn_1" type="button" class="btn btn-primary" onClick="fnjs_antecedente_entrada();" >{{ "Buscar"|trans }}</button>
+        <button id="btn_1" type="button" class="btn btn-primary" onClick="fnjs_antecedente_entrada();" >{{ "Buscar"|trans|raw }}</button>
       </div>
       <div class="col-2 ps-3 pt-1">
         <input id="chk_anulados" name="chk_anulados" type="checkbox" onChange='fnjs_ctr_anulados()' {{ chk_ctr_anulados }}>
-          {{ "ver ctr anulados"|trans }}
+          {{ "ver ctr anulados"|trans|raw }}
       </div>
   </div>
   </form>

@@ -9,7 +9,7 @@
 <!--  --------------- ASUNTO --------------- -->
 <div class="row">
   <div class="col-9">
-    <label class="form-label">{{ "Nombre"|trans }}:</label>
+    <label class="form-label">{{ "Nombre"|trans|raw }}:</label>
       {{ nom }}
   </div>
 </div>
@@ -24,7 +24,7 @@
   {#
     <div class="p-2 text-dark fw-bold" >
       <button type="button" class="btn btn-outline-secondary" onClick="fnjs_download_pdf({{ id_doc }})">
-  	    <i class="fa fa-download" aria-hidden="true">  {{ "Descargar en pdf"|trans }}</i>
+  	    <i class="fa fa-download" aria-hidden="true">  {{ "Descargar en pdf"|trans|raw }}</i>
 	  </button>
     </div>
   </div>

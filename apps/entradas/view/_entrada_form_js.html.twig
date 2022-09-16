@@ -175,20 +175,20 @@ fnjs_guardar_entrada=function(){
                 if (id != id_entrada) {
                     // caso de nueva entrada
                     $.confirm({
-                        title: '{{ "datos guardados"|trans }}',
-                        content: '{{ "¿añadir escrito o adjuntos?"|trans }}',
+                        title: '{{ "datos guardados"|trans|raw }}',
+                        content: '{{ "¿añadir escrito o adjuntos?"|trans|raw }}',
                         buttons: {
-                            {{ "Sí"|trans }}: function () {
+                            {{ "Sí"|trans|raw }}: function () {
                                 // ir al form entrada.
                                 pagina_mod = 'apps'
                                 fnjs_update_div('#main',json.pagina_mod);
                             },
-                            {{ "No"|trans }}: function () {
+                            {{ "No"|trans|raw }}: function () {
                                 // Volver a la lista...
                                 fnjs_update_div('#main','{{ pagina_cancel|raw }}');
                             },
                             somethingElse: {
-                                text: '{{ "otra entrada"|trans }}',
+                                text: '{{ "otra entrada"|trans|raw }}',
                                 btnClass: 'btn-blue',
                                 keys: ['enter', 'shift'],
                                 // Nueva entrada.

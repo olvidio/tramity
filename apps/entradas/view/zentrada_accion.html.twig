@@ -3,7 +3,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Asignar entrada"|trans }}</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Asignar entrada"|trans|raw }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
@@ -18,7 +18,7 @@
               {{ oDesplCargosOficinaEncargado.desplegable|raw }}
             </div>
               <div class="col-4">
-                <button type="button" class="btn btn-primary" onClick="fnjs_encargar();" >{{ "Encargar"|trans }}</button>
+                <button type="button" class="btn btn-primary" onClick="fnjs_encargar();" >{{ "Encargar"|trans|raw }}</button>
               </div>
           </div>
         </div>
@@ -36,20 +36,20 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="ModalLongTitle">{{ "Asignar Etiquetas a la entrada"|trans }}</h5>
+        <h5 class="modal-title" id="ModalLongTitle">{{ "Asignar Etiquetas a la entrada"|trans|raw }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
       <div class="modal-body">
           <div id="div_etiquetas" class="mb-0 row align-items-center">
-            <label for="etiquetas" class="col-2 form-label">{{ "Etiquetas"|trans }}:</label>
+            <label for="etiquetas" class="col-2 form-label">{{ "Etiquetas"|trans|raw }}:</label>
             <div class="mb-0 col-6">
               <span id="span_etiquetas">
                   {{ oArrayDesplEtiquetas.ListaSelects|raw }}
               </span>
             </div>
               <div class="col-4">
-                <button type="button" class="btn btn-primary" onClick="fnjs_guardar_etiquetas();" >{{ "Guardar"|trans }}</button>
+                <button type="button" class="btn btn-primary" onClick="fnjs_guardar_etiquetas();" >{{ "Guardar"|trans|raw }}</button>
               </div>
           </div>
       </div>
@@ -62,7 +62,7 @@
 
 <div class="card w-50 mx-auto ">
   <div class="card-header">
-    <h5 class="card-title">{{ "Acciones para la entrada"|trans }}: ({{ protocolo }})</h5>
+    <h5 class="card-title">{{ "Acciones para la entrada"|trans|raw }}: ({{ protocolo }})</h5>
     <h5 class="card-title">{{ asunto }}</h5>
   </div>
   <div class="card-body">
@@ -89,7 +89,7 @@
 <div class="row">
 <div class="col" style="margin: 1cm;"><!-- per quedar alineat del pills que també tenen un marge de 1cm. -->
   <button type="button" class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Cancelar"|trans }}
+    {{ "Cancelar"|trans|raw }}
   </button>
 </div>
 </div>

@@ -5,38 +5,38 @@
 	<input type="hidden" name="id_expediente" value='{{ id_expediente }}' />
   <!--  --------------- ASUNTO --------------- -->
   <div class="mb-3 row">
-    <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans }}</label>
+    <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans|raw }}</label>
     <div class="col-10">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------------  Periodo --------------------------  -->
   <div id="div_periodo" class="mb-3 row">
-    <label for="periodo" class="col-1 form-label">{{ "periodo"|trans }}:</label>
+    <label for="periodo" class="col-1 form-label">{{ "periodo"|trans|raw }}:</label>
     <div class="col-6">
 		<select tabindex=111 id=periodo name=periodo >
-		<option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans }}</option>
-		<option value="mes_6" {{ sel_mes_6 }}>{{ "hace 6 meses"|trans }}</option>
-		<option value="any_1" {{ sel_any_1 }} >{{ "hace 1 año"|trans }}</option>
-		<option value="any_2" {{ sel_any_2 }} >{{ "hace 2 año"|trans }}</option>
-		<option value="siempre" {{ sel_siempre }} >{{ "siempre"|trans }}</option>
+		<option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans|raw }}</option>
+		<option value="mes_6" {{ sel_mes_6 }}>{{ "hace 6 meses"|trans|raw }}</option>
+		<option value="any_1" {{ sel_any_1 }} >{{ "hace 1 año"|trans|raw }}</option>
+		<option value="any_2" {{ sel_any_2 }} >{{ "hace 2 año"|trans|raw }}</option>
+		<option value="siempre" {{ sel_siempre }} >{{ "siempre"|trans|raw }}</option>
 		</select>
 	</div>
   </div>
   <!--  --------------- Etiquetas --------------- -->
   <div id="div_etiquetas" class="row align-items-center bg-light">
-    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans }}:</label>
+    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans|raw }}:</label>
     <div class="col-2">
         <div class="col-6">
           <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
           <label class="form-check-label">
-          {{ "alguna"|trans }}
+          {{ "alguna"|trans|raw }}
           </label>
         </div>
         <div class="col-6">
           <input type="radio" class="form-check-input" name="andOr" value="AND" {{ chk_and }} >
           <label class="form-check-label">
-          {{ "todas"|trans }}
+          {{ "todas"|trans|raw }}
           </label>
         </div>
 	</div>
@@ -47,7 +47,7 @@
     </div>
       <!--  --------------- BOTON --------------- -->
       <div class="col-2">
-        <button type="button" class="btn btn-primary" onClick="fnjs_antecedente_expediente();" >{{ "Buscar"|trans }}</button>
+        <button type="button" class="btn btn-primary" onClick="fnjs_antecedente_expediente();" >{{ "Buscar"|trans|raw }}</button>
       </div>
   </div>
   </form>

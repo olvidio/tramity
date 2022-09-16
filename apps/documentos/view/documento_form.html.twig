@@ -28,7 +28,7 @@
 <div class="col-10" > 
   <!--  --------------- ASUNTO --------------- -->
   <div class="row">
-    <label for="nom" class="col-2 form-label">{{ "Nombre"|trans }}:</label>
+    <label for="nom" class="col-2 form-label">{{ "Nombre"|trans|raw }}:</label>
     <div class="col">
         <div class="input-group mb-2">
           <input tabindex='30' type="text" class="form-control" name='nom' id="nom" value="{{ nom }}">
@@ -38,7 +38,7 @@
   {#
   <!--  --------------- DETALLE --------------- -->
   <div class="mb-3 row">
-    <label for="detalle" class="col-2 form-label">{{ "Detalle"|trans }}:</label>
+    <label for="detalle" class="col-2 form-label">{{ "Detalle"|trans|raw }}:</label>
     <div class='col-6'>
       <input {{ detalle_readonly }} tabindex='50' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
     </div>
@@ -46,7 +46,7 @@
   #}
   <!--  --------------- ETIQUETAS --------------- -->
   <div class="mb-3 row">
-      <label for="etiquetas" class="col-2 form-label">{{ "Etiquetas"|trans }}:</label>
+      <label for="etiquetas" class="col-2 form-label">{{ "Etiquetas"|trans|raw }}:</label>
       <div class="mb-0 col-8">
         <span id="span_etiquetas">
       	  {{ oArrayDesplEtiquetas.ListaSelects|raw }}
@@ -59,7 +59,7 @@
 <div class="col-7" > <!-- COL IZQ --> 
   <!--  --------------- Visibilidad --------------- -->
   <div class="mb-3 row">
-    <label for="visibilidad" class="col-3 form-label">{{ "Visibilidad"|trans }}:</label>
+    <label for="visibilidad" class="col-3 form-label">{{ "Visibilidad"|trans|raw }}:</label>
     <div class='col-3'>
         {{ oDesplVisibilidad.desplegable|raw }}
       </div>
@@ -68,9 +68,9 @@
     <!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
     {% if tipo_doc == 1 %}
         <div class="mb-3">
-          <label class="form-label">{{ "Ver escrito"|trans }}:</label>
+          <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
           <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep();" >
-            {{ "Etherpad"|trans }}
+            {{ "Etherpad"|trans|raw }}
           </button>
         </div>
     {% endif %}
@@ -78,19 +78,19 @@
         <p>etherCalc</p>
     {% endif %}
     {% if tipo_doc == 3 %}
-        <label class="col-3 form-label">{{ "Tipo de documento"|trans }}:</label>
+        <label class="col-3 form-label">{{ "Tipo de documento"|trans|raw }}:</label>
         <label class="col-3 form-label">{{ "incrustado"|raw }}</label>
     {% endif %}
     {% if tipo_doc is empty %}
-        <label class="col-3 form-label">{{ "Insertar escrito"|trans }}:</label>
+        <label class="col-3 form-label">{{ "Insertar escrito"|trans|raw }}:</label>
 		  <div class='col-3'>
           <button tabindex='100' class="btn btn-info" onClick="fnjs_add_doc(1);" >
-            {{ "Etherpad"|trans }}
+            {{ "Etherpad"|trans|raw }}
           </button>
           </div>
 		  <div class='col-3'>
           <button tabindex='10' class="btn btn-info" onClick="fnjs_add_doc(3);" >
-            {{ "Incrustado"|trans }}
+            {{ "Incrustado"|trans|raw }}
           </button>
         </div>
     {% endif %}
@@ -109,10 +109,10 @@
 
 <div>
     <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-      {{ "Cancelar"|trans }}
+      {{ "Cancelar"|trans|raw }}
     </button>
     <button tabindex='90' class="btn btn-primary" onClick="fnjs_guardar_documento();" >
-      {{ "Guardar"|trans }}
+      {{ "Guardar"|trans|raw }}
     </button>
 </div>
 
@@ -129,9 +129,9 @@ $(document).ready(function() {
     	theme: "explorer-fas",
         uploadUrl: "apps/documentos/controller/adjunto_upload.php",
         dropZoneEnabled: true,
-        dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans }}",
+        dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans|raw }}",
         browseOnZoneClick: true,
-        dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans }}",
+        dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans|raw }}",
         maxFileCount: 1,
         validateInitialCount: true,
         showUpload: false, // upload button

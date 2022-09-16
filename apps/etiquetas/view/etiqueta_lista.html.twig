@@ -1,4 +1,4 @@
-<h3>{{ "Lista de etiquetas"|trans }}</h3>
+<h3>{{ "Lista de etiquetas"|trans|raw }}</h3>
 <br>
 </form>
 <form id="seleccionados"  name="seleccionados" action="" method="post" >
@@ -8,7 +8,7 @@
 <br>
 <div class="col-8">
   <button class="btn btn-secondary" onClick="fnjs_update_div('body', '');" >
-    {{ "Cancelar"|trans }}
+    {{ "Cancelar"|trans|raw }}
   </button>
   <button class="btn btn-primary" onClick="fnjs_update_div('#main','{{ url_nuevo }}');" >
     {{ "nueva etiqueta"|trans}}
@@ -27,7 +27,7 @@ fnjs_eliminar=function(){
 	}
 	rta=fnjs_solo_uno('#seleccionados');
 	if (rta==1) {
-		if (confirm("{{ "¿Está seguro que desea borrar esta etiqueta?"|trans }}") ) {
+		if (confirm("{{ "¿Está seguro que desea borrar esta etiqueta?"|trans|raw }}") ) {
             $('#que').val('eliminar');
             datos = $('#seleccionados').serialize();
 

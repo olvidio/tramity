@@ -3,7 +3,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar"|trans }}</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar"|trans|raw }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
@@ -17,17 +17,17 @@
               {{ oDesplCargosOficinaEncargado.desplegable|raw }}
             </div>
               <div class="col-4">
-                <button type="button" class="btn btn-primary" onClick="fnjs_encargar();" >{{ "Encargar"|trans }}</button>
+                <button type="button" class="btn btn-primary" onClick="fnjs_encargar();" >{{ "Encargar"|trans|raw }}</button>
               </div>
           </div>
           <!--  --------------- ASUNTO --------------- -->
           <div class="mb-3 row" id="busqueda_asunto">
-            <label for="asunto" class="col-2 form-label">{{ "Asunto"|trans }}</label>
+            <label for="asunto" class="col-2 form-label">{{ "Asunto"|trans|raw }}</label>
             <div class="col-8">
               <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar" value="">
             </div>
               <div class="col-2">
-                <button type="button" class="btn btn-primary" onClick="fnjs_buscar_expediente();" >{{ "Buscar"|trans }}</button>
+                <button type="button" class="btn btn-primary" onClick="fnjs_buscar_expediente();" >{{ "Buscar"|trans|raw }}</button>
               </div>
           </div>
           <!--  --------------- Cargos de la oficina --------------- -->
@@ -45,7 +45,7 @@
               <input tabindex='30' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_plazo }}"  onchange="fnjs_comprobar_fecha('#f_plazo')" />
             </div>
             <div class="col-3">
-              <button type="button" class="btn btn-primary" onClick="fnjs_crear_pendiente();" >{{ "Crear Pendiente"|trans }}</button>
+              <button type="button" class="btn btn-primary" onClick="fnjs_crear_pendiente();" >{{ "Crear Pendiente"|trans|raw }}</button>
             </div>
           </div>
           </div>
@@ -56,7 +56,7 @@
               {{ oDesplCargos.desplegable|raw }}
             </div>
               <div class="col-4">
-                <button type="button" class="btn btn-primary" onClick="fnjs_copiar();" >{{ "Copiar"|trans }}</button>
+                <button type="button" class="btn btn-primary" onClick="fnjs_copiar();" >{{ "Copiar"|trans|raw }}</button>
               </div>
           </div>
         </div>
@@ -75,20 +75,20 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="ModalLongTitle">{{ "Asignar Etiquetas a la entrada"|trans }}</h5>
+        <h5 class="modal-title" id="ModalLongTitle">{{ "Asignar Etiquetas a la entrada"|trans|raw }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
       <div class="modal-body">
           <div id="div_etiquetas" class="mb-0 row align-items-center">
-            <label for="etiquetas" class="col-2 form-label">{{ "Etiquetas"|trans }}:</label>
+            <label for="etiquetas" class="col-2 form-label">{{ "Etiquetas"|trans|raw }}:</label>
             <div class="mb-0 col-6">
               <span id="span_etiquetas">
                   {{ oArrayDesplEtiquetas.ListaSelects|raw }}
               </span>
             </div>
               <div class="col-4">
-                <button type="button" class="btn btn-primary" onClick="fnjs_guardar_etiquetas();" >{{ "Guardar"|trans }}</button>
+                <button type="button" class="btn btn-primary" onClick="fnjs_guardar_etiquetas();" >{{ "Guardar"|trans|raw }}</button>
               </div>
           </div>
       </div>
@@ -125,7 +125,7 @@
 <div class="row">
 <div class="col" style="margin: 1cm;"><!-- per quedar alineat del pills que també tenen un marge de 1cm. -->
   <button type="button" class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Cancelar"|trans }}
+    {{ "Cancelar"|trans|raw }}
   </button>
 </div>
 </div>
@@ -134,13 +134,13 @@
 fnjs_accion=function(accion){
 	var err=0;
 	if (accion == 'exp_eliminar') {
-		if ( !confirm("{{ "¿Seguro que quiere eliminar todo el expediente?"|trans }}") ) {
+		if ( !confirm("{{ "¿Seguro que quiere eliminar todo el expediente?"|trans|raw }}") ) {
         	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
             return;
         }
 	}
 	if (accion == 'exp_a_borrador' || accion == 'exp_a_borrador_cmb_creador') {
-		if ( !confirm("{{ "¿Seguro que quiere pasar el expediente a borrador y:\\n - Perder todos los comentarios.\\n - Perder las firmas.?"|trans }}") ) {
+		if ( !confirm("{{ "¿Seguro que quiere pasar el expediente a borrador y:\\n - Perder todos los comentarios.\\n - Perder las firmas.?"|trans|raw }}") ) {
         	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
             return;
         }

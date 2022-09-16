@@ -11,7 +11,7 @@
 {% if btn_cerrar == TRUE %}
 <div class="text-center">
   <button id='btn_volver' tabindex='91' class="btn btn-secondary" onClick="window.close();" >
-    {{ "Cerrar"|trans }}
+    {{ "Cerrar"|trans|raw }}
   </button>
 </div>
 {% endif %}

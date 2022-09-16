@@ -47,7 +47,7 @@
 <input type='hidden' id='simple_per' name='simple_per' value='{{ simple_per }}'>
 
 {% if calendario == 'registro' %}
-  <h1>{{ "entrada del registro pendiente de contestar"|trans }}</h1>
+  <h1>{{ "entrada del registro pendiente de contestar"|trans|raw }}</h1>
 {% else %}
   <h1>{{ titulo_oficina }}</h1>
 {% endif %}
@@ -66,7 +66,7 @@
   {% if secretaria %}
   <!--  --------------------  Oficinas --------------------------  -->
   <div class="mb-3 row align-items-center">
-    <label for="oficina" class="col-1 form-label">{{ "Oficina"|trans }}:</label>
+    <label for="oficina" class="col-1 form-label">{{ "Oficina"|trans|raw }}:</label>
     <div class="col-6">
       	{{ oDesplOficinas.desplegable|raw }}
     </div>
@@ -76,14 +76,14 @@
   {% endif %}
   <!--  --------------- ASUNTO --------------- -->
   <div class="mb-3 row">
-    <label for="asunto_e" class="col-1 form-label">{{ "Asunto"|trans }}</label>
+    <label for="asunto_e" class="col-1 form-label">{{ "Asunto"|trans|raw }}</label>
     <div class="col-9">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------------  Etiquetas --------------------------  -->
   <div id="div_etiquetas" class="mb-3 row align-items-center">
-    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans }}:</label>
+    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans|raw }}:</label>
     <div class="col-6">
       <span id="span_etiquetas">
       	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
@@ -99,7 +99,7 @@
   </div> 
   <!--  --------------------  Encargado --------------------------  -->
   <div class="mb-3 row align-items-center">
-    <label for="oficina" class="col-2 form-label">{{ "¿Está asignado a alguien?"|trans }}:</label>
+    <label for="oficina" class="col-2 form-label">{{ "¿Está asignado a alguien?"|trans|raw }}:</label>
     <div class="col-6">
 	  {{ oDesplEncargados.desplegable|raw }}
     </div>
@@ -112,21 +112,21 @@
 
   <!--  --------------- PROTOCOLO --------------- -->
   <div class="mb-3 row">
-    <label class="col-2 form-label">{{ "protocolo o referencia"|trans }}</label>
+    <label class="col-2 form-label">{{ "protocolo o referencia"|trans|raw }}</label>
     <div class="col-3 me-3">
         {{ oDesplLugar.desplegable|raw }}
     </div>
     <div class="row col-6">
       <div class="col-2">
-        <input id="ref_prot_num" name="ref_prot_num" value="{{ ref_prot_num }}" class="text-end form-control form-control-sm" title="{{ "protocolo origen"|trans }}" onchange="fnjs_proto('#ref_prot_num','#ref_prot_any','#b_buscar_7')">
+        <input id="ref_prot_num" name="ref_prot_num" value="{{ ref_prot_num }}" class="text-end form-control form-control-sm" title="{{ "protocolo origen"|trans|raw }}" onchange="fnjs_proto('#ref_prot_num','#ref_prot_any','#b_buscar_7')">
       </div>
       /
       <div class="col-1">
-        <input id="ref_prot_any" name="ref_prot_any" value="{{ ref_prot_any }}" class="form-control form-control-sm" title="{{ "año protocolo origen"|trans }}" >
+        <input id="ref_prot_any" name="ref_prot_any" value="{{ ref_prot_any }}" class="form-control form-control-sm" title="{{ "año protocolo origen"|trans|raw }}" >
       </div>
       ,
       <div class="col-4">
-        <input id="ref_prot_mas" name="ref_prot_mas" value="{{ ref_prot_mas }}" class="form-control form-control-sm" title="{{ "información complementaria"|trans }}" >
+        <input id="ref_prot_mas" name="ref_prot_mas" value="{{ ref_prot_mas }}" class="form-control form-control-sm" title="{{ "información complementaria"|trans|raw }}" >
       </div>
     </div>
   </div>
@@ -135,7 +135,7 @@
 	<input type="hidden" tabindex="-1" id="detalle" name="detalle" style="width:100%;" value="{{ detalle }}" />
 {% else %}
   <div class="mb-3 row">
-    <label for="detalle" class="col-1 form-label">{{ "detalle"|trans }}</label>
+    <label for="detalle" class="col-1 form-label">{{ "detalle"|trans|raw }}</label>
     <div class="col-9">
       <input tabindex='30' type="text" class="form-control" name="detalle" id="detalle" value="{{ detalle }}">
     </div>
@@ -144,7 +144,7 @@
 {% if calendario == 'oficina' %}
   <!--  --------------- DESTINO --------------- -->
   <div class="mb-3 row">
-    <label class="col-3 form-label">{{ "¿con quién es el pendiente?"|trans }}</label>
+    <label class="col-3 form-label">{{ "¿con quién es el pendiente?"|trans|raw }}</label>
     <div class="col-3">
         {{ oDesplLugar1.desplegable|raw }}
     </div>
@@ -152,7 +152,7 @@
 {% endif %}
   <!--  --------------- Oficinas implicadas --------------- -->
   <div class="mb-3 row">
-	<label for="oficinas" class="col-3 form-label">{{ "otras oficinas implicadas"|trans }}</label>
+	<label for="oficinas" class="col-3 form-label">{{ "otras oficinas implicadas"|trans|raw }}</label>
     <div class="col">
       <span id="span_oficinas">
       	{{ oArrayDesplOficinas.ListaSelects|raw }}
@@ -162,7 +162,7 @@
 
   <!--  --------------- OBSERVACIONES --------------- -->
   <div class="mb-3 row">
-    <label for="observ" class="col-2 form-label">{{ "Observaciones"|trans }}</label>
+    <label for="observ" class="col-2 form-label">{{ "Observaciones"|trans|raw }}</label>
     <div class='col-10'>
       <textarea tabindex='50' rows="5" class="form-control" name='observ' id="observ">{{ observ }}</textarea>
     </div>
@@ -170,17 +170,17 @@
   
   <div class="mb-3 row">
     <!--  --------------- VISIBILIDAD --------------- -->
-    <label class="col-1 form-label">{{ "Visibilidad"|trans }}</label>
+    <label class="col-1 form-label">{{ "Visibilidad"|trans|raw }}</label>
     <div class="col-2">
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
     <!--  --------------- STATUS --------------- -->
-    <label class="col-1 form-label">{{ "estado"|trans }}</label>
+    <label class="col-1 form-label">{{ "estado"|trans|raw }}</label>
     <div class="col-2">
         {{ oDesplStatus.desplegable|raw }}
     </div>
 	<!--  --------------------  fecha --------------------------  -->
-    <label for="f_acabado" class="col col-2 form-label">{{ "fecha acabado"|trans }}:</label>
+    <label for="f_acabado" class="col col-2 form-label">{{ "fecha acabado"|trans|raw }}:</label>
     <div class='col-2 date'>
       <input tabindex='30' name='f_acabado' id='f_acabado' type='text' class="form-control" value="{{ f_acabado }}"  onchange="fnjs_cambiar_estado()" />
     </div>
@@ -196,12 +196,12 @@
 <div class="row">
   <div class="col-2">
     <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-      {{ "Volver"|trans }}
+      {{ "Volver"|trans|raw }}
     </button>
   </div>
   <div class="col-2">
     <button tabindex='90' class="btn btn-success" onClick="fnjs_guardar_pendiente();" >
-      {{ "guardar"|trans }}
+      {{ "guardar"|trans|raw }}
     </button> 
   </div>
 </div>

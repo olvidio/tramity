@@ -1,29 +1,29 @@
 <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
-	{{ "nuevo documento"|trans }}
+	{{ "nuevo documento"|trans|raw }}
 </button>
 <!-- 
 <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_converter_entradas|raw }}');">
-	{{ "convertir prot entradas"|trans }}
+	{{ "convertir prot entradas"|trans|raw }}
 </button>
 <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_converter_escritos|raw }}');">
-	{{ "convertir prot escritos"|trans }}
+	{{ "convertir prot escritos"|trans|raw }}
 </button>
 <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_converter_expedientes|raw }}');">
-	{{ "convertir prot expedientes"|trans }}
+	{{ "convertir prot expedientes"|trans|raw }}
 </button>
  -->
 <table class="table table-sm table-bordered">
   <thead class="thead-light">
     <tr>
       <th scope="col">{{ "ver texto"|raw }}</th>
-      <th scope="col">{{ "ver datos"|trans }}</th>
-      <th scope="col">{{ "creador"|trans }}</th>
-      <th scope="col">{{ "nom"|trans }}</th>
-      <th scope="col">{{ "visibilidad"|trans }}</th>
-      <th scope="col">{{ "etiquetas"|trans }}</th>
-      <th scope="col">{{ "f mod"|trans }}</th>
-      <th scope="col">{{ "tipo"|trans }}</th>
-      <th scope="col">{{ "acción"|trans }}</th>
+      <th scope="col">{{ "ver datos"|trans|raw }}</th>
+      <th scope="col">{{ "creador"|trans|raw }}</th>
+      <th scope="col">{{ "nom"|trans|raw }}</th>
+      <th scope="col">{{ "visibilidad"|trans|raw }}</th>
+      <th scope="col">{{ "etiquetas"|trans|raw }}</th>
+      <th scope="col">{{ "f mod"|trans|raw }}</th>
+      <th scope="col">{{ "tipo"|trans|raw }}</th>
+      <th scope="col">{{ "acción"|trans|raw }}</th>
     </tr>
   </thead>
   <tbody>
@@ -77,7 +77,7 @@ fnjs_revisar_documento=function(id_doc) {
 }
 
 fnjs_eliminar_documento=function(id_documento){
-    seguro=confirm("{{ "¿Está Seguro que desea borrar este documento?"|trans }}");
+    seguro=confirm("{{ "¿Está Seguro que desea borrar este documento?"|trans|raw }}");
     if (seguro) {
         var param_json = { que: 'eliminar', id_doc: id_documento };
         request=$.ajax({

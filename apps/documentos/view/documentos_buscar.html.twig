@@ -4,22 +4,22 @@
 <input type="hidden" id="que" name="que" value="buscar">
 
 
-  <div class="fs-4 col-10 mb-3 row">{{ "listar documentos"|trans }}:
+  <div class="fs-4 col-10 mb-3 row">{{ "listar documentos"|trans|raw }}:
   </div>
   <!--  --------------- Etiquetas --------------- -->
   <div id="div_etiquetas" class="mb-3 row align-items-center bg-light">
-    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans }}:</label>
+    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans|raw }}:</label>
     <div class="col-2">
         <div class="col-6">
           <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
           <label class="form-check-label">
-          {{ "alguna"|trans }}
+          {{ "alguna"|trans|raw }}
           </label>
         </div>
         <div class="col-6">
           <input type="radio" class="form-check-input" name="andOr" value="AND" {{ chk_and }} >
           <label class="form-check-label">
-          {{ "todas"|trans }}
+          {{ "todas"|trans|raw }}
           </label>
         </div>
 	</div>
@@ -32,12 +32,12 @@
       <div class="row col-3">
         <div class="col-6">
           <button id="btn_buscar" type="button" tabindex='90' class="w-100 btn btn-primary" onClick="fnjs_buscar('#frm_que');" >
-            {{ "ver lista"|trans }}
+            {{ "ver lista"|trans|raw }}
           </button>
         </div>
         <div class="col-6">
           <button id="btn_buscar_all" type="button" tabindex='91' class="w-100 btn btn-primary" onClick="fnjs_buscar_todos('#frm_que');" >
-            {{ "ver todos"|trans }}
+            {{ "ver todos"|trans|raw }}
           </button>
         </div>
       </div>

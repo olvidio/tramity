@@ -28,23 +28,23 @@
     {% if anular %}
         <div class="p-2 form-check form-switch">
           <input type="checkbox" class="form-check-input" id="customSwitches" name="anular" {{  chk_anulado }}>
-          <label class="form-check-label" for="customSwitches">{{ "Anular este escrito"|trans }}</label>
+          <label class="form-check-label" for="customSwitches">{{ "Anular este escrito"|trans|raw }}</label>
         </div>
     {% endif %}
     <div class="ms-auto p-2 bd-highlight">
-      <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="fnjs_guardar_distribuir();" >{{ "Guardar"|trans }}</button>
+      <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="fnjs_guardar_distribuir();" >{{ "Guardar"|trans|raw }}</button>
     </div>
   </div>
   <!--  --------------- ASUNTO --------------- -->
   <div class="mb-3 row">
-    <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans }}</label>
+    <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans|raw }}</label>
     <div class="col-11">
       <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
     </div>
   </div>
   <!--  --------------- DETALLE --------------- -->
   <div class="mb-3 row">
-    <label for="detalle" class="col-1 form-label">{{ "Detalle"|trans }}</label>
+    <label for="detalle" class="col-1 form-label">{{ "Detalle"|trans|raw }}</label>
     <div class='col-11'>
       <input tabindex='50' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
     </div>
@@ -65,7 +65,7 @@
 {% if a_adjuntos %}
 <hr>
 <div class="mb-3 col-md-12">
-    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans }}:</label>
+    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}:</label>
 {% for item,nom in a_adjuntos %}
 	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_download({{ item }})">{{ nom }}</button>
 {% endfor %}

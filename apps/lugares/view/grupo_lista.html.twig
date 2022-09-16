@@ -11,7 +11,7 @@ fnjs_eliminar=function(){
 	}
 	rta=fnjs_solo_uno('#seleccionados');
 	if (rta==1) {
-		if (confirm("{{ "¿Está seguro que desea borrar este grupo?"|trans }}") ) {
+		if (confirm("{{ "¿Está seguro que desea borrar este grupo?"|trans|raw }}") ) {
             $('#que').val('eliminar');
             datos = $('#seleccionados').serialize();	
         	request=$.ajax({
@@ -36,8 +36,8 @@ fnjs_actualizar=function(){
 }
 fnjs_left_side_hide();
 </script>
-<h6>{{ "Los datos referentes a centros deben modificarse desde la administración del servidor."|trans }}</h6>
-<h3>{{ "Lista de grupos"|trans }}</h3>
+<h6>{{ "Los datos referentes a centros deben modificarse desde la administración del servidor."|trans|raw }}</h6>
+<h3>{{ "Lista de grupos"|trans|raw }}</h3>
 <br>
 </form>
 <form id="seleccionados"  name="seleccionados" action="" method="post" >

@@ -18,7 +18,7 @@
           </div>
           <div class="d-inline-flex w-75">
               <div class="ps-5 input-group mb-3">
-                  <span class="input-group-text" id="inputGroup-sizing-default">{{ "Nota (detalle)"|trans }}:</span>
+                  <span class="input-group-text" id="inputGroup-sizing-default">{{ "Nota (detalle)"|trans|raw }}:</span>
                   <input type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}" onChange="fnjs_detalle()" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
               </div>
           </div>
@@ -37,7 +37,7 @@
 <!--  --------------- ASUNTO --------------- -->
 <div class="row">
     <div class="ms-3 col-11 alert alert-primary">
-      <label for="asunto_e" class="form-label">{{ "Asunto entrada"|trans }}:</label>
+      <label for="asunto_e" class="form-label">{{ "Asunto entrada"|trans|raw }}:</label>
         {{ asunto_e }}
     </div>
 </div>
@@ -45,12 +45,12 @@
 <div class="row">
     <div class="ms-3 col-11 d-flex flex-row justify-content-between">
       <div class="p-2">
-        {{ "Fecha documento"|trans }}: {{ f_escrito }}
+        {{ "Fecha documento"|trans|raw }}: {{ f_escrito }}
       </div>
       <div class="row text-end mb-3 justify-content-end">
         <div class="col-3 p-2 form-check form-switch">
           <input type="checkbox" class="form-check-input" id="customSwitches" onChange="fnjs_read()" {{  chk_leido }}>
-          <label class="form-check-label" for="customSwitches">{{ "Leido el"|trans }}</label>
+          <label class="form-check-label" for="customSwitches">{{ "Leido el"|trans|raw }}</label>
         </div>
         <div class="col-5">
           <input class="form-control col-2" name='f_entrada' id='f_entrada' type='text' value="{{ f_entrada }}" {{ f_entrada_disabled }}/>
@@ -69,7 +69,7 @@
 <hr>
 <!--  --------------------  ADJUNTOS  --------------------------  -->
 <div class="mb-3 col-md-12">
-    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans }}:</label>
+    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}:</label>
 {% for item,nom in a_adjuntos %}
 	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_download({{ item }})">{{ nom }}</button>
 {% endfor %}

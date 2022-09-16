@@ -24,7 +24,7 @@ fnjs_eliminar_plantilla=function(){
 	}
 	rta=fnjs_solo_uno('#seleccionados');
 	if (rta==1) {
-		if (confirm("{{ "¿Está seguro que desea borrar esta plantilla?"|trans }}") ) {
+		if (confirm("{{ "¿Está seguro que desea borrar esta plantilla?"|trans|raw }}") ) {
             $('#que').val('eliminar');
         	datos = $('#seleccionados').serialize();	
         	request=$.ajax({

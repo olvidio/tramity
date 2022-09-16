@@ -2,7 +2,7 @@
 fnjs_selectAll=function(formulario,Name,val,aviso){
 	aviso = typeof aviso !== 'undefined' ? aviso : 1;
 	if (aviso == 1) {
-		alert ("{{ "Sólo se seleccionan los ítems que se ha visualizado."|trans }}");
+		alert ("{{ "Sólo se seleccionan los ítems que se ha visualizado."|trans|raw }}");
 	}
 	var form=$(formulario).attr('id');
 	/* selecciono los elementos input del id=formulario */
@@ -34,11 +34,11 @@ fnjs_solo_uno_grid=function(formulario) {
 	var s = sel.length;
 
 	if ( s > 1 ) {
-		var txt = sprintf ("{{ "Sólo puede seleccionar un elemento. Ha selecionado %s."|trans }}",s);
+		var txt = sprintf ("{{ "Sólo puede seleccionar un elemento. Ha selecionado %s."|trans|raw }}",s);
 		alert (txt);
 	}
 	if (s==0) {
-		alert ("{{ "No ha seleccionado ninguna fila. debe hacer click en algún chekbox de la izquierda."|trans }}");
+		alert ("{{ "No ha seleccionado ninguna fila. debe hacer click en algún chekbox de la izquierda."|trans|raw }}");
 	}
 	return s;
 }
@@ -51,11 +51,11 @@ fnjs_solo_uno=function(formulario, multiple = false) {
 	var s = sel.length;
 
 	if ( s > 1 && !multiple) {
-		var txt = sprintf ("{{ "Sólo puede seleccionar un elemento. Ha selecionado %s."|trans }}",s);
+		var txt = sprintf ("{{ "Sólo puede seleccionar un elemento. Ha selecionado %s."|trans|raw }}",s);
 		alert (txt);
 	}
 	if (s==0) {
-		alert ("{{ "No ha seleccionado ninguna fila. debe hacer click en algún chekbox de la izquierda."|trans }}");
+		alert ("{{ "No ha seleccionado ninguna fila. debe hacer click en algún chekbox de la izquierda."|trans|raw }}");
 	}
 	return s;
 }
@@ -120,14 +120,14 @@ fnjs_comprobar_fecha=function(id) {
   {
      if(parseInt(v_fecha[0],10)>31 || (parseInt(v_fecha[0],10)<1))
      {
-        alert(name_fecha+": {{ "el dia no es correcto"|trans }}");
+        alert(name_fecha+": {{ "el dia no es correcto"|trans|raw }}");
 		$(id).focus();
         return false;
      }
    
      if(parseInt(v_fecha[1],10)>12 || (parseInt(v_fecha[1],10)<1))
      {
-        alert(name_fecha+": {{ "el mes no es correcto"|trans }}");
+        alert(name_fecha+": {{ "el mes no es correcto"|trans|raw }}");
 		$(id).focus();
         return false;
      }
@@ -135,7 +135,7 @@ fnjs_comprobar_fecha=function(id) {
      var mi_v_fecha = new Date(parseInt(v_fecha[2],10),parseInt(v_fecha[1],10)-parseInt(1,10),parseInt(v_fecha[0],10))
      if(parseInt(v_fecha[0],10)!=parseInt(mi_v_fecha.getDate()))
      {
-        alert(name_fecha+": {{ "La fecha introducida NO es correcta"|trans }}");
+        alert(name_fecha+": {{ "La fecha introducida NO es correcta"|trans|raw }}");
 		$(id).focus();
         return false;
      }
@@ -146,7 +146,7 @@ fnjs_comprobar_fecha=function(id) {
   	 if (v_fecha.length==1 && v_fecha[0]) {
   	 	dia=parseInt(v_fecha[0],10);
   	 	if(isNaN(dia) || dia>31 || (dia<1)) {
-  	 		alert(name_fecha+": {{ "El formato debe ser dd/mm/yyyy"|trans }}");
+  	 		alert(name_fecha+": {{ "El formato debe ser dd/mm/yyyy"|trans|raw }}");
 		 	$(id).focus();
 		 	return false;
   	 	}
@@ -154,7 +154,7 @@ fnjs_comprobar_fecha=function(id) {
 		$(id).focus();
 		return true;
   	 } else {
-	     alert(name_fecha+": {{ "El formato debe ser dd/mm/yyyy"|trans }}");
+	     alert(name_fecha+": {{ "El formato debe ser dd/mm/yyyy"|trans|raw }}");
 		 $(id).focus();
 		 return false;
 	 }

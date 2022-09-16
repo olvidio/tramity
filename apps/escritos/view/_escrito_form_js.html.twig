@@ -179,14 +179,14 @@ fnjs_guardar_escrito=function(quiet=0){
                     if (id != id_escrito) {
                         // caso de nuevo escrito
                         $.confirm({
-                            title: '{{ "datos guardados"|trans }}',
-                            content: '{{ "¿añadir escrito o adjuntos?"|trans }}',
+                            title: '{{ "datos guardados"|trans|raw }}',
+                            content: '{{ "¿añadir escrito o adjuntos?"|trans|raw }}',
                             buttons: {
-                                {{ "Sí"|trans }}: function () {
+                                {{ "Sí"|trans|raw }}: function () {
                                     // ir al form expediente.
                                     fnjs_update_div('#main',json.pagina_mod);
                                 },
-                                {{ "No"|trans }}: function () {
+                                {{ "No"|trans|raw }}: function () {
                                     //$.alert('Canceled!');
                                     alert ("{{ "datos guardados"|trans|raw }}");
                                     // Volver a la lista...

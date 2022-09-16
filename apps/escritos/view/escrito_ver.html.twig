@@ -24,7 +24,7 @@
 <!--  --------------- ASUNTO --------------- -->
 <div class="row">
   <div class="col-9">
-    <label for="asunto_e" class="form-label">{{ "Asunto"|trans }}:</label>
+    <label for="asunto_e" class="form-label">{{ "Asunto"|trans|raw }}:</label>
       {{ asunto_e }}
   </div>
 </div>
@@ -37,7 +37,7 @@
   <div class="d-inline-flex float-start">
     <div class="p-2 text-dark fw-bold" >
       <button type="button" class="btn btn-outline-secondary" onClick="fnjs_download_pdf({{ id_escrito }})">
-  	    <i class="fa fa-download" aria-hidden="true">  {{ "Descargar en pdf"|trans }}</i>
+  	    <i class="fa fa-download" aria-hidden="true">  {{ "Descargar en pdf"|trans|raw }}</i>
 	  </button>
     </div>
   </div>
@@ -52,7 +52,7 @@
 {% if a_adjuntos %}
 <hr>
 <div class="mb-3 col-md-12">
-    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans }}:</label>
+    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}:</label>
 {% for item,nom in a_adjuntos %}
 	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_download({{ item }})">{{ nom }}</button>
 {% endfor %}

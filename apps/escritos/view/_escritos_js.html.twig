@@ -4,25 +4,25 @@
  
 fnjs_confirm_insertar_documento=function(tipo,id_doc,id_escrito) {
     $('#ModalBuscar').modal('hide');
-	var msg="{{ "Esto quitará el documento de la carpeta de documentos. Si quiere conservarlo debería insertar una copia."|trans }}";
+	var msg="{{ "Esto quitará el documento de la carpeta de documentos. Si quiere conservarlo debería insertar una copia."|trans|raw }}";
 	// caso de nueva entrada
     $.confirm({
-        title: '{{ "AVISO"|trans }}:',
+        title: '{{ "AVISO"|trans|raw }}:',
         content: msg,
         columnClass: 'col-md-6',
         buttons: {
-            {{ "Cancel"|trans }}: function () {
+            {{ "Cancel"|trans|raw }}: function () {
                 fnjs_actualizar();
             },
             adjuntar: {
-                text: '{{ "Insertar"|trans }}',
+                text: '{{ "Insertar"|trans|raw }}',
                 btnClass: 'btn-blue',
                 action: function () {
                 	fnjs_insertar_documento(tipo,id_doc,id_escrito);
                 }
             },
             somethingElse: {
-                text: '{{ "insertar una copia"|trans }}',
+                text: '{{ "insertar una copia"|trans|raw }}',
                 btnClass: 'btn-secondary',
                 // Nueva entrada.
                 action: function () {
@@ -31,32 +31,32 @@ fnjs_confirm_insertar_documento=function(tipo,id_doc,id_escrito) {
             }
         },
         onContentReady: function(){
-            $('.jconfirm-buttons').find('button:contains("{{ "Insertar"|trans }}")').focus()
+            $('.jconfirm-buttons').find('button:contains("{{ "Insertar"|trans|raw }}")').focus()
         }
     });
 }
 
 fnjs_confirm_adjuntar_documento=function(tipo,id_doc,id_escrito) {
     $('#ModalBuscar').modal('hide');
-	var msg="{{ "Esto quitará el documento de la carpeta de documentos. Si quiere conservarlo debería adjuntar una copia."|trans }}";
+	var msg="{{ "Esto quitará el documento de la carpeta de documentos. Si quiere conservarlo debería adjuntar una copia."|trans|raw }}";
 	// caso de nueva entrada
     $.confirm({
-        title: '{{ "AVISO"|trans }}:',
+        title: '{{ "AVISO"|trans|raw }}:',
         content: msg,
         columnClass: 'col-md-6',
         buttons: {
-            {{ "Cancel"|trans }}: function () {
+            {{ "Cancel"|trans|raw }}: function () {
                 fnjs_actualizar();
             },
             adjuntar: {
-                text: '{{ "Adjuntar"|trans }}',
+                text: '{{ "Adjuntar"|trans|raw }}',
                 btnClass: 'btn-blue',
                 action: function () {
                 	fnjs_adjuntar_documento(tipo,id_doc,id_escrito);
                 }
             },
             somethingElse: {
-                text: '{{ "adjuntar una copia"|trans }}',
+                text: '{{ "adjuntar una copia"|trans|raw }}',
                 btnClass: 'btn-secondary',
                 // Nueva entrada.
                 action: function () {
@@ -65,7 +65,7 @@ fnjs_confirm_adjuntar_documento=function(tipo,id_doc,id_escrito) {
             }
         },
         onContentReady: function(){
-            $('.jconfirm-buttons').find('button:contains("{{ "Adjuntar"|trans }}")').focus()
+            $('.jconfirm-buttons').find('button:contains("{{ "Adjuntar"|trans|raw }}")').focus()
         }
     });
 }
@@ -93,17 +93,17 @@ fnjs_insertar_documento=function(tipo,id_doc,id_escrito,que='insertar',force='fa
         	if (err_tipo == 'antecedente') {
                 var msg=json.mensaje;
                 msg += "<br>";
-                msg += "{{ "¿Quiere adjuntar una copia?"|trans }}";
+                msg += "{{ "¿Quiere adjuntar una copia?"|trans|raw }}";
                 $.confirm({
-                    title: '{{ "AVISO"|trans }}:',
+                    title: '{{ "AVISO"|trans|raw }}:',
                     content: msg,
                     columnClass: 'col-md-6',
                     buttons: {
-                        {{ "Cancel"|trans }}: function () {
+                        {{ "Cancel"|trans|raw }}: function () {
                             fnjs_actualizar();
                         },
                         copia: {
-                            text: '{{ "adjuntar una copia"|trans }}',
+                            text: '{{ "adjuntar una copia"|trans|raw }}',
                             btnClass: 'btn-secondary',
                             action: function () {
                                 // alertar de que el proceso de copiar el etherpad puede ser lento
@@ -150,17 +150,17 @@ fnjs_adjuntar_documento=function(tipo,id_doc,id_escrito,que='adjuntar',force='fa
         	if (err_tipo == 'antecedente') {
                 var msg=json.mensaje;
                 msg += "<br>";
-                msg += "{{ "¿Quiere adjuntar una copia?"|trans }}";
+                msg += "{{ "¿Quiere adjuntar una copia?"|trans|raw }}";
                 $.confirm({
-                    title: '{{ "AVISO"|trans }}:',
+                    title: '{{ "AVISO"|trans|raw }}:',
                     content: msg,
                     columnClass: 'col-md-6',
                     buttons: {
-                        {{ "Cancel"|trans }}: function () {
+                        {{ "Cancel"|trans|raw }}: function () {
                             fnjs_actualizar();
                         },
                         copia: {
-                            text: '{{ "adjuntar una copia"|trans }}',
+                            text: '{{ "adjuntar una copia"|trans|raw }}',
                             btnClass: 'btn-secondary',
                             action: function () {
                                 // alertar de que el proceso de copiar el etherpad puede ser lento

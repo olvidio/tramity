@@ -124,7 +124,7 @@ fnjs_guardar_datos=function() {
 
 fnjs_guardar_success=function(data) {
 	if (data.success != true) {
-		return $.Deferred().reject('{{ "Error al guardar"|trans }}');
+		return $.Deferred().reject('{{ "Error al guardar"|trans|raw }}');
 	}
 }
 

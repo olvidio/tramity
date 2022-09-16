@@ -5,7 +5,7 @@
     
     
   <div class="mb-3 row">
-  	<label for="f_reunion" class="col col-2 form-label text-end">{{ "día de reunión"|trans }}:</label>
+  	<label for="f_reunion" class="col col-2 form-label text-end">{{ "día de reunión"|trans|raw }}:</label>
     <div class='col-2 date'>
       <input name='f_reunion' id='f_reunion' type='text' class="form-control" value="{{ f_reunion }}" />
     </div>
@@ -13,10 +13,10 @@
   
   <div>
     <button type="button" class="btn btn-secondary" onClick="fnjs_cancelar();" >
-      {{ "Cancelar"|trans }}
+      {{ "Cancelar"|trans|raw }}
     </button>
     <button type="button" class="btn btn-primary" onClick="fnjs_reunion();" >
-      {{ "Fijar día"|trans }}
+      {{ "Fijar día"|trans|raw }}
     </button>
   </div>
 </form>

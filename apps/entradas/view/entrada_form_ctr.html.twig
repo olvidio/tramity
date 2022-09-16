@@ -34,7 +34,7 @@
   <!--  --------------- REFERENCIAS --------------- -->
   <div class="mb-3 row">
     <label class="col-2 form-label">
-      {{ "Referencias"|trans }}:
+      {{ "Referencias"|trans|raw }}:
     </label>
     <div class="col-10">
       {{ oArrayProtRef.ListaTxtBr|raw }}
@@ -42,13 +42,13 @@
   </div>
   <!--  --------------- ASUNTO --------------- -->
   <div class="mb-3 row">
-    <label for="asunto_e" class="col-3 form-label">{{ "Asunto entrada"|trans }}</label>
+    <label for="asunto_e" class="col-3 form-label">{{ "Asunto entrada"|trans|raw }}</label>
     <div class="col-9">
       <input tabindex='100' readonly type="text" class="form-control" name="asunto_e" id="asunto_e" value="{{ asunto_e }}">
     </div>
   </div>
   <div class="mb-3 row">
-    <label for="asunto" class="col-3 form-label">{{ "Asunto del centro"|trans }}</label>
+    <label for="asunto" class="col-3 form-label">{{ "Asunto del centro"|trans|raw }}</label>
     <div class="col">
         <div class="input-group mb-2">
           <span class="input-group-text">{{ anulado_txt }}</span>
@@ -58,7 +58,7 @@
   </div>
   <!--  --------------- DETALLE --------------- -->
   <div class="mb-3 row">
-    <label for="detalle" class="col-2 form-label">{{ "Detalle"|trans }}</label>
+    <label for="detalle" class="col-2 form-label">{{ "Detalle"|trans|raw }}</label>
     <div class='col-6'>
       <input tabindex='110' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
     </div>
@@ -66,11 +66,11 @@
   <!--  --------------- FECHAS --------------- -->
 {% if id_entrada %}
   <div class="mb-3 row">
-        <label for="f_entrada" class="col col-2 form-label">{{ "Fecha entrada"|trans }}</label>
+        <label for="f_entrada" class="col col-2 form-label">{{ "Fecha entrada"|trans|raw }}</label>
         <div class='col-3 date'>
           <input readonly tabindex='150' name='f_entrada' id='f_entrada' type='text' class="form-control" value="{{ f_entrada }}" />
         </div>
-	    <label for="f_escrito" class="col col-2 form-label">{{ "Fecha escrito"|trans }}</label>
+	    <label for="f_escrito" class="col col-2 form-label">{{ "Fecha escrito"|trans|raw }}</label>
         <div class='col-3 date'>
           <input readonly tabindex='155' name='f_escrito' id='f_escrito' type='text' class="form-control" value="{{ f_escrito }}" />
         </div>
@@ -79,22 +79,22 @@
   <!--  --------------- TIPO --------------- -->
   <div class="row">
     <div class="mb-3 col-md-2">
-      <label for="tipo">{{ "Categoría"|trans }}</label>
+      <label for="tipo">{{ "Categoría"|trans|raw }}</label>
       {{ oDesplCategoria.desplegable|raw }}
     </div>
     <div class="mb-3 col-md-2">
-      <label for="visibilidad">{{ "Visibilidad"|trans }}</label>
+      <label for="visibilidad">{{ "Visibilidad"|trans|raw }}</label>
       {{ oDesplVisibilidad.desplegable|raw }}
     </div>
   </div>
 {% if ver_pendiente %}
   <div class="mb-3 row">
-      <label for="plazo" class="col-3 me-3 mt-2">{{ "Contestar antes de"|trans }}:</label>
+      <label for="plazo" class="col-3 me-3 mt-2">{{ "Contestar antes de"|trans|raw }}:</label>
       <div class='col-2 date'>
         <input readonly tabindex='185' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_contestar }}" />
       </div>
       <button id="btn_pendiente" tabindex='188' class="col-2 btn btn-outline-secondary" onClick="fnjs_mod_pendiente();" >
-          {{ "modificar pendiente"|trans }}
+          {{ "modificar pendiente"|trans|raw }}
 	  </button>
   </div>
 {% endif %}
@@ -108,7 +108,7 @@
 
 <div>
   <button type="button" tabindex='1' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Cancelar"|trans }}
+    {{ "Cancelar"|trans|raw }}
   </button>
   <button id="btn_guardar" type="button" tabindex='220' class="btn btn-primary" onClick="fnjs_guardar_entrada_ctr();" >
     {{ txt_btn_guardar }}
