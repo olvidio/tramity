@@ -89,8 +89,8 @@ fnjs_orden_anular_a_plataforma=function(id_reg,id_form) {
         if (json.success != true) {
             alert (json.mensaje);
         } else {
-            $('#exampleModalLongTitle').html('{{ "Enviar orden de anular a otra plataforma"|trans|raw }}');
-            $('#modal_titulo').html('{{ "Anular (si no hay texto está activo)"|trans|raw }}');
+            $('#exampleModalLongTitle').html("{{ "Enviar orden de anular a otra plataforma"|trans|raw }}");
+            $('#modal_titulo').html("{{ "Anular (si no hay texto está activo)"|trans|raw }}");
             $('#modal_id_reg').val(id_reg);	
             $('#modal_tipo_reg').val(id_form);	
             $('#modal_tipo').val('{{ constant('oasis_as4\\model\\As4CollaborationInfo::ACCION_ORDEN_ANULAR') }}' );
@@ -387,8 +387,8 @@ fnjs_buscar_ver_destinos=function(formulario, tipo_escrito){
                 alert (json.mensaje);
             } else {
                 if (json.destinos) {
-					$('#exampleModalLongTitle').html('{{ "Destinos del escrito"|trans|raw }}');
-					$('#modal_titulo').html('{{ "Destinos"|trans|raw }}');
+					$('#exampleModalLongTitle').html("{{ "Destinos del escrito"|trans|raw }}");
+					$('#modal_titulo').html("{{ "Destinos"|trans|raw }}");
 					$('#modal_id_reg').val(id_reg);	
 					$('#modal_tipo').val('destinos');	
                     $('#comentario').val(json.destinos);
@@ -430,7 +430,7 @@ fnjs_modificar_det_entrada=function(formulario){
                 alert (json.mensaje);
             } else {
                 if (json.detalle) {
-					$('#modal_titulo').html('{{ "Detalle"|trans|raw }}');
+					$('#modal_titulo').html("{{ "Detalle"|trans|raw }}");
 					$('#modal_id_reg').val(id_reg);	
 					$('#modal_tipo').val('detalle_entrada');	
                     $('#comentario').val(json.detalle);
@@ -470,7 +470,7 @@ fnjs_anular_entrada=function(formulario){
             if (json.success != true) {
                 alert (json.mensaje);
             } else {
-                $('#modal_titulo').html('{{ "Anular (si no hay texto está activo)"|trans|raw }}');
+                $('#modal_titulo').html("{{ "Anular (si no hay texto está activo)"|trans|raw }}");
                 $('#modal_id_reg').val(id_reg);	
                 $('#modal_tipo').val('anular');	
                 $('#comentario').val(json.detalle);
@@ -652,7 +652,7 @@ fnjs_modificar_det_escrito=function(formulario){
                 alert (json.mensaje);
             } else {
                 if (json.detalle) {
- 					$('#modal_titulo').html('{{ "Detalle"|trans|raw }}');
+ 					$('#modal_titulo').html("{{ "Detalle"|trans|raw }}");
  					$('#modal_id_reg').val(id_reg);	
  					$('#modal_tipo').val('detalle_escrito');	
                     $('#comentario').val(json.detalle);

@@ -937,7 +937,7 @@ class OtlDump
 		// http://www.microsoft.com/typography/otspec/gdef.htm
 		if (isset($this->tables["GDEF"])) {
 			if ($this->mode == 'summary') {
-				$this->mpdf->WriteHTML('<h1>GDEF table</h1>');
+				$this->mpdf->Writehtml("<h1>GDEF table</h1>");
 			}
 			$gdef_offset = $this->seek_table("GDEF");
 			// ULONG Version of the GDEF table-currently 0x00010000
@@ -963,14 +963,14 @@ class OtlDump
 			$GlyphByClass = $this->_getClassDefinitionTable();
 
 			if ($this->mode == 'summary') {
-				$this->mpdf->WriteHTML('<h2>Glyph classes</h2>');
+				$this->mpdf->Writehtml("<h2>Glyph classes</h2>");
 			}
 
 			if (isset($GlyphByClass[1]) && count($GlyphByClass[1]) > 0) {
 				$this->GlyphClassBases = $this->formatClassArr($GlyphByClass[1]);
 				if ($this->mode == 'summary') {
-					$this->mpdf->WriteHTML('<h3>Glyph class 1</h3>');
-					$this->mpdf->WriteHTML('<h5>Base glyph (single character, spacing glyph)</h5>');
+					$this->mpdf->Writehtml("<h3>Glyph class 1</h3>");
+					$this->mpdf->Writehtml("<h5>Base glyph (single character, spacing glyph)</h5>");
 					$html = '';
 					$html .= '<div class="glyphs">';
 					foreach ($GlyphByClass[1] as $g) {
@@ -985,8 +985,8 @@ class OtlDump
 			if (isset($GlyphByClass[2]) && count($GlyphByClass[2]) > 0) {
 				$this->GlyphClassLigatures = $this->formatClassArr($GlyphByClass[2]);
 				if ($this->mode == 'summary') {
-					$this->mpdf->WriteHTML('<h3>Glyph class 2</h3>');
-					$this->mpdf->WriteHTML('<h5>Ligature glyph (multiple character, spacing glyph)</h5>');
+					$this->mpdf->Writehtml("<h3>Glyph class 2</h3>");
+					$this->mpdf->Writehtml("<h5>Ligature glyph (multiple character, spacing glyph)</h5>");
 					$html = '';
 					$html .= '<div class="glyphs">';
 					foreach ($GlyphByClass[2] as $g) {
@@ -1001,8 +1001,8 @@ class OtlDump
 			if (isset($GlyphByClass[3]) && count($GlyphByClass[3]) > 0) {
 				$this->GlyphClassMarks = $this->formatClassArr($GlyphByClass[3]);
 				if ($this->mode == 'summary') {
-					$this->mpdf->WriteHTML('<h3>Glyph class 3</h3>');
-					$this->mpdf->WriteHTML('<h5>Mark glyph (non-spacing combining glyph)</h5>');
+					$this->mpdf->Writehtml("<h3>Glyph class 3</h3>");
+					$this->mpdf->Writehtml("<h5>Mark glyph (non-spacing combining glyph)</h5>");
 					$html = '';
 					$html .= '<div class="glyphs">';
 					foreach ($GlyphByClass[3] as $g) {
@@ -1017,8 +1017,8 @@ class OtlDump
 			if (isset($GlyphByClass[4]) && count($GlyphByClass[4]) > 0) {
 				$this->GlyphClassComponents = $this->formatClassArr($GlyphByClass[4]);
 				if ($this->mode == 'summary') {
-					$this->mpdf->WriteHTML('<h3>Glyph class 4</h3>');
-					$this->mpdf->WriteHTML('<h5>Component glyph (part of single character, spacing glyph)</h5>');
+					$this->mpdf->Writehtml("<h3>Glyph class 4</h3>");
+					$this->mpdf->Writehtml("<h5>Component glyph (part of single character, spacing glyph)</h5>");
 					$html = '';
 					$html .= '<div class="glyphs">';
 					foreach ($GlyphByClass[4] as $g) {
@@ -1065,7 +1065,7 @@ class OtlDump
 			// MarkAttachmentType
 			if ($MarkAttachClassDef_offset) {
 				if ($this->mode == 'summary') {
-					$this->mpdf->WriteHTML('<h1>Mark Attachment Types</h1>');
+					$this->mpdf->Writehtml("<h1>Mark Attachment Types</h1>");
 				}
 				$this->seek($gdef_offset + $MarkAttachClassDef_offset);
 				$MarkAttachmentTypes = $this->_getClassDefinitionTable();
@@ -1080,7 +1080,7 @@ class OtlDump
 					$this->MarkAttachmentType[$class] = $this->formatClassArr($mat);
 
 					if ($this->mode == 'summary') {
-						$this->mpdf->WriteHTML('<h3>Mark Attachment Type: ' . $class . '</h3>');
+						$this->mpdf->Writehtml("<h3>Mark Attachment Type: ' . $class . '</h3>");
 						$html = '';
 						$html .= '<div class="glyphs">';
 						foreach ($glyphs as $g) {
@@ -1097,7 +1097,7 @@ class OtlDump
 			// MarkGlyphSets only in Version 0x00010002 of GDEF
 			if ($ver_min == 2 && $MarkGlyphSetsDef_offset) {
 				if ($this->mode == 'summary') {
-					$this->mpdf->WriteHTML('<h1>Mark Glyph Sets</h1>');
+					$this->mpdf->Writehtml("<h1>Mark Glyph Sets</h1>");
 				}
 				$this->seek($gdef_offset + $MarkGlyphSetsDef_offset);
 				$MarkSetTableFormat = $this->read_ushort();
@@ -1111,7 +1111,7 @@ class OtlDump
 					$glyphs = $this->_getCoverage();
 					$this->MarkGlyphSets[$i] = $this->formatClassArr($glyphs);
 					if ($this->mode == 'summary') {
-						$this->mpdf->WriteHTML('<h3>Mark Glyph Set class: ' . $i . '</h3>');
+						$this->mpdf->Writehtml("<h3>Mark Glyph Set class: ' . $i . '</h3>");
 						$html = '';
 						$html .= '<div class="glyphs">';
 						foreach ($glyphs as $g) {
@@ -1125,7 +1125,7 @@ class OtlDump
 				$this->MarkGlyphSets = [];
 			}
 		} else {
-			$this->mpdf->WriteHTML('<div>GDEF table not defined</div>');
+			$this->mpdf->Writehtml("<div>GDEF table not defined</div>");
 		}
 
 //echo $this->GlyphClassMarks ; exit;
@@ -1175,7 +1175,7 @@ class OtlDump
 		// GSUB - Glyph Substitution
 		///////////////////////////////////
 		if (isset($this->tables["GSUB"])) {
-			$this->mpdf->WriteHTML('<h1>GSUB Tables</h1>');
+			$this->mpdf->Writehtml("<h1>GSUB Tables</h1>");
 			$ffeats = [];
 			$gsub_offset = $this->seek_table("GSUB");
 			$this->skip(4);
@@ -1279,8 +1279,8 @@ class OtlDump
 //print_r($gsub); exit;
 
 			if ($this->mode == 'summary') {
-				$this->mpdf->WriteHTML('<h3>GSUB Scripts &amp; Languages</h3>');
-				$this->mpdf->WriteHTML('<div class="glyphs">');
+				$this->mpdf->Writehtml("<h3>GSUB Scripts &amp; Languages</h3>");
+				$this->mpdf->Writehtml("<div class="glyphs">");
 				$html = '';
 				if (count($gsub)) {
 					foreach ($gsub as $st => $g) {
@@ -1297,7 +1297,7 @@ class OtlDump
 					$html .= '<div>No entries in GSUB table.</div>';
 				}
 				$this->mpdf->WriteHTML($html);
-				$this->mpdf->WriteHTML('</div>');
+				$this->mpdf->Writehtml("</div>");
 
 				return 0;
 			}
@@ -3028,7 +3028,7 @@ $MarkAttachmentType = ' . var_export($this->MarkAttachmentType, true) . ';
 		// GPOS - Glyph Positioning
 		///////////////////////////////////
 		if (isset($this->tables["GPOS"])) {
-			$this->mpdf->WriteHTML('<h1>GPOS Tables</h1>');
+			$this->mpdf->Writehtml("<h1>GPOS Tables</h1>");
 			$ffeats = [];
 			$gpos_offset = $this->seek_table("GPOS");
 			$this->skip(4);
@@ -3130,7 +3130,7 @@ $MarkAttachmentType = ' . var_export($this->MarkAttachmentType, true) . ';
 				}
 			}
 			if ($this->mode == 'summary') {
-				$this->mpdf->WriteHTML('<h3>GPOS Scripts &amp; Languages</h3>');
+				$this->mpdf->Writehtml("<h3>GPOS Scripts &amp; Languages</h3>");
 				$html = '';
 				if (count($gpos)) {
 					foreach ($gpos as $st => $g) {
@@ -3147,7 +3147,7 @@ $MarkAttachmentType = ' . var_export($this->MarkAttachmentType, true) . ';
 					$html .= '<div>No entries in GPOS table.</div>';
 				}
 				$this->mpdf->WriteHTML($html);
-				$this->mpdf->WriteHTML('</div>');
+				$this->mpdf->Writehtml("</div>");
 
 				return 0;
 			}

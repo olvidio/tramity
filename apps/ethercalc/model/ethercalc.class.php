@@ -176,7 +176,7 @@ class Ethercalc {
             $mpdf = new \Mpdf\Mpdf($config);
             $mpdf->SetDisplayMode('fullpage');
             $mpdf->list_indent_first_level = 0;	// 1 or 0 - whether to indent the first level of a list
-            //$mpdf->WriteHTML('<h1>Hello world!</h1><p>Més què d\'air. Ñanyo.</p>');
+            //$mpdf->Writehtml("<h1>Hello world!</h1><p>Més què d\'air. Ñanyo.</p>");
             //$mpdf->SetHTMLHeader($html_header);
             $mpdf->SetHeader($header, 'O');
             $mpdf->SetHTMLFooter($footer);
