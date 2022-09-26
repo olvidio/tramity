@@ -816,6 +816,11 @@ class ExpedienteLista {
         
         $vista = ConfigGlobal::getVista();
         
+        $cabecera_oficina = _("oficinas");
+		if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+			$cabecera_oficina = _("cargo");
+		}
+        	
         $a_campos = [
             //'id_expediente' => $this->id_expediente,
             //'oHash' => $oHash,
@@ -828,6 +833,7 @@ class ExpedienteLista {
             'ver_f_ini' => $ver_f_ini,
             'col_mod' => $col_mod,
             'col_ver' => $col_ver,
+        	'cabecera_oficina' => $cabecera_oficina,
             // tabs_show
             'vista' => $vista,
         ];

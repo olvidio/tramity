@@ -12,7 +12,7 @@ Etapas del proceso:
 Existen dos posibles casos:
 
 - El escrito recibido es papel (o email). Hay introducir manualmente los datos. hay dos opciones:
-    - El scdl imrpime en papel y lo pasa al vcd. Una vez de vuelta, se introducen los datos en Tramity, ya con la fecha de entrada correspondiente al dia que lo ha visto el vcd.
+    - El scdl imprime en papel y lo pasa al vcd. Una vez de vuelta, se introducen los datos en Tramity, ya con la fecha de entrada correspondiente al dia que lo ha visto el vcd.
     - El scdl introduce los datos manualmente en  Tramity para que el vcd pueda verlos y Admitirlos.
 - El escrito recibido es xml (lo envia otra instancia de Tramity). En este caso la introducción de datos es automática.
 
@@ -20,7 +20,7 @@ Existen dos posibles casos:
 
 2.- Admitir (vcd)
 -----------
-El vcd puee leer los escritos de entrada y marcarlos como leídos.
+El vcd puede leer los escritos de entrada y marcarlos como leídos.
 
 3.- Asignar (secretaria)
 -----------
@@ -64,7 +64,7 @@ El cargo que pone a circular un expediente, automáticamente se llena la primera
 3.- Firmar
 ----------
 
-Bajo la pestaña de "para firmar" aparecen los expedienets que hay que firamr. Para firmar basta dar al botón de firmar y aparecera una ventana con varias opciones:
+Bajo la pestaña de "para firmar" aparecen los expedientes que hay que firamr. Para firmar basta dar al botón de firmar y aparecera una ventana con varias opciones:
 	 - Se puede poner un comentario y hacer click en "Pedir aclaración"
 	 - Se puede poner un comentario (o no) y emitir un voto: ok, no, visto, espera. El voto emitido quedará registrado en la lista de firmas.
 	 

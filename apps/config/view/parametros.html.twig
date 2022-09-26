@@ -237,23 +237,25 @@
 
 <h3>{{ "valor inicio contadores"|trans|raw }}:</h3>
 <form id="frm_contador" name="frm_contador" action="">
-{{ oHashC.getCamposHtml|raw }}
-{{ "para cr"|trans|raw }}
-<input class="col-2" type="text" name="valor" value="{{ ini_contador_cr }}" >
-<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
-</form>
-<form id="frm_contador1" name="frm_contador1" action="">
 {{ oHashC1.getCamposHtml|raw }}
-{{ "para el resto"|trans|raw }}
+{{ "para la propia entidad"|trans|raw }}
 <input class="col-2" type="text" name="valor" value="{{ ini_contador }}" >
 <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
 </form>
-<form id="frm_contador2" name="frm_contador2" action="">
-{{ oHashC2.getCamposHtml|raw }}
-{{ "para IESE"|trans|raw }}
-<input class="col-2" type="text" name="valor" value="{{ ini_contador_iese }}" >
-<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
-</form>
+{% if ambito_dl %}
+    <form id="frm_contador1" name="frm_contador1" action="">
+    {{ oHashC.getCamposHtml|raw }}
+    {{ "para cr"|trans|raw }}
+    <input class="col-2" type="text" name="valor" value="{{ ini_contador_cr }}" >
+    <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
+    </form>
+    <form id="frm_contador2" name="frm_contador2" action="">
+    {{ oHashC2.getCamposHtml|raw }}
+    {{ "para IESE"|trans|raw }}
+    <input class="col-2" type="text" name="valor" value="{{ ini_contador_iese }}" >
+    <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
+    </form>
+{% endif %}
 <hr>
 
 <h3>{{ "idioma por defecto"|trans|raw }}:</h3>

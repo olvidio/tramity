@@ -17,6 +17,14 @@ use web\Hash;
 $url = 'apps/config/controller/parametros_update.php';
 $a_campos = [ 'url' => $url];
 
+
+$ambito_dl = FALSE;
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+	$ambito_dl = TRUE;
+}
+
+$a_campos['ambito_dl'] = $ambito_dl;
+
 // ----------- periodos entradas -------------------
 /* Ver las entradas de los n días anteriores  
  */

@@ -39,8 +39,10 @@ if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
     ];
     $op_calendario_default = empty($Qdespl_calendario)? 'registro' : $Qdespl_calendario;
 } else {
+	// oficina = nombre del centro
+	$sigla = $_SESSION['oConfig']->getSigla();
     $aOpciones = [
-        'oficina' => _("oficina"),
+        'oficina' => $sigla,
     ];
     $op_calendario_default = empty($Qdespl_calendario)? 'oficina' : $Qdespl_calendario;
 }
@@ -151,6 +153,12 @@ $a_cabeceras=array( ucfirst(_("protocolo")),
 					ucfirst(_("encargado")),
 					ucfirst(_("calendario")),
 					);
+
+// para los ctr quitar columna oficina y calendario
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+	unset($a_cabeceras[5]);
+	unset($a_cabeceras[7]);
+}
 
 // Fetch all todos
 $f_inicio="19950101T000000Z";
@@ -268,6 +276,11 @@ if (!empty($a_valores)) {
 	// Obtain a list of columns
 	foreach ($a_valores as $key => $row) {
 		$fechas[$key]  = $row['order'];
+		// para los ctr quitar columna oficina y calendario
+		if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+			unset($a_valores[$key][6]);
+			unset($a_valores[$key][8]);
+		}
 	}
 	// Sort the data with fechas descending
 	// Add $a_valores as the last parameter, to sort by the common key

@@ -1,9 +1,8 @@
 <?php
 use core\ViewTwig;
-use etiquetas\model\entity\Etiqueta;
-use lugares\model\entity\GestorLugar;
-use web\Desplegable;
 use function core\is_true;
+use etiquetas\model\entity\Etiqueta;
+use usuarios\model\entity\Cargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -75,6 +74,12 @@ if (!empty($Qid_etiqueta)) {
     $nom_etiqueta = '';
 }
 
+$entorno = _("de la oficina");
+if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+	$entorno = _("del centro");
+}
+
+
 $camposForm = 'que!nom_etiqueta';
 $oHash = new web\Hash();
 $oHash->setcamposForm($camposForm);
@@ -95,6 +100,7 @@ $a_campos = [
             'nom_etiqueta' => $nom_etiqueta,
             'chk_oficina' => $chk_oficina,
             'chk_personal' => $chk_personal,
+			'entorno' => $entorno,
             ];
 
 $oView = new ViewTwig('etiquetas/controller');
