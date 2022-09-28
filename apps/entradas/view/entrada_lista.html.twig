@@ -4,6 +4,7 @@
 </button>
 {% endif %}
 {% if btn_dock %}
+  <h3>{{ "Lista de entradas por encargar"|trans|raw }}</h3>
   <button type="button" class="btn btn-info" onClick="$('#slow_load').show(); fnjs_update_div('#main','{{ pagina_cargar_dock|raw }}');">
 	{{ txt_btn_dock }}
   </button>

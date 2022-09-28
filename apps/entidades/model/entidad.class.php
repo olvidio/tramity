@@ -3,17 +3,19 @@ namespace entidades\model;
 
 use core\ConfigGlobal;
 use entidades\model\entity\EntidadDB;
+use usuarios\model\entity\Cargo;
 
 
 class Entidad Extends EntidadDB {
     
     /* CONST -------------------------------------------------------------- */
-    
-    // tipo entrada
-    const TIPO_CTR       = 1;
-    const TIPO_DL        = 2;
-    const TIPO_CR        = 3;
-    const TIPO_CG        = 4;
+	
+	/* Utilizar los mismos que en cargo
+	const AMBITO_CG  = 1;
+	const AMBITO_CR  = 2;
+	const AMBITO_DL  = 3;  //"dl"
+	const AMBITO_CTR = 4;
+    */
     
     private $sdir;
     private $sfileLog;
@@ -51,10 +53,10 @@ class Entidad Extends EntidadDB {
     
     public function getArrayTipo() {
         return [
-            self::TIPO_CTR => _("ctr"),
-            self::TIPO_DL => _("dl"),
-            self::TIPO_CR => _("cr"),
-            self::TIPO_CG => _("cg"),
+            Cargo::AMBITO_CTR => _("ctr"),
+            Cargo::AMBITO_DL  => _("dl"),
+            Cargo::AMBITO_CR  => _("cr"),
+            Cargo::AMBITO_CG  => _("cg"),
         ];
     }
         
@@ -73,7 +75,6 @@ class Entidad Extends EntidadDB {
         
         return $err;
     }
-        
         
         
     /**
@@ -120,7 +121,7 @@ class Entidad Extends EntidadDB {
         // entradas:
         $err .= $this->ejecutarPsqlCrear('entradas');
         // para las dl:
-        if ($this->getTipo() === self::TIPO_DL) {
+        if ($this->getTipo() === Cargo::AMBITO_DL) {
             // entradas_bypass
             $err .= $this->ejecutarPsqlCrear('entradas',TRUE);
         }
@@ -144,21 +145,23 @@ class Entidad Extends EntidadDB {
         $err .= $this->ejecutarPsqlCrear('tramites');
 
         // para las dl:
-        if ($this->getTipo() === self::TIPO_DL) {
+        if ($this->getTipo() === Cargo::AMBITO_DL) {
             // x_oficinas y cargos_grupos
             $err .= $this->ejecutarPsqlCrear('usuarios', TRUE);
             // lugares_grupos
             $err .= $this->ejecutarPsqlCrear('lugares', TRUE);
             // insert cargos mínimos usuarios:
             $err .= $this->ejecutarPsqlInsert('usuarios', TRUE);
-            $err .= $this->ejecutarPsqlInsert('config');
+            $err .= $this->ejecutarPsqlInsert('tramites', TRUE);
+            $err .= $this->ejecutarPsqlInsert('config', TRUE);
         } else {
             // insert cargos mínimos usuarios:
             $err .= $this->ejecutarPsqlInsert('usuarios');
+            $err .= $this->ejecutarPsqlInsert('tramites');
             $err .= $this->ejecutarPsqlInsert('config');
-            // añadir la sigla en config:
-            $err .= $this->ejecutarSql("INSERT INTO public.x_config (parametro, valor) VALUES ('sigla', '$this->snombre')");
         }
+		// añadir la sigla en config:
+		$err .= $this->ejecutarSql("INSERT INTO public.x_config (parametro, valor) VALUES ('sigla', '$this->snombre')");
 
         return $err;
     }

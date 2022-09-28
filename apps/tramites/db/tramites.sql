@@ -9,15 +9,6 @@ CREATE TABLE public.x_tramites (
 
 ALTER TABLE public.x_tramites OWNER TO tramity;
 
-INSERT INTO public.x_tramites (tramite, orden, breve) VALUES ('de trámite (los "E-12")', 10, 'E12');
-INSERT INTO public.x_tramites (tramite, orden, breve) VALUES ('ordinarios', 20, 'ord.');
-INSERT INTO public.x_tramites (tramite, orden, breve) VALUES ('de despacho', 30, 'desp.');
-INSERT INTO public.x_tramites (tramite, orden, breve) VALUES ('extraordinarios', 40, 'extra.');
-INSERT INTO public.x_tramites (tramite, orden, breve) VALUES ('voto consultivo', 50, 'cons.');
-INSERT INTO public.x_tramites (tramite, orden, breve) VALUES ('voto deliberativo', 60, 'delib.');
-INSERT INTO public.x_tramites (tramite, orden, breve) VALUES ('comisión de trabajo', 70, 'c. t.');
-
-
 CREATE TABLE public.tramite_cargo (
     id_item SERIAL PRIMARY KEY,
     id_tramite integer NOT NULL,

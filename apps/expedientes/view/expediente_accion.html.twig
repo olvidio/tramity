@@ -152,25 +152,26 @@ fnjs_accion=function(accion){
 	} else {
         var param_json = { que: accion, id_expediente: {{ id_expediente }} };
 	}
-    request=$.ajax({
-        data: param_json,
-        url: url_ajax,
-        method: 'POST'
-    });
-    request.done( function (json) {
-        if (json.success != true) {
-            rta_txt = json.mensaje;
-            alert ('error: '+rta_txt);
-        } else {
-            // En el caso de crear expediente a partir de una entrada. Ir
-            // directo al nuevo escrito dentro del nuevo expediente.
-            if (accion == 'en_expediente') {
-                fnjs_update_div('#main','{{ pagina_contestar|raw }}');
+
+    // En el caso de crear expediente a partir de una entrada. Ir
+    // directo al nuevo escrito dentro del nuevo expediente.
+    if (accion == 'en_expediente') {
+        fnjs_update_div('#main','{{ pagina_contestar|raw }}');
+    } else {
+        request=$.ajax({
+            data: param_json,
+            url: url_ajax,
+            method: 'POST'
+        });
+        request.done( function (json) {
+            if (json.success != true) {
+                rta_txt = json.mensaje;
+                alert ('error: '+rta_txt);
             } else {
                 fnjs_update_div('#main','{{ pagina_cancel|raw }}');
             }
-        }
-    });
+        });
+    }
 }
 
 fnjs_guardar_etiquetas=function() {

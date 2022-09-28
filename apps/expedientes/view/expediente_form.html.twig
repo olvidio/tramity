@@ -141,10 +141,10 @@
   <!--  --------------- ACCIONES --------------- -->
   
 {% if id_expediente %}
+  <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_propuesta|raw }}');">
+      {{ "nueva propuesta"|trans|raw }}
+  </button>
   {% if vista_dl %}
-    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_propuesta|raw }}');">
-        {{ "nueva propuesta"|trans|raw }}
-    </button>
     <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_plantilla|raw }}');">
         {{ "plantilla"|trans|raw }}
     </button>

@@ -1,4 +1,9 @@
 <?php
+/*
+var_dump( xdebug_info( 'mode' ) );
+xdebug_info();
+die();
+*/
 // INICIO Cabecera global de URL de controlador *********************************
 use config\model\entity\ConfigSchema;
 use core\ConfigGlobal;
