@@ -4,7 +4,9 @@
 </button>
 {% endif %}
 {% if btn_dock %}
-  <h3>{{ "Lista de entradas por encargar"|trans|raw }}</h3>
+  {% if vista == 'ctr' %}
+    <h3>{{ "Lista de entradas por encargar"|trans|raw }}</h3>
+  {% endif %}
   <button type="button" class="btn btn-info" onClick="$('#slow_load').show(); fnjs_update_div('#main','{{ pagina_cargar_dock|raw }}');">
 	{{ txt_btn_dock }}
   </button>
