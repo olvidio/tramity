@@ -41,7 +41,7 @@ class ImprimirTabla {
     }
 
     public function mostrarTabla($aCollection) {
-		$this->sTitulo = _("registro de escritos recibidos o envados en la Delegación");
+		$this->sTitulo = _("registro de escritos recibidos o enviados en la Delegación");
 		
         $a_cabeceras=array( array('name'=>ucfirst(_("protocolo")),'formatter'=>'clickFormatter'),
                             ucfirst(_("destinos")),

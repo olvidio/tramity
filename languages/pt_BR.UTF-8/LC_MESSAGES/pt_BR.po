@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tramity\n"
 "POT-Creation-Date: 2022-09-29 09:21+0200\n"
-"PO-Revision-Date: 2022-09-29 09:22+0200\n"
-"Last-Translator: Daniel Serrabou <dani@moneders.net>\n"
+"PO-Revision-Date: 2022-09-29 09:29+0200\n"
+"Last-Translator: \n"
 "Language-Team: \n"
-"Language: ca_ES\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 "X-Poedit-Basepath: ../apps\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -17,11 +17,11 @@ msgstr ""
 
 #: busquedas/controller/buscar_ajax.php:50
 msgid "No se..."
-msgstr "No sé..."
+msgstr ""
 
 #: busquedas/controller/buscar_ajax.php:151
 msgid "No encuentro nada con esta ref."
-msgstr "No trobo res amb aquesta ref."
+msgstr ""
 
 #: busquedas/controller/buscar_ajax.php:160
 #: busquedas/controller/ver_tabla.php:367
@@ -85,66 +85,66 @@ msgstr "No trobo res amb aquesta ref."
 #: usuarios/controller/usuario_update.php:144
 #, php-format
 msgid "opción no definida en switch en %s, linea %s"
-msgstr "opció no definida en el switch en %s, linea %s"
+msgstr ""
 
 #: busquedas/controller/buscar_escrito.php:173
 msgid "1 mes"
-msgstr "1 mes"
+msgstr ""
 
 #: busquedas/controller/buscar_escrito.php:174
 msgid "3 meses"
-msgstr "3 mesos"
+msgstr ""
 
 #: busquedas/controller/buscar_escrito.php:175
 msgid "6 meses"
-msgstr "6 mesos"
+msgstr ""
 
 #: busquedas/controller/buscar_escrito.php:176
 msgid "1 año"
-msgstr "1 any"
+msgstr ""
 
 #: busquedas/controller/buscar_escrito.php:177
 msgid "2 años"
-msgstr "2 anys"
+msgstr ""
 
 #: busquedas/controller/buscar_escrito.php:178
 msgid "más de 2 años"
-msgstr "més de 2 anys"
+msgstr ""
 
 #: busquedas/controller/lista_permanentes.php:113
 msgid "Debe indicar el protocolo o el asunto"
-msgstr "Heu d'indicar el protocol o l'asumpte"
+msgstr ""
 
 #: busquedas/controller/lista_permanentes.php:130
 msgid "AVISOS DE CR DE NÚMERO BAJO: por oficinas"
-msgstr "AVISOS CR DE NOMBRE BAIX: per oficines"
+msgstr ""
 
 #: busquedas/controller/lista_permanentes.php:136
 #, php-format
 msgid "oficina %s"
-msgstr "oficina %s"
+msgstr ""
 
 #: busquedas/controller/lista_permanentes.php:141
 msgid "AVISOS DE CR DE NÚMERO BAJO"
-msgstr "AVISOS DE CR DE NOMBRE BAIX"
+msgstr ""
 
 #: busquedas/controller/lista_permanentes.php:181
 msgid "AVISOS DE CR DE NÚMERO BAJO: por años"
-msgstr "AVISOS CR DE NOMBRE BAIX: per anys"
+msgstr ""
 
 #: busquedas/controller/lista_permanentes.php:185
 #: busquedas/controller/lista_permanentes.php:198
 #, php-format
 msgid "año %s"
-msgstr "any %s"
+msgstr ""
 
 #: busquedas/controller/ver_tabla.php:116
 msgid "Buscar otros escritos con esta referencia"
-msgstr "Cerca altres escrits amb aquesta referència"
+msgstr ""
 
 #: busquedas/model/imprimirtabla.class.php:44
 msgid "registro de escritos recibidos o enviados en la Delegación"
-msgstr "registre dels escrits rebuts o enviats a la Delegació"
+msgstr ""
 
 #: busquedas/model/imprimirtabla.class.php:46
 #: entradas/controller/buscar_form.php:99
@@ -155,7 +155,7 @@ msgstr "registre dels escrits rebuts o enviats a la Delegació"
 #: pendientes/controller/pendiente_buscar.php:218
 #: pendientes/controller/pendiente_tabla.php:147
 msgid "protocolo"
-msgstr "protocol"
+msgstr ""
 
 #: busquedas/model/imprimirtabla.class.php:47
 #: busquedas/model/vertabla.class.php:425
@@ -164,14 +164,14 @@ msgstr "protocol"
 #: escritos/model/entity/escritodb.class.php:1220
 #: expedientes/controller/antecedentes_ajax.php:470
 msgid "destinos"
-msgstr "destinacions"
+msgstr ""
 
 #: busquedas/model/imprimirtabla.class.php:48
 #: busquedas/model/vertabla.class.php:238
 #: busquedas/model/vertabla.class.php:316
 #: busquedas/model/vertabla.class.php:426
 msgid "ref."
-msgstr "ref."
+msgstr ""
 
 #: busquedas/model/imprimirtabla.class.php:49
 #: busquedas/model/vertabla.class.php:240
@@ -191,7 +191,7 @@ msgstr "ref."
 #: pendientes/controller/pendiente_tabla.php:150
 #: pendientes/model/entity/pendientedb.class.php:855
 msgid "asunto"
-msgstr "assumpte"
+msgstr ""
 
 #: busquedas/model/imprimirtabla.class.php:50
 #: busquedas/model/vertabla.class.php:320
@@ -200,23 +200,23 @@ msgstr "assumpte"
 #: pendientes/controller/pendiente_tabla.php:152
 #: pendientes/model/entity/pendientedb.class.php:999
 msgid "oficinas"
-msgstr "oficines"
+msgstr ""
 
 #: busquedas/model/imprimirtabla.class.php:51
 #: busquedas/model/vertabla.class.php:241
 #: busquedas/model/vertabla.class.php:321
 #: busquedas/model/vertabla.class.php:431
 msgid "fecha doc."
-msgstr "data del document."
+msgstr ""
 
 #: busquedas/model/imprimirtabla.class.php:52
 #: busquedas/model/vertabla.class.php:432
 msgid "fecha aprobación"
-msgstr "data d'aprovació"
+msgstr ""
 
 #: busquedas/model/imprimirtabla.class.php:53
 msgid "fecha entrada/salida"
-msgstr "data d'entrada/sortida"
+msgstr ""
 
 #: busquedas/model/imprimirtabla.class.php:156
 #: busquedas/model/vertabla.class.php:480
@@ -227,51 +227,51 @@ msgstr "data d'entrada/sortida"
 #: escritos/model/escritolista.class.php:202
 #: escritos/model/escritolista.class.php:390
 msgid "ANULADO"
-msgstr "ANUL·LAT"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:184
 msgid "escritos recibidos en el centro con referencias al escrito"
-msgstr "escrits rebuts en el centre amb referències l'escrit"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:186
 msgid "escritos recibidos en la Delegación con referencias al escrito"
-msgstr "escrits rebuts a la Delegació amb referències l'escrit"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:191
 msgid "escritos de cr para el centro"
-msgstr "escrits de cr per al centre"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:196
 #: busquedas/model/vertabla.class.php:204
 msgid "escritos recibidos en el centro"
-msgstr "escrits rebuts en el centre"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:198
 #: busquedas/model/vertabla.class.php:206
 msgid "escritos recibidos en la Delegación"
-msgstr "escrits rebuts a la Delegació"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:212
 msgid "escritos aprobados en el centro con referencias al escrito"
-msgstr "escrits aprovats en el centre amb referències l'escrit"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:214
 msgid "escritos aprobados en la Delegación con referencias al escrito"
-msgstr "escrits aprovats en la Delegació amb referències a l'escrit"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:220
 msgid "escritos aprobados en el centro"
-msgstr "escrits aprovats en el centre"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:222
 msgid "escritos aprobados en la Delegación"
-msgstr "escrits aprovats a la Delegació"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:237
 #: busquedas/model/vertabla.class.php:315
 #: busquedas/model/vertabla.class.php:424
 msgid "protocolo origen"
-msgstr "protocol d'origen"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:239
 #: busquedas/model/vertabla.class.php:317
@@ -280,12 +280,12 @@ msgstr "protocol d'origen"
 #: entradas/model/entity/entradadb.class.php:1102
 #: escritos/model/entity/escritodb.class.php:1328
 msgid "categoria"
-msgstr "categoria"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:242
 #: busquedas/model/vertabla.class.php:323
 msgid "fecha entrada"
-msgstr "data d'entrada"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:318
 #: busquedas/model/vertabla.class.php:428
@@ -295,30 +295,30 @@ msgstr "data d'entrada"
 #: expedientes/model/entity/expedientedb.class.php:1187
 #: pendientes/model/entity/pendientedb.class.php:951
 msgid "visibilidad"
-msgstr "visibilitat"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:322
 msgid "contestar antes de"
-msgstr "contestar abans de"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:430
 msgid "cargos"
-msgstr "càrrecs"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:433
 #: escritos/model/escritolista.class.php:155
 #: escritos/model/escritolista.class.php:298
 #: expedientes/controller/expediente_form.php:197
 msgid "enviado"
-msgstr "enviat"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:484
 msgid "Sin definir la categoría"
-msgstr "Categoria sense definir"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:486
 msgid "No se encuentra la categoría"
-msgstr "No puc trobar la categoria"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:543
 #: busquedas/model/vertabla.class.php:557
@@ -336,7 +336,7 @@ msgstr "No puc trobar la categoria"
 #: usuarios/controller/cargo_lista.php:55
 #: usuarios/controller/usuario_lista.php:58
 msgid "modificar"
-msgstr "modificar"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:544
 #: busquedas/model/vertabla.class.php:558
@@ -350,13 +350,13 @@ msgstr "modificar"
 #: plantillas/controller/plantilla_lista.php:24
 #: tramites/controller/tramitecargo_ajax.php:88
 msgid "eliminar"
-msgstr "eliminar"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:545
 #: busquedas/model/vertabla.class.php:559
 #: oasis_as4/model/as4collaborationinfo.class.php:26
 msgid "anular"
-msgstr "anul·lar"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:549
 #: busquedas/model/vertabla.class.php:572
@@ -364,7 +364,7 @@ msgstr "anul·lar"
 #: escritos/model/entity/escritodb.class.php:1244
 #: pendientes/model/entity/pendientedb.class.php:963
 msgid "detalle"
-msgstr "detall"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:550
 #: busquedas/model/vertabla.class.php:562
@@ -379,7 +379,7 @@ msgstr "detall"
 #: plantillas/controller/plantilla_lista_expediente.php:28
 #: plantillas/controller/plantilla_lista_expediente.php:38
 msgid "ver"
-msgstr "veure"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:551
 #: entradas/model/entradalista.class.php:289
@@ -387,84 +387,81 @@ msgstr "veure"
 #: expedientes/model/expedientelista.class.php:715
 #: oasis_as4/controller/pdm_exportar.php:20
 msgid "acción"
-msgstr "acció"
+msgstr ""
 
 #: busquedas/model/vertabla.class.php:552
 #: busquedas/model/vertabla.class.php:574
 msgid "ver destinos"
-msgstr "veure destins"
+msgstr ""
 
 #: config/model/config.class.php:33 config/model/config.class.php:41
 msgid ""
 "Falta definir el tamaño máximo del fichero a subir en la configuración del "
 "servidor"
 msgstr ""
-"Falta definir la mida màxima del fitxer a pujar en la configuració del "
-"servidor"
 
 #: config/model/entity/configschema.class.php:341
 #: tramites/model/entity/firma.class.php:921
 msgid "valor"
-msgstr "valor"
+msgstr ""
 
 #: core/comprobar_campos.php:65
 msgid "no tiene el formato requerido"
-msgstr "no té el format requerit"
+msgstr ""
 
 #: core/comprobar_campos.php:67
 #, php-format
 msgid "el campo \"%1$s\" \"%3$s\". Valor actual: \"%2$s\""
-msgstr "el camp \"%1$s\" \"%3$s\". Valor actual: \"%2$s\""
+msgstr ""
 
 #: core/comprobar_campos.php:78
 #, php-format
 msgid "el campo \"%1$s\" debe ser un número real, y es: \"%2$s\""
-msgstr "el camp \"%1$s\" ha de ser un nombre real, i és: \"%2$s\""
+msgstr ""
 
 #: core/comprobar_campos.php:86
 #, php-format
 msgid "el campo \"%1$s\" debe ser un número, y es: \"%2$s\""
-msgstr "el camp \"%1$s\" ha de ser un nombre, i és: \"%2$s\""
+msgstr ""
 
 #: core/comprobar_campos.php:97 core/comprobar_campos.php:103
 #, php-format
 msgid "el campo \"%1$s\" debe ser un número entero, y es: \"%2$s\""
-msgstr "el camp \"%1$s\" ha de ser un nombre enter, i és: \"%2$s\""
+msgstr ""
 
 #: core/comprobar_campos.php:111 core/comprobar_campos.php:119
 #, php-format
 msgid "el campo \"%1$s\" debe ser un texto, y es: \"%2$s\""
-msgstr "el camp \"%1$s\" ha de ser un text, i és: \"%2$s\""
+msgstr ""
 
 #: core/comprobar_campos.php:125
 #, php-format
 msgid "el campo \"%1$s\" sólo puede tener %2$d cararcteres y tiene %3$d"
-msgstr "el camp \"%1$s\" només pot tenir %2$d cararcteres i en té %3$d"
+msgstr ""
 
 #: core/comprobar_campos.php:138
 #, php-format
 msgid "el campo \"%1$s\" debe ser una fecha, y es: \"%2$s\""
-msgstr "el camp \"%1$s\" ha de ser una data, i és: \"%2$s\""
+msgstr ""
 
 #: core/comprobar_campos.php:153 core/comprobar_campos.php:159
 #, php-format
 msgid ""
 "el campo \"%1$s\" debe ser una hora. Debe tener el formato hh:mm:ss. [%2$s]"
 msgstr ""
-"el camp \"%1$s\" ha de ser una hora. Ha de tenir el format hh: mm: ss. [%2$s]"
 
 #: core/comprobar_campos.php:182
 #, php-format
 msgid "el campo \"%1$s\" no puede estar vacío"
-msgstr "el camp \"%1$s\" no pot estar buit"
+msgstr ""
 
 #: core/gestorerrores.class.php:73
 msgid "ya existe un registro con esta información"
-msgstr "ja existeix un registre amb aquesta informació"
+msgstr ""
 
 #: core/gestorerrores.class.php:80
 msgid "continuar"
-msgstr "continuar"
+msgstr ""
 
 #: davical/controller/user_update.php:25 davical/model/davical.class.php:155
 #: davical/model/davical.class.php:492 davical/model/davical.class.php:579
@@ -479,7 +476,7 @@ msgstr "continuar"
 #: usuarios/controller/oficina_update.php:35
 #: usuarios/controller/usuario_update.php:54
 msgid "hay un error, no se ha eliminado"
-msgstr "hi ha un error, no s'ha eliminat"
+msgstr ""
 
 #: davical/controller/user_update.php:55 davical/controller/user_update.php:85
 #: davical/controller/user_update.php:108
@@ -502,7 +499,7 @@ msgstr "hi ha un error, no s'ha eliminat"
 #: usuarios/controller/usuario_update.php:111
 #: usuarios/controller/usuario_update.php:136
 msgid "hay un error, no se ha guardado"
-msgstr "hi ha un error, no s'ha guardat"
+msgstr ""
 
 #: davical/controller/user_update.php:62
 #: entidades/controller/entidad_update.php:41
@@ -519,415 +516,415 @@ msgstr "hi ha un error, no s'ha guardat"
 #: usuarios/controller/oficina_update.php:55
 #: usuarios/controller/usuario_update.php:88
 msgid "debe poner un nombre"
-msgstr "ha de posar un nom"
+msgstr ""
 
 #: davical/controller/user_update.php:111
 msgid "debe poner un nombre y el password"
-msgstr "ha de posar un nom i el password"
+msgstr ""
 
 #: davical/model/davical.class.php:101
 #, php-format
 msgid "No existe un principal del grupo para este cargo (%s) en davical"
-msgstr "No hi ha cap principal del grup per a aquest càrrec (%s) en davical"
+msgstr ""
 
 #: davical/model/davical.class.php:111
 #, php-format
 msgid "No existe esta oficina (%s) en davical"
-msgstr "No hi ha tal oficina (%s) en davical"
+msgstr ""
 
 #: davical/model/davical.class.php:113 davical/model/davical.class.php:122
 #: davical/model/davical.class.php:740
 msgid "creando..."
-msgstr "creant..."
+msgstr ""
 
 #: davical/model/davical.class.php:120
 #, php-format
 msgid "No existe un grupo para esta oficina (%s) en davical"
-msgstr "No hi ha cap grup per a aquesta oficina (%s) en davical"
+msgstr ""
 
 #: davical/model/davical.class.php:131
 #, php-format
 msgid "No existe un principal del grupo la oficina %s en davical"
-msgstr "No hi ha cap principal del grup de l'oficina %s en davical"
+msgstr ""
 
 #: davical/model/davical.class.php:236
 #, php-format
 msgid "Problemas al crear la persona (%s) en Davical"
-msgstr "Problemes per crear la persona (%s) a Davical"
+msgstr ""
 
 #: davical/model/davical.class.php:419
 msgid "pendientes del registro"
-msgstr "pendent del registre"
+msgstr ""
 
 #: davical/model/davical.class.php:425
 msgid "pendientes de la oficina"
-msgstr "pendents de l'oficina"
+msgstr ""
 
 #: davical/model/davical.class.php:520
 #, php-format
 msgid "grupo de %s"
-msgstr "grup de %s"
+msgstr ""
 
 #: davical/model/davical.class.php:559
 #, php-format
 msgid "Problemas al crear el grupo (%s) en Davical"
-msgstr "Problemes per crear el grup (%s) a Davical"
+msgstr ""
 
 #: davical/model/davical.class.php:646
 #, php-format
 msgid "Problemas al crear el recurso (%s) en Davical"
-msgstr "Problemes per crear el recurs (%s) a Davical"
+msgstr ""
 
 #: davical/model/davical.class.php:728
 #, php-format
 msgid "No existe un principal del grupo (%s) en davical"
-msgstr "No hi ha cap principal del grup %s en davical"
+msgstr ""
 
 #: davical/model/davical.class.php:738
 #, php-format
 msgid "No existe un grupo para %s en davical"
-msgstr "No hi ha cap grup per a %s en davical"
+msgstr ""
 
 #: davical/model/davical.class.php:749
 #, php-format
 msgid "No existe un principal del grupo para %s en davical"
-msgstr "No hi ha cap principal del grup per a %s en davical"
+msgstr ""
 
 #: davical/model/davical.class.php:757
 msgid "Problemas al crear secretaria en Davical"
-msgstr "Problemes per crear secretaria a Davical"
+msgstr ""
 
 #: davical/model/davical.class.php:815
 msgid "No se puede determinar la ruta del calendario para añadir el pendiente"
-msgstr "No podeu determinar la ruta del calendari per afegir el pendent"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1170
 #: davical/model/entity/collection.class.php:865
 #: davical/model/entity/principal.class.php:474
 msgid "user_no"
-msgstr "user_no"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1183
 #: davical/model/entity/collection.class.php:889
 msgid "dav_name"
-msgstr "dav_name"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1196
 #: davical/model/entity/collection.class.php:901
 msgid "dav_etag"
-msgstr "dav_etag"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1208
 msgid "uid"
-msgstr "uid"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1220
 #: davical/model/entity/collection.class.php:937
 msgid "created"
-msgstr "creada"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1232
 msgid "last_modified"
-msgstr "last_modified"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1244
 msgid "dtstamp"
-msgstr "dtstamp"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1256
 msgid "dtstart"
-msgstr "dtstart"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1268
 msgid "dtend"
-msgstr "dtend"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1280
 msgid "due"
-msgstr "due"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1292
 msgid "summary"
-msgstr "summary"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1304
 msgid "location"
-msgstr "location"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1316
 #: davical/model/entity/collection.class.php:1045
 msgid "description"
-msgstr "descripció"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1328
 msgid "priority"
-msgstr "prioritat"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1340
 msgid "class"
-msgstr "class"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1352
 msgid "transp"
-msgstr "transp"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1364
 #: pendientes/model/entity/pendientedb.class.php:1023
 msgid "rrule"
-msgstr "rrule"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1376
 msgid "url"
-msgstr "url"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1388
 msgid "percent_complete"
-msgstr "percent_complete"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1400
 msgid "tz_id"
-msgstr "tz_id"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1412
 #: pendientes/model/entity/pendientedb.class.php:867
 msgid "status"
-msgstr "estatus"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1424
 msgid "completed"
-msgstr "completat"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1436
 msgid "dav_id"
-msgstr "dav_id"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1448
 msgid "collection_id"
-msgstr "collection_id"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1460
 msgid "first_instance_start"
-msgstr "first_instance_start"
+msgstr ""
 
 #: davical/model/entity/calendaritem.class.php:1472
 msgid "last_instance_end"
-msgstr "last_instance_end"
+msgstr ""
 
 #: davical/model/entity/collection.class.php:877
 msgid "parent_container"
-msgstr "parent_container"
+msgstr ""
 
 #: davical/model/entity/collection.class.php:913
 msgid "dav_displayname"
-msgstr "dav_displayname"
+msgstr ""
 
 #: davical/model/entity/collection.class.php:925
 msgid "is_calendar"
-msgstr "is_calendar"
+msgstr ""
 
 #: davical/model/entity/collection.class.php:949
 msgid "modified"
-msgstr "modificat"
+msgstr ""
 
 #: davical/model/entity/collection.class.php:961
 msgid "public_events_only"
-msgstr "public_events_only"
+msgstr ""
 
 #: davical/model/entity/collection.class.php:973
 msgid "publicly_readable"
-msgstr "publicly_readable"
+msgstr ""
 
 #: davical/model/entity/collection.class.php:985
 #: davical/model/entity/principal.class.php:498
 msgid "privilegios por defecto"
-msgstr "privilegis per defecte"
+msgstr ""
 
 #: davical/model/entity/collection.class.php:997
 msgid "is_addressbook"
-msgstr "is_addressbook"
+msgstr ""
 
 #: davical/model/entity/collection.class.php:1009
 msgid "resourcetypes"
-msgstr "resourcetypes"
+msgstr ""
 
 #: davical/model/entity/collection.class.php:1021
 msgid "schedule_transp"
-msgstr "schedule_transp"
+msgstr ""
 
 #: davical/model/entity/collection.class.php:1033
 msgid "timezone"
-msgstr "timezone"
+msgstr ""
 
 #: davical/model/entity/grant.class.php:453
 msgid "by_collection"
-msgstr "by_collection"
+msgstr ""
 
 #: davical/model/entity/grant.class.php:465
 msgid "privileges"
-msgstr "privilegis"
+msgstr ""
 
 #: davical/model/entity/grant.class.php:477
 msgid "is_group"
-msgstr "is_group"
+msgstr ""
 
 #: davical/model/entity/groupmember.class.php:351
 msgid "group_id"
-msgstr "group_id"
+msgstr ""
 
 #: davical/model/entity/principal.class.php:462
 msgid "type_id"
-msgstr "type_id"
+msgstr ""
 
 #: davical/model/entity/principal.class.php:486
 msgid "displayname"
-msgstr "displayname"
+msgstr ""
 
 #: davical/model/entity/rolemember.class.php:360
 msgid "role_no"
-msgstr "role_no"
+msgstr ""
 
 #: davical/model/entity/userdb.class.php:731
 msgid "active"
-msgstr "actiu"
+msgstr ""
 
 #: davical/model/entity/userdb.class.php:743
 msgid "email_ok"
-msgstr "email_ok"
+msgstr ""
 
 #: davical/model/entity/userdb.class.php:755
 msgid "joined"
-msgstr "s'ha unit a"
+msgstr ""
 
 #: davical/model/entity/userdb.class.php:767
 msgid "updated"
-msgstr "actualitzat"
+msgstr ""
 
 #: davical/model/entity/userdb.class.php:779
 msgid "last_used"
-msgstr "last_used"
+msgstr ""
 
 #: davical/model/entity/userdb.class.php:791
 msgid "username"
-msgstr "username"
+msgstr ""
 
 #: davical/model/entity/userdb.class.php:803
 #: usuarios/model/entity/usuario.class.php:489
 #: usuarios/view/usuario_form_pwd.phtml:49
 msgid "password"
-msgstr "password"
+msgstr ""
 
 #: davical/model/entity/userdb.class.php:815
 msgid "fullname"
-msgstr "fullname"
+msgstr ""
 
 #: davical/model/entity/userdb.class.php:827
 #: usuarios/model/entity/usuario.class.php:501
 msgid "email"
-msgstr "email"
+msgstr ""
 
 #: davical/model/entity/userdb.class.php:839
 msgid "config_data"
-msgstr "config_data"
+msgstr ""
 
 #: davical/model/entity/userdb.class.php:851
 msgid "date_format_type"
-msgstr "date_format_type"
+msgstr ""
 
 #: davical/model/entity/userdb.class.php:863
 msgid "locale"
-msgstr "locale"
+msgstr ""
 
 #: devel/controller/factory_form.php:26
 msgid "guardar cambios"
-msgstr "guardar canvis"
+msgstr ""
 
 #: documentos/controller/adjunto_upload.php:41
 #: escritos/controller/adjunto_upload.php:42
 #: oasis_as4/controller/pdm_upload.php:38
 msgid "Fichero demasiado grande"
-msgstr "Fitxer massa gran"
+msgstr ""
 
 #: documentos/controller/documento_form.php:89
 msgid "nuevo documento"
-msgstr "nou document"
+msgstr ""
 
 #: documentos/model/documento.class.php:36
 #: escritos/controller/escrito_update.php:214
 #: etiquetas/model/entity/etiqueta.class.php:436
 #: pendientes/controller/pendiente_tabla.php:38
 msgid "oficina"
-msgstr "oficina"
+msgstr ""
 
 #: documentos/model/documento.class.php:37
 #: etiquetas/controller/etiqueta_lista.php:73
 #: usuarios/controller/usuario_ctr.php:51
 #: usuarios/model/visibilidad.class.php:63
 msgid "personal"
-msgstr "personal"
+msgstr ""
 
 #: documentos/model/documento.class.php:43
 msgid "etherpad"
-msgstr "etherpad"
+msgstr ""
 
 #: documentos/model/documento.class.php:44
 msgid "etheclac"
-msgstr "etheclac"
+msgstr ""
 
 #: documentos/model/documento.class.php:45
 msgid "incrustado"
-msgstr "incrustat"
+msgstr ""
 
 #: documentos/model/documento.class.php:63
 msgid "Este documento está como antecedente"
-msgstr "Aquest document està com antecedent"
+msgstr ""
 
 #: documentos/model/documentolista.class.php:98
 msgid "editar"
-msgstr "editar"
+msgstr ""
 
 #: documentos/model/documentolista.class.php:101
 #: oasis_as4/controller/pdm_exportar.php:32
 msgid "descargar"
-msgstr "descarregar"
+msgstr ""
 
 #: documentos/model/documentolista.class.php:103
 msgid "datos"
-msgstr "dades"
+msgstr ""
 
 #: documentos/model/entity/documentodb.class.php:609
 #: entradas/model/entity/entradacompartidaadjunto.class.php:462
 #: escritos/model/entity/escritoadjunto.class.php:506
 msgid "nom"
-msgstr "nom"
+msgstr ""
 
 #: documentos/model/entity/documentodb.class.php:621
 msgid "nombre_fichero"
-msgstr "nom del fitxer"
+msgstr ""
 
 #: documentos/model/entity/documentodb.class.php:633
 #: escritos/model/entity/escritodb.class.php:1256
 #: expedientes/controller/antecedentes_ajax.php:649
 msgid "creador"
-msgstr "creador"
+msgstr ""
 
 #: documentos/model/entity/documentodb.class.php:657
 #: entradas/model/entity/entradadocdb.class.php:401
 #: escritos/model/entity/escritoadjunto.class.php:530
 #: escritos/model/entity/escritodb.class.php:1400
 msgid "tipo_doc"
-msgstr "tipo_doc"
+msgstr ""
 
 #: documentos/model/entity/documentodb.class.php:669
 msgid "f_upload"
-msgstr "f_upload"
+msgstr ""
 
 #: documentos/model/entity/documentodb.class.php:681
 msgid "documento"
-msgstr "document"
+msgstr ""
 
 #: entidades/controller/entidad_form.php:94
 msgid "guardar datos entidad"
-msgstr "desa les dades de l'entitat"
+msgstr ""
 
 #: entidades/controller/entidad_lista.php:49
 #: escritos/model/escrito.class.php:239
@@ -940,35 +937,35 @@ msgstr "desa les dades de l'entitat"
 #: usuarios/controller/oficina_lista.php:45
 #: usuarios/controller/usuario_lista.php:56
 msgid "borrar"
-msgstr "esborrar"
+msgstr ""
 
 #: entidades/controller/entidad_lista.php:63
 #: entradas/controller/entrada_form.php:102
 #: entradas/controller/entrada_form.php:107
 #: usuarios/controller/cargo_lista.php:69
 msgid "Sí"
-msgstr "Sí"
+msgstr ""
 
 #: entidades/controller/entidad_update.php:68
 msgid "hay un error al guardar"
-msgstr "hi ha un error en desar"
+msgstr ""
 
 #: entidades/model/entidad.class.php:56
 msgid "ctr"
-msgstr "ctr"
+msgstr ""
 
 #: entidades/model/entidad.class.php:57 lugares/controller/lugar_lista.php:55
 #: lugares/model/entity/lugar.class.php:651
 msgid "dl"
-msgstr "dl"
+msgstr ""
 
 #: entidades/model/entidad.class.php:58
 msgid "cr"
-msgstr "cr"
+msgstr ""
 
 #: entidades/model/entidad.class.php:59
 msgid "cg"
-msgstr "cg"
+msgstr ""
 
 #: entidades/model/entity/entidaddb.class.php:443
 #: escritos/controller/escrito_adjuntos_ajax.php:293
@@ -979,17 +976,17 @@ msgstr "cg"
 #: plantillas/controller/plantilla_lista_expediente.php:28
 #: plantillas/model/entity/plantilla.class.php:350
 msgid "nombre"
-msgstr "nom"
+msgstr ""
 
 #: entidades/model/entity/entidaddb.class.php:455
 msgid "schema"
-msgstr "schema"
+msgstr ""
 
 #: entidades/model/entity/entidaddb.class.php:467
 #: tramites/model/entity/firma.class.php:909
 #: usuarios/model/entity/preferencia.class.php:413
 msgid "tipo"
-msgstr "tipus"
+msgstr ""
 
 #: entidades/model/entity/entidaddb.class.php:479
 #: entradas/model/entity/entradacompartida.class.php:962
@@ -998,7 +995,7 @@ msgstr "tipus"
 #: lugares/controller/lugar_lista.php:62
 #: lugares/model/entity/lugar.class.php:747
 msgid "anulado"
-msgstr "anul·lat"
+msgstr ""
 
 #: entradas/controller/buscar_form.php:100
 #: entradas/controller/entrada_ajax.php:469
@@ -1011,7 +1008,7 @@ msgstr "anul·lat"
 #: expedientes/model/expedientelista.class.php:573
 #: expedientes/model/expedientelista.class.php:590
 msgid "fecha"
-msgstr "data"
+msgstr ""
 
 #: entradas/controller/buscar_form.php:102
 #: entradas/model/entity/entradadb.class.php:1042
@@ -1023,47 +1020,47 @@ msgstr "data"
 #: expedientes/model/entity/expedientedb.class.php:995
 #: pendientes/controller/pendiente_buscar.php:225
 msgid "ponente"
-msgstr "ponent"
+msgstr ""
 
 #: entradas/controller/entrada_ajax.php:42
 msgid "por n.v."
-msgstr "per n.v."
+msgstr ""
 
 #: entradas/controller/entrada_ajax.php:57
 msgid "Sólo se pueden reemplazar las entradas bypass"
-msgstr "Només es poden reemplaçar les entrades bypass"
+msgstr ""
 
 #: entradas/controller/entrada_ajax.php:110
 msgid "Sólo se pueden anular las entradas bypass"
-msgstr "Només es poden anul·lar les entrades bypass"
+msgstr ""
 
 #: entradas/controller/entrada_ajax.php:148
 msgid "No tiene permiso para ver la entrada"
-msgstr "No tens permís per veure l'entrada"
+msgstr ""
 
 #: entradas/controller/entrada_ajax.php:254
 #: escritos/controller/escrito_update.php:93
 msgid "No tiene permiso para modificar el detalle"
-msgstr "No teniu permís per canviar el detall"
+msgstr ""
 
 #: entradas/controller/entrada_ajax.php:306
 #: entradas/controller/entrada_ajax.php:335
 #, php-format
 msgid "Esta entrada tiene %s pendientes asociados."
-msgstr "Aquesta entrada té %s pendents associats."
+msgstr ""
 
 #: entradas/controller/entrada_ajax.php:342
 #, php-format
 msgid "Esta entrada tiene %s envios a ctr."
-msgstr "Aquesta entrada té %s enviaments a ctr."
+msgstr ""
 
 #: entradas/controller/entrada_ajax.php:384
 msgid "No existe la entrada"
-msgstr "No hi ha entrada"
+msgstr ""
 
 #: entradas/controller/entrada_ajax.php:469
 msgid "oficina ponente"
-msgstr "oficina ponent"
+msgstr ""
 
 #: entradas/controller/entrada_ajax.php:491
 #: escritos/controller/escrito_adjuntos_ajax.php:298
@@ -1071,11 +1068,11 @@ msgstr "oficina ponent"
 #: plantillas/controller/plantilla_lista_expediente.php:28
 #: plantillas/controller/plantilla_lista_expediente.php:41
 msgid "adjuntar"
-msgstr "adjuntar"
+msgstr ""
 
 #: entradas/controller/entrada_bypass.php:110
 msgid "salida distribución cr"
-msgstr "sortida distribució cr"
+msgstr ""
 
 #: entradas/controller/entrada_dock.php:55
 #: oasis_as4/model/as4remove.class.php:60
@@ -1083,42 +1080,42 @@ msgstr "sortida distribució cr"
 #: oasis_as4/model/as4remove.class.php:90
 #, php-format
 msgid "No se ha podido eliminar el fichero %s"
-msgstr "No s' ha pogut eliminar el fitxer %s"
+msgstr ""
 
 #: entradas/controller/entrada_dock.php:60
 #: oasis_as4/model/as4remove.class.php:73
 #: oasis_as4/model/as4remove.class.php:95
 #, php-format
 msgid "No se ha podido eliminar el mensaje %s"
-msgstr "No s'ha pogut eliminar el missatge %s"
+msgstr ""
 
 #: entradas/controller/entrada_dock.php:64
 #, php-format
 msgid "No se ha podido entregar el mensaje %s a su destinatario"
-msgstr "No s' ha pogut lliurar el missatge %s al seu destinatari"
+msgstr ""
 
 #: entradas/controller/entrada_dock.php:83
 msgid "Error"
-msgstr "Error"
+msgstr ""
 
 #: entradas/controller/entrada_dock.php:92
 #, php-format
 msgid "No se ha podido eliminar el mensaje info %s"
-msgstr "No s'ha pogut eliminar el missatge info %s"
+msgstr ""
 
 #: entradas/controller/entrada_dock.php:101
 msgid "Todos los mensajes descargados"
-msgstr "Tots els missatges descarregats"
+msgstr ""
 
 #: entradas/controller/entrada_enviar.php:43
 #: escritos/controller/escrito_enviar.php:39
 msgid "No puedo eliminar los ya enviados"
-msgstr "No puc eliminar els ja enviats"
+msgstr ""
 
 #: entradas/controller/entrada_enviar.php:51
 #: escritos/controller/escrito_enviar.php:47
 msgid "No puedo eliminar los rechazados"
-msgstr "No puc eliminar els rebutjats"
+msgstr ""
 
 #: entradas/controller/entrada_form.php:88
 #: entradas/controller/entrada_form_ctr.php:72
@@ -1130,7 +1127,7 @@ msgstr "No puc eliminar els rebutjats"
 #: tramites/model/entity/firma.class.php:252
 #: tramites/model/entity/firma.class.php:256
 msgid "no"
-msgstr "no"
+msgstr ""
 
 #: entradas/controller/entrada_form.php:89
 #: entradas/controller/entrada_form.php:90
@@ -1143,89 +1140,89 @@ msgstr "no"
 #: escritos/model/escritoform.class.php:166
 #, php-format
 msgid "en %s días"
-msgstr "en %s dies"
+msgstr ""
 
 #: entradas/controller/entrada_form.php:92
 #: entradas/controller/entrada_form_ctr.php:76
 #: escritos/model/escritoform.class.php:167
 msgid "el día"
-msgstr "el dia"
+msgstr ""
 
 #: entradas/controller/entrada_form.php:102
 #: entradas/controller/entrada_form.php:107
 #: usuarios/controller/cargo_lista.php:69
 msgid "No"
-msgstr "No"
+msgstr ""
 
 #: entradas/controller/entrada_form.php:186
 #: entradas/controller/entrada_form_ctr.php:119
 #: escritos/model/escritoform.class.php:258
 msgid "modificar entrada"
-msgstr "modificar l'entrada"
+msgstr ""
 
 #: entradas/controller/entrada_form.php:237
 #: entradas/controller/entrada_form_ctr.php:130
 #: entradas/model/entradalista.class.php:360
 msgid "nueva entrada"
-msgstr "nova entrada"
+msgstr ""
 
 #: entradas/controller/entrada_form.php:265
 msgid "Asignar"
-msgstr "Assignar"
+msgstr ""
 
 #: entradas/controller/entrada_form.php:268
 msgid "Aceptar"
-msgstr "Acceptar"
+msgstr ""
 
 #: entradas/controller/entrada_form.php:272
 #: entradas/controller/entrada_form_ctr.php:145
 msgid "Guardar"
-msgstr "Guardar"
+msgstr ""
 
 #: entradas/controller/entrada_update.php:79
 #: expedientes/controller/expediente_update.php:234
 msgid "No se han podido guardar las etiquetas"
-msgstr "No s'han pogut desar les etiquetes"
+msgstr ""
 
 #: entradas/controller/entrada_update.php:516
 #: expedientes/controller/expediente_update.php:141
 #: oasis_as4/model/as4entregar.class.php:363
 #: pendientes/controller/pendiente_update_ics.php:235
 msgid "No se han podido guardar el nuevo pendiente"
-msgstr "No s'ha pogut desar el nou pendent"
+msgstr ""
 
 #: entradas/controller/entrada_ver_slide.php:59
 msgid "No hay más entradas"
-msgstr "No hi ha més entrades"
+msgstr ""
 
 #: entradas/controller/entrada_ver_slide.php:105
 msgid "No se encuentran registros"
-msgstr "No es troben registres"
+msgstr ""
 
 #: entradas/controller/zentrada_accion.php:42
 #: expedientes/controller/expediente_accion.php:150
 msgid "Encargar a"
-msgstr "Encarregar a"
+msgstr ""
 
 #: entradas/controller/zentrada_accion.php:46
 #: entradas/controller/zentrada_accion.php:55
 #: expedientes/controller/expediente_accion.php:157
 msgid "marcar como visto"
-msgstr "marca com vist"
+msgstr ""
 
 #: entradas/controller/zentrada_accion.php:49
 #: expedientes/controller/expediente_accion.php:177
 msgid "Etiquetas"
-msgstr "Etiquetes"
+msgstr ""
 
 #: entradas/controller/zentrada_accion.php:65
 #: expedientes/controller/expediente_accion.php:280
 msgid "no tiene permiso"
-msgstr "no té permís"
+msgstr ""
 
 #: entradas/model/entity/entradabypass.class.php:624
 msgid "id_entrada"
-msgstr "id_entrada"
+msgstr ""
 
 #: entradas/model/entity/entradabypass.class.php:636
 #: entradas/model/entity/entradacompartida.class.php:854
@@ -1234,109 +1231,109 @@ msgstr "id_entrada"
 #: usuarios/model/entity/cargo.class.php:602
 #: usuarios/model/entity/cargogrupo.class.php:429
 msgid "descripcion"
-msgstr "descripció"
+msgstr ""
 
 #: entradas/model/entity/entradabypass.class.php:648
 #: entradas/model/entity/entradacompartida.class.php:866
 #: escritos/model/entity/escritodb.class.php:1184
 msgid "json_prot_destino"
-msgstr "json_prot_destino"
+msgstr ""
 
 #: entradas/model/entity/entradabypass.class.php:660
 #: escritos/model/entity/escritodb.class.php:1208
 msgid "id_grupos"
-msgstr "id_grupos"
+msgstr ""
 
 #: entradas/model/entity/entradabypass.class.php:684
 #: escritos/model/entity/escritodb.class.php:1376
 msgid "f_salida"
-msgstr "f_salida"
+msgstr ""
 
 #: entradas/model/entity/entradacompartida.class.php:321
 #: entradas/model/entrada.class.php:376 escritos/model/escrito.class.php:695
 msgid "E12"
-msgstr "E12"
+msgstr ""
 
 #: entradas/model/entity/entradacompartida.class.php:890
 msgid "f_documento"
-msgstr "f_document"
+msgstr ""
 
 #: entradas/model/entity/entradacompartida.class.php:902
 #: entradas/model/entity/entradadb.class.php:1006
 msgid "json_prot_origen"
-msgstr "json_prot_origen"
+msgstr ""
 
 #: entradas/model/entity/entradacompartida.class.php:914
 #: entradas/model/entity/entradadb.class.php:1030
 #: escritos/model/entity/escritodb.class.php:1196
 msgid "json_prot_ref"
-msgstr "json_prot_ref"
+msgstr ""
 
 #: entradas/model/entity/entradacompartida.class.php:938
 #: entradas/model/entity/entradadb.class.php:1018
 msgid "asunto_entrada"
-msgstr "assumpte_entrada"
+msgstr ""
 
 #: entradas/model/entity/entradacompartida.class.php:950
 #: entradas/model/entity/entradadb.class.php:1078
 msgid "f_entrada"
-msgstr "f_entrada"
+msgstr ""
 
 #: entradas/model/entity/entradacompartidaadjunto.class.php:450
 #: entradas/model/entity/entradadb.class.php:982
 msgid "id_entrada_compartida"
-msgstr "id_entrada_compartida"
+msgstr ""
 
 #: entradas/model/entity/entradacompartidaadjunto.class.php:474
 #: escritos/model/entity/escritoadjunto.class.php:518
 msgid "adjunto"
-msgstr "adjunt"
+msgstr ""
 
 #: entradas/model/entity/entradadb.class.php:994
 msgid "modo_entrada"
-msgstr "modo_entrada"
+msgstr ""
 
 #: entradas/model/entity/entradadb.class.php:1054
 #: escritos/model/entity/escritodb.class.php:1268
 #: expedientes/model/entity/expedientedb.class.php:1007
 msgid "resto_oficinas"
-msgstr "reste d'oficinas"
+msgstr ""
 
 #: entradas/model/entity/entradadb.class.php:1126
 #: escritos/model/entity/escritodb.class.php:1316
 #: expedientes/model/entity/expedientedb.class.php:1091
 msgid "f_contestar"
-msgstr "f_contestar"
+msgstr ""
 
 #: entradas/model/entity/entradadb.class.php:1138
 msgid "bypass"
-msgstr "bypass"
+msgstr ""
 
 #: entradas/model/entity/entradadb.class.php:1150
 #: expedientes/model/entity/expedientedb.class.php:1103
 #: pendientes/controller/pendiente_buscar.php:228
 msgid "estado"
-msgstr "estat"
+msgstr ""
 
 #: entradas/model/entity/entradadb.class.php:1174
 #: expedientes/model/expediente.class.php:373
 #: pendientes/controller/pendiente_tabla.php:153
 #: pendientes/model/entity/pendientedb.class.php:927
 msgid "encargado"
-msgstr "encarregat"
+msgstr ""
 
 #: entradas/model/entity/entradadb.class.php:1186
 msgid "json_visto"
-msgstr "json_visto"
+msgstr ""
 
 #: entradas/model/entity/entradadocdb.class.php:413
 msgid "f_doc"
-msgstr "f_doc"
+msgstr ""
 
 #: entradas/model/entrada.class.php:122 entradas/model/entrada.class.php:255
 #: oasis_as4/model/as4entregar.class.php:162
 msgid "No hay destinos"
-msgstr "No hi ha destinacions"
+msgstr ""
 
 #: entradas/model/entrada.class.php:215 entradas/model/entrada.class.php:236
 #: escritos/model/escrito.class.php:80 escritos/model/escrito.class.php:96
@@ -1344,54 +1341,54 @@ msgstr "No hi ha destinacions"
 #: pendientes/model/pendiente.class.php:1027
 #: usuarios/model/visibilidad.class.php:65
 msgid "reservado"
-msgstr "reservat"
+msgstr ""
 
 #: entradas/model/entradalista.class.php:185
 msgid "No ha escogido ningún filtro"
-msgstr "No heu triat cap filtre"
+msgstr ""
 
 #: entradas/model/entradalista.class.php:364
 msgid "procesar"
-msgstr "procesar"
+msgstr ""
 
 #: entradas/model/entradalista.class.php:379
 msgid "revisar dock"
-msgstr "revisar dock"
+msgstr ""
 
 #: envios/model/enviar.class.php:185 envios/model/enviar.class.php:210
 #: envios/model/enviar.class.php:235
 msgid "No hay más"
-msgstr "Ja no hi ha més"
+msgstr ""
 
 #: envios/model/enviar.class.php:271
 #, php-format
 msgid "No se puede enviar el adjunto \"%s\""
-msgstr "No es pot enviar l'adjunt \"%s\""
+msgstr ""
 
 #: envios/model/enviar.class.php:372
 msgid "No hay modo de envio para este destino"
-msgstr "No hi ha mode d'enviament per a aquest destí"
+msgstr ""
 
 #: envios/model/enviar.class.php:389
 msgid "No hay destinos para este escrito"
-msgstr "No hi ha destinacions per a aquest escrit"
+msgstr ""
 
 #: envios/model/enviar.class.php:396
 msgid "mail no válido para"
-msgstr "el correu no és vàlid per a"
+msgstr ""
 
 #: envios/model/enviar.class.php:557
 msgid "Ver archivos adjuntos"
-msgstr "Veure arxius adjunts"
+msgstr ""
 
 #: escritos/controller/adjunto_revisar.php:42
 msgid "modificar ajuntos escrito"
-msgstr "modificar els adjunts de l'escrit"
+msgstr ""
 
 #: escritos/controller/escrito_adjuntos_ajax.php:242
 #: expedientes/controller/antecedentes_ajax.php:597
 msgid "No hay ningún documento con estas etiquetas"
-msgstr "No hi ha cap document amb aquestes etiquetes"
+msgstr ""
 
 #: escritos/controller/escrito_adjuntos_ajax.php:295
 #: expedientes/controller/antecedentes_ajax.php:322
@@ -1400,24 +1397,24 @@ msgstr "No hi ha cap document amb aquestes etiquetes"
 #: pendientes/controller/pendiente_tabla.php:148
 #: pendientes/model/entity/pendientedb.class.php:987
 msgid "etiquetas"
-msgstr "etiquetes"
+msgstr ""
 
 #: escritos/controller/escrito_adjuntos_ajax.php:298
 msgid "abrir"
-msgstr "obrir"
+msgstr ""
 
 #: escritos/controller/escrito_distribuir.php:98
 #: escritos/controller/escrito_ver.php:124
 msgid "No hay escritos"
-msgstr "Sense escrits"
+msgstr ""
 
 #: escritos/controller/escrito_download.php:25
 msgid "Algún error al genrar el pdf. Es posible que no tenga el protocolo."
-msgstr "Algun error al genrar el pdf. És possible que no t teniu el protocol."
+msgstr ""
 
 #: escritos/controller/escrito_from_entrada.php:38
 msgid "Respuesta a:"
-msgstr "Resposta a:"
+msgstr ""
 
 #: escritos/controller/escrito_rev.php:135 escritos/model/escrito.class.php:473
 #: expedientes/model/expedientelista.class.php:569
@@ -1425,19 +1422,19 @@ msgstr "Resposta a:"
 #: expedientes/model/expedientelista.class.php:584
 #: expedientes/model/expedientelista.class.php:598
 msgid "revisar"
-msgstr "revisar"
+msgstr ""
 
 #: escritos/controller/escrito_rev.php:138
 msgid "revisar escrito"
-msgstr "revisar escrit"
+msgstr ""
 
 #: escritos/controller/escrito_rev.php:141
 msgid "revisar propuesta"
-msgstr "revisar proposta"
+msgstr ""
 
 #: escritos/controller/escrito_rev.php:144
 msgid "revisar plantilla"
-msgstr "revisar plantilla"
+msgstr ""
 
 #: escritos/controller/escrito_rev.php:165
 #: escritos/controller/salida_escrito.php:236
@@ -1445,143 +1442,143 @@ msgstr "revisar plantilla"
 #: oasis_as4/model/as4collaborationinfo.class.php:28
 #: tramites/controller/tramitecargo_ajax.php:94
 msgid "nuevo"
-msgstr "nou"
+msgstr ""
 
 #: escritos/controller/escrito_rev.php:168
 #: escritos/model/escritoform.class.php:326
 msgid "nuevo escrito"
-msgstr "nou escrit"
+msgstr ""
 
 #: escritos/controller/escrito_rev.php:171
 #: escritos/model/escritoform.class.php:329
 msgid "nueva propuesta"
-msgstr "nova proposta"
+msgstr ""
 
 #: escritos/controller/escrito_rev.php:174
 #: escritos/model/escritoform.class.php:332
 msgid "nueva plantilla"
-msgstr "plantilla nova"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:117
 msgid "No tiene permiso ver el escrito"
-msgstr "No teniu permís per veure l'escrit"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:211
 #: pendientes/controller/pendiente_buscar.php:220
 #: pendientes/controller/pendiente_tabla.php:149
 msgid "p"
-msgstr "p"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:213
 #: pendientes/controller/pendiente_buscar.php:222
 #: pendientes/controller/pendiente_tabla.php:151
 msgid "fecha plazo"
-msgstr "data plaç"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:256
 #: pendientes/controller/pendiente_update_ics.php:340
 #: pendientes/controller/pendiente_update_ics.php:347
 msgid "No se han podido marcar como contestado"
-msgstr "No s'han pogut marcar com a contestat"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:262
 msgid "falta definir fecha para periodico"
-msgstr "falta definir la data per el periòdic"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:301
 msgid "Es posible que esté relacionado con alguno de estos pendientes:"
-msgstr "Pot estar relacionat amb algun d'aquestes pendents:"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:307
 #, php-format
 msgid "Tiene %s pendiente asociado"
-msgstr "Té %s pendent associat"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:344
 msgid "Hay un error al eliminar el escrito"
-msgstr "S'ha produït un error en suprimir l'escrit"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:355
 msgid "Hay un error al quitar el escrito de expediente"
-msgstr "S'ha produït un error en suprimir l'escrit de l'expedient"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:362
 #: escritos/controller/escrito_update.php:438
 msgid "No existe el escrito"
-msgstr "No existeix l'escrit"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:433
 msgid "Hay un error al guardar el escrito"
-msgstr "Hi ha un error en desar l'escrit"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:625
 msgid "No puede ser"
-msgstr "No pot ser"
+msgstr ""
 
 #: escritos/controller/escrito_update.php:630
 msgid "Algún error al explotar"
-msgstr "Algun error en explotar"
+msgstr ""
 
 #: escritos/controller/mantenimiento.php:22
 msgid "anular en otras plataformas"
-msgstr "anul·lar en altres plataformes"
+msgstr ""
 
 #: escritos/controller/mantenimiento.php:23
 msgid "Envia una orden de anulación para un escrito en otra plataforma"
-msgstr "Envia una ordre d'anul·lació per a un escrit en una altra plataforma"
+msgstr ""
 
 #: escritos/controller/mantenimiento.php:42
 msgid "reemplazar en otras plataformas"
-msgstr "reemplaçar en altres plataformes"
+msgstr ""
 
 #: escritos/controller/mantenimiento.php:43
 msgid "Envia un escrito que reemplaza a otro en otra plataforma"
-msgstr "Envia un escrit que reemplaça un altre en una altra plataforma"
+msgstr ""
 
 #: escritos/controller/salida_escrito.php:52
 msgid "Protocolo repetido"
-msgstr "Protocol repetit"
+msgstr ""
 
 #: escritos/controller/salida_escrito.php:120
 #: escritos/model/escritoform.class.php:188
 msgid "personalizado"
-msgstr "personalitzat"
+msgstr ""
 
 #: escritos/controller/salida_escrito.php:270
 msgid "Generar protocolo"
-msgstr "Generar protocol"
+msgstr ""
 
 #: escritos/controller/salida_escrito.php:270
 msgid "Pasar a secretaría"
-msgstr "Passar a secretaria"
+msgstr ""
 
 #: escritos/model/entity/escritoadjunto.class.php:494
 #: expedientes/model/entity/accion.class.php:434
 msgid "id_escrito"
-msgstr "id_escrito"
+msgstr ""
 
 #: escritos/model/entity/escritodb.class.php:1172
 msgid "json_prot_local"
-msgstr "json_prot_local"
+msgstr ""
 
 #: escritos/model/entity/escritodb.class.php:1280
 #: expedientes/model/entity/expedientedb.class.php:1043
 msgid "comentarios"
-msgstr "comentaris"
+msgstr ""
 
 #: escritos/model/entity/escritodb.class.php:1292
 #: expedientes/model/entity/expedientedb.class.php:1139
 msgid "f_aprobacion"
-msgstr "f_aprobacio"
+msgstr ""
 
 #: escritos/model/entity/escritodb.class.php:1304
 msgid "f_escrito"
-msgstr "f_escrito"
+msgstr ""
 
 #: escritos/model/entity/escritodb.class.php:1364
 #: lugares/model/entity/lugar.class.php:699
 msgid "modo_envio"
-msgstr "modo_envio"
+msgstr ""
 
 #: escritos/model/entity/escritodb.class.php:1388
 #: tramites/model/entity/firma.class.php:219
@@ -1589,79 +1586,79 @@ msgstr "modo_envio"
 #: tramites/model/entity/firma.class.php:251
 #: tramites/model/entity/firma.class.php:255
 msgid "ok"
-msgstr "ok"
+msgstr ""
 
 #: escritos/model/entity/gestorescritodb.class.php:625
 msgid "Demasiados registros"
-msgstr "Massa registres"
+msgstr ""
 
 #: escritos/model/entity/gestorescritodb.class.php:626
 #, php-format
 msgid "Excepción capturada: %s"
-msgstr "Excepció capturada: %s"
+msgstr ""
 
 #: escritos/model/escrito.class.php:146
 msgid "Error no hay destino"
-msgstr "Error no hi ha destí"
+msgstr ""
 
 #: escritos/model/escrito.class.php:193
 msgid "No se ha podido eliminar un adjunto"
-msgstr "No s'ha pogut suprimir un fitxer adjunt"
+msgstr ""
 
 #: escritos/model/escrito.class.php:199
 msgid "No se ha podido eliminar el escrito"
-msgstr "No s'ha pogut suprimir l'escrit"
+msgstr ""
 
 #: escritos/model/escrito.class.php:212
 msgid "manual"
-msgstr "manual"
+msgstr ""
 
 #: escritos/model/escrito.class.php:213
 #: lugares/model/entity/lugar.class.php:305
 msgid "xml"
-msgstr "xml"
+msgstr ""
 
 #: escritos/model/escrito.class.php:219
 msgid "propuesta"
-msgstr "proposta"
+msgstr ""
 
 #: escritos/model/escrito.class.php:220
 msgid "plantilla"
-msgstr "plantilla"
+msgstr ""
 
 #: escritos/model/escrito.class.php:221
 msgid "escrito"
-msgstr "escrit"
+msgstr ""
 
 #: escritos/model/escrito.class.php:644
 msgid "Conforme"
-msgstr "Conforme"
+msgstr ""
 
 #: escritos/model/escrito.class.php:667
 msgid "debe indicar la localidad en la configuración"
-msgstr "ha d'indicar la localitat en la configuració"
+msgstr ""
 
 #: escritos/model/escrito.class.php:671
 msgid "El Vicario de la Delegación"
-msgstr "El vicari de la Delegació"
+msgstr ""
 
 #: escritos/model/escritoform.class.php:249
 msgid "modificar escrito"
-msgstr "modificar l'escrit"
+msgstr ""
 
 #: escritos/model/escritoform.class.php:252
 msgid "modificar propuesta"
-msgstr "modificar la proposta"
+msgstr ""
 
 #: escritos/model/escritoform.class.php:255
 msgid "modificar plantilla"
-msgstr "modificar la plantilla"
+msgstr ""
 
 #: escritos/model/escritolista.class.php:150
 #: escritos/model/escritolista.class.php:333
 #: expedientes/controller/expediente_form.php:179
 msgid "mod.datos"
-msgstr "mod.dades"
+msgstr ""
 
 #: escritos/model/escritolista.class.php:151
 #: escritos/model/escritolista.class.php:281
@@ -1669,165 +1666,165 @@ msgstr "mod.dades"
 #: escritos/model/escritolista.class.php:345
 #: expedientes/controller/expediente_form.php:180
 msgid "rev.texto"
-msgstr "rev.text"
+msgstr ""
 
 #: escritos/model/escritolista.class.php:161
 #: expedientes/controller/expediente_form.php:188
 #: usuarios/controller/usuario_secretaria.php:142
 msgid "enviar"
-msgstr "enviar"
+msgstr ""
 
 #: escritos/model/escritolista.class.php:310
 msgid "en secretaría"
-msgstr "a secretaria"
+msgstr ""
 
 #: escritos/model/escritolista.class.php:313
 msgid "pasar a secretaría"
-msgstr "passar a secretaria"
+msgstr ""
 
 #: escritos/model/escritolista.class.php:317
 msgid "otra acción?"
-msgstr "una altra acció?"
+msgstr ""
 
 #: escritos/model/escritolista.class.php:339
 msgid "prot. local/rev.texto"
-msgstr "prot. local/rev.text"
+msgstr ""
 
 #: escritos/model/escritolista.class.php:343
 msgid "prot. local"
-msgstr "prot. local"
+msgstr ""
 
 #: escritos/model/escritolista.class.php:382
 msgid "devuelto"
-msgstr "retornat"
+msgstr ""
 
 #: escritos/model/escritolista.class.php:406
 msgid "ver todos"
-msgstr "veure tots"
+msgstr ""
 
 #: ethercalc/controller/getUrlEscrito.php:20
 #: etherpad/controller/getUrlEscrito.php:20
 msgid "Falta definir el tipo de documento etherpad"
-msgstr "Cal definir el tipus de document etherpad"
+msgstr ""
 
 #: ethercalc/model/ethercalc.class.php:216
 msgid "Debe indicar el id con SetId"
-msgstr "Ha d'indicar l'id amb setId"
+msgstr ""
 
 #: etherpad/model/etherpad.class.php:455
 msgid "Debe indicar el id con setId"
-msgstr "Ha d'indicar l'id amb setId"
+msgstr ""
 
 #: etiquetas/controller/etiqueta_form.php:77
 #: etiquetas/controller/etiqueta_lista.php:67
 msgid "de la oficina"
-msgstr "de l'oficina"
+msgstr ""
 
 #: etiquetas/controller/etiqueta_form.php:79
 #: etiquetas/controller/etiqueta_lista.php:69
 msgid "del centro"
-msgstr "del centre"
+msgstr ""
 
 #: etiquetas/controller/etiqueta_lista.php:46
 msgid "etiqueta"
-msgstr "etiqueta"
+msgstr ""
 
 #: etiquetas/controller/etiqueta_lista.php:47
 msgid "entorno"
-msgstr "entorn"
+msgstr ""
 
 #: etiquetas/controller/etiqueta_lista.php:48
 #: expedientes/model/expedientelista.class.php:821
 #: tramites/controller/tramitecargo_ajax.php:68
 #: usuarios/model/entity/cargo.class.php:590
 msgid "cargo"
-msgstr "càrrec"
+msgstr ""
 
 #: etiquetas/model/entity/etiqueta.class.php:412
 msgid "nom_etiqueta"
-msgstr "nom_etiqueta"
+msgstr ""
 
 #: etiquetas/model/entity/etiqueta.class.php:424
 #: tramites/model/entity/firma.class.php:861
 #: tramites/model/entity/tramitecargo.class.php:464
 msgid "id_cargo"
-msgstr "id_cargo"
+msgstr ""
 
 #: expedientes/controller/antecedentes_ajax.php:269
 #: expedientes/controller/expediente_lista.php:70
 #: expedientes/controller/expediente_lista.php:168
 msgid "No hay ningún expediente con estas etiquetas"
-msgstr "No hi ha cap expedient amb aquestes etiquetes"
+msgstr ""
 
 #: expedientes/controller/expediente_accion.php:144
 msgid "Acciones para el expediente"
-msgstr "Accions per l'exppedient"
+msgstr ""
 
 #: expedientes/controller/expediente_accion.php:148
 #: expedientes/controller/expediente_accion.php:155
 #: expedientes/controller/expediente_accion.php:162
 msgid "Acciones para la entrada"
-msgstr "Accions per l'entrada"
+msgstr ""
 
 #: expedientes/controller/expediente_accion.php:165
 msgid "añadir a un expediente"
-msgstr "afegir a un expedient"
+msgstr ""
 
 #: expedientes/controller/expediente_accion.php:169
 msgid "crear un nuevo expediente"
-msgstr "crear un nou expedient"
+msgstr ""
 
 #: expedientes/controller/expediente_accion.php:173
 msgid "crear un nuevo pendiente de la oficina"
-msgstr "crear un nou pendent de l'oficina"
+msgstr ""
 
 #: expedientes/controller/expediente_accion.php:181
 #: pendientes/controller/pendiente_form.php:535
 msgid "plazo para contestar"
-msgstr "termini per contestar"
+msgstr ""
 
 #: expedientes/controller/expediente_accion.php:205
 #: expedientes/controller/expediente_accion.php:211
 #: expedientes/controller/expediente_accion.php:244
 #: expedientes/controller/expediente_accion.php:255
 msgid "mover a borrador"
-msgstr "passar a esborrany"
+msgstr ""
 
 #: expedientes/controller/expediente_accion.php:217
 #: expedientes/controller/expediente_accion.php:230
 #: expedientes/controller/expediente_accion.php:248
 #: expedientes/controller/expediente_accion.php:259
 msgid "copiar a borrador"
-msgstr "còpia a esborrany"
+msgstr ""
 
 #: expedientes/controller/expediente_accion.php:222
 #: expedientes/controller/expediente_accion.php:235
 msgid "copiar a copias"
-msgstr "copiar a còpies"
+msgstr ""
 
 #: expedientes/controller/expediente_accion.php:262
 msgid "copiar a otro cargo"
-msgstr "copiar a un altre càrrec"
+msgstr ""
 
 #: expedientes/controller/expediente_cambio_tramite.php:35
 msgid "Cambiar el trámite del expediente"
-msgstr "Canviar el tràmit de l'expedient"
+msgstr ""
 
 #: expedientes/controller/expediente_distribuir.php:122
 msgid "Guardar etiquetas"
-msgstr "Desar les etiquetes"
+msgstr ""
 
 #: expedientes/controller/expediente_distribuir.php:139
 msgid "Distribuir"
-msgstr "Distribuir"
+msgstr ""
 
 #: expedientes/controller/expediente_distribuir.php:153
 msgid "Archivar"
-msgstr "Arxivar"
+msgstr ""
 
 #: expedientes/controller/expediente_form.php:117
 msgid "expediente"
-msgstr "expedient"
+msgstr ""
 
 #: expedientes/controller/expediente_form.php:193
 #: expedientes/model/expediente.class.php:475
@@ -1835,214 +1832,214 @@ msgstr "expedient"
 #: expedientes/model/expediente.class.php:490
 #: expedientes/model/expediente.class.php:498
 msgid "quitar"
-msgstr "treure"
+msgstr ""
 
 #: expedientes/controller/expediente_form.php:255
 msgid "nuevo expediente"
-msgstr "nou expedient"
+msgstr ""
 
 #: expedientes/controller/expediente_update.php:178
 msgid "No se han podido crear el nuevo expediente"
-msgstr "No s'ha pogut crear el nou expedient"
+msgstr ""
 
 #: expedientes/controller/expediente_update.php:186
 msgid "No se han podido adjuntar la entrada"
-msgstr "No s'ha pogut adjuntar l'entrada"
+msgstr ""
 
 #: expedientes/controller/expediente_update.php:210
 msgid "No se han podido asignar el nuevo encargado"
-msgstr "No s'ha pogut assignar el nou encarregat"
+msgstr ""
 
 #: expedientes/controller/expediente_update.php:255
 msgid "No se ha podido guarda la fecha de reunión"
-msgstr "No s'ha pogut desar la data de la reunió"
+msgstr ""
 
 #: expedientes/controller/expediente_update.php:298
 #: expedientes/controller/expediente_update.php:321
 #: expedientes/controller/expediente_update.php:470
 msgid "No se ha podido cambiar el estado del expediente"
-msgstr "No s'ha pogut canviar l'estat de l'expedient"
+msgstr ""
 
 #: expedientes/controller/expediente_update.php:449
 #: expedientes/controller/expediente_update.php:533
 msgid "No se ha eliminado la firma"
-msgstr "La signatura no s'ha eliminat"
+msgstr ""
 
 #: expedientes/controller/expediente_update.php:458
 msgid "RETIRADO"
-msgstr "RETIRAT"
+msgstr ""
 
 #: expedientes/controller/expediente_update.php:487
 msgid "No se ha guardado el escrito"
-msgstr "No s'ha guardat l'escrit"
+msgstr ""
 
 #: expedientes/controller/expediente_update.php:523
 msgid "No se ha eliminado la accion"
-msgstr "No s'ha eliminat l'acció"
+msgstr ""
 
 #: expedientes/controller/expediente_update.php:539
 msgid "No se ha eliminado el expediente"
-msgstr "No s'ha eliminat l'expedient"
+msgstr ""
 
 #: expedientes/controller/expediente_update.php:614
 #: tramites/model/entity/firma.class.php:253
 msgid "visto"
-msgstr "vist"
+msgstr ""
 
 #: expedientes/controller/expediente_update.php:658
 msgid "Creo que ya se ha creado"
-msgstr "Crec que ja s'ha creat"
+msgstr ""
 
 #: expedientes/controller/expediente_ver.php:122
 msgid "Firmar"
-msgstr "Signar"
+msgstr ""
 
 #: expedientes/controller/expediente_ver.php:133
 msgid "Responder aclaración"
-msgstr "Respondre a l'aclariment"
+msgstr ""
 
 #: expedientes/controller/expediente_ver.php:136
 msgid "Responder"
-msgstr "Contestar"
+msgstr ""
 
 #: expedientes/controller/expediente_ver.php:139
 msgid "Pedir aclaración"
-msgstr "Sol·licitar aclariments"
+msgstr ""
 
 #: expedientes/controller/expediente_ver.php:180
 msgid "Quitar Firmas"
-msgstr "Suprimeix Signatures"
+msgstr ""
 
 #: expedientes/controller/expediente_ver.php:184
 msgid "Añadir Firmas"
-msgstr "Afegeix signatures"
+msgstr ""
 
 #: expedientes/controller/fecha_reunion.php:50
 msgid "Fijar fecha reunión:"
-msgstr "Estableix la data de la reunió:"
+msgstr ""
 
 #: expedientes/model/entity/accion.class.php:410
 #: tramites/model/entity/firma.class.php:813
 msgid "id_expediente"
-msgstr "id_expediente"
+msgstr ""
 
 #: expedientes/model/entity/accion.class.php:422
 msgid "tipo_accion"
-msgstr "tipo_accion"
+msgstr ""
 
 #: expedientes/model/entity/expedientedb.class.php:983
 #: tramites/model/entity/firma.class.php:825
 #: tramites/model/entity/tramitecargo.class.php:440
 msgid "id_tramite"
-msgstr "id_tramite"
+msgstr ""
 
 #: expedientes/model/entity/expedientedb.class.php:1031
 msgid "entradilla"
-msgstr "entradilla"
+msgstr ""
 
 #: expedientes/model/entity/expedientedb.class.php:1055
 msgid "prioridad"
-msgstr "prioritat"
+msgstr ""
 
 #: expedientes/model/entity/expedientedb.class.php:1067
 msgid "json_antecedentes"
-msgstr "json_antecedentes"
+msgstr ""
 
 #: expedientes/model/entity/expedientedb.class.php:1079
 msgid "json_acciones"
-msgstr "json_acciones"
+msgstr ""
 
 #: expedientes/model/entity/expedientedb.class.php:1115
 msgid "f_ini_circulacion"
-msgstr "f_ini_circulacion"
+msgstr ""
 
 #: expedientes/model/entity/expedientedb.class.php:1127
 msgid "f_reunion"
-msgstr "f_reunion"
+msgstr ""
 
 #: expedientes/model/entity/expedientedb.class.php:1151
 msgid "vida"
-msgstr "vida"
+msgstr ""
 
 #: expedientes/model/entity/expedientedb.class.php:1163
 msgid "json_preparar"
-msgstr "json_preparar"
+msgstr ""
 
 #: expedientes/model/entity/expedientedb.class.php:1175
 msgid "firmas_oficina"
-msgstr "firmas_oficina"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:358
 #: expedientes/model/expediente.class.php:386
 #: usuarios/model/categoria.class.php:19
 msgid "normal"
-msgstr "normal"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:359
 msgid "rápido"
-msgstr "ràpid"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:360
 msgid "urgente"
-msgstr "urgent"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:361
 msgid "desconocido"
-msgstr "desconegut"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:362
 msgid "otra"
-msgstr "un altre"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:363
 msgid "en espera"
-msgstr "en espera"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:369
 msgid "borrador"
-msgstr "esborrany"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:370
 #: usuarios/controller/usuario_home.php:130
 msgid "circulando"
-msgstr "circulant"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:371
 #: usuarios/controller/usuario_secretaria.php:52
 msgid "fijar reunión"
-msgstr "fixar reunió"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:372
 #: pendientes/model/pendiente.class.php:125
 msgid "acabado"
-msgstr "acabat"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:374
 msgid "ok secretaria / distribuir"
-msgstr "ok secretari / distribuir"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:375
 msgid "archivado"
-msgstr "arxivat"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:376
 #: usuarios/controller/usuario_home.php:218
 msgid "copias"
-msgstr "còpies"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:377
 #: tramites/model/entity/firma.class.php:230
 #: tramites/model/entity/firma.class.php:239
 #: tramites/model/entity/firma.class.php:260
 msgid "rechazado"
-msgstr "rebutjat"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:378
 #: tramites/model/entity/firma.class.php:229
 #: tramites/model/entity/firma.class.php:238
 #: tramites/model/entity/firma.class.php:259
 msgid "dilata"
-msgstr "dilata"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:379
 #: tramites/model/entity/firma.class.php:221
@@ -2053,573 +2050,571 @@ msgstr "dilata"
 #: tramites/model/entity/firma.class.php:257
 #: tramites/model/entity/firma.class.php:263
 msgid "espera"
-msgstr "espera"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:387
 #: usuarios/model/categoria.class.php:21
 msgid "permanente"
-msgstr "permanent"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:388
 msgid "experiencia"
-msgstr "experiència"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:389
 msgid "temporal"
-msgstr "temporal"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:390
 msgid "borrable"
-msgstr "esborrable"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:403
 msgid "DILATA"
-msgstr "DILATA"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:406
 msgid "RECHAZADO"
-msgstr "REBUTJAT"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:409
 msgid "NO"
-msgstr "NO"
+msgstr ""
 
 #: expedientes/model/expediente.class.php:496
 msgid "este documento se ha eliminado"
-msgstr "aquest document no s'ha eliminat"
+msgstr ""
 
 #: expedientes/model/expedientelista.class.php:654
 #, php-format
 msgid "No existe el trámite para el expediente: '%s' (id:%s)"
-msgstr "No existeix el tràmit per l'expedient: '%s' (id:%s)"
+msgstr ""
 
 #: expedientes/model/expedientelista.class.php:712
 #: plantillas/controller/plantilla_lista.php:27
 msgid "mod"
-msgstr "mod"
+msgstr ""
 
 #: lugares/controller/grupo_lista.php:48
 #: usuarios/controller/cargo_grupo_lista.php:46
 msgid "descripción"
-msgstr "descripció"
+msgstr ""
 
 #: lugares/controller/grupo_lista.php:48
 #: lugares/model/entity/grupo.class.php:400
 #: usuarios/controller/cargo_grupo_lista.php:47
 #: usuarios/model/entity/cargogrupo.class.php:441
 msgid "miembros"
-msgstr "membres"
+msgstr ""
 
 #: lugares/controller/lugar_form.php:105
 msgid "guardar datos lugar"
-msgstr "desa les dades de Lloc"
+msgstr ""
 
 #: lugares/controller/lugar_form.php:106
 #: usuarios/controller/usuario_form.php:101
 msgid "¿Está seguro que desea quitar este permiso?"
-msgstr "Esteu segur que voleu treure aquest permís?"
+msgstr ""
 
 #: lugares/controller/lugar_lista.php:54
 #: lugares/model/entity/lugar.class.php:639
 #: usuarios/model/entity/oficina.class.php:380
 msgid "sigla"
-msgstr "sigla"
+msgstr ""
 
 #: lugares/controller/lugar_lista.php:56
 msgid "región"
-msgstr "regió"
+msgstr ""
 
 #: lugares/controller/lugar_lista.php:58
 #: lugares/model/entity/lugar.class.php:687
 msgid "tipo_ctr"
-msgstr "tipo_ctr"
+msgstr ""
 
 #: lugares/controller/lugar_lista.php:59
 #: lugares/model/entity/lugar.class.php:735
 msgid "e_mail"
-msgstr "e-mail"
+msgstr ""
 
 #: lugares/controller/lugar_lista.php:60
 msgid "modo envío"
-msgstr "mode d'enviament"
+msgstr ""
 
 #: lugares/controller/lugar_lista.php:61
 #: lugares/model/entity/lugar.class.php:711
 msgid "plataforma"
-msgstr "plataforma"
+msgstr ""
 
 #: lugares/model/entity/gestorlugar.class.php:71
 msgid "Error al buscar las plataformas posibles"
-msgstr "Error en buscar les plataformes possibles"
+msgstr ""
 
 #: lugares/model/entity/gestorlugar.class.php:82
 msgid "Error al buscar el id del IESE"
-msgstr "Error en buscar l'id de l'IESE"
+msgstr ""
 
 #: lugares/model/entity/gestorlugar.class.php:122
 msgid "Error al buscar el id de cr"
-msgstr "Error en buscar l'id de cr"
+msgstr ""
 
 #: lugares/model/entity/lugar.class.php:303
 msgid "as4"
-msgstr "as4"
+msgstr ""
 
 #: lugares/model/entity/lugar.class.php:304
 msgid "pdf"
-msgstr "pdf"
+msgstr ""
 
 #: lugares/model/entity/lugar.class.php:663
 msgid "region"
-msgstr "regió"
+msgstr ""
 
 #: lugares/model/entity/lugar.class.php:723
 msgid "pub_key"
-msgstr "pub_key"
+msgstr ""
 
 #: oasis_as4/controller/pdm_exportar.php:20
 msgid "nombre fichero"
-msgstr "nom del fitxer"
+msgstr ""
 
 #: oasis_as4/controller/pdm_update.php:56
 #: oasis_as4/controller/pdm_update.php:63
 #: oasis_as4/controller/pdm_update.php:69
 #, php-format
 msgid "hay un error al eliminar: %s"
-msgstr "hi ha un error en eliminar: %s"
+msgstr ""
 
 #: oasis_as4/controller/ver_tabla.php:52
 msgid "enviar orden anular"
-msgstr "enviar ordre anul·lar"
+msgstr ""
 
 #: oasis_as4/controller/ver_tabla.php:57
 msgid "enviar orden reemplazar"
-msgstr "enviar ordre reemplaçar"
+msgstr ""
 
 #: oasis_as4/model/as4.class.php:60
 msgid "Error al escribir el as4.xml"
-msgstr "Error en escriure l'as4.xml"
+msgstr ""
 
 #: oasis_as4/model/as4collaborationinfo.class.php:29
 msgid "compartir"
-msgstr "compartir"
+msgstr ""
 
 #: oasis_as4/model/as4collaborationinfo.class.php:30
 msgid "reemplazar"
-msgstr "reemplaçar"
+msgstr ""
 
 #: oasis_as4/model/as4collaborationinfo.class.php:31
 msgid "orden anular"
-msgstr "ordre anular"
+msgstr ""
 
 #: oasis_as4/model/as4entregar.class.php:209
 msgid "La entrada no tiene descripción"
-msgstr "L'entrada no té descripció"
+msgstr ""
 
 #: oasis_as4/model/as4entregar.class.php:212
 msgid "La entrada no tiene asunto"
-msgstr "L'entrada no té assumpte"
+msgstr ""
 
 #: oasis_as4/model/as4entregar.class.php:822
 msgid "sin nombre"
-msgstr "sense nom"
+msgstr ""
 
 #: oasis_as4/model/as4remove.class.php:115
 msgid "Fichero"
-msgstr "Fitxer"
+msgstr ""
 
 #: oasis_as4/model/pmode.class.php:42
 msgid "Error al escribir el pmode resp"
-msgstr "Error en escriure el pmode resp"
+msgstr ""
 
 #: oasis_as4/model/pmode.class.php:61
 msgid "Error al escribir el pmode init"
-msgstr "Error en escriure el pmode init"
+msgstr ""
 
 #: pendientes/controller/pendiente_buscar.php:35
 msgid ""
 "Está mal! No deberia asociar un pendiente a una entrada de distribución cr "
 "(bypass)"
 msgstr ""
-"Està malament! No hauria d'associar un pendent a una entrada de distribució "
-"cr (bypass)"
 
 #: pendientes/controller/pendiente_buscar.php:62
 msgid "cualquiera"
-msgstr "qualsevol"
+msgstr ""
 
 #: pendientes/controller/pendiente_buscar.php:213
 msgid "nuevo pendiente"
-msgstr "nou pendent"
+msgstr ""
 
 #: pendientes/controller/pendiente_buscar.php:214
 msgid "marcar como terminado"
-msgstr "marca com a acabat"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:182
 msgid "No sé a que pendiente se refiere."
-msgstr "No sé a quin pendent fa referència."
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:285
 #, php-format
 msgid "pendiente de %s"
-msgstr "pendent de %s"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:288
 #, php-format
 msgid "pendiente de la oficina %s"
-msgstr "pendent de l' oficina %s"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:330
 #, php-format
 msgid "pasa algo con el pendiente periódico: %s"
-msgstr "passa alguna cosa amb el pendent periòdic: %s"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:465
 msgid "primer"
-msgstr "primer"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:466
 msgid "segundo"
-msgstr "segon"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:467
 msgid "tercer"
-msgstr "tercer"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:468
 msgid "cuarto"
-msgstr "quart"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:469
 msgid "último"
-msgstr "últim"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:525
 msgid "ver ficha completa"
-msgstr "veure fitxa complerta"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:528
 msgid "ver ficha sencilla"
-msgstr "veure fitxa sencilla"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:534
 msgid "ver periodicidad"
-msgstr "veure periodicitat"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:539
 msgid "ocultar periodicidad"
-msgstr "amagar la periodicitat"
+msgstr ""
 
 #: pendientes/controller/pendiente_form.php:540
 msgid "fecha de final"
-msgstr "data de finalització"
+msgstr ""
 
 #: pendientes/controller/pendiente_tabla.php:37
 msgid "registro"
-msgstr "registre"
+msgstr ""
 
 #: pendientes/controller/pendiente_tabla.php:141
 msgid "marcar como contestado"
-msgstr "marca com a contestada"
+msgstr ""
 
 #: pendientes/controller/pendiente_tabla.php:154
 msgid "calendario"
-msgstr "calendari"
+msgstr ""
 
 #: pendientes/controller/pendiente_update_ics.php:282
 #: pendientes/controller/pendiente_update_ics.php:380
 msgid "No se han podido modificar el pendiente"
-msgstr "No s'ha pogut canviar el pendent"
+msgstr ""
 
 #: pendientes/controller/pendiente_update_ics.php:312
 #: pendientes/controller/pendiente_update_ics.php:354
 msgid "No se cual tengo que eliminar."
-msgstr "No sé quin he d'eliminar."
+msgstr ""
 
 #: pendientes/controller/pendiente_update_migrar.php:53
 msgid "No se encuentra ninguna entrada con el protocolo origen"
-msgstr "No es troba cap entrada amb el protocol d'origen"
+msgstr ""
 
 #: pendientes/controller/pendiente_update_migrar.php:56
 msgid "Existen más de una entrada con el protocolo origen"
-msgstr "Existeixen més d'una entrada amb protocol d'origen"
+msgstr ""
 
 #: pendientes/controller/pendiente_update_migrar.php:60
 msgid "Error en la búsqueda del origen"
-msgstr "Error en la cerca de l'origen"
+msgstr ""
 
 #: pendientes/controller/pendiente_update_migrar.php:94
 msgid "No se encuentra ninguna entrada con el protocolo destino"
-msgstr "No es troba cap entrada amb el protocol de destí"
+msgstr ""
 
 #: pendientes/controller/pendiente_update_migrar.php:97
 msgid "Existen más de una entrada con el protocolo destino"
-msgstr "Existeixen més d'una entrada amb protocol de destí"
+msgstr ""
 
 #: pendientes/controller/pendiente_update_migrar.php:101
 msgid "Error en la búsqueda del destino"
-msgstr "Error en la cerca del destí"
+msgstr ""
 
 #: pendientes/controller/pendiente_update_migrar.php:125
 msgid "No se puede cambiar el pendiente de una oficina a otra"
-msgstr "No es pot canviar el pendent d'una oficina a una altre"
+msgstr ""
 
 #: pendientes/controller/pendiente_update_migrar.php:141
 msgid "No se ha podido trasladar..."
-msgstr "No s'ha pogut traslladar..."
+msgstr ""
 
 #: pendientes/model/entity/pendientedb.class.php:879
 msgid "f_acabado"
-msgstr "f_acabado"
+msgstr ""
 
 #: pendientes/model/entity/pendientedb.class.php:891
 msgid "f_plazo"
-msgstr "f_plazo"
+msgstr ""
 
 #: pendientes/model/entity/pendientedb.class.php:903
 msgid "ref_mas"
-msgstr "ref_mes"
+msgstr ""
 
 #: pendientes/model/entity/pendientedb.class.php:915
 #: tramites/model/entity/firma.class.php:945
 msgid "observ"
-msgstr "observ"
+msgstr ""
 
 #: pendientes/model/entity/pendientedb.class.php:939
 msgid "cancilleria"
-msgstr "cacilleria"
+msgstr ""
 
 #: pendientes/model/entity/pendientedb.class.php:975
 msgid "pendiente_con"
-msgstr "pendent_amb"
+msgstr ""
 
 #: pendientes/model/entity/pendientedb.class.php:1011
 #: usuarios/model/entity/cargo.class.php:614
 msgid "id_oficina"
-msgstr "id_oficina"
+msgstr ""
 
 #: pendientes/model/entity/pendientedb.class.php:1035
 msgid "f_inicio"
-msgstr "f_inicio"
+msgstr ""
 
 #: pendientes/model/pendiente.class.php:124
 msgid "iniciado"
-msgstr "iniciat"
+msgstr ""
 
 #: pendientes/model/pendiente.class.php:126
 msgid "en proceso"
-msgstr "en procés"
+msgstr ""
 
 #: pendientes/model/pendiente.class.php:127
 msgid "cancelado"
-msgstr "cancel·lat"
+msgstr ""
 
 #: pendientes/model/pendiente.class.php:733
 msgid "No encuentro el todo"
-msgstr "No puc trobar el todo"
+msgstr ""
 
 #: pendientes/model/rrule.class.php:34
 msgid "No hay tipo en recurrencias"
-msgstr "No hi ha tipus a recurrències"
+msgstr ""
 
 #: pendientes/model/rrule.class.php:164
 #, php-format
 msgid "Cuidado con febrero para el día: %s"
-msgstr "Compte amb el febrer per al dia: %s"
+msgstr ""
 
 #: pendientes/model/rrule.class.php:167
 msgid "Cuidado con los meses de menos de 31 días"
-msgstr "Compte amb mesos menys de 31 dies"
+msgstr ""
 
 #: plantillas/controller/plantilla_lista.php:23
 msgid "cambiar nombre"
-msgstr "canviar el nom"
+msgstr ""
 
 #: plantillas/controller/plantilla_lista.php:56
 #: plantillas/controller/plantilla_lista_expediente.php:62
 msgid "Plantillas de la Delegación"
-msgstr "Plantilles de la delegació"
+msgstr ""
 
 #: tramites/controller/firma_ajax.php:152
 #: tramites/controller/firma_ajax.php:313
 msgid "No puede Firmar"
-msgstr "No es pot signar"
+msgstr ""
 
 #: tramites/controller/firma_ajax.php:197
 msgid "No se puede firmar el cargo_tipo distribuir"
-msgstr "No podeu signar el cargo_tipo distribuir"
+msgstr ""
 
 #: tramites/controller/tramite_form.php:55
 msgid "guardar datos trámite"
-msgstr "desa les dades del tràmit"
+msgstr ""
 
 #: tramites/controller/tramite_form.php:84
 msgid "¿Está seguro que desea borrar esta tramite?"
-msgstr "Esteu segur que voleu suprimir aquest tràmit?"
+msgstr ""
 
 #: tramites/controller/tramitecargo_ajax.php:68
 #: tramites/model/entity/tramite.class.php:423
 #: usuarios/model/entity/oficina.class.php:392
 msgid "orden"
-msgstr "ordre"
+msgstr ""
 
 #: tramites/controller/tramitecargo_ajax.php:68
 #: tramites/model/entity/tramitecargo.class.php:476
 msgid "multiple"
-msgstr "múltiple"
+msgstr ""
 
 #: tramites/controller/tramitecargo_select.php:78
 #: usuarios/controller/cargo_form.php:120
 msgid "¿Está seguro que desea quitar este cargo?"
-msgstr "Esteu segur que voleu treure aquest càrrec?"
+msgstr ""
 
 #: tramites/controller/tramitecargo_select.php:79
 msgid "No ha determinado para que trámite"
-msgstr "No ha determinat per a quin tràmit"
+msgstr ""
 
 #: tramites/model/entity/firma.class.php:208
 msgid "voto"
-msgstr "vot"
+msgstr ""
 
 #: tramites/model/entity/firma.class.php:209
 #: tramites/model/entity/gestorfirma.class.php:283
 msgid "aclaración"
-msgstr "aclariment"
+msgstr ""
 
 #: tramites/model/entity/firma.class.php:228
 #: tramites/model/entity/firma.class.php:258
 msgid "VºBº"
-msgstr "VºBº"
+msgstr ""
 
 #: tramites/model/entity/firma.class.php:244
 #: tramites/model/entity/firma.class.php:261
 msgid "nueva"
-msgstr "nova"
+msgstr ""
 
 #: tramites/model/entity/firma.class.php:245
 #: tramites/model/entity/firma.class.php:262
 #: tramites/model/entity/gestorfirma.class.php:287
 msgid "respuesta"
-msgstr "resposta"
+msgstr ""
 
 #: tramites/model/entity/firma.class.php:837
 msgid "id_cargo_creador"
-msgstr "id_cargo_creador"
+msgstr ""
 
 #: tramites/model/entity/firma.class.php:849
 msgid "cargo_tipo"
-msgstr "càrrec_tipus"
+msgstr ""
 
 #: tramites/model/entity/firma.class.php:873
 #: usuarios/model/entity/cargo.class.php:650
 #: usuarios/model/entity/preferencia.class.php:401
 msgid "id_usuario"
-msgstr "id_usuario"
+msgstr ""
 
 #: tramites/model/entity/firma.class.php:885
 #: tramites/model/entity/tramitecargo.class.php:452
 msgid "orden_tramite"
-msgstr "orden_tramite"
+msgstr ""
 
 #: tramites/model/entity/firma.class.php:897
 msgid "orden_oficina"
-msgstr "orden_oficina"
+msgstr ""
 
 #: tramites/model/entity/firma.class.php:933
 msgid "observ_creador"
-msgstr "observ_creador"
+msgstr ""
 
 #: tramites/model/entity/firma.class.php:957
 msgid "f_valor"
-msgstr "f_valor"
+msgstr ""
 
 #: tramites/model/entity/tramite.class.php:411
 msgid "trámite"
-msgstr "tràmit"
+msgstr ""
 
 #: tramites/model/entity/tramite.class.php:435
 msgid "breve"
-msgstr "breu"
+msgstr ""
 
 #: usuarios/controller/cargo_form.php:59
 msgid "guardar datos cargo"
-msgstr "desar dades del càrrec"
+msgstr ""
 
 #: usuarios/controller/cargo_grupo_form.php:89
 msgid "guardar datos grupo"
-msgstr "guardar dades grup"
+msgstr ""
 
 #: usuarios/controller/cargo_grupo_form.php:90
 msgid "¿Está seguro que desea quitar este grupo?"
-msgstr "Esteu segur que voleu suprimir aquest grup?"
+msgstr ""
 
 #: usuarios/controller/cargo_grupo_lista.php:45
 msgid "cargo ref"
-msgstr "càrrec ref"
+msgstr ""
 
 #: usuarios/controller/cargo_update.php:27
 msgid "Hay un error al guardar"
-msgstr "Hi ha un error en desar"
+msgstr ""
 
 #: usuarios/controller/cargo_update.php:52
 msgid "No se puede eliminar un cargo tipo."
-msgstr "No podeu suprimir un càrrec tipus."
+msgstr ""
 
 #: usuarios/controller/login.php:77 usuarios/controller/login.php:263
 #, php-format
 msgid "Todavía NO se ha creado la entidad: %s"
-msgstr "Encara NO s'ha creat l'entitat: %s"
+msgstr ""
 
 #: usuarios/controller/login.php:146
 #, php-format
 msgid "(%s) está asignado como suplente a este cargo"
-msgstr "(%s) està assignat com a suplent per aquest càrrec"
+msgstr ""
 
 #: usuarios/controller/login.php:246
 msgid "Password incorrecto"
-msgstr "Contrasenya incorrecta"
+msgstr ""
 
 #: usuarios/controller/login.php:251
 msgid "este usuario no existe"
-msgstr "aquest usuari no existeix"
+msgstr ""
 
 #: usuarios/controller/oficina_form.php:56
 msgid "guardar datos oficina"
-msgstr "desa les dades de l'oficina"
+msgstr ""
 
 #: usuarios/controller/oficina_form.php:81
 msgid "¿Está seguro que desea borrar esta oficina?"
-msgstr "Esteu segur que voleu suprimir aquesta oficina?"
+msgstr ""
 
 #: usuarios/controller/personal_update.php:45
 msgid "hay un error, no se ha guardado idioma"
-msgstr "hi ha un error, no s'ha guardat l'idioma"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:37
 msgid "Expedientes"
-msgstr "Expedients"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:38
 msgid "Entradas"
-msgstr "Entrades"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:52
 #: usuarios/controller/usuario_home.php:47
 msgid "Expedientes de trabajo propio"
-msgstr "Expedients de treball propis"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:72
 msgid "consejo local"
-msgstr "consell local"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:73
 msgid "Expedientes para revisión del consejo local"
-msgstr "Expedients per a revisió del consell local"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:94
 #: usuarios/controller/usuario_home.php:194
 msgid "archivados"
-msgstr "arxivats"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:95
 #: usuarios/controller/usuario_home.php:195
@@ -2627,2198 +2622,597 @@ msgid ""
 "Expedientes de la propia oficina archivados, una vez finalizados todos los "
 "pasos"
 msgstr ""
-"Expedients de la pròpia oficina arxivats, una vegada acabats tots els passos"
 
 #: usuarios/controller/usuario_ctr.php:119
 msgid "correo de entrada"
-msgstr "correu d'entrada"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:120
 msgid "Gestionar el correo de entrada"
-msgstr "Gestionar el correu d' entrada"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:142
 msgid "correo encargado"
-msgstr "correu encarregat"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:143
 msgid "Ver el correo de entrada encargado a alguien"
-msgstr "Veure el correu d'entrada encarregat a algú"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:164
 #: usuarios/controller/usuario_home.php:313
 #: usuarios/controller/usuario_secretaria.php:255
 msgid "archivo de escritos"
-msgstr "arxiu d'escrits"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:165
 #: usuarios/controller/usuario_home.php:314
 msgid "Buscar Entradas, escritos, etc. registrados en secetaría"
-msgstr "Cercar Entrades, escrits, etc. registrats a secretaria"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:184
 msgid "entradas recientes"
-msgstr "entrades recents"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:186
 #, php-format
 msgid ""
 "Correo de dl y cr (marcado como visto o encargado) de los últimos %s días"
-msgstr "Correu de dl i cr (marcat com a vist o encarregat) dels últims %s dies"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:205
 msgid "permanentes"
-msgstr "permanents"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:206
 msgid "Escritos permanentes"
-msgstr "Escrits permanents"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:228
 #: usuarios/controller/usuario_home.php:378
 #: usuarios/controller/usuario_secretaria.php:302
 msgid "pendientes"
-msgstr "pendents"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:229
 #: usuarios/controller/usuario_home.php:379
 msgid "Gestionar pendientes del registro y/o la oficina"
-msgstr "Gestionar pendents del registre i/o oficina"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:249
 #: usuarios/controller/usuario_home.php:399
 msgid "documentos"
-msgstr "documents"
+msgstr ""
 
 #: usuarios/controller/usuario_ctr.php:250
 #: usuarios/controller/usuario_home.php:400
 msgid ""
 "Introducir y gestionar documentos externos a la base de datos de Tramity"
-msgstr "Introduir i gestionar documents externs a la base de dades de Tramity"
+msgstr ""
 
 #: usuarios/controller/usuario_form.php:100
 msgid "guardar datos usuario"
-msgstr "guardar dades usuari"
+msgstr ""
 
 #: usuarios/controller/usuario_form_pwd.php:34
 msgid "guardar datos"
-msgstr "guardar dades"
+msgstr ""
 
 #: usuarios/controller/usuario_form_pwd.php:35
 msgid "se ha cambiado el password"
-msgstr "ha canviat la contrasenya"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:46
 msgid "borrador (propio)"
-msgstr "esborrany (propi)"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:67
 msgid "borrador (oficina)"
-msgstr "esborrany (oficina)"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:68
 msgid "Expedientes para revisión de la propia oficina"
-msgstr "Expedients per revisar de la pròpia oficina"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:88
 msgid "para firmar"
-msgstr "per a signar"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:89
 msgid "Expedientes pendientes de firmar"
-msgstr "Expedients pendents de firmar"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:109
 msgid "para reunión"
-msgstr "per a la reunió"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:110
 msgid "Expedientes pendientes de firmar para una próxima reunión"
-msgstr "Expedients pendents de firmar pe a una pròxima reunió"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:131
 msgid "Expedientes de la oficina que están circulando"
-msgstr "Expedients de l'oficina que estan circulant"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:152
 msgid "acabados"
-msgstr "acabats"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:153
 msgid "Expedientes que han terminado de circular (directores)"
-msgstr "Expedients que han acabat de circular (directors)"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:173
 msgid "acabados encargados"
-msgstr "acabats encarregats"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:174
 msgid "Expedientes que han circulado y se han encargado a alguien"
-msgstr "Expedients que han circulat i s'han encarregat a algú"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:219
 msgid "Copias de Expedientes de otras oficinas"
-msgstr "Còpies d'expedients d'altres oficines"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:243
 msgid "E: admitir"
-msgstr "E: admetre"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:244
 msgid "Ver el correo de entrada"
-msgstr "Veure el correu d'entrada"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:268
 msgid "entradas"
-msgstr "entrades"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:269
 msgid "Gestionar el correo de entrada de la oficina (Director)"
-msgstr "Gestionar el correu d'entrada a la oficina (Director)"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:291
 msgid "entradas encargadas"
-msgstr "entrades encarregades"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:292
 msgid "Ver el correo de entrada que se ha encargado"
-msgstr "Veure el correu d'entrada que s'ha encarregat"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:334
 msgid "escritos de cr"
-msgstr "escrits de cr"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:335
 msgid "Correo de cr de la última semana (Directores)"
-msgstr "Correu de cr de la última setmana (Directors)"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:355
 msgid "permanentes de cr"
-msgstr "permanents de cr"
+msgstr ""
 
 #: usuarios/controller/usuario_home.php:356
 msgid "Escritos de cr permanentes"
-msgstr "Escrits de cr permanents"
+msgstr ""
 
 #: usuarios/controller/usuario_lista.php:57
 msgid "cambiar password"
-msgstr "canviar el password"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:53
 msgid "asignar a cada expediente la fecha de la reunión (scdl)"
-msgstr "assignar a cada fitxer la data de la reunió (scdl)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:73
 msgid "seguimiento reunion"
-msgstr "seguiment de la reunió"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:74
 msgid "control de quiénes faltan por firmar cada expediente (scdl)"
-msgstr "control dels que falten per firmar cada expedient (scdl)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:95
 msgid "seguimiento"
-msgstr "seguiment"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:119
 msgid "distribuir"
-msgstr "distribuir"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:120
 msgid "Pasar a cada oficina los expedientes que ya han circulado (scdl)"
-msgstr "Passar a cada oficina els expedients que ja han circulat (scdl)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:143
 msgid "Enviar escritos a los destinos correspondientes (secretaría)"
-msgstr "Enviar escrits als destins corresponents (secretaria)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:164
 msgid "E: introducir"
-msgstr "E: Introduir"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:165
 msgid "Introducir nuevas entradas para el vcd (Secretaría)"
-msgstr "Introduir noves entrades l¡per el vcd (Secretaria)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:186
 msgid "E: asignar"
-msgstr "E: assignar"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:187
 msgid "Completar el registro de las nuevas entradas (Secretaría)"
-msgstr "Completar el registre de les noves entrades (Secretaria)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:211
 msgid "E: aceptar"
-msgstr "E: acceptar"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:212
 msgid "Confirmar y completar el registro de las nuevas entradas (scdl)"
-msgstr "Confirmar i completar la inscripció de noves inscripcions (scdl)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:233
 msgid "distribución cr"
-msgstr "distribució cr"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:234
 msgid "Enviar escritos de cr a ctr (Secretaría)"
-msgstr "Enviar escrits de cr a ctr (Secretaria)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:256
 msgid "Modificaciones en Entradas, escritos, etc. (Secretaría)"
-msgstr "Modificacions a entrades, escrits, etc. (Secretaria)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:276
 msgid "pref"
-msgstr "pref"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:277
 msgid "Dar permisos a of de Secretaría para tareas del scdl (scdl)"
-msgstr "Donar permisos a of de Secretaria per a tasques del scdl (scdl)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:303
 msgid "Gestión de los pendientes (Secretaría)"
-msgstr "Gestió dels pendents (Secretaria)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:324
 msgid "salida manual"
-msgstr "sortida manual"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:325
 msgid "Registro y envío de escritos sin circular expediente (Secretaría)"
-msgstr "Registre i enviament d'escrits sense circular l'expedient (Secretaria)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:345
 msgid "mantenimiento"
-msgstr "manteniment"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:346
 msgid "Operaciones varias (Secretaría)"
-msgstr "Operacions diverses (Secretaria)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:367
 msgid "plantillas"
-msgstr "plantilles"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:368
 msgid "Modelos jurídicos para diferentes trámites (Secretaría)"
-msgstr "Model jurídics per a diferents tràmits (Secretaria)"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:388
 msgid "imprimir"
-msgstr "imprimir"
+msgstr ""
 
 #: usuarios/controller/usuario_secretaria.php:389
 msgid "Imprimir el registro (Secretaría)"
-msgstr "Imprimir el registre (Secretaria)"
+msgstr ""
 
 #: usuarios/controller/usuario_update.php:46
 #, php-format
 msgid "role cambiado a %s"
-msgstr "role canviat a %s"
+msgstr ""
 
 #: usuarios/controller/usuario_update.php:130
 msgid "debe añadir un password"
-msgstr "hauries d'afegir una contrasenya"
+msgstr ""
 
 #: usuarios/controller/usuario_update.php:140
 msgid "debe poner un nombre de usuario"
-msgstr "ha de posar un nom d'usuari"
+msgstr ""
 
 #: usuarios/model/categoria.class.php:20
 msgid "sin numerar"
-msgstr "sense numerar"
+msgstr ""
 
 #: usuarios/model/entity/cargo.class.php:578
 msgid "id_ambito"
-msgstr "id_ambito"
+msgstr ""
 
 #: usuarios/model/entity/cargo.class.php:626
 msgid "director"
-msgstr "director"
+msgstr ""
 
 #: usuarios/model/entity/cargo.class.php:638
 msgid "sacd"
-msgstr "sacd"
+msgstr ""
 
 #: usuarios/model/entity/cargo.class.php:662
 msgid "id_suplente"
-msgstr "id_suplente"
+msgstr ""
 
 #: usuarios/model/entity/cargogrupo.class.php:417
 msgid "id_cargo_ref"
-msgstr "id_cargo_ref"
+msgstr ""
 
 #: usuarios/model/entity/locale.class.php:431
 msgid "nom_locale"
-msgstr "nom_locale"
+msgstr ""
 
 #: usuarios/model/entity/locale.class.php:445
 msgid "idioma"
-msgstr "idioma"
+msgstr ""
 
 #: usuarios/model/entity/locale.class.php:459
 msgid "nombre idioma"
-msgstr "nom llengua"
+msgstr ""
 
 #: usuarios/model/entity/locale.class.php:473
 msgid "activo"
-msgstr "actiu"
+msgstr ""
 
 #: usuarios/model/entity/preferencia.class.php:425
 msgid "preferencia"
-msgstr "preferència"
+msgstr ""
 
 #: usuarios/model/entity/usuario.class.php:465
 msgid "usuario"
-msgstr "usuariiiii"
+msgstr ""
 
 #: usuarios/model/entity/usuario.class.php:477
 msgid "id_cargo_preferido"
-msgstr "id_cargo_preferit"
+msgstr ""
 
 #: usuarios/model/entity/usuario.class.php:513
 msgid "nom_usuario"
-msgstr "nom_usuario"
+msgstr ""
 
 #: usuarios/model/visibilidad.class.php:62
 #: usuarios/model/visibilidad.class.php:72
 msgid "todos"
-msgstr "tots"
+msgstr ""
 
 #: usuarios/model/visibilidad.class.php:64
 msgid "directores"
-msgstr "directors"
+msgstr ""
 
 #: usuarios/model/visibilidad.class.php:66
 msgid "vcd"
-msgstr "vcd"
+msgstr ""
 
 #: usuarios/model/visibilidad.class.php:73
 msgid "d"
-msgstr "d"
+msgstr ""
 
 #: usuarios/model/visibilidad.class.php:74
 msgid "d y sacd"
-msgstr "d i sacd"
+msgstr ""
 
 #: web/datetimelocal.class.php:17
 msgid "enero"
-msgstr "gener"
+msgstr ""
 
 #: web/datetimelocal.class.php:18
 msgid "febrero"
-msgstr "febrer"
+msgstr ""
 
 #: web/datetimelocal.class.php:19
 msgid "marzo"
-msgstr "març"
+msgstr ""
 
 #: web/datetimelocal.class.php:20
 msgid "abril"
-msgstr "abril"
+msgstr ""
 
 #: web/datetimelocal.class.php:21
 msgid "mayo"
-msgstr "maig"
+msgstr ""
 
 #: web/datetimelocal.class.php:22
 msgid "junio"
-msgstr "juny"
+msgstr ""
 
 #: web/datetimelocal.class.php:23
 msgid "julio"
-msgstr "juliol"
+msgstr ""
 
 #: web/datetimelocal.class.php:24
 msgid "agosto"
-msgstr "agost"
+msgstr ""
 
 #: web/datetimelocal.class.php:25
 msgid "septiembre"
-msgstr "setembre"
+msgstr ""
 
 #: web/datetimelocal.class.php:26
 msgid "octubre"
-msgstr "octubre"
+msgstr ""
 
 #: web/datetimelocal.class.php:27
 msgid "noviembre"
-msgstr "novembre"
+msgstr ""
 
 #: web/datetimelocal.class.php:28
 msgid "diciembre"
-msgstr "desembre"
+msgstr ""
 
 #: web/datetimelocal.class.php:57
 msgid "lunes"
-msgstr "dilluns"
+msgstr ""
 
 #: web/datetimelocal.class.php:58
 msgid "martes"
-msgstr "dimarts"
+msgstr ""
 
 #: web/datetimelocal.class.php:59
 msgid "miércoles"
-msgstr "dimecres"
+msgstr ""
 
 #: web/datetimelocal.class.php:60
 msgid "jueves"
-msgstr "dijous"
+msgstr ""
 
 #: web/datetimelocal.class.php:61
 msgid "viernes"
-msgstr "divendres"
+msgstr ""
 
 #: web/datetimelocal.class.php:62
 msgid "sábado"
-msgstr "dissabte"
+msgstr ""
 
 #: web/datetimelocal.class.php:63
 msgid "domingo"
-msgstr "diumenge"
+msgstr ""
 
 #: web/datetimelocal.class.php:229
 #, php-format
 msgid "la fecha fin es igual a la fecha inicio en el periodo %s: %s"
-msgstr "la data de finalització és igual a la data d'inici del període %s: %s"
+msgstr ""
 
 #: web/datetimelocal.class.php:234
 #, php-format
 msgid "la fecha fin es menor que la fecha inicio en el periodo %s: %s"
 msgstr ""
-"la data de finalització és inferior a la data d'inici del període %s: %s"
 
 #: web/datetimelocal.class.php:244
 #, php-format
 msgid "dias libres cerca de %s"
-msgstr "dies lliures prop de %s"
+msgstr ""
 
 #: web/datetimelocal.class.php:249
 #, php-format
 msgid "hay un solape cerca de %s"
-msgstr "hi ha una superposició propera a %s"
+msgstr ""
 
 #: web/desplegable.class.php:129 web/protocolo.class.php:257
 msgid "tiene que ser un array"
-msgstr "ha de ser un array"
+msgstr ""
 
 #: web/hash.class.php:148
 msgid "llegan campos hidden modificados"
-msgstr "arriben camps hidden modificats"
+msgstr ""
 
 #: web/hash.class.php:179
 msgid "llegan distinto número o nombre de los campos que se dice que se envian"
-msgstr "arriben diferent nombre o nom dels camps que es diu que s'envien"
+msgstr ""
 
 #: web/hash.class.php:223
 msgid "url modificada"
-msgstr "url modificada"
+msgstr ""
 
 #: web/hash.class.php:234 web/hash.class.php:239
 msgid "problema general de seguridad"
-msgstr "problema general de seguretat"
+msgstr ""
 
 #: web/hash.class.php:240
 msgid "para ver más detalles activa el mode debug en core\\confgiGlobal"
-msgstr "per veure més detalls activa el model debug en core\\confgiGlobal"
+msgstr ""
 
 #: web/hash.class.php:279
 msgid "página con seguridad desactivada"
-msgstr "pàgina amb seguretat desactivada"
+msgstr ""
 
 #: web/lista.class.php:186
 msgid "no hay filas"
-msgstr "no hi ha files"
+msgstr ""
 
 #: web/lista.class.php:357 web/lista.class.php:955 web/lista.class.php:1160
 #: web/lista.class.php:1330
 msgid "no hay ninguna fila"
-msgstr "no hi ha cap fila"
+msgstr ""
 
 #: web/lista.class.php:904
 msgid "guardar selección de columnas"
-msgstr "guardar selecció de columnes"
+msgstr ""
 
 #: web/lista.class.php:906
 msgid "ver/ocultar panel de búsqueda"
-msgstr "veure/ocultar panell de cerca"
+msgstr ""
 
 #: web/lista.class.php:915
 msgid "Buscar en todas las columnas"
-msgstr "Cercar en totes les columnes"
+msgstr ""
 
 #: web/lista.class.php:1028 web/lista.class.php:1232 web/lista.class.php:1383
 msgid "clic para seleccionar"
-msgstr "clic per seleccionar"
+msgstr ""
 
 #: web/lista.class.php:1348
 msgid "ordenar por..."
-msgstr "ordenar per..."
+msgstr ""
 
 #: web/protocolo.class.php:90
 msgid "sin numerar (E12)"
-msgstr "sense numerar (E12)"
+msgstr ""
 
 #: web/protocolo.class.php:209 web/protocoloarray.class.php:288
 msgid "más..."
-msgstr "més..."
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:8
 msgid "error: password no válido"
-msgstr "error: password no vàlid"
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:12
 msgid "error: debes confirmar el password"
-msgstr "error: has de confirmar el password"
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:16
 msgid "error: passwords no coincidentes"
-msgstr "error: passwords no coincidents"
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:44
 msgid "deberías cambiar el password"
-msgstr "hauries de canviar la contrasenya"
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:50
 msgid "confirma password"
-msgstr "confirma password"
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:55
 msgid "Cancelar"
-msgstr "Cancelar"
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:59
 msgid "Requerimientos del password"
-msgstr "Requisits de contrasenya"
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:61
 msgid ""
 "Los passwords no pueden contener el valor del \"login\" o de qualquiera de "
 "las palabras del \"nombre\". (no tiene en cuenta mayúsculas/minúsculas)"
 msgstr ""
-"Les contrasenyes no poden contenir el valor del \"login\" ni cap de les "
-"paraules del \"nom\". (cas insensible)"
 
 #: usuarios/view/usuario_form_pwd.phtml:62
 msgid "El password ha de tener más de 8 carácteres"
-msgstr "La contrasenya ha de tenir més de 8 caràcters"
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:63
 msgid ""
 "El password ha de tener como mínimo 3 de los segientes grupos de carácteres"
-msgstr "La contrasenya ha de tenir almenys 3 dels següents grups de caràcters"
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:65
 msgid "Mayúsculas ('A' a 'Z')"
-msgstr "Majúscules ('A' a 'Z')"
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:66
 msgid "Minúsculas ('a' a 'z')"
-msgstr "Minúscules ('a' a 'z')"
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:67
 msgid "Números ('0' a '9')"
-msgstr "Números ('0' a '9')"
+msgstr ""
 
 #: usuarios/view/usuario_form_pwd.phtml:68
 msgid ""
 "(No pueden ser comillas dobles!!) Carácteres: ~!@#$%^&*_-+=`|(){}[]:;<>,.?/"
 msgstr ""
-"(No es poden fer cometes dobles!!) Caràcters: .!@#$%*^&*_-+`| (){}[]:;<>,.? /"
-
-#~ msgid "Buscar un escrito concreto"
-#~ msgstr "Cerca un escrit concret"
-
-#~ msgid ""
-#~ "puede pegar el protocolo completo (ej: cr 1/15) y presionar el tabulador"
-#~ msgstr ""
-#~ "pot enganxar el protocol complert (ex: cr 1/15) i pressionar el tabulador"
-
-#~ msgid "¿Qué protocolo tiene?"
-#~ msgstr "Quin protocol té?"
-
-#~ msgid "año protocolo origen"
-#~ msgstr "any del protocol origen"
-
-#~ msgid "buscar"
-#~ msgstr "cercar"
-
-#~ msgid "hay diferentes opciones para buscar o listar escritos"
-#~ msgstr "hi ha diferents opcions per buscar o llistar escrits"
-
-#~ msgid "opción 1: Listado de los últimos"
-#~ msgstr "opció 1: Llistat dels últims"
-
-#~ msgid "¿Quién enviaba el escrito?"
-#~ msgstr "Qui ha enviat l'escrit?"
-
-#~ msgid "antigüedad del escrito"
-#~ msgstr "l'antiguitat de l'escrit"
-
-#~ msgid "opción 2: Buscar por el asunto o detalle"
-#~ msgstr "opció 2: Cerca per assumpte o detall"
-
-#~ msgid "Escribir una palabra clave"
-#~ msgstr "Escriure una paraula clau"
-
-#~ msgid "Si se sabe, poner el periodo"
-#~ msgstr "Si es coneix, posar el període"
-
-#~ msgid "entre el"
-#~ msgstr "entre el"
-
-#~ msgid "y el"
-#~ msgstr "i el"
-
-#~ msgid "Si interesa, poner una oficina"
-#~ msgstr "Si t'interessa, posar una oficina"
-
-#~ msgid "opción 3: Listar escritos por el origen, el destino o por ambos"
-#~ msgstr "opció 3: Llistar escrits per l'origen, destinació o ambdues"
-
-#~ msgid "¿A quién iba dirigido?"
-#~ msgstr "A qui es dirigia?"
-
-#~ msgid "opción 4: Listar varios escritos"
-#~ msgstr "opció 4: Llistar diversos escrits"
-
-#~ msgid "de"
-#~ msgstr "de"
-
-#~ msgid "de un ctr, dl o cr concreto"
-#~ msgstr "d'un ctr, dl o cr en particular"
-
-#~ msgid "de cr a"
-#~ msgstr "de cr a"
-
-#~ msgid "de cr a ctr"
-#~ msgstr "de cr a ctr"
-
-#~ msgid "opción 8: Listar entradas por etiquetas"
-#~ msgstr "opció 8: Llistar entrades per etiquetes"
-
-#~ msgid "alguna"
-#~ msgstr "alguna"
-
-#~ msgid "todas"
-#~ msgstr "totes"
-
-#~ msgid "opción 6: Listar varios modelos jurídicos por fechas"
-#~ msgstr "opció 6: Llistar diversos models legals per dates"
-
-#~ msgid "ver todas las opciones"
-#~ msgstr "veure totes les opcions"
-
-#~ msgid "ver ctr anulados"
-#~ msgstr "veure ctr anul·lats"
-
-#~ msgid "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"
-#~ msgstr "ATENCIÓ: També es pot consultar registre exclusiu de l'IESE"
-
-#~ msgid "Tiene que escribir una palabra para buscar en el asunto"
-#~ msgstr "Vostè ha d'escriure una paraula per cercar en l'assumpte"
-
-#~ msgid ""
-#~ "Puede tardar bastante. Ralentiza el servidor (afecta a otros usuarios). "
-#~ "Si hay más de 20.000 puede dar error"
-#~ msgstr ""
-#~ "Pot trigar bastant. alenteix el servidor (afecta altres usuaris). Si n'hi "
-#~ "ha més de 20.000 pot donar error"
-
-#~ msgid "¿Seguro que quiere ver todos?"
-#~ msgstr "Estàs segur que vols veure'ls tots?"
-
-#~ msgid "ver menos opciones"
-#~ msgstr "veure menys opcions"
-
-#~ msgid "Debe poner un periodo"
-#~ msgstr "Heu de posar un període"
-
-#~ msgid "estas dos opciones no son compatibles"
-#~ msgstr "aquestes dues opcions no són compatibles"
-
-#~ msgid "tiene que seleccionar un origen o un destino"
-#~ msgstr "heu de seleccionar un origen o una destinació"
-
-#~ msgid "lista por oficinas"
-#~ msgstr "llista per oficines"
-
-#~ msgid "listar todos"
-#~ msgstr "llistar tots"
-
-#~ msgid "lista por años"
-#~ msgstr "llista per anys"
-
-#~ msgid "modifica entrada"
-#~ msgstr "modifica l'entrada"
-
-#~ msgid "Cerrar"
-#~ msgstr "Tancar"
-
-#~ msgid "Enviar orden de anular a otra plataforma"
-#~ msgstr "Enviar ordre d'anul·lar una altra plataforma"
-
-#~ msgid "Anular (si no hay texto está activo)"
-#~ msgstr "Anul·lar (si no hi ha text està actiu)"
-
-#~ msgid "¿Qué quiere hacer?"
-#~ msgstr "Què vols fer?"
-
-#~ msgid "Anular todos los pendientes"
-#~ msgstr "Anul·lar tots els pendents"
-
-#~ msgid "No hacer nada"
-#~ msgstr "No fer res"
-
-#~ msgid "Mensaje enviado"
-#~ msgstr "Missatge enviat"
-
-#~ msgid "Detalle"
-#~ msgstr "Detall"
-
-#~ msgid "No tiene detalle"
-#~ msgstr "No té detall"
-
-#~ msgid "¿Está Seguro que desea borrar este registro?"
-#~ msgstr "Esteu segur que voleu suprimir aquest registre?"
-
-#~ msgid "Eliminar todo"
-#~ msgstr "Suprimir tot"
-
-#~ msgid "¿Está Seguro que desea borrar este escrito?"
-#~ msgstr "Esteu segur que voleu suprimir aquest escrit?"
-
-#~ msgid "plazos para vida expedientes"
-#~ msgstr "terminis per a vida expedients"
-
-#~ msgid "Vida"
-#~ msgstr "Vida"
-
-#~ msgid "plazo para registro"
-#~ msgstr "termini per a registre"
-
-#~ msgid "plazo para contenidos"
-#~ msgstr "termini per a continguts"
-
-#~ msgid "Permanente"
-#~ msgstr "Permanent"
-
-#~ msgid "guardar"
-#~ msgstr "guardar"
-
-#~ msgid "Experiencia"
-#~ msgstr "Experiència"
-
-#~ msgid "Normal"
-#~ msgstr "Normal"
-
-#~ msgid "Temporal"
-#~ msgstr "Temporal"
-
-#~ msgid "Borrable"
-#~ msgstr "Esborrable"
-
-#~ msgid "plazos para categorias"
-#~ msgstr "terminis per a categories"
-
-#~ msgid "Categoría"
-#~ msgstr "Categoria"
-
-#~ msgid "plazos para pendientes"
-#~ msgstr "terminis per pendents"
-
-#~ msgid "plazo urgente"
-#~ msgstr "termini urgent"
-
-#~ msgid "días"
-#~ msgstr "dies"
-
-#~ msgid "plazo rápido"
-#~ msgstr "termini ràpid"
-
-#~ msgid "plazo normal"
-#~ msgstr "termini normal"
-
-#~ msgid "error en fecha"
-#~ msgstr "error en la data"
-
-#~ msgid "localidad"
-#~ msgstr "localitat"
-
-#~ msgid "para firmar documentos"
-#~ msgstr "per a signar documents"
-
-#~ msgid "texto del mail"
-#~ msgstr "text del mail"
-
-#~ msgid "From:"
-#~ msgstr "De:"
-
-#~ msgid "Reply to:"
-#~ msgstr "Respondre a:"
-
-#~ msgid "valor inicio contadores"
-#~ msgstr "valor d'inici de comptadors"
-
-#~ msgid "para cr"
-#~ msgstr "per a cr"
-
-#~ msgid "para el resto"
-#~ msgstr "per a la resta"
-
-#~ msgid "para IESE"
-#~ msgstr "per a IESE"
-
-#~ msgid "idioma por defecto"
-#~ msgstr "idioma predeterminat"
-
-#~ msgid "Ámbito de la entidad: centro, delegación, comisión regional"
-#~ msgstr "Àmbit de l' entitat: centre, delegació, comissió regional"
-
-#~ msgid "centro"
-#~ msgstr "centre"
-
-#~ msgid "delegación"
-#~ msgstr "delegació"
-
-#~ msgid "comisión"
-#~ msgstr "comissió"
-
-#~ msgid "Parametros del scdl (los puede cambiar el suplente)"
-#~ msgstr "Paràmetres del scdl (poden ser canviats pel substitut)"
-
-#~ msgid "Los oficiales de secreataría pueden distribuir:"
-#~ msgstr "Els oficials de secretaria poden distribuir:"
-
-#~ msgid "Si"
-#~ msgstr "Sí"
-
-#~ msgid "Los oficiales de secreataría pueden aceptar entradas:"
-#~ msgstr "Els oficials de secretaria poden acceptar entrades:"
-
-#~ msgid "servidor etherpad"
-#~ msgstr "servidor etherpad"
-
-#~ msgid "servidor ethercalc"
-#~ msgstr "servidor ethercalc"
-
-#~ msgid "servidor SMTP"
-#~ msgstr "servidor SMTP"
-
-#~ msgid "Host:"
-#~ msgstr "Host:"
-
-#~ msgid "Port:"
-#~ msgstr "Port:"
-
-#~ msgid "usar autenticación:"
-#~ msgstr "usa l'autenticació:"
-
-#~ msgid "User:"
-#~ msgstr "Usuari:"
-
-#~ msgid "Password:"
-#~ msgstr "Password:"
-
-#~ msgid "seguridad:"
-#~ msgstr "seguretat:"
-
-#~ msgid "tls"
-#~ msgstr "tls"
-
-#~ msgid "ssl"
-#~ msgstr "ssl"
-
-#~ msgid "servidor EDI"
-#~ msgstr "servidor EDI"
-
-#~ msgid "directorio dock:"
-#~ msgstr "directori dock:"
-
-#~ msgid "servidor davical"
-#~ msgstr "servidor davical"
-
-#~ msgid "Debe llenar el campo de nom"
-#~ msgstr "Ha d'omplir el camp de nom"
-
-#~ msgid "Debe poner como mínimo una etiqueta"
-#~ msgstr "Ha de posar com a mínim una etiqueta"
-
-#~ msgid "datos guardados"
-#~ msgstr "dades desades"
-
-#~ msgid "Error al guardar"
-#~ msgstr "Error en guardar"
-
-#~ msgid "No se ha definido el tipo de escrito"
-#~ msgstr "El tipus d'escrit no s'ha definit"
-
-#~ msgid "Nombre"
-#~ msgstr "Nom"
-
-#~ msgid "Visibilidad"
-#~ msgstr "Visibilitat"
-
-#~ msgid "Ver escrito"
-#~ msgstr "Veure escrit"
-
-#~ msgid "Etherpad"
-#~ msgstr "Etherpad"
-
-#~ msgid "Tipo de documento"
-#~ msgstr "Tipus de document"
-
-#~ msgid "Insertar escrito"
-#~ msgstr "Inserir escrit"
-
-#~ msgid "Incrustado"
-#~ msgstr "Incrustat"
-
-#~ msgid "Arrastrar ficheros aquí"
-#~ msgstr "Arrossegueu els fitxers aquí"
-
-#~ msgid "(o hacer click para seleccionar ficheros)"
-#~ msgstr "(o feu clic per seleccionar fitxers)"
-
-#~ msgid "listar documentos"
-#~ msgstr "llistar documents"
-
-#~ msgid "ver lista"
-#~ msgstr "veure llista"
-
-#~ msgid "convertir prot entradas"
-#~ msgstr "convertir prot entrades"
-
-#~ msgid "convertir prot escritos"
-#~ msgstr "convertir prot escrits"
-
-#~ msgid "convertir prot expedientes"
-#~ msgstr "convertir prot expedients"
-
-#~ msgid "ver datos"
-#~ msgstr "veure dades"
-
-#~ msgid "f mod"
-#~ msgstr "f mod"
-
-#~ msgid "¿Está Seguro que desea borrar este documento?"
-#~ msgstr "Està Segur que desitja esborrar aquest document?"
-
-#~ msgid "Datos de la Entidad"
-#~ msgstr "Dades de l'Entitat"
-
-#~ msgid "Nombre del esquema"
-#~ msgstr "Nom de l'esquema"
-
-#~ msgid "Tipo de entidad"
-#~ msgstr "Tipus d'entitat"
-
-#~ msgid "Esto borrará todos los escritos."
-#~ msgstr "Això esborrarà tots els escrits."
-
-#~ msgid "Puede usar la opción anulado en modificar."
-#~ msgstr "Pot fer servir l'opció anul·lat a modificar."
-
-#~ msgid "¿Está seguro que desea borrar esta entidad?"
-#~ msgstr "Està segur que desitja esborrar aquesta entitat?"
-
-#~ msgid "Lista de usuarios"
-#~ msgstr "LListat d'Usuaris"
-
-#~ msgid "nueva entidad"
-#~ msgstr "nova entitat"
-
-#~ msgid "Debe llenar el campo de fecha del escrito"
-#~ msgstr "Heu d'emplenar el camp de data de l'escrit"
-
-#~ msgid "Debe indicar el ponente para asignarle el pendiente"
-#~ msgstr "Heu d'indicar el ponent per assignar-hi el pendent"
-
-#~ msgid "Debe llenar el campo de fecha para contestar el escrito"
-#~ msgstr "Heu d'emplenar el camp de data per respondre a l'escrit"
-
-#~ msgid "Debe llenar el campo de origen"
-#~ msgstr "Heu d'emplenar el camp d'origen"
-
-#~ msgid "Debe llenar el campo de protocolo origen"
-#~ msgstr "Ha d'omplir el camp de protocol origen"
-
-#~ msgid "Debe llenar el campo de asunto entrada"
-#~ msgstr "Heu d'emplenar el camp de l'assumpte d'entrada"
-
-#~ msgid "Debe llenar el campo del ponente"
-#~ msgstr "Heu d'omplir el camp del ponent"
-
-#~ msgid "Debe llenar el campo de fecha de entrada"
-#~ msgstr "Ha d' omplir el camp de data d' entrada"
-
-#~ msgid "La fecha de entrada no es correcta"
-#~ msgstr "La data d'entrada no és correcta"
-
-#~ msgid "La fecha de entrada debe ser posterior a la del escrito"
-#~ msgstr "La data d'entrada ha de ser posterior a la de l'escrit"
-
-#~ msgid "¿añadir escrito o adjuntos?"
-#~ msgstr "Voleu afegir un escrit o adjunt?"
-
-#~ msgid "otra entrada"
-#~ msgstr "una altra entrada"
-
-#~ msgid "Asunto"
-#~ msgstr "Asumpte"
-
-#~ msgid "Oficina"
-#~ msgstr "Oficina"
-
-#~ msgid "periodo"
-#~ msgstr "període"
-
-#~ msgid "hace un mes"
-#~ msgstr "fa un mes"
-
-#~ msgid "hace 6 meses"
-#~ msgstr "fa 6 mesos"
-
-#~ msgid "hace 1 año"
-#~ msgstr "fa 1 any"
-
-#~ msgid "hace 2 año"
-#~ msgstr "fa 2 anys"
-
-#~ msgid "siempre"
-#~ msgstr "sempre"
-
-#~ msgid "Buscar"
-#~ msgstr "Cercar"
-
-#~ msgid "listar entradas encargadas a"
-#~ msgstr "llistar les entrades encarregades a"
-
-#~ msgid "Protocolo entrada"
-#~ msgstr "Protocol d'entrada"
-
-#~ msgid "Asunto entrada"
-#~ msgstr "Assumpte d'entrada"
-
-#~ msgid "Asunto secretaria"
-#~ msgstr "Assumpte secretaria"
-
-#~ msgid "Oficinas"
-#~ msgstr "Oficines"
-
-#~ msgid "Fecha salida"
-#~ msgstr "Data sortida"
-
-#~ msgid "Adjuntos"
-#~ msgstr "Adjuncions"
-
-#~ msgid "Destinos"
-#~ msgstr "Destins"
-
-#~ msgid "Grupo"
-#~ msgstr "Grup"
-
-#~ msgid "Enviar"
-#~ msgstr "Enviar"
-
-#~ msgid "Debe llenar el campo de asunto"
-#~ msgstr "Heu d'emplenar el camp de l'assumpte"
-
-#~ msgid "Debe llenar el campo de fecha de salida"
-#~ msgstr "Heu d'emplenar el camp de data de sortida"
-
-#~ msgid "Referencias"
-#~ msgstr "Referències"
-
-#~ msgid "Oficina ponente"
-#~ msgstr "Oficina ponent"
-
-#~ msgid "Fecha entrada"
-#~ msgstr "Data d'entrada"
-
-#~ msgid "Fecha escrito"
-#~ msgstr "Data escrit"
-
-#~ msgid "Admitido (vcd)"
-#~ msgstr "Admés (vcd)"
-
-#~ msgid "¿Es necesario contestar?"
-#~ msgstr "Cal respondre?"
-
-#~ msgid "modificar pendiente"
-#~ msgstr "modificar pendent"
-
-#~ msgid "Ethercalc"
-#~ msgstr "Ethercalc"
-
-#~ msgid "EtherCalc"
-#~ msgstr "EtherCalc"
-
-#~ msgid "Para añadir escrito, primero debe guardar la entrada"
-#~ msgstr "Per afegir l'escrit, primer heu de desar l'entrada"
-
-#~ msgid "Distribución cr"
-#~ msgstr "Distribució cr"
-
-#~ msgid "Asunto del centro"
-#~ msgstr "Assumpte del centre"
-
-#~ msgid "Contestar antes de"
-#~ msgstr "Contestar abans de"
-
-#~ msgid "fecha escrito"
-#~ msgstr "data escrit"
-
-#~ msgid "Descargar en pdf"
-#~ msgstr "Descarregar en pdf"
-
-#~ msgid "Nota (detalle)"
-#~ msgstr "Nota (detall)"
-
-#~ msgid "Fecha documento"
-#~ msgstr "Data document"
-
-#~ msgid "Leido el"
-#~ msgstr "Llegit el"
-
-#~ msgid "listar entradas de oficina"
-#~ msgstr "llistar entrades d'oficina"
-
-#~ msgid "propia"
-#~ msgstr "pròpia"
-
-#~ msgid "resto"
-#~ msgstr "resta"
-
-#~ msgid "Asignar entrada"
-#~ msgstr "Assignar entrada"
-
-#~ msgid "Encargar"
-#~ msgstr "Encarregar"
-
-#~ msgid "Asignar Etiquetas a la entrada"
-#~ msgstr "Assignar Etiquetes a l' entrada"
-
-#~ msgid "Marcar como contestado"
-#~ msgstr "Marca com a contestat"
-
-#~ msgid "Enviar sin marcar"
-#~ msgstr "Envia sense marcar"
-
-#~ msgid "Marcar alguno como contestado"
-#~ msgstr "Marqueu algun con contestat"
-
-#~ msgid "Primero debe guardar el escrito"
-#~ msgstr "Primer ha de desar l'escrit"
-
-#~ msgid "explotar!"
-#~ msgstr "explotar!"
-
-#~ msgid "escrito explotado"
-#~ msgstr "escrit explotat"
-
-#~ msgid "Debe poner al menos un grupo de destinos"
-#~ msgstr "Ha de posar almenys un grup de destinacions"
-
-#~ msgid "Debe poner al menos un destino"
-#~ msgstr "Ha de posar almenys un destí"
-
-#~ msgid "Debe llenar el campo entradilla"
-#~ msgstr "Heu d'omplir el camp entradilla"
-
-#~ msgid "Devolver"
-#~ msgstr "Tornar"
-
-#~ msgid "Escriba un comentario para la oficina"
-#~ msgstr "Escriu un comentari per a l'oficina"
-
-#~ msgid ""
-#~ "Esto quitará el documento de la carpeta de documentos. Si quiere "
-#~ "conservarlo debería insertar una copia."
-#~ msgstr ""
-#~ "Això treurà el document de la carpeta de documents. Si vol conservar-lo "
-#~ "hauria d'inserir-ne una còpia."
-
-#~ msgid "AVISO"
-#~ msgstr "AVÍS"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancel"
-
-#~ msgid "Insertar"
-#~ msgstr "Inserir"
-
-#~ msgid "insertar una copia"
-#~ msgstr "inserir una còpia"
-
-#~ msgid ""
-#~ "Esto quitará el documento de la carpeta de documentos. Si quiere "
-#~ "conservarlo debería adjuntar una copia."
-#~ msgstr ""
-#~ "Això treurà el document de la carpeta de documents. Si vol conservar-lo "
-#~ "hauria d'adjuntar-ne una còpia."
-
-#~ msgid "Adjuntar"
-#~ msgstr "Adjuntar"
-
-#~ msgid "adjuntar una copia"
-#~ msgstr "adjuntar una còpia"
-
-#~ msgid "¿Quiere adjuntar una copia?"
-#~ msgstr "Vol adjuntar-ne una còpia?"
-
-#~ msgid "Debe llenar el campo de destino"
-#~ msgstr "Heu d'emplenar el camp de destinació"
-
-#~ msgid "Debe llenar el campo de protocolo destino"
-#~ msgstr "Ha d'omplir el camp de protocol destí"
-
-#~ msgid "Primero debe encontrar un escrito"
-#~ msgstr "Primer ha de trobar un escrit"
-
-#~ msgid "Debe llenar el campo de fecha aprobación"
-#~ msgstr "Heu d'emplenar el camp data d'aprovació"
-
-#~ msgid "número de protocolo"
-#~ msgstr "número de protocol"
-
-#~ msgid "pasa a la pestaña enviar"
-#~ msgstr "va a la pestanya d'enviar"
-
-#~ msgid "Anular este escrito"
-#~ msgstr "Anul·la aquest escrit"
-
-#~ msgid "Buscar (máximo 50 filas)"
-#~ msgstr "Cercar (màxim 50 files)"
-
-#~ msgid "modificar selección"
-#~ msgstr "modificar la selecció"
-
-#~ msgid "Fecha del escrito"
-#~ msgstr "Data d'escrit"
-
-#~ msgid "Visibilidad en destino"
-#~ msgstr "Visibilitat en destinació"
-
-#~ msgid "¿El centro debe contestar?"
-#~ msgstr "El centre ha de contestar?"
-
-#~ msgid "Explotar en un escrito para cada ctr"
-#~ msgstr "Explotar en un escrit per a cada ctr"
-
-#~ msgid "Devolver a la oficina"
-#~ msgstr "Tornar a l'oficina"
-
-#~ msgid "Insertar Etherpad"
-#~ msgstr "Inserir Etherpad"
-
-#~ msgid "Nuevo"
-#~ msgstr "Nou"
-
-#~ msgid "Buscar en Documentos"
-#~ msgstr "Cercar en Documents"
-
-#~ msgid "Para añadir el texto, primero debe guardar los datos del escrito"
-#~ msgstr "Per afegir el text, primer heu de desar les dades d'escrit"
-
-#~ msgid "rev.datos"
-#~ msgstr "rev.dades"
-
-#~ msgid "destino"
-#~ msgstr "destí"
-
-#~ msgid "adj."
-#~ msgstr "adj."
-
-#~ msgid "Entradilla"
-#~ msgstr "Entradilla"
-
-#~ msgid "Volver"
-#~ msgstr "Tornar"
-
-#~ msgid "operaciones de mantenimimento"
-#~ msgstr "operacions de mantenimiment"
-
-#~ msgid "Para la pataforma"
-#~ msgstr "Per a la pataforma"
-
-#~ msgid "Ponente"
-#~ msgstr "Ponent"
-
-#~ msgid "Firmas"
-#~ msgstr "Signatures"
-
-#~ msgid "Fecha de aprobación"
-#~ msgstr "Data d'aprovació"
-
-#~ msgid "Datos de la etiqueta"
-#~ msgstr "Dades de l'etiqueta"
-
-#~ msgid "Nombre de la etiqueta"
-#~ msgstr "Nom de l'etiqueta"
-
-#~ msgid "Personal"
-#~ msgstr "Personal"
-
-#~ msgid "Lista de etiquetas"
-#~ msgstr "Llista d'etiquetes"
-
-#~ msgid "nueva etiqueta"
-#~ msgstr "nova etiqueta"
-
-#~ msgid "¿Está seguro que desea borrar esta etiqueta?"
-#~ msgstr "Esteu segur que voleu suprimir aquesta etiqueta?"
-
-#~ msgid "circulando!"
-#~ msgstr "circulant!"
-
-#~ msgid "ok distribuir"
-#~ msgstr "ok distribuir"
-
-#~ msgid "Debe llenar el campo de trámite"
-#~ msgstr "Heu d'omplir el camp del tràmit"
-
-#~ msgid "Debe llenar el campo de estado"
-#~ msgstr "Heu d'emplenar el camp d'estat"
-
-#~ msgid "Debe llenar el campo de prioridad"
-#~ msgstr "Heu d'emplenar el camp de prioritat"
-
-#~ msgid "Debe llenar el campo de asunto expediente"
-#~ msgstr "Heu d'emplenar el camp assumpte expedient"
-
-#~ msgid "listar expedientes"
-#~ msgstr "llistar expedients"
-
-#~ msgid "¿De que asunto trataba?"
-#~ msgstr "De quin asumpte es tractava?"
-
-#~ msgid "Crear Pendiente"
-#~ msgstr "Crear pendent"
-
-#~ msgid "Copiar"
-#~ msgstr "Copiar"
-
-#~ msgid "¿Seguro que quiere eliminar todo el expediente?"
-#~ msgstr "Segur que vol eliminar tot l'expedient?"
-
-#~ msgid ""
-#~ "¿Seguro que quiere pasar el expediente a borrador y:\\\n"
-#~ " - Perder todos los comentarios.\\\n"
-#~ " - Perder las firmas.?"
-#~ msgstr ""
-#~ "¿Segur que vol passar l'expedient a esborrany i:\\\n"
-#~ " - Perdre tots els comentaris.\\\n"
-#~ " - Perdre les signatures.?"
-
-#~ msgid "nuevo trámite"
-#~ msgstr "nou tràmit"
-
-#~ msgid "Cambiar"
-#~ msgstr "Canviar"
-
-#~ msgid "Prioridad"
-#~ msgstr "Prioritat"
-
-#~ msgid "Inicio"
-#~ msgstr "Inici"
-
-#~ msgid "reunión"
-#~ msgstr "reunió"
-
-#~ msgid "aprobación"
-#~ msgstr "aprovació"
-
-#~ msgid "contestar"
-#~ msgstr "contestar"
-
-#~ msgid "Antecedentes"
-#~ msgstr "Antecedents"
-
-#~ msgid "Recorrido"
-#~ msgstr "Recorregut"
-
-#~ msgid "Encargar!"
-#~ msgstr "Encarregar!"
-
-#~ msgid "Trámite"
-#~ msgstr "Tràmit"
-
-#~ msgid "Estado"
-#~ msgstr "Estat"
-
-#~ msgid "resolver antes de"
-#~ msgstr "resoldre abans de"
-
-#~ msgid "Asunto expediente"
-#~ msgstr "Assumpte expedient"
-
-#~ msgid "Entrada"
-#~ msgstr "Entrada"
-
-#~ msgid "Expediente"
-#~ msgstr "Expedient"
-
-#~ msgid "Escrito"
-#~ msgstr "Escrit"
-
-#~ msgid "Documento"
-#~ msgstr "Document"
-
-#~ msgid "Para añadir un antecedente, primero debe guardar el expediente"
-#~ msgstr "Per afegir un antecedent, primer heu de desar l'expedient"
-
-#~ msgid "contestar entrada"
-#~ msgstr "contestar entrada"
-
-#~ msgid "accion"
-#~ msgstr "acció"
-
-#~ msgid "Para añadir escritos, primero debe guardar el expediente"
-#~ msgstr "Per afegir escrits, primer heu de desar l'expedient"
-
-#~ msgid "Preparar"
-#~ msgstr "Preparar"
-
-#~ msgid "Firmas oficina"
-#~ msgstr "Signatures d'oficina"
-
-#~ msgid "Otras Firmas"
-#~ msgstr "Altres Signatures"
-
-#~ msgid "Circular"
-#~ msgstr "Circular"
-
-#~ msgid "##"
-#~ msgstr "##"
-
-#~ msgid "fecha inicio"
-#~ msgstr "data inici"
-
-#~ msgid "fecha resolver"
-#~ msgstr "data de resolució"
-
-#~ msgid "fecha reunión"
-#~ msgstr "data de la reunió"
-
-#~ msgid "contenido"
-#~ msgstr "contingut"
-
-#~ msgid "Firma"
-#~ msgstr "Signatura"
-
-#~ msgid "Comentario"
-#~ msgstr "Comentari"
-
-#~ msgid "resolver"
-#~ msgstr "resoldre"
-
-#~ msgid "Cambiar trámite"
-#~ msgstr "Canviar de tràmit"
-
-#~ msgid "Debe seleccionar un voto"
-#~ msgstr "Heu de seleccionar un vot"
-
-#~ msgid "Debe llenar el campo de comentario"
-#~ msgstr "Heu d'omplir el camp de comentaris"
-
-#~ msgid "listar expedientes borrador"
-#~ msgstr "llistar expedients esborrany"
-
-#~ msgid "filtrar"
-#~ msgstr "filtrar"
-
-#~ msgid "día de reunión"
-#~ msgstr "dia de la reunió"
-
-#~ msgid "Fijar día"
-#~ msgstr "Defineix el dia"
-
-#~ msgid "Cargo"
-#~ msgstr "Càrrec"
-
-#~ msgid "Datos del grupo"
-#~ msgstr "Dades del grup"
-
-#~ msgid "Descripción"
-#~ msgstr "Descripció"
-
-#~ msgid "Seleccione los destinos"
-#~ msgstr "Seleccioneu les destinacions"
-
-#~ msgid "¿Está seguro que desea borrar este grupo?"
-#~ msgstr "Esteu segur que voleu esborrar aquest grup?"
-
-#~ msgid ""
-#~ "Los datos referentes a centros deben modificarse desde la administración "
-#~ "del servidor."
-#~ msgstr ""
-#~ "Les dades referents a centres s'han de modificar des de l'administració "
-#~ "del servidor."
-
-#~ msgid "Lista de grupos"
-#~ msgstr "Llista de grups"
-
-#~ msgid "nuevo grupo"
-#~ msgstr "nou grup"
-
-#~ msgid "Datos del Lugar"
-#~ msgstr "Dades del Lloc"
-
-#~ msgid "Sigla"
-#~ msgstr "Sigla"
-
-#~ msgid "tipo de centro"
-#~ msgstr "tipus de centre"
-
-#~ msgid "e-mail"
-#~ msgstr "e-mail"
-
-#~ msgid "¿Está seguro que desea borrar este lugar?"
-#~ msgstr "Esteu segur que voleu suprimir aquest lloc?"
-
-#~ msgid "Lista de lugares"
-#~ msgstr "Llista de llocs"
-
-#~ msgid "nuevo lugar"
-#~ msgstr "nou lloc"
-
-#~ msgid "sigla de la plataforma:"
-#~ msgstr "sigla de la plataforma:"
-
-#~ msgid ""
-#~ "(conforme a \"urn:oasis:names:tc:ebcore:partyid-type:unregistered:"
-#~ "siglas\")"
-#~ msgstr ""
-#~ "(conforme a \"urn:oasis:names:tc:ebcore:partyid-type:unregistered:"
-#~ "siglas\")"
-
-#~ msgid "Lista de ficheros resp plataformas pdm"
-#~ msgstr "Llista de fitxers resp plataformes pdm"
-
-#~ msgid ""
-#~ "Para generar uno nuevo, ir a 'lista pdm' para crear y borrar el init y "
-#~ "resp de una vez"
-#~ msgstr ""
-#~ "Per generar-ne un de nou, anar a 'llista' per crear i esborrar l'init i "
-#~ "resp d'una vegada"
-
-#~ msgid "Datos de la conexión"
-#~ msgstr "Dades de la connexió"
-
-#~ msgid "nombre de la plataforma destino"
-#~ msgstr "nom de la plataforma destinació"
-
-#~ msgid "Servidor"
-#~ msgstr "Servidor"
-
-#~ msgid "Acción"
-#~ msgstr "Acció"
-
-#~ msgid "Generar ficheros pdm"
-#~ msgstr "Generar fitxers pdm"
-
-#~ msgid "Insertar xml resp"
-#~ msgstr "Insertar xml resp"
-
-#~ msgid "¿Está seguro que desea borrar el fichero pdm?"
-#~ msgstr "Està segur que desitja esborrar el fitxer pdm?"
-
-#~ msgid "Lista de ficheros enlace plataformas pdm"
-#~ msgstr "Llista de fitxers enllaç plataformes pdm"
-
-#~ msgid "nuevo pdm"
-#~ msgstr "nou pdm"
-
-#~ msgid "fecha de fin"
-#~ msgstr "data de finalització"
-
-#~ msgid "nº de protocolo fuera de rango"
-#~ msgstr "número de protocol fora de l'interval"
-
-#~ msgid "No es de este año, ni del año pasado"
-#~ msgstr "No és d'aquest any, o l'any passat"
-
-#~ msgid "nº de protocolo repetido"
-#~ msgstr "nº de protocol repetit"
-
-#~ msgid "El escrito de referencia ha sido anulado"
-#~ msgstr "S'ha anul·lat l'escrit de referència"
-
-#~ msgid ""
-#~ "El nº de protocolo tiene un salto de más de xxx números respecto al último"
-#~ msgstr ""
-#~ "El número de protocol té un salt de més de xxx números des de l'últim"
-
-#~ msgid "No existe ningún escrito con este protocolo. No se guardará."
-#~ msgstr "No hi ha cap escrit amb aquest protocol. No es guardarà."
-
-#~ msgid "Debe introducir el número de protocolo y el año"
-#~ msgstr "Heu d'introduir el número de protocol i l'any"
-
-#~ msgid "Debe llenar el campo de oficinas"
-#~ msgstr "Heu d'emplenar el camp d'oficines"
-
-#~ msgid "Debe llenar el campo de"
-#~ msgstr "Heu d'omplir el camp de"
-
-#~ msgid "Incorrecta"
-#~ msgstr "Incorrecte"
-
-#~ msgid "probablemente no tenga permiso en el calendario"
-#~ msgstr "probablement no té permís al calendari"
-
-#~ msgid "Debe seleccionar una oficina para ver sus pendientes"
-#~ msgstr "Heu de seleccionar una oficina per veure els seus pendents"
-
-#~ msgid "No puede modificar este pendiente"
-#~ msgstr "No es pot modificar aquest pendent"
-
-#~ msgid "No puede modificar un pendiente periódico. Hable con secretaría."
-#~ msgstr "No pot modificar un pendent periòdic. Parlar-ho amb secretaria."
-
-#~ msgid "Sólo puede seleccionar un elemento. Ha selecionado"
-#~ msgstr "Només podeu seleccionar un element. Ha seleccionat"
-
-#~ msgid ""
-#~ "No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la "
-#~ "izquierda"
-#~ msgstr ""
-#~ "No heu seleccionat cap fila. Heu de fer clic en algun chekbox de "
-#~ "l'esquerra"
-
-#~ msgid "¿Está Seguro que desea borrar este pendiente?"
-#~ msgstr "Esteu segur que voleu eliminar aquest pendent?"
-
-#~ msgid "222probablemente no tenga permiso en el calendario"
-#~ msgstr "222probablement no tingui permís al calendari"
-
-#~ msgid "buscar un pendiente"
-#~ msgstr "buscar un pendent"
-
-#~ msgid "¿A qué escrito hacia referencia?"
-#~ msgstr "A quin escrit feia referència?"
-
-#~ msgid "información complementaria"
-#~ msgstr "informació complementària"
-
-#~ msgid "¿Cuál era la oficina responsable?"
-#~ msgstr "Quina era l'oficina responsable?"
-
-#~ msgid "periodo determinado entre"
-#~ msgstr "període determinat entre"
-
-#~ msgid "y"
-#~ msgstr "i"
-
-#~ msgid "estado posibles del pendiente"
-#~ msgstr "possible estat del pendent"
-
-#~ msgid "cancelar"
-#~ msgstr "cancel·lar"
-
-#~ msgid "Sólo puede seleccionar un elemento"
-#~ msgstr "Només podeu seleccionar un element"
-
-#~ msgid ""
-#~ "No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la "
-#~ "izquierda."
-#~ msgstr ""
-#~ "No heu seleccionat cap fila. Heu de fer clic en algun chekbox de "
-#~ "l'esquerra."
-
-#~ msgid "entrada del registro pendiente de contestar"
-#~ msgstr "entrada de registre pendent de resposta"
-
-#~ msgid "¿Está asignado a alguien?"
-#~ msgstr "Està assignat a algú?"
-
-#~ msgid "protocolo o referencia"
-#~ msgstr "protocol o referència"
-
-#~ msgid "¿con quién es el pendiente?"
-#~ msgstr "Amb qui és el pendent?"
-
-#~ msgid "otras oficinas implicadas"
-#~ msgstr "altres oficines implicades"
-
-#~ msgid "Observaciones"
-#~ msgstr "Observacions"
-
-#~ msgid "fecha acabado"
-#~ msgstr "data acabat"
-
-#~ msgid "modificar etiquetas del pendiente periódico"
-#~ msgstr "modificar etiquetes del pendent periòdic"
-
-#~ msgid "modificar etiquetas del pendiente de la oficina"
-#~ msgstr "modificar etiquetes del pendent de l'oficina"
-
-#~ msgid "Repetición"
-#~ msgstr "Repetició"
-
-#~ msgid "desde"
-#~ msgstr "des de"
-
-#~ msgid "hasta"
-#~ msgstr "fins"
-
-#~ msgid "anual"
-#~ msgstr "anual"
-
-#~ msgid "mensual"
-#~ msgstr "mensual"
-
-#~ msgid "semanal"
-#~ msgstr "setmanal"
-
-#~ msgid "diaria"
-#~ msgstr "diaria"
-
-#~ msgid "anualmente"
-#~ msgstr "anualment"
-
-#~ msgid "El/los día/s (separados por comas)"
-#~ msgstr "Els dies (separats per comes)"
-
-#~ msgid "de cada"
-#~ msgstr "de cada"
-
-#~ msgid "El"
-#~ msgstr "El"
-
-#~ msgid "por dias de meses, cada"
-#~ msgstr "per dies de mesos, cada"
-
-#~ msgid "años"
-#~ msgstr "anys"
-
-#~ msgid "que días"
-#~ msgstr "quins dies"
-
-#~ msgid "de que meses"
-#~ msgstr "de quins mesos"
-
-#~ msgid "mensualmente"
-#~ msgstr "mensualment"
-
-#~ msgid "de cada mes"
-#~ msgstr "de cada mes"
-
-#~ msgid "semanalmente"
-#~ msgstr "setmanalment"
-
-#~ msgid "periodicidad día de la semana"
-#~ msgstr "periodicitat dia de la setmana"
-
-#~ msgid "diariamente"
-#~ msgstr "diariament"
-
-#~ msgid "Son los marcados como contestados o eliminados"
-#~ msgstr "Són els marcats com a contestats o suprimits"
-
-#~ msgid "Lista de pendientes relacionados"
-#~ msgstr "Llista de pendents relacionats"
-
-#~ msgid "Marcar como contestado y enviar"
-#~ msgstr "Marcar com a contestat i enviar"
-
-#~ msgid "Trasladar pendientes"
-#~ msgstr "Traslladar pendents"
-
-#~ msgid "escrito origen"
-#~ msgstr "escrit origen"
-
-#~ msgid "escrito destino"
-#~ msgstr "escrit destinació"
-
-#~ msgid "protocolo destino"
-#~ msgstr "protocol destinació"
-
-#~ msgid "año protocolo destino"
-#~ msgstr "any protocol destinació"
-
-#~ msgid "trasladar"
-#~ msgstr "traslladar"
-
-#~ msgid "No se buscan los pendientes de las entradas de distribución cr"
-#~ msgstr "No es busquen els pendents de les entrades de distribució cr"
-
-#~ msgid "Debe llenar el campo del año del protocolo origen"
-#~ msgstr "Ha d'omplir el camp de l'any del protocol origen"
-
-#~ msgid "Debe llenar el campo del año del protocolo destino"
-#~ msgstr "Ha d'omplir el camp de l'any del protocol"
-
-#~ msgid "pendientes activos de escritos anulados"
-#~ msgstr "pendents actius d'escrits anul·lats"
-
-#~ msgid "listar escritos pendientes de contestar"
-#~ msgstr "llistar escrits pendents de contestar"
-
-#~ msgid "De"
-#~ msgstr "De"
-
-#~ msgid "hasta la fecha"
-#~ msgstr "fins la data"
-
-#~ msgid "próxima semana"
-#~ msgstr "la setmana que ve"
-
-#~ msgid "próximo mes"
-#~ msgstr "el mes que ve"
-
-#~ msgid "próximo trimestre"
-#~ msgstr "proper trimestre"
-
-#~ msgid "próximo año"
-#~ msgstr "l'any que ve"
-
-#~ msgid "listar"
-#~ msgstr "llistar"
-
-#~ msgid "buscar pendientes de escritos anulados"
-#~ msgstr "buscar pendents d'escrits anul·lats"
-
-#~ msgid "Datos de la plantilla"
-#~ msgstr "Dades de la plantilla"
-
-#~ msgid "¿Está seguro que desea borrar esta plantilla?"
-#~ msgstr "Esteu segur que voleu suprimir aquesta plantilla?"
-
-#~ msgid "Datos del Trámite"
-#~ msgstr "Dades del tràmit"
-
-#~ msgid "Abreviatura"
-#~ msgstr "Abreviatura"
-
-#~ msgid "Orden"
-#~ msgstr "Ordre"
-
-#~ msgid "¿Está seguro que desea borrar este trámite?"
-#~ msgstr "Esteu segur que voleu suprimir aquest tràmit?"
-
-#~ msgid "Lista de tramites"
-#~ msgstr "Llista de tràmits"
-
-#~ msgid "número mínimo de firmas"
-#~ msgstr "nombre mínim de signatures"
-
-#~ msgid "Preferencias"
-#~ msgstr "Preferències"
-
-#~ msgid "Salir"
-#~ msgstr "Sortir"
-
-#~ msgid "Admin entidad"
-#~ msgstr "Admin entitat"
-
-#~ msgid "Dashboard"
-#~ msgstr "Dashboard"
-
-#~ msgid "Configuración"
-#~ msgstr "Configuració"
-
-#~ msgid "usuarios"
-#~ msgstr "usuaris"
-
-#~ msgid "Buscar / modificar"
-#~ msgstr "Cercar/modificar"
-
-#~ msgid "Suplentes"
-#~ msgstr "Suplents"
-
-#~ msgid "Cargos"
-#~ msgstr "Càrrecs"
-
-#~ msgid "lista grupos firmas"
-#~ msgstr "llista grups de signatures"
-
-#~ msgid "Oficinas y centros"
-#~ msgstr "Oficines i centres"
-
-#~ msgid "Grupos de distribución"
-#~ msgstr "Grups de distribució"
-
-#~ msgid "Trámites"
-#~ msgstr "Tràmits"
-
-#~ msgid "Trámites (nombres)"
-#~ msgstr "Tràmits (noms)"
-
-#~ msgid "Trámites (recorrido)"
-#~ msgstr "Tràmits (recorregut)"
-
-#~ msgid "Parámetros"
-#~ msgstr "Paràmetres"
-
-#~ msgid "Cargando..."
-#~ msgstr "Carregant..."
-
-#~ msgid "Admin"
-#~ msgstr "Admin"
-
-#~ msgid "Lugares (ctr, dl)"
-#~ msgstr "Llocs (ctr, dl)"
-
-#~ msgid "Enviar cambios"
-#~ msgstr "Enviar canvis"
-
-#~ msgid "de la aplicación"
-#~ msgstr "de l'aplicació"
-
-#~ msgid "Usuarios admin"
-#~ msgstr "Usuaris admin"
-
-#~ msgid "Utilidades"
-#~ msgstr "Utilitats"
-
-#~ msgid "Custom Utilities"
-#~ msgstr "Custom Utilities"
-
-#~ msgid "generar claves"
-#~ msgstr "generar claus"
-
-#~ msgid "Multiples entidades"
-#~ msgstr "Multiples entitats"
-
-#~ msgid "Entidades"
-#~ msgstr "Entitats"
-
-#~ msgid "Múltiples centros, dl.."
-#~ msgstr "Múltiples centres, dl..."
-
-#~ msgid "lista"
-#~ msgstr "llista"
-
-#~ msgid "HoloDeckb2b"
-#~ msgstr "HoloDeckb2b"
-
-#~ msgid "Holodeck"
-#~ msgstr "Holodeck"
-
-#~ msgid "definir plataforma"
-#~ msgstr "definir plataforma"
-
-#~ msgid "lista pdm"
-#~ msgstr "llista pdm"
-
-#~ msgid "exportar pdm local"
-#~ msgstr "exportar pdm local"
-
-#~ msgid "importar pdm"
-#~ msgstr "importar pdm"
-
-#~ msgid "Servidor Davical"
-#~ msgstr "Servidor Davical"
-
-#~ msgid "Davical"
-#~ msgstr "Davical"
-
-#~ msgid "mitration reg"
-#~ msgstr "mitration reg"
-
-#~ msgid "pruebas"
-#~ msgstr "proves"
-
-#~ msgid "Datos del Cargo"
-#~ msgstr "Dades del càrrec"
-
-#~ msgid "Titular"
-#~ msgstr "Titular"
-
-#~ msgid "Suplente"
-#~ msgstr "Suplent"
-
-#~ msgid "Seleccione el cargo del trámite"
-#~ msgstr "Seleccioneu el càrrec del tràmit"
-
-#~ msgid "Seleccione los cargos"
-#~ msgstr "Seleccioneu els càrrecs"
-
-#~ msgid ""
-#~ "el nombre debe corresponder a un cargo sin oficina que se use en el "
-#~ "trámite"
-#~ msgstr ""
-#~ "el nom ha de correspondre a un càrrec sense oficina que s'utilitza en el "
-#~ "tràmit"
-
-#~ msgid ""
-#~ "(Ahora mismo solo funciona con 'todos_d'. Si hubiera necesidad de más, "
-#~ "habría que revisar el código."
-#~ msgstr ""
-#~ "(Ara mateix només funciona amb 'todos_d'. Si hi hagués una necessitat de "
-#~ "més, hauríem de revisar el codi."
-
-#~ msgid "¿Está seguro que desea borrar este cargo?"
-#~ msgstr "Esteu segur que voleu suprimir aquest càrrec?"
-
-#~ msgid "Lista de cargos"
-#~ msgstr "Llista de càrrecs"
-
-#~ msgid "nuevo cargo"
-#~ msgstr "nou càrrec"
-
-#~ msgid "Inicio de sesión"
-#~ msgstr "Inici de sessió"
-
-#~ msgid "Usuario"
-#~ msgstr "Usuari"
-
-#~ msgid "Password"
-#~ msgstr "Password"
-
-#~ msgid "Entrar"
-#~ msgstr "Entrar"
-
-#~ msgid "Datos de la Oficina"
-#~ msgstr "Dades de l'oficina"
-
-#~ msgid "Lista de oficina"
-#~ msgstr "Llista d'oficines"
-
-#~ msgid "nueva oficina"
-#~ msgstr "nova oficina"
-
-#~ msgid "preferencias personales"
-#~ msgstr "preferències personals"
-
-#~ msgid "color"
-#~ msgstr "color"
-
-#~ msgid "Se cambia en la configuración del pad"
-#~ msgstr "S'ha de canviar en la configuració del pad"
-
-#~ msgid "Nombre a mostrar"
-#~ msgstr "Nom a mostrar"
-
-#~ msgid "Dirección de correo electrónico"
-#~ msgstr "Adreça de correu electrònic"
-
-#~ msgid "Cargo Preferido"
-#~ msgstr "Càrrec preferit"
-
-#~ msgid "cambiar el password"
-#~ msgstr "canviar el password"
-
-#~ msgid "Lista de suplencias"
-#~ msgstr "Llista de substitucions"
-
-#~ msgid "Datos de Usuario"
-#~ msgstr "Dades de l'usuari"
-
-#~ msgid "Login"
-#~ msgstr "Login"
-
-#~ msgid "alerta"
-#~ msgstr "alerta"
-
-#~ msgid "¿Está seguro que desea borrar este usuario?"
-#~ msgstr "Esteu segur que voleu suprimir aquest usuari?"
-
-#~ msgid "nuevo usuario"
-#~ msgstr "nou ususariii"
-
-#~ msgid "reunion día"
-#~ msgstr "dia de la reunió"
-
-#~ msgid "búsquedas de escritos"
-#~ msgstr "cerques d'escrites"
-
-#~ msgid "número de referencia"
-#~ msgstr "número de referència"
-
-#~ msgid "plazos"
-#~ msgstr "terminis"
-
-#~ msgid "Origen"
-#~ msgstr "Origen"
-
-#~ msgid "Datos del Tramite"
-#~ msgstr "Dades del tràmit"
-
-#~ msgid "Usuarios y cargos"
-#~ msgstr "Usuaris i càrrecs"
-
-#~ msgid "Lista"
-#~ msgstr "Llista"
-
-#~ msgid "Aplicación"
-#~ msgstr "Aplicació"
-
-#~ msgid "Lugares"
-#~ msgstr "Llocs"
-
-#~ msgid "lista usuarios"
-#~ msgstr "llista usuaris"
-
-#~ msgid "recuerdame"
-#~ msgstr "recorda'm"
-
-#~ msgid "por dias de meses"
-#~ msgstr "per dies de mesos"
-
-#~ msgid "introducir los meses"
-#~ msgstr "introduir els mesos"
-
-#~ msgid "introducir los días"
-#~ msgstr "introduïu els dies"
-
-#~ msgid "Excepciones"
-#~ msgstr "Excepcions"
-
-#~ msgid "formato: aaaammdd[,aaaammdd,...]"
-#~ msgstr "format: yymmdd[,yymmdd,...]"
-
-#~ msgid "No existe el usuario para el cargo %s"
-#~ msgstr "No hi ha cap usuari per al càrrec %s"
-
-#~ msgid "sin_protocolo"
-#~ msgstr "sense protocol"
-
-#~ msgid "No hay destinos válidos para este escrito"
-#~ msgstr "No hi ha destinacions vàlides per a aquest escrit"
-
-#~ msgid "copiar a oficina"
-#~ msgstr "còpia a l'oficina"
-
-#~ msgid "tramite"
-#~ msgstr "tràmit"
-
-#~ msgid "cambiar el mail"
-#~ msgstr "canviar el mail"
-
-#~ msgid "oficinas."
-#~ msgstr "oficines"
-
-#~ msgid "default_privileges"
-#~ msgstr "default_privileges"
-
-#~ msgid "modo envio"
-#~ msgstr "mode d'enviament"
-
-#~ msgid "¿Esta seguro que quitar este cargo?"
-#~ msgstr "Esteu segur voleu treure aquest càrrec?"
-
-#~ msgid "mas..."
-#~ msgstr "més..."
-
-#~ msgid "Debe llenar el campo de fecha de escrito"
-#~ msgstr "Heu d'emplenar el camp de data de l'escrit"
-
-#~ msgid "No se ha definido el tipo de escrit"
-#~ msgstr "El tipus d'escrit no s'ha definit"
-
-#~ msgid "Debe llenar el campo de estad"
-#~ msgstr "Heu d'emplenar el camp d'estat"
-
-#~ msgid "Voto"
-#~ msgstr "Vot"
-
-#, fuzzy
-#~ msgid "Tramite"
-#~ msgstr "Procés"
-
-#~ msgid "TTTTWWWWEEEETTTT"
-#~ msgstr "UNA COSA"
