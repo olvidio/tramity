@@ -389,6 +389,7 @@ class VerTabla {
         $oTabla->setDatos($a_valores);
         $oTabla->setDataTable_options_dom($this->dt_op_dom);
         $oTabla->setDataTable_options_buttons($this->dt_op_buttons);
+		$oTabla->setDataTable_options_order('[9,"desc"],[1,"desc"]');
         
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
@@ -507,6 +508,7 @@ class VerTabla {
         $oTabla->setDatos($a_valores);
         $oTabla->setDataTable_options_dom($this->dt_op_dom);
         $oTabla->setDataTable_options_buttons($this->dt_op_buttons);
+		$oTabla->setDataTable_options_order('[9,"desc"],[1,"desc"]');
         
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         
