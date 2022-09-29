@@ -153,11 +153,14 @@ fnjs_accion=function(accion){
         var param_json = { que: accion, id_expediente: {{ id_expediente }} };
 	}
 
+	debugger;
     // En el caso de crear expediente a partir de una entrada. Ir
     // directo al nuevo escrito dentro del nuevo expediente.
-    if (accion == 'en_expediente') {
-        fnjs_update_div('#main','{{ pagina_contestar|raw }}');
-    } else {
+    {% if vista == 'ctr' %}
+      if (accion == 'en_expediente') {
+          fnjs_update_div('#main','{{ pagina_contestar|raw }}');
+      } else {
+    {% endif %}
         request=$.ajax({
             data: param_json,
             url: url_ajax,
@@ -171,7 +174,9 @@ fnjs_accion=function(accion){
                 fnjs_update_div('#main','{{ pagina_cancel|raw }}');
             }
         });
-    }
+    {% if vista == 'ctr' %}
+      }
+    {% endif %}
 }
 
 fnjs_guardar_etiquetas=function() {

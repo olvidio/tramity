@@ -305,6 +305,8 @@ $format = $oFecha->getFormat();
 $yearStart = date('Y');
 $yearEnd = $yearStart + 2;
 
+$vista = ConfigGlobal::getVista();
+
 $a_campos = [
     'id_entrada' => $Qid_entrada,
     'id_expediente' => $Qid_expediente,
@@ -328,6 +330,7 @@ $a_campos = [
 	'yearEnd' => $yearEnd,	
 	//Solo para saltar directo al contestar una entrada 
  	'pagina_contestar' => $pagina_contestar,
+	'vista' => $vista,
 ];
 
 $oView = new ViewTwig('expedientes/controller');
