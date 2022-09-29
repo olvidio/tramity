@@ -7,6 +7,7 @@ use web\Posicion;
 
 function logout($idioma,$esquema,$error) {
     $a_campos = [];
+    $a_campos['entidad'] = $esquema;
     $a_campos['error'] = $error;
     $a_campos['idioma'] = $idioma;
     $a_campos['url'] = ConfigGlobal::getWeb();
