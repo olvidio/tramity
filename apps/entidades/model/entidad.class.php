@@ -151,7 +151,7 @@ class Entidad Extends EntidadDB {
             // lugares_grupos
             $err .= $this->ejecutarPsqlCrear('lugares', TRUE);
         }
-        sleep(5); // creo que no da tiempo a crear todo antes de insertar y da error de que no existe la tabla
+        /*
         if ($this->getTipo() === Cargo::AMBITO_DL) {
             // insert cargos mínimos usuarios:
             $err .= $this->ejecutarPsqlInsert('usuarios', TRUE);
@@ -163,6 +163,7 @@ class Entidad Extends EntidadDB {
             $err .= $this->ejecutarPsqlInsert('tramites');
             $err .= $this->ejecutarPsqlInsert('config');
         }
+        */
 		// añadir la sigla en config:
 		$err .= $this->ejecutarSql("INSERT INTO public.x_config (parametro, valor) VALUES ('sigla', '$this->snombre')");
 
