@@ -121,7 +121,8 @@ class Entidad Extends EntidadDB {
         // entradas:
         $err .= $this->ejecutarPsqlCrear('entradas');
         // para las dl:
-        if ($this->getTipo() === Cargo::AMBITO_DL) {
+        $tipo_entidad = $this->getTipo();
+        if ($tipo_entidad === Cargo::AMBITO_DL) {
             // entradas_bypass
             $err .= $this->ejecutarPsqlCrear('entradas',TRUE);
         }
@@ -145,7 +146,7 @@ class Entidad Extends EntidadDB {
         $err .= $this->ejecutarPsqlCrear('tramites');
 
         // para las dl:
-        if ($this->getTipo() === Cargo::AMBITO_DL) {
+        if ($tipo_entidad === Cargo::AMBITO_DL) {
             // x_oficinas y cargos_grupos
             $err .= $this->ejecutarPsqlCrear('usuarios', TRUE);
             // lugares_grupos
