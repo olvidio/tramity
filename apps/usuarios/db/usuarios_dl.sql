@@ -13,5 +13,5 @@ CREATE TABLE public.cargos_grupos (
     miembros integer[]
 );
 
-CREATE UNIQUE INDEX "cargos_grupos_id_cargo_ref_ukey" ON public.cargos_grupos (id_cargo_ref);
+CREATE UNIQUE INDEX cargos_grupos_id_cargo_ref_ukey ON public.cargos_grupos (id_cargo_ref);
 ALTER TABLE public.cargos_grupos OWNER TO tramity;

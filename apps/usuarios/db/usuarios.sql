@@ -40,5 +40,5 @@ CREATE TABLE public.usuario_preferencias (
 	preferencia text
 );
 
-CREATE UNIQUE INDEX "usuario_preferencias_id_usuario_tipo_ukey" ON public.usuario_preferencias (id_usuario, tipo);
+CREATE UNIQUE INDEX usuario_preferencias_id_usuario_tipo_ukey ON public.usuario_preferencias (id_usuario, tipo);
 ALTER TABLE public.usuario_preferencias OWNER TO tramity;
