@@ -150,6 +150,9 @@ class Entidad Extends EntidadDB {
             $err .= $this->ejecutarPsqlCrear('usuarios', TRUE);
             // lugares_grupos
             $err .= $this->ejecutarPsqlCrear('lugares', TRUE);
+        }
+        sleep(5); // creo que no da tiempo a crear todo antes de insertar y da error de que no existe la tabla
+        if ($this->getTipo() === Cargo::AMBITO_DL) {
             // insert cargos mínimos usuarios:
             $err .= $this->ejecutarPsqlInsert('usuarios', TRUE);
             $err .= $this->ejecutarPsqlInsert('tramites', TRUE);
