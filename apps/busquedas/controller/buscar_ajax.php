@@ -1,7 +1,7 @@
 <?php
 
 // INICIO Cabecera global de URL de controlador *********************************
-	use entradas\model\GestorEntrada;
+use entradas\model\GestorEntrada;
 use escritos\model\GestorEscrito;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\Cargo;
