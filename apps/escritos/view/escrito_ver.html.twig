@@ -3,72 +3,75 @@
     <script src="{{ base_url }}/node_modules/jquery/dist/jquery.min.js"></script>
     <!-- jQuery CSS -->
     <!-- CSS jQuery, bootstrap -->
-    <link type="text/css" rel='stylesheet' href='{{ base_url }}/node_modules/jquery-ui/themes/base/all.css' />
-    <link type="text/css" rel="stylesheet" href="{{ base_url }}/node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
-    <link href="{{ base_url }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link type="text/css" rel='stylesheet' href='{{ base_url }}/node_modules/jquery-ui/themes/base/all.css'/>
+    <link type="text/css" rel="stylesheet" href="{{ base_url }}/node_modules/bootstrap/dist/css/bootstrap.min.css"
+          crossorigin="anonymous">
+    <link href="{{ base_url }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet"
+          type="text/css">
 {% endif %}
 
 <div id="tot" class="container-fluid mt-3">
-<div class="clearfix ">
-  <div class="d-inline-flex float-start">
-    <div class="p-2 text-dark fw-bold" >
-      {{ destinos|raw }}
+    <div class="clearfix ">
+        <div class="d-inline-flex float-start">
+            <div class="p-2 text-dark fw-bold">
+                {{ destinos|raw }}
+            </div>
+        </div>
+        <div class="d-inline-flex float-end">
+            <div class="p-2 text-dark fw-bold align-top text-end">
+                {{ origen_txt|raw }}
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="d-inline-flex float-end">
-    <div class="p-2 text-dark fw-bold align-top text-end" >
-      {{ origen_txt|raw }}
+    <!--  --------------- ASUNTO --------------- -->
+    <div class="row">
+        <div class="col-9">
+            <label for="asunto_e" class="form-label">{{ "Asunto"|trans|raw }}:</label>
+            {{ asunto_e }}
+        </div>
     </div>
-  </div>
-</div>
-<!--  --------------- ASUNTO --------------- -->
-<div class="row">
-  <div class="col-9">
-    <label for="asunto_e" class="form-label">{{ "Asunto"|trans|raw }}:</label>
-      {{ asunto_e }}
-  </div>
-</div>
-<!--  --------------------  ESCRITO  --------------------------  -->
-<div class="border border-secondary rounded p-3">
-{{ escrito_html|raw }}
-</div>
-<!--  --------------------  DOWNLOAD Y FECHA  --------------------------  -->
-<div class="clearfix ">
-  <div class="d-inline-flex float-start">
-    <div class="p-2 text-dark fw-bold" >
-      <button type="button" class="btn btn-outline-secondary" onClick="fnjs_download_pdf({{ id_escrito }})">
-  	    <i class="fa fa-download" aria-hidden="true">  {{ "Descargar en pdf"|trans|raw }}</i>
-	  </button>
+    <!--  --------------------  ESCRITO  --------------------------  -->
+    <div class="border border-secondary rounded p-3">
+        {{ escrito_html|raw }}
     </div>
-  </div>
-  <div class="d-inline-flex float-end">
-    <div class="p-2 text-dark fw-bold" >
-      {{ f_escrito }}
+    <!--  --------------------  DOWNLOAD Y FECHA  --------------------------  -->
+    <div class="clearfix ">
+        <div class="d-inline-flex float-start d-print-none">
+            <div class="p-2 text-dark fw-bold">
+                <button type="button" class="btn btn-outline-secondary" onClick="fnjs_download_pdf({{ id_escrito }})">
+                    <i class="fa fa-download" aria-hidden="true">  {{ "Descargar en pdf"|trans|raw }}</i>
+                </button>
+            </div>
+        </div>
+        <div class="d-inline-flex float-end">
+            <div class="p-2 text-dark fw-bold">
+                {{ f_escrito }}
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!--  --------------------  ADJUNTOS  --------------------------  -->
-{% if a_adjuntos %}
-<hr>
-<div class="mb-3 col-md-12">
-    <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}:</label>
-{% for item,nom in a_adjuntos %}
-	<button type="button" class="btn btn-outline-secondary" onClick="fnjs_download({{ item }})">{{ nom }}</button>
-{% endfor %}
-</div>
-{% endif %}
+    <!--  --------------------  ADJUNTOS  --------------------------  -->
+    {% if a_adjuntos %}
+        <hr>
+        <div class="mb-3 col-md-12">
+            <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}:</label>
+            {% for item,nom in a_adjuntos %}
+                <button type="button" class="btn btn-outline-secondary"
+                        onClick="fnjs_download({{ item }})">{{ nom }}</button>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 <hr>
 {% if primero %}
     <script>
-    fnjs_download_pdf=function(id_escrito) {
-        url = "{{ url_download_pdf }}"+"?id_escrito="+id_escrito;
-        window.open(url);
-    }
-    fnjs_download=function(item) {
-        url = "{{ url_download }}"+"?key="+item;
-        window.open(url);
-    }
+        fnjs_download_pdf = function (id_escrito) {
+            url = "{{ url_download_pdf }}" + "?id_escrito=" + id_escrito;
+            window.open(url);
+        }
+        fnjs_download = function (item) {
+            url = "{{ url_download }}" + "?key=" + item;
+            window.open(url);
+        }
     </script>
 {% endif %}

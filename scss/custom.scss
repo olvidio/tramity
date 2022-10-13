@@ -6,26 +6,25 @@
 $all-colors: map-merge-multiple($blues, $indigos, $purples, $pinks, $reds, $oranges, $yellows, $greens, $teals, $cyans);
 
 $utilities: map-merge(
-  $utilities,
-  (
-    "color": map-merge(
-      map-get($utilities, "color"),
-      (
-        values: map-merge(
-          map-get(map-get($utilities, "color"), "values"),
-          (
-            $all-colors
-          ),
-        ),
-      ),
-    ),
-  )
+                $utilities,
+                (
+                        "color": map-merge(
+                                        map-get($utilities, "color"),
+                                        (
+                                                values: map-merge(
+                                                                map-get(map-get($utilities, "color"), "values"),
+                                                                        (
+                                                                                $all-colors
+                                                                        ),
+                                                ),
+                                        ),
+                        ),
+                )
 );
 
 @import "../node_modules/bootstrap/scss/utilities/_api.scss";
 
 
-
 .prova {
-    background-color: $yellow-100;
+  background-color: $yellow-100;
 }

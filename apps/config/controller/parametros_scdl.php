@@ -1,22 +1,21 @@
 <?php
+
 use config\model\entity\ConfigSchema;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorLocale;
 use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
-	require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 //	require_once ("classes/personas/ext_web_preferencias_gestor.class");
 
-// Crea los objectos de uso global **********************************************
-	require_once ("apps/core/global_object.inc");
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
 
 $url = 'apps/config/controller/parametros_update.php';
-$a_campos = [ 'url' => $url];
+$a_campos = ['url' => $url];
 
 
 // ----------- permiso para el botón distribuir al oficial -------------------
@@ -24,8 +23,8 @@ $parametro = 'perm_distribuir';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
-$val_perm_distribuir = 't'; 
-$chk_perm_distribuir = ($valor == $val_perm_distribuir)? 'checked' : '';
+$val_perm_distribuir = 't';
+$chk_perm_distribuir = ($valor == $val_perm_distribuir) ? 'checked' : '';
 
 $oHashPD = new Hash();
 $oHashPD->setUrl($url);
@@ -41,8 +40,8 @@ $parametro = 'perm_aceptar';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
-$val_perm_aceptar = 't'; 
-$chk_perm_aceptar = ($valor == $val_perm_aceptar)? 'checked' : '';
+$val_perm_aceptar = 't';
+$chk_perm_aceptar = ($valor == $val_perm_aceptar) ? 'checked' : '';
 
 $oHashPA = new Hash();
 $oHashPA->setUrl($url);
@@ -56,4 +55,4 @@ $a_campos['chk_perm_aceptar'] = $chk_perm_aceptar;
 $a_campos['filtro'] = $Qfiltro;
 
 $oView = new core\ViewTwig('config/controller');
-echo $oView->render('parametros_scdl.html.twig',$a_campos);
+echo $oView->render('parametros_scdl.html.twig', $a_campos);

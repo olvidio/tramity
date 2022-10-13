@@ -7,110 +7,110 @@ use DirectoryIterator;
 class Cache
 {
 
-	private $basePath;
+    private $basePath;
 
-	private $cleanupInterval;
+    private $cleanupInterval;
 
-	public function __construct($basePath, $cleanupInterval = 3600)
-	{
-		if (!$this->createBasePath($basePath)) {
-			throw new \Mpdf\MpdfException(sprintf('Temporary files directory "%s" is not writable', $basePath));
-		}
+    public function __construct($basePath, $cleanupInterval = 3600)
+    {
+        if (!$this->createBasePath($basePath)) {
+            throw new \Mpdf\MpdfException(sprintf('Temporary files directory "%s" is not writable', $basePath));
+        }
 
-		$this->basePath = $basePath;
-		$this->cleanupInterval = $cleanupInterval;
-	}
+        $this->basePath = $basePath;
+        $this->cleanupInterval = $cleanupInterval;
+    }
 
-	protected function createBasePath($basePath)
-	{
-		if (!file_exists($basePath)) {
-			if (!$this->createBasePath(dirname($basePath))) {
-				return false;
-			}
+    protected function createBasePath($basePath)
+    {
+        if (!file_exists($basePath)) {
+            if (!$this->createBasePath(dirname($basePath))) {
+                return false;
+            }
 
-			if (!$this->createDirectory($basePath)) {
-				return false;
-			}
-		}
+            if (!$this->createDirectory($basePath)) {
+                return false;
+            }
+        }
 
-		if (!is_writable($basePath) || !is_dir($basePath)) {
-			return false;
-		}
+        if (!is_writable($basePath) || !is_dir($basePath)) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	protected function createDirectory($basePath)
-	{
-		if (!mkdir($basePath)) {
-			return false;
-		}
+    protected function createDirectory($basePath)
+    {
+        if (!mkdir($basePath)) {
+            return false;
+        }
 
-		if (!chmod($basePath, 0777)) {
-			return false;
-		}
+        if (!chmod($basePath, 0777)) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	public function tempFilename($filename)
-	{
-		return $this->getFilePath($filename);
-	}
+    public function tempFilename($filename)
+    {
+        return $this->getFilePath($filename);
+    }
 
-	public function has($filename)
-	{
-		return file_exists($this->getFilePath($filename));
-	}
+    private function getFilePath($filename)
+    {
+        return $this->basePath . '/' . $filename;
+    }
 
-	public function load($filename)
-	{
-		return file_get_contents($this->getFilePath($filename));
-	}
+    public function has($filename)
+    {
+        return file_exists($this->getFilePath($filename));
+    }
 
-	public function write($filename, $data)
-	{
-		$tempFile = tempnam($this->basePath, 'cache_tmp_');
-		file_put_contents($tempFile, $data);
+    public function load($filename)
+    {
+        return file_get_contents($this->getFilePath($filename));
+    }
 
-		$path = $this->getFilePath($filename);
-		rename($tempFile, $path);
+    public function write($filename, $data)
+    {
+        $tempFile = tempnam($this->basePath, 'cache_tmp_');
+        file_put_contents($tempFile, $data);
 
-		return $path;
-	}
+        $path = $this->getFilePath($filename);
+        rename($tempFile, $path);
 
-	public function remove($filename)
-	{
-		return unlink($this->getFilePath($filename));
-	}
+        return $path;
+    }
 
-	public function clearOld()
-	{
-		$iterator = new DirectoryIterator($this->basePath);
+    public function remove($filename)
+    {
+        return unlink($this->getFilePath($filename));
+    }
 
-		/** @var \DirectoryIterator $item */
-		foreach ($iterator as $item) {
-			if (!$item->isDot()
-					&& $item->isFile()
-					&& !$this->isDotFile($item)
-					&& $this->isOld($item)) {
-				unlink($item->getPathname());
-			}
-		}
-	}
+    public function clearOld()
+    {
+        $iterator = new DirectoryIterator($this->basePath);
 
-	private function getFilePath($filename)
-	{
-		return $this->basePath . '/' . $filename;
-	}
+        /** @var \DirectoryIterator $item */
+        foreach ($iterator as $item) {
+            if (!$item->isDot()
+                && $item->isFile()
+                && !$this->isDotFile($item)
+                && $this->isOld($item)) {
+                unlink($item->getPathname());
+            }
+        }
+    }
 
-	private function isOld(DirectoryIterator $item)
-	{
-		return $item->getMTime() + $this->cleanupInterval < time();
-	}
+    public function isDotFile(DirectoryIterator $item)
+    {
+        return substr($item->getFilename(), 0, 1) === '.';
+    }
 
-	public function isDotFile(DirectoryIterator $item)
-	{
-		return substr($item->getFilename(), 0, 1) === '.';
-	}
+    private function isOld(DirectoryIterator $item)
+    {
+        return $item->getMTime() + $this->cleanupInterval < time();
+    }
 }

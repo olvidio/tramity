@@ -59,13 +59,13 @@ final class SetTokenParser extends AbstractTokenParser
         return new SetNode($capture, $names, $values, $lineno, $this->getTag());
     }
 
-    public function decideBlockEnd(Token $token): bool
-    {
-        return $token->test('endset');
-    }
-
     public function getTag(): string
     {
         return 'set';
+    }
+
+    public function decideBlockEnd(Token $token): bool
+    {
+        return $token->test('endset');
     }
 }

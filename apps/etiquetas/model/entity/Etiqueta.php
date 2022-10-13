@@ -1,0 +1,493 @@
+<?php
+
+namespace etiquetas\model\entity;
+
+use core;
+
+/**
+ * Fitxer amb la Classe que accedeix a la taula etiquetas
+ *
+ * @package tramity
+ * @subpackage model
+ * @author Daniel Serrabou
+ * @version 1.0
+ * @created 10/11/2020
+ */
+
+/**
+ * Classe que implementa l'entitat etiquetas
+ *
+ * @package tramity
+ * @subpackage model
+ * @author Daniel Serrabou
+ * @version 1.0
+ * @created 10/11/2020
+ */
+class Etiqueta extends core\ClasePropiedades
+{
+    /* ATRIBUTOS ----------------------------------------------------------------- */
+
+    /**
+     * oDbl de Etiqueta
+     *
+     * @var object
+     */
+    protected $oDbl;
+    /**
+     * NomTabla de Etiqueta
+     *
+     * @var string
+     */
+    protected $sNomTabla;
+    /**
+     * aPrimary_key de Etiqueta
+     *
+     * @var array
+     */
+    private $aPrimary_key;
+    /**
+     * aDades de Etiqueta
+     *
+     * @var array
+     */
+    private $aDades;
+    /**
+     * bLoaded de Etiqueta
+     *
+     * @var boolean
+     */
+    private $bLoaded = FALSE;
+    /**
+     * Id_schema de Etiqueta
+     *
+     * @var integer
+     */
+    private $iid_schema;
+    /**
+     * Id_etiqueta de Etiqueta
+     *
+     * @var integer
+     */
+    private $iid_etiqueta;
+    /**
+     * Nom_etiqueta de Etiqueta
+     *
+     * @var string
+     */
+    private $snom_etiqueta;
+    /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
+    /**
+     * Id_cargo de Etiqueta
+     *
+     * @var integer
+     */
+    private $iid_cargo;
+    /**
+     * Oficina de Etiqueta
+     *
+     * @var boolean
+     */
+    private $boficina;
+    /* CONSTRUCTOR -------------------------------------------------------------- */
+
+    /**
+     * Constructor de la classe.
+     * Si només necessita un valor, se li pot passar un integer.
+     * En general se li passa un array amb les claus primàries.
+     *
+     * @param integer|array iid_etiqueta
+     *                        $a_id. Un array con los nombres=>valores de las claves primarias.
+     */
+    function __construct($a_id = '')
+    {
+        $oDbl = $GLOBALS['oDBT'];
+        if (is_array($a_id)) {
+            $this->aPrimary_key = $a_id;
+            foreach ($a_id as $nom_id => $val_id) {
+                if (($nom_id == 'id_etiqueta') && $val_id !== '') {
+                    $this->iid_etiqueta = (int)$val_id;
+                } // evitem SQL injection fent cast a integer
+            }
+        } else {
+            if (isset($a_id) && $a_id !== '') {
+                $this->iid_etiqueta = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->aPrimary_key = array('iid_etiqueta' => $this->iid_etiqueta);
+            }
+        }
+        $this->setoDbl($oDbl);
+        $this->setNomTabla('etiquetas');
+    }
+
+    /* MÉTODOS PÚBLICOS ----------------------------------------------------------*/
+
+    /**
+     * Desa els ATRIBUTOS de l'objecte a la base de dades.
+     * Si no hi ha el registre, fa el insert, si hi es fa el update.
+     *
+     */
+    public function DBGuardar()
+    {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        if ($this->DBCarregar('guardar') === FALSE) {
+            $bInsert = TRUE;
+        } else {
+            $bInsert = FALSE;
+        }
+        $aDades = array();
+        $aDades['nom_etiqueta'] = $this->snom_etiqueta;
+        $aDades['id_cargo'] = $this->iid_cargo;
+        $aDades['oficina'] = $this->boficina;
+        array_walk($aDades, 'core\poner_null');
+        //para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
+        if (core\is_true($aDades['oficina'])) {
+            $aDades['oficina'] = 'true';
+        } else {
+            $aDades['oficina'] = 'false';
+        }
+
+        if ($bInsert === FALSE) {
+            //UPDATE
+            $update = "
+					nom_etiqueta             = :nom_etiqueta,
+					id_cargo                 = :id_cargo,
+					oficina                  = :oficina";
+            if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_etiqueta='$this->iid_etiqueta'")) === FALSE) {
+                $sClauError = 'Etiqueta.update.prepare';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                return FALSE;
+            } else {
+                try {
+                    $oDblSt->execute($aDades);
+                } catch (\PDOException $e) {
+                    $err_txt = $e->errorInfo[2];
+                    $this->setErrorTxt($err_txt);
+                    $sClauError = 'Etiqueta.update.execute';
+                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                    return FALSE;
+                }
+            }
+        } else {
+            // INSERT
+            $campos = "(nom_etiqueta,id_cargo,oficina)";
+            $valores = "(:nom_etiqueta,:id_cargo,:oficina)";
+            if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
+                $sClauError = 'Etiqueta.insertar.prepare';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                return FALSE;
+            } else {
+                try {
+                    $oDblSt->execute($aDades);
+                } catch (\PDOException $e) {
+                    $err_txt = $e->errorInfo[2];
+                    $this->setErrorTxt($err_txt);
+                    $sClauError = 'Etiqueta.insertar.execute';
+                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                    return FALSE;
+                }
+            }
+            $this->id_etiqueta = $oDbl->lastInsertId('etiquetas_id_etiqueta_seq');
+        }
+        $this->setAllAtributes($aDades);
+        return TRUE;
+    }
+
+    /**
+     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     *
+     */
+    public function DBCarregar($que = null)
+    {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        if (isset($this->iid_etiqueta)) {
+            if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_etiqueta='$this->iid_etiqueta'")) === FALSE) {
+                $sClauError = 'Etiqueta.carregar';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                return FALSE;
+            }
+            $aDades = $oDblSt->fetch(\PDO::FETCH_ASSOC);
+            // Para evitar posteriores cargas
+            $this->bLoaded = TRUE;
+            switch ($que) {
+                case 'tot':
+                    $this->setAllAtributes($aDades);
+                    break;
+                case 'guardar':
+                    if (!$oDblSt->rowCount()) {
+                        return FALSE;
+                    }
+                    break;
+                default:
+                    // En el caso de no existir esta fila, $aDades = FALSE:
+                    if ($aDades === FALSE) {
+                        $this->setNullAllAtributes();
+                    } else {
+                        $this->setAllAtributes($aDades);
+                    }
+            }
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
+    /**
+     * Estableix el valor de tots els ATRIBUTOS
+     *
+     * @param array $aDades
+     */
+    function setAllAtributes($aDades)
+    {
+        if (!is_array($aDades)) {
+            return;
+        }
+        if (array_key_exists('id_schema', $aDades)) {
+            $this->setId_schema($aDades['id_schema']);
+        }
+        if (array_key_exists('id_etiqueta', $aDades)) {
+            $this->setId_etiqueta($aDades['id_etiqueta']);
+        }
+        if (array_key_exists('nom_etiqueta', $aDades)) {
+            $this->setNom_etiqueta($aDades['nom_etiqueta']);
+        }
+        if (array_key_exists('id_cargo', $aDades)) {
+            $this->setId_cargo($aDades['id_cargo']);
+        }
+        if (array_key_exists('oficina', $aDades)) {
+            $this->setOficina($aDades['oficina']);
+        }
+    }
+
+    /* METODES ALTRES  ----------------------------------------------------------*/
+    /* METODES PRIVATS ----------------------------------------------------------*/
+
+    /**
+     * estableix el valor de l'atribut iid_etiqueta de Etiqueta
+     *
+     * @param integer iid_etiqueta
+     */
+    function setId_etiqueta($iid_etiqueta)
+    {
+        $this->iid_etiqueta = $iid_etiqueta;
+    }
+
+    /**
+     * estableix el valor de l'atribut snom_etiqueta de Etiqueta
+     *
+     * @param string snom_etiqueta='' optional
+     */
+    function setNom_etiqueta($snom_etiqueta = '')
+    {
+        $this->snom_etiqueta = $snom_etiqueta;
+    }
+
+    /* METODES GET i SET --------------------------------------------------------*/
+
+    /**
+     * estableix el valor de l'atribut iid_cargo de Etiqueta
+     *
+     * @param integer iid_cargo='' optional
+     */
+    function setId_cargo($iid_cargo = '')
+    {
+        $this->iid_cargo = $iid_cargo;
+    }
+
+    /**
+     * estableix el valor de l'atribut boficina de Etiqueta
+     *
+     * @param boolean boficina='f' optional
+     */
+    function setOficina($boficina = 'f')
+    {
+        $this->boficina = $boficina;
+    }
+
+    /**
+     * Estableix a empty el valor de tots els ATRIBUTOS
+     *
+     */
+    function setNullAllAtributes()
+    {
+        $aPK = $this->getPrimary_key();
+        $this->setId_schema('');
+        $this->setId_etiqueta('');
+        $this->setNom_etiqueta('');
+        $this->setId_cargo('');
+        $this->setOficina('');
+        $this->setPrimary_key($aPK);
+    }
+
+    /**
+     * Recupera las claus primàries de Etiqueta en un array
+     *
+     * @return array aPrimary_key
+     */
+    function getPrimary_key()
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('id_etiqueta' => $this->iid_etiqueta);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
+     * Estableix las claus primàries de Etiqueta en un array
+     *
+     */
+    public function setPrimary_key($a_id = '')
+    {
+        if (is_array($a_id)) {
+            $this->aPrimary_key = $a_id;
+            foreach ($a_id as $nom_id => $val_id) {
+                if (($nom_id == 'id_etiqueta') && $val_id !== '') {
+                    $this->iid_etiqueta = (int)$val_id;
+                } // evitem SQL injection fent cast a integer
+            }
+        } else {
+            if (isset($a_id) && $a_id !== '') {
+                $this->iid_etiqueta = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->aPrimary_key = array('iid_etiqueta' => $this->iid_etiqueta);
+            }
+        }
+    }
+
+    /**
+     * Elimina el registre de la base de dades corresponent a l'objecte.
+     *
+     */
+    public function DBEliminar()
+    {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_etiqueta='$this->iid_etiqueta'")) === FALSE) {
+            $sClauError = 'Etiqueta.eliminar';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+    /**
+     * Recupera l'atribut iid_etiqueta de Etiqueta
+     *
+     * @return integer iid_etiqueta
+     */
+    function getId_etiqueta()
+    {
+        if (!isset($this->iid_etiqueta) && !$this->bLoaded) {
+            $this->DBCarregar();
+        }
+        return $this->iid_etiqueta;
+    }
+
+    /**
+     * Recupera l'atribut snom_etiqueta de Etiqueta
+     *
+     * @return string snom_etiqueta
+     */
+    function getNom_etiqueta()
+    {
+        if (!isset($this->snom_etiqueta) && !$this->bLoaded) {
+            $this->DBCarregar();
+        }
+        return $this->snom_etiqueta;
+    }
+
+    /**
+     * Recupera l'atribut iid_cargo de Etiqueta
+     *
+     * @return integer iid_cargo
+     */
+    function getId_cargo()
+    {
+        if (!isset($this->iid_cargo) && !$this->bLoaded) {
+            $this->DBCarregar();
+        }
+        return $this->iid_cargo;
+    }
+
+    /**
+     * Recupera l'atribut boficina de Etiqueta
+     *
+     * @return boolean boficina
+     */
+    function getOficina()
+    {
+        if (!isset($this->boficina) && !$this->bLoaded) {
+            $this->DBCarregar();
+        }
+        return $this->boficina;
+    }
+
+    /**
+     * Retorna una col·lecció d'objectes del tipus DatosCampo
+     *
+     */
+    function getDatosCampos()
+    {
+        $oEtiquetaSet = new core\Set();
+
+        $oEtiquetaSet->add($this->getDatosNom_etiqueta());
+        $oEtiquetaSet->add($this->getDatosId_cargo());
+        $oEtiquetaSet->add($this->getDatosOficina());
+        return $oEtiquetaSet->getTot();
+    }
+    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+
+    /**
+     * Recupera les propietats de l'atribut snom_etiqueta de Etiqueta
+     * en una clase del tipus DatosCampo
+     *
+     * @return core\DatosCampo
+     */
+    function getDatosNom_etiqueta()
+    {
+        $nom_tabla = $this->getNomTabla();
+        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'nom_etiqueta'));
+        $oDatosCampo->setEtiqueta(_("nom_etiqueta"));
+        return $oDatosCampo;
+    }
+
+    /**
+     * Recupera les propietats de l'atribut iid_cargo de Etiqueta
+     * en una clase del tipus DatosCampo
+     *
+     * @return core\DatosCampo
+     */
+    function getDatosId_cargo()
+    {
+        $nom_tabla = $this->getNomTabla();
+        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_cargo'));
+        $oDatosCampo->setEtiqueta(_("id_cargo"));
+        return $oDatosCampo;
+    }
+
+    /**
+     * Recupera les propietats de l'atribut boficina de Etiqueta
+     * en una clase del tipus DatosCampo
+     *
+     * @return core\DatosCampo
+     */
+    function getDatosOficina()
+    {
+        $nom_tabla = $this->getNomTabla();
+        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'oficina'));
+        $oDatosCampo->setEtiqueta(_("oficina"));
+        return $oDatosCampo;
+    }
+
+    /**
+     * Recupera tots els ATRIBUTOS de Etiqueta en un array
+     *
+     * @return array aDades
+     */
+    function getTot()
+    {
+        if (!is_array($this->aDades)) {
+            $this->DBCarregar('tot');
+        }
+        return $this->aDades;
+    }
+}

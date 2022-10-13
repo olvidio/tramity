@@ -1,115 +1,115 @@
 <table class="table table-sm table-bordered">
-  <thead class="thead-light">
+    <thead class="thead-light">
     <tr>
-	  {%  if ver_ok %}
-        <th scope="col">{{ "ok"|trans|raw }}</th>
-      {% endif %}
-      <th scope="col">{{ ver_todo|raw }}</th>
-	  {%  if modo == 'mod' or filtro == 'archivados' %}
-        {%  if bdistribuir %}
-          <th scope="col">{{ "rev.datos"|trans|raw }}</th>
+        {% if ver_ok %}
+            <th scope="col">{{ "ok"|trans|raw }}</th>
         {% endif %}
-        <th scope="col">{{ prot_local_header }}</th>
-      {% endif %}
-	  {%  if filtro != 'archivados' %}
-      	<th scope="col">{{ "tipo"|trans|raw }}</th>
-      {% endif %}
-      <th scope="col">{{ "destino"|trans|raw }}</th>
-      <th scope="col">{{ "ref."|trans|raw }}</th>
-      <th scope="col">{{ "asunto"|trans|raw }}</th>
-      <th scope="col">{{ "adj."|trans|raw }}</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for row in a_acciones %}
-    <tr>
-	  {%  if ver_ok %}
-        <td>{{ row.ok|raw }}</td>
-      {% endif %}
-      <td>{{ row.link_ver|raw }}</td>
-	  {%  if modo == 'mod' or filtro == 'archivados' %}
-        {%  if bdistribuir %}
-          <td>{{ row.link_mod|raw }}</td>
+        <th scope="col">{{ ver_todo|raw }}</th>
+        {% if modo == 'mod' or filtro == 'archivados' %}
+            {% if bdistribuir %}
+                <th scope="col">{{ "rev.datos"|trans|raw }}</th>
+            {% endif %}
+            <th scope="col">{{ prot_local_header }}</th>
         {% endif %}
-        <td>{{ row.prot_local|raw }}</td>
-      {% endif %}
-	  {%  if filtro != 'archivados' %}
-        <td>{{ row.tipo|raw }}</td>
-      {% endif %}
-      <td>{{ row.destino|raw }}</td>
-      <td>{{ row.ref|raw }}</td>
-      <td>{{ row.asunto|raw }}</td>
-      <td>{{ row.adjuntos|raw }}</td>
+        {% if filtro != 'archivados' %}
+            <th scope="col">{{ "tipo"|trans|raw }}</th>
+        {% endif %}
+        <th scope="col">{{ "destino"|trans|raw }}</th>
+        <th scope="col">{{ "ref."|trans|raw }}</th>
+        <th scope="col">{{ "asunto"|trans|raw }}</th>
+        <th scope="col">{{ "adj."|trans|raw }}</th>
     </tr>
+    </thead>
+    <tbody>
+    {% for row in a_acciones %}
+        <tr>
+            {% if ver_ok %}
+                <td>{{ row.ok|raw }}</td>
+            {% endif %}
+            <td>{{ row.link_ver|raw }}</td>
+            {% if modo == 'mod' or filtro == 'archivados' %}
+                {% if bdistribuir %}
+                    <td>{{ row.link_mod|raw }}</td>
+                {% endif %}
+                <td>{{ row.prot_local|raw }}</td>
+            {% endif %}
+            {% if filtro != 'archivados' %}
+                <td>{{ row.tipo|raw }}</td>
+            {% endif %}
+            <td>{{ row.destino|raw }}</td>
+            <td>{{ row.ref|raw }}</td>
+            <td>{{ row.asunto|raw }}</td>
+            <td>{{ row.adjuntos|raw }}</td>
+        </tr>
     {% endfor %}
-  </tbody>
+    </tbody>
 </table>
 <script type="text/javascript">
-{% if show_tabs %} //Cuando se abre una ventana via GET no existen los tabs (ver un adjunto). 
-$(document).ready(function() {
-	tabs_show('{{ vista }}','{{ filtro }}');
-});
-{% endif %}
-
-fnjs_distribuir_escrito=function(id_escrito) {
-    var ssfsv = 'sv';
-    var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-    var server = '{{ server }}';
-    var url = server+'/apps/escritos/controller/escrito_distribuir.php?id_escrito='+id_escrito;
-    w=window.open(url, "", winPrefs);
-    w.focus();
-}
-fnjs_revisar_escrito=function(id_escrito) {
-    var winPrefs="dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-    var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
-    var param_json = { tipo_id: 'escrito', id: id_escrito };
-
-    if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-	}
-	
-    request=$.ajax({
-        data: param_json,
-        url: url_ajax,
-        method: 'POST'
+    {% if show_tabs %} //Cuando se abre una ventana via GET no existen los tabs (ver un adjunto).
+    $(document).ready(function () {
+        tabs_show('{{ vista }}', '{{ filtro }}');
     });
+    {% endif %}
 
-    request.done( function (rta) {
-        // antes, dentro del ajax, hacia falta el responseText
-        //url=rta.responseText;
-        url=rta;
-        w=window.open(url, "", winPrefs);
-        if (w === null ) {
-        	alert("{{ "No se puede abrir una nueva ventana. Puede tener bloqueados los popup"|trans|raw }}");    
-        } else {
-        	w.focus();
+    fnjs_distribuir_escrito = function (id_escrito) {
+        var ssfsv = 'sv';
+        var winPrefs = "dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+        var server = '{{ server }}';
+        var url = server + '/apps/escritos/controller/escrito_distribuir.php?id_escrito=' + id_escrito;
+        w = window.open(url, "", winPrefs);
+        w.focus();
+    }
+    fnjs_revisar_escrito = function (id_escrito) {
+        var winPrefs = "dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+        var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
+        var param_json = {tipo_id: 'escrito', id: id_escrito};
+
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
         }
-    });
-	request.fail(function(JqXHR, textStatus, errorThrown){
-		alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
-        console.error("Hi ha un error: "+ textStatus, errorThrown);
-    });
 
-	return false;
-}
-fnjs_revisar_adjunto=function(id_escrito) {
-	id_expediente = $('#id_expediente').val();
-	filtro = $('#filtro').val();
-	modo = $('#modo').val();
-	
-    var url_ajax = 'apps/escritos/controller/adjunto_revisar.php';
-    var param_json = { id_expediente: id_expediente, filtro: filtro, modo: modo, id_escrito: id_escrito };
-    
-    request=$.ajax({
-        data: param_json,
-        url: url_ajax,
-        method: 'POST'
-    });
+        request = $.ajax({
+            data: param_json,
+            url: url_ajax,
+            method: 'POST'
+        });
 
-    request.done( function (rta) {
-        $('#main').html(rta);
-    });
-}
+        request.done(function (rta) {
+            // antes, dentro del ajax, hacia falta el responseText
+            //url=rta.responseText;
+            url = rta;
+            w = window.open(url, "", winPrefs);
+            if (w === null) {
+                alert("{{ "No se puede abrir una nueva ventana. Puede tener bloqueados los popup"|trans|raw }}");
+            } else {
+                w.focus();
+            }
+        });
+        request.fail(function (JqXHR, textStatus, errorThrown) {
+            alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+            console.error("Hi ha un error: " + textStatus, errorThrown);
+        });
+
+        return false;
+    }
+    fnjs_revisar_adjunto = function (id_escrito) {
+        id_expediente = $('#id_expediente').val();
+        filtro = $('#filtro').val();
+        modo = $('#modo').val();
+
+        var url_ajax = 'apps/escritos/controller/adjunto_revisar.php';
+        var param_json = {id_expediente: id_expediente, filtro: filtro, modo: modo, id_escrito: id_escrito};
+
+        request = $.ajax({
+            data: param_json,
+            url: url_ajax,
+            method: 'POST'
+        });
+
+        request.done(function (rta) {
+            $('#main').html(rta);
+        });
+    }
 </script>

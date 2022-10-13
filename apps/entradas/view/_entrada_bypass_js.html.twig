@@ -1,85 +1,85 @@
 <script type="text/javascript">
-{{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
+    {{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
 
-$(document).ready(function() {
-	fnjs_distr_cr();
-	fnjs_grupo();
-});
-
-fnjs_distr_cr=function() {
-    var ok=$('#bypass').val();
-    if (ok == 't') {
-      $("#dst_cr").show();
-    } else {
-      $("#dst_cr").hide();
-    }
-}
-
-fnjs_grupo=function() {
-    var ok=$('#grupo_dst').prop('checked')
-    if (ok) {
-      $("#dst_array").hide();
-      $("#dst_grupo").show();
-    } else {
-      $("#dst_array").show();
-      $("#dst_grupo").hide();
-    }
-}
-
-fnjs_mas_grupos=function(){
-	var code = (event.keyCode ? event.keyCode : event.which);
-    var valor=1;
-    var id_campo='#'+event.currentTarget.id;
-    var valor=$(id_campo).val();
-    if(code!=9 && typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-	if ( code==9 || event.type=="change") {
-		if (valor!=0) {
-			{{ oArrayDesplGrupo.ListaSelectsJs|raw }}
-		}
-	}
-}
-fnjs_quitar_grupos=function(){
-	$('#span_grupos').html("");
-	$('#grupos_num').val(0);
-}
-
-{{ oArrayProtDestino.ComprobarSelectJs|raw }}
-fnjs_mas_destinos=function(){
-	event.stopImmediatePropagation();
-    var id_campo='#'+event.currentTarget.id;
-    var valor=$(id_campo).val();
-    if (event.type == 'change') {
-        global_flag = 2;
-        if (valor!=0) {
-            {{ oArrayProtDestino.ListaSelectsJs|raw }}
-        } else {
-            $('#referencias_mas').focus();
-        }
-    }
-    if (event.type == 'blur') {
-        if (global_flag == 1 && valor == 0 ) {
-            $('#referencias_mas').focus();
-        }
-        global_flag = 1;
-    }
-}
-fnjs_quitar_destinos=function(){
-	$('#span_dst').html("");
-	$('#dst_num').val(0);
-}
-
-$(function() {
-	$( "#f_salida" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		yearStart: {{ yearStart }},
-		yearEnd: {{ yearEnd }},
-		dayOfWeekStart: globaljsVarDayStart,
+    $(document).ready(function () {
+        fnjs_distr_cr();
+        fnjs_grupo();
     });
 
-});
+    fnjs_distr_cr = function () {
+        var ok = $('#bypass').val();
+        if (ok == 't') {
+            $("#dst_cr").show();
+        } else {
+            $("#dst_cr").hide();
+        }
+    }
+
+    fnjs_grupo = function () {
+        var ok = $('#grupo_dst').prop('checked')
+        if (ok) {
+            $("#dst_array").hide();
+            $("#dst_grupo").show();
+        } else {
+            $("#dst_array").show();
+            $("#dst_grupo").hide();
+        }
+    }
+
+    fnjs_mas_grupos = function () {
+        var code = (event.keyCode ? event.keyCode : event.which);
+        var valor = 1;
+        var id_campo = '#' + event.currentTarget.id;
+        var valor = $(id_campo).val();
+        if (code != 9 && typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        if (code == 9 || event.type == "change") {
+            if (valor != 0) {
+                {{ oArrayDesplGrupo.ListaSelectsJs|raw }}
+            }
+        }
+    }
+    fnjs_quitar_grupos = function () {
+        $('#span_grupos').html("");
+        $('#grupos_num').val(0);
+    }
+
+    {{ oArrayProtDestino.ComprobarSelectJs|raw }}
+    fnjs_mas_destinos = function () {
+        event.stopImmediatePropagation();
+        var id_campo = '#' + event.currentTarget.id;
+        var valor = $(id_campo).val();
+        if (event.type == 'change') {
+            global_flag = 2;
+            if (valor != 0) {
+                {{ oArrayProtDestino.ListaSelectsJs|raw }}
+            } else {
+                $('#referencias_mas').focus();
+            }
+        }
+        if (event.type == 'blur') {
+            if (global_flag == 1 && valor == 0) {
+                $('#referencias_mas').focus();
+            }
+            global_flag = 1;
+        }
+    }
+    fnjs_quitar_destinos = function () {
+        $('#span_dst').html("");
+        $('#dst_num').val(0);
+    }
+
+    $(function () {
+        $("#f_salida").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            yearStart: {{ yearStart }},
+            yearEnd: {{ yearEnd }},
+            dayOfWeekStart: globaljsVarDayStart,
+        });
+
+    });
 </script>

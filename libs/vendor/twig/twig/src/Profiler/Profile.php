@@ -36,6 +36,18 @@ final class Profile implements \IteratorAggregate, \Serializable
         $this->enter();
     }
 
+    /**
+     * Starts the profiling.
+     */
+    public function enter(): void
+    {
+        $this->starts = [
+            'wt' => microtime(true),
+            'mu' => memory_get_usage(),
+            'pmu' => memory_get_peak_usage(),
+        ];
+    }
+
     public function getTemplate(): string
     {
         return $this->template;
@@ -49,11 +61,6 @@ final class Profile implements \IteratorAggregate, \Serializable
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function isRoot(): bool
-    {
-        return self::ROOT === $this->type;
     }
 
     public function isTemplate(): bool
@@ -102,6 +109,11 @@ final class Profile implements \IteratorAggregate, \Serializable
         return isset($this->ends['wt']) && isset($this->starts['wt']) ? $this->ends['wt'] - $this->starts['wt'] : 0;
     }
 
+    public function isRoot(): bool
+    {
+        return self::ROOT === $this->type;
+    }
+
     /**
      * Returns the memory usage in bytes.
      */
@@ -116,18 +128,6 @@ final class Profile implements \IteratorAggregate, \Serializable
     public function getPeakMemoryUsage(): int
     {
         return isset($this->ends['pmu']) && isset($this->starts['pmu']) ? $this->ends['pmu'] - $this->starts['pmu'] : 0;
-    }
-
-    /**
-     * Starts the profiling.
-     */
-    public function enter(): void
-    {
-        $this->starts = [
-            'wt' => microtime(true),
-            'mu' => memory_get_usage(),
-            'pmu' => memory_get_peak_usage(),
-        ];
     }
 
     /**
@@ -158,17 +158,17 @@ final class Profile implements \IteratorAggregate, \Serializable
         return serialize($this->__serialize());
     }
 
-    public function unserialize($data)
-    {
-        $this->__unserialize(unserialize($data));
-    }
-
     /**
      * @internal
      */
     public function __serialize()
     {
         return [$this->template, $this->name, $this->type, $this->starts, $this->ends, $this->profiles];
+    }
+
+    public function unserialize($data)
+    {
+        $this->__unserialize(unserialize($data));
     }
 
     /**

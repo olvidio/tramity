@@ -1,23 +1,22 @@
 <?php
-use tramites\model\entity\TramiteCargo;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
-use web\Desplegable;
+
 use tramites\model\entity\Tramite;
+use tramites\model\entity\TramiteCargo;
+use usuarios\model\entity\GestorCargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Qmod = (string) \filter_input(INPUT_POST, 'mod');
-$Qid_item = (integer) \filter_input(INPUT_POST, 'id_item');
-$Qid_tramite = (integer) \filter_input(INPUT_POST, 'id_tramite');
+$Qmod = (string)\filter_input(INPUT_POST, 'mod');
+$Qid_item = (integer)\filter_input(INPUT_POST, 'id_item');
+$Qid_tramite = (integer)\filter_input(INPUT_POST, 'id_tramite');
 
 $oTramite = new Tramite($Qid_tramite);
 $tramite = $oTramite->getTramite();
@@ -28,16 +27,16 @@ $oDesplCargos->setNombre('id_cargo');
 $oDesplCargos->setBlanco(true);
 // para el form
 if ($Qmod == 'editar') {
-	$oTramiteCargo = new TramiteCargo(array('id_item'=>$Qid_item));
+    $oTramiteCargo = new TramiteCargo(array('id_item' => $Qid_item));
 
-	$orden_tramite = $oTramiteCargo->getOrden_tramite();
-	$id_cargo = $oTramiteCargo->getId_cargo();
+    $orden_tramite = $oTramiteCargo->getOrden_tramite();
+    $id_cargo = $oTramiteCargo->getId_cargo();
     $oDesplCargos->setOpcion_sel($id_cargo);
-	$multiple = $oTramiteCargo->getMultiple();
+    $multiple = $oTramiteCargo->getMultiple();
 }
 if ($Qmod == 'nuevo') {
-	$orden_tramite = 0;
-	$multiple = 1;
+    $orden_tramite = 0;
+    $multiple = 1;
 }
 
 $url_ajax = "apps/tramites/controller/tramitecargo_ajax.php";
@@ -49,7 +48,7 @@ $oHash->setCamposNo('que!id_fase_previa[]!id_tarea_previa[]!mensaje_requisito[]'
 $oHash->setCamposChk('id_tarea_previa');
 $a_camposHidden = [
     'que' => 'update',
-    'id_item' => $Qid_item, 
+    'id_item' => $Qid_item,
     'id_tramite' => $Qid_tramite,
 ];
 $oHash->setArraycamposHidden($a_camposHidden);
@@ -62,7 +61,7 @@ $a_campos = ['oPosicion' => $oPosicion,
     'tramite' => $tramite,
     'orden_tramite' => $orden_tramite,
     'multiple' => $multiple,
-    ];
+];
 
 $oView = new core\ViewTwig('tramites/controller');
-echo $oView->render('tramitecargo_form.html.twig',$a_campos);
+echo $oView->render('tramitecargo_form.html.twig', $a_campos);

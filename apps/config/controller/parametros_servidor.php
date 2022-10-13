@@ -1,21 +1,22 @@
 <?php
+
 use config\model\entity\ConfigSchema;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorLocale;
 use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
-	require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 //	require_once ("classes/personas/ext_web_preferencias_gestor.class");
 
-// Crea los objectos de uso global **********************************************
-	require_once ("apps/core/global_object.inc");
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
 $url = 'apps/config/controller/parametros_update.php';
-$a_campos = [ 'url' => $url];
+$a_campos = ['url' => $url];
 
 // ----------- size de los fcheros para poder hacer upload ------------------
 /* En /etc/php/7.4/fpm/php.ini
@@ -248,11 +249,11 @@ if (empty($valor)) {
     $valor = Cargo::AMBITO_DL;  // "dl"
 }
 $val_ctr = Cargo::AMBITO_CTR;
-$chk_ctr = ($valor == $val_ctr)? 'checked' : ''; 
+$chk_ctr = ($valor == $val_ctr) ? 'checked' : '';
 $val_dl = Cargo::AMBITO_DL;
-$chk_dl = ($valor == $val_dl)? 'checked' : ''; 
+$chk_dl = ($valor == $val_dl) ? 'checked' : '';
 $val_cr = Cargo::AMBITO_CR;
-$chk_cr = ($valor == $val_cr)? 'checked' : ''; 
+$chk_cr = ($valor == $val_cr) ? 'checked' : '';
 
 $oHashDLR = new Hash();
 $oHashDLR->setUrl($url);
@@ -273,16 +274,16 @@ $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
 $val_tls = 'tls'; // PHPMailer::ENCRYPTION_STARTTLS
-$chk_tls = ($valor == $val_tls)? 'checked' : ''; 
+$chk_tls = ($valor == $val_tls) ? 'checked' : '';
 $val_ssl = 'ssl'; // PHPMailer::ENCRYPTION_SMTPS
-$chk_ssl = ($valor == $val_ssl)? 'checked' : ''; 
+$chk_ssl = ($valor == $val_ssl) ? 'checked' : '';
 
 $oHashSMTP_secure = new Hash();
-$oHashSMTP_secure ->setUrl($url);
-$oHashSMTP_secure ->setcamposForm('valor');
-$oHashSMTP_secure ->setArrayCamposHidden(['parametro' => $parametro]);
+$oHashSMTP_secure->setUrl($url);
+$oHashSMTP_secure->setcamposForm('valor');
+$oHashSMTP_secure->setArrayCamposHidden(['parametro' => $parametro]);
 
-$a_campos['oHashSMTP_secure'] = $oHashSMTP_secure ;
+$a_campos['oHashSMTP_secure'] = $oHashSMTP_secure;
 $a_campos['val_tls'] = $val_tls;
 $a_campos['chk_tls'] = $chk_tls;
 $a_campos['val_ssl'] = $val_ssl;
@@ -293,11 +294,11 @@ $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
 $oHashSMTP_host = new Hash();
-$oHashSMTP_host ->setUrl($url);
-$oHashSMTP_host ->setcamposForm('valor');
-$oHashSMTP_host ->setArrayCamposHidden(['parametro' => $parametro]);
+$oHashSMTP_host->setUrl($url);
+$oHashSMTP_host->setcamposForm('valor');
+$oHashSMTP_host->setArrayCamposHidden(['parametro' => $parametro]);
 
-$a_campos['oHashSMTP_host'] = $oHashSMTP_host ;
+$a_campos['oHashSMTP_host'] = $oHashSMTP_host;
 $a_campos[$parametro] = $valor;
 
 $parametro = 'smtp_port';
@@ -305,11 +306,11 @@ $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
 $oHashSMTP_port = new Hash();
-$oHashSMTP_port ->setUrl($url);
-$oHashSMTP_port ->setcamposForm('valor');
-$oHashSMTP_port ->setArrayCamposHidden(['parametro' => $parametro]);
+$oHashSMTP_port->setUrl($url);
+$oHashSMTP_port->setcamposForm('valor');
+$oHashSMTP_port->setArrayCamposHidden(['parametro' => $parametro]);
 
-$a_campos['oHashSMTP_port'] = $oHashSMTP_port ;
+$a_campos['oHashSMTP_port'] = $oHashSMTP_port;
 $a_campos[$parametro] = $valor;
 
 $parametro = 'smtp_auth';
@@ -317,9 +318,9 @@ $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
 $val_auth = 'true';
-$chk_auth = ($valor == $val_auth)? 'checked' : ''; 
+$chk_auth = ($valor == $val_auth) ? 'checked' : '';
 
-$oHashSMTP_auth  = new Hash();
+$oHashSMTP_auth = new Hash();
 $oHashSMTP_auth->setUrl($url);
 $oHashSMTP_auth->setcamposForm('valor');
 $oHashSMTP_auth->setArrayCamposHidden(['parametro' => $parametro]);
@@ -333,23 +334,23 @@ $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
 $oHashSMTP_user = new Hash();
-$oHashSMTP_user ->setUrl($url);
-$oHashSMTP_user ->setcamposForm('valor');
-$oHashSMTP_user ->setArrayCamposHidden(['parametro' => $parametro]);
+$oHashSMTP_user->setUrl($url);
+$oHashSMTP_user->setcamposForm('valor');
+$oHashSMTP_user->setArrayCamposHidden(['parametro' => $parametro]);
 
-$a_campos['oHashSMTP_user'] = $oHashSMTP_user ;
+$a_campos['oHashSMTP_user'] = $oHashSMTP_user;
 $a_campos[$parametro] = $valor;
 
 $parametro = 'smtp_pwd';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
-$oHashSMTP_pwd  = new Hash();
-$oHashSMTP_pwd  ->setUrl($url);
-$oHashSMTP_pwd  ->setcamposForm('valor');
-$oHashSMTP_pwd  ->setArrayCamposHidden(['parametro' => $parametro]);
+$oHashSMTP_pwd = new Hash();
+$oHashSMTP_pwd->setUrl($url);
+$oHashSMTP_pwd->setcamposForm('valor');
+$oHashSMTP_pwd->setArrayCamposHidden(['parametro' => $parametro]);
 
-$a_campos['oHashSMTP_pwd'] = $oHashSMTP_pwd  ;
+$a_campos['oHashSMTP_pwd'] = $oHashSMTP_pwd;
 $a_campos[$parametro] = $valor;
 
 // ----------- Servidor de AS4 Deck -----------------
@@ -383,8 +384,5 @@ $a_campos['oHashDavical'] = $oHashDavical;
 $a_campos['server_davical'] = $val_server_davical;
 
 
-
-
-
 $oView = new core\ViewTwig('config/controller');
-echo $oView->render('parametros_servidor.html.twig',$a_campos);
+echo $oView->render('parametros_servidor.html.twig', $a_campos);

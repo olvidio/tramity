@@ -1,17 +1,18 @@
 <?php
+
 use config\model\entity\ConfigSchema;
 use web\Hash;
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
 $url = 'apps/config/controller/parametros_update.php';
-$a_campos = [ 'url' => $url];
+$a_campos = ['url' => $url];
 
 
 // ----------- Servidor de AS4 Deck -----------------
@@ -45,4 +46,4 @@ $a_campos['dock'] = $val_dock;
 
 
 $oView = new core\ViewTwig('oasis_as4/controller');
-echo $oView->render('definir_plataforma.html.twig',$a_campos);
+echo $oView->render('definir_plataforma.html.twig', $a_campos);

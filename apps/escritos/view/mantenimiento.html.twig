@@ -3,33 +3,34 @@
 {{ 'Para la pataforma'|trans|raw }}: {{ oDesplPlataformas.desplegable|raw }}
 
 <nav class="nav nav-pills flex-column col-3" id="pills-col" role="tablist">
-{% for pill in a_pills %}
-  {# <li class="flex-sm-fill text-sm-center nav-item"> #}
-    {# <a data-bs-toggle="pill" class="nav-link {{ pill.active }}" href="#" onClick="fnjs_update_div('#main','{{ pill.pag_lst }}');"> #}
-    
-    <button class="mt-3 flex-sm-fill text-sm-center nav-link {{ pill.class }} {{ pill.active }}" onClick="fnjs_update_div('#main','{{ pill.pag_lst }}');"  title="{{ pill.explicacion }}">
-	{{ pill.orden }}.- {{ pill.text }}
-	</button>
-  {# </li> #}
-  {% endfor %}
+    {% for pill in a_pills %}
+        {# <li class="flex-sm-fill text-sm-center nav-item"> #}
+        {# <a data-bs-toggle="pill" class="nav-link {{ pill.active }}" href="#" onClick="fnjs_update_div('#main','{{ pill.pag_lst }}');"> #}
+
+        <button class="mt-3 flex-sm-fill text-sm-center nav-link {{ pill.class }} {{ pill.active }}"
+                onClick="fnjs_update_div('#main','{{ pill.pag_lst }}');" title="{{ pill.explicacion }}">
+            {{ pill.orden }}.- {{ pill.text }}
+        </button>
+        {# </li> #}
+    {% endfor %}
 </nav>
 
 
 <!-- End of Page content -->
 <script>
 
-fnjs_guardar_plataforma=function(){
-	var plataforma=$('#plataforma').val();
-    var url = '{{ url_ajax }}';
-    var param_json = { que: 'update_plataforma', plataforma: plataforma };
-    request=$.ajax({
-        data: param_json,
-        url: url,
-        method: 'POST'
-    });
-}
+    fnjs_guardar_plataforma = function () {
+        var plataforma = $('#plataforma').val();
+        var url = '{{ url_ajax }}';
+        var param_json = {que: 'update_plataforma', plataforma: plataforma};
+        request = $.ajax({
+            data: param_json,
+            url: url,
+            method: 'POST'
+        });
+    }
 
-$(document).ready(function() {
-	tabs_show('{{ vista }}','{{ filtro }}');
-});
+    $(document).ready(function () {
+        tabs_show('{{ vista }}', '{{ filtro }}');
+    });
 </script>

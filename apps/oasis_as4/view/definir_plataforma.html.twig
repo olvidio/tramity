@@ -1,44 +1,43 @@
-
 <h3>{{ "servidor EDI"|trans|raw }}:</h3>
 
 <form id="frm_nomdock" name="frm_nomdock" action="">
-{{ oHashNomDock.getCamposHtml|raw }}
-{{ "sigla de la plataforma:"|trans|raw }}
-{{ "(conforme a \"urn:oasis:names:tc:ebcore:partyid-type:unregistered:siglas\")"|trans|raw }}
-<input class="col-10" type="text" name="valor" value="{{ nomdock }}" >
-<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
+    {{ oHashNomDock.getCamposHtml|raw }}
+    {{ "sigla de la plataforma:"|trans|raw }}
+    {{ "(conforme a \"urn:oasis:names:tc:ebcore:partyid-type:unregistered:siglas\")"|trans|raw }}
+    <input class="col-10" type="text" name="valor" value="{{ nomdock }}">
+    <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);">
 </form>
 <hr>
 
 <form id="frm_dock" name="frm_dock" action="">
-{{ oHashDock.getCamposHtml|raw }}
-{{ "directorio dock:"|trans|raw }}
-<input class="col-10" type="text" name="valor" value="{{ dock }}" >
-<input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);" >
+    {{ oHashDock.getCamposHtml|raw }}
+    {{ "directorio dock:"|trans|raw }}
+    <input class="col-10" type="text" name="valor" value="{{ dock }}">
+    <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);">
 </form>
 <hr>
 
 
 <script>
-fnjs_guardar=function(formulario){
-    if (typeof event !== 'undefined') {
-    	event.preventDefault();
-	}
-    datos=$(formulario).serialize();
-	request=$.ajax({
-		data: datos,
-		url: '{{ url }}',
-        method: 'POST',
-        dataType: 'json'
-    });
-    request.done( function (rta) {
-        var json=rta;
-        id = json.id_escrito;
-        if (json.success != true) {
-            rta_txt = rta.responseText;
-            alert ('error: '+rta_txt);
+    fnjs_guardar = function (formulario) {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
         }
-    });
-}
+        datos = $(formulario).serialize();
+        request = $.ajax({
+            data: datos,
+            url: '{{ url }}',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done(function (rta) {
+            var json = rta;
+            id = json.id_escrito;
+            if (json.success != true) {
+                rta_txt = rta.responseText;
+                alert('error: ' + rta_txt);
+            }
+        });
+    }
 </script>
 

@@ -1,74 +1,75 @@
 <?php
+
 use core\ConfigGlobal;
 use davical\model\Davical;
 use lugares\model\entity\Lugar;
+use pendientes\model\entity\PendienteDB;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
-use pendientes\model\entity\PendienteDB;
 use web\DateTimeLocal;
 
 /**
-* Esta página actualiza la base de datos del registro.
-*
-* Se le puede pasar la varaible $nueva.
-*	Si es 1 >> inserta una nueva entrada.
-*	Si es 2 >> modifica un pendiente.
-*	Si es 3 >> elimina un pendiente.
-*	Si es 4 >> marca como contestado un pendiente.
-* 
-*
-*@package	delegacion
-*@subpackage	registro
-*@author	Daniel Serrabou
-*@since		20/5/03.
-*		
-*/
+ * Esta página actualiza la base de datos del registro.
+ *
+ * Se le puede pasar la varaible $nueva.
+ *    Si es 1 >> inserta una nueva entrada.
+ *    Si es 2 >> modifica un pendiente.
+ *    Si es 3 >> elimina un pendiente.
+ *    Si es 4 >> marca como contestado un pendiente.
+ *
+ *
+ * @package    delegacion
+ * @subpackage    registro
+ * @author    Daniel Serrabou
+ * @since        20/5/03.
+ *
+ */
 // INICIO Cabecera global de URL de controlador *********************************
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos por esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos por esta url  **********************************************
 // FIN de  Cabecera global de URL de controlador ********************************
 
 // ----------------------------------------------------------------------------------------------
 /* Resetear valores iniciales */
 
-$Qgo            = (string) \filter_input(INPUT_POST, 'go');
-$Qcalendario    = (string) \filter_input(INPUT_POST, 'calendario');
-$Qnuevo         = (string) \filter_input(INPUT_POST, 'nuevo');
-$Quid           = (string) \filter_input(INPUT_POST, 'uid');
-$Qid_reg        = (string) \filter_input(INPUT_POST, 'id_reg');
-$Qstatus        = (string) \filter_input(INPUT_POST, 'status');
-$Qf_inicio      = (string) \filter_input(INPUT_POST, 'f_inicio');
-$Qf_acabado     = (string) \filter_input(INPUT_POST, 'f_acabado');
-$Qf_plazo       = (string) \filter_input(INPUT_POST, 'f_plazo');
-$Qcal_oficina   = (string) \filter_input(INPUT_POST, 'cal_oficina');
-$Qid_oficina    = (string) \filter_input(INPUT_POST, 'id_oficina');
+$Qgo = (string)\filter_input(INPUT_POST, 'go');
+$Qcalendario = (string)\filter_input(INPUT_POST, 'calendario');
+$Qnuevo = (string)\filter_input(INPUT_POST, 'nuevo');
+$Quid = (string)\filter_input(INPUT_POST, 'uid');
+$Qid_reg = (string)\filter_input(INPUT_POST, 'id_reg');
+$Qstatus = (string)\filter_input(INPUT_POST, 'status');
+$Qf_inicio = (string)\filter_input(INPUT_POST, 'f_inicio');
+$Qf_acabado = (string)\filter_input(INPUT_POST, 'f_acabado');
+$Qf_plazo = (string)\filter_input(INPUT_POST, 'f_plazo');
+$Qcal_oficina = (string)\filter_input(INPUT_POST, 'cal_oficina');
+$Qid_oficina = (string)\filter_input(INPUT_POST, 'id_oficina');
 if (empty($Qcal_oficina) && !empty($Qid_oficina)) { // si soy secretaria puede ser que haya definido la oficina posteriormente
     $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
     $Qcal_oficina = $oDavical->getNombreRecurso($Qid_oficina);
 }
 
-$Qref_id_lugar  = (string) \filter_input(INPUT_POST, 'ref_id_lugar');
-$Qref_prot_num  = (string) \filter_input(INPUT_POST, 'ref_prot_num');
-$Qref_prot_any  = (string) \filter_input(INPUT_POST, 'ref_prot_any');
-$Qref_prot_mas  = (string) \filter_input(INPUT_POST, 'ref_prot_mas');
+$Qref_id_lugar = (string)\filter_input(INPUT_POST, 'ref_id_lugar');
+$Qref_prot_num = (string)\filter_input(INPUT_POST, 'ref_prot_num');
+$Qref_prot_any = (string)\filter_input(INPUT_POST, 'ref_prot_any');
+$Qref_prot_mas = (string)\filter_input(INPUT_POST, 'ref_prot_mas');
 
-$Qobserv        = (string) \filter_input(INPUT_POST, 'observ');
-$Qvisibilidad     = (string) \filter_input(INPUT_POST, 'visibilidad');
-$Qdetalle       = (string) \filter_input(INPUT_POST, 'detalle');
-$Qencargado     = (string) \filter_input(INPUT_POST, 'encargado');
-$Qpendiente_con = (string) \filter_input(INPUT_POST, 'pendiente_con');
-$Qasunto        = (string) \filter_input(INPUT_POST, 'asunto');
-$Qsimple_per    = (string) \filter_input(INPUT_POST, 'simple_per');
-$rrule='';
+$Qobserv = (string)\filter_input(INPUT_POST, 'observ');
+$Qvisibilidad = (string)\filter_input(INPUT_POST, 'visibilidad');
+$Qdetalle = (string)\filter_input(INPUT_POST, 'detalle');
+$Qencargado = (string)\filter_input(INPUT_POST, 'encargado');
+$Qpendiente_con = (string)\filter_input(INPUT_POST, 'pendiente_con');
+$Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
+$Qsimple_per = (string)\filter_input(INPUT_POST, 'simple_per');
+$rrule = '';
 
-$Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_oficinas = (array)  \filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_exdates = (array)  \filter_input(INPUT_POST, 'exdates', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_oficinas = (array)\filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_exdates = (array)\filter_input(INPUT_POST, 'exdates', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 
 /* Para mantener las comillas en el asunto */
@@ -80,8 +81,8 @@ $asunto = strtr($Qasunto, $trans);
 if (!empty($Qref_id_lugar)) {
     $oLugar = new Lugar($Qref_id_lugar);
     $location = $oLugar->getSigla();
-    $location .= empty($Qref_prot_num)? '' : ' '.$Qref_prot_num;
-    $location .= empty($Qref_prot_any)? '' : '/'.$Qref_prot_any;
+    $location .= empty($Qref_prot_num) ? '' : ' ' . $Qref_prot_num;
+    $location .= empty($Qref_prot_any) ? '' : '/' . $Qref_prot_any;
 } else {
     $location = '';
 }
@@ -93,110 +94,114 @@ $user_davical = $oDavical->getUsernameDavical($id_cargo_role);
 
 $txt_err = '';
 if (!empty($Qsimple_per)) { // sólo para los periodicos.
-    $Quntil = (string) \filter_input(INPUT_POST,'until');
-    if (!empty($Quntil)) { $request['until'] = $Quntil; }
-    $Qperiodico_tipo = (string) \filter_input(INPUT_POST, 'periodico_tipo');
-    $Qtipo_dia = (string) \filter_input(INPUT_POST, 'tipo_dia');
-	switch ($Qperiodico_tipo) {
-		case "periodico_d_a":
-			$request['tipo']="d_a";
-			$request['tipo_dia']= (string) \filter_input(INPUT_POST,'tipo_dia');
-			$request['interval']= (integer) \filter_input(INPUT_POST,'a_interval');
-			switch ($Qtipo_dia) {
-				case "num":
-					$request['dias']= (string) \filter_input(INPUT_POST,'a_dia_num');
-					$request['meses']= (string) \filter_input(INPUT_POST,'mes_num');
-				break;
-				case "ref":
-					$request['ordinal']= (string) \filter_input(INPUT_POST,'ordinal_a');
-					$request['dia_semana']= (string) \filter_input(INPUT_POST,'dia_semana_a');
-					$request['meses']= (string) \filter_input(INPUT_POST,'mes_num_ref');
-				break;
-				case "num_dm":
-					$request['dias'] = (array)  \filter_input(INPUT_POST, 'dias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-					$request['meses'] = (array) \filter_input(INPUT_POST,'meses', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-				break;
-				default:
-				    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-				    exit ($err_switch);
-			}
-			$rrule = Rrule::montar_rrule($request);
-			break;
-		case "periodico_d_m":
-			$request['tipo']="d_m";
-			$request['tipo_dia']= (string) \filter_input(INPUT_POST,'tipo_dia');
-			switch ($Qtipo_dia) {
-				case "num_ini":
-				    // cojo el dia de la fecha inicio
-				    $oF_ini = DateTimeLocal::createFromLocal($Qf_inicio);
-				    $dia = $oF_ini->format('j');
-					$request['dias']= (string) $dia;
-				break;
-				case "num":
-					$request['dias']= (string) \filter_input(INPUT_POST,'dia_num');
-				break;
-				case "ref":
-					$request['ordinal']= (string) \filter_input(INPUT_POST,'ordinal');
-					$request['dia_semana']= (string) \filter_input(INPUT_POST,'dia_semana');
-				break;
-				default:
-				    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-				    exit ($err_switch);
-			}
-			$rrule = Rrule::montar_rrule($request);
-			break;
-		case "periodico_d_s":
-			$request['tipo']="d_s";
-			$request['tipo_dia'] = (string) \filter_input(INPUT_POST, 'tipo_dia');
-            $request['dias'] = (array)  \filter_input(INPUT_POST, 'dias_w', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-			$rrule = Rrule::montar_rrule($request);
-			break;
-		case "periodico_d_d":
-			$request['tipo']="d_d";
-			$rrule = Rrule::montar_rrule($request);
-			break;
-		default:
-		    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-		    exit ($err_switch);
-	}
+    $Quntil = (string)\filter_input(INPUT_POST, 'until');
+    if (!empty($Quntil)) {
+        $request['until'] = $Quntil;
+    }
+    $Qperiodico_tipo = (string)\filter_input(INPUT_POST, 'periodico_tipo');
+    $Qtipo_dia = (string)\filter_input(INPUT_POST, 'tipo_dia');
+    switch ($Qperiodico_tipo) {
+        case "periodico_d_a":
+            $request['tipo'] = "d_a";
+            $request['tipo_dia'] = (string)\filter_input(INPUT_POST, 'tipo_dia');
+            $request['interval'] = (integer)\filter_input(INPUT_POST, 'a_interval');
+            switch ($Qtipo_dia) {
+                case "num":
+                    $request['dias'] = (string)\filter_input(INPUT_POST, 'a_dia_num');
+                    $request['meses'] = (string)\filter_input(INPUT_POST, 'mes_num');
+                    break;
+                case "ref":
+                    $request['ordinal'] = (string)\filter_input(INPUT_POST, 'ordinal_a');
+                    $request['dia_semana'] = (string)\filter_input(INPUT_POST, 'dia_semana_a');
+                    $request['meses'] = (string)\filter_input(INPUT_POST, 'mes_num_ref');
+                    break;
+                case "num_dm":
+                    $request['dias'] = (array)\filter_input(INPUT_POST, 'dias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                    $request['meses'] = (array)\filter_input(INPUT_POST, 'meses', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                    break;
+                default:
+                    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_switch);
+            }
+            $rrule = Rrule::montar_rrule($request);
+            break;
+        case "periodico_d_m":
+            $request['tipo'] = "d_m";
+            $request['tipo_dia'] = (string)\filter_input(INPUT_POST, 'tipo_dia');
+            switch ($Qtipo_dia) {
+                case "num_ini":
+                    // cojo el dia de la fecha inicio
+                    $oF_ini = DateTimeLocal::createFromLocal($Qf_inicio);
+                    $dia = $oF_ini->format('j');
+                    $request['dias'] = (string)$dia;
+                    break;
+                case "num":
+                    $request['dias'] = (string)\filter_input(INPUT_POST, 'dia_num');
+                    break;
+                case "ref":
+                    $request['ordinal'] = (string)\filter_input(INPUT_POST, 'ordinal');
+                    $request['dia_semana'] = (string)\filter_input(INPUT_POST, 'dia_semana');
+                    break;
+                default:
+                    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_switch);
+            }
+            $rrule = Rrule::montar_rrule($request);
+            break;
+        case "periodico_d_s":
+            $request['tipo'] = "d_s";
+            $request['tipo_dia'] = (string)\filter_input(INPUT_POST, 'tipo_dia');
+            $request['dias'] = (array)\filter_input(INPUT_POST, 'dias_w', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+            $rrule = Rrule::montar_rrule($request);
+            break;
+        case "periodico_d_d":
+            $request['tipo'] = "d_d";
+            $rrule = Rrule::montar_rrule($request);
+            break;
+        default:
+            $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_switch);
+    }
 }
 
 switch ($Qnuevo) {
-	case "1": //nuevo pendiente
-		// si vengo de entradas, primero lo guardo en una tabla temporal hasta que sepa el id_reg
-		if ($Qgo=="entradas") { 
-		    if (empty($Qf_plazo)) { $Qf_plazo=$Qf_inicio; } // En el caso de periodico, no tengo fecha plazo.
-			    
-			$oPendienteDB = new PendienteDB();
-			$oPendienteDB->setAsunto($asunto);
-			$oPendienteDB->setStatus($Qstatus);
-			$oPendienteDB->setF_inicio($Qf_inicio);
-			$oPendienteDB->setF_acabado($Qf_acabado);
-			$oPendienteDB->setF_plazo($Qf_plazo);
-			$oPendienteDB->setRef_mas($Qref_prot_mas);
-			$oPendienteDB->setObserv($Qobserv);
-			$oPendienteDB->setvisibilidad($Qvisibilidad);
-			$oPendienteDB->setDetalle($Qdetalle);
-			$oPendienteDB->setEncargado($Qencargado);
-			$oPendienteDB->setPendiente_con($Qpendiente_con);
-			$oPendienteDB->setId_oficina($Qid_oficina);
-			$oPendienteDB->setRrule($rrule);
+    case "1": //nuevo pendiente
+        // si vengo de entradas, primero lo guardo en una tabla temporal hasta que sepa el id_reg
+        if ($Qgo == "entradas") {
+            if (empty($Qf_plazo)) {
+                $Qf_plazo = $Qf_inicio;
+            } // En el caso de periodico, no tengo fecha plazo.
+
+            $oPendienteDB = new PendienteDB();
+            $oPendienteDB->setAsunto($asunto);
+            $oPendienteDB->setStatus($Qstatus);
+            $oPendienteDB->setF_inicio($Qf_inicio);
+            $oPendienteDB->setF_acabado($Qf_acabado);
+            $oPendienteDB->setF_plazo($Qf_plazo);
+            $oPendienteDB->setRef_mas($Qref_prot_mas);
+            $oPendienteDB->setObserv($Qobserv);
+            $oPendienteDB->setvisibilidad($Qvisibilidad);
+            $oPendienteDB->setDetalle($Qdetalle);
+            $oPendienteDB->setEncargado($Qencargado);
+            $oPendienteDB->setPendiente_con($Qpendiente_con);
+            $oPendienteDB->setId_oficina($Qid_oficina);
+            $oPendienteDB->setRrule($rrule);
             // las oficinas implicadas:
             $oPendienteDB->setOficinasArray($Qa_oficinas);
             // las etiquetas:
             $oPendienteDB->setEtiquetasArray($Qa_etiquetas);
-			if ($oPendienteDB->DBGuardar() === FALSE) {
-			    $txt_err .= $oPendienteDB->getErrorTxt();
-			}
-			
-			$id_pendiente = $oPendienteDB->getId_pendiente();
-			
-			if (strlen($id_pendiente) > 10 ) {
-				$txt_err .= "ERROR: $id_pendiente \n";
-			} else {
+            if ($oPendienteDB->DBGuardar() === FALSE) {
+                $txt_err .= $oPendienteDB->getErrorTxt();
+            }
+
+            $id_pendiente = $oPendienteDB->getId_pendiente();
+
+            if (strlen($id_pendiente) > 10) {
+                $txt_err .= "ERROR: $id_pendiente \n";
+            } else {
                 $jsondata['id_pendiente'] = $id_pendiente;
                 $jsondata['f_plazo'] = $Qf_plazo;
-			}
+            }
             if (empty($txt_err)) {
                 $jsondata['success'] = true;
                 $jsondata['mensaje'] = 'ok';
@@ -208,7 +213,7 @@ switch ($Qnuevo) {
             header('Content-type: application/json; charset=utf-8');
             echo json_encode($jsondata);
             exit();
-		} else {
+        } else {
             $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $user_davical, $Quid);
             $oPendiente->setId_reg($Qid_reg);
             $oPendiente->setAsunto($asunto);
@@ -231,14 +236,14 @@ switch ($Qnuevo) {
             // las etiquetas:
             $oPendiente->setEtiquetasArray($Qa_etiquetas);
             $aRespuesta = $oPendiente->Guardar();
-            if ($aRespuesta['success'] === FALSE ) {
+            if ($aRespuesta['success'] === FALSE) {
                 $txt_err .= _("No se han podido guardar el nuevo pendiente");
                 $txt_err .= "\n";
                 $txt_err .= $aRespuesta['mensaje'];
-			} else {
+            } else {
                 $jsondata['f_plazo'] = $Qf_plazo;
-			}
-			
+            }
+
             if (empty($txt_err)) {
                 $jsondata['success'] = true;
                 $jsondata['mensaje'] = 'ok';
@@ -250,15 +255,15 @@ switch ($Qnuevo) {
             header('Content-type: application/json; charset=utf-8');
             echo json_encode($jsondata);
             exit();
-		}
-		break;
-	case "2": //modificar pendiente
-		// 1º actualizo el escrito 
+        }
+        break;
+    case "2": //modificar pendiente
+        // 1º actualizo el escrito
         $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $user_davical, $Quid);
         if (!empty($Qid_reg)) {
             $oPendiente->setId_reg($Qid_reg);
         }
-		$oPendiente->Carregar();
+        $oPendiente->Carregar();
         $oPendiente->setAsunto($asunto);
         $oPendiente->setStatus($Qstatus);
         $oPendiente->setF_inicio($Qf_inicio);
@@ -277,12 +282,12 @@ switch ($Qnuevo) {
         $oPendiente->setOficinasArray($Qa_oficinas);
         // las etiquetas:
         $oPendiente->setEtiquetasArray($Qa_etiquetas);
-		$aRespuesta = $oPendiente->Guardar();
-		if ($aRespuesta['success'] === FALSE ) {
+        $aRespuesta = $oPendiente->Guardar();
+        if ($aRespuesta['success'] === FALSE) {
             $txt_err .= _("No se han podido modificar el pendiente");
-			$txt_err .= "\n";
-			$txt_err .= $aRespuesta['mensaje'];
-		}
+            $txt_err .= "\n";
+            $txt_err .= $aRespuesta['mensaje'];
+        }
         if (empty($txt_err)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
@@ -294,23 +299,23 @@ switch ($Qnuevo) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-		break;
-	case "3": //eliminar pendiente.
-		//vengo de un checkbox
-        $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-		if (!empty($Qa_sel)) { // puedo seleccionar más de uno.
-			foreach ($Qa_sel as $id) {
-				$uid=strtok($id,'#');
-				$cal_oficina=strtok('#');
-				// miro si es una recursiva de un pendiente:
-				$f_recur=strtok('#');
+        break;
+    case "3": //eliminar pendiente.
+        //vengo de un checkbox
+        $Qa_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        if (!empty($Qa_sel)) { // puedo seleccionar más de uno.
+            foreach ($Qa_sel as $id) {
+                $uid = strtok($id, '#');
+                $cal_oficina = strtok('#');
+                // miro si es una recursiva de un pendiente:
+                $f_recur = strtok('#');
                 $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $user_davical, $uid);
                 $oPendiente->Carregar();
                 $oPendiente->marcar_contestado("eliminar");
-			}
-		} else {
-		    $txt_err .= _("No se cual tengo que eliminar.");
-		}
+            }
+        } else {
+            $txt_err .= _("No se cual tengo que eliminar.");
+        }
         if (empty($txt_err)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
@@ -322,37 +327,37 @@ switch ($Qnuevo) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-		break;
-	case "4": //marcar com contestado
-		//vengo de un checkbox
-        $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-		if (!empty($Qa_sel)) { // puedo seleccionar más de uno.
-			foreach ($Qa_sel as $id) {
-				$uid=strtok($id,'#');
-				$cal_oficina=strtok('#');
-				// miro si es una recursiva de un pendiente:
-				$f_recur=strtok('#');
+        break;
+    case "4": //marcar com contestado
+        //vengo de un checkbox
+        $Qa_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        if (!empty($Qa_sel)) { // puedo seleccionar más de uno.
+            foreach ($Qa_sel as $id) {
+                $uid = strtok($id, '#');
+                $cal_oficina = strtok('#');
+                // miro si es una recursiva de un pendiente:
+                $f_recur = strtok('#');
                 $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $user_davical, $uid);
                 $oPendiente->Carregar();
-				if (!empty($f_recur)) {
-					$aRespuesta = $oPendiente->marcar_excepcion($f_recur);
-					if ($aRespuesta['success'] === FALSE ) {
-						$txt_err .= _("No se han podido marcar como contestado");
-						$txt_err .= "\n";
-						$txt_err .= $aRespuesta['mensaje'];
-					}
-				} else {
-					$aRespuesta = $oPendiente->marcar_contestado("contestado");
-					if ($aRespuesta['success'] === FALSE ) {
-						$txt_err .= _("No se han podido marcar como contestado");
-						$txt_err .= "\n";
-						$txt_err .= $aRespuesta['mensaje'];
-					}
-				}
-			}
-		} else {
-		    $txt_err .= _("No se cual tengo que eliminar.");
-		}
+                if (!empty($f_recur)) {
+                    $aRespuesta = $oPendiente->marcar_excepcion($f_recur);
+                    if ($aRespuesta['success'] === FALSE) {
+                        $txt_err .= _("No se han podido marcar como contestado");
+                        $txt_err .= "\n";
+                        $txt_err .= $aRespuesta['mensaje'];
+                    }
+                } else {
+                    $aRespuesta = $oPendiente->marcar_contestado("contestado");
+                    if ($aRespuesta['success'] === FALSE) {
+                        $txt_err .= _("No se han podido marcar como contestado");
+                        $txt_err .= "\n";
+                        $txt_err .= $aRespuesta['mensaje'];
+                    }
+                }
+            }
+        } else {
+            $txt_err .= _("No se cual tengo que eliminar.");
+        }
         if (empty($txt_err)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
@@ -364,8 +369,8 @@ switch ($Qnuevo) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-		break;
-	case "5": // modificar eetiequetas y encargados
+        break;
+    case "5": // modificar eetiequetas y encargados
         $oPendiente = new Pendiente($Qcal_oficina, $Qcalendario, $user_davical, $Quid);
         if (!empty($Qid_reg)) {
             $oPendiente->setId_reg($Qid_reg);
@@ -375,12 +380,12 @@ switch ($Qnuevo) {
         $oPendiente->setEncargado($Qencargado);
         // las etiquetas:
         $oPendiente->setEtiquetasArray($Qa_etiquetas);
-		$aRespuesta = $oPendiente->Guardar();
-		if ($aRespuesta['success'] === FALSE ) {
+        $aRespuesta = $oPendiente->Guardar();
+        if ($aRespuesta['success'] === FALSE) {
             $txt_err .= _("No se han podido modificar el pendiente");
-			$txt_err .= "\n";
-			$txt_err .= $aRespuesta['mensaje'];
-		}
+            $txt_err .= "\n";
+            $txt_err .= $aRespuesta['mensaje'];
+        }
         if (empty($txt_err)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
@@ -392,8 +397,8 @@ switch ($Qnuevo) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-	    break;
-	default:
-	    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-	    exit ($err_switch);
+        break;
+    default:
+        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_switch);
 } // fin del switch de nuevo.	

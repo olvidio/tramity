@@ -15,7 +15,7 @@ class MultipartStream implements StreamInterface
     private $boundary;
 
     /**
-     * @param array  $elements Array of associative arrays, each containing a
+     * @param array $elements Array of associative arrays, each containing a
      *                         required "name" key mapping to the form field,
      *                         name, a required "contents" key mapping to a
      *                         StreamInterface/resource/string, an optional
@@ -30,34 +30,6 @@ class MultipartStream implements StreamInterface
     {
         $this->boundary = $boundary ?: sha1(uniqid('', true));
         $this->stream = $this->createStream($elements);
-    }
-
-    /**
-     * Get the boundary
-     *
-     * @return string
-     */
-    public function getBoundary()
-    {
-        return $this->boundary;
-    }
-
-    public function isWritable()
-    {
-        return false;
-    }
-
-    /**
-     * Get the headers needed before transferring the content of a POST file
-     */
-    private function getHeaders(array $headers)
-    {
-        $str = '';
-        foreach ($headers as $key => $value) {
-            $str .= "{$key}: {$value}\r\n";
-        }
-
-        return "--{$this->boundary}\r\n" . trim($str) . "\r\n\r\n";
     }
 
     /**
@@ -125,7 +97,7 @@ class MultipartStream implements StreamInterface
         $length = $this->getHeader($headers, 'content-length');
         if (!$length) {
             if ($length = $stream->getSize()) {
-                $headers['Content-Length'] = (string) $length;
+                $headers['Content-Length'] = (string)$length;
             }
         }
 
@@ -150,5 +122,33 @@ class MultipartStream implements StreamInterface
         }
 
         return null;
+    }
+
+    /**
+     * Get the headers needed before transferring the content of a POST file
+     */
+    private function getHeaders(array $headers)
+    {
+        $str = '';
+        foreach ($headers as $key => $value) {
+            $str .= "{$key}: {$value}\r\n";
+        }
+
+        return "--{$this->boundary}\r\n" . trim($str) . "\r\n\r\n";
+    }
+
+    /**
+     * Get the boundary
+     *
+     * @return string
+     */
+    public function getBoundary()
+    {
+        return $this->boundary;
+    }
+
+    public function isWritable()
+    {
+        return false;
     }
 }

@@ -37,7 +37,7 @@ class PumpStream implements StreamInterface
      *                         amount of data to return. The callable MUST
      *                         return a string when called, or false on error
      *                         or EOF.
-     * @param array $options   Stream options:
+     * @param array $options Stream options:
      *                         - metadata: Hash of metadata to use with stream.
      *                         - size: Size of the stream, if known.
      */
@@ -81,11 +81,6 @@ class PumpStream implements StreamInterface
         return $this->tellPos;
     }
 
-    public function eof()
-    {
-        return !$this->source;
-    }
-
     public function isSeekable()
     {
         return false;
@@ -106,14 +101,24 @@ class PumpStream implements StreamInterface
         return false;
     }
 
-    public function write($string)
-    {
-        throw new \RuntimeException('Cannot write to a PumpStream');
-    }
-
     public function isReadable()
     {
         return true;
+    }
+
+    public function getContents()
+    {
+        $result = '';
+        while (!$this->eof()) {
+            $result .= $this->read(1000000);
+        }
+
+        return $result;
+    }
+
+    public function eof()
+    {
+        return !$this->source;
     }
 
     public function read($length)
@@ -132,25 +137,6 @@ class PumpStream implements StreamInterface
         return $data;
     }
 
-    public function getContents()
-    {
-        $result = '';
-        while (!$this->eof()) {
-            $result .= $this->read(1000000);
-        }
-
-        return $result;
-    }
-
-    public function getMetadata($key = null)
-    {
-        if (!$key) {
-            return $this->metadata;
-        }
-
-        return isset($this->metadata[$key]) ? $this->metadata[$key] : null;
-    }
-
     private function pump($length)
     {
         if ($this->source) {
@@ -164,5 +150,19 @@ class PumpStream implements StreamInterface
                 $length -= strlen($data);
             } while ($length > 0);
         }
+    }
+
+    public function write($string)
+    {
+        throw new \RuntimeException('Cannot write to a PumpStream');
+    }
+
+    public function getMetadata($key = null)
+    {
+        if (!$key) {
+            return $this->metadata;
+        }
+
+        return isset($this->metadata[$key]) ? $this->metadata[$key] : null;
     }
 }

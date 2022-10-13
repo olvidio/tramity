@@ -1,26 +1,27 @@
 <?php
+
 use config\model\entity\ConfigSchema;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorLocale;
 use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
-	require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 //	require_once ("classes/personas/ext_web_preferencias_gestor.class");
 
-// Crea los objectos de uso global **********************************************
-	require_once ("apps/core/global_object.inc");
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
 $url = 'apps/config/controller/parametros_update.php';
-$a_campos = [ 'url' => $url];
+$a_campos = ['url' => $url];
 
 
 $ambito_dl = FALSE;
 if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
-	$ambito_dl = TRUE;
+    $ambito_dl = TRUE;
 }
 
 $a_campos['ambito_dl'] = $ambito_dl;
@@ -203,7 +204,6 @@ $oHashVIDA_borrable_c->setcamposForm('valor');
 $oHashVIDA_borrable_c->setArrayCamposHidden(['parametro' => $parametro]);
 $a_campos['oHashVIDA_borrable_c'] = $oHashVIDA_borrable_c;
 $a_campos[$parametro] = $val_sigla;
-
 
 
 // ----------- plazos categorias -------------------
@@ -523,11 +523,11 @@ if (empty($valor)) {
     $valor = Cargo::AMBITO_DL;  // "dl"
 }
 $val_ctr = Cargo::AMBITO_CTR;
-$chk_ctr = ($valor == $val_ctr)? 'checked' : ''; 
+$chk_ctr = ($valor == $val_ctr) ? 'checked' : '';
 $val_dl = Cargo::AMBITO_DL;
-$chk_dl = ($valor == $val_dl)? 'checked' : ''; 
+$chk_dl = ($valor == $val_dl) ? 'checked' : '';
 $val_cr = Cargo::AMBITO_CR;
-$chk_cr = ($valor == $val_cr)? 'checked' : ''; 
+$chk_cr = ($valor == $val_cr) ? 'checked' : '';
 
 $oHashDLR = new Hash();
 $oHashDLR->setUrl($url);
@@ -548,24 +548,24 @@ $parametro = 'from';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
-$oHashFrom  = new Hash();
-$oHashFrom  ->setUrl($url);
-$oHashFrom  ->setcamposForm('valor');
-$oHashFrom  ->setArrayCamposHidden(['parametro' => $parametro]);
+$oHashFrom = new Hash();
+$oHashFrom->setUrl($url);
+$oHashFrom->setcamposForm('valor');
+$oHashFrom->setArrayCamposHidden(['parametro' => $parametro]);
 
-$a_campos['oHashFrom'] = $oHashFrom  ;
+$a_campos['oHashFrom'] = $oHashFrom;
 $a_campos[$parametro] = $valor;
 
 $parametro = 'reply_to';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
-$oHashReply  = new Hash();
-$oHashReply  ->setUrl($url);
-$oHashReply  ->setcamposForm('valor');
-$oHashReply  ->setArrayCamposHidden(['parametro' => $parametro]);
+$oHashReply = new Hash();
+$oHashReply->setUrl($url);
+$oHashReply->setcamposForm('valor');
+$oHashReply->setArrayCamposHidden(['parametro' => $parametro]);
 
-$a_campos['oHashReply'] = $oHashReply  ;
+$a_campos['oHashReply'] = $oHashReply;
 $a_campos[$parametro] = $valor;
 
 // ----------- Servidor de Davical -------------------
@@ -584,8 +584,5 @@ $a_campos['oHashDavical'] = $oHashDavical;
 $a_campos['server_davical'] = $val_server_davical;
 
 
-
-
-
 $oView = new core\ViewTwig('config/controller');
-echo $oView->render('parametros.html.twig',$a_campos);
+echo $oView->render('parametros.html.twig', $a_campos);

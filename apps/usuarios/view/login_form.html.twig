@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <head>
-<meta charset="UTF-8" >
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" >
-<title>Tramity</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Tramity</title>
 </head>
 .<!-- Este caracter '.' sirve para que el navegador cierre el <head> y no de un error:
  unbalanced tree was written using document.write()
  -->
 <script type="text/javascript">
-/* Cuando hay un timeout, la página normalmente se carga en algún div mediante ajax, como
- * respuesta a una petición. Para que ocupe toda la ventana, se hace por javascript,
- * reescribiendo todo el contenido con document.write() una vez está dentro de la página
- * que ha generado la petición.
- */
- 
-window.onload=newContent(); 
+    /*
+     * Cuando hay un timeout, la página normalmente se carga en algún div mediante ajax, como
+     * respuesta a una petición. Para que ocupe toda la ventana, se hace por javascript,
+     * reescribiendo todo el contenido con document.write() una vez está dentro de la página
+     * que ha generado la petición.
+     */
 
-function newContent() {
-    document.open();
+    window.onload = newContent();
 
-    //document.write("<head id='login_head'>\
-    document.write("<link href='../node_modules/bootstrap/dist/css/bootstrap.min.css' rel='stylesheet' >\
+    function newContent() {
+        document.open();
+        document.write("<link href='../node_modules/bootstrap/dist/css/bootstrap.min.css' rel='stylesheet' >\
     <style>\
     body {\
         display: -ms-flexbox;\
@@ -57,20 +56,19 @@ function newContent() {
         <h1 class='h3 mb-3 fw-normal text-center'>{{ "Inicio de sesión"|trans|raw }}</h1>\
         <label for='username' class='visually-hidden'>{{ "Usuario"|trans|raw }}</label>\
             <input type='text' id='username' name='username' class='form-control' placeholder='Usuario' required='' autofocus='' autocomplete='username' />\
-    	<label for='password' class='visually-hidden'>{{ "Password"|trans|raw }}</label>\
+        <label for='password' class='visually-hidden'>{{ "Password"|trans|raw }}</label>\
             <input type='password' id='password' name='password' class='form-control' placeholder='Password' required='' autocomplete='new-password' />\
         {% if error %}
-        <!-- Error Alert -->\
-        <div class='alert alert-danger alert-dismissible fade show'>\
-            <strong>Error!: </strong> {{ error }}\
-        </div>\
+          <div class='alert alert-danger alert-dismissible fade show'>\
+            <strong>{{ "Error!"|trans|raw }}:</strong> {{ error }}\
+          </div>\
         {% endif %}
         <button class='btn btn-lg btn-primary w-100 mt-3' type='submit'>{{ "Entrar"|trans|raw }}</button>\
         <p class='mt-3 mb-3 text-center text-muted'>© 2020-2022</p>\
     </form>\
     ");
 
-    document.close();
-}
+        document.close();
+    }
 </script>
 <body></body>

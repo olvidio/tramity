@@ -25,7 +25,6 @@ class TempNameExpression extends AbstractExpression
         $compiler
             ->raw('$_')
             ->raw($this->getAttribute('name'))
-            ->raw('_')
-        ;
+            ->raw('_');
     }
 }

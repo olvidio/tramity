@@ -33,14 +33,12 @@ class ParentExpression extends AbstractExpression
                 ->addDebugInfo($this)
                 ->write('$this->displayParentBlock(')
                 ->string($this->getAttribute('name'))
-                ->raw(", \$context, \$blocks);\n")
-            ;
+                ->raw(", \$context, \$blocks);\n");
         } else {
             $compiler
                 ->raw('$this->renderParentBlock(')
                 ->string($this->getAttribute('name'))
-                ->raw(', $context, $blocks)')
-            ;
+                ->raw(', $context, $blocks)');
         }
     }
 }

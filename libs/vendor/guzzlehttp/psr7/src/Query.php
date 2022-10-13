@@ -12,7 +12,7 @@ final class Query
      * PHP style arrays into an associative array (e.g., `foo[a]=1&foo[b]=2`
      * will be parsed into `['foo[a]' => '1', 'foo[b]' => '2'])`.
      *
-     * @param string   $str         Query string to parse
+     * @param string $str Query string to parse
      * @param int|bool $urlEncoding How the query string is encoded
      *
      * @return array
@@ -34,7 +34,9 @@ final class Query
         } elseif ($urlEncoding === PHP_QUERY_RFC1738) {
             $decoder = 'urldecode';
         } else {
-            $decoder = function ($str) { return $str; };
+            $decoder = function ($str) {
+                return $str;
+            };
         }
 
         foreach (explode('&', $str) as $kvp) {
@@ -61,7 +63,7 @@ final class Query
      * string. This function does not modify the provided keys when an array is
      * encountered (like `http_build_query()` would).
      *
-     * @param array     $params   Query string parameters.
+     * @param array $params Query string parameters.
      * @param int|false $encoding Set to false to not encode, PHP_QUERY_RFC3986
      *                            to encode using RFC3986, or PHP_QUERY_RFC1738
      *                            to encode using RFC1738.
@@ -74,7 +76,9 @@ final class Query
         }
 
         if ($encoding === false) {
-            $encoder = function ($str) { return $str; };
+            $encoder = function ($str) {
+                return $str;
+            };
         } elseif ($encoding === PHP_QUERY_RFC3986) {
             $encoder = 'rawurlencode';
         } elseif ($encoding === PHP_QUERY_RFC1738) {
@@ -103,6 +107,6 @@ final class Query
             }
         }
 
-        return $qs ? (string) substr($qs, 0, -1) : '';
+        return $qs ? (string)substr($qs, 0, -1) : '';
     }
 }

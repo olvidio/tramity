@@ -46,25 +46,6 @@ class Compiler
     /**
      * @return $this
      */
-    public function compile(Node $node, int $indentation = 0)
-    {
-        $this->lastLine = null;
-        $this->source = '';
-        $this->debugInfo = [];
-        $this->sourceOffset = 0;
-        // source code starts at 1 (as we then increment it when we encounter new lines)
-        $this->sourceLine = 1;
-        $this->indentation = $indentation;
-        $this->varNameSalt = 0;
-
-        $node->compile($this);
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
     public function subcompile(Node $node, bool $raw = true)
     {
         if (false === $raw) {
@@ -77,39 +58,20 @@ class Compiler
     }
 
     /**
-     * Adds a raw string to the compiled code.
-     *
      * @return $this
      */
-    public function raw(string $string)
+    public function compile(Node $node, int $indentation = 0)
     {
-        $this->source .= $string;
+        $this->lastLine = null;
+        $this->source = '';
+        $this->debugInfo = [];
+        $this->sourceOffset = 0;
+        // source code starts at 1 (as we then increment it when we encounter new lines)
+        $this->sourceLine = 1;
+        $this->indentation = $indentation;
+        $this->varNameSalt = 0;
 
-        return $this;
-    }
-
-    /**
-     * Writes a string to the compiled code by adding indentation.
-     *
-     * @return $this
-     */
-    public function write(...$strings)
-    {
-        foreach ($strings as $string) {
-            $this->source .= str_repeat(' ', $this->indentation * 4).$string;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Adds a quoted string to the compiled code.
-     *
-     * @return $this
-     */
-    public function string(string $value)
-    {
-        $this->source .= sprintf('"%s"', addcslashes($value, "\0\t\"\$\\"));
+        $node->compile($this);
 
         return $this;
     }
@@ -156,6 +118,30 @@ class Compiler
     }
 
     /**
+     * Adds a raw string to the compiled code.
+     *
+     * @return $this
+     */
+    public function raw(string $string)
+    {
+        $this->source .= $string;
+
+        return $this;
+    }
+
+    /**
+     * Adds a quoted string to the compiled code.
+     *
+     * @return $this
+     */
+    public function string(string $value)
+    {
+        $this->source .= sprintf('"%s"', addcslashes($value, "\0\t\"\$\\"));
+
+        return $this;
+    }
+
+    /**
      * @return $this
      */
     public function addDebugInfo(Node $node)
@@ -168,6 +154,20 @@ class Compiler
             $this->debugInfo[$this->sourceLine] = $node->getTemplateLine();
 
             $this->lastLine = $node->getTemplateLine();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Writes a string to the compiled code by adding indentation.
+     *
+     * @return $this
+     */
+    public function write(...$strings)
+    {
+        foreach ($strings as $string) {
+            $this->source .= str_repeat(' ', $this->indentation * 4) . $string;
         }
 
         return $this;
@@ -209,6 +209,6 @@ class Compiler
 
     public function getVarName(): string
     {
-        return sprintf('__internal_%s', hash('sha256', __METHOD__.$this->varNameSalt++));
+        return sprintf('__internal_%s', hash('sha256', __METHOD__ . $this->varNameSalt++));
     }
 }

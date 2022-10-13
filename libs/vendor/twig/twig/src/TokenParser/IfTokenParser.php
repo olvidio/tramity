@@ -70,6 +70,11 @@ final class IfTokenParser extends AbstractTokenParser
         return new IfNode(new Node($tests), $else, $lineno, $this->getTag());
     }
 
+    public function getTag(): string
+    {
+        return 'if';
+    }
+
     public function decideIfFork(Token $token): bool
     {
         return $token->test(['elseif', 'else', 'endif']);
@@ -78,10 +83,5 @@ final class IfTokenParser extends AbstractTokenParser
     public function decideIfEnd(Token $token): bool
     {
         return $token->test(['endif']);
-    }
-
-    public function getTag(): string
-    {
-        return 'if';
     }
 }

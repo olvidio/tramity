@@ -1,14 +1,15 @@
 <?php
+
 use documentos\model\Documento;
 use escritos\model\entity\EscritoAdjunto;
 
 // INICIO Cabecera global de URL de controlador *********************************
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos por esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos por esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
@@ -22,10 +23,11 @@ exit(); // terminate
 // main upload function used above
 // upload the bootstrap-fileinput files
 // returns associative array
-function upload() {
-    $Qid_escrito = (integer) \filter_input(INPUT_POST, 'id_escrito');
-    $Qid_item = (integer) \filter_input(INPUT_POST, 'id_item');
-    
+function upload()
+{
+    $Qid_escrito = (integer)\filter_input(INPUT_POST, 'id_escrito');
+    $Qid_item = (integer)\filter_input(INPUT_POST, 'id_item');
+
     $preview = [];
     $config = [];
     $errors = [];
@@ -39,14 +41,14 @@ function upload() {
             $fileName = $_FILES[$input]['name'][$i]; // the file name
             $fileSize = $_FILES[$input]['size'][$i]; // the file size
             if ($fileSize > $_SESSION['oConfig']->getMax_filesize_en_bytes()) {
-            	exit (_("Fichero demasiado grande"));
+                exit (_("Fichero demasiado grande"));
             }
-            
+
             //Make sure we have a file path
-            if ($tmpFilePath != "" && $Qid_escrito){
+            if ($tmpFilePath != "" && $Qid_escrito) {
                 $fp = fopen($tmpFilePath, 'rb');
                 $contenido_doc = fread($fp, filesize($tmpFilePath));
-                
+
                 if (!empty($Qid_item)) {
                     // update
                     $oEscritoAdjunto = new EscritoAdjunto($Qid_item);
@@ -55,12 +57,12 @@ function upload() {
                     // new
                     $oEscritoAdjunto = new EscritoAdjunto();
                 }
-                
+
                 $oEscritoAdjunto->setId_escrito($Qid_escrito);
                 $oEscritoAdjunto->setNom($fileName);
                 $oEscritoAdjunto->setTipo_doc(Documento::DOC_UPLOAD);
                 $oEscritoAdjunto->setAdjunto($contenido_doc);
-                
+
                 if ($oEscritoAdjunto->DBGuardar() !== FALSE) {
                     $id_item = $oEscritoAdjunto->getId_item();
                     $preview[] = "'$fileName'";
@@ -78,7 +80,7 @@ function upload() {
         }
         $out = ['initialPreview' => $preview, 'initialPreviewConfig' => $config];
         if (!empty($errors)) {
-            $img = count($errors) === 1 ? 'file "' . $errors[0]  . '" ' : 'files: "' . implode('", "', $errors) . '" ';
+            $img = count($errors) === 1 ? 'file "' . $errors[0] . '" ' : 'files: "' . implode('", "', $errors) . '" ';
             $out['error'] = 'Oh snap! We could not upload the ' . $img . 'now. Please try again later.';
         }
         return $out;

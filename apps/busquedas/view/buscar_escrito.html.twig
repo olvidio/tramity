@@ -1,621 +1,707 @@
 <div id="condiciones" class="col-9">
-<!-- Un escrito concreto --------------------------------------------- -->
-<form id="frm_buscar_7" name="frm_buscar_7" action="">
-    <input type="hidden" name="opcion" value="">
-    <input type="hidden" name="mas" value="">
-    <table class="table table-warning p-2">
-    <tr class="table-danger">
-    <th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans|raw }}
-      <input id="protocolo" name="protocolo" size="30" class=contenido  onchange="fnjs_protocolo('#id_lugar','#prot_num','#prot_any','#b_buscar_7')" value=""
-          title="{{ "puede pegar el protocolo completo (ej: cr 1/15) y presionar el tabulador"|trans|raw }}" >
-    </th>
-    </tr>
-    <tr><td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans|raw }}:
-        {{ oDesplLugar.desplegable|raw }}
-        <td>
-          <input id="prot_num" name="prot_num" size="12" class=contenido title="{{ "protocolo origen"|trans|raw }}" onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar_7')" value="{{ prot_num }}" >
-          /
-          <input id="prot_any" name="prot_any" size="5" class=contenido title="{{ "año protocolo origen"|trans|raw }}" value="{{ prot_any }}" >
-        </td></tr>
-    <tr>
-      <td colspan=5 style="text-align:right;">
-        <button class="btn btn-success" id="b_buscar_7" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_7')" >{{ "buscar"|trans|raw }}</button>
-      </td>
-    </tr>
-    </table>
-</form>
+    <!-- Un escrito concreto --------------------------------------------- -->
+    <form id="frm_buscar_7" name="frm_buscar_7" action="">
+        <input type="hidden" name="opcion" value="">
+        <input type="hidden" name="mas" value="">
+        <table class="table table-warning p-2">
+            <tr class="table-danger">
+                <th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans|raw }}
+                    <input id="protocolo" name="protocolo" size="30" class=contenido
+                           onchange="fnjs_protocolo('#id_lugar','#prot_num','#prot_any','#b_buscar_7')" value=""
+                           title="{{ "puede pegar el protocolo completo (ej: cr 1/15) y presionar el tabulador"|trans|raw }}">
+                </th>
+            </tr>
+            <tr>
+                <td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans|raw }}:
+                    {{ oDesplLugar.desplegable|raw }}
+                <td>
+                    <input id="prot_num" name="prot_num" size="12" class=contenido
+                           title="{{ "protocolo origen"|trans|raw }}"
+                           onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar_7')" value="{{ prot_num }}">
+                    /
+                    <input id="prot_any" name="prot_any" size="5" class=contenido
+                           title="{{ "año protocolo origen"|trans|raw }}" value="{{ prot_any }}">
+                </td>
+            </tr>
+            <tr>
+                <td colspan=5 style="text-align:right;">
+                    <button class="btn btn-success" id="b_buscar_7" name="b_buscar" TYPE="button"
+                            onclick="fnjs_buscar('#frm_buscar_7')">{{ "buscar"|trans|raw }}</button>
+                </td>
+            </tr>
+        </table>
+    </form>
 
-<!-- listar por un lugar y un tiempo --------------------------------------------- -->
-<form id="frm_buscar_1" name="frm_buscar_1" action="">
-    <input type="hidden" name="opcion" value="">
-    {{ "hay diferentes opciones para buscar o listar escritos"|trans|raw }}
-    <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 1: Listado de los últimos"|trans|raw }}</th></tr>
-        <tr><td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans|raw }}:</td>
-        <td>
-        {{ oDesplOrigen.desplegable|raw }}
-        </td>
-        <td class=etiqueta>{{ "antigüedad del escrito"|trans|raw }}</td>
-        <td>
-        {{ oDesplAntiguedad.desplegable|raw }}
-        </td>
-    <td></tr>
-    <tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar_1" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_1')" >{{ "buscar"|trans|raw }}</button>
-    </td></tr>
-</table>
-</form>
+    <!-- listar por un lugar y un tiempo --------------------------------------------- -->
+    <form id="frm_buscar_1" name="frm_buscar_1" action="">
+        <input type="hidden" name="opcion" value="">
+        {{ "hay diferentes opciones para buscar o listar escritos"|trans|raw }}
+        <table class="table table-warning p-2">
+            <tr class="table-danger">
+                <th colspan=5 class=titulo_inv>{{ "opción 1: Listado de los últimos"|trans|raw }}</th>
+            </tr>
+            <tr>
+                <td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans|raw }}:</td>
+                <td>
+                    {{ oDesplOrigen.desplegable|raw }}
+                </td>
+                <td class=etiqueta>{{ "antigüedad del escrito"|trans|raw }}</td>
+                <td>
+                    {{ oDesplAntiguedad.desplegable|raw }}
+                </td>
+                <td>
+            </tr>
+            <tr>
+                <td colspan=5 style="text-align:right;">
+                    <button class="btn btn-success" id="b_buscar_1" name="b_buscar" TYPE="button"
+                            onclick="fnjs_buscar('#frm_buscar_1')">{{ "buscar"|trans|raw }}</button>
+                </td>
+            </tr>
+        </table>
+    </form>
 
-<!-- Asunto más periodo --------------------------------------------- -->
-<form id="frm_buscar_2" name="frm_buscar_2" action="">
-<input type="hidden" name="opcion" value="">
-<table class="table table-warning p-2">
-<tr class="table-danger"><th colspan=5 class="titulo_inv" >{{ "opción 2: Buscar por el asunto o detalle"|trans|raw }}
-    </th></tr>
-    <tr><td class=etiqueta>{{ "Escribir una palabra clave del asunto"|trans|raw }}:</td>
-    <td colspan=4><input type="Text" id="asunto_2" name="asunto" size="50" value="{{ asunto }}"></td>
-    </tr>
-    <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
-    <td> {{ "entre el"|trans|raw }} 
-        <input class="fecha" type="Text" id="frm2_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm2_f_min')" value="{{ f_min }}">
-        </td>
-    <td> {{ "y el"|trans|raw }} 
-        <input class="fecha" type="Text" id="frm2_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm2_f_max')" value="{{ f_max }}">
-        </td>
-    {%  if vista_dl %}
-        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td><td>
-        {{ oDesplOficinas2.desplegable|raw }}
-        </td>
+    <!-- Asunto más periodo --------------------------------------------- -->
+    <form id="frm_buscar_2" name="frm_buscar_2" action="">
+        <input type="hidden" name="opcion" value="">
+        <table class="table table-warning p-2">
+            <tr class="table-danger">
+                <th colspan=5 class="titulo_inv">{{ "opción 2: Buscar por el asunto o detalle"|trans|raw }}
+                </th>
+            </tr>
+            <tr>
+                <td class=etiqueta>{{ "Escribir una palabra clave del asunto"|trans|raw }}:</td>
+                <td colspan=4><input type="Text" id="asunto_2" name="asunto" size="50" value="{{ asunto }}"></td>
+            </tr>
+            <tr>
+                <td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
+                <td> {{ "entre el"|trans|raw }}
+                    <input class="fecha" type="Text" id="frm2_f_min" name="f_min" size="12"
+                           onchange="fnjs_comprobar_fecha('#frm2_f_min')" value="{{ f_min }}">
+                </td>
+                <td> {{ "y el"|trans|raw }}
+                    <input class="fecha" type="Text" id="frm2_f_max" name="f_max" size="12"
+                           onchange="fnjs_comprobar_fecha('#frm2_f_max')" value="{{ f_max }}">
+                </td>
+                {% if vista_dl %}
+                    <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td>
+                    <td>
+                        {{ oDesplOficinas2.desplegable|raw }}
+                    </td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td colspan=5 style="text-align:right;">
+                    <button class="btn btn-success" id="b_buscar_2" name="b_buscar" TYPE="button"
+                            onclick="fnjs_buscar('#frm_buscar_2')">{{ "buscar"|trans|raw }}</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <!-- Origen, destino  más periodo --------------------------------------------- -->
+    {% if vista_dl %}
+        <form id="frm_buscar_3" name="frm_buscar_3" action="">
+            <input type="hidden" name="opcion" value="">
+            <table class="table table-warning p-2">
+                <tr class="table-danger">
+                    <th colspan=5 class=titulo_inv>
+                        {{ "opción 3a: Listar escritos enviados (por el destino)"|trans|raw }}</th>
+                </tr>
+                <tr>
+                    <td class=etiqueta>{{ "¿A quién iba dirigido?"|trans|raw }}:</td>
+                    <td colspan="4">
+                        {{ oDesplDestino2.desplegable|raw }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
+                    <td> {{ "entre el"|trans|raw }}
+                        <input class="fecha" type="Text" id="frm3_f_min" name="f_min" size="12"
+                               onchange="fnjs_comprobar_fecha('#frm3_f_min')" value="{{ f_min }}">
+                    </td>
+                    <td> {{ "y el"|trans|raw }}
+                        <input class="fecha" type="Text" id="frm3_f_max" name="f_max" size="12"
+                               onchange="fnjs_comprobar_fecha('frm3_f_max')" value="{{ f_max }}">
+                    </td>
+                    <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td>
+                    <td>
+                        {{ oDesplOficinas3.desplegable|raw }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=5 style="text-align:right;">
+                        <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button"
+                                onclick="fnjs_buscar('#frm_buscar_3')">{{ "buscar"|trans|raw }}</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form id="frm_buscar_9" name="frm_buscar_9" action="">
+            <input type="hidden" name="opcion" value="">
+            <table class="table table-warning p-2">
+                <tr class="table-danger">
+                    <th colspan=5 class=titulo_inv>
+                        {{ "opción 3b: Listar escritos  recibidos (por el origen)"|trans|raw }}</th>
+                </tr>
+                <tr>
+                    <td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans|raw }}:</td>
+                    <td colspan="4">
+                        {{ oDesplOrigen2.desplegable|raw }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
+                    <td> {{ "entre el"|trans|raw }}
+                        <input class="fecha" type="Text" id="frm9_f_min" name="f_min" size="12"
+                               onchange="fnjs_comprobar_fecha('#frm9_f_min')" value="{{ f_min }}">
+                    </td>
+                    <td> {{ "y el"|trans|raw }}
+                        <input class="fecha" type="Text" id="frm9_f_max" name="f_max" size="12"
+                               onchange="fnjs_comprobar_fecha('frm9_f_max')" value="{{ f_max }}">
+                    </td>
+                    <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td>
+                    <td>
+                        {{ oDesplOficinas9.desplegable|raw }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=5 style="text-align:right;">
+                        <button class="btn btn-success" id="b_buscar_9" name="b_buscar" TYPE="button"
+                                onclick="fnjs_buscar('#frm_buscar_9')">{{ "buscar"|trans|raw }}</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
     {% endif %}
-    </tr>
-<tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar_2" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_2')" >{{ "buscar"|trans|raw }}</button>
-    </td></tr>
-    </table>
-</form>
 
-<!-- Origen, destino  más periodo --------------------------------------------- -->
-{%  if vista_dl %}
-<form id="frm_buscar_3" name="frm_buscar_3" action="">
-    <input type="hidden" name="opcion" value="">
-    <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>
-        {{ "opción 3a: Listar escritos enviados (por el destino)"|trans|raw }}</th></tr>
-        <tr><td class=etiqueta>{{ "¿A quién iba dirigido?"|trans|raw }}:</td>
-        <td colspan="4">
-        {{ oDesplDestino2.desplegable|raw }}
-        </td></tr>
-        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
-        <td> {{ "entre el"|trans|raw }} 
-          <input class="fecha" type="Text" id="frm3_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm3_f_min')" value="{{ f_min }}">
-          </td>
-        <td> {{ "y el"|trans|raw }} 
-          <input class="fecha" type="Text" id="frm3_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('frm3_f_max')" value="{{ f_max }}">
-          </td>
-        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td><td>
-        {{ oDesplOficinas3.desplegable|raw }}
-        </td></tr>
-    <tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_3')" >{{ "buscar"|trans|raw }}</button>
-    </td></tr>
-    </table>
-</form>
-<form id="frm_buscar_9" name="frm_buscar_9" action="">
-    <input type="hidden" name="opcion" value="">
-    <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>
-        {{ "opción 3b: Listar escritos  recibidos (por el origen)"|trans|raw }}</th></tr>
-        <tr><td class=etiqueta>{{ "¿Quién enviaba el escrito?"|trans|raw }}:</td>
-        <td colspan="4">
-        {{ oDesplOrigen2.desplegable|raw }}
-        </td></tr>
-        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
-        <td> {{ "entre el"|trans|raw }} 
-          <input class="fecha" type="Text" id="frm9_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm9_f_min')" value="{{ f_min }}">
-          </td>
-        <td> {{ "y el"|trans|raw }} 
-          <input class="fecha" type="Text" id="frm9_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('frm9_f_max')" value="{{ f_max }}">
-          </td>
-        <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td><td>
-        {{ oDesplOficinas9.desplegable|raw }}
-        </td></tr>
-    <tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar_9" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_9')" >{{ "buscar"|trans|raw }}</button>
-    </td></tr>
-    </table>
-</form>
-{% endif %}
+    <!-- Listar varios escritos --------------------------------------------- -->
+    <form id="frm_buscar_4" name="frm_buscar_4" action="">
+        <input type="hidden" name="opcion" value="">
+        <table class="table table-warning p-2">
+            <tr class="table-danger">
+                <th colspan=5 class=titulo_inv>{{ "opción 4: Listar varios escritos"|trans|raw }}</th>
+            </tr>
+            <td colspan="5">
+                <input type="radio" {{ chk_lo_1 }} id="lista_origen_1" name="lista_origen" value="dl"
+                       onchange="fnjs_activar_lugar(1)">
+                {{ "aprobados en"|trans|raw }} {{ dele }}
+                <br>
+                <input type="radio" {{ chk_lo_2 }} id="lista_origen_2" name="lista_origen" value="de"
+                       onchange="fnjs_activar_lugar(2)">
+                {{ "recibidos de un ctr, dl o cr concreto"|trans|raw }}
+                {{ oDesplLugar4.desplegable|raw }}
+                <br>
+                <input type="radio" {{ chk_lo_3 }} id="lista_origen_3" name="lista_origen" value="cr_dl"
+                       onchange="fnjs_activar_lugar(3)">
+                {{ "de cr a"|trans|raw }} {{ dele }}
+                <br>
+                <input type="radio" {{ chk_lo_4 }} id="lista_origen_4" name="lista_origen" value="cr_ctr"
+                       onchange="fnjs_activar_lugar(4)">
+                {{ "de cr a ctr"|trans|raw }}
+                <br>
+            </td>
+            </tr>
+            <tr>
+                <td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
+                <td> {{ "entre el"|trans|raw }}
+                    <input class="fecha" type="Text" id="frm4_f_min" name="f_min" size="12"
+                           onchange="fnjs_comprobar_fecha('#frm4_f_min')" value="{{ f_min }}">
+                </td>
+                <td> {{ "y el"|trans|raw }}
+                    <input class="fecha" type="Text" id="frm4_f_max" name="f_max" size="12"
+                           onchange="fnjs_comprobar_fecha('#frm4_f_max')" value="{{ f_max }}">
+                </td>
+                {% if vista_dl %}
+                    <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td>
+                    <td>
+                        {{ oDesplOficinas4.desplegable|raw }}
+                    </td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td colspan=5 style="text-align:right;">
+                    <button class="btn btn-success" id="b_buscar_4" name="b_buscar" TYPE="button"
+                            onclick="fnjs_buscar('#frm_buscar_4')">{{ "buscar"|trans|raw }}</button>
+                </td>
+            </tr>
+        </table>
+    </form>
 
-<!-- Listar varios escritos --------------------------------------------- -->
-<form id="frm_buscar_4" name="frm_buscar_4" action="">
-    <input type="hidden" name="opcion" value="">
-    <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 4: Listar varios escritos"|trans|raw }}</th></tr>
-    <td colspan="5">
-    <input type="radio" {{ chk_lo_1 }} id="lista_origen_1" name="lista_origen" value="dl" onchange="fnjs_activar_lugar(1)">
-     {{ "aprobados en"|trans|raw }} {{ dele }}
-     <br>
-    <input type="radio" {{ chk_lo_2 }} id="lista_origen_2" name="lista_origen" value="de" onchange="fnjs_activar_lugar(2)">
-     {{ "recibidos de un ctr, dl o cr concreto"|trans|raw }}
-        {{ oDesplLugar4.desplegable|raw }}
-     <br>
-    <input type="radio" {{ chk_lo_3 }} id="lista_origen_3" name="lista_origen" value="cr_dl" onchange="fnjs_activar_lugar(3)">
-     {{ "de cr a"|trans|raw }} {{ dele }}
-     <br>
-    <input type="radio" {{ chk_lo_4 }} id="lista_origen_4" name="lista_origen" value="cr_ctr" onchange="fnjs_activar_lugar(4)">
-     {{ "de cr a ctr"|trans|raw }}
-     <br>
-    </td>
-    </tr>
-        <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
-        <td> {{ "entre el"|trans|raw }} 
-            <input class="fecha" type="Text" id="frm4_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_min')" value="{{ f_min }}">
-            </td>
-        <td> {{ "y el"|trans|raw }} 
-            <input class="fecha" type="Text" id="frm4_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm4_f_max')" value="{{ f_max }}">
-            </td>
-        {%  if vista_dl %}
-            <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td>
-            <td>
-              {{ oDesplOficinas4.desplegable|raw }}
-            </td>
-        {% endif %}
-        </tr>
-        <tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar_4" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_4')" >{{ "buscar"|trans|raw }}</button>
-    </td></tr>
-    </table>
-</form>
-
-<!-- Listar Entradas por etiquetas --------------------------------------------- -->
-<form id="frm_buscar_8" name="frm_buscar_8" action="">
-    <input type="hidden" name="opcion" value="">
-    <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 8: Listar entradas por etiquetas"|trans|raw }}</th></tr>
-    <tr>
-      <td>
-        <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
-        <label class="form-check-label">
-          {{ "alguna"|trans|raw }}
-        </label>
-        <br>
-        <input type="radio" class="form-check-input" name="andOr" value="AND" {{ chk_and }} >
-        <label class="form-check-label">
-          {{ "todas"|trans|raw }}
-        </label>
-      </td>
-      <td colspan=4>
+    <!-- Listar Entradas por etiquetas --------------------------------------------- -->
+    <form id="frm_buscar_8" name="frm_buscar_8" action="">
+        <input type="hidden" name="opcion" value="">
+        <table class="table table-warning p-2">
+            <tr class="table-danger">
+                <th colspan=5 class=titulo_inv>{{ "opción 8: Listar entradas por etiquetas"|trans|raw }}</th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
+                    <label class="form-check-label">
+                        {{ "alguna"|trans|raw }}
+                    </label>
+                    <br>
+                    <input type="radio" class="form-check-input" name="andOr" value="AND" {{ chk_and }} >
+                    <label class="form-check-label">
+                        {{ "todas"|trans|raw }}
+                    </label>
+                </td>
+                <td colspan=4>
         <span id="span_etiquetas">
       	  {{ oArrayDesplEtiquetas.ListaSelects|raw }}
         </span>
-      </td>
-    </tr>
-    <tr><td colspan=5 style="text-align:right;">
-      		<button class="btn btn-success" id="b_buscar_8" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_8')" >{{ "buscar"|trans|raw }}</button>
-        </td>
-    </tr>
-    </table>
-</form>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=5 style="text-align:right;">
+                    <button class="btn btn-success" id="b_buscar_8" name="b_buscar" TYPE="button"
+                            onclick="fnjs_buscar('#frm_buscar_8')">{{ "buscar"|trans|raw }}</button>
+                </td>
+            </tr>
+        </table>
+    </form>
 
-<!-- Listar modelos jurídicos por fechas --------------------------------------------- -->
-{%  if vista_dl %}
-<form id="frm_buscar_6" name="frm_buscar_6" action="">
-    <input type="hidden" name="opcion" value="">
-    <table class="table table-warning p-2">
-    <tr class="table-danger"><th colspan=5 class=titulo_inv>{{ "opción 6: Listar varios modelos jurídicos por fechas"|trans|raw }}</th></tr>
-    <tr><td class=etiqueta>{{ "Escribir una palabra clave del asunto"|trans|raw }}:</td>
-    <td colspan=4><input type="Text" id="asunto_6" name="asunto" size="50" value="{{ asunto }}"></td>
-    </tr>
-    <tr><td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
-    <td> {{ "entre el"|trans|raw }} 
-    	<input class="fecha" type="Text" id="frm6_f_min" name="f_min" size="12" onchange="fnjs_comprobar_fecha('#frm6_f_min')" value="{{ f_min }}">
-    	</td>
-    <td> {{ "y el"|trans|raw }} 
-    	<input class="fecha" type="Text" id="frm6_f_max" name="f_max" size="12" onchange="fnjs_comprobar_fecha('#frm6_f_max')" value="{{ f_max }}">
-    	</td>
-    <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td><td>
-    {{ oDesplOficinas6.desplegable|raw }}
-    </td></tr>
-    <tr><td colspan=5 style="text-align:right;">
-      <button class="btn btn-success" id="b_buscar_6" name="b_buscar" TYPE="button" onclick="fnjs_buscar('#frm_buscar_6')" >{{ "buscar"|trans|raw }}</button>
-    </td></tr>
-    </table>
-</form>
-{% endif %}
+    <!-- Listar modelos jurídicos por fechas --------------------------------------------- -->
+    {% if vista_dl %}
+        <form id="frm_buscar_6" name="frm_buscar_6" action="">
+            <input type="hidden" name="opcion" value="">
+            <table class="table table-warning p-2">
+                <tr class="table-danger">
+                    <th colspan=5
+                        class=titulo_inv>{{ "opción 6: Listar varios modelos jurídicos por fechas"|trans|raw }}</th>
+                </tr>
+                <tr>
+                    <td class=etiqueta>{{ "Escribir una palabra clave del asunto"|trans|raw }}:</td>
+                    <td colspan=4><input type="Text" id="asunto_6" name="asunto" size="50" value="{{ asunto }}"></td>
+                </tr>
+                <tr>
+                    <td class=etiqueta>{{ "Si se sabe, poner el periodo"|trans|raw }}</td>
+                    <td> {{ "entre el"|trans|raw }}
+                        <input class="fecha" type="Text" id="frm6_f_min" name="f_min" size="12"
+                               onchange="fnjs_comprobar_fecha('#frm6_f_min')" value="{{ f_min }}">
+                    </td>
+                    <td> {{ "y el"|trans|raw }}
+                        <input class="fecha" type="Text" id="frm6_f_max" name="f_max" size="12"
+                               onchange="fnjs_comprobar_fecha('#frm6_f_max')" value="{{ f_max }}">
+                    </td>
+                    <td class=etiqueta>{{ "Si interesa, poner una oficina"|trans|raw }}:</td>
+                    <td>
+                        {{ oDesplOficinas6.desplegable|raw }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=5 style="text-align:right;">
+                        <button class="btn btn-success" id="b_buscar_6" name="b_buscar" TYPE="button"
+                                onclick="fnjs_buscar('#frm_buscar_6')">{{ "buscar"|trans|raw }}</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    {% endif %}
 
 </div>
 
 <div class="row">
-  <div class="col-2">
-  	<input id="b_listar_t" name="b_listar_t" type="button" value="{{ "ver todas las opciones"|trans|raw }}" onclick="fnjs_ver_todos()" flag='uno'>
-  </div>
-  {% if vista_dl %}
-  <div class="col-2"></div>
-  <div class="col-2">
-    <input id="chk_anulados" name="chk_anulados" type="checkbox" onChange='fnjs_ctr_anulados()' {{ chk_ctr_anulados }}>
-    {{ "ver ctr anulados"|trans|raw }}
-  </div>
-  {% endif %}
+    <div class="col-2">
+        <input id="b_listar_t" name="b_listar_t" type="button" value="{{ "ver todas las opciones"|trans|raw }}"
+               onclick="fnjs_ver_todos()" flag='uno'>
+    </div>
+    {% if vista_dl %}
+        <div class="col-2"></div>
+        <div class="col-2">
+            <input id="chk_anulados" name="chk_anulados" type="checkbox"
+                   onChange='fnjs_ctr_anulados()' {{ chk_ctr_anulados }}>
+            {{ "ver ctr anulados"|trans|raw }}
+        </div>
+    {% endif %}
 
 </div>
 
-<div id="resultados" class="container-fluid p-3 my-3 border bg-light" >
+<div id="resultados" class="container-fluid p-3 my-3 border bg-light">
 </div>
 
 <script>
-$(function() {
-	$( "#frm2_f_min" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		dayOfWeekStart: globaljsVarDayStart,
-		//format: 'Y-m-d',
-		onShow: function(ct){
-			var f_max_iso = fnjs_convert2iso("#frm2_f_max", '{{ format }}');
-			this.setOptions({
-				maxDate: f_max_iso ? f_max_iso: false
-            })
-        }
+    $(function () {
+        $("#frm2_f_min").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            dayOfWeekStart: globaljsVarDayStart,
+            //format: 'Y-m-d',
+            onShow: function (ct) {
+                var f_max_iso = fnjs_convert2iso("#frm2_f_max", '{{ format }}');
+                this.setOptions({
+                    maxDate: f_max_iso ? f_max_iso : false
+                })
+            }
+        });
     });
-});
-    
-$(function() {
-	$( "#frm2_f_max" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		dayOfWeekStart: globaljsVarDayStart,
-		//format: 'Y-m-d',
-		onShow: function(ct){
-			var f_min_iso = fnjs_convert2iso("#frm2_f_min", '{{ format }}');
-			this.setOptions({
-				minDate: f_min_iso ? f_min_iso: false
-            })
-        }
-    });
-});
 
-$(function() {
-	$( "#frm3_f_min" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		dayOfWeekStart: globaljsVarDayStart,
-		//format: 'Y-m-d',
-		onShow: function(ct){
-			var f_max_iso = fnjs_convert2iso("#frm3_f_max", '{{ format }}');
-			this.setOptions({
-				maxDate: f_max_iso ? f_max_iso: false
-            })
-        }
+    $(function () {
+        $("#frm2_f_max").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            dayOfWeekStart: globaljsVarDayStart,
+            //format: 'Y-m-d',
+            onShow: function (ct) {
+                var f_min_iso = fnjs_convert2iso("#frm2_f_min", '{{ format }}');
+                this.setOptions({
+                    minDate: f_min_iso ? f_min_iso : false
+                })
+            }
+        });
     });
-});
-    
-$(function() {
-	$( "#frm3_f_max" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		dayOfWeekStart: globaljsVarDayStart,
-		//format: 'Y-m-d',
-		onShow: function(ct){
-			var f_min_iso = fnjs_convert2iso("#frm3_f_min", '{{ format }}');
-			this.setOptions({
-				minDate: f_min_iso ? f_min_iso: false
-            })
-        }
-    });
-});
 
-$(function() {
-	$( "#frm9_f_min" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		dayOfWeekStart: globaljsVarDayStart,
-		//format: 'Y-m-d',
-		onShow: function(ct){
-			var f_max_iso = fnjs_convert2iso("#frm9_f_max", '{{ format }}');
-			this.setOptions({
-				maxDate: f_max_iso ? f_max_iso: false
-            })
-        }
+    $(function () {
+        $("#frm3_f_min").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            dayOfWeekStart: globaljsVarDayStart,
+            //format: 'Y-m-d',
+            onShow: function (ct) {
+                var f_max_iso = fnjs_convert2iso("#frm3_f_max", '{{ format }}');
+                this.setOptions({
+                    maxDate: f_max_iso ? f_max_iso : false
+                })
+            }
+        });
     });
-});
-    
-$(function() {
-	$( "#frm9_f_max" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		dayOfWeekStart: globaljsVarDayStart,
-		//format: 'Y-m-d',
-		onShow: function(ct){
-			var f_min_iso = fnjs_convert2iso("#frm9_f_min", '{{ format }}');
-			this.setOptions({
-				minDate: f_min_iso ? f_min_iso: false
-            })
-        }
-    });
-});
 
-$(function() {
-	$( "#frm4_f_min" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		dayOfWeekStart: globaljsVarDayStart,
-		//format: 'Y-m-d',
-		onShow: function(ct){
-			var f_max_iso = fnjs_convert2iso("#frm4_f_max", '{{ format }}');
-			this.setOptions({
-				maxDate: f_max_iso ? f_max_iso: false
-            })
-        }
+    $(function () {
+        $("#frm3_f_max").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            dayOfWeekStart: globaljsVarDayStart,
+            //format: 'Y-m-d',
+            onShow: function (ct) {
+                var f_min_iso = fnjs_convert2iso("#frm3_f_min", '{{ format }}');
+                this.setOptions({
+                    minDate: f_min_iso ? f_min_iso : false
+                })
+            }
+        });
     });
-});
-    
-$(function() {
-	$( "#frm4_f_max" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		dayOfWeekStart: globaljsVarDayStart,
-		//format: 'Y-m-d',
-		onShow: function(ct){
-			var f_min_iso = fnjs_convert2iso("#frm4_f_min", '{{ format }}');
-			this.setOptions({
-				minDate: f_min_iso ? f_min_iso: false
-            })
-        }
-    });
-});
 
-$(function() {
-	$( "#frm6_f_min" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		dayOfWeekStart: globaljsVarDayStart,
-		//format: 'Y-m-d',
-		onShow: function(ct){
-			var f_max_iso = fnjs_convert2iso("#frm6_f_max", '{{ format }}');
-			this.setOptions({
-				maxDate: f_max_iso ? f_max_iso: false
-            })
-        }
+    $(function () {
+        $("#frm9_f_min").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            dayOfWeekStart: globaljsVarDayStart,
+            //format: 'Y-m-d',
+            onShow: function (ct) {
+                var f_max_iso = fnjs_convert2iso("#frm9_f_max", '{{ format }}');
+                this.setOptions({
+                    maxDate: f_max_iso ? f_max_iso : false
+                })
+            }
+        });
     });
-});
-    
-$(function() {
-	$( "#frm6_f_max" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		dayOfWeekStart: globaljsVarDayStart,
-		//format: 'Y-m-d',
-		onShow: function(ct){
-			var f_min_iso = fnjs_convert2iso("#frm6_f_min", '{{ format }}');
-			this.setOptions({
-				minDate: f_min_iso ? f_min_iso: false
-            })
-        }
+
+    $(function () {
+        $("#frm9_f_max").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            dayOfWeekStart: globaljsVarDayStart,
+            //format: 'Y-m-d',
+            onShow: function (ct) {
+                var f_min_iso = fnjs_convert2iso("#frm9_f_min", '{{ format }}');
+                this.setOptions({
+                    minDate: f_min_iso ? f_min_iso : false
+                })
+            }
+        });
     });
-});
 
-fnjs_aviso_IESE=function(id){
-    var nom=$(id).val();
-    if (nom=="610") alert ("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans|raw }}");
-}
-/* intentar explotar el protocolo en lugar, num y año */
-fnjs_protocolo=function(nom_lugar,num,any,siguiente){
-    var protocolo=$('#protocolo').val();
-    var expresion_regular= new RegExp('\\s*((\\w*\\s*)*)\\s+([0-9]+)\/([0-9]+)', 'g');
-    var resultado = expresion_regular.exec(protocolo);
+    $(function () {
+        $("#frm4_f_min").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            dayOfWeekStart: globaljsVarDayStart,
+            //format: 'Y-m-d',
+            onShow: function (ct) {
+                var f_max_iso = fnjs_convert2iso("#frm4_f_max", '{{ format }}');
+                this.setOptions({
+                    maxDate: f_max_iso ? f_max_iso : false
+                })
+            }
+        });
+    });
 
-    if (resultado) {
-        if (resultado[1]) {
-            //str_select = nom_lugar+" option:contains("+resultado[1]+")";
-            $(nom_lugar+" option").filter(function() {
-                return $(this).text() === resultado[1];
-            }).attr('selected', 'selected');
+    $(function () {
+        $("#frm4_f_max").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            dayOfWeekStart: globaljsVarDayStart,
+            //format: 'Y-m-d',
+            onShow: function (ct) {
+                var f_min_iso = fnjs_convert2iso("#frm4_f_min", '{{ format }}');
+                this.setOptions({
+                    minDate: f_min_iso ? f_min_iso : false
+                })
+            }
+        });
+    });
+
+    $(function () {
+        $("#frm6_f_min").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            dayOfWeekStart: globaljsVarDayStart,
+            //format: 'Y-m-d',
+            onShow: function (ct) {
+                var f_max_iso = fnjs_convert2iso("#frm6_f_max", '{{ format }}');
+                this.setOptions({
+                    maxDate: f_max_iso ? f_max_iso : false
+                })
+            }
+        });
+    });
+
+    $(function () {
+        $("#frm6_f_max").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            dayOfWeekStart: globaljsVarDayStart,
+            //format: 'Y-m-d',
+            onShow: function (ct) {
+                var f_min_iso = fnjs_convert2iso("#frm6_f_min", '{{ format }}');
+                this.setOptions({
+                    minDate: f_min_iso ? f_min_iso : false
+                })
+            }
+        });
+    });
+
+    fnjs_aviso_IESE = function (id) {
+        var nom = $(id).val();
+        if (nom == "610") alert("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans|raw }}");
+    }
+    /* intentar explotar el protocolo en lugar, num y año */
+    fnjs_protocolo = function (nom_lugar, num, any, siguiente) {
+        var protocolo = $('#protocolo').val();
+        var expresion_regular = new RegExp('\\s*((\\w*\\s*)*)\\s+([0-9]+)\/([0-9]+)', 'g');
+        var resultado = expresion_regular.exec(protocolo);
+
+        if (resultado) {
+            if (resultado[1]) {
+                //str_select = nom_lugar+" option:contains("+resultado[1]+")";
+                $(nom_lugar + " option").filter(function () {
+                    return $(this).text() === resultado[1];
+                }).attr('selected', 'selected');
+            }
+
+            if (resultado[3]) {
+                $(num).val(resultado[3]);
+                $(any).val(resultado[4]);
+                $(siguiente).focus();
+            }
         }
-        
-        if (resultado[3]) {
-            $(num).val(resultado[3]);
-            $(any).val(resultado[4]);
+    }
+
+    fnjs_proto = function (num, any, siguiente) {
+        var numero;
+        var prot_num = $(num).val();
+        numero = prot_num.split("/");
+        if (numero[1]) {
+            $(num).val(numero[0]);
+            $(any).val(numero[1]);
             $(siguiente).focus();
         }
     }
-}
 
-fnjs_proto=function(num,any,siguiente){
-    var numero;
-    var prot_num=$(num).val();
-    numero=prot_num.split("/");
-    if (numero[1]) {
-        $(num).val(numero[0]);
-        $(any).val(numero[1]);
-        $(siguiente).focus();
-    }
-}
+    fnjs_sel_periodo = function (id) {
+        var nom = $(id + ' :selected').text();
 
-fnjs_sel_periodo=function(id){
-    var nom=$(id+' :selected').text();
-    
-    switch (nom) {
-        case "IESE":
-            alert ("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans|raw }}");
-            break;
-        case "cr":
-            $('#antiguedad').val('1m');
-            break;
-        case "dlb":
-            $('#antiguedad').val('1m');
-            break;
-        default:
-            $('#antiguedad').val('3m');
-    }
-    $('#b_buscar').focus();
-}
-
-fnjs_buscar_mas=function(){
-	formulario='#frm_buscar_7';
-	opcion=71;
-    fnjs_ver_solo(formulario);
-    // borro los posibles resultados anteriores
-    $('#resultados').html("");
-    $(formulario+' input[name="opcion"]').val(opcion);
-    $(formulario).attr('action','apps/busquedas/controller/ver_tabla.php');
-    fnjs_enviar_formulario(formulario,'#resultados');
-}
-fnjs_buscar=function(formulario){
-    var form_name=$(formulario).attr('name');
-    var opcion=form_name.substr(-1);
-    if (opcion==2) {
-        if (!$('#asunto_2').val()) {
-            alert ("{{ "Tiene que escribir una palabra para buscar en el asunto"|trans|raw }}");
-            return;
+        switch (nom) {
+            case "IESE":
+                alert("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans|raw }}");
+                break;
+            case "cr":
+                $('#antiguedad').val('1m');
+                break;
+            case "dlb":
+                $('#antiguedad').val('1m');
+                break;
+            default:
+                $('#antiguedad').val('3m');
         }
+        $('#b_buscar').focus();
     }
-    if (opcion==3) {
-        if (fnjs_compatible()) {
-            return;
-        }
+
+    fnjs_buscar_mas = function () {
+        formulario = '#frm_buscar_7';
+        opcion = 71;
+        fnjs_ver_solo(formulario);
+        // borro los posibles resultados anteriores
+        $('#resultados').html("");
+        $(formulario + ' input[name="opcion"]').val(opcion);
+        $(formulario).attr('action', 'apps/busquedas/controller/ver_tabla.php');
+        fnjs_enviar_formulario(formulario, '#resultados');
     }
-    if (opcion==1) {
-        var origen=$('#origen_id_lugar').val();
-        var antiguedad=$('#antiguedad').val();
-        if (antiguedad === 'aa' && origen == '{{ id_dl }}') {
-            if ( !confirm("{{ "Puede tardar bastante. Ralentiza el servidor (afecta a otros usuarios). Si hay más de 20.000 puede dar error"|trans|raw }}") ) {
+    fnjs_buscar = function (formulario) {
+        var form_name = $(formulario).attr('name');
+        var opcion = form_name.substr(-1);
+        if (opcion == 2) {
+            if (!$('#asunto_2').val()) {
+                alert("{{ "Tiene que escribir una palabra para buscar en el asunto"|trans|raw }}");
                 return;
             }
         }
-    }
-    if (opcion==7) {
-        var num = $('#prot_num').val();
-        if (num === '0' || num === 0 || num === '') {
-            if ( !confirm("{{ "¿Seguro que quiere ver todos?"|trans|raw }}") ) {
+        if (opcion == 3) {
+            if (fnjs_compatible()) {
                 return;
             }
         }
-    }
-    fnjs_ver_solo(formulario);
-    // borro los posibles resultados anteriores
-    $('#resultados').html("");
-    $(formulario+' input[name="opcion"]').val(opcion);
-    $(formulario).attr('action','apps/busquedas/controller/ver_tabla.php');
-    fnjs_enviar_formulario(formulario,'#resultados');
-}
-fnjs_ver_solo=function(formulario){
-    // colección de todos los formularios
-    $('#condiciones form').each(function(i,f){
-        nom_f='#'+$(this).attr('name');
-        //alert ("f: "+nom_f+", form: "+formulario);
-        if (nom_f != formulario) {
-            $(this).hide();
-            $(this)[0].reset();
+        if (opcion == 1) {
+            var origen = $('#origen_id_lugar').val();
+            var antiguedad = $('#antiguedad').val();
+            if (antiguedad === 'aa' && origen == '{{ id_dl }}') {
+                if (!confirm("{{ "Puede tardar bastante. Ralentiza el servidor (afecta a otros usuarios). Si hay más de 20.000 puede dar error"|trans|raw }}")) {
+                    return;
+                }
+            }
         }
-    });
-}
-fnjs_ctr_anulados = function(){
-    anulado=$('#chk_anulados').prop("checked");
-    if (anulado == true) { //volver a cargar la página
-        fnjs_update_div('#main','apps/busquedas/controller/buscar_escrito.php?simple=1&ctr_anulados=1');
-    } else {
-        fnjs_update_div('#main','apps/busquedas/controller/buscar_escrito.php?simple=1&ctr_anulados=0');
+        if (opcion == 7) {
+            var num = $('#prot_num').val();
+            if (num === '0' || num === 0 || num === '') {
+                if (!confirm("{{ "¿Seguro que quiere ver todos?"|trans|raw }}")) {
+                    return;
+                }
+            }
+        }
+        fnjs_ver_solo(formulario);
+        // borro los posibles resultados anteriores
+        $('#resultados').html("");
+        $(formulario + ' input[name="opcion"]').val(opcion);
+        $(formulario).attr('action', 'apps/busquedas/controller/ver_tabla.php');
+        fnjs_enviar_formulario(formulario, '#resultados');
     }
-}
-fnjs_ver_todos=function(){
-    flag=$('#b_listar_t').attr('flag');
-    if (flag=='todo') {
-        fnjs_ver_solo('#frm_buscar_7');
-        $('#b_listar_t').attr('flag','uno');
-        $('#b_listar_t').val("{{ "ver todas las opciones"|trans|raw }}");
-    } else {
+    fnjs_ver_solo = function (formulario) {
         // colección de todos los formularios
-        $('#condiciones form').each(function(i,f){
-            $(this).show();
-            $(this).attr('action',"");
+        $('#condiciones form').each(function (i, f) {
+            nom_f = '#' + $(this).attr('name');
+            //alert ("f: "+nom_f+", form: "+formulario);
+            if (nom_f != formulario) {
+                $(this).hide();
+                $(this)[0].reset();
+            }
         });
-        $('#b_listar_t').attr('flag','todo');
-        $('#b_listar_t').val("{{ "ver menos opciones"|trans|raw }}");
     }
-}
-fnjs_periodo_alert=function(){
-    alert("{{ "Debe poner un periodo"|trans|raw }}");
-    document.listas.f_lista_min.focus();
-}
-fnjs_listar=function(){
-    var f=document.listas.f_lista_min.value;
-    var f2=document.listas.f_lista_max.value;
-    if (f && f2) {
-        $('#listas').attr('action','apps/busquedas/controller/ver_tabla.php');
-        fnjs_enviar_formulario('#listas');
-    } else {
-        periodo_alert();
+    fnjs_ctr_anulados = function () {
+        anulado = $('#chk_anulados').prop("checked");
+        if (anulado == true) { //volver a cargar la página
+            fnjs_update_div('#main', 'apps/busquedas/controller/buscar_escrito.php?simple=1&ctr_anulados=1');
+        } else {
+            fnjs_update_div('#main', 'apps/busquedas/controller/buscar_escrito.php?simple=1&ctr_anulados=0');
+        }
     }
-}
+    fnjs_ver_todos = function () {
+        flag = $('#b_listar_t').attr('flag');
+        if (flag == 'todo') {
+            fnjs_ver_solo('#frm_buscar_7');
+            $('#b_listar_t').attr('flag', 'uno');
+            $('#b_listar_t').val("{{ "ver todas las opciones"|trans|raw }}");
+        } else {
+            // colección de todos los formularios
+            $('#condiciones form').each(function (i, f) {
+                $(this).show();
+                $(this).attr('action', "");
+            });
+            $('#b_listar_t').attr('flag', 'todo');
+            $('#b_listar_t').val("{{ "ver menos opciones"|trans|raw }}");
+        }
+    }
+    fnjs_periodo_alert = function () {
+        alert("{{ "Debe poner un periodo"|trans|raw }}");
+        document.listas.f_lista_min.focus();
+    }
+    fnjs_listar = function () {
+        var f = document.listas.f_lista_min.value;
+        var f2 = document.listas.f_lista_max.value;
+        if (f && f2) {
+            $('#listas').attr('action', 'apps/busquedas/controller/ver_tabla.php');
+            fnjs_enviar_formulario('#listas');
+        } else {
+            periodo_alert();
+        }
+    }
 
-fnjs_activar_lugar=function(n){
-    if (n==2) {
-        $('#lista_origen_2').attr('checked',"true");
-    } else {
-        $('#lista_lugar').val("");
+    fnjs_activar_lugar = function (n) {
+        if (n == 2) {
+            $('#lista_origen_2').attr('checked', "true");
+        } else {
+            $('#lista_lugar').val("");
+        }
     }
-}
-fnjs_compatible=function(){
-    var id_base=10; //valor minimo de los id_lugar
-    var destino=$('#dest_id_lugar_2').val();
-    var origen=$('#origen_id_lugar_2').val();
-    var id_dl={{ id_dl }};
-    var id_cr={{ id_cr }};
-    var err=0;
-    if (destino==id_dl && origen==id_dl) { err=1; }
-    if ((destino!=id_cr && destino!=id_dl && destino > id_base) && (origen!=id_cr && origen!=id_dl && origen > id_base)) { err=1; }
-    if (destino==id_cr && (origen!=id_dl && origen > id_base)) { err=1; }
-    
-    if (err==1) { alert("{{ "estas dos opciones no son compatibles"|trans|raw }}"); }
-    //if (origen=="" && destino=="") {
-    if (origen < id_base && destino < id_base) {
-        err=1;
-        alert("{{ "tiene que seleccionar un origen o un destino"|trans|raw }}");
-    }
-    return err;
-}
+    fnjs_compatible = function () {
+        var id_base = 10; //valor minimo de los id_lugar
+        var destino = $('#dest_id_lugar_2').val();
+        var origen = $('#origen_id_lugar_2').val();
+        var id_dl ={{ id_dl }};
+        var id_cr ={{ id_cr }};
+        var err = 0;
+        if (destino == id_dl && origen == id_dl) {
+            err = 1;
+        }
+        if ((destino != id_cr && destino != id_dl && destino > id_base) && (origen != id_cr && origen != id_dl && origen > id_base)) {
+            err = 1;
+        }
+        if (destino == id_cr && (origen != id_dl && origen > id_base)) {
+            err = 1;
+        }
 
-{% if simple == 1 %}
+        if (err == 1) {
+            alert("{{ "estas dos opciones no son compatibles"|trans|raw }}");
+        }
+        //if (origen=="" && destino=="") {
+        if (origen < id_base && destino < id_base) {
+            err = 1;
+            alert("{{ "tiene que seleccionar un origen o un destino"|trans|raw }}");
+        }
+        return err;
+    }
+
+    {% if simple == 1 %}
     fnjs_ver_solo('#frm_buscar_7');
-{% endif %}
-{% if opcion %}
+    {% endif %}
+    {% if opcion %}
     fnjs_ver_solo('#frm_buscar_{{ opcion }}');
     fnjs_buscar('#frm_buscar_{{ opcion }}')
-{% endif %}
+    {% endif %}
 
 
-{{ oArrayDesplEtiquetas.ComprobarSelectJs|raw }}
-fnjs_mas_etiquetas=function(){
-    var code = (event.keyCode ? event.keyCode : event.which);
-    var valor=1;
-    var id_campo='#'+event.currentTarget.id;
-    var valor=$(id_campo).val();
-    if(code!=9 && typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-    if ( code==9 || event.type=="change") {
-        if (valor!=0) {
-            {{ oArrayDesplEtiquetas.ListaSelectsJs|raw }}
+    {{ oArrayDesplEtiquetas.ComprobarSelectJs|raw }}
+    fnjs_mas_etiquetas = function () {
+        var code = (event.keyCode ? event.keyCode : event.which);
+        var valor = 1;
+        var id_campo = '#' + event.currentTarget.id;
+        var valor = $(id_campo).val();
+        if (code != 9 && typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        if (code == 9 || event.type == "change") {
+            if (valor != 0) {
+                {{ oArrayDesplEtiquetas.ListaSelectsJs|raw }}
+            }
         }
     }
-}
-fnjs_quitar_etiquetas=function(){
-    $('#span_etiquetas').html("");
-    $('#etiquetas_num').val(0);
-}
+    fnjs_quitar_etiquetas = function () {
+        $('#span_etiquetas').html("");
+        $('#etiquetas_num').val(0);
+    }
 
-    
-$(document).ready(function() {
-	tabs_show('{{ vista }}','{{ filtro }}');
-});
+
+    $(document).ready(function () {
+        tabs_show('{{ vista }}', '{{ filtro }}');
+    });
 </script>

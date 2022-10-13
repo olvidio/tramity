@@ -1,4 +1,5 @@
 <?php
+
 use core\ConfigGlobal;
 use core\ViewTwig;
 use escritos\model\EscritoLista;
@@ -11,21 +12,21 @@ use usuarios\model\entity\GestorCargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos para esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos para esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
-$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
-$Qprioridad_sel = (integer) \filter_input(INPUT_POST, 'prioridad_sel');
+$Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
+$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Qprioridad_sel = (integer)\filter_input(INPUT_POST, 'prioridad_sel');
 
 $gesCargos = new GestorCargo();
-$aCargos =$gesCargos->getArrayCargos();
+$aCargos = $gesCargos->getArrayCargos();
 
 $txt_option_cargos = '';
 $gesCargos = new GestorCargo();
@@ -62,15 +63,15 @@ $rango = 'voto';
 if (ConfigGlobal::role_actual() === 'vcd') {
     // Ver cual toca
     $aWhere = ['id_expediente' => $Qid_expediente,
-                'id_cargo' => ConfigGlobal::role_id_cargo(),
-                '_ordre' => 'orden_tramite',
+        'id_cargo' => ConfigGlobal::role_id_cargo(),
+        '_ordre' => 'orden_tramite',
     ];
     $cFirmasVcd = $gesFirmas->getFirmas($aWhere);
     foreach ($cFirmasVcd as $oFirma) {
         $valor = $oFirma->getValor();
-        $cargo_tipo = $oFirma->getCargo_tipo();        
+        $cargo_tipo = $oFirma->getCargo_tipo();
         if (empty($valor) ||
-            ($valor != Firma::V_D_NO && $valor != Firma::V_D_OK &&  $valor != Firma::V_D_VISTO_BUENO) ) {
+            ($valor != Firma::V_D_NO && $valor != Firma::V_D_OK && $valor != Firma::V_D_VISTO_BUENO)) {
             if ($cargo_tipo == Cargo::CARGO_VB_VCD) {
                 $rango = 'vb_vcd';
             } else {
@@ -86,7 +87,7 @@ foreach ($oFirma->getArrayValor($rango) as $key => $valor) {
     $a_voto['valor'] = $valor;
     $a_firmas[] = $a_voto;
 }
-    
+
 $prioridad = $oExpediente->getPrioridad();
 $a_prioridad = $oExpediente->getArrayPrioridad();
 $prioridad_txt = $a_prioridad[$prioridad];
@@ -128,7 +129,7 @@ if ($responder) {
     if (ConfigGlobal::soy_dtor()) {
         $a_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
     }
-    
+
     if ($id_ponente == ConfigGlobal::role_id_cargo() || array_key_exists($id_ponente, $a_cargos_oficina)) {
         $aclaracion = _("Responder aclaración");
         $aclaracion_event = 'respuesta';
@@ -155,22 +156,22 @@ if ($estado == Expediente::ESTADO_ACABADO) {
         $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
         $a_etiquetas[] = $id_etiqueta;
     }
-    $oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas,$a_posibles_etiquetas,'etiquetas');
+    $oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas, $a_posibles_etiquetas, 'etiquetas');
     $ver_etiquetas = TRUE;
 }
 
 $oficinas = $oExpediente->getResto_oficinas();
 
-$oArrayDesplFirmas = new web\DesplegableArray($oficinas,$a_posibles_cargos,'oficinas');
-$oArrayDesplFirmas ->setBlanco('t');
-$oArrayDesplFirmas ->setAccionConjunto('fnjs_mas_oficinas()');
+$oArrayDesplFirmas = new web\DesplegableArray($oficinas, $a_posibles_cargos, 'oficinas');
+$oArrayDesplFirmas->setBlanco('t');
+$oArrayDesplFirmas->setAccionConjunto('fnjs_mas_oficinas()');
 
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query(['filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
+$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query(['filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
 $base_url = core\ConfigGlobal::getWeb();
-$pagina_cambio = web\Hash::link('apps/expedientes/controller/expediente_cambio_tramite.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
+$pagina_cambio = web\Hash::link('apps/expedientes/controller/expediente_cambio_tramite.php?' . http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
 
 $add_del_txt = '';
 if ($Qfiltro == 'seg_reunion') {
@@ -190,7 +191,7 @@ if (ConfigGlobal::role_actual() == 'scdl' || ConfigGlobal::role_actual() == 'sd'
 } else {
     $cmb_tramite = FALSE;
 }
-    
+
 $a_campos = [
     'id_expediente' => $Qid_expediente,
     'filtro' => $Qfiltro,
@@ -207,19 +208,19 @@ $a_campos = [
     'f_ini_circulacion' => $f_ini_circulacion,
     'f_reunion' => $f_reunion,
     'f_aprobacion' => $f_aprobacion,
-    
+
     'asunto' => $asunto,
     'entradilla' => $entradilla,
     'comentarios' => $comentarios,
     'a_recorrido' => $a_recorrido,
-    
+
     'oficinas' => $oficinas,
-    'oArrayDesplFirmas' => $oArrayDesplFirmas, 
+    'oArrayDesplFirmas' => $oArrayDesplFirmas,
     'txt_option_cargos' => $txt_option_cargos,
     'lista_antecedentes' => $lista_antecedentes,
     'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
     'ver_etiquetas' => $ver_etiquetas,
-    
+
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
     //acciones
@@ -238,4 +239,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('expedientes/controller');
-echo $oView->renderizar('expediente_ver.html.twig',$a_campos);
+echo $oView->renderizar('expediente_ver.html.twig', $a_campos);

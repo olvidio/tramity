@@ -1,4 +1,5 @@
 <?php
+
 use core\ViewTwig;
 use documentos\model\Documento;
 use etiquetas\model\entity\GestorEtiqueta;
@@ -6,26 +7,26 @@ use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos para esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos para esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_doc = (integer) \filter_input(INPUT_POST, 'id_doc');
-$Qaccion = (integer) \filter_input(INPUT_POST, 'accion');
-$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
-$QandOr = (string) \filter_input(INPUT_POST, 'andOr');
-$Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qque = (string) \filter_input(INPUT_POST, 'que');
+$Qid_doc = (integer)\filter_input(INPUT_POST, 'id_doc');
+$Qaccion = (integer)\filter_input(INPUT_POST, 'accion');
+$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$QandOr = (string)\filter_input(INPUT_POST, 'andOr');
+$Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qque = (string)\filter_input(INPUT_POST, 'que');
 
 $visibilidad = 0;
 
 $oDocumento = new Documento($Qid_doc);
-$post_max_size =  $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
+$post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
 // visibilidad (usar las mismas opciones que en entradas)
 $aOpciones = $oDocumento->getArrayVisibilidad();
@@ -53,20 +54,20 @@ if (!empty($Qid_doc)) {
     $nom = $oDocumento->getNom();
     $nombre_fichero = $oDocumento->getNombre_fichero();
     $documento_txt = $oDocumento->getDocumento();
-    
+
     if (!empty($oDocumento->getVisibilidad())) {
         $visibilidad = $oDocumento->getVisibilidad();
         $oDesplVisibilidad->setOpcion_sel($visibilidad);
     }
-    
+
     $f_mod = $oDocumento->getF_upload()->getFromLocal();
     $tipo_doc = $oDocumento->getTipo_doc();
-    
+
     $etiquetas = $oDocumento->getEtiquetasVisiblesArray();
-    $oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
-    $oArrayDesplEtiquetas ->setBlanco('t');
-    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
-    
+    $oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas, $a_posibles_etiquetas, 'etiquetas');
+    $oArrayDesplEtiquetas->setBlanco('t');
+    $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
+
     $titulo = _("modificar");
 
     if (!empty($documento_txt)) {
@@ -78,7 +79,7 @@ if (!empty($Qid_doc)) {
         ];
         $tipo_doc = Documento::DOC_UPLOAD;
     }
-    
+
 } else {
     // Valors por defecto:
     $nom = '';
@@ -87,27 +88,27 @@ if (!empty($Qid_doc)) {
 
     $f_mod = '';
     $titulo = _("nuevo documento");
-    
-    $oArrayDesplEtiquetas = new web\DesplegableArray([],$a_posibles_etiquetas,'etiquetas');
-    $oArrayDesplEtiquetas ->setBlanco('t');
-    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
-    
+
+    $oArrayDesplEtiquetas = new web\DesplegableArray([], $a_posibles_etiquetas, 'etiquetas');
+    $oArrayDesplEtiquetas->setBlanco('t');
+    $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
+
 }
-$initialPreview = implode(',',$preview);
+$initialPreview = implode(',', $preview);
 $json_config = json_encode($config);
 
 // poner '' en vez de 0
-$tipo_doc = empty($tipo_doc)? '' : $tipo_doc;
+$tipo_doc = empty($tipo_doc) ? '' : $tipo_doc;
 
 $url_update = 'apps/documentos/controller/documento_update.php';
 $a_cosas = [
-            'filtro' => $Qfiltro,
-            'andOr' => $QandOr,
-            'etiquetas' => $Qa_etiquetas,
-            'que' => $Qque,
-        ];
+    'filtro' => $Qfiltro,
+    'andOr' => $QandOr,
+    'etiquetas' => $Qa_etiquetas,
+    'que' => $Qque,
+];
 
-$pagina_cancel = web\Hash::link('apps/documentos/controller/documentos_lista.php?'.http_build_query($a_cosas));
+$pagina_cancel = web\Hash::link('apps/documentos/controller/documentos_lista.php?' . http_build_query($a_cosas));
 
 $a_campos = [
     //'oHash' => $oHash,
@@ -121,7 +122,7 @@ $a_campos = [
     'oDesplVisibilidad' => $oDesplVisibilidad,
     'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
     'initialPreview' => $initialPreview,
-	'post_max_size' => $post_max_size,
+    'post_max_size' => $post_max_size,
     'json_config' => $json_config,
     // para js
     'url_update' => $url_update,
@@ -132,4 +133,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('documentos/controller');
-echo $oView->renderizar('documento_form.html.twig',$a_campos);
+echo $oView->renderizar('documento_form.html.twig', $a_campos);

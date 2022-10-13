@@ -1,78 +1,80 @@
-<div class="card col-8" >
-  <div class="card-header">
-    <h5 class="card-title">{{ "Datos de la etiqueta"|trans|raw }}</h5>
-  </div>
-  <div class="card-body">
-      <form class="user" id="frm_etiqueta"  name="frm_etiqueta" action="" method="post">
-      {{ oHash.getCamposHtml|raw }}
-        <div class="mb-3">
-          <label for="descripcion" class="form-label">{{ "Nombre de la etiqueta"|trans|raw }}</label>
-          <input type="text" class="form-control col-6" id="nom_etiqueta" name="nom_etiqueta" placeholder="nom_etiqueta" value="{{ nom_etiqueta }}">
-        </div>
-        <div class="mb-3">
-          <label for="example" class="form-label">{{ "entorno"|trans|raw }}:</label>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="oficina" value=1 id="oficina1" {{ chk_oficina }}>
-            <label class="form-check-label" for="oficina1">
-              {{ entorno }}
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="oficina" value=0 id="oficina2" {{ chk_personal }}>
-            <label class="form-check-label" for="oficina2">
-              {{ "Personal"|trans|raw }}
-            </label>
-          </div>
-        </div>
-        
-        <div class="mb-3">
-          <button class="btn btn-secondary" onClick="fnjs_cancelar();" >
-            {{ "Cancelar"|trans|raw }}
-		  </button>
-		  <button class="btn btn-primary" onClick="fnjs_guardar();" >
-            {{ "Guardar"|trans}}
-  		  </button>
-        </div>
-      </form>
-  </div>
+<div class="card col-8">
+    <div class="card-header">
+        <h5 class="card-title">{{ "Datos de la etiqueta"|trans|raw }}</h5>
+    </div>
+    <div class="card-body">
+        <form class="user" id="frm_etiqueta" name="frm_etiqueta" action="" method="post">
+            {{ oHash.getCamposHtml|raw }}
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">{{ "Nombre de la etiqueta"|trans|raw }}</label>
+                <input type="text" class="form-control col-6" id="nom_etiqueta" name="nom_etiqueta"
+                       placeholder="nom_etiqueta" value="{{ nom_etiqueta }}">
+            </div>
+            <div class="mb-3">
+                <label for="example" class="form-label">{{ "entorno"|trans|raw }}:</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="oficina" value=1 id="oficina1" {{ chk_oficina }}>
+                    <label class="form-check-label" for="oficina1">
+                        {{ entorno }}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="oficina" value=0
+                           id="oficina2" {{ chk_personal }}>
+                    <label class="form-check-label" for="oficina2">
+                        {{ "Personal"|trans|raw }}
+                    </label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-secondary" onClick="fnjs_cancelar();">
+                    {{ "Cancelar"|trans|raw }}
+                </button>
+                <button class="btn btn-primary" onClick="fnjs_guardar();">
+                    {{ "Guardar"|trans }}
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script>
-fnjs_cancelar=function(){
-	if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        // Asegurarme que es por click y no por return (posicion: 0,0)
-        var x = event.x || event.clientX;
-        var y = event.y || event.clientY;
-        if (!x && !y) {
-            return false;
+    fnjs_cancelar = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
         }
-	}
-	fnjs_update_div('#main',"apps/etiquetas/controller/etiqueta_lista.php");
-}
+        fnjs_update_div('#main', "apps/etiquetas/controller/etiqueta_lista.php");
+    }
 
-fnjs_guardar=function(){
-	if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-	}
-    datos = $('#frm_etiqueta').serialize();
-    
-    request=$.ajax({
-        url: "apps/etiquetas/controller/etiqueta_update.php",
-        method: 'POST',
-        data: datos
-    });
-
-    request.done(function (rta_txt) {
-        if (rta_txt != '' && rta_txt != '\\n') {
-            alert ('{{ "respuesta"|trans|raw }}: '+rta_txt);
-        } else {
-            fnjs_update_div('#main',"apps/etiquetas/controller/etiqueta_lista.php");
+    fnjs_guardar = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
         }
-    });
-}
+        datos = $('#frm_etiqueta').serialize();
+
+        request = $.ajax({
+            url: "apps/etiquetas/controller/etiqueta_update.php",
+            method: 'POST',
+            data: datos
+        });
+
+        request.done(function (rta_txt) {
+            if (rta_txt != '' && rta_txt != '\\n') {
+                alert('{{ "respuesta"|trans|raw }}: ' + rta_txt);
+            } else {
+                fnjs_update_div('#main', "apps/etiquetas/controller/etiqueta_lista.php");
+            }
+        });
+    }
 </script>

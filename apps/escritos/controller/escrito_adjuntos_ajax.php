@@ -1,11 +1,12 @@
 <?php
+
 use core\ConfigGlobal;
 use core\ViewTwig;
 use documentos\model\Documento;
-use documentos\model\GestorDocumento;
 use documentos\model\entity\GestorEtiquetaDocumento;
-use escritos\model\Escrito;
+use documentos\model\GestorDocumento;
 use escritos\model\entity\EscritoAdjunto;
+use escritos\model\Escrito;
 use etherpad\model\Etherpad;
 use etherpad\model\GestorEtherpad;
 use etiquetas\model\entity\GestorEtiqueta;
@@ -14,17 +15,17 @@ use web\DateTimeLocal;
 use web\Lista;
 
 // INICIO Cabecera global de URL de controlador *********************************
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string) \filter_input(INPUT_POST, 'que');
+$Qque = (string)\filter_input(INPUT_POST, 'que');
 
-$Qid_escrito = (integer) \filter_input(INPUT_POST, 'id_escrito');
-$Qoficina_buscar = (integer) \filter_input(INPUT_POST, 'oficina_buscar');
+$Qid_escrito = (integer)\filter_input(INPUT_POST, 'id_escrito');
+$Qoficina_buscar = (integer)\filter_input(INPUT_POST, 'oficina_buscar');
 
 $gesCargos = new GestorCargo();
 $a_posibles_cargos = $gesCargos->getArrayCargos();
@@ -32,18 +33,18 @@ $error_txt = '';
 switch ($Qque) {
     case 'insertar_copia':
     case 'insertar':
-        $Qid_doc = (integer) \filter_input(INPUT_POST, 'id_doc');
-        $Qforce = (string) \filter_input(INPUT_POST, 'force');
-        
+        $Qid_doc = (integer)\filter_input(INPUT_POST, 'id_doc');
+        $Qforce = (string)\filter_input(INPUT_POST, 'force');
+
         $oDocumento = new Documento($Qid_doc);
         if ($Qforce == 'false') {
             // Avisar si está como antecedente en algun sitio:
             $error_txt .= $oDocumento->comprobarEliminar($Qid_doc);
-            if (!empty($error_txt))  {
+            if (!empty($error_txt)) {
                 $jsondata['err_tipo'] = 'antecedente';
             }
         }
-        
+
         if (empty($error_txt)) {
             $gesEtherpad = new GestorEtherpad();
             if ($Qque == 'insertar_copia') {
@@ -63,7 +64,7 @@ switch ($Qque) {
                 $error_txt .= ($oEscrito->getErrorTxt());
             }
         }
-        
+
         if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
@@ -71,15 +72,15 @@ switch ($Qque) {
             $jsondata['success'] = false;
             $jsondata['mensaje'] = $error_txt;
         }
-        
+
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
         break;
     case 'quitar':
-        $Qid_adjunto = (integer) \filter_input(INPUT_POST, 'id_adjunto');
-        
+        $Qid_adjunto = (integer)\filter_input(INPUT_POST, 'id_adjunto');
+
         $oEscritoAdjunto = new EscritoAdjunto($Qid_adjunto);
         // borrar de adjuntos
         if ($oEscritoAdjunto->DBEliminar() === FALSE) {
@@ -89,7 +90,7 @@ switch ($Qque) {
         $oEtherpad = new Etherpad();
         $oEtherpad->setId(Etherpad::ID_ADJUNTO, $Qid_adjunto);
         $sourceID = $oEtherpad->getId_pad();
-        
+
         $rta = $oEtherpad->deletePad($sourceID);
         if ($rta->getCode() == 0) {
             /* Example returns:
@@ -99,22 +100,22 @@ switch ($Qque) {
         } else {
             echo $oEtherpad->mostrar_error($rta);
         }
-        
+
         $oEscrito = new Escrito($Qid_escrito);
         echo $oEscrito->getHtmlAdjuntos();
         break;
     case 'adjuntar_copia':
     case 'adjuntar':
-        $Qid_doc = (integer) \filter_input(INPUT_POST, 'id_doc');
-        $Qforce = (string) \filter_input(INPUT_POST, 'force');
+        $Qid_doc = (integer)\filter_input(INPUT_POST, 'id_doc');
+        $Qforce = (string)\filter_input(INPUT_POST, 'force');
         // recuperar el documento
         $oDocumento = new Documento($Qid_doc);
         $tipo_doc = $oDocumento->getTipo_doc();
-        
+
         if ($Qforce == 'false') {
             // Avisar si está como antecedente en algun sitio:
             $error_txt .= $oDocumento->comprobarEliminar($Qid_doc);
-            if (!empty($error_txt))  {
+            if (!empty($error_txt)) {
                 $jsondata['err_tipo'] = 'antecedente';
             }
         }
@@ -128,12 +129,12 @@ switch ($Qque) {
                     $oEscritoAdjunto->setId_escrito($Qid_escrito);
                     $oEscritoAdjunto->setNom($fileName);
                     $oEscritoAdjunto->setTipo_doc(Documento::DOC_ETHERPAD);
-                    
+
                     if ($oEscritoAdjunto->DBGuardar() === FALSE) {
                         $error_txt .= $oEscritoAdjunto->getErrorTxt();
                     }
                     $id_item = $oEscritoAdjunto->getId_item();
-                    
+
                     $gesEtherpad = new GestorEtherpad();
                     if ($Qque == 'adjuntar_copia') {
                         $error_txt .= $gesEtherpad->copyDocToAdjunto($Qid_doc, $id_item, 'true');
@@ -144,9 +145,9 @@ switch ($Qque) {
                     }
                     break;
                 case Documento::DOC_UPLOAD:
-                	$nombre_fichero = $oDocumento->getNombre_fichero();
+                    $nombre_fichero = $oDocumento->getNombre_fichero();
                     $contenido_doc = $oDocumento->getDocumento();
-                    
+
                     // gravar en adjuntos escrito
                     // new
                     $oEscritoAdjunto = new EscritoAdjunto();
@@ -154,16 +155,16 @@ switch ($Qque) {
                     $oEscritoAdjunto->setNom($nombre_fichero);
                     $oEscritoAdjunto->setAdjunto($contenido_doc);
                     $oEscritoAdjunto->setTipo_doc(Documento::DOC_UPLOAD);
-                    
+
                     if ($oEscritoAdjunto->DBGuardar() === FALSE) {
                         $error_txt .= $oEscritoAdjunto->getErrorTxt();
                     }
                     // NO sirve el metodo 'refresh' del fileinput parar cambiar la lista de docuemntos.
                     // habrá que refrescar toda la página
-                    
+
                     // borrar de documentos
                     if ($Qque == 'adjuntar' && $oDocumento->DBEliminar() === FALSE) {
-                        $error_txt .= $oDocumento->getErrorTxt();    
+                        $error_txt .= $oDocumento->getErrorTxt();
                     }
                     break;
                 default:
@@ -171,7 +172,7 @@ switch ($Qque) {
                     exit ($err_switch);
             }
         }
-        
+
         if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
@@ -179,184 +180,184 @@ switch ($Qque) {
             $jsondata['success'] = false;
             $jsondata['mensaje'] = $error_txt;
         }
-        
+
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
         break;
-	case 'buscar_documento':
-	case 'buscar_4':
-	case 'buscar_5':
+    case 'buscar_documento':
+    case 'buscar_4':
+    case 'buscar_5':
         //n = 4 -> Documento Upload y Etherpad (adjuntar)
         //n = 5 -> Documento Etherpad (insertar)
-        $Qtipo_n = (string) \filter_input(INPUT_POST, 'tipo_n');
-	    $Qnom = (string) \filter_input(INPUT_POST, 'nom');
-	    $QandOr = (string) \filter_input(INPUT_POST, 'andOr');
-	    $Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-	    $Qperiodo =  (string) \filter_input(INPUT_POST, 'periodo');
-	    
-        $Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
-	    
-	    $gesDocumento = new GestorDocumento();
-	    $aWhere = [];
-	    $aOperador = [];
-	    // sólo los de mi oficina:
-	    $id_oficina = ConfigGlobal::role_id_oficina();
-	    $gesCargos = new GestorCargo();
-	    $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
-	    $a_cargos = [];
-	    foreach (array_keys($a_cargos_oficina) as $id_cargo) {
-	        $a_cargos[] = $id_cargo;
-	    }
-	    if (!empty($a_cargos)) {
-	        $aWhere['creador'] = implode(',',$a_cargos);
-	        $aOperador['creador'] = 'IN';
-	    }
-	    
-	    $gesEtiquetas = new GestorEtiqueta();
-	    $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
-	    $a_posibles_etiquetas = [];
-	    foreach ($cEtiquetas as $oEtiqueta) {
-	        $id_etiqueta = $oEtiqueta->getId_etiqueta();
-	        $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
-	        $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
-	    }
-	    
-	    $oArrayDesplEtiquetas = new web\DesplegableArray($Qa_etiquetas,$a_posibles_etiquetas,'etiquetas');
-	    $oArrayDesplEtiquetas ->setBlanco('t');
-	    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
-	    
-	    $chk_or = ($QandOr == 'OR')? 'checked' : '';
-	    // por defecto 'AND':
-        $chk_and = (($QandOr == 'AND') || empty($QandOr))? 'checked' : '';
-	    
-	    if (!empty($Qa_etiquetas)) {
-	        $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
-	        $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($Qa_etiquetas,$QandOr);
-	        if (!empty($cDocumentos)) {
-	            $aWhere['id_doc'] = implode(',',$cDocumentos);
-	            $aOperador['id_doc'] = 'IN';
-	        } else {
-	            // No hay ninguno. No importa el resto de condiciones
-	            exit(_("No hay ningún documento con estas etiquetas"));
-	        }
-	    }
-	    
-	    if (!empty($Qnom )) {
-	        $aWhere['nom'] = $Qnom;
-	        $aOperador['nom'] = 'sin_acentos';
-	    }
-	    $sel_mes = '';
-	    $sel_mes_6 = '';
-	    $sel_any_1 = '';
-	    $sel_any_2 = '';
-	    $sel_siempre = '';
-	    switch ($Qperiodo) {
-	        case "mes_6":
-	            $sel_mes_6 = 'selected';
-	            $periodo = 'P6M';
-	            break;
-	        case "any_1":
-	            $sel_any_1 = 'selected';
-	            $periodo = 'P1Y';
-	            break;
-	        case "any_2":
-	            $sel_any_2 = 'selected';
-	            $periodo = 'P2Y';
-	            break;
-	        case "siempre":
-	            $sel_siempre = 'selected';
-	            $periodo = '';
-	            break;
-	        case "mes":
-	        default:
-	            $sel_mes = 'selected';
-	            $periodo = 'P1M';
-	    }
-	    if (!empty($periodo)) {
-	        $oFecha = new DateTimeLocal();
-	        $oFecha->sub(new DateInterval($periodo));
-	        $aWhere['f_upload'] = $oFecha->getIso();
-	        $aOperador['f_upload'] = '>';
-	    }
-	    
-	    // por defecto, buscar sólo 50.
-	    if (empty($Qnom && empty($Qoficina_buscar))) {
-	        $aWhere['_limit'] = 50;
-	    }
-	    $aWhere['_ordre'] = 'f_upload DESC';
-	    
-	    $cDocumentos = $gesDocumento->getDocumentos($aWhere,$aOperador);
-	    
-	    $a_cabeceras = [ [ 'width' => 70, 'name' => _("fecha")],
-	                       [ 'width' => 500, 'name' => _("nombre")],
-	                       [ 'width' => 50, 'name' => _("ponente")],
-	                       [ 'width' => 50, 'name' => _("etiquetas")],
-	                   ''];
-	    
-	    $txt_ajuntar = ($Qtipo_n == 5)? _("abrir") : _("adjuntar");
-	    $a_valores = [];
-	    $a = 0;
-	    foreach ($cDocumentos as $oDocumento) {
-            // Si sólo quiero los etherpad, quitar el resto:
-	        if ($Qtipo_n == 5 && $oDocumento->getTipo_doc() != Documento::DOC_ETHERPAD) {
-	            continue;
-	        }
-	        // mirar permisos...
-	        $visibilidad = $oDocumento->getVisibilidad();
-	        
-	        if (ConfigGlobal::soy_dtor() === FALSE
-	            && $visibilidad == Documento::V_PERSONAL
-	            && $oDocumento->getCreador() != ConfigGlobal::role_id_cargo()
-	            ) {
-	                continue;
-            }
-	        $a++;
-	        $id_doc = $oDocumento->getId_doc();
-	        $fecha_txt = $oDocumento->getF_upload()->getFromLocal();
-	        $id_creador = $oDocumento->getCreador();
-	        
-	        $creador = $a_posibles_cargos[$id_creador];
-	        
-	        if ($Qtipo_n == 5) {
-                $add = "<span class=\"btn btn-link\" onclick=\"fnjs_confirm_insertar_documento('documento','$id_doc','$Qid_escrito');\" >$txt_ajuntar</span>";
-	        } else {
-                $add = "<span class=\"btn btn-link\" onclick=\"fnjs_confirm_adjuntar_documento('documento','$id_doc','$Qid_escrito');\" >$txt_ajuntar</span>";
-	        }
-	        
-	        $a_valores[$a][1] = $fecha_txt;
-	        $a_valores[$a][2] = $oDocumento->getNom();
-	        $a_valores[$a][3] = $creador;
-	        $a_valores[$a][4] = $oDocumento->getEtiquetasVisiblesTxt();
-	        $a_valores[$a][5] = $add;
-	    }
-	    
-	    $oLista = new Lista();
-	    $oLista->setCabeceras($a_cabeceras);
-	    $oLista->setDatos($a_valores);
+        $Qtipo_n = (string)\filter_input(INPUT_POST, 'tipo_n');
+        $Qnom = (string)\filter_input(INPUT_POST, 'nom');
+        $QandOr = (string)\filter_input(INPUT_POST, 'andOr');
+        $Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qperiodo = (string)\filter_input(INPUT_POST, 'periodo');
 
-	    $a_campos = [
-	        'para' => 'adjunto',
+        $Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
+
+        $gesDocumento = new GestorDocumento();
+        $aWhere = [];
+        $aOperador = [];
+        // sólo los de mi oficina:
+        $id_oficina = ConfigGlobal::role_id_oficina();
+        $gesCargos = new GestorCargo();
+        $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+        $a_cargos = [];
+        foreach (array_keys($a_cargos_oficina) as $id_cargo) {
+            $a_cargos[] = $id_cargo;
+        }
+        if (!empty($a_cargos)) {
+            $aWhere['creador'] = implode(',', $a_cargos);
+            $aOperador['creador'] = 'IN';
+        }
+
+        $gesEtiquetas = new GestorEtiqueta();
+        $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+        $a_posibles_etiquetas = [];
+        foreach ($cEtiquetas as $oEtiqueta) {
+            $id_etiqueta = $oEtiqueta->getId_etiqueta();
+            $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+            $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+        }
+
+        $oArrayDesplEtiquetas = new web\DesplegableArray($Qa_etiquetas, $a_posibles_etiquetas, 'etiquetas');
+        $oArrayDesplEtiquetas->setBlanco('t');
+        $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
+
+        $chk_or = ($QandOr == 'OR') ? 'checked' : '';
+        // por defecto 'AND':
+        $chk_and = (($QandOr == 'AND') || empty($QandOr)) ? 'checked' : '';
+
+        if (!empty($Qa_etiquetas)) {
+            $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
+            $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($Qa_etiquetas, $QandOr);
+            if (!empty($cDocumentos)) {
+                $aWhere['id_doc'] = implode(',', $cDocumentos);
+                $aOperador['id_doc'] = 'IN';
+            } else {
+                // No hay ninguno. No importa el resto de condiciones
+                exit(_("No hay ningún documento con estas etiquetas"));
+            }
+        }
+
+        if (!empty($Qnom)) {
+            $aWhere['nom'] = $Qnom;
+            $aOperador['nom'] = 'sin_acentos';
+        }
+        $sel_mes = '';
+        $sel_mes_6 = '';
+        $sel_any_1 = '';
+        $sel_any_2 = '';
+        $sel_siempre = '';
+        switch ($Qperiodo) {
+            case "mes_6":
+                $sel_mes_6 = 'selected';
+                $periodo = 'P6M';
+                break;
+            case "any_1":
+                $sel_any_1 = 'selected';
+                $periodo = 'P1Y';
+                break;
+            case "any_2":
+                $sel_any_2 = 'selected';
+                $periodo = 'P2Y';
+                break;
+            case "siempre":
+                $sel_siempre = 'selected';
+                $periodo = '';
+                break;
+            case "mes":
+            default:
+                $sel_mes = 'selected';
+                $periodo = 'P1M';
+        }
+        if (!empty($periodo)) {
+            $oFecha = new DateTimeLocal();
+            $oFecha->sub(new DateInterval($periodo));
+            $aWhere['f_upload'] = $oFecha->getIso();
+            $aOperador['f_upload'] = '>';
+        }
+
+        // por defecto, buscar sólo 50.
+        if (empty($Qnom && empty($Qoficina_buscar))) {
+            $aWhere['_limit'] = 50;
+        }
+        $aWhere['_ordre'] = 'f_upload DESC';
+
+        $cDocumentos = $gesDocumento->getDocumentos($aWhere, $aOperador);
+
+        $a_cabeceras = [['width' => 70, 'name' => _("fecha")],
+            ['width' => 500, 'name' => _("nombre")],
+            ['width' => 50, 'name' => _("ponente")],
+            ['width' => 50, 'name' => _("etiquetas")],
+            ''];
+
+        $txt_ajuntar = ($Qtipo_n == 5) ? _("abrir") : _("adjuntar");
+        $a_valores = [];
+        $a = 0;
+        foreach ($cDocumentos as $oDocumento) {
+            // Si sólo quiero los etherpad, quitar el resto:
+            if ($Qtipo_n == 5 && $oDocumento->getTipo_doc() != Documento::DOC_ETHERPAD) {
+                continue;
+            }
+            // mirar permisos...
+            $visibilidad = $oDocumento->getVisibilidad();
+
+            if (ConfigGlobal::soy_dtor() === FALSE
+                && $visibilidad == Documento::V_PERSONAL
+                && $oDocumento->getCreador() != ConfigGlobal::role_id_cargo()
+            ) {
+                continue;
+            }
+            $a++;
+            $id_doc = $oDocumento->getId_doc();
+            $fecha_txt = $oDocumento->getF_upload()->getFromLocal();
+            $id_creador = $oDocumento->getCreador();
+
+            $creador = $a_posibles_cargos[$id_creador];
+
+            if ($Qtipo_n == 5) {
+                $add = "<span class=\"btn btn-link\" onclick=\"fnjs_confirm_insertar_documento('documento','$id_doc','$Qid_escrito');\" >$txt_ajuntar</span>";
+            } else {
+                $add = "<span class=\"btn btn-link\" onclick=\"fnjs_confirm_adjuntar_documento('documento','$id_doc','$Qid_escrito');\" >$txt_ajuntar</span>";
+            }
+
+            $a_valores[$a][1] = $fecha_txt;
+            $a_valores[$a][2] = $oDocumento->getNom();
+            $a_valores[$a][3] = $creador;
+            $a_valores[$a][4] = $oDocumento->getEtiquetasVisiblesTxt();
+            $a_valores[$a][5] = $add;
+        }
+
+        $oLista = new Lista();
+        $oLista->setCabeceras($a_cabeceras);
+        $oLista->setDatos($a_valores);
+
+        $a_campos = [
+            'para' => 'adjunto',
             'id_expediente' => $Qid_expediente,
             'id_escrito' => $Qid_escrito,
-	        'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
-	        'chk_and' => $chk_and,
-	        'chk_or' => $chk_or,
-	        'nom' => $Qnom,
-	        'sel_mes' => $sel_mes,
-	        'sel_mes_6' => $sel_mes_6,
-	        'sel_any_1' => $sel_any_1,
-	        'sel_any_2' => $sel_any_2,
-	        'sel_siempre' => $sel_siempre,
+            'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
+            'chk_and' => $chk_and,
+            'chk_or' => $chk_or,
+            'nom' => $Qnom,
+            'sel_mes' => $sel_mes,
+            'sel_mes_6' => $sel_mes_6,
+            'sel_any_1' => $sel_any_1,
+            'sel_any_2' => $sel_any_2,
+            'sel_siempre' => $sel_siempre,
             'oLista' => $oLista,
-	        'tipo_n' => $Qtipo_n,
-	    ];
-	    
-	    $oView = new ViewTwig('expedientes/controller');
-	    echo $oView->renderizar('modal_buscar_documentos.html.twig',$a_campos);
-	    break;
-	default:
-	    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-	    exit ($err_switch);
+            'tipo_n' => $Qtipo_n,
+        ];
+
+        $oView = new ViewTwig('expedientes/controller');
+        echo $oView->renderizar('modal_buscar_documentos.html.twig', $a_campos);
+        break;
+    default:
+        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_switch);
 }

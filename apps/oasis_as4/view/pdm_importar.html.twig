@@ -10,51 +10,51 @@
 
 <!-- Para reducir la ventana file-input: sólo se puede subir un archivo -->
 <style>
-.file-drop-zone {
-    min-height: 100px !important;
-}
+    .file-drop-zone {
+        min-height: 100px !important;
+    }
 </style>
 
 
-<h1>{{ "cargar arxivos pdm xml" }}:</h1>
+<h1>{{ "cargar Archivos pdm xml" }}:</h1>
 
 
 <label class="col-6 form-label">{{ "Insertar xml resp"|trans|raw }}:</label>
-<div class="col-8" > <!-- COL DCHA --> 
-<div class="mb-3" id=upload>
-    <div class="file-loading">
-        <input id="pdm_xml" name="pdm_xml[]" type="file" multiple>
+<div class="col-8"> <!-- COL DCHA -->
+    <div class="mb-3" id=upload>
+        <div class="file-loading">
+            <input id="pdm_xml" name="pdm_xml[]" type="file" multiple>
+        </div>
     </div>
-</div>
-</div> <!-- FIN COL IZQ --> 
+</div> <!-- FIN COL IZQ -->
 </div>
 <script type="text/javascript">
-$(document).ready(function() {
-	var el1 = $("#pdm_xml");
-    el1.fileinput({
-    	theme: "explorer-fas",
-        uploadUrl: "apps/oasis_as4/controller/pdm_upload.php",
-        dropZoneEnabled: true,
-        dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans|raw }}",
-        browseOnZoneClick: true,
-        dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans|raw }}",
-        maxFileCount: 1,
-        validateInitialCount: true,
-        showUpload: false, // upload button
-        showBrowse: true,
-        showRemove: false,
-        showClose: false,
-        allowedPreviewTypes: false,
-        hideThumbnailContent: true,
-        // this is where the magic happens
-        uploadAsync: false,
-        removeFromPreviewOnError: true,
-        overwriteInitial: false,
-        fileActionSettings: {showZoom: false, showDrag: false},
-        maxFileSize: {{ post_max_size }},
+    $(document).ready(function () {
+        var el1 = $("#pdm_xml");
+        el1.fileinput({
+            theme: "explorer-fas",
+            uploadUrl: "apps/oasis_as4/controller/pdm_upload.php",
+            dropZoneEnabled: true,
+            dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans|raw }}",
+            browseOnZoneClick: true,
+            dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans|raw }}",
+            maxFileCount: 1,
+            validateInitialCount: true,
+            showUpload: false, // upload button
+            showBrowse: true,
+            showRemove: false,
+            showClose: false,
+            allowedPreviewTypes: false,
+            hideThumbnailContent: true,
+            // this is where the magic happens
+            uploadAsync: false,
+            removeFromPreviewOnError: true,
+            overwriteInitial: false,
+            fileActionSettings: {showZoom: false, showDrag: false},
+            maxFileSize: {{ post_max_size }},
+        });
+        el1.on("filebatchselected", function (files) {
+            el1.fileinput("upload");
+        });
     });
-	el1.on("filebatchselected", function(files) {
-        el1.fileinput("upload");
-    });
-});
 </script>

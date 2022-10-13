@@ -1,131 +1,157 @@
 <div id="condiciones">
-<form id="frm_que" name="frm_que" action="" method="post">
-<input type="hidden" id="calendario" name="calendario" value="{{ calendario }}" >
+    <form id="frm_que" name="frm_que" action="" method="post">
+        <input type="hidden" id="calendario" name="calendario" value="{{ calendario }}">
 
-<h2>{{ "Trasladar pendientes"|trans|raw }}</h2>
+        <h2>{{ "Trasladar pendientes"|trans|raw }}</h2>
 
-<!--  --------------- ORIGEN --------------- -->
-  <div class="mt-5 mb-3 row">
-    <label class="col-2 form-label">{{ "escrito origen"|trans|raw }}</label>
-    <div class="col-3">
-        {{ oDesplLugar_org.desplegable|raw }}
-    </div>
-    <div class="col-4">
-      <input id="prot_num_org" name="prot_num_org" size="12" value="{{ prot_num_org }}" class=contenido title="{{ "protocolo origen"|trans|raw }}" onchange="fnjs_proto('#prot_num_org','#prot_any_org','#id_lugar_dst')">
-      /
-      <input id="prot_any_org" name="prot_any_org" size="5" value="{{ prot_any_org }}" class=contenido title="{{ "año protocolo origen"|trans|raw }}" >
-      {#
-      ,<input id="prot_mas_org" name="prot_mas_org" size="10" value="{{ prot_mas_org }}" class=contenido title="{{ "información complementaria"|trans|raw }}" >
-      #}
-    </div>
-  </div>
-<!--  --------------- DESTINO --------------- -->
-  <div class="mb-3 row">
-    <label class="col-2 form-label">{{ "escrito destino"|trans|raw }}</label>
-    <div class="col-3">
-        {{ oDesplLugar_dst.desplegable|raw }}
-    </div>
-    <div class="col-4">
-      <input id="prot_num_dst" name="prot_num_dst" size="12" value="{{ prot_num_dst }}" class=contenido title="{{ "protocolo destino"|trans|raw }}" onchange="fnjs_proto('#prot_num_dst','#prot_any_dst','#btn_trasladar')">
-      /
-      <input id="prot_any_dst" name="prot_any_dst" size="5" value="{{ prot_any_dst }}" class=contenido title="{{ "año protocolo destino"|trans|raw }}" >
-      {#
-      ,<input id="prot_mas_dst" name="prot_mas_dst" size="10" value="{{ prot_mas_dst }}" class=contenido title="{{ "información complementaria"|trans|raw }}" >
-      #}
-    </div>
-  </div>
-  
-  <!--  --------------------  Botones --------------------------  -->
-  <div class="row">
-    <button id="btn_cancelar" type="button" tabindex='90' class="m-3 col-1 btn btn-secondary" onClick="fnjs_cancelar();" >
-      {{ "cancelar"|trans|raw }}
-    </button>
-    <button id="btn_trasladar" type="button" tabindex='90' class="m-3 col-1 btn btn-primary" onClick="fnjs_trasladar('#frm_que');" >
-      {{ "trasladar"|trans|raw }}
-    </button>
-  </div>
-  </form>
+        <!--  --------------- ORIGEN --------------- -->
+        <div class="mt-5 mb-3 row">
+            <label class="col-2 form-label">{{ "escrito origen"|trans|raw }}</label>
+            <div class="col-3">
+                {{ oDesplLugar_org.desplegable|raw }}
+            </div>
+            <div class="col-4">
+                <input id="prot_num_org" name="prot_num_org" size="12" value="{{ prot_num_org }}" class=contenido
+                       title="{{ "protocolo origen"|trans|raw }}"
+                       onchange="fnjs_proto('#prot_num_org','#prot_any_org','#id_lugar_dst')">
+                /
+                <input id="prot_any_org" name="prot_any_org" size="5" value="{{ prot_any_org }}" class=contenido
+                       title="{{ "año protocolo origen"|trans|raw }}">
+                {#
+                ,<input id="prot_mas_org" name="prot_mas_org" size="10" value="{{ prot_mas_org }}" class=contenido title="{{ "información complementaria"|trans|raw }}" >
+                #}
+            </div>
+        </div>
+        <!--  --------------- DESTINO --------------- -->
+        <div class="mb-3 row">
+            <label class="col-2 form-label">{{ "escrito destino"|trans|raw }}</label>
+            <div class="col-3">
+                {{ oDesplLugar_dst.desplegable|raw }}
+            </div>
+            <div class="col-4">
+                <input id="prot_num_dst" name="prot_num_dst" size="12" value="{{ prot_num_dst }}" class=contenido
+                       title="{{ "protocolo destino"|trans|raw }}"
+                       onchange="fnjs_proto('#prot_num_dst','#prot_any_dst','#btn_trasladar')">
+                /
+                <input id="prot_any_dst" name="prot_any_dst" size="5" value="{{ prot_any_dst }}" class=contenido
+                       title="{{ "año protocolo destino"|trans|raw }}">
+                {#
+                ,<input id="prot_mas_dst" name="prot_mas_dst" size="10" value="{{ prot_mas_dst }}" class=contenido title="{{ "información complementaria"|trans|raw }}" >
+                #}
+            </div>
+        </div>
+
+        <!--  --------------------  Botones --------------------------  -->
+        <div class="row">
+            <button id="btn_cancelar" type="button" tabindex='90' class="m-3 col-1 btn btn-secondary"
+                    onClick="fnjs_cancelar();">
+                {{ "cancelar"|trans|raw }}
+            </button>
+            <button id="btn_trasladar" type="button" tabindex='90' class="m-3 col-1 btn btn-primary"
+                    onClick="fnjs_trasladar('#frm_que');">
+                {{ "trasladar"|trans|raw }}
+            </button>
+        </div>
+    </form>
 </div>
 <div class="alert alert-info">
-{{ "No se buscan los pendientes de las entradas de distribución cr"|trans|raw }}
+    {{ "No se buscan los pendientes de las entradas de distribución cr"|trans|raw }}
 </div>
 <script>
 
 
-fnjs_trasladar=function(formulario){
-    if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-	}
-
-	var err=0;
-
-	var id_lugar_org=$('#id_lugar_org').val();
-	var prot_num_org=$('#prot_num_org').val();
-	var prot_any_org=$('#prot_any_org').val();
-
-	var id_lugar_dst=$('#id_lugar_dst').val();
-	var prot_num_dst=$('#prot_num_dst').val();
-	var prot_any_dst=$('#prot_any_dst').val();
-	
-	if (!id_lugar_org) { alert("{{ "Debe llenar el campo de origen"|trans|raw }}"); err=1; }
-    if (!prot_num_org) { alert("{{ "Debe llenar el campo de protocolo origen"|trans|raw }}"); err=1; }
-    if (!prot_any_org) { alert("{{ "Debe llenar el campo del año del protocolo origen"|trans|raw }}"); err=1; }
-
-	if (!id_lugar_dst) { alert("{{ "Debe llenar el campo de destino"|trans|raw }}"); err=1; }
-    if (!prot_num_dst) { alert("{{ "Debe llenar el campo de protocolo destino"|trans|raw }}"); err=1; }
-    if (!prot_any_dst) { alert("{{ "Debe llenar el campo del año del protocolo destino"|trans|raw }}"); err=1; }
-
-    if (err!=1) {
-    
-        datos = $(formulario).serialize();
-        
-        request=$.ajax({
-            data: datos,
-            url: '{{ url_update }}',
-            method: 'POST',
-            dataType: 'json'
-        });
-
-        request.done( function (json) {
-            if (json.success != true) {
-                rta_txt = json.mensaje;
-                alert ('error: '+rta_txt);
-            } else {
-            	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-            }
-        });
-    }
-}
-
-fnjs_proto=function(num,any,siguiente){
-    var numero;
-    var prot_num=$(num).val();
-    numero=prot_num.split("/");
-    if (numero[1]) {
-        $(num).val(numero[0]);
-        $(any).val(numero[1]);
-        $(siguiente).focus();
-    }
-}
-fnjs_cancelar=function() {
-    if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-	}
-	var go = $('#go').val();
-	if (go == 'entradas') { // estoy en una ventana independiente
-        window.close();
-    } else {
-        // Asegurarme que es por click y no por return (posicion: 0,0)
-        var x = event.x || event.clientX;
-        var y = event.y || event.clientY;
-        if (!x && !y) {
-            return false;
+    fnjs_trasladar = function (formulario) {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
         }
-        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+
+        var err = 0;
+
+        var id_lugar_org = $('#id_lugar_org').val();
+        var prot_num_org = $('#prot_num_org').val();
+        var prot_any_org = $('#prot_any_org').val();
+
+        var id_lugar_dst = $('#id_lugar_dst').val();
+        var prot_num_dst = $('#prot_num_dst').val();
+        var prot_any_dst = $('#prot_any_dst').val();
+
+        if (!id_lugar_org) {
+            alert("{{ "Debe llenar el campo de origen"|trans|raw }}");
+            err = 1;
+        }
+        if (!prot_num_org) {
+            alert("{{ "Debe llenar el campo de protocolo origen"|trans|raw }}");
+            err = 1;
+        }
+        if (!prot_any_org) {
+            alert("{{ "Debe llenar el campo del año del protocolo origen"|trans|raw }}");
+            err = 1;
+        }
+
+        if (!id_lugar_dst) {
+            alert("{{ "Debe llenar el campo de destino"|trans|raw }}");
+            err = 1;
+        }
+        if (!prot_num_dst) {
+            alert("{{ "Debe llenar el campo de protocolo destino"|trans|raw }}");
+            err = 1;
+        }
+        if (!prot_any_dst) {
+            alert("{{ "Debe llenar el campo del año del protocolo destino"|trans|raw }}");
+            err = 1;
+        }
+
+        if (err != 1) {
+
+            datos = $(formulario).serialize();
+
+            request = $.ajax({
+                data: datos,
+                url: '{{ url_update }}',
+                method: 'POST',
+                dataType: 'json'
+            });
+
+            request.done(function (json) {
+                if (json.success != true) {
+                    rta_txt = json.mensaje;
+                    alert('error: ' + rta_txt);
+                } else {
+                    fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+                }
+            });
+        }
     }
-}
+
+    fnjs_proto = function (num, any, siguiente) {
+        var numero;
+        var prot_num = $(num).val();
+        numero = prot_num.split("/");
+        if (numero[1]) {
+            $(num).val(numero[0]);
+            $(any).val(numero[1]);
+            $(siguiente).focus();
+        }
+    }
+    fnjs_cancelar = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+        var go = $('#go').val();
+        if (go == 'entradas') { // estoy en una ventana independiente
+            window.close();
+        } else {
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
+            fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+        }
+    }
 </script>

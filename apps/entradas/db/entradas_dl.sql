@@ -1,17 +1,19 @@
 --- by pass
 -- OJO; Para los indices array integer ---
-CREATE EXTENSION IF NOT EXISTS intarray;
-CREATE TABLE public.entradas_bypass (
-	id_item SERIAL PRIMARY KEY,
-    id_entrada integer NOT NULL,
-    descripcion text NOT NULL,
+CREATE
+EXTENSION IF NOT EXISTS intarray;
+CREATE TABLE public.entradas_bypass
+(
+    id_item           SERIAL PRIMARY KEY,
+    id_entrada        integer NOT NULL,
+    descripcion       text    NOT NULL,
     json_prot_destino jsonb,
-    id_grupos integer[],
-    destinos integer[],
-    f_salida date,
+    id_grupos         integer[],
+    destinos          integer[],
+    f_salida          date,
     CONSTRAINT fk_entrada
-      FOREIGN KEY(id_entrada) 
-	  REFERENCES public.entradas(id_entrada) ON DELETE CASCADE
+        FOREIGN KEY (id_entrada)
+            REFERENCES public.entradas (id_entrada) ON DELETE CASCADE
 );
 
 ALTER TABLE public.entradas_bypass OWNER TO tramity;

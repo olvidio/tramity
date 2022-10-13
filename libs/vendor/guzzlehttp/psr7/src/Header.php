@@ -55,7 +55,7 @@ final class Header
 
         $result = [];
         foreach ($header as $value) {
-            foreach ((array) $value as $v) {
+            foreach ((array)$value as $v) {
                 if (strpos($v, ',') === false) {
                     $result[] = $v;
                     continue;

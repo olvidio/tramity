@@ -1,73 +1,77 @@
 <script>
-fnjs_guardar=function(formulario){
-	datos = $(formulario).serialize();	
-	request=$.ajax({
-		data: datos,
-		url: '{{ url_update }}',
-		method: 'POST',
-		dataType: 'json'
-	});
-	request.done( function (json) {
-		if (json.success != true) {
-			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-		} else {
-            {{ oPosicion.js_atras(1)|raw }}
-		}
-	});
-}
+    fnjs_guardar = function (formulario) {
+        datos = $(formulario).serialize();
+        request = $.ajax({
+            data: datos,
+            url: '{{ url_update }}',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done(function (json) {
+            if (json.success != true) {
+                alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+            } else {
+                {{ oPosicion.js_atras(1)|raw }}
+            }
+        });
+    }
 </script>
 <div class="card" style="width: 30rem;">
-  <div class="card-header">
-    <h5 class="card-title">{{ "Datos del Cargo"|trans|raw }}</h5>
-  </div>
-  <div class="card-body">
-<div class="row">
-  <div class="col-12">
-      <form class="user" id="frm_cargo"  name="frm_cargo" action="" method="post">
-      {{ oHash.getCamposHtml|raw }}
-        <div class="mb-3 input-group col-6">
-           <span class="input-group-text">{{ "Cargo"|trans|raw }}</span>
-           <input type="text" class="form-control" id="cargo" name="cargo" placeholder="nombre del cargo" value="{{ cargo }}">
+    <div class="card-header">
+        <h5 class="card-title">{{ "Datos del Cargo"|trans|raw }}</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <form class="user" id="frm_cargo" name="frm_cargo" action="" method="post">
+                    {{ oHash.getCamposHtml|raw }}
+                    <div class="mb-3 input-group col-6">
+                        <span class="input-group-text">{{ "Cargo"|trans|raw }}</span>
+                        <input type="text" class="form-control" id="cargo" name="cargo" placeholder="nombre del cargo"
+                               value="{{ cargo }}">
+                    </div>
+                    <div class="mb-3 input-group col-10">
+                        <span class="input-group-text">{{ "Descripción"|trans|raw }}</span>
+                        <input type="text" class="form-control" id="descripcion" name="descripcion"
+                               placeholder="descripcion" value="{{ descripcion }}">
+                    </div>
+                    <div class="row mb-3">
+                        {% if hay_oficina %}
+                            <div class="col-6">
+                                <label for="example" class="form-label">{{ "Oficina"|trans|raw }}</label>
+                                {{ oDesplOficinas.desplegable|raw }}
+                            </div>
+                        {% endif %}
+                        <div class="col-6">
+                            <input type="checkbox" class="col-form-check-input" id="director"
+                                   name="director" {{ chk_director }}>
+                            <label class="col-form-label" for="director">{{ "director"|trans|raw }}</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="checkbox" class="col-form-check-input" id="sacd" name="sacd" {{ chk_sacd }}>
+                            <label class="col-form-label" for="sacd">{{ "sacd"|trans|raw }}</label>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label for="example" class="form-label">{{ "Titular"|trans|raw }}</label>
+                            {{ oDesplUsuarios.desplegable|raw }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label for="example" class="form-label">{{ "Suplente"|trans|raw }}</label>
+                            {{ oDesplSuplentes.desplegable|raw }}
+                        </div>
+                    </div>
+                    <div class="mb-3 input-group col-10">
+                        <button onclick="fnjs_guardar(this.form);" type="button"
+                                class="btn btn-primary w-100 col-6">{{ "Guardar"|trans|raw }}</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="mb-3 input-group col-10">
-            <span class="input-group-text">{{ "Descripción"|trans|raw }}</span>
-            <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="descripcion" value="{{ descripcion }}">
-        </div>
-		<div class="row mb-3">
-		  {%  if hay_oficina %}
-          <div class="col-6">
-          <label for="example" class="form-label">{{ "Oficina"|trans|raw }}</label>
-			{{ oDesplOficinas.desplegable|raw }}
-		  </div>
-		  {% endif %}
-          <div class="col-6">
-		    <input type="checkbox" class="col-form-check-input" id="director" name="director" {{ chk_director }}>
-    	    <label class="col-form-label" for="director">{{ "director"|trans|raw }}</label>
-    	  </div>
-          <div class="col-6">
-		    <input type="checkbox" class="col-form-check-input" id="sacd" name="sacd" {{ chk_sacd }}>
-    	    <label class="col-form-label" for="sacd">{{ "sacd"|trans|raw }}</label>
-    	  </div>
-        </div>
-        
-		<div class="row mb-3">
-          <div class="col-6">
-          <label for="example" class="form-label">{{ "Titular"|trans|raw }}</label>
-			{{ oDesplUsuarios.desplegable|raw }}
-		  </div>
-		</div>
-		 
-		<div class="row mb-3">
-          <div class="col-6">
-          <label for="example" class="form-label">{{ "Suplente"|trans|raw }}</label>
-			{{ oDesplSuplentes.desplegable|raw }}
-		  </div>
-		 </div>
-        <div class="mb-3 input-group col-10">
-          <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary w-100 col-6">{{ "Guardar"|trans|raw }}</button>
-        </div>
-      </form>
-  </div>
-</div>
-</div>
+    </div>
 </div>

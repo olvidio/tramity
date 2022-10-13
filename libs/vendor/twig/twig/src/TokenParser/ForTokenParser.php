@@ -60,6 +60,11 @@ final class ForTokenParser extends AbstractTokenParser
         return new ForNode($keyTarget, $valueTarget, $seq, null, $body, $else, $lineno, $this->getTag());
     }
 
+    public function getTag(): string
+    {
+        return 'for';
+    }
+
     public function decideForFork(Token $token): bool
     {
         return $token->test(['else', 'endfor']);
@@ -68,10 +73,5 @@ final class ForTokenParser extends AbstractTokenParser
     public function decideForEnd(Token $token): bool
     {
         return $token->test('endfor');
-    }
-
-    public function getTag(): string
-    {
-        return 'for';
     }
 }

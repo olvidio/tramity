@@ -1,40 +1,41 @@
 <?php
+
 use core\ConfigGlobal;
 use core\ViewTwig;
-use function core\is_true;
 use escritos\model\EscritoLista;
 use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\Expediente;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
-use usuarios\model\Visibilidad;
 use usuarios\model\entity\GestorCargo;
+use usuarios\model\Visibilidad;
 use web\Desplegable;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos para esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos para esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
-$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
-$Qmodo = (string) \filter_input(INPUT_POST, 'modo');
+$Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
+$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Qmodo = (string)\filter_input(INPUT_POST, 'modo');
 
 // En el caso de ajuntos, puedo abrir una nueva ventana para ver el expediente,
 // y en ese caso el parametro viene por GET:
 $cargar_css = FALSE;
 $show_tabs = TRUE;
 if (empty($Qid_expediente)) {
-    $Qid_expediente = (integer) \filter_input(INPUT_GET, 'id_expediente');
+    $Qid_expediente = (integer)\filter_input(INPUT_GET, 'id_expediente');
     $cargar_css = TRUE;
-	$show_tabs = FALSE;
-	$Qfiltro = 'archivados';
+    $show_tabs = FALSE;
+    $Qfiltro = 'archivados';
 }
 
 if (empty($Qid_expediente)) {
@@ -48,7 +49,7 @@ $oExpediente->DBCarregar();
 $ponente_txt = '?';
 $id_ponente = $oExpediente->getPonente();
 $gesCargos = new GestorCargo();
-$aCargos =$gesCargos->getArrayCargos();
+$aCargos = $gesCargos->getArrayCargos();
 $ponente_txt = $aCargos[$id_ponente];
 
 $id_tramite = $oExpediente->getId_tramite();
@@ -112,25 +113,25 @@ if (ConfigGlobal::role_actual() != 'secretaria') {
         $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
         $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
     }
-    $oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas,$a_posibles_etiquetas,'etiquetas');
-    $oArrayDesplEtiquetas ->setBlanco('t');
-    $oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
+    $oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas, $a_posibles_etiquetas, 'etiquetas');
+    $oArrayDesplEtiquetas->setBlanco('t');
+    $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
     $ver_etiquetas = TRUE;
 } else {
-    $oArrayDesplEtiquetas = new web\DesplegableArray('',[],'etiquetas');
+    $oArrayDesplEtiquetas = new web\DesplegableArray('', [], 'etiquetas');
 }
 $txt_btn_etiquetas = _("Guardar etiquetas");
 
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
-$cosas = ['filtro' => $Qfiltro, 'modo' => $Qmodo ];
+$cosas = ['filtro' => $Qfiltro, 'modo' => $Qmodo];
 if ($Qfiltro == 'archivados') {
-	$Qa_condiciones = (array)  \filter_input(INPUT_POST, 'condiciones', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-	$cosas = array_merge($cosas, $Qa_condiciones);
+    $Qa_condiciones = (array)\filter_input(INPUT_POST, 'condiciones', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $cosas = array_merge($cosas, $Qa_condiciones);
 }
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?'.http_build_query($cosas));
-$pagina_actualizar = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?'.http_build_query(['id_expediente' => $Qid_expediente,'filtro' => $Qfiltro, 'modo' => $Qmodo]));
+$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($cosas));
+$pagina_actualizar = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?' . http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'modo' => $Qmodo]));
 $base_url = ConfigGlobal::getWeb(); //http://tramity.local
 
 $disable_archivar = '';
@@ -138,7 +139,7 @@ if ($Qfiltro == 'distribuir') {
     $btn_action = 'distribuir';
     $txt_btn_success = _("Distribuir");
     $oEscritoLista->setFiltro('distribuir');
-    $oDesplOficiales = new Desplegable('id_oficial',[],$id_ponente,TRUE);
+    $oDesplOficiales = new Desplegable('id_oficial', [], $id_ponente, TRUE);
     $ver_encargar = FALSE;
 
     $perm_d = $_SESSION['oConfig']->getPerm_distribuir();
@@ -153,11 +154,11 @@ if ($Qfiltro == 'distribuir') {
     $txt_btn_success = _("Archivar");
     //$oEscritoLista->setFiltro('acabados');
     $oEscritoLista->setFiltro($Qfiltro);
-    $disable_archivar = is_true($oEscritoLista->isTodos_escritos_enviados())? '' : 'disabled';
+    $disable_archivar = is_true($oEscritoLista->isTodos_escritos_enviados()) ? '' : 'disabled';
     // para encargar a los oficiales
     $id_oficina = ConfigGlobal::role_id_oficina();
     $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
-    $oDesplOficiales = new Desplegable('id_oficial',$a_usuarios_oficina,$id_ponente,FALSE);
+    $oDesplOficiales = new Desplegable('id_oficial', $a_usuarios_oficina, $id_ponente, FALSE);
     $ver_encargar = TRUE;
 }
 
@@ -175,16 +176,16 @@ $a_campos = [
     'f_ini_circulacion' => $f_ini_circulacion,
     'f_reunion' => $f_reunion,
     'f_aprobacion' => $f_aprobacion,
-    
+
     'asunto' => $asunto,
     'entradilla' => $entradilla,
     'comentarios' => $comentarios,
     'a_recorrido' => $a_recorrido,
-    
+
     'lista_antecedentes' => $lista_antecedentes,
     'oDesplVisibilidad' => $oDesplVisibilidad,
     'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
-    'oDesplOficiales' => $oDesplOficiales, 
+    'oDesplOficiales' => $oDesplOficiales,
     'ver_encargar' => $ver_encargar,
 
     'url_update' => $url_update,
@@ -207,4 +208,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('expedientes/controller');
-echo $oView->renderizar('expediente_distribuir.html.twig',$a_campos);
+echo $oView->renderizar('expediente_distribuir.html.twig', $a_campos);

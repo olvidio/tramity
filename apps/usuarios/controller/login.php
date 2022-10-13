@@ -4,12 +4,12 @@ namespace usuarios\controller;
 
 use core\ConfigDB;
 use core\ConfigGlobal;
+use core\DBConnection;
 use core\MyCrypt;
 use core\ServerConf;
 use core\ViewTwig;
 use PDO;
 use function core\cambiar_idioma;
-use core\dbConnection;
 
 function logout($idioma, $esquema, $error)
 {
@@ -26,7 +26,7 @@ function posibles_esquemas()
 {
     $oConfigDB = new ConfigDB('tramity');
     $config = $oConfigDB->getEsquema('public');
-    $oConexion = new dbConnection($config);
+    $oConexion = new DBConnection($config);
     $oDB = $oConexion->getPDO();
 
     $sQuery = "select nspname from pg_namespace where nspowner > 1000 AND nspname !~ '^zz' ORDER BY nspname";
@@ -49,7 +49,6 @@ $esquema_web = getenv('ESQUEMA');
 // Si el esquema no se pasa por directorio de la URL,
 // está en el nombre del servidor:
 if (empty($esquema_web)) {
-    //$servername = $_SERVER['SERVER_NAME'];
     $servername = $_SERVER['HTTP_HOST'];
     $host = '.' . ServerConf::SERVIDOR;
     $esquema_web = str_replace($host, '', $servername);
@@ -57,7 +56,7 @@ if (empty($esquema_web)) {
 
 
 if (!isset($_SESSION['session_auth'])) {
-    //el segon cop tinc el nom i el password
+    //la segunda vez tengo el nombre y el password
     $idioma = '';
     if (isset($_POST['username'], $_POST['password'])) {
         $mail = '';
@@ -82,7 +81,7 @@ if (!isset($_SESSION['session_auth'])) {
         } else {
             $config = $oConfigDB->getEsquema('public');
         }
-        $oConexion = new dbConnection($config);
+        $oConexion = new DBConnection($config);
         $oDB = $oConexion->getPDO();
 
         $query = "SELECT * FROM aux_usuarios WHERE usuario = :usuario";
@@ -180,7 +179,7 @@ if (!isset($_SESSION['session_auth'])) {
 
                     // si no tiene mail interior, cojo el exterior.
                     $mail = empty($mail) ? $row['email'] : $mail;
-                    $expire = ""; //de moment, per fer servir més endevant...
+                    $expire = "";
                     // Para obligar a cambiar el password
                     if ($_POST['password'] === '1ªVegada') {
                         $expire = 1;
@@ -192,7 +191,7 @@ if (!isset($_SESSION['session_auth'])) {
                 $row = $oDBStI->fetch(PDO::FETCH_ASSOC);
                 $idioma = $row === FALSE ? '' : $row['preferencia'];
 
-                //registro la sesion con los permisos
+                //registro la sesión con los permisos
                 $session_auth = array(
                     'id_usuario' => $id_usuario,
                     'usuario_cargo' => $usuario_cargo,
@@ -210,7 +209,7 @@ if (!isset($_SESSION['session_auth'])) {
                     'idioma' => $idioma,
                 );
                 $_SESSION['session_auth'] = $session_auth;
-                //si existe, registro la sesion con la configuración
+                //si existe, registro la sesión con la configuración
                 if (!isset($_SESSION['config'])) {
                     $session_config = array(
                         'id_cargo' => $id_cargo_preferido,

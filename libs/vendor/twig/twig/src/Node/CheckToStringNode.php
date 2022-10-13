@@ -39,7 +39,6 @@ class CheckToStringNode extends AbstractExpression
             ->subcompile($expr)
             ->raw(', ')
             ->repr($expr->getTemplateLine())
-            ->raw(', $this->source)')
-        ;
+            ->raw(', $this->source)');
     }
 }

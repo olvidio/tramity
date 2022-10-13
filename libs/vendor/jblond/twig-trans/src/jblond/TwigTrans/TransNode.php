@@ -27,13 +27,14 @@ class TransNode extends Node
      * @param null $tag
      */
     public function __construct(
-        Node $body,
-        Node $plural = null,
+        Node               $body,
+        Node               $plural = null,
         AbstractExpression $count = null,
-        Node $notes = null,
-        $lineNo = 0,
-        $tag = null
-    ) {
+        Node               $notes = null,
+                           $lineNo = 0,
+                           $tag = null
+    )
+    {
         $nodes = ['body' => $body];
         if (null !== $count) {
             $nodes['count'] = $count;
@@ -77,8 +78,7 @@ class TransNode extends Node
         if ($vars) {
             $compiler
                 ->write('echo strtr(' . $function . '(')
-                ->subcompile($msg)
-            ;
+                ->subcompile($msg);
 
             if ($this->hasNode('plural')) {
                 $compiler
@@ -86,8 +86,7 @@ class TransNode extends Node
                     ->subcompile($msg1)
                     ->raw(', abs(')
                     ->subcompile($this->hasNode('count') ? $this->getNode('count') : null)
-                    ->raw(')')
-                ;
+                    ->raw(')');
             }
 
             $compiler->raw('), array(');
@@ -98,15 +97,13 @@ class TransNode extends Node
                         ->string('%count%')
                         ->raw(' => abs(')
                         ->subcompile($this->hasNode('count') ? $this->getNode('count') : null)
-                        ->raw('), ')
-                    ;
+                        ->raw('), ');
                 } else {
                     $compiler
                         ->string('%' . $var->getAttribute('name') . '%')
                         ->raw(' => ')
                         ->subcompile($var)
-                        ->raw(', ')
-                    ;
+                        ->raw(', ');
                 }
             }
 
@@ -114,8 +111,7 @@ class TransNode extends Node
         } else {
             $compiler
                 ->write('echo ' . $function . '(')
-                ->subcompile($msg)
-            ;
+                ->subcompile($msg);
 
             if ($this->hasNode('plural')) {
                 $compiler
@@ -123,8 +119,7 @@ class TransNode extends Node
                     ->subcompile($msg1)
                     ->raw(', abs(')
                     ->subcompile($this->hasNode('count') ? $this->getNode('count') : null)
-                    ->raw(')')
-                ;
+                    ->raw(')');
             }
 
             $compiler->raw(");\n");

@@ -30,8 +30,7 @@ class ArrowFunctionExpression extends AbstractExpression
     {
         $compiler
             ->addDebugInfo($this)
-            ->raw('function (')
-        ;
+            ->raw('function (');
         foreach ($this->getNode('names') as $i => $name) {
             if ($i) {
                 $compiler->raw(', ');
@@ -40,25 +39,21 @@ class ArrowFunctionExpression extends AbstractExpression
             $compiler
                 ->raw('$__')
                 ->raw($name->getAttribute('name'))
-                ->raw('__')
-            ;
+                ->raw('__');
         }
         $compiler
-            ->raw(') use ($context, $macros) { ')
-        ;
+            ->raw(') use ($context, $macros) { ');
         foreach ($this->getNode('names') as $name) {
             $compiler
                 ->raw('$context["')
                 ->raw($name->getAttribute('name'))
                 ->raw('"] = $__')
                 ->raw($name->getAttribute('name'))
-                ->raw('__; ')
-            ;
+                ->raw('__; ');
         }
         $compiler
             ->raw('return ')
             ->subcompile($this->getNode('expr'))
-            ->raw('; }')
-        ;
+            ->raw('; }');
     }
 }

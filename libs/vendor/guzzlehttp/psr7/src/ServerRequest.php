@@ -4,9 +4,9 @@ namespace GuzzleHttp\Psr7;
 
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\UriInterface;
 
 /**
  * Server-side HTTP request
@@ -55,12 +55,12 @@ class ServerRequest extends Request implements ServerRequestInterface
     private $uploadedFiles = [];
 
     /**
-     * @param string                               $method       HTTP method
-     * @param string|UriInterface                  $uri          URI
-     * @param array                                $headers      Request headers
-     * @param string|null|resource|StreamInterface $body         Request body
-     * @param string                               $version      Protocol version
-     * @param array                                $serverParams Typically the $_SERVER superglobal
+     * @param string $method HTTP method
+     * @param string|UriInterface $uri URI
+     * @param array $headers Request headers
+     * @param string|null|resource|StreamInterface $body Request body
+     * @param string $version Protocol version
+     * @param array $serverParams Typically the $_SERVER superglobal
      */
     public function __construct(
         $method,
@@ -69,90 +69,11 @@ class ServerRequest extends Request implements ServerRequestInterface
         $body = null,
         $version = '1.1',
         array $serverParams = []
-    ) {
+    )
+    {
         $this->serverParams = $serverParams;
 
         parent::__construct($method, $uri, $headers, $body, $version);
-    }
-
-    /**
-     * Return an UploadedFile instance array.
-     *
-     * @param array $files A array which respect $_FILES structure
-     *
-     * @return array
-     *
-     * @throws InvalidArgumentException for unrecognized values
-     */
-    public static function normalizeFiles(array $files)
-    {
-        $normalized = [];
-
-        foreach ($files as $key => $value) {
-            if ($value instanceof UploadedFileInterface) {
-                $normalized[$key] = $value;
-            } elseif (is_array($value) && isset($value['tmp_name'])) {
-                $normalized[$key] = self::createUploadedFileFromSpec($value);
-            } elseif (is_array($value)) {
-                $normalized[$key] = self::normalizeFiles($value);
-                continue;
-            } else {
-                throw new InvalidArgumentException('Invalid value in files specification');
-            }
-        }
-
-        return $normalized;
-    }
-
-    /**
-     * Create and return an UploadedFile instance from a $_FILES specification.
-     *
-     * If the specification represents an array of values, this method will
-     * delegate to normalizeNestedFileSpec() and return that return value.
-     *
-     * @param array $value $_FILES struct
-     * @return array|UploadedFileInterface
-     */
-    private static function createUploadedFileFromSpec(array $value)
-    {
-        if (is_array($value['tmp_name'])) {
-            return self::normalizeNestedFileSpec($value);
-        }
-
-        return new UploadedFile(
-            $value['tmp_name'],
-            (int) $value['size'],
-            (int) $value['error'],
-            $value['name'],
-            $value['type']
-        );
-    }
-
-    /**
-     * Normalize an array of file specifications.
-     *
-     * Loops through all nested files and returns a normalized array of
-     * UploadedFileInterface instances.
-     *
-     * @param array $files
-     * @return UploadedFileInterface[]
-     */
-    private static function normalizeNestedFileSpec(array $files = [])
-    {
-        $normalizedFiles = [];
-
-        foreach (array_keys($files['tmp_name']) as $key) {
-            $spec = [
-                'tmp_name' => $files['tmp_name'][$key],
-                'size'     => $files['size'][$key],
-                'error'    => $files['error'][$key],
-                'name'     => $files['name'][$key],
-                'type'     => $files['type'][$key],
-            ];
-            $normalizedFiles[$key] = self::createUploadedFileFromSpec($spec);
-        }
-
-        return $normalizedFiles;
     }
 
     /**
@@ -180,20 +101,6 @@ class ServerRequest extends Request implements ServerRequestInterface
             ->withQueryParams($_GET)
             ->withParsedBody($_POST)
             ->withUploadedFiles(self::normalizeFiles($_FILES));
-    }
-
-    private static function extractHostAndPortFromAuthority($authority)
-    {
-        $uri = 'http://'.$authority;
-        $parts = parse_url($uri);
-        if (false === $parts) {
-            return [null, null];
-        }
-
-        $host = isset($parts['host']) ? $parts['host'] : null;
-        $port = isset($parts['port']) ? $parts['port'] : null;
-
-        return [$host, $port];
     }
 
     /**
@@ -245,6 +152,143 @@ class ServerRequest extends Request implements ServerRequestInterface
         return $uri;
     }
 
+    private static function extractHostAndPortFromAuthority($authority)
+    {
+        $uri = 'http://' . $authority;
+        $parts = parse_url($uri);
+        if (false === $parts) {
+            return [null, null];
+        }
+
+        $host = isset($parts['host']) ? $parts['host'] : null;
+        $port = isset($parts['port']) ? $parts['port'] : null;
+
+        return [$host, $port];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withUploadedFiles(array $uploadedFiles)
+    {
+        $new = clone $this;
+        $new->uploadedFiles = $uploadedFiles;
+
+        return $new;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withParsedBody($data)
+    {
+        $new = clone $this;
+        $new->parsedBody = $data;
+
+        return $new;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withQueryParams(array $query)
+    {
+        $new = clone $this;
+        $new->queryParams = $query;
+
+        return $new;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withCookieParams(array $cookies)
+    {
+        $new = clone $this;
+        $new->cookieParams = $cookies;
+
+        return $new;
+    }
+
+    /**
+     * Return an UploadedFile instance array.
+     *
+     * @param array $files A array which respect $_FILES structure
+     *
+     * @return array
+     *
+     * @throws InvalidArgumentException for unrecognized values
+     */
+    public static function normalizeFiles(array $files)
+    {
+        $normalized = [];
+
+        foreach ($files as $key => $value) {
+            if ($value instanceof UploadedFileInterface) {
+                $normalized[$key] = $value;
+            } elseif (is_array($value) && isset($value['tmp_name'])) {
+                $normalized[$key] = self::createUploadedFileFromSpec($value);
+            } elseif (is_array($value)) {
+                $normalized[$key] = self::normalizeFiles($value);
+                continue;
+            } else {
+                throw new InvalidArgumentException('Invalid value in files specification');
+            }
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * Create and return an UploadedFile instance from a $_FILES specification.
+     *
+     * If the specification represents an array of values, this method will
+     * delegate to normalizeNestedFileSpec() and return that return value.
+     *
+     * @param array $value $_FILES struct
+     * @return array|UploadedFileInterface
+     */
+    private static function createUploadedFileFromSpec(array $value)
+    {
+        if (is_array($value['tmp_name'])) {
+            return self::normalizeNestedFileSpec($value);
+        }
+
+        return new UploadedFile(
+            $value['tmp_name'],
+            (int)$value['size'],
+            (int)$value['error'],
+            $value['name'],
+            $value['type']
+        );
+    }
+
+    /**
+     * Normalize an array of file specifications.
+     *
+     * Loops through all nested files and returns a normalized array of
+     * UploadedFileInterface instances.
+     *
+     * @param array $files
+     * @return UploadedFileInterface[]
+     */
+    private static function normalizeNestedFileSpec(array $files = [])
+    {
+        $normalizedFiles = [];
+
+        foreach (array_keys($files['tmp_name']) as $key) {
+            $spec = [
+                'tmp_name' => $files['tmp_name'][$key],
+                'size' => $files['size'][$key],
+                'error' => $files['error'][$key],
+                'name' => $files['name'][$key],
+                'type' => $files['type'][$key],
+            ];
+            $normalizedFiles[$key] = self::createUploadedFileFromSpec($spec);
+        }
+
+        return $normalizedFiles;
+    }
 
     /**
      * {@inheritdoc}
@@ -265,31 +309,9 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withUploadedFiles(array $uploadedFiles)
-    {
-        $new = clone $this;
-        $new->uploadedFiles = $uploadedFiles;
-
-        return $new;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getCookieParams()
     {
         return $this->cookieParams;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withCookieParams(array $cookies)
-    {
-        $new = clone $this;
-        $new->cookieParams = $cookies;
-
-        return $new;
     }
 
     /**
@@ -303,31 +325,9 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withQueryParams(array $query)
-    {
-        $new = clone $this;
-        $new->queryParams = $query;
-
-        return $new;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getParsedBody()
     {
         return $this->parsedBody;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withParsedBody($data)
-    {
-        $new = clone $this;
-        $new->parsedBody = $data;
-
-        return $new;
     }
 
     /**

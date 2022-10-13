@@ -6,208 +6,225 @@
     <script src="{{ base_url_web }}/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="{{ base_url_web }}/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ base_url_web }}/node_modules/mdb-ui-kit/js/mdb.min.js"></script>
-    <!-- CSS jQuery-confirm -->
-    <link type="text/css" rel='stylesheet' href='{{ base_url_web }}/node_modules/jquery-confirm/dist/jquery-confirm.min.css' />
+<!-- CSS jQuery-confirm -->
+<link type="text/css" rel='stylesheet'
+      href='{{ base_url_web }}/node_modules/jquery-confirm/dist/jquery-confirm.min.css'/>
     <script src="{{ base_url_web }}/node_modules/jquery-confirm/dist/jquery-confirm.min.js"></script>
 
-    <!-- CSS jQuery, bootstrap -->
-    <link type="text/css" rel='stylesheet' href='{{ base_url_web }}/node_modules/jquery-ui/themes/base/all.css' />
-    <link type="text/css" rel="stylesheet" href="{{ base_url_web }}/node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+<!-- CSS jQuery, bootstrap -->
+<link type="text/css" rel='stylesheet' href='{{ base_url_web }}/node_modules/jquery-ui/themes/base/all.css'/>
+<link type="text/css" rel="stylesheet" href="{{ base_url_web }}/node_modules/bootstrap/dist/css/bootstrap.min.css"
+      crossorigin="anonymous">
 
-    <!-- CSS jQuery DateTimePicker -->
-    <link type="text/css" rel="stylesheet" href="{{ base_url_web }}/node_modules/jquery-datetimepicker/jquery.datetimepicker.css" crossorigin="anonymous">
-    <script type="text/javascript" src='{{ base_url_web }}/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.js'></script>
+<!-- CSS jQuery DateTimePicker -->
+<link type="text/css" rel="stylesheet"
+      href="{{ base_url_web }}/node_modules/jquery-datetimepicker/jquery.datetimepicker.css" crossorigin="anonymous">
+    <script type="text/javascript"
+            src='{{ base_url_web }}/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.js'></script>
 
-    <!-- sprintf -->
+<!-- sprintf -->
     <script type="text/javascript" src="{{ base_url_web }}/node_modules/sprintf-js/dist/sprintf.min.js"></script>
-    <!-- jQuery -->
+<!-- jQuery -->
     <script type="text/javascript" src="{{ base_url_web }}/node_modules/jquery-ui-sortable/jquery-ui.min.js"></script>
     <script type="text/javascript" src='{{ base_url_web }}/node_modules/jquery-ui-dist/jquery-ui.min.js'></script>
-      
-    <link href="{{ base_url_web }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <!-- DataTables -->
-	<link type="text/css" rel="stylesheet" href='node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css' />
-	<script type="text/javascript" src='node_modules/datatables.net/js/jquery.dataTables.min.js'></script>
-	<script type="text/javascript" src='node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js'></script>
 
-    <div class="m-3"> {# para margenes #}
-{% endif %}
+<link href="{{ base_url_web }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet"
+      type="text/css">
+<!-- DataTables -->
+<link type="text/css" rel="stylesheet" href='node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css'/>
+    <script type="text/javascript" src='node_modules/datatables.net/js/jquery.dataTables.min.js'></script>
+    <script type="text/javascript" src='node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js'></script>
 
-<form id="form_pendiente" name="form_pendiente" action="" method="post" >
-<input type="hidden" id="m" name="m">
-<input type="hidden" id="calendario" name="calendario" value='{{ calendario }}'>
-<input type="hidden" id="uid" name="uid" value='{{ uid }}'>
-<input type="hidden" id="cal_oficina" name="cal_oficina" value='{{ cal_oficina }}'>
-<input type="hidden" id="nuevo" name="nuevo" value='{{ nuevo }}'>
-<input type="hidden" id="go" name="go" value='{{ go }}'> 
-<input type="hidden" id="busca_ap_prot_num" name="busca_ap_prot_num" value='{{ busca_ap_num }}'> 
-<input type="hidden" id="busca_ap_prot_any" name="busca_ap_prot_any" value='{{ busca_ap_any }}'> 
-<input type='hidden' id='id_reg' name='id_reg' value='{{ id_reg }}'>
-<input type='hidden' id='simple' name='simple' value='{{ simple }}'>
-<input type='hidden' id='simple_per' name='simple_per' value='{{ simple_per }}'>
+<div class="m-3"> {# para margenes #}
+    {% endif %}
 
-{% if calendario == 'registro' %}
-  <h1>{{ "entrada del registro pendiente de contestar"|trans|raw }}</h1>
-{% else %}
-  <h1>{{ titulo_oficina }}</h1>
-{% endif %}
+    <form id="form_pendiente" name="form_pendiente" action="" method="post">
+        <input type="hidden" id="m" name="m">
+        <input type="hidden" id="calendario" name="calendario" value='{{ calendario }}'>
+        <input type="hidden" id="uid" name="uid" value='{{ uid }}'>
+        <input type="hidden" id="cal_oficina" name="cal_oficina" value='{{ cal_oficina }}'>
+        <input type="hidden" id="nuevo" name="nuevo" value='{{ nuevo }}'>
+        <input type="hidden" id="go" name="go" value='{{ go }}'>
+        <input type="hidden" id="busca_ap_prot_num" name="busca_ap_prot_num" value='{{ busca_ap_num }}'>
+        <input type="hidden" id="busca_ap_prot_any" name="busca_ap_prot_any" value='{{ busca_ap_any }}'>
+        <input type='hidden' id='id_reg' name='id_reg' value='{{ id_reg }}'>
+        <input type='hidden' id='simple' name='simple' value='{{ simple }}'>
+        <input type='hidden' id='simple_per' name='simple_per' value='{{ simple_per }}'>
 
-<button id="opciones" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_opciones('completa');" >
-  {{ txt_completa }}
-</button>
-<button id="opciones_per" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_opciones('periodico');" >
-  {{ txt_periodicidad }}
-</button>
-        
-<br>
-<br>
-<!--  ********************  FICHA SIMPLE   ****************************  -->
-<div>
-  {% if secretaria %}
-  <!--  --------------------  Oficinas --------------------------  -->
-  <div class="mb-3 row align-items-center">
-    <label for="oficina" class="col-1 form-label">{{ "Oficina"|trans|raw }}:</label>
-    <div class="col-6">
-      	{{ oDesplOficinas.desplegable|raw }}
-    </div>
-  </div>
-  {% else %}
-	<input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
-  {% endif %}
-  <!--  --------------- ASUNTO --------------- -->
-  <div class="mb-3 row">
-    <label for="asunto_e" class="col-1 form-label">{{ "Asunto"|trans|raw }}</label>
-    <div class="col-9">
-      <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}">
-    </div>
-  </div>
-  <!--  --------------------  Etiquetas --------------------------  -->
-  <div id="div_etiquetas" class="mb-3 row align-items-center">
-    <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans|raw }}:</label>
-    <div class="col-6">
+        {% if calendario == 'registro' %}
+            <h1>{{ "entrada del registro pendiente de contestar"|trans|raw }}</h1>
+        {% else %}
+            <h1>{{ titulo_oficina }}</h1>
+        {% endif %}
+
+        <button id="opciones" tabindex='' class="btn btn-outline-secondary" onClick="fnjs_ver_opciones('completa');">
+            {{ txt_completa }}
+        </button>
+        <button id="opciones_per" tabindex='' class="btn btn-outline-secondary"
+                onClick="fnjs_ver_opciones('periodico');">
+            {{ txt_periodicidad }}
+        </button>
+
+        <br>
+        <br>
+        <!--  ********************  FICHA SIMPLE   ****************************  -->
+        <div>
+            {% if secretaria %}
+                <!--  --------------------  Oficinas --------------------------  -->
+                <div class="mb-3 row align-items-center">
+                    <label for="oficina" class="col-1 form-label">{{ "Oficina"|trans|raw }}:</label>
+                    <div class="col-6">
+                        {{ oDesplOficinas.desplegable|raw }}
+                    </div>
+                </div>
+            {% else %}
+                <input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
+            {% endif %}
+            <!--  --------------- ASUNTO --------------- -->
+            <div class="mb-3 row">
+                <label for="asunto_e" class="col-1 form-label">{{ "Asunto"|trans|raw }}</label>
+                <div class="col-9">
+                    <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto"
+                           value="{{ asunto }}">
+                </div>
+            </div>
+            <!--  --------------------  Etiquetas --------------------------  -->
+            <div id="div_etiquetas" class="mb-3 row align-items-center">
+                <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans|raw }}:</label>
+                <div class="col-6">
       <span id="span_etiquetas">
       	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
       </span>
-    </div>
-  </div
-  <!--  --------------------  Plazo --------------------------  -->
-  <div class="mb-3 row" style="{{ display_plazo }}" >
-        <label id="txt_plazo" for="f_plazo" class="col col-2 form-label">{{ txt_plazo }}:</label>
-        <div class='col-2 date'>
-          <input tabindex='30' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_plazo }}"  onchange="fnjs_comprobar_fecha('#f_plazo')" />
+                </div>
+            </div
+                    <!--  --------------------  Plazo --------------------------  -->
+            <div class="mb-3 row" style="{{ display_plazo }}">
+                <label id="txt_plazo" for="f_plazo" class="col col-2 form-label">{{ txt_plazo }}:</label>
+                <div class='col-2 date'>
+                    <input tabindex='30' name='f_plazo' id='f_plazo' type='text' class="form-control"
+                           value="{{ f_plazo }}" onchange="fnjs_comprobar_fecha('#f_plazo')"/>
+                </div>
+            </div>
+            <!--  --------------------  Encargado --------------------------  -->
+            <div class="mb-3 row align-items-center">
+                <label for="oficina" class="col-2 form-label">{{ "¿Está asignado a alguien?"|trans|raw }}:</label>
+                <div class="col-6">
+                    {{ oDesplEncargados.desplegable|raw }}
+                </div>
+            </div
         </div>
-  </div> 
-  <!--  --------------------  Encargado --------------------------  -->
-  <div class="mb-3 row align-items-center">
-    <label for="oficina" class="col-2 form-label">{{ "¿Está asignado a alguien?"|trans|raw }}:</label>
-    <div class="col-6">
-	  {{ oDesplEncargados.desplegable|raw }}
-    </div>
-  </div
-</div> 
 
-<!--  ********************  FICHA COMPLETA   ****************************  -->
+        <!--  ********************  FICHA COMPLETA   ****************************  -->
 
-<div id=mas_opciones style="{{ display_completa }}">
+        <div id=mas_opciones style="{{ display_completa }}">
 
-  <!--  --------------- PROTOCOLO --------------- -->
-  <div class="mb-3 row">
-    <label class="col-2 form-label">{{ "protocolo o referencia"|trans|raw }}</label>
-    <div class="col-3 me-3">
-        {{ oDesplLugar.desplegable|raw }}
-    </div>
-    <div class="row col-6">
-      <div class="col-2">
-        <input id="ref_prot_num" name="ref_prot_num" value="{{ ref_prot_num }}" class="text-end form-control form-control-sm" title="{{ "protocolo origen"|trans|raw }}" onchange="fnjs_proto('#ref_prot_num','#ref_prot_any','#b_buscar_7')">
-      </div>
-      /
-      <div class="col-1">
-        <input id="ref_prot_any" name="ref_prot_any" value="{{ ref_prot_any }}" class="form-control form-control-sm" title="{{ "año protocolo origen"|trans|raw }}" >
-      </div>
-      ,
-      <div class="col-4">
-        <input id="ref_prot_mas" name="ref_prot_mas" value="{{ ref_prot_mas }}" class="form-control form-control-sm" title="{{ "información complementaria"|trans|raw }}" >
-      </div>
-    </div>
-  </div>
-  <!--  --------------- DETALLE --------------- -->
-{% if perm_detalle < 2 %}
-	<input type="hidden" tabindex="-1" id="detalle" name="detalle" style="width:100%;" value="{{ detalle }}" />
-{% else %}
-  <div class="mb-3 row">
-    <label for="detalle" class="col-1 form-label">{{ "detalle"|trans|raw }}</label>
-    <div class="col-9">
-      <input tabindex='30' type="text" class="form-control" name="detalle" id="detalle" value="{{ detalle }}">
-    </div>
-  </div>
-{% endif %}
-{% if calendario == 'oficina' %}
-  <!--  --------------- DESTINO --------------- -->
-  <div class="mb-3 row">
-    <label class="col-3 form-label">{{ "¿con quién es el pendiente?"|trans|raw }}</label>
-    <div class="col-3">
-        {{ oDesplLugar1.desplegable|raw }}
-    </div>
-  </div>
-{% endif %}
-  <!--  --------------- Oficinas implicadas --------------- -->
-  <div class="mb-3 row">
-	<label for="oficinas" class="col-3 form-label">{{ "otras oficinas implicadas"|trans|raw }}</label>
-    <div class="col">
+            <!--  --------------- PROTOCOLO --------------- -->
+            <div class="mb-3 row">
+                <label class="col-2 form-label">{{ "protocolo o referencia"|trans|raw }}</label>
+                <div class="col-3 me-3">
+                    {{ oDesplLugar.desplegable|raw }}
+                </div>
+                <div class="row col-6">
+                    <div class="col-2">
+                        <input id="ref_prot_num" name="ref_prot_num" value="{{ ref_prot_num }}"
+                               class="text-end form-control form-control-sm" title="{{ "protocolo origen"|trans|raw }}"
+                               onchange="fnjs_proto('#ref_prot_num','#ref_prot_any','#b_buscar_7')">
+                    </div>
+                    /
+                    <div class="col-1">
+                        <input id="ref_prot_any" name="ref_prot_any" value="{{ ref_prot_any }}"
+                               class="form-control form-control-sm" title="{{ "año protocolo origen"|trans|raw }}">
+                    </div>
+                    ,
+                    <div class="col-4">
+                        <input id="ref_prot_mas" name="ref_prot_mas" value="{{ ref_prot_mas }}"
+                               class="form-control form-control-sm"
+                               title="{{ "información complementaria"|trans|raw }}">
+                    </div>
+                </div>
+            </div>
+            <!--  --------------- DETALLE --------------- -->
+            {% if perm_detalle < 2 %}
+                <input type="hidden" tabindex="-1" id="detalle" name="detalle" style="width:100%;"
+                       value="{{ detalle }}"/>
+            {% else %}
+                <div class="mb-3 row">
+                    <label for="detalle" class="col-1 form-label">{{ "detalle"|trans|raw }}</label>
+                    <div class="col-9">
+                        <input tabindex='30' type="text" class="form-control" name="detalle" id="detalle"
+                               value="{{ detalle }}">
+                    </div>
+                </div>
+            {% endif %}
+            {% if calendario == 'oficina' %}
+                <!--  --------------- DESTINO --------------- -->
+                <div class="mb-3 row">
+                    <label class="col-3 form-label">{{ "¿con quién es el pendiente?"|trans|raw }}</label>
+                    <div class="col-3">
+                        {{ oDesplLugar1.desplegable|raw }}
+                    </div>
+                </div>
+            {% endif %}
+            <!--  --------------- Oficinas implicadas --------------- -->
+            <div class="mb-3 row">
+                <label for="oficinas" class="col-3 form-label">{{ "otras oficinas implicadas"|trans|raw }}</label>
+                <div class="col">
       <span id="span_oficinas">
       	{{ oArrayDesplOficinas.ListaSelects|raw }}
       </span>
-    </div>
-  </div>
+                </div>
+            </div>
 
-  <!--  --------------- OBSERVACIONES --------------- -->
-  <div class="mb-3 row">
-    <label for="observ" class="col-2 form-label">{{ "Observaciones"|trans|raw }}</label>
-    <div class='col-10'>
-      <textarea tabindex='50' rows="5" class="form-control" name='observ' id="observ">{{ observ }}</textarea>
-    </div>
-  </div>
-  
-  <div class="mb-3 row">
-    <!--  --------------- VISIBILIDAD --------------- -->
-    <label class="col-1 form-label">{{ "Visibilidad"|trans|raw }}</label>
-    <div class="col-2">
-      {{ oDesplVisibilidad.desplegable|raw }}
-    </div>
-    <!--  --------------- STATUS --------------- -->
-    <label class="col-1 form-label">{{ "estado"|trans|raw }}</label>
-    <div class="col-2">
-        {{ oDesplStatus.desplegable|raw }}
-    </div>
-	<!--  --------------------  fecha --------------------------  -->
-    <label for="f_acabado" class="col col-2 form-label">{{ "fecha acabado"|trans|raw }}:</label>
-    <div class='col-2 date'>
-      <input tabindex='30' name='f_acabado' id='f_acabado' type='text' class="form-control" value="{{ f_acabado }}"  onchange="fnjs_cambiar_estado()" />
-    </div>
-  </div>
-</div>
+            <!--  --------------- OBSERVACIONES --------------- -->
+            <div class="mb-3 row">
+                <label for="observ" class="col-2 form-label">{{ "Observaciones"|trans|raw }}</label>
+                <div class='col-10'>
+                    <textarea tabindex='50' rows="5" class="form-control" name='observ'
+                              id="observ">{{ observ }}</textarea>
+                </div>
+            </div>
 
-<!--  ********************  PERIODICIDAD   ****************************  -->
-<div id=periodico style="{{ display_periodico }}">
-	{{ include('pendiente_form_periodico.html.twig')  }}
-</div>
+            <div class="mb-3 row">
+                <!--  --------------- VISIBILIDAD --------------- -->
+                <label class="col-1 form-label">{{ "Visibilidad"|trans|raw }}</label>
+                <div class="col-2">
+                    {{ oDesplVisibilidad.desplegable|raw }}
+                </div>
+                <!--  --------------- STATUS --------------- -->
+                <label class="col-1 form-label">{{ "estado"|trans|raw }}</label>
+                <div class="col-2">
+                    {{ oDesplStatus.desplegable|raw }}
+                </div>
+                <!--  --------------------  fecha --------------------------  -->
+                <label for="f_acabado" class="col col-2 form-label">{{ "fecha acabado"|trans|raw }}:</label>
+                <div class='col-2 date'>
+                    <input tabindex='30' name='f_acabado' id='f_acabado' type='text' class="form-control"
+                           value="{{ f_acabado }}" onchange="fnjs_cambiar_estado()"/>
+                </div>
+            </div>
+        </div>
 
-  <!--  --------------------  BOTONES --------------------------  -->
-<div class="row">
-  <div class="col-2">
-    <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-      {{ "Volver"|trans|raw }}
-    </button>
-  </div>
-  <div class="col-2">
-    <button tabindex='90' class="btn btn-success" onClick="fnjs_guardar_pendiente();" >
-      {{ "guardar"|trans|raw }}
-    </button> 
-  </div>
-</div>
-</form>
+        <!--  ********************  PERIODICIDAD   ****************************  -->
+        <div id=periodico style="{{ display_periodico }}">
+            {{ include('pendiente_form_periodico.html.twig') }}
+        </div>
 
-{% if cargar_css %}
+        <!--  --------------------  BOTONES --------------------------  -->
+        <div class="row">
+            <div class="col-2">
+                <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();">
+                    {{ "Volver"|trans|raw }}
+                </button>
+            </div>
+            <div class="col-2">
+                <button tabindex='90' class="btn btn-success" onClick="fnjs_guardar_pendiente();">
+                    {{ "guardar"|trans|raw }}
+                </button>
+            </div>
+        </div>
+    </form>
+
+    {% if cargar_css %}
 </div>
 {% endif %}
 {{ include ('_pendiente_form_js.html.twig') }}

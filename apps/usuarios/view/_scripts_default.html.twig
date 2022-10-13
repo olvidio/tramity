@@ -1,51 +1,55 @@
 <!-- Custom scripts for all pages-->
 <script>
-	// Variable global para todos los datetimepiker, indica el dia de inicio de la semana
-	// debe estar al inicio, para que la encuentre siempre al crear el datetimepicker
+    // Variable global para todos los datetimepiker, indica el dia de inicio de la semana
+    // debe estar al inicio, para que la encuentre siempre al crear el datetimepicker
     //Star week DatePicker. Default Sunday - 0. Monday - 1 ...
     var globaljsVarDayStart = 1;
 </script>
 {% include '@global_js/core_ajax.js.twig' %}
 <script src="js/core_ajax.js"></script>
 <script>
-$(document).ready(function() {
-	$('#cargando').hide();  // hide it initially
-});
-$(document).ajaxStart(function() {$('#cargando').show(); });
-$(document).ajaxStop(function() {$('#cargando').hide(); });
+    $(document).ready(function () {
+        $('#cargando').hide();  // hide it initially
+    });
+    $(document).ajaxStart(function () {
+        $('#cargando').show();
+    });
+    $(document).ajaxStop(function () {
+        $('#cargando').hide();
+    });
 
-    
-/* Hay que ponerlo aqui, para asegurar que haya terminado de cargar todos los scripts. */
-$(document).ready(function(){
-	{% if mi_idioma %}
+
+    /* Hay que ponerlo aqui, para asegurar que haya terminado de cargar todos los scripts. */
+    $(document).ready(function () {
+        {% if mi_idioma %}
         jQuery.datetimepicker.setLocale('{{ mi_idioma }}');
-	{% else %}
-		jQuery.datetimepicker.setLocale('en');
-	{% endif %}
-});
+        {% else %}
+        jQuery.datetimepicker.setLocale('en');
+        {% endif %}
+    });
 
-jQuery.event.special.touchstart = {
-    setup: function( _, ns, handle ){
-      if ( ns.includes("noPreventDefault") ) {
-        this.addEventListener("touchstart", handle, { passive: false });
-      } else {
-        this.addEventListener("touchstart", handle, { passive: true });
-      }
-    }
-};
-jQuery.event.special.touchmove = {
-    setup: function( _, ns, handle ){
-      if ( ns.includes("noPreventDefault") ) {
-        this.addEventListener("touchmove", handle, { passive: false });
-      } else {
-        this.addEventListener("touchmove", handle, { passive: true });
-      }
-    }
-};
-jQuery.event.special.mousewheel = {
-  setup: function( _, ns, handle ){
-    this.addEventListener("mousewheel", handle, { passive: true });
-  }
-};
+    jQuery.event.special.touchstart = {
+        setup: function (_, ns, handle) {
+            if (ns.includes("noPreventDefault")) {
+                this.addEventListener("touchstart", handle, {passive: false});
+            } else {
+                this.addEventListener("touchstart", handle, {passive: true});
+            }
+        }
+    };
+    jQuery.event.special.touchmove = {
+        setup: function (_, ns, handle) {
+            if (ns.includes("noPreventDefault")) {
+                this.addEventListener("touchmove", handle, {passive: false});
+            } else {
+                this.addEventListener("touchmove", handle, {passive: true});
+            }
+        }
+    };
+    jQuery.event.special.mousewheel = {
+        setup: function (_, ns, handle) {
+            this.addEventListener("mousewheel", handle, {passive: true});
+        }
+    };
 
 </script>

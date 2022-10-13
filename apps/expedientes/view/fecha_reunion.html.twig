@@ -1,89 +1,89 @@
 <h1>{{ titulo }}</h1>
-<form id ="form_reunion" >
+<form id="form_reunion">
     <input type=hidden name='que' id='que' value=0>
-    <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
-    
-    
-  <div class="mb-3 row">
-  	<label for="f_reunion" class="col col-2 form-label text-end">{{ "día de reunión"|trans|raw }}:</label>
-    <div class='col-2 date'>
-      <input name='f_reunion' id='f_reunion' type='text' class="form-control" value="{{ f_reunion }}" />
+    <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }}>
+
+
+    <div class="mb-3 row">
+        <label for="f_reunion" class="col col-2 form-label text-end">{{ "día de reunión"|trans|raw }}:</label>
+        <div class='col-2 date'>
+            <input name='f_reunion' id='f_reunion' type='text' class="form-control" value="{{ f_reunion }}"/>
+        </div>
     </div>
-  </div>
-  
-  <div>
-    <button type="button" class="btn btn-secondary" onClick="fnjs_cancelar();" >
-      {{ "Cancelar"|trans|raw }}
-    </button>
-    <button type="button" class="btn btn-primary" onClick="fnjs_reunion();" >
-      {{ "Fijar día"|trans|raw }}
-    </button>
-  </div>
+
+    <div>
+        <button type="button" class="btn btn-secondary" onClick="fnjs_cancelar();">
+            {{ "Cancelar"|trans|raw }}
+        </button>
+        <button type="button" class="btn btn-primary" onClick="fnjs_reunion();">
+            {{ "Fijar día"|trans|raw }}
+        </button>
+    </div>
 </form>
 
 <div id="resultados"></div>
 <script>
-fnjs_cancelar=function(){
-	if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        // Asegurarme que es por click y no por return (posicion: 0,0)
-        var x = event.x || event.clientX;
-        var y = event.y || event.clientY;
-        if (!x && !y) {
-            return false;
+    fnjs_cancelar = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
         }
+        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
     }
-	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-}
 
-fnjs_reunion=function(){
-	if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        // Asegurarme que es por click y no por return (posicion: 0,0)
-        var x = event.x || event.clientX;
-        var y = event.y || event.clientY;
-        if (!x && !y) {
-            return false;
+    fnjs_reunion = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
         }
-	}
 
-    $('#que').val('reunion');
-	datos = $('#form_reunion').serialize();	
-	request=$.ajax({
-		data: datos,
-		url: '{{ pagina_reunion }}',
-		method: 'POST',
-		dataType: 'json'
-	});
-	request.done( function (json) {
-		if (json.success != true) {
-			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-		} else {
-            fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-		}
-	});
-}
+        $('#que').val('reunion');
+        datos = $('#form_reunion').serialize();
+        request = $.ajax({
+            data: datos,
+            url: '{{ pagina_reunion }}',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done(function (json) {
+            if (json.success != true) {
+                alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+            } else {
+                fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+            }
+        });
+    }
 
-$(function() {
-	$( "#f_reunion" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: true,
-		datepicker: true,
-		format: 'd-m-Y H:i',
-		hours12: false,
-		step: 15,
-		yearStart: {{ yearStart }},
-		yearEnd: {{ yearEnd }},
-		dayOfWeekStart: globaljsVarDayStart,
-		onShow: function(ct) {
-			this.setOptions({
-				minDate: '{{ hoyIso }}'
-			})
-		}
+    $(function () {
+        $("#f_reunion").prop('autocomplete', 'off').datetimepicker({
+            timepicker: true,
+            datepicker: true,
+            format: 'd-m-Y H:i',
+            hours12: false,
+            step: 15,
+            yearStart: {{ yearStart }},
+            yearEnd: {{ yearEnd }},
+            dayOfWeekStart: globaljsVarDayStart,
+            onShow: function (ct) {
+                this.setOptions({
+                    minDate: '{{ hoyIso }}'
+                })
+            }
+        });
+
     });
-
-});
 </script>

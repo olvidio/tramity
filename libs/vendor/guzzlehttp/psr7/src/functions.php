@@ -71,7 +71,7 @@ function uri_for($uri)
  *   buffered and used in subsequent reads.
  *
  * @param resource|string|null|int|float|bool|StreamInterface|callable|\Iterator $resource Entity body data
- * @param array                                                                  $options  Additional options
+ * @param array $options Additional options
  *
  * @return StreamInterface
  *
@@ -132,7 +132,7 @@ function normalize_header($header)
  * - version: (string) Set the protocol version.
  *
  * @param RequestInterface $request Request to clone and modify.
- * @param array            $changes Changes to apply.
+ * @param array $changes Changes to apply.
  *
  * @return RequestInterface
  *
@@ -167,7 +167,7 @@ function rewind_body(MessageInterface $message)
  * error handler that checks for errors and throws an exception instead.
  *
  * @param string $filename File to open
- * @param string $mode     Mode used to open the file
+ * @param string $mode Mode used to open the file
  *
  * @return resource
  *
@@ -185,7 +185,7 @@ function try_fopen($filename, $mode)
  * bytes have been read.
  *
  * @param StreamInterface $stream Stream to read
- * @param int             $maxLen Maximum number of bytes to read. Pass -1
+ * @param int $maxLen Maximum number of bytes to read. Pass -1
  *                                to read the entire stream.
  * @return string
  *
@@ -203,8 +203,8 @@ function copy_to_string(StreamInterface $stream, $maxLen = -1)
  * of bytes have been read.
  *
  * @param StreamInterface $source Stream to read from
- * @param StreamInterface $dest   Stream to write to
- * @param int             $maxLen Maximum number of bytes to read. Pass -1
+ * @param StreamInterface $dest Stream to write to
+ * @param int $maxLen Maximum number of bytes to read. Pass -1
  *                                to read the entire stream.
  *
  * @throws \RuntimeException on error.
@@ -222,9 +222,9 @@ function copy_to_stream(StreamInterface $source, StreamInterface $dest, $maxLen 
  * This method reads the entire stream to calculate a rolling hash, based on
  * PHP's `hash_init` functions.
  *
- * @param StreamInterface $stream    Stream to calculate the hash for
- * @param string          $algo      Hash algorithm (e.g. md5, crc32, etc)
- * @param bool            $rawOutput Whether or not to use raw output
+ * @param StreamInterface $stream Stream to calculate the hash for
+ * @param string $algo Hash algorithm (e.g. md5, crc32, etc)
+ * @param bool $rawOutput Whether or not to use raw output
  *
  * @return string Returns the hash of the stream
  *
@@ -240,8 +240,8 @@ function hash(StreamInterface $stream, $algo, $rawOutput = false)
 /**
  * Read a line from the stream up to the maximum allowed buffer length.
  *
- * @param StreamInterface $stream    Stream to read from
- * @param int|null        $maxLength Maximum buffer length
+ * @param StreamInterface $stream Stream to read from
+ * @param int|null $maxLength Maximum buffer length
  *
  * @return string
  *
@@ -288,7 +288,7 @@ function parse_response($message)
  * arrays into an associative array (e.g., `foo[a]=1&foo[b]=2` will be parsed
  * into `['foo[a]' => '1', 'foo[b]' => '2'])`.
  *
- * @param string   $str         Query string to parse
+ * @param string $str Query string to parse
  * @param int|bool $urlEncoding How the query string is encoded
  *
  * @return array
@@ -307,7 +307,7 @@ function parse_query($str, $urlEncoding = true)
  * string. This function does not modify the provided keys when an array is
  * encountered (like `http_build_query()` would).
  *
- * @param array     $params   Query string parameters.
+ * @param array $params Query string parameters.
  * @param int|false $encoding Set to false to not encode, PHP_QUERY_RFC3986
  *                            to encode using RFC3986, or PHP_QUERY_RFC1738
  *                            to encode using RFC1738.
@@ -371,8 +371,8 @@ function _parse_message($message)
 /**
  * Constructs a URI for an HTTP request message.
  *
- * @param string $path    Path from the start-line
- * @param array  $headers Array of headers (each value an array).
+ * @param string $path Path from the start-line
+ * @param array $headers Array of headers (each value an array).
  *
  * @return string
  *
@@ -389,8 +389,8 @@ function _parse_request_uri($path, array $headers)
  *
  * Will return `null` if the response is not printable.
  *
- * @param MessageInterface $message    The message to get the body summary
- * @param int              $truncateAt The maximum allowed size of the summary
+ * @param MessageInterface $message The message to get the body summary
+ * @param int $truncateAt The maximum allowed size of the summary
  *
  * @return string|null
  *

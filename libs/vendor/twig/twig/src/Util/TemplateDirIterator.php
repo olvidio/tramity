@@ -23,6 +23,6 @@ class TemplateDirIterator extends \IteratorIterator
 
     public function key()
     {
-        return (string) parent::key();
+        return (string)parent::key();
     }
 }

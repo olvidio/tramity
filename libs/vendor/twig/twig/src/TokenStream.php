@@ -42,18 +42,6 @@ final class TokenStream
     }
 
     /**
-     * Sets the pointer to the next token and returns the old one.
-     */
-    public function next(): Token
-    {
-        if (!isset($this->tokens[++$this->current])) {
-            throw new SyntaxError('Unexpected end of template.', $this->tokens[$this->current - 1]->getLine(), $this->source);
-        }
-
-        return $this->tokens[$this->current - 1];
-    }
-
-    /**
      * Tests a token, sets the pointer to the next one and returns it or throws a syntax error.
      *
      * @return Token|null The next token if the condition is true, null otherwise
@@ -66,6 +54,26 @@ final class TokenStream
     }
 
     /**
+     * Tests the current token.
+     */
+    public function test($primary, $secondary = null): bool
+    {
+        return $this->tokens[$this->current]->test($primary, $secondary);
+    }
+
+    /**
+     * Sets the pointer to the next token and returns the old one.
+     */
+    public function next(): Token
+    {
+        if (!isset($this->tokens[++$this->current])) {
+            throw new SyntaxError('Unexpected end of template.', $this->tokens[$this->current - 1]->getLine(), $this->source);
+        }
+
+        return $this->tokens[$this->current - 1];
+    }
+
+    /**
      * Tests a token and returns it or throws a syntax error.
      */
     public function expect($type, $value = null, string $message = null): Token
@@ -74,7 +82,7 @@ final class TokenStream
         if (!$token->test($type, $value)) {
             $line = $token->getLine();
             throw new SyntaxError(sprintf('%sUnexpected token "%s"%s ("%s" expected%s).',
-                $message ? $message.'. ' : '',
+                $message ? $message . '. ' : '',
                 Token::typeToEnglish($token->getType()),
                 $token->getValue() ? sprintf(' of value "%s"', $token->getValue()) : '',
                 Token::typeToEnglish($type), $value ? sprintf(' with value "%s"', $value) : ''),
@@ -97,14 +105,6 @@ final class TokenStream
         }
 
         return $this->tokens[$this->current + $number];
-    }
-
-    /**
-     * Tests the current token.
-     */
-    public function test($primary, $secondary = null): bool
-    {
-        return $this->tokens[$this->current]->test($primary, $secondary);
     }
 
     /**

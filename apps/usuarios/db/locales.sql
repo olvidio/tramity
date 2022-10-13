@@ -5,31 +5,43 @@
 -- Dumped from database version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
 -- Dumped by pg_dump version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
+SET
+statement_timeout = 0;
+SET
+lock_timeout = 0;
+SET
+idle_in_transaction_session_timeout = 0;
+SET
+client_encoding = 'UTF8';
+SET
+standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
+SET
+check_function_bodies = false;
+SET
+xmloption = content;
+SET
+client_min_messages = warning;
+SET
+row_security = off;
 
-SET default_tablespace = '';
+SET
+default_tablespace = '';
 
-SET default_with_oids = false;
+SET
+default_with_oids = false;
 
 --
 -- Name: x_locales; Type: TABLE; Schema: public; Owner: tramity
 --
 
-CREATE TABLE public.x_locales (
-    id_locale character varying(12) NOT NULL,
+CREATE TABLE public.x_locales
+(
+    id_locale  character varying(12) NOT NULL,
     nom_locale text,
-    idioma character varying(3),
+    idioma     character varying(3),
     nom_idioma text,
-    activo boolean DEFAULT false NOT NULL
+    activo     boolean DEFAULT false NOT NULL
 );
 
 
@@ -40,7 +52,10 @@ ALTER TABLE public.x_locales OWNER TO tramity;
 --
 
 COPY public.x_locales (id_locale, nom_locale, idioma, nom_idioma, activo) FROM stdin;
-de_DE.UTF-8	German_Germany	de	German	t
+de_DE
+.
+UTF
+-8	German_Germany	de	German	t
 af_ZA.UTF-8	Afrikaans_South Africa	af	Afrikaans	f
 sq_AL.UTF-8	Albanian_Albania	sq	Albanian	f
 ar_SA.UTF-8	Arabic_Saudi Arabia	ar	Arabic	f

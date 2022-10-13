@@ -29,7 +29,6 @@ class EvenTest extends TestExpression
             ->raw('(')
             ->subcompile($this->getNode('node'))
             ->raw(' % 2 == 0')
-            ->raw(')')
-        ;
+            ->raw(')');
     }
 }

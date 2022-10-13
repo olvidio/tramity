@@ -6,94 +6,100 @@
     <script src="{{ base_url_web }}/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="{{ base_url_web }}/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ base_url_web }}/node_modules/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
-    <!-- CSS jQuery-confirm -->
-    <link type="text/css" rel='stylesheet' href='{{ base_url_web }}/node_modules/jquery-confirm/dist/jquery-confirm.min.css' />
+<!-- CSS jQuery-confirm -->
+<link type="text/css" rel='stylesheet'
+      href='{{ base_url_web }}/node_modules/jquery-confirm/dist/jquery-confirm.min.css'/>
     <script src="{{ base_url_web }}/node_modules/jquery-confirm/dist/jquery-confirm.min.js"></script>
 
-    <!-- CSS jQuery, bootstrap -->
-    <link type="text/css" rel='stylesheet' href='{{ base_url_web }}/node_modules/jquery-ui/themes/base/all.css' />
-    <link type="text/css" rel="stylesheet" href="{{ base_url_web }}/node_modules/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+<!-- CSS jQuery, bootstrap -->
+<link type="text/css" rel='stylesheet' href='{{ base_url_web }}/node_modules/jquery-ui/themes/base/all.css'/>
+<link type="text/css" rel="stylesheet" href="{{ base_url_web }}/node_modules/bootstrap/dist/css/bootstrap.min.css"
+      crossorigin="anonymous">
 
-    <!-- CSS jQuery DateTimePicker -->
-    <link type="text/css" rel="stylesheet" href="{{ base_url_web }}/node_modules/jquery-datetimepicker/jquery.datetimepicker.css" crossorigin="anonymous">
-    <script type="text/javascript" src='{{ base_url_web }}/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.js'></script>
+<!-- CSS jQuery DateTimePicker -->
+<link type="text/css" rel="stylesheet"
+      href="{{ base_url_web }}/node_modules/jquery-datetimepicker/jquery.datetimepicker.css" crossorigin="anonymous">
+    <script type="text/javascript"
+            src='{{ base_url_web }}/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.js'></script>
 
-    <!-- sprintf -->
+<!-- sprintf -->
     <script type="text/javascript" src="{{ base_url_web }}/node_modules/sprintf-js/dist/sprintf.min.js"></script>
-    <!-- jQuery -->
+<!-- jQuery -->
     <script type="text/javascript" src="{{ base_url_web }}/node_modules/jquery-ui-sortable/jquery-ui.min.js"></script>
     <script type="text/javascript" src='{{ base_url_web }}/node_modules/jquery-ui-dist/jquery-ui.min.js'></script>
-      
-    <link href="{{ base_url_web }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <!-- DataTables -->
-	<link type="text/css" rel="stylesheet" href='node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css' />
-	<script type="text/javascript" src='node_modules/datatables.net/js/jquery.dataTables.min.js'></script>
-	<script type="text/javascript" src='node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js'></script>
 
-    <div class="m-3"> {# para margenes #}
-{% endif %}
+<link href="{{ base_url_web }}/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet"
+      type="text/css">
+<!-- DataTables -->
+<link type="text/css" rel="stylesheet" href='node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css'/>
+    <script type="text/javascript" src='node_modules/datatables.net/js/jquery.dataTables.min.js'></script>
+    <script type="text/javascript" src='node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js'></script>
 
-<form id="form_pendiente" name="form_pendiente" action="" method="post" >
-<input type="hidden" id="m" name="m">
-<input type="hidden" id="calendario" name="calendario" value='{{ calendario }}'>
-<input type="hidden" id="uid" name="uid" value='{{ uid }}'>
-<input type="hidden" id="cal_oficina" name="cal_oficina" value='{{ cal_oficina }}'>
-<input type="hidden" id="nuevo" name="nuevo" value='{{ nuevo }}'>
-<input type="hidden" id="go" name="go" value='{{ go }}'> 
-<input type="hidden" id="busca_ap_prot_num" name="busca_ap_prot_num" value='{{ busca_ap_num }}'> 
-<input type="hidden" id="busca_ap_prot_any" name="busca_ap_prot_any" value='{{ busca_ap_any }}'> 
-<input type='hidden' id='id_reg' name='id_reg' value='{{ id_reg }}'>
-<input type='hidden' id='simple' name='simple' value='{{ simple }}'>
-<input type='hidden' id='simple_per' name='simple_per' value='{{ simple_per }}'>
-<input type='hidden' id='status' name='status' value='{{ status }}'>
+<div class="m-3"> {# para margenes #}
+    {% endif %}
 
-{% if calendario == 'registro' %}
-  <h1>{{ "modificar etiquetas del pendiente periódico"|trans|raw }}</h1>
-{% else %}
-  <h1>{{ "modificar etiquetas del pendiente de la oficina"|trans|raw }}</h1>
-{% endif %}
+    <form id="form_pendiente" name="form_pendiente" action="" method="post">
+        <input type="hidden" id="m" name="m">
+        <input type="hidden" id="calendario" name="calendario" value='{{ calendario }}'>
+        <input type="hidden" id="uid" name="uid" value='{{ uid }}'>
+        <input type="hidden" id="cal_oficina" name="cal_oficina" value='{{ cal_oficina }}'>
+        <input type="hidden" id="nuevo" name="nuevo" value='{{ nuevo }}'>
+        <input type="hidden" id="go" name="go" value='{{ go }}'>
+        <input type="hidden" id="busca_ap_prot_num" name="busca_ap_prot_num" value='{{ busca_ap_num }}'>
+        <input type="hidden" id="busca_ap_prot_any" name="busca_ap_prot_any" value='{{ busca_ap_any }}'>
+        <input type='hidden' id='id_reg' name='id_reg' value='{{ id_reg }}'>
+        <input type='hidden' id='simple' name='simple' value='{{ simple }}'>
+        <input type='hidden' id='simple_per' name='simple_per' value='{{ simple_per }}'>
+        <input type='hidden' id='status' name='status' value='{{ status }}'>
 
-<br>
-<br>
-<!--  ********************  FICHA SIMPLE   ****************************  -->
-<div>
-	<input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
-  <!--  --------------- ASUNTO --------------- -->
-  <div class="mb-3 row">
-    <label for="asunto_e" class="col-1 form-label">{{ "Asunto"|trans|raw }}</label>
-    <div class="col-9">
-      <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}" disabled>
-    </div>
-  </div>
-  <!--  --------------------  Etiquetas --------------------------  -->
-  <div id="div_etiquetas" class="mb-3 row align-items-center">
-    <label for="etiquetas" class="col-1">{{ "Etiquetas"|trans|raw }}:</label>
-    <div class="col-6">
+        {% if calendario == 'registro' %}
+            <h1>{{ "modificar etiquetas del pendiente periódico"|trans|raw }}</h1>
+        {% else %}
+            <h1>{{ "modificar etiquetas del pendiente de la oficina"|trans|raw }}</h1>
+        {% endif %}
+
+        <br>
+        <br>
+        <!--  ********************  FICHA SIMPLE   ****************************  -->
+        <div>
+            <input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
+            <!--  --------------- ASUNTO --------------- -->
+            <div class="mb-3 row">
+                <label for="asunto_e" class="col-1 form-label">{{ "Asunto"|trans|raw }}</label>
+                <div class="col-9">
+                    <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto" value="{{ asunto }}"
+                           disabled>
+                </div>
+            </div>
+            <!--  --------------------  Etiquetas --------------------------  -->
+            <div id="div_etiquetas" class="mb-3 row align-items-center">
+                <label for="etiquetas" class="col-1">{{ "Etiquetas"|trans|raw }}:</label>
+                <div class="col-6">
       <span id="span_etiquetas">
       	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
       </span>
-    </div>
-  </div
-  <!--  --------------------  Encargado --------------------------  -->
-  <div class="mb-3 row align-items-center">
-    <label for="oficina" class="col-2">{{ "¿Está asignado a alguien?"|trans|raw }}:</label>
-    <div class="col-6">
-	  {{ oDesplEncargados.desplegable|raw }}
-    </div>
-  </div
-</div> 
- <!--  --------------------  BOTONES --------------------------  -->
-<div>
-  <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Volver"|trans|raw }}
-  </button>
-  <button tabindex='90' class="btn btn-success" onClick="fnjs_guardar();" >
-    {{ "guardar"|trans|raw }}
-  </button> 
-</div>
-</form>
+                </div>
+            </div
+                    <!--  --------------------  Encargado --------------------------  -->
+            <div class="mb-3 row align-items-center">
+                <label for="oficina" class="col-2">{{ "¿Está asignado a alguien?"|trans|raw }}:</label>
+                <div class="col-6">
+                    {{ oDesplEncargados.desplegable|raw }}
+                </div>
+            </div
+        </div>
+        <!--  --------------------  BOTONES --------------------------  -->
+        <div>
+            <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();">
+                {{ "Volver"|trans|raw }}
+            </button>
+            <button tabindex='90' class="btn btn-success" onClick="fnjs_guardar();">
+                {{ "guardar"|trans|raw }}
+            </button>
+        </div>
+    </form>
 
-{% if cargar_css %}
+    {% if cargar_css %}
 </div>
 {% endif %}
 {{ include ('_pendiente_form_js.html.twig') }}

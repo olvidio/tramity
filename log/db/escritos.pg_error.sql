@@ -1,1 +1,2 @@
-NOTICE:  extension "intarray" already exists, skipping
+NOTICE
+:  extension "intarray" already exists, skipping

@@ -1,72 +1,74 @@
 <script type="text/javascript">
 
-{{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
-fnjs_mas_grupos=function(){  
-	var code = (event.keyCode ? event.keyCode : event.which);
-	var valor=1;
-    var id_campo='#'+event.currentTarget.id;
-    var valor=$(id_campo).val();
-    if(code!=9 && typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
+    {{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
+    fnjs_mas_grupos = function () {
+        var code = (event.keyCode ? event.keyCode : event.which);
+        var valor = 1;
+        var id_campo = '#' + event.currentTarget.id;
+        var valor = $(id_campo).val();
+        if (code != 9 && typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        if (code == 9 || event.type == "change") {
+            if (valor != 0) {
+                {{ oArrayDesplGrupo.ListaSelectsJs|raw }}
+            }
+        }
     }
-    if ( code==9 || event.type=="change") {
-		if (valor!=0) {
-			{{ oArrayDesplGrupo.ListaSelectsJs|raw }}
-		}
-	}
-}
-fnjs_quitar_grupos=function(){
-	$('#span_grupos').html("");
-	$('#grupos_num').val(0);
-}
+    fnjs_quitar_grupos = function () {
+        $('#span_grupos').html("");
+        $('#grupos_num').val(0);
+    }
 
-fnjs_comprobar_plazo=function(campo){
-	contestar=$('#plazo');
-	if (campo=="select") {
-		cont=contestar.val();
-		if (cont=="fecha") {
-			// activo el campo input y pongo allí el cursor
-			$("#f_plazo").prop("disabled", false);
-			$('#f_plazo').focus();
-			$('#f_plazo').val('');
-		} else {
-			var hoy=new Date();
-			var fecha=new Date();
-			switch (cont) {
-				case "hoy":
-					$('#f_plazo').val('');
-					break;
-				case "rápido":
-					var dias={{ plazo_rapido }};
-					var mseconds=hoy.getTime()+dias*24*60*60*1000;
-					fecha.setTime(mseconds);
-					var mes=fecha.getMonth()+1;
-					$('#f_plazo').val(fecha.getDate()+"/"+mes+"/"+fecha.getFullYear());
-					break;
-				case "urgente":
-					var dias={{ plazo_urgente }};
-					var mseconds=hoy.getTime()+dias*24*60*60*1000;
-					fecha.setTime(mseconds);
-					var mes=fecha.getMonth()+1;
-					$('#f_plazo').val(fecha.getDate()+"/"+mes+"/"+fecha.getFullYear());
-					break;
-				case "normal":
-					var dias={{ plazo_normal }};
-					var mseconds=hoy.getTime()+dias*24*60*60*1000;
-					fecha.setTime(mseconds);
-					var mes=fecha.getMonth()+1;
-					$('#f_plazo').val(fecha.getDate()+"/"+mes+"/"+fecha.getFullYear());
-					break;
-			}
-			$('#f_plazo').prop("disabled",true);
-			$('#b_guardar').focus();
-		}
-	} else { // es el input
-		contestar.val('fecha');
-		fecha=$('#f_plazo');
-		if (!fnjs_fecha_en_intervalo('#f_plazo')) { err=0; } // Se permite, simplemente avisa.
-		$('#b_guardar').focus();
-	}
-}
+    fnjs_comprobar_plazo = function (campo) {
+        contestar = $('#plazo');
+        if (campo == "select") {
+            cont = contestar.val();
+            if (cont == "fecha") {
+                // activo el campo input y pongo allí el cursor
+                $("#f_plazo").prop("disabled", false);
+                $('#f_plazo').focus();
+                $('#f_plazo').val('');
+            } else {
+                var hoy = new Date();
+                var fecha = new Date();
+                switch (cont) {
+                    case "hoy":
+                        $('#f_plazo').val('');
+                        break;
+                    case "rápido":
+                        var dias ={{ plazo_rapido }};
+                        var mseconds = hoy.getTime() + dias * 24 * 60 * 60 * 1000;
+                        fecha.setTime(mseconds);
+                        var mes = fecha.getMonth() + 1;
+                        $('#f_plazo').val(fecha.getDate() + "/" + mes + "/" + fecha.getFullYear());
+                        break;
+                    case "urgente":
+                        var dias ={{ plazo_urgente }};
+                        var mseconds = hoy.getTime() + dias * 24 * 60 * 60 * 1000;
+                        fecha.setTime(mseconds);
+                        var mes = fecha.getMonth() + 1;
+                        $('#f_plazo').val(fecha.getDate() + "/" + mes + "/" + fecha.getFullYear());
+                        break;
+                    case "normal":
+                        var dias ={{ plazo_normal }};
+                        var mseconds = hoy.getTime() + dias * 24 * 60 * 60 * 1000;
+                        fecha.setTime(mseconds);
+                        var mes = fecha.getMonth() + 1;
+                        $('#f_plazo').val(fecha.getDate() + "/" + mes + "/" + fecha.getFullYear());
+                        break;
+                }
+                $('#f_plazo').prop("disabled", true);
+                $('#b_guardar').focus();
+            }
+        } else { // es el input
+            contestar.val('fecha');
+            fecha = $('#f_plazo');
+            if (!fnjs_fecha_en_intervalo('#f_plazo')) {
+                err = 0;
+            } // Se permite, simplemente avisa.
+            $('#b_guardar').focus();
+        }
+    }
 </script>

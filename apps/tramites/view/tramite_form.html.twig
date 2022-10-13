@@ -1,47 +1,51 @@
 <script>
-fnjs_guardar=function(formulario){
-	var datos = $(formulario).serialize();	
-	request=$.ajax({
-		data: datos,
-		url: '{{ url_update }}',
-		method: 'POST',
-		dataType: 'json'
-	});
-	request.done( function (json) {
-		if (json.success != true) {
-			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-		} else {
-            {{ oPosicion.js_atras(1)|raw }}
-		}
-	});
-}
+    fnjs_guardar = function (formulario) {
+        var datos = $(formulario).serialize();
+        request = $.ajax({
+            data: datos,
+            url: '{{ url_update }}',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done(function (json) {
+            if (json.success != true) {
+                alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+            } else {
+                {{ oPosicion.js_atras(1)|raw }}
+            }
+        });
+    }
 </script>
 <div class="card" style="width: 30rem;">
-  <div class="card-header">
-    <h5 class="card-title">{{ "Datos del Trámite"|trans|raw }}</h5>
-  </div>
-  <div class="card-body">
-<div class="row">
-  <div class="col-12">
-      <form class="user" id="frm_tramite"  name="frm_tramite" action="" method="post">
-      {{ oHash.getCamposHtml|raw }}
-        <div class="mb-3 input-group col-10">
-           <span class="input-group-text">{{ "Trámite"|trans|raw }}</span>
-           <input type="text" class="form-control" id="tramite" name="tramite" placeholder="nombre del trámite" value="{{ tramite }}">
+    <div class="card-header">
+        <h5 class="card-title">{{ "Datos del Trámite"|trans|raw }}</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <form class="user" id="frm_tramite" name="frm_tramite" action="" method="post">
+                    {{ oHash.getCamposHtml|raw }}
+                    <div class="mb-3 input-group col-10">
+                        <span class="input-group-text">{{ "Trámite"|trans|raw }}</span>
+                        <input type="text" class="form-control" id="tramite" name="tramite"
+                               placeholder="nombre del trámite" value="{{ tramite }}">
+                    </div>
+                    <div class="mb-3 input-group col-8">
+                        <span class="input-group-text">{{ "Abreviatura"|trans|raw }}</span>
+                        <input type="text" class="form-control" id="breve" name="breve" placeholder="breve"
+                               value="{{ breve }}">
+                    </div>
+                    <div class="mb-3 input-group col-4">
+                        <span class="input-group-text">{{ "Orden"|trans|raw }}</span>
+                        <input type="text" class="form-control" id="orden" name="orden" placeholder="orden"
+                               value="{{ orden }}">
+                    </div>
+                    <div class="mb-3 input-group col-10">
+                        <button onclick="fnjs_guardar(this.form);" type="button"
+                                class="btn btn-primary w-100 col-6">{{ "Guardar"|trans|raw }}</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="mb-3 input-group col-8">
-          <span class="input-group-text">{{ "Abreviatura"|trans|raw }}</span>
-          <input type="text" class="form-control" id="breve" name="breve" placeholder="breve" value="{{ breve }}">
-        </div>
-        <div class="mb-3 input-group col-4">
-          <span class="input-group-text">{{ "Orden"|trans|raw }}</span>
-          <input type="text" class="form-control" id="orden" name="orden" placeholder="orden" value="{{ orden }}">
-        </div>
-        <div class="mb-3 input-group col-10">
-          <button onclick="fnjs_guardar(this.form);" type="button" class="btn btn-primary w-100 col-6">{{ "Guardar"|trans|raw }}</button>
-        </div>
-      </form>
-  </div>
-</div>
-</div>
+    </div>
 </div>

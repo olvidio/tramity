@@ -60,6 +60,38 @@ abstract class CallExpression extends AbstractExpression
         }
     }
 
+    private function reflectCallable($callable)
+    {
+        if (null !== $this->reflector) {
+            return $this->reflector;
+        }
+
+        if (\is_array($callable)) {
+            if (!method_exists($callable[0], $callable[1])) {
+                // __call()
+                return [null, []];
+            }
+            $r = new \ReflectionMethod($callable[0], $callable[1]);
+        } elseif (\is_object($callable) && !$callable instanceof \Closure) {
+            $r = new \ReflectionObject($callable);
+            $r = $r->getMethod('__invoke');
+            $callable = [$callable, '__invoke'];
+        } elseif (\is_string($callable) && false !== $pos = strpos($callable, '::')) {
+            $class = substr($callable, 0, $pos);
+            $method = substr($callable, $pos + 2);
+            if (!method_exists($class, $method)) {
+                // __staticCall()
+                return [null, []];
+            }
+            $r = new \ReflectionMethod($callable);
+            $callable = [$class, $method];
+        } else {
+            $r = new \ReflectionFunction($callable);
+        }
+
+        return $this->reflector = [$r, $callable];
+    }
+
     protected function compileArguments(Compiler $compiler, $isArray = false): void
     {
         $compiler->raw($isArray ? '[' : '(');
@@ -276,7 +308,7 @@ abstract class CallExpression extends AbstractExpression
             } else {
                 $callableName = $r->name;
                 if ($r instanceof \ReflectionMethod) {
-                    $callableName = $r->getDeclaringClass()->name.'::'.$callableName;
+                    $callableName = $r->getDeclaringClass()->name . '::' . $callableName;
                 }
 
                 throw new \LogicException(sprintf('The last parameter of "%s" for %s "%s" must be an array with default value, eg. "array $arg = []".', $callableName, $this->getAttribute('type'), $this->getAttribute('name')));
@@ -284,37 +316,5 @@ abstract class CallExpression extends AbstractExpression
         }
 
         return [$parameters, $isPhpVariadic];
-    }
-
-    private function reflectCallable($callable)
-    {
-        if (null !== $this->reflector) {
-            return $this->reflector;
-        }
-
-        if (\is_array($callable)) {
-            if (!method_exists($callable[0], $callable[1])) {
-                // __call()
-                return [null, []];
-            }
-            $r = new \ReflectionMethod($callable[0], $callable[1]);
-        } elseif (\is_object($callable) && !$callable instanceof \Closure) {
-            $r = new \ReflectionObject($callable);
-            $r = $r->getMethod('__invoke');
-            $callable = [$callable, '__invoke'];
-        } elseif (\is_string($callable) && false !== $pos = strpos($callable, '::')) {
-            $class = substr($callable, 0, $pos);
-            $method = substr($callable, $pos + 2);
-            if (!method_exists($class, $method)) {
-                // __staticCall()
-                return [null, []];
-            }
-            $r = new \ReflectionMethod($callable);
-            $callable = [$class, $method];
-        } else {
-            $r = new \ReflectionFunction($callable);
-        }
-
-        return $this->reflector = [$r, $callable];
     }
 }

@@ -1,70 +1,74 @@
 <script>
-fnjs_guardar=function(formulario){
-	// si es 0, no se cambia el password.
-	var pwd=$("#password").val();
-	var pwd1=$("#password1").val();
-	
-	if (!pwd) {
-		alert ("<?= _("error: password no válido") ?>");
-		return false;
-	}
-	if (!pwd1) {
-		alert ("<?= _("error: debes confirmar el password") ?>");
-		return false;
-	}
-	if (pwd!=pwd1) {
-		alert ("<?= _("error: passwords no coincidentes") ?>");
-		return false;
-	}
-	id_usuario=$('#id_usuario').val();
-	datos = $(formulario).serialize();	
-	request=$.ajax({
-		data: datos,
-		url: 'apps/usuarios/controller/usuario_update.php',
-		method: 'POST',
-		dataType: 'json'
-	});
-	request.done( function (json) {
-		if (json.success != true) {
-			alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
-		} else {
-            alert('<?= $txt_ok ?>');
-		}
-        fnjs_cancelar();
-	});
-}
+    fnjs_guardar = function (formulario) {
+        // si es 0, no se cambia el password.
+        var pwd = $("#password").val();
+        var pwd1 = $("#password1").val();
 
-fnjs_cancelar=function(){
-    fnjs_update_div('#main','<?= $pagina_cancel ?>');
-}
+        if (!pwd) {
+            alert("<?= _("error: password no válido") ?>");
+            return false;
+        }
+        if (!pwd1) {
+            alert("<?= _("error: debes confirmar el password") ?>");
+            return false;
+        }
+        if (pwd != pwd1) {
+            alert("<?= _("error: passwords no coincidentes") ?>");
+            return false;
+        }
+        id_usuario = $('#id_usuario').val();
+        datos = $(formulario).serialize();
+        request = $.ajax({
+            data: datos,
+            url: 'apps/usuarios/controller/usuario_update.php',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done(function (json) {
+            if (json.success != true) {
+                alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+            } else {
+                alert('<?= $txt_ok ?>');
+            }
+            fnjs_cancelar();
+        });
+    }
+
+    fnjs_cancelar = function () {
+        fnjs_update_div('#main', '<?= $pagina_cancel ?>');
+    }
 </script>
 
 <h3><?= $usuario ?></h3>
-<?php if ($expire == 1 ) { ?>
-<?= _("deberías cambiar el password") ?>
+<?php if ($expire == 1) { ?>
+    <?= _("deberías cambiar el password") ?>
 <?php } ?>
 <br>
-<form id=frm_usuario  name=frm_usuario action='' method="post" >
-<?= $oHash->getCamposHtml(); ?>
-<?= ucfirst(_("password")) ?>:<input type="password" id="password" name="password"><br>
-<?= ucfirst(_("confirma password")) ?>:<input type="password" id="password1" name="password1"><br>
-<br>
-<div class="row">
-    <button onclick="fnjs_guardar(this.form);" type="button" class="col-4 btn btn-primary w-100"><?= $txt_guardar ?></button>
-  <div class="col-1"></div>
-    <button onclick="fnjs_cancelar();" type="button" class="col-4 btn btn-secondary w-100"><?= _("Cancelar") ?></button>
-</div>
+<form id=frm_usuario name=frm_usuario action='' method="post">
+    <?= $oHash->getCamposHtml(); ?>
+    <?= ucfirst(_("password")) ?>:<input type="password" id="password" name="password"><br>
+    <?= ucfirst(_("confirma password")) ?>:<input type="password" id="password1" name="password1"><br>
+    <br>
+    <div class="row">
+        <button onclick="fnjs_guardar(this.form);" type="button"
+                class="col-4 btn btn-primary w-100"><?= $txt_guardar ?></button>
+        <div class="col-1"></div>
+        <button onclick="fnjs_cancelar();" type="button"
+                class="col-4 btn btn-secondary w-100"><?= _("Cancelar") ?></button>
+    </div>
 </form>
 <br>
 <?= _("Requerimientos del password") ?>:<br>
 <ol>
-<li><?= _("Los passwords no pueden contener el valor del \"login\" o de qualquiera de las palabras del \"nombre\". (no tiene en cuenta mayúsculas/minúsculas)") ?>.</li>
-<li><?= _("El password ha de tener más de 8 carácteres") ?>.</li>
-<li><?= _("El password ha de tener como mínimo 3 de los segientes grupos de carácteres") ?>:
-<ul>
-<li><?= _("Mayúsculas ('A' a 'Z')") ?></li>
-<li><?= _("Minúsculas ('a' a 'z')") ?></li>
-<li><?= _("Números ('0' a '9')") ?></li>
-<li><?= _("(No pueden ser comillas dobles!!) Carácteres: ~!@#$%^&*_-+=`|(){}[]:;<>,.?/") ?></li>
-</ul>
+    <li><?= _("Los passwords no pueden contener el valor del \"login\" o de qualquiera de las palabras del \"nombre\". (no tiene en cuenta mayúsculas/minúsculas)") ?>
+        .
+    </li>
+    <li><?= _("El password ha de tener más de 8 carácteres") ?>.</li>
+    <li><?= _("El password ha de tener como mínimo 3 de los segientes grupos de carácteres") ?>:
+        <ul>
+            <li><?= _("Mayúsculas ('A' a 'Z')") ?></li>
+            <li><?= _("Minúsculas ('a' a 'z')") ?></li>
+            <li><?= _("Números ('0' a '9')") ?></li>
+            <li><?= _("(No pueden ser comillas dobles!!) Carácteres: ~!@#$%^&*_-+=`|(){}[]:;<>,.?/") ?></li>
+        </ul>
 </ol>

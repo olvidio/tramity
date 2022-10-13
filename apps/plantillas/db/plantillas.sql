@@ -1,7 +1,7 @@
-
-CREATE TABLE public.plantillas (
+CREATE TABLE public.plantillas
+(
     id_plantilla SERIAL PRIMARY KEY,
-    nombre text NOT NULL
+    nombre       text NOT NULL
 );
 
 

@@ -1,81 +1,82 @@
 {% if btn_new %}
-<button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
-	{{ txt_btn_new }}
-</button>
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
+        {{ txt_btn_new }}
+    </button>
 {% endif %}
 {% if btn_dock %}
-  {% if vista == 'ctr' %}
-    <h3>{{ "Lista de entradas por encargar"|trans|raw }}</h3>
-  {% endif %}
-  <button type="button" class="btn btn-info" onClick="$('#slow_load').show(); fnjs_update_div('#main','{{ pagina_cargar_dock|raw }}');">
-	{{ txt_btn_dock }}
-  </button>
+    {% if vista == 'ctr' %}
+        <h3>{{ "Lista de entradas por encargar"|trans|raw }}</h3>
+    {% endif %}
+    <button type="button" class="btn btn-info"
+            onClick="$('#slow_load').show(); fnjs_update_div('#main','{{ pagina_cargar_dock|raw }}');">
+        {{ txt_btn_dock }}
+    </button>
 {% endif %}
 <!--  --------------- Image cargando , para cuando se activa el leer dock, que es lento --------------- -->
 <div id="slow_load" style="display: flex; justify-content: center; align-items: center; text-align: center;">
-  <img class="mb-4" src="../images/loading.gif" alt="cargando" width="32" height="32"> 
+    <img class="mb-4" src="../images/loading.gif" alt="cargando" width="32" height="32">
 </div>
 
 <table class="table table-sm table-bordered">
-  <thead class="thead-light">
+    <thead class="thead-light">
     <tr>
-      {% if secretaria %}
-        <th scope="col">#</th>
-      {% endif %}
-      <th scope="col">##</th>
-      <th scope="col">{{ "protocolo"|trans|raw }}</th>
-      <th scope="col">{{ "ref."|trans|raw }}</th>
-      <th scope="col">{{ "categoria"|trans|raw }}</th>
-      <th scope="col">{{ "asunto"|trans|raw }}</th>
-      {% if ver_oficina %}
-        <th scope="col">{{ "visibilidad"|trans|raw }}</th>
-        <th scope="col">{{ "oficinas"|trans|raw }}</th>
-      {% endif %}
-      <th scope="col">{{ "fecha escrito"|trans|raw }}</th>
-      <th scope="col">{{ "contestar antes de"|trans|raw }}</th>
-      <th scope="col">{{ "fecha entrada"|trans|raw }}</th>
-      {% if ver_accion %}
-        <th></th>
-      {% endif %}
+        {% if secretaria %}
+            <th scope="col">#</th>
+        {% endif %}
+        <th scope="col">##</th>
+        <th scope="col">{{ "protocolo"|trans|raw }}</th>
+        <th scope="col">{{ "ref."|trans|raw }}</th>
+        <th scope="col">{{ "categoria"|trans|raw }}</th>
+        <th scope="col">{{ "asunto"|trans|raw }}</th>
+        {% if ver_oficina %}
+            <th scope="col">{{ "visibilidad"|trans|raw }}</th>
+            <th scope="col">{{ "oficinas"|trans|raw }}</th>
+        {% endif %}
+        <th scope="col">{{ "fecha escrito"|trans|raw }}</th>
+        <th scope="col">{{ "contestar antes de"|trans|raw }}</th>
+        <th scope="col">{{ "fecha entrada"|trans|raw }}</th>
+        {% if ver_accion %}
+            <th></th>
+        {% endif %}
     </tr>
-  </thead>
-  <tbody>
-  {% for row in a_entradas %}
-    <tr>
-      {% if secretaria %}
-        <td>{{ row.link_mod|raw }}</td>
-      {% endif %}
-      <td>{{ row.link_ver|raw }}</td>
-      <td>{{ row.protocolo }}</td>
-      <td>{{ row.referencias|raw }}</td>
-      <td>{{ row.categoria }}</td>
-      <td>{{ row.asunto|raw }}</td>
-      {% if ver_oficina %}
-        <td>{{ row.visibilidad }}</td>
-        <td>{{ row.oficinas|raw }}</td>
-      {% endif %}
-      <td style="text-align: right">{{ row.f_escrito }}</td>
-      <td style="text-align: right">{{ row.f_contestar }}</td>
-      <td style="text-align: right">{{ row.f_entrada }}</td>
-      {% if ver_accion %}
-        <td>{{ row.link_accion|raw }}</td>
-      {% endif %}
-    </tr>
+    </thead>
+    <tbody>
+    {% for row in a_entradas %}
+        <tr>
+            {% if secretaria %}
+                <td>{{ row.link_mod|raw }}</td>
+            {% endif %}
+            <td>{{ row.link_ver|raw }}</td>
+            <td>{{ row.protocolo }}</td>
+            <td>{{ row.referencias|raw }}</td>
+            <td>{{ row.categoria }}</td>
+            <td>{{ row.asunto|raw }}</td>
+            {% if ver_oficina %}
+                <td>{{ row.visibilidad }}</td>
+                <td>{{ row.oficinas|raw }}</td>
+            {% endif %}
+            <td style="text-align: right">{{ row.f_escrito }}</td>
+            <td style="text-align: right">{{ row.f_contestar }}</td>
+            <td style="text-align: right">{{ row.f_entrada }}</td>
+            {% if ver_accion %}
+                <td>{{ row.link_accion|raw }}</td>
+            {% endif %}
+        </tr>
     {% endfor %}
-  </tbody>
+    </tbody>
 </table>
 
 <script type="text/javascript">
-$(document).ready(function() {
-	tabs_show('{{ vista }}','{{ filtro }}');
-	$('#slow_load').hide();  // hide it initially
-});
-fnjs_ver_entrada=function(id_entrada,compartida=false) {
-    var ssfsv = 'sv';
-    var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-    var server = '{{ server }}';
-    var url = server+'/apps/entradas/controller/entrada_ver.php?id_entrada='+id_entrada+'&compartida='+compartida;
-    w=window.open(url, "", winPrefs);
-    w.focus();
-}
+    $(document).ready(function () {
+        tabs_show('{{ vista }}', '{{ filtro }}');
+        $('#slow_load').hide();  // hide it initially
+    });
+    fnjs_ver_entrada = function (id_entrada, compartida = false) {
+        var ssfsv = 'sv';
+        var winPrefs = "dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+        var server = '{{ server }}';
+        var url = server + '/apps/entradas/controller/entrada_ver.php?id_entrada=' + id_entrada + '&compartida=' + compartida;
+        w = window.open(url, "", winPrefs);
+        w.focus();
+    }
 </script>

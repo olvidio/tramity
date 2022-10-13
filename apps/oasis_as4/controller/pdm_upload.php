@@ -1,13 +1,12 @@
 <?php
-use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos por esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos por esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
@@ -21,7 +20,8 @@ exit(); // terminate
 // main upload function used above
 // upload the bootstrap-fileinput files
 // returns associative array
-function upload() {
+function upload()
+{
     $preview = [];
     $config = [];
     $errors = [];
@@ -35,20 +35,20 @@ function upload() {
             $fileName = $_FILES[$input]['name'][$i]; // the file name
             $fileSize = $_FILES[$input]['size'][$i]; // the file size
             if ($fileSize > $_SESSION['oConfig']->getMax_filesize_en_bytes()) {
-            	exit (_("Fichero demasiado grande"));
+                exit (_("Fichero demasiado grande"));
             }
-            
+
             //Make sure we have a file path
-            if ($tmpFilePath != ""){
-                
+            if ($tmpFilePath != "") {
+
                 $fp = fopen($tmpFilePath, 'rb');
                 $contenido_doc = fread($fp, filesize($tmpFilePath));
-                
+
                 $dir = $_SESSION['oConfig']->getDock();
                 // si es una resp. sólo hay que eliminar este fichero
-				$fullfilename = $dir .'/repository/pmodes/'. $fileName;
-                
-				if (file_put_contents($fullfilename, $contenido_doc) !== FALSE) {
+                $fullfilename = $dir . '/repository/pmodes/' . $fileName;
+
+                if (file_put_contents($fullfilename, $contenido_doc) !== FALSE) {
                     $preview[] = "'$fileName'";
                     $config[] = [
                         'key' => 1,
@@ -64,7 +64,7 @@ function upload() {
         }
         $out = ['initialPreview' => $preview, 'initialPreviewConfig' => $config];
         if (!empty($errors)) {
-            $img = count($errors) === 1 ? 'file "' . $errors[0]  . '" ' : 'files: "' . implode('", "', $errors) . '" ';
+            $img = count($errors) === 1 ? 'file "' . $errors[0] . '" ' : 'files: "' . implode('", "', $errors) . '" ';
             $out['error'] = 'Oh snap! We could not upload the ' . $img . 'now. Please try again later.';
         }
         return $out;

@@ -1,78 +1,78 @@
-{%  if pagina_nueva %}
-<button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
-	{{ "nuevo expediente"|trans|raw }}
-</button>
+{% if pagina_nueva %}
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
+        {{ "nuevo expediente"|trans|raw }}
+    </button>
 {% endif %}
 <table class="table table-sm table-bordered">
-  <thead class="thead-light">
+    <thead class="thead-light">
     <tr>
-      {%  if col_mod %}
-        <th scope="col">#</th>
-      {% endif %}
-      {%  if col_ver %}
-        <th scope="col">{{ "##"|trans|raw }}</th>
-      {% endif %}
-      {% if ver_f_ini %}
-        <th scope="col">{{ "fecha inicio"|trans|raw }}</th>
-      {% endif %}
-      <th scope="col">{{ "trámite"|trans|raw }}</th>
-      <th scope="col">{{ "visibilidad"|trans|raw }}</th>
-      <th scope="col">{{ "asunto"|trans|raw }}</th>
-      <th scope="col">{{ cabecera_oficina }}</th>
-      <th scope="col">{{ "fecha resolver"|trans|raw }}</th>
-      {% if presentacion == 3 or presentacion == 4 or presentacion == 5 %}
-          <th scope="col">{{ "fecha reunión"|trans|raw }}</th>
-      {% endif %}
-      {% if presentacion == 2 or presentacion == 4 or presentacion == 5 %}
-          <th scope="col">{{ "fecha aprobación"|trans|raw }}</th>
-      {% endif %}
-          <th scope="col">{{ "contenido"|trans|raw }}</th>
-      {% if presentacion != 1 %}
-          <th scope="col">{{ "etiquetas"|trans|raw }}</th>
-      {% endif %}
-      {% if presentacion == 5 %}
-          <th scope="col">{{ "encargado"|trans|raw }}</th>
-      {% endif %}
-      <th></th>
+        {% if col_mod %}
+            <th scope="col">#</th>
+        {% endif %}
+        {% if col_ver %}
+            <th scope="col">{{ "##"|trans|raw }}</th>
+        {% endif %}
+        {% if ver_f_ini %}
+            <th scope="col">{{ "fecha inicio"|trans|raw }}</th>
+        {% endif %}
+        <th scope="col">{{ "trámite"|trans|raw }}</th>
+        <th scope="col">{{ "visibilidad"|trans|raw }}</th>
+        <th scope="col">{{ "asunto"|trans|raw }}</th>
+        <th scope="col">{{ cabecera_oficina }}</th>
+        <th scope="col">{{ "fecha resolver"|trans|raw }}</th>
+        {% if presentacion == 3 or presentacion == 4 or presentacion == 5 %}
+            <th scope="col">{{ "fecha reunión"|trans|raw }}</th>
+        {% endif %}
+        {% if presentacion == 2 or presentacion == 4 or presentacion == 5 %}
+            <th scope="col">{{ "fecha aprobación"|trans|raw }}</th>
+        {% endif %}
+        <th scope="col">{{ "contenido"|trans|raw }}</th>
+        {% if presentacion != 1 %}
+            <th scope="col">{{ "etiquetas"|trans|raw }}</th>
+        {% endif %}
+        {% if presentacion == 5 %}
+            <th scope="col">{{ "encargado"|trans|raw }}</th>
+        {% endif %}
+        <th></th>
     </tr>
-  </thead>
-  <tbody>
-  {% for row in a_expedientes %}
-    <tr class="{{ row.class_row|raw }}">
-      {%  if col_mod %}
-        <th scope="row">{{ row.link_mod|raw }}</th>
-      {% endif %}
-      {%  if col_ver %}
-        <td>{{ row.link_ver|raw }}</td>
-      {% endif %}
-      {% if ver_f_ini %}
-        <td>{{ row.f_ini|raw }}</td>
-      {% endif %}
-      <td>{{ row.tramite|raw }}</td>
-      <td>{{ row.visibilidad|raw }}</td>
-      <td>{{ row.asunto|raw }}</td>
-      <td>{{ row.oficinas|raw }}</td>
-      <td>{{ row.f_contestar|raw }}</td>
-      {% if presentacion == 3 or presentacion == 4 or presentacion == 5 %}
-          <td>{{ row.f_reunion|raw }}</td>
-      {% endif %}
-      {% if presentacion == 2 or presentacion == 4 or presentacion == 5 %}
-          <td>{{ row.f_aprobacion|raw }}</td>
-      {% endif %}
-          <td>{{ row.contenido|raw }}</td>
-      {% if presentacion != 1 %}
-          <td>{{ row.etiquetas|raw }}</td>
-      {% endif %}
-      {% if presentacion == 5 %}
-          <td>{{ row.nom_encargado|raw }}</td>
-      {% endif %}
-      <td>{{ row.link_accion|raw }}</td>
-    </tr>
+    </thead>
+    <tbody>
+    {% for row in a_expedientes %}
+        <tr class="{{ row.class_row|raw }}">
+            {% if col_mod %}
+                <th scope="row">{{ row.link_mod|raw }}</th>
+            {% endif %}
+            {% if col_ver %}
+                <td>{{ row.link_ver|raw }}</td>
+            {% endif %}
+            {% if ver_f_ini %}
+                <td>{{ row.f_ini|raw }}</td>
+            {% endif %}
+            <td>{{ row.tramite|raw }}</td>
+            <td>{{ row.visibilidad|raw }}</td>
+            <td>{{ row.asunto|raw }}</td>
+            <td>{{ row.oficinas|raw }}</td>
+            <td>{{ row.f_contestar|raw }}</td>
+            {% if presentacion == 3 or presentacion == 4 or presentacion == 5 %}
+                <td>{{ row.f_reunion|raw }}</td>
+            {% endif %}
+            {% if presentacion == 2 or presentacion == 4 or presentacion == 5 %}
+                <td>{{ row.f_aprobacion|raw }}</td>
+            {% endif %}
+            <td>{{ row.contenido|raw }}</td>
+            {% if presentacion != 1 %}
+                <td>{{ row.etiquetas|raw }}</td>
+            {% endif %}
+            {% if presentacion == 5 %}
+                <td>{{ row.nom_encargado|raw }}</td>
+            {% endif %}
+            <td>{{ row.link_accion|raw }}</td>
+        </tr>
     {% endfor %}
-  </tbody>
+    </tbody>
 </table>
 <script type="text/javascript">
-$(document).ready(function() {
-	tabs_show('{{ vista }}','{{ filtro }}');
-});
+    $(document).ready(function () {
+        tabs_show('{{ vista }}', '{{ filtro }}');
+    });
 </script>

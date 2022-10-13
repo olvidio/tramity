@@ -8,117 +8,125 @@
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
 
-<div class="row" >
-<div class="col-6" >
-<h1>{{ titulo }}:</h1>
+<div class="row">
+    <div class="col-6">
+        <h1>{{ titulo }}:</h1>
+    </div>
+    <div class="col-6">
+        <h1>{{ oProtOrigen.ver_txt|raw }}</h1>
+    </div>
 </div>
-<div class="col-6" >
-<h1>{{ oProtOrigen.ver_txt|raw }}</h1>
-</div>
-</div>
-<form id ="form_entrada" >
+<form id="form_entrada">
     <input type=hidden name='go' id='go' value=0>
     <input type=hidden name='que' id='que' value=0>
-    <input type=hidden name='hidden_visibilidad' id='hidden_visibilidad' value={{ hidden_visibilidad }} >
+    <input type=hidden name='hidden_visibilidad' id='hidden_visibilidad' value={{ hidden_visibilidad }}>
     <!-- sirve para cuando se genera antes que la entrada (desde una ventana adicional) -->
-	<input type='hidden' id='id_pendiente' name='id_pendiente' value=''>
-    <input type=hidden name='filtro' id='filtro' value={{ filtro }} >
-    <input type=hidden name='id_entrada' id='id_entrada' value={{ id_entrada }} >
-    <input type=hidden name='f_contestar' id='f_contestar' value={{ f_contestar }} >
+    <input type='hidden' id='id_pendiente' name='id_pendiente' value=''>
+    <input type=hidden name='filtro' id='filtro' value={{ filtro }}>
+    <input type=hidden name='id_entrada' id='id_entrada' value={{ id_entrada }}>
+    <input type=hidden name='f_contestar' id='f_contestar' value={{ f_contestar }}>
     <!-- si vengo de buscar, para poder volver -->
-    <input type=hidden name='str_condicion' id='str_condicion' value={{ str_condicion }} >
-    
-<div class="row" >
-<!--  col Izda -->
-<div class="col-8" >
-  <!--  --------------- REFERENCIAS --------------- -->
-  <div class="mb-3 row">
-    <label class="col-2 form-label">
-      {{ "Referencias"|trans|raw }}:
-    </label>
-    <div class="col-10">
-      {{ oArrayProtRef.ListaTxtBr|raw }}
-    </div>
-  </div>
-  <!--  --------------- ASUNTO --------------- -->
-  <div class="mb-3 row">
-    <label for="asunto_e" class="col-3 form-label">{{ "Asunto entrada"|trans|raw }}</label>
-    <div class="col-9">
-      <input tabindex='100' readonly type="text" class="form-control" name="asunto_e" id="asunto_e" value="{{ asunto_e }}">
-    </div>
-  </div>
-  <div class="mb-3 row">
-    <label for="asunto" class="col-3 form-label">{{ "Asunto del centro"|trans|raw }}</label>
-    <div class="col">
-        <div class="input-group mb-2">
-          <span class="input-group-text">{{ anulado_txt }}</span>
-          <input tabindex='105' type="text" class="form-control" name='asunto' id="asunto" value="{{ asunto }}">
-        </div>
-    </div>
-  </div>
-  <!--  --------------- DETALLE --------------- -->
-  <div class="mb-3 row">
-    <label for="detalle" class="col-2 form-label">{{ "Detalle"|trans|raw }}</label>
-    <div class='col-6'>
-      <input tabindex='110' type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}">
-    </div>
-  </div>
-  <!--  --------------- FECHAS --------------- -->
-{% if id_entrada %}
-  <div class="mb-3 row">
-        <label for="f_entrada" class="col col-2 form-label">{{ "Fecha entrada"|trans|raw }}</label>
-        <div class='col-3 date'>
-          <input readonly tabindex='150' name='f_entrada' id='f_entrada' type='text' class="form-control" value="{{ f_entrada }}" />
-        </div>
-	    <label for="f_escrito" class="col col-2 form-label">{{ "Fecha escrito"|trans|raw }}</label>
-        <div class='col-3 date'>
-          <input readonly tabindex='155' name='f_escrito' id='f_escrito' type='text' class="form-control" value="{{ f_escrito }}" />
-        </div>
-  </div> 
-{% endif %}
-  <!--  --------------- TIPO --------------- -->
-  <div class="row">
-    <div class="mb-3 col-md-2">
-      <label for="tipo">{{ "Categoría"|trans|raw }}</label>
-      {{ oDesplCategoria.desplegable|raw }}
-    </div>
-    <div class="mb-3 col-md-2">
-      <label for="visibilidad">{{ "Visibilidad"|trans|raw }}</label>
-      {{ oDesplVisibilidad.desplegable|raw }}
-    </div>
-  </div>
-{% if ver_pendiente %}
-  <div class="mb-3 row">
-      <label for="plazo" class="col-3 me-3 mt-2">{{ "Contestar antes de"|trans|raw }}:</label>
-      <div class='col-2 date'>
-        <input readonly tabindex='185' name='f_plazo' id='f_plazo' type='text' class="form-control" value="{{ f_contestar }}" />
-      </div>
-      <button id="btn_pendiente" tabindex='188' class="col-2 btn btn-outline-secondary" onClick="fnjs_mod_pendiente();" >
-          {{ "modificar pendiente"|trans|raw }}
-	  </button>
-  </div>
-{% endif %}
-  <!-- Fin Col Izda -->
-</div>
-<!--  Col Dcha -->
-<div class="col-4" >
-</div>
+    <input type=hidden name='str_condicion' id='str_condicion' value={{ str_condicion }}>
 
-</div>
+    <div class="row">
+        <!--  col Izda -->
+        <div class="col-8">
+            <!--  --------------- REFERENCIAS --------------- -->
+            <div class="mb-3 row">
+                <label class="col-2 form-label">
+                    {{ "Referencias"|trans|raw }}:
+                </label>
+                <div class="col-10">
+                    {{ oArrayProtRef.ListaTxtBr|raw }}
+                </div>
+            </div>
+            <!--  --------------- ASUNTO --------------- -->
+            <div class="mb-3 row">
+                <label for="asunto_e" class="col-3 form-label">{{ "Asunto entrada"|trans|raw }}</label>
+                <div class="col-9">
+                    <input tabindex='100' readonly type="text" class="form-control" name="asunto_e" id="asunto_e"
+                           value="{{ asunto_e }}">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="asunto" class="col-3 form-label">{{ "Asunto del centro"|trans|raw }}</label>
+                <div class="col">
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">{{ anulado_txt }}</span>
+                        <input tabindex='105' type="text" class="form-control" name='asunto' id="asunto"
+                               value="{{ asunto }}">
+                    </div>
+                </div>
+            </div>
+            <!--  --------------- DETALLE --------------- -->
+            <div class="mb-3 row">
+                <label for="detalle" class="col-2 form-label">{{ "Detalle"|trans|raw }}</label>
+                <div class='col-6'>
+                    <input tabindex='110' type="text" class="form-control" name='detalle' id="detalle"
+                           value="{{ detalle }}">
+                </div>
+            </div>
+            <!--  --------------- FECHAS --------------- -->
+            {% if id_entrada %}
+                <div class="mb-3 row">
+                    <label for="f_entrada" class="col col-2 form-label">{{ "Fecha entrada"|trans|raw }}</label>
+                    <div class='col-3 date'>
+                        <input readonly tabindex='150' name='f_entrada' id='f_entrada' type='text' class="form-control"
+                               value="{{ f_entrada }}"/>
+                    </div>
+                    <label for="f_escrito" class="col col-2 form-label">{{ "Fecha escrito"|trans|raw }}</label>
+                    <div class='col-3 date'>
+                        <input readonly tabindex='155' name='f_escrito' id='f_escrito' type='text' class="form-control"
+                               value="{{ f_escrito }}"/>
+                    </div>
+                </div>
+            {% endif %}
+            <!--  --------------- TIPO --------------- -->
+            <div class="row">
+                <div class="mb-3 col-md-2">
+                    <label for="tipo">{{ "Categoría"|trans|raw }}</label>
+                    {{ oDesplCategoria.desplegable|raw }}
+                </div>
+                <div class="mb-3 col-md-2">
+                    <label for="visibilidad">{{ "Visibilidad"|trans|raw }}</label>
+                    {{ oDesplVisibilidad.desplegable|raw }}
+                </div>
+            </div>
+            {% if ver_pendiente %}
+                <div class="mb-3 row">
+                    <label for="plazo" class="col-3 me-3 mt-2">{{ "Contestar antes de"|trans|raw }}:</label>
+                    <div class='col-2 date'>
+                        <input readonly tabindex='185' name='f_plazo' id='f_plazo' type='text' class="form-control"
+                               value="{{ f_contestar }}"/>
+                    </div>
+                    <button id="btn_pendiente" tabindex='188' class="col-2 btn btn-outline-secondary"
+                            onClick="fnjs_mod_pendiente();">
+                        {{ "modificar pendiente"|trans|raw }}
+                    </button>
+                </div>
+            {% endif %}
+            <!-- Fin Col Izda -->
+        </div>
+        <!--  Col Dcha -->
+        <div class="col-4">
+        </div>
 
-<div>
-  <button type="button" tabindex='1' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-    {{ "Cancelar"|trans|raw }}
-  </button>
-  <button id="btn_guardar" type="button" tabindex='220' class="btn btn-primary" onClick="fnjs_guardar_entrada_ctr();" >
-    {{ txt_btn_guardar }}
-  </button>
-</div>
+    </div>
+
+    <div>
+        <button type="button" tabindex='1' class="btn btn-secondary" onClick="fnjs_cancelar();">
+            {{ "Cancelar"|trans|raw }}
+        </button>
+        <button id="btn_guardar" type="button" tabindex='220' class="btn btn-primary"
+                onClick="fnjs_guardar_entrada_ctr();">
+            {{ txt_btn_guardar }}
+        </button>
+    </div>
 </form>
 
 {{ include ('_entrada_form_ctr_js.html.twig') }}
 <script type="text/javascript">
-$(document).ready(function() {
-	tabs_hide();
-});
+    $(document).ready(function () {
+        tabs_hide();
+    });
 </script>

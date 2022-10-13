@@ -63,6 +63,15 @@ final class EscaperNodeVisitor implements NodeVisitorInterface
         return $node;
     }
 
+    private function needEscaping(Environment $env)
+    {
+        if (\count($this->statusStack)) {
+            return $this->statusStack[\count($this->statusStack) - 1];
+        }
+
+        return $this->defaultStrategy ? $this->defaultStrategy : false;
+    }
+
     public function leaveNode(Node $node, Environment $env): ?Node
     {
         if ($node instanceof ModuleNode) {
@@ -87,6 +96,52 @@ final class EscaperNodeVisitor implements NodeVisitorInterface
         }
 
         return $node;
+    }
+
+    private function preEscapeFilterNode(FilterExpression $filter, Environment $env): FilterExpression
+    {
+        $name = $filter->getNode('filter')->getAttribute('value');
+
+        $type = $env->getFilter($name)->getPreEscape();
+        if (null === $type) {
+            return $filter;
+        }
+
+        $node = $filter->getNode('node');
+        if ($this->isSafeFor($type, $node, $env)) {
+            return $filter;
+        }
+
+        $filter->setNode('node', $this->getEscaperFilter($type, $node));
+
+        return $filter;
+    }
+
+    private function isSafeFor(string $type, Node $expression, Environment $env): bool
+    {
+        $safe = $this->safeAnalysis->getSafe($expression);
+
+        if (null === $safe) {
+            if (null === $this->traverser) {
+                $this->traverser = new NodeTraverser($env, [$this->safeAnalysis]);
+            }
+
+            $this->safeAnalysis->setSafeVars($this->safeVars);
+
+            $this->traverser->traverse($expression);
+            $safe = $this->safeAnalysis->getSafe($expression);
+        }
+
+        return \in_array($type, $safe) || \in_array('all', $safe);
+    }
+
+    private function getEscaperFilter(string $type, Node $node): FilterExpression
+    {
+        $line = $node->getTemplateLine();
+        $name = new ConstantExpression('escape', $line);
+        $args = new Node([new ConstantExpression((string)$type, $line), new ConstantExpression(null, $line), new ConstantExpression(true, $line)]);
+
+        return new FilterExpression($node, $name, $args, $line);
     }
 
     private function shouldUnwrapConditional(ConditionalExpression $expression, Environment $env, string $type): bool
@@ -142,61 +197,6 @@ final class EscaperNodeVisitor implements NodeVisitorInterface
         $class = \get_class($node);
 
         return new $class($this->getEscaperFilter($type, $expression), $node->getTemplateLine());
-    }
-
-    private function preEscapeFilterNode(FilterExpression $filter, Environment $env): FilterExpression
-    {
-        $name = $filter->getNode('filter')->getAttribute('value');
-
-        $type = $env->getFilter($name)->getPreEscape();
-        if (null === $type) {
-            return $filter;
-        }
-
-        $node = $filter->getNode('node');
-        if ($this->isSafeFor($type, $node, $env)) {
-            return $filter;
-        }
-
-        $filter->setNode('node', $this->getEscaperFilter($type, $node));
-
-        return $filter;
-    }
-
-    private function isSafeFor(string $type, Node $expression, Environment $env): bool
-    {
-        $safe = $this->safeAnalysis->getSafe($expression);
-
-        if (null === $safe) {
-            if (null === $this->traverser) {
-                $this->traverser = new NodeTraverser($env, [$this->safeAnalysis]);
-            }
-
-            $this->safeAnalysis->setSafeVars($this->safeVars);
-
-            $this->traverser->traverse($expression);
-            $safe = $this->safeAnalysis->getSafe($expression);
-        }
-
-        return \in_array($type, $safe) || \in_array('all', $safe);
-    }
-
-    private function needEscaping(Environment $env)
-    {
-        if (\count($this->statusStack)) {
-            return $this->statusStack[\count($this->statusStack) - 1];
-        }
-
-        return $this->defaultStrategy ? $this->defaultStrategy : false;
-    }
-
-    private function getEscaperFilter(string $type, Node $node): FilterExpression
-    {
-        $line = $node->getTemplateLine();
-        $name = new ConstantExpression('escape', $line);
-        $args = new Node([new ConstantExpression((string) $type, $line), new ConstantExpression(null, $line), new ConstantExpression(true, $line)]);
-
-        return new FilterExpression($node, $name, $args, $line);
     }
 
     public function getPriority(): int

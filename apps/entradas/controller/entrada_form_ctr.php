@@ -1,4 +1,5 @@
 <?php
+
 use core\ViewTwig;
 use entradas\model\Entrada;
 use lugares\model\entity\GestorLugar;
@@ -10,21 +11,21 @@ use web\Protocolo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos para esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos para esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
-$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
 
 if ($Qfiltro == 'en_buscar' && empty($Qid_entrada)) {
-    $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $Qa_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
     $Qid_entrada = $Qa_sel[0];
 }
@@ -70,9 +71,9 @@ $oDesplVisibilidad->setTabIndex(81);
 // Plazo
 $aOpcionesPlazo = [
     'hoy' => ucfirst(_("no")),
-    'normal' => ucfirst(sprintf(_("en %s días"),$plazo_normal)),
-    'rápido' => ucfirst(sprintf(_("en %s días"),$plazo_rapido)),
-    'urgente' => ucfirst(sprintf(_("en %s días"),$plazo_urgente)),
+    'normal' => ucfirst(sprintf(_("en %s días"), $plazo_normal)),
+    'rápido' => ucfirst(sprintf(_("en %s días"), $plazo_rapido)),
+    'urgente' => ucfirst(sprintf(_("en %s días"), $plazo_urgente)),
     'fecha' => ucfirst(_("el día")),
 ];
 $oDesplPlazo = new Desplegable();
@@ -87,13 +88,13 @@ if (!empty($Qid_entrada)) {
     $oProtOrigen->setProt_num($json_prot_origen->num);
     $oProtOrigen->setProt_any($json_prot_origen->any);
     $oProtOrigen->setMas($json_prot_origen->mas);
-    
+
     $json_prot_ref = $oEntrada->getJson_prot_ref();
 
-    $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares,'referencias');
-    $oArrayProtRef ->setBlanco('t');
-    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias()');
-    
+    $oArrayProtRef = new web\ProtocoloArray($json_prot_ref, $a_posibles_lugares, 'referencias');
+    $oArrayProtRef->setBlanco('t');
+    $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias()');
+
     $asunto_e = $oEntrada->getAsunto_entrada();
     $asunto = $oEntrada->getAsuntoDB();
     $anulado_txt = $oEntrada->getAnulado();
@@ -102,7 +103,7 @@ if (!empty($Qid_entrada)) {
     }
     $detalle = $oEntrada->getDetalle();
     $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
-    
+
     $categoria = $oEntrada->getCategoria();
     $oDesplCategoria->setOpcion_sel($categoria);
     $visibilidad = $oEntrada->getVisibilidad();
@@ -112,12 +113,16 @@ if (!empty($Qid_entrada)) {
         $oDesplPlazo->setOpcion_sel('fecha');
     }
     $bypass = $oEntrada->getBypass();
-    if ( core\is_true($bypass) ) { $bypass='t'; } else { $bypass='f'; }
-    
+    if (core\is_true($bypass)) {
+        $bypass = 't';
+    } else {
+        $bypass = 'f';
+    }
+
     // mirar si tienen escrito
     $f_escrito = $oEntrada->getF_documento()->getFromLocal();
     $titulo = _("modificar entrada");
-    
+
 } else {
     $asunto_e = '';
     $asunto = '';
@@ -128,10 +133,10 @@ if (!empty($Qid_entrada)) {
     $f_escrito = '';
     $f_contestar = '';
     $titulo = _("nueva entrada");
-    
-    $oArrayProtRef = new web\ProtocoloArray('',$a_posibles_lugares,'referencias');
-    $oArrayProtRef ->setBlanco('t');
-    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias()');
+
+    $oArrayProtRef = new web\ProtocoloArray('', $a_posibles_lugares, 'referencias');
+    $oArrayProtRef->setBlanco('t');
+    $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias()');
 
 }
 
@@ -147,12 +152,12 @@ $txt_btn_guardar = _("Guardar");
 $url_update = 'apps/entradas/controller/entrada_update.php';
 if ($Qfiltro == 'en_buscar') {
     $a_condicion = [];
-    $str_condicion = (string) \filter_input(INPUT_POST, 'condicion');
+    $str_condicion = (string)\filter_input(INPUT_POST, 'condicion');
     parse_str($str_condicion, $a_condicion);
     $a_condicion['filtro'] = $Qfiltro;
-    $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($a_condicion));
+    $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));
 } else {
-    $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
+    $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => $Qfiltro]));
     $str_condicion = '';
 }
 
@@ -198,4 +203,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('entradas/controller');
-echo $oView->renderizar('entrada_form_ctr.html.twig',$a_campos);
+echo $oView->renderizar('entrada_form_ctr.html.twig', $a_campos);

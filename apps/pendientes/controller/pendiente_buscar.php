@@ -1,32 +1,30 @@
 <?php
 
 use busquedas\model\Buscar;
-use busquedas\model\VerTabla;
 use core\ConfigGlobal;
 use core\ViewTwig;
+use entradas\model\Entrada;
 use etiquetas\model\entity\GestorEtiqueta;
 use lugares\model\entity\GestorLugar;
 use pendientes\model\BuscarPendiente;
 use pendientes\model\Pendiente;
-use usuarios\model\PermRegistro;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
-use usuarios\model\entity\Oficina;
+use usuarios\model\PermRegistro;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
-use entradas\model\Entrada;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos para esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos para esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
@@ -34,18 +32,18 @@ $oPosicion->recordar();
 
 $explicacion_bypass = _("Está mal! No deberia asociar un pendiente a una entrada de distribución cr (bypass)");
 
-$Qque = (string) \filter_input(INPUT_POST, 'que');
-$Qcalendario = (string) \filter_input(INPUT_POST, 'calendario');
-$Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
-$Qstatus = (string) \filter_input(INPUT_POST, 'status');
-$Qid_lugar =  (integer) \filter_input(INPUT_POST, 'id_lugar');
-$Qprot_num =  (integer) \filter_input(INPUT_POST, 'prot_num');
-$Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
-$Qprot_mas =  (string) \filter_input(INPUT_POST, 'prot_mas');
-$Qid_oficina = (string) \filter_input(INPUT_POST, 'id_oficina');
-$Qf_min_enc =  (string) \filter_input(INPUT_POST, 'f_min');
+$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Qcalendario = (string)\filter_input(INPUT_POST, 'calendario');
+$Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
+$Qstatus = (string)\filter_input(INPUT_POST, 'status');
+$Qid_lugar = (integer)\filter_input(INPUT_POST, 'id_lugar');
+$Qprot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
+$Qprot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+$Qprot_mas = (string)\filter_input(INPUT_POST, 'prot_mas');
+$Qid_oficina = (string)\filter_input(INPUT_POST, 'id_oficina');
+$Qf_min_enc = (string)\filter_input(INPUT_POST, 'f_min');
 $Qf_min = urldecode($Qf_min_enc);
-$Qf_max_enc =  (string) \filter_input(INPUT_POST, 'f_max');
+$Qf_max_enc = (string)\filter_input(INPUT_POST, 'f_max');
 $Qf_max = urldecode($Qf_max_enc);
 
 $gesLugares = new GestorLugar();
@@ -60,7 +58,7 @@ $oDesplLugar->setOpcion_sel($Qid_lugar);
 $a_opciones_status = Pendiente::getArrayStatus();
 // añadr la opción de 'caulquiera' al inicio
 $all_traducido = _("cualquiera");
-$Qstatus = empty($Qstatus)? 'all' : $Qstatus;
+$Qstatus = empty($Qstatus) ? 'all' : $Qstatus;
 $a_opciones_status = array_merge(array("all" => $all_traducido), $a_opciones_status);
 $oDesplStatus = new Desplegable();
 $oDesplStatus->setNombre('status');
@@ -92,13 +90,13 @@ if ($Qque == 'buscar') {
 
     if ($Qcalendario == 'registro' && !empty($Qid_lugar)) {
         // buscar en el registro:
-        $Qprot_any = empty($Qprot_any)? '' : core\any_2($Qprot_any);
-        
+        $Qprot_any = empty($Qprot_any) ? '' : core\any_2($Qprot_any);
+
         $oBuscar = new Buscar();
         $oBuscar->setId_lugar($Qid_lugar);
         $oBuscar->setProt_num($Qprot_num);
         $oBuscar->setProt_any($Qprot_any);
-        
+
         $aCollection = $oBuscar->getCollection(7);
         $aIds = [];
         foreach ($aCollection as $key => $cCollection) {
@@ -110,18 +108,26 @@ if ($Qque == 'buscar') {
             }
         }
         if (!empty($aIds)) {
-            $oBuscarPendiente->setId_reg($aIds); 
+            $oBuscarPendiente->setId_reg($aIds);
         }
-        
+
     }
 
-    if (!empty($Qid_oficina)) { 
-        $oBuscarPendiente->setId_oficina($Qid_oficina); 
+    if (!empty($Qid_oficina)) {
+        $oBuscarPendiente->setId_oficina($Qid_oficina);
     }
-    if (!empty($Qasunto)) { $oBuscarPendiente->setAsunto($Qasunto); }
-    if (!empty($Qf_min)) { $oBuscarPendiente->setF_min($Qf_min); }
-    if (!empty($Qf_max)) { $oBuscarPendiente->setF_max($Qf_max); }
-    if (!empty($Qstatus)) { $oBuscarPendiente->setStatus($Qstatus); }
+    if (!empty($Qasunto)) {
+        $oBuscarPendiente->setAsunto($Qasunto);
+    }
+    if (!empty($Qf_min)) {
+        $oBuscarPendiente->setF_min($Qf_min);
+    }
+    if (!empty($Qf_max)) {
+        $oBuscarPendiente->setF_max($Qf_max);
+    }
+    if (!empty($Qstatus)) {
+        $oBuscarPendiente->setStatus($Qstatus);
+    }
 
     $gesEtiquetas = new GestorEtiqueta();
     $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
@@ -136,7 +142,7 @@ if ($Qque == 'buscar') {
     $a_valores = [];
     $t = 0;
     $oPermisoregistro = new PermRegistro();
-	$a_status=Pendiente::getArrayStatus();
+    $a_status = Pendiente::getArrayStatus();
     foreach ($cPendientes as $oPendiente) {
         $t++;
         $perm_detalle = $oPermisoregistro->permiso_detalle($oPendiente, 'detalle');
@@ -144,16 +150,18 @@ if ($Qque == 'buscar') {
         // uid = REN33-20210211T172224@registro_oficina_agd
         $pos = strpos($uid, '_', 1);
         $parent_container = substr($uid, $pos + 1);
-        
+
         $protocolo = $oPendiente->getProtocolo();
         $rrule = $oPendiente->getRrule();
         $asunto = $oPendiente->getAsuntoDetalle();
-        if (!empty($asunto)) { $asunto=htmlspecialchars(stripslashes($asunto),ENT_QUOTES,'utf-8'); }
-        
+        if (!empty($asunto)) {
+            $asunto = htmlspecialchars(stripslashes($asunto), ENT_QUOTES, 'utf-8');
+        }
+
         /* Para mostrar errores algunos se han asociado al bypass */
         $matches = [];
         preg_match('/REN(\d*?)-.*/', $uid, $matches);
-        $id_entrada = empty($matches[1])? '' : $matches[1];
+        $id_entrada = empty($matches[1]) ? '' : $matches[1];
         if (!empty($id_entrada)) {
             $oEntrada = new Entrada($id_entrada);
             $bypass = $oEntrada->getBypass();
@@ -161,48 +169,48 @@ if ($Qque == 'buscar') {
                 $asunto = "<span class=\"text-danger\" title=\"$explicacion_bypass\">BYPASS</span> " . $asunto;
             }
         }
-        
+
         $plazo = $oPendiente->getF_plazo()->getFromLocal();
         $plazo_iso = $oPendiente->getF_plazo()->format('Ymd'); // sólo números, para poder ordenar.
-        
+
         $status = $oPendiente->getStatus();
-        $estado = empty($a_status[$status])? '?' : $a_status[$status]; 
-        
+        $estado = empty($a_status[$status]) ? '?' : $a_status[$status];
+
         $of_ponente = $oPendiente->getPonente();
         $ponente = $a_oficinas[$of_ponente];
-        
+
         $oficinas_txt = $oPendiente->getOficinasTxtcsv();
-        
+
         $aEtiquetas = $oPendiente->getEtiquetasArray();
         $str_etiquetas = '';
         foreach ($aEtiquetas as $id_etiqueta) {
-            $str_etiquetas .= empty($str_etiquetas)? '' : ', ';
-            $str_etiquetas .= empty($a_posibles_etiquetas[$id_etiqueta])? '' : $a_posibles_etiquetas[$id_etiqueta];
+            $str_etiquetas .= empty($str_etiquetas) ? '' : ', ';
+            $str_etiquetas .= empty($a_posibles_etiquetas[$id_etiqueta]) ? '' : $a_posibles_etiquetas[$id_etiqueta];
         }
-        
+
         if (!empty($rrule)) {
-            $periodico="p";
+            $periodico = "p";
         } else {
-            $periodico="";
+            $periodico = "";
         }
-        
+
         if ($perm_detalle >= PermRegistro::PERM_MODIFICAR) {
             $a_valores[$t]['sel'] = "$uid#$parent_container";
         } else {
             $a_valores[$t]['sel'] = "x";
         }
-        $a_valores[$t][1]=$protocolo;
-        $a_valores[$t][2]=$str_etiquetas;
-        $a_valores[$t][3]=$periodico;
-        $a_valores[$t][4]=$asunto;
-        $a_valores[$t][5]=$plazo;
+        $a_valores[$t][1] = $protocolo;
+        $a_valores[$t][2] = $str_etiquetas;
+        $a_valores[$t][3] = $periodico;
+        $a_valores[$t][4] = $asunto;
+        $a_valores[$t][5] = $plazo;
         if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
-            $a_valores[$t][6]=$ponente;
-            $a_valores[$t][7]=$oficinas_txt;
+            $a_valores[$t][6] = $ponente;
+            $a_valores[$t][7] = $oficinas_txt;
         }
-        $a_valores[$t][8]=$estado;
+        $a_valores[$t][8] = $estado;
         // para el orden
-        if ($plazo!="x") {
+        if ($plazo != "x") {
             $a_valores[$t]['order'] = $plazo_iso;
         }
     }
@@ -210,17 +218,17 @@ if ($Qque == 'buscar') {
     $a_valores = [];
 }
 
-$a_botones[]=array( 'txt' => _('nuevo pendiente'), 'click' =>"fnjs_nuevo_pendiente(\"#seleccionados\")" ) ;
-$a_botones[]=array( 'txt' => _('marcar como terminado'), 'click' =>"fnjs_marcar(\"#seleccionados\")" ) ;
-$a_botones[]=array( 'txt' => _('modificar'), 'click' =>"fnjs_modificar(\"#seleccionados\")" ) ;
-$a_botones[]=array( 'txt' => _('eliminar'), 'click' =>"fnjs_borrar(\"#seleccionados\")" ) ;
+$a_botones[] = array('txt' => _('nuevo pendiente'), 'click' => "fnjs_nuevo_pendiente(\"#seleccionados\")");
+$a_botones[] = array('txt' => _('marcar como terminado'), 'click' => "fnjs_marcar(\"#seleccionados\")");
+$a_botones[] = array('txt' => _('modificar'), 'click' => "fnjs_modificar(\"#seleccionados\")");
+$a_botones[] = array('txt' => _('eliminar'), 'click' => "fnjs_borrar(\"#seleccionados\")");
 
-$a_cabeceras=array( ucfirst(_("protocolo")),
+$a_cabeceras = array(ucfirst(_("protocolo")),
     ucfirst(_("etiquetas")),
     _("p"),
-    array('name'=>ucfirst(_("asunto")),'formatter'=>'clickFormatter'),
-    array('name'=>ucfirst(_("fecha plazo")),'class'=>'fecha'),
-    );
+    array('name' => ucfirst(_("asunto")), 'formatter' => 'clickFormatter'),
+    array('name' => ucfirst(_("fecha plazo")), 'class' => 'fecha'),
+);
 if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
     $a_cabeceras[] = ucfirst(_("ponente"));
     $a_cabeceras[] = ucfirst(_("oficinas"));
@@ -239,19 +247,19 @@ $oFecha = new DateTimeLocal();
 $format = $oFecha->getFormat();
 
 $aGoBack = [
-        'que' => $Qque,
-        'calendario' => $Qcalendario,
-        'asunto' => $Qasunto,
-        'status' => $Qstatus,
-        'id_lugar' => $Qid_lugar,
-        'prot_num' => $Qprot_num,
-        'prot_any' => $Qprot_any,
-        'prot_mas' => $Qprot_mas,
-        'id_oficina' => $Qid_oficina,
-        'f_min_enc' => $Qf_min_enc,
-        'f_max_enc' => $Qf_max_enc,
-        ];
-$oPosicion->setParametros($aGoBack,1);
+    'que' => $Qque,
+    'calendario' => $Qcalendario,
+    'asunto' => $Qasunto,
+    'status' => $Qstatus,
+    'id_lugar' => $Qid_lugar,
+    'prot_num' => $Qprot_num,
+    'prot_any' => $Qprot_any,
+    'prot_mas' => $Qprot_mas,
+    'id_oficina' => $Qid_oficina,
+    'f_min_enc' => $Qf_min_enc,
+    'f_max_enc' => $Qf_max_enc,
+];
+$oPosicion->setParametros($aGoBack, 1);
 
 $a_campos = [
     'oPosicion' => $oPosicion,
@@ -273,6 +281,6 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('pendientes/controller');
-echo $oView->renderizar('pendiente_buscar.html.twig',$a_campos);
+echo $oView->renderizar('pendiente_buscar.html.twig', $a_campos);
 
 

@@ -3,58 +3,58 @@
 // INICIO Cabecera global de URL de controlador *********************************
 use core\ConfigGlobal;
 use core\ViewTwig;
-use function core\is_true;
 use etiquetas\model\entity\GestorEtiqueta;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;
+use function core\is_true;
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos por esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos por esta url  **********************************************
 
-$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
-$Qctr_anulados = (bool) \filter_input(INPUT_POST, 'ctr_anulados');
+$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Qctr_anulados = (bool)\filter_input(INPUT_POST, 'ctr_anulados');
 
 // vengo de modificar algo, quiero volver a la lista
-$Qopcion = (integer) \filter_input(INPUT_POST, 'opcion');
+$Qopcion = (integer)\filter_input(INPUT_POST, 'opcion');
 //3
-$Qorigen_id_lugar = (integer) \filter_input(INPUT_POST, 'origen_id_lugar');
-$Qantiguedad = (string) \filter_input(INPUT_POST, 'antiguedad');
+$Qorigen_id_lugar = (integer)\filter_input(INPUT_POST, 'origen_id_lugar');
+$Qantiguedad = (string)\filter_input(INPUT_POST, 'antiguedad');
 //2
-$Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
+$Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
 $Qasunto = urldecode($Qasunto);
-$Qf_min_enc = (string) \filter_input(INPUT_POST, 'f_min');
+$Qf_min_enc = (string)\filter_input(INPUT_POST, 'f_min');
 $Qf_min = urldecode($Qf_min_enc);
-$Qf_max_enc = (string) \filter_input(INPUT_POST, 'f_max');
+$Qf_max_enc = (string)\filter_input(INPUT_POST, 'f_max');
 $Qf_max = urldecode($Qf_max_enc);
-$Qoficina = (string) \filter_input(INPUT_POST, 'oficina');
+$Qoficina = (string)\filter_input(INPUT_POST, 'oficina');
 //3
-$Qdest_id_lugar_2 = (integer) \filter_input(INPUT_POST, 'dest_id_lugar_2');
+$Qdest_id_lugar_2 = (integer)\filter_input(INPUT_POST, 'dest_id_lugar_2');
 //4
-$Qlista_origen = (string) \filter_input(INPUT_POST, 'lista_origen');
-$Qlista_lugar = (integer) \filter_input(INPUT_POST, 'lista_lugar');
+$Qlista_origen = (string)\filter_input(INPUT_POST, 'lista_origen');
+$Qlista_lugar = (integer)\filter_input(INPUT_POST, 'lista_lugar');
 //7
-$Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
-$Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
-$Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+$Qid_lugar = (integer)\filter_input(INPUT_POST, 'id_lugar');
+$Qprot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
+$Qprot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 // para uitar el '0':
-$Qprot_num = empty($Qprot_num)? '' : $Qprot_num;
-$Qprot_any = empty($Qprot_any)? '' : $Qprot_any;
+$Qprot_num = empty($Qprot_num) ? '' : $Qprot_num;
+$Qprot_any = empty($Qprot_any) ? '' : $Qprot_any;
 
 //8 
-$QandOr = (string) \filter_input(INPUT_POST, 'andOr');
-$Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$QandOr = (string)\filter_input(INPUT_POST, 'andOr');
+$Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $a_etiquetas_filtered = array_filter($Qa_etiquetas);
 
-$chk_or = ($QandOr == 'OR')? 'checked' : '';
+$chk_or = ($QandOr == 'OR') ? 'checked' : '';
 // por defecto 'AND':
-$chk_and = (($QandOr == 'AND') || empty($QandOr))? 'checked' : '';
+$chk_and = (($QandOr == 'AND') || empty($QandOr)) ? 'checked' : '';
 
 
 $chk_lo_1 = '';
@@ -124,7 +124,7 @@ $oDesplOrigen2->setBlanco(TRUE);
 $oDesplOrigen2->setOpciones($a_lugares);
 $oDesplOrigen2->setAction("fnjs_sel_periodo('#origen_id_lugar_2')");
 $oDesplOrigen2->setOpcion_sel($Qorigen_id_lugar);
-    
+
 $gesOficinas = new GestorOficina();
 $a_oficinas = $gesOficinas->getArrayOficinas();
 $oDesplOficinas2 = new Desplegable();
@@ -170,13 +170,13 @@ $oDesplDestino2->setOpciones($a_lugares);
 $oDesplDestino2->setOpcion_sel($Qdest_id_lugar_2);
 
 $a_antiguedad = [
-            "1m" => _("1 mes"),
-            "3m" => _("3 meses"),
-            "6m" => _("6 meses"),
-            "1a" => _("1 año"),
-            "2a" => _("2 años"),
-            "aa" => _("más de 2 años"),
-   ];
+    "1m" => _("1 mes"),
+    "3m" => _("3 meses"),
+    "6m" => _("6 meses"),
+    "1a" => _("1 año"),
+    "2a" => _("2 años"),
+    "aa" => _("más de 2 años"),
+];
 $oDesplAntiguedad = new Desplegable();
 $oDesplAntiguedad->setNombre('antiguedad');
 $oDesplAntiguedad->setBlanco(TRUE);
@@ -188,14 +188,14 @@ $gesEtiquetas = new GestorEtiqueta();
 $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
 $a_posibles_etiquetas = [];
 foreach ($cEtiquetas as $oEtiqueta) {
-	$id_etiqueta = $oEtiqueta->getId_etiqueta();
-	$nom_etiqueta = $oEtiqueta->getNom_etiqueta();
-	$a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+    $id_etiqueta = $oEtiqueta->getId_etiqueta();
+    $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+    $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
 }
 
-$oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas_filtered,$a_posibles_etiquetas,'etiquetas');
-$oArrayDesplEtiquetas ->setBlanco('t');
-$oArrayDesplEtiquetas ->setAccionConjunto('fnjs_mas_etiquetas()');
+$oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas_filtered, $a_posibles_etiquetas, 'etiquetas');
+$oArrayDesplEtiquetas->setBlanco('t');
+$oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
 
 if (!empty($Qopcion)) {
@@ -241,20 +241,20 @@ $a_campos = [
     'asunto' => $Qasunto,
     'f_min' => $Qf_min,
     'f_max' => $Qf_max,
-    'chk_lo_1' => $chk_lo_1, 
-    'chk_lo_2' => $chk_lo_2, 
-    'chk_lo_3' => $chk_lo_3, 
+    'chk_lo_1' => $chk_lo_1,
+    'chk_lo_2' => $chk_lo_2,
+    'chk_lo_3' => $chk_lo_3,
     'chk_lo_4' => $chk_lo_4,
     'prot_num' => $Qprot_num,
     'prot_any' => $Qprot_any,
-	'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
-	'chk_and' => $chk_and,
-	'chk_or' => $chk_or,
+    'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
+    'chk_and' => $chk_and,
+    'chk_or' => $chk_or,
     // datepicker
     'format' => $format,
     // tabs_show
     'vista' => $vista,
-    ];
+];
 
 $oView = new ViewTwig('busquedas/controller');
-echo $oView->renderizar('buscar_escrito.html.twig',$a_campos);
+echo $oView->renderizar('buscar_escrito.html.twig', $a_campos);

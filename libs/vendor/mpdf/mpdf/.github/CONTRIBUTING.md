@@ -12,7 +12,8 @@ For these questions you can always use the
 
 * Please provide a small example in php/html that reproduces your situation
 * Please report one feature or one bug per issue
-* Failing to provide necessary information or not using the issue template may cause the issue to be closed without consideration.
+* Failing to provide necessary information or not using the issue template may cause the issue to be closed without
+  consideration.
 
 Pull requests
 -------------

@@ -19,9 +19,10 @@ Hay que cambiar la estructura de la base de datos:
  public | x_locales            | table | tramity
 ```
 
- - para cada entidad se debe crear un esquema con el nombre de la entidad (normalizado: existe una función para normalizar, quitar espacios, pasar a minúscula etc.)
- 
- para una entidad tipo centro, las tablas son:
+- para cada entidad se debe crear un esquema con el nombre de la entidad (normalizado: existe una función para
+  normalizar, quitar espacios, pasar a minúscula etc.)
+
+para una entidad tipo centro, las tablas son:
 
 ```
                  List of relations
@@ -51,10 +52,9 @@ Hay que cambiar la estructura de la base de datos:
  agdmontagut | x_config             | table | tramity
  agdmontagut | x_tramites           | table | tramity
 ```
- 
- 
- Para una entidad tipo dl, se añaden las tablas:
- 
+
+Para una entidad tipo dl, se añaden las tablas:
+
 ```
                 List of relations
  Schema |         Name         | Type  |  Owner  
@@ -75,11 +75,11 @@ cambios en programa
 
 - Los usuarios en davical, pasan de ser los cargos, a ser (nombre entidad).cargo
 
-
 simplificación para los ctr
 ===========================
 
-- en los escritos, el destino sólo puede ser la entidad superior (dl) y las referencias pueden ser: al propio ctr, a la dl, a cr.
+- en los escritos, el destino sólo puede ser la entidad superior (dl) y las referencias pueden ser: al propio ctr, a la
+  dl, a cr.
 
 
  

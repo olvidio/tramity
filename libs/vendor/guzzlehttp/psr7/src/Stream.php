@@ -39,8 +39,8 @@ class Stream implements StreamInterface
      * - metadata: (array) Any additional metadata to return when the metadata
      *   of the stream is accessed.
      *
-     * @param resource $stream  Stream resource to wrap.
-     * @param array    $options Associative array of options.
+     * @param resource $stream Stream resource to wrap.
+     * @param array $options Associative array of options.
      *
      * @throws \InvalidArgumentException if the stream is not a stream resource
      */
@@ -66,39 +66,27 @@ class Stream implements StreamInterface
         $this->uri = $this->getMetadata('uri');
     }
 
+    public function getMetadata($key = null)
+    {
+        if (!isset($this->stream)) {
+            return $key ? null : [];
+        } elseif (!$key) {
+            return $this->customMetadata + stream_get_meta_data($this->stream);
+        } elseif (isset($this->customMetadata[$key])) {
+            return $this->customMetadata[$key];
+        }
+
+        $meta = stream_get_meta_data($this->stream);
+
+        return isset($meta[$key]) ? $meta[$key] : null;
+    }
+
     /**
      * Closes the stream when the destructed
      */
     public function __destruct()
     {
         $this->close();
-    }
-
-    public function __toString()
-    {
-        try {
-            if ($this->isSeekable()) {
-                $this->seek(0);
-            }
-            return $this->getContents();
-        } catch (\Exception $e) {
-            return '';
-        }
-    }
-
-    public function getContents()
-    {
-        if (!isset($this->stream)) {
-            throw new \RuntimeException('Stream is detached');
-        }
-
-        $contents = stream_get_contents($this->stream);
-
-        if ($contents === false) {
-            throw new \RuntimeException('Unable to read stream contents');
-        }
-
-        return $contents;
     }
 
     public function close()
@@ -123,6 +111,54 @@ class Stream implements StreamInterface
         $this->readable = $this->writable = $this->seekable = false;
 
         return $result;
+    }
+
+    public function __toString()
+    {
+        try {
+            if ($this->isSeekable()) {
+                $this->seek(0);
+            }
+            return $this->getContents();
+        } catch (\Exception $e) {
+            return '';
+        }
+    }
+
+    public function isSeekable()
+    {
+        return $this->seekable;
+    }
+
+    public function seek($offset, $whence = SEEK_SET)
+    {
+        $whence = (int)$whence;
+
+        if (!isset($this->stream)) {
+            throw new \RuntimeException('Stream is detached');
+        }
+        if (!$this->seekable) {
+            throw new \RuntimeException('Stream is not seekable');
+        }
+        if (fseek($this->stream, $offset, $whence) === -1) {
+            throw new \RuntimeException('Unable to seek to stream position '
+                . $offset . ' with whence ' . var_export($whence, true));
+        }
+    }
+
+    public function getContents()
+    {
+        if (!isset($this->stream)) {
+            throw new \RuntimeException('Stream is detached');
+        }
+
+        $contents = stream_get_contents($this->stream);
+
+        if ($contents === false) {
+            throw new \RuntimeException('Unable to read stream contents');
+        }
+
+        return $contents;
     }
 
     public function getSize()
@@ -159,11 +195,6 @@ class Stream implements StreamInterface
         return $this->writable;
     }
 
-    public function isSeekable()
-    {
-        return $this->seekable;
-    }
-
     public function eof()
     {
         if (!isset($this->stream)) {
@@ -191,22 +222,6 @@ class Stream implements StreamInterface
     public function rewind()
     {
         $this->seek(0);
-    }
-
-    public function seek($offset, $whence = SEEK_SET)
-    {
-        $whence = (int) $whence;
-
-        if (!isset($this->stream)) {
-            throw new \RuntimeException('Stream is detached');
-        }
-        if (!$this->seekable) {
-            throw new \RuntimeException('Stream is not seekable');
-        }
-        if (fseek($this->stream, $offset, $whence) === -1) {
-            throw new \RuntimeException('Unable to seek to stream position '
-                . $offset . ' with whence ' . var_export($whence, true));
-        }
     }
 
     public function read($length)
@@ -251,20 +266,5 @@ class Stream implements StreamInterface
         }
 
         return $result;
-    }
-
-    public function getMetadata($key = null)
-    {
-        if (!isset($this->stream)) {
-            return $key ? null : [];
-        } elseif (!$key) {
-            return $this->customMetadata + stream_get_meta_data($this->stream);
-        } elseif (isset($this->customMetadata[$key])) {
-            return $this->customMetadata[$key];
-        }
-
-        $meta = stream_get_meta_data($this->stream);
-
-        return isset($meta[$key]) ? $meta[$key] : null;
     }
 }

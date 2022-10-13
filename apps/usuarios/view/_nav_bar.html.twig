@@ -1,53 +1,60 @@
 <style>
-<!--
-.nav-item {
-    border: 1px solid #ddd;
-    padding: 1px;
-    border-radius: 4px;
-}
--->
+    <!--
+    .nav-item {
+        border: 1px solid #ddd;
+        padding: 1px;
+        border-radius: 4px;
+    }
+
+    -->
 </style>
 <!-- Topbar -->
 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow">
-  <!-- OJO! NO hay que poner el onclick en <a href> porque envia por GET, y no POST (XHR) -->
-  <span class="ms-5 col-2" onClick="fnjs_update_div('body', '');">
+    <!-- OJO! NO hay que poner el onclick en <a href> porque envia por GET, y no POST (XHR) -->
+    <span class="ms-5 col-2" onClick="fnjs_update_div('body', '');">
     <i class="fas fa-home fa-2x fa-fw" aria-hidden="true"></i>
     {{ role_actual }}
   </span>
-  <!-- Topbar Navbar -->
-  <div class="p-2 w-100"></div> <!-- ESPACIO EN BLANCO para alinear derecha -->
-  <ul class="navbar-nav ">
-    <!-- Nav Item -User Information -->
-    <li class="nav-item dropdown me-4">
-      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span class="me-2 d-none d-lg-inline text-gray-600 small">{{ username }}</span>
-        <i class="fa fa-bars"></i>
-      </a>
-      <!-- Dropdown - User Information -->
-      <ul class="dropdown-menu dropdown-menu-end shadow animated--grow-in" aria-labelledby="userDropdown">
-        <li>
-        <a class="dropdown-item" href="#" onclick="fnjs_update_div('#main','{{ pagina_profile|raw }}')">
-          <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>
-          {{ "Preferencias"|trans|raw }}
-        </a>
+    <!-- Topbar Navbar -->
+    <div class="p-2 w-100">
+        <h1 class='h3 mb-0 fw-normal text-center' style='padding-inline-end: 20%; color:#930000c7'>{{ entidad }}</h1>
+    </div> <!-- ESPACIO EN BLANCO para alinear derecha -->
+    <ul class="navbar-nav ">
+        <!-- Nav Item -User Information -->
+        <li class="nav-item dropdown me-4">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <span class="me-2 d-none d-lg-inline text-gray-600 small">{{ username }}</span>
+                <i class="fa fa-bars"></i>
+            </a>
+            <!-- Dropdown - User Information -->
+            <ul class="dropdown-menu dropdown-menu-end shadow animated--grow-in" aria-labelledby="userDropdown">
+                <li>
+                    <a class="dropdown-item" href="#" onclick="fnjs_update_div('#main','{{ pagina_profile|raw }}')">
+                        <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>
+                        {{ "Preferencias"|trans|raw }}
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" onclick="fnjs_update_div('#main','{{ pagina_etiquetas|raw }}')">
+                        <i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>
+                        {{ "Etiquetas"|trans|raw }}
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal"
+                       onclick="fnjs_logout()">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>
+                        {{ "Salir"|trans|raw }}
+                    </a>
+                </li>
+            </ul>
         </li>
-        <li>
-        <a class="dropdown-item" href="#" onclick="fnjs_update_div('#main','{{ pagina_etiquetas|raw }}')">
-          <i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>
-          {{ "Etiquetas"|trans|raw }}
-        </a>
-        </li>
-        <li><hr class="dropdown-divider"></li>
-        <li>
-        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal" onclick="fnjs_logout()">
-          <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>
-          {{ "Salir"|trans|raw }}
-        </a>
-        </li>
-      </ul>
-    </li>
 
-  </ul>
+    </ul>
 
 </nav>
 <!-- End of Topbar -->

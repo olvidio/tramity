@@ -1,14 +1,15 @@
 <?php
+
 use migration\model\Migration;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-	require_once ("apps/core/global_object.inc");
-// Crea los objectos para esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos para esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
@@ -25,10 +26,9 @@ poner entrdas
     asunto_entrada 	json_prot_ref 	ponente 	resto_oficinas 	asunto 	detalle 	categoria 	visibilidad 	f_contestar 	bypass 	estado 	anulado
 */
 
-	
-	
+
 // Equivalencias
-$Qque = (string) \filter_input(INPUT_POST, 'que');
+$Qque = (string)\filter_input(INPUT_POST, 'que');
 
 switch ($Qque) {
     case 'aprobaciones_oficinas':
@@ -96,6 +96,6 @@ switch ($Qque) {
         $oMigration->crear_equivalencias_oficinas();
         echo "OK oficinas";
         break;
-    
-    
+
+
 }

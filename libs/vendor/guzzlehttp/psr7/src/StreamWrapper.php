@@ -44,6 +44,16 @@ class StreamWrapper
     }
 
     /**
+     * Registers the stream wrapper if needed
+     */
+    public static function register()
+    {
+        if (!in_array('guzzle', stream_get_wrappers())) {
+            stream_wrapper_register('guzzle', __CLASS__);
+        }
+    }
+
+    /**
      * Creates a stream context that can be used to open a stream as a php stream resource.
      *
      * @param StreamInterface $stream
@@ -55,16 +65,6 @@ class StreamWrapper
         return stream_context_create([
             'guzzle' => ['stream' => $stream]
         ]);
-    }
-
-    /**
-     * Registers the stream wrapper if needed
-     */
-    public static function register()
-    {
-        if (!in_array('guzzle', stream_get_wrappers())) {
-            stream_wrapper_register('guzzle', __CLASS__);
-        }
     }
 
     public function stream_open($path, $mode, $options, &$opened_path)
@@ -88,7 +88,7 @@ class StreamWrapper
 
     public function stream_write($data)
     {
-        return (int) $this->stream->write($data);
+        return (int)$this->stream->write($data);
     }
 
     public function stream_tell()
@@ -118,46 +118,46 @@ class StreamWrapper
     public function stream_stat()
     {
         static $modeMap = [
-            'r'  => 33060,
+            'r' => 33060,
             'rb' => 33060,
             'r+' => 33206,
-            'w'  => 33188,
+            'w' => 33188,
             'wb' => 33188
         ];
 
         return [
-            'dev'     => 0,
-            'ino'     => 0,
-            'mode'    => $modeMap[$this->mode],
-            'nlink'   => 0,
-            'uid'     => 0,
-            'gid'     => 0,
-            'rdev'    => 0,
-            'size'    => $this->stream->getSize() ?: 0,
-            'atime'   => 0,
-            'mtime'   => 0,
-            'ctime'   => 0,
+            'dev' => 0,
+            'ino' => 0,
+            'mode' => $modeMap[$this->mode],
+            'nlink' => 0,
+            'uid' => 0,
+            'gid' => 0,
+            'rdev' => 0,
+            'size' => $this->stream->getSize() ?: 0,
+            'atime' => 0,
+            'mtime' => 0,
+            'ctime' => 0,
             'blksize' => 0,
-            'blocks'  => 0
+            'blocks' => 0
         ];
     }
 
     public function url_stat($path, $flags)
     {
         return [
-            'dev'     => 0,
-            'ino'     => 0,
-            'mode'    => 0,
-            'nlink'   => 0,
-            'uid'     => 0,
-            'gid'     => 0,
-            'rdev'    => 0,
-            'size'    => 0,
-            'atime'   => 0,
-            'mtime'   => 0,
-            'ctime'   => 0,
+            'dev' => 0,
+            'ino' => 0,
+            'mode' => 0,
+            'nlink' => 0,
+            'uid' => 0,
+            'gid' => 0,
+            'rdev' => 0,
+            'size' => 0,
+            'atime' => 0,
+            'mtime' => 0,
+            'ctime' => 0,
             'blksize' => 0,
-            'blocks'  => 0
+            'blocks' => 0
         ];
     }
 }

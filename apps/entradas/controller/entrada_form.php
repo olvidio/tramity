@@ -1,34 +1,35 @@
 <?php
+
 use core\ViewTwig;
-use entradas\model\Entrada;
 use entradas\model\entity\EntradaBypass;
+use entradas\model\Entrada;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\Categoria;
+use usuarios\model\entity\GestorOficina;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
-use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos para esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos para esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
-$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
 
 if ($Qfiltro == 'en_buscar' && empty($Qid_entrada)) {
-    $Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $Qa_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
     $Qid_entrada = $Qa_sel[0];
 }
@@ -37,12 +38,12 @@ $plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
 $plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
-$post_max_size =  $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
+$post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();
 
-$oArrayProtDestino = new web\ProtocoloArray('',$a_posibles_lugares,'destinos');
+$oArrayProtDestino = new web\ProtocoloArray('', $a_posibles_lugares, 'destinos');
 $oArrayProtDestino->setBlanco('t');
 $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
 
@@ -86,9 +87,9 @@ $oDesplVisibilidad->setTabIndex(81);
 // Plazo
 $aOpcionesPlazo = [
     'hoy' => ucfirst(_("no")),
-    'normal' => ucfirst(sprintf(_("en %s días"),$plazo_normal)),
-    'rápido' => ucfirst(sprintf(_("en %s días"),$plazo_rapido)),
-    'urgente' => ucfirst(sprintf(_("en %s días"),$plazo_urgente)),
+    'normal' => ucfirst(sprintf(_("en %s días"), $plazo_normal)),
+    'rápido' => ucfirst(sprintf(_("en %s días"), $plazo_rapido)),
+    'urgente' => ucfirst(sprintf(_("en %s días"), $plazo_urgente)),
     'fecha' => ucfirst(_("el día")),
 ];
 $oDesplPlazo = new Desplegable();
@@ -101,7 +102,7 @@ $oDesplByPass = new Desplegable();
 $oDesplByPass->setNombre('bypass');
 $oDesplByPass->setOpciones(['f' => _("No"), 't' => _("Sí")]);
 $oDesplByPass->setAction("fnjs_distr_cr()");
-    
+
 $oDesplAdmitido = new Desplegable();
 $oDesplAdmitido->setNombre('admitir');
 $oDesplAdmitido->setOpciones(['f' => _("No"), 't' => _("Sí")]);
@@ -120,23 +121,23 @@ if ($Qfiltro == 'en_admitido') {
     $oDesplAdmitido->setDisabled(TRUE);
 }
 $oDesplAdmitido->setOpcion_sel($badmitido);
-    
+
 $gesGrupo = new GestorGrupo();
 $a_posibles_grupos = $gesGrupo->getArrayGrupos();
-    
+
 if (!empty($Qid_entrada)) {
     $json_prot_origen = $oEntrada->getJson_prot_origen();
     $oProtOrigen->setLugar($json_prot_origen->id_lugar);
     $oProtOrigen->setProt_num($json_prot_origen->num);
     $oProtOrigen->setProt_any($json_prot_origen->any);
     $oProtOrigen->setMas($json_prot_origen->mas);
-    
+
     $json_prot_ref = $oEntrada->getJson_prot_ref();
 
-    $oArrayProtRef = new web\ProtocoloArray($json_prot_ref,$a_posibles_lugares,'referencias');
-    $oArrayProtRef ->setBlanco('t');
-    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias()');
-    
+    $oArrayProtRef = new web\ProtocoloArray($json_prot_ref, $a_posibles_lugares, 'referencias');
+    $oArrayProtRef->setBlanco('t');
+    $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias()');
+
     $asunto_e = $oEntrada->getAsunto_entrada();
     $asunto = $oEntrada->getAsuntoDB();
     $anulado_txt = $oEntrada->getAnulado();
@@ -145,15 +146,15 @@ if (!empty($Qid_entrada)) {
     }
     $detalle = $oEntrada->getDetalle();
     $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
-    
+
     $id_of_ponente = $oEntrada->getPonente();
     $oDesplPonenteOficina->setOpcion_sel($id_of_ponente);
     $a_oficinas = $oEntrada->getResto_oficinas();
-    
-    $oArrayDesplOficinas = new web\DesplegableArray($a_oficinas,$a_posibles_oficinas,'oficinas');
+
+    $oArrayDesplOficinas = new web\DesplegableArray($a_oficinas, $a_posibles_oficinas, 'oficinas');
     $oArrayDesplOficinas->setBlanco('t');
     $oArrayDesplOficinas->setAccionConjunto('fnjs_mas_oficinas()');
-    
+
     $categoria = $oEntrada->getCategoria();
     $oDesplCategoria->setOpcion_sel($categoria);
     $visibilidad = $oEntrada->getVisibilidad();
@@ -163,9 +164,13 @@ if (!empty($Qid_entrada)) {
         $oDesplPlazo->setOpcion_sel('fecha');
     }
     $bypass = $oEntrada->getBypass();
-    if ( core\is_true($bypass) ) { $bypass='t'; } else { $bypass='f'; }
+    if (core\is_true($bypass)) {
+        $bypass = 't';
+    } else {
+        $bypass = 'f';
+    }
     $oDesplByPass->setOpcion_sel($bypass);
-    
+
     $a_adjuntos = $oEntrada->getArrayIdAdjuntos();
     $preview = [];
     $config = [];
@@ -177,38 +182,38 @@ if (!empty($Qid_entrada)) {
             'url' => 'apps/entradas/controller/delete.php', // server api to delete the file based on key
         ];
     }
-    $initialPreview = implode(',',$preview);
+    $initialPreview = implode(',', $preview);
     $json_config = json_encode($config);
-    
+
     // mirar si tienen escrito
     $f_escrito = $oEntrada->getF_documento()->getFromLocal();
     $tipo_documento = $oEntrada->getTipo_documento();
     $titulo = _("modificar entrada");
-    
+
     // a ver si ya está
     $id_grupo = 0;
-	$oEntradaBypass = new EntradaBypass($Qid_entrada);
-	$a_grupos = $oEntradaBypass->getId_grupos();
-	if (!empty($a_grupos)) {
-		$oArrayDesplGrupo = new web\DesplegableArray($a_grupos,$a_posibles_grupos,'grupos');
-		$chk_grupo_dst = 'checked';
-	} else {
-		$oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
-		$chk_grupo_dst = '';
-		if (!empty((array) $oEntradaBypass->getJson_prot_destino())) {
-			$json_prot_dst = $oEntradaBypass->getJson_prot_destino();
-			$oArrayProtDestino->setArray_sel($json_prot_dst);
-		}
-	}
-	$oArrayDesplGrupo->setBlanco('t');
-	$oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
-    
+    $oEntradaBypass = new EntradaBypass($Qid_entrada);
+    $a_grupos = $oEntradaBypass->getId_grupos();
+    if (!empty($a_grupos)) {
+        $oArrayDesplGrupo = new web\DesplegableArray($a_grupos, $a_posibles_grupos, 'grupos');
+        $chk_grupo_dst = 'checked';
+    } else {
+        $oArrayDesplGrupo = new web\DesplegableArray('', $a_posibles_grupos, 'grupos');
+        $chk_grupo_dst = '';
+        if (!empty((array)$oEntradaBypass->getJson_prot_destino())) {
+            $json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+            $oArrayProtDestino->setArray_sel($json_prot_dst);
+        }
+    }
+    $oArrayDesplGrupo->setBlanco('t');
+    $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
+
     $oPermisoregistro = new PermRegistro();
     $perm_asunto = $oPermisoregistro->permiso_detalle($oEntrada, 'asunto');
     $perm_detalle = $oPermisoregistro->permiso_detalle($oEntrada, 'detalle');
-    $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
-    $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR)? 'readonly' : '';
-    
+    $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR) ? 'readonly' : '';
+    $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR) ? 'readonly' : '';
+
     $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEntrada, 'cambio');
     if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
         $oDesplVisibilidad->setDisabled(TRUE);
@@ -217,10 +222,10 @@ if (!empty($Qid_entrada)) {
 } else {
     $chk_grupo_dst = '';
     $id_grupo = 0;
-    $oArrayDesplGrupo = new web\DesplegableArray('',$a_posibles_grupos,'grupos');
+    $oArrayDesplGrupo = new web\DesplegableArray('', $a_posibles_grupos, 'grupos');
     $oArrayDesplGrupo->setBlanco('t');
     $oArrayDesplGrupo->setAccionConjunto('fnjs_mas_grupos()');
-        
+
     $asunto_e = '';
     $asunto = '';
     $anulado_txt = '';
@@ -235,15 +240,15 @@ if (!empty($Qid_entrada)) {
     $json_config = '{}';
     $tipo_documento = '';
     $titulo = _("nueva entrada");
-    
-    $oArrayProtRef = new web\ProtocoloArray('',$a_posibles_lugares,'referencias');
-    $oArrayProtRef ->setBlanco('t');
-    $oArrayProtRef ->setAccionConjunto('fnjs_mas_referencias()');
 
-    $oArrayDesplOficinas = new web\DesplegableArray('',$a_posibles_oficinas,'oficinas');
+    $oArrayProtRef = new web\ProtocoloArray('', $a_posibles_lugares, 'referencias');
+    $oArrayProtRef->setBlanco('t');
+    $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias()');
+
+    $oArrayDesplOficinas = new web\DesplegableArray('', $a_posibles_oficinas, 'oficinas');
     $oArrayDesplOficinas->setBlanco('t');
     $oArrayDesplOficinas->setAccionConjunto('fnjs_mas_oficinas()');
-    
+
     $asunto_readonly = '';
     $detalle_readonly = '';
 }
@@ -270,19 +275,19 @@ switch ($Qfiltro) {
         break;
     default:
         $txt_btn_guardar = _("Guardar");
-        
+
 }
 
 $url_update = 'apps/entradas/controller/entrada_update.php';
-$pagina_nueva = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query(['filtro' => $Qfiltro]));
+$pagina_nueva = web\Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query(['filtro' => $Qfiltro]));
 if ($Qfiltro == 'en_buscar') {
     $a_condicion = [];
-    $str_condicion = (string) \filter_input(INPUT_POST, 'condicion');
+    $str_condicion = (string)\filter_input(INPUT_POST, 'condicion');
     parse_str($str_condicion, $a_condicion);
     $a_condicion['filtro'] = $Qfiltro;
-    $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?'.http_build_query($a_condicion));
+    $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));
 } else {
-    $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?'.http_build_query(['filtro' => $Qfiltro]));
+    $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => $Qfiltro]));
     $str_condicion = '';
 }
 
@@ -310,7 +315,7 @@ $a_campos = [
     'detalle_readonly' => $detalle_readonly,
     'oDesplPonenteOficina' => $oDesplPonenteOficina,
     'a_oficinas' => $a_oficinas,
-    'oArrayDesplOficinas' => $oArrayDesplOficinas,  
+    'oArrayDesplOficinas' => $oArrayDesplOficinas,
     'oDesplCategoria' => $oDesplCategoria,
     'oDesplVisibilidad' => $oDesplVisibilidad,
     'hidden_visibilidad' => $visibilidad,
@@ -322,7 +327,7 @@ $a_campos = [
     'badmitido' => $badmitido,
     //'a_adjuntos' => $a_adjuntos,
     'initialPreview' => $initialPreview,
-	'post_max_size' => $post_max_size,
+    'post_max_size' => $post_max_size,
     'json_config' => $json_config,
     //'txt_option_oficinas' => $txt_option_oficinas,
     //'txt_option_ref' => $txt_option_ref,
@@ -352,4 +357,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('entradas/controller');
-echo $oView->renderizar('entrada_form.html.twig',$a_campos);
+echo $oView->renderizar('entrada_form.html.twig', $a_campos);

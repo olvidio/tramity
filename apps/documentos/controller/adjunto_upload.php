@@ -1,14 +1,15 @@
 <?php
+
 use documentos\model\Documento;
 use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos por esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos por esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
@@ -22,9 +23,10 @@ exit(); // terminate
 // main upload function used above
 // upload the bootstrap-fileinput files
 // returns associative array
-function upload() {
-    $Qid_doc = (integer) \filter_input(INPUT_POST, 'id_doc');
-    
+function upload()
+{
+    $Qid_doc = (integer)\filter_input(INPUT_POST, 'id_doc');
+
     $preview = [];
     $config = [];
     $errors = [];
@@ -38,25 +40,25 @@ function upload() {
             $fileName = $_FILES[$input]['name'][$i]; // the file name
             $fileSize = $_FILES[$input]['size'][$i]; // the file size
             if ($fileSize > $_SESSION['oConfig']->getMax_filesize_en_bytes()) {
-            	exit (_("Fichero demasiado grande"));
+                exit (_("Fichero demasiado grande"));
             }
-            
+
             //Make sure we have a file path
-            if ($tmpFilePath != ""){
-                
+            if ($tmpFilePath != "") {
+
                 $fp = fopen($tmpFilePath, 'rb');
                 $contenido_doc = fread($fp, filesize($tmpFilePath));
-                
+
                 $oHoy = new DateTimeLocal();
                 $hoy_iso = $oHoy->getIso();
-                
+
                 $oDocumento = new Documento($Qid_doc);
                 $oDocumento->DBCarregar();
                 $oDocumento->setNombre_fichero($fileName);
                 $oDocumento->setTipo_doc(Documento::DOC_UPLOAD);
                 $oDocumento->setDocumento($contenido_doc);
-                $oDocumento->setF_upload($hoy_iso,FALSE);
-                
+                $oDocumento->setF_upload($hoy_iso, FALSE);
+
                 if ($oDocumento->DBGuardar() !== FALSE) {
                     $preview[] = "'$fileName'";
                     $config[] = [
@@ -73,7 +75,7 @@ function upload() {
         }
         $out = ['initialPreview' => $preview, 'initialPreviewConfig' => $config];
         if (!empty($errors)) {
-            $img = count($errors) === 1 ? 'file "' . $errors[0]  . '" ' : 'files: "' . implode('", "', $errors) . '" ';
+            $img = count($errors) === 1 ? 'file "' . $errors[0] . '" ' : 'files: "' . implode('", "', $errors) . '" ';
             $out['error'] = 'Oh snap! We could not upload the ' . $img . 'now. Please try again later.';
         }
         return $out;

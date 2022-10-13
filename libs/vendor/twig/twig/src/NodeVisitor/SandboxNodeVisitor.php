@@ -95,22 +95,6 @@ final class SandboxNodeVisitor implements NodeVisitorInterface
         return $node;
     }
 
-    public function leaveNode(Node $node, Environment $env): ?Node
-    {
-        if ($node instanceof ModuleNode) {
-            $this->inAModule = false;
-
-            $node->setNode('constructor_end', new Node([new CheckSecurityCallNode(), $node->getNode('constructor_end')]));
-            $node->setNode('class_end', new Node([new CheckSecurityNode($this->filters, $this->tags, $this->functions), $node->getNode('class_end')]));
-        } elseif ($this->inAModule) {
-            if ($node instanceof PrintNode || $node instanceof SetNode) {
-                $this->needsToStringWrap = false;
-            }
-        }
-
-        return $node;
-    }
-
     private function wrapNode(Node $node, string $name): void
     {
         $expr = $node->getNode($name);
@@ -125,6 +109,22 @@ final class SandboxNodeVisitor implements NodeVisitorInterface
         foreach ($args as $name => $_) {
             $this->wrapNode($args, $name);
         }
+    }
+
+    public function leaveNode(Node $node, Environment $env): ?Node
+    {
+        if ($node instanceof ModuleNode) {
+            $this->inAModule = false;
+
+            $node->setNode('constructor_end', new Node([new CheckSecurityCallNode(), $node->getNode('constructor_end')]));
+            $node->setNode('class_end', new Node([new CheckSecurityNode($this->filters, $this->tags, $this->functions), $node->getNode('class_end')]));
+        } elseif ($this->inAModule) {
+            if ($node instanceof PrintNode || $node instanceof SetNode) {
+                $this->needsToStringWrap = false;
+            }
+        }
+
+        return $node;
     }
 
     public function getPriority(): int

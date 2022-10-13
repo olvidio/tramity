@@ -53,7 +53,7 @@ class Parser
 
     public function getVarName(): string
     {
-        return sprintf('__internal_%s', hash('sha256', __METHOD__.$this->stream->getSourceContext()->getCode().$this->varNameSalt++));
+        return sprintf('__internal_%s', hash('sha256', __METHOD__ . $this->stream->getSourceContext()->getCode() . $this->varNameSalt++));
     }
 
     public function parse(TokenStream $stream, $test = null, bool $dropNeedle = false): ModuleNode
@@ -197,6 +197,59 @@ class Parser
         return new Node($rv, [], $lineno);
     }
 
+    public function getCurrentToken(): Token
+    {
+        return $this->stream->getCurrent();
+    }
+
+    private function filterBodyNodes(Node $node, bool $nested = false): ?Node
+    {
+        // check that the body does not contain non-empty output nodes
+        if (
+            ($node instanceof TextNode && !ctype_space($node->getAttribute('data')))
+            ||
+            (!$node instanceof TextNode && !$node instanceof BlockReferenceNode && $node instanceof NodeOutputInterface)
+        ) {
+            if (false !== strpos((string)$node, \chr(0xEF) . \chr(0xBB) . \chr(0xBF))) {
+                $t = substr($node->getAttribute('data'), 3);
+                if ('' === $t || ctype_space($t)) {
+                    // bypass empty nodes starting with a BOM
+                    return null;
+                }
+            }
+
+            throw new SyntaxError('A template that extends another one cannot include content outside Twig blocks. Did you forget to put the content inside a {% block %} tag?', $node->getTemplateLine(), $this->stream->getSourceContext());
+        }
+
+        // bypass nodes that "capture" the output
+        if ($node instanceof NodeCaptureInterface) {
+            // a "block" tag in such a node will serve as a block definition AND be displayed in place as well
+            return $node;
+        }
+
+        // "block" tags that are not captured (see above) are only used for defining
+        // the content of the block. In such a case, nesting it does not work as
+        // expected as the definition is not part of the default template code flow.
+        if ($nested && $node instanceof BlockReferenceNode) {
+            throw new SyntaxError('A block definition cannot be nested under non-capturing nodes.', $node->getTemplateLine(), $this->stream->getSourceContext());
+        }
+
+        if ($node instanceof NodeOutputInterface) {
+            return null;
+        }
+
+        // here, $nested means "being at the root level of a child template"
+        // we need to discard the wrapping "Node" for the "body" node
+        $nested = $nested || Node::class !== \get_class($node);
+        foreach ($node as $k => $n) {
+            if (null !== $n && null === $this->filterBodyNodes($n, $nested)) {
+                $node->removeNode($k);
+            }
+        }
+
+        return $node;
+    }
+
     public function getBlockStack(): array
     {
         return $this->blockStack;
@@ -303,58 +356,5 @@ class Parser
     public function getStream(): TokenStream
     {
         return $this->stream;
-    }
-
-    public function getCurrentToken(): Token
-    {
-        return $this->stream->getCurrent();
-    }
-
-    private function filterBodyNodes(Node $node, bool $nested = false): ?Node
-    {
-        // check that the body does not contain non-empty output nodes
-        if (
-            ($node instanceof TextNode && !ctype_space($node->getAttribute('data')))
-            ||
-            (!$node instanceof TextNode && !$node instanceof BlockReferenceNode && $node instanceof NodeOutputInterface)
-        ) {
-            if (false !== strpos((string) $node, \chr(0xEF).\chr(0xBB).\chr(0xBF))) {
-                $t = substr($node->getAttribute('data'), 3);
-                if ('' === $t || ctype_space($t)) {
-                    // bypass empty nodes starting with a BOM
-                    return null;
-                }
-            }
-
-            throw new SyntaxError('A template that extends another one cannot include content outside Twig blocks. Did you forget to put the content inside a {% block %} tag?', $node->getTemplateLine(), $this->stream->getSourceContext());
-        }
-
-        // bypass nodes that "capture" the output
-        if ($node instanceof NodeCaptureInterface) {
-            // a "block" tag in such a node will serve as a block definition AND be displayed in place as well
-            return $node;
-        }
-
-        // "block" tags that are not captured (see above) are only used for defining
-        // the content of the block. In such a case, nesting it does not work as
-        // expected as the definition is not part of the default template code flow.
-        if ($nested && $node instanceof BlockReferenceNode) {
-            throw new SyntaxError('A block definition cannot be nested under non-capturing nodes.', $node->getTemplateLine(), $this->stream->getSourceContext());
-        }
-
-        if ($node instanceof NodeOutputInterface) {
-            return null;
-        }
-
-        // here, $nested means "being at the root level of a child template"
-        // we need to discard the wrapping "Node" for the "body" node
-        $nested = $nested || Node::class !== \get_class($node);
-        foreach ($node as $k => $n) {
-            if (null !== $n && null === $this->filterBodyNodes($n, $nested)) {
-                $node->removeNode($k);
-            }
-        }
-
-        return $node;
     }
 }

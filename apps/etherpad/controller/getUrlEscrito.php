@@ -1,27 +1,28 @@
 <?php
+
 use etherpad\model\Etherpad;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos para esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos para esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid = (string) \filter_input(INPUT_POST, 'id');
-$Qtipo_id = (string) \filter_input(INPUT_POST, 'tipo_id');
-$Qmodo = (string) \filter_input(INPUT_POST, 'modo');
+$Qid = (string)\filter_input(INPUT_POST, 'id');
+$Qtipo_id = (string)\filter_input(INPUT_POST, 'tipo_id');
+$Qmodo = (string)\filter_input(INPUT_POST, 'modo');
 
 if (empty($Qtipo_id)) {
     exit (_("Falta definir el tipo de documento etherpad"));
 }
 
 $oEtherpad = new Etherpad();
-$oEtherpad->setId ($Qtipo_id,$Qid); 
+$oEtherpad->setId($Qtipo_id, $Qid);
 $padID = $oEtherpad->getPadId();
 $url = $oEtherpad->getUrl();
 

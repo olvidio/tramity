@@ -1,112 +1,115 @@
 <script type="text/javascript">
 
-fnjs_ver_documento=function(id_doc,tipo_doc) {
-    var server = '{{ server }}';
-	if (tipo_doc == 1) { // etherpad
-        var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-        var url = server+'/apps/documentos/controller/documento_ver.php?id_doc='+id_doc;
-        w=window.open(url, "", winPrefs);
+    fnjs_ver_documento = function (id_doc, tipo_doc) {
+        var server = '{{ server }}';
+        if (tipo_doc == 1) { // etherpad
+            var winPrefs = "dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+            var url = server + '/apps/documentos/controller/documento_ver.php?id_doc=' + id_doc;
+            w = window.open(url, "", winPrefs);
+            w.focus();
+        }
+        if (tipo_doc == 3) { // upload
+            var url_download = server + '/apps/documentos/controller/adjunto_download.php?key=' + id_doc;
+            window.open(url_download);
+        }
+    }
+
+    fnjs_ver_expediente = function (id_expediente) {
+        var winPrefs = "dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+        var server = '{{ server }}';
+        var url = server + '/apps/expedientes/controller/expediente_distribuir.php?id_expediente=' + id_expediente;
+        w = window.open(url, "", winPrefs);
         w.focus();
-	}
-	if (tipo_doc == 3) { // upload
-        var url_download = server+'/apps/documentos/controller/adjunto_download.php?key='+id_doc;
-        window.open(url_download);
-	}
-}
+    }
 
-fnjs_ver_expediente=function(id_expediente) {
-    var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-    var server = '{{ server }}';
-    var url = server+'/apps/expedientes/controller/expediente_distribuir.php?id_expediente='+id_expediente;
-    w=window.open(url, "", winPrefs);
-    w.focus();
-}
+    fnjs_ver_escrito = function (id_escrito) {
+        var winPrefs = "dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+        var server = '{{ server }}';
+        var url = server + '/apps/escritos/controller/escrito_ver.php?id_escrito=' + id_escrito;
+        w = window.open(url, "", winPrefs);
+        w.focus();
+    }
 
-fnjs_ver_escrito=function(id_escrito) {
-    var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-    var server = '{{ server }}';
-    var url = server+'/apps/escritos/controller/escrito_ver.php?id_escrito='+id_escrito;
-    w=window.open(url, "", winPrefs);
-    w.focus();
-}
+    fnjs_ver_entrada = function (id_entrada) {
+        var winPrefs = "dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+        var server = '{{ server }}';
+        var url = server + '/apps/entradas/controller/entrada_ver.php?id_entrada=' + id_entrada;
+        w = window.open(url, "", winPrefs);
+        w.focus();
+    }
 
-fnjs_ver_entrada=function(id_entrada) {
-    var winPrefs="dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-    var server = '{{ server }}';
-    var url = server+'/apps/entradas/controller/entrada_ver.php?id_entrada='+id_entrada;
-    w=window.open(url, "", winPrefs);
-    w.focus();
-}
-
-fnjs_del_antecedente=function(tipo,id_escrito) {
-	var que='quitar';
-	var id_expediente=$('#id_expediente').val();
-    var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
-
-	//alert("Borrar entrada: "+id_entrada);
-    var param_json = { que: que, tipo_doc: tipo, id_expediente: id_expediente, id_escrito: id_escrito };
-    request=$.ajax({
-        data: param_json,
-        url: url_ajax,
-        method: 'POST'
-    });
-    request.done( function (rta) {
-        rta_txt=rta;
-        if (rta_txt==undefined) {
-            rta_txt='';
-        }
-        $('#lista_antecedentes').html(rta);
-    });
-}
-
-fnjs_adjuntar_antecedente=function(tipo,id_escrito,id_expediente) {
-	var que='adjuntar';
-    var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
-    var param_json = { que: que, tipo_doc: tipo, id_expediente: id_expediente, id_escrito: id_escrito };
-    request=$.ajax({
-        data: param_json,
-        url: url_ajax,
-        method: 'POST'
-    });
-    request.done( function (rta) {
-        // close div modal
-        $('#ModalBuscar').modal('hide');
-        rta_txt=rta;
-        if (rta_txt==undefined) {
-            rta_txt='';
-        }
-        if (rta_txt != '' && rta_txt != '\n') {
-		    $('#lista_antecedentes').html(rta);
-        }
-    });
-}
-	
-fnjs_buscar_antecedente=function(n) {
-	//n = 1 -> Entradas
-	//n = 2 -> Expedientes
-	//n = 3 -> Escritos-propuestas
-	//n = 4 -> Documentos
-    $('#id_n').val(n);
-	var err=0;
-	var que = 'buscar_'+n;
-	var id_expediente=$('#id_expediente').val();
-	
-	if (!n) { alert("{{ "No se ha definido el tipo de escrito"|trans|raw }}"); err=1; }
-
-	if (err!=1) {
+    fnjs_del_antecedente = function (tipo, id_escrito) {
+        var que = 'quitar';
+        var id_expediente = $('#id_expediente').val();
         var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
-        var param_json = { que: que, id_expediente: id_expediente };
-        request=$.ajax({
+
+        //alert("Borrar entrada: "+id_entrada);
+        var param_json = {que: que, tipo_doc: tipo, id_expediente: id_expediente, id_escrito: id_escrito};
+        request = $.ajax({
             data: param_json,
             url: url_ajax,
             method: 'POST'
         });
-        request.done( function (rta) {
-            if (rta==undefined) {
-                rta='';
+        request.done(function (rta) {
+            rta_txt = rta;
+            if (rta_txt == undefined) {
+                rta_txt = '';
             }
-            $('#modal-body').html(rta);
+            $('#lista_antecedentes').html(rta);
         });
-	}
-}
+    }
+
+    fnjs_adjuntar_antecedente = function (tipo, id_escrito, id_expediente) {
+        var que = 'adjuntar';
+        var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
+        var param_json = {que: que, tipo_doc: tipo, id_expediente: id_expediente, id_escrito: id_escrito};
+        request = $.ajax({
+            data: param_json,
+            url: url_ajax,
+            method: 'POST'
+        });
+        request.done(function (rta) {
+            // close div modal
+            $('#ModalBuscar').modal('hide');
+            rta_txt = rta;
+            if (rta_txt == undefined) {
+                rta_txt = '';
+            }
+            if (rta_txt != '' && rta_txt != '\n') {
+                $('#lista_antecedentes').html(rta);
+            }
+        });
+    }
+
+    fnjs_buscar_antecedente = function (n) {
+        //n = 1 -> Entradas
+        //n = 2 -> Expedientes
+        //n = 3 -> Escritos-propuestas
+        //n = 4 -> Documentos
+        $('#id_n').val(n);
+        var err = 0;
+        var que = 'buscar_' + n;
+        var id_expediente = $('#id_expediente').val();
+
+        if (!n) {
+            alert("{{ "No se ha definido el tipo de escrito"|trans|raw }}");
+            err = 1;
+        }
+
+        if (err != 1) {
+            var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
+            var param_json = {que: que, id_expediente: id_expediente};
+            request = $.ajax({
+                data: param_json,
+                url: url_ajax,
+                method: 'POST'
+            });
+            request.done(function (rta) {
+                if (rta == undefined) {
+                    rta = '';
+                }
+                $('#modal-body').html(rta);
+            });
+        }
+    }
 </script>

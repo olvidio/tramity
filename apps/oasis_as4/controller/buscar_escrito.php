@@ -6,24 +6,24 @@ use core\ViewTwig;
 use lugares\model\entity\GestorLugar;
 use web\Desplegable;
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos por esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos por esta url  **********************************************
 
-$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
-$Qctr_anulados = (bool) \filter_input(INPUT_POST, 'ctr_anulados');
-$Qaccion = (string) \filter_input(INPUT_POST, 'accion');
+$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Qctr_anulados = (bool)\filter_input(INPUT_POST, 'ctr_anulados');
+$Qaccion = (string)\filter_input(INPUT_POST, 'accion');
 
 //7
-$Qid_lugar = (integer) \filter_input(INPUT_POST, 'id_lugar');
-$Qprot_num = (integer) \filter_input(INPUT_POST, 'prot_num');
-$Qprot_any = (string) \filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+$Qid_lugar = (integer)\filter_input(INPUT_POST, 'id_lugar');
+$Qprot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
+$Qprot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 // para quitar el '0':
-$Qprot_num = empty($Qprot_num)? '' : $Qprot_num;
-$Qprot_any = empty($Qprot_any)? '' : $Qprot_any;
+$Qprot_num = empty($Qprot_num) ? '' : $Qprot_num;
+$Qprot_any = empty($Qprot_any) ? '' : $Qprot_any;
 
 
 $gesLugares = new GestorLugar();
@@ -56,7 +56,7 @@ $a_campos = [
     'prot_any' => $Qprot_any,
     // tabs_show
     'vista' => $vista,
-    ];
+];
 
 $oView = new ViewTwig('oasis_as4/controller');
-echo $oView->renderizar('buscar_escrito.html.twig',$a_campos);
+echo $oView->renderizar('buscar_escrito.html.twig', $a_campos);

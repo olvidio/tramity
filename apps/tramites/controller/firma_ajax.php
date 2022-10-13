@@ -1,28 +1,28 @@
 <?php
+
 use core\ConfigGlobal;
 use expedientes\model\Expediente;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
+use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use tramites\model\entity\GestorTramiteCargo;
-use usuarios\model\entity\Usuario;
 
 // INICIO Cabecera global de URL de controlador *********************************
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 $oPosicion->recordar();
 
-$Qque = (string) \filter_input(INPUT_POST, 'que');
+$Qque = (string)\filter_input(INPUT_POST, 'que');
 
-$Qid_expediente = (integer) \filter_input(INPUT_POST, 'id_expediente');
-$Qvoto = (integer) \filter_input(INPUT_POST, 'voto');
-$Qcomentario = (string) \filter_input(INPUT_POST, 'comentario');
+$Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
+$Qvoto = (integer)\filter_input(INPUT_POST, 'voto');
+$Qcomentario = (string)\filter_input(INPUT_POST, 'comentario');
 
 $id_cargo = ConfigGlobal::role_id_cargo();
 $oExpediente = new Expediente($Qid_expediente);
@@ -36,12 +36,12 @@ switch ($Qque) {
         $gesFirmas = new GestorFirma();
         $aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
         $a_recorrido = $aRecorrido['recorrido'];
-        
+
         $jsondata['recorrido'] = json_encode($a_recorrido);
         break;
-    
+
     case 'add':
-        $Qa_cargos = (array)  \filter_input(INPUT_POST, 'a_cargos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qa_cargos = (array)\filter_input(INPUT_POST, 'a_cargos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // buscar el orden del ultimo:
         $gesTramiteCargo = new GestorTramiteCargo();
         $cTramiteCargos = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS]);
@@ -49,8 +49,8 @@ switch ($Qque) {
         $orden_tramite = $oTramiteCargo->getOrden_tramite();
         // buscar el orden dentro de las firmas
         $aWhere = ['id_expediente' => $Qid_expediente,
-                    'orden_tramite' => $orden_tramite,
-                    '_ordre' => 'orden_oficina DESC',
+            'orden_tramite' => $orden_tramite,
+            '_ordre' => 'orden_oficina DESC',
         ];
         $gesFirmas = new GestorFirma();
         $cFirmas = $gesFirmas->getFirmas($aWhere);
@@ -72,22 +72,22 @@ switch ($Qque) {
             $oFirma->setOrden_oficina($orden_oficina);
             // Al inicializar, sólo pongo los votos.
             $oFirma->setTipo(Firma::TIPO_VOTO);
-            if ($oFirma->DBGuardar() === FALSE ) {
+            if ($oFirma->DBGuardar() === FALSE) {
                 $error_txt .= $oFirma->getErrorTxt();
             }
         }
         break;
     case 'del':
-        $Qa_cargos = (array)  \filter_input(INPUT_POST, 'a_cargos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qa_cargos = (array)\filter_input(INPUT_POST, 'a_cargos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         foreach ($Qa_cargos as $id_cargo) {
             $aWhere = ['id_expediente' => $Qid_expediente,
-                        'cargo_tipo' => Cargo::CARGO_TODOS_DIR,
-                        'id_cargo' => $id_cargo,
+                'cargo_tipo' => Cargo::CARGO_TODOS_DIR,
+                'id_cargo' => $id_cargo,
             ];
             $gesFirmas = new GestorFirma();
             $cFirmas = $gesFirmas->getFirmas($aWhere);
             foreach ($cFirmas as $oFirma) {
-                if ($oFirma->DBEliminar() === FALSE ) {
+                if ($oFirma->DBEliminar() === FALSE) {
                     $error_txt .= $oFirma->getErrorTxt();
                 }
             }
@@ -97,7 +97,7 @@ switch ($Qque) {
         // todos los cargos
         $gesCargos = new GestorCargo();
         $a_cargos = $gesCargos->getArrayCargos();
-        
+
         $gesFirmas = new GestorFirma();
         $aCargosFaltan = $gesFirmas->faltaFirmarReunionExpediente($Qid_expediente);
         $a_posibles_cargos = [];
@@ -108,7 +108,7 @@ switch ($Qque) {
             } else {
                 $sigla = $a_cargos[$id_cargo];
             }
-            $a_posibles_cargos[] = ['id'=>$id_cargo, 'sigla'=>$sigla ];
+            $a_posibles_cargos[] = ['id' => $id_cargo, 'sigla' => $sigla];
         }
         $jsondata['cargos'] = json_encode($a_posibles_cargos);
         break;
@@ -116,7 +116,7 @@ switch ($Qque) {
         // todos los cargos
         $gesCargos = new GestorCargo();
         $a_todos_cargos = $gesCargos->getArrayCargosConUsuario();
-        
+
         $aWhere = ['id_expediente' => $Qid_expediente,
         ];
         $gesFirmas = new GestorFirma();
@@ -132,19 +132,19 @@ switch ($Qque) {
             unset($a_todos_cargos[$id_cargo]);
         }
         foreach ($a_todos_cargos as $id => $sigla) {
-            $a_posibles_cargos[] = ['id'=>$id, 'sigla'=>$sigla ];
+            $a_posibles_cargos[] = ['id' => $id, 'sigla' => $sigla];
         }
         foreach ($a_cargos_repetidos as $id => $sigla) {
-            $a_cargos_repetir[] = ['id'=>$id, 'sigla'=>$sigla ];
+            $a_cargos_repetir[] = ['id' => $id, 'sigla' => $sigla];
         }
         $jsondata['cargos'] = json_encode($a_posibles_cargos);
         $jsondata['cargos_repetir'] = json_encode($a_cargos_repetir);
         break;
     case 'voto':
         $aWhere = ['id_expediente' => $Qid_expediente,
-                    'id_cargo' => $id_cargo,
-                    'tipo' => Firma::TIPO_VOTO,
-                    '_ordre' => 'orden_tramite',
+            'id_cargo' => $id_cargo,
+            'tipo' => Firma::TIPO_VOTO,
+            '_ordre' => 'orden_tramite',
         ];
         $gesFirmas = new GestorFirma();
         $cFirmas = $gesFirmas->getFirmas($aWhere);
@@ -161,8 +161,7 @@ switch ($Qque) {
                 $valor = $oFirma->getValor();
                 if (!($valor == Firma::V_NO || $valor == Firma::V_D_NO ||
                     $valor == Firma::V_OK || $valor == Firma::V_D_OK ||
-                    $valor == Firma::V_D_VISTO_BUENO))
-                {
+                    $valor == Firma::V_D_VISTO_BUENO)) {
                     break;
                 }
             }
@@ -170,8 +169,8 @@ switch ($Qque) {
             $oFirma->setValor($Qvoto);
             $oFirma->setObserv($Qcomentario);
             $oFirma->setId_usuario(ConfigGlobal::mi_id_usuario());
-            $oFirma->setF_valor($f_hoy_iso,FALSE);
-            if ($oFirma->DBGuardar() === FALSE ) {
+            $oFirma->setF_valor($f_hoy_iso, FALSE);
+            if ($oFirma->DBGuardar() === FALSE) {
                 $error_txt .= $oFirma->getErrorTxt();
             }
             // comprobar que ya ha firmado todo el mundo, para 
@@ -189,8 +188,8 @@ switch ($Qque) {
                     $oFirmaDistribuir->DBCarregar();
                     $oFirmaDistribuir->setId_usuario(ConfigGlobal::mi_id_usuario());
                     $oFirmaDistribuir->setValor($Qvoto);
-                    $oFirmaDistribuir->setF_valor($f_hoy_iso,FALSE);
-                    if ($oFirmaDistribuir->DBGuardar() === FALSE ) {
+                    $oFirmaDistribuir->setF_valor($f_hoy_iso, FALSE);
+                    if ($oFirmaDistribuir->DBGuardar() === FALSE) {
                         $error_txt .= $oFirmaDistribuir->getErrorTxt();
                     }
                 } else {
@@ -219,15 +218,15 @@ switch ($Qque) {
                         $estado = Expediente::ESTADO_ACABADO;
                 }
                 $oExpediente->setEstado($estado);
-                $oExpediente->setF_aprobacion($f_hoy_iso,FALSE); 
-                $oExpediente->setF_aprobacion_escritos($f_hoy_iso,FALSE); 
-                if ($oExpediente->DBGuardar() === FALSE ) {
+                $oExpediente->setF_aprobacion($f_hoy_iso, FALSE);
+                $oExpediente->setF_aprobacion_escritos($f_hoy_iso, FALSE);
+                if ($oExpediente->DBGuardar() === FALSE) {
                     $error_txt .= $oExpediente->getErrorTxt();
                 }
             }
             // 22/2/21. Amplio a cambiar el estado para todos los casos.
             $bParaReunion = $gesFirmas->paraReunion($Qid_expediente);
-            if($bParaReunion) {
+            if ($bParaReunion) {
                 switch ($Qvoto) {
                     case Firma::V_D_VISTO_BUENO:
                         $estado = Expediente::ESTADO_FIJAR_REUNION;
@@ -245,12 +244,12 @@ switch ($Qque) {
                         $estado = Expediente::ESTADO_ACABADO;
                 }
                 $oExpediente->setEstado($estado);
-                if ($oExpediente->DBGuardar() === FALSE ) {
+                if ($oExpediente->DBGuardar() === FALSE) {
                     $error_txt .= $oExpediente->getErrorTxt();
                 }
             }
             // En caso de V_D_RECHAZADO o V_D_NO, anulo todos los escritos:
-            if($estado == Expediente::ESTADO_RECHAZADO || $estado == Expediente::ESTADO_NO) {
+            if ($estado == Expediente::ESTADO_RECHAZADO || $estado == Expediente::ESTADO_NO) {
                 $oExpediente->anularEscritos();
             }
         }
@@ -267,13 +266,13 @@ switch ($Qque) {
             'observ_creador' => 'IS NULL',
         ];
         $gesFirmas = new GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas($aWhere,$aOperador);
+        $cFirmas = $gesFirmas->getFirmas($aWhere, $aOperador);
         if (is_array($cFirmas) && !empty($cFirmas)) {
             // Ya existe una aclaración. Busco la última, para saber el orden.
             $oFirmaAclaracion = $cFirmas[0];
             $oFirmaAclaracion->DBCarregar();
             $oFirmaAclaracion->setObserv_creador($Qcomentario);
-            if ($oFirmaAclaracion->DBGuardar() === FALSE ) {
+            if ($oFirmaAclaracion->DBGuardar() === FALSE) {
                 $error_txt .= $oFirma->getErrorTxt();
             }
         }
@@ -283,9 +282,9 @@ switch ($Qque) {
         $orden_oficina = 0;
         // Comprobar que no existe:
         $aWhere = ['id_expediente' => $Qid_expediente,
-                    'id_cargo' => $id_cargo,
-                    'tipo' => Firma::TIPO_ACLARACION,
-                    '_ordre' => 'orden_tramite'
+            'id_cargo' => $id_cargo,
+            'tipo' => Firma::TIPO_ACLARACION,
+            '_ordre' => 'orden_tramite'
         ];
         $gesFirmas = new GestorFirma();
         $cFirmasA = $gesFirmas->getFirmas($aWhere);
@@ -297,14 +296,14 @@ switch ($Qque) {
             $cargo_tipo = $oFirmaAclaracion->getCargo_tipo();
         }
         // orden trámite: Del primer voto no firmado
-        $in_valor =  Firma::V_NO.','.Firma::V_D_NO.',';
-        $in_valor .=  Firma::V_OK.','.Firma::V_D_OK.',';
-        $in_valor .=  Firma::V_D_RECHAZADO;
+        $in_valor = Firma::V_NO . ',' . Firma::V_D_NO . ',';
+        $in_valor .= Firma::V_OK . ',' . Firma::V_D_OK . ',';
+        $in_valor .= Firma::V_D_RECHAZADO;
         $aWhere = ['id_expediente' => $Qid_expediente,
-                    'id_cargo' => $id_cargo,
-                    'tipo' => Firma::TIPO_VOTO,
-                    'valor' => $in_valor,
-                    '_ordre' => 'orden_tramite DESC, orden_oficina DESC'
+            'id_cargo' => $id_cargo,
+            'tipo' => Firma::TIPO_VOTO,
+            'valor' => $in_valor,
+            '_ordre' => 'orden_tramite DESC, orden_oficina DESC'
         ];
         $aOperador = ['valor' => 'NOT IN'];
         $gesFirmas = new GestorFirma();
@@ -322,7 +321,7 @@ switch ($Qque) {
             } else {
                 $orden_oficina = $orden_oficina + 1;
             }
-            
+
             $f_hoy_iso = date(\DateTimeInterface::ISO8601);
             $oFirma = new Firma();
             $oFirma->setTipo(Firma::TIPO_ACLARACION);
@@ -336,17 +335,17 @@ switch ($Qque) {
             $oFirma->setOrden_oficina($orden_oficina);
             $oFirma->setValor($valor);
             $oFirma->setObserv($Qcomentario);
-            $oFirma->setF_valor($f_hoy_iso,FALSE);
-            if ($oFirma->DBGuardar() === FALSE ) {
+            $oFirma->setF_valor($f_hoy_iso, FALSE);
+            if ($oFirma->DBGuardar() === FALSE) {
                 $error_txt .= $oFirma->getErrorTxt();
             }
         }
-    break;
+        break;
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);
 }
-        
+
 if (!empty($error_txt)) {
     $jsondata['success'] = FALSE;
     $jsondata['mensaje'] = $error_txt;

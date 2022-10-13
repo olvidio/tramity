@@ -1,26 +1,27 @@
 <?php
+
 use core\ConfigGlobal;
 use entradas\model\Entrada;
 use escritos\model\Escrito;
 use escritos\model\EscritoForm;
-use expedientes\model\Expediente;
 use expedientes\model\entity\Accion;
+use expedientes\model\Expediente;
 use tramites\model\entity\GestorTramite;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos para esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos para esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+$Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
 //$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
 // cambio el filtro para ver los borradores:
 $filtro = 'borrador_propio';
@@ -35,7 +36,7 @@ $ponente = ConfigGlobal::role_id_cargo();
 $estado = Expediente::ESTADO_BORRADOR;
 $prioridad = Expediente::PRIORIDAD_NORMAL;
 $vida = Expediente::VIDA_NORMAL;
-$asunto = _("Respuesta a:"). ' '. $oEntrada->getAsunto_entrada();
+$asunto = _("Respuesta a:") . ' ' . $oEntrada->getAsunto_entrada();
 $entradilla = '';
 $categoria = $oEntrada->getCategoria();
 $visibilidad = $oEntrada->getVisibilidad();
@@ -68,26 +69,26 @@ $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
 
 $new_preparar = [];
 foreach (array_keys($a_cargos_oficina) as $id_cargo) {
-	$oJSON = new stdClass;
-	$oJSON->id = (int) $id_cargo;
-	// hay que asegurar que sea bool
-	$oJSON->visto = FALSE;
-	$new_preparar[] = $oJSON;
+    $oJSON = new stdClass;
+    $oJSON->id = (int)$id_cargo;
+    // hay que asegurar que sea bool
+    $oJSON->visto = FALSE;
+    $new_preparar[] = $oJSON;
 }
 $oExpediente->setJson_preparar($new_preparar);
 
-if ($oExpediente->DBGuardar() === FALSE ) {
-	$error_txt .= $oExpediente->getErrorTxt();
+if ($oExpediente->DBGuardar() === FALSE) {
+    $error_txt .= $oExpediente->getErrorTxt();
 } else {
-	$oExpediente->DBCarregar();
-	$id_expediente = $oExpediente->getId_expediente();
+    $oExpediente->DBCarregar();
+    $id_expediente = $oExpediente->getId_expediente();
 }
 
 // adjuntar entrada como antecedente
-$a_antecedente = [ 'tipo'=> 'entrada', 'id' => $Qid_entrada ];
+$a_antecedente = ['tipo' => 'entrada', 'id' => $Qid_entrada];
 $oExpediente->addAntecedente($a_antecedente);
-if ($oExpediente->DBGuardar() === FALSE ) {
-	$error_txt .= $oExpediente->getErrorTxt();
+if ($oExpediente->DBGuardar() === FALSE) {
+    $error_txt .= $oExpediente->getErrorTxt();
 }
 
 // crear el escrito
@@ -119,20 +120,20 @@ $oEscrito->setVisibilidad($visibilidad);
 $oEscrito->setF_contestar($f_contestar);
 
 if ($oEscrito->DBGuardar() === FALSE) {
-	$error_txt .= $oEscrito->getErrorTxt();
+    $error_txt .= $oEscrito->getErrorTxt();
 }
 
 $id_escrito = $oEscrito->getId_escrito();
 
 // añadirlo al expediente
 if ($nuevo === TRUE) {
-	$oAccion = new Accion();
-	$oAccion->setId_expediente($id_expediente);
-	$oAccion->setId_escrito($id_escrito);
-	$oAccion->setTipo_accion($accion);
-	if ($oAccion->DBGuardar() === FALSE) {
-		$error_txt .= $oAccion->getErrorTxt();
-	}
+    $oAccion = new Accion();
+    $oAccion->setId_expediente($id_expediente);
+    $oAccion->setId_escrito($id_escrito);
+    $oAccion->setTipo_accion($accion);
+    if ($oAccion->DBGuardar() === FALSE) {
+        $error_txt .= $oAccion->getErrorTxt();
+    }
 }
 
 // mostrar el form para empezar el etherpad

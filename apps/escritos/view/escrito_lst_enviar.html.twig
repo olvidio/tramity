@@ -1,44 +1,44 @@
 <table class="table table-sm table-bordered">
-  <thead class="thead-light">
+    <thead class="thead-light">
     <tr>
-      {%  if ver_ok %}
-        <th scope="col">{{ "ok"|trans|raw }}</th>
-      {% endif %}
-      <th scope="col">{{ "ver"|trans|raw }}</th>
-      {%  if modo == 'mod' %}
-        <th scope="col">{{ "mod.datos"|trans|raw }}</th>
-      {% endif %}
-      <th scope="col">{{ "prot. local/rev.texto"|trans|raw }}</th>
-      <th scope="col">{{ "ponente"|trans|raw }}</th>
-      <th scope="col">{{ "destino"|trans|raw }}</th>
-      <th scope="col">{{ "ref."|trans|raw }}</th>
-      <th scope="col">{{ "asunto"|trans|raw }}</th>
-      {%  if modo == 'mod' %}
-        <th scope="col">{{ "enviar" }}</th>
-      {% endif %}
+        {% if ver_ok %}
+            <th scope="col">{{ "ok"|trans|raw }}</th>
+        {% endif %}
+        <th scope="col">{{ "ver"|trans|raw }}</th>
+        {% if modo == 'mod' %}
+            <th scope="col">{{ "mod.datos"|trans|raw }}</th>
+        {% endif %}
+        <th scope="col">{{ "prot. local/rev.texto"|trans|raw }}</th>
+        <th scope="col">{{ "ponente"|trans|raw }}</th>
+        <th scope="col">{{ "destino"|trans|raw }}</th>
+        <th scope="col">{{ "ref."|trans|raw }}</th>
+        <th scope="col">{{ "asunto"|trans|raw }}</th>
+        {% if modo == 'mod' %}
+            <th scope="col">{{ "enviar" }}</th>
+        {% endif %}
     </tr>
-  </thead>
-  <tbody>
-  {% for row in a_acciones %}
-    <tr>
-      {%  if ver_ok %}
-        <td>{{ row.ok|raw }}</td>
-      {% endif %}
-      <td scope="row">{{ row.link_ver|raw }}</td>
-      {%  if modo == 'mod' %}
-        <td>{{ row.link_mod|raw }}</td>
-      {% endif %}
-      <td>{{ row.prot_local|raw }}</td>
-      <td>{{ row.ponente|raw }}</td>
-      <td>{{ row.destino|raw }}</td>
-      <td>{{ row.ref|raw }}</td>
-      <td>{{ row.asunto }}</td>
-      {%  if modo == 'mod' %}
-        <td>{{ row.enviar|raw }}</td>
-      {% endif %}
-    </tr>
+    </thead>
+    <tbody>
+    {% for row in a_acciones %}
+        <tr>
+            {% if ver_ok %}
+                <td>{{ row.ok|raw }}</td>
+            {% endif %}
+            <td scope="row">{{ row.link_ver|raw }}</td>
+            {% if modo == 'mod' %}
+                <td>{{ row.link_mod|raw }}</td>
+            {% endif %}
+            <td>{{ row.prot_local|raw }}</td>
+            <td>{{ row.ponente|raw }}</td>
+            <td>{{ row.destino|raw }}</td>
+            <td>{{ row.ref|raw }}</td>
+            <td>{{ row.asunto }}</td>
+            {% if modo == 'mod' %}
+                <td>{{ row.enviar|raw }}</td>
+            {% endif %}
+        </tr>
     {% endfor %}
-  </tbody>
+    </tbody>
 </table>
 
 {% include '_escrito_enviar_js.html.twig' %}

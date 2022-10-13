@@ -22,8 +22,8 @@ class SyntaxError extends Error
     /**
      * Tweaks the error message to include suggestions.
      *
-     * @param string $name  The original name of the item that does not exist
-     * @param array  $items An array of possible items
+     * @param string $name The original name of the item that does not exist
+     * @param array $items An array of possible items
      */
     public function addSuggestions(string $name, array $items): void
     {

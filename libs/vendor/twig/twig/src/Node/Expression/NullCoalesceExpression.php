@@ -51,8 +51,7 @@ class NullCoalesceExpression extends ConditionalExpression
                 ->subcompile($this->getNode('expr2'))
                 ->raw(') ?? (')
                 ->subcompile($this->getNode('expr3'))
-                ->raw('))')
-            ;
+                ->raw('))');
         } else {
             parent::compile($compiler);
         }

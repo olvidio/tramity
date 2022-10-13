@@ -1,120 +1,120 @@
 <?php
+
 use core\ConfigGlobal;
-use function core\is_true;
 use davical\model\Davical;
-use entradas\model\Entrada;
 use entradas\model\entity\EntradaBypass;
 use entradas\model\entity\EntradaDB;
-use entradas\model\entity\GestorEntradaBypass;
+use entradas\model\Entrada;
 use lugares\model\entity\GestorGrupo;
 use pendientes\model\Pendiente;
-use usuarios\model\PermRegistro;
 use usuarios\model\entity\Cargo;
+use usuarios\model\PermRegistro;
 use web\DateTimeLocal;
 use web\Protocolo;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
-	require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-	require_once ("apps/core/global_object.inc");
-// Crea los objectos por esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos por esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string) \filter_input(INPUT_POST, 'que');
-$Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
-$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
 
-$Qorigen = (integer) \filter_input(INPUT_POST, 'origen');
-$Qprot_num_origen = (integer) \filter_input(INPUT_POST, 'prot_num_origen');
-$Qprot_any_origen = (integer) \filter_input(INPUT_POST, 'prot_any_origen');
-$Qprot_mas_origen = (string) \filter_input(INPUT_POST, 'prot_mas_origen');
+$Qorigen = (integer)\filter_input(INPUT_POST, 'origen');
+$Qprot_num_origen = (integer)\filter_input(INPUT_POST, 'prot_num_origen');
+$Qprot_any_origen = (integer)\filter_input(INPUT_POST, 'prot_any_origen');
+$Qprot_mas_origen = (string)\filter_input(INPUT_POST, 'prot_mas_origen');
 
-$Qasunto_e = (string) \filter_input(INPUT_POST, 'asunto_e');
-$Qf_escrito = (string) \filter_input(INPUT_POST, 'f_escrito');
-$Qasunto = (string) \filter_input(INPUT_POST, 'asunto');
-$Qf_entrada = (string) \filter_input(INPUT_POST, 'f_entrada');
+$Qasunto_e = (string)\filter_input(INPUT_POST, 'asunto_e');
+$Qf_escrito = (string)\filter_input(INPUT_POST, 'f_escrito');
+$Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
+$Qf_entrada = (string)\filter_input(INPUT_POST, 'f_entrada');
 
-$Qdetalle = (string) \filter_input(INPUT_POST, 'detalle');
-$Qid_of_ponente = (integer) \filter_input(INPUT_POST, 'of_ponente');
-$Qa_oficinas = (array)  \filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qdetalle = (string)\filter_input(INPUT_POST, 'detalle');
+$Qid_of_ponente = (integer)\filter_input(INPUT_POST, 'of_ponente');
+$Qa_oficinas = (array)\filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-$Qcategoria = (integer) \filter_input(INPUT_POST, 'categoria');
-$Qvisibilidad = (integer) \filter_input(INPUT_POST, 'visibilidad');
+$Qcategoria = (integer)\filter_input(INPUT_POST, 'categoria');
+$Qvisibilidad = (integer)\filter_input(INPUT_POST, 'visibilidad');
 
-$Qplazo = (string) \filter_input(INPUT_POST, 'plazo');
-$Qf_plazo = (string) \filter_input(INPUT_POST, 'f_plazo');
-$Qbypass = (string) \filter_input(INPUT_POST, 'bypass');
-$QAdmitir_hidden = (string) \filter_input(INPUT_POST, 'admitir_hidden');
+$Qplazo = (string)\filter_input(INPUT_POST, 'plazo');
+$Qf_plazo = (string)\filter_input(INPUT_POST, 'f_plazo');
+$Qbypass = (string)\filter_input(INPUT_POST, 'bypass');
+$QAdmitir_hidden = (string)\filter_input(INPUT_POST, 'admitir_hidden');
 
 /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
-$Qa_referencias = (array)  \filter_input(INPUT_POST, 'referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_prot_num_referencias = (array)  \filter_input(INPUT_POST, 'prot_num_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_prot_any_referencias = (array)  \filter_input(INPUT_POST, 'prot_any_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_prot_mas_referencias = (array)  \filter_input(INPUT_POST, 'prot_mas_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_referencias = (array)\filter_input(INPUT_POST, 'referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_prot_num_referencias = (array)\filter_input(INPUT_POST, 'prot_num_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_prot_any_referencias = (array)\filter_input(INPUT_POST, 'prot_any_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_prot_mas_referencias = (array)\filter_input(INPUT_POST, 'prot_mas_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 $error_txt = '';
 $jsondata = [];
-switch($Qque) {
-	case 'guardar_etiquetas':
-		$Qa_etiquetas = (array)  \filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-		// si viene del serializeArray del jQuery, cada fila, a su vez es un array:
-		$a_etiquetas = [];
-		foreach ($Qa_etiquetas as $etiqueta) {
-			if (is_array($etiqueta)) {
-				$a_etiquetas[] = $etiqueta['value'];
-			} else {
-				$a_etiquetas[] = $etiqueta;
-			}
-		}
-		// Se pone cuando se han enviado...
-		$oEntrada = new Entrada($Qid_entrada);
-		$oEntrada->DBCarregar();
-		// las etiquetas:
-		$oEntrada->setEtiquetas($a_etiquetas);
-		//$oEntrada->setVisibilidad($Qvisibilidad);
-		if ($oEntrada->DBGuardar() === FALSE ) {
-			$error_txt .= _("No se han podido guardar las etiquetas");
-		}
-		if (empty($error_txt)) {
-			$jsondata['success'] = true;
-			$jsondata['mensaje'] = 'ok';
-		} else {
-			$jsondata['success'] = false;
-			$jsondata['mensaje'] = $error_txt;
-		}
-		
-		//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
-		header('Content-type: application/json; charset=utf-8');
-		echo json_encode($jsondata);
-		exit();
-		break;
+switch ($Qque) {
+    case 'guardar_etiquetas':
+        $Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        // si viene del serializeArray del jQuery, cada fila, a su vez es un array:
+        $a_etiquetas = [];
+        foreach ($Qa_etiquetas as $etiqueta) {
+            if (is_array($etiqueta)) {
+                $a_etiquetas[] = $etiqueta['value'];
+            } else {
+                $a_etiquetas[] = $etiqueta;
+            }
+        }
+        // Se pone cuando se han enviado...
+        $oEntrada = new Entrada($Qid_entrada);
+        $oEntrada->DBCarregar();
+        // las etiquetas:
+        $oEntrada->setEtiquetas($a_etiquetas);
+        //$oEntrada->setVisibilidad($Qvisibilidad);
+        if ($oEntrada->DBGuardar() === FALSE) {
+            $error_txt .= _("No se han podido guardar las etiquetas");
+        }
+        if (empty($error_txt)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        }
+
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+        break;
     case 'en_asignar':
         $Qid_oficina = ConfigGlobal::role_id_oficina();
-        $Qid_cargo_encargado = (integer) \filter_input(INPUT_POST, 'id_cargo_encargado');
+        $Qid_cargo_encargado = (integer)\filter_input(INPUT_POST, 'id_cargo_encargado');
         $oEntrada = new EntradaDB($Qid_entrada);
         $oEntrada->DBCarregar();
         // comprobar si es un cambio (ya estaba encargado a alguien)
         $encargado_old = $oEntrada->getEncargado();
-        
+
         // Para los ctr, hay que cambiar el estado a ESTADO_ACEPTADO
         if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
-        	$oEntrada->setEstado(Entrada::ESTADO_ACEPTADO);
+            $oEntrada->setEstado(Entrada::ESTADO_ACEPTADO);
         }
         $oEntrada->setEncargado($Qid_cargo_encargado);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
         }
-        
+
         // también hay que marcarlo como visto por quien lo encarga
         // Siempre que no sea el mismo:
         if (ConfigGlobal::role_id_cargo() != $Qid_cargo_encargado) {
             $flag_encontrado = FALSE;
             $aVisto = $oEntrada->getJson_visto(TRUE);
             foreach ($aVisto as $key => $oVisto) {
-                if ( ($oVisto['oficina'] == $Qid_oficina) && ($oVisto['cargo'] == $Qid_cargo_encargado) ) {
+                if (($oVisto['oficina'] == $Qid_oficina) && ($oVisto['cargo'] == $Qid_cargo_encargado)) {
                     $aVisto[$key]['visto'] = TRUE;
                     $flag_encontrado = TRUE;
                 }
@@ -131,7 +131,7 @@ switch($Qque) {
                 $error_txt .= $oEntrada->getErrorTxt();
             }
         }
-        
+
         // Si es un cambio: marcar visto al anterior
         if (!empty($encargado_old)) {
             $flag_encontrado = FALSE;
@@ -149,7 +149,7 @@ switch($Qque) {
                 $oVisto['visto'] = TRUE;
                 $aVisto[] = $oVisto;
             }
-            
+
             $oEntrada->setJson_visto($aVisto);
             if ($oEntrada->DBGuardar() === FALSE) {
                 $error_txt .= $oEntrada->getErrorTxt();
@@ -162,7 +162,7 @@ switch($Qque) {
                 $aVisto[$key]['visto'] = FALSE;
             }
         }
-        
+
         $oEntrada->setJson_visto($aVisto);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
@@ -184,19 +184,19 @@ switch($Qque) {
         $Qid_cargo = ConfigGlobal::role_id_cargo();
         $oEntrada = new EntradaDB($Qid_entrada);
         $oEntrada->DBCarregar();
-        
+
         $aVisto = $oEntrada->getJson_visto(TRUE);
         $oVisto = [];
         $oVisto['oficina'] = $Qid_oficina;
         $oVisto['cargo'] = $Qid_cargo;
         $oVisto['visto'] = TRUE;
         $aVisto[] = $oVisto;
-        
+
         $oEntrada->setJson_visto($aVisto);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
         }
-        
+
         $oEntrada->comprobarVisto();
 
         if (!empty($error_txt)) {
@@ -218,38 +218,38 @@ switch($Qque) {
         }
         break;
     case 'guardar_destinos':
-		$oEntradaBypass = new EntradaBypass($Qid_entrada);
-		$oEntradaBypass->DBCarregar();
-		// Al cargar si no existe, también borra el id_entrada, y hay que volver a asignarlo.
-		$oEntradaBypass->setId_entrada($Qid_entrada);
+        $oEntradaBypass = new EntradaBypass($Qid_entrada);
+        $oEntradaBypass->DBCarregar();
+        // Al cargar si no existe, también borra el id_entrada, y hay que volver a asignarlo.
+        $oEntradaBypass->setId_entrada($Qid_entrada);
         //Qasunto.
         $oPermisoRegistro = new PermRegistro();
         $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntradaBypass, 'asunto');
-        if ( $perm_asunto >= PermRegistro::PERM_MODIFICAR) {
+        if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
             $oEntradaBypass->setAsunto($Qasunto);
             if ($oEntradaBypass->DBGuardar() === FALSE) {
                 $error_txt .= $oEntradaBypass->getErrorTxt();
             }
         }
         // destinos
-        $Qgrupo_dst = (string) \filter_input(INPUT_POST, 'grupo_dst');
-        $Qf_salida = (string) \filter_input(INPUT_POST, 'f_salida');
-        
+        $Qgrupo_dst = (string)\filter_input(INPUT_POST, 'grupo_dst');
+        $Qf_salida = (string)\filter_input(INPUT_POST, 'f_salida');
+
         // genero un vector con todos los grupos.
-        $Qa_grupos = (array)  \filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qa_grupos = (array)\filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
-        $Qa_destinos = (array)  \filter_input(INPUT_POST, 'destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $Qa_prot_num_destinos = (array)  \filter_input(INPUT_POST, 'prot_num_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $Qa_prot_any_destinos = (array)  \filter_input(INPUT_POST, 'prot_any_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $Qa_prot_mas_destinos = (array)  \filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        
+        $Qa_destinos = (array)\filter_input(INPUT_POST, 'destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qa_prot_num_destinos = (array)\filter_input(INPUT_POST, 'prot_num_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qa_prot_any_destinos = (array)\filter_input(INPUT_POST, 'prot_any_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qa_prot_mas_destinos = (array)\filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+
         // Si esta marcado como grupo de destinos, o destinos individuales.
         if (core\is_true($Qgrupo_dst)) {
             $descripcion = '';
             $gesGrupo = new GestorGrupo();
             $a_grupos = $gesGrupo->getArrayGrupos();
             foreach ($Qa_grupos as $id_grupo) {
-                $descripcion .= empty($descripcion)? '' : ' + ';
+                $descripcion .= empty($descripcion) ? '' : ' + ';
                 $descripcion .= $a_grupos[$id_grupo];
             }
             $oEntradaBypass->setId_grupos($Qa_grupos);
@@ -260,7 +260,7 @@ switch($Qque) {
                 $prot_num = $Qa_prot_num_destinos[$key];
                 $prot_any = $Qa_prot_any_destinos[$key];
                 $prot_mas = $Qa_prot_mas_destinos[$key];
-                
+
                 if (!empty($id_lugar)) {
                     $oProtDst = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
                     $aProtDst[] = $oProtDst->getProt();
@@ -269,14 +269,14 @@ switch($Qque) {
             $oEntradaBypass->setJson_prot_destino($aProtDst);
             $oEntradaBypass->setId_grupos();
             if (empty($oEntradaBypass->getDescripcion())) {
-				$oEntradaBypass->setDescripcion('x'); // no puede ser null.
+                $oEntradaBypass->setDescripcion('x'); // no puede ser null.
             }
         }
         $oEntradaBypass->setF_salida($Qf_salida);
-        if ($oEntradaBypass->DBGuardar() === FALSE ) {
+        if ($oEntradaBypass->DBGuardar() === FALSE) {
             $error_txt .= $oEntradaBypass->getErrorTxt();
         }
-        
+
         if (!empty($error_txt)) {
             $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
@@ -322,37 +322,37 @@ switch($Qque) {
         $oEntrada->setDetalle($Qdetalle);
         $oEntrada->setCategoria($Qcategoria);
         $oEntrada->setVisibilidad($Qvisibilidad);
-		switch ($Qplazo) {
-			case 'hoy':
-				$oEntrada->setF_contestar('');
-				break;
-			case 'normal':
-				$plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
-				$periodo = 'P'.$plazo_normal.'D';
-				$oF = new DateTimeLocal();
-				$oF->add(new DateInterval($periodo));
-				$oEntrada->setF_contestar($oF);
-				break;
-			case 'rápido':
-				$plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
-				$periodo = 'P'.$plazo_rapido.'D';
-				$oF = new DateTimeLocal();
-				$oF->add(new DateInterval($periodo));
-				$oEntrada->setF_contestar($oF);
-				break;
-			case 'urgente':
-				$plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
-				$periodo = 'P'.$plazo_urgente.'D';
-				$oF = new DateTimeLocal();
-				$oF->add(new DateInterval($periodo));
-				$oEntrada->setF_contestar($oF);
-				break;
-			case 'fecha':
-				$oEntrada->setF_contestar($Qf_plazo);
-				break;
-			default:
-				// Si no hay $Qplazo, No pongo ninguna fecha a contestar
-		}
+        switch ($Qplazo) {
+            case 'hoy':
+                $oEntrada->setF_contestar('');
+                break;
+            case 'normal':
+                $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
+                $periodo = 'P' . $plazo_normal . 'D';
+                $oF = new DateTimeLocal();
+                $oF->add(new DateInterval($periodo));
+                $oEntrada->setF_contestar($oF);
+                break;
+            case 'rápido':
+                $plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
+                $periodo = 'P' . $plazo_rapido . 'D';
+                $oF = new DateTimeLocal();
+                $oF->add(new DateInterval($periodo));
+                $oEntrada->setF_contestar($oF);
+                break;
+            case 'urgente':
+                $plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
+                $periodo = 'P' . $plazo_urgente . 'D';
+                $oF = new DateTimeLocal();
+                $oF->add(new DateInterval($periodo));
+                $oEntrada->setF_contestar($oF);
+                break;
+            case 'fecha':
+                $oEntrada->setF_contestar($Qf_plazo);
+                break;
+            default:
+                // Si no hay $Qplazo, No pongo ninguna fecha a contestar
+        }
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt = $oEntrada->getErrorTxt();
             exit($error_txt);
@@ -363,8 +363,8 @@ switch($Qque) {
         } else {
             $jsondata['success'] = TRUE;
             $jsondata['id_entrada'] = $Qid_entrada;
-            $a_cosas = [ 'id_entrada' => $Qid_entrada, 'filtro' => $Qfiltro];
-            $pagina_mod = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query($a_cosas));
+            $a_cosas = ['id_entrada' => $Qid_entrada, 'filtro' => $Qfiltro];
+            $pagina_mod = web\Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query($a_cosas));
             $jsondata['pagina_mod'] = $pagina_mod;
         }
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -384,27 +384,27 @@ switch($Qque) {
             $perm_asunto = PermRegistro::PERM_MODIFICAR;
             $perm_detalle = PermRegistro::PERM_MODIFICAR;
         }
-        
+
         $oEntrada->setModo_entrada(Entrada::MODO_MANUAL);
-        
+
         $oProtOrigen = new Protocolo($Qorigen, $Qprot_num_origen, $Qprot_any_origen, $Qprot_mas_origen);
         $oEntrada->setJson_prot_origen($oProtOrigen->getProt());
-        
+
         $aProtRef = [];
         foreach ($Qa_referencias as $key => $id_lugar) {
             $prot_num = $Qa_prot_num_referencias[$key];
             $prot_any = $Qa_prot_any_referencias[$key];
             $prot_mas = $Qa_prot_mas_referencias[$key];
-            
+
             if (!empty($id_lugar)) {
                 $oProtRef = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
                 $aProtRef[] = $oProtRef->getProt();
             }
         }
         $oEntrada->setJson_prot_ref($aProtRef);
- 
+
         $oEntrada->setAsunto_entrada($Qasunto_e);
-        $oEntrada->setF_documento($Qf_escrito,TRUE);
+        $oEntrada->setF_documento($Qf_escrito, TRUE);
         $oEntrada->setF_entrada($Qf_entrada);
         if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
             $oEntrada->setAsunto($Qasunto);
@@ -418,11 +418,11 @@ switch($Qque) {
         $oEntrada->setCategoria($Qcategoria);
         // visibilidad: puede que esté en modo solo lectura, mirar el hiden.
         if (empty($Qvisibilidad)) {
-            $Qvisibilidad = (integer) \filter_input(INPUT_POST, 'hidden_visibilidad');
+            $Qvisibilidad = (integer)\filter_input(INPUT_POST, 'hidden_visibilidad');
         }
         $oEntrada->setVisibilidad($Qvisibilidad);
 
-        
+
         // 5º Compruebo si hay que generar un pendiente
         switch ($Qplazo) {
             case 'hoy':
@@ -430,21 +430,21 @@ switch($Qque) {
                 break;
             case 'normal':
                 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
-                $periodo = 'P'.$plazo_normal.'D';
+                $periodo = 'P' . $plazo_normal . 'D';
                 $oF = new DateTimeLocal();
                 $oF->add(new DateInterval($periodo));
                 $oEntrada->setF_contestar($oF);
                 break;
             case 'rápido':
                 $plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
-                $periodo = 'P'.$plazo_rapido.'D';
+                $periodo = 'P' . $plazo_rapido . 'D';
                 $oF = new DateTimeLocal();
                 $oF->add(new DateInterval($periodo));
                 $oEntrada->setF_contestar($oF);
                 break;
             case 'urgente':
                 $plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
-                $periodo = 'P'.$plazo_urgente.'D';
+                $periodo = 'P' . $plazo_urgente . 'D';
                 $oF = new DateTimeLocal();
                 $oF->add(new DateInterval($periodo));
                 $oEntrada->setF_contestar($oF);
@@ -455,7 +455,7 @@ switch($Qque) {
             default:
                 // Si no hay $Qplazo, No pongo ninguna fecha a contestar
         }
-            
+
         if (is_true($QAdmitir_hidden)) {
             // pasa directamente a asigado. Se supone que el admitido lo ha puesto el vcd.
             // en caso de ponerlo secretaria, al guardar pasa igualmente a asignado.
@@ -467,18 +467,18 @@ switch($Qque) {
         if ($Qfiltro == 'en_asignado' || $Qfiltro == 'en_buscar') {
             $estado = Entrada::ESTADO_ACEPTADO;
         }
-        
+
         if ($Qfiltro == 'en_buscar') { // NO tocar el estado
             $estado = $oEntrada->getEstado();
             $id_entrada = $Qid_entrada;
         }
         $oEntrada->setEstado($estado);
-       
+
         $oEntrada->setBypass($Qbypass);
-        if ($oEntrada->DBGuardar() === FALSE ) {
+        if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
         }
-        
+
         if (empty($error_txt) && $Qfiltro != 'en_buscar') {
             $id_entrada = $oEntrada->getId_entrada();
             //////// Generar un Pendiente (hay que esperar e tener el id_entrada //////
@@ -486,13 +486,13 @@ switch($Qque) {
             // se van generando pendientes cada vez que se guarda.
             if ($Qfiltro == 'en_asignado') {
                 if ($Qplazo != "hoy") {
-                    $Qid_pendiente = (integer) \filter_input(INPUT_POST, 'id_pendiente');
+                    $Qid_pendiente = (integer)\filter_input(INPUT_POST, 'id_pendiente');
                     if (empty($Qid_pendiente)) { // si no se ha generado el pendiente con "modificar pendiente"
                         $f_plazo = $oEntrada->getF_contestar()->getFromLocal();
                         $location = $oProtOrigen->ver_txt_num();
                         $prot_mas = $oProtOrigen->ver_txt_mas();
-                        
-                        $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
+
+                        $id_reg = 'REN' . $id_entrada; // REN = Regitro Entrada
                         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
                         $parent_container = $oDavical->getNombreRecurso($Qid_of_ponente);
                         $calendario = 'registro';
@@ -512,29 +512,29 @@ switch($Qque) {
                         $oPendiente->setId_oficina($Qid_of_ponente);
                         // las firmas son cargos, buscar las oficinas implicadas:
                         $oPendiente->setOficinasArray($Qa_oficinas);
-                        if ($oPendiente->Guardar() === FALSE ) {
+                        if ($oPendiente->Guardar() === FALSE) {
                             $error_txt .= _("No se han podido guardar el nuevo pendiente");
                         }
                     } else {
                         // meter el pendienteDB en davical con el id_reg que toque y borrarlo de pendienteDB.
-                        $id_reg = 'REN'.$id_entrada; // REN = Regitro Entrada
+                        $id_reg = 'REN' . $id_entrada; // REN = Regitro Entrada
                         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
                         $parent_container = $oDavical->getNombreRecurso($Qid_of_ponente);
                         $calendario = 'registro';
                         $user_davical = $oDavical->getUsernameDavicalSecretaria();
                         $uid = '';
                         $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
-                        $oPendiente->crear_de_pendienteDB($id_reg,$Qid_pendiente);
+                        $oPendiente->crear_de_pendienteDB($id_reg, $Qid_pendiente);
                     }
                 }
             }
-        
+
             //////// BY PASS //////
             if (is_true($Qbypass) && !empty($Qid_entrada)) {
-				$oEntradaBypass = new EntradaBypass($Qid_entrada);
-				$oEntradaBypass->DBCarregar();
-				// Al cargar si no existe, también borra el id_entrada, y hay que volver a asignarlo.
-				$oEntradaBypass->setId_entrada($Qid_entrada);
+                $oEntradaBypass = new EntradaBypass($Qid_entrada);
+                $oEntradaBypass->DBCarregar();
+                // Al cargar si no existe, también borra el id_entrada, y hay que volver a asignarlo.
+                $oEntradaBypass->setId_entrada($Qid_entrada);
                 //Qasunto.
                 if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
                     $oEntrada = new EntradaDB($Qid_entrada);
@@ -545,24 +545,24 @@ switch($Qque) {
                     }
                 }
                 // destinos
-                $Qgrupo_dst = (string) \filter_input(INPUT_POST, 'grupo_dst');
-                $Qf_salida = (string) \filter_input(INPUT_POST, 'f_salida');
-                
+                $Qgrupo_dst = (string)\filter_input(INPUT_POST, 'grupo_dst');
+                $Qf_salida = (string)\filter_input(INPUT_POST, 'f_salida');
+
                 // genero un vector con todos los grupos.
-                $Qa_grupos = (array)  \filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $Qa_grupos = (array)\filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
                 /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
-                $Qa_destinos = (array)  \filter_input(INPUT_POST, 'destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-                $Qa_prot_num_destinos = (array)  \filter_input(INPUT_POST, 'prot_num_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-                $Qa_prot_any_destinos = (array)  \filter_input(INPUT_POST, 'prot_any_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-                $Qa_prot_mas_destinos = (array)  \filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-                
+                $Qa_destinos = (array)\filter_input(INPUT_POST, 'destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $Qa_prot_num_destinos = (array)\filter_input(INPUT_POST, 'prot_num_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $Qa_prot_any_destinos = (array)\filter_input(INPUT_POST, 'prot_any_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $Qa_prot_mas_destinos = (array)\filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+
                 // Si esta marcado como grupo de destinos, o destinos individuales.
                 if (core\is_true($Qgrupo_dst)) {
                     $descripcion = '';
                     $gesGrupo = new GestorGrupo();
                     $a_grupos = $gesGrupo->getArrayGrupos();
                     foreach ($Qa_grupos as $id_grupo) {
-                        $descripcion .= empty($descripcion)? '' : ' + ';
+                        $descripcion .= empty($descripcion) ? '' : ' + ';
                         $descripcion .= $a_grupos[$id_grupo];
                     }
                     $oEntradaBypass->setId_grupos($Qa_grupos);
@@ -573,7 +573,7 @@ switch($Qque) {
                         $prot_num = $Qa_prot_num_destinos[$key];
                         $prot_any = $Qa_prot_any_destinos[$key];
                         $prot_mas = $Qa_prot_mas_destinos[$key];
-                        
+
                         if (!empty($id_lugar)) {
                             $oProtDst = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
                             $aProtDst[] = $oProtDst->getProt();
@@ -583,10 +583,10 @@ switch($Qque) {
                     $oEntradaBypass->setId_grupos();
                     $oEntradaBypass->setDescripcion('x'); // no puede ser null.
                 }
-                if ($oEntradaBypass->DBGuardar() === FALSE ) {
+                if ($oEntradaBypass->DBGuardar() === FALSE) {
                     $error_txt .= $oEntradaBypass->getErrorTxt();
                 }
-                
+
                 if (!empty($error_txt)) {
                     $jsondata['success'] = FALSE;
                     $jsondata['mensaje'] = $error_txt;
@@ -597,25 +597,25 @@ switch($Qque) {
                 // borrar si hubiera habido. ( o no?)
             }
         }
-        
-        
+
+
         if (!empty($error_txt)) {
             $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         } else {
             $jsondata['success'] = TRUE;
             $jsondata['id_entrada'] = $id_entrada;
-            $a_cosas = [ 'id_entrada' => $id_entrada, 'filtro' => $Qfiltro];
-            $pagina_mod = web\Hash::link('apps/entradas/controller/entrada_form.php?'.http_build_query($a_cosas));
+            $a_cosas = ['id_entrada' => $id_entrada, 'filtro' => $Qfiltro];
+            $pagina_mod = web\Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query($a_cosas));
             $jsondata['pagina_mod'] = $pagina_mod;
         }
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        
-    break;
-	default:
+
+        break;
+    default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);
 }

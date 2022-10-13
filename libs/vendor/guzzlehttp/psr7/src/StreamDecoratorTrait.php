@@ -36,6 +36,18 @@ trait StreamDecoratorTrait
         throw new \UnexpectedValueException("$name not found on class");
     }
 
+    /**
+     * Implement in subclasses to dynamically create streams when requested.
+     *
+     * @return StreamInterface
+     *
+     * @throws \BadMethodCallException
+     */
+    protected function createStream()
+    {
+        throw new \BadMethodCallException('Not implemented');
+    }
+
     public function __toString()
     {
         try {
@@ -46,9 +58,19 @@ trait StreamDecoratorTrait
         } catch (\Exception $e) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
             trigger_error('StreamDecorator::__toString exception: '
-                . (string) $e, E_USER_ERROR);
+                . (string)$e, E_USER_ERROR);
             return '';
         }
+    }
+
+    public function isSeekable()
+    {
+        return $this->stream->isSeekable();
+    }
+
+    public function seek($offset, $whence = SEEK_SET)
+    {
+        $this->stream->seek($offset, $whence);
     }
 
     public function getContents()
@@ -60,7 +82,7 @@ trait StreamDecoratorTrait
      * Allow decorators to implement custom methods
      *
      * @param string $method Missing method name
-     * @param array  $args   Method arguments
+     * @param array $args Method arguments
      *
      * @return mixed
      */
@@ -112,19 +134,9 @@ trait StreamDecoratorTrait
         return $this->stream->isWritable();
     }
 
-    public function isSeekable()
-    {
-        return $this->stream->isSeekable();
-    }
-
     public function rewind()
     {
         $this->seek(0);
-    }
-
-    public function seek($offset, $whence = SEEK_SET)
-    {
-        $this->stream->seek($offset, $whence);
     }
 
     public function read($length)
@@ -135,17 +147,5 @@ trait StreamDecoratorTrait
     public function write($string)
     {
         return $this->stream->write($string);
-    }
-
-    /**
-     * Implement in subclasses to dynamically create streams when requested.
-     *
-     * @return StreamInterface
-     *
-     * @throws \BadMethodCallException
-     */
-    protected function createStream()
-    {
-        throw new \BadMethodCallException('Not implemented');
     }
 }

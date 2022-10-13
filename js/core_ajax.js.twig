@@ -1,206 +1,206 @@
 <script>
-fnjs_selectAll=function(formulario,Name,val,aviso){
-	aviso = typeof aviso !== 'undefined' ? aviso : 1;
-	if (aviso == 1) {
-		alert ("{{ "Sólo se seleccionan los ítems que se ha visualizado."|trans|raw }}");
-	}
-	var form=$(formulario).attr('id');
-	/* selecciono los elementos input del id=formulario */
-	var selector=$('#'+form+' input');
-	if(val==null){var val='toggle';}
-	$(selector).each(function(i,item) {
-			if($(item).attr('name') == Name) {
-				switch (val) {
-					case 'all':
-						$(item).prop('checked',true);
-						break;
-					case 'none':
-						$(item).prop('checked',false);
-						break;
-					case 'toggle':
-						$(item).trigger("click");
-						break;
-				}
-			}
-		}
-	);
+    fnjs_selectAll=function(formulario,Name,val,aviso){
+    aviso = typeof aviso !== 'undefined' ? aviso : 1;
+    if (aviso == 1) {
+    alert ("{{ "Sólo se seleccionan los ítems que se ha visualizado."|trans|raw }}");
+}
+    var form=$(formulario).attr('id');
+    /* selecciono los elementos input del id=formulario */
+    var selector=$('#'+form+' input');
+    if(val==null){var val='toggle';}
+    $(selector).each(function(i,item) {
+    if($(item).attr('name') == Name) {
+    switch (val) {
+    case 'all':
+    $(item).prop('checked',true);
+    break;
+    case 'none':
+    $(item).prop('checked',false);
+    break;
+    case 'toggle':
+    $(item).trigger("click");
+    break;
+}
+}
+}
+    );
 }
 
-fnjs_solo_uno_grid=function(formulario) {
-	var s=0;
-	var form=$(formulario).attr('id');
-	/* selecciono los elementos con class="slick-cell-checkboxsel" de las tablas del id=formulario */
-	var sel=$('#'+form+' div.slick-cell-checkboxsel > input:checked');
-	var s = sel.length;
+    fnjs_solo_uno_grid=function(formulario) {
+    var s=0;
+    var form=$(formulario).attr('id');
+    /* selecciono los elementos con class="slick-cell-checkboxsel" de las tablas del id=formulario */
+    var sel=$('#'+form+' div.slick-cell-checkboxsel > input:checked');
+    var s = sel.length;
 
-	if ( s > 1 ) {
-		var txt = sprintf ("{{ "Sólo puede seleccionar un elemento. Ha selecionado %s."|trans|raw }}",s);
-		alert (txt);
-	}
-	if (s==0) {
-		alert ("{{ "No ha seleccionado ninguna fila. debe hacer click en algún chekbox de la izquierda."|trans|raw }}");
-	}
-	return s;
+    if ( s > 1 ) {
+    var txt = sprintf ("{{ "Sólo puede seleccionar un elemento. Ha selecionado %s."|trans|raw }}",s);
+    alert (txt);
+}
+    if (s==0) {
+    alert ("{{ "No ha seleccionado ninguna fila. debe hacer click en algún chekbox de la izquierda."|trans|raw }}");
+}
+    return s;
 }
 
-fnjs_solo_uno=function(formulario, multiple = false) {
-	var s=0;
-	var form=$(formulario).attr('id');
-	/* selecciono los elementos con class="sel" de las tablas del id=formulario */
-	var sel=$('#'+form+' input.sel:checked');
-	var s = sel.length;
+    fnjs_solo_uno=function(formulario, multiple = false) {
+    var s=0;
+    var form=$(formulario).attr('id');
+    /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+    var sel=$('#'+form+' input.sel:checked');
+    var s = sel.length;
 
-	if ( s > 1 && !multiple) {
-		var txt = sprintf ("{{ "Sólo puede seleccionar un elemento. Ha selecionado %s."|trans|raw }}",s);
-		alert (txt);
-	}
-	if (s==0) {
-		alert ("{{ "No ha seleccionado ninguna fila. debe hacer click en algún chekbox de la izquierda."|trans|raw }}");
-	}
-	return s;
+    if ( s > 1 && !multiple) {
+    var txt = sprintf ("{{ "Sólo puede seleccionar un elemento. Ha selecionado %s."|trans|raw }}",s);
+    alert (txt);
+}
+    if (s==0) {
+    alert ("{{ "No ha seleccionado ninguna fila. debe hacer click en algún chekbox de la izquierda."|trans|raw }}");
+}
+    return s;
 }
 
-<!-- Esta funcion comprueba que las fechas seean correctas --> 
-<!-- Esta funcion compara cual es mayor --> 
-<!-- Devuelve: fecha en formato ISO -->
-fnjs_convert2iso=function(id1,formato) {
-	// formatos posibles del php DateTimeLocal:
-	// 'j/n/Y' o 'n/j/Y' (US)
-	date_string=$(id1).val();
-	if (!date_string) {
-		return '';
-	}
-	var dateParts = date_string.split(/[.\/-]/);
-	if (formato == 'j/n/Y') {
-		var dateIsoString = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
-	} 
-	if (formato == 'n/j/Y') {
-		var dateIsoString = dateParts[2] + '/' + dateParts[0] + '/' + dateParts[1];
-	} 
-	return dateIsoString;
+    <!-- Esta funcion comprueba que las fechas seean correctas -->
+    <!-- Esta funcion compara cual es mayor -->
+    <!-- Devuelve: fecha en formato ISO -->
+    fnjs_convert2iso=function(id1,formato) {
+    // formatos posibles del php DateTimeLocal:
+    // 'j/n/Y' o 'n/j/Y' (US)
+    date_string = $(id1).val();
+    if (!date_string) {
+    return '';
+}
+    var dateParts = date_string.split(/[.\/-]/);
+    if (formato == 'j/n/Y') {
+    var dateIsoString = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+}
+    if (formato == 'n/j/Y') {
+    var dateIsoString = dateParts[2] + '/' + dateParts[0] + '/' + dateParts[1];
+}
+    return dateIsoString;
 }
 
-<!-- Esta funcion comprueba que las fechas seean correctas --> 
-<!-- Esta funcion compara cual es mayor --> 
-<!-- Devuelve: false-> si algún valor incorrecto. --> 
-<!-- 			1 -> si id1 > id2 -->
-<!-- 			2 -> si id2 > id1 -->
-<!-- 			3 -> si id1 = id2 -->
-fnjs_diff_fechas=function(id1,id2) {
+    <!-- Esta funcion comprueba que las fechas seean correctas -->
+    <!-- Esta funcion compara cual es mayor -->
+    <!-- Devuelve: false-> si algún valor incorrecto. -->
+    <!-- 			1 -> si id1 > id2 -->
+    <!-- 			2 -> si id2 > id1 -->
+    <!-- 			3 -> si id1 = id2 -->
+    fnjs_diff_fechas=function(id1,id2) {
 
-	date1_string=$(id1).val();
-	date2_string=$(id2).val();
-	var dateParts1 = date1_string.split("/");
-	var dateParts2 = date2_string.split("/");
-	// month is 0-based, that's why we need dataParts[1] - 1
-	var dateObject1 = new Date(+dateParts1[2], dateParts1[1] - 1, +dateParts1[0]); 
-	var dateObject2 = new Date(+dateParts2[2], dateParts2[1] - 1, +dateParts2[0]); 
+    date1_string = $(id1).val();
+    date2_string=$(id2).val();
+    var dateParts1 = date1_string.split("/");
+    var dateParts2 = date2_string.split("/");
+    // month is 0-based, that's why we need dataParts[1] - 1
+    var dateObject1 = new Date(+dateParts1[2], dateParts1[1] - 1, +dateParts1[0]);
+    var dateObject2 = new Date(+dateParts2[2], dateParts2[1] - 1, +dateParts2[0]);
 
-    var one_day = 1000*60*60*24; 
-    var daysApart = Math.ceil((dateObject1.getTime()-dateObject2.getTime())/one_day); 
-    return daysApart; 
+    var one_day = 1000*60*60*24;
+    var daysApart = Math.ceil((dateObject1.getTime()-dateObject2.getTime())/one_day);
+    return daysApart;
 
 }
-<!-- Esta funcion comprueba si una v_fecha es correcta --> 
-<!-- Esta funcion necesita que se le envie la v_fecha con formato d/m/y o dd/mm/yyyy --> 
-<!-- Ahora tambien acepta: d-m-y o dd-mm-yyyy --> 
-<!-- La función parseInt da un error si empieza por 0 (y el siguiente número no entra en el rango Octal 0-7), -->
-<!-- porque interpreta que es un valor en Octal. Se pone ",10" para indicar que es un valor decimal. -->
-fnjs_comprobar_fecha=function(id) {
-  calDate = new Date();
-  var year  = calDate.getFullYear();
-  var month  = calDate.getMonth()+1; // sumo 1 porque empieza a contar en 0 (enero)
+    <!-- Esta funcion comprueba si una v_fecha es correcta -->
+    <!-- Esta funcion necesita que se le envie la v_fecha con formato d/m/y o dd/mm/yyyy -->
+    <!-- Ahora tambien acepta: d-m-y o dd-mm-yyyy -->
+    <!-- La función parseInt da un error si empieza por 0 (y el siguiente número no entra en el rango Octal 0-7), -->
+    <!-- porque interpreta que es un valor en Octal. Se pone ",10" para indicar que es un valor decimal. -->
+    fnjs_comprobar_fecha=function(id) {
+    calDate = new Date();
+    var year  = calDate.getFullYear();
+    var month  = calDate.getMonth()+1; // sumo 1 porque empieza a contar en 0 (enero)
 
-  str_fecha=$(id).val();
-  if (str_fecha==null || str_fecha=="") return false;
-  name_fecha=$(id).attr('name');
-  str_fecha=str_fecha.replace(/\-/g,"/");
-  v_fecha=str_fecha.split("/");
-  if(v_fecha.length==3)
-  {
-     if(parseInt(v_fecha[0],10)>31 || (parseInt(v_fecha[0],10)<1))
-     {
-        alert(name_fecha+": {{ "el dia no es correcto"|trans|raw }}");
-		$(id).focus();
-        return false;
-     }
-   
-     if(parseInt(v_fecha[1],10)>12 || (parseInt(v_fecha[1],10)<1))
-     {
-        alert(name_fecha+": {{ "el mes no es correcto"|trans|raw }}");
-		$(id).focus();
-        return false;
-     }
-     // Con esto compruebo que esté correctamente formada y verifico años bisiestos.
-     var mi_v_fecha = new Date(parseInt(v_fecha[2],10),parseInt(v_fecha[1],10)-parseInt(1,10),parseInt(v_fecha[0],10))
-     if(parseInt(v_fecha[0],10)!=parseInt(mi_v_fecha.getDate()))
-     {
-        alert(name_fecha+": {{ "La fecha introducida NO es correcta"|trans|raw }}");
-		$(id).focus();
-        return false;
-     }
-	 $(id).val(str_fecha); // por si he cambiado los "-" por "/".
-     return true;
-  } else {
-  	  // pruebo de poner el mes y el año actual si sólo tengo el dia
-  	 if (v_fecha.length==1 && v_fecha[0]) {
-  	 	dia=parseInt(v_fecha[0],10);
-  	 	if(isNaN(dia) || dia>31 || (dia<1)) {
-  	 		alert(name_fecha+": {{ "El formato debe ser dd/mm/yyyy"|trans|raw }}");
-		 	$(id).focus();
-		 	return false;
-  	 	}
-		$(id).val(v_fecha[0]+"/"+month+"/"+year);
-		$(id).focus();
-		return true;
-  	 } else {
-	     alert(name_fecha+": {{ "El formato debe ser dd/mm/yyyy"|trans|raw }}");
-		 $(id).focus();
-		 return false;
-	 }
-  }
+    str_fecha=$(id).val();
+    if (str_fecha==null || str_fecha=="") return false;
+    name_fecha=$(id).attr('name');
+    str_fecha=str_fecha.replace(/\-/g,"/");
+    v_fecha=str_fecha.split("/");
+    if(v_fecha.length==3)
+{
+    if(parseInt(v_fecha[0],10)>31 || (parseInt(v_fecha[0],10)<1))
+{
+    alert(name_fecha+": {{ "el dia no es correcto"|trans|raw }}");
+    $(id).focus();
+    return false;
 }
 
-fnjs_fecha_en_intervalo=function(id){
-    var rta=fnjs_comprobar_fecha(id);   
-	if ( rta === false) {
-		return false;
-	} else {
-		if (rta === true) {
-		} else {
-			$(id).val(rta);
-		}
-	}
-	var hoy=new Date();
-	var t = hoy.getTime();
-	var t1 = t- {{ error_fecha }}*24*60*60*1000;
-	var t2 = t+ {{ error_fecha }}*24*60*60*1000;
+    if(parseInt(v_fecha[1],10)>12 || (parseInt(v_fecha[1],10)<1))
+{
+    alert(name_fecha+": {{ "el mes no es correcto"|trans|raw }}");
+    $(id).focus();
+    return false;
+}
+    // Con esto compruebo que esté correctamente formada y verifico años bisiestos.
+    var mi_v_fecha = new Date(parseInt(v_fecha[2],10),parseInt(v_fecha[1],10)-parseInt(1,10),parseInt(v_fecha[0],10))
+    if(parseInt(v_fecha[0],10)!=parseInt(mi_v_fecha.getDate()))
+{
+    alert(name_fecha+": {{ "La fecha introducida NO es correcta"|trans|raw }}");
+    $(id).focus();
+    return false;
+}
+    $(id).val(str_fecha); // por si he cambiado los "-" por "/".
+    return true;
+} else {
+    // pruebo de poner el mes y el año actual si sólo tengo el dia
+    if (v_fecha.length==1 && v_fecha[0]) {
+    dia=parseInt(v_fecha[0],10);
+    if(isNaN(dia) || dia>31 || (dia<1)) {
+    alert(name_fecha+": {{ "El formato debe ser dd/mm/yyyy"|trans|raw }}");
+    $(id).focus();
+    return false;
+}
+    $(id).val(v_fecha[0]+"/"+month+"/"+year);
+    $(id).focus();
+    return true;
+} else {
+    alert(name_fecha+": {{ "El formato debe ser dd/mm/yyyy"|trans|raw }}");
+    $(id).focus();
+    return false;
+}
+}
+}
 
-	var fecha_2;
-	fecha_2=$(id).val().split("/");
+    fnjs_fecha_en_intervalo=function(id){
+    var rta=fnjs_comprobar_fecha(id);
+    if ( rta === false) {
+    return false;
+} else {
+    if (rta === true) {
+} else {
+    $(id).val(rta);
+}
+}
+    var hoy=new Date();
+    var t = hoy.getTime();
+    var t1 = t- {{ error_fecha }}*24*60*60*1000;
+    var t2 = t+ {{ error_fecha }}*24*60*60*1000;
 
-	/* con new Date(); no acaba de funcionar bien para los dias 31.
-		 Lo hago con new Date(Date.UTC(y,m,d,h,m,s));  */
+    var fecha_2;
+    fecha_2=$(id).val().split("/");
 
-	var diaa=parseInt(fecha_2[0],10);
-	var mess=parseInt(fecha_2[1]-1,10); /* hay que restar 1 porque cuenta desde 0 */
-	/* si el año sólo tiene 2 digitos le pongo 4 (los de este año) */
-	if (fecha_2[2].length < 4) {
-			var siglo=hoy.getFullYear();
-			siglo=Math.floor(siglo/100)*100;
-			var any=siglo+parseInt(fecha_2[2],10);
-	} else {
-			var any=(parseInt(fecha_2[2],10));
-	}
-	
-	fecha = new Date(Date.UTC(any, mess, diaa, 0, 0, 0))
-	var f = fecha.getTime();
+    /* con new Date(); no acaba de funcionar bien para los dias 31.
+         Lo hago con new Date(Date.UTC(y,m,d,h,m,s));  */
 
-	if (f<t1 || f>t2) {
-		alert("{{ "La fecha es muy distinta de hoy (más de %s días)"|trans|format(error_fecha) }}");
-		return false;
-	} else {
-		return true;
-	}
+    var diaa=parseInt(fecha_2[0],10);
+    var mess=parseInt(fecha_2[1]-1,10); /* hay que restar 1 porque cuenta desde 0 */
+    /* si el año sólo tiene 2 digitos le pongo 4 (los de este año) */
+    if (fecha_2[2].length < 4) {
+    var siglo=hoy.getFullYear();
+    siglo=Math.floor(siglo/100)*100;
+    var any=siglo+parseInt(fecha_2[2],10);
+} else {
+    var any=(parseInt(fecha_2[2],10));
+}
+
+    fecha = new Date(Date.UTC(any, mess, diaa, 0, 0, 0))
+    var f = fecha.getTime();
+
+    if (f<t1 || f>t2) {
+    alert("{{ "La fecha es muy distinta de hoy (más de %s días)"|trans|format(error_fecha) }}");
+    return false;
+} else {
+    return true;
+}
 }
 </script>

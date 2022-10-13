@@ -27,14 +27,10 @@ class CachingStream implements StreamInterface
     public function __construct(
         StreamInterface $stream,
         StreamInterface $target = null
-    ) {
+    )
+    {
         $this->remoteStream = $stream;
         $this->stream = $target ?: new Stream(fopen('php://temp', 'r+'));
-    }
-
-    public function getSize()
-    {
-        return max($this->stream->getSize(), $this->remoteStream->getSize());
     }
 
     public function rewind()
@@ -71,6 +67,24 @@ class CachingStream implements StreamInterface
             // We can just do a normal seek since we've already seen this byte.
             $this->stream->seek($byte);
         }
+    }
+
+    public function getSize()
+    {
+        return max($this->stream->getSize(), $this->remoteStream->getSize());
+    }
+
+    private function cacheEntireStream()
+    {
+        $target = new FnStream(['write' => 'strlen']);
+        Utils::copyToStream($this, $target);
+
+        return $this->tell();
+    }
+
+    public function eof()
+    {
+        return $this->stream->eof() && $this->remoteStream->eof();
     }
 
     public function read($length)
@@ -116,24 +130,11 @@ class CachingStream implements StreamInterface
         return $this->stream->write($string);
     }
 
-    public function eof()
-    {
-        return $this->stream->eof() && $this->remoteStream->eof();
-    }
-
     /**
      * Close both the remote stream and buffer stream
      */
     public function close()
     {
         $this->remoteStream->close() && $this->stream->close();
-    }
-
-    private function cacheEntireStream()
-    {
-        $target = new FnStream(['write' => 'strlen']);
-        Utils::copyToStream($this, $target);
-
-        return $this->tell();
     }
 }

@@ -1,82 +1,87 @@
 <div id="condiciones">
-<form id="frm_que" name="frm_que" action="">
-	<input type="hidden" name="simple" value=1>
-	<input type='hidden' name='filtro' value='{{ filtro }}'>
+    <form id="frm_que" name="frm_que" action="">
+        <input type="hidden" name="simple" value=1>
+        <input type='hidden' name='filtro' value='{{ filtro }}'>
 
-<h3>{{ "listar escritos pendientes de contestar"|trans|raw }}</h3>
-<!--  --------------------  Calendarios --------------------------  -->
-  <div class="mt-4 row bg-light">
-    <label class="col-1 form-label">{{ "De"|trans|raw }}:</label>
-    <div class="col-1">
-		{{ oDesplCalendarios.desplegable|raw }}
-    </div>
-	<!--  --------------------  Periodo --------------------------  -->
-    <label for="periodo" class="col-1 form-label">{{ "periodo"|trans|raw }}:</label>
-    <div class="col-2">
-		<select tabindex=111 id=periodo name=periodo >
-		<option value="hoy" {{ sel_hoy }} >{{ "hasta la fecha"|trans|raw }}</option>
-		<option value="semana" {{ sel_semana }} >{{ "próxima semana"|trans|raw }}</option>
-		<option value="mes" {{ sel_mes }}>{{ "próximo mes"|trans|raw }}</option>
-		<option value="trimestre" {{ sel_trimestre }}>{{ "próximo trimestre"|trans|raw }}</option>
-		<option value="any" {{ sel_any }}>{{ "próximo año"|trans|raw }}</option>
-		</select>
-	</div>
-  </div>
-  <div class="mt-2 row bg-light">
-    <!--  --------------------  Oficinas --------------------------  -->
-	{% if secretaria %}
-      <div class="row col-2">
-        <div class="col-5">
-          <label for="id_oficina" class="col-xs-1 form-label">{{ "Oficina"|trans|raw }}:</label>
+        <h3>{{ "listar escritos pendientes de contestar"|trans|raw }}</h3>
+        <!--  --------------------  Calendarios --------------------------  -->
+        <div class="mt-4 row bg-light">
+            <label class="col-1 form-label">{{ "De"|trans|raw }}:</label>
+            <div class="col-1">
+                {{ oDesplCalendarios.desplegable|raw }}
+            </div>
+            <!--  --------------------  Periodo --------------------------  -->
+            <label for="periodo" class="col-1 form-label">{{ "periodo"|trans|raw }}:</label>
+            <div class="col-2">
+                <select tabindex=111 id=periodo name=periodo>
+                    <option value="hoy" {{ sel_hoy }} >{{ "hasta la fecha"|trans|raw }}</option>
+                    <option value="semana" {{ sel_semana }} >{{ "próxima semana"|trans|raw }}</option>
+                    <option value="mes" {{ sel_mes }}>{{ "próximo mes"|trans|raw }}</option>
+                    <option value="trimestre" {{ sel_trimestre }}>{{ "próximo trimestre"|trans|raw }}</option>
+                    <option value="any" {{ sel_any }}>{{ "próximo año"|trans|raw }}</option>
+                </select>
+            </div>
         </div>
-        <div class="col-5">
-          {{ oDesplOficinas.desplegable|raw }}
+        <div class="mt-2 row bg-light">
+            <!--  --------------------  Oficinas --------------------------  -->
+            {% if secretaria %}
+                <div class="row col-2">
+                    <div class="col-5">
+                        <label for="id_oficina" class="col-xs-1 form-label">{{ "Oficina"|trans|raw }}:</label>
+                    </div>
+                    <div class="col-5">
+                        {{ oDesplOficinas.desplegable|raw }}
+                    </div>
+                </div>
+            {% else %}
+                <input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
+            {% endif %}
+            <!--  --------------------  Encargados --------------------------  -->
+            <div class="row col-6">
+                <label class="col-5 form-label">{{ "¿Está asignado a alguien?"|trans|raw }}:</label>
+                <div class="col-5">
+                    {{ oDesplEncargados.desplegable|raw }}
+                </div>
+            </div>
+            <!--  --------------------  BOTONES --------------------------  -->
+            <div class="col-3">
+                <button tabindex='90' class="p-2 btn btn-success" onClick="fnjs_buscar_lista_pendientes();">
+                    {{ "listar"|trans|raw }}
+                </button>
+            </div>
         </div>
-      </div>
-    {% else %}
-      <input type="hidden" id="id_oficina" name="id_oficina" value="{{ id_oficina }}">
-    {% endif %}
-    <!--  --------------------  Encargados --------------------------  -->
-    <div class="row col-6">
-      <label class="col-5 form-label">{{ "¿Está asignado a alguien?"|trans|raw }}:</label>
-      <div class="col-5">
-        {{ oDesplEncargados.desplegable|raw }}
-      </div>
-    </div>
- 	<!--  --------------------  BOTONES --------------------------  -->
-    <div class="col-3">
-	  <button tabindex='90' class="p-2 btn btn-success" onClick="fnjs_buscar_lista_pendientes();" >
-        {{ "listar"|trans|raw }}
-  	  </button>
-  	</div> 
-  </div>
-</form>
+    </form>
 </div>
 <hr>
-<div id="exportar" >
-<form id='seleccionados' name='seleccionados' action='' method='post'>
-	<input type='hidden' id='calendario' name='calendario' value='{{ op_calendario_default }}'>
-	<input type='hidden' name='filtro' value='{{ filtro }}'>
-	<input type='hidden' name='periodo' value='{{ periodo }}'>
-    <input type="hidden" id="id_oficina2" name="id_oficina" value="{{ id_oficina }}">
-	<input type='hidden' name='permiso' value='3'>
-	<input type='Hidden' name='go' value='lista' >
-	<input type='Hidden' id='nuevo' name='nuevo' value='' >
-	{{ oTabla.mostrar_tabla|raw }}
-</form><br>
+<div id="exportar">
+    <form id='seleccionados' name='seleccionados' action='' method='post'>
+        <input type='hidden' id='calendario' name='calendario' value='{{ op_calendario_default }}'>
+        <input type='hidden' name='filtro' value='{{ filtro }}'>
+        <input type='hidden' name='periodo' value='{{ periodo }}'>
+        <input type="hidden" id="id_oficina2" name="id_oficina" value="{{ id_oficina }}">
+        <input type='hidden' name='permiso' value='3'>
+        <input type='Hidden' name='go' value='lista'>
+        <input type='Hidden' id='nuevo' name='nuevo' value=''>
+        {{ oTabla.mostrar_tabla|raw }}
+    </form>
+    <br>
 
-<input id="btn_nuevo" type="button" name="nuevo" onclick='fnjs_nuevo_pendiente("#seleccionados");' value="{{ "nuevo"|trans|raw }}">
-<input id="btn_buscar" type="button" name="buscar" onclick='fnjs_buscar_pendiente("#seleccionados");' value="{{ "buscar un pendiente"|trans|raw }}">
-{% if secretaria %}
-    <input id="btn_migrar" type="button" name="migrar" onclick='fnjs_migrar_pendiente("#seleccionados");' value="{{ "trasladar pendientes"|trans|raw }}">
-    <input id="btn_sanear" type="button" name="sanear" onclick='fnjs_sanear_pendiente("#seleccionados");' value="{{ "buscar pendientes de escritos anulados"|trans|raw }}">
-{% endif %}
+    <input id="btn_nuevo" type="button" name="nuevo" onclick='fnjs_nuevo_pendiente("#seleccionados");'
+           value="{{ "nuevo"|trans|raw }}">
+    <input id="btn_buscar" type="button" name="buscar" onclick='fnjs_buscar_pendiente("#seleccionados");'
+           value="{{ "buscar un pendiente"|trans|raw }}">
+    {% if secretaria %}
+        <input id="btn_migrar" type="button" name="migrar" onclick='fnjs_migrar_pendiente("#seleccionados");'
+               value="{{ "trasladar pendientes"|trans|raw }}">
+        <input id="btn_sanear" type="button" name="sanear" onclick='fnjs_sanear_pendiente("#seleccionados");'
+               value="{{ "buscar pendientes de escritos anulados"|trans|raw }}">
+    {% endif %}
 
 </div>
 
 {{ include ('_pendiente_tabla_js.html.twig') }}
 <script type="text/javascript">
-$(document).ready(function() {
-	tabs_show('{{ vista }}','{{ filtro }}');
-});
+    $(document).ready(function () {
+        tabs_show('{{ vista }}', '{{ filtro }}');
+    });
 </script>

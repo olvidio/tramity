@@ -52,8 +52,7 @@ class WithNode extends Node
                 ->raw(", \$this->getSourceContext());\n")
                 ->outdent()
                 ->write("}\n")
-                ->write(sprintf("\$%s = twig_to_array(\$%s);\n", $varsName, $varsName))
-            ;
+                ->write(sprintf("\$%s = twig_to_array(\$%s);\n", $varsName, $varsName));
 
             if ($this->getAttribute('only')) {
                 $compiler->write("\$context = [];\n");
@@ -64,7 +63,6 @@ class WithNode extends Node
 
         $compiler
             ->subcompile($this->getNode('body'))
-            ->write(sprintf("\$context = \$%s;\n", $parentContextName))
-        ;
+            ->write(sprintf("\$context = \$%s;\n", $parentContextName));
     }
 }

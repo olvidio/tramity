@@ -1,46 +1,47 @@
 <?php
+
 use tramites\model\entity\GestorTramite;
-use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use web\Hash;
+
 /**
-* Esta página muestra el cuadro para seleccionar el proceso
-*
-*
-*@package	delegacion
-*@subpackage	tramites
-*@author	Daniel Serrabou
-*@since		07/12/18.
-*		
-*/
+ * Esta página muestra el cuadro para seleccionar el proceso
+ *
+ *
+ * @package    delegacion
+ * @subpackage    tramites
+ * @author    Daniel Serrabou
+ * @since        07/12/18.
+ *
+ */
 
 // INICIO Cabecera global de URL de controlador *********************************
-	require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
-	
-// Crea los objectos de uso global **********************************************
-	require_once ("apps/core/global_object.inc");
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
+
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Qrefresh = (integer)  \filter_input(INPUT_POST, 'refresh');
+$Qrefresh = (integer)\filter_input(INPUT_POST, 'refresh');
 $oPosicion->recordar($Qrefresh);
 
 //Si vengo por medio de Posicion, borro la última
 if (isset($_POST['stack'])) {
-	$stack = \filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
-	if ($stack != '') {
-		$oPosicion2 = new web\Posicion();
-		if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
-			$Qid_sel=$oPosicion2->getParametro('id_sel');
-			$Qscroll_id = $oPosicion2->getParametro('scroll_id');
-			$oPosicion2->olvidar($stack);
-		}
-	}
+    $stack = \filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
+    if ($stack != '') {
+        $oPosicion2 = new web\Posicion();
+        if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
+            $Qid_sel = $oPosicion2->getParametro('id_sel');
+            $Qscroll_id = $oPosicion2->getParametro('scroll_id');
+            $oPosicion2->olvidar($stack);
+        }
+    }
 }
 
-$oLista=new GestorTramite();
-$oDespl=$oLista->getListaTramites();
+$oLista = new GestorTramite();
+$oDespl = $oLista->getListaTramites();
 
 $url_ajax = "apps/tramites/controller/tramitecargo_ajax.php";
 $url_ver = "apps/tramites/controller/tramitecargo_ver.php";
@@ -99,4 +100,4 @@ $a_campos = ['oPosicion' => $oPosicion,
 ];
 
 $oView = new core\ViewTwig('tramites/controller');
-echo $oView->render('tramitecargo_select.html.twig',$a_campos);
+echo $oView->render('tramitecargo_select.html.twig', $a_campos);

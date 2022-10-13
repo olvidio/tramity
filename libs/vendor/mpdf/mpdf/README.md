@@ -22,7 +22,6 @@ PHP versions and extensions
 - `PHP 7.3` is supported since `mPDF v7.1.7`
 - `PHP 7.4` is supported since `mPDF v8.0.4`
 
-
 PHP `mbstring` and `gd` extensions have to be loaded.
 
 Additional extensions may be required for some advanced features such as `zlib` for compression of output and
@@ -44,7 +43,8 @@ Consider supporting development of mPDF with a donation of any value. [Donation 
 Installation
 ============
 
-Official installation method is via composer and its packagist package [mpdf/mpdf](https://packagist.org/packages/mpdf/mpdf).
+Official installation method is via composer and its packagist
+package [mpdf/mpdf](https://packagist.org/packages/mpdf/mpdf).
 
 ```
 $ composer require mpdf/mpdf
@@ -80,7 +80,6 @@ The directory must have write permissions (mode `775` is recommended) for users 
 
 **Warning:** mPDF will clean up old temporary files in the temporary directory. Choose a path dedicated to mPDF only.
 
-
 ```php
 <?php
 
@@ -103,12 +102,14 @@ Online manual
 
 Online manual is available at https://mpdf.github.io/.
 
-For general questions or troubleshooting please use the [mpdf tag](https://stackoverflow.com/questions/tagged/mpdf) at Stack Overflow (and not the project's issue tracker).
+For general questions or troubleshooting please use the [mpdf tag](https://stackoverflow.com/questions/tagged/mpdf) at
+Stack Overflow (and not the project's issue tracker).
 
 Contributing
 ============
 
-Please read before submitting issues and pull requests the [CONTRIBUTING.md](https://github.com/mpdf/mpdf/blob/development/.github/CONTRIBUTING.md) file.
+Please read before submitting issues and pull requests
+the [CONTRIBUTING.md](https://github.com/mpdf/mpdf/blob/development/.github/CONTRIBUTING.md) file.
 
 Unit Testing
 ============

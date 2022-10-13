@@ -1,4 +1,4 @@
-{%  if not peticion_ajax %}
+{% if not peticion_ajax %}
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     {# <script src="xxxnode_modules/mdb-ui-kit/js/mdb.min.js"></script> #}
@@ -9,27 +9,27 @@
 {% include '_nav_bar.html.twig' %}
 
 <!-- Page content -->
-<div id="content" style="margin: 1cm;" >   
+<div id="content" style="margin: 1cm;">
     <!-- Tabs -->
-    <div id="tabs" style="margin: 1cm;" >  
-    <!-- vars: a_pills -->
-    {% include 'usuario_tabs.html.twig' %}
+    <div id="tabs" style="margin: 1cm;">
+        <!-- vars: a_pills -->
+        {% include 'usuario_tabs.html.twig' %}
     </div> <!-- End of tabs -->
     <!-- Main -->
-    <div id="main" style="margin: 1cm;" >
+    <div id="main" style="margin: 1cm;">
     </div> <!-- End of main -->
 </div> <!-- End of content -->
 
-<div id="cargando" >{{ "Cargando..."|trans|raw }}</div>
+<div id="cargando">{{ "Cargando..."|trans|raw }}</div>
 
 <!-- Custom scripts for all pages-->
 {# solo debe cargarse un vez, sino hay conflicto con los dropdown bootsrtap #}
 <!-- vars: mi_idioma, error_fecha -->
 {% include '_scripts_default.html.twig' %}
 <script>
-window.onload = function() {
-	// cargar lista pendientes:
-	fnjs_update_div('#main', '{{ pagina_inicio }}');
-};
+    window.onload = function () {
+        // cargar lista pendientes:
+        fnjs_update_div('#main', '{{ pagina_inicio }}');
+    };
 
 </script>

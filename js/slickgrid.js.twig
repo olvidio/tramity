@@ -1,110 +1,110 @@
 <script>
-fnjs_slick_col_visible=function() {
-	// columnas vivibles
-	colsVisible={};
-	ci = 0;
-	v ="true";
-	$(".slick-header-columns .slick-column-name").each(function(i){
-		ci++;
-		// para saber el nombre
-		name=$(this).text();
-		name_idx = name.replace(/ /g,''); // quito posibles espacios en el indice
-		//alert ("name: "+name+" vis: "+v);
-		colsVisible[name_idx]=v;
-	});
-	if (ci == 0) { colsVisible = 'noCambia'; }
-	//alert (ci+'  cols: '+colsVisible);
-	return colsVisible;
+    fnjs_slick_col_visible=function() {
+    // columnas vivibles
+    colsVisible = {};
+    ci = 0;
+    v ="true";
+    $(".slick-header-columns .slick-column-name").each(function(i){
+    ci++;
+    // para saber el nombre
+    name=$(this).text();
+    name_idx = name.replace(/ /g,''); // quito posibles espacios en el indice
+    //alert ("name: "+name+" vis: "+v);
+    colsVisible[name_idx]=v;
+});
+    if (ci == 0) {colsVisible = 'noCambia';}
+    //alert (ci+'  cols: '+colsVisible);
+    return colsVisible;
 }
 
-fnjs_slick_search_panel=function(tabla) {
-	// panel de búsqueda
-	if ($("#inlineFilterPanel_"+tabla).is(":visible")) {
-		panelVis = "si";
-	} else {
-		panelVis = "no";
-	}
-	//alert (panelVis);
-	return panelVis;
+    fnjs_slick_search_panel=function(tabla) {
+    // panel de búsqueda
+    if ($("#inlineFilterPanel_"+tabla).is(":visible")) {
+    panelVis = "si";
+} else {
+    panelVis = "no";
 }
-fnjs_slick_cols_width=function(tabla) {
-	// anchura de las columnas
-	colsWidth={};
-	$("#grid_"+tabla+" .slick-header-column").each(function(i){
-		//styl = $(this).attr("style");
-		wid = $(this).css('width');
-		//alert (wid);
-		// quitar los 'px'
-		//match = /width:\s*(\d*)(\.)?(.*)px;/i.exec(styl)
-		regExp = /(\d*)(px)*/;
-		match = regExp.exec(wid);
-		w=0;
-		if (match != null) {
-			w = match[1];
-			if (w==undefined) {
-				w=0;
-			}
-		}
-		//alert (w);
-		// para saber el nombre
-		name=$(this).children(".slick-column-name").text();
-		name_idx = name.replace(/ /g,''); // quito posibles espacios en el indice
-		colsWidth[name_idx]=w;
-	});
-	return colsWidth;
+    //alert (panelVis);
+    return panelVis;
 }
-fnjs_slick_grid_width=function(tabla) {
-	// anchura de toda la grid
-	var widthGrid = '';
-	styl = $('#grid_'+tabla).attr('style');
-	match = /(^|\s)width:\s*(\d*)(\.)?(.*)px;/i.exec(styl)
-	if (match != null) {
-		w = match[2];
-		if (w!=undefined) {
-			widthGrid=w;
-		}
-	}
-	return widthGrid;
+    fnjs_slick_cols_width=function(tabla) {
+    // anchura de las columnas
+    colsWidth = {};
+    $("#grid_"+tabla+" .slick-header-column").each(function(i){
+    //styl = $(this).attr("style");
+    wid = $(this).css('width');
+    //alert (wid);
+    // quitar los 'px'
+    //match = /width:\s*(\d*)(\.)?(.*)px;/i.exec(styl)
+    regExp = /(\d*)(px)*/;
+    match = regExp.exec(wid);
+    w=0;
+    if (match != null) {
+    w = match[1];
+    if (w==undefined) {
+    w=0;
 }
-fnjs_slick_grid_height=function(tabla) {
-	// altura de toda la grid
-	var heightGrid = '';
-	styl = $('#grid_'+tabla).attr('style');
-	match = /(^|\s)height:\s*(\d*)(\.)?(.*)px;/i.exec(styl)
-	if (match != null) {
-		h = match[2];
-		if (h!=undefined) {
-			heightGrid=h;
-		}
-	}
-	return heightGrid;
 }
-fnjs_def_tabla=function(tabla) {
-	// si es la tabla por defecto, no puedo guardar las preferencias.
-	if (tabla=='uno') { alert("{{ "no puedo grabar las preferencias de la tabla. No puede tener el nombre por defecto"|trans|raw }}: "+tabla); return; }
+    //alert (w);
+    // para saber el nombre
+    name=$(this).children(".slick-column-name").text();
+    name_idx = name.replace(/ /g,''); // quito posibles espacios en el indice
+    colsWidth[name_idx]=w;
+});
+    return colsWidth;
+}
+    fnjs_slick_grid_width=function(tabla) {
+    // anchura de toda la grid
+    var widthGrid = '';
+    styl = $('#grid_'+tabla).attr('style');
+    match = /(^|\s)width:\s*(\d*)(\.)?(.*)px;/i.exec(styl)
+    if (match != null) {
+    w = match[2];
+    if (w!=undefined) {
+    widthGrid=w;
+}
+}
+    return widthGrid;
+}
+    fnjs_slick_grid_height=function(tabla) {
+    // altura de toda la grid
+    var heightGrid = '';
+    styl = $('#grid_'+tabla).attr('style');
+    match = /(^|\s)height:\s*(\d*)(\.)?(.*)px;/i.exec(styl)
+    if (match != null) {
+    h = match[2];
+    if (h!=undefined) {
+    heightGrid=h;
+}
+}
+    return heightGrid;
+}
+    fnjs_def_tabla=function(tabla) {
+    // si es la tabla por defecto, no puedo guardar las preferencias.
+    if (tabla=='uno') {alert("{{ "no puedo grabar las preferencias de la tabla. No puede tener el nombre por defecto"|trans|raw }}: "+tabla); return;}
 
-	panelVis=fnjs_slick_search_panel(tabla);
-	colsVisible=fnjs_slick_col_visible();
-	//alert(JSON.stringify(colsVisible));
-	colsWidth=fnjs_slick_cols_width(tabla);
-	//alert(JSON.stringify(colsWidth));
-	widthGrid=fnjs_slick_grid_width(tabla);
-	heightGrid=fnjs_slick_grid_height(tabla);
+    panelVis=fnjs_slick_search_panel(tabla);
+    colsVisible=fnjs_slick_col_visible();
+    //alert(JSON.stringify(colsVisible));
+    colsWidth=fnjs_slick_cols_width(tabla);
+    //alert(JSON.stringify(colsWidth));
+    widthGrid=fnjs_slick_grid_width(tabla);
+    heightGrid=fnjs_slick_grid_height(tabla);
 
-	oPrefs = { "panelVis": panelVis, "colVisible": colsVisible, "colWidths": colsWidth, "widthGrid": widthGrid, "heightGrid": heightGrid };
-	sPrefs = JSON.stringify(oPrefs);
-	url="apps/usuarios/controller/personal_update.php";
-	parametros='que=slickGrid&tabla='+tabla+'&sPrefs='+sPrefs; 
-	$.ajax({
-			url: url,
-			type: 'post',
-			data: parametros,
-			complete: function (rta) {
-				rta_txt=rta.responseText;
-				if (rta_txt != '' && rta_txt != '\n') {
-					alert (rta_txt);
-				}
-			}
-	});
+    oPrefs = {"panelVis": panelVis, "colVisible": colsVisible, "colWidths": colsWidth, "widthGrid": widthGrid, "heightGrid": heightGrid};
+    sPrefs = JSON.stringify(oPrefs);
+    url="apps/usuarios/controller/personal_update.php";
+    parametros='que=slickGrid&tabla='+tabla+'&sPrefs='+sPrefs;
+    $.ajax({
+    url: url,
+    type: 'post',
+    data: parametros,
+    complete: function (rta) {
+    rta_txt=rta.responseText;
+    if (rta_txt != '' && rta_txt != '\n') {
+    alert (rta_txt);
+}
+}
+});
 }
 </script>

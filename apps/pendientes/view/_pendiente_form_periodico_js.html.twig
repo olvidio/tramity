@@ -1,77 +1,77 @@
 <script>
-$(function() {
-	$( "#f_until" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		yearStart: {{ yearStart }},
-		yearEnd: {{ yearEnd }},
-		dayOfWeekStart: globaljsVarDayStart,
-		onShow: function(ct){
-			var f_min_iso = '{{ hoy_iso }}';
-			this.setOptions({
-				minDate: f_min_iso ? f_min_iso: false
-            })
-        }
+    $(function () {
+        $("#f_until").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            yearStart: {{ yearStart }},
+            yearEnd: {{ yearEnd }},
+            dayOfWeekStart: globaljsVarDayStart,
+            onShow: function (ct) {
+                var f_min_iso = '{{ hoy_iso }}';
+                this.setOptions({
+                    minDate: f_min_iso ? f_min_iso : false
+                })
+            }
+        });
+
+    });
+    $(function () {
+        $("#f_inicio").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            yearStart: {{ yearStart }},
+            yearEnd: {{ yearEnd }},
+            dayOfWeekStart: globaljsVarDayStart,
+            onShow: function (ct) {
+                var f_max_iso = '{{ hoy_iso }}';
+                this.setOptions({
+                    maxDate: f_max_iso ? f_max_iso : false
+                })
+            }
+        });
+
     });
 
-});
-$(function() {
-	$( "#f_inicio" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		yearStart: {{ yearStart }},
-		yearEnd: {{ yearEnd }},
-		dayOfWeekStart: globaljsVarDayStart,
-		onShow: function(ct){
-			var f_max_iso = '{{ hoy_iso }}';
-			this.setOptions({
-				maxDate: f_max_iso ? f_max_iso: false
-            })
+    fnjs_marcar = function (id) {
+        $(id).prop("checked", true);
+    }
+
+    fnjs_ver_tab = function (elemento, btn) {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
         }
-    });
+        var tabs = ['#periodico_d_a', '#periodico_d_m', '#periodico_d_s', '#periodico_d_d'];
+        $.each(tabs, function (i, item) {
+            $(item).hide()
+        });
+        $(elemento).show();
+        var el = elemento.substr(1);
+        $('#periodico_tipo').val(el);
+        // activar el button:
+        var btns = ['#btn_d_a', '#btn_d_m', '#btn_d_s', '#btn_d_d'];
+        $.each(btns, function (i, item) {
+            $(item).removeClass('active')
+        });
+        $(btn).addClass('active');
+    }
 
-});
-
-fnjs_marcar=function(id){
-	$(id).prop("checked",true);
-}
-
-fnjs_ver_tab=function(elemento,btn){
-    if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-	}
-	var tabs=[ '#periodico_d_a', '#periodico_d_m', '#periodico_d_s', '#periodico_d_d'];
-	$.each(tabs,function(i,item){
-			$(item).hide()
-			});
-	$(elemento).show();
-	var el=elemento.substr(1);
-	$('#periodico_tipo').val(el);
-	// activar el button:
-	var btns=[ '#btn_d_a', '#btn_d_m', '#btn_d_s', '#btn_d_d'];
-	$.each(btns,function(i,item){
-			$(item).removeClass('active')
-			});
-	$(btn).addClass('active');
-}
-
-/* activar el boton correspondiente*/
-$(document).ready(function(){
-	 {% if periodico_tipo == "periodico_d_a" %}
+    /* activar el boton correspondiente*/
+    $(document).ready(function () {
+        {% if periodico_tipo == "periodico_d_a" %}
         $('#btn_d_a').addClass('active');
-	 {% endif %}
-	 {% if periodico_tipo == "periodico_d_m" %}
+        {% endif %}
+        {% if periodico_tipo == "periodico_d_m" %}
         $('#btn_d_m').addClass('active');
-	 {% endif %}
-	 {% if periodico_tipo == "periodico_d_s" %}
+        {% endif %}
+        {% if periodico_tipo == "periodico_d_s" %}
         $('#btn_d_s').addClass('active');
-	 {% endif %}
-	 {% if periodico_tipo == "periodico_d_d" %}
+        {% endif %}
+        {% if periodico_tipo == "periodico_d_d" %}
         $('#btn_d_d').addClass('active');
-	 {% endif %}
-}); 
+        {% endif %}
+    });
 </script>

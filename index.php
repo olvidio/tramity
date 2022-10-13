@@ -4,6 +4,7 @@ var_dump( xdebug_info( 'mode' ) );
 xdebug_info();
 die();
 */
+
 // INICIO Cabecera global de URL de controlador *********************************
 use config\model\entity\ConfigSchema;
 use core\ConfigGlobal;
@@ -11,16 +12,16 @@ use core\ViewTwig;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
 // Para salir de la sesión.
-if (isset($_REQUEST['logout']) && $_REQUEST['logout'] == 'si') {
+if (isset($_REQUEST['logout']) && $_REQUEST['logout'] === 'si') {
     // Destruir todas las variables de sesión.
     $_SESSION = array();
     //$GLOBALS = array(); # error en php8.1
@@ -31,7 +32,7 @@ if (isset($_REQUEST['logout']) && $_REQUEST['logout'] == 'si') {
         setcookie(session_name(), '', time() - 42000,
             $params["path"], $params["domain"],
             $params["secure"], $params["httponly"]
-            );
+        );
     }
     // Finalmente, destruir la sesión.
     session_regenerate_id();
@@ -70,7 +71,7 @@ if ($valor_ambito == Cargo::AMBITO_DL) {
 //oficinas adicionales (suplencias..)
 if ($role_actual != 'admin') {
     $aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
-    foreach($aPosiblesCargos as $id_cargo => $cargo) {
+    foreach ($aPosiblesCargos as $id_cargo => $cargo) {
         $a_roles_posibles[] = $cargo;
         // si es de secretaria, lo añado
         if ($valor_ambito === Cargo::AMBITO_DL) {
@@ -87,134 +88,130 @@ $_SESSION['session_auth']['a_roles'] = $a_roles_posibles;
 ?>
 <!DOCTYPE html>
 <head>
-<script>
-fnjs_is_active=function() {
-	url='apps/usuarios/controller/test_status_phpsession.php';
-	var xmlHttp = new XMLHttpRequest();
-	// a pelo, porque todavía no he cargado el jQuery.
-    xmlHttp.onreadystatechange = function()
-    {
-        if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
-        {
-            rta_json=JSON.parse(xmlHttp.responseText);
-            if (rta_json.success != true) {
-                fnjs_logout();
-            }
-        }
-    }
-    xmlHttp.open("post", url); 
-    xmlHttp.send();
-}
-
-// Cada 5 seg. comprobar que la sessión php no ha finalizado, para volver al login de entrada
-// Si es en el portatil no lo compruebo, para que haya menos cosas en los logs.
-<?php
-if (ConfigGlobal::SERVIDOR != 'tramity.local') {
-	echo "setInterval( fnjs_is_active, 5000);";
-}
-?>
-
-fnjs_procesarError=function() {
-	alert("<?= _("Error de página devuelta") ?>");
-}
-fnjs_ref_absoluta=function(base,path) {
-    var url="";
-    var inicio="";
-    var base1= base;
-    var path1= path;
-    var secure = <?php if (!empty($_SERVER["HTTPS"])) { echo 1; } else {echo 0;} ?> ;
-	if (secure) {
-		var protocol = 'https:';
-	} else {
-		var protocol = 'http:';
-	}
-	// El apache ya ha añadido por su cuenta protocolo+$web. Lo quito:
-	ini=protocol+'<?= ConfigGlobal::getWeb() ?>';
-	if (path.indexOf(ini) != -1) {
-		path=path.replace(ini,'');
-	} else {
-		// pruebo si ha subido un nivel, si ha subido más (../../../) no hay manera. El apache sube hasta nivel de servidor, no más.
-        ini=protocol+'<?= ConfigGlobal::getWeb() ?>';
-        if (path.indexOf(ini) != -1) {
-            path=path.replace(ini,'');
-        } else {
-            // si el path es una ref. absoluta, no hago nada
-            // si empieza por http://
-            if  ( path.match(/^http/) ) {
-                url=path;
-                return url;
-            } else {
-                if ("<?= ConfigGlobal::mi_usuario() ?>"=="dani") {
-                    alert("Este link no va ha funcionar bien, porque tiene una url relativa: ../../\n"+path);
+    <script>
+        fnjs_is_active = function () {
+            url = 'apps/usuarios/controller/test_status_phpsession.php';
+            let xmlHttp = new XMLHttpRequest();
+            // a pelo, porque todavía no he cargado el jQuery.
+            xmlHttp.onreadystatechange = function () {
+                let rta_json;
+                if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                    rta_json = JSON.parse(xmlHttp.responseText);
+                    if (rta_json.success !== true) {
+                        fnjs_logout();
+                    }
                 }
             }
+            xmlHttp.open("post", url);
+            xmlHttp.send();
         }
-	}
-	// De la base. puede ser un directorio o una web:
-	//   - cambio el directorio físico por su correspondiente web.
-	//   - quito el documento.
-	
-	a=0;
-	if ( base.match(/^<?= addcslashes(ConfigGlobal::$directorio,"/") ?>/) ) {	// si es un directorio
-		base=base.replace('<?= ConfigGlobal::$directorio ?>','');
-		inicio=protocol+'<?= ConfigGlobal::getWeb() ?>';
-    } else { if ( base.match(/^<?= addcslashes(ConfigGlobal::$dir_web,"/") ?>/) ){
-        base=base.replace('<?= ConfigGlobal::$dir_web ?>','');
-        inicio=protocol+'<?= ConfigGlobal::getWeb() ?>';
-        a=5;
-		}
-    }
-	// si es una web:
-	if (!inicio) {
-		if (base.indexOf(protocol) != -1) {
-			base=base.replace(protocol,'');
-			inicio=protocol;
-            a=6;
-		}
-	}
-	// le quito la página final (si tiene) y la barra (/)
-	base=base.replace(/\/(\w+\.\w+$)|\/((\w+-)*(\w+ )*\w+\.\w+$)/,''); 
-	//elimino la base si ya existe en el path:
-	path=path.replace(base,'');
-	if ("<?= ConfigGlobal::mi_usuario() ?>"=="dani") {
-		//alert ("base1: "+base1+"\npath1: "+path1+"\npath: "+path+"\nAA: "+a +" base: "+base);	
-	}
-	// sino coincide con niguno, dejo lo que había.
-	if (!inicio) {
-		url=path;
-	} else {
-		url=inicio+base+path;
-	}
-	//alert ('url: '+url);
-	return url;
-}
-</script>
+
+        // Cada 5 seg. comprobar que la sesión php no ha finalizado, para volver al login de entrada
+        // Si es en el portátil no lo compruebo, para que haya menos cosas en los logs.
+        <?php
+        if (ConfigGlobal::SERVIDOR !== 'tramity.local') {
+            echo "setInterval( fnjs_is_active, 5000);";
+        }
+        ?>
+
+        fnjs_procesarError = function () {
+            alert("<?= _("Error de página devuelta") ?>");
+        }
+        fnjs_ref_absoluta = function (base, path) {
+            var url;
+            var inicio = "";
+            var secure = <?php if (!empty($_SERVER["HTTPS"])) {
+                echo 1;
+            } else {
+                echo 0;
+            } ?> ;
+            if (secure) {
+                var protocol = 'https:';
+            } else {
+                var protocol = 'http:';
+            }
+            // El apache ya ha añadido por su cuenta protocolo+$web. Lo quito:
+            ini = protocol + '<?= ConfigGlobal::getWeb() ?>';
+            if (path.indexOf(ini) !== -1) {
+                path = path.replace(ini, '');
+            } else {
+                // Pruebo si ha subido un nivel, si ha subido más (../../../) no hay manera. El apache sube hasta nivel de servidor, no más.
+                ini = protocol + '<?= ConfigGlobal::getWeb() ?>';
+                if (path.indexOf(ini) !== -1) {
+                    path = path.replace(ini, '');
+                } else {
+                    // si el path es una ref. absoluta, no hago nada
+                    // si empieza por http://
+                    if (path.match(/^http/)) {
+                        url = path;
+                        return url;
+                    } else {
+                        if ("<?= ConfigGlobal::mi_usuario() ?>" === "dani") {
+                            alert("Este link no va ha funcionar bien, porque tiene una url relativa: ../../\n" + path);
+                        }
+                    }
+                }
+            }
+            // De la base. Puede ser un directorio o una web:
+            //   - cambio el directorio físico por su correspondiente web.
+            //   - quito el documento.
+            if (base.match(/^<?= addcslashes(ConfigGlobal::$directorio, "/") ?>/)) { // si es un directorio
+                base = base.replace('<?= ConfigGlobal::$directorio ?>', '');
+                inicio = protocol + '<?= ConfigGlobal::getWeb() ?>';
+            } else {
+                if (base.match(/^<?= addcslashes(ConfigGlobal::$dir_web, "/") ?>/)) {
+                    base = base.replace('<?= ConfigGlobal::$dir_web ?>', '');
+                    inicio = protocol + '<?= ConfigGlobal::getWeb() ?>';
+                }
+            }
+            // si es una web:
+            if (!inicio) {
+                if (base.indexOf(protocol) !== -1) {
+                    base = base.replace(protocol, '');
+                    inicio = protocol;
+                }
+            }
+            // le quito la página final (si tiene) y la barra (/)
+            base = base.replace(/\/(\w+\.\w+$)|\/((\w+-)*(\w+ )*\w+\.\w+$)/, '');
+            //elimino la base si ya existe en el path:
+            path = path.replace(base, '');
+            // si no coincide con ninguno, dejo lo que había.
+            if (!inicio) {
+                url = path;
+            } else {
+                url = inicio + base + path;
+            }
+            //alert ('url: '+url);
+            return url;
+        }
+    </script>
+    <title>Tramity</title>
 </head>
 <body>
 <?php
 switch ($role_actual) {
     case 'admin':
-        $server =  $_SESSION['oConfig']->getServerDavical();
-        $server = $server.'/index.php';
-        // hay que enviar algun valor, sino el javascript da un error:
-        $error_fecha = empty($_SESSION['oConfig']->getPlazoError())? 15 : $_SESSION['oConfig']->getPlazoError();
-    	$pagina_profile = web\Hash::link('apps/usuarios/controller/personal.php?'.http_build_query([]));
+        $server = $_SESSION['oConfig']->getServerDavical();
+        $server .= '/index.php';
+        // hay que enviar algún valor, sino el javascript da un error:
+        $error_fecha = empty($_SESSION['oConfig']->getPlazoError()) ? 15 : $_SESSION['oConfig']->getPlazoError();
+        $pagina_profile = web\Hash::link('apps/usuarios/controller/personal.php?' . http_build_query([]));
         $a_campos = [
-			'pagina_profile' => $pagina_profile,
+            'pagina_profile' => $pagina_profile,
             'error_fecha' => $error_fecha,
             'server_davical' => $server,
         ];
         $entidad = ConfigGlobal::getEsquema();
         if ($entidad === 'admin') {
             $oView = new ViewTwig('usuarios/controller');
-            echo $oView->renderizar('admin_servidor.html.twig',$a_campos);
+            echo $oView->renderizar('admin_servidor.html.twig', $a_campos);
         } else {
             $a_campos['is_ambito_dl'] = $id_ambito_dl;
             $a_campos['entidad'] = $entidad;
             $oView = new ViewTwig('usuarios/controller');
-            echo $oView->renderizar('admin_entidad.html.twig',$a_campos);
+            echo $oView->renderizar('admin_entidad.html.twig', $a_campos);
         }
-        break; 
+        break;
     case 'secretaria';
         include_once 'apps/usuarios/controller/usuario_secretaria.php';
         break;

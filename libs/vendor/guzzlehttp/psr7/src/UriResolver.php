@@ -13,56 +13,23 @@ use Psr\Http\Message\UriInterface;
  */
 final class UriResolver
 {
-    /**
-     * Removes dot segments from a path and returns the new path.
-     *
-     * @param string $path
-     *
-     * @return string
-     * @link http://tools.ietf.org/html/rfc3986#section-5.2.4
-     */
-    public static function removeDotSegments($path)
+    private function __construct()
     {
-        if ($path === '' || $path === '/') {
-            return $path;
-        }
-
-        $results = [];
-        $segments = explode('/', $path);
-        foreach ($segments as $segment) {
-            if ($segment === '..') {
-                array_pop($results);
-            } elseif ($segment !== '.') {
-                $results[] = $segment;
-            }
-        }
-
-        $newPath = implode('/', $results);
-
-        if ($path[0] === '/' && (!isset($newPath[0]) || $newPath[0] !== '/')) {
-            // Re-add the leading slash if necessary for cases like "/.."
-            $newPath = '/' . $newPath;
-        } elseif ($newPath !== '' && ($segment === '.' || $segment === '..')) {
-            // Add the trailing slash if necessary
-            // If newPath is not empty, then $segment must be set and is the last segment from the foreach
-            $newPath .= '/';
-        }
-
-        return $newPath;
+        // cannot be instantiated
     }
 
     /**
      * Converts the relative URI into a new URI that is resolved against the base URI.
      *
      * @param UriInterface $base Base URI
-     * @param UriInterface $rel  Relative URI
+     * @param UriInterface $rel Relative URI
      *
      * @return UriInterface
      * @link http://tools.ietf.org/html/rfc3986#section-5.2
      */
     public static function resolve(UriInterface $base, UriInterface $rel)
     {
-        if ((string) $rel === '') {
+        if ((string)$rel === '') {
             // we can simply return the same base URI instance for this same-document reference
             return $base;
         }
@@ -110,6 +77,44 @@ final class UriResolver
     }
 
     /**
+     * Removes dot segments from a path and returns the new path.
+     *
+     * @param string $path
+     *
+     * @return string
+     * @link http://tools.ietf.org/html/rfc3986#section-5.2.4
+     */
+    public static function removeDotSegments($path)
+    {
+        if ($path === '' || $path === '/') {
+            return $path;
+        }
+
+        $results = [];
+        $segments = explode('/', $path);
+        foreach ($segments as $segment) {
+            if ($segment === '..') {
+                array_pop($results);
+            } elseif ($segment !== '.') {
+                $results[] = $segment;
+            }
+        }
+
+        $newPath = implode('/', $results);
+
+        if ($path[0] === '/' && (!isset($newPath[0]) || $newPath[0] !== '/')) {
+            // Re-add the leading slash if necessary for cases like "/.."
+            $newPath = '/' . $newPath;
+        } elseif ($newPath !== '' && ($segment === '.' || $segment === '..')) {
+            // Add the trailing slash if necessary
+            // If newPath is not empty, then $segment must be set and is the last segment from the foreach
+            $newPath .= '/';
+        }
+
+        return $newPath;
+    }
+
+    /**
      * Returns the target URI as a relative reference from the base URI.
      *
      * This method is the counterpart to resolve():
@@ -130,7 +135,7 @@ final class UriResolver
      *
      *    echo UriResolver::relativize($base, new Uri('/a/b/c'));  // prints 'c' as well
      *
-     * @param UriInterface $base   Base URI
+     * @param UriInterface $base Base URI
      * @param UriInterface $target Target URI
      *
      * @return UriInterface The relative URI reference
@@ -211,10 +216,5 @@ final class UriResolver
         }
 
         return $relativePath;
-    }
-
-    private function __construct()
-    {
-        // cannot be instantiated
     }
 }

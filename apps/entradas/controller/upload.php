@@ -1,13 +1,14 @@
 <?php
+
 use entradas\model\entity\EntradaAdjunto;
 
 // INICIO Cabecera global de URL de controlador *********************************
-require_once ("apps/core/global_header.inc");
-// Arxivos requeridos por esta url **********************************************
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
 
-// Crea los objectos de uso global **********************************************
-require_once ("apps/core/global_object.inc");
-// Crea los objectos por esta url  **********************************************
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos por esta url  **********************************************
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
@@ -21,10 +22,11 @@ exit(); // terminate
 // main upload function used above
 // upload the bootstrap-fileinput files
 // returns associative array
-function upload() {
-    $Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
-    $Qid_item = (integer) \filter_input(INPUT_POST, 'id_item');
-    
+function upload()
+{
+    $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+    $Qid_item = (integer)\filter_input(INPUT_POST, 'id_item');
+
     $preview = [];
     $config = [];
     $errors = [];
@@ -36,13 +38,13 @@ function upload() {
         for ($i = 0; $i < $total; $i++) {
             $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
             $fileName = $_FILES[$input]['name'][$i]; // the file name
-            
+
             //Make sure we have a file path
-            if ($tmpFilePath != "" && $Qid_entrada){
-                
+            if ($tmpFilePath != "" && $Qid_entrada) {
+
                 $fp = fopen($tmpFilePath, 'rb');
                 $contenido_doc = fread($fp, filesize($tmpFilePath));
-                
+
                 if (!empty($Qid_item)) {
                     // update
                     $oEntradaAdjunto = new EntradaAdjunto($Qid_item);
@@ -50,11 +52,11 @@ function upload() {
                     // new
                     $oEntradaAdjunto = new EntradaAdjunto();
                 }
-                
+
                 $oEntradaAdjunto->setId_entrada($Qid_entrada);
                 $oEntradaAdjunto->setNom($fileName);
                 $oEntradaAdjunto->setAdjunto($contenido_doc);
-                
+
                 if ($oEntradaAdjunto->DBGuardar() !== FALSE) {
                     $id_item = $oEntradaAdjunto->getId_item();
                     $preview[] = "'$fileName'";
@@ -72,7 +74,7 @@ function upload() {
         }
         $out = ['initialPreview' => $preview, 'initialPreviewConfig' => $config];
         if (!empty($errors)) {
-            $img = count($errors) === 1 ? 'file "' . $errors[0]  . '" ' : 'files: "' . implode('", "', $errors) . '" ';
+            $img = count($errors) === 1 ? 'file "' . $errors[0] . '" ' : 'files: "' . implode('", "', $errors) . '" ';
             $out['error'] = 'Oh snap! We could not upload the ' . $img . 'now. Please try again later.';
         }
         return $out;

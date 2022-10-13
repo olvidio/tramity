@@ -67,6 +67,72 @@ final class OptimizerNodeVisitor implements NodeVisitorInterface
         return $node;
     }
 
+    /**
+     * Optimizes "for" tag by removing the "loop" variable creation whenever possible.
+     */
+    private function enterOptimizeFor(Node $node, Environment $env): void
+    {
+        if ($node instanceof ForNode) {
+            // disable the loop variable by default
+            $node->setAttribute('with_loop', false);
+            array_unshift($this->loops, $node);
+            array_unshift($this->loopsTargets, $node->getNode('value_target')->getAttribute('name'));
+            array_unshift($this->loopsTargets, $node->getNode('key_target')->getAttribute('name'));
+        } elseif (!$this->loops) {
+            // we are outside a loop
+            return;
+        }
+
+        // when do we need to add the loop variable back?
+
+        // the loop variable is referenced for the current loop
+        elseif ($node instanceof NameExpression && 'loop' === $node->getAttribute('name')) {
+            $node->setAttribute('always_defined', true);
+            $this->addLoopToCurrent();
+        } // optimize access to loop targets
+        elseif ($node instanceof NameExpression && \in_array($node->getAttribute('name'), $this->loopsTargets)) {
+            $node->setAttribute('always_defined', true);
+        } // block reference
+        elseif ($node instanceof BlockReferenceNode || $node instanceof BlockReferenceExpression) {
+            $this->addLoopToCurrent();
+        } // include without the only attribute
+        elseif ($node instanceof IncludeNode && !$node->getAttribute('only')) {
+            $this->addLoopToAll();
+        } // include function without the with_context=false parameter
+        elseif ($node instanceof FunctionExpression
+            && 'include' === $node->getAttribute('name')
+            && (!$node->getNode('arguments')->hasNode('with_context')
+                || false !== $node->getNode('arguments')->getNode('with_context')->getAttribute('value')
+            )
+        ) {
+            $this->addLoopToAll();
+        } // the loop variable is referenced via an attribute
+        elseif ($node instanceof GetAttrExpression
+            && (!$node->getNode('attribute') instanceof ConstantExpression
+                || 'parent' === $node->getNode('attribute')->getAttribute('value')
+            )
+            && (true === $this->loops[0]->getAttribute('with_loop')
+                || ($node->getNode('node') instanceof NameExpression
+                    && 'loop' === $node->getNode('node')->getAttribute('name')
+                )
+            )
+        ) {
+            $this->addLoopToAll();
+        }
+    }
+
+    private function addLoopToCurrent(): void
+    {
+        $this->loops[0]->setAttribute('with_loop', true);
+    }
+
+    private function addLoopToAll(): void
+    {
+        foreach ($this->loops as $loop) {
+            $loop->setAttribute('with_loop', true);
+        }
+    }
+
     public function leaveNode(Node $node, Environment $env): ?Node
     {
         if (self::OPTIMIZE_FOR === (self::OPTIMIZE_FOR & $this->optimizers)) {
@@ -78,6 +144,30 @@ final class OptimizerNodeVisitor implements NodeVisitorInterface
         }
 
         $node = $this->optimizePrintNode($node, $env);
+
+        return $node;
+    }
+
+    /**
+     * Optimizes "for" tag by removing the "loop" variable creation whenever possible.
+     */
+    private function leaveOptimizeFor(Node $node, Environment $env): void
+    {
+        if ($node instanceof ForNode) {
+            array_shift($this->loops);
+            array_shift($this->loopsTargets);
+            array_shift($this->loopsTargets);
+        }
+    }
+
+    /**
+     * Removes "raw" filters.
+     */
+    private function optimizeRawFilter(Node $node, Environment $env): Node
+    {
+        if ($node instanceof FilterExpression && 'raw' == $node->getNode('filter')->getAttribute('value')) {
+            return $node->getNode('node');
+        }
 
         return $node;
     }
@@ -106,106 +196,6 @@ final class OptimizerNodeVisitor implements NodeVisitorInterface
         }
 
         return $node;
-    }
-
-    /**
-     * Removes "raw" filters.
-     */
-    private function optimizeRawFilter(Node $node, Environment $env): Node
-    {
-        if ($node instanceof FilterExpression && 'raw' == $node->getNode('filter')->getAttribute('value')) {
-            return $node->getNode('node');
-        }
-
-        return $node;
-    }
-
-    /**
-     * Optimizes "for" tag by removing the "loop" variable creation whenever possible.
-     */
-    private function enterOptimizeFor(Node $node, Environment $env): void
-    {
-        if ($node instanceof ForNode) {
-            // disable the loop variable by default
-            $node->setAttribute('with_loop', false);
-            array_unshift($this->loops, $node);
-            array_unshift($this->loopsTargets, $node->getNode('value_target')->getAttribute('name'));
-            array_unshift($this->loopsTargets, $node->getNode('key_target')->getAttribute('name'));
-        } elseif (!$this->loops) {
-            // we are outside a loop
-            return;
-        }
-
-        // when do we need to add the loop variable back?
-
-        // the loop variable is referenced for the current loop
-        elseif ($node instanceof NameExpression && 'loop' === $node->getAttribute('name')) {
-            $node->setAttribute('always_defined', true);
-            $this->addLoopToCurrent();
-        }
-
-        // optimize access to loop targets
-        elseif ($node instanceof NameExpression && \in_array($node->getAttribute('name'), $this->loopsTargets)) {
-            $node->setAttribute('always_defined', true);
-        }
-
-        // block reference
-        elseif ($node instanceof BlockReferenceNode || $node instanceof BlockReferenceExpression) {
-            $this->addLoopToCurrent();
-        }
-
-        // include without the only attribute
-        elseif ($node instanceof IncludeNode && !$node->getAttribute('only')) {
-            $this->addLoopToAll();
-        }
-
-        // include function without the with_context=false parameter
-        elseif ($node instanceof FunctionExpression
-            && 'include' === $node->getAttribute('name')
-            && (!$node->getNode('arguments')->hasNode('with_context')
-                 || false !== $node->getNode('arguments')->getNode('with_context')->getAttribute('value')
-               )
-        ) {
-            $this->addLoopToAll();
-        }
-
-        // the loop variable is referenced via an attribute
-        elseif ($node instanceof GetAttrExpression
-            && (!$node->getNode('attribute') instanceof ConstantExpression
-                || 'parent' === $node->getNode('attribute')->getAttribute('value')
-               )
-            && (true === $this->loops[0]->getAttribute('with_loop')
-                || ($node->getNode('node') instanceof NameExpression
-                    && 'loop' === $node->getNode('node')->getAttribute('name')
-                   )
-               )
-        ) {
-            $this->addLoopToAll();
-        }
-    }
-
-    /**
-     * Optimizes "for" tag by removing the "loop" variable creation whenever possible.
-     */
-    private function leaveOptimizeFor(Node $node, Environment $env): void
-    {
-        if ($node instanceof ForNode) {
-            array_shift($this->loops);
-            array_shift($this->loopsTargets);
-            array_shift($this->loopsTargets);
-        }
-    }
-
-    private function addLoopToCurrent(): void
-    {
-        $this->loops[0]->setAttribute('with_loop', true);
-    }
-
-    private function addLoopToAll(): void
-    {
-        foreach ($this->loops as $loop) {
-            $loop->setAttribute('with_loop', true);
-        }
     }
 
     public function getPriority(): int

@@ -1,390 +1,439 @@
 <script type="text/javascript">
-var global_flag = 1;
+    var global_flag = 1;
 
-$(function() {
-	$( "#destinos_mas" ).on('change focusout', fnjs_mas_destinos );
-});
-$(function() {
-	$( "#referencias_mas" ).on('change focusout', fnjs_mas_referencias );
-});
-
-$(function() {
-	$( "#f_plazo" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		yearStart: {{ yearStart }},
-		yearEnd: {{ yearEnd }},
-		dayOfWeekStart: globaljsVarDayStart,
+    $(function () {
+        $("#destinos_mas").on('change focusout', fnjs_mas_destinos);
+    });
+    $(function () {
+        $("#referencias_mas").on('change focusout', fnjs_mas_referencias);
     });
 
-});
-
-$(function() {
-	$( "#f_entrada" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		yearStart: {{ yearStart }},
-		yearEnd: {{ yearEnd }},
-		dayOfWeekStart: globaljsVarDayStart,
-    });
-
-});
-
-$(function() {
-	$( "#f_escrito" ).prop('autocomplete', 'off').datetimepicker( {
-		timepicker: false,
-		datepicker: true,
-		format: '{{ format }}',
-		yearStart: {{ yearStart }},
-		yearEnd: {{ yearEnd }},
-		dayOfWeekStart: globaljsVarDayStart,
-    });
-
-});
-
-fnjs_admitir=function(){
-	var val_admitir=$('#admitir').val();
-    $('#admitir_hidden').val(val_admitir);
-}
-
-fnjs_mod_pendiente=function() {
-    if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        // Asegurarme que es por click y no por return (posicion: 0,0)
-        var x = event.x || event.clientX;
-        var y = event.y || event.clientY;
-        if (!x && !y) {
-            return false;
-        }
-    }
-    var err=0;
-    var of_ponente=$('#of_ponente').val();
-
-    if (!of_ponente) { alert("{{ "Debe indicar el ponente para asignarle el pendiente"|trans|raw }}"); err=1; }
-
-    if (err!=1) {
-        var winPrefs="dependent=yes,width=1200,height=800,screenX=30,screenY=30,titlebar=yes,scrollbars=yes";
-        top.newWin = window.open("", "sele", winPrefs);
-        $('#form_entrada').attr('action','apps/pendientes/controller/pendiente_form.php');
-        $('#go').val('entradas');
-        $('#form_entrada').attr('target','sele');
-        $('#form_entrada').submit();
-        $('#form_entrada').off();
-        top.newWin.focus();
-    }
-}
-
-fnjs_cancelar=function(){
-    if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        // Asegurarme que es por click y no por return (posicion: 0,0)
-        var x = event.x || event.clientX;
-        var y = event.y || event.clientY;
-        if (!x && !y) {
-            return false;
-        }
-    }
-	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-}
-
-fnjs_guardar_entrada=function(){
-    if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        // Asegurarme que es por click y no por return (posicion: 0,0)
-        var x = event.x || event.clientX;
-        var y = event.y || event.clientY;
-        if (!x && !y) {
-            return false;
-        }
-    }
-
-	var err=0;
-	var origen=$('#origen').val();
-	var origen_prot_num=$('#prot_num_origen').val();
-	var asunto_e=$('#asunto_e').val();
-	var f_entrada=$('#f_entrada').val();
-	var f_escrito=$('#f_escrito').val();
-	var of_ponente=$('#of_ponente').val();
-	var plazo=$('#plazo').val();
-	var id_entrada=$('#id_entrada').val();
-	var categoria=$('#categoria').val();
-
-	var oficina='';
-	var i=0;
-	var selector="span#span_oficinas select";
-	$(selector).each(function(i) {
-		if ($(this).val().length) {  
-			i++;
-			if (i>1) oficina+=",";
-			oficina+=$(this).val();
-		}
-	});
-	
-    if (categoria != "{{ cat_e12 }}" ) { 
-        if (!origen) { alert("{{ "Debe llenar el campo de origen"|trans|raw }}"); err=1; }
-        if (!origen_prot_num) { alert("{{ "Debe llenar el campo de protocolo origen"|trans|raw }}"); err=1; }
-	}
-	if (!asunto_e) { alert("{{ "Debe llenar el campo de asunto entrada"|trans|raw }}"); err=1; }
-	if (!of_ponente) { alert("{{ "Debe llenar el campo del ponente"|trans|raw }}"); err=1; }
-	// La debe poner el vcd. En el caso de Introducir no hace falta la comprobación. Si en Asignar.
-	{% if comprobar_f_entrada %} 
-		if (!f_entrada) { alert("{{ "Debe llenar el campo de fecha de entrada"|trans|raw }}"); err=1; }
-        if (!fnjs_comprobar_fecha('#f_entrada')) { alert("{{ "La fecha de entrada no es correcta"|trans|raw }}"); err=1; }
-	{% endif %}
-
-	if (f_escrito) {
-		diff=fnjs_diff_fechas('#f_entrada','#f_escrito');	
-		if (diff < 0) {
-			alert("{{ "La fecha de entrada debe ser posterior a la del escrito"|trans|raw }}");
-			err=1; 
-		}
-	}
-	
-	if (plazo=="fecha") { 
-		var f_plazo=$('#f_plazo').val();
-		if (!f_plazo) { alert("{{ "Debe llenar el campo de fecha para contestar el escrito"|trans|raw }}"); err=1; }
-		if (!fnjs_fecha_en_intervalo('#f_plazo')) { err=0; } // Se permite, simplemente avisa.
-	}
-
-	if (err!=1) {
-		$('#oficinas').val(oficina);
-		$('#que').val('guardar');
-        datos = $('#form_entrada').serialize();
-        
-        request=$.ajax({
-            data: datos,
-            url: '{{ url_update }}',
-            method: 'POST',
-            dataType: 'json'
+    $(function () {
+        $("#f_plazo").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            yearStart: {{ yearStart }},
+            yearEnd: {{ yearEnd }},
+            dayOfWeekStart: globaljsVarDayStart,
         });
 
-        request.done( function (json) {
-            id = json.id_entrada;
-            if (json.success != true) {
-                rta_txt = json.mensaje;
-                alert ('error: '+rta_txt);
-            } else {
-                if (id != id_entrada) {
-                    // caso de nueva entrada
-                    $.confirm({
-                        title: '{{ "datos guardados"|trans|raw }}',
-                        content: '{{ "¿añadir escrito o adjuntos?"|trans|raw }}',
-                        buttons: {
-                            {{ "Sí"|trans|raw }}: function () {
-                                // ir al form entrada.
-                                pagina_mod = 'apps'
-                                fnjs_update_div('#main',json.pagina_mod);
-                            },
-                            {{ "No"|trans|raw }}: function () {
-                                // Volver a la lista...
-                                fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                            },
-                            somethingElse: {
-                                text: '{{ "otra entrada"|trans|raw }}',
-                                btnClass: 'btn-blue',
-                                keys: ['enter', 'shift'],
-                                // Nueva entrada.
-                                action: fnjs_update_div('#main','{{ pagina_nueva|raw }}')
-                            }
-                        }
-                    });
-                } else {
-                    alert ("{{ "datos guardados"|trans|raw }}");
-                    // Volver a la lista...
-                    fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-                }
-            }
+    });
+
+    $(function () {
+        $("#f_entrada").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            yearStart: {{ yearStart }},
+            yearEnd: {{ yearEnd }},
+            dayOfWeekStart: globaljsVarDayStart,
         });
-	}
-}
 
-fnjs_focus_a=function(camp){
-	$(camp).focus();
-}
+    });
 
-{{ oArrayProtRef.ComprobarSelectJs|raw }}
-fnjs_mas_referencias=function(){
-	event.stopImmediatePropagation();
-    var id_campo='#'+event.currentTarget.id;
-    var valor=$(id_campo).val();
-    if (event.type == 'change') {
-        global_flag = 2;
-        if (valor!=0) {
-            {{ oArrayProtRef.ListaSelectsJs|raw }}
-        } else {
-            $('#asunto').focus();
-        }
+    $(function () {
+        $("#f_escrito").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            yearStart: {{ yearStart }},
+            yearEnd: {{ yearEnd }},
+            dayOfWeekStart: globaljsVarDayStart,
+        });
+
+    });
+
+    fnjs_admitir = function () {
+        var val_admitir = $('#admitir').val();
+        $('#admitir_hidden').val(val_admitir);
     }
-    if (event.type == 'blur') {
-        if (global_flag == 1 && valor == 0 ) {
-            $('#asunto').focus();
-        }
-        global_flag = 1;
-    }
-}
-fnjs_quitar_referencias=function(){
-	$('#span_ref').html("");
-	$('#ref_num').val(0);
-}
 
-{{ oArrayDesplOficinas.ComprobarSelectJs|raw }}
-fnjs_mas_oficinas=function(){
-	if (event == undefined){
-		// cuando lo disparo por javascript
-        {{ oArrayDesplOficinas.ListaSelectsJs|raw }}
-    } else {
-        var code = (event.keyCode ? event.keyCode : event.which);
-        var valor=1;
-        var id_campo='#'+event.currentTarget.id;
-        var valor=$(id_campo).val();
-        if(code!=9 && typeof event !== 'undefined') {
+    fnjs_mod_pendiente = function () {
+        if (typeof event !== 'undefined') {
             event.preventDefault();
             event.stopPropagation();
-        }
-        if ( code==9 || event.type=="change") {
-            if (valor!=0) {
-                {{ oArrayDesplOficinas.ListaSelectsJs|raw }}
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
             }
         }
-	}
-}
-fnjs_quitar_oficinas=function(){
-	$('#span_oficinas').html("");
-	$('#oficina_num').val(0);
-}
+        var err = 0;
+        var of_ponente = $('#of_ponente').val();
 
-fnjs_comprobar_plazo=function(campo){
-	contestar=$('#plazo');
-	if (campo=="select") {
-		cont=contestar.val();
-		if (cont=="fecha") {
-			// activo el campo input y pongo allí el cursor
-			$("#f_plazo").prop("disabled", false);
-			$('#f_plazo').focus();
-			$('#f_plazo').val('');
-		} else {
-			var hoy=new Date();
-			var fecha=new Date();
-			switch (cont) {
-				case "hoy":
-					$('#f_plazo').val('');
-					break;
-				case "rápido":
-					var dias={{ plazo_rapido }};
-					var mseconds=hoy.getTime()+dias*24*60*60*1000;
-					fecha.setTime(mseconds);
-					var mes=fecha.getMonth()+1;
-					$('#f_plazo').val(fecha.getDate()+"/"+mes+"/"+fecha.getFullYear());
-					break;
-				case "urgente":
-					var dias={{ plazo_urgente }};
-					var mseconds=hoy.getTime()+dias*24*60*60*1000;
-					fecha.setTime(mseconds);
-					var mes=fecha.getMonth()+1;
-					$('#f_plazo').val(fecha.getDate()+"/"+mes+"/"+fecha.getFullYear());
-					break;
-				case "normal":
-					var dias={{ plazo_normal }};
-					var mseconds=hoy.getTime()+dias*24*60*60*1000;
-					fecha.setTime(mseconds);
-					var mes=fecha.getMonth()+1;
-					$('#f_plazo').val(fecha.getDate()+"/"+mes+"/"+fecha.getFullYear());
-					break;
-			}
-			$('#f_plazo').prop("disabled",true);
-			$('#b_guardar').focus();
-		}
-	} else { // es el input
-		contestar.val('fecha');
-		fecha=$('#f_plazo');
-		if (!fnjs_fecha_en_intervalo('#f_plazo')) { err=0; } // Se permite, simplemente avisa.
-		$('#b_guardar').focus();
-	}
-			
-}
+        if (!of_ponente) {
+            alert("{{ "Debe indicar el ponente para asignarle el pendiente"|trans|raw }}");
+            err = 1;
+        }
 
-fnjs_proto=function(num,any){
-    if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-	}
+        if (err != 1) {
+            var winPrefs = "dependent=yes,width=1200,height=800,screenX=30,screenY=30,titlebar=yes,scrollbars=yes";
+            top.newWin = window.open("", "sele", winPrefs);
+            $('#form_entrada').attr('action', 'apps/pendientes/controller/pendiente_form.php');
+            $('#go').val('entradas');
+            $('#form_entrada').attr('target', 'sele');
+            $('#form_entrada').submit();
+            $('#form_entrada').off();
+            top.newWin.focus();
+        }
+    }
 
-	var s=0;
-	var numero;
-	var siguiente="";
-	siguiente = num.replace(/_num_/g, "_mas_"); 
-	num_escaped = num.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
-	any_escaped = any.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
-	siguiente_escaped = siguiente.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
-	var prot_num=$(num_escaped).val();
-	var prot_any=$(any_escaped).val();
-	if (prot_num === undefined) {
-		return;
-	}
-	numero=prot_num.split("/");
-	if (numero[1]) {
-		$(num_escaped).val(numero[0]);
-		$(any_escaped).val(numero[1]);
-		prot_any=$(any).val();
-  	} else {
-		if (!prot_any) {
-			var calDate = new Date();
-  			var year  = calDate.getFullYear();
-  			var year2 = year.toString().substr(-2);
-			$(any).val(year2);
-			prot_any=year;
-		}
-	}
-	
-	/* Para el número de referencias */
-	if (num=='#prot_num_referencias[0]') {
-		prot_num_dst=$('#prot_num_destinos\\[0\\]').val();
-        if (prot_num_dst == '' || prot_num_dst == undefined) {
-            id_lugar=$('#referencias\\[0\\]').val();
-            prot_num=$('#prot_num_referencias\\[0\\]').val();
-            prot_any=$('#prot_any_referencias\\[0\\]').val();
+    fnjs_cancelar = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
+        }
+        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+    }
 
-            var url_buscar_ajax='apps/busquedas/controller/buscar_ajax.php';
-            var param_json = { para: 'entrada', que: 'buscar_referencia_correspondiente', id_lugar: id_lugar, prot_num: prot_num, prot_any: prot_any };
-            request=$.ajax({
-                data: param_json,
-                url: url_buscar_ajax,
+    fnjs_guardar_entrada = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
+        }
+
+        var err = 0;
+        var origen = $('#origen').val();
+        var origen_prot_num = $('#prot_num_origen').val();
+        var asunto_e = $('#asunto_e').val();
+        var f_entrada = $('#f_entrada').val();
+        var f_escrito = $('#f_escrito').val();
+        var of_ponente = $('#of_ponente').val();
+        var plazo = $('#plazo').val();
+        var id_entrada = $('#id_entrada').val();
+        var categoria = $('#categoria').val();
+
+        var oficina = '';
+        var i = 0;
+        var selector = "span#span_oficinas select";
+        $(selector).each(function (i) {
+            if ($(this).val().length) {
+                i++;
+                if (i > 1) oficina += ",";
+                oficina += $(this).val();
+            }
+        });
+
+        if (categoria != "{{ cat_e12 }}") {
+            if (!origen) {
+                alert("{{ "Debe llenar el campo de origen"|trans|raw }}");
+                err = 1;
+            }
+            if (!origen_prot_num) {
+                alert("{{ "Debe llenar el campo de protocolo origen"|trans|raw }}");
+                err = 1;
+            }
+        }
+        if (!asunto_e) {
+            alert("{{ "Debe llenar el campo de asunto entrada"|trans|raw }}");
+            err = 1;
+        }
+        if (!of_ponente) {
+            alert("{{ "Debe llenar el campo del ponente"|trans|raw }}");
+            err = 1;
+        }
+        // La debe poner el vcd. En el caso de Introducir no hace falta la comprobación. Si en Asignar.
+        {% if comprobar_f_entrada %}
+        if (!f_entrada) {
+            alert("{{ "Debe llenar el campo de fecha de entrada"|trans|raw }}");
+            err = 1;
+        }
+        if (!fnjs_comprobar_fecha('#f_entrada')) {
+            alert("{{ "La fecha de entrada no es correcta"|trans|raw }}");
+            err = 1;
+        }
+        {% endif %}
+
+        if (f_escrito) {
+            diff = fnjs_diff_fechas('#f_entrada', '#f_escrito');
+            if (diff < 0) {
+                alert("{{ "La fecha de entrada debe ser posterior a la del escrito"|trans|raw }}");
+                err = 1;
+            }
+        }
+
+        if (plazo == "fecha") {
+            var f_plazo = $('#f_plazo').val();
+            if (!f_plazo) {
+                alert("{{ "Debe llenar el campo de fecha para contestar el escrito"|trans|raw }}");
+                err = 1;
+            }
+            if (!fnjs_fecha_en_intervalo('#f_plazo')) {
+                err = 0;
+            } // Se permite, simplemente avisa.
+        }
+
+        if (err != 1) {
+            $('#oficinas').val(oficina);
+            $('#que').val('guardar');
+            datos = $('#form_entrada').serialize();
+
+            request = $.ajax({
+                data: datos,
+                url: '{{ url_update }}',
                 method: 'POST',
                 dataType: 'json'
             });
-            request.done( function (json) {
+
+            request.done(function (json) {
                 id = json.id_entrada;
                 if (json.success != true) {
-                    alert ('{{ "respuesta"|trans|raw }}: '+json.mensaje);
+                    rta_txt = json.mensaje;
+                    alert('error: ' + rta_txt);
                 } else {
-                    $('#asunto').val(json.asunto);
-                    $('#detalle').val(json.detalle);
-                    $('#categoria').val(json.categoria);
-                    $('#visibilidad').val(json.visibilidad);
-                    $('#of_ponente').val(json.id_ponente);
-                    // varias:
-                    for (const id_oficina of json.oficinas) {
-                        $('#oficinas_mas').val(id_oficina);
-                        $('#oficinas_mas').trigger("change");
+                    if (id != id_entrada) {
+                        // caso de nueva entrada
+                        $.confirm({
+                            title: '{{ "datos guardados"|trans|raw }}',
+                            content: '{{ "¿añadir escrito o adjuntos?"|trans|raw }}',
+                            buttons: {
+                        {{ "Sí"|trans|raw }}:
+
+                        function () {
+                            // ir al form entrada.
+                            pagina_mod = 'apps'
+                            fnjs_update_div('#main', json.pagina_mod);
+                        }
+
+                    ,
+                        {{ "No"|trans|raw }}:
+
+                        function () {
+                            // Volver a la lista...
+                            fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+                        }
+
+                    ,
+                        somethingElse: {
+                            text: '{{ "otra entrada"|trans|raw }}',
+                                btnClass
+                        :
+                            'btn-blue',
+                                keys
+                        :
+                            ['enter', 'shift'],
+                                // Nueva entrada.
+                                action
+                        :
+                            fnjs_update_div('#main', '{{ pagina_nueva|raw }}')
+                        }
+                    }
+                    })
+                        ;
+                    } else {
+                        alert("{{ "datos guardados"|trans|raw }}");
+                        // Volver a la lista...
+                        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
                     }
                 }
             });
         }
-	}
-	
-	siguiente_escaped = siguiente.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
-	$(siguiente_escaped).focus(); 
+    }
 
-	return false;
-}
+    fnjs_focus_a = function (camp) {
+        $(camp).focus();
+    }
+
+    {{ oArrayProtRef.ComprobarSelectJs|raw }}
+    fnjs_mas_referencias = function () {
+        event.stopImmediatePropagation();
+        var id_campo = '#' + event.currentTarget.id;
+        var valor = $(id_campo).val();
+        if (event.type == 'change') {
+            global_flag = 2;
+            if (valor != 0) {
+                {{ oArrayProtRef.ListaSelectsJs|raw }}
+            } else {
+                $('#asunto').focus();
+            }
+        }
+        if (event.type == 'blur') {
+            if (global_flag == 1 && valor == 0) {
+                $('#asunto').focus();
+            }
+            global_flag = 1;
+        }
+    }
+    fnjs_quitar_referencias = function () {
+        $('#span_ref').html("");
+        $('#ref_num').val(0);
+    }
+
+    {{ oArrayDesplOficinas.ComprobarSelectJs|raw }}
+    fnjs_mas_oficinas = function () {
+        if (event == undefined) {
+            // cuando lo disparo por javascript
+            {{ oArrayDesplOficinas.ListaSelectsJs|raw }}
+        } else {
+            var code = (event.keyCode ? event.keyCode : event.which);
+            var valor = 1;
+            var id_campo = '#' + event.currentTarget.id;
+            var valor = $(id_campo).val();
+            if (code != 9 && typeof event !== 'undefined') {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            if (code == 9 || event.type == "change") {
+                if (valor != 0) {
+                    {{ oArrayDesplOficinas.ListaSelectsJs|raw }}
+                }
+            }
+        }
+    }
+    fnjs_quitar_oficinas = function () {
+        $('#span_oficinas').html("");
+        $('#oficina_num').val(0);
+    }
+
+    fnjs_comprobar_plazo = function (campo) {
+        contestar = $('#plazo');
+        if (campo == "select") {
+            cont = contestar.val();
+            if (cont == "fecha") {
+                // activo el campo input y pongo allí el cursor
+                $("#f_plazo").prop("disabled", false);
+                $('#f_plazo').focus();
+                $('#f_plazo').val('');
+            } else {
+                var hoy = new Date();
+                var fecha = new Date();
+                switch (cont) {
+                    case "hoy":
+                        $('#f_plazo').val('');
+                        break;
+                    case "rápido":
+                        var dias ={{ plazo_rapido }};
+                        var mseconds = hoy.getTime() + dias * 24 * 60 * 60 * 1000;
+                        fecha.setTime(mseconds);
+                        var mes = fecha.getMonth() + 1;
+                        $('#f_plazo').val(fecha.getDate() + "/" + mes + "/" + fecha.getFullYear());
+                        break;
+                    case "urgente":
+                        var dias ={{ plazo_urgente }};
+                        var mseconds = hoy.getTime() + dias * 24 * 60 * 60 * 1000;
+                        fecha.setTime(mseconds);
+                        var mes = fecha.getMonth() + 1;
+                        $('#f_plazo').val(fecha.getDate() + "/" + mes + "/" + fecha.getFullYear());
+                        break;
+                    case "normal":
+                        var dias ={{ plazo_normal }};
+                        var mseconds = hoy.getTime() + dias * 24 * 60 * 60 * 1000;
+                        fecha.setTime(mseconds);
+                        var mes = fecha.getMonth() + 1;
+                        $('#f_plazo').val(fecha.getDate() + "/" + mes + "/" + fecha.getFullYear());
+                        break;
+                }
+                $('#f_plazo').prop("disabled", true);
+                $('#b_guardar').focus();
+            }
+        } else { // es el input
+            contestar.val('fecha');
+            fecha = $('#f_plazo');
+            if (!fnjs_fecha_en_intervalo('#f_plazo')) {
+                err = 0;
+            } // Se permite, simplemente avisa.
+            $('#b_guardar').focus();
+        }
+
+    }
+
+    fnjs_proto = function (num, any) {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+
+        var s = 0;
+        var numero;
+        var siguiente = "";
+        siguiente = num.replace(/_num_/g, "_mas_");
+        num_escaped = num.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+        any_escaped = any.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+        siguiente_escaped = siguiente.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+        var prot_num = $(num_escaped).val();
+        var prot_any = $(any_escaped).val();
+        if (prot_num === undefined) {
+            return;
+        }
+        numero = prot_num.split("/");
+        if (numero[1]) {
+            $(num_escaped).val(numero[0]);
+            $(any_escaped).val(numero[1]);
+            prot_any = $(any).val();
+        } else {
+            if (!prot_any) {
+                var calDate = new Date();
+                var year = calDate.getFullYear();
+                var year2 = year.toString().substr(-2);
+                $(any).val(year2);
+                prot_any = year;
+            }
+        }
+
+        /* Para el número de referencias */
+        if (num == '#prot_num_referencias[0]') {
+            prot_num_dst = $('#prot_num_destinos\\[0\\]').val();
+            if (prot_num_dst == '' || prot_num_dst == undefined) {
+                id_lugar = $('#referencias\\[0\\]').val();
+                prot_num = $('#prot_num_referencias\\[0\\]').val();
+                prot_any = $('#prot_any_referencias\\[0\\]').val();
+
+                var url_buscar_ajax = 'apps/busquedas/controller/buscar_ajax.php';
+                var param_json = {
+                    para: 'entrada',
+                    que: 'buscar_referencia_correspondiente',
+                    id_lugar: id_lugar,
+                    prot_num: prot_num,
+                    prot_any: prot_any
+                };
+                request = $.ajax({
+                    data: param_json,
+                    url: url_buscar_ajax,
+                    method: 'POST',
+                    dataType: 'json'
+                });
+                request.done(function (json) {
+                    id = json.id_entrada;
+                    if (json.success != true) {
+                        alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+                    } else {
+                        $('#asunto').val(json.asunto);
+                        $('#detalle').val(json.detalle);
+                        $('#categoria').val(json.categoria);
+                        $('#visibilidad').val(json.visibilidad);
+                        $('#of_ponente').val(json.id_ponente);
+                        // varias:
+                        for (const id_oficina of json.oficinas) {
+                            $('#oficinas_mas').val(id_oficina);
+                            $('#oficinas_mas').trigger("change");
+                        }
+                    }
+                });
+            }
+        }
+
+        siguiente_escaped = siguiente.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+        $(siguiente_escaped).focus();
+
+        return false;
+    }
 
 </script>

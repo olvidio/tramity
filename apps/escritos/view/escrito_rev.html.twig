@@ -8,74 +8,74 @@
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
 <script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
 
-<form id ="form_escrito" >
+<form id="form_escrito">
     <input type=hidden name='que' id='que' value=0>
-    <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }} >
-    <input type=hidden name='id_escrito' id='id_escrito' value={{ id_escrito }} >
-    <input type=hidden name='accion' id='accion' value={{ accion }} >
-    <input type=hidden name='id_ponente' id='id_ponente' value={{ id_ponente }} >
-    
-<!--  --------------- CABECERAS --------------- -->
-<div class="clearfix ">
-  <div class="d-inline-flex float-start">
-    <div class="p-2 text-dark fw-bold" >
-      {{ cabeceraIzqd|raw }}
+    <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }}>
+    <input type=hidden name='id_escrito' id='id_escrito' value={{ id_escrito }}>
+    <input type=hidden name='accion' id='accion' value={{ accion }}>
+    <input type=hidden name='id_ponente' id='id_ponente' value={{ id_ponente }}>
+
+    <!--  --------------- CABECERAS --------------- -->
+    <div class="clearfix ">
+        <div class="d-inline-flex float-start">
+            <div class="p-2 text-dark fw-bold">
+                {{ cabeceraIzqd|raw }}
+            </div>
+        </div>
+        <div class="d-inline-flex float-end">
+            <div class="p-2 text-dark fw-bold align-top text-end">
+                {{ cabeceraDcha|raw }}
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="d-inline-flex float-end">
-    <div class="p-2 text-dark fw-bold align-top text-end" >
-      {{ cabeceraDcha|raw }}
+    <!--  --------------- ASUNTO --------------- -->
+    <div class="alert alert-info" role="alert">
+        <strong>{{ "Asunto"|trans|raw }}:</strong>
+        {{ asunto_detalle }}
     </div>
-  </div>
-</div>
-<!--  --------------- ASUNTO --------------- -->
-<div class="alert alert-info" role="alert">
-<strong>{{ "Asunto"|trans|raw }}:</strong> 
-{{ asunto_detalle }}
-</div>
-<!--  --------------- ENTRADILLA --------------- -->
-<div class="alert alert-primary" role="alert">
-<strong>{{ "Entradilla"|trans|raw }}:</strong> 
-<textarea rows="5" class="form-control" readonly>
+    <!--  --------------- ENTRADILLA --------------- -->
+    <div class="alert alert-primary" role="alert">
+        <strong>{{ "Entradilla"|trans|raw }}:</strong>
+        <textarea rows="5" class="form-control" readonly>
   {{ entradilla }}
 </textarea>
-</div>
-<!--  --------------- FECHA --------------- -->
-<div class="mb-3 row">
-  <label for="f_escrito" class="col-4 form-label">{{ "Fecha del escrito"|trans|raw }}:
-    {{ f_escrito }}</label>
-</div>
-
-<div class="row" >
-    {# Per ficar l'escrit, si cal #}
-    <div id="prova">
-    {{ iframe|raw }}
     </div>
-</div>
-
-<br>
-<div class="row" >
+    <!--  --------------- FECHA --------------- -->
     <div class="mb-3 row">
-      <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();" >
-        {{ "Volver"|trans|raw }}
-      </button>
+        <label for="f_escrito" class="col-4 form-label">{{ "Fecha del escrito"|trans|raw }}:
+            {{ f_escrito }}</label>
     </div>
-</div>
+
+    <div class="row">
+        {# Per ficar l'escrit, si cal #}
+        <div id="prova">
+            {{ iframe|raw }}
+        </div>
+    </div>
+
+    <br>
+    <div class="row">
+        <div class="mb-3 row">
+            <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();">
+                {{ "Volver"|trans|raw }}
+            </button>
+        </div>
+    </div>
 </form>
 
 <script>
-fnjs_cancelar=function(){
-	if (typeof event !== 'undefined') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        // Asegurarme que es por click y no por return (posicion: 0,0)
-        var x = event.x || event.clientX;
-        var y = event.y || event.clientY;
-        if (!x && !y) {
-            return false;
+    fnjs_cancelar = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
         }
+        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
     }
-	fnjs_update_div('#main','{{ pagina_cancel|raw }}');
-}
 </script>
