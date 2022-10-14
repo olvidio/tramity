@@ -14,11 +14,11 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 // El download es via GET!!!";
-$Qid_entrada = (integer)\filter_input(INPUT_GET, 'id_entrada');
-$Qcompartida = (integer)\filter_input(INPUT_GET, 'compartida');
+$Q_id_entrada = (integer)filter_input(INPUT_GET, 'id_entrada');
+$Q_compartida = (integer)filter_input(INPUT_GET, 'compartida');
 
-if (!empty($Qid_entrada)) {
-    if (is_true($Qcompartida)) {
+if (!empty($Q_id_entrada)) {
+    if (is_true($Q_compartida)) {
         $bCompartida = TRUE;
     } else {
         $bCompartida = FALSE;

@@ -106,7 +106,7 @@ $_SESSION['session_auth']['a_roles'] = $a_roles_posibles;
             xmlHttp.send();
         }
 
-        // Cada 5 seg. comprobar que la sesión php no ha finalizado, para volver al login de entrada
+        // Cada 5 seg. Comprobar que la sesión php no ha finalizado, para volver al login de entrada
         // Si es en el portátil no lo compruebo, para que haya menos cosas en los logs.
         <?php
         if (ConfigGlobal::SERVIDOR !== 'tramity.local') {
@@ -216,10 +216,10 @@ switch ($role_actual) {
         include_once 'apps/usuarios/controller/usuario_secretaria.php';
         break;
     default:
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             include_once 'apps/usuarios/controller/usuario_home.php';
         }
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             include_once 'apps/usuarios/controller/usuario_ctr.php';
         }
 }

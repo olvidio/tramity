@@ -489,8 +489,8 @@ class CalendarItem extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iuser_no de CalendarItem
@@ -512,7 +512,7 @@ class CalendarItem extends core\ClasePropiedades
         $this->sdav_name = $sdav_name;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut sdav_etag de CalendarItem
@@ -1318,7 +1318,7 @@ class CalendarItem extends core\ClasePropiedades
         $oCalendarItemSet->add($this->getDatosLast_instance_end());
         return $oCalendarItemSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut iuser_no de CalendarItem

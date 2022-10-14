@@ -21,9 +21,9 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qprioridad_sel = (integer)\filter_input(INPUT_POST, 'prioridad_sel');
+$Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_prioridad_sel = (integer)filter_input(INPUT_POST, 'prioridad_sel');
 
 $gesCargos = new GestorCargo();
 $aCargos = $gesCargos->getArrayCargos();
@@ -35,12 +35,12 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
     $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
 }
 
-if (empty($Qid_expediente)) {
+if (empty($Q_id_expediente)) {
     exit ("Error, no existe el expediente");
 }
 $oExpediente = new Expediente();
 
-$oExpediente->setId_expediente($Qid_expediente);
+$oExpediente->setId_expediente($Q_id_expediente);
 $oExpediente->DBCarregar();
 
 $ponente_txt = '?';
@@ -62,7 +62,7 @@ $a_firmas = [];
 $rango = 'voto';
 if (ConfigGlobal::role_actual() === 'vcd') {
     // Ver cual toca
-    $aWhere = ['id_expediente' => $Qid_expediente,
+    $aWhere = ['id_expediente' => $Q_id_expediente,
         'id_cargo' => ConfigGlobal::role_id_cargo(),
         '_ordre' => 'orden_tramite',
     ];
@@ -109,12 +109,12 @@ $asunto = $oExpediente->getAsunto();
 $entradilla = $oExpediente->getEntradilla();
 
 $oEscritoLista = new EscritoLista();
-$oEscritoLista->setId_expediente($Qid_expediente);
-$oEscritoLista->setFiltro($Qfiltro);
+$oEscritoLista->setId_expediente($Q_id_expediente);
+$oEscritoLista->setFiltro($Q_filtro);
 $oEscritoLista->setModo('mod');
 
 // Comentarios y Aclaraciones
-$aRecorrido = $gesFirmas->getRecorrido($Qid_expediente);
+$aRecorrido = $gesFirmas->getRecorrido($Q_id_expediente);
 $a_recorrido = $aRecorrido['recorrido'];
 $comentarios = $aRecorrido['comentarios'];
 $responder = $aRecorrido['responder'];
@@ -169,12 +169,12 @@ $oArrayDesplFirmas->setAccionConjunto('fnjs_mas_oficinas()');
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query(['filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
+$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query(['filtro' => $Q_filtro, 'prioridad_sel' => $Q_prioridad_sel]));
 $base_url = core\ConfigGlobal::getWeb();
-$pagina_cambio = web\Hash::link('apps/expedientes/controller/expediente_cambio_tramite.php?' . http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
+$pagina_cambio = web\Hash::link('apps/expedientes/controller/expediente_cambio_tramite.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'prioridad_sel' => $Q_prioridad_sel]));
 
 $add_del_txt = '';
-if ($Qfiltro == 'seg_reunion') {
+if ($Q_filtro == 'seg_reunion') {
     $add_del = 'del';
     // solo secretaria tiene permiso
     if (ConfigGlobal::role_actual() == 'secretaria') {
@@ -186,16 +186,16 @@ if ($Qfiltro == 'seg_reunion') {
 }
 
 // solo el scdl tiene permiso. Ahora 11-3-22 también el sd.
-if (ConfigGlobal::role_actual() == 'scdl' || ConfigGlobal::role_actual() == 'sd') {
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && (ConfigGlobal::role_actual() == 'scdl' || ConfigGlobal::role_actual() == 'sd')) {
     $cmb_tramite = TRUE;
 } else {
     $cmb_tramite = FALSE;
 }
 
 $a_campos = [
-    'id_expediente' => $Qid_expediente,
-    'filtro' => $Qfiltro,
-    'prioridad_sel' => $Qprioridad_sel,
+    'id_expediente' => $Q_id_expediente,
+    'filtro' => $Q_filtro,
+    'prioridad_sel' => $Q_prioridad_sel,
     //'oHash' => $oHash,
     'ponente_txt' => $ponente_txt,
     'id_ponente' => $id_ponente,

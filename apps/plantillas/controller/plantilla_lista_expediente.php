@@ -16,9 +16,9 @@ require_once("apps/core/global_object.inc");
 // Crea los objetos por esta url  **********************************************
 
 // si vengo del expediente, para buscar una:
-$Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qmodo = (string)\filter_input(INPUT_POST, 'modo');
+$Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_modo = (string)filter_input(INPUT_POST, 'modo');
 
 $gesPlantillas = new GestorPlantilla();
 $aWhere = [];
@@ -37,7 +37,7 @@ foreach ($cPlantillas as $oPlantilla) {
     $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_plantilla('$id_plantilla');\" >";
     $ver .= _("ver");
     $ver .= "</span>";
-    $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_plantilla('$id_plantilla','$Qid_expediente');\" >";
+    $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_plantilla('$id_plantilla','$Q_id_expediente');\" >";
     $add .= _("adjuntar");
     $add .= "</span>";
     $a_valores[$i][1] = $ver;
@@ -52,9 +52,9 @@ $oTabla->setBotones($a_botones);
 $oTabla->setDatos($a_valores);
 
 $a_cosas = [
-    'id_expediente' => $Qid_expediente,
-    'filtro' => $Qfiltro,
-    'modo' => $Qmodo,
+    'id_expediente' => $Q_id_expediente,
+    'filtro' => $Q_filtro,
+    'modo' => $Q_modo,
 ];
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
 $url_update = 'apps/plantillas/controller/plantilla_update.php';

@@ -15,26 +15,26 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
-$Qid_doc = (integer)\filter_input(INPUT_POST, 'id_doc');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
+$Q_id_doc = (integer)filter_input(INPUT_POST, 'id_doc');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
-$Qnom = (string)\filter_input(INPUT_POST, 'nom');
-$Qvisibilidad = (integer)\filter_input(INPUT_POST, 'visibilidad');
-$Qtipo_doc = (integer)\filter_input(INPUT_POST, 'tipo_doc');
-$Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_nom = (string)filter_input(INPUT_POST, 'nom');
+$Q_visibilidad = (integer)filter_input(INPUT_POST, 'visibilidad');
+$Q_tipo_doc = (integer)filter_input(INPUT_POST, 'tipo_doc');
+$Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 $error_txt = '';
 $jsondata = [];
-switch ($Qque) {
+switch ($Q_que) {
     case 'tipo_doc':
-        if (!empty($Qid_doc)) {
+        if (!empty($Q_id_doc)) {
             $oHoy = new DateTimeLocal();
             $hoy_iso = $oHoy->getIso();
 
-            $oDocumento = new Documento($Qid_doc);
+            $oDocumento = new Documento($Q_id_doc);
             $oDocumento->DBCarregar();
-            $oDocumento->setTipo_doc($Qtipo_doc);
+            $oDocumento->setTipo_doc($Q_tipo_doc);
             $oDocumento->setF_upload($hoy_iso, FALSE);
 
             if ($oDocumento->DBGuardar() === FALSE) {
@@ -43,7 +43,7 @@ switch ($Qque) {
         }
         break;
     case 'eliminar':
-        $oDocumento = new DocumentoDB($Qid_doc);
+        $oDocumento = new DocumentoDB($Q_id_doc);
         if ($oDocumento->DBEliminar() === FALSE) {
             $error_txt .= $oDocumento->getErrorTxt();
         }
@@ -59,8 +59,8 @@ switch ($Qque) {
         exit();
         break;
     case 'guardar':
-        if (!empty($Qid_doc)) {
-            $oDocumento = new Documento($Qid_doc);
+        if (!empty($Q_id_doc)) {
+            $oDocumento = new Documento($Q_id_doc);
             $oDocumento->DBCarregar();
         } else {
             $oDocumento = new Documento();
@@ -68,9 +68,9 @@ switch ($Qque) {
             $oDocumento->setCreador($id_creador);
         }
 
-        $oDocumento->setNom($Qnom);
-        $oDocumento->setVisibilidad($Qvisibilidad);
-        $oDocumento->setTipo_doc($Qtipo_doc);
+        $oDocumento->setNom($Q_nom);
+        $oDocumento->setVisibilidad($Q_visibilidad);
+        $oDocumento->setTipo_doc($Q_tipo_doc);
 
 
         if ($oDocumento->DBGuardar() === FALSE) {
@@ -80,8 +80,8 @@ switch ($Qque) {
         $tipo_doc = $oDocumento->getTipo_doc();
 
         // las etiquetas despues de guardar el documento:
-        if (!empty($Qa_etiquetas)) { // No puede haber un docuemento sin etiquetas
-            $oDocumento->setEtiquetas($Qa_etiquetas);
+        if (!empty($Q_a_etiquetas)) { // No puede haber un docuemento sin etiquetas
+            $oDocumento->setEtiquetas($Q_a_etiquetas);
         }
 
         if (!empty($error_txt)) {
@@ -91,7 +91,7 @@ switch ($Qque) {
             $jsondata['success'] = TRUE;
             $jsondata['id_doc'] = $id_doc;
             $jsondata['tipo_doc'] = $tipo_doc;
-            $a_cosas = ['id_doc' => $id_doc, 'filtro' => $Qfiltro];
+            $a_cosas = ['id_doc' => $id_doc, 'filtro' => $Q_filtro];
             $pagina_mod = web\Hash::link('apps/documentos/controller/documento_form.php?' . http_build_query($a_cosas));
             $jsondata['pagina_mod'] = $pagina_mod;
         }

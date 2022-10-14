@@ -428,8 +428,8 @@ class ExpedienteDB extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_expediente de ExpedienteDB
@@ -451,7 +451,7 @@ class ExpedienteDB extends core\ClasePropiedades
         $this->iid_tramite = $iid_tramite;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iponente de ExpedienteDB
@@ -517,7 +517,7 @@ class ExpedienteDB extends core\ClasePropiedades
      */
     function setPrioridad($iprioridad = '')
     {
-        $this->iprioridad = $iprioridad;
+        $this->iprioridad = (int)$iprioridad;
     }
 
     /**
@@ -545,7 +545,7 @@ class ExpedienteDB extends core\ClasePropiedades
      */
     function setEstado($iestado = '')
     {
-        $this->iestado = $iestado;
+        $this->iestado = (int)$iestado;
     }
 
     /**
@@ -815,7 +815,7 @@ class ExpedienteDB extends core\ClasePropiedades
      *
      * @return integer iprioridad
      */
-    function getPrioridad()
+    function getPrioridad(): int
     {
         if (!isset($this->iprioridad) && !$this->bLoaded) {
             $this->DBCarregar();
@@ -926,7 +926,7 @@ class ExpedienteDB extends core\ClasePropiedades
      *
      * @return integer iestado
      */
-    function getEstado()
+    function getEstado(): int
     {
         if (!isset($this->iestado) && !$this->bLoaded) {
             $this->DBCarregar();
@@ -1093,7 +1093,7 @@ class ExpedienteDB extends core\ClasePropiedades
         $oExpedienteDBSet->add($this->getDatosVisibilidad());
         return $oExpedienteDBSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut iid_tramite de ExpedienteDB

@@ -16,19 +16,19 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
-$Qid_lugar = (integer)\filter_input(INPUT_POST, 'id_lugar');
-$Qprot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
-$Qprot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+$Q_que = (string)filter_input(INPUT_POST, 'que');
+$Q_id_lugar = (integer)filter_input(INPUT_POST, 'id_lugar');
+$Q_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
+$Q_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 
 $jsondata = [];
-switch ($Qque) {
+switch ($Q_que) {
     case 'buscar_entrada_correspondiente':
-        $Qprot_any = core\any_2($Qprot_any);
+        $Q_prot_any = core\any_2($Q_prot_any);
 
-        $aProt_origen = ['id_lugar' => $Qid_lugar,
-            'num' => $Qprot_num,
-            'any' => $Qprot_any,
+        $aProt_origen = ['id_lugar' => $Q_id_lugar,
+            'num' => $Q_prot_num,
+            'any' => $Q_prot_any,
         ];
 
         $id_entrada = '';
@@ -61,18 +61,18 @@ switch ($Qque) {
 
         break;
     case 'buscar_referencia_correspondiente':
-        $Qpara = (string)\filter_input(INPUT_POST, 'para');
-        $Qprot_any = core\any_2($Qprot_any);
+        $Q_para = (string)filter_input(INPUT_POST, 'para');
+        $Q_prot_any = core\any_2($Q_prot_any);
 
         // Si es de la dl busco en escritos, sino en entradas:
         $gesLugares = new GestorLugar();
         $id_sigla_local = $gesLugares->getId_sigla_local();
-        if ($Qid_lugar == $id_sigla_local) {
+        if ($Q_id_lugar == $id_sigla_local) {
             // Escritos
             $gesLugares = new GestorLugar();
-            $aProt_local = ['id_lugar' => $Qid_lugar,
-                'num' => $Qprot_num,
-                'any' => $Qprot_any,
+            $aProt_local = ['id_lugar' => $Q_id_lugar,
+                'num' => $Q_prot_num,
+                'any' => $Q_prot_any,
             ];
             $id_escrito = '';
             $gesEscritos = new GestorEscrito();
@@ -87,11 +87,11 @@ switch ($Qque) {
                 $id_ponente = $oEscrito->getPonente();
                 $a_firmas = $oEscrito->getResto_oficinas();
 
-                if ($Qpara == 'escrito') {
+                if ($Q_para == 'escrito') {
                     $jsondata['id_ponente'] = $id_ponente;
                     $jsondata['firmas'] = $a_firmas;
                 }
-                if ($Qpara == 'entrada') {
+                if ($Q_para == 'entrada') {
                     $oCargo = new Cargo($id_ponente);
                     $id_of_ponente = $oCargo->getId_oficina();
                     $jsondata['id_ponente'] = $id_of_ponente;
@@ -106,9 +106,9 @@ switch ($Qque) {
             }
         } else {
             // Entradas
-            $aProt_origen = ['id_lugar' => $Qid_lugar,
-                'num' => $Qprot_num,
-                'any' => $Qprot_any,
+            $aProt_origen = ['id_lugar' => $Q_id_lugar,
+                'num' => $Q_prot_num,
+                'any' => $Q_prot_any,
             ];
 
             $id_entrada = '';
@@ -130,11 +130,11 @@ switch ($Qque) {
                 // oficinas
                 $a_oficinas = $oEntrada->getResto_oficinas();
 
-                if ($Qpara == 'entrada') {
+                if ($Q_para == 'entrada') {
                     $jsondata['id_ponente'] = $id_of_ponente;
                     $jsondata['oficinas'] = $a_oficinas;
                 }
-                if ($Qpara == 'escrito') {
+                if ($Q_para == 'escrito') {
                     $gesCargos = new GestorCargo();
                     // Ponente
                     $id_ponente = $gesCargos->getDirectorOficina($id_of_ponente);

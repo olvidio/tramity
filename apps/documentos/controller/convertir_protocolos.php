@@ -13,19 +13,19 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
-if ($Qque == 'entradas') {
+if ($Q_que == 'entradas') {
     $oConvertir = new Convertir('entradas');
     $oConvertir->ref();
 }
 
-if ($Qque == 'escritos') {
+if ($Q_que == 'escritos') {
     $oConvertir = new Convertir('escritos');
     $oConvertir->destino();
 }
 
-if ($Qque == 'expedientes') {
+if ($Q_que == 'expedientes') {
     $oConvertir = new Convertir('expedientes');
     $oConvertir->expedientes();
 }

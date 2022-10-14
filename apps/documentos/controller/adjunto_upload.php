@@ -25,7 +25,7 @@ exit(); // terminate
 // returns associative array
 function upload()
 {
-    $Qid_doc = (integer)\filter_input(INPUT_POST, 'id_doc');
+    $Q_id_doc = (integer)filter_input(INPUT_POST, 'id_doc');
 
     $preview = [];
     $config = [];
@@ -52,7 +52,7 @@ function upload()
                 $oHoy = new DateTimeLocal();
                 $hoy_iso = $oHoy->getIso();
 
-                $oDocumento = new Documento($Qid_doc);
+                $oDocumento = new Documento($Q_id_doc);
                 $oDocumento->DBCarregar();
                 $oDocumento->setNombre_fichero($fileName);
                 $oDocumento->setTipo_doc(Documento::DOC_UPLOAD);
@@ -62,7 +62,7 @@ function upload()
                 if ($oDocumento->DBGuardar() !== FALSE) {
                     $preview[] = "'$fileName'";
                     $config[] = [
-                        'key' => $Qid_doc,
+                        'key' => $Q_id_doc,
                         'caption' => $fileName,
                         'url' => 'apps/documentos/controller/adjunto_delete.php', // server api to delete the file based on key
                     ];

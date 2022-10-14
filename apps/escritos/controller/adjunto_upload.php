@@ -25,8 +25,8 @@ exit(); // terminate
 // returns associative array
 function upload()
 {
-    $Qid_escrito = (integer)\filter_input(INPUT_POST, 'id_escrito');
-    $Qid_item = (integer)\filter_input(INPUT_POST, 'id_item');
+    $Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
+    $Q_id_item = (integer)filter_input(INPUT_POST, 'id_item');
 
     $preview = [];
     $config = [];
@@ -45,20 +45,20 @@ function upload()
             }
 
             //Make sure we have a file path
-            if ($tmpFilePath != "" && $Qid_escrito) {
+            if ($tmpFilePath != "" && $Q_id_escrito) {
                 $fp = fopen($tmpFilePath, 'rb');
                 $contenido_doc = fread($fp, filesize($tmpFilePath));
 
-                if (!empty($Qid_item)) {
+                if (!empty($Q_id_item)) {
                     // update
-                    $oEscritoAdjunto = new EscritoAdjunto($Qid_item);
+                    $oEscritoAdjunto = new EscritoAdjunto($Q_id_item);
                     $oEscritoAdjunto->DBCarregar();
                 } else {
                     // new
                     $oEscritoAdjunto = new EscritoAdjunto();
                 }
 
-                $oEscritoAdjunto->setId_escrito($Qid_escrito);
+                $oEscritoAdjunto->setId_escrito($Q_id_escrito);
                 $oEscritoAdjunto->setNom($fileName);
                 $oEscritoAdjunto->setTipo_doc(Documento::DOC_UPLOAD);
                 $oEscritoAdjunto->setAdjunto($contenido_doc);

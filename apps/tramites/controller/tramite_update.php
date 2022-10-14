@@ -12,48 +12,48 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
 $error_txt = '';
-switch ($Qque) {
+switch ($Q_que) {
     case "eliminar":
-        $a_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
-            $Qid_tramite = (integer)strtok($a_sel[0], "#");
-            $oTramite = new Tramite($Qid_tramite);
+            $Q_id_tramite = (integer)strtok($a_sel[0], "#");
+            $oTramite = new Tramite($Q_id_tramite);
             if ($oTramite->DBEliminar() === FALSE) {
                 $error_txt .= $oTramite->getErrorTxt();
             }
         }
         break;
     case "guardar":
-        $Qtramite = (string)\filter_input(INPUT_POST, 'tramite');
+        $Q_tramite = (string)filter_input(INPUT_POST, 'tramite');
 
-        if (empty($Qtramite)) {
+        if (empty($Q_tramite)) {
             echo _("debe poner un nombre");
         }
-        $Qid_tramite = (integer)\filter_input(INPUT_POST, 'id_tramite');
-        $Qorden = (string)\filter_input(INPUT_POST, 'orden');
-        $Qbreve = (string)\filter_input(INPUT_POST, 'breve');
+        $Q_id_tramite = (integer)filter_input(INPUT_POST, 'id_tramite');
+        $Q_orden = (string)filter_input(INPUT_POST, 'orden');
+        $Q_breve = (string)filter_input(INPUT_POST, 'breve');
 
-        $oTramite = new Tramite (array('id_tramite' => $Qid_tramite));
+        $oTramite = new Tramite (array('id_tramite' => $Q_id_tramite));
         $oTramite->DBCarregar();
-        $oTramite->setTramite($Qtramite);
-        $oTramite->setOrden($Qorden);
-        $oTramite->setBreve($Qbreve);
+        $oTramite->setTramite($Q_tramite);
+        $oTramite->setOrden($Q_orden);
+        $oTramite->setBreve($Q_breve);
         if ($oTramite->DBGuardar() === FALSE) {
             $error_txt .= $oTramite->getErrorTxt();
         }
         break;
     case "nuevo":
-        $Qtramite = (string)\filter_input(INPUT_POST, 'tramite');
-        $Qorden = (string)\filter_input(INPUT_POST, 'orden');
-        $Qbreve = (string)\filter_input(INPUT_POST, 'breve');
+        $Q_tramite = (string)filter_input(INPUT_POST, 'tramite');
+        $Q_orden = (string)filter_input(INPUT_POST, 'orden');
+        $Q_breve = (string)filter_input(INPUT_POST, 'breve');
 
         $oTramite = new Tramite();
-        $oTramite->setTramite($Qtramite);
-        $oTramite->setOrden($Qorden);
-        $oTramite->setBreve($Qbreve);
+        $oTramite->setTramite($Q_tramite);
+        $oTramite->setOrden($Q_orden);
+        $oTramite->setBreve($Q_breve);
         if ($oTramite->DBGuardar() === FALSE) {
             $error_txt .= $oTramite->getErrorTxt();
         }

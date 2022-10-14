@@ -15,7 +15,7 @@ abstract class ClaseGestor
      * @var string
      */
     protected $sNomTabla;
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
     /**
      * Recupera l'atribut oDbl de Grupo
      *
@@ -56,7 +56,7 @@ abstract class ClaseGestor
         $this->sNomTabla = $sNomTabla;
     }
 
-    /* METODES ALTRES --------------------------------------------------------*/
+    /* OTOS MÉTODOS --------------------------------------------------------*/
 
     /**
      * Serveix per juntar en un conjunt una serie de col·leccions separades

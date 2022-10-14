@@ -17,8 +17,8 @@ require_once("apps/core/global_object.inc");
 
 // El download es via GET!!!";
 
-$Qid_item = (integer)\filter_input(INPUT_GET, 'key');
-$Qcompartida = (integer)\filter_input(INPUT_GET, 'compartida');
+$Qid_item = (integer)filter_input(INPUT_GET, 'key');
+$Qcompartida = (integer)filter_input(INPUT_GET, 'compartida');
 
 if (!empty($Qid_item)) {
     if (is_true($Qcompartida)) {

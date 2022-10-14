@@ -277,8 +277,8 @@ class EntradaDB extends core\ClasePropiedades
         return $this->iponente;
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
@@ -401,7 +401,7 @@ class EntradaDB extends core\ClasePropiedades
     }
 
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_entrada_compartida de EntradaDB
@@ -1097,7 +1097,7 @@ class EntradaDB extends core\ClasePropiedades
         $oEntradaDBSet->add($this->getDatosJson_visto());
         return $oEntradaDBSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut iid_entrada_compartida de EntradaDB

@@ -18,37 +18,30 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
 $oTabla = new ExpedienteLista();
-$oTabla->setFiltro($Qfiltro);
+$oTabla->setFiltro($Q_filtro);
 
 $msg = '';
 // añadir dialogo de búsquedas
-if ($Qfiltro == 'archivados') {
-    $Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
-    $QandOr = (string)\filter_input(INPUT_POST, 'andOr');
-    $Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    $Qperiodo = (string)\filter_input(INPUT_POST, 'periodo');
+if ($Q_filtro === 'archivados') {
+    $Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
+    $Q_andOr = (string)filter_input(INPUT_POST, 'andOr');
+    $Q_periodo = (string)filter_input(INPUT_POST, 'periodo');
+    $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $a_etiquetas_filtered = array_filter($Q_a_etiquetas);
 
     $a_condiciones = [
-        'asunto' => $Qasunto,
-        'andOr' => $QandOr,
-        'etiquetas' => $Qa_etiquetas,
-        'periodo' => $Qperiodo,
+        'asunto' => $Q_asunto,
+        'andOr' => $Q_andOr,
+        'etiquetas' => $Q_a_etiquetas,
+        'periodo' => $Q_periodo,
     ];
     $oTabla->setACondiciones($a_condiciones);
-    $a_etiquetas_filtered = array_filter($Qa_etiquetas);
 
     $gesEtiquetas = new GestorEtiqueta();
-    $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
-    $a_posibles_etiquetas = [];
-    foreach ($cEtiquetas as $oEtiqueta) {
-        $id_etiqueta = $oEtiqueta->getId_etiqueta();
-        $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
-        $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
-    }
-
+    $a_posibles_etiquetas = $gesEtiquetas->getArrayMisEtiquetas();
     $oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas_filtered, $a_posibles_etiquetas, 'etiquetas');
     $oArrayDesplEtiquetas->setBlanco('t');
     $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
@@ -56,13 +49,13 @@ if ($Qfiltro == 'archivados') {
     $aWhereADD = [];
     $aOperadorADD = [];
 
-    $chk_or = ($QandOr == 'OR') ? 'checked' : '';
+    $chk_or = ($Q_andOr === 'OR') ? 'checked' : '';
     // por defecto 'AND':
-    $chk_and = (($QandOr == 'AND') || empty($QandOr)) ? 'checked' : '';
+    $chk_and = (($Q_andOr === 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
     if (!empty($a_etiquetas_filtered)) {
         $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
-        $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($a_etiquetas_filtered, $QandOr);
+        $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($a_etiquetas_filtered, $Q_andOr);
         if (!empty($cExpedientes)) {
             $aWhereADD['id_expediente'] = implode(',', $cExpedientes);
             $aOperadorADD['id_expediente'] = 'IN';
@@ -72,8 +65,8 @@ if ($Qfiltro == 'archivados') {
         }
     }
 
-    if (!empty($Qasunto)) {
-        $aWhereADD['asunto'] = $Qasunto;
+    if (!empty($Q_asunto)) {
+        $aWhereADD['asunto'] = $Q_asunto;
         $aOperadorADD['asunto'] = 'sin_acentos';
     }
     $sel_mes = '';
@@ -81,7 +74,8 @@ if ($Qfiltro == 'archivados') {
     $sel_any_1 = '';
     $sel_any_2 = '';
     $sel_siempre = '';
-    switch ($Qperiodo) {
+    $periodo = '';
+    switch ($Q_periodo) {
         case "mes":
             $sel_mes = 'selected';
             $periodo = 'P1M';
@@ -104,7 +98,7 @@ if ($Qfiltro == 'archivados') {
         default:
             // no hace falta, ya se borran todas los $sel_ antes del switch
     }
-    if (!empty($Qperiodo) && $Qperiodo != 'siempre') {
+    if (!empty($Q_periodo) && !empty($periodo)) {
         $oFecha = new DateTimeLocal();
         $oFecha->sub(new DateInterval($periodo));
         $aWhereADD['f_aprobacion'] = $oFecha->getIso();
@@ -112,11 +106,11 @@ if ($Qfiltro == 'archivados') {
     }
 
     $a_campos = [
-        'filtro' => $Qfiltro,
+        'filtro' => $Q_filtro,
         'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
         'chk_and' => $chk_and,
         'chk_or' => $chk_or,
-        'asunto' => $Qasunto,
+        'asunto' => $Q_asunto,
         'sel_mes' => $sel_mes,
         'sel_mes_6' => $sel_mes_6,
         'sel_any_1' => $sel_any_1,
@@ -132,35 +126,34 @@ if ($Qfiltro == 'archivados') {
 }
 
 // añadir dialogo de búsquedas
-if ($Qfiltro == 'borrador_oficina' || $Qfiltro == 'borrador_propio') {
-    $Qprioridad_sel = (integer)\filter_input(INPUT_POST, 'prioridad_sel');
-    $QandOr = (string)\filter_input(INPUT_POST, 'andOr');
-    $Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    $a_etiquetas_filtered = array_filter($Qa_etiquetas);
+if ($Q_filtro === 'borrador_oficina' || $Q_filtro === 'borrador_propio') {
+    $Q_prioridad_sel = (integer)filter_input(INPUT_POST, 'prioridad_sel');
+    $Q_andOr = (string)filter_input(INPUT_POST, 'andOr');
+    $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $a_etiquetas_filtered = array_filter($Q_a_etiquetas);
 
-    $oTabla->setPrioridad_sel($Qprioridad_sel);
+    $oTabla->setPrioridad_sel($Q_prioridad_sel);
 
     $aWhereADD = [];
     $aOperadorADD = [];
-    if ($Qprioridad_sel == Expediente::PRIORIDAD_ESPERA) {
-        $aWhereADD['prioridad'] = Expediente::PRIORIDAD_ESPERA;
+    $aWhereADD['prioridad'] = Expediente::PRIORIDAD_ESPERA;
+    if ($Q_prioridad_sel === Expediente::PRIORIDAD_ESPERA) {
         $aOperadorADD['prioridad'] = '=';
         $chk_espera = 'checked';
         $chk_resto = '';
     } else {
-        $aWhereADD['prioridad'] = Expediente::PRIORIDAD_ESPERA;
         $aOperadorADD['prioridad'] = '!=';
         $chk_resto = 'checked';
         $chk_espera = '';
     }
 
-    $chk_or = ($QandOr == 'OR') ? 'checked' : '';
+    $chk_or = ($Q_andOr === 'OR') ? 'checked' : '';
     // por defecto 'AND':
-    $chk_and = (($QandOr == 'AND') || empty($QandOr)) ? 'checked' : '';
+    $chk_and = (($Q_andOr === 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
     if (!empty($a_etiquetas_filtered)) {
         $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
-        $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($a_etiquetas_filtered, $QandOr);
+        $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($a_etiquetas_filtered, $Q_andOr);
         if (!empty($cExpedientes)) {
             $aWhereADD['id_expediente'] = implode(',', $cExpedientes);
             $aOperadorADD['id_expediente'] = 'IN';
@@ -185,7 +178,7 @@ if ($Qfiltro == 'borrador_oficina' || $Qfiltro == 'borrador_propio') {
     $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
     $a_campos = [
-        'filtro' => $Qfiltro,
+        'filtro' => $Q_filtro,
         'chk_resto' => $chk_resto,
         'chk_espera' => $chk_espera,
         'chk_and' => $chk_and,

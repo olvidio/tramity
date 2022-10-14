@@ -23,15 +23,15 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_expediente = (string)\filter_input(INPUT_POST, 'id_expediente');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Qid_expediente = (string)filter_input(INPUT_POST, 'id_expediente');
+$Qfiltro = (string)filter_input(INPUT_POST, 'filtro');
 
-$Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
-$Qperiodo = (string)\filter_input(INPUT_POST, 'periodo');
-$Qorigen_id_lugar = (integer)\filter_input(INPUT_POST, 'origen_id_lugar');
-$Qorigen_prot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
-$Qorigen_prot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
-$Qchk_anulados = (bool)\filter_input(INPUT_POST, 'chk_anulados');
+$Qasunto = (string)filter_input(INPUT_POST, 'asunto');
+$Qperiodo = (string)filter_input(INPUT_POST, 'periodo');
+$Qorigen_id_lugar = (integer)filter_input(INPUT_POST, 'origen_id_lugar');
+$Qorigen_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
+$Qorigen_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+$Qchk_anulados = (bool)filter_input(INPUT_POST, 'chk_anulados');
 
 $Qoficina_buscar = ConfigGlobal::role_id_oficina();
 
@@ -183,8 +183,8 @@ $oView = new ViewTwig('entradas/controller');
 echo $oView->renderizar('buscar_form.html.twig', $a_campos);
 
 /*
-$Qid_expediente = (string) \filter_input(INPUT_POST, 'id_expediente');
-$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Qid_expediente = (string) filter_input(INPUT_POST, 'id_expediente');
+$Qfiltro = (string) filter_input(INPUT_POST, 'filtro');
 
 $id_oficina = ConfigGlobal::role_id_oficina();
 

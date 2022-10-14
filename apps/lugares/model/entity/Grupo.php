@@ -240,8 +240,8 @@ class Grupo extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_grupo de Grupo
@@ -263,7 +263,7 @@ class Grupo extends core\ClasePropiedades
         $this->sdescripcion = $sdescripcion;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut a_miembros de Grupo
@@ -397,7 +397,7 @@ class Grupo extends core\ClasePropiedades
         $oGrupoSet->add($this->getDatosMiembros());
         return $oGrupoSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut sdescripcion de Grupo

@@ -161,7 +161,7 @@ class GestorGrupo extends core\ClaseGestor
         return $oGrupoSet->getTot();
     }
 
-    /* METODES PROTECTED --------------------------------------------------------*/
+    /* MÉTODOS PROTECTED --------------------------------------------------------*/
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

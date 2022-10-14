@@ -20,7 +20,7 @@ $a_campos = ['url' => $url];
 
 
 $ambito_dl = FALSE;
-if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
     $ambito_dl = TRUE;
 }
 

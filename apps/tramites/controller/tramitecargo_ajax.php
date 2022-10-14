@@ -13,21 +13,21 @@ require_once("apps/core/global_header.inc");
 require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
 $error_txt = '';
-switch ($Qque) {
+switch ($Q_que) {
     case 'info_firmas':
-        $Qid_tramite = (integer)\filter_input(INPUT_POST, 'id_tramite');
+        $Q_id_tramite = (integer)filter_input(INPUT_POST, 'id_tramite');
         $oficiales = FALSE;
-        $aWhere = ['id_tramite' => $Qid_tramite, 'id_cargo' => Cargo::CARGO_OFICIALES];
+        $aWhere = ['id_tramite' => $Q_id_tramite, 'id_cargo' => Cargo::CARGO_OFICIALES];
         $gesTramiteCargo = new GestorTramiteCargo();
         $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
         if (count($cTramiteCargos) > 0) {
             $oficiales = TRUE;
         }
         $varias = FALSE;
-        $aWhere = ['id_tramite' => $Qid_tramite, 'id_cargo' => Cargo::CARGO_VARIAS];
+        $aWhere = ['id_tramite' => $Q_id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS];
         $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
         if (count($cTramiteCargos) > 0) {
             $varias = TRUE;
@@ -40,12 +40,12 @@ switch ($Qque) {
         $jsondata['data'] = json_encode($a_info);
         break;
     case 'info':
-        $Qid_item = (integer)\filter_input(INPUT_POST, 'id_item');
+        $Q_id_item = (integer)filter_input(INPUT_POST, 'id_item');
         $oGesCargo = new GestorCargo();
         $oDesplCargos = $oGesCargo->getDesplCargos();
         $oDesplCargos->setNombre('id_cargo');
         $oDesplCargos->setBlanco(true);
-        $oTramiteCargo = new TramiteCargo(array('id_item' => $Qid_item));
+        $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
         $orden_tramite = $oTramiteCargo->getOrden_tramite();
         $id_cargo = $oTramiteCargo->getId_cargo();
         $oDesplCargos->setOpcion_sel($id_cargo);
@@ -55,16 +55,16 @@ switch ($Qque) {
         $a_info = ['orden' => $orden_tramite,
             'multiple' => $multiple,
             'cargos' => $cargos,
-            'item' => $Qid_item,
+            'item' => $Q_id_item,
         ];
 
         $jsondata['data'] = json_encode($a_info);
         break;
     case 'get_listado':
-        $Qid_tramite = (integer)\filter_input(INPUT_POST, 'id_tramite');
+        $Q_id_tramite = (integer)filter_input(INPUT_POST, 'id_tramite');
 
         $gesTramiteCargo = new GestorTramiteCargo();
-        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $Qid_tramite, '_ordre' => 'orden_tramite']);
+        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $Q_id_tramite, '_ordre' => 'orden_tramite']);
         $txt = '<table class="table table-striped" >';
         $txt .= '<tr><th>' . _("orden") . '</th><th>' . _("cargo") . '</th><th>' . _("multiple") . '</th></tr>';
         $i = 0;
@@ -98,24 +98,24 @@ switch ($Qque) {
         exit();
         break;
     case 'update':
-        $Qid_item = (integer)\filter_input(INPUT_POST, 'id_item');
-        $Qid_tramite = (integer)\filter_input(INPUT_POST, 'id_tramite');
-        $Qid_cargo = (integer)\filter_input(INPUT_POST, 'id_cargo');
-        $Qorden_tramite = (integer)\filter_input(INPUT_POST, 'orden_tramite');
-        $Qmultiple = (integer)\filter_input(INPUT_POST, 'multiple');
+        $Q_id_item = (integer)filter_input(INPUT_POST, 'id_item');
+        $Q_id_tramite = (integer)filter_input(INPUT_POST, 'id_tramite');
+        $Q_id_cargo = (integer)filter_input(INPUT_POST, 'id_cargo');
+        $Q_orden_tramite = (integer)filter_input(INPUT_POST, 'orden_tramite');
+        $Q_multiple = (integer)filter_input(INPUT_POST, 'multiple');
 
-        $oTramiteCargo = new TramiteCargo(array('id_item' => $Qid_item));
-        $oTramiteCargo->setId_tramite($Qid_tramite);
-        $oTramiteCargo->setId_cargo($Qid_cargo);
-        $oTramiteCargo->setOrden_tramite($Qorden_tramite);
-        $oTramiteCargo->setMultiple($Qmultiple);
+        $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
+        $oTramiteCargo->setId_tramite($Q_id_tramite);
+        $oTramiteCargo->setId_cargo($Q_id_cargo);
+        $oTramiteCargo->setOrden_tramite($Q_orden_tramite);
+        $oTramiteCargo->setMultiple($Q_multiple);
         if ($oTramiteCargo->DBGuardar() === FALSE) {
             $error_txt .= $oTramiteCargo->getErrorTxt();
         }
         break;
     case 'eliminar':
-        $Qid_item = (integer)\filter_input(INPUT_POST, 'id_item');
-        $oTramiteCargo = new TramiteCargo(array('id_item' => $Qid_item));
+        $Q_id_item = (integer)filter_input(INPUT_POST, 'id_item');
+        $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
         if ($oTramiteCargo->DBEliminar() === FALSE) {
             $error_txt .= $oTramiteCargo->getErrorTxt();
         }

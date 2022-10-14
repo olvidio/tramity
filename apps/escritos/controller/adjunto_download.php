@@ -15,10 +15,10 @@ require_once("apps/core/global_object.inc");
 
 // El download es via GET!!!";
 
-$Qid_item = (integer)\filter_input(INPUT_GET, 'key');
+$Q_id_item = (integer)filter_input(INPUT_GET, 'key');
 
-if (!empty($Qid_item)) {
-    $oEscritoAdjunto = new EscritoAdjunto($Qid_item);
+if (!empty($Q_id_item)) {
+    $oEscritoAdjunto = new EscritoAdjunto($Q_id_item);
     $nombre_fichero = $oEscritoAdjunto->getNom();
     $doc = $oEscritoAdjunto->getAdjunto();
 

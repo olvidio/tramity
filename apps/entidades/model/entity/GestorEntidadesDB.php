@@ -134,7 +134,7 @@ class GestorEntidadesDB extends core\ClaseGestor
         return $oEntidadesDBSet->getTot();
     }
 
-    /* METODES PROTECTED --------------------------------------------------------*/
+    /* MÉTODOS PROTECTED --------------------------------------------------------*/
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

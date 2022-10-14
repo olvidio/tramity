@@ -15,20 +15,20 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_expediente = (string)\filter_input(INPUT_POST, 'id_expediente');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Q_id_expediente = (string)filter_input(INPUT_POST, 'id_expediente');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
 $gesTramites = new GestorTramite();
 $oDesplTramites = $gesTramites->getListaTramites();
 $oDesplTramites->setNombre('tramite');
 
-$a_cosas = ['id_expediente' => $Qid_expediente,
-    'filtro' => $Qfiltro,
+$a_cosas = ['id_expediente' => $Q_id_expediente,
+    'filtro' => $Q_filtro,
 ];
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($a_cosas));
 $pagina_update = web\Hash::link('apps/expedientes/controller/expediente_update.php?' . http_build_query([]));
 
-$oExpediente = new Expediente($Qid_expediente);
+$oExpediente = new Expediente($Q_id_expediente);
 $id_tramite = $oExpediente->getId_tramite();
 $oDesplTramites->setOpcion_sel($id_tramite);
 
@@ -36,7 +36,7 @@ $oDesplTramites->setOpcion_sel($id_tramite);
 $titulo = _("Cambiar el trámite del expediente");
 
 $a_campos = [
-    'id_expediente' => $Qid_expediente,
+    'id_expediente' => $Q_id_expediente,
     'titulo' => $titulo,
     'pagina_cancel' => $pagina_cancel,
     'pagina_update' => $pagina_update,

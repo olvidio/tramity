@@ -197,7 +197,7 @@ class DesplegableArray extends Desplegable
         return $txt_js;
     }
 
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     public function setSeleccionados($sSeleccionados)
     {

@@ -12,26 +12,26 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
 $gesPreferencias = new GestorPreferencia();
-switch ($Qque) {
+switch ($Q_que) {
     case "slickGrid":
-        $Qtabla = (string)\filter_input(INPUT_POST, 'tabla');
-        $QsPrefs = (string)\filter_input(INPUT_POST, 'sPrefs');
+        $Q_tabla = (string)filter_input(INPUT_POST, 'tabla');
+        $Q_sPrefs = (string)filter_input(INPUT_POST, 'sPrefs');
         $idioma = core\ConfigGlobal::mi_Idioma();
-        $tipo = 'slickGrid_' . $Qtabla . '_' . $idioma;
+        $tipo = 'slickGrid_' . $Q_tabla . '_' . $idioma;
         $oPref = $gesPreferencias->getMiPreferencia($tipo);
         // si no se han cambiado las columnas visibles, pongo las actuales (sino las borra).
-        $aPrefs = json_decode($QsPrefs, true);
+        $aPrefs = json_decode($Q_sPrefs, true);
         if ($aPrefs['colVisible'] == 'noCambia') {
             $sPrefs_old = $oPref->getMiPreferencia();
             $aPrefs_old = json_decode($sPrefs_old, true);
             $aPrefs['colVisible'] = empty($aPrefs_old['colVisible']) ? '' : $aPrefs_old['colVisible'];
-            $QsPrefs = json_encode($aPrefs, true);
+            $Q_sPrefs = json_encode($aPrefs, true);
         }
 
-        $oPref->setPreferencia($QsPrefs);
+        $oPref->setPreferencia($Q_sPrefs);
         if ($oPref->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
             echo "\n" . $oPref->getErrorTxt();
@@ -39,9 +39,9 @@ switch ($Qque) {
         break;
     default:
         // Guardar idioma:
-        $Qidioma_nou = (string)\filter_input(INPUT_POST, 'idioma_nou');
+        $Q_idioma_nou = (string)filter_input(INPUT_POST, 'idioma_nou');
         $oPref = $gesPreferencias->getMiPreferencia('idioma');
-        $oPref->setPreferencia($Qidioma_nou);
+        $oPref->setPreferencia($Q_idioma_nou);
         if ($oPref->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado idioma");
             echo "\n" . $oPref->getErrorTxt();
@@ -49,15 +49,15 @@ switch ($Qque) {
 
         // Guardar Nombre a Mostrar, mail, cargo preferido
         $id_usuario = core\ConfigGlobal::mi_id_usuario();
-        $Qnom_usuario = (string)\filter_input(INPUT_POST, 'nom_usuario');
-        $Qemail = (string)\filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $Qid_cargo_preferido = (integer)\filter_input(INPUT_POST, 'id_cargo_preferido');
+        $Q_nom_usuario = (string)filter_input(INPUT_POST, 'nom_usuario');
+        $Q_email = (string)filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $Q_id_cargo_preferido = (integer)filter_input(INPUT_POST, 'id_cargo_preferido');
 
         $oUsuario = new Usuario(array('id_usuario' => $id_usuario));
         $oUsuario->DBCarregar();
-        $oUsuario->setId_cargo_preferido($Qid_cargo_preferido);
-        $oUsuario->setEmail($Qemail);
-        $oUsuario->setNom_usuario($Qnom_usuario);
+        $oUsuario->setId_cargo_preferido($Q_id_cargo_preferido);
+        $oUsuario->setEmail($Q_email);
+        $oUsuario->setNom_usuario($Q_nom_usuario);
         if ($oUsuario->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
             echo "\n" . $oUsuario->getErrorTxt();

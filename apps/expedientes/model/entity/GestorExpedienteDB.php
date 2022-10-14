@@ -217,7 +217,7 @@ class GestorExpedienteDB extends core\ClaseGestor
         return $oExpedienteDBSet->getTot();
     }
 
-    /* METODES PROTECTED --------------------------------------------------------*/
+    /* MÉTODOS PROTECTED --------------------------------------------------------*/
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

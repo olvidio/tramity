@@ -27,48 +27,48 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qque = (string)\filter_input(INPUT_POST, 'que');
-$Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
-$Qid_escrito = (integer)\filter_input(INPUT_POST, 'id_escrito');
-$Qaccion = (integer)\filter_input(INPUT_POST, 'accion');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
+$Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
+$Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
+$Q_accion = (integer)filter_input(INPUT_POST, 'accion');
 
-$Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
-$Qf_escrito = (string)\filter_input(INPUT_POST, 'f_escrito');
+$Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
+$Q_f_escrito = (string)filter_input(INPUT_POST, 'f_escrito');
 
-$Qdetalle = (string)\filter_input(INPUT_POST, 'detalle');
-$Qid_ponente = (integer)\filter_input(INPUT_POST, 'id_ponente');
-$Qa_firmas = (array)\filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_detalle = (string)filter_input(INPUT_POST, 'detalle');
+$Q_id_ponente = (integer)filter_input(INPUT_POST, 'id_ponente');
+$Q_a_firmas = (array)filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-$Qcategoria = (integer)\filter_input(INPUT_POST, 'categoria');
-$Qvisibilidad = (integer)\filter_input(INPUT_POST, 'visibilidad');
-$Qvisibilidad_dst = (integer)\filter_input(INPUT_POST, 'visibilidad_dst');
-$Qplazo = (string)\filter_input(INPUT_POST, 'plazo');
-$Qf_plazo = (string)\filter_input(INPUT_POST, 'f_plazo');
-$Qok = (string)\filter_input(INPUT_POST, 'ok');
+$Q_categoria = (integer)filter_input(INPUT_POST, 'categoria');
+$Q_visibilidad = (integer)filter_input(INPUT_POST, 'visibilidad');
+$Q_visibilidad_dst = (integer)filter_input(INPUT_POST, 'visibilidad_dst');
+$Q_plazo = (string)filter_input(INPUT_POST, 'plazo');
+$Q_f_plazo = (string)filter_input(INPUT_POST, 'f_plazo');
+$Q_ok = (string)filter_input(INPUT_POST, 'ok');
 
-$Qgrupo_dst = (string)\filter_input(INPUT_POST, 'grupo_dst');
+$Q_grupo_dst = (string)filter_input(INPUT_POST, 'grupo_dst');
 // genero un vector con todos los grupos.
-$Qa_grupos = (array)\filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_a_grupos = (array)filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
-$Qa_destinos = (array)\filter_input(INPUT_POST, 'destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_prot_num_destinos = (array)\filter_input(INPUT_POST, 'prot_num_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_prot_any_destinos = (array)\filter_input(INPUT_POST, 'prot_any_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_prot_mas_destinos = (array)\filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_a_destinos = (array)filter_input(INPUT_POST, 'destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_a_prot_num_destinos = (array)filter_input(INPUT_POST, 'prot_num_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_a_prot_any_destinos = (array)filter_input(INPUT_POST, 'prot_any_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_a_prot_mas_destinos = (array)filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
-$Qa_referencias = (array)\filter_input(INPUT_POST, 'referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_prot_num_referencias = (array)\filter_input(INPUT_POST, 'prot_num_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_prot_any_referencias = (array)\filter_input(INPUT_POST, 'prot_any_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_prot_mas_referencias = (array)\filter_input(INPUT_POST, 'prot_mas_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_a_referencias = (array)filter_input(INPUT_POST, 'referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_a_prot_num_referencias = (array)filter_input(INPUT_POST, 'prot_num_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_a_prot_any_referencias = (array)filter_input(INPUT_POST, 'prot_any_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_a_prot_mas_referencias = (array)filter_input(INPUT_POST, 'prot_mas_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-switch ($Qque) {
+switch ($Q_que) {
     case 'modificar_detalle':
         $error_txt = '';
-        $oEscrito = new Escrito($Qid_escrito);
-        $Qdetalle = (string)\filter_input(INPUT_POST, 'text');
+        $oEscrito = new Escrito($Q_id_escrito);
+        $Q_detalle = (string)filter_input(INPUT_POST, 'text');
         $oEscrito->DBCarregar();
-        $oEscrito->setDetalle($Qdetalle);
+        $oEscrito->setDetalle($Q_detalle);
         if ($oEscrito->DBGuardar() === FALSE) {
             $error_txt = $oEscrito->getErrorTxt();
         }
@@ -86,7 +86,7 @@ switch ($Qque) {
         exit();
         break;
     case 'get_detalle':
-        $oEscrito = new Escrito($Qid_escrito);
+        $oEscrito = new Escrito($Q_id_escrito);
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($oEscrito, 'detalle');
         if ($perm < PermRegistro::PERM_MODIFICAR) {
@@ -110,7 +110,7 @@ switch ($Qque) {
         exit();
         break;
     case 'perm_ver':
-        $oEscrito = new Escrito($Qid_escrito);
+        $oEscrito = new Escrito($Q_id_escrito);
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($oEscrito, 'escrito');
         if ($perm < PermRegistro::PERM_VER) {
@@ -134,11 +134,11 @@ switch ($Qque) {
         break;
     case 'lista_pendientes':
         $txt_err = '';
-        $Qpendientes_uid = (string)\filter_input(INPUT_POST, 'pendientes_uid');
-        $Qid_contestados = (string)\filter_input(INPUT_POST, 'id_contestados');
+        $Q_pendientes_uid = (string)filter_input(INPUT_POST, 'pendientes_uid');
+        $Q_id_contestados = (string)filter_input(INPUT_POST, 'id_contestados');
         $txt_err = '';
-        $a_pendientes_uid = explode(',', $Qpendientes_uid);
-        $a_id_contestados = explode(',', $Qid_contestados);
+        $a_pendientes_uid = explode(',', $Q_pendientes_uid);
+        $a_id_contestados = explode(',', $Q_id_contestados);
 
         $a_pendientes_uid_filtered = array_filter($a_pendientes_uid);
         $a_id_contestados_filtered = array_filter($a_id_contestados);
@@ -231,8 +231,8 @@ switch ($Qque) {
         $a_campos = [
             'base_url' => $base_url,
             'oTabla' => $oTabla,
-            'id_escrito' => $Qid_escrito,
-            'pendientes_uid' => $Qpendientes_uid,
+            'id_escrito' => $Q_id_escrito,
+            'pendientes_uid' => $Q_pendientes_uid,
         ];
 
         $oView = new ViewTwig('pendientes/controller');
@@ -241,9 +241,9 @@ switch ($Qque) {
 
         break;
     case 'contestar_pendientes':
-        $Qpendientes_uid = (string)\filter_input(INPUT_POST, 'pendientes_uid');
+        $Q_pendientes_uid = (string)filter_input(INPUT_POST, 'pendientes_uid');
         $txt_err = '';
-        $a_pendientes_uid = explode(',', $Qpendientes_uid);
+        $a_pendientes_uid = explode(',', $Q_pendientes_uid);
         $a_pendientes_uid = array_filter($a_pendientes_uid); // evitar valores nulos
 
         foreach ($a_pendientes_uid as $uid_container) {
@@ -283,7 +283,7 @@ switch ($Qque) {
     case 'comprobar_pendientes':
         $txt_err = '';
         $mensaje = '';
-        $oEscrito = new Escrito($Qid_escrito);
+        $oEscrito = new Escrito($Q_id_escrito);
         // buscar en los destinos.
         $a_prot_dst = $oEscrito->getJson_prot_destino(TRUE);
         $gesPendientesEntrada = new GestorPendienteEntrada();
@@ -330,8 +330,8 @@ switch ($Qque) {
         break;
     case 'eliminar':
         $txt_err = '';
-        if (!empty($Qid_escrito)) {
-            $oEscrito = new Escrito($Qid_escrito);
+        if (!empty($Q_id_escrito)) {
+            $oEscrito = new Escrito($Q_id_escrito);
             // Sólo se puede eliminar si no se ha enviado, o si es secretaría 
             // Si se ha enviado se puede quitar del expediente:
             $f_salida = $oEscrito->getF_salida()->getIso();
@@ -340,7 +340,7 @@ switch ($Qque) {
                 // borrar el Etherpad
                 if ($tipo_doc == Escrito::TIPO_ETHERPAD) {
                     $oNewEtherpad = new Etherpad();
-                    $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $Qid_escrito);
+                    $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $Q_id_escrito);
                     $oNewEtherpad->eliminarPad();
                 }
 
@@ -350,9 +350,9 @@ switch ($Qque) {
                 }
             } else {
                 // Si está dentro de un expediente, lo quito:
-                if (!empty($Qid_expediente)) {
+                if (!empty($Q_id_expediente)) {
                     $gesAcciones = new GestorAccion();
-                    $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Qid_expediente, 'id_escrito' => $Qid_escrito]);
+                    $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Q_id_expediente, 'id_escrito' => $Q_id_escrito]);
                     // debería existir sólo uno
                     $oAccion = $cAcciones[0];
                     if ($oAccion->DBEliminar() === FALSE) {
@@ -379,7 +379,7 @@ switch ($Qque) {
         exit();
         break;
     case 'escrito_a_secretaria':
-        $oEscrito = new Escrito($Qid_escrito);
+        $oEscrito = new Escrito($Q_id_escrito);
         $oEscrito->DBCarregar();
         $oEscrito->setComentarios('');
         $oEscrito->setOK(Escrito::OK_OFICINA);
@@ -388,51 +388,51 @@ switch ($Qque) {
         }
         break;
     case 'escrito_a_oficina':
-        $Qcomentario = (string)\filter_input(INPUT_POST, 'comentario');
-        $oEscrito = new Escrito($Qid_escrito);
+        $Q_comentario = (string)filter_input(INPUT_POST, 'comentario');
+        $oEscrito = new Escrito($Q_id_escrito);
         $oEscrito->DBCarregar();
-        $oEscrito->setComentarios($Qcomentario);
+        $oEscrito->setComentarios($Q_comentario);
         $oEscrito->setOK(Escrito::OK_NO);
         if ($oEscrito->DBGuardar() === FALSE) {
             exit($oEscrito->getErrorTxt());
         }
         break;
     case 'tipo_doc':
-        $Qtipo_doc = (integer)\filter_input(INPUT_POST, 'tipo_doc');
-        $oEscrito = new Escrito($Qid_escrito);
+        $Q_tipo_doc = (integer)filter_input(INPUT_POST, 'tipo_doc');
+        $oEscrito = new Escrito($Q_id_escrito);
         $oEscrito->DBCarregar();
-        $oEscrito->setTipo_doc($Qtipo_doc);
+        $oEscrito->setTipo_doc($Q_tipo_doc);
         if ($oEscrito->DBGuardar() === FALSE) {
             exit($oEscrito->getErrorTxt());
         }
 
         break;
     case 'f_escrito':
-        if ($Qf_escrito == 'hoy') {
+        if ($Q_f_escrito == 'hoy') {
             $oHoy = new DateTimeLocal();
-            $Qf_escrito = $oHoy->getFromLocal();
+            $Q_f_escrito = $oHoy->getFromLocal();
         }
-        $oEscrito = new Escrito($Qid_escrito);
+        $oEscrito = new Escrito($Q_id_escrito);
         $oEscrito->DBCarregar();
-        $oEscrito->setF_escrito($Qf_escrito);
+        $oEscrito->setF_escrito($Q_f_escrito);
         if ($oEscrito->DBGuardar() === FALSE) {
             exit($oEscrito->getErrorTxt());
         }
         break;
     case 'guardar_asunto':
         $txt_err = '';
-        if (!empty($Qid_escrito)) {
-            $oEscrito = new Escrito($Qid_escrito);
+        if (!empty($Q_id_escrito)) {
+            $oEscrito = new Escrito($Q_id_escrito);
             $oEscrito->DBCarregar();
-            $Qanular = (string)\filter_input(INPUT_POST, 'anular');
+            $Q_anular = (string)filter_input(INPUT_POST, 'anular');
 
-            if (is_true($Qanular)) {
+            if (is_true($Q_anular)) {
                 $oEscrito->setAnulado('t');
             } else {
                 $oEscrito->setAnulado('f');
             }
-            $oEscrito->setAsunto($Qasunto);
-            $oEscrito->setDetalle($Qdetalle);
+            $oEscrito->setAsunto($Q_asunto);
+            $oEscrito->setDetalle($Q_detalle);
             if ($oEscrito->DBGuardar() === FALSE) {
                 $txt_err .= _("Hay un error al guardar el escrito");
                 $txt_err .= "<br>";
@@ -457,29 +457,29 @@ switch ($Qque) {
     case 'guardar':
         $error_txt = '';
         $nuevo = FALSE;
-        if (!empty($Qid_escrito)) {
-            $oEscrito = new Escrito($Qid_escrito);
+        if (!empty($Q_id_escrito)) {
+            $oEscrito = new Escrito($Q_id_escrito);
             $oEscrito->DBCarregar();
             $oPermisoRegistro = new PermRegistro();
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEscrito, 'asunto');
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEscrito, 'detalle');
         } else {
             $oEscrito = new Escrito();
-            $oEscrito->setAccion($Qaccion);
+            $oEscrito->setAccion($Q_accion);
             $oEscrito->setModo_envio(Escrito::MODO_MANUAL);
             $nuevo = TRUE;
             $perm_asunto = PermRegistro::PERM_MODIFICAR;
             $perm_detalle = PermRegistro::PERM_MODIFICAR;
         }
 
-        if ($Qaccion == Escrito::ACCION_ESCRITO) {
+        if ($Q_accion == Escrito::ACCION_ESCRITO) {
             // Si esta marcado como grupo de destinos, o destinos individuales. 
-            if (core\is_true($Qgrupo_dst)) {
+            if (core\is_true($Q_grupo_dst)) {
                 $descripcion = '';
                 $saltar = FALSE;
                 $gesGrupo = new GestorGrupo();
                 $a_grupos = $gesGrupo->getArrayGrupos();
-                foreach ($Qa_grupos as $id_grupo) {
+                foreach ($Q_a_grupos as $id_grupo) {
                     // si es personalizado, no cambio nada porque ya se ha guardado al personalizar
                     if ($id_grupo == 'custom') {
                         $saltar = TRUE;
@@ -489,7 +489,7 @@ switch ($Qque) {
                     $descripcion .= $a_grupos[$id_grupo];
                 }
                 if ($saltar === FALSE) {
-                    $oEscrito->setId_grupos($Qa_grupos);
+                    $oEscrito->setId_grupos($Q_a_grupos);
                     // borro las posibles personalizaciones:
                     $oEscrito->setDestinos('');
                     $oEscrito->setDescripcion('');
@@ -498,10 +498,10 @@ switch ($Qque) {
                 $oEscrito->setJson_prot_destino([]);
             } else {
                 $aProtDst = [];
-                foreach ($Qa_destinos as $key => $id_lugar) {
-                    $prot_num = $Qa_prot_num_destinos[$key];
-                    $prot_any = $Qa_prot_any_destinos[$key];
-                    $prot_mas = $Qa_prot_mas_destinos[$key];
+                foreach ($Q_a_destinos as $key => $id_lugar) {
+                    $prot_num = $Q_a_prot_num_destinos[$key];
+                    $prot_any = $Q_a_prot_any_destinos[$key];
+                    $prot_mas = $Q_a_prot_mas_destinos[$key];
 
                     if (!empty($id_lugar)) {
                         $oProtDst = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
@@ -516,10 +516,10 @@ switch ($Qque) {
             }
 
             $aProtRef = [];
-            foreach ($Qa_referencias as $key => $id_lugar) {
-                $prot_num = $Qa_prot_num_referencias[$key];
-                $prot_any = $Qa_prot_any_referencias[$key];
-                $prot_mas = $Qa_prot_mas_referencias[$key];
+            foreach ($Q_a_referencias as $key => $id_lugar) {
+                $prot_num = $Q_a_prot_num_referencias[$key];
+                $prot_any = $Q_a_prot_any_referencias[$key];
+                $prot_mas = $Q_a_prot_mas_referencias[$key];
 
                 if (!empty($id_lugar)) {
                     $oProtRef = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
@@ -529,26 +529,26 @@ switch ($Qque) {
             $oEscrito->setJson_prot_ref($aProtRef);
         }
 
-        $oEscrito->setF_escrito($Qf_escrito);
+        $oEscrito->setF_escrito($Q_f_escrito);
         if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
-            $oEscrito->setAsunto($Qasunto);
+            $oEscrito->setAsunto($Q_asunto);
         }
 
         if ($perm_detalle >= PermRegistro::PERM_MODIFICAR) {
-            $oEscrito->setDetalle($Qdetalle);
+            $oEscrito->setDetalle($Q_detalle);
         }
-        $oEscrito->setCreador($Qid_ponente);
-        $oEscrito->setResto_oficinas($Qa_firmas);
+        $oEscrito->setCreador($Q_id_ponente);
+        $oEscrito->setResto_oficinas($Q_a_firmas);
 
-        $oEscrito->setCategoria($Qcategoria);
+        $oEscrito->setCategoria($Q_categoria);
         // visibilidad: puede que esté en modo solo lectura, mirar el hiden.
-        if (empty($Qvisibilidad)) {
-            $Qvisibilidad = (integer)\filter_input(INPUT_POST, 'hidden_visibilidad');
+        if (empty($Q_visibilidad)) {
+            $Q_visibilidad = (integer)filter_input(INPUT_POST, 'hidden_visibilidad');
         }
-        $oEscrito->setVisibilidad($Qvisibilidad);
-        $oEscrito->setVisibilidad_dst($Qvisibilidad_dst);
+        $oEscrito->setVisibilidad($Q_visibilidad);
+        $oEscrito->setVisibilidad_dst($Q_visibilidad_dst);
 
-        switch ($Qplazo) {
+        switch ($Q_plazo) {
             case 'hoy':
                 $oEscrito->setF_contestar('');
                 break;
@@ -574,13 +574,13 @@ switch ($Qque) {
                 $oEscrito->setF_contestar($oF);
                 break;
             case 'fecha':
-                $oEscrito->setF_contestar($Qf_plazo);
+                $oEscrito->setF_contestar($Q_f_plazo);
                 break;
             default:
-                // Si no hay $Qplazo, No pongo ninguna fecha a contestar
+                // Si no hay $Q_plazo, No pongo ninguna fecha a contestar
         }
 
-        if (is_true($Qok)) {
+        if (is_true($Q_ok)) {
             $oEscrito->setComentarios('');
             $oEscrito->setOK(Escrito::OK_OFICINA);
         } else {
@@ -595,9 +595,9 @@ switch ($Qque) {
 
         if ($nuevo === TRUE) {
             $oAccion = new Accion();
-            $oAccion->setId_expediente($Qid_expediente);
+            $oAccion->setId_expediente($Q_id_expediente);
             $oAccion->setId_escrito($id_escrito);
-            $oAccion->setTipo_accion($Qaccion);
+            $oAccion->setTipo_accion($Q_accion);
             if ($oAccion->DBGuardar() === FALSE) {
                 $error_txt .= $oAccion->getErrorTxt();
             }
@@ -606,7 +606,7 @@ switch ($Qque) {
         if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['id_escrito'] = $id_escrito;
-            $a_cosas = ['id_escrito' => $id_escrito, 'filtro' => $Qfiltro, 'id_expediente' => $Qid_expediente];
+            $a_cosas = ['id_escrito' => $id_escrito, 'filtro' => $Q_filtro, 'id_expediente' => $Q_id_expediente];
             $pagina_mod = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
             $jsondata['pagina_mod'] = $pagina_mod;
         } else {
@@ -622,8 +622,8 @@ switch ($Qque) {
         break;
     case 'explotar':
         $txt_err = '';
-        if (!empty($Qid_escrito)) {
-            $oEscrito = new Escrito($Qid_escrito);
+        if (!empty($Q_id_escrito)) {
+            $oEscrito = new Escrito($Q_id_escrito);
             $oEscrito->DBCarregar();
         } else {
             $txt_err .= _("No puede ser");
@@ -650,9 +650,9 @@ switch ($Qque) {
         break;
     case 'guardar_manual':
         $nuevo = FALSE;
-        $Qf_aprobacion = (string)\filter_input(INPUT_POST, 'f_aprobacion');
-        if (!empty($Qid_escrito)) {
-            $oEscrito = new Escrito($Qid_escrito);
+        $Q_f_aprobacion = (string)filter_input(INPUT_POST, 'f_aprobacion');
+        if (!empty($Q_id_escrito)) {
+            $oEscrito = new Escrito($Q_id_escrito);
             $oEscrito->DBCarregar();
             $oPermisoRegistro = new PermRegistro();
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEscrito, 'asunto');
@@ -667,12 +667,12 @@ switch ($Qque) {
         }
 
         // Si esta marcado como grupo de destinos, o destinos individuales. 
-        if (core\is_true($Qgrupo_dst)) {
+        if (core\is_true($Q_grupo_dst)) {
             $descripcion = '';
             $saltar = FALSE;
             $gesGrupo = new GestorGrupo();
             $a_grupos = $gesGrupo->getArrayGrupos();
-            foreach ($Qa_grupos as $id_grupo) {
+            foreach ($Q_a_grupos as $id_grupo) {
                 // si es personalizado, no cambio nada porque ya se ha guardado al personalizar
                 if ($id_grupo == 'custom') {
                     $saltar = TRUE;
@@ -682,17 +682,17 @@ switch ($Qque) {
                 $descripcion .= $a_grupos[$id_grupo];
             }
             if ($saltar === FALSE) {
-                $oEscrito->setId_grupos($Qa_grupos);
+                $oEscrito->setId_grupos($Q_a_grupos);
                 // borro las posibles personalizaciones:
                 $oEscrito->setDestinos('');
                 $oEscrito->setDescripcion('');
             }
         } else {
             $aProtDst = [];
-            foreach ($Qa_destinos as $key => $id_lugar) {
-                $prot_num = $Qa_prot_num_destinos[$key];
-                $prot_any = $Qa_prot_any_destinos[$key];
-                $prot_mas = $Qa_prot_mas_destinos[$key];
+            foreach ($Q_a_destinos as $key => $id_lugar) {
+                $prot_num = $Q_a_prot_num_destinos[$key];
+                $prot_any = $Q_a_prot_any_destinos[$key];
+                $prot_mas = $Q_a_prot_mas_destinos[$key];
 
                 if (!empty($id_lugar)) {
                     $oProtDst = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
@@ -704,10 +704,10 @@ switch ($Qque) {
         }
 
         $aProtRef = [];
-        foreach ($Qa_referencias as $key => $id_lugar) {
-            $prot_num = $Qa_prot_num_referencias[$key];
-            $prot_any = $Qa_prot_any_referencias[$key];
-            $prot_mas = $Qa_prot_mas_referencias[$key];
+        foreach ($Q_a_referencias as $key => $id_lugar) {
+            $prot_num = $Q_a_prot_num_referencias[$key];
+            $prot_any = $Q_a_prot_any_referencias[$key];
+            $prot_mas = $Q_a_prot_mas_referencias[$key];
 
             if (!empty($id_lugar)) {
                 $oProtRef = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
@@ -716,20 +716,20 @@ switch ($Qque) {
         }
         $oEscrito->setJson_prot_ref($aProtRef);
 
-        $oEscrito->setF_escrito($Qf_escrito);
-        $oEscrito->setF_aprobacion($Qf_aprobacion);
+        $oEscrito->setF_escrito($Q_f_escrito);
+        $oEscrito->setF_aprobacion($Q_f_aprobacion);
         if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
-            $oEscrito->setAsunto($Qasunto);
+            $oEscrito->setAsunto($Q_asunto);
         }
 
         if ($perm_detalle >= PermRegistro::PERM_MODIFICAR) {
-            $oEscrito->setDetalle($Qdetalle);
+            $oEscrito->setDetalle($Q_detalle);
         }
-        $oEscrito->setCreador($Qid_ponente);
-        $oEscrito->setResto_oficinas($Qa_firmas);
+        $oEscrito->setCreador($Q_id_ponente);
+        $oEscrito->setResto_oficinas($Q_a_firmas);
 
-        $oEscrito->setCategoria($Qcategoria);
-        $oEscrito->setVisibilidad($Qvisibilidad);
+        $oEscrito->setCategoria($Q_categoria);
+        $oEscrito->setVisibilidad($Q_visibilidad);
 
         if ($nuevo === TRUE) {
             $oEscrito->setOK(Escrito::OK_NO);

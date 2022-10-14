@@ -340,7 +340,7 @@ class EntradaCompartida extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_entrada_compartida de EntradaCompartida
@@ -417,7 +417,7 @@ class EntradaCompartida extends core\ClasePropiedades
         $this->sasunto_entrada = $sasunto_entrada;
     }
 
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut df_entrada de EntradaCompartida
@@ -447,7 +447,7 @@ class EntradaCompartida extends core\ClasePropiedades
         $this->sanulado = $sanulado;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * Estableix a empty el valor de tots els ATRIBUTOS
@@ -900,7 +900,7 @@ class EntradaCompartida extends core\ClasePropiedades
         }
         return $this->sanulado;
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Retorna una col·lecció d'objectes del tipus DatosCampo

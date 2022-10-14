@@ -283,8 +283,8 @@ class EntradaAdjunto extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_item de EntradaAdjunto
@@ -306,7 +306,7 @@ class EntradaAdjunto extends core\ClasePropiedades
         $this->iid_entrada = $iid_entrada;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut snom de EntradaAdjunto
@@ -465,6 +465,6 @@ class EntradaAdjunto extends core\ClasePropiedades
         $escaped = bin2hex($adjunto);
         $this->adjunto = $escaped;
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
 }

@@ -17,16 +17,16 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
-switch ($Qque) {
+switch ($Q_que) {
     case 'copiar':
         // crear escrito
-        $Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
-        $Qid_plantilla = (integer)\filter_input(INPUT_POST, 'id_plantilla');
-        $Qfiltro = (integer)\filter_input(INPUT_POST, 'filtro');
+        $Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
+        $Q_id_plantilla = (integer)filter_input(INPUT_POST, 'id_plantilla');
+        $Q_filtro = (integer)filter_input(INPUT_POST, 'filtro');
         // Para saber el nombre de la plantilla:
-        $oPlantilla = new Plantilla($Qid_plantilla);
+        $oPlantilla = new Plantilla($Q_id_plantilla);
         $asunto = $oPlantilla->getNombre();
 
         // crear un nuevo escrito:
@@ -54,7 +54,7 @@ switch ($Qque) {
         $id_escrito = $oEscrito->getId_escrito();
 
         $oAccion = new Accion();
-        $oAccion->setId_expediente($Qid_expediente);
+        $oAccion->setId_expediente($Q_id_expediente);
         $oAccion->setId_escrito($id_escrito);
         $oAccion->setTipo_accion(Escrito::ACCION_PLANTILLA);
         if ($oAccion->DBGuardar() === FALSE) {
@@ -65,7 +65,7 @@ switch ($Qque) {
 
         //clone:
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Qid_plantilla);
+        $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Q_id_plantilla);
         $sourceID = $oEtherpad->getPadId();
 
         $oNewEtherpad = new Etherpad();
@@ -78,7 +78,7 @@ switch ($Qque) {
          * con el Text no coje los formatos.
         // copiar etherpad:
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Qid_plantilla);
+        $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Q_id_plantilla);
         //$padID = $oEtherpad->getPadId();
         //$txtPad = $oEtherpad->getTexto($padID);
         $htmlPad = $oEtherpad->getHHtml();
@@ -95,7 +95,7 @@ switch ($Qque) {
 
         $jsondata['success'] = true;
         $jsondata['id_escrito'] = $id_escrito;
-        $a_cosas = ['id_escrito' => $id_escrito, 'id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro];
+        $a_cosas = ['id_escrito' => $id_escrito, 'id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro];
         $pagina_mod = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
         $jsondata['pagina_mod'] = $pagina_mod;
 
@@ -107,23 +107,23 @@ switch ($Qque) {
 
         break;
     case "guardar_escrito":
-        $Qid_escrito = (integer)\filter_input(INPUT_POST, 'id_escrito');
-        $Qid_plantilla = (integer)\filter_input(INPUT_POST, 'id_plantilla');
-        $Qnombre = (string)\filter_input(INPUT_POST, 'nombre');
-        $Qa_lugares = (array)\filter_input(INPUT_POST, 'lugares', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
+        $Q_id_plantilla = (integer)filter_input(INPUT_POST, 'id_plantilla');
+        $Q_nombre = (string)filter_input(INPUT_POST, 'nombre');
+        $Q_a_lugares = (array)filter_input(INPUT_POST, 'lugares', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-        if (empty($Qnombre)) {
+        if (empty($Q_nombre)) {
             echo _("debe poner un nombre");
         }
 
-        $oEscrito = new Escrito($Qid_escrito);
+        $oEscrito = new Escrito($Q_id_escrito);
         $oEscrito->DBCarregar();
         // borrar destinos existentes
         $oEscrito->setJson_prot_destino([]);
         $oEscrito->setId_grupos();
         // poner nueva seleccion
-        $oEscrito->setDestinos($Qa_lugares);
-        $oEscrito->setDescripcion($Qnombre);
+        $oEscrito->setDestinos($Q_a_lugares);
+        $oEscrito->setDescripcion($Q_nombre);
 
         if ($oEscrito->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
@@ -131,10 +131,10 @@ switch ($Qque) {
         }
         break;
     case "eliminar":
-        $a_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
-            $Qid_plantilla = (integer)strtok($a_sel[0], "#");
-            $oPlantilla = new Plantilla($Qid_plantilla);
+            $Q_id_plantilla = (integer)strtok($a_sel[0], "#");
+            $oPlantilla = new Plantilla($Q_id_plantilla);
             if ($oPlantilla->DBEliminar() === FALSE) {
                 echo _("hay un error, no se ha eliminado");
                 echo "\n" . $oPlantilla->getErrorTxt();
@@ -143,20 +143,20 @@ switch ($Qque) {
         break;
     case "nuevo":
     case "guardar":
-        $Qid_plantilla = (integer)\filter_input(INPUT_POST, 'id_plantilla');
-        $Qnombre = (string)\filter_input(INPUT_POST, 'nombre');
+        $Q_id_plantilla = (integer)filter_input(INPUT_POST, 'id_plantilla');
+        $Q_nombre = (string)filter_input(INPUT_POST, 'nombre');
 
-        if (empty($Qnombre)) {
+        if (empty($Q_nombre)) {
             echo _("debe poner un nombre");
         }
 
-        if (empty($Qid_plantilla)) {
+        if (empty($Q_id_plantilla)) {
             $oPlantilla = new Plantilla();
         } else {
-            $oPlantilla = new Plantilla(array('id_plantilla' => $Qid_plantilla));
+            $oPlantilla = new Plantilla(array('id_plantilla' => $Q_id_plantilla));
         }
         $oPlantilla->DBCarregar();
-        $oPlantilla->setNombre($Qnombre);
+        $oPlantilla->setNombre($Q_nombre);
         if ($oPlantilla->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
             echo "\n" . $oPlantilla->getErrorTxt();

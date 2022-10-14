@@ -19,14 +19,14 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 // porque también se puede abrir en una ventana nueva, y entonces se llama por GET
-$Qmethod = (string)\filter_input(INPUT_SERVER, 'REQUEST_METHOD');
+$Qmethod = (string)filter_input(INPUT_SERVER, 'REQUEST_METHOD');
 if ($Qmethod == 'POST') {
-    $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-    $Qcompartida = (string)\filter_input(INPUT_POST, 'compartida');
+    $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+    $Qcompartida = (string)filter_input(INPUT_POST, 'compartida');
 }
 if ($Qmethod == 'GET') {
-    $Qid_entrada = (integer)\filter_input(INPUT_GET, 'id_entrada');
-    $Qcompartida = (string)\filter_input(INPUT_GET, 'compartida');
+    $Qid_entrada = (integer)filter_input(INPUT_GET, 'id_entrada');
+    $Qcompartida = (string)filter_input(INPUT_GET, 'compartida');
 }
 
 $sigla = $_SESSION['oConfig']->getSigla();

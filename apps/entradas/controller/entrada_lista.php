@@ -19,29 +19,29 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qslide_mode = (string)\filter_input(INPUT_POST, 'slide_mode');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_slide_mode = (string)filter_input(INPUT_POST, 'slide_mode');
 
 $oTabla = new EntradaLista();
-$oTabla->setFiltro($Qfiltro);
-$oTabla->setSlide_mode($Qslide_mode);
+$oTabla->setFiltro($Q_filtro);
+$oTabla->setSlide_mode($Q_slide_mode);
 
 $msg = '';
 // añadir dialogo de búsquedas
-if ($Qfiltro == 'en_aceptado') {
-    $Qoficina = (string)\filter_input(INPUT_POST, 'oficina');
+if ($Q_filtro == 'en_aceptado') {
+    $Q_oficina = (string)filter_input(INPUT_POST, 'oficina');
     // por defecto:
-    if (empty($Qoficina)) {
-        $Qoficina = 'propia';
+    if (empty($Q_oficina)) {
+        $Q_oficina = 'propia';
     }
 
     // para los ctr no hace falta
     if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
-        $chk_of_propia = ($Qoficina == 'propia') ? 'checked' : '';
-        $chk_of_resto = ($Qoficina == 'resto') ? 'checked' : '';
+        $chk_of_propia = ($Q_oficina == 'propia') ? 'checked' : '';
+        $chk_of_resto = ($Q_oficina == 'resto') ? 'checked' : '';
 
         $a_campos = [
-            'filtro' => $Qfiltro,
+            'filtro' => $Q_filtro,
             'chk_of_propia' => $chk_of_propia,
             'chk_of_resto' => $chk_of_resto,
         ];
@@ -52,16 +52,16 @@ if ($Qfiltro == 'en_aceptado') {
     }
     $aWhereADD = [];
     $aOperadorADD = [];
-    $aWhereADD['ponente'] = $Qoficina;
+    $aWhereADD['ponente'] = $Q_oficina;
     $oTabla->setAWhereADD($aWhereADD);
     $oTabla->setAOperadorADD($aOperadorADD);
 }
 
-if ($Qfiltro == 'en_encargado') {
-    $Qencargado = (string)\filter_input(INPUT_POST, 'encargado');
+if ($Q_filtro == 'en_encargado') {
+    $Q_encargado = (string)filter_input(INPUT_POST, 'encargado');
     // por defecto:
-    if (empty($Qencargado)) {
-        $Qencargado = ConfigGlobal::role_id_cargo();
+    if (empty($Q_encargado)) {
+        $Q_encargado = ConfigGlobal::role_id_cargo();
     }
 
     $id_oficina = ConfigGlobal::role_id_oficina();
@@ -78,16 +78,16 @@ if ($Qfiltro == 'en_encargado') {
         $a_usuarios_oficina = [$id_cargo => $nom_cargo];
     }
     // para el dialogo de búsquedas:
-    $oDesplEncargados = new Desplegable('encargado', $a_usuarios_oficina, $Qencargado, FALSE);
+    $oDesplEncargados = new Desplegable('encargado', $a_usuarios_oficina, $Q_encargado, FALSE);
     $oDesplEncargados->setAction("fnjs_buscar('#que');");
 
 
     $aWhereADD = [];
     $aOperadorADD = [];
-    $aWhereADD['encargado'] = $Qencargado;
+    $aWhereADD['encargado'] = $Q_encargado;
 
     $a_campos = [
-        'filtro' => $Qfiltro,
+        'filtro' => $Q_filtro,
         'oDesplEncargados' => $oDesplEncargados,
     ];
 

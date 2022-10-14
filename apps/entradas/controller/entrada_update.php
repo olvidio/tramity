@@ -23,43 +23,43 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
-$Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
+$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
-$Qorigen = (integer)\filter_input(INPUT_POST, 'origen');
-$Qprot_num_origen = (integer)\filter_input(INPUT_POST, 'prot_num_origen');
-$Qprot_any_origen = (integer)\filter_input(INPUT_POST, 'prot_any_origen');
-$Qprot_mas_origen = (string)\filter_input(INPUT_POST, 'prot_mas_origen');
+$Q_origen = (integer)filter_input(INPUT_POST, 'origen');
+$Q_prot_num_origen = (integer)filter_input(INPUT_POST, 'prot_num_origen');
+$Q_prot_any_origen = (integer)filter_input(INPUT_POST, 'prot_any_origen');
+$Q_prot_mas_origen = (string)filter_input(INPUT_POST, 'prot_mas_origen');
 
-$Qasunto_e = (string)\filter_input(INPUT_POST, 'asunto_e');
-$Qf_escrito = (string)\filter_input(INPUT_POST, 'f_escrito');
-$Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
-$Qf_entrada = (string)\filter_input(INPUT_POST, 'f_entrada');
+$Q_asunto_e = (string)filter_input(INPUT_POST, 'asunto_e');
+$Q_f_escrito = (string)filter_input(INPUT_POST, 'f_escrito');
+$Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
+$Q_f_entrada = (string)filter_input(INPUT_POST, 'f_entrada');
 
-$Qdetalle = (string)\filter_input(INPUT_POST, 'detalle');
-$Qid_of_ponente = (integer)\filter_input(INPUT_POST, 'of_ponente');
-$Qa_oficinas = (array)\filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qdetalle = (string)filter_input(INPUT_POST, 'detalle');
+$Qid_of_ponente = (integer)filter_input(INPUT_POST, 'of_ponente');
+$Qa_oficinas = (array)filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-$Qcategoria = (integer)\filter_input(INPUT_POST, 'categoria');
-$Qvisibilidad = (integer)\filter_input(INPUT_POST, 'visibilidad');
+$Qcategoria = (integer)filter_input(INPUT_POST, 'categoria');
+$Qvisibilidad = (integer)filter_input(INPUT_POST, 'visibilidad');
 
-$Qplazo = (string)\filter_input(INPUT_POST, 'plazo');
-$Qf_plazo = (string)\filter_input(INPUT_POST, 'f_plazo');
-$Qbypass = (string)\filter_input(INPUT_POST, 'bypass');
-$QAdmitir_hidden = (string)\filter_input(INPUT_POST, 'admitir_hidden');
+$Qplazo = (string)filter_input(INPUT_POST, 'plazo');
+$Qf_plazo = (string)filter_input(INPUT_POST, 'f_plazo');
+$Qbypass = (string)filter_input(INPUT_POST, 'bypass');
+$QAdmitir_hidden = (string)filter_input(INPUT_POST, 'admitir_hidden');
 
 /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
-$Qa_referencias = (array)\filter_input(INPUT_POST, 'referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_prot_num_referencias = (array)\filter_input(INPUT_POST, 'prot_num_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_prot_any_referencias = (array)\filter_input(INPUT_POST, 'prot_any_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_prot_mas_referencias = (array)\filter_input(INPUT_POST, 'prot_mas_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_referencias = (array)filter_input(INPUT_POST, 'referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_prot_num_referencias = (array)filter_input(INPUT_POST, 'prot_num_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_prot_any_referencias = (array)filter_input(INPUT_POST, 'prot_any_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Qa_prot_mas_referencias = (array)filter_input(INPUT_POST, 'prot_mas_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 $error_txt = '';
 $jsondata = [];
 switch ($Qque) {
     case 'guardar_etiquetas':
-        $Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qa_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // si viene del serializeArray del jQuery, cada fila, a su vez es un array:
         $a_etiquetas = [];
         foreach ($Qa_etiquetas as $etiqueta) {
@@ -93,14 +93,14 @@ switch ($Qque) {
         break;
     case 'en_asignar':
         $Qid_oficina = ConfigGlobal::role_id_oficina();
-        $Qid_cargo_encargado = (integer)\filter_input(INPUT_POST, 'id_cargo_encargado');
+        $Qid_cargo_encargado = (integer)filter_input(INPUT_POST, 'id_cargo_encargado');
         $oEntrada = new EntradaDB($Qid_entrada);
         $oEntrada->DBCarregar();
         // comprobar si es un cambio (ya estaba encargado a alguien)
         $encargado_old = $oEntrada->getEncargado();
 
         // Para los ctr, hay que cambiar el estado a ESTADO_ACEPTADO
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $oEntrada->setEstado(Entrada::ESTADO_ACEPTADO);
         }
         $oEntrada->setEncargado($Qid_cargo_encargado);
@@ -232,16 +232,16 @@ switch ($Qque) {
             }
         }
         // destinos
-        $Qgrupo_dst = (string)\filter_input(INPUT_POST, 'grupo_dst');
-        $Qf_salida = (string)\filter_input(INPUT_POST, 'f_salida');
+        $Qgrupo_dst = (string)filter_input(INPUT_POST, 'grupo_dst');
+        $Qf_salida = (string)filter_input(INPUT_POST, 'f_salida');
 
         // genero un vector con todos los grupos.
-        $Qa_grupos = (array)\filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qa_grupos = (array)filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
-        $Qa_destinos = (array)\filter_input(INPUT_POST, 'destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $Qa_prot_num_destinos = (array)\filter_input(INPUT_POST, 'prot_num_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $Qa_prot_any_destinos = (array)\filter_input(INPUT_POST, 'prot_any_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $Qa_prot_mas_destinos = (array)\filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qa_destinos = (array)filter_input(INPUT_POST, 'destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qa_prot_num_destinos = (array)filter_input(INPUT_POST, 'prot_num_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qa_prot_any_destinos = (array)filter_input(INPUT_POST, 'prot_any_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Qa_prot_mas_destinos = (array)filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
         // Si esta marcado como grupo de destinos, o destinos individuales.
         if (core\is_true($Qgrupo_dst)) {
@@ -418,7 +418,7 @@ switch ($Qque) {
         $oEntrada->setCategoria($Qcategoria);
         // visibilidad: puede que esté en modo solo lectura, mirar el hiden.
         if (empty($Qvisibilidad)) {
-            $Qvisibilidad = (integer)\filter_input(INPUT_POST, 'hidden_visibilidad');
+            $Qvisibilidad = (integer)filter_input(INPUT_POST, 'hidden_visibilidad');
         }
         $oEntrada->setVisibilidad($Qvisibilidad);
 
@@ -486,7 +486,7 @@ switch ($Qque) {
             // se van generando pendientes cada vez que se guarda.
             if ($Qfiltro == 'en_asignado') {
                 if ($Qplazo != "hoy") {
-                    $Qid_pendiente = (integer)\filter_input(INPUT_POST, 'id_pendiente');
+                    $Qid_pendiente = (integer)filter_input(INPUT_POST, 'id_pendiente');
                     if (empty($Qid_pendiente)) { // si no se ha generado el pendiente con "modificar pendiente"
                         $f_plazo = $oEntrada->getF_contestar()->getFromLocal();
                         $location = $oProtOrigen->ver_txt_num();
@@ -545,16 +545,16 @@ switch ($Qque) {
                     }
                 }
                 // destinos
-                $Qgrupo_dst = (string)\filter_input(INPUT_POST, 'grupo_dst');
-                $Qf_salida = (string)\filter_input(INPUT_POST, 'f_salida');
+                $Qgrupo_dst = (string)filter_input(INPUT_POST, 'grupo_dst');
+                $Qf_salida = (string)filter_input(INPUT_POST, 'f_salida');
 
                 // genero un vector con todos los grupos.
-                $Qa_grupos = (array)\filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $Qa_grupos = (array)filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
                 /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
-                $Qa_destinos = (array)\filter_input(INPUT_POST, 'destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-                $Qa_prot_num_destinos = (array)\filter_input(INPUT_POST, 'prot_num_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-                $Qa_prot_any_destinos = (array)\filter_input(INPUT_POST, 'prot_any_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-                $Qa_prot_mas_destinos = (array)\filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $Qa_destinos = (array)filter_input(INPUT_POST, 'destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $Qa_prot_num_destinos = (array)filter_input(INPUT_POST, 'prot_num_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $Qa_prot_any_destinos = (array)filter_input(INPUT_POST, 'prot_any_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $Qa_prot_mas_destinos = (array)filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
                 // Si esta marcado como grupo de destinos, o destinos individuales.
                 if (core\is_true($Qgrupo_dst)) {

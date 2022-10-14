@@ -22,10 +22,10 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
-$Qid_escrito = (integer)\filter_input(INPUT_POST, 'id_escrito');
-$Qaccion = (integer)\filter_input(INPUT_POST, 'accion');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
+$Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
+$Q_accion = (integer)filter_input(INPUT_POST, 'accion');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
 // ----------- Sigla local -------------------
 $sigla_local = $_SESSION['oConfig']->getSigla();
@@ -61,7 +61,7 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
     $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
 }
 
-$oEscrito = new Escrito($Qid_escrito);
+$oEscrito = new Escrito($Q_id_escrito);
 // categoria
 $oCategoria = new Categoria();
 $aOpciones = $oCategoria->getArrayCategoria();
@@ -74,7 +74,7 @@ $oDesplCategoria->setTabIndex(80);
 $oVisibilidad = new Visibilidad();
 $aOpciones = $oVisibilidad->getArrayVisibilidad();
 
-if (!empty($Qid_escrito)) {
+if (!empty($Q_id_escrito)) {
 
     $f_aprobacion = $oEscrito->getF_aprobacion();
     if (!empty($f_aprobacion)) {
@@ -134,7 +134,7 @@ if (!empty($Qid_escrito)) {
     $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
 
     $titulo = _("revisar");
-    switch ($Qaccion) {
+    switch ($Q_accion) {
         case Escrito::ACCION_ESCRITO:
             $titulo = _("revisar escrito");
             break;
@@ -151,7 +151,7 @@ if (!empty($Qid_escrito)) {
 
 
     $oEtherpad = new Etherpad();
-    $oEtherpad->setId(Etherpad::ID_ESCRITO, $Qid_escrito);
+    $oEtherpad->setId(Etherpad::ID_ESCRITO, $Q_id_escrito);
     $padID = $oEtherpad->getPadId();
     $url = $oEtherpad->getUrl();
 
@@ -164,7 +164,7 @@ if (!empty($Qid_escrito)) {
     $initialPreview = '';
     $json_config = '{}';
     $titulo = _("nuevo");
-    switch ($Qaccion) {
+    switch ($Q_accion) {
         case Escrito::ACCION_ESCRITO:
             $titulo = _("nuevo escrito");
             break;
@@ -191,16 +191,16 @@ if (!empty($Qid_escrito)) {
 }
 
 
-$a_cosas = ['id_expediente' => $Qid_expediente,
-    'filtro' => $Qfiltro
+$a_cosas = ['id_expediente' => $Q_id_expediente,
+    'filtro' => $Q_filtro
 ];
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
 
 $a_campos = [
     'titulo' => $titulo,
-    'id_expediente' => $Qid_expediente,
-    'id_escrito' => $Qid_escrito,
-    'accion' => $Qaccion,
+    'id_expediente' => $Q_id_expediente,
+    'id_escrito' => $Q_id_escrito,
+    'accion' => $Q_accion,
     'id_ponente' => $id_ponente,
     //'oHash' => $oHash,
     'cabeceraIzqd' => $cabeceraIzqd,

@@ -21,7 +21,7 @@ abstract class ClasePropiedades
      * @var string
      */
     protected $sErrorTxt;
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
 
     /**

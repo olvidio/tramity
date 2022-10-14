@@ -13,27 +13,27 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
 $txt_err = '';
-switch ($Qque) {
+switch ($Q_que) {
     case "suplente":
-        $Qid_cargo = (integer)\filter_input(INPUT_POST, 'id_cargo');
-        $Qid_suplente = (integer)\filter_input(INPUT_POST, 'id_suplente');
-        $oCargo = new Cargo (array('id_cargo' => $Qid_cargo));
+        $Q_id_cargo = (integer)filter_input(INPUT_POST, 'id_cargo');
+        $Q_id_suplente = (integer)filter_input(INPUT_POST, 'id_suplente');
+        $oCargo = new Cargo (array('id_cargo' => $Q_id_cargo));
         $oCargo->DBCarregar();
-        $oCargo->setId_suplente($Qid_suplente);
+        $oCargo->setId_suplente($Q_id_suplente);
         if ($oCargo->DBGuardar() === FALSE) {
             $txt_err .= _("Hay un error al guardar");
             $txt_err .= "<br>";
         }
         break;
     case "eliminar":
-        $a_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
-            $Qid_cargo = (integer)strtok($a_sel[0], "#");
-            if ($Qid_cargo > Cargo::CARGO_REUNION) { // A dia de hoy, es el número mayor (7)
-                $oCargo = new Cargo($Qid_cargo);
+            $Q_id_cargo = (integer)strtok($a_sel[0], "#");
+            if ($Q_id_cargo > Cargo::CARGO_REUNION) { // A dia de hoy, es el número mayor (7)
+                $oCargo = new Cargo($Q_id_cargo);
                 // hay que coger la información antes de borrar:
                 $id_oficina = $oCargo->getId_oficina();
                 $cargo = $oCargo->getCargo();
@@ -55,46 +55,46 @@ switch ($Qque) {
         break;
     case "nuevo":
     case "guardar":
-        $Qcargo = (string)\filter_input(INPUT_POST, 'cargo');
+        $Q_cargo = (string)filter_input(INPUT_POST, 'cargo');
 
-        if (empty($Qcargo)) {
+        if (empty($Q_cargo)) {
             $txt_err .= _("debe poner un nombre");
         }
-        $Qid_cargo = (integer)\filter_input(INPUT_POST, 'id_cargo');
-        $Qdescripcion = (string)\filter_input(INPUT_POST, 'descripcion');
-        $Qid_ambito = (integer)\filter_input(INPUT_POST, 'id_ambito');
-        $Qid_oficina = (integer)\filter_input(INPUT_POST, 'id_oficina');
-        $Qdirector = (bool)\filter_input(INPUT_POST, 'director');
-        $Qsacd = (bool)\filter_input(INPUT_POST, 'sacd');
-        $Qid_usuario = (integer)\filter_input(INPUT_POST, 'id_usuario');
-        $Qid_suplente = (integer)\filter_input(INPUT_POST, 'id_suplente');
+        $Q_id_cargo = (integer)filter_input(INPUT_POST, 'id_cargo');
+        $Q_descripcion = (string)filter_input(INPUT_POST, 'descripcion');
+        $Q_id_ambito = (integer)filter_input(INPUT_POST, 'id_ambito');
+        $Q_id_oficina = (integer)filter_input(INPUT_POST, 'id_oficina');
+        $Q_director = (bool)filter_input(INPUT_POST, 'director');
+        $Q_sacd = (bool)filter_input(INPUT_POST, 'sacd');
+        $Q_id_usuario = (integer)filter_input(INPUT_POST, 'id_usuario');
+        $Q_id_suplente = (integer)filter_input(INPUT_POST, 'id_suplente');
 
         if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_DL) {
-            $Qid_oficina = Cargo::OFICINA_ESQUEMA;
+            $Q_id_oficina = Cargo::OFICINA_ESQUEMA;
         }
 
-        if (empty($Qid_cargo)) {
+        if (empty($Q_id_cargo)) {
             $oCargo = new Cargo();
         } else {
-            $oCargo = new Cargo (array('id_cargo' => $Qid_cargo));
+            $oCargo = new Cargo (array('id_cargo' => $Q_id_cargo));
             $oCargo->DBCarregar();
         }
-        $oCargo->setCargo($Qcargo);
-        $oCargo->setDescripcion($Qdescripcion);
-        $oCargo->setId_ambito($Qid_ambito);
-        $oCargo->setId_oficina($Qid_oficina);
-        $oCargo->setDirector($Qdirector);
-        $oCargo->setSacd($Qsacd);
-        $oCargo->setId_usuario($Qid_usuario);
-        $oCargo->setId_suplente($Qid_suplente);
+        $oCargo->setCargo($Q_cargo);
+        $oCargo->setDescripcion($Q_descripcion);
+        $oCargo->setId_ambito($Q_id_ambito);
+        $oCargo->setId_oficina($Q_id_oficina);
+        $oCargo->setDirector($Q_director);
+        $oCargo->setSacd($Q_sacd);
+        $oCargo->setId_usuario($Q_id_usuario);
+        $oCargo->setId_suplente($Q_id_suplente);
         if ($oCargo->DBGuardar() === false) {
             $txt_err .= _("hay un error, no se ha guardado");
             $txt_err .= "\n" . $oCargo->getErrorTxt();
         }
         // Crear el usuario en davical.
-        $aDatosCargo = ['cargo' => $Qcargo,
-            'descripcion' => $Qdescripcion,
-            'oficina' => $Qid_oficina,
+        $aDatosCargo = ['cargo' => $Q_cargo,
+            'descripcion' => $Q_descripcion,
+            'oficina' => $Q_id_oficina,
         ];
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
         $txt_err .= $oDavical->crearUser($aDatosCargo);

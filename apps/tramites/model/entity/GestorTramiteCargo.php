@@ -134,7 +134,7 @@ class GestorTramiteCargo extends core\ClaseGestor
         return $oTramiteCargoSet->getTot();
     }
 
-    /* METODES PROTECTED --------------------------------------------------------*/
+    /* MÉTODOS PROTECTED --------------------------------------------------------*/
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

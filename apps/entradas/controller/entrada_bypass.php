@@ -22,7 +22,7 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
 
 $gesOficinas = new GestorOficina();
 $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
@@ -30,7 +30,7 @@ $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();
 
-$oEntradaBypass = new EntradaBypass($Qid_entrada);
+$oEntradaBypass = new EntradaBypass($Q_id_entrada);
 // categoria
 $oCategoria = new Categoria();
 $aOpciones = $oCategoria->getArrayCategoria();
@@ -127,7 +127,7 @@ $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . 
 
 $a_campos = [
     'titulo' => $titulo,
-    'id_entrada' => $Qid_entrada,
+    'id_entrada' => $Q_id_entrada,
     'asunto_e' => $asunto_e,
     'asunto' => $asunto,
     'f_entrada' => $f_entrada,

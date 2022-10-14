@@ -12,15 +12,15 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
 $error_txt = '';
-switch ($Qque) {
+switch ($Q_que) {
     case "eliminar":
-        $a_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
-            $Qid_grupo = (integer)strtok($a_sel[0], "#");
-            $oGrupo = new CargoGrupo($Qid_grupo);
+            $Q_id_grupo = (integer)strtok($a_sel[0], "#");
+            $oGrupo = new CargoGrupo($Q_id_grupo);
             if ($oGrupo->DBEliminar() === FALSE) {
                 $error_txt .= _("hay un error, no se ha eliminado");
                 $error_txt .= "\n" . $oGrupo->getErrorTxt();
@@ -29,24 +29,24 @@ switch ($Qque) {
         break;
     case "nuevo":
     case "guardar":
-        $Qid_grupo = (integer)\filter_input(INPUT_POST, 'id_grupo');
-        $Qid_cargo_ref = (integer)\filter_input(INPUT_POST, 'id_cargo_ref');
-        $Qdescripcion = (string)\filter_input(INPUT_POST, 'descripcion');
-        $Qa_cargos = (array)\filter_input(INPUT_POST, 'cargos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Q_id_grupo = (integer)filter_input(INPUT_POST, 'id_grupo');
+        $Q_id_cargo_ref = (integer)filter_input(INPUT_POST, 'id_cargo_ref');
+        $Q_descripcion = (string)filter_input(INPUT_POST, 'descripcion');
+        $Q_a_cargos = (array)filter_input(INPUT_POST, 'cargos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-        if (empty($Qdescripcion)) {
+        if (empty($Q_descripcion)) {
             echo _("debe poner un nombre");
         }
 
-        if (empty($Qid_grupo)) {
+        if (empty($Q_id_grupo)) {
             $oGrupo = new CargoGrupo();
         } else {
-            $oGrupo = new CargoGrupo(array('id_grupo' => $Qid_grupo));
+            $oGrupo = new CargoGrupo(array('id_grupo' => $Q_id_grupo));
         }
         $oGrupo->DBCarregar();
-        $oGrupo->setId_cargo_ref($Qid_cargo_ref);
-        $oGrupo->setDescripcion($Qdescripcion);
-        $oGrupo->setMiembros($Qa_cargos);
+        $oGrupo->setId_cargo_ref($Q_id_cargo_ref);
+        $oGrupo->setDescripcion($Q_descripcion);
+        $oGrupo->setMiembros($Q_a_cargos);
         if ($oGrupo->DBGuardar() === FALSE) {
             $error_txt .= _("hay un error, no se ha guardado");
             $error_txt .= "\n" . $oGrupo->getErrorTxt();

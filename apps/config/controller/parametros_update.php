@@ -12,11 +12,11 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Qparametro = (string)\filter_input(INPUT_POST, 'parametro');
-$Qvalor = (string)\filter_input(INPUT_POST, 'valor');
+$Q_parametro = (string)filter_input(INPUT_POST, 'parametro');
+$Q_valor = (string)filter_input(INPUT_POST, 'valor');
 
-$oConfigSchema = new ConfigSchema($Qparametro);
-$oConfigSchema->setValor($Qvalor);
+$oConfigSchema = new ConfigSchema($Q_parametro);
+$oConfigSchema->setValor($Q_valor);
 
 $error_txt = '';
 if ($oConfigSchema->DBGuardar() === FALSE) {

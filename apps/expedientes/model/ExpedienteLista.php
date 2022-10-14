@@ -122,7 +122,6 @@ class ExpedienteLista
         $gesCargos = new GestorCargo();
         $a_posibles_cargos = $gesCargos->getArrayCargos();
         $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina(), TRUE);
-        $oExpediente = new Expediente();
 
         $txt_ver = '';
         $txt_mod = '';
@@ -221,6 +220,7 @@ class ExpedienteLista
             $oPermiso = new PermRegistro();
             foreach ($cExpedientes as $oExpediente) {
                 $row = [];
+                $tramite_txt = '';
                 // mirar permisos...
                 $visibilidad = $oExpediente->getVisibilidad();
                 if (!empty($visibilidad) && !$oPermiso->isVisibleDtor($visibilidad)) {
@@ -247,28 +247,28 @@ class ExpedienteLista
                 $baclaracion = FALSE;
                 $bpeticion = FALSE;
                 $brespuesta = FALSE;
-                if ($this->filtro == 'firmar') {
-                    if (in_array($id_expediente, $this->a_expedientes_nuevos)) {
+                if ($this->filtro === 'firmar') {
+                    if (in_array($id_expediente, $this->a_expedientes_nuevos, true)) {
                         $bstrong = TRUE;
                     }
-                    if (in_array($id_expediente, $this->a_exp_aclaracion)) {
+                    if (in_array($id_expediente, $this->a_exp_aclaracion, true)) {
                         $baclaracion = TRUE;
                     }
-                    if (in_array($id_expediente, $this->a_exp_peticion)) {
+                    if (in_array($id_expediente, $this->a_exp_peticion, true)) {
                         $bpeticion = TRUE;
                     }
-                    if (in_array($id_expediente, $this->a_exp_respuesta)) {
+                    if (in_array($id_expediente, $this->a_exp_respuesta, true)) {
                         $brespuesta = TRUE;
                     }
                 }
                 // reunion. faltan firmas:
                 $bfalta_mi_firma = FALSE;
                 $bfalta_firma = FALSE;
-                if ($this->filtro == 'reunion' || $this->filtro == 'seg_reunion') {
-                    if (in_array($id_expediente, $this->a_exp_reunion_falta_mi_firma)) {
+                if ($this->filtro === 'reunion' || $this->filtro === 'seg_reunion') {
+                    if (in_array($id_expediente, $this->a_exp_reunion_falta_mi_firma, true)) {
                         $bfalta_mi_firma = TRUE;
                     }
-                    if (in_array($id_expediente, $this->a_exp_reunion_falta_firma)) {
+                    if (in_array($id_expediente, $this->a_exp_reunion_falta_firma, true)) {
                         $bfalta_firma = TRUE;
                     }
                 }
@@ -283,7 +283,7 @@ class ExpedienteLista
                     'prioridad_sel' => $this->prioridad_sel,
                     'modo' => 'mod',
                 ];
-                if ($this->filtro == 'archivados') {
+                if ($this->filtro === 'archivados') {
                     $a_cosas = $this->getACondiciones();
                     $a_cosas_ver['condiciones'] = $a_cosas;
                 }
@@ -301,7 +301,7 @@ class ExpedienteLista
                 if ($bfalta_mi_firma) {
                     $row['class_row'] = 'bg-warning';
                 }
-                if (ConfigGlobal::role_actual() == 'secretaria' && $bfalta_firma) {
+                if (ConfigGlobal::role_actual() === 'secretaria' && $bfalta_firma) {
                     $row['class_row'] = 'bg-warning';
                 }
                 if ($baclaracion || $bpeticion) {
@@ -311,26 +311,24 @@ class ExpedienteLista
                     $row['class_row'] = 'respuesta';
                 }
                 // color para los rechazados
-                if ($estado == Expediente::ESTADO_DILATA) {
+                if ($estado === Expediente::ESTADO_DILATA) {
                     $row['class_row'] = 'bg-warning';
                 }
-                if ($estado == Expediente::ESTADO_RECHAZADO || $estado == Expediente::ESTADO_NO) {
+                if ($estado === Expediente::ESTADO_RECHAZADO || $estado === Expediente::ESTADO_NO) {
                     $row['class_row'] = 'bg-warning';
                 }
-                if ($estado == Expediente::ESTADO_ESPERA) {
+                if ($estado === Expediente::ESTADO_ESPERA) {
                     $row['class_row'] = 'bg-light';
                 }
-                if ($estado == Expediente::ESTADO_FIJAR_REUNION) {
-                    if (in_array($id_expediente, $this->a_expedientes_espera)) {
-                        $row['class_row'] = 'bg-light';
-                    }
+                if (($estado === Expediente::ESTADO_FIJAR_REUNION) && in_array($id_expediente, $this->a_expedientes_espera, true)) {
+                    $row['class_row'] = 'bg-light';
                 }
                 // Si ya lo han visto todos (y hay alguno marcado):
-                if ($estado == Expediente::ESTADO_BORRADOR && $oExpediente->isVistoTodos()) {
+                if ($estado === Expediente::ESTADO_BORRADOR && $oExpediente->isVistoTodos()) {
                     $row['class_row'] = 'bg-warning';
                 }
-                // Acabados devueletos por secretaria
-                if (($this->filtro == 'acabados_encargados' || $this->filtro == 'acabados') && $oExpediente->isDevueltoAlguno()) {
+                // Acabados devueltos por secretaria
+                if (($this->filtro === 'acabados_encargados' || $this->filtro === 'acabados') && $oExpediente->isDevueltoAlguno()) {
                     $row['class_row'] = 'bg-warning';
                 }
 
@@ -339,7 +337,7 @@ class ExpedienteLista
                 $row['tramite'] = $tramite_txt;
 
                 // color prioridad:
-                if ($prioridad == Expediente::PRIORIDAD_URGENTE) {
+                if ($prioridad === Expediente::PRIORIDAD_URGENTE) {
                     $row['class_row'] = 'bg-light text-danger';
                 }
 
@@ -361,7 +359,7 @@ class ExpedienteLista
                 }
                 $row['oficinas'] = $oficinas_txt;
                 // nombre encargado (ponente)
-                if ($this->filtro == 'acabados_encargados' || $this->filtro == 'acabados') {
+                if ($this->filtro === 'acabados_encargados' || $this->filtro === 'acabados') {
                     $nom_encargado = $a_usuarios_oficina[$id_ponente];
                     $row['nom_encargado'] = $nom_encargado;
                 }
@@ -384,7 +382,7 @@ class ExpedienteLista
                 } else {
                     $num_orden = 'c' . $oExpediente->getF_aprobacion()->getIso();
                 }
-                $num_orden = $num_orden . $id_expediente;
+                $num_orden .= $id_expediente;
 
                 $a_expedientes[$num_orden] = $row;
             }
@@ -400,7 +398,7 @@ class ExpedienteLista
         $vista = ConfigGlobal::getVista();
 
         $cabecera_oficina = _("oficinas");
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $cabecera_oficina = _("cargo");
         }
 
@@ -428,7 +426,7 @@ class ExpedienteLista
     /**
      *
      */
-    private function setCondicion()
+    private function setCondicion(): void
     {
         $aWhere = [];
         $aOperador = [];
@@ -478,15 +476,13 @@ class ExpedienteLista
                         Expediente::ESTADO_RECHAZADO,
                         Expediente::ESTADO_CIRCULANDO,
                     ];
-                    $aWhere['estado'] = implode(',', $a_tipos_acabado);
-                    $aOperador['estado'] = 'IN';
                 } else {
                     $a_tipos_acabado = [Expediente::ESTADO_CIRCULANDO,
                         Expediente::ESTADO_ESPERA,
                     ];
-                    $aWhere['estado'] = implode(',', $a_tipos_acabado);
-                    $aOperador['estado'] = 'IN';
                 }
+                $aWhere['estado'] = implode(',', $a_tipos_acabado);
+                $aOperador['estado'] = 'IN';
                 //pendientes de mi firma, pero ya circulando
                 $aWhereFirma['id_cargo'] = ConfigGlobal::role_id_cargo();
                 $aWhereFirma['tipo'] = Firma::TIPO_VOTO;
@@ -516,7 +512,7 @@ class ExpedienteLista
                         $this->a_expedientes_nuevos[] = $id_expediente;
                     }
                 }
-                //////// mirar los que se ha pedido aclaracion para marcarlos en ambar /////////
+                //////// mirar los que se ha pedido aclaración para marcarlos en naranja /////////
                 $aWhereFirma2 = ['tipo' => Firma::TIPO_ACLARACION,
                     'valor' => Firma::V_A_NUEVA,
                     'observ_creador' => 'x',
@@ -550,7 +546,7 @@ class ExpedienteLista
                     'id_cargo_creador' => ConfigGlobal::role_id_cargo(),
                 ];
                 $aOperadorFirma = ['observ_creador' => 'IS NULL'];
-                // 31.5.2021 Que tmabién el dtor de la oficina pueda responder.
+                // 31.5.2021 Que también el dtor de la oficina pueda responder.
                 $gesCargos = new GestorCargo();
                 $a_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
                 if (ConfigGlobal::soy_dtor()) {
@@ -623,7 +619,7 @@ class ExpedienteLista
                         continue;
                     }
 
-                    if ($oFirma->getValor() == Firma::V_D_ESPERA) {
+                    if ($oFirma->getValor() === Firma::V_D_ESPERA) {
                         $this->a_expedientes_espera[] = $id_expediente;
                     } else {
                         $this->a_exp_reunion_falta_mi_firma[] = $id_expediente;
@@ -712,7 +708,8 @@ class ExpedienteLista
                     unset($aOperador['estado']);
                 }
                 // Si es el director los ve todos, no sólo los pendientes de poner 'visto'.
-                if (is_true(ConfigGlobal::soy_dtor())) {
+                // para los centros, todos ven igual que el director
+                if (is_true(ConfigGlobal::soy_dtor()) || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR ) {
                     // posibles oficiales de la oficina:
                     $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
                     $id_oficina = $oCargo->getId_oficina();
@@ -742,12 +739,17 @@ class ExpedienteLista
                 ];
                 $aWhere['estado'] = implode(',', $a_tipos_acabado);
                 $aOperador['estado'] = 'IN';
-                // todavia sin marcar por scdl con ok.
+                // todavía sin marcar por scdl con ok.
                 break;
             case 'acabados':
-                // Ahora (16/12/2020) todos los de la oficina si es dtor.
+                // Ahora (16/12/2020) todos los de la oficina si es director.
                 // sino los encargados (salto a otro estado)
-                $aWhere['estado'] = Expediente::ESTADO_ACABADO_SECRETARIA;
+                // para los centros buscar en ESTADO_ACABADO
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                    $aWhere['estado'] = Expediente::ESTADO_ACABADO;
+                } else {
+                    $aWhere['estado'] = Expediente::ESTADO_ACABADO_SECRETARIA;
+                }
                 // solo los de la oficina:
                 // posibles oficiales de la oficina:
                 $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
@@ -847,9 +849,9 @@ class ExpedienteLista
     }
 
     /**
-     * @return number
+     * @return integer
      */
-    public function getId_expediente()
+    public function getId_expediente(): int
     {
         return $this->id_expediente;
     }
@@ -857,15 +859,15 @@ class ExpedienteLista
     /**
      * @param number $id_expediente
      */
-    public function setId_expediente($id_expediente)
+    public function setId_expediente($id_expediente): void
     {
-        $this->id_expediente = $id_expediente;
+        $this->id_expediente = (int)$id_expediente;
     }
 
     /**
      * @return string
      */
-    public function getFiltro()
+    public function getFiltro(): string
     {
         return $this->filtro;
     }
@@ -873,7 +875,7 @@ class ExpedienteLista
     /**
      * @param string $filtro
      */
-    public function setFiltro($filtro)
+    public function setFiltro(string $filtro): void
     {
         $this->filtro = $filtro;
     }
@@ -881,7 +883,7 @@ class ExpedienteLista
     /**
      * @return array
      */
-    public function getACondiciones()
+    public function getACondiciones(): array
     {
         return $this->aCondiciones;
     }
@@ -889,7 +891,7 @@ class ExpedienteLista
     /**
      * @param array $aCondicion
      */
-    public function setACondiciones($aCondiciones)
+    public function setACondiciones($aCondiciones): void
     {
         $this->aCondiciones = $aCondiciones;
     }
@@ -911,7 +913,7 @@ class ExpedienteLista
     /**
      * @param string $prioridad_sel
      */
-    public function setPrioridad_sel($prioridad_sel)
+    public function setPrioridad_sel(string $prioridad_sel): void
     {
         $this->prioridad_sel = $prioridad_sel;
     }
@@ -919,7 +921,7 @@ class ExpedienteLista
     /**
      * @return array
      */
-    public function getAWhereADD()
+    public function getAWhereADD(): array
     {
         return $this->aWhereADD;
     }
@@ -927,7 +929,7 @@ class ExpedienteLista
     /**
      * @param array $aWhereADD
      */
-    public function setAWhereADD($aWhereADD)
+    public function setAWhereADD(array $aWhereADD): void
     {
         $this->aWhereADD = $aWhereADD;
     }
@@ -935,7 +937,7 @@ class ExpedienteLista
     /**
      * @return array
      */
-    public function getAOperadorADD()
+    public function getAOperadorADD(): array
     {
         return $this->aOperadorADD;
     }
@@ -943,7 +945,7 @@ class ExpedienteLista
     /**
      * @param array $aOperadorADD
      */
-    public function setAOperadorADD($aOperadorADD)
+    public function setAOperadorADD(array $aOperadorADD): void
     {
         $this->aOperadorADD = $aOperadorADD;
     }

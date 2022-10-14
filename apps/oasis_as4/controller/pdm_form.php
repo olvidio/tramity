@@ -18,10 +18,10 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Qfilename = '';
-$Qplataforma = '';
-$Qservidor = '';
-$Qaccion = '';
+$Q_filename = '';
+$Q_plataforma = '';
+$Q_servidor = '';
+$Q_accion = '';
 
 $oPmode = new Pmode(); // para los tipos
 $a_opciones_accion = $oPmode->getArrayAccion();
@@ -35,7 +35,7 @@ $oHash = new web\Hash();
 $oHash->setcamposForm($camposForm);
 $a_camposHidden = array(
     'que' => '',
-    'filename' => $Qfilename,
+    'filename' => $Q_filename,
 );
 $oHash->setArraycamposHidden($a_camposHidden);
 
@@ -47,9 +47,9 @@ $a_campos = [
     'oHash' => $oHash,
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
-    'filename' => $Qfilename,
-    'plataforma' => $Qplataforma,
-    'servidor' => $Qservidor,
+    'filename' => $Q_filename,
+    'plataforma' => $Q_plataforma,
+    'servidor' => $Q_servidor,
     'oDesplAcciones' => $oDesplAcciones,
 ];
 

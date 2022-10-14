@@ -29,7 +29,7 @@ class Visibilidad
 
     public function getArrayCondVisibilidad()
     {
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             // visibilidad:
             $a_visibilidad[] = self::V_CTR_TODOS;
             $id_cargo = ConfigGlobal::role_id_cargo();
@@ -52,10 +52,10 @@ class Visibilidad
     public function getArrayVisibilidad()
     {
         $a_visibilidad = [];
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $a_visibilidad = $this->getArrayVisibilidadCtr();
         }
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $a_visibilidad = $this->getArrayVisibilidadDl();
         }
 

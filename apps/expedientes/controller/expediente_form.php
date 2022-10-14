@@ -28,10 +28,10 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qprioridad_sel = (integer)\filter_input(INPUT_POST, 'prioridad_sel');
-$Qmodo = (string)\filter_input(INPUT_POST, 'modo');
+$Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_prioridad_sel = (integer)filter_input(INPUT_POST, 'prioridad_sel');
+$Q_modo = (string)filter_input(INPUT_POST, 'modo');
 
 $prioridad_fecha = Expediente::PRIORIDAD_FECHA;
 $prioridad_desconocido = Expediente::PRIORIDAD_UNKNOW;
@@ -53,7 +53,7 @@ if (!empty($oCargo)) {
 
 // para reducir la vista en el caso de los ctr
 $vista_dl = TRUE;
-if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
     $vista_dl = FALSE;
 }
 
@@ -69,6 +69,10 @@ $gesTramites = new GestorTramite();
 $oDesplTramites = $gesTramites->getListaTramites();
 $oDesplTramites->setNombre('tramite');
 $oDesplTramites->setAction('fnjs_tramite()');
+// para los centros selecciono el primer trámite (quito la opción blanco)
+if (!$vista_dl) {
+    $oDesplTramites->setBlanco(FALSE);
+}
 
 $oExpediente = new Expediente();
 
@@ -116,9 +120,9 @@ foreach ($cCargos_oficina as $oCargo) {
     $txt_option_cargos_oficina .= "<option value=$id_cargo >$cargo</option>";
 }
 
-if ($Qid_expediente) {
+if ($Q_id_expediente) {
     $titulo = _("expediente");
-    $oExpediente->setId_expediente($Qid_expediente);
+    $oExpediente->setId_expediente($Q_id_expediente);
     $oExpediente->DBCarregar();
 
     $id_tramite = $oExpediente->getId_tramite();
@@ -152,7 +156,7 @@ if ($Qid_expediente) {
     $entradilla = $oExpediente->getEntradilla();
 
     $gesAcciones = new GestorAccion();
-    $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Qid_expediente, '_ordre' => 'tipo_accion']);
+    $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Q_id_expediente, '_ordre' => 'tipo_accion']);
     $a_acciones = [];
 
     $oEscrito = new Escrito();
@@ -162,7 +166,7 @@ if ($Qid_expediente) {
 
     $oProtDestino = new Protocolo();
     $oProtDestino->setNombre('destino');
-    // mortrar archivar si todas las acciones están envidas
+    // mostrar archivar si todas las acciones están envidas
     $mostrar_archivar = TRUE;
     foreach ($cAcciones as $oAccion) {
         $id_escrito = $oAccion->getId_escrito();
@@ -171,11 +175,11 @@ if ($Qid_expediente) {
 
         $oEscrito = new Escrito($id_escrito);
 
-        $a_cosas = ['id_expediente' => $Qid_expediente,
+        $a_cosas = ['id_expediente' => $Q_id_expediente,
             'id_escrito' => $id_escrito,
             'accion' => $tipo_accion,
-            'filtro' => $Qfiltro,
-            'prioridad_sel' => $Qprioridad_sel,
+            'filtro' => $Q_filtro,
+            'prioridad_sel' => $Q_prioridad_sel,
         ];
         $pag_escrito = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
 
@@ -186,11 +190,6 @@ if ($Qid_expediente) {
         $f_salida = $oEscrito->getF_salida()->getIso();
         if (empty($f_salida)) {
             $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >" . _("eliminar") . "</span>";
-            // para los centros, se puede enviar desde aquí
-            if (!$vista_dl) {
-                $link_enviar = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito($id_escrito);\" >" . _("enviar") . "</span>";
-                $a_accion['link_del'] .= $link_enviar;
-            }
             $mostrar_archivar = FALSE;
         } else {
             $a_accion['link_del'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_accion($id_escrito);\" >" . _("quitar") . "</span>";
@@ -266,8 +265,12 @@ if ($Qid_expediente) {
     $a_acciones = [];
     $oficinas = '';
     $oficiales = '';
+    // para los centros selecciono todos los oficiales por defecto
+    if (!$vista_dl) {
+        $oficiales = array_keys($a_posibles_cargos_oficina);
+    }
 
-    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
         $oDesplVisibilidad->setOpcion_sel(Visibilidad::V_CTR_TODOS);
     } else {
         $oDesplVisibilidad->setOpcion_sel(Visibilidad::V_PERSONAL);
@@ -292,16 +295,16 @@ $lista_antecedentes = $oExpediente->getHtmlAntecedentes();
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
 $url_ajax = 'apps/tramites/controller/tramitecargo_ajax.php';
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query(['filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
+$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query(['filtro' => $Q_filtro, 'prioridad_sel' => $Q_prioridad_sel]));
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query([]));
 
-$pag_escrito = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
-$pag_propuesta = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_PROPUESTA]));
-$pag_plantilla = web\Hash::link('apps/plantillas/controller/plantilla_lista_expediente.php?' . http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'modo' => $Qmodo, 'prioridad_sel' => $Qprioridad_sel]));
-$pag_respuesta = web\Hash::link('apps/entradas/controller/buscar_form.php?' . http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
+$pag_escrito = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
+$pag_propuesta = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'accion' => Escrito::ACCION_PROPUESTA]));
+$pag_plantilla = web\Hash::link('apps/plantillas/controller/plantilla_lista_expediente.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'modo' => $Q_modo, 'prioridad_sel' => $Q_prioridad_sel]));
+$pag_respuesta = web\Hash::link('apps/entradas/controller/buscar_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'prioridad_sel' => $Q_prioridad_sel]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
 
-$pag_actualizar = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query(['id_expediente' => $Qid_expediente, 'filtro' => $Qfiltro, 'prioridad_sel' => $Qprioridad_sel]));
+$pag_actualizar = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'prioridad_sel' => $Q_prioridad_sel]));
 
 // datepicker
 $oFecha = new DateTimeLocal();
@@ -317,7 +320,7 @@ $minIso = $oHoy->format('Y-m-d');
 $a_campos = [
     'vista_dl' => $vista_dl,
     'titulo' => $titulo,
-    'id_expediente' => $Qid_expediente,
+    'id_expediente' => $Q_id_expediente,
     //'oHash' => $oHash,
     'ponente_txt' => $ponente_txt,
     'id_ponente' => $id_ponente,

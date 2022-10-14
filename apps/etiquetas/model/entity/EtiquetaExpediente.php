@@ -226,8 +226,8 @@ class EtiquetaExpediente extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_etiqueta de EtiquetaExpediente
@@ -249,7 +249,7 @@ class EtiquetaExpediente extends core\ClasePropiedades
         $this->iid_expediente = $iid_expediente;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * Estableix a empty el valor de tots els ATRIBUTOS
@@ -348,7 +348,7 @@ class EtiquetaExpediente extends core\ClasePropiedades
 
         return $oEtiquetaExpedienteSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera tots els ATRIBUTOS de EtiquetaExpediente en un array

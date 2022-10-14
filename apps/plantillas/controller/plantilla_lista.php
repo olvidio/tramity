@@ -14,7 +14,7 @@ require_once("apps/core/global_header.inc");
 require_once("apps/core/global_object.inc");
 // Crea los objetos por esta url  **********************************************
 
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
 $gesPlantillas = new GestorPlantilla();
 $aWhere = [];
@@ -60,7 +60,7 @@ $a_campos = [
     'titulo' => $titulo,
     'oTabla' => $oTabla,
     //'oHash' => $oHash,
-    'filtro' => $Qfiltro,
+    'filtro' => $Q_filtro,
     'server' => $server,
     'url_nuevo' => $url_nuevo,
     'url_form' => $url_form,

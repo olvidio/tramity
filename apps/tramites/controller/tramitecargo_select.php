@@ -24,17 +24,17 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Qrefresh = (integer)\filter_input(INPUT_POST, 'refresh');
-$oPosicion->recordar($Qrefresh);
+$Q_refresh = (integer)filter_input(INPUT_POST, 'refresh');
+$oPosicion->recordar($Q_refresh);
 
 //Si vengo por medio de Posicion, borro la última
 if (isset($_POST['stack'])) {
-    $stack = \filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
+    $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
     if ($stack != '') {
         $oPosicion2 = new web\Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
-            $Qid_sel = $oPosicion2->getParametro('id_sel');
-            $Qscroll_id = $oPosicion2->getParametro('scroll_id');
+            $Q_id_sel = $oPosicion2->getParametro('id_sel');
+            $Q_scroll_id = $oPosicion2->getParametro('scroll_id');
             $oPosicion2->olvidar($stack);
         }
     }

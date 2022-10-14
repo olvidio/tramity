@@ -14,11 +14,11 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 // El download es via GET!!!";
-$Qid_escrito = (integer)\filter_input(INPUT_GET, 'id_escrito');
+$Q_id_escrito = (integer)filter_input(INPUT_GET, 'id_escrito');
 
-if (!empty($Qid_escrito)) {
+if (!empty($Q_id_escrito)) {
 
-    $oEnviar = new Enviar($Qid_escrito, 'escrito');
+    $oEnviar = new Enviar($Q_id_escrito, 'escrito');
 
     if (($File = $oEnviar->getPdf()) === FALSE) {
         $txt_alert = $_SESSION['oGestorErrores']->ver();

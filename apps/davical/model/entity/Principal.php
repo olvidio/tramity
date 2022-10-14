@@ -284,8 +284,8 @@ class Principal extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iprincipal_id de Principal
@@ -307,7 +307,7 @@ class Principal extends core\ClasePropiedades
         $this->itype_id = $itype_id;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iuser_no de Principal
@@ -484,7 +484,7 @@ class Principal extends core\ClasePropiedades
         $oPrincipalSet->add($this->getDatosDefault_privileges());
         return $oPrincipalSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut itype_id de Principal

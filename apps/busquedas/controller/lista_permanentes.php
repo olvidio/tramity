@@ -20,17 +20,17 @@ require_once("apps/core/global_header.inc");
 require_once("apps/core/global_object.inc");
 // Crea los objetos por esta url  **********************************************
 
-$Qtipo_lista = (string)\filter_input(INPUT_POST, 'tipo_lista');
-$Qid_lugar = (integer)\filter_input(INPUT_POST, 'id_lugar');
-$Qprot_num = '';
-$Qprot_any = '';
-$Qasunto = '';
+$Q_tipo_lista = (string)filter_input(INPUT_POST, 'tipo_lista');
+$Q_id_lugar = (integer)filter_input(INPUT_POST, 'id_lugar');
+$Q_prot_num = '';
+$Q_prot_any = '';
+$Q_asunto = '';
 $filtro = 'permanentes_cr';
 
 $titulo = '';
 $lista = '';
 $oVerTabla = '';
-switch ($Qtipo_lista) {
+switch ($Q_tipo_lista) {
     case 54:
         // por asunto
         break;
@@ -45,11 +45,11 @@ switch ($Qtipo_lista) {
             $id_cr = $gesLugares->getId_cr();
             $oBuscar->setId_lugar($id_cr);
         }
-        $Qany = (integer)\filter_input(INPUT_POST, 'any');
-        $any2 = any_2($Qany);
+        $Q_any = (integer)filter_input(INPUT_POST, 'any');
+        $any2 = any_2($Q_any);
 
         $oBuscar->setProt_any($any2);
-        $aCollection = $oBuscar->getCollection($Qtipo_lista);
+        $aCollection = $oBuscar->getCollection($Q_tipo_lista);
         foreach ($aCollection as $key => $cCollection) {
             $oVerTabla = new VerTabla();
             $oVerTabla->setKey($key);
@@ -63,13 +63,13 @@ switch ($Qtipo_lista) {
         // Busco el id_lugar de cr.
         $gesLugares = new GestorLugar();
         $id_cr = $gesLugares->getId_cr();
-        $Qid_oficina = (integer)\filter_input(INPUT_POST, 'id_oficina');
+        $Q_id_oficina = (integer)filter_input(INPUT_POST, 'id_oficina');
 
         $oBuscar = new Buscar();
         $oBuscar->setId_lugar($id_cr);
-        $oBuscar->setPonente($Qid_oficina);
+        $oBuscar->setPonente($Q_id_oficina);
 
-        $aCollection = $oBuscar->getCollection($Qtipo_lista);
+        $aCollection = $oBuscar->getCollection($Q_tipo_lista);
         foreach ($aCollection as $key => $cCollection) {
             $oVerTabla = new VerTabla();
             $oVerTabla->setKey($key);
@@ -82,37 +82,37 @@ switch ($Qtipo_lista) {
         $oBuscar = new Buscar();
         // por año
         $flag = 0;
-        if (!empty($Qid_lugar)) {
+        if (!empty($Q_id_lugar)) {
 
-            $Qprot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
-            $Qprot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
-            $Qany = (integer)\filter_input(INPUT_POST, 'any');
-            $Qprot_any2 = core\any_2($Qprot_any);
+            $Q_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
+            $Q_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+            $Q_any = (integer)filter_input(INPUT_POST, 'any');
+            $Q_prot_any2 = core\any_2($Q_prot_any);
 
-            if (!empty($Qprot_num)) {
-                $oBuscar->setProt_num($Qprot_num);
+            if (!empty($Q_prot_num)) {
+                $oBuscar->setProt_num($Q_prot_num);
                 $flag = 1;
             } else {
-                $Qprot_num = '';
+                $Q_prot_num = '';
             }
-            if ($Qprot_any2 != '') { // para aceptar el 00
-                $oBuscar->setProt_any($Qprot_any2);
+            if ($Q_prot_any2 != '') { // para aceptar el 00
+                $oBuscar->setProt_any($Q_prot_any2);
                 $flag = 1;
             }
 
-            $oBuscar->setId_lugar($Qid_lugar);
-            $oBuscar->setProt_any($Qprot_any2);
+            $oBuscar->setId_lugar($Q_id_lugar);
+            $oBuscar->setProt_any($Q_prot_any2);
         }
 
-        $Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
-        if (!empty($Qasunto)) {
-            $oBuscar->setAsunto($Qasunto);
+        $Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
+        if (!empty($Q_asunto)) {
+            $oBuscar->setAsunto($Q_asunto);
             $flag = 1;
         }
         if ($flag == 0) {
             $lista = _("Debe indicar el protocolo o el asunto");
         } else {
-            $aCollection = $oBuscar->getCollection($Qtipo_lista);
+            $aCollection = $oBuscar->getCollection($Q_tipo_lista);
             foreach ($aCollection as $key => $cCollection) {
                 $oVerTabla = new VerTabla();
                 $oVerTabla->setKey($key);
@@ -149,7 +149,7 @@ switch ($Qtipo_lista) {
             $oBuscar->setId_lugar($id_cr);
         }
 
-        $aCollection = $oBuscar->getCollection($Qtipo_lista);
+        $aCollection = $oBuscar->getCollection($Q_tipo_lista);
         foreach ($aCollection as $key => $cCollection) {
             $oVerTabla = new VerTabla();
             $oVerTabla->setKey($key);
@@ -161,7 +161,7 @@ switch ($Qtipo_lista) {
     case 'lst_years':
     default:
         //anys posibles:
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $gesEntradas = new GestorEntradaCompartida();
         } else {
             $gesEntradas = new GestorEntrada();
@@ -220,24 +220,24 @@ if (!empty($cLugares)) {
 $a_lugares = [$id_cr => 'cr', $id_sigla_dl => $sigla_dl];
 // por defecto cr, en el caso de dl. vacio en caso de ctr.
 $ambito_dl = FALSE;
-if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
-    $Qid_lugar = empty($Qid_lugar) ? $id_cr : $Qid_lugar;
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+    $Q_id_lugar = empty($Q_id_lugar) ? $id_cr : $Q_id_lugar;
     $ambito_dl = TRUE;
 }
 $oDesplLugar = new Desplegable();
 $oDesplLugar->setNombre('id_lugar');
 $oDesplLugar->setBlanco(TRUE);
 $oDesplLugar->setOpciones($a_lugares);
-$oDesplLugar->setOpcion_sel($Qid_lugar);
+$oDesplLugar->setOpcion_sel($Q_id_lugar);
 
 $vista = ConfigGlobal::getVista();
 
 $a_campos = [
     //'oHash' => $oHash,
-    'prot_num' => $Qprot_num,
-    'prot_any' => $Qprot_any,
-    'asunto' => $Qasunto,
-    'tipo_lista' => $Qtipo_lista,
+    'prot_num' => $Q_prot_num,
+    'prot_any' => $Q_prot_any,
+    'asunto' => $Q_asunto,
+    'tipo_lista' => $Q_tipo_lista,
     'titulo' => $titulo,
     'lista' => $lista,
     'filtro' => $filtro,

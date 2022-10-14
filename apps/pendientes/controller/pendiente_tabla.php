@@ -26,30 +26,30 @@ require_once("apps/core/global_object.inc");
 
 $oPosicion->recordar();
 
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qperiodo = (string)\filter_input(INPUT_POST, 'periodo');
-$Qid_oficina = (string)\filter_input(INPUT_POST, 'id_oficina');
-$Qdespl_calendario = (string)\filter_input(INPUT_POST, 'despl_calendario');
-$Qcalendario = (string)\filter_input(INPUT_POST, 'calendario');
-$Qencargado = (string)\filter_input(INPUT_POST, 'encargado');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_periodo = (string)filter_input(INPUT_POST, 'periodo');
+$Q_id_oficina = (string)filter_input(INPUT_POST, 'id_oficina');
+$Q_despl_calendario = (string)filter_input(INPUT_POST, 'despl_calendario');
+$Q_calendario = (string)filter_input(INPUT_POST, 'calendario');
+$Q_encargado = (string)filter_input(INPUT_POST, 'encargado');
 
-if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
     $aOpciones = [
         'registro' => _("registro"),
         'oficina' => _("oficina"),
     ];
-    $op_calendario_default = empty($Qdespl_calendario) ? 'registro' : $Qdespl_calendario;
+    $op_calendario_default = empty($Q_despl_calendario) ? 'registro' : $Q_despl_calendario;
 } else {
     // oficina = nombre del centro
     $sigla = $_SESSION['oConfig']->getSigla();
     $aOpciones = [
         'oficina' => $sigla,
     ];
-    $op_calendario_default = empty($Qdespl_calendario) ? 'oficina' : $Qdespl_calendario;
+    $op_calendario_default = empty($Q_despl_calendario) ? 'oficina' : $Q_despl_calendario;
 }
 
-if (!empty($Qcalendario)) {
-    $op_calendario_default = $Qcalendario;
+if (!empty($Q_calendario)) {
+    $op_calendario_default = $Q_calendario;
 }
 
 $oDesplCalendarios = new Desplegable();
@@ -60,7 +60,7 @@ $oDesplCalendarios->setAction('fnjs_calendario()');
 
 // Para dl, Hace falta el nombre de la oficina;
 // para ctr, uso el nombre del esquema:
-if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
     // solo secretaría puede ver/crear pendientes de otras oficinas
     $role_actual = ConfigGlobal::role_actual();
     if ($role_actual === 'secretaria') {
@@ -68,7 +68,7 @@ if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
         $perm_periodico = 1; // NO TRUE, para eljavascript;
         $gesOficinas = new GestorOficina();
         $oDesplOficinas = $gesOficinas->getListaOficinas();
-        $oDesplOficinas->setOpcion_sel($Qid_oficina);
+        $oDesplOficinas->setOpcion_sel($Q_id_oficina);
         $oDesplOficinas->setNombre('id_oficina');
         $id_oficina = '';
     } else {
@@ -79,8 +79,8 @@ if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
         $id_oficina = $oCargo->getId_oficina();
     }
 
-    if (!empty($Qid_oficina)) {
-        $id_oficina = $Qid_oficina;
+    if (!empty($Q_id_oficina)) {
+        $id_oficina = $Q_id_oficina;
     }
 } else {
     $oDesplOficinas = []; // para evitar errores
@@ -97,7 +97,7 @@ $cal_oficina = $oDavical->getNombreRecurso($id_oficina);
 
 
 // para el dialogo de búsquedas:
-$oDesplEncargados = new Desplegable('encargado', $a_usuarios_oficina, $Qencargado, TRUE);
+$oDesplEncargados = new Desplegable('encargado', $a_usuarios_oficina, $Q_encargado, TRUE);
 
 
 $gesEtiquetas = new GestorEtiqueta();
@@ -114,10 +114,10 @@ $sel_semana = "";
 $sel_mes = "";
 $sel_trimestre = "";
 $sel_any = "";
-if (!empty($Qperiodo)) {
-    $var_sel = "sel_" . $Qperiodo;
+if (!empty($Q_periodo)) {
+    $var_sel = "sel_" . $Q_periodo;
     $$var_sel = "selected";
-    switch ($Qperiodo) {
+    switch ($Q_periodo) {
         case "hoy":
             $limite = date("Ymd", mktime(0, 0, 0, date("m"), date("d"), date("Y")));
             break;
@@ -156,7 +156,7 @@ $a_cabeceras = array(ucfirst(_("protocolo")),
 );
 
 // para los ctr quitar columna oficina y calendario
-if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
     unset($a_cabeceras[5]);
     unset($a_cabeceras[7]);
 }
@@ -190,7 +190,7 @@ foreach ($cPendientes as $oPendiente) {
     $calendario = $oPendiente->getCalendario();
     $id_encargado = $oPendiente->getEncargado();
     $perm_detalle = $oPermisoregistro->permiso_detalle($oPendiente, 'detalle');
-    if (!empty($Qencargado) && $id_encargado != $Qencargado) {
+    if (!empty($Q_encargado) && $id_encargado != $Q_encargado) {
         continue;
     }
     $encargado = !empty($id_encargado) ? $a_usuarios_oficina[$id_encargado] : '';
@@ -284,7 +284,7 @@ if (!empty($a_valores)) {
     foreach ($a_valores as $key => $row) {
         $fechas[$key] = $row['order'];
         // para los ctr quitar columna oficina y calendario
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             unset($a_valores[$key][6]);
             unset($a_valores[$key][8]);
         }
@@ -303,9 +303,9 @@ $oTabla->setDatos($a_valores);
 
 
 $a_cosas = [
-    'filtro' => $Qfiltro,
-    'periodo' => $Qperiodo,
-    'id_oficina' => $Qid_oficina,
+    'filtro' => $Q_filtro,
+    'periodo' => $Q_periodo,
+    'id_oficina' => $Q_id_oficina,
     'calendario' => $op_calendario_default,
 ];
 $pagina_cancel = web\Hash::link('apps/pendientes/controller/pendiente_tabla.php?' . http_build_query($a_cosas));
@@ -325,8 +325,8 @@ $a_campos = [
     'oDesplCalendarios' => $oDesplCalendarios,
     'oDesplEncargados' => $oDesplEncargados,
     'oTabla' => $oTabla,
-    'filtro' => $Qfiltro,
-    'periodo' => $Qperiodo,
+    'filtro' => $Q_filtro,
+    'periodo' => $Q_periodo,
     'op_calendario_default' => $op_calendario_default,
     'pagina_cancel' => $pagina_cancel,
     // tabs_show

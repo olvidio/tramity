@@ -14,8 +14,8 @@ require_once("apps/core/global_object.inc");
 $oPosicion->recordar();
 
 
-$Qid_sel = (string)\filter_input(INPUT_POST, 'id_sel');
-$Qscroll_id = (string)\filter_input(INPUT_POST, 'scroll_id');
+$Q_id_sel = (string)filter_input(INPUT_POST, 'id_sel');
+$Q_scroll_id = (string)filter_input(INPUT_POST, 'scroll_id');
 
 $nomdock = $_SESSION['oConfig']->getNomDock();
 $dir = $_SESSION['oConfig']->getDock();

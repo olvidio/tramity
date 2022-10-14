@@ -149,7 +149,7 @@ class GestorCollection extends core\ClaseGestor
         return $oCollectionSet->getTot();
     }
 
-    /* METODES PROTECTED --------------------------------------------------------*/
+    /* MÉTODOS PROTECTED --------------------------------------------------------*/
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

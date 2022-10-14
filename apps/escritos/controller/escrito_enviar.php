@@ -28,7 +28,7 @@ echo "<img class=\"mb-4\" src=\"../images/loading.gif\" alt=\"cargando\" width=\
 echo "</div>";
 */
 
-$Qid_escrito = (integer)\filter_input(INPUT_GET, 'id');
+$Q_id_escrito = (integer)filter_input(INPUT_GET, 'id');
 $f_salida = date(\DateTimeInterface::ISO8601);
 // Comprobar si tiene clave para enviar un xml, o hay que generar un pdf.
 
@@ -52,15 +52,15 @@ if (!empty($rta_txt)) {
 // Primero intento enviar, sólo guardo la f_salida si tengo éxito
 // Ahora cambio y pongo la f_salida si puedo enviar 1 o más. Los que no, salen como 
 // error, pero el escrito se marca como enviado.
-$oEnviar = new Enviar($Qid_escrito, 'escrito');
+$oEnviar = new Enviar($Q_id_escrito, 'escrito');
 
 $a_rta = $oEnviar->enviar();
 
 if ($a_rta['marcar'] === TRUE) {
-    $oEscrito = new Escrito($Qid_escrito);
+    $oEscrito = new Escrito($Q_id_escrito);
     $oEscrito->DBCarregar();
     $oEscrito->setF_salida($f_salida, FALSE);
-    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+    if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
         $oEscrito->setF_aprobacion($f_salida, FALSE);
     }
     $oEscrito->setOk(Escrito::OK_SECRETARIA);

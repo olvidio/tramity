@@ -13,59 +13,59 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qplataforma = (string)\filter_input(INPUT_POST, 'plataforma');
-$Qservidor = (string)\filter_input(INPUT_POST, 'servidor');
-$Qaccion = (string)\filter_input(INPUT_POST, 'accion');
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_plataforma = (string)filter_input(INPUT_POST, 'plataforma');
+$Q_servidor = (string)filter_input(INPUT_POST, 'servidor');
+$Q_accion = (string)filter_input(INPUT_POST, 'accion');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
-$Qscroll_id = (integer)\filter_input(INPUT_POST, 'scroll_id');
-$a_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_scroll_id = (integer)filter_input(INPUT_POST, 'scroll_id');
+$a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 if (!empty($a_sel)) { //vengo de un checkbox
-    $Qque = (string)\filter_input(INPUT_POST, 'que');
-    $Qfilename = (string)strtok($a_sel[0], "#");
+    $Q_que = (string)filter_input(INPUT_POST, 'que');
+    $Q_filename = (string)strtok($a_sel[0], "#");
     // el scroll id es de la página anterior, hay que guardarlo allí
     $oPosicion->addParametro('id_sel', $a_sel, 1);
-    $Qscroll_id = (integer)\filter_input(INPUT_POST, 'scroll_id');
-    $oPosicion->addParametro('scroll_id', $Qscroll_id, 1);
+    $Q_scroll_id = (integer)filter_input(INPUT_POST, 'scroll_id');
+    $oPosicion->addParametro('scroll_id', $Q_scroll_id, 1);
 }
 
 
 $error_txt = '';
-if ($Qque == 'nuevo') {
+if ($Q_que == 'nuevo') {
     // init
     $oPmode = new Pmode();
-    $oPmode->setPlataforma_Destino($Qplataforma);
-    $oPmode->setAccion($Qaccion);
-    $oPmode->setHolo_server_dst($Qservidor);
+    $oPmode->setPlataforma_Destino($Q_plataforma);
+    $oPmode->setAccion($Q_accion);
+    $oPmode->setHolo_server_dst($Q_servidor);
     $error_txt .= $oPmode->saveInit();
     // resp
     $oPmode = new Pmode();
-    $oPmode->setPlataforma_Destino($Qplataforma);
-    $oPmode->setAccion($Qaccion);
-    $oPmode->setHolo_server_dst($Qservidor);
+    $oPmode->setPlataforma_Destino($Q_plataforma);
+    $oPmode->setAccion($Q_accion);
+    $oPmode->setHolo_server_dst($Q_servidor);
     $error_txt .= $oPmode->saveResp();
 }
-if ($Qque == 'eliminar') {
+if ($Q_que == 'eliminar') {
     $dir = $_SESSION['oConfig']->getDock();
     // si es una resp. sólo hay que eliminar este fichero
     $matches = [];
     $pattern = "/(.*)\-resp\.xml/";
-    if (preg_match($pattern, $Qfilename, $matches)) {
-        $fullfilename = $dir . '/repository/pmodes/' . $Qfilename;
+    if (preg_match($pattern, $Q_filename, $matches)) {
+        $fullfilename = $dir . '/repository/pmodes/' . $Q_filename;
         if (unlink($fullfilename) === FALSE) {
             $error_txt .= sprintf(_("hay un error al eliminar: %s"), $fullfilename);
         }
     } else {
         // si es un init, también habrá que eliminar la resp. en el directorio particular (pmodes_resp)
         // init
-        $fullfilename = $dir . '/repository/pmodes/' . $Qfilename;
+        $fullfilename = $dir . '/repository/pmodes/' . $Q_filename;
         if (unlink($fullfilename) === FALSE) {
             $error_txt .= sprintf(_("hay un error al eliminar: %s"), $fullfilename);
         }
         // resp
-        $Qfilename_resp = str_replace('-init', '-resp', $Qfilename);
-        $fullfilename = $dir . '/repository/pmodes_resp/' . $Qfilename_resp;
+        $Q_filename_resp = str_replace('-init', '-resp', $Q_filename);
+        $fullfilename = $dir . '/repository/pmodes_resp/' . $Q_filename_resp;
         if (unlink($fullfilename) === FALSE) {
             $error_txt .= sprintf(_("hay un error al eliminar: %s"), $fullfilename);
         }

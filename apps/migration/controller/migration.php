@@ -28,9 +28,9 @@ poner entrdas
 
 
 // Equivalencias
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
-switch ($Qque) {
+switch ($Q_que) {
     case 'aprobaciones_oficinas':
         $oMigration = new Migration();
         $oMigration->oficinas_aprobaciones();

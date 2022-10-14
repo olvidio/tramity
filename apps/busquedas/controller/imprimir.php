@@ -14,25 +14,25 @@ require_once("apps/core/global_header.inc");
 require_once("apps/core/global_object.inc");
 // Crea los objetos por esta url  **********************************************
 
-$Qopcion = (integer)\filter_input(INPUT_POST, 'opcion');
-$Qmas = (integer)\filter_input(INPUT_POST, 'mas');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Q_opcion = (integer)filter_input(INPUT_POST, 'opcion');
+$Q_mas = (integer)filter_input(INPUT_POST, 'mas');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
-$filtro = empty($Qfiltro) ? 'en_buscar' : $Qfiltro;
-$Qmas = '';
+$filtro = empty($Q_filtro) ? 'en_buscar' : $Q_filtro;
+$Q_mas = '';
 // buscar por periodo
 
-$Qf_min = (string)\filter_input(INPUT_POST, 'f_min');
-$Qf_max = (string)\filter_input(INPUT_POST, 'f_max');
+$Q_f_min = (string)filter_input(INPUT_POST, 'f_min');
+$Q_f_max = (string)filter_input(INPUT_POST, 'f_max');
 
 
-$oConverter = new Converter('date', $Qf_min);
+$oConverter = new Converter('date', $Q_f_min);
 $f_min = $oConverter->toPg();
-if (empty($Qf_max)) {
+if (empty($Q_f_max)) {
     $oHoy = new web\DateTimeLocal();
     $f_max = $oHoy->format("Y-m-d");
 } else {
-    $oConverter = new Converter('date', $Qf_max);
+    $oConverter = new Converter('date', $Q_f_max);
     $f_max = $oConverter->toPg(); //iso
 }
 

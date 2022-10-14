@@ -110,26 +110,28 @@
             </div>
             {# si se carga el css, es para ver en ventana nueva, y no hacen falta los botones #}
             {% if not cargar_css %}
-                {% if ver_encargar %}
-                    <!--  --------------- Encargar a --------------- -->
-                    <div class="mb-2 row align-items-center">
-                        <!--  --------------- OFICIALES --------------- -->
-                        <label for="id_oficial" class="col-1 form-label">{{ "Encargar a"|trans|raw }}:</label>
-                        <div id="div_oficiales" class="col-5">
-                            {{ oDesplOficiales.desplegable|raw }}
-                            <button tabindex='' class="btn btn-outline-secondary col" onClick="fnjs_encargar();">
-                                {{ "Encargar!"|trans|raw }}
-                            </button>
+                {% if vista_dl %}
+                    {% if ver_encargar %}
+                        <!--  --------------- Encargar a --------------- -->
+                        <div class="mb-2 row align-items-center">
+                            <!--  --------------- OFICIALES --------------- -->
+                            <label for="id_oficial" class="col-1 form-label">{{ "Encargar a"|trans|raw }}:</label>
+                            <div id="div_oficiales" class="col-5">
+                                {{ oDesplOficiales.desplegable|raw }}
+                                <button tabindex='' class="btn btn-outline-secondary col" onClick="fnjs_encargar();">
+                                    {{ "Encargar!"|trans|raw }}
+                                </button>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!--  --------------- VISIBILIDAD --------------- -->
+                    <div id="div_visibilidad" class="mb-2 row align-items-center">
+                        <label for="Visibilidad" class="col-1 form-label">{{ "Visibilidad"|trans|raw }}:</label>
+                        <div class="col-3">
+                            {{ oDesplVisibilidad.desplegable|raw }}
                         </div>
                     </div>
                 {% endif %}
-                <!--  --------------- VISIBILIDAD --------------- -->
-                <div id="div_visibilidad" class="mb-2 row align-items-center">
-                    <label for="Visibilidad" class="col-1 form-label">{{ "Visibilidad"|trans|raw }}:</label>
-                    <div class="col-3">
-                        {{ oDesplVisibilidad.desplegable|raw }}
-                    </div>
-                </div>
                 <!--  --------------- Etiquetas --------------- -->
                 {% if ver_etiquetas %}
                     <div id="div_etiquetas" class="mb-3 row align-items-center">

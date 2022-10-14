@@ -31,25 +31,25 @@ $oficinas_txt = '';
 $dest_id_lugar[0] = '';
 
 $txt_err = '';
-$Qque = (string)\filter_input(INPUT_POST, 'que');
-$Qprot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
-$Qprot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+$Q_que = (string)filter_input(INPUT_POST, 'que');
+$Q_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
+$Q_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 
-$Qprot_any = any_2($Qprot_any);
+$Q_prot_any = any_2($Q_prot_any);
 // compruebo el año (actual o -1)
 $any = date('y');
-if ($Qprot_any != $any && $Qprot_any != $any - 1) {
+if ($Q_prot_any != $any && $Q_prot_any != $any - 1) {
     $aviso_any = 1;
 }
 
-if ($Qque == 's4') {
-    $Qid_lugar = (integer)\filter_input(INPUT_POST, 'id_lugar');
+if ($Q_que == 's4') {
+    $Q_id_lugar = (integer)filter_input(INPUT_POST, 'id_lugar');
     // compruebo si existe el escrito de referencia (sólo el primero, ordeno por anulado).
     // en entradas:
     $gesEntradas = new GestorEntrada();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
-    $aProt_origen = ['id_lugar' => $Qid_lugar,
-        'num' => $Qprot_num,
-        'any' => $Qprot_any,
+    $aProt_origen = ['id_lugar' => $Q_id_lugar,
+        'num' => $Q_prot_num,
+        'any' => $Q_prot_any,
         'mas' => '',
     ];
     // No buscar los anulados:
@@ -75,7 +75,7 @@ if ($Qque == 's4') {
 }
 
 
-$jsondata["que"] = $Qque;
+$jsondata["que"] = $Q_que;
 $jsondata["rango"] = "$aviso_rango";
 $jsondata["repe"] = "$aviso_repe";
 $jsondata["registrado"] = "$aviso_origen";

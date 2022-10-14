@@ -218,8 +218,8 @@ class EntradaBypass extends Entrada
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * Estableix el valor de tots els ATRIBUTOS
@@ -317,7 +317,7 @@ class EntradaBypass extends Entrada
         $this->iid_entrada = $iid_entrada;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut sdescripcion de EntradaBypass
@@ -679,7 +679,7 @@ class EntradaBypass extends Entrada
         $this->json_prot_destino = $json;
     }
 
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Retorna una col·lecció d'objectes del tipus DatosCampo

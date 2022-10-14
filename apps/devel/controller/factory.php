@@ -20,19 +20,19 @@ require_once("apps/core/global_object.inc");
 require_once("apps/devel/controller/func_factory.php");
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qdb = (string)\filter_input(INPUT_POST, 'db');
-$Qtabla = (string)\filter_input(INPUT_POST, 'tabla');
-$Qclase = (string)\filter_input(INPUT_POST, 'clase');
-$Qclase_plural = (string)\filter_input(INPUT_POST, 'clase_plural');
-$Qgrupo = (string)\filter_input(INPUT_POST, 'grupo');
-$Qaplicacion = (string)\filter_input(INPUT_POST, 'aplicacion');
+$Q_db = (string)filter_input(INPUT_POST, 'db');
+$Q_tabla = (string)filter_input(INPUT_POST, 'tabla');
+$Q_clase = (string)filter_input(INPUT_POST, 'clase');
+$Q_clase_plural = (string)filter_input(INPUT_POST, 'clase_plural');
+$Q_grupo = (string)filter_input(INPUT_POST, 'grupo');
+$Q_aplicacion = (string)filter_input(INPUT_POST, 'aplicacion');
 
-if (empty($Qtabla)) {
+if (empty($Q_tabla)) {
     exit("Ha de dir quina taula");
 }
 // si la tabla tiene el schema, hay que separalo:
 $schema_sql = '';
-$tabla = $Qtabla;
+$tabla = $Q_tabla;
 $schema = strtok($tabla, '.');
 if ($schema !== $tabla) {
     $tabla = strtok('.');
@@ -42,8 +42,8 @@ if ($schema !== $tabla) {
 }
 
 
-if (isset($Qdb)) {
-    switch ($Qdb) {
+if (isset($Q_db)) {
+    switch ($Q_db) {
         case "tramity":
             $oDbl = $oDBT;
             $oDB_txt = 'oDBT';
@@ -62,9 +62,9 @@ if (isset($Qdb)) {
 }
 
 
-$clase = !empty($Qclase) ? $Qclase : $tabla;
-if (!empty($Qclase_plural)) {
-    $clase_plural = $Qclase_plural;
+$clase = !empty($Q_clase) ? $Q_clase : $tabla;
+if (!empty($Q_clase_plural)) {
+    $clase_plural = $Q_clase_plural;
 } else {
     //plural de la clase
     if (preg_match('/[aeiou]$/', $clase)) {
@@ -74,11 +74,11 @@ if (!empty($Qclase_plural)) {
     }
 }
 
-$grupo = !empty($Qgrupo) ? $Qgrupo : "actividades";
-$aplicacion = !empty($Qaplicacion) ? $Qaplicacion : "delegación";
+$grupo = !empty($Q_grupo) ? $Q_grupo : "actividades";
+$aplicacion = !empty($Q_aplicacion) ? $Q_aplicacion : "delegación";
 
 //busco les claus primaries
-$aClaus = primaryKey($oDbl, $Qtabla);
+$aClaus = primaryKey($oDbl, $Q_tabla);
 
 $sql = "SELECT 
 				a.attnum,
@@ -741,10 +741,10 @@ $txt .= "\n\t\t" . '}
 		return TRUE;
 	}
 	
-	/* METODES ALTRES  ----------------------------------------------------------*/
+	/* OTOS MÉTODOS  ----------------------------------------------------------*/
 ';
 
-$txt .= '	/* METODES PRIVATS ----------------------------------------------------------*/
+$txt .= '	/* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
 	/**
 	 * Estableix el valor de tots els ATRIBUTOS
@@ -774,7 +774,7 @@ $txt .= $ToEmpty;
 $txt .= "\n\t\t" . '$this->setPrimary_key($aPK);';
 $txt .= "\n\t" . '}
 
-	/* METODES GET i SET --------------------------------------------------------*/
+	/* MÉTODOS GET y SET --------------------------------------------------------*/
 
 	/**
 	 * Recupera tots els ATRIBUTOS de ' . $clase . ' en un array
@@ -812,7 +812,7 @@ $txt .= "\n\t" . '}
 $txt .= $gets;
 
 $txt .= '
-	/* METODES GET i SET D\'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+	/* MÉTODOS GET y SET D\'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
 	/**
 	 * Retorna una col·lecció d\'objectes del tipus DatosCampo
@@ -834,7 +834,7 @@ $txt .= '
 ';
 
 /* ESCRIURE LA CLASSSE ------------------------------------------------ */
-$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/' . strtolower($Qclase) . '.class.php';
+$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/' . strtolower($Q_clase) . '.class.php';
 
 if (!$handle = fopen($filename, 'w')) {
     echo "Cannot open file ($filename)";
@@ -976,13 +976,13 @@ $txt2 .= '
 	}
 ';
 $txt2 .= '
-	/* METODES PROTECTED --------------------------------------------------------*/
+	/* MÉTODOS PROTECTED --------------------------------------------------------*/
 
-	/* METODES GET i SET --------------------------------------------------------*/
+	/* MÉTODOS GET y SET --------------------------------------------------------*/
 }
 ';
 /* ESCRIURE LA CLASSSE ------------------------------------------------ */
-$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/gestor' . strtolower($Qclase) . '.class.php';
+$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/gestor' . strtolower($Q_clase) . '.class.php';
 
 
 if (!$handle = fopen($filename, 'w')) {

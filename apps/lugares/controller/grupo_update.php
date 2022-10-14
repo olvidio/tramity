@@ -13,27 +13,27 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
-switch ($Qque) {
+switch ($Q_que) {
     case "guardar_escrito":
-        $Qid_escrito = (integer)\filter_input(INPUT_POST, 'id_escrito');
-        $Qid_grupo = (integer)\filter_input(INPUT_POST, 'id_grupo');
-        $Qdescripcion = (string)\filter_input(INPUT_POST, 'descripcion');
-        $Qa_lugares = (array)\filter_input(INPUT_POST, 'lugares', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
+        $Q_id_grupo = (integer)filter_input(INPUT_POST, 'id_grupo');
+        $Q_descripcion = (string)filter_input(INPUT_POST, 'descripcion');
+        $Q_a_lugares = (array)filter_input(INPUT_POST, 'lugares', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-        if (empty($Qdescripcion)) {
+        if (empty($Q_descripcion)) {
             echo _("debe poner un nombre");
         }
 
-        $oEscrito = new Escrito($Qid_escrito);
+        $oEscrito = new Escrito($Q_id_escrito);
         $oEscrito->DBCarregar();
         // borrar destinos existentes
         $oEscrito->setJson_prot_destino([]);
         $oEscrito->setId_grupos();
         // poner nueva seleccion
-        $oEscrito->setDestinos($Qa_lugares);
-        $oEscrito->setDescripcion($Qdescripcion);
+        $oEscrito->setDestinos($Q_a_lugares);
+        $oEscrito->setDescripcion($Q_descripcion);
 
         if ($oEscrito->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
@@ -41,10 +41,10 @@ switch ($Qque) {
         }
         break;
     case "eliminar":
-        $a_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
-            $Qid_grupo = (integer)strtok($a_sel[0], "#");
-            $oGrupo = new Grupo($Qid_grupo);
+            $Q_id_grupo = (integer)strtok($a_sel[0], "#");
+            $oGrupo = new Grupo($Q_id_grupo);
             if ($oGrupo->DBEliminar() === FALSE) {
                 echo _("hay un error, no se ha eliminado");
                 echo "\n" . $oGrupo->getErrorTxt();
@@ -53,22 +53,22 @@ switch ($Qque) {
         break;
     case "nuevo":
     case "guardar":
-        $Qid_grupo = (integer)\filter_input(INPUT_POST, 'id_grupo');
-        $Qdescripcion = (string)\filter_input(INPUT_POST, 'descripcion');
-        $Qa_lugares = (array)\filter_input(INPUT_POST, 'lugares', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Q_id_grupo = (integer)filter_input(INPUT_POST, 'id_grupo');
+        $Q_descripcion = (string)filter_input(INPUT_POST, 'descripcion');
+        $Q_a_lugares = (array)filter_input(INPUT_POST, 'lugares', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-        if (empty($Qdescripcion)) {
+        if (empty($Q_descripcion)) {
             echo _("debe poner un nombre");
         }
 
-        if (empty($Qid_grupo)) {
+        if (empty($Q_id_grupo)) {
             $oGrupo = new Grupo();
         } else {
-            $oGrupo = new Grupo(array('id_grupo' => $Qid_grupo));
+            $oGrupo = new Grupo(array('id_grupo' => $Q_id_grupo));
         }
         $oGrupo->DBCarregar();
-        $oGrupo->setDescripcion($Qdescripcion);
-        $oGrupo->setMiembros($Qa_lugares);
+        $oGrupo->setDescripcion($Q_descripcion);
+        $oGrupo->setMiembros($Q_a_lugares);
         if ($oGrupo->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
             echo "\n" . $oGrupo->getErrorTxt();

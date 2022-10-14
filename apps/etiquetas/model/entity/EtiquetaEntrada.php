@@ -226,8 +226,8 @@ class EtiquetaEntrada extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_etiqueta de EtiquetaEntrada
@@ -249,7 +249,7 @@ class EtiquetaEntrada extends core\ClasePropiedades
         $this->iid_entrada = $iid_entrada;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * Estableix a empty el valor de tots els ATRIBUTOS
@@ -348,7 +348,7 @@ class EtiquetaEntrada extends core\ClasePropiedades
 
         return $oEtiquetaEntradaSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera tots els ATRIBUTOS de EtiquetaEntrada en un array

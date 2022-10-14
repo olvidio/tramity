@@ -259,8 +259,8 @@ class Etiqueta extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_etiqueta de Etiqueta
@@ -282,7 +282,7 @@ class Etiqueta extends core\ClasePropiedades
         $this->snom_etiqueta = $snom_etiqueta;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_cargo de Etiqueta
@@ -434,7 +434,7 @@ class Etiqueta extends core\ClasePropiedades
         $oEtiquetaSet->add($this->getDatosOficina());
         return $oEtiquetaSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut snom_etiqueta de Etiqueta

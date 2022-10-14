@@ -183,7 +183,7 @@ class VerTabla
     {
         switch ($this->sKey) {
             case 'entradas_ref':
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $this->sTitulo = _("escritos recibidos en el centro con referencias al escrito");
                 } else {
                     $this->sTitulo = _("escritos recibidos en la Delegación con referencias al escrito");
@@ -195,7 +195,7 @@ class VerTabla
                 $this->tabla_entradas($this->aCollection);
                 break;
             case 'entradas':
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $this->sTitulo = _("escritos recibidos en el centro");
                 } else {
                     $this->sTitulo = _("escritos recibidos en la Delegación");
@@ -203,7 +203,7 @@ class VerTabla
                 $this->tabla_entradas($this->aCollection);
                 break;
             case 'entradas_compartidas':
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $this->sTitulo = _("escritos recibidos en el centro");
                 } else {
                     $this->sTitulo = _("escritos recibidos en la Delegación");
@@ -211,7 +211,7 @@ class VerTabla
                 $this->tabla_entradas_compartidas($this->aCollection);
                 break;
             case 'escritos_ref':
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $this->sTitulo = _("escritos aprobados en el centro con referencias al escrito");
                 } else {
                     $this->sTitulo = _("escritos aprobados en la Delegación con referencias al escrito");
@@ -219,7 +219,7 @@ class VerTabla
                 $this->tabla_escritos($this->aCollection);
                 break;
             case 'escritos':
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $this->sTitulo = _("escritos aprobados en el centro");
                 } else {
                     $this->sTitulo = _("escritos aprobados en la Delegación");

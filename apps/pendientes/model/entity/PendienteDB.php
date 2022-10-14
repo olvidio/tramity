@@ -401,8 +401,8 @@ class PendienteDB extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_pendiente de PendienteDB
@@ -424,7 +424,7 @@ class PendienteDB extends core\ClasePropiedades
         $this->sasunto = $sasunto;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut sstatus de PendienteDB
@@ -954,7 +954,7 @@ class PendienteDB extends core\ClasePropiedades
         return $oPendienteDBSet->getTot();
     }
 
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut sasunto de PendienteDB

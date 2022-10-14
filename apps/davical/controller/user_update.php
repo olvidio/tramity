@@ -14,14 +14,14 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
-switch ($Qque) {
+switch ($Q_que) {
     case "eliminar":
-        $a_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
-            $Qid_usuario = (integer)strtok($a_sel[0], "#");
-            $oUsuario = new Usuario($Qid_usuario);
+            $Q_id_usuario = (integer)strtok($a_sel[0], "#");
+            $oUsuario = new Usuario($Q_id_usuario);
             if ($oUsuario->DBEliminar() === FALSE) {
                 echo _("hay un error, no se ha eliminado");
                 echo "\n" . $oUsuario->getErrorTxt();
@@ -30,27 +30,27 @@ switch ($Qque) {
 
         break;
     case "buscar":
-        $Qusuario = (string)\filter_input(INPUT_POST, 'usuario');
+        $Q_usuario = (string)filter_input(INPUT_POST, 'usuario');
 
         $oUsuarios = new GestorUsuario();
-        $oUser = $oUsuarios->getUsuarios(array('usuario' => $Qusuario));
+        $oUser = $oUsuarios->getUsuarios(array('usuario' => $Q_usuario));
         $oUsuario = $oUser[0];
         break;
     case "guardar_pwd":
-        $Qid_usuario = (integer)\filter_input(INPUT_POST, 'id_usuario');
-        $Qemail = (string)\filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $Qpassword = (string)\filter_input(INPUT_POST, 'password');
-        $Qpass = (string)\filter_input(INPUT_POST, 'pass');
+        $Q_id_usuario = (integer)filter_input(INPUT_POST, 'id_usuario');
+        $Q_email = (string)filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $Q_password = (string)filter_input(INPUT_POST, 'password');
+        $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
-        $oUsuario = new Usuario(array('id_usuario' => $Qid_usuario));
+        $oUsuario = new Usuario(array('id_usuario' => $Q_id_usuario));
         $oUsuario->DBCarregar();
-        $oUsuario->setEmail($Qemail);
-        if (!empty($Qpassword)) {
+        $oUsuario->setEmail($Q_email);
+        if (!empty($Q_password)) {
             $oCrypt = new MyCrypt();
-            $my_passwd = $oCrypt->encode($Qpassword);
+            $my_passwd = $oCrypt->encode($Q_password);
             $oUsuario->setPassword($my_passwd);
         } else {
-            $oUsuario->setPassword($Qpass);
+            $oUsuario->setPassword($Q_pass);
         }
         if ($oUsuario->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
@@ -58,31 +58,31 @@ switch ($Qque) {
         }
         break;
     case "guardar":
-        $Qusuario = (string)\filter_input(INPUT_POST, 'usuario');
+        $Q_usuario = (string)filter_input(INPUT_POST, 'usuario');
 
-        if (empty($Qusuario)) {
+        if (empty($Q_usuario)) {
             echo _("debe poner un nombre");
         }
-        $Qid_usuario = (integer)\filter_input(INPUT_POST, 'id_usuario');
-        $Qid_cargo = (integer)\filter_input(INPUT_POST, 'id_cargo');
-        $Qemail = (string)\filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $Q_id_usuario = (integer)filter_input(INPUT_POST, 'id_usuario');
+        $Q_id_cargo = (integer)filter_input(INPUT_POST, 'id_cargo');
+        $Q_email = (string)filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
-        $Qnom_usuario = (string)\filter_input(INPUT_POST, 'nom_usuario');
-        $Qpassword = (string)\filter_input(INPUT_POST, 'password');
-        $Qpass = (string)\filter_input(INPUT_POST, 'pass');
+        $Q_nom_usuario = (string)filter_input(INPUT_POST, 'nom_usuario');
+        $Q_password = (string)filter_input(INPUT_POST, 'password');
+        $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
-        $oUsuario = new Usuario(array('id_usuario' => $Qid_usuario));
+        $oUsuario = new Usuario(array('id_usuario' => $Q_id_usuario));
         $oUsuario->DBCarregar();
-        $oUsuario->setUsuario($Qusuario);
-        $oUsuario->setId_cargo($Qid_cargo);
-        $oUsuario->setEmail($Qemail);
-        $oUsuario->setNom_usuario($Qnom_usuario);
-        if (!empty($Qpassword)) {
+        $oUsuario->setUsuario($Q_usuario);
+        $oUsuario->setId_cargo($Q_id_cargo);
+        $oUsuario->setEmail($Q_email);
+        $oUsuario->setNom_usuario($Q_nom_usuario);
+        if (!empty($Q_password)) {
             $oCrypt = new MyCrypt();
-            $my_passwd = $oCrypt->encode($Qpassword);
+            $my_passwd = $oCrypt->encode($Q_password);
             $oUsuario->setPassword($my_passwd);
         } else {
-            $oUsuario->setPassword($Qpass);
+            $oUsuario->setPassword($Q_pass);
         }
         if ($oUsuario->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
@@ -90,23 +90,23 @@ switch ($Qque) {
         }
         break;
     case "nuevo":
-        $Qusuario = (string)\filter_input(INPUT_POST, 'usuario');
-        $Qemail = (string)\filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $Qid_cargo = (integer)\filter_input(INPUT_POST, 'id_cargo');
-        $Qnom_usuario = (string)\filter_input(INPUT_POST, 'nom_usuario');
-        $Qpassword = (string)\filter_input(INPUT_POST, 'password');
+        $Q_usuario = (string)filter_input(INPUT_POST, 'usuario');
+        $Q_email = (string)filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $Q_id_cargo = (integer)filter_input(INPUT_POST, 'id_cargo');
+        $Q_nom_usuario = (string)filter_input(INPUT_POST, 'nom_usuario');
+        $Q_password = (string)filter_input(INPUT_POST, 'password');
 
-        if ($Qusuario && $Qpassword) {
+        if ($Q_usuario && $Q_password) {
             $oUsuario = new Usuario();
-            $oUsuario->setUsuario($Qusuario);
-            if (!empty($Qpassword)) {
+            $oUsuario->setUsuario($Q_usuario);
+            if (!empty($Q_password)) {
                 $oCrypt = new MyCrypt();
-                $my_passwd = $oCrypt->encode($Qpassword);
+                $my_passwd = $oCrypt->encode($Q_password);
                 $oUsuario->setPassword($my_passwd);
             }
-            $oUsuario->setEmail($Qemail);
-            $oUsuario->setId_cargo($Qid_cargo);
-            $oUsuario->setNom_usuario($Qnom_usuario);
+            $oUsuario->setEmail($Q_email);
+            $oUsuario->setId_cargo($Q_id_cargo);
+            $oUsuario->setNom_usuario($Q_nom_usuario);
             if ($oUsuario->DBGuardar() === FALSE) {
                 echo _("hay un error, no se ha guardado");
                 echo "\n" . $oUsuario->getErrorTxt();

@@ -200,27 +200,29 @@
         </div>
     {% endif %}
 
-    <div class="mb-2 row align-items-center">
-        <!--  --------------- OFICIALES --------------- -->
-        <label for="mt-3" class="col-1 form-label">{{ "Preparar"|trans|raw }}:</label>
-        <div id="div_preparar" class="col"> {# la funcion fnjs_visto remplaza el contenido de este div. #}
-            {% for row in a_preparar %}
-                <div class="form-check custom-checkbox form-check-inline">
-                    <input type="checkbox" class="" name="a_preparar[]" id="{{ row.id }}"
-                           value="{{ row.id }}#{{ row.visto }}" {{ row.chk }}>
-                    {% if row.visto %}
-                        <label class="mt-2 ms-2 text-success form-label">{{ row.text }} ({{ "visto"|trans|raw }}
-                            )</label>
-                    {% else %}
-                        <label class="mt-2 ms-2 form-label">{{ row.text }}</label>
-                    {% endif %}
-                </div>
-            {% endfor %}
-            <button tabindex='' class="col-2 btn btn-outline-secondary" onClick="fnjs_visto();">
-                {{ "marcar como visto"|trans|raw }}
-            </button>
+    {% if vista_dl %}
+        <div class="mb-2 row align-items-center">
+            <!--  --------------- OFICIALES --------------- -->
+            <label for="mt-3" class="col-1 form-label">{{ "Preparar"|trans|raw }}:</label>
+            <div id="div_preparar" class="col"> {# la funcion fnjs_visto remplaza el contenido de este div. #}
+                {% for row in a_preparar %}
+                    <div class="form-check custom-checkbox form-check-inline">
+                        <input type="checkbox" class="" name="a_preparar[]" id="{{ row.id }}"
+                               value="{{ row.id }}#{{ row.visto }}" {{ row.chk }}>
+                        {% if row.visto %}
+                            <label class="mt-2 ms-2 text-success form-label">{{ row.text }} ({{ "visto"|trans|raw }}
+                                )</label>
+                        {% else %}
+                            <label class="mt-2 ms-2 form-label">{{ row.text }}</label>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button tabindex='' class="col-2 btn btn-outline-secondary" onClick="fnjs_visto();">
+                    {{ "marcar como visto"|trans|raw }}
+                </button>
+            </div>
         </div>
-    </div>
+    {% endif %}
 
     <!--  --------------- FIRMAS OFICINA --------------- -->
     <div id="div_firmas_oficina" class="mb-2 row">
@@ -232,15 +234,15 @@
         </div>
     </div>
     {% if vista_dl %}
-      <!--  --------------- OTRAS FIRMAS --------------- -->
-      <div id="div_firmas" class="mb-3 row">
-        <label for="firmas" class="col-md-1 form-label">{{ "Otras Firmas"|trans|raw }}:</label>
-        <div class="col-6">
+        <!--  --------------- OTRAS FIRMAS --------------- -->
+        <div id="div_firmas" class="mb-3 row">
+            <label for="firmas" class="col-md-1 form-label">{{ "Otras Firmas"|trans|raw }}:</label>
+            <div class="col-6">
           <span id="span_firmas">
             {{ oArrayDesplFirmas.ListaSelects|raw }}
           </span>
+            </div>
         </div>
-      </div>
     {% endif %}
 
     <!--  --------------------  BOTONES --------------------------  -->
@@ -250,7 +252,7 @@
     <button tabindex='90' class="btn btn-primary" onClick="fnjs_guardar_expediente();">
         {{ "Guardar"|trans|raw }}
     </button>
-    {% if vista_dl and id_expediente %}
+    {% if id_expediente %}
         <button tabindex='90' class="btn btn-success" onClick="fnjs_circular();">
             {{ "Circular"|trans|raw }}
         </button>

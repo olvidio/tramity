@@ -230,8 +230,8 @@ class GroupMember extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut igroup_id de GroupMember
@@ -253,7 +253,7 @@ class GroupMember extends core\ClasePropiedades
         $this->imember_id = $imember_id;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * Estableix a empty el valor de tots els ATRIBUTOS
@@ -355,7 +355,7 @@ class GroupMember extends core\ClasePropiedades
         $oGroupMemberSet->add($this->getDatosGroup_id());
         return $oGroupMemberSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut igroup_id de GroupMember

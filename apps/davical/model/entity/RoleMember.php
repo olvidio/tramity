@@ -238,8 +238,8 @@ class RoleMember extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut irole_no de RoleMember
@@ -261,7 +261,7 @@ class RoleMember extends core\ClasePropiedades
         $this->iuser_no = $iuser_no;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * Estableix a empty el valor de tots els ATRIBUTOS
@@ -363,7 +363,7 @@ class RoleMember extends core\ClasePropiedades
         $oRoleMemberSet->add($this->getDatosRole_no());
         return $oRoleMemberSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut irole_no de RoleMember

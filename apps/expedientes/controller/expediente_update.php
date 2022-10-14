@@ -29,36 +29,36 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
-$Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
-$Qponente = (string)\filter_input(INPUT_POST, 'ponente');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
+$Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
+$Q_ponente = (string)filter_input(INPUT_POST, 'ponente');
 
-$Qtramite = (integer)\filter_input(INPUT_POST, 'tramite');
-$Qestado = (integer)\filter_input(INPUT_POST, 'estado');
-$Qprioridad = (integer)\filter_input(INPUT_POST, 'prioridad');
+$Q_tramite = (integer)filter_input(INPUT_POST, 'tramite');
+$Q_estado = (integer)filter_input(INPUT_POST, 'estado');
+$Q_prioridad = (integer)filter_input(INPUT_POST, 'prioridad');
 
-$Qf_reunion = (string)\filter_input(INPUT_POST, 'f_reunion');
-$Qf_aprobacion = (string)\filter_input(INPUT_POST, 'f_aprobacion');
-$Qf_contestar = (string)\filter_input(INPUT_POST, 'f_contestar');
+$Q_f_reunion = (string)filter_input(INPUT_POST, 'f_reunion');
+$Q_f_aprobacion = (string)filter_input(INPUT_POST, 'f_aprobacion');
+$Q_f_contestar = (string)filter_input(INPUT_POST, 'f_contestar');
 
-$Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
-$Qentradilla = (string)\filter_input(INPUT_POST, 'entradilla');
+$Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
+$Q_entradilla = (string)filter_input(INPUT_POST, 'entradilla');
 
-$Qa_firmas_oficina = (array)\filter_input(INPUT_POST, 'firmas_oficina', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_firmas = (array)\filter_input(INPUT_POST, 'firmas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qa_preparar = (array)\filter_input(INPUT_POST, 'a_preparar', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_a_firmas_oficina = (array)filter_input(INPUT_POST, 'firmas_oficina', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_a_firmas = (array)filter_input(INPUT_POST, 'firmas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_a_preparar = (array)filter_input(INPUT_POST, 'a_preparar', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-$Qvida = (integer)\filter_input(INPUT_POST, 'vida');
-$Qvisibilidad = (integer)\filter_input(INPUT_POST, 'visibilidad');
+$Q_vida = (integer)filter_input(INPUT_POST, 'vida');
+$Q_visibilidad = (integer)filter_input(INPUT_POST, 'visibilidad');
 
 $error_txt = '';
 $nuevo_creador = '';
-switch ($Qque) {
+switch ($Q_que) {
     case 'en_visto': // Copiado de entradas_update.
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-        $Qid_oficina = ConfigGlobal::role_id_oficina();
-        $Qid_cargo = ConfigGlobal::role_id_cargo();
-        $oEntrada = new Entrada($Qid_entrada);
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Q_id_oficina = ConfigGlobal::role_id_oficina();
+        $Q_id_cargo = ConfigGlobal::role_id_cargo();
+        $oEntrada = new Entrada($Q_id_entrada);
         $oEntrada->DBCarregar();
 
         $aVisto = $oEntrada->getJson_visto(TRUE);
@@ -67,7 +67,7 @@ switch ($Qque) {
         foreach ($aVisto as $key => $oVisto) {
             $oficina = $oVisto['oficina'];
             $cargo = $oVisto['cargo'];
-            if ($oficina == $Qid_oficina && $cargo == $Qid_cargo) {
+            if ($oficina == $Q_id_oficina && $cargo == $Q_id_cargo) {
                 $oVisto['visto'] = TRUE;
                 $aVisto[$key] = $oVisto;
                 $flag = TRUE;
@@ -75,8 +75,8 @@ switch ($Qque) {
         }
         if ($flag === FALSE) {
             $oVisto = new stdClass;
-            $oVisto->oficina = $Qid_oficina;
-            $oVisto->cargo = $Qid_cargo;
+            $oVisto->oficina = $Q_id_oficina;
+            $oVisto->cargo = $Q_id_cargo;
             $oVisto->visto = TRUE;
             $aVisto[] = $oVisto;
         }
@@ -100,34 +100,34 @@ switch ($Qque) {
         exit();
         break;
     case 'en_pendiente':
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-        $Qid_cargo_pendiente = (integer)\filter_input(INPUT_POST, 'id_cargo_pendiente');
-        $Qf_plazo = (string)\filter_input(INPUT_POST, 'f_plazo');
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Q_id_cargo_pendiente = (integer)filter_input(INPUT_POST, 'id_cargo_pendiente');
+        $Q_f_plazo = (string)filter_input(INPUT_POST, 'f_plazo');
 
-        $oCargo = new Cargo($Qid_cargo_pendiente);
+        $oCargo = new Cargo($Q_id_cargo_pendiente);
         $id_oficina = $oCargo->getId_oficina();
 
         // nombre normalizado del usuario y oficina:
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-        $user_davical = $oDavical->getUsernameDavical($Qid_cargo_pendiente);
+        $user_davical = $oDavical->getUsernameDavical($Q_id_cargo_pendiente);
         $parent_container = $oDavical->getNombreRecurso($id_oficina);
 
         $calendario = 'oficina';
         $oHoy = new DateTimeLocal();
-        $Qf_plazo = empty($Qf_plazo) ? $oHoy->getFromLocal() : $Qf_plazo;
+        $Q_f_plazo = empty($Q_f_plazo) ? $oHoy->getFromLocal() : $Q_f_plazo;
         // datos de la entrada 
-        $id_reg = 'EN' . $Qid_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': EN)
-        $oEntrada = new Entrada($Qid_entrada);
+        $id_reg = 'EN' . $Q_id_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': EN)
+        $oEntrada = new Entrada($Q_id_entrada);
 
         $oPendiente = new Pendiente($parent_container, $calendario, $user_davical);
         $oPendiente->setId_reg($id_reg);
         $oPendiente->setAsunto($oEntrada->getAsunto());
         $oPendiente->setStatus("NEEDS-ACTION");
         $oPendiente->setF_inicio($oHoy->getFromLocal());
-        $oPendiente->setF_plazo($Qf_plazo);
-        $oPendiente->setvisibilidad($Qvisibilidad);
+        $oPendiente->setF_plazo($Q_f_plazo);
+        $oPendiente->setvisibilidad($Q_visibilidad);
         $oPendiente->setDetalle($oEntrada->getDetalle());
-        $oPendiente->setEncargado($Qid_cargo_pendiente);
+        $oPendiente->setEncargado($Q_id_cargo_pendiente);
         $oPendiente->setId_oficina($id_oficina);
 
         $oProtOrigen = new Protocolo();
@@ -157,23 +157,23 @@ switch ($Qque) {
         // nada
         break;
     case 'en_expediente':
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         // Hay que crear un nunevo expediente, con un ajunto (entrada).
-        $oEntrada = new Entrada($Qid_entrada);
-        $Qasunto = $oEntrada->getAsunto_entrada();
+        $oEntrada = new Entrada($Q_id_entrada);
+        $Q_asunto = $oEntrada->getAsunto_entrada();
 
-        $Qestado = Expediente::ESTADO_BORRADOR;
-        $Qponente = ConfigGlobal::role_id_cargo();
-        $Qtramite = 2; // Ordinario, no puede ser null.
-        $Qprioridad = Expediente::PRIORIDAD_NORMAL; // no puede ser null.
+        $Q_estado = Expediente::ESTADO_BORRADOR;
+        $Q_ponente = ConfigGlobal::role_id_cargo();
+        $Q_tramite = 2; // Ordinario, no puede ser null.
+        $Q_prioridad = Expediente::PRIORIDAD_NORMAL; // no puede ser null.
 
         $oExpediente = new Expediente();
-        $oExpediente->setPonente($Qponente);
-        $oExpediente->setEstado($Qestado);
-        $oExpediente->setId_tramite($Qtramite);
-        $oExpediente->setPrioridad($Qprioridad);
-        $oExpediente->setAsunto($Qasunto);
-        $oExpediente->setVisibilidad($Qvisibilidad);
+        $oExpediente->setPonente($Q_ponente);
+        $oExpediente->setEstado($Q_estado);
+        $oExpediente->setId_tramite($Q_tramite);
+        $oExpediente->setPrioridad($Q_prioridad);
+        $oExpediente->setAsunto($Q_asunto);
+        $oExpediente->setVisibilidad($Q_visibilidad);
 
         if ($oExpediente->DBGuardar() === FALSE) {
             $error_txt .= _("No se han podido crear el nuevo expediente");
@@ -181,7 +181,7 @@ switch ($Qque) {
             $error_txt .= $oExpediente->getErrorTxt();
         }
 
-        $a_antecedente = ['tipo' => 'entrada', 'id' => $Qid_entrada];
+        $a_antecedente = ['tipo' => 'entrada', 'id' => $Q_id_entrada];
         $oExpediente->addAntecedente($a_antecedente);
         if ($oExpediente->DBGuardar() === FALSE) {
             $error_txt .= _("No se han podido adjuntar la entrada");
@@ -201,12 +201,12 @@ switch ($Qque) {
         exit();
         break;
     case 'encargar_a':
-        $Qid_oficial = (integer)\filter_input(INPUT_POST, 'id_oficial');
+        $Q_id_oficial = (integer)filter_input(INPUT_POST, 'id_oficial');
         // Se pone cuando se han enviado...
-        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCarregar();
         $oExpediente->setEstado(Expediente::ESTADO_ACABADO_ENCARGADO);
-        $oExpediente->setPonente($Qid_oficial);
+        $oExpediente->setPonente($Q_id_oficial);
         if ($oExpediente->DBGuardar() === FALSE) {
             $error_txt .= _("No se han podido asignar el nuevo encargado");
         }
@@ -224,13 +224,13 @@ switch ($Qque) {
         exit();
         break;
     case 'guardar_etiquetas':
-        $Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
-        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCarregar();
         // las etiquetas:
-        $oExpediente->setEtiquetas($Qa_etiquetas);
-        $oExpediente->setVisibilidad($Qvisibilidad);
+        $oExpediente->setEtiquetas($Q_a_etiquetas);
+        $oExpediente->setVisibilidad($Q_visibilidad);
         if ($oExpediente->DBGuardar() === FALSE) {
             $error_txt .= _("No se han podido guardar las etiquetas");
         }
@@ -248,10 +248,10 @@ switch ($Qque) {
         exit();
         break;
     case 'reunion':
-        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCarregar();
         // Si pongo la fecha con datetimepicker, ya esta en ISO (hay que poner FALSE a la conversión).
-        $oExpediente->setF_reunion($Qf_reunion);
+        $oExpediente->setF_reunion($Q_f_reunion);
         if ($oExpediente->DBGuardar() === FALSE) {
             $error_txt .= _("No se ha podido guarda la fecha de reunión");
             $error_txt .= "<br>";
@@ -259,7 +259,7 @@ switch ($Qque) {
         // firmar el paso de fijar reunion:
         $f_hoy_iso = date(\DateTimeInterface::ISO8601);
         $gesFirmas = new  GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente, 'cargo_tipo' => Cargo::CARGO_REUNION]);
+        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_REUNION]);
         foreach ($cFirmas as $oFirma) {
             $oFirma->DBCarregar();
             if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
@@ -288,12 +288,12 @@ switch ($Qque) {
         exit();
         break;
     case 'archivar':
-        $Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
-        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCarregar();
         // las etiquetas:
-        $oExpediente->setEtiquetas($Qa_etiquetas);
+        $oExpediente->setEtiquetas($Q_a_etiquetas);
         $oExpediente->setEstado(Expediente::ESTADO_ARCHIVADO);
         if ($oExpediente->DBGuardar() === FALSE) {
             $error_txt .= _("No se ha podido cambiar el estado del expediente");
@@ -314,7 +314,7 @@ switch ($Qque) {
         break;
     case 'distribuir':
         $html = '';
-        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCarregar();
         $estado_original = $oExpediente->getEstado();
         $oExpediente->setEstado(Expediente::ESTADO_ACABADO_SECRETARIA);
@@ -326,7 +326,7 @@ switch ($Qque) {
         // firmar el paso de distribuir:
         $f_hoy_iso = date(\DateTimeInterface::ISO8601);
         $gesFirmas = new  GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente, 'cargo_tipo' => Cargo::CARGO_DISTRIBUIR]);
+        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_DISTRIBUIR]);
         foreach ($cFirmas as $oFirma) {
             $oFirma->DBCarregar();
             if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
@@ -358,7 +358,7 @@ switch ($Qque) {
         $oLugar = $cLugares[0];
         $id_lugar_iese = $oLugar->getId_lugar();
         // escritos del expediente: acciones tipo escrito
-        $aWhereAccion = ['id_expediente' => $Qid_expediente, '_ordre' => 'tipo_accion'];
+        $aWhereAccion = ['id_expediente' => $Q_id_expediente, '_ordre' => 'tipo_accion'];
         $gesAcciones = new GestorAccion();
         $cAcciones = $gesAcciones->getAcciones($aWhereAccion);
         $json_prot_local = [];
@@ -387,7 +387,7 @@ switch ($Qque) {
             // cojo el protocolo del ultimo escrito. No tiene porque ser siempre cierto.
             if ($tipo_accion === Escrito::ACCION_PLANTILLA) {
                 $oEscritoP = new Escrito($id_escrito);
-                $html = $oEscritoP->addConforme($Qid_expediente, $json_prot_local);
+                $html = $oEscritoP->addConforme($Q_id_expediente, $json_prot_local);
             }
         }
 
@@ -406,13 +406,13 @@ switch ($Qque) {
         exit();
         break;
     case 'exp_cp_oficina':
-        $Qof_destino = (integer)\filter_input(INPUT_POST, 'of_destino');
+        $Q_of_destino = (integer)filter_input(INPUT_POST, 'of_destino');
     case 'exp_cp_copias':
         $copias = TRUE;
     case 'exp_cp_borrador':
         $error_txt = '';
-        if (!empty($Qof_destino)) {
-            $of_destino = $Qof_destino;
+        if (!empty($Q_of_destino)) {
+            $of_destino = $Q_of_destino;
         } else {
             if (!empty($copias) && is_true($copias)) {
                 $of_destino = 'copias';
@@ -421,7 +421,7 @@ switch ($Qque) {
             }
         }
         // copiar expdiente: poner los escritos como antecedentes.
-        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente = new Expediente($Q_id_expediente);
         if ($oExpediente->copiar($of_destino) === FALSE) {
             $error_txt .= $oExpediente->getErrorTxt();
         }
@@ -444,7 +444,7 @@ switch ($Qque) {
         $error_txt = '';
         // Hay que borrar: las firmas.
         $gesFirmas = new  GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente]);
+        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente]);
         foreach ($cFirmas as $oFirma) {
             if ($oFirma->DBEliminar() === FALSE) {
                 $error_txt .= _("No se ha eliminado la firma");
@@ -452,7 +452,7 @@ switch ($Qque) {
             }
         }
 
-        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCarregar();
         $oExpediente->setEstado(Expediente::ESTADO_BORRADOR);
         $asunto = $oExpediente->getAsunto();
@@ -463,7 +463,7 @@ switch ($Qque) {
         $oExpediente->setF_aprobacion('');
         $oExpediente->setF_reunion('');
 
-        if ($Qque == 'exp_a_borrador_cmb_creador') {
+        if ($Q_que == 'exp_a_borrador_cmb_creador') {
             $nuevo_creador = ConfigGlobal::role_id_cargo();
             $oExpediente->setPonente($nuevo_creador);
         }
@@ -475,13 +475,13 @@ switch ($Qque) {
         // Si hay escritos anulados, quitar el 'anulado'
         // cambiar también el creador de todos los escritos:
         $gesAccion = new GestorAccion();
-        $cAcciones = $gesAccion->getAcciones(['id_expediente' => $Qid_expediente]);
+        $cAcciones = $gesAccion->getAcciones(['id_expediente' => $Q_id_expediente]);
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $oEscrito = new Escrito($id_escrito);
             $oEscrito->DBCarregar();
             $oEscrito->setAnulado('f');
-            if ($Qque == 'exp_a_borrador_cmb_creador') {
+            if ($Q_que == 'exp_a_borrador_cmb_creador') {
                 $oEscrito->setCreador($nuevo_creador);
             }
             if ($oEscrito->DBGuardar() === FALSE) {
@@ -509,7 +509,7 @@ switch ($Qque) {
         $error_txt = '';
         // Hay que borrar: el expediente, las firmas, las acciones, los escritos y los adjuntos de los escritos.
         $gesAccion = new GestorAccion();
-        $cAcciones = $gesAccion->getAcciones(['id_expediente' => $Qid_expediente]);
+        $cAcciones = $gesAccion->getAcciones(['id_expediente' => $Q_id_expediente]);
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $oEscrito = new Escrito($id_escrito);
@@ -528,14 +528,14 @@ switch ($Qque) {
         }
         // firmas:
         $gesFirmas = new  GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Qid_expediente]);
+        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente]);
         foreach ($cFirmas as $oFirma) {
             if ($oFirma->DBEliminar() === FALSE) {
                 $error_txt .= _("No se ha eliminado la firma");
                 $error_txt .= "<br>";
             }
         }
-        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente = new Expediente($Q_id_expediente);
         if ($oExpediente->DBEliminar() === FALSE) {
             $error_txt .= _("No se ha eliminado el expediente");
             $error_txt .= "<br>";
@@ -560,11 +560,11 @@ switch ($Qque) {
         $oCargo = new Cargo($mi_id_cargo);
         $mi_id_oficina = $oCargo->getId_oficina();
 
-        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCarregar();
         // oficiales
         $new_preparar = [];
-        foreach ($Qa_preparar as $oficial) {
+        foreach ($Q_a_preparar as $oficial) {
             $id = strtok($oficial, '#');
             $visto = strtok('#');
             $oJSON = new stdClass;
@@ -621,7 +621,7 @@ switch ($Qque) {
 
         if (empty($error_txt)) {
             $jsondata['success'] = true;
-            $jsondata['id_expediente'] = $Qid_expediente;
+            $jsondata['id_expediente'] = $Q_id_expediente;
             $jsondata['html'] = $html;
         } else {
             $jsondata['success'] = false;
@@ -635,22 +635,22 @@ switch ($Qque) {
     case 'circular':
         // primero se guarda, y al final se guarda la fecha de hoy y se crean las firmas para el trámite
     case 'guardar':
-        if (!empty($Qid_expediente)) {
-            $oExpediente = new Expediente($Qid_expediente);
+        if (!empty($Q_id_expediente)) {
+            $oExpediente = new Expediente($Q_id_expediente);
             $oExpediente->DBCarregar();
             // Mantego al ponente como creador...
         } else {
             // si falla el javascript, puede ser que se hagan varios click a 'Guardar' 
             // y se dupliquen los espedientes. Me aseguro de que no exista uno igual:
             $gesExpedientes = new GestorExpediente();
-            $aWhere = ['id_tramite' => $Qtramite,
-                'estado' => $Qestado,
-                'prioridad' => $Qprioridad,
-                'asunto' => $Qasunto,
-                'entradilla' => $Qentradilla,
+            $aWhere = ['id_tramite' => $Q_tramite,
+                'estado' => $Q_estado,
+                'prioridad' => $Q_prioridad,
+                'asunto' => $Q_asunto,
+                'entradilla' => $Q_entradilla,
             ];
-            if (!empty($Qf_contestar)) {
-                $oConverter = new core\Converter('date', $Qf_contestar);
+            if (!empty($Q_f_contestar)) {
+                $oConverter = new core\Converter('date', $Q_f_contestar);
                 $f_contestar_iso = $oConverter->toPg();
                 $aWhere['f_contestar'] = $f_contestar_iso;
             }
@@ -660,36 +660,36 @@ switch ($Qque) {
             }
             // nuevo.
             $oExpediente = new Expediente();
-            $Qestado = Expediente::ESTADO_BORRADOR;
-            $oExpediente->setPonente($Qponente);
+            $Q_estado = Expediente::ESTADO_BORRADOR;
+            $oExpediente->setPonente($Q_ponente);
         }
 
-        $oExpediente->setId_tramite($Qtramite);
-        $oExpediente->setEstado($Qestado);
-        $oExpediente->setPrioridad($Qprioridad);
-        $oExpediente->setF_reunion($Qf_reunion);
-        $oExpediente->setF_aprobacion($Qf_aprobacion);
-        $oExpediente->setF_contestar($Qf_contestar);
-        $oExpediente->setAsunto($Qasunto);
-        $oExpediente->setEntradilla($Qentradilla);
+        $oExpediente->setId_tramite($Q_tramite);
+        $oExpediente->setEstado($Q_estado);
+        $oExpediente->setPrioridad($Q_prioridad);
+        $oExpediente->setF_reunion($Q_f_reunion);
+        $oExpediente->setF_aprobacion($Q_f_aprobacion);
+        $oExpediente->setF_contestar($Q_f_contestar);
+        $oExpediente->setAsunto($Q_asunto);
+        $oExpediente->setEntradilla($Q_entradilla);
 
         // según el trámite mirar si hay que grabar oficiales y/o varios cargos.
         $oficiales = FALSE;
-        $aWhere = ['id_tramite' => $Qtramite, 'id_cargo' => Cargo::CARGO_OFICIALES];
+        $aWhere = ['id_tramite' => $Q_tramite, 'id_cargo' => Cargo::CARGO_OFICIALES];
         $gesTramiteCargo = new GestorTramiteCargo();
         $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
         if (count($cTramiteCargos) > 0) {
             $oficiales = TRUE;
         }
         $varias = FALSE;
-        $aWhere = ['id_tramite' => $Qtramite, 'id_cargo' => Cargo::CARGO_VARIAS];
+        $aWhere = ['id_tramite' => $Q_tramite, 'id_cargo' => Cargo::CARGO_VARIAS];
         $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
         if (count($cTramiteCargos) > 0) {
             $varias = TRUE;
         }
         // pasar a array para postgresql
         if ($oficiales) {
-            $a_filter_firmas_oficina = array_filter($Qa_firmas_oficina); // Quita los elementos vacíos y nulos.
+            $a_filter_firmas_oficina = array_filter($Q_a_firmas_oficina); // Quita los elementos vacíos y nulos.
             $oExpediente->setFirmas_oficina($a_filter_firmas_oficina);
         } else {
             $oExpediente->setFirmas_oficina('');
@@ -697,18 +697,18 @@ switch ($Qque) {
 
         // pasar a array para postgresql
         if ($varias) {
-            $a_filter_firmas = array_filter($Qa_firmas); // Quita los elementos vacíos y nulos.
+            $a_filter_firmas = array_filter($Q_a_firmas); // Quita los elementos vacíos y nulos.
             $oExpediente->setResto_oficinas($a_filter_firmas);
         } else {
             $oExpediente->setResto_oficinas('');
         }
 
-        $oExpediente->setVida($Qvida);
-        $oExpediente->setVisibilidad($Qvisibilidad);
+        $oExpediente->setVida($Q_vida);
+        $oExpediente->setVisibilidad($Q_visibilidad);
 
         // oficiales
         $new_preparar = [];
-        foreach ($Qa_preparar as $oficial) {
+        foreach ($Q_a_preparar as $oficial) {
             $id = strtok($oficial, '#');
             $visto = strtok('#');
             $oJSON = new stdClass;
@@ -725,15 +725,15 @@ switch ($Qque) {
         } else {
             $id_expediente = $oExpediente->getId_expediente();
             // las etiquetas, después de tener el id_expediente (si es nuevo):
-            $Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-            $oExpediente->setEtiquetas($Qa_etiquetas);
+            $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+            $oExpediente->setEtiquetas($Q_a_etiquetas);
             if ($oExpediente->DBGuardar() === FALSE) {
                 $error_txt .= $oExpediente->getErrorTxt();
             }
         }
 
         // CIRCULAR
-        if ($Qque == 'circular') {
+        if ($Q_que == 'circular') {
             $f_hoy_iso = date(\DateTimeInterface::ISO8601);
             // se pone la fecha del escrito como hoy:
             $oExpediente->setF_escritos($f_hoy_iso, FALSE);
@@ -761,14 +761,27 @@ switch ($Qque) {
                 if ($oFirmaPrimera->DBGuardar() === FALSE) {
                     $error_txt .= $oFirmaPrimera->getErrorTxt();
                 }
-                // comprobar que ya ha firmado todo el mundo, para
-                // pasarlo a scdl para distribuir (ok_scdl)
-                $bParaDistribuir = $gesFirmas->paraDistribuir($Qid_expediente);
-                if ($bParaDistribuir) {
+                // comprobar que ya han firmado todos, para:
+                //  - en caso dl: pasarlo a scdl para distribuir (ok_scdl)
+                //  - en caso ctr: marcar como circulando
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+                    $bParaDistribuir = $gesFirmas->isParaDistribuir($Q_id_expediente);
+                    if ($bParaDistribuir) {
+                        // guardar la firma de Cargo::CARGO_DISTRIBUIR;
+                        $oExpediente->DBCarregar();
+                        $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
+                        $oExpediente->setF_aprobacion($f_hoy_iso, FALSE);
+                        $oExpediente->setF_aprobacion_escritos($f_hoy_iso, FALSE);
+                        if ($oExpediente->DBGuardar() === FALSE) {
+                            $error_txt .= $oExpediente->getErrorTxt();
+                        }
+                    }
+                }
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                    // cambio el estado del expediente.
                     $oExpediente->DBCarregar();
-                    $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
-                    $oExpediente->setF_aprobacion($f_hoy_iso, FALSE);
-                    $oExpediente->setF_aprobacion_escritos($f_hoy_iso, FALSE);
+                    $estado = Expediente::ESTADO_CIRCULANDO;
+                    $oExpediente->setEstado($estado);
                     if ($oExpediente->DBGuardar() === FALSE) {
                         $error_txt .= $oExpediente->getErrorTxt();
                     }
@@ -794,10 +807,10 @@ switch ($Qque) {
         exit();
         break;
     case 'cambio_tramite':
-        $oExpediente = new Expediente($Qid_expediente);
+        $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCarregar();
         $id_tramite_old = $oExpediente->getId_tramite();
-        $oExpediente->setId_tramite($Qtramite);
+        $oExpediente->setId_tramite($Q_tramite);
         if ($oExpediente->DBGuardar() === FALSE) {
             $error_txt .= $oExpediente->getErrorTxt();
         }
@@ -805,9 +818,9 @@ switch ($Qque) {
         $oExpediente->generarFirmas();
         $gesFirmas = new GestorFirma();
         // copiar las firmas:
-        $gesFirmas->copiarFirmas($Qid_expediente, $Qtramite, $id_tramite_old);
+        $gesFirmas->copiarFirmas($Q_id_expediente, $Q_tramite, $id_tramite_old);
         // borrar el recorrido del tramite anterior.
-        $gesFirmas->borrarFirmas($Qid_expediente, $id_tramite_old);
+        $gesFirmas->borrarFirmas($Q_id_expediente, $id_tramite_old);
 
 
         if (!empty($error_txt)) {
@@ -815,8 +828,8 @@ switch ($Qque) {
             $jsondata['mensaje'] = $error_txt;
         } else {
             $jsondata['success'] = true;
-            $jsondata['id_expediente'] = $Qid_expediente;
-            $a_cosas = ['id_expediente' => $Qid_expediente];
+            $jsondata['id_expediente'] = $Q_id_expediente;
+            $a_cosas = ['id_expediente' => $Q_id_expediente];
             $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
             $jsondata['pagina_mod'] = $pagina_mod;
         }

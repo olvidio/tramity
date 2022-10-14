@@ -26,28 +26,28 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_escrito = (integer)\filter_input(INPUT_POST, 'id_escrito');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qmodo = (string)\filter_input(INPUT_POST, 'modo');
+$Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_modo = (string)filter_input(INPUT_POST, 'modo');
 
 $msg = '';
 $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 ////////////////////  buscar si ya existe  ////////////////////////////////
-$Qprot_num = (integer)\filter_input(INPUT_POST, 'buscar_prot_num');
-$Qprot_any = (integer)\filter_input(INPUT_POST, 'buscar_prot_any');
-if (!empty($Qprot_num) && !empty($Qprot_any)) {
+$Q_prot_num = (integer)filter_input(INPUT_POST, 'buscar_prot_num');
+$Q_prot_any = (integer)filter_input(INPUT_POST, 'buscar_prot_any');
+if (!empty($Q_prot_num) && !empty($Q_prot_any)) {
     $gesLugares = new GestorLugar();
     $id_lugar_local = $gesLugares->getId_sigla_local();
     $aProt_local = ['id_lugar' => $id_lugar_local,
-        'num' => $Qprot_num,
-        'any' => $Qprot_any,
+        'num' => $Q_prot_num,
+        'any' => $Q_prot_any,
     ];
     $gesEscritos = new GestorEscrito();
     $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
     if (!empty($cEscritos)) {
         $oEscrito = $cEscritos[0];
         $oEscrito->DBCarregar();
-        $Qid_escrito = $oEscrito->getId_escrito();
+        $Q_id_escrito = $oEscrito->getId_escrito();
     }
     if (count($cEscritos) > 1) {
         $msg = ' ' . _("Protocolo repetido");
@@ -80,7 +80,7 @@ $oArrayDesplFirmas->setBlanco('t');
 $oArrayDesplFirmas->setAccionConjunto('fnjs_mas_firmas()');
 $oArrayDesplFirmas->setTabIndex(140);
 
-$oEscrito = new Escrito($Qid_escrito);
+$oEscrito = new Escrito($Q_id_escrito);
 // categoria
 $oCategoria = new Categoria();
 $aOpciones = $oCategoria->getArrayCategoria();
@@ -104,7 +104,7 @@ $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
 $oDesplVisibilidad->setTabIndex(155);
 
-if (!empty($Qid_escrito)) {
+if (!empty($Q_id_escrito)) {
     // destinos individuales
     $json_prot_dst = $oEscrito->getJson_prot_destino(TRUE);
     $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst, $a_posibles_lugares, 'destinos');
@@ -183,9 +183,9 @@ if (!empty($Qid_escrito)) {
     }
 } else {
     // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
-    $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-    if (!empty($Qid_entrada)) {
-        $oEntrada = new Entrada($Qid_entrada);
+    $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+    if (!empty($Q_id_entrada)) {
+        $oEntrada = new Entrada($Q_id_entrada);
         $asunto = $oEntrada->getAsunto();
         $detalle = $oEntrada->getDetalle();
         // ProtocoloArray espera un array.
@@ -253,27 +253,27 @@ if (!empty($Qid_escrito)) {
 
 $url_update = 'apps/escritos/controller/escrito_update.php';
 $a_cosas = [
-    'filtro' => $Qfiltro,
-    'modo' => $Qmodo,
+    'filtro' => $Q_filtro,
+    'modo' => $Q_modo,
 ];
 
 $ver_revisado = FALSE;
 
 $a_condicion = [];
-$str_condicion = (string)\filter_input(INPUT_POST, 'condicion');
+$str_condicion = (string)filter_input(INPUT_POST, 'condicion');
 parse_str($str_condicion, $a_condicion);
-$a_condicion['filtro'] = $Qfiltro;
+$a_condicion['filtro'] = $Q_filtro;
 $pagina_cancel = web\Hash::link('apps/escritos/controller/salida_escrito.php?' . http_build_query($a_condicion));
 
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
 $url_escrito = 'apps/escritos/controller/salida_escrito.php';
 
-$b_guardar_txt = empty($Qid_escrito) ? _("Generar protocolo") : _("Pasar a secretaría");
+$b_guardar_txt = empty($Q_id_escrito) ? _("Generar protocolo") : _("Pasar a secretaría");
 
 // para cambiar destinos en nueva ventana.
 $a_cosas = [
-    'filtro' => $Qfiltro,
-    'id_escrito' => $Qid_escrito,
+    'filtro' => $Q_filtro,
+    'id_escrito' => $Q_id_escrito,
 ];
 $pagina_actualizar = web\Hash::link('apps/escritos/controller/salida_escrito.php?' . http_build_query($a_cosas));
 
@@ -291,9 +291,9 @@ $minIso = $oHoy->format('Y-m-d');
 $a_campos = [
     'titulo' => $titulo,
     'b_guardar_txt' => $b_guardar_txt,
-    'id_escrito' => $Qid_escrito,
-    'filtro' => $Qfiltro,
-    'modo' => $Qmodo,
+    'id_escrito' => $Q_id_escrito,
+    'filtro' => $Q_filtro,
+    'modo' => $Q_modo,
     'id_ponente' => $id_ponente,
     //'oHash' => $oHash,
     'chk_grupo_dst' => $chk_grupo_dst,

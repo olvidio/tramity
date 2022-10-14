@@ -10,15 +10,15 @@ require_once("apps/core/global_header.inc");
 require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
 $error_txt = '';
-switch ($Qque) {
+switch ($Q_que) {
     case 'update_plataforma':
-        $Qplataforma = (string)\filter_input(INPUT_POST, 'plataforma');
+        $Q_plataforma = (string)filter_input(INPUT_POST, 'plataforma');
 
         $oConfigSchema = new ConfigSchema('plataforma_mantenimiento');
-        $oConfigSchema->setValor($Qplataforma);
+        $oConfigSchema->setValor($Q_plataforma);
 
         $error_txt = '';
         if ($oConfigSchema->DBGuardar() === FALSE) {

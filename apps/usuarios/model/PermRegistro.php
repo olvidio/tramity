@@ -36,7 +36,7 @@ class PermRegistro
 
     public function __construct()
     {
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $this->init_ctr();
         } else {
             $this->init();
@@ -380,7 +380,7 @@ class PermRegistro
 
     public function isVisibleDtor($visibilidad)
     {
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $soy_dtor = ConfigGlobal::soy_dtor();
             if (($visibilidad == Visibilidad::V_DIRECTORES ||
                     $visibilidad == Visibilidad::V_RESERVADO ||
@@ -394,7 +394,7 @@ class PermRegistro
             return $rta;
         }
 
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $soy_dtor = ConfigGlobal::soy_dtor();
             $soy_sacd = ConfigGlobal::soy_sacd();
             $rta = FALSE;
@@ -423,7 +423,7 @@ class PermRegistro
     public function permiso_detalle($objeto, $que)
     {
 
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $rta = $this->permiso_detalle_ctr($objeto, $que);
         } else {
             $rta = $this->permiso_detalle_dl($objeto, $que);
@@ -537,7 +537,7 @@ class PermRegistro
         }
         // para el sd, como vcd excepto si la oficina es vcd.
         // Lo pongo fuera de switch para aprovechar el default.
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL && $role_actual == 'sd') {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && $role_actual == 'sd') {
             $gesCargo = new GestorCargo();
             $cCargos = $gesCargo->getCargos(['cargo' => 'vcd']);
             $id_oficina_vcd = $cCargos[0]->getId_oficina();

@@ -40,6 +40,17 @@ class GestorEtiqueta extends core\ClaseGestor
 
     /* MÉTODOS PÚBLICOS -----------------------------------------------------------*/
 
+    public function getArrayMisEtiquetas($id_cargo = ''): array
+    {
+        $a_posibles_etiquetas = [];
+        foreach ($this->getMisEtiquetas($id_cargo) as $oEtiqueta) {
+            $id_etiqueta = $oEtiqueta->getId_etiqueta();
+            $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
+            $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
+        }
+        return $a_posibles_etiquetas;
+    }
+
     public function getMisEtiquetas($id_cargo = '')
     {
         if (empty($id_cargo)) {
@@ -143,7 +154,7 @@ class GestorEtiqueta extends core\ClaseGestor
             $id_cargo = ConfigGlobal::role_id_cargo();
         }
 
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $oCargo = new Cargo($id_cargo);
             $id_oficina = $oCargo->getId_oficina();
         } else {
@@ -185,7 +196,7 @@ class GestorEtiqueta extends core\ClaseGestor
         return $oEtiquetaSet->getTot();
     }
 
-    /* METODES PROTECTED --------------------------------------------------------*/
+    /* MÉTODOS PROTECTED --------------------------------------------------------*/
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

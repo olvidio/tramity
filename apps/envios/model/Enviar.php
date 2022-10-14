@@ -93,7 +93,7 @@ class Enviar
         }
         if ($this->tipo == 'entrada') {
             // Los centros no tienen bypass
-            if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                 $this->oEntradaBypass = new Entrada($this->iid);
             } else {
                 $this->oEntradaBypass = new EntradaBypass($this->iid);
@@ -132,7 +132,7 @@ class Enviar
 
         if ($this->tipo == 'entrada') {
             // Puede que no sea bypass. Se usa para descargar la entrada en local.
-            if (is_true($this->is_Bypass) && $_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+            if (is_true($this->is_Bypass) && $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                 $a_header = ['left' => $this->oEntradaBypass->cabeceraDistribucion_cr(),
                     'center' => '',
                     'right' => $this->oEntradaBypass->cabeceraDerecha(),
@@ -254,7 +254,7 @@ class Enviar
             // En el caso de los ctr, se envia directamente sin los pasos
             // de cirular por secretaria, y al llegar aqui todavía no se ha generado el
             // número de protocolo.
-            if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR && empty((array)$json_prot_local)) {
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && empty((array)$json_prot_local)) {
                 $this->oEscrito->generarProtocolo();
                 $this->oEscrito->DBCarregar();
             }

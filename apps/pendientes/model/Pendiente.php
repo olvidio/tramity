@@ -326,7 +326,7 @@ class Pendiente
     {
         switch ($class) {
             case 'PUBLIC':
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $visibilidad = Visibilidad::V_CTR_TODOS;
                 } else {
                     $visibilidad = Visibilidad::V_TODOS;
@@ -336,7 +336,7 @@ class Pendiente
                 $visibilidad = Visibilidad::V_PERSONAL;
                 break;
             case 'CONFIDENTIAL':
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $visibilidad = Visibilidad::V_CTR_DTOR;
                 } else {
                     $visibilidad = Visibilidad::V_DIRECTORES;

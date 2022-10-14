@@ -32,24 +32,24 @@ class Firma extends core\ClasePropiedades
     // tipo, valor
 
     // tipo
-    const TIPO_VOTO = 1;
-    const TIPO_ACLARACION = 2;
+    public const TIPO_VOTO = 1;
+    public const TIPO_ACLARACION = 2;
     // valor. Finalmente distingo los votos del vcd (_D_: director) para poder 
-    // hacer cambios de estado en el expediente más facilmente.
-    const V_VISTO = 1;  // leído, pensando
-    const V_ESPERA = 2;  // distinto a no leído
-    const V_NO = 3;  // voto negativo
-    const V_OK = 4;  // voto positivo
-    const V_D_ESPERA = 22;  // distinto a no leído
-    const V_D_NO = 23;  // voto negativo
-    const V_D_OK = 24;  // voto positivo
-    const V_D_DILATA = 25;  // sólo vcd
-    const V_D_RECHAZADO = 26;  // sólo vcd
-    const V_D_VISTO_BUENO = 27;  // sólo vcd VºBº
-    // del tipo aclaracion
-    const V_A_NUEVA = 51;  // Petición de aclaración
-    const V_A_RESPUESTA = 52;  // Respuesta a la petición de aclaración
-    const V_A_ESPERA = 53;  // en espera
+    // hacer cambios de estado en el expediente más fácilmente.
+    public const V_VISTO = 1;  // leído, pensando
+    public const V_ESPERA = 2;  // distinto a no leído
+    public const V_NO = 3;  // voto negativo
+    public const V_OK = 4;  // voto positivo
+    public const V_D_ESPERA = 22;  // distinto a no leído
+    public const V_D_NO = 23;  // voto negativo
+    public const V_D_OK = 24;  // voto positivo
+    public const V_D_DILATA = 25;  // sólo vcd
+    public const V_D_RECHAZADO = 26;  // sólo vcd
+    public const V_D_VISTO_BUENO = 27;  // sólo vcd VºBº
+    // del tipo aclaración
+    public const V_A_NUEVA = 51;  // Petición de aclaración
+    public const V_A_RESPUESTA = 52;  // Respuesta a la petición de aclaración
+    public const V_A_ESPERA = 53;  // en espera
 
 
     /* ATRIBUTOS ----------------------------------------------------------------- */
@@ -453,8 +453,8 @@ class Firma extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_item de Firma
@@ -473,10 +473,10 @@ class Firma extends core\ClasePropiedades
      */
     function setId_expediente($iid_expediente = '')
     {
-        $this->iid_expediente = $iid_expediente;
+        $this->iid_expediente = (int)$iid_expediente;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_tramite de Firma
@@ -565,7 +565,7 @@ class Firma extends core\ClasePropiedades
      */
     function setValor($ivalor = '')
     {
-        $this->ivalor = $ivalor;
+        $this->ivalor = (int)$ivalor;
     }
 
     /**
@@ -816,7 +816,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return integer ivalor
      */
-    function getValor()
+    function getValor(): int
     {
         if (!isset($this->ivalor) && !$this->bLoaded) {
             $this->DBCarregar();
@@ -890,7 +890,7 @@ class Firma extends core\ClasePropiedades
         $oFirmaSet->add($this->getDatodf_valor());
         return $oFirmaSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut iid_expediente de Firma

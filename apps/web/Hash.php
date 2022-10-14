@@ -779,7 +779,7 @@ class Hash
 
         return $sUrl_full . $sQuery;
     }
-    /* METODES PRIVATS -----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS -----------------------------------------------------------*/
 
     /**
      * Devuelve los camposHidden del array en un srting para una url

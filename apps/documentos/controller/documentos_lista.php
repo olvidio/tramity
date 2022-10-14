@@ -16,35 +16,35 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
 $oTabla = new DocumentoLista();
-$oTabla->setFiltro($Qfiltro);
+$oTabla->setFiltro($Q_filtro);
 
 // añadir dialogo de búsquedas
-$QandOr = (string)\filter_input(INPUT_POST, 'andOr');
-$Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$a_etiquetas_filtered = array_filter($Qa_etiquetas);
+$Q_andOr = (string)filter_input(INPUT_POST, 'andOr');
+$Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$a_etiquetas_filtered = array_filter($Q_a_etiquetas);
 
 $aWhere = [];
 $aOperador = [];
 
 $cDocumentos = [];
-if ($Qque == 'todos') {
+if ($Q_que == 'todos') {
     $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
     $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentosTodos();
     // borro las etiquetas seleccionadas
     $a_etiquetas_filtered = [];
-    $QandOr = 'AND';
+    $Q_andOr = 'AND';
 } elseif (!empty($a_etiquetas_filtered)) {
     $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
-    $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($a_etiquetas_filtered, $QandOr);
+    $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($a_etiquetas_filtered, $Q_andOr);
 }
 
-$chk_or = ($QandOr == 'OR') ? 'checked' : '';
+$chk_or = ($Q_andOr == 'OR') ? 'checked' : '';
 // por defecto 'AND':
-$chk_and = (($QandOr == 'AND') || empty($QandOr)) ? 'checked' : '';
+$chk_and = (($Q_andOr == 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
 if (!empty($cDocumentos)) {
     $aWhere['id_doc'] = implode(',', $cDocumentos);
@@ -65,10 +65,10 @@ $oArrayDesplEtiquetas->setBlanco('t');
 $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
 $a_campos = [
-    'filtro' => $Qfiltro,
+    'filtro' => $Q_filtro,
     'chk_and' => $chk_and,
     'chk_or' => $chk_or,
-    'que' => $Qque,
+    'que' => $Q_que,
     'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
 
 ];
@@ -76,8 +76,8 @@ $a_campos = [
 $oView = new ViewTwig('documentos/controller');
 echo $oView->renderizar('documentos_buscar.html.twig', $a_campos);
 
-$oTabla->setQue($Qque);
-$oTabla->setAndOr($QandOr);
+$oTabla->setQue($Q_que);
+$oTabla->setAndOr($Q_andOr);
 $oTabla->setEtiquetas($a_etiquetas_filtered);
 $oTabla->setAWhere($aWhere);
 $oTabla->setAOperador($aOperador);

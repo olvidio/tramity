@@ -16,16 +16,16 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 // porque también se puede abrir en una ventana nueva, y entonces se llama por GET
-$Qmethod = (string)\filter_input(INPUT_SERVER, 'REQUEST_METHOD');
-if ($Qmethod == 'POST') {
-    $Qid_doc = (integer)\filter_input(INPUT_POST, 'id_doc');
+$Q_method = (string)filter_input(INPUT_SERVER, 'REQUEST_METHOD');
+if ($Q_method == 'POST') {
+    $Q_id_doc = (integer)filter_input(INPUT_POST, 'id_doc');
 }
-if ($Qmethod == 'GET') {
-    $Qid_doc = (integer)\filter_input(INPUT_GET, 'id_doc');
+if ($Q_method == 'GET') {
+    $Q_id_doc = (integer)filter_input(INPUT_GET, 'id_doc');
 }
 
-$oDocumento = new Documento($Qid_doc);
-if (!empty($Qid_doc)) {
+$oDocumento = new Documento($Q_id_doc);
+if (!empty($Q_id_doc)) {
 
     $nom = $oDocumento->getNom();
     $f_upload = $oDocumento->getF_upload()->getFromLocal();
@@ -33,7 +33,7 @@ if (!empty($Qid_doc)) {
     switch ($tipo_doc) {
         case Documento::DOC_ETHERPAD:
             $oEtherpad = new Etherpad();
-            $oEtherpad->setId(Etherpad::ID_DOCUMENTO, $Qid_doc);
+            $oEtherpad->setId(Etherpad::ID_DOCUMENTO, $Q_id_doc);
 
             $escrito_html = $oEtherpad->generarHtml();
             break;
@@ -54,7 +54,7 @@ if (!empty($Qid_doc)) {
 $base_url = core\ConfigGlobal::getWeb();
 
 $a_campos = [
-    'id_doc' => $Qid_doc,
+    'id_doc' => $Q_id_doc,
     //'oHash' => $oHash,
     'nom' => $nom,
     'f_upload' => $f_upload,

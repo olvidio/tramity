@@ -16,16 +16,16 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_doc = (integer)\filter_input(INPUT_POST, 'id_doc');
-$Qaccion = (integer)\filter_input(INPUT_POST, 'accion');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$QandOr = (string)\filter_input(INPUT_POST, 'andOr');
-$Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_id_doc = (integer)filter_input(INPUT_POST, 'id_doc');
+$Q_accion = (integer)filter_input(INPUT_POST, 'accion');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_andOr = (string)filter_input(INPUT_POST, 'andOr');
+$Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
 $visibilidad = 0;
 
-$oDocumento = new Documento($Qid_doc);
+$oDocumento = new Documento($Q_id_doc);
 $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
 // visibilidad (usar las mismas opciones que en entradas)
@@ -49,7 +49,7 @@ foreach ($cEtiquetas as $oEtiqueta) {
 $preview = [];
 $config = [];
 $tipo_doc = '';
-if (!empty($Qid_doc)) {
+if (!empty($Q_id_doc)) {
     // destinos individuales
     $nom = $oDocumento->getNom();
     $nombre_fichero = $oDocumento->getNombre_fichero();
@@ -73,7 +73,7 @@ if (!empty($Qid_doc)) {
     if (!empty($documento_txt)) {
         $preview[] = "'$nombre_fichero'";
         $config[] = [
-            'key' => $Qid_doc,
+            'key' => $Q_id_doc,
             'caption' => $nombre_fichero,
             'url' => 'apps/documentos/controller/adjunto_delete.php', // server api to delete the file based on key
         ];
@@ -102,10 +102,10 @@ $tipo_doc = empty($tipo_doc) ? '' : $tipo_doc;
 
 $url_update = 'apps/documentos/controller/documento_update.php';
 $a_cosas = [
-    'filtro' => $Qfiltro,
-    'andOr' => $QandOr,
-    'etiquetas' => $Qa_etiquetas,
-    'que' => $Qque,
+    'filtro' => $Q_filtro,
+    'andOr' => $Q_andOr,
+    'etiquetas' => $Q_a_etiquetas,
+    'que' => $Q_que,
 ];
 
 $pagina_cancel = web\Hash::link('apps/documentos/controller/documentos_lista.php?' . http_build_query($a_cosas));
@@ -113,9 +113,9 @@ $pagina_cancel = web\Hash::link('apps/documentos/controller/documentos_lista.php
 $a_campos = [
     //'oHash' => $oHash,
     'titulo' => $titulo,
-    'id_doc' => $Qid_doc,
-    'accion' => $Qaccion,
-    'filtro' => $Qfiltro,
+    'id_doc' => $Q_id_doc,
+    'accion' => $Q_accion,
+    'filtro' => $Q_filtro,
     'f_mod' => $f_mod,
     'tipo_doc' => $tipo_doc,
     'nom' => $nom,
@@ -127,8 +127,8 @@ $a_campos = [
     // para js
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
-    'etiquetas' => $Qa_etiquetas,
-    'andOr' => $QandOr,
+    'etiquetas' => $Q_a_etiquetas,
+    'andOr' => $Q_andOr,
 
 ];
 

@@ -243,8 +243,8 @@ class EntradaDocDB extends core\ClasePropiedades
         $this->setPrimary_key($aPK);
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * Recupera las claus primàries de EntradaDocDB en un array
@@ -269,7 +269,7 @@ class EntradaDocDB extends core\ClasePropiedades
         $this->iid_entrada = $iid_entrada;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut itipo_doc de EntradaDocDB
@@ -415,7 +415,7 @@ class EntradaDocDB extends core\ClasePropiedades
         $oEntradaDocDBSet->add($this->getDatosF_doc());
         return $oEntradaDocDBSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut itipo_doc de EntradaDocDB

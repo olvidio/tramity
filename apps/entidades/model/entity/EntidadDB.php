@@ -3,26 +3,8 @@
 namespace entidades\model\entity;
 
 use core;
+use PDOException;
 
-/**
- * Fitxer amb la Classe que accedeix a la taula entidades
- *
- * @package tramity
- * @subpackage model
- * @author Daniel Serrabou
- * @version 1.0
- * @created 28/10/2021
- */
-
-/**
- * Classe que implementa l'entitat entidades
- *
- * @package tramity
- * @subpackage model
- * @author Daniel Serrabou
- * @version 1.0
- * @created 28/10/2021
- */
 class EntidadDB extends core\ClasePropiedades
 {
 
@@ -109,19 +91,19 @@ class EntidadDB extends core\ClasePropiedades
      * @param integer|array iid_entidad
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = '')
+    public function __construct($a_id = '')
     {
         $oDbl = $GLOBALS['oDBP'];
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_entidad') && $val_id !== '') {
+                if (($nom_id === 'id_entidad') && $val_id !== '') {
                     $this->iid_entidad = (int)$val_id;
                 } // evitem SQL injection fent cast a integer
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_entidad = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_entidad = (int) $a_id;
                 $this->aPrimary_key = array('iid_entidad' => $this->iid_entidad);
             }
         }
@@ -136,7 +118,7 @@ class EntidadDB extends core\ClasePropiedades
      * Si no hi ha el registre, fa el insert, si hi es fa el update.
      *
      */
-    public function DBGuardar()
+    public function DBGuardar(): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -172,7 +154,7 @@ class EntidadDB extends core\ClasePropiedades
             } else {
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'EntidadDB.update.execute';
@@ -191,7 +173,7 @@ class EntidadDB extends core\ClasePropiedades
             } else {
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'EntidadDB.insertar.execute';
@@ -209,7 +191,7 @@ class EntidadDB extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCarregar($que = null): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -227,7 +209,9 @@ class EntidadDB extends core\ClasePropiedades
                     $this->setAllAtributes($aDades);
                     break;
                 case 'guardar':
-                    if (!$oDblSt->rowCount()) return FALSE;
+                    if (!$oDblSt->rowCount()) {
+                        return FALSE;
+                    }
                     break;
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
@@ -248,7 +232,7 @@ class EntidadDB extends core\ClasePropiedades
      *
      * @param array $aDades
      */
-    function setAllAtributes($aDades)
+    private function setAllAtributes($aDades)
     {
         if (!is_array($aDades)) {
             return;
@@ -273,8 +257,10 @@ class EntidadDB extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
+
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_entidad de EntidadDB
@@ -296,14 +282,12 @@ class EntidadDB extends core\ClasePropiedades
         $this->snombre = $snombre;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
-
     /**
      * estableix el valor de l'atribut sschema de EntidadDB
      *
      * @param string sschema='' optional
      */
-    function setSchema($sschema = '')
+    public function setSchema($sschema = ''): void
     {
         $this->sschema = $sschema;
     }
@@ -313,7 +297,7 @@ class EntidadDB extends core\ClasePropiedades
      *
      * @param integer itipo='' optional
      */
-    function setTipo($itipo = '')
+    public function setTipo($itipo = ''): void
     {
         $this->itipo = $itipo;
     }
@@ -323,7 +307,7 @@ class EntidadDB extends core\ClasePropiedades
      *
      * @param boolean banulado='f' optional
      */
-    function setAnulado($banulado = 'f')
+    public function setAnulado($banulado = 'f'): void
     {
         $this->banulado = $banulado;
     }
@@ -332,7 +316,7 @@ class EntidadDB extends core\ClasePropiedades
      * Estableix a empty el valor de tots els ATRIBUTOS
      *
      */
-    function setNullAllAtributes()
+    private function setNullAllAtributes()
     {
         $aPK = $this->getPrimary_key();
         $this->setId_schema('');
@@ -349,7 +333,7 @@ class EntidadDB extends core\ClasePropiedades
      *
      * @return array aPrimary_key
      */
-    function getPrimary_key()
+    public function getPrimary_key()
     {
         if (!isset($this->aPrimary_key)) {
             $this->aPrimary_key = array('id_entidad' => $this->iid_entidad);
@@ -366,7 +350,7 @@ class EntidadDB extends core\ClasePropiedades
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_entidad') && $val_id !== '') {
+                if (($nom_id === 'id_entidad') && $val_id !== '') {
                     $this->iid_entidad = (int)$val_id;
                 } // evitem SQL injection fent cast a integer
             }
@@ -399,7 +383,7 @@ class EntidadDB extends core\ClasePropiedades
      *
      * @return integer iid_entidad
      */
-    function getId_entidad()
+    public function getId_entidad()
     {
         if (!isset($this->iid_entidad) && !$this->bLoaded) {
             $this->DBCarregar();
@@ -412,7 +396,7 @@ class EntidadDB extends core\ClasePropiedades
      *
      * @return string snombre
      */
-    function getNombre()
+    public function getNombre(): string
     {
         if (!isset($this->snombre) && !$this->bLoaded) {
             $this->DBCarregar();
@@ -425,7 +409,7 @@ class EntidadDB extends core\ClasePropiedades
      *
      * @return string sschema
      */
-    function getSchema()
+    public function getSchema(): string
     {
         if (!isset($this->sschema) && !$this->bLoaded) {
             $this->DBCarregar();
@@ -438,7 +422,7 @@ class EntidadDB extends core\ClasePropiedades
      *
      * @return integer itipo
      */
-    function getTipo()
+    public function getTipo(): int
     {
         if (!isset($this->itipo) && !$this->bLoaded) {
             $this->DBCarregar();
@@ -451,7 +435,7 @@ class EntidadDB extends core\ClasePropiedades
      *
      * @return boolean banulado
      */
-    function getAnulado()
+    public function isAnulado(): bool
     {
         if (!isset($this->banulado) && !$this->bLoaded) {
             $this->DBCarregar();
@@ -459,11 +443,13 @@ class EntidadDB extends core\ClasePropiedades
         return $this->banulado;
     }
 
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+
     /**
      * Retorna una col·lecció d'objectes del tipus DatosCampo
      *
      */
-    function getDatosCampos()
+    public function getDatosCampos()
     {
         $oEntidadDBesSet = new core\Set();
 
@@ -473,7 +459,6 @@ class EntidadDB extends core\ClasePropiedades
         $oEntidadDBesSet->add($this->getDatosAnulado());
         return $oEntidadDBesSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut snombre de EntidadDB

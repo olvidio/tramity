@@ -15,17 +15,17 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 // porque también se puede abrir en una ventana nueva, y entonces se llama por GET
-$Qmethod = (integer)\filter_input(INPUT_SERVER, 'REQUEST_METHOD');
-if ($Qmethod == 'POST') {
-    $Qid_plantilla = (integer)\filter_input(INPUT_POST, 'id_plantilla');
+$Q_method = (integer)filter_input(INPUT_SERVER, 'REQUEST_METHOD');
+if ($Q_method == 'POST') {
+    $Q_id_plantilla = (integer)filter_input(INPUT_POST, 'id_plantilla');
 }
-if ($Qmethod == 'GET') {
-    $Qid_plantilla = (integer)\filter_input(INPUT_GET, 'id_plantilla');
+if ($Q_method == 'GET') {
+    $Q_id_plantilla = (integer)filter_input(INPUT_GET, 'id_plantilla');
 }
 
-if (!empty($Qid_plantilla)) {
+if (!empty($Q_id_plantilla)) {
     $oEtherpad = new Etherpad();
-    $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Qid_plantilla);
+    $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Q_id_plantilla);
 
     $escrito_html = $oEtherpad->generarHtml();
 } else {
@@ -35,7 +35,7 @@ if (!empty($Qid_plantilla)) {
 $base_url = core\ConfigGlobal::getWeb();
 
 $a_campos = [
-    'id_plantilla' => $Qid_plantilla,
+    'id_plantilla' => $Q_id_plantilla,
     //'oHash' => $oHash,
     'base_url' => $base_url,
     'escrito_html' => $escrito_html,

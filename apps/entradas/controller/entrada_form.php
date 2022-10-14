@@ -25,13 +25,13 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
-if ($Qfiltro == 'en_buscar' && empty($Qid_entrada)) {
-    $Qa_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+if ($Q_filtro == 'en_buscar' && empty($Q_id_entrada)) {
+    $Q_a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
-    $Qid_entrada = $Qa_sel[0];
+    $Q_id_entrada = $Q_a_sel[0];
 }
 
 $plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
@@ -67,7 +67,7 @@ $oDesplPonenteOficina = $gesOficinas->getListaOficinas();
 $oDesplPonenteOficina->setNombre('of_ponente');
 $oDesplPonenteOficina->setTabIndex(80);
 
-$oEntrada = new Entrada($Qid_entrada);
+$oEntrada = new Entrada($Q_id_entrada);
 // tipo
 $oCategoria = new Categoria();
 $aOpciones = $oCategoria->getArrayCategoria();
@@ -115,7 +115,7 @@ if ($estado >= Entrada::ESTADO_ADMITIDO) {
     $badmitido = 'f';
     $comprobar_f_entrada = FALSE;
 }
-if ($Qfiltro == 'en_admitido') {
+if ($Q_filtro == 'en_admitido') {
     $badmitido = 't';
 } else {
     $oDesplAdmitido->setDisabled(TRUE);
@@ -125,7 +125,7 @@ $oDesplAdmitido->setOpcion_sel($badmitido);
 $gesGrupo = new GestorGrupo();
 $a_posibles_grupos = $gesGrupo->getArrayGrupos();
 
-if (!empty($Qid_entrada)) {
+if (!empty($Q_id_entrada)) {
     $json_prot_origen = $oEntrada->getJson_prot_origen();
     $oProtOrigen->setLugar($json_prot_origen->id_lugar);
     $oProtOrigen->setProt_num($json_prot_origen->num);
@@ -192,7 +192,7 @@ if (!empty($Qid_entrada)) {
 
     // a ver si ya está
     $id_grupo = 0;
-    $oEntradaBypass = new EntradaBypass($Qid_entrada);
+    $oEntradaBypass = new EntradaBypass($Q_id_entrada);
     $a_grupos = $oEntradaBypass->getId_grupos();
     if (!empty($a_grupos)) {
         $oArrayDesplGrupo = new web\DesplegableArray($a_grupos, $a_posibles_grupos, 'grupos');
@@ -265,7 +265,7 @@ $oDesplByPass->setTabIndex(190);
 $oArrayProtDestino->setTabIndex(200);
 
 $ver_pendiente = FALSE;
-switch ($Qfiltro) {
+switch ($Q_filtro) {
     case 'en_admitido':
         $txt_btn_guardar = _("Asignar");
         break;
@@ -279,10 +279,10 @@ switch ($Qfiltro) {
 }
 
 $url_update = 'apps/entradas/controller/entrada_update.php';
-$pagina_nueva = web\Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query(['filtro' => $Qfiltro]));
+$pagina_nueva = web\Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query(['filtro' => $Q_filtro]));
 if ($Qfiltro == 'en_buscar') {
     $a_condicion = [];
-    $str_condicion = (string)\filter_input(INPUT_POST, 'condicion');
+    $str_condicion = (string)filter_input(INPUT_POST, 'condicion');
     parse_str($str_condicion, $a_condicion);
     $a_condicion['filtro'] = $Qfiltro;
     $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));

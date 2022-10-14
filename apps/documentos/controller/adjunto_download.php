@@ -15,10 +15,10 @@ require_once("apps/core/global_object.inc");
 
 // El download es via GET!!!";
 
-$Qid_doc = (integer)\filter_input(INPUT_GET, 'key');
+$Q_id_doc = (integer)filter_input(INPUT_GET, 'key');
 
-if (!empty($Qid_doc)) {
-    $oDocumento = new Documento($Qid_doc);
+if (!empty($Q_id_doc)) {
+    $oDocumento = new Documento($Q_id_doc);
     $nombre_fichero = $oDocumento->getNombre_fichero();
     $doc = $oDocumento->getDocumento();
 

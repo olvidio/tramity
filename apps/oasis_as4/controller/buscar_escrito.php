@@ -13,21 +13,21 @@ require_once("apps/core/global_header.inc");
 require_once("apps/core/global_object.inc");
 // Crea los objetos por esta url  **********************************************
 
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qctr_anulados = (bool)\filter_input(INPUT_POST, 'ctr_anulados');
-$Qaccion = (string)\filter_input(INPUT_POST, 'accion');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_ctr_anulados = (bool)filter_input(INPUT_POST, 'ctr_anulados');
+$Q_accion = (string)filter_input(INPUT_POST, 'accion');
 
 //7
-$Qid_lugar = (integer)\filter_input(INPUT_POST, 'id_lugar');
-$Qprot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
-$Qprot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+$Q_id_lugar = (integer)filter_input(INPUT_POST, 'id_lugar');
+$Q_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
+$Q_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 // para quitar el '0':
-$Qprot_num = empty($Qprot_num) ? '' : $Qprot_num;
-$Qprot_any = empty($Qprot_any) ? '' : $Qprot_any;
+$Q_prot_num = empty($Q_prot_num) ? '' : $Q_prot_num;
+$Q_prot_any = empty($Q_prot_any) ? '' : $Q_prot_any;
 
 
 $gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayBusquedas($Qctr_anulados);
+$a_lugares = $gesLugares->getArrayBusquedas($Q_ctr_anulados);
 
 // Busco el id_lugar de la dl.
 $id_siga_local = $gesLugares->getId_sigla_local();
@@ -40,7 +40,7 @@ $oDesplLugar = new Desplegable();
 $oDesplLugar->setNombre('id_lugar');
 $oDesplLugar->setBlanco(TRUE);
 $oDesplLugar->setOpciones($a_lugares);
-$oDesplLugar->setOpcion_sel($Qid_lugar);
+$oDesplLugar->setOpcion_sel($Q_id_lugar);
 
 $vista = ConfigGlobal::getVista();
 
@@ -50,10 +50,10 @@ $a_campos = [
     'id_dl' => $id_siga_local,
     'dele' => $sigla,
     'id_cr' => $id_cr,
-    'filtro' => $Qfiltro,
-    'accion' => $Qaccion,
-    'prot_num' => $Qprot_num,
-    'prot_any' => $Qprot_any,
+    'filtro' => $Q_filtro,
+    'accion' => $Q_accion,
+    'prot_num' => $Q_prot_num,
+    'prot_any' => $Q_prot_any,
     // tabs_show
     'vista' => $vista,
 ];

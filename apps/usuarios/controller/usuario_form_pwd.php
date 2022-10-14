@@ -15,16 +15,16 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qpersonal = (integer)\filter_input(INPUT_POST, 'personal');
+$Q_personal = (integer)filter_input(INPUT_POST, 'personal');
 
-$Qscroll_id = (integer)\filter_input(INPUT_POST, 'scroll_id');
-$a_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_scroll_id = (integer)filter_input(INPUT_POST, 'scroll_id');
+$a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 if (!empty($a_sel)) { //vengo de un checkbox
     $id_usuario = (integer)strtok($a_sel[0], "#");
     // el scroll id es de la página anterior, hay que guardarlo allí
     $oPosicion->addParametro('id_sel', $a_sel, 1);
-    $Qscroll_id = (integer)\filter_input(INPUT_POST, 'scroll_id');
-    $oPosicion->addParametro('scroll_id', $Qscroll_id, 1);
+    $Q_scroll_id = (integer)filter_input(INPUT_POST, 'scroll_id');
+    $oPosicion->addParametro('scroll_id', $Q_scroll_id, 1);
     $expire = '';
 } else {
     $expire = $_SESSION['session_auth']['expire'];
@@ -54,7 +54,7 @@ $a_camposHidden = array(
 );
 $oHash->setArraycamposHidden($a_camposHidden);
 
-if ($Qpersonal == 1) {
+if ($Q_personal == 1) {
     $pagina_cancel = web\Hash::link('apps/usuarios/controller/personal.php?' . http_build_query([]));
 } else {
     $pagina_cancel = web\Hash::link('apps/usuarios/controller/usuario_lista.php?' . http_build_query([]));
@@ -70,5 +70,5 @@ $a_campos = [
     'pagina_cancel' => $pagina_cancel,
 ];
 
-$oView = new core\View('usuarios/controller');
-echo $oView->render('usuario_form_pwd.phtml', $a_campos);
+$oView = new core\ViewTwig('usuarios/controller');
+echo $oView->render('usuario_form_pwd.html.twig', $a_campos);

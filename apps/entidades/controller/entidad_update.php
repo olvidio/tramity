@@ -14,15 +14,15 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
 $error_txt = '';
-switch ($Qque) {
+switch ($Q_que) {
     case "eliminar":
-        $a_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
-            $Qid_entidad = (integer)strtok($a_sel[0], "#");
-            $oEntidad = new Entidad (array('id_entidad' => $Qid_entidad));
+            $Q_id_entidad = (integer)strtok($a_sel[0], "#");
+            $oEntidad = new Entidad (array('id_entidad' => $Q_id_entidad));
             // antes de eliminar la entidaddb, hay que eliminar el schema, etherpad i davical.
             // después perderé el nombre del esquema.
             $error_txt .= $oEntidad->eliminarEsquema();
@@ -37,42 +37,42 @@ switch ($Qque) {
         break;
     case "nuevo":
     case "guardar":
-        $Qnombre = (string)\filter_input(INPUT_POST, 'nombre');
+        $Q_nombre = (string)filter_input(INPUT_POST, 'nombre');
 
-        if (empty($Qnombre)) {
+        if (empty($Q_nombre)) {
             $error_txt = _("debe poner un nombre");
         } else {
-            $Qid_entidad = (integer)\filter_input(INPUT_POST, 'id_entidad');
-            $Qschema = (string)\filter_input(INPUT_POST, 'schema');
-            $Qtipo_entidad = (integer)\filter_input(INPUT_POST, 'tipo_entidad');
-            $Qanulado = (bool)\filter_input(INPUT_POST, 'anulado');
+            $Q_id_entidad = (integer)filter_input(INPUT_POST, 'id_entidad');
+            $Q_schema = (string)filter_input(INPUT_POST, 'schema');
+            $Q_tipo_entidad = (integer)filter_input(INPUT_POST, 'tipo_entidad');
+            $Q_anulado = (bool)filter_input(INPUT_POST, 'anulado');
 
-            if (empty($Qid_entidad)) {
+            if (empty($Q_id_entidad)) {
                 $oEntidadDB = new EntidadDB();
             } else {
-                $oEntidadDB = new EntidadDB (array('id_entidad' => $Qid_entidad));
+                $oEntidadDB = new EntidadDB (array('id_entidad' => $Q_id_entidad));
                 $oEntidadDB->DBCarregar();
             }
 
-            $Qschema = empty($Qschema) ? $Qnombre : $Qschema;
+            $Q_schema = empty($Q_schema) ? $Q_nombre : $Q_schema;
             // El nombre del esquema es en minúsculas porque si se accede via nombre del 
             // servidor, éste está en minúscula (agdmontagut.tramity.local)
             // http://www.ietf.org/rfc/rfc2616.txt: Field names are case-insensitive. 
-            $schema = strtolower($Qschema);
+            $schema = strtolower($Q_schema);
             // tambien lo normalizo:
             $schema = StringLocal::toRFC952($schema);
 
-            $oEntidadDB->setNombre($Qnombre);
+            $oEntidadDB->setNombre($Q_nombre);
             $oEntidadDB->setSchema($schema);
-            $oEntidadDB->setTipo($Qtipo_entidad);
-            $oEntidadDB->setAnulado($Qanulado);
+            $oEntidadDB->setTipo($Q_tipo_entidad);
+            $oEntidadDB->setAnulado($Q_anulado);
             if ($oEntidadDB->DBGuardar() === FALSE) {
                 $error_txt .= _("hay un error al guardar");
                 $error_txt .= "\n" . $oEntidadDB->getErrorTxt();
             } else {
                 // En el caso de nuevo, crear el esquema:
                 // Crear el calendario davical ??¿?¿:
-                if ($Qque == 'nuevo') {
+                if ($Q_que == 'nuevo') {
                     $id = $oEntidadDB->getId_entidad();
                     $oEntidad = new Entidad($id);
                     $oEntidad->DBCarregar();

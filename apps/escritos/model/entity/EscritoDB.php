@@ -509,7 +509,7 @@ class EscritoDB extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_escrito de EscritoDB
@@ -521,7 +521,7 @@ class EscritoDB extends core\ClasePropiedades
         $this->iid_escrito = $iid_escrito;
     }
 
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut a_id_grupos de EscritoDB
@@ -557,7 +557,7 @@ class EscritoDB extends core\ClasePropiedades
         $this->a_destinos = $postgresArray;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut sasunto de EscritoDB
@@ -1319,7 +1319,7 @@ class EscritoDB extends core\ClasePropiedades
         $oEscritoDBSet->add($this->getDatosDescripcion());
         return $oEscritoDBSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut json_prot_local de EscritoDB

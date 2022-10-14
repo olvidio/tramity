@@ -13,11 +13,11 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
-switch ($Qque) {
+$Q_que = (string)filter_input(INPUT_POST, 'que');
+switch ($Q_que) {
     case 'get_destinos':
-        $Qid_escrito = (integer)\filter_input(INPUT_POST, 'id_escrito');
-        $oEscrito = new Escrito($Qid_escrito);
+        $Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
+        $oEscrito = new Escrito($Q_id_escrito);
         $a_miembros = $oEscrito->getDestinosIds();
         $gesLugares = new GestorLugar();
         $aLugares = $gesLugares->getArrayLugares();

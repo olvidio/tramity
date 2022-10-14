@@ -33,23 +33,23 @@ require_once("apps/core/global_object.inc");
 
 $oPosicion->recordar();
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
-$Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
-$Qoficina_buscar = (integer)\filter_input(INPUT_POST, 'oficina_buscar');
+$Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
+$Q_oficina_buscar = (integer)filter_input(INPUT_POST, 'oficina_buscar');
 
 $gesCargos = new GestorCargo();
 $a_posibles_cargos = $gesCargos->getArrayCargos();
 //n = 1 -> Entradas
 //n = 2 -> Expedientes
 //n = 3 -> Escritos-propuestas
-switch ($Qque) {
+switch ($Q_que) {
     case 'quitar':
-        $Qid_escrito = (integer)\filter_input(INPUT_POST, 'id_escrito');
-        $Qtipo_antecedente = (string)\filter_input(INPUT_POST, 'tipo_doc');
+        $Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
+        $Q_tipo_antecedente = (string)filter_input(INPUT_POST, 'tipo_doc');
 
-        $a_antecedente = ['tipo' => $Qtipo_antecedente, 'id' => $Qid_escrito];
-        $oExpediente = new Expediente($Qid_expediente);
+        $a_antecedente = ['tipo' => $Q_tipo_antecedente, 'id' => $Q_id_escrito];
+        $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCarregar();
         $oExpediente->delAntecedente($a_antecedente);
         if ($oExpediente->DBGuardar() === FALSE) {
@@ -58,11 +58,11 @@ switch ($Qque) {
         echo $oExpediente->getHtmlAntecedentes();
         break;
     case 'adjuntar':
-        $Qid_escrito = (integer)\filter_input(INPUT_POST, 'id_escrito');
-        $Qtipo_antecedente = (string)\filter_input(INPUT_POST, 'tipo_doc');
+        $Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
+        $Q_tipo_antecedente = (string)filter_input(INPUT_POST, 'tipo_doc');
 
-        $a_antecedente = ['tipo' => $Qtipo_antecedente, 'id' => $Qid_escrito];
-        $oExpediente = new Expediente($Qid_expediente);
+        $a_antecedente = ['tipo' => $Q_tipo_antecedente, 'id' => $Q_id_escrito];
+        $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCarregar();
         $oExpediente->addAntecedente($a_antecedente);
         if ($oExpediente->DBGuardar() === FALSE) {
@@ -73,28 +73,28 @@ switch ($Qque) {
     case 'buscar_entrada':
     case 'buscar_1':
         //n = 1 -> Entradas
-        $Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
-        $Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $Qperiodo = (string)\filter_input(INPUT_POST, 'periodo');
-        $Qorigen_id_lugar = (integer)\filter_input(INPUT_POST, 'origen_id_lugar');
-        $Qorigen_prot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
-        $Qorigen_prot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
-        $Qchk_anulados = (bool)\filter_input(INPUT_POST, 'chk_anulados');
+        $Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
+        $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Q_periodo = (string)filter_input(INPUT_POST, 'periodo');
+        $Q_origen_id_lugar = (integer)filter_input(INPUT_POST, 'origen_id_lugar');
+        $Q_origen_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
+        $Q_origen_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+        $Q_chk_anulados = (bool)filter_input(INPUT_POST, 'chk_anulados');
 
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
         $gesEntradas = new GestorEntrada();
         $aWhere = [];
         $aOperador = [];
-        if (!empty($Qoficina_buscar)) {
-            $aWhere['ponente'] = $Qoficina_buscar;
+        if (!empty($Q_oficina_buscar)) {
+            $aWhere['ponente'] = $Q_oficina_buscar;
         }
-        if (!empty($Qasunto)) {
+        if (!empty($Q_asunto)) {
             // en este caso el operador es 'sin_acentos'
-            $aWhere['asunto_detalle'] = $Qasunto;
+            $aWhere['asunto_detalle'] = $Q_asunto;
         }
 
-        switch ($Qperiodo) {
+        switch ($Q_periodo) {
             case "mes":
                 $periodo = 'P1M';
                 break;
@@ -121,19 +121,19 @@ switch ($Qque) {
         }
 
         // por defecto, buscar sólo 50.
-        if (empty($Qasunto && empty($Qoficina_buscar))) {
+        if (empty($Q_asunto && empty($Q_oficina_buscar))) {
             $aWhere['_limit'] = 50;
         }
         $aWhere['_ordre'] = 'f_entrada DESC';
 
-        if (!empty($Qorigen_id_lugar)) {
+        if (!empty($Q_origen_id_lugar)) {
             $gesEntradas = new GestorEntrada();
-            $id_lugar = $Qorigen_id_lugar;
-            if (!empty($Qorigen_prot_num) && !empty($Qorigen_prot_any)) {
+            $id_lugar = $Q_origen_id_lugar;
+            if (!empty($Q_origen_prot_num) && !empty($Q_origen_prot_any)) {
                 // No tengo en quenta las otras condiciones de la búsqueda
-                $aProt_origen = ['id_lugar' => $Qorigen_id_lugar,
-                    'num' => $Qorigen_prot_num,
-                    'any' => $Qorigen_prot_any,
+                $aProt_origen = ['id_lugar' => $Q_origen_id_lugar,
+                    'num' => $Q_origen_prot_num,
+                    'any' => $Q_origen_prot_any,
                 ];
                 $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
             } else {
@@ -167,7 +167,7 @@ switch ($Qque) {
             $ponente_txt = empty($a_posibles_oficinas[$id_of_ponente]) ? '?' : $a_posibles_oficinas[$id_of_ponente];
 
             $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >ver</span>";
-            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('entrada','$id_entrada','$Qid_expediente');\" >adjuntar</span>";
+            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('entrada','$id_entrada','$Q_id_expediente');\" >adjuntar</span>";
 
             $a_valores[$a][1] = $ver;
             $a_valores[$a][2] = $proto_txt;
@@ -184,34 +184,34 @@ switch ($Qque) {
 
         $gesOficinas = new GestorOficina();
         $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
-        $oDesplOficinas = new web\Desplegable('oficina_buscar', $a_posibles_oficinas, $Qoficina_buscar, TRUE);
+        $oDesplOficinas = new web\Desplegable('oficina_buscar', $a_posibles_oficinas, $Q_oficina_buscar, TRUE);
 
         $gesLugares = new GestorLugar();
-        $a_lugares = $gesLugares->getArrayBusquedas($Qchk_anulados);
+        $a_lugares = $gesLugares->getArrayBusquedas($Q_chk_anulados);
 
         $oDesplOrigen = new Desplegable();
         $oDesplOrigen->setNombre('origen_id_lugar');
         $oDesplOrigen->setBlanco(TRUE);
         $oDesplOrigen->setOpciones($a_lugares);
         $oDesplOrigen->setAction("fnjs_sel_periodo('#origen_id_lugar')");
-        $oDesplOrigen->setOpcion_sel($Qorigen_id_lugar);
+        $oDesplOrigen->setOpcion_sel($Q_origen_id_lugar);
 
-        if (is_true($Qchk_anulados)) {
+        if (is_true($Q_chk_anulados)) {
             $chk_ctr_anulados = 'checked';
         } else {
             $chk_ctr_anulados = '';
         }
 
         // para que no ponga '0'
-        $Qorigen_prot_num = empty($Qorigen_prot_num) ? '' : $Qorigen_prot_num;
+        $Q_origen_prot_num = empty($Q_origen_prot_num) ? '' : $Q_origen_prot_num;
         $a_campos = [
-            'id_expediente' => $Qid_expediente,
+            'id_expediente' => $Q_id_expediente,
             'oDesplOrigen' => $oDesplOrigen,
             'oDesplOficinas' => $oDesplOficinas,
             'oLista' => $oLista,
-            'asunto' => $Qasunto,
-            'prot_num' => $Qorigen_prot_num,
-            'prot_any' => $Qorigen_prot_any,
+            'asunto' => $Q_asunto,
+            'prot_num' => $Q_origen_prot_num,
+            'prot_any' => $Q_origen_prot_any,
             'chk_ctr_anulados' => $chk_ctr_anulados,
         ];
         $oView = new ViewTwig('expedientes/controller');
@@ -220,10 +220,10 @@ switch ($Qque) {
     case 'buscar_expediente':
     case 'buscar_2':
         //n = 2 -> Expediente
-        $Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
-        $QandOr = (string)\filter_input(INPUT_POST, 'andOr');
-        $Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $Qperiodo = (string)\filter_input(INPUT_POST, 'periodo');
+        $Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
+        $Q_andOr = (string)filter_input(INPUT_POST, 'andOr');
+        $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Q_periodo = (string)filter_input(INPUT_POST, 'periodo');
 
         $gesExpediente = new GestorExpediente();
         $aWhere = [];
@@ -250,17 +250,17 @@ switch ($Qque) {
             $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
         }
 
-        $oArrayDesplEtiquetas = new web\DesplegableArray($Qa_etiquetas, $a_posibles_etiquetas, 'etiquetas');
+        $oArrayDesplEtiquetas = new web\DesplegableArray($Q_a_etiquetas, $a_posibles_etiquetas, 'etiquetas');
         $oArrayDesplEtiquetas->setBlanco('t');
         $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
-        $chk_or = ($QandOr == 'OR') ? 'checked' : '';
+        $chk_or = ($Q_andOr == 'OR') ? 'checked' : '';
         // por defecto 'AND':
-        $chk_and = (($QandOr == 'AND') || empty($QandOr)) ? 'checked' : '';
+        $chk_and = (($Q_andOr == 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
-        if (!empty($Qa_etiquetas)) {
+        if (!empty($Q_a_etiquetas)) {
             $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
-            $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($Qa_etiquetas, $QandOr);
+            $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($Q_a_etiquetas, $Q_andOr);
             if (!empty($cExpedientes)) {
                 $aWhere['id_expediente'] = implode(',', $cExpedientes);
                 $aOperador['id_expediente'] = 'IN';
@@ -270,8 +270,8 @@ switch ($Qque) {
             }
         }
 
-        if (!empty($Qasunto)) {
-            $aWhere['asunto'] = $Qasunto;
+        if (!empty($Q_asunto)) {
+            $aWhere['asunto'] = $Q_asunto;
             $aOperador['asunto'] = 'sin_acentos';
         }
         $sel_mes = '';
@@ -279,7 +279,7 @@ switch ($Qque) {
         $sel_any_1 = '';
         $sel_any_2 = '';
         $sel_siempre = '';
-        switch ($Qperiodo) {
+        switch ($Q_periodo) {
             case "mes_6":
                 $sel_mes_6 = 'selected';
                 $periodo = 'P6M';
@@ -309,7 +309,7 @@ switch ($Qque) {
         }
 
         // por defecto, buscar sólo 50.
-        if (empty($Qasunto && empty($Qoficina_buscar))) {
+        if (empty($Q_asunto && empty($Q_oficina_buscar))) {
             $aWhere['_limit'] = 50;
         }
         $aWhere['_ordre'] = 'f_aprobacion DESC';
@@ -338,7 +338,7 @@ switch ($Qque) {
             $ponente_txt = $a_posibles_cargos[$ponente];
 
             $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_expediente('$id_expediente');\" >ver</span>";
-            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('expediente','$id_expediente','$Qid_expediente');\" >adjuntar</span>";
+            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('expediente','$id_expediente','$Q_id_expediente');\" >adjuntar</span>";
 
             $a_valores[$a][1] = $ver;
             $a_valores[$a][2] = $fecha_txt;
@@ -354,11 +354,11 @@ switch ($Qque) {
         $oLista->setDatos($a_valores);
 
         $a_campos = [
-            'id_expediente' => $Qid_expediente,
+            'id_expediente' => $Q_id_expediente,
             'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
             'chk_and' => $chk_and,
             'chk_or' => $chk_or,
-            'asunto' => $Qasunto,
+            'asunto' => $Q_asunto,
             'sel_mes' => $sel_mes,
             'sel_mes_6' => $sel_mes_6,
             'sel_any_1' => $sel_any_1,
@@ -373,13 +373,13 @@ switch ($Qque) {
     case 'buscar_escrito':
     case 'buscar_3':
         //n = 3 -> Escrito
-        $Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
-        $Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $Qperiodo = (string)\filter_input(INPUT_POST, 'periodo');
-        $Qdest_id_lugar = (integer)\filter_input(INPUT_POST, 'dest_id_lugar');
-        $Qlocal_prot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
-        $Qlocal_prot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
-        $Qchk_anulados = (bool)\filter_input(INPUT_POST, 'chk_anulados');
+        $Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
+        $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Q_periodo = (string)filter_input(INPUT_POST, 'periodo');
+        $Q_dest_id_lugar = (integer)filter_input(INPUT_POST, 'dest_id_lugar');
+        $Q_local_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
+        $Q_local_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+        $Q_chk_anulados = (bool)filter_input(INPUT_POST, 'chk_anulados');
 
         $gesEscrito = new GestorEscrito();
         $aWhere = [];
@@ -387,12 +387,12 @@ switch ($Qque) {
         // Sólo los escritos que ya se han enviado
         $aWhere['f_salida'] = 'x';
         $aOperador['f_salida'] = 'IS NOT NULL';
-        if (!empty($Qoficina_buscar)) {
-            $aWhere['creador'] = $Qoficina_buscar;
+        if (!empty($Q_oficina_buscar)) {
+            $aWhere['creador'] = $Q_oficina_buscar;
         }
-        if (!empty($Qasunto)) {
+        if (!empty($Q_asunto)) {
             // en este caso el operador es 'sin_acentos'
-            $aWhere['asunto_detalle'] = $Qasunto;
+            $aWhere['asunto_detalle'] = $Q_asunto;
         }
 
         $sel_mes = '';
@@ -400,7 +400,7 @@ switch ($Qque) {
         $sel_any_1 = '';
         $sel_any_2 = '';
         $sel_siempre = '';
-        switch ($Qperiodo) {
+        switch ($Q_periodo) {
             case "mes_6":
                 $sel_mes_6 = 'selected';
                 $periodo = 'P6M';
@@ -430,14 +430,14 @@ switch ($Qque) {
         }
 
         // por defecto, buscar sólo 50.
-        if (empty($Qasunto && empty($Qoficina_buscar))) {
+        if (empty($Q_asunto && empty($Q_oficina_buscar))) {
             $aWhere['_limit'] = 50;
         }
         $aWhere['_ordre'] = 'f_aprobacion DESC';
 
-        if (!empty($Qdest_id_lugar)) {
+        if (!empty($Q_dest_id_lugar)) {
             $gesEscritos = new GestorEscrito();
-            $id_lugar = $Qdest_id_lugar;
+            $id_lugar = $Q_dest_id_lugar;
             $cEscritos = $gesEscritos->getEscritosByLugarDB($id_lugar, $aWhere, $aOperador);
         } else {
             $cEscritos1 = $gesEscrito->getEscritos($aWhere, $aOperador);
@@ -452,12 +452,12 @@ switch ($Qque) {
         }
 
         // No tengo en quenta las otras condiciones de la búsqueda
-        if (!empty($Qlocal_prot_num) && !empty($Qlocal_prot_any)) {
+        if (!empty($Q_local_prot_num) && !empty($Q_local_prot_any)) {
             $gesLugares = new GestorLugar();
             $id_sigla_local = $gesLugares->getId_sigla_local();
             $aProt_local = ['id_lugar' => $id_sigla_local,
-                'num' => $Qlocal_prot_num,
-                'any' => $Qlocal_prot_any,
+                'num' => $Q_local_prot_num,
+                'any' => $Q_local_prot_any,
             ];
             $gesEscritos = new GestorEscrito();
             $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
@@ -488,7 +488,7 @@ switch ($Qque) {
             $ponente_txt = empty($a_posibles_cargos[$ponente]) ? '?' : $a_posibles_cargos[$ponente];
 
             $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >ver</span>";
-            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('escrito','$id_escrito','$Qid_expediente');\" >adjuntar</span>";
+            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('escrito','$id_escrito','$Q_id_expediente');\" >adjuntar</span>";
 
             $a_valores[$a][1] = $ver;
             $a_valores[$a][2] = $proto_txt;
@@ -504,17 +504,17 @@ switch ($Qque) {
         $oLista->setCabeceras($a_cabeceras);
         $oLista->setDatos($a_valores);
 
-        $oDesplCargos = new web\Desplegable('oficina_buscar', $a_posibles_cargos, $Qoficina_buscar, TRUE);
+        $oDesplCargos = new web\Desplegable('oficina_buscar', $a_posibles_cargos, $Q_oficina_buscar, TRUE);
 
         $gesLugares = new GestorLugar();
-        $a_lugares = $gesLugares->getArrayBusquedas($Qchk_anulados);
+        $a_lugares = $gesLugares->getArrayBusquedas($Q_chk_anulados);
         $oDesplDestino = new Desplegable();
         $oDesplDestino->setNombre('dest_id_lugar');
         $oDesplDestino->setBlanco(TRUE);
         $oDesplDestino->setOpciones($a_lugares);
-        $oDesplDestino->setOpcion_sel($Qdest_id_lugar);
+        $oDesplDestino->setOpcion_sel($Q_dest_id_lugar);
 
-        if (is_true($Qchk_anulados)) {
+        if (is_true($Q_chk_anulados)) {
             $chk_ctr_anulados = 'checked';
         } else {
             $chk_ctr_anulados = '';
@@ -523,21 +523,21 @@ switch ($Qque) {
         $sigla = $_SESSION['oConfig']->getSigla();
 
         // para que no ponga '0'
-        $Qlocal_prot_num = empty($Qlocal_prot_num) ? '' : $Qlocal_prot_num;
+        $Q_local_prot_num = empty($Q_local_prot_num) ? '' : $Q_local_prot_num;
         $a_campos = [
-            'id_expediente' => $Qid_expediente,
+            'id_expediente' => $Q_id_expediente,
             'oDesplCargos' => $oDesplCargos,
             'oDesplDestino' => $oDesplDestino,
             'oLista' => $oLista,
-            'asunto' => $Qasunto,
+            'asunto' => $Q_asunto,
             'sel_mes' => $sel_mes,
             'sel_mes_6' => $sel_mes_6,
             'sel_any_1' => $sel_any_1,
             'sel_any_2' => $sel_any_2,
             'sel_siempre' => $sel_siempre,
             'sigla' => $sigla,
-            'prot_num' => $Qlocal_prot_num,
-            'prot_any' => $Qlocal_prot_any,
+            'prot_num' => $Q_local_prot_num,
+            'prot_any' => $Q_local_prot_any,
             'chk_ctr_anulados' => $chk_ctr_anulados,
         ];
         $oView = new ViewTwig('expedientes/controller');
@@ -547,11 +547,11 @@ switch ($Qque) {
     case 'buscar_4':
         //n = 4 -> Documento
         //n = 5 -> Documento Etherpad (insertar)
-        $Qtipo_n = (string)\filter_input(INPUT_POST, 'tipo_n');
-        $Qnom = (string)\filter_input(INPUT_POST, 'nom');
-        $QandOr = (string)\filter_input(INPUT_POST, 'andOr');
-        $Qa_etiquetas = (array)\filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        $Qperiodo = (string)\filter_input(INPUT_POST, 'periodo');
+        $Q_tipo_n = (string)filter_input(INPUT_POST, 'tipo_n');
+        $Q_nom = (string)filter_input(INPUT_POST, 'nom');
+        $Q_andOr = (string)filter_input(INPUT_POST, 'andOr');
+        $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $Q_periodo = (string)filter_input(INPUT_POST, 'periodo');
 
         $gesDocumento = new GestorDocumento();
         $aWhere = [];
@@ -578,17 +578,17 @@ switch ($Qque) {
             $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
         }
 
-        $oArrayDesplEtiquetas = new web\DesplegableArray($Qa_etiquetas, $a_posibles_etiquetas, 'etiquetas');
+        $oArrayDesplEtiquetas = new web\DesplegableArray($Q_a_etiquetas, $a_posibles_etiquetas, 'etiquetas');
         $oArrayDesplEtiquetas->setBlanco('t');
         $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
-        $chk_or = ($QandOr == 'OR') ? 'checked' : '';
+        $chk_or = ($Q_andOr == 'OR') ? 'checked' : '';
         // por defecto 'AND':
-        $chk_and = (($QandOr == 'AND') || empty($QandOr)) ? 'checked' : '';
+        $chk_and = (($Q_andOr == 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
-        if (!empty($Qa_etiquetas)) {
+        if (!empty($Q_a_etiquetas)) {
             $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
-            $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($Qa_etiquetas, $QandOr);
+            $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($Q_a_etiquetas, $Q_andOr);
             if (!empty($cDocumentos)) {
                 $aWhere['id_doc'] = implode(',', $cDocumentos);
                 $aOperador['id_doc'] = 'IN';
@@ -598,8 +598,8 @@ switch ($Qque) {
             }
         }
 
-        if (!empty($Qnom)) {
-            $aWhere['nom'] = $Qnom;
+        if (!empty($Q_nom)) {
+            $aWhere['nom'] = $Q_nom;
             $aOperador['nom'] = 'sin_acentos';
         }
         $sel_mes = '';
@@ -607,7 +607,7 @@ switch ($Qque) {
         $sel_any_1 = '';
         $sel_any_2 = '';
         $sel_siempre = '';
-        switch ($Qperiodo) {
+        switch ($Q_periodo) {
             case "mes_6":
                 $sel_mes_6 = 'selected';
                 $periodo = 'P6M';
@@ -637,7 +637,7 @@ switch ($Qque) {
         }
 
         // por defecto, buscar sólo 50.
-        if (empty($Qnom && empty($Qoficina_buscar))) {
+        if (empty($Q_nom && empty($Q_oficina_buscar))) {
             $aWhere['_limit'] = 50;
         }
         $aWhere['_ordre'] = 'f_upload DESC';
@@ -653,7 +653,7 @@ switch ($Qque) {
         $a = 0;
         foreach ($cDocumentos as $oDocumento) {
             // Si sólo quiero los etherpad, quitar el resto:
-            if ($Qtipo_n == 5 && $oDocumento->getTipo_doc() != Documento::DOC_ETHERPAD) {
+            if ($Q_tipo_n == 5 && $oDocumento->getTipo_doc() != Documento::DOC_ETHERPAD) {
                 continue;
             }
             // mirar permisos...
@@ -672,7 +672,7 @@ switch ($Qque) {
 
             $creador = $a_posibles_cargos[$id_creador];
 
-            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('documento','$id_doc','$Qid_expediente');\" >adjuntar</span>";
+            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('documento','$id_doc','$Q_id_expediente');\" >adjuntar</span>";
 
             $a_valores[$a][1] = $fecha_txt;
             $a_valores[$a][2] = $oDocumento->getNom();
@@ -686,12 +686,12 @@ switch ($Qque) {
         $oLista->setDatos($a_valores);
 
         $a_campos = [
-            'id_expediente' => $Qid_expediente,
+            'id_expediente' => $Q_id_expediente,
             'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
             'chk_and' => $chk_and,
             'chk_or' => $chk_or,
-            'tipo_n' => $Qtipo_n,
-            'nom' => $Qnom,
+            'tipo_n' => $Q_tipo_n,
+            'nom' => $Q_nom,
             'sel_mes' => $sel_mes,
             'sel_mes_6' => $sel_mes_6,
             'sel_any_1' => $sel_any_1,
@@ -704,8 +704,8 @@ switch ($Qque) {
         echo $oView->renderizar('modal_buscar_documentos.html.twig', $a_campos);
         break;
     case 'buscar_expediente_borrador':
-        $Qasunto_buscar = (string)\filter_input(INPUT_POST, 'asunto_buscar');
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+        $Q_asunto_buscar = (string)filter_input(INPUT_POST, 'asunto_buscar');
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         // Expediente de mi oficina en borrador
         $gesExpediente = new GestorExpediente();
         $aWhere = [];
@@ -725,7 +725,7 @@ switch ($Qque) {
             $aOperador['ponente'] = 'IN';
         }
         // por defecto, buscar sólo 15.
-        if (empty($Qasunto_buscar)) {
+        if (empty($Q_asunto_buscar)) {
             $aWhere['_limit'] = 15;
         }
         $aWhere['_ordre'] = 'f_aprobacion DESC';
@@ -747,7 +747,7 @@ switch ($Qque) {
             $ponente_txt = $a_posibles_cargos[$ponente];
 
             $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_expediente('$id_expediente');\" >" . _("ver") . "</span>";
-            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('entrada','$Qid_entrada','$id_expediente');\" >" . _("adjuntar") . "</span>";
+            $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_antecedente('entrada','$Q_id_entrada','$id_expediente');\" >" . _("adjuntar") . "</span>";
 
             $a_valores[$a][1] = $ver;
             $a_valores[$a][2] = $fecha_txt;

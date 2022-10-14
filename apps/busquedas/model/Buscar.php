@@ -147,7 +147,7 @@ class Buscar
             case 'proto':
                 // En los centros, no busco en entradas, sino en emtradas_compartidas y
                 // veo si el centro está en los destinos.
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $aWhereEntrada = [];
                     $aOperadorEntrada = [];
                     // por asunto
@@ -200,7 +200,7 @@ class Buscar
                 // por año
                 // En los centros, no busco en entradas, sino en entradas_compartidas y
                 // veo si el centro está en los destinos.
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $aWhereEntrada = [];
                     $aOperadorEntrada = [];
                     $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
@@ -237,7 +237,7 @@ class Buscar
             case 'lst_todos':
                 // En los centros, no busco en entradas, sino en entradas_compartidas y
                 // veo si el centro está en los destinos.
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $aWhereEntrada = [];
                     $aOperadorEntrada = [];
                     $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
@@ -360,8 +360,8 @@ class Buscar
                 return $aCollections;
                 break;
             case 1:    // Listado de los últimos
-                $Qantiguedad = (string)\filter_input(INPUT_POST, 'antiguedad');
-                $Qorigen_id_lugar = (integer)\filter_input(INPUT_POST, 'origen_id_lugar');
+                $Q_antiguedad = (string)filter_input(INPUT_POST, 'antiguedad');
+                $Q_origen_id_lugar = (integer)filter_input(INPUT_POST, 'origen_id_lugar');
                 $aWhereEntrada = [];
                 $aOperadorEntrada = [];
                 $aWhereEscrito = [];
@@ -369,8 +369,8 @@ class Buscar
 
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';
-                if (!empty($Qantiguedad)) {
-                    switch ($Qantiguedad) {
+                if (!empty($Q_antiguedad)) {
+                    switch ($Q_antiguedad) {
                         case "1m":
                             $limite = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, date("d"), date("Y")));
                             break;
@@ -407,17 +407,17 @@ class Buscar
                     $aOperadorEscrito['f_aprobacion'] = 'IS NOT NULL';
                 }
 
-                if (!empty($Qorigen_id_lugar)) {
+                if (!empty($Q_origen_id_lugar)) {
                     // Caso especial de querer ver los escritos de la dl. No se consulta en las entradas, sino salidas.
                     // se omiten los de distribución de cr.
-                    if ($Qorigen_id_lugar == $this->local_id_lugar) {
+                    if ($Q_origen_id_lugar == $this->local_id_lugar) {
                         $this->setF_min($limite, FALSE);
                         $cEscritos = $this->buscarEscritos();
                         $aCollections['escritos'] = $cEscritos;
                     } else {
                         $aWhereEntrada['_ordre'] = 'f_entrada';
                         $gesEntradas = new GestorEntradaDB();
-                        $cEntradas = $gesEntradas->getEntradasByLugarDB($Qorigen_id_lugar, $aWhereEntrada, $aOperadorEntrada);
+                        $cEntradas = $gesEntradas->getEntradasByLugarDB($Q_origen_id_lugar, $aWhereEntrada, $aOperadorEntrada);
                         $aCollections['entradas'] = $cEntradas;
                     }
                 } else {

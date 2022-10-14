@@ -61,11 +61,11 @@ class Config
         return $oConfigSchema->getValor();
     }
 
-    public function getAmbito()
+    public function getAmbito(): int
     {
         $parametro = 'ambito';
         $oConfigSchema = new ConfigSchema($parametro);
-        return $oConfigSchema->getValor();
+        return (integer)$oConfigSchema->getValor();
     }
 
     public function getContador($sigla = '')

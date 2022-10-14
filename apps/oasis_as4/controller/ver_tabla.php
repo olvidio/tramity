@@ -14,48 +14,48 @@ require_once("apps/core/global_header.inc");
 require_once("apps/core/global_object.inc");
 // Crea los objetos por esta url  **********************************************
 
-$Qaccion = (string)\filter_input(INPUT_POST, 'accion');
-$Qmas = (integer)\filter_input(INPUT_POST, 'mas');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Q_accion = (string)filter_input(INPUT_POST, 'accion');
+$Q_mas = (integer)filter_input(INPUT_POST, 'mas');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
 $gesLugares = new GestorLugar();
 $id_sigla_local = $gesLugares->getId_sigla_local();
 
-$filtro = empty($Qfiltro) ? 'mantenimiento' : $Qfiltro;
-$Qmas = '';
-$Qopcion = 7;
+$filtro = empty($Q_filtro) ? 'mantenimiento' : $Q_filtro;
+$Q_mas = '';
+$Q_opcion = 7;
 $a_condicion = []; // para poner los parámetros de la búsqueda y poder actualizar la página.
-$a_condicion['opcion'] = $Qopcion;
-$a_condicion['accion'] = $Qaccion;
+$a_condicion['opcion'] = $Q_opcion;
+$a_condicion['accion'] = $Q_accion;
 
 // un protocolo concreto:
-$Qid_lugar = (integer)\filter_input(INPUT_POST, 'id_lugar');
-$Qprot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
-$Qprot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+$Q_id_lugar = (integer)filter_input(INPUT_POST, 'id_lugar');
+$Q_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
+$Q_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 
-$Qprot_any = core\any_2($Qprot_any);
+$Q_prot_any = core\any_2($Q_prot_any);
 
-$a_condicion['id_lugar'] = $Qid_lugar;
-$a_condicion['prot_num'] = $Qprot_num;
-$a_condicion['prot_any'] = $Qprot_any;
+$a_condicion['id_lugar'] = $Q_id_lugar;
+$a_condicion['prot_num'] = $Q_prot_num;
+$a_condicion['prot_any'] = $Q_prot_any;
 $str_condicion = http_build_query($a_condicion);
 
 $oBuscar = new Buscar();
 $oBuscar->setId_sigla($id_sigla_local);
-$oBuscar->setId_lugar($Qid_lugar);
-$oBuscar->setProt_num($Qprot_num);
-$oBuscar->setProt_any($Qprot_any);
+$oBuscar->setId_lugar($Q_id_lugar);
+$oBuscar->setProt_num($Q_prot_num);
+$oBuscar->setProt_any($Q_prot_any);
 
-$aCollection = $oBuscar->getCollection($Qopcion, $Qmas);
+$aCollection = $oBuscar->getCollection($Q_opcion, $Q_mas);
 foreach ($aCollection as $key => $cCollection) {
-    if ($Qaccion == As4CollaborationInfo::ACCION_ORDEN_ANULAR) {
+    if ($Q_accion == As4CollaborationInfo::ACCION_ORDEN_ANULAR) {
         $a_botones = [
-            ['txt' => _('enviar orden anular'), 'click' => "fnjs_orden_a_plataforma(\"#$key\",\"$Qaccion\")"],
+            ['txt' => _('enviar orden anular'), 'click' => "fnjs_orden_a_plataforma(\"#$key\",\"$Q_accion\")"],
         ];
     }
-    if ($Qaccion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
+    if ($Q_accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
         $a_botones = [
-            ['txt' => _('enviar orden reemplazar'), 'click' => "fnjs_orden_a_plataforma(\"#$key\",\"$Qaccion\")"],
+            ['txt' => _('enviar orden reemplazar'), 'click' => "fnjs_orden_a_plataforma(\"#$key\",\"$Q_accion\")"],
         ];
     }
 

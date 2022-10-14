@@ -24,8 +24,8 @@ exit(); // terminate
 // returns associative array
 function upload()
 {
-    $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-    $Qid_item = (integer)\filter_input(INPUT_POST, 'id_item');
+    $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+    $Qid_item = (integer)filter_input(INPUT_POST, 'id_item');
 
     $preview = [];
     $config = [];

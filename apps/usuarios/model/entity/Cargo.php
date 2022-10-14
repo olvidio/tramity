@@ -332,8 +332,8 @@ class Cargo extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_cargo de Cargo
@@ -355,7 +355,7 @@ class Cargo extends core\ClasePropiedades
         $this->iid_ambito = $iid_ambito;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut scargo de Cargo
@@ -631,7 +631,7 @@ class Cargo extends core\ClasePropiedades
         $oCargoSet->add($this->getDatosId_suplente());
         return $oCargoSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut iid_ambito de Cargo

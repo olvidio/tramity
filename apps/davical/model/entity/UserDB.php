@@ -357,8 +357,8 @@ class UserDB extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iuser_no de UserDB
@@ -380,7 +380,7 @@ class UserDB extends core\ClasePropiedades
         $this->bactive = $bactive;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut demail_ok de UserDB
@@ -805,7 +805,7 @@ class UserDB extends core\ClasePropiedades
         $oUserDBSet->add($this->getDatosLocale());
         return $oUserDBSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut bactive de UserDB

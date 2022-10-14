@@ -28,20 +28,20 @@ require_once("apps/core/global_object.inc");
 // ----------------------------------------------------------------------------------------------
 /* Resetear valores iniciales */
 
-$Qid_lugar_org = (string)\filter_input(INPUT_POST, 'id_lugar_org');
-$Qprot_num_org = (string)\filter_input(INPUT_POST, 'prot_num_org');
-$Qprot_any_org = (string)\filter_input(INPUT_POST, 'prot_any_org');
+$Q_id_lugar_org = (string)filter_input(INPUT_POST, 'id_lugar_org');
+$Q_prot_num_org = (string)filter_input(INPUT_POST, 'prot_num_org');
+$Q_prot_any_org = (string)filter_input(INPUT_POST, 'prot_any_org');
 
-$Qid_lugar_dst = (string)\filter_input(INPUT_POST, 'id_lugar_dst');
-$Qprot_num_dst = (string)\filter_input(INPUT_POST, 'prot_num_dst');
-$Qprot_any_dst = (string)\filter_input(INPUT_POST, 'prot_any_dst');
+$Q_id_lugar_dst = (string)filter_input(INPUT_POST, 'id_lugar_dst');
+$Q_prot_num_dst = (string)filter_input(INPUT_POST, 'prot_num_dst');
+$Q_prot_any_dst = (string)filter_input(INPUT_POST, 'prot_any_dst');
 
 $gesEntradas = new GestorEntrada();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
 
 // busacr id_entrada del prot origen
-$aProt_origen = ['id_lugar' => $Qid_lugar_org,
-    'num' => $Qprot_num_org,
-    'any' => $Qprot_any_org,
+$aProt_origen = ['id_lugar' => $Q_id_lugar_org,
+    'num' => $Q_prot_num_org,
+    'any' => $Q_prot_any_org,
     'mas' => '',
 ];
 $aWhere = ['bypass' => 'f', 'anulado' => 'x'];
@@ -81,9 +81,9 @@ if (empty($msg)) {
 }
 
 // buscar id_entrada del prot destino
-$aProt_dst = ['id_lugar' => $Qid_lugar_dst,
-    'num' => $Qprot_num_dst,
-    'any' => $Qprot_any_dst,
+$aProt_dst = ['id_lugar' => $Q_id_lugar_dst,
+    'num' => $Q_prot_num_dst,
+    'any' => $Q_prot_any_dst,
     'mas' => '',
 ];
 $aWhere = ['bypass' => 'f', 'anulado' => 'x'];

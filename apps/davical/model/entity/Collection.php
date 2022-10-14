@@ -221,7 +221,7 @@ class Collection extends core\ClasePropiedades
         }
 
         // registro
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $dav_name_new = $parent_container_new . "registro/";
             $dav_name_old = $parent_container_old . "registro/";
             $sQry = "UPDATE $nom_tabla SET parent_container='$parent_container_new', dav_name='$dav_name_new'
@@ -452,8 +452,8 @@ class Collection extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iuser_no de Collection
@@ -475,7 +475,7 @@ class Collection extends core\ClasePropiedades
         $this->sparent_container = $sparent_container;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut sdav_name de Collection
@@ -976,7 +976,7 @@ class Collection extends core\ClasePropiedades
         $oCollectionSet->add($this->getDatosDescription());
         return $oCollectionSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut iuser_no de Collection

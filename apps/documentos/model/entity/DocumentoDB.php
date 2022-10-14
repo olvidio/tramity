@@ -361,8 +361,8 @@ class DocumentoDB extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_doc de Documento
@@ -384,7 +384,7 @@ class DocumentoDB extends core\ClasePropiedades
         $this->snom = $snom;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut snombre_fichero de Documento
@@ -655,7 +655,7 @@ class DocumentoDB extends core\ClasePropiedades
         $oDocumentoSet->add($this->getDatosDocumento());
         return $oDocumentoSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut snom de Documento

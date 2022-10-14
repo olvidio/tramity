@@ -179,7 +179,7 @@ class EscritoLista
         }
 
         $vista_dl = TRUE;
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $vista_dl = FALSE;
         }
 
@@ -308,7 +308,11 @@ class EscritoLista
                             $a_accion['enviar'] = _("en secretaría");
                             $enviado = TRUE;
                         } else {
-                            $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_a_secretaria('$id_escrito');\" >" . _("pasar a secretaría") . "</span>";
+                            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                                $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito('$id_escrito');\" >" . _("enviar") . "</span>";
+                            } else {
+                                $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_a_secretaria('$id_escrito');\" >" . _("pasar a secretaría") . "</span>";
+                            }
                         }
                     }
                 } else {

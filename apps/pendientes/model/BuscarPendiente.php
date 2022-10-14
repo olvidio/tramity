@@ -114,7 +114,7 @@ class BuscarPendiente
         $gesCalendarItem = new GestorCalendarItem();
         $cCalendarItems = $gesCalendarItem->getCalendarItemsQuery($sql_pen);
 
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             // solo secretaría puede ver/crear pendientes de otras oficinas
             $user_davical = $oDavical->getUsernameDavicalSecretaria();
         } else {

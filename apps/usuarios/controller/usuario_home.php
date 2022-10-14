@@ -30,8 +30,8 @@ $username = $_SESSION['session_auth']['username'];
 $oUsuario = new Usuario(ConfigGlobal::mi_id_usuario());
 $username = empty($oUsuario->getNom_usuario()) ? $username : $oUsuario->getNom_usuario();
 
-$Qtabs = (string)\filter_input(INPUT_POST, 'tabs');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Q_tabs = (string)filter_input(INPUT_POST, 'tabs');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
 $a_pills = [];
 //Diferentes filtros:
@@ -39,7 +39,7 @@ $a_pills = [];
 
 $oExpedienteLista = new ExpedienteLista();
 $filtro = 'borrador_propio';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 1;
@@ -60,7 +60,7 @@ $a_pills[$num_orden] = $pill;
 
 // borrador_oficina = 2
 $filtro = 'borrador_oficina';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 2;
@@ -81,7 +81,7 @@ $a_pills[$num_orden] = $pill;
 
 // firmar = 3
 $filtro = 'firmar';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 3;
@@ -102,7 +102,7 @@ $a_pills[$num_orden] = $pill;
 
 // reunion = 4
 $filtro = 'reunion';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 4;
@@ -123,7 +123,7 @@ $a_pills[$num_orden] = $pill;
 
 // circular = 5
 $filtro = 'circulando';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 5;
@@ -145,7 +145,7 @@ $a_pills[$num_orden] = $pill;
 if (is_true(ConfigGlobal::soy_dtor())) {
     // acabados = 7
     $filtro = 'acabados';
-    $active = ($filtro == $Qfiltro) ? 'active' : '';
+    $active = ($filtro == $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
     $num_orden = 7;
@@ -166,7 +166,7 @@ if (is_true(ConfigGlobal::soy_dtor())) {
 }
 // acabados = 7.1
 $filtro = 'acabados_encargados';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 8;
@@ -187,7 +187,7 @@ $a_pills[$num_orden] = $pill;
 
 // archivados = 9
 $filtro = 'archivados';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 9;
@@ -211,7 +211,7 @@ $a_pills[$num_orden] = $pill;
 
 // copias = 10
 $filtro = 'copias';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 10;
@@ -236,7 +236,7 @@ $a_pills[$num_orden] = $pill;
 if (ConfigGlobal::role_actual() === 'vcd') {
     // entradas = 11
     $filtro = 'en_ingresado';
-    $active = ($filtro == $Qfiltro) ? 'active' : '';
+    $active = ($filtro == $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($aQuery));
     $num_orden = 11;
@@ -261,7 +261,7 @@ if (ConfigGlobal::role_actual() === 'vcd') {
 if (is_true(ConfigGlobal::soy_dtor())) {
     // entradas = 12
     $filtro = 'en_aceptado';
-    $active = ($filtro == $Qfiltro) ? 'active' : '';
+    $active = ($filtro == $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($aQuery));
     $num_orden = 12;
@@ -284,7 +284,7 @@ if (is_true(ConfigGlobal::soy_dtor())) {
 
 // entradas = 13
 $filtro = 'en_encargado';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($aQuery));
 $num_orden = 13;
@@ -306,7 +306,7 @@ $a_pills[$num_orden] = $pill;
 
 // buscar = 20
 $filtro = 'en_buscar';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($aQuery));
 $num_orden = 20;
@@ -327,7 +327,7 @@ $a_pills[$num_orden] = $pill;
 if (is_true(ConfigGlobal::soy_dtor())) {
     // escritos_cr = 21
     $filtro = 'escritos_cr';
-    $active = ($filtro == $Qfiltro) ? 'active' : '';
+    $active = ($filtro == $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro, 'opcion' => 51];
     $pag_lst = web\Hash::link('apps/busquedas/controller/ver_tabla.php?' . http_build_query($aQuery));
     $num_orden = 21;
@@ -348,7 +348,7 @@ if (is_true(ConfigGlobal::soy_dtor())) {
 
 // buscar = 22
 $filtro = 'permanentes_cr';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?' . http_build_query($aQuery));
 $num_orden = 22;
@@ -368,7 +368,7 @@ $a_pills[$num_orden] = $pill;
 
 // pendientes = 30
 $filtro = 'pendientes';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro,
     'periodo' => 'hoy',
 ];
@@ -391,7 +391,7 @@ $a_pills[$num_orden] = $pill;
 
 // documentos = 40
 $filtro = 'documentos';
-$active = ($filtro == $Qfiltro) ? 'active' : '';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro,
 ];
 $pag_lst = web\Hash::link('apps/documentos/controller/documentos_lista.php?' . http_build_query($aQuery));
@@ -439,7 +439,7 @@ $a_campos = [
 ];
 $oView = new ViewTwig('usuarios/controller');
 
-if (empty($Qtabs)) {
+if (empty($Q_tabs)) {
     echo $oView->renderizar('usuario_home.html.twig', $a_campos);
 } else {
     echo $oView->renderizar('usuario_tabs.html.twig', $a_campos);

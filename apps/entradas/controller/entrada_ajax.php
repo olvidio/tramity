@@ -31,14 +31,14 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Qque = (string)filter_input(INPUT_POST, 'que');
 switch ($Qque) {
     case As4CollaborationInfo::ACCION_REEMPLAZAR:
         $plataforma = $_SESSION['oConfig']->getPlataformaMantenimiento();
         $error_txt = '';
         // id_entrada formato: tabla#id_reg
-        $Qid_entrada = (string)\filter_input(INPUT_POST, 'id_entrada');
-        $Qelim_pendientes = (integer)\filter_input(INPUT_POST, 'elim_pendientes');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
         // En el caso de reemplazar, no se prgunta el motivo. Siempre es:
         $Qtext = _("por n.v.");
 
@@ -91,9 +91,9 @@ switch ($Qque) {
         $plataforma = $_SESSION['oConfig']->getPlataformaMantenimiento();
         $error_txt = '';
         // id_entrada formato: tabla#id_reg
-        $Qid_entrada = (string)\filter_input(INPUT_POST, 'id_entrada');
-        $Qtext = (string)\filter_input(INPUT_POST, 'text');
-        $Qelim_pendientes = (integer)\filter_input(INPUT_POST, 'elim_pendientes');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $Qtext = (string)filter_input(INPUT_POST, 'text');
+        $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
 
         $tipo_escritos = strtok($Qid_entrada, '#');
         // hay que quitar la 's' del final
@@ -141,7 +141,7 @@ switch ($Qque) {
         exit();
         break;
     case 'perm_ver':
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $oEntrada = new Entrada($Qid_entrada);
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($oEntrada, 'escrito');
@@ -166,9 +166,9 @@ switch ($Qque) {
         break;
     case 'modificar_anular':
         $error_txt = '';
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-        $Qtext = (string)\filter_input(INPUT_POST, 'text');
-        $Qelim_pendientes = (integer)\filter_input(INPUT_POST, 'elim_pendientes');
+        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qtext = (string)filter_input(INPUT_POST, 'text');
+        $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
 
         $oEntrada = new Entrada($Qid_entrada);
         $oEntrada->DBCarregar();
@@ -205,8 +205,8 @@ switch ($Qque) {
         break;
     case 'modificar_detalle':
         $error_txt = '';
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-        $Qdetalle = (string)\filter_input(INPUT_POST, 'text');
+        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qdetalle = (string)filter_input(INPUT_POST, 'text');
         $oEntrada = new Entrada($Qid_entrada);
         $oEntrada->DBCarregar();
         $oEntrada->setDetalle($Qdetalle);
@@ -227,7 +227,7 @@ switch ($Qque) {
         exit();
         break;
     case 'get_anular':
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $oEntrada = new Entrada($Qid_entrada);
         $anulado = $oEntrada->getAnulado();
         $mensaje = '';
@@ -246,7 +246,7 @@ switch ($Qque) {
         exit();
         break;
     case 'get_detalle':
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $oEntrada = new Entrada($Qid_entrada);
         $mensaje = '';
         $oPermiso = new PermRegistro();
@@ -269,7 +269,7 @@ switch ($Qque) {
         exit();
         break;
     case 'get_destinos':
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $oEntradaBypass = new EntradaBypass($Qid_entrada);
         $a_destinos = $oEntradaBypass->getDestinosByPass();
         $a_miembros = $a_destinos['miembros'];
@@ -298,7 +298,7 @@ switch ($Qque) {
     case 'comprobar_pdte': //antes de eliminar
         $bypass_txt = '';
         $pendientes_txt = '';
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         // Comprobar si tiene pendientes
         $gesPendientes = new GestorPendienteEntrada();
         $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
@@ -327,7 +327,7 @@ switch ($Qque) {
     case 'comprobar': //antes de eliminar
         $bypass_txt = '';
         $pendientes_txt = '';
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         // Comprobar si tiene pendientes
         $gesPendientes = new GestorPendienteEntrada();
         $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
@@ -361,7 +361,7 @@ switch ($Qque) {
         exit();
         break;
     case 'eliminar':
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $error_txt = '';
         if (!empty($Qid_entrada)) {
             $oEntrada = new Entrada($Qid_entrada);
@@ -398,15 +398,15 @@ switch ($Qque) {
         exit();
         break;
     case 'buscar':
-        $Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
-        $Qid_oficina = (integer)\filter_input(INPUT_POST, 'oficina_buscar');
-        $Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
-        $Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-        $Qperiodo = (string)\filter_input(INPUT_POST, 'periodo');
+        $Qid_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
+        $Qid_oficina = (integer)filter_input(INPUT_POST, 'oficina_buscar');
+        $Qasunto = (string)filter_input(INPUT_POST, 'asunto');
+        $Qfiltro = (string)filter_input(INPUT_POST, 'filtro');
+        $Qperiodo = (string)filter_input(INPUT_POST, 'periodo');
 
-        $Qorigen_id_lugar = (integer)\filter_input(INPUT_POST, 'origen_id_lugar');
-        $Qorigen_prot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
-        $Qorigen_prot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+        $Qorigen_id_lugar = (integer)filter_input(INPUT_POST, 'origen_id_lugar');
+        $Qorigen_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
+        $Qorigen_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 
         $gesEntradas = new GestorEntrada();
         $aWhere = [];
@@ -506,9 +506,9 @@ switch ($Qque) {
         echo $oLista->mostrar_tabla();
         break;
     case 'guardar':
-        $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-        $Qf_escrito = (string)\filter_input(INPUT_POST, 'f_escrito');
-        $Qtipo_doc = (integer)\filter_input(INPUT_POST, 'tipo_doc');
+        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qf_escrito = (string)filter_input(INPUT_POST, 'f_escrito');
+        $Qtipo_doc = (integer)filter_input(INPUT_POST, 'tipo_doc');
 
         if (!empty($Qid_entrada)) {
             $oEntradaDocBD = new EntradaDocDB($Qid_entrada);

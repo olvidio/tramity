@@ -19,11 +19,11 @@ require_once("apps/core/global_object.inc");
 
 
 // Para poder moverse de una entrada a otra:
-$QSlide_mode = (bool)\filter_input(INPUT_POST, 'slide_mode', FILTER_VALIDATE_BOOLEAN);
+$QSlide_mode = (bool)filter_input(INPUT_POST, 'slide_mode', FILTER_VALIDATE_BOOLEAN);
 
 if ($QSlide_mode === TRUE) {
-    $Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-    $Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+    $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+    $Qfiltro = (string)filter_input(INPUT_POST, 'filtro');
 } else {
     // porque también se puede abrir como include
     $Qid_entrada = $id_entrada;

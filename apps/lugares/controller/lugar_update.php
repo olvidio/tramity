@@ -12,15 +12,15 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
 $error_txt = '';
-switch ($Qque) {
+switch ($Q_que) {
     case "eliminar":
-        $a_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
-            $Qid_lugar = (integer)strtok($a_sel[0], "#");
-            $oLugar = new Lugar($Qid_lugar);
+            $Q_id_lugar = (integer)strtok($a_sel[0], "#");
+            $oLugar = new Lugar($Q_id_lugar);
             if ($oLugar->DBEliminar() === FALSE) {
                 $error_txt .= _("hay un error, no se ha eliminado");
                 $error_txt .= "\n" . $oLugar->getErrorTxt();
@@ -29,21 +29,21 @@ switch ($Qque) {
 
         break;
     case "guardar":
-        $Qid_lugar = (integer)\filter_input(INPUT_POST, 'id_lugar');
-        $Qsigla = (string)\filter_input(INPUT_POST, 'sigla');
+        $Q_id_lugar = (integer)filter_input(INPUT_POST, 'id_lugar');
+        $Q_sigla = (string)filter_input(INPUT_POST, 'sigla');
 
-        if (empty($Qsigla)) {
+        if (empty($Q_sigla)) {
             echo _("debe poner un nombre");
         }
 
-        $Qdl = (string)\filter_input(INPUT_POST, 'dl');
-        $Qregion = (string)\filter_input(INPUT_POST, 'region');
-        $Qnombre = (string)\filter_input(INPUT_POST, 'nombre');
-        $Qtipo_ctr = (string)\filter_input(INPUT_POST, 'tipo_ctr');
-        $Qplataforma = (string)\filter_input(INPUT_POST, 'plataforma');
-        $Qe_mail = (string)\filter_input(INPUT_POST, 'e_mail');
-        $Qmodo_envio = (integer)\filter_input(INPUT_POST, 'modo_envio');
-        $Qanulado = (bool)\filter_input(INPUT_POST, 'anulado');
+        $Q_dl = (string)filter_input(INPUT_POST, 'dl');
+        $Q_region = (string)filter_input(INPUT_POST, 'region');
+        $Q_nombre = (string)filter_input(INPUT_POST, 'nombre');
+        $Q_tipo_ctr = (string)filter_input(INPUT_POST, 'tipo_ctr');
+        $Q_plataforma = (string)filter_input(INPUT_POST, 'plataforma');
+        $Q_e_mail = (string)filter_input(INPUT_POST, 'e_mail');
+        $Q_modo_envio = (integer)filter_input(INPUT_POST, 'modo_envio');
+        $Qanulado = (bool)filter_input(INPUT_POST, 'anulado');
 
         $oLugar = new Lugar(array('id_lugar' => $Qid_lugar));
         $oLugar->DBCarregar();
@@ -62,17 +62,17 @@ switch ($Qque) {
         }
         break;
     case "nuevo":
-        $Qsigla = (string)\filter_input(INPUT_POST, 'sigla');
+        $Qsigla = (string)filter_input(INPUT_POST, 'sigla');
         if (empty($Qsigla)) {
             echo _("debe poner un nombre");
         }
-        $Qdl = (string)\filter_input(INPUT_POST, 'dl');
-        $Qregion = (string)\filter_input(INPUT_POST, 'region');
-        $Qnombre = (string)\filter_input(INPUT_POST, 'nombre');
-        $Qtipo_ctr = (string)\filter_input(INPUT_POST, 'tipo_ctr');
-        $Qplataforma = (string)\filter_input(INPUT_POST, 'plataforma');
-        $Qe_mail = (string)\filter_input(INPUT_POST, 'e_mail');
-        $Qmodo_envio = (integer)\filter_input(INPUT_POST, 'modo_envio');
+        $Qdl = (string)filter_input(INPUT_POST, 'dl');
+        $Qregion = (string)filter_input(INPUT_POST, 'region');
+        $Qnombre = (string)filter_input(INPUT_POST, 'nombre');
+        $Qtipo_ctr = (string)filter_input(INPUT_POST, 'tipo_ctr');
+        $Qplataforma = (string)filter_input(INPUT_POST, 'plataforma');
+        $Qe_mail = (string)filter_input(INPUT_POST, 'e_mail');
+        $Qmodo_envio = (integer)filter_input(INPUT_POST, 'modo_envio');
 
         $oLugar = new Lugar(array('id_lugar' => $Qid_lugar));
         $oLugar->DBCarregar();

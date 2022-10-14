@@ -29,8 +29,8 @@ echo "<img class=\"mb-4\" src=\"../../images/loading.gif\" alt=\"cargando\" widt
 echo "</div>";
 */
 
-$Qid_entrada = (integer)\filter_input(INPUT_GET, 'id');
-$Qf_salida = (string)\filter_input(INPUT_POST, 'f_salida');
+$Q_id_entrada = (integer)filter_input(INPUT_GET, 'id');
+$Qf_salida = (string)filter_input(INPUT_POST, 'f_salida');
 
 if (empty($Qf_salida)) {
     $Qf_salida = date(\DateTimeInterface::ISO8601);

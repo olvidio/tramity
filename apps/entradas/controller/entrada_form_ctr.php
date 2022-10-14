@@ -21,13 +21,13 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
-if ($Qfiltro == 'en_buscar' && empty($Qid_entrada)) {
-    $Qa_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+if ($Q_filtro == 'en_buscar' && empty($Q_id_entrada)) {
+    $Q_a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
-    $Qid_entrada = $Qa_sel[0];
+    $Q_id_entrada = $Q_a_sel[0];
 }
 
 $plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
@@ -51,7 +51,7 @@ $oProtRef->setNombre('ref');
 $oProtRef->setOpciones($a_posibles_lugares);
 $oProtRef->setBlanco(TRUE);
 
-$oEntrada = new Entrada($Qid_entrada);
+$oEntrada = new Entrada($Q_id_entrada);
 // tipo
 $oCategoria = new Categoria();
 $aOpciones = $oCategoria->getArrayCategoria();
@@ -82,7 +82,7 @@ $oDesplPlazo->setOpciones($aOpcionesPlazo);
 $oDesplPlazo->setAction("fnjs_comprobar_plazo('select')");
 $oDesplPlazo->setTabIndex(82);
 
-if (!empty($Qid_entrada)) {
+if (!empty($Q_id_entrada)) {
     $json_prot_origen = $oEntrada->getJson_prot_origen();
     $oProtOrigen->setLugar($json_prot_origen->id_lugar);
     $oProtOrigen->setProt_num($json_prot_origen->num);
@@ -150,11 +150,11 @@ $ver_pendiente = TRUE;
 $txt_btn_guardar = _("Guardar");
 
 $url_update = 'apps/entradas/controller/entrada_update.php';
-if ($Qfiltro == 'en_buscar') {
+if ($Q_filtro == 'en_buscar') {
     $a_condicion = [];
-    $str_condicion = (string)\filter_input(INPUT_POST, 'condicion');
+    $str_condicion = (string)filter_input(INPUT_POST, 'condicion');
     parse_str($str_condicion, $a_condicion);
-    $a_condicion['filtro'] = $Qfiltro;
+    $a_condicion['filtro'] = $Q_filtro;
     $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));
 } else {
     $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => $Qfiltro]));

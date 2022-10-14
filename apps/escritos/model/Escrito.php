@@ -130,7 +130,7 @@ class Escrito extends EscritoDB
         }
 
         $gesLugares = new GestorLugar();
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             if (empty($id_lugar)) {
                 $id_lugar = $gesLugares->getId_sigla_local();
             }
@@ -326,7 +326,7 @@ class Escrito extends EscritoDB
 
             $origen_txt = $oProtOrigen->ver_txt();
 
-            if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                 $oVisibilidad = new Visibilidad();
                 $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
                 $visibilidad = $this->getVisibilidad();

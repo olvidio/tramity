@@ -31,23 +31,23 @@ use web\ProtocoloArray;
 class EscritoForm
 {
 
-    private $Qid_expediente;
-    private $Qid_escrito;
-    private $Qaccion;
-    private $Qfiltro;
-    private $Qmodo;
+    private $Q_id_expediente;
+    private $Q_id_escrito;
+    private $Q_accion;
+    private $Q_filtro;
+    private $Q_modo;
 
 
     /**
      *
      * @var array
      */
-    private $Qa_sel;
+    private $Q_a_sel;
     /**
      *
      * @var int
      */
-    private $Qid_entrada;
+    private $Q_id_entrada;
 
     /**
      *
@@ -55,14 +55,14 @@ class EscritoForm
      */
     private $str_condicion;
 
-    public function __construct(int $Qid_expediente, int $Qid_escrito, int $Qaccion, string $Qfiltro, string $Qmodo)
+    public function __construct(int $Q_id_expediente, int $Q_id_escrito, int $Q_accion, string $Q_filtro, string $Q_modo)
     {
 
-        $this->Qid_expediente = $Qid_expediente;
-        $this->Qid_escrito = $Qid_escrito;
-        $this->Qaccion = $Qaccion;
-        $this->Qfiltro = $Qfiltro;
-        $this->Qmodo = $Qmodo;
+        $this->Qid_expediente = $Q_id_expediente;
+        $this->Qid_escrito = $Q_id_escrito;
+        $this->Qaccion = $Q_accion;
+        $this->Qfiltro = $Q_filtro;
+        $this->Qmodo = $Q_modo;
     }
 
     public function render()
@@ -70,7 +70,7 @@ class EscritoForm
         $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
         if (empty($this->Qid_escrito) && $this->Qfiltro == 'en_buscar') {
-            //$this->Qa_sel = (array)  \filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+            //$this->Qa_sel = (array)  filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
             // sólo debería seleccionar uno.
             $this->Qid_escrito = $this->Qa_sel[0];
         }
@@ -277,7 +277,7 @@ class EscritoForm
             $comentario = $oEscrito->getComentarios();
         } else {
             // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
-            //$this->Qid_entrada = (integer) \filter_input(INPUT_POST, 'id_entrada');
+            //$this->Qid_entrada = (integer) filter_input(INPUT_POST, 'id_entrada');
             if (!empty($this->Qid_entrada)) {
                 $this->Qaccion = Escrito::ACCION_ESCRITO;
                 $oEntrada = new Entrada($this->Qid_entrada);
@@ -320,7 +320,7 @@ class EscritoForm
                 $oArrayProtDestino = new ProtocoloArray($json_prot_dst, $a_posibles_lugares, 'destinos');
                 $oArrayProtDestino->setBlanco('t');
                 $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $oArrayProtDestino->setAdd(FALSE);
                 }
 
@@ -422,7 +422,7 @@ class EscritoForm
         $oHoy->sub(new DateInterval($error_fecha_txt));
         $minIso = $oHoy->format('Y-m-d');
 
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $a_campos = [
                 'titulo' => $titulo,
                 'id_expediente' => $this->Qid_expediente,
@@ -547,11 +547,11 @@ class EscritoForm
     }
 
     /**
-     * @param array $Qa_sel
+     * @param array $Q_a_sel
      */
-    public function setQa_sel($Qa_sel)
+    public function setQa_sel($Q_a_sel)
     {
-        $this->Qa_sel = $Qa_sel;
+        $this->Qa_sel = $Q_a_sel;
     }
 
     /**
@@ -563,11 +563,11 @@ class EscritoForm
     }
 
     /**
-     * @param number $Qid_entrada
+     * @param number $Q_id_entrada
      */
-    public function setQid_entrada($Qid_entrada)
+    public function setQid_entrada($Q_id_entrada)
     {
-        $this->Qid_entrada = $Qid_entrada;
+        $this->Qid_entrada = $Q_id_entrada;
     }
 
     /**

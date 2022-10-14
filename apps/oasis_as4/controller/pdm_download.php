@@ -12,12 +12,12 @@ require_once("apps/core/global_object.inc");
 
 
 // El download es via GET!!!";
-$Qfilename = (string)\filter_input(INPUT_GET, 'filename');
+$Q_filename = (string)filter_input(INPUT_GET, 'filename');
 
-if (!empty($Qfilename)) {
+if (!empty($Q_filename)) {
     // resp
     $dir = $_SESSION['oConfig']->getDock();
-    $fullfileame = $dir . '/repository/pmodes_resp/' . $Qfilename;
+    $fullfileame = $dir . '/repository/pmodes_resp/' . $Q_filename;
 
     $doc = file_get_contents($fullfileame);
 
@@ -29,7 +29,7 @@ if (!empty($Qfilename)) {
     header("Cache-Control: private", false); // required for certain browsers
     header('Content-Type: application/force-download');
     header('Content-Type: application/download', false);
-    header('Content-disposition: attachment; filename="' . $Qfilename . '"');
+    header('Content-disposition: attachment; filename="' . $Q_filename . '"');
     ob_clean();
     flush();
     echo $doc;

@@ -14,16 +14,16 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
-$Qid_escrito = (integer)\filter_input(INPUT_POST, 'id_escrito');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qmodo = (string)\filter_input(INPUT_POST, 'modo');
+$Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
+$Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_modo = (string)filter_input(INPUT_POST, 'modo');
 
 $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
-$oEscrito = new Escrito($Qid_escrito);
+$oEscrito = new Escrito($Q_id_escrito);
 
-if (!empty($Qid_escrito)) {
+if (!empty($Q_id_escrito)) {
     $destino_txt = $oEscrito->getDestinosEscrito();
 
     $a_adjuntos = $oEscrito->getArrayIdAdjuntos();
@@ -44,15 +44,15 @@ if (!empty($Qid_escrito)) {
     $titulo .= " " . $destino_txt;
 }
 
-$a_cosas = ['id_expediente' => $Qid_expediente,
-    'filtro' => $Qfiltro,
-    'modo' => $Qmodo,
+$a_cosas = ['id_expediente' => $Q_id_expediente,
+    'filtro' => $Q_filtro,
+    'modo' => $Q_modo,
 ];
 
-if ($Qfiltro == 'distribuir') {
+if ($Q_filtro == 'distribuir') {
     $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?' . http_build_query($a_cosas));
 } else {
-    if ($Qmodo == 'mod') {
+    if ($Q_modo == 'mod') {
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
     } else {
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
@@ -62,9 +62,9 @@ if ($Qfiltro == 'distribuir') {
 
 $a_campos = [
     'titulo' => $titulo,
-    'id_expediente' => $Qid_expediente,
-    'id_escrito' => $Qid_escrito,
-    'filtro' => $Qfiltro,
+    'id_expediente' => $Q_id_expediente,
+    'id_escrito' => $Q_id_escrito,
+    'filtro' => $Q_filtro,
     'pagina_cancel' => $pagina_cancel,
     //'oHash' => $oHash,
     'initialPreview' => $initialPreview,

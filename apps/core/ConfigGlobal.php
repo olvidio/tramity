@@ -114,10 +114,10 @@ class ConfigGlobal extends ServerConf
         if (ConfigGlobal::role_actual() === 'secretaria') {
             $vista = 'secretaria';
         } else {
-            if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                 $vista = 'home';
             }
-            if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                 $vista = 'ctr';
             }
         }

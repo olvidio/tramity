@@ -276,8 +276,8 @@ class Grant extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iby_principal de Grant
@@ -299,7 +299,7 @@ class Grant extends core\ClasePropiedades
         $this->iby_collection = $iby_collection;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut ito_principal de Grant
@@ -479,7 +479,7 @@ class Grant extends core\ClasePropiedades
         $oGrantSet->add($this->getDatosIs_group());
         return $oGrantSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut iby_collection de Grant

@@ -19,17 +19,17 @@ require_once("apps/core/global_object.inc");
 $oPosicion->recordar();
 
 
-$Qid_sel = (string)\filter_input(INPUT_POST, 'id_sel');
-$Qscroll_id = (string)\filter_input(INPUT_POST, 'scroll_id');
+$Q_id_sel = (string)filter_input(INPUT_POST, 'id_sel');
+$Q_scroll_id = (string)filter_input(INPUT_POST, 'scroll_id');
 
 //Si vengo por medio de Posicion, borro la última
 if (isset($_POST['stack'])) {
-    $stack = \filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
+    $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
     if ($stack != '') {
         $oPosicion2 = new web\Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
-            $Qid_sel = $oPosicion2->getParametro('id_sel');
-            $Qscroll_id = $oPosicion2->getParametro('scroll_id');
+            $Q_id_sel = $oPosicion2->getParametro('id_sel');
+            $Q_scroll_id = $oPosicion2->getParametro('scroll_id');
             $oPosicion2->olvidar($stack);
         }
     }
@@ -65,7 +65,7 @@ foreach ($cEtiquetas as $oEtiqueta) {
     $oficina = $oEtiqueta->getOficina();
     if (is_true($oficina)) {
         $oficina_txt = _("de la oficina");
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $oficina_txt = _("del centro");
         }
         $cargo_txt = empty($a_oficinas[$id_cargo]) ? $id_cargo : $a_oficinas[$id_cargo];
@@ -79,11 +79,11 @@ foreach ($cEtiquetas as $oEtiqueta) {
     $a_valores[$i][2] = $oficina_txt;
     $a_valores[$i][3] = $cargo_txt;
 }
-if (isset($Qid_sel) && !empty($Qid_sel)) {
-    $a_valores['select'] = $Qid_sel;
+if (isset($Q_id_sel) && !empty($Q_id_sel)) {
+    $a_valores['select'] = $Q_id_sel;
 }
-if (isset($Qscroll_id) && !empty($Qscroll_id)) {
-    $a_valores['scroll_id'] = $Qscroll_id;
+if (isset($Q_scroll_id) && !empty($Q_scroll_id)) {
+    $a_valores['scroll_id'] = $Q_scroll_id;
 }
 
 $oTabla = new web\Lista();

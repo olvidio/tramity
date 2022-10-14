@@ -161,7 +161,7 @@ class GestorEscritoAdjunto extends core\ClaseGestor
         return $oEscritoAdjuntoSet->getTot();
     }
 
-    /* METODES PROTECTED --------------------------------------------------------*/
+    /* MÉTODOS PROTECTED --------------------------------------------------------*/
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

@@ -13,20 +13,20 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid = (string)\filter_input(INPUT_POST, 'id');
-$Qtipo_id = (string)\filter_input(INPUT_POST, 'tipo_id');
-$Qmodo = (string)\filter_input(INPUT_POST, 'modo');
+$Q_id = (string)filter_input(INPUT_POST, 'id');
+$Q_tipo_id = (string)filter_input(INPUT_POST, 'tipo_id');
+$Q_modo = (string)filter_input(INPUT_POST, 'modo');
 
-if (empty($Qtipo_id)) {
+if (empty($Q_tipo_id)) {
     exit (_("Falta definir el tipo de documento etherpad"));
 }
 
 $oEtherpad = new Etherpad();
-$oEtherpad->setId($Qtipo_id, $Qid);
+$oEtherpad->setId($Q_tipo_id, $Q_id);
 $padID = $oEtherpad->getPadId();
 $url = $oEtherpad->getUrl();
 
-switch ($Qmodo) {
+switch ($Q_modo) {
     case 'html':
         // Hay que evitar el CORS ( no puedo acceder al tramity.local:9001) 
         //$url = 'http://tramity.local:8080';

@@ -28,16 +28,16 @@ require_once("apps/core/global_object.inc");
 
 $cDatosCampos = false;
 
-$Qcc_obj = (string)\filter_input(INPUT_POST, 'cc_obj');
-if (!empty($Qcc_obj)) {
-    $Object = new $Qcc_obj;
+$Q_cc_obj = (string)filter_input(INPUT_POST, 'cc_obj');
+if (!empty($Q_cc_obj)) {
+    $Object = new $Q_cc_obj;
     $oDbl = $Object->getoDbl();
     // selecciono las restricciones anotadas en el objeto: getDatosCampos().
     $cDatosCampos = $Object->getDatosCampos();
 }
 
 $errores = [];
-$Qcc_pau = (integer)\filter_input(INPUT_POST, 'cc_pau');
+$Q_cc_pau = (integer)filter_input(INPUT_POST, 'cc_pau');
 foreach ($cDatosCampos as $oDatosCampo) {
     $reg_exp = $oDatosCampo->getRegExp();
     $nomcamp = $oDatosCampo->getNom_camp();
@@ -46,7 +46,7 @@ foreach ($cDatosCampos as $oDatosCampo) {
     $not_null = $oDatosCampo->datos_campo($oDbl, 'nulo');
     $longitud = $oDatosCampo->datos_campo($oDbl, 'longitud');
 
-    if (($nomcamp == 'id_nom' || $nomcamp == 'id_activ' || $nomcamp == 'id_ubi') && $Qcc_pau == 1) {
+    if (($nomcamp == 'id_nom' || $nomcamp == 'id_activ' || $nomcamp == 'id_ubi') && $Q_cc_pau == 1) {
         $nomcamp = 'id_pau';
     }
     // caso especial.

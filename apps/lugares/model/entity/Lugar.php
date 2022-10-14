@@ -314,7 +314,7 @@ class Lugar extends core\ClasePropiedades
         $this->setPrimary_key($aPK);
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
 
     /**
      * Recupera las claus primàries de Lugar en un array
@@ -329,7 +329,7 @@ class Lugar extends core\ClasePropiedades
         return $this->aPrimary_key;
     }
 
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_lugar de Lugar
@@ -351,7 +351,7 @@ class Lugar extends core\ClasePropiedades
         $this->ssigla = $ssigla;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut sdl de Lugar
@@ -701,7 +701,7 @@ class Lugar extends core\ClasePropiedades
         $oLugarSet->add($this->getDatosAnulado());
         return $oLugarSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut ssigla de Lugar

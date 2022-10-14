@@ -32,19 +32,19 @@ $oPosicion->recordar();
 
 $explicacion_bypass = _("Está mal! No deberia asociar un pendiente a una entrada de distribución cr (bypass)");
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
-$Qcalendario = (string)\filter_input(INPUT_POST, 'calendario');
-$Qasunto = (string)\filter_input(INPUT_POST, 'asunto');
-$Qstatus = (string)\filter_input(INPUT_POST, 'status');
-$Qid_lugar = (integer)\filter_input(INPUT_POST, 'id_lugar');
-$Qprot_num = (integer)\filter_input(INPUT_POST, 'prot_num');
-$Qprot_any = (string)\filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
-$Qprot_mas = (string)\filter_input(INPUT_POST, 'prot_mas');
-$Qid_oficina = (string)\filter_input(INPUT_POST, 'id_oficina');
-$Qf_min_enc = (string)\filter_input(INPUT_POST, 'f_min');
-$Qf_min = urldecode($Qf_min_enc);
-$Qf_max_enc = (string)\filter_input(INPUT_POST, 'f_max');
-$Qf_max = urldecode($Qf_max_enc);
+$Q_que = (string)filter_input(INPUT_POST, 'que');
+$Q_calendario = (string)filter_input(INPUT_POST, 'calendario');
+$Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
+$Q_status = (string)filter_input(INPUT_POST, 'status');
+$Q_id_lugar = (integer)filter_input(INPUT_POST, 'id_lugar');
+$Q_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
+$Q_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+$Q_prot_mas = (string)filter_input(INPUT_POST, 'prot_mas');
+$Q_id_oficina = (string)filter_input(INPUT_POST, 'id_oficina');
+$Q_f_min_enc = (string)filter_input(INPUT_POST, 'f_min');
+$Q_f_min = urldecode($Q_f_min_enc);
+$Q_f_max_enc = (string)filter_input(INPUT_POST, 'f_max');
+$Q_f_max = urldecode($Q_f_max_enc);
 
 $gesLugares = new GestorLugar();
 $a_lugares = $gesLugares->getArrayBusquedas();
@@ -53,17 +53,17 @@ $oDesplLugar = new Desplegable();
 $oDesplLugar->setNombre('id_lugar');
 $oDesplLugar->setBlanco(TRUE);
 $oDesplLugar->setOpciones($a_lugares);
-$oDesplLugar->setOpcion_sel($Qid_lugar);
+$oDesplLugar->setOpcion_sel($Q_id_lugar);
 
 $a_opciones_status = Pendiente::getArrayStatus();
 // añadr la opción de 'caulquiera' al inicio
 $all_traducido = _("cualquiera");
-$Qstatus = empty($Qstatus) ? 'all' : $Qstatus;
+$Q_status = empty($Q_status) ? 'all' : $Q_status;
 $a_opciones_status = array_merge(array("all" => $all_traducido), $a_opciones_status);
 $oDesplStatus = new Desplegable();
 $oDesplStatus->setNombre('status');
 $oDesplStatus->setOpciones($a_opciones_status);
-$oDesplStatus->setOpcion_sel($Qstatus);
+$oDesplStatus->setOpcion_sel($Q_status);
 
 $gesOficinas = new GestorOficina();
 $a_oficinas = $gesOficinas->getArrayOficinas();
@@ -74,7 +74,7 @@ if ($role_actual === 'secretaria') {
     $oDesplOficinas = new Desplegable();
     $oDesplOficinas->setNombre('id_oficina');
     $oDesplOficinas->setOpciones($a_oficinas);
-    $oDesplOficinas->setOpcion_sel($Qid_oficina);
+    $oDesplOficinas->setOpcion_sel($Q_id_oficina);
     $oDesplOficinas->setBlanco(TRUE);
     $id_oficina = '';
 } else {
@@ -84,18 +84,18 @@ if ($role_actual === 'secretaria') {
     $id_oficina = $oCargo->getId_oficina();
 }
 
-if ($Qque == 'buscar') {
+if ($Q_que == 'buscar') {
     $oBuscarPendiente = new BuscarPendiente();
-    $oBuscarPendiente->setCalendario($Qcalendario);
+    $oBuscarPendiente->setCalendario($Q_calendario);
 
-    if ($Qcalendario == 'registro' && !empty($Qid_lugar)) {
+    if ($Q_calendario == 'registro' && !empty($Q_id_lugar)) {
         // buscar en el registro:
-        $Qprot_any = empty($Qprot_any) ? '' : core\any_2($Qprot_any);
+        $Q_prot_any = empty($Q_prot_any) ? '' : core\any_2($Q_prot_any);
 
         $oBuscar = new Buscar();
-        $oBuscar->setId_lugar($Qid_lugar);
-        $oBuscar->setProt_num($Qprot_num);
-        $oBuscar->setProt_any($Qprot_any);
+        $oBuscar->setId_lugar($Q_id_lugar);
+        $oBuscar->setProt_num($Q_prot_num);
+        $oBuscar->setProt_any($Q_prot_any);
 
         $aCollection = $oBuscar->getCollection(7);
         $aIds = [];
@@ -113,20 +113,20 @@ if ($Qque == 'buscar') {
 
     }
 
-    if (!empty($Qid_oficina)) {
-        $oBuscarPendiente->setId_oficina($Qid_oficina);
+    if (!empty($Q_id_oficina)) {
+        $oBuscarPendiente->setId_oficina($Q_id_oficina);
     }
-    if (!empty($Qasunto)) {
-        $oBuscarPendiente->setAsunto($Qasunto);
+    if (!empty($Q_asunto)) {
+        $oBuscarPendiente->setAsunto($Q_asunto);
     }
-    if (!empty($Qf_min)) {
-        $oBuscarPendiente->setF_min($Qf_min);
+    if (!empty($Q_f_min)) {
+        $oBuscarPendiente->setF_min($Q_f_min);
     }
-    if (!empty($Qf_max)) {
-        $oBuscarPendiente->setF_max($Qf_max);
+    if (!empty($Q_f_max)) {
+        $oBuscarPendiente->setF_max($Q_f_max);
     }
-    if (!empty($Qstatus)) {
-        $oBuscarPendiente->setStatus($Qstatus);
+    if (!empty($Q_status)) {
+        $oBuscarPendiente->setStatus($Q_status);
     }
 
     $gesEtiquetas = new GestorEtiqueta();
@@ -204,7 +204,7 @@ if ($Qque == 'buscar') {
         $a_valores[$t][3] = $periodico;
         $a_valores[$t][4] = $asunto;
         $a_valores[$t][5] = $plazo;
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $a_valores[$t][6] = $ponente;
             $a_valores[$t][7] = $oficinas_txt;
         }
@@ -229,7 +229,7 @@ $a_cabeceras = array(ucfirst(_("protocolo")),
     array('name' => ucfirst(_("asunto")), 'formatter' => 'clickFormatter'),
     array('name' => ucfirst(_("fecha plazo")), 'class' => 'fecha'),
 );
-if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
     $a_cabeceras[] = ucfirst(_("ponente"));
     $a_cabeceras[] = ucfirst(_("oficinas"));
 }
@@ -247,35 +247,35 @@ $oFecha = new DateTimeLocal();
 $format = $oFecha->getFormat();
 
 $aGoBack = [
-    'que' => $Qque,
-    'calendario' => $Qcalendario,
-    'asunto' => $Qasunto,
-    'status' => $Qstatus,
-    'id_lugar' => $Qid_lugar,
-    'prot_num' => $Qprot_num,
-    'prot_any' => $Qprot_any,
-    'prot_mas' => $Qprot_mas,
-    'id_oficina' => $Qid_oficina,
-    'f_min_enc' => $Qf_min_enc,
-    'f_max_enc' => $Qf_max_enc,
+    'que' => $Q_que,
+    'calendario' => $Q_calendario,
+    'asunto' => $Q_asunto,
+    'status' => $Q_status,
+    'id_lugar' => $Q_id_lugar,
+    'prot_num' => $Q_prot_num,
+    'prot_any' => $Q_prot_any,
+    'prot_mas' => $Q_prot_mas,
+    'id_oficina' => $Q_id_oficina,
+    'f_min_enc' => $Q_f_min_enc,
+    'f_max_enc' => $Q_f_max_enc,
 ];
 $oPosicion->setParametros($aGoBack, 1);
 
 $a_campos = [
     'oPosicion' => $oPosicion,
-    'calendario' => $Qcalendario,
+    'calendario' => $Q_calendario,
     'secretaria' => $secretaria,
     'oDesplLugar' => $oDesplLugar,
     'oDesplOficinas' => $oDesplOficinas,
     'oDesplStatus' => $oDesplStatus,
-    'asunto' => $Qasunto,
+    'asunto' => $Q_asunto,
     'id_oficina' => $id_oficina,
     'oTabla' => $oTabla,
-    'f_min' => $Qf_min,
-    'f_max' => $Qf_max,
-    'prot_num' => $Qprot_num,
-    'prot_any' => $Qprot_any,
-    'prot_mas' => $Qprot_mas,
+    'f_min' => $Q_f_min,
+    'f_max' => $Q_f_max,
+    'prot_num' => $Q_prot_num,
+    'prot_any' => $Q_prot_any,
+    'prot_mas' => $Q_prot_mas,
     // datepicker
     'format' => $format,
 ];

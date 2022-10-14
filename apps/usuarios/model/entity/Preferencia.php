@@ -232,8 +232,8 @@ class Preferencia extends core\ClasePropiedades
         $this->setPrimary_key($aPK);
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * Recupera las claus primàries de Preferencia en un array
@@ -258,7 +258,7 @@ class Preferencia extends core\ClasePropiedades
         $this->iid_item = $iid_item;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_usuario de Preferencia
@@ -416,7 +416,7 @@ class Preferencia extends core\ClasePropiedades
         $oPreferenciaSet->add($this->getDatosPreferencia());
         return $oPreferenciaSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut iid_usuario de Preferencia

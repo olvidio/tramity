@@ -17,36 +17,36 @@ require_once("apps/core/global_object.inc");
 // Crea los objetos por esta url  **********************************************
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
-switch ($Qque) {
+switch ($Q_que) {
     case 'add_user':
-        $Qoficina = (string)\filter_input(INPUT_POST, 'oficina');
-        $Quser = (string)\filter_input(INPUT_POST, 'user');
+        $Q_oficina = (string)filter_input(INPUT_POST, 'oficina');
+        $Q_user = (string)filter_input(INPUT_POST, 'user');
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-        $oDavical->crearUser($Quser);
-        $oDavical->addUserOficina($Qoficina, $Quser);
+        $oDavical->crearUser($Q_user);
+        $oDavical->addUserOficina($Q_oficina, $Q_user);
 
         break;
     case 'crear_oficina':
-        $Qoficina = (string)\filter_input(INPUT_POST, 'oficina');
+        $Q_oficina = (string)filter_input(INPUT_POST, 'oficina');
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-        $oDavical->crearOficina($Qoficina);
+        $oDavical->crearOficina($Q_oficina);
 
         break;
     case 'crear_coleccion':
-        $Qcollection_id = (integer)\filter_input(INPUT_POST, 'collection_id');
-        $Quser_no = (integer)\filter_input(INPUT_POST, 'user_no');
+        $Q_collection_id = (integer)filter_input(INPUT_POST, 'collection_id');
+        $Q_user_no = (integer)filter_input(INPUT_POST, 'user_no');
         $oAhora = new DateTimeLocal('', new DateTimeZone('Europe/Madrid'));
         $str_ahora = $oAhora->getFromLocalHora();
-        if (!empty($Qcollection_id)) {
-            $oCollection = new Collection($Qcollection_id);
+        if (!empty($Q_collection_id)) {
+            $oCollection = new Collection($Q_collection_id);
             $oCollection->DBCarregar();
         } else {
             $oCollection = new Collection();
         }
 
-        $user_no = $Quser_no;
+        $user_no = $Q_user_no;
         $parent_container = "/oficina_vsm/";
         $dav_name = '/oficina_vsm/registro/';
         $dav_etag = -1; //weak_etag?
@@ -91,11 +91,11 @@ switch ($Qque) {
         echo "</pre>";
         break;
     case 'crear_resource':
-        $Quser_no = (integer)\filter_input(INPUT_POST, 'user_no');
+        $Q_user_no = (integer)filter_input(INPUT_POST, 'user_no');
         $oAhora = new DateTimeLocal('', new DateTimeZone('Europe/Madrid'));
         $str_ahora = $oAhora->getFromLocalHora();
-        if (!empty($Quser_no)) {
-            $oUserDavical = new User($Quser_no);
+        if (!empty($Q_user_no)) {
+            $oUserDavical = new User($Q_user_no);
             $oUserDavical->DBCarregar();
             $joined = $oUserDavical->getJoined()->getFromLocalHora();
         } else {
@@ -139,10 +139,10 @@ switch ($Qque) {
 
         // crear el principal correspondiente:
         $oPrincipal = '';
-        if (!empty($Quser_no)) {
+        if (!empty($Q_user_no)) {
             // buscar si ya existe
             $gesPrincipal = new GestorPrincipal();
-            $cPrincipal = $gesPrincipal->getPrincipales(['user_no' => $Quser_no]);
+            $cPrincipal = $gesPrincipal->getPrincipales(['user_no' => $Q_user_no]);
             if (!empty($cPrincipal)) {
                 $oPrincipal = $cPrincipal[0];
                 $default_privileges = $oPrincipal->getDefault_privileges();
@@ -166,11 +166,11 @@ switch ($Qque) {
 
         break;
     case 'crear_usuario':
-        $Quser_no = (integer)\filter_input(INPUT_POST, 'user_no');
+        $Q_user_no = (integer)filter_input(INPUT_POST, 'user_no');
         $oAhora = new DateTimeLocal('', new DateTimeZone('Europe/Madrid'));
         $str_ahora = $oAhora->getFromLocalHora();
-        if (!empty($Quser_no)) {
-            $oUserDavical = new User($Quser_no);
+        if (!empty($Q_user_no)) {
+            $oUserDavical = new User($Q_user_no);
             $oUserDavical->DBCarregar();
             $joined = $oUserDavical->getJoined()->getFromLocal();
         } else {
@@ -214,10 +214,10 @@ switch ($Qque) {
 
         // crear el principal correspondiente:
         $oPrincipal = '';
-        if (!empty($Quser_no)) {
+        if (!empty($Q_user_no)) {
             // buscar si ya existe
             $gesPrincipal = new GestorPrincipal();
-            $cPrincipal = $gesPrincipal->getPrincipales(['user_no' => $Quser_no]);
+            $cPrincipal = $gesPrincipal->getPrincipales(['user_no' => $Q_user_no]);
             if (!empty($cPrincipal)) {
                 $oPrincipal = $cPrincipal[0];
                 $default_privileges = $oPrincipal->getDefault_privileges();
@@ -241,7 +241,7 @@ switch ($Qque) {
 
         break;
     case 'eliminar_usuario':
-        $Quser_no = (integer)\filter_input(INPUT_POST, 'user_no');
+        $Q_user_no = (integer)filter_input(INPUT_POST, 'user_no');
 
         $cargo = 'cosa';
         $oficina = 'vsm';

@@ -21,11 +21,11 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-$Qoficina = (string)\filter_input(INPUT_POST, 'oficina');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+$Q_oficina = (string)filter_input(INPUT_POST, 'oficina');
 
-$oEntrada = new Entrada($Qid_entrada);
+$oEntrada = new Entrada($Q_id_entrada);
 $asunto = $oEntrada->getAsunto();
 
 $oProtOrigen = new Protocolo();
@@ -33,11 +33,11 @@ $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
 $protocolo = $oProtOrigen->ver_txt();
 
 $url_cancel = 'apps/entradas/controller/entrada_lista.php';
-$pagina_cancel = Hash::link($url_cancel . '?' . http_build_query(['filtro' => $Qfiltro, 'oficina' => $Qoficina]));
+$pagina_cancel = Hash::link($url_cancel . '?' . http_build_query(['filtro' => $Q_filtro, 'oficina' => $Q_oficina]));
 
 $oDesplCargosOficinaEncargado = [];
 $a_botones = [];
-if ($Qoficina == 'propia') { // encargar
+if ($Q_oficina == 'propia') { // encargar
     $a_botones[0] = ['accion' => 'en_add_encargado',
         'txt' => _("Encargar a"),
         'tipo' => 'modal',
@@ -50,7 +50,7 @@ if ($Qoficina == 'propia') { // encargar
         'tipo' => 'modal1',
     ];
 }
-if ($Qoficina == 'resto') { // marcar como visto
+if ($Q_oficina == 'resto') { // marcar como visto
     $a_botones[0] = ['accion' => 'en_visto',
         'txt' => _("marcar como visto"),
     ];
@@ -83,8 +83,8 @@ $oArrayDesplEtiquetas->setBlanco('t');
 $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
 $a_campos = [
-    'id_entrada' => $Qid_entrada,
-    'filtro' => $Qfiltro,
+    'id_entrada' => $Q_id_entrada,
+    'filtro' => $Q_filtro,
     //'oHash' => $oHash,
     'protocolo' => $protocolo,
     'asunto' => $asunto,

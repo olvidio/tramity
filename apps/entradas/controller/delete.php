@@ -14,7 +14,7 @@ require_once("apps/core/global_object.inc");
 
 // El delete es via POST!!!";
 
-$Qid_item = (integer)\filter_input(INPUT_POST, 'key');
+$Qid_item = (integer)filter_input(INPUT_POST, 'key');
 
 if (!empty($Qid_item)) {
     $oEntradaAdjunto = new EntradaAdjunto($Qid_item);

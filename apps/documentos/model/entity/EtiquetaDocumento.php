@@ -225,8 +225,8 @@ class EtiquetaDocumento extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_etiqueta de EtiquetaDocumento
@@ -248,7 +248,7 @@ class EtiquetaDocumento extends core\ClasePropiedades
         $this->iid_doc = $iid_doc;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * Estableix a empty el valor de tots els ATRIBUTOS
@@ -347,7 +347,7 @@ class EtiquetaDocumento extends core\ClasePropiedades
 
         return $oEtiquetaDocumentoSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera tots els ATRIBUTOS de EtiquetaDocumento en un array

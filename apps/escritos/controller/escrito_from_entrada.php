@@ -21,13 +21,13 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
-//$Qfiltro = (string) \filter_input(INPUT_POST, 'filtro');
+$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+//$Q_filtro = (string) filter_input(INPUT_POST, 'filtro');
 // cambio el filtro para ver los borradores:
 $filtro = 'borrador_propio';
 $modo = 'mod';
 
-$oEntrada = new Entrada($Qid_entrada);
+$oEntrada = new Entrada($Q_id_entrada);
 $f_contestar = $oEntrada->getF_contestar();
 
 // crear el expediente
@@ -85,7 +85,7 @@ if ($oExpediente->DBGuardar() === FALSE) {
 }
 
 // adjuntar entrada como antecedente
-$a_antecedente = ['tipo' => 'entrada', 'id' => $Qid_entrada];
+$a_antecedente = ['tipo' => 'entrada', 'id' => $Q_id_entrada];
 $oExpediente->addAntecedente($a_antecedente);
 if ($oExpediente->DBGuardar() === FALSE) {
     $error_txt .= $oExpediente->getErrorTxt();

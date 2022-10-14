@@ -19,9 +19,9 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_escrito = (string)\filter_input(INPUT_POST, 'id_escrito');
-if (empty($Qid_escrito)) {
-    $Qid_escrito = (string)\filter_input(INPUT_GET, 'id_escrito');
+$Q_id_escrito = (string)filter_input(INPUT_POST, 'id_escrito');
+if (empty($Q_id_escrito)) {
+    $Q_id_escrito = (string)filter_input(INPUT_GET, 'id_escrito');
 }
 
 $sigla = $_SESSION['oConfig']->getSigla();
@@ -31,9 +31,9 @@ $oProtRef->setEtiqueta('Ref');
 $oProtRef->setNombre('ref');
 $oProtRef->setBlanco(TRUE);
 
-if (!empty($Qid_escrito)) {
+if (!empty($Q_id_escrito)) {
     $gesAcciones = new GestorAccion();
-    $cAccion = $gesAcciones->getAcciones(['id_escrito' => $Qid_escrito]);
+    $cAccion = $gesAcciones->getAcciones(['id_escrito' => $Q_id_escrito]);
     $id_expediente = $cAccion[0]->getId_expediente();
     $oExpediente = new Expediente($id_expediente);
     $estado = $oExpediente->getEstado();
@@ -42,7 +42,7 @@ if (!empty($Qid_escrito)) {
     $url_download = $base_url . '/apps/escritos/controller/adjunto_download.php';
     $url_update = 'escrito_update.php';
     // Pueden ser varios escritos separados por comas:
-    $a_escritos = explode(',', $Qid_escrito);
+    $a_escritos = explode(',', $Q_id_escrito);
     foreach ($a_escritos as $id_escrito) {
         $oEscrito = new Escrito($id_escrito);
 

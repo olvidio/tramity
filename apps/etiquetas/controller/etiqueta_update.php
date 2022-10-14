@@ -15,14 +15,14 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)\filter_input(INPUT_POST, 'que');
+$Q_que = (string)filter_input(INPUT_POST, 'que');
 
-switch ($Qque) {
+switch ($Q_que) {
     case "eliminar":
-        $a_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
-            $Qid_etiqueta = (integer)strtok($a_sel[0], "#");
-            $oEtiqueta = new Etiqueta($Qid_etiqueta);
+            $Q_id_etiqueta = (integer)strtok($a_sel[0], "#");
+            $oEtiqueta = new Etiqueta($Q_id_etiqueta);
             if ($oEtiqueta->DBEliminar() === FALSE) {
                 echo _("hay un error, no se ha eliminado");
                 echo "\n" . $oEtiqueta->getErrorTxt();
@@ -31,11 +31,11 @@ switch ($Qque) {
         break;
     case "nuevo":
     case "guardar":
-        $Qid_etiqueta = (integer)\filter_input(INPUT_POST, 'id_etiqueta');
-        $Qnom_etiqueta = (string)\filter_input(INPUT_POST, 'nom_etiqueta');
-        $Qoficina = (string)\filter_input(INPUT_POST, 'oficina');
+        $Q_id_etiqueta = (integer)filter_input(INPUT_POST, 'id_etiqueta');
+        $Q_nom_etiqueta = (string)filter_input(INPUT_POST, 'nom_etiqueta');
+        $Q_oficina = (string)filter_input(INPUT_POST, 'oficina');
 
-        if (is_true($Qoficina)) {
+        if (is_true($Q_oficina)) {
             $oficina = 't';
             // buscar el id de la oficina:
             $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
@@ -45,17 +45,17 @@ switch ($Qque) {
             $id_cargo = ConfigGlobal::role_id_cargo();
         }
 
-        if (empty($Qnom_etiqueta)) {
+        if (empty($Q_nom_etiqueta)) {
             echo _("debe poner un nombre");
         }
 
-        if (empty($Qid_etiqueta)) {
+        if (empty($Q_id_etiqueta)) {
             $oEtiqueta = new Etiqueta();
         } else {
-            $oEtiqueta = new Etiqueta(array('id_etiqueta' => $Qid_etiqueta));
+            $oEtiqueta = new Etiqueta(array('id_etiqueta' => $Q_id_etiqueta));
         }
         $oEtiqueta->DBCarregar();
-        $oEtiqueta->setNom_etiqueta($Qnom_etiqueta);
+        $oEtiqueta->setNom_etiqueta($Q_nom_etiqueta);
         $oEtiqueta->setOficina($oficina);
         $oEtiqueta->setId_cargo($id_cargo);
         if ($oEtiqueta->DBGuardar() === FALSE) {

@@ -100,7 +100,7 @@ class Entrada extends EntradaDB
         if (!is_true($this->getBypass())) {
             $visibilidad = $this->getVisibilidad();
             // si soy dl o ctr
-            if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                 if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
                     $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
                     $visibilidad_txt = $a_visibilidad_dst[$visibilidad];

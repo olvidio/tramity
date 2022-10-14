@@ -16,7 +16,7 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
 // Anular escrito
 $num_orden = 10;
@@ -24,7 +24,7 @@ $text = _("anular en otras plataformas");
 $explicacion = _("Envia una orden de anulación para un escrito en otra plataforma");
 
 $active = ''; // no sé si tiene sentido que sea 'active'
-$aQuery = ['filtro' => $Qfiltro,
+$aQuery = ['filtro' => $Q_filtro,
     'accion' => As4CollaborationInfo::ACCION_ORDEN_ANULAR,
 ];
 $pag_lst = web\Hash::link('apps/oasis_as4/controller/buscar_escrito.php?' . http_build_query($aQuery));
@@ -44,7 +44,7 @@ $text = _("reemplazar en otras plataformas");
 $explicacion = _("Envia un escrito que reemplaza a otro en otra plataforma");
 
 $active = ''; // no sé si tiene sentido que sea 'active'
-$aQuery = ['filtro' => $Qfiltro,
+$aQuery = ['filtro' => $Q_filtro,
     'accion' => As4CollaborationInfo::ACCION_REEMPLAZAR,
 ];
 $pag_lst = web\Hash::link('apps/oasis_as4/controller/buscar_escrito.php?' . http_build_query($aQuery));
@@ -71,7 +71,7 @@ $oDesplPlataformas->setOpcion_sel($plataforma_mantenimiento);
 
 $url_ajax = 'apps/escritos/controller/mantenimiento_ajax.php';
 
-$a_campos = ['filtro' => $Qfiltro,
+$a_campos = ['filtro' => $Q_filtro,
     'btn_cerrar' => TRUE,
     'a_pills' => $a_pills,
     'oDesplPlataformas' => $oDesplPlataformas,

@@ -24,33 +24,33 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Qid_expediente = (integer)\filter_input(INPUT_POST, 'id_expediente');
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qid_entrada = (integer)\filter_input(INPUT_POST, 'id_entrada');
+$Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
 
 $pagina_contestar = '';
 // Añado la opcion de poder crear un expediente desde entradas
-switch ($Qfiltro) {
+switch ($Q_filtro) {
     case 'entradas_semana':
     case 'escritos_cr':
     case 'permanentes_cr':
     case 'en_buscar':
-        $oEntrada = new Entrada($Qid_entrada);
+        $oEntrada = new Entrada($Q_id_entrada);
         $asunto = $oEntrada->getAsunto();
 
         $a_condicion = [];
-        $str_condicion = (string)\filter_input(INPUT_POST, 'condicion');
+        $str_condicion = (string)filter_input(INPUT_POST, 'condicion');
         parse_str($str_condicion, $a_condicion);
-        $a_condicion['filtro'] = $Qfiltro;
-        switch ($Qfiltro) {
+        $a_condicion['filtro'] = $Q_filtro;
+        switch ($Q_filtro) {
             case 'en_buscar':
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));
                 break;
             case 'permanentes_cr':
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?' . http_build_query($a_condicion));
                 // En los ctr, buscar en entradas compartidas:
-                if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
-                    $oEntrada = new EntradaCompartida($Qid_entrada);
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                    $oEntrada = new EntradaCompartida($Q_id_entrada);
                     $asunto = $oEntrada->getAsunto_entrada();
                 }
                 break;
@@ -68,42 +68,42 @@ switch ($Qfiltro) {
         }
         break;
     case 'en_aceptado':
-        $Qoficina = (string)\filter_input(INPUT_POST, 'oficina');
-        $oEntrada = new Entrada($Qid_entrada);
+        $Q_oficina = (string)filter_input(INPUT_POST, 'oficina');
+        $oEntrada = new Entrada($Q_id_entrada);
         $asunto = $oEntrada->getAsunto();
 
         $url_cancel = 'apps/entradas/controller/entrada_lista.php';
-        $pagina_cancel = Hash::link($url_cancel . '?' . http_build_query(['filtro' => $Qfiltro, 'oficina' => $Qoficina]));
+        $pagina_cancel = Hash::link($url_cancel . '?' . http_build_query(['filtro' => $Q_filtro, 'oficina' => $Q_oficina]));
         // En los ctr, ir directo a contestar:
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
         } else {
             $url_contestar = $url_cancel;
         }
-        $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Qfiltro, 'id_entrada' => $Qid_entrada]));
+        $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Q_id_entrada]));
         break;
     case 'en_encargado':
-        $Qencargado = (integer)\filter_input(INPUT_POST, 'encargado');
-        $oEntrada = new Entrada($Qid_entrada);
+        $Q_encargado = (integer)filter_input(INPUT_POST, 'encargado');
+        $oEntrada = new Entrada($Q_id_entrada);
         $asunto = $oEntrada->getAsunto();
 
         $url_cancel = 'apps/entradas/controller/entrada_lista.php';
-        $pagina_cancel = Hash::link($url_cancel . '?' . http_build_query(['filtro' => $Qfiltro, 'encargado' => $Qencargado]));
+        $pagina_cancel = Hash::link($url_cancel . '?' . http_build_query(['filtro' => $Q_filtro, 'encargado' => $Q_encargado]));
         // En los ctr, ir directo a contestar:
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
         } else {
             $url_contestar = $url_cancel;
         }
-        $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Qfiltro, 'id_entrada' => $Qid_entrada]));
+        $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Q_id_entrada]));
         break;
     default:
-        if (empty($Qid_expediente) && $Qfiltro != 'en_aceptado') {
+        if (empty($Q_id_expediente) && $Q_filtro != 'en_aceptado') {
             exit ("Error, no existe el expediente");
         }
 
         $oExpediente = new Expediente();
-        $oExpediente->setId_expediente($Qid_expediente);
+        $oExpediente->setId_expediente($Q_id_expediente);
         $asunto = $oExpediente->getAsunto();
         $id_ponente = $oExpediente->getPonente();
 
@@ -111,7 +111,7 @@ switch ($Qfiltro) {
         $oficina_ponente = $oCargo->getId_oficina();
 
         $url_cancel = 'apps/expedientes/controller/expediente_lista.php';
-        $pagina_cancel = Hash::link($url_cancel . '?' . http_build_query(['filtro' => $Qfiltro]));
+        $pagina_cancel = Hash::link($url_cancel . '?' . http_build_query(['filtro' => $Q_filtro]));
 }
 
 /*
@@ -142,7 +142,7 @@ $txt_plazo = '';
 $f_plazo = '';
 $hoy_iso = '';
 $titulo = _("Acciones para el expediente");
-switch ($Qfiltro) {
+switch ($Q_filtro) {
     case 'en_aceptado':
     case 'en_encargado':
         $titulo = _("Acciones para la entrada");
@@ -308,9 +308,9 @@ $yearEnd = $yearStart + 2;
 $vista = ConfigGlobal::getVista();
 
 $a_campos = [
-    'id_entrada' => $Qid_entrada,
-    'id_expediente' => $Qid_expediente,
-    'filtro' => $Qfiltro,
+    'id_entrada' => $Q_id_entrada,
+    'id_expediente' => $Q_id_expediente,
+    'filtro' => $Q_filtro,
     //'oHash' => $oHash,
     'titulo' => $titulo,
     'asunto' => $asunto,

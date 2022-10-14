@@ -84,10 +84,10 @@ class GestorLugar extends core\ClaseGestor
      */
     public function getId_iese()
     {
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             exit (_("Error al buscar el id del IESE"));
         }
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $sigla = 'IESE';
             $cLugares = $this->getLugares(['sigla' => $sigla]);
             $oLugar = $cLugares[0];
@@ -176,12 +176,12 @@ class GestorLugar extends core\ClaseGestor
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
 
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $mi_ctr = $_SESSION['oConfig']->getSigla();
             $mi_dl = $this->getSigla_superior($mi_ctr);
             $mi_cr = $this->getSigla_superior($mi_dl);
         }
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_DL) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $mi_dl = $_SESSION['oConfig']->getSigla();
             $mi_cr = $this->getSigla_superior($mi_dl);
         }
@@ -291,7 +291,7 @@ class GestorLugar extends core\ClaseGestor
      */
     function getArrayBusquedas($ctr_anulados = FALSE)
     {
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             return $this->getArrayBusquedasCtr();
         } else {
             return $this->getArrayBusquedasDl($ctr_anulados);
@@ -536,7 +536,7 @@ class GestorLugar extends core\ClaseGestor
         return $oLugarSet->getTot();
     }
 
-    /* METODES PROTECTED --------------------------------------------------------*/
+    /* MÉTODOS PROTECTED --------------------------------------------------------*/
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

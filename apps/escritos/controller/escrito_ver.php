@@ -16,22 +16,22 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qid_escrito = (string)\filter_input(INPUT_POST, 'id_escrito');
+$Q_id_escrito = (string)filter_input(INPUT_POST, 'id_escrito');
 
 // Para poder moverse de una escrito a otro:
-$QSlide_mode = (bool)\filter_input(INPUT_POST, 'slide_mode', FILTER_VALIDATE_BOOLEAN);
+$Q_Slide_mode = (bool)filter_input(INPUT_POST, 'slide_mode', FILTER_VALIDATE_BOOLEAN);
 
-if ($QSlide_mode === TRUE) {
-    $Qmov = (string)\filter_input(INPUT_POST, 'mov');
+if ($Q_Slide_mode === TRUE) {
+    $Q_mov = (string)filter_input(INPUT_POST, 'mov');
 
-    if ($Qmov == 'prev') {
-        $Qid_escrito = $Qid_escrito - 1;
+    if ($Q_mov == 'prev') {
+        $Q_id_escrito = $Q_id_escrito - 1;
     }
-    if ($Qmov == 'next') {
-        $Qid_escrito = $Qid_escrito + 1;
+    if ($Q_mov == 'next') {
+        $Q_id_escrito = $Q_id_escrito + 1;
     }
 } else {
-    $Qid_escrito = (string)\filter_input(INPUT_GET, 'id_escrito');
+    $Q_id_escrito = (string)filter_input(INPUT_GET, 'id_escrito');
 }
 
 $oProtRef = new Protocolo();
@@ -40,17 +40,17 @@ $oProtRef->setNombre('ref');
 $oProtRef->setBlanco(TRUE);
 
 $pagina = core\ConfigGlobal::getWeb() . '/apps/escritos/controller/escrito_ver.php';
-$a_cosas = ['id_escrito' => $Qid_escrito, 'slide_mode' => 'TRUE', 'mov' => 'prev'];
+$a_cosas = ['id_escrito' => $Q_id_escrito, 'slide_mode' => 'TRUE', 'mov' => 'prev'];
 $pagina_prev = web\Hash::link($pagina . '?' . http_build_query($a_cosas));
-$a_cosas = ['id_escrito' => $Qid_escrito, 'slide_mode' => 'TRUE', 'mov' => 'next'];
+$a_cosas = ['id_escrito' => $Q_id_escrito, 'slide_mode' => 'TRUE', 'mov' => 'next'];
 $pagina_next = web\Hash::link($pagina . '?' . http_build_query($a_cosas));
 
-if (!empty($Qid_escrito)) {
+if (!empty($Q_id_escrito)) {
     $base_url = core\ConfigGlobal::getWeb();
     $url_download = $base_url . '/apps/escritos/controller/adjunto_download.php';
     $url_download_pdf = $base_url . '/apps/escritos/controller/escrito_download.php';
     // Pueden ser varios escritos separados por comas:
-    $a_escritos = explode(',', $Qid_escrito);
+    $a_escritos = explode(',', $Q_id_escrito);
     $primero = 1;
     $todosHtml = '';
     $oEtherpad = new Etherpad();
@@ -76,7 +76,7 @@ if (!empty($Qid_escrito)) {
         $escrito_html = $oEtherpad->generarHtml();
 
         $oView = new ViewTwig('escritos/controller');
-        if ($QSlide_mode === TRUE) {
+        if ($Q_Slide_mode === TRUE) {
             $a_campos = [
                 'id_escrito' => $id_escrito,
                 //'oHash' => $oHash,

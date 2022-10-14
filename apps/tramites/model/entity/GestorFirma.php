@@ -577,6 +577,35 @@ class GestorFirma extends core\ClaseGestor
 
     /**
      * Devuelve boolean
+     * comprobar que ya han firmado todos
+     * pasarlo a acabado (para los centros)
+     *
+     * @param integer $id_expediente
+     * @return boolean
+     */
+    public function hasTodasLasFirmas(int $id_expediente): bool
+    {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        $tipo_voto = Firma::TIPO_VOTO;
+        $valor_ok = Firma::V_OK;
+        $valor_no = Firma::V_NO;
+        $sQuery = "SELECT count(*)
+                    FROM $nom_tabla
+                    WHERE id_expediente = $id_expediente AND tipo = $tipo_voto AND (valor IS NULL OR (valor != $valor_ok AND valor != $valor_no))
+                  ";
+        if (($stmt = $oDbl->query($sQuery)) === FALSE) {
+            $sClauError = 'GestorFirma.query';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        $count = $stmt->fetchColumn();
+        return $count <= 0;
+    }
+
+
+    /**
+     * Devuelve boolean
      * comprobar que ya ha firmado todo el mundo, para
      * pasarlo a scdl para distribuir (ok_scdl)
      *
@@ -584,11 +613,11 @@ class GestorFirma extends core\ClaseGestor
      * @param integer $id_expediente
      * @return boolean
      */
-    public function paraDistribuir($id_expediente)
+    public function isParaDistribuir($id_expediente): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        // El siguienet paso es distribuir, y ya han firmado todos:
+        // El siguiente paso es distribuir, y ya han firmado todos:
 
         // Buscar el orden tramite de distribuir, y comprobar que todos los anteriores son ok.
         $cargo_tipo_distribuir = Cargo::CARGO_DISTRIBUIR;
@@ -777,7 +806,7 @@ class GestorFirma extends core\ClaseGestor
         return $oFirmaSet->getTot();
     }
 
-    /* METODES PROTECTED --------------------------------------------------------*/
+    /* MÉTODOS PROTECTED --------------------------------------------------------*/
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

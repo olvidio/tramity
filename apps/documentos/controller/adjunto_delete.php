@@ -14,10 +14,10 @@ require_once("apps/core/global_object.inc");
 
 // El delete es via POST!!!";
 
-$Qid_doc = (integer)\filter_input(INPUT_POST, 'key');
+$Q_id_doc = (integer)filter_input(INPUT_POST, 'key');
 
-if (!empty($Qid_doc)) {
-    $oDocumento = new Documento($Qid_doc);
+if (!empty($Q_id_doc)) {
+    $oDocumento = new Documento($Q_id_doc);
     $oDocumento->DBCarregar('');
 
     /* The deleteUrl server action must send data via AJAX request as a JSON response {error: BOOLEAN_VALUE} */

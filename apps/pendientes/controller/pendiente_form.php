@@ -33,28 +33,28 @@ $oPosicion->recordar();
 // Si vengo del formulario de entradas, abro una ventana nueva y
 // los parametros vienen por GET.
 
-$Qfiltro = (string)\filter_input(INPUT_POST, 'filtro');
-$Qperiodo = (string)\filter_input(INPUT_POST, 'periodo');
-$Qnuevo = (string)\filter_input(INPUT_POST, 'nuevo');
-$Qcalendario = (string)\filter_input(INPUT_POST, 'calendario');
-$Qid_oficina = (string)\filter_input(INPUT_POST, 'id_oficina');
-$id_reg = (string)\filter_input(INPUT_POST, 'id_reg');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_periodo = (string)filter_input(INPUT_POST, 'periodo');
+$Q_nuevo = (string)filter_input(INPUT_POST, 'nuevo');
+$Q_calendario = (string)filter_input(INPUT_POST, 'calendario');
+$Q_id_oficina = (string)filter_input(INPUT_POST, 'id_oficina');
+$id_reg = (string)filter_input(INPUT_POST, 'id_reg');
 
 $cargar_css = FALSE;
 
 // estoy en una ventana independiente
-$go = (string)\filter_input(INPUT_GET, 'go');
+$go = (string)filter_input(INPUT_GET, 'go');
 if (empty($go)) {
-    $go = (string)\filter_input(INPUT_POST, 'go');
+    $go = (string)filter_input(INPUT_POST, 'go');
 }
 if ($go == "entradas" || $go == "salidas" || $go == "mov_iese") {
-    $id_reg = (integer)\filter_input(INPUT_GET, 'id_reg');
-    $Qid_oficina = (integer)\filter_input(INPUT_GET, 'of_ponente');
-    $Qcalendario = 'registro';
+    $id_reg = (integer)filter_input(INPUT_GET, 'id_reg');
+    $Q_id_oficina = (integer)filter_input(INPUT_GET, 'of_ponente');
+    $Q_calendario = 'registro';
 
     $cargar_css = TRUE;
 } else {
-    $Qcalendario = empty($Qcalendario) ? 'oficina' : $Qcalendario;
+    $Q_calendario = empty($Q_calendario) ? 'oficina' : $Q_calendario;
 }
 
 $gesOficinas = new GestorOficina();
@@ -66,7 +66,7 @@ if ($role_actual === 'secretaria') {
     $secretaria = TRUE;
     $oDesplOficinas = $gesOficinas->getListaOficinas();
     $oDesplOficinas->setNombre('id_oficina');
-    $id_oficina = $Qid_oficina;
+    $id_oficina = $Q_id_oficina;
 
     // nombre normalizado del usuario y oficina:
     $id_cargo_role = ConfigGlobal::role_id_cargo();
@@ -143,14 +143,14 @@ $ref_prot_num = '';
 $ref_prot_any = '';
 $ref_prot_mas = '';
 
-$nuevo = empty($Qnuevo) ? 1 : $Qnuevo;
+$nuevo = empty($Q_nuevo) ? 1 : $Q_nuevo;
 $hoy = date("d/m/Y");
 $hoy_iso = date("Y-m-d");
 if ($nuevo == 1) {
     $uid = '';
     if (!empty($id_oficina)) { // En el caso de secretaria puede estar vacío
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-        $cal_oficina = $oDavical->getNombreRecurso($Qid_oficina);
+        $cal_oficina = $oDavical->getNombreRecurso($Q_id_oficina);
     } else {
         $cal_oficina = '';
     }
@@ -173,7 +173,7 @@ if ($nuevo == 1) {
             $cal_oficina = strtok('#');
             // deduzco el calendario:
             $calendario_of = substr($uid, strpos($uid, '@') + 1);
-            $Qcalendario = substr($calendario_of, 0, strpos($calendario_of, '_'));
+            $Q_calendario = substr($calendario_of, 0, strpos($calendario_of, '_'));
         } else {
             empty($_POST['uid']) ? $uid = "" : $uid = $_POST['uid'];
             empty($_POST['cal_oficina']) ? $cal_oficina = "" : $cal_oficina = $_POST['cal_oficina'];
@@ -187,7 +187,7 @@ if ($nuevo == 1) {
             $id_reg = substr($uid, 3, $pos);
         }
 
-        $oPendiente = new Pendiente($cal_oficina, $Qcalendario, $user_davical, $uid);
+        $oPendiente = new Pendiente($cal_oficina, $Q_calendario, $user_davical, $uid);
 
         $asunto = $oPendiente->getAsunto();
         $status = $oPendiente->getStatus();
@@ -257,21 +257,21 @@ if ($go == 'entradas') {
 
     $f_acabado = '';
     $observ = '';
-    $asunto = (string)\filter_input(INPUT_GET, 'asunto');
-    $detalle = (string)\filter_input(INPUT_GET, 'detalle');
-    $visibilidad = (integer)\filter_input(INPUT_GET, 'visibilidad');
+    $asunto = (string)filter_input(INPUT_GET, 'asunto');
+    $detalle = (string)filter_input(INPUT_GET, 'detalle');
+    $visibilidad = (integer)filter_input(INPUT_GET, 'visibilidad');
     $oDesplVisibilidad->setOpcion_sel($visibilidad);
 
     // las oficinas	implicadas
-    $resto_oficinas = (array)\filter_input(INPUT_GET, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $resto_oficinas = (array)filter_input(INPUT_GET, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $oArrayDesplOficinas->setSeleccionados($resto_oficinas);
 
-    $f_plazo = (string)\filter_input(INPUT_GET, 'f_plazo');
+    $f_plazo = (string)filter_input(INPUT_GET, 'f_plazo');
 
-    $ref_id_lugar = (integer)\filter_input(INPUT_GET, 'origen');
-    $ref_prot_num = (integer)\filter_input(INPUT_GET, 'prot_num_origen');
-    $ref_prot_any = (integer)\filter_input(INPUT_GET, 'prot_any_origen');
-    $ref_prot_mas = (string)\filter_input(INPUT_GET, 'prot_mas_origen');
+    $ref_id_lugar = (integer)filter_input(INPUT_GET, 'origen');
+    $ref_prot_num = (integer)filter_input(INPUT_GET, 'prot_num_origen');
+    $ref_prot_any = (integer)filter_input(INPUT_GET, 'prot_any_origen');
+    $ref_prot_mas = (string)filter_input(INPUT_GET, 'prot_mas_origen');
     $oDesplLugar->setOpcion_sel($ref_id_lugar);
 
     $perm_detalle = 3;
@@ -280,11 +280,11 @@ if ($go == 'entradas') {
 
 /// titulo pagina ///
 $titulo_oficina = '';
-if ($Qcalendario != 'registro') {
-    if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+if ($Q_calendario != 'registro') {
+    if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
         $titulo_oficina = sprintf(_("pendiente de %s"), ConfigGlobal::getEsquema());
     } else {
-        $oficina_txt = $a_posibles_oficinas[$Qid_oficina];
+        $oficina_txt = $a_posibles_oficinas[$Q_id_oficina];
         $titulo_oficina = sprintf(_("pendiente de la oficina %s"), $oficina_txt);
     }
 }
@@ -555,10 +555,10 @@ $yearStart = date('Y');
 $yearEnd = $yearStart + 2;
 
 $a_cosas = [
-    'filtro' => $Qfiltro,
-    'periodo' => $Qperiodo,
+    'filtro' => $Q_filtro,
+    'periodo' => $Q_periodo,
     'id_oficina' => $id_oficina,
-    'calendario' => $Qcalendario,
+    'calendario' => $Q_calendario,
 ];
 $pagina_cancel = web\Hash::link('apps/pendientes/controller/pendiente_tabla.php?' . http_build_query($a_cosas));
 $base_url_web = ConfigGlobal::getWeb(); //http://tramity.local
@@ -568,12 +568,12 @@ if (!empty($oDesplOficinas)) {
 }
 
 $oView = new ViewTwig('pendientes/controller');
-if (!empty($periodico_tipo) && $Qcalendario == 'registro' && $secretaria === FALSE) {
+if (!empty($periodico_tipo) && $Q_calendario == 'registro' && $secretaria === FALSE) {
     $a_campos = [
         'oPosicion' => $oPosicion,
         'base_url_web' => $base_url_web,
         'cargar_css' => $cargar_css,
-        'calendario' => $Qcalendario,
+        'calendario' => $Q_calendario,
         'secretaria' => $secretaria,
         'uid' => $uid,
         'cal_oficina' => $cal_oficina,
@@ -601,7 +601,7 @@ if (!empty($periodico_tipo) && $Qcalendario == 'registro' && $secretaria === FAL
         'titulo_oficina' => $titulo_oficina,
         'base_url_web' => $base_url_web,
         'cargar_css' => $cargar_css,
-        'calendario' => $Qcalendario,
+        'calendario' => $Q_calendario,
         'secretaria' => $secretaria,
         'uid' => $uid,
         'cal_oficina' => $cal_oficina,

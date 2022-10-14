@@ -48,7 +48,7 @@ class GestorOficina extends core\ClaseGestor
      */
     function getArrayOficinas()
     {
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $clave = Cargo::OFICINA_ESQUEMA;
             $val = ConfigGlobal::getEsquema();
             $aOpciones[$clave] = $val;
@@ -82,7 +82,7 @@ class GestorOficina extends core\ClaseGestor
      */
     function getListaOficinas()
     {
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $clave = Cargo::OFICINA_ESQUEMA;
             $val = ConfigGlobal::getEsquema();
             $aOpciones[$clave] = $val;
@@ -203,7 +203,7 @@ class GestorOficina extends core\ClaseGestor
         return $oOficinaSet->getTot();
     }
 
-    /* METODES PROTECTED --------------------------------------------------------*/
+    /* MÉTODOS PROTECTED --------------------------------------------------------*/
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

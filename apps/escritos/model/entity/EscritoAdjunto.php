@@ -302,8 +302,8 @@ class EscritoAdjunto extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_item de EscritoAdjunto
@@ -325,7 +325,7 @@ class EscritoAdjunto extends core\ClasePropiedades
         $this->iid_escrito = $iid_escrito;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut snom de EscritoAdjunto
@@ -515,7 +515,7 @@ class EscritoAdjunto extends core\ClasePropiedades
         $oEscritoAdjuntoSet->add($this->getDatosTipo_doc());
         return $oEscritoAdjuntoSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut iid_escrito de EscritoAdjunto

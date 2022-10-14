@@ -91,14 +91,14 @@ class GestorCargo extends core\ClaseGestor
      * Els posibles noms d'usuaris d'una oficina
      *
      * @param integer $id_oficina
-     * @return Array [id_cargo => nom_usuario]
+     * @return array|false [id_cargo => nom_usuario]
      */
     function getArrayUsuariosOficina($id_oficina = '', $sin_cargo = FALSE)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
 
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $Where = "WHERE id_oficina = $id_oficina";
         } else {
             $Where = "WHERE id_oficina > 0";
@@ -145,7 +145,7 @@ class GestorCargo extends core\ClaseGestor
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
 
-        if ($_SESSION['oConfig']->getAmbito() == Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $Where = "WHERE id_oficina = " . Cargo::OFICINA_ESQUEMA;
         } else {
             $Where = "WHERE id_oficina > 0";
@@ -442,7 +442,7 @@ class GestorCargo extends core\ClaseGestor
         return $oCargoSet->getTot();
     }
 
-    /* METODES PROTECTED --------------------------------------------------------*/
+    /* MÉTODOS PROTECTED --------------------------------------------------------*/
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

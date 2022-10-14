@@ -280,8 +280,8 @@ class EntradaCompartidaAdjunto extends core\ClasePropiedades
         }
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut iid_item de EntradaCompartidaAdjunto
@@ -303,7 +303,7 @@ class EntradaCompartidaAdjunto extends core\ClasePropiedades
         $this->iid_entrada_compartida = $iid_entrada_compartida;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut snom de EntradaCompartidaAdjunto
@@ -468,7 +468,7 @@ class EntradaCompartidaAdjunto extends core\ClasePropiedades
         $oEntradaCompartidaAdjuntoSet->add($this->getDatosAdjunto());
         return $oEntradaCompartidaAdjuntoSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut iid_entrada_compartida de EntradaCompartidaAdjunto

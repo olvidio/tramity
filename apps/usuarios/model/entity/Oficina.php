@@ -230,8 +230,8 @@ class Oficina extends core\ClasePropiedades
         $this->setPrimary_key($aPK);
     }
 
-    /* METODES ALTRES  ----------------------------------------------------------*/
-    /* METODES PRIVATS ----------------------------------------------------------*/
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
      * Recupera las claus primàries de Oficina en un array
@@ -256,7 +256,7 @@ class Oficina extends core\ClasePropiedades
         $this->iid_oficina = $iid_oficina;
     }
 
-    /* METODES GET i SET --------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * estableix el valor de l'atribut ssigla de Oficina
@@ -390,7 +390,7 @@ class Oficina extends core\ClasePropiedades
         $oOficinaSet->add($this->getDatosOrden());
         return $oOficinaSet->getTot();
     }
-    /* METODES GET i SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
      * Recupera les propietats de l'atribut ssigla de Oficina

@@ -17,42 +17,42 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qrefresh = (integer)\filter_input(INPUT_POST, 'refresh');
-$oPosicion->recordar($Qrefresh);
+$Q_refresh = (integer)filter_input(INPUT_POST, 'refresh');
+$oPosicion->recordar($Q_refresh);
 
-$Qid_entidad = (integer)\filter_input(INPUT_POST, 'id_entidad');
+$Q_id_entidad = (integer)filter_input(INPUT_POST, 'id_entidad');
 
-$Qscroll_id = (integer)\filter_input(INPUT_POST, 'scroll_id');
-$a_sel = (array)\filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$Q_scroll_id = (integer)filter_input(INPUT_POST, 'scroll_id');
+$a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 // Hay que usar isset y empty porque puede tener el valor =0.
 // Si vengo por medio de Posicion, borro la última
 if (isset($_POST['stack'])) {
-    $stack = \filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
+    $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
     if ($stack != '') {
         // No me sirve el de global_object, sino el de la session
         $oPosicion2 = new web\Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
             $a_sel = $oPosicion2->getParametro('id_sel');
             if (!empty($a_sel)) {
-                $Qid_entidad = (integer)strtok($a_sel[0], "#");
+                $Q_id_entidad = (integer)strtok($a_sel[0], "#");
             } else {
-                $Qid_entidad = $oPosicion2->getParametro('id_entidad');
+                $Q_id_entidad = $oPosicion2->getParametro('id_entidad');
             }
-            $Qscroll_id = $oPosicion2->getParametro('scroll_id');
+            $Q_scroll_id = $oPosicion2->getParametro('scroll_id');
             $oPosicion2->olvidar($stack);
         }
     }
 } elseif (!empty($a_sel)) { //vengo de un checkbox
-    $Qque = (string)\filter_input(INPUT_POST, 'que');
-    if ($Qque != 'del_grupmenu') { //En el caso de venir de borrar un grupmenu, no hago nada
-        $Qid_entidad = (integer)strtok($a_sel[0], "#");
+    $Q_que = (string)filter_input(INPUT_POST, 'que');
+    if ($Q_que != 'del_grupmenu') { //En el caso de venir de borrar un grupmenu, no hago nada
+        $Q_id_entidad = (integer)strtok($a_sel[0], "#");
         // el scroll id es de la página anterior, hay que guardarlo allí
         $oPosicion->addParametro('id_sel', $a_sel, 1);
-        $Qscroll_id = (integer)\filter_input(INPUT_POST, 'scroll_id');
-        $oPosicion->addParametro('scroll_id', $Qscroll_id, 1);
+        $Q_scroll_id = (integer)filter_input(INPUT_POST, 'scroll_id');
+        $oPosicion->addParametro('scroll_id', $Q_scroll_id, 1);
     }
 }
-$oPosicion->setParametros(array('id_entidad' => $Qid_entidad), 1);
+$oPosicion->setParametros(array('id_entidad' => $Q_id_entidad), 1);
 
 $oEntidad = new Entidad(); // para los tipos
 $a_opciones_tipos = $oEntidad->getArrayTipo();
@@ -60,15 +60,15 @@ $oDesplTipos = new Desplegable();
 $oDesplTipos->setNombre('tipo_entidad');
 $oDesplTipos->setOpciones($a_opciones_tipos);
 
-if (!empty($Qid_entidad)) {
+if (!empty($Q_id_entidad)) {
     $que_user = 'guardar';
-    $oEntidadDB = new EntidadDB(array('id_entidad' => $Qid_entidad));
+    $oEntidadDB = new EntidadDB(array('id_entidad' => $Q_id_entidad));
 
     $nombre = $oEntidadDB->getnombre();
     $schema = $oEntidadDB->getSchema();
     $tipo = $oEntidadDB->getTipo();
     $oDesplTipos->setOpcion_sel($tipo);
-    $anulado = $oEntidadDB->getAnulado();
+    $anulado = $oEntidadDB->isAnulado();
     $chk_anulado = ($anulado === TRUE) ? 'checked' : '';
 
 } else {
@@ -85,7 +85,7 @@ $camposForm = 'que!nombre!schema!tipo_entidad!anulado';
 $oHash = new web\Hash();
 $oHash->setcamposForm($camposForm);
 $a_camposHidden = array(
-    'id_entidad' => $Qid_entidad,
+    'id_entidad' => $Q_id_entidad,
     'que' => $que_user,
 );
 $oHash->setArraycamposHidden($a_camposHidden);
@@ -99,7 +99,7 @@ $pagina_cancel = web\Hash::link('apps/entidades/controller/entidad_lista.php?' .
 $a_campos = [
     'oPosicion' => $oPosicion,
     'url_update' => $url_update,
-    'id_entidad' => $Qid_entidad,
+    'id_entidad' => $Q_id_entidad,
     'nombre' => $nombre,
     'oHash' => $oHash,
     'schema' => $schema,
