@@ -237,7 +237,7 @@
 <h3>{{ "valor inicio contadores"|trans|raw }}:</h3>
 <form id="frm_contador" name="frm_contador" action="">
     {{ oHashC1.getCamposHtml|raw }}
-    {{ "para la propia entidad"|trans|raw }}
+    {{ "para la propia nombre_entidad"|trans|raw }}
     <input class="col-2" type="text" name="valor" value="{{ ini_contador }}">
     <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);">
 </form>
@@ -264,7 +264,7 @@
     <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);">
 </form>
 <hr>
-<h3>{{ "Ámbito de la entidad: centro, delegación, comisión regional"|trans|raw }}:</h3>
+<h3>{{ "Ámbito de la nombre_entidad: centro, delegación, comisión regional"|trans|raw }}:</h3>
 <form id="frm_dl_r" name="frm_dl_r" action="">
     {{ oHashDLR.getCamposHtml|raw }}
     <input type="radio" name="valor" value="{{ val_ctr }}" {{ chk_ctr }} > {{ "centro"|trans|raw }}

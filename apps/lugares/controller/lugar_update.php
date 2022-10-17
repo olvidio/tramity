@@ -46,7 +46,7 @@ switch ($Q_que) {
         $Qanulado = (bool)filter_input(INPUT_POST, 'anulado');
 
         $oLugar = new Lugar(array('id_lugar' => $Qid_lugar));
-        $oLugar->DBCarregar();
+        $oLugar->DBCargar();
         $oLugar->setSigla($Qsigla);
         $oLugar->setDl($Qdl);
         $oLugar->setRegion($Qregion);
@@ -75,7 +75,7 @@ switch ($Q_que) {
         $Qmodo_envio = (integer)filter_input(INPUT_POST, 'modo_envio');
 
         $oLugar = new Lugar(array('id_lugar' => $Qid_lugar));
-        $oLugar->DBCarregar();
+        $oLugar->DBCargar();
         $oLugar->setSigla($Qsigla);
         $oLugar->setDl($Qdl);
         $oLugar->setRegion($Qregion);

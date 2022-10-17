@@ -123,7 +123,7 @@ class Preferencia extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -184,7 +184,7 @@ class Preferencia extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -359,7 +359,7 @@ class Preferencia extends core\ClasePropiedades
     function getId_item()
     {
         if (!isset($this->iid_item) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_item;
     }
@@ -372,7 +372,7 @@ class Preferencia extends core\ClasePropiedades
     function getId_usuario()
     {
         if (!isset($this->iid_usuario) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_usuario;
     }
@@ -385,7 +385,7 @@ class Preferencia extends core\ClasePropiedades
     function getTipo()
     {
         if (!isset($this->stipo) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->stipo;
     }
@@ -398,7 +398,7 @@ class Preferencia extends core\ClasePropiedades
     function getPreferencia()
     {
         if (!isset($this->spreferencia) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->spreferencia;
     }
@@ -468,7 +468,7 @@ class Preferencia extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

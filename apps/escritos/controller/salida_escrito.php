@@ -46,7 +46,7 @@ if (!empty($Q_prot_num) && !empty($Q_prot_any)) {
     $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
     if (!empty($cEscritos)) {
         $oEscrito = $cEscritos[0];
-        $oEscrito->DBCarregar();
+        $oEscrito->DBCargar();
         $Q_id_escrito = $oEscrito->getId_escrito();
     }
     if (count($cEscritos) > 1) {

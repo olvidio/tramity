@@ -256,7 +256,7 @@ class Enviar
             // número de protocolo.
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && empty((array)$json_prot_local)) {
                 $this->oEscrito->generarProtocolo();
-                $this->oEscrito->DBCarregar();
+                $this->oEscrito->DBCargar();
             }
             // f_salida
             $this->f_salida = $this->oEscrito->getF_escrito()->getFromLocal('.');
@@ -310,7 +310,7 @@ class Enviar
 
             $oLugar = new Lugar();
             $oLugar->setId_lugar($id_lugar);
-            $oLugar->DBCarregar(); // obligar a recargar después de cambiar el id.
+            $oLugar->DBCargar(); // obligar a recargar después de cambiar el id.
             $this->sigla_destino = $oLugar->getSigla();
 
             $modo_envio = $oLugar->getModo_envio();

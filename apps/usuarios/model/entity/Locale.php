@@ -128,7 +128,7 @@ class Locale extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === false) {
+        if ($this->DBCargar('guardar') === false) {
             $bInsert = true;
         } else {
             $bInsert = false;
@@ -197,7 +197,7 @@ class Locale extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -381,7 +381,7 @@ class Locale extends core\ClasePropiedades
     function getId_locale()
     {
         if (!isset($this->sid_locale) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sid_locale;
     }
@@ -394,7 +394,7 @@ class Locale extends core\ClasePropiedades
     function getNom_locale()
     {
         if (!isset($this->snom_locale) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->snom_locale;
     }
@@ -407,7 +407,7 @@ class Locale extends core\ClasePropiedades
     function getIdioma()
     {
         if (!isset($this->sidioma) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sidioma;
     }
@@ -420,7 +420,7 @@ class Locale extends core\ClasePropiedades
     function getNom_idioma()
     {
         if (!isset($this->snom_idioma) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->snom_idioma;
     }
@@ -433,7 +433,7 @@ class Locale extends core\ClasePropiedades
     function getActivo()
     {
         if (!isset($this->bactivo) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->bactivo;
     }
@@ -525,7 +525,7 @@ class Locale extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

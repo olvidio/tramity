@@ -157,7 +157,7 @@ class Principal extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -220,7 +220,7 @@ class Principal extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -413,7 +413,7 @@ class Principal extends core\ClasePropiedades
     function getPrincipal_id()
     {
         if (!isset($this->iprincipal_id) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iprincipal_id;
     }
@@ -426,7 +426,7 @@ class Principal extends core\ClasePropiedades
     function getType_id()
     {
         if (!isset($this->itype_id) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->itype_id;
     }
@@ -439,7 +439,7 @@ class Principal extends core\ClasePropiedades
     function getUser_no()
     {
         if (!isset($this->iuser_no) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iuser_no;
     }
@@ -452,7 +452,7 @@ class Principal extends core\ClasePropiedades
     function getDisplayname()
     {
         if (!isset($this->sdisplayname) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdisplayname;
     }
@@ -465,7 +465,7 @@ class Principal extends core\ClasePropiedades
     function getDefault_privileges()
     {
         if (!isset($this->sdefault_privileges) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdefault_privileges;
     }
@@ -550,7 +550,7 @@ class Principal extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

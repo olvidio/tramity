@@ -33,7 +33,7 @@ switch ($Q_que) {
             $hoy_iso = $oHoy->getIso();
 
             $oDocumento = new Documento($Q_id_doc);
-            $oDocumento->DBCarregar();
+            $oDocumento->DBCargar();
             $oDocumento->setTipo_doc($Q_tipo_doc);
             $oDocumento->setF_upload($hoy_iso, FALSE);
 
@@ -61,7 +61,7 @@ switch ($Q_que) {
     case 'guardar':
         if (!empty($Q_id_doc)) {
             $oDocumento = new Documento($Q_id_doc);
-            $oDocumento->DBCarregar();
+            $oDocumento->DBCargar();
         } else {
             $oDocumento = new Documento();
             $id_creador = ConfigGlobal::role_id_cargo();

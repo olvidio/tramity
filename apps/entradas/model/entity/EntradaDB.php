@@ -272,7 +272,7 @@ class EntradaDB extends core\ClasePropiedades
     function getPonente()
     {
         if (!isset($this->iponente) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iponente;
     }
@@ -284,7 +284,7 @@ class EntradaDB extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -648,7 +648,7 @@ class EntradaDB extends core\ClasePropiedades
     function getResto_oficinas()
     {
         if (!isset($this->a_resto_oficinas) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return core\array_pg2php($this->a_resto_oficinas);
     }
@@ -662,7 +662,7 @@ class EntradaDB extends core\ClasePropiedades
     function getJson_visto($bArray = FALSE)
     {
         if (!isset($this->json_visto) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_visto, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -702,7 +702,7 @@ class EntradaDB extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -807,7 +807,7 @@ class EntradaDB extends core\ClasePropiedades
     function getId_entrada()
     {
         if (!isset($this->iid_entrada) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_entrada;
     }
@@ -820,7 +820,7 @@ class EntradaDB extends core\ClasePropiedades
     function getId_entrada_compartida()
     {
         if (!isset($this->iid_entrada_compartida) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_entrada_compartida;
     }
@@ -833,7 +833,7 @@ class EntradaDB extends core\ClasePropiedades
     function getModo_entrada()
     {
         if (!isset($this->imodo_entrada) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->imodo_entrada;
     }
@@ -847,7 +847,7 @@ class EntradaDB extends core\ClasePropiedades
     function getJson_prot_origen($bArray = FALSE)
     {
         if (!isset($this->json_prot_origen) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_origen, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -886,7 +886,7 @@ class EntradaDB extends core\ClasePropiedades
     function getAsunto_entrada()
     {
         if (!isset($this->sasunto_entrada) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sasunto_entrada;
     }
@@ -900,7 +900,7 @@ class EntradaDB extends core\ClasePropiedades
     function getJson_prot_ref($bArray = FALSE)
     {
         if (!isset($this->json_prot_ref) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_ref, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -939,7 +939,7 @@ class EntradaDB extends core\ClasePropiedades
     function getAsuntoDB()
     {
         if (!isset($this->sasunto) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sasunto;
     }
@@ -952,7 +952,7 @@ class EntradaDB extends core\ClasePropiedades
     function getF_entrada()
     {
         if (!isset($this->df_entrada) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_entrada)) {
             return new web\NullDateTimeLocal();
@@ -969,7 +969,7 @@ class EntradaDB extends core\ClasePropiedades
     function getDetalleDB()
     {
         if (!isset($this->sdetalle) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdetalle;
     }
@@ -982,7 +982,7 @@ class EntradaDB extends core\ClasePropiedades
     function getCategoria()
     {
         if (!isset($this->icategoria) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->icategoria;
     }
@@ -995,7 +995,7 @@ class EntradaDB extends core\ClasePropiedades
     function getVisibilidad()
     {
         if (!isset($this->ivisibilidad) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ivisibilidad;
     }
@@ -1008,7 +1008,7 @@ class EntradaDB extends core\ClasePropiedades
     function getF_contestar()
     {
         if (!isset($this->df_contestar) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_contestar)) {
             return new web\NullDateTimeLocal();
@@ -1025,7 +1025,7 @@ class EntradaDB extends core\ClasePropiedades
     function getBypass()
     {
         if (!isset($this->bbypass) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->bbypass;
     }
@@ -1038,7 +1038,7 @@ class EntradaDB extends core\ClasePropiedades
     function getEstado()
     {
         if (!isset($this->iestado) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iestado;
     }
@@ -1051,7 +1051,7 @@ class EntradaDB extends core\ClasePropiedades
     function getAnulado()
     {
         if (!isset($this->sanulado) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sanulado;
     }
@@ -1064,7 +1064,7 @@ class EntradaDB extends core\ClasePropiedades
     function getEncargado()
     {
         if (!isset($this->iencargado) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iencargado;
     }
@@ -1359,7 +1359,7 @@ class EntradaDB extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

@@ -126,7 +126,7 @@ class RoleMember extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -183,7 +183,7 @@ class RoleMember extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -334,7 +334,7 @@ class RoleMember extends core\ClasePropiedades
     function getRole_no()
     {
         if (!isset($this->irole_no) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->irole_no;
     }
@@ -347,7 +347,7 @@ class RoleMember extends core\ClasePropiedades
     function getUser_no()
     {
         if (!isset($this->iuser_no) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iuser_no;
     }
@@ -387,7 +387,7 @@ class RoleMember extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

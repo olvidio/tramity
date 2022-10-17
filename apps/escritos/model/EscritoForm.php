@@ -365,8 +365,8 @@ class EscritoForm
         ];
 
         $explotar = FALSE;
-        if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
-            || ($estado == Expediente::ESTADO_ACABADO_SECRETARIA)) {
+        if ($estado === Expediente::ESTADO_ACABADO_ENCARGADO
+            || ($estado === Expediente::ESTADO_ACABADO_SECRETARIA)) {
             // Posibilidad de explotar en varios escritos, uno para cada ctr destino.
             $ctr_dest = $oArrayProtDestino->getArray_sel();
             if (count($ctr_dest) > 1 || !empty($a_grupos)) {
@@ -395,6 +395,11 @@ class EscritoForm
             default:
                 $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
         }
+
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && $this->Qfiltro === 'circulando') {
+            $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
+        }
+
 
         $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query(['filtro' => $this->Qfiltro]));
         $url_escrito = 'apps/escritos/controller/escrito_form.php';

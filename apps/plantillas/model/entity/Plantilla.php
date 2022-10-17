@@ -117,7 +117,7 @@ class Plantilla extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -174,7 +174,7 @@ class Plantilla extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -325,7 +325,7 @@ class Plantilla extends core\ClasePropiedades
     function getId_plantilla()
     {
         if (!isset($this->iid_plantilla) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_plantilla;
     }
@@ -338,7 +338,7 @@ class Plantilla extends core\ClasePropiedades
     function getNombre()
     {
         if (!isset($this->snombre) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->snombre;
     }
@@ -378,7 +378,7 @@ class Plantilla extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

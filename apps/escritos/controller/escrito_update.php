@@ -67,7 +67,7 @@ switch ($Q_que) {
         $error_txt = '';
         $oEscrito = new Escrito($Q_id_escrito);
         $Q_detalle = (string)filter_input(INPUT_POST, 'text');
-        $oEscrito->DBCarregar();
+        $oEscrito->DBCargar();
         $oEscrito->setDetalle($Q_detalle);
         if ($oEscrito->DBGuardar() === FALSE) {
             $error_txt = $oEscrito->getErrorTxt();
@@ -335,7 +335,7 @@ switch ($Q_que) {
             // Sólo se puede eliminar si no se ha enviado, o si es secretaría 
             // Si se ha enviado se puede quitar del expediente:
             $f_salida = $oEscrito->getF_salida()->getIso();
-            if (empty($f_salida) || ConfigGlobal::role_actual() == 'secretaria') {
+            if (empty($f_salida) || ConfigGlobal::role_actual() === 'secretaria') {
                 $tipo_doc = $oEscrito->getTipo_doc();
                 // borrar el Etherpad
                 if ($tipo_doc == Escrito::TIPO_ETHERPAD) {
@@ -380,7 +380,7 @@ switch ($Q_que) {
         break;
     case 'escrito_a_secretaria':
         $oEscrito = new Escrito($Q_id_escrito);
-        $oEscrito->DBCarregar();
+        $oEscrito->DBCargar();
         $oEscrito->setComentarios('');
         $oEscrito->setOK(Escrito::OK_OFICINA);
         if ($oEscrito->DBGuardar() === FALSE) {
@@ -390,7 +390,7 @@ switch ($Q_que) {
     case 'escrito_a_oficina':
         $Q_comentario = (string)filter_input(INPUT_POST, 'comentario');
         $oEscrito = new Escrito($Q_id_escrito);
-        $oEscrito->DBCarregar();
+        $oEscrito->DBCargar();
         $oEscrito->setComentarios($Q_comentario);
         $oEscrito->setOK(Escrito::OK_NO);
         if ($oEscrito->DBGuardar() === FALSE) {
@@ -400,7 +400,7 @@ switch ($Q_que) {
     case 'tipo_doc':
         $Q_tipo_doc = (integer)filter_input(INPUT_POST, 'tipo_doc');
         $oEscrito = new Escrito($Q_id_escrito);
-        $oEscrito->DBCarregar();
+        $oEscrito->DBCargar();
         $oEscrito->setTipo_doc($Q_tipo_doc);
         if ($oEscrito->DBGuardar() === FALSE) {
             exit($oEscrito->getErrorTxt());
@@ -413,7 +413,7 @@ switch ($Q_que) {
             $Q_f_escrito = $oHoy->getFromLocal();
         }
         $oEscrito = new Escrito($Q_id_escrito);
-        $oEscrito->DBCarregar();
+        $oEscrito->DBCargar();
         $oEscrito->setF_escrito($Q_f_escrito);
         if ($oEscrito->DBGuardar() === FALSE) {
             exit($oEscrito->getErrorTxt());
@@ -423,7 +423,7 @@ switch ($Q_que) {
         $txt_err = '';
         if (!empty($Q_id_escrito)) {
             $oEscrito = new Escrito($Q_id_escrito);
-            $oEscrito->DBCarregar();
+            $oEscrito->DBCargar();
             $Q_anular = (string)filter_input(INPUT_POST, 'anular');
 
             if (is_true($Q_anular)) {
@@ -459,7 +459,7 @@ switch ($Q_que) {
         $nuevo = FALSE;
         if (!empty($Q_id_escrito)) {
             $oEscrito = new Escrito($Q_id_escrito);
-            $oEscrito->DBCarregar();
+            $oEscrito->DBCargar();
             $oPermisoRegistro = new PermRegistro();
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEscrito, 'asunto');
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEscrito, 'detalle');
@@ -472,7 +472,7 @@ switch ($Q_que) {
             $perm_detalle = PermRegistro::PERM_MODIFICAR;
         }
 
-        if ($Q_accion == Escrito::ACCION_ESCRITO) {
+        if ($Q_accion === Escrito::ACCION_ESCRITO) {
             // Si esta marcado como grupo de destinos, o destinos individuales. 
             if (core\is_true($Q_grupo_dst)) {
                 $descripcion = '';
@@ -481,7 +481,7 @@ switch ($Q_que) {
                 $a_grupos = $gesGrupo->getArrayGrupos();
                 foreach ($Q_a_grupos as $id_grupo) {
                     // si es personalizado, no cambio nada porque ya se ha guardado al personalizar
-                    if ($id_grupo == 'custom') {
+                    if ($id_grupo === 'custom') {
                         $saltar = TRUE;
                         break;
                     }
@@ -624,7 +624,7 @@ switch ($Q_que) {
         $txt_err = '';
         if (!empty($Q_id_escrito)) {
             $oEscrito = new Escrito($Q_id_escrito);
-            $oEscrito->DBCarregar();
+            $oEscrito->DBCargar();
         } else {
             $txt_err .= _("No puede ser");
         }
@@ -653,7 +653,7 @@ switch ($Q_que) {
         $Q_f_aprobacion = (string)filter_input(INPUT_POST, 'f_aprobacion');
         if (!empty($Q_id_escrito)) {
             $oEscrito = new Escrito($Q_id_escrito);
-            $oEscrito->DBCarregar();
+            $oEscrito->DBCargar();
             $oPermisoRegistro = new PermRegistro();
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEscrito, 'asunto');
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEscrito, 'detalle');

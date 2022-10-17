@@ -129,7 +129,7 @@ class Etiqueta extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -196,7 +196,7 @@ class Etiqueta extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -377,7 +377,7 @@ class Etiqueta extends core\ClasePropiedades
     function getId_etiqueta()
     {
         if (!isset($this->iid_etiqueta) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_etiqueta;
     }
@@ -390,7 +390,7 @@ class Etiqueta extends core\ClasePropiedades
     function getNom_etiqueta()
     {
         if (!isset($this->snom_etiqueta) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->snom_etiqueta;
     }
@@ -403,7 +403,7 @@ class Etiqueta extends core\ClasePropiedades
     function getId_cargo()
     {
         if (!isset($this->iid_cargo) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_cargo;
     }
@@ -416,7 +416,7 @@ class Etiqueta extends core\ClasePropiedades
     function getOficina()
     {
         if (!isset($this->boficina) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->boficina;
     }
@@ -486,7 +486,7 @@ class Etiqueta extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

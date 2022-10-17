@@ -50,7 +50,7 @@ switch ($Q_que) {
 
         $a_antecedente = ['tipo' => $Q_tipo_antecedente, 'id' => $Q_id_escrito];
         $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCarregar();
+        $oExpediente->DBCargar();
         $oExpediente->delAntecedente($a_antecedente);
         if ($oExpediente->DBGuardar() === FALSE) {
             exit($oExpediente->getErrorTxt());
@@ -63,7 +63,7 @@ switch ($Q_que) {
 
         $a_antecedente = ['tipo' => $Q_tipo_antecedente, 'id' => $Q_id_escrito];
         $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCarregar();
+        $oExpediente->DBCargar();
         $oExpediente->addAntecedente($a_antecedente);
         if ($oExpediente->DBGuardar() === FALSE) {
             exit($oExpediente->getErrorTxt());

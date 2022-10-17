@@ -37,7 +37,7 @@ switch ($Q_que) {
         $Q_breve = (string)filter_input(INPUT_POST, 'breve');
 
         $oTramite = new Tramite (array('id_tramite' => $Q_id_tramite));
-        $oTramite->DBCarregar();
+        $oTramite->DBCargar();
         $oTramite->setTramite($Q_tramite);
         $oTramite->setOrden($Q_orden);
         $oTramite->setBreve($Q_breve);

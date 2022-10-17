@@ -15,7 +15,7 @@
         rta = fnjs_solo_uno('#seleccionados');
         if (rta == 1) {
             if (confirm("{{ "Esto borrará todos los escritos."|trans|raw }}" + "\n" + "{{ "Puede usar la opción anulado en modificar."|trans|raw }}"
-                + "\n" + "{{ "¿Está seguro que desea borrar esta entidad?"|trans|raw }}")) {
+                + "\n" + "{{ "¿Está seguro que desea borrar esta nombre_entidad?"|trans|raw }}")) {
                 $('#que').val('eliminar');
                 datos = $('#seleccionados').serialize();
                 request = $.ajax({
@@ -49,5 +49,5 @@
 </form>
 <br>
 <button type="button" class="btn btn-primary btn w-100" onclick="fnjs_update_div('#main','{{ url_nuevo }}');">
-    {{ "nueva entidad"|trans }}
+    {{ "nueva nombre_entidad"|trans }}
 </button>

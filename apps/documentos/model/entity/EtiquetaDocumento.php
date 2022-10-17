@@ -115,7 +115,7 @@ class EtiquetaDocumento extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -170,7 +170,7 @@ class EtiquetaDocumento extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -319,7 +319,7 @@ class EtiquetaDocumento extends core\ClasePropiedades
     function getId_etiqueta()
     {
         if (!isset($this->iid_etiqueta) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_etiqueta;
     }
@@ -332,7 +332,7 @@ class EtiquetaDocumento extends core\ClasePropiedades
     function getId_doc()
     {
         if (!isset($this->iid_doc) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_doc;
     }
@@ -357,7 +357,7 @@ class EtiquetaDocumento extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

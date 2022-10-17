@@ -14,7 +14,7 @@ class EntradaEntidadDoc extends EntradaDocDB
      * Constructor de la classe.
      * Se l'hi ha de dir a quin esquema s'ha de conectar.
      *
-     * @param string $entidad . Nombre de la entidad donde hay que crear la entradaDocDB.
+     * @param string $entidad . Nombre de la nombre_entidad donde hay que crear la entradaDocDB.
      */
     function __construct($a_id, $entidad)
     {

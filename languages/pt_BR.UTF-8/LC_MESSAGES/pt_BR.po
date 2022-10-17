@@ -923,7 +923,7 @@ msgid "documento"
 msgstr ""
 
 #: entidades/controller/entidad_form.php:94
-msgid "guardar datos entidad"
+msgid "guardar datos nombre_entidad"
 msgstr ""
 
 #: entidades/controller/entidad_lista.php:49
@@ -950,20 +950,20 @@ msgstr ""
 msgid "hay un error al guardar"
 msgstr ""
 
-#: entidades/model/entidad.class.php:56
+#: entidades/model/nombre_entidad.class.php:56
 msgid "ctr"
 msgstr ""
 
-#: entidades/model/entidad.class.php:57 lugares/controller/lugar_lista.php:55
+#: entidades/model/nombre_entidad.class.php:57 lugares/controller/lugar_lista.php:55
 #: lugares/model/entity/lugar.class.php:651
 msgid "dl"
 msgstr ""
 
-#: entidades/model/entidad.class.php:58
+#: entidades/model/nombre_entidad.class.php:58
 msgid "cr"
 msgstr ""
 
-#: entidades/model/entidad.class.php:59
+#: entidades/model/nombre_entidad.class.php:59
 msgid "cg"
 msgstr ""
 
@@ -2562,7 +2562,7 @@ msgstr ""
 
 #: usuarios/controller/login.php:77 usuarios/controller/login.php:263
 #, php-format
-msgid "Todavía NO se ha creado la entidad: %s"
+msgid "Todavía NO se ha creado la nombre_entidad: %s"
 msgstr ""
 
 #: usuarios/controller/login.php:146

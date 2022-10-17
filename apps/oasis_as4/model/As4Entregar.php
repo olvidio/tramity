@@ -548,7 +548,7 @@ class As4Entregar extends As4CollaborationInfo
     }
 
     /**
-     * asignar la entrada a la entidad correspondiente
+     * asignar la entrada a la nombre_entidad correspondiente
      * Mirar a quien va dirigido y introducirlo en su BD
      *
      */
@@ -639,7 +639,7 @@ class As4Entregar extends As4CollaborationInfo
 
     private function nuevo()
     {
-        // hay que conectar con la entidad destino:
+        // hay que conectar con la nombre_entidad destino:
         $siglaDestino = $this->getSiglaDestino();
         $id_entrada = $this->nuevaEntrada($siglaDestino);
 
@@ -660,7 +660,7 @@ class As4Entregar extends As4CollaborationInfo
     private function nuevaEntrada($siglaDestino, $id_entrada_compartida = '')
     {
         $oEntrada = new EntradaEntidad($siglaDestino);
-        $oEntrada->DBCarregar();
+        $oEntrada->DBCargar();
         $oEntrada->setModo_entrada(Entrada::MODO_MANUAL);
         $oEntrada->setJson_prot_origen($this->a_Prot_org);
         $oEntrada->setJson_prot_ref($this->a_Prot_ref);
@@ -709,7 +709,7 @@ class As4Entregar extends As4CollaborationInfo
                     $oEtherpad->getPadId(); // Aqui crea el pad y utiliza el $this->content
                     // la relacion con la entrada y la fecha
                     $oEntradaDocDB = new EntradaEntidadDoc($id_entrada, $siglaDestino);
-                    // no hace falta, porque es nuevo y todavia no está en la DB. $oEntradaDocDB->DBCarregar();
+                    // no hace falta, porque es nuevo y todavia no está en la DB. $oEntradaDocDB->DBCargar();
                     if (!empty($this->oF_escrito)) {
                         $oEntradaDocDB->setF_doc($this->oF_escrito->getIso(), FALSE);
                     } else {
@@ -734,7 +734,7 @@ class As4Entregar extends As4CollaborationInfo
                     $oEtherpad->setHTML($pad_id, $this->content);
                     // la relacion con la entrada y la fecha
                     $oEntradaDocDB = new EntradaEntidadDoc($id_entrada, $siglaDestino);
-                    // no hace falta, porque es nuevo y todavia no está en la DB. $oEntradaDocDB->DBCarregar();
+                    // no hace falta, porque es nuevo y todavia no está en la DB. $oEntradaDocDB->DBCargar();
                     if (!empty($this->oF_escrito)) {
                         $oEntradaDocDB->setF_doc($this->oF_escrito->getIso(), FALSE);
                     } else {

@@ -50,10 +50,10 @@ class GestorEntradaBypass extends core\ClaseGestor
         $aCondi = array();
         $COND_OR = '';
         foreach ($aWhere as $camp => $val) {
-            if ($camp == '_ordre') {
+            if ($camp === '_ordre') {
                 continue;
             }
-            if ($camp == '_limit') {
+            if ($camp === '_limit') {
                 continue;
             }
             if ($camp == 'asunto_detalle') {
@@ -70,13 +70,13 @@ class GestorEntradaBypass extends core\ClaseGestor
                 $aCondi[] = $a;
             }
             // operadores que no requieren valores
-            if ($sOperador == 'BETWEEN' || $sOperador == 'IS NULL' || $sOperador == 'IS NOT NULL' || $sOperador == 'OR') {
+            if ($sOperador === 'BETWEEN' || $sOperador === 'IS NULL' || $sOperador === 'IS NOT NULL' || $sOperador === 'OR') {
                 unset($aWhere[$camp]);
             }
-            if ($sOperador == 'IN' || $sOperador == 'NOT IN') {
+            if ($sOperador === 'IN' || $sOperador === 'NOT IN') {
                 unset($aWhere[$camp]);
             }
-            if ($sOperador == 'TXT') {
+            if ($sOperador === 'TXT') {
                 unset($aWhere[$camp]);
             }
         }
@@ -112,13 +112,13 @@ class GestorEntradaBypass extends core\ClaseGestor
 
         $sOrdre = '';
         $sLimit = '';
-        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] != '') {
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] !== '') {
             $sOrdre = ' ORDER BY ' . $aWhere['_ordre'];
         }
         if (isset($aWhere['_ordre'])) {
             unset($aWhere['_ordre']);
         }
-        if (isset($aWhere['_limit']) && $aWhere['_limit'] != '') {
+        if (isset($aWhere['_limit']) && $aWhere['_limit'] !== '') {
             $sLimit = ' LIMIT ' . $aWhere['_limit'];
         }
         if (isset($aWhere['_limit'])) {
@@ -184,10 +184,10 @@ class GestorEntradaBypass extends core\ClaseGestor
         $oCondicion = new Condicion();
         $aCondi = array();
         foreach ($aWhere as $camp => $val) {
-            if ($camp == '_ordre') {
+            if ($camp === '_ordre') {
                 continue;
             }
-            if ($camp == '_limit') {
+            if ($camp === '_limit') {
                 continue;
             }
             $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
@@ -195,13 +195,13 @@ class GestorEntradaBypass extends core\ClaseGestor
                 $aCondi[] = $a;
             }
             // operadores que no requieren valores
-            if ($sOperador == 'BETWEEN' || $sOperador == 'IS NULL' || $sOperador == 'IS NOT NULL' || $sOperador == 'OR') {
+            if ($sOperador === 'BETWEEN' || $sOperador === 'IS NULL' || $sOperador === 'IS NOT NULL' || $sOperador === 'OR') {
                 unset($aWhere[$camp]);
             }
-            if ($sOperador == 'IN' || $sOperador == 'NOT IN') {
+            if ($sOperador === 'IN' || $sOperador === 'NOT IN') {
                 unset($aWhere[$camp]);
             }
-            if ($sOperador == 'TXT') {
+            if ($sOperador === 'TXT') {
                 unset($aWhere[$camp]);
             }
         }
@@ -211,13 +211,13 @@ class GestorEntradaBypass extends core\ClaseGestor
         }
         $sOrdre = '';
         $sLimit = '';
-        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] != '') {
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] !== '') {
             $sOrdre = ' ORDER BY ' . $aWhere['_ordre'];
         }
         if (isset($aWhere['_ordre'])) {
             unset($aWhere['_ordre']);
         }
-        if (isset($aWhere['_limit']) && $aWhere['_limit'] != '') {
+        if (isset($aWhere['_limit']) && $aWhere['_limit'] !== '') {
             $sLimit = ' LIMIT ' . $aWhere['_limit'];
         }
         if (isset($aWhere['_limit'])) {

@@ -135,7 +135,7 @@ class TramiteCargo extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -198,7 +198,7 @@ class TramiteCargo extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -391,7 +391,7 @@ class TramiteCargo extends core\ClasePropiedades
     function getId_item()
     {
         if (!isset($this->iid_item) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_item;
     }
@@ -404,7 +404,7 @@ class TramiteCargo extends core\ClasePropiedades
     function getId_tramite()
     {
         if (!isset($this->iid_tramite) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_tramite;
     }
@@ -417,7 +417,7 @@ class TramiteCargo extends core\ClasePropiedades
     function getOrden_tramite()
     {
         if (!isset($this->iorden_tramite) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iorden_tramite;
     }
@@ -430,7 +430,7 @@ class TramiteCargo extends core\ClasePropiedades
     function getId_cargo()
     {
         if (!isset($this->iid_cargo) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_cargo;
     }
@@ -443,7 +443,7 @@ class TramiteCargo extends core\ClasePropiedades
     function getMultiple()
     {
         if (!isset($this->imultiple) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->imultiple;
     }
@@ -528,7 +528,7 @@ class TramiteCargo extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

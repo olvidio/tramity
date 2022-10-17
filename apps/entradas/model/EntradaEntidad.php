@@ -20,7 +20,7 @@ class EntradaEntidad extends Entrada
      * Constructor de la classe.
      * Se l'hi ha de dir a quin esquema s'ha de conectar.
      *
-     * @param string $entidad . Nombre de la entidad donde hay que crear la entrada.
+     * @param string $entidad . Nombre de la nombre_entidad donde hay que crear la entrada.
      */
     function __construct($entidad)
     {

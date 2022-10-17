@@ -117,7 +117,7 @@ switch ($Q_que) {
         }
 
         $oEscrito = new Escrito($Q_id_escrito);
-        $oEscrito->DBCarregar();
+        $oEscrito->DBCargar();
         // borrar destinos existentes
         $oEscrito->setJson_prot_destino([]);
         $oEscrito->setId_grupos();
@@ -155,7 +155,7 @@ switch ($Q_que) {
         } else {
             $oPlantilla = new Plantilla(array('id_plantilla' => $Q_id_plantilla));
         }
-        $oPlantilla->DBCarregar();
+        $oPlantilla->DBCargar();
         $oPlantilla->setNombre($Q_nombre);
         if ($oPlantilla->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");

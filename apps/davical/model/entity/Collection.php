@@ -244,7 +244,7 @@ class Collection extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -352,7 +352,7 @@ class Collection extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -729,7 +729,7 @@ class Collection extends core\ClasePropiedades
     function getUser_no()
     {
         if (!isset($this->iuser_no) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iuser_no;
     }
@@ -742,7 +742,7 @@ class Collection extends core\ClasePropiedades
     function getParent_container()
     {
         if (!isset($this->sparent_container) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sparent_container;
     }
@@ -755,7 +755,7 @@ class Collection extends core\ClasePropiedades
     function getDav_name()
     {
         if (!isset($this->sdav_name) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdav_name;
     }
@@ -768,7 +768,7 @@ class Collection extends core\ClasePropiedades
     function getDav_etag()
     {
         if (!isset($this->sdav_etag) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdav_etag;
     }
@@ -781,7 +781,7 @@ class Collection extends core\ClasePropiedades
     function getDav_displayname()
     {
         if (!isset($this->sdav_displayname) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdav_displayname;
     }
@@ -794,7 +794,7 @@ class Collection extends core\ClasePropiedades
     function getIs_calendar()
     {
         if (!isset($this->bis_calendar) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->bis_calendar;
     }
@@ -807,7 +807,7 @@ class Collection extends core\ClasePropiedades
     function getCreated()
     {
         if (!isset($this->dcreated) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->dcreated)) {
             return new web\NullDateTimeLocal();
@@ -824,7 +824,7 @@ class Collection extends core\ClasePropiedades
     function getModified()
     {
         if (!isset($this->dmodified) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->dmodified)) {
             return new web\NullDateTimeLocal();
@@ -841,7 +841,7 @@ class Collection extends core\ClasePropiedades
     function getPublic_events_only()
     {
         if (!isset($this->bpublic_events_only) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->bpublic_events_only;
     }
@@ -854,7 +854,7 @@ class Collection extends core\ClasePropiedades
     function getPublicly_readable()
     {
         if (!isset($this->bpublicly_readable) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->bpublicly_readable;
     }
@@ -867,7 +867,7 @@ class Collection extends core\ClasePropiedades
     function getCollection_id()
     {
         if (!isset($this->icollection_id) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->icollection_id;
     }
@@ -880,7 +880,7 @@ class Collection extends core\ClasePropiedades
     function getDefault_privileges()
     {
         if (!isset($this->idefault_privileges) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->idefault_privileges;
     }
@@ -893,7 +893,7 @@ class Collection extends core\ClasePropiedades
     function getIs_addressbook()
     {
         if (!isset($this->bis_addressbook) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->bis_addressbook;
     }
@@ -906,7 +906,7 @@ class Collection extends core\ClasePropiedades
     function getResourcetypes()
     {
         if (!isset($this->sresourcetypes) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sresourcetypes;
     }
@@ -919,7 +919,7 @@ class Collection extends core\ClasePropiedades
     function getSchedule_transp()
     {
         if (!isset($this->sschedule_transp) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sschedule_transp;
     }
@@ -932,7 +932,7 @@ class Collection extends core\ClasePropiedades
     function getTimezone()
     {
         if (!isset($this->stimezone) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->stimezone;
     }
@@ -945,7 +945,7 @@ class Collection extends core\ClasePropiedades
     function getDescription()
     {
         if (!isset($this->sdescription) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdescription;
     }
@@ -1210,7 +1210,7 @@ class Collection extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

@@ -120,7 +120,7 @@ class EscritoLista
 
             $destino_txt = $oEscrito->getDestinosEscrito();
             $visibilidad_dst = $oEscrito->getVisibilidad_dst();
-            if (!empty($visibilidad_dst) && $visibilidad_dst != Visibilidad::V_CTR_TODOS) {
+            if (!empty($visibilidad_dst) && $visibilidad_dst !== Visibilidad::V_CTR_TODOS) {
                 $visibilidad_txt = $a_visibilidad_dst[$visibilidad_dst];
                 $destino_txt .= " ($visibilidad_txt)";
             }
@@ -136,7 +136,7 @@ class EscritoLista
             $oArrayProtRef = new ProtocoloArray($json_ref, '', '');
             $oArrayProtRef->setRef(TRUE);
 
-            if ($this->getModo() == 'mod') {
+            if ($this->getModo() === 'mod') {
                 $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito('$id_escrito');\" >";
                 $prot_local .= $prot_local_txt;
                 $prot_local .= "</span>";
@@ -145,7 +145,7 @@ class EscritoLista
             }
 
 
-            if (!empty($oEscrito->getOk()) && $oEscrito->getOk() != Escrito::OK_NO) {
+            if (!empty($oEscrito->getOk()) && $oEscrito->getOk() !== Escrito::OK_NO) {
                 $ok = '<i class="fas fa-check"></i>';
             } else {
                 $ok = '';
@@ -171,8 +171,8 @@ class EscritoLista
 
         $server = ConfigGlobal::getWeb(); //http://tramity.local
 
-        if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
-            || ($estado == Expediente::ESTADO_ACABADO_SECRETARIA)) {
+        if ($estado === Expediente::ESTADO_ACABADO_ENCARGADO
+            || ($estado === Expediente::ESTADO_ACABADO_SECRETARIA)) {
             $ver_ok = TRUE;
         } else {
             $ver_ok = FALSE;
@@ -200,13 +200,13 @@ class EscritoLista
     private function getEscritosParaEnviar($fecha)
     {
         if (empty($fecha)) {
-            $fecha = date(\DateTimeInterface::ISO8601);
+            $fecha = date(DateTimeInterface::ATOM);
         }
         $gesEscritos = new GestorEscrito();
         // No enviados
         $aWhere = ['accion' => Escrito::ACCION_ESCRITO,
             'f_salida' => 'x',
-            'ok' => Escrito::OK_OFICINA,
+            'ok' => entity\EscritoDB::OK_OFICINA,
         ];
         $aOperador = ['f_salida' => 'IS NULL',
         ];
@@ -214,7 +214,7 @@ class EscritoLista
         // Enviados a partir de $fecha
         $aWhere = ['accion' => Escrito::ACCION_ESCRITO,
             'f_salida' => $fecha,
-            'ok' => Escrito::OK_OFICINA,
+            'ok' => entity\EscritoDB::OK_OFICINA,
         ];
         $aOperador = ['f_salida' => '>=',
         ];
@@ -234,7 +234,7 @@ class EscritoLista
     /**
      * @param string $modo
      */
-    public function setModo($modo)
+    public function setModo($modo): void
     {
         $this->modo = $modo;
     }
@@ -249,7 +249,6 @@ class EscritoLista
             case 'acabados_encargados':
             case 'enviar':
                 return $oView->renderizar('escrito_lst_enviar.html.twig', $a_campos);
-                break;
             default:
                 return $oView->renderizar('escrito_lista.html.twig', $a_campos);
         }
@@ -296,7 +295,7 @@ class EscritoLista
                 $a_accion['enviar'] = _("enviado") . " ($f_salida)";
                 $enviado = TRUE;
             } else {
-                if ($tipo_accion == Escrito::ACCION_ESCRITO) {
+                if ($tipo_accion === Escrito::ACCION_ESCRITO) {
                     // si es anulado NO enviar!
                     if (is_true($oEscrito->getAnulado())) {
                         $a_accion['enviar'] = "-";
@@ -341,7 +340,10 @@ class EscritoLista
                 $prot_local_header = _("prot. local/rev.texto");
             } else {
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >" . _("ver") . "</span>";
-                if ($this->filtro == 'archivados') {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                    $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >" . _("mod.datos") . "</span>";
+                }
+                if ($this->filtro === 'archivados') {
                     $prot_local_header = _("prot. local");
                 } else {
                     $prot_local_header = _("rev.texto");
@@ -355,7 +357,7 @@ class EscritoLista
                 $destino_txt .= " ($visibilidad_txt)";
             }
 
-            $default = ($this->filtro == 'archivados') ? '-' : '';
+            $default = ($this->filtro === 'archivados') ? '-' : '';
             $prot_local_txt = $oEscrito->getProt_local_txt($default);
             // Tiene adjuntos?
             $adjuntos = '';
@@ -368,7 +370,7 @@ class EscritoLista
             $oArrayProtRef = new ProtocoloArray($json_ref, '', '');
             $oArrayProtRef->setRef(TRUE);
 
-            if ($this->getModo() == 'mod' && !$enviado) {
+            if ($this->getModo() === 'mod' && !$enviado) {
                 $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito('$id_escrito');\" >";
                 $prot_local .= $prot_local_txt;
                 $prot_local .= "</span>";

@@ -19,10 +19,10 @@ Hay que cambiar la estructura de la base de datos:
  public | x_locales            | table | tramity
 ```
 
-- para cada entidad se debe crear un esquema con el nombre de la entidad (normalizado: existe una función para
+- para cada nombre_entidad se debe crear un esquema con el nombre de la nombre_entidad (normalizado: existe una función para
   normalizar, quitar espacios, pasar a minúscula etc.)
 
-para una entidad tipo centro, las tablas son:
+para una nombre_entidad tipo centro, las tablas son:
 
 ```
                  List of relations
@@ -53,7 +53,7 @@ para una entidad tipo centro, las tablas son:
  agdmontagut | x_tramites           | table | tramity
 ```
 
-Para una entidad tipo dl, se añaden las tablas:
+Para una nombre_entidad tipo dl, se añaden las tablas:
 
 ```
                 List of relations
@@ -70,15 +70,15 @@ cambios en programa
 
 - El nombre del esquema se obtiene del nombre del host de la URL (agdmontagut.tramity.red.local)
 
-- El nombre de los etherpad, pasa a contener el nombre de la entidad
-- El nombre de los calendarios de pendientes, pasa a tener el nombre de la entidad.
+- El nombre de los etherpad, pasa a contener el nombre de la nombre_entidad
+- El nombre de los calendarios de pendientes, pasa a tener el nombre de la nombre_entidad.
 
-- Los usuarios en davical, pasan de ser los cargos, a ser (nombre entidad).cargo
+- Los usuarios en davical, pasan de ser los cargos, a ser (nombre nombre_entidad).cargo
 
 simplificación para los ctr
 ===========================
 
-- en los escritos, el destino sólo puede ser la entidad superior (dl) y las referencias pueden ser: al propio ctr, a la
+- en los escritos, el destino sólo puede ser la nombre_entidad superior (dl) y las referencias pueden ser: al propio ctr, a la
   dl, a cr.
 
 

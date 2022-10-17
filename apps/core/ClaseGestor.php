@@ -71,7 +71,7 @@ abstract class ClaseGestor
         $cClassesTot = array();
 
         $paraOrdenar = '';
-        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] != '') {
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] !== '') {
             $paraOrdenar = $aWhere['_ordre'];
             unset($aWhere['_ordre']);
         }

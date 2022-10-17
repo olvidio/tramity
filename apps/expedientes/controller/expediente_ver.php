@@ -41,7 +41,7 @@ if (empty($Q_id_expediente)) {
 $oExpediente = new Expediente();
 
 $oExpediente->setId_expediente($Q_id_expediente);
-$oExpediente->DBCarregar();
+$oExpediente->DBCargar();
 
 $ponente_txt = '?';
 $id_ponente = $oExpediente->getPonente();
@@ -71,8 +71,8 @@ if (ConfigGlobal::role_actual() === 'vcd') {
         $valor = $oFirma->getValor();
         $cargo_tipo = $oFirma->getCargo_tipo();
         if (empty($valor) ||
-            ($valor != Firma::V_D_NO && $valor != Firma::V_D_OK && $valor != Firma::V_D_VISTO_BUENO)) {
-            if ($cargo_tipo == Cargo::CARGO_VB_VCD) {
+            ($valor !== Firma::V_D_NO && $valor !== Firma::V_D_OK && $valor !== Firma::V_D_VISTO_BUENO)) {
+            if ($cargo_tipo === Cargo::CARGO_VB_VCD) {
                 $rango = 'vb_vcd';
             } else {
                 $rango = 'vcd';
@@ -130,7 +130,7 @@ if ($responder) {
         $a_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
     }
 
-    if ($id_ponente == ConfigGlobal::role_id_cargo() || array_key_exists($id_ponente, $a_cargos_oficina)) {
+    if (array_key_exists($id_ponente, $a_cargos_oficina) || ($id_ponente === ConfigGlobal::role_id_cargo())) {
         $aclaracion = _("Responder aclaración");
         $aclaracion_event = 'respuesta';
         $bool_aclaracion = TRUE;
@@ -139,14 +139,13 @@ if ($responder) {
 } else {
     $aclaracion = _("Pedir aclaración");
     $aclaracion_event = 'nueva';
-    $bool_aclaracion = FALSE;
 }
 
 
 // Etiquetas
 $ver_etiquetas = FALSE;
 $oArrayDesplEtiquetas = '';
-if ($estado == Expediente::ESTADO_ACABADO) {
+if ($estado === Expediente::ESTADO_ACABADO) {
     $cEtiquetas = $oExpediente->getEtiquetasVisibles();
     $a_etiquetas = [];
     $a_posibles_etiquetas = [];
@@ -174,10 +173,10 @@ $base_url = core\ConfigGlobal::getWeb();
 $pagina_cambio = web\Hash::link('apps/expedientes/controller/expediente_cambio_tramite.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'prioridad_sel' => $Q_prioridad_sel]));
 
 $add_del_txt = '';
-if ($Q_filtro == 'seg_reunion') {
+if ($Q_filtro === 'seg_reunion') {
     $add_del = 'del';
     // solo secretaria tiene permiso
-    if (ConfigGlobal::role_actual() == 'secretaria') {
+    if (ConfigGlobal::role_actual() === 'secretaria') {
         $add_del_txt = _("Quitar Firmas");
     }
 } else {
@@ -186,7 +185,7 @@ if ($Q_filtro == 'seg_reunion') {
 }
 
 // solo el scdl tiene permiso. Ahora 11-3-22 también el sd.
-if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && (ConfigGlobal::role_actual() == 'scdl' || ConfigGlobal::role_actual() == 'sd')) {
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && (ConfigGlobal::role_actual() === 'scdl' || ConfigGlobal::role_actual() === 'sd')) {
     $cmb_tramite = TRUE;
 } else {
     $cmb_tramite = FALSE;

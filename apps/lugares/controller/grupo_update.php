@@ -27,7 +27,7 @@ switch ($Q_que) {
         }
 
         $oEscrito = new Escrito($Q_id_escrito);
-        $oEscrito->DBCarregar();
+        $oEscrito->DBCargar();
         // borrar destinos existentes
         $oEscrito->setJson_prot_destino([]);
         $oEscrito->setId_grupos();
@@ -66,7 +66,7 @@ switch ($Q_que) {
         } else {
             $oGrupo = new Grupo(array('id_grupo' => $Q_id_grupo));
         }
-        $oGrupo->DBCarregar();
+        $oGrupo->DBCargar();
         $oGrupo->setDescripcion($Q_descripcion);
         $oGrupo->setMiembros($Q_a_lugares);
         if ($oGrupo->DBGuardar() === FALSE) {

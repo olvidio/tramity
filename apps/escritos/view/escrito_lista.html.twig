@@ -18,6 +18,9 @@
         <th scope="col">{{ "ref."|trans|raw }}</th>
         <th scope="col">{{ "asunto"|trans|raw }}</th>
         <th scope="col">{{ "adj."|trans|raw }}</th>
+        {% if not vista_dl %}
+            <th scope="col">{{ "enviar"|trans|raw }}</th>
+        {% endif %}
     </tr>
     </thead>
     <tbody>
@@ -40,6 +43,9 @@
             <td>{{ row.ref|raw }}</td>
             <td>{{ row.asunto|raw }}</td>
             <td>{{ row.adjuntos|raw }}</td>
+            {% if not vista_dl %}
+                <td>{{ row.enviar|raw }}</td>
+            {% endif %}
         </tr>
     {% endfor %}
     </tbody>

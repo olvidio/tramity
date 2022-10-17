@@ -72,12 +72,6 @@ class Firma extends core\ClasePropiedades
      */
     private $aPrimary_key;
     /**
-     * aDades de Firma
-     *
-     * @var array
-     */
-    private $aDades;
-    /**
      * bLoaded de Firma
      *
      * @var boolean
@@ -184,19 +178,19 @@ class Firma extends core\ClasePropiedades
      * @param integer|array iid_item
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = '')
+    public function __construct($a_id = '')
     {
         $oDbl = $GLOBALS['oDBT'];
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_item') && $val_id !== '') {
+                if (($nom_id === 'id_item') && $val_id !== '') {
                     $this->iid_item = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_item = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_item = (int)$a_id;
                 $this->aPrimary_key = array('iid_item' => $this->iid_item);
             }
         }
@@ -281,7 +275,7 @@ class Firma extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -322,16 +316,16 @@ class Firma extends core\ClasePropiedades
                 $sClauError = 'Firma.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'Firma.update.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            }
+
+            try {
+                $oDblSt->execute($aDades);
+            } catch (\PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'Firma.update.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
         } else {
             // INSERT
@@ -341,16 +335,16 @@ class Firma extends core\ClasePropiedades
                 $sClauError = 'Firma.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'Firma.insertar.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            }
+
+            try {
+                $oDblSt->execute($aDades);
+            } catch (\PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'Firma.insertar.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
             $this->id_item = $oDbl->lastInsertId('expediente_firmas_id_item_seq');
         }
@@ -362,7 +356,7 @@ class Firma extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -391,9 +385,9 @@ class Firma extends core\ClasePropiedades
                     }
             }
             return TRUE;
-        } else {
-            return FALSE;
         }
+
+        return FALSE;
     }
 
     /**
@@ -401,7 +395,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param array $aDades
      */
-    function setAllAtributes($aDades, $convert = FALSE)
+    public function setAllAtributes($aDades, $convert = FALSE)
     {
         if (!is_array($aDades)) {
             return;
@@ -461,7 +455,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param integer iid_item
      */
-    function setId_item($iid_item)
+    public function setId_item($iid_item)
     {
         $this->iid_item = $iid_item;
     }
@@ -471,7 +465,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param integer iid_expediente='' optional
      */
-    function setId_expediente($iid_expediente = '')
+    public function setId_expediente($iid_expediente = '')
     {
         $this->iid_expediente = (int)$iid_expediente;
     }
@@ -483,7 +477,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param integer iid_tramite='' optional
      */
-    function setId_tramite($iid_tramite = '')
+    public function setId_tramite($iid_tramite = '')
     {
         $this->iid_tramite = $iid_tramite;
     }
@@ -493,7 +487,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param integer iid_cargo_creador='' optional
      */
-    function setId_cargo_creador($iid_cargo_creador = '')
+    public function setId_cargo_creador($iid_cargo_creador = '')
     {
         $this->iid_cargo_creador = $iid_cargo_creador;
     }
@@ -503,7 +497,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param integer icargo_tipo='' optional
      */
-    function setCargo_tipo($icargo_tipo = '')
+    public function setCargo_tipo($icargo_tipo = '')
     {
         $this->icargo_tipo = $icargo_tipo;
     }
@@ -513,7 +507,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param integer iid_cargo='' optional
      */
-    function setId_cargo($iid_cargo = '')
+    public function setId_cargo($iid_cargo = '')
     {
         $this->iid_cargo = $iid_cargo;
     }
@@ -523,7 +517,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param integer iid_usuario='' optional
      */
-    function setId_usuario($iid_usuario = '')
+    public function setId_usuario($iid_usuario = '')
     {
         $this->iid_usuario = $iid_usuario;
     }
@@ -533,7 +527,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param integer iorden_tramite='' optional
      */
-    function setOrden_tramite($iorden_tramite = '')
+    public function setOrden_tramite($iorden_tramite = '')
     {
         $this->iorden_tramite = $iorden_tramite;
     }
@@ -543,7 +537,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param integer iorden_oficina='' optional
      */
-    function setOrden_oficina($iorden_oficina = '')
+    public function setOrden_oficina($iorden_oficina = '')
     {
         $this->iorden_oficina = $iorden_oficina;
     }
@@ -553,7 +547,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param integer itipo='' optional
      */
-    function setTipo($itipo = '')
+    public function setTipo($itipo = '')
     {
         $this->itipo = $itipo;
     }
@@ -563,7 +557,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param integer ivalor='' optional
      */
-    function setValor($ivalor = '')
+    public function setValor($ivalor = '')
     {
         $this->ivalor = (int)$ivalor;
     }
@@ -573,7 +567,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param string sobserv_creador='' optional
      */
-    function setObserv_creador($sobserv_creador = '')
+    public function setObserv_creador($sobserv_creador = '')
     {
         $this->sobserv_creador = $sobserv_creador;
     }
@@ -583,7 +577,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param string sobserv='' optional
      */
-    function setObserv($sobserv = '')
+    public function setObserv($sobserv = '')
     {
         $this->sobserv = $sobserv;
     }
@@ -593,10 +587,10 @@ class Firma extends core\ClasePropiedades
      * Si df_valor es string, y convert=true se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es false, df_valor debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param date|string df_valor='' optional.
+     * @param DateTimeLocal|string df_valor='' optional.
      * @param boolean convert=true optional. Si es false, df_valor debe ser un string en formato ISO (Y-m-d).
      */
-    function setF_valor($df_valor = '', $convert = true)
+    public function setF_valor($df_valor = '', $convert = true)
     {
         if ($convert === true && !empty($df_valor)) {
             $oConverter = new core\Converter('date', $df_valor);
@@ -610,7 +604,7 @@ class Firma extends core\ClasePropiedades
      * Estableix a empty el valor de tots els ATRIBUTOS
      *
      */
-    function setNullAllAtributes()
+    public function setNullAllAtributes()
     {
         $aPK = $this->getPrimary_key();
         $this->setId_schema('');
@@ -636,7 +630,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return array aPrimary_key
      */
-    function getPrimary_key()
+    public function getPrimary_key()
     {
         if (!isset($this->aPrimary_key)) {
             $this->aPrimary_key = array('id_item' => $this->iid_item);
@@ -653,13 +647,13 @@ class Firma extends core\ClasePropiedades
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_item') && $val_id !== '') {
+                if (($nom_id === 'id_item') && $val_id !== '') {
                     $this->iid_item = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_item = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_item = (int)$a_id;
                 $this->aPrimary_key = array('iid_item' => $this->iid_item);
             }
         }
@@ -686,10 +680,10 @@ class Firma extends core\ClasePropiedades
      *
      * @return integer iid_item
      */
-    function getId_item()
+    public function getId_item(): int
     {
         if (!isset($this->iid_item) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_item;
     }
@@ -699,10 +693,10 @@ class Firma extends core\ClasePropiedades
      *
      * @return integer iid_expediente
      */
-    function getId_expediente()
+    public function getId_expediente(): int
     {
         if (!isset($this->iid_expediente) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_expediente;
     }
@@ -712,10 +706,10 @@ class Firma extends core\ClasePropiedades
      *
      * @return integer iid_tramite
      */
-    function getId_tramite()
+    public function getId_tramite(): int
     {
         if (!isset($this->iid_tramite) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_tramite;
     }
@@ -725,10 +719,10 @@ class Firma extends core\ClasePropiedades
      *
      * @return integer iid_cargo_creador
      */
-    function getId_cargo_creador()
+    public function getId_cargo_creador(): int
     {
         if (!isset($this->iid_cargo_creador) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_cargo_creador;
     }
@@ -738,10 +732,10 @@ class Firma extends core\ClasePropiedades
      *
      * @return integer icargo_tipo
      */
-    function getCargo_tipo()
+    function getCargo_tipo(): int
     {
         if (!isset($this->icargo_tipo) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->icargo_tipo;
     }
@@ -751,10 +745,10 @@ class Firma extends core\ClasePropiedades
      *
      * @return integer iid_cargo
      */
-    function getId_cargo()
+    public function getId_cargo(): int
     {
         if (!isset($this->iid_cargo) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_cargo;
     }
@@ -762,12 +756,12 @@ class Firma extends core\ClasePropiedades
     /**
      * Recupera l'atribut iid_usuario de Firma
      *
-     * @return integer iid_usuario
+     * @return integer|null iid_usuario
      */
-    function getId_usuario()
+    public function getId_usuario(): ?int
     {
         if (!isset($this->iid_usuario) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_usuario;
     }
@@ -777,10 +771,10 @@ class Firma extends core\ClasePropiedades
      *
      * @return integer iorden_tramite
      */
-    function getOrden_tramite()
+    public function getOrden_tramite(): int
     {
         if (!isset($this->iorden_tramite) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iorden_tramite;
     }
@@ -788,12 +782,12 @@ class Firma extends core\ClasePropiedades
     /**
      * Recupera l'atribut iorden_oficina de Firma
      *
-     * @return integer iorden_oficina
+     * @return integer|null iorden_oficina
      */
-    function getOrden_oficina()
+    public function getOrden_oficina(): ?int
     {
         if (!isset($this->iorden_oficina) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iorden_oficina;
     }
@@ -803,10 +797,10 @@ class Firma extends core\ClasePropiedades
      *
      * @return integer itipo
      */
-    function getTipo()
+    public function getTipo(): int
     {
         if (!isset($this->itipo) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->itipo;
     }
@@ -814,12 +808,12 @@ class Firma extends core\ClasePropiedades
     /**
      * Recupera l'atribut ivalor de Firma
      *
-     * @return integer ivalor
+     * @return integer|null ivalor
      */
-    function getValor(): int
+    public function getValor(): ?int
     {
         if (!isset($this->ivalor) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ivalor;
     }
@@ -827,12 +821,12 @@ class Firma extends core\ClasePropiedades
     /**
      * Recupera l'atribut sobserv_creador de Firma
      *
-     * @return string sobserv_creador
+     * @return string|null sobserv_creador
      */
-    function getObserv_creador()
+    public function getObserv_creador(): ?string
     {
         if (!isset($this->sobserv_creador) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sobserv_creador;
     }
@@ -840,12 +834,12 @@ class Firma extends core\ClasePropiedades
     /**
      * Recupera l'atribut sobserv de Firma
      *
-     * @return string sobserv
+     * @return string|null sobserv
      */
-    function getObserv()
+    public function getObserv(): ?string
     {
         if (!isset($this->sobserv) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sobserv;
     }
@@ -853,12 +847,12 @@ class Firma extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_valor de Firma
      *
-     * @return DateTimeLocal df_valor
+     * @return DateTimeLocal|NullDateTimeLocal|null df_valor
      */
-    function getF_valor()
+    public function getF_valor()
     {
         if (!isset($this->df_valor) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_valor)) {
             return new NullDateTimeLocal();
@@ -871,7 +865,7 @@ class Firma extends core\ClasePropiedades
      * Retorna una col·lecció d'objectes del tipus DatosCampo
      *
      */
-    function getDatosCampos()
+    public function getDatosCampos()
     {
         $oFirmaSet = new core\Set();
 
@@ -887,7 +881,7 @@ class Firma extends core\ClasePropiedades
         $oFirmaSet->add($this->getDatosValor());
         $oFirmaSet->add($this->getDatosObserv_creador());
         $oFirmaSet->add($this->getDatosObserv());
-        $oFirmaSet->add($this->getDatodf_valor());
+        $oFirmaSet->add($this->getDatosF_valor());
         return $oFirmaSet->getTot();
     }
     /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
@@ -898,7 +892,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return core\DatosCampo
      */
-    function getDatosId_expediente()
+    function getDatosId_expediente(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_expediente'));
@@ -912,7 +906,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return core\DatosCampo
      */
-    function getDatosId_tramite()
+    function getDatosId_tramite(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_tramite'));
@@ -926,7 +920,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return core\DatosCampo
      */
-    function getDatosId_cargo_creador()
+    function getDatosId_cargo_creador(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_cargo_creador'));
@@ -940,7 +934,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return core\DatosCampo
      */
-    function getDatosCargo_tipo()
+    function getDatosCargo_tipo(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'cargo_tipo'));
@@ -954,7 +948,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return core\DatosCampo
      */
-    function getDatosId_cargo()
+    function getDatosId_cargo(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_cargo'));
@@ -968,7 +962,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return core\DatosCampo
      */
-    function getDatosId_usuario()
+    function getDatosId_usuario(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_usuario'));
@@ -982,7 +976,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return core\DatosCampo
      */
-    function getDatosOrden_tramite()
+    function getDatosOrden_tramite(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'orden_tramite'));
@@ -996,7 +990,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return core\DatosCampo
      */
-    function getDatosOrden_oficina()
+    function getDatosOrden_oficina(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'orden_oficina'));
@@ -1010,7 +1004,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return core\DatosCampo
      */
-    function getDatosTipo()
+    function getDatosTipo(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'tipo'));
@@ -1024,7 +1018,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return core\DatosCampo
      */
-    function getDatosValor()
+    function getDatosValor(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'valor'));
@@ -1038,7 +1032,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return core\DatosCampo
      */
-    function getDatosObserv_creador()
+    function getDatosObserv_creador(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'observ_creador'));
@@ -1052,7 +1046,7 @@ class Firma extends core\ClasePropiedades
      *
      * @return core\DatosCampo
      */
-    function getDatosObserv()
+    function getDatosObserv(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'observ'));
@@ -1061,25 +1055,12 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * Recupera tots els ATRIBUTOS de Firma en un array
-     *
-     * @return array aDades
-     */
-    function getTot()
-    {
-        if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
-        }
-        return $this->aDades;
-    }
-
-    /**
      * Recupera les propietats de l'atribut df_valor de Firma
      * en una clase del tipus DatosCampo
      *
      * @return core\DatosCampo
      */
-    function getDatosF_valor()
+    function getDatosF_valor(): core\DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
         $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'f_valor'));

@@ -129,7 +129,7 @@ class CargoGrupo extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -190,7 +190,7 @@ class CargoGrupo extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -376,7 +376,7 @@ class CargoGrupo extends core\ClasePropiedades
     function getId_grupo()
     {
         if (!isset($this->iid_grupo) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_grupo;
     }
@@ -389,7 +389,7 @@ class CargoGrupo extends core\ClasePropiedades
     function getId_cargo_ref()
     {
         if (!isset($this->iid_cargo_ref) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_cargo_ref;
     }
@@ -402,7 +402,7 @@ class CargoGrupo extends core\ClasePropiedades
     function getDescripcion()
     {
         if (!isset($this->sdescripcion) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdescripcion;
     }
@@ -415,7 +415,7 @@ class CargoGrupo extends core\ClasePropiedades
     function getMiembros()
     {
         if (!isset($this->a_miembros) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return core\array_pg2php($this->a_miembros);
     }
@@ -485,7 +485,7 @@ class CargoGrupo extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

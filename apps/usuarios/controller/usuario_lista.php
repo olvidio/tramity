@@ -69,9 +69,9 @@ foreach ($oUsuarioColeccion as $oUsuario) {
     $email = $oUsuario->getEmail();
     $id_cargo_preferido = $oUsuario->getId_cargo_preferido();
 
-    if (!empty($id_cargo_preferido) && ConfigGlobal::getEsquema() != 'admin') {
+    if (!empty($id_cargo_preferido) && ConfigGlobal::nombreEntidad() != 'admin') {
         $oCargo->setId_cargo($id_cargo_preferido);
-        $oCargo->DBCarregar();
+        $oCargo->DBCargar();
         $cargo = $oCargo->getCargo();
     } else {
         $cargo = '?';

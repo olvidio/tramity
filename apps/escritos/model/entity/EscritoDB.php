@@ -277,7 +277,7 @@ class EscritoDB extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -384,7 +384,7 @@ class EscritoDB extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -721,7 +721,7 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_salida de EscritoDB
+     * establece el valor del atributo df_salida de EscritoDB
      * Si df_salida es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_salida debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -872,7 +872,7 @@ class EscritoDB extends core\ClasePropiedades
     function getPonente()
     {
         if (!isset($this->icreador) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->icreador;
     }
@@ -885,7 +885,7 @@ class EscritoDB extends core\ClasePropiedades
     function getId_escrito()
     {
         if (!isset($this->iid_escrito) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_escrito;
     }
@@ -899,7 +899,7 @@ class EscritoDB extends core\ClasePropiedades
     function getJson_prot_local($bArray = FALSE)
     {
         if (!isset($this->json_prot_local) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_local, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -940,7 +940,7 @@ class EscritoDB extends core\ClasePropiedades
     function getJson_prot_destino($bArray = FALSE)
     {
         if (!isset($this->json_prot_destino) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_destino, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -980,7 +980,7 @@ class EscritoDB extends core\ClasePropiedades
     function getJson_prot_ref($bArray = FALSE)
     {
         if (!isset($this->json_prot_ref) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_ref, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -1019,7 +1019,7 @@ class EscritoDB extends core\ClasePropiedades
     function getId_grupos()
     {
         if (!isset($this->a_id_grupos) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return core\array_pg2php($this->a_id_grupos);
     }
@@ -1032,7 +1032,7 @@ class EscritoDB extends core\ClasePropiedades
     function getDestinos()
     {
         if (!isset($this->a_destinos) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return core\array_pg2php($this->a_destinos);
     }
@@ -1045,7 +1045,7 @@ class EscritoDB extends core\ClasePropiedades
     function getAsuntoDB()
     {
         if (!isset($this->sasunto) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sasunto;
     }
@@ -1058,7 +1058,7 @@ class EscritoDB extends core\ClasePropiedades
     function getDetalleDB()
     {
         if (!isset($this->sdetalle) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdetalle;
     }
@@ -1071,7 +1071,7 @@ class EscritoDB extends core\ClasePropiedades
     function getCreador()
     {
         if (!isset($this->icreador) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->icreador;
     }
@@ -1084,7 +1084,7 @@ class EscritoDB extends core\ClasePropiedades
     function getResto_oficinas()
     {
         if (!isset($this->a_resto_oficinas) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return core\array_pg2php($this->a_resto_oficinas);
     }
@@ -1097,7 +1097,7 @@ class EscritoDB extends core\ClasePropiedades
     function getComentarios()
     {
         if (!isset($this->scomentarios) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->scomentarios;
     }
@@ -1110,7 +1110,7 @@ class EscritoDB extends core\ClasePropiedades
     function getF_aprobacion()
     {
         if (!isset($this->df_aprobacion) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_aprobacion)) {
             return new web\NullDateTimeLocal();
@@ -1127,7 +1127,7 @@ class EscritoDB extends core\ClasePropiedades
     function getF_escrito()
     {
         if (!isset($this->df_escrito) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_escrito)) {
             return new web\NullDateTimeLocal();
@@ -1144,7 +1144,7 @@ class EscritoDB extends core\ClasePropiedades
     function getF_contestar()
     {
         if (!isset($this->df_contestar) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_contestar)) {
             return new web\NullDateTimeLocal();
@@ -1161,7 +1161,7 @@ class EscritoDB extends core\ClasePropiedades
     function getCategoria()
     {
         if (!isset($this->icategoria) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->icategoria;
     }
@@ -1171,10 +1171,10 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return integer ivisibilidad
      */
-    function getVisibilidad()
+    function getVisibilidad(): int
     {
         if (!isset($this->ivisibilidad) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ivisibilidad;
     }
@@ -1184,10 +1184,10 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return integer ivisibilidad_dst
      */
-    function getVisibilidad_dst()
+    function getVisibilidad_dst(): int
     {
         if (!isset($this->ivisibilidad_dst) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ivisibilidad_dst;
     }
@@ -1195,12 +1195,12 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut iaccion de EscritoDB
      *
-     * @return integer iaccion
+     * @return integer|null iaccion
      */
-    function getAccion()
+    function getAccion(): ?int
     {
         if (!isset($this->iaccion) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iaccion;
     }
@@ -1213,7 +1213,7 @@ class EscritoDB extends core\ClasePropiedades
     function getModo_envio()
     {
         if (!isset($this->imodo_envio) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->imodo_envio;
     }
@@ -1226,7 +1226,7 @@ class EscritoDB extends core\ClasePropiedades
     function getF_salida()
     {
         if (!isset($this->df_salida) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_salida)) {
             return new web\NullDateTimeLocal();
@@ -1238,12 +1238,12 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut iok de EscritoDB
      *
-     * @return integer iok
+     * @return integer|null iok
      */
-    function getOk()
+    function getOk(): ?int
     {
         if (!isset($this->iok) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iok;
     }
@@ -1256,7 +1256,7 @@ class EscritoDB extends core\ClasePropiedades
     function getTipo_doc()
     {
         if (!isset($this->itipo_doc) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->itipo_doc;
     }
@@ -1269,7 +1269,7 @@ class EscritoDB extends core\ClasePropiedades
     function getAnulado()
     {
         if (!isset($this->banulado) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->banulado;
     }
@@ -1282,7 +1282,7 @@ class EscritoDB extends core\ClasePropiedades
     function getDescripcion()
     {
         if (!isset($this->sdescripcion) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdescripcion;
     }
@@ -1637,7 +1637,7 @@ class EscritoDB extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

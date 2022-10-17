@@ -177,7 +177,7 @@ class Lugar extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -258,7 +258,7 @@ class Lugar extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -547,7 +547,7 @@ class Lugar extends core\ClasePropiedades
     function getId_lugar()
     {
         if (!isset($this->iid_lugar) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_lugar;
     }
@@ -560,7 +560,7 @@ class Lugar extends core\ClasePropiedades
     function getSigla()
     {
         if (!isset($this->ssigla) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ssigla;
     }
@@ -573,7 +573,7 @@ class Lugar extends core\ClasePropiedades
     function getDl()
     {
         if (!isset($this->sdl) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdl;
     }
@@ -586,7 +586,7 @@ class Lugar extends core\ClasePropiedades
     function getRegion()
     {
         if (!isset($this->sregion) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sregion;
     }
@@ -599,7 +599,7 @@ class Lugar extends core\ClasePropiedades
     function getNombre()
     {
         if (!isset($this->snombre) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->snombre;
     }
@@ -612,7 +612,7 @@ class Lugar extends core\ClasePropiedades
     function getTipo_ctr()
     {
         if (!isset($this->stipo_ctr) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->stipo_ctr;
     }
@@ -625,7 +625,7 @@ class Lugar extends core\ClasePropiedades
     function getModo_envio()
     {
         if (!isset($this->imodo_envio) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->imodo_envio;
     }
@@ -638,7 +638,7 @@ class Lugar extends core\ClasePropiedades
     function getPlataforma()
     {
         if (!isset($this->splataforma) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->splataforma;
     }
@@ -651,7 +651,7 @@ class Lugar extends core\ClasePropiedades
     function getPub_key()
     {
         if (!isset($this->ipub_key) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ipub_key;
     }
@@ -664,7 +664,7 @@ class Lugar extends core\ClasePropiedades
     function getE_mail()
     {
         if (!isset($this->se_mail) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->se_mail;
     }
@@ -677,7 +677,7 @@ class Lugar extends core\ClasePropiedades
     function getAnulado()
     {
         if (!isset($this->banulado) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->banulado;
     }
@@ -837,7 +837,7 @@ class Lugar extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

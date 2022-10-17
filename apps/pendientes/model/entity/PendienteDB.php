@@ -208,7 +208,7 @@ class PendienteDB extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -301,7 +301,7 @@ class PendienteDB extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -686,7 +686,7 @@ class PendienteDB extends core\ClasePropiedades
     function getId_pendiente()
     {
         if (!isset($this->iid_pendiente) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_pendiente;
     }
@@ -699,7 +699,7 @@ class PendienteDB extends core\ClasePropiedades
     function getAsunto()
     {
         if (!isset($this->sasunto) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sasunto;
     }
@@ -712,7 +712,7 @@ class PendienteDB extends core\ClasePropiedades
     function getStatus()
     {
         if (!isset($this->sstatus) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sstatus;
     }
@@ -725,7 +725,7 @@ class PendienteDB extends core\ClasePropiedades
     function getF_acabado()
     {
         if (!isset($this->df_acabado) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_acabado)) {
             return new web\NullDateTimeLocal();
@@ -742,7 +742,7 @@ class PendienteDB extends core\ClasePropiedades
     function getF_plazo()
     {
         if (!isset($this->df_plazo) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_plazo)) {
             return new web\NullDateTimeLocal();
@@ -759,7 +759,7 @@ class PendienteDB extends core\ClasePropiedades
     function getRef_mas()
     {
         if (!isset($this->sref_mas) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sref_mas;
     }
@@ -772,7 +772,7 @@ class PendienteDB extends core\ClasePropiedades
     function getObserv()
     {
         if (!isset($this->sobserv) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sobserv;
     }
@@ -785,7 +785,7 @@ class PendienteDB extends core\ClasePropiedades
     function getEncargado()
     {
         if (!isset($this->sencargado) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sencargado;
     }
@@ -798,7 +798,7 @@ class PendienteDB extends core\ClasePropiedades
     function getCancilleria()
     {
         if (!isset($this->bcancilleria) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->bcancilleria;
     }
@@ -811,7 +811,7 @@ class PendienteDB extends core\ClasePropiedades
     function getVisibilidad()
     {
         if (!isset($this->ivisibilidad) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ivisibilidad;
     }
@@ -824,7 +824,7 @@ class PendienteDB extends core\ClasePropiedades
     function getDetalle()
     {
         if (!isset($this->sdetalle) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdetalle;
     }
@@ -837,7 +837,7 @@ class PendienteDB extends core\ClasePropiedades
     function getPendiente_con()
     {
         if (!isset($this->spendiente_con) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->spendiente_con;
     }
@@ -850,7 +850,7 @@ class PendienteDB extends core\ClasePropiedades
     function getEtiquetas()
     {
         if (!isset($this->setiquetas) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->setiquetas;
     }
@@ -863,7 +863,7 @@ class PendienteDB extends core\ClasePropiedades
     function getOficinas()
     {
         if (!isset($this->soficinas) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->soficinas;
     }
@@ -876,7 +876,7 @@ class PendienteDB extends core\ClasePropiedades
     function getId_oficina()
     {
         if (!isset($this->iid_oficina) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_oficina;
     }
@@ -889,7 +889,7 @@ class PendienteDB extends core\ClasePropiedades
     function getRrule()
     {
         if (!isset($this->srrule) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->srrule;
     }
@@ -902,7 +902,7 @@ class PendienteDB extends core\ClasePropiedades
     function getF_inicio()
     {
         if (!isset($this->df_inicio) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_inicio)) {
             return new web\NullDateTimeLocal();
@@ -1188,7 +1188,7 @@ class PendienteDB extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

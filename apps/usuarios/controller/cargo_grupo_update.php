@@ -43,7 +43,7 @@ switch ($Q_que) {
         } else {
             $oGrupo = new CargoGrupo(array('id_grupo' => $Q_id_grupo));
         }
-        $oGrupo->DBCarregar();
+        $oGrupo->DBCargar();
         $oGrupo->setId_cargo_ref($Q_id_cargo_ref);
         $oGrupo->setDescripcion($Q_descripcion);
         $oGrupo->setMiembros($Q_a_cargos);

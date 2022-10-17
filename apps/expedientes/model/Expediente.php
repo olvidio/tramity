@@ -347,7 +347,7 @@ class Expediente extends expedienteDB
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $oEscrito = new Escrito($id_escrito);
-            $oEscrito->DBCarregar();
+            $oEscrito->DBCargar();
             $oEscrito->setF_aprobacion($df_aprobacion, $convert);
             $oEscrito->DBGuardar();
         }
@@ -367,7 +367,7 @@ class Expediente extends expedienteDB
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $oEscrito = new Escrito($id_escrito);
-            $oEscrito->DBCarregar();
+            $oEscrito->DBCargar();
             $oEscrito->setF_escrito($df_escrito, $convert);
             $oEscrito->DBGuardar();
         }
@@ -385,7 +385,7 @@ class Expediente extends expedienteDB
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $oEscrito = new Escrito($id_escrito);
-            $oEscrito->DBCarregar();
+            $oEscrito->DBCargar();
             $oEscrito->setAnulado(TRUE);
             $oEscrito->DBGuardar();
         }

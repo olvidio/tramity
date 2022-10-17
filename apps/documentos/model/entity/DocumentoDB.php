@@ -159,7 +159,7 @@ class DocumentoDB extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -258,7 +258,7 @@ class DocumentoDB extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -532,7 +532,7 @@ class DocumentoDB extends core\ClasePropiedades
     function getId_doc()
     {
         if (!isset($this->iid_doc) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_doc;
     }
@@ -545,7 +545,7 @@ class DocumentoDB extends core\ClasePropiedades
     function getNom()
     {
         if (!isset($this->snom) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->snom;
     }
@@ -558,7 +558,7 @@ class DocumentoDB extends core\ClasePropiedades
     function getNombre_fichero()
     {
         if (!isset($this->snombre_fichero) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->snombre_fichero;
     }
@@ -571,7 +571,7 @@ class DocumentoDB extends core\ClasePropiedades
     function getCreador()
     {
         if (!isset($this->icreador) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->icreador;
     }
@@ -584,7 +584,7 @@ class DocumentoDB extends core\ClasePropiedades
     function getVisibilidad()
     {
         if (!isset($this->ivisibilidad) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ivisibilidad;
     }
@@ -597,7 +597,7 @@ class DocumentoDB extends core\ClasePropiedades
     function getTipo_doc()
     {
         if (!isset($this->itipo_doc) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->itipo_doc;
     }
@@ -610,7 +610,7 @@ class DocumentoDB extends core\ClasePropiedades
     function getF_upload()
     {
         if (!isset($this->df_upload) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_upload)) {
             return new web\NullDateTimeLocal();
@@ -622,7 +622,7 @@ class DocumentoDB extends core\ClasePropiedades
     public function getDocumento()
     {
         if (!isset($this->documento) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return hex2bin($this->documento);
     }
@@ -749,7 +749,7 @@ class DocumentoDB extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

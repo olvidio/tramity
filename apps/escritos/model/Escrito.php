@@ -24,10 +24,10 @@ class Escrito extends EscritoDB
 {
     /* CONST -------------------------------------------------------------- */
 
-    // modo envio
+    // modo envío
     public const MODO_MANUAL = 1;
     public const MODO_XML = 2;
-    // Accion
+    // Acción
     public const ACCION_PROPUESTA = 1;
     public const ACCION_ESCRITO = 2;
     public const ACCION_PLANTILLA = 3;
@@ -175,7 +175,7 @@ class Escrito extends EscritoDB
         $oProtLocal = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
         $prot_local = $oProtLocal->getProt();
 
-        $this->DBCarregar();
+        $this->DBCargar();
         $this->setJson_prot_local($prot_local);
         $this->DBGuardar();
     }
@@ -572,7 +572,7 @@ class Escrito extends EscritoDB
                 $a_id_adjuntos = $this->getArrayIdAdjuntos();
                 foreach (array_keys($a_id_adjuntos) as $id_item) {
                     $Adjunto = new EscritoAdjunto($id_item);
-                    $Adjunto->DBCarregar();
+                    $Adjunto->DBCargar();
                     $newAdjunto = clone($Adjunto);
                     $newAdjunto->setId_escrito($newId_escrito);
                     $newAdjunto->DBGuardar();
@@ -607,7 +607,7 @@ class Escrito extends EscritoDB
             }
             $aMiembros = array_unique($aMiembros);
             // los guardo individualmente
-            $this->DBCarregar();
+            $this->DBCargar();
             $this->setDestinos($aMiembros);
             $this->DBGuardar();
         } else {

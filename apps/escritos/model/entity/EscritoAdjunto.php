@@ -141,7 +141,7 @@ class EscritoAdjunto extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -222,7 +222,7 @@ class EscritoAdjunto extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -432,7 +432,7 @@ class EscritoAdjunto extends core\ClasePropiedades
     function getId_item()
     {
         if (!isset($this->iid_item) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_item;
     }
@@ -445,7 +445,7 @@ class EscritoAdjunto extends core\ClasePropiedades
     function getId_escrito()
     {
         if (!isset($this->iid_escrito) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_escrito;
     }
@@ -458,7 +458,7 @@ class EscritoAdjunto extends core\ClasePropiedades
     function getNom()
     {
         if (!isset($this->snom) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->snom;
     }
@@ -471,7 +471,7 @@ class EscritoAdjunto extends core\ClasePropiedades
     public function getAdjunto()
     {
         if (!isset($this->adjunto) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return hex2bin($this->adjunto);
     }
@@ -496,7 +496,7 @@ class EscritoAdjunto extends core\ClasePropiedades
     function getTipo_doc()
     {
         if (!isset($this->itipo_doc) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->itipo_doc;
     }
@@ -581,7 +581,7 @@ class EscritoAdjunto extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

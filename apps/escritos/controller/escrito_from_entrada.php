@@ -80,7 +80,7 @@ $oExpediente->setJson_preparar($new_preparar);
 if ($oExpediente->DBGuardar() === FALSE) {
     $error_txt .= $oExpediente->getErrorTxt();
 } else {
-    $oExpediente->DBCarregar();
+    $oExpediente->DBCargar();
     $id_expediente = $oExpediente->getId_expediente();
 }
 

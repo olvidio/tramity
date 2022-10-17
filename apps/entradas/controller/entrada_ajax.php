@@ -171,7 +171,7 @@ switch ($Qque) {
         $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
 
         $oEntrada = new Entrada($Qid_entrada);
-        $oEntrada->DBCarregar();
+        $oEntrada->DBCargar();
         $oEntrada->setAnulado($Qtext);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt = $oEntrada->getErrorTxt();
@@ -208,7 +208,7 @@ switch ($Qque) {
         $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qdetalle = (string)filter_input(INPUT_POST, 'text');
         $oEntrada = new Entrada($Qid_entrada);
-        $oEntrada->DBCarregar();
+        $oEntrada->DBCargar();
         $oEntrada->setDetalle($Qdetalle);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt = $oEntrada->getErrorTxt();

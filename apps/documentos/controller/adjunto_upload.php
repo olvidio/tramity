@@ -53,7 +53,7 @@ function upload()
                 $hoy_iso = $oHoy->getIso();
 
                 $oDocumento = new Documento($Q_id_doc);
-                $oDocumento->DBCarregar();
+                $oDocumento->DBCargar();
                 $oDocumento->setNombre_fichero($fileName);
                 $oDocumento->setTipo_doc(Documento::DOC_UPLOAD);
                 $oDocumento->setDocumento($contenido_doc);

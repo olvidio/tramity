@@ -926,7 +926,7 @@ msgid "documento"
 msgstr "document"
 
 #: entidades/controller/entidad_form.php:94
-msgid "guardar datos entidad"
+msgid "guardar datos nombre_entidad"
 msgstr "desa les dades de l'entitat"
 
 #: entidades/controller/entidad_lista.php:49
@@ -953,20 +953,20 @@ msgstr "Sí"
 msgid "hay un error al guardar"
 msgstr "hi ha un error en desar"
 
-#: entidades/model/entidad.class.php:56
+#: entidades/model/nombre_entidad.class.php:56
 msgid "ctr"
 msgstr "ctr"
 
-#: entidades/model/entidad.class.php:57 lugares/controller/lugar_lista.php:55
+#: entidades/model/nombre_entidad.class.php:57 lugares/controller/lugar_lista.php:55
 #: lugares/model/entity/lugar.class.php:651
 msgid "dl"
 msgstr "dl"
 
-#: entidades/model/entidad.class.php:58
+#: entidades/model/nombre_entidad.class.php:58
 msgid "cr"
 msgstr "cr"
 
-#: entidades/model/entidad.class.php:59
+#: entidades/model/nombre_entidad.class.php:59
 msgid "cg"
 msgstr "cg"
 
@@ -2567,7 +2567,7 @@ msgstr "No podeu suprimir un càrrec tipus."
 
 #: usuarios/controller/login.php:77 usuarios/controller/login.php:263
 #, php-format
-msgid "Todavía NO se ha creado la entidad: %s"
+msgid "Todavía NO se ha creado la nombre_entidad: %s"
 msgstr "Encara NO s'ha creat l'entitat: %s"
 
 #: usuarios/controller/login.php:146
@@ -3473,7 +3473,7 @@ msgstr ""
 #~ msgid "idioma por defecto"
 #~ msgstr "idioma predeterminat"
 
-#~ msgid "Ámbito de la entidad: centro, delegación, comisión regional"
+#~ msgid "Ámbito de la nombre_entidad: centro, delegación, comisión regional"
 #~ msgstr "Àmbit de l' entitat: centre, delegació, comissió regional"
 
 #~ msgid "centro"
@@ -3611,7 +3611,7 @@ msgstr ""
 #~ msgid "Nombre del esquema"
 #~ msgstr "Nom de l'esquema"
 
-#~ msgid "Tipo de entidad"
+#~ msgid "Tipo de nombre_entidad"
 #~ msgstr "Tipus d'entitat"
 
 #~ msgid "Esto borrará todos los escritos."
@@ -3620,13 +3620,13 @@ msgstr ""
 #~ msgid "Puede usar la opción anulado en modificar."
 #~ msgstr "Pot fer servir l'opció anul·lat a modificar."
 
-#~ msgid "¿Está seguro que desea borrar esta entidad?"
+#~ msgid "¿Está seguro que desea borrar esta nombre_entidad?"
 #~ msgstr "Està segur que desitja esborrar aquesta entitat?"
 
 #~ msgid "Lista de usuarios"
 #~ msgstr "LListat d'Usuaris"
 
-#~ msgid "nueva entidad"
+#~ msgid "nueva nombre_entidad"
 #~ msgstr "nova entitat"
 
 #~ msgid "Debe llenar el campo de fecha del escrito"
@@ -4511,7 +4511,7 @@ msgstr ""
 #~ msgid "Salir"
 #~ msgstr "Sortir"
 
-#~ msgid "Admin entidad"
+#~ msgid "Admin nombre_entidad"
 #~ msgstr "Admin entitat"
 
 #~ msgid "Dashboard"

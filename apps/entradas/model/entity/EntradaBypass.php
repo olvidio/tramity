@@ -171,7 +171,7 @@ class EntradaBypass extends Entrada
     function getId_entrada()
     {
         if (!isset($this->iid_entrada) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_entrada;
     }
@@ -180,7 +180,7 @@ class EntradaBypass extends Entrada
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -372,7 +372,7 @@ class EntradaBypass extends Entrada
     /*
     function getId_item() {
         if (!isset($this->iid_item) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_item;
     }
@@ -484,7 +484,7 @@ class EntradaBypass extends Entrada
     function getDestinos()
     {
         if (!isset($this->a_destinos) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return core\array_pg2php($this->a_destinos);
     }
@@ -497,7 +497,7 @@ class EntradaBypass extends Entrada
     function getF_salida()
     {
         if (!isset($this->df_salida) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_salida)) {
             return new web\NullDateTimeLocal();
@@ -549,7 +549,7 @@ class EntradaBypass extends Entrada
     function getId_grupos()
     {
         if (!isset($this->a_id_grupos) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return core\array_pg2php($this->a_id_grupos);
     }
@@ -562,7 +562,7 @@ class EntradaBypass extends Entrada
     function getDescripcion()
     {
         if (!isset($this->sdescripcion) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdescripcion;
     }
@@ -576,7 +576,7 @@ class EntradaBypass extends Entrada
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -648,7 +648,7 @@ class EntradaBypass extends Entrada
     function getJson_prot_destino($bArray = FALSE)
     {
         if (!isset($this->json_prot_destino) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_destino, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -790,7 +790,7 @@ class EntradaBypass extends Entrada
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

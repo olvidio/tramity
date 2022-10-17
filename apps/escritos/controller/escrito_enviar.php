@@ -58,7 +58,7 @@ $a_rta = $oEnviar->enviar();
 
 if ($a_rta['marcar'] === TRUE) {
     $oEscrito = new Escrito($Q_id_escrito);
-    $oEscrito->DBCarregar();
+    $oEscrito->DBCargar();
     $oEscrito->setF_salida($f_salida, FALSE);
     if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
         $oEscrito->setF_aprobacion($f_salida, FALSE);

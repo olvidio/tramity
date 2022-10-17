@@ -21,7 +21,7 @@ switch ($Q_que) {
         $Q_id_cargo = (integer)filter_input(INPUT_POST, 'id_cargo');
         $Q_id_suplente = (integer)filter_input(INPUT_POST, 'id_suplente');
         $oCargo = new Cargo (array('id_cargo' => $Q_id_cargo));
-        $oCargo->DBCarregar();
+        $oCargo->DBCargar();
         $oCargo->setId_suplente($Q_id_suplente);
         if ($oCargo->DBGuardar() === FALSE) {
             $txt_err .= _("Hay un error al guardar");
@@ -77,7 +77,7 @@ switch ($Q_que) {
             $oCargo = new Cargo();
         } else {
             $oCargo = new Cargo (array('id_cargo' => $Q_id_cargo));
-            $oCargo->DBCarregar();
+            $oCargo->DBCargar();
         }
         $oCargo->setCargo($Q_cargo);
         $oCargo->setDescripcion($Q_descripcion);

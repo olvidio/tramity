@@ -128,7 +128,7 @@ class Grant extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -206,7 +206,7 @@ class Grant extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -409,7 +409,7 @@ class Grant extends core\ClasePropiedades
     function getBy_principal()
     {
         if (!isset($this->iby_principal) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iby_principal;
     }
@@ -422,7 +422,7 @@ class Grant extends core\ClasePropiedades
     function getBy_collection()
     {
         if (!isset($this->iby_collection) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iby_collection;
     }
@@ -435,7 +435,7 @@ class Grant extends core\ClasePropiedades
     function getTo_principal()
     {
         if (!isset($this->ito_principal) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ito_principal;
     }
@@ -448,7 +448,7 @@ class Grant extends core\ClasePropiedades
     function getPrivileges()
     {
         if (!isset($this->iprivileges) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iprivileges;
     }
@@ -461,7 +461,7 @@ class Grant extends core\ClasePropiedades
     function getIs_group()
     {
         if (!isset($this->bis_group) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->bis_group;
     }
@@ -531,7 +531,7 @@ class Grant extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

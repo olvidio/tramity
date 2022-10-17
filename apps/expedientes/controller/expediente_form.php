@@ -108,12 +108,13 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
 }
 
 $txt_option_cargos_oficina = '';
-$cCargos_oficina = $gesCargos->getCargos(['id_oficina' => $id_oficina]);
+$cCargos_oficina = $gesCargos->getCargos(['id_oficina' => $id_oficina, '_ordre' => 'director DESC, cargo DESC']);
 $a_posibles_cargos_oficina = [];
 foreach ($cCargos_oficina as $oCargo) {
+    // No pongo al director, ya está con el resto de firmas.
     if ($oCargo->getDirector()) {
         continue;
-    } // No pongo al director, ya está con el resto de firmas.
+    }
     $id_cargo = $oCargo->getId_cargo();
     $cargo = $oCargo->getCargo();
     $a_posibles_cargos_oficina[$id_cargo] = $cargo;
@@ -123,7 +124,7 @@ foreach ($cCargos_oficina as $oCargo) {
 if ($Q_id_expediente) {
     $titulo = _("expediente");
     $oExpediente->setId_expediente($Q_id_expediente);
-    $oExpediente->DBCarregar();
+    $oExpediente->DBCargar();
 
     $id_tramite = $oExpediente->getId_tramite();
     $oDesplTramites->setOpcion_sel($id_tramite);
@@ -307,13 +308,12 @@ $server = ConfigGlobal::getWeb(); //http://tramity.local
 $pag_actualizar = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'prioridad_sel' => $Q_prioridad_sel]));
 
 // datepicker
-$oFecha = new DateTimeLocal();
-$format = $oFecha->getFormat();
+$oHoy = new DateTimeLocal();
+$format = $oHoy->getFormat();
 $yearStart = date('Y');
 $yearEnd = $yearStart + 2;
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 $error_fecha_txt = 'P' . $error_fecha . 'D';
-$oHoy = new DateTimeLocal();
 $oHoy->sub(new DateInterval($error_fecha_txt));
 $minIso = $oHoy->format('Y-m-d');
 

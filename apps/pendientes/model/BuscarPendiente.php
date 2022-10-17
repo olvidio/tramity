@@ -149,7 +149,7 @@ class BuscarPendiente
     function getF_min()
     {
         if (!isset($this->df_min) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_min)) {
             return new NullDateTimeLocal();
@@ -166,7 +166,7 @@ class BuscarPendiente
     function getF_max()
     {
         if (!isset($this->df_max) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_max)) {
             return new NullDateTimeLocal();

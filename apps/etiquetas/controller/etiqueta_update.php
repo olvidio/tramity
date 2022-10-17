@@ -54,7 +54,7 @@ switch ($Q_que) {
         } else {
             $oEtiqueta = new Etiqueta(array('id_etiqueta' => $Q_id_etiqueta));
         }
-        $oEtiqueta->DBCarregar();
+        $oEtiqueta->DBCargar();
         $oEtiqueta->setNom_etiqueta($Q_nom_etiqueta);
         $oEtiqueta->setOficina($oficina);
         $oEtiqueta->setId_cargo($id_cargo);

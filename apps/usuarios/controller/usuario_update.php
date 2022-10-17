@@ -70,7 +70,7 @@ switch ($Q_que) {
         $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
         $oUsuario = new Usuario(array('id_usuario' => $Q_id_usuario));
-        $oUsuario->DBCarregar();
+        $oUsuario->DBCargar();
         if (!empty($Q_password)) {
             $oCrypt = new MyCrypt();
             $my_passwd = $oCrypt->encode($Q_password);
@@ -98,7 +98,7 @@ switch ($Q_que) {
         $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
         $oUsuario = new Usuario(array('id_usuario' => $Q_id_usuario));
-        $oUsuario->DBCarregar();
+        $oUsuario->DBCargar();
         $oUsuario->setUsuario($Q_usuario);
         $oUsuario->setId_cargo_preferido($Q_id_cargo_preferido);
         $oUsuario->setEmail($Q_email);

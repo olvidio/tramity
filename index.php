@@ -201,13 +201,14 @@ switch ($role_actual) {
             'error_fecha' => $error_fecha,
             'server_davical' => $server,
         ];
-        $entidad = ConfigGlobal::getEsquema();
-        if ($entidad === 'admin') {
+        $esquema = ConfigGlobal::getEsquema();
+        $nombre_entidad = ConfigGlobal::nombreEntidad();
+        if ($esquema === 'admin') {
             $oView = new ViewTwig('usuarios/controller');
             echo $oView->renderizar('admin_servidor.html.twig', $a_campos);
         } else {
             $a_campos['is_ambito_dl'] = $id_ambito_dl;
-            $a_campos['entidad'] = $entidad;
+            $a_campos['nombre_entidad'] = $nombre_entidad;
             $oView = new ViewTwig('usuarios/controller');
             echo $oView->renderizar('admin_entidad.html.twig', $a_campos);
         }

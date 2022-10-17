@@ -59,7 +59,7 @@ switch ($Q_que) {
         $Q_id_oficina = ConfigGlobal::role_id_oficina();
         $Q_id_cargo = ConfigGlobal::role_id_cargo();
         $oEntrada = new Entrada($Q_id_entrada);
-        $oEntrada->DBCarregar();
+        $oEntrada->DBCargar();
 
         $aVisto = $oEntrada->getJson_visto(TRUE);
         // Si ya está no hay que añadirlo, sino modificarlo:
@@ -204,7 +204,7 @@ switch ($Q_que) {
         $Q_id_oficial = (integer)filter_input(INPUT_POST, 'id_oficial');
         // Se pone cuando se han enviado...
         $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCarregar();
+        $oExpediente->DBCargar();
         $oExpediente->setEstado(Expediente::ESTADO_ACABADO_ENCARGADO);
         $oExpediente->setPonente($Q_id_oficial);
         if ($oExpediente->DBGuardar() === FALSE) {
@@ -227,7 +227,7 @@ switch ($Q_que) {
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
         $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCarregar();
+        $oExpediente->DBCargar();
         // las etiquetas:
         $oExpediente->setEtiquetas($Q_a_etiquetas);
         $oExpediente->setVisibilidad($Q_visibilidad);
@@ -249,7 +249,7 @@ switch ($Q_que) {
         break;
     case 'reunion':
         $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCarregar();
+        $oExpediente->DBCargar();
         // Si pongo la fecha con datetimepicker, ya esta en ISO (hay que poner FALSE a la conversión).
         $oExpediente->setF_reunion($Q_f_reunion);
         if ($oExpediente->DBGuardar() === FALSE) {
@@ -261,7 +261,7 @@ switch ($Q_que) {
         $gesFirmas = new  GestorFirma();
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_REUNION]);
         foreach ($cFirmas as $oFirma) {
-            $oFirma->DBCarregar();
+            $oFirma->DBCargar();
             if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
                 $oFirma->setValor(Firma::V_D_OK);
             } else {
@@ -291,7 +291,7 @@ switch ($Q_que) {
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
         $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCarregar();
+        $oExpediente->DBCargar();
         // las etiquetas:
         $oExpediente->setEtiquetas($Q_a_etiquetas);
         $oExpediente->setEstado(Expediente::ESTADO_ARCHIVADO);
@@ -315,7 +315,7 @@ switch ($Q_que) {
     case 'distribuir':
         $html = '';
         $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCarregar();
+        $oExpediente->DBCargar();
         $estado_original = $oExpediente->getEstado();
         $oExpediente->setEstado(Expediente::ESTADO_ACABADO_SECRETARIA);
         if ($oExpediente->DBGuardar() === FALSE) {
@@ -328,7 +328,7 @@ switch ($Q_que) {
         $gesFirmas = new  GestorFirma();
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_DISTRIBUIR]);
         foreach ($cFirmas as $oFirma) {
-            $oFirma->DBCarregar();
+            $oFirma->DBCargar();
             if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
                 $oFirma->setValor(Firma::V_D_OK);
             } else {
@@ -453,7 +453,7 @@ switch ($Q_que) {
         }
 
         $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCarregar();
+        $oExpediente->DBCargar();
         $oExpediente->setEstado(Expediente::ESTADO_BORRADOR);
         $asunto = $oExpediente->getAsunto();
         $asunto_retirado = _("RETIRADO") . " $asunto";
@@ -479,7 +479,7 @@ switch ($Q_que) {
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $oEscrito = new Escrito($id_escrito);
-            $oEscrito->DBCarregar();
+            $oEscrito->DBCargar();
             $oEscrito->setAnulado('f');
             if ($Q_que == 'exp_a_borrador_cmb_creador') {
                 $oEscrito->setCreador($nuevo_creador);
@@ -561,7 +561,7 @@ switch ($Q_que) {
         $mi_id_oficina = $oCargo->getId_oficina();
 
         $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCarregar();
+        $oExpediente->DBCargar();
         // oficiales
         $new_preparar = [];
         foreach ($Q_a_preparar as $oficial) {
@@ -637,11 +637,11 @@ switch ($Q_que) {
     case 'guardar':
         if (!empty($Q_id_expediente)) {
             $oExpediente = new Expediente($Q_id_expediente);
-            $oExpediente->DBCarregar();
-            // Mantego al ponente como creador...
+            $oExpediente->DBCargar();
+            // Mantengo al ponente como creador...
         } else {
             // si falla el javascript, puede ser que se hagan varios click a 'Guardar' 
-            // y se dupliquen los espedientes. Me aseguro de que no exista uno igual:
+            // y se dupliquen los expedientes. Me aseguro de que no exista uno igual:
             $gesExpedientes = new GestorExpediente();
             $aWhere = ['id_tramite' => $Q_tramite,
                 'estado' => $Q_estado,
@@ -733,8 +733,8 @@ switch ($Q_que) {
         }
 
         // CIRCULAR
-        if ($Q_que == 'circular') {
-            $f_hoy_iso = date(\DateTimeInterface::ISO8601);
+        if ($Q_que === 'circular') {
+            $f_hoy_iso = date(DateTimeInterface::ATOM);
             // se pone la fecha del escrito como hoy:
             $oExpediente->setF_escritos($f_hoy_iso, FALSE);
             // Guardar fecha y cambiar estado
@@ -744,47 +744,56 @@ switch ($Q_que) {
                 $error_txt .= $oExpediente->getErrorTxt();
             }
             // generar firmas
+            $role_id_cargo = ConfigGlobal::role_id_cargo();
             $oExpediente->generarFirmas();
-            // Si soy el primero, Ya firmo.
             $gesFirmas = new GestorFirma();
-            $oFirmaPrimera = $gesFirmas->getPrimeraFirma($id_expediente);
-            $id_primer_cargo = $oFirmaPrimera->getId_cargo();
-            if ($id_primer_cargo == ConfigGlobal::role_id_cargo()) {
-                if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
-                    $oFirmaPrimera->setValor(Firma::V_D_OK);
-                } else {
-                    $oFirmaPrimera->setValor(Firma::V_OK);
-                }
-                $oFirmaPrimera->setId_usuario(ConfigGlobal::mi_id_usuario());
-                $oFirmaPrimera->setObserv('');
-                $oFirmaPrimera->setF_valor($f_hoy_iso, FALSE);
-                if ($oFirmaPrimera->DBGuardar() === FALSE) {
-                    $error_txt .= $oFirmaPrimera->getErrorTxt();
-                }
-                // comprobar que ya han firmado todos, para:
-                //  - en caso dl: pasarlo a scdl para distribuir (ok_scdl)
-                //  - en caso ctr: marcar como circulando
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-                    $bParaDistribuir = $gesFirmas->isParaDistribuir($Q_id_expediente);
-                    if ($bParaDistribuir) {
-                        // guardar la firma de Cargo::CARGO_DISTRIBUIR;
-                        $oExpediente->DBCarregar();
-                        $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
-                        $oExpediente->setF_aprobacion($f_hoy_iso, FALSE);
-                        $oExpediente->setF_aprobacion_escritos($f_hoy_iso, FALSE);
-                        if ($oExpediente->DBGuardar() === FALSE) {
-                            $error_txt .= $oExpediente->getErrorTxt();
-                        }
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                // Para los centros, firmo sea quien sea
+                $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $id_expediente, 'id_cargo' => $role_id_cargo, 'tipo' => Firma::TIPO_VOTO]);
+                $oFirmaPrimera = $cFirmas[0];
+                $oFirmaPrimera->DBCargar();
+                $oFirmaPrimera->setValor(Firma::V_OK);
+            } else {
+                // Si soy el primero, Ya firmo.
+                $oFirmaPrimera = $gesFirmas->getPrimeraFirma($id_expediente);
+                $id_primer_cargo = $oFirmaPrimera->getId_cargo();
+                if ($id_primer_cargo === $role_id_cargo) {
+                    if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
+                        $oFirmaPrimera->setValor(Firma::V_D_OK);
+                    } else {
+                        $oFirmaPrimera->setValor(Firma::V_OK);
                     }
                 }
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                    // cambio el estado del expediente.
-                    $oExpediente->DBCarregar();
-                    $estado = Expediente::ESTADO_CIRCULANDO;
-                    $oExpediente->setEstado($estado);
+            }
+            $oFirmaPrimera->setId_usuario(ConfigGlobal::mi_id_usuario());
+            $oFirmaPrimera->setObserv('');
+            $oFirmaPrimera->setF_valor($f_hoy_iso, FALSE);
+            if ($oFirmaPrimera->DBGuardar() === FALSE) {
+                $error_txt .= $oFirmaPrimera->getErrorTxt();
+            }
+            // comprobar que ya han firmado todos, para:
+            //  - en caso dl: pasarlo a scdl para distribuir (ok_scdl)
+            //  - en caso ctr: marcar como circulando
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+                $bParaDistribuir = $gesFirmas->isParaDistribuir($Q_id_expediente);
+                if ($bParaDistribuir) {
+                    // guardar la firma de Cargo::CARGO_DISTRIBUIR;
+                    $oExpediente->DBCargar();
+                    $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
+                    $oExpediente->setF_aprobacion($f_hoy_iso, FALSE);
+                    $oExpediente->setF_aprobacion_escritos($f_hoy_iso, FALSE);
                     if ($oExpediente->DBGuardar() === FALSE) {
                         $error_txt .= $oExpediente->getErrorTxt();
                     }
+                }
+            }
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                // cambio el estado del expediente.
+                $oExpediente->DBCargar();
+                $estado = Expediente::ESTADO_CIRCULANDO;
+                $oExpediente->setEstado($estado);
+                if ($oExpediente->DBGuardar() === FALSE) {
+                    $error_txt .= $oExpediente->getErrorTxt();
                 }
             }
 
@@ -808,7 +817,7 @@ switch ($Q_que) {
         break;
     case 'cambio_tramite':
         $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCarregar();
+        $oExpediente->DBCargar();
         $id_tramite_old = $oExpediente->getId_tramite();
         $oExpediente->setId_tramite($Q_tramite);
         if ($oExpediente->DBGuardar() === FALSE) {

@@ -278,10 +278,10 @@ class Entrada extends EntradaDB
      * {@inheritDoc}
      * @see \entradas\model\entity\EntradaDB::DBGuardar()
      */
-    public function DBCarregar($que = NULL)
+    public function DBCargar($que = NULL)
     {
         // El objeto padre:
-        if (parent::DBCarregar($que) === FALSE) {
+        if (parent::DBCargar($que) === FALSE) {
             return FALSE;
         }
         // El tipo y fecha documento:

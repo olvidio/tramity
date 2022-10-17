@@ -45,7 +45,7 @@ if (empty($Q_id_expediente)) {
 $oExpediente = new Expediente();
 
 $oExpediente->setId_expediente($Q_id_expediente);
-$oExpediente->DBCarregar();
+$oExpediente->DBCargar();
 
 $ponente_txt = '?';
 $id_ponente = $oExpediente->getPonente();

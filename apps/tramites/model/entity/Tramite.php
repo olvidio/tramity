@@ -129,7 +129,7 @@ class Tramite extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -190,7 +190,7 @@ class Tramite extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -369,7 +369,7 @@ class Tramite extends core\ClasePropiedades
     function getId_tramite()
     {
         if (!isset($this->iid_tramite) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_tramite;
     }
@@ -382,7 +382,7 @@ class Tramite extends core\ClasePropiedades
     function getTramite()
     {
         if (!isset($this->stramite) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->stramite;
     }
@@ -395,7 +395,7 @@ class Tramite extends core\ClasePropiedades
     function getOrden()
     {
         if (!isset($this->iorden) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iorden;
     }
@@ -408,7 +408,7 @@ class Tramite extends core\ClasePropiedades
     function getBreve()
     {
         if (!isset($this->sbreve) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sbreve;
     }
@@ -464,7 +464,7 @@ class Tramite extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

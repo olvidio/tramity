@@ -122,7 +122,7 @@ class EntidadDB extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -191,7 +191,7 @@ class EntidadDB extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null): bool
+    public function DBCargar($que = null): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -386,7 +386,7 @@ class EntidadDB extends core\ClasePropiedades
     public function getId_entidad()
     {
         if (!isset($this->iid_entidad) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_entidad;
     }
@@ -399,7 +399,7 @@ class EntidadDB extends core\ClasePropiedades
     public function getNombre(): string
     {
         if (!isset($this->snombre) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->snombre;
     }
@@ -412,7 +412,7 @@ class EntidadDB extends core\ClasePropiedades
     public function getSchema(): string
     {
         if (!isset($this->sschema) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sschema;
     }
@@ -425,7 +425,7 @@ class EntidadDB extends core\ClasePropiedades
     public function getTipo(): int
     {
         if (!isset($this->itipo) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->itipo;
     }
@@ -438,7 +438,7 @@ class EntidadDB extends core\ClasePropiedades
     public function isAnulado(): bool
     {
         if (!isset($this->banulado) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->banulado;
     }
@@ -524,7 +524,7 @@ class EntidadDB extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

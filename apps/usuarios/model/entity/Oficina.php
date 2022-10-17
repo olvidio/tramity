@@ -123,7 +123,7 @@ class Oficina extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -182,7 +182,7 @@ class Oficina extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -347,7 +347,7 @@ class Oficina extends core\ClasePropiedades
     function getId_oficina()
     {
         if (!isset($this->iid_oficina) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_oficina;
     }
@@ -360,7 +360,7 @@ class Oficina extends core\ClasePropiedades
     function getSigla()
     {
         if (!isset($this->ssigla) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ssigla;
     }
@@ -373,7 +373,7 @@ class Oficina extends core\ClasePropiedades
     function getOrden()
     {
         if (!isset($this->iorden) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iorden;
     }
@@ -428,7 +428,7 @@ class Oficina extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

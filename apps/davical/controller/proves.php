@@ -48,7 +48,7 @@ switch ($Q_que) {
         $str_ahora = $oAhora->getFromLocalHora();
         if (!empty($Q_collection_id)) {
             $oCollection = new Collection($Q_collection_id);
-            $oCollection->DBCarregar();
+            $oCollection->DBCargar();
         } else {
             $oCollection = new Collection();
         }
@@ -103,7 +103,7 @@ switch ($Q_que) {
         $str_ahora = $oAhora->getFromLocalHora();
         if (!empty($Q_user_no)) {
             $oUserDavical = new User($Q_user_no);
-            $oUserDavical->DBCarregar();
+            $oUserDavical->DBCargar();
             $joined = $oUserDavical->getJoined()->getFromLocalHora();
         } else {
             $oUserDavical = new User();

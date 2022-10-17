@@ -243,10 +243,10 @@ class GestorFirma extends core\ClaseGestor
         $oCondicion = new core\Condicion();
         $aCondi = array();
         foreach ($aWhere as $camp => $val) {
-            if ($camp == '_ordre') {
+            if ($camp === '_ordre') {
                 continue;
             }
-            if ($camp == '_limit') {
+            if ($camp === '_limit') {
                 continue;
             }
             $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
@@ -254,13 +254,13 @@ class GestorFirma extends core\ClaseGestor
                 $aCondi[] = $a;
             }
             // operadores que no requieren valores
-            if ($sOperador == 'BETWEEN' || $sOperador == 'IS NULL' || $sOperador == 'IS NOT NULL' || $sOperador == 'OR') {
+            if ($sOperador === 'BETWEEN' || $sOperador === 'IS NULL' || $sOperador === 'IS NOT NULL' || $sOperador === 'OR') {
                 unset($aWhere[$camp]);
             }
-            if ($sOperador == 'IN' || $sOperador == 'NOT IN') {
+            if ($sOperador === 'IN' || $sOperador === 'NOT IN') {
                 unset($aWhere[$camp]);
             }
-            if ($sOperador == 'TXT') {
+            if ($sOperador === 'TXT') {
                 unset($aWhere[$camp]);
             }
         }
@@ -270,13 +270,13 @@ class GestorFirma extends core\ClaseGestor
         }
         $sOrdre = '';
         $sLimit = '';
-        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] != '') {
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] !== '') {
             $sOrdre = ' ORDER BY ' . $aWhere['_ordre'];
         }
         if (isset($aWhere['_ordre'])) {
             unset($aWhere['_ordre']);
         }
-        if (isset($aWhere['_limit']) && $aWhere['_limit'] != '') {
+        if (isset($aWhere['_limit']) && $aWhere['_limit'] !== '') {
             $sLimit = ' LIMIT ' . $aWhere['_limit'];
         }
         if (isset($aWhere['_limit'])) {
@@ -303,16 +303,15 @@ class GestorFirma extends core\ClaseGestor
 
     public function getRecorrido($id_expediente)
     {
-        // cabio el nombre para los tipo_cargo:
-        $a_cargos_especicales[] = Cargo::CARGO_DISTRIBUIR;
-        $a_cargos_especicales[] = Cargo::CARGO_VB_VCD;
-        $a_cargos_especicales[] = Cargo::CARGO_REUNION;
+        // cambio el nombre para los tipo_cargo:
+        $a_cargos_especiales[] = Cargo::CARGO_DISTRIBUIR;
+        $a_cargos_especiales[] = Cargo::CARGO_VB_VCD;
+        $a_cargos_especiales[] = Cargo::CARGO_REUNION;
 
         $gesCargos = new GestorCargo();
         $aCargos = $gesCargos->getArrayCargos(FALSE);
         $aWhere = ['id_expediente' => $id_expediente,
             '_ordre' => 'orden_tramite, f_valor'
-            //'_ordre' => 'orden_tramite, orden_oficina ASC, tipo ASC'
         ];
         $cFirmas = $this->getFirmas($aWhere);
         $responder = FALSE;
@@ -326,21 +325,21 @@ class GestorFirma extends core\ClaseGestor
             $valor = $oFirma->getValor();
             $oFvalor = $oFirma->getF_valor();
             $f_valor = empty($oFvalor) ? '' : $oFvalor->getFromLocalHora();
-            $id_usuario = $oFirma->getId_usuario();
-            $oUsuario = new Usuario($id_usuario);
-            $nom_usuario = $oUsuario->getNom_usuario();
-            $id_cargo = $oFirma->getId_cargo();
-            $cargo_tipo = $oFirma->getCargo_tipo();
-            if (in_array($cargo_tipo, $a_cargos_especicales)) {
-                $cargo = $aCargos[$cargo_tipo];
-            } else {
-                $cargo = $aCargos[$id_cargo];
-            }
-            if (!empty($valor) && ($valor != Firma::V_VISTO)) {
+            if (!empty($valor) && ($valor !== Firma::V_VISTO)) {
+                $id_usuario = $oFirma->getId_usuario();
+                $oUsuario = new Usuario($id_usuario);
+                $nom_usuario = $oUsuario->getNom_usuario();
+                $id_cargo = $oFirma->getId_cargo();
+                $cargo_tipo = $oFirma->getCargo_tipo();
+                if (in_array($cargo_tipo, $a_cargos_especiales, true)) {
+                    $cargo = $aCargos[$cargo_tipo];
+                } else {
+                    $cargo = $aCargos[$id_cargo];
+                }
                 $voto = $a_valores[$valor];
                 $observ = $oFirma->getObserv();
                 $observ_ponente = $oFirma->getObserv_creador();
-                if ($tipo == Firma::TIPO_VOTO) {
+                if ($tipo === Firma::TIPO_VOTO) {
                     if (!empty($observ)) {
                         $comentarios .= empty($comentarios) ? '' : "<br>";
                         $comentarios .= "$cargo($nom_usuario) [$voto]: $observ";
@@ -362,7 +361,7 @@ class GestorFirma extends core\ClaseGestor
                     $a_rec['valor'] = "$f_valor $cargo($nom_usuario) [$voto]";
                     $a_recorrido[] = $a_rec;
                 }
-                if ($tipo == Firma::TIPO_ACLARACION) {
+                if ($tipo === Firma::TIPO_ACLARACION) {
                     $voto = '<span class="fw-bold">' . _("aclaración") . '</span>';
                     $comentarios .= empty($comentarios) ? '' : "<br>";
                     $comentarios .= "$cargo($voto): $observ";
@@ -374,13 +373,17 @@ class GestorFirma extends core\ClaseGestor
                     }
                 }
             } else {
-                if ($tipo == Firma::TIPO_VOTO) {
+                if ($tipo === Firma::TIPO_VOTO) {
+                    // lo marco como visto (sólo el mio). Si hay más de uno sólo debería ser el primero vacío
+                    $oUsuario = new Usuario(ConfigGlobal::mi_id_usuario());
+                    $nom_usuario = $oUsuario->getNom_usuario();
+                    $id_cargo = $oFirma->getId_cargo();
+                    $cargo = $aCargos[$id_cargo];
                     $a_rec['class'] = "";
                     $a_rec['valor'] = $cargo;
-                    // lo marco como visto (sólo el mio). Si hay más de uno sólo debería ser el primero vacío
-                    if ($id_cargo == ConfigGlobal::role_id_cargo()) {
+                    if ($id_cargo === ConfigGlobal::role_id_cargo()) {
                         $orden_tramite_ref = $oFirma->getOrden_tramite();
-                        // sólo el siguiente en orden tramite si estan todos completos.
+                        // sólo el siguiente en orden tramite si están todos completos.
                         if ($this->getAnteriorOK($id_expediente, $orden_tramite_ref)) {
                             $oFirma->setValor(Firma::V_VISTO);
                             $oFirma->DBGuardar();
@@ -515,7 +518,7 @@ class GestorFirma extends core\ClaseGestor
      * @param integer $id_expediente
      * @return boolean
      */
-    public function paraReunion($id_expediente)
+    public function isParaReunion($id_expediente)
     {
         $oFirmaUltimaOk = $this->getUltimaOk($id_expediente);
 
@@ -723,7 +726,7 @@ class GestorFirma extends core\ClaseGestor
             $a_resto_oficinas = $oExpediente->getResto_oficinas();
             foreach ($cFirmasVarias as $oFirma) {
                 $id_cargo = $oFirma->getId_cargo();
-                if (in_array($id_cargo, $a_resto_oficinas)) {
+                if (in_array($id_cargo, $a_resto_oficinas, true)) {
                     continue;
                 }
                 $oFirma->setId_tramite($id_tramite);
@@ -735,7 +738,7 @@ class GestorFirma extends core\ClaseGestor
             // No tiene 'varias' en el recorrido
         }
 
-        // tipo aclaracion:
+        // tipo aclaración:
         $tipo_a = Firma::TIPO_ACLARACION;
         // Busco las que tengo (valor is not null) y compruebo que existe la casilla para tipo=voto, y la inserto.
         $aWhere = ['valor' => 'x',

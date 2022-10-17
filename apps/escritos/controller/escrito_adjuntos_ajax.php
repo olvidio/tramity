@@ -58,7 +58,7 @@ switch ($Q_que) {
                 }
             }
             $oEscrito = new Escrito($Q_id_escrito);
-            $oEscrito->DBCarregar();
+            $oEscrito->DBCargar();
             $oEscrito->setTipo_doc(Documento::DOC_ETHERPAD);
             if ($oEscrito->DBGuardar() === FALSE) {
                 $error_txt .= ($oEscrito->getErrorTxt());

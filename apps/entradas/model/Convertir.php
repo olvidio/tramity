@@ -94,13 +94,13 @@ class Convertir extends ClaseGestor
         $sOrdre = '';
         $sLimit = '';
         $sOffset = '';
-        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] != '') {
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] !== '') {
             $sOrdre = ' ORDER BY ' . $aWhere['_ordre'];
         }
         if (isset($aWhere['_ordre'])) {
             unset($aWhere['_ordre']);
         }
-        if (isset($aWhere['_limit']) && $aWhere['_limit'] != '') {
+        if (isset($aWhere['_limit']) && $aWhere['_limit'] !== '') {
             $sLimit = ' LIMIT ' . $aWhere['_limit'];
         }
         if (isset($aWhere['_limit'])) {
@@ -224,13 +224,13 @@ class Convertir extends ClaseGestor
         $sOrdre = '';
         $sLimit = '';
         $sOffset = '';
-        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] != '') {
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] !== '') {
             $sOrdre = ' ORDER BY ' . $aWhere['_ordre'];
         }
         if (isset($aWhere['_ordre'])) {
             unset($aWhere['_ordre']);
         }
-        if (isset($aWhere['_limit']) && $aWhere['_limit'] != '') {
+        if (isset($aWhere['_limit']) && $aWhere['_limit'] !== '') {
             $sLimit = ' LIMIT ' . $aWhere['_limit'];
         }
         if (isset($aWhere['_limit'])) {
@@ -334,13 +334,13 @@ class Convertir extends ClaseGestor
         $sOrdre = '';
         $sLimit = '';
         $sOffset = '';
-        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] != '') {
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] !== '') {
             $sOrdre = ' ORDER BY ' . $aWhere['_ordre'];
         }
         if (isset($aWhere['_ordre'])) {
             unset($aWhere['_ordre']);
         }
-        if (isset($aWhere['_limit']) && $aWhere['_limit'] != '') {
+        if (isset($aWhere['_limit']) && $aWhere['_limit'] !== '') {
             $sLimit = ' LIMIT ' . $aWhere['_limit'];
         }
         if (isset($aWhere['_limit'])) {

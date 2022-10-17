@@ -184,7 +184,7 @@ class UserDB extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -269,7 +269,7 @@ class UserDB extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -606,7 +606,7 @@ class UserDB extends core\ClasePropiedades
     function getUser_no()
     {
         if (!isset($this->iuser_no) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iuser_no;
     }
@@ -619,7 +619,7 @@ class UserDB extends core\ClasePropiedades
     function getActive()
     {
         if (!isset($this->bactive) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->bactive;
     }
@@ -632,7 +632,7 @@ class UserDB extends core\ClasePropiedades
     function getEmail_ok()
     {
         if (!isset($this->demail_ok) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->demail_ok)) {
             return new web\NullDateTimeLocal();
@@ -649,7 +649,7 @@ class UserDB extends core\ClasePropiedades
     function getJoined()
     {
         if (!isset($this->djoined) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->djoined)) {
             return new web\NullDateTimeLocal();
@@ -666,7 +666,7 @@ class UserDB extends core\ClasePropiedades
     function getUpdated()
     {
         if (!isset($this->dupdated) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->dupdated)) {
             return new web\NullDateTimeLocal();
@@ -683,7 +683,7 @@ class UserDB extends core\ClasePropiedades
     function getLast_used()
     {
         if (!isset($this->dlast_used) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->dlast_used)) {
             return new web\NullDateTimeLocal();
@@ -700,7 +700,7 @@ class UserDB extends core\ClasePropiedades
     function getUsername()
     {
         if (!isset($this->susername) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->susername;
     }
@@ -713,7 +713,7 @@ class UserDB extends core\ClasePropiedades
     function getPassword()
     {
         if (!isset($this->spassword) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->spassword;
     }
@@ -726,7 +726,7 @@ class UserDB extends core\ClasePropiedades
     function getFullname()
     {
         if (!isset($this->sfullname) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sfullname;
     }
@@ -739,7 +739,7 @@ class UserDB extends core\ClasePropiedades
     function getEmail()
     {
         if (!isset($this->semail) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->semail;
     }
@@ -752,7 +752,7 @@ class UserDB extends core\ClasePropiedades
     function getConfig_data()
     {
         if (!isset($this->sconfig_data) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sconfig_data;
     }
@@ -765,7 +765,7 @@ class UserDB extends core\ClasePropiedades
     function getDate_format_type()
     {
         if (!isset($this->sdate_format_type) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdate_format_type;
     }
@@ -778,7 +778,7 @@ class UserDB extends core\ClasePropiedades
     function getLocale()
     {
         if (!isset($this->slocale) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->slocale;
     }
@@ -983,7 +983,7 @@ class UserDB extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

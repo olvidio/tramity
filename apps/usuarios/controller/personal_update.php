@@ -54,7 +54,7 @@ switch ($Q_que) {
         $Q_id_cargo_preferido = (integer)filter_input(INPUT_POST, 'id_cargo_preferido');
 
         $oUsuario = new Usuario(array('id_usuario' => $id_usuario));
-        $oUsuario->DBCarregar();
+        $oUsuario->DBCargar();
         $oUsuario->setId_cargo_preferido($Q_id_cargo_preferido);
         $oUsuario->setEmail($Q_email);
         $oUsuario->setNom_usuario($Q_nom_usuario);

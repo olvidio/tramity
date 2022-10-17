@@ -117,7 +117,7 @@ class GroupMember extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -175,7 +175,7 @@ class GroupMember extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -326,7 +326,7 @@ class GroupMember extends core\ClasePropiedades
     function getGroup_id()
     {
         if (!isset($this->igroup_id) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->igroup_id;
     }
@@ -339,7 +339,7 @@ class GroupMember extends core\ClasePropiedades
     function getMember_id()
     {
         if (!isset($this->imember_id) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->imember_id;
     }
@@ -379,7 +379,7 @@ class GroupMember extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

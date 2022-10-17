@@ -60,7 +60,7 @@ $a_rta = $oEnviar->enviar();
 
 if ($a_rta['success'] === TRUE) {
     $oEntradaBypass = new EntradaBypass($Qid_entrada);
-    $oEntradaBypass->DBCarregar();
+    $oEntradaBypass->DBCargar();
     $oEntradaBypass->setF_salida($Qf_salida, FALSE);
     if ($oEntradaBypass->DBGuardar() === FALSE) {
         $error_txt = $oEntradaBypass->getErrorTxt();

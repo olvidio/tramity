@@ -231,7 +231,7 @@ class ExpedienteDB extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -322,7 +322,7 @@ class ExpedienteDB extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -727,7 +727,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getId_expediente()
     {
         if (!isset($this->iid_expediente) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_expediente;
     }
@@ -740,7 +740,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getId_tramite()
     {
         if (!isset($this->iid_tramite) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_tramite;
     }
@@ -753,7 +753,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getPonente()
     {
         if (!isset($this->iponente) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iponente;
     }
@@ -766,7 +766,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getResto_oficinas()
     {
         if (!isset($this->a_resto_oficinas) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return core\array_pg2php($this->a_resto_oficinas);
     }
@@ -779,7 +779,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getAsunto()
     {
         if (!isset($this->sasunto) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sasunto;
     }
@@ -792,7 +792,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getEntradilla()
     {
         if (!isset($this->sentradilla) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sentradilla;
     }
@@ -805,7 +805,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getComentarios()
     {
         if (!isset($this->scomentarios) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->scomentarios;
     }
@@ -818,7 +818,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getPrioridad(): int
     {
         if (!isset($this->iprioridad) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iprioridad;
     }
@@ -832,7 +832,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getJson_antecedentes($bArray = FALSE)
     {
         if (!isset($this->json_antecedentes) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_antecedentes, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -872,7 +872,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getJson_acciones($bArray = FALSE)
     {
         if (!isset($this->json_acciones) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_acciones, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -912,7 +912,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getF_contestar()
     {
         if (!isset($this->df_contestar) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_contestar)) {
             return new web\NullDateTimeLocal();
@@ -929,7 +929,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getEstado(): int
     {
         if (!isset($this->iestado) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iestado;
     }
@@ -942,7 +942,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getF_ini_circulacion()
     {
         if (!isset($this->df_ini_circulacion) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_ini_circulacion)) {
             return new web\NullDateTimeLocal();
@@ -959,7 +959,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getF_reunion()
     {
         if (!isset($this->df_reunion) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_reunion)) {
             return new web\NullDateTimeLocal();
@@ -976,7 +976,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getF_aprobacion()
     {
         if (!isset($this->df_aprobacion) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_aprobacion)) {
             return new web\NullDateTimeLocal();
@@ -993,7 +993,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getVida()
     {
         if (!isset($this->ivida) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ivida;
     }
@@ -1007,7 +1007,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getJson_preparar($bArray = FALSE)
     {
         if (!isset($this->json_preparar) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_preparar, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -1047,7 +1047,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getFirmas_oficina()
     {
         if (!isset($this->a_firmas_oficina) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return core\array_pg2php($this->a_firmas_oficina);
     }
@@ -1060,7 +1060,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getVisibilidad()
     {
         if (!isset($this->ivisibilidad) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ivisibilidad;
     }
@@ -1355,7 +1355,7 @@ class ExpedienteDB extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

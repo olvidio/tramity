@@ -71,7 +71,7 @@ switch ($Qque) {
         }
         // Se pone cuando se han enviado...
         $oEntrada = new Entrada($Qid_entrada);
-        $oEntrada->DBCarregar();
+        $oEntrada->DBCargar();
         // las etiquetas:
         $oEntrada->setEtiquetas($a_etiquetas);
         //$oEntrada->setVisibilidad($Qvisibilidad);
@@ -95,7 +95,7 @@ switch ($Qque) {
         $Qid_oficina = ConfigGlobal::role_id_oficina();
         $Qid_cargo_encargado = (integer)filter_input(INPUT_POST, 'id_cargo_encargado');
         $oEntrada = new EntradaDB($Qid_entrada);
-        $oEntrada->DBCarregar();
+        $oEntrada->DBCargar();
         // comprobar si es un cambio (ya estaba encargado a alguien)
         $encargado_old = $oEntrada->getEncargado();
 
@@ -183,7 +183,7 @@ switch ($Qque) {
         $Qid_oficina = ConfigGlobal::role_id_oficina();
         $Qid_cargo = ConfigGlobal::role_id_cargo();
         $oEntrada = new EntradaDB($Qid_entrada);
-        $oEntrada->DBCarregar();
+        $oEntrada->DBCargar();
 
         $aVisto = $oEntrada->getJson_visto(TRUE);
         $oVisto = [];
@@ -219,7 +219,7 @@ switch ($Qque) {
         break;
     case 'guardar_destinos':
         $oEntradaBypass = new EntradaBypass($Qid_entrada);
-        $oEntradaBypass->DBCarregar();
+        $oEntradaBypass->DBCargar();
         // Al cargar si no existe, también borra el id_entrada, y hay que volver a asignarlo.
         $oEntradaBypass->setId_entrada($Qid_entrada);
         //Qasunto.
@@ -294,7 +294,7 @@ switch ($Qque) {
             $Qf_entrada = $oHoy->getFromLocal();
         }
         $oEntrada = new Entrada($Qid_entrada);
-        $oEntrada->DBCarregar();
+        $oEntrada->DBCargar();
         $oEntrada->setF_entrada($Qf_entrada);
         if (empty($Qf_entrada)) {
             $oEntrada->setEstado(Entrada::ESTADO_INGRESADO);
@@ -308,7 +308,7 @@ switch ($Qque) {
         break;
     case 'detalle':
         $oEntrada = new Entrada($Qid_entrada);
-        $oEntrada->DBCarregar();
+        $oEntrada->DBCargar();
         $oEntrada->setDetalle($Qdetalle);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt = $oEntrada->getErrorTxt();
@@ -317,7 +317,7 @@ switch ($Qque) {
         break;
     case 'guardar_ctr':
         $oEntrada = new Entrada($Qid_entrada);
-        $oEntrada->DBCarregar();
+        $oEntrada->DBCargar();
         $oEntrada->setAsunto($Qasunto);
         $oEntrada->setDetalle($Qdetalle);
         $oEntrada->setCategoria($Qcategoria);
@@ -375,7 +375,7 @@ switch ($Qque) {
     case 'guardar':
         if (!empty($Qid_entrada)) {
             $oEntrada = new Entrada($Qid_entrada);
-            $oEntrada->DBCarregar();
+            $oEntrada->DBCargar();
             $oPermisoRegistro = new PermRegistro();
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntrada, 'asunto');
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEntrada, 'detalle');
@@ -532,13 +532,13 @@ switch ($Qque) {
             //////// BY PASS //////
             if (is_true($Qbypass) && !empty($Qid_entrada)) {
                 $oEntradaBypass = new EntradaBypass($Qid_entrada);
-                $oEntradaBypass->DBCarregar();
+                $oEntradaBypass->DBCargar();
                 // Al cargar si no existe, también borra el id_entrada, y hay que volver a asignarlo.
                 $oEntradaBypass->setId_entrada($Qid_entrada);
                 //Qasunto.
                 if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
                     $oEntrada = new EntradaDB($Qid_entrada);
-                    $oEntrada->DBCarregar();
+                    $oEntrada->DBCargar();
                     $oEntrada->setAsunto($Qasunto);
                     if ($oEntrada->DBGuardar() === FALSE) {
                         $error_txt .= $oEntrada->getErrorTxt();

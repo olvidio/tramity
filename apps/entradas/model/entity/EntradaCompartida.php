@@ -183,7 +183,7 @@ class EntradaCompartida extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -258,7 +258,7 @@ class EntradaCompartida extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -559,7 +559,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function getJson_prot_origen($bArray = FALSE)
     {
         if (!isset($this->json_prot_origen) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_origen, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -624,7 +624,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function getDescripcion()
     {
         if (!isset($this->sdescripcion) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdescripcion;
     }
@@ -638,7 +638,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function getJson_prot_destino($bArray = FALSE)
     {
         if (!isset($this->json_prot_destino) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_destino, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -704,7 +704,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function getJson_prot_ref($bArray = FALSE)
     {
         if (!isset($this->json_prot_ref) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_ref, $bArray);
         if (empty($oJSON) || $oJSON == '[]') {
@@ -810,7 +810,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function getId_entrada_compartida()
     {
         if (!isset($this->iid_entrada_compartida) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_entrada_compartida;
     }
@@ -823,7 +823,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function getDestinos()
     {
         if (!isset($this->a_destinos) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return core\array_pg2php($this->a_destinos);
     }
@@ -836,7 +836,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function getF_documento()
     {
         if (!isset($this->df_documento) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_documento)) {
             return new web\NullDateTimeLocal();
@@ -853,7 +853,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function getCategoria()
     {
         if (!isset($this->icategoria) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->icategoria;
     }
@@ -866,7 +866,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function getAsunto_entrada()
     {
         if (!isset($this->sasunto_entrada) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sasunto_entrada;
     }
@@ -879,7 +879,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function getF_entrada()
     {
         if (!isset($this->df_entrada) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->df_entrada)) {
             return new web\NullDateTimeLocal();
@@ -896,7 +896,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function getAnulado()
     {
         if (!isset($this->sanulado) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sanulado;
     }
@@ -1072,7 +1072,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

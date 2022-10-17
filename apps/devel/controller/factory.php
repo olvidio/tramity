@@ -260,7 +260,7 @@ foreach ($oDbl->query($sql) as $row) {
 	 */
 	function get' . $NomCamp . '() {
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
-			$this->DBCarregar();
+			$this->DBCargar();
 		}
         return core\array_pg2php($this->' . $tip . $nomcamp . ');
 	}';
@@ -276,7 +276,7 @@ foreach ($oDbl->query($sql) as $row) {
 	 */
 	function get' . $NomCamp . '($bArray=FALSE) {
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
-			$this->DBCarregar();
+			$this->DBCargar();
 		}
         $oJSON = json_decode($this->' . $tip . $nomcamp . ',$bArray);
 	    if (empty($oJSON) || $oJSON == \'[]\') {
@@ -300,7 +300,7 @@ foreach ($oDbl->query($sql) as $row) {
 	 */
 	function get' . $NomCamp . '() {
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
-			$this->DBCarregar();
+			$this->DBCargar();
 		}
 		if (empty($this->' . $tip . $nomcamp . ')) {
 			return new web\NullDateTimeLocal();
@@ -318,7 +318,7 @@ foreach ($oDbl->query($sql) as $row) {
 	 */
 	function get' . $NomCamp . '() {
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
-			$this->DBCarregar();
+			$this->DBCargar();
 		}
 		return $this->' . $tip . $nomcamp . ';
 	}';
@@ -617,7 +617,7 @@ $txt .= '
 	public function DBGuardar() {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
-		if ($this->DBCarregar(\'guardar\') === FALSE) { $bInsert=TRUE; } else { $bInsert=FALSE; }
+		if ($this->DBCargar(\'guardar\') === FALSE) { $bInsert=TRUE; } else { $bInsert=FALSE; }
 		$aDades=array();';
 $txt .= $guardar;
 $txt .= '
@@ -693,7 +693,7 @@ $txt .= "\n\t\t" . '}
 	 * Carrega els camps de la base de dades com ATRIBUTOS de l\'objecte.
 	 *
 	 */
-	public function DBCarregar($que=null) {
+	public function DBCargar($que=null) {
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
 		if (' . $claus_isset . ') {
@@ -783,7 +783,7 @@ $txt .= "\n\t" . '}
 	 */
 	function getTot() {
 		if (!is_array($this->aDades)) {
-			$this->DBCarregar(\'tot\');
+			$this->DBCargar(\'tot\');
 		}
 		return $this->aDades;
 	}

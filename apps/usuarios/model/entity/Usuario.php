@@ -135,7 +135,7 @@ class Usuario extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -200,7 +200,7 @@ class Usuario extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -409,7 +409,7 @@ class Usuario extends core\ClasePropiedades
     function getId_usuario()
     {
         if (!isset($this->iid_usuario) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_usuario;
     }
@@ -422,7 +422,7 @@ class Usuario extends core\ClasePropiedades
     function getUsuario()
     {
         if (!isset($this->susuario) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->susuario;
     }
@@ -435,7 +435,7 @@ class Usuario extends core\ClasePropiedades
     function getId_cargo_preferido()
     {
         if (!isset($this->iid_cargo_preferido) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_cargo_preferido;
     }
@@ -448,7 +448,7 @@ class Usuario extends core\ClasePropiedades
     function getPassword()
     {
         if (!isset($this->spassword) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->spassword;
     }
@@ -461,7 +461,7 @@ class Usuario extends core\ClasePropiedades
     function getEmail()
     {
         if (!isset($this->semail) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->semail;
     }
@@ -474,7 +474,7 @@ class Usuario extends core\ClasePropiedades
     function getNom_usuario()
     {
         if (!isset($this->snom_usuario) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->snom_usuario;
     }
@@ -574,7 +574,7 @@ class Usuario extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

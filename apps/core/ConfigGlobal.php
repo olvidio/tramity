@@ -77,7 +77,7 @@ class ConfigGlobal extends ServerConf
      */
     public static function role_id_cargo()
     {
-        return $_SESSION['session_auth']['id_cargo'];
+        return (int)$_SESSION['session_auth']['id_cargo'];
     }
 
     /**
@@ -151,6 +151,11 @@ class ConfigGlobal extends ServerConf
     public static function mi_mail()
     {
         return $_SESSION['session_auth']['mail'];
+    }
+    // ----------- Entidad -------------------
+    public static function nombreEntidad()
+    {
+        return $_SESSION['session_auth']['nombreEntidad'];
     }
     // ----------- Idioma -------------------
     //es_ES.UTF-8

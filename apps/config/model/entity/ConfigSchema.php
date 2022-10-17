@@ -114,7 +114,7 @@ class ConfigSchema extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -171,7 +171,7 @@ class ConfigSchema extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -317,7 +317,7 @@ class ConfigSchema extends core\ClasePropiedades
     function getParametro()
     {
         if (!isset($this->sparametro) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sparametro;
     }
@@ -330,7 +330,7 @@ class ConfigSchema extends core\ClasePropiedades
     function getValor()
     {
         if (!isset($this->svalor) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->svalor;
     }
@@ -370,7 +370,7 @@ class ConfigSchema extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

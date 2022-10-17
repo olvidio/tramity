@@ -51,7 +51,7 @@ switch ($Q_que) {
                 $oEntidadDB = new EntidadDB();
             } else {
                 $oEntidadDB = new EntidadDB (array('id_entidad' => $Q_id_entidad));
-                $oEntidadDB->DBCarregar();
+                $oEntidadDB->DBCargar();
             }
 
             $Q_schema = empty($Q_schema) ? $Q_nombre : $Q_schema;
@@ -75,7 +75,7 @@ switch ($Q_que) {
                 if ($Q_que == 'nuevo') {
                     $id = $oEntidadDB->getId_entidad();
                     $oEntidad = new Entidad($id);
-                    $oEntidad->DBCarregar();
+                    $oEntidad->DBCargar();
                     $error_txt = $oEntidad->nuevoEsquema();
                 }
             }

@@ -14,7 +14,7 @@ use function core\cambiar_idioma;
 function logout($idioma, $esquema, $error)
 {
     $a_campos = [];
-    $a_campos['entidad'] = $esquema;
+    $a_campos['nombre_entidad'] = $esquema;
     $a_campos['error'] = $error;
     $a_campos['idioma'] = $idioma;
     $a_campos['url'] = ConfigGlobal::getWeb();
@@ -66,7 +66,7 @@ if (!isset($_SESSION['session_auth'])) {
         // Comprobar si existe el esquema:
         $a_esquemas = posibles_esquemas();
         if (!in_array($esquema_web, $a_esquemas, true)) {
-            $error = sprintf(_("Todavía NO se ha creado la entidad: %s"), $esquema_web);
+            $error = sprintf(_("Todavía NO se ha creado la nombre_entidad: %s"), $esquema_web);
             logout($idioma, $esquema_web, $error);
             die();
         }
@@ -191,6 +191,12 @@ if (!isset($_SESSION['session_auth'])) {
                 $row = $oDBStI->fetch(PDO::FETCH_ASSOC);
                 $idioma = $row === FALSE ? '' : $row['preferencia'];
 
+                // Nombre de la nombre_entidad
+                $query_entidad = sprintf("select * from public.entidades where schema = '%s'", $esquema);
+                $oDBStE = $oDB->query($query_entidad);
+                $row = $oDBStE->fetch(PDO::FETCH_ASSOC);
+                $nombreEntidad = $row === FALSE ? '' : $row['nombre'];
+
                 //registro la sesión con los permisos
                 $session_auth = array(
                     'id_usuario' => $id_usuario,
@@ -203,6 +209,7 @@ if (!isset($_SESSION['session_auth'])) {
                     'username' => $_POST['username'],
                     'password' => $_POST['password'],
                     'esquema' => $esquema,
+                    'nombreEntidad' => $nombreEntidad,
                     'mi_id_oficina' => $mi_id_oficina,
                     'expire' => $expire,
                     'mail' => $mail,
@@ -242,7 +249,7 @@ if (!isset($_SESSION['session_auth'])) {
         // Comprobar si existe el esquema:
         $a_esquemas = posibles_esquemas();
         if (!in_array($esquema_web, $a_esquemas, true)) {
-            $error = sprintf(_("Todavía NO se ha creado la entidad: %s"), $esquema_web);
+            $error = sprintf(_("Todavía NO se ha creado la nombre_entidad: %s"), $esquema_web);
         }
 
         logout($idioma, $esquema_web, $error);

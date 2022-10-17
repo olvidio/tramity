@@ -406,9 +406,9 @@ $pagina_etiquetas = web\Hash::link('apps/etiquetas/controller/etiqueta_lista.php
 $url_ajax = web\Hash::link('apps/usuarios/controller/usuario_update.php');
 
 $mi_idioma = ConfigGlobal::mi_Idioma_short();
-$entidad = ConfigGlobal::getEsquema();
+$nombre_entidad = ConfigGlobal::nombreEntidad();
 $a_campos = [
-    'entidad' => $entidad,
+    'nombre_entidad' => $nombre_entidad,
     'role_actual' => ConfigGlobal::role_actual(),
     'username' => $username,
     'mi_idioma' => $mi_idioma,

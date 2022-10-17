@@ -282,7 +282,7 @@ if ($go == 'entradas') {
 $titulo_oficina = '';
 if ($Q_calendario != 'registro') {
     if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-        $titulo_oficina = sprintf(_("pendiente de %s"), ConfigGlobal::getEsquema());
+        $titulo_oficina = sprintf(_("pendiente de %s"), ConfigGlobal::nombreEntidad());
     } else {
         $oficina_txt = $a_posibles_oficinas[$Q_id_oficina];
         $titulo_oficina = sprintf(_("pendiente de la oficina %s"), $oficina_txt);

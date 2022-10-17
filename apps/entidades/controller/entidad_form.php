@@ -92,7 +92,7 @@ $oHash->setArraycamposHidden($a_camposHidden);
 
 $url_update = ConfigGlobal::getWeb() . '/apps/entidades/controller/entidad_update.php';
 
-$txt_guardar = _("guardar datos entidad");
+$txt_guardar = _("guardar datos nombre_entidad");
 
 $pagina_cancel = web\Hash::link('apps/entidades/controller/entidad_lista.php?' . http_build_query([]));
 

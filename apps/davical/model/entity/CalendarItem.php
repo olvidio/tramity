@@ -257,7 +257,7 @@ class CalendarItem extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -362,7 +362,7 @@ class CalendarItem extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -916,7 +916,7 @@ class CalendarItem extends core\ClasePropiedades
     function getUser_no()
     {
         if (!isset($this->iuser_no) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iuser_no;
     }
@@ -929,7 +929,7 @@ class CalendarItem extends core\ClasePropiedades
     function getDav_name()
     {
         if (!isset($this->sdav_name) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdav_name;
     }
@@ -942,7 +942,7 @@ class CalendarItem extends core\ClasePropiedades
     function getDav_etag()
     {
         if (!isset($this->sdav_etag) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdav_etag;
     }
@@ -955,7 +955,7 @@ class CalendarItem extends core\ClasePropiedades
     function getUid()
     {
         if (!isset($this->suid) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->suid;
     }
@@ -968,7 +968,7 @@ class CalendarItem extends core\ClasePropiedades
     function getCreated()
     {
         if (!isset($this->dcreated) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->dcreated)) {
             return new web\NullDateTimeLocal();
@@ -985,7 +985,7 @@ class CalendarItem extends core\ClasePropiedades
     function getLast_modified()
     {
         if (!isset($this->dlast_modified) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->dlast_modified)) {
             return new web\NullDateTimeLocal();
@@ -1002,7 +1002,7 @@ class CalendarItem extends core\ClasePropiedades
     function getDtstamp()
     {
         if (!isset($this->ddtstamp) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->ddtstamp)) {
             return new web\NullDateTimeLocal();
@@ -1019,7 +1019,7 @@ class CalendarItem extends core\ClasePropiedades
     function getDtstart()
     {
         if (!isset($this->ddtstart) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->ddtstart)) {
             return new web\NullDateTimeLocal();
@@ -1036,7 +1036,7 @@ class CalendarItem extends core\ClasePropiedades
     function getDtend()
     {
         if (!isset($this->ddtend) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->ddtend)) {
             return new web\NullDateTimeLocal();
@@ -1053,7 +1053,7 @@ class CalendarItem extends core\ClasePropiedades
     function getDue()
     {
         if (!isset($this->ddue) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->ddue)) {
             return new web\NullDateTimeLocal();
@@ -1070,7 +1070,7 @@ class CalendarItem extends core\ClasePropiedades
     function getSummary()
     {
         if (!isset($this->ssummary) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ssummary;
     }
@@ -1083,7 +1083,7 @@ class CalendarItem extends core\ClasePropiedades
     function getLocation()
     {
         if (!isset($this->slocation) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->slocation;
     }
@@ -1096,7 +1096,7 @@ class CalendarItem extends core\ClasePropiedades
     function getDescription()
     {
         if (!isset($this->sdescription) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdescription;
     }
@@ -1109,7 +1109,7 @@ class CalendarItem extends core\ClasePropiedades
     function getPriority()
     {
         if (!isset($this->ipriority) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ipriority;
     }
@@ -1122,7 +1122,7 @@ class CalendarItem extends core\ClasePropiedades
     function getClass()
     {
         if (!isset($this->sclass) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sclass;
     }
@@ -1135,7 +1135,7 @@ class CalendarItem extends core\ClasePropiedades
     function getTransp()
     {
         if (!isset($this->stransp) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->stransp;
     }
@@ -1148,7 +1148,7 @@ class CalendarItem extends core\ClasePropiedades
     function getRrule()
     {
         if (!isset($this->srrule) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->srrule;
     }
@@ -1161,7 +1161,7 @@ class CalendarItem extends core\ClasePropiedades
     function getUrl()
     {
         if (!isset($this->surl) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->surl;
     }
@@ -1174,7 +1174,7 @@ class CalendarItem extends core\ClasePropiedades
     function getPercent_complete()
     {
         if (!isset($this->ipercent_complete) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->ipercent_complete;
     }
@@ -1187,7 +1187,7 @@ class CalendarItem extends core\ClasePropiedades
     function getTz_id()
     {
         if (!isset($this->stz_id) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->stz_id;
     }
@@ -1200,7 +1200,7 @@ class CalendarItem extends core\ClasePropiedades
     function getStatus()
     {
         if (!isset($this->sstatus) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sstatus;
     }
@@ -1213,7 +1213,7 @@ class CalendarItem extends core\ClasePropiedades
     function getCompleted()
     {
         if (!isset($this->dcompleted) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->dcompleted)) {
             return new web\NullDateTimeLocal();
@@ -1230,7 +1230,7 @@ class CalendarItem extends core\ClasePropiedades
     function getDav_id()
     {
         if (!isset($this->idav_id) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->idav_id;
     }
@@ -1243,7 +1243,7 @@ class CalendarItem extends core\ClasePropiedades
     function getCollection_id()
     {
         if (!isset($this->icollection_id) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->icollection_id;
     }
@@ -1256,7 +1256,7 @@ class CalendarItem extends core\ClasePropiedades
     function getFirst_instance_start()
     {
         if (!isset($this->dfirst_instance_start) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->dfirst_instance_start)) {
             return new web\NullDateTimeLocal();
@@ -1273,7 +1273,7 @@ class CalendarItem extends core\ClasePropiedades
     function getLast_instance_end()
     {
         if (!isset($this->dlast_instance_end) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         if (empty($this->dlast_instance_end)) {
             return new web\NullDateTimeLocal();
@@ -1692,7 +1692,7 @@ class CalendarItem extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

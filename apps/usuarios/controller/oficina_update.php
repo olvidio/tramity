@@ -43,7 +43,7 @@ switch ($Q_que) {
                 $oOficina = new Oficina($Q_id_oficina);
                 $oficina = $oOficina->getSigla();
             } else {
-                $oficina = ConfigGlobal::getEsquema();
+                $oficina = ConfigGlobal::nombreEntidad();
             }
             //$oficina = 'ocs';
 
@@ -61,7 +61,7 @@ switch ($Q_que) {
         $Q_orden = (string)filter_input(INPUT_POST, 'orden');
 
         $oOficina = new Oficina (array('id_oficina' => $Q_id_oficina));
-        $oOficina->DBCarregar();
+        $oOficina->DBCargar();
         $sigla_old = $oOficina->getSigla();
         $oOficina->setSigla($Q_sigla);
         $oOficina->setOrden($Q_orden);

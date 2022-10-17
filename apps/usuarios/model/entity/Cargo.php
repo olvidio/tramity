@@ -174,7 +174,7 @@ class Cargo extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if ($this->DBCarregar('guardar') === FALSE) {
+        if ($this->DBCargar('guardar') === FALSE) {
             $bInsert = TRUE;
         } else {
             $bInsert = FALSE;
@@ -256,7 +256,7 @@ class Cargo extends core\ClasePropiedades
      * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
      *
      */
-    public function DBCarregar($que = null)
+    public function DBCargar($que = null)
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -505,7 +505,7 @@ class Cargo extends core\ClasePropiedades
     function getId_cargo()
     {
         if (!isset($this->iid_cargo) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_cargo;
     }
@@ -518,7 +518,7 @@ class Cargo extends core\ClasePropiedades
     function getId_ambito()
     {
         if (!isset($this->iid_ambito) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_ambito;
     }
@@ -531,7 +531,7 @@ class Cargo extends core\ClasePropiedades
     function getCargo()
     {
         if (!isset($this->scargo) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->scargo;
     }
@@ -544,7 +544,7 @@ class Cargo extends core\ClasePropiedades
     function getDescripcion()
     {
         if (!isset($this->sdescripcion) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->sdescripcion;
     }
@@ -557,7 +557,7 @@ class Cargo extends core\ClasePropiedades
     function getId_oficina()
     {
         if (!isset($this->iid_oficina) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_oficina;
     }
@@ -570,7 +570,7 @@ class Cargo extends core\ClasePropiedades
     function getDirector()
     {
         if (!isset($this->bdirector) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->bdirector;
     }
@@ -583,7 +583,7 @@ class Cargo extends core\ClasePropiedades
     function getSacd()
     {
         if (!isset($this->bsacd) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->bsacd;
     }
@@ -596,7 +596,7 @@ class Cargo extends core\ClasePropiedades
     function getId_usuario()
     {
         if (!isset($this->iid_usuario) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_usuario;
     }
@@ -609,7 +609,7 @@ class Cargo extends core\ClasePropiedades
     function getId_suplente()
     {
         if (!isset($this->iid_suplente) && !$this->bLoaded) {
-            $this->DBCarregar();
+            $this->DBCargar();
         }
         return $this->iid_suplente;
     }
@@ -739,7 +739,7 @@ class Cargo extends core\ClasePropiedades
     function getTot()
     {
         if (!is_array($this->aDades)) {
-            $this->DBCarregar('tot');
+            $this->DBCargar('tot');
         }
         return $this->aDades;
     }

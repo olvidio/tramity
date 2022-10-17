@@ -42,9 +42,14 @@ switch ($Q_que) {
 
     case 'add':
         $Q_a_cargos = (array)filter_input(INPUT_POST, 'a_cargos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-        // buscar el orden del ultimo:
+        // buscar el orden del último:
         $gesTramiteCargo = new GestorTramiteCargo();
-        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS]);
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+            $cTramiteCargos = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS]);
+        } else {
+            // Para los centros
+            $cTramiteCargos = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $id_tramite, '_ordre' => 'orden_tramite DESC']);
+        }
         $oTramiteCargo = $cTramiteCargos[0];
         $orden_tramite = $oTramiteCargo->getOrden_tramite();
         // buscar el orden dentro de las firmas
@@ -152,7 +157,7 @@ switch ($Q_que) {
             $error_txt .= _("No puede Firmar");
         } else {
             $oExpediente = new Expediente($Q_id_expediente);
-            $oExpediente->DBCarregar();
+            $oExpediente->DBCargar();
             $estado = $oExpediente->getEstado();
             $f_hoy_iso = date(DateTimeInterface::ATOM);
             // Habrá que ver como se cambia un voto.
@@ -187,7 +192,7 @@ switch ($Q_que) {
                     $cFirmaDistribuir = $gesFirmas->getFirmas($aWhere);
                     if (is_array($cFirmaDistribuir) && !empty($cFirmaDistribuir)) {
                         $oFirmaDistribuir = $cFirmaDistribuir[0];
-                        $oFirmaDistribuir->DBCarregar();
+                        $oFirmaDistribuir->DBCargar();
                         $oFirmaDistribuir->setId_usuario(ConfigGlobal::mi_id_usuario());
                         $oFirmaDistribuir->setValor($Q_voto);
                         $oFirmaDistribuir->setF_valor($f_hoy_iso, FALSE);
@@ -199,7 +204,7 @@ switch ($Q_que) {
                     }
                     // cambio el estado del expediente.
                     $oExpediente = new Expediente($Q_id_expediente);
-                    $oExpediente->DBCarregar();
+                    $oExpediente->DBCargar();
                     switch ($Q_voto) {
                         case Firma::V_D_VISTO_BUENO:
                             $estado = Expediente::ESTADO_FIJAR_REUNION;
@@ -227,7 +232,7 @@ switch ($Q_que) {
                     }
                 }
                 // 22/2/21. Amplio a cambiar el estado para todos los casos.
-                $bParaReunion = $gesFirmas->paraReunion($Q_id_expediente);
+                $bParaReunion = $gesFirmas->isParaReunion($Q_id_expediente);
                 if ($bParaReunion) {
                     switch ($Q_voto) {
                         case Firma::V_D_VISTO_BUENO:
@@ -259,7 +264,7 @@ switch ($Q_que) {
                 if ($gesFirmas->hasTodasLasFirmas($Q_id_expediente)) {
                     // cambio el estado del expediente.
                     $oExpediente = new Expediente($Q_id_expediente);
-                    $oExpediente->DBCarregar();
+                    $oExpediente->DBCargar();
                     $estado = Expediente::ESTADO_ACABADO;
                     $oExpediente->setEstado($estado);
                     $oExpediente->setF_aprobacion($f_hoy_iso, FALSE);
@@ -287,7 +292,7 @@ switch ($Q_que) {
         if (is_array($cFirmas) && !empty($cFirmas)) {
             // Ya existe una aclaración. Busco la última, para saber el orden.
             $oFirmaAclaracion = $cFirmas[0];
-            $oFirmaAclaracion->DBCarregar();
+            $oFirmaAclaracion->DBCargar();
             $oFirmaAclaracion->setObserv_creador($Q_comentario);
             if ($oFirmaAclaracion->DBGuardar() === FALSE) {
                 $error_txt .= $oFirmaAclaracion->getErrorTxt();

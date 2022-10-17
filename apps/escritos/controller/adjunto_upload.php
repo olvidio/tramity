@@ -52,7 +52,7 @@ function upload()
                 if (!empty($Q_id_item)) {
                     // update
                     $oEscritoAdjunto = new EscritoAdjunto($Q_id_item);
-                    $oEscritoAdjunto->DBCarregar();
+                    $oEscritoAdjunto->DBCargar();
                 } else {
                     // new
                     $oEscritoAdjunto = new EscritoAdjunto();
