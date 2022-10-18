@@ -280,14 +280,14 @@ switch ($Q_filtro) {
 
 $url_update = 'apps/entradas/controller/entrada_update.php';
 $pagina_nueva = web\Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query(['filtro' => $Q_filtro]));
-if ($Qfiltro == 'en_buscar') {
+if ($Q_filtro == 'en_buscar') {
     $a_condicion = [];
     $str_condicion = (string)filter_input(INPUT_POST, 'condicion');
     parse_str($str_condicion, $a_condicion);
-    $a_condicion['filtro'] = $Qfiltro;
+    $a_condicion['filtro'] = $Q_filtro;
     $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));
 } else {
-    $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => $Qfiltro]));
+    $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => $Q_filtro]));
     $str_condicion = '';
 }
 
@@ -299,7 +299,7 @@ $yearEnd = $yearStart + 2;
 
 $a_campos = [
     'titulo' => $titulo,
-    'id_entrada' => $Qid_entrada,
+    'id_entrada' => $Q_id_entrada,
     //'oHash' => $oHash,
     'oProtOrigen' => $oProtOrigen,
     'oArrayProtRef' => $oArrayProtRef,
@@ -334,7 +334,7 @@ $a_campos = [
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
     'pagina_nueva' => $pagina_nueva,
-    'filtro' => $Qfiltro,
+    'filtro' => $Q_filtro,
     'txt_btn_guardar' => $txt_btn_guardar,
     // para la pagina js
     'plazo_normal' => $plazo_normal,

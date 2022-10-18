@@ -33,7 +33,7 @@ $Q_id_entrada = (integer)filter_input(INPUT_GET, 'id');
 $Qf_salida = (string)filter_input(INPUT_POST, 'f_salida');
 
 if (empty($Qf_salida)) {
-    $Qf_salida = date(\DateTimeInterface::ISO8601);
+    $Qf_salida = date(DateTimeInterface::ATOM);
 }
 
 $rta_txt = '';
@@ -54,12 +54,12 @@ if (!empty($rta_txt)) {
 }
 
 // Primero intento enviar, sólo guardo la f_salida si tengo éxito
-$oEnviar = new Enviar($Qid_entrada, 'entrada');
+$oEnviar = new Enviar($Q_id_entrada, 'entrada');
 
 $a_rta = $oEnviar->enviar();
 
 if ($a_rta['success'] === TRUE) {
-    $oEntradaBypass = new EntradaBypass($Qid_entrada);
+    $oEntradaBypass = new EntradaBypass($Q_id_entrada);
     $oEntradaBypass->DBCargar();
     $oEntradaBypass->setF_salida($Qf_salida, FALSE);
     if ($oEntradaBypass->DBGuardar() === FALSE) {
@@ -68,7 +68,7 @@ if ($a_rta['success'] === TRUE) {
 				alert('$error_txt');
 			  </script>";
     }
-    $oEntrada = new Entrada($Qid_entrada);
+    $oEntrada = new Entrada($Q_id_entrada);
     $oEntrada->setEstado(Entrada::ESTADO_ENVIADO_CR);
     if ($oEntrada->DBGuardar() === FALSE) {
         $error_txt = $oEntrada->getErrorTxt();

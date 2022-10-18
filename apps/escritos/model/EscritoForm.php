@@ -277,7 +277,7 @@ class EscritoForm
             $comentario = $oEscrito->getComentarios();
         } else {
             // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
-            //$this->Qid_entrada = (integer) filter_input(INPUT_POST, 'id_entrada');
+            //$this->Q_id_entrada = (integer) filter_input(INPUT_POST, 'id_entrada');
             if (!empty($this->Qid_entrada)) {
                 $this->Qaccion = Escrito::ACCION_ESCRITO;
                 $oEntrada = new Entrada($this->Qid_entrada);

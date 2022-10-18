@@ -157,7 +157,7 @@ if ($Q_filtro == 'en_buscar') {
     $a_condicion['filtro'] = $Q_filtro;
     $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));
 } else {
-    $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => $Qfiltro]));
+    $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => $Q_filtro]));
     $str_condicion = '';
 }
 
@@ -169,7 +169,7 @@ $yearEnd = $yearStart + 2;
 
 $a_campos = [
     'titulo' => $titulo,
-    'id_entrada' => $Qid_entrada,
+    'id_entrada' => $Q_id_entrada,
     //'oHash' => $oHash,
     'oProtOrigen' => $oProtOrigen,
     'oArrayProtRef' => $oArrayProtRef,
@@ -187,7 +187,7 @@ $a_campos = [
     'ver_pendiente' => $ver_pendiente,
     'url_update' => $url_update,
     'pagina_cancel' => $pagina_cancel,
-    'filtro' => $Qfiltro,
+    'filtro' => $Q_filtro,
     'txt_btn_guardar' => $txt_btn_guardar,
     // para la pagina js
     'plazo_normal' => $plazo_normal,

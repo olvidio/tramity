@@ -24,9 +24,9 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 $Qid_expediente = (string)filter_input(INPUT_POST, 'id_expediente');
-$Qfiltro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
-$Qasunto = (string)filter_input(INPUT_POST, 'asunto');
+$Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
 $Qperiodo = (string)filter_input(INPUT_POST, 'periodo');
 $Qorigen_id_lugar = (integer)filter_input(INPUT_POST, 'origen_id_lugar');
 $Qorigen_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
@@ -43,9 +43,9 @@ $aOperador = [];
 if (!empty($Qoficina_buscar)) {
     $aWhere['ponente'] = $Qoficina_buscar;
 }
-if (!empty($Qasunto)) {
+if (!empty($Q_asunto)) {
     // en este caso el operador es 'sin_acentos'
-    $aWhere['asunto_detalle'] = $Qasunto;
+    $aWhere['asunto_detalle'] = $Q_asunto;
 }
 
 switch ($Qperiodo) {
@@ -75,7 +75,7 @@ if (!empty($periodo)) {
 }
 
 // por defecto, buscar sólo 50.
-if (empty($Qasunto && empty($Qoficina_buscar))) {
+if (empty($Q_asunto && empty($Qoficina_buscar))) {
     $aWhere['_limit'] = 50;
 }
 $aWhere['_ordre'] = 'f_entrada DESC';
@@ -121,7 +121,7 @@ foreach ($cEntradas as $oEntrada) {
     $ponente_txt = empty($a_posibles_oficinas[$id_of_ponente]) ? '?' : $a_posibles_oficinas[$id_of_ponente];
 
     $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >ver</span>";
-    $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_entrada('$id_entrada','$Qid_expediente','$Qfiltro');\" >adjuntar</span>";
+    $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_entrada('$id_entrada','$Qid_expediente','$Q_filtro');\" >adjuntar</span>";
 
     $a_valores[$a][1] = $ver;
     $a_valores[$a][2] = $proto_txt;
@@ -157,7 +157,7 @@ if (is_true($Qchk_anulados)) {
 }
 
 $a_cosas = ['id_expediente' => $Qid_expediente,
-    'filtro' => $Qfiltro,
+    'filtro' => $Q_filtro,
 ];
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
 $pagina_buscar = web\Hash::link('apps/entradas/controller/entrada_ajax.php?' . http_build_query([$a_cosas]));
@@ -170,7 +170,7 @@ $a_campos = [
     'oDesplOrigen' => $oDesplOrigen,
     'oDesplOficinas' => $oDesplOficinas,
     'oLista' => $oLista,
-    'asunto' => $Qasunto,
+    'asunto' => $Q_asunto,
     'prot_num' => $Qorigen_prot_num,
     'prot_any' => $Qorigen_prot_any,
     'chk_ctr_anulados' => $chk_ctr_anulados,
@@ -184,7 +184,7 @@ echo $oView->renderizar('buscar_form.html.twig', $a_campos);
 
 /*
 $Qid_expediente = (string) filter_input(INPUT_POST, 'id_expediente');
-$Qfiltro = (string) filter_input(INPUT_POST, 'filtro');
+$Q_filtro = (string) filter_input(INPUT_POST, 'filtro');
 
 $id_oficina = ConfigGlobal::role_id_oficina();
 
@@ -202,7 +202,7 @@ $oDesplLugares->setOpciones($a_posibles_lugares);
 $oDesplLugares->setBlanco(TRUE);
 
 $a_cosas = [ 'id_expediente' => $Qid_expediente,
-            'filtro' => $Qfiltro,
+            'filtro' => $Q_filtro,
             ];
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
 $pagina_buscar = web\Hash::link('apps/entradas/controller/entrada_ajax.php?'.http_build_query([$a_cosas]));
@@ -213,7 +213,7 @@ $titulo = _("Buscar en entradas:");
 
 $a_campos = [
     'id_expediente' => $Qid_expediente,
-    'filtro' => $Qfiltro,
+    'filtro' => $Q_filtro,
     'titulo' => $titulo,
     'oDesplOficinas' => $oDesplOficinas,
     'oDesplLugares' => $oDesplLugares,

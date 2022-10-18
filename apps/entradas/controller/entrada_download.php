@@ -23,7 +23,7 @@ if (!empty($Q_id_entrada)) {
     } else {
         $bCompartida = FALSE;
     }
-    $oEnviar = new Enviar($Qid_entrada, 'entrada');
+    $oEnviar = new Enviar($Q_id_entrada, 'entrada');
     $File = $oEnviar->getPdf($bCompartida);
 
     $escrito = $File['content'];

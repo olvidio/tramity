@@ -37,17 +37,17 @@ $Q_f_escrito = (string)filter_input(INPUT_POST, 'f_escrito');
 $Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
 $Q_f_entrada = (string)filter_input(INPUT_POST, 'f_entrada');
 
-$Qdetalle = (string)filter_input(INPUT_POST, 'detalle');
-$Qid_of_ponente = (integer)filter_input(INPUT_POST, 'of_ponente');
+$Q_detalle = (string)filter_input(INPUT_POST, 'detalle');
+$Q_id_of_ponente = (integer)filter_input(INPUT_POST, 'of_ponente');
 $Qa_oficinas = (array)filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-$Qcategoria = (integer)filter_input(INPUT_POST, 'categoria');
-$Qvisibilidad = (integer)filter_input(INPUT_POST, 'visibilidad');
+$Q_categoria = (integer)filter_input(INPUT_POST, 'categoria');
+$Q_visibilidad = (integer)filter_input(INPUT_POST, 'visibilidad');
 
-$Qplazo = (string)filter_input(INPUT_POST, 'plazo');
-$Qf_plazo = (string)filter_input(INPUT_POST, 'f_plazo');
-$Qbypass = (string)filter_input(INPUT_POST, 'bypass');
-$QAdmitir_hidden = (string)filter_input(INPUT_POST, 'admitir_hidden');
+$Q_plazo = (string)filter_input(INPUT_POST, 'plazo');
+$Q_f_plazo = (string)filter_input(INPUT_POST, 'f_plazo');
+$Q_bypass = (string)filter_input(INPUT_POST, 'bypass');
+$Q_admitir_hidden = (string)filter_input(INPUT_POST, 'admitir_hidden');
 
 /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
 $Qa_referencias = (array)filter_input(INPUT_POST, 'referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -57,7 +57,7 @@ $Qa_prot_mas_referencias = (array)filter_input(INPUT_POST, 'prot_mas_referencias
 
 $error_txt = '';
 $jsondata = [];
-switch ($Qque) {
+switch ($Q_que) {
     case 'guardar_etiquetas':
         $Qa_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // si viene del serializeArray del jQuery, cada fila, a su vez es un array:
@@ -70,11 +70,10 @@ switch ($Qque) {
             }
         }
         // Se pone cuando se han enviado...
-        $oEntrada = new Entrada($Qid_entrada);
+        $oEntrada = new Entrada($Q_id_entrada);
         $oEntrada->DBCargar();
         // las etiquetas:
         $oEntrada->setEtiquetas($a_etiquetas);
-        //$oEntrada->setVisibilidad($Qvisibilidad);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= _("No se han podido guardar las etiquetas");
         }
@@ -90,11 +89,10 @@ switch ($Qque) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'en_asignar':
         $Qid_oficina = ConfigGlobal::role_id_oficina();
         $Qid_cargo_encargado = (integer)filter_input(INPUT_POST, 'id_cargo_encargado');
-        $oEntrada = new EntradaDB($Qid_entrada);
+        $oEntrada = new EntradaDB($Q_id_entrada);
         $oEntrada->DBCargar();
         // comprobar si es un cambio (ya estaba encargado a alguien)
         $encargado_old = $oEntrada->getEncargado();
@@ -110,11 +108,11 @@ switch ($Qque) {
 
         // también hay que marcarlo como visto por quien lo encarga
         // Siempre que no sea el mismo:
-        if (ConfigGlobal::role_id_cargo() != $Qid_cargo_encargado) {
+        if (ConfigGlobal::role_id_cargo() !== $Qid_cargo_encargado) {
             $flag_encontrado = FALSE;
             $aVisto = $oEntrada->getJson_visto(TRUE);
             foreach ($aVisto as $key => $oVisto) {
-                if (($oVisto['oficina'] == $Qid_oficina) && ($oVisto['cargo'] == $Qid_cargo_encargado)) {
+                if (($oVisto['oficina'] === $Qid_oficina) && ($oVisto['cargo'] === $Qid_cargo_encargado)) {
                     $aVisto[$key]['visto'] = TRUE;
                     $flag_encontrado = TRUE;
                 }
@@ -137,7 +135,7 @@ switch ($Qque) {
             $flag_encontrado = FALSE;
             $aVisto = $oEntrada->getJson_visto(TRUE);
             foreach ($aVisto as $key => $oVisto) {
-                if ($oVisto['oficina'] == $Qid_oficina && $oVisto['cargo'] == $Qid_cargo_encargado) {
+                if ($oVisto['oficina'] === $Qid_oficina && $oVisto['cargo'] === $Qid_cargo_encargado) {
                     $aVisto[$key]['visto'] = TRUE;
                     $flag_encontrado = TRUE;
                 }
@@ -158,7 +156,7 @@ switch ($Qque) {
         // y en cualquier caso: desmarcar al nuevo (podria estar marcado previamente)
         $aVisto = $oEntrada->getJson_visto(TRUE);
         foreach ($aVisto as $key => $oVisto) {
-            if ($oVisto['oficina'] == $Qid_oficina && $oVisto['cargo'] == $Qid_cargo_encargado) {
+            if ($oVisto['oficina'] === $Qid_oficina && $oVisto['cargo'] === $Qid_cargo_encargado) {
                 $aVisto[$key]['visto'] = FALSE;
             }
         }
@@ -178,11 +176,10 @@ switch ($Qque) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'en_visto':
         $Qid_oficina = ConfigGlobal::role_id_oficina();
         $Qid_cargo = ConfigGlobal::role_id_cargo();
-        $oEntrada = new EntradaDB($Qid_entrada);
+        $oEntrada = new EntradaDB($Q_id_entrada);
         $oEntrada->DBCargar();
 
         $aVisto = $oEntrada->getJson_visto(TRUE);
@@ -209,31 +206,30 @@ switch ($Qque) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'eliminar':
-        $oEntrada = new EntradaDB($Qid_entrada);
+        $oEntrada = new EntradaDB($Q_id_entrada);
         if ($oEntrada->DBEliminar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
             exit($error_txt);
         }
         break;
     case 'guardar_destinos':
-        $oEntradaBypass = new EntradaBypass($Qid_entrada);
+        $oEntradaBypass = new EntradaBypass($Q_id_entrada);
         $oEntradaBypass->DBCargar();
         // Al cargar si no existe, también borra el id_entrada, y hay que volver a asignarlo.
-        $oEntradaBypass->setId_entrada($Qid_entrada);
-        //Qasunto.
+        $oEntradaBypass->setId_entrada($Q_id_entrada);
+        //Q_asunto.
         $oPermisoRegistro = new PermRegistro();
         $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntradaBypass, 'asunto');
         if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
-            $oEntradaBypass->setAsunto($Qasunto);
+            $oEntradaBypass->setAsunto($Q_asunto);
             if ($oEntradaBypass->DBGuardar() === FALSE) {
                 $error_txt .= $oEntradaBypass->getErrorTxt();
             }
         }
         // destinos
-        $Qgrupo_dst = (string)filter_input(INPUT_POST, 'grupo_dst');
-        $Qf_salida = (string)filter_input(INPUT_POST, 'f_salida');
+        $Q_grupo_dst = (string)filter_input(INPUT_POST, 'grupo_dst');
+        $Q_f_salida = (string)filter_input(INPUT_POST, 'f_salida');
 
         // genero un vector con todos los grupos.
         $Qa_grupos = (array)filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -244,7 +240,7 @@ switch ($Qque) {
         $Qa_prot_mas_destinos = (array)filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
         // Si esta marcado como grupo de destinos, o destinos individuales.
-        if (core\is_true($Qgrupo_dst)) {
+        if (core\is_true($Q_grupo_dst)) {
             $descripcion = '';
             $gesGrupo = new GestorGrupo();
             $a_grupos = $gesGrupo->getArrayGrupos();
@@ -272,7 +268,7 @@ switch ($Qque) {
                 $oEntradaBypass->setDescripcion('x'); // no puede ser null.
             }
         }
-        $oEntradaBypass->setF_salida($Qf_salida);
+        $oEntradaBypass->setF_salida($Q_f_salida);
         if ($oEntradaBypass->DBGuardar() === FALSE) {
             $error_txt .= $oEntradaBypass->getErrorTxt();
         }
@@ -287,16 +283,15 @@ switch ($Qque) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'f_entrada':
-        if ($Qf_entrada == 'hoy') {
+        if ($Q_f_entrada === 'hoy') {
             $oHoy = new DateTimeLocal();
-            $Qf_entrada = $oHoy->getFromLocal();
+            $Q_f_entrada = $oHoy->getFromLocal();
         }
-        $oEntrada = new Entrada($Qid_entrada);
+        $oEntrada = new Entrada($Q_id_entrada);
         $oEntrada->DBCargar();
-        $oEntrada->setF_entrada($Qf_entrada);
-        if (empty($Qf_entrada)) {
+        $oEntrada->setF_entrada($Q_f_entrada);
+        if (empty($Q_f_entrada)) {
             $oEntrada->setEstado(Entrada::ESTADO_INGRESADO);
         } else {
             $oEntrada->setEstado(Entrada::ESTADO_ADMITIDO);
@@ -307,22 +302,22 @@ switch ($Qque) {
         }
         break;
     case 'detalle':
-        $oEntrada = new Entrada($Qid_entrada);
+        $oEntrada = new Entrada($Q_id_entrada);
         $oEntrada->DBCargar();
-        $oEntrada->setDetalle($Qdetalle);
+        $oEntrada->setDetalle($Q_detalle);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt = $oEntrada->getErrorTxt();
             exit($error_txt);
         }
         break;
     case 'guardar_ctr':
-        $oEntrada = new Entrada($Qid_entrada);
+        $oEntrada = new Entrada($Q_id_entrada);
         $oEntrada->DBCargar();
-        $oEntrada->setAsunto($Qasunto);
-        $oEntrada->setDetalle($Qdetalle);
-        $oEntrada->setCategoria($Qcategoria);
-        $oEntrada->setVisibilidad($Qvisibilidad);
-        switch ($Qplazo) {
+        $oEntrada->setAsunto($Q_asunto);
+        $oEntrada->setDetalle($Q_detalle);
+        $oEntrada->setCategoria($Q_categoria);
+        $oEntrada->setVisibilidad($Q_visibilidad);
+        switch ($Q_plazo) {
             case 'hoy':
                 $oEntrada->setF_contestar('');
                 break;
@@ -348,10 +343,10 @@ switch ($Qque) {
                 $oEntrada->setF_contestar($oF);
                 break;
             case 'fecha':
-                $oEntrada->setF_contestar($Qf_plazo);
+                $oEntrada->setF_contestar($Q_f_plazo);
                 break;
             default:
-                // Si no hay $Qplazo, No pongo ninguna fecha a contestar
+                // Si no hay $Q_plazo, No pongo ninguna fecha a contestar
         }
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt = $oEntrada->getErrorTxt();
@@ -362,8 +357,8 @@ switch ($Qque) {
             $jsondata['mensaje'] = $error_txt;
         } else {
             $jsondata['success'] = TRUE;
-            $jsondata['id_entrada'] = $Qid_entrada;
-            $a_cosas = ['id_entrada' => $Qid_entrada, 'filtro' => $Qfiltro];
+            $jsondata['id_entrada'] = $Q_id_entrada;
+            $a_cosas = ['id_entrada' => $Q_id_entrada, 'filtro' => $Q_filtro];
             $pagina_mod = web\Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query($a_cosas));
             $jsondata['pagina_mod'] = $pagina_mod;
         }
@@ -371,10 +366,9 @@ switch ($Qque) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'guardar':
-        if (!empty($Qid_entrada)) {
-            $oEntrada = new Entrada($Qid_entrada);
+        if (!empty($Q_id_entrada)) {
+            $oEntrada = new Entrada($Q_id_entrada);
             $oEntrada->DBCargar();
             $oPermisoRegistro = new PermRegistro();
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntrada, 'asunto');
@@ -387,7 +381,7 @@ switch ($Qque) {
 
         $oEntrada->setModo_entrada(Entrada::MODO_MANUAL);
 
-        $oProtOrigen = new Protocolo($Qorigen, $Qprot_num_origen, $Qprot_any_origen, $Qprot_mas_origen);
+        $oProtOrigen = new Protocolo($Q_origen, $Q_prot_num_origen, $Q_prot_any_origen, $Q_prot_mas_origen);
         $oEntrada->setJson_prot_origen($oProtOrigen->getProt());
 
         $aProtRef = [];
@@ -403,28 +397,28 @@ switch ($Qque) {
         }
         $oEntrada->setJson_prot_ref($aProtRef);
 
-        $oEntrada->setAsunto_entrada($Qasunto_e);
-        $oEntrada->setF_documento($Qf_escrito, TRUE);
-        $oEntrada->setF_entrada($Qf_entrada);
+        $oEntrada->setAsunto_entrada($Q_asunto_e);
+        $oEntrada->setF_documento($Q_f_escrito, TRUE);
+        $oEntrada->setF_entrada($Q_f_entrada);
         if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
-            $oEntrada->setAsunto($Qasunto);
+            $oEntrada->setAsunto($Q_asunto);
         }
         if ($perm_detalle >= PermRegistro::PERM_MODIFICAR) {
-            $oEntrada->setDetalle($Qdetalle);
+            $oEntrada->setDetalle($Q_detalle);
         }
-        $oEntrada->setPonente($Qid_of_ponente);
+        $oEntrada->setPonente($Q_id_of_ponente);
         $oEntrada->setResto_oficinas($Qa_oficinas);
 
-        $oEntrada->setCategoria($Qcategoria);
-        // visibilidad: puede que esté en modo solo lectura, mirar el hiden.
-        if (empty($Qvisibilidad)) {
-            $Qvisibilidad = (integer)filter_input(INPUT_POST, 'hidden_visibilidad');
+        $oEntrada->setCategoria($Q_categoria);
+        // visibilidad: puede que esté en modo solo lectura, mirar el hidden.
+        if (empty($Q_visibilidad)) {
+            $Q_visibilidad = (integer)filter_input(INPUT_POST, 'hidden_visibilidad');
         }
-        $oEntrada->setVisibilidad($Qvisibilidad);
+        $oEntrada->setVisibilidad($Q_visibilidad);
 
 
         // 5º Compruebo si hay que generar un pendiente
-        switch ($Qplazo) {
+        switch ($Q_plazo) {
             case 'hoy':
                 $oEntrada->setF_contestar('');
                 break;
@@ -450,13 +444,13 @@ switch ($Qque) {
                 $oEntrada->setF_contestar($oF);
                 break;
             case 'fecha':
-                $oEntrada->setF_contestar($Qf_plazo);
+                $oEntrada->setF_contestar($Q_f_plazo);
                 break;
             default:
-                // Si no hay $Qplazo, No pongo ninguna fecha a contestar
+                // Si no hay $Q_plazo, No pongo ninguna fecha a contestar
         }
 
-        if (is_true($QAdmitir_hidden)) {
+        if (is_true($Q_admitir_hidden)) {
             // pasa directamente a asigado. Se supone que el admitido lo ha puesto el vcd.
             // en caso de ponerlo secretaria, al guardar pasa igualmente a asignado.
             $estado = Entrada::ESTADO_ASIGNADO;
@@ -464,52 +458,52 @@ switch ($Qque) {
             $estado = Entrada::ESTADO_INGRESADO;
         }
         // si es el scdl, puede ser que pase a aceptado:
-        if ($Qfiltro == 'en_asignado' || $Qfiltro == 'en_buscar') {
+        if ($Q_filtro === 'en_asignado' || $Q_filtro === 'en_buscar') {
             $estado = Entrada::ESTADO_ACEPTADO;
         }
 
-        if ($Qfiltro == 'en_buscar') { // NO tocar el estado
+        if ($Q_filtro === 'en_buscar') { // NO tocar el estado
             $estado = $oEntrada->getEstado();
-            $id_entrada = $Qid_entrada;
+            $id_entrada = $Q_id_entrada;
         }
         $oEntrada->setEstado($estado);
 
-        $oEntrada->setBypass($Qbypass);
+        $oEntrada->setBypass($Q_bypass);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
         }
 
-        if (empty($error_txt) && $Qfiltro != 'en_buscar') {
+        if (empty($error_txt) && $Q_filtro !== 'en_buscar') {
             $id_entrada = $oEntrada->getId_entrada();
             //////// Generar un Pendiente (hay que esperar e tener el id_entrada //////
             // Solo se genera en cuando el scdl lo acepta (filtro=en_asignado). Si no se mira esta condición
             // se van generando pendientes cada vez que se guarda.
-            if ($Qfiltro == 'en_asignado') {
-                if ($Qplazo != "hoy") {
+            if ($Q_filtro === 'en_asignado') {
+                if ($Q_plazo !== 'hoy') {
                     $Qid_pendiente = (integer)filter_input(INPUT_POST, 'id_pendiente');
                     if (empty($Qid_pendiente)) { // si no se ha generado el pendiente con "modificar pendiente"
                         $f_plazo = $oEntrada->getF_contestar()->getFromLocal();
                         $location = $oProtOrigen->ver_txt_num();
                         $prot_mas = $oProtOrigen->ver_txt_mas();
 
-                        $id_reg = 'REN' . $id_entrada; // REN = Regitro Entrada
+                        $id_reg = 'REN' . $id_entrada; // REN = Registro Entrada
                         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-                        $parent_container = $oDavical->getNombreRecurso($Qid_of_ponente);
+                        $parent_container = $oDavical->getNombreRecurso($Q_id_of_ponente);
                         $calendario = 'registro';
                         $user_davical = $oDavical->getUsernameDavicalSecretaria();
                         $uid = '';
                         $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
                         $oPendiente->setId_reg($id_reg);
-                        $oPendiente->setAsunto($Qasunto);
+                        $oPendiente->setAsunto($Q_asunto);
                         $oPendiente->setStatus("NEEDS-ACTION");
-                        $oPendiente->setF_inicio($Qf_entrada);
+                        $oPendiente->setF_inicio($Q_f_entrada);
                         $oPendiente->setF_plazo($f_plazo);
-                        $oPendiente->setVisibilidad($Qvisibilidad);
-                        $oPendiente->setDetalle($Qdetalle);
-                        $oPendiente->setPendiente_con($Qorigen);
+                        $oPendiente->setVisibilidad($Q_visibilidad);
+                        $oPendiente->setDetalle($Q_detalle);
+                        $oPendiente->setPendiente_con($Q_origen);
                         $oPendiente->setLocation($location);
                         $oPendiente->setRef_prot_mas($prot_mas);
-                        $oPendiente->setId_oficina($Qid_of_ponente);
+                        $oPendiente->setId_oficina($Q_id_of_ponente);
                         // las firmas son cargos, buscar las oficinas implicadas:
                         $oPendiente->setOficinasArray($Qa_oficinas);
                         if ($oPendiente->Guardar() === FALSE) {
@@ -517,9 +511,9 @@ switch ($Qque) {
                         }
                     } else {
                         // meter el pendienteDB en davical con el id_reg que toque y borrarlo de pendienteDB.
-                        $id_reg = 'REN' . $id_entrada; // REN = Regitro Entrada
+                        $id_reg = 'REN' . $id_entrada; // REN = Registro Entrada
                         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-                        $parent_container = $oDavical->getNombreRecurso($Qid_of_ponente);
+                        $parent_container = $oDavical->getNombreRecurso($Q_id_of_ponente);
                         $calendario = 'registro';
                         $user_davical = $oDavical->getUsernameDavicalSecretaria();
                         $uid = '';
@@ -530,23 +524,23 @@ switch ($Qque) {
             }
 
             //////// BY PASS //////
-            if (is_true($Qbypass) && !empty($Qid_entrada)) {
-                $oEntradaBypass = new EntradaBypass($Qid_entrada);
+            if (is_true($Q_bypass) && !empty($Q_id_entrada)) {
+                $oEntradaBypass = new EntradaBypass($Q_id_entrada);
                 $oEntradaBypass->DBCargar();
                 // Al cargar si no existe, también borra el id_entrada, y hay que volver a asignarlo.
-                $oEntradaBypass->setId_entrada($Qid_entrada);
-                //Qasunto.
+                $oEntradaBypass->setId_entrada($Q_id_entrada);
+                //Q_asunto.
                 if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
-                    $oEntrada = new EntradaDB($Qid_entrada);
+                    $oEntrada = new EntradaDB($Q_id_entrada);
                     $oEntrada->DBCargar();
-                    $oEntrada->setAsunto($Qasunto);
+                    $oEntrada->setAsunto($Q_asunto);
                     if ($oEntrada->DBGuardar() === FALSE) {
                         $error_txt .= $oEntrada->getErrorTxt();
                     }
                 }
                 // destinos
-                $Qgrupo_dst = (string)filter_input(INPUT_POST, 'grupo_dst');
-                $Qf_salida = (string)filter_input(INPUT_POST, 'f_salida');
+                $Q_grupo_dst = (string)filter_input(INPUT_POST, 'grupo_dst');
+                $Q_f_salida = (string)filter_input(INPUT_POST, 'f_salida');
 
                 // genero un vector con todos los grupos.
                 $Qa_grupos = (array)filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -557,7 +551,7 @@ switch ($Qque) {
                 $Qa_prot_mas_destinos = (array)filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
                 // Si esta marcado como grupo de destinos, o destinos individuales.
-                if (core\is_true($Qgrupo_dst)) {
+                if (core\is_true($Q_grupo_dst)) {
                     $descripcion = '';
                     $gesGrupo = new GestorGrupo();
                     $a_grupos = $gesGrupo->getArrayGrupos();
@@ -593,8 +587,6 @@ switch ($Qque) {
                 } else {
                     $jsondata['success'] = TRUE;
                 }
-            } else {
-                // borrar si hubiera habido. ( o no?)
             }
         }
 
@@ -605,7 +597,7 @@ switch ($Qque) {
         } else {
             $jsondata['success'] = TRUE;
             $jsondata['id_entrada'] = $id_entrada;
-            $a_cosas = ['id_entrada' => $id_entrada, 'filtro' => $Qfiltro];
+            $a_cosas = ['id_entrada' => $id_entrada, 'filtro' => $Q_filtro];
             $pagina_mod = web\Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query($a_cosas));
             $jsondata['pagina_mod'] = $pagina_mod;
         }
@@ -613,8 +605,6 @@ switch ($Qque) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-
-        break;
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);

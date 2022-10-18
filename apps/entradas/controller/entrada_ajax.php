@@ -31,18 +31,18 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Qque = (string)filter_input(INPUT_POST, 'que');
-switch ($Qque) {
+$Q_que = (string)filter_input(INPUT_POST, 'que');
+switch ($Q_que) {
     case As4CollaborationInfo::ACCION_REEMPLAZAR:
         $plataforma = $_SESSION['oConfig']->getPlataformaMantenimiento();
         $error_txt = '';
         // id_entrada formato: tabla#id_reg
-        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $Q_id_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
         // En el caso de reemplazar, no se prgunta el motivo. Siempre es:
         $Qtext = _("por n.v.");
 
-        $tipo_escritos = strtok($Qid_entrada, '#');
+        $tipo_escritos = strtok($Q_id_entrada, '#');
         // hay que quitar la 's' del final
         $tipo_escrito = rtrim($tipo_escritos, 's');
         $id_entrada = strtok('#');
@@ -91,11 +91,11 @@ switch ($Qque) {
         $plataforma = $_SESSION['oConfig']->getPlataformaMantenimiento();
         $error_txt = '';
         // id_entrada formato: tabla#id_reg
-        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $Q_id_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $Qtext = (string)filter_input(INPUT_POST, 'text');
         $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
 
-        $tipo_escritos = strtok($Qid_entrada, '#');
+        $tipo_escritos = strtok($Q_id_entrada, '#');
         // hay que quitar la 's' del final
         $tipo_escrito = rtrim($tipo_escritos, 's');
         $id_entrada = strtok('#');
@@ -141,8 +141,8 @@ switch ($Qque) {
         exit();
         break;
     case 'perm_ver':
-        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        $oEntrada = new Entrada($Qid_entrada);
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $oEntrada = new Entrada($Q_id_entrada);
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($oEntrada, 'escrito');
         if ($perm < PermRegistro::PERM_VER) {
@@ -166,11 +166,11 @@ switch ($Qque) {
         break;
     case 'modificar_anular':
         $error_txt = '';
-        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qtext = (string)filter_input(INPUT_POST, 'text');
         $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
 
-        $oEntrada = new Entrada($Qid_entrada);
+        $oEntrada = new Entrada($Q_id_entrada);
         $oEntrada->DBCargar();
         $oEntrada->setAnulado($Qtext);
         if ($oEntrada->DBGuardar() === FALSE) {
@@ -179,7 +179,7 @@ switch ($Qque) {
         // Mirar si hay pendientes
         if (!empty($Qelim_pendientes)) {
             $gesPendientes = new GestorPendienteEntrada();
-            $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
+            $cUids = $gesPendientes->getArrayUidById_entrada($Q_id_entrada);
             if (!empty($cUids)) {
                 $calendario = 'registro';
                 $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
@@ -205,9 +205,9 @@ switch ($Qque) {
         break;
     case 'modificar_detalle':
         $error_txt = '';
-        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qdetalle = (string)filter_input(INPUT_POST, 'text');
-        $oEntrada = new Entrada($Qid_entrada);
+        $oEntrada = new Entrada($Q_id_entrada);
         $oEntrada->DBCargar();
         $oEntrada->setDetalle($Qdetalle);
         if ($oEntrada->DBGuardar() === FALSE) {
@@ -227,8 +227,8 @@ switch ($Qque) {
         exit();
         break;
     case 'get_anular':
-        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        $oEntrada = new Entrada($Qid_entrada);
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $oEntrada = new Entrada($Q_id_entrada);
         $anulado = $oEntrada->getAnulado();
         $mensaje = '';
 
@@ -246,8 +246,8 @@ switch ($Qque) {
         exit();
         break;
     case 'get_detalle':
-        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        $oEntrada = new Entrada($Qid_entrada);
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $oEntrada = new Entrada($Q_id_entrada);
         $mensaje = '';
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($oEntrada, 'detalle');
@@ -269,8 +269,8 @@ switch ($Qque) {
         exit();
         break;
     case 'get_destinos':
-        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        $oEntradaBypass = new EntradaBypass($Qid_entrada);
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $oEntradaBypass = new EntradaBypass($Q_id_entrada);
         $a_destinos = $oEntradaBypass->getDestinosByPass();
         $a_miembros = $a_destinos['miembros'];
         $gesLugares = new GestorLugar();
@@ -298,10 +298,10 @@ switch ($Qque) {
     case 'comprobar_pdte': //antes de eliminar
         $bypass_txt = '';
         $pendientes_txt = '';
-        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         // Comprobar si tiene pendientes
         $gesPendientes = new GestorPendienteEntrada();
-        $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
+        $cUids = $gesPendientes->getArrayUidById_entrada($Q_id_entrada);
         if (!empty($cUids)) {
             $c = count($cUids);
             $pendientes_txt = sprintf(_("Esta entrada tiene %s pendientes asociados."), $c);
@@ -327,17 +327,17 @@ switch ($Qque) {
     case 'comprobar': //antes de eliminar
         $bypass_txt = '';
         $pendientes_txt = '';
-        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         // Comprobar si tiene pendientes
         $gesPendientes = new GestorPendienteEntrada();
-        $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
+        $cUids = $gesPendientes->getArrayUidById_entrada($Q_id_entrada);
         if (!empty($cUids)) {
             $c = count($cUids);
             $pendientes_txt = sprintf(_("Esta entrada tiene %s pendientes asociados."), $c);
         }
         // comprobar si tiene bypass
         $gesByPass = new GestorEntradaBypass();
-        $cByPass = $gesByPass->getEntradasBypass(['id_entrada' => $Qid_entrada]);
+        $cByPass = $gesByPass->getEntradasBypass(['id_entrada' => $Q_id_entrada]);
         if (is_array($cByPass) && !empty($cByPass)) {
             $c = count($cByPass);
             $bypass_txt = sprintf(_("Esta entrada tiene %s envios a ctr."), $c);
@@ -361,13 +361,13 @@ switch ($Qque) {
         exit();
         break;
     case 'eliminar':
-        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $error_txt = '';
-        if (!empty($Qid_entrada)) {
-            $oEntrada = new Entrada($Qid_entrada);
+        if (!empty($Q_id_entrada)) {
+            $oEntrada = new Entrada($Q_id_entrada);
             // eliminar los pendientes
             $gesPendientes = new GestorPendienteEntrada();
-            $cUids = $gesPendientes->getArrayUidById_entrada($Qid_entrada);
+            $cUids = $gesPendientes->getArrayUidById_entrada($Q_id_entrada);
             if (!empty($cUids)) {
                 $calendario = 'registro';
                 $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
@@ -506,12 +506,12 @@ switch ($Qque) {
         echo $oLista->mostrar_tabla();
         break;
     case 'guardar':
-        $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qf_escrito = (string)filter_input(INPUT_POST, 'f_escrito');
         $Qtipo_doc = (integer)filter_input(INPUT_POST, 'tipo_doc');
 
-        if (!empty($Qid_entrada)) {
-            $oEntradaDocBD = new EntradaDocDB($Qid_entrada);
+        if (!empty($Q_id_entrada)) {
+            $oEntradaDocBD = new EntradaDocDB($Q_id_entrada);
             $oEntradaDocBD->setF_doc($Qf_escrito);
             $oEntradaDocBD->setTipo_doc($Qtipo_doc);
 
@@ -531,7 +531,7 @@ switch ($Qque) {
             switch ($Qtipo_doc) {
                 case EntradaDocDB::TIPO_ETHERCALC :
                     $oEthercalc = new Ethercalc();
-                    $oEthercalc->setId(Ethercalc::ID_ENTRADA, $Qid_entrada);
+                    $oEthercalc->setId(Ethercalc::ID_ENTRADA, $Q_id_entrada);
                     $padID = $oEthercalc->getPadId();
                     $url = $oEthercalc->getUrl();
 
@@ -542,7 +542,7 @@ switch ($Qque) {
                     break;
                 case EntradaDocDB::TIPO_ETHERPAD :
                     $oEtherpad = new Etherpad();
-                    $oEtherpad->setId(Etherpad::ID_ENTRADA, $Qid_entrada);
+                    $oEtherpad->setId(Etherpad::ID_ENTRADA, $Q_id_entrada);
                     $padID = $oEtherpad->getPadId();
                     // add user access to pad (Session)
                     //$oEtherpad->addUserPerm($id_entrada);
