@@ -53,8 +53,15 @@
         <div class="mb-3 col-md-12">
             <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}:</label>
             {% for item,nom in a_adjuntos %}
+                <div class="btn-group" role="group" aria-label="Basic example">
                 <button type="button" class="btn btn-outline-secondary"
-                        onClick="fnjs_download({{ item }})">{{ nom }}</button>
+                        onClick="fnjs_download({{ item }})" title="{{ "decargar original"|trans|raw }}">
+                    {{ nom }}</button>
+
+                <button type="button" class="btn btn-outline-secondary bi bi-file-pdf green-color"
+                        onClick="fnjs_download_pdf_adjunto({{ item }})" title="{{ "decargar en pdf"|trans|raw }}">
+                <i class="fa fa-file-pdf fa-2x" aria-hidden="true"></i></button>
+                </div>
             {% endfor %}
         </div>
     {% endif %}
@@ -69,6 +76,11 @@
     }
     fnjs_download = function (item) {
         url = "{{ url_download }}" + "?compartida={{ bCompartida }}&key=" + item;
+        window.open(url);
+    }
+    fnjs_download_pdf_adjunto = function (item) {
+        debugger;
+        url = "{{ url_download_pdf_adjunto }}" + "?compartida={{ bCompartida }}&key=" + item;
         window.open(url);
     }
 </script>

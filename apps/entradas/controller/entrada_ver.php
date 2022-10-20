@@ -95,6 +95,7 @@ if (!empty($f_entrada)) {
 
 $base_url = core\ConfigGlobal::getWeb();
 $url_download = $base_url . '/apps/entradas/controller/download.php';
+$url_download_pdf_adjunto = $base_url . '/apps/entradas/controller/download_as_pdf.php';
 $url_download_pdf = $base_url . '/apps/entradas/controller/entrada_download.php';
 
 $a_campos = [
@@ -113,6 +114,7 @@ $a_campos = [
     'escrito_html' => $escrito_html,
     'url_download_pdf' => $url_download_pdf,
     'bCompartida' => $bCompartida,
+    'url_download_pdf_adjunto' => $url_download_pdf_adjunto ,
 ];
 
 $oView = new ViewTwig('entradas/controller');

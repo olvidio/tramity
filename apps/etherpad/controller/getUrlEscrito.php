@@ -33,9 +33,9 @@ switch ($Q_modo) {
         echo "$url/p/$padID/export/html";
         break;
     case 'iframe':
-        echo "<iframe src='$url/p/$padID?showChat=false&showLineNumbers=false' width=1020 height=500></iframe>";
+        echo "<iframe src='$url/p/$padID?showChat=true&showLineNumbers=false' width=1020 height=500></iframe>";
         break;
     default:
-        $rta = "$url/p/$padID?showChat=false&showLineNumbers=false";
+        $rta = "$url/p/$padID?showChat=true&showLineNumbers=false";
         echo $rta;
 }

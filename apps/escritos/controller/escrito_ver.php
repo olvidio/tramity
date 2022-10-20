@@ -48,6 +48,7 @@ $pagina_next = web\Hash::link($pagina . '?' . http_build_query($a_cosas));
 if (!empty($Q_id_escrito)) {
     $base_url = core\ConfigGlobal::getWeb();
     $url_download = $base_url . '/apps/escritos/controller/adjunto_download.php';
+    $url_download_pdf_adjunto = $base_url . '/apps/escritos/controller/adjunto_download_as_pdf.php';
     $url_download_pdf = $base_url . '/apps/escritos/controller/escrito_download.php';
     // Pueden ser varios escritos separados por comas:
     $a_escritos = explode(',', $Q_id_escrito);
@@ -113,6 +114,7 @@ if (!empty($Q_id_escrito)) {
                 'base_url' => $base_url,
                 'url_download' => $url_download,
                 'url_download_pdf' => $url_download_pdf,
+                'url_download_pdf_adjunto' => $url_download_pdf_adjunto,
             ];
             $todosHtml .= $oView->renderizar('escrito_ver.html.twig', $a_campos);
         }

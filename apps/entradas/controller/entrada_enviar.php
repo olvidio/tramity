@@ -16,10 +16,10 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-/*	
-// Para enseñar el mesaje antes de terminar el script
+/*
+// Para enseñar el mensaje antes de terminar el script
 // NO SE PUEDE porque al consultar el etherpad:
-// headers alredy sent...
+// headers already sent...
 ob_end_flush();
 ob_implicit_flush();
 echo "<div id=\"slow_load\" style=\"display: flex; justify-content: center; align-items: center; text-align: center; margin-top: 100px;\">";
@@ -36,7 +36,6 @@ if (empty($Qf_salida)) {
     $Qf_salida = date(DateTimeInterface::ATOM);
 }
 
-$rta_txt = '';
 // borrar los ya enviados:
 $oAS4Remove = new As4Remove();
 $rta_txt = $oAS4Remove->remove_accepted();
