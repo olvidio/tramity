@@ -26,6 +26,31 @@ if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
 
 $a_campos['ambito_dl'] = $ambito_dl;
 
+// ----------- Chat del etherpad -------------------
+$parametro = 'chat';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$val_chat_true = 'TRUE';
+$chk_chat_true = ($valor == $val_chat_true) ? 'checked' : '';
+$val_chat_false = 'FALSE';
+$chk_chat_false = ($valor == $val_chat_false) ? 'checked' : '';
+$val_chat_none = 'NONE';
+$chk_chat_none = ($valor == $val_chat_none) ? 'checked' : '';
+
+$oHashChat = new Hash();
+$oHashChat->setUrl($url);
+$oHashChat->setcamposForm('valor');
+$oHashChat->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashChat'] = $oHashChat;
+$a_campos['val_chat_true'] = $val_chat_true;
+$a_campos['chk_chat_true'] = $chk_chat_true;
+$a_campos['val_chat_false'] = $val_chat_false;
+$a_campos['chk_chat_false'] = $chk_chat_false;
+$a_campos['val_chat_none'] = $val_chat_none;
+$a_campos['chk_chat_none'] = $chk_chat_none;
+
 // ----------- periodos entradas -------------------
 /* Ver las entradas de los n días anteriores  
  */

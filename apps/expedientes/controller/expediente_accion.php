@@ -98,7 +98,7 @@ switch ($Q_filtro) {
         $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Q_id_entrada]));
         break;
     default:
-        if (empty($Q_id_expediente) && $Q_filtro != 'en_aceptado') {
+        if (empty($Q_id_expediente)) {
             exit ("Error, no existe el expediente");
         }
 
@@ -145,6 +145,7 @@ $titulo = _("Acciones para el expediente");
 switch ($Q_filtro) {
     case 'en_aceptado':
     case 'en_encargado':
+    case 'entradas_semana':
         $titulo = _("Acciones para la entrada");
         $a_botones[4] = ['accion' => 'en_add_encargado',
             'txt' => _("Encargar a"),
@@ -157,7 +158,6 @@ switch ($Q_filtro) {
             'txt' => _("marcar como visto"),
             'tipo' => '',
         ];
-    case 'entradas_semana':
     case 'escritos_cr':
         $titulo = _("Acciones para la entrada");
 
@@ -301,7 +301,7 @@ $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
 // datepicker
 $oFecha = new DateTimeLocal();
-$format = $oFecha->getFormat();
+$format = $oFecha::getFormat();
 $yearStart = date('Y');
 $yearEnd = $yearStart + 2;
 

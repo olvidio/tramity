@@ -155,7 +155,14 @@ if (!empty($Q_id_escrito)) {
     $padID = $oEtherpad->getPadId();
     $url = $oEtherpad->getUrl();
 
-    $iframe = "<iframe src='$url/p/$padID?showChat=false&showLineNumbers=false' width=1300 height=500></iframe>";
+    $showChat = '';
+    if ($_SESSION['oConfig']->getChat() === 'TRUE') {
+        $showChat = '&showChat=true';
+    }
+    if ($_SESSION['oConfig']->getChat() === 'FALSE') {
+        $showChat = '&showChat=false';
+    }
+    $iframe = "<iframe src='$url/p/$padID?showLineNumbers=false$showChat' width=1300 height=500></iframe>";
 
 } else {
     $entradilla = '';

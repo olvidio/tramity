@@ -26,6 +26,13 @@ $oEtherpad->setId($Q_tipo_id, $Q_id);
 $padID = $oEtherpad->getPadId();
 $url = $oEtherpad->getUrl();
 
+$showChat = '';
+if ($_SESSION['oConfig']->getChat() === 'TRUE') {
+    $showChat = '&showChat=true';
+}
+if ($_SESSION['oConfig']->getChat() === 'FALSE') {
+    $showChat = '&showChat=false';
+}
 switch ($Q_modo) {
     case 'html':
         // Hay que evitar el CORS ( no puedo acceder al tramity.local:9001) 
@@ -33,9 +40,9 @@ switch ($Q_modo) {
         echo "$url/p/$padID/export/html";
         break;
     case 'iframe':
-        echo "<iframe src='$url/p/$padID?showChat=true&showLineNumbers=false' width=1020 height=500></iframe>";
+        echo "<iframe src='$url/p/$padID?showLineNumbers=false$showChat' width=1020 height=500></iframe>";
         break;
     default:
-        $rta = "$url/p/$padID?showChat=true&showLineNumbers=false";
+        $rta = "$url/p/$padID?showLineNumbers=false$showChat";
         echo $rta;
 }
