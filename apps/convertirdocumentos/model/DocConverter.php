@@ -22,14 +22,21 @@ final class DocConverter
     {
         $path_temp = '/tmp/';
         $filename_local = $path_temp . $this->base_name;
-        file_put_contents($filename_local, $this->documento);
-        $command = "libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to pdf --outdir $path_temp $filename_local  2>&1";
+        // con los espacios hay problemas, no bastan las comillas
+        $filename_local_sin_espacios = str_replace(' ', '_', $filename_local);
+        file_put_contents($filename_local_sin_espacios, $this->documento);
+        //$command = escapeshellcmd("libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to pdf --outdir $path_temp \"$filename_local\"  2>&1");
+        $command = escapeshellcmd("libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to pdf --outdir $path_temp $filename_local_sin_espacios 2>&1");
 
         exec($command, $output,  $retval);
-        //echo "Returned with status $retval and output:\n";
 
-        $filename_pdf = $path_temp . $this->file_name . '.pdf';
+        $filename_sin_espacios = str_replace(' ', '_', $this->file_name);
+        $filename_pdf = $path_temp . $filename_sin_espacios . '.pdf';
         $doc_converted = file_get_contents($filename_pdf);
+
+        // borrar los ficheros temporales
+        unlink($filename_local_sin_espacios);
+        unlink($filename_pdf);
         return $doc_converted;
     }
 

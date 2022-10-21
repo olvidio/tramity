@@ -1,5 +1,6 @@
 <?php
 
+use convertirdocumentos\model\DocConverter;
 use envios\model\MIMETypeLocal;
 use escritos\model\entity\EscritoAdjunto;
 

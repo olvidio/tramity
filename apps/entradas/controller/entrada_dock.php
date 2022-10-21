@@ -1,5 +1,6 @@
 <?php
 
+use entradas\model\Pid;
 use oasis_as4\model\As4Entregar;
 use oasis_as4\model\As4SignalMessage;
 
@@ -16,6 +17,15 @@ require_once("apps/core/global_object.inc");
 
 $dir = $_SESSION['oConfig']->getDock();
 $dir_dock = $dir . '/data/msg_in';
+
+/* Poner una marca para evitar que empiece un nuevo proceso antes
+de finalizar el anterior y borrar los ficheros */
+$oPid = new Pid();
+
+if ($oPid->existePid()) {
+    die(_("Ya existe un proceso en marcha."));
+}
+$oPid->crearPid();
 
 $a_scan = scandir($dir_dock);
 $a_files = array_diff($a_scan, ['.', '..']);
@@ -44,11 +54,11 @@ foreach ($a_files as $filename) {
 // cada mensaje que llega hay que descomponer y poner en su sitio
 $txt = '';
 foreach ($a_files_mmd as $file_mmd) {
-    $xmldata = simplexml_load_file($file_mmd);
+    $xmldata = simplexml_load_string(file_get_contents($file_mmd));
     $AS4 = new As4Entregar($xmldata);
     if ($AS4->introducirEnDB() === TRUE) {
         // eliminar el mensaje de la bandeja de entrada
-        // nombre del fihero del body:
+        // nombre del fichero del body:
         $location = $AS4->getLocation();
 
         if (unlink($location) === FALSE) {
@@ -96,6 +106,7 @@ foreach ($a_files_mi as $file_mmd) {
     }
 }
 
+$oPid->borrarPid();
 if (!empty($txt)) {
     echo $txt;
 } else {
