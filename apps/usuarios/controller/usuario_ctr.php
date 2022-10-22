@@ -20,7 +20,7 @@ require_once("apps/core/global_object.inc");
 $peticion_ajax = 0;
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
     && !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
-    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
     // handle request as AJAX
     $peticion_ajax = 1;
 }
@@ -231,6 +231,26 @@ $pill = ['orden' => $num_orden,
     'num' => $num,
     'active' => $active,
     'class' => 'btn-entrada',
+    'explicacion' => $explicacion,
+    'ver_orden' => false,
+];
+$a_pills[$num_orden] = $pill;
+
+// permanentes de cl
+$filtro = 'permanentes_cl';
+$active = ($filtro == $Q_filtro) ? 'active' : '';
+$aQuery = ['filtro' => $filtro];
+$pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
+$num_orden = 21;
+$text = _("permanentes cl");
+$explicacion = _("permanentes del cl");
+$num = '';
+$pill = ['orden' => $num_orden,
+    'text' => $text,
+    'pag_lst' => $pag_lst,
+    'num' => $num,
+    'active' => $active,
+    'class' => 'btn-pendiente',
     'explicacion' => $explicacion,
     'ver_orden' => false,
 ];

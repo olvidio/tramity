@@ -114,7 +114,7 @@ class ExpedienteLista
     'pendientes'
     */
 
-    public function mostrarTabla()
+    public function mostrarTabla(): void
     {
         $this->setCondicion();
         $pagina_nueva = '';
@@ -144,6 +144,7 @@ class ExpedienteLista
                 break;
             case 'firmar':
             case 'circulando':
+            case 'permanentes_cl':
                 $pagina_mod = ConfigGlobal::getWeb() . '/apps/expedientes/controller/expediente_ver.php';
                 $col_mod = 0;
                 $col_ver = 1;
@@ -420,7 +421,7 @@ class ExpedienteLista
         ];
 
         $oView = new ViewTwig('expedientes/controller');
-        return $oView->renderizar('expediente_lista.html.twig', $a_campos);
+        $oView->renderizar('expediente_lista.html.twig', $a_campos);
     }
 
     /**
@@ -469,7 +470,6 @@ class ExpedienteLista
                 break;
             case 'firmar':
                 // añadir las que requieren aclaración.
-
                 if (ConfigGlobal::role_actual() === 'secretaria') {
                     $a_tipos_acabado = [Expediente::ESTADO_NO,
                         Expediente::ESTADO_DILATA,
@@ -740,6 +740,26 @@ class ExpedienteLista
                 $aWhere['estado'] = implode(',', $a_tipos_acabado);
                 $aOperador['estado'] = 'IN';
                 // todavía sin marcar por scdl con ok.
+                break;
+            case 'permanentes_cl':
+                $aWhere['vida'] = Expediente::VIDA_PERMANENTE;
+                // solo los de la oficina:
+                // posibles oficiales de la oficina:
+                $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
+                $id_oficina = $oCargo->getId_oficina();
+                $gesCargos = new GestorCargo();
+                $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+                $a_cargos = [];
+                foreach (array_keys($a_cargos_oficina) as $id_cargo) {
+                    $a_cargos[] = $id_cargo;
+                }
+                if (!empty($a_cargos)) {
+                    $aWhere['ponente'] = implode(',', $a_cargos);
+                    $aOperador['ponente'] = 'IN';
+                } else {
+                    // para que no salga nada pongo
+                    $aWhere = [];
+                }
                 break;
             case 'acabados':
                 // Ahora (16/12/2020) todos los de la oficina si es director.

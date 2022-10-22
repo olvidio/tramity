@@ -9,6 +9,7 @@ use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
+use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -24,6 +25,12 @@ require_once("apps/core/global_object.inc");
 $Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 $Q_prioridad_sel = (integer)filter_input(INPUT_POST, 'prioridad_sel');
+
+// para reducir la vista en el caso de los ctr
+$vista_dl = TRUE;
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+    $vista_dl = FALSE;
+}
 
 $gesCargos = new GestorCargo();
 $aCargos = $gesCargos->getArrayCargos();
@@ -99,6 +106,9 @@ if (!empty($vida)) {
 } else {
     $vida_txt = '';
 }
+$oDesplVida = new Desplegable('vida', $a_vida, '', FALSE);
+$oDesplVida->setOpcion_sel($vida);
+$oDesplVida->setAction("fnjs_cambio_vida();");
 
 $f_contestar = $oExpediente->getF_contestar()->getFromLocal();
 $f_ini_circulacion = $oExpediente->getF_ini_circulacion()->getFromLocal();
@@ -140,7 +150,6 @@ if ($responder) {
     $aclaracion = _("Pedir aclaración");
     $aclaracion_event = 'nueva';
 }
-
 
 // Etiquetas
 $ver_etiquetas = FALSE;
@@ -192,6 +201,7 @@ if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && (ConfigGlobal::rol
 }
 
 $a_campos = [
+    'vista_dl' => $vista_dl,
     'id_expediente' => $Q_id_expediente,
     'filtro' => $Q_filtro,
     'prioridad_sel' => $Q_prioridad_sel,
@@ -202,6 +212,7 @@ $a_campos = [
     'estado_txt' => $estado_txt,
     'prioridad_txt' => $prioridad_txt,
     'vida_txt' => $vida_txt,
+    'oDesplVida' => $oDesplVida,
 
     'f_contestar' => $f_contestar,
     'f_ini_circulacion' => $f_ini_circulacion,

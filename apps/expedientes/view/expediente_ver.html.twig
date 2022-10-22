@@ -85,10 +85,17 @@
             <div class="p-2 bg-warning">
                 {{ estado_txt }}
             </div>
-            <!--  --------------- OFICINAS --------------- -->
-            <div class="p-2 bg-white">
-                {{ "Oficinas"|trans|raw }}: {{ oArrayDesplFirmas.Lista|raw }}
-            </div>
+            {% if visata_dl %}
+                <!--  --------------- OFICINAS --------------- -->
+                <div class="p-2 bg-white">
+                    {{ "Oficinas"|trans|raw }}: {{ oArrayDesplFirmas.Lista|raw }}
+                </div>
+            {% else %}
+                    <div class="p-2 bg-white">
+                    <label for="Vida" class="form-label"> {{ "Vida"|trans|raw }} {{ vida_txt }}, {{ "pasar a"|trans|raw }}</label>
+                    {{ oDesplVida.desplegable|raw }}
+                    </div>
+            {% endif %}
 
         </div>
         <div class="d-inline-flex float-end">
@@ -103,12 +110,14 @@
             <div class="p-2">
                 {{ "Inicio"|trans|raw }}: {{ f_ini_circulacion }}
             </div>
-            <div class="p-2">
-                {{ "reunión"|trans|raw }}: {{ f_reunion }}
-            </div>
-            <div class="p-2">
-                {{ "aprobación"|trans|raw }}: {{ f_aprobacion }}
-            </div>
+            {% if visata_dl %}
+                <div class="p-2">
+                    {{ "reunión"|trans|raw }}: {{ f_reunion }}
+                </div>
+                <div class="p-2">
+                    {{ "aprobación"|trans|raw }}: {{ f_aprobacion }}
+                </div>
+            {% endif %}
         </div>
         <div class="d-inline-flex float-end">
             <div class="p-2 bg-warning">
@@ -208,6 +217,33 @@
 
 {{ include ('_antecedentes_js.html.twig') }}
 <script type="text/javascript">
+    fnjs_cambio_vida = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+
+        alert("Hola Vida");
+
+        $('#que').val('cambio_vida');
+        datos = $('#form_expediente').serialize();
+        request = $.ajax({
+            data: datos,
+            url: '{{ url_update }}',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done(function (json) {
+            if (json.success != true) {
+                alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+            } else {
+                // Volver a la lista...
+                fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+            }
+        });
+    }
+
     fnjs_cambio_tramite = function () {
         if (typeof event !== 'undefined') {
             event.preventDefault();
@@ -406,3 +442,4 @@
     $(document).ready(function () {
         tabs_hide();
     });
+</script>

@@ -98,7 +98,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'en_pendiente':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Q_id_cargo_pendiente = (integer)filter_input(INPUT_POST, 'id_cargo_pendiente');
@@ -152,13 +151,12 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'en_add_expediente':
         // nada
         break;
     case 'en_expediente':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        // Hay que crear un nunevo expediente, con un ajunto (entrada).
+        // Hay que crear un nuevo expediente, con un adjunto (entrada).
         $oEntrada = new Entrada($Q_id_entrada);
         $Q_asunto = $oEntrada->getAsunto_entrada();
 
@@ -199,7 +197,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'encargar_a':
         $Q_id_oficial = (integer)filter_input(INPUT_POST, 'id_oficial');
         // Se pone cuando se han enviado...
@@ -222,7 +219,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'guardar_etiquetas':
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
@@ -246,7 +242,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'reunion':
         $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCargar();
@@ -257,7 +252,7 @@ switch ($Q_que) {
             $error_txt .= "<br>";
         }
         // firmar el paso de fijar reunion:
-        $f_hoy_iso = date(DateTimeInterface::ISO8601);
+        $f_hoy_iso = date(DateTimeInterface::ATOM);
         $gesFirmas = new  GestorFirma();
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_REUNION]);
         foreach ($cFirmas as $oFirma) {
@@ -286,7 +281,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'archivar':
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
@@ -311,7 +305,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'distribuir':
         $html = '';
         $oExpediente = new Expediente($Q_id_expediente);
@@ -324,7 +317,7 @@ switch ($Q_que) {
             $error_txt .= $oExpediente->getErrorTxt();
         }
         // firmar el paso de distribuir:
-        $f_hoy_iso = date(DateTimeInterface::ISO8601);
+        $f_hoy_iso = date(DateTimeInterface::ATOM);
         $gesFirmas = new  GestorFirma();
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_DISTRIBUIR]);
         foreach ($cFirmas as $oFirma) {
@@ -404,7 +397,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'exp_cp_oficina':
         $Q_of_destino = (integer)filter_input(INPUT_POST, 'of_destino');
     case 'exp_cp_copias':
@@ -438,7 +430,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'exp_a_borrador_cmb_creador':
     case 'exp_a_borrador':
         $error_txt = '';
@@ -463,7 +454,7 @@ switch ($Q_que) {
         $oExpediente->setF_aprobacion('');
         $oExpediente->setF_reunion('');
 
-        if ($Q_que == 'exp_a_borrador_cmb_creador') {
+        if ($Q_que === 'exp_a_borrador_cmb_creador') {
             $nuevo_creador = ConfigGlobal::role_id_cargo();
             $oExpediente->setPonente($nuevo_creador);
         }
@@ -481,7 +472,7 @@ switch ($Q_que) {
             $oEscrito = new Escrito($id_escrito);
             $oEscrito->DBCargar();
             $oEscrito->setAnulado('f');
-            if ($Q_que == 'exp_a_borrador_cmb_creador') {
+            if ($Q_que === 'exp_a_borrador_cmb_creador') {
                 $oEscrito->setCreador($nuevo_creador);
             }
             if ($oEscrito->DBGuardar() === FALSE) {
@@ -503,7 +494,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'exp_eliminar':
         // Si hay escritos enviados, no se borran.
         $error_txt = '';
@@ -553,7 +543,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'visto':
         // yo soy el que hago el click:
         $mi_id_cargo = ConfigGlobal::role_id_cargo();
@@ -604,10 +593,9 @@ switch ($Q_que) {
                     $visto = $visto_db;
                     // rompo el bucle
                     break;
-                } else {
-                    $chk = '';
-                    $visto = '';
                 }
+                $chk = '';
+                $visto = '';
             }
             $html .= "<div class=\"form-check custom-checkbox form-check-inline\">";
             $html .= "<input type=\"checkbox\" class=\"form-check-input\" name=\"a_preparar[]\" id=\"$id2\" value=\"$id2#$visto\" $chk>";
@@ -814,7 +802,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'cambio_tramite':
         $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCargar();
@@ -846,7 +833,28 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
+    case 'cambio_vida':
+        $oExpediente = new Expediente($Q_id_expediente);
+        $oExpediente->DBCargar();
+        $oExpediente->setVida($Q_vida);
+        if ($oExpediente->DBGuardar() === FALSE) {
+            $error_txt .= $oExpediente->getErrorTxt();
+        }
+
+        if (!empty($error_txt)) {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        } else {
+            $jsondata['success'] = true;
+            $jsondata['id_expediente'] = $Q_id_expediente;
+            $a_cosas = ['id_expediente' => $Q_id_expediente];
+            $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
+            $jsondata['pagina_mod'] = $pagina_mod;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);
