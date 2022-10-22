@@ -41,13 +41,13 @@ $cCalendarItems = $gestorCalendarItem->getCalendarItems($aWhere, $aOperador);
  *  ;Status values for "VTODO".
  */
 
-$patrón = '/^REN(\d+)-/';
+$patron = '/^REN(\d+)-/';
 $matches = [];
 $a_id_entrada = [];
 foreach ($cCalendarItems as $oCalendarItem) {
     $uid = $oCalendarItem->getUid();
     $status = $oCalendarItem->getStatus();
-    preg_match($patrón, $uid, $matches);
+    preg_match($patron, $uid, $matches);
     if (!empty($matches[1]) && ($status == 'NEEDS-ACTION' || $status == 'IN-PROCESS')) {
         $a_id_entrada[] = $matches[1];
     }

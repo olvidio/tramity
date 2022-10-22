@@ -17,7 +17,7 @@ class MIMEContainer
     function __construct()
     {
         $this->created = false;
-        $this->boundary = uniqid(rand(1, 10000));
+        $this->boundary = uniqid(random_int(1, 10000), true);
     }
 
     public function sendmail($to, $from, $subject, $add_headers = "")

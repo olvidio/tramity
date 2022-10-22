@@ -189,7 +189,7 @@ class Client
         $padID = "";
 
         for ($i = 0; $i < $length; $i++) {
-            $padID .= $chars[rand() % strlen($chars)];
+            $padID .= $chars[mt_rand() % strlen($chars)];
         }
 
         return $padID;

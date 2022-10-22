@@ -12,7 +12,7 @@ class MIMEContent extends MIMEAttachment
     {
 
         parent::__construct();
-        $this->content_id = uniqid(rand(1, 10000));
+        $this->content_id = uniqid(random_int(1, 10000), true);
 
         if (!empty($file)) {
             $this->set_file($file, $mimetype);

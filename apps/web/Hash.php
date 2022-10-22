@@ -302,7 +302,7 @@ class Hash
                     // Si vengo por web\Posicion, el hash es de toda la url.
                     // Con los formularios, como en algunos casos se cambia el action, sólo compruebo los campos.
                     if ($hpos == 1) {
-                        $aParamSorted = $this->ordenarArrayParam($aPOST);
+                        $aParamSorted = self::ordenarArrayParam($aPOST);
                         $sUrl = $this->realFullUrl();
                         if (!empty($aParamSorted)) {
                             $sUrl .= '?' . http_build_query($aParamSorted);

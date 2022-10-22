@@ -18,7 +18,7 @@ class MIMEAttachment extends MIMEContainer
             $this->set_file($filename, $mimetype);
         }
 
-        $this->content = uniqid(rand(1, 1000));
+        $this->content = uniqid(random_int(1, 1000), true);
     }
 
     public function set_file($filename, $mimetype = "")

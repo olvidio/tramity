@@ -618,7 +618,7 @@ class CalDAVClient
      */
     function SetDepth($depth = '0')
     {
-        $this->headers['depth'] = 'Depth: ' . ($depth == '1' ? "1" : ($depth == 'infinity' ? $depth : "0"));
+        $this->headers['depth'] = 'Depth: ' . ($depth == '1' ? "1" : ($depth === 'infinity' ? $depth : "0"));
     }
 
     /**
