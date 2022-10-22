@@ -175,5 +175,3 @@ class GestorErrores
         fclose($handle);
     }
 }
-
-?>

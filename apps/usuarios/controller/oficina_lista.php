@@ -93,5 +93,5 @@ $a_campos = [
     'url_actualizar' => $url_actualizar,
 ];
 $oView = new ViewTwig('usuarios/controller');
-echo $oView->renderizar('oficina_lista.html.twig', $a_campos);
+$oView->renderizar('oficina_lista.html.twig', $a_campos);
 

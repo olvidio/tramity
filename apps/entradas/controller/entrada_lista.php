@@ -47,7 +47,7 @@ if ($Q_filtro == 'en_aceptado') {
         ];
 
         $oView = new ViewTwig('entradas/controller');
-        echo $oView->renderizar('oficinas_buscar.html.twig', $a_campos);
+        $oView->renderizar('oficinas_buscar.html.twig', $a_campos);
 
     }
     $aWhereADD = [];
@@ -92,7 +92,7 @@ if ($Q_filtro == 'en_encargado') {
     ];
 
     $oView = new ViewTwig('entradas/controller');
-    echo $oView->renderizar('encargados_buscar.html.twig', $a_campos);
+    $oView->renderizar('encargados_buscar.html.twig', $a_campos);
 
     $oTabla->setAWhereADD($aWhereADD);
     $oTabla->setAOperadorADD($aOperadorADD);

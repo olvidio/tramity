@@ -4,6 +4,7 @@ namespace oasis_as4\model;
 
 use core\ConfigGlobal;
 use davical\model\Davical;
+use DOMDocument;
 use entidades\model\entity\GestorEntidadesDB;
 use entradas\model\entity\EntradaCompartida;
 use entradas\model\entity\EntradaCompartidaAdjunto;
@@ -250,7 +251,7 @@ class As4Entregar extends As4CollaborationInfo
 
     private function getEscritoAnular($location)
     {
-        $this->dom = new \DOMDocument('1.0', 'UTF-8');
+        $this->dom = new DOMDocument('1.0', 'UTF-8');
         $this->dom->preserveWhiteSpace = false;
         $this->dom->load($location, LIBXML_PARSEHUGE);
 
@@ -321,7 +322,7 @@ class As4Entregar extends As4CollaborationInfo
     private function getEscrito($location)
     {
         //$this->xml_escrito = simplexml_load_file($location);
-        $this->dom = new \DOMDocument('1.0', 'UTF-8');
+        $this->dom = new DOMDocument('1.0', 'UTF-8');
         $this->dom->preserveWhiteSpace = false;
         $this->dom->load($location, LIBXML_PARSEHUGE);
         //$this->dom->load($location);

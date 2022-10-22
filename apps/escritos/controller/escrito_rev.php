@@ -102,7 +102,6 @@ if (!empty($Q_id_escrito)) {
     $cabeceraIzqd = $oEscrito->cabeceraIzquierda();
     $cabeceraDcha = $oEscrito->cabeceraDerecha();
 
-    $entradilla = $oEscrito->getEntradilla();
     $asunto_detalle = $oEscrito->getAsuntoDetalle();
 
     // Ponente
@@ -165,7 +164,6 @@ if (!empty($Q_id_escrito)) {
     $iframe = "<iframe src='$url/p/$padID?showLineNumbers=false$showChat' width=1300 height=500></iframe>";
 
 } else {
-    $entradilla = '';
     $asunto_detalle = '';
     $f_escrito = '';
     $initialPreview = '';
@@ -214,7 +212,6 @@ $a_campos = [
     'cabeceraDcha' => $cabeceraDcha,
 
     'f_escrito' => $f_escrito,
-    'entradilla' => $entradilla,
     'asunto_detalle' => $asunto_detalle,
     'iframe' => $iframe,
     //'a_adjuntos' => $a_adjuntos,
@@ -227,4 +224,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('escritos/controller');
-echo $oView->renderizar('escrito_rev.html.twig', $a_campos);
+$oView->renderizar('escrito_rev.html.twig', $a_campos);

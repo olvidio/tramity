@@ -1,6 +1,8 @@
 <?php
 
 namespace devel\controller;
+use PDO;
+
 /**
  * Devuelve un array con los nombres de los campos que forman la clave primaria de la tabla
  *
@@ -29,7 +31,7 @@ function primaryKey($oDB, $tabla)
         $oDBSt_resultado = $oDB->query($query_unica);
     }
     //buscar el nombre
-    $row = $oDBSt_resultado->fetch(\PDO::FETCH_ASSOC);
+    $row = $oDBSt_resultado->fetch(PDO::FETCH_ASSOC);
     $claves = explode(" ", $row['indkey']);
     $oid_tabla = $row['oid'];
     if (empty($oid_tabla)) {
@@ -40,7 +42,7 @@ function primaryKey($oDB, $tabla)
 					from pg_attribute
 					where attrelid='$oid_tabla' and attnum='$clave'";
         $oDBSt_resultado = $oDB->query($query_nom);
-        $row = $oDBSt_resultado->fetch(\PDO::FETCH_ASSOC);
+        $row = $oDBSt_resultado->fetch(PDO::FETCH_ASSOC);
         $campo[] = $row['attname'];
     }
     return $campo;

@@ -340,7 +340,7 @@ class VerTabla
         ];
 
         $oView = new ViewTwig('busquedas/controller');
-        echo $oView->renderizar('ver_tabla.html.twig', $a_campos);
+        $oView->renderizar('ver_tabla.html.twig', $a_campos);
     }
 
     public function setBotones($a_botones)
@@ -437,7 +437,7 @@ class VerTabla
         ];
 
         $oView = new ViewTwig('busquedas/controller');
-        echo $oView->renderizar('ver_tabla.html.twig', $a_campos);
+        $oView->renderizar('ver_tabla.html.twig', $a_campos);
     }
 
     public function tabla_escritos($cCollection)
@@ -555,7 +555,7 @@ class VerTabla
         ];
 
         $oView = new ViewTwig('busquedas/controller');
-        echo $oView->renderizar('ver_tabla.html.twig', $a_campos);
+        $oView->renderizar('ver_tabla.html.twig', $a_campos);
     }
 
     public function setBotonesDefault()

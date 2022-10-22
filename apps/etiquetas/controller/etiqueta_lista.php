@@ -115,5 +115,5 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('etiquetas/controller');
-echo $oView->renderizar('etiqueta_lista.html.twig', $a_campos);
+$oView->renderizar('etiqueta_lista.html.twig', $a_campos);
 

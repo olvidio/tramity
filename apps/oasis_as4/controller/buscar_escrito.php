@@ -59,4 +59,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('oasis_as4/controller');
-echo $oView->renderizar('buscar_escrito.html.twig', $a_campos);
+$oView->renderizar('buscar_escrito.html.twig', $a_campos);

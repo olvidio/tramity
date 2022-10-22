@@ -334,4 +334,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('expedientes/controller');
-echo $oView->renderizar('expediente_accion.html.twig', $a_campos);
+$oView->renderizar('expediente_accion.html.twig', $a_campos);

@@ -3,6 +3,7 @@
 namespace oasis_as4\model;
 
 use DOMAttr;
+use DOMDocument;
 
 class Pmode extends As4CollaborationInfo
 {
@@ -22,7 +23,7 @@ class Pmode extends As4CollaborationInfo
     public function __construct()
     {
         /* create a dom document with encoding utf8 */
-        $this->dom = new \DOMDocument('1.0', 'UTF-8');
+        $this->dom = new DOMDocument('1.0', 'UTF-8');
     }
 
 

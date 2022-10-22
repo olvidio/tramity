@@ -120,7 +120,7 @@ class Protocolo
 
         $txt = "$nom_lugar";
         if (!empty($prot_num)) {
-            $txt .= " ${prot_num}/${prot_any}";
+            $txt .= " $prot_num/$prot_any";
         }
         return $txt;
     }
@@ -152,10 +152,10 @@ class Protocolo
                     $actual_4 = (string)date('Y');
                     $prot_any = substr($actual_4, 0, 2) . $prot_any;
                 }
-                $txt .= "$nom_lugar-${prot_any}-${prot_num}";
+                $txt .= "$nom_lugar-$prot_any-$prot_num";
             } else {
                 $prot = date('Y-m-d');
-                $txt .= "$nom_lugar-${prot}";
+                $txt .= "$nom_lugar-$prot";
             }
         }
 

@@ -130,4 +130,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('lugares/controller');
-echo $oView->renderizar('lugar_lista.html.twig', $a_campos);
+$oView->renderizar('lugar_lista.html.twig', $a_campos);

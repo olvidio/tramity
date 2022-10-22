@@ -2,6 +2,8 @@
 
 namespace web;
 
+use Normalizer;
+
 class StringLocal
 {
 
@@ -72,7 +74,7 @@ class StringLocal
 
         // maps special characters (characters with diacritics) on their base-character followed by the diacritical mark
         // exmaple:  Ú => U´,  á => a`
-        $s = \Normalizer::normalize($s, \Normalizer::FORM_D);
+        $s = Normalizer::normalize($s, Normalizer::FORM_D);
 
 
         $s = preg_replace('@\pM@u', "", $s);    // removes diacritics

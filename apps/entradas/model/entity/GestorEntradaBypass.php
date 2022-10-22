@@ -65,7 +65,7 @@ class GestorEntradaBypass extends core\ClaseGestor
                 unset($aWhere[$camp]);
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }
@@ -190,7 +190,7 @@ class GestorEntradaBypass extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }

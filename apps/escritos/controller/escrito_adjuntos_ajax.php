@@ -349,7 +349,7 @@ switch ($Q_que) {
         ];
 
         $oView = new ViewTwig('expedientes/controller');
-        echo $oView->renderizar('modal_buscar_documentos.html.twig', $a_campos);
+        $oView->renderizar('modal_buscar_documentos.html.twig', $a_campos);
         break;
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);

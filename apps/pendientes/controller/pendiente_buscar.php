@@ -84,11 +84,11 @@ if ($role_actual === 'secretaria') {
     $id_oficina = $oCargo->getId_oficina();
 }
 
-if ($Q_que == 'buscar') {
+if ($Q_que === 'buscar') {
     $oBuscarPendiente = new BuscarPendiente();
     $oBuscarPendiente->setCalendario($Q_calendario);
 
-    if ($Q_calendario == 'registro' && !empty($Q_id_lugar)) {
+    if ($Q_calendario === 'registro' && !empty($Q_id_lugar)) {
         // buscar en el registro:
         $Q_prot_any = empty($Q_prot_any) ? '' : core\any_2($Q_prot_any);
 
@@ -101,7 +101,7 @@ if ($Q_que == 'buscar') {
         $aIds = [];
         foreach ($aCollection as $key => $cCollection) {
             foreach ($cCollection as $oEntrada) { // También puede ser un Escrito, pero en principio son entradas.
-                if ($key == 'entradas') {
+                if ($key === 'entradas') {
                     $id_reg = $oEntrada->getId_entrada();
                 }
                 $aIds[] = $id_reg;
@@ -210,7 +210,7 @@ if ($Q_que == 'buscar') {
         }
         $a_valores[$t][8] = $estado;
         // para el orden
-        if ($plazo != "x") {
+        if ($plazo !== 'x') {
             $a_valores[$t]['order'] = $plazo_iso;
         }
     }
@@ -244,7 +244,7 @@ $oTabla->setDatos($a_valores);
 
 // datepicker
 $oFecha = new DateTimeLocal();
-$format = $oFecha->getFormat();
+$format = $oFecha::getFormat();
 
 $aGoBack = [
     'que' => $Q_que,
@@ -281,6 +281,6 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('pendientes/controller');
-echo $oView->renderizar('pendiente_buscar.html.twig', $a_campos);
+$oView->renderizar('pendiente_buscar.html.twig', $a_campos);
 
 

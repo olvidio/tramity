@@ -69,7 +69,7 @@ if ($valor_ambito == Cargo::AMBITO_DL) {
 }
 
 //oficinas adicionales (suplencias..)
-if ($role_actual != 'admin') {
+if ($role_actual !== 'admin') {
     $aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
     foreach ($aPosiblesCargos as $id_cargo => $cargo) {
         $a_roles_posibles[] = $cargo;
@@ -118,17 +118,14 @@ $_SESSION['session_auth']['a_roles'] = $a_roles_posibles;
             alert("<?= _("Error de página devuelta") ?>");
         }
         fnjs_ref_absoluta = function (base, path) {
-            var url;
-            var inicio = "";
-            var secure = <?php if (!empty($_SERVER["HTTPS"])) {
-                echo 1;
-            } else {
-                echo 0;
-            } ?> ;
+            let protocol;
+            let url;
+            let inicio = "";
+            let secure, ini;
             if (secure) {
-                var protocol = 'https:';
+                protocol = 'https:';
             } else {
-                var protocol = 'http:';
+                protocol = 'http:';
             }
             // El apache ya ha añadido por su cuenta protocolo+$web. Lo quito:
             ini = protocol + '<?= ConfigGlobal::getWeb() ?>';
@@ -205,12 +202,12 @@ switch ($role_actual) {
         $nombre_entidad = ConfigGlobal::nombreEntidad();
         if ($esquema === 'admin') {
             $oView = new ViewTwig('usuarios/controller');
-            echo $oView->renderizar('admin_servidor.html.twig', $a_campos);
+            $oView->renderizar('admin_servidor.html.twig', $a_campos);
         } else {
             $a_campos['is_ambito_dl'] = $id_ambito_dl;
             $a_campos['nombre_entidad'] = $nombre_entidad;
             $oView = new ViewTwig('usuarios/controller');
-            echo $oView->renderizar('admin_entidad.html.twig', $a_campos);
+            $oView->renderizar('admin_entidad.html.twig', $a_campos);
         }
         break;
     case 'secretaria';

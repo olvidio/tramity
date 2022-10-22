@@ -405,7 +405,7 @@ class Hash
                     // Finalmente, destruir la sesión.
                     session_regenerate_id();
                     session_destroy();
-                    $pagina_exit = "/" . \core\ConfigGlobal::WEBDIR . "/index.php";
+                    $pagina_exit = "/" . ConfigGlobal::WEBDIR . "/index.php";
                     header("Location: $pagina_exit");
                     die();
                 }

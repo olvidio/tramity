@@ -206,7 +206,7 @@ class ImprimirTabla
         ];
 
         $oView = new ViewTwig('busquedas/controller');
-        echo $oView->renderizar('ver_tabla.html.twig', $a_campos);
+        $oView->renderizar('ver_tabla.html.twig', $a_campos);
     }
 
     // ---------------------------------- botones ----------------------------

@@ -21,7 +21,7 @@ $Q_f_max = urldecode($Q_f_max_enc);
 
 // datepicker
 $oFecha = new DateTimeLocal();
-$format = $oFecha->getFormat();
+$format = $oFecha::getFormat();
 
 $vista = ConfigGlobal::getVista();
 
@@ -37,4 +37,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('busquedas/controller');
-echo $oView->renderizar('imprimir_que.html.twig', $a_campos);
+$oView->renderizar('imprimir_que.html.twig', $a_campos);

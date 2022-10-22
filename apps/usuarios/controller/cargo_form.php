@@ -58,7 +58,7 @@ $txt_guardar = _("guardar datos cargo");
 if (!empty($Q_id_cargo)) {
     $que = 'guardar';
     $oCargo->setId_cargo($Q_id_cargo);
-    $oCargo->DBcarregar();
+    $oCargo->DBCargar();
     $cargo = $oCargo->getCargo();
     $descripcion = $oCargo->getDescripcion();
     $id_ambito = $oCargo->getId_ambito();
@@ -137,4 +137,4 @@ if ($hay_oficina) {
 }
 
 $oView = new ViewTwig('usuarios/controller');
-echo $oView->renderizar('cargo_form.html.twig', $a_campos);
+$oView->renderizar('cargo_form.html.twig', $a_campos);

@@ -2,6 +2,9 @@
 
 namespace web;
 
+use DateTime;
+use DateTimeZone;
+
 /**
  * Classe per les dates. Afageix a la clase del php la vista amn num. romans.
  *
@@ -11,7 +14,7 @@ namespace web;
  * @version 1.0
  * @created 26/11/2010
  */
-class NullDateTimeLocal extends \DateTime
+class NullDateTimeLocal extends DateTime
 {
 
     static public function createFromLocal($data)
@@ -19,7 +22,7 @@ class NullDateTimeLocal extends \DateTime
         return '';
     }
 
-    static public function createFromFormat($format, $data, \DateTimeZone $TimeZone = NULL)
+    static public function createFromFormat($format, $data, DateTimeZone $TimeZone = NULL)
     {
         return '';
     }

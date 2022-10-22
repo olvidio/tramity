@@ -2,6 +2,7 @@
 
 namespace core;
 
+use Exception;
 use web\DateTimeLocal;
 
 /**
@@ -136,7 +137,7 @@ foreach ($cDatosCampos as $oDatosCampo) {
                     //check weather the date is valid of not
                     try {
                         $dateTimeObject = DateTimeLocal::createFromLocal($valor);
-                    } catch (\Exception $exc) {
+                    } catch (Exception $exc) {
                         $errores[] = array('txt' => _("el campo \"%1\$s\" debe ser una fecha, y es: \"%2\$s\""),
                             'camp' => $nomcamp,
                             'etiqueta' => $etiqueta,

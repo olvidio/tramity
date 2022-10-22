@@ -3,6 +3,8 @@
 namespace escritos\model\entity;
 
 use core;
+use PDO;
+use PDOException;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula escrito_adjuntos
@@ -170,13 +172,13 @@ class EscritoAdjunto extends core\ClasePropiedades
                 $adjunto = $aDades['adjunto'];
                 $tipo_doc = $aDades['tipo_doc'];
 
-                $oDblSt->bindParam(1, $id_escrito, \PDO::PARAM_INT);
-                $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
-                $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_STR);
-                $oDblSt->bindParam(4, $tipo_doc, \PDO::PARAM_INT);
+                $oDblSt->bindParam(1, $id_escrito, PDO::PARAM_INT);
+                $oDblSt->bindParam(2, $nom, PDO::PARAM_STR);
+                $oDblSt->bindParam(3, $adjunto, PDO::PARAM_STR);
+                $oDblSt->bindParam(4, $tipo_doc, PDO::PARAM_INT);
                 try {
                     $oDblSt->execute();
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'EscritoAdjunto.update.execute';
@@ -198,13 +200,13 @@ class EscritoAdjunto extends core\ClasePropiedades
                 $adjunto = $aDades['adjunto'];
                 $tipo_doc = $aDades['tipo_doc'];
 
-                $oDblSt->bindParam(1, $id_escrito, \PDO::PARAM_INT);
-                $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
-                $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_STR);
-                $oDblSt->bindParam(4, $tipo_doc, \PDO::PARAM_INT);
+                $oDblSt->bindParam(1, $id_escrito, PDO::PARAM_INT);
+                $oDblSt->bindParam(2, $nom, PDO::PARAM_STR);
+                $oDblSt->bindParam(3, $adjunto, PDO::PARAM_STR);
+                $oDblSt->bindParam(4, $tipo_doc, PDO::PARAM_INT);
                 try {
                     $oDblSt->execute();
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'EscritoAdjunto.insertar.execute';
@@ -237,11 +239,11 @@ class EscritoAdjunto extends core\ClasePropiedades
                 return FALSE;
             }
             $oDblSt->execute();
-            $oDblSt->bindColumn(1, $id_escrito, \PDO::PARAM_INT);
-            $oDblSt->bindColumn(2, $nom, \PDO::PARAM_STR, 256);
-            $oDblSt->bindColumn(3, $adjunto, \PDO::PARAM_STR);
-            $oDblSt->bindColumn(4, $tipo_doc, \PDO::PARAM_INT);
-            $oDblSt->fetch(\PDO::FETCH_BOUND);
+            $oDblSt->bindColumn(1, $id_escrito, PDO::PARAM_INT);
+            $oDblSt->bindColumn(2, $nom, PDO::PARAM_STR, 256);
+            $oDblSt->bindColumn(3, $adjunto, PDO::PARAM_STR);
+            $oDblSt->bindColumn(4, $tipo_doc, PDO::PARAM_INT);
+            $oDblSt->fetch(PDO::FETCH_BOUND);
 
             $aDades = ['id_escrito' => $id_escrito,
                 'nom' => $nom,

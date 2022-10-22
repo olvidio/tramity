@@ -42,7 +42,7 @@ if (isset($_POST['stack'])) {
     }
 } elseif (!empty($a_sel)) { //vengo de un checkbox
     $Q_que = (string)filter_input(INPUT_POST, 'que');
-    if ($Q_que != 'del_grupmenu') { //En el caso de venir de borrar un grupmenu, no hago nada
+    if ($Q_que !== 'del_grupmenu') { //En el caso de venir de borrar un grupmenu, no hago nada
         $Q_id_tramite = (integer)strtok($a_sel[0], "#");
         // el scroll id es de la página anterior, hay que guardarlo allí
         $oPosicion->addParametro('id_sel', $a_sel, 1);
@@ -59,7 +59,7 @@ if (!empty($Q_id_tramite)) {
     $que = 'guardar';
     $oTramite = new Tramite();
     $oTramite->setId_tramite($Q_id_tramite);
-    $oTramite->DBcarregar();
+    $oTramite->DBCargar();
     $tramite = $oTramite->getTramite();
     $orden = $oTramite->getOrden();
     $breve = $oTramite->getBreve();
@@ -97,4 +97,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('tramites/controller');
-echo $oView->renderizar('tramite_form.html.twig', $a_campos);
+$oView->renderizar('tramite_form.html.twig', $a_campos);

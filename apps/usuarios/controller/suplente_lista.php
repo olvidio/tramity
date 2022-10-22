@@ -54,5 +54,5 @@ $a_campos = [
     */
 ];
 $oView = new ViewTwig('usuarios/controller');
-echo $oView->renderizar('suplente_lista.html.twig', $a_campos);
+$oView->renderizar('suplente_lista.html.twig', $a_campos);
 

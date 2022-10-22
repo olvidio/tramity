@@ -4,6 +4,8 @@ namespace entradas\model\entity;
 
 use core;
 use entradas\model\Entrada;
+use PDO;
+use PDOException;
 use stdClass;
 use web;
 
@@ -294,7 +296,7 @@ class EntradaDB extends core\ClasePropiedades
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
             }
-            $aDades = $oDblSt->fetch(\PDO::FETCH_ASSOC);
+            $aDades = $oDblSt->fetch(PDO::FETCH_ASSOC);
             // Para evitar posteriores cargas
             $this->bLoaded = TRUE;
             switch ($que) {
@@ -766,7 +768,7 @@ class EntradaDB extends core\ClasePropiedades
             } else {
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'EntradaDB.update.execute';
@@ -785,7 +787,7 @@ class EntradaDB extends core\ClasePropiedades
             } else {
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'EntradaDB.insertar.execute';

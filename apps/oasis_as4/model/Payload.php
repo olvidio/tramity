@@ -3,6 +3,8 @@
 namespace oasis_as4\model;
 
 use documentos\model\Documento;
+use DOMAttr;
+use DOMDocument;
 use entradas\model\entity\EntradaAdjunto;
 use envios\model\MIMEAttachment;
 use envios\model\MIMEContainer;
@@ -55,7 +57,7 @@ class Payload
         $gesLugares = new GestorLugar();
         $this->aLugares = $gesLugares->getArrayLugares();
 
-        $this->dom = new \DOMDocument('1.0', 'utf-8');
+        $this->dom = new DOMDocument('1.0', 'utf-8');
     }
 
     public function setPayload($oEscrito, $tipo_escrito, $sufijo_dst = '')
@@ -214,20 +216,20 @@ class Payload
     public function createXml($dom)
     {
         $this->payload = $dom->createElement("PayloadInfo");
-        $attr = new \DOMAttr('deleteFilesAfterSubmit', $this->deleteFilesAfterSubmit);
+        $attr = new DOMAttr('deleteFilesAfterSubmit', $this->deleteFilesAfterSubmit);
         $this->payload->setAttributeNode($attr);
 
         $location = "payloads/$this->nombre_escrito";
 
         $part_info = $dom->createElement('PartInfo');
-        $attr_1 = new \DOMAttr('containment', "body");
+        $attr_1 = new DOMAttr('containment', "body");
         $part_info->setAttributeNode($attr_1);
-        $attr_2 = new \DOMAttr('location', $location);
+        $attr_2 = new DOMAttr('location', $location);
         $part_info->setAttributeNode($attr_2);
 
         $part_properties = $dom->createElement('PartProperties');
         $element_property = $dom->createElement('Property', $this->nombre_escrito);
-        $attr_name = new \DOMAttr('name', "original-file-name");
+        $attr_name = new DOMAttr('name', "original-file-name");
         $element_property->setAttributeNode($attr_name);
         $part_properties->appendChild($element_property);
 
@@ -240,7 +242,7 @@ class Payload
 
     public function createXmlFile()
     {
-        $this->dom = new \DOMDocument('1.0', 'UTF-8');
+        $this->dom = new DOMDocument('1.0', 'UTF-8');
 
         $this->escrito = $this->dom->createElement("escrito");
 
@@ -489,7 +491,7 @@ class Payload
                 $contenido_mime = $mime->get_message();
 
                 $content = $this->dom->createElement('content', $contenido_mime);
-                $attr = new \DOMAttr('type', self::TYPE_ETHERAD_TXT);
+                $attr = new DOMAttr('type', self::TYPE_ETHERAD_TXT);
                 $content->setAttributeNode($attr);
                 return $content;
                 break;
@@ -505,7 +507,7 @@ class Payload
                 $contenido_mime = $mime->get_message();
 
                 $content = $this->dom->createElement('content', $contenido_mime);
-                $attr = new \DOMAttr('type', self::TYPE_ETHERAD_HTML);
+                $attr = new DOMAttr('type', self::TYPE_ETHERAD_HTML);
                 $content->setAttributeNode($attr);
                 return $content;
                 break;

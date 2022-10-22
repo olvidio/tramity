@@ -24,7 +24,7 @@ require_once("apps/core/global_object.inc");
 $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
-if ($Q_filtro == 'en_buscar' && empty($Q_id_entrada)) {
+if ($Q_filtro === 'en_buscar' && empty($Q_id_entrada)) {
     $Q_a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
     $Q_id_entrada = $Q_a_sel[0];
@@ -150,7 +150,7 @@ $ver_pendiente = TRUE;
 $txt_btn_guardar = _("Guardar");
 
 $url_update = 'apps/entradas/controller/entrada_update.php';
-if ($Q_filtro == 'en_buscar') {
+if ($Q_filtro === 'en_buscar') {
     $a_condicion = [];
     $str_condicion = (string)filter_input(INPUT_POST, 'condicion');
     parse_str($str_condicion, $a_condicion);
@@ -163,7 +163,7 @@ if ($Q_filtro == 'en_buscar') {
 
 // datepicker
 $oFecha = new DateTimeLocal();
-$format = $oFecha->getFormat();
+$format = $oFecha::getFormat();
 $yearStart = date('Y');
 $yearEnd = $yearStart + 2;
 
@@ -203,4 +203,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('entradas/controller');
-echo $oView->renderizar('entrada_form_ctr.html.twig', $a_campos);
+$oView->renderizar('entrada_form_ctr.html.twig', $a_campos);

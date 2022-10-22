@@ -49,10 +49,10 @@ $a_cosas = ['id_expediente' => $Q_id_expediente,
     'modo' => $Q_modo,
 ];
 
-if ($Q_filtro == 'distribuir') {
+if ($Q_filtro === 'distribuir') {
     $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?' . http_build_query($a_cosas));
 } else {
-    if ($Q_modo == 'mod') {
+    if ($Q_modo === 'mod') {
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
     } else {
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
@@ -73,4 +73,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('expedientes/controller');
-echo $oView->renderizar('adjunto_revisar.html.twig', $a_campos);
+$oView->renderizar('adjunto_revisar.html.twig', $a_campos);

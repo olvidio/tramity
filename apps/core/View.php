@@ -31,7 +31,7 @@ class View
      *
      *
      */
-    function __construct($namespace)
+    public function __construct($namespace)
     {
         $this->snamespace = $namespace;
     }
@@ -39,7 +39,7 @@ class View
 
     /* MÉTODOS PÚBLICOS -----------------------------------------------------------*/
 
-    function render($file, $variables = array())
+    public function render($file, $variables = array()): void
     {
 
         extract($variables);
@@ -63,9 +63,8 @@ class View
 
         require $fileName;
 
-        $out2 = ob_get_contents();
+        $out2 = ob_get_clean();
 
-        ob_end_clean();
         echo $out2;
     }
 }

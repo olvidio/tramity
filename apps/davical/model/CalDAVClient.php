@@ -2,6 +2,9 @@
 
 namespace davical\model;
 
+use XMLDocument;
+use XMLElement;
+
 /**
  * A Class for connecting to a caldav server
  *
@@ -593,8 +596,8 @@ class CalDAVClient
     {
         $this->SetDepth($depth);
         /* todo */
-        $xml = new \XMLDocument(array('DAV:' => '', 'urn:ietf:params:xml:ns:caldav' => 'C'));
-        $prop = new \XMLElement('prop');
+        $xml = new XMLDocument(array('DAV:' => '', 'urn:ietf:params:xml:ns:caldav' => 'C'));
+        $prop = new XMLElement('prop');
         foreach ($props as $v) {
             $xml->NSElement($prop, $v);
         }

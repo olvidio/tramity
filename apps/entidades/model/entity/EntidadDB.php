@@ -3,6 +3,7 @@
 namespace entidades\model\entity;
 
 use core;
+use PDO;
 use PDOException;
 
 class EntidadDB extends core\ClasePropiedades
@@ -201,7 +202,7 @@ class EntidadDB extends core\ClasePropiedades
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
             }
-            $aDades = $oDblSt->fetch(\PDO::FETCH_ASSOC);
+            $aDades = $oDblSt->fetch(PDO::FETCH_ASSOC);
             // Para evitar posteriores cargas
             $this->bLoaded = TRUE;
             switch ($que) {

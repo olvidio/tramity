@@ -2,6 +2,8 @@
 
 namespace core;
 
+use DateTimeInterface;
+use Exception;
 use web;
 
 /**
@@ -100,10 +102,10 @@ class PgTimestamp
                     // Ya lo pongo en ISO 
                     // ya tiene los segundos:
                     if (!empty($s)) {
-                        $timestamp_with_seconds = "$y-$m-${d} $h:$min:$s$zone_full";
+                        $timestamp_with_seconds = "$y-$m-$d $h:$min:$s$zone_full";
                     } else {
                         // si faltan los segundos los añado (:00)
-                        $timestamp_with_seconds = "$y-$m-${d} $h:$min:00$zone_full";
+                        $timestamp_with_seconds = "$y-$m-$d $h:$min:00$zone_full";
                     }
 
                     $rta = sprintf("%s", $this->checkData($timestamp_with_seconds)->format(static::TS_FORMAT));
@@ -132,7 +134,7 @@ class PgTimestamp
      */
     protected function checkData($data)
     {
-        if (!$data instanceof \DateTimeInterface) {
+        if (!$data instanceof DateTimeInterface) {
             try {
                 switch ($this->type) {
                     case 'timestamp':
@@ -142,8 +144,8 @@ class PgTimestamp
                     default:
                         $data = web\DateTimeLocal::createFromLocal($data, $this->type);
                 }
-            } catch (\Exception $e) {
-                throw new \Exception(
+            } catch (Exception $e) {
+                throw new Exception(
                     sprintf(
                         "Cannot convert data from invalid datetime representation '%s'.",
                         $data

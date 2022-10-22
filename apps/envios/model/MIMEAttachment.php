@@ -65,8 +65,8 @@ class MIMEAttachment extends MIMEContainer
 
         $addheaders = (is_array($this->add_header)) ? implode($this->add_header, "\r\n") : "";
 
-        $headers = "Content-Type: {$this->content_type}; filename=$this->filename\r\n";
-        $headers .= "Content-Transfer-Encoding: {$this->content_enc}\r\n";
+        $headers = "Content-Type: $this->content_type; filename=$this->filename\r\n";
+        $headers .= "Content-Transfer-Encoding: $this->content_enc\r\n";
         $headers .= "Content-Disposition: attachment\r\n$addheaders\r\n";
         //$headers .= chunk_split($this->content)."\r\n";
         //$headers .= $this->mb_chunk_split($this->content, 72, "\r\n");

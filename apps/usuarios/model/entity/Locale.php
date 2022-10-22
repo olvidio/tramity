@@ -2,6 +2,8 @@
 namespace usuarios\model\entity;
 
 use core;
+use PDO;
+use PDOException;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula x_locales
@@ -160,7 +162,7 @@ class Locale extends core\ClasePropiedades
             } else {
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'Locale.update.execute';
@@ -180,7 +182,7 @@ class Locale extends core\ClasePropiedades
             } else {
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'Locale.insertar.execute';
@@ -207,7 +209,7 @@ class Locale extends core\ClasePropiedades
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return false;
             }
-            $aDades = $oDblSt->fetch(\PDO::FETCH_ASSOC);
+            $aDades = $oDblSt->fetch(PDO::FETCH_ASSOC);
             // Para evitar posteriores cargas
             $this->bLoaded = TRUE;
             switch ($que) {
@@ -530,5 +532,3 @@ class Locale extends core\ClasePropiedades
         return $this->aDades;
     }
 }
-
-?>

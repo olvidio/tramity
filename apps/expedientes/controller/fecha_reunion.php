@@ -62,4 +62,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('expedientes/controller');
-echo $oView->renderizar('fecha_reunion.html.twig', $a_campos);
+$oView->renderizar('fecha_reunion.html.twig', $a_campos);

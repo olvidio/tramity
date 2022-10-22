@@ -418,7 +418,7 @@ class EscritoForm
 
         // datepicker
         $oFecha = new DateTimeLocal();
-        $format = $oFecha->getFormat();
+        $format = $oFecha::getFormat();
         $yearStart = date('Y');
         $yearEnd = $yearStart + 2;
         $error_fecha = $_SESSION['oConfig']->getPlazoError();
@@ -476,7 +476,7 @@ class EscritoForm
             ];
 
             $oView = new ViewTwig('escritos/controller');
-            echo $oView->renderizar('escrito_form_ctr.html.twig', $a_campos);
+            $oView->renderizar('escrito_form_ctr.html.twig', $a_campos);
         } else {
             $a_campos = [
                 'titulo' => $titulo,
@@ -539,7 +539,7 @@ class EscritoForm
             ];
 
             $oView = new ViewTwig('escritos/controller');
-            echo $oView->renderizar('escrito_form.html.twig', $a_campos);
+            $oView->renderizar('escrito_form.html.twig', $a_campos);
         }
     }
 

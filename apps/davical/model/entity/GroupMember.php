@@ -3,6 +3,8 @@
 namespace davical\model\entity;
 
 use core;
+use PDO;
+use PDOException;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula group_member
@@ -137,7 +139,7 @@ class GroupMember extends core\ClasePropiedades
             } else {
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'GroupMember.update.execute';
@@ -158,7 +160,7 @@ class GroupMember extends core\ClasePropiedades
             } else {
                 try {
                     $oDblSt->execute($aDades1);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'GroupMember.insertar.execute';
@@ -185,7 +187,7 @@ class GroupMember extends core\ClasePropiedades
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
             }
-            $aDades = $oDblSt->fetch(\PDO::FETCH_ASSOC);
+            $aDades = $oDblSt->fetch(PDO::FETCH_ASSOC);
             // Para evitar posteriores cargas
             $this->bLoaded = TRUE;
             switch ($que) {

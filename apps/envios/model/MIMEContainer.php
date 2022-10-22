@@ -36,7 +36,7 @@ class MIMEContainer
 
         /* Standard Headers that exist on every MIME e-mail */
         $headers = "MIME-Version: 1.0\r\n" .
-            "Content-Transfer-Encoding: {$this->content_enc}\r\n";
+            "Content-Transfer-Encoding: $this->content_enc\r\n";
 
         $addheaders = (is_array($this->add_header)) ?
             implode($this->add_header, "\r\n") : '';
@@ -45,8 +45,8 @@ class MIMEContainer
         if (is_array($this->subcontainers) &&
             (count($this->subcontainers) > 0)) {
 
-            $headers .= "Content-Type: {$this->content_type}; charset=UTF-8; " .
-                "boundary={$this->boundary}\r\n$addheaders\r\n\r\n";
+            $headers .= "Content-Type: $this->content_type; charset=UTF-8; " .
+                "boundary=$this->boundary\r\n$addheaders\r\n\r\n";
 
             //$headers .= wordwrap("If you are reading this portion of the e-mail," .
             //		"then you are not reading this e-mail through a" .
@@ -54,16 +54,16 @@ class MIMEContainer
 
             foreach ($this->subcontainers as $val) {
                 if (method_exists($val, "create")) {
-                    $headers .= "--{$this->boundary}\r\n";
+                    $headers .= "--$this->boundary\r\n";
                     $headers .= $val->create();
                 }
             }
 
-            $headers .= "--{$this->boundary}--\r\n";
+            $headers .= "--$this->boundary--\r\n";
         } else {
 
-            $headers .= "Content-Type: {$this->content_type} charset=UTF-8; \r\n" .
-                $addheaders . "\r\n\r\n{$this->content}";
+            $headers .= "Content-Type: $this->content_type charset=UTF-8; \r\n" .
+                $addheaders . "\r\n\r\n$this->content";
 
         }
         return $headers;

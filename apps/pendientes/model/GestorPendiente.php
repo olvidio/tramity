@@ -5,6 +5,7 @@ namespace pendientes\model;
 use core\Set;
 use davical\model\CalDAVClient;
 use davical\model\Davical;
+use iCalComponent;
 
 // Archivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
@@ -74,7 +75,7 @@ class GestorPendiente
         $tt = 0;
         foreach ($events as $a_todo) {
             $tt++;
-            $vcalendar[$tt] = new \iCalComponent($a_todo['data']);
+            $vcalendar[$tt] = new iCalComponent($a_todo['data']);
         }
 
         for ($t = 1; $t <= $tt; $t++) {

@@ -91,9 +91,9 @@ class ProtocoloArray extends Protocolo
                 $nom_lugar = $oLugar->getSigla();
                 $txt = "$nom_lugar";
                 if (!empty($prot_num)) {
-                    $txt .= " ${prot_num}/${prot_any}";
+                    $txt .= " $prot_num/$prot_any";
                 }
-                $txt .= !empty($prot_mas) ? ", ${prot_mas}" : '';
+                $txt .= !empty($prot_mas) ? ", $prot_mas" : '';
 
                 if ($id_lugar == $id_lugar_dst_org) {
                     $aRef['dst_org'] .= !empty($aRef['dst_org']) ? "<br>" : '';
@@ -141,9 +141,9 @@ class ProtocoloArray extends Protocolo
 
                 $txt = "$nom_lugar";
                 if (!empty($prot_num)) {
-                    $txt .= " ${prot_num}/${prot_any}";
+                    $txt .= " $prot_num/$prot_any";
                 }
-                $txt .= !empty($prot_mas) ? ", ${prot_mas}" : '';
+                $txt .= !empty($prot_mas) ? ", $prot_mas" : '';
 
                 $sLista .= !empty($sLista) ? "<br>" : '';
                 $sLista .= $ref . $txt;
@@ -179,9 +179,9 @@ class ProtocoloArray extends Protocolo
 
                 $txt = "$nom_lugar";
                 if (!empty($prot_num)) {
-                    $txt .= " ${prot_num}/${prot_any}";
+                    $txt .= " $prot_num/$prot_any";
                 }
-                $txt .= !empty($prot_mas) ? ", ${prot_mas}" : '';
+                $txt .= !empty($prot_mas) ? ", $prot_mas" : '';
 
                 $sLista .= $ref . $txt . "<br>";
             }
@@ -277,7 +277,7 @@ class ProtocoloArray extends Protocolo
         $num = $this->sNomConjunto . "_num";
         $span = $this->sNomConjunto . "_span";
 
-        $tab_def = isset($this->iTabIndex) ? $this->iTabIndex : 40;
+        $tab_def = $this->iTabIndex ?? 40;
         $tab = $tab_def - 39;
 
         $txt_js = "\n\t\t\tvar num=$('#$num');";

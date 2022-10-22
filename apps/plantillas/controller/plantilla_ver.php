@@ -16,10 +16,10 @@ require_once("apps/core/global_object.inc");
 
 // porque también se puede abrir en una ventana nueva, y entonces se llama por GET
 $Q_method = (integer)filter_input(INPUT_SERVER, 'REQUEST_METHOD');
-if ($Q_method == 'POST') {
+if ($Q_method === 'POST') {
     $Q_id_plantilla = (integer)filter_input(INPUT_POST, 'id_plantilla');
 }
-if ($Q_method == 'GET') {
+if ($Q_method === 'GET') {
     $Q_id_plantilla = (integer)filter_input(INPUT_GET, 'id_plantilla');
 }
 
@@ -42,4 +42,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('plantillas/controller');
-echo $oView->renderizar('plantilla_ver.html.twig', $a_campos);
+$oView->renderizar('plantilla_ver.html.twig', $a_campos);

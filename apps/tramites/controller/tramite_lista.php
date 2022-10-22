@@ -95,5 +95,5 @@ $a_campos = [
     'url_actualizar' => $url_actualizar,
 ];
 $oView = new ViewTwig('tramites/controller');
-echo $oView->renderizar('tramite_lista.html.twig', $a_campos);
+$oView->renderizar('tramite_lista.html.twig', $a_campos);
 

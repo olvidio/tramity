@@ -2,6 +2,10 @@
 
 namespace web;
 
+use DateInterval;
+use DateTime;
+use DateTimeZone;
+
 /**
  * Classe per les dates. Afageix a la clase del php la vista amn num. romans.
  *
@@ -11,10 +15,10 @@ namespace web;
  * @version 1.0
  * @created 26/11/2010
  */
-class DateTimeLocal extends \DateTime
+class DateTimeLocal extends DateTime
 {
 
-    static public function createFromLocal($data, $type = '')
+    public static function createFromLocal($data, $type = '')
     {
         // Cambiar '-' por '/':
         $data = str_replace('-', '/', $data);
@@ -37,7 +41,7 @@ class DateTimeLocal extends \DateTime
             $currentY2 = date('y');
             $currentMilenium = $currentY4 - $currentY2;
 
-            $extnd_dt->add(new \DateInterval('P' . $currentMilenium . 'Y'));
+            $extnd_dt->add(new DateInterval('P' . $currentMilenium . 'Y'));
         }
 
         return $extnd_dt;
@@ -49,7 +53,7 @@ class DateTimeLocal extends \DateTime
      * @param string $separador separador entre dia, mes año
      * @return string
      */
-    static public function getFormat($separador = '/', $type = '')
+    public static function getFormat($separador = '/', $type = '')
     {
         $idioma = $_SESSION['session_auth']['idioma'];
         # Si no hemos encontrado ningún idioma que nos convenga, mostramos la web en el idioma por defecto
@@ -65,13 +69,13 @@ class DateTimeLocal extends \DateTime
             default:
                 $format = 'j' . $separador . 'n' . $separador . 'Y';
         }
-        if (!empty($type) && ($type == 'timestamp' || $type == 'timestamptz')) {
+        if (!empty($type) && ($type === 'timestamp' || $type === 'timestamptz')) {
             $format .= ' H:i:sP';
         }
         return $format;
     }
 
-    static public function createFromFormat($format, $data, \DateTimeZone $TimeZone = NULL)
+    public static function createFromFormat($format, $data, DateTimeZone $TimeZone = NULL)
     {
         $extnd_dt = new static();
         $parent_dt = parent::createFromFormat($format, $data, $TimeZone);
@@ -85,7 +89,7 @@ class DateTimeLocal extends \DateTime
 
     public function getFechaLatin()
     {
-        $mes_latin = $this->Meses_latin();
+        $mes_latin = self::Meses_latin();
 
         $dia = parent::format('j'); //sin ceros iniciales
         $mes = parent::format('n'); //sin ceros iniciales
@@ -94,7 +98,7 @@ class DateTimeLocal extends \DateTime
         return "die " . $dia . " mense  " . $mes_latin[$mes] . "  anno  " . $any;
     }
 
-    public static function Meses_latin()
+    public static function Meses_latin(): array
     {
         return [
             '1' => 'ianuario',
@@ -125,7 +129,7 @@ class DateTimeLocal extends \DateTime
      *    primero el id (en inglés), después el nombre
      *
      */
-    public static function arrayDiasSemana()
+    public static function arrayDiasSemana(): array
     {
         return [
             "MO" => _("lunes"),
@@ -142,14 +146,14 @@ class DateTimeLocal extends \DateTime
      * devuelve el mes en texto (según el idioma del usuario)
      *
      */
-    public function getMesLocalTxt()
+    public function getMesLocalTxt():array
     {
         $mes_num = parent::format('n');
         $aMeses = self::Meses();
         return $aMeses[$mes_num];
     }
 
-    public static function Meses()
+    public static function Meses(): array
     {
         return [
             '1' => _("enero"),
@@ -167,12 +171,12 @@ class DateTimeLocal extends \DateTime
         ];
     }
 
-    public function getIsoTime()
+    public function getIsoTime(): string
     {
         return parent::format('Y-m-d H:i:s');
     }
 
-    public function getIso()
+    public function getIso(): string
     {
         return parent::format('Y-m-d');
     }
@@ -183,14 +187,14 @@ class DateTimeLocal extends \DateTime
      * @param string $separador (.-/)
      * @return string
      */
-    public function getFromLocalHora($separador = '/')
+    public function getFromLocalHora($separador = '/'): string
     {
-        $format = $this->getFormat($separador);
+        $format = $this::getFormat($separador);
         $format .= ' H:i:s';
         return parent::format($format);
     }
 
-    public function formatRoman()
+    public function formatRoman(): string
     {
         $a_num_romanos = array('1' => "I", '2' => "II", '3' => "III", '4' => "IV", '5' => "V", '6' => "VI", '7' => "VII", '8' => "VIII", '9' => "IX",
             '10' => "X", '11' => "XI", '12' => "XII");
@@ -200,7 +204,7 @@ class DateTimeLocal extends \DateTime
         return "$dia." . $a_num_romanos[$mes] . ".$any";
     }
 
-    public function duracion($oDateDiff)
+    public function duracion($oDateDiff): float
     {
         $interval = $this->diff($oDateDiff);
         $horas = $interval->format('%a') * 24 + $interval->format('%h') + $interval->format('%i') / 60 + $interval->format('%s') / 3600;
@@ -242,7 +246,7 @@ class DateTimeLocal extends \DateTime
             if ($oF_fin == $oF_ini) {
                 $fecha = $oF_fin->getFromLocal();
                 $error_txt .= empty($error_txt) ? '' : '<br>';
-                $error_txt .= sprinitf(_("la fecha fin es igual a la fecha inicio en el periodo %s: %s"), $i, $fecha);
+                $error_txt .= sprintf(_("la fecha fin es igual a la fecha inicio en el periodo %s: %s"), $i, $fecha);
             }
             if ($oF_fin < $oF_ini) {
                 $fecha = $oF_ini->getFromLocal();
@@ -268,10 +272,9 @@ class DateTimeLocal extends \DateTime
         }
         if (empty($error_txt)) {
             return FALSE;
-        } else {
-            return $error_txt;
         }
 
+        return $error_txt;
     }
 
     /**
@@ -282,7 +285,7 @@ class DateTimeLocal extends \DateTime
      */
     public function getFromLocal($separador = '/')
     {
-        $format = $this->getFormat($separador);
+        $format = $this::getFormat($separador);
         return parent::format($format);
     }
 }

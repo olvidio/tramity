@@ -41,7 +41,7 @@ class Response
      */
     private function getPropertyFromData($key)
     {
-        return isset($this->data[$key]) ? $this->data[$key] : null;
+        return $this->data[$key] ?? null;
     }
 
     /**
@@ -71,7 +71,7 @@ class Response
         $data = $this->getPropertyFromData('data');
 
         if (null !== $key) {
-            return isset($data[$key]) ? $data[$key] : $defaultValue;
+            return $data[$key] ?? $defaultValue;
         }
 
         return $data;

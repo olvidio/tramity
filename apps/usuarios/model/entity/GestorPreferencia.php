@@ -42,7 +42,7 @@ class GestorPreferencia extends core\ClaseGestor
      * retorna un objecte Preferencia
      *
      * @param string $tipo
-     * @return \usuarios\model\entity\Preferencia
+     * @return usuarios\model\entity\Preferencia
      */
     function getMiPreferencia($tipo)
     {
@@ -55,7 +55,7 @@ class GestorPreferencia extends core\ClaseGestor
      *
      * @param integer $id_usuario
      * @param string $tipo
-     * @return \usuarios\model\entity\Preferencia
+     * @return usuarios\model\entity\Preferencia
      */
     function getPreferenciaUsuario($id_usuario, $tipo)
     {
@@ -93,7 +93,7 @@ class GestorPreferencia extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }

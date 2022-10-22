@@ -120,7 +120,7 @@ $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . 
 
 // datepicker
 $oFecha = new DateTimeLocal();
-$format = $oFecha->getFormat();
+$format = $oFecha::getFormat();
 $yearStart = date('Y');
 $yearEnd = $yearStart + 2;
 
@@ -151,4 +151,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('entradas/controller');
-echo $oView->renderizar('entrada_ver_slide.html.twig', $a_campos);
+$oView->renderizar('entrada_ver_slide.html.twig', $a_campos);

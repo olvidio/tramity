@@ -561,7 +561,7 @@ class Posicion
         $aParam = array();
         foreach (explode('&', $parametros) as $param) {
             $aa = explode('=', $param);
-            $aParam[$aa[0]] = isset($aa[1]) ? $aa[1] : ''; //ojo con el empty y el 0.
+            $aParam[$aa[0]] = $aa[1] ?? ''; //ojo con el empty y el 0.
         }
         $parametros = Hash::add_hash($aParam, $url);
 

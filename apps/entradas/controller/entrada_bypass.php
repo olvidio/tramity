@@ -116,7 +116,7 @@ if (empty($f_salida)) {
 
 // datepicker
 $oFecha = new DateTimeLocal();
-$format = $oFecha->getFormat();
+$format = $oFecha::getFormat();
 $yearStart = date('Y');
 $yearEnd = $yearStart + 2;
 
@@ -153,4 +153,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('entradas/controller');
-echo $oView->renderizar('entrada_bypass.html.twig', $a_campos);
+$oView->renderizar('entrada_bypass.html.twig', $a_campos);

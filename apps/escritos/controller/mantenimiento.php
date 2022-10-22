@@ -79,4 +79,4 @@ $a_campos = ['filtro' => $Q_filtro,
 ];
 
 $oView = new ViewTwig('escritos/controller');
-echo $oView->renderizar('mantenimiento.html.twig', $a_campos);
+$oView->renderizar('mantenimiento.html.twig', $a_campos);

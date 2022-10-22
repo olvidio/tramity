@@ -52,4 +52,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('pendientes/controller');
-echo $oView->renderizar('pendiente_migrar.html.twig', $a_campos);
+$oView->renderizar('pendiente_migrar.html.twig', $a_campos);

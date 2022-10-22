@@ -84,7 +84,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'get_detalle':
         $oEscrito = new Escrito($Q_id_escrito);
         $oPermiso = new PermRegistro();
@@ -131,7 +130,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'lista_pendientes':
         $txt_err = '';
         $Q_pendientes_uid = (string)filter_input(INPUT_POST, 'pendientes_uid');
@@ -179,7 +177,7 @@ switch ($Q_que) {
                     if (is_array($a_exdates)) {
                         foreach ($a_exdates as $icalprop) {
                             // si hay más de uno separados por coma
-                            $a_fechas = preg_split('/,/', $icalprop->content);
+                            $a_fechas = explode(',', $icalprop->content);
                             foreach ($a_fechas as $f_ex) {
                                 $oF_exception = new DateTimeLocal($f_ex);
                                 if ($oF_recurrente == $oF_exception) {
@@ -236,7 +234,7 @@ switch ($Q_que) {
         ];
 
         $oView = new ViewTwig('pendientes/controller');
-        echo $oView->renderizar('pendiente_lista_enviar.html.twig', $a_campos);
+        $oView->renderizar('pendiente_lista_enviar.html.twig', $a_campos);
 
 
         break;
@@ -279,7 +277,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'comprobar_pendientes':
         $txt_err = '';
         $mensaje = '';
@@ -327,7 +324,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'eliminar':
         $txt_err = '';
         if (!empty($Q_id_escrito)) {
@@ -377,7 +373,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'escrito_a_secretaria':
         $oEscrito = new Escrito($Q_id_escrito);
         $oEscrito->DBCargar();
@@ -408,7 +403,7 @@ switch ($Q_que) {
 
         break;
     case 'f_escrito':
-        if ($Q_f_escrito == 'hoy') {
+        if ($Q_f_escrito === 'hoy') {
             $oHoy = new DateTimeLocal();
             $Q_f_escrito = $oHoy->getFromLocal();
         }
@@ -618,8 +613,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-
-        break;
     case 'explotar':
         $txt_err = '';
         if (!empty($Q_id_escrito)) {
@@ -646,8 +639,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-
-        break;
     case 'guardar_manual':
         $nuevo = FALSE;
         $Q_f_aprobacion = (string)filter_input(INPUT_POST, 'f_aprobacion');
@@ -674,7 +665,7 @@ switch ($Q_que) {
             $a_grupos = $gesGrupo->getArrayGrupos();
             foreach ($Q_a_grupos as $id_grupo) {
                 // si es personalizado, no cambio nada porque ya se ha guardado al personalizar
-                if ($id_grupo == 'custom') {
+                if ($id_grupo === 'custom') {
                     $saltar = TRUE;
                     break;
                 }
@@ -759,8 +750,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-
-        break;
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);

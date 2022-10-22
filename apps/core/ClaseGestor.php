@@ -123,5 +123,3 @@ abstract class ClaseGestor
     }
 
 }
-
-?>

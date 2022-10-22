@@ -119,7 +119,7 @@ if ($Q_filtro === 'archivados') {
     ];
 
     $oView = new ViewTwig('expedientes/controller');
-    echo $oView->renderizar('archivados_buscar.html.twig', $a_campos);
+    $oView->renderizar('archivados_buscar.html.twig', $a_campos);
 
     $oTabla->setAWhereADD($aWhereADD);
     $oTabla->setAOperadorADD($aOperadorADD);
@@ -188,7 +188,7 @@ if ($Q_filtro === 'borrador_oficina' || $Q_filtro === 'borrador_propio') {
     ];
 
     $oView = new ViewTwig('expedientes/controller');
-    echo $oView->renderizar('expedientes_espera_buscar.html.twig', $a_campos);
+    $oView->renderizar('expedientes_espera_buscar.html.twig', $a_campos);
 
     $oTabla->setAWhereADD($aWhereADD);
     $oTabla->setAOperadorADD($aOperadorADD);

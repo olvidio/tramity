@@ -257,7 +257,7 @@ switch ($Q_que) {
             $error_txt .= "<br>";
         }
         // firmar el paso de fijar reunion:
-        $f_hoy_iso = date(\DateTimeInterface::ISO8601);
+        $f_hoy_iso = date(DateTimeInterface::ISO8601);
         $gesFirmas = new  GestorFirma();
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_REUNION]);
         foreach ($cFirmas as $oFirma) {
@@ -324,7 +324,7 @@ switch ($Q_que) {
             $error_txt .= $oExpediente->getErrorTxt();
         }
         // firmar el paso de distribuir:
-        $f_hoy_iso = date(\DateTimeInterface::ISO8601);
+        $f_hoy_iso = date(DateTimeInterface::ISO8601);
         $gesFirmas = new  GestorFirma();
         $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_DISTRIBUIR]);
         foreach ($cFirmas as $oFirma) {

@@ -32,5 +32,5 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('migration/controller');
-echo $oView->renderizar('migration_index.html.twig', $a_campos);
+$oView->renderizar('migration_index.html.twig', $a_campos);
 	

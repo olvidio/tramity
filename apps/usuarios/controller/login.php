@@ -135,7 +135,7 @@ if (!isset($_SESSION['session_auth'])) {
                         $txt_alert = sprintf(_("(%s) está asignado como suplente a este cargo"), $nom_suplente);
                         $a_campos = ['txt_alert' => $txt_alert, 'btn_cerrar' => FALSE];
                         $oView = new ViewTwig('expedientes/controller');
-                        echo $oView->renderizar('alerta.html.twig', $a_campos);
+                        $oView->renderizar('alerta.html.twig', $a_campos);
                     }
 
                     // el usuario default, y el admin no tienen cargo:

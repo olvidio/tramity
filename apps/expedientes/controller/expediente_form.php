@@ -309,7 +309,7 @@ $pag_actualizar = web\Hash::link('apps/expedientes/controller/expediente_form.ph
 
 // datepicker
 $oHoy = new DateTimeLocal();
-$format = $oHoy->getFormat();
+$format = $oHoy::getFormat();
 $yearStart = date('Y');
 $yearEnd = $yearStart + 2;
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
@@ -382,4 +382,4 @@ $a_campos = [
 // dentro del _expediente_form_js.html.twig hay un include a  escritos/view/_escrito_enviar_js.html.twig
 $aditionalPaths = ['escritos' => 'escritos/view'];
 $oView = new ViewTwig('expedientes/controller', $aditionalPaths);
-echo $oView->renderizar('expediente_form.html.twig', $a_campos);
+$oView->renderizar('expediente_form.html.twig', $a_campos);

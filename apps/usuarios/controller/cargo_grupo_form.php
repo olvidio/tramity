@@ -45,7 +45,7 @@ if (isset($_POST['stack'])) {
     }
 } elseif (!empty($a_sel)) { //vengo de un checkbox
     $Q_que = (string)filter_input(INPUT_POST, 'que');
-    if ($Q_que != 'del_grupmenu') { //En el caso de venir de borrar un grupmenu, no hago nada
+    if ($Q_que !== 'del_grupmenu') { //En el caso de venir de borrar un grupmenu, no hago nada
         $Q_id_grupo = (integer)strtok($a_sel[0], "#");
         // el scroll id es de la página anterior, hay que guardarlo allí
         $oPosicion->addParametro('id_sel', $a_sel, 1);
@@ -104,4 +104,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('usuarios/controller');
-echo $oView->renderizar('cargo_grupo_form.html.twig', $a_campos);
+$oView->renderizar('cargo_grupo_form.html.twig', $a_campos);

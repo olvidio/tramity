@@ -74,7 +74,7 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('documentos/controller');
-echo $oView->renderizar('documentos_buscar.html.twig', $a_campos);
+$oView->renderizar('documentos_buscar.html.twig', $a_campos);
 
 $oTabla->setQue($Q_que);
 $oTabla->setAndOr($Q_andOr);

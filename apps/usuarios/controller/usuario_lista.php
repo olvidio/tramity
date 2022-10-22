@@ -69,7 +69,7 @@ foreach ($oUsuarioColeccion as $oUsuario) {
     $email = $oUsuario->getEmail();
     $id_cargo_preferido = $oUsuario->getId_cargo_preferido();
 
-    if (!empty($id_cargo_preferido) && ConfigGlobal::nombreEntidad() != 'admin') {
+    if (!empty($id_cargo_preferido) && ConfigGlobal::nombreEntidad() !== 'admin') {
         $oCargo->setId_cargo($id_cargo_preferido);
         $oCargo->DBCargar();
         $cargo = $oCargo->getCargo();
@@ -125,5 +125,5 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('usuarios/controller');
-echo $oView->renderizar('usuario_lista.html.twig', $a_campos);
+$oView->renderizar('usuario_lista.html.twig', $a_campos);
 

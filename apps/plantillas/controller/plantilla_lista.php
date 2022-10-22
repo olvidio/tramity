@@ -69,4 +69,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('plantillas/controller');
-echo $oView->renderizar('plantilla_lista.html.twig', $a_campos);
+$oView->renderizar('plantilla_lista.html.twig', $a_campos);

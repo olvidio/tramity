@@ -440,7 +440,7 @@ $a_campos = [
 $oView = new ViewTwig('usuarios/controller');
 
 if (empty($Q_tabs)) {
-    echo $oView->renderizar('usuario_home.html.twig', $a_campos);
+    $oView->renderizar('usuario_home.html.twig', $a_campos);
 } else {
-    echo $oView->renderizar('usuario_tabs.html.twig', $a_campos);
+    $oView->renderizar('usuario_tabs.html.twig', $a_campos);
 }

@@ -9,6 +9,8 @@ use etiquetas\model\entity\GestorEtiqueta;
 use etiquetas\model\entity\GestorEtiquetaEntrada;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
+use PDO;
+use PDOException;
 use stdClass;
 use web;
 use web\Protocolo;
@@ -221,7 +223,7 @@ class EntradaCompartida extends core\ClasePropiedades
             } else {
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'EntradaCompartida.update.execute';
@@ -240,7 +242,7 @@ class EntradaCompartida extends core\ClasePropiedades
             } else {
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'EntradaCompartida.insertar.execute';
@@ -268,7 +270,7 @@ class EntradaCompartida extends core\ClasePropiedades
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
             }
-            $aDades = $oDblSt->fetch(\PDO::FETCH_ASSOC);
+            $aDades = $oDblSt->fetch(PDO::FETCH_ASSOC);
             // Para evitar posteriores cargas
             $this->bLoaded = TRUE;
             switch ($que) {

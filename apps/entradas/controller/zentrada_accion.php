@@ -95,4 +95,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('entradas/controller');
-echo $oView->renderizar('entrada_accion.html.twig', $a_campos);
+$oView->renderizar('entrada_accion.html.twig', $a_campos);

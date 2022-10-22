@@ -47,7 +47,7 @@ $go = (string)filter_input(INPUT_GET, 'go');
 if (empty($go)) {
     $go = (string)filter_input(INPUT_POST, 'go');
 }
-if ($go == "entradas" || $go == "salidas" || $go == "mov_iese") {
+if ($go === "entradas" || $go === "salidas" || $go === "mov_iese") {
     $id_reg = (integer)filter_input(INPUT_GET, 'id_reg');
     $Q_id_oficina = (integer)filter_input(INPUT_GET, 'of_ponente');
     $Q_calendario = 'registro';
@@ -163,7 +163,7 @@ if ($nuevo == 1) {
     $pendiente_con = '';
     $perm_detalle = '';
     $ref_prot_mas = '';
-    $go = ($go != 'entradas') ? 'lista' : $go;
+    $go = ($go !== 'entradas') ? 'lista' : $go;
 } else {
     $go = 'lista';
     // Si vengo a form_pendiente, desde un checkbox(sel) o de la tabla de pendientes(link) .
@@ -251,7 +251,7 @@ if ($nuevo == 1) {
 }
 
 // si vengo desde el regitro entradas
-if ($go == 'entradas') {
+if ($go === 'entradas') {
     // estas variables quedan igual: asunto, f_acabado, f_plazo, f_retraso, id_reg
     $nuevo = 1;
 
@@ -280,7 +280,7 @@ if ($go == 'entradas') {
 
 /// titulo pagina ///
 $titulo_oficina = '';
-if ($Q_calendario != 'registro') {
+if ($Q_calendario !== 'registro') {
     if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
         $titulo_oficina = sprintf(_("pendiente de %s"), ConfigGlobal::nombreEntidad());
     } else {
@@ -371,8 +371,8 @@ if (empty($rrule)) {
                     $chk_a_num = "";
                     $chk_a_ref = "";
                     $chk_a_num_dm = "checked";
-                    $meses_db = empty($rta['meses']) ? '' : preg_split('/,/', $rta['meses']);
-                    $dias_db = empty($rta['dias']) ? '' : preg_split('/,/', $rta['dias']);
+                    $meses_db = empty($rta['meses']) ? '' : explode(',', $rta['meses']);
+                    $dias_db = empty($rta['dias']) ? '' : explode(',', $rta['dias']);
                     $a_interval_db = empty($rta['interval']) ? 1 : $rta['interval'];
                     break;
                 default:
@@ -381,8 +381,8 @@ if (empty($rrule)) {
             }
             break;
         case "d_m":
-            $meses_db = empty($rta['meses']) ? '' : preg_split('/,/', $rta['meses']);
-            $dias_db = empty($rta['dias']) ? '' : preg_split('/,/', $rta['dias']);
+            $meses_db = empty($rta['meses']) ? '' : explode(',', $rta['meses']);
+            $dias_db = empty($rta['dias']) ? '' : explode(',', $rta['dias']);
             $display_d_m = "display:in-line;";
             $periodico_tipo = "periodico_d_m";
             switch ($rta['tipo_dia']) {
@@ -422,7 +422,7 @@ if (empty($rrule)) {
                 case "ref":
                     $chk_s_num_ini = "";
                     $chk_s_ref = "checked";
-                    $dias_w_db = empty($rta['dias']) ? '' : preg_split('/,/', $rta['dias']);
+                    $dias_w_db = empty($rta['dias']) ? '' : explode(',', $rta['dias']);
                     break;
                 default:
                     $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
@@ -455,7 +455,7 @@ if (empty($display_d_d)) {
 if (is_array($exdates) && !empty($exdates)) {
     foreach ($exdates as $icalprop) {
         // si hay más de uno separados por coma
-        $a_fechas = preg_split('/,/', $icalprop->content);
+        $a_fechas = explode(',', $icalprop->content);
         foreach ($a_fechas as $fecha_iso) {
             $oFecha = new DateTimeLocal($fecha_iso); // hay que quitar 'THHMMSSZ'
             $a_exdates_local[] = $oFecha->getFromLocal();
@@ -550,7 +550,7 @@ if (empty($display_periodico)) {
 
 // datepicker
 $oFecha = new DateTimeLocal();
-$format = $oFecha->getFormat();
+$format = $oFecha::getFormat();
 $yearStart = date('Y');
 $yearEnd = $yearStart + 2;
 
@@ -568,7 +568,7 @@ if (!empty($oDesplOficinas)) {
 }
 
 $oView = new ViewTwig('pendientes/controller');
-if (!empty($periodico_tipo) && $Q_calendario == 'registro' && $secretaria === FALSE) {
+if (!empty($periodico_tipo) && $Q_calendario === 'registro' && $secretaria === FALSE) {
     $a_campos = [
         'oPosicion' => $oPosicion,
         'base_url_web' => $base_url_web,
@@ -594,7 +594,7 @@ if (!empty($periodico_tipo) && $Q_calendario == 'registro' && $secretaria === FA
         'status' => $status,
         'nuevo' => 5,
     ];
-    echo $oView->renderizar('pendiente_form_etiquetas.html.twig', $a_campos);
+    $oView->renderizar('pendiente_form_etiquetas.html.twig', $a_campos);
 } else {
     $a_campos = [
         'oPosicion' => $oPosicion,
@@ -667,7 +667,6 @@ if (!empty($periodico_tipo) && $Q_calendario == 'registro' && $secretaria === FA
         'display_d_m' => $display_d_m,
         'chk_m_num_ini' => $chk_m_num_ini,
         'chk_m_num' => $chk_m_num,
-        'dia_num_db' => $dia_num_db,
         'chk_m_ref' => $chk_m_ref,
         'oDesplOrdinalesMes' => $oDesplOrdinalesMes,
         'oDesplDiasSemanaMes' => $oDesplDiasSemanaMes,
@@ -679,5 +678,5 @@ if (!empty($periodico_tipo) && $Q_calendario == 'registro' && $secretaria === FA
         'chk_d_num_ini' => $chk_d_num_ini,
         'a_exdates_local' => $a_exdates_local,
     ];
-    echo $oView->renderizar('pendiente_form.html.twig', $a_campos);
+    $oView->renderizar('pendiente_form.html.twig', $a_campos);
 }

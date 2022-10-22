@@ -45,7 +45,7 @@ class Buscar
     /**
      * Prot_any
      *
-     * @var integer
+     * @var string (puede ser '04')
      */
     private $prot_any;
 
@@ -865,9 +865,9 @@ class Buscar
     }
 
     /**
-     * @param number $prot_any
+     * @param string prot_any
      */
-    public function setProt_any($prot_any)
+    public function setProt_any($prot_any): void
     {
         $this->prot_any = $prot_any;
     }

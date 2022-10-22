@@ -122,5 +122,5 @@ $a_campos = [
     'url_actualizar' => $url_actualizar,
 ];
 $oView = new ViewTwig('usuarios/controller');
-echo $oView->renderizar('cargo_lista.html.twig', $a_campos);
+$oView->renderizar('cargo_lista.html.twig', $a_campos);
 

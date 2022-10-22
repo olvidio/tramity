@@ -109,7 +109,7 @@ class GestorGrupo extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }

@@ -150,7 +150,7 @@ class DesplegableArray extends Desplegable
         $mas = $this->sNomConjunto . "_mas";
         $num = $this->sNomConjunto . "_num";
         $span = $this->sNomConjunto . "_span";
-        $tab = isset($this->iTabIndexIni) ? $this->iTabIndexIni : 10;
+        $tab = $this->iTabIndexIni ?? 10;
 
         $txt_js = "\n\t\t\tvar num=$('#$num');";
         $txt_js .= "\n\t\t\tvar id_mas=$('#$mas').val();";
@@ -214,5 +214,3 @@ class DesplegableArray extends Desplegable
         $this->sAccionConjunto = $sAccionConjunto;
     }
 }
-
-?>

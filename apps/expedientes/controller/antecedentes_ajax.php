@@ -215,7 +215,7 @@ switch ($Q_que) {
             'chk_ctr_anulados' => $chk_ctr_anulados,
         ];
         $oView = new ViewTwig('expedientes/controller');
-        echo $oView->renderizar('modal_buscar_entradas.html.twig', $a_campos);
+        $oView->renderizar('modal_buscar_entradas.html.twig', $a_campos);
         break;
     case 'buscar_expediente':
     case 'buscar_2':
@@ -368,7 +368,7 @@ switch ($Q_que) {
         ];
 
         $oView = new ViewTwig('expedientes/controller');
-        echo $oView->renderizar('modal_buscar_expedientes.html.twig', $a_campos);
+        $oView->renderizar('modal_buscar_expedientes.html.twig', $a_campos);
         break;
     case 'buscar_escrito':
     case 'buscar_3':
@@ -541,7 +541,7 @@ switch ($Q_que) {
             'chk_ctr_anulados' => $chk_ctr_anulados,
         ];
         $oView = new ViewTwig('expedientes/controller');
-        echo $oView->renderizar('modal_buscar_escritos.html.twig', $a_campos);
+        $oView->renderizar('modal_buscar_escritos.html.twig', $a_campos);
         break;
     case 'buscar_documento':
     case 'buscar_4':
@@ -701,7 +701,7 @@ switch ($Q_que) {
         ];
 
         $oView = new ViewTwig('expedientes/controller');
-        echo $oView->renderizar('modal_buscar_documentos.html.twig', $a_campos);
+        $oView->renderizar('modal_buscar_documentos.html.twig', $a_campos);
         break;
     case 'buscar_expediente_borrador':
         $Q_asunto_buscar = (string)filter_input(INPUT_POST, 'asunto_buscar');

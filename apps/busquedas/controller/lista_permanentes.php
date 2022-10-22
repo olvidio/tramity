@@ -249,4 +249,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('busquedas/controller');
-echo $oView->renderizar('lista_permanentes.html.twig', $a_campos);
+$oView->renderizar('lista_permanentes.html.twig', $a_campos);

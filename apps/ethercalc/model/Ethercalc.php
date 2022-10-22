@@ -3,6 +3,9 @@
 namespace ethercalc\model;
 
 use core\ConfigGlobal;
+use DOMDocument;
+use Mpdf\Mpdf;
+use Mpdf\MpdfException;
 use web\StringLocal;
 
 /**
@@ -79,7 +82,7 @@ class Ethercalc
      * devuelve el escrito en html.
      *
      * @param array $a_header ['left', 'center', 'right']
-     * @return \Mpdf\Mpdf
+     * @return Mpdf
      */
     public function generarHtml($a_header = [], $fecha = '')
     {
@@ -88,7 +91,7 @@ class Ethercalc
         $contenido = $this->getHHTML();
 
 
-        $dom = new \DOMDocument;
+        $dom = new DOMDocument;
         $dom->loadHTML($contenido);
         // lista de los tagg 'body'
         $bodies = $dom->getElementsByTagName('body');
@@ -146,7 +149,7 @@ class Ethercalc
      * devuelve el escrito en formato PDF.
      *
      * @param array $a_header ['left', 'center', 'right']
-     * @return \Mpdf\Mpdf
+     * @return Mpdf
      */
     public function generarPDF($a_header = [], $fecha = '')
     {
@@ -166,7 +169,6 @@ class Ethercalc
             ),
             'C' => array(
                 'content' => $a_header['center'],
-                'content' => '',
                 'font-size' => 10,
                 'font-style' => 'B',
                 'font-family' => 'serif',
@@ -187,7 +189,7 @@ class Ethercalc
         $contenido = $this->getHHTML();
 
 
-        $dom = new \DOMDocument;
+        $dom = new DOMDocument;
         $dom->loadHTML($contenido);
         // lista de los tagg 'body'
         $bodies = $dom->getElementsByTagName('body');
@@ -214,7 +216,7 @@ class Ethercalc
                 'margin_top' => 40,
 
             ];
-            $mpdf = new \Mpdf\Mpdf($config);
+            $mpdf = new Mpdf($config);
             $mpdf->SetDisplayMode('fullpage');
             $mpdf->list_indent_first_level = 0;    // 1 or 0 - whether to indent the first level of a list
             //$mpdf->Writehtml("<h1>Hello world!</h1><p>Més què d\'air. Ñanyo.</p>");
@@ -225,7 +227,7 @@ class Ethercalc
 
             // Other code
             return $mpdf;
-        } catch (\Mpdf\MpdfException $e) { // Note: safer fully qualified exception name used for catch
+        } catch (MpdfException $e) { // Note: safer fully qualified exception name used for catch
             // Process the exception, log, print etc.
             echo $e->getMessage();
         }

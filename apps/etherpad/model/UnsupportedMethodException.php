@@ -2,7 +2,9 @@
 
 namespace etherpad\model;
 
-class UnsupportedMethodException extends \Exception
+use Exception;
+
+class UnsupportedMethodException extends Exception
 {
 
 }

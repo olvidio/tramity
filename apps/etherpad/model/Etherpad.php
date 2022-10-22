@@ -3,6 +3,11 @@
 namespace etherpad\model;
 
 use core\ConfigGlobal;
+use DOMDocument;
+use DOMXPath;
+use Mpdf\HTMLParserMode;
+use Mpdf\Mpdf;
+use Mpdf\MpdfException;
 use web\StringLocal;
 
 /**
@@ -143,7 +148,7 @@ class Etherpad extends Client
     {
         $contenido = $this->getHHTML();
 
-        $dom = new \DOMDocument;
+        $dom = new DOMDocument;
         /* la '@' sirve para evita los errores:  Warning: DOMDocument::loadHTML()
          *
          * loadHTML expects valid markup, i’m afraid most page’s arn’t.
@@ -181,7 +186,7 @@ class Etherpad extends Client
             }
         }
 
-        $xpath = new \DOMXPath($dom);
+        $xpath = new DOMXPath($dom);
         /* Quitar los <td> con display:none:
          * <td class="regex-delete" name="payload" style="display:none;">{"payload":[["</td>
          * <td class="regex-delete" name="delimCell" id="" style="display:none;">","</td>
@@ -580,7 +585,7 @@ class Etherpad extends Client
      * devuelve el escrito en formato PDF.
      *
      * @param array $a_header ['left', 'center', 'right']
-     * @return \Mpdf\Mpdf
+     * @return Mpdf
      */
     public function generarPDF($a_header = [], $fecha = '')
     {
@@ -630,7 +635,7 @@ class Etherpad extends Client
                 'margin_top' => 40,
 
             ];
-            $mpdf = new \Mpdf\Mpdf($config);
+            $mpdf = new Mpdf($config);
             $mpdf->SetDisplayMode('fullpage');
             $mpdf->list_indent_first_level = 0;    // 1 or 0 - whether to indent the first level of a list
 
@@ -639,12 +644,12 @@ class Etherpad extends Client
             }
             $mpdf->SetHTMLFooter($footer);
 
-            $mpdf->WriteHTML($stylesheet, \Mpdf\HTMLParserMode::HEADER_CSS);
+            $mpdf->WriteHTML($stylesheet, HTMLParserMode::HEADER_CSS);
             $mpdf->WriteHTML($html);
 
             // Other code
             return $mpdf;
-        } catch (\Mpdf\MpdfException $e) { // Note: safer fully qualified exception name used for catch
+        } catch (MpdfException $e) { // Note: safer fully qualified exception name used for catch
             // Process the exception, log, print etc.
             echo $e->getMessage();
         }
@@ -751,7 +756,7 @@ class Etherpad extends Client
      */
     private function quitarAtributosTabla($html)
     {
-        $dom = new \DOMDocument;
+        $dom = new DOMDocument;
         /* la '@' sirve para evita los errores:  Warning: DOMDocument::loadHTML()
          *
          * loadHTML expects valid markup, i’m afraid most page’s arn’t.
@@ -760,7 +765,7 @@ class Etherpad extends Client
          */
         @$dom->loadHTML($html);
 
-        $xpath = new \DOMXPath($dom);
+        $xpath = new DOMXPath($dom);
         // Quitar los atributos style
         $tags_list = $xpath->query("//table|//tr|//td");
         foreach ($tags_list as $tag) {

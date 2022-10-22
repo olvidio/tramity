@@ -118,4 +118,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('entradas/controller');
-echo $oView->renderizar('entrada_ver.html.twig', $a_campos);
+$oView->renderizar('entrada_ver.html.twig', $a_campos);

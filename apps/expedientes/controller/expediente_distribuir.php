@@ -103,9 +103,8 @@ $oDesplVisibilidad->setOpcion_sel($visibilidad);
 
 // Etiquetas
 $ver_etiquetas = FALSE;
-$etiquetas = []; // No hay ninguna porque en archivar es cuando se añaden.
 $etiquetas = $oExpediente->getEtiquetasVisiblesArray();
-if (ConfigGlobal::role_actual() != 'secretaria') {
+if (ConfigGlobal::role_actual() !== 'secretaria') {
     $gesEtiquetas = new GestorEtiqueta();
     $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
     $a_posibles_etiquetas = [];
@@ -127,7 +126,7 @@ $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
 $cosas = ['filtro' => $Q_filtro, 'modo' => $Q_modo];
-if ($Q_filtro == 'archivados') {
+if ($Q_filtro === 'archivados') {
     $Q_a_condiciones = (array)filter_input(INPUT_POST, 'condiciones', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $cosas = array_merge($cosas, $Q_a_condiciones);
 }
@@ -137,7 +136,7 @@ $base_url = ConfigGlobal::getWeb(); //http://tramity.local
 
 $disable_archivar = '';
 $ver_encargar = FALSE;
-if ($Q_filtro == 'distribuir') {
+if ($Q_filtro === 'distribuir') {
     $btn_action = 'distribuir';
     $txt_btn_success = _("Distribuir");
     $oEscritoLista->setFiltro('distribuir');
@@ -215,4 +214,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('expedientes/controller');
-echo $oView->renderizar('expediente_distribuir.html.twig', $a_campos);
+$oView->renderizar('expediente_distribuir.html.twig', $a_campos);

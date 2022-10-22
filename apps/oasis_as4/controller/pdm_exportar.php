@@ -56,4 +56,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('oasis_as4/controller');
-echo $oView->renderizar('pdm_exportar.html.twig', $a_campos);
+$oView->renderizar('pdm_exportar.html.twig', $a_campos);

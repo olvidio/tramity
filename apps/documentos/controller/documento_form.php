@@ -133,4 +133,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('documentos/controller');
-echo $oView->renderizar('documento_form.html.twig', $a_campos);
+$oView->renderizar('documento_form.html.twig', $a_campos);

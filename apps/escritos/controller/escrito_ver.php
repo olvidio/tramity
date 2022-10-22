@@ -93,7 +93,6 @@ if (!empty($Q_id_escrito)) {
                 'pagina_next' => $pagina_next,
                 'base_url' => $base_url,
                 'escrito_html' => $escrito_html,
-                'base_url' => $base_url,
                 'url_download' => $url_download,
             ];
             $todosHtml .= $oView->renderizar('escrito_ver_slide.html.twig', $a_campos);
@@ -127,5 +126,5 @@ if (!empty($Q_id_escrito)) {
     $txt_alert = _("No hay escritos");
     $a_campos = ['txt_alert' => $txt_alert, 'btn_cerrar' => TRUE];
     $oView = new ViewTwig('expedientes/controller');
-    echo $oView->renderizar('alerta.html.twig', $a_campos);
+    $oView->renderizar('alerta.html.twig', $a_campos);
 }

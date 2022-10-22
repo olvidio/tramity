@@ -3,6 +3,8 @@
 namespace usuarios\model\entity;
 
 use core;
+use PDO;
+use PDOException;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula aux_usuarios
@@ -163,7 +165,7 @@ class Usuario extends core\ClasePropiedades
             } else {
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'Usuario.update.execute';
@@ -182,7 +184,7 @@ class Usuario extends core\ClasePropiedades
             } else {
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'Usuario.insertar.execute';
@@ -212,8 +214,8 @@ class Usuario extends core\ClasePropiedades
             }
             // para los bytea:
             $sPasswd = '';
-            $oDblSt->bindColumn('password', $sPasswd, \PDO::PARAM_STR);
-            $aDades = $oDblSt->fetch(\PDO::FETCH_ASSOC);
+            $oDblSt->bindColumn('password', $sPasswd, PDO::PARAM_STR);
+            $aDades = $oDblSt->fetch(PDO::FETCH_ASSOC);
             // Para evitar posteriores cargas
             $this->bLoaded = TRUE;
             $aDades['password'] = $sPasswd;

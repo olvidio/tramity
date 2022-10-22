@@ -2,6 +2,8 @@
 
 namespace core;
 
+use PDO;
+
 class DBConnection
 {
 
@@ -56,8 +58,8 @@ class DBConnection
         $dsn = 'pgsql:host=' . $host . ';port=' . $port . ';dbname=\'' . $dbname . '\';user=\'' . $user . '\';password=\'' . $password . '\';' . $str_conexio;
 
         $esquema = $this->config['schema'];
-        $oDB = new \PDO($dsn);
-        $oDB->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $oDB = new PDO($dsn);
+        $oDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $oDB->exec("SET search_path TO \"$esquema\"");
         return $oDB;
     }
@@ -108,6 +110,6 @@ class DBConnection
         $str_conexio .= ", array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING)";
         $oDB = new \PDO($str_conexio);
         */
-        return new \PDO($str_conexio, $config['user'], $config['password'], array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING, \PDO::ATTR_TIMEOUT => 3));
+        return new PDO($str_conexio, $config['user'], $config['password'], array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING, PDO::ATTR_TIMEOUT => 3));
     }
 }

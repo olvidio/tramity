@@ -29,7 +29,7 @@
 
 <!-- Un escrito concreto --------------------------------------------- -->
 <form id="frm_buscar" name="frm_buscar" method="POST" action="apps/escritos/controller/salida_escrito.php">
-    <table class="table-warning" border=1>
+    <table class="table-warning">
         <tr>
             <td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans|raw }}:
             <td>
@@ -221,7 +221,6 @@
 </form>
 {# Per ficar l'escrit, si cal #}
 <div id="prova">
-</div>
 </div>
 
 {{ include ('_salida_escrito_form_js.html.twig') }}

@@ -279,7 +279,7 @@ $pagina_actualizar = web\Hash::link('apps/escritos/controller/salida_escrito.php
 
 // datepicker
 $oFecha = new DateTimeLocal();
-$format = $oFecha->getFormat();
+$format = $oFecha::getFormat();
 $yearStart = date('Y');
 $yearEnd = $yearStart + 2;
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
@@ -333,4 +333,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('escritos/controller');
-echo $oView->renderizar('salida_escrito.html.twig', $a_campos);
+$oView->renderizar('salida_escrito.html.twig', $a_campos);

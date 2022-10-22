@@ -238,4 +238,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('expedientes/controller');
-echo $oView->renderizar('expediente_ver.html.twig', $a_campos);
+$oView->renderizar('expediente_ver.html.twig', $a_campos);

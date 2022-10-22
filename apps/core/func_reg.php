@@ -21,7 +21,7 @@ require_once("global_object.inc");
  * Función para poner el año en dos cifras.
  *
  */
-function any_2($any)
+function any_2($any): string
 {
     //convert to String
     $any = (string)$any;

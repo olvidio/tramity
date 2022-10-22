@@ -44,4 +44,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('expedientes/controller');
-echo $oView->renderizar('expediente_cambio_tramite.html.twig', $a_campos);
+$oView->renderizar('expediente_cambio_tramite.html.twig', $a_campos);

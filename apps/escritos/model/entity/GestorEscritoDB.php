@@ -5,6 +5,8 @@ namespace escritos\model\entity;
 use core;
 use core\ConfigGlobal;
 use escritos\model\Escrito;
+use Exception;
+use PDO;
 use function core\any_2;
 
 /**
@@ -64,7 +66,7 @@ class GestorEscritoDB extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }
@@ -183,7 +185,7 @@ class GestorEscritoDB extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }
@@ -308,7 +310,7 @@ class GestorEscritoDB extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }
@@ -423,7 +425,7 @@ class GestorEscritoDB extends core\ClaseGestor
                 unset($aWhere[$camp]);
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }
@@ -514,7 +516,7 @@ class GestorEscritoDB extends core\ClaseGestor
                 unset($aWhere[$camp]);
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }
@@ -603,7 +605,7 @@ class GestorEscritoDB extends core\ClaseGestor
                 unset($aWhere[$camp]);
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }
@@ -680,7 +682,7 @@ class GestorEscritoDB extends core\ClaseGestor
             $stm = $pdo->prepare("FETCH NEXT FROM $cursorID");
             $stm->execute();
             if ($stm) {
-                while ($row = $stm->fetch(\PDO::FETCH_ASSOC)) {
+                while ($row = $stm->fetch(PDO::FETCH_ASSOC)) {
                     if (is_string($idCol) && array_key_exists($idCol, $row)) {
                         yield $row[$idCol] => $row;
                     } else {
@@ -689,7 +691,7 @@ class GestorEscritoDB extends core\ClaseGestor
                     $stm->execute();
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Anything you want [*Parece que no hace nada!!]
             echo _("Demasiados registros");
             echo sprintf(_("Excepción capturada: %s"), $e->getMessage());
@@ -728,7 +730,7 @@ class GestorEscritoDB extends core\ClaseGestor
                 unset($aWhere[$camp]);
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }
@@ -832,7 +834,7 @@ class GestorEscritoDB extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }

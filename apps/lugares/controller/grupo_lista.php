@@ -106,5 +106,5 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('lugares/controller');
-echo $oView->renderizar('grupo_lista.html.twig', $a_campos);
+$oView->renderizar('grupo_lista.html.twig', $a_campos);
 

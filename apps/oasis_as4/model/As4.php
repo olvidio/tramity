@@ -2,7 +2,9 @@
 
 namespace oasis_as4\model;
 
+use DateTimeInterface;
 use DOMAttr;
+use DOMDocument;
 use lugares\model\entity\GestorLugar;
 use web\Protocolo;
 
@@ -45,7 +47,7 @@ class As4 extends As4CollaborationInfo
     {
 
         /* create a dom document with encoding utf8 */
-        $this->dom = new \DOMDocument('1.0', 'UTF-8');
+        $this->dom = new DOMDocument('1.0', 'UTF-8');
     }
 
     public function writeOnDock($filename)
@@ -110,7 +112,7 @@ class As4 extends As4CollaborationInfo
             case As4CollaborationInfo::ACCION_REEMPLAZAR:
             case As4CollaborationInfo::ACCION_COMPARTIR:
                 // para cambios sucesivos, añadir la fechaHora (modificaciones cr...)
-                $f_ahora_iso = date(\DateTimeInterface::ATOM);
+                $f_ahora_iso = date(DateTimeInterface::ATOM);
                 $this->message_id = 'compartir' . '@' . $this->accion . '@' . $this->getId_escrito() . '@' . $f_ahora_iso;
                 break;
             default:

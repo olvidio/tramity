@@ -3,6 +3,8 @@
 namespace documentos\model\entity;
 
 use core;
+use PDO;
+use PDOException;
 use web;
 
 /**
@@ -197,16 +199,16 @@ class DocumentoDB extends core\ClasePropiedades
                 $f_upload = $aDades['f_upload'];
                 $documento = $aDades['documento'];
 
-                $oDblSt->bindParam(1, $nom, \PDO::PARAM_STR);
-                $oDblSt->bindParam(2, $nombre_fichero, \PDO::PARAM_STR);
-                $oDblSt->bindParam(3, $creador, \PDO::PARAM_INT);
-                $oDblSt->bindParam(4, $visibilidad, \PDO::PARAM_INT);
-                $oDblSt->bindParam(5, $tipo_doc, \PDO::PARAM_INT);
-                $oDblSt->bindParam(6, $f_upload, \PDO::PARAM_STR);
-                $oDblSt->bindParam(7, $documento, \PDO::PARAM_STR);
+                $oDblSt->bindParam(1, $nom, PDO::PARAM_STR);
+                $oDblSt->bindParam(2, $nombre_fichero, PDO::PARAM_STR);
+                $oDblSt->bindParam(3, $creador, PDO::PARAM_INT);
+                $oDblSt->bindParam(4, $visibilidad, PDO::PARAM_INT);
+                $oDblSt->bindParam(5, $tipo_doc, PDO::PARAM_INT);
+                $oDblSt->bindParam(6, $f_upload, PDO::PARAM_STR);
+                $oDblSt->bindParam(7, $documento, PDO::PARAM_STR);
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'Documento.update.execute';
@@ -231,16 +233,16 @@ class DocumentoDB extends core\ClasePropiedades
                 $f_upload = $aDades['f_upload'];
                 $documento = $aDades['documento'];
 
-                $oDblSt->bindParam(1, $nom, \PDO::PARAM_STR);
-                $oDblSt->bindParam(2, $nombre_fichero, \PDO::PARAM_STR);
-                $oDblSt->bindParam(3, $creador, \PDO::PARAM_INT);
-                $oDblSt->bindParam(4, $visibilidad, \PDO::PARAM_INT);
-                $oDblSt->bindParam(5, $tipo_doc, \PDO::PARAM_INT);
-                $oDblSt->bindParam(6, $f_upload, \PDO::PARAM_STR);
-                $oDblSt->bindParam(7, $documento, \PDO::PARAM_STR);
+                $oDblSt->bindParam(1, $nom, PDO::PARAM_STR);
+                $oDblSt->bindParam(2, $nombre_fichero, PDO::PARAM_STR);
+                $oDblSt->bindParam(3, $creador, PDO::PARAM_INT);
+                $oDblSt->bindParam(4, $visibilidad, PDO::PARAM_INT);
+                $oDblSt->bindParam(5, $tipo_doc, PDO::PARAM_INT);
+                $oDblSt->bindParam(6, $f_upload, PDO::PARAM_STR);
+                $oDblSt->bindParam(7, $documento, PDO::PARAM_STR);
                 try {
                     $oDblSt->execute($aDades);
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'Documento.insertar.execute';
@@ -278,14 +280,14 @@ class DocumentoDB extends core\ClasePropiedades
                 return FALSE;
             }
             $oDblSt->execute();
-            $oDblSt->bindColumn(1, $nom, \PDO::PARAM_STR);
-            $oDblSt->bindColumn(2, $nombre_fichero, \PDO::PARAM_STR);
-            $oDblSt->bindColumn(3, $creador, \PDO::PARAM_INT);
-            $oDblSt->bindColumn(4, $visibilidad, \PDO::PARAM_INT);
-            $oDblSt->bindColumn(5, $tipo_doc, \PDO::PARAM_INT);
-            $oDblSt->bindColumn(6, $f_upload, \PDO::PARAM_STR);
-            $oDblSt->bindColumn(7, $documento, \PDO::PARAM_STR);
-            $oDblSt->fetch(\PDO::FETCH_BOUND);
+            $oDblSt->bindColumn(1, $nom, PDO::PARAM_STR);
+            $oDblSt->bindColumn(2, $nombre_fichero, PDO::PARAM_STR);
+            $oDblSt->bindColumn(3, $creador, PDO::PARAM_INT);
+            $oDblSt->bindColumn(4, $visibilidad, PDO::PARAM_INT);
+            $oDblSt->bindColumn(5, $tipo_doc, PDO::PARAM_INT);
+            $oDblSt->bindColumn(6, $f_upload, PDO::PARAM_STR);
+            $oDblSt->bindColumn(7, $documento, PDO::PARAM_STR);
+            $oDblSt->fetch(PDO::FETCH_BOUND);
 
             $aDades = [
                 'nom' => $nom,

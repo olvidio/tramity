@@ -189,7 +189,7 @@ class Rrule
                             if (!empty($txt_alert)) {
                                 $a_campos = ['txt_alert' => $txt_alert];
                                 $oView = new ViewTwig('expedientes/controller');
-                                echo $oView->renderizar('alerta.html.twig', $a_campos);
+                                $oView->renderizar('alerta.html.twig', $a_campos);
                             }
                             // Me salto los dias del mes anteriores a la fecha de inicio y los posteriores a la de fin
                             if (($dia < $day_ini && $mes == $month_ini && $any == $any_ini) || ($dia > $day_fin && $mes == $month_fin && $any == $any_fin)) {

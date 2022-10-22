@@ -110,5 +110,5 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('usuarios/controller');
-echo $oView->renderizar('cargo_grupo_lista.html.twig', $a_campos);
+$oView->renderizar('cargo_grupo_lista.html.twig', $a_campos);
 

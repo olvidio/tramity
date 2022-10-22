@@ -107,5 +107,5 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('entidades/controller');
-echo $oView->renderizar('entidades_lista.html.twig', $a_campos);
+$oView->renderizar('entidades_lista.html.twig', $a_campos);
 

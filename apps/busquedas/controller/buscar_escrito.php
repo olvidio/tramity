@@ -206,7 +206,7 @@ if (!empty($Q_opcion)) {
 
 // datepicker
 $oFecha = new DateTimeLocal();
-$format = $oFecha->getFormat();
+$format = $oFecha::getFormat();
 
 $vista = ConfigGlobal::getVista();
 
@@ -237,7 +237,6 @@ $a_campos = [
     'chk_ctr_anulados' => $chk_ctr_anulados,
     'filtro' => $Q_filtro,
     'opcion' => $Q_opcion,
-    'simple' => $simple,
     'asunto' => $Q_asunto,
     'f_min' => $Q_f_min,
     'f_max' => $Q_f_max,
@@ -257,4 +256,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('busquedas/controller');
-echo $oView->renderizar('buscar_escrito.html.twig', $a_campos);
+$oView->renderizar('buscar_escrito.html.twig', $a_campos);

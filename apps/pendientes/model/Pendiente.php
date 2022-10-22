@@ -5,6 +5,8 @@ namespace pendientes\model;
 use core\Converter;
 use davical\model\CalDAVClient;
 use entradas\model\GestorEntrada;
+use iCalComponent;
+use iCalProp;
 use pendientes\model\entity\PendienteDB;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
@@ -235,7 +237,7 @@ class Pendiente
             $_SESSION['oGestorErrores']->addError($err_txt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
-        $vcalendar = new \iCalComponent($todo[0]['data']);
+        $vcalendar = new iCalComponent($todo[0]['data']);
         $icalComp = $vcalendar->GetComponents('VTODO');
         // error...
         if (empty($icalComp[0])) {
@@ -897,12 +899,12 @@ class Pendiente
             $args['X-DLB-OFICINAS'] = "$oficinas";
         }
 
-        $icalComp = new \iCalComponent();
+        $icalComp = new iCalComponent();
         $icalComp->SetType('VTODO');
         if (is_array($exdates)) {
             foreach ($exdates as $f_exdate) {
                 if (!empty($f_exdate)) {
-                    $new_prop = new \iCalProp();
+                    $new_prop = new iCalProp();
                     $new_prop->Name('EXDATE');
                     $new_prop->Value($f_exdate);
                     $a_exdates[] = $new_prop;
@@ -914,7 +916,7 @@ class Pendiente
         }
 
         foreach ($args as $new_property => $value) {
-            $new_prop = new \iCalProp();
+            $new_prop = new iCalProp();
             $new_prop->Name($new_property);
             $new_prop->Value($value);
             $a_properties[] = $new_prop;
@@ -922,7 +924,7 @@ class Pendiente
 
         $icalComp->SetProperties($a_properties);
 
-        $vcalendar = new \iCalComponent();
+        $vcalendar = new iCalComponent();
         $vcalendar->VCalendar();
         $vcalendar->AddComponent($icalComp);
 
@@ -977,7 +979,7 @@ class Pendiente
                 $reponse_code = intval($out[1]);
             }
             if (false !== ($matches = explode(':', $value, 2))) {
-                $headers["{$matches[0]}"] = trim($matches[1]);
+                $headers["$matches[0]"] = trim($matches[1]);
             }
         }
 
@@ -1009,7 +1011,7 @@ class Pendiente
         $pass = $this->getPasswd();
         $cal = new CalDAVClient($base_url, $cargo, $pass);
 
-        $vcalendar = new \iCalComponent($todo[0]['data']);
+        $vcalendar = new iCalComponent($todo[0]['data']);
         $icalComp = $vcalendar->GetComponents('VTODO');
         $exdates = $vcalendar->GetPropertiesByPath('/VCALENDAR/VTODO/EXDATE');
         if (is_array($exdates)) {
@@ -1034,7 +1036,7 @@ class Pendiente
                 if (empty($repe)) {
                     $exdates_csv .= ',' . $f_recur;
                 }
-                $new_prop = new \iCalProp();
+                $new_prop = new iCalProp();
                 $new_prop->Name('EXDATE');
                 $new_prop->Value($exdates_csv);
                 $icalComp[0]->SetProperties(array($new_prop), 'EXDATE');
@@ -1191,12 +1193,12 @@ class Pendiente
         }
 
         // Sólo cambio las propiedades que vienen del formulario, el resto no las toco.
-        $vcalendar = new \iCalComponent($todo[0]['data']);
+        $vcalendar = new iCalComponent($todo[0]['data']);
         $icalComp = $vcalendar->GetComponents('VTODO');
         if (is_array($exdates)) {
             foreach ($exdates as $f_exdate) {
                 if (!empty($f_exdate)) {
-                    $new_prop = new \iCalProp();
+                    $new_prop = new iCalProp();
                     $new_prop->Name('EXDATE');
                     $new_prop->Value($f_exdate);
                     $a_exdates[] = $new_prop;
@@ -1212,7 +1214,7 @@ class Pendiente
         }
 
         foreach ($args as $new_property => $value) {
-            $new_prop = new \iCalProp();
+            $new_prop = new iCalProp();
             $new_prop->Name($new_property);
             $new_prop->Value($value);
             if (!empty($value)) {
@@ -1263,22 +1265,22 @@ class Pendiente
         $cal = new CalDAVClient($base_url, $cargo, $pass);
 
         // cambio el status y completed.
-        $vcalendar = new \iCalComponent($todo[0]['data']);
+        $vcalendar = new iCalComponent($todo[0]['data']);
         $icalComp = $vcalendar->GetComponents('VTODO');
         switch ($que) {
             case "contestado":
                 $ahora = date("Ymd\THis");
-                $new_prop = new \iCalProp();
+                $new_prop = new iCalProp();
                 $new_prop->Name('COMPLETED');
                 $new_prop->Value($ahora);
                 $icalComp[0]->SetProperties(array($new_prop), 'COMPLETED');
-                $new_prop = new \iCalProp();
+                $new_prop = new iCalProp();
                 $new_prop->Name('STATUS');
                 $new_prop->Value('COMPLETED');
                 $icalComp[0]->SetProperties(array($new_prop), 'STATUS');
                 break;
             case "cancelar":
-                $new_prop = new \iCalProp();
+                $new_prop = new iCalProp();
                 $new_prop->Name('STATUS');
                 $new_prop->Value('CANCELLED');
                 $icalComp[0]->SetProperties(array($new_prop), 'STATUS');

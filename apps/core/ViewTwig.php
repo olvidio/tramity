@@ -27,7 +27,7 @@ class ViewTwig extends Environment
     /**
      * Namespace
      *
-     * @var \Twig\Loader\FilesystemLoader
+     * @var Twig\Loader\FilesystemLoader
      */
     private $loader;
 
@@ -110,7 +110,7 @@ class ViewTwig extends Environment
 
     /* MÉTODOS PÚBLICOS -----------------------------------------------------------*/
 
-    public function renderizar($name, $context)
+    public function renderizar($name, $context): void
     {
         try {
             $tpl = $this->load($name);

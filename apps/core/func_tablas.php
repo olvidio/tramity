@@ -196,8 +196,8 @@ function cambiar_idioma($idioma = '')
     putenv("LANGUAGE=");
 
     setlocale(LC_MESSAGES, $idioma);
-    putenv("LC_ALL={$idioma}");
-    putenv("LANG={$idioma}");
+    putenv("LC_ALL=$idioma");
+    putenv("LANG=$idioma");
 
     bindtextdomain($domain, ConfigGlobal::$dir_languages);
     textdomain($domain);

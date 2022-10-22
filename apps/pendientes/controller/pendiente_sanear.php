@@ -158,4 +158,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('pendientes/controller');
-echo $oView->renderizar('pendiente_sanear.html.twig', $a_campos);
+$oView->renderizar('pendiente_sanear.html.twig', $a_campos);

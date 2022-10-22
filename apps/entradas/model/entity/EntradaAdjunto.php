@@ -3,6 +3,8 @@
 namespace entradas\model\entity;
 
 use core;
+use PDO;
+use PDOException;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula entradas
@@ -160,12 +162,12 @@ class EntradaAdjunto extends core\ClasePropiedades
                 $nom = $aDades['nom'];
                 $adjunto = $aDades['adjunto'];
 
-                $oDblSt->bindParam(1, $id_entrada, \PDO::PARAM_INT);
-                $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
-                $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_STR);
+                $oDblSt->bindParam(1, $id_entrada, PDO::PARAM_INT);
+                $oDblSt->bindParam(2, $nom, PDO::PARAM_STR);
+                $oDblSt->bindParam(3, $adjunto, PDO::PARAM_STR);
                 try {
                     $oDblSt->execute();
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'EntradaAdjunto.update.execute';
@@ -186,12 +188,12 @@ class EntradaAdjunto extends core\ClasePropiedades
                 $nom = $aDades['nom'];
                 $adjunto = $aDades['adjunto'];
 
-                $oDblSt->bindParam(1, $id_entrada, \PDO::PARAM_INT);
-                $oDblSt->bindParam(2, $nom, \PDO::PARAM_STR);
-                $oDblSt->bindParam(3, $adjunto, \PDO::PARAM_STR);
+                $oDblSt->bindParam(1, $id_entrada, PDO::PARAM_INT);
+                $oDblSt->bindParam(2, $nom, PDO::PARAM_STR);
+                $oDblSt->bindParam(3, $adjunto, PDO::PARAM_STR);
                 try {
                     $oDblSt->execute();
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
                     $sClauError = 'EntradaAdjunto.insertar.execute';
@@ -223,10 +225,10 @@ class EntradaAdjunto extends core\ClasePropiedades
                 return FALSE;
             }
             $oDblSt->execute();
-            $oDblSt->bindColumn(1, $id_entrada, \PDO::PARAM_INT);
-            $oDblSt->bindColumn(2, $nom, \PDO::PARAM_STR, 256);
-            $oDblSt->bindColumn(3, $adjunto, \PDO::PARAM_STR);
-            $oDblSt->fetch(\PDO::FETCH_BOUND);
+            $oDblSt->bindColumn(1, $id_entrada, PDO::PARAM_INT);
+            $oDblSt->bindColumn(2, $nom, PDO::PARAM_STR, 256);
+            $oDblSt->bindColumn(3, $adjunto, PDO::PARAM_STR);
+            $oDblSt->fetch(PDO::FETCH_BOUND);
 
             $aDades = ['id_entrada' => $id_entrada,
                 'nom' => $nom,

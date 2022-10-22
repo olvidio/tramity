@@ -1,6 +1,8 @@
 <?php
 
 namespace core;
+use PDO;
+
 /**
  * DatosCampo
  *
@@ -166,7 +168,7 @@ class DatosCampo
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDB, $sClauError, __LINE__, __FILE__);
                 return false;
             }
-            $row = $oDBSt_res_fields->fetch(\PDO::FETCH_ASSOC);
+            $row = $oDBSt_res_fields->fetch(PDO::FETCH_ASSOC);
             if ($row['length'] > 0) {
                 $llarg = $row['length'];
             } else if ($row['lengthvar'] > 0) {

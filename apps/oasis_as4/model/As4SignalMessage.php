@@ -2,6 +2,7 @@
 
 namespace oasis_as4\model;
 
+use DOMDocument;
 use web\DateTimeLocal;
 use function core\any_2;
 
@@ -33,7 +34,7 @@ class As4SignalMessage
     {
         $content = file_get_contents($filename);
 
-        $this->xmldata = new \DOMDocument();
+        $this->xmldata = new DOMDocument();
         $this->xmldata->loadXML($content);
 
         $this->explotar_xml();

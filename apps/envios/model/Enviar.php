@@ -2,6 +2,7 @@
 
 namespace envios\model;
 
+use DateTime;
 use documentos\model\Documento;
 use entradas\model\entity\EntradaAdjunto;
 use entradas\model\entity\EntradaBypass;
@@ -68,7 +69,7 @@ class Enviar
     private $sigla_destino = '';
     /**
      *
-     * @var \DateTime
+     * @var DateTime
      *
      */
     private $f_salida;
@@ -436,7 +437,7 @@ class Enviar
                 $this->a_rta['marcar'] = TRUE;
             } catch (Exception $e) {
                 $err_mail .= empty($err_mail) ? '' : '<br>';
-                $err_mail .= "Message could not be sent. Mailer Error: {$oMail->ErrorInfo}";
+                $err_mail .= "Message could not be sent. Mailer Error: $oMail->ErrorInfo";
             }
         } else {
             $oLugar = new Lugar($id_lugar);
@@ -503,7 +504,7 @@ class Enviar
             $a_json_prot_dst = $this->oEntradaBypass->getJson_prot_destino(FALSE);
         }
 
-        $json_prot_dst = new \stdClass();
+        $json_prot_dst = new stdClass();
         foreach ($a_json_prot_dst as $json_prot_dst) {
             if (!property_exists($json_prot_dst, 'id_lugar')) {
                 continue;

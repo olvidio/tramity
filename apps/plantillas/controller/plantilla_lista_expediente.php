@@ -73,4 +73,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('plantillas/controller');
-echo $oView->renderizar('plantilla_lista_expediente.html.twig', $a_campos);
+$oView->renderizar('plantilla_lista_expediente.html.twig', $a_campos);

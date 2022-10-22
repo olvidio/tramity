@@ -180,7 +180,7 @@ $a_campos = [
     'url_escrito' => $url_escrito,
 ];
 $oView = new ViewTwig('entradas/controller');
-echo $oView->renderizar('buscar_form.html.twig', $a_campos);
+$oView->renderizar('buscar_form.html.twig', $a_campos);
 
 /*
 $Qid_expediente = (string) filter_input(INPUT_POST, 'id_expediente');
@@ -223,6 +223,6 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('entradas/controller');
-echo $oView->renderizar('buscar_form.html.twig',$a_campos);
+$oView->renderizar('buscar_form.html.twig',$a_campos);
 
 */

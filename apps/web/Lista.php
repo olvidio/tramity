@@ -904,7 +904,7 @@ class Lista
         $aFields = array();
         if ($b !== 0 || $b === 'x') {
             $c++;
-            $width = isset($aColsWidth['sel']) ? $aColsWidth['sel'] : 30;
+            $width = $aColsWidth['sel'] ?? 30;
             $sColumns .= "{id: \"sel\", name: \"sel\", field: \"sel\", width:$width, sortable: false, formatter: checkboxSelectionFormatter}";
             if (!is_array($aColsVisible) || $aColsVisible['sel'] == "true") {
                 $sColumnsVisible .= "{id: \"sel\", name: \"sel\", field: \"sel\", width:$width, sortable: false, formatter: checkboxSelectionFormatter},";

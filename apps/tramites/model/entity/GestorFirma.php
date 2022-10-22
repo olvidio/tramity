@@ -5,6 +5,7 @@ namespace tramites\model\entity;
 use core;
 use core\ConfigGlobal;
 use expedientes\model\Expediente;
+use PDO;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\Usuario;
@@ -188,7 +189,7 @@ class GestorFirma extends core\ClaseGestor
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
-        $aFirma = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $aFirma = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!empty($aFirma)) {
             return FALSE;
         }
@@ -249,7 +250,7 @@ class GestorFirma extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            $sOperador = isset($aOperators[$camp]) ? $aOperators[$camp] : '';
+            $sOperador = $aOperators[$camp] ?? '';
             if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
                 $aCondi[] = $a;
             }
@@ -633,7 +634,7 @@ class GestorFirma extends core\ClaseGestor
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
-        $aFirma = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $aFirma = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!empty($aFirma['orden_tramite'])) {
             $orden_tramite_secretaria = $aFirma['orden_tramite'];
             // mirar los anteriores:

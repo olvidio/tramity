@@ -17,10 +17,10 @@ require_once("apps/core/global_object.inc");
 
 // porque también se puede abrir en una ventana nueva, y entonces se llama por GET
 $Q_method = (string)filter_input(INPUT_SERVER, 'REQUEST_METHOD');
-if ($Q_method == 'POST') {
+if ($Q_method === 'POST') {
     $Q_id_doc = (integer)filter_input(INPUT_POST, 'id_doc');
 }
-if ($Q_method == 'GET') {
+if ($Q_method === 'GET') {
     $Q_id_doc = (integer)filter_input(INPUT_GET, 'id_doc');
 }
 
@@ -63,4 +63,4 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('documentos/controller');
-echo $oView->renderizar('documento_ver.html.twig', $a_campos);
+$oView->renderizar('documento_ver.html.twig', $a_campos);
