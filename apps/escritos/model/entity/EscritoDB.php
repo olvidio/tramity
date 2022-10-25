@@ -31,14 +31,14 @@ class EscritoDB extends core\ClasePropiedades
 {
 
     // tipo documento (igual que entradadocdb)
-    const TIPO_ETHERPAD = 1;
-    const TIPO_ETHERCALC = 2;
-    const TIPO_OTRO = 3;
+    public const TIPO_ETHERPAD = 1;
+    public const TIPO_ETHERCALC = 2;
+    public const TIPO_OTRO = 3;
 
     // ok
-    const OK_NO = 1;
-    const OK_OFICINA = 2;
-    const OK_SECRETARIA = 3;
+    public const OK_NO = 1;
+    public const OK_OFICINA = 2;
+    public const OK_SECRETARIA = 3;
 
     // visibilidad
     // USAR LAS DE ENTRADADB
@@ -255,7 +255,7 @@ class EscritoDB extends core\ClasePropiedades
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_escrito = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_escrito = (int)$a_id; // evitem SQL injection fent cast a integer
                 $this->aPrimary_key = array('iid_escrito' => $this->iid_escrito);
             }
         }
@@ -1223,7 +1223,7 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_salida de EscritoDB
      *
-     * @return web\DateTimeLocal df_salida
+     * @return web\DateTimeLocal|web\NullDateTimeLocal
      */
     function getF_salida()
     {
