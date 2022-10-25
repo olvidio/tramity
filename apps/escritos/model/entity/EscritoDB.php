@@ -249,7 +249,7 @@ class EscritoDB extends core\ClasePropiedades
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_escrito') && $val_id !== '') {
+                if (($nom_id === 'id_escrito') && $val_id !== '') {
                     $this->iid_escrito = (int)$val_id;
                 } // evitem SQL injection fent cast a integer
             }
@@ -837,7 +837,7 @@ class EscritoDB extends core\ClasePropiedades
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_escrito') && $val_id !== '') {
+                if (($nom_id === 'id_escrito') && $val_id !== '') {
                     $this->iid_escrito = (int)$val_id;
                 } // evitem SQL injection fent cast a integer
             }
@@ -904,7 +904,7 @@ class EscritoDB extends core\ClasePropiedades
             $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_local, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {
@@ -945,7 +945,7 @@ class EscritoDB extends core\ClasePropiedades
             $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_destino, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {
@@ -985,7 +985,7 @@ class EscritoDB extends core\ClasePropiedades
             $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_ref, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {
@@ -1107,7 +1107,7 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_aprobacion de EscritoDB
      *
-     * @return web\DateTimeLocal df_aprobacion
+     * @return web\DateTimeLocal|web\NullDateTimeLocal
      */
     function getF_aprobacion()
     {
@@ -1124,7 +1124,7 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_escrito de EscritoDB
      *
-     * @return web\DateTimeLocal df_escrito
+     * @return web\DateTimeLocal|web\NullDateTimeLocal
      */
     function getF_escrito()
     {
@@ -1141,7 +1141,7 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_contestar de EscritoDB
      *
-     * @return web\DateTimeLocal df_contestar
+     * @return web\DateTimeLocal|web\NullDateTimeLocal
      */
     function getF_contestar()
     {
@@ -1173,7 +1173,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return integer ivisibilidad
      */
-    function getVisibilidad(): int
+    function getVisibilidad(): ?int
     {
         if (!isset($this->ivisibilidad) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1186,7 +1186,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return integer ivisibilidad_dst
      */
-    function getVisibilidad_dst(): int
+    function getVisibilidad_dst(): ?int
     {
         if (!isset($this->ivisibilidad_dst) && !$this->bLoaded) {
             $this->DBCargar();
