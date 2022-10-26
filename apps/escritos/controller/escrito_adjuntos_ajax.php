@@ -331,6 +331,11 @@ switch ($Q_que) {
         $oLista->setCabeceras($a_cabeceras);
         $oLista->setDatos($a_valores);
 
+        // Alerta!!
+        $alerta = '';
+        if ($Q_tipo_n == 5) {
+            $alerta = _("ATENCIÓN: Sólo se pueden insertar los de tipo Etherpad");
+        }
         $a_campos = [
             'para' => 'adjunto',
             'id_expediente' => $Q_id_expediente,
@@ -346,6 +351,7 @@ switch ($Q_que) {
             'sel_siempre' => $sel_siempre,
             'oLista' => $oLista,
             'tipo_n' => $Q_tipo_n,
+            'alerta' => $alerta
         ];
 
         $oView = new ViewTwig('expedientes/controller');
