@@ -121,7 +121,7 @@ fnjs_cambiar_link = function (id_div) {
         $(selector).each(function (i) {
             var aa = this.href;
             // si tiene una ref a name(#):
-            if (aa != undefined && aa.indexOf("#") != -1) {
+            if (aa !== undefined && aa.indexOf("#") !== -1) {
                 part = aa.split("#");
                 this.href = "";
                 $(this).attr("onclick", "location.hash = '#" + part[1] + "'; return false;");
@@ -129,7 +129,7 @@ fnjs_cambiar_link = function (id_div) {
                 url = fnjs_ref_absoluta(base, aa);
                 var path = aa.replace(/[\?#].*$/, ''); // borro desde el '?' o el '#'
                 var extension = path.substr(-4);
-                if (extension == ".php" || extension == "html" || extension == ".htm") { // documento web
+                if (extension === ".php" || extension === "html" || extension === ".htm") { // documento web
                     this.href = "";
                     $(this).attr("onclick", "fnjs_update_div('" + id_div + "','" + url + "'); return false;");
                 } else {
