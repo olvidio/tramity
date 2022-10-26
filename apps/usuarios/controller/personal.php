@@ -21,7 +21,7 @@ $oGesPref = new GestorPreferencia();
 $id_usuario = core\ConfigGlobal::mi_id_usuario();
 $role_actual = $_SESSION['session_auth']['role_actual'];
 $is_admin = FALSE;
-if ($role_actual == 'admin') {
+if ($role_actual === 'admin') {
     $is_admin = TRUE;
 }
 
@@ -39,8 +39,7 @@ if (is_array($aPref) && !empty($aPref)) {
 $aPref = $oGesPref->getPreferencias(array('id_usuario' => $id_usuario, 'tipo' => 'idioma'));
 if (is_array($aPref) && !empty($aPref)) {
     $oPreferencia = $aPref[0];
-    $preferencia = $oPreferencia->getPreferencia();
-    list($idioma) = preg_split('/#/', $preferencia);
+    $idioma = $oPreferencia->getPreferencia();
 } else {
     $idioma = '';
 }

@@ -53,8 +53,8 @@ fnjs_update_div = function (bloque, ref) {
         dataType: 'text'
     });
 
-    request.done(function (resposta) {
-        fnjs_mostra_resposta(resposta, bloque);
+    request.done(function (respuesta) {
+        fnjs_mostra_resposta(respuesta, bloque);
     });
     request.fail(function (JqXHR, textStatus, errorThrown) {
         alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
@@ -71,20 +71,20 @@ fnjs_borrar_posibles_atras = function () {
     if ($('#go_atras').length) $('#go_atras').remove();
 }
 
-fnjs_mostra_resposta = function (resposta, bloque) {
-    if (resposta === null) {
+fnjs_mostra_resposta = function (respuesta, bloque) {
+    let myText;
+    if (respuesta === null) {
         return true;
     }
-    switch (typeof resposta) {
+    switch (typeof respuesta) {
         case 'object':
-            var myText = resposta.responseText;
+            myText = respuesta.responseText;
             break;
         case 'string':
-            var myText = resposta.trim();
+            myText = respuesta.trim();
             break;
         case 'undefined':
             return true;
-            break;
     }
     if ($(bloque).length) {
         $(bloque).empty();

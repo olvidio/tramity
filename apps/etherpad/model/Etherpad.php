@@ -20,13 +20,13 @@ class Etherpad extends Client
 {
 
     // Tipos de id
-    const ID_COMPARTIDO = 'compartido';
-    const ID_ADJUNTO = 'adjunto';
-    const ID_DOCUMENTO = 'documento';
-    const ID_ENTRADA = 'entrada';
-    const ID_ESCRITO = 'escrito';
-    const ID_EXPEDIENTE = 'expediente';
-    const ID_PLANTILLA = 'plantilla';
+    public const ID_COMPARTIDO = 'compartido';
+    public const ID_ADJUNTO = 'adjunto';
+    public const ID_DOCUMENTO = 'documento';
+    public const ID_ENTRADA = 'entrada';
+    public const ID_ESCRITO = 'escrito';
+    public const ID_EXPEDIENTE = 'expediente';
+    public const ID_PLANTILLA = 'plantilla';
 
     /**
      * Se encuentra en el servidor etherpad en;
@@ -67,7 +67,7 @@ class Etherpad extends Client
         $this->setNom_usuario($nom_usuario);
 
         // depende si es en el portatil o en la dl.
-        if (ConfigGlobal::SERVIDOR == 'tramity.local') {
+        if (ConfigGlobal::SERVIDOR === 'tramity.local') {
             $apikey = $this->apikey;
         } else {
             $apikey = $this->apikey_dlb;
@@ -79,7 +79,7 @@ class Etherpad extends Client
     public function setId($tipo_id, $id, $sigla = '')
     {
         // excepción para las entradas compartidas:
-        if ($tipo_id == self::ID_COMPARTIDO) {
+        if ($tipo_id === self::ID_COMPARTIDO) {
             $prefix = 'com';
             $this->id_escrito = $prefix . $id;
         } else {
@@ -167,12 +167,12 @@ class Etherpad extends Client
         foreach ($domNodeList as $domElement) {
             // mirar si es: class="comment
             $class = $domElement->getAttribute('class');
-            if (strstr($class, 'comment')) {
+            if (strpos($class, 'comment') !== false) {
                 $domNodeListChilds = $domElement->childNodes;
                 foreach ($domNodeListChilds as $domElementChild) {
                     // borrar los child: <sup></sup>
                     $nodeName = $domElementChild->nodeName;
-                    if ($nodeName == 'sup') {
+                    if ($nodeName === 'sup') {
                         $domElement->removeChild($domElementChild);
                     }
                 }
@@ -196,7 +196,7 @@ class Etherpad extends Client
         $tags_list = $xpath->query("//td");
         foreach ($tags_list as $tag) {
             $class = $tag->getAttribute('name');
-            if (strstr($class, 'payload') || strstr($class, 'delimCell') || strstr($class, 'bracketAndcomma')) {
+            if (strpos($class, 'payload') !== false || strpos($class, 'delimCell') !== false || strpos($class, 'bracketAndcomma') !== false) {
                 // Remove the td tag.
                 $tag->parentNode->removeChild($tag);
             }

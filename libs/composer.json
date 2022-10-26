@@ -10,7 +10,8 @@
     "ext-gettext": "*",
     "ext-pdo": "*",
     "ext-json": "*",
-    "ext-simplexml": "*"
+    "ext-simplexml": "*",
+    "ext-dom": "*"
   },
   "require-dev": {
   }
