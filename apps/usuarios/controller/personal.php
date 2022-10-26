@@ -82,4 +82,4 @@ $a_campos = [
 ];
 
 $oView = new core\ViewTwig('usuarios/controller');
-echo $oView->render('personal.html.twig', $a_campos);
+$oView->renderizar('personal.html.twig', $a_campos);

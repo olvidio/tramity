@@ -100,4 +100,4 @@ $a_campos = ['oPosicion' => $oPosicion,
 ];
 
 $oView = new core\ViewTwig('tramites/controller');
-echo $oView->render('tramitecargo_select.html.twig', $a_campos);
+$oView->renderizar('tramitecargo_select.html.twig', $a_campos);

@@ -64,4 +64,4 @@ $a_campos = ['oPosicion' => $oPosicion,
 ];
 
 $oView = new core\ViewTwig('tramites/controller');
-echo $oView->render('tramitecargo_form.html.twig', $a_campos);
+$oView->renderizar('tramitecargo_form.html.twig', $a_campos);

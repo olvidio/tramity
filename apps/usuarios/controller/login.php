@@ -19,7 +19,7 @@ function logout($idioma, $esquema, $error)
     $a_campos['idioma'] = $idioma;
     $a_campos['url'] = ConfigGlobal::getWeb();
     $oView = new ViewTwig(__NAMESPACE__);
-    echo $oView->render('login_form.html.twig', $a_campos);
+    $oView->renderizar('login_form.html.twig', $a_campos);
 }
 
 function posibles_esquemas()

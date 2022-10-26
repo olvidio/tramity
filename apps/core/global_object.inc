@@ -15,7 +15,7 @@ function logout($idioma, $esquema, $error)
     $a_campos['url'] = ConfigGlobal::getWeb();
 
     $oView = new ViewTwig('usuarios\controller');
-    echo $oView->render('login_form.html.twig', $a_campos);
+    $oView->renderizar('login_form.html.twig', $a_campos);
 }
 
 if (session_status() !== PHP_SESSION_ACTIVE) {

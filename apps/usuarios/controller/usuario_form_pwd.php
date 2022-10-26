@@ -71,4 +71,4 @@ $a_campos = [
 ];
 
 $oView = new core\ViewTwig('usuarios/controller');
-echo $oView->render('usuario_form_pwd.html.twig', $a_campos);
+$oView->renderizar('usuario_form_pwd.html.twig', $a_campos);

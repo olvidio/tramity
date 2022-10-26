@@ -46,4 +46,4 @@ $a_campos['dock'] = $val_dock;
 
 
 $oView = new core\ViewTwig('oasis_as4/controller');
-echo $oView->render('definir_plataforma.html.twig', $a_campos);
+$oView->renderizar('definir_plataforma.html.twig', $a_campos);

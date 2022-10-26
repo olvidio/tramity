@@ -610,4 +610,4 @@ $a_campos['server_davical'] = $val_server_davical;
 
 
 $oView = new core\ViewTwig('config/controller');
-echo $oView->render('parametros.html.twig', $a_campos);
+$oView->renderizar('parametros.html.twig', $a_campos);

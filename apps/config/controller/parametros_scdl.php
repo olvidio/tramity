@@ -55,4 +55,4 @@ $a_campos['chk_perm_aceptar'] = $chk_perm_aceptar;
 $a_campos['filtro'] = $Q_filtro;
 
 $oView = new core\ViewTwig('config/controller');
-echo $oView->render('parametros_scdl.html.twig', $a_campos);
+$oView->renderizar('parametros_scdl.html.twig', $a_campos);
