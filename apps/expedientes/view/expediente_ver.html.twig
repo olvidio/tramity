@@ -177,6 +177,8 @@
                     <button type="button" class="btn btn-outline-secondary"
                             onClick="fnjs_ver_cargos('{{ add_del }}');">{{ add_del_txt }}</button>
                 {% endif %}
+                <button type="button" class="btn btn-outline-secondary"
+                        onClick="fnjs_recircular();">{{ reset_txt }}</button>
             </div>
             <div id="of" class="d-flex row round m-3 border rounded">
             </div>
@@ -252,6 +254,32 @@
         fnjs_update_div('#main', '{{ pagina_cambio|raw }}');
     }
 
+    fnjs_recircular = function () {
+        alert ("borrar todas las firmas");
+
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+
+        $('#que').val('recircular');
+        datos = $('#form_expediente').serialize();
+        request = $.ajax({
+            data: datos,
+            url: '{{ url_update }}',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done(function (json) {
+            if (json.success != true) {
+                alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+            } else {
+                // Volver a la lista...
+                fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+            }
+        });
+    }
     fnjs_ver_cargos = function (add_del) {
         if (add_del == 'add') {
             // consultar que oficinas no estan en el recorrido

@@ -242,6 +242,33 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
+    case 'recircular':
+        // borrar todas la firmas
+        $oExpediente = new Expediente($Q_id_expediente);
+        $oExpediente->DBCargar();
+        $gesFirmas = new  GestorFirma();
+        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente]);
+        foreach ($cFirmas as $oFirma) {
+            $oFirma->DBCargar();
+            $oFirma->setValor(NULL);
+            $oFirma->setF_valor(NULL);
+            if ($oFirma->DBGuardar() === FALSE) {
+                $error_txt .= $oFirma->getErrorTxt();
+            }
+        }
+
+        if (empty($error_txt)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        }
+
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
     case 'reunion':
         $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCargar();

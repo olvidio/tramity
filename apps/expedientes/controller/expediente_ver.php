@@ -192,6 +192,7 @@ if ($Q_filtro === 'seg_reunion') {
     $add_del = 'add';
     $add_del_txt = _("Añadir Firmas");
 }
+$reset_txt = _("Re-circular");
 
 // solo el scdl tiene permiso. Ahora 11-3-22 también el sd.
 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && (ConfigGlobal::role_actual() === 'scdl' || ConfigGlobal::role_actual() === 'sd')) {
@@ -244,6 +245,7 @@ $a_campos = [
     'bool_aclaracion' => $bool_aclaracion,
     'add_del' => $add_del,
     'add_del_txt' => $add_del_txt,
+    'reset_txt' => $reset_txt,
     'cmb_tramite' => $cmb_tramite,
     'pagina_cambio' => $pagina_cambio,
 ];

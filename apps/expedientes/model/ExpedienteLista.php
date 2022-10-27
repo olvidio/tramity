@@ -506,8 +506,12 @@ class ExpedienteLista
                     $id_expediente = $oFirma->getId_expediente();
                     $orden_tramite = $oFirma->getOrden_tramite();
                     // Sólo a partir de que el orden_tramite anterior ya lo hayan firmado todos
-                    if (!$gesFirmas->getAnteriorOK($id_expediente, $orden_tramite)) {
-                        continue;
+                    if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR ) {
+                        // Para los ctr NO. Puede ser que el d no haya firmado (nivel ponente) y
+                        // no se debe impedir firmar a otros (nivel oficiales).
+                        if (!$gesFirmas->getAnteriorOK($id_expediente, $orden_tramite)) {
+                            continue;
+                        }
                     }
 
                     $a_expedientes[] = $id_expediente;

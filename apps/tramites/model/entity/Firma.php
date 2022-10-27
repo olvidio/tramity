@@ -80,12 +80,6 @@ class Firma extends core\ClasePropiedades
      */
     private $bLoaded = FALSE;
     /**
-     * Id_schema de Firma
-     *
-     * @var integer
-     */
-    private $iid_schema;
-    /**
      * Id_item de Firma
      *
      * @var integer
@@ -561,7 +555,7 @@ class Firma extends core\ClasePropiedades
      */
     public function setValor($ivalor = '')
     {
-        $this->ivalor = (int)$ivalor;
+        $this->ivalor = $ivalor;
     }
 
     /**
