@@ -85,7 +85,7 @@ $oDesplVida = new Desplegable('vida', $a_vida, '', FALSE);
 
 // visibilidad
 $oVisibilidad = new Visibilidad();
-$aOpciones = $oVisibilidad->getArrayVisibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad(TRUE);
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
@@ -321,11 +321,9 @@ $a_campos = [
     'vista_dl' => $vista_dl,
     'titulo' => $titulo,
     'id_expediente' => $Q_id_expediente,
-    //'oHash' => $oHash,
     'ponente_txt' => $ponente_txt,
     'id_ponente' => $id_ponente,
     'oDesplTramites' => $oDesplTramites,
-    //'oDesplEstado' => $oDesplEstado,
     'estado' => $estado,
     'oDesplPrioridad' => $oDesplPrioridad,
     'oDesplVida' => $oDesplVida,
