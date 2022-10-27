@@ -469,6 +469,11 @@ class ExpedienteLista
                 }
                 break;
             case 'firmar':
+                // Quito los permanentes_cl (de momento para los ctr)
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR ) {
+                    $aWhere['vida'] = Expediente::VIDA_PERMANENTE;
+                    $aOperador['vida'] = '!=';
+                }
                 // añadir las que requieren aclaración.
                 if (ConfigGlobal::role_actual() === 'secretaria') {
                     $a_tipos_acabado = [Expediente::ESTADO_NO,
@@ -697,6 +702,11 @@ class ExpedienteLista
                 }
                 break;
             case 'circulando':
+                // Quito los permanentes_cl (de momento para los ctr)
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR ) {
+                    $aWhere['vida'] = Expediente::VIDA_PERMANENTE;
+                    $aOperador['vida'] = '!=';
+                }
                 if (ConfigGlobal::role_actual() === 'vcd') {
                     $a_tipos_acabado = [Expediente::ESTADO_CIRCULANDO,
                         Expediente::ESTADO_ESPERA,
