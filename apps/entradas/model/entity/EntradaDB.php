@@ -1063,7 +1063,7 @@ class EntradaDB extends core\ClasePropiedades
      *
      * @return integer iencargado
      */
-    function getEncargado()
+    public function getEncargado(): ?int
     {
         if (!isset($this->iencargado) && !$this->bLoaded) {
             $this->DBCargar();

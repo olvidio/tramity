@@ -254,11 +254,16 @@ class VerTabla
             array('name' => ucfirst(_("contestar antes de")), 'class' => 'fecha'),
             array('name' => ucfirst(_("fecha entrada")), 'class' => 'fecha')
         );
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+           $a_cabeceras[] = _("encargado a") ;
+        }
 
         $oProtOrigen = new Protocolo();
         $a_valores = [];
         $i = 0;
         $oPermRegistro = new PermRegistro();
+        $gesCargos = new GestorCargo();
+        $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina(), TRUE);
         foreach ($aCollection as $oEntrada) {
             // mirar permisos visibilidad:...
             $visibilidad = $oEntrada->getVisibilidad();
@@ -302,6 +307,9 @@ class VerTabla
             $f_doc = $oEntrada->getF_documento();
             $f_contestar = $oEntrada->getF_contestar();
 
+            $id_encargado = $oEntrada->getEncargado();
+            $nom_encargado = $a_usuarios_oficina[$id_encargado]?? '';
+
             $a_valores[$i]['sel'] = "$id_entrada";
             $a_valores[$i][1] = $protocolo;
             $a_valores[$i][2] = $referencias;
@@ -312,6 +320,10 @@ class VerTabla
             $a_valores[$i][7] = $f_doc->getFromLocal();
             $a_valores[$i][8] = $f_contestar->getFromLocal();
             $a_valores[$i][9] = $f_entrada->getFromLocal();
+
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                $a_valores[$i][10] = $nom_encargado;
+            }
         }
 
         $oTabla = new Lista();
