@@ -21,7 +21,8 @@ ALTER TABLE public.aux_cargos OWNER TO tramity;
 
 CREATE TABLE public.aux_usuarios
 (
-    id_usuario         SERIAL PRIMARY KEY,
+    id_auto         SERIAL PRIMARY KEY,
+    id_usuario         integer NOT NULL DEFAULT idglobal('agdmontagut'::text),
     usuario            character varying(20) NOT NULL,
     id_cargo_preferido integer               NOT NULL,
     password           bytea,

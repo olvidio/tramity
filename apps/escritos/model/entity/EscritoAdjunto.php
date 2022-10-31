@@ -114,13 +114,13 @@ class EscritoAdjunto extends core\ClasePropiedades
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_item') && $val_id !== '') {
+                if (($nom_id === 'id_item') && $val_id !== '') {
                     $this->iid_item = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_item = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_item = (int)$a_id;
                 $this->aPrimary_key = array('iid_item' => $this->iid_item);
             }
         }
@@ -258,7 +258,9 @@ class EscritoAdjunto extends core\ClasePropiedades
                     $this->setAllAtributes($aDades);
                     break;
                 case 'guardar':
-                    if (!$oDblSt->rowCount()) return FALSE;
+                    if (!$oDblSt->rowCount()) {
+                        return FALSE;
+                    }
                     break;
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
@@ -398,13 +400,13 @@ class EscritoAdjunto extends core\ClasePropiedades
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_item') && $val_id !== '') {
+                if (($nom_id === 'id_item') && $val_id !== '') {
                     $this->iid_item = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_item = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_item = (int)$a_id;
                 $this->aPrimary_key = array('iid_item' => $this->iid_item);
             }
         }
@@ -468,7 +470,7 @@ class EscritoAdjunto extends core\ClasePropiedades
     /**
      * Recupera l'atribut adjunto de EntradaAdjunto
      *
-     * @return string adjunto
+     * @return string|FALSE adjunto
      */
     public function getAdjunto()
     {

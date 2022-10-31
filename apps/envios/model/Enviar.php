@@ -65,7 +65,6 @@ class Enviar
      *
      * @var string
      */
-    private $destinos_txt;
     private $sigla_destino = '';
     /**
      *
@@ -89,10 +88,10 @@ class Enviar
         $this->setId($id);
         $this->setTipo($tipo);
 
-        if ($this->tipo == 'escrito') {
+        if ($this->tipo === 'escrito') {
             $this->oEscrito = new Escrito($this->iid);
         }
-        if ($this->tipo == 'entrada') {
+        if ($this->tipo === 'entrada') {
             // Los centros no tienen bypass
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                 $this->oEntradaBypass = new Entrada($this->iid);
@@ -124,14 +123,14 @@ class Enviar
     {
         $this->getDocumento($is_compartida);
 
-        if ($this->tipo == 'escrito') {
+        if ($this->tipo === 'escrito') {
             $a_header = ['left' => $this->oEscrito->cabeceraIzquierda(),
                 'center' => '',
                 'right' => $this->oEscrito->cabeceraDerecha(),
             ];
         }
 
-        if ($this->tipo == 'entrada') {
+        if ($this->tipo === 'entrada') {
             // Puede que no sea bypass. Se usa para descargar la entrada en local.
             if (is_true($this->is_Bypass) && $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                 $a_header = ['left' => $this->oEntradaBypass->cabeceraDistribucion_cr(),
@@ -158,7 +157,7 @@ class Enviar
 
     private function getDocumento($is_compartida = FALSE)
     {
-        if ($this->tipo == 'entrada') {
+        if ($this->tipo === 'entrada') {
             if ($is_compartida) {
                 $this->getDatosEntradaCompartida();
             } else {
@@ -170,7 +169,7 @@ class Enviar
                 }
             }
         }
-        if ($this->tipo == 'escrito') {
+        if ($this->tipo === 'escrito') {
             $this->getDatosEscrito();
         }
     }
@@ -224,7 +223,7 @@ class Enviar
         $this->asunto = empty($this->oEntrada->getAsunto()) ? $this->oEntrada->getAsunto_entrada() : $this->oEntrada->getAsunto();
 
         $json_prot_origen = $this->oEntrada->getJson_prot_origen();
-        if (count(get_object_vars($json_prot_origen)) == 0) {
+        if (count(get_object_vars($json_prot_origen)) === 0) {
             exit (_("No hay más"));
         }
 
@@ -252,8 +251,8 @@ class Enviar
         // para no tener que repetir cuando hay multiples destinos
         if ($this->bLoaded === FALSE) {
             $json_prot_local = $this->oEscrito->getJson_prot_local();
-            // En el caso de los ctr, se envia directamente sin los pasos
-            // de cirular por secretaria, y al llegar aqui todavía no se ha generado el
+            // En el caso de los ctr, se envía directamente sin los pasos
+            // de circular por secretaria, y al llegar aquí todavía no se ha generado el
             // número de protocolo.
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && empty((array)$json_prot_local)) {
                 $this->oEscrito->generarProtocolo();
@@ -322,25 +321,27 @@ class Enviar
                     break;
                 case Lugar::MODO_AS4;
                     $plataforma = $oLugar->getPlataforma();
-                    // si la acción es compartir, se envia el mismo escrito a un conjunto de ctr.
-                    // aquí genero el array de destinos:
-                    if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
-                        || $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
-                        $a_lista_dst_as4[] = $plataforma;
+                    // si la acción es compartir, se envía el mismo escrito a un conjunto de ctr.
+                    // aquí genero el array de plataformas destino:
+                    if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR
+                        || $this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
+                        if (!in_array($plataforma, $a_lista_dst_as4, true)) {
+                            $a_lista_dst_as4[] = $plataforma;
+                        }
                     } else {
                         $err_mail = $this->enviarAS4($id_lugar, $plataforma, $this->accion);
                     }
                     break;
                 default:
-                    $err_mail = _("No hay modo de envio para este destino");
+                    $err_mail = _("No hay modo de envío para este destino");
             }
         }
 
         // si es compartir, enviar en bloque por plataformas.
-        if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
-            || $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
+        if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR
+            || $this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
             foreach ($a_lista_dst_as4 as $plataforma) {
-                // Finalmente, los destinos se añaden en el payload. No se tienen en cuenta a la hora de enviar.
+                // Finalmente los destinos se añaden en el payload. No se tienen en cuenta a la hora de enviar.
                 // Al recoger, se mira si están en la plataforma y se les añade.
                 $err_mail = $this->enviarAS4Compartido($plataforma);
             }
@@ -371,13 +372,12 @@ class Enviar
         if ($this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
             echo "AAAAAAAHHHHH!!!!!";
         }
-        if ($this->tipo == 'entrada') {
+        if ($this->tipo === 'entrada') {
             $this->accion = As4CollaborationInfo::ACCION_COMPARTIR;
             $aDestinos = $this->oEntradaBypass->getDestinosByPass();
-            $this->destinos_txt = $aDestinos['txt'];
             return $aDestinos['miembros'];
         }
-        if ($this->tipo == 'escrito') {
+        if ($this->tipo === 'escrito') {
             $id_grupos = $this->oEscrito->getId_grupos();
             if (!empty($id_grupos)) {
                 $this->accion = As4CollaborationInfo::ACCION_COMPARTIR;
@@ -451,7 +451,7 @@ class Enviar
     private function getHeader($id_lugar = '')
     {
         $a_header = [];
-        if ($this->tipo == 'entrada') {
+        if ($this->tipo === 'entrada') {
             // Puede que no sea bypass. Se uasa para descargar la entrada en local.
             if (is_true($this->is_Bypass)) {
                 $a_header = ['left' => $this->oEntradaBypass->cabeceraIzquierda(),
@@ -465,7 +465,7 @@ class Enviar
                 ];
             }
         }
-        if ($this->tipo == 'escrito') {
+        if ($this->tipo === 'escrito') {
             $a_header = ['left' => $this->oEscrito->cabeceraIzquierda($id_lugar),
                 'center' => '',
                 'right' => $this->oEscrito->cabeceraDerecha(),
@@ -480,8 +480,8 @@ class Enviar
         $err_mail = '';
         $this->getDocumento();
 
-        if ($this->tipo == 'escrito') {
-            // Si la categoria es 'sin numerar', no hay protocolo local.
+        if ($this->tipo === 'escrito') {
+            // Si la categoría es 'sin numerar', no hay protocolo local.
             // fabrico uno con sólo el lugar:
             if ($this->oEscrito->getCategoria() == Categoria::CAT_E12) {
                 // Busco el id_lugar de la dl.
@@ -499,7 +499,7 @@ class Enviar
             // y aporta más datos del protocolo
             $a_json_prot_dst = $this->oEscrito->getJson_prot_destino(FALSE);
         }
-        if ($this->tipo == 'entrada') {
+        if ($this->tipo === 'entrada') {
             $json_prot_org = $this->oEntradaBypass->getJson_prot_origen();
             $a_json_prot_dst = $this->oEntradaBypass->getJson_prot_destino(FALSE);
         }
@@ -528,10 +528,10 @@ class Enviar
         $oAS4->setTipo_escrito($this->tipo);
         $oAS4->setJson_prot_org($json_prot_org);
         $oAS4->setJson_prot_dst($json_prot_dst);
-        if ($this->tipo == 'escrito') {
+        if ($this->tipo === 'escrito') {
             $oAS4->setEscrito($this->oEscrito);
         }
-        if ($this->tipo == 'entrada') {
+        if ($this->tipo === 'entrada') {
             $oAS4->setEscrito($this->oEntradaBypass);
         }
 
@@ -558,7 +558,7 @@ class Enviar
         $err_mail = '';
         $this->getDocumento();
 
-        if ($this->tipo == 'escrito') {
+        if ($this->tipo === 'escrito') {
             // Si la categoria es 'sin numerar', no hay protocolo local.
             // fabrico uno con sólo el lugar:
             if ($this->oEscrito->getCategoria() == Categoria::CAT_E12) {
@@ -575,7 +575,7 @@ class Enviar
             }
         }
 
-        if ($this->tipo == 'entrada') {
+        if ($this->tipo === 'entrada') {
             $json_prot_org = $this->oEntradaBypass->getJson_prot_origen();
             // cambio el nombre del fichero. No hace falta añadir la sigla destino si es compartido.
             switch ($this->accion) {
@@ -603,10 +603,10 @@ class Enviar
         $oAS4->setAccion($this->accion);
         $oAS4->setTipo_escrito($this->tipo);
         $oAS4->setJson_prot_org($json_prot_org);
-        if ($this->tipo == 'escrito') {
+        if ($this->tipo === 'escrito') {
             $oAS4->setEscrito($this->oEscrito);
         }
-        if ($this->tipo == 'entrada') {
+        if ($this->tipo === 'entrada') {
             $oAS4->setEscrito($this->oEntradaBypass);
         }
 
