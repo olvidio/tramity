@@ -250,6 +250,7 @@ class EscritoLista
             case 'acabados_encargados':
             case 'enviar':
                 $oView->renderizar('escrito_lst_enviar.html.twig', $a_campos);
+                break;
             default:
                 $oView->renderizar('escrito_lista.html.twig', $a_campos);
         }
