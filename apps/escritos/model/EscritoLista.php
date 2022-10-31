@@ -195,7 +195,7 @@ class EscritoLista
         ];
 
         $oView = new ViewTwig('escritos/controller');
-        return $oView->renderizar('escrito_lst_enviar.html.twig', $a_campos);
+        $oView->renderizar('escrito_lst_enviar.html.twig', $a_campos);
     }
 
     private function getEscritosParaEnviar($fecha)
@@ -249,9 +249,9 @@ class EscritoLista
             case 'acabados':
             case 'acabados_encargados':
             case 'enviar':
-                return $oView->renderizar('escrito_lst_enviar.html.twig', $a_campos);
+                $oView->renderizar('escrito_lst_enviar.html.twig', $a_campos);
             default:
-                return $oView->renderizar('escrito_lista.html.twig', $a_campos);
+                $oView->renderizar('escrito_lista.html.twig', $a_campos);
         }
     }
 
@@ -419,6 +419,10 @@ class EscritoLista
         }
 
         $vista = ConfigGlobal::getVista();
+        $vista_dl = TRUE;
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+            $vista_dl = FALSE;
+        }
 
         $a_campos = [
             'filtro' => $this->filtro,
@@ -432,6 +436,7 @@ class EscritoLista
             'ver_ok' => $ver_ok,
             // tabs_show
             'vista' => $vista,
+            'vista_dl' => $vista_dl,
             'show_tabs' => $this->isShow_tabs(),
         ];
 
