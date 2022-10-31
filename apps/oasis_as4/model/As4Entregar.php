@@ -18,6 +18,7 @@ use entradas\model\GestorEntrada;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
 use pendientes\model\Pendiente;
+use stdClass;
 use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
@@ -41,7 +42,6 @@ class As4Entregar extends As4CollaborationInfo
     private $sigla_origen;
 
     private $service;
-    private $xml_escrito;
     private $dom;
 
     /**
@@ -51,9 +51,9 @@ class As4Entregar extends As4CollaborationInfo
     private $a_Prot_dst;
     /**
      * a_Prot_dst
-     * @var array
+     * @var stdClass
      */
-    private $a_Prot_org;
+    private $oProt_org;
     /**
      * a_Prot_dst
      * @var array
@@ -152,9 +152,9 @@ class As4Entregar extends As4CollaborationInfo
         return $this->getProtocolos();
     }
 
-    private function getProtocolos()
+    private function getProtocolos(): array
     {
-        // consegir los protocolos origen y destino de las propiedades del mensaje:
+        // conseguir los protocolos origen y destino de las propiedades del mensaje:
         // MessageProperties
         $messageProperties = $this->xmldata->MessageProperties;
 
@@ -174,30 +174,30 @@ class As4Entregar extends As4CollaborationInfo
                 $value = $node_property;
 
                 // origen
-                if ($name == 'lugar_org') {
+                if ($name === 'lugar_org') {
                     $lugar_org = $value;
                 }
-                if ($name == 'num_org') {
+                if ($name === 'num_org') {
                     $num_org = $value;
                 }
-                if ($name == 'any_org') {
+                if ($name === 'any_org') {
                     $any_org = $value;
                 }
-                if ($name == 'mas_org') {
+                if ($name === 'mas_org') {
                     $mas_org = $value;
                 }
 
                 // sigla destino
-                if ($name == 'lugar_dst') {
+                if ($name === 'lugar_dst') {
                     $lugar_dst = $value;
                 }
-                if ($name == 'num_dst') {
+                if ($name === 'num_dst') {
                     $num_dst = $value;
                 }
-                if ($name == 'any_dst') {
+                if ($name === 'any_dst') {
                     $any_dst = $value;
                 }
-                if ($name == 'mas_dst') {
+                if ($name === 'mas_dst') {
                     $mas_dst = $value;
                 }
 
@@ -223,13 +223,13 @@ class As4Entregar extends As4CollaborationInfo
         return $a_prot;
     }
 
-    private function getCollaborationInfo()
+    private function getCollaborationInfo(): void
     {
         $this->setService((string)$this->xmldata->CollaborationInfo->Service);
         $this->setAccion((string)$this->xmldata->CollaborationInfo->Action);
     }
 
-    private function getPayload()
+    private function getPayload(): void
     {
         $payload = $this->xmldata->PayloadInfo;
         $location = $payload->PartInfo->attributes()->location;
@@ -249,23 +249,28 @@ class As4Entregar extends As4CollaborationInfo
         }
     }
 
-    private function getEscritoAnular($location)
+    private function getEscritoAnular($location): void
     {
         $this->dom = new DOMDocument('1.0', 'UTF-8');
         $this->dom->preserveWhiteSpace = false;
         $this->dom->load($location, LIBXML_PARSEHUGE);
 
-        $this->a_Prot_org = $this->getProt_org();
+        $this->oProt_org = $this->getProt_org();
         $this->anular_txt = $this->getAnular();
     }
 
-    private function getProt_org()
+    private function getProt_org(): stdClass
     {
         $xml_prot = $this->dom->getElementsByTagName('prot_origen')->item(0);
         return $this->xml2prot_simple($xml_prot, 'org');
     }
 
-    private function xml2prot_simple($xml, $sufijo)
+    /**
+     * @param $xml
+     * @param $sufijo string
+     * @return stdClass
+     */
+    private function xml2prot_simple($xml, $sufijo): stdClass
     {
         $nom_lugar = '';
         $ilugar = '';
@@ -278,18 +283,18 @@ class As4Entregar extends As4CollaborationInfo
                 $name = $node->nodeName;
                 $value = $node->nodeValue;
 
-                if ($name == 'lugar_' . $sufijo) {
+                if ($name === 'lugar_' . $sufijo) {
                     $nom_lugar = (string)$value;
                     // pasarlo de texto al id correspondiente:
-                    $ilugar = array_search($nom_lugar, $this->aLugares);
+                    $ilugar = array_search($nom_lugar, $this->aLugares, true);
                 }
-                if ($name == 'num_' . $sufijo) {
+                if ($name === 'num_' . $sufijo) {
                     $num = (string)$value;
                 }
-                if ($name == 'any_' . $sufijo) {
+                if ($name === 'any_' . $sufijo) {
                     $any = (string)$value;
                 }
-                if ($name == 'mas_' . $sufijo) {
+                if ($name === 'mas_' . $sufijo) {
                     $mas = (string)$value;
                 }
             }
@@ -309,7 +314,7 @@ class As4Entregar extends As4CollaborationInfo
         return $this->getValorTag('anular');
     }
 
-    private function getValorTag($tagname)
+    private function getValorTag($tagname): string
     {
         $rta = '';
         $nodelist = $this->dom->getElementsByTagName($tagname);
@@ -319,7 +324,7 @@ class As4Entregar extends As4CollaborationInfo
         return $rta;
     }
 
-    private function getEscrito($location)
+    private function getEscrito($location): void
     {
         //$this->xml_escrito = simplexml_load_file($location);
         $this->dom = new DOMDocument('1.0', 'UTF-8');
@@ -328,7 +333,7 @@ class As4Entregar extends As4CollaborationInfo
         //$this->dom->load($location);
 
         $this->a_Prot_dst = $this->getProt_dst();
-        $this->a_Prot_org = $this->getProt_org();
+        $this->oProt_org = $this->getProt_org();
         $this->a_Prot_ref = $this->getProt_ref();
         // Si el destino tiene número de protocolo se añade a las referencias
         if (!empty((array)$this->a_Prot_dst)) {
@@ -349,8 +354,8 @@ class As4Entregar extends As4CollaborationInfo
         $this->bypass = $this->getByPass();
 
         // compartido
-        if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
-            || $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
+        if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR
+            || $this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
             $this->getCompartido();
         }
     }
@@ -379,34 +384,43 @@ class As4Entregar extends As4CollaborationInfo
         return $a_json_prot;
     }
 
+    /**
+     * @throws \Exception
+     */
     private function getF_entrada()
     {
         $f_entrada_iso = (string)$this->getValorTag('f_entrada');
         if (!empty($f_entrada_iso)) {
             return new DateTimeLocal($f_entrada_iso);
-        } else {
-            return '';
         }
+
+        return '';
     }
 
+    /**
+     * @throws \Exception
+     */
     private function getF_escrito()
     {
         $f_escrito_iso = (string)$this->getValorTag('f_escrito');
         if (!empty($f_escrito_iso)) {
             return new DateTimeLocal($f_escrito_iso);
-        } else {
-            return '';
         }
+
+        return '';
     }
 
+    /**
+     * @throws \Exception
+     */
     private function getF_contestar()
     {
         $f_contestar_iso = (string)$this->getValorTag('f_contestar');
         if (!empty($f_contestar_iso)) {
             return new DateTimeLocal($f_contestar_iso);
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     private function getAsunto()
@@ -419,7 +433,7 @@ class As4Entregar extends As4CollaborationInfo
         $xml_adjuntos = $this->dom->getElementsByTagName('content')->item(0);
         if (!empty($xml_adjuntos)) {
             $name = $xml_adjuntos->nodeName;
-            if ($name == 'content') {
+            if ($name === 'content') {
                 $value = $xml_adjuntos->nodeValue;
                 $a_mime = $this->descomponerMime($value);
                 foreach ($a_mime as $mime) {
@@ -452,7 +466,7 @@ class As4Entregar extends As4CollaborationInfo
             $part_data = mailparse_msg_get_part_data($part);
             $content_type = $part_data['content-type'];
             // no se coje el primero, que es el grupo:
-            if ($content_type == 'multipart/mixed') {
+            if ($content_type === 'multipart/mixed') {
                 continue;
             }
             $starting_pos_body = $part_data['starting-pos-body'];
@@ -471,7 +485,7 @@ class As4Entregar extends As4CollaborationInfo
     {
         $nodo_content = $this->dom->getElementsByTagName('content')->item(0);
         foreach ($nodo_content->attributes as $attribute) {
-            if ($attribute->name == 'type') {
+            if ($attribute->name === 'type') {
                 return (string)$attribute->value;
             }
         }
@@ -494,7 +508,7 @@ class As4Entregar extends As4CollaborationInfo
             if (!empty($xml_adjuntos)) {
                 foreach ($xml_adjuntos->childNodes as $adjunto) {
                     $name = $adjunto->nodeName;
-                    if ($name == 'adjunto') {
+                    if ($name === 'adjunto') {
                         $value = $adjunto->nodeValue;
 
                         $a_mime = $this->descomponerMime($value);
@@ -521,13 +535,13 @@ class As4Entregar extends As4CollaborationInfo
             foreach ($xml_compartido->childNodes as $node) {
 
                 $name = $node->nodeName;
-                if ($name == 'descripcion') {
+                if ($name === 'descripcion') {
                     $this->descripcion = $node->nodeValue;
                 }
-                if ($name == 'categoria') {
+                if ($name === 'categoria') {
                     $this->categoria = $node->nodeValue;
                 }
-                if ($name == 'destinos') {
+                if ($name === 'destinos') {
                     $this->a_destinos = $this->getDestinos($node);
                 }
             }
@@ -540,7 +554,7 @@ class As4Entregar extends As4CollaborationInfo
         if (!empty($xml_destinos)) {
             foreach ($xml_destinos->childNodes as $node) {
                 $name = $node->nodeName;
-                if ($name == 'destino') {
+                if ($name === 'destino') {
                     $aDestinos[] = (integer)$node->nodeValue;
                 }
             }
@@ -557,8 +571,8 @@ class As4Entregar extends As4CollaborationInfo
     {
         $this->msg = '';
         $success = TRUE;
-        // service + accion: que hay que hacer
-        if ($this->getService() == 'correo') {
+        // service + acción: que hay que hacer
+        if ($this->getService() === 'correo') {
             switch ($this->getAccion()) {
                 case As4CollaborationInfo::ACCION_NUEVO:
                     // comprobar que existe destino (sigla)
@@ -594,13 +608,12 @@ class As4Entregar extends As4CollaborationInfo
             }
             return $success;
         }
-
     }
 
     /**
      * @return string
      */
-    public function getService()
+    public function getService(): string
     {
         return $this->service;
     }
@@ -608,7 +621,7 @@ class As4Entregar extends As4CollaborationInfo
     /**
      * @param string $service
      */
-    public function setService($service)
+    public function setService(string $service): void
     {
         $this->service = strtolower($service);
     }
@@ -663,7 +676,7 @@ class As4Entregar extends As4CollaborationInfo
         $oEntrada = new EntradaEntidad($siglaDestino);
         $oEntrada->DBCargar();
         $oEntrada->setModo_entrada(Entrada::MODO_MANUAL);
-        $oEntrada->setJson_prot_origen($this->a_Prot_org);
+        $oEntrada->setJson_prot_origen($this->oProt_org);
         $oEntrada->setJson_prot_ref($this->a_Prot_ref);
         $oEntrada->setAsunto_entrada($this->asunto);
         $oEntrada->setAsunto($this->asunto);
@@ -686,11 +699,9 @@ class As4Entregar extends As4CollaborationInfo
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt = $oEntrada->getErrorTxt();
             exit ($error_txt);
-        } else {
-            $id_entrada = $oEntrada->getId_entrada();
         }
 
-        return $id_entrada;
+        return $oEntrada->getId_entrada();
     }
 
     private function cargarContenido($id_entrada, $siglaDestino = '', $compartido = FALSE)
@@ -795,15 +806,15 @@ class As4Entregar extends As4CollaborationInfo
         $f_entrada = $oHoy->getFromLocal();
         $f_plazo = $this->oF_contestar->getFromLocal();
 
-        $id_origen = $this->a_Prot_org->id_lugar;
-        $prot_num = $this->a_Prot_org->num;
-        $prot_any = $this->a_Prot_org->any;
+        $id_origen = $this->oProt_org->id_lugar;
+        $prot_num = $this->oProt_org->num;
+        $prot_any = $this->oProt_org->any;
 
         $location = $this->aLugares[$id_origen];
         $location .= empty($prot_num) ? '' : ' ' . $prot_num;
         $location .= empty($prot_any) ? '' : '/' . $prot_any;
 
-        $prot_mas = $this->a_Prot_org->mas;
+        $prot_mas = $this->oProt_org->mas;
 
         $id_reg = 'EN' . $id_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': EN)
         $oPendiente = new Pendiente($cal_oficina, $calendario, $user_davical);
@@ -828,11 +839,10 @@ class As4Entregar extends As4CollaborationInfo
      * Se debe crear una entrada_compartida en public (y adjuntos si hay)
      * y posteriormente una entrada para cada destino, con referencia al id_entrada_compartida.
      *
-     * @param boolean $avisoIndividual . Si se debe mandar o no la entrada a cada detino
+     * @param boolean $avisoIndividual . Si se debe mandar o no la entrada a cada destino
      */
     private function entrada_compartida($avisoIndividual = TRUE)
     {
-
         // Valores que no pueden ser NULL:
         if (empty($this->descripcion)) {
             $this->msg = _("La entrada no tiene descripción");
@@ -852,7 +862,7 @@ class As4Entregar extends As4CollaborationInfo
          * no hay que crear entradas con fechas antiguas, simplemente incorporarlo a la
          * lista de destino del escrito compartido.
          */
-        $oEntradaCompartida->setJson_prot_origen($this->a_Prot_org);
+        $oEntradaCompartida->setJson_prot_origen($this->oProt_org);
         $oEntradaCompartida->setJson_prot_ref($this->a_Prot_ref);
         $oEntradaCompartida->setCategoria($this->categoria);
         $oEntradaCompartida->setAsunto_entrada($this->asunto);
@@ -862,9 +872,9 @@ class As4Entregar extends As4CollaborationInfo
 
         if ($oEntradaCompartida->DBGuardar() === FALSE) {
             return FALSE;
-        } else {
-            $id_entrada_compartida = $oEntradaCompartida->getId_entrada_compartida();
         }
+
+        $id_entrada_compartida = $oEntradaCompartida->getId_entrada_compartida();
         // contenido de la entrada compartida
         if (!empty($this->content)) {
             $this->cargarContenido($id_entrada_compartida, '', TRUE);
@@ -880,7 +890,7 @@ class As4Entregar extends As4CollaborationInfo
             foreach ($this->a_destinos as $id_destino) {
                 $siglaDestino = $this->aLugares[$id_destino];
                 // comprobar que el destino está en la plataforma, sino, no se crea la entrada
-                if (in_array($siglaDestino, $this->getEntidadesPlataforma())) {
+                if (in_array($siglaDestino, $this->getEntidadesPlataforma(), true)) {
                     $id_entrada = $this->nuevaEntrada($siglaDestino, $id_entrada_compartida);
                     // Compruebo si hay que generar un pendiente
                     if (!empty($this->oF_contestar) && $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
@@ -892,9 +902,8 @@ class As4Entregar extends As4CollaborationInfo
         return TRUE;
     }
 
-    private function cargarAdjuntoCompartido($a_adjuntos, $id_entrada)
+    private function cargarAdjuntoCompartido($a_adjuntos, $id_entrada): void
     {
-
         foreach ($a_adjuntos as $adjunto) {
             $filename = $adjunto['filename'];
             $doc_encoded = $adjunto['contenido'];
@@ -914,21 +923,21 @@ class As4Entregar extends As4CollaborationInfo
      *
      * @return boolean
      */
-    private function orden_reemplazar()
+    private function orden_reemplazar(): bool
     {
         if ($this->orden_anular_entrada_compartida()) {
             return $this->entrada_compartida(FALSE);
-        } else {
-            return FALSE;
         }
+
+        return FALSE;
     }
 
     private function orden_anular_entrada_compartida()
     {
         $success = FALSE;
-        $aProt_org = ['id_lugar' => $this->a_Prot_org->id_lugar,
-            'num' => $this->a_Prot_org->num,
-            'any' => $this->a_Prot_org->any,
+        $aProt_org = ['id_lugar' => $this->oProt_org->id_lugar,
+            'num' => $this->oProt_org->num,
+            'any' => $this->oProt_org->any,
             'mas' => '',
         ];
 

@@ -39,7 +39,7 @@ switch ($Q_que) {
         // id_entrada formato: tabla#id_reg
         $Q_id_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
-        // En el caso de reemplazar, no se prgunta el motivo. Siempre es:
+        // En el caso de reemplazar, no se pregunta el motivo. Siempre es:
         $Qtext = _("por n.v.");
 
         $tipo_escritos = strtok($Q_id_entrada, '#');
@@ -47,12 +47,12 @@ switch ($Q_que) {
         $tipo_escrito = rtrim($tipo_escritos, 's');
         $id_entrada = strtok('#');
 
-        if ($tipo_escrito == 'escrito') {
+        if ($tipo_escrito === 'escrito') {
             $oEscrito = new Escrito($id_entrada);
         }
-        if ($tipo_escrito == 'entrada') {
+        if ($tipo_escrito === 'entrada') {
             $oEscrito = new EntradaBypass($id_entrada);
-            // comprobar que es bypass. Por el click podria ser una entrada normal
+            // comprobar que es bypass. Por el click podría ser una entrada normal
             $bypass = $oEscrito->getBypass();
             if (!is_true($bypass)) {
                 $error_txt = _("Sólo se pueden reemplazar las entradas bypass");
@@ -86,7 +86,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case As4CollaborationInfo::ACCION_ORDEN_ANULAR:
         $plataforma = $_SESSION['oConfig']->getPlataformaMantenimiento();
         $error_txt = '';
@@ -100,10 +99,10 @@ switch ($Q_que) {
         $tipo_escrito = rtrim($tipo_escritos, 's');
         $id_entrada = strtok('#');
 
-        if ($tipo_escrito == 'escrito') {
+        if ($tipo_escrito === 'escrito') {
             $oEscrito = new Escrito($id_entrada);
         }
-        if ($tipo_escrito == 'entrada') {
+        if ($tipo_escrito === 'entrada') {
             $oEscrito = new EntradaBypass($id_entrada);
             // comprobar que es bypass. Por el click podria ser una entrada normal
             $bypass = $oEscrito->getBypass();
@@ -139,7 +138,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'perm_ver':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $oEntrada = new Entrada($Q_id_entrada);
@@ -163,7 +161,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'modificar_anular':
         $error_txt = '';
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
@@ -202,7 +199,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'modificar_detalle':
         $error_txt = '';
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
@@ -225,7 +221,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'get_anular':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $oEntrada = new Entrada($Q_id_entrada);
@@ -244,7 +239,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'get_detalle':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $oEntrada = new Entrada($Q_id_entrada);
@@ -267,7 +261,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'get_destinos':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $oEntradaBypass = new EntradaBypass($Q_id_entrada);
@@ -294,7 +287,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'comprobar_pdte': //antes de eliminar
         $bypass_txt = '';
         $pendientes_txt = '';
@@ -323,7 +315,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'comprobar': //antes de eliminar
         $bypass_txt = '';
         $pendientes_txt = '';
@@ -359,7 +350,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'eliminar':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $error_txt = '';
@@ -396,7 +386,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'buscar':
         $Qid_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
         $Qid_oficina = (integer)filter_input(INPUT_POST, 'oficina_buscar');

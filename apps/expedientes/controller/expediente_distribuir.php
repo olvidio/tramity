@@ -28,8 +28,8 @@ $Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 $Q_modo = (string)filter_input(INPUT_POST, 'modo');
 
-// En el caso de ajuntos, puedo abrir una nueva ventana para ver el expediente,
-// y en ese caso el parametro viene por GET:
+// En el caso de adjuntos, puedo abrir una nueva ventana para ver el expediente,
+// y en ese caso el parámetro viene por GET:
 $cargar_css = FALSE;
 $show_tabs = TRUE;
 if (empty($Q_id_expediente)) {

@@ -559,7 +559,7 @@ class Enviar
         $this->getDocumento();
 
         if ($this->tipo === 'escrito') {
-            // Si la categoria es 'sin numerar', no hay protocolo local.
+            // Si la categoría es 'sin numerar', no hay protocolo local.
             // fabrico uno con sólo el lugar:
             if ($this->oEscrito->getCategoria() == Categoria::CAT_E12) {
                 // Busco el id_lugar de la dl.
@@ -579,13 +579,9 @@ class Enviar
             $json_prot_org = $this->oEntradaBypass->getJson_prot_origen();
             // cambio el nombre del fichero. No hace falta añadir la sigla destino si es compartido.
             switch ($this->accion) {
-                case As4CollaborationInfo::ACCION_ORDEN_ANULAR:
-                    $parentesi = $this->accion;
-                    break;
-                case As4CollaborationInfo::ACCION_REEMPLAZAR:
-                    $parentesi = $this->accion;
-                    break;
                 case As4CollaborationInfo::ACCION_COMPARTIR:
+                case As4CollaborationInfo::ACCION_REEMPLAZAR:
+                case As4CollaborationInfo::ACCION_ORDEN_ANULAR:
                     $parentesi = $this->accion;
                     break;
                 default:
