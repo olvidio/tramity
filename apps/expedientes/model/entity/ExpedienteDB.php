@@ -3,10 +3,12 @@
 namespace expedientes\model\entity;
 
 use core;
+use core\ClasePropiedades;
 use PDO;
 use PDOException;
 use stdClass;
-use web;
+use web\DateTimeLocal;
+use web\NullDateTimeLocal;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula expedientes
@@ -27,7 +29,7 @@ use web;
  * @version 1.0
  * @created 20/10/2020
  */
-class ExpedienteDB extends core\ClasePropiedades
+class ExpedienteDB extends ClasePropiedades
 {
 
     // constantes:
@@ -128,7 +130,7 @@ class ExpedienteDB extends core\ClasePropiedades
     /**
      * F_contestar de ExpedienteDB
      *
-     * @var web\DateTimeLocal
+     * @var DateTimeLocal
      */
     protected $df_contestar;
     /**
@@ -140,19 +142,19 @@ class ExpedienteDB extends core\ClasePropiedades
     /**
      * F_ini_circulacion de ExpedienteDB
      *
-     * @var web\DateTimeLocal
+     * @var DateTimeLocal
      */
     protected $df_ini_circulacion;
     /**
      * F_reunion de ExpedienteDB
      *
-     * @var web\DateTimeLocal
+     * @var DateTimeLocal
      */
     protected $df_reunion;
     /**
      * F_aprobacion de ExpedienteDB
      *
-     * @var web\DateTimeLocal
+     * @var DateTimeLocal
      */
     protected $df_aprobacion;
     /**
@@ -208,13 +210,13 @@ class ExpedienteDB extends core\ClasePropiedades
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_expediente') && $val_id !== '') {
+                if (($nom_id === 'id_expediente') && $val_id !== '') {
                     $this->iid_expediente = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_expediente = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_expediente = (int)$a_id;
                 $this->aPrimary_key = array('iid_expediente' => $this->iid_expediente);
             }
         }
@@ -524,10 +526,10 @@ class ExpedienteDB extends core\ClasePropiedades
 
     /**
      * estableix el valor de l'atribut df_contestar de ExpedienteDB
-     * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
+     * Si df_contestar es string, y convert=TRUE se convierte usando el formato DateTimeLocal->getFormat().
      * Si convert es FALSE, df_contestar debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param web\DateTimeLocal|string df_contestar='' optional.
+     * @param DateTimeLocal|string df_contestar='' optional.
      * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     function setF_contestar($df_contestar = '', $convert = TRUE)
@@ -552,10 +554,10 @@ class ExpedienteDB extends core\ClasePropiedades
 
     /**
      * estableix el valor de l'atribut df_ini_circulacion de ExpedienteDB
-     * Si df_ini_circulacion es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
+     * Si df_ini_circulacion es string, y convert=TRUE se convierte usando el formato DateTimeLocal->getFormat().
      * Si convert es FALSE, df_ini_circulacion debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param web\DateTimeLocal|string df_ini_circulacion='' optional.
+     * @param DateTimeLocal|string df_ini_circulacion='' optional.
      * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     function setF_ini_circulacion($df_ini_circulacion = '', $convert = TRUE)
@@ -570,10 +572,10 @@ class ExpedienteDB extends core\ClasePropiedades
 
     /**
      * estableix el valor de l'atribut df_reunion de ExpedienteDB
-     * Si df_reunion es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
+     * Si df_reunion es string, y convert=TRUE se convierte usando el formato DateTimeLocal->getFormat().
      * Si convert es FALSE, df_reunion debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param web\DateTimeLocal|string df_reunion='' optional.
+     * @param DateTimeLocal|string df_reunion='' optional.
      * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     function setF_reunion($df_reunion = '', $convert = TRUE)
@@ -588,10 +590,10 @@ class ExpedienteDB extends core\ClasePropiedades
 
     /**
      * estableix el valor de l'atribut df_aprobacion de ExpedienteDB
-     * Si df_aprobacion es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
+     * Si df_aprobacion es string, y convert=TRUE se convierte usando el formato DateTimeLocal->getFormat().
      * Si convert es FALSE, df_aprobacion debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param web\DateTimeLocal|string df_aprobacion='' optional.
+     * @param DateTimeLocal|string df_aprobacion='' optional.
      * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     function setF_aprobacion($df_aprobacion = '', $convert = TRUE)
@@ -693,13 +695,13 @@ class ExpedienteDB extends core\ClasePropiedades
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_expediente') && $val_id !== '') {
+                if (($nom_id === 'id_expediente') && $val_id !== '') {
                     $this->iid_expediente = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_expediente = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_expediente = (int)$a_id;
                 $this->aPrimary_key = array('iid_expediente' => $this->iid_expediente);
             }
         }
@@ -815,9 +817,9 @@ class ExpedienteDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut iprioridad de ExpedienteDB
      *
-     * @return integer iprioridad
+     * @return integer|null iprioridad
      */
-    function getPrioridad(): int
+    function getPrioridad(): ?int
     {
         if (!isset($this->iprioridad) && !$this->bLoaded) {
             $this->DBCargar();
@@ -909,7 +911,7 @@ class ExpedienteDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_contestar de ExpedienteDB
      *
-     * @return web\DateTimeLocal df_contestar
+     * @return DateTimeLocal|NullDateTimeLocal df_contestar
      */
     function getF_contestar()
     {
@@ -917,7 +919,7 @@ class ExpedienteDB extends core\ClasePropiedades
             $this->DBCargar();
         }
         if (empty($this->df_contestar)) {
-            return new web\NullDateTimeLocal();
+            return new NullDateTimeLocal();
         }
         $oConverter = new core\Converter('date', $this->df_contestar);
         return $oConverter->fromPg();
@@ -926,9 +928,9 @@ class ExpedienteDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut iestado de ExpedienteDB
      *
-     * @return integer iestado
+     * @return integer|null iestado
      */
-    function getEstado(): int
+    function getEstado(): ?int
     {
         if (!isset($this->iestado) && !$this->bLoaded) {
             $this->DBCargar();
@@ -939,7 +941,7 @@ class ExpedienteDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_ini_circulacion de ExpedienteDB
      *
-     * @return web\DateTimeLocal df_ini_circulacion
+     * @return DateTimeLocal|NullDateTimeLocal df_ini_circulacion
      */
     function getF_ini_circulacion()
     {
@@ -947,7 +949,7 @@ class ExpedienteDB extends core\ClasePropiedades
             $this->DBCargar();
         }
         if (empty($this->df_ini_circulacion)) {
-            return new web\NullDateTimeLocal();
+            return new NullDateTimeLocal();
         }
         $oConverter = new core\Converter('date', $this->df_ini_circulacion);
         return $oConverter->fromPg();
@@ -956,7 +958,7 @@ class ExpedienteDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_reunion de ExpedienteDB
      *
-     * @return web\DateTimeLocal df_reunion
+     * @return DateTimeLocal|NullDateTimeLocal df_reunion
      */
     function getF_reunion()
     {
@@ -964,7 +966,7 @@ class ExpedienteDB extends core\ClasePropiedades
             $this->DBCargar();
         }
         if (empty($this->df_reunion)) {
-            return new web\NullDateTimeLocal();
+            return new NullDateTimeLocal();
         }
         $oConverter = new core\Converter('date', $this->df_reunion);
         return $oConverter->fromPg();
@@ -973,7 +975,7 @@ class ExpedienteDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_aprobacion de ExpedienteDB
      *
-     * @return web\DateTimeLocal df_aprobacion
+     * @return DateTimeLocal|NullDateTimeLocal df_aprobacion
      */
     function getF_aprobacion()
     {
@@ -981,7 +983,7 @@ class ExpedienteDB extends core\ClasePropiedades
             $this->DBCargar();
         }
         if (empty($this->df_aprobacion)) {
-            return new web\NullDateTimeLocal();
+            return new NullDateTimeLocal();
         }
         $oConverter = new core\Converter('date', $this->df_aprobacion);
         return $oConverter->fromPg();
