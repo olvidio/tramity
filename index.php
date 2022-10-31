@@ -63,7 +63,7 @@ if ($valor_ambito === Cargo::AMBITO_DL) {
         $id_oficina_secretaria = $cOficinas[0]->getId_oficina();
     }
     $mi_id_oficina = ConfigGlobal::role_id_oficina();
-    if ($id_oficina_secretaria == $mi_id_oficina) {
+    if ($id_oficina_secretaria === $mi_id_oficina) {
         $a_roles_posibles[] = 'secretaria';
     }
 }
@@ -77,14 +77,14 @@ if ($role_actual !== 'admin') {
         if ($valor_ambito === Cargo::AMBITO_DL) {
             $oCargo = new Cargo($id_cargo);
             $id_oficina_cargo = $oCargo->getId_oficina();
-            if ($id_oficina_cargo == $id_oficina_secretaria) {
+            if ($id_oficina_cargo === $id_oficina_secretaria) {
                 $a_roles_posibles[] = 'secretaria';
             }
         }
     }
 }
 
-$_SESSION['session_auth']['a_roles'] = $a_roles_posibles;
+$_SESSION['session_auth']['a_roles'] = array_unique($a_roles_posibles);
 ?>
 <!DOCTYPE html>
 <head>
