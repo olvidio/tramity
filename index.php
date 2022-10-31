@@ -50,10 +50,10 @@ $role_actual = $_SESSION['session_auth']['role_actual'];
 
 
 $oConfigSchema = new ConfigSchema('ambito');
-$valor_ambito = $oConfigSchema->getValor();
+$valor_ambito = (int)$oConfigSchema->getValor();
 $id_ambito_dl = FALSE;
 $a_roles_posibles = [];
-if ($valor_ambito == Cargo::AMBITO_DL) {
+if ($valor_ambito === Cargo::AMBITO_DL) {
     $id_ambito_dl = TRUE;
     // role de 'secretaria' para los oficiales de secretaria:
     $id_oficina_secretaria = '';

@@ -4,6 +4,7 @@ namespace escritos\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use DateTimeInterface;
 use escritos\model\entity\GestorEscritoDB;
 use expedientes\model\entity\GestorAccion;
 use expedientes\model\Expediente;

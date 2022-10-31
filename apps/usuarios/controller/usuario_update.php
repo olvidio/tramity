@@ -26,7 +26,7 @@ switch ($Q_que) {
         $Q_role = (string)filter_input(INPUT_POST, 'role');
         $_SESSION['session_auth']['role_actual'] = $Q_role;
         $aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
-        $id_cargo = array_search($Q_role, $aPosiblesCargos);
+        $id_cargo = array_search($Q_role, $aPosiblesCargos, true);
         // en el caso se secretaria no tiene id:
         if ($id_cargo !== FALSE) {
             $_SESSION['session_auth']['id_cargo'] = $id_cargo;
