@@ -16,14 +16,17 @@ use entradas\model\EntradaEntidadAdjunto;
 use entradas\model\EntradaEntidadDoc;
 use entradas\model\GestorEntrada;
 use etherpad\model\Etherpad;
+use Exception;
 use lugares\model\entity\GestorLugar;
 use pendientes\model\Pendiente;
+use SimpleXMLElement;
 use stdClass;
 use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
 use web\Protocolo;
 use web\StringLocal;
+use function core\is_true;
 
 /**
  * No se usa el simpleXml porque con los adjuntos grandes se acaba la memoria...
@@ -34,28 +37,36 @@ use web\StringLocal;
 class As4Entregar extends As4CollaborationInfo
 {
 
+    /**
+     * @var string
+     */
     private $msg;
+    /**
+     * @var  SimpleXMLElement
+     */
     private $xmldata;
 
+    /**
+     * @var string
+     */
     private $location;
     private $sigla_destino;
-    private $sigla_origen;
 
     private $service;
     private $dom;
 
     /**
-     * a_Prot_dst
-     * @var array
+     * oProt_dst
+     * @var stdClass
      */
-    private $a_Prot_dst;
+    private $oProt_dst;
     /**
-     * a_Prot_dst
+     * oProt_org
      * @var stdClass
      */
     private $oProt_org;
     /**
-     * a_Prot_dst
+     * a_Prot_ref
      * @var array
      */
     private $a_Prot_ref;
@@ -96,20 +107,27 @@ class As4Entregar extends As4CollaborationInfo
      * @var integer
      */
     private $visibilidad;
+    /**
+     * @var boolean
+     */
     private $bypass;
-
     /**
      *
      * @var array
      */
     private $a_adjuntos;
-
     /**
      *
      * @var array
      */
     private $a_destinos;
+    /**
+     * @var string
+     */
     private $descripcion;
+    /**
+     * @var integer
+     */
     private $categoria;
 
     /**
@@ -126,7 +144,10 @@ class As4Entregar extends As4CollaborationInfo
     private $anular_txt;
 
 
-    public function __construct($xmldata)
+    /**
+     * @param $xmldata  SimpleXMLElement
+     */
+    public function __construct(SimpleXMLElement $xmldata)
     {
         $gesLugares = new GestorLugar();
         $this->aLugares = $gesLugares->getArrayLugares();
@@ -135,7 +156,7 @@ class As4Entregar extends As4CollaborationInfo
         $this->explotar_xml();
     }
 
-    private function explotar_xml()
+    private function explotar_xml(): void
     {
         // MessageProperties
         $this->getMessageProperties();
@@ -143,16 +164,16 @@ class As4Entregar extends As4CollaborationInfo
         // CollaborationInfo
         $this->getCollaborationInfo();
 
-        // Papyload
+        // Payload
         $this->getPayload();
     }
 
-    private function getMessageProperties()
+    private function getMessageProperties(): void
     {
-        return $this->getProtocolos();
+        $this->getProtocolos();
     }
 
-    private function getProtocolos(): array
+    private function getProtocolos(): void
     {
         // conseguir los protocolos origen y destino de las propiedades del mensaje:
         // MessageProperties
@@ -217,10 +238,8 @@ class As4Entregar extends As4CollaborationInfo
             'mas' => $mas_dst,
         ];
 
-        $this->sigla_origen = (string)$lugar_org;
         $this->sigla_destino = (string)$lugar_dst;
         // si no existen, hay que mirar dentro del mensaje
-        return $a_prot;
     }
 
     private function getCollaborationInfo(): void
@@ -232,28 +251,28 @@ class As4Entregar extends As4CollaborationInfo
     private function getPayload(): void
     {
         $payload = $this->xmldata->PayloadInfo;
-        $location = $payload->PartInfo->attributes()->location;
-        $this->setLocation($location);
+        $xmlFileName = $payload->PartInfo->attributes()->location;
+        $this->setLocation($xmlFileName);
 
         switch ($this->accion) {
             case As4CollaborationInfo::ACCION_ORDEN_ANULAR:
                 // propiamente no hay escrito:
-                $this->getEscritoAnular($location);
+                $this->getEscritoAnularFromFileName($xmlFileName);
                 break;
             case As4CollaborationInfo::ACCION_REEMPLAZAR:
-                $this->getEscritoAnular($location);
-                $this->getEscrito($location);
+                $this->getEscritoAnularFromFileName($xmlFileName);
+                $this->getEscritoFromFileName($xmlFileName);
                 break;
             default:
-                $this->getEscrito($location);
+                $this->getEscritoFromFileName($xmlFileName);
         }
     }
 
-    private function getEscritoAnular($location): void
+    private function getEscritoAnularFromFileName($xmlFileName): void
     {
         $this->dom = new DOMDocument('1.0', 'UTF-8');
         $this->dom->preserveWhiteSpace = false;
-        $this->dom->load($location, LIBXML_PARSEHUGE);
+        $this->dom->load($xmlFileName, LIBXML_PARSEHUGE);
 
         $this->oProt_org = $this->getProt_org();
         $this->anular_txt = $this->getAnular();
@@ -270,9 +289,8 @@ class As4Entregar extends As4CollaborationInfo
      * @param $sufijo string
      * @return stdClass
      */
-    private function xml2prot_simple($xml, $sufijo): stdClass
+    private function xml2prot_simple($xml, string $sufijo): stdClass
     {
-        $nom_lugar = '';
         $ilugar = '';
         $num = '';
         $any = '';
@@ -305,11 +323,10 @@ class As4Entregar extends As4CollaborationInfo
             $mas = '';
         }
 
-        $oProtOrigen = new Protocolo($ilugar, $num, $any, $mas);
-        return $oProtOrigen->getProt();
+        return (new Protocolo($ilugar, $num, $any, $mas))->getProt();
     }
 
-    private function getAnular()
+    private function getAnular(): string
     {
         return $this->getValorTag('anular');
     }
@@ -324,20 +341,18 @@ class As4Entregar extends As4CollaborationInfo
         return $rta;
     }
 
-    private function getEscrito($location): void
+    private function getEscritoFromFileName($xmlFileName): void
     {
-        //$this->xml_escrito = simplexml_load_file($location);
         $this->dom = new DOMDocument('1.0', 'UTF-8');
         $this->dom->preserveWhiteSpace = false;
-        $this->dom->load($location, LIBXML_PARSEHUGE);
-        //$this->dom->load($location);
+        $this->dom->load($xmlFileName, LIBXML_PARSEHUGE);
 
-        $this->a_Prot_dst = $this->getProt_dst();
+        $this->oProt_dst = $this->getProt_dst();
         $this->oProt_org = $this->getProt_org();
         $this->a_Prot_ref = $this->getProt_ref();
         // Si el destino tiene número de protocolo se añade a las referencias
-        if (!empty((array)$this->a_Prot_dst)) {
-            $oProtDst = $this->a_Prot_dst;
+        if (!empty((array)$this->oProt_dst)) {
+            $oProtDst = $this->oProt_dst;
             if (!empty($oProtDst->num)) {
                 array_unshift($this->a_Prot_ref, $oProtDst);
             }
@@ -360,19 +375,19 @@ class As4Entregar extends As4CollaborationInfo
         }
     }
 
-    private function getProt_dst()
+    private function getProt_dst(): stdClass
     {
         $xml_prot = $this->dom->getElementsByTagName('prot_destino')->item(0);
         return $this->xml2prot_simple($xml_prot, 'dst');
     }
 
-    private function getProt_ref()
+    private function getProt_ref(): array
     {
         $xml_prot = $this->dom->getElementsByTagName('prot_referencias')->item(0);
         return $this->xml2prot_array($xml_prot, 'ref');
     }
 
-    private function xml2prot_array($xml, $sufijo)
+    private function xml2prot_array($xml, $sufijo): array
     {
         $a_json_prot = [];
         // para evitar el mensaje: "Node no longer exists"
@@ -385,11 +400,11 @@ class As4Entregar extends As4CollaborationInfo
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function getF_entrada()
     {
-        $f_entrada_iso = (string)$this->getValorTag('f_entrada');
+        $f_entrada_iso = $this->getValorTag('f_entrada');
         if (!empty($f_entrada_iso)) {
             return new DateTimeLocal($f_entrada_iso);
         }
@@ -398,11 +413,11 @@ class As4Entregar extends As4CollaborationInfo
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function getF_escrito()
     {
-        $f_escrito_iso = (string)$this->getValorTag('f_escrito');
+        $f_escrito_iso = $this->getValorTag('f_escrito');
         if (!empty($f_escrito_iso)) {
             return new DateTimeLocal($f_escrito_iso);
         }
@@ -411,11 +426,11 @@ class As4Entregar extends As4CollaborationInfo
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function getF_contestar()
     {
-        $f_contestar_iso = (string)$this->getValorTag('f_contestar');
+        $f_contestar_iso = $this->getValorTag('f_contestar');
         if (!empty($f_contestar_iso)) {
             return new DateTimeLocal($f_contestar_iso);
         }
@@ -423,7 +438,7 @@ class As4Entregar extends As4CollaborationInfo
         return '';
     }
 
-    private function getAsunto()
+    private function getAsunto(): string
     {
         return $this->getValorTag('asunto');
     }
@@ -442,7 +457,6 @@ class As4Entregar extends As4CollaborationInfo
             }
             // normalmente el escrito es sólo uno, aunque se use el MIME/multipart
             $escrito = $aAdjuntos[0];
-            // $filename = $escrito['filename']
             $doc_encoded = $escrito['contenido'];
             $doc = base64_decode($doc_encoded);
         } else {
@@ -452,7 +466,7 @@ class As4Entregar extends As4CollaborationInfo
         return $doc;
     }
 
-    private function descomponerMime($mime_txt)
+    private function descomponerMime($mime_txt): array
     {
 
         $mime = mailparse_msg_create();
@@ -465,7 +479,7 @@ class As4Entregar extends As4CollaborationInfo
             $part = mailparse_msg_get_part($mime, $s);
             $part_data = mailparse_msg_get_part_data($part);
             $content_type = $part_data['content-type'];
-            // no se coje el primero, que es el grupo:
+            // no se coge el primero, que es el grupo:
             if ($content_type === 'multipart/mixed') {
                 continue;
             }
@@ -481,7 +495,7 @@ class As4Entregar extends As4CollaborationInfo
         return $parts;
     }
 
-    private function getType()
+    private function getType(): string
     {
         $nodo_content = $this->dom->getElementsByTagName('content')->item(0);
         foreach ($nodo_content->attributes as $attribute) {
@@ -493,12 +507,12 @@ class As4Entregar extends As4CollaborationInfo
         return 'html';
     }
 
-    private function getVisibilidad()
+    private function getVisibilidad(): int
     {
-        return $this->getValorTag('visibilidad');
+        return (integer)$this->getValorTag('visibilidad');
     }
 
-    private function getAdjuntos()
+    private function getAdjuntos(): array
     {
         $nodelist = $this->dom->getElementsByTagName('adjuntos');
 
@@ -522,12 +536,12 @@ class As4Entregar extends As4CollaborationInfo
         return $aAdjuntos;
     }
 
-    private function getByPass()
+    private function getByPass(): bool
     {
-        return $this->getValorTag('bypass');
+        return is_true($this->getValorTag('bypass'));
     }
 
-    private function getCompartido()
+    private function getCompartido(): void
     {
         $nodelist = $this->dom->getElementsByTagName('compartido');
         if ($nodelist->length > 0) {
@@ -536,10 +550,10 @@ class As4Entregar extends As4CollaborationInfo
 
                 $name = $node->nodeName;
                 if ($name === 'descripcion') {
-                    $this->descripcion = $node->nodeValue;
+                    $this->descripcion = (string)$node->nodeValue;
                 }
                 if ($name === 'categoria') {
-                    $this->categoria = $node->nodeValue;
+                    $this->categoria = (integer)$node->nodeValue;
                 }
                 if ($name === 'destinos') {
                     $this->a_destinos = $this->getDestinos($node);
@@ -548,7 +562,7 @@ class As4Entregar extends As4CollaborationInfo
         }
     }
 
-    private function getDestinos($xml_destinos)
+    private function getDestinos($xml_destinos): array
     {
         $aDestinos = [];
         if (!empty($xml_destinos)) {
@@ -576,7 +590,7 @@ class As4Entregar extends As4CollaborationInfo
             switch ($this->getAccion()) {
                 case As4CollaborationInfo::ACCION_NUEVO:
                     // comprobar que existe destino (sigla)
-                    if (in_array($this->getSiglaDestino(), $this->getEntidadesPlataforma())) {
+                    if (in_array($this->getSiglaDestino(), $this->getEntidadesPlataforma(), true)) {
                         // introducir los datos del mensaje en el tramity
                         $this->nuevo();
                     } else {
@@ -592,12 +606,11 @@ class As4Entregar extends As4CollaborationInfo
                         $success = FALSE;
                     }
                     break;
+                case As4CollaborationInfo::ACCION_ELIMINAR:
                 case As4CollaborationInfo::ACCION_ANULAR:
                     break;
                 case As4CollaborationInfo::ACCION_REEMPLAZAR:
                     $success = $this->orden_reemplazar();
-                    break;
-                case As4CollaborationInfo::ACCION_ELIMINAR:
                     break;
                 case As4CollaborationInfo::ACCION_ORDEN_ANULAR:
                     $success = $this->orden_anular_entrada_compartida();
@@ -608,12 +621,13 @@ class As4Entregar extends As4CollaborationInfo
             }
             return $success;
         }
+        return FALSE;
     }
 
     /**
      * @return string
      */
-    public function getService(): string
+    private function getService(): string
     {
         return $this->service;
     }
@@ -621,7 +635,7 @@ class As4Entregar extends As4CollaborationInfo
     /**
      * @param string $service
      */
-    public function setService(string $service): void
+    private function setService(string $service): void
     {
         $this->service = strtolower($service);
     }
@@ -629,12 +643,12 @@ class As4Entregar extends As4CollaborationInfo
     /**
      * @return mixed
      */
-    public function getSiglaDestino()
+    private function getSiglaDestino()
     {
         return $this->sigla_destino;
     }
 
-    public function getEntidadesPlataforma()
+    private function getEntidadesPlataforma(): array
     {
         if (!isset($this->aEntidades)) {
             $gesEntidades = new GestorEntidadesDB();
@@ -651,14 +665,14 @@ class As4Entregar extends As4CollaborationInfo
         return $this->aEntidades;
     }
 
-    private function nuevo()
+    private function nuevo(): void
     {
         // hay que conectar con la nombre_entidad destino:
         $siglaDestino = $this->getSiglaDestino();
         $id_entrada = $this->nuevaEntrada($siglaDestino);
 
         if (!empty($this->content)) {
-            $this->cargarContenido($id_entrada, $siglaDestino, FALSE);
+            $this->cargarContenido($id_entrada, $siglaDestino);
         }
         // cargar los adjuntos una vez se ha creado la entrada y se tiene el id:
         if (!empty($this->a_adjuntos)) {
@@ -671,7 +685,7 @@ class As4Entregar extends As4CollaborationInfo
         }
     }
 
-    private function nuevaEntrada($siglaDestino, $id_entrada_compartida = '')
+    private function nuevaEntrada($siglaDestino, $id_entrada_compartida = ''): int
     {
         $oEntrada = new EntradaEntidad($siglaDestino);
         $oEntrada->DBCargar();
@@ -704,7 +718,7 @@ class As4Entregar extends As4CollaborationInfo
         return $oEntrada->getId_entrada();
     }
 
-    private function cargarContenido($id_entrada, $siglaDestino = '', $compartido = FALSE)
+    private function cargarContenido($id_entrada, $siglaDestino = '', $compartido = FALSE): void
     {
         $oHoy = new DateTimeLocal();
         switch ($this->type) {
@@ -714,14 +728,14 @@ class As4Entregar extends As4CollaborationInfo
                 if ($compartido) {
                     $oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada, $siglaDestino);
                     $oEtherpad->setText($this->content);
-                    $oEtherpad->getPadId(); // Aqui crea el pad y utiliza el $this->content
+                    $oEtherpad->getPadId(); // Aquí crea el pad y utiliza el $this->content
                 } else {
                     $oEtherpad->setId(Etherpad::ID_ENTRADA, $id_entrada, $siglaDestino);
                     $oEtherpad->setText($this->content);
-                    $oEtherpad->getPadId(); // Aqui crea el pad y utiliza el $this->content
-                    // la relacion con la entrada y la fecha
+                    $oEtherpad->getPadId(); // Aquí crea el pad y utiliza el $this->content
+                    // la relación con la entrada y la fecha
                     $oEntradaDocDB = new EntradaEntidadDoc($id_entrada, $siglaDestino);
-                    // no hace falta, porque es nuevo y todavia no está en la DB. $oEntradaDocDB->DBCargar();
+                    // no hace falta, porque es nuevo y todavía no está en la DB. $oEntradaDocDB->DBCargar();
                     if (!empty($this->oF_escrito)) {
                         $oEntradaDocDB->setF_doc($this->oF_escrito->getIso(), FALSE);
                     } else {
@@ -738,15 +752,15 @@ class As4Entregar extends As4CollaborationInfo
                 $oEtherpad = new Etherpad();
                 if ($compartido) {
                     $oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada, $siglaDestino);
-                    $pad_id = $oEtherpad->getPadId(); // Aqui crea el pad
+                    $pad_id = $oEtherpad->getPadId(); // Aquí crea el pad
                     $oEtherpad->setHTML($pad_id, $this->content);
                 } else {
                     $oEtherpad->setId(Etherpad::ID_ENTRADA, $id_entrada, $siglaDestino);
-                    $pad_id = $oEtherpad->getPadId(); // Aqui crea el pad
+                    $pad_id = $oEtherpad->getPadId(); // Aquí crea el pad
                     $oEtherpad->setHTML($pad_id, $this->content);
-                    // la relacion con la entrada y la fecha
+                    // la relación con la entrada y la fecha
                     $oEntradaDocDB = new EntradaEntidadDoc($id_entrada, $siglaDestino);
-                    // no hace falta, porque es nuevo y todavia no está en la DB. $oEntradaDocDB->DBCargar();
+                    // no hace falta, porque es nuevo y todavía no está en la DB. $oEntradaDocDB->DBCargar();
                     if (!empty($this->oF_escrito)) {
                         $oEntradaDocDB->setF_doc($this->oF_escrito->getIso(), FALSE);
                     } else {
@@ -764,7 +778,7 @@ class As4Entregar extends As4CollaborationInfo
 
     }
 
-    private function cargarAdjunto($a_adjuntos, $id_entrada)
+    private function cargarAdjunto($a_adjuntos, $id_entrada): void
     {
 
         foreach ($a_adjuntos as $adjunto) {
@@ -781,7 +795,7 @@ class As4Entregar extends As4CollaborationInfo
         }
     }
 
-    private function nuevoPendiente($id_entrada, $siglaDestino)
+    private function nuevoPendiente($id_entrada, $siglaDestino): void
     {
         $oHoy = new DateTimeLocal();
         $id_cargo_role = ConfigGlobal::role_id_cargo();
@@ -810,13 +824,13 @@ class As4Entregar extends As4CollaborationInfo
         $prot_num = $this->oProt_org->num;
         $prot_any = $this->oProt_org->any;
 
-        $location = $this->aLugares[$id_origen];
-        $location .= empty($prot_num) ? '' : ' ' . $prot_num;
-        $location .= empty($prot_any) ? '' : '/' . $prot_any;
+        $pendiente_location = $this->aLugares[$id_origen];
+        $pendiente_location .= empty($prot_num) ? '' : ' ' . $prot_num;
+        $pendiente_location .= empty($prot_any) ? '' : '/' . $prot_any;
 
         $prot_mas = $this->oProt_org->mas;
 
-        $id_reg = 'EN' . $id_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': EN)
+        $id_reg = 'EN' . $id_entrada; // (para calendario='registro': REN = Registro Entrada, para 'oficina': EN)
         $oPendiente = new Pendiente($cal_oficina, $calendario, $user_davical);
         $oPendiente->setId_reg($id_reg);
         $oPendiente->setAsunto($this->asunto);
@@ -825,7 +839,7 @@ class As4Entregar extends As4CollaborationInfo
         $oPendiente->setF_plazo($f_plazo);
         $oPendiente->setVisibilidad($this->visibilidad);
         $oPendiente->setPendiente_con($id_origen);
-        $oPendiente->setLocation($location);
+        $oPendiente->setLocation($pendiente_location);
         $oPendiente->setRef_prot_mas($prot_mas);
         $oPendiente->setId_oficina($id_oficina);
         // las firmas son cargos, buscar las oficinas implicadas:
@@ -841,7 +855,7 @@ class As4Entregar extends As4CollaborationInfo
      *
      * @param boolean $avisoIndividual . Si se debe mandar o no la entrada a cada destino
      */
-    private function entrada_compartida($avisoIndividual = TRUE)
+    private function entrada_compartida(bool $avisoIndividual = TRUE): bool
     {
         // Valores que no pueden ser NULL:
         if (empty($this->descripcion)) {
@@ -932,7 +946,7 @@ class As4Entregar extends As4CollaborationInfo
         return FALSE;
     }
 
-    private function orden_anular_entrada_compartida()
+    private function orden_anular_entrada_compartida(): bool
     {
         $success = FALSE;
         $aProt_org = ['id_lugar' => $this->oProt_org->id_lugar,
@@ -964,7 +978,7 @@ class As4Entregar extends As4CollaborationInfo
         return $success;
     }
 
-    public function getSchemaEntidadesPlataforma()
+    private function getSchemaEntidadesPlataforma(): array
     {
         if (!isset($this->aEntidades)) {
             $gesEntidades = new GestorEntidadesDB();
@@ -982,17 +996,18 @@ class As4Entregar extends As4CollaborationInfo
     }
 
     /**
-     * @return mixed
+     * path dónde está el fichero del xml: "payloads/cr_19_22.xml"
+     * @return string
      */
-    public function getLocation()
+    public function getLocation(): string
     {
         return $this->location;
     }
 
     /**
-     * @param mixed $location
+     * @param string $location
      */
-    public function setLocation($location)
+    private function setLocation(string $location): void
     {
         $this->location = $location;
     }
@@ -1000,18 +1015,9 @@ class As4Entregar extends As4CollaborationInfo
     /**
      * @return string
      */
-    public function getMsg()
+    public function getMsg(): string
     {
         return $this->msg;
     }
-
-    /**
-     * @param string $msg
-     */
-    public function setMsg($msg)
-    {
-        $this->msg = $msg;
-    }
-
 
 }

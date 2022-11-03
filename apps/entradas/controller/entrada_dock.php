@@ -55,6 +55,9 @@ foreach ($a_files as $filename) {
 $txt = '';
 foreach ($a_files_mmd as $file_mmd) {
     $xmldata = simplexml_load_string(file_get_contents($file_mmd));
+    if ($xmldata === FALSE) {
+        $txt .= sprintf(_("No se ha podido crear el xml del fichero %s"), $file_mmd);
+    }
     $AS4 = new As4Entregar($xmldata);
     if ($AS4->introducirEnDB() === TRUE) {
         // eliminar el mensaje de la bandeja de entrada
