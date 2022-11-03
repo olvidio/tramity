@@ -19,12 +19,12 @@ class NullDateTimeLocal extends DateTime
 
     static public function createFromLocal($data)
     {
-        return '';
+        return NULL;
     }
 
-    static public function createFromFormat($format, $data, DateTimeZone $TimeZone = NULL)
+    static public function createFromFormat($format, $datetime, DateTimeZone $timezone = NULL)
     {
-        return '';
+        return NULL;
     }
 
     public function getFromLocal()

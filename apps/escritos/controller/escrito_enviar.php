@@ -18,7 +18,7 @@ require_once("apps/core/global_object.inc");
 
 
 /* NO VA PORQUE... da error headers already sent. 
-// Para enseñar el mesaje antes de terminar el script
+// Para enseñar el mensaje antes de terminar el script
 ob_end_flush();
 ob_implicit_flush();
 echo "<div id=\"slow_load\" style=\"display: flex; justify-content: center; align-items: center; text-align: center;\">";
@@ -29,19 +29,17 @@ echo "</div>";
 */
 
 $Q_id_escrito = (integer)filter_input(INPUT_GET, 'id');
-$f_salida = date(DateTimeInterface::ISO8601);
+$f_salida = date(DateTimeInterface::ATOM);
 // Comprobar si tiene clave para enviar un xml, o hay que generar un pdf.
 
 $rta_txt = '';
-// borrar los ya enviados:
 $oAS4Remove = new As4Remove();
+// borrar los ya enviados:
 $rta_txt = $oAS4Remove->remove_accepted();
 if (!empty($rta_txt)) {
     exit(_("No puedo eliminar los ya enviados"));
 }
-
 // borrar los errores:
-$oAS4Remove = new As4Remove();
 $rta_txt = $oAS4Remove->remove_rejected();
 if (!empty($rta_txt)) {
     $rta_txt .= "<br>";

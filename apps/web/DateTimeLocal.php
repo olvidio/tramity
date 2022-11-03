@@ -36,7 +36,7 @@ class DateTimeLocal extends DateTime
          * No sirve para el siglo I (0-99) ;-) */
         $yy = $extnd_dt->format('y');
         $yyyy = $extnd_dt->format('Y');
-        if (($yyyy - $yy) == 0) {
+        if (($yyyy - $yy) === 0) {
             $currentY4 = date('Y');
             $currentY2 = date('y');
             $currentMilenium = $currentY4 - $currentY2;
@@ -53,7 +53,7 @@ class DateTimeLocal extends DateTime
      * @param string $separador separador entre dia, mes año
      * @return string
      */
-    public static function getFormat($separador = '/', $type = '')
+    public static function getFormat(string $separador = '/', $type = ''): string
     {
         $idioma = $_SESSION['session_auth']['idioma'];
         # Si no hemos encontrado ningún idioma que nos convenga, mostramos la web en el idioma por defecto
@@ -75,10 +75,10 @@ class DateTimeLocal extends DateTime
         return $format;
     }
 
-    public static function createFromFormat($format, $data, DateTimeZone $TimeZone = NULL)
+    public static function createFromFormat($format, $datetime, DateTimeZone $timezone = NULL)
     {
         $extnd_dt = new static();
-        $parent_dt = parent::createFromFormat($format, $data, $TimeZone);
+        $parent_dt = parent::createFromFormat($format, $datetime, $timezone);
 
         if (!$parent_dt) {
             return false;
