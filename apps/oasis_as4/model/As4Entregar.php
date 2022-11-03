@@ -191,8 +191,8 @@ class As4Entregar extends As4CollaborationInfo
         // para evitar el mensaje: "Node no longer exists"
         if (@count($messageProperties->children())) {
             foreach ($messageProperties->children() as $node_property) {
-                $name = $node_property->attributes()->name;
-                $value = $node_property;
+                $name = (string)$node_property->attributes()->name;
+                $value = (string)$node_property;
 
                 // origen
                 if ($name === 'lugar_org') {
