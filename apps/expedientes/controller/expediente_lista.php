@@ -87,6 +87,8 @@ switch ($Q_filtro) {
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         $a_etiquetas_filtered = array_filter($Q_a_etiquetas);
 
+        // para evitar que salgan todos, por defecto poner periodo un mes.
+        $Q_periodo = empty($Q_periodo)? 'mes' : $Q_periodo;
         $oDialogoBusqueda = new DialogoBusquedaArchivados($Q_asunto, $Q_andOr, $Q_a_etiquetas, $Q_filtro, $Q_periodo);
         $aCondicion = $oDialogoBusqueda->generarCondicion();
         $aWhereADD = $aCondicion['aWhereADD'];
