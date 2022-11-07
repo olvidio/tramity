@@ -358,7 +358,6 @@ class Buscar
                 }
 
                 return $aCollections;
-                break;
             case 1:    // Listado de los últimos
                 $Q_antiguedad = (string)filter_input(INPUT_POST, 'antiguedad');
                 $Q_origen_id_lugar = (integer)filter_input(INPUT_POST, 'origen_id_lugar');
@@ -410,7 +409,7 @@ class Buscar
                 if (!empty($Q_origen_id_lugar)) {
                     // Caso especial de querer ver los escritos de la dl. No se consulta en las entradas, sino salidas.
                     // se omiten los de distribución de cr.
-                    if ($Q_origen_id_lugar == $this->local_id_lugar) {
+                    if ($Q_origen_id_lugar === $this->local_id_lugar) {
                         $this->setF_min($limite, FALSE);
                         $cEscritos = $this->buscarEscritos();
                         $aCollections['escritos'] = $cEscritos;
@@ -427,7 +426,6 @@ class Buscar
                     $aCollections['entradas'] = $cEntradas;
                 }
                 return $aCollections;
-                break;
             case 2:
                 // buscar en entradas (sólo entradas 17-3-2021)
                 $cEntradas = $this->buscarEntradas();
@@ -435,7 +433,6 @@ class Buscar
                 $cEscritos = $this->buscarEscritos();
                 $aCollections['escritos'] = $cEscritos;
                 return $aCollections;
-                break;
             case 3:
                 // buscar por destino
                 $aCollections = [];
@@ -456,13 +453,12 @@ class Buscar
                 }
 
                 return $aCollections;
-                break;
             case 9:
                 // buscar por origen
                 $aCollections = [];
 
                 // para ver los enviados por dl
-                if (!empty($this->origen_id_lugar) && $this->origen_id_lugar == $this->local_id_lugar) {
+                if (!empty($this->origen_id_lugar) && $this->origen_id_lugar === $this->local_id_lugar) {
                     $cEscritos = $this->buscarEscritos();
                     $aCollections['escritos'] = $cEscritos;
                 } else {
@@ -474,14 +470,11 @@ class Buscar
                 }
 
                 return $aCollections;
-                break;
             case 41: // case "dl":
             case 6: // buscar en escritos: modelo jurídico (plantilla)
                 $cEscritos = $this->buscarEscritos();
                 $aCollections['escritos'] = $cEscritos;
                 return $aCollections;
-                break;
-                break;
             case 42: //case "de":
             case 43: //case "de cr a dl":
             case 44: //case "de cr a ctr":
@@ -489,7 +482,6 @@ class Buscar
                 $cEntradas = $this->buscarEntradas();
                 $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
-                break;
             default:
                 $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_switch);
@@ -502,7 +494,7 @@ class Buscar
      * Si df_valor es string, y convert=true se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es false, df_valor debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param date|string df_min='' optional.
+     * @param DateTimeLocal|string df_min='' optional.
      * @param boolean convert=true optional. Si es false, df_valor debe ser un string en formato ISO (Y-m-d).
      */
     function setF_min($df_min = '', $convert = true)
@@ -623,7 +615,7 @@ class Buscar
     /**
      * Recupera l'atribut df_min
      *
-     * @return DateTimeLocal df_min
+     * @return DateTimeLocal|NullDateTimeLocal df_min
      */
     function getF_min()
     {
@@ -637,7 +629,7 @@ class Buscar
     /**
      * Recupera l'atribut df_max
      *
-     * @return DateTimeLocal df_max
+     * @return DateTimeLocal|NullDateTimeLocal df_max
      */
     function getF_max()
     {
@@ -792,10 +784,11 @@ class Buscar
 
         if (!empty($this->oficina)) {
             // Entradas es por oficinas, escritos por cargos:
-            // dos busquedas:
+            // dos búsquedas:
             $aWhere['ponente'] = $this->oficina;
-            // Quien envia el escrito (entradas)
+            // Quien envía el escrito (entradas)
             if (!empty($this->origen_id_lugar)) {
+                exit("Función no implementada!!!");
                 $cEntradasPonente = $gesEntradas->getEntradasByLugarDB($this->origen_id_lugar, $aWhere, $aOperador);
             } else {
                 $cEntradasPonente = $gesEntradas->getEntradasBypass($aWhere, $aOperador);
@@ -857,7 +850,7 @@ class Buscar
     }
 
     /**
-     * @return number
+     * @return string
      */
     public function getProt_any()
     {
@@ -949,7 +942,7 @@ class Buscar
      * Si df_valor es string, y convert=true se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es false, df_valor debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param date|string df_max='' optional.
+     * @param DateTimeLocal|string df_max='' optional.
      * @param boolean convert=true optional. Si es false, df_valor debe ser un string en formato ISO (Y-m-d).
      */
     function setF_max($df_max = '', $convert = true)

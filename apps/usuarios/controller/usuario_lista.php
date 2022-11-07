@@ -115,7 +115,7 @@ $url_actualizar = web\Hash::link(core\ConfigGlobal::getWeb() . '/apps/usuarios/c
 $a_campos = [
     'oPosicion' => $oPosicion,
     'oHash' => $oHash,
-    'oExpedienteLista' => $oTabla,
+    'oTabla' => $oTabla,
     'permiso' => $permiso,
     'url_nuevo' => $url_nuevo,
     'url_form' => $url_form,
@@ -126,4 +126,3 @@ $a_campos = [
 
 $oView = new ViewTwig('usuarios/controller');
 $oView->renderizar('usuario_lista.html.twig', $a_campos);
-

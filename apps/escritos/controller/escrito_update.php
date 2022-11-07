@@ -107,7 +107,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'perm_ver':
         $oEscrito = new Escrito($Q_id_escrito);
         $oPermiso = new PermRegistro();
@@ -228,7 +227,7 @@ switch ($Q_que) {
 
         $a_campos = [
             'base_url' => $base_url,
-            'oExpedienteLista' => $oTabla,
+            'oTabla' => $oTabla,
             'id_escrito' => $Q_id_escrito,
             'pendientes_uid' => $Q_pendientes_uid,
         ];

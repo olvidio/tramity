@@ -50,7 +50,7 @@ switch ($Q_opcion) {
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
             $oTabla->setBotonesDefault();
-            echo $oTabla->mostrarTabla();
+            $oTabla->mostrarTabla();
         }
         break;
     case 71: // buscar en referencias (mismo formulario que 7):
@@ -80,7 +80,7 @@ switch ($Q_opcion) {
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
             $oTabla->setBotonesDefault();
-            echo $oTabla->mostrarTabla();
+            $oTabla->mostrarTabla();
         }
 
         break;
@@ -110,7 +110,7 @@ switch ($Q_opcion) {
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
             $oTabla->setBotonesDefault();
-            echo $oTabla->mostrarTabla();
+            $oTabla->mostrarTabla();
         }
         $btn_mas = "<button id=\"btn_mas\" type=\"button\" class=\"btn btn-primary\" onClick=\"fnjs_buscar_mas();\" >";
         $btn_mas .= _("Buscar otros escritos con esta referencia");
@@ -138,7 +138,7 @@ switch ($Q_opcion) {
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
             $oTabla->setBotonesDefault();
-            echo $oTabla->mostrarTabla();
+            $oTabla->mostrarTabla();
         }
         break;
     case 2:
@@ -170,7 +170,7 @@ switch ($Q_opcion) {
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
             $oTabla->setBotonesDefault();
-            echo $oTabla->mostrarTabla();
+            $oTabla->mostrarTabla();
         }
         break;
     case 3:
@@ -211,7 +211,7 @@ switch ($Q_opcion) {
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
             $oTabla->setBotonesDefault();
-            echo $oTabla->mostrarTabla();
+            $oTabla->mostrarTabla();
         }
         break;
     case 9:
@@ -253,7 +253,7 @@ switch ($Q_opcion) {
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
             $oTabla->setBotonesDefault();
-            echo $oTabla->mostrarTabla();
+            $oTabla->mostrarTabla();
         }
         break;
     case 4:
@@ -289,7 +289,7 @@ switch ($Q_opcion) {
                     $oTabla->setCollection($cCollection);
                     $oTabla->setFiltro($filtro);
                     $oTabla->setBotonesDefault();
-                    echo $oTabla->mostrarTabla();
+                    $oTabla->mostrarTabla();
                 }
                 break;
             case "de":
@@ -313,7 +313,7 @@ switch ($Q_opcion) {
                     $oTabla->setCollection($cCollection);
                     $oTabla->setFiltro($filtro);
                     $oTabla->setBotonesDefault();
-                    echo $oTabla->mostrarTabla();
+                    $oTabla->mostrarTabla();
                 }
                 break;
             case "cr_dl":
@@ -336,7 +336,7 @@ switch ($Q_opcion) {
                     $oTabla->setCollection($cCollection);
                     $oTabla->setFiltro($filtro);
                     $oTabla->setBotonesDefault();
-                    echo $oTabla->mostrarTabla();
+                    $oTabla->mostrarTabla();
                 }
                 break;
             case "cr_ctr":
@@ -360,7 +360,7 @@ switch ($Q_opcion) {
                     $oTabla->setCollection($cCollection);
                     $oTabla->setFiltro($filtro);
                     $oTabla->setBotonesDefault();
-                    echo $oTabla->mostrarTabla();
+                    $oTabla->mostrarTabla();
                 }
                 break;
             default:
@@ -369,7 +369,7 @@ switch ($Q_opcion) {
         }
         break;
     case 6:
-        // buscar escrito con: accion = plantilla.
+        // buscar escrito con: acción = plantilla.
         // buscar en asunto, detalle, + periodo + oficina
         // las fechas.
         $Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
@@ -399,12 +399,11 @@ switch ($Q_opcion) {
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
             $oTabla->setBotonesDefault();
-            echo $oTabla->mostrarTabla();
         }
         break;
     case 51:
         //'escritos_cr':
-        // recibidos los ultimos 7 dias
+        // recibidos los últimos 7 dias
         $oHoy = new DateTimeLocal();
         $oIni = new DateTimeLocal();
         $oIni->sub(new DateInterval('P7D'));
@@ -429,12 +428,12 @@ switch ($Q_opcion) {
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
             $oTabla->setBotonesDefault();
-            echo $oTabla->mostrarTabla();
+            $oTabla->mostrarTabla();
         }
         break;
     case 52:
         //'entradas_semana':
-        // recibidos los ultimos 15 dias
+        // recibidos los últimos 15 dias
         $oHoy = new DateTimeLocal();
         $oIni = new DateTimeLocal();
         $dias = $_SESSION['oConfig']->getPeriodoEntradas();
@@ -452,7 +451,7 @@ switch ($Q_opcion) {
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
             $oTabla->setBotonesDefault();
-            echo $oTabla->mostrarTabla();
+            $oTabla->mostrarTabla();
         }
         break;
     default:

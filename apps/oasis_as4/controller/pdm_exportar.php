@@ -52,7 +52,7 @@ $a_campos = [
     'nomdock' => $nomdock,
     'oPosicion' => $oPosicion,
     'oHash' => $oHash,
-    'oExpedienteLista' => $oTabla,
+    'oTabla' => $oTabla,
 ];
 
 $oView = new ViewTwig('oasis_as4/controller');

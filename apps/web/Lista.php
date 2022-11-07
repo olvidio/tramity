@@ -107,7 +107,7 @@ class Lista
     protected $formato_tabla = '';
 
     /**
-     * botones visibles en la Dataatble
+     * botones visibles en la Datatable
      *        buttons: [
      *        'copyHtml5', 'excel', 'pdf', 'colvis', 'print'
      *            ],";
@@ -151,16 +151,6 @@ class Lista
 
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
-    /**
-     * Constructor de la classe.
-     *
-     * @return Lista
-     *
-     */
-    function __construct()
-    {
-        // constructor buit
-    }
 
     /**
      * Constructor de la classe.
@@ -168,7 +158,7 @@ class Lista
      * @return string Html
      *
      */
-    function listaPaginada()
+    public function listaPaginada(): string
     {
         //------------------------------------ html ------------------------------
         reset($this->aGrupos);
@@ -189,11 +179,10 @@ class Lista
     /**
      * Muestra una tabla simple
      *
-     * @param ikey indice del array aDatos
      * @return string Html
      *
      */
-    function lista()
+    public function lista(): string
     {
         $aCabeceras = $this->aCabeceras;
         $aDatos = $this->aDatos;
@@ -223,16 +212,16 @@ class Lista
                 $clase .= " " . $aFila['clase'];
             }
             foreach ($aFila as $col => $valor) {
-                if ($col == "clase") {
+                if ($col === "clase") {
                     continue;
                 }
-                if ($col == "order") {
+                if ($col === "order") {
                     continue;
                 }
-                if ($col == "select") {
+                if ($col === "select") {
                     continue;
                 }
-                if ($col == "sel") {
+                if ($col === "sel") {
                     continue;
                 }
                 if (is_array($valor)) {
@@ -289,7 +278,7 @@ class Lista
      * @return string Html
      *
      */
-    function mostrar_tabla()
+    public function mostrar_tabla(): string
     {
         $sPrefs = '';
         $gesPreferencias = new GestorPreferencia();
@@ -303,13 +292,10 @@ class Lista
         switch ($sPrefs) {
             case 'html':
                 return $this->mostrar_tabla_html();
-                break;
             case 'dataTable':
                 return $this->mostrar_datatable();
-                break;
             case 'slickgrid':
                 return $this->mostrar_datatable();
-                break;
             default:
                 // de momento, el slickgrid es incompatible con fileinput.js (drag and drop)
                 //return $this->mostrar_tabla_slickgrid();
@@ -324,7 +310,7 @@ class Lista
      * @return string Html
      *
      */
-    function mostrar_tabla_html()
+    public function mostrar_tabla_html(): string
     {
         $a_botones = $this->aBotones;
         $a_cabeceras = $this->aCabeceras;
@@ -341,7 +327,7 @@ class Lista
             return _("no hay ninguna fila");
         }
         if (!empty($a_botones)) {
-            if ($a_botones == "ninguno") {
+            if ($a_botones === "ninguno") {
                 $b = "x";
             } else {
                 $b = 0;
@@ -398,16 +384,16 @@ class Lista
             }
             $tbody .= "<tr id='$id_fila' class='$clase'>";
             foreach ($fila as $col => $valor) {
-                if ($col == "clase") {
+                if ($col === "clase") {
                     continue;
                 }
-                if ($col == "order") {
+                if ($col === "order") {
                     continue;
                 }
-                if ($col == "select") {
+                if ($col === "select") {
                     continue;
                 }
-                if ($col == "sel") {
+                if ($col === "sel") {
                     if (empty($b)) {
                         continue;
                     } // si no hay botones (por permisos...) no tiene sentido el checkbox
@@ -512,14 +498,14 @@ class Lista
      * @return string Html
      *
      */
-    function mostrar_datatable()
+    public function mostrar_datatable(): string
     {
         $fecha_format_en = FALSE;
         $idioma = $_SESSION['session_auth']['idioma'];
         if (!empty($idioma)) {
             $a_idioma = explode('.', $idioma);
             $code_lng = $a_idioma[0];
-            if ($code_lng == 'en_US') {
+            if ($code_lng === 'en_US') {
                 $fecha_format_en = TRUE;
             }
         }
@@ -539,7 +525,7 @@ class Lista
             return _("no hay ninguna fila");
         }
         if (!empty($a_botones)) {
-            if ($a_botones == "ninguno") {
+            if ($a_botones === "ninguno") {
                 $b = "x";
             } else {
                 $b = 0;
@@ -597,16 +583,16 @@ class Lista
             }
             $tbody .= "<tr id='$id_fila' class='$clase'>";
             foreach ($fila as $col => $valor) {
-                if ($col == "clase") {
+                if ($col === "clase") {
                     continue;
                 }
-                if ($col == "order") {
+                if ($col === "order") {
                     continue;
                 }
-                if ($col == "select") {
+                if ($col === "select") {
                     continue;
                 }
-                if ($col == "sel") {
+                if ($col === "sel") {
                     if (empty($b)) {
                         continue;
                     } // si no hay botones (por permisos...) no tiene sentido el checkbox
@@ -745,7 +731,7 @@ class Lista
     /**
      * @return string
      */
-    public function getDataTable_options_dom()
+    public function getDataTable_options_dom(): string
     {
         if (empty($this->dt_op_dom)) {
             $this->setDataTable_options_domDefault();
@@ -765,7 +751,7 @@ class Lista
      *
      * @return string
      */
-    public function getDataTable_options_order()
+    public function getDataTable_options_order(): string
     {
         if (empty($this->dt_op_order)) {
             $this->setDataTable_options_orderDefault();
@@ -773,7 +759,7 @@ class Lista
         return "'order': [$this->dt_op_order],";
     }
 
-    public function setDatatable_options_orderDefault()
+    public function setDatatable_options_orderDefault(): void
     {
         $this->dt_op_order = "[0, 'desc']";
     }
@@ -781,7 +767,7 @@ class Lista
     /**
      * @return string
      */
-    public function getDataTable_options_buttons()
+    public function getDataTable_options_buttons(): string
     {
         if (empty($this->dt_op_buttons)) {
             $this->setDataTable_options_buttonsDefault();
@@ -792,7 +778,7 @@ class Lista
 			],";
     }
 
-    public function setDataTable_options_buttonsDefault()
+    public function setDataTable_options_buttonsDefault(): void
     {
         $this->btn_jsTable = "'copyHtml5', 'excel', 'pdf', 'colvis', 'print'";
     }
@@ -824,7 +810,7 @@ class Lista
      * @return string Html Grid
      *
      */
-    function mostrar_tabla_slickgrid()
+    public function mostrar_tabla_slickgrid(): string
     {
         $a_botones = $this->aBotones;
         $a_cabeceras = $this->aCabeceras;
@@ -854,7 +840,7 @@ class Lista
             return _("no hay ninguna fila");
         }
         if (!empty($a_botones)) {
-            if ($a_botones == "ninguno") {
+            if ($a_botones === "ninguno") {
                 $b = "x";
             } else {
                 foreach ($a_botones as $a_boton) {
@@ -871,7 +857,7 @@ class Lista
         $aUser = array(0 => $id_usuario, 1 => 44); // 44 es el id_usuario para default.
         $aColsVisible = '';
         $bPanelVis = false;
-        for ($i = 0; $i < count($aUser); $i++) {
+        for ($i = 0, $iMax = count($aUser); $i < $iMax; $i++) {
             $user = $aUser[$i];
             $oPref = $gesPreferencias->getPreferenciaUsuario($user, $tipo);
 
@@ -882,7 +868,7 @@ class Lista
                     //$aColsVisible = empty($aPrefs['colVisible'])? '*' : $aPrefs['colVisible'];
                     //$aColsVisible = explode(',',$aPrefs['colVisible']);
                 }
-                $bPanelVis = ($aPrefs['panelVis'] == "si") ? true : false;
+                $bPanelVis = ($aPrefs['panelVis'] === "si");
                 if (!empty($aPrefs['colWidths'])) {
                     $aColsWidth = $aPrefs['colWidths'];
                 }
@@ -906,7 +892,7 @@ class Lista
             $c++;
             $width = $aColsWidth['sel'] ?? 30;
             $sColumns .= "{id: \"sel\", name: \"sel\", field: \"sel\", width:$width, sortable: false, formatter: checkboxSelectionFormatter}";
-            if (!is_array($aColsVisible) || $aColsVisible['sel'] == "true") {
+            if (!is_array($aColsVisible) || $aColsVisible['sel'] === "true") {
                 $sColumnsVisible .= "{id: \"sel\", name: \"sel\", field: \"sel\", width:$width, sortable: false, formatter: checkboxSelectionFormatter},";
             }
         }
@@ -925,7 +911,7 @@ class Lista
                 $width = filter_var($width, FILTER_SANITIZE_NUMBER_INT);
                 $formatter = !empty($Cabecera['formatter']) ? $Cabecera['formatter'] : '';
                 if (!empty($Cabecera['visible'])) {
-                    if ($Cabecera['visible'] == 'No' || $Cabecera['visible'] == 'no') {
+                    if ($Cabecera['visible'] === 'No' || $Cabecera['visible'] === 'no') {
                         $visible = FALSE;
                     }
                 }
@@ -983,18 +969,18 @@ class Lista
             $icol = 0;
             $aFilas[$num_fila]["id"] = $id_fila;
             foreach ($fila as $col => $valor) {
-                if ($col == "clase") {
+                if ($col === "clase") {
                     $id = $valor;
                     $aFilas[$num_fila]["clase"] = addslashes($id);
                     continue;
                 }
-                if ($col == "order") {
+                if ($col === "order") {
                     continue;
                 }
-                if ($col == "select") {
+                if ($col === "select") {
                     continue;
                 }
-                if ($col == "sel") {
+                if ($col === "sel") {
                     if (empty($b)) continue; // si no hay botones (por permisos...) no tiene sentido el checkbox
                     //$col="";
                     if (is_array($valor)) {
@@ -1450,7 +1436,7 @@ class Lista
      * @return string Html
      *
      */
-    function mostrar_tabla_html2()
+    public function mostrar_tabla_html2(): string
     {
         $aGrupos = $this->aGrupos;
         $a_botones = $this->aBotones;
@@ -1468,7 +1454,7 @@ class Lista
             return _("no hay ninguna fila");
         }
         if (!empty($a_botones)) {
-            if ($a_botones == "ninguno") {
+            if ($a_botones === "ninguno") {
                 $b = "x";
             } else {
                 $b = 0;
@@ -1511,16 +1497,16 @@ class Lista
                 }
                 $tbody .= "<tr id='$id_fila' class='$clase'>";
                 foreach ($fila as $col => $valor) {
-                    if ($col == "clase") {
+                    if ($col === "clase") {
                         continue;
                     }
-                    if ($col == "order") {
+                    if ($col === "order") {
                         continue;
                     }
-                    if ($col == "select") {
+                    if ($col === "select") {
                         continue;
                     }
-                    if ($col == "sel") {
+                    if ($col === "sel") {
                         if (empty($b)) {
                             continue;
                         } // si no hay botones (por permisos...) no tiene sentido el checkbox

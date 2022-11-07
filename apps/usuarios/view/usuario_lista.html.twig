@@ -49,7 +49,7 @@
 <br>
 <form id="seleccionados" name="seleccionados" action="" method="post">
     {{ oHash.getCamposHtml|raw }}
-    {{ oTabla.mostrar_tabla|raw }}
+    {{ oTabla.mostrar_tabla()|raw }}
 </form>
 <br>
 {% if permiso == 1 %}

@@ -58,7 +58,7 @@ $server = ConfigGlobal::getWeb(); //http://tramity.local
 
 $a_campos = [
     'titulo' => $titulo,
-    'oExpedienteLista' => $oTabla,
+    'oTabla' => $oTabla,
     //'oHash' => $oHash,
     'filtro' => $Q_filtro,
     'server' => $server,
