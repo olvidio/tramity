@@ -38,9 +38,13 @@ class ExpedienteReunionLista
         $oFormatoLista->setTxtColumnaVer(_("revisar"));
         $oFormatoLista->setTxtColumnaMod(_("fecha"));
 
-        $gesExpedientes = new GestorExpediente();
-        $this->aWhere['_ordre'] = 'id_expediente';
-        $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+        if (!empty($this->aWhere)) {
+            $gesExpedientes = new GestorExpediente();
+            $this->aWhere['_ordre'] = 'id_expediente';
+            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+        } else {
+            $cExpedientes = [];
+        }
         $oExpedienteLista = new ExpedienteLista($cExpedientes, $oFormatoLista, $oExpedientesDeColor);
         $oExpedienteLista->setFiltro($this->filtro);
 

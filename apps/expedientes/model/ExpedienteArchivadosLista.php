@@ -56,9 +56,13 @@ class ExpedienteArchivadosLista
         $oFormatoLista->setPaginaMod($pagina_mod);
         $oFormatoLista->setPaginaVer($pagina_ver);
 
-        $gesExpedientes = new GestorExpediente();
-        $this->aWhere['_ordre'] = 'id_expediente';
-        $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+        if (!empty($this->aWhere)) {
+            $gesExpedientes = new GestorExpediente();
+            $this->aWhere['_ordre'] = 'id_expediente';
+            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+        } else {
+            $cExpedientes = [];
+        }
         $oExpedienteLista = new ExpedienteLista($cExpedientes, $oFormatoLista, new ExpedientesDeColor());
         $oExpedienteLista->setFiltro($this->filtro);
         $oExpedienteLista->setCondicionesBusqueda($this->condiciones_busqueda);
