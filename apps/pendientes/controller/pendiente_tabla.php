@@ -272,7 +272,7 @@ foreach ($cPendientes as $oPendiente) {
         $a_valores[$t][7] = $encargado;
         $a_valores[$t][8] = $calendario;
         // para el orden
-        if ($plazo != "x") {
+        if ($plazo !== 'x') {
             $a_valores[$t]['order'] = $plazo_iso;
         }
     }
@@ -324,7 +324,7 @@ $a_campos = [
     'id_oficina' => $id_oficina,
     'oDesplCalendarios' => $oDesplCalendarios,
     'oDesplEncargados' => $oDesplEncargados,
-    'oTabla' => $oTabla,
+    'oExpedienteLista' => $oTabla,
     'filtro' => $Q_filtro,
     'periodo' => $Q_periodo,
     'op_calendario_default' => $op_calendario_default,

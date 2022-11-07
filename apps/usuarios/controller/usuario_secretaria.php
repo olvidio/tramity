@@ -5,7 +5,9 @@ use core\ViewTwig;
 use entradas\model\EntradaLista;
 use escritos\model\Escrito;
 use escritos\model\EscritoLista;
-use expedientes\model\ExpedienteLista;
+use expedientes\model\ExpedienteDistribuirLista;
+use expedientes\model\ExpedienteReunionFijarLista;
+use expedientes\model\ExpedienteReunionSeguimientoLista;
 use usuarios\model\entity\Usuario;
 
 require_once("apps/core/global_header.inc");
@@ -21,7 +23,7 @@ require_once("apps/core/global_object.inc");
 $peticion_ajax = 0;
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
     && !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
-    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
     // handle request as AJAX
     $peticion_ajax = 1;
 }
@@ -34,23 +36,20 @@ $Q_tabs = (string)filter_input(INPUT_POST, 'tabs');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
 $a_pills = [];
-//Diferentes filtros:
-// Expedientes:
-$oExpedienteLista = new ExpedienteLista();
 
 // Sólo para scdl o suplente
 $aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
-$id_cargo = array_search('scdl', $aPosiblesCargos);
+$id_cargo = array_search('scdl', $aPosiblesCargos, true);
 if (!empty($id_cargo)) {
     // fijar reunión = 1;
     $filtro = 'fijar_reunion';
-    $active = ($filtro == $Q_filtro) ? 'active' : '';
+    $oExpedienteLista = new ExpedienteReunionFijarLista($filtro);
+    $active = ($filtro === $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
     $num_orden = 1;
     $text = _("fijar reunión");
     $explicacion = _("asignar a cada expediente la fecha de la reunión (scdl)");
-    $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
     $pill = ['orden' => $num_orden,
         'text' => $text,
@@ -65,13 +64,13 @@ if (!empty($id_cargo)) {
 
     // seguimiento = 2
     $filtro = 'seg_reunion';
-    $active = ($filtro == $Q_filtro) ? 'active' : '';
+    $oExpedienteLista = new ExpedienteReunionSeguimientoLista($filtro);
+    $active = ($filtro === $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
     $num_orden = 2;
     $text = _("seguimiento reunion");
     $explicacion = _("control de quiénes faltan por firmar cada expediente (scdl)");
-    $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
     $pill = ['orden' => $num_orden,
         'text' => $text,
@@ -85,39 +84,18 @@ if (!empty($id_cargo)) {
     $a_pills[$num_orden] = $pill;
 }
 
-// firmar = 2
-$filtro = 'seguimiento';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
-$aQuery = ['filtro' => $filtro];
-$pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
-$num_orden = 7;
-$text = _("seguimiento");
-$explicacion = '';
-$oExpedienteLista->setFiltro($filtro);
-$num = $oExpedienteLista->getNumero();
-$pill = ['orden' => $num_orden,
-    'text' => $text,
-    'pag_lst' => $pag_lst,
-    'num' => $num,
-    'active' => $active,
-    'class' => 'btn-expediente',
-    'explicacion' => $explicacion,
-    'ver_orden' => TRUE,
-];
-$a_pills[$num_orden] = $pill;
-
 // reunion = 3
 // Solo el scdl
 $perm_distribuir = $_SESSION['oConfig']->getPerm_distribuir();
 if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_distribuir) {
     $filtro = 'distribuir';
-    $active = ($filtro == $Q_filtro) ? 'active' : '';
+    $oExpedienteLista = new ExpedienteDistribuirLista($filtro);
+    $active = ($filtro === $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
     $num_orden = 3;
     $text = _("distribuir");
     $explicacion = _("Pasar a cada oficina los expedientes que ya han circulado (scdl)");
-    $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
     $pill = ['orden' => $num_orden,
         'text' => $text,
@@ -132,9 +110,9 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_distribuir) {
 }
 
 // circular = 4
-// se envian escritos, no expedientes
+// se envían escritos, no expedientes
 $filtro = 'enviar';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro, 'modo' => 'mod'];
 $pag_lst = web\Hash::link('apps/escritos/controller/escrito_lista.php?' . http_build_query($aQuery));
 $num_orden = 4;
@@ -156,7 +134,7 @@ $a_pills[$num_orden] = $pill;
 
 // introducir entradas
 $filtro = 'en_ingresado';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($aQuery));
 $num_orden = 7;
@@ -178,7 +156,7 @@ $a_pills[$num_orden] = $pill;
 
 // asignar entradas
 $filtro = 'en_admitido';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($aQuery));
 $num_orden = 8;
@@ -203,7 +181,7 @@ $perm_aceptar = $_SESSION['oConfig']->getPerm_aceptar();
 if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_aceptar) {
     // aceptar entradas
     $filtro = 'en_asignado';
-    $active = ($filtro == $Q_filtro) ? 'active' : '';
+    $active = ($filtro === $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($aQuery));
     $num_orden = 9;
@@ -225,7 +203,7 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_aceptar) {
 }
 // distribución cr
 $filtro = 'bypass';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($aQuery));
 $num_orden = 10;
@@ -247,7 +225,7 @@ $a_pills[$num_orden] = $pill;
 
 // buscar = 13
 $filtro = 'en_buscar';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($aQuery));
 $num_orden = 13;
@@ -268,7 +246,7 @@ $a_pills[$num_orden] = $pill;
 // preferencias del scdl o suplente
 if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
     $filtro = 'pref';
-    $active = ($filtro == $Q_filtro) ? 'active' : '';
+    $active = ($filtro === $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro];
     $pag_lst = web\Hash::link('apps/config/controller/parametros_scdl.php?' . http_build_query($aQuery));
     $num_orden = 90;
@@ -291,7 +269,7 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl') {
 
 // pendientes = 16
 $filtro = 'pendientes';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro,
     'periodo' => 'hoy',
 ];
@@ -314,7 +292,7 @@ $a_pills[$num_orden] = $pill;
 
 // salida manual = 20
 $filtro = 'salida_manual';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro,
     'accion' => Escrito::ACCION_ESCRITO,
 ];
@@ -322,11 +300,10 @@ $pag_lst = web\Hash::link('apps/escritos/controller/salida_escrito.php?' . http_
 $num_orden = 20;
 $text = _("salida manual");
 $explicacion = _("Registro y envío de escritos sin circular expediente (Secretaría)");
-$num = '';
 $pill = ['orden' => $num_orden,
     'text' => $text,
     'pag_lst' => $pag_lst,
-    'num' => $num,
+    'num' => '',
     'active' => $active,
     'class' => 'btn-pendiente',
     'explicacion' => $explicacion,
@@ -336,18 +313,17 @@ $a_pills[$num_orden] = $pill;
 
 // mantenimiento = 21
 $filtro = 'mantenimiento';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro,
 ];
 $pag_lst = web\Hash::link('apps/escritos/controller/mantenimiento.php?' . http_build_query($aQuery));
 $num_orden = 21;
 $text = _("mantenimiento");
 $explicacion = _("Operaciones varias (Secretaría)");
-$num = '';
 $pill = ['orden' => $num_orden,
     'text' => $text,
     'pag_lst' => $pag_lst,
-    'num' => $num,
+    'num' => '',
     'active' => $active,
     'class' => 'btn-pendiente',
     'explicacion' => $explicacion,
@@ -357,7 +333,7 @@ $a_pills[$num_orden] = $pill;
 
 // plantillas = 30
 $filtro = 'plantillas';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro,
     'accion' => Escrito::ACCION_PLANTILLA,
 ];
@@ -365,11 +341,10 @@ $pag_lst = web\Hash::link('apps/plantillas/controller/plantilla_lista.php?' . ht
 $num_orden = 30;
 $text = _("plantillas");
 $explicacion = _("Modelos jurídicos para diferentes trámites (Secretaría)");
-$num = '';
 $pill = ['orden' => $num_orden,
     'text' => $text,
     'pag_lst' => $pag_lst,
-    'num' => $num,
+    'num' => '',
     'active' => $active,
     'class' => 'btn-pendiente',
     'explicacion' => $explicacion,
@@ -379,18 +354,17 @@ $a_pills[$num_orden] = $pill;
 
 // imprimir = 40
 $filtro = 'imprimir';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro,
 ];
 $pag_lst = web\Hash::link('apps/busquedas/controller/imprimir_que.php?' . http_build_query($aQuery));
 $num_orden = 40;
 $text = _("imprimir");
 $explicacion = _("Imprimir el registro (Secretaría)");
-$num = '';
 $pill = ['orden' => $num_orden,
     'text' => $text,
     'pag_lst' => $pag_lst,
-    'num' => $num,
+    'num' => '',
     'active' => $active,
     'class' => 'btn-pendiente',
     'explicacion' => $explicacion,

@@ -1,10 +1,16 @@
 <?php
 // INICIO Cabecera global de URL de controlador *********************************
-use config\model\Config;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\EntradaLista;
-use expedientes\model\ExpedienteLista;
+use expedientes\model\ExpedienteAcabadosEncargadosLista;
+use expedientes\model\ExpedienteAcabadosLista;
+use expedientes\model\ExpedienteArchivadosLista;
+use expedientes\model\ExpedienteBorradorLista;
+use expedientes\model\ExpedienteCirculandoLista;
+use expedientes\model\ExpedienteCopiasLista;
+use expedientes\model\ExpedienteParaFirmarLista;
+use expedientes\model\ExpedienteReunionLista;
 use usuarios\model\entity\Usuario;
 use function core\is_true;
 
@@ -21,7 +27,7 @@ require_once("apps/core/global_object.inc");
 $peticion_ajax = 0;
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
     && !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
-    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
     // handle request as AJAX
     $peticion_ajax = 1;
 }
@@ -37,15 +43,14 @@ $a_pills = [];
 //Diferentes filtros:
 // Expedientes:
 
-$oExpedienteLista = new ExpedienteLista();
 $filtro = 'borrador_propio';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$oExpedienteLista = new ExpedienteBorradorLista($filtro);
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 1;
 $text = _("borrador (propio)");
 $explicacion = _("Expedientes de trabajo propio");
-$oExpedienteLista->setFiltro($filtro);
 $num = $oExpedienteLista->getNumero();
 $pill = ['orden' => $num_orden,
     'text' => $text,
@@ -60,13 +65,13 @@ $a_pills[$num_orden] = $pill;
 
 // borrador_oficina = 2
 $filtro = 'borrador_oficina';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$oExpedienteLista = new ExpedienteBorradorLista($filtro);
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 2;
 $text = _("borrador (oficina)");
 $explicacion = _("Expedientes para revisión de la propia oficina");
-$oExpedienteLista->setFiltro($filtro);
 $num = $oExpedienteLista->getNumero();
 $pill = ['orden' => $num_orden,
     'text' => $text,
@@ -81,13 +86,13 @@ $a_pills[$num_orden] = $pill;
 
 // firmar = 3
 $filtro = 'firmar';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$oExpedienteLista = new ExpedienteParaFirmarLista($filtro);
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 3;
 $text = _("para firmar");
 $explicacion = _("Expedientes pendientes de firmar");
-$oExpedienteLista->setFiltro($filtro);
 $num = $oExpedienteLista->getNumero();
 $pill = ['orden' => $num_orden,
     'text' => $text,
@@ -102,13 +107,13 @@ $a_pills[$num_orden] = $pill;
 
 // reunion = 4
 $filtro = 'reunion';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$oExpedienteLista = new ExpedienteReunionLista($filtro);
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 4;
 $text = _("para reunión");
 $explicacion = _("Expedientes pendientes de firmar para una próxima reunión");
-$oExpedienteLista->setFiltro($filtro);
 $num = $oExpedienteLista->getNumero();
 $pill = ['orden' => $num_orden,
     'text' => $text,
@@ -123,13 +128,13 @@ $a_pills[$num_orden] = $pill;
 
 // circular = 5
 $filtro = 'circulando';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$oExpedienteLista = new ExpedienteCirculandoLista($filtro);
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 5;
 $text = _("circulando");
 $explicacion = _("Expedientes de la oficina que están circulando");
-$oExpedienteLista->setFiltro($filtro);
 $num = $oExpedienteLista->getNumero();
 $pill = ['orden' => $num_orden,
     'text' => $text,
@@ -145,13 +150,13 @@ $a_pills[$num_orden] = $pill;
 if (is_true(ConfigGlobal::soy_dtor())) {
     // acabados = 7
     $filtro = 'acabados';
-    $active = ($filtro == $Q_filtro) ? 'active' : '';
+    $oExpedienteLista = new ExpedienteAcabadosLista($filtro);
+    $active = ($filtro === $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro];
     $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
     $num_orden = 7;
     $text = _("acabados");
     $explicacion = _("Expedientes que han terminado de circular (directores)");
-    $oExpedienteLista->setFiltro($filtro);
     $num = $oExpedienteLista->getNumero();
     $pill = ['orden' => $num_orden,
         'text' => $text,
@@ -166,13 +171,13 @@ if (is_true(ConfigGlobal::soy_dtor())) {
 }
 // acabados = 7.1
 $filtro = 'acabados_encargados';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$oExpedienteLista = new ExpedienteAcabadosEncargadosLista($filtro);
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 8;
 $text = _("acabados encargados");
 $explicacion = _("Expedientes que han circulado y se han encargado a alguien");
-$oExpedienteLista->setFiltro($filtro);
 $num = $oExpedienteLista->getNumero();
 $pill = ['orden' => $num_orden,
     'text' => $text,
@@ -187,14 +192,14 @@ $a_pills[$num_orden] = $pill;
 
 // archivados = 9
 $filtro = 'archivados';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$oExpedienteLista = new ExpedienteArchivadosLista($filtro);
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 9;
 $text = _("archivados");
 $explicacion = _("Expedientes de la propia oficina archivados, una vez finalizados todos los pasos");
 // No hace falta el número:
-//$oExpedienteLista->setFiltro($filtro);
 //$num = $oExpedienteLista->getNumero();
 $num = '';
 $pill = ['orden' => $num_orden,
@@ -211,13 +216,13 @@ $a_pills[$num_orden] = $pill;
 
 // copias = 10
 $filtro = 'copias';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$oExpedienteLista = new ExpedienteCopiasLista($filtro);
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = 10;
 $text = _("copias");
 $explicacion = _("Copias de Expedientes de otras oficinas");
-$oExpedienteLista->setFiltro($filtro);
 $num = $oExpedienteLista->getNumero();
 $pill = ['orden' => $num_orden,
     'text' => $text,
@@ -236,7 +241,7 @@ $a_pills[$num_orden] = $pill;
 if (ConfigGlobal::role_actual() === 'vcd') {
     // entradas = 11
     $filtro = 'en_ingresado';
-    $active = ($filtro == $Q_filtro) ? 'active' : '';
+    $active = ($filtro === $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($aQuery));
     $num_orden = 11;
@@ -257,11 +262,11 @@ if (ConfigGlobal::role_actual() === 'vcd') {
     $a_pills[$num_orden] = $pill;
 }
 
-// Sólo para dtor
+// Sólo para director
 if (is_true(ConfigGlobal::soy_dtor())) {
     // entradas = 12
     $filtro = 'en_aceptado';
-    $active = ($filtro == $Q_filtro) ? 'active' : '';
+    $active = ($filtro === $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($aQuery));
     $num_orden = 12;
@@ -284,7 +289,7 @@ if (is_true(ConfigGlobal::soy_dtor())) {
 
 // entradas = 13
 $filtro = 'en_encargado';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($aQuery));
 $num_orden = 13;
@@ -306,17 +311,16 @@ $a_pills[$num_orden] = $pill;
 
 // buscar = 20
 $filtro = 'en_buscar';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($aQuery));
 $num_orden = 20;
 $text = _("archivo de escritos");
 $explicacion = _("Buscar Entradas, escritos, etc. registrados en secetaría");
-$num = '';
 $pill = ['orden' => $num_orden,
     'text' => $text,
     'pag_lst' => $pag_lst,
-    'num' => $num,
+    'num' => '',
     'active' => $active,
     'class' => 'btn-entrada',
     'explicacion' => $explicacion,
@@ -327,7 +331,7 @@ $a_pills[$num_orden] = $pill;
 if (is_true(ConfigGlobal::soy_dtor())) {
     // escritos_cr = 21
     $filtro = 'escritos_cr';
-    $active = ($filtro == $Q_filtro) ? 'active' : '';
+    $active = ($filtro === $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro, 'opcion' => 51];
     $pag_lst = web\Hash::link('apps/busquedas/controller/ver_tabla.php?' . http_build_query($aQuery));
     $num_orden = 21;
@@ -348,7 +352,7 @@ if (is_true(ConfigGlobal::soy_dtor())) {
 
 // buscar = 22
 $filtro = 'permanentes_cr';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?' . http_build_query($aQuery));
 $num_orden = 22;
@@ -368,7 +372,7 @@ $a_pills[$num_orden] = $pill;
 
 // pendientes = 30
 $filtro = 'pendientes';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro,
     'periodo' => 'hoy',
 ];
@@ -377,11 +381,10 @@ $pagina_inicio = $pag_lst;
 $num_orden = 30;
 $text = _("pendientes");
 $explicacion = _("Gestionar pendientes del registro y/o la oficina");
-$num = '';
 $pill = ['orden' => $num_orden,
     'text' => $text,
     'pag_lst' => $pag_lst,
-    'num' => $num,
+    'num' => '',
     'active' => $active,
     'class' => 'btn-pendiente',
     'explicacion' => $explicacion,
@@ -391,18 +394,17 @@ $a_pills[$num_orden] = $pill;
 
 // documentos = 40
 $filtro = 'documentos';
-$active = ($filtro == $Q_filtro) ? 'active' : '';
+$active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro,
 ];
 $pag_lst = web\Hash::link('apps/documentos/controller/documentos_lista.php?' . http_build_query($aQuery));
 $num_orden = 40;
 $text = _("documentos");
 $explicacion = _("Introducir y gestionar documentos externos a la base de datos de Tramity");
-$num = '';
 $pill = ['orden' => $num_orden,
     'text' => $text,
     'pag_lst' => $pag_lst,
-    'num' => $num,
+    'num' => '',
     'active' => $active,
     'class' => 'btn-documento',
     'explicacion' => $explicacion,

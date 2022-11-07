@@ -99,9 +99,9 @@ $prioridad = $oExpediente->getPrioridad();
 $a_prioridad = $oExpediente->getArrayPrioridad();
 $prioridad_txt = $a_prioridad[$prioridad];
 
+$a_vida = $oExpediente->getArrayVida();
 $vida = $oExpediente->getVida();
 if (!empty($vida)) {
-    $a_vida = $oExpediente->getArrayVida();
     $vida_txt = $a_vida[$vida];
 } else {
     $vida_txt = '';
