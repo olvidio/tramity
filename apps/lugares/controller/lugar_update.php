@@ -43,47 +43,48 @@ switch ($Q_que) {
         $Q_plataforma = (string)filter_input(INPUT_POST, 'plataforma');
         $Q_e_mail = (string)filter_input(INPUT_POST, 'e_mail');
         $Q_modo_envio = (integer)filter_input(INPUT_POST, 'modo_envio');
-        $Qanulado = (bool)filter_input(INPUT_POST, 'anulado');
+        $Q_anulado = (bool)filter_input(INPUT_POST, 'anulado');
 
-        $oLugar = new Lugar(array('id_lugar' => $Qid_lugar));
+        $oLugar = new Lugar(array('id_lugar' => $Q_id_lugar));
         $oLugar->DBCargar();
-        $oLugar->setSigla($Qsigla);
-        $oLugar->setDl($Qdl);
-        $oLugar->setRegion($Qregion);
-        $oLugar->setNombre($Qnombre);
-        $oLugar->setTipo_ctr($Qtipo_ctr);
-        $oLugar->setPlataforma($Qplataforma);
-        $oLugar->setE_mail($Qe_mail);
-        $oLugar->setModo_envio($Qmodo_envio);
-        $oLugar->setAnulado($Qanulado);
+        $oLugar->setSigla($Q_sigla);
+        $oLugar->setDl($Q_dl);
+        $oLugar->setRegion($Q_region);
+        $oLugar->setNombre($Q_nombre);
+        $oLugar->setTipo_ctr($Q_tipo_ctr);
+        $oLugar->setPlataforma($Q_plataforma);
+        $oLugar->setE_mail($Q_e_mail);
+        $oLugar->setModo_envio($Q_modo_envio);
+        $oLugar->setAnulado($Q_anulado);
         if ($oLugar->DBGuardar() === FALSE) {
             $error_txt .= _("hay un error, no se ha guardado");
             $error_txt .= "\n" . $oLugar->getErrorTxt();
         }
         break;
     case "nuevo":
-        $Qsigla = (string)filter_input(INPUT_POST, 'sigla');
-        if (empty($Qsigla)) {
+        $Q_id_lugar = (integer)filter_input(INPUT_POST, 'id_lugar');
+        $Q_sigla = (string)filter_input(INPUT_POST, 'sigla');
+        if (empty($Q_sigla)) {
             echo _("debe poner un nombre");
         }
-        $Qdl = (string)filter_input(INPUT_POST, 'dl');
-        $Qregion = (string)filter_input(INPUT_POST, 'region');
-        $Qnombre = (string)filter_input(INPUT_POST, 'nombre');
-        $Qtipo_ctr = (string)filter_input(INPUT_POST, 'tipo_ctr');
-        $Qplataforma = (string)filter_input(INPUT_POST, 'plataforma');
-        $Qe_mail = (string)filter_input(INPUT_POST, 'e_mail');
-        $Qmodo_envio = (integer)filter_input(INPUT_POST, 'modo_envio');
+        $Q_dl = (string)filter_input(INPUT_POST, 'dl');
+        $Q_region = (string)filter_input(INPUT_POST, 'region');
+        $Q_nombre = (string)filter_input(INPUT_POST, 'nombre');
+        $Q_tipo_ctr = (string)filter_input(INPUT_POST, 'tipo_ctr');
+        $Q_plataforma = (string)filter_input(INPUT_POST, 'plataforma');
+        $Q_e_mail = (string)filter_input(INPUT_POST, 'e_mail');
+        $Q_modo_envio = (integer)filter_input(INPUT_POST, 'modo_envio');
 
-        $oLugar = new Lugar(array('id_lugar' => $Qid_lugar));
+        $oLugar = new Lugar(array('id_lugar' => $Q_id_lugar));
         $oLugar->DBCargar();
-        $oLugar->setSigla($Qsigla);
-        $oLugar->setDl($Qdl);
-        $oLugar->setRegion($Qregion);
-        $oLugar->setNombre($Qnombre);
-        $oLugar->setTipo_ctr($Qtipo_ctr);
-        $oLugar->setPlataforma($Qplataforma);
-        $oLugar->setE_mail($Qe_mail);
-        $oLugar->setModo_envio($Qmodo_envio);
+        $oLugar->setSigla($Q_sigla);
+        $oLugar->setDl($Q_dl);
+        $oLugar->setRegion($Q_region);
+        $oLugar->setNombre($Q_nombre);
+        $oLugar->setTipo_ctr($Q_tipo_ctr);
+        $oLugar->setPlataforma($Q_plataforma);
+        $oLugar->setE_mail($Q_e_mail);
+        $oLugar->setModo_envio($Q_modo_envio);
         if ($oLugar->DBGuardar() === FALSE) {
             $error_txt .= _("hay un error, no se ha guardado");
             $error_txt .= "\n" . $oLugar->getErrorTxt();

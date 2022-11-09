@@ -25,7 +25,7 @@ $Q_quien = (string)filter_input(INPUT_POST, 'quien');
 $Q_scroll_id = (integer)filter_input(INPUT_POST, 'scroll_id');
 $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 // Hay que usar isset y empty porque puede tener el valor =0.
-// Si vengo por medio de Posicion, borro la última
+// Si vengo por medio de Posición, borro la última
 if (isset($_POST['stack'])) {
     $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
     if ($stack != '') {
@@ -74,7 +74,7 @@ if (!empty($Q_id_lugar)) {
     $e_mail = $oLugar->getE_mail();
     $plataforma = $oLugar->getPlataforma();
     $anulado = $oLugar->getAnulado();
-    // modo envio
+    // modo envío
     $modo_envio = $oLugar->getModo_envio();
     $oDesplModoEnvio->setOpcion_sel($modo_envio);
 
