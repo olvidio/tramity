@@ -273,20 +273,11 @@ class Escrito extends EscritoDB
         // añadir visibilidad destino
         // sigla +(visibilidad) + ref
         $oVisibilidad = new Visibilidad();
-        $visibilidad = $this->getVisibilidad();
-        // si soy dl o ctr
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
-                $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
-                $visibilidad_txt = $a_visibilidad_dst[$visibilidad];
-                $destinos_txt .= " ($visibilidad_txt)";
-            }
-        } else {
-            if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
-                $a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
-                $visibilidad_txt = $a_visibilidad_dl[$visibilidad];
-                $destinos_txt .= " ($visibilidad_txt)";
-            }
+        $visibilidad_dst = $this->getVisibilidad_dst();
+        if ($visibilidad_dst !== null && $visibilidad_dst !== Visibilidad::V_CTR_TODOS) {
+            $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
+            $visibilidad_txt = $a_visibilidad_dst[$visibilidad_dst];
+            $destinos_txt .= " ($visibilidad_txt)";
         }
         // si hay grupos, tienen preferencia
         $a_grupos = $this->getId_grupos();
