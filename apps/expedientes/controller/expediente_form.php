@@ -213,7 +213,7 @@ if ($Q_id_expediente) {
         if (!empty($a_id_adjuntos)) {
             $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto_en_expediente('$id_escrito','mod');\"  ></i>";
         }
-        // Categoria
+        // Categoría
         $categoria = $oEscrito->getCategoria();
         $categoria_txt = $aCategorias[$categoria];
 

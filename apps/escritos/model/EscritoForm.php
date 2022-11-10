@@ -69,7 +69,7 @@ class EscritoForm
     {
         $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
-        if (empty($this->Qid_escrito) && $this->Qfiltro == 'en_buscar') {
+        if (empty($this->Qid_escrito) && $this->Qfiltro === 'en_buscar') {
             //$this->Qa_sel = (array)  filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
             // sólo debería seleccionar uno.
             $this->Qid_escrito = $this->Qa_sel[0];
@@ -132,10 +132,10 @@ class EscritoForm
         $oEscrito = new Escrito($this->Qid_escrito);
         // categoria
         $oCategoria = new Categoria();
-        $aOpciones = $oCategoria->getArrayCategoria();
+        $aOpcionesVisibilidad = $oCategoria->getArrayCategoria();
         $oDesplCategoria = new Desplegable();
         $oDesplCategoria->setNombre('categoria');
-        $oDesplCategoria->setOpciones($aOpciones);
+        $oDesplCategoria->setOpciones($aOpcionesVisibilidad);
         $oDesplCategoria->setTabIndex(80);
 
 
@@ -146,16 +146,16 @@ class EscritoForm
 
         // visibilidad
         $oVisibilidad = new Visibilidad();
-        $aOpciones = $oVisibilidad->getArrayVisibilidad();
+        $aOpcionesVisibilidad = $oVisibilidad->getArrayVisibilidad();
         $oDesplVisibilidad = new Desplegable();
         $oDesplVisibilidad->setNombre('visibilidad');
-        $oDesplVisibilidad->setOpciones($aOpciones);
+        $oDesplVisibilidad->setOpciones($aOpcionesVisibilidad);
         $oDesplVisibilidad->setOpcion_sel($visibilidad);
 
-        $aOpciones_dst = $oVisibilidad->getArrayVisibilidadCtr();
+        $aOpcionesVisibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
         $oDesplVisibilidad_dst = new Desplegable();
         $oDesplVisibilidad_dst->setNombre('visibilidad_dst');
-        $oDesplVisibilidad_dst->setOpciones($aOpciones_dst);
+        $oDesplVisibilidad_dst->setOpciones($aOpcionesVisibilidad_dst);
         $oDesplVisibilidad_dst->setOpcion_sel($visibilidad_dst);
 
         // plazo para contestar al enviar.

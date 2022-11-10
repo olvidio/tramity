@@ -65,14 +65,19 @@ class Visibilidad
     public function getArrayVisibilidadCtr($limitar_por_usuario=FALSE):array
     {
         $a_visibilidad[ self::V_CTR_TODOS] = _("todos");
-        if ($limitar_por_usuario) {
-            if (ConfigGlobal::soy_dtor()) {
-                $a_visibilidad[ self::V_CTR_DTOR] = _("d");
-                $a_visibilidad[ self::V_CTR_DTOR_SACD] = _("d y sacd");
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+            if ($limitar_por_usuario) {
+                if (ConfigGlobal::soy_dtor()) {
+                    $a_visibilidad[self::V_CTR_DTOR] = _("d");
+                    $a_visibilidad[self::V_CTR_DTOR_SACD] = _("d y sacd");
+                }
+                if (ConfigGlobal::soy_sacd()) {
+                    $a_visibilidad[self::V_CTR_DTOR_SACD] = _("d y sacd");
+                }
             }
-            if (ConfigGlobal::soy_sacd()) {
-                $a_visibilidad[ self::V_CTR_DTOR_SACD] = _("d y sacd");
-            }
+        } else {
+            $a_visibilidad[self::V_CTR_DTOR] = _("d");
+            $a_visibilidad[self::V_CTR_DTOR_SACD] = _("d y sacd");
         }
         return $a_visibilidad;
     }
