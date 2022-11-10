@@ -130,7 +130,7 @@ class EscritoForm
         }
 
         $oEscrito = new Escrito($this->Qid_escrito);
-        // categoria
+        // categoría
         $oCategoria = new Categoria();
         $aOpcionesVisibilidad = $oCategoria->getArrayCategoria();
         $oDesplCategoria = new Desplegable();
@@ -146,7 +146,7 @@ class EscritoForm
 
         // visibilidad
         $oVisibilidad = new Visibilidad();
-        $aOpcionesVisibilidad = $oVisibilidad->getArrayVisibilidad();
+        $aOpcionesVisibilidad = $oVisibilidad->getArrayVisibilidad(TRUE);
         $oDesplVisibilidad = new Desplegable();
         $oDesplVisibilidad->setNombre('visibilidad');
         $oDesplVisibilidad->setOpciones($aOpcionesVisibilidad);

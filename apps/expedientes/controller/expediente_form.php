@@ -299,8 +299,8 @@ $url_ajax = 'apps/tramites/controller/tramitecargo_ajax.php';
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query(['filtro' => $Q_filtro, 'prioridad_sel' => $Q_prioridad_sel]));
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query([]));
 
-$pag_escrito = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
-$pag_propuesta = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'accion' => Escrito::ACCION_PROPUESTA]));
+$pag_escrito = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'accion' => Escrito::ACCION_ESCRITO]));
+$pag_propuesta = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente,'filtro' => $Q_filtro, 'accion' => Escrito::ACCION_PROPUESTA]));
 $pag_plantilla = web\Hash::link('apps/plantillas/controller/plantilla_lista_expediente.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'modo' => $Q_modo, 'prioridad_sel' => $Q_prioridad_sel]));
 $pag_respuesta = web\Hash::link('apps/entradas/controller/buscar_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'prioridad_sel' => $Q_prioridad_sel]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local

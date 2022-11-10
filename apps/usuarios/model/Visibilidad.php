@@ -74,6 +74,9 @@ class Visibilidad
                 if (ConfigGlobal::soy_sacd()) {
                     $a_visibilidad[self::V_CTR_DTOR_SACD] = _("d y sacd");
                 }
+            } else {
+                $a_visibilidad[self::V_CTR_DTOR] = _("d");
+                $a_visibilidad[self::V_CTR_DTOR_SACD] = _("d y sacd");
             }
         } else {
             $a_visibilidad[self::V_CTR_DTOR] = _("d");
