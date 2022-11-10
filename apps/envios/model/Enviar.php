@@ -2,7 +2,6 @@
 
 namespace envios\model;
 
-use DateTime;
 use documentos\model\Documento;
 use entradas\model\entity\EntradaAdjunto;
 use entradas\model\entity\EntradaBypass;
@@ -13,6 +12,7 @@ use escritos\model\Escrito;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
+use Mpdf\MpdfException;
 use oasis_as4\model\As4;
 use oasis_as4\model\As4CollaborationInfo;
 use PHPMailer\PHPMailer\Exception;
@@ -25,63 +25,31 @@ use function core\is_true;
 
 class Enviar
 {
+    private Escrito $oEscrito;
     /**
-     *
-     * @var object
-     */
-    private $oEscrito;
-    /**
-     *
-     * @var object
+     * @var Entrada|EntradaCompartida
      */
     private $oEntrada;
     /**
-     *
-     * @var object
+     * @var EntradaBypass|Entrada
      */
     private $oEntradaBypass;
-    /**
-     *
-     * @var object
-     */
-    private $oEtherpad;
-    /**
-     *
-     * @var boolean
-     */
-    private $bLoaded = FALSE;
-    private $is_Bypass;
-    /**
-     *
-     * @var integer
-     */
-    private $iid;
-    /**
-     *
-     * @var string
-     */
-    private $tipo;
-    /**
-     *
-     * @var string
-     */
-    private $sigla_destino = '';
-    /**
-     *
-     * @var DateTime
-     *
-     */
-    private $f_salida;
+    private Etherpad $oEtherpad;
+    private bool $bLoaded = FALSE;
+    private bool $is_Bypass;
+    private int $iid;
+    private string $tipo;
+    private string $sigla_destino = '';
+    private string $f_salida;
 
-    private $asunto;
-    private $filename;
-    private $filename_ext;
-    private $contentFile;
-    private $a_adjuntos;
+    private string $asunto;
+    private string $filename;
+    private string $filename_ext;
+    private string $contentFile;
+    private array $a_adjuntos;
+    private array $a_rta = [];
 
-    private $a_rta = [];
-
-    private $accion;
+    private string $accion;
 
     public function __construct($id, $tipo)
     {
@@ -102,13 +70,13 @@ class Enviar
         }
     }
 
-    public function setId($id)
+    public function setId($id): void
     {
         $this->iid = $id;
         $this->bLoaded = FALSE;
     }
 
-    public function setTipo($tipo)
+    public function setTipo($tipo): void
     {
         $this->tipo = $tipo;
         $this->bLoaded = FALSE;
@@ -117,12 +85,15 @@ class Enviar
     /**
      * para descargar en local
      *
-     * @return array|string
+     * @param bool $is_compartida
+     * @return array
+     * @throws MpdfException
      */
-    public function getPdf($is_compartida = FALSE)
+    public function getPdf(bool $is_compartida = FALSE): array
     {
         $this->getDocumento($is_compartida);
 
+        $a_header = [];
         if ($this->tipo === 'escrito') {
             $a_header = ['left' => $this->oEscrito->cabeceraIzquierda(),
                 'center' => '',
@@ -155,7 +126,7 @@ class Enviar
         ];
     }
 
-    private function getDocumento($is_compartida = FALSE)
+    private function getDocumento(bool $is_compartida = FALSE): void
     {
         if ($this->tipo === 'entrada') {
             if ($is_compartida) {
@@ -174,14 +145,14 @@ class Enviar
         }
     }
 
-    private function getDatosEntradaCompartida()
+    private function getDatosEntradaCompartida(): void
     {
         $this->oEntrada = new EntradaCompartida($this->iid);
         $this->f_salida = $this->oEntrada->getF_documento()->getFromLocal('.');
         $this->asunto = $this->oEntrada->getAsunto_entrada();
 
         $json_prot_origen = $this->oEntrada->getJson_prot_origen();
-        if (count(get_object_vars($json_prot_origen)) == 0) {
+        if (count(get_object_vars($json_prot_origen)) === 0) {
             exit (_("No hay más"));
         }
 
@@ -191,13 +162,13 @@ class Enviar
         $this->oEtherpad->setId(Etherpad::ID_COMPARTIDO, $this->iid);
     }
 
-    private function getDatosEntradaByPass()
+    private function getDatosEntradaByPass(): void
     {
         $this->f_salida = $this->oEntradaBypass->getF_documento()->getFromLocal('.');
         $this->asunto = empty($this->oEntradaBypass->getAsunto()) ? $this->oEntradaBypass->getAsunto_entrada() : $this->oEntradaBypass->getAsunto();
 
         $json_prot_origen = $this->oEntradaBypass->getJson_prot_origen();
-        if (count(get_object_vars($json_prot_origen)) == 0) {
+        if (count(get_object_vars($json_prot_origen)) === 0) {
             exit (_("No hay más"));
         }
 
@@ -216,7 +187,7 @@ class Enviar
         }
     }
 
-    private function getDatosEntrada()
+    private function getDatosEntrada(): void
     {
         $this->oEntrada = new Entrada($this->iid);
         $this->f_salida = $this->oEntrada->getF_documento()->getFromLocal('.');
@@ -246,7 +217,7 @@ class Enviar
      * Obtiene los datos de:
      *    asunto, f_salida, adjuntos, Etherpad.
      */
-    private function getDatosEscrito()
+    private function getDatosEscrito(): void
     {
         // para no tener que repetir cuando hay multiples destinos
         if ($this->bLoaded === FALSE) {
@@ -297,9 +268,8 @@ class Enviar
         $this->filename = $this->oEscrito->getNombreEscrito($this->sigla_destino);
     }
 
-    public function enviar()
+    public function enviar(): array
     {
-
         $aDestinos = $this->getDestinatarios();
 
         $num_enviados = 0;
@@ -335,6 +305,9 @@ class Enviar
                 default:
                     $err_mail = _("No hay modo de envío para este destino");
             }
+            if (empty($err_mail)) {
+                $num_enviados++;
+            }
         }
 
         // si es compartir, enviar en bloque por plataformas.
@@ -369,8 +342,8 @@ class Enviar
 
     private function getDestinatarios()
     {
-        if ($this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
-            echo "AAAAAAAHHHHH!!!!!";
+        if ($this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
+            die("AAAAAAAHHHHH!!!!!");
         }
         if ($this->tipo === 'entrada') {
             $this->accion = As4CollaborationInfo::ACCION_COMPARTIR;
@@ -448,7 +421,7 @@ class Enviar
         return $err_mail;
     }
 
-    private function getHeader($id_lugar = '')
+    private function getHeader($id_lugar = ''): array
     {
         $a_header = [];
         if ($this->tipo === 'entrada') {
@@ -475,7 +448,7 @@ class Enviar
         return $a_header;
     }
 
-    private function enviarAS4($id_lugar, $plataforma, $accion)
+    private function enviarAS4(int $id_lugar, string $plataforma, string $accion): string
     {
         $err_mail = '';
         $this->getDocumento();
@@ -483,7 +456,7 @@ class Enviar
         if ($this->tipo === 'escrito') {
             // Si la categoría es 'sin numerar', no hay protocolo local.
             // fabrico uno con sólo el lugar:
-            if ($this->oEscrito->getCategoria() == Categoria::CAT_E12) {
+            if ($this->oEscrito->getCategoria() === Categoria::CAT_E12) {
                 // Busco el id_lugar de la dl.
                 $gesLugares = new GestorLugar();
                 $id_siga_local = $gesLugares->getId_sigla_local();
@@ -509,8 +482,8 @@ class Enviar
             if (!property_exists($json_prot_dst, 'id_lugar')) {
                 continue;
             }
-            $id_dst = $json_prot_dst->id_lugar;
-            if ($id_dst == $id_lugar) {
+            $id_dst = (int) $json_prot_dst->id_lugar;
+            if ($id_dst === $id_lugar) {
                 break;
             }
         }
@@ -553,7 +526,7 @@ class Enviar
         return $err_mail;
     }
 
-    private function enviarAS4Compartido($plataforma)
+    private function enviarAS4Compartido($plataforma): string
     {
         $err_mail = '';
         $this->getDocumento();
@@ -561,7 +534,7 @@ class Enviar
         if ($this->tipo === 'escrito') {
             // Si la categoría es 'sin numerar', no hay protocolo local.
             // fabrico uno con sólo el lugar:
-            if ($this->oEscrito->getCategoria() == Categoria::CAT_E12) {
+            if ($this->oEscrito->getCategoria() === Categoria::CAT_E12) {
                 // Busco el id_lugar de la dl.
                 $gesLugares = new GestorLugar();
                 $id_siga_local = $gesLugares->getId_sigla_local();
@@ -621,9 +594,4 @@ class Enviar
         return $err_mail;
     }
 
-    private function renombrar($string)
-    {
-        //cambiar '/' por '_':
-        return str_replace('/', '_', $string);
-    }
 }

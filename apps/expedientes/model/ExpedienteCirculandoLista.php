@@ -72,7 +72,7 @@ class ExpedienteCirculandoLista
         // Quito los permanentes_cl (de momento para los ctr)
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR ) {
             $this->aWhere['vida'] = Expediente::VIDA_PERMANENTE;
-            $aOperador['vida'] = '!=';
+            $this->aOperador['vida'] = '!=';
         }
         if (ConfigGlobal::role_actual() === 'vcd') {
             $a_tipos_acabado = [Expediente::ESTADO_CIRCULANDO,
