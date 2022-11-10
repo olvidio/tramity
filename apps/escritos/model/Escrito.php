@@ -274,7 +274,7 @@ class Escrito extends EscritoDB
         // sigla +(visibilidad) + ref
         $oVisibilidad = new Visibilidad();
         $visibilidad_dst = $this->getVisibilidad_dst();
-        if ($visibilidad_dst !== null && $visibilidad_dst !== Visibilidad::V_CTR_TODOS) {
+        if (!empty($visibilidad_dst) && $visibilidad_dst !== Visibilidad::V_CTR_TODOS) {
             $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
             $visibilidad_txt = $a_visibilidad_dst[$visibilidad_dst];
             $destinos_txt .= " ($visibilidad_txt)";
