@@ -270,10 +270,28 @@ class Escrito extends EscritoDB
         $json_prot_dst = $this->getJson_prot_destino(TRUE);
         $oArrayProtDestino = new ProtocoloArray($json_prot_dst, '', 'destinos');
         $destinos_txt = $oArrayProtDestino->ListaTxtBr();
+        // añadir visibilidad destino
+        // sigla +(visibilidad) + ref
+        $oVisibilidad = new Visibilidad();
+        $visibilidad = $this->getVisibilidad();
+        // si soy dl o ctr
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+            if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
+                $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
+                $visibilidad_txt = $a_visibilidad_dst[$visibilidad];
+                $destinos_txt .= " ($visibilidad_txt)";
+            }
+        } else {
+            if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
+                $a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
+                $visibilidad_txt = $a_visibilidad_dl[$visibilidad];
+                $destinos_txt .= " ($visibilidad_txt)";
+            }
+        }
         // si hay grupos, tienen preferencia
         $a_grupos = $this->getId_grupos();
         if (!empty($a_grupos)) {
-            //(segun los grupos seleccionados)
+            //(según los grupos seleccionados)
             foreach ($a_grupos as $id_grupo) {
                 $oGrupo = new Grupo($id_grupo);
                 $descripcion_g = $oGrupo->getDescripcion();
