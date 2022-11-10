@@ -33,12 +33,12 @@ function array_php2pg($phpArray = [])
 }
 
 /**
- * para convertir los arrays provinientes del postgresql a php.
+ * para convertir los arrays que provienen del postgresql a php.
  *
  * @param pg_array
  * @return array
  */
-function array_pg2php($postgresArray)
+function array_pg2php($postgresArray): array
 {
     $str_csv = trim($postgresArray, "{}");
     if (empty($str_csv)) {
@@ -78,7 +78,7 @@ function urlsafe_b64decode($string)
 function is_true($val)
 {
     if (is_string($val)) {
-        $val = ($val == 't') ? 'true' : $val;
+        $val = ($val === 't') ? 'true' : $val;
         $boolval = filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     } else {
         $boolval = $val;
@@ -166,16 +166,16 @@ function cambiar_idioma($idioma = '')
                  en que está disponible nuestra web */
                 for ($i = 0; $i < count($a_idiomas); $i++) {
                     if (!isset($idioma)) {
-                        if (substr($a_idiomas[$i], 0, 2) == "ca") {
+                        if (substr($a_idiomas[$i], 0, 2) === "ca") {
                             $idioma = "ca_ES.UTF-8";
                         }
-                        if (substr($a_idiomas[$i], 0, 2) == "es") {
+                        if (substr($a_idiomas[$i], 0, 2) === "es") {
                             $idioma = "es_ES.UTF-8";
                         }
-                        if (substr($a_idiomas[$i], 0, 2) == "en") {
+                        if (substr($a_idiomas[$i], 0, 2) === "en") {
                             $idioma = "en_US.UTF-8";
                         }
-                        if (substr($a_idiomas[$i], 0, 2) == "de") {
+                        if (substr($a_idiomas[$i], 0, 2) === "de") {
                             $idioma = "de_DE.UTF-8";
                         }
                     }

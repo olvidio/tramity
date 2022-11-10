@@ -98,8 +98,6 @@ class ViewTwig extends Environment
 
     private function getJsPath()
     {
-        //$dir_apps = ConfigGlobal::$web_path.'/apps';
-        // en este caso ya esta en document_root
         $dir_apps = '';
         $base_dir = $_SERVER['DOCUMENT_ROOT'] . $dir_apps;
         $new_dir = 'js';

@@ -146,7 +146,7 @@ class DateTimeLocal extends DateTime
      * devuelve el mes en texto (según el idioma del usuario)
      *
      */
-    public function getMesLocalTxt():array
+    public function getMesLocalTxt(): string
     {
         $mes_num = parent::format('n');
         $aMeses = self::Meses();

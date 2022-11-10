@@ -251,11 +251,11 @@ class EscritoDB extends core\ClasePropiedades
             foreach ($a_id as $nom_id => $val_id) {
                 if (($nom_id === 'id_escrito') && $val_id !== '') {
                     $this->iid_escrito = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_escrito = (int)$a_id; // evitem SQL injection fent cast a integer
+                $this->iid_escrito = (int)$a_id;
                 $this->aPrimary_key = array('iid_escrito' => $this->iid_escrito);
             }
         }
@@ -1018,7 +1018,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return array a_id_grupos
      */
-    function getId_grupos()
+    public function getId_grupos(): array
     {
         if (!isset($this->a_id_grupos) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1031,7 +1031,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return array a_destinos
      */
-    function getDestinos()
+    public function getDestinos(): array
     {
         if (!isset($this->a_destinos) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1044,7 +1044,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return string sasunto
      */
-    function getAsuntoDB()
+    public function getAsuntoDB(): string
     {
         if (!isset($this->sasunto) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1055,9 +1055,9 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut sdetalle de EscritoDB
      *
-     * @return string sdetalle
+     * @return string|null sdetalle
      */
-    function getDetalleDB()
+    public function getDetalleDB(): ?string
     {
         if (!isset($this->sdetalle) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1068,9 +1068,9 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut icreador de EscritoDB
      *
-     * @return integer icreador
+     * @return integer|null icreador
      */
-    function getCreador()
+    public function getCreador(): ?int
     {
         if (!isset($this->icreador) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1083,7 +1083,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return array a_resto_oficinas
      */
-    function getResto_oficinas()
+    public function getResto_oficinas(): array
     {
         if (!isset($this->a_resto_oficinas) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1094,9 +1094,9 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut scomentarios de EscritoDB
      *
-     * @return string scomentarios
+     * @return string|null scomentarios
      */
-    function getComentarios()
+    public function getComentarios(): ?string
     {
         if (!isset($this->scomentarios) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1109,7 +1109,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return web\DateTimeLocal|web\NullDateTimeLocal
      */
-    function getF_aprobacion()
+    public function getF_aprobacion()
     {
         if (!isset($this->df_aprobacion) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1126,7 +1126,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return web\DateTimeLocal|web\NullDateTimeLocal
      */
-    function getF_escrito()
+    public function getF_escrito()
     {
         if (!isset($this->df_escrito) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1143,7 +1143,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return web\DateTimeLocal|web\NullDateTimeLocal
      */
-    function getF_contestar()
+    public function getF_contestar()
     {
         if (!isset($this->df_contestar) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1158,9 +1158,9 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut icategoria de EscritoDB
      *
-     * @return integer icategoria
+     * @return integer|null icategoria
      */
-    function getCategoria()
+    public function getCategoria(): ?int
     {
         if (!isset($this->icategoria) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1171,9 +1171,9 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut ivisibilidad de EscritoDB
      *
-     * @return integer ivisibilidad
+     * @return integer|null ivisibilidad
      */
-    function getVisibilidad(): ?int
+    public function getVisibilidad(): ?int
     {
         if (!isset($this->ivisibilidad) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1184,9 +1184,9 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut ivisibilidad_dst de EscritoDB
      *
-     * @return integer ivisibilidad_dst
+     * @return integer|null ivisibilidad_dst
      */
-    function getVisibilidad_dst(): ?int
+    public function getVisibilidad_dst(): ?int
     {
         if (!isset($this->ivisibilidad_dst) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1197,9 +1197,9 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut iaccion de EscritoDB
      *
-     * @return integer|null iaccion
+     * @return integer iaccion
      */
-    function getAccion(): ?int
+    public function getAccion(): int
     {
         if (!isset($this->iaccion) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1212,7 +1212,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return integer imodo_envio
      */
-    function getModo_envio()
+    public function getModo_envio(): int
     {
         if (!isset($this->imodo_envio) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1225,7 +1225,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return web\DateTimeLocal|web\NullDateTimeLocal
      */
-    function getF_salida()
+    public function getF_salida()
     {
         if (!isset($this->df_salida) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1242,7 +1242,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return integer|null iok
      */
-    function getOk(): ?int
+    public function getOk(): ?int
     {
         if (!isset($this->iok) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1253,9 +1253,9 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut itipo_doc de EscritoDB
      *
-     * @return integer itipo_doc
+     * @return integer|null itipo_doc
      */
-    function getTipo_doc()
+    public function getTipo_doc(): ?int
     {
         if (!isset($this->itipo_doc) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1268,7 +1268,7 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @return boolean banulado
      */
-    function getAnulado()
+    public function getAnulado(): bool
     {
         if (!isset($this->banulado) && !$this->bLoaded) {
             $this->DBCargar();
@@ -1279,9 +1279,9 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut sdescripcion de EscritoDB
      *
-     * @return string sdescripcion
+     * @return string|null sdescripcion
      */
-    function getDescripcion()
+    public function getDescripcion(): ?string
     {
         if (!isset($this->sdescripcion) && !$this->bLoaded) {
             $this->DBCargar();

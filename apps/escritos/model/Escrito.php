@@ -45,9 +45,6 @@ class Escrito extends EscritoDB
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
-     * Constructor de la classe.
-     * Si només necessita un valor, se li pot passar un integer.
-     * En general se li passa un array amb les claus primàries.
      *
      * @param integer|array iid_escrito
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
@@ -58,13 +55,13 @@ class Escrito extends EscritoDB
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_escrito') && $val_id !== '') {
+                if (($nom_id === 'id_escrito') && $val_id !== '') {
                     $this->iid_escrito = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_escrito = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_escrito = (int)$a_id;
                 $this->aPrimary_key = array('iid_escrito' => $this->iid_escrito);
             }
         }
@@ -78,7 +75,7 @@ class Escrito extends EscritoDB
      *
      * return string
      */
-    public function getAsuntoDetalle()
+    public function getAsuntoDetalle(): string
     {
         $detalle = $this->getDetalle();
         return empty($detalle) ? $this->getAsunto() : $this->getAsunto() . " [$detalle]";
@@ -87,9 +84,9 @@ class Escrito extends EscritoDB
     /**
      * Recupera l'atribut sdetalle de Entrada teniendo en cuenta los permisos
      *
-     * @return string sdetalle
+     * @return string|null sdetalle
      */
-    function getDetalle()
+    public function getDetalle(): ?string
     {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this, 'detalle');
@@ -103,10 +100,11 @@ class Escrito extends EscritoDB
 
     /**
      * Recupera l'atribut sasunto de Entrada teniendo en cuenta los permisos
+     * (NOT NULL)
      *
      * @return string sasunto
      */
-    function getAsunto()
+    public function getAsunto(): string
     {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this, 'asunto');
@@ -121,7 +119,7 @@ class Escrito extends EscritoDB
     /**
      * genera el número de protocolo local. y lo guarda.
      */
-    public function generarProtocolo($id_lugar = '', $id_lugar_cr = '', $id_lugar_iese = '')
+    public function generarProtocolo($id_lugar = null, $id_lugar_cr = null, $id_lugar_iese = null)
     {
         // si ya tiene no se toca:
         $prot_local = $this->getJson_prot_local();
@@ -134,7 +132,7 @@ class Escrito extends EscritoDB
             if (empty($id_lugar)) {
                 $id_lugar = $gesLugares->getId_sigla_local();
             }
-            // segun si el destino es cr, iese o resto:
+            // según si el destino es cr, iese o resto:
             $lugar_contador = '';
         } else {
             if (empty($id_lugar_iese)) {
@@ -146,7 +144,7 @@ class Escrito extends EscritoDB
             if (empty($id_lugar)) {
                 $id_lugar = $gesLugares->getId_sigla_local();
             }
-            // segun si el destino es cr, iese o resto:
+            // según si el destino es cr, iese o resto:
             $lugar_contador = '';
             $aProtDst = $this->getJson_prot_destino(TRUE);
             // es un array, pero sólo debería haber uno...
@@ -355,20 +353,16 @@ class Escrito extends EscritoDB
     }
 
     /**
-     * id_lugar sólo se pasa cuando el escrito va dirigido a un grupo, y hay que generear escritos
+     * id_lugar sólo se pasa cuando el escrito va dirigido a un grupo, y hay que generar escritos
      * individuales para cada ctr del grupo.
      *
      * @param string $id_lugar_de_grupo
      * @return string destinos | destino + ref.
      */
-    public function cabeceraIzquierda($id_lugar_de_grupo = '')
+    public function cabeceraIzquierda($id_lugar_de_grupo = ''): string
     {
-        // visibilidad
         $oVisibilidad = new Visibilidad();
         $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
-        // destinos + ref
-        // destinos:
-        $a_grupos = [];
         $destinos_txt = '';
         $id_dst = '';
 
@@ -478,7 +472,7 @@ class Escrito extends EscritoDB
         $json_prot_local = $this->getJson_prot_local();
         if (count(get_object_vars($json_prot_local)) == 0) {
             $err_txt = "No hay protocolo local";
-            $_SESSION['oGestorErrores']->addError($err_txt, 'generar PDF', __LINE__, __FILE__);
+            $_SESSION['oGestorErrores']->addError($err_txt, 'generar cabecera derecha', __LINE__, __FILE__);
             $_SESSION['oGestorErrores']->recordar($err_txt);
 
             $origen_txt = $_SESSION['oConfig']->getSigla();
@@ -500,7 +494,7 @@ class Escrito extends EscritoDB
         return $origen_txt;
     }
 
-    public function explotar()
+    public function explotar(): bool
     {
         $oEtherpad = new Etherpad();
         $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid_escrito);
@@ -521,7 +515,7 @@ class Escrito extends EscritoDB
         }
 
         // en el último destino, no lo creo nuevo sino que utilizo el
-        // de referencia. Lo hago con el último, porque si hay algun error,
+        // de referencia. Lo hago con el último, porque si hay algún error,
         // pueda conservar el de referencia.
         $max = count($aProtDst);
         $n = 0;
@@ -559,12 +553,12 @@ class Escrito extends EscritoDB
                 } else {
                     continue;
                 }
-                // canviar el id, y clonar el etherpad con el nuevo id
+                // cambiar el id, y clonar el etherpad con el nuevo id
                 $oNewEtherpad = new Etherpad();
                 $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $newId_escrito);
-                $destinationID = $oNewEtherpad->getPadID(); // Aqui crea el pad
+                $destinationID = $oNewEtherpad->getPadID(); // Aquí crea el pad
                 /* con el Html, (setHtml) no hace bien los centrados (quizá más)
-                 * con el Text  (setText) no coje los formatos.
+                 * con el Text  (setText) no coge los formatos.
                  */
                 $oEtherpad->copyPad($sourceID, $destinationID, 'true');
 
@@ -584,7 +578,7 @@ class Escrito extends EscritoDB
                 // borro los grupos
                 $this->setId_grupos();
                 $this->setDestinos();
-                // añado destino indivdual
+                // añado destino individual
                 $this->setJson_prot_destino($aProtDestino);
                 $this->setId_grupos();
                 $this->DBGuardar();
@@ -593,25 +587,27 @@ class Escrito extends EscritoDB
         return TRUE;
     }
 
-    public function getDestinosIds()
+    public function getDestinosIds(): array
     {
         $a_grupos = $this->getId_grupos();
 
         $aMiembros = [];
         if (!empty($a_grupos)) {
-            //(segun los grupos seleccionados)
+            //(según los grupos seleccionados)
+            $a_miembros_g = [];
             foreach ($a_grupos as $id_grupo) {
                 $oGrupo = new Grupo($id_grupo);
-                $a_miembros_g = $oGrupo->getMiembros();
-                $aMiembros = array_merge($aMiembros, $a_miembros_g);
+                $a_miembros_g[] = $oGrupo->getMiembros();
+                //$aMiembros = array_merge($aMiembros, $a_miembros_g);
             }
+            $aMiembros = array_merge([], ...$a_miembros_g);
             $aMiembros = array_unique($aMiembros);
             // los guardo individualmente
             $this->DBCargar();
             $this->setDestinos($aMiembros);
             $this->DBGuardar();
         } else {
-            //(segun individuales)
+            //(según individuales)
             $a_json_prot_dst = $this->getJson_prot_destino();
             foreach ($a_json_prot_dst as $json_prot_dst) {
                 if (!property_exists($json_prot_dst, 'id_lugar')) {
@@ -628,11 +624,13 @@ class Escrito extends EscritoDB
     }
 
     /**
-     * Para los ecritos jurídicos (vienen de plantilla)
+     * Para los escritos jurídicos (vienen de plantilla)
      *
+     * @param $id_expediente
+     * @param $json_prot_local
      * @return string
      */
-    public function addConforme($id_expediente, $json_prot_local)
+    public function addConforme($id_expediente, $json_prot_local): string
     {
 
         $html_conforme = $this->getConforme($id_expediente, $json_prot_local);
@@ -651,11 +649,13 @@ class Escrito extends EscritoDB
     }
 
     /**
-     * Para los ecritos jurídicos (vienen de plantilla)
+     * Para los escritos jurídicos (vienen de plantilla)
      *
+     * @param $id_expediente
+     * @param $json_prot_local
      * @return string
      */
-    public function getConforme($id_expediente, $json_prot_local)
+    public function getConforme($id_expediente, $json_prot_local): string
     {
         $oProtOrigen = new Protocolo();
         $oProtOrigen->setLugar($json_prot_local->id_lugar);
@@ -698,7 +698,7 @@ class Escrito extends EscritoDB
         $conforme_txt .= _("El Vicario de la Delegación");
         $conforme_txt .= '</p>';
 
-        $conforme_txt .= "$protocol_txt";
+        $conforme_txt .= $protocol_txt;
         $conforme_txt .= '<p style="text-align:right">';
         $conforme_txt .= "$localidad, $dia de $mes_txt de $any";
         $conforme_txt .= '</p>';
@@ -709,10 +709,10 @@ class Escrito extends EscritoDB
     /**
      * Devuelve el nombre del escrito: dlb_2012_22
      *
-     * @param string $parentesi si existe se añade al nombre, entre parentesis
+     * @param string $parentesi si existe se añade al nombre, entre paréntesis
      * @return string|mixed
      */
-    public function getNombreEscrito($parentesi = '')
+    public function getNombreEscrito(string $parentesi = '')
     {
         $json_prot_local = $this->getJson_prot_local();
         // nombre del archivo
@@ -738,9 +738,8 @@ class Escrito extends EscritoDB
     private function renombrar($string)
     {
         //cambiar ' ' por '_':
-        $string1 = str_replace(' ', '_', $string);
         //cambiar '/' por '_':
-        return str_replace('/', '_', $string1);
+        return str_replace(array(' ', '/'), '_', $string);
     }
 
 }

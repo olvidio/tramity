@@ -82,7 +82,7 @@ class GestorLugar extends core\ClaseGestor
     /**
      * devuelve el id del IESE
      */
-    public function getId_iese()
+    public function getId_iese(): int
     {
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             exit (_("Error al buscar el id del IESE"));
@@ -171,7 +171,7 @@ class GestorLugar extends core\ClaseGestor
     /**
      * devuelve el id de la cr (cr)
      */
-    public function getId_cr()
+    public function getId_cr(): int
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -196,7 +196,7 @@ class GestorLugar extends core\ClaseGestor
             $lugares[] = $clave;
         }
 
-        if (is_array($lugares) && count($lugares) == 1) {
+        if (is_array($lugares) && count($lugares) === 1) {
             return $lugares[0];
         } else {
             exit (_("Error al buscar el id de cr"));
