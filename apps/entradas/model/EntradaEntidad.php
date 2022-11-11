@@ -28,10 +28,10 @@ class EntradaEntidad extends Entrada
         // servidor, éste está en minúscula (agdmontagut.tramity.local)
         // http://www.ietf.org/rfc/rfc2616.txt: Field names are case-insensitive.
         $schema = strtolower($entidad);
-        // tambien lo normalizo:
+        // también lo normalizo:
         $schema = StringLocal::toRFC952($schema);
 
-        $oConfigDB = new ConfigDB('tramity'); //de la database comun
+        $oConfigDB = new ConfigDB('tramity'); //de la database común
         $config = $oConfigDB->getEsquema($schema);
         $oConexion = new DBConnection($config);
         $oDbl = $oConexion->getPDO();

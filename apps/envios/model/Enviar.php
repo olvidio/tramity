@@ -342,9 +342,6 @@ class Enviar
 
     private function getDestinatarios()
     {
-        if ($this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
-            die("AAAAAAAHHHHH!!!!!");
-        }
         if ($this->tipo === 'entrada') {
             $this->accion = As4CollaborationInfo::ACCION_COMPARTIR;
             $aDestinos = $this->oEntradaBypass->getDestinosByPass();
