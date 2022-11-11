@@ -195,9 +195,6 @@ class As4 extends As4CollaborationInfo
 
     private function createPayloadInfo()
     {
-        // para asegurar que $this->lugar_destino_txt tiene texto
-        //$this->getDestino_txt();
-
         $oPayload = new Payload();
         $oPayload->setAccion($this->accion);
 
