@@ -82,7 +82,7 @@ class As4 extends As4CollaborationInfo
         $attr_1 = new DOMAttr('xmlns', "http://holodeck-b2b.org/schemas/2014/06/mmd");
         $message_meta_data->setAttributeNode($attr_1);
 
-        // añadir subnodos
+        // añadir sub-nodos
         $message_meta_data->appendChild($this->createMessageInfo());
         $message_meta_data->appendChild($this->createCollaborationInfo());
         $message_meta_data->appendChild($this->createPayloadInfo());
@@ -195,6 +195,8 @@ class As4 extends As4CollaborationInfo
 
     private function createPayloadInfo()
     {
+        // para asegurar que $this->lugar_destino_txt tiene texto
+        $this->getDestino_txt();
 
         $oPayload = new Payload();
         $oPayload->setAccion($this->accion);
@@ -222,7 +224,7 @@ class As4 extends As4CollaborationInfo
     /**
      * @param mixed $anular_txt
      */
-    public function setAnular_txt($anular_txt)
+    public function setAnular_txt($anular_txt): void
     {
         $this->anular_txt = $anular_txt;
     }

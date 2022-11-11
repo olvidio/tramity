@@ -206,7 +206,7 @@ class Payload
             || $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
             $this->json_prot_dst = $oEntradaBypass->getJson_prot_destino();
             ///$this->descripcion = $oEntrada->getDescripcion();
-            $this->descripcion = $oEntradaBypass->cabeceraDistribucion_cr(); // decripción más completa
+            $this->descripcion = $oEntradaBypass->cabeceraDistribucion_cr(); // descripción más completa
             $this->categoria = $oEntradaBypass->getCategoria();
             $aDestinos = $oEntradaBypass->getDestinosByPass();
             $this->destinos = $aDestinos['miembros'];
