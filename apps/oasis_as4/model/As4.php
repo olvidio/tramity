@@ -29,12 +29,12 @@ class As4 extends As4CollaborationInfo
     private $json_prot_org;
     private $json_prot_dst;
 
-    private string $lugar_destino_txt;
+    private string $lugar_destino_txt = '';
     private $conversation_id;
     private $message_id;
     private $tipo_escrito;
 
-    private $anular_txt;
+    private string $anular_txt = '';
     private $filename;
 
     /**
@@ -196,7 +196,7 @@ class As4 extends As4CollaborationInfo
     private function createPayloadInfo()
     {
         // para asegurar que $this->lugar_destino_txt tiene texto
-        $this->getDestino_txt();
+        //$this->getDestino_txt();
 
         $oPayload = new Payload();
         $oPayload->setAccion($this->accion);
