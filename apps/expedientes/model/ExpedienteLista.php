@@ -225,13 +225,39 @@ class ExpedienteLista
 
         $vista = ConfigGlobal::getVista();
 
+        $titulo = '';
         $cabecera_oficina = _("oficinas");
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $cabecera_oficina = _("cargo");
+            switch ($filtro) {
+                case 'borrador_propio':
+                case 'borrador_oficina':
+                    $titulo = _("borrador");
+                    break;
+                case 'firmar':
+                    $titulo = _("para firmar");
+                    break;
+                case 'circulando':
+                    $titulo = _("circulando");
+                    break;
+                case 'permanentes_cl':
+                    $titulo = _("permanentes de cl");
+                    break;
+                case 'acabados':
+                    $titulo = _("acabados");
+                    break;
+                case 'archivados':
+                    $titulo = _("archivados");
+                    break;
+                default:
+                    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_switch);
+            }
         }
 
         $a_campos = [
             'filtro' => $filtro,
+            'titulo' => $titulo,
             'a_expedientes' => $a_expedientes,
             'url_update' => $url_update,
             'pagina_nueva' => $this->oFormatoLista->getPaginaNueva(),

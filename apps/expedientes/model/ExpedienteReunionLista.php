@@ -24,8 +24,8 @@ class ExpedienteReunionLista
         $oExpedientesDeColor = $this->setCondicion();
         $a_cosas = ['filtro' => $this->filtro];
         $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
-        $pagina_mod = ConfigGlobal::getWeb() . '/apps/expedientes/controller/fecha_reunion.php';
-        $pagina_ver = ConfigGlobal::getWeb() . '/apps/expedientes/controller/expediente_distribuir.php';
+        $pagina_mod = ConfigGlobal::getWeb() . '/apps/expedientes/controller/expediente_ver.php';
+        $pagina_ver = ConfigGlobal::getWeb() . '/apps/expedientes/controller/expediente_ver.php';
 
         $oFormatoLista = new FormatoLista();
         $oFormatoLista->setPresentacion(1);
