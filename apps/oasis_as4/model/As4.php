@@ -5,6 +5,7 @@ namespace oasis_as4\model;
 use DateTimeInterface;
 use DOMAttr;
 use DOMDocument;
+use escritos\model\Escrito;
 use lugares\model\entity\GestorLugar;
 use web\Protocolo;
 
@@ -28,7 +29,7 @@ class As4 extends As4CollaborationInfo
     private $json_prot_org;
     private $json_prot_dst;
 
-    private $lugar_destino_txt;
+    private string $lugar_destino_txt;
     private $conversation_id;
     private $message_id;
     private $tipo_escrito;
@@ -37,10 +38,10 @@ class As4 extends As4CollaborationInfo
     private $filename;
 
     /**
-     *
-     * @var object
+     * para PHP8.0
+     * @var object Escrito|EntradaBypass
      */
-    private $oEscrito;
+    private  $oEscrito;
 
 
     public function __construct()
@@ -150,10 +151,10 @@ class As4 extends As4CollaborationInfo
     private function getId_escrito()
     {
         $id = '';
-        if ($this->tipo_escrito == 'escrito') {
+        if ($this->tipo_escrito === 'escrito') {
             $id = $this->oEscrito->getId_escrito();
         }
-        if ($this->tipo_escrito == 'entrada') {
+        if ($this->tipo_escrito === 'entrada') {
             $id = $this->oEscrito->getId_entrada();
         }
         return $id;
@@ -255,7 +256,7 @@ class As4 extends As4CollaborationInfo
             $any_org = $json_prot_org->any;
             $mas_org = $json_prot_org->mas;
 
-            // No se admiten propiedades vacias: No se incluyen.
+            // No se admiten propiedades vacías: No se incluyen.
             if (!empty($lugar_org)) {
                 $message_properties->appendChild($this->newPropertyName('lugar_org', $lugar_org));
             }
@@ -272,8 +273,8 @@ class As4 extends As4CollaborationInfo
 
         // En el caso de compartir, el destino es multiple y no lo pongo aquí,
         // Estará en el mensaje.
-        if (!($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
-            || $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR)
+        if (!($this->accion === As4CollaborationInfo::ACCION_COMPARTIR
+            || $this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR)
         ) {
             // puede ser 'sin_numerar (E12)'
             $json_prot_dst = $this->getJson_prot_dst();
@@ -284,7 +285,7 @@ class As4 extends As4CollaborationInfo
                 $any_dst = $json_prot_dst->any;
                 $mas_dst = $json_prot_dst->mas;
 
-                // No se admiten propiedades vacias: No se incluyen.
+                // No se admiten propiedades vacías: No se incluyen.
                 if (!empty($lugar_dst)) {
                     $message_properties->appendChild($this->newPropertyName('lugar_dst', $lugar_dst));
                 }

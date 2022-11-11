@@ -18,8 +18,8 @@ class Payload
 {
 
     // Type: formato del escrito
-    const TYPE_ETHERAD_TXT = 'etherpad_txt';
-    const TYPE_ETHERAD_HTML = 'etherpad_html';
+    public const TYPE_ETHERAD_TXT = 'etherpad_txt';
+    public const TYPE_ETHERAD_HTML = 'etherpad_html';
 
     private $accion;
 
@@ -49,8 +49,8 @@ class Payload
     private $categoria;
     private $destinos;
 
-    private $sufijo_dst;
-    private $anular_txt;
+    private string $sufijo_dst;
+    private string $anular_txt;
 
     public function __construct()
     {
@@ -60,20 +60,20 @@ class Payload
         $this->dom = new DOMDocument('1.0', 'utf-8');
     }
 
-    public function setPayload($oEscrito, $tipo_escrito, $sufijo_dst = '')
+    public function setPayload($oEscrito, $tipo_escrito, $sufijo_dst = ''): void
     {
         $this->tipo_escrito = $tipo_escrito;
         $this->sufijo_dst = $sufijo_dst;
 
-        if ($this->tipo_escrito == 'escrito') {
+        if ($this->tipo_escrito === 'escrito') {
             $this->setPayloadEscrito($oEscrito);
         }
-        if ($this->tipo_escrito == 'entrada') {
+        if ($this->tipo_escrito === 'entrada') {
             $this->setPayloadEntrada($oEscrito);
         }
     }
 
-    private function setPayloadEscrito($oEscrito)
+    private function setPayloadEscrito($oEscrito): void
     {
         $this->json_prot_local = $oEscrito->getJson_prot_local();
         // OJO hay que coger el destino que se tiene al enviar,
@@ -95,8 +95,8 @@ class Payload
 
         $this->nombre_escrito = $oEscrito->getNombreEscrito($this->sufijo_dst) . '.xml';
 
-        if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
-            || $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
+        if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR
+            || $this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
             $this->json_prot_dst = $oEscrito->getJson_prot_destino();
             $this->descripcion = $oEscrito->getDestinosEscrito(); // para que salga la descripción del grupo.
             $this->categoria = $oEscrito->getCategoria();
@@ -107,7 +107,7 @@ class Payload
     /**
      * @param mixed $f_entrada
      */
-    public function setF_entrada($f_entrada)
+    public function setF_entrada($f_entrada): void
     {
         $this->f_entrada = $f_entrada;
     }
@@ -125,7 +125,7 @@ class Payload
     /**
      * @param mixed $f_escrito
      */
-    public function setF_escrito($f_escrito)
+    public function setF_escrito($f_escrito): void
     {
         $this->f_escrito = $f_escrito;
     }
@@ -133,7 +133,7 @@ class Payload
     /**
      * @param mixed $f_salida
      */
-    public function setF_salida($f_salida)
+    public function setF_salida($f_salida): void
     {
         $this->f_salida = $f_salida;
     }
@@ -143,7 +143,7 @@ class Payload
     /**
      * @param mixed $f_contestar
      */
-    public function setF_contestar($f_contestar)
+    public function setF_contestar($f_contestar): void
     {
         $this->f_contestar = $f_contestar;
     }
@@ -151,7 +151,7 @@ class Payload
     /**
      * @param mixed $asunto
      */
-    public function setAsunto($asunto)
+    public function setAsunto($asunto): void
     {
         $this->asunto = $asunto;
     }
@@ -159,7 +159,7 @@ class Payload
     /**
      * @param mixed $content
      */
-    public function setId_escrito($id_escrito)
+    public function setId_escrito($id_escrito): void
     {
         $this->id_escrito = $id_escrito;
     }
@@ -167,7 +167,7 @@ class Payload
     /**
      * @param mixed $visibilidad
      */
-    public function setVisibilidad($visibilidad)
+    public function setVisibilidad($visibilidad): void
     {
         $this->visibilidad = $visibilidad;
     }
@@ -175,12 +175,12 @@ class Payload
     /**
      * @param mixed $a_id_adjuntos
      */
-    public function setA_id_adjuntos($a_id_adjuntos)
+    public function setA_id_adjuntos($a_id_adjuntos): void
     {
         $this->a_id_adjuntos = $a_id_adjuntos;
     }
 
-    private function setPayloadEntrada($oEntradaBypass)
+    private function setPayloadEntrada($oEntradaBypass): void
     {
         $this->json_prot_local = $oEntradaBypass->getJson_prot_origen();
         // OJO hay que coger el destino que se tiene al enviar,
@@ -240,18 +240,18 @@ class Payload
         return $this->payload;
     }
 
-    public function createXmlFile()
+    public function createXmlFile(): void
     {
         $this->dom = new DOMDocument('1.0', 'UTF-8');
 
         $this->escrito = $this->dom->createElement("escrito");
 
         $saltar = FALSE;
-        if ($this->accion == As4CollaborationInfo::ACCION_ORDEN_ANULAR) {
+        if ($this->accion === As4CollaborationInfo::ACCION_ORDEN_ANULAR) {
             $this->escrito->appendChild($this->createXmlAnular());
             $saltar = TRUE;
         }
-        if ($this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
+        if ($this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
             $this->escrito->appendChild($this->createXmlAnular());
         }
 
@@ -268,8 +268,8 @@ class Payload
             $this->escrito->appendChild($this->createXmlContent());
             $this->escrito->appendChild($this->createXmlVisibilidad());
             $this->escrito->appendChild($this->createXmlAdjuntos());
-            if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
-                || $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
+            if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR
+                || $this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
                 $this->escrito->appendChild($this->createXmlCompartido());
             }
         }
@@ -466,10 +466,10 @@ class Payload
         /* Puede ser un bypass o simplemente una salida con múltiples destinos */
         if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
             || $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
-            if ($this->tipo_escrito == 'entrada') {
+            if ($this->tipo_escrito === 'entrada') {
                 $oEtherpad->setId(Etherpad::ID_ENTRADA, $this->id_escrito);
             }
-            if ($this->tipo_escrito == 'escrito') {
+            if ($this->tipo_escrito === 'escrito') {
                 $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->id_escrito);
             }
         } else {
@@ -494,7 +494,6 @@ class Payload
                 $attr = new DOMAttr('type', self::TYPE_ETHERAD_TXT);
                 $content->setAttributeNode($attr);
                 return $content;
-                break;
             case Payload::TYPE_ETHERAD_HTML:
             case 'html':
                 $txt = $oEtherpad->generarHtml();
@@ -510,7 +509,6 @@ class Payload
                 $attr = new DOMAttr('type', self::TYPE_ETHERAD_HTML);
                 $content->setAttributeNode($attr);
                 return $content;
-                break;
             default:
                 $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_switch);
@@ -549,12 +547,12 @@ class Payload
     {
         $a_adjuntos = [];
         foreach ($this->a_id_adjuntos as $item => $adjunto_filename) {
-            if ($this->tipo_escrito == 'entrada') {
+            if ($this->tipo_escrito === 'entrada') {
                 $oEntradaAdjunto = new EntradaAdjunto($item);
                 $escrito_txt = $oEntradaAdjunto->getAdjunto();
                 $a_adjuntos[$adjunto_filename] = $escrito_txt;
             }
-            if ($this->tipo_escrito == 'escrito') {
+            if ($this->tipo_escrito === 'escrito') {
                 $oEscritoAdjunto = new EscritoAdjunto($item);
                 $tipo_doc = $oEscritoAdjunto->getTipo_doc();
                 switch ($tipo_doc) {
