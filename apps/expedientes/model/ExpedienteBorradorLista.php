@@ -37,7 +37,7 @@ class ExpedienteBorradorLista
         $this->setCondicion();
         $a_cosas = ['filtro' => $this->filtro, 'prioridad_sel' => $this->prioridad_sel];
         $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
-        $pagina_mod = Hash::link('/apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
+        $pagina_mod = ConfigGlobal::getWeb() . '/apps/expedientes/controller/expediente_form.php';
         $pagina_ver = ConfigGlobal::getWeb() . '/apps/expedientes/controller/expediente_ver.php';
 
         $oFormatoLista = new FormatoLista();
