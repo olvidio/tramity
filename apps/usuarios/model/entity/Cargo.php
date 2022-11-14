@@ -120,15 +120,15 @@ class Cargo extends core\ClasePropiedades
     /**
      * Id_usuario de Cargo
      *
-     * @var integer
+     * @var integer|null
      */
-    private int $iid_usuario;
+    private ?int $iid_usuario;
     /**
      * Id_suplente de Cargo
      *
-     * @var integer
+     * @var integer|null
      */
-    private int $iid_suplente;
+    private ?int $iid_suplente;
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
@@ -406,9 +406,9 @@ class Cargo extends core\ClasePropiedades
     /**
      * estableix el valor de l'atribut iid_usuario de Cargo
      *
-     * @param integer iid_usuario='' optional
+     * @param integer|null $iid_usuario optional
      */
-    function setId_usuario($iid_usuario = '')
+    public function setId_usuario(int $iid_usuario = null): void
     {
         $this->iid_usuario = $iid_usuario;
     }
@@ -416,9 +416,9 @@ class Cargo extends core\ClasePropiedades
     /**
      * estableix el valor de l'atribut iid_suplente de Cargo
      *
-     * @param integer iid_suplente='' optional
+     * @param integer|null $iid_suplente optional
      */
-    function setId_suplente($iid_suplente = '')
+    public function setId_suplente(int $iid_suplente = null): void
     {
         $this->iid_suplente = $iid_suplente;
     }
