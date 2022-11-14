@@ -883,6 +883,50 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
+    case 'cambio_asunto':
+        $oExpediente = new Expediente($Q_id_expediente);
+        $oExpediente->DBCargar();
+        $oExpediente->setAsunto($Q_asunto);
+        if ($oExpediente->DBGuardar() === FALSE) {
+            $error_txt .= $oExpediente->getErrorTxt();
+        }
+
+        if (!empty($error_txt)) {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        } else {
+            $jsondata['success'] = true;
+            $jsondata['id_expediente'] = $Q_id_expediente;
+            $a_cosas = ['id_expediente' => $Q_id_expediente];
+            $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
+            $jsondata['pagina_mod'] = $pagina_mod;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
+    case 'cambio_entradilla':
+        $oExpediente = new Expediente($Q_id_expediente);
+        $oExpediente->DBCargar();
+        $oExpediente->setEntradilla($Q_entradilla);
+        if ($oExpediente->DBGuardar() === FALSE) {
+            $error_txt .= $oExpediente->getErrorTxt();
+        }
+
+        if (!empty($error_txt)) {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        } else {
+            $jsondata['success'] = true;
+            $jsondata['id_expediente'] = $Q_id_expediente;
+            $a_cosas = ['id_expediente' => $Q_id_expediente];
+            $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
+            $jsondata['pagina_mod'] = $pagina_mod;
+        }
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);

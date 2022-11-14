@@ -20,6 +20,7 @@
         <th scope="col">{{ "adj."|trans|raw }}</th>
         {% if not vista_dl %}
             <th scope="col">{{ "enviar"|trans|raw }}</th>
+            <th scope="col">{{ "eliminar"|trans|raw }}</th>
         {% endif %}
     </tr>
     </thead>
@@ -45,6 +46,7 @@
             <td>{{ row.adjuntos|raw }}</td>
             {% if not vista_dl %}
                 <td>{{ row.enviar|raw }}</td>
+                <td>{{ row.eliminar|raw }}</td>
             {% endif %}
         </tr>
     {% endfor %}

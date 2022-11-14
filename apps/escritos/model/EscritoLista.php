@@ -5,6 +5,7 @@ namespace escritos\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use DateTimeInterface;
+use escritos\model\entity\EscritoDB;
 use escritos\model\entity\GestorEscritoDB;
 use expedientes\model\entity\GestorAccion;
 use expedientes\model\Expediente;
@@ -24,37 +25,37 @@ class EscritoLista
      *
      * @var string
      */
-    private $modo;
+    private string $modo;
     /**
      *
      * @var string
      */
-    private $filtro;
+    private string $filtro;
     /**
      *
      * @var boolean
      */
-    private $show_tabs;
+    private bool $show_tabs = FALSE;
     /**
      *
      * @var integer
      */
-    private $id_expediente;
+    private int $id_expediente;
     /**
      *
      * @var array
      */
-    private $aWhere;
+    private array $aWhere;
     /**
      *
      * @var array
      */
-    private $aOperador;
+    private array $aOperador;
     /**
      *
      * @var boolean
      */
-    private $todos_escritos_enviados;
+    private bool $estan_todos_los_escritos_enviados;
 
 
     /*
@@ -63,7 +64,7 @@ class EscritoLista
     'enviar'
     */
 
-    public function mostrarTablaEnviar($fecha = '')
+    public function mostrarTablaEnviar(string $fecha = ''): void
     {
         // visibilidad
         $oVisibilidad = new Visibilidad();
@@ -146,7 +147,7 @@ class EscritoLista
             }
 
 
-            if (!empty($oEscrito->getOk()) && $oEscrito->getOk() !== Escrito::OK_NO) {
+            if (!empty($oEscrito->getOk()) && $oEscrito->getOk() !== EscritoDB::OK_NO) {
                 $ok = '<i class="fas fa-check"></i>';
             } else {
                 $ok = '';
@@ -198,7 +199,7 @@ class EscritoLista
         $oView->renderizar('escrito_lst_enviar.html.twig', $a_campos);
     }
 
-    private function getEscritosParaEnviar($fecha)
+    private function getEscritosParaEnviar(string $fecha): array
     {
         if (empty($fecha)) {
             $fecha = date(DateTimeInterface::ATOM);
@@ -227,7 +228,7 @@ class EscritoLista
     /**
      * @return string
      */
-    public function getModo()
+    public function getModo(): string
     {
         return $this->modo;
     }
@@ -235,12 +236,12 @@ class EscritoLista
     /**
      * @param string $modo
      */
-    public function setModo($modo): void
+    public function setModo(string $modo): void
     {
         $this->modo = $modo;
     }
 
-    public function mostrarTabla()
+    public function mostrarTabla(): void
     {
         $a_campos = $this->getCamposTabla();
 
@@ -256,7 +257,7 @@ class EscritoLista
         }
     }
 
-    private function getCamposTabla()
+    private function getCamposTabla(): array
     {
         // visibilidad destino
         $oVisibilidad = new Visibilidad();
@@ -266,7 +267,7 @@ class EscritoLista
         $estado = $oExpediente->getEstado();
 
         $this->setCondicion();
-        $bdistribuir = $this->getDistribuir();
+        $bdistribuir = $this->isDistribuir();
 
         $oEscrito = new Escrito();
         $aAcciones = $oEscrito->getArrayAccion();
@@ -305,7 +306,7 @@ class EscritoLista
                         // Se pasa a secretaria
                         $todos_escritos_enviados = FALSE;
                         $ok = $oEscrito->getOk();
-                        if ($ok == EScrito::OK_OFICINA) {
+                        if ($ok === EscritoDB::OK_OFICINA) {
                             $a_accion['enviar'] = _("en secretaría");
                             $enviado = TRUE;
                         } else {
@@ -319,6 +320,12 @@ class EscritoLista
                 } else {
                     $a_accion['enviar'] = _("otra acción?");
                 }
+            }
+             // solamente para los centros
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && !$enviado) {
+                $a_accion['eliminar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_escrito('$id_escrito');\" >" . _("eliminar") . "</span>";
+            } else {
+                $a_accion['eliminar'] = "<span class=\"btn\" title=\"" . _("no se puede eliminar") . "\">---</span>";
             }
 
             $a_cosas = ['id_expediente' => $this->id_expediente,
@@ -343,7 +350,11 @@ class EscritoLista
             } else {
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >" . _("ver") . "</span>";
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                    $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >" . _("mod.datos") . "</span>";
+                    if ($enviado) {
+                        $a_accion['link_ver'] = "<span class=\"btn\" title=\"" . _("los datos no se pueden modificar") . "\">---</span>";
+                    } else {
+                        $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >" . _("mod.datos") . "</span>";
+                    }
                 }
                 if ($this->filtro === 'archivados') {
                     $prot_local_header = _("prot. local");
@@ -372,15 +383,19 @@ class EscritoLista
             $oArrayProtRef = new ProtocoloArray($json_ref, '', '');
             $oArrayProtRef->setRef(TRUE);
 
-            if ($this->getModo() === 'mod' && !$enviado) {
+            if (($this->getModo() === 'mod') && !$enviado) {
                 $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito('$id_escrito');\" >";
                 $prot_local .= $prot_local_txt;
                 $prot_local .= "</span>";
             } else {
-                $prot_local = $prot_local_txt;
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                    $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >$prot_local_txt</span>";
+                } else {
+                    $prot_local = $prot_local_txt;
+                }
             }
 
-            if (!empty($oEscrito->getOk()) && $oEscrito->getOk() != Escrito::OK_NO) {
+            if ($oEscrito->getOk() !== null && $oEscrito->getOk() !== EscritoDB::OK_NO) {
                 $ok = '<i class="fas fa-check"></i>';
             } else {
                 $comentarios = $oEscrito->getComentarios();
@@ -408,12 +423,12 @@ class EscritoLista
 
             $a_acciones[] = $a_accion;
         }
-        $this->setTodos_escritos_enviados($todos_escritos_enviados);
+        $this->setEstanTodosLosEscritosEnviados($todos_escritos_enviados);
         $ver_todo = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$todos_escritos');\" >" . _("ver todos") . "</span>";
         $server = ConfigGlobal::getWeb(); //http://tramity.local
 
-        if ($estado == Expediente::ESTADO_ACABADO_ENCARGADO
-            || ($estado == Expediente::ESTADO_ACABADO_SECRETARIA)) {
+        if ($estado === Expediente::ESTADO_ACABADO_ENCARGADO
+            || ($estado === Expediente::ESTADO_ACABADO_SECRETARIA)) {
             $ver_ok = TRUE;
         } else {
             $ver_ok = FALSE;
@@ -447,7 +462,7 @@ class EscritoLista
     /**
      *
      */
-    private function setCondicion()
+    private function setCondicion(): void
     {
         $aWhere = [];
         $aOperador = [];
@@ -459,22 +474,17 @@ class EscritoLista
         $this->aOperador = $aOperador;
     }
 
-    private function getDistribuir()
+    private function isDistribuir(): bool
     {
         $oExpediente = new Expediente($this->id_expediente);
         $estado = $oExpediente->getEstado();
-        if ($estado == Expediente::ESTADO_ACABADO) {
-            $bdistribuir = TRUE;
-        } else {
-            $bdistribuir = FALSE;
-        }
-        return $bdistribuir;
+        return $estado === Expediente::ESTADO_ACABADO;
     }
 
     /**
      * @return boolean
      */
-    public function isShow_tabs()
+    public function isShow_tabs(): bool
     {
         return $this->show_tabs;
     }
@@ -482,18 +492,18 @@ class EscritoLista
     /**
      * @param boolean $show_tabs
      */
-    public function setShow_tabs($show_tabs)
+    public function setShow_tabs(bool $show_tabs): void
     {
         $this->show_tabs = $show_tabs;
     }
 
-    public function getNumeroEnviar($fecha = '')
+    public function getNumeroEnviar(string $fecha = ''): int
     {
         $cEscritos = $this->getEscritosParaEnviar($fecha);
         return count($cEscritos);
     }
 
-    public function getNumero()
+    public function getNumero(): int
     {
         $this->setCondicion();
         $gesEscritos = new GestorEscritoDB();
@@ -504,7 +514,7 @@ class EscritoLista
     /**
      * @return string
      */
-    public function getFiltro()
+    public function getFiltro(): string
     {
         return $this->filtro;
     }
@@ -512,23 +522,23 @@ class EscritoLista
     /**
      * @param string $filtro
      */
-    public function setFiltro($filtro)
+    public function setFiltro(string $filtro): void
     {
         $this->filtro = $filtro;
     }
 
     /**
-     * @return number
+     * @return int
      */
-    public function getId_expediente()
+    public function getId_expediente(): int
     {
         return $this->id_expediente;
     }
 
     /**
-     * @param number $id_expediente
+     * @param int $id_expediente
      */
-    public function setId_expediente($id_expediente)
+    public function setId_expediente(int $id_expediente): void
     {
         $this->id_expediente = $id_expediente;
     }
@@ -536,20 +546,20 @@ class EscritoLista
     /**
      * @return boolean
      */
-    public function isTodos_escritos_enviados()
+    public function EstanTodosLosEscritosEnviados(): bool
     {
-        if (!isset($this->todos_escritos_enviados)) {
+        if (!isset($this->estan_todos_los_escritos_enviados)) {
             $this->getCamposTabla();
         }
-        return $this->todos_escritos_enviados;
+        return $this->estan_todos_los_escritos_enviados;
     }
 
     /**
-     * @param boolean $todos_escritos_enviados
+     * @param boolean $estan_todos_los_escritos_enviados
      */
-    public function setTodos_escritos_enviados($todos_escritos_enviados)
+    public function setEstanTodosLosEscritosEnviados(bool $estan_todos_los_escritos_enviados): void
     {
-        $this->todos_escritos_enviados = $todos_escritos_enviados;
+        $this->estan_todos_los_escritos_enviados = $estan_todos_los_escritos_enviados;
     }
 
 

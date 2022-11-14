@@ -77,7 +77,7 @@
     <div class="clearfix">
         <div class="d-inline-flex float-start">
             <div class="p-2 bg-warning text-dark fw-bold">
-                {{ ponente_txt }}
+                Centro {{ ponente_txt }}
             </div>
             <div class="p-2 bg-info">
                 {{ tramite_txt }}
@@ -85,18 +85,10 @@
             <div class="p-2 bg-warning">
                 {{ estado_txt }}
             </div>
-            {% if vista_dl %}
-                <!--  --------------- OFICINAS --------------- -->
-                <div class="p-2 bg-white">
-                    {{ "Oficinas"|trans|raw }}: {{ oArrayDesplFirmas.Lista|raw }}
-                </div>
-            {% else %}
                     <div class="p-2 bg-white">
                     <label for="Vida" class="form-label"> {{ "Vida"|trans|raw }} {{ vida_txt }}, {{ "pasar a"|trans|raw }}</label>
                     {{ oDesplVida.desplegable|raw }}
                     </div>
-            {% endif %}
-
         </div>
         <div class="d-inline-flex float-end">
             <div class="p-2 bg-warning">
@@ -110,14 +102,6 @@
             <div class="p-2">
                 {{ "Inicio"|trans|raw }}: {{ f_ini_circulacion }}
             </div>
-            {% if vista_dl %}
-                <div class="p-2">
-                    {{ "reunión"|trans|raw }}: {{ f_reunion }}
-                </div>
-                <div class="p-2">
-                    {{ "aprobación"|trans|raw }}: {{ f_aprobacion }}
-                </div>
-            {% endif %}
         </div>
         <div class="d-inline-flex float-end">
             <div class="p-2 bg-warning">
@@ -131,8 +115,9 @@
         <div class="col-1">
             {{ "Asunto"|trans|raw }}:
         </div>
-        <div class="col-11 alert alert-primary">
-            {{ asunto }}
+        <div class="col-11 p-1 alert alert-primary">
+            <input tabindex="30" type="text" class="form-control" name="asunto" id="asunto" onchange="fnjs_cambio_asunto()"
+                   value="{{ asunto }}">
         </div>
     </div>
 
@@ -144,14 +129,20 @@
                 {{ "Entradilla"|trans|raw }}:
             </div>
             <div class="col-0">
-                <textarea rows="5" class="form-control" readonly>{{ entradilla }}</textarea>
+                    <textarea tabindex="50" rows="5" class="form-control" name="entradilla" onchange="fnjs_cambio_entradilla()"
+                              id="entradilla">{{ entradilla }}</textarea>
             </div>
             <!--  --------------- COMENTARIOS --------------- -->
             <br>
             <div class="col-0 alert bg-light">
                 {{ comentarios|raw }}
             </div>
-
+            <button type="button" class="btn btn-info" onClick="fnjs_nueva_accion('propuesta');">
+                {{ "nueva propuesta"|trans|raw }}
+            </button>
+            <button type="button" class="btn btn-info" onClick="fnjs_nueva_accion('escrito');">
+                {{ "nuevo escrito"|trans|raw }}
+            </button>
             <!--  --------------- ACCIONES --------------- -->
             {{ oEscritoLista.mostrarTabla()|raw }}
         </div>
@@ -219,6 +210,54 @@
 
 {{ include ('_antecedentes_js.html.twig') }}
 <script type="text/javascript">
+    fnjs_cambio_entradilla = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+
+        $('#que').val('cambio_entradilla');
+        datos = $('#form_expediente').serialize();
+        request = $.ajax({
+            data: datos,
+            url: '{{ url_update }}',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done(function (json) {
+            if (json.success != true) {
+                alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+            } else {
+                // Quedarme donde estoy
+            }
+        });
+    }
+
+    fnjs_cambio_asunto = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+
+        $('#que').val('cambio_asunto');
+        datos = $('#form_expediente').serialize();
+        request = $.ajax({
+            data: datos,
+            url: '{{ url_update }}',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done(function (json) {
+            if (json.success != true) {
+                alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+            } else {
+                // Quedarme donde estoy
+            }
+        });
+    }
+
     fnjs_cambio_vida = function () {
         if (typeof event !== 'undefined') {
             event.preventDefault();
@@ -244,6 +283,59 @@
         });
     }
 
+    fnjs_re_circular_alert = function () {
+        return confirm("{{ "Esta acción volverá a circular el expediente para firmas\\n¿Está Seguro?"|trans|raw }}");
+    }
+
+    fnjs_nueva_accion = function (tipo_accion) {
+        seguro = fnjs_re_circular_alert();
+        if (seguro) {
+            $('#que').val('recircular');
+            datos = $('#form_expediente').serialize();
+            request = $.ajax({
+                data: datos,
+                url: '{{ url_update }}',
+                method: 'POST',
+                dataType: 'json'
+            });
+            request.done(function (json) {
+                if (json.success != true) {
+                    alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+                } else {
+                    if (tipo_accion === 'escrito') {
+                        fnjs_update_div('#main', '{{ pag_nuevo_escrito|raw }}');
+                    }
+                    if (tipo_accion === 'propuesta') {
+                        fnjs_update_div('#main', '{{ pag_nueva_propuesta|raw }}');
+                    }
+                }
+            });
+        }
+    }
+
+    fnjs_eliminar_escrito = function (id_escrito) {
+        seguro = fnjs_re_circular_alert();
+        if (seguro) {
+            $('#slow_load').show();
+            var id_expediente = $('#id_expediente').val();
+            var url_doc = "apps/escritos/controller/escrito_update.php";
+            var param_json = {que: 'eliminar', id_expediente: id_expediente, id_escrito: id_escrito};
+            request = $.ajax({
+                data: param_json,
+                url: url_doc,
+                method: 'POST',
+                dataType: 'json'
+            });
+            request.done(function (json) {
+                if (json.success != true) {
+                    alert(json.mensaje);
+                } else {
+                    fnjs_recircular(1);
+                }
+            });
+        }
+    }
+
     fnjs_cambio_tramite = function () {
         if (typeof event !== 'undefined') {
             event.preventDefault();
@@ -254,8 +346,10 @@
         fnjs_update_div('#main', '{{ pagina_cambio|raw }}');
     }
 
-    fnjs_recircular = function () {
-        alert ("borrar todas las firmas");
+    fnjs_recircular = function (silent=0) {
+        if (silent !== 1) {
+            alert("borrar todas las firmas");
+        }
 
         if (typeof event !== 'undefined') {
             event.preventDefault();

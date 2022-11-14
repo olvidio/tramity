@@ -2,6 +2,7 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use escritos\model\Escrito;
 use escritos\model\EscritoLista;
 use expedientes\model\Expediente;
 use tramites\model\entity\Firma;
@@ -194,7 +195,7 @@ if ($Q_filtro === 'seg_reunion') {
 }
 $reset_txt = _("Re-circular");
 
-// solo el scdl tiene permiso. Ahora 11-3-22 también el sd.
+// solamente el scdl tiene permiso. Ahora 11-3-22 también el sd.
 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && (ConfigGlobal::role_actual() === 'scdl' || ConfigGlobal::role_actual() === 'sd')) {
     $cmb_tramite = TRUE;
 } else {
@@ -251,4 +252,19 @@ $a_campos = [
 ];
 
 $oView = new ViewTwig('expedientes/controller');
-$oView->renderizar('expediente_ver.html.twig', $a_campos);
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+    $a_cosas = ['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'volver_a' => 'expediente_ver'];
+    $a_cosas['accion'] = Escrito::ACCION_ESCRITO;
+    $pag_nuevo_escrito = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
+    $a_cosas['accion'] = Escrito::ACCION_PROPUESTA;
+    $pag_nueva_propuesta = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
+    $a_cosas = ['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'modo' => 'ver'];
+    $pag_actualizar = web\Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
+
+    $a_campos['pag_nuevo_escrito'] = $pag_nuevo_escrito;
+    $a_campos['pag_nueva_propuesta'] = $pag_nueva_propuesta;
+    $a_campos['pag_actualizar'] = $pag_actualizar;
+    $oView->renderizar('expediente_ctr_ver.html.twig', $a_campos);
+} else {
+    $oView->renderizar('expediente_ver.html.twig', $a_campos);
+}

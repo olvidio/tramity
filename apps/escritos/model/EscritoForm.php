@@ -31,52 +31,43 @@ use web\ProtocoloArray;
 class EscritoForm
 {
 
-    private $Q_id_expediente;
-    private $Q_id_escrito;
-    private $Q_accion;
-    private $Q_filtro;
-    private $Q_modo;
+    private int $Q_id_expediente;
+    private int $Q_id_escrito;
+    private int $Q_accion;
+    private string $Q_filtro;
+    private string $Q_modo;
+    private string $Q_volver_a;
 
 
-    /**
-     *
-     * @var array
-     */
-    private $Q_a_sel;
     /**
      *
      * @var int
      */
-    private $Q_id_entrada;
+    private int $id_entrada;
 
     /**
      *
      * @var string
      */
-    private $str_condicion;
+    private string $str_condicion = '';
 
-    public function __construct(int $Q_id_expediente, int $Q_id_escrito, int $Q_accion, string $Q_filtro, string $Q_modo)
+    public function __construct(int $Q_id_expediente, int $Q_id_escrito, int $Q_accion, string $Q_filtro, string $Q_modo, string $Q_volver_a = '')
     {
 
-        $this->Qid_expediente = $Q_id_expediente;
-        $this->Qid_escrito = $Q_id_escrito;
-        $this->Qaccion = $Q_accion;
-        $this->Qfiltro = $Q_filtro;
-        $this->Qmodo = $Q_modo;
+        $this->Q_id_expediente = $Q_id_expediente;
+        $this->Q_id_escrito = $Q_id_escrito;
+        $this->Q_accion = $Q_accion;
+        $this->Q_filtro = $Q_filtro;
+        $this->Q_modo = $Q_modo;
+        $this->Q_volver_a = $Q_volver_a;
     }
 
     public function render()
     {
         $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
-        if (empty($this->Qid_escrito) && $this->Qfiltro === 'en_buscar') {
-            //$this->Qa_sel = (array)  filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-            // sólo debería seleccionar uno.
-            $this->Qid_escrito = $this->Qa_sel[0];
-        }
-
         $gesLugares = new GestorLugar();
-        if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
             $a_posibles_lugares = $gesLugares->getArrayLugares();
             $a_posibles_lugares_ref = $gesLugares->getArrayLugares();
 
@@ -123,13 +114,13 @@ class EscritoForm
         $estado = 0;
         $visibilidad = 0;
         $visibilidad_dst = Visibilidad::V_CTR_TODOS;
-        if (!empty($this->Qid_expediente)) {
-            $oExpediente = new Expediente($this->Qid_expediente);
+        if (!empty($this->Q_id_expediente)) {
+            $oExpediente = new Expediente($this->Q_id_expediente);
             $visibilidad = $oExpediente->getVisibilidad();
             $estado = $oExpediente->getEstado();
         }
 
-        $oEscrito = new Escrito($this->Qid_escrito);
+        $oEscrito = new Escrito($this->Q_id_escrito);
         // categoría
         $oCategoria = new Categoria();
         $aOpcionesVisibilidad = $oCategoria->getArrayCategoria();
@@ -176,7 +167,7 @@ class EscritoForm
         $oDesplPlazo->setOpciones($aOpcionesPlazo);
         $oDesplPlazo->setAction("fnjs_comprobar_plazo('select')");
 
-        if (!empty($this->Qid_escrito)) {
+        if (!empty($this->Q_id_escrito)) {
             // destinos individuales
             $json_prot_dst = $oEscrito->getJson_prot_destino(TRUE);
             $oArrayProtDestino = new ProtocoloArray($json_prot_dst, $a_posibles_lugares, 'destinos');
@@ -249,7 +240,7 @@ class EscritoForm
             $tipo_doc = $oEscrito->getTipo_doc();
 
             $titulo = _("modificar");
-            switch ($this->Qaccion) {
+            switch ($this->Q_accion) {
                 case Escrito::ACCION_ESCRITO:
                     $titulo = _("modificar escrito");
                     break;
@@ -277,10 +268,9 @@ class EscritoForm
             $comentario = $oEscrito->getComentarios();
         } else {
             // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
-            //$this->Q_id_entrada = (integer) filter_input(INPUT_POST, 'id_entrada');
-            if (!empty($this->Qid_entrada)) {
-                $this->Qaccion = Escrito::ACCION_ESCRITO;
-                $oEntrada = new Entrada($this->Qid_entrada);
+            if (!empty($this->id_entrada)) {
+                $this->Q_accion = Escrito::ACCION_ESCRITO;
+                $oEntrada = new Entrada($this->id_entrada);
                 $asunto = $oEntrada->getAsunto();
                 $detalle = $oEntrada->getDetalle();
                 // ProtocoloArray espera un array.
@@ -300,8 +290,8 @@ class EscritoForm
                 $tipo_doc = '';
             } else {
                 // Valors por defecto: los del expediente:
-                if (!empty($this->Qid_expediente)) {
-                    $oExpediente = new Expediente($this->Qid_expediente);
+                if (!empty($this->Q_id_expediente)) {
+                    $oExpediente = new Expediente($this->Q_id_expediente);
                     $asunto = $oExpediente->getAsunto();
                     $visibilidad = $oExpediente->getVisibilidad();
                     $oDesplVisibilidad->setOpcion_sel($visibilidad);
@@ -326,7 +316,7 @@ class EscritoForm
 
             }
             $titulo = _("nuevo");
-            switch ($this->Qaccion) {
+            switch ($this->Q_accion) {
                 case Escrito::ACCION_ESCRITO:
                     $titulo = _("nuevo escrito");
                     break;
@@ -359,9 +349,10 @@ class EscritoForm
         $lista_adjuntos_etherpad = $oEscrito->getHtmlAdjuntos();
 
         $url_update = 'apps/escritos/controller/escrito_update.php';
-        $a_cosas = ['id_expediente' => $this->Qid_expediente,
-            'filtro' => $this->Qfiltro,
-            'modo' => $this->Qmodo,
+        $a_cosas = ['id_expediente' => $this->Q_id_expediente,
+            'filtro' => $this->Q_filtro,
+            'modo' => $this->Q_modo,
+            'volver_a' => $this->Q_volver_a,
         ];
 
         $explotar = FALSE;
@@ -376,7 +367,7 @@ class EscritoForm
 
         $ver_plazo = TRUE;
         $devolver = FALSE;
-        switch ($this->Qfiltro) {
+        switch ($this->Q_filtro) {
             case 'acabados':
             case 'acabados_encargados':
             case 'distribuir':
@@ -389,29 +380,33 @@ class EscritoForm
             case 'en_buscar':
                 $a_condicion = [];
                 parse_str($this->str_condicion, $a_condicion);
-                $a_condicion['filtro'] = $this->Qfiltro;
+                $a_condicion['filtro'] = $this->Q_filtro;
                 $pagina_cancel = Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));
                 break;
             default:
-                $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
+                if ($this->Q_volver_a === 'expediente_ver') {
+                    $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
+                } else {
+                    $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
+                }
         }
 
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && $this->Qfiltro === 'circulando') {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && $this->Q_filtro === 'circulando') {
             $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
         }
 
 
-        $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query(['filtro' => $this->Qfiltro]));
+        $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query(['filtro' => $this->Q_filtro]));
         $url_escrito = 'apps/escritos/controller/escrito_form.php';
 
-        $esEscrtito = ($this->Qaccion == Escrito::ACCION_ESCRITO) ? TRUE : FALSE;
+        $esEscrito = $this->Q_accion == Escrito::ACCION_ESCRITO;
 
         // para cambiar destinos en nueva ventana.
         $a_cosas = [
-            'filtro' => $this->Qfiltro,
-            'id_expediente' => $this->Qid_expediente,
-            'id_escrito' => $this->Qid_escrito,
-            'accion' => $this->Qaccion,
+            'filtro' => $this->Q_filtro,
+            'id_expediente' => $this->Q_id_expediente,
+            'id_escrito' => $this->Q_id_escrito,
+            'accion' => $this->Q_accion,
             'condicion' => $this->str_condicion,
         ];
         $pagina_actualizar = Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
@@ -430,12 +425,12 @@ class EscritoForm
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $a_campos = [
                 'titulo' => $titulo,
-                'id_expediente' => $this->Qid_expediente,
-                'id_escrito' => $this->Qid_escrito,
-                'accion' => $this->Qaccion,
-                'filtro' => $this->Qfiltro,
-                'modo' => $this->Qmodo,
-                'esEscrito' => $esEscrtito,
+                'id_expediente' => $this->Q_id_expediente,
+                'id_escrito' => $this->Q_id_escrito,
+                'accion' => $this->Q_accion,
+                'filtro' => $this->Q_filtro,
+                'modo' => $this->Q_modo,
+                'esEscrito' => $esEscrito,
                 'id_ponente' => $id_ponente,
                 //'oHash' => $oHash,
                 'oArrayProtDestino' => $oArrayProtDestino,
@@ -480,12 +475,12 @@ class EscritoForm
         } else {
             $a_campos = [
                 'titulo' => $titulo,
-                'id_expediente' => $this->Qid_expediente,
-                'id_escrito' => $this->Qid_escrito,
-                'accion' => $this->Qaccion,
-                'filtro' => $this->Qfiltro,
-                'modo' => $this->Qmodo,
-                'esEscrito' => $esEscrtito,
+                'id_expediente' => $this->Q_id_expediente,
+                'id_escrito' => $this->Q_id_escrito,
+                'accion' => $this->Q_accion,
+                'filtro' => $this->Q_filtro,
+                'modo' => $this->Q_modo,
+                'esEscrito' => $esEscrito,
                 'id_ponente' => $id_ponente,
                 //'oHash' => $oHash,
                 'chk_grupo_dst' => $chk_grupo_dst,
@@ -544,41 +539,25 @@ class EscritoForm
     }
 
     /**
-     * @return array
+     * @return int
      */
-    public function getQa_sel()
+    public function getId_entrada(): int
     {
-        return $this->Qa_sel;
+        return $this->id_entrada;
     }
 
     /**
-     * @param array $Q_a_sel
+     * @param int $id_entrada
      */
-    public function setQa_sel($Q_a_sel)
+    public function setId_entrada(int $id_entrada): void
     {
-        $this->Qa_sel = $Q_a_sel;
-    }
-
-    /**
-     * @return number
-     */
-    public function getQid_entrada()
-    {
-        return $this->Qid_entrada;
-    }
-
-    /**
-     * @param number $Q_id_entrada
-     */
-    public function setQid_entrada($Q_id_entrada)
-    {
-        $this->Qid_entrada = $Q_id_entrada;
+        $this->id_entrada = $id_entrada;
     }
 
     /**
      * @return string
      */
-    public function getStr_condicion()
+    public function getStr_condicion(): string
     {
         return $this->str_condicion;
     }
@@ -586,7 +565,7 @@ class EscritoForm
     /**
      * @param string $str_condicion
      */
-    public function setStr_condicion($str_condicion)
+    public function setStr_condicion(string $str_condicion): void
     {
         $this->str_condicion = $str_condicion;
     }
