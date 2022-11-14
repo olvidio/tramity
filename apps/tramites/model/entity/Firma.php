@@ -174,7 +174,7 @@ class Firma extends core\ClasePropiedades
      * @param integer|array iid_item
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    public function __construct($a_id = '')
+    public function __construct($a_id = null)
     {
         $oDbl = $GLOBALS['oDBT'];
         if (is_array($a_id)) {
@@ -342,7 +342,7 @@ class Firma extends core\ClasePropiedades
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
                 return FALSE;
             }
-            $this->id_item = $oDbl->lastInsertId('expediente_firmas_id_item_seq');
+            $this->iid_item = $oDbl->lastInsertId('expediente_firmas_id_item_seq');
         }
         $this->setAllAtributes($aDades);
         return TRUE;
@@ -391,7 +391,7 @@ class Firma extends core\ClasePropiedades
      *
      * @param array $aDades
      */
-    public function setAllAtributes($aDades, $convert = FALSE)
+    private function setAllAtributes($aDades, $convert = FALSE)
     {
         if (!is_array($aDades)) {
             return;
@@ -638,7 +638,7 @@ class Firma extends core\ClasePropiedades
      * Estableix las claus primàries de Firma en un array
      *
      */
-    public function setPrimary_key($a_id = '')
+    public function setPrimary_key($a_id = null)
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;

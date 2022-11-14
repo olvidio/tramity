@@ -545,13 +545,13 @@ foreach ($aClaus2 as $clau => $nom_clau) {
     if ($i > 0) $claus_if .= "\n";
     switch (substr($nom_clau, 0, 1)) {
         case 'i':
-            $claus_if .= "\t\t\t\t" . 'if (($nom_id == \'' . $clau . '\') && $val_id !== \'\') { $this->' . $nom_clau . ' = (int)$val_id; } // evitem SQL injection fent cast a integer';
+            $claus_if .= "\t\t\t\t" . 'if (($nom_id === \'' . $clau . '\') && $val_id !== \'\') { $this->' . $nom_clau . ' = (int)$val_id; }';
             break;
         case 's':
-            $claus_if .= "\t\t\t\t" . 'if (($nom_id == \'' . $clau . '\') && $val_id !== \'\') { $this->' . $nom_clau . ' = (string)$val_id; } // evitem SQL injection fent cast a string';
+            $claus_if .= "\t\t\t\t" . 'if (($nom_id === \'' . $clau . '\') && $val_id !== \'\') { $this->' . $nom_clau . ' = (string)$val_id; } // evitem SQL injection fent cast a string';
             break;
         case 'b':
-            $claus_if .= "\t\t\t\t" . 'if (($nom_id == \'' . $clau . '\') && $val_id !== \'\') { $this->' . $nom_clau . ' = (bool)$val_id; } // evitem SQL injection fent cast a boolean';
+            $claus_if .= "\t\t\t\t" . 'if (($nom_id === \'' . $clau . '\') && $val_id !== \'\') { $this->' . $nom_clau . ' = (bool)$val_id; } // evitem SQL injection fent cast a boolean';
             break;
     }
     // si no es auto
@@ -590,7 +590,7 @@ if (count($aClaus2) > 1) { // per el cas de només una clau.
 } else {
     $sForPrimaryK .= "\n\t\t" . '} else {
 			if (isset($a_id) && $a_id !== \'\') {
-				$this->' . $claus_txt . ' = intval($a_id); // evitem SQL injection fent cast a integer
+				$this->' . $claus_txt . ' = (int)$a_id;
 				$this->aPrimary_key = array(\'' . $claus_txt . '\' => $this->' . $claus_txt . ');
 			}
 		}';
@@ -680,7 +680,7 @@ if ($id_seq || $id_seq2) {
         $ccc = 'i' . end($a_auto);
     } else {
         $id_seq = $id_seq2;
-        $ccc = end($a_auto);
+        $ccc = 'i' . end($a_auto);
     }
     $txt .= "\n\t\t\t" . '$this->' . $ccc . ' = $oDbl->lastInsertId(\'' . $id_seq . '\');';
 }
@@ -754,7 +754,7 @@ $txt .= '	/* MÉTODOS PRIVADOS -------------------------------------------------
 if ($add_convert === TRUE) {
     $txt .= "\n\t" . 'function setAllAtributes($aDades,$convert=FALSE) {';
 } else {
-    $txt .= "\n\t" . 'function setAllAtributes($aDades) {';
+    $txt .= "\n\t" . 'private function setAllAtributes($aDades) {';
 }
 $txt .= "\n\t\t" . 'if (!is_array($aDades)) { return; }
 		if (array_key_exists(\'id_schema\',$aDades)) { $this->setId_schema($aDades[\'id_schema\']); }';

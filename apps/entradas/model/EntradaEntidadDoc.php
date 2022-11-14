@@ -22,7 +22,7 @@ class EntradaEntidadDoc extends EntradaDocDB
         // servidor, éste está en minúscula (agdmontagut.tramity.local)
         // http://www.ietf.org/rfc/rfc2616.txt: Field names are case-insensitive.
         $schema = strtolower($entidad);
-        // tambien lo normalizo:
+        // también lo normalizo:
         $schema = StringLocal::toRFC952($schema);
 
         $oConfigDB = new ConfigDB('tramity'); //de la database comun
@@ -33,13 +33,13 @@ class EntradaEntidadDoc extends EntradaDocDB
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_entrada') && $val_id !== '') {
+                if (($nom_id === 'id_entrada') && $val_id !== '') {
                     $this->iid_entrada = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_entrada = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_entrada = (int)$a_id;
                 $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
             }
         }

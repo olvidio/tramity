@@ -17,8 +17,6 @@ class Convertir extends ClaseGestor
     /**
      * Constructor de la classe.
      *
-     * @return $gestor
-     *
      */
     function __construct($nom_tabla)
     {
@@ -129,7 +127,6 @@ class Convertir extends ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_expediente' => $aDades['id_expediente']);
             $oExpediente = new ExpedienteDB($a_pkey);
-            $oExpediente->setAllAtributes($aDades);
             $oExpedienteDBSet->add($oExpediente);
         }
         return $oExpedienteDBSet->getTot();
@@ -258,7 +255,6 @@ class Convertir extends ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_escrito' => $aDades['id_escrito']);
             $oEscrito = new EscritoDB($a_pkey);
-            $oEscrito->setAllAtributes($aDades);
             $oEscritoDBSet->add($oEscrito);
         }
         return $oEscritoDBSet->getTot();
@@ -368,7 +364,6 @@ class Convertir extends ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_entrada' => $aDades['id_entrada']);
             $oEntradaDB = new EntradaDB($a_pkey);
-            $oEntradaDB->setAllAtributes($aDades);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();

@@ -31,8 +31,6 @@ class GestorEntradaDB extends ClaseGestor
     /**
      * Constructor de la classe.
      *
-     * @return $gestor
-     *
      */
     function __construct()
     {
@@ -178,7 +176,6 @@ class GestorEntradaDB extends ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_entrada' => $aDades['id_entrada']);
             $oEntradaDB = new Entrada($a_pkey);
-            $oEntradaDB->setAllAtributes($aDades);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -207,7 +204,7 @@ class GestorEntradaDB extends ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            if ($camp == 'asunto_detalle') {
+            if ($camp === 'asunto_detalle') {
                 $valor = $aWhere[$camp];
                 $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
                 $COND_OR .= " OR ";
@@ -306,7 +303,6 @@ class GestorEntradaDB extends ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_entrada' => $aDades['id_entrada']);
             $oEntradaDB = new Entrada($a_pkey);
-            $oEntradaDB->setAllAtributes($aDades);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -424,7 +420,6 @@ class GestorEntradaDB extends ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_entrada' => $aDades['id_entrada']);
             $oEntradaDB = new Entrada($a_pkey);
-            $oEntradaDB->setAllAtributes($aDades);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -454,7 +449,7 @@ class GestorEntradaDB extends ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            if ($camp == 'asunto_detalle') {
+            if ($camp === 'asunto_detalle') {
                 $valor = $aWhere[$camp];
                 $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
                 $COND_OR .= " OR ";
@@ -561,7 +556,6 @@ class GestorEntradaDB extends ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_entrada' => $aDades['id_entrada']);
             $oEntradaDB = new Entrada($a_pkey);
-            $oEntradaDB->setAllAtributes($aDades);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -582,7 +576,7 @@ class GestorEntradaDB extends ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            if ($camp == 'asunto_detalle') {
+            if ($camp === 'asunto_detalle') {
                 $valor = $aWhere[$camp];
                 $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
                 $COND_OR .= " OR ";
@@ -649,7 +643,6 @@ class GestorEntradaDB extends ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_entrada' => $aDades['id_entrada']);
             $oEntradaDB = new Entrada($a_pkey);
-            $oEntradaDB->setAllAtributes($aDades);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -670,7 +663,7 @@ class GestorEntradaDB extends ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            if ($camp == 'asunto_detalle') {
+            if ($camp === 'asunto_detalle') {
                 $valor = $aWhere[$camp];
                 $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
                 $COND_OR .= " OR ";
@@ -737,7 +730,6 @@ class GestorEntradaDB extends ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_entrada' => $aDades['id_entrada']);
             $oEntradaDB = new Entrada($a_pkey);
-            $oEntradaDB->setAllAtributes($aDades);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();

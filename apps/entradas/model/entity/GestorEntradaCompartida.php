@@ -29,8 +29,6 @@ class GestorEntradaCompartida extends ClaseGestor
     /**
      * Constructor de la classe.
      *
-     * @return $gestor
-     *
      */
     function __construct()
     {
@@ -78,6 +76,7 @@ class GestorEntradaCompartida extends ClaseGestor
      * Devuelve la colección de entradas, segun las condiciones del protcolo de entrada, más las normales
      *
      * @param array $aProt_origen = ['id_lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
+     * @param int $id_destino
      * @param array $aWhere
      * @param array $aOperators
      * @return boolean|array
@@ -97,7 +96,7 @@ class GestorEntradaCompartida extends ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            if ($camp == 'asunto' || $camp == 'asunto_detalle') {
+            if ($camp === 'asunto' || $camp === 'asunto_detalle') {
                 $valor = $aWhere[$camp];
                 $COND_OR = "public.sin_acentos(asunto_entrada::text)  ~* public.sin_acentos('$valor'::text)";
 
@@ -207,7 +206,6 @@ class GestorEntradaCompartida extends ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_entrada_compartida' => $aDades['id_entrada_compartida']);
             $oEntradaCompartida = new EntradaCompartida($a_pkey);
-            $oEntradaCompartida->setAllAtributes($aDades);
             $oEntradaCompartidaSet->add($oEntradaCompartida);
         }
         return $oEntradaCompartidaSet->getTot();
@@ -236,7 +234,7 @@ class GestorEntradaCompartida extends ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            if ($camp == 'asunto' || $camp == 'asunto_detalle') {
+            if ($camp === 'asunto' || $camp === 'asunto_detalle') {
                 $valor = $aWhere[$camp];
                 $COND_OR = "public.sin_acentos(asunto_entrada::text)  ~* public.sin_acentos('$valor'::text)";
 
@@ -341,7 +339,6 @@ class GestorEntradaCompartida extends ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_entrada_compartida' => $aDades['id_entrada_compartida']);
             $oEntradaCompartida = new EntradaCompartida($a_pkey);
-            $oEntradaCompartida->setAllAtributes($aDades);
             $oEntradaCompartidaSet->add($oEntradaCompartida);
         }
         return $oEntradaCompartidaSet->getTot();

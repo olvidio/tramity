@@ -378,6 +378,6 @@ $a_campos = [
 ];
 
 // dentro del _expediente_form_js.html.twig hay un include a  escritos/view/_escrito_enviar_js.html.twig
-$aditionalPaths = ['escritos' => 'escritos/view'];
-$oView = new ViewTwig('expedientes/controller', $aditionalPaths);
+$additionalPaths = ['escritos' => 'escritos/view'];
+$oView = new ViewTwig('expedientes/controller', $additionalPaths);
 $oView->renderizar('expediente_form.html.twig', $a_campos);

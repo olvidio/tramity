@@ -126,7 +126,6 @@ class GestorEntrada extends GestorEntradaDB
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_entrada' => $aDades['id_entrada']);
             $oEntradaDB = new Entrada($a_pkey);
-            $oEntradaDB->setAllAtributes($aDades);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();

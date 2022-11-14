@@ -85,13 +85,13 @@ class ConfigSchema extends core\ClasePropiedades
      * @param integer|array sparametro
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = '')
+    function __construct($a_id = null)
     {
         $oDbl = $GLOBALS['oDBT'];
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'parametro') && $val_id !== '') {
+                if (($nom_id === 'parametro') && $val_id !== '') {
                     $this->sparametro = (string)$val_id; // evitem SQL injection fent cast a string
                 }
             }
@@ -265,12 +265,12 @@ class ConfigSchema extends core\ClasePropiedades
      *
      * @return array aPrimary_key
      */
-    public function setPrimary_key($a_id = '')
+    public function setPrimary_key($a_id = null)
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'parametro') && $val_id !== '') {
+                if (($nom_id === 'parametro') && $val_id !== '') {
                     $this->sparametro = $val_id;
                 }
             }
@@ -282,7 +282,7 @@ class ConfigSchema extends core\ClasePropiedades
      *
      * @param array $aDades
      */
-    function setAllAtributes($aDades)
+    private function setAllAtributes($aDades)
     {
         if (!is_array($aDades)) {
             return;

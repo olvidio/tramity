@@ -34,7 +34,7 @@ class Entidad extends EntidadDB
      * @param integer|array iid_entrada
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = '')
+    function __construct($a_id = null)
     {
         $oDbl = $GLOBALS['oDBT'];
         if (is_array($a_id)) {

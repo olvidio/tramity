@@ -127,19 +127,19 @@ class EntradaBypass extends Entrada
      * @param integer|array iid_entrada
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = '')
+    function __construct($a_id = null)
     {
         $oDbl = $GLOBALS['oDBT'];
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_entrada') && $val_id !== '') {
+                if (($nom_id === 'id_entrada') && $val_id !== '') {
                     $this->iid_entrada = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_entrada = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_entrada = (int)$a_id;
                 $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
             }
         }
@@ -228,7 +228,7 @@ class EntradaBypass extends Entrada
      *
      * @param array $aDades
      */
-    function setAllAtributes($aDades, $convert = FALSE)
+    private function setAllAtributes($aDades, $convert = FALSE)
     {
         if (!is_array($aDades)) {
             return;
@@ -461,18 +461,18 @@ class EntradaBypass extends Entrada
      * Estableix las claus primàries de EntradaBypass en un array
      *
      */
-    public function setPrimary_key($a_id = '')
+    public function setPrimary_key($a_id = null)
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_entrada') && $val_id !== '') {
+                if (($nom_id === 'id_entrada') && $val_id !== '') {
                     $this->iid_entrada = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_entrada = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_entrada = (int)$a_id;
                 $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
             }
         }
@@ -517,12 +517,14 @@ class EntradaBypass extends Entrada
 
         if (!empty($a_grupos)) {
             $destinos_txt = $this->getDescripcion();
-            //(segun los grupos seleccionados)
+            //(según los grupos seleccionados)
+            $a_miembros_g = [];
             foreach ($a_grupos as $id_grupo) {
                 $oGrupo = new Grupo($id_grupo);
-                $a_miembros_g = $oGrupo->getMiembros();
-                $aMiembros = array_merge($aMiembros, $a_miembros_g);
+                $a_miembros_g[] = $oGrupo->getMiembros();
+                //$aMiembros = array_merge($aMiembros, $a_miembros_g);
             }
+            $aMiembros = array_merge([], ...$a_miembros_g);
             $aMiembros = array_unique($aMiembros);
             $this->setDestinos($aMiembros);
             if ($this->DBGuardar() === FALSE) {
@@ -530,7 +532,7 @@ class EntradaBypass extends Entrada
                 exit ($error_txt);
             }
         } else {
-            //(segun individuales)
+            //(según individuales)
             $a_json_prot_dst = $this->getJson_prot_destino();
             foreach ($a_json_prot_dst as $json_prot_dst) {
                 $aMiembros[] = $json_prot_dst->id_lugar;

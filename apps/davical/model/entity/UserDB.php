@@ -155,19 +155,19 @@ class UserDB extends core\ClasePropiedades
      * @param integer|array iuser_no
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = '')
+    function __construct($a_id = null)
     {
         $oDbl = $GLOBALS['oDBDavical'];
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'user_no') && $val_id !== '') {
+                if (($nom_id === 'user_no') && $val_id !== '') {
                     $this->iuser_no = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iuser_no = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iuser_no = (int)$a_id;
                 $this->aPrimary_key = array('iuser_no' => $this->iuser_no);
             }
         }
@@ -261,7 +261,7 @@ class UserDB extends core\ClasePropiedades
                     return FALSE;
                 }
             }
-            $this->user_no = $oDbl->lastInsertId('usr_user_no_seq');
+            $this->iuser_no = $oDbl->lastInsertId('usr_user_no_seq');
         }
         $this->setAllAtributes($aDades);
         return TRUE;
@@ -310,7 +310,7 @@ class UserDB extends core\ClasePropiedades
      *
      * @param array $aDades
      */
-    function setAllAtributes($aDades, $convert = FALSE)
+    private function setAllAtributes($aDades, $convert = FALSE)
     {
         if (!is_array($aDades)) {
             return;
@@ -567,18 +567,18 @@ class UserDB extends core\ClasePropiedades
      * Estableix las claus primàries de UserDB en un array
      *
      */
-    public function setPrimary_key($a_id = '')
+    public function setPrimary_key($a_id = null)
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'user_no') && $val_id !== '') {
+                if (($nom_id === 'user_no') && $val_id !== '') {
                     $this->iuser_no = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iuser_no = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iuser_no = (int)$a_id;
                 $this->aPrimary_key = array('iuser_no' => $this->iuser_no);
             }
         }
@@ -629,7 +629,7 @@ class UserDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut demail_ok de UserDB
      *
-     * @return web\DateTimeLocal demail_ok
+     * @return web\DateTimeLocal|web\NullDateTimeLocal demail_ok
      */
     function getEmail_ok()
     {

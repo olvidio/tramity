@@ -107,19 +107,19 @@ class EntradaDocDB extends core\ClasePropiedades
      * @param integer|array iid_entrada
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = '')
+    function __construct($a_id = null)
     {
         $oDbl = $GLOBALS['oDBT'];
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_entrada') && $val_id !== '') {
+                if (($nom_id === 'id_entrada') && $val_id !== '') {
                     $this->iid_entrada = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_entrada = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_entrada = (int)$a_id;
                 $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
             }
         }
@@ -305,18 +305,18 @@ class EntradaDocDB extends core\ClasePropiedades
      * Estableix las claus primàries de EntradaDocDB en un array
      *
      */
-    public function setPrimary_key($a_id = '')
+    public function setPrimary_key($a_id = null)
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_entrada') && $val_id !== '') {
+                if (($nom_id === 'id_entrada') && $val_id !== '') {
                     $this->iid_entrada = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_entrada = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_entrada = (int)$a_id;
                 $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
             }
         }
@@ -327,7 +327,7 @@ class EntradaDocDB extends core\ClasePropiedades
      *
      * @param array $aDades
      */
-    function setAllAtributes($aDades, $convert = FALSE)
+    private function setAllAtributes($aDades, $convert = FALSE)
     {
         if (!is_array($aDades)) {
             return;

@@ -108,7 +108,7 @@ class DatosCampo
      *
      *
      */
-    function __construct($a_id = '')
+    function __construct($a_id = null)
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;

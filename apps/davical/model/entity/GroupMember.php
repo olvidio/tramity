@@ -88,19 +88,19 @@ class GroupMember extends core\ClasePropiedades
      * @param integer|array imember_id
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = '')
+    function __construct($a_id = null)
     {
         $oDbl = $GLOBALS['oDBDavical'];
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'member_id') && $val_id !== '') {
+                if (($nom_id === 'member_id') && $val_id !== '') {
                     $this->imember_id = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->imember_id = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->imember_id = (int)$a_id;
                 $this->aPrimary_key = array('imember_id' => $this->imember_id);
             }
         }
@@ -216,7 +216,7 @@ class GroupMember extends core\ClasePropiedades
      *
      * @param array $aDades
      */
-    function setAllAtributes($aDades)
+    private function setAllAtributes($aDades)
     {
         if (!is_array($aDades)) {
             return;
@@ -287,18 +287,18 @@ class GroupMember extends core\ClasePropiedades
      * Estableix las claus primàries de GroupMember en un array
      *
      */
-    public function setPrimary_key($a_id = '')
+    public function setPrimary_key($a_id = null)
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'member_id') && $val_id !== '') {
+                if (($nom_id === 'member_id') && $val_id !== '') {
                     $this->imember_id = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->imember_id = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->imember_id = (int)$a_id;
                 $this->aPrimary_key = array('imember_id' => $this->imember_id);
             }
         }

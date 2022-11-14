@@ -30,8 +30,6 @@ class GestorEscritoDB extends core\ClaseGestor
     /**
      * Constructor de la classe.
      *
-     * @return $gestor
-     *
      */
     function __construct()
     {
@@ -157,7 +155,6 @@ class GestorEscritoDB extends core\ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_escrito' => $aDades['id_escrito']);
             $oEscritoDB = new Escrito($a_pkey);
-            $oEscritoDB->setAllAtributes($aDades);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();
@@ -282,7 +279,6 @@ class GestorEscritoDB extends core\ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_escrito' => $aDades['id_escrito']);
             $oEscritoDB = new Escrito($a_pkey);
-            $oEscritoDB->setAllAtributes($aDades);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();
@@ -394,7 +390,6 @@ class GestorEscritoDB extends core\ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_escrito' => $aDades['id_escrito']);
             $oEscritoDB = new Escrito($a_pkey);
-            $oEscritoDB->setAllAtributes($aDades);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();
@@ -416,7 +411,7 @@ class GestorEscritoDB extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            if ($camp == 'asunto_detalle') {
+            if ($camp === 'asunto_detalle') {
                 $valor = $aWhere[$camp];
                 $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
                 $COND_OR .= " OR ";
@@ -484,7 +479,6 @@ class GestorEscritoDB extends core\ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_escrito' => $aDades['id_escrito']);
             $oEscritoDB = new Escrito($a_pkey);
-            $oEscritoDB->setAllAtributes($aDades);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();
@@ -507,7 +501,7 @@ class GestorEscritoDB extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            if ($camp == 'asunto_detalle') {
+            if ($camp === 'asunto_detalle') {
                 $valor = $aWhere[$camp];
                 $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
                 $COND_OR .= " OR ";
@@ -576,7 +570,6 @@ class GestorEscritoDB extends core\ClaseGestor
         foreach ($oDblSt as $aDades) {
             $a_pkey = array('id_escrito' => $aDades['id_escrito']);
             $oEscritoDB = new Escrito($a_pkey);
-            $oEscritoDB->setAllAtributes($aDades);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();
@@ -596,7 +589,7 @@ class GestorEscritoDB extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            if ($camp == 'asunto_detalle') {
+            if ($camp === 'asunto_detalle') {
                 $valor = $aWhere[$camp];
                 $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
                 $COND_OR .= " OR ";
@@ -657,7 +650,6 @@ class GestorEscritoDB extends core\ClaseGestor
         foreach ($this->fetchCursor($sQry, $aWhere) as $row) {
             $a_pkey = array('id_escrito' => $row['id_escrito']);
             $oEscritoDB = new Escrito($a_pkey);
-            $oEscritoDB->setAllAtributes($row);
             $oEscritoDBSet->add($oEscritoDB);
 
         }
@@ -721,7 +713,7 @@ class GestorEscritoDB extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            if ($camp == 'asunto_detalle') {
+            if ($camp === 'asunto_detalle') {
                 $valor = $aWhere[$camp];
                 $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
                 $COND_OR .= " OR ";
@@ -782,7 +774,6 @@ class GestorEscritoDB extends core\ClaseGestor
         foreach ($this->fetchCursor($sQry, $aWhere) as $row) {
             $a_pkey = array('id_escrito' => $row['id_escrito']);
             $oEscritoDB = new Escrito($a_pkey);
-            $oEscritoDB->setAllAtributes($row);
             $oEscritoDBSet->add($oEscritoDB);
 
         }

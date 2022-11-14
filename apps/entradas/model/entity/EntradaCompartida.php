@@ -154,19 +154,19 @@ class EntradaCompartida extends core\ClasePropiedades
      * @param integer|array iid_entrada_compartida
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = '')
+    function __construct($a_id = null)
     {
         $oDbl = $GLOBALS['oDBP'];
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_entrada_compartida') && $val_id !== '') {
+                if (($nom_id === 'id_entrada_compartida') && $val_id !== '') {
                     $this->iid_entrada_compartida = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_entrada_compartida = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_entrada_compartida = (int)$a_id;
                 $this->aPrimary_key = array('iid_entrada_compartida' => $this->iid_entrada_compartida);
             }
         }
@@ -250,7 +250,7 @@ class EntradaCompartida extends core\ClasePropiedades
                     return FALSE;
                 }
             }
-            $this->id_entrada_compartida = $oDbl->lastInsertId('entradas_compartidas_id_entrada_compartida_seq');
+            $this->iid_entrada_compartida = $oDbl->lastInsertId('entradas_compartidas_id_entrada_compartida_seq');
         }
         $this->setAllAtributes($aDades);
         return TRUE;
@@ -299,7 +299,7 @@ class EntradaCompartida extends core\ClasePropiedades
      *
      * @param array $aDades
      */
-    function setAllAtributes($aDades, $convert = FALSE)
+    private function setAllAtributes($aDades, $convert = FALSE)
     {
         if (!is_array($aDades)) {
             return;
@@ -490,18 +490,18 @@ class EntradaCompartida extends core\ClasePropiedades
      * Estableix las claus primàries de EntradaCompartida en un array
      *
      */
-    public function setPrimary_key($a_id = '')
+    public function setPrimary_key($a_id = null)
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_entrada_compartida') && $val_id !== '') {
+                if (($nom_id === 'id_entrada_compartida') && $val_id !== '') {
                     $this->iid_entrada_compartida = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_entrada_compartida = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_entrada_compartida = (int)$a_id;
                 $this->aPrimary_key = array('iid_entrada_compartida' => $this->iid_entrada_compartida);
             }
         }

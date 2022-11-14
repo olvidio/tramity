@@ -92,7 +92,7 @@ class EntidadDB extends core\ClasePropiedades
      * @param integer|array iid_entidad
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    public function __construct($a_id = '')
+    public function __construct($a_id = null)
     {
         $oDbl = $GLOBALS['oDBP'];
         if (is_array($a_id)) {
@@ -100,7 +100,7 @@ class EntidadDB extends core\ClasePropiedades
             foreach ($a_id as $nom_id => $val_id) {
                 if (($nom_id === 'id_entidad') && $val_id !== '') {
                     $this->iid_entidad = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
@@ -182,7 +182,7 @@ class EntidadDB extends core\ClasePropiedades
                     return FALSE;
                 }
             }
-            $this->id_entidad = $oDbl->lastInsertId('entidades_id_entidad_seq');
+            $this->iid_entidad = $oDbl->lastInsertId('entidades_id_entidad_seq');
         }
         $this->setAllAtributes($aDades);
         return TRUE;
@@ -346,18 +346,18 @@ class EntidadDB extends core\ClasePropiedades
      * Estableix las claus primàries de EntidadDB en un array
      *
      */
-    public function setPrimary_key($a_id = '')
+    public function setPrimary_key($a_id = null)
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
                 if (($nom_id === 'id_entidad') && $val_id !== '') {
                     $this->iid_entidad = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_entidad = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_entidad = (int)$a_id;
                 $this->aPrimary_key = array('iid_entidad' => $this->iid_entidad);
             }
         }

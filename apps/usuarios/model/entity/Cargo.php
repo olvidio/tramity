@@ -61,13 +61,13 @@ class Cargo extends core\ClasePropiedades
      *
      * @var array
      */
-    private $aPrimary_key;
+    private array $aPrimary_key;
     /**
      * aDades de Cargo
      *
      * @var array
      */
-    private $aDades;
+    private array $aDades;
     /**
      * bLoaded de Cargo
      *
@@ -75,66 +75,60 @@ class Cargo extends core\ClasePropiedades
      */
     private $bLoaded = FALSE;
     /**
-     * Id_schema de Cargo
-     *
-     * @var integer
-     */
-    private $iid_schema;
-    /**
      * Id_cargo de Cargo
      *
      * @var integer
      */
-    private $iid_cargo;
+    private int $iid_cargo;
     /**
      * Id_ambito de Cargo
      *
      * @var integer
      */
-    private $iid_ambito;
+    private int $iid_ambito;
     /**
      * Cargo de Cargo
      *
      * @var string
      */
-    private $scargo;
+    private string $scargo;
     /**
-     * Descripcion de Cargo
+     * Descripción de Cargo
      *
      * @var string
      */
-    private $sdescripcion;
+    private string $sdescripcion;
     /**
      * Id_oficina de Cargo
      *
      * @var integer
      */
-    private $iid_oficina;
+    private int $iid_oficina;
     /**
      * Director de Cargo
      *
      * @var boolean
      */
-    private $bdirector;
+    private bool $bdirector;
     /**
      * Sacd de Cargo
      *
      * @var boolean
      */
-    private $bsacd;
+    private bool $bsacd;
     /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
      * Id_usuario de Cargo
      *
      * @var integer
      */
-    private $iid_usuario;
+    private int $iid_usuario;
     /**
      * Id_suplente de Cargo
      *
      * @var integer
      */
-    private $iid_suplente;
+    private int $iid_suplente;
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
@@ -142,22 +136,22 @@ class Cargo extends core\ClasePropiedades
      * Si només necessita un valor, se li pot passar un integer.
      * En general se li passa un array amb les claus primàries.
      *
-     * @param integer|array iid_cargo
+     * @param integer|array $a_id iid_cargo
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = '')
+    public function __construct($a_id = null)
     {
         $oDbl = $GLOBALS['oDBT'];
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_cargo') && $val_id !== '') {
+                if (($nom_id === 'id_cargo') && $val_id !== '') {
                     $this->iid_cargo = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_cargo = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_cargo = (int)$a_id;
                 $this->aPrimary_key = array('iid_cargo' => $this->iid_cargo);
             }
         }
@@ -248,7 +242,7 @@ class Cargo extends core\ClasePropiedades
                     return FALSE;
                 }
             }
-            $this->id_cargo = $oDbl->lastInsertId('aux_cargos_id_cargo_seq');
+            $this->iid_cargo = $oDbl->lastInsertId('aux_cargos_id_cargo_seq');
         }
         $this->setAllAtributes($aDades);
         return TRUE;
@@ -297,7 +291,7 @@ class Cargo extends core\ClasePropiedades
      *
      * @param array $aDades
      */
-    function setAllAtributes($aDades)
+    private function setAllAtributes($aDades)
     {
         if (!is_array($aDades)) {
             return;
@@ -466,18 +460,18 @@ class Cargo extends core\ClasePropiedades
      * Estableix las claus primàries de Cargo en un array
      *
      */
-    public function setPrimary_key($a_id = '')
+    public function setPrimary_key($a_id = null)
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'id_cargo') && $val_id !== '') {
+                if (($nom_id === 'id_cargo') && $val_id !== '') {
                     $this->iid_cargo = (int)$val_id;
-                } // evitem SQL injection fent cast a integer
+                }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_cargo = intval($a_id); // evitem SQL injection fent cast a integer
+                $this->iid_cargo = (int)$a_id;
                 $this->aPrimary_key = array('iid_cargo' => $this->iid_cargo);
             }
         }

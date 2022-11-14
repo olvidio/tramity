@@ -31,8 +31,6 @@ class GestorFirma extends core\ClaseGestor
     /**
      * Constructor de la classe.
      *
-     * @return $gestor
-     *
      */
     function __construct()
     {
@@ -526,12 +524,12 @@ class GestorFirma extends core\ClaseGestor
         $valor = $oFirmaUltimaOk->getValor();
         $cargo_tipo = $oFirmaUltimaOk->getCargo_tipo();
 
-        if ($cargo_tipo == Cargo::CARGO_VB_VCD &&
-            ($valor == Firma::V_D_NO ||
-                $valor == Firma::V_D_DILATA ||
-                $valor == Firma::V_D_ESPERA ||
-                $valor == Firma::V_D_RECHAZADO ||
-                $valor == Firma::V_D_VISTO_BUENO)) {
+        if ($cargo_tipo === Cargo::CARGO_VB_VCD &&
+            ($valor === Firma::V_D_NO ||
+                $valor === Firma::V_D_DILATA ||
+                $valor === Firma::V_D_ESPERA ||
+                $valor === Firma::V_D_RECHAZADO ||
+                $valor === Firma::V_D_VISTO_BUENO)) {
             return TRUE;
         } else {
             return FALSE;
@@ -542,7 +540,7 @@ class GestorFirma extends core\ClaseGestor
      * devuelve el objeto Firma. La ultima firmada
      *
      * @param integer $id_expediente
-     * @return object $oFirma
+     * @return false|object
      */
     public function getUltimaOk($id_expediente)
     {
@@ -574,7 +572,6 @@ class GestorFirma extends core\ClaseGestor
         foreach ($oDbl->query($sQuery) as $aDades) {
             $a_pkey = array('id_item' => $aDades['id_item']);
             $oFirma = new Firma($a_pkey);
-            $oFirma->setAllAtributes($aDades);
         }
         return $oFirma;
     }
@@ -676,7 +673,6 @@ class GestorFirma extends core\ClaseGestor
         foreach ($oDbl->query($sQuery) as $aDades) {
             $a_pkey = array('id_item' => $aDades['id_item']);
             $oFirma = new Firma($a_pkey);
-            $oFirma->setAllAtributes($aDades);
         }
         return $oFirma;
     }

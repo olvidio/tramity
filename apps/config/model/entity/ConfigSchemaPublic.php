@@ -39,13 +39,13 @@ class ConfigSchemaPublic extends ConfigSchema
      * @param integer|array sparametro
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = '')
+    function __construct($a_id = null)
     {
         $oDbl = $GLOBALS['oDBP'];
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id == 'parametro') && $val_id !== '') {
+                if (($nom_id === 'parametro') && $val_id !== '') {
                     $this->sparametro = (string)$val_id; // evitem SQL injection fent cast a string
                 }
             }
