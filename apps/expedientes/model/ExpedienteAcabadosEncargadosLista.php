@@ -23,8 +23,6 @@ class ExpedienteAcabadosEncargadosLista
     public function mostrarTabla(): void
     {
         $this->setCondicion();
-        $a_cosas = ['filtro' => $this->filtro];
-        $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
         $pagina_mod = ConfigGlobal::getWeb() . '/apps/expedientes/controller/expediente_distribuir.php';
         $pagina_ver = ConfigGlobal::getWeb() . '/apps/expedientes/controller/expediente_distribuir.php';
 
@@ -33,9 +31,13 @@ class ExpedienteAcabadosEncargadosLista
         $oFormatoLista->setColumnaModVisible(TRUE);
         $oFormatoLista->setColumnaVerVisible(TRUE);
         $oFormatoLista->setColumnaFIniVisible(TRUE);
-        $oFormatoLista->setPaginaNueva($pagina_nueva);
         $oFormatoLista->setPaginaMod($pagina_mod);
         $oFormatoLista->setPaginaVer($pagina_ver);
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+            $a_cosas = ['filtro' => $this->filtro];
+            $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
+            $oFormatoLista->setPaginaNueva($pagina_nueva);
+        }
 
         if (!empty($this->aWhere)) {
             $gesExpedientes = new GestorExpediente();

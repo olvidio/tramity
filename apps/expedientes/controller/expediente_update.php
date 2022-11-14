@@ -32,6 +32,7 @@ require_once("apps/core/global_object.inc");
 $Q_que = (string)filter_input(INPUT_POST, 'que');
 $Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
 $Q_ponente = (string)filter_input(INPUT_POST, 'ponente');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
 $Q_tramite = (integer)filter_input(INPUT_POST, 'tramite');
 $Q_estado = (integer)filter_input(INPUT_POST, 'estado');
@@ -821,7 +822,7 @@ switch ($Q_que) {
         } else {
             $jsondata['success'] = true;
             $jsondata['id_expediente'] = $id_expediente;
-            $a_cosas = ['id_expediente' => $id_expediente];
+            $a_cosas = ['id_expediente' => $id_expediente, 'filtro' => $Q_filtro];
             $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
             $jsondata['pagina_mod'] = $pagina_mod;
         }
