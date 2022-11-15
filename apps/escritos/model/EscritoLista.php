@@ -40,7 +40,7 @@ class EscritoLista
      *
      * @var integer
      */
-    private int $id_expediente;
+    private int $id_expediente = 0;
     /**
      *
      * @var array
@@ -69,121 +69,106 @@ class EscritoLista
         // visibilidad
         $oVisibilidad = new Visibilidad();
         $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
+        $gesCargos = new GestorCargo();
+        $a_cargos = $gesCargos->getArrayCargos();
+        $oProtLocal = new Protocolo();
+        $oProtLocal->setNombre('local');
 
-        if (isset($this->id_expediente)) {
-            $oExpediente = new Expediente($this->id_expediente);
-            $estado = $oExpediente->getEstado();
-            $cEscritos = $this->getEscritosParaEnviar($fecha);
-
-            $gesCargos = new GestorCargo();
-            $a_cargos = $gesCargos->getArrayCargos();
-
-            $oProtLocal = new Protocolo();
-            $oProtLocal->setNombre('local');
-            $a_acciones = [];
-            $oPermRegistro = new PermRegistro();
-            foreach ($cEscritos as $oEscrito) {
-                $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEscrito, 'escrito');
-                if ($perm_ver_escrito < PermRegistro::PERM_VER) {
-                    continue;
-                }
-
-                $id_escrito = $oEscrito->getId_escrito();
-                $f_salida = $oEscrito->getF_salida()->getFromLocal();
-                $ponente = $oEscrito->getCreador();
-                $ponente_txt = empty($a_cargos[$ponente]) ? '?' : $a_cargos[$ponente];
-
-                $tipo_accion = $oEscrito->getAccion();
-
-                $a_cosas = ['id_expediente' => $this->id_expediente,
-                    'id_escrito' => $id_escrito,
-                    'filtro' => $this->filtro,
-                    'modo' => $this->modo,
-                    'accion' => $tipo_accion,
-                ];
-                $pag_escrito = Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
-                $pag_rev = Hash::link('apps/escritos/controller/escrito_rev.php?' . http_build_query($a_cosas));
-
-                $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >" . _("mod.datos") . "</span>";
-                $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >" . _("rev.texto") . "</span>";
-
-
-                if (!empty($f_salida)) {
-                    $a_accion['enviar'] = _("enviado") . " ($f_salida)";
-                } else {
-                    // si es anulado NO enviar!
-                    if (is_true($oEscrito->getAnulado())) {
-                        $a_accion['enviar'] = "-";
-                    } else {
-                        $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito('$id_escrito');\" >" . _("enviar") . "</span>";
-                    }
-                }
-
-                $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >" . _("ver") . "</span>";
-
-                $destino_txt = $oEscrito->getDestinosEscrito();
-                $visibilidad_dst = $oEscrito->getVisibilidad_dst();
-                if (!empty($visibilidad_dst) && $visibilidad_dst !== Visibilidad::V_CTR_TODOS) {
-                    $visibilidad_txt = $a_visibilidad_dst[$visibilidad_dst];
-                    $destino_txt .= " ($visibilidad_txt)";
-                }
-                $prot_local_txt = $oEscrito->getProt_local_txt();
-                // Tiene adjuntos?
-                $adjuntos = '';
-                $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
-                if (!empty($a_id_adjuntos)) {
-                    $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto('$id_escrito');\"  ></i>";
-                }
-
-                $json_ref = $oEscrito->getJson_prot_ref();
-                $oArrayProtRef = new ProtocoloArray($json_ref, '', '');
-                $oArrayProtRef->setRef(TRUE);
-
-                if ($this->getModo() === 'mod') {
-                    $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito('$id_escrito');\" >";
-                    $prot_local .= $prot_local_txt;
-                    $prot_local .= "</span>";
-                } else {
-                    $prot_local = $prot_local_txt;
-                }
-
-
-                if (!empty($oEscrito->getOk()) && $oEscrito->getOk() !== EscritoDB::OK_NO) {
-                    $ok = '<i class="fas fa-check"></i>';
-                } else {
-                    $ok = '';
-                }
-
-                $asunto_detalle = $oEscrito->getAsuntoDetalle();
-                if (is_true($oEscrito->getAnulado())) {
-                    $anulado_txt = _("ANULADO");
-                    $asunto_detalle = $anulado_txt . ' ' . $asunto_detalle;
-                }
-                $a_accion['ok'] = $ok;
-                $a_accion['prot_local'] = $prot_local;
-                $a_accion['tipo'] = '';
-                $a_accion['ponente'] = $ponente_txt;
-                $a_accion['destino'] = $destino_txt;
-                $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
-                $a_accion['categoria'] = '';
-                $a_accion['asunto'] = $asunto_detalle;
-                $a_accion['adjuntos'] = $adjuntos;
-
-                $a_acciones[] = $a_accion;
+        $a_acciones = [];
+        $oPermRegistro = new PermRegistro();
+        $cEscritos = $this->getEscritosParaEnviar($fecha);
+        foreach ($cEscritos as $oEscrito) {
+            $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEscrito, 'escrito');
+            if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+                continue;
             }
 
-            if ($estado === Expediente::ESTADO_ACABADO_ENCARGADO
-                || ($estado === Expediente::ESTADO_ACABADO_SECRETARIA)) {
-                $ver_ok = TRUE;
+            $id_escrito = $oEscrito->getId_escrito();
+            $f_salida = $oEscrito->getF_salida()->getFromLocal();
+            $ponente = $oEscrito->getCreador();
+            $ponente_txt = empty($a_cargos[$ponente]) ? '?' : $a_cargos[$ponente];
+
+            $tipo_accion = $oEscrito->getAccion();
+
+            $a_cosas = [
+                'id_escrito' => $id_escrito,
+                'filtro' => $this->filtro,
+                'modo' => $this->modo,
+                'accion' => $tipo_accion,
+            ];
+            $pag_escrito = Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
+            $pag_rev = Hash::link('apps/escritos/controller/escrito_rev.php?' . http_build_query($a_cosas));
+
+            $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >" . _("mod.datos") . "</span>";
+            $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >" . _("rev.texto") . "</span>";
+
+
+            if (!empty($f_salida)) {
+                $a_accion['enviar'] = _("enviado") . " ($f_salida)";
             } else {
-                $ver_ok = FALSE;
+                // si es anulado NO enviar!
+                if (is_true($oEscrito->getAnulado())) {
+                    $a_accion['enviar'] = "-";
+                } else {
+                    $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito('$id_escrito');\" >" . _("enviar") . "</span>";
+                }
             }
-        } else {
-            $a_acciones = [];
-            $ver_ok = FALSE;
+
+            $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >" . _("ver") . "</span>";
+
+            $destino_txt = $oEscrito->getDestinosEscrito();
+            $visibilidad_dst = $oEscrito->getVisibilidad_dst();
+            if (!empty($visibilidad_dst) && $visibilidad_dst !== Visibilidad::V_CTR_TODOS) {
+                $visibilidad_txt = $a_visibilidad_dst[$visibilidad_dst];
+                $destino_txt .= " ($visibilidad_txt)";
+            }
+            $prot_local_txt = $oEscrito->getProt_local_txt();
+            // Tiene adjuntos?
+            $adjuntos = '';
+            $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
+            if (!empty($a_id_adjuntos)) {
+                $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto('$id_escrito');\"  ></i>";
+            }
+
+            $json_ref = $oEscrito->getJson_prot_ref();
+            $oArrayProtRef = new ProtocoloArray($json_ref, '', '');
+            $oArrayProtRef->setRef(TRUE);
+
+            if ($this->getModo() === 'mod') {
+                $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito('$id_escrito');\" >";
+                $prot_local .= $prot_local_txt;
+                $prot_local .= "</span>";
+            } else {
+                $prot_local = $prot_local_txt;
+            }
+
+
+            if (!empty($oEscrito->getOk()) && $oEscrito->getOk() !== EscritoDB::OK_NO) {
+                $ok = '<i class="fas fa-check"></i>';
+            } else {
+                $ok = '';
+            }
+
+            $asunto_detalle = $oEscrito->getAsuntoDetalle();
+            if (is_true($oEscrito->getAnulado())) {
+                $anulado_txt = _("ANULADO");
+                $asunto_detalle = $anulado_txt . ' ' . $asunto_detalle;
+            }
+            $a_accion['ok'] = $ok;
+            $a_accion['prot_local'] = $prot_local;
+            $a_accion['tipo'] = '';
+            $a_accion['ponente'] = $ponente_txt;
+            $a_accion['destino'] = $destino_txt;
+            $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
+            $a_accion['categoria'] = '';
+            $a_accion['asunto'] = $asunto_detalle;
+            $a_accion['adjuntos'] = $adjuntos;
+
+            $a_acciones[] = $a_accion;
         }
 
         $server = ConfigGlobal::getWeb(); //http://tramity.local
+        $ver_ok = FALSE;
         $vista_dl = TRUE;
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $vista_dl = FALSE;
@@ -325,7 +310,7 @@ class EscritoLista
                     $a_accion['enviar'] = _("otra acción?");
                 }
             }
-             // solamente para los centros
+            // solamente para los centros
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && !$enviado) {
                 $a_accion['eliminar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_escrito('$id_escrito');\" >" . _("eliminar") . "</span>";
             } else {
