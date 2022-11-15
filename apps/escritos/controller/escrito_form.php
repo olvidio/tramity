@@ -23,7 +23,7 @@ $Q_volver_a = (string)filter_input(INPUT_POST, 'volver_a');
 if (empty($Q_id_escrito) && $Q_filtro === 'en_buscar') {
     $Q_a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
-    $Q_id_escrito = $this->Q_a_sel[0];
+    $Q_id_escrito = $Q_a_sel[0];
 }
 
 $oEscritoForm = new EscritoForm($Q_id_expediente, $Q_id_escrito, $Q_accion, $Q_filtro, $Q_modo, $Q_volver_a);
