@@ -33,11 +33,13 @@ class ExpedienteReunionFijarLista
         $oFormatoLista->setPaginaVer($pagina_ver);
         $oFormatoLista->setTxtColumnaVer(_("revisar"));
         $oFormatoLista->setTxtColumnaMod(_("fecha"));
+        /*
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $a_cosas = ['filtro' => $this->filtro];
             $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
             $oFormatoLista->setPaginaNueva($pagina_nueva);
         }
+        */
 
         if (!empty($this->aWhere)) {
             $gesExpedientes = new GestorExpediente();

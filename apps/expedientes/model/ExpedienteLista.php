@@ -272,7 +272,7 @@ class ExpedienteLista
         ];
 
         $oView = new ViewTwig('expedientes/controller');
-        $oView->renderizar('expediente_lista_new.html.twig', $a_campos);
+        $oView->renderizar('expediente_lista.html.twig', $a_campos);
     }
 
 

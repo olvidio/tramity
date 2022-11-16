@@ -550,7 +550,7 @@ class Cargo extends core\ClasePropiedades
      *
      * @return integer iid_oficina
      */
-    function getId_oficina()
+    public function getId_oficina(): int
     {
         if (!isset($this->iid_oficina) && !$this->bLoaded) {
             $this->DBCargar();

@@ -63,6 +63,36 @@ $Q_a_prot_any_referencias = (array)filter_input(INPUT_POST, 'prot_any_referencia
 $Q_a_prot_mas_referencias = (array)filter_input(INPUT_POST, 'prot_mas_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 switch ($Q_que) {
+    case 'conmutar':
+        $error_txt = '';
+        $oEscrito = new Escrito($Q_id_escrito);
+        $accion = ($oEscrito->getAccion() === 1)? 2 : 1;
+        $oEscrito->setAccion($accion);
+        if ($oEscrito->DBGuardar() === FALSE) {
+            $error_txt .= $oEscrito->getErrorTxt();
+        }
+        $gesAcciones = new GestorAccion();
+        $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Q_id_expediente, 'id_escrito' => $Q_id_escrito]);
+        // solamente debería haber uno
+        $oAccion = $cAcciones[0];
+        $oAccion->DBCargar();
+        $oAccion->setTipo_accion($accion);
+        if ($oAccion->DBGuardar() === FALSE) {
+            $error_txt .= $oAccion->getErrorTxt();
+        }
+
+        if (empty($error_txt)) {
+            $jsondata['success'] = true;
+            $jsondata['mensaje'] = 'ok';
+        } else {
+            $jsondata['success'] = false;
+            $jsondata['mensaje'] = $error_txt;
+        }
+
+        //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($jsondata);
+        exit();
     case 'modificar_detalle':
         $error_txt = '';
         $oEscrito = new Escrito($Q_id_escrito);

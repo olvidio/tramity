@@ -752,9 +752,9 @@ class ExpedienteDB extends ClasePropiedades
     /**
      * Recupera l'atribut iponente de ExpedienteDB
      *
-     * @return integer iponente
+     * @return integer|null iponente
      */
-    function getPonente()
+    public function getPonente(): ?int
     {
         if (!isset($this->iponente) && !$this->bLoaded) {
             $this->DBCargar();

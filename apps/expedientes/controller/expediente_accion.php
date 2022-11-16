@@ -29,7 +29,7 @@ $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
 
 $pagina_contestar = '';
-// Añado la opcion de poder crear un expediente desde entradas
+// Añado la opción crear un expediente desde entradas
 switch ($Q_filtro) {
     case 'entradas_semana':
     case 'escritos_cr':
@@ -127,7 +127,8 @@ switch ($Q_filtro) {
 - a "Acabados", "Copias" el botó "mov/cop" ha de fer:
     - "a borrador" (passa a "borrador")
     - "copia a borrador" (fa una copia a "borrador")
-        
+    - "re-circular" (només als centres)
+
 - a "Archivados" el botó "mov/cop" ha de fer:
     - "a borrador" (passa a "borrador")
     - "copia a borrador" (fa una copia a "borrador")
@@ -191,7 +192,7 @@ switch ($Q_filtro) {
     case 'borrador_oficina':
     case 'borrador_propio':
         // los de la oficina
-        if ($oficina_ponente == ConfigGlobal::role_id_oficina()) {
+        if ($oficina_ponente === ConfigGlobal::role_id_oficina()) {
             $a_botones[0] = ['accion' => 'exp_eliminar',
                 'txt' => _("eliminar"),
             ];
@@ -200,19 +201,19 @@ switch ($Q_filtro) {
     case 'firmar':
     case 'circulando':
         // sólo si soy el ponente (creador)
-        if ($id_ponente == ConfigGlobal::role_id_cargo()) {
+        if ($id_ponente === ConfigGlobal::role_id_cargo()) {
             $a_botones[0] = ['accion' => 'exp_a_borrador',
                 'txt' => _("mover a borrador"),
             ];
         }
-        // Si soy dtor de la oficina, al mover debo cambiar el creador.
-        if ($oficina_ponente == ConfigGlobal::role_id_oficina() && ConfigGlobal::soy_dtor()) {
+        // Si soy director de la oficina, al mover debo cambiar el creador.
+        if ($oficina_ponente === ConfigGlobal::role_id_oficina() && ConfigGlobal::soy_dtor()) {
             $a_botones[0] = ['accion' => 'exp_a_borrador_cmb_creador',
                 'txt' => _("mover a borrador"),
             ];
         }
         // los de la oficina
-        if ($oficina_ponente == ConfigGlobal::role_id_oficina()) {
+        if ($oficina_ponente === ConfigGlobal::role_id_oficina()) {
             $a_botones[1] = ['accion' => 'exp_cp_borrador',
                 'txt' => _("copiar a borrador"),
             ];
@@ -225,7 +226,7 @@ switch ($Q_filtro) {
     case 'reunion':
     case 'seg_reunion':
         // los de la oficina
-        if ($oficina_ponente == ConfigGlobal::role_id_oficina()) {
+        if ($oficina_ponente === ConfigGlobal::role_id_oficina()) {
             $a_botones[1] = ['accion' => 'exp_cp_borrador',
                 'txt' => _("copiar a borrador"),
             ];
@@ -239,7 +240,7 @@ switch ($Q_filtro) {
     case 'acabados_encargados':
     case 'copias':
         // sólo si soy el ponente (creador)
-        if ($id_ponente == ConfigGlobal::role_id_cargo()) {
+        if ($id_ponente === ConfigGlobal::role_id_cargo()) {
             $a_botones[0] = ['accion' => 'exp_a_borrador',
                 'txt' => _("mover a borrador"),
             ];
@@ -247,10 +248,16 @@ switch ($Q_filtro) {
         $a_botones[1] = ['accion' => 'exp_cp_borrador',
             'txt' => _("copiar a borrador"),
         ];
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+            $a_botones[2] = ['accion' => 'recircular',
+                'txt' => _("re-circular"),
+            ];
+
+        }
         break;
     case 'archivados':
         // sólo si soy el ponente (creador)
-        if ($id_ponente == ConfigGlobal::role_id_cargo()) {
+        if ($id_ponente === ConfigGlobal::role_id_cargo()) {
             $a_botones[0] = ['accion' => 'exp_a_borrador',
                 'txt' => _("mover a borrador"),
             ];

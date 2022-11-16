@@ -138,6 +138,11 @@
                     {{ "Guardar"|trans|raw }}
                 </button>
             </div>
+            <div class="mt-5">
+                <button tabindex='94' class="btn btn-info" onClick="fnjs_conmutar();">
+                    {{ conmutar_txt }}
+                </button>
+            </div>
             {% if explotar %}
                 <div class="col-3">
                     <button tabindex='90' class="btn btn-danger" onClick="fnjs_explotar();">
@@ -212,8 +217,7 @@
                 </div>
             {% endif %}
         </div> <!-- Fin Col Dcha -->
-
-
+    </div>
 </form>
 {# Per ficar l'escrit, si cal #}
 <div id="prova">

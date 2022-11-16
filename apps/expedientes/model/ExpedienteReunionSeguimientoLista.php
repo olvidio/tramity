@@ -40,11 +40,13 @@ class ExpedienteReunionSeguimientoLista
             $oFormatoLista->setColumnaModVisible(FALSE);
         }
         $oFormatoLista->setPaginaMod($pagina_mod);
+        /*
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $a_cosas = ['filtro' => $this->filtro];
             $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
             $oFormatoLista->setPaginaNueva($pagina_nueva);
         }
+        */
 
         if (!empty($this->aWhere)) {
             $gesExpedientes = new GestorExpediente();

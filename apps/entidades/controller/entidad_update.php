@@ -72,7 +72,7 @@ switch ($Q_que) {
             } else {
                 // En el caso de nuevo, crear el esquema:
                 // Crear el calendario davical ??¿?¿:
-                if ($Q_que == 'nuevo') {
+                if ($Q_que === 'nuevo') {
                     $id = $oEntidadDB->getId_entidad();
                     $oEntidad = new Entidad($id);
                     $oEntidad->DBCargar();
@@ -96,6 +96,6 @@ if (empty($error_txt)) {
 
 //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
 header('Content-type: application/json; charset=utf-8');
-echo json_encode($jsondata);
+echo json_encode($jsondata, JSON_THROW_ON_ERROR);
 exit();
         

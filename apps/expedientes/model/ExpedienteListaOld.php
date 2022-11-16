@@ -421,7 +421,7 @@ class ExpedienteListaOld
         ];
 
         $oView = new ViewTwig('expedientes/controller');
-        $oView->renderizar('expediente_lista.html.twig', $a_campos);
+        $oView->renderizar('expediente_lista_old.html.twig', $a_campos);
     }
 
     /**

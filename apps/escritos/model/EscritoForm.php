@@ -422,6 +422,13 @@ class EscritoForm
         $oHoy->sub(new DateInterval($error_fecha_txt));
         $minIso = $oHoy->format('Y-m-d');
 
+        // texto para conmutar
+        if ($this->Q_accion === 1) {
+            $conmutar_txt = _("pasar a escrito");
+        } else {
+            $conmutar_txt = _("pasar a propuesta");
+        }
+
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $a_campos = [
                 'titulo' => $titulo,
@@ -468,6 +475,7 @@ class EscritoForm
                 'str_condicion' => $this->str_condicion,
                 // para ver comentario cuando se devuelve a la oficina
                 'comentario' => $comentario,
+                'conmutar_txt' => $conmutar_txt,
             ];
 
             $oView = new ViewTwig('escritos/controller');

@@ -257,6 +257,11 @@ switch ($Q_que) {
                 $error_txt .= $oFirma->getErrorTxt();
             }
         }
+        // Es posible que esté como acabad, hay que cambiar el estado:
+        $oExpediente->setEstado(Expediente::ESTADO_CIRCULANDO);
+        if ($oExpediente->DBGuardar() === FALSE) {
+            $error_txt .= $oExpediente->getErrorTxt();
+        }
 
         if (empty($error_txt)) {
             $jsondata['success'] = true;

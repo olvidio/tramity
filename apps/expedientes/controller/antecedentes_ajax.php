@@ -130,7 +130,7 @@ switch ($Q_que) {
             $gesEntradas = new GestorEntrada();
             $id_lugar = $Q_origen_id_lugar;
             if (!empty($Q_origen_prot_num) && !empty($Q_origen_prot_any)) {
-                // No tengo en quenta las otras condiciones de la búsqueda
+                // No tengo en cuenta las otras condiciones de la búsqueda
                 $aProt_origen = ['id_lugar' => $Q_origen_id_lugar,
                     'num' => $Q_origen_prot_num,
                     'any' => $Q_origen_prot_any,
@@ -254,9 +254,9 @@ switch ($Q_que) {
         $oArrayDesplEtiquetas->setBlanco('t');
         $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
-        $chk_or = ($Q_andOr == 'OR') ? 'checked' : '';
+        $chk_or = ($Q_andOr === 'OR') ? 'checked' : '';
         // por defecto 'AND':
-        $chk_and = (($Q_andOr == 'AND') || empty($Q_andOr)) ? 'checked' : '';
+        $chk_and = (($Q_andOr === 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
         if (!empty($Q_a_etiquetas)) {
             $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
@@ -451,7 +451,7 @@ switch ($Q_que) {
             $cEscritos = array_merge($cEscritos1, $cEscritosJ);
         }
 
-        // No tengo en quenta las otras condiciones de la búsqueda
+        // No tengo en cuenta las otras condiciones de la búsqueda
         if (!empty($Q_local_prot_num) && !empty($Q_local_prot_any)) {
             $gesLugares = new GestorLugar();
             $id_sigla_local = $gesLugares->getId_sigla_local();
@@ -582,9 +582,9 @@ switch ($Q_que) {
         $oArrayDesplEtiquetas->setBlanco('t');
         $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
-        $chk_or = ($Q_andOr == 'OR') ? 'checked' : '';
+        $chk_or = ($Q_andOr === 'OR') ? 'checked' : '';
         // por defecto 'AND':
-        $chk_and = (($Q_andOr == 'AND') || empty($Q_andOr)) ? 'checked' : '';
+        $chk_and = (($Q_andOr === 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
         if (!empty($Q_a_etiquetas)) {
             $gesEtiquetasDocumento = new GestorEtiquetaDocumento();

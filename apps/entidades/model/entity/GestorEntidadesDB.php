@@ -25,10 +25,8 @@ class GestorEntidadesDB extends core\ClaseGestor
     /**
      * Constructor de la classe.
      *
-     * @return $gestor
-     *
      */
-    function __construct()
+    public function __construct()
     {
         $oDbl = $GLOBALS['oDBP'];
         $this->setoDbl($oDbl);
@@ -44,7 +42,7 @@ class GestorEntidadesDB extends core\ClaseGestor
      * @param string sQuery la query a executar.
      * @return array Una col·lecció d'objectes de tipus EntidadesDB
      */
-    function getEntidadesDBQuery($sQuery = '')
+    public function getEntidadesDBQuery($sQuery = '')
     {
         $oDbl = $this->getoDbl();
         $oEntidadesDBSet = new core\Set();

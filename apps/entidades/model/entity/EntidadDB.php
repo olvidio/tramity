@@ -2,11 +2,14 @@
 
 namespace entidades\model\entity;
 
-use core;
+use core\ClasePropiedades;
+use core\DatosCampo;
+use core\Set;
 use PDO;
 use PDOException;
+use function core\is_true;
 
-class EntidadDB extends core\ClasePropiedades
+class EntidadDB extends ClasePropiedades
 {
 
     /* ATRIBUTOS ----------------------------------------------------------------- */
@@ -135,7 +138,7 @@ class EntidadDB extends core\ClasePropiedades
         $aDades['anulado'] = $this->banulado;
         array_walk($aDades, 'core\poner_null');
         //para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
-        if (core\is_true($aDades['anulado'])) {
+        if (is_true($aDades['anulado'])) {
             $aDades['anulado'] = 'true';
         } else {
             $aDades['anulado'] = 'false';
@@ -452,7 +455,7 @@ class EntidadDB extends core\ClasePropiedades
      */
     public function getDatosCampos()
     {
-        $oEntidadDBesSet = new core\Set();
+        $oEntidadDBesSet = new Set();
 
         $oEntidadDBesSet->add($this->getDatosNombre());
         $oEntidadDBesSet->add($this->getDatosSchema());
@@ -465,12 +468,12 @@ class EntidadDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut snombre de EntidadDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
     function getDatosNombre()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'nombre'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'nombre'));
         $oDatosCampo->setEtiqueta(_("nombre"));
         return $oDatosCampo;
     }
@@ -479,12 +482,12 @@ class EntidadDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut sschema de EntidadDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
     function getDatosSchema()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'schema'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'schema'));
         $oDatosCampo->setEtiqueta(_("schema"));
         return $oDatosCampo;
     }
@@ -493,12 +496,12 @@ class EntidadDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut itipo de EntidadDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
     function getDatosTipo()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'tipo'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'tipo'));
         $oDatosCampo->setEtiqueta(_("tipo"));
         return $oDatosCampo;
     }
@@ -507,12 +510,12 @@ class EntidadDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut banulado de EntidadDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
     function getDatosAnulado()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'anulado'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'anulado'));
         $oDatosCampo->setEtiqueta(_("anulado"));
         return $oDatosCampo;
     }

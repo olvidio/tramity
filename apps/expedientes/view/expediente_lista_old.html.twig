@@ -1,27 +1,18 @@
-<div class="row">
-    {% if pagina_nueva %}
-        <div class="col-2">
-            <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
-                {{ "nuevo expediente"|trans|raw }}
-            </button>
-        </div>
-    {% endif %}
-    {% if titulo %}
-        <div class="col text-left">
-            <h3>{{ titulo }}</h3>
-        </div>
-    {% endif %}
-</div>
+{% if pagina_nueva %}
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
+        {{ "nuevo expediente"|trans|raw }}
+    </button>
+{% endif %}
 <table class="table table-sm table-bordered">
     <thead class="thead-light">
     <tr>
-        {% if is_columna_mod_visible %}
+        {% if col_mod %}
             <th scope="col">#</th>
         {% endif %}
-        {% if is_columna_ver_visible %}
+        {% if col_ver %}
             <th scope="col">{{ "##"|trans|raw }}</th>
         {% endif %}
-        {% if is_columna_f_ini_visible %}
+        {% if ver_f_ini %}
             <th scope="col">{{ "fecha inicio"|trans|raw }}</th>
         {% endif %}
         <th scope="col">{{ "trámite"|trans|raw }}</th>
@@ -48,13 +39,13 @@
     <tbody>
     {% for row in a_expedientes %}
         <tr class="{{ row.class_row|raw }}">
-            {% if is_columna_mod_visible %}
+            {% if col_mod %}
                 <th scope="row">{{ row.link_mod|raw }}</th>
             {% endif %}
-            {% if is_columna_ver_visible %}
+            {% if col_ver %}
                 <td>{{ row.link_ver|raw }}</td>
             {% endif %}
-            {% if is_columna_f_ini_visible %}
+            {% if ver_f_ini %}
                 <td>{{ row.f_ini|raw }}</td>
             {% endif %}
             <td>{{ row.tramite|raw }}</td>

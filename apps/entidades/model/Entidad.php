@@ -267,7 +267,7 @@ class Entidad extends EntidadDB
         exec($command, $output, $return_var);
         // read the file, if empty all's well
         $error = file_get_contents($file_log);
-        if (trim($error) != ''
+        if (trim($error) !== ''
             && stripos($error, 'error') !== FALSE // evitar los NOTICE y otros
             && ConfigGlobal::is_debug_mode()) {
             $err_txt .= sprintf("PSQL ERROR IN COMMAND(1): %s<br> mirar: %s<br>", $command, $file_log);
