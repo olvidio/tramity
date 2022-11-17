@@ -111,7 +111,7 @@ class PendienteDB extends core\ClasePropiedades
     /**
      * Encargado de PendienteDB
      *
-     * @var string
+     * @var string|null
      */
     private $sencargado;
     /**
@@ -497,9 +497,9 @@ class PendienteDB extends core\ClasePropiedades
     /**
      * estableix el valor de l'atribut sencargado de PendienteDB
      *
-     * @param string sencargado='' optional
+     * @param string|null
      */
-    function setEncargado($sencargado = '')
+    public function setEncargado($sencargado = null): void
     {
         $this->sencargado = $sencargado;
     }

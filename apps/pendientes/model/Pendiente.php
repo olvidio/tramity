@@ -655,9 +655,9 @@ class Pendiente
     }
 
     /**
-     * @param string $encargado
+     * @param string|null $encargado
      */
-    public function setEncargado(string $encargado): void
+    public function setEncargado(?string $encargado): void
     {
         $this->encargado = $encargado;
     }
