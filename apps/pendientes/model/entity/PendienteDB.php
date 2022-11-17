@@ -782,9 +782,9 @@ class PendienteDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut sencargado de PendienteDB
      *
-     * @return string sencargado
+     * @return string|null sencargado
      */
-    public function getEncargado(): string
+    public function getEncargado(): ?string
     {
         if (!isset($this->sencargado) && !$this->bLoaded) {
             $this->DBCargar();

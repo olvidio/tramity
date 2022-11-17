@@ -644,9 +644,9 @@ class Pendiente
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEncargado(): string
+    public function getEncargado(): ?string
     {
         if (!isset($this->encargado) && !$this->bLoaded) {
             $this->Carregar();
