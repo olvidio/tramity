@@ -427,18 +427,6 @@
         }
     }
 
-    /**
-     * Si se pone dentro de la función fnjs_voto, no acaba de cerrar bien el modal:
-     * no quita la sombra. Hay que hacerlo así para que primero acabe con el modal,
-     * y luego vuelva a la pagina que queremos.
-     */
-    $('#ModalFirma').on('hidden.bs.modal', function () {
-        var volver = $('#modal_volver').val();
-        if (volver == 1) {
-            fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
-        }
-    });
-
     fnjs_cancelar = function () {
         if (typeof event !== 'undefined') {
             event.preventDefault();
@@ -467,5 +455,17 @@
 
     $(document).ready(function () {
         tabs_hide();
+
+        /**
+         * Si se pone dentro de la función fnjs_voto, no acaba de cerrar bien el modal:
+         * no quita la sombra. Hay que hacerlo así para que primero acabe con el modal,
+         * y luego vuelva a la pagina que queremos.
+         */
+        $('#ModalFirma').on('hidden.bs.modal', function () {
+            var volver = $('#modal_volver').val();
+            if (volver == 1) {
+                fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+            }
+        });
     });
 </script>

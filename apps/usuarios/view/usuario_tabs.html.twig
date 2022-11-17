@@ -1,20 +1,20 @@
 <ul class="nav nav-pills" id="pills-tab" role="tablist">
-    {% set grupo_anterior = '' %}
-    {% for pill in a_pills %}
+  {% set grupo_anterior = '' %}
+  {% for pill in a_pills %}
     {% if '#' in pill.orden %}
-    {% set numeros = pill.orden|split('#') %}
-    {% set grupo = numeros[0] %}
-    {% set orden = numeros[1] %}
+        {% set numeros = pill.orden|split('#') %}
+        {% set grupo = numeros[0] %}
+        {% set orden = numeros[1] %}
 
-    {% if grupo != grupo_anterior %}
-    {% if grupo_anterior %}
-</ul>
-{% endif %}
-    	{% set grupo_anterior = grupo %}
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-       aria-expanded="false">{{ a_grupos[grupo] }}</a>
-    <ul class="dropdown-menu">
+        {% if grupo != grupo_anterior %}
+            {% if grupo_anterior %}
+                </ul>
+            {% endif %}
+            {% set grupo_anterior = grupo %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                   aria-expanded="false">{{ a_grupos[grupo] }}</a>
+                <ul class="dropdown-menu">
         {% endif %}
 
         <li>
@@ -26,28 +26,26 @@
                 {% endif %}
             </button>
         </li>
-
-        {% else %}
+    {% else %}
         {% if grupo_anterior %}
-        {% set grupo_anterior = '' %}
-    </ul>
-</li>
+            {% set grupo_anterior = '' %}
+            </ul>
+            </li>
+        {% endif %}
+        <li class="nav-item">
+            <button class="nav-link {{ pill.class }} {{ pill.active }}"
+                    onClick="fnjs_update_div('#main','{{ pill.pag_lst }}');" title="{{ pill.explicacion }}">
+                {% if pill.ver_orden %}
+                    {{ pill.orden }}.- {{ pill.text }}
+                {% else %}
+                    {{ pill.text }}
+                {% endif %}
+                {% if pill.num %}
+                    <span class="badge rounded-pill bg-danger">{{ pill.num }}</span>
+                {% endif %}
+            </button>
+        </li>
     {% endif %}
-
-    <li class="nav-item">
-        <button class="nav-link {{ pill.class }} {{ pill.active }}"
-                onClick="fnjs_update_div('#main','{{ pill.pag_lst }}');" title="{{ pill.explicacion }}">
-            {% if pill.ver_orden %}
-                {{ pill.orden }}.- {{ pill.text }}
-            {% else %}
-                {{ pill.text }}
-            {% endif %}
-            {% if pill.num %}
-                <span class="badge rounded-pill bg-danger">{{ pill.num }}</span>
-            {% endif %}
-        </button>
-    </li>
-{% endif %}
   {% endfor %}
 
 

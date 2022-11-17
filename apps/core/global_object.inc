@@ -79,7 +79,7 @@ $oConexion = new DBConnection($config);
 $oDBP = $oConexion->getPDO();
 
 
-// Conexión al servicdor davical (calendarios caldav).
+// Conexión al servidor davical (calendarios caldav).
 $oConfigDB = new ConfigDB('davical');
 $config = $oConfigDB->getEsquema('public');
 $oConexion = new DBConnection($config);

@@ -22,7 +22,7 @@
 
 <div id="cargando">{{ "Cargando..."|trans|raw }}</div>
 <!-- Page preferencias. Al final para no cambiar los pargenes de content -->
-<div id="preferencias" style="margin: 2cm;">
+<div id="preferencias" style="margin: 2cm;"></div>
 
 <!-- Custom scripts for all pages-->
 {# solo debe cargarse un vez, sino hay conflicto con los dropdown bootsrtap #}
@@ -33,5 +33,4 @@
         // cargar lista pendientes:
         fnjs_update_div('#main', '{{ pagina_inicio }}');
     };
-
 </script>

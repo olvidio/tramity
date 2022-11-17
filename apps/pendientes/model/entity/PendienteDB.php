@@ -784,7 +784,7 @@ class PendienteDB extends core\ClasePropiedades
      *
      * @return string sencargado
      */
-    function getEncargado()
+    public function getEncargado(): string
     {
         if (!isset($this->sencargado) && !$this->bLoaded) {
             $this->DBCargar();

@@ -157,8 +157,7 @@ $a_cabeceras = array(ucfirst(_("protocolo")),
 
 // para los ctr quitar columna oficina y calendario
 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-    unset($a_cabeceras[5]);
-    unset($a_cabeceras[7]);
+    unset($a_cabeceras[5], $a_cabeceras[7]);
 }
 
 // Fetch all todos
@@ -188,9 +187,9 @@ $t = 0;
 $oPermisoregistro = new PermRegistro();
 foreach ($cPendientes as $oPendiente) {
     $calendario = $oPendiente->getCalendario();
-    $id_encargado = $oPendiente->getEncargado();
+    $id_encargado = $oPendiente->getEncargado(); // es un string
     $perm_detalle = $oPermisoregistro->permiso_detalle($oPendiente, 'detalle');
-    if (!empty($Q_encargado) && $id_encargado != $Q_encargado) {
+    if (!empty($Q_encargado) && $id_encargado !== $Q_encargado) {
         continue;
     }
     $encargado = !empty($id_encargado) ? $a_usuarios_oficina[$id_encargado] : '';
@@ -229,7 +228,7 @@ foreach ($cPendientes as $oPendiente) {
             if (is_array($a_exdates)) {
                 foreach ($a_exdates as $icalprop) {
                     // si hay más de uno separados por coma
-                    $a_fechas = preg_split('/,/', $icalprop->content);
+                    $a_fechas = explode(',', $icalprop->content);
                     foreach ($a_fechas as $f_ex) {
                         $oF_exception = new DateTimeLocal($f_ex);
                         if ($oF_recurrente == $oF_exception) {

@@ -644,9 +644,9 @@ class Pendiente
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getEncargado()
+    public function getEncargado(): string
     {
         if (!isset($this->encargado) && !$this->bLoaded) {
             $this->Carregar();
@@ -655,9 +655,9 @@ class Pendiente
     }
 
     /**
-     * @param mixed $encargado
+     * @param string $encargado
      */
-    public function setEncargado($encargado)
+    public function setEncargado(string $encargado): void
     {
         $this->encargado = $encargado;
     }
