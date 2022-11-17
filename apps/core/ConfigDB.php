@@ -2,8 +2,6 @@
 
 namespace core;
 
-/* canvis per veure si els posa al seu lloc */
-
 /**
  * Básicamente la conexión a la base de datos, con los passwd para cada esquema.
  * @author dani
@@ -44,7 +42,7 @@ class ConfigDB
     {
         // Las bases de datos de pruebas y producción están en el mismo cluster, y 
         // por tanto los usuarios son los mismos. Hay que ponerlo en los dos ficheros:
-        // Pero OJO: la parte de definicion de host y dbname son diferentes!!
+        // Pero OJO: la parte de definición de host y dbname son diferentes!!
 
         $this->addEsquemaProduccion($database, $esquema, $esquema_pwd);
         $this->addEsquemaPruebas($database, $esquema, $esquema_pwd);
