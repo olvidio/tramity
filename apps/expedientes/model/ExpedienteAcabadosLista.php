@@ -5,7 +5,6 @@ namespace expedientes\model;
 use core\ConfigGlobal;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use web\Hash;
 
 
 class ExpedienteAcabadosLista
@@ -27,18 +26,20 @@ class ExpedienteAcabadosLista
 
         $oFormatoLista = new FormatoLista();
         $oFormatoLista->setPresentacion(5);
-        $oFormatoLista->setColumnaModVisible(TRUE);
         $oFormatoLista->setColumnaVerVisible(TRUE);
+        $oFormatoLista->setColumnaModVisible(TRUE);
         $oFormatoLista->setColumnaFIniVisible(TRUE);
         $oFormatoLista->setPaginaMod($pagina_mod);
         $oFormatoLista->setPaginaVer($pagina_ver);
-        /*
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            $a_cosas = ['filtro' => $this->filtro];
-            $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
-            $oFormatoLista->setPaginaNueva($pagina_nueva);
+            $oFormatoLista->setColumnaVerVisible(FALSE);
+            /*
+                $a_cosas = ['filtro' => $this->filtro];
+                $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
+                $oFormatoLista->setPaginaNueva($pagina_nueva);
+            */
         }
-        */
+
         if (!empty($this->aWhere)) {
             $gesExpedientes = new GestorExpediente();
             $this->aWhere['_ordre'] = 'id_expediente';
