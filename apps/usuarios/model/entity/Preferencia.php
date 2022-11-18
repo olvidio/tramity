@@ -183,7 +183,7 @@ class Preferencia extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -221,7 +221,7 @@ class Preferencia extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -251,8 +251,6 @@ class Preferencia extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_item de Preferencia
-     *
      * @param integer iid_item
      */
     function setId_item($iid_item)
@@ -263,8 +261,6 @@ class Preferencia extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_usuario de Preferencia
-     *
      * @param integer iid_usuario='' optional
      */
     function setId_usuario($iid_usuario = '')
@@ -273,8 +269,6 @@ class Preferencia extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut stipo de Preferencia
-     *
      * @param string stipo='' optional
      */
     function setTipo($stipo = '')
@@ -283,8 +277,6 @@ class Preferencia extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut spreferencia de Preferencia
-     *
      * @param string spreferencia='' optional
      */
     function setPreferencia($spreferencia = '')
@@ -314,7 +306,7 @@ class Preferencia extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */

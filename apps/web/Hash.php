@@ -430,7 +430,6 @@ class Hash
     }
 
     /**
-     *
      * @param array $aCampos
      * @param string $valor 'sin_valor' Para no tener en cuenta los valores de los campos en el hash
      * @return array  'hash' =>

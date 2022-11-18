@@ -323,7 +323,7 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -361,7 +361,7 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -436,8 +436,6 @@ class ExpedienteDB extends ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_expediente de ExpedienteDB
-     *
      * @param integer iid_expediente
      */
     function setId_expediente($iid_expediente)
@@ -446,8 +444,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_tramite de ExpedienteDB
-     *
      * @param integer iid_tramite='' optional
      */
     function setId_tramite($iid_tramite = '')
@@ -458,8 +454,6 @@ class ExpedienteDB extends ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iponente de ExpedienteDB
-     *
      * @param integer iponente='' optional
      */
     function setPonente($iponente = '')
@@ -468,8 +462,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut a_resto_oficinas de ExpedienteDB
-     *
      * @param array a_resto_oficinas
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
@@ -485,8 +477,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sasunto de ExpedienteDB
-     *
      * @param string sasunto='' optional
      */
     function setAsunto($sasunto = '')
@@ -495,8 +485,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sentradilla de ExpedienteDB
-     *
      * @param string sentradilla='' optional
      */
     function setEntradilla($sentradilla = '')
@@ -505,8 +493,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut scomentarios de ExpedienteDB
-     *
      * @param string scomentarios='' optional
      */
     function setComentarios($scomentarios = '')
@@ -515,8 +501,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iprioridad de ExpedienteDB
-     *
      * @param integer iprioridad='' optional
      */
     function setPrioridad($iprioridad = '')
@@ -525,7 +509,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_contestar de ExpedienteDB
      * Si df_contestar es string, y convert=TRUE se convierte usando el formato DateTimeLocal->getFormat().
      * Si convert es FALSE, df_contestar debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -543,8 +526,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iestado de ExpedienteDB
-     *
      * @param integer iestado='' optional
      */
     function setEstado($iestado = '')
@@ -553,7 +534,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_ini_circulacion de ExpedienteDB
      * Si df_ini_circulacion es string, y convert=TRUE se convierte usando el formato DateTimeLocal->getFormat().
      * Si convert es FALSE, df_ini_circulacion debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -571,7 +551,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_reunion de ExpedienteDB
      * Si df_reunion es string, y convert=TRUE se convierte usando el formato DateTimeLocal->getFormat().
      * Si convert es FALSE, df_reunion debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -589,7 +568,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_aprobacion de ExpedienteDB
      * Si df_aprobacion es string, y convert=TRUE se convierte usando el formato DateTimeLocal->getFormat().
      * Si convert es FALSE, df_aprobacion debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -607,8 +585,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ivida de ExpedienteDB
-     *
      * @param integer ivida='' optional
      */
     function setVida($ivida = '')
@@ -617,8 +593,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut a_firmas_oficina de ExpedienteDB
-     *
      * @param array a_firmas_oficina
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
@@ -634,8 +608,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ivisibilidad de ExpedienteDB
-     *
      * @param integer ivisibilidad='' optional
      */
     function setVisibilidad($ivisibilidad = '')
@@ -644,7 +616,7 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -851,8 +823,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut json_antecedentes de ExpedienteDB
-     *
      * @param object JSON json_antecedentes
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
@@ -892,8 +862,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut json_acciones de ExpedienteDB
-     *
      * @param object JSON json_acciones
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
@@ -1027,8 +995,6 @@ class ExpedienteDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut json_preparar de ExpedienteDB
-     *
      * @param object JSON json_preparar
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.

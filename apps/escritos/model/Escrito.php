@@ -45,7 +45,6 @@ class Escrito extends EscritoDB
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
-     *
      * @param integer|array iid_escrito
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */

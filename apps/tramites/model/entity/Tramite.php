@@ -189,7 +189,7 @@ class Tramite extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -227,7 +227,7 @@ class Tramite extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -258,8 +258,6 @@ class Tramite extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_tramite de Tramite
-     *
      * @param integer iid_tramite
      */
     function setId_tramite($iid_tramite)
@@ -270,8 +268,6 @@ class Tramite extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut stramite de Tramite
-     *
      * @param string stramite='' optional
      */
     function setTramite($stramite = '')
@@ -280,8 +276,6 @@ class Tramite extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iorden de Tramite
-     *
      * @param integer iorden='' optional
      */
     function setOrden($iorden = '')
@@ -290,8 +284,6 @@ class Tramite extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sbreve de Tramite
-     *
      * @param string sbreve='' optional
      */
     function setBreve($sbreve = '')
@@ -321,7 +313,7 @@ class Tramite extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */

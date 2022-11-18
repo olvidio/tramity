@@ -283,7 +283,7 @@ class EntradaDB extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -321,7 +321,7 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -393,8 +393,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_entrada de EntradaDB
-     *
      * @param integer iid_entrada
      */
     function setId_entrada($iid_entrada)
@@ -406,8 +404,6 @@ class EntradaDB extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_entrada_compartida de EntradaDB
-     *
      * @param integer iid_entrada_compartida
      */
     function setId_entrada_compartida($iid_entrada_compartida)
@@ -416,8 +412,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut imodo_entrada de EntradaDB
-     *
      * @param integer imodo_entrada='' optional
      */
     function setModo_entrada($imodo_entrada = '')
@@ -426,8 +420,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sasunto_entrada de EntradaDB
-     *
      * @param string sasunto_entrada='' optional
      */
     function setAsunto_entrada($sasunto_entrada = '')
@@ -436,8 +428,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iponente de EntradaDB
-     *
      * @param integer iponente='' optional
      */
     function setPonente($iponente = '')
@@ -446,8 +436,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut a_resto_oficinas de EntradaDB
-     *
      * @param array a_resto_oficinas
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
@@ -463,8 +451,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sasunto de EntradaDB
-     *
      * @param string sasunto='' optional
      */
     function setAsunto($sasunto = '')
@@ -473,7 +459,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_entrada de EntradaDB
      * Si df_entrada es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_entrada debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -491,8 +476,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdetalle de EntradaDB
-     *
      * @param string sdetalle='' optional
      */
     function setDetalle($sdetalle = '')
@@ -501,8 +484,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut icategoria de EntradaDB
-     *
      * @param integer icategoria='' optional
      */
     function setCategoria($icategoria = '')
@@ -511,8 +492,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ivisibilidad de EntradaDB
-     *
      * @param integer ivisibilidad='' optional
      */
     function setVisibilidad($ivisibilidad = '')
@@ -521,7 +500,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_contestar de EntradaDB
      * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_contestar debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -539,8 +517,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut bbypass de EntradaDB
-     *
      * @param boolean bbypass='f' optional
      */
     function setBypass($bbypass = 'f')
@@ -549,8 +525,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iestado de EntradaDB
-     *
      * @param integer iestado
      */
     function setEstado($iestado)
@@ -559,8 +533,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sanulado de EntradaDB
-     *
      * @param integer sanulado
      */
     function setAnulado($sanulado)
@@ -569,8 +541,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iencargado de EntradaDB
-     *
      * @param integer iencargado
      */
     function setEncargado($iencargado)
@@ -579,7 +549,7 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -679,8 +649,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut json_visto de EntradaDB
-     *
      * @param object JSON json_visto
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
@@ -864,8 +832,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut json_prot_origen de EntradaDB
-     *
      * @param object JSON json_prot_origen
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
@@ -917,8 +883,6 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut json_prot_ref de EntradaDB
-     *
      * @param object JSON json_prot_ref
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.

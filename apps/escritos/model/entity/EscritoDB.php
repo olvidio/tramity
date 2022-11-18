@@ -383,7 +383,7 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -425,7 +425,7 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -514,8 +514,6 @@ class EscritoDB extends core\ClasePropiedades
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_escrito de EscritoDB
-     *
      * @param integer iid_escrito
      */
     function setId_escrito($iid_escrito)
@@ -526,8 +524,6 @@ class EscritoDB extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut a_id_grupos de EscritoDB
-     *
      * @param array a_id_grupos
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
@@ -543,8 +539,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut a_destinos de EscritoDB
-     *
      * @param array a_destinos
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
@@ -562,8 +556,6 @@ class EscritoDB extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut sasunto de EscritoDB
-     *
      * @param string sasunto='' optional
      */
     function setAsunto($sasunto = '')
@@ -572,8 +564,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdetalle de EscritoDB
-     *
      * @param string sdetalle='' optional
      */
     function setDetalle($sdetalle = '')
@@ -582,8 +572,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut icreador de EscritoDB
-     *
      * @param integer icreador='' optional
      */
     function setCreador($icreador = '')
@@ -592,8 +580,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut a_resto_oficinas de EscritoDB
-     *
      * @param array a_resto_oficinas
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
@@ -609,8 +595,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut scomentarios de EscritoDB
-     *
      * @param string scomentarios='' optional
      */
     function setComentarios($scomentarios = '')
@@ -619,7 +603,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_aprobacion de EscritoDB
      * Si df_aprobacion es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_aprobacion debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -637,7 +620,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_escrito de EscritoDB
      * Si df_escrito es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_escrito debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -655,7 +637,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_contestar de EscritoDB
      * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_contestar debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -673,8 +654,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut icategoria de EscritoDB
-     *
      * @param integer icategoria='' optional
      */
     function setCategoria($icategoria = '')
@@ -683,8 +662,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ivisibilidad de EscritoDB
-     *
      * @param integer ivisibilidad='' optional
      */
     function setVisibilidad($ivisibilidad = '')
@@ -693,8 +670,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ivisibilidad_dst de EscritoDB
-     *
      * @param integer ivisibilidad_dst='' optional
      */
     function setVisibilidad_dst($ivisibilidad_dst = '')
@@ -703,8 +678,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iaccion de EscritoDB
-     *
      * @param integer iaccion='' optional
      */
     function setAccion($iaccion = '')
@@ -713,8 +686,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut imodo_envio de EscritoDB
-     *
      * @param integer imodo_envio='' optional
      */
     function setModo_envio($imodo_envio = '')
@@ -741,8 +712,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iok de EscritoDB
-     *
      * @param integer iok
      */
     function setOk($iok)
@@ -751,8 +720,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut itipo_doc de EscritoDB
-     *
      * @param integer itipo_doc='' optional
      */
     function setTipo_doc($itipo_doc = '')
@@ -761,8 +728,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut banulado de EscritoDB
-     *
      * @param boolean banulado='f' optional
      */
     function setAnulado($banulado = 'f')
@@ -771,8 +736,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdescripcion de EscritoDB
-     *
      * @param string sdescripcion='' optional
      */
     function setDescripcion($sdescripcion = '')
@@ -781,7 +744,7 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -917,8 +880,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut json_prot_local de EscritoDB
-     *
      * @param object JSON json_prot_local
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
@@ -957,8 +918,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut json_prot_destino de EscritoDB
-     *
      * @param object JSON json_prot_destino
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
@@ -997,8 +956,6 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut json_prot_ref de EscritoDB
-     *
      * @param object JSON json_prot_ref
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.

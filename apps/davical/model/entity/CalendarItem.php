@@ -361,7 +361,7 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -399,7 +399,7 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -495,8 +495,6 @@ class CalendarItem extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iuser_no de CalendarItem
-     *
      * @param integer iuser_no
      */
     function setUser_no($iuser_no)
@@ -505,8 +503,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdav_name de CalendarItem
-     *
      * @param string sdav_name
      */
     function setDav_name($sdav_name)
@@ -517,8 +513,6 @@ class CalendarItem extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut sdav_etag de CalendarItem
-     *
      * @param string sdav_etag='' optional
      */
     function setDav_etag($sdav_etag = '')
@@ -527,8 +521,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut suid de CalendarItem
-     *
      * @param string suid='' optional
      */
     function setUid($suid = '')
@@ -537,7 +529,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut dcreated de CalendarItem
      * Si dcreated es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, dcreated debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -555,7 +546,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut dlast_modified de CalendarItem
      * Si dlast_modified es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, dlast_modified debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -573,7 +563,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ddtstamp de CalendarItem
      * Si ddtstamp es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, ddtstamp debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -591,7 +580,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ddtstart de CalendarItem
      * Si ddtstart es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, ddtstart debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -609,7 +597,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ddtend de CalendarItem
      * Si ddtend es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, ddtend debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -627,7 +614,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ddue de CalendarItem
      * Si ddue es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, ddue debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -645,8 +631,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ssummary de CalendarItem
-     *
      * @param string ssummary='' optional
      */
     function setSummary($ssummary = '')
@@ -655,8 +639,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut slocation de CalendarItem
-     *
      * @param string slocation='' optional
      */
     function setLocation($slocation = '')
@@ -665,8 +647,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdescription de CalendarItem
-     *
      * @param string sdescription='' optional
      */
     function setDescription($sdescription = '')
@@ -675,8 +655,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ipriority de CalendarItem
-     *
      * @param integer ipriority='' optional
      */
     function setPriority($ipriority = '')
@@ -685,8 +663,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sclass de CalendarItem
-     *
      * @param string sclass='' optional
      */
     function setClass($sclass = '')
@@ -695,8 +671,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut stransp de CalendarItem
-     *
      * @param string stransp='' optional
      */
     function setTransp($stransp = '')
@@ -705,8 +679,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut srrule de CalendarItem
-     *
      * @param string srrule='' optional
      */
     function setRrule($srrule = '')
@@ -715,8 +687,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut surl de CalendarItem
-     *
      * @param string surl='' optional
      */
     function setUrl($surl = '')
@@ -725,8 +695,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ipercent_complete de CalendarItem
-     *
      * @param float ipercent_complete='' optional
      */
     function setPercent_complete($ipercent_complete = '')
@@ -735,8 +703,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut stz_id de CalendarItem
-     *
      * @param string stz_id='' optional
      */
     function setTz_id($stz_id = '')
@@ -745,8 +711,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sstatus de CalendarItem
-     *
      * @param string sstatus='' optional
      */
     function setStatus($sstatus = '')
@@ -755,7 +719,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut dcompleted de CalendarItem
      * Si dcompleted es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, dcompleted debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -773,8 +736,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut idav_id de CalendarItem
-     *
      * @param integer idav_id='' optional
      */
     function setDav_id($idav_id = '')
@@ -783,8 +744,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut icollection_id de CalendarItem
-     *
      * @param integer icollection_id='' optional
      */
     function setCollection_id($icollection_id = '')
@@ -793,7 +752,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut dfirst_instance_start de CalendarItem
      * Si dfirst_instance_start es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, dfirst_instance_start debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -811,7 +769,6 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut dlast_instance_end de CalendarItem
      * Si dlast_instance_end es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, dlast_instance_end debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -829,7 +786,7 @@ class CalendarItem extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()

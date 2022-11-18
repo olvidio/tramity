@@ -269,8 +269,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut snom_tabla de DatosCampo
-     *
      * @param string snom_tabla
      */
     function setNom_tabla($snom_tabla)
@@ -279,8 +277,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut snom_camp de DatosCampo
-     *
      * @param string snom_camp
      */
     function setNom_camp($snom_camp)
@@ -299,8 +295,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut setiqueta de DatosCampo
-     *
      * @param string setiqueta
      */
     function setEtiqueta($setiqueta)
@@ -322,8 +316,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut baviso de DatosCampo
-     *
      * @param boolean baviso
      */
     function setAviso($baviso)
@@ -342,8 +334,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut stipodb de DatosCampo
-     *
      * @param string stipodb
      */
     function setTipoDb($stipodb)
@@ -362,8 +352,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut stipo de DatosCampo
-     *
      * @param string stipo
      */
     function setTipo($stipo)
@@ -382,8 +370,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut sargument de DatosCampo
-     *
      * @param string sargument
      */
     function setArgument($sargument)
@@ -402,8 +388,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut sargument2 de DatosCampo
-     *
      * @param string sargument2
      */
     function setArgument2($sargument2)
@@ -422,8 +406,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut sargument3 de DatosCampo
-     *
      * @param string sargument3
      */
     function setArgument3($sargument3)
@@ -442,8 +424,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut saccion de DatosCampo
-     *
      * @param string saccion
      */
     function setAccion($saccion)
@@ -462,8 +442,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut sdepende de DatosCampo
-     *
      * @param string sdepende
      */
     function setDepende($sdepende)
@@ -482,8 +460,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut alista de DatosCampo
-     *
      * @param array alista
      */
     function setLista($alista)
@@ -502,8 +478,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut sRegExp de DatosCampo
-     *
      * @param string sRegExp
      */
     function setRegExp($sRegExp)
@@ -522,8 +496,6 @@ class DatosCampo
     }
 
     /**
-     * estableix el valor de l'atribut sRegExpText de DatosCampo
-     *
      * @param string sRegExpText
      */
     function setRegExpText($sRegExpText)

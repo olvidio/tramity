@@ -199,7 +199,7 @@ class Usuario extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -243,7 +243,7 @@ class Usuario extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -275,8 +275,6 @@ class Usuario extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_usuario de Usuario
-     *
      * @param integer iid_usuario
      */
     function setId_usuario($iid_usuario)
@@ -287,8 +285,6 @@ class Usuario extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut susuario de Usuario
-     *
      * @param string susuario='' optional
      */
     function setUsuario($susuario = '')
@@ -297,8 +293,6 @@ class Usuario extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_cargo_preferido de Usuario
-     *
      * @param integer iid_cargo_preferido='' optional
      */
     function setId_cargo_preferido($iid_cargo_preferido = '')
@@ -307,8 +301,6 @@ class Usuario extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut spassword de Usuario
-     *
      * @param integer spassword='' optional
      */
     function setPassword($spassword = '')
@@ -317,8 +309,6 @@ class Usuario extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut semail de Usuario
-     *
      * @param string semail='' optional
      */
     function setEmail($semail = '')
@@ -327,8 +317,6 @@ class Usuario extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut snom_usuario de Usuario
-     *
      * @param string snom_usuario='' optional
      */
     function setNom_usuario($snom_usuario = '')
@@ -358,7 +346,7 @@ class Usuario extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */

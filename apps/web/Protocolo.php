@@ -62,7 +62,6 @@ class Protocolo
     }
 
     /**
-     *
      * @param stdClass $oProt
      */
     public function setJson($oProt)

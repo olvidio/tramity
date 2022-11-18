@@ -170,7 +170,7 @@ class ConfigSchema extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -210,7 +210,7 @@ class ConfigSchema extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -238,8 +238,6 @@ class ConfigSchema extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sparametro de ConfigSchema
-     *
      * @param string sparametro
      */
     function setParametro($sparametro)
@@ -251,8 +249,6 @@ class ConfigSchema extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut svalor de ConfigSchema
-     *
      * @param string svalor='' optional
      */
     function setValor($svalor = '')
@@ -278,7 +274,7 @@ class ConfigSchema extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */

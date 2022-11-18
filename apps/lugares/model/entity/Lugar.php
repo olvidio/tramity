@@ -257,7 +257,7 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -295,7 +295,7 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -334,8 +334,6 @@ class Lugar extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_lugar de Lugar
-     *
      * @param integer iid_lugar
      */
     function setId_lugar($iid_lugar)
@@ -344,8 +342,6 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ssigla de Lugar
-     *
      * @param string ssigla='' optional
      */
     function setSigla($ssigla = '')
@@ -356,8 +352,6 @@ class Lugar extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut sdl de Lugar
-     *
      * @param string sdl='' optional
      */
     function setDl($sdl = '')
@@ -366,8 +360,6 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sregion de Lugar
-     *
      * @param string sregion='' optional
      */
     function setRegion($sregion = '')
@@ -376,8 +368,6 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut snombre de Lugar
-     *
      * @param string snombre='' optional
      */
     function setNombre($snombre = '')
@@ -386,8 +376,6 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut stipo_ctr de Lugar
-     *
      * @param string stipo_ctr='' optional
      */
     function setTipo_ctr($stipo_ctr = '')
@@ -396,8 +384,6 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut imodo_envio de Lugar
-     *
      * @param integer imodo_envio='' optional
      */
     function setModo_envio($imodo_envio = '')
@@ -406,8 +392,6 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut splataforma de Lugar
-     *
      * @param string splataforma='' optional
      */
     function setPlataforma($splataforma = '')
@@ -416,8 +400,6 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ipub_key de Lugar
-     *
      * @param integer ipub_key='' optional
      */
     function setPub_key($ipub_key = '')
@@ -426,8 +408,6 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut se_mail de Lugar
-     *
      * @param string se_mail='' optional
      */
     function setE_mail($se_mail = '')
@@ -436,8 +416,6 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut banulado de Lugar
-     *
      * @param boolean banulado='f' optional
      */
     function setAnulado($banulado = 'f')
@@ -467,7 +445,7 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */

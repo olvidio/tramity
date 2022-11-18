@@ -192,7 +192,7 @@ class EntidadDB extends ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null): bool
@@ -232,7 +232,7 @@ class EntidadDB extends ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -267,8 +267,6 @@ class EntidadDB extends ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_entidad de EntidadDB
-     *
      * @param integer iid_entidad
      */
     function setId_entidad($iid_entidad)
@@ -277,8 +275,6 @@ class EntidadDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut snombre de EntidadDB
-     *
      * @param string snombre='' optional
      */
     function setNombre($snombre = '')
@@ -287,8 +283,6 @@ class EntidadDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sschema de EntidadDB
-     *
      * @param string sschema='' optional
      */
     public function setSchema($sschema = ''): void
@@ -297,8 +291,6 @@ class EntidadDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut itipo de EntidadDB
-     *
      * @param integer itipo='' optional
      */
     public function setTipo($itipo = ''): void
@@ -307,8 +299,6 @@ class EntidadDB extends ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut banulado de EntidadDB
-     *
      * @param boolean banulado='f' optional
      */
     public function setAnulado($banulado = 'f'): void
@@ -317,7 +307,7 @@ class EntidadDB extends ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     private function setNullAllAtributes()

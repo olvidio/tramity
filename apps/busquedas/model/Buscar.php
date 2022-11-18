@@ -490,7 +490,6 @@ class Buscar
     }
 
     /**
-     * estableix el valor de l'atribut df_min
      * Si df_valor es string, y convert=true se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es false, df_valor debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -938,7 +937,6 @@ class Buscar
     }
 
     /**
-     * estableix el valor de l'atribut df_max
      * Si df_valor es string, y convert=true se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es false, df_valor debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *

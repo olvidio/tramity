@@ -179,7 +179,7 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -224,7 +224,7 @@ class EntradaBypass extends Entrada
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -310,8 +310,6 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * estableix el valor de l'atribut iid_entrada de EntradaBypass
-     *
      * @param integer iid_entrada='' optional
      */
     function setId_entrada($iid_entrada = '')
@@ -322,8 +320,6 @@ class EntradaBypass extends Entrada
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut sdescripcion de EntradaBypass
-     *
      * @param string sdescripcion='' optional
      */
     function setDescripcion($sdescripcion = '')
@@ -332,8 +328,6 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * estableix el valor de l'atribut a_id_grupos de EntradaBypass
-     *
      * @param array a_id_grupos
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
@@ -349,8 +343,6 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * estableix el valor de l'atribut a_destinos de EntradaBypass
-     *
      * @param array a_destinos
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
@@ -380,8 +372,6 @@ class EntradaBypass extends Entrada
     }
     */
     /**
-     * estableix el valor de l'atribut iid_item de EntradaBypass
-     *
      * @param integer iid_item
      */
     /*
@@ -391,7 +381,6 @@ class EntradaBypass extends Entrada
     */
 
     /**
-     * estableix el valor de l'atribut df_salida de EntradaBypass
      * Si df_salida es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_salida debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -409,7 +398,7 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -667,8 +656,6 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * estableix el valor de l'atribut json_prot_destino de EntradaBypass
-     *
      * @param object JSON json_prot_destino
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.

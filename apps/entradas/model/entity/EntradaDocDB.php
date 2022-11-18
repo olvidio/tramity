@@ -194,7 +194,7 @@ class EntradaDocDB extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -232,7 +232,7 @@ class EntradaDocDB extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -262,8 +262,6 @@ class EntradaDocDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_entrada de EntradaDocDB
-     *
      * @param integer iid_entrada
      */
     function setId_entrada($iid_entrada)
@@ -274,8 +272,6 @@ class EntradaDocDB extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut itipo_doc de EntradaDocDB
-     *
      * @param integer itipo_doc='' optional
      */
     function setTipo_doc($itipo_doc = '')
@@ -284,7 +280,6 @@ class EntradaDocDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_doc de EntradaDocDB
      * Si df_doc es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_doc debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -323,7 +318,7 @@ class EntradaDocDB extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */

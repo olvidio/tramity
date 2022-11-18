@@ -325,7 +325,6 @@ class Entrada extends EntradaDB
     }
 
     /**
-     * estableix el valor de l'atribut df_doc de EntradaDB
      * Si df_doc es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_entrada debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *

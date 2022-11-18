@@ -257,7 +257,7 @@ class EntradaCompartida extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -295,7 +295,7 @@ class EntradaCompartida extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -345,8 +345,6 @@ class EntradaCompartida extends core\ClasePropiedades
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_entrada_compartida de EntradaCompartida
-     *
      * @param integer iid_entrada_compartida
      */
     function setId_entrada_compartida($iid_entrada_compartida)
@@ -355,8 +353,6 @@ class EntradaCompartida extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdescripcion de EntradaCompartida
-     *
      * @param string sdescripcion='' optional
      */
     function setDescripcion($sdescripcion = '')
@@ -365,8 +361,6 @@ class EntradaCompartida extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut a_destinos de EntradaCompartida
-     *
      * @param array a_destinos
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
@@ -382,7 +376,6 @@ class EntradaCompartida extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_documento de EntradaCompartida
      * Si df_documento es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_documento debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -400,8 +393,6 @@ class EntradaCompartida extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut icategoria de EntradaCompartida
-     *
      * @param integer icategoria='' optional
      */
     function setCategoria($icategoria = '')
@@ -410,8 +401,6 @@ class EntradaCompartida extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sasunto_entrada de EntradaCompartida
-     *
      * @param string sasunto_entrada='' optional
      */
     function setAsunto_entrada($sasunto_entrada = '')
@@ -422,7 +411,6 @@ class EntradaCompartida extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut df_entrada de EntradaCompartida
      * Si df_entrada es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_entrada debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -440,8 +428,6 @@ class EntradaCompartida extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sanulado de EntradaCompartida
-     *
      * @param string sanulado='' optional
      */
     function setAnulado($sanulado = '')
@@ -452,7 +438,7 @@ class EntradaCompartida extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -575,8 +561,6 @@ class EntradaCompartida extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut json_prot_origen de EntradaCompartida
-     *
      * @param object JSON json_prot_origen
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
@@ -654,8 +638,6 @@ class EntradaCompartida extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut json_prot_destino de EntradaCompartida
-     *
      * @param object JSON json_prot_destino
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
@@ -720,8 +702,6 @@ class EntradaCompartida extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut json_prot_ref de EntradaCompartida
-     *
      * @param object JSON json_prot_ref
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.

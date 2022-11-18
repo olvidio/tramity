@@ -208,7 +208,7 @@ class EntradaAdjunto extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -259,7 +259,7 @@ class EntradaAdjunto extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -289,8 +289,6 @@ class EntradaAdjunto extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_item de EntradaAdjunto
-     *
      * @param integer iid_item
      */
     function setId_item($iid_item)
@@ -299,8 +297,6 @@ class EntradaAdjunto extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_entrada de EntradaAdjunto
-     *
      * @param integer iid_entrada
      */
     function setId_entrada($iid_entrada)
@@ -311,8 +307,6 @@ class EntradaAdjunto extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut snom de EntradaAdjunto
-     *
      * @param string snom='' optional
      */
     function setNom($snom = '')
@@ -321,7 +315,6 @@ class EntradaAdjunto extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut adjunto de EntradaAdjunto
      * per usar amb els valors directes de la DB.
      *
      * @param string adjunto='' optional (ja convertit a hexadecimal)
@@ -332,7 +325,7 @@ class EntradaAdjunto extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -457,8 +450,6 @@ class EntradaAdjunto extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut adjunto de EntradaAdjunto
-     *
      * @param string adjunto='' optional
      */
     function setAdjunto($adjunto = '')

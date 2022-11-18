@@ -2,9 +2,12 @@
 
 namespace usuarios\model\entity;
 
-use core;
+use core\ClasePropiedades;
+use core\DatosCampo;
+use core\Set;
 use PDO;
 use PDOException;
+use function core\is_true;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula aux_cargos
@@ -25,7 +28,7 @@ use PDOException;
  * @version 1.0
  * @created 12/11/2020
  */
-class Cargo extends core\ClasePropiedades
+class Cargo extends ClasePropiedades
 {
 
     public const AMBITO_CG = 1;
@@ -63,17 +66,11 @@ class Cargo extends core\ClasePropiedades
      */
     private array $aPrimary_key;
     /**
-     * aDades de Cargo
-     *
-     * @var array
-     */
-    private array $aDades;
-    /**
      * bLoaded de Cargo
      *
      * @var boolean
      */
-    private $bLoaded = FALSE;
+    private bool $bLoaded = FALSE;
     /**
      * Id_cargo de Cargo
      *
@@ -95,9 +92,9 @@ class Cargo extends core\ClasePropiedades
     /**
      * Descripción de Cargo
      *
-     * @var string
+     * @var string|null
      */
-    private string $sdescripcion;
+    private ?string $sdescripcion;
     /**
      * Id_oficina de Cargo
      *
@@ -116,7 +113,6 @@ class Cargo extends core\ClasePropiedades
      * @var boolean
      */
     private bool $bsacd;
-    /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
      * Id_usuario de Cargo
      *
@@ -149,11 +145,9 @@ class Cargo extends core\ClasePropiedades
                     $this->iid_cargo = (int)$val_id;
                 }
             }
-        } else {
-            if (isset($a_id) && $a_id !== '') {
-                $this->iid_cargo = (int)$a_id;
-                $this->aPrimary_key = array('iid_cargo' => $this->iid_cargo);
-            }
+        } else if (isset($a_id) && $a_id !== '') {
+            $this->iid_cargo = (int)$a_id;
+            $this->aPrimary_key = array('iid_cargo' => $this->iid_cargo);
         }
         $this->setoDbl($oDbl);
         $this->setNomTabla('aux_cargos');
@@ -166,7 +160,7 @@ class Cargo extends core\ClasePropiedades
      * Si no hi ha el registre, fa el insert, si hi es fa el update.
      *
      */
-    public function DBGuardar()
+    public function DBGuardar(): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -186,12 +180,12 @@ class Cargo extends core\ClasePropiedades
         $aDades['id_suplente'] = $this->iid_suplente;
         array_walk($aDades, 'core\poner_null');
         //para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
-        if (core\is_true($aDades['director'])) {
+        if (is_true($aDades['director'])) {
             $aDades['director'] = 'true';
         } else {
             $aDades['director'] = 'false';
         }
-        if (core\is_true($aDades['sacd'])) {
+        if (is_true($aDades['sacd'])) {
             $aDades['sacd'] = 'true';
         } else {
             $aDades['sacd'] = 'false';
@@ -212,16 +206,16 @@ class Cargo extends core\ClasePropiedades
                 $sClauError = 'Cargo.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'Cargo.update.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            }
+
+            try {
+                $oDblSt->execute($aDades);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'Cargo.update.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
         } else {
             // INSERT
@@ -231,16 +225,16 @@ class Cargo extends core\ClasePropiedades
                 $sClauError = 'Cargo.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'Cargo.insertar.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            }
+
+            try {
+                $oDblSt->execute($aDades);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'Cargo.insertar.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
             $this->iid_cargo = $oDbl->lastInsertId('aux_cargos_id_cargo_seq');
         }
@@ -249,10 +243,10 @@ class Cargo extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
-    public function DBCargar($que = null)
+    public function DBCargar($que = null): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -270,7 +264,9 @@ class Cargo extends core\ClasePropiedades
                     $this->setAllAtributes($aDades);
                     break;
                 case 'guardar':
-                    if (!$oDblSt->rowCount()) return FALSE;
+                    if (!$oDblSt->rowCount()) {
+                        return FALSE;
+                    }
                     break;
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
@@ -281,21 +277,18 @@ class Cargo extends core\ClasePropiedades
                     }
             }
             return TRUE;
-        } else {
-            return FALSE;
         }
+
+        return FALSE;
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
-    private function setAllAtributes($aDades)
+    private function setAllAtributes(array $aDades): void
     {
-        if (!is_array($aDades)) {
-            return;
-        }
         if (array_key_exists('id_schema', $aDades)) {
             $this->setId_schema($aDades['id_schema']);
         }
@@ -332,21 +325,17 @@ class Cargo extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_cargo de Cargo
-     *
-     * @param integer iid_cargo
+     * @param integer $iid_cargo
      */
-    function setId_cargo($iid_cargo)
+    public function setId_cargo(int $iid_cargo): void
     {
         $this->iid_cargo = $iid_cargo;
     }
 
     /**
-     * estableix el valor de l'atribut iid_ambito de Cargo
-     *
-     * @param integer iid_ambito='' optional
+     * @param integer $iid_ambito
      */
-    function setId_ambito($iid_ambito = '')
+    public function setId_ambito(int $iid_ambito): void
     {
         $this->iid_ambito = $iid_ambito;
     }
@@ -354,58 +343,46 @@ class Cargo extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut scargo de Cargo
-     *
-     * @param string scargo='' optional
+     * @param string $scargo
      */
-    function setCargo($scargo = '')
+    public function setCargo(string $scargo): void
     {
         $this->scargo = $scargo;
     }
 
     /**
-     * estableix el valor de l'atribut sdescripcion de Cargo
-     *
-     * @param string sdescripcion='' optional
+     * @param string|null $sdescripcion
      */
-    function setDescripcion($sdescripcion = '')
+    public function setDescripcion(?string $sdescripcion = ''): void
     {
         $this->sdescripcion = $sdescripcion;
     }
 
     /**
-     * estableix el valor de l'atribut iid_oficina de Cargo
-     *
-     * @param integer iid_oficina='' optional
+     * @param integer $iid_oficina
      */
-    function setId_oficina($iid_oficina = '')
+    public function setId_oficina(int $iid_oficina): void
     {
         $this->iid_oficina = $iid_oficina;
     }
 
     /**
-     * estableix el valor de l'atribut bdirector de Cargo
-     *
-     * @param boolean bdirector='f' optional
+     * @param boolean $bdirector
      */
-    function setDirector($bdirector = 'f')
+    public function setDirector(bool $bdirector = FALSE): void
     {
         $this->bdirector = $bdirector;
     }
 
     /**
-     * estableix el valor de l'atribut bsacd de Cargo
-     *
-     * @param boolean bsacd='f' optional
+     * @param boolean $bsacd ='f'
      */
-    function setSacd($bsacd = 'f')
+    public function setSacd(bool $bsacd = FALSE): void
     {
         $this->bsacd = $bsacd;
     }
 
     /**
-     * estableix el valor de l'atribut iid_usuario de Cargo
-     *
      * @param integer|null $iid_usuario optional
      */
     public function setId_usuario(int $iid_usuario = null): void
@@ -414,8 +391,6 @@ class Cargo extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_suplente de Cargo
-     *
      * @param integer|null $iid_suplente optional
      */
     public function setId_suplente(int $iid_suplente = null): void
@@ -424,17 +399,17 @@ class Cargo extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
-    function setNullAllAtributes()
+    private function setNullAllAtributes(): void
     {
         $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
+        $this->setId_schema();
         $this->setId_cargo('');
         $this->setId_ambito('');
         $this->setCargo('');
-        $this->setDescripcion('');
+        $this->setDescripcion();
         $this->setId_oficina('');
         $this->setDirector('');
         $this->setSacd('');
@@ -448,7 +423,7 @@ class Cargo extends core\ClasePropiedades
      *
      * @return array aPrimary_key
      */
-    function getPrimary_key()
+    public function getPrimary_key(): array
     {
         if (!isset($this->aPrimary_key)) {
             $this->aPrimary_key = array('id_cargo' => $this->iid_cargo);
@@ -460,7 +435,7 @@ class Cargo extends core\ClasePropiedades
      * Estableix las claus primàries de Cargo en un array
      *
      */
-    public function setPrimary_key($a_id = null)
+    public function setPrimary_key($a_id = null): void
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
@@ -481,7 +456,7 @@ class Cargo extends core\ClasePropiedades
      * Elimina el registre de la base de dades corresponent a l'objecte.
      *
      */
-    public function DBEliminar()
+    public function DBEliminar(): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -496,9 +471,9 @@ class Cargo extends core\ClasePropiedades
     /**
      * Recupera l'atribut iid_cargo de Cargo
      *
-     * @return integer iid_cargo
+     * @return integer
      */
-    function getId_cargo()
+    public function getId_cargo(): int
     {
         if (!isset($this->iid_cargo) && !$this->bLoaded) {
             $this->DBCargar();
@@ -509,9 +484,9 @@ class Cargo extends core\ClasePropiedades
     /**
      * Recupera l'atribut iid_ambito de Cargo
      *
-     * @return integer iid_ambito
+     * @return integer
      */
-    function getId_ambito()
+    public function getId_ambito(): int
     {
         if (!isset($this->iid_ambito) && !$this->bLoaded) {
             $this->DBCargar();
@@ -522,9 +497,9 @@ class Cargo extends core\ClasePropiedades
     /**
      * Recupera l'atribut scargo de Cargo
      *
-     * @return string scargo
+     * @return string
      */
-    function getCargo()
+    public function getCargo(): string
     {
         if (!isset($this->scargo) && !$this->bLoaded) {
             $this->DBCargar();
@@ -535,9 +510,9 @@ class Cargo extends core\ClasePropiedades
     /**
      * Recupera l'atribut sdescripcion de Cargo
      *
-     * @return string sdescripcion
+     * @return string|null
      */
-    function getDescripcion()
+    public function getDescripcion(): ?string
     {
         if (!isset($this->sdescripcion) && !$this->bLoaded) {
             $this->DBCargar();
@@ -548,7 +523,7 @@ class Cargo extends core\ClasePropiedades
     /**
      * Recupera l'atribut iid_oficina de Cargo
      *
-     * @return integer iid_oficina
+     * @return integer
      */
     public function getId_oficina(): int
     {
@@ -561,9 +536,9 @@ class Cargo extends core\ClasePropiedades
     /**
      * Recupera l'atribut bdirector de Cargo
      *
-     * @return boolean bdirector
+     * @return boolean
      */
-    function getDirector()
+    public function getDirector(): bool
     {
         if (!isset($this->bdirector) && !$this->bLoaded) {
             $this->DBCargar();
@@ -574,9 +549,9 @@ class Cargo extends core\ClasePropiedades
     /**
      * Recupera l'atribut bsacd de Cargo
      *
-     * @return boolean bsacd
+     * @return boolean
      */
-    function getSacd()
+    public function getSacd(): bool
     {
         if (!isset($this->bsacd) && !$this->bLoaded) {
             $this->DBCargar();
@@ -587,9 +562,9 @@ class Cargo extends core\ClasePropiedades
     /**
      * Recupera l'atribut iid_usuario de Cargo
      *
-     * @return integer iid_usuario
+     * @return integer|null
      */
-    function getId_usuario()
+    public function getId_usuario(): ?int
     {
         if (!isset($this->iid_usuario) && !$this->bLoaded) {
             $this->DBCargar();
@@ -600,9 +575,9 @@ class Cargo extends core\ClasePropiedades
     /**
      * Recupera l'atribut iid_suplente de Cargo
      *
-     * @return integer iid_suplente
+     * @return integer|null
      */
-    function getId_suplente()
+    public function getId_suplente(): ?int
     {
         if (!isset($this->iid_suplente) && !$this->bLoaded) {
             $this->DBCargar();
@@ -614,9 +589,9 @@ class Cargo extends core\ClasePropiedades
      * Retorna una col·lecció d'objectes del tipus DatosCampo
      *
      */
-    function getDatosCampos()
+    public function getDatosCampos(): array
     {
-        $oCargoSet = new core\Set();
+        $oCargoSet = new Set();
 
         $oCargoSet->add($this->getDatosId_ambito());
         $oCargoSet->add($this->getDatosCargo());
@@ -633,12 +608,12 @@ class Cargo extends core\ClasePropiedades
      * Recupera les propietats de l'atribut iid_ambito de Cargo
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosId_ambito()
+    function getDatosId_ambito(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_ambito'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_ambito'));
         $oDatosCampo->setEtiqueta(_("id_ambito"));
         return $oDatosCampo;
     }
@@ -647,12 +622,12 @@ class Cargo extends core\ClasePropiedades
      * Recupera les propietats de l'atribut scargo de Cargo
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosCargo()
+    function getDatosCargo(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'cargo'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'cargo'));
         $oDatosCampo->setEtiqueta(_("cargo"));
         return $oDatosCampo;
     }
@@ -661,12 +636,12 @@ class Cargo extends core\ClasePropiedades
      * Recupera les propietats de l'atribut sdescripcion de Cargo
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosDescripcion()
+    function getDatosDescripcion(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'descripcion'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'descripcion'));
         $oDatosCampo->setEtiqueta(_("descripcion"));
         return $oDatosCampo;
     }
@@ -675,12 +650,12 @@ class Cargo extends core\ClasePropiedades
      * Recupera les propietats de l'atribut iid_oficina de Cargo
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosId_oficina()
+    function getDatosId_oficina(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_oficina'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_oficina'));
         $oDatosCampo->setEtiqueta(_("id_oficina"));
         return $oDatosCampo;
     }
@@ -689,12 +664,12 @@ class Cargo extends core\ClasePropiedades
      * Recupera les propietats de l'atribut bdirector de Cargo
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosDirector()
+    function getDatosDirector(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'director'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'director'));
         $oDatosCampo->setEtiqueta(_("director"));
         return $oDatosCampo;
     }
@@ -703,12 +678,12 @@ class Cargo extends core\ClasePropiedades
      * Recupera les propietats de l'atribut iid_usuario de Cargo
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosId_usuario()
+    function getDatosId_usuario(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_usuario'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_usuario'));
         $oDatosCampo->setEtiqueta(_("id_usuario"));
         return $oDatosCampo;
     }
@@ -717,39 +692,26 @@ class Cargo extends core\ClasePropiedades
      * Recupera les propietats de l'atribut iid_suplente de Cargo
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosId_suplente()
+    function getDatosId_suplente(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_suplente'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_suplente'));
         $oDatosCampo->setEtiqueta(_("id_suplente"));
         return $oDatosCampo;
-    }
-
-    /**
-     * Recupera tots els ATRIBUTOS de Cargo en un array
-     *
-     * @return array aDades
-     */
-    function getTot()
-    {
-        if (!is_array($this->aDades)) {
-            $this->DBCargar('tot');
-        }
-        return $this->aDades;
     }
 
     /**
      * Recupera les propietats de l'atribut bsacd de Cargo
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosSacd()
+    function getDatosSacd(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'sacd'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'sacd'));
         $oDatosCampo->setEtiqueta(_("sacd"));
         return $oDatosCampo;
     }

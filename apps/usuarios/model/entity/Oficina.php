@@ -181,7 +181,7 @@ class Oficina extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -219,7 +219,7 @@ class Oficina extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -249,8 +249,6 @@ class Oficina extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_oficina de Oficina
-     *
      * @param integer iid_oficina
      */
     function setId_oficina($iid_oficina)
@@ -261,8 +259,6 @@ class Oficina extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut ssigla de Oficina
-     *
      * @param string ssigla='' optional
      */
     function setSigla($ssigla = '')
@@ -271,8 +267,6 @@ class Oficina extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iorden de Oficina
-     *
      * @param integer iorden='' optional
      */
     function setOrden($iorden = '')
@@ -302,7 +296,7 @@ class Oficina extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */

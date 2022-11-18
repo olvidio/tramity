@@ -2,6 +2,9 @@
 
 namespace pendientes\model;
 
+// Archivos requeridos por esta url **********************************************
+require_once("/usr/share/awl/inc/iCalendar.php");
+
 use core\Converter;
 use davical\model\CalDAVClient;
 use entradas\model\GestorEntrada;
@@ -15,9 +18,6 @@ use usuarios\model\Visibilidad;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
-
-// Archivos requeridos por esta url **********************************************
-require_once("/usr/share/awl/inc/iCalendar.php");
 
 class Pendiente
 {
@@ -103,11 +103,10 @@ class Pendiente
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
-     * Constructor de la classe.
      *
      * @param string $parent_container (ej: oficina_adl)
-     * @param string $calendario ('resigtro'|'oficina')
-     * @param string $cargo (para obtener la autentificacion, permisos etc. ej: secretaria)
+     * @param string $calendario ('registro'|'oficina')
+     * @param string $cargo (para obtener la autentificación, permisos etc. ej: secretaria)
      * @param string $uid (cuando no es nuevo; para modificarlo)
      */
     function __construct($parent_container, $calendario, $cargo, $uid = FALSE)
@@ -122,7 +121,7 @@ class Pendiente
 
     /* MÉTODOS PÚBLICOS ----------------------------------------------------------*/
 
-    static public function getArrayStatus()
+    public static function getArrayStatus(): array
     {
         return [
             "NEEDS-ACTION" => _("iniciado"),
@@ -142,12 +141,12 @@ class Pendiente
         $id_reg = 0;
         $ref = '';
         //  Registro entradas
-        if (($pos_ini = strpos($uid, 'REN')) !== FALSE && $pos_ini == 0) {
+        if (($pos_ini = strpos($uid, 'REN')) !== FALSE && $pos_ini === 0) {
             $pos = strpos($uid, '-') - 3;
             $id_reg = substr($uid, 3, $pos);
         }
-        // Tambien para los pendientes de oficina:
-        if (($pos_ini = strpos($uid, 'EN')) !== FALSE && $pos_ini == 0) {
+        // También para los pendientes de oficina:
+        if (($pos_ini = strpos($uid, 'EN')) !== FALSE && $pos_ini === 0) {
             $pos = strpos($uid, '-') - 4;
             $id_reg = substr($uid, 4, $pos);
         }
@@ -163,13 +162,13 @@ class Pendiente
                 $oEntrada = $cEntradas[0];
                 $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
 
-                if ($formato == "txt") {
+                if ($formato === 'txt') {
                     $ref = $oProtOrigen->ver_txt();
                 }
-                if ($formato == "object") {
+                if ($formato === 'object') {
                     $ref = $oProtOrigen->getProt();
                 }
-                if ($formato == "array") {
+                if ($formato === 'array') {
                     $ref = (array)$oProtOrigen->getProt();
                 }
             }
@@ -274,7 +273,7 @@ class Pendiente
         $this->setAllAtributes($aDades);
     }
 
-    public function getTodoByUid()
+    public function getTodoByUid(): array
     {
         $base_url = $this->getBaseUrl();
         $pass = $this->getPasswd();
@@ -283,7 +282,7 @@ class Pendiente
         return $cal->GetEntryByUid($this->getUid());
     }
 
-    public function getBaseUrl($parent_container = '')
+    public function getBaseUrl($parent_container = ''): string
     {
         $server_base = $_SESSION['oConfig']->getServerDavical();
         $this->server = $server_base . '/caldav.php';
@@ -295,13 +294,13 @@ class Pendiente
     /**
      * @return string
      */
-    public function getPasswd()
+    public function getPasswd(): string
     {
         return $this->passwd;
     }
 
     /**
-     * @param string $cargo
+     * @param $passwd
      */
     public function setPasswd($passwd)
     {
@@ -355,7 +354,7 @@ class Pendiente
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -1402,7 +1401,6 @@ class Pendiente
             $id_of_ponente = $cOficinas[0]->getId_oficina();
         } else {
             // es un ctr
-            $nom_oficina = $a_container[0];
             $id_of_ponente = Cargo::OFICINA_ESQUEMA;
         }
         return $id_of_ponente;

@@ -195,7 +195,7 @@ class Etiqueta extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -235,7 +235,7 @@ class Etiqueta extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -265,8 +265,6 @@ class Etiqueta extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_etiqueta de Etiqueta
-     *
      * @param integer iid_etiqueta
      */
     function setId_etiqueta($iid_etiqueta)
@@ -275,8 +273,6 @@ class Etiqueta extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut snom_etiqueta de Etiqueta
-     *
      * @param string snom_etiqueta='' optional
      */
     function setNom_etiqueta($snom_etiqueta = '')
@@ -287,8 +283,6 @@ class Etiqueta extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_cargo de Etiqueta
-     *
      * @param integer iid_cargo='' optional
      */
     function setId_cargo($iid_cargo = '')
@@ -297,8 +291,6 @@ class Etiqueta extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut boficina de Etiqueta
-     *
      * @param boolean boficina='f' optional
      */
     function setOficina($boficina = 'f')
@@ -307,7 +299,7 @@ class Etiqueta extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()

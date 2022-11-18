@@ -169,7 +169,7 @@ class EtiquetaDocumento extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -207,7 +207,7 @@ class EtiquetaDocumento extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -231,8 +231,6 @@ class EtiquetaDocumento extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_etiqueta de EtiquetaDocumento
-     *
      * @param integer iid_etiqueta
      */
     function setId_etiqueta($iid_etiqueta)
@@ -241,8 +239,6 @@ class EtiquetaDocumento extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_doc de EtiquetaDocumento
-     *
      * @param integer iid_doc
      */
     function setId_doc($iid_doc)
@@ -253,7 +249,7 @@ class EtiquetaDocumento extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()

@@ -27,8 +27,6 @@ abstract class ClaseGestor
     }
 
     /**
-     * estableix el valor de l'atribut oDbl de Grupo
-     *
      * @param object oDbl
      */
     public function setoDbl($oDbl)
@@ -47,8 +45,6 @@ abstract class ClaseGestor
     }
 
     /**
-     * estableix el valor de l'atribut sNomTabla de Grupo
-     *
      * @param string sNomTabla
      */
     protected function setNomTabla($sNomTabla)

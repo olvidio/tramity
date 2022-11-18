@@ -257,7 +257,7 @@ class DocumentoDB extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -325,7 +325,7 @@ class DocumentoDB extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -367,8 +367,6 @@ class DocumentoDB extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_doc de Documento
-     *
      * @param integer iid_doc
      */
     function setId_doc($iid_doc)
@@ -377,8 +375,6 @@ class DocumentoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut snom de Documento
-     *
      * @param string snom='' optional
      */
     function setNom($snom = '')
@@ -389,8 +385,6 @@ class DocumentoDB extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut snombre_fichero de Documento
-     *
      * @param string snombre_fichero='' optional
      */
     function setNombre_fichero($snombre_fichero = '')
@@ -399,8 +393,6 @@ class DocumentoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut icreador de Documento
-     *
      * @param integer icreador='' optional
      */
     function setCreador($icreador = '')
@@ -409,8 +401,6 @@ class DocumentoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ivisibilidad de Documento
-     *
      * @param integer ivisibilidad='' optional
      */
     function setVisibilidad($ivisibilidad = '')
@@ -419,8 +409,6 @@ class DocumentoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut itipo_doc de Documento
-     *
      * @param integer itipo_doc='' optional
      */
     function setTipo_doc($tipo_doc = '')
@@ -429,7 +417,6 @@ class DocumentoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_upload de Documento
      * Si df_upload es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_upload debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -447,7 +434,6 @@ class DocumentoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut documento de Documento
      * per usar amb els valors directes de la DB.
      *
      * @param string documento='' optional (ja convertit a hexadecimal)
@@ -458,7 +444,7 @@ class DocumentoDB extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -630,8 +616,6 @@ class DocumentoDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut documento de Documento
-     *
      * @param string documento='' optional
      */
     public function setDocumento($documento = '')

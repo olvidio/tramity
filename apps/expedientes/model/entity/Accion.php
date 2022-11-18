@@ -189,7 +189,7 @@ class Accion extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -227,7 +227,7 @@ class Accion extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -258,8 +258,6 @@ class Accion extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_item de Accion
-     *
      * @param integer iid_item
      */
     function setId_item($iid_item)
@@ -270,8 +268,6 @@ class Accion extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_expediente de Accion
-     *
      * @param integer iid_expediente='' optional
      */
     function setId_expediente($iid_expediente = '')
@@ -280,8 +276,6 @@ class Accion extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut itipo_accion de Accion
-     *
      * @param integer itipo_accion='' optional
      */
     function setTipo_accion($itipo_accion = '')
@@ -290,8 +284,6 @@ class Accion extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_escrito de Accion
-     *
      * @param integer iid_escrito='' optional
      */
     function setId_escrito($iid_escrito = '')
@@ -321,7 +313,7 @@ class Accion extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */

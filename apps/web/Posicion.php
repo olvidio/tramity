@@ -56,7 +56,7 @@ class Posicion
     }
 
     /**
-     * estableix el valor de tots els ATRIBUTOS parametros de Posicion que se li passen en un array
+     * Establece el valor de todos los atributos parametros de Posicion que se li passen en un array
      *
      * @param array aVars
      */
@@ -384,8 +384,6 @@ class Posicion
     }
 
     /**
-     * estableix el valor de l'atribut url de Posicion
-     *
      * @param string url
      */
     function setUrl($url)
@@ -404,8 +402,6 @@ class Posicion
     }
 
     /**
-     * estableix el valor de l'atribut bloque de Posicion
-     *
      * @param string sbloque
      */
     function setBloque($bloque)
@@ -576,8 +572,6 @@ class Posicion
     }
 
     /**
-     * estableix el valor de l'atribut id_div de Posicion
-     *
      * @param string id_div
      */
     function setId_div($id_div)

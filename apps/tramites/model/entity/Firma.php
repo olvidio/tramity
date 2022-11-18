@@ -349,7 +349,7 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null): bool
@@ -387,7 +387,7 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -447,8 +447,6 @@ class Firma extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_item de Firma
-     *
      * @param integer iid_item
      */
     public function setId_item($iid_item)
@@ -457,8 +455,6 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_expediente de Firma
-     *
      * @param integer iid_expediente='' optional
      */
     public function setId_expediente($iid_expediente = '')
@@ -469,8 +465,6 @@ class Firma extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_tramite de Firma
-     *
      * @param integer iid_tramite='' optional
      */
     public function setId_tramite($iid_tramite = '')
@@ -479,8 +473,6 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_cargo_creador de Firma
-     *
      * @param integer iid_cargo_creador='' optional
      */
     public function setId_cargo_creador($iid_cargo_creador = '')
@@ -489,8 +481,6 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut icargo_tipo de Firma
-     *
      * @param integer icargo_tipo='' optional
      */
     public function setCargo_tipo($icargo_tipo = '')
@@ -499,8 +489,6 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_cargo de Firma
-     *
      * @param integer iid_cargo='' optional
      */
     public function setId_cargo($iid_cargo = '')
@@ -509,8 +497,6 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_usuario de Firma
-     *
      * @param integer iid_usuario='' optional
      */
     public function setId_usuario($iid_usuario = '')
@@ -519,8 +505,6 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iorden_tramite de Firma
-     *
      * @param integer iorden_tramite='' optional
      */
     public function setOrden_tramite($iorden_tramite = '')
@@ -529,8 +513,6 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iorden_oficina de Firma
-     *
      * @param integer iorden_oficina='' optional
      */
     public function setOrden_oficina($iorden_oficina = '')
@@ -539,8 +521,6 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut itipo de Firma
-     *
      * @param integer itipo='' optional
      */
     public function setTipo($itipo = '')
@@ -549,8 +529,6 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ivalor de Firma
-     *
      * @param integer ivalor='' optional
      */
     public function setValor($ivalor = '')
@@ -559,8 +537,6 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sobserv_creador de Firma
-     *
      * @param string sobserv_creador='' optional
      */
     public function setObserv_creador($sobserv_creador = '')
@@ -569,8 +545,6 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sobserv de Firma
-     *
      * @param string sobserv='' optional
      */
     public function setObserv($sobserv = '')
@@ -579,7 +553,6 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_valor de Firma
      * Si df_valor es string, y convert=true se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es false, df_valor debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -597,7 +570,7 @@ class Firma extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     public function setNullAllAtributes()

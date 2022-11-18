@@ -300,7 +300,7 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -338,7 +338,7 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -407,8 +407,6 @@ class PendienteDB extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_pendiente de PendienteDB
-     *
      * @param integer iid_pendiente
      */
     function setId_pendiente($iid_pendiente)
@@ -417,8 +415,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sasunto de PendienteDB
-     *
      * @param string sasunto='' optional
      */
     function setAsunto($sasunto = '')
@@ -429,8 +425,6 @@ class PendienteDB extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut sstatus de PendienteDB
-     *
      * @param string sstatus='' optional
      */
     function setStatus($sstatus = '')
@@ -439,7 +433,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_acabado de PendienteDB
      * Si df_acabado es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_acabado debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -457,7 +450,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_plazo de PendienteDB
      * Si df_plazo es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_plazo debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -475,8 +467,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sref_mas de PendienteDB
-     *
      * @param string sref_mas='' optional
      */
     function setRef_mas($sref_mas = '')
@@ -485,8 +475,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sobserv de PendienteDB
-     *
      * @param string sobserv='' optional
      */
     function setObserv($sobserv = '')
@@ -495,8 +483,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sencargado de PendienteDB
-     *
      * @param string|null
      */
     public function setEncargado($sencargado = null): void
@@ -505,8 +491,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut bcancilleria de PendienteDB
-     *
      * @param boolean bcancilleria='f' optional
      */
     function setCancilleria($bcancilleria = 'f')
@@ -515,8 +499,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut ivisibilidad de PendienteDB
-     *
      * @param integer ivisibilidad=''
      */
     function setVisibilidad($ivisibilidad = '')
@@ -525,8 +507,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdetalle de PendienteDB
-     *
      * @param string sdetalle='' optional
      */
     function setDetalle($sdetalle = '')
@@ -535,8 +515,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut spendiente_con de PendienteDB
-     *
      * @param string spendiente_con='' optional
      */
     function setPendiente_con($spendiente_con = '')
@@ -545,8 +523,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut setiquetas de PendienteDB
-     *
      * @param string setiquetas='' optional
      */
     function setEtiquetas($setiquetas = '')
@@ -555,8 +531,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut soficinas de PendienteDB
-     *
      * @param string soficinas='' optional
      */
     function setOficinas($soficinas = '')
@@ -565,8 +539,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_oficina de PendienteDB
-     *
      * @param integer iid_oficina='' optional
      */
     function setId_oficina($iid_oficina = '')
@@ -575,8 +547,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut srrule de PendienteDB
-     *
      * @param string srrule='' optional
      */
     function setRrule($srrule = '')
@@ -585,7 +555,6 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut df_inicio de PendienteDB
      * Si df_inicio es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_inicio debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -603,7 +572,7 @@ class PendienteDB extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()

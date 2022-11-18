@@ -302,7 +302,6 @@ class Payload
     }
 
     /**
-     *
      * @param object $oProt
      * @param string $tipo 'destino'|'origen'|'referencia'
      */

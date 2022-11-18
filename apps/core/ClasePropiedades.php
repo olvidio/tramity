@@ -38,7 +38,7 @@ abstract class ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_schema
+     *
      *
      * @param integer iid_schema='' optional
      */
@@ -58,7 +58,6 @@ abstract class ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut oDbl de ClasePropiedades
      * El faig public per quan s'ha de copiar dades d'un esquema a un altre.
      *
      * @param object oDbl
@@ -115,8 +114,6 @@ abstract class ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sNomTabla de ClasePropiedades
-     *
      * @param string sNomTabla
      */
     protected function setNomTabla($sNomTabla)

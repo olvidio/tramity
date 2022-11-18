@@ -182,7 +182,7 @@ class RoleMember extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -220,7 +220,7 @@ class RoleMember extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -244,8 +244,6 @@ class RoleMember extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut irole_no de RoleMember
-     *
      * @param integer irole_no='' optional
      */
     function setRole_no($irole_no = '')
@@ -254,8 +252,6 @@ class RoleMember extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iuser_no de RoleMember
-     *
      * @param integer iuser_no
      */
     function setUser_no($iuser_no)
@@ -266,7 +262,7 @@ class RoleMember extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()

@@ -35,13 +35,15 @@
                         <input type="text" class="form-control" id="descripcion" name="descripcion"
                                placeholder="descripcion" value="{{ descripcion }}">
                     </div>
-                    <div class="row mb-3">
                         {% if hay_oficina %}
+                        <div class="row mb-3">
                             <div class="col-6">
                                 <label for="example" class="form-label">{{ "Oficina"|trans|raw }}</label>
                                 {{ oDesplOficinas.desplegable|raw }}
                             </div>
+                        </div>
                         {% endif %}
+                    <div class="row mb-3">
                         <div class="col-6">
                             <input type="checkbox" class="col-form-check-input" id="director"
                                    name="director" {{ chk_director }}>

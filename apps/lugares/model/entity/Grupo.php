@@ -181,7 +181,7 @@ class Grupo extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -219,7 +219,7 @@ class Grupo extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -246,8 +246,6 @@ class Grupo extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_grupo de Grupo
-     *
      * @param integer iid_grupo
      */
     function setId_grupo($iid_grupo)
@@ -256,8 +254,6 @@ class Grupo extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdescripcion de Grupo
-     *
      * @param string sdescripcion='' optional
      */
     function setDescripcion($sdescripcion = '')
@@ -268,8 +264,6 @@ class Grupo extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut a_miembros de Grupo
-     *
      * @param array a_miembros
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
@@ -285,7 +279,7 @@ class Grupo extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()

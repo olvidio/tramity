@@ -173,7 +173,7 @@ class Plantilla extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -211,7 +211,7 @@ class Plantilla extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -235,8 +235,6 @@ class Plantilla extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_plantilla de Plantilla
-     *
      * @param integer iid_plantilla
      */
     function setId_plantilla($iid_plantilla)
@@ -245,8 +243,6 @@ class Plantilla extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut snombre de Plantilla
-     *
      * @param string snombre='' optional
      */
     function setNombre($snombre = '')
@@ -257,7 +253,7 @@ class Plantilla extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()

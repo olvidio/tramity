@@ -351,7 +351,7 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -389,7 +389,7 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -458,8 +458,6 @@ class Collection extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iuser_no de Collection
-     *
      * @param integer iuser_no='' optional
      */
     function setUser_no($iuser_no = '')
@@ -468,8 +466,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sparent_container de Collection
-     *
      * @param string sparent_container='' optional
      */
     function setParent_container($sparent_container = '')
@@ -480,8 +476,6 @@ class Collection extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut sdav_name de Collection
-     *
      * @param string sdav_name='' optional
      */
     function setDav_name($sdav_name = '')
@@ -490,8 +484,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdav_etag de Collection
-     *
      * @param string sdav_etag='' optional
      */
     function setDav_etag($sdav_etag = '')
@@ -500,8 +492,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdav_displayname de Collection
-     *
      * @param string sdav_displayname='' optional
      */
     function setDav_displayname($sdav_displayname = '')
@@ -510,8 +500,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut bis_calendar de Collection
-     *
      * @param boolean bis_calendar='f' optional
      */
     function setIs_calendar($bis_calendar = 'f')
@@ -520,7 +508,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut dcreated de Collection
      * Si dcreated es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, dcreated debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -538,7 +525,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut dmodified de Collection
      * Si dmodified es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, dmodified debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -556,8 +542,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut bpublic_events_only de Collection
-     *
      * @param boolean bpublic_events_only='f' optional
      */
     function setPublic_events_only($bpublic_events_only = 'f')
@@ -566,8 +550,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut bpublicly_readable de Collection
-     *
      * @param boolean bpublicly_readable='f' optional
      */
     function setPublicly_readable($bpublicly_readable = 'f')
@@ -576,8 +558,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut icollection_id de Collection
-     *
      * @param integer icollection_id
      */
     function setCollection_id($icollection_id)
@@ -586,8 +566,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut idefault_privileges de Collection
-     *
      * @param integer idefault_privileges='' optional
      */
     function setDefault_privileges($idefault_privileges = '')
@@ -596,8 +574,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut bis_addressbook de Collection
-     *
      * @param boolean bis_addressbook='f' optional
      */
     function setIs_addressbook($bis_addressbook = 'f')
@@ -606,8 +582,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sresourcetypes de Collection
-     *
      * @param string sresourcetypes='' optional
      */
     function setResourcetypes($sresourcetypes = '')
@@ -616,8 +590,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sschedule_transp de Collection
-     *
      * @param string sschedule_transp='' optional
      */
     function setSchedule_transp($sschedule_transp = '')
@@ -626,8 +598,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut stimezone de Collection
-     *
      * @param string stimezone='' optional
      */
     function setTimezone($stimezone = '')
@@ -636,8 +606,6 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdescription de Collection
-     *
      * @param string sdescription='' optional
      */
     function setDescription($sdescription = '')
@@ -646,7 +614,7 @@ class Collection extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()

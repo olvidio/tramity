@@ -196,7 +196,7 @@ class Locale extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -234,7 +234,7 @@ class Locale extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -265,8 +265,6 @@ class Locale extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sid_locale de Locale
-     *
      * @param string sid_locale
      */
     function setId_locale($sid_locale)
@@ -278,8 +276,6 @@ class Locale extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut snom_locale de Locale
-     *
      * @param string snom_locale='' optional
      */
     function setNom_locale($snom_locale = '')
@@ -288,8 +284,6 @@ class Locale extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sidioma de Locale
-     *
      * @param string sidioma='' optional
      */
     function setIdioma($sidioma = '')
@@ -298,8 +292,6 @@ class Locale extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut snom_idioma de Locale
-     *
      * @param string snom_idioma='' optional
      */
     function setNom_idioma($snom_idioma = '')
@@ -308,8 +300,6 @@ class Locale extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut bactivo de Locale
-     *
      * @param boolean bactivo='f' optional
      */
     function setActivo($bactivo = 'f')
@@ -333,7 +323,7 @@ class Locale extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */

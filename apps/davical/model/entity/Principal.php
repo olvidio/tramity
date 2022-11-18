@@ -219,7 +219,7 @@ class Principal extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -257,7 +257,7 @@ class Principal extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -290,8 +290,6 @@ class Principal extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iprincipal_id de Principal
-     *
      * @param integer iprincipal_id
      */
     function setPrincipal_id($iprincipal_id)
@@ -300,8 +298,6 @@ class Principal extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut itype_id de Principal
-     *
      * @param integer itype_id='' optional
      */
     function setType_id($itype_id = '')
@@ -312,8 +308,6 @@ class Principal extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iuser_no de Principal
-     *
      * @param integer iuser_no='' optional
      */
     function setUser_no($iuser_no = '')
@@ -322,8 +316,6 @@ class Principal extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdisplayname de Principal
-     *
      * @param string sdisplayname='' optional
      */
     function setDisplayname($sdisplayname = '')
@@ -332,8 +324,6 @@ class Principal extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdefault_privileges de Principal
-     *
      * @param string sdefault_privileges='' optional
      */
     function setDefault_privileges($sdefault_privileges = '')
@@ -342,7 +332,7 @@ class Principal extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()

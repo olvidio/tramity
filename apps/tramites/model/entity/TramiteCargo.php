@@ -197,7 +197,7 @@ class TramiteCargo extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -235,7 +235,7 @@ class TramiteCargo extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -267,8 +267,6 @@ class TramiteCargo extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_item de TramiteCargo
-     *
      * @param integer iid_item
      */
     function setId_item($iid_item)
@@ -279,8 +277,6 @@ class TramiteCargo extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_tramite de TramiteCargo
-     *
      * @param integer iid_tramite='' optional
      */
     function setId_tramite($iid_tramite = '')
@@ -289,8 +285,6 @@ class TramiteCargo extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iorden_tramite de TramiteCargo
-     *
      * @param integer iorden_tramite='' optional
      */
     function setOrden_tramite($iorden_tramite = '')
@@ -299,8 +293,6 @@ class TramiteCargo extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_cargo de TramiteCargo
-     *
      * @param integer iid_cargo='' optional
      */
     function setId_cargo($iid_cargo = '')
@@ -309,8 +301,6 @@ class TramiteCargo extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut imultiple de TramiteCargo
-     *
      * @param integer imultiple=1 optional
      */
     function setMultiple($imultiple = 1)
@@ -340,7 +330,7 @@ class TramiteCargo extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */

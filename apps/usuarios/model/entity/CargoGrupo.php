@@ -189,7 +189,7 @@ class CargoGrupo extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -227,7 +227,7 @@ class CargoGrupo extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -257,8 +257,6 @@ class CargoGrupo extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iid_grupo de CargoGrupo
-     *
      * @param integer iid_grupo
      */
     function setId_grupo($iid_grupo)
@@ -267,8 +265,6 @@ class CargoGrupo extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iid_cargo_ref de CargoGrupo
-     *
      * @param integer iid_cargo_ref='' optional
      */
     function setId_cargo_ref($iid_cargo_ref = '')
@@ -279,8 +275,6 @@ class CargoGrupo extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut sdescripcion de CargoGrupo
-     *
      * @param string sdescripcion='' optional
      */
     function setDescripcion($sdescripcion = '')
@@ -289,8 +283,6 @@ class CargoGrupo extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut a_miembros de CargoGrupo
-     *
      * @param array a_miembros
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
@@ -306,7 +298,7 @@ class CargoGrupo extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()

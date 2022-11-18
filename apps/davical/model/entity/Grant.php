@@ -48,12 +48,6 @@ class Grant extends core\ClasePropiedades
      */
     private $aPrimary_key;
     /**
-     * aDades de Grant
-     *
-     * @var array
-     */
-    private $aDades;
-    /**
      * bLoaded de Grant
      *
      * @var boolean
@@ -166,16 +160,16 @@ class Grant extends core\ClasePropiedades
                 $sClauError = 'Grant.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'Grant.update.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            }
+
+            try {
+                $oDblSt->execute($aDades);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'Grant.update.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
         } else {
             // INSERT
@@ -188,16 +182,16 @@ class Grant extends core\ClasePropiedades
                 $sClauError = 'Grant.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                try {
-                    $oDblSt->execute($aDades1);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'Grant.insertar.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            }
+
+            try {
+                $oDblSt->execute($aDades1);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'Grant.insertar.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
         }
         $this->setAllAtributes($aDades);
@@ -205,7 +199,7 @@ class Grant extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -243,13 +237,13 @@ class Grant extends core\ClasePropiedades
                     }
             }
             return TRUE;
-        } else {
-            return FALSE;
         }
+
+        return FALSE;
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -282,8 +276,6 @@ class Grant extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iby_principal de Grant
-     *
      * @param integer iby_principal
      */
     function setBy_principal($iby_principal)
@@ -292,8 +284,6 @@ class Grant extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iby_collection de Grant
-     *
      * @param integer iby_collection='' optional
      */
     function setBy_collection($iby_collection = '')
@@ -304,8 +294,6 @@ class Grant extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut ito_principal de Grant
-     *
      * @param integer ito_principal
      */
     function setTo_principal($ito_principal)
@@ -314,8 +302,6 @@ class Grant extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut iprivileges de Grant
-     *
      * @param integer iprivileges='' optional
      */
     function setPrivileges($iprivileges = '')
@@ -324,8 +310,6 @@ class Grant extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut bis_group de Grant
-     *
      * @param boolean bis_group='f' optional
      */
     function setIs_group($bis_group = 'f')
@@ -334,7 +318,7 @@ class Grant extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()
@@ -525,16 +509,4 @@ class Grant extends core\ClasePropiedades
         return $oDatosCampo;
     }
 
-    /**
-     * Recupera tots els ATRIBUTOS de Grant en un array
-     *
-     * @return array aDades
-     */
-    function getTot()
-    {
-        if (!is_array($this->aDades)) {
-            $this->DBCargar('tot');
-        }
-        return $this->aDades;
-    }
 }

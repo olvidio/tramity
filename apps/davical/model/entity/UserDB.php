@@ -268,7 +268,7 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * Carrega els camps de la base de dades com ATRIBUTOS de l'objecte.
+     * Carga los campos de la tabla como atributos de la clase.
      *
      */
     public function DBCargar($que = null)
@@ -306,7 +306,7 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * Estableix el valor de tots els ATRIBUTOS
+     * Establece el valor de todos los atributos
      *
      * @param array $aDades
      */
@@ -363,8 +363,6 @@ class UserDB extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut iuser_no de UserDB
-     *
      * @param integer iuser_no
      */
     function setUser_no($iuser_no)
@@ -373,8 +371,6 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut bactive de UserDB
-     *
      * @param boolean bactive='f' optional
      */
     function setActive($bactive = 'f')
@@ -385,7 +381,6 @@ class UserDB extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * estableix el valor de l'atribut demail_ok de UserDB
      * Si demail_ok es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, demail_ok debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -403,7 +398,6 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut djoined de UserDB
      * Si djoined es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, djoined debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -421,7 +415,6 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut dupdated de UserDB
      * Si dupdated es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, dupdated debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -439,7 +432,6 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut dlast_used de UserDB
      * Si dlast_used es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, dlast_used debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -457,8 +449,6 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut susername de UserDB
-     *
      * @param string susername='' optional
      */
     function setUsername($susername = '')
@@ -467,8 +457,6 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut spassword de UserDB
-     *
      * @param string spassword='' optional
      */
     function setPassword($spassword = '')
@@ -477,8 +465,6 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sfullname de UserDB
-     *
      * @param string sfullname='' optional
      */
     function setFullname($sfullname = '')
@@ -487,8 +473,6 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut semail de UserDB
-     *
      * @param string semail='' optional
      */
     function setEmail($semail = '')
@@ -497,8 +481,6 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sconfig_data de UserDB
-     *
      * @param string sconfig_data='' optional
      */
     function setConfig_data($sconfig_data = '')
@@ -507,8 +489,6 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut sdate_format_type de UserDB
-     *
      * @param string sdate_format_type='' optional
      */
     function setDate_format_type($sdate_format_type = '')
@@ -517,8 +497,6 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * estableix el valor de l'atribut slocale de UserDB
-     *
      * @param string slocale='' optional
      */
     function setLocale($slocale = '')
@@ -527,7 +505,7 @@ class UserDB extends core\ClasePropiedades
     }
 
     /**
-     * Estableix a empty el valor de tots els ATRIBUTOS
+     * Establece a empty el valor de todos los atributos de la clase
      *
      */
     function setNullAllAtributes()

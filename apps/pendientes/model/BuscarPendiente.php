@@ -237,7 +237,6 @@ class BuscarPendiente
     }
 
     /**
-     * estableix el valor de l'atribut df_min de ExpedienteDB
      * Si df_min es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_min debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
@@ -255,7 +254,6 @@ class BuscarPendiente
     }
 
     /**
-     * estableix el valor de l'atribut df_max de ExpedienteDB
      * Si df_max es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_max debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *

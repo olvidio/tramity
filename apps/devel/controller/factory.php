@@ -747,7 +747,7 @@ $txt .= "\n\t\t" . '}
 $txt .= '	/* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
 	/**
-	 * Estableix el valor de tots els ATRIBUTOS
+	 * Establece el valor de todos los atributos
 	 *
 	 * @param array $aDades
 	 */';
