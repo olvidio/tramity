@@ -26,11 +26,16 @@ class Pid
         if (file_exists($this->filename)) {
             $fileContent = file_get_contents($this->filename);
             if (!empty($fileContent)) {
+                $ahora = date("Y/m/d H:i:s");
+                echo "$ahora ";
+                echo sprintf(_("El fichero %s no está vacío."), $this->filename);
+                echo " ";
+                echo "<br>";
                 // Comprobar que no sea por que el anterior ha dado un error y
                 // no se ha borrado. Miramos que sea de hace más de 5 min.
                 $delta = 5;
                 $matches = [];
-                $result = preg_match('@(\d+/\d+/\d+ \d+:\d+:\d+) -- .*@', $fileContent, $matches);
+                $result = preg_match('@(\d+/\d+/\d+ \d+:\d+:\d+).*@', $fileContent, $matches);
                 if ($result === 1) {
                     $f_iso = $matches[1];
 
@@ -40,21 +45,13 @@ class Pid
                     $interval = $oDiaFichero->diff($oAhora);
                     $a = $interval->format('%i');
 
-                    if ($a > $delta) {
-                        $ahora = date("Y/m/d H:i:s");
-                        echo "$ahora ";
-                        echo sprintf(_("El fichero %s no está vacío."), $this->filename);
-                        echo " ";
-                        echo _("Posiblemente la anterior operación finalizó con error");
+                    echo _("Posiblemente la anterior operación finalizó con error");
+                    // Solamente paro el proceso si hace menos de delta minutos,
+                    // sino se devuelve false para que siga el proceso
+                    if ($a < $delta) {
                         return TRUE;
                     }
                 } else {
-                    $ahora = date("Y/m/d H:i:s");
-                    echo "$ahora ";
-                    echo sprintf(_("El fichero %s no está vacío."), $this->filename);
-                    echo " ";
-                    echo $fileContent;
-                    echo "<br>";
                     return TRUE;
                 }
             }
