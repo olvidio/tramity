@@ -378,6 +378,10 @@ class As4Entregar extends As4CollaborationInfo
     private function getProt_dst(): stdClass
     {
         $xml_prot = $this->dom->getElementsByTagName('prot_destino')->item(0);
+        if (is_null($xml_prot)) {
+            // los que son compartidos pueden tener el destino = null
+            return new stdClass();
+        }
         return $this->xml2prot_simple($xml_prot, 'dst');
     }
 
