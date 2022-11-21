@@ -54,6 +54,8 @@ class Pid
                     echo sprintf(_("El fichero %s no está vacío."), $this->filename);
                     echo " ";
                     echo $fileContent;
+                    echo "<br>";
+                    return TRUE;
                 }
             }
         }
