@@ -49,6 +49,11 @@ class Pid
                     // Solamente paro el proceso si hace menos de delta minutos,
                     // sino se devuelve false para que siga el proceso
                     if ($a < $delta) {
+                        echo '<br>';
+                        echo $fileContent;
+                        echo '<br>';
+                        echo sprintf(_("inténtelo otra vez dentro de %s minutos"), $delta);
+                        echo '<br>';
                         return TRUE;
                     }
                 } else {
