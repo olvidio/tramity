@@ -98,8 +98,7 @@ class Entidad extends EntidadDB
 
     public function nuevoEsquema()
     {
-        $err = '';
-        $err .= $this->crearEsquema();
+        $err = $this->crearEsquema();
         $err .= $this->crearTablas();
 
         return $err;
@@ -215,7 +214,7 @@ class Entidad extends EntidadDB
             $err .= $this->ejecutarPsqlInsert('config');
         }
         // añadir la sigla en config:
-        $err .= $this->ejecutarSql("INSERT INTO public.x_config (parametro, valor) VALUES ('sigla', '$this->snombre')");
+        $err .= $this->ejecutarSql("INSERT INTO nombre_del_esquema.x_config (parametro, valor) VALUES ('sigla', '$this->snombre')");
 
         return $err;
     }
@@ -257,7 +256,10 @@ class Entidad extends EntidadDB
         // cambiar nombre esquema
         $nom_schema = "\\\"" . $this->getSchema() . "\\\"" . '.';
 
-        $sql_txt_nou = str_replace('public.', $nom_schema, $sql_txt);
+        $sql_txt_nou = str_replace('nombre_del_esquema.', $nom_schema, $sql_txt);
+        // para la función idglobal
+        $idglobal_txt_nou = "idglobal('". $this->getSchema();
+        $sql_txt_nou = str_replace('idglobal(\'nombre_del_esquema', $idglobal_txt_nou, $sql_txt_nou);
 
         $command = "/usr/bin/psql -U tramity -d tramity -c << EOF \" $sql_txt_nou \" ";
         $command .= " 2> " . $file_log;
@@ -294,7 +296,7 @@ class Entidad extends EntidadDB
 
         // cambiar nombre esquema
         $nom_schema = "\"" . $this->getSchema() . "\"" . '.';
-        $sql_txt_nou = str_replace('public.', $nom_schema, $sql);
+        $sql_txt_nou = str_replace('nombre_del_esquema.', $nom_schema, $sql);
 
         if (($oDblSt = $oDbl->prepare($sql_txt_nou)) === false) {
             $sClauError = 'Entidad.sql.prepare';

@@ -245,10 +245,9 @@ class Principal extends core\ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -331,22 +330,7 @@ class Principal extends core\ClasePropiedades
         $this->sdefault_privileges = $sdefault_privileges;
     }
 
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setPrincipal_id('');
-        $this->setType_id('');
-        $this->setUser_no('');
-        $this->setDisplayname('');
-        $this->setDefault_privileges('');
-        $this->setPrimary_key($aPK);
-    }
-
+    
     /**
      * Recupera las claus primàries de Principal en un array
      *

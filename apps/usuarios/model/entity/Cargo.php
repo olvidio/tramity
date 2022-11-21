@@ -271,10 +271,10 @@ class Cargo extends ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         }
@@ -385,7 +385,7 @@ class Cargo extends ClasePropiedades
     /**
      * @param integer|null $iid_usuario optional
      */
-    public function setId_usuario(int $iid_usuario = null): void
+    public function setId_usuario(?int $iid_usuario = null): void
     {
         $this->iid_usuario = $iid_usuario;
     }
@@ -393,29 +393,9 @@ class Cargo extends ClasePropiedades
     /**
      * @param integer|null $iid_suplente optional
      */
-    public function setId_suplente(int $iid_suplente = null): void
+    public function setId_suplente(?int $iid_suplente = null): void
     {
         $this->iid_suplente = $iid_suplente;
-    }
-
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    private function setNullAllAtributes(): void
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema();
-        $this->setId_cargo('');
-        $this->setId_ambito('');
-        $this->setCargo('');
-        $this->setDescripcion();
-        $this->setId_oficina('');
-        $this->setDirector('');
-        $this->setSacd('');
-        $this->setId_usuario('');
-        $this->setId_suplente('');
-        $this->setPrimary_key($aPK);
     }
 
     /**

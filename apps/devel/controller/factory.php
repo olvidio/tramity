@@ -151,7 +151,7 @@ $err_bool = "";
 $a_auto = array();
 foreach ($oDbl->query($sql) as $row) {
     $nomcamp = $row['field'];
-    if ($nomcamp == 'id_schema') {
+    if ($nomcamp === 'id_schema') {
         continue;
     }
     $NomCamp = ucwords($nomcamp);
@@ -450,8 +450,8 @@ foreach ($oDbl->query($sql) as $row) {
     }
 
     if (!in_array($nomcamp, $aClaus)) {
-        if ($auto != 1) { // si tiene sequencia no pongo el campo en el update.
-            if ($tip == 'b') {
+        if ($auto != 1) { // si tiene secuencia no pongo el campo en el update.
+            if ($tip === 'b') {
                 $err_bool .= "\n\t\t" . 'if ( core\is_true($aDades[\'' . $nomcamp . '\']) ) { $aDades[\'' . $nomcamp . '\']=\'true\'; } else { $aDades[\'' . $nomcamp . '\']=\'false\'; }';
             }
             $guardar .= "\n\t\t" . '$aDades[\'' . $nomcamp . '\'] = $this->' . $tip . $nomcamp . ';';
@@ -715,10 +715,9 @@ $txt .= "\n\t\t" . '}
                 default:
 					// En el caso de no existir esta fila, $aDades = FALSE:
 					if ($aDades === FALSE) {
-						$this->setNullAllAtributes();
-					} else {
-						$this->setAllAtributes($aDades);
+						return FALSE;
 					}
+					$this->setAllAtributes($aDades);
 			}
 			return TRUE;
 		} else {
@@ -761,18 +760,6 @@ $txt .= "\n\t\t" . 'if (!is_array($aDades)) { return; }
 
 $txt .= $exists;
 $txt .= "\n\t" . '}';
-
-$txt .= '	
-	/**
-	 * Estableix a empty el valor de tots els ATRIBUTOS
-	 *
-	 */
-	function setNullAllAtributes() {
-		$aPK = $this->getPrimary_key();
-		$this->setId_schema(\'\');';
-$txt .= $ToEmpty;
-$txt .= "\n\t\t" . '$this->setPrimary_key($aPK);';
-$txt .= "\n\t" . '}
 
 	/* MÉTODOS GET y SET --------------------------------------------------------*/
 

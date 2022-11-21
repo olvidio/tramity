@@ -375,10 +375,9 @@ class Firma extends core\ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         }
@@ -567,31 +566,6 @@ class Firma extends core\ClasePropiedades
         } else {
             $this->df_valor = $df_valor;
         }
-    }
-
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    public function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setId_item('');
-        $this->setId_expediente('');
-        $this->setId_tramite('');
-        $this->setId_cargo_creador('');
-        $this->setCargo_tipo('');
-        $this->setId_cargo('');
-        $this->setId_usuario('');
-        $this->setOrden_tramite('');
-        $this->setOrden_oficina('');
-        $this->setTipo('');
-        $this->setValor('');
-        $this->setObserv_creador('');
-        $this->setObserv('');
-        $this->setF_valor('');
-        $this->setPrimary_key($aPK);
     }
 
     /**

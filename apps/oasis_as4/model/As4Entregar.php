@@ -735,7 +735,7 @@ class As4Entregar extends As4CollaborationInfo
                     $oEtherpad->getPadId(); // Aquí crea el pad y utiliza el $this->content
                     // la relación con la entrada y la fecha
                     $oEntradaDocDB = new EntradaEntidadDoc($id_entrada, $siglaDestino);
-                    // no hace falta, porque es nuevo y todavía no está en la DB. $oEntradaDocDB->DBCargar();
+                    // no hace falta DBCargar, porque es nuevo y todavía no está en la DB.
                     if (!empty($this->oF_escrito)) {
                         $oEntradaDocDB->setF_doc($this->oF_escrito->getIso(), FALSE);
                     } else {
@@ -760,7 +760,7 @@ class As4Entregar extends As4CollaborationInfo
                     $oEtherpad->setHTML($pad_id, $this->content);
                     // la relación con la entrada y la fecha
                     $oEntradaDocDB = new EntradaEntidadDoc($id_entrada, $siglaDestino);
-                    // no hace falta, porque es nuevo y todavía no está en la DB. $oEntradaDocDB->DBCargar();
+                    // no hace falta DBCargar, porque es nuevo y todavía no está en la DB.
                     if (!empty($this->oF_escrito)) {
                         $oEntradaDocDB->setF_doc($this->oF_escrito->getIso(), FALSE);
                     } else {

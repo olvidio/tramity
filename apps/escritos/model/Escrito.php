@@ -574,7 +574,10 @@ class Escrito extends EscritoDB
                 $a_id_adjuntos = $this->getArrayIdAdjuntos();
                 foreach (array_keys($a_id_adjuntos) as $id_item) {
                     $Adjunto = new EscritoAdjunto($id_item);
-                    $Adjunto->DBCargar();
+                    if ($Adjunto->DBCargar() === FALSE ){
+                        $err_cargar = sprintf(_("OJO! no existe el adjunto en %s, linea %s"), __FILE__, __LINE__);
+                        exit ($err_cargar);
+                    }
                     $newAdjunto = clone($Adjunto);
                     $newAdjunto->setId_escrito($newId_escrito);
                     $newAdjunto->DBGuardar();

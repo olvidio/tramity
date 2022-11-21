@@ -382,9 +382,9 @@ class PermRegistro
     {
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $soy_dtor = ConfigGlobal::soy_dtor();
-            if (($visibilidad == Visibilidad::V_DIRECTORES ||
-                    $visibilidad == Visibilidad::V_RESERVADO ||
-                    $visibilidad == Visibilidad::V_RESERVADO_VCD
+            if (($visibilidad === Visibilidad::V_DIRECTORES ||
+                    $visibilidad === Visibilidad::V_RESERVADO ||
+                    $visibilidad === Visibilidad::V_RESERVADO_VCD
                 )
                 && $soy_dtor === FALSE) {
                 $rta = FALSE;
@@ -398,13 +398,13 @@ class PermRegistro
             $soy_dtor = ConfigGlobal::soy_dtor();
             $soy_sacd = ConfigGlobal::soy_sacd();
             $rta = FALSE;
-            if ($visibilidad == Visibilidad::V_CTR_DTOR && $soy_dtor) {
+            if ($visibilidad === Visibilidad::V_CTR_DTOR && $soy_dtor) {
                 $rta = TRUE;
             }
-            if ($visibilidad == Visibilidad::V_CTR_DTOR_SACD && ($soy_dtor || $soy_sacd)) {
+            if ($visibilidad === Visibilidad::V_CTR_DTOR_SACD && ($soy_dtor || $soy_sacd)) {
                 $rta = TRUE;
             }
-            if ($visibilidad == Visibilidad::V_CTR_TODOS) {
+            if ($visibilidad === Visibilidad::V_CTR_TODOS) {
                 $rta = TRUE;
             }
             return $rta;
@@ -417,7 +417,7 @@ class PermRegistro
      * de una entrada o escrito o pendiente según quien sea yo.
      *
      * @param object $oEntrada |$oEscrito|$oPendiente|oExpediente
-     * @param string $que (aunto|detalle|escrito|cambio)
+     * @param string $que (asunto|detalle|escrito|cambio)
      * @return number
      */
     public function permiso_detalle($objeto, $que)
@@ -434,12 +434,12 @@ class PermRegistro
 
 
     /**
-     * Para el ambito CTR:
+     * Para el ámbito CTR:
      * Función para buscar el permiso para ver el asunto, detalle o escrito
      * de una entrada o escrito o pendiente según quien sea yo.
      *
-     * @param object $oEntrada |$oEscrito|$oPendiente|oExpediente
-     * @param string $que (aunto|detalle|escrito|cambio)
+     * @param oEscrito|oPendiente|oExpediente|oEntrada $objeto
+     * @param string $que (asunto|detalle|escrito|cambio)
      * @return number
      */
     private function permiso_detalle_ctr($objeto, $que)
@@ -465,12 +465,12 @@ class PermRegistro
     }
 
     /**
-     * Para el ambito DL:
+     * Para el ámbito DL:
      * Función para buscar el permiso para ver el asunto, detalle o escrito
      * de una entrada o escrito o pendiente según quien sea yo.
      *
      * @param object $oEntrada |$oEscrito|$oPendiente|oExpediente
-     * @param string $que (aunto|detalle|escrito|cambio)
+     * @param string $que (asunto|detalle|escrito|cambio)
      * @return number
      */
     private function permiso_detalle_dl($objeto, $que)
@@ -479,14 +479,17 @@ class PermRegistro
         $id_oficina_pral = '';
         $id_oficina_role = '';
         // El role de secretaria no tiene oficina
-        if ($role_actual == 'secretaria') {
+        if ($role_actual === 'secretaria') {
             // mira el usuario actual, no el role.
             $soy_dtor = ConfigGlobal::soy_dtor();
         } else {
             $id_oficina_role = ConfigGlobal::role_id_oficina();
             $id_cargo_role = ConfigGlobal::role_id_cargo();
             $oCargo = new Cargo($id_cargo_role);
-            $soy_dtor = $oCargo->getDirector();
+            if ($oCargo->DBCargar()) {
+                // Asegurar que existe el cargo
+                $soy_dtor = $oCargo->getDirector();
+            }
         }
 
 
@@ -507,14 +510,20 @@ class PermRegistro
             if (empty($objeto->getF_aprobacion()->getIso())) {
                 return self::PERM_MODIFICAR;
             } else {
-                $id_ponente = $objeto->getPonente();
                 $resto_cargos = $objeto->getResto_oficinas();
                 // pasar cargos a oficinas:
+                $id_ponente = $objeto->getPonente();
                 $oCargoP = new Cargo($id_ponente);
-                $id_oficina_pral = $oCargoP->getId_oficina();
+                if ($oCargoP->DBCargar()) {
+                    // asegurar que existe el cargo
+                    $id_oficina_pral = $oCargoP->getId_oficina();
+                }
                 foreach ($resto_cargos as $id_cargo) {
                     $oCargo = new Cargo($id_cargo);
-                    $a_oficinas[] = $oCargo->getId_oficina();
+                    if ($oCargo->DBCargar()) {
+                        // asegurar que existe el cargo
+                        $a_oficinas[] = $oCargo->getId_oficina();
+                    }
                 }
             }
         }

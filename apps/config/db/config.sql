@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS public.x_config
+CREATE TABLE IF NOT EXISTS nombre_del_esquema.x_config
 (
     parametro
     text
@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS public.x_config
     text
 );
 
-ALTER TABLE public.x_config OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.x_config OWNER TO tramity;
 
-ALTER TABLE public.x_config
+ALTER TABLE nombre_del_esquema.x_config
     ADD PRIMARY KEY (parametro);

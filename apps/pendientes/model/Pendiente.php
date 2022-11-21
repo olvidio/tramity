@@ -588,9 +588,9 @@ class Pendiente
     }
 
     /**
-     * @return mixed
+     * @return integer|null
      */
-    public function getVisibilidad()
+    public function getVisibilidad(): ?int
     {
         if (!isset($this->visibilidad) && !$this->bLoaded) {
             $this->Carregar();

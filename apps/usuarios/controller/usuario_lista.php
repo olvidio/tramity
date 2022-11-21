@@ -60,7 +60,6 @@ $a_botones = [['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
 
 $a_valores = array();
 $i = 0;
-$oCargo = new Cargo();
 foreach ($oUsuarioColeccion as $oUsuario) {
     $i++;
     $id_usuario = $oUsuario->getId_usuario();
@@ -70,8 +69,7 @@ foreach ($oUsuarioColeccion as $oUsuario) {
     $id_cargo_preferido = $oUsuario->getId_cargo_preferido();
 
     if (!empty($id_cargo_preferido) && ConfigGlobal::nombreEntidad() !== 'admin') {
-        $oCargo->setId_cargo($id_cargo_preferido);
-        $oCargo->DBCargar();
+        $oCargo = new Cargo($id_cargo_preferido);
         $cargo = $oCargo->getCargo();
     } else {
         $cargo = '?';

@@ -39,14 +39,11 @@ if (empty($Q_id_expediente)) {
     $Q_filtro = 'archivados';
 }
 
-if (empty($Q_id_expediente)) {
-    exit ("Error, no existe el expediente");
+$oExpediente = new Expediente($Q_id_expediente);
+if ($oExpediente->DBCargar() === FALSE ){
+    $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
+    exit ($err_cargar);
 }
-$oExpediente = new Expediente();
-
-$oExpediente->setId_expediente($Q_id_expediente);
-$oExpediente->DBCargar();
-
 $ponente_txt = '?';
 $id_ponente = $oExpediente->getPonente();
 $gesCargos = new GestorCargo();

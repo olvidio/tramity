@@ -106,7 +106,8 @@ class EntidadDB extends ClasePropiedades
                 }
             }
         } else {
-            if (isset($a_id) && $a_id !== '') {
+            // No sirve el 0, null, ''
+            if (!empty($a_id)) {
                 $this->iid_entidad = (int) $a_id;
                 $this->aPrimary_key = array('iid_entidad' => $this->iid_entidad);
             }
@@ -220,10 +221,9 @@ class EntidadDB extends ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -304,22 +304,6 @@ class EntidadDB extends ClasePropiedades
     public function setAnulado($banulado = 'f'): void
     {
         $this->banulado = $banulado;
-    }
-
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    private function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setId_entidad('');
-        $this->setNombre('');
-        $this->setSchema('');
-        $this->setTipo('');
-        $this->setAnulado('');
-        $this->setPrimary_key($aPK);
     }
 
     /**

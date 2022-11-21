@@ -42,7 +42,7 @@ class GestorPreferencia extends core\ClaseGestor
      * retorna un objecte Preferencia
      *
      * @param string $tipo
-     * @return usuarios\model\entity\Preferencia
+     * @return Preferencia
      */
     function getMiPreferencia($tipo)
     {
@@ -55,15 +55,18 @@ class GestorPreferencia extends core\ClaseGestor
      *
      * @param integer $id_usuario
      * @param string $tipo
-     * @return usuarios\model\entity\Preferencia
+     * @return Preferencia
      */
     function getPreferenciaUsuario($id_usuario, $tipo)
     {
         $gesPreferencias = new GestorPreferencia();
         $cPreferencias = $gesPreferencias->getPreferencias(['id_usuario' => $id_usuario, 'tipo' => $tipo]);
         if (count($cPreferencias) > 0) {
-            $oPref = $cPreferencias[0]; // solo deberia haber uno.
-            $oPref->DBCargar();
+            $oPref = $cPreferencias[0]; // solo debería haber uno.
+            if ($oPref->DBCargar() === FALSE ){
+                $err_cargar = sprintf(_("OJO! no existe la Preferencia en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
         } else {
             $oPref = new Preferencia();
             $oPref->setId_usuario($id_usuario);

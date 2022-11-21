@@ -1,4 +1,4 @@
-CREATE TABLE public.pendientes
+CREATE TABLE nombre_del_esquema.pendientes
 (
     id_pendiente  SERIAL PRIMARY KEY,
     asunto        text                  NOT NULL,
@@ -20,6 +20,6 @@ CREATE TABLE public.pendientes
 );
 
 COMMENT
-ON TABLE public.pendientes IS 'Tabla temporal para guardar pendientes antes de saber el id_reg';
+ON TABLE nombre_del_esquema.pendientes IS 'Tabla temporal para guardar pendientes antes de saber el id_reg';
 
-ALTER TABLE public.pendientes OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.pendientes OWNER TO tramity;

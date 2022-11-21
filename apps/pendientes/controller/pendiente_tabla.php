@@ -85,8 +85,8 @@ if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
 } else {
     $oDesplOficinas = []; // para evitar errores
     $role_actual = ConfigGlobal::role_actual();
-    $secretaria = 0; // NO TRUE, para eljavascript;
-    $perm_periodico = 1; // NO TRUE, para eljavascript;
+    $secretaria = 0; // NO TRUE, para el javascript;
+    $perm_periodico = 1; // NO TRUE, para el javascript;
     $id_oficina = Cargo::OFICINA_ESQUEMA;
 }
 $gesCargos = new GestorCargo();

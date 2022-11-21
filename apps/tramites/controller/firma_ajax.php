@@ -157,7 +157,6 @@ switch ($Q_que) {
             $error_txt .= _("No puede Firmar");
         } else {
             $oExpediente = new Expediente($Q_id_expediente);
-            $oExpediente->DBCargar();
             $estado = $oExpediente->getEstado();
             $f_hoy_iso = date(DateTimeInterface::ATOM);
             // Habrá que ver como se cambia un voto.
@@ -192,7 +191,10 @@ switch ($Q_que) {
                     $cFirmaDistribuir = $gesFirmas->getFirmas($aWhere);
                     if (is_array($cFirmaDistribuir) && !empty($cFirmaDistribuir)) {
                         $oFirmaDistribuir = $cFirmaDistribuir[0];
-                        $oFirmaDistribuir->DBCargar();
+                        if ($oFirmaDistribuir->DBCargar() === FALSE ){
+                            $err_cargar = sprintf(_("OJO! no existe la firma en %s, linea %s"), __FILE__, __LINE__);
+                            exit ($err_cargar);
+                        }
                         $oFirmaDistribuir->setId_usuario(ConfigGlobal::mi_id_usuario());
                         $oFirmaDistribuir->setValor($Q_voto);
                         $oFirmaDistribuir->setF_valor($f_hoy_iso, FALSE);
@@ -292,14 +294,17 @@ switch ($Q_que) {
         if (is_array($cFirmas) && !empty($cFirmas)) {
             // Ya existe una aclaración. Busco la última, para saber el orden.
             $oFirmaAclaracion = $cFirmas[0];
-            $oFirmaAclaracion->DBCargar();
+            if ($oFirmaAclaracion->DBCargar() === FALSE ){
+                $err_cargar = sprintf(_("OJO! no existe el escrito a enviar en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
             $oFirmaAclaracion->setObserv_creador($Q_comentario);
             if ($oFirmaAclaracion->DBGuardar() === FALSE) {
                 $error_txt .= $oFirmaAclaracion->getErrorTxt();
             }
         }
         break;
-    case 'nueva': // aclaracion_nueva
+    case 'nueva': // aclaración nueva
         $valor = Firma::V_A_NUEVA; //Nueva aclaración.
         $orden_oficina = 0;
         // Comprobar que no existe:

@@ -47,19 +47,15 @@ switch ($Q_que) {
             $Q_tipo_entidad = (integer)filter_input(INPUT_POST, 'tipo_entidad');
             $Q_anulado = (bool)filter_input(INPUT_POST, 'anulado');
 
-            if (empty($Q_id_entidad)) {
-                $oEntidadDB = new EntidadDB();
-            } else {
-                $oEntidadDB = new EntidadDB (array('id_entidad' => $Q_id_entidad));
-                $oEntidadDB->DBCargar();
-            }
+            $oEntidadDB = new EntidadDB ($Q_id_entidad);
+            $oEntidadDB->DBCargar();
 
             $Q_schema = empty($Q_schema) ? $Q_nombre : $Q_schema;
             // El nombre del esquema es en minúsculas porque si se accede via nombre del 
             // servidor, éste está en minúscula (agdmontagut.tramity.local)
             // http://www.ietf.org/rfc/rfc2616.txt: Field names are case-insensitive. 
             $schema = strtolower($Q_schema);
-            // tambien lo normalizo:
+            // también lo normalizo:
             $schema = StringLocal::toRFC952($schema);
 
             $oEntidadDB->setNombre($Q_nombre);

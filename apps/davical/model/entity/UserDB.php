@@ -294,10 +294,9 @@ class UserDB extends core\ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -504,30 +503,7 @@ class UserDB extends core\ClasePropiedades
         $this->slocale = $slocale;
     }
 
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setUser_no('');
-        $this->setActive('');
-        $this->setEmail_ok('');
-        $this->setJoined('');
-        $this->setUpdated('');
-        $this->setLast_used('');
-        $this->setUsername('');
-        $this->setPassword('');
-        $this->setFullname('');
-        $this->setEmail('');
-        $this->setConfig_data('');
-        $this->setDate_format_type('');
-        $this->setLocale('');
-        $this->setPrimary_key($aPK);
-    }
-
+    
     /**
      * Recupera las claus primàries de UserDB en un array
      *

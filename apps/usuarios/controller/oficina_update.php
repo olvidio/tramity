@@ -60,8 +60,7 @@ switch ($Q_que) {
         $Q_id_oficina = (integer)filter_input(INPUT_POST, 'id_oficina');
         $Q_orden = (string)filter_input(INPUT_POST, 'orden');
 
-        $oOficina = new Oficina (array('id_oficina' => $Q_id_oficina));
-        $oOficina->DBCargar();
+        $oOficina = new Oficina ($Q_id_oficina);
         $sigla_old = $oOficina->getSigla();
         $oOficina->setSigla($Q_sigla);
         $oOficina->setOrden($Q_orden);
@@ -69,7 +68,7 @@ switch ($Q_que) {
             $error_txt .= _("hay un error, no se ha guardado");
             $error_txt .= "\n" . $oOficina->getErrorTxt();
         } else {
-            if ($sigla_old != $Q_sigla) {
+            if ($sigla_old !== $Q_sigla) {
                 // Cambiar el nombre en davical.
                 $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
                 $oDavical->cambioNombreOficina($Q_sigla, $sigla_old);

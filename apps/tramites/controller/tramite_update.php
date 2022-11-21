@@ -26,6 +26,7 @@ switch ($Q_que) {
             }
         }
         break;
+    case "nuevo":
     case "guardar":
         $Q_tramite = (string)filter_input(INPUT_POST, 'tramite');
 
@@ -36,21 +37,8 @@ switch ($Q_que) {
         $Q_orden = (string)filter_input(INPUT_POST, 'orden');
         $Q_breve = (string)filter_input(INPUT_POST, 'breve');
 
-        $oTramite = new Tramite (array('id_tramite' => $Q_id_tramite));
+        $oTramite = new Tramite ($Q_id_tramite);
         $oTramite->DBCargar();
-        $oTramite->setTramite($Q_tramite);
-        $oTramite->setOrden($Q_orden);
-        $oTramite->setBreve($Q_breve);
-        if ($oTramite->DBGuardar() === FALSE) {
-            $error_txt .= $oTramite->getErrorTxt();
-        }
-        break;
-    case "nuevo":
-        $Q_tramite = (string)filter_input(INPUT_POST, 'tramite');
-        $Q_orden = (string)filter_input(INPUT_POST, 'orden');
-        $Q_breve = (string)filter_input(INPUT_POST, 'breve');
-
-        $oTramite = new Tramite();
         $oTramite->setTramite($Q_tramite);
         $oTramite->setOrden($Q_orden);
         $oTramite->setBreve($Q_breve);

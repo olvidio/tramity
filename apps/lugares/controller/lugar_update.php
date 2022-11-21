@@ -45,7 +45,7 @@ switch ($Q_que) {
         $Q_modo_envio = (integer)filter_input(INPUT_POST, 'modo_envio');
         $Q_anulado = (bool)filter_input(INPUT_POST, 'anulado');
 
-        $oLugar = new Lugar(array('id_lugar' => $Q_id_lugar));
+        $oLugar = new Lugar($Q_id_lugar);
         $oLugar->DBCargar();
         $oLugar->setSigla($Q_sigla);
         $oLugar->setDl($Q_dl);
@@ -75,7 +75,7 @@ switch ($Q_que) {
         $Q_e_mail = (string)filter_input(INPUT_POST, 'e_mail');
         $Q_modo_envio = (integer)filter_input(INPUT_POST, 'modo_envio');
 
-        $oLugar = new Lugar(array('id_lugar' => $Q_id_lugar));
+        $oLugar = new Lugar($Q_id_lugar);
         $oLugar->DBCargar();
         $oLugar->setSigla($Q_sigla);
         $oLugar->setDl($Q_dl);

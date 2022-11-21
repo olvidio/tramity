@@ -227,7 +227,10 @@ class Enviar
             // número de protocolo.
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && empty((array)$json_prot_local)) {
                 $this->oEscrito->generarProtocolo();
-                $this->oEscrito->DBCargar();
+                if ($this->oEscrito->DBCargar() === FALSE ){
+                    $err_cargar = sprintf(_("OJO! no existe el escrito a enviar en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_cargar);
+                }
             }
             // f_salida
             $this->f_salida = $this->oEscrito->getF_escrito()->getFromLocal('.');
@@ -278,9 +281,7 @@ class Enviar
             ini_set('display_errors', 1);
             error_reporting(E_ALL);
 
-            $oLugar = new Lugar();
-            $oLugar->setId_lugar($id_lugar);
-            $oLugar->DBCargar(); // obligar a recargar después de cambiar el id.
+            $oLugar = new Lugar($id_lugar);
             $this->sigla_destino = $oLugar->getSigla();
 
             $modo_envio = $oLugar->getModo_envio();

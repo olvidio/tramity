@@ -1,4 +1,4 @@
-CREATE TABLE public.documentos
+CREATE TABLE nombre_del_esquema.documentos
 (
     id_doc         SERIAL PRIMARY KEY,
     nom            text,
@@ -11,24 +11,24 @@ CREATE TABLE public.documentos
 );
 
 
-ALTER TABLE public.documentos OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.documentos OWNER TO tramity;
 
-CREATE INDEX IF NOT EXISTS documentos_f_upload_idx ON public.documentos (f_upload);
-CREATE INDEX IF NOT EXISTS documentos_nom_idx ON public.documentos (nom);
-CREATE INDEX IF NOT EXISTS documentos_creador_idx ON public.documentos (creador);
-CREATE INDEX IF NOT EXISTS documentos_visibilidad_idx ON public.documentos (visibilidad);
+CREATE INDEX IF NOT EXISTS documentos_f_upload_idx ON nombre_del_esquema.documentos (f_upload);
+CREATE INDEX IF NOT EXISTS documentos_nom_idx ON nombre_del_esquema.documentos (nom);
+CREATE INDEX IF NOT EXISTS documentos_creador_idx ON nombre_del_esquema.documentos (creador);
+CREATE INDEX IF NOT EXISTS documentos_visibilidad_idx ON nombre_del_esquema.documentos (visibilidad);
 
 
-CREATE TABLE public.etiquetas_documento
+CREATE TABLE nombre_del_esquema.etiquetas_documento
 (
     id_etiqueta integer not null,
     id_doc      integer not null,
     PRIMARY KEY (id_etiqueta, id_doc)
 );
 
-ALTER TABLE public.etiquetas_documento OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.etiquetas_documento OWNER TO tramity;
 
-ALTER TABLE public.etiquetas_documento
-    ADD CONSTRAINT etiquetas_documento_fk_exp FOREIGN KEY (id_doc) REFERENCES public.documentos (id_doc) ON DELETE CASCADE;
-ALTER TABLE public.etiquetas_documento
-    ADD CONSTRAINT etiquetas_documento_fk_eti FOREIGN KEY (id_etiqueta) REFERENCES public.etiquetas (id_etiqueta) ON DELETE CASCADE;
+ALTER TABLE nombre_del_esquema.etiquetas_documento
+    ADD CONSTRAINT etiquetas_documento_fk_exp FOREIGN KEY (id_doc) REFERENCES nombre_del_esquema.documentos (id_doc) ON DELETE CASCADE;
+ALTER TABLE nombre_del_esquema.etiquetas_documento
+    ADD CONSTRAINT etiquetas_documento_fk_eti FOREIGN KEY (id_etiqueta) REFERENCES nombre_del_esquema.etiquetas (id_etiqueta) ON DELETE CASCADE;

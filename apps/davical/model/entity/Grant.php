@@ -231,10 +231,9 @@ class Grant extends core\ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         }
@@ -317,22 +316,7 @@ class Grant extends core\ClasePropiedades
         $this->bis_group = $bis_group;
     }
 
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setBy_principal('');
-        $this->setBy_collection('');
-        $this->setTo_principal('');
-        $this->setPrivileges('');
-        $this->setIs_group('');
-        $this->setPrimary_key($aPK);
-    }
-
+    
     /**
      * Recupera las claus primàries de Grant en un array
      *

@@ -209,10 +209,9 @@ class EntradaBypass extends Entrada
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -397,42 +396,7 @@ class EntradaBypass extends Entrada
         }
     }
 
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        //$this->setId_item('');
-        $this->setId_entrada('');
-        $this->setDescripcion('');
-        $this->setJson_prot_destino('');
-        $this->setId_grupos();
-        $this->setDestinos('');
-        $this->setF_salida('');
-        $this->setPrimary_key($aPK);
-        // añado los de entradas
-        $this->setModo_entrada('');
-        $this->setJson_prot_origen('');
-        $this->setAsunto_entrada('');
-        $this->setJson_prot_ref('');
-        $this->setPonente('');
-        $this->setResto_oficinas('');
-        $this->setAsunto('');
-        $this->setF_entrada('');
-        $this->setDetalle('');
-        $this->setCategoria('');
-        $this->setVisibilidad('');
-        $this->setF_contestar('');
-        $this->setBypass('');
-        $this->setEstado('');
-        $this->setAnulado('');
-        $this->setEncargado('');
-        $this->setJson_visto('');
-    }
-
+    
     /**
      * Recupera las claus primàries de EntradaBypass en un array
      *

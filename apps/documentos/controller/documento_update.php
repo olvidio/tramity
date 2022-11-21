@@ -33,7 +33,10 @@ switch ($Q_que) {
             $hoy_iso = $oHoy->getIso();
 
             $oDocumento = new Documento($Q_id_doc);
-            $oDocumento->DBCargar();
+            if ($oDocumento->DBCargar() === FALSE ){
+                $err_cargar = sprintf(_("OJO! no existe el documento en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
             $oDocumento->setTipo_doc($Q_tipo_doc);
             $oDocumento->setF_upload($hoy_iso, FALSE);
 
@@ -61,7 +64,10 @@ switch ($Q_que) {
     case 'guardar':
         if (!empty($Q_id_doc)) {
             $oDocumento = new Documento($Q_id_doc);
-            $oDocumento->DBCargar();
+            if ($oDocumento->DBCargar() === FALSE ){
+                $err_cargar = sprintf(_("OJO! no existe el documento en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
         } else {
             $oDocumento = new Documento();
             $id_creador = ConfigGlobal::role_id_cargo();

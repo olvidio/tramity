@@ -53,7 +53,10 @@ function upload()
                 $hoy_iso = $oHoy->getIso();
 
                 $oDocumento = new Documento($Q_id_doc);
-                $oDocumento->DBCargar();
+                if ($oDocumento->DBCargar() === FALSE ){
+                    $err_cargar = sprintf(_("OJO! no existe el documento en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_cargar);
+                }
                 $oDocumento->setNombre_fichero($fileName);
                 $oDocumento->setTipo_doc(Documento::DOC_UPLOAD);
                 $oDocumento->setDocumento($contenido_doc);

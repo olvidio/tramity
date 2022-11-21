@@ -168,7 +168,10 @@ switch ($Q_que) {
         $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
 
         $oEntrada = new Entrada($Q_id_entrada);
-        $oEntrada->DBCargar();
+        if ($oEntrada->DBCargar() === FALSE) {
+            $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oEntrada->setAnulado($Qtext);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt = $oEntrada->getErrorTxt();
@@ -204,7 +207,10 @@ switch ($Q_que) {
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qdetalle = (string)filter_input(INPUT_POST, 'text');
         $oEntrada = new Entrada($Q_id_entrada);
-        $oEntrada->DBCargar();
+        if ($oEntrada->DBCargar() === FALSE) {
+            $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oEntrada->setDetalle($Qdetalle);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt = $oEntrada->getErrorTxt();

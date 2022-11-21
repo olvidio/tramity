@@ -52,18 +52,15 @@ if (isset($_POST['stack'])) {
 }
 $oPosicion->setParametros(array('id_oficina' => $Q_id_oficina), 1);
 
-$oOficina = new Oficina();
 
 $txt_guardar = _("guardar datos oficina");
-if (!empty($Q_id_oficina)) {
+$oOficina = new Oficina($Q_id_oficina);
+if ($oOficina->DBCargar()) {
     $que = 'guardar';
-    $oOficina->setId_oficina($Q_id_oficina);
-    $oOficina->DBCargar();
     $sigla = $oOficina->getSigla();
     $orden = $oOficina->getOrden();
 } else {
     $que = 'nuevo';
-    $Q_id_oficina = '';
     $sigla = '';
     $orden = '';
 }

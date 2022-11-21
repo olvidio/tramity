@@ -247,10 +247,9 @@ class EntradaAdjunto extends core\ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -324,21 +323,7 @@ class EntradaAdjunto extends core\ClasePropiedades
         $this->adjunto = $adjunto;
     }
 
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setId_item('');
-        $this->setId_entrada('');
-        $this->setNom('');
-        $this->setAdjuntoEscaped('');
-        $this->setPrimary_key($aPK);
-    }
-
+    
     /**
      * Recupera las claus primàries de EntradaAdjunto en un array
      *

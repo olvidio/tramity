@@ -32,10 +32,10 @@ SET
 default_with_oids = false;
 
 --
--- Name: x_locales; Type: TABLE; Schema: public; Owner: tramity
+-- Name: x_locales; Type: TABLE; Schema: nombre_del_esquema. Owner: tramity
 --
 
-CREATE TABLE public.x_locales
+CREATE TABLE nombre_del_esquema.x_locales
 (
     id_locale  character varying(12) NOT NULL,
     nom_locale text,
@@ -45,13 +45,13 @@ CREATE TABLE public.x_locales
 );
 
 
-ALTER TABLE public.x_locales OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.x_locales OWNER TO tramity;
 
 --
--- Data for Name: x_locales; Type: TABLE DATA; Schema: public; Owner: tramity
+-- Data for Name: x_locales; Type: TABLE DATA; Schema: nombre_del_esquema. Owner: tramity
 --
 
-COPY public.x_locales (id_locale, nom_locale, idioma, nom_idioma, activo) FROM stdin;
+COPY nombre_del_esquema.x_locales (id_locale, nom_locale, idioma, nom_idioma, activo) FROM stdin;
 de_DE
 .
 UTF
@@ -107,7 +107,7 @@ vi_VN.UTF-8	Vietnamese_Viet Nam	vi	Vietnamese	f
 ca_ES.UTF-8	Catalan_Spain	ca	Catalan	t
 es_ES.UTF-8	Spanish_Spain	es	Spanish	t
 hu.UTF-8	Hungarian_Hungary	hu	Hungarian	f
-cs_CZ.UTF-8	Czech_Czech Republic	cs	Czech	f
+cs_CZ.UTF-8	Czech_Czech Renombre_del_esquema.cs	Czech	f
 it_IT.UTF-8	Italian_Italy	it	Italian	t
 en_US.UTF-8	English_US	en	English	t
 en.UTF-8	English_Australia	en	English	f
@@ -120,10 +120,10 @@ gl_ES.UTF-8	Galician_Spain	gl	Gallego	f
 
 
 --
--- Name: x_locales xidiomas_pkey; Type: CONSTRAINT; Schema: public; Owner: tramity
+-- Name: x_locales xidiomas_pkey; Type: CONSTRAINT; Schema: nombre_del_esquema. Owner: tramity
 --
 
-ALTER TABLE ONLY public.x_locales
+ALTER TABLE ONLY nombre_del_esquema.x_locales
     ADD CONSTRAINT xidiomas_pkey PRIMARY KEY (id_locale);
 
 

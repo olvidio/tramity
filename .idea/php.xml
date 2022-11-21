@@ -21,6 +21,7 @@
       <path value="$PROJECT_DIR$/libs/vendor/twig/twig" />
       <path value="$PROJECT_DIR$/libs/vendor/jblond/twig-trans" />
       <path value="$PROJECT_DIR$/apps" />
+      <path value="/usr/share/awl/inc" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />

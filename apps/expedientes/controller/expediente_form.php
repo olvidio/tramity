@@ -124,7 +124,10 @@ foreach ($cCargos_oficina as $oCargo) {
 if ($Q_id_expediente) {
     $titulo = _("expediente");
     $oExpediente->setId_expediente($Q_id_expediente);
-    $oExpediente->DBCargar();
+    if ($oExpediente->DBCargar() === FALSE ){
+        $err_cargar = sprintf(_("OJO! no existe el escrito a enviar en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_cargar);
+    }
 
     $id_tramite = $oExpediente->getId_tramite();
     $oDesplTramites->setOpcion_sel($id_tramite);

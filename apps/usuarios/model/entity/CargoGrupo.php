@@ -215,10 +215,9 @@ class CargoGrupo extends core\ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -297,21 +296,7 @@ class CargoGrupo extends core\ClasePropiedades
         $this->a_miembros = $postgresArray;
     }
 
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setId_grupo('');
-        $this->setId_cargo_ref('');
-        $this->setDescripcion('');
-        $this->setMiembros('');
-        $this->setPrimary_key($aPK);
-    }
-
+    
     /**
      * Recupera las claus primàries de CargoGrupo en un array
      *

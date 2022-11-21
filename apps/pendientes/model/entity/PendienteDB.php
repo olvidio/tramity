@@ -326,10 +326,9 @@ class PendienteDB extends core\ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -571,34 +570,7 @@ class PendienteDB extends core\ClasePropiedades
         }
     }
 
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setId_pendiente('');
-        $this->setAsunto('');
-        $this->setStatus('');
-        $this->setF_acabado('');
-        $this->setF_plazo('');
-        $this->setRef_mas('');
-        $this->setObserv('');
-        $this->setEncargado('');
-        $this->setCancilleria('');
-        $this->setVisibilidad('');
-        $this->setDetalle('');
-        $this->setPendiente_con('');
-        $this->setEtiquetas('');
-        $this->setOficinas('');
-        $this->setId_oficina('');
-        $this->setRrule('');
-        $this->setF_inicio('');
-        $this->setPrimary_key($aPK);
-    }
-
+    
     /**
      * Recupera las claus primàries de PendienteDB en un array
      *
@@ -777,9 +749,9 @@ class PendienteDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut ivisibilidad de PendienteDB
      *
-     * @return integer ivisibilidad
+     * @return integer|null $ivisibilidad
      */
-    function getVisibilidad()
+    public function getVisibilidad(): ?int
     {
         if (!isset($this->ivisibilidad) && !$this->bLoaded) {
             $this->DBCargar();

@@ -60,7 +60,7 @@ foreach ($cEntidadDBes as $oEntidadDB) {
     $id_entidad = $oEntidadDB->getId_entidad();
     $nombre = $oEntidadDB->getNombre();
     $schema = $oEntidadDB->getSchema();
-    $anulado = $oEntidadDB->getAnulado();
+    $anulado = $oEntidadDB->isAnulado();
     $anulado_txt = is_true($anulado) ? _("Sí") : '';
     $tipo = $oEntidadDB->getTipo();
     $tipo_txt = $a_opciones_tipo[$tipo];

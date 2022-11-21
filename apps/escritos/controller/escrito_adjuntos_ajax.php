@@ -37,8 +37,8 @@ switch ($Q_que) {
         $Q_force = (string)filter_input(INPUT_POST, 'force');
 
         $oDocumento = new Documento($Q_id_doc);
-        if ($Q_force == 'false') {
-            // Avisar si está como antecedente en algun sitio:
+        if ($Q_force === 'false') {
+            // Avisar si está como antecedente en algún sitio:
             $error_txt .= $oDocumento->comprobarEliminar($Q_id_doc);
             if (!empty($error_txt)) {
                 $jsondata['err_tipo'] = 'antecedente';
@@ -47,9 +47,9 @@ switch ($Q_que) {
 
         if (empty($error_txt)) {
             $gesEtherpad = new GestorEtherpad();
-            if ($Q_que == 'insertar_copia') {
+            if ($Q_que === 'insertar_copia') {
                 $error_txt .= $gesEtherpad->copyDocToEscrito($Q_id_doc, $Q_id_escrito, 'true');
-            } elseif ($Q_que == 'insertar') {
+            } elseif ($Q_que === 'insertar') {
                 $error_txt .= $gesEtherpad->moveDocToEscrito($Q_id_doc, $Q_id_escrito, 'true');
                 // borrar el documento:
                 $oDocumento = new Documento($Q_id_doc);
@@ -58,7 +58,10 @@ switch ($Q_que) {
                 }
             }
             $oEscrito = new Escrito($Q_id_escrito);
-            $oEscrito->DBCargar();
+            if ($oEscrito->DBCargar() === FALSE ){
+                $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
             $oEscrito->setTipo_doc(Documento::DOC_ETHERPAD);
             if ($oEscrito->DBGuardar() === FALSE) {
                 $error_txt .= ($oEscrito->getErrorTxt());
@@ -92,7 +95,7 @@ switch ($Q_que) {
         $sourceID = $oEtherpad->getId_pad();
 
         $rta = $oEtherpad->deletePad($sourceID);
-        if ($rta->getCode() == 0) {
+        if ($rta->getCode() === 0) {
             /* Example returns:
              * {code: 0, message:"ok", data: null}
              * {code: 1, message:"padID does not exist", data: null}
@@ -112,7 +115,7 @@ switch ($Q_que) {
         $oDocumento = new Documento($Q_id_doc);
         $tipo_doc = $oDocumento->getTipo_doc();
 
-        if ($Q_force == 'false') {
+        if ($Q_force === 'false') {
             // Avisar si está como antecedente en algun sitio:
             $error_txt .= $oDocumento->comprobarEliminar($Q_id_doc);
             if (!empty($error_txt)) {
@@ -136,9 +139,9 @@ switch ($Q_que) {
                     $id_item = $oEscritoAdjunto->getId_item();
 
                     $gesEtherpad = new GestorEtherpad();
-                    if ($Q_que == 'adjuntar_copia') {
+                    if ($Q_que === 'adjuntar_copia') {
                         $error_txt .= $gesEtherpad->copyDocToAdjunto($Q_id_doc, $id_item, 'true');
-                    } elseif ($Q_que == 'adjuntar') {
+                    } elseif ($Q_que === 'adjuntar') {
                         $error_txt .= $gesEtherpad->moveDocToAdjunto($Q_id_doc, $id_item, 'true');
                         // borra de la lista de documentos:
                         $oDocumento->DBEliminar();
@@ -163,7 +166,7 @@ switch ($Q_que) {
                     // habrá que refrescar toda la página
 
                     // borrar de documentos
-                    if ($Q_que == 'adjuntar' && $oDocumento->DBEliminar() === FALSE) {
+                    if ($Q_que === 'adjuntar' && $oDocumento->DBEliminar() === FALSE) {
                         $error_txt .= $oDocumento->getErrorTxt();
                     }
                     break;
@@ -191,7 +194,7 @@ switch ($Q_que) {
     case 'buscar_5':
         //n = 4 -> Documento Upload y Etherpad (adjuntar)
         //n = 5 -> Documento Etherpad (insertar)
-        $Q_tipo_n = (string)filter_input(INPUT_POST, 'tipo_n');
+        $Q_tipo_n = (integer)filter_input(INPUT_POST, 'tipo_n');
         $Q_nom = (string)filter_input(INPUT_POST, 'nom');
         $Q_andOr = (string)filter_input(INPUT_POST, 'andOr');
         $Q_periodo = (string)filter_input(INPUT_POST, 'periodo');
@@ -290,12 +293,12 @@ switch ($Q_que) {
             ['width' => 50, 'name' => _("etiquetas")],
             ''];
 
-        $txt_ajuntar = ($Q_tipo_n == 5) ? _("abrir") : _("adjuntar");
+        $txt_ajuntar = ($Q_tipo_n === 5) ? _("abrir") : _("adjuntar");
         $a_valores = [];
         $a = 0;
         foreach ($cDocumentos as $oDocumento) {
             // Si sólo quiero los etherpad, quitar el resto:
-            if ($Q_tipo_n == 5 && $oDocumento->getTipo_doc() != Documento::DOC_ETHERPAD) {
+            if ($Q_tipo_n === 5 && $oDocumento->getTipo_doc() != Documento::DOC_ETHERPAD) {
                 continue;
             }
             // mirar permisos...
@@ -314,7 +317,7 @@ switch ($Q_que) {
 
             $creador = $a_posibles_cargos[$id_creador];
 
-            if ($Q_tipo_n == 5) {
+            if ($Q_tipo_n === 5) {
                 $add = "<span class=\"btn btn-link\" onclick=\"fnjs_confirm_insertar_documento('documento','$id_doc','$Q_id_escrito');\" >$txt_ajuntar</span>";
             } else {
                 $add = "<span class=\"btn btn-link\" onclick=\"fnjs_confirm_adjuntar_documento('documento','$id_doc','$Q_id_escrito');\" >$txt_ajuntar</span>";
@@ -333,7 +336,7 @@ switch ($Q_que) {
 
         // Alerta!!
         $alerta = '';
-        if ($Q_tipo_n == 5) {
+        if ($Q_tipo_n === 5) {
             $alerta = _("ATENCIÓN: Sólo se pueden insertar los de tipo Etherpad");
         }
         $a_campos = [

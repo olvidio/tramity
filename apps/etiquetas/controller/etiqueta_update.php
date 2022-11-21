@@ -49,12 +49,11 @@ switch ($Q_que) {
             echo _("debe poner un nombre");
         }
 
-        if (empty($Q_id_etiqueta)) {
-            $oEtiqueta = new Etiqueta();
-        } else {
-            $oEtiqueta = new Etiqueta(array('id_etiqueta' => $Q_id_etiqueta));
+        $oEtiqueta = new Etiqueta($Q_id_etiqueta);
+        if ($oEtiqueta->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe la etiqueta en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
         }
-        $oEtiqueta->DBCargar();
         $oEtiqueta->setNom_etiqueta($Q_nom_etiqueta);
         $oEtiqueta->setOficina($oficina);
         $oEtiqueta->setId_cargo($id_cargo);

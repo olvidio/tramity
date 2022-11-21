@@ -413,10 +413,9 @@ class EscritoDB extends core\ClasePropiedades
                     $oDblSt->closeCursor();
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -743,41 +742,7 @@ class EscritoDB extends core\ClasePropiedades
         $this->sdescripcion = $sdescripcion;
     }
 
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setId_escrito('');
-        $this->setJson_prot_local('');
-        $this->setJson_prot_destino('');
-        $this->setJson_prot_ref('');
-        $this->setId_grupos();
-        $this->setDestinos('');
-        $this->setAsunto('');
-        $this->setDetalle('');
-        $this->setCreador('');
-        $this->setResto_oficinas('');
-        $this->setComentarios('');
-        $this->setF_aprobacion('');
-        $this->setF_escrito('');
-        $this->setF_contestar('');
-        $this->setCategoria('');
-        $this->setVisibilidad('');
-        $this->setVisibilidad_dst('');
-        $this->setAccion('');
-        $this->setModo_envio('');
-        $this->setF_salida('');
-        $this->setOk('');
-        $this->setTipo_doc('');
-        $this->setAnulado('');
-        $this->setDescripcion('');
-        $this->setPrimary_key($aPK);
-    }
-
+    
     /**
      * Recupera las claus primàries de EscritoDB en un array
      *

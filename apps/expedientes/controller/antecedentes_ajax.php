@@ -50,7 +50,10 @@ switch ($Q_que) {
 
         $a_antecedente = ['tipo' => $Q_tipo_antecedente, 'id' => $Q_id_escrito];
         $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCargar();
+        if ($oExpediente->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oExpediente->delAntecedente($a_antecedente);
         if ($oExpediente->DBGuardar() === FALSE) {
             exit($oExpediente->getErrorTxt());
@@ -63,7 +66,10 @@ switch ($Q_que) {
 
         $a_antecedente = ['tipo' => $Q_tipo_antecedente, 'id' => $Q_id_escrito];
         $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCargar();
+        if ($oExpediente->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oExpediente->addAntecedente($a_antecedente);
         if ($oExpediente->DBGuardar() === FALSE) {
             exit($oExpediente->getErrorTxt());
@@ -547,7 +553,7 @@ switch ($Q_que) {
     case 'buscar_4':
         //n = 4 -> Documento
         //n = 5 -> Documento Etherpad (insertar)
-        $Q_tipo_n = (string)filter_input(INPUT_POST, 'tipo_n');
+        $Q_tipo_n = (integer)filter_input(INPUT_POST, 'tipo_n');
         $Q_nom = (string)filter_input(INPUT_POST, 'nom');
         $Q_andOr = (string)filter_input(INPUT_POST, 'andOr');
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -653,7 +659,7 @@ switch ($Q_que) {
         $a = 0;
         foreach ($cDocumentos as $oDocumento) {
             // Si sólo quiero los etherpad, quitar el resto:
-            if ($Q_tipo_n == 5 && $oDocumento->getTipo_doc() != Documento::DOC_ETHERPAD) {
+            if ($Q_tipo_n === 5 && $oDocumento->getTipo_doc() != Documento::DOC_ETHERPAD) {
                 continue;
             }
             // mirar permisos...

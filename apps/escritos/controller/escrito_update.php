@@ -75,7 +75,10 @@ switch ($Q_que) {
         $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Q_id_expediente, 'id_escrito' => $Q_id_escrito]);
         // solamente debería haber uno
         $oAccion = $cAcciones[0];
-        $oAccion->DBCargar();
+        if ($oAccion->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe la acción en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oAccion->setTipo_accion($accion);
         if ($oAccion->DBGuardar() === FALSE) {
             $error_txt .= $oAccion->getErrorTxt();
@@ -97,7 +100,10 @@ switch ($Q_que) {
         $error_txt = '';
         $oEscrito = new Escrito($Q_id_escrito);
         $Q_detalle = (string)filter_input(INPUT_POST, 'text');
-        $oEscrito->DBCargar();
+        if ($oEscrito->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oEscrito->setDetalle($Q_detalle);
         if ($oEscrito->DBGuardar() === FALSE) {
             $error_txt = $oEscrito->getErrorTxt();
@@ -404,7 +410,10 @@ switch ($Q_que) {
         exit();
     case 'escrito_a_secretaria':
         $oEscrito = new Escrito($Q_id_escrito);
-        $oEscrito->DBCargar();
+        if ($oEscrito->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oEscrito->setComentarios('');
         $oEscrito->setOK(Escrito::OK_OFICINA);
         if ($oEscrito->DBGuardar() === FALSE) {
@@ -414,7 +423,10 @@ switch ($Q_que) {
     case 'escrito_a_oficina':
         $Q_comentario = (string)filter_input(INPUT_POST, 'comentario');
         $oEscrito = new Escrito($Q_id_escrito);
-        $oEscrito->DBCargar();
+        if ($oEscrito->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oEscrito->setComentarios($Q_comentario);
         $oEscrito->setOK(Escrito::OK_NO);
         if ($oEscrito->DBGuardar() === FALSE) {
@@ -424,7 +436,10 @@ switch ($Q_que) {
     case 'tipo_doc':
         $Q_tipo_doc = (integer)filter_input(INPUT_POST, 'tipo_doc');
         $oEscrito = new Escrito($Q_id_escrito);
-        $oEscrito->DBCargar();
+        if ($oEscrito->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oEscrito->setTipo_doc($Q_tipo_doc);
         if ($oEscrito->DBGuardar() === FALSE) {
             exit($oEscrito->getErrorTxt());
@@ -437,7 +452,10 @@ switch ($Q_que) {
             $Q_f_escrito = $oHoy->getFromLocal();
         }
         $oEscrito = new Escrito($Q_id_escrito);
-        $oEscrito->DBCargar();
+        if ($oEscrito->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oEscrito->setF_escrito($Q_f_escrito);
         if ($oEscrito->DBGuardar() === FALSE) {
             exit($oEscrito->getErrorTxt());
@@ -447,7 +465,10 @@ switch ($Q_que) {
         $txt_err = '';
         if (!empty($Q_id_escrito)) {
             $oEscrito = new Escrito($Q_id_escrito);
-            $oEscrito->DBCargar();
+            if ($oEscrito->DBCargar() === FALSE ){
+                $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
             $Q_anular = (string)filter_input(INPUT_POST, 'anular');
 
             if (is_true($Q_anular)) {
@@ -483,7 +504,10 @@ switch ($Q_que) {
         $nuevo = FALSE;
         if (!empty($Q_id_escrito)) {
             $oEscrito = new Escrito($Q_id_escrito);
-            $oEscrito->DBCargar();
+            if ($oEscrito->DBCargar() === FALSE ){
+                $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
             $oPermisoRegistro = new PermRegistro();
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEscrito, 'asunto');
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEscrito, 'detalle');
@@ -646,7 +670,10 @@ switch ($Q_que) {
         $txt_err = '';
         if (!empty($Q_id_escrito)) {
             $oEscrito = new Escrito($Q_id_escrito);
-            $oEscrito->DBCargar();
+            if ($oEscrito->DBCargar() === FALSE ){
+                $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
         } else {
             $txt_err .= _("No puede ser");
         }
@@ -673,7 +700,10 @@ switch ($Q_que) {
         $Q_f_aprobacion = (string)filter_input(INPUT_POST, 'f_aprobacion');
         if (!empty($Q_id_escrito)) {
             $oEscrito = new Escrito($Q_id_escrito);
-            $oEscrito->DBCargar();
+            if ($oEscrito->DBCargar() === FALSE ){
+                $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
             $oPermisoRegistro = new PermRegistro();
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEscrito, 'asunto');
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEscrito, 'detalle');

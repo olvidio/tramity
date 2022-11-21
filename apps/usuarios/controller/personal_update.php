@@ -53,8 +53,11 @@ switch ($Q_que) {
         $Q_email = (string)filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $Q_id_cargo_preferido = (integer)filter_input(INPUT_POST, 'id_cargo_preferido');
 
-        $oUsuario = new Usuario(array('id_usuario' => $id_usuario));
-        $oUsuario->DBCargar();
+        $oUsuario = new Usuario($id_usuario);
+        if ($oUsuario->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oUsuario->setId_cargo_preferido($Q_id_cargo_preferido);
         $oUsuario->setEmail($Q_email);
         $oUsuario->setNom_usuario($Q_nom_usuario);

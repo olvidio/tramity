@@ -69,8 +69,11 @@ switch ($Q_que) {
         $Q_password = (string)filter_input(INPUT_POST, 'password');
         $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
-        $oUsuario = new Usuario(array('id_usuario' => $Q_id_usuario));
-        $oUsuario->DBCargar();
+        $oUsuario = new Usuario($Q_id_usuario);
+        if ($oUsuario->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         if (!empty($Q_password)) {
             $oCrypt = new MyCrypt();
             $my_passwd = $oCrypt->encode($Q_password);
@@ -97,8 +100,11 @@ switch ($Q_que) {
         $Q_password = (string)filter_input(INPUT_POST, 'password');
         $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
-        $oUsuario = new Usuario(array('id_usuario' => $Q_id_usuario));
-        $oUsuario->DBCargar();
+        $oUsuario = new Usuario($Q_id_usuario);
+        if ($oUsuario->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oUsuario->setUsuario($Q_usuario);
         $oUsuario->setId_cargo_preferido($Q_id_cargo_preferido);
         $oUsuario->setEmail($Q_email);

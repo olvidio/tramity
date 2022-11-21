@@ -49,15 +49,11 @@ function upload()
                 $fp = fopen($tmpFilePath, 'rb');
                 $contenido_doc = fread($fp, filesize($tmpFilePath));
 
-                if (!empty($Q_id_item)) {
-                    // update
-                    $oEscritoAdjunto = new EscritoAdjunto($Q_id_item);
-                    $oEscritoAdjunto->DBCargar();
-                } else {
-                    // new
-                    $oEscritoAdjunto = new EscritoAdjunto();
+                $oEscritoAdjunto = new EscritoAdjunto($Q_id_item);
+                if ($oEscritoAdjunto->DBCargar() === FALSE ){
+                    $err_cargar = sprintf(_("OJO! no existe el escrito adjunto en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_cargar);
                 }
-
                 $oEscritoAdjunto->setId_escrito($Q_id_escrito);
                 $oEscritoAdjunto->setNom($fileName);
                 $oEscritoAdjunto->setTipo_doc(Documento::DOC_UPLOAD);

@@ -69,9 +69,12 @@ switch ($Q_que) {
                 $a_etiquetas[] = $etiqueta;
             }
         }
-        // Se pone cuando se han enviado...
+        // Se ponen cuando se han enviado...
         $oEntrada = new Entrada($Q_id_entrada);
-        $oEntrada->DBCargar();
+        if ($oEntrada->DBCargar() === FALSE) {
+            $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         // las etiquetas:
         $oEntrada->setEtiquetas($a_etiquetas);
         if ($oEntrada->DBGuardar() === FALSE) {
@@ -93,7 +96,10 @@ switch ($Q_que) {
         $Qid_oficina = ConfigGlobal::role_id_oficina();
         $Qid_cargo_encargado = (integer)filter_input(INPUT_POST, 'id_cargo_encargado');
         $oEntrada = new EntradaDB($Q_id_entrada);
-        $oEntrada->DBCargar();
+        if ($oEntrada->DBCargar() === FALSE) {
+            $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         // comprobar si es un cambio (ya estaba encargado a alguien)
         $encargado_old = $oEntrada->getEncargado();
 
@@ -180,7 +186,10 @@ switch ($Q_que) {
         $Qid_oficina = ConfigGlobal::role_id_oficina();
         $Qid_cargo = ConfigGlobal::role_id_cargo();
         $oEntrada = new EntradaDB($Q_id_entrada);
-        $oEntrada->DBCargar();
+        if ($oEntrada->DBCargar() === FALSE) {
+            $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
 
         $aVisto = $oEntrada->getJson_visto(TRUE);
         $oVisto = [];
@@ -289,7 +298,10 @@ switch ($Q_que) {
             $Q_f_entrada = $oHoy->getFromLocal();
         }
         $oEntrada = new Entrada($Q_id_entrada);
-        $oEntrada->DBCargar();
+        if ($oEntrada->DBCargar() === FALSE) {
+            $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oEntrada->setF_entrada($Q_f_entrada);
         if (empty($Q_f_entrada)) {
             $oEntrada->setEstado(Entrada::ESTADO_INGRESADO);
@@ -303,7 +315,10 @@ switch ($Q_que) {
         break;
     case 'detalle':
         $oEntrada = new Entrada($Q_id_entrada);
-        $oEntrada->DBCargar();
+        if ($oEntrada->DBCargar() === FALSE) {
+            $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oEntrada->setDetalle($Q_detalle);
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt = $oEntrada->getErrorTxt();
@@ -312,7 +327,10 @@ switch ($Q_que) {
         break;
     case 'guardar_ctr':
         $oEntrada = new Entrada($Q_id_entrada);
-        $oEntrada->DBCargar();
+        if ($oEntrada->DBCargar() === FALSE) {
+            $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oEntrada->setAsunto($Q_asunto);
         $oEntrada->setDetalle($Q_detalle);
         $oEntrada->setCategoria($Q_categoria);
@@ -369,7 +387,10 @@ switch ($Q_que) {
     case 'guardar':
         if (!empty($Q_id_entrada)) {
             $oEntrada = new Entrada($Q_id_entrada);
-            $oEntrada->DBCargar();
+            if ($oEntrada->DBCargar() === FALSE) {
+                $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
             $oPermisoRegistro = new PermRegistro();
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntrada, 'asunto');
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEntrada, 'detalle');
@@ -526,13 +547,14 @@ switch ($Q_que) {
             //////// BY PASS //////
             if (is_true($Q_bypass) && !empty($Q_id_entrada)) {
                 $oEntradaBypass = new EntradaBypass($Q_id_entrada);
-                $oEntradaBypass->DBCargar();
-                // Al cargar si no existe, también borra el id_entrada, y hay que volver a asignarlo.
-                $oEntradaBypass->setId_entrada($Q_id_entrada);
+                $oEntradaBypass->DBCargar(); // Mo pasa nada si no existe, ya se insertará
                 //Q_asunto.
                 if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
                     $oEntrada = new EntradaDB($Q_id_entrada);
-                    $oEntrada->DBCargar();
+                    if ($oEntrada->DBCargar() === FALSE) {
+                        $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
+                        exit ($err_cargar);
+                    }
                     $oEntrada->setAsunto($Q_asunto);
                     if ($oEntrada->DBGuardar() === FALSE) {
                         $error_txt .= $oEntrada->getErrorTxt();

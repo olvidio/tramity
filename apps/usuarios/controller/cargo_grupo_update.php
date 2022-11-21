@@ -38,11 +38,7 @@ switch ($Q_que) {
             echo _("debe poner un nombre");
         }
 
-        if (empty($Q_id_grupo)) {
-            $oGrupo = new CargoGrupo();
-        } else {
-            $oGrupo = new CargoGrupo(array('id_grupo' => $Q_id_grupo));
-        }
+        $oGrupo = new CargoGrupo($Q_id_grupo);
         $oGrupo->DBCargar();
         $oGrupo->setId_cargo_ref($Q_id_cargo_ref);
         $oGrupo->setDescripcion($Q_descripcion);

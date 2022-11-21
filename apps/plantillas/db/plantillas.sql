@@ -1,9 +1,9 @@
-CREATE TABLE public.plantillas
+CREATE TABLE nombre_del_esquema.plantillas
 (
     id_plantilla SERIAL PRIMARY KEY,
     nombre       text NOT NULL
 );
 
 
-ALTER TABLE public.plantillas OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.plantillas OWNER TO tramity;
 

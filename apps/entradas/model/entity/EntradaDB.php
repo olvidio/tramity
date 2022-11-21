@@ -309,10 +309,9 @@ class EntradaDB extends core\ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -548,36 +547,7 @@ class EntradaDB extends core\ClasePropiedades
         $this->iencargado = $iencargado;
     }
 
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setId_entrada('');
-        $this->setId_entrada_compartida('');
-        $this->setModo_entrada('');
-        $this->setJson_prot_origen('');
-        $this->setAsunto_entrada('');
-        $this->setJson_prot_ref('');
-        $this->setPonente('');
-        $this->setResto_oficinas('');
-        $this->setAsunto('');
-        $this->setF_entrada('');
-        $this->setDetalle('');
-        $this->setCategoria('');
-        $this->setVisibilidad('');
-        $this->setF_contestar('');
-        $this->setBypass('');
-        $this->setEstado('');
-        $this->setAnulado('');
-        $this->setEncargado('');
-        $this->setJson_visto('');
-        $this->setPrimary_key($aPK);
-    }
-
+    
     /**
      * Recupera las claus primàries de EntradaDB en un array
      *
@@ -956,9 +926,9 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut ivisibilidad de EntradaDB
      *
-     * @return integer ivisibilidad
+     * @return integer|null ivisibilidad
      */
-    function getVisibilidad()
+    public function getVisibilidad(): ?int
     {
         if (!isset($this->ivisibilidad) && !$this->bLoaded) {
             $this->DBCargar();

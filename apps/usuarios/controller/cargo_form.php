@@ -52,13 +52,11 @@ if (isset($_POST['stack'])) {
 }
 $oPosicion->setParametros(array('id_cargo' => $Q_id_cargo), 1);
 
-$oCargo = new Cargo();
 
 $txt_guardar = _("guardar datos cargo");
-if (!empty($Q_id_cargo)) {
+$oCargo = new Cargo($Q_id_cargo);
+if ($oCargo->DBCargar()) {
     $que = 'guardar';
-    $oCargo->setId_cargo($Q_id_cargo);
-    $oCargo->DBCargar();
     $cargo = $oCargo->getCargo();
     $descripcion = $oCargo->getDescripcion();
     $id_ambito = $oCargo->getId_ambito();
@@ -74,7 +72,7 @@ if (!empty($Q_id_cargo)) {
     $Q_id_cargo = '';
     $cargo = '';
     $descripcion = '';
-    $id_ambito = $_SESSION['oConfig']->getAmbito(); // segun configuración de la aplicacion;
+    $id_ambito = $_SESSION['oConfig']->getAmbito(); // según configuración de la aplicación;
     $id_oficina = '';
     $chk_director = '';
     $chk_sacd = '';
@@ -82,7 +80,7 @@ if (!empty($Q_id_cargo)) {
     $id_suplente = '';
 }
 
-if ($id_ambito == $oCargo::AMBITO_DL) {
+if ($id_ambito === $oCargo::AMBITO_DL) {
     $hay_oficina = TRUE;
     $oGOficinas = new GestorOficina();
     $oDesplOficinas = $oGOficinas->getListaOficinas();

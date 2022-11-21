@@ -2,7 +2,7 @@
 -- OJO; Para los indices array integer ---
 CREATE
 EXTENSION IF NOT EXISTS intarray;
-CREATE TABLE public.escritos
+CREATE TABLE nombre_del_esquema.escritos
 (
     id_escrito        SERIAL PRIMARY KEY,
     json_prot_local   jsonb,
@@ -30,21 +30,21 @@ CREATE TABLE public.escritos
     descripcion       text
 );
 
-ALTER TABLE public.escritos OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.escritos OWNER TO tramity;
 
-CREATE INDEX IF NOT EXISTS escritos_asunto_idx ON public.escritos ((lower (asunto)));
-CREATE INDEX IF NOT EXISTS escritos_f_aprobacion_idx ON public.escritos (f_aprobacion);
-CREATE INDEX IF NOT EXISTS escritos_f_contestar_idx ON public.escritos (f_contestar);
-CREATE INDEX IF NOT EXISTS escritos_f_escrito_idx ON public.escritos (f_escrito);
-CREATE INDEX IF NOT EXISTS escritos_id_grupos_idx ON public.escritos USING GIN (id_grupos gin__int_ops);
-CREATE INDEX IF NOT EXISTS excritos_destinos_idx ON public.escritos USING GIN (destinos gin__int_ops);
+CREATE INDEX IF NOT EXISTS escritos_asunto_idx ON nombre_del_esquema.escritos ((lower (asunto)));
+CREATE INDEX IF NOT EXISTS escritos_f_aprobacion_idx ON nombre_del_esquema.escritos (f_aprobacion);
+CREATE INDEX IF NOT EXISTS escritos_f_contestar_idx ON nombre_del_esquema.escritos (f_contestar);
+CREATE INDEX IF NOT EXISTS escritos_f_escrito_idx ON nombre_del_esquema.escritos (f_escrito);
+CREATE INDEX IF NOT EXISTS escritos_id_grupos_idx ON nombre_del_esquema.escritos USING GIN (id_grupos gin__int_ops);
+CREATE INDEX IF NOT EXISTS excritos_destinos_idx ON nombre_del_esquema.escritos USING GIN (destinos gin__int_ops);
 
-CREATE INDEX IF NOT EXISTS escritos_local_idx ON public.escritos USING GIN (json_prot_local jsonb_path_ops);
-CREATE INDEX IF NOT EXISTS escritos_destino_idx ON public.escritos USING GIN (json_prot_destino jsonb_path_ops);
-CREATE INDEX IF NOT EXISTS escritos_ref_idx ON public.escritos USING GIN (json_prot_ref jsonb_path_ops);
+CREATE INDEX IF NOT EXISTS escritos_local_idx ON nombre_del_esquema.escritos USING GIN (json_prot_local jsonb_path_ops);
+CREATE INDEX IF NOT EXISTS escritos_destino_idx ON nombre_del_esquema.escritos USING GIN (json_prot_destino jsonb_path_ops);
+CREATE INDEX IF NOT EXISTS escritos_ref_idx ON nombre_del_esquema.escritos USING GIN (json_prot_ref jsonb_path_ops);
 
 --- adjuntos
-CREATE TABLE public.escrito_adjuntos
+CREATE TABLE nombre_del_esquema.escrito_adjuntos
 (
     id_item    SERIAL PRIMARY KEY,
     id_escrito integer NOT NULL,
@@ -53,8 +53,8 @@ CREATE TABLE public.escrito_adjuntos
     tipo_doc   smallint
 );
 
-ALTER TABLE public.escrito_adjuntos OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.escrito_adjuntos OWNER TO tramity;
 
-CREATE INDEX IF NOT EXISTS escrito_adjuntos_id_escrito_idx ON public.escrito_adjuntos (id_escrito);
-ALTER TABLE public.escrito_adjuntos
-    ADD CONSTRAINT escrito_adjuntos_fk_ent FOREIGN KEY (id_escrito) REFERENCES public.escritos (id_escrito) ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS escrito_adjuntos_id_escrito_idx ON nombre_del_esquema.escrito_adjuntos (id_escrito);
+ALTER TABLE nombre_del_esquema.escrito_adjuntos
+    ADD CONSTRAINT escrito_adjuntos_fk_ent FOREIGN KEY (id_escrito) REFERENCES nombre_del_esquema.escritos (id_escrito) ON DELETE CASCADE;

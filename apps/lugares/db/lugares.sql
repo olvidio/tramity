@@ -1,4 +1,4 @@
-CREATE TABLE public.lugares
+CREATE TABLE nombre_del_esquema.lugares
 (
     id_lugar   SERIAL PRIMARY KEY,
     sigla      text                  NOT NULL,
@@ -14,25 +14,25 @@ CREATE TABLE public.lugares
 );
 
 
-ALTER TABLE public.lugares OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.lugares OWNER TO tramity;
 
 
-CREATE INDEX sigla_lugares_key ON public.lugares USING btree (sigla);
+CREATE INDEX sigla_lugares_key ON nombre_del_esquema.lugares USING btree (sigla);
 
-CREATE TABLE public.lugares_grupos
+CREATE TABLE nombre_del_esquema.lugares_grupos
 (
     id_grupo    SERIAL PRIMARY KEY,
     descripcion text NOT NULL,
     miembros    integer[]
 );
 
-ALTER TABLE public.lugares_grupos OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.lugares_grupos OWNER TO tramity;
 
 --
--- Data for Name: lugares; Type: TABLE DATA; Schema: public; Owner: tramity
+-- Data for Name: lugares; Type: TABLE DATA; Schema: nombre_del_esquema. Owner: tramity
 --
 
-COPY public.lugares (id_lugar, sigla, dl, region, nombre, tipo_ctr, modo_envio, pub_key, e_mail, anulado) FROM stdin;
+COPY nombre_del_esquema.lugares (id_lugar, sigla, dl, region, nombre, tipo_ctr, modo_envio, pub_key, e_mail, anulado) FROM stdin;
 58	agdMontagut	dlb	H	agdMontagut	am	1
 \N
 \N	f
@@ -655,5 +655,5 @@ COPY public.lugares (id_lugar, sigla, dl, region, nombre, tipo_ctr, modo_envio, 
 
 
 
-SELECT pg_catalog.setval('public.lugares_id_lugar_seq', 263, true);
+SELECT pg_catalog.setval('nombre_del_esquema.lugares_id_lugar_seq', 263, true);
 

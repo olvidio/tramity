@@ -42,8 +42,11 @@ switch ($Q_que) {
         $Q_password = (string)filter_input(INPUT_POST, 'password');
         $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
-        $oUsuario = new Usuario(array('id_usuario' => $Q_id_usuario));
-        $oUsuario->DBCargar();
+        $oUsuario = new Usuario($Q_id_usuario);
+        if ($oUsuario->DBCargar() === FALSE) {
+            $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oUsuario->setEmail($Q_email);
         if (!empty($Q_password)) {
             $oCrypt = new MyCrypt();
@@ -71,10 +74,13 @@ switch ($Q_que) {
         $Q_password = (string)filter_input(INPUT_POST, 'password');
         $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
-        $oUsuario = new Usuario(array('id_usuario' => $Q_id_usuario));
-        $oUsuario->DBCargar();
+        $oUsuario = new Usuario($Q_id_usuario);
+        if ($oUsuario->DBCargar() === FALSE) {
+            $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $oUsuario->setUsuario($Q_usuario);
-        $oUsuario->setId_cargo($Q_id_cargo);
+        $oUsuario->setId_cargo_preferido($Q_id_cargo);
         $oUsuario->setEmail($Q_email);
         $oUsuario->setNom_usuario($Q_nom_usuario);
         if (!empty($Q_password)) {
@@ -105,7 +111,7 @@ switch ($Q_que) {
                 $oUsuario->setPassword($my_passwd);
             }
             $oUsuario->setEmail($Q_email);
-            $oUsuario->setId_cargo($Q_id_cargo);
+            $oUsuario->setId_cargo_preferido($Q_id_cargo);
             $oUsuario->setNom_usuario($Q_nom_usuario);
             if ($oUsuario->DBGuardar() === FALSE) {
                 echo _("hay un error, no se ha guardado");

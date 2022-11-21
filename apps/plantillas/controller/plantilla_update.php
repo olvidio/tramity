@@ -121,7 +121,7 @@ switch ($Q_que) {
         // borrar destinos existentes
         $oEscrito->setJson_prot_destino([]);
         $oEscrito->setId_grupos();
-        // poner nueva seleccion
+        // poner nueva selección
         $oEscrito->setDestinos($Q_a_lugares);
         $oEscrito->setDescripcion($Q_nombre);
 
@@ -150,11 +150,7 @@ switch ($Q_que) {
             echo _("debe poner un nombre");
         }
 
-        if (empty($Q_id_plantilla)) {
-            $oPlantilla = new Plantilla();
-        } else {
-            $oPlantilla = new Plantilla(array('id_plantilla' => $Q_id_plantilla));
-        }
+        $oPlantilla = new Plantilla($Q_id_plantilla);
         $oPlantilla->DBCargar();
         $oPlantilla->setNombre($Q_nombre);
         if ($oPlantilla->DBGuardar() === FALSE) {

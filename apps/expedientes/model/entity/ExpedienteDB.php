@@ -349,10 +349,9 @@ class ExpedienteDB extends ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -615,36 +614,7 @@ class ExpedienteDB extends ClasePropiedades
         $this->ivisibilidad = $ivisibilidad;
     }
 
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setId_expediente('');
-        $this->setId_tramite('');
-        $this->setPonente('');
-        $this->setResto_oficinas('');
-        $this->setAsunto('');
-        $this->setEntradilla('');
-        $this->setComentarios('');
-        $this->setPrioridad('');
-        $this->setJson_antecedentes('');
-        $this->setJson_acciones('');
-        $this->setF_contestar('');
-        $this->setEstado('');
-        $this->setF_ini_circulacion('');
-        $this->setF_reunion('');
-        $this->setF_aprobacion('');
-        $this->setVida('');
-        $this->setJson_preparar('');
-        $this->setFirmas_oficina('');
-        $this->setVisibilidad('');
-        $this->setPrimary_key($aPK);
-    }
-
+    
     /**
      * Recupera las claus primàries de ExpedienteDB en un array
      *
@@ -1025,9 +995,9 @@ class ExpedienteDB extends ClasePropiedades
     /**
      * Recupera l'atribut ivisibilidad de ExpedienteDB
      *
-     * @return integer ivisibilidad
+     * @return integer|null ivisibilidad
      */
-    function getVisibilidad()
+    public function getVisibilidad(): ?int
     {
         if (!isset($this->ivisibilidad) && !$this->bLoaded) {
             $this->DBCargar();

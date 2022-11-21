@@ -54,18 +54,16 @@ $oPosicion->setParametros(array('id_tramite' => $Q_id_tramite), 1);
 
 
 $txt_guardar = _("guardar datos trámite");
-$oSelects = array();
-if (!empty($Q_id_tramite)) {
+$oSelects = [];
+
+$oTramite = new Tramite($Q_id_tramite);
+if ($oTramite->DBCargar()) {
     $que = 'guardar';
-    $oTramite = new Tramite();
-    $oTramite->setId_tramite($Q_id_tramite);
-    $oTramite->DBCargar();
     $tramite = $oTramite->getTramite();
     $orden = $oTramite->getOrden();
     $breve = $oTramite->getBreve();
 } else {
     $que = 'nuevo';
-    $Q_id_tramite = '';
     $tramite = '';
     $orden = '';
     $breve = '';

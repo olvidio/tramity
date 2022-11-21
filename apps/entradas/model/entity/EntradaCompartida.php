@@ -283,10 +283,9 @@ class EntradaCompartida extends core\ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -437,28 +436,7 @@ class EntradaCompartida extends core\ClasePropiedades
 
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setId_entrada_compartida('');
-        $this->setDescripcion('');
-        $this->setJson_prot_destino('');
-        $this->setDestinos('');
-        $this->setF_documento('');
-        $this->setJson_prot_origen('');
-        $this->setJson_prot_ref('');
-        $this->setCategoria('');
-        $this->setAsunto_entrada('');
-        $this->setF_entrada('');
-        $this->setAnulado('');
-        $this->setPrimary_key($aPK);
-    }
-
+    
     /**
      * Recupera las claus primàries de EntradaCompartida en un array
      *

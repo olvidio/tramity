@@ -27,11 +27,14 @@ switch ($Q_que) {
         }
 
         $oEscrito = new Escrito($Q_id_escrito);
-        $oEscrito->DBCargar();
+        if ($oEscrito->DBCargar() === FALSE ){
+            $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         // borrar destinos existentes
         $oEscrito->setJson_prot_destino([]);
         $oEscrito->setId_grupos();
-        // poner nueva seleccion
+        // poner nueva selección
         $oEscrito->setDestinos($Q_a_lugares);
         $oEscrito->setDescripcion($Q_descripcion);
 
@@ -61,11 +64,7 @@ switch ($Q_que) {
             echo _("debe poner un nombre");
         }
 
-        if (empty($Q_id_grupo)) {
-            $oGrupo = new Grupo();
-        } else {
-            $oGrupo = new Grupo(array('id_grupo' => $Q_id_grupo));
-        }
+        $oGrupo = new Grupo($Q_id_grupo);
         $oGrupo->DBCargar();
         $oGrupo->setDescripcion($Q_descripcion);
         $oGrupo->setMiembros($Q_a_lugares);

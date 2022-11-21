@@ -313,10 +313,9 @@ class DocumentoDB extends core\ClasePropiedades
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
-                        $this->setNullAllAtributes();
-                    } else {
-                        $this->setAllAtributes($aDades);
+                        return FALSE;
                     }
+                   $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -443,25 +442,7 @@ class DocumentoDB extends core\ClasePropiedades
         $this->documento = $documento;
     }
 
-    /**
-     * Establece a empty el valor de todos los atributos de la clase
-     *
-     */
-    function setNullAllAtributes()
-    {
-        $aPK = $this->getPrimary_key();
-        $this->setId_schema('');
-        $this->setId_doc('');
-        $this->setNom('');
-        $this->setNombre_fichero('');
-        $this->setCreador('');
-        $this->setVisibilidad('');
-        $this->setTipo_doc('');
-        $this->setF_upload('');
-        $this->setDocumentoEscaped('');
-        $this->setPrimary_key($aPK);
-    }
-
+    
     /**
      * Recupera las claus primàries de Documento en un array
      *
@@ -567,9 +548,9 @@ class DocumentoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut ivisibilidad de Documento
      *
-     * @return integer ivisibilidad
+     * @return integer|null ivisibilidad
      */
-    function getVisibilidad()
+    public function getVisibilidad(): ?int
     {
         if (!isset($this->ivisibilidad) && !$this->bLoaded) {
             $this->DBCargar();

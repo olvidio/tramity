@@ -56,7 +56,10 @@ $a_rta = $oEnviar->enviar();
 
 if ($a_rta['marcar'] === TRUE) {
     $oEscrito = new Escrito($Q_id_escrito);
-    $oEscrito->DBCargar();
+    if ($oEscrito->DBCargar() === FALSE ){
+        $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_cargar);
+    }
     $oEscrito->setF_salida($f_salida, FALSE);
     if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
         $oEscrito->setF_aprobacion($f_salida, FALSE);
