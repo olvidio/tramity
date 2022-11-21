@@ -296,7 +296,7 @@ class As4Entregar extends As4CollaborationInfo
         $any = '';
         $mas = '';
         // para evitar el mensaje: "Node no longer exists"
-        if (@count($xml->childNodes)) {
+        if (!is_null($xml->chilNodes) && @count($xml->childNodes)) {
             foreach ($xml->childNodes as $node) {
                 $name = $node->nodeName;
                 $value = $node->nodeValue;
