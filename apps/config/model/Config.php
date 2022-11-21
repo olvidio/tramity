@@ -61,7 +61,7 @@ class Config
         return $oConfigSchema->getValor();
     }
 
-    public function getChat(): string
+    public function getChat(): ?string
     {
         $parametro = 'chat';
         $oConfigSchema = new ConfigSchema($parametro);
