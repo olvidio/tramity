@@ -432,7 +432,7 @@
      * no quita la sombra. Hay que hacerlo así para que primero acabe con el modal,
      * y luego vuelva a la pagina que queremos.
      */
-    $('#ModalFirma').on('hidden.bs.modal', function () {
+    $('#ModalFirma').on('hidden.bs.modal', async function () {
         // Esto es un sleep, para que de tiempo a escribir el valor de modal_volver
         await new Promise(r => setTimeout(r, 500));
         var volver = $('#modal_volver').val();
