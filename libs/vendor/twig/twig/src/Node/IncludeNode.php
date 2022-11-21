@@ -29,7 +29,7 @@ class IncludeNode extends Node implements NodeOutputInterface
             $nodes['variables'] = $variables;
         }
 
-        parent::__construct($nodes, ['only' => (bool)$only, 'ignore_missing' => (bool)$ignoreMissing], $lineno, $tag);
+        parent::__construct($nodes, ['only' => $only, 'ignore_missing' => $ignoreMissing], $lineno, $tag);
     }
 
     public function compile(Compiler $compiler): void
@@ -43,7 +43,8 @@ class IncludeNode extends Node implements NodeOutputInterface
                 ->write(sprintf("$%s = null;\n", $template))
                 ->write("try {\n")
                 ->indent()
-                ->write(sprintf('$%s = ', $template));
+                ->write(sprintf('$%s = ', $template))
+            ;
 
             $this->addGetTemplate($compiler);
 
@@ -57,12 +58,14 @@ class IncludeNode extends Node implements NodeOutputInterface
                 ->write("}\n")
                 ->write(sprintf("if ($%s) {\n", $template))
                 ->indent()
-                ->write(sprintf('$%s->display(', $template));
+                ->write(sprintf('$%s->display(', $template))
+            ;
             $this->addTemplateArguments($compiler);
             $compiler
                 ->raw(");\n")
                 ->outdent()
-                ->write("}\n");
+                ->write("}\n")
+            ;
         } else {
             $this->addGetTemplate($compiler);
             $compiler->raw('->display(');
@@ -80,7 +83,8 @@ class IncludeNode extends Node implements NodeOutputInterface
             ->repr($this->getTemplateName())
             ->raw(', ')
             ->repr($this->getTemplateLine())
-            ->raw(')');
+            ->raw(')')
+        ;
     }
 
     protected function addTemplateArguments(Compiler $compiler)
@@ -91,7 +95,8 @@ class IncludeNode extends Node implements NodeOutputInterface
             $compiler
                 ->raw('twig_array_merge($context, ')
                 ->subcompile($this->getNode('variables'))
-                ->raw(')');
+                ->raw(')')
+            ;
         } else {
             $compiler->raw('twig_to_array(');
             $compiler->subcompile($this->getNode('variables'));

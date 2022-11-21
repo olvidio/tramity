@@ -28,6 +28,7 @@ class NullTest extends TestExpression
         $compiler
             ->raw('(null === ')
             ->subcompile($this->getNode('node'))
-            ->raw(')');
+            ->raw(')')
+        ;
     }
 }

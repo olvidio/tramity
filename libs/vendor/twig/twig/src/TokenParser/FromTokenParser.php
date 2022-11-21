@@ -20,6 +20,8 @@ use Twig\Token;
  * Imports macros.
  *
  *   {% from 'forms.html' import forms %}
+ *
+ * @internal
  */
 final class FromTokenParser extends AbstractTokenParser
 {
@@ -51,7 +53,7 @@ final class FromTokenParser extends AbstractTokenParser
         $node = new ImportNode($macro, $var, $token->getLine(), $this->getTag(), $this->parser->isMainScope());
 
         foreach ($targets as $name => $alias) {
-            $this->parser->addImportedSymbol('function', $alias, 'macro_' . $name, $var);
+            $this->parser->addImportedSymbol('function', $alias, 'macro_'.$name, $var);
         }
 
         return $node;

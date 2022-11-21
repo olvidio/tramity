@@ -26,6 +26,8 @@ use Twig\Token;
  *    <link rel="stylesheet" href="style.css" />
  *    <title>{% block title %}{% endblock %} - My Webpage</title>
  *  {% endblock %}
+ *
+ * @internal
  */
 final class BlockTokenParser extends AbstractTokenParser
 {
@@ -64,13 +66,13 @@ final class BlockTokenParser extends AbstractTokenParser
         return new BlockReferenceNode($name, $lineno, $this->getTag());
     }
 
-    public function getTag(): string
-    {
-        return 'block';
-    }
-
     public function decideBlockEnd(Token $token): bool
     {
         return $token->test('endblock');
+    }
+
+    public function getTag(): string
+    {
+        return 'block';
     }
 }

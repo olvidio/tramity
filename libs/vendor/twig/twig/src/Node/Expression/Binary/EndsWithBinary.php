@@ -24,7 +24,8 @@ class EndsWithBinary extends AbstractBinary
             ->subcompile($this->getNode('left'))
             ->raw(sprintf(') && is_string($%s = ', $right))
             ->subcompile($this->getNode('right'))
-            ->raw(sprintf(') && (\'\' === $%2$s || $%2$s === substr($%1$s, -strlen($%2$s))))', $left, $right));
+            ->raw(sprintf(') && (\'\' === $%2$s || $%2$s === substr($%1$s, -strlen($%2$s))))', $left, $right))
+        ;
     }
 
     public function operator(Compiler $compiler): Compiler

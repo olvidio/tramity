@@ -30,6 +30,7 @@ class DivisiblebyTest extends TestExpression
             ->subcompile($this->getNode('node'))
             ->raw(' % ')
             ->subcompile($this->getNode('arguments')->getNode(0))
-            ->raw(')');
+            ->raw(')')
+        ;
     }
 }

@@ -26,6 +26,8 @@ use Twig\Token;
  *    {% endsandbox %}
  *
  * @see https://twig.symfony.com/doc/api.html#sandbox-extension for details
+ *
+ * @internal
  */
 final class SandboxTokenParser extends AbstractTokenParser
 {
@@ -52,13 +54,13 @@ final class SandboxTokenParser extends AbstractTokenParser
         return new SandboxNode($body, $token->getLine(), $this->getTag());
     }
 
-    public function getTag(): string
-    {
-        return 'sandbox';
-    }
-
     public function decideBlockEnd(Token $token): bool
     {
         return $token->test('endsandbox');
+    }
+
+    public function getTag(): string
+    {
+        return 'sandbox';
     }
 }

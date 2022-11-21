@@ -23,6 +23,8 @@ use Twig\Token;
  *   {% apply upper %}
  *      This text becomes uppercase
  *   {% endapply %}
+ *
+ * @internal
  */
 final class ApplyTokenParser extends AbstractTokenParser
 {
@@ -46,13 +48,13 @@ final class ApplyTokenParser extends AbstractTokenParser
         ]);
     }
 
-    public function getTag(): string
-    {
-        return 'apply';
-    }
-
     public function decideApplyEnd(Token $token): bool
     {
         return $token->test('endapply');
+    }
+
+    public function getTag(): string
+    {
+        return 'apply';
     }
 }

@@ -28,12 +28,14 @@ abstract class AbstractBinary extends AbstractExpression
         $compiler
             ->raw('(')
             ->subcompile($this->getNode('left'))
-            ->raw(' ');
+            ->raw(' ')
+        ;
         $this->operator($compiler);
         $compiler
             ->raw(' ')
             ->subcompile($this->getNode('right'))
-            ->raw(')');
+            ->raw(')')
+        ;
     }
 
     abstract public function operator(Compiler $compiler): Compiler;

@@ -46,6 +46,7 @@ class SandboxNode extends Node
             ->outdent()
             ->write("}\n")
             ->outdent()
-            ->write("}\n");
+            ->write("}\n")
+        ;
     }
 }

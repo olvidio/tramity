@@ -22,7 +22,8 @@ class MatchesBinary extends AbstractBinary
             ->subcompile($this->getNode('right'))
             ->raw(', ')
             ->subcompile($this->getNode('left'))
-            ->raw(')');
+            ->raw(')')
+        ;
     }
 
     public function operator(Compiler $compiler): Compiler

@@ -5,15 +5,18 @@ namespace Mpdf;
 use Mpdf\Color\ColorConverter;
 use Mpdf\Color\ColorModeConverter;
 use Mpdf\Color\ColorSpaceRestrictor;
+use Mpdf\File\LocalContentLoader;
 use Mpdf\Fonts\FontCache;
 use Mpdf\Fonts\FontFileFinder;
+use Mpdf\Http\CurlHttpClient;
+use Mpdf\Http\SocketHttpClient;
 use Mpdf\Image\ImageProcessor;
 use Mpdf\Pdf\Protection;
 use Mpdf\Pdf\Protection\UniqidGenerator;
-use Mpdf\Writer\BackgroundWriter;
 use Mpdf\Writer\BaseWriter;
-use Mpdf\Writer\BookmarkWriter;
+use Mpdf\Writer\BackgroundWriter;
 use Mpdf\Writer\ColorWriter;
+use Mpdf\Writer\BookmarkWriter;
 use Mpdf\Writer\FontWriter;
 use Mpdf\Writer\FormWriter;
 use Mpdf\Writer\ImageWriter;
@@ -27,143 +30,205 @@ use Psr\Log\LoggerInterface;
 class ServiceFactory
 {
 
-    public function getServices(
-        Mpdf            $mpdf,
-        LoggerInterface $logger,
-                        $config,
-                        $restrictColorSpace,
-                        $languageToFont,
-                        $scriptToLanguage,
-                        $fontDescriptor,
-                        $bmp,
-                        $directWrite,
-                        $wmf
-    )
-    {
-        $sizeConverter = new SizeConverter($mpdf->dpi, $mpdf->default_font_size, $mpdf, $logger);
+	/**
+	 * @var \Mpdf\Container\ContainerInterface|null
+	 */
+	private $container;
 
-        $colorModeConverter = new ColorModeConverter();
-        $colorSpaceRestrictor = new ColorSpaceRestrictor(
-            $mpdf,
-            $colorModeConverter,
-            $restrictColorSpace
-        );
-        $colorConverter = new ColorConverter($mpdf, $colorModeConverter, $colorSpaceRestrictor);
+	public function __construct($container = null)
+	{
+		$this->container = $container;
+	}
 
-        $tableOfContents = new TableOfContents($mpdf, $sizeConverter);
+	public function getServices(
+		Mpdf $mpdf,
+		LoggerInterface $logger,
+		$config,
+		$languageToFont,
+		$scriptToLanguage,
+		$fontDescriptor,
+		$bmp,
+		$directWrite,
+		$wmf
+	) {
+		$sizeConverter = new SizeConverter($mpdf->dpi, $mpdf->default_font_size, $mpdf, $logger);
 
-        $cache = new Cache($config['tempDir']);
-        $fontCache = new FontCache(new Cache($config['tempDir'] . '/ttfontdata'));
+		$colorModeConverter = new ColorModeConverter();
+		$colorSpaceRestrictor = new ColorSpaceRestrictor(
+			$mpdf,
+			$colorModeConverter
+		);
+		$colorConverter = new ColorConverter($mpdf, $colorModeConverter, $colorSpaceRestrictor);
 
-        $fontFileFinder = new FontFileFinder($config['fontDir']);
+		$tableOfContents = new TableOfContents($mpdf, $sizeConverter);
 
-        $cssManager = new CssManager($mpdf, $cache, $sizeConverter, $colorConverter);
+		$cacheBasePath = $config['tempDir'] . '/mpdf';
 
-        $otl = new Otl($mpdf, $fontCache);
+		$cache = new Cache($cacheBasePath, $config['cacheCleanupInterval']);
+		$fontCache = new FontCache(new Cache($cacheBasePath . '/ttfontdata', $config['cacheCleanupInterval']));
 
-        $protection = new Protection(new UniqidGenerator());
+		$fontFileFinder = new FontFileFinder($config['fontDir']);
 
-        $writer = new BaseWriter($mpdf, $protection);
+		if ($this->container && $this->container->has('httpClient')) {
+			$httpClient = $this->container->get('httpClient');
+		} elseif (\function_exists('curl_init')) {
+			$httpClient = new CurlHttpClient($mpdf, $logger);
+		} else {
+			$httpClient = new SocketHttpClient($logger);
+		}
 
-        $gradient = new Gradient($mpdf, $sizeConverter, $colorConverter, $writer);
+		$localContentLoader = $this->container && $this->container->has('localContentLoader')
+			? $this->container->get('localContentLoader')
+			: new LocalContentLoader();
 
-        $formWriter = new FormWriter($mpdf, $writer);
+		$assetFetcher = new AssetFetcher($mpdf, $localContentLoader, $httpClient, $logger);
 
-        $form = new Form($mpdf, $otl, $colorConverter, $writer, $formWriter);
+		$cssManager = new CssManager($mpdf, $cache, $sizeConverter, $colorConverter, $assetFetcher);
 
-        $hyphenator = new Hyphenator($mpdf);
+		$otl = new Otl($mpdf, $fontCache);
 
-        $remoteContentFetcher = new RemoteContentFetcher($mpdf, $logger);
+		$protection = new Protection(new UniqidGenerator());
 
-        $imageProcessor = new ImageProcessor(
-            $mpdf,
-            $otl,
-            $cssManager,
-            $sizeConverter,
-            $colorConverter,
-            $colorModeConverter,
-            $cache,
-            $languageToFont,
-            $scriptToLanguage,
-            $remoteContentFetcher,
-            $logger
-        );
+		$writer = new BaseWriter($mpdf, $protection);
 
-        $tag = new Tag(
-            $mpdf,
-            $cache,
-            $cssManager,
-            $form,
-            $otl,
-            $tableOfContents,
-            $sizeConverter,
-            $colorConverter,
-            $imageProcessor,
-            $languageToFont
-        );
+		$gradient = new Gradient($mpdf, $sizeConverter, $colorConverter, $writer);
 
-        $fontWriter = new FontWriter($mpdf, $writer, $fontCache, $fontDescriptor);
-        $metadataWriter = new MetadataWriter($mpdf, $writer, $form, $protection, $logger);
-        $imageWriter = new ImageWriter($mpdf, $writer);
-        $pageWriter = new PageWriter($mpdf, $form, $writer, $metadataWriter);
-        $bookmarkWriter = new BookmarkWriter($mpdf, $writer);
-        $optionalContentWriter = new OptionalContentWriter($mpdf, $writer);
-        $colorWriter = new ColorWriter($mpdf, $writer);
-        $backgroundWriter = new BackgroundWriter($mpdf, $writer);
-        $javaScriptWriter = new JavaScriptWriter($mpdf, $writer);
+		$formWriter = new FormWriter($mpdf, $writer);
 
-        $resourceWriter = new ResourceWriter(
-            $mpdf,
-            $writer,
-            $colorWriter,
-            $fontWriter,
-            $imageWriter,
-            $formWriter,
-            $optionalContentWriter,
-            $backgroundWriter,
-            $bookmarkWriter,
-            $metadataWriter,
-            $javaScriptWriter,
-            $logger
-        );
+		$form = new Form($mpdf, $otl, $colorConverter, $writer, $formWriter);
 
-        return [
-            'otl' => $otl,
-            'bmp' => $bmp,
-            'cache' => $cache,
-            'cssManager' => $cssManager,
-            'directWrite' => $directWrite,
-            'fontCache' => $fontCache,
-            'fontFileFinder' => $fontFileFinder,
-            'form' => $form,
-            'gradient' => $gradient,
-            'tableOfContents' => $tableOfContents,
-            'tag' => $tag,
-            'wmf' => $wmf,
-            'sizeConverter' => $sizeConverter,
-            'colorConverter' => $colorConverter,
-            'hyphenator' => $hyphenator,
-            'remoteContentFetcher' => $remoteContentFetcher,
-            'imageProcessor' => $imageProcessor,
-            'protection' => $protection,
+		$hyphenator = new Hyphenator($mpdf);
 
-            'languageToFont' => $languageToFont,
-            'scriptToLanguage' => $scriptToLanguage,
+		$imageProcessor = new ImageProcessor(
+			$mpdf,
+			$otl,
+			$cssManager,
+			$sizeConverter,
+			$colorConverter,
+			$colorModeConverter,
+			$cache,
+			$languageToFont,
+			$scriptToLanguage,
+			$assetFetcher,
+			$logger
+		);
 
-            'writer' => $writer,
-            'fontWriter' => $fontWriter,
-            'metadataWriter' => $metadataWriter,
-            'imageWriter' => $imageWriter,
-            'formWriter' => $formWriter,
-            'pageWriter' => $pageWriter,
-            'bookmarkWriter' => $bookmarkWriter,
-            'optionalContentWriter' => $optionalContentWriter,
-            'colorWriter' => $colorWriter,
-            'backgroundWriter' => $backgroundWriter,
-            'javaScriptWriter' => $javaScriptWriter,
+		$tag = new Tag(
+			$mpdf,
+			$cache,
+			$cssManager,
+			$form,
+			$otl,
+			$tableOfContents,
+			$sizeConverter,
+			$colorConverter,
+			$imageProcessor,
+			$languageToFont
+		);
 
-            'resourceWriter' => $resourceWriter
-        ];
-    }
+		$fontWriter = new FontWriter($mpdf, $writer, $fontCache, $fontDescriptor);
+		$metadataWriter = new MetadataWriter($mpdf, $writer, $form, $protection, $logger);
+		$imageWriter = new ImageWriter($mpdf, $writer);
+		$pageWriter = new PageWriter($mpdf, $form, $writer, $metadataWriter);
+		$bookmarkWriter = new BookmarkWriter($mpdf, $writer);
+		$optionalContentWriter = new OptionalContentWriter($mpdf, $writer);
+		$colorWriter = new ColorWriter($mpdf, $writer);
+		$backgroundWriter = new BackgroundWriter($mpdf, $writer);
+		$javaScriptWriter = new JavaScriptWriter($mpdf, $writer);
+
+		$resourceWriter = new ResourceWriter(
+			$mpdf,
+			$writer,
+			$colorWriter,
+			$fontWriter,
+			$imageWriter,
+			$formWriter,
+			$optionalContentWriter,
+			$backgroundWriter,
+			$bookmarkWriter,
+			$metadataWriter,
+			$javaScriptWriter,
+			$logger
+		);
+
+		return [
+			'otl' => $otl,
+			'bmp' => $bmp,
+			'cache' => $cache,
+			'cssManager' => $cssManager,
+			'directWrite' => $directWrite,
+			'fontCache' => $fontCache,
+			'fontFileFinder' => $fontFileFinder,
+			'form' => $form,
+			'gradient' => $gradient,
+			'tableOfContents' => $tableOfContents,
+			'tag' => $tag,
+			'wmf' => $wmf,
+			'sizeConverter' => $sizeConverter,
+			'colorConverter' => $colorConverter,
+			'hyphenator' => $hyphenator,
+			'localContentLoader' => $localContentLoader,
+			'httpClient' => $httpClient,
+			'assetFetcher' => $assetFetcher,
+			'imageProcessor' => $imageProcessor,
+			'protection' => $protection,
+
+			'languageToFont' => $languageToFont,
+			'scriptToLanguage' => $scriptToLanguage,
+
+			'writer' => $writer,
+			'fontWriter' => $fontWriter,
+			'metadataWriter' => $metadataWriter,
+			'imageWriter' => $imageWriter,
+			'formWriter' => $formWriter,
+			'pageWriter' => $pageWriter,
+			'bookmarkWriter' => $bookmarkWriter,
+			'optionalContentWriter' => $optionalContentWriter,
+			'colorWriter' => $colorWriter,
+			'backgroundWriter' => $backgroundWriter,
+			'javaScriptWriter' => $javaScriptWriter,
+			'resourceWriter' => $resourceWriter
+		];
+	}
+
+	public function getServiceIds()
+	{
+		return [
+			'otl',
+			'bmp',
+			'cache',
+			'cssManager',
+			'directWrite',
+			'fontCache',
+			'fontFileFinder',
+			'form',
+			'gradient',
+			'tableOfContents',
+			'tag',
+			'wmf',
+			'sizeConverter',
+			'colorConverter',
+			'hyphenator',
+			'localContentLoader',
+			'httpClient',
+			'assetFetcher',
+			'imageProcessor',
+			'protection',
+			'languageToFont',
+			'scriptToLanguage',
+			'writer',
+			'fontWriter',
+			'metadataWriter',
+			'imageWriter',
+			'formWriter',
+			'pageWriter',
+			'bookmarkWriter',
+			'optionalContentWriter',
+			'colorWriter',
+			'backgroundWriter',
+			'javaScriptWriter',
+			'resourceWriter',
+		];
+	}
 
 }

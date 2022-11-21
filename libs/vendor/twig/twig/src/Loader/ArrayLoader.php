@@ -45,7 +45,6 @@ final class ArrayLoader implements LoaderInterface
 
     public function getSourceContext(string $name): Source
     {
-        $name = (string)$name;
         if (!isset($this->templates[$name])) {
             throw new LoaderError(sprintf('Template "%s" is not defined.', $name));
         }
@@ -64,7 +63,7 @@ final class ArrayLoader implements LoaderInterface
             throw new LoaderError(sprintf('Template "%s" is not defined.', $name));
         }
 
-        return $name . ':' . $this->templates[$name];
+        return $name.':'.$this->templates[$name];
     }
 
     public function isFresh(string $name, int $time): bool

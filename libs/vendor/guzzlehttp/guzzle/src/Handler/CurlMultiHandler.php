@@ -19,6 +19,7 @@ use Psr\Http\Message\RequestInterface;
  *
  * @final
  */
+#[\AllowDynamicProperties]
 class CurlMultiHandler
 {
     /**
@@ -32,9 +33,9 @@ class CurlMultiHandler
     private $selectTimeout;
 
     /**
-     * @var resource|\CurlMultiHandle|null the currently executing resource in `curl_multi_exec`.
+     * @var int Will be higher than 0 when `curl_multi_exec` is still running.
      */
-    private $active;
+    private $active = 0;
 
     /**
      * @var array Request entry handles, indexed by handle id in `addRequest`.
@@ -72,7 +73,7 @@ class CurlMultiHandler
             $this->selectTimeout = $options['select_timeout'];
         } elseif ($selectTimeout = Utils::getenv('GUZZLE_CURL_SELECT_TIMEOUT')) {
             @trigger_error('Since guzzlehttp/guzzle 7.2.0: Using environment variable GUZZLE_CURL_SELECT_TIMEOUT is deprecated. Use option "select_timeout" instead.', \E_USER_DEPRECATED);
-            $this->selectTimeout = (int)$selectTimeout;
+            $this->selectTimeout = (int) $selectTimeout;
         } else {
             $this->selectTimeout = 1;
         }
@@ -121,7 +122,7 @@ class CurlMultiHandler
     public function __invoke(RequestInterface $request, array $options): PromiseInterface
     {
         $easy = $this->factory->create($request, $options);
-        $id = (int)$easy->handle;
+        $id = (int) $easy->handle;
 
         $promise = new Promise(
             [$this, 'execute'],
@@ -133,69 +134,6 @@ class CurlMultiHandler
         $this->addRequest(['easy' => $easy, 'deferred' => $promise]);
 
         return $promise;
-    }
-
-    /**
-     * Cancels a handle from sending and removes references to it.
-     *
-     * @param int $id Handle ID to cancel and remove.
-     *
-     * @return bool True on success, false on failure.
-     */
-    private function cancel($id): bool
-    {
-        // Cannot cancel if it has been processed.
-        if (!isset($this->handles[$id])) {
-            return false;
-        }
-
-        $handle = $this->handles[$id]['easy']->handle;
-        unset($this->delays[$id], $this->handles[$id]);
-        \curl_multi_remove_handle($this->_mh, $handle);
-        \curl_close($handle);
-
-        return true;
-    }
-
-    private function addRequest(array $entry): void
-    {
-        $easy = $entry['easy'];
-        $id = (int)$easy->handle;
-        $this->handles[$id] = $entry;
-        if (empty($easy->options['delay'])) {
-            \curl_multi_add_handle($this->_mh, $easy->handle);
-        } else {
-            $this->delays[$id] = Utils::currentTime() + ($easy->options['delay'] / 1000);
-        }
-    }
-
-    /**
-     * Runs until all outstanding connections have completed.
-     */
-    public function execute(): void
-    {
-        $queue = P\Utils::queue();
-
-        while ($this->handles || !$queue->isEmpty()) {
-            // If there are no transfers, then sleep for the next delay
-            if (!$this->active && $this->delays) {
-                \usleep($this->timeToNext());
-            }
-            $this->tick();
-        }
-    }
-
-    private function timeToNext(): int
-    {
-        $currentTime = Utils::currentTime();
-        $nextTime = \PHP_INT_MAX;
-        foreach ($this->delays as $time) {
-            if ($time < $nextTime) {
-                $nextTime = $time;
-            }
-        }
-
-        return ((int)\max(0, $nextTime - $currentTime)) * 1000000;
     }
 
     /**
@@ -226,15 +164,73 @@ class CurlMultiHandler
             \usleep(250);
         }
 
-        while (\curl_multi_exec($this->_mh, $this->active) === \CURLM_CALL_MULTI_PERFORM) ;
+        while (\curl_multi_exec($this->_mh, $this->active) === \CURLM_CALL_MULTI_PERFORM);
 
         $this->processMessages();
+    }
+
+    /**
+     * Runs until all outstanding connections have completed.
+     */
+    public function execute(): void
+    {
+        $queue = P\Utils::queue();
+
+        while ($this->handles || !$queue->isEmpty()) {
+            // If there are no transfers, then sleep for the next delay
+            if (!$this->active && $this->delays) {
+                \usleep($this->timeToNext());
+            }
+            $this->tick();
+        }
+    }
+
+    private function addRequest(array $entry): void
+    {
+        $easy = $entry['easy'];
+        $id = (int) $easy->handle;
+        $this->handles[$id] = $entry;
+        if (empty($easy->options['delay'])) {
+            \curl_multi_add_handle($this->_mh, $easy->handle);
+        } else {
+            $this->delays[$id] = Utils::currentTime() + ($easy->options['delay'] / 1000);
+        }
+    }
+
+    /**
+     * Cancels a handle from sending and removes references to it.
+     *
+     * @param int $id Handle ID to cancel and remove.
+     *
+     * @return bool True on success, false on failure.
+     */
+    private function cancel($id): bool
+    {
+        if (!is_int($id)) {
+            trigger_deprecation('guzzlehttp/guzzle', '7.4', 'Not passing an integer to %s::%s() is deprecated and will cause an error in 8.0.', __CLASS__, __FUNCTION__);
+        }
+
+        // Cannot cancel if it has been processed.
+        if (!isset($this->handles[$id])) {
+            return false;
+        }
+
+        $handle = $this->handles[$id]['easy']->handle;
+        unset($this->delays[$id], $this->handles[$id]);
+        \curl_multi_remove_handle($this->_mh, $handle);
+        \curl_close($handle);
+
+        return true;
     }
 
     private function processMessages(): void
     {
         while ($done = \curl_multi_info_read($this->_mh)) {
-            $id = (int)$done['handle'];
+            if ($done['msg'] !== \CURLMSG_DONE) {
+                // if it's not done, then it would be premature to remove the handle. ref https://github.com/guzzle/guzzle/pull/2892#issuecomment-945150216
+                continue;
+            }
+            $id = (int) $done['handle'];
             \curl_multi_remove_handle($this->_mh, $done['handle']);
 
             if (!isset($this->handles[$id])) {
@@ -249,5 +245,18 @@ class CurlMultiHandler
                 CurlFactory::finish($this, $entry['easy'], $this->factory)
             );
         }
+    }
+
+    private function timeToNext(): int
+    {
+        $currentTime = Utils::currentTime();
+        $nextTime = \PHP_INT_MAX;
+        foreach ($this->delays as $time) {
+            if ($time < $nextTime) {
+                $nextTime = $time;
+            }
+        }
+
+        return ((int) \max(0, $nextTime - $currentTime)) * 1000000;
     }
 }

@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace GuzzleHttp\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 
-
 /**
- * Decorator used to return only a subset of a stream
+ * Decorator used to return only a subset of a stream.
  */
-class LimitStream implements StreamInterface
+final class LimitStream implements StreamInterface
 {
     use StreamDecoratorTrait;
 
@@ -18,75 +19,59 @@ class LimitStream implements StreamInterface
     /** @var int Limit the number of bytes that can be read */
     private $limit;
 
+    /** @var StreamInterface */
+    private $stream;
+
     /**
      * @param StreamInterface $stream Stream to wrap
-     * @param int $limit Total number of bytes to allow to be read
+     * @param int             $limit  Total number of bytes to allow to be read
      *                                from the stream. Pass -1 for no limit.
-     * @param int $offset Position to seek to before reading (only
+     * @param int             $offset Position to seek to before reading (only
      *                                works on seekable streams).
      */
     public function __construct(
         StreamInterface $stream,
-                        $limit = -1,
-                        $offset = 0
-    )
-    {
+        int $limit = -1,
+        int $offset = 0
+    ) {
         $this->stream = $stream;
         $this->setLimit($limit);
         $this->setOffset($offset);
     }
 
-    /**
-     * Set the limit of bytes that the decorator allows to be read from the
-     * stream.
-     *
-     * @param int $limit Number of bytes to allow to be read from the stream.
-     *                   Use -1 for no limit.
-     */
-    public function setLimit($limit)
+    public function eof(): bool
     {
-        $this->limit = $limit;
-    }
-
-    /**
-     * Set the offset to start limiting from
-     *
-     * @param int $offset Offset to seek to and begin byte limiting from
-     *
-     * @throws \RuntimeException if the stream cannot be seeked.
-     */
-    public function setOffset($offset)
-    {
-        $current = $this->stream->tell();
-
-        if ($current !== $offset) {
-            // If the stream cannot seek to the offset position, then read to it
-            if ($this->stream->isSeekable()) {
-                $this->stream->seek($offset);
-            } elseif ($current > $offset) {
-                throw new \RuntimeException("Could not seek to stream offset $offset");
-            } else {
-                $this->stream->read($offset - $current);
-            }
+        // Always return true if the underlying stream is EOF
+        if ($this->stream->eof()) {
+            return true;
         }
 
-        $this->offset = $offset;
+        // No limit and the underlying stream is not at EOF
+        if ($this->limit === -1) {
+            return false;
+        }
+
+        return $this->stream->tell() >= $this->offset + $this->limit;
     }
 
     /**
-     * Give a relative tell()
-     * {@inheritdoc}
+     * Returns the size of the limited subset of data
      */
-    public function tell()
+    public function getSize(): ?int
     {
-        return $this->stream->tell() - $this->offset;
+        if (null === ($length = $this->stream->getSize())) {
+            return null;
+        } elseif ($this->limit === -1) {
+            return $length - $this->offset;
+        } else {
+            return min($this->limit, $length - $this->offset);
+        }
     }
 
     /**
      * Allow for a bounded seek on the read limited stream
-     * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
         if ($whence !== SEEK_SET || $offset < 0) {
             throw new \RuntimeException(sprintf(
@@ -107,9 +92,54 @@ class LimitStream implements StreamInterface
         $this->stream->seek($offset);
     }
 
-    public function read($length)
+    /**
+     * Give a relative tell()
+     */
+    public function tell(): int
     {
-        if ($this->limit == -1) {
+        return $this->stream->tell() - $this->offset;
+    }
+
+    /**
+     * Set the offset to start limiting from
+     *
+     * @param int $offset Offset to seek to and begin byte limiting from
+     *
+     * @throws \RuntimeException if the stream cannot be seeked.
+     */
+    public function setOffset(int $offset): void
+    {
+        $current = $this->stream->tell();
+
+        if ($current !== $offset) {
+            // If the stream cannot seek to the offset position, then read to it
+            if ($this->stream->isSeekable()) {
+                $this->stream->seek($offset);
+            } elseif ($current > $offset) {
+                throw new \RuntimeException("Could not seek to stream offset $offset");
+            } else {
+                $this->stream->read($offset - $current);
+            }
+        }
+
+        $this->offset = $offset;
+    }
+
+    /**
+     * Set the limit of bytes that the decorator allows to be read from the
+     * stream.
+     *
+     * @param int $limit Number of bytes to allow to be read from the stream.
+     *                   Use -1 for no limit.
+     */
+    public function setLimit(int $limit): void
+    {
+        $this->limit = $limit;
+    }
+
+    public function read($length): string
+    {
+        if ($this->limit === -1) {
             return $this->stream->read($length);
         }
 
@@ -123,35 +153,5 @@ class LimitStream implements StreamInterface
         }
 
         return '';
-    }
-
-    public function eof()
-    {
-        // Always return true if the underlying stream is EOF
-        if ($this->stream->eof()) {
-            return true;
-        }
-
-        // No limit and the underlying stream is not at EOF
-        if ($this->limit == -1) {
-            return false;
-        }
-
-        return $this->stream->tell() >= $this->offset + $this->limit;
-    }
-
-    /**
-     * Returns the size of the limited subset of data
-     * {@inheritdoc}
-     */
-    public function getSize()
-    {
-        if (null === ($length = $this->stream->getSize())) {
-            return null;
-        } elseif ($this->limit == -1) {
-            return $length - $this->offset;
-        } else {
-            return min($this->limit, $length - $this->offset);
-        }
     }
 }

@@ -28,16 +28,29 @@ final class BlackfireDumper
         $str = <<<EOF
 file-format: BlackfireProbe
 cost-dimensions: wt mu pmu
-request-start: {$start}
+request-start: $start
 
 
 EOF;
 
         foreach ($data as $name => $values) {
-            $str .= "{$name}//{$values['ct']} {$values['wt']} {$values['mu']} {$values['pmu']}\n";
+            $str .= "$name//{$values['ct']} {$values['wt']} {$values['mu']} {$values['pmu']}\n";
         }
 
         return $str;
+    }
+
+    private function dumpChildren(string $parent, Profile $profile, &$data)
+    {
+        foreach ($profile as $p) {
+            if ($p->isTemplate()) {
+                $name = $p->getTemplate();
+            } else {
+                $name = sprintf('%s::%s(%s)', $p->getTemplate(), $p->getType(), $p->getName());
+            }
+            $this->dumpProfile(sprintf('%s==>%s', $parent, $name), $p, $data);
+            $this->dumpChildren($name, $p, $data);
+        }
     }
 
     private function dumpProfile(string $edge, Profile $profile, &$data)
@@ -54,19 +67,6 @@ EOF;
                 'mu' => $profile->getMemoryUsage(),
                 'pmu' => $profile->getPeakMemoryUsage(),
             ];
-        }
-    }
-
-    private function dumpChildren(string $parent, Profile $profile, &$data)
-    {
-        foreach ($profile as $p) {
-            if ($p->isTemplate()) {
-                $name = $p->getTemplate();
-            } else {
-                $name = sprintf('%s::%s(%s)', $p->getTemplate(), $p->getType(), $p->getName());
-            }
-            $this->dumpProfile(sprintf('%s==>%s', $parent, $name), $p, $data);
-            $this->dumpChildren($name, $p, $data);
         }
     }
 }

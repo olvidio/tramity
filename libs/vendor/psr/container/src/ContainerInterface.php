@@ -1,7 +1,6 @@
 <?php
-/**
- * @license http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
- */
+
+declare(strict_types=1);
 
 namespace Psr\Container;
 
@@ -15,12 +14,12 @@ interface ContainerInterface
      *
      * @param string $id Identifier of the entry to look for.
      *
-     * @return mixed Entry.
+     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
      * @throws ContainerExceptionInterface Error while retrieving the entry.
      *
-     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
+     * @return mixed Entry.
      */
-    public function get($id);
+    public function get(string $id);
 
     /**
      * Returns true if the container can return an entry for the given identifier.
@@ -33,5 +32,5 @@ interface ContainerInterface
      *
      * @return bool
      */
-    public function has($id);
+    public function has(string $id);
 }

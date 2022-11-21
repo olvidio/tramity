@@ -2,9 +2,9 @@
 
 namespace Psr\Log\Test;
 
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Provides a base test class for ensuring compliance with the LoggerInterface.
@@ -14,31 +14,10 @@ use Psr\Log\LogLevel;
  */
 abstract class LoggerInterfaceTest extends TestCase
 {
-    public function testImplements()
-    {
-        $this->assertInstanceOf('Psr\Log\LoggerInterface', $this->getLogger());
-    }
-
     /**
      * @return LoggerInterface
      */
     abstract public function getLogger();
-
-    /**
-     * @dataProvider provideLevelsAndMessages
-     */
-    public function testLogsAtAllLevels($level, $message)
-    {
-        $logger = $this->getLogger();
-        $logger->{$level}($message, array('user' => 'Bob'));
-        $logger->log($level, $message, array('user' => 'Bob'));
-
-        $expected = array(
-            $level . ' message of level ' . $level . ' with context: Bob',
-            $level . ' message of level ' . $level . ' with context: Bob',
-        );
-        $this->assertEquals($expected, $this->getLogs());
-    }
 
     /**
      * This must return the log messages in order.
@@ -50,6 +29,27 @@ abstract class LoggerInterfaceTest extends TestCase
      * @return string[]
      */
     abstract public function getLogs();
+
+    public function testImplements()
+    {
+        $this->assertInstanceOf('Psr\Log\LoggerInterface', $this->getLogger());
+    }
+
+    /**
+     * @dataProvider provideLevelsAndMessages
+     */
+    public function testLogsAtAllLevels($level, $message)
+    {
+        $logger = $this->getLogger();
+        $logger->{$level}($message, array('user' => 'Bob'));
+        $logger->log($level, $message, array('user' => 'Bob'));
+
+        $expected = array(
+            $level.' message of level '.$level.' with context: Bob',
+            $level.' message of level '.$level.' with context: Bob',
+        );
+        $this->assertEquals($expected, $this->getLogs());
+    }
 
     public function provideLevelsAndMessages()
     {

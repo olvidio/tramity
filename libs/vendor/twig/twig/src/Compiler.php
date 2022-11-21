@@ -46,20 +46,6 @@ class Compiler
     /**
      * @return $this
      */
-    public function subcompile(Node $node, bool $raw = true)
-    {
-        if (false === $raw) {
-            $this->source .= str_repeat(' ', $this->indentation * 4);
-        }
-
-        $node->compile($this);
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
     public function compile(Node $node, int $indentation = 0)
     {
         $this->lastLine = null;
@@ -77,6 +63,58 @@ class Compiler
     }
 
     /**
+     * @return $this
+     */
+    public function subcompile(Node $node, bool $raw = true)
+    {
+        if (false === $raw) {
+            $this->source .= str_repeat(' ', $this->indentation * 4);
+        }
+
+        $node->compile($this);
+
+        return $this;
+    }
+
+    /**
+     * Adds a raw string to the compiled code.
+     *
+     * @return $this
+     */
+    public function raw(string $string)
+    {
+        $this->source .= $string;
+
+        return $this;
+    }
+
+    /**
+     * Writes a string to the compiled code by adding indentation.
+     *
+     * @return $this
+     */
+    public function write(...$strings)
+    {
+        foreach ($strings as $string) {
+            $this->source .= str_repeat(' ', $this->indentation * 4).$string;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Adds a quoted string to the compiled code.
+     *
+     * @return $this
+     */
+    public function string(string $value)
+    {
+        $this->source .= sprintf('"%s"', addcslashes($value, "\0\t\"\$\\"));
+
+        return $this;
+    }
+
+    /**
      * Returns a PHP representation of a given value.
      *
      * @return $this
@@ -84,14 +122,14 @@ class Compiler
     public function repr($value)
     {
         if (\is_int($value) || \is_float($value)) {
-            if (false !== $locale = setlocale(LC_NUMERIC, '0')) {
-                setlocale(LC_NUMERIC, 'C');
+            if (false !== $locale = setlocale(\LC_NUMERIC, '0')) {
+                setlocale(\LC_NUMERIC, 'C');
             }
 
             $this->raw(var_export($value, true));
 
             if (false !== $locale) {
-                setlocale(LC_NUMERIC, $locale);
+                setlocale(\LC_NUMERIC, $locale);
             }
         } elseif (null === $value) {
             $this->raw('null');
@@ -118,30 +156,6 @@ class Compiler
     }
 
     /**
-     * Adds a raw string to the compiled code.
-     *
-     * @return $this
-     */
-    public function raw(string $string)
-    {
-        $this->source .= $string;
-
-        return $this;
-    }
-
-    /**
-     * Adds a quoted string to the compiled code.
-     *
-     * @return $this
-     */
-    public function string(string $value)
-    {
-        $this->source .= sprintf('"%s"', addcslashes($value, "\0\t\"\$\\"));
-
-        return $this;
-    }
-
-    /**
      * @return $this
      */
     public function addDebugInfo(Node $node)
@@ -154,20 +168,6 @@ class Compiler
             $this->debugInfo[$this->sourceLine] = $node->getTemplateLine();
 
             $this->lastLine = $node->getTemplateLine();
-        }
-
-        return $this;
-    }
-
-    /**
-     * Writes a string to the compiled code by adding indentation.
-     *
-     * @return $this
-     */
-    public function write(...$strings)
-    {
-        foreach ($strings as $string) {
-            $this->source .= str_repeat(' ', $this->indentation * 4) . $string;
         }
 
         return $this;
@@ -209,6 +209,6 @@ class Compiler
 
     public function getVarName(): string
     {
-        return sprintf('__internal_%s', hash('sha256', __METHOD__ . $this->varNameSalt++));
+        return sprintf('__internal_compile_%d', $this->varNameSalt++);
     }
 }

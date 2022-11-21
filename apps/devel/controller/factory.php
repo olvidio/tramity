@@ -10,7 +10,7 @@ use web\DateTimeLocal;
  *
  */
 /**
- * Para asegurar que inicia la sesion, y poder acceder a los permisos
+ * Para asegurar que inicia la sesión, y poder acceder a los permisos
  */
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");

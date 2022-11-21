@@ -75,7 +75,13 @@ class DateTimeLocal extends DateTime
         return $format;
     }
 
-    public static function createFromFormat($format, $datetime, DateTimeZone $timezone = NULL)
+    /**
+     * @param string $format
+     * @param string $datetime
+     * @param DateTimeZone|NULL $timezone
+     * @return DateTime|false
+     */
+    public static function createFromFormat(string $format='', string $datetime='', DateTimeZone $timezone = NULL): DateTime|false
     {
         $extnd_dt = new static();
         $parent_dt = parent::createFromFormat($format, $datetime, $timezone);
@@ -116,7 +122,7 @@ class DateTimeLocal extends DateTime
         ];
     }
 
-    public function format($format)
+    public function format(string $format): string
     {
         $english = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
         $local = array_values(self::arrayDiasSemana());

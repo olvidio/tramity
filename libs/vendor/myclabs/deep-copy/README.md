@@ -1,19 +1,16 @@
 # DeepCopy
 
-DeepCopy helps you create deep copies (clones) of your objects. It is designed to handle cycles in the association
-graph.
+DeepCopy helps you create deep copies (clones) of your objects. It is designed to handle cycles in the association graph.
 
-[![Build Status](https://travis-ci.org/myclabs/DeepCopy.png?branch=1.x)](https://travis-ci.org/myclabs/DeepCopy)
-[![Coverage Status](https://coveralls.io/repos/myclabs/DeepCopy/badge.png?branch=1.x)](https://coveralls.io/r/myclabs/DeepCopy?branch=1.x)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/myclabs/DeepCopy/badges/quality-score.png?s=2747100c19b275f93a777e3297c6c12d1b68b934)](https://scrutinizer-ci.com/g/myclabs/DeepCopy/)
 [![Total Downloads](https://poser.pugx.org/myclabs/deep-copy/downloads.svg)](https://packagist.org/packages/myclabs/deep-copy)
+[![Integrate](https://github.com/myclabs/DeepCopy/workflows/ci/badge.svg?branch=1.x)](https://github.com/myclabs/DeepCopy/actions)
 
 ## Table of Contents
 
 1. [How](#how)
 1. [Why](#why)
     1. [Using simply `clone`](#using-simply-clone)
-    1. [Overridding `__clone()`](#overridding-__clone)
+    1. [Overriding `__clone()`](#overriding-__clone)
     1. [With `DeepCopy`](#with-deepcopy)
 1. [How it works](#how-it-works)
 1. [Going further](#going-further)
@@ -33,15 +30,16 @@ graph.
 1. [Contributing](#contributing)
     1. [Tests](#tests)
 
+
 ## How?
 
 Install with Composer:
 
-```json
+```
 composer require myclabs/deep-copy
 ```
 
-Use simply:
+Use it:
 
 ```php
 use DeepCopy\DeepCopy;
@@ -49,6 +47,7 @@ use DeepCopy\DeepCopy;
 $copier = new DeepCopy();
 $myCopy = $copier->copy($myObject);
 ```
+
 
 ## Why?
 
@@ -69,17 +68,21 @@ Now you're in for a big mess :(
 
 ![association graph](doc/graph.png)
 
+
 ### Using simply `clone`
 
 ![Using clone](doc/clone.png)
 
-### Overridding `__clone()`
 
-![Overridding __clone](doc/deep-clone.png)
+### Overriding `__clone()`
+
+![Overriding __clone](doc/deep-clone.png)
+
 
 ### With `DeepCopy`
 
 ![With DeepCopy](doc/deep-copy.png)
+
 
 ## How it works
 
@@ -123,6 +126,7 @@ function deep_copy($var)
 }
 ```
 
+
 ## Going further
 
 You can add filters to customize the copy process.
@@ -133,10 +137,12 @@ and `$matcher` implementing `DeepCopy\Matcher\Matcher`.
 
 We provide some generic filters and matchers.
 
+
 ### Matchers
 
-- `DeepCopy\Matcher` applies on a object attribute.
-- `DeepCopy\TypeMatcher` applies on any element found in graph, including array elements.
+  - `DeepCopy\Matcher` applies on a object attribute.
+  - `DeepCopy\TypeMatcher` applies on any element found in graph, including array elements.
+
 
 #### Property name
 
@@ -149,6 +155,7 @@ use DeepCopy\Matcher\PropertyNameMatcher;
 $matcher = new PropertyNameMatcher('id');
 ```
 
+
 #### Specific property
 
 The `PropertyMatcher` will match a specific property of a specific class:
@@ -159,6 +166,7 @@ use DeepCopy\Matcher\PropertyMatcher;
 // Will apply a filter to the property "id" of any objects of the class "MyClass"
 $matcher = new PropertyMatcher('MyClass', 'id');
 ```
+
 
 #### Type
 
@@ -172,10 +180,12 @@ use DeepCopy\TypeMatcher\TypeMatcher;
 $matcher = new TypeMatcher('Doctrine\Common\Collections\Collection');
 ```
 
+
 ### Filters
 
 - `DeepCopy\Filter` applies a transformation to the object attribute matched by `DeepCopy\Matcher`
 - `DeepCopy\TypeFilter` applies a transformation to any element matched by `DeepCopy\TypeMatcher`
+
 
 #### `SetNullFilter` (filter)
 
@@ -198,6 +208,7 @@ $copy = $copier->copy($object);
 echo $copy->id; // null
 ```
 
+
 #### `KeepFilter` (filter)
 
 If you want a property to remain untouched (for example, an association to an object):
@@ -214,6 +225,7 @@ $copy = $copier->copy($object);
 // $copy->category has not been touched
 ```
 
+
 #### `DoctrineCollectionFilter` (filter)
 
 If you use Doctrine and want to copy an entity, you will need to use the `DoctrineCollectionFilter`:
@@ -228,6 +240,7 @@ $copier->addFilter(new DoctrineCollectionFilter(), new PropertyTypeMatcher('Doct
 
 $copy = $copier->copy($object);
 ```
+
 
 #### `DoctrineEmptyCollectionFilter` (filter)
 
@@ -246,6 +259,7 @@ $copy = $copier->copy($object);
 
 // $copy->myProperty will return an empty collection
 ```
+
 
 #### `DoctrineProxyFilter` (filter)
 
@@ -267,6 +281,7 @@ $copy = $copier->copy($object);
 
 // $copy should now contain a clone of all entities, including those that were not yet fully loaded.
 ```
+
 
 #### `ReplaceFilter` (type filter)
 
@@ -306,7 +321,9 @@ $copy = $copier->copy([new MyClass, 'some string', new MyClass]);
 // $copy will contain ['MyClass', 'some string', 'MyClass']
 ```
 
+
 The `$callback` parameter of the `ReplaceFilter` constructor accepts any PHP callable.
+
 
 #### `ShallowCopyFilter` (type filter)
 
@@ -328,6 +345,7 @@ $myServiceWithMocks = new MyService(m::mock(MyDependency1::class), m::mock(MyDep
 // All mocks will be just cloned, not deep copied
 ```
 
+
 ## Edge cases
 
 The following structures cannot be deep-copied with PHP Reflection. As a result they are shallow cloned and filters are
@@ -336,9 +354,11 @@ not applied. There is two ways for you to handle them:
 - Implement your own `__clone()` method
 - Use a filter with a type matcher
 
+
 ## Contributing
 
 DeepCopy is distributed under the MIT license.
+
 
 ### Tests
 
@@ -350,6 +370,4 @@ vendor/bin/phpunit
 
 ### Support
 
-Get professional support
-via [the Tidelift Subscription](https://tidelift.com/subscription/pkg/packagist-myclabs-deep-copy?utm_source=packagist-myclabs-deep-copy&utm_medium=referral&utm_campaign=readme)
-.
+Get professional support via [the Tidelift Subscription](https://tidelift.com/subscription/pkg/packagist-myclabs-deep-copy?utm_source=packagist-myclabs-deep-copy&utm_medium=referral&utm_campaign=readme).

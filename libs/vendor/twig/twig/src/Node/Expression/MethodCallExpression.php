@@ -32,7 +32,8 @@ class MethodCallExpression extends AbstractExpression
                 ->repr($this->getNode('node')->getAttribute('name'))
                 ->raw('], ')
                 ->repr($this->getAttribute('method'))
-                ->raw(')');
+                ->raw(')')
+            ;
 
             return;
         }
@@ -42,7 +43,8 @@ class MethodCallExpression extends AbstractExpression
             ->repr($this->getNode('node')->getAttribute('name'))
             ->raw('], ')
             ->repr($this->getAttribute('method'))
-            ->raw(', [');
+            ->raw(', [')
+        ;
         $first = true;
         foreach ($this->getNode('arguments')->getKeyValuePairs() as $pair) {
             if (!$first) {

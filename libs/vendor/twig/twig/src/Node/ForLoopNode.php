@@ -42,7 +42,8 @@ class ForLoopNode extends Node
                 ->write("--\$context['loop']['revindex'];\n")
                 ->write("\$context['loop']['last'] = 0 === \$context['loop']['revindex0'];\n")
                 ->outdent()
-                ->write("}\n");
+                ->write("}\n")
+            ;
         }
     }
 }

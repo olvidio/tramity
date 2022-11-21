@@ -63,7 +63,8 @@ class SetNode extends Node implements NodeCaptureInterface
                     $compiler->write("ob_start(function () { return ''; });\n");
                 }
                 $compiler
-                    ->subcompile($this->getNode('values'));
+                    ->subcompile($this->getNode('values'))
+                ;
             }
 
             $compiler->subcompile($this->getNode('names'), false);
@@ -91,7 +92,8 @@ class SetNode extends Node implements NodeCaptureInterface
                     $compiler
                         ->raw("('' === \$tmp = ")
                         ->subcompile($this->getNode('values'))
-                        ->raw(") ? '' : new Markup(\$tmp, \$this->env->getCharset())");
+                        ->raw(") ? '' : new Markup(\$tmp, \$this->env->getCharset())")
+                    ;
                 } else {
                     $compiler->subcompile($this->getNode('values'));
                 }

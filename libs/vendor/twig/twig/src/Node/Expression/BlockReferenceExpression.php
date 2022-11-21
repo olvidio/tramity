@@ -61,7 +61,8 @@ class BlockReferenceExpression extends AbstractExpression
                 ->repr($this->getTemplateName())
                 ->raw(', ')
                 ->repr($this->getTemplateLine())
-                ->raw(')');
+                ->raw(')')
+            ;
         }
 
         $compiler->raw(sprintf('->%s', $method));

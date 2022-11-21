@@ -28,6 +28,8 @@ use Twig\Node\SetNode;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @internal
  */
 final class SandboxNodeVisitor implements NodeVisitorInterface
 {
@@ -95,22 +97,6 @@ final class SandboxNodeVisitor implements NodeVisitorInterface
         return $node;
     }
 
-    private function wrapNode(Node $node, string $name): void
-    {
-        $expr = $node->getNode($name);
-        if ($expr instanceof NameExpression || $expr instanceof GetAttrExpression) {
-            $node->setNode($name, new CheckToStringNode($expr));
-        }
-    }
-
-    private function wrapArrayNode(Node $node, string $name): void
-    {
-        $args = $node->getNode($name);
-        foreach ($args as $name => $_) {
-            $this->wrapNode($args, $name);
-        }
-    }
-
     public function leaveNode(Node $node, Environment $env): ?Node
     {
         if ($node instanceof ModuleNode) {
@@ -125,6 +111,22 @@ final class SandboxNodeVisitor implements NodeVisitorInterface
         }
 
         return $node;
+    }
+
+    private function wrapNode(Node $node, string $name): void
+    {
+        $expr = $node->getNode($name);
+        if ($expr instanceof NameExpression || $expr instanceof GetAttrExpression) {
+            $node->setNode($name, new CheckToStringNode($expr));
+        }
+    }
+
+    private function wrapArrayNode(Node $node, string $name): void
+    {
+        $args = $node->getNode($name);
+        foreach ($args as $name => $_) {
+            $this->wrapNode($args, $name);
+        }
     }
 
     public function getPriority(): int

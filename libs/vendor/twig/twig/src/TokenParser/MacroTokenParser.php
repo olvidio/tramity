@@ -23,6 +23,8 @@ use Twig\Token;
  *   {% macro input(name, value, type, size) %}
  *      <input type="{{ type|default('text') }}" name="{{ name }}" value="{{ value|e }}" size="{{ size|default(20) }}" />
  *   {% endmacro %}
+ *
+ * @internal
  */
 final class MacroTokenParser extends AbstractTokenParser
 {
@@ -52,13 +54,13 @@ final class MacroTokenParser extends AbstractTokenParser
         return new Node();
     }
 
-    public function getTag(): string
-    {
-        return 'macro';
-    }
-
     public function decideBlockEnd(Token $token): bool
     {
         return $token->test('endmacro');
+    }
+
+    public function getTag(): string
+    {
+        return 'macro';
     }
 }

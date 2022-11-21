@@ -30,7 +30,7 @@ class Fpdi extends FpdfTpl
      *
      * @string
      */
-    const VERSION = '2.3.5';
+    const VERSION = '2.3.6';
 
     public function _enddoc()
     {
@@ -131,18 +131,6 @@ class Fpdi extends FpdfTpl
     /**
      * @inheritdoc
      */
-    protected function _put($s, $newLine = true)
-    {
-        if ($newLine) {
-            $this->buffer .= $s . "\n";
-        } else {
-            $this->buffer .= $s;
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
     protected function _putxobjectdict()
     {
         foreach ($this->importedPages as $key => $pageData) {
@@ -150,5 +138,17 @@ class Fpdi extends FpdfTpl
         }
 
         parent::_putxobjectdict();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _put($s, $newLine = true)
+    {
+        if ($newLine) {
+            $this->buffer .= $s . "\n";
+        } else {
+            $this->buffer .= $s;
+        }
     }
 }

@@ -19,7 +19,7 @@ class TransTag extends AbstractTokenParser
     /**
      * {@inheritdoc}
      */
-    public function parse(Token $token)
+    public function parse(Token $token): Node
     {
         $lineNo = $token->getLine();
         $stream = $this->parser->getStream();
@@ -56,11 +56,37 @@ class TransTag extends AbstractTokenParser
     }
 
     /**
+     * @param Token $token
+     * @return bool
+     */
+    public function decideForFork(Token $token): bool
+    {
+        return $token->test(['plural', 'notes', 'endtrans']);
+    }
+
+    /**
+     * @param Token $token
+     * @return bool
+     */
+    public function decideForEnd(Token $token): bool
+    {
+        return $token->test('endtrans');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTag(): string
+    {
+        return 'trans';
+    }
+
+    /**
      * @param Node $body
      * @param int $lineNo
      * @throws SyntaxError
      */
-    protected function checkTransString(Node $body, int $lineNo)
+    protected function checkTransString(Node $body, int $lineNo): void
     {
         foreach ($body as $i => $node) {
             if (
@@ -70,35 +96,9 @@ class TransTag extends AbstractTokenParser
                 continue;
             }
             throw new SyntaxError(
-                sprintf('The text to be translated with "trans" can only contain references to simple variables'),
+                'The text to be translated with "trans" can only contain references to simple variables',
                 $lineNo
             );
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTag()
-    {
-        return 'trans';
-    }
-
-    /**
-     * @param Token $token
-     * @return bool
-     */
-    public function decideForFork(Token $token)
-    {
-        return $token->test(['plural', 'notes', 'endtrans']);
-    }
-
-    /**
-     * @param Token $token
-     * @return bool
-     */
-    public function decideForEnd(Token $token)
-    {
-        return $token->test('endtrans');
     }
 }

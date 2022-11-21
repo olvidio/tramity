@@ -44,6 +44,16 @@ abstract class AbstractReader
     }
 
     /**
+     * Get the trailer dictionary.
+     *
+     * @return PdfDictionary
+     */
+    public function getTrailer()
+    {
+        return $this->trailer;
+    }
+
+    /**
      * Read the trailer dictionary.
      *
      * @throws CrossReferenceException
@@ -81,15 +91,5 @@ abstract class AbstractReader
         }
 
         $this->trailer = $trailer;
-    }
-
-    /**
-     * Get the trailer dictionary.
-     *
-     * @return PdfDictionary
-     */
-    public function getTrailer()
-    {
-        return $this->trailer;
     }
 }

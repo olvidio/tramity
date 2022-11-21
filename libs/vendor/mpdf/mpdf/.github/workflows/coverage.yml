@@ -21,7 +21,7 @@ jobs:
         php-version:
           - "7.4"
 
-        operating-system: [ ubuntu-latest ]
+        operating-system: [ubuntu-latest]
 
     steps:
       - name: "Checkout"
@@ -36,7 +36,7 @@ jobs:
           tools: composer:v2
 
       - name: "Install dependencies"
-        run: "composer install --no-interaction --no-progress --no-suggest"
+        run: "composer install --no-interaction --no-progress"
 
       - name: "Code coverage"
         run: composer coverage

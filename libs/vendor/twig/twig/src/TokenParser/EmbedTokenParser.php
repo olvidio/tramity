@@ -19,6 +19,8 @@ use Twig\Token;
 
 /**
  * Embeds a template.
+ *
+ * @internal
  */
 final class EmbedTokenParser extends IncludeTokenParser
 {
@@ -59,13 +61,13 @@ final class EmbedTokenParser extends IncludeTokenParser
         return new EmbedNode($module->getTemplateName(), $module->getAttribute('index'), $variables, $only, $ignoreMissing, $token->getLine(), $this->getTag());
     }
 
-    public function getTag(): string
-    {
-        return 'embed';
-    }
-
     public function decideBlockEnd(Token $token): bool
     {
         return $token->test('endembed');
+    }
+
+    public function getTag(): string
+    {
+        return 'embed';
     }
 }

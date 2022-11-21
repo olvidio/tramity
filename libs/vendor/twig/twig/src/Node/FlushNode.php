@@ -29,6 +29,7 @@ class FlushNode extends Node
     {
         $compiler
             ->addDebugInfo($this)
-            ->write("flush();\n");
+            ->write("flush();\n")
+        ;
     }
 }

@@ -33,13 +33,15 @@ class ImportNode extends Node
             ->addDebugInfo($this)
             ->write('$macros[')
             ->repr($this->getNode('var')->getAttribute('name'))
-            ->raw('] = ');
+            ->raw('] = ')
+        ;
 
         if ($this->getAttribute('global')) {
             $compiler
                 ->raw('$this->macros[')
                 ->repr($this->getNode('var')->getAttribute('name'))
-                ->raw('] = ');
+                ->raw('] = ')
+            ;
         }
 
         if ($this->getNode('expr') instanceof NameExpression && '_self' === $this->getNode('expr')->getAttribute('name')) {
@@ -52,7 +54,8 @@ class ImportNode extends Node
                 ->repr($this->getTemplateName())
                 ->raw(', ')
                 ->repr($this->getTemplateLine())
-                ->raw(')->unwrap()');
+                ->raw(')->unwrap()')
+            ;
         }
 
         $compiler->raw(";\n");

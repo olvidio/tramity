@@ -50,6 +50,11 @@ final class SandboxExtension extends AbstractExtension
         $this->sandboxed = false;
     }
 
+    public function isSandboxed(): bool
+    {
+        return $this->sandboxedGlobally || $this->sandboxed;
+    }
+
     public function isSandboxedGlobally(): bool
     {
         return $this->sandboxedGlobally;
@@ -72,16 +77,25 @@ final class SandboxExtension extends AbstractExtension
         }
     }
 
-    public function isSandboxed(): bool
-    {
-        return $this->sandboxedGlobally || $this->sandboxed;
-    }
-
-    public function checkPropertyAllowed($obj, $method, int $lineno = -1, Source $source = null): void
+    public function checkMethodAllowed($obj, $method, int $lineno = -1, Source $source = null): void
     {
         if ($this->isSandboxed()) {
             try {
-                $this->policy->checkPropertyAllowed($obj, $method);
+                $this->policy->checkMethodAllowed($obj, $method);
+            } catch (SecurityNotAllowedMethodError $e) {
+                $e->setSourceContext($source);
+                $e->setTemplateLine($lineno);
+
+                throw $e;
+            }
+        }
+    }
+
+    public function checkPropertyAllowed($obj, $property, int $lineno = -1, Source $source = null): void
+    {
+        if ($this->isSandboxed()) {
+            try {
+                $this->policy->checkPropertyAllowed($obj, $property);
             } catch (SecurityNotAllowedPropertyError $e) {
                 $e->setSourceContext($source);
                 $e->setTemplateLine($lineno);
@@ -105,19 +119,5 @@ final class SandboxExtension extends AbstractExtension
         }
 
         return $obj;
-    }
-
-    public function checkMethodAllowed($obj, $method, int $lineno = -1, Source $source = null): void
-    {
-        if ($this->isSandboxed()) {
-            try {
-                $this->policy->checkMethodAllowed($obj, $method);
-            } catch (SecurityNotAllowedMethodError $e) {
-                $e->setSourceContext($source);
-                $e->setTemplateLine($lineno);
-
-                throw $e;
-            }
-        }
     }
 }

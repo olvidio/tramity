@@ -33,7 +33,7 @@ use League\OAuth2\Client\Token\AccessToken;
  *
  * @author  Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  */
-class OAuth
+class OAuth implements OAuthTokenProvider
 {
     /**
      * An instance of the League OAuth Client Provider.
@@ -94,24 +94,13 @@ class OAuth
     }
 
     /**
-     * Generate a base64-encoded OAuth token.
+     * Get a new RefreshToken.
      *
-     * @return string
+     * @return RefreshToken
      */
-    public function getOauth64()
+    protected function getGrant()
     {
-        // Get a new token if it's not available or has expired
-        if (null === $this->oauthToken || $this->oauthToken->hasExpired()) {
-            $this->oauthToken = $this->getToken();
-        }
-
-        return base64_encode(
-            'user=' .
-            $this->oauthUserEmail .
-            "\001auth=Bearer " .
-            $this->oauthToken .
-            "\001\001"
-        );
+        return new RefreshToken();
     }
 
     /**
@@ -128,12 +117,23 @@ class OAuth
     }
 
     /**
-     * Get a new RefreshToken.
+     * Generate a base64-encoded OAuth token.
      *
-     * @return RefreshToken
+     * @return string
      */
-    protected function getGrant()
+    public function getOauth64()
     {
-        return new RefreshToken();
+        //Get a new token if it's not available or has expired
+        if (null === $this->oauthToken || $this->oauthToken->hasExpired()) {
+            $this->oauthToken = $this->getToken();
+        }
+
+        return base64_encode(
+            'user=' .
+            $this->oauthUserEmail .
+            "\001auth=Bearer " .
+            $this->oauthToken .
+            "\001\001"
+        );
     }
 }

@@ -26,7 +26,7 @@ class Translation implements ExtensionInterface
      * @param array $context
      * @return string
      */
-    public static function transGetText(string $value, array $context)
+    public static function transGetText(string $value, array $context): string
     {
         $getTextString = gettext($value);
         //if empty return original value
@@ -43,9 +43,17 @@ class Translation implements ExtensionInterface
      */
     private static function replaceContext(string $string, array $context): string
     {
+        // Without the brackets there is no need to run the rest of this method.
+        if (mb_strpos($string, '{{') === false) {
+            return $string;
+        }
         foreach ($context as $key => $value) {
             if (is_array($value)) {
                 return self::replaceContext($string, $value);
+            }
+            // Ignore objects, since only simple variables can be used
+            if (is_object($value)) {
+                continue;
             }
             $string = str_replace('{{ ' . $key . ' }}', $value, $string);
         }
@@ -55,17 +63,17 @@ class Translation implements ExtensionInterface
     /**
      * @inheritDoc
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
-            new TwigFilter('Translation', 'transGetText'),
+            new TwigFilter('Translation', [$this, 'transGetText']),
         ];
     }
 
     /**
      * @inheritDoc
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('transGetText', [$this, 'transGetText']),
@@ -75,17 +83,17 @@ class Translation implements ExtensionInterface
     /**
      * @inheritDoc
      */
-    public function getTests()
+    public function getTests(): array
     {
         return [
-            new TwigTest('Translation', 'test')
+            new TwigTest('Translation', null)
         ];
     }
 
     /**
      * @inheritDoc
      */
-    public function getTokenParsers()
+    public function getTokenParsers(): array
     {
         return [
             new TransTag()
@@ -95,7 +103,7 @@ class Translation implements ExtensionInterface
     /**
      * @inheritDoc
      */
-    public function getNodeVisitors()
+    public function getNodeVisitors(): array
     {
         return [new MacroAutoImportNodeVisitor()];
     }
@@ -103,7 +111,7 @@ class Translation implements ExtensionInterface
     /**
      * @inheritDoc
      */
-    public function getOperators()
+    public function getOperators(): array
     {
         return [
             [

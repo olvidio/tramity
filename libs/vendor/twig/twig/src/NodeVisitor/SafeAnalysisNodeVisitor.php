@@ -23,6 +23,9 @@ use Twig\Node\Expression\NameExpression;
 use Twig\Node\Expression\ParentExpression;
 use Twig\Node\Node;
 
+/**
+ * @internal
+ */
 final class SafeAnalysisNodeVisitor implements NodeVisitorInterface
 {
     private $data = [];
@@ -31,6 +34,44 @@ final class SafeAnalysisNodeVisitor implements NodeVisitorInterface
     public function setSafeVars(array $safeVars): void
     {
         $this->safeVars = $safeVars;
+    }
+
+    public function getSafe(Node $node)
+    {
+        $hash = spl_object_hash($node);
+        if (!isset($this->data[$hash])) {
+            return;
+        }
+
+        foreach ($this->data[$hash] as $bucket) {
+            if ($bucket['key'] !== $node) {
+                continue;
+            }
+
+            if (\in_array('html_attr', $bucket['value'])) {
+                $bucket['value'][] = 'html';
+            }
+
+            return $bucket['value'];
+        }
+    }
+
+    private function setSafe(Node $node, array $safe): void
+    {
+        $hash = spl_object_hash($node);
+        if (isset($this->data[$hash])) {
+            foreach ($this->data[$hash] as &$bucket) {
+                if ($bucket['key'] === $node) {
+                    $bucket['value'] = $safe;
+
+                    return;
+                }
+            }
+        }
+        $this->data[$hash][] = [
+            'key' => $node,
+            'value' => $safe,
+        ];
     }
 
     public function enterNode(Node $node, Environment $env): Node
@@ -95,24 +136,6 @@ final class SafeAnalysisNodeVisitor implements NodeVisitorInterface
         return $node;
     }
 
-    private function setSafe(Node $node, array $safe): void
-    {
-        $hash = spl_object_hash($node);
-        if (isset($this->data[$hash])) {
-            foreach ($this->data[$hash] as &$bucket) {
-                if ($bucket['key'] === $node) {
-                    $bucket['value'] = $safe;
-
-                    return;
-                }
-            }
-        }
-        $this->data[$hash][] = [
-            'key' => $node,
-            'value' => $safe,
-        ];
-    }
-
     private function intersectSafe(array $a = null, array $b = null): array
     {
         if (null === $a || null === $b) {
@@ -128,26 +151,6 @@ final class SafeAnalysisNodeVisitor implements NodeVisitorInterface
         }
 
         return array_intersect($a, $b);
-    }
-
-    public function getSafe(Node $node)
-    {
-        $hash = spl_object_hash($node);
-        if (!isset($this->data[$hash])) {
-            return;
-        }
-
-        foreach ($this->data[$hash] as $bucket) {
-            if ($bucket['key'] !== $node) {
-                continue;
-            }
-
-            if (\in_array('html_attr', $bucket['value'])) {
-                $bucket['value'][] = 'html';
-            }
-
-            return $bucket['value'];
-        }
     }
 
     public function getPriority(): int

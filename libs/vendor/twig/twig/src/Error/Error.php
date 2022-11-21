@@ -49,9 +49,9 @@ class Error extends \Exception
      *
      * By default, automatic guessing is enabled.
      *
-     * @param string $message The error message
-     * @param int $lineno The template line where the error occurred
-     * @param Source|null $source The source context where the error occurred
+     * @param string      $message The error message
+     * @param int         $lineno  The template line where the error occurred
+     * @param Source|null $source  The source context where the error occurred
      */
     public function __construct(string $message, int $lineno = -1, Source $source = null, \Exception $previous = null)
     {
@@ -68,6 +68,53 @@ class Error extends \Exception
         $this->lineno = $lineno;
         $this->name = $name;
         $this->rawMessage = $message;
+        $this->updateRepr();
+    }
+
+    public function getRawMessage(): string
+    {
+        return $this->rawMessage;
+    }
+
+    public function getTemplateLine(): int
+    {
+        return $this->lineno;
+    }
+
+    public function setTemplateLine(int $lineno): void
+    {
+        $this->lineno = $lineno;
+
+        $this->updateRepr();
+    }
+
+    public function getSourceContext(): ?Source
+    {
+        return $this->name ? new Source($this->sourceCode, $this->name, $this->sourcePath) : null;
+    }
+
+    public function setSourceContext(Source $source = null): void
+    {
+        if (null === $source) {
+            $this->sourceCode = $this->name = $this->sourcePath = null;
+        } else {
+            $this->sourceCode = $source->getCode();
+            $this->name = $source->getName();
+            $this->sourcePath = $source->getPath();
+        }
+
+        $this->updateRepr();
+    }
+
+    public function guess(): void
+    {
+        $this->guessTemplateInfo();
+        $this->updateRepr();
+    }
+
+    public function appendMessage($rawMessage): void
+    {
+        $this->rawMessage .= $rawMessage;
         $this->updateRepr();
     }
 
@@ -116,52 +163,16 @@ class Error extends \Exception
         }
     }
 
-    public function getRawMessage(): string
-    {
-        return $this->rawMessage;
-    }
-
-    public function getTemplateLine(): int
-    {
-        return $this->lineno;
-    }
-
-    public function setTemplateLine(int $lineno): void
-    {
-        $this->lineno = $lineno;
-
-        $this->updateRepr();
-    }
-
-    public function setSourceContext(Source $source = null): void
-    {
-        if (null === $source) {
-            $this->sourceCode = $this->name = $this->sourcePath = null;
-        } else {
-            $this->sourceCode = $source->getCode();
-            $this->name = $source->getName();
-            $this->sourcePath = $source->getPath();
-        }
-
-        $this->updateRepr();
-    }
-
-    public function guess(): void
-    {
-        $this->guessTemplateInfo();
-        $this->updateRepr();
-    }
-
     private function guessTemplateInfo(): void
     {
         $template = null;
         $templateClass = null;
 
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS | DEBUG_BACKTRACE_PROVIDE_OBJECT);
+        $backtrace = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS | \DEBUG_BACKTRACE_PROVIDE_OBJECT);
         foreach ($backtrace as $trace) {
             if (isset($trace['object']) && $trace['object'] instanceof Template) {
                 $currentClass = \get_class($trace['object']);
-                $isEmbedContainer = 0 === strpos($templateClass, $currentClass);
+                $isEmbedContainer = null === $templateClass ? false : 0 === strpos($templateClass, $currentClass);
                 if (null === $this->name || ($this->name == $trace['object']->getTemplateName() && !$isEmbedContainer)) {
                     $template = $trace['object'];
                     $templateClass = \get_class($trace['object']);
@@ -212,16 +223,5 @@ class Error extends \Exception
                 }
             }
         }
-    }
-
-    public function getSourceContext(): ?Source
-    {
-        return $this->name ? new Source($this->sourceCode, $this->name, $this->sourcePath) : null;
-    }
-
-    public function appendMessage($rawMessage): void
-    {
-        $this->rawMessage .= $rawMessage;
-        $this->updateRepr();
     }
 }

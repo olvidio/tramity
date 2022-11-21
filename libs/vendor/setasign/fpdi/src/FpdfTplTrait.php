@@ -39,6 +39,51 @@ trait FpdfTplTrait
     protected $templateId = 0;
 
     /**
+     * Set the page format of the current page.
+     *
+     * @param array $size An array with two values defining the size.
+     * @param string $orientation "L" for landscape, "P" for portrait.
+     * @throws \BadMethodCallException
+     */
+    public function setPageFormat($size, $orientation)
+    {
+        if ($this->currentTemplateId !== null) {
+            throw new \BadMethodCallException('The page format cannot be changed when writing to a template.');
+        }
+
+        if (!\in_array($orientation, ['P', 'L'], true)) {
+            throw new \InvalidArgumentException(\sprintf(
+                'Invalid page orientation "%s"! Only "P" and "L" are allowed!',
+                $orientation
+            ));
+        }
+
+        $size = $this->_getpagesize($size);
+
+        if (
+            $orientation != $this->CurOrientation
+            || $size[0] != $this->CurPageSize[0]
+            || $size[1] != $this->CurPageSize[1]
+        ) {
+            // New size or orientation
+            if ($orientation === 'P') {
+                $this->w = $size[0];
+                $this->h = $size[1];
+            } else {
+                $this->w = $size[1];
+                $this->h = $size[0];
+            }
+            $this->wPt = $this->w * $this->k;
+            $this->hPt = $this->h * $this->k;
+            $this->PageBreakTrigger = $this->h - $this->bMargin;
+            $this->CurOrientation = $orientation;
+            $this->CurPageSize = $size;
+
+            $this->PageInfo[$this->page]['size'] = array($this->wPt, $this->hPt);
+        }
+    }
+
+    /**
      * Draws a template onto the page or another template.
      *
      * Give only one of the size parameters (width, height) to calculate the other one automatically in view to the
@@ -135,63 +180,6 @@ trait FpdfTplTrait
     }
 
     /**
-     * Set the page format of the current page.
-     *
-     * @param array $size An array with two values defining the size.
-     * @param string $orientation "L" for landscape, "P" for portrait.
-     * @throws \BadMethodCallException
-     */
-    public function setPageFormat($size, $orientation)
-    {
-        if ($this->currentTemplateId !== null) {
-            throw new \BadMethodCallException('The page format cannot be changed when writing to a template.');
-        }
-
-        if (!\in_array($orientation, ['P', 'L'], true)) {
-            throw new \InvalidArgumentException(\sprintf(
-                'Invalid page orientation "%s"! Only "P" and "L" are allowed!',
-                $orientation
-            ));
-        }
-
-        $size = $this->_getpagesize($size);
-
-        if (
-            $orientation != $this->CurOrientation
-            || $size[0] != $this->CurPageSize[0]
-            || $size[1] != $this->CurPageSize[1]
-        ) {
-            // New size or orientation
-            if ($orientation === 'P') {
-                $this->w = $size[0];
-                $this->h = $size[1];
-            } else {
-                $this->w = $size[1];
-                $this->h = $size[0];
-            }
-            $this->wPt = $this->w * $this->k;
-            $this->hPt = $this->h * $this->k;
-            $this->PageBreakTrigger = $this->h - $this->bMargin;
-            $this->CurOrientation = $orientation;
-            $this->CurPageSize = $size;
-
-            $this->PageInfo[$this->page]['size'] = array($this->wPt, $this->hPt);
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function _out($s)
-    {
-        if ($this->currentTemplateId !== null) {
-            $this->templates[$this->currentTemplateId]['buffer'] .= $s . "\n";
-        } else {
-            parent::_out($s);
-        }
-    }
-
-    /**
      * Begins a new template.
      *
      * @param float|int|null $width The width of the template. If null, the current page width is used.
@@ -272,18 +260,6 @@ trait FpdfTplTrait
     }
 
     /**
-     * Get the next template id.
-     *
-     * @return int
-     */
-    protected function getNextTemplateId()
-    {
-        return $this->templateId++;
-    }
-
-    /* overwritten FPDF methods: */
-
-    /**
      * Ends a template.
      *
      * @return bool|int|null A template identifier.
@@ -329,6 +305,18 @@ trait FpdfTplTrait
 
         return $templateId;
     }
+
+    /**
+     * Get the next template id.
+     *
+     * @return int
+     */
+    protected function getNextTemplateId()
+    {
+        return $this->templateId++;
+    }
+
+    /* overwritten FPDF methods: */
 
     /**
      * @inheritdoc
@@ -466,5 +454,17 @@ trait FpdfTplTrait
         }
 
         parent::_putxobjectdict();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _out($s)
+    {
+        if ($this->currentTemplateId !== null) {
+            $this->templates[$this->currentTemplateId]['buffer'] .= $s . "\n";
+        } else {
+            parent::_out($s);
+        }
     }
 }

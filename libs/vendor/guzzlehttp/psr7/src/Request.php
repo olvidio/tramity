@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace GuzzleHttp\Psr7;
 
 use InvalidArgumentException;
@@ -17,27 +19,26 @@ class Request implements RequestInterface
     /** @var string */
     private $method;
 
-    /** @var null|string */
+    /** @var string|null */
     private $requestTarget;
 
     /** @var UriInterface */
     private $uri;
 
     /**
-     * @param string $method HTTP method
-     * @param string|UriInterface $uri URI
-     * @param array $headers Request headers
-     * @param string|null|resource|StreamInterface $body Request body
-     * @param string $version Protocol version
+     * @param string                               $method  HTTP method
+     * @param string|UriInterface                  $uri     URI
+     * @param array<string, string|string[]>       $headers Request headers
+     * @param string|resource|StreamInterface|null $body    Request body
+     * @param string                               $version Protocol version
      */
     public function __construct(
-        $method,
+        string $method,
         $uri,
         array $headers = [],
         $body = null,
-        $version = '1.1'
-    )
-    {
+        string $version = '1.1'
+    ) {
         $this->assertMethod($method);
         if (!($uri instanceof UriInterface)) {
             $uri = new Uri($uri);
@@ -57,14 +58,71 @@ class Request implements RequestInterface
         }
     }
 
-    private function assertMethod($method)
+    public function getRequestTarget(): string
     {
-        if (!is_string($method) || $method === '') {
-            throw new \InvalidArgumentException('Method must be a non-empty string.');
+        if ($this->requestTarget !== null) {
+            return $this->requestTarget;
         }
+
+        $target = $this->uri->getPath();
+        if ($target === '') {
+            $target = '/';
+        }
+        if ($this->uri->getQuery() != '') {
+            $target .= '?' . $this->uri->getQuery();
+        }
+
+        return $target;
     }
 
-    private function updateHostFromUri()
+    public function withRequestTarget($requestTarget): RequestInterface
+    {
+        if (preg_match('#\s#', $requestTarget)) {
+            throw new InvalidArgumentException(
+                'Invalid request target provided; cannot contain whitespace'
+            );
+        }
+
+        $new = clone $this;
+        $new->requestTarget = $requestTarget;
+        return $new;
+    }
+
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    public function withMethod($method): RequestInterface
+    {
+        $this->assertMethod($method);
+        $new = clone $this;
+        $new->method = strtoupper($method);
+        return $new;
+    }
+
+    public function getUri(): UriInterface
+    {
+        return $this->uri;
+    }
+
+    public function withUri(UriInterface $uri, $preserveHost = false): RequestInterface
+    {
+        if ($uri === $this->uri) {
+            return $this;
+        }
+
+        $new = clone $this;
+        $new->uri = $uri;
+
+        if (!$preserveHost || !isset($this->headerNames['host'])) {
+            $new->updateHostFromUri();
+        }
+
+        return $new;
+    }
+
+    private function updateHostFromUri(): void
     {
         $host = $this->uri->getHost();
 
@@ -87,67 +145,13 @@ class Request implements RequestInterface
         $this->headers = [$header => [$host]] + $this->headers;
     }
 
-    public function getRequestTarget()
+    /**
+     * @param mixed $method
+     */
+    private function assertMethod($method): void
     {
-        if ($this->requestTarget !== null) {
-            return $this->requestTarget;
+        if (!is_string($method) || $method === '') {
+            throw new InvalidArgumentException('Method must be a non-empty string.');
         }
-
-        $target = $this->uri->getPath();
-        if ($target == '') {
-            $target = '/';
-        }
-        if ($this->uri->getQuery() != '') {
-            $target .= '?' . $this->uri->getQuery();
-        }
-
-        return $target;
-    }
-
-    public function withRequestTarget($requestTarget)
-    {
-        if (preg_match('#\s#', $requestTarget)) {
-            throw new InvalidArgumentException(
-                'Invalid request target provided; cannot contain whitespace'
-            );
-        }
-
-        $new = clone $this;
-        $new->requestTarget = $requestTarget;
-        return $new;
-    }
-
-    public function getMethod()
-    {
-        return $this->method;
-    }
-
-    public function withMethod($method)
-    {
-        $this->assertMethod($method);
-        $new = clone $this;
-        $new->method = strtoupper($method);
-        return $new;
-    }
-
-    public function getUri()
-    {
-        return $this->uri;
-    }
-
-    public function withUri(UriInterface $uri, $preserveHost = false)
-    {
-        if ($uri === $this->uri) {
-            return $this;
-        }
-
-        $new = clone $this;
-        $new->uri = $uri;
-
-        if (!$preserveHost || !isset($this->headerNames['host'])) {
-            $new->updateHostFromUri();
-        }
-
-        return $new;
     }
 }

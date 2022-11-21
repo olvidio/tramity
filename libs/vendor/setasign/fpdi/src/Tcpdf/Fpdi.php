@@ -42,7 +42,7 @@ class Fpdi extends \TCPDF
      *
      * @string
      */
-    const VERSION = '2.3.5';
+    const VERSION = '2.3.6';
 
     /**
      * A counter for template ids.
@@ -57,6 +57,22 @@ class Fpdi extends \TCPDF
      * @var int|null
      */
     protected $currentObjectNumber;
+
+    protected function _enddoc()
+    {
+        parent::_enddoc();
+        $this->cleanUp();
+    }
+
+    /**
+     * Get the next template id.
+     *
+     * @return int
+     */
+    protected function getNextTemplateId()
+    {
+        return $this->templateId++;
+    }
 
     /**
      * Draws an imported page onto the page or another template.
@@ -120,22 +136,6 @@ class Fpdi extends \TCPDF
     public function getTemplateSize($tpl, $width = null, $height = null)
     {
         return $this->getImportedPageSize($tpl, $width, $height);
-    }
-
-    protected function _enddoc()
-    {
-        parent::_enddoc();
-        $this->cleanUp();
-    }
-
-    /**
-     * Get the next template id.
-     *
-     * @return int
-     */
-    protected function getNextTemplateId()
-    {
-        return $this->templateId++;
     }
 
     /**
@@ -204,6 +204,21 @@ class Fpdi extends \TCPDF
     }
 
     /**
+     * Append content to the buffer of TCPDF.
+     *
+     * @param string $s
+     * @param bool $newLine
+     */
+    protected function _put($s, $newLine = true)
+    {
+        if ($newLine) {
+            $this->setBuffer($s . "\n");
+        } else {
+            $this->setBuffer($s);
+        }
+    }
+
+    /**
      * Begin a new object and return the object number.
      *
      * @param int|string $objid Object ID (leave empty to get a new ID).
@@ -251,20 +266,5 @@ class Fpdi extends \TCPDF
         }
 
         $this->fpdiWritePdfType($value);
-    }
-
-    /**
-     * Append content to the buffer of TCPDF.
-     *
-     * @param string $s
-     * @param bool $newLine
-     */
-    protected function _put($s, $newLine = true)
-    {
-        if ($newLine) {
-            $this->setBuffer($s . "\n");
-        } else {
-            $this->setBuffer($s);
-        }
     }
 }

@@ -30,6 +30,7 @@ class ConditionalExpression extends AbstractExpression
             ->subcompile($this->getNode('expr2'))
             ->raw(') : (')
             ->subcompile($this->getNode('expr3'))
-            ->raw('))');
+            ->raw('))')
+        ;
     }
 }

@@ -40,7 +40,7 @@ final class DeprecationCollector
         $iterator = new \RegexIterator(
             new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($dir), \RecursiveIteratorIterator::LEAVES_ONLY
-            ), '{' . preg_quote($ext) . '$}'
+            ), '{'.preg_quote($ext).'$}'
         );
 
         return $this->collect(new TemplateDirIterator($iterator));
@@ -57,7 +57,7 @@ final class DeprecationCollector
     {
         $deprecations = [];
         set_error_handler(function ($type, $msg) use (&$deprecations) {
-            if (E_USER_DEPRECATED === $type) {
+            if (\E_USER_DEPRECATED === $type) {
                 $deprecations[] = $msg;
             }
         });

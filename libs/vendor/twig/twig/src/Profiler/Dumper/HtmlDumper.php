@@ -27,7 +27,7 @@ final class HtmlDumper extends BaseDumper
 
     public function dump(Profile $profile): string
     {
-        return '<pre>' . parent::dump($profile) . '</pre>';
+        return '<pre>'.parent::dump($profile).'</pre>';
     }
 
     protected function formatTemplate(Profile $profile, $prefix): string

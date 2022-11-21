@@ -22,6 +22,7 @@ class CheckSecurityCallNode extends Node
     {
         $compiler
             ->write("\$this->sandbox = \$this->env->getExtension('\Twig\Extension\SandboxExtension');\n")
-            ->write("\$this->checkSecurity();\n");
+            ->write("\$this->checkSecurity();\n")
+        ;
     }
 }

@@ -21,6 +21,7 @@ class AssignNameExpression extends NameExpression
         $compiler
             ->raw('$context[')
             ->string($this->getAttribute('name'))
-            ->raw(']');
+            ->raw(']')
+        ;
     }
 }

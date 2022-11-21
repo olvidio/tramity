@@ -23,7 +23,7 @@ class ArrayExpression extends AbstractExpression
 
         $this->index = -1;
         foreach ($this->getKeyValuePairs() as $pair) {
-            if ($pair['key'] instanceof ConstantExpression && ctype_digit((string)$pair['key']->getAttribute('value')) && $pair['key']->getAttribute('value') > $this->index) {
+            if ($pair['key'] instanceof ConstantExpression && ctype_digit((string) $pair['key']->getAttribute('value')) && $pair['key']->getAttribute('value') > $this->index) {
                 $this->index = $pair['key']->getAttribute('value');
             }
         }
@@ -47,7 +47,7 @@ class ArrayExpression extends AbstractExpression
         foreach ($this->getKeyValuePairs() as $pair) {
             // we compare the string representation of the keys
             // to avoid comparing the line numbers which are not relevant here.
-            if ((string)$key === (string)$pair['key']) {
+            if ((string) $key === (string) $pair['key']) {
                 return true;
             }
         }
@@ -77,7 +77,8 @@ class ArrayExpression extends AbstractExpression
             $compiler
                 ->subcompile($pair['key'])
                 ->raw(' => ')
-                ->subcompile($pair['value']);
+                ->subcompile($pair['value'])
+            ;
         }
         $compiler->raw(']');
     }
