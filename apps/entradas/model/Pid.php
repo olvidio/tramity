@@ -3,11 +3,12 @@
 namespace entradas\model;
 
 use core\ConfigGlobal;
+use Exception;
 use web\DateTimeLocal;
 
 class Pid
 {
-    private $filename;
+    private string $filename;
 
     public function __construct()
     {
@@ -17,6 +18,9 @@ class Pid
 
     }
 
+    /**
+     * @throws Exception
+     */
     public function existePid(): bool
     {
         if (file_exists($this->filename)) {
@@ -26,29 +30,40 @@ class Pid
                 // no se ha borrado. Miramos que sea de hace más de 5 min.
                 $delta = 5;
                 $matches = [];
-                preg_match('@(\d+/\d+/\d+ \d+:\d+:\d+) -- .*@', $fileContent, $matches);
-                $f_iso = $matches[1];
+                $result = preg_match('@(\d+/\d+/\d+ \d+:\d+:\d+) -- .*@', $fileContent, $matches);
+                if ($result === 1) {
+                    $f_iso = $matches[1];
 
-                $oDiaFichero = new DateTimeLocal($f_iso);
-                $oAhora = new DateTimeLocal('now');
+                    $oDiaFichero = new DateTimeLocal($f_iso);
+                    $oAhora = new DateTimeLocal('now');
 
-                $interval = $oDiaFichero->diff($oAhora);
-                $a = $interval->format('%i');
+                    $interval = $oDiaFichero->diff($oAhora);
+                    $a = $interval->format('%i');
 
-                if ($a > $delta) {
+                    if ($a > $delta) {
+                        $ahora = date("Y/m/d H:i:s");
+                        echo "$ahora ";
+                        echo sprintf(_("El fichero %s no está vacío."), $this->filename);
+                        echo " ";
+                        echo _("Posiblemente la anterior operación finalizó con error");
+                        return TRUE;
+                    }
+                } else {
                     $ahora = date("Y/m/d H:i:s");
                     echo "$ahora ";
                     echo sprintf(_("El fichero %s no está vacío."), $this->filename);
                     echo " ";
-                    echo _("Posiblemente la anterior operación finalizó con error");
-                    return TRUE;
+                    echo $fileContent;
                 }
             }
         }
         return FALSE;
     }
 
-    public function crearPid()
+    /**
+     * @throws Exception
+     */
+    public function crearPid(): void
     {
         if (!$this->existePid()) {
             $ahora = date("Y/m/d H:i:s");
@@ -57,7 +72,7 @@ class Pid
         }
     }
 
-    public function borrarPid()
+    public function borrarPid(): void
     {
         // al finalizar borro el pid
         // Si he lanzado el proceso automáticamente.
