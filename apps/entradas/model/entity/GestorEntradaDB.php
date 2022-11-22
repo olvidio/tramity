@@ -53,7 +53,7 @@ class GestorEntradaDB extends ClaseGestor
                     GROUP BY a ORDER BY a";
 
         if (($oDblSt = $oDbl->Query($sql_anys)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.execute';
+            $sClauError = 'GestorEntradaDB.posiblesYear.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -169,7 +169,7 @@ class GestorEntradaDB extends ClaseGestor
         $sQry = "$select_todas EXCEPT $select_vistas";
 
         if (($oDblSt = $oDbl->query($sQry)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.prepare';
+            $sClauError = 'GestorEntradaDB.getNoVisto.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -291,12 +291,12 @@ class GestorEntradaDB extends ClaseGestor
         $sQry = "SELECT * FROM $nom_tabla $where_condi" . $sOrdre . $sLimit;
 
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.prepare';
+            $sClauError = 'GestorEntradaDB.getVisto.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.execute';
+            $sClauError = 'GestorEntradaDB.getVisto.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -407,12 +407,12 @@ class GestorEntradaDB extends ClaseGestor
         $sQry = "SELECT * FROM $nom_tabla $where_condi" . $sOrdre . $sLimit;
 
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.prepare';
+            $sClauError = 'GestorEntradaDB.getByRef.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.execute';
+            $sClauError = 'GestorEntradaDB.getByRef.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -542,12 +542,12 @@ class GestorEntradaDB extends ClaseGestor
         $sQry = "SELECT * FROM $nom_tabla $where_condi" . $sOrdre . $sLimit;
 
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.prepare';
+            $sClauError = 'GestorEntradaDB.getByProtOrg.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.execute';
+            $sClauError = 'GestorEntradaDB.getByProtOrg.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -628,12 +628,12 @@ class GestorEntradaDB extends ClaseGestor
         $sQry = "SELECT * FROM $nom_tabla " . $sCondi . $sOrdre . $sLimit;
 
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.prepare';
+            $sClauError = 'GestorEntradaDB.getNumeradas.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.execute';
+            $sClauError = 'GestorEntradaDB.getNumeradas.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -714,12 +714,12 @@ class GestorEntradaDB extends ClaseGestor
         $sQry = "SELECT * FROM $nom_tabla " . $sCondi . $sOrdre . $sLimit;
 
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.prepare';
+            $sClauError = 'GestorEntradaDB.getByLugar.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.execute';
+            $sClauError = 'GestorEntradaDB.getByLugar.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -786,12 +786,12 @@ class GestorEntradaDB extends ClaseGestor
         }
         $sQry = "SELECT * FROM $nom_tabla " . $sCondi . $sOrdre . $sLimit;
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.prepare';
+            $sClauError = 'GestorEntradaDB.get.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.execute';
+            $sClauError = 'GestorEntradaDB.get.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }

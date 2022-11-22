@@ -33,7 +33,7 @@ class GestorEntrada extends GestorEntradaDB
 					WHERE id_entrada_compartida = $id_entrada_compartida";
 
             if (($oDbl->query($sQry)) === FALSE) {
-                $sClauError = 'GestorEntradaDB.llistar.execute';
+                $sClauError = 'GestorEntrada.anular.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -114,12 +114,12 @@ class GestorEntrada extends GestorEntradaDB
         }
         $sQry = "SELECT * FROM $nom_tabla " . $sCondi . $sOrdre . $sLimit;
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.prepare';
+            $sClauError = 'GestorEntrada.get.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.llistar.execute';
+            $sClauError = 'GestorEntrada.get.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
