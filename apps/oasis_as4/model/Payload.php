@@ -11,6 +11,7 @@ use envios\model\MIMEContainer;
 use escritos\model\entity\EscritoAdjunto;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
+use usuarios\model\Visibilidad;
 use function core\is_true;
 
 
@@ -169,7 +170,7 @@ class Payload
      */
     public function setVisibilidad($visibilidad): void
     {
-        $this->visibilidad = $visibilidad;
+        $this->visibilidad = (string)$visibilidad;
     }
 
     /**
@@ -355,9 +356,9 @@ class Payload
                 $nodo_array->appendChild($nodo);
             }
             return $nodo_array;
-        } else {
-            return $this->explodeProt($aProt, $name_nodo, $sufijo);
         }
+
+        return $this->explodeProt($aProt, $name_nodo, $sufijo);
     }
 
     private function explodeProt($oProt, $nombre_nodo, $sufijo)
@@ -536,7 +537,13 @@ class Payload
      */
     private function createXmlVisibilidad()
     {
-        return $this->dom->createElement('visibilidad', $this->visibilidad);
+        // con pHP 8 no se puede pasar un valor null
+        if (empty($this->visibilidad)) {
+            $visibilidad_string = (string)Visibilidad::V_CTR_TODOS;
+        } else {
+            $visibilidad_string = (string)$this->visibilidad;
+        }
+        return $this->dom->createElement('visibilidad', $visibilidad_string);
     }
 
     /**

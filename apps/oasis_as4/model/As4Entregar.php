@@ -296,7 +296,7 @@ class As4Entregar extends As4CollaborationInfo
         $any = '';
         $mas = '';
         // para evitar el mensaje: "Node no longer exists"
-        if (!is_null($xml->childNodes) && @count($xml->childNodes)) {
+        if ($xml !== null && !is_null($xml->childNodes) && @count($xml->childNodes)) {
             foreach ($xml->childNodes as $node) {
                 $name = $node->nodeName;
                 $value = $node->nodeValue;
@@ -395,7 +395,7 @@ class As4Entregar extends As4CollaborationInfo
     {
         $a_json_prot = [];
         // para evitar el mensaje: "Node no longer exists"
-        if (!is_null($xml->childNodes) && @count($xml->childNodes)) {
+        if ($xml !== null && !is_null($xml->childNodes) && @count($xml->childNodes)) {
             foreach ($xml->childNodes as $node) {
                 $a_json_prot[] = $this->xml2prot_simple($node, $sufijo);
             }

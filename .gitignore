@@ -1,7 +1,7 @@
 # Dani #
 apps/web/Hash.php
 *.sh
-log/descargas.pid
+*.pid
 
 # Compiled source #
 ###################

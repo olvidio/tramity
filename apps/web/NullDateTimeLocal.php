@@ -17,14 +17,14 @@ use DateTimeZone;
 class NullDateTimeLocal extends DateTime
 {
 
-    static public function createFromLocal($data)
+    public static function createFromLocal($data)
     {
         return NULL;
     }
 
-    static public function createFromFormat($format, $datetime, DateTimeZone $timezone = NULL)
+    public static function createFromFormat(string $format='', string $datetime='', DateTimeZone $timezone = NULL): DateTime|false
     {
-        return NULL;
+        return FALSE;
     }
 
     public function getFromLocal()
@@ -47,7 +47,7 @@ class NullDateTimeLocal extends DateTime
         return '';
     }
 
-    public function format($format)
+    public function format($format): string
     {
         return '';
     }
