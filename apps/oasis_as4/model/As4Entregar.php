@@ -906,7 +906,8 @@ class As4Entregar extends As4CollaborationInfo
         // crear entradas individuales para cada destino
         if ($avisoIndividual) {
             foreach ($this->a_destinos as $id_destino) {
-                $siglaDestino = $this->aLugares[$id_destino];
+                // puede ser que no exista el ctr en la lista (o esté anulado)...
+                $siglaDestino = empty($this->aLugares[$id_destino])? '' : $this->aLugares[$id_destino];
                 // comprobar que el destino está en la plataforma, sino, no se crea la entrada
                 if (in_array($siglaDestino, $this->getEntidadesPlataforma(), true)) {
                     $id_entrada = $this->nuevaEntrada($siglaDestino, $id_entrada_compartida);

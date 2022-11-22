@@ -52,7 +52,7 @@ class GestorEntrada extends GestorEntradaDB
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $oEntradaDBSet = new Set();
+        $oEntradaSet = new Set();
         $oCondicion = new Condicion();
         $aCondi = array();
         $COND_OR = '';
@@ -63,7 +63,7 @@ class GestorEntrada extends GestorEntradaDB
             if ($camp === '_limit') {
                 continue;
             }
-            if ($camp == 'asunto_detalle') {
+            if ($camp === 'asunto_detalle') {
                 $valor = $aWhere[$camp];
                 $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
                 $COND_OR .= " OR ";
@@ -124,11 +124,11 @@ class GestorEntrada extends GestorEntradaDB
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDB = new Entrada($a_pkey);
-            $oEntradaDBSet->add($oEntradaDB);
+            $id_entrada = $aDades['id_entrada'];
+            $oEntrada = new Entrada($id_entrada);
+            $oEntradaSet->add($oEntrada);
         }
-        return $oEntradaDBSet->getTot();
+        return $oEntradaSet->getTot();
     }
 
 

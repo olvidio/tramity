@@ -3,11 +3,14 @@
 namespace entradas\model\entity;
 
 use core;
+use core\Converter;
 use entradas\model\Entrada;
 use PDO;
 use PDOException;
 use stdClass;
 use web;
+use web\DateTimeLocal;
+use web\NullDateTimeLocal;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula entradas
@@ -195,24 +198,15 @@ class EntradaDB extends core\ClasePropiedades
      * Si només necessita un valor, se li pot passar un integer.
      * En general se li passa un array amb les claus primàries.
      *
-     * @param integer|array iid_entrada
+     * @param integer|null $iid_entrada
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = null)
+    public function __construct(?int $iid_entrada = null)
     {
         $oDbl = $GLOBALS['oDBT'];
-        if (is_array($a_id)) {
-            $this->aPrimary_key = $a_id;
-            foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id === 'id_entrada') && $val_id !== '') {
-                    $this->iid_entrada = (int)$val_id;
-                }
-            }
-        } else {
-            if (isset($a_id) && $a_id !== '') {
-                $this->iid_entrada = (int)$a_id;
-                $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
-            }
+        if ($iid_entrada !== null) {
+            $this->iid_entrada = $iid_entrada;
+            $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
         }
         $this->setoDbl($oDbl);
         $this->setNomTabla('entradas');
@@ -249,8 +243,8 @@ class EntradaDB extends core\ClasePropiedades
         foreach ($a_json_visto as $json_visto) {
             $id_oficina = $json_visto['oficina'];
             $visto = $json_visto['visto'];
-            if ($visto == 'true') {
-                if ($id_oficina == $ponente) {
+            if ($visto === 'true') {
+                if ($id_oficina === $ponente) {
                     $ponente = '';
                 } else {
                     $key_of = array_search($id_oficina, $resto_oficinas);
@@ -269,9 +263,9 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut iponente de EntradaDB
      *
-     * @return integer iponente
+     * @return integer|null iponente
      */
-    function getPonente()
+    function getPonente(): ?int
     {
         if (!isset($this->iponente) && !$this->bLoaded) {
             $this->DBCargar();
@@ -304,19 +298,21 @@ class EntradaDB extends core\ClasePropiedades
                     $this->setAllAtributes($aDades);
                     break;
                 case 'guardar':
-                    if (!$oDblSt->rowCount()) return FALSE;
+                    if (!$oDblSt->rowCount()) {
+                        return FALSE;
+                    }
                     break;
                 default:
                     // En el caso de no existir esta fila, $aDades = FALSE:
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
-        } else {
-            return FALSE;
         }
+
+        return FALSE;
     }
 
     /**
@@ -547,7 +543,7 @@ class EntradaDB extends core\ClasePropiedades
         $this->iencargado = $iencargado;
     }
 
-    
+
     /**
      * Recupera las claus primàries de EntradaDB en un array
      *
@@ -607,7 +603,7 @@ class EntradaDB extends core\ClasePropiedades
             $this->DBCargar();
         }
         $oJSON = json_decode($this->json_visto, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {
@@ -703,16 +699,16 @@ class EntradaDB extends core\ClasePropiedades
                 $sClauError = 'EntradaDB.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'EntradaDB.update.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            }
+
+            try {
+                $oDblSt->execute($aDades);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'EntradaDB.update.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
         } else {
             // INSERT
@@ -722,16 +718,16 @@ class EntradaDB extends core\ClasePropiedades
                 $sClauError = 'EntradaDB.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'EntradaDB.insertar.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            }
+
+            try {
+                $oDblSt->execute($aDades);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'EntradaDB.insertar.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
             $this->iid_entrada = $oDbl->lastInsertId('entradas_id_entrada_seq');
         }
@@ -790,7 +786,7 @@ class EntradaDB extends core\ClasePropiedades
             $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_origen, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {
@@ -841,7 +837,7 @@ class EntradaDB extends core\ClasePropiedades
             $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_ref, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {
@@ -883,26 +879,25 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_entrada de EntradaDB
      *
-     * @return web\DateTimeLocal df_entrada
+     * @return DateTimeLocal|NullDateTimeLocal df_entrada
      */
-    function getF_entrada()
+    public function getF_entrada(): DateTimeLocal|NullDateTimeLocal
     {
         if (!isset($this->df_entrada) && !$this->bLoaded) {
             $this->DBCargar();
         }
         if (empty($this->df_entrada)) {
-            return new web\NullDateTimeLocal();
+            return new NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_entrada);
-        return $oConverter->fromPg();
+        return (new Converter('date', $this->df_entrada))->fromPg();
     }
 
     /**
      * Recupera l'atribut sdetalle de EntradaDB
      *
-     * @return string sdetalle
+     * @return string|null sdetalle
      */
-    function getDetalleDB()
+    public function getDetalleDB(): ?string
     {
         if (!isset($this->sdetalle) && !$this->bLoaded) {
             $this->DBCargar();
@@ -913,9 +908,9 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut icategoria de EntradaDB
      *
-     * @return integer icategoria
+     * @return integer|null icategoria
      */
-    function getCategoria()
+    public function getCategoria(): ?int
     {
         if (!isset($this->icategoria) && !$this->bLoaded) {
             $this->DBCargar();
@@ -939,18 +934,17 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_contestar de EntradaDB
      *
-     * @return web\DateTimeLocal df_contestar
+     * @return DateTimeLocal|NullDateTimeLocal df_contestar
      */
-    function getF_contestar()
+    public function getF_contestar(): DateTimeLocal|NullDateTimeLocal
     {
         if (!isset($this->df_contestar) && !$this->bLoaded) {
             $this->DBCargar();
         }
         if (empty($this->df_contestar)) {
-            return new web\NullDateTimeLocal();
+            return new NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_contestar);
-        return $oConverter->fromPg();
+        return (new Converter('date', $this->df_contestar))->fromPg();
     }
 
     /**
@@ -958,7 +952,7 @@ class EntradaDB extends core\ClasePropiedades
      *
      * @return boolean bbypass
      */
-    function getBypass()
+    public function getBypass(): bool
     {
         if (!isset($this->bbypass) && !$this->bLoaded) {
             $this->DBCargar();
@@ -969,9 +963,9 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut iestado de EntradaDB
      *
-     * @return integer iestado
+     * @return integer|null iestado
      */
-    function getEstado()
+    public function getEstado(): ?int
     {
         if (!isset($this->iestado) && !$this->bLoaded) {
             $this->DBCargar();
@@ -982,9 +976,9 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut sanulado de EntradaDB
      *
-     * @return integer sanulado
+     * @return string|null sanulado
      */
-    function getAnulado()
+    public function getAnulado(): ?string
     {
         if (!isset($this->sanulado) && !$this->bLoaded) {
             $this->DBCargar();

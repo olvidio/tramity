@@ -61,32 +61,9 @@ class Entrada extends EntradaDB
 
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
-    /**
-     * Constructor de la classe.
-     * Si només necessita un valor, se li pot passar un integer.
-     * En general se li passa un array amb les claus primàries.
-     *
-     * @param integer|array iid_entrada
-     *                        $a_id. Un array con los nombres=>valores de las claves primarias.
-     */
-    function __construct($a_id = null)
+    public function __construct(?int $iid_entrada = null)
     {
-        $oDbl = $GLOBALS['oDBT'];
-        if (is_array($a_id)) {
-            $this->aPrimary_key = $a_id;
-            foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id === 'id_entrada') && $val_id !== '') {
-                    $this->iid_entrada = (int)$val_id;
-                }
-            }
-        } else {
-            if (isset($a_id) && $a_id !== '') {
-                $this->iid_entrada = (int)$a_id;
-                $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
-            }
-        }
-        $this->setoDbl($oDbl);
-        $this->setNomTabla('entradas');
+        parent::__construct($iid_entrada);
     }
 
     public function cabeceraIzquierda()
@@ -101,13 +78,13 @@ class Entrada extends EntradaDB
             $visibilidad = $this->getVisibilidad();
             // si soy dl o ctr
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
+                if ($visibilidad !== null && $visibilidad !== Visibilidad::V_CTR_TODOS) {
                     $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
                     $visibilidad_txt = $a_visibilidad_dst[$visibilidad];
                     $destinos_txt .= " ($visibilidad_txt)";
                 }
             } else {
-                if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
+                if ($visibilidad !== null && $visibilidad !== Visibilidad::V_CTR_TODOS) {
                     $a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
                     $visibilidad_txt = $a_visibilidad_dl[$visibilidad];
                     $destinos_txt .= " ($visibilidad_txt)";
@@ -208,10 +185,10 @@ class Entrada extends EntradaDB
             $descripcion = $oEntradaBypass->getDescripcion();
 
             if (!empty($a_grupos)) {
-                //(segun los grupos seleccionados)
+                //(según los grupos seleccionados)
                 $destinos_txt = $descripcion;
             } else {
-                //(segun individuales)
+                //(según individuales)
                 $destinos_txt = '';
                 if (!empty($descripcion)) {
                     $destinos_txt = $descripcion;
@@ -224,8 +201,6 @@ class Entrada extends EntradaDB
                     }
                 }
             }
-
-            $destinos_txt;
         } else {
             // No hay destinos definidos.
             $destinos_txt = _("No hay destinos");
@@ -274,7 +249,7 @@ class Entrada extends EntradaDB
     }
 
     /**
-     * Hay que gauradar dos objetos.
+     * Hay que guardar dos objetos.
      * {@inheritDoc}
      * @see \entradas\model\entity\EntradaDB::DBGuardar()
      */
@@ -303,9 +278,9 @@ class Entrada extends EntradaDB
      * Recupera l'atribut df_doc de Entrada
      * de EntradaDocDB, o si es una entrada compartida de 'EntradaCompartida'
      *
-     * @return DateTimeLocal df_doc
+     * @return DateTimeLocal|NullDateTimeLocal df_doc
      */
-    function getF_documento()
+    public function getF_documento(): DateTimeLocal|NullDateTimeLocal
     {
         if (!isset($this->df_doc) && !empty($this->iid_entrada)) {
             if (!empty($this->getId_entrada_compartida())) {
@@ -351,20 +326,18 @@ class Entrada extends EntradaDB
         $this->itipo_doc = $itipo_doc;
     }
 
-    public function getArrayIdAdjuntos()
+    public function getArrayIdAdjuntos(): bool|array
     {
-
-        $gesEntradaAdjuntos = new GestorEntradaAdjunto();
-        return $gesEntradaAdjuntos->getArrayIdAdjuntos($this->iid_entrada);
+        return (new GestorEntradaAdjunto())->getArrayIdAdjuntos($this->iid_entrada);
     }
 
     /**
      * Devuelve el nombre del escrito (sigla_num_año): cr_15_05
      *
      * @param string $parentesi si existe se añade al nombre, entre parentesis
-     * @return string|mixed
+     * @return string
      */
-    public function getNombreEscrito($parentesi = '')
+    public function getNombreEscrito($parentesi = ''): string
     {
         $json_prot_local = $this->getJson_prot_origen();
         // nombre del archivo
@@ -387,12 +360,11 @@ class Entrada extends EntradaDB
         return $this->nombre_escrito;
     }
 
-    private function renombrar($string)
+    private function renombrar($string): string
     {
         //cambiar ' ' por '_':
-        $string1 = str_replace(' ', '_', $string);
         //cambiar '/' por '_':
-        return str_replace('/', '_', $string1);
+        return str_replace(array(' ', '/'), '_', $string);
     }
 
     public function getEtiquetasVisiblesArray($id_cargo = '')
@@ -405,9 +377,9 @@ class Entrada extends EntradaDB
         return $a_etiquetas;
     }
 
-    public function getEtiquetasVisibles($id_cargo = '')
+    public function getEtiquetasVisibles(?int $id_cargo = null): array
     {
-        if (empty($id_cargo)) {
+        if ($id_cargo === null) {
             $id_cargo = ConfigGlobal::role_id_cargo();
         }
         $gesEtiquetas = new GestorEtiqueta();
@@ -422,7 +394,7 @@ class Entrada extends EntradaDB
         $cEtiquetas = [];
         foreach ($cEtiquetasEnt as $oEtiquetaEnt) {
             $id_etiqueta = $oEtiquetaEnt->getId_etiqueta();
-            if (in_array($id_etiqueta, $a_mis_etiquetas)) {
+            if (in_array($id_etiqueta, $a_mis_etiquetas, true)) {
                 $cEtiquetas[] = new Etiqueta($id_etiqueta);
             }
         }
@@ -465,17 +437,14 @@ class Entrada extends EntradaDB
         }
     }
 
-    public function delEtiquetas()
+    public function delEtiquetas(): bool
     {
         $gesEtiquetasEntrada = new GestorEtiquetaEntrada();
-        if ($gesEtiquetasEntrada->deleteEtiquetasEntrada($this->iid_entrada) === FALSE) {
-            return FALSE;
-        }
-        return TRUE;
+        return $gesEtiquetasEntrada->deleteEtiquetasEntrada($this->iid_entrada) !== FALSE;
     }
 
     /**
-     * Hay que gauradar dos objetos.
+     * Hay que guardar dos objetos.
      * {@inheritDoc}
      * @see \entradas\model\entity\EntradaDB::DBGuardar()
      */

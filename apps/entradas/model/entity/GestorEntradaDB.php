@@ -32,7 +32,7 @@ class GestorEntradaDB extends ClaseGestor
      * Constructor de la classe.
      *
      */
-    function __construct()
+    public function __construct()
     {
         $oDbl = $GLOBALS['oDBT'];
         $this->setoDbl($oDbl);
@@ -42,7 +42,7 @@ class GestorEntradaDB extends ClaseGestor
 
     /* MÉTODOS PÚBLICOS -----------------------------------------------------------*/
 
-    public function posiblesYear()
+    public function posiblesYear(): bool|array
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -60,7 +60,7 @@ class GestorEntradaDB extends ClaseGestor
         $a_anys = [];
         foreach ($oDblSt as $a_year) {
             $year = trim($a_year['a'], '"');
-            $iyear = intval($year);
+            $iyear = (int)$year;
             if ($iyear > 70) {
                 $iany = 1900 + $iyear;
             } else {
@@ -174,8 +174,8 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDB = new Entrada($a_pkey);
+            $id_entrada = $aDades['id_entrada'];
+            $oEntradaDB = new EntradaDB($id_entrada);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -301,15 +301,14 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDB = new Entrada($a_pkey);
+            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
     }
 
     /**
-     * Devuelve la colección de entradas, segun las condiciones del protcolo de referencias, más las normales
+     * Devuelve la colección de entradas, según las condiciones del protocolo de referencias, más las normales
      *
      * @param array $aProt_ref = ['id_lugar' => xx, 'num' => xx, 'any' => xx, 'mas' => xx]
      * @param array $aWhere
@@ -418,8 +417,7 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDB = new Entrada($a_pkey);
+            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -554,8 +552,7 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDB = new Entrada($a_pkey);
+            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -641,8 +638,7 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDB = new Entrada($a_pkey);
+            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -728,31 +724,7 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDB = new Entrada($a_pkey);
-            $oEntradaDBSet->add($oEntradaDB);
-        }
-        return $oEntradaDBSet->getTot();
-    }
-
-    /**
-     * retorna l'array d'objectes de tipus EntradaDB
-     *
-     * @param string sQuery la query a executar.
-     * @return array Una col·lecció d'objectes de tipus EntradaDB
-     */
-    function getEntradasDBQuery($sQuery = '')
-    {
-        $oDbl = $this->getoDbl();
-        $oEntradaDBSet = new Set();
-        if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'GestorEntradaDB.query';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDB = new EntradaDB($a_pkey);
+            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -824,8 +796,7 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDB = new EntradaDB($a_pkey);
+            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();

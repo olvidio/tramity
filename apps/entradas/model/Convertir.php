@@ -362,8 +362,7 @@ class Convertir extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDB = new EntradaDB($a_pkey);
+            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
