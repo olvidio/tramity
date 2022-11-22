@@ -175,7 +175,7 @@ class GestorEntradaDB extends ClaseGestor
         }
         foreach ($oDblSt as $aDades) {
             $id_entrada = $aDades['id_entrada'];
-            $oEntradaDB = new EntradaDB($id_entrada);
+            $oEntradaDB = new Entrada($id_entrada);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -301,7 +301,7 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
+            $oEntradaDB = new Entrada($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -417,7 +417,7 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
+            $oEntradaDB = new Entrada($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -552,7 +552,7 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
+            $oEntradaDB = new Entrada($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -638,7 +638,7 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
+            $oEntradaDB = new Entrada($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -724,7 +724,7 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
+            $oEntradaDB = new Entrada($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
@@ -796,7 +796,7 @@ class GestorEntradaDB extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
+            $oEntradaDB = new Entrada($aDades['id_entrada']);
             $oEntradaDBSet->add($oEntradaDB);
         }
         return $oEntradaDBSet->getTot();
