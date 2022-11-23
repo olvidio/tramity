@@ -191,7 +191,9 @@ class EntradaBypass extends Entrada
             $this->setDestinos($aDades['destinos'], TRUE);
         }
         if (array_key_exists('f_salida', $aDades)) {
-            $this->setF_salida($aDades['f_salida'], $convert);
+            $f_salida = $aDades['f_salida']?? '';
+            $this->setF_salida($f_salida, $convert);
+
         }
         // añado los de entradas
         if (array_key_exists('modo_entrada', $aDades)) {
@@ -216,7 +218,8 @@ class EntradaBypass extends Entrada
             $this->setAsunto($aDades['asunto']);
         }
         if (array_key_exists('f_entrada', $aDades)) {
-            $this->setF_entrada($aDades['f_entrada'], $convert);
+            $f_entrada = $aDades['f_entrada']?? '';
+            $this->setF_entrada($f_entrada, $convert);
         }
         if (array_key_exists('detalle', $aDades)) {
             $this->setDetalle($aDades['detalle']);
@@ -228,7 +231,8 @@ class EntradaBypass extends Entrada
             $this->setVisibilidad($aDades['visibilidad']);
         }
         if (array_key_exists('f_contestar', $aDades)) {
-            $this->setF_contestar($aDades['f_contestar'], $convert);
+            $f_contestar = $aDades['f_contestar']?? '';
+            $this->setF_contestar($f_contestar, $convert);
         }
         if (array_key_exists('bypass', $aDades)) {
             $this->setBypass($aDades['bypass']);

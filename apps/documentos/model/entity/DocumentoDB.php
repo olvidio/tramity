@@ -3,9 +3,13 @@
 namespace documentos\model\entity;
 
 use core;
+use core\Converter;
+use core\DatosCampo;
 use PDO;
 use PDOException;
 use web;
+use web\DateTimeLocal;
+use web\NullDateTimeLocal;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula documentos
@@ -35,78 +39,78 @@ class DocumentoDB extends core\ClasePropiedades
      *
      * @var array
      */
-    protected $aPrimary_key;
+    protected array $aPrimary_key;
 
     /**
      * aDades de Documento
      *
      * @var array
      */
-    protected $aDades;
+    protected array $aDades;
 
     /**
      * bLoaded de Documento
      *
      * @var boolean
      */
-    protected $bLoaded = FALSE;
+    protected bool $bLoaded = FALSE;
 
     /**
      * Id_schema de Documento
      *
-     * @var integer
+     * @var integer $iid_schema
      */
-    protected $iid_schema;
+    protected int $iid_schema;
 
     /**
      * Id_doc de Documento
      *
      * @var integer
      */
-    protected $iid_doc;
+    protected int $iid_doc;
     /**
      * Nom de Documento
      *
-     * @var string
+     * @var string|null
      */
-    protected $snom;
+    protected ?string $snom;
     /**
      * Nom de Documento
      *
-     * @var string
+     * @var string|null
      */
-    protected $snombre_fichero;
+    protected ?string $snombre_fichero;
     /**
      * Creador de Documento
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $icreador;
+    protected ?int $icreador;
     /**
      * Visibilidad de Documento
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $ivisibilidad;
+    protected ?int $ivisibilidad;
     /**
      * Tipo_doc de Documento
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $itipo_doc;
+    protected ?int $itipo_doc;
     /**
      * F_upload de Documento
      *
-     * @var web\DateTimeLocal
+     * @var string|null
      */
-    protected $df_upload;
+    protected ?string $df_upload;
     /**
      * Documento de Documento
      *
      * @var string bytea
      *
      */
-    protected $documento;
+    protected string $documento;
     /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
      * oDbl de Documento
@@ -127,24 +131,15 @@ class DocumentoDB extends core\ClasePropiedades
      * Si només necessita un valor, se li pot passar un integer.
      * En general se li passa un array amb les claus primàries.
      *
-     * @param integer|array iid_doc
+     * @param integer|null $iid_doc
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = null)
+    public function __construct(int $iid_doc = null)
     {
         $oDbl = $GLOBALS['oDBT'];
-        if (is_array($a_id)) {
-            $this->aPrimary_key = $a_id;
-            foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id === 'id_doc') && $val_id !== '') {
-                    $this->iid_doc = (int)$val_id;
-                }
-            }
-        } else {
-            if (isset($a_id) && $a_id !== '') {
-                $this->iid_doc = (int)$a_id;
-                $this->aPrimary_key = array('iid_doc' => $this->iid_doc);
-            }
+        if ($iid_doc !== null) {
+            $this->iid_doc = $iid_doc;
+            $this->aPrimary_key = array('iid_doc' => $this->iid_doc);
         }
         $this->setoDbl($oDbl);
         $this->setNomTabla('documentos');
@@ -157,7 +152,7 @@ class DocumentoDB extends core\ClasePropiedades
      * Si no hi ha el registre, fa el insert, si hi es fa el update.
      *
      */
-    public function DBGuardar()
+    public function DBGuardar(): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -190,31 +185,31 @@ class DocumentoDB extends core\ClasePropiedades
                 $sClauError = 'Documento.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                $nom = $aDades['nom'];
-                $nombre_fichero = $aDades['nombre_fichero'];
-                $creador = $aDades['creador'];
-                $visibilidad = $aDades['visibilidad'];
-                $tipo_doc = $aDades['tipo_doc'];
-                $f_upload = $aDades['f_upload'];
-                $documento = $aDades['documento'];
+            }
 
-                $oDblSt->bindParam(1, $nom, PDO::PARAM_STR);
-                $oDblSt->bindParam(2, $nombre_fichero, PDO::PARAM_STR);
-                $oDblSt->bindParam(3, $creador, PDO::PARAM_INT);
-                $oDblSt->bindParam(4, $visibilidad, PDO::PARAM_INT);
-                $oDblSt->bindParam(5, $tipo_doc, PDO::PARAM_INT);
-                $oDblSt->bindParam(6, $f_upload, PDO::PARAM_STR);
-                $oDblSt->bindParam(7, $documento, PDO::PARAM_STR);
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'Documento.update.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            $nom = $aDades['nom'];
+            $nombre_fichero = $aDades['nombre_fichero'];
+            $creador = $aDades['creador'];
+            $visibilidad = $aDades['visibilidad'];
+            $tipo_doc = $aDades['tipo_doc'];
+            $f_upload = $aDades['f_upload'];
+            $documento = $aDades['documento'];
+
+            $oDblSt->bindParam(1, $nom, PDO::PARAM_STR);
+            $oDblSt->bindParam(2, $nombre_fichero, PDO::PARAM_STR);
+            $oDblSt->bindParam(3, $creador, PDO::PARAM_INT);
+            $oDblSt->bindParam(4, $visibilidad, PDO::PARAM_INT);
+            $oDblSt->bindParam(5, $tipo_doc, PDO::PARAM_INT);
+            $oDblSt->bindParam(6, $f_upload, PDO::PARAM_STR);
+            $oDblSt->bindParam(7, $documento, PDO::PARAM_STR);
+            try {
+                $oDblSt->execute($aDades);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'Documento.update.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
         } else {
             // INSERT
@@ -224,31 +219,31 @@ class DocumentoDB extends core\ClasePropiedades
                 $sClauError = 'Documento.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                $nom = $aDades['nom'];
-                $nombre_fichero = $aDades['nombre_fichero'];
-                $creador = $aDades['creador'];
-                $visibilidad = $aDades['visibilidad'];
-                $tipo_doc = $aDades['tipo_doc'];
-                $f_upload = $aDades['f_upload'];
-                $documento = $aDades['documento'];
+            }
 
-                $oDblSt->bindParam(1, $nom, PDO::PARAM_STR);
-                $oDblSt->bindParam(2, $nombre_fichero, PDO::PARAM_STR);
-                $oDblSt->bindParam(3, $creador, PDO::PARAM_INT);
-                $oDblSt->bindParam(4, $visibilidad, PDO::PARAM_INT);
-                $oDblSt->bindParam(5, $tipo_doc, PDO::PARAM_INT);
-                $oDblSt->bindParam(6, $f_upload, PDO::PARAM_STR);
-                $oDblSt->bindParam(7, $documento, PDO::PARAM_STR);
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'Documento.insertar.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            $nom = $aDades['nom'];
+            $nombre_fichero = $aDades['nombre_fichero'];
+            $creador = $aDades['creador'];
+            $visibilidad = $aDades['visibilidad'];
+            $tipo_doc = $aDades['tipo_doc'];
+            $f_upload = $aDades['f_upload'];
+            $documento = $aDades['documento'];
+
+            $oDblSt->bindParam(1, $nom, PDO::PARAM_STR);
+            $oDblSt->bindParam(2, $nombre_fichero, PDO::PARAM_STR);
+            $oDblSt->bindParam(3, $creador, PDO::PARAM_INT);
+            $oDblSt->bindParam(4, $visibilidad, PDO::PARAM_INT);
+            $oDblSt->bindParam(5, $tipo_doc, PDO::PARAM_INT);
+            $oDblSt->bindParam(6, $f_upload, PDO::PARAM_STR);
+            $oDblSt->bindParam(7, $documento, PDO::PARAM_STR);
+            try {
+                $oDblSt->execute($aDades);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'Documento.insertar.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
             $this->iid_doc = $oDbl->lastInsertId('documentos_id_doc_seq');
         }
@@ -260,7 +255,7 @@ class DocumentoDB extends core\ClasePropiedades
      * Carga los campos de la tabla como atributos de la clase.
      *
      */
-    public function DBCargar($que = null)
+    public function DBCargar($que = null): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -315,24 +310,22 @@ class DocumentoDB extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
-        } else {
-            return FALSE;
         }
+
+        return FALSE;
     }
 
     /**
      * Establece el valor de todos los atributos
      *
      * @param array $aDades
+     * @param bool $convert
      */
-    private function setAllAtributes($aDades, $convert = FALSE)
+    private function setAllAtributes(array $aDades, bool $convert = FALSE): void
     {
-        if (!is_array($aDades)) {
-            return;
-        }
         if (array_key_exists('id_schema', $aDades)) {
             $this->setId_schema($aDades['id_schema']);
         }
@@ -355,7 +348,8 @@ class DocumentoDB extends core\ClasePropiedades
             $this->setTipo_doc($aDades['tipo_doc']);
         }
         if (array_key_exists('f_upload', $aDades)) {
-            $this->setF_upload($aDades['f_upload'], $convert);
+            $f_upload = $aDades['f_upload'] ?? '';
+            $this->setF_upload($f_upload, $convert);
         }
         if (array_key_exists('documento', $aDades)) {
             $this->setDocumentoEscaped($aDades['documento']);
@@ -366,17 +360,17 @@ class DocumentoDB extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * @param integer iid_doc
+     * @param integer $iid_doc
      */
-    function setId_doc($iid_doc)
+    public function setId_doc($iid_doc): void
     {
         $this->iid_doc = $iid_doc;
     }
 
     /**
-     * @param string snom='' optional
+     * @param string $snom som='' optional
      */
-    function setNom($snom = '')
+    public function setNom(string $snom = ''): void
     {
         $this->snom = $snom;
     }
@@ -384,33 +378,33 @@ class DocumentoDB extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * @param string snombre_fichero='' optional
+     * @param string $snombre_fichero
      */
-    function setNombre_fichero($snombre_fichero = '')
+    public function setNombre_fichero(string $snombre_fichero = ''): void
     {
         $this->snombre_fichero = $snombre_fichero;
     }
 
     /**
-     * @param integer icreador='' optional
+     * @param integer|null $icreador
      */
-    function setCreador($icreador = '')
+    public function setCreador(?int $icreador = null): void
     {
         $this->icreador = $icreador;
     }
 
     /**
-     * @param integer ivisibilidad='' optional
+     * @param integer|null $ivisibilidad
      */
-    function setVisibilidad($ivisibilidad = '')
+    public function setVisibilidad(?int $ivisibilidad = null): void
     {
         $this->ivisibilidad = $ivisibilidad;
     }
 
     /**
-     * @param integer itipo_doc='' optional
+     * @param integer|null $tipo_doc
      */
-    function setTipo_doc($tipo_doc = '')
+    public function setTipo_doc(?int $tipo_doc = null): void
     {
         $this->itipo_doc = $tipo_doc;
     }
@@ -419,10 +413,10 @@ class DocumentoDB extends core\ClasePropiedades
      * Si df_upload es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_upload debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param web\DateTimeLocal|string df_upload='' optional.
-     * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
+     * @param string|DateTimeLocal $df_upload ='' optional.
+     * @param boolean $convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
-    function setF_upload($df_upload = '', $convert = TRUE)
+    public function setF_upload(DateTimeLocal|string $df_upload = '', bool $convert = TRUE): void
     {
         if ($convert === TRUE && !empty($df_upload)) {
             $oConverter = new core\Converter('date', $df_upload);
@@ -435,14 +429,14 @@ class DocumentoDB extends core\ClasePropiedades
     /**
      * per usar amb els valors directes de la DB.
      *
-     * @param string documento='' optional (ja convertit a hexadecimal)
+     * @param string|null $documento='' optional (ja convertit a hexadecimal)
      */
-    private function setDocumentoEscaped($documento = '')
+    private function setDocumentoEscaped(?string $documento = ''): void
     {
         $this->documento = $documento;
     }
 
-    
+
     /**
      * Recupera las claus primàries de Documento en un array
      *
@@ -481,7 +475,7 @@ class DocumentoDB extends core\ClasePropiedades
      * Elimina el registre de la base de dades corresponent a l'objecte.
      *
      */
-    public function DBEliminar()
+    public function DBEliminar(): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -498,7 +492,7 @@ class DocumentoDB extends core\ClasePropiedades
      *
      * @return integer iid_doc
      */
-    function getId_doc()
+    public function getId_doc(): int
     {
         if (!isset($this->iid_doc) && !$this->bLoaded) {
             $this->DBCargar();
@@ -509,9 +503,9 @@ class DocumentoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut snom de Documento
      *
-     * @return string snom
+     * @return string|null $snom
      */
-    function getNom()
+    public function getNom(): ?string
     {
         if (!isset($this->snom) && !$this->bLoaded) {
             $this->DBCargar();
@@ -522,9 +516,9 @@ class DocumentoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut snombre_fichero de Documento
      *
-     * @return string snombre_fichero
+     * @return string|null $snombre_fichero
      */
-    function getNombre_fichero()
+    public function getNombre_fichero(): ?string
     {
         if (!isset($this->snombre_fichero) && !$this->bLoaded) {
             $this->DBCargar();
@@ -535,9 +529,9 @@ class DocumentoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut icreador de Documento
      *
-     * @return integer icreador
+     * @return integer|null $icreador
      */
-    function getCreador()
+    public function getCreador(): ?int
     {
         if (!isset($this->icreador) && !$this->bLoaded) {
             $this->DBCargar();
@@ -548,7 +542,7 @@ class DocumentoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut ivisibilidad de Documento
      *
-     * @return integer|null ivisibilidad
+     * @return integer|null $ivisibilidad
      */
     public function getVisibilidad(): ?int
     {
@@ -561,9 +555,9 @@ class DocumentoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut itipo_doc de Documento
      *
-     * @return integer itipo_doc
+     * @return integer|null $itipo_doc
      */
-    function getTipo_doc()
+    public function getTipo_doc(): ?int
     {
         if (!isset($this->itipo_doc) && !$this->bLoaded) {
             $this->DBCargar();
@@ -574,21 +568,23 @@ class DocumentoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_upload de Documento
      *
-     * @return web\DateTimeLocal df_upload
+     * @return DateTimeLocal|NullDateTimeLocal df_upload
      */
-    function getF_upload()
+    public function getF_upload(): DateTimeLocal|NullDateTimeLocal
     {
         if (!isset($this->df_upload) && !$this->bLoaded) {
             $this->DBCargar();
         }
         if (empty($this->df_upload)) {
-            return new web\NullDateTimeLocal();
+            return new NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_upload);
-        return $oConverter->fromPg();
+        return (new Converter('date', $this->df_upload))->fromPg();
     }
 
-    public function getDocumento()
+    /**
+     * @return bool|string
+     */
+    public function getDocumento(): bool|string
     {
         if (!isset($this->documento) && !$this->bLoaded) {
             $this->DBCargar();
@@ -597,9 +593,9 @@ class DocumentoDB extends core\ClasePropiedades
     }
 
     /**
-     * @param string documento='' optional
+     * @param string|null $documento='' optional
      */
-    public function setDocumento($documento = '')
+    public function setDocumento(?string $documento = ''): void
     {
         // Escape the binary data
         $escaped = bin2hex($documento);
@@ -610,7 +606,7 @@ class DocumentoDB extends core\ClasePropiedades
      * Retorna una col·lecció d'objectes del tipus DatosCampo
      *
      */
-    function getDatosCampos()
+    public function getDatosCampos(): array
     {
         $oDocumentoSet = new core\Set();
 
@@ -628,12 +624,12 @@ class DocumentoDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut snom de Documento
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosNom()
+    public function getDatosNom(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'nom'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'nom'));
         $oDatosCampo->setEtiqueta(_("nom"));
         return $oDatosCampo;
     }
@@ -642,12 +638,12 @@ class DocumentoDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut icreador de Documento
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosCreador()
+    public function getDatosCreador(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'creador'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'creador'));
         $oDatosCampo->setEtiqueta(_("creador"));
         return $oDatosCampo;
     }
@@ -656,12 +652,12 @@ class DocumentoDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut ivisibilidad de Documento
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosVisibilidad()
+    public function getDatosVisibilidad(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'visibilidad'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'visibilidad'));
         $oDatosCampo->setEtiqueta(_("visibilidad"));
         return $oDatosCampo;
     }
@@ -670,12 +666,12 @@ class DocumentoDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut itipo_doc de Documento
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosTipo_doc()
+    public function getDatosTipo_doc(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'tipo_doc'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'tipo_doc'));
         $oDatosCampo->setEtiqueta(_("tipo_doc"));
         return $oDatosCampo;
     }
@@ -684,12 +680,12 @@ class DocumentoDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut df_upload de Documento
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosF_upload()
+    public function getDatosF_upload(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'f_upload'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'f_upload'));
         $oDatosCampo->setEtiqueta(_("f_upload"));
         return $oDatosCampo;
     }
@@ -698,12 +694,12 @@ class DocumentoDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut documento de Documento
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosDocumento()
+    public function getDatosDocumento(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'documento'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'documento'));
         $oDatosCampo->setEtiqueta(_("documento"));
         return $oDatosCampo;
     }
@@ -713,7 +709,7 @@ class DocumentoDB extends core\ClasePropiedades
      *
      * @return array aDades
      */
-    function getTot()
+    public function getTot(): array
     {
         if (!is_array($this->aDades)) {
             $this->DBCargar('tot');
@@ -725,12 +721,12 @@ class DocumentoDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut snombre_fichero de Documento
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosNombre_fichero()
+    public function getDatosNombre_fichero(): DatosCampo
     {
-        $nombre_fichero_tabla = $this->getNombre_ficheroTabla();
-        $oDatosCampo = new core\DatosCampo(array('nombre_fichero_tabla' => $nombre_fichero_tabla, 'nombre_fichero_camp' => 'nombre_fichero'));
+        $nom_tabla = $this->getNomTabla();
+        $oDatosCampo = new DatosCampo(array('nombre_tabla' => $nom_tabla, 'nombre_camp' => 'nombre_fichero'));
         $oDatosCampo->setEtiqueta(_("nombre_fichero"));
         return $oDatosCampo;
     }

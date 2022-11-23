@@ -327,7 +327,8 @@ class EntradaDocDB extends ClasePropiedades
             $this->setTipo_doc($aDades['tipo_doc']);
         }
         if (array_key_exists('f_doc', $aDades)) {
-            $this->setF_doc($aDades['f_doc'], $convert);
+            $f_doc =$aDades['f_doc']?? '';
+            $this->setF_doc($f_doc, $convert);
         }
     }
 
