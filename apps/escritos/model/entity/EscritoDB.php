@@ -101,15 +101,15 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Id_grupos de EscritoDB
      *
-     * @var array
+     * @var string|null
      */
-    protected $a_id_grupos;
+    protected ?string $a_id_grupos;
     /**
      * Destinos de EscritoDB
      *
-     * @var array
+     * @var string|null
      */
-    protected $a_destinos;
+    protected ?string $a_destinos;
     /**
      * Asunto de EscritoDB
      *

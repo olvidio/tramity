@@ -6,6 +6,7 @@ use core\Converter;
 use core\DatosCampo;
 use core\Set;
 use entradas\model\Entrada;
+use JsonException;
 use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
 use PDO;
@@ -66,23 +67,23 @@ class EntradaBypass extends Entrada
     /**
      * Id_grupos de EntradaBypass
      *
-     * @var array
+     * @var string|null
      */
-    private array $a_id_grupos;
+    private ?string $a_id_grupos;
 
     /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
      * Destinos de EntradaBypass
      *
-     * @var array
+     * @var string|null
      */
-    private array $a_destinos;
+    private ?string $a_destinos;
     /**
      * F_salida de EntradaBypass
      *
-     * @var DateTimeLocal|null
+     * @var string|null
      */
-    private ?DateTimeLocal $df_salida;
+    private ?string $df_salida;
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
@@ -257,11 +258,11 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * @param array|null $a_id_grupos
+     * @param string|null $a_id_grupos
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
      */
-    public function setId_grupos(?array $a_id_grupos = [], bool $db = FALSE): void
+    public function setId_grupos(?string $a_id_grupos = null, bool $db = FALSE): void
     {
         if ($db === FALSE) {
             $postgresArray = array_php2pg($a_id_grupos);
@@ -272,11 +273,11 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * @param array|null $a_destinos
+     * @param array|string|null $a_destinos
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
      */
-    public function setDestinos(array|null $a_destinos = null, bool $db = FALSE): void
+    public function setDestinos(array|string $a_destinos = null, bool $db = FALSE): void
     {
         if ($db === FALSE) {
             $postgresArray = array_php2pg($a_destinos);
@@ -526,11 +527,12 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * @param stdClass $oJSON json_prot_destino
+     * @param string|null $oJSON json_prot_destino
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
+     * @throws JsonException
      */
-    public function setJson_prot_destino(stdClass $oJSON, bool $db = FALSE): void
+    public function setJson_prot_destino(?string $oJSON, bool $db = FALSE): void
     {
         if ($db === FALSE) {
             $json = json_encode($oJSON, JSON_THROW_ON_ERROR);

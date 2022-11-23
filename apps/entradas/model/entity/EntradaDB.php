@@ -113,9 +113,9 @@ class EntradaDB extends ClasePropiedades
     /**
      * Resto_oficinas de EntradaDB
      *
-     * @var array|null
+     * @var string|null
      */
-    protected ?array $a_resto_oficinas;
+    protected ?string $a_resto_oficinas;
     /**
      * Asunto de EntradaDB
      *
@@ -125,9 +125,9 @@ class EntradaDB extends ClasePropiedades
     /**
      * F_entrada de EntradaDB
      *
-     * @var DateTimeLocal|null
+     * @var string|null
      */
-    protected ?DateTimeLocal $df_entrada;
+    protected ?string $df_entrada;
     /**
      * Detalle de EntradaDB
      *
@@ -149,9 +149,9 @@ class EntradaDB extends ClasePropiedades
     /**
      * F_contestar de EntradaDB
      *
-     * @var DateTimeLocal|null
+     * @var string|null
      */
-    protected ?DateTimeLocal $df_contestar;
+    protected ?string $df_contestar;
     /**
      * Bypass de EntradaDB
      *
@@ -438,11 +438,11 @@ class EntradaDB extends ClasePropiedades
     }
 
     /**
-     * @param array|null $a_resto_oficinas
+     * @param string|null $a_resto_oficinas
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
      */
-    public function setResto_oficinas(?array $a_resto_oficinas = null, bool $db = FALSE): void
+    public function setResto_oficinas(?string $a_resto_oficinas = null, bool $db = FALSE): void
     {
         if ($db === FALSE) {
             $postgresArray = array_php2pg($a_resto_oficinas);
@@ -465,7 +465,7 @@ class EntradaDB extends ClasePropiedades
      * Si convert es FALSE, df_entrada debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
      * @param string|DateTimeLocal|null $df_entrada df_entrada='' optional.
-     * @param boolean $convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
+     * @param boolean $convert =TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     public function setF_entrada(DateTimeLocal|string|null $df_entrada = '', bool $convert = TRUE): void
     {
@@ -494,7 +494,7 @@ class EntradaDB extends ClasePropiedades
     }
 
     /**
-     * @param integer|null $ivisibilidad=null
+     * @param integer|null $ivisibilidad =null
      */
     public function setVisibilidad(?int $ivisibilidad = null): void
     {
@@ -505,8 +505,8 @@ class EntradaDB extends ClasePropiedades
      * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_contestar debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param string|DateTimeLocal|null $df_contestar='' optional.
-     * @param boolean $convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
+     * @param string|DateTimeLocal|null $df_contestar ='' optional.
+     * @param boolean $convert =TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     public function setF_contestar(DateTimeLocal|string|null $df_contestar = '', bool $convert = TRUE): void
     {
@@ -519,7 +519,7 @@ class EntradaDB extends ClasePropiedades
     }
 
     /**
-     * @param boolean $bbypass=FALSE optional
+     * @param boolean $bbypass =FALSE optional
      */
     public function setBypass(bool $bbypass = FALSE): void
     {
@@ -535,9 +535,9 @@ class EntradaDB extends ClasePropiedades
     }
 
     /**
-     * @param integer|null $sanulado
+     * @param string|null $sanulado
      */
-    public function setAnulado(?int $sanulado): void
+    public function setAnulado(?string $sanulado): void
     {
         $this->sanulado = $sanulado;
     }
@@ -603,7 +603,7 @@ class EntradaDB extends ClasePropiedades
      * Recupera l'atribut json_visto de EntradaDB
      *
      * @param boolean $bArray si hay que devolver un array en vez de un objeto.
-     * @return array|stdClass $json_visto
+     * @return array|string $json_visto
      * @throws JsonException
      */
     public function getJson_visto(bool $bArray = FALSE): array|stdClass
@@ -623,12 +623,12 @@ class EntradaDB extends ClasePropiedades
     }
 
     /**
-     * @param stdClass $oJSON json_visto
+     * @param string|null $oJSON json_visto
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
      * @throws JsonException
      */
-    public function setJson_visto(stdClass $oJSON, bool $db = FALSE): void
+    public function setJson_visto(?string $oJSON, bool $db = FALSE): void
     {
         if ($db === FALSE) {
             $json = json_encode($oJSON, JSON_THROW_ON_ERROR);
@@ -791,7 +791,7 @@ class EntradaDB extends ClasePropiedades
      * Recupera l'atribut json_prot_origen de EntradaDB
      *
      * @param boolean $bArray si hay que devolver un array en vez de un objeto.
-     * @return stdClass|array $JSON json_prot_origen
+     * @return string|array $JSON json_prot_origen
      * @throws JsonException
      */
     public function getJson_prot_origen(bool $bArray = FALSE): array|stdClass
@@ -812,12 +812,12 @@ class EntradaDB extends ClasePropiedades
     }
 
     /**
-     * @param stdClass $oJSON json_prot_origen
+     * @param string $oJSON json_prot_origen
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
      * @throws JsonException
      */
-    public function setJson_prot_origen(stdClass $oJSON, bool $db = FALSE): void
+    public function setJson_prot_origen(string $oJSON, bool $db = FALSE): void
     {
         if ($db === FALSE) {
             $json = json_encode($oJSON, JSON_THROW_ON_ERROR);
@@ -853,7 +853,11 @@ class EntradaDB extends ClasePropiedades
         if (!isset($this->json_prot_ref) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_prot_ref, $bArray, 512, JSON_THROW_ON_ERROR);
+        if ($this->json_prot_ref !== NULL) {
+            $oJSON = json_decode($this->json_prot_ref, $bArray, 512, JSON_THROW_ON_ERROR);
+        } else {
+            $oJSON = '';
+        }
         if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
@@ -861,17 +865,18 @@ class EntradaDB extends ClasePropiedades
                 $oJSON = new stdClass;
             }
         }
+
         //$this->json_prot_ref = $oJSON;
         return $oJSON;
     }
 
     /**
-     * @param stdClass $oJSON json_prot_ref
+     * @param string|null $oJSON json_prot_ref
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
-     * @throws \JsonException
+     * @throws JsonException
      */
-    public function setJson_prot_ref(stdClass $oJSON, bool $db = FALSE): void
+    public function setJson_prot_ref(string|null $oJSON, bool $db = FALSE): void
     {
         if ($db === FALSE) {
             $json = json_encode($oJSON, JSON_THROW_ON_ERROR);
@@ -981,7 +986,7 @@ class EntradaDB extends ClasePropiedades
     {
         if (!isset($this->bbypass) && !$this->bLoaded) {
             // Puede ser que no sea una entradaBypass, al cargar da false (no hay ninguna fila)
-            if ($this->DBCargar() === FALSE){
+            if ($this->DBCargar() === FALSE) {
                 return FALSE;
             }
         }

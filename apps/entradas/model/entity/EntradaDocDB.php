@@ -75,13 +75,13 @@ class EntradaDocDB extends ClasePropiedades
      *
      * @var integer
      */
-    protected $iid_entrada;
+    protected int $iid_entrada;
     /**
      * Tipo_doc de EntradaDocDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $itipo_doc;
+    protected ?int $itipo_doc = null;
     /**
      * F_doc de EntradaDocDB
      *
@@ -254,7 +254,7 @@ class EntradaDocDB extends ClasePropiedades
     /**
      * @param integer iid_entrada
      */
-    function setId_entrada($iid_entrada)
+    public function setId_entrada($iid_entrada)
     {
         $this->iid_entrada = $iid_entrada;
     }
@@ -262,9 +262,9 @@ class EntradaDocDB extends ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * @param integer itipo_doc='' optional
+     * @param ?integer $itipo_doc optional
      */
-    function setTipo_doc($itipo_doc = '')
+    public function setTipo_doc(int $itipo_doc = null)
     {
         $this->itipo_doc = $itipo_doc;
     }
