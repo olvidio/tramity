@@ -373,7 +373,7 @@ class Entrada extends EntradaDB
         return str_replace(array(' ', '/'), '_', $string);
     }
 
-    public function getEtiquetasVisiblesArray($id_cargo = ''): array
+    public function getEtiquetasVisiblesArray(?int $id_cargo = null): array
     {
         $cEtiquetas = $this->getEtiquetasVisibles($id_cargo);
         $a_etiquetas = [];
