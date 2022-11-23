@@ -2,10 +2,14 @@
 
 namespace entradas\model\entity;
 
-use core;
+use core\ClasePropiedades;
+use core\Converter;
+use core\DatosCampo;
+use core\Set;
 use PDO;
 use PDOException;
-use web;
+use web\DateTimeLocal;
+use web\NullDateTimeLocal;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula entrada_doc
@@ -26,7 +30,7 @@ use web;
  * @version 1.0
  * @created 8/7/2020
  */
-class EntradaDocDB extends core\ClasePropiedades
+class EntradaDocDB extends ClasePropiedades
 {
 
     /* CONST -------------------------------------------------------------- */
@@ -81,7 +85,7 @@ class EntradaDocDB extends core\ClasePropiedades
     /**
      * F_doc de EntradaDocDB
      *
-     * @var web\DateTimeLocal
+     * @var DateTimeLocal
      */
     protected $df_doc;
     /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
@@ -134,7 +138,7 @@ class EntradaDocDB extends core\ClasePropiedades
      * Si no hi ha el registre, fa el insert, si hi es fa el update.
      *
      */
-    public function DBGuardar()
+    public function DBGuardar(): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -157,27 +161,23 @@ class EntradaDocDB extends core\ClasePropiedades
                 $sClauError = 'EntradaDocDB.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'EntradaDocDB.update.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            }
+
+            try {
+                $oDblSt->execute($aDades);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'EntradaDocDB.update.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
         } else {
             // INSERT
             array_unshift($aDades, $this->iid_entrada);
             $campos = "(id_entrada,tipo_doc,f_doc)";
             $valores = "(:id_entrada,:tipo_doc,:f_doc)";
-            if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
-                $sClauError = 'EntradaDocDB.insertar.prepare';
-                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-                return FALSE;
-            } else {
+            if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) !== FALSE) {
                 try {
                     $oDblSt->execute($aDades);
                 } catch (PDOException $e) {
@@ -187,6 +187,10 @@ class EntradaDocDB extends core\ClasePropiedades
                     $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
                     return FALSE;
                 }
+            } else {
+                $sClauError = 'EntradaDocDB.insertar.prepare';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
         }
         $this->setAllAtributes($aDades);
@@ -197,7 +201,7 @@ class EntradaDocDB extends core\ClasePropiedades
      * Carga los campos de la tabla como atributos de la clase.
      *
      */
-    public function DBCargar($que = null)
+    public function DBCargar($que = null): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -225,9 +229,9 @@ class EntradaDocDB extends core\ClasePropiedades
                    $this->setAllAtributes($aDades);
             }
             return TRUE;
-        } else {
-            return FALSE;
         }
+
+        return FALSE;
     }
 
     
@@ -266,16 +270,16 @@ class EntradaDocDB extends core\ClasePropiedades
     }
 
     /**
-     * Si df_doc es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
+     * Si df_doc es string, y convert=TRUE se convierte usando el formato DateTimeLocal->getFormat().
      * Si convert es FALSE, df_doc debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param web\DateTimeLocal|string df_doc='' optional.
+     * @param DateTimeLocal|string df_doc='' optional.
      * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     function setF_doc($df_doc = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_doc)) {
-            $oConverter = new core\Converter('date', $df_doc);
+            $oConverter = new Converter('date', $df_doc);
             $this->df_doc = $oConverter->toPg();
         } else {
             $this->df_doc = $df_doc;
@@ -372,7 +376,7 @@ class EntradaDocDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut df_doc de EntradaDocDB
      *
-     * @return web\DateTimeLocal df_doc
+     * @return DateTimeLocal|NullDateTimeLocal df_doc
      */
     function getF_doc()
     {
@@ -380,10 +384,9 @@ class EntradaDocDB extends core\ClasePropiedades
             $this->DBCargar();
         }
         if (empty($this->df_doc)) {
-            return new web\NullDateTimeLocal();
+            return new NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_doc);
-        return $oConverter->fromPg();
+        return (new Converter('date', $this->df_doc))->fromPg();
     }
 
     /**
@@ -392,7 +395,7 @@ class EntradaDocDB extends core\ClasePropiedades
      */
     function getDatosCampos()
     {
-        $oEntradaDocDBSet = new core\Set();
+        $oEntradaDocDBSet = new Set();
 
         $oEntradaDocDBSet->add($this->getDatosTipo_doc());
         $oEntradaDocDBSet->add($this->getDatosF_doc());
@@ -404,12 +407,12 @@ class EntradaDocDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut itipo_doc de EntradaDocDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
     function getDatosTipo_doc()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'tipo_doc'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'tipo_doc'));
         $oDatosCampo->setEtiqueta(_("tipo_doc"));
         return $oDatosCampo;
     }
@@ -418,12 +421,12 @@ class EntradaDocDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut df_doc de EntradaDocDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
     function getDatosF_doc()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'f_doc'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'f_doc'));
         $oDatosCampo->setEtiqueta(_("f_doc"));
         return $oDatosCampo;
     }

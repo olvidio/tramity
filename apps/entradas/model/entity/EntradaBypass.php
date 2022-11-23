@@ -2,14 +2,19 @@
 
 namespace entradas\model\entity;
 
-use core;
+use core\Converter;
+use core\DatosCampo;
+use core\Set;
 use entradas\model\Entrada;
 use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
 use PDO;
 use PDOException;
 use stdClass;
-use web;
+use web\DateTimeLocal;
+use web\NullDateTimeLocal;
+use function core\array_pg2php;
+use function core\array_php2pg;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula entradas_bypass
@@ -35,46 +40,6 @@ class EntradaBypass extends Entrada
     /* ATRIBUTOS ----------------------------------------------------------------- */
 
     /**
-     * aPrimary_key de EntradaBypass
-     *
-     * @var array
-     */
-    //private $aPrimary_key;
-
-    /**
-     * aDades de EntradaBypass
-     *
-     * @var array
-     */
-    //private $aDades;
-
-    /**
-     * bLoaded de EntradaBypass
-     *
-     * @var boolean
-     */
-    //private $bLoaded = FALSE;
-
-    /**
-     * Id_schema de EntradaBypass
-     *
-     * @var integer
-     */
-    //private $iid_schema;
-
-    /**
-     * Id_item de EntradaBypass
-     *
-     * @var integer
-     */
-    //private $iid_item;
-    /**
-     * Id_entrada de EntradaBypass
-     *
-     * @var integer
-     */
-    //private $iid_entrada;
-    /**
      * oDbl de EntradaBypass
      *
      * @var object
@@ -87,36 +52,37 @@ class EntradaBypass extends Entrada
      */
     protected $sNomTabla;
     /**
-     * Descripcion de EntradaBypass
+     * Descripción de EntradaBypass
      *
      * @var string
      */
-    private $sdescripcion;
+    private string $sdescripcion;
     /**
      * Json_prot_destino de EntradaBypass
      *
-     * @var object JSON
+     * @var string|null
      */
-    private $json_prot_destino;
+    private ?string $json_prot_destino;
     /**
      * Id_grupos de EntradaBypass
      *
      * @var array
      */
-    private $a_id_grupos;
+    private array $a_id_grupos;
+
     /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
      * Destinos de EntradaBypass
      *
      * @var array
      */
-    private $a_destinos;
+    private array $a_destinos;
     /**
      * F_salida de EntradaBypass
      *
-     * @var web\DateTimeLocal
+     * @var DateTimeLocal|null
      */
-    private $df_salida;
+    private ?DateTimeLocal $df_salida;
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
@@ -124,26 +90,12 @@ class EntradaBypass extends Entrada
      * Si només necessita un valor, se li pot passar un integer.
      * En general se li passa un array amb les claus primàries.
      *
-     * @param integer|array iid_entrada
+     * @param integer|null $iid_entrada
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = null)
+    function __construct(?int $iid_entrada = null)
     {
-        $oDbl = $GLOBALS['oDBT'];
-        if (is_array($a_id)) {
-            $this->aPrimary_key = $a_id;
-            foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id === 'id_entrada') && $val_id !== '') {
-                    $this->iid_entrada = (int)$val_id;
-                }
-            }
-        } else {
-            if (isset($a_id) && $a_id !== '') {
-                $this->iid_entrada = (int)$a_id;
-                $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
-            }
-        }
-        $this->setoDbl($oDbl);
+        parent::__construct($iid_entrada);
         $this->setNomTabla('entradas_bypass');
     }
 
@@ -153,7 +105,7 @@ class EntradaBypass extends Entrada
      * Elimina el registre de la base de dades corresponent a l'objecte.
      *
      */
-    public function DBEliminar()
+    public function DBEliminar(): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -166,23 +118,10 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * Recupera l'atribut iid_entrada de EntradaBypass
-     *
-     * @return integer iid_entrada
-     */
-    function getId_entrada()
-    {
-        if (!isset($this->iid_entrada) && !$this->bLoaded) {
-            $this->DBCargar();
-        }
-        return $this->iid_entrada;
-    }
-
-    /**
      * Carga los campos de la tabla como atributos de la clase.
      *
      */
-    public function DBCargar($que = null)
+    public function DBCargar($que = null): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -214,9 +153,9 @@ class EntradaBypass extends Entrada
                    $this->setAllAtributes($aDades);
             }
             return TRUE;
-        } else {
-            return FALSE;
         }
+
+        return FALSE;
     }
 
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
@@ -226,12 +165,11 @@ class EntradaBypass extends Entrada
      * Establece el valor de todos los atributos
      *
      * @param array $aDades
+     * @param bool $convert
+     * @throws \JsonException
      */
-    private function setAllAtributes($aDades, $convert = FALSE)
+    private function setAllAtributes(array $aDades, bool $convert = FALSE): void
     {
-        if (!is_array($aDades)) {
-            return;
-        }
         if (array_key_exists('id_schema', $aDades)) {
             $this->setId_schema($aDades['id_schema']);
         }
@@ -308,33 +246,25 @@ class EntradaBypass extends Entrada
         }
     }
 
-    /**
-     * @param integer iid_entrada='' optional
-     */
-    function setId_entrada($iid_entrada = '')
-    {
-        $this->iid_entrada = $iid_entrada;
-    }
-
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * @param string sdescripcion='' optional
+     * @param string $sdescripcion
      */
-    function setDescripcion($sdescripcion = '')
+    public function setDescripcion(string $sdescripcion): void
     {
         $this->sdescripcion = $sdescripcion;
     }
 
     /**
-     * @param array a_id_grupos
+     * @param array|null $a_id_grupos
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
      */
-    function setId_grupos($a_id_grupos = [], $db = FALSE)
+    public function setId_grupos(?array $a_id_grupos = [], bool $db = FALSE): void
     {
         if ($db === FALSE) {
-            $postgresArray = core\array_php2pg($a_id_grupos);
+            $postgresArray = array_php2pg($a_id_grupos);
         } else {
             $postgresArray = $a_id_grupos;
         }
@@ -342,54 +272,31 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * @param array a_destinos
+     * @param array|null $a_destinos
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
      */
-    function setDestinos($a_destinos = '', $db = FALSE)
+    public function setDestinos(array|null $a_destinos = null, bool $db = FALSE): void
     {
         if ($db === FALSE) {
-            $postgresArray = core\array_php2pg($a_destinos);
+            $postgresArray = array_php2pg($a_destinos);
         } else {
             $postgresArray = $a_destinos;
         }
         $this->a_destinos = $postgresArray;
     }
 
-
-    /**
-     * Recupera l'atribut iid_item de EntradaBypass
-     *
-     * @return integer iid_item
-     */
-    /*
-    function getId_item() {
-        if (!isset($this->iid_item) && !$this->bLoaded) {
-            $this->DBCargar();
-        }
-        return $this->iid_item;
-    }
-    */
-    /**
-     * @param integer iid_item
-     */
-    /*
-    function setId_item($iid_item) {
-        $this->iid_item = $iid_item;
-    }
-    */
-
     /**
      * Si df_salida es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_salida debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param web\DateTimeLocal|string df_salida='' optional.
-     * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
+     * @param string|DateTimeLocal $df_salida
+     * @param boolean $convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
-    function setF_salida($df_salida = '', $convert = TRUE)
+    public function setF_salida(DateTimeLocal|string $df_salida = '', bool $convert = TRUE): void
     {
         if ($convert === TRUE && !empty($df_salida)) {
-            $oConverter = new core\Converter('date', $df_salida);
+            $oConverter = new Converter('date', $df_salida);
             $this->df_salida = $oConverter->toPg();
         } else {
             $this->df_salida = $df_salida;
@@ -402,7 +309,7 @@ class EntradaBypass extends Entrada
      *
      * @return array aPrimary_key
      */
-    function getPrimary_key()
+    function getPrimary_key(): array
     {
         if (!isset($this->aPrimary_key)) {
             $this->aPrimary_key = array('id_entrada' => $this->iid_entrada);
@@ -414,7 +321,7 @@ class EntradaBypass extends Entrada
      * Estableix las claus primàries de EntradaBypass en un array
      *
      */
-    public function setPrimary_key($a_id = null)
+    public function setPrimary_key($a_id = null): void
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
@@ -434,34 +341,33 @@ class EntradaBypass extends Entrada
     /**
      * Recupera l'atribut a_destinos de EntradaBypass
      *
-     * @return array a_destinos
+     * @return array $a_destinos
      */
-    function getDestinos()
+    public function getDestinos(): array
     {
         if (!isset($this->a_destinos) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return core\array_pg2php($this->a_destinos);
+        return array_pg2php($this->a_destinos);
     }
 
     /**
      * Recupera l'atribut df_salida de EntradaBypass
      *
-     * @return web\DateTimeLocal df_salida
+     * @return DateTimeLocal $df_salida
      */
-    function getF_salida()
+    public function getF_salida(): DateTimeLocal|NullDateTimeLocal
     {
         if (!isset($this->df_salida) && !$this->bLoaded) {
             $this->DBCargar();
         }
         if (empty($this->df_salida)) {
-            return new web\NullDateTimeLocal();
+            return new NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_salida);
-        return $oConverter->fromPg();
+        return (new Converter('date', $this->df_salida))->fromPg();
     }
 
-    public function getDestinosByPass()
+    public function getDestinosByPass(): array
     {
         $a_grupos = $this->getId_grupos();
 
@@ -501,22 +407,22 @@ class EntradaBypass extends Entrada
     /**
      * Recupera l'atribut a_id_grupos de EntradaBypass
      *
-     * @return array a_id_grupos
+     * @return array $a_id_grupos
      */
-    function getId_grupos()
+    public function getId_grupos(): array
     {
         if (!isset($this->a_id_grupos) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return core\array_pg2php($this->a_id_grupos);
+        return array_pg2php($this->a_id_grupos);
     }
 
     /**
      * Recupera l'atribut sdescripcion de EntradaBypass
      *
-     * @return string sdescripcion
+     * @return string $sdescripcion
      */
-    function getDescripcion()
+    public function getDescripcion(): string
     {
         if (!isset($this->sdescripcion) && !$this->bLoaded) {
             $this->DBCargar();
@@ -529,7 +435,7 @@ class EntradaBypass extends Entrada
      * Si no hi ha el registre, fa el insert, si hi és fa el update.
      *
      */
-    public function DBGuardar()
+    public function DBGuardar(): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -560,16 +466,16 @@ class EntradaBypass extends Entrada
                 $sClauError = 'EntradaBypass.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'EntradaBypass.update.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            }
+
+            try {
+                $oDblSt->execute($aDades);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'EntradaBypass.update.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
         } else {
             // INSERT
@@ -579,16 +485,16 @@ class EntradaBypass extends Entrada
                 $sClauError = 'EntradaBypass.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'EntradaBypass.insertar.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            }
+
+            try {
+                $oDblSt->execute($aDades);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'EntradaBypass.insertar.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
             //$this->id_item = $oDbl->lastInsertId('entradas_bypass_id_item_seq');
         }
@@ -600,15 +506,15 @@ class EntradaBypass extends Entrada
      * Recupera l'atribut json_prot_destino de EntradaBypass
      *
      * @param boolean $bArray si hay que devolver un array en vez de un objeto.
-     * @return object JSON json_prot_destino
+     * @return stdClass $json_prot_destino
      */
-    function getJson_prot_destino($bArray = FALSE)
+    public function getJson_prot_destino($bArray = FALSE): array|stdClass
     {
         if (!isset($this->json_prot_destino) && !$this->bLoaded) {
             $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_destino, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {
@@ -620,14 +526,14 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * @param object JSON json_prot_destino
+     * @param stdClass $oJSON json_prot_destino
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
      */
-    function setJson_prot_destino($oJSON, $db = FALSE)
+    public function setJson_prot_destino(stdClass $oJSON, bool $db = FALSE): void
     {
         if ($db === FALSE) {
-            $json = json_encode($oJSON);
+            $json = json_encode($oJSON, JSON_THROW_ON_ERROR);
         } else {
             $json = $oJSON;
         }
@@ -640,9 +546,9 @@ class EntradaBypass extends Entrada
      * Retorna una col·lecció d'objectes del tipus DatosCampo
      *
      */
-    function getDatosCampos()
+    function getDatosCampos(): array
     {
-        $oEntradaBypassSet = new core\Set();
+        $oEntradaBypassSet = new Set();
 
         $oEntradaBypassSet->add($this->getDatosId_entrada());
         $oEntradaBypassSet->add($this->getDatosDescripcion());
@@ -657,12 +563,12 @@ class EntradaBypass extends Entrada
      * Recupera les propietats de l'atribut iid_entrada de EntradaBypass
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
     function getDatosId_entrada()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_entrada'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_entrada'));
         $oDatosCampo->setEtiqueta(_("id_entrada"));
         return $oDatosCampo;
     }
@@ -671,12 +577,12 @@ class EntradaBypass extends Entrada
      * Recupera les propietats de l'atribut sdescripcion de EntradaBypass
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
     function getDatosDescripcion()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'descripcion'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'descripcion'));
         $oDatosCampo->setEtiqueta(_("descripcion"));
         return $oDatosCampo;
     }
@@ -685,12 +591,12 @@ class EntradaBypass extends Entrada
      * Recupera les propietats de l'atribut json_prot_destino de EntradaBypass
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
     function getDatosJson_prot_destino()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'json_prot_destino'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'json_prot_destino'));
         $oDatosCampo->setEtiqueta(_("json_prot_destino"));
         return $oDatosCampo;
     }
@@ -699,12 +605,12 @@ class EntradaBypass extends Entrada
      * Recupera les propietats de l'atribut a_id_grupos de EntradaBypass
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
     function getDatosId_grupos()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_grupos'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_grupos'));
         $oDatosCampo->setEtiqueta(_("id_grupos"));
         return $oDatosCampo;
     }
@@ -713,12 +619,12 @@ class EntradaBypass extends Entrada
      * Recupera les propietats de l'atribut a_destinos de EntradaBypass
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
     function getDatosDestinos()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'destinos'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'destinos'));
         $oDatosCampo->setEtiqueta(_("destinos"));
         return $oDatosCampo;
     }
@@ -727,12 +633,12 @@ class EntradaBypass extends Entrada
      * Recupera les propietats de l'atribut df_salida de EntradaBypass
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
     function getDatosF_salida()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'f_salida'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'f_salida'));
         $oDatosCampo->setEtiqueta(_("f_salida"));
         return $oDatosCampo;
     }
@@ -742,7 +648,7 @@ class EntradaBypass extends Entrada
      *
      * @return array aDades
      */
-    function getTot()
+    function getTot(): array
     {
         if (!is_array($this->aDades)) {
             $this->DBCargar('tot');

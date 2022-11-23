@@ -2,15 +2,20 @@
 
 namespace entradas\model\entity;
 
-use core;
+use core\ClasePropiedades;
 use core\Converter;
+use core\DatosCampo;
+use core\Set;
 use entradas\model\Entrada;
+use JsonException;
 use PDO;
 use PDOException;
 use stdClass;
-use web;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
+use function core\array_pg2php;
+use function core\array_php2pg;
+use function core\is_true;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula entradas
@@ -31,7 +36,7 @@ use web\NullDateTimeLocal;
  * @version 1.0
  * @created 20/10/2020
  */
-class EntradaDB extends core\ClasePropiedades
+class EntradaDB extends ClasePropiedades
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 
@@ -40,21 +45,21 @@ class EntradaDB extends core\ClasePropiedades
      *
      * @var array
      */
-    protected $aPrimary_key;
+    protected array $aPrimary_key;
 
     /**
      * aDades de EntradaDB
      *
      * @var array
      */
-    protected $aDades;
+    protected array $aDades;
 
     /**
      * bLoaded de EntradaDB
      *
      * @var boolean
      */
-    protected $bLoaded = FALSE;
+    protected bool $bLoaded = FALSE;
 
     /**
      * Id_schema de EntradaDB
@@ -68,115 +73,115 @@ class EntradaDB extends core\ClasePropiedades
      *
      * @var integer
      */
-    protected $iid_entrada;
+    protected int $iid_entrada;
     /**
      * Id_entrada_compartida de EntradaDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $iid_entrada_compartida;
+    protected ?int $iid_entrada_compartida;
     /**
      * Modo_entrada de EntradaDB
      *
      * @var integer
      */
-    protected $imodo_entrada;
+    protected int $imodo_entrada;
     /**
      * Json_prot_origen de EntradaDB
      *
-     * @var object JSON
+     * @var string|null
      */
-    protected $json_prot_origen;
+    protected ?string $json_prot_origen;
     /**
      * Asunto_entrada de EntradaDB
      *
      * @var string
      */
-    protected $sasunto_entrada;
+    protected string $sasunto_entrada;
     /**
      * Json_prot_ref de EntradaDB
      *
-     * @var object JSON
+     * @var string|null
      */
-    protected $json_prot_ref;
+    protected ?string $json_prot_ref;
     /**
      * Ponente de EntradaDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $iponente;
+    protected ?int $iponente;
     /**
      * Resto_oficinas de EntradaDB
      *
-     * @var array
+     * @var array|null
      */
-    protected $a_resto_oficinas;
+    protected ?array $a_resto_oficinas;
     /**
      * Asunto de EntradaDB
      *
-     * @var string
+     * @var string|null
      */
-    protected $sasunto;
+    protected ?string $sasunto;
     /**
      * F_entrada de EntradaDB
      *
-     * @var web\DateTimeLocal
+     * @var DateTimeLocal|null
      */
-    protected $df_entrada;
+    protected ?DateTimeLocal $df_entrada;
     /**
      * Detalle de EntradaDB
      *
-     * @var string
+     * @var string|null
      */
-    protected $sdetalle;
+    protected ?string $sdetalle;
     /**
      * Categoria de EntradaDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $icategoria;
+    protected ?int $icategoria;
     /**
      * Visibilidad de EntradaDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $ivisibilidad;
+    protected ?int $ivisibilidad;
     /**
      * F_contestar de EntradaDB
      *
-     * @var web\DateTimeLocal
+     * @var DateTimeLocal|null
      */
-    protected $df_contestar;
+    protected ?DateTimeLocal $df_contestar;
     /**
      * Bypass de EntradaDB
      *
      * @var boolean
      */
-    protected $bbypass;
+    protected bool $bbypass;
     /**
      * Estado de EntradaDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $iestado;
+    protected ?int $iestado;
     /**
      * Anulado de EntradaDB
      *
-     * @var string
+     * @var string|null
      */
-    protected $sanulado;
+    protected ?string $sanulado;
     /**
      * Encargado de EntradaDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $iencargado;
+    protected ?int $iencargado;
     /**
      * Json_visto de EntradaDB
      *
-     * @var object JSON
+     * @var string|null
      */
-    protected $json_visto;
+    protected ?string $json_visto;
 
     /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
@@ -218,7 +223,7 @@ class EntradaDB extends core\ClasePropiedades
      * Elimina el registre de la base de dades corresponent a l'objecte.
      *
      */
-    public function DBEliminar()
+    public function DBEliminar(): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -233,8 +238,9 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Comprueba si lo han visto todos y lo pone en estado Archivado
      *
+     * @throws JsonException
      */
-    public function comprobarVisto()
+    public function comprobarVisto(): void
     {
         $ponente = $this->getPonente();
         $resto_oficinas = $this->getResto_oficinas();
@@ -247,7 +253,7 @@ class EntradaDB extends core\ClasePropiedades
                 if ($id_oficina === $ponente) {
                     $ponente = '';
                 } else {
-                    $key_of = array_search($id_oficina, $resto_oficinas);
+                    $key_of = array_search($id_oficina, $resto_oficinas, true);
                     unset($resto_oficinas[$key_of]);
                 }
             }
@@ -264,8 +270,9 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera l'atribut iponente de EntradaDB
      *
      * @return integer|null iponente
+     * @throws JsonException
      */
-    function getPonente(): ?int
+    public function getPonente(): ?int
     {
         if (!isset($this->iponente) && !$this->bLoaded) {
             $this->DBCargar();
@@ -279,8 +286,9 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Carga los campos de la tabla como atributos de la clase.
      *
+     * @throws JsonException
      */
-    public function DBCargar($que = null)
+    public function DBCargar($que = null): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -319,12 +327,11 @@ class EntradaDB extends core\ClasePropiedades
      * Establece el valor de todos los atributos
      *
      * @param array $aDades
+     * @param bool $convert
+     * @throws JsonException
      */
-    private function setAllAtributes($aDades, $convert = FALSE)
+    private function setAllAtributes(array $aDades, bool $convert = FALSE): void
     {
-        if (!is_array($aDades)) {
-            return;
-        }
         if (array_key_exists('id_schema', $aDades)) {
             $this->setId_schema($aDades['id_schema']);
         }
@@ -388,9 +395,9 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * @param integer iid_entrada
+     * @param integer $iid_entrada
      */
-    function setId_entrada($iid_entrada)
+    public function setId_entrada(int $iid_entrada): void
     {
         $this->iid_entrada = $iid_entrada;
     }
@@ -399,46 +406,46 @@ class EntradaDB extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * @param integer iid_entrada_compartida
+     * @param integer|null $iid_entrada_compartida
      */
-    function setId_entrada_compartida($iid_entrada_compartida)
+    public function setId_entrada_compartida(?int $iid_entrada_compartida): void
     {
         $this->iid_entrada_compartida = $iid_entrada_compartida;
     }
 
     /**
-     * @param integer imodo_entrada='' optional
+     * @param integer $imodo_entrada
      */
-    function setModo_entrada($imodo_entrada = '')
+    public function setModo_entrada(int $imodo_entrada): void
     {
         $this->imodo_entrada = $imodo_entrada;
     }
 
     /**
-     * @param string sasunto_entrada='' optional
+     * @param string $sasunto_entrada
      */
-    function setAsunto_entrada($sasunto_entrada = '')
+    public function setAsunto_entrada(string $sasunto_entrada): void
     {
         $this->sasunto_entrada = $sasunto_entrada;
     }
 
     /**
-     * @param integer iponente='' optional
+     * @param integer|null $iponente
      */
-    function setPonente($iponente = '')
+    public function setPonente(?int $iponente = null): void
     {
         $this->iponente = $iponente;
     }
 
     /**
-     * @param array a_resto_oficinas
+     * @param array|null $a_resto_oficinas
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
      */
-    function setResto_oficinas($a_resto_oficinas = '', $db = FALSE)
+    public function setResto_oficinas(?array $a_resto_oficinas = null, bool $db = FALSE): void
     {
         if ($db === FALSE) {
-            $postgresArray = core\array_php2pg($a_resto_oficinas);
+            $postgresArray = array_php2pg($a_resto_oficinas);
         } else {
             $postgresArray = $a_resto_oficinas;
         }
@@ -446,9 +453,9 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * @param string sasunto='' optional
+     * @param string|null $sasunto
      */
-    function setAsunto($sasunto = '')
+    public function setAsunto(?string $sasunto = null): void
     {
         $this->sasunto = $sasunto;
     }
@@ -457,13 +464,13 @@ class EntradaDB extends core\ClasePropiedades
      * Si df_entrada es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_entrada debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param web\DateTimeLocal|string df_entrada='' optional.
-     * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
+     * @param string|DateTimeLocal|null $df_entrada df_entrada='' optional.
+     * @param boolean $convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
-    function setF_entrada($df_entrada = '', $convert = TRUE)
+    public function setF_entrada(DateTimeLocal|string|null $df_entrada = '', bool $convert = TRUE): void
     {
         if ($convert === TRUE && !empty($df_entrada)) {
-            $oConverter = new core\Converter('date', $df_entrada);
+            $oConverter = new Converter('date', $df_entrada);
             $this->df_entrada = $oConverter->toPg();
         } else {
             $this->df_entrada = $df_entrada;
@@ -471,25 +478,25 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * @param string sdetalle='' optional
+     * @param string|null $sdetalle
      */
-    function setDetalle($sdetalle = '')
+    public function setDetalle(?string $sdetalle = null): void
     {
         $this->sdetalle = $sdetalle;
     }
 
     /**
-     * @param integer icategoria='' optional
+     * @param integer|null $icategoria
      */
-    function setCategoria($icategoria = '')
+    public function setCategoria(?int $icategoria = null): void
     {
         $this->icategoria = $icategoria;
     }
 
     /**
-     * @param integer ivisibilidad='' optional
+     * @param integer|null $ivisibilidad=null
      */
-    function setVisibilidad($ivisibilidad = '')
+    public function setVisibilidad(?int $ivisibilidad = null): void
     {
         $this->ivisibilidad = $ivisibilidad;
     }
@@ -498,13 +505,13 @@ class EntradaDB extends core\ClasePropiedades
      * Si df_contestar es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_contestar debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param web\DateTimeLocal|string df_contestar='' optional.
-     * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
+     * @param string|DateTimeLocal|null $df_contestar='' optional.
+     * @param boolean $convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
-    function setF_contestar($df_contestar = '', $convert = TRUE)
+    public function setF_contestar(DateTimeLocal|string|null $df_contestar = '', bool $convert = TRUE): void
     {
         if ($convert === TRUE && !empty($df_contestar)) {
-            $oConverter = new core\Converter('date', $df_contestar);
+            $oConverter = new Converter('date', $df_contestar);
             $this->df_contestar = $oConverter->toPg();
         } else {
             $this->df_contestar = $df_contestar;
@@ -512,33 +519,33 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * @param boolean bbypass='f' optional
+     * @param boolean $bbypass=FALSE optional
      */
-    function setBypass($bbypass = 'f')
+    public function setBypass(bool $bbypass = FALSE): void
     {
         $this->bbypass = $bbypass;
     }
 
     /**
-     * @param integer iestado
+     * @param integer|null $iestado
      */
-    function setEstado($iestado)
+    public function setEstado(?int $iestado): void
     {
         $this->iestado = $iestado;
     }
 
     /**
-     * @param integer sanulado
+     * @param integer|null $sanulado
      */
-    function setAnulado($sanulado)
+    public function setAnulado(?int $sanulado): void
     {
         $this->sanulado = $sanulado;
     }
 
     /**
-     * @param integer iencargado
+     * @param integer|null $iencargado
      */
-    function setEncargado($iencargado)
+    public function setEncargado(?int $iencargado): void
     {
         $this->iencargado = $iencargado;
     }
@@ -549,7 +556,7 @@ class EntradaDB extends core\ClasePropiedades
      *
      * @return array aPrimary_key
      */
-    function getPrimary_key()
+    public function getPrimary_key(): array
     {
         if (!isset($this->aPrimary_key)) {
             $this->aPrimary_key = array('id_entrada' => $this->iid_entrada);
@@ -561,7 +568,7 @@ class EntradaDB extends core\ClasePropiedades
      * Estableix las claus primàries de EntradaDB en un array
      *
      */
-    public function setPrimary_key($a_id = null)
+    public function setPrimary_key($a_id = null): void
     {
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
@@ -581,28 +588,30 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut a_resto_oficinas de EntradaDB
      *
-     * @return array a_resto_oficinas
+     * @return array|null $a_resto_oficinas
+     * @throws JsonException
      */
-    function getResto_oficinas()
+    public function getResto_oficinas(): ?array
     {
         if (!isset($this->a_resto_oficinas) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return core\array_pg2php($this->a_resto_oficinas);
+        return array_pg2php($this->a_resto_oficinas);
     }
 
     /**
      * Recupera l'atribut json_visto de EntradaDB
      *
      * @param boolean $bArray si hay que devolver un array en vez de un objeto.
-     * @return object JSON json_visto
+     * @return array|stdClass $json_visto
+     * @throws JsonException
      */
-    function getJson_visto($bArray = FALSE)
+    public function getJson_visto(bool $bArray = FALSE): array|stdClass
     {
         if (!isset($this->json_visto) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_visto, $bArray);
+        $oJSON = json_decode($this->json_visto, $bArray, 512, JSON_THROW_ON_ERROR);
         if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
@@ -610,19 +619,19 @@ class EntradaDB extends core\ClasePropiedades
                 $oJSON = new stdClass;
             }
         }
-        //$this->json_visto = $oJSON;
         return $oJSON;
     }
 
     /**
-     * @param object JSON json_visto
+     * @param stdClass $oJSON json_visto
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
+     * @throws JsonException
      */
-    function setJson_visto($oJSON, $db = FALSE)
+    public function setJson_visto(stdClass $oJSON, bool $db = FALSE): void
     {
         if ($db === FALSE) {
-            $json = json_encode($oJSON);
+            $json = json_encode($oJSON, JSON_THROW_ON_ERROR);
         } else {
             $json = $oJSON;
         }
@@ -633,8 +642,9 @@ class EntradaDB extends core\ClasePropiedades
      * Desa els ATRIBUTOS de l'objecte a la base de dades.
      * Si no hi ha el registre, fa el insert, si hi es fa el update.
      *
+     * @throws JsonException
      */
-    public function DBGuardar()
+    public function DBGuardar(): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -664,7 +674,7 @@ class EntradaDB extends core\ClasePropiedades
         $aDades['json_visto'] = $this->json_visto;
         array_walk($aDades, 'core\poner_null');
         //para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
-        if (core\is_true($aDades['bypass'])) {
+        if (is_true($aDades['bypass'])) {
             $aDades['bypass'] = 'true';
         } else {
             $aDades['bypass'] = 'false';
@@ -738,9 +748,10 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut iid_entrada de EntradaDB
      *
-     * @return integer iid_entrada
+     * @return integer $iid_entrada
+     * @throws JsonException
      */
-    function getId_entrada()
+    public function getId_entrada(): int
     {
         if (!isset($this->iid_entrada) && !$this->bLoaded) {
             $this->DBCargar();
@@ -751,9 +762,10 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut iid_entrada_compartida de EntradaDB
      *
-     * @return integer iid_entrada_compartida
+     * @return integer|null $iid_entrada_compartida
+     * @throws JsonException
      */
-    function getId_entrada_compartida()
+    public function getId_entrada_compartida(): ?int
     {
         if (!isset($this->iid_entrada_compartida) && !$this->bLoaded) {
             $this->DBCargar();
@@ -764,9 +776,10 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut imodo_entrada de EntradaDB
      *
-     * @return integer imodo_entrada
+     * @return integer $imodo_entrada
+     * @throws JsonException
      */
-    function getModo_entrada()
+    public function getModo_entrada(): int
     {
         if (!isset($this->imodo_entrada) && !$this->bLoaded) {
             $this->DBCargar();
@@ -778,14 +791,15 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera l'atribut json_prot_origen de EntradaDB
      *
      * @param boolean $bArray si hay que devolver un array en vez de un objeto.
-     * @return object JSON json_prot_origen
+     * @return stdClass|array $JSON json_prot_origen
+     * @throws JsonException
      */
-    function getJson_prot_origen($bArray = FALSE)
+    public function getJson_prot_origen(bool $bArray = FALSE): array|stdClass
     {
         if (!isset($this->json_prot_origen) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_prot_origen, $bArray);
+        $oJSON = json_decode($this->json_prot_origen, $bArray, 512, JSON_THROW_ON_ERROR);
         if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
@@ -798,14 +812,15 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * @param object JSON json_prot_origen
+     * @param stdClass $oJSON json_prot_origen
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
+     * @throws JsonException
      */
-    function setJson_prot_origen($oJSON, $db = FALSE)
+    public function setJson_prot_origen(stdClass $oJSON, bool $db = FALSE): void
     {
         if ($db === FALSE) {
-            $json = json_encode($oJSON);
+            $json = json_encode($oJSON, JSON_THROW_ON_ERROR);
         } else {
             $json = $oJSON;
         }
@@ -815,9 +830,10 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut sasunto_entrada de EntradaDB
      *
-     * @return string sasunto_entrada
+     * @return string $sasunto_entrada
+     * @throws JsonException
      */
-    function getAsunto_entrada()
+    public function getAsunto_entrada(): string
     {
         if (!isset($this->sasunto_entrada) && !$this->bLoaded) {
             $this->DBCargar();
@@ -829,14 +845,15 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera l'atribut json_prot_ref de EntradaDB
      *
      * @param boolean $bArray si hay que devolver un array en vez de un objeto.
-     * @return object JSON json_prot_ref
+     * @return stdClass|array $oJSON json_prot_ref
+     * @throws JsonException
      */
-    function getJson_prot_ref($bArray = FALSE)
+    public function getJson_prot_ref(bool $bArray = FALSE): array|stdClass
     {
         if (!isset($this->json_prot_ref) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_prot_ref, $bArray);
+        $oJSON = json_decode($this->json_prot_ref, $bArray, 512, JSON_THROW_ON_ERROR);
         if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
@@ -849,14 +866,15 @@ class EntradaDB extends core\ClasePropiedades
     }
 
     /**
-     * @param object JSON json_prot_ref
+     * @param stdClass $oJSON json_prot_ref
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
+     * @throws \JsonException
      */
-    function setJson_prot_ref($oJSON, $db = FALSE)
+    public function setJson_prot_ref(stdClass $oJSON, bool $db = FALSE): void
     {
         if ($db === FALSE) {
-            $json = json_encode($oJSON);
+            $json = json_encode($oJSON, JSON_THROW_ON_ERROR);
         } else {
             $json = $oJSON;
         }
@@ -866,9 +884,10 @@ class EntradaDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut sasunto de EntradaDB
      *
-     * @return string sasunto
+     * @return string|null sasunto
+     * @throws JsonException
      */
-    function getAsuntoDB()
+    public function getAsuntoDB(): ?string
     {
         if (!isset($this->sasunto) && !$this->bLoaded) {
             $this->DBCargar();
@@ -880,6 +899,7 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera l'atribut df_entrada de EntradaDB
      *
      * @return DateTimeLocal|NullDateTimeLocal df_entrada
+     * @throws JsonException
      */
     public function getF_entrada(): DateTimeLocal|NullDateTimeLocal
     {
@@ -896,6 +916,7 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera l'atribut sdetalle de EntradaDB
      *
      * @return string|null sdetalle
+     * @throws JsonException
      */
     public function getDetalleDB(): ?string
     {
@@ -909,6 +930,7 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera l'atribut icategoria de EntradaDB
      *
      * @return integer|null icategoria
+     * @throws JsonException
      */
     public function getCategoria(): ?int
     {
@@ -922,6 +944,7 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera l'atribut ivisibilidad de EntradaDB
      *
      * @return integer|null ivisibilidad
+     * @throws JsonException
      */
     public function getVisibilidad(): ?int
     {
@@ -935,6 +958,7 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera l'atribut df_contestar de EntradaDB
      *
      * @return DateTimeLocal|NullDateTimeLocal df_contestar
+     * @throws JsonException
      */
     public function getF_contestar(): DateTimeLocal|NullDateTimeLocal
     {
@@ -951,11 +975,15 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera l'atribut bbypass de EntradaDB
      *
      * @return boolean bbypass
+     * @throws JsonException
      */
     public function getBypass(): bool
     {
         if (!isset($this->bbypass) && !$this->bLoaded) {
-            $this->DBCargar();
+            // Puede ser que no sea una entradaBypass, al cargar da false (no hay ninguna fila)
+            if ($this->DBCargar() === FALSE){
+                return FALSE;
+            }
         }
         return $this->bbypass;
     }
@@ -964,6 +992,7 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera l'atribut iestado de EntradaDB
      *
      * @return integer|null iestado
+     * @throws JsonException
      */
     public function getEstado(): ?int
     {
@@ -977,6 +1006,7 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera l'atribut sanulado de EntradaDB
      *
      * @return string|null sanulado
+     * @throws JsonException
      */
     public function getAnulado(): ?string
     {
@@ -990,6 +1020,7 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera l'atribut iencargado de EntradaDB
      *
      * @return integer iencargado
+     * @throws JsonException
      */
     public function getEncargado(): ?int
     {
@@ -1003,9 +1034,9 @@ class EntradaDB extends core\ClasePropiedades
      * Retorna una col·lecció d'objectes del tipus DatosCampo
      *
      */
-    function getDatosCampos()
+    public function getDatosCampos(): array
     {
-        $oEntradaDBSet = new core\Set();
+        $oEntradaDBSet = new Set();
 
         $oEntradaDBSet->add($this->getDatosId_entrada_compartida());
         $oEntradaDBSet->add($this->getDatosModo_entrada());
@@ -1033,12 +1064,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut iid_entrada_compartida de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosId_entrada_compartida()
+    public function getDatosId_entrada_compartida(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_entrada_compartida'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_entrada_compartida'));
         $oDatosCampo->setEtiqueta(_("id_entrada_compartida"));
         return $oDatosCampo;
     }
@@ -1047,12 +1078,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut imodo_entrada de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosModo_entrada()
+    public function getDatosModo_entrada(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'modo_entrada'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'modo_entrada'));
         $oDatosCampo->setEtiqueta(_("modo_entrada"));
         return $oDatosCampo;
     }
@@ -1061,12 +1092,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut json_prot_origen de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosJson_prot_origen()
+    public function getDatosJson_prot_origen(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'json_prot_origen'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'json_prot_origen'));
         $oDatosCampo->setEtiqueta(_("json_prot_origen"));
         return $oDatosCampo;
     }
@@ -1075,12 +1106,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut sasunto_entrada de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosAsunto_entrada()
+    public function getDatosAsunto_entrada(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'asunto_entrada'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'asunto_entrada'));
         $oDatosCampo->setEtiqueta(_("asunto_entrada"));
         return $oDatosCampo;
     }
@@ -1089,12 +1120,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut json_prot_ref de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosJson_prot_ref()
+    public function getDatosJson_prot_ref(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'json_prot_ref'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'json_prot_ref'));
         $oDatosCampo->setEtiqueta(_("json_prot_ref"));
         return $oDatosCampo;
     }
@@ -1103,12 +1134,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut iponente de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosPonente()
+    public function getDatosPonente(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'ponente'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'ponente'));
         $oDatosCampo->setEtiqueta(_("ponente"));
         return $oDatosCampo;
     }
@@ -1117,12 +1148,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut a_resto_oficinas de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosResto_oficinas()
+    public function getDatosResto_oficinas(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'resto_oficinas'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'resto_oficinas'));
         $oDatosCampo->setEtiqueta(_("resto_oficinas"));
         return $oDatosCampo;
     }
@@ -1131,12 +1162,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut sasunto de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosAsunto()
+    public function getDatosAsunto(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'asunto'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'asunto'));
         $oDatosCampo->setEtiqueta(_("asunto"));
         return $oDatosCampo;
     }
@@ -1145,12 +1176,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut df_entrada de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosF_entrada()
+    public function getDatosF_entrada(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'f_entrada'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'f_entrada'));
         $oDatosCampo->setEtiqueta(_("f_entrada"));
         return $oDatosCampo;
     }
@@ -1159,12 +1190,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut sdetalle de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosDetalle()
+    public function getDatosDetalle(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'detalle'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'detalle'));
         $oDatosCampo->setEtiqueta(_("detalle"));
         return $oDatosCampo;
     }
@@ -1173,12 +1204,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut icategoria de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosCategoria()
+    public function getDatosCategoria(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'categoria'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'categoria'));
         $oDatosCampo->setEtiqueta(_("categoria"));
         return $oDatosCampo;
     }
@@ -1187,12 +1218,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut ivisibilidad de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosVisibilidad()
+    public function getDatosVisibilidad(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'visibilidad'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'visibilidad'));
         $oDatosCampo->setEtiqueta(_("visibilidad"));
         return $oDatosCampo;
     }
@@ -1201,12 +1232,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut df_contestar de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosF_contestar()
+    public function getDatosF_contestar(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'f_contestar'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'f_contestar'));
         $oDatosCampo->setEtiqueta(_("f_contestar"));
         return $oDatosCampo;
     }
@@ -1215,12 +1246,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut bbypass de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosBypass()
+    public function getDatosBypass(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'bypass'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'bypass'));
         $oDatosCampo->setEtiqueta(_("bypass"));
         return $oDatosCampo;
     }
@@ -1229,12 +1260,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut iestado de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosEstado()
+    public function getDatosEstado(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'estado'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'estado'));
         $oDatosCampo->setEtiqueta(_("estado"));
         return $oDatosCampo;
     }
@@ -1243,12 +1274,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut sanulado de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosAnulado()
+    public function getDatosAnulado(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'anulado'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'anulado'));
         $oDatosCampo->setEtiqueta(_("anulado"));
         return $oDatosCampo;
     }
@@ -1257,12 +1288,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut iencargado de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosEncargado()
+    public function getDatosEncargado(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'encargado'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'encargado'));
         $oDatosCampo->setEtiqueta(_("encargado"));
         return $oDatosCampo;
     }
@@ -1271,12 +1302,12 @@ class EntradaDB extends core\ClasePropiedades
      * Recupera les propietats de l'atribut json_visto de EntradaDB
      * en una clase del tipus DatosCampo
      *
-     * @return core\DatosCampo
+     * @return DatosCampo
      */
-    function getDatosJson_visto()
+    public function getDatosJson_visto(): DatosCampo
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'json_visto'));
+        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'json_visto'));
         $oDatosCampo->setEtiqueta(_("json_visto"));
         return $oDatosCampo;
     }
@@ -1286,11 +1317,28 @@ class EntradaDB extends core\ClasePropiedades
      *
      * @return array aDades
      */
-    function getTot()
+    public function getTot(): array
     {
-        if (!is_array($this->aDades)) {
-            $this->DBCargar('tot');
-        }
         return $this->aDades;
+    }
+
+    /**
+     * @param int $iid_schema
+     * @return EntradaDB
+     */
+    public function setIidSchema(int $iid_schema): EntradaDB
+    {
+        $this->iid_schema = $iid_schema;
+        return $this;
+    }
+
+    /**
+     * @param string $sNomTabla
+     * @return EntradaDB
+     */
+    public function setSNomTabla(string $sNomTabla): EntradaDB
+    {
+        $this->sNomTabla = $sNomTabla;
+        return $this;
     }
 }

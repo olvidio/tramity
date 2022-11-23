@@ -24,13 +24,7 @@ class GestorEntradaBypass extends core\ClaseGestor
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
 
-    /**
-     * Constructor de la classe.
-     *
-     * @return $gestor
-     *
-     */
-    function __construct()
+    public function __construct()
     {
         $oDbl = $GLOBALS['oDBT'];
         $this->setoDbl($oDbl);
@@ -41,7 +35,7 @@ class GestorEntradaBypass extends core\ClaseGestor
     /* MÉTODOS PÚBLICOS -----------------------------------------------------------*/
 
 
-    function getEntradasBypassByDestino($id_lugar, $aWhere = array(), $aOperators = array())
+    public function getEntradasBypassByDestino($id_lugar, $aWhere = array(), $aOperators = array()): bool|array
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -56,8 +50,8 @@ class GestorEntradaBypass extends core\ClaseGestor
             if ($camp === '_limit') {
                 continue;
             }
-            if ($camp == 'asunto_detalle') {
-                $valor = $aWhere[$camp];
+            if ($camp === 'asunto_detalle') {
+                $valor = $val;
                 $COND_OR = "(public.sin_acentos(asunto::text)  ~* public.sin_acentos('$valor'::text)";
                 $COND_OR .= " OR ";
                 $COND_OR .= "public.sin_acentos(detalle::text)  ~* public.sin_acentos('$valor'::text) )";
@@ -87,8 +81,8 @@ class GestorEntradaBypass extends core\ClaseGestor
         } else {
             $sCondi1 = " WHERE json_prot_destino @> '{\"id_lugar\":$id_lugar}' AND " . $sCondi;
         }
-        if ($COND_OR != '') {
-            if ($sCondi1 != '') {
+        if ($COND_OR !== '') {
+            if ($sCondi1 !== '') {
                 $sCondi1 .= " AND " . $COND_OR;
             } else {
                 $sCondi1 .= " WHERE " . $COND_OR;
@@ -101,8 +95,8 @@ class GestorEntradaBypass extends core\ClaseGestor
         } else {
             $sCondi2 = " WHERE $id_lugar = ANY(destinos) AND " . $sCondi;
         }
-        if ($COND_OR != '') {
-            if ($sCondi2 != '') {
+        if ($COND_OR !== '') {
+            if ($sCondi2 !== '') {
                 $sCondi2 .= " AND " . $COND_OR;
             } else {
                 $sCondi2 .= " WHERE " . $COND_OR;
@@ -138,8 +132,7 @@ class GestorEntradaBypass extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaBypass = new EntradaBypass($a_pkey);
+            $oEntradaBypass = new EntradaBypass($aDades['id_entrada']);
             $oEntradaBypassSet->add($oEntradaBypass);
         }
         return $oEntradaBypassSet->getTot();
@@ -149,10 +142,10 @@ class GestorEntradaBypass extends core\ClaseGestor
     /**
      * retorna l'array d'objectes de tipus EntradaBypass
      *
-     * @param string sQuery la query a executar.
-     * @return array Una col·lecció d'objectes de tipus EntradaBypass
+     * @param string $sQuery la query a executar.
+     * @return array|false Una col·lecció d'objectes de tipus EntradaBypass
      */
-    function getEntradasBypassQuery($sQuery = '')
+    public function getEntradasBypassQuery(string $sQuery = ''): bool|array
     {
         $oDbl = $this->getoDbl();
         $oEntradaBypassSet = new Set();
@@ -162,8 +155,7 @@ class GestorEntradaBypass extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaBypass = new EntradaBypass($a_pkey);
+            $oEntradaBypass = new EntradaBypass($aDades['id_entrada']);
             $oEntradaBypassSet->add($oEntradaBypass);
         }
         return $oEntradaBypassSet->getTot();
@@ -172,11 +164,11 @@ class GestorEntradaBypass extends core\ClaseGestor
     /**
      * retorna l'array d'objectes de tipus EntradaBypass
      *
-     * @param array aWhere associatiu amb els valors de les variables amb les quals farem la query
-     * @param array aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
-     * @return array Una col·lecció d'objectes de tipus EntradaBypass
+     * @param array $aWhere associatiu amb els valors de les variables amb les quals farem la query
+     * @param array $aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
+     * @return array|false Una col·lecció d'objectes de tipus EntradaBypass
      */
-    function getEntradasBypass($aWhere = array(), $aOperators = array())
+    public function getEntradasBypass(array $aWhere = [], array $aOperators = []): bool|array
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -206,7 +198,7 @@ class GestorEntradaBypass extends core\ClaseGestor
             }
         }
         $sCondi = implode(' AND ', $aCondi);
-        if ($sCondi != '') {
+        if ($sCondi !== '') {
             $sCondi = " WHERE " . $sCondi;
         }
         $sOrdre = '';
@@ -224,7 +216,6 @@ class GestorEntradaBypass extends core\ClaseGestor
             unset($aWhere['_limit']);
         }
 
-        //$sQry = "SELECT * FROM $nom_tabla ".$sCondi.$sOrdre.$sLimit;
         $sQry = "SELECT * FROM $nom_tabla JOIN entradas USING (id_entrada) " . $sCondi . $sOrdre . $sLimit;
 
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
@@ -238,8 +229,7 @@ class GestorEntradaBypass extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaBypass = new EntradaBypass($a_pkey);
+            $oEntradaBypass = new EntradaBypass($aDades['id_entrada']);
             $oEntradaBypassSet->add($oEntradaBypass);
         }
         return $oEntradaBypassSet->getTot();

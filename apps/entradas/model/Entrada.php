@@ -12,6 +12,7 @@ use etiquetas\model\entity\Etiqueta;
 use etiquetas\model\entity\EtiquetaEntrada;
 use etiquetas\model\entity\GestorEtiqueta;
 use etiquetas\model\entity\GestorEtiquetaEntrada;
+use JsonException;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
 use usuarios\model\entity\Cargo;
@@ -30,8 +31,8 @@ class Entrada extends EntradaDB
     /* CONST -------------------------------------------------------------- */
 
     // modo entrada
-    const MODO_MANUAL = 1;
-    const MODO_XML = 2;
+    public const MODO_MANUAL = 1;
+    public const MODO_XML = 2;
 
     // estado
     /*
@@ -43,30 +44,28 @@ class Entrada extends EntradaDB
      - Archivado (Ya no sale en las listas de la oficina)
      - Enviado cr (Cuando se han enviado los bypass)
      */
-    const ESTADO_INGRESADO = 1;
-    const ESTADO_ADMITIDO = 2;
-    const ESTADO_ASIGNADO = 3;
-    const ESTADO_ACEPTADO = 4;
+    public const ESTADO_INGRESADO = 1;
+    public const ESTADO_ADMITIDO = 2;
+    public const ESTADO_ASIGNADO = 3;
+    public const ESTADO_ACEPTADO = 4;
     //const ESTADO_OFICINAS           = 5;
-    const ESTADO_ARCHIVADO = 6;
-    const ESTADO_ENVIADO_CR = 10;
+    public const ESTADO_ARCHIVADO = 6;
+    public const ESTADO_ENVIADO_CR = 10;
 
     /* PROPIEDADES -------------------------------------------------------------- */
 
-    protected $df_doc;
-    protected $convert;
-    protected $itipo_doc;
+    protected DateTimeLocal|null $df_doc;
+    protected bool $convert;
+    protected int $itipo_doc;
 
-    protected $nombre_escrito;
+    protected string $nombre_escrito;
 
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
-    public function __construct(?int $iid_entrada = null)
-    {
-        parent::__construct($iid_entrada);
-    }
-
-    public function cabeceraIzquierda()
+    /**
+     * @throws JsonException
+     */
+    public function cabeceraIzquierda(): string
     {
         // sigla +(visibilidad) + ref
         $oVisibilidad = new Visibilidad();
@@ -113,10 +112,12 @@ class Entrada extends EntradaDB
         return $destinos_txt;
     }
 
-    public function cabeceraDerecha()
+    /**
+     * @throws JsonException
+     */
+    public function cabeceraDerecha(): string
     {
         // origen + ref
-        $id_org = '';
         $json_prot_origen = $this->getJson_prot_origen();
         if (!empty((array)$json_prot_origen)) {
             $id_org = $json_prot_origen->id_lugar;
@@ -152,8 +153,9 @@ class Entrada extends EntradaDB
      * tener en cuenta los permisos...
      *
      * return string
+     * @throws JsonException
      */
-    public function getAsuntoDetalle()
+    public function getAsuntoDetalle(): string
     {
         //
         $txt_grupos = '';
@@ -171,7 +173,7 @@ class Entrada extends EntradaDB
         return $asunto_detelle;
     }
 
-    public function cabeceraDistribucion_cr()
+    public function cabeceraDistribucion_cr(): string
     {
         // a ver si ya está
         $gesEntradasBypass = new GestorEntradaBypass();
@@ -213,8 +215,9 @@ class Entrada extends EntradaDB
      * Recupera l'atribut sasunto de Entrada teniendo en cuenta los permisos
      *
      * @return string sasunto
+     * @throws JsonException
      */
-    function getAsunto()
+    public function getAsunto(): string
     {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this, 'asunto');
@@ -235,8 +238,9 @@ class Entrada extends EntradaDB
      * Recupera l'atribut sdetalle de Entrada teniendo en cuenta los permisos
      *
      * @return string sdetalle
+     * @throws JsonException
      */
-    function getDetalle()
+    public function getDetalle(): string
     {
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this, 'detalle');
@@ -253,7 +257,7 @@ class Entrada extends EntradaDB
      * {@inheritDoc}
      * @see \entradas\model\entity\EntradaDB::DBGuardar()
      */
-    public function DBCargar($que = NULL)
+    public function DBCargar($que = NULL): bool
     {
         // El objeto padre:
         if (parent::DBCargar($que) === FALSE) {
@@ -261,7 +265,7 @@ class Entrada extends EntradaDB
         }
         // El tipo y fecha documento:
         if (!empty($this->iid_entrada)) {
-            if (!empty($this->getId_entrada_compartida())) {
+            if ($this->getId_entrada_compartida() !== null) {
                 $oEntradaCompartida = new EntradaCompartida($this->iid_entrada_compartida);
                 $oFdoc = $oEntradaCompartida->getF_documento();
                 $this->df_doc = $oFdoc;
@@ -279,11 +283,12 @@ class Entrada extends EntradaDB
      * de EntradaDocDB, o si es una entrada compartida de 'EntradaCompartida'
      *
      * @return DateTimeLocal|NullDateTimeLocal df_doc
+     * @throws JsonException
      */
     public function getF_documento(): DateTimeLocal|NullDateTimeLocal
     {
         if (!isset($this->df_doc) && !empty($this->iid_entrada)) {
-            if (!empty($this->getId_entrada_compartida())) {
+            if ($this->getId_entrada_compartida() !== null) {
                 $oEntradaCompartida = new EntradaCompartida($this->iid_entrada_compartida);
                 $oFdoc = $oEntradaCompartida->getF_documento();
                 $this->df_doc = $oFdoc;
@@ -303,16 +308,16 @@ class Entrada extends EntradaDB
      * Si df_doc es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_entrada debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param DateTimeLocal|string df_doc='' optional.
-     * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
+     * @param string|DateTimeLocal $df_doc='' optional.
+     * @param boolean $convert TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
-    public function setF_documento($df_doc = '', $convert = TRUE)
+    public function setF_documento(DateTimeLocal|string $df_doc = '', bool $convert = TRUE): void
     {
         $this->convert = $convert;
         $this->df_doc = $df_doc;
     }
 
-    public function getTipo_documento()
+    public function getTipo_documento(): int
     {
         if (!isset($this->itipo_doc) && !empty($this->iid_entrada)) {
             $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
@@ -321,7 +326,7 @@ class Entrada extends EntradaDB
         return $this->itipo_doc;
     }
 
-    public function setTipo_documento($itipo_doc)
+    public function setTipo_documento($itipo_doc): void
     {
         $this->itipo_doc = $itipo_doc;
     }
@@ -336,8 +341,9 @@ class Entrada extends EntradaDB
      *
      * @param string $parentesi si existe se añade al nombre, entre parentesis
      * @return string
+     * @throws JsonException
      */
-    public function getNombreEscrito($parentesi = ''): string
+    public function getNombreEscrito(string $parentesi = ''): string
     {
         $json_prot_local = $this->getJson_prot_origen();
         // nombre del archivo
@@ -367,7 +373,7 @@ class Entrada extends EntradaDB
         return str_replace(array(' ', '/'), '_', $string);
     }
 
-    public function getEtiquetasVisiblesArray($id_cargo = '')
+    public function getEtiquetasVisiblesArray($id_cargo = ''): array
     {
         $cEtiquetas = $this->getEtiquetasVisibles($id_cargo);
         $a_etiquetas = [];
@@ -402,7 +408,7 @@ class Entrada extends EntradaDB
         return $cEtiquetas;
     }
 
-    public function getEtiquetasVisiblesTxt($id_cargo = '')
+    public function getEtiquetasVisiblesTxt($id_cargo = ''): string
     {
         $cEtiquetas = $this->getEtiquetasVisibles($id_cargo);
         $str_etiquetas = '';
@@ -413,7 +419,7 @@ class Entrada extends EntradaDB
         return $str_etiquetas;
     }
 
-    public function getEtiquetas()
+    public function getEtiquetas(): array
     {
         $gesEtiquetasEntrada = new GestorEtiquetaEntrada();
         $aWhere = ['id_entrada' => $this->iid_entrada];
@@ -427,7 +433,7 @@ class Entrada extends EntradaDB
         return $cEtiquetas;
     }
 
-    public function setEtiquetas($aEtiquetas)
+    public function setEtiquetas($aEtiquetas): void
     {
         $this->delEtiquetas();
         $a_filter_etiquetas = array_filter($aEtiquetas); // Quita los elementos vacíos y nulos.
@@ -448,17 +454,19 @@ class Entrada extends EntradaDB
      * {@inheritDoc}
      * @see \entradas\model\entity\EntradaDB::DBGuardar()
      */
-    public function DBGuardar()
+    public function DBGuardar(): bool
     {
         // El tipo y fecha documento: (excepto si es nuevo)
         if (!empty($this->iid_entrada)) {
             $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
             $oEntradaDocDB->setF_doc($this->df_doc, TRUE);
             $oEntradaDocDB->setTipo_doc($this->itipo_doc);
-            $oEntradaDocDB->DBGuardar();
+            if ($oEntradaDocDB->DBGuardar() === FALSE) {
+                return FALSE;
+            }
         }
         // El objeto padre:
-        parent::DBGuardar();
+        return parent::DBGuardar();
     }
 
 

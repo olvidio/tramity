@@ -4,7 +4,7 @@ namespace core;
 
 use DateTimeInterface;
 use Exception;
-use web;
+use web\DateTimeLocal;
 
 /**
  * @author dani
@@ -41,7 +41,7 @@ class PgTimestamp
     {
         $data = trim($this->data);
         if ($data !== '') {
-            $oFecha = new web\DateTimeLocal($data);
+            $oFecha = new DateTimeLocal($data);
         } else {
             $oFecha = null;
         }
@@ -66,11 +66,11 @@ class PgTimestamp
                     $matches = [];
                     $string = $this->data;
 
-                    $local_format = web\DateTimeLocal::getFormat('-', $type);
+                    $local_format = DateTimeLocal::getFormat('-', $type);
                     $format_E = 'j-n-Y H:i:sP';
                     $format_US = 'n-j-Y H:i:sP';
                     $pattern = '/^([0-9]{1,2})[-\/]([0-9]{1,2})[-\/]([0-9]{2,4})[T\s]([0-9]{2}):([0-9]{2}):*([0-9]{2}\.*[0-9]*){0,1}([+|-]([01][0-9]|[2][0-3])[:]*([0-5][0-9])*){0,1}$/';
-                    if ($local_format == $format_E) {
+                    if ($local_format === $format_E) {
                         preg_match($pattern, $string, $matches);
                         //list($full_str,$d,$m,$y,$h,$min,$s,$zone_full,$zone_h,$zone_m)=$matches;
                         // hay que evitar los errores 'Undefined offset'
@@ -84,7 +84,7 @@ class PgTimestamp
                         $zone_h = empty($matches[8]) ? '' : $matches[8];
                         $zond_m = empty($matches[9]) ? '' : $matches[9];
                     }
-                    if ($local_format == $format_US) {
+                    if ($local_format === $format_US) {
                         preg_match($pattern, $string, $matches);
                         //list($full_str,$d,$m,$y,$h,$min,$s,$zone_full,$zone_h,$zone_m)=$matches;
                         // hay que evitar los errores 'Undefined offset'
@@ -129,8 +129,8 @@ class PgTimestamp
      * Ensure a DateTime instance.
      *
      * @param mixed $data
-     * @return $data web\DateTimeLocal
-     * @throws object \Exception
+     * @return DateTimeInterface|false|mixed|DateTimeLocal $data
+     * @throws Exception
      */
     protected function checkData($data)
     {
@@ -139,10 +139,10 @@ class PgTimestamp
                 switch ($this->type) {
                     case 'timestamp':
                     case 'timestamptz':
-                        $data = new web\DateTimeLocal($data);
+                        $data = new DateTimeLocal($data);
                         break;
                     default:
-                        $data = web\DateTimeLocal::createFromLocal($data, $this->type);
+                        $data = DateTimeLocal::createFromLocal($data, $this->type);
                 }
             } catch (Exception $e) {
                 throw new Exception(
