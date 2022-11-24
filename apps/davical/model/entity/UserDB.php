@@ -389,7 +389,7 @@ class UserDB extends core\ClasePropiedades
     function setEmail_ok($demail_ok = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($demail_ok)) {
-            $oConverter = new core\Converter('timestamptz', $demail_ok);
+            $oConverter = new core\ConverterDate('timestamptz', $demail_ok);
             $this->demail_ok = $oConverter->toPg();
         } else {
             $this->demail_ok = $demail_ok;
@@ -406,7 +406,7 @@ class UserDB extends core\ClasePropiedades
     function setJoined($djoined = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($djoined)) {
-            $oConverter = new core\Converter('timestamptz', $djoined);
+            $oConverter = new core\ConverterDate('timestamptz', $djoined);
             $this->djoined = $oConverter->toPg();
         } else {
             $this->djoined = $djoined;
@@ -423,7 +423,7 @@ class UserDB extends core\ClasePropiedades
     function setUpdated($dupdated = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($dupdated)) {
-            $oConverter = new core\Converter('timestamptz', $dupdated);
+            $oConverter = new core\ConverterDate('timestamptz', $dupdated);
             $this->dupdated = $oConverter->toPg();
         } else {
             $this->dupdated = $dupdated;
@@ -440,7 +440,7 @@ class UserDB extends core\ClasePropiedades
     function setLast_used($dlast_used = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($dlast_used)) {
-            $oConverter = new core\Converter('timestamptz', $dlast_used);
+            $oConverter = new core\ConverterDate('timestamptz', $dlast_used);
             $this->dlast_used = $oConverter->toPg();
         } else {
             $this->dlast_used = $dlast_used;
@@ -593,7 +593,7 @@ class UserDB extends core\ClasePropiedades
         if (empty($this->demail_ok)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamptz', $this->demail_ok);
+        $oConverter = new core\ConverterDate('timestamptz', $this->demail_ok);
         return $oConverter->fromPg();
     }
 
@@ -610,7 +610,7 @@ class UserDB extends core\ClasePropiedades
         if (empty($this->djoined)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamptz', $this->djoined);
+        $oConverter = new core\ConverterDate('timestamptz', $this->djoined);
         return $oConverter->fromPg();
     }
 
@@ -627,7 +627,7 @@ class UserDB extends core\ClasePropiedades
         if (empty($this->dupdated)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamptz', $this->dupdated);
+        $oConverter = new core\ConverterDate('timestamptz', $this->dupdated);
         return $oConverter->fromPg();
     }
 
@@ -644,7 +644,7 @@ class UserDB extends core\ClasePropiedades
         if (empty($this->dlast_used)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamptz', $this->dlast_used);
+        $oConverter = new core\ConverterDate('timestamptz', $this->dlast_used);
         return $oConverter->fromPg();
     }
 

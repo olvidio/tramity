@@ -611,7 +611,7 @@ class EscritoDB extends core\ClasePropiedades
     function setF_aprobacion($df_aprobacion = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_aprobacion)) {
-            $oConverter = new core\Converter('date', $df_aprobacion);
+            $oConverter = new core\ConverterDate('date', $df_aprobacion);
             $this->df_aprobacion = $oConverter->toPg();
         } else {
             $this->df_aprobacion = $df_aprobacion;
@@ -628,7 +628,7 @@ class EscritoDB extends core\ClasePropiedades
     function setF_escrito($df_escrito = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_escrito)) {
-            $oConverter = new core\Converter('date', $df_escrito);
+            $oConverter = new core\ConverterDate('date', $df_escrito);
             $this->df_escrito = $oConverter->toPg();
         } else {
             $this->df_escrito = $df_escrito;
@@ -645,7 +645,7 @@ class EscritoDB extends core\ClasePropiedades
     function setF_contestar($df_contestar = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_contestar)) {
-            $oConverter = new core\Converter('date', $df_contestar);
+            $oConverter = new core\ConverterDate('date', $df_contestar);
             $this->df_contestar = $oConverter->toPg();
         } else {
             $this->df_contestar = $df_contestar;
@@ -703,7 +703,7 @@ class EscritoDB extends core\ClasePropiedades
     function setF_salida($df_salida = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_salida)) {
-            $oConverter = new core\Converter('date', $df_salida);
+            $oConverter = new core\ConverterDate('date', $df_salida);
             $this->df_salida = $oConverter->toPg();
         } else {
             $this->df_salida = $df_salida;
@@ -1039,7 +1039,7 @@ class EscritoDB extends core\ClasePropiedades
         if (empty($this->df_aprobacion)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_aprobacion);
+        $oConverter = new core\ConverterDate('date', $this->df_aprobacion);
         return $oConverter->fromPg();
     }
 
@@ -1056,7 +1056,7 @@ class EscritoDB extends core\ClasePropiedades
         if (empty($this->df_escrito)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_escrito);
+        $oConverter = new core\ConverterDate('date', $this->df_escrito);
         return $oConverter->fromPg();
     }
 
@@ -1073,7 +1073,7 @@ class EscritoDB extends core\ClasePropiedades
         if (empty($this->df_contestar)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_contestar);
+        $oConverter = new core\ConverterDate('date', $this->df_contestar);
         return $oConverter->fromPg();
     }
 
@@ -1155,7 +1155,7 @@ class EscritoDB extends core\ClasePropiedades
         if (empty($this->df_salida)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_salida);
+        $oConverter = new core\ConverterDate('date', $this->df_salida);
         return $oConverter->fromPg();
     }
 

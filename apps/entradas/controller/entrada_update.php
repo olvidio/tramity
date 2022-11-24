@@ -249,7 +249,7 @@ switch ($Q_que) {
         $Qa_prot_mas_destinos = (array)filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
         // Si esta marcado como grupo de destinos, o destinos individuales.
-        if (core\is_true($Q_grupo_dst)) {
+        if (is_true($Q_grupo_dst)) {
             $descripcion = '';
             $gesGrupo = new GestorGrupo();
             $a_grupos = $gesGrupo->getArrayGrupos();
@@ -573,7 +573,7 @@ switch ($Q_que) {
                 $Qa_prot_mas_destinos = (array)filter_input(INPUT_POST, 'prot_mas_destinos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
                 // Si esta marcado como grupo de destinos, o destinos individuales.
-                if (core\is_true($Q_grupo_dst)) {
+                if (is_true($Q_grupo_dst)) {
                     $descripcion = '';
                     $gesGrupo = new GestorGrupo();
                     $a_grupos = $gesGrupo->getArrayGrupos();

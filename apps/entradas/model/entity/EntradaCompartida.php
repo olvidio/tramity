@@ -384,7 +384,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function setF_documento($df_documento = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_documento)) {
-            $oConverter = new core\Converter('date', $df_documento);
+            $oConverter = new core\ConverterDate('date', $df_documento);
             $this->df_documento = $oConverter->toPg();
         } else {
             $this->df_documento = $df_documento;
@@ -419,7 +419,7 @@ class EntradaCompartida extends core\ClasePropiedades
     function setF_entrada($df_entrada = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_entrada)) {
-            $oConverter = new core\Converter('date', $df_entrada);
+            $oConverter = new core\ConverterDate('date', $df_entrada);
             $this->df_entrada = $oConverter->toPg();
         } else {
             $this->df_entrada = $df_entrada;
@@ -528,7 +528,7 @@ class EntradaCompartida extends core\ClasePropiedades
             $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_origen, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {
@@ -605,7 +605,7 @@ class EntradaCompartida extends core\ClasePropiedades
             $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_destino, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {
@@ -669,7 +669,7 @@ class EntradaCompartida extends core\ClasePropiedades
             $this->DBCargar();
         }
         $oJSON = json_decode($this->json_prot_ref, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {
@@ -801,7 +801,7 @@ class EntradaCompartida extends core\ClasePropiedades
         if (empty($this->df_documento)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_documento);
+        $oConverter = new core\ConverterDate('date', $this->df_documento);
         return $oConverter->fromPg();
     }
 
@@ -844,7 +844,7 @@ class EntradaCompartida extends core\ClasePropiedades
         if (empty($this->df_entrada)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_entrada);
+        $oConverter = new core\ConverterDate('date', $this->df_entrada);
         return $oConverter->fromPg();
     }
 

@@ -517,7 +517,7 @@ class ExpedienteDB extends ClasePropiedades
     function setF_contestar($df_contestar = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_contestar)) {
-            $oConverter = new core\Converter('date', $df_contestar);
+            $oConverter = new core\ConverterDate('date', $df_contestar);
             $this->df_contestar = $oConverter->toPg();
         } else {
             $this->df_contestar = $df_contestar;
@@ -542,7 +542,7 @@ class ExpedienteDB extends ClasePropiedades
     function setF_ini_circulacion($df_ini_circulacion = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_ini_circulacion)) {
-            $oConverter = new core\Converter('date', $df_ini_circulacion);
+            $oConverter = new core\ConverterDate('date', $df_ini_circulacion);
             $this->df_ini_circulacion = $oConverter->toPg();
         } else {
             $this->df_ini_circulacion = $df_ini_circulacion;
@@ -559,7 +559,7 @@ class ExpedienteDB extends ClasePropiedades
     function setF_reunion($df_reunion = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_reunion)) {
-            $oConverter = new core\Converter('timestamp', $df_reunion);
+            $oConverter = new core\ConverterDate('timestamp', $df_reunion);
             $this->df_reunion = $oConverter->toPg();
         } else {
             $this->df_reunion = $df_reunion;
@@ -576,7 +576,7 @@ class ExpedienteDB extends ClasePropiedades
     function setF_aprobacion($df_aprobacion = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_aprobacion)) {
-            $oConverter = new core\Converter('date', $df_aprobacion);
+            $oConverter = new core\ConverterDate('date', $df_aprobacion);
             $this->df_aprobacion = $oConverter->toPg();
         } else {
             $this->df_aprobacion = $df_aprobacion;
@@ -859,7 +859,7 @@ class ExpedienteDB extends ClasePropiedades
         if (empty($this->df_contestar)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_contestar);
+        $oConverter = new core\ConverterDate('date', $this->df_contestar);
         return $oConverter->fromPg();
     }
 
@@ -889,7 +889,7 @@ class ExpedienteDB extends ClasePropiedades
         if (empty($this->df_ini_circulacion)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_ini_circulacion);
+        $oConverter = new core\ConverterDate('date', $this->df_ini_circulacion);
         return $oConverter->fromPg();
     }
 
@@ -906,7 +906,7 @@ class ExpedienteDB extends ClasePropiedades
         if (empty($this->df_reunion)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_reunion);
+        $oConverter = new core\ConverterDate('date', $this->df_reunion);
         return $oConverter->fromPg();
     }
 
@@ -923,7 +923,7 @@ class ExpedienteDB extends ClasePropiedades
         if (empty($this->df_aprobacion)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_aprobacion);
+        $oConverter = new core\ConverterDate('date', $this->df_aprobacion);
         return $oConverter->fromPg();
     }
 

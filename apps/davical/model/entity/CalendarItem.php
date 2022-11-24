@@ -537,7 +537,7 @@ class CalendarItem extends core\ClasePropiedades
     function setCreated($dcreated = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($dcreated)) {
-            $oConverter = new core\Converter('timestamp', $dcreated);
+            $oConverter = new core\ConverterDate('timestamp', $dcreated);
             $this->dcreated = $oConverter->toPg();
         } else {
             $this->dcreated = $dcreated;
@@ -554,7 +554,7 @@ class CalendarItem extends core\ClasePropiedades
     function setLast_modified($dlast_modified = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($dlast_modified)) {
-            $oConverter = new core\Converter('timestamp', $dlast_modified);
+            $oConverter = new core\ConverterDate('timestamp', $dlast_modified);
             $this->dlast_modified = $oConverter->toPg();
         } else {
             $this->dlast_modified = $dlast_modified;
@@ -571,7 +571,7 @@ class CalendarItem extends core\ClasePropiedades
     function setDtstamp($ddtstamp = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($ddtstamp)) {
-            $oConverter = new core\Converter('timestamp', $ddtstamp);
+            $oConverter = new core\ConverterDate('timestamp', $ddtstamp);
             $this->ddtstamp = $oConverter->toPg();
         } else {
             $this->ddtstamp = $ddtstamp;
@@ -588,7 +588,7 @@ class CalendarItem extends core\ClasePropiedades
     function setDtstart($ddtstart = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($ddtstart)) {
-            $oConverter = new core\Converter('timestamptz', $ddtstart);
+            $oConverter = new core\ConverterDate('timestamptz', $ddtstart);
             $this->ddtstart = $oConverter->toPg();
         } else {
             $this->ddtstart = $ddtstart;
@@ -605,7 +605,7 @@ class CalendarItem extends core\ClasePropiedades
     function setDtend($ddtend = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($ddtend)) {
-            $oConverter = new core\Converter('timestamptz', $ddtend);
+            $oConverter = new core\ConverterDate('timestamptz', $ddtend);
             $this->ddtend = $oConverter->toPg();
         } else {
             $this->ddtend = $ddtend;
@@ -622,7 +622,7 @@ class CalendarItem extends core\ClasePropiedades
     function setDue($ddue = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($ddue)) {
-            $oConverter = new core\Converter('timestamptz', $ddue);
+            $oConverter = new core\ConverterDate('timestamptz', $ddue);
             $this->ddue = $oConverter->toPg();
         } else {
             $this->ddue = $ddue;
@@ -727,7 +727,7 @@ class CalendarItem extends core\ClasePropiedades
     function setCompleted($dcompleted = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($dcompleted)) {
-            $oConverter = new core\Converter('timestamptz', $dcompleted);
+            $oConverter = new core\ConverterDate('timestamptz', $dcompleted);
             $this->dcompleted = $oConverter->toPg();
         } else {
             $this->dcompleted = $dcompleted;
@@ -760,7 +760,7 @@ class CalendarItem extends core\ClasePropiedades
     function setFirst_instance_start($dfirst_instance_start = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($dfirst_instance_start)) {
-            $oConverter = new core\Converter('timestamptz', $dfirst_instance_start);
+            $oConverter = new core\ConverterDate('timestamptz', $dfirst_instance_start);
             $this->dfirst_instance_start = $oConverter->toPg();
         } else {
             $this->dfirst_instance_start = $dfirst_instance_start;
@@ -777,7 +777,7 @@ class CalendarItem extends core\ClasePropiedades
     function setLast_instance_end($dlast_instance_end = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($dlast_instance_end)) {
-            $oConverter = new core\Converter('timestamptz', $dlast_instance_end);
+            $oConverter = new core\ConverterDate('timestamptz', $dlast_instance_end);
             $this->dlast_instance_end = $oConverter->toPg();
         } else {
             $this->dlast_instance_end = $dlast_instance_end;
@@ -895,7 +895,7 @@ class CalendarItem extends core\ClasePropiedades
         if (empty($this->dcreated)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamp', $this->dcreated);
+        $oConverter = new core\ConverterDate('timestamp', $this->dcreated);
         return $oConverter->fromPg();
     }
 
@@ -912,7 +912,7 @@ class CalendarItem extends core\ClasePropiedades
         if (empty($this->dlast_modified)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamp', $this->dlast_modified);
+        $oConverter = new core\ConverterDate('timestamp', $this->dlast_modified);
         return $oConverter->fromPg();
     }
 
@@ -929,7 +929,7 @@ class CalendarItem extends core\ClasePropiedades
         if (empty($this->ddtstamp)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamp', $this->ddtstamp);
+        $oConverter = new core\ConverterDate('timestamp', $this->ddtstamp);
         return $oConverter->fromPg();
     }
 
@@ -946,7 +946,7 @@ class CalendarItem extends core\ClasePropiedades
         if (empty($this->ddtstart)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamptz', $this->ddtstart);
+        $oConverter = new core\ConverterDate('timestamptz', $this->ddtstart);
         return $oConverter->fromPg();
     }
 
@@ -963,7 +963,7 @@ class CalendarItem extends core\ClasePropiedades
         if (empty($this->ddtend)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamptz', $this->ddtend);
+        $oConverter = new core\ConverterDate('timestamptz', $this->ddtend);
         return $oConverter->fromPg();
     }
 
@@ -980,7 +980,7 @@ class CalendarItem extends core\ClasePropiedades
         if (empty($this->ddue)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamptz', $this->ddue);
+        $oConverter = new core\ConverterDate('timestamptz', $this->ddue);
         return $oConverter->fromPg();
     }
 
@@ -1140,7 +1140,7 @@ class CalendarItem extends core\ClasePropiedades
         if (empty($this->dcompleted)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamptz', $this->dcompleted);
+        $oConverter = new core\ConverterDate('timestamptz', $this->dcompleted);
         return $oConverter->fromPg();
     }
 
@@ -1183,7 +1183,7 @@ class CalendarItem extends core\ClasePropiedades
         if (empty($this->dfirst_instance_start)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamptz', $this->dfirst_instance_start);
+        $oConverter = new core\ConverterDate('timestamptz', $this->dfirst_instance_start);
         return $oConverter->fromPg();
     }
 
@@ -1200,7 +1200,7 @@ class CalendarItem extends core\ClasePropiedades
         if (empty($this->dlast_instance_end)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamptz', $this->dlast_instance_end);
+        $oConverter = new core\ConverterDate('timestamptz', $this->dlast_instance_end);
         return $oConverter->fromPg();
     }
 

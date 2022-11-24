@@ -1,7 +1,7 @@
 <?php
 
 use busquedas\model\ImprimirTabla;
-use core\Converter;
+use core\ConverterDate;
 use entradas\model\GestorEntrada;
 use escritos\model\GestorEscrito;
 
@@ -26,13 +26,13 @@ $Q_f_min = (string)filter_input(INPUT_POST, 'f_min');
 $Q_f_max = (string)filter_input(INPUT_POST, 'f_max');
 
 
-$oConverter = new Converter('date', $Q_f_min);
+$oConverter = new ConverterDate('date', $Q_f_min);
 $f_min = $oConverter->toPg();
 if (empty($Q_f_max)) {
     $oHoy = new web\DateTimeLocal();
     $f_max = $oHoy->format("Y-m-d");
 } else {
-    $oConverter = new Converter('date', $Q_f_max);
+    $oConverter = new ConverterDate('date', $Q_f_max);
     $f_max = $oConverter->toPg(); //iso
 }
 

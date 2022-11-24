@@ -3,7 +3,7 @@
 namespace entradas\model\entity;
 
 use core\ClasePropiedades;
-use core\Converter;
+use core\ConverterDate;
 use core\DatosCampo;
 use core\Set;
 use PDO;
@@ -264,7 +264,7 @@ class EntradaDocDB extends ClasePropiedades
     /**
      * @param ?integer $itipo_doc optional
      */
-    public function setTipo_doc(int $itipo_doc = null)
+    public function setTipo_doc(?int $itipo_doc = null)
     {
         $this->itipo_doc = $itipo_doc;
     }
@@ -279,7 +279,7 @@ class EntradaDocDB extends ClasePropiedades
     function setF_doc($df_doc = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_doc)) {
-            $oConverter = new Converter('date', $df_doc);
+            $oConverter = new ConverterDate('date', $df_doc);
             $this->df_doc = $oConverter->toPg();
         } else {
             $this->df_doc = $df_doc;
@@ -364,9 +364,9 @@ class EntradaDocDB extends ClasePropiedades
     /**
      * Recupera l'atribut itipo_doc de EntradaDocDB
      *
-     * @return integer itipo_doc
+     * @return integer|null  $itipo_doc
      */
-    function getTipo_doc()
+    public function getTipo_doc(): ?int
     {
         if (!isset($this->itipo_doc) && !$this->bLoaded) {
             $this->DBCargar();
@@ -387,7 +387,7 @@ class EntradaDocDB extends ClasePropiedades
         if (empty($this->df_doc)) {
             return new NullDateTimeLocal();
         }
-        return (new Converter('date', $this->df_doc))->fromPg();
+        return (new ConverterDate('date', $this->df_doc))->fromPg();
     }
 
     /**

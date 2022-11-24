@@ -28,7 +28,7 @@ require_once("apps/core/global_object.inc");
 $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
-if ($Q_filtro == 'en_buscar' && empty($Q_id_entrada)) {
+if ($Q_filtro === 'en_buscar' && empty($Q_id_entrada)) {
     $Q_a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
     $Q_id_entrada = $Q_a_sel[0];
@@ -115,7 +115,7 @@ if ($estado >= Entrada::ESTADO_ADMITIDO) {
     $badmitido = 'f';
     $comprobar_f_entrada = FALSE;
 }
-if ($Q_filtro == 'en_admitido') {
+if ($Q_filtro === 'en_admitido') {
     $badmitido = 't';
 } else {
     $oDesplAdmitido->setDisabled(TRUE);
@@ -127,11 +127,17 @@ $a_posibles_grupos = $gesGrupo->getArrayGrupos();
 
 if (!empty($Q_id_entrada)) {
     $json_prot_origen = $oEntrada->getJson_prot_origen();
-    $oProtOrigen->setLugar($json_prot_origen->id_lugar);
-    $oProtOrigen->setProt_num($json_prot_origen->num);
-    $oProtOrigen->setProt_any($json_prot_origen->any);
-    $oProtOrigen->setMas($json_prot_origen->mas);
-
+    if (empty((array)$json_prot_origen)) {
+        $oProtOrigen->setLugar(null);
+        $oProtOrigen->setProt_num(null);
+        $oProtOrigen->setProt_any(null);
+        $oProtOrigen->setMas(null);
+    } else {
+        $oProtOrigen->setLugar($json_prot_origen->id_lugar);
+        $oProtOrigen->setProt_num($json_prot_origen->num);
+        $oProtOrigen->setProt_any($json_prot_origen->any);
+        $oProtOrigen->setMas($json_prot_origen->mas);
+    }
     $json_prot_ref = $oEntrada->getJson_prot_ref();
 
     $oArrayProtRef = new web\ProtocoloArray($json_prot_ref, $a_posibles_lugares, 'referencias');
@@ -280,7 +286,7 @@ switch ($Q_filtro) {
 
 $url_update = 'apps/entradas/controller/entrada_update.php';
 $pagina_nueva = web\Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query(['filtro' => $Q_filtro]));
-if ($Q_filtro == 'en_buscar') {
+if ($Q_filtro === 'en_buscar') {
     $a_condicion = [];
     $str_condicion = (string)filter_input(INPUT_POST, 'condicion');
     parse_str($str_condicion, $a_condicion);
@@ -294,7 +300,7 @@ if ($Q_filtro == 'en_buscar') {
 // datepicker
 $oFecha = new DateTimeLocal();
 $format = $oFecha::getFormat();
-$yearStart = date('Y');
+$yearStart = (int)date('Y');
 $yearEnd = $yearStart + 2;
 
 $a_campos = [

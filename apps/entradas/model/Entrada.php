@@ -317,7 +317,7 @@ class Entrada extends EntradaDB
         $this->df_doc = $df_doc;
     }
 
-    public function getTipo_documento(): int
+    public function getTipo_documento(): ?int
     {
         if (!isset($this->itipo_doc) && !empty($this->iid_entrada)) {
             $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);

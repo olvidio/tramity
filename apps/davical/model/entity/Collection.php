@@ -516,7 +516,7 @@ class Collection extends core\ClasePropiedades
     function setCreated($dcreated = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($dcreated)) {
-            $oConverter = new core\Converter('timestamptz', $dcreated);
+            $oConverter = new core\ConverterDate('timestamptz', $dcreated);
             $this->dcreated = $oConverter->toPg();
         } else {
             $this->dcreated = $dcreated;
@@ -533,7 +533,7 @@ class Collection extends core\ClasePropiedades
     function setModified($dmodified = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($dmodified)) {
-            $oConverter = new core\Converter('timestamptz', $dmodified);
+            $oConverter = new core\ConverterDate('timestamptz', $dmodified);
             $this->dmodified = $oConverter->toPg();
         } else {
             $this->dmodified = $dmodified;
@@ -754,7 +754,7 @@ class Collection extends core\ClasePropiedades
         if (empty($this->dcreated)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamptz', $this->dcreated);
+        $oConverter = new core\ConverterDate('timestamptz', $this->dcreated);
         return $oConverter->fromPg();
     }
 
@@ -771,7 +771,7 @@ class Collection extends core\ClasePropiedades
         if (empty($this->dmodified)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('timestamptz', $this->dmodified);
+        $oConverter = new core\ConverterDate('timestamptz', $this->dmodified);
         return $oConverter->fromPg();
     }
 

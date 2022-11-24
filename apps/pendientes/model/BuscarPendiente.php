@@ -4,7 +4,7 @@ namespace pendientes\model;
 
 
 use core\ConfigGlobal;
-use core\Converter;
+use core\ConverterDate;
 use davical\model\Davical;
 use davical\model\entity\GestorCalendarItem;
 use usuarios\model\entity\Cargo;
@@ -154,7 +154,7 @@ class BuscarPendiente
         if (empty($this->df_min)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new Converter('date', $this->df_min);
+        $oConverter = new ConverterDate('date', $this->df_min);
         return $oConverter->fromPg();
     }
 
@@ -171,7 +171,7 @@ class BuscarPendiente
         if (empty($this->df_max)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new Converter('date', $this->df_max);
+        $oConverter = new ConverterDate('date', $this->df_max);
         return $oConverter->fromPg();
     }
 
@@ -246,7 +246,7 @@ class BuscarPendiente
     function setF_min($df_min = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_min)) {
-            $oConverter = new Converter('date', $df_min);
+            $oConverter = new ConverterDate('date', $df_min);
             $this->df_min = $oConverter->toPg();
         } else {
             $this->df_min = $df_min;
@@ -263,7 +263,7 @@ class BuscarPendiente
     function setF_max($df_max = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_max)) {
-            $oConverter = new Converter('date', $df_max);
+            $oConverter = new ConverterDate('date', $df_max);
             $this->df_max = $oConverter->toPg();
         } else {
             $this->df_max = $df_max;

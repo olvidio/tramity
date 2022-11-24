@@ -21,32 +21,32 @@ class EntradaLista
      *
      * @var string
      */
-    private $filtro;
+    private string $filtro;
     /**
      *
      * @var integer
      */
-    private $id_entrada;
+    private int $id_entrada;
     /**
      *
      * @var array
      */
-    private $aWhere;
+    private array $aWhere = [];
     /**
      *
      * @var array
      */
-    private $aOperador;
+    private array $aOperador = [];
     /**
      *
      * @var array
      */
-    private $aWhereADD = [];
+    private array $aWhereADD = [];
     /**
      *
      * @var array
      */
-    private $aOperadorADD = [];
+    private array $aOperadorADD = [];
 
     /*
      * filtros posibles: 
@@ -60,7 +60,7 @@ class EntradaLista
     'pendientes'
     */
 
-    public function mostrarTabla()
+    public function mostrarTabla(): void
     {
         $this->setCondicion();
         $pagina_nueva = '';
@@ -140,10 +140,10 @@ class EntradaLista
                     'filtro' => $filtro,
                     'slide_mode' => $this->slide_mode,
                 ];
-                if ($filtro == 'en_aceptado') {
+                if ($filtro === 'en_aceptado') {
                     $a_cosas['oficina'] = $oficina;
                 }
-                if ($filtro == 'en_encargado') {
+                if ($filtro === 'en_encargado') {
                     $a_cosas['encargado'] = $encargado;
                 }
 
@@ -205,10 +205,10 @@ class EntradaLista
         $a_cosas = ['filtro' => $filtro,
             'slide_mode' => $this->slide_mode,
         ];
-        if ($filtro == 'en_aceptado') {
+        if ($filtro === 'en_aceptado') {
             $a_cosas['oficina'] = $oficina;
         }
-        if ($filtro == 'en_encargado') {
+        if ($filtro === 'en_encargado') {
             $a_cosas['encargado'] = $encargado;
         }
         $pagina_cancel = Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($a_cosas));
@@ -218,7 +218,7 @@ class EntradaLista
         $txt_btn_dock = '';
         $btn_dock = FALSE;
         $secretaria = FALSE;
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && $this->filtro == 'en_aceptado') {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && $this->filtro === 'en_aceptado') {
             $btn_dock = TRUE;
             if (ConfigGlobal::soy_dtor()) {
                 $secretaria = TRUE;
@@ -236,12 +236,12 @@ class EntradaLista
             $txt_btn_new = _("procesar");
             $btn_dock = TRUE;
         }
-        if ($this->filtro == 'bypass') {
+        if ($this->filtro === 'bypass') {
             $btn_new = FALSE;
         }
 
         $ver_accion = FALSE;
-        if ($this->filtro == 'en_aceptado' || $this->filtro == 'en_encargado') {
+        if ($this->filtro === 'en_aceptado' || $this->filtro === 'en_encargado') {
             $ver_accion = TRUE;
         }
 
@@ -281,7 +281,7 @@ class EntradaLista
             $id_entrada = empty($row['id_entrada']) ? '' : $row['id_entrada'];
             include('apps/entradas/controller/entrada_ver_slide.php');
         } else {
-            return $oView->renderizar('entrada_lista.html.twig', $a_campos);
+            $oView->renderizar('entrada_lista.html.twig', $a_campos);
         }
     }
 
@@ -351,7 +351,7 @@ class EntradaLista
                     }
 
                 } else {
-                    if ($oficina == 'propia') {
+                    if ($oficina === 'propia') {
                         $id_oficina = ConfigGlobal::role_id_oficina();
 
                         // No marcado como visto:
@@ -367,7 +367,7 @@ class EntradaLista
 
                 //////// las oficina implicadas //////////////////////////////
                 $a_entradas_resto = [];
-                if ($oficina == 'resto') {
+                if ($oficina === 'resto') {
                     $id_oficina_role = ConfigGlobal::role_id_oficina();
                     if (!empty($id_oficina_role)) {
                         $id_oficina = ConfigGlobal::role_id_oficina();
@@ -419,17 +419,17 @@ class EntradaLista
     }
 
     /**
-     * @return number
+     * @return integer
      */
-    public function getId_entrada()
+    public function getId_entrada(): int
     {
         return $this->id_entrada;
     }
 
     /**
-     * @param number $id_entrada
+     * @param integer $id_entrada
      */
-    public function setId_entrada($id_entrada)
+    public function setId_entrada(int $id_entrada): void
     {
         $this->id_entrada = $id_entrada;
     }
@@ -437,7 +437,7 @@ class EntradaLista
     /**
      * @return string
      */
-    public function getFiltro()
+    public function getFiltro(): string
     {
         return $this->filtro;
     }
@@ -445,12 +445,12 @@ class EntradaLista
     /**
      * @param string $filtro
      */
-    public function setFiltro($filtro)
+    public function setFiltro(string $filtro): void
     {
         $this->filtro = $filtro;
     }
 
-    public function getNumero()
+    public function getNumero(): int|string
     {
         $this->setCondicion();
         if (!empty($this->aWhere)) {
@@ -474,7 +474,7 @@ class EntradaLista
     /**
      * @return array
      */
-    public function getAWhereADD()
+    public function getAWhereADD(): array
     {
         return $this->aWhereADD;
     }
@@ -482,7 +482,7 @@ class EntradaLista
     /**
      * @param array $aWhereADD
      */
-    public function setAWhereADD($aWhereADD)
+    public function setAWhereADD(array $aWhereADD): void
     {
         $this->aWhereADD = $aWhereADD;
     }
@@ -490,7 +490,7 @@ class EntradaLista
     /**
      * @return array
      */
-    public function getAOperadorADD()
+    public function getAOperadorADD(): array
     {
         return $this->aOperadorADD;
     }
@@ -498,10 +498,9 @@ class EntradaLista
     /**
      * @param array $aOperadorADD
      */
-    public function setAOperadorADD($aOperadorADD)
+    public function setAOperadorADD(array $aOperadorADD): void
     {
         $this->aOperadorADD = $aOperadorADD;
     }
-
 
 }

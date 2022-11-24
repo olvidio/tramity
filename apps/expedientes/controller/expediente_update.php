@@ -701,7 +701,7 @@ switch ($Q_que) {
                 'entradilla' => $Q_entradilla,
             ];
             if (!empty($Q_f_contestar)) {
-                $oConverter = new core\Converter('date', $Q_f_contestar);
+                $oConverter = new core\ConverterDate('date', $Q_f_contestar);
                 $f_contestar_iso = $oConverter->toPg();
                 $aWhere['f_contestar'] = $f_contestar_iso;
             }

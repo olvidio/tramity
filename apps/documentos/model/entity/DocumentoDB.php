@@ -3,7 +3,7 @@
 namespace documentos\model\entity;
 
 use core;
-use core\Converter;
+use core\ConverterDate;
 use core\DatosCampo;
 use PDO;
 use PDOException;
@@ -419,7 +419,7 @@ class DocumentoDB extends core\ClasePropiedades
     public function setF_upload(DateTimeLocal|string $df_upload = '', bool $convert = TRUE): void
     {
         if ($convert === TRUE && !empty($df_upload)) {
-            $oConverter = new core\Converter('date', $df_upload);
+            $oConverter = new core\ConverterDate('date', $df_upload);
             $this->df_upload = $oConverter->toPg();
         } else {
             $this->df_upload = $df_upload;
@@ -578,7 +578,7 @@ class DocumentoDB extends core\ClasePropiedades
         if (empty($this->df_upload)) {
             return new NullDateTimeLocal();
         }
-        return (new Converter('date', $this->df_upload))->fromPg();
+        return (new ConverterDate('date', $this->df_upload))->fromPg();
     }
 
     /**

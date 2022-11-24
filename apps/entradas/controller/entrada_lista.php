@@ -1,5 +1,6 @@
 <?php
 
+
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\EntradaLista;
@@ -28,7 +29,7 @@ $oTabla->setSlide_mode($Q_slide_mode);
 
 $msg = '';
 // añadir dialogo de búsquedas
-if ($Q_filtro == 'en_aceptado') {
+if ($Q_filtro === 'en_aceptado') {
     $Q_oficina = (string)filter_input(INPUT_POST, 'oficina');
     // por defecto:
     if (empty($Q_oficina)) {
@@ -37,8 +38,8 @@ if ($Q_filtro == 'en_aceptado') {
 
     // para los ctr no hace falta
     if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
-        $chk_of_propia = ($Q_oficina == 'propia') ? 'checked' : '';
-        $chk_of_resto = ($Q_oficina == 'resto') ? 'checked' : '';
+        $chk_of_propia = ($Q_oficina === 'propia') ? 'checked' : '';
+        $chk_of_resto = ($Q_oficina === 'resto') ? 'checked' : '';
 
         $a_campos = [
             'filtro' => $Q_filtro,
@@ -57,7 +58,7 @@ if ($Q_filtro == 'en_aceptado') {
     $oTabla->setAOperadorADD($aOperadorADD);
 }
 
-if ($Q_filtro == 'en_encargado') {
+if ($Q_filtro === 'en_encargado') {
     $Q_encargado = (string)filter_input(INPUT_POST, 'encargado');
     // por defecto:
     if (empty($Q_encargado)) {

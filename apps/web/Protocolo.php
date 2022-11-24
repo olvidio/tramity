@@ -24,27 +24,27 @@ class Protocolo
 
     /**
      * id del lugar
-     * @var integer
+     * @var integer|null
      */
-    protected $ilugar;
+    protected  $ilugar;
     /**
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $iprot_num;
+    protected  $iprot_num;
     /**
      * Debe ser un string para permitir "00", "01" etc.
-     * @var string
+     * @var string|null
      */
-    protected $sprot_any;
+    protected ?string $sprot_any;
     /**
      *
-     * @var string
+     * @var string|null
      */
-    protected $sprot_mas;
+    protected  $sprot_mas;
 
     /* CONSTRUCTOR ------------------------------ */
-    function __construct($ilugar = '', $iprot_num = '', $iprot_any = '', $sprot_mas = '')
+    function __construct($ilugar = null, $iprot_num = null, $iprot_any = '', $sprot_mas = '')
     {
         if (isset($ilugar) && $ilugar !== '') {
             $this->ilugar = $ilugar;
@@ -85,7 +85,7 @@ class Protocolo
         $oProt = new stdClass;
         $oProt->id_lugar = (int)$this->ilugar;
         $oProt->num = (int)$this->iprot_num;
-        $oProt->any = (string)$this->sprot_any;
+        $oProt->any = $this->sprot_any;
         $oProt->mas = (string)$this->sprot_mas;
 
         return $oProt;
@@ -201,7 +201,7 @@ class Protocolo
         }
 
         $clasname = get_class($this);
-        if ($clasname == 'web\Protocolo') {
+        if ($clasname === 'web\Protocolo') {
             $sHtml .= "<div class=\"col-10\">";
         }
         $sHtml .= "<div class=\"row\" id=\"$id_row\">";
@@ -229,7 +229,7 @@ class Protocolo
                     </div>";
 
         $sHtml .= '</div>';
-        if ($clasname == 'web\Protocolo') {
+        if ($clasname === 'web\Protocolo') {
             $sHtml .= '</div>';
         }
 

@@ -441,7 +441,7 @@ class PendienteDB extends core\ClasePropiedades
     function setF_acabado($df_acabado = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_acabado)) {
-            $oConverter = new core\Converter('date', $df_acabado);
+            $oConverter = new core\ConverterDate('date', $df_acabado);
             $this->df_acabado = $oConverter->toPg();
         } else {
             $this->df_acabado = $df_acabado;
@@ -458,7 +458,7 @@ class PendienteDB extends core\ClasePropiedades
     function setF_plazo($df_plazo = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_plazo)) {
-            $oConverter = new core\Converter('date', $df_plazo);
+            $oConverter = new core\ConverterDate('date', $df_plazo);
             $this->df_plazo = $oConverter->toPg();
         } else {
             $this->df_plazo = $df_plazo;
@@ -563,7 +563,7 @@ class PendienteDB extends core\ClasePropiedades
     function setF_inicio($df_inicio = '', $convert = TRUE)
     {
         if ($convert === TRUE && !empty($df_inicio)) {
-            $oConverter = new core\Converter('date', $df_inicio);
+            $oConverter = new core\ConverterDate('date', $df_inicio);
             $this->df_inicio = $oConverter->toPg();
         } else {
             $this->df_inicio = $df_inicio;
@@ -673,7 +673,7 @@ class PendienteDB extends core\ClasePropiedades
         if (empty($this->df_acabado)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_acabado);
+        $oConverter = new core\ConverterDate('date', $this->df_acabado);
         return $oConverter->fromPg();
     }
 
@@ -690,7 +690,7 @@ class PendienteDB extends core\ClasePropiedades
         if (empty($this->df_plazo)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_plazo);
+        $oConverter = new core\ConverterDate('date', $this->df_plazo);
         return $oConverter->fromPg();
     }
 
@@ -850,7 +850,7 @@ class PendienteDB extends core\ClasePropiedades
         if (empty($this->df_inicio)) {
             return new web\NullDateTimeLocal();
         }
-        $oConverter = new core\Converter('date', $this->df_inicio);
+        $oConverter = new core\ConverterDate('date', $this->df_inicio);
         return $oConverter->fromPg();
     }
 

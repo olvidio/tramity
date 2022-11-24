@@ -5,7 +5,7 @@ namespace pendientes\model;
 // Archivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
 
-use core\Converter;
+use core\ConverterDate;
 use davical\model\CalDAVClient;
 use entradas\model\GestorEntrada;
 use iCalComponent;
@@ -533,7 +533,7 @@ class Pendiente
         if (empty($this->f_acabado)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new Converter('date', $this->f_acabado);
+        $oConverter = new ConverterDate('date', $this->f_acabado);
         return $oConverter->fromPg();
     }
 
@@ -556,7 +556,7 @@ class Pendiente
         if (empty($this->f_plazo)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new Converter('date', $this->f_plazo);
+        $oConverter = new ConverterDate('date', $this->f_plazo);
         return $oConverter->fromPg();
     }
 
@@ -729,7 +729,7 @@ class Pendiente
         if (empty($this->f_inicio)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new Converter('date', $this->f_inicio);
+        $oConverter = new ConverterDate('date', $this->f_inicio);
         return $oConverter->fromPg();
     }
 
@@ -752,7 +752,7 @@ class Pendiente
         if (empty($this->f_end)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new Converter('date', $this->f_end);
+        $oConverter = new ConverterDate('date', $this->f_end);
         return $oConverter->fromPg();
     }
 
@@ -792,12 +792,12 @@ class Pendiente
         $cal = new CalDAVClient($base_url, $cargo, $pass);
 
         if (!empty($f_acabado)) {
-            $oConverter = new Converter('date', $f_acabado);
+            $oConverter = new ConverterDate('date', $f_acabado);
             $f_cal_acabado = $oConverter->toCal();
         }
 
         if (!empty($f_end)) {
-            $oConverter = new Converter('date', $f_end);
+            $oConverter = new ConverterDate('date', $f_end);
             $f_cal_end = $oConverter->toCal();
         }
 
@@ -811,11 +811,11 @@ class Pendiente
         }
 
         if (!empty($f_inicio)) {
-            $oConverter = new Converter('date', $f_inicio);
+            $oConverter = new ConverterDate('date', $f_inicio);
             $f_cal_inicio = $oConverter->toCal();
         }
         if (!empty($f_plazo)) {
-            $oConverter = new Converter('date', $f_plazo);
+            $oConverter = new ConverterDate('date', $f_plazo);
             $f_cal_plazo = $oConverter->toCal();
         }
 
@@ -1124,7 +1124,7 @@ class Pendiente
         $etag = $todo[0]['etag'];
 
         if (!empty($f_acabado)) {
-            $oConverter = new Converter('date', $f_acabado);
+            $oConverter = new ConverterDate('date', $f_acabado);
             $f_cal_acabado = $oConverter->toCal();
         }
 
@@ -1138,15 +1138,15 @@ class Pendiente
         }
 
         if (!empty($f_inicio)) {
-            $oConverter = new Converter('date', $f_inicio);
+            $oConverter = new ConverterDate('date', $f_inicio);
             $f_cal_inicio = $oConverter->toCal();
         }
         if (!empty($f_end)) {
-            $oConverter = new Converter('date', $f_end);
+            $oConverter = new ConverterDate('date', $f_end);
             $f_cal_end = $oConverter->toCal();
         }
         if (!empty($f_plazo)) {
-            $oConverter = new Converter('date', $f_plazo);
+            $oConverter = new ConverterDate('date', $f_plazo);
             $f_cal_plazo = $oConverter->toCal();
         }
         $args['SUMMARY'] = "$asunto";
@@ -1520,7 +1520,7 @@ class Pendiente
         $exdates_csv = '';
         // pasar a formato ISO
         foreach ($a_filter_exdates as $f_local) {
-            $oConverter = new Converter('date', $f_local);
+            $oConverter = new ConverterDate('date', $f_local);
             $f_iso = $oConverter->toPg();
             $exdates_csv .= empty($exdates_csv) ? '' : ',';
             $exdates_csv .= $f_iso;
@@ -1539,7 +1539,7 @@ class Pendiente
         if (empty($this->f_recur)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new Converter('date', $this->f_recur);
+        $oConverter = new ConverterDate('date', $this->f_recur);
         return $oConverter->fromPg();
     }
 

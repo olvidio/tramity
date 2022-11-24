@@ -2,7 +2,7 @@
 
 namespace busquedas\model;
 
-use core\Converter;
+use core\ConverterDate;
 use DateInterval;
 use entradas\model\entity\GestorEntradaBypass;
 use entradas\model\entity\GestorEntradaCompartida;
@@ -195,7 +195,6 @@ class Buscar
                     $aCollections['entradas'] = $cEntradas;
                 }
                 return $aCollections;
-                break;
             case 'any':
                 // por año
                 // En los centros, no busco en entradas, sino en entradas_compartidas y
@@ -233,7 +232,6 @@ class Buscar
                     $aCollections['entradas'] = $cEntradas;
                 }
                 return $aCollections;
-                break;
             case 'lst_todos':
                 // En los centros, no busco en entradas, sino en entradas_compartidas y
                 // veo si el centro está en los destinos.
@@ -256,7 +254,6 @@ class Buscar
                     $aCollections['entradas_compartidas'] = $cEntradas;
                 }
                 return $aCollections;
-                break;
             case 'oficina':
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';
@@ -273,7 +270,6 @@ class Buscar
                 $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen, $aWhereEntrada, $aOperadorEntrada);
                 $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
-                break;
             case 8: // por etiquetas
                 $gesEtiquetasEntrada = new GestorEtiquetaEntrada();
                 $a_Id_entradas = $gesEtiquetasEntrada->getArrayEntradas($this->a_etiquetas, $this->andOr);
@@ -286,7 +282,6 @@ class Buscar
                 $aCollections['entradas'] = $cEntradas;
 
                 return $aCollections;
-                break;
             case 71: // un protocolo concreto también en ref:
 
                 $aProt_ref = ['id_lugar' => $this->id_lugar,
@@ -499,7 +494,7 @@ class Buscar
     function setF_min($df_min = '', $convert = true)
     {
         if ($convert === true && !empty($df_min)) {
-            $oConverter = new Converter('date', $df_min);
+            $oConverter = new ConverterDate('date', $df_min);
             $this->df_min = $oConverter->toPg();
         } else {
             $this->df_min = $df_min;
@@ -621,8 +616,7 @@ class Buscar
         if (empty($this->df_min)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new Converter('date', $this->df_min);
-        return $oConverter->fromPg();
+        return (new ConverterDate('date', $this->df_min))->fromPg();
     }
 
     /**
@@ -635,8 +629,7 @@ class Buscar
         if (empty($this->df_max)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new Converter('date', $this->df_max);
-        return $oConverter->fromPg();
+        return (new ConverterDate('date', $this->df_max))->fromPg();
     }
 
     private function buscarEntradas()
@@ -788,7 +781,6 @@ class Buscar
             // Quien envía el escrito (entradas)
             if (!empty($this->origen_id_lugar)) {
                 exit("Función no implementada!!!");
-                $cEntradasPonente = $gesEntradas->getEntradasByLugarDB($this->origen_id_lugar, $aWhere, $aOperador);
             } else {
                 $cEntradasPonente = $gesEntradas->getEntradasBypass($aWhere, $aOperador);
             }
@@ -946,7 +938,7 @@ class Buscar
     function setF_max($df_max = '', $convert = true)
     {
         if ($convert === true && !empty($df_max)) {
-            $oConverter = new Converter('date', $df_max);
+            $oConverter = new ConverterDate('date', $df_max);
             $this->df_max = $oConverter->toPg();
         } else {
             $this->df_max = $df_max;

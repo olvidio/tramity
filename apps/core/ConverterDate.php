@@ -14,7 +14,7 @@ namespace core;
  * @see       ConverterInterface
  */
 
-class Converter
+class ConverterDate
 {
 
     var $Converter;

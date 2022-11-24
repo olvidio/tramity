@@ -2,7 +2,8 @@
 
 namespace entradas\model\entity;
 
-use core\Converter;
+use core\ConverterDate;
+use core\ConverterJson;
 use core\DatosCampo;
 use core\Set;
 use entradas\model\Entrada;
@@ -63,13 +64,13 @@ class EntradaBypass extends Entrada
      *
      * @var string|null
      */
-    private ?string $json_prot_destino;
+    private ?string $json_prot_destino = null;
     /**
      * Id_grupos de EntradaBypass
      *
      * @var string|null
      */
-    private ?string $a_id_grupos;
+    private ?string $a_id_grupos = null;
 
     /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
@@ -77,13 +78,13 @@ class EntradaBypass extends Entrada
      *
      * @var string|null
      */
-    private ?string $a_destinos;
+    private ?string $a_destinos = null;
     /**
      * F_salida de EntradaBypass
      *
      * @var string|null
      */
-    private ?string $df_salida;
+    private ?string $df_salida = null;
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
@@ -94,7 +95,7 @@ class EntradaBypass extends Entrada
      * @param integer|null $iid_entrada
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct(?int $iid_entrada = null)
+    public function __construct(?int $iid_entrada = null)
     {
         parent::__construct($iid_entrada);
         $this->setNomTabla('entradas_bypass');
@@ -262,11 +263,11 @@ class EntradaBypass extends Entrada
     }
 
     /**
-     * @param string|null $a_id_grupos
+     * @param array|string|null $a_id_grupos
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
      */
-    public function setId_grupos(?string $a_id_grupos = null, bool $db = FALSE): void
+    public function setId_grupos(array|string $a_id_grupos = null, bool $db = FALSE): void
     {
         if ($db === FALSE) {
             $postgresArray = array_php2pg($a_id_grupos);
@@ -301,45 +302,10 @@ class EntradaBypass extends Entrada
     public function setF_salida(DateTimeLocal|string $df_salida = '', bool $convert = TRUE): void
     {
         if ($convert === TRUE && !empty($df_salida)) {
-            $oConverter = new Converter('date', $df_salida);
+            $oConverter = new ConverterDate('date', $df_salida);
             $this->df_salida = $oConverter->toPg();
         } else {
             $this->df_salida = $df_salida;
-        }
-    }
-
-    
-    /**
-     * Recupera las claus primàries de EntradaBypass en un array
-     *
-     * @return array aPrimary_key
-     */
-    function getPrimary_key(): array
-    {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('id_entrada' => $this->iid_entrada);
-        }
-        return $this->aPrimary_key;
-    }
-
-    /**
-     * Estableix las claus primàries de EntradaBypass en un array
-     *
-     */
-    public function setPrimary_key($a_id = null): void
-    {
-        if (is_array($a_id)) {
-            $this->aPrimary_key = $a_id;
-            foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id === 'id_entrada') && $val_id !== '') {
-                    $this->iid_entrada = (int)$val_id;
-                }
-            }
-        } else {
-            if (isset($a_id) && $a_id !== '') {
-                $this->iid_entrada = (int)$a_id;
-                $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
-            }
         }
     }
 
@@ -369,7 +335,7 @@ class EntradaBypass extends Entrada
         if (empty($this->df_salida)) {
             return new NullDateTimeLocal();
         }
-        return (new Converter('date', $this->df_salida))->fromPg();
+        return (new ConverterDate('date', $this->df_salida))->fromPg();
     }
 
     public function getDestinosByPass(): array
@@ -412,9 +378,9 @@ class EntradaBypass extends Entrada
     /**
      * Recupera l'atribut a_id_grupos de EntradaBypass
      *
-     * @return array $a_id_grupos
+     * @return array|null $a_id_grupos
      */
-    public function getId_grupos(): array
+    public function getId_grupos(): ?array
     {
         if (!isset($this->a_id_grupos) && !$this->bLoaded) {
             $this->DBCargar();
@@ -507,43 +473,31 @@ class EntradaBypass extends Entrada
         return TRUE;
     }
 
-    /**
+     /**
      * Recupera l'atribut json_prot_destino de EntradaBypass
      *
      * @param boolean $bArray si hay que devolver un array en vez de un objeto.
-     * @return stdClass $json_prot_destino
+     * @return array|stdClass|null $oJSON json_prot_destino
+     * @throws JsonException
      */
-    public function getJson_prot_destino($bArray = FALSE): array|stdClass
+    public function getJson_prot_destino(bool $bArray = FALSE): array|stdClass|null
     {
         if (!isset($this->json_prot_destino) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_prot_destino, $bArray);
-        if (empty($oJSON) || $oJSON === '[]') {
-            if ($bArray) {
-                $oJSON = [];
-            } else {
-                $oJSON = new stdClass;
-            }
-        }
-        //$this->json_prot_destino = $oJSON;
-        return $oJSON;
+
+        return (new ConverterJson($this->json_prot_destino, $bArray))->fromPg();
     }
 
     /**
-     * @param string|null $oJSON json_prot_destino
+     * @param string|array|null $oJSON json_prot_destino (los arrays del postgres som como strings)
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
      * @throws JsonException
      */
-    public function setJson_prot_destino(?string $oJSON, bool $db = FALSE): void
+    public function setJson_prot_destino(string|array|null $oJSON, bool $db = FALSE): void
     {
-        if ($db === FALSE) {
-            $json = json_encode($oJSON, JSON_THROW_ON_ERROR);
-        } else {
-            $json = $oJSON;
-        }
-        $this->json_prot_destino = $json;
+        $this->json_prot_ref = (new ConverterJson($oJSON, FALSE))->toPg($db);
     }
 
     /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
