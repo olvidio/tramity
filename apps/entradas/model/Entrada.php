@@ -54,9 +54,9 @@ class Entrada extends EntradaDB
 
     /* PROPIEDADES -------------------------------------------------------------- */
 
-    protected string|DateTimeLocal|NullDateTimeLocal $df_doc;
-    protected bool $convert;
-    protected ?int $itipo_doc;
+    protected string|DateTimeLocal|NullDateTimeLocal|null $df_doc = null;
+    protected bool $convert = FALSE;
+    protected ?int $itipo_doc = null;
 
     protected string $nombre_escrito;
 
