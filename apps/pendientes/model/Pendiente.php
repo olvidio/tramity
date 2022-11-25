@@ -271,6 +271,7 @@ class Pendiente
         $aDades['exdates'] = $vcalendar->GetPropertiesByPath('/VCALENDAR/VTODO/EXDATE');
 
         $this->setAllAtributes($aDades);
+        return TRUE;
     }
 
     public function getTodoByUid(): array
@@ -363,9 +364,11 @@ class Pendiente
         if (!is_array($aDades)) {
             return;
         }
+        /*
         if (array_key_exists('id_pendiente', $aDades)) {
             $this->setId_pendiente($aDades['id_pendiente']);
         }
+        */
         if (array_key_exists('asunto', $aDades)) {
             $this->setAsunto($aDades['asunto']);
         }
@@ -456,7 +459,7 @@ class Pendiente
         $aDades['oficinas'] = $oPendienteDB->getOficinas();
         $aDades['rrule'] = $oPendienteDB->getRrule();
         $aDades['f_inicio'] = $oPendienteDB->getF_inicio();
-        $aDades['f_end'] = $oPendienteDB->getF_end();
+        //??$aDades['f_end'] = $oPendienteDB->getF_end();
 
         $aDades['id_reg'] = $id_reg;
 
@@ -826,10 +829,10 @@ class Pendiente
             if (($pos_ini = strpos($id_reg, 'REN')) !== FALSE && $pos_ini == 0) { //  Registro entradas
                 $uid = "$id_reg-$ahora";
             } else {
-                if ($this->calendario == 'registro') {
+                if ($this->calendario === 'registro') {
                     $uid = "R$id_reg-$ahora";
                 }
-                if ($this->calendario == 'oficina') {
+                if ($this->calendario === 'oficina') {
                     $uid = "OF$id_reg-$ahora";
                 }
             }
@@ -975,10 +978,10 @@ class Pendiente
         foreach ($arr as $value) {
             $out = [];
             if (preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#", $value, $out)) {
-                $reponse_code = intval($out[1]);
+                $reponse_code = (int)$out[1];
             }
-            if (false !== ($matches = explode(':', $value, 2))) {
-                $headers["$matches[0]"] = trim($matches[1]);
+            if (($matches = explode(':', $value, 2))) {
+                $headers[(string)$matches[0]] = !empty($matches[1])? trim($matches[1]) : '';
             }
         }
 
@@ -986,7 +989,7 @@ class Pendiente
         //HTTP/1.1 401 Unauthorized
         if ($reponse_code == 401) {
             $aRespuesta['success'] = FALSE;
-            $aRespuesta['mensaje'] = $response_headers;
+            $aRespuesta['mensaje'] = $headers;
         } else {
             $aRespuesta['success'] = TRUE;
             $aRespuesta['mensaje'] = 'ok';
@@ -1027,7 +1030,7 @@ class Pendiente
                 // me aseguro que no está repetida
                 $repe = 0;
                 // si hay más de uno separados por coma
-                $a_fechas = preg_split('/,/', $exdates_csv);
+                $a_fechas = explode(",", $exdates_csv);
                 foreach ($a_fechas as $f_ex) {
                     $oF_exception = new DateTimeLocal($f_ex);
                     if ($oF_recurrente == $oF_exception) $repe = 1;
@@ -1151,7 +1154,7 @@ class Pendiente
         }
         $args['SUMMARY'] = "$asunto";
         $args['STATUS'] = "$status";
-        if ($status == "COMPLETED") {
+        if ($status === "COMPLETED") {
             $args['STATUS'] = "COMPLETED";
             $args['COMPLETED'] = $f_cal_acabado;
         }
@@ -1291,7 +1294,7 @@ class Pendiente
                 $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_switch);
         }
-        if ($que != "eliminar") {
+        if ($que !== "eliminar") {
             $vcalendar->SetComponents($icalComp); // OJO, le paso el array de objetos.
             $icalendar = $vcalendar->Render();
             $cal->DoPUTRequest($base_url . $nom_fichero, $icalendar, $etag);
