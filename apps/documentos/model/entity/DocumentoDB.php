@@ -73,7 +73,7 @@ class DocumentoDB extends core\ClasePropiedades
      *
      * @var string|null
      */
-    protected ?string $snom;
+    protected ?string $snom = null;
     /**
      * Nom de Documento
      *
@@ -85,32 +85,32 @@ class DocumentoDB extends core\ClasePropiedades
      *
      * @var integer|null
      */
-    protected ?int $icreador;
+    protected ?int $icreador = null;
     /**
      * Visibilidad de Documento
      *
      * @var integer|null
      */
-    protected ?int $ivisibilidad;
+    protected ?int $ivisibilidad =null;
     /**
      * Tipo_doc de Documento
      *
      * @var integer|null
      */
-    protected ?int $itipo_doc;
+    protected ?int $itipo_doc = null;
     /**
      * F_upload de Documento
      *
      * @var string|null
      */
-    protected ?string $df_upload;
+    protected ?string $df_upload = null;
     /**
      * Documento de Documento
      *
      * @var string|null bytea
      *
      */
-    protected ?string $documento;
+    protected ?string $documento = null;
     /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
      * oDbl de Documento
