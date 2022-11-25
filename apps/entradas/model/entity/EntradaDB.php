@@ -616,12 +616,12 @@ class EntradaDB extends ClasePropiedades
     }
 
     /**
-     * @param string|stdClass|null $oJSON json_visto (los arrays del postgres som como strings)
+     * @param string|array|null $oJSON json_visto (los arrays del postgres som como strings)
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
      * @throws JsonException
      */
-    public function setJson_visto(string|stdClass|null $oJSON, bool $db = FALSE): void
+    public function setJson_visto(string|array|null $oJSON, bool $db = FALSE): void
     {
         $this->json_visto = (new ConverterJson($oJSON, FALSE))->toPg($db);
     }

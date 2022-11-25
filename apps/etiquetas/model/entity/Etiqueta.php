@@ -97,24 +97,15 @@ class Etiqueta extends core\ClasePropiedades
      * Si només necessita un valor, se li pot passar un integer.
      * En general se li passa un array amb les claus primàries.
      *
-     * @param integer|array iid_etiqueta
+     * @param integer|null iid_etiqueta
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
-    function __construct($a_id = null)
+    function __construct($iid_etiqueta = null)
     {
         $oDbl = $GLOBALS['oDBT'];
-        if (is_array($a_id)) {
-            $this->aPrimary_key = $a_id;
-            foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id === 'id_etiqueta') && $val_id !== '') {
-                    $this->iid_etiqueta = (int)$val_id;
-                }
-            }
-        } else {
-            if (isset($a_id) && $a_id !== '') {
-                $this->iid_etiqueta = (int)$a_id;
-                $this->aPrimary_key = array('iid_etiqueta' => $this->iid_etiqueta);
-            }
+        if ($iid_etiqueta !== NULL || $iid_etiqueta === 0) {
+            $this->iid_etiqueta = $iid_etiqueta;
+            $this->aPrimary_key = array('iid_etiqueta' => $this->iid_etiqueta);
         }
         $this->setoDbl($oDbl);
         $this->setNomTabla('etiquetas');

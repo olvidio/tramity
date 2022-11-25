@@ -50,10 +50,7 @@ switch ($Q_que) {
         }
 
         $oEtiqueta = new Etiqueta($Q_id_etiqueta);
-        if ($oEtiqueta->DBCargar() === FALSE ){
-            $err_cargar = sprintf(_("OJO! no existe la etiqueta en %s, linea %s"), __FILE__, __LINE__);
-            exit ($err_cargar);
-        }
+        $oEtiqueta->DBCargar();
         $oEtiqueta->setNom_etiqueta($Q_nom_etiqueta);
         $oEtiqueta->setOficina($oficina);
         $oEtiqueta->setId_cargo($id_cargo);

@@ -108,28 +108,28 @@ $ATRIBUTOS = '
 	 *
 	 * @var array
 	 */
-	 private $aPrimary_key;
+	 private array $aPrimary_key;
 
 	/**
 	 * aDades de ' . $clase . '
 	 *
 	 * @var array
 	 */
-	 private $aDades;
+	 private array $aDades;
 
 	/**
 	 * bLoaded de ' . $clase . '
 	 *
 	 * @var boolean
 	 */
-	 private $bLoaded = FALSE;
+	 private bool $bLoaded = FALSE;
 
 	/**
 	 * Id_schema de ' . $clase . '
 	 *
 	 * @var integer
 	 */
-	 private $iid_schema;
+	 private int $iid_schema;
 ';
 $add_convert = FALSE;
 $add_JSON = FALSE;
@@ -156,7 +156,7 @@ foreach ($oDbl->query($sql) as $row) {
     }
     $NomCamp = ucwords($nomcamp);
     $tipo = $row['type'];
-    $not_null = $row['notnull'];
+    $null = ($row['notnull'] === 'f')? 'null' : '';
 
     $sql_get_default = "SELECT pg_get_expr(adbin, adrelid) AS rowdefault
 				FROM pg_catalog.pg_attrdef d,
@@ -199,7 +199,7 @@ foreach ($oDbl->query($sql) as $row) {
         case 'int8':
         case 'int4':
         case 'int2':
-            $tipo_db = 'integer';
+            $tipo_db = 'int';
             $tip = 'i';
             $tip_val = '';
             break;
@@ -219,7 +219,7 @@ foreach ($oDbl->query($sql) as $row) {
         case 'date':
         case 'timestamp':
         case 'timestamptz';
-            $tipo_db = 'web\\DateTimeLocal';
+            $tipo_db = 'DateTimeLocal';
             $tip = 'd';
             $tip_val = '';
             break;
@@ -235,18 +235,27 @@ foreach ($oDbl->query($sql) as $row) {
             break;
         case 'json':
         case 'jsonb':
-            $tipo_db = 'object JSON';
+            $tipo_db = 'stdClass';
             $tip = '';
             $tip_val = '';
             break;
+    }
+    if (empty($null)) {
+        $tipo_db_txt = $tipo_db."|null";
+        $tip_txt = "?".$tipo_db;
+        $val_default = ' = null';
+    } else {
+        $tipo_db_txt = $tipo_db;
+        $tip_txt = $tipo_db;
+        $val_default = '';
     }
     $ATRIBUTOS .= '
 	/**
 	 * ' . $NomCamp . ' de ' . $clase . '
 	 *
-	 * @var ' . $tipo_db . '
+	 * @var ' . $tipo_db_txt .'
 	 */
-	 private $' . $tip . $nomcamp . ';';
+	 private ' . $tip_txt. ' $' . $nomcamp . $val_default . ';';
 
     switch ($tipo) {
         case '_int8':
@@ -254,11 +263,11 @@ foreach ($oDbl->query($sql) as $row) {
         case '_int2':
             $gets .= '
 	/**
-	 * Recupera l\'atribut ' . $tip . $nomcamp . ' de ' . $clase . '
 	 *
-	 * @return ' . $tipo_db . ' ' . $tip . $nomcamp . '
+	 * @return ' . $tipo_db_txt . ' ' . $tip . '$'.$nomcamp . '
 	 */
-	function get' . $NomCamp . '() {
+	public function get' . $NomCamp . '(): '.$tipo_db_txt.'
+	{
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
 			$this->DBCargar();
 		}
@@ -269,12 +278,12 @@ foreach ($oDbl->query($sql) as $row) {
         case 'jsonb':
             $gets .= '
 	/**
-	 * Recupera l\'atribut ' . $tip . $nomcamp . ' de ' . $clase . '
 	 *
 	 * @param boolean $bArray si hay que devolver un array en vez de un objeto.
-	 * @return ' . $tipo_db . ' ' . $tip . $nomcamp . '
+	 * @return ' . $tipo_db_txt . ' ' . $tip . $nomcamp . '
 	 */
-	function get' . $NomCamp . '($bArray=FALSE) {
+	public function get' . $NomCamp . '($bArray=FALSE): '.$tipo_db_txt.'
+	{
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
 			$this->DBCargar();
 		}
@@ -294,11 +303,10 @@ foreach ($oDbl->query($sql) as $row) {
         case 'timestamptz';
             $gets .= '
 	/**
-	 * Recupera l\'atribut ' . $tip . $nomcamp . ' de ' . $clase . '
 	 *
 	 * @return ' . $tipo_db . ' ' . $tip . $nomcamp . '
 	 */
-	function get' . $NomCamp . '() {
+	public function get' . $NomCamp . '() {
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
 			$this->DBCargar();
 		}
@@ -312,11 +320,11 @@ foreach ($oDbl->query($sql) as $row) {
         default:
             $gets .= '
 	/**
-	 * Recupera l\'atribut ' . $tip . $nomcamp . ' de ' . $clase . '
 	 *
-	 * @return ' . $tipo_db . ' ' . $tip . $nomcamp . '
+	 * @return ' . $tipo_db_txt . ' ' . $tip . $nomcamp . '
 	 */
-	function get' . $NomCamp . '() {
+	public function get' . $NomCamp . '(): '.$tip_txt.'
+	{
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
 			$this->DBCargar();
 		}
@@ -328,11 +336,11 @@ foreach ($oDbl->query($sql) as $row) {
         $aClaus2[$nomcamp] = $tip . $nomcamp;
         $gets .= '
 	/**
-	 * estableix el valor de l\'atribut ' . $tip . $nomcamp . ' de ' . $clase . '
 	 *
-	 * @param ' . $tipo_db . ' ' . $tip . $nomcamp . '
+	 * @param ' . $tipo_db_txt . '$'.$nomcamp . '
 	 */
-	function set' . $NomCamp . '($' . $tip . $nomcamp . ') {
+	public function set' . $NomCamp . '('.$tip_txt.' $' . $tip . $nomcamp . '): void
+	{
 		$this->' . $tip . $nomcamp . ' = $' . $tip . $nomcamp . ';
 	}';
     } else {
@@ -348,7 +356,7 @@ foreach ($oDbl->query($sql) as $row) {
      * @param boolean $db=FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
 	 *  o es una variable de php hay que convertirlo.
 	 */
-	function set' . $NomCamp . '($' . $tip . $nomcamp . '=\'' . $tip_val . '\',$db=FALSE) {
+	public function set' . $NomCamp . '($' . $tip . $nomcamp . '=\'' . $tip_val . '\',$db=FALSE) {
         if ($db === FALSE) {
 	        $postgresArray = core\array_php2pg($' . $tip . $nomcamp . ');
 	    } else {
@@ -367,7 +375,7 @@ foreach ($oDbl->query($sql) as $row) {
      * @param boolean $db=FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
 	 *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
 	 */
-	function set' . $NomCamp . '($oJSON,$db=FALSE) {
+	public function set' . $NomCamp . '($oJSON,$db=FALSE) {
         if ($db === FALSE) {
 	        $json = json_encode($oJSON);
 	    } else {
@@ -388,7 +396,7 @@ foreach ($oDbl->query($sql) as $row) {
 	 * @param ' . $tipo_db . '|string ' . $tip . $nomcamp . '=\'' . $tip_val . '\' optional.
      * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
 	 */
-	function set' . $NomCamp . '($' . $tip . $nomcamp . '=\'' . $tip_val . '\',$convert=TRUE) {
+	public function set' . $NomCamp . '($' . $tip . $nomcamp . '=\'' . $tip_val . '\',$convert=TRUE) {
         if ($convert === TRUE  && !empty($' . $tip . $nomcamp . ')) {
             $oConverter = new core\Converter(\'' . $tipo . '\', $' . $tip . $nomcamp . ');
             $this->' . $tip . $nomcamp . ' = $oConverter->toPg();
@@ -404,7 +412,7 @@ foreach ($oDbl->query($sql) as $row) {
 	 *
 	 * @param ' . $tipo_db . ' ' . $tip . $nomcamp . '=\'' . $tip_val . '\' optional
 	 */
-	function set' . $NomCamp . '($' . $tip . $nomcamp . '=\'' . $tip_val . '\') {
+	public function set' . $NomCamp . '( '.$tip_txt.' $' . $tip . $nomcamp . $val_default . '\') {
 		$this->' . $tip . $nomcamp . ' = $' . $tip . $nomcamp . ';
 	}';
 
@@ -412,12 +420,11 @@ foreach ($oDbl->query($sql) as $row) {
 
         $altres_gets .= '
 	/**
-	 * Recupera les propietats de l\'atribut ' . $tip . $nomcamp . ' de ' . $clase . '
-	 * en una clase del tipus DatosCampo
 	 *
-	 * @return core\DatosCampo
+	 * @return DatosCampo
 	 */
-	function getDatos' . $NomCamp . '() {
+	public function getDatos' . $NomCamp . '(): DatosCampo
+	{
 		$nom_tabla = $this->getNomTabla();
 		$oDatosCampo = new core\\DatosCampo(array(\'nom_tabla\'=>$nom_tabla,\'nom_camp\'=>\'' . $nomcamp . '\'));
 		$oDatosCampo->setEtiqueta(_("' . $nomcamp . '"));
@@ -434,18 +441,27 @@ foreach ($oDbl->query($sql) as $row) {
         case 'json':
         case 'jsonb':
             $add_JSON = TRUE;
-            $exists .= "\n\t\t" . 'if (array_key_exists(\'' . $nomcamp . '\',$aDades)) { $this->set' . $NomCamp . '($aDades[\'' . $nomcamp . '\'],TRUE); }';
+            $exists .= "\n\t\t" . 'if (array_key_exists(\'' . $nomcamp . '\',$aDades))';
+            $exists .= "\n\t\t{";
+            $exists .= "\n\t\t\t" . '$this->set' . $NomCamp . '($aDades[\'' . $nomcamp . '\'],TRUE);';
+            $exists .= "\n\t\t{";
             $ToEmpty .= "\n\t\t" . '$this->set' . $NomCamp . '(\'\');';
             break;
         case 'date':
         case 'timestamp':
         case 'timestamptz';
             $add_convert = TRUE;
-            $exists .= "\n\t\t" . 'if (array_key_exists(\'' . $nomcamp . '\',$aDades)) { $this->set' . $NomCamp . '($aDades[\'' . $nomcamp . '\'],$convert); }';
+            $exists .= "\n\t\t" . 'if (array_key_exists(\'' . $nomcamp . '\',$aDades))';
+            $exists .= "\n\t\t{";
+            $exists .= "\n\t\t\t" . '$this->set' . $NomCamp . '($aDades[\'' . $nomcamp . '\'],$convert);';
+            $exists .= "\n\t\t}";
             $ToEmpty .= "\n\t\t" . '$this->set' . $NomCamp . '(\'\');';
             break;
         default:
-            $exists .= "\n\t\t" . 'if (array_key_exists(\'' . $nomcamp . '\',$aDades)) { $this->set' . $NomCamp . '($aDades[\'' . $nomcamp . '\']); }';
+            $exists .= "\n\t\t" . 'if (array_key_exists(\'' . $nomcamp . '\',$aDades))';
+            $exists .= "\n\t\t{";
+            $exists .= "\n\t\t\t" . '$this->set' . $NomCamp . '($aDades[\'' . $nomcamp . '\']);';
+            $exists .= "\n\t\t}";
             $ToEmpty .= "\n\t\t" . '$this->set' . $NomCamp . '(\'\');';
     }
 
@@ -479,7 +495,12 @@ $hoy = $oHoy->getFromLocal();
 
 $txt = "<?php
 namespace $grupo\\model\\entity;
-use core;";
+
+use core\ClasePropiedades;
+use core\DatosCampo;
+use core\Set;
+use PDO;
+use PDOException;";
 
 if ($add_convert === TRUE) {
     $txt .= "\nuse web;";
@@ -495,7 +516,7 @@ $txt .= "
  * @package $aplicacion
  * @subpackage model
  * @author Daniel Serrabou
- * @version 1.0
+ * @version 2.0
  * @created $hoy
  */
 /**
@@ -504,10 +525,10 @@ $txt .= "
  * @package $aplicacion
  * @subpackage model
  * @author Daniel Serrabou
- * @version 1.0
+ * @version 2.0
  * @created $hoy
  */
-class $clase Extends core\ClasePropiedades {
+class $clase Extends ClasePropiedades {
 	/* ATRIBUTOS ----------------------------------------------------------------- */
 ";
 $txt .= $ATRIBUTOS;
@@ -536,38 +557,7 @@ $where = '';
 $claus_isset = '';
 $claus_query = "";
 $claus_getPrimary = "";
-foreach ($aClaus2 as $clau => $nom_clau) {
-    //$nom_clau="i".$clau;
-    if (!empty($claus_txt)) $claus_txt .= ",";
-    $claus_txt .= $nom_clau;
-    if ($i > 0) $claus_txt2 .= ",\n\t\t\t\t\t\t\t";
-    $claus_txt2 .= "'$clau' => " . '$aDades[\'' . $clau . '\']';
-    if ($i > 0) $claus_if .= "\n";
-    switch (substr($nom_clau, 0, 1)) {
-        case 'i':
-            $claus_if .= "\t\t\t\t" . 'if (($nom_id === \'' . $clau . '\') && $val_id !== \'\') { $this->' . $nom_clau . ' = (int)$val_id; }';
-            break;
-        case 's':
-            $claus_if .= "\t\t\t\t" . 'if (($nom_id === \'' . $clau . '\') && $val_id !== \'\') { $this->' . $nom_clau . ' = (string)$val_id; } // evitem SQL injection fent cast a string';
-            break;
-        case 'b':
-            $claus_if .= "\t\t\t\t" . 'if (($nom_id === \'' . $clau . '\') && $val_id !== \'\') { $this->' . $nom_clau . ' = (bool)$val_id; } // evitem SQL injection fent cast a boolean';
-            break;
-    }
-    // si no es auto
-    if (!in_array($clau, $a_auto)) {
-        if (!empty($guardar_if)) $guardar_if .= ", ";
-        $guardar_if .= '$this->' . $nom_clau;
-    }
-    if ($i > 0) $where .= " AND ";
-    $where .= $clau . '=\'$this->' . $nom_clau . '\'';
-    if ($i > 0) $claus_isset .= " && ";
-    $claus_isset .= 'isset($this->' . $nom_clau . ')';
-    $claus_query .= "\n\t\t\t" . '$' . $nom_clau . ' = $aDades[\'' . $clau . '\'];';
-    if (!empty($claus_getPrimary)) $claus_getPrimary .= ",";
-    $claus_getPrimary .= '\'' . $clau . '\' => $this->' . $nom_clau;
-    $i++;
-}
+
 $txt .= '
 	/* CONSTRUCTOR -------------------------------------------------------------- */
 
@@ -575,30 +565,92 @@ $txt .= '
 	 * Constructor de la classe.
 	 * Si només necessita un valor, se li pot passar un integer.
 	 * En general se li passa un array amb les claus primàries.
-	 *
-	 * @param integer|array ' . $claus_txt . '
-	 * 						$a_id. Un array con los nombres=>valores de las claves primarias.
-	 */';
+	 *';
+// si només hi ha una clau primària
+if (count($aClaus2) === 1) {
+    $nom_clau = current($aClaus2);
+    $clau = key($aClaus2);
+    switch (substr($nom_clau, 0, 1)) {
+        case 'i':
+            $txt .= "\n\t * @param integer|null  \$$nom_clau";
+            $txt .= "\n\t */";
+            $txt .= "\n\t" . 'public function __construct(int $'.$nom_clau.' = null)'."\n\t" . '{';
+            break;
+        case 's':
+            $txt .= "\n\t * @param string|null  \$$nom_clau";
+            $txt .= "\n\t */";
+            $txt .= "\n\t" . 'public function __construct(string $'.$nom_clau.' = null)'."\n\t" . '{';
+            break;
+        case 'b':
+            $txt .= "\n\t * @param bool|null  \$$nom_clau";
+            $txt .= "\n\t */";
+            $txt .= "\n\t" . 'public function __construct(bool $'.$nom_clau.' = null)'."\n\t" . '{';
+            break;
+    }
+    $txt .= "\n\t\t" . '$oDbl = $GLOBALS[\'' . $oDB_txt . '\'];';
 
-$sForPrimaryK = 'if (is_array($a_id)) { 
-			$this->aPrimary_key = $a_id;
-			foreach($a_id as $nom_id=>$val_id) {
-' . $claus_if . '
-			}';
-if (count($aClaus2) > 1) { // per el cas de només una clau.
-    $sForPrimaryK .= "\n\t\t}";
+    $claus_txt2 .= "'$clau' => " . '$aDades[\'' . $clau . '\']';
+    $txt .= "\n\t\t" . 'if ($'.$nom_clau.' !== null)';
+    $txt .= "\n\t\t" . '{';
+    $txt .= "\n\t\t\t" . '$this->' . $nom_clau . " = \$$nom_clau;";
+    $txt .= "\n\t\t\t" . '$this->aPrimary_key = array(\''.$nom_clau.'\' => $this->'.$nom_clau.');';
+    $txt .= "\n\t\t" . '}';
+
+    $claus_isset .= 'isset($this->' . $nom_clau . ')';
+
 } else {
-    $sForPrimaryK .= "\n\t\t" . '} else {
-			if (isset($a_id) && $a_id !== \'\') {
-				$this->' . $claus_txt . ' = (int)$a_id;
-				$this->aPrimary_key = array(\'' . $claus_txt . '\' => $this->' . $claus_txt . ');
-			}
-		}';
-}
+    // si n'hi ha més d'una
+    foreach ($aClaus2 as $clau => $nom_clau) {
+        //$nom_clau="i".$clau;
+        if (!empty($claus_txt)) $claus_txt .= ",";
+        $claus_txt .= $nom_clau;
+        if ($i > 0) $claus_txt2 .= ",\n\t\t\t\t\t\t\t";
+        $claus_txt2 .= "'$clau' => " . '$aDades[\'' . $clau . '\']';
+        if ($i > 0) $claus_if .= "\n";
+        switch (substr($nom_clau, 0, 1)) {
+            case 'i':
+                $claus_if .= "\t\t\t\t" . 'if (($nom_id === \'' . $clau . '\') && $val_id !== \'\') { $this->' . $nom_clau . ' = (int)$val_id; }';
+                break;
+            case 's':
+                $claus_if .= "\t\t\t\t" . 'if (($nom_id === \'' . $clau . '\') && $val_id !== \'\') { $this->' . $nom_clau . ' = (string)$val_id; } // evitem SQL injection fent cast a string';
+                break;
+            case 'b':
+                $claus_if .= "\t\t\t\t" . 'if (($nom_id === \'' . $clau . '\') && $val_id !== \'\') { $this->' . $nom_clau . ' = (bool)$val_id; } // evitem SQL injection fent cast a boolean';
+                break;
+        }
+        // si no es auto
+        if (!in_array($clau, $a_auto)) {
+            if (!empty($guardar_if)) $guardar_if .= ", ";
+            $guardar_if .= '$this->' . $nom_clau;
+        }
+        if ($i > 0) $where .= " AND ";
+        $where .= $clau . '=\'$this->' . $nom_clau . '\'';
+        if ($i > 0) $claus_isset .= " && ";
+        $claus_isset .= 'isset($this->' . $nom_clau . ')';
+        $claus_query .= "\n\t\t\t" . '$' . $nom_clau . ' = $aDades[\'' . $clau . '\'];';
+        if (!empty($claus_getPrimary)) $claus_getPrimary .= ",";
+        $claus_getPrimary .= '\'' . $clau . '\' => $this->' . $nom_clau;
+        $i++;
+    }
 
-$txt .= "\n\t" . 'function __construct($a_id=\'\') {
-		$oDbl = $GLOBALS[\'' . $oDB_txt . '\'];';
-$txt .= "\n\t\t" . $sForPrimaryK;
+    $sForPrimaryK = 'if (is_array($a_id)) { 
+                $this->aPrimary_key = $a_id;
+                foreach($a_id as $nom_id=>$val_id) {
+    ' . $claus_if . '
+                }';
+    if (count($aClaus2) > 1) { // per el cas de només una clau.
+        $sForPrimaryK .= "\n\t\t}";
+    } else {
+        $sForPrimaryK .= "\n\t\t" . '} else {
+                if (isset($a_id) && $a_id !== \'\') {
+                    $this->' . $claus_txt . ' = (int)$a_id;
+                    $this->aPrimary_key = array(\'' . $claus_txt . '\' => $this->' . $claus_txt . ');
+                }
+            }';
+    }
+
+    $txt .= "\n\t\t" . $sForPrimaryK;
+}
 
 $txt .= "\n\t\t" . '$this->setoDbl($oDbl);
 		$this->setNomTabla(\'' . $tabla . '\');
@@ -614,7 +666,8 @@ $txt .= '
 	 * Si no hi ha el registre, fa el insert, si hi es fa el update.
 	 *
 	 */
-	public function DBGuardar() {
+	public function DBGuardar(): bool
+	{
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
 		if ($this->DBCargar(\'guardar\') === FALSE) { $bInsert=TRUE; } else { $bInsert=FALSE; }
@@ -636,18 +689,18 @@ $txt .= '
 				$sClauError = \'' . $clase . '.update.prepare\';
 				$_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
-			} else {
-				try {
-					$oDblSt->execute($aDades);
-				}
-				catch ( \PDOException $e) {
-					$err_txt=$e->errorInfo[2];
-					$this->setErrorTxt($err_txt);
-					$sClauError = \'' . $clase . '.update.execute\';
-					$_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-					return FALSE;
-				}
 			}
+				
+            try {
+                $oDblSt->execute($aDades);
+            }
+            catch ( PDOException $e) {
+                $err_txt=$e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = \'' . $clase . '.update.execute\';
+                $_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
+            }
 		} else {
 			// INSERT';
 if (!empty($guardar_if)) {
@@ -662,17 +715,16 @@ $txt .= '
 				$sClauError = \'' . $clase . '.insertar.prepare\';
 				$_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
-			} else {
-				try {
-					$oDblSt->execute($aDades);
-				}
-				catch ( \PDOException $e) {
-					$err_txt=$e->errorInfo[2];
-					$this->setErrorTxt($err_txt);
-					$sClauError = \'' . $clase . '.insertar.execute\';
-					$_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-					return FALSE;
-				}
+			}
+            try {
+                $oDblSt->execute($aDades);
+            }
+            catch ( PDOException $e) {
+                $err_txt=$e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = \'' . $clase . '.insertar.execute\';
+                $_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
 			}';
 if ($id_seq || $id_seq2) {
     if (empty($id_seq2)) {
@@ -690,10 +742,11 @@ $txt .= "\n\t\t" . '}
 	}
 
 	/**
-	 * Carrega els camps de la base de dades com ATRIBUTOS de l\'objecte.
+	 * Carga los camps de la base de dades como ATRIBUTOS de la clase.
 	 *
 	 */
-	public function DBCargar($que=null) {
+	public function DBCargar($que=null): bool
+	{
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
 		if (' . $claus_isset . ') {
@@ -702,7 +755,7 @@ $txt .= "\n\t\t" . '}
 				$_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
 				return FALSE;
 			}
-			$aDades = $oDblSt->fetch(\\PDO::FETCH_ASSOC);
+			$aDades = $oDblSt->fetch(PDO::FETCH_ASSOC);
             // Para evitar posteriores cargas
             $this->bLoaded = TRUE;
 			switch ($que) {
@@ -720,16 +773,16 @@ $txt .= "\n\t\t" . '}
 					$this->setAllAtributes($aDades);
 			}
 			return TRUE;
-		} else {
-		   	return FALSE;
 		}
+        return FALSE;
 	}
 
 	/**
 	 * Elimina el registre de la base de dades corresponent a l\'objecte.
 	 *
 	 */
-	public function DBEliminar() {
+	public function DBEliminar(): bool
+	{
 		$oDbl = $this->getoDbl();
 		$nom_tabla = $this->getNomTabla();
 		if (($oDbl->exec("DELETE FROM $nom_tabla WHERE ' . $where . '")) === FALSE) {
@@ -751,20 +804,21 @@ $txt .= '	/* MÉTODOS PRIVADOS -------------------------------------------------
 	 * @param array $aDades
 	 */';
 if ($add_convert === TRUE) {
-    $txt .= "\n\t" . 'function setAllAtributes($aDades,$convert=FALSE) {';
+    $txt .= "\n\t" . 'private function setAllAtributes(array $aDades, $convert=FALSE): void'. "\n\t" . '{';
 } else {
-    $txt .= "\n\t" . 'private function setAllAtributes($aDades) {';
+    $txt .= "\n\t" . 'private function setAllAtributes(array $aDades): void' . "\n\t" . '{';
 }
-$txt .= "\n\t\t" . 'if (!is_array($aDades)) { return; }
-		if (array_key_exists(\'id_schema\',$aDades)) { $this->setId_schema($aDades[\'id_schema\']); }';
+$txt .= "\n\t\t" . 'if (array_key_exists(\'id_schema\',$aDades)) {
+		    $this->setId_schema($aDades[\'id_schema\']);
+		}';
 
 $txt .= $exists;
 $txt .= "\n\t" . '}';
 
+$txt .='
 	/* MÉTODOS GET y SET --------------------------------------------------------*/
 
 	/**
-	 * Recupera tots els ATRIBUTOS de ' . $clase . ' en un array
 	 *
 	 * @return array aDades
 	 */
@@ -775,6 +829,10 @@ $txt .= "\n\t" . '}';
 		return $this->aDades;
 	}
 
+';
+
+$sForPrimaryK  = '';
+$tmp = '
 	/**
 	 * Recupera las claus primàries de ' . $clase . ' en un array
 	 *
@@ -796,6 +854,8 @@ $txt .= "\n\t" . '}';
 	
 ';
 
+
+
 $txt .= $gets;
 
 $txt .= '
@@ -805,8 +865,9 @@ $txt .= '
 	 * Retorna una col·lecció d\'objectes del tipus DatosCampo
 	 *
 	 */
-	function getDatosCampos() {
-		$o' . $clase . 'Set = new core\Set();
+	function getDatosCampos(): array
+	{
+		$o' . $clase . 'Set = new Set();
 ';
 $txt .= $altres_gets_set;
 $txt .= '
@@ -821,7 +882,7 @@ $txt .= '
 ';
 
 /* ESCRIURE LA CLASSSE ------------------------------------------------ */
-$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/' . strtolower($Q_clase) . '.class.php';
+$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/' . $Q_clase . '.php';
 
 if (!$handle = fopen($filename, 'w')) {
     echo "Cannot open file ($filename)";
@@ -969,7 +1030,7 @@ $txt2 .= '
 }
 ';
 /* ESCRIURE LA CLASSSE ------------------------------------------------ */
-$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/gestor' . strtolower($Q_clase) . '.class.php';
+$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/gestor' . $Q_clase . '.php';
 
 
 if (!$handle = fopen($filename, 'w')) {

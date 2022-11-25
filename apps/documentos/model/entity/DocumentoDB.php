@@ -79,7 +79,7 @@ class DocumentoDB extends core\ClasePropiedades
      *
      * @var string|null
      */
-    protected ?string $snombre_fichero;
+    protected ?string $snombre_fichero = null;
     /**
      * Creador de Documento
      *
@@ -107,10 +107,10 @@ class DocumentoDB extends core\ClasePropiedades
     /**
      * Documento de Documento
      *
-     * @var string bytea
+     * @var string|null bytea
      *
      */
-    protected string $documento;
+    protected ?string $documento;
     /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
      * oDbl de Documento
@@ -378,9 +378,9 @@ class DocumentoDB extends core\ClasePropiedades
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
-     * @param string $snombre_fichero
+     * @param string|null $snombre_fichero
      */
-    public function setNombre_fichero(string $snombre_fichero = ''): void
+    public function setNombre_fichero(string $snombre_fichero = null): void
     {
         $this->snombre_fichero = $snombre_fichero;
     }
@@ -431,7 +431,7 @@ class DocumentoDB extends core\ClasePropiedades
      *
      * @param string|null $documento='' optional (ja convertit a hexadecimal)
      */
-    private function setDocumentoEscaped(?string $documento = ''): void
+    private function setDocumentoEscaped(?string $documento = null): void
     {
         $this->documento = $documento;
     }

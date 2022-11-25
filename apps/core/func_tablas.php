@@ -69,7 +69,7 @@ function urlsafe_b64decode($string)
 
 /**
  * Para unificar los valores true ('t', 'true', 1, 'on...)
- *
+ * Devuelve string 'true' or 'false' (para el postgres??)
  *
  * @author    Daniel Serrabou
  * @since        23/3/2020.
@@ -82,6 +82,27 @@ function is_true($val)
         $boolval = filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     } else {
         $boolval = $val;
+    }
+
+    return $boolval;
+}
+
+
+/**
+ * Devuelve vlaores boolean: TRUE or FALSE.
+ *
+ * @param mixed $val
+ * @return bool
+ */
+function isTrue(mixed $val): bool
+{
+    if (is_bool($val)) {
+        return $val;
+    }
+    if (is_string($val)) {
+        $val = ($val === 't') ? TRUE : $val;
+        $val = ($val === 'f') ? FALSE : $val;
+        $boolval = filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 
     return $boolval;

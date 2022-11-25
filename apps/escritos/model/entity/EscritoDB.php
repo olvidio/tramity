@@ -83,33 +83,33 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Json_prot_local de EscritoDB
      *
-     * @var object JSON
+     * @var object|null JSON
      */
-    protected $json_prot_local;
+    protected $json_prot_local = null;
     /**
      * Json_prot_destino de EscritoDB
      *
-     * @var object JSON
+     * @var object|null JSON
      */
-    protected $json_prot_destino;
+    protected $json_prot_destino = null;
     /**
      * Json_prot_ref de EscritoDB
      *
-     * @var object JSON
+     * @var object|null JSON
      */
-    protected $json_prot_ref;
+    protected $json_prot_ref = null;
     /**
      * Id_grupos de EscritoDB
      *
      * @var string|null
      */
-    protected ?string $a_id_grupos;
+    protected ?string $a_id_grupos = null;
     /**
      * Destinos de EscritoDB
      *
      * @var string|null
      */
-    protected ?string $a_destinos;
+    protected ?string $a_destinos = null;
     /**
      * Asunto de EscritoDB
      *
@@ -119,63 +119,63 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Detalle de EscritoDB
      *
-     * @var string
+     * @var string|null
      */
-    protected $sdetalle;
+    protected $sdetalle = null;
     /**
      * Creador de EscritoDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $icreador;
+    protected $icreador = null;
     /**
      * Resto_oficinas de EscritoDB
      *
-     * @var array
+     * @var array|null
      */
-    protected $a_resto_oficinas;
+    protected $a_resto_oficinas = null;
     /**
      * Comentarios de EscritoDB
      *
-     * @var string
+     * @var string|null
      */
-    protected $scomentarios;
+    protected $scomentarios = null;
     /**
      * F_aprobacion de EscritoDB
      *
-     * @var web\DateTimeLocal
+     * @var web\DateTimeLocal|null
      */
-    protected $df_aprobacion;
+    protected $df_aprobacion = null;
     /**
      * F_escrito de EscritoDB
      *
-     * @var web\DateTimeLocal
+     * @var web\DateTimeLocal|null
      */
-    protected $df_escrito;
+    protected $df_escrito = null;
     /**
      * F_contestar de EscritoDB
      *
-     * @var web\DateTimeLocal
+     * @var web\DateTimeLocal|null
      */
-    protected $df_contestar;
+    protected $df_contestar = null;
     /**
      * Categoria de EscritoDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $icategoria;
+    protected $icategoria = null;
     /**
      * Visibilidad de EscritoDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $ivisibilidad;
+    protected $ivisibilidad = null;
     /**
      * Visibilidad para destino de EscritoDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $ivisibilidad_dst;
+    protected $ivisibilidad_dst = null;
     /**
      * Accion de EscritoDB
      *
@@ -193,31 +193,31 @@ class EscritoDB extends core\ClasePropiedades
      *
      * @var web\DateTimeLocal
      */
-    protected $df_salida;
+    protected $df_salida = null;
     /**
      * Ok de EscritoDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $iok;
+    protected $iok = null;
     /**
      * Tipo_doc de EscritoDB
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $itipo_doc;
+    protected $itipo_doc = null;
     /**
      * anulado de EscritoDB
      *
-     * @var boolean
+     * @var boolean|null
      */
-    protected $banulado;
+    protected $banulado = null;
     /**
      * descripcion de EscritoDB
      *
-     * @var string
+     * @var string|null
      */
-    protected $sdescripcion;
+    protected $sdescripcion = null;
     /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
      * oDbl de EscritoDB

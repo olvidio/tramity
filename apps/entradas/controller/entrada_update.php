@@ -12,6 +12,7 @@ use usuarios\model\PermRegistro;
 use web\DateTimeLocal;
 use web\Protocolo;
 use function core\is_true;
+use function core\isTrue;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -489,7 +490,7 @@ switch ($Q_que) {
         }
         $oEntrada->setEstado($estado);
 
-        $oEntrada->setBypass($Q_bypass);
+        $oEntrada->setBypass(isTrue($Q_bypass));
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
         }

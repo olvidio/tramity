@@ -55,8 +55,7 @@ class GestorDocumentoDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_doc' => $aDades['id_doc']);
-            $oDocumentoDB = new DocumentoDB($a_pkey);
+            $oDocumentoDB = new DocumentoDB($aDades['id_doc']);
             $oDocumentoSet->add($oDocumentoDB);
         }
         return $oDocumentoSet->getTot();
@@ -128,11 +127,10 @@ class GestorDocumentoDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_doc' => $aDades['id_doc']);
             if ($parent) {
-                $oDocumentoDB = new Documento($a_pkey);
+                $oDocumentoDB = new Documento($aDades['id_doc']);
             } else {
-                $oDocumentoDB = new DocumentoDB($a_pkey);
+                $oDocumentoDB = new DocumentoDB($aDades['id_doc']);
             }
             $oDocumentoSet->add($oDocumentoDB);
         }

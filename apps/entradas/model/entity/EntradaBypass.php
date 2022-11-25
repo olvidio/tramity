@@ -312,9 +312,9 @@ class EntradaBypass extends Entrada
     /**
      * Recupera l'atribut a_destinos de EntradaBypass
      *
-     * @return array $a_destinos
+     * @return array|null $a_destinos
      */
-    public function getDestinos(): array
+    public function getDestinos(): ?array
     {
         if (!isset($this->a_destinos) && !$this->bLoaded) {
             $this->DBCargar();
