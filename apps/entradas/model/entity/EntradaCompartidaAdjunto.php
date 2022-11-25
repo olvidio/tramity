@@ -48,12 +48,6 @@ class EntradaCompartidaAdjunto extends core\ClasePropiedades
      */
     private $aPrimary_key;
     /**
-     * aDades de EntradaCompartidaAdjunto
-     *
-     * @var array
-     */
-    private $aDades;
-    /**
      * bLoaded de EntradaCompartidaAdjunto
      *
      * @var boolean
@@ -152,23 +146,23 @@ class EntradaCompartidaAdjunto extends core\ClasePropiedades
                 $sClauError = 'EntradaCompartidaAdjunto.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                $id_entrada_compartida = $aDades['id_entrada_compartida'];
-                $nom = $aDades['nom'];
-                $adjunto = $aDades['adjunto'];
+            }
 
-                $oDblSt->bindParam(1, $id_entrada_compartida, PDO::PARAM_INT);
-                $oDblSt->bindParam(2, $nom, PDO::PARAM_STR);
-                $oDblSt->bindParam(3, $adjunto, PDO::PARAM_STR);
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'EntradaCompartidaAdjunto.update.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            $id_entrada_compartida = $aDades['id_entrada_compartida'];
+            $nom = $aDades['nom'];
+            $adjunto = $aDades['adjunto'];
+
+            $oDblSt->bindParam(1, $id_entrada_compartida, PDO::PARAM_INT);
+            $oDblSt->bindParam(2, $nom, PDO::PARAM_STR);
+            $oDblSt->bindParam(3, $adjunto, PDO::PARAM_STR);
+            try {
+                $oDblSt->execute($aDades);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'EntradaCompartidaAdjunto.update.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
         } else {
             // INSERT
@@ -178,23 +172,23 @@ class EntradaCompartidaAdjunto extends core\ClasePropiedades
                 $sClauError = 'EntradaCompartidaAdjunto.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
-            } else {
-                $id_entrada_compartida = $aDades['id_entrada_compartida'];
-                $nom = $aDades['nom'];
-                $adjunto = $aDades['adjunto'];
+            }
 
-                $oDblSt->bindParam(1, $id_entrada_compartida, PDO::PARAM_INT);
-                $oDblSt->bindParam(2, $nom, PDO::PARAM_STR);
-                $oDblSt->bindParam(3, $adjunto, PDO::PARAM_STR);
-                try {
-                    $oDblSt->execute($aDades);
-                } catch (PDOException $e) {
-                    $err_txt = $e->errorInfo[2];
-                    $this->setErrorTxt($err_txt);
-                    $sClauError = 'EntradaCompartidaAdjunto.insertar.execute';
-                    $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                    return FALSE;
-                }
+            $id_entrada_compartida = $aDades['id_entrada_compartida'];
+            $nom = $aDades['nom'];
+            $adjunto = $aDades['adjunto'];
+
+            $oDblSt->bindParam(1, $id_entrada_compartida, PDO::PARAM_INT);
+            $oDblSt->bindParam(2, $nom, PDO::PARAM_STR);
+            $oDblSt->bindParam(3, $adjunto, PDO::PARAM_STR);
+            try {
+                $oDblSt->execute($aDades);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClauError = 'EntradaCompartidaAdjunto.insertar.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
+                return FALSE;
             }
             $this->iid_item = $oDbl->lastInsertId('entrada_compartida_adjuntos_id_item_seq');
         }
@@ -210,7 +204,7 @@ class EntradaCompartidaAdjunto extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $id_entrada_compartida = 0;
+        $id_entrada_compartida = null;
         $nom = '';
         $adjunto = '';
         if (isset($this->iid_item)) {
@@ -249,9 +243,9 @@ class EntradaCompartidaAdjunto extends core\ClasePropiedades
                    $this->setAllAtributes($aDades);
             }
             return TRUE;
-        } else {
-            return FALSE;
         }
+
+        return FALSE;
     }
 
     /**
@@ -490,16 +484,4 @@ class EntradaCompartidaAdjunto extends core\ClasePropiedades
         return $oDatosCampo;
     }
 
-    /**
-     * Recupera tots els ATRIBUTOS de EntradaCompartidaAdjunto en un array
-     *
-     * @return array aDades
-     */
-    function getTot()
-    {
-        if (!is_array($this->aDades)) {
-            $this->DBCargar('tot');
-        }
-        return $this->aDades;
-    }
 }

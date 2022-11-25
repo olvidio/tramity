@@ -689,7 +689,7 @@ class As4Entregar extends As4CollaborationInfo
         }
     }
 
-    private function nuevaEntrada($siglaDestino, $id_entrada_compartida = ''): int
+    private function nuevaEntrada($siglaDestino, $id_entrada_compartida = null): int
     {
         $oEntrada = new EntradaEntidad($siglaDestino);
         $oEntrada->DBCargar();
