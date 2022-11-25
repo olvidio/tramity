@@ -1141,16 +1141,31 @@ class Pendiente
         }
 
         if (!empty($f_inicio)) {
-            $oConverter = new ConverterDate('date', $f_inicio);
-            $f_cal_inicio = $oConverter->toCal();
+            // Si ya está en formato para el davical, no hace falta convertirla
+            if (preg_match('/\d{8}/', $f_inicio)) {
+                $f_cal_inicio = $f_inicio;
+            } else {
+                $oConverter = new ConverterDate('date', $f_inicio);
+                $f_cal_inicio = $oConverter->toCal();
+            }
         }
         if (!empty($f_end)) {
-            $oConverter = new ConverterDate('date', $f_end);
-            $f_cal_end = $oConverter->toCal();
+            // Si ya está en formato para el davical, no hace falta convertirla
+            if (preg_match('/\d{8}/', $f_end)) {
+                $f_cal_end = $f_end;
+            } else {
+                $oConverter = new ConverterDate('date', $f_end);
+                $f_cal_end = $oConverter->toCal();
+            }
         }
         if (!empty($f_plazo)) {
-            $oConverter = new ConverterDate('date', $f_plazo);
-            $f_cal_plazo = $oConverter->toCal();
+            // Si ya está en formato para el davical, no hace falta convertirla
+            if (preg_match('/\d{8}/', $f_plazo)) {
+                $f_cal_plazo = $f_plazo;
+            } else {
+                $oConverter = new ConverterDate('date', $f_plazo);
+                $f_cal_plazo = $oConverter->toCal();
+            }
         }
         $args['SUMMARY'] = "$asunto";
         $args['STATUS'] = "$status";

@@ -133,7 +133,7 @@ if (!empty($Q_simple_per)) { // sólo para los periodicos.
                     // cojo el dia de la fecha inicio
                     $oF_ini = DateTimeLocal::createFromLocal($Q_f_inicio);
                     $dia = $oF_ini->format('j');
-                    $request['dias'] = (string)$dia;
+                    $request['dias'] = $dia;
                     break;
                 case "num":
                     $request['dias'] = (string)filter_input(INPUT_POST, 'dia_num');
@@ -158,6 +158,9 @@ if (!empty($Q_simple_per)) { // sólo para los periodicos.
             $request['tipo'] = "d_d";
             $rrule = Rrule::montar_rrule($request);
             break;
+        case "":
+            // No está definido como periódico
+            break;
         default:
             $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_switch);
@@ -167,7 +170,7 @@ if (!empty($Q_simple_per)) { // sólo para los periodicos.
 switch ($Q_nuevo) {
     case "1": //nuevo pendiente
         // si vengo de entradas, primero lo guardo en una tabla temporal hasta que sepa el id_reg
-        if ($Q_go == "entradas") {
+        if ($Q_go === "entradas") {
             if (empty($Q_f_plazo)) {
                 $Q_f_plazo = $Q_f_inicio;
             } // En el caso de periodico, no tengo fecha plazo.
@@ -256,7 +259,6 @@ switch ($Q_nuevo) {
             echo json_encode($jsondata);
             exit();
         }
-        break;
     case "2": //modificar pendiente
         // 1º actualizo el escrito
         $oPendiente = new Pendiente($Q_cal_oficina, $Q_calendario, $user_davical, $Q_uid);
@@ -299,7 +301,6 @@ switch ($Q_nuevo) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case "3": //eliminar pendiente.
         //vengo de un checkbox
         $Q_a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -327,7 +328,6 @@ switch ($Q_nuevo) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case "4": //marcar com contestado
         //vengo de un checkbox
         $Q_a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -369,8 +369,7 @@ switch ($Q_nuevo) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
-    case "5": // modificar eetiequetas y encargados
+    case "5": // modificar etiquetas y encargados
         $oPendiente = new Pendiente($Q_cal_oficina, $Q_calendario, $user_davical, $Q_uid);
         if (!empty($Q_id_reg)) {
             $oPendiente->setId_reg($Q_id_reg);
@@ -397,7 +396,6 @@ switch ($Q_nuevo) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);

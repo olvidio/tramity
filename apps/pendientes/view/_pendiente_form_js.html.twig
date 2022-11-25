@@ -247,11 +247,11 @@
 
         if (err != 1) {
             $('#oficinas').val(oficinas);
+            var url = 'apps/pendientes/controller/pendiente_update_ics.php';
             switch (go) {
                 case "entradas":
                 case "salidas":
                 case "mov_iese":
-                    var url = 'pendiente_update_ics.php';
                     var datos = $('#form_pendiente').serialize();
                     request = $.ajax({
                         url: url,
@@ -283,7 +283,6 @@
                     });
                     break;
                 case "lista":
-                    var url = 'apps/pendientes/controller/pendiente_update_ics.php';
                     var datos = $('#form_pendiente').serialize();
                     request = $.ajax({
                         url: url,
@@ -312,8 +311,8 @@
                 default:
                     $('#form_pendiente').submit(function () {
                         $.ajax({
+                            url: url,
                             data: $(this).serialize(),
-                            url: $(this).attr('action'),
                             method: 'POST',
                             complete: function (rta) {
                                 rta_txt = rta.responseText;
@@ -414,4 +413,4 @@
         $('#etiquetas_span').html("");
         $('#etiquetas_num').val(0);
     }
-</script>	
+</script>

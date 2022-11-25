@@ -79,21 +79,21 @@
       	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
       </span>
                 </div>
-            </div
+            </div>
                     <!--  --------------------  Encargado --------------------------  -->
             <div class="mb-3 row align-items-center">
                 <label for="oficina" class="col-2">{{ "¿Está asignado a alguien?"|trans|raw }}:</label>
                 <div class="col-6">
                     {{ oDesplEncargados.desplegable|raw }}
                 </div>
-            </div
+            </div>
         </div>
         <!--  --------------------  BOTONES --------------------------  -->
         <div>
             <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();">
                 {{ "Volver"|trans|raw }}
             </button>
-            <button tabindex='90' class="btn btn-success" onClick="fnjs_guardar();">
+            <button tabindex='90' class="btn btn-success" onClick="fnjs_guardar_pendiente();">
                 {{ "guardar"|trans|raw }}
             </button>
         </div>

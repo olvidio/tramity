@@ -551,7 +551,7 @@ if (empty($display_periodico)) {
 // datepicker
 $oFecha = new DateTimeLocal();
 $format = $oFecha::getFormat();
-$yearStart = date('Y');
+$yearStart = (int)date('Y');
 $yearEnd = $yearStart + 2;
 
 $a_cosas = [
@@ -588,6 +588,10 @@ if (!empty($periodico_tipo) && $Q_calendario === 'registro' && $secretaria === F
         'asunto' => $asunto,
         'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
         'oDesplEncargados' => $oDesplEncargados,
+        // datepicker
+        'format' => $format,
+        'yearStart' => $yearStart,
+        'yearEnd' => $yearEnd,
 
         'pagina_cancel' => $pagina_cancel,
         // para modificar etiquetas
