@@ -3,10 +3,14 @@
 namespace escritos\model\entity;
 
 use core;
+use core\ConverterJson;
+use JsonException;
 use PDO;
 use PDOException;
 use stdClass;
 use web;
+use function core\array_pg2php;
+use function core\array_php2pg;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula escritos
@@ -83,21 +87,21 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Json_prot_local de EscritoDB
      *
-     * @var object|null JSON
+     * @var string|null
      */
-    protected $json_prot_local = null;
+    protected ?string $json_prot_local = null;
     /**
      * Json_prot_destino de EscritoDB
      *
-     * @var object|null JSON
+     * @var string|null
      */
-    protected $json_prot_destino = null;
+    protected ?string $json_prot_destino = null;
     /**
      * Json_prot_ref de EscritoDB
      *
-     * @var object|null JSON
+     * @var string|null
      */
-    protected $json_prot_ref = null;
+    protected ?string $json_prot_ref = null;
     /**
      * Id_grupos de EscritoDB
      *
@@ -131,7 +135,7 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Resto_oficinas de EscritoDB
      *
-     * @var array|null
+     * @var string|null
      */
     protected $a_resto_oficinas = null;
     /**
@@ -523,14 +527,14 @@ class EscritoDB extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * @param array a_id_grupos
+     * @param array|string|null $a_id_grupos
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
      */
-    function setId_grupos($a_id_grupos = [], $db = FALSE)
+    public function setId_grupos(array|string|null $a_id_grupos = null, bool $db = FALSE): void
     {
         if ($db === FALSE) {
-            $postgresArray = core\array_php2pg($a_id_grupos);
+            $postgresArray = array_php2pg($a_id_grupos);
         } else {
             $postgresArray = $a_id_grupos;
         }
@@ -538,14 +542,14 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * @param array a_destinos
+     * @param array|string|null $a_destinos
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
      */
-    function setDestinos($a_destinos = '', $db = FALSE)
+    public function setDestinos(array|string $a_destinos = null, bool $db = FALSE): void
     {
         if ($db === FALSE) {
-            $postgresArray = core\array_php2pg($a_destinos);
+            $postgresArray = array_php2pg($a_destinos);
         } else {
             $postgresArray = $a_destinos;
         }
@@ -579,14 +583,14 @@ class EscritoDB extends core\ClasePropiedades
     }
 
     /**
-     * @param array a_resto_oficinas
+     * @param array|string|null $a_resto_oficinas a_resto_oficinas
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
      *  o es una variable de php hay que convertirlo.
      */
-    function setResto_oficinas($a_resto_oficinas = '', $db = FALSE)
+    public function setResto_oficinas(array|string|null $a_resto_oficinas = null, bool $db = FALSE): void
     {
         if ($db === FALSE) {
-            $postgresArray = core\array_php2pg($a_resto_oficinas);
+            $postgresArray = array_php2pg($a_resto_oficinas);
         } else {
             $postgresArray = $a_resto_oficinas;
         }
@@ -824,141 +828,104 @@ class EscritoDB extends core\ClasePropiedades
      * Recupera l'atribut json_prot_local de EscritoDB
      *
      * @param boolean $bArray si hay que devolver un array en vez de un objeto.
-     * @return object JSON json_prot_local
+     * @return array|stdClass|null
+     * @throws JsonException
      */
-    function getJson_prot_local($bArray = FALSE)
+    public function getJson_prot_local(bool $bArray = FALSE): array|stdClass|null
     {
         if (!isset($this->json_prot_local) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_prot_local, $bArray);
-        if (empty($oJSON) || $oJSON === '[]') {
-            if ($bArray) {
-                $oJSON = [];
-            } else {
-                $oJSON = new stdClass;
-            }
-        }
-        //$this->json_prot_local = $oJSON;
-        //return $this->json_prot_local;
-        return $oJSON;
+        return (new ConverterJson($this->json_prot_local, $bArray))->fromPg();
     }
 
     /**
-     * @param object JSON json_prot_local
+     * @param string|stdClass|null $oJSON
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
+     * @throws JsonException
      */
-    function setJson_prot_local($oJSON, $db = FALSE)
+    public function setJson_prot_local(string|stdClass|null $oJSON, bool $db = FALSE): void
     {
-        if ($db === FALSE) {
-            $json = json_encode($oJSON);
-        } else {
-            $json = $oJSON;
-        }
-        $this->json_prot_local = $json;
+        $this->json_prot_local = (new ConverterJson($oJSON, FALSE))->toPg($db);
     }
 
     /**
      * Recupera l'atribut json_prot_destino de EscritoDB
      *
      * @param boolean $bArray si hay que devolver un array en vez de un objeto.
-     * @return object JSON json_prot_destino
+     * @return array|stdClass|null
+     * @throws JsonException
      */
-    function getJson_prot_destino($bArray = FALSE)
+    public function getJson_prot_destino(bool $bArray = FALSE): array|stdClass|null
     {
         if (!isset($this->json_prot_destino) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_prot_destino, $bArray);
-        if (empty($oJSON) || $oJSON === '[]') {
-            if ($bArray) {
-                $oJSON = [];
-            } else {
-                $oJSON = [new stdClass];
-            }
-        }
-        //$this->json_prot_destino = $oJSON;
-        return $oJSON;
+        return (new ConverterJson($this->json_prot_destino, $bArray))->fromPg();
     }
 
     /**
-     * @param object JSON json_prot_destino
+     * @param string|array|null $oJSON json_prot_destino
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
+     * @throws JsonException
      */
-    function setJson_prot_destino($oJSON, $db = FALSE)
+    public function setJson_prot_destino(string|array|null $oJSON, bool $db = FALSE):void
     {
-        if ($db === FALSE) {
-            $json = json_encode($oJSON);
-        } else {
-            $json = $oJSON;
-        }
-        $this->json_prot_destino = $json;
+        $this->json_prot_destino = (new ConverterJson($oJSON, FALSE))->toPg($db);
     }
 
     /**
      * Recupera l'atribut json_prot_ref de EscritoDB
      *
      * @param boolean $bArray si hay que devolver un array en vez de un objeto.
-     * @return object JSON json_prot_ref
+     * @return array|stdClass|null JSON json_prot_ref
+     * @throws JsonException
      */
-    function getJson_prot_ref($bArray = FALSE)
+    public function getJson_prot_ref(bool $bArray = FALSE): array|stdClass|null
     {
         if (!isset($this->json_prot_ref) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_prot_ref, $bArray);
-        if (empty($oJSON) || $oJSON === '[]') {
-            if ($bArray) {
-                $oJSON = [];
-            } else {
-                $oJSON = new stdClass;
-            }
-        }
-        //$this->json_prot_ref = $oJSON;
-        return $oJSON;
+        return (new ConverterJson($this->json_prot_ref, $bArray))->fromPg();
     }
 
     /**
-     * @param object JSON json_prot_ref
+     * @param string|array|null $oJSON JSON json_prot_ref
      * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
      *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
+     * @throws JsonException
      */
-    function setJson_prot_ref($oJSON, $db = FALSE)
+    public function setJson_prot_ref(string|array|null $oJSON, bool $db = FALSE):void
     {
-        if ($db === FALSE) {
-            $json = json_encode($oJSON);
-        } else {
-            $json = $oJSON;
-        }
-        $this->json_prot_ref = $json;
+        $this->json_prot_ref = (new ConverterJson($oJSON, FALSE))->toPg($db);
     }
 
     /**
      * Recupera l'atribut a_id_grupos de EscritoDB
      *
-     * @return array a_id_grupos
+     * @return array|null $a_id_grupos
      */
-    public function getId_grupos(): array
+    public function getId_grupos(): ?array
     {
         if (!isset($this->a_id_grupos) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return core\array_pg2php($this->a_id_grupos);
+        return array_pg2php($this->a_id_grupos);
     }
 
     /**
      * Recupera l'atribut a_destinos de EscritoDB
      *
-     * @return array a_destinos
+     * @return array|null a_destinos
      */
-    public function getDestinos(): array
+    public function getDestinos(): ?array
     {
         if (!isset($this->a_destinos) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return core\array_pg2php($this->a_destinos);
+        return array_pg2php($this->a_destinos);
     }
 
     /**
@@ -1003,14 +970,14 @@ class EscritoDB extends core\ClasePropiedades
     /**
      * Recupera l'atribut a_resto_oficinas de EscritoDB
      *
-     * @return array a_resto_oficinas
+     * @return array|null $a_resto_oficinas
      */
-    public function getResto_oficinas(): array
+    public function getResto_oficinas(): ?array
     {
         if (!isset($this->a_resto_oficinas) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return core\array_pg2php($this->a_resto_oficinas);
+        return array_pg2php($this->a_resto_oficinas);
     }
 
     /**
