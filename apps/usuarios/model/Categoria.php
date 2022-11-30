@@ -24,7 +24,4 @@ class Categoria
             self::CAT_PERMANATE => _("permanente"),
         ];
     }
-
-
 }
-    

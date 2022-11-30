@@ -24,11 +24,11 @@ $Q_Slide_mode = (bool)filter_input(INPUT_POST, 'slide_mode', FILTER_VALIDATE_BOO
 if ($Q_Slide_mode === TRUE) {
     $Q_mov = (string)filter_input(INPUT_POST, 'mov');
 
-    if ($Q_mov == 'prev') {
-        $Q_id_escrito = $Q_id_escrito - 1;
+    if ($Q_mov === 'prev') {
+        --$Q_id_escrito;
     }
-    if ($Q_mov == 'next') {
-        $Q_id_escrito = $Q_id_escrito + 1;
+    if ($Q_mov === 'next') {
+        ++$Q_id_escrito;
     }
 } else {
     $Q_id_escrito = (string)filter_input(INPUT_GET, 'id_escrito');

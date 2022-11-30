@@ -111,7 +111,7 @@ switch ($Q_filtro) {
         $oExpedienteLista = new ExpedienteCopiasLista($Q_filtro);
         break;
     default:
-        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        $err_switch = sprintf(_("opción (%s) no definida en switch en %s, linea %s"), $Q_filtro, __FILE__, __LINE__);
         exit ($err_switch);
 }
 

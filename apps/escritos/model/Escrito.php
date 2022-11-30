@@ -37,7 +37,7 @@ class Escrito extends EscritoDB
      *
      * @var string
      */
-    private $destinos_txt;
+    private  $destinos_txt;
 
     private $nombre_escrito;
 
@@ -478,11 +478,14 @@ class Escrito extends EscritoDB
         $aRef = $oArrayProtRef->ArrayListaTxtBr($id_dst);
 
         $json_prot_local = $this->getJson_prot_local();
-        if (count(get_object_vars($json_prot_local)) == 0) {
-            $err_txt = "No hay protocolo local";
-            $_SESSION['oGestorErrores']->addError($err_txt, 'generar cabecera derecha', __LINE__, __FILE__);
-            $_SESSION['oGestorErrores']->recordar($err_txt);
-
+        if (count(get_object_vars($json_prot_local)) === 0){
+            $is_plantilla = $this->getAccion() === self::ACCION_PLANTILLA;
+            $is_anulado = $this->getAnulado();
+            if(!$is_plantilla && !$is_anulado) {
+                $err_txt = "No hay protocolo local";
+                $_SESSION['oGestorErrores']->addError($err_txt, 'generar cabecera derecha', __LINE__, __FILE__);
+                $_SESSION['oGestorErrores']->recordar($err_txt);
+            }
             $origen_txt = $_SESSION['oConfig']->getSigla();
         } else {
             $oProtOrigen = new Protocolo();
