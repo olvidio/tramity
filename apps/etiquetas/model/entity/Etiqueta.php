@@ -5,7 +5,6 @@ namespace etiquetas\model\entity;
 use core;
 use PDO;
 use PDOException;
-use function core\is_true;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula etiquetas
@@ -248,7 +247,7 @@ class Etiqueta extends core\ClasePropiedades
             $this->setId_cargo($aDades['id_cargo']);
         }
         if (array_key_exists('oficina', $aDades)) {
-            $this->setOficina(is_true($aDades['oficina']));
+            $this->setOficina($aDades['oficina']);
         }
     }
 

@@ -11,7 +11,6 @@ use stdClass;
 use web;
 use function core\array_pg2php;
 use function core\array_php2pg;
-use function core\is_true;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula escritos
@@ -508,7 +507,7 @@ class EscritoDB extends core\ClasePropiedades
             $this->setTipo_doc($aDades['tipo_doc']);
         }
         if (array_key_exists('anulado', $aDades)) {
-            $this->setAnulado(is_true($aDades['anulado']));
+            $this->setAnulado($aDades['anulado']);
         }
         if (array_key_exists('descripcion', $aDades)) {
             $this->setDescripcion($aDades['descripcion']);

@@ -215,8 +215,6 @@ class EntradaLista
 
         $txt_btn_new = '';
         $btn_new = FALSE;
-        $txt_btn_carpeta = '';
-        $btn_carpeta = FALSE;
         $txt_btn_dock = '';
         $btn_dock = FALSE;
         $secretaria = FALSE;
@@ -228,7 +226,6 @@ class EntradaLista
         }
 
         if (ConfigGlobal::role_actual() === 'secretaria') {
-            $btn_carpeta = TRUE;
             $btn_dock = TRUE;
             $secretaria = TRUE;
             $btn_new = TRUE;
@@ -253,8 +250,6 @@ class EntradaLista
 
         $txt_btn_dock = _("revisar dock");
         $pagina_cargar_dock = Hash::link('apps/entradas/controller/entrada_dock.php?' . http_build_query(['filtro' => $filtro]));
-        $txt_btn_carpeta = _("revisar carpeta");
-        $pagina_cargar_carpeta = Hash::link('apps/entradas/controller/entrada_carpeta.php?' . http_build_query(['filtro' => $filtro]));
 
 
         $a_campos = [
@@ -277,10 +272,6 @@ class EntradaLista
             'btn_dock' => $btn_dock,
             'txt_btn_dock' => $txt_btn_dock,
             'pagina_cargar_dock' => $pagina_cargar_dock,
-            // introducir por carpeta
-            'btn_carpeta' => $btn_carpeta,
-            'txt_btn_carpeta' => $txt_btn_carpeta,
-            'pagina_cargar_carpeta' => $pagina_cargar_carpeta,
         ];
 
         $oView = new ViewTwig('entradas/controller');

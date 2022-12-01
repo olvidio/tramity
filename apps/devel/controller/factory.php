@@ -114,7 +114,7 @@ $ATRIBUTOS = '
 	/**
 	 * bLoaded de ' . $clase . '
 	 *
-	 * @var bool
+	 * @var boolean
 	 */
 	 private bool $bLoaded = FALSE;
 
@@ -139,55 +139,6 @@ $altres_gets_set = "";
 $query_if = "";
 $err_bool = "";
 $a_auto = array();
-// una primera vuelta para cargar exceciopnes...
-foreach ($oDbl->query($sql) as $row) {
-    $nomcamp = $row['field'];
-    if ($nomcamp === 'id_schema') {
-        continue;
-    }
-    $tipo = $row['type'];
-
-    switch ($tipo) {
-        case '_int8':
-        case '_int4':
-        case '_int2':
-            $a_use_txt['array_pg2php'] = "use function core\array_pg2php";
-            $a_use_txt['array_php2pg'] = "use function core\array_php2pg";
-            break;
-        case 'int8':
-        case 'int4':
-        case 'int2':
-            break;
-        case 'float4':
-        case 'double':
-        case 'numeric':
-            break;
-        case 'text':
-        case 'varchar':
-            break;
-        case 'date':
-        case 'timestamp':
-        case 'timestamptz';
-            $a_use_txt['DateTimeLocal'] = "use web\DateTimeLocal";
-            $a_use_txt['NullDateTimeLocal'] = "use web\NullDateTimeLocal";
-            $a_use_txt['ConverterDate'] = "use core\ConverterDate";
-            break;
-        case 'time':
-            break;
-        case 'bool':
-            $a_use_txt['is_true'] = "use function core\is_true";
-            break;
-        case 'json':
-        case 'jsonb':
-            $a_use_txt['ConverterJson'] = "use core\ConverterJson";
-            $a_use_txt['JsonException'] = "use JsonException";
-            $a_use_txt['stdClass'] = "use stdClass";
-            break;
-        case 'bytea':
-            break;
-    }
-}
-
 foreach ($oDbl->query($sql) as $row) {
     $nomcamp = $row['field'];
     if ($nomcamp === 'id_schema') {
@@ -234,6 +185,8 @@ foreach ($oDbl->query($sql) as $row) {
             $tipo_db = 'array';
             $tip = 'a_';
             $tip_val = '';
+            $a_use_txt['array_pg2php'] = "use function core\array_pg2php";
+            $a_use_txt['array_php2pg'] = "use function core\array_php2pg";
             break;
         case 'int8':
         case 'int4':
@@ -261,6 +214,9 @@ foreach ($oDbl->query($sql) as $row) {
             $tipo_db = 'DateTimeLocal';
             $tip = 'd';
             $tip_val = '';
+            $a_use_txt['DateTimeLocal'] = "use web\DateTimeLocal";
+            $a_use_txt['NullDateTimeLocal'] = "use web\NullDateTimeLocal";
+            $a_use_txt['ConverterDate'] = "use core\ConverterDate";
             break;
         case 'time':
             $tipo_db = 'string time';
@@ -268,15 +224,19 @@ foreach ($oDbl->query($sql) as $row) {
             $tip_val = '';
             break;
         case 'bool':
-            $tipo_db = 'bool';
+            $tipo_db = 'boolean';
             $tip = 'b';
             $tip_val = 'FALSE';
+            $a_use_txt['is_true'] = "use function core\is_true";
             break;
         case 'json':
         case 'jsonb':
             $tipo_db = 'string';
             $tip = '';
             $tip_val = '';
+            $a_use_txt['ConverterJson'] = "use core\ConverterJson";
+            $a_use_txt['JsonException'] = "use JsonException";
+            $a_use_txt['stdClass'] = "use stdClass";
             break;
         case 'bytea':
             $tipo_db = 'string';
@@ -315,11 +275,8 @@ foreach ($oDbl->query($sql) as $row) {
             $gets .= '
 	/**
 	 *
-	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp;
-    if (!empty($a_use_txt['JsonException'])) {
-        $gets .= "\n\t".' * @throws JsonException';
-    }
-	$gets .= "\n\t".' */
+	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp . '
+	 */
 	public function get' . $NomCamp . '(): '.$tipo_db_txt.'
 	{
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
@@ -333,16 +290,16 @@ foreach ($oDbl->query($sql) as $row) {
             $gets .= '
 	/**
 	 *
-	 * @param bool $bArray si hay que devolver un array en vez de un objeto.
-	 * @return array|stdClass|null $' . $tip . $nomcamp . '
+	 * @param boolean $bArray si hay que devolver un array en vez de un objeto.
+	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp . '
 	 * @throws JsonException
 	 */
-	public function get' . $NomCamp . '(bool $bArray=FALSE): array|stdClass|null
+	public function get' . $NomCamp . '($bArray=FALSE): '.$tipo_db_txt.'
 	{
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
 			$this->DBCargar();
 		}
-		return (new ConverterJson($this->'. $tip . $nomcamp .', $bArray))->fromPg();
+		return (new ConverterJson($this->'. $tip . $nomcamp .'json_visto, $bArray))->fromPg();
 	}';
             break;
         case 'date':
@@ -351,11 +308,9 @@ foreach ($oDbl->query($sql) as $row) {
             $gets .= '
 	/**
 	 *
-	 * @return DateTimeLocal|NullDateTimeLocal' . ' $' . $tip . $nomcamp;
-    if (!empty($a_use_txt['JsonException'])) {
-        $gets .= "\n\t".' * @throws JsonException';
-    }
-	$gets .= "\n\t".' */
+	 * @return DateTimeLocal|NullDateTimeLocal' . ' $' . $tip . $nomcamp . '
+	 * @throws JsonException
+	 */
 	public function get' . $NomCamp . '(): DateTimeLocal|NullDateTimeLocal
 	{
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
@@ -364,18 +319,16 @@ foreach ($oDbl->query($sql) as $row) {
 		if (empty($this->' . $tip . $nomcamp . ')) {
 			return new NullDateTimeLocal();
 		}
-        return (new ConverterDate(\'' . $tipo . '\', $this->' . $tip . $nomcamp . '))->fromPg();
+        $oConverter = new ConverterDate(\'' . $tipo . '\', $this->' . $tip . $nomcamp . ');
+		return $oConverter->fromPg();
 	}';
             break;
         default:
             $gets .= '
 	/**
 	 *
-	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp;
-    if (!empty($a_use_txt['JsonException'])) {
-        $gets .= "\n\t".' * @throws JsonException';
-    }
-	$gets .= "\n\t".' */
+	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp . '
+	 */
 	public function get' . $NomCamp . '(): '.$tip_txt.'
 	{
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
@@ -404,11 +357,11 @@ foreach ($oDbl->query($sql) as $row) {
                 $gets .= '
 	/**
 	 * 
-	 * @param array|string|null $' . $tip . $nomcamp . '
-     * @param bool $db=FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
+	 * @param ' . $tipo_db_txt . ' $' . $tip . $nomcamp . '
+     * @param boolean $db=FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
 	 *  o es una variable de php hay que convertirlo.
 	 */
-	public function set' . $NomCamp . '(array|string $' . $tip . $nomcamp . '= null , bool $db=FALSE): void
+	public function set' . $NomCamp . '($' . $tip . $nomcamp . '=\'' . $tip_val . '\',$db=FALSE): void
 	{
         if ($db === FALSE) {
 	        $postgresArray = array_php2pg($' . $tip . $nomcamp . ');
@@ -423,14 +376,14 @@ foreach ($oDbl->query($sql) as $row) {
                 $gets .= '
 	/**
 	 * 
-	 * @param string|array|null $' . $tip . $nomcamp . '
-     * @param bool $db=FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
+	 * @param ' . $tipo_db_txt . ' $' . $tip . $nomcamp . '
+     * @param boolean $db=FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
 	 *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
 	 * @throws JsonException
 	 */
-	public function set' . $NomCamp . '(string|array|null $'.$tip.$nomcamp.', bool $db=FALSE): void
+	public function set' . $NomCamp . '(' . $tipo_db_txt . ' $oJSON, bool $db=FALSE): void
 	{
-        $this->' . $tip . $nomcamp . ' = (new ConverterJson($'.$tip.$nomcamp.', FALSE))->toPg($db);
+        $this->' . $tip . $nomcamp . ' = (new ConverterJson($oJSON, FALSE))->toPg($db);
 	}';
                 break;
             case 'date':
@@ -442,7 +395,7 @@ foreach ($oDbl->query($sql) as $row) {
 	 * Si convert es FALSE, $' . $tip . $nomcamp . ' debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
 	 * @param DateTimeLocal|string|null $' . $tip . $nomcamp.'
-     * @param bool $convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
+     * @param boolean $convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
 	 */
 	public function set' . $NomCamp . '(DateTimeLocal|string|null $' . $tip . $nomcamp . '=\'\', bool $convert=TRUE): void
 	{
@@ -501,7 +454,7 @@ foreach ($oDbl->query($sql) as $row) {
             $add_convert = TRUE;
             $exists .= "\n\t\t" . 'if (array_key_exists(\'' . $nomcamp . '\',$aDades))';
             $exists .= "\n\t\t{";
-            $exists .= "\n\t\t\t" . '$this->set' . $NomCamp . '($aDades[\'' . $nomcamp . '\'], FALSE);';
+            $exists .= "\n\t\t\t" . '$this->set' . $NomCamp . '($aDades[\'' . $nomcamp . '\'],$convert);';
             $exists .= "\n\t\t}";
             $ToEmpty .= "\n\t\t" . '$this->set' . $NomCamp . '(\'\');';
             break;
@@ -697,11 +650,8 @@ $txt .= '
 	/* MÉTODOS PÚBLICOS ----------------------------------------------------------*/
 
 	/**
-	 * Si no existe el registro, hace un insert, si existe, se hace el update.';
-    if (!empty($a_use_txt['JsonException'])) {
-        $txt .= "\n\t".' * @throws JsonException';
-    }
-	$txt .= "\n\t".' */
+	 * Si no existe el registro, hace un insert, si existe, se hace el update.
+	 */
 	public function DBGuardar(): bool
 	{
 		$oDbl = $this->getoDbl();
@@ -734,7 +684,8 @@ $txt .= '
 				
             try {
                 $oDblSt->execute($aDades);
-            } catch ( PDOException $e) {
+            }
+            catch ( PDOException $e) {
                 $err_txt=$e->errorInfo[2];
                 $this->setErrorTxt($err_txt);
                 $sClaveError = \'' . $clase . '.update.execute\';
@@ -758,7 +709,8 @@ $txt .= '
 			}
             try {
                 $oDblSt->execute($aDades);
-            } catch ( PDOException $e) {
+            }
+            catch ( PDOException $e) {
                 $err_txt=$e->errorInfo[2];
                 $this->setErrorTxt($err_txt);
                 $sClaveError = \'' . $clase . '.insertar.execute\';
@@ -781,11 +733,8 @@ $txt .= "\n\t\t" . '}
 	}
 
 	/**
-	 * Carga los campos de la base de datos como ATRIBUTOS de la clase.';
-    if (!empty($a_use_txt['JsonException'])) {
-        $txt .= "\n\t".' * @throws JsonException';
-    }
-	$txt .= "\n\t".' */
+	 * Carga los campos de la base de datos como ATRIBUTOS de la clase.
+	 */
 	public function DBCargar($que=null): bool
 	{
 		$oDbl = $this->getoDbl();
@@ -850,12 +799,13 @@ $txt .= '	/* MÉTODOS PRIVADOS -------------------------------------------------
 	/**
 	 * Establece el valor de todos los atributos
 	 *
-	 * @param array $aDades';
-if (!empty($a_use_txt['JsonException'])) {
-    $txt .= "\n\t".' * @throws JsonException';
+	 * @param array $aDades
+	 */';
+if ($add_convert === TRUE) {
+    $txt .= "\n\t" . 'private function setAllAtributes(array $aDades, $convert=FALSE): void'. "\n\t" . '{';
+} else {
+    $txt .= "\n\t" . 'private function setAllAtributes(array $aDades): void' . "\n\t" . '{';
 }
-$txt .= "\n\t".' */';
-$txt .= "\n\t" . 'private function setAllAtributes(array $aDades): void' . "\n\t" . '{';
 
 $txt .= $exists;
 $txt .= "\n\t" . '}';
@@ -936,7 +886,7 @@ chmod($filename, 0775);
 chgrp($filename, 'www-data');
 
 /* CONSTRUIR EL GESTOR ------------------------------------------------ */
-$gestor = "GestorBase" . ucfirst($clase);
+$gestor = "Gestor" . ucfirst($clase);
 $txt2 = "<?php
 namespace $grupo\\model\\entity;
 
@@ -1072,7 +1022,7 @@ $txt2 .= '
 }
 ';
 /* ESCRIURE LA CLASSSE ------------------------------------------------ */
-$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/GestorBase' . $Q_clase . '.php';
+$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/Gestor' . $Q_clase . '.php';
 
 
 if (!$handle = fopen($filename, 'w')) {

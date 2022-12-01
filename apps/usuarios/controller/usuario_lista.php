@@ -3,7 +3,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorBaseUsuario;
+use usuarios\model\entity\GestorUsuario;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -36,7 +36,7 @@ if (isset($_POST['stack'])) {
 $aWhere['_ordre'] = 'usuario';
 $aOperador = [];
 
-$oGesUsuarios = new GestorBaseUsuario();
+$oGesUsuarios = new GestorUsuario();
 $oUsuarioColeccion = $oGesUsuarios->getUsuarios($aWhere, $aOperador);
 
 //default:

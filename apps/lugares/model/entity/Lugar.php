@@ -5,7 +5,6 @@ namespace lugares\model\entity;
 use core;
 use PDO;
 use PDOException;
-use function core\is_true;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula lugares
@@ -467,7 +466,7 @@ class Lugar extends core\ClasePropiedades
             $this->setE_mail($aDades['e_mail']);
         }
         if (array_key_exists('anulado', $aDades)) {
-            $this->setAnulado(is_true($aDades['anulado']));
+            $this->setAnulado($aDades['anulado']);
         }
     }
 

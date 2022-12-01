@@ -6,7 +6,6 @@ use core;
 use PDO;
 use PDOException;
 use web;
-use function core\is_true;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula usr
@@ -322,7 +321,7 @@ class UserDB extends core\ClasePropiedades
             $this->setUser_no($aDades['user_no']);
         }
         if (array_key_exists('active', $aDades)) {
-            $this->setActive(is_true($aDades['active']));
+            $this->setActive($aDades['active']);
         }
         if (array_key_exists('email_ok', $aDades)) {
             $this->setEmail_ok($aDades['email_ok'], $convert);

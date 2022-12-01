@@ -1,7 +1,7 @@
 <?php
 
 use core\MyCrypt;
-use usuarios\model\entity\GestorBaseUsuario;
+use usuarios\model\entity\GestorUsuario;
 use usuarios\model\entity\Usuario;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -32,7 +32,7 @@ switch ($Q_que) {
     case "buscar":
         $Q_usuario = (string)filter_input(INPUT_POST, 'usuario');
 
-        $oUsuarios = new GestorBaseUsuario();
+        $oUsuarios = new GestorUsuario();
         $oUser = $oUsuarios->getUsuarios(array('usuario' => $Q_usuario));
         $oUsuario = $oUser[0];
         break;

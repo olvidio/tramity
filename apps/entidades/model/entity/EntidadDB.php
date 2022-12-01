@@ -257,7 +257,7 @@ class EntidadDB extends ClasePropiedades
             $this->setTipo($aDades['tipo']);
         }
         if (array_key_exists('anulado', $aDades)) {
-            $this->setAnulado(is_true($aDades['anulado']));
+            $this->setAnulado($aDades['anulado']);
         }
     }
 
