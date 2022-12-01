@@ -45,6 +45,11 @@ switch ($Q_filtro) {
         switch ($Q_filtro) {
             case 'en_buscar':
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));
+                // En los ctr, ir directo a contestar:
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                    $url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
+                    $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Q_id_entrada]));
+                }
                 break;
             case 'permanentes_cr':
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?' . http_build_query($a_condicion));
@@ -61,6 +66,11 @@ switch ($Q_filtro) {
             case 'entradas_semana':
                 $a_condicion['opcion'] = 52;
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/ver_tabla.php?' . http_build_query($a_condicion));
+                // En los ctr, ir directo a contestar:
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                    $url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
+                    $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Q_id_entrada]));
+                }
                 break;
             default:
                 $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
@@ -309,7 +319,7 @@ $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 // datepicker
 $oFecha = new DateTimeLocal();
 $format = $oFecha::getFormat();
-$yearStart = date('Y');
+$yearStart = (int) date('Y');
 $yearEnd = $yearStart + 2;
 
 $vista = ConfigGlobal::getVista();
