@@ -160,7 +160,7 @@ switch ($Q_que) {
                 $error_txt .= $oEntrada->getErrorTxt();
             }
         }
-        // y en cualquier caso: desmarcar al nuevo (podria estar marcado previamente)
+        // y en cualquier caso: desmarcar al nuevo (podría estar marcado previamente)
         $aVisto = $oEntrada->getJson_visto(TRUE);
         foreach ($aVisto as $key => $oVisto) {
             if ($oVisto['oficina'] === $Qid_oficina && $oVisto['cargo'] === $Qid_cargo_encargado) {

@@ -3,7 +3,7 @@
 use core\MyCrypt;
 use davical\model\Davical;
 use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorUsuario;
+use usuarios\model\entity\GestorBaseUsuario;
 use usuarios\model\entity\Usuario;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -60,7 +60,7 @@ switch ($Q_que) {
     case "buscar":
         $Q_usuario = (string)filter_input(INPUT_POST, 'usuario');
 
-        $oUsuarios = new GestorUsuario();
+        $oUsuarios = new GestorBaseUsuario();
         $oUser = $oUsuarios->getUsuarios(array('usuario' => $Q_usuario));
         $oUsuario = $oUser[0];
         break;
@@ -130,6 +130,8 @@ switch ($Q_que) {
 
         if ($Q_usuario) {
             $oUsuario = new Usuario();
+            $id_usuario = $oUsuario->getNewId_usuario();
+            $oUsuario->setId_usuario($id_usuario);
             $oUsuario->setUsuario($Q_usuario);
             if (!empty($Q_password)) {
                 $oCrypt = new MyCrypt();

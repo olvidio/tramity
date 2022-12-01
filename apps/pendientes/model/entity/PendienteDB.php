@@ -6,6 +6,7 @@ use core;
 use PDO;
 use PDOException;
 use web;
+use function core\is_true;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula pendientes
@@ -374,7 +375,7 @@ class PendienteDB extends core\ClasePropiedades
             $this->setEncargado($aDades['encargado']);
         }
         if (array_key_exists('cancilleria', $aDades)) {
-            $this->setCancilleria($aDades['cancilleria']);
+            $this->setCancilleria(is_true($aDades['cancilleria']));
         }
         if (array_key_exists('visibilidad', $aDades)) {
             $this->setVisibilidad($aDades['visibilidad']);

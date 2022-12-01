@@ -734,7 +734,8 @@ $txt .= '
 				
             try {
                 $oDblSt->execute($aDades);
-            } catch ( PDOException $e) {
+            }
+            catch ( PDOException $e) {
                 $err_txt=$e->errorInfo[2];
                 $this->setErrorTxt($err_txt);
                 $sClaveError = \'' . $clase . '.update.execute\';
@@ -758,7 +759,8 @@ $txt .= '
 			}
             try {
                 $oDblSt->execute($aDades);
-            } catch ( PDOException $e) {
+            }
+            catch ( PDOException $e) {
                 $err_txt=$e->errorInfo[2];
                 $this->setErrorTxt($err_txt);
                 $sClaveError = \'' . $clase . '.insertar.execute\';
@@ -936,7 +938,7 @@ chmod($filename, 0775);
 chgrp($filename, 'www-data');
 
 /* CONSTRUIR EL GESTOR ------------------------------------------------ */
-$gestor = "GestorBase" . ucfirst($clase);
+$gestor = "Gestor" . ucfirst($clase);
 $txt2 = "<?php
 namespace $grupo\\model\\entity;
 
@@ -1072,7 +1074,7 @@ $txt2 .= '
 }
 ';
 /* ESCRIURE LA CLASSSE ------------------------------------------------ */
-$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/GestorBase' . $Q_clase . '.php';
+$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/Gestor' . $Q_clase . '.php';
 
 
 if (!$handle = fopen($filename, 'w')) {

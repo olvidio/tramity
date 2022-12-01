@@ -3,7 +3,7 @@
 use core\ViewTwig;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
-use usuarios\model\entity\GestorUsuario;
+use usuarios\model\entity\GestorBaseUsuario;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -90,7 +90,7 @@ if ($id_ambito === $oCargo::AMBITO_DL) {
     $hay_oficina = FALSE;
 }
 
-$gesUsuarios = new GestorUsuario();
+$gesUsuarios = new GestorBaseUsuario();
 $oDesplUsuarios = $gesUsuarios->getDesplUsuarios();
 $oDesplUsuarios->setNombre('id_usuario');
 $oDesplUsuarios->setOpcion_sel($id_usuario);

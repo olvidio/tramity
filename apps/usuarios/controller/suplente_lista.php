@@ -2,7 +2,7 @@
 
 use core\ViewTwig;
 use usuarios\model\entity\GestorCargo;
-use usuarios\model\entity\GestorUsuario;
+use usuarios\model\entity\GestorBaseUsuario;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -17,10 +17,10 @@ $aOperador = ['id_oficina' => '>'];
 $gesCargo = new GestorCargo();
 $cCargos = $gesCargo->getCargos($aWhere, $aOperador);
 
-$gesUsuarios = new GestorUsuario();
+$gesUsuarios = new GestorBaseUsuario();
 
 $a_valores = [];
-$gesUsuarios = new GestorUsuario();
+$gesUsuarios = new GestorBaseUsuario();
 $aUsuarios = $gesUsuarios->getArrayUsuarios();
 foreach ($cCargos as $oCargo) {
     $cargo = $oCargo->getCargo();

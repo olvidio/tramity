@@ -49,7 +49,7 @@ $oDesplLocales->setNombre('idioma_nou');
 $oDesplLocales->setOpcion_sel($idioma);
 
 // ----------- nom usuario y mail -------------------
-$oUsuario = new Usuario(array('id_usuario' => $id_usuario));
+$oUsuario = new Usuario($id_usuario);
 
 $usuario = $oUsuario->getUsuario();
 $nom_usuario = $oUsuario->getNom_usuario();

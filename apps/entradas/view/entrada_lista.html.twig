@@ -2,6 +2,9 @@
     <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
         {{ txt_btn_new }}
     </button>
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_cargar_carpeta|raw }}');">
+        {{ txt_btn_carpeta }}
+    </button>
 {% endif %}
 {% if btn_dock %}
     {% if vista == 'ctr' %}

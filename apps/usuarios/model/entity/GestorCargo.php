@@ -16,25 +16,12 @@ use web\Desplegable;
  * @version 1.0
  * @created 12/11/2020
  */
-class GestorCargo extends core\ClaseGestor
+class GestorCargo extends GestorBaseCargo
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
-
-    /**
-     * Constructor de la classe.
-     *
-     * @return $gestor
-     *
-     */
-    function __construct()
-    {
-        $oDbl = $GLOBALS['oDBT'];
-        $this->setoDbl($oDbl);
-        $this->setNomTabla('aux_cargos');
-    }
 
 
     /* MÉTODOS PÚBLICOS -----------------------------------------------------------*/
@@ -234,7 +221,7 @@ class GestorCargo extends core\ClaseGestor
      * retorna un Array
      * Els posibles cargos de ref al tramite
      *
-     * @return Array
+     * @return array|false
      */
     function getArrayCargosRef()
     {
@@ -346,103 +333,4 @@ class GestorCargo extends core\ClaseGestor
         return new Desplegable('', $aOpciones, '', true);
     }
 
-    /**
-     * retorna l'array d'objectes de tipus Cargo
-     *
-     * @param string sQuery la query a executar.
-     * @return array Una col·lecció d'objectes de tipus Cargo
-     */
-    function getCargosQuery($sQuery = '')
-    {
-        $oDbl = $this->getoDbl();
-        $oCargoSet = new core\Set();
-        if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'GestorCargo.query';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_cargo' => $aDades['id_cargo']);
-            $oCargo = new Cargo($a_pkey);
-            $oCargoSet->add($oCargo);
-        }
-        return $oCargoSet->getTot();
-    }
-
-    /**
-     * retorna l'array d'objectes de tipus Cargo
-     *
-     * @param array aWhere associatiu amb els valors de les variables amb les quals farem la query
-     * @param array aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
-     * @return array Una col·lecció d'objectes de tipus Cargo
-     */
-    function getCargos($aWhere = array(), $aOperators = array())
-    {
-        $oDbl = $this->getoDbl();
-        $nom_tabla = $this->getNomTabla();
-        $oCargoSet = new core\Set();
-        $oCondicion = new core\Condicion();
-        $aCondi = array();
-        foreach ($aWhere as $camp => $val) {
-            if ($camp === '_ordre') {
-                continue;
-            }
-            if ($camp === '_limit') {
-                continue;
-            }
-            $sOperador = $aOperators[$camp] ?? '';
-            if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
-                $aCondi[] = $a;
-            }
-            // operadores que no requieren valores
-            if ($sOperador === 'BETWEEN' || $sOperador === 'IS NULL' || $sOperador === 'IS NOT NULL' || $sOperador === 'OR') {
-                unset($aWhere[$camp]);
-            }
-            if ($sOperador === 'IN' || $sOperador === 'NOT IN') {
-                unset($aWhere[$camp]);
-            }
-            if ($sOperador === 'TXT') {
-                unset($aWhere[$camp]);
-            }
-        }
-        $sCondi = implode(' AND ', $aCondi);
-        if ($sCondi != '') {
-            $sCondi = " WHERE " . $sCondi;
-        }
-        $sOrdre = '';
-        $sLimit = '';
-        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] !== '') {
-            $sOrdre = ' ORDER BY ' . $aWhere['_ordre'];
-        }
-        if (isset($aWhere['_ordre'])) {
-            unset($aWhere['_ordre']);
-        }
-        if (isset($aWhere['_limit']) && $aWhere['_limit'] !== '') {
-            $sLimit = ' LIMIT ' . $aWhere['_limit'];
-        }
-        if (isset($aWhere['_limit'])) {
-            unset($aWhere['_limit']);
-        }
-        $sQry = "SELECT * FROM $nom_tabla " . $sCondi . $sOrdre . $sLimit;
-        if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorCargo.llistar.prepare';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorCargo.llistar.execute';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_cargo' => $aDades['id_cargo']);
-            $oCargo = new Cargo($a_pkey);
-            $oCargoSet->add($oCargo);
-        }
-        return $oCargoSet->getTot();
-    }
-
-    /* MÉTODOS PROTECTED --------------------------------------------------------*/
-
-    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

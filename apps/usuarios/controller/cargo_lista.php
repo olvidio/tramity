@@ -3,7 +3,7 @@
 use core\ViewTwig;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use usuarios\model\entity\GestorUsuario;
+use usuarios\model\entity\GestorBaseUsuario;
 use usuarios\model\entity\Oficina;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -57,7 +57,7 @@ $a_botones = [['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
 
 $a_valores = array();
 $i = 0;
-$gesUsuarios = new GestorUsuario();
+$gesUsuarios = new GestorBaseUsuario();
 $aUsuarios = $gesUsuarios->getArrayUsuarios();
 foreach ($cCargos as $oCargo) {
     $i++;

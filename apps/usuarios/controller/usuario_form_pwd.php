@@ -36,7 +36,7 @@ if (!empty($a_sel)) { //vengo de un checkbox
 $txt_guardar = _("guardar datos");
 $txt_ok = _("se ha cambiado el password");
 
-$oUsuario = new usuarios\Usuario(array('id_usuario' => $id_usuario));
+$oUsuario = new usuarios\Usuario($id_usuario);
 
 $id_usuario = $oUsuario->getId_usuario();
 $usuario = $oUsuario->getUsuario();

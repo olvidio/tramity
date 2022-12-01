@@ -2,69 +2,39 @@
 
 namespace usuarios\model\entity;
 
-use core\ClasePropiedades;
-use core\DatosCampo;
-use core\Set;
-use PDO;
-use PDOException;
-
 /**
- * Fitxer amb la Classe que accedeix a la taula aux_usuarios
+ * Clase que implementa la entidad aux_usuarios
  *
  * @package tramity
  * @subpackage model
  * @author Daniel Serrabou
- * @version 1.0
- * @created 4/6/2020
+ * @version 2.0
+ * @created 30/11/2022
  */
-
-/**
- * Classe que implementa l'entitat aux_usuarios
- *
- * @package tramity
- * @subpackage model
- * @author Daniel Serrabou
- * @version 1.0
- * @created 4/6/2020
- */
-class Usuario extends ClasePropiedades
+class Usuario
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 
-    /**
-     * oDbl de Usuario
-     *
-     * @var object
-     */
-    protected $oDbl;
-    /**
-     * NomTabla de Usuario
-     *
-     * @var string
-     */
-    protected $sNomTabla;
+
     /**
      * aPrimary_key de Usuario
      *
      * @var array
      */
     private array $aPrimary_key;
+
     /**
-     * aDades de Usuario
+     * bLoaded de Usuario
      *
-     * @var array
-     */
-    private array $aDades;
-    /**
-     * bLoaded
-     *
-     * @var boolean
+     * @var bool
      */
     private bool $bLoaded = FALSE;
+
+
     /**
      * Id_usuario de Usuario
      *
-     * @var integer
+     * @var int
      */
     private int $iid_usuario;
     /**
@@ -76,7 +46,7 @@ class Usuario extends ClasePropiedades
     /**
      * Id_cargo_preferido de Usuario
      *
-     * @var integer
+     * @var int
      */
     private int $iid_cargo_preferido;
     /**
@@ -97,148 +67,56 @@ class Usuario extends ClasePropiedades
      * @var string|null
      */
     private ?string $snom_usuario = null;
+    /* ATRIBUTOS QUE NO SON CAMPOS------------------------------------------------- */
+
+    private UsuarioRepository $repository;
+
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
-     * Constructor de la classe.
-     * Si només necessita un valor, se li pot passar un integer.
-     * En general se li passa un array amb les claus primàries.
-     *
      * @param integer|null $iid_usuario
-     *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
     public function __construct(int $iid_usuario = null)
     {
-         $oDbl = $GLOBALS['oDBT'];
+        $this->repository = new UsuarioRepository();
         if ($iid_usuario !== null) {
             $this->iid_usuario = $iid_usuario;
             $this->aPrimary_key = array('iid_usuario' => $this->iid_usuario);
         }
-        $this->setoDbl($oDbl);
-        $this->setNomTabla('aux_usuarios');
     }
 
     /* MÉTODOS PÚBLICOS ----------------------------------------------------------*/
 
     /**
-     * Desa els ATRIBUTOS de l'objecte a la base de dades.
-     * Si no hi ha el registre, fa el insert, si hi es fa el update.
-     *
+     * Si no existe el registro, hace un insert, si existe, se hace el update.
      */
     public function DBGuardar(): bool
     {
-        $oDbl = $this->getoDbl();
-        $nom_tabla = $this->getNomTabla();
-        if ($this->DBCargar('guardar') === FALSE) {
-            $bInsert = TRUE;
-        } else {
-            $bInsert = FALSE;
-        }
-        $aDades = array();
-        $aDades['usuario'] = $this->susuario;
-        $aDades['id_cargo_preferido'] = $this->iid_cargo_preferido;
-        $aDades['password'] = $this->spassword;
-        $aDades['email'] = $this->semail;
-        $aDades['nom_usuario'] = $this->snom_usuario;
-        array_walk($aDades, 'core\poner_null');
-
-        if ($bInsert === FALSE) {
-            //UPDATE
-            $update = "
-					usuario                  = :usuario,
-					id_cargo_preferido       = :id_cargo_preferido,
-					password                 = :password,
-					email                    = :email,
-					nom_usuario              = :nom_usuario";
-            if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_usuario='$this->iid_usuario'")) === FALSE) {
-                $sClauError = 'Usuario.update.prepare';
-                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-                return FALSE;
-            }
-
-            try {
-                $oDblSt->execute($aDades);
-            } catch (PDOException $e) {
-                $err_txt = $e->errorInfo[2];
-                $this->setErrorTxt($err_txt);
-                $sClauError = 'Usuario.update.execute';
-                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                return FALSE;
-            }
-        } else {
-            // INSERT
-            $campos = "(usuario,id_cargo_preferido,password,email,nom_usuario)";
-            $valores = "(:usuario,:id_cargo_preferido,:password,:email,:nom_usuario)";
-            if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
-                $sClauError = 'Usuario.insertar.prepare';
-                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-                return FALSE;
-            }
-
-            try {
-                $oDblSt->execute($aDades);
-            } catch (PDOException $e) {
-                $err_txt = $e->errorInfo[2];
-                $this->setErrorTxt($err_txt);
-                $sClauError = 'Usuario.insertar.execute';
-                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                return FALSE;
-            }
-            $this->iid_usuario = $oDbl->lastInsertId('aux_usuarios_id_usuario_seq');
-        }
-        $this->setAllAtributes($aDades);
-        return TRUE;
+        return $this->repository->Guardar($this);
     }
 
     /**
-     * Carga los campos de la tabla como atributos de la clase.
-     *
+     * Carga los campos de la base de datos como ATRIBUTOS de la clase.
      */
-    public function DBCargar($que = null): bool
+    public function DBCargar(): void
     {
-        $oDbl = $this->getoDbl();
-        $nom_tabla = $this->getNomTabla();
-        if (isset($this->iid_usuario)) {
-            if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_usuario='$this->iid_usuario'")) === FALSE) {
-                $sClauError = 'Usuario.carregar';
-                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-                return FALSE;
-            }
-            // para los bytea:
-            $sPasswd = '';
-            $oDblSt->bindColumn('password', $sPasswd, PDO::PARAM_STR);
-            $aDades = $oDblSt->fetch(PDO::FETCH_ASSOC);
-            // Para evitar posteriores cargas
-            $this->bLoaded = TRUE;
-            $aDades['password'] = $sPasswd;
-            switch ($que) {
-                case 'tot':
-                    $this->aDades = $aDades;
-                    break;
-                case 'guardar':
-                    if (!$oDblSt->rowCount()) {
-                        return FALSE;
-                    }
-                    break;
-                default:
-                    // En el caso de no existir esta fila, $aDades = FALSE:
-                    if ($aDades === FALSE) {
-                        return FALSE;
-                    }
-                   $this->setAllAtributes($aDades);
-            }
-            return TRUE;
-        }
-
-        return FALSE;
+        $this->bLoaded = TRUE;
+        $aDatos = $this->repository->datosById($this->iid_usuario);
+        $this->repository->setAllAttributes($this, $aDatos);
     }
 
-    
-    /* OTOS MÉTODOS  ----------------------------------------------------------*/
-    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
+    public function DBEliminar(): bool
+    {
+        return $this->repository->Eliminar($this);
+    }
+
+    public function hidrate($aDatos): void
+    {
+        $this->repository->setAllAttributes($this, $aDatos);
+    }
 
     /**
-     * Recupera las claus primàries de Usuario en un array
+     * Recupera las claves primarias de Usuario en un array
      *
      * @return array aPrimary_key
      */
@@ -251,112 +129,18 @@ class Usuario extends ClasePropiedades
     }
 
     /**
-     * @param integer $iid_usuario
-     */
-    public function setId_usuario(int $iid_usuario): void
-    {
-        $this->iid_usuario = $iid_usuario;
-    }
-
-    /* MÉTODOS GET y SET --------------------------------------------------------*/
-
-    /**
-     * @param string $susuario
-     */
-    public function setUsuario(string $susuario): void
-    {
-        $this->susuario = $susuario;
-    }
-
-    /**
-     * @param integer $iid_cargo_preferido
-     */
-    public function setId_cargo_preferido(int $iid_cargo_preferido): void
-    {
-        $this->iid_cargo_preferido = $iid_cargo_preferido;
-    }
-
-    /**
-     * @param string|null $spassword
-     */
-    public function setPassword(string $spassword = null): void
-    {
-        $this->spassword = $spassword;
-    }
-
-    /**
-     * @param string|null $semail
-     */
-    public function setEmail(string $semail = null): void
-    {
-        $this->semail = $semail;
-    }
-
-    /**
-     * @param string|null $snom_usuario
-     */
-    public function setNom_usuario(string $snom_usuario = null): void
-    {
-        $this->snom_usuario = $snom_usuario;
-    }
-
-    /**
-     * Estableix las claus primàries de Usuario en un array
+     * Establece las claves primarias de Usuario en un array
      *
      */
-    public function setPrimary_key(int $iid_usuario): void
+    public function setPrimary_key(array $aPrimaryKey): void
     {
-        $this->iid_usuario = $iid_usuario;
-        $this->aPrimary_key = array('iid_usuario' => $this->iid_usuario);
+        $this->aPrimary_key = $aPrimaryKey;
     }
 
-    /**
-     * Establece el valor de todos los atributos
-     *
-     * @param array $aDades
-     */
-    private function setAllAtributes(array $aDades): void
-    {
-        if (array_key_exists('id_usuario', $aDades)) {
-            $this->setId_usuario($aDades['id_usuario']);
-        }
-        if (array_key_exists('usuario', $aDades)) {
-            $this->setUsuario($aDades['usuario']);
-        }
-        if (array_key_exists('id_cargo_preferido', $aDades)) {
-            $this->setId_cargo_preferido($aDades['id_cargo_preferido']);
-        }
-        if (array_key_exists('password', $aDades)) {
-            $this->setPassword($aDades['password']);
-        }
-        if (array_key_exists('email', $aDades)) {
-            $this->setEmail($aDades['email']);
-        }
-        if (array_key_exists('nom_usuario', $aDades)) {
-            $this->setNom_usuario($aDades['nom_usuario']);
-        }
-    }
 
     /**
-     * Elimina el registre de la base de dades corresponent a l'objecte.
      *
-     */
-    public function DBEliminar(): bool
-    {
-        $oDbl = $this->getoDbl();
-        $nom_tabla = $this->getNomTabla();
-        if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_usuario='$this->iid_usuario'")) === FALSE) {
-            $sClauError = 'Usuario.eliminar';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        return TRUE;
-    }
-
-    /**
-     * Recupera l'atribut iid_usuario de Usuario
-     *
-     * @return integer $iid_usuario
+     * @return int $iid_usuario
      */
     public function getId_usuario(): int
     {
@@ -367,7 +151,15 @@ class Usuario extends ClasePropiedades
     }
 
     /**
-     * Recupera l'atribut susuario de Usuario
+     *
+     * @param int $iid_usuario
+     */
+    public function setId_usuario(int $iid_usuario): void
+    {
+        $this->iid_usuario = $iid_usuario;
+    }
+
+    /**
      *
      * @return string $susuario
      */
@@ -380,9 +172,17 @@ class Usuario extends ClasePropiedades
     }
 
     /**
-     * Recupera l'atribut iid_cargo_preferido de Usuario
      *
-     * @return integer $iid_cargo_preferido
+     * @param string $susuario
+     */
+    public function setUsuario(string $susuario): void
+    {
+        $this->susuario = $susuario;
+    }
+
+    /**
+     *
+     * @return int $iid_cargo_preferido
      */
     public function getId_cargo_preferido(): int
     {
@@ -393,7 +193,15 @@ class Usuario extends ClasePropiedades
     }
 
     /**
-     * Recupera l'atribut spassword de Usuario
+     *
+     * @param int $iid_cargo_preferido
+     */
+    public function setId_cargo_preferido(int $iid_cargo_preferido): void
+    {
+        $this->iid_cargo_preferido = $iid_cargo_preferido;
+    }
+
+    /**
      *
      * @return string|null $spassword
      */
@@ -406,7 +214,15 @@ class Usuario extends ClasePropiedades
     }
 
     /**
-     * Recupera l'atribut semail de Usuario
+     *
+     * @param string|null $spassword
+     */
+    public function setPassword(string $spassword = null): void
+    {
+        $this->spassword = $spassword;
+    }
+
+    /**
      *
      * @return string|null $semail
      */
@@ -419,7 +235,15 @@ class Usuario extends ClasePropiedades
     }
 
     /**
-     * Recupera l'atribut snom_usuario de Usuario
+     *
+     * @param string|null $semail
+     */
+    public function setEmail(?string $semail = null): void
+    {
+        $this->semail = $semail;
+    }
+
+    /**
      *
      * @return string|null $snom_usuario
      */
@@ -432,99 +256,17 @@ class Usuario extends ClasePropiedades
     }
 
     /**
-     * Retorna una col·lecció d'objectes del tipus DatosCampo
      *
+     * @param string|null $snom_usuario
      */
-    public function getDatosCampos(): array
+    public function setNom_usuario(?string $snom_usuario = null): void
     {
-        $oUsuarioSet = new Set();
-
-        $oUsuarioSet->add($this->getDatosUsuario());
-        $oUsuarioSet->add($this->getDatosId_cargo_preferido());
-        $oUsuarioSet->add($this->getDatosPassword());
-        $oUsuarioSet->add($this->getDatosEmail());
-        $oUsuarioSet->add($this->getDatosNom_usuario());
-        return $oUsuarioSet->getTot();
-    }
-    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
-
-    /**
-     * Recupera les propietats de l'atribut susuario de Usuario
-     * en una clase del tipus DatosCampo
-     *
-     * @return DatosCampo
-     */
-    public function getDatosUsuario(): DatosCampo
-    {
-        $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'usuario'));
-        $oDatosCampo->setEtiqueta(_("usuario"));
-        return $oDatosCampo;
+        $this->snom_usuario = $snom_usuario;
     }
 
-    /**
-     * Recupera les propietats de l'atribut iid_cargo_preferido de Usuario
-     * en una clase del tipus DatosCampo
-     *
-     * @return DatosCampo
-     */
-    public function getDatosId_cargo_preferido(): DatosCampo
+    public function getNewId_usuario()
     {
-        $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_cargo_preferido'));
-        $oDatosCampo->setEtiqueta(_("id_cargo_preferido"));
-        return $oDatosCampo;
+        return $this->repository->getNewId_usuario();
     }
 
-    /**
-     * Recupera les propietats de l'atribut spassword de Usuario
-     * en una clase del tipus DatosCampo
-     *
-     * @return DatosCampo
-     */
-    public function getDatosPassword(): DatosCampo
-    {
-        $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'password'));
-        $oDatosCampo->setEtiqueta(_("password"));
-        return $oDatosCampo;
-    }
-
-    /**
-     * Recupera les propietats de l'atribut semail de Usuario
-     * en una clase del tipus DatosCampo
-     *
-     * @return DatosCampo
-     */
-    public function getDatosEmail(): DatosCampo
-    {
-        $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'email'));
-        $oDatosCampo->setEtiqueta(_("email"));
-        return $oDatosCampo;
-    }
-
-    /**
-     * Recupera les propietats de l'atribut snom_usuario de Usuario
-     * en una clase del tipus DatosCampo
-     *
-     * @return DatosCampo
-     */
-    public function getDatosNom_usuario(): DatosCampo
-    {
-        $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'nom_usuario'));
-        $oDatosCampo->setEtiqueta(_("nom_usuario"));
-        return $oDatosCampo;
-    }
-
-    /**
-     * Recupera tots els ATRIBUTOS de Usuario en un array
-     *
-     * @return array $aDades
-     */
-    public function getTot(): array
-    {
-        return $this->aDades;
-    }
 }
