@@ -4,6 +4,7 @@ namespace usuarios\model\entity;
 use core;
 use PDO;
 use PDOException;
+use function core\is_true;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula x_locales
@@ -330,7 +331,7 @@ class Locale extends core\ClasePropiedades
             $this->setNom_idioma($aDades['nom_idioma']);
         }
         if (array_key_exists('activo', $aDades)) {
-            $this->setActivo($aDades['activo']);
+            $this->setActivo(is_true($aDades['activo']));
         }
     }
 

@@ -379,7 +379,7 @@ class EntradaDB extends ClasePropiedades
             $this->setF_contestar($aDades['f_contestar'], $convert);
         }
         if (array_key_exists('bypass', $aDades)) {
-            $this->setBypass($aDades['bypass']);
+            $this->setBypass(is_true($aDades['bypass']));
         }
         if (array_key_exists('estado', $aDades)) {
             $this->setEstado($aDades['estado']);

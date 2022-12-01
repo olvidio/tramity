@@ -308,10 +308,10 @@ class Cargo extends ClasePropiedades
             $this->setId_oficina($aDades['id_oficina']);
         }
         if (array_key_exists('director', $aDades)) {
-            $this->setDirector($aDades['director']);
+            $this->setDirector(is_true($aDades['director']));
         }
         if (array_key_exists('sacd', $aDades)) {
-            $this->setSacd($aDades['sacd']);
+            $this->setSacd(is_true($aDades['sacd']));
         }
         if (array_key_exists('id_usuario', $aDades)) {
             $this->setId_usuario($aDades['id_usuario']);
