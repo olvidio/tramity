@@ -2,7 +2,7 @@
 
 use core\ViewTwig;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\domain\entity\CargoGrupo;
+use usuarios\model\entity\CargoGrupo;
 use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
