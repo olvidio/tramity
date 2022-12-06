@@ -3,8 +3,13 @@
 namespace usuarios\model;
 
 use core\ConfigGlobal;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use entradas\model\Entrada;
+use escritos\model\Escrito;
+use expedientes\model\Expediente;
+use JsonException;
+use pendientes\model\Pendiente;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 
 class PermRegistro
 {
@@ -438,17 +443,21 @@ class PermRegistro
      * Función para buscar el permiso para ver el asunto, detalle o escrito
      * de una entrada o escrito o pendiente según quien sea yo.
      *
-     * @param oEscrito|oPendiente|oExpediente|oEntrada $objeto
+     * @param Entrada|Escrito|Expediente|Pendiente $objeto
      * @param string $que (asunto|detalle|escrito|cambio)
      * @return number
+     * @throws JsonException
      */
-    private function permiso_detalle_ctr($objeto, $que)
+    private function permiso_detalle_ctr(Pendiente|Expediente|Escrito|Entrada $objeto, string $que)
     {
 
         $id_cargo_role = ConfigGlobal::role_id_cargo();
-        $oCargo = new Cargo($id_cargo_role);
-        $soy_dtor = $oCargo->getDirector();
-        $soy_sacd = $oCargo->getSacd();
+        $CargoRepository = new CargoRepository();
+        $oCargo = $CargoRepository->findById($id_cargo_role);
+        if ($oCargo !== null) {
+            $soy_dtor = $oCargo->isDirector();
+            $soy_sacd = $oCargo->isSacd();
+        }
 
         $visibilidad = $objeto->getVisibilidad();
         $visibilidad = empty($visibilidad) ? Visibilidad::V_TODOS : $visibilidad;
@@ -469,11 +478,11 @@ class PermRegistro
      * Función para buscar el permiso para ver el asunto, detalle o escrito
      * de una entrada o escrito o pendiente según quien sea yo.
      *
-     * @param object $oEntrada |$oEscrito|$oPendiente|oExpediente
+     * @param Entrada|Escrito|Pendiente|Expediente $objeto
      * @param string $que (asunto|detalle|escrito|cambio)
      * @return number
      */
-    private function permiso_detalle_dl($objeto, $que)
+    private function permiso_detalle_dl($objeto, string $que): int
     {
         $role_actual = ConfigGlobal::role_actual();
         $id_oficina_pral = '';
@@ -485,10 +494,11 @@ class PermRegistro
         } else {
             $id_oficina_role = ConfigGlobal::role_id_oficina();
             $id_cargo_role = ConfigGlobal::role_id_cargo();
-            $oCargo = new Cargo($id_cargo_role);
-            if ($oCargo->DBCargar()) {
+            $CargoRepository = new CargoRepository();
+            $oCargo = $CargoRepository->findById($id_cargo_role);
+            if ($oCargo !== null) {
                 // Asegurar que existe el cargo
-                $soy_dtor = $oCargo->getDirector();
+                $soy_dtor = $oCargo->isDirector();
             }
         }
 
@@ -509,21 +519,22 @@ class PermRegistro
             // Sólo afecta a los que tengan fecha de aprobación:
             if (empty($objeto->getF_aprobacion()->getIso())) {
                 return self::PERM_MODIFICAR;
-            } else {
-                $resto_cargos = $objeto->getResto_oficinas();
-                // pasar cargos a oficinas:
-                $id_ponente = $objeto->getPonente();
-                $oCargoP = new Cargo($id_ponente);
-                if ($oCargoP->DBCargar()) {
+            }
+
+            $resto_cargos = $objeto->getResto_oficinas();
+            // pasar cargos a oficinas:
+            $id_ponente = $objeto->getPonente();
+            $CargoRepository = new CargoRepository();
+            $oCargoP = $CargoRepository->findById($id_ponente);
+            if ($oCargoP !== null) {
+                // asegurar que existe el cargo
+                $id_oficina_pral = $oCargoP->getId_oficina();
+            }
+            foreach ($resto_cargos as $id_cargo) {
+                $oCargo = $CargoRepository->findById($id_cargo);
+                if ($oCargo !== null) {
                     // asegurar que existe el cargo
-                    $id_oficina_pral = $oCargoP->getId_oficina();
-                }
-                foreach ($resto_cargos as $id_cargo) {
-                    $oCargo = new Cargo($id_cargo);
-                    if ($oCargo->DBCargar()) {
-                        // asegurar que existe el cargo
-                        $a_oficinas[] = $oCargo->getId_oficina();
-                    }
+                    $a_oficinas[] = $oCargo->getId_oficina();
                 }
             }
         }
@@ -537,20 +548,20 @@ class PermRegistro
                 $soy = 'dtor_pral';
                 break;
             default:
-                if (in_array($id_oficina_role, $a_oficinas)) {
+                if (in_array($id_oficina_role, $a_oficinas, true)) {
                     $soy = empty($soy_dtor) ? 'of_imp' : 'dtor_imp';
                 }
-                if ($id_oficina_role == $id_oficina_pral) {
+                if ($id_oficina_role === $id_oficina_pral) {
                     $soy = empty($soy_dtor) ? 'of_pral' : 'dtor_pral';
                 }
         }
         // para el sd, como vcd excepto si la oficina es vcd.
         // Lo pongo fuera de switch para aprovechar el default.
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && $role_actual == 'sd') {
-            $gesCargo = new GestorCargo();
-            $cCargos = $gesCargo->getCargos(['cargo' => 'vcd']);
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && $role_actual === 'sd') {
+            $CargoRepository = new CargoRepository();
+            $cCargos = $CargoRepository->getCargos(['cargo' => 'vcd']);
             $id_oficina_vcd = $cCargos[0]->getId_oficina();
-            if ($id_oficina_pral != $id_oficina_vcd) {
+            if ($id_oficina_pral !== $id_oficina_vcd) {
                 $soy = 'dtor_pral';
             }
         }

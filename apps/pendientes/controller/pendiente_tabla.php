@@ -6,8 +6,8 @@ use davical\model\Davical;
 use etiquetas\model\entity\GestorEtiqueta;
 use pendientes\model\GestorPendiente;
 use pendientes\model\Rrule;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\entity\GestorOficina;
 use usuarios\model\PermRegistro;
 use web\DateTimeLocal;
@@ -58,6 +58,7 @@ $oDesplCalendarios->setOpciones($aOpciones);
 $oDesplCalendarios->setOpcion_sel($op_calendario_default);
 $oDesplCalendarios->setAction('fnjs_calendario()');
 
+$CargoRepository = new CargoRepository();
 // Para dl, Hace falta el nombre de la oficina;
 // para ctr, uso el nombre del esquema:
 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
@@ -75,7 +76,7 @@ if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
         $oDesplOficinas = []; // para evitar errores
         $secretaria = 0; // NO FALSE, para eljavascript;
         $perm_periodico = 0; // NO TRUE, para eljavascript;
-        $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
+        $oCargo = $CargoRepository->findById(ConfigGlobal::role_id_cargo());
         $id_oficina = $oCargo->getId_oficina();
     }
 
@@ -89,8 +90,7 @@ if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
     $perm_periodico = 1; // NO TRUE, para el javascript;
     $id_oficina = Cargo::OFICINA_ESQUEMA;
 }
-$gesCargos = new GestorCargo();
-$a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
+$a_usuarios_oficina = $CargoRepository->getArrayUsuariosOficina($id_oficina);
 
 $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
 $cal_oficina = $oDavical->getNombreRecurso($id_oficina);
@@ -122,16 +122,16 @@ if (!empty($Q_periodo)) {
             $limite = date("Ymd", mktime(0, 0, 0, date("m"), date("d"), date("Y")));
             break;
         case "semana":
-            $limite = date("Ymd", mktime(0, 0, 0, date("m"), date("d") + 7, date("Y")));
+            $limite = date("Ymd", mktime(0, 0, 0, date("m"), (int) date("d") + 7, date("Y")));
             break;
         case "mes":
-            $limite = date("Ymd", mktime(0, 0, 0, date("m") + 1, date("d"), date("Y")));
+            $limite = date("Ymd", mktime(0, 0, 0, (int)date("m") + 1, date("d"), date("Y")));
             break;
         case "trimestre":
-            $limite = date("Ymd", mktime(0, 0, 0, date("m") + 3, date("d"), date("Y")));
+            $limite = date("Ymd", mktime(0, 0, 0, (int)date("m") + 3, date("d"), date("Y")));
             break;
         case "any":
-            $limite = date("Ymd", mktime(0, 0, 0, date("m"), date("d"), date("Y") + 1));
+            $limite = date("Ymd", mktime(0, 0, 0, date("m"), date("d"), (int)date("Y") + 1));
             break;
         default:
             $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);

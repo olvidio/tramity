@@ -13,8 +13,7 @@ use etiquetas\model\entity\GestorEtiquetaExpediente;
 use expedientes\model\Expediente;
 use expedientes\model\GestorExpediente;
 use lugares\model\entity\GestorLugar;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\entity\GestorOficina;
 use usuarios\model\PermRegistro;
 use web\DateTimeLocal;
@@ -38,8 +37,8 @@ $Q_que = (string)filter_input(INPUT_POST, 'que');
 $Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
 $Q_oficina_buscar = (integer)filter_input(INPUT_POST, 'oficina_buscar');
 
-$gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargos();
+$CargoRepository = new CargoRepository();
+$a_posibles_cargos = $CargoRepository->getArrayCargos();
 //n = 1 -> Entradas
 //n = 2 -> Expedientes
 //n = 3 -> Escritos-propuestas
@@ -50,7 +49,7 @@ switch ($Q_que) {
 
         $a_antecedente = ['tipo' => $Q_tipo_antecedente, 'id' => $Q_id_escrito];
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -66,7 +65,7 @@ switch ($Q_que) {
 
         $a_antecedente = ['tipo' => $Q_tipo_antecedente, 'id' => $Q_id_escrito];
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -236,8 +235,8 @@ switch ($Q_que) {
         $aOperador = [];
         // sólo los de mi oficina:
         $id_oficina = ConfigGlobal::role_id_oficina();
-        $gesCargos = new GestorCargo();
-        $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+        $CargoRepository = new CargoRepository();
+        $a_cargos_oficina = $CargoRepository->getArrayCargosOficina($id_oficina);
         $a_cargos = [];
         foreach (array_keys($a_cargos_oficina) as $id_cargo) {
             $a_cargos[] = $id_cargo;
@@ -564,8 +563,8 @@ switch ($Q_que) {
         $aOperador = [];
         // sólo los de mi oficina:
         $id_oficina = ConfigGlobal::role_id_oficina();
-        $gesCargos = new GestorCargo();
-        $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+        $CargoRepository = new CargoRepository();
+        $a_cargos_oficina = $CargoRepository->getArrayCargosOficina($id_oficina);
         $a_cargos = [];
         foreach (array_keys($a_cargos_oficina) as $id_cargo) {
             $a_cargos[] = $id_cargo;
@@ -718,10 +717,10 @@ switch ($Q_que) {
         $aOperador = [];
         $aWhere['estado'] = Expediente::ESTADO_BORRADOR;
         // posibles oficiales de la oficina:
-        $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
+        $CargoRepository = new CargoRepository();
+        $oCargo = $CargoRepository->findById(ConfigGlobal::role_id_cargo());
         $id_oficina = $oCargo->getId_oficina();
-        $gesCargos = new GestorCargo();
-        $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+        $a_cargos_oficina = $CargoRepository->getArrayCargosOficina($id_oficina);
         $a_cargos = [];
         foreach (array_keys($a_cargos_oficina) as $id_cargo) {
             $a_cargos[] = $id_cargo;

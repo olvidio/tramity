@@ -7,8 +7,8 @@ use escritos\model\Escrito;
 use escritos\model\GestorEscrito;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\Categoria;
-use usuarios\model\entity\GestorCargo;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
 use web\DateTimeLocal;
@@ -65,8 +65,8 @@ foreach ($a_posibles_lugares as $id_lugar => $sigla) {
 */
 
 $txt_option_cargos = '';
-$gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargos();
+$CargoRepository = new CargoRepository();
+$a_posibles_cargos = $CargoRepository->getArrayCargos();
 foreach ($a_posibles_cargos as $id_cargo => $cargo) {
     $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
 }
@@ -198,15 +198,14 @@ if (!empty($Q_id_escrito)) {
         // Ponente
         $id_of_ponente = $oEntrada->getPonente();
         if (!empty($id_of_ponente)) {
-            $gesCargos = new GestorCargo();
-            $id_ponente = $gesCargos->getDirectorOficina($id_of_ponente);
+            $id_ponente = $CargoRepository->getDirectorOficina($id_of_ponente);
             $oDesplPonente->setOpcion_sel($id_ponente);
         }
         // oficinas
         $a_oficinas = $oEntrada->getResto_oficinas();
         $a_resto_cargos = [];
         foreach ($a_oficinas as $id_oficina) {
-            $a_resto_cargos[] = $gesCargos->getDirectorOficina($id_oficina);
+            $a_resto_cargos[] = $CargoRepository->getDirectorOficina($id_oficina);
         }
         $oArrayDesplFirmas->setSeleccionados($a_resto_cargos);
 

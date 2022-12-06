@@ -4,7 +4,7 @@ namespace expedientes\model;
 
 use core\ConfigGlobal;
 use tramites\model\entity\GestorFirma;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use web\Hash;
 
 

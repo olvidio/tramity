@@ -4,9 +4,9 @@ namespace busquedas\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\Categoria;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorOficina;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
@@ -262,8 +262,8 @@ class VerTabla
         $a_valores = [];
         $i = 0;
         $oPermRegistro = new PermRegistro();
-        $gesCargos = new GestorCargo();
-        $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina(), TRUE);
+        $CargoRepository = new CargoRepository();
+        $a_usuarios_oficina = $CargoRepository->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina(), TRUE);
         foreach ($aCollection as $oEntrada) {
             // mirar permisos visibilidad:...
             $visibilidad = $oEntrada->getVisibilidad();
@@ -455,8 +455,8 @@ class VerTabla
     public function tabla_escritos($cCollection)
     {
         // salidas
-        $gesCargos = new GestorCargo();
-        $a_posibles_cargos = $gesCargos->getArrayCargos();
+        $CargoRepository = new CargoRepository();
+        $a_posibles_cargos = $CargoRepository ->getArrayCargos();
 
         $oCategoria = new Categoria();
         $a_categorias = $oCategoria->getArrayCategoria();

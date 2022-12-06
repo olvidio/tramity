@@ -7,7 +7,7 @@ use escritos\model\EscritoForm;
 use expedientes\model\entity\Accion;
 use expedientes\model\Expediente;
 use tramites\model\entity\GestorTramite;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\repositories\CargoRepository;
 use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -64,8 +64,8 @@ $oExpediente->setF_contestar($f_contestar);
 
 // que lo vea todos los oficiales de mi oficina:
 $id_oficina = ConfigGlobal::role_id_oficina();
-$gesCargos = new GestorCargo();
-$a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+$CargoRepository = new CargoRepository();
+$a_cargos_oficina = $CargoRepository->getArrayCargosOficina($id_oficina);
 
 $new_preparar = [];
 foreach (array_keys($a_cargos_oficina) as $id_cargo) {

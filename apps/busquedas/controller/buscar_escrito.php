@@ -5,7 +5,7 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use etiquetas\model\entity\GestorEtiqueta;
 use lugares\model\entity\GestorLugar;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 use web\DateTimeLocal;
 use web\Desplegable;

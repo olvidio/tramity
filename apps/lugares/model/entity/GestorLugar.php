@@ -3,7 +3,7 @@
 namespace lugares\model\entity;
 
 use core;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use function core\is_true;
 
 /**

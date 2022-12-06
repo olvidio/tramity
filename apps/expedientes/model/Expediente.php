@@ -15,8 +15,8 @@ use expedientes\model\entity\ExpedienteDB;
 use expedientes\model\entity\GestorAccion;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorTramiteCargo;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\entity\GestorCargoGrupo;
 
 
@@ -556,14 +556,14 @@ class Expediente extends expedienteDB
             // 5 => vº bº vcd.
             // 6 => secretaria distribuir
             // 7 => secretaria reunion
-            $oCargo = new Cargo($id_cargo);
+            $CargoRepository = new CargoRepository();
+            $oCargo = $CargoRepository->findById($id_cargo);
             $id_oficina = $oCargo->getId_oficina();
             if (empty($id_oficina)) {
                 switch ($id_cargo) {
                     case Cargo::CARGO_REUNION:
                     case Cargo::CARGO_DISTRIBUIR:
-                        $gesCargos = new GestorCargo();
-                        $cCargos = $gesCargos->getCargos(['cargo' => 'scdl']);
+                        $cCargos = $CargoRepository->getCargos(['cargo' => 'scdl']);
                         $oCargoDtor = $cCargos[0];
                         $id_dtor_scdl = $oCargoDtor->getId_cargo();
                         $oFirma = new Firma();
@@ -578,8 +578,7 @@ class Expediente extends expedienteDB
                         $oFirma->DBGuardar();
                         break;
                     case Cargo::CARGO_VB_VCD: // el vº bº lo tiene que dar el vcd.
-                        $gesCargos = new GestorCargo();
-                        $cCargos = $gesCargos->getCargos(['cargo' => 'vcd']);
+                        $cCargos = $CargoRepository->getCargos(['cargo' => 'vcd']);
                         $oCargoDtor = $cCargos[0];
                         $id_dtor_vcd = $oCargoDtor->getId_cargo();
                         $oFirma = new Firma();
@@ -595,10 +594,9 @@ class Expediente extends expedienteDB
                         break;
                     case Cargo::CARGO_PONENTE: // si es el ponente hay que poner su id_cargo.
                         // El ponente es el director de la oficina del creador.
-                        $oCargo = new Cargo($id_ponente);
+                        $oCargo = $CargoRepository->findById($id_ponente);
                         $id_oficina = $oCargo->getId_oficina();
-                        $gesCargos = new GestorCargo();
-                        $cCargos = $gesCargos->getCargos(['id_oficina' => $id_oficina, 'director' => 't']);
+                        $cCargos = $CargoRepository->getCargos(['id_oficina' => $id_oficina, 'director' => 't']);
                         $oCargoDtor = $cCargos[0];
                         $id_dtor_ponente = $oCargoDtor->getId_cargo();
                         $oFirma = new Firma();
@@ -654,7 +652,7 @@ class Expediente extends expedienteDB
                         $aMiembros = $cGrupos[0]->getMiembros();
                         $orden_oficina = 0;
                         foreach ($aMiembros as $id_cargo) {
-                            $oCargo = new Cargo($id_cargo);
+                            $oCargo = $CargoRepository->findById($id_cargo);
                             $orden_oficina++;
                             $id_cargo_of = $oCargo->getId_cargo();
                             $oFirma = new Firma();

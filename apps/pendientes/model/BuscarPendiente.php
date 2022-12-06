@@ -7,7 +7,7 @@ use core\ConfigGlobal;
 use core\ConverterDate;
 use davical\model\Davical;
 use davical\model\entity\GestorCalendarItem;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 

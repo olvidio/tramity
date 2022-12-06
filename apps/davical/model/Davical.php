@@ -12,7 +12,8 @@ use davical\model\entity\Grant;
 use davical\model\entity\GroupMember;
 use davical\model\entity\Principal;
 use davical\model\entity\RoleMember;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\entity\Oficina;
 use web\DateTimeLocal;
 use web\StringLocal;
@@ -746,7 +747,7 @@ class Davical
      * Eliminar dos colecciones: una para el registro y otra para la oficina
      *
      * @param string $oficina
-     * @return array con los valores de collection_id para 'registro' y 'oficina'.
+     * @return string con el error
      */
     private function deleteColecciones($nom_oficina)
     {
@@ -830,7 +831,8 @@ class Davical
     public function getUsernameDavical($id_cargo)
     {
         // nombre normalizado del usuario y oficina:
-        $oCargo = new Cargo($id_cargo);
+        $CargoRepository = new CargoRepository();
+        $oCargo = $CargoRepository->findById($id_cargo);
         $cargo_role = $oCargo->getCargo();
 
         return $this->getNombreUsuario($cargo_role);

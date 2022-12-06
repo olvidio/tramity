@@ -5,9 +5,8 @@ namespace expedientes\model;
 use core\ConfigGlobal;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
-use web\Hash;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 
 
 class ExpedienteParaFirmarLista
@@ -163,8 +162,8 @@ class ExpedienteParaFirmarLista
         ];
         $aOperadorFirma = ['observ_creador' => 'IS NULL'];
         // 31.5.2021 Que también el director de la oficina pueda responder.
-        $gesCargos = new GestorCargo();
-        $a_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
+        $CargoRepository = new CargoRepository();
+        $a_cargos_oficina = $CargoRepository->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
         if (ConfigGlobal::soy_dtor()) {
             $ids_cargos = array_keys($a_cargos_oficina);
             if (!empty($ids_cargos)) {

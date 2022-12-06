@@ -1,6 +1,7 @@
 <?php
 
 namespace core;
+
 abstract class ClasePropiedades
 {
     /**
@@ -120,5 +121,4 @@ abstract class ClasePropiedades
     {
         $this->sNomTabla = $sNomTabla;
     }
-
 }

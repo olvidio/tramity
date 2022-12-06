@@ -4,7 +4,8 @@ namespace etiquetas\model\entity;
 
 use core;
 use core\ConfigGlobal;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 
 /**
  * GestorEtiqueta
@@ -154,7 +155,8 @@ class GestorEtiqueta extends core\ClaseGestor
         }
 
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-            $oCargo = new Cargo($id_cargo);
+            $CargoRepository = new CargoRepository();
+            $oCargo = $CargoRepository->findById($id_cargo);
             $id_oficina = $oCargo->getId_oficina();
         } else {
             $id_oficina = Cargo::OFICINA_ESQUEMA;

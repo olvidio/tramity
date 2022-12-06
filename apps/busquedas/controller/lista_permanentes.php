@@ -8,7 +8,7 @@ use core\ViewTwig;
 use entradas\model\entity\GestorEntradaCompartida;
 use entradas\model\GestorEntrada;
 use lugares\model\entity\GestorLugar;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 use web\Desplegable;
 use function core\any_2;

@@ -1,6 +1,6 @@
 <?php
 
-use usuarios\model\entity\CargoGrupo;
+use usuarios\domain\entity\CargoGrupo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");

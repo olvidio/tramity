@@ -1,7 +1,7 @@
 <?php
 
 use config\model\entity\ConfigSchema;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use usuarios\model\entity\GestorLocale;
 use web\Hash;
 

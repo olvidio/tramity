@@ -17,9 +17,9 @@ use expedientes\model\Expediente;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
 use stdClass;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\Categoria;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
 use web\DateTimeLocal;
@@ -105,8 +105,8 @@ class EscritoForm
 
 
         $txt_option_cargos = '';
-        $gesCargos = new GestorCargo();
-        $a_posibles_cargos = $gesCargos->getArrayCargos();
+        $CargoRepository = new CargoRepository();
+        $a_posibles_cargos = $CargoRepository->getArrayCargos();
         foreach ($a_posibles_cargos as $id_cargo => $cargo) {
             $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
         }
@@ -415,7 +415,7 @@ class EscritoForm
         $oFecha = new DateTimeLocal();
         $format = $oFecha::getFormat();
         $yearStart = date('Y');
-        $yearEnd = $yearStart + 2;
+        $yearEnd = (int)$yearStart + 2;
         $error_fecha = $_SESSION['oConfig']->getPlazoError();
         $error_fecha_txt = 'P' . $error_fecha . 'D';
         $oHoy = new DateTimeLocal();

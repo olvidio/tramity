@@ -2,8 +2,8 @@
 
 use core\ViewTwig;
 use etiquetas\model\entity\GestorEtiqueta;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\entity\GestorOficina;
 use function core\is_true;
 
@@ -51,8 +51,8 @@ $a_botones = [['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
     ['txt' => _("modificar"), 'click' => "fnjs_editar()"],
 ];
 
-$gesCargos = new GestorCargo();
-$a_cargos = $gesCargos->getArrayCargos(TRUE);
+$CargoRepository = new CargoRepository();
+$a_cargos = $CargoRepository->getArrayCargos(TRUE);
 $gesOficinas = new GestorOficina();
 $a_oficinas = $gesOficinas->getArrayOficinas();
 $a_valores = array();

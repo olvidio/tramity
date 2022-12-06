@@ -6,8 +6,8 @@ use entradas\model\entity\EntradaCompartida;
 use entradas\model\Entrada;
 use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\Expediente;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Hash;
@@ -107,7 +107,8 @@ switch ($Q_filtro) {
         $asunto = $oExpediente->getAsunto();
         $id_ponente = $oExpediente->getPonente();
 
-        $oCargo = new Cargo($id_ponente);
+        $CargoRepository = new CargoRepository();
+        $oCargo = $CargoRepository->findById($id_ponente);
         $oficina_ponente = $oCargo->getId_oficina();
 
         $url_cancel = 'apps/expedientes/controller/expediente_lista.php';
@@ -184,8 +185,8 @@ switch ($Q_filtro) {
         $hoy_iso = $oHoy->getIso();
         $f_plazo = $oHoy->getFromLocal();
 
-        $gesCargos = new GestorCargo();
-        $a_posibles_cargos_oficina = $gesCargos->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina());
+        $CargoRepository = new CargoRepository();
+        $a_posibles_cargos_oficina = $CargoRepository->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina());
         $oDesplCargosOficinaPendiente = new Desplegable('id_cargo_pendiente', $a_posibles_cargos_oficina, '', '');
         $oDesplCargosOficinaEncargado = new Desplegable('id_cargo_encargado', $a_posibles_cargos_oficina, '', '');
         break;
@@ -269,8 +270,8 @@ switch ($Q_filtro) {
             'txt' => _("copiar a otro cargo"),
             'tipo' => 'modal',
         ];
-        $gesCargos = new GestorCargo();
-        $a_posibles_cargos = $gesCargos->getArrayCargos(ConfigGlobal::role_id_oficina());
+        $CargoRepository = new CargoRepository();
+        $a_posibles_cargos = $CargoRepository->getArrayCargos(ConfigGlobal::role_id_oficina());
         $oDesplCargos = new Desplegable('of_destino', $a_posibles_cargos, '', '');
         break;
     case 'fijar_reunion':

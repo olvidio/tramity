@@ -4,7 +4,7 @@ namespace entidades\model;
 
 use core\ConfigGlobal;
 use entidades\model\entity\EntidadDB;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 
 
 class Entidad extends EntidadDB

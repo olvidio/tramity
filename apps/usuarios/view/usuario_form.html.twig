@@ -24,11 +24,12 @@
                         <input type="email" class="form-control" id="email" name="email" placeholder="Email Address"
                                value="{{ email }}">
                     </div>
-                    <div class="mb-3">
-                        <label for="example" class="form-label">{{ "Cargo Preferido"|trans|raw }}</label>
-                        {{ oDesplCargos.desplegable|raw }}
-                    </div>
-
+                    {% if ver_cargos %}
+                        <div class="mb-3">
+                            <label for="example" class="form-label">{{ "Cargo Preferido"|trans|raw }}</label>
+                            {{ oDesplCargos.desplegable|raw }}
+                        </div>
+                    {% endif %}
                     <div class="row mb-3">
                         <button onclick="fnjs_guardar(this.form);" type="button"
                                 class="col-4 btn btn-primary w-100">{{ "Guardar"|trans|raw }}</button>

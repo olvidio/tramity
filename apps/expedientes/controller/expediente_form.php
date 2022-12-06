@@ -7,9 +7,9 @@ use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\entity\GestorAccion;
 use expedientes\model\Expediente;
 use tramites\model\entity\GestorTramite;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\Categoria;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
 use web\DateTimeLocal;
@@ -44,9 +44,10 @@ $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 
 $id_ponente = ConfigGlobal::role_id_cargo();
-$oCargo = new Cargo($id_ponente);
+$CargoRepository = new CargoRepository();
+$oCargo = $CargoRepository->findById($id_ponente);
 $ponente_txt = '';
-if (!empty($oCargo)) {
+if ($oCargo !== null) {
     $id_oficina = $oCargo->getId_oficina();
     $ponente_txt = $oCargo->getCargo();
 }
@@ -58,8 +59,7 @@ if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
 }
 
 // preparar
-$gesCargos = new GestorCargo();
-$a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+$a_cargos_oficina = $CargoRepository->getArrayCargosOficina($id_oficina);
 $a_preparar = [];
 foreach ($a_cargos_oficina as $id_cargo => $cargo) {
     $a_preparar[] = ['id' => $id_cargo, 'text' => $cargo, 'chk' => '', 'visto' => 0];
@@ -102,13 +102,13 @@ foreach ($cEtiquetas as $oEtiqueta) {
 }
 
 $txt_option_cargos = '';
-$a_posibles_cargos = $gesCargos->getArrayCargos();
+$a_posibles_cargos = $CargoRepository->getArrayCargos();
 foreach ($a_posibles_cargos as $id_cargo => $cargo) {
     $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
 }
 
 $txt_option_cargos_oficina = '';
-$cCargos_oficina = $gesCargos->getCargos(['id_oficina' => $id_oficina, '_ordre' => 'director DESC, cargo DESC']);
+$cCargos_oficina = $CargoRepository->getCargos(['id_oficina' => $id_oficina, '_ordre' => 'director DESC, cargo DESC']);
 $a_posibles_cargos_oficina = [];
 foreach ($cCargos_oficina as $oCargo) {
     // No pongo al director, ya está con el resto de firmas.
@@ -124,7 +124,7 @@ foreach ($cCargos_oficina as $oCargo) {
 if ($Q_id_expediente) {
     $titulo = _("expediente");
     $oExpediente->setId_expediente($Q_id_expediente);
-    if ($oExpediente->DBCargar() === FALSE ){
+    if ($oExpediente->DBCargar() === FALSE) {
         $err_cargar = sprintf(_("OJO! no existe el escrito a enviar en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_cargar);
     }
@@ -250,7 +250,7 @@ if ($Q_id_expediente) {
         // marcar las que estan.
         foreach ($a_preparar as $key => $oficial2) {
             $id2 = $oficial2['id'];
-            if ($id == $id2) {
+            if ($id === $id2) {
                 $a_preparar[$key]['chk'] = 'checked';
                 $a_preparar[$key]['visto'] = $visto;
             }
@@ -303,7 +303,7 @@ $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.ph
 $pagina_nueva = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query(['filtro' => $Q_filtro, 'prioridad_sel' => $Q_prioridad_sel]));
 
 $pag_nuevo_escrito = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'accion' => Escrito::ACCION_ESCRITO]));
-$pag_propuesta = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente,'filtro' => $Q_filtro, 'accion' => Escrito::ACCION_PROPUESTA]));
+$pag_propuesta = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'accion' => Escrito::ACCION_PROPUESTA]));
 $pag_plantilla = web\Hash::link('apps/plantillas/controller/plantilla_lista_expediente.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'modo' => $Q_modo, 'prioridad_sel' => $Q_prioridad_sel]));
 $pag_respuesta = web\Hash::link('apps/entradas/controller/buscar_form.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'prioridad_sel' => $Q_prioridad_sel]));
 $server = ConfigGlobal::getWeb(); //http://tramity.local
@@ -314,7 +314,7 @@ $pag_actualizar = web\Hash::link('apps/expedientes/controller/expediente_form.ph
 $oHoy = new DateTimeLocal();
 $format = $oHoy::getFormat();
 $yearStart = date('Y');
-$yearEnd = $yearStart + 2;
+$yearEnd = (int)$yearStart + 2;
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 $error_fecha_txt = 'P' . $error_fecha . 'D';
 $oHoy->sub(new DateInterval($error_fecha_txt));

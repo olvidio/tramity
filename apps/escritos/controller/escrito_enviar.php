@@ -4,7 +4,7 @@ use core\ViewTwig;
 use envios\model\Enviar;
 use escritos\model\Escrito;
 use oasis_as4\model\As4Remove;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");

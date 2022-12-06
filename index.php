@@ -8,9 +8,10 @@ die();
 // INICIO Cabecera global de URL de controlador *********************************
 use config\model\entity\ConfigSchema;
 use core\ConfigGlobal;
+use core\ServerConf;
 use core\ViewTwig;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorOficina;
+use usuarios\domain\entity\Cargo;
+use web\Hash;
 
 require_once("apps/core/global_header.inc");
 // Archivos requeridos por esta url **********************************************
@@ -53,6 +54,7 @@ $oConfigSchema = new ConfigSchema('ambito');
 $valor_ambito = (int)$oConfigSchema->getValor();
 $id_ambito_dl = FALSE;
 $a_roles_posibles = [];
+/*
 if ($valor_ambito === Cargo::AMBITO_DL) {
     $id_ambito_dl = TRUE;
     // role de 'secretaria' para los oficiales de secretaria:
@@ -85,6 +87,7 @@ if ($role_actual !== 'admin') {
 }
 
 $_SESSION['session_auth']['a_roles'] = array_unique($a_roles_posibles);
+*/
 ?>
 <!DOCTYPE html>
 <head>
@@ -109,7 +112,7 @@ $_SESSION['session_auth']['a_roles'] = array_unique($a_roles_posibles);
         // Cada 5 seg. Comprobar que la sesión php no ha finalizado, para volver al login de entrada
         // Si es en el portátil no lo compruebo, para que haya menos cosas en los logs.
         <?php
-        if (ConfigGlobal::SERVIDOR !== 'tramity.local') {
+        if (ServerConf::SERVIDOR !== 'tramity.local') {
             echo "setInterval( fnjs_is_active, 5000);";
         }
         ?>
@@ -192,7 +195,7 @@ switch ($role_actual) {
         $server .= '/index.php';
         // hay que enviar algún valor, sino el javascript da un error:
         $error_fecha = empty($_SESSION['oConfig']->getPlazoError()) ? 15 : $_SESSION['oConfig']->getPlazoError();
-        $pagina_profile = web\Hash::link('apps/usuarios/controller/personal.php?' . http_build_query([]));
+        $pagina_profile = Hash::link('apps/usuarios/controller/personal.php?' . http_build_query([]));
         $a_campos = [
             'pagina_profile' => $pagina_profile,
             'error_fecha' => $error_fecha,

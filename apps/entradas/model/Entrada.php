@@ -15,7 +15,7 @@ use etiquetas\model\entity\GestorEtiquetaEntrada;
 use JsonException;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
 use web\DateTimeLocal;

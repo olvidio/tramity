@@ -3,7 +3,7 @@
 namespace expedientes\model;
 
 use core\ConfigGlobal;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use web\Hash;
 
 

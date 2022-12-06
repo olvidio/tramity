@@ -3,9 +3,7 @@
 namespace expedientes\model;
 
 use core\ConfigGlobal;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
-use web\Hash;
+use usuarios\domain\repositories\CargoRepository;
 
 
 class ExpedienteCopiasLista
@@ -74,10 +72,10 @@ class ExpedienteCopiasLista
         $this->aWhere['estado'] = Expediente::ESTADO_COPIAS;
         // solo los de la oficina:
         // posibles oficiales de la oficina:
-        $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
+        $CargoRepository = new CargoRepository();
+        $oCargo = $CargoRepository->findById(ConfigGlobal::role_id_cargo());
         $id_oficina = $oCargo->getId_oficina();
-        $gesCargos = new GestorCargo();
-        $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+        $a_cargos_oficina = $CargoRepository->getArrayCargosOficina($id_oficina);
         $a_cargos = [];
         foreach (array_keys($a_cargos_oficina) as $id_cargo) {
             $a_cargos[] = $id_cargo;

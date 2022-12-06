@@ -2,8 +2,10 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use usuarios\model\entity\GestorCargo;
-use usuarios\model\entity\Usuario;
+use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\repositories\UsuarioRepository;
+use web\Hash;
+use web\Posicion;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -30,7 +32,7 @@ if (isset($_POST['stack'])) {
     $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
     if ($stack != '') {
         // No me sirve el de global_object, sino el de la session
-        $oPosicion2 = new web\Posicion();
+        $oPosicion2 = new Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
             $a_sel = $oPosicion2->getParametro('id_sel');
             if (!empty($a_sel)) {
@@ -55,14 +57,22 @@ if (isset($_POST['stack'])) {
 }
 $oPosicion->setParametros(array('id_usuario' => $Q_id_usuario), 1);
 
-$oGCargos = new GestorCargo();
-$oDesplCargos = $oGCargos->getDesplCargosUsuario($Q_id_usuario);
-$oDesplCargos->setNombre('id_cargo_preferido');
+$esquema = ConfigGlobal::getEsquema();
+if ( $esquema !== 'admin') {
+    $ver_cargos = TRUE;
+    $CargoRepository = new CargoRepository();
+    $oDesplCargos = $CargoRepository->getDesplCargosUsuario($Q_id_usuario);
+    $oDesplCargos->setNombre('id_cargo_preferido');
+} else {
+    $ver_cargos = FALSE;
+    $oDesplCargos = [];
+}
 
+
+$UsuarioRepository = new UsuarioRepository();
 if (!empty($Q_id_usuario)) {
     $que_user = 'guardar';
-    $oUsuario = new Usuario(array('id_usuario' => $Q_id_usuario));
-
+    $oUsuario = $UsuarioRepository->findById($Q_id_usuario);
     $usuario = $oUsuario->getUsuario();
     $nom_usuario = $oUsuario->getNom_usuario();
     $pass = $oUsuario->getPassword();
@@ -80,7 +90,7 @@ if (!empty($Q_id_usuario)) {
     $email = '';
 }
 $camposForm = 'que!usuario!nom_usuario!password!email!id_cargo_preferido';
-$oHash = new web\Hash();
+$oHash = new Hash();
 $oHash->setcamposForm($camposForm);
 $oHash->setcamposNo('pass!password!id_ctr!id_nom!casas');
 $a_camposHidden = array(
@@ -91,7 +101,7 @@ $a_camposHidden = array(
 $oHash->setArraycamposHidden($a_camposHidden);
 
 $url_usuario_ajax = ConfigGlobal::getWeb() . '/apps/usuarios/controller/usuario_ajax.php';
-$oHash1 = new web\Hash();
+$oHash1 = new Hash();
 $oHash1->setUrl($url_usuario_ajax);
 $oHash1->setCamposForm('que!id_usuario');
 $oHash1->setCamposNo('scroll_id');
@@ -100,7 +110,7 @@ $h1 = $oHash1->linkSinVal();
 $txt_guardar = _("guardar datos usuario");
 $txt_eliminar = _("¿Está seguro que desea quitar este permiso?");
 
-$pagina_cancel = web\Hash::link('apps/usuarios/controller/usuario_lista.php?' . http_build_query([]));
+$pagina_cancel = Hash::link('apps/usuarios/controller/usuario_lista.php?' . http_build_query([]));
 
 $a_campos = [
     'oPosicion' => $oPosicion,
@@ -117,6 +127,7 @@ $a_campos = [
     'txt_guardar' => $txt_guardar,
     'txt_eliminar' => $txt_eliminar,
     'pagina_cancel' => $pagina_cancel,
+    'ver_cargos' => $ver_cargos,
 ];
 
 $oView = new ViewTwig('usuarios/controller');

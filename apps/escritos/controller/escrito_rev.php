@@ -5,8 +5,8 @@ use core\ViewTwig;
 use escritos\model\Escrito;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\Categoria;
-use usuarios\model\entity\GestorCargo;
 use usuarios\model\Visibilidad;
 use web\Desplegable;
 use web\Protocolo;
@@ -36,7 +36,7 @@ $a_posibles_lugares = $gesLugares->getArrayLugares();
 //$txt_option_ref = '';
 foreach ($a_posibles_lugares as $id_lugar => $sigla) {
     //$txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
-    if ($sigla == $sigla_local) {
+    if ($sigla === $sigla_local) {
         $id_lugar_local = $id_lugar;
     }
 }
@@ -55,8 +55,8 @@ $oProtRef->setOpciones($a_posibles_lugares);
 $oProtRef->setBlanco(TRUE);
 
 $txt_option_cargos = '';
-$gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargos();
+$CargoRepository = new CargoRepository();
+$a_posibles_cargos = $CargoRepository->getArrayCargos();
 foreach ($a_posibles_cargos as $id_cargo => $cargo) {
     $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
 }
@@ -80,7 +80,7 @@ if (!empty($Q_id_escrito)) {
     if (!empty($f_aprobacion)) {
         $tipo_documento = '';
         // si es un escrito, hay que generar el protocolo local:
-        if ($tipo_documento == Escrito::ACCION_ESCRITO) {
+        if ($tipo_documento === Escrito::ACCION_ESCRITO) {
             $json_prot_origen = $oEscrito->getJson_prot_local();
             if (!empty(get_object_vars($json_prot_origen))) {
                 $oProtLocal->setLugar($json_prot_origen->id_lugar);

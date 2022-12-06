@@ -4,7 +4,7 @@ namespace busquedas\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\entity\GestorOficina;
 use web\Lista;
 use web\Protocolo;
@@ -118,8 +118,8 @@ class ImprimirTabla
             }
 
             if ($key === 'escritos') {
-                $gesCargos = new GestorCargo();
-                $a_posibles_cargos = $gesCargos->getArrayCargos();
+                $CargoRepository = new CargoRepository();
+                $a_posibles_cargos = $CargoRepository->getArrayCargos();
                 foreach ($cCollection as $oEscrito) {
                     $asunto = $oEscrito->getAsunto();
                     $anulado = $oEscrito->getAnulado();

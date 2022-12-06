@@ -12,9 +12,9 @@ use pendientes\model\Pendiente;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramiteCargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\Categoria;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Protocolo;
 use function core\is_true;
@@ -60,7 +60,7 @@ switch ($Q_que) {
         $Q_id_oficina = ConfigGlobal::role_id_oficina();
         $Q_id_cargo = ConfigGlobal::role_id_cargo();
         $oEntrada = new Entrada($Q_id_entrada);
-        if ($oEntrada->DBCargar() === FALSE ){
+        if ($oEntrada->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -107,7 +107,8 @@ switch ($Q_que) {
         $Q_id_cargo_pendiente = (integer)filter_input(INPUT_POST, 'id_cargo_pendiente');
         $Q_f_plazo = (string)filter_input(INPUT_POST, 'f_plazo');
 
-        $oCargo = new Cargo($Q_id_cargo_pendiente);
+        $CargoRepository = new CargoRepository();
+        $oCargo = $CargoRepository->findById($Q_id_cargo_pendiente);
         $id_oficina = $oCargo->getId_oficina();
 
         // nombre normalizado del usuario y oficina:
@@ -205,7 +206,7 @@ switch ($Q_que) {
         $Q_id_oficial = (integer)filter_input(INPUT_POST, 'id_oficial');
         // Se pone cuando se han enviado...
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -230,7 +231,7 @@ switch ($Q_que) {
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -255,7 +256,7 @@ switch ($Q_que) {
     case 'recircular':
         // borrar todas la firmas
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -289,7 +290,7 @@ switch ($Q_que) {
         exit();
     case 'reunion':
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -333,7 +334,7 @@ switch ($Q_que) {
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -495,7 +496,7 @@ switch ($Q_que) {
 
         $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCargar();
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -524,7 +525,7 @@ switch ($Q_que) {
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $oEscrito = new Escrito($id_escrito);
-            if ($oEscrito->DBCargar() === FALSE ){
+            if ($oEscrito->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -603,11 +604,12 @@ switch ($Q_que) {
     case 'visto':
         // yo soy el que hago el click:
         $mi_id_cargo = ConfigGlobal::role_id_cargo();
-        $oCargo = new Cargo($mi_id_cargo);
+        $CargoRepository = new CargoRepository();
+        $oCargo = $CargoRepository->findById($mi_id_cargo);
         $mi_id_oficina = $oCargo->getId_oficina();
 
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -633,8 +635,7 @@ switch ($Q_que) {
         }
 
         //para regenerar la linea de oficiales
-        $gesCargos = new GestorCargo();
-        $a_cargos_oficina = $gesCargos->getArrayCargosOficina($mi_id_oficina);
+        $a_cargos_oficina = $CargoRepository->getArrayCargosOficina($mi_id_oficina);
         $a_preparar = [];
         foreach ($a_cargos_oficina as $id_cargo => $cargo) {
             $a_preparar[] = ['id' => $id_cargo, 'text' => $cargo, 'chk' => '', 'visto' => 0];
@@ -647,8 +648,8 @@ switch ($Q_que) {
             foreach ($json_preparar as $oficial) {
                 $id = $oficial->id;
                 $visto_db = empty($oficial->visto) ? 0 : $oficial->visto;
-                // marcar las que estan.
-                if ($id == $id2) {
+                // marcar las que están.
+                if ($id === $id2) {
                     $chk = 'checked';
                     $visto = $visto_db;
                     // rompo el bucle
@@ -685,7 +686,7 @@ switch ($Q_que) {
     case 'guardar':
         if (!empty($Q_id_expediente)) {
             $oExpediente = new Expediente($Q_id_expediente);
-            if ($oExpediente->DBCargar() === FALSE ){
+            if ($oExpediente->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -829,7 +830,7 @@ switch ($Q_que) {
                 $bParaDistribuir = $gesFirmas->isParaDistribuir($Q_id_expediente);
                 if ($bParaDistribuir) {
                     // guardar la firma de Cargo::CARGO_DISTRIBUIR;
-                    if ($oExpediente->DBCargar() === FALSE ){
+                    if ($oExpediente->DBCargar() === FALSE) {
                         $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
                         exit ($err_cargar);
                     }
@@ -843,7 +844,7 @@ switch ($Q_que) {
             }
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                 // cambio el estado del expediente.
-                if ($oExpediente->DBCargar() === FALSE ){
+                if ($oExpediente->DBCargar() === FALSE) {
                     $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
                     exit ($err_cargar);
                 }
@@ -873,7 +874,7 @@ switch ($Q_que) {
         exit();
     case 'cambio_tramite':
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -907,7 +908,7 @@ switch ($Q_que) {
         exit();
     case 'cambio_vida':
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -932,7 +933,7 @@ switch ($Q_que) {
         exit();
     case 'cambio_asunto':
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -957,7 +958,7 @@ switch ($Q_que) {
         exit();
     case 'cambio_entradilla':
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }

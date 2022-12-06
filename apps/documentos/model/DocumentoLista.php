@@ -4,7 +4,7 @@ namespace documentos\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\repositories\CargoRepository;
 use web\Hash;
 
 
@@ -57,8 +57,8 @@ class DocumentoLista
 
         $pagina_mod = ConfigGlobal::getWeb() . '/apps/documentos/controller/documento_form.php';
 
-        $gesCargos = new GestorCargo();
-        $a_cargos = $gesCargos->getArrayCargos();
+        $CargoRepository = new CargoRepository();
+        $a_cargos = $CargoRepository->getArrayCargos();
 
         $a_documentos = [];
         $id_doc = '';

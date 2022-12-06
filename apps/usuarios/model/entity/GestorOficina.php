@@ -4,6 +4,7 @@ namespace usuarios\model\entity;
 
 use core;
 use core\ConfigGlobal;
+use usuarios\domain\entity\Cargo;
 use web\Desplegable;
 
 /**

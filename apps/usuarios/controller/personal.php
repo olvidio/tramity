@@ -1,9 +1,12 @@
 <?php
 
-use usuarios\model\entity\GestorCargo;
+use core\ConfigGlobal;
+use core\ViewTwig;
+use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\repositories\UsuarioRepository;
 use usuarios\model\entity\GestorLocale;
 use usuarios\model\entity\GestorPreferencia;
-use usuarios\model\entity\Usuario;
+use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -18,7 +21,7 @@ $oPosicion->recordar();
 
 $oGesPref = new GestorPreferencia();
 
-$id_usuario = core\ConfigGlobal::mi_id_usuario();
+$id_usuario = ConfigGlobal::mi_id_usuario();
 $role_actual = $_SESSION['session_auth']['role_actual'];
 $is_admin = FALSE;
 if ($role_actual === 'admin') {
@@ -49,7 +52,8 @@ $oDesplLocales->setNombre('idioma_nou');
 $oDesplLocales->setOpcion_sel($idioma);
 
 // ----------- nom usuario y mail -------------------
-$oUsuario = new Usuario(array('id_usuario' => $id_usuario));
+$UsuarioRepository = new UsuarioRepository();
+$oUsuario = $UsuarioRepository->findById($id_usuario);
 
 $usuario = $oUsuario->getUsuario();
 $nom_usuario = $oUsuario->getNom_usuario();
@@ -59,15 +63,15 @@ $id_cargo_preferido = $oUsuario->getId_cargo_preferido();
 if ($is_admin) {
     $oDesplCargos = '';
 } else {
-    $oGCargos = new GestorCargo();
-    $oDesplCargos = $oGCargos->getDesplCargosUsuario($id_usuario);
+    $CargoRepository = new CargoRepository();
+    $oDesplCargos = $CargoRepository->getDesplCargosUsuario($id_usuario);
     $oDesplCargos->setNombre('id_cargo_preferido');
     $oDesplCargos->setOpcion_sel($id_cargo_preferido);
 }
 
-$cambio_password = web\Hash::link('apps/usuarios/controller/usuario_form_pwd.php?' . http_build_query(['personal' => 1]));
+$cambio_password = Hash::link('apps/usuarios/controller/usuario_form_pwd.php?' . http_build_query(['personal' => 1]));
 
-$oHash = new web\Hash();
+$oHash = new Hash();
 $oHash->setcamposForm('inicio!oficina!estilo_color!tipo_menu!tipo_tabla!ordenApellidos!idioma_nou');
 
 $a_campos = [
@@ -81,5 +85,5 @@ $a_campos = [
     'is_admin' => $is_admin,
 ];
 
-$oView = new core\ViewTwig('usuarios/controller');
+$oView = new ViewTwig('usuarios/controller');
 $oView->renderizar('personal.html.twig', $a_campos);

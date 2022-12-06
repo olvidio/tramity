@@ -13,7 +13,7 @@ use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
 use tramites\model\entity\GestorFirma;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
 use web\Protocolo;

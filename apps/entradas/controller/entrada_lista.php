@@ -4,8 +4,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\EntradaLista;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\repositories\CargoRepository;
 use web\Desplegable;
 use function core\is_true;
 
@@ -69,11 +68,10 @@ if ($Q_filtro === 'en_encargado') {
 
     // sólo el director puede ver al resto de oficiales
     $id_cargo = ConfigGlobal::role_id_cargo();
-    $oCargo = new Cargo($id_cargo);
-    $dtor = $oCargo->getDirector();
-    if (is_true($dtor)) {
-        $gesCargos = new GestorCargo();
-        $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
+    $CargoRepository = new CargoRepository();
+    $oCargo = $CargoRepository->findById($id_cargo);
+    if ($oCargo->isDirector()) {
+        $a_usuarios_oficina = $CargoRepository->getArrayUsuariosOficina($id_oficina);
     } else {
         $nom_cargo = $oCargo->getCargo();
         $a_usuarios_oficina = [$id_cargo => $nom_cargo];
@@ -100,7 +98,7 @@ if ($Q_filtro === 'en_encargado') {
 }
 
 if (empty($msg)) {
-    echo $oTabla->mostrarTabla();
+    $oTabla->mostrarTabla();
 } else {
     echo $msg;
 }

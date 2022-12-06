@@ -2,8 +2,8 @@
 
 use tramites\model\entity\GestorTramiteCargo;
 use tramites\model\entity\TramiteCargo;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -41,8 +41,8 @@ switch ($Q_que) {
         break;
     case 'info':
         $Q_id_item = (integer)filter_input(INPUT_POST, 'id_item');
-        $oGesCargo = new GestorCargo();
-        $oDesplCargos = $oGesCargo->getDesplCargos();
+        $CargoRepository = new CargoRepository();
+        $oDesplCargos = $CargoRepository->getDesplCargos();
         $oDesplCargos->setNombre('id_cargo');
         $oDesplCargos->setBlanco(true);
         $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
@@ -68,13 +68,14 @@ switch ($Q_que) {
         $txt = '<table class="table table-striped" >';
         $txt .= '<tr><th>' . _("orden") . '</th><th>' . _("cargo") . '</th><th>' . _("multiple") . '</th></tr>';
         $i = 0;
+        $CargoRepository = new CargoRepository();
         foreach ($cTramiteCargos as $oTramiteCargo) {
             $id_item = $oTramiteCargo->getId_item();
             $orden = $oTramiteCargo->getOrden_tramite();
             $id_cargo = $oTramiteCargo->getId_cargo();
             $multiple = $oTramiteCargo->getMultiple();
 
-            $oCargo = new Cargo($id_cargo);
+            $oCargo = $CargoRepository->findById($id_cargo);
             $cargo = $oCargo->getCargo();
 
             $txt .= "<tr><td>($orden)</td><td>$cargo</td><td>$multiple</td>";

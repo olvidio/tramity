@@ -21,8 +21,9 @@ use lugares\model\entity\GestorLugar;
 use pendientes\model\Pendiente;
 use SimpleXMLElement;
 use stdClass;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\Categoria;
-use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
 use web\Protocolo;
 use web\StringLocal;
@@ -803,7 +804,8 @@ class As4Entregar extends As4CollaborationInfo
     {
         $oHoy = new DateTimeLocal();
         $id_cargo_role = ConfigGlobal::role_id_cargo();
-        $oCargo = new Cargo($id_cargo_role);
+        $CargoRepository = new CargoRepository();
+        $oCargo = $CargoRepository->findById($id_cargo_role);
         $id_oficina = $oCargo->getId_oficina();
         // nombre normalizado del usuario y oficina:
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());

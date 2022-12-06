@@ -1,8 +1,8 @@
 <?php
 
 use core\ViewTwig;
-use usuarios\model\entity\CargoGrupo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\entity\CargoGrupo;
 use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -28,7 +28,7 @@ $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_A
 // Si vengo por medio de Posicion, borro la última
 if (isset($_POST['stack'])) {
     $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
-    if ($stack != '') {
+    if ($stack !== '') {
         // No me sirve el de global_object, sino el de la session
         $oPosicion2 = new web\Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
@@ -55,9 +55,9 @@ if (isset($_POST['stack'])) {
 }
 $oPosicion->setParametros(array('id_grupo' => $Q_id_grupo), 1);
 
-$gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargos();
-$a_posibles_cargos_ref = $gesCargos->getArrayCargosRef();
+$CargoRepository = new CargoRepository();
+$a_posibles_cargos = $CargoRepository->getArrayCargos();
+$a_posibles_cargos_ref = $CargoRepository->getArrayCargosRef();
 
 if (!empty($Q_id_grupo)) {
     $que_user = 'guardar';

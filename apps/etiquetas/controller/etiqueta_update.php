@@ -2,7 +2,7 @@
 
 use core\ConfigGlobal;
 use etiquetas\model\entity\Etiqueta;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -38,7 +38,8 @@ switch ($Q_que) {
         if (is_true($Q_oficina)) {
             $oficina = 't';
             // buscar el id de la oficina:
-            $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
+            $CargoRepository = new CargoRepository();
+            $oCargo = $CargoRepository->findById(ConfigGlobal::role_id_cargo());
             $id_cargo = $oCargo->getId_oficina();
         } else {
             $oficina = 'f';

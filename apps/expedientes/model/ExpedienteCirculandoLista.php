@@ -3,9 +3,8 @@
 namespace expedientes\model;
 
 use core\ConfigGlobal;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
-use web\Hash;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use function core\is_true;
 
 
@@ -74,7 +73,7 @@ class ExpedienteCirculandoLista
         $this->aWhere = [];
         $this->aOperador = [];
         // Quito los permanentes_cl (de momento para los ctr)
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR ) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $this->aWhere['vida'] = Expediente::VIDA_PERMANENTE;
             $this->aOperador['vida'] = '!=';
         }
@@ -90,12 +89,12 @@ class ExpedienteCirculandoLista
         }
         // Si es el director los ve todos, no sólo los pendientes de poner 'visto'.
         // para los centros, todos ven igual que el director
-        if (is_true(ConfigGlobal::soy_dtor()) || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR ) {
+        if (is_true(ConfigGlobal::soy_dtor()) || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             // posibles oficiales de la oficina:
-            $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
+            $CargoRepository = new CargoRepository();
+            $oCargo = $CargoRepository->findById(ConfigGlobal::role_id_cargo());
             $id_oficina = $oCargo->getId_oficina();
-            $gesCargos = new GestorCargo();
-            $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+            $a_cargos_oficina = $CargoRepository->getArrayCargosOficina($id_oficina);
             $a_cargos = [];
             foreach (array_keys($a_cargos_oficina) as $id_cargo) {
                 $a_cargos[] = $id_cargo;

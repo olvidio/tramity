@@ -5,8 +5,8 @@ namespace expedientes\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use tramites\model\entity\GestorTramite;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
 use web\Hash;
@@ -32,9 +32,9 @@ class ExpedienteLista
 
     public function mostrarTabla(): void
     {
-        $gesCargos = new GestorCargo();
-        $a_posibles_cargos = $gesCargos->getArrayCargos();
-        $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina(), TRUE);
+        $CargoRepository = new CargoRepository();
+        $a_posibles_cargos = $CargoRepository->getArrayCargos();
+        $a_usuarios_oficina = $CargoRepository->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina(), TRUE);
 
         $pagina_accion = ConfigGlobal::getWeb() . '/apps/expedientes/controller/expediente_accion.php';
 

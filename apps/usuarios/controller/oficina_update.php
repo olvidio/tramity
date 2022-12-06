@@ -2,7 +2,7 @@
 
 use core\ConfigGlobal;
 use davical\model\Davical;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use usuarios\model\entity\Oficina;
 
 // INICIO Cabecera global de URL de controlador *********************************

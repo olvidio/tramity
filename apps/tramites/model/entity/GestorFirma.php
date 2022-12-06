@@ -6,9 +6,9 @@ use core;
 use core\ConfigGlobal;
 use expedientes\model\Expediente;
 use PDO;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
-use usuarios\model\entity\Usuario;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\repositories\UsuarioRepository;
 
 /**
  * GestorFirma
@@ -208,12 +208,14 @@ class GestorFirma extends core\ClaseGestor
         ];
         $cFirmas = $this->getFirmas($aWhere);
         $a_recorrido = [];
+        $UsuarioRepository = new UsuarioRepository();
         foreach ($cFirmas as $oFirma) {
             $valor = $oFirma->getValor();
             $oFecha = $oFirma->getF_valor();
             $fecha = $oFecha->getFromLocal();
             $id_usuario = $oFirma->getId_usuario();
-            $oUsuario = new Usuario($id_usuario);
+
+            $oUsuario = $UsuarioRepository->findById($id_usuario);
             $nom_usuario = $oUsuario->getNom_usuario();
             $cargo_tipo = $oFirma->getCargo_tipo();
             if (in_array($cargo_tipo, $a_cargos_especicales)) {
@@ -307,8 +309,8 @@ class GestorFirma extends core\ClaseGestor
         $a_cargos_especiales[] = Cargo::CARGO_VB_VCD;
         $a_cargos_especiales[] = Cargo::CARGO_REUNION;
 
-        $gesCargos = new GestorCargo();
-        $aCargos = $gesCargos->getArrayCargos(FALSE);
+        $CargoRepository = new CargoRepository();
+        $aCargos = $CargoRepository->getArrayCargos(FALSE);
         $aWhere = ['id_expediente' => $id_expediente,
             '_ordre' => 'orden_tramite, f_valor'
         ];
@@ -318,6 +320,7 @@ class GestorFirma extends core\ClaseGestor
         $a_recorrido = [];
         $oFirma = new Firma();
         $a_valores = $oFirma->getArrayValor('all');
+        $UsuarioRepository = new UsuarioRepository();
         foreach ($cFirmas as $oFirma) {
             $a_rec = [];
             $tipo = $oFirma->getTipo();
@@ -326,7 +329,7 @@ class GestorFirma extends core\ClaseGestor
             $f_valor = empty($oFvalor) ? '' : $oFvalor->getFromLocalHora();
             if (!empty($valor) && ($valor !== Firma::V_VISTO)) {
                 $id_usuario = $oFirma->getId_usuario();
-                $oUsuario = new Usuario($id_usuario);
+                $oUsuario = $UsuarioRepository->findById($id_usuario);
                 $nom_usuario = $oUsuario->getNom_usuario();
                 $id_cargo = $oFirma->getId_cargo();
                 $cargo_tipo = $oFirma->getCargo_tipo();
@@ -374,7 +377,7 @@ class GestorFirma extends core\ClaseGestor
             } else {
                 if ($tipo === Firma::TIPO_VOTO) {
                     // lo marco como visto (sólo el mio). Si hay más de uno sólo debería ser el primero vacío
-                    $oUsuario = new Usuario(ConfigGlobal::mi_id_usuario());
+                    $oUsuario = $UsuarioRepository->findById(ConfigGlobal::mi_id_usuario());
                     $nom_usuario = $oUsuario->getNom_usuario();
                     $id_cargo = $oFirma->getId_cargo();
                     $cargo = $aCargos[$id_cargo];

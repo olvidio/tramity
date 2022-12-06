@@ -2,7 +2,7 @@
 
 use core\ViewTwig;
 use etiquetas\model\entity\Etiqueta;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************

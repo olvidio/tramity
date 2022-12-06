@@ -1,9 +1,11 @@
 <?php
 
 use core\ViewTwig;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\repositories\UsuarioRepository;
 use usuarios\model\entity\GestorOficina;
-use usuarios\model\entity\GestorUsuario;
+use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -27,7 +29,7 @@ $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_A
 // Si vengo por medio de Posicion, borro la última
 if (isset($_POST['stack'])) {
     $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
-    if ($stack != '') {
+    if ($stack !== '') {
         // No me sirve el de global_object, sino el de la session
         $oPosicion2 = new web\Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
@@ -54,16 +56,17 @@ $oPosicion->setParametros(array('id_cargo' => $Q_id_cargo), 1);
 
 
 $txt_guardar = _("guardar datos cargo");
-$oCargo = new Cargo($Q_id_cargo);
-if ($oCargo->DBCargar()) {
+$CargoRepository = new CargoRepository();
+$oCargo = $CargoRepository->findById($Q_id_cargo);
+if ($oCargo !== null) {
     $que = 'guardar';
     $cargo = $oCargo->getCargo();
     $descripcion = $oCargo->getDescripcion();
     $id_ambito = $oCargo->getId_ambito();
     $id_oficina = $oCargo->getId_oficina();
-    $director = $oCargo->getDirector();
+    $director = $oCargo->isDirector();
     $chk_director = ($director === TRUE) ? 'checked' : '';
-    $sacd = $oCargo->getSacd();
+    $sacd = $oCargo->isSacd();
     $chk_sacd = ($sacd === TRUE) ? 'checked' : '';
     $id_usuario = $oCargo->getId_usuario();
     $id_suplente = $oCargo->getId_suplente();
@@ -80,7 +83,7 @@ if ($oCargo->DBCargar()) {
     $id_suplente = '';
 }
 
-if ($id_ambito === $oCargo::AMBITO_DL) {
+if ($id_ambito === Cargo::AMBITO_DL) {
     $hay_oficina = TRUE;
     $oGOficinas = new GestorOficina();
     $oDesplOficinas = $oGOficinas->getListaOficinas();
@@ -90,18 +93,18 @@ if ($id_ambito === $oCargo::AMBITO_DL) {
     $hay_oficina = FALSE;
 }
 
-$gesUsuarios = new GestorUsuario();
-$oDesplUsuarios = $gesUsuarios->getDesplUsuarios();
+$UsuarioRepository = new UsuarioRepository();
+$oDesplUsuarios = $UsuarioRepository->getDesplUsuarios();
 $oDesplUsuarios->setNombre('id_usuario');
 $oDesplUsuarios->setOpcion_sel($id_usuario);
 
-$oDesplSuplentes = $gesUsuarios->getDesplUsuarios();
+$oDesplSuplentes = $UsuarioRepository->getDesplUsuarios();
 $oDesplSuplentes->setNombre('id_suplente');
 $oDesplSuplentes->setOpcion_sel($id_suplente);
 
 
 $camposForm = 'que!cargo!descripcion!id_oficina';
-$oHash = new web\Hash();
+$oHash = new Hash();
 $oHash->setcamposForm($camposForm);
 $oHash->setcamposNo('');
 $a_camposHidden = array(

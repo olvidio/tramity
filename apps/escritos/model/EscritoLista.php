@@ -9,8 +9,8 @@ use escritos\model\entity\EscritoDB;
 use escritos\model\entity\GestorEscritoDB;
 use expedientes\model\entity\GestorAccion;
 use expedientes\model\Expediente;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
 use web\Hash;
@@ -69,8 +69,8 @@ class EscritoLista
         // visibilidad
         $oVisibilidad = new Visibilidad();
         $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
-        $gesCargos = new GestorCargo();
-        $a_cargos = $gesCargos->getArrayCargos();
+        $CargoRepository = new CargoRepository();
+        $a_cargos = $CargoRepository->getArrayCargos();
         $oProtLocal = new Protocolo();
         $oProtLocal->setNombre('local');
 

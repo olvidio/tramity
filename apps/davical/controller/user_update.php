@@ -1,8 +1,9 @@
 <?php
 
 use core\MyCrypt;
-use usuarios\model\entity\GestorUsuario;
-use usuarios\model\entity\Usuario;
+use usuarios\domain\entity\Usuario;
+use usuarios\domain\repositories\UsuarioRepository;
+use usuarios\model\entity\GestorUsuarioInterface;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -21,10 +22,11 @@ switch ($Q_que) {
         $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
             $Q_id_usuario = (integer)strtok($a_sel[0], "#");
-            $oUsuario = new Usuario($Q_id_usuario);
+            $UsuarioRepository = new UsuarioRepository();
+            $oUsuario = $UsuarioRepository->findById($Q_id_usuario);
             if ($oUsuario->DBEliminar() === FALSE) {
                 echo _("hay un error, no se ha eliminado");
-                echo "\n" . $oUsuario->getErrorTxt();
+                echo "\n" . $UsuarioRepository->getErrorTxt();
             }
         }
 
@@ -32,8 +34,8 @@ switch ($Q_que) {
     case "buscar":
         $Q_usuario = (string)filter_input(INPUT_POST, 'usuario');
 
-        $oUsuarios = new GestorUsuario();
-        $oUser = $oUsuarios->getUsuarios(array('usuario' => $Q_usuario));
+        $UsuarioRepository = new UsuarioRepository();
+        $oUser = $UsuarioRepository->getUsuarios(array('usuario' => $Q_usuario));
         $oUsuario = $oUser[0];
         break;
     case "guardar_pwd":
@@ -42,11 +44,8 @@ switch ($Q_que) {
         $Q_password = (string)filter_input(INPUT_POST, 'password');
         $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
-        $oUsuario = new Usuario($Q_id_usuario);
-        if ($oUsuario->DBCargar() === FALSE) {
-            $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
-            exit ($err_cargar);
-        }
+        $UsuarioRepository = new UsuarioRepository();
+        $oUsuario = $UsuarioRepository->findById($Q_id_usuario);
         $oUsuario->setEmail($Q_email);
         if (!empty($Q_password)) {
             $oCrypt = new MyCrypt();
@@ -55,9 +54,9 @@ switch ($Q_que) {
         } else {
             $oUsuario->setPassword($Q_pass);
         }
-        if ($oUsuario->DBGuardar() === FALSE) {
+        if ($UsuarioRepository->Guardar($oUsuario) === FALSE) {
             echo _("hay un error, no se ha guardado");
-            echo "\n" . $oUsuario->getErrorTxt();
+            echo "\n" . $UsuarioRepository->getErrorTxt();
         }
         break;
     case "guardar":
@@ -74,11 +73,8 @@ switch ($Q_que) {
         $Q_password = (string)filter_input(INPUT_POST, 'password');
         $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
-        $oUsuario = new Usuario($Q_id_usuario);
-        if ($oUsuario->DBCargar() === FALSE) {
-            $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
-            exit ($err_cargar);
-        }
+        $UsuarioRepository = new UsuarioRepository();
+        $oUsuario = $UsuarioRepository->findById($Q_id_usuario);
         $oUsuario->setUsuario($Q_usuario);
         $oUsuario->setId_cargo_preferido($Q_id_cargo);
         $oUsuario->setEmail($Q_email);
@@ -90,9 +86,9 @@ switch ($Q_que) {
         } else {
             $oUsuario->setPassword($Q_pass);
         }
-        if ($oUsuario->DBGuardar() === FALSE) {
+        if ($UsuarioRepository->Guardar($oUsuario) === FALSE) {
             echo _("hay un error, no se ha guardado");
-            echo "\n" . $oUsuario->getErrorTxt();
+            echo "\n" . $UsuarioRepository->getErrorTxt();
         }
         break;
     case "nuevo":
@@ -103,6 +99,7 @@ switch ($Q_que) {
         $Q_password = (string)filter_input(INPUT_POST, 'password');
 
         if ($Q_usuario && $Q_password) {
+            $UsuarioRepository = new UsuarioRepository();
             $oUsuario = new Usuario();
             $oUsuario->setUsuario($Q_usuario);
             if (!empty($Q_password)) {
@@ -113,9 +110,9 @@ switch ($Q_que) {
             $oUsuario->setEmail($Q_email);
             $oUsuario->setId_cargo_preferido($Q_id_cargo);
             $oUsuario->setNom_usuario($Q_nom_usuario);
-            if ($oUsuario->DBGuardar() === FALSE) {
+            if ($UsuarioRepository->Guardar($oUsuario) === FALSE) {
                 echo _("hay un error, no se ha guardado");
-                echo "\n" . $oUsuario->getErrorTxt();
+                echo "\n" . $UsuarioRepository->getErrorTxt();
             }
         } else {
             echo _("debe poner un nombre y el password");

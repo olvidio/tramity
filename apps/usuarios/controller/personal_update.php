@@ -1,7 +1,8 @@
 ﻿<?php
 //namespace usuarios\controller;
+use usuarios\domain\entity\Usuario;
+use usuarios\domain\repositories\UsuarioRepository;
 use usuarios\model\entity\GestorPreferencia;
-use usuarios\model\entity\Usuario;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -53,16 +54,13 @@ switch ($Q_que) {
         $Q_email = (string)filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $Q_id_cargo_preferido = (integer)filter_input(INPUT_POST, 'id_cargo_preferido');
 
-        $oUsuario = new Usuario($id_usuario);
-        if ($oUsuario->DBCargar() === FALSE ){
-            $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
-            exit ($err_cargar);
-        }
+        $UsuarioRepository = new UsuarioRepository();
+        $oUsuario = $UsuarioRepository->findById($id_usuario);
         $oUsuario->setId_cargo_preferido($Q_id_cargo_preferido);
         $oUsuario->setEmail($Q_email);
         $oUsuario->setNom_usuario($Q_nom_usuario);
-        if ($oUsuario->DBGuardar() === FALSE) {
+        if ($UsuarioRepository->Guardar($oUsuario) === FALSE) {
             echo _("hay un error, no se ha guardado");
-            echo "\n" . $oUsuario->getErrorTxt();
+            echo "\n" . $UsuarioRepository->getErrorTxt();
         }
 }

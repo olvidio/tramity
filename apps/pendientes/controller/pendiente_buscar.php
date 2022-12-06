@@ -8,7 +8,8 @@ use etiquetas\model\entity\GestorEtiqueta;
 use lugares\model\entity\GestorLugar;
 use pendientes\model\BuscarPendiente;
 use pendientes\model\Pendiente;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\entity\GestorOficina;
 use usuarios\model\PermRegistro;
 use web\DateTimeLocal;
@@ -80,7 +81,8 @@ if ($role_actual === 'secretaria') {
 } else {
     $oDesplOficinas = []; // para evitar errores
     $secretaria = 0; // NO FALSE, para eljavascript;
-    $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
+    $CargoRepository = new CargoRepository();
+    $oCargo = $CargoRepository->findById(ConfigGlobal::role_id_cargo());
     $id_oficina = $oCargo->getId_oficina();
 }
 

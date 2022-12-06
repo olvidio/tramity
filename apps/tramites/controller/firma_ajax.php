@@ -5,8 +5,8 @@ use expedientes\model\Expediente;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramiteCargo;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -100,8 +100,8 @@ switch ($Q_que) {
         break;
     case 'lst_falta_firma':
         // todos los cargos
-        $gesCargos = new GestorCargo();
-        $a_cargos = $gesCargos->getArrayCargos();
+        $CargoRepository = new CargoRepository();
+        $a_cargos = $CargoRepository->getArrayCargos();
 
         $gesFirmas = new GestorFirma();
         $aCargosFaltan = $gesFirmas->faltaFirmarReunionExpediente($Q_id_expediente);
@@ -119,8 +119,8 @@ switch ($Q_que) {
         break;
     case 'lst_cargos_libres':
         // todos los cargos
-        $gesCargos = new GestorCargo();
-        $a_todos_cargos = $gesCargos->getArrayCargosConUsuario();
+        $CargoRepository = new CargoRepository();
+        $a_todos_cargos = $CargoRepository->getArrayCargosConUsuario();
 
         $aWhere = ['id_expediente' => $Q_id_expediente,
         ];

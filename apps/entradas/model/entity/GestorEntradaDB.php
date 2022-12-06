@@ -6,8 +6,8 @@ use core\ClaseGestor;
 use core\Condicion;
 use core\Set;
 use entradas\model\Entrada;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\Categoria;
-use usuarios\model\entity\Cargo;
 use function core\any_2;
 
 /**
@@ -80,7 +80,7 @@ class GestorEntradaDB extends ClaseGestor
      * @param integer id_oficina (id_encargado, en el caso de $tipo_oficina='encargado')
      * @param string tipo_oficina (ponente|resto|encargado|centro) Seleccionar por
      * @param array a_visibilidad para filtrar (caso centros?)
-     * @return array Una col·lecció d'objectes de tipus EntradaDB
+     * @return array|false Una col·lecció d'objectes de tipus EntradaDB
      */
     function getEntradasNoVistoDB($oficina, $tipo_oficina, $a_visibilidad = [])
     {
@@ -111,7 +111,8 @@ class GestorEntradaDB extends ClaseGestor
                 break;
             case 'encargado':
                 $encargado = $oficina;
-                $oCargo = new Cargo($encargado);
+                $CargoRepository = new CargoRepository();
+                $oCargo = $CargoRepository->findById($encargado);
                 $id_oficina = $oCargo->getId_oficina();
                 $sCondi = "encargado = $encargado AND estado = $estado";
                 // comprobar visibilidad:

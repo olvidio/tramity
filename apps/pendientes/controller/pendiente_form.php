@@ -7,8 +7,8 @@ use etiquetas\model\entity\GestorEtiqueta;
 use lugares\model\entity\GestorLugar;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\entity\GestorOficina;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
@@ -76,7 +76,8 @@ if ($role_actual === 'secretaria') {
     $oDesplOficinas = []; // para evitar errores
     $secretaria = FALSE;
     $id_cargo_role = ConfigGlobal::role_id_cargo();
-    $oCargo = new Cargo($id_cargo_role);
+    $CargoRepository = new CargoRepository();
+    $oCargo = $CargoRepository->findById($id_cargo_role);
     $id_oficina = $oCargo->getId_oficina();
     // nombre normalizado del usuario y oficina:
     $id_cargo_role = ConfigGlobal::role_id_cargo();
@@ -110,8 +111,8 @@ $oArrayDesplEtiquetas->setBlanco('t');
 $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
 // para encargar a los oficiales
-$gesCargos = new GestorCargo();
-$a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
+$CargoRepository = new CargoRepository();
+$a_usuarios_oficina = $CargoRepository->getArrayUsuariosOficina($id_oficina);
 $oDesplEncargados = new Desplegable('encargado', $a_usuarios_oficina, '', TRUE);
 
 $gesLugares = new GestorLugar();

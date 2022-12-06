@@ -2,9 +2,9 @@
 
 use core\MyCrypt;
 use davical\model\Davical;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorUsuario;
-use usuarios\model\entity\Usuario;
+use usuarios\domain\entity\Usuario;
+use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\repositories\UsuarioRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -31,10 +31,11 @@ switch ($Q_que) {
         if ($id_cargo !== FALSE) {
             $_SESSION['session_auth']['id_cargo'] = $id_cargo;
             // Oficina actual:
-            $oUsuario = new Cargo($id_cargo);
+            $CargoRepository = new CargoRepository();
+            $oUsuario = $CargoRepository->findById($id_cargo);
             $id_oficina_actual = $oUsuario->getId_oficina();
-            $bdirector = $oUsuario->getDirector();
-            $bsacd = $oUsuario->getSacd();
+            $bdirector = $oUsuario->isDirector();
+            $bsacd = $oUsuario->isSacd();
             $_SESSION['session_auth']['mi_id_oficina'] = $id_oficina_actual;
             $_SESSION['session_auth']['usuario_dtor'] = $bdirector;
             $_SESSION['session_auth']['usuario_sacd'] = $bsacd;
@@ -50,18 +51,19 @@ switch ($Q_que) {
         $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
             $Q_id_usuario = (integer)strtok($a_sel[0], "#");
-            $oUsuario = new Usuario($Q_id_usuario);
-            if ($oUsuario->DBEliminar() === FALSE) {
+            $UsuarioRepository = new UsuarioRepository();
+            $oUsuario = $UsuarioRepository->findById($Q_id_usuario);
+            if ($UsuarioRepository->Eliminar($oUsuario) === FALSE) {
                 $error_txt = _("hay un error, no se ha eliminado");
-                $error_txt .= "\n" . $oUsuario->getErrorTxt();
+                $error_txt .= "\n" . $UsuarioRepository->getErrorTxt();
             }
         }
         break;
     case "buscar":
         $Q_usuario = (string)filter_input(INPUT_POST, 'usuario');
 
-        $oUsuarios = new GestorUsuario();
-        $oUser = $oUsuarios->getUsuarios(array('usuario' => $Q_usuario));
+        $UsuarioRepository = new UsuarioRepository();
+        $oUser = $UsuarioRepository->getUsuarios(array('usuario' => $Q_usuario));
         $oUsuario = $oUser[0];
         break;
     case "guardar_pwd":
@@ -69,11 +71,8 @@ switch ($Q_que) {
         $Q_password = (string)filter_input(INPUT_POST, 'password');
         $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
-        $oUsuario = new Usuario($Q_id_usuario);
-        if ($oUsuario->DBCargar() === FALSE ){
-            $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
-            exit ($err_cargar);
-        }
+        $UsuarioRepository = new UsuarioRepository();
+        $oUsuario = $UsuarioRepository->findById($Q_id_usuario);
         if (!empty($Q_password)) {
             $oCrypt = new MyCrypt();
             $my_passwd = $oCrypt->encode($Q_password);
@@ -81,9 +80,9 @@ switch ($Q_que) {
         } else {
             $oUsuario->setPassword($Q_pass);
         }
-        if ($oUsuario->DBGuardar() === FALSE) {
+        if ($UsuarioRepository->Guardar($oUsuario) === FALSE) {
             $error_txt = _("hay un error, no se ha guardado");
-            $error_txt .= "\n" . $oUsuario->getErrorTxt();
+            $error_txt .= "\n" . $UsuarioRepository->getErrorTxt();
         }
         break;
     case "guardar":
@@ -100,11 +99,8 @@ switch ($Q_que) {
         $Q_password = (string)filter_input(INPUT_POST, 'password');
         $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
-        $oUsuario = new Usuario($Q_id_usuario);
-        if ($oUsuario->DBCargar() === FALSE ){
-            $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
-            exit ($err_cargar);
-        }
+        $UsuarioRepository = new UsuarioRepository();
+        $oUsuario = $UsuarioRepository->findById($Q_id_usuario);
         $oUsuario->setUsuario($Q_usuario);
         $oUsuario->setId_cargo_preferido($Q_id_cargo_preferido);
         $oUsuario->setEmail($Q_email);
@@ -116,9 +112,9 @@ switch ($Q_que) {
         } else {
             $oUsuario->setPassword($Q_pass);
         }
-        if ($oUsuario->DBGuardar() === FALSE) {
+        if ($UsuarioRepository->Guardar($oUsuario) === FALSE) {
             $error_txt .= _("hay un error, no se ha guardado");
-            $error_txt .= "\n" . $oUsuario->getErrorTxt();
+            $error_txt .= "\n" . $UsuarioRepository->getErrorTxt();
         }
         break;
     case "nuevo":
@@ -128,8 +124,11 @@ switch ($Q_que) {
         $Q_nom_usuario = (string)filter_input(INPUT_POST, 'nom_usuario');
         $Q_password = (string)filter_input(INPUT_POST, 'password');
 
+        $UsuarioRepository = new UsuarioRepository();
         if ($Q_usuario) {
+            $id_usuario = $UsuarioRepository->getNewId_usuario();
             $oUsuario = new Usuario();
+            $oUsuario->setId_usuario($id_usuario);
             $oUsuario->setUsuario($Q_usuario);
             if (!empty($Q_password)) {
                 $oCrypt = new MyCrypt();
@@ -141,9 +140,9 @@ switch ($Q_que) {
             $oUsuario->setEmail($Q_email);
             $oUsuario->setId_cargo_preferido($Q_id_cargo_preferido);
             $oUsuario->setNom_usuario($Q_nom_usuario);
-            if ($oUsuario->DBGuardar() === FALSE) {
+            if ($UsuarioRepository->Guardar($oUsuario) === FALSE) {
                 $error_txt .= _("hay un error, no se ha guardado");
-                $error_txt .= "\n" . $oUsuario->getErrorTxt();
+                $error_txt .= "\n" . $UsuarioRepository->getErrorTxt();
             }
         } else {
             $error_txt .= _("debe poner un nombre de usuario");

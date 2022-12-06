@@ -12,9 +12,9 @@ use entradas\model\GestorEntrada;
 use escritos\model\GestorEscrito;
 use etiquetas\model\entity\GestorEtiquetaEntrada;
 use lugares\model\entity\GestorLugar;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\Categoria;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 
@@ -545,8 +545,8 @@ class Buscar
         $cEscritos = [];
         if (!empty($this->oficina)) {
             // Cargos correspondientes a la oficina:
-            $gesCargos = new GestorCargo();
-            $a_cargos_oficina = $gesCargos->getArrayCargosOficina($this->oficina);
+            $CargoRepository = new CargoRepository();
+            $a_cargos_oficina = $CargoRepository->getArrayCargosOficina($this->oficina);
             $a_cargos = [];
             foreach (array_keys($a_cargos_oficina) as $id_cargo) {
                 $a_cargos[] = $id_cargo;

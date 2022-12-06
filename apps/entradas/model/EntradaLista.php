@@ -6,7 +6,7 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\entity\GestorEntradaBypass;
 use usuarios\model\Categoria;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;

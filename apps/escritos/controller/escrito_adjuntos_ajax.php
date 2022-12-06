@@ -10,7 +10,7 @@ use escritos\model\Escrito;
 use etherpad\model\Etherpad;
 use etherpad\model\GestorEtherpad;
 use etiquetas\model\entity\GestorEtiqueta;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\repositories\CargoRepository;
 use web\DateTimeLocal;
 use web\Lista;
 
@@ -27,8 +27,8 @@ $Q_que = (string)filter_input(INPUT_POST, 'que');
 $Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
 $Q_oficina_buscar = (integer)filter_input(INPUT_POST, 'oficina_buscar');
 
-$gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargos();
+$CargoRepository = new CargoRepository();
+$a_posibles_cargos = $CargoRepository->getArrayCargos();
 $error_txt = '';
 switch ($Q_que) {
     case 'insertar_copia':
@@ -207,8 +207,7 @@ switch ($Q_que) {
         $aOperador = [];
         // sólo los de mi oficina:
         $id_oficina = ConfigGlobal::role_id_oficina();
-        $gesCargos = new GestorCargo();
-        $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+        $a_cargos_oficina = $CargoRepository->getArrayCargosOficina($id_oficina);
         $a_cargos = [];
         foreach (array_keys($a_cargos_oficina) as $id_cargo) {
             $a_cargos[] = $id_cargo;

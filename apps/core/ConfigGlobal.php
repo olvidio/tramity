@@ -2,7 +2,7 @@
 
 namespace core;
 
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 
 class ConfigGlobal extends ServerConf
 {

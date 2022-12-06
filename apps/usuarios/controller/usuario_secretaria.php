@@ -8,7 +8,7 @@ use escritos\model\EscritoLista;
 use expedientes\model\ExpedienteDistribuirLista;
 use expedientes\model\ExpedienteReunionFijarLista;
 use expedientes\model\ExpedienteReunionSeguimientoLista;
-use usuarios\model\entity\Usuario;
+use usuarios\domain\repositories\UsuarioRepository;
 
 require_once("apps/core/global_header.inc");
 // Archivos requeridos por esta url **********************************************
@@ -29,7 +29,8 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
 }
 
 $username = $_SESSION['session_auth']['username'];
-$oUsuario = new Usuario(ConfigGlobal::mi_id_usuario());
+$oUsuarioRepository = new UsuarioRepository();
+$oUsuario = $oUsuarioRepository->findById(ConfigGlobal::mi_id_usuario());
 $username = empty($oUsuario->getNom_usuario()) ? $username : $oUsuario->getNom_usuario();
 
 $Q_tabs = (string)filter_input(INPUT_POST, 'tabs');

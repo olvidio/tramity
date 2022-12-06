@@ -1,10 +1,11 @@
 <?php
 
 use core\ViewTwig;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
-use usuarios\model\entity\GestorUsuario;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\repositories\UsuarioRepository;
 use usuarios\model\entity\Oficina;
+use web\Posicion;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -23,8 +24,8 @@ $Q_scroll_id = (string)filter_input(INPUT_POST, 'scroll_id');
 //Si vengo por medio de Posicion, borro la última
 if (isset($_POST['stack'])) {
     $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
-    if ($stack != '') {
-        $oPosicion2 = new web\Posicion();
+    if ($stack !== '') {
+        $oPosicion2 = new Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
             $Q_id_sel = $oPosicion2->getParametro('id_sel');
             $Q_scroll_id = $oPosicion2->getParametro('scroll_id');
@@ -41,8 +42,8 @@ $aWhere['id_ambito'] = $_SESSION['oConfig']->getAmbito();
 
 $aWhere['_ordre'] = 'director DESC, cargo';
 
-$oGesCargos = new GestorCargo();
-$cCargos = $oGesCargos->getCargos($aWhere, $aOperador);
+$CargoRepository = new CargoRepository();
+$cCargos = $CargoRepository->getCargos($aWhere, $aOperador);
 
 //default:
 $id_cargo = '';
@@ -57,15 +58,15 @@ $a_botones = [['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
 
 $a_valores = array();
 $i = 0;
-$gesUsuarios = new GestorUsuario();
-$aUsuarios = $gesUsuarios->getArrayUsuarios();
+$UsuarioRepository = new UsuarioRepository();
+$aUsuarios = $UsuarioRepository->getArrayUsuarios();
 foreach ($cCargos as $oCargo) {
     $i++;
     $id_cargo = $oCargo->getId_cargo();
     $cargo = $oCargo->getCargo();
     $descripcion = $oCargo->getDescripcion();
     $id_oficina = $oCargo->getId_oficina();
-    $director = $oCargo->getDirector();
+    $director = $oCargo->isDirector();
     $director_txt = ($director === TRUE) ? _("Sí") : _("No");
     $id_usuario = $oCargo->getId_usuario();
     $id_suplente = $oCargo->getId_suplente();

@@ -1,7 +1,7 @@
 <?php
 
 use tramites\model\entity\GestorTramite;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\repositories\CargoRepository;
 use web\Hash;
 
 /**
@@ -30,7 +30,7 @@ $oPosicion->recordar($Q_refresh);
 //Si vengo por medio de Posicion, borro la última
 if (isset($_POST['stack'])) {
     $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
-    if ($stack != '') {
+    if ($stack !== '') {
         $oPosicion2 = new web\Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
             $Q_id_sel = $oPosicion2->getParametro('id_sel');
@@ -79,8 +79,8 @@ $h_mover = $oHashMover->linkSinVal();
 $txt_eliminar = _("¿Está seguro que desea quitar este cargo?");
 $txt_clonar = _("No ha determinado para que trámite");
 
-$oGesCargo = new GestorCargo();
-$oDesplCargos = $oGesCargo->getDesplCargos();
+$CargoRepository = new CargoRepository();
+$oDesplCargos = $CargoRepository->getDesplCargos();
 $oDesplCargos->setNombre('id_cargo');
 $oDesplCargos->setBlanco(true);
 

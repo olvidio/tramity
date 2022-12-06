@@ -1,7 +1,7 @@
 <?php
 
 use core\ViewTwig;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\entity\GestorCargoGrupo;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -51,9 +51,9 @@ $a_botones = [['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
     ['txt' => _("modificar"), 'click' => "fnjs_editar()"],
 ];
 
-$gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargos();
-$a_posibles_cargos_ref = $gesCargos->getArrayCargosRef();
+$CargoRepository = new CargoRepository();
+$a_posibles_cargos = $CargoRepository->getArrayCargos();
+$a_posibles_cargos_ref = $CargoRepository->getArrayCargosRef();
 $a_valores = array();
 $i = 0;
 foreach ($cGrupos as $oGrupo) {

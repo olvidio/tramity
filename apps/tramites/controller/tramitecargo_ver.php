@@ -2,7 +2,7 @@
 
 use tramites\model\entity\Tramite;
 use tramites\model\entity\TramiteCargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\repositories\CargoRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -21,12 +21,12 @@ $Q_id_tramite = (integer)filter_input(INPUT_POST, 'id_tramite');
 $oTramite = new Tramite($Q_id_tramite);
 $tramite = $oTramite->getTramite();
 
-$oGesCargo = new GestorCargo();
-$oDesplCargos = $oGesCargo->getDesplCargos();
+$CargoRepository = new CargoRepository();
+$oDesplCargos = $CargoRepository->getDesplCargos();
 $oDesplCargos->setNombre('id_cargo');
 $oDesplCargos->setBlanco(true);
 // para el form
-if ($Q_mod == 'editar') {
+if ($Q_mod === 'editar') {
     $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
 
     $orden_tramite = $oTramiteCargo->getOrden_tramite();
@@ -34,7 +34,7 @@ if ($Q_mod == 'editar') {
     $oDesplCargos->setOpcion_sel($id_cargo);
     $multiple = $oTramiteCargo->getMultiple();
 }
-if ($Q_mod == 'nuevo') {
+if ($Q_mod === 'nuevo') {
     $orden_tramite = 0;
     $multiple = 1;
 }

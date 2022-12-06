@@ -8,8 +8,8 @@ use expedientes\model\Expediente;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -33,12 +33,11 @@ if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
     $vista_dl = FALSE;
 }
 
-$gesCargos = new GestorCargo();
-$aCargos = $gesCargos->getArrayCargos();
+$CargoRepository = new CargoRepository();
+$aCargos = $CargoRepository->getArrayCargos();
 
 $txt_option_cargos = '';
-$gesCargos = new GestorCargo();
-$a_posibles_cargos = $gesCargos->getArrayCargos();
+$a_posibles_cargos = $CargoRepository->getArrayCargos();
 foreach ($a_posibles_cargos as $id_cargo => $cargo) {
     $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
 }
@@ -136,7 +135,7 @@ $bool_aclaracion = FALSE;
 if ($responder) {
     $a_cargos_oficina = [];
     if (ConfigGlobal::soy_dtor()) {
-        $a_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
+        $a_cargos_oficina = $CargoRepository->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
     }
 
     if (array_key_exists($id_ponente, $a_cargos_oficina) || ($id_ponente === ConfigGlobal::role_id_cargo())) {

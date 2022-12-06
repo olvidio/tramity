@@ -5,7 +5,7 @@ namespace davical\model\entity;
 use core;
 use PDO;
 use PDOException;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use web;
 
 /**

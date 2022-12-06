@@ -7,8 +7,8 @@ use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\Expediente;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
-use usuarios\model\entity\Cargo;
-use usuarios\model\entity\GestorCargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use usuarios\model\Visibilidad;
 use web\Desplegable;
 use function core\is_true;
@@ -46,8 +46,8 @@ if ($oExpediente->DBCargar() === FALSE ){
 }
 $ponente_txt = '?';
 $id_ponente = $oExpediente->getPonente();
-$gesCargos = new GestorCargo();
-$aCargos = $gesCargos->getArrayCargos();
+$CargoRepository = new CargoRepository();
+$aCargos = $CargoRepository->getArrayCargos();
 $ponente_txt = $aCargos[$id_ponente];
 
 $id_tramite = $oExpediente->getId_tramite();
@@ -154,7 +154,7 @@ if ($Q_filtro === 'distribuir') {
     $disable_archivar = is_true($oEscritoLista->EstanTodosLosEscritosEnviados()) ? '' : 'disabled';
     // para encargar a los oficiales
     $id_oficina = ConfigGlobal::role_id_oficina();
-    $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
+    $a_usuarios_oficina = $CargoRepository->getArrayUsuariosOficina($id_oficina);
     $oDesplOficiales = new Desplegable('id_oficial', $a_usuarios_oficina, $id_ponente, FALSE);
     $ver_encargar = TRUE;
 }

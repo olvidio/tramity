@@ -1,7 +1,8 @@
 <?php
 
 use davical\model\Davical;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -20,13 +21,10 @@ switch ($Q_que) {
     case "suplente":
         $Q_id_cargo = (integer)filter_input(INPUT_POST, 'id_cargo');
         $Q_id_suplente = (integer)filter_input(INPUT_POST, 'id_suplente');
-        $oCargo = new Cargo ($Q_id_cargo);
-        if ($oCargo->DBCargar() === FALSE ){
-            $err_cargar = sprintf(_("OJO! no existe el cargo en %s, linea %s"), __FILE__, __LINE__);
-            exit ($err_cargar);
-        }
+        $CargoRepository = new CargoRepository();
+        $oCargo = $CargoRepository->findById($Q_id_cargo);
         $oCargo->setId_suplente($Q_id_suplente);
-        if ($oCargo->DBGuardar() === FALSE) {
+        if ($CargoRepository->Guardar($oCargo) === FALSE) {
             $txt_err .= _("Hay un error al guardar");
             $txt_err .= "<br>";
         }
@@ -36,13 +34,14 @@ switch ($Q_que) {
         if (!empty($a_sel)) { //vengo de un checkbox
             $Q_id_cargo = (integer)strtok($a_sel[0], "#");
             if ($Q_id_cargo > Cargo::CARGO_REUNION) { // A dia de hoy, es el número mayor (7)
-                $oCargo = new Cargo($Q_id_cargo);
+                $CargoRepository = new CargoRepository();
+                $oCargo = $CargoRepository->findById($Q_id_cargo);
                 // hay que coger la información antes de borrar:
                 $id_oficina = $oCargo->getId_oficina();
                 $cargo = $oCargo->getCargo();
-                if ($oCargo->DBEliminar() === false) {
+                if ($CargoRepository->Eliminar($oCargo) === false) {
                     $txt_err .= _("hay un error, no se ha eliminado");
-                    $txt_err .= "\n" . $oCargo->getErrorTxt();
+                    $txt_err .= "\n" . $CargoRepository->getErrorTxt();
                 } else {
                     // Eliminar el usuario en davical.
                     $aDatosCargo = ['cargo' => $cargo,
@@ -72,12 +71,17 @@ switch ($Q_que) {
         $Q_id_usuario = (integer)filter_input(INPUT_POST, 'id_usuario');
         $Q_id_suplente = (integer)filter_input(INPUT_POST, 'id_suplente');
 
-        if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_DL) {
+        if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_DL) {
             $Q_id_oficina = Cargo::OFICINA_ESQUEMA;
         }
 
-        $oCargo = new Cargo ($Q_id_cargo);
-        $oCargo->DBCargar();
+        $CargoRepository = new CargoRepository();
+        $oCargo = $CargoRepository->findById($Q_id_cargo);
+        if ($oCargo === null) {
+            $Q_id_cargo = $CargoRepository->getNewId_cargo();
+            $oCargo = new Cargo();
+            $oCargo->setId_cargo($Q_id_cargo);
+        }
         $oCargo->setCargo($Q_cargo);
         $oCargo->setDescripcion($Q_descripcion);
         $oCargo->setId_ambito($Q_id_ambito);
@@ -86,9 +90,9 @@ switch ($Q_que) {
         $oCargo->setSacd($Q_sacd);
         $oCargo->setId_usuario($Q_id_usuario);
         $oCargo->setId_suplente($Q_id_suplente);
-        if ($oCargo->DBGuardar() === false) {
+        if ($CargoRepository->Guardar($oCargo) === false) {
             $txt_err .= _("hay un error, no se ha guardado");
-            $txt_err .= "\n" . $oCargo->getErrorTxt();
+            $txt_err .= "\n" . $CargoRepository->getErrorTxt();
         }
         // Crear el usuario en davical.
         $aDatosCargo = ['cargo' => $Q_cargo,

@@ -11,7 +11,7 @@ use entradas\model\GestorEntrada;
 use iCalComponent;
 use iCalProp;
 use pendientes\model\entity\PendienteDB;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
 use usuarios\model\entity\GestorOficina;
 use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;

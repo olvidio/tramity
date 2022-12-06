@@ -3,7 +3,8 @@
 namespace usuarios\model;
 
 use core\ConfigGlobal;
-use usuarios\model\entity\Cargo;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
 use function core\is_true;
 
 class Visibilidad
@@ -33,14 +34,13 @@ class Visibilidad
             // visibilidad:
             $a_visibilidad[] = self::V_CTR_TODOS;
             $id_cargo = ConfigGlobal::role_id_cargo();
-            $oCargo = new Cargo($id_cargo);
-            $dtor = $oCargo->getDirector();
-            $sacd = $oCargo->getSacd();
-            if (is_true($dtor)) {
+            $CargoRepository = new CargoRepository();
+            $oCargo = $CargoRepository->findById($id_cargo);
+            if ($oCargo->isDirector()) {
                 $a_visibilidad[] = self::V_CTR_DTOR;
                 $a_visibilidad[] = self::V_CTR_DTOR_SACD;
             }
-            if (is_true($sacd)) {
+            if ($oCargo->isSacd()) {
                 $a_visibilidad[] = self::V_CTR_DTOR_SACD;
             }
         } else {

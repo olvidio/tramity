@@ -9,7 +9,8 @@ use expedientes\model\ExpedienteBorradorLista;
 use expedientes\model\ExpedienteCirculandoLista;
 use expedientes\model\ExpedienteParaFirmarLista;
 use expedientes\model\ExpedientepermanentesClLista;
-use usuarios\model\entity\Usuario;
+use usuarios\domain\entity\Usuario;
+use usuarios\domain\repositories\UsuarioRepository;
 use function core\is_true;
 
 require_once("apps/core/global_header.inc");
@@ -31,7 +32,8 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
 }
 
 $username = $_SESSION['session_auth']['username'];
-$oUsuario = new Usuario(ConfigGlobal::mi_id_usuario());
+$UsuarioRepository = new UsuarioRepository();
+$oUsuario = $UsuarioRepository->findById(ConfigGlobal::mi_id_usuario());
 $username = empty($oUsuario->getNom_usuario()) ? $username : $oUsuario->getNom_usuario();
 
 $Q_tabs = (string)filter_input(INPUT_POST, 'tabs');

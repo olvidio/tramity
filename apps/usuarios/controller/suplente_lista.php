@@ -1,8 +1,8 @@
 <?php
 
 use core\ViewTwig;
-use usuarios\model\entity\GestorCargo;
-use usuarios\model\entity\GestorUsuario;
+use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\repositories\UsuarioRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -14,14 +14,12 @@ require_once("apps/core/global_object.inc");
 
 $aWhere = ['id_oficina' => 0, '_ordre' => 'director DESC, cargo'];
 $aOperador = ['id_oficina' => '>'];
-$gesCargo = new GestorCargo();
-$cCargos = $gesCargo->getCargos($aWhere, $aOperador);
-
-$gesUsuarios = new GestorUsuario();
+$CargoRepository = new CargoRepository();
+$cCargos = $CargoRepository->getCargos($aWhere, $aOperador);
 
 $a_valores = [];
-$gesUsuarios = new GestorUsuario();
-$aUsuarios = $gesUsuarios->getArrayUsuarios();
+$UsuarioRepository = new UsuarioRepository();
+$aUsuarios = $UsuarioRepository->getArrayUsuarios();
 foreach ($cCargos as $oCargo) {
     $cargo = $oCargo->getCargo();
     $id_cargo = $oCargo->getId_cargo();
@@ -29,7 +27,7 @@ foreach ($cCargos as $oCargo) {
     $id_suplente = $oCargo->getId_suplente();
     $usuario = empty($aUsuarios[$id_usuario]) ? '' : $aUsuarios[$id_usuario];
 
-    $oDesplSuplentes = $gesUsuarios->getDesplUsuarios();
+    $oDesplSuplentes = $UsuarioRepository->getDesplUsuarios();
     $oDesplSuplentes->setNombre("id_suplente_$id_cargo");
     $oDesplSuplentes->setOpcion_sel($id_suplente);
     $oDesplSuplentes->setAction("fnjs_update_suplente($id_cargo)");
