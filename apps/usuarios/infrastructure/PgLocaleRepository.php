@@ -208,6 +208,18 @@ class PgLocaleRepository extends ClaseRepository implements LocaleRepositoryInte
     }
 
     /**
+     * Busca la clase con id_locale en la base de datos .
+     */
+    public function findById(string $id_locale): ?Locale
+    {
+        $aDatos = $this->datosById($id_locale);
+        if (empty($aDatos)) {
+            return null;
+        }
+        return (new Locale())->setAllAttributes($aDatos);
+    }
+
+    /**
      * Carga los campos de la base de datos como ATRIBUTOS de la clase.
      */
     public function datosById(string $id_locale): array|bool
@@ -221,19 +233,6 @@ class PgLocaleRepository extends ClaseRepository implements LocaleRepositoryInte
         }
         $aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);
         return $aDatos;
-    }
-
-
-    /**
-     * Busca la clase con id_locale en la base de datos .
-     */
-    public function findById(string $id_locale): ?Locale
-    {
-        $aDatos = $this->datosById($id_locale);
-        if (empty($aDatos)) {
-            return null;
-        }
-        return (new Locale())->setAllAttributes($aDatos);
     }
 
     /* -------------------- GESTOR EXTRA ---------------------------------------- */

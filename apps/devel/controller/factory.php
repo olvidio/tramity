@@ -236,7 +236,7 @@ foreach ($oDbl->query($sql) as $row) {
     }
     $NomCamp = ucwords($nomcamp);
     $tipo = $row['type'];
-    $null = (is_true($row['notnull']))? 'null' : '';
+    $null = (is_true($row['notnull'])) ? 'null' : '';
 
     $sql_get_default = "SELECT pg_get_expr(adbin, adrelid) AS rowdefault
 				FROM pg_catalog.pg_attrdef d,
@@ -282,7 +282,7 @@ foreach ($oDbl->query($sql) as $row) {
             $tip = 'a_';
             $tip_val = '';
             $array_dades .= "\n\t\t\t";
-            $array_dades .= '$aDatos[\''.$nomcamp.'\'] = array_pg2php($aDatos[\''.$nomcamp.'\']);';
+            $array_dades .= '$aDatos[\'' . $nomcamp . '\'] = array_pg2php($aDatos[\'' . $nomcamp . '\']);';
             break;
         case 'int8':
         case 'int4':
@@ -311,7 +311,7 @@ foreach ($oDbl->query($sql) as $row) {
             $tip = 'd';
             $tip_val = '';
             $fechas_dades .= "\n\t\t\t";
-            $fechas_dades .= '$aDatos[\''.$nomcamp.'\'] = (new ConverterDate(\'' . $tipo . '\', $aDatos[\''.$nomcamp.'\']))->fromPg();';
+            $fechas_dades .= '$aDatos[\'' . $nomcamp . '\'] = (new ConverterDate(\'' . $tipo . '\', $aDatos[\'' . $nomcamp . '\']))->fromPg();';
             break;
         case 'time':
             $tipo_db = 'string time';
@@ -334,7 +334,7 @@ foreach ($oDbl->query($sql) as $row) {
             $tip = 's';
             $tip_val = '';
             $bytea_dades .= "\n\t\t\t";
-            $bytea_dades .= '$handle = $aDatos[\''.$nomcamp.'\'];';
+            $bytea_dades .= '$handle = $aDatos[\'' . $nomcamp . '\'];';
             $bytea_dades .= 'if ($handle !== null) {';
             $bytea_dades .= "\n\t\t\t";
             $bytea_dades .= '$contents = stream_get_contents($handle);';
@@ -343,23 +343,23 @@ foreach ($oDbl->query($sql) as $row) {
             $bytea_dades .= "\n\t\t\t";
             $bytea_dades .= '$' . $nomcamp . ' = $contents;';
             $bytea_dades .= "\n\t\t\t";
-            $bytea_dades .= '$aDatos[\''.$nomcamp.'\'] = $' . $nomcamp . ';';
+            $bytea_dades .= '$aDatos[\'' . $nomcamp . '\'] = $' . $nomcamp . ';';
             $bytea_dades .= "\n\t\t\t";
             $bytea_dades .= "}";
 
             $bytea_bind .= "\n\t\t";
-            $bytea_bind .= '$'.$tip.$nomcamp." = '';";
+            $bytea_bind .= '$' . $tip . $nomcamp . " = '';";
             $bytea_bind .= "\n\t\t";
-            $bytea_bind .= '$oDblSt->bindColumn(\''.$nomcamp.'\', $'.$tip.$nomcamp.', PDO::PARAM_STR);';
+            $bytea_bind .= '$oDblSt->bindColumn(\'' . $nomcamp . '\', $' . $tip . $nomcamp . ', PDO::PARAM_STR);';
             $bytea_bind .= "\n\t\t";
             $bytea_bind .= '$aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);';
             $bytea_bind .= "\n\t\t";
-            $bytea_bind .= '$aDatos[\''.$nomcamp.'\'] = $'.$tip.$nomcamp.';';
+            $bytea_bind .= '$aDatos[\'' . $nomcamp . '\'] = $' . $tip . $nomcamp . ';';
             break;
     }
     if (empty($null)) {
-        $tipo_db_txt = $tipo_db."|null";
-        $tip_txt = "?".$tipo_db;
+        $tipo_db_txt = $tipo_db . "|null";
+        $tip_txt = "?" . $tipo_db;
         $val_default = ' = null';
     } else {
         $tipo_db_txt = $tipo_db;
@@ -370,22 +370,22 @@ foreach ($oDbl->query($sql) as $row) {
 	/**
 	 * ' . $NomCamp . ' de ' . $clase . '
 	 *
-	 * @var ' . $tipo_db_txt .'
+	 * @var ' . $tipo_db_txt . '
 	 */
-	 private ' . $tip_txt. ' $' . $tip . $nomcamp . $val_default . ';';
+	 private ' . $tip_txt . ' $' . $tip . $nomcamp . $val_default . ';';
 
     switch ($tipo) {
         case 'bool':
-            $metodo_get ='is' . $NomCamp . '()';
+            $metodo_get = 'is' . $NomCamp . '()';
             $gets .= '
 	/**
 	 *
 	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp;
             if (!empty($a_use_txt['JsonException'])) {
-                $gets .= "\n\t".' * @throws JsonException';
+                $gets .= "\n\t" . ' * @throws JsonException';
             }
-            $gets .= "\n\t".' */
-	public function is' . $NomCamp . '(): '.$tip_txt.'
+            $gets .= "\n\t" . ' */
+	public function is' . $NomCamp . '(): ' . $tip_txt . '
 	{
 		return $this->' . $tip . $nomcamp . ';
 	}';
@@ -393,23 +393,23 @@ foreach ($oDbl->query($sql) as $row) {
         case '_int8':
         case '_int4':
         case '_int2':
-            $metodo_get ='get' . $NomCamp . '()';
+            $metodo_get = 'get' . $NomCamp . '()';
             $gets .= '
 	/**
 	 *
 	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp;
-    if (!empty($a_use_txt['JsonException'])) {
-        $gets .= "\n\t".' * @throws JsonException';
-    }
-	$gets .= "\n\t".' */
-	public function get' . $NomCamp . '(): '.$tipo_db_txt.'
+            if (!empty($a_use_txt['JsonException'])) {
+                $gets .= "\n\t" . ' * @throws JsonException';
+            }
+            $gets .= "\n\t" . ' */
+	public function get' . $NomCamp . '(): ' . $tipo_db_txt . '
 	{
         return $this->' . $tip . $nomcamp . ';
 	}';
             break;
         case 'json':
         case 'jsonb':
-            $metodo_get ='get' . $NomCamp . '()';
+            $metodo_get = 'get' . $NomCamp . '()';
             $gets .= '
 	/**
 	 *
@@ -422,34 +422,34 @@ foreach ($oDbl->query($sql) as $row) {
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
 			$this->DBCargar();
 		}
-		return (new ConverterJson($this->'. $tip . $nomcamp .', $bArray))->fromPg();
+		return (new ConverterJson($this->' . $tip . $nomcamp . ', $bArray))->fromPg();
 	}';
             break;
         case 'date':
         case 'timestamp':
         case 'timestamptz';
-            $metodo_get ='get' . $NomCamp . '()';
+            $metodo_get = 'get' . $NomCamp . '()';
             $gets .= '
 	/**
 	 *
 	 * @return DateTimeLocal|null' . ' $' . $tip . $nomcamp;
-	$gets .= "\n\t".' */
+            $gets .= "\n\t" . ' */
 	public function get' . $NomCamp . '(): DateTimeLocal|null
 	{
         return $this->' . $tip . $nomcamp . ';
 	}';
             break;
         default:
-            $metodo_get ='get' . $NomCamp . '()';
+            $metodo_get = 'get' . $NomCamp . '()';
             $gets .= '
 	/**
 	 *
 	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp;
-    if (!empty($a_use_txt['JsonException'])) {
-        $gets .= "\n\t".' * @throws JsonException';
-    }
-	$gets .= "\n\t".' */
-	public function get' . $NomCamp . '(): '.$tip_txt.'
+            if (!empty($a_use_txt['JsonException'])) {
+                $gets .= "\n\t" . ' * @throws JsonException';
+            }
+            $gets .= "\n\t" . ' */
+	public function get' . $NomCamp . '(): ' . $tip_txt . '
 	{
 		return $this->' . $tip . $nomcamp . ';
 	}';
@@ -457,13 +457,13 @@ foreach ($oDbl->query($sql) as $row) {
 
     if (in_array($nomcamp, $aClaus)) {
         $a_add_campos[$nomcamp] = '$aDatos[\'' . $nomcamp . '\'] = $' . $Q_clase . '->' . $metodo_get . ';';
-        $aClaus2[$nomcamp] = ['tip_nomcamp' =>  $tip . $nomcamp, 'tip_txt' => $tip_txt];
+        $aClaus2[$nomcamp] = ['tip_nomcamp' => $tip . $nomcamp, 'tip_txt' => $tip_txt];
         $gets .= '
 	/**
 	 *
-	 * @param ' . $tipo_db_txt . ' $'.$tip.$nomcamp . '
+	 * @param ' . $tipo_db_txt . ' $' . $tip . $nomcamp . '
 	 */
-	public function set' . $NomCamp . '('.$tip_txt.' $' . $tip . $nomcamp . '): void
+	public function set' . $NomCamp . '(' . $tip_txt . ' $' . $tip . $nomcamp . '): void
 	{
 		$this->' . $tip . $nomcamp . ' = $' . $tip . $nomcamp . ';
 	}';
@@ -492,9 +492,9 @@ foreach ($oDbl->query($sql) as $row) {
 	 *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
 	 * @throws JsonException
 	 */
-	public function set' . $NomCamp . '(string|array|null $'.$tip.$nomcamp.', bool $db=FALSE): void
+	public function set' . $NomCamp . '(string|array|null $' . $tip . $nomcamp . ', bool $db=FALSE): void
 	{
-        $this->' . $tip . $nomcamp . ' = (new ConverterJson($'.$tip.$nomcamp.', FALSE))->toPg($db);
+        $this->' . $tip . $nomcamp . ' = (new ConverterJson($' . $tip . $nomcamp . ', FALSE))->toPg($db);
 	}';
                 break;
             case 'date':
@@ -503,7 +503,7 @@ foreach ($oDbl->query($sql) as $row) {
                 $gets .= '
 	/**
 	 * 
-	 * @param DateTimeLocal|null $' . $tip . $nomcamp.'
+	 * @param DateTimeLocal|null $' . $tip . $nomcamp . '
 	 */
 	public function set' . $NomCamp . '(DateTimeLocal|null $' . $tip . $nomcamp . ' = null): void
 	{
@@ -514,9 +514,9 @@ foreach ($oDbl->query($sql) as $row) {
                 $gets .= '
 	/**
 	 *
-	 * @param ' . $tipo_db_txt . ' $' . $tip . $nomcamp .'
+	 * @param ' . $tipo_db_txt . ' $' . $tip . $nomcamp . '
 	 */
-	public function set' . $NomCamp . '('.$tip_txt.' $' . $tip . $nomcamp . $val_default . '): void
+	public function set' . $NomCamp . '(' . $tip_txt . ' $' . $tip . $nomcamp . $val_default . '): void
 	{
 		$this->' . $tip . $nomcamp . ' = $' . $tip . $nomcamp . ';
 	}';
@@ -616,10 +616,10 @@ $txt_entidad = "<?php
 
 namespace $grupo\\domain\\entity;";
 if (!empty($a_use_txt['is_true'])) {
-    $txt_entidad .= "\n\t".'use function core\is_true;';
+    $txt_entidad .= "\n\t" . 'use function core\is_true;';
 }
 if (!empty($a_use_txt['DateTimeLocal'])) {
-    $txt_entidad .= "\n\t".'use web\DateTimeLocal;';
+    $txt_entidad .= "\n\t" . 'use web\DateTimeLocal;';
 }
 
 $txt_entidad .= "
@@ -646,11 +646,11 @@ $txt_entidad .= '/* MÉTODOS PÚBLICOS -----------------------------------------
 	 *
 	 * @param array $aDatos';
 if (!empty($a_use_txt['JsonException'])) {
-    $txt_entidad .= "\n\t".' * @throws JsonException';
+    $txt_entidad .= "\n\t" . ' * @throws JsonException';
 }
-$txt_entidad .= "\n\t".' * return '.$Q_clase;
-$txt_entidad .= "\n\t".' */';
-$txt_entidad .= "\n\t" . 'public function setAllAttributes(array $aDatos): '.$Q_clase. "\n\t" . '{';
+$txt_entidad .= "\n\t" . ' * return ' . $Q_clase;
+$txt_entidad .= "\n\t" . ' */';
+$txt_entidad .= "\n\t" . 'public function setAllAttributes(array $aDatos): ' . $Q_clase . "\n\t" . '{';
 
 $txt_entidad .= $exists;
 $txt_entidad .= "\n\t\t" . 'return $this;';
@@ -682,9 +682,9 @@ fclose($handle);
 
 // ---------------------- REPOSITORIO ------------------------------------------------
 
-$pg_clase = "Pg".$Q_clase."Repository";
-$clase_interface = $Q_clase."RepositoryInterface";
-$clase_repository = $Q_clase."Repository";
+$pg_clase = "Pg" . $Q_clase . "Repository";
+$clase_interface = $Q_clase . "RepositoryInterface";
+$clase_repository = $Q_clase . "Repository";
 
 $where = '';
 $claus_getPrimary = '';
@@ -713,7 +713,9 @@ if (count($aClaus2) === 1) {
     foreach ($aClaus2 as $clau => $nom_clau) {
         //$nom_clau="i".$clau;
         $i++;
-        if ($i > 0) { $where .= " AND "; }
+        if ($i > 0) {
+            $where .= " AND ";
+        }
         // si es integer quito las comillas del where
         if ($nom_clau[0] === 'i') {
             $where .= $clau . ' = $' . $clau;
@@ -801,9 +803,9 @@ use web\\Desplegable;
 
 $use_txt = '';
 foreach ($a_use_txt as $use) {
-    $use_txt .= "\n".$use.";";
+    $use_txt .= "\n" . $use . ";";
 }
-$txt_pgRepositorio .= "\n".$use_txt;
+$txt_pgRepositorio .= "\n" . $use_txt;
 
 $txt_pgRepositorio .= "
 /**
@@ -823,7 +825,7 @@ $txt_pgRepositorio .= '
     {
         $oDbl = $GLOBALS[\'oDBT\'];
         $this->setoDbl($oDbl);
-        $this->setNomTabla(\''.$tabla.'\');
+        $this->setNomTabla(\'' . $tabla . '\');
     }
 ';
 
@@ -940,7 +942,7 @@ $txt_repository .= "\n";
 $txt_repository .= '/* -------------------- ENTIDAD --------------------------------------------- */';
 $txt_repository .= "\n";
 $txt_repository .= "\n\t";
-$txt_repository .= 'public function Eliminar('.$Q_clase.' $'.$Q_clase.'): bool
+$txt_repository .= 'public function Eliminar(' . $Q_clase . ' $' . $Q_clase . '): bool
     {
         return $this->repository->Eliminar($' . $Q_clase . ');
     }';
@@ -949,16 +951,16 @@ $txt_interface .= "\n";
 $txt_interface .= '/* -------------------- ENTIDAD --------------------------------------------- */';
 $txt_interface .= "\n";
 $txt_interface .= "\n\t";
-$txt_interface .= 'public function Eliminar('.$Q_clase.' $'.$Q_clase.'): bool;';
+$txt_interface .= 'public function Eliminar(' . $Q_clase . ' $' . $Q_clase . '): bool;';
 
 $txt_pgRepositorio .= "\n";
 $txt_pgRepositorio .= '/* -------------------- ENTIDAD --------------------------------------------- */';
 $txt_pgRepositorio .= "\n";
 
 $txt_pgRepositorio .= "\n\t";
-$txt_pgRepositorio .= 'public function Eliminar('.$Q_clase.' $'.$Q_clase.'): bool
+$txt_pgRepositorio .= 'public function Eliminar(' . $Q_clase . ' $' . $Q_clase . '): bool
     {
-        ' . $getClau .'
+        ' . $getClau . '
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         if (($oDbl->exec("DELETE FROM $nom_tabla WHERE ' . $where . '")) === FALSE) {
@@ -972,7 +974,7 @@ $txt_pgRepositorio .= 'public function Eliminar('.$Q_clase.' $'.$Q_clase.'): boo
 
 $txt_repository .= "\n";
 $txt_repository .= "\n\t";
-$txt_repository .= 'public function Guardar('.$Q_clase.' $'.$Q_clase.'): bool
+$txt_repository .= 'public function Guardar(' . $Q_clase . ' $' . $Q_clase . '): bool
     {
         return $this->repository->Guardar($' . $Q_clase . ');
     }';
@@ -1007,7 +1009,7 @@ $txt_repository .= 'public function getNomTabla(): string
 
 $txt_interface .= "\n";
 $txt_interface .= "\n\t";
-$txt_interface .= 'public function Guardar('.$Q_clase.' $'.$Q_clase.'): bool;';
+$txt_interface .= 'public function Guardar(' . $Q_clase . ' $' . $Q_clase . '): bool;';
 
 $txt_interface .= "\n";
 $txt_interface .= "\n\t";
@@ -1030,9 +1032,9 @@ $txt_pgRepositorio .= '
 	/**
 	 * Si no existe el registro, hace un insert, si existe, se hace el update.
 	 */
-	public function Guardar('.$Q_clase.' $'.$Q_clase.'): bool
+	public function Guardar(' . $Q_clase . ' $' . $Q_clase . '): bool
     {
-        ' . $getClau .'
+        ' . $getClau . '
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         $bInsert = $this->isNew($' . $clau . ');
@@ -1077,7 +1079,7 @@ $txt_pgRepositorio .= '
             }
 		} else {
 			// INSERT';
-foreach ($a_add_campos AS $add_campo) {
+foreach ($a_add_campos as $add_campo) {
     $txt_pgRepositorio .= "\n\t\t\t" . $add_campo;
 }
 $txt_pgRepositorio .= "\n\t\t\t" . '$campos="(';
@@ -1104,12 +1106,12 @@ $txt_pgRepositorio .= "\n\t\t" . '}
 	}';
 
 $txt_pgRepositorio .= "\n\t";
-$txt_pgRepositorio .='
-    private function isNew(' . $clau_tip_txt . ' $' . $clau.'): bool
+$txt_pgRepositorio .= '
+    private function isNew(' . $clau_tip_txt . ' $' . $clau . '): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE '.$where.'")) === FALSE) {
+        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE ' . $where . '")) === FALSE) {
 			$sClaveError = \'' . $clase . '.isNew\';
 			$_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
@@ -1131,10 +1133,10 @@ $txt_repository .= '
      * Devuelve los campos de la base de datos en un array asociativo.
      * Devuelve false si no existe la fila en la base de datos
      * 
-     * @param ' . $clau_tip_txt . ' $'.$clau.'
+     * @param ' . $clau_tip_txt . ' $' . $clau . '
      * @return array|bool
      */
-    public function datosById(' . $clau_tip_txt.' $' . $clau.'): array|bool
+    public function datosById(' . $clau_tip_txt . ' $' . $clau . '): array|bool
     {
         return $this->repository->datosById($' . $clau . ');
     }';
@@ -1145,21 +1147,21 @@ $txt_interface .= '
      * Devuelve los campos de la base de datos en un array asociativo.
      * Devuelve false si no existe la fila en la base de datos
      * 
-     * @param ' . $clau_tip_txt . ' $'.$clau.'
+     * @param ' . $clau_tip_txt . ' $' . $clau . '
      * @return array|bool
      */
-    public function datosById(' . $clau_tip_txt.' $' . $clau.'): array|bool;';
+    public function datosById(' . $clau_tip_txt . ' $' . $clau . '): array|bool;';
 
 $txt_pgRepositorio .= "\n\t";
-$txt_pgRepositorio .='
+$txt_pgRepositorio .= '
     /**
      * Devuelve los campos de la base de datos en un array asociativo.
      * Devuelve false si no existe la fila en la base de datos
      * 
-     * @param ' . $clau_tip_txt . ' $'.$clau.'
+     * @param ' . $clau_tip_txt . ' $' . $clau . '
      * @return array|bool
      */
-    public function datosById(' . $clau_tip_txt.' $' . $clau.'): array|bool
+    public function datosById(' . $clau_tip_txt . ' $' . $clau . '): array|bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -1191,34 +1193,34 @@ if (!empty($fechas_dades)) {
 }
 
 
-$txt_pgRepositorio .='
+$txt_pgRepositorio .= '
         return $aDatos;
     }
     ';
 
 $txt_repository .= "\n\t";
-$txt_repository .='
+$txt_repository .= '
     /**
      * Busca la clase con ' . $clau . ' en el repositorio.
      */
-    public function findById(' . $clau_tip_txt . ' $' . $clau.'): ?' . $Q_clase . '
+    public function findById(' . $clau_tip_txt . ' $' . $clau . '): ?' . $Q_clase . '
     {
         return $this->repository->findById($' . $clau . ');
     }';
 
 $txt_interface .= "\n\t";
-$txt_interface .='
+$txt_interface .= '
     /**
      * Busca la clase con ' . $clau . ' en el repositorio.
      */
-    public function findById('.$clau_tip_txt.' $' . $clau.'): ?' . $Q_clase.';';
+    public function findById(' . $clau_tip_txt . ' $' . $clau . '): ?' . $Q_clase . ';';
 
 $txt_pgRepositorio .= "\n\t";
-$txt_pgRepositorio .='
+$txt_pgRepositorio .= '
     /**
      * Busca la clase con ' . $clau . ' en la base de datos .
      */
-    public function findById('.$clau_tip_txt.' $' . $clau.'): ?' . $Q_clase . '
+    public function findById(' . $clau_tip_txt . ' $' . $clau . '): ?' . $Q_clase . '
     {
         $aDatos = $this->datosById($' . $clau . ');
         if (empty($aDatos)) {
@@ -1234,18 +1236,18 @@ if ($id_seq || $id_seq2) {
     $nomcamp = $a_auto[0];
 
     $txt_repository .= "\n\t";
-    $txt_repository.='
+    $txt_repository .= '
     public function getNew' . ucfirst($nomcamp) . '()
     {
         return $this->repository->getNew' . ucfirst($nomcamp) . '();
     }';
 
     $txt_interface .= "\n\t";
-    $txt_interface .='
+    $txt_interface .= '
     public function getNew' . ucfirst($nomcamp) . '();';
 
     $txt_pgRepositorio .= "\n\t";
-    $txt_pgRepositorio .='
+    $txt_pgRepositorio .= '
     public function getNew' . ucfirst($nomcamp) . '()
     {
         $oDbl = $this->getoDbl();
@@ -1326,7 +1328,7 @@ $dir_infra = ServerConf::DIR . '/apps/' . $grupo . '/infrastructure';
 if (!is_dir($dir_infra)) {
     mkdir($dir_infra);
 }
-$filename = $dir_infra.'/' . $pg_clase . '.php';
+$filename = $dir_infra . '/' . $pg_clase . '.php';
 if (!$handle = fopen($filename, 'w')) {
     echo "Cannot open file ($filename)";
     die();
@@ -1344,7 +1346,7 @@ $dir_repositories = ServerConf::DIR . '/apps/' . $grupo . '/domain/repositories'
 if (!is_dir($dir_repositories)) {
     mkdir($dir_repositories);
 }
-$filename = $dir_repositories.'/' . $clase_interface . '.php';
+$filename = $dir_repositories . '/' . $clase_interface . '.php';
 if (!$handle = fopen($filename, 'w')) {
     echo "Cannot open file ($filename)";
     die();
@@ -1362,7 +1364,7 @@ $dir_repositories = ServerConf::DIR . '/apps/' . $grupo . '/domain/repositories'
 if (!is_dir($dir_repositories)) {
     mkdir($dir_repositories);
 }
-$filename = $dir_repositories.'/' . $clase_repository . '.php';
+$filename = $dir_repositories . '/' . $clase_repository . '.php';
 if (!$handle = fopen($filename, 'w')) {
     echo "Cannot open file ($filename)";
     die();

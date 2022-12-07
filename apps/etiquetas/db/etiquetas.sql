@@ -6,7 +6,8 @@ CREATE TABLE nombre_del_esquema.etiquetas
     oficina      boolean DEFAULT 'f'
 );
 
-ALTER TABLE nombre_del_esquema.etiquetas OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.etiquetas
+    OWNER TO tramity;
 
 CREATE TABLE nombre_del_esquema.etiquetas_expediente
 (
@@ -15,7 +16,8 @@ CREATE TABLE nombre_del_esquema.etiquetas_expediente
     PRIMARY KEY (id_etiqueta, id_expediente)
 );
 
-ALTER TABLE nombre_del_esquema.etiquetas_expediente OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.etiquetas_expediente
+    OWNER TO tramity;
 
 ALTER TABLE nombre_del_esquema.etiquetas_expediente
     ADD CONSTRAINT etiquetas_expediente_fk_exp FOREIGN KEY (id_expediente) REFERENCES nombre_del_esquema.expedientes (id_expediente) ON DELETE CASCADE;
@@ -29,7 +31,8 @@ CREATE TABLE nombre_del_esquema.etiquetas_entrada
     PRIMARY KEY (id_etiqueta, id_entrada)
 );
 
-ALTER TABLE nombre_del_esquema.etiquetas_entrada OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.etiquetas_entrada
+    OWNER TO tramity;
 
 ALTER TABLE nombre_del_esquema.etiquetas_entrada
     ADD CONSTRAINT etiquetas_entrada_fk_exp FOREIGN KEY (id_entrada) REFERENCES nombre_del_esquema.entradas (id_entrada) ON DELETE CASCADE;

@@ -79,9 +79,9 @@ final class Utils
      *
      * The returned handler is not wrapped by any default middlewares.
      *
+     * @return callable(\Psr\Http\Message\RequestInterface, array): \GuzzleHttp\Promise\PromiseInterface Returns the best handler for the given system.
      * @throws \RuntimeException if no viable Handler is available.
      *
-     * @return callable(\Psr\Http\Message\RequestInterface, array): \GuzzleHttp\Promise\PromiseInterface Returns the best handler for the given system.
      */
     public static function chooseHandler(): callable
     {
@@ -216,7 +216,7 @@ EOT
      * 3. The area starts with "." and the area is the last part of the host. e.g.
      *    '.mit.edu' will match any host that ends with '.mit.edu'.
      *
-     * @param string   $host         Host to check against the patterns.
+     * @param string $host Host to check against the patterns.
      * @param string[] $noProxyArray An array of host patterns.
      *
      * @throws InvalidArgumentException
@@ -259,11 +259,11 @@ EOT
     /**
      * Wrapper for json_decode that throws when an error occurs.
      *
-     * @param string $json    JSON data to parse
-     * @param bool   $assoc   When true, returned objects will be converted
+     * @param string $json JSON data to parse
+     * @param bool $assoc When true, returned objects will be converted
      *                        into associative arrays.
-     * @param int    $depth   User specified recursion depth.
-     * @param int    $options Bitmask of JSON decode options.
+     * @param int $depth User specified recursion depth.
+     * @param int $options Bitmask of JSON decode options.
      *
      * @return object|array|string|int|float|bool|null
      *
@@ -284,9 +284,9 @@ EOT
     /**
      * Wrapper for JSON encoding that throws when an error occurs.
      *
-     * @param mixed $value   The value being encoded
-     * @param int   $options JSON encode option bitmask
-     * @param int   $depth   Set the maximum depth. Must be greater than zero.
+     * @param mixed $value The value being encoded
+     * @param int $options JSON encode option bitmask
+     * @param int $depth Set the maximum depth. Must be greater than zero.
      *
      * @throws InvalidArgumentException if the JSON cannot be encoded.
      *
@@ -313,7 +313,7 @@ EOT
      */
     public static function currentTime(): float
     {
-        return (float) \function_exists('hrtime') ? \hrtime(true) / 1e9 : \microtime(true);
+        return (float)\function_exists('hrtime') ? \hrtime(true) / 1e9 : \microtime(true);
     }
 
     /**
@@ -356,22 +356,6 @@ EOT
     }
 
     /**
-     * @internal
-     */
-    public static function getenv(string $name): ?string
-    {
-        if (isset($_SERVER[$name])) {
-            return (string) $_SERVER[$name];
-        }
-
-        if (\PHP_SAPI === 'cli' && ($value = \getenv($name)) !== false && $value !== null) {
-            return (string) $value;
-        }
-
-        return null;
-    }
-
-    /**
      * @return string|false
      */
     private static function idnToAsci(string $domain, int $options, ?array &$info = [])
@@ -381,5 +365,21 @@ EOT
         }
 
         throw new \Error('ext-idn or symfony/polyfill-intl-idn not loaded or too old');
+    }
+
+    /**
+     * @internal
+     */
+    public static function getenv(string $name): ?string
+    {
+        if (isset($_SERVER[$name])) {
+            return (string)$_SERVER[$name];
+        }
+
+        if (\PHP_SAPI === 'cli' && ($value = \getenv($name)) !== false && $value !== null) {
+            return (string)$value;
+        }
+
+        return null;
     }
 }

@@ -1,11 +1,12 @@
 # Twig Trans
 
-[![Latest Version](https://img.shields.io/github/release/JBlond/twig-trans.svg?style=flat-square&label=Release)](https://github.com/JBlond/twig-trans/releases) 
+[![Latest Version](https://img.shields.io/github/release/JBlond/twig-trans.svg?style=flat-square&label=Release)](https://github.com/JBlond/twig-trans/releases)
 [![Packagist Installs](https://badgen.net/packagist/dt/jblond/twig-trans)](https://packagist.org/packages/jblond/twig-trans)
 
 ## Introduction
 
-This is the replacement for the old **Twig** Extensions **I18n** / **Intl** / **I18nExtension** for the translation with po / mo 
+This is the replacement for the old **Twig** Extensions **I18n** / **Intl** / **I18nExtension** for the translation with
+po / mo
 **gettext** files.
 
 I didn't want to install Symfony, but Twig only. Symfony seemed to be too much overhead.
@@ -77,7 +78,6 @@ try {
 
 echo $tpl->render();
 ```
-
 
 ## Requirements
 

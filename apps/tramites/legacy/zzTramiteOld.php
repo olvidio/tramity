@@ -217,7 +217,7 @@ class zzzTramiteOld extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -225,21 +225,35 @@ class zzzTramiteOld extends core\ClasePropiedades
         }
     }
 
-    
+
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * Recupera las claus primàries de Tramite en un array
+     * Establece el valor de todos los atributos
      *
-     * @return array aPrimary_key
+     * @param array $aDades
      */
-    function getPrimary_key()
+    private function setAllAtributes($aDades)
     {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('id_tramite' => $this->iid_tramite);
+        if (!is_array($aDades)) {
+            return;
         }
-        return $this->aPrimary_key;
+        if (array_key_exists('id_schema', $aDades)) {
+            $this->setId_schema($aDades['id_schema']);
+        }
+        if (array_key_exists('id_tramite', $aDades)) {
+            $this->setId_tramite($aDades['id_tramite']);
+        }
+        if (array_key_exists('tramite', $aDades)) {
+            $this->setTramite($aDades['tramite']);
+        }
+        if (array_key_exists('orden', $aDades)) {
+            $this->setOrden($aDades['orden']);
+        }
+        if (array_key_exists('breve', $aDades)) {
+            $this->setBreve($aDades['breve']);
+        }
     }
 
     /**
@@ -277,6 +291,19 @@ class zzzTramiteOld extends core\ClasePropiedades
     }
 
     /**
+     * Recupera las claus primàries de Tramite en un array
+     *
+     * @return array aPrimary_key
+     */
+    function getPrimary_key()
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('id_tramite' => $this->iid_tramite);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
      * Estableix las claus primàries de Tramite en un array
      *
      */
@@ -294,33 +321,6 @@ class zzzTramiteOld extends core\ClasePropiedades
                 $this->iid_tramite = (int)$a_id;
                 $this->aPrimary_key = array('iid_tramite' => $this->iid_tramite);
             }
-        }
-    }
-
-    /**
-     * Establece el valor de todos los atributos
-     *
-     * @param array $aDades
-     */
-    private function setAllAtributes($aDades)
-    {
-        if (!is_array($aDades)) {
-            return;
-        }
-        if (array_key_exists('id_schema', $aDades)) {
-            $this->setId_schema($aDades['id_schema']);
-        }
-        if (array_key_exists('id_tramite', $aDades)) {
-            $this->setId_tramite($aDades['id_tramite']);
-        }
-        if (array_key_exists('tramite', $aDades)) {
-            $this->setTramite($aDades['tramite']);
-        }
-        if (array_key_exists('orden', $aDades)) {
-            $this->setOrden($aDades['orden']);
-        }
-        if (array_key_exists('breve', $aDades)) {
-            $this->setBreve($aDades['breve']);
         }
     }
 

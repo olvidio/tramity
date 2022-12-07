@@ -91,10 +91,11 @@
                     {{ "Oficinas"|trans|raw }}: {{ oArrayDesplFirmas.Lista|raw }}
                 </div>
             {% else %}
-                    <div class="p-2 bg-white">
-                    <label for="Vida" class="form-label"> {{ "Vida"|trans|raw }} {{ vida_txt }}, {{ "pasar a"|trans|raw }}</label>
+                <div class="p-2 bg-white">
+                    <label for="Vida" class="form-label"> {{ "Vida"|trans|raw }} {{ vida_txt }}
+                        , {{ "pasar a"|trans|raw }}</label>
                     {{ oDesplVida.desplegable|raw }}
-                    </div>
+                </div>
             {% endif %}
 
         </div>
@@ -255,7 +256,7 @@
     }
 
     fnjs_recircular = function () {
-        alert ("borrar todas las firmas");
+        alert("borrar todas las firmas");
 
         if (typeof event !== 'undefined') {
             event.preventDefault();

@@ -55,20 +55,6 @@ class ExpedienteParaFirmarLista
         $oExpedienteLista->mostrarTabla();
     }
 
-    public function getNumero()
-    {
-        $this->setCondicion();
-        if (!empty($this->aWhere)) {
-            $gesExpedientes = new GestorExpediente();
-            $this->aWhere['_ordre'] = 'id_expediente';
-            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
-            $num = count($cExpedientes);
-        } else {
-            $num = '';
-        }
-        return $num;
-    }
-
     public function setCondicion(): ExpedientesDeColor
     {
         $this->aWhere = [];
@@ -76,7 +62,7 @@ class ExpedienteParaFirmarLista
         $oExpedientesDeColor = new ExpedientesDeColor();
 
         // Quito los permanentes_cl (de momento para los ctr)
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR ) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $this->aWhere['vida'] = Expediente::VIDA_PERMANENTE;
             $this->aOperador['vida'] = '!=';
         }
@@ -112,7 +98,7 @@ class ExpedienteParaFirmarLista
             $id_expediente = $oFirma->getId_expediente();
             $orden_tramite = $oFirma->getOrden_tramite();
             // Sólo a partir de que el orden_tramite anterior ya lo hayan firmado todos
-            if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR ) {
+            if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
                 // Para los ctr NO. Puede ser que el d no haya firmado (nivel ponente) y
                 // no se debe impedir firmar a otros (nivel oficiales).
                 if (!$FirmaRepository->isAnteriorOK($id_expediente, $orden_tramite)) {
@@ -194,6 +180,20 @@ class ExpedienteParaFirmarLista
         $oExpedientesDeColor->setExpAclaracion($a_exp_aclaracion);
 
         return $oExpedientesDeColor;
+    }
+
+    public function getNumero()
+    {
+        $this->setCondicion();
+        if (!empty($this->aWhere)) {
+            $gesExpedientes = new GestorExpediente();
+            $this->aWhere['_ordre'] = 'id_expediente';
+            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+            $num = count($cExpedientes);
+        } else {
+            $num = '';
+        }
+        return $num;
     }
 
 }

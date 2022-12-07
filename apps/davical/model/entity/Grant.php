@@ -233,7 +233,7 @@ class Grant extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         }
@@ -316,7 +316,7 @@ class Grant extends core\ClasePropiedades
         $this->bis_group = $bis_group;
     }
 
-    
+
     /**
      * Recupera las claus primàries de Grant en un array
      *

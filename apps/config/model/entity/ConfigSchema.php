@@ -213,16 +213,21 @@ class ConfigSchema extends core\ClasePropiedades
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * Recupera las claus primàries de ConfigSchema en un array
+     * Establece el valor de todos los atributos
      *
-     * @return array aPrimary_key
+     * @param array $aDades
      */
-    function getPrimary_key()
+    private function setAllAtributes($aDades)
     {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('parametro' => $this->sparametro);
+        if (!is_array($aDades)) {
+            return;
         }
-        return $this->aPrimary_key;
+        if (array_key_exists('parametro', $aDades)) {
+            $this->setParametro($aDades['parametro']);
+        }
+        if (array_key_exists('valor', $aDades)) {
+            $this->setValor($aDades['valor']);
+        }
     }
 
     /**
@@ -245,6 +250,19 @@ class ConfigSchema extends core\ClasePropiedades
     }
 
     /**
+     * Recupera las claus primàries de ConfigSchema en un array
+     *
+     * @return array aPrimary_key
+     */
+    function getPrimary_key()
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('parametro' => $this->sparametro);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
      * Estableix las claus primàries de ConfigSchema en un array
      *
      * @return array aPrimary_key
@@ -258,24 +276,6 @@ class ConfigSchema extends core\ClasePropiedades
                     $this->sparametro = $val_id;
                 }
             }
-        }
-    }
-
-    /**
-     * Establece el valor de todos los atributos
-     *
-     * @param array $aDades
-     */
-    private function setAllAtributes($aDades)
-    {
-        if (!is_array($aDades)) {
-            return;
-        }
-        if (array_key_exists('parametro', $aDades)) {
-            $this->setParametro($aDades['parametro']);
-        }
-        if (array_key_exists('valor', $aDades)) {
-            $this->setValor($aDades['valor']);
         }
     }
 

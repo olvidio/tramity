@@ -48,13 +48,13 @@ final class ApplyTokenParser extends AbstractTokenParser
         ]);
     }
 
-    public function decideApplyEnd(Token $token): bool
-    {
-        return $token->test('endapply');
-    }
-
     public function getTag(): string
     {
         return 'apply';
+    }
+
+    public function decideApplyEnd(Token $token): bool
+    {
+        return $token->test('endapply');
     }
 }

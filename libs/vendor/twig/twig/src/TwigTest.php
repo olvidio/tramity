@@ -63,24 +63,24 @@ final class TwigTest
         return $this->options['node_class'];
     }
 
-    public function setArguments(array $arguments): void
-    {
-        $this->arguments = $arguments;
-    }
-
     public function getArguments(): array
     {
         return $this->arguments;
     }
 
+    public function setArguments(array $arguments): void
+    {
+        $this->arguments = $arguments;
+    }
+
     public function isVariadic(): bool
     {
-        return (bool) $this->options['is_variadic'];
+        return (bool)$this->options['is_variadic'];
     }
 
     public function isDeprecated(): bool
     {
-        return (bool) $this->options['deprecated'];
+        return (bool)$this->options['deprecated'];
     }
 
     public function getDeprecatedVersion(): string
@@ -95,6 +95,6 @@ final class TwigTest
 
     public function hasOneMandatoryArgument(): bool
     {
-        return (bool) $this->options['one_mandatory_argument'];
+        return (bool)$this->options['one_mandatory_argument'];
     }
 }

@@ -114,7 +114,7 @@ $a_campos = [
     'escrito_html' => $escrito_html,
     'url_download_pdf' => $url_download_pdf,
     'bCompartida' => $bCompartida,
-    'url_download_pdf_adjunto' => $url_download_pdf_adjunto ,
+    'url_download_pdf_adjunto' => $url_download_pdf_adjunto,
 ];
 
 $oView = new ViewTwig('entradas/controller');

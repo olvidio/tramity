@@ -5,4 +5,5 @@ CREATE TABLE nombre_del_esquema.lugares_grupos
     miembros    integer[]
 );
 
-ALTER TABLE nombre_del_esquema.lugares_grupos OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.lugares_grupos
+    OWNER TO tramity;

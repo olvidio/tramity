@@ -227,7 +227,7 @@ class Enviar
             // número de protocolo.
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && empty((array)$json_prot_local)) {
                 $this->oEscrito->generarProtocolo();
-                if ($this->oEscrito->DBCargar() === FALSE ){
+                if ($this->oEscrito->DBCargar() === FALSE) {
                     $err_cargar = sprintf(_("OJO! no existe el escrito a enviar en %s, linea %s"), __FILE__, __LINE__);
                     exit ($err_cargar);
                 }
@@ -480,7 +480,7 @@ class Enviar
             if (!property_exists($json_prot_dst, 'id_lugar')) {
                 continue;
             }
-            $id_dst = (int) $json_prot_dst->id_lugar;
+            $id_dst = (int)$json_prot_dst->id_lugar;
             if ($id_dst === $id_lugar) {
                 break;
             }

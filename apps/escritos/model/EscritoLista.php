@@ -471,6 +471,14 @@ class EscritoLista
     }
 
     /**
+     * @param boolean $estan_todos_los_escritos_enviados
+     */
+    public function setEstanTodosLosEscritosEnviados(bool $estan_todos_los_escritos_enviados): void
+    {
+        $this->estan_todos_los_escritos_enviados = $estan_todos_los_escritos_enviados;
+    }
+
+    /**
      * @return boolean
      */
     public function isShow_tabs(): bool
@@ -541,14 +549,6 @@ class EscritoLista
             $this->getCamposTabla();
         }
         return $this->estan_todos_los_escritos_enviados;
-    }
-
-    /**
-     * @param boolean $estan_todos_los_escritos_enviados
-     */
-    public function setEstanTodosLosEscritosEnviados(bool $estan_todos_los_escritos_enviados): void
-    {
-        $this->estan_todos_los_escritos_enviados = $estan_todos_los_escritos_enviados;
     }
 
 

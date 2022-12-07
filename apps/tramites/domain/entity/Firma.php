@@ -1,6 +1,7 @@
 <?php
 
 namespace tramites\domain\entity;
+
 use web\DateTimeLocal;
 
 /**
@@ -247,29 +248,11 @@ class Firma
 
     /**
      *
-     * @return int $iid_item
-     */
-    public function getId_item(): int
-    {
-        return $this->iid_item;
-    }
-
-    /**
-     *
      * @param int $iid_item
      */
     public function setId_item(int $iid_item): void
     {
         $this->iid_item = $iid_item;
-    }
-
-    /**
-     *
-     * @return int $iid_expediente
-     */
-    public function getId_expediente(): int
-    {
-        return $this->iid_expediente;
     }
 
     /**
@@ -283,29 +266,11 @@ class Firma
 
     /**
      *
-     * @return int $iid_tramite
-     */
-    public function getId_tramite(): int
-    {
-        return $this->iid_tramite;
-    }
-
-    /**
-     *
      * @param int $iid_tramite
      */
     public function setId_tramite(int $iid_tramite): void
     {
         $this->iid_tramite = $iid_tramite;
-    }
-
-    /**
-     *
-     * @return int $iid_cargo_creador
-     */
-    public function getId_cargo_creador(): int
-    {
-        return $this->iid_cargo_creador;
     }
 
     /**
@@ -319,29 +284,11 @@ class Firma
 
     /**
      *
-     * @return int $icargo_tipo
-     */
-    public function getCargo_tipo(): int
-    {
-        return $this->icargo_tipo;
-    }
-
-    /**
-     *
      * @param int $icargo_tipo
      */
     public function setCargo_tipo(int $icargo_tipo): void
     {
         $this->icargo_tipo = $icargo_tipo;
-    }
-
-    /**
-     *
-     * @return int $iid_cargo
-     */
-    public function getId_cargo(): int
-    {
-        return $this->iid_cargo;
     }
 
     /**
@@ -355,29 +302,11 @@ class Firma
 
     /**
      *
-     * @return int|null $iid_usuario
-     */
-    public function getId_usuario(): ?int
-    {
-        return $this->iid_usuario;
-    }
-
-    /**
-     *
      * @param int|null $iid_usuario
      */
     public function setId_usuario(?int $iid_usuario = null): void
     {
         $this->iid_usuario = $iid_usuario;
-    }
-
-    /**
-     *
-     * @return int $iorden_tramite
-     */
-    public function getOrden_tramite(): int
-    {
-        return $this->iorden_tramite;
     }
 
     /**
@@ -391,29 +320,11 @@ class Firma
 
     /**
      *
-     * @return int|null $iorden_oficina
-     */
-    public function getOrden_oficina(): ?int
-    {
-        return $this->iorden_oficina;
-    }
-
-    /**
-     *
      * @param int|null $iorden_oficina
      */
     public function setOrden_oficina(?int $iorden_oficina = null): void
     {
         $this->iorden_oficina = $iorden_oficina;
-    }
-
-    /**
-     *
-     * @return int $itipo
-     */
-    public function getTipo(): int
-    {
-        return $this->itipo;
     }
 
     /**
@@ -427,29 +338,11 @@ class Firma
 
     /**
      *
-     * @return int|null $ivalor
-     */
-    public function getValor(): ?int
-    {
-        return $this->ivalor;
-    }
-
-    /**
-     *
      * @param int|null $ivalor
      */
     public function setValor(?int $ivalor = null): void
     {
         $this->ivalor = $ivalor;
-    }
-
-    /**
-     *
-     * @return string|null $sobserv_creador
-     */
-    public function getObserv_creador(): ?string
-    {
-        return $this->sobserv_creador;
     }
 
     /**
@@ -463,15 +356,6 @@ class Firma
 
     /**
      *
-     * @return string|null $sobserv
-     */
-    public function getObserv(): ?string
-    {
-        return $this->sobserv;
-    }
-
-    /**
-     *
      * @param string|null $sobserv
      */
     public function setObserv(?string $sobserv = null): void
@@ -481,19 +365,136 @@ class Firma
 
     /**
      *
-     * @return DateTimeLocal|null $df_valor
-     */
-    public function getF_valor(): DateTimeLocal|null
-    {
-        return $this->df_valor;
-    }
-
-    /**
-     *
      * @param DateTimeLocal|null $df_valor
      */
     public function setF_valor(DateTimeLocal $df_valor = null): void
     {
         $this->df_valor = $df_valor;
+    }
+
+    /**
+     *
+     * @return int $iid_item
+     */
+    public function getId_item(): int
+    {
+        return $this->iid_item;
+    }
+
+    /**
+     *
+     * @return int $iid_expediente
+     */
+    public function getId_expediente(): int
+    {
+        return $this->iid_expediente;
+    }
+
+    /**
+     *
+     * @return int $iid_tramite
+     */
+    public function getId_tramite(): int
+    {
+        return $this->iid_tramite;
+    }
+
+    /**
+     *
+     * @return int $iid_cargo_creador
+     */
+    public function getId_cargo_creador(): int
+    {
+        return $this->iid_cargo_creador;
+    }
+
+    /**
+     *
+     * @return int $icargo_tipo
+     */
+    public function getCargo_tipo(): int
+    {
+        return $this->icargo_tipo;
+    }
+
+    /**
+     *
+     * @return int $iid_cargo
+     */
+    public function getId_cargo(): int
+    {
+        return $this->iid_cargo;
+    }
+
+    /**
+     *
+     * @return int|null $iid_usuario
+     */
+    public function getId_usuario(): ?int
+    {
+        return $this->iid_usuario;
+    }
+
+    /**
+     *
+     * @return int $iorden_tramite
+     */
+    public function getOrden_tramite(): int
+    {
+        return $this->iorden_tramite;
+    }
+
+    /**
+     *
+     * @return int|null $iorden_oficina
+     */
+    public function getOrden_oficina(): ?int
+    {
+        return $this->iorden_oficina;
+    }
+
+    /**
+     *
+     * @return int $itipo
+     */
+    public function getTipo(): int
+    {
+        return $this->itipo;
+    }
+
+    /**
+     *
+     * @return int|null $ivalor
+     */
+    public function getValor(): ?int
+    {
+        return $this->ivalor;
+    }
+
+    /**
+     *
+     * @return string|null $sobserv_creador
+     */
+    public function getObserv_creador(): ?string
+    {
+        return $this->sobserv_creador;
+    }
+
+    /**
+     *
+     * @return string|null $sobserv
+     */
+    public function getObserv(): ?string
+    {
+        return $this->sobserv;
+    }
+
+    /**
+     *
+     * @return DateTimeLocal|null $df_valor
+     */
+    public function getF_valor(): DateTimeLocal|null
+    {
+        return $this->df_valor;
     }
 }

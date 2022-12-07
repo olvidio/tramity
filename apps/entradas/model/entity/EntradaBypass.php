@@ -120,6 +120,22 @@ class EntradaBypass extends Entrada
     }
 
     /**
+     * Recupera l'atribut a_destinos de EntradaBypass
+     *
+     * @return array|null $a_destinos
+     */
+    public function getDestinos(): ?array
+    {
+        if (!isset($this->a_destinos) && !$this->bLoaded) {
+            $this->DBCargar();
+        }
+        return array_pg2php($this->a_destinos);
+    }
+
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
+
+    /**
      * Carga los campos de la tabla como atributos de la clase.
      *
      */
@@ -152,7 +168,7 @@ class EntradaBypass extends Entrada
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         }
@@ -160,8 +176,7 @@ class EntradaBypass extends Entrada
         return FALSE;
     }
 
-    /* OTOS MÉTODOS  ----------------------------------------------------------*/
-    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * Establece el valor de todos los atributos
@@ -192,7 +207,7 @@ class EntradaBypass extends Entrada
             $this->setDestinos($aDades['destinos'], TRUE);
         }
         if (array_key_exists('f_salida', $aDades)) {
-            $f_salida = $aDades['f_salida']?? '';
+            $f_salida = $aDades['f_salida'] ?? '';
             $this->setF_salida($f_salida, $convert);
 
         }
@@ -219,7 +234,7 @@ class EntradaBypass extends Entrada
             $this->setAsunto($aDades['asunto']);
         }
         if (array_key_exists('f_entrada', $aDades)) {
-            $f_entrada = $aDades['f_entrada']?? '';
+            $f_entrada = $aDades['f_entrada'] ?? '';
             $this->setF_entrada($f_entrada, $convert);
         }
         if (array_key_exists('detalle', $aDades)) {
@@ -232,7 +247,7 @@ class EntradaBypass extends Entrada
             $this->setVisibilidad($aDades['visibilidad']);
         }
         if (array_key_exists('f_contestar', $aDades)) {
-            $f_contestar = $aDades['f_contestar']?? '';
+            $f_contestar = $aDades['f_contestar'] ?? '';
             $this->setF_contestar($f_contestar, $convert);
         }
         if (array_key_exists('bypass', $aDades)) {
@@ -251,8 +266,6 @@ class EntradaBypass extends Entrada
             $this->setJson_visto($aDades['json_visto'], TRUE);
         }
     }
-
-    /* MÉTODOS GET y SET --------------------------------------------------------*/
 
     /**
      * @param string $sdescripcion
@@ -297,7 +310,7 @@ class EntradaBypass extends Entrada
      * Si convert es FALSE, df_salida debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
      * @param string|DateTimeLocal $df_salida
-     * @param boolean $convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
+     * @param boolean $convert =TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     public function setF_salida(DateTimeLocal|string $df_salida = '', bool $convert = TRUE): void
     {
@@ -307,19 +320,6 @@ class EntradaBypass extends Entrada
         } else {
             $this->df_salida = $df_salida;
         }
-    }
-
-    /**
-     * Recupera l'atribut a_destinos de EntradaBypass
-     *
-     * @return array|null $a_destinos
-     */
-    public function getDestinos(): ?array
-    {
-        if (!isset($this->a_destinos) && !$this->bLoaded) {
-            $this->DBCargar();
-        }
-        return array_pg2php($this->a_destinos);
     }
 
     /**
@@ -473,7 +473,7 @@ class EntradaBypass extends Entrada
         return TRUE;
     }
 
-     /**
+    /**
      * Recupera l'atribut json_prot_destino de EntradaBypass
      *
      * @param boolean $bArray si hay que devolver un array en vez de un objeto.

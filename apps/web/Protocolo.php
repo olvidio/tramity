@@ -26,12 +26,12 @@ class Protocolo
      * id del lugar
      * @var integer|null
      */
-    protected  $ilugar = null;
+    protected $ilugar = null;
     /**
      *
      * @var integer|null
      */
-    protected  $iprot_num = null;
+    protected $iprot_num = null;
     /**
      * Debe ser un string para permitir "00", "01" etc.
      * @var string|null
@@ -41,7 +41,7 @@ class Protocolo
      *
      * @var string|null
      */
-    protected  $sprot_mas = null;
+    protected $sprot_mas = null;
 
     /* CONSTRUCTOR ------------------------------ */
     function __construct($ilugar = null, $iprot_num = null, $iprot_any = '', $sprot_mas = '')

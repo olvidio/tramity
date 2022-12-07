@@ -40,16 +40,14 @@ class NameExpression extends AbstractExpression
                 $compiler
                     ->raw('array_key_exists(')
                     ->string($name)
-                    ->raw(', $context)')
-                ;
+                    ->raw(', $context)');
             } else {
                 $compiler
                     ->raw('(isset($context[')
                     ->string($name)
                     ->raw(']) || array_key_exists(')
                     ->string($name)
-                    ->raw(', $context))')
-                ;
+                    ->raw(', $context))');
             }
         } elseif ($this->isSpecial()) {
             $compiler->raw($this->specialVars[$name]);
@@ -57,15 +55,13 @@ class NameExpression extends AbstractExpression
             $compiler
                 ->raw('$context[')
                 ->string($name)
-                ->raw(']')
-            ;
+                ->raw(']');
         } else {
             if ($this->getAttribute('ignore_strict_check') || !$compiler->getEnvironment()->isStrictVariables()) {
                 $compiler
                     ->raw('($context[')
                     ->string($name)
-                    ->raw('] ?? null)')
-                ;
+                    ->raw('] ?? null)');
             } else {
                 $compiler
                     ->raw('(isset($context[')
@@ -79,8 +75,7 @@ class NameExpression extends AbstractExpression
                     ->raw(' does not exist.\', ')
                     ->repr($this->lineno)
                     ->raw(', $this->source); })()')
-                    ->raw(')')
-                ;
+                    ->raw(')');
             }
         }
     }

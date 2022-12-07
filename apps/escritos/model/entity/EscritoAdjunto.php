@@ -267,7 +267,7 @@ class EscritoAdjunto extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -352,7 +352,7 @@ class EscritoAdjunto extends core\ClasePropiedades
         $this->itipo_doc = $tipo_doc;
     }
 
-    
+
     /**
      * Recupera las claus primàries de EscritoAdjunto en un array
      *

@@ -217,7 +217,7 @@ class Accion extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -225,21 +225,35 @@ class Accion extends core\ClasePropiedades
         }
     }
 
-    
+
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * Recupera las claus primàries de Accion en un array
+     * Establece el valor de todos los atributos
      *
-     * @return array aPrimary_key
+     * @param array $aDades
      */
-    function getPrimary_key()
+    function setAllAtributes(array $aDades)
     {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('id_item' => $this->iid_item);
+        if (!is_array($aDades)) {
+            return;
         }
-        return $this->aPrimary_key;
+        if (array_key_exists('id_schema', $aDades)) {
+            $this->setId_schema($aDades['id_schema']);
+        }
+        if (array_key_exists('id_item', $aDades)) {
+            $this->setId_item($aDades['id_item']);
+        }
+        if (array_key_exists('id_expediente', $aDades)) {
+            $this->setId_expediente($aDades['id_expediente']);
+        }
+        if (array_key_exists('tipo_accion', $aDades)) {
+            $this->setTipo_accion($aDades['tipo_accion']);
+        }
+        if (array_key_exists('id_escrito', $aDades)) {
+            $this->setId_escrito($aDades['id_escrito']);
+        }
     }
 
     /**
@@ -277,6 +291,19 @@ class Accion extends core\ClasePropiedades
     }
 
     /**
+     * Recupera las claus primàries de Accion en un array
+     *
+     * @return array aPrimary_key
+     */
+    function getPrimary_key()
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('id_item' => $this->iid_item);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
      * Estableix las claus primàries de Accion en un array
      *
      */
@@ -294,33 +321,6 @@ class Accion extends core\ClasePropiedades
                 $this->iid_item = (int)$a_id;
                 $this->aPrimary_key = array('iid_item' => $this->iid_item);
             }
-        }
-    }
-
-    /**
-     * Establece el valor de todos los atributos
-     *
-     * @param array $aDades
-     */
-    function setAllAtributes(array $aDades)
-    {
-        if (!is_array($aDades)) {
-            return;
-        }
-        if (array_key_exists('id_schema', $aDades)) {
-            $this->setId_schema($aDades['id_schema']);
-        }
-        if (array_key_exists('id_item', $aDades)) {
-            $this->setId_item($aDades['id_item']);
-        }
-        if (array_key_exists('id_expediente', $aDades)) {
-            $this->setId_expediente($aDades['id_expediente']);
-        }
-        if (array_key_exists('tipo_accion', $aDades)) {
-            $this->setTipo_accion($aDades['tipo_accion']);
-        }
-        if (array_key_exists('id_escrito', $aDades)) {
-            $this->setId_escrito($aDades['id_escrito']);
         }
     }
 

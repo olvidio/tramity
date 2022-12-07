@@ -28,8 +28,7 @@ class EqualBinary extends AbstractBinary
             ->subcompile($this->getNode('left'))
             ->raw(', ')
             ->subcompile($this->getNode('right'))
-            ->raw('))')
-        ;
+            ->raw('))');
     }
 
     public function operator(Compiler $compiler): Compiler

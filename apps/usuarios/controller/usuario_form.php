@@ -58,7 +58,7 @@ if (isset($_POST['stack'])) {
 $oPosicion->setParametros(array('id_usuario' => $Q_id_usuario), 1);
 
 $esquema = ConfigGlobal::getEsquema();
-if ( $esquema !== 'admin') {
+if ($esquema !== 'admin') {
     $ver_cargos = TRUE;
     $CargoRepository = new CargoRepository();
     $oDesplCargos = $CargoRepository->getDesplCargosUsuario($Q_id_usuario);

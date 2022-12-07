@@ -193,7 +193,7 @@ switch ($Q_que) {
                     $cFirmaDistribuir = $FirmaRepository->getFirmas($aWhere);
                     if (is_array($cFirmaDistribuir) && !empty($cFirmaDistribuir)) {
                         $oFirmaDistribuir = $cFirmaDistribuir[0];
-                        if ($oFirmaDistribuir->DBCargar() === FALSE ){
+                        if ($oFirmaDistribuir->DBCargar() === FALSE) {
                             $err_cargar = sprintf(_("OJO! no existe la firma en %s, linea %s"), __FILE__, __LINE__);
                             exit ($err_cargar);
                         }
@@ -298,7 +298,7 @@ switch ($Q_que) {
         if (is_array($cFirmas) && !empty($cFirmas)) {
             // Ya existe una aclaración. Busco la última, para saber el orden.
             $oFirmaAclaracion = $cFirmas[0];
-            if ($oFirmaAclaracion->DBCargar() === FALSE ){
+            if ($oFirmaAclaracion->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito a enviar en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }

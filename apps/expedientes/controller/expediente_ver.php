@@ -43,7 +43,7 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
 }
 
 $oExpediente = new Expediente($Q_id_expediente);
-if ($oExpediente->DBCargar() === FALSE ){
+if ($oExpediente->DBCargar() === FALSE) {
     $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
     exit ($err_cargar);
 }

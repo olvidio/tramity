@@ -1,6 +1,5 @@
 <?php
 
-use entradas\model\Pid;
 use oasis_as4\model\As4Entregar;
 use oasis_as4\model\As4SignalMessage;
 

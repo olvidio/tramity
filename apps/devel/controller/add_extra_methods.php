@@ -2,12 +2,8 @@
 
 namespace devel\controller;
 
-use core\ConfigGlobal;
 use core\ServerConf;
 use ReflectionMethod;
-use usuarios\domain\entity\Usuario;
-use web\DateTimeLocal;
-use function core\is_true;
 
 /**
  * programa per generar les classes a partir de la taula
@@ -45,8 +41,8 @@ if (!empty($Q_clase_plural)) {
     }
 }
 
-$gestor_base = 'get'.$clase_plural;
-$gestor_query = 'get'.$clase_plural.'Query';
+$gestor_base = 'get' . $clase_plural;
+$gestor_query = 'get' . $clase_plural . 'Query';
 
 
 /* buscar en el fichero gestor */
@@ -62,14 +58,14 @@ $pattern = '/^function \s+' . $gestor . '/im';
 */
 
 
-$class_name_old =  $Q_grupo . '\\legacy\\zzzGestor' . $Q_clase . 'Old';
+$class_name_old = $Q_grupo . '\\legacy\\zzzGestor' . $Q_clase . 'Old';
 
 $Class = new $class_name_old();
 
-$class_methods=get_class_methods($Class);
+$class_methods = get_class_methods($Class);
 
 $a_metodos = [];
-foreach($class_methods as $method_name) {
+foreach ($class_methods as $method_name) {
     // descartar algunos:
     if ($method_name === $gestor_base) {
         continue;
@@ -95,7 +91,7 @@ foreach($class_methods as $method_name) {
     $a_metodos[] = $method_name;
 }
 
-foreach ($a_metodos as $name){
+foreach ($a_metodos as $name) {
     echo "$name<br>";
 }
 
@@ -133,18 +129,18 @@ foreach ($a_metodos as $method) {
     if (str_contains($name_function, 'protected')) {
         continue;
     }
-    $name_function = str_replace('public','',$name_function);
-    $name_function = str_replace('function','',$name_function);
+    $name_function = str_replace('public', '', $name_function);
+    $name_function = str_replace('function', '', $name_function);
     $name_function = trim($name_function);
 
     $txt_extra_interface .= "\n\t";
-    $txt_extra_interface .= 'public function '.$name_function.';';
+    $txt_extra_interface .= 'public function ' . $name_function . ';';
     $txt_extra_interface .= "\n";
 
     $txt_extra_repository .= "\n\t";
-    $txt_extra_repository .= 'public function '.$name_function;
+    $txt_extra_repository .= 'public function ' . $name_function;
     $txt_extra_repository .= "\n\t{";
-    $txt_extra_repository .= "\n\t\t".'return $this->repository->'.$name_function.';';
+    $txt_extra_repository .= "\n\t\t" . 'return $this->repository->' . $name_function . ';';
     $txt_extra_repository .= "\n\t}";
     $txt_extra_repository .= "\n";
 }
@@ -154,16 +150,16 @@ $txt_extra_interface .= "}";
 $txt_extra_repository .= "}";
 
 // ------------------------------ PG REPOSITORY -----------------------------
-$pg_clase = "Pg".$Q_clase."Repository";
+$pg_clase = "Pg" . $Q_clase . "Repository";
 
 $dir_infra = ServerConf::DIR . '/apps/' . $Q_grupo . '/infrastructure';
-$filename = $dir_infra.'/' . $pg_clase . '.php';
+$filename = $dir_infra . '/' . $pg_clase . '.php';
 // borrar la llave del final de la clase:
 $txt = file_get_contents($filename);
 $end = strpos($txt, '}', -1);
-$txt_recortado = substr($txt, 0 , $end );
+$txt_recortado = substr($txt, 0, $end);
 
-$txt_completo =  $txt_recortado . $txt_extra_pg_repository;
+$txt_completo = $txt_recortado . $txt_extra_pg_repository;
 
 // Write $somecontent to our opened file.
 if (!$handle = fopen($filename, 'w')) {
@@ -179,16 +175,16 @@ fclose($handle);
 
 // ------------------------------ REPOSITORY INTERFACE -----------------------------
 
-$clase_interface = $Q_clase."RepositoryInterface";
+$clase_interface = $Q_clase . "RepositoryInterface";
 
 $dir_repositories = ServerConf::DIR . '/apps/' . $Q_grupo . '/domain/repositories';
-$filename = $dir_repositories.'/' . $clase_interface . '.php';
+$filename = $dir_repositories . '/' . $clase_interface . '.php';
 // borrar la llave del final de la clase:
 $txt = file_get_contents($filename);
 $end = strpos($txt, '}', -1);
-$txt_recortado = substr($txt, 0 , $end );
+$txt_recortado = substr($txt, 0, $end);
 
-$txt_completo =  $txt_recortado . $txt_extra_interface;
+$txt_completo = $txt_recortado . $txt_extra_interface;
 
 if (!$handle = fopen($filename, 'w')) {
     echo "Cannot open file ($filename)";
@@ -203,16 +199,16 @@ fclose($handle);
 
 // ------------------------------ REPOSITORY  -----------------------------
 
-$clase_repository = $Q_clase."Repository";
+$clase_repository = $Q_clase . "Repository";
 
 $dir_repositories = ServerConf::DIR . '/apps/' . $Q_grupo . '/domain/repositories';
-$filename = $dir_repositories.'/' . $clase_repository . '.php';
+$filename = $dir_repositories . '/' . $clase_repository . '.php';
 // borrar la llave del final de la clase:
 $txt = file_get_contents($filename);
 $end = strpos($txt, '}', -1);
-$txt_recortado = substr($txt, 0 , $end );
+$txt_recortado = substr($txt, 0, $end);
 
-$txt_completo =  $txt_recortado . $txt_extra_repository;
+$txt_completo = $txt_recortado . $txt_extra_repository;
 
 if (!$handle = fopen($filename, 'w')) {
     echo "Cannot open file ($filename)";

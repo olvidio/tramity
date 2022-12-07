@@ -389,7 +389,7 @@ class CalendarItem extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -784,7 +784,7 @@ class CalendarItem extends core\ClasePropiedades
         }
     }
 
-    
+
     /**
      * Recupera las claus primàries de CalendarItem en un array
      *

@@ -194,7 +194,7 @@ foreach ($oDbl->query($sql) as $row) {
     }
     $NomCamp = ucwords($nomcamp);
     $tipo = $row['type'];
-    $null = (is_true($row['notnull']))? 'null' : '';
+    $null = (is_true($row['notnull'])) ? 'null' : '';
 
     $sql_get_default = "SELECT pg_get_expr(adbin, adrelid) AS rowdefault
 				FROM pg_catalog.pg_attrdef d,
@@ -282,17 +282,17 @@ foreach ($oDbl->query($sql) as $row) {
             $tip = 's';
             $tip_val = '';
             $bytea_dades .= "\n\t\t\t";
-            $bytea_dades .= '$aDades[\''.$nomcamp.'\'] = $'.$tip.$nomcamp.';';
+            $bytea_dades .= '$aDades[\'' . $nomcamp . '\'] = $' . $tip . $nomcamp . ';';
             $bytea_bind .= "\n\t\t\t";
-            $bytea_bind .= '$'.$tip.$nomcamp." = '';";
+            $bytea_bind .= '$' . $tip . $nomcamp . " = '';";
             $bytea_bind .= "\n\t\t\t";
-            $bytea_bind .= '$oDblSt->bindColumn(\''.$nomcamp.'\', $'.$tip.$nomcamp.', PDO::PARAM_STR);';
+            $bytea_bind .= '$oDblSt->bindColumn(\'' . $nomcamp . '\', $' . $tip . $nomcamp . ', PDO::PARAM_STR);';
 
             break;
     }
     if (empty($null)) {
-        $tipo_db_txt = $tipo_db."|null";
-        $tip_txt = "?".$tipo_db;
+        $tipo_db_txt = $tipo_db . "|null";
+        $tip_txt = "?" . $tipo_db;
         $val_default = ' = null';
     } else {
         $tipo_db_txt = $tipo_db;
@@ -303,9 +303,9 @@ foreach ($oDbl->query($sql) as $row) {
 	/**
 	 * ' . $NomCamp . ' de ' . $clase . '
 	 *
-	 * @var ' . $tipo_db_txt .'
+	 * @var ' . $tipo_db_txt . '
 	 */
-	 private ' . $tip_txt. ' $' . $tip . $nomcamp . $val_default . ';';
+	 private ' . $tip_txt . ' $' . $tip . $nomcamp . $val_default . ';';
 
     switch ($tipo) {
         case '_int8':
@@ -315,11 +315,11 @@ foreach ($oDbl->query($sql) as $row) {
 	/**
 	 *
 	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp;
-    if (!empty($a_use_txt['JsonException'])) {
-        $gets .= "\n\t".' * @throws JsonException';
-    }
-	$gets .= "\n\t".' */
-	public function get' . $NomCamp . '(): '.$tipo_db_txt.'
+            if (!empty($a_use_txt['JsonException'])) {
+                $gets .= "\n\t" . ' * @throws JsonException';
+            }
+            $gets .= "\n\t" . ' */
+	public function get' . $NomCamp . '(): ' . $tipo_db_txt . '
 	{
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
 			$this->DBCargar();
@@ -341,7 +341,7 @@ foreach ($oDbl->query($sql) as $row) {
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
 			$this->DBCargar();
 		}
-		return (new ConverterJson($this->'. $tip . $nomcamp .', $bArray))->fromPg();
+		return (new ConverterJson($this->' . $tip . $nomcamp . ', $bArray))->fromPg();
 	}';
             break;
         case 'date':
@@ -351,10 +351,10 @@ foreach ($oDbl->query($sql) as $row) {
 	/**
 	 *
 	 * @return DateTimeLocal|NullDateTimeLocal' . ' $' . $tip . $nomcamp;
-    if (!empty($a_use_txt['JsonException'])) {
-        $gets .= "\n\t".' * @throws JsonException';
-    }
-	$gets .= "\n\t".' */
+            if (!empty($a_use_txt['JsonException'])) {
+                $gets .= "\n\t" . ' * @throws JsonException';
+            }
+            $gets .= "\n\t" . ' */
 	public function get' . $NomCamp . '(): DateTimeLocal|NullDateTimeLocal
 	{
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
@@ -371,11 +371,11 @@ foreach ($oDbl->query($sql) as $row) {
 	/**
 	 *
 	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp;
-    if (!empty($a_use_txt['JsonException'])) {
-        $gets .= "\n\t".' * @throws JsonException';
-    }
-	$gets .= "\n\t".' */
-	public function get' . $NomCamp . '(): '.$tip_txt.'
+            if (!empty($a_use_txt['JsonException'])) {
+                $gets .= "\n\t" . ' * @throws JsonException';
+            }
+            $gets .= "\n\t" . ' */
+	public function get' . $NomCamp . '(): ' . $tip_txt . '
 	{
 		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
 			$this->DBCargar();
@@ -389,9 +389,9 @@ foreach ($oDbl->query($sql) as $row) {
         $gets .= '
 	/**
 	 *
-	 * @param ' . $tipo_db_txt . ' $'.$tip.$nomcamp . '
+	 * @param ' . $tipo_db_txt . ' $' . $tip . $nomcamp . '
 	 */
-	public function set' . $NomCamp . '('.$tip_txt.' $' . $tip . $nomcamp . '): void
+	public function set' . $NomCamp . '(' . $tip_txt . ' $' . $tip . $nomcamp . '): void
 	{
 		$this->' . $tip . $nomcamp . ' = $' . $tip . $nomcamp . ';
 	}';
@@ -427,9 +427,9 @@ foreach ($oDbl->query($sql) as $row) {
 	 *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
 	 * @throws JsonException
 	 */
-	public function set' . $NomCamp . '(string|array|null $'.$tip.$nomcamp.', bool $db=FALSE): void
+	public function set' . $NomCamp . '(string|array|null $' . $tip . $nomcamp . ', bool $db=FALSE): void
 	{
-        $this->' . $tip . $nomcamp . ' = (new ConverterJson($'.$tip.$nomcamp.', FALSE))->toPg($db);
+        $this->' . $tip . $nomcamp . ' = (new ConverterJson($' . $tip . $nomcamp . ', FALSE))->toPg($db);
 	}';
                 break;
             case 'date':
@@ -440,7 +440,7 @@ foreach ($oDbl->query($sql) as $row) {
 	 * Si $' . $tip . $nomcamp . ' es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
 	 * Si convert es FALSE, $' . $tip . $nomcamp . ' debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
-	 * @param DateTimeLocal|string|null $' . $tip . $nomcamp.'
+	 * @param DateTimeLocal|string|null $' . $tip . $nomcamp . '
      * @param bool $convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
 	 */
 	public function set' . $NomCamp . '(DateTimeLocal|string|null $' . $tip . $nomcamp . '=\'\', bool $convert=TRUE): void
@@ -457,9 +457,9 @@ foreach ($oDbl->query($sql) as $row) {
                 $gets .= '
 	/**
 	 *
-	 * @param ' . $tipo_db_txt . ' $' . $tip . $nomcamp .'
+	 * @param ' . $tipo_db_txt . ' $' . $tip . $nomcamp . '
 	 */
-	public function set' . $NomCamp . '( '.$tip_txt.' $' . $tip . $nomcamp . $val_default . '): void
+	public function set' . $NomCamp . '( ' . $tip_txt . ' $' . $tip . $nomcamp . $val_default . '): void
 	{
 		$this->' . $tip . $nomcamp . ' = $' . $tip . $nomcamp . ';
 	}';
@@ -557,9 +557,9 @@ use PDOException;";
 
 $use_txt = '';
 foreach ($a_use_txt as $use) {
-    $txt .= "\n".$use.";";
+    $txt .= "\n" . $use . ";";
 }
-$txt .= "\n".$use_txt;
+$txt .= "\n" . $use_txt;
 
 $txt .= "
 
@@ -611,26 +611,26 @@ if (count($aClaus2) === 1) {
         case 'i':
             $txt .= "\n\t * @param integer|null  \$$nom_clau";
             $txt .= "\n\t */";
-            $txt .= "\n\t" . 'public function __construct(int $'.$nom_clau.' = null)'."\n\t" . '{';
+            $txt .= "\n\t" . 'public function __construct(int $' . $nom_clau . ' = null)' . "\n\t" . '{';
             break;
         case 's':
             $txt .= "\n\t * @param string|null  \$$nom_clau";
             $txt .= "\n\t */";
-            $txt .= "\n\t" . 'public function __construct(string $'.$nom_clau.' = null)'."\n\t" . '{';
+            $txt .= "\n\t" . 'public function __construct(string $' . $nom_clau . ' = null)' . "\n\t" . '{';
             break;
         case 'b':
             $txt .= "\n\t * @param bool|null  \$$nom_clau";
             $txt .= "\n\t */";
-            $txt .= "\n\t" . 'public function __construct(bool $'.$nom_clau.' = null)'."\n\t" . '{';
+            $txt .= "\n\t" . 'public function __construct(bool $' . $nom_clau . ' = null)' . "\n\t" . '{';
             break;
     }
     $txt .= "\n\t\t" . '$oDbl = $GLOBALS[\'' . $oDB_txt . '\'];';
 
     $claus_txt2 .= "'$clau' => " . '$aDades[\'' . $clau . '\']';
-    $txt .= "\n\t\t" . 'if ($'.$nom_clau.' !== null)';
+    $txt .= "\n\t\t" . 'if ($' . $nom_clau . ' !== null)';
     $txt .= "\n\t\t" . '{';
     $txt .= "\n\t\t\t" . '$this->' . $nom_clau . " = \$$nom_clau;";
-    $txt .= "\n\t\t\t" . '$this->aPrimary_key = array(\''.$nom_clau.'\' => $this->'.$nom_clau.');';
+    $txt .= "\n\t\t\t" . '$this->aPrimary_key = array(\'' . $nom_clau . '\' => $this->' . $nom_clau . ');';
     $txt .= "\n\t\t" . '}';
 
     $where .= $clau . '=\'$this->' . $nom_clau . '\'';
@@ -703,10 +703,10 @@ $txt .= '
 
 	/**
 	 * Si no existe el registro, hace un insert, si existe, se hace el update.';
-    if (!empty($a_use_txt['JsonException'])) {
-        $txt .= "\n\t".' * @throws JsonException';
-    }
-	$txt .= "\n\t".' */
+if (!empty($a_use_txt['JsonException'])) {
+    $txt .= "\n\t" . ' * @throws JsonException';
+}
+$txt .= "\n\t" . ' */
 	public function DBGuardar(): bool
 	{
 		$oDbl = $this->getoDbl();
@@ -787,10 +787,10 @@ $txt .= "\n\t\t" . '}
 
 	/**
 	 * Carga los campos de la base de datos como ATRIBUTOS de la clase.';
-    if (!empty($a_use_txt['JsonException'])) {
-        $txt .= "\n\t".' * @throws JsonException';
-    }
-	$txt .= "\n\t".' */
+if (!empty($a_use_txt['JsonException'])) {
+    $txt .= "\n\t" . ' * @throws JsonException';
+}
+$txt .= "\n\t" . ' */
 	public function DBCargar($que=null): bool
 	{
 		$oDbl = $this->getoDbl();
@@ -857,15 +857,15 @@ $txt .= '	/* MÉTODOS PRIVADOS -------------------------------------------------
 	 *
 	 * @param array $aDades';
 if (!empty($a_use_txt['JsonException'])) {
-    $txt .= "\n\t".' * @throws JsonException';
+    $txt .= "\n\t" . ' * @throws JsonException';
 }
-$txt .= "\n\t".' */';
+$txt .= "\n\t" . ' */';
 $txt .= "\n\t" . 'private function setAllAtributes(array $aDades): void' . "\n\t" . '{';
 
 $txt .= $exists;
 $txt .= "\n\t" . '}';
 
-$txt .='
+$txt .= '
 	/* MÉTODOS GET y SET --------------------------------------------------------*/
 
 ';
@@ -998,7 +998,7 @@ $txt2 .= '
 		foreach ($oDbl->query($sQuery) as $aDades) {';
 // si només hi ha una clau primària
 if (count($aClaus2) === 1) {
-    $txt2 .= "\n\t\t\t" . '$o' . $clase . ' = new ' . $clase . '($aDades[\''.$clau.'\']);';
+    $txt2 .= "\n\t\t\t" . '$o' . $clase . ' = new ' . $clase . '($aDades[\'' . $clau . '\']);';
 } else {
     $txt2 .= "\n\t\t\t" . '$a_pkey = array(' . $claus_txt2 . ');';
     $txt2 .= "\n\t\t\t" . '$o' . $clase . ' = new ' . $clase . '($a_pkey);';
@@ -1059,7 +1059,7 @@ $txt2 .= "\n\t\t" . '$sCondicion = implode(\' AND \',$aCondicion);
 		foreach ($oDblSt as $aDades) {';
 // si només hi ha una clau primària
 if (count($aClaus2) === 1) {
-    $txt2 .= "\n\t\t\t" . '$o' . $clase . ' = new ' . $clase . '($aDades[\''.$clau.'\']);';
+    $txt2 .= "\n\t\t\t" . '$o' . $clase . ' = new ' . $clase . '($aDades[\'' . $clau . '\']);';
 } else {
     $txt2 .= "\n\t\t\t" . '$a_pkey = array(' . $claus_txt2 . ');';
     $txt2 .= "\n\t\t\t" . '$o' . $clase . ' = new ' . $clase . '($a_pkey);';

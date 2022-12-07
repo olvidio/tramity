@@ -54,13 +54,13 @@
             <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}:</label>
             {% for item,nom in a_adjuntos %}
                 <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-outline-secondary"
-                        onClick="fnjs_download({{ item }})" title="{{ "decargar original"|trans|raw }}">
-                    {{ nom }}</button>
+                    <button type="button" class="btn btn-outline-secondary"
+                            onClick="fnjs_download({{ item }})" title="{{ "decargar original"|trans|raw }}">
+                        {{ nom }}</button>
 
-                <button type="button" class="btn btn-outline-secondary bi bi-file-pdf green-color"
-                        onClick="fnjs_download_pdf_adjunto({{ item }})" title="{{ "decargar en pdf"|trans|raw }}">
-                <i class="fa fa-file-pdf fa-2x" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-outline-secondary bi bi-file-pdf green-color"
+                            onClick="fnjs_download_pdf_adjunto({{ item }})" title="{{ "decargar en pdf"|trans|raw }}">
+                        <i class="fa fa-file-pdf fa-2x" aria-hidden="true"></i></button>
                 </div>
             {% endfor %}
         </div>

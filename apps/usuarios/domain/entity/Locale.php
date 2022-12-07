@@ -79,29 +79,11 @@ class Locale
 
     /**
      *
-     * @return string $sid_locale
-     */
-    public function getId_locale(): string
-    {
-        return $this->sid_locale;
-    }
-
-    /**
-     *
      * @param string $sid_locale
      */
     public function setId_locale(string $sid_locale): void
     {
         $this->sid_locale = $sid_locale;
-    }
-
-    /**
-     *
-     * @return string|null $snom_locale
-     */
-    public function getNom_locale(): ?string
-    {
-        return $this->snom_locale;
     }
 
     /**
@@ -115,29 +97,11 @@ class Locale
 
     /**
      *
-     * @return string|null $sidioma
-     */
-    public function getIdioma(): ?string
-    {
-        return $this->sidioma;
-    }
-
-    /**
-     *
      * @param string|null $sidioma
      */
     public function setIdioma(?string $sidioma = null): void
     {
         $this->sidioma = $sidioma;
-    }
-
-    /**
-     *
-     * @return string|null $snom_idioma
-     */
-    public function getNom_idioma(): ?string
-    {
-        return $this->snom_idioma;
     }
 
     /**
@@ -151,19 +115,55 @@ class Locale
 
     /**
      *
-     * @return bool $bactivo
-     */
-    public function isActivo(): bool
-    {
-        return $this->bactivo;
-    }
-
-    /**
-     *
      * @param bool $bactivo
      */
     public function setActivo(bool $bactivo): void
     {
         $this->bactivo = $bactivo;
+    }
+
+    /**
+     *
+     * @return string $sid_locale
+     */
+    public function getId_locale(): string
+    {
+        return $this->sid_locale;
+    }
+
+    /**
+     *
+     * @return string|null $snom_locale
+     */
+    public function getNom_locale(): ?string
+    {
+        return $this->snom_locale;
+    }
+
+    /**
+     *
+     * @return string|null $sidioma
+     */
+    public function getIdioma(): ?string
+    {
+        return $this->sidioma;
+    }
+
+    /**
+     *
+     * @return string|null $snom_idioma
+     */
+    public function getNom_idioma(): ?string
+    {
+        return $this->snom_idioma;
+    }
+
+    /**
+     *
+     * @return bool $bactivo
+     */
+    public function isActivo(): bool
+    {
+        return $this->bactivo;
     }
 }

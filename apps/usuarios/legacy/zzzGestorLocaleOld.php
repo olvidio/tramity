@@ -1,4 +1,5 @@
 <?php
+
 namespace usuarios\legacy;
 
 use core;

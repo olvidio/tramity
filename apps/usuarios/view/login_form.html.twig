@@ -58,9 +58,13 @@
         <label for='password' class='visually-hidden'>{{ "Password"|trans|raw }}</label>\
             <input type='password' id='password' name='password' class='form-control' placeholder='Password' required='' autocomplete='new-password' />\
         {% if error %}
-          <div class='alert alert-danger alert-dismissible fade show'>\
+            < div
+
+        class
+
+        = 'alert alert-danger alert-dismissible fade show' >\
             <strong>{{ "Error!"|trans|raw }}:</strong> {{ error }}\
-          </div>\
+    </div>\
         {% endif %}
         <button class='btn btn-lg btn-primary w-100 mt-3' type='submit'>{{ "Entrar"|trans|raw }}</button>\
         <p class='mt-3 mb-3 text-center text-muted'>Tramity © 2020-{{ "now"|date("Y") }}</p>\

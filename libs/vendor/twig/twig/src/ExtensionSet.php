@@ -69,6 +69,14 @@ final class ExtensionSet
     }
 
     /**
+     * @return ExtensionInterface[]
+     */
+    public function getExtensions(): array
+    {
+        return $this->extensions;
+    }
+
+    /**
      * @param ExtensionInterface[] $extensions
      */
     public function setExtensions(array $extensions): void
@@ -78,12 +86,19 @@ final class ExtensionSet
         }
     }
 
-    /**
-     * @return ExtensionInterface[]
-     */
-    public function getExtensions(): array
+    public function addExtension(ExtensionInterface $extension): void
     {
-        return $this->extensions;
+        $class = \get_class($extension);
+
+        if ($this->initialized) {
+            throw new \LogicException(sprintf('Unable to register extension "%s" as extensions have already been initialized.', $class));
+        }
+
+        if (isset($this->extensions[$class])) {
+            throw new \LogicException(sprintf('Unable to register extension "%s" as it is already registered.', $class));
+        }
+
+        $this->extensions[$class] = $extension;
     }
 
     public function getSignature(): string
@@ -112,21 +127,6 @@ final class ExtensionSet
         return $this->lastModified;
     }
 
-    public function addExtension(ExtensionInterface $extension): void
-    {
-        $class = \get_class($extension);
-
-        if ($this->initialized) {
-            throw new \LogicException(sprintf('Unable to register extension "%s" as extensions have already been initialized.', $class));
-        }
-
-        if (isset($this->extensions[$class])) {
-            throw new \LogicException(sprintf('Unable to register extension "%s" as it is already registered.', $class));
-        }
-
-        $this->extensions[$class] = $extension;
-    }
-
     public function addFunction(TwigFunction $function): void
     {
         if ($this->initialized) {
@@ -148,6 +148,118 @@ final class ExtensionSet
         return $this->functions;
     }
 
+    private function initExtensions(): void
+    {
+        $this->parsers = [];
+        $this->filters = [];
+        $this->functions = [];
+        $this->tests = [];
+        $this->visitors = [];
+        $this->unaryOperators = [];
+        $this->binaryOperators = [];
+
+        foreach ($this->extensions as $extension) {
+            $this->initExtension($extension);
+        }
+        $this->initExtension($this->staging);
+        // Done at the end only, so that an exception during initialization does not mark the environment as initialized when catching the exception
+        $this->initialized = true;
+    }
+
+    private function initExtension(ExtensionInterface $extension): void
+    {
+        // filters
+        foreach ($extension->getFilters() as $filter) {
+            $this->filters[$filter->getName()] = $filter;
+        }
+
+        // functions
+        foreach ($extension->getFunctions() as $function) {
+            $this->functions[$function->getName()] = $function;
+        }
+
+        // tests
+        foreach ($extension->getTests() as $test) {
+            $this->tests[$test->getName()] = $test;
+        }
+
+        // token parsers
+        foreach ($extension->getTokenParsers() as $parser) {
+            if (!$parser instanceof TokenParserInterface) {
+                throw new \LogicException('getTokenParsers() must return an array of \Twig\TokenParser\TokenParserInterface.');
+            }
+
+            $this->parsers[$parser->getTag()] = $parser;
+        }
+
+        // node visitors
+        foreach ($extension->getNodeVisitors() as $visitor) {
+            $this->visitors[] = $visitor;
+        }
+
+        // operators
+        if ($operators = $extension->getOperators()) {
+            if (!\is_array($operators)) {
+                throw new \InvalidArgumentException(sprintf('"%s::getOperators()" must return an array with operators, got "%s".', \get_class($extension), \is_object($operators) ? \get_class($operators) : \gettype($operators) . (\is_resource($operators) ? '' : '#' . $operators)));
+            }
+
+            if (2 !== \count($operators)) {
+                throw new \InvalidArgumentException(sprintf('"%s::getOperators()" must return an array of 2 elements, got %d.', \get_class($extension), \count($operators)));
+            }
+
+            $this->unaryOperators = array_merge($this->unaryOperators, $operators[0]);
+            $this->binaryOperators = array_merge($this->binaryOperators, $operators[1]);
+        }
+    }
+
+    /**
+     * @return TwigFilter[]
+     */
+    public function getFilters(): array
+    {
+        if (!$this->initialized) {
+            $this->initExtensions();
+        }
+
+        return $this->filters;
+    }
+
+    /**
+     * @return TwigTest[]
+     */
+    public function getTests(): array
+    {
+        if (!$this->initialized) {
+            $this->initExtensions();
+        }
+
+        return $this->tests;
+    }
+
+    /**
+     * @return TokenParserInterface[]
+     */
+    public function getTokenParsers(): array
+    {
+        if (!$this->initialized) {
+            $this->initExtensions();
+        }
+
+        return $this->parsers;
+    }
+
+    /**
+     * @return NodeVisitorInterface[]
+     */
+    public function getNodeVisitors(): array
+    {
+        if (!$this->initialized) {
+            $this->initExtensions();
+        }
+
+        return $this->visitors;
+    }
+
     public function getFunction(string $name): ?TwigFunction
     {
         if (!$this->initialized) {
@@ -161,7 +273,7 @@ final class ExtensionSet
         foreach ($this->functions as $pattern => $function) {
             $pattern = str_replace('\\*', '(.*?)', preg_quote($pattern, '#'), $count);
 
-            if ($count && preg_match('#^'.$pattern.'$#', $name, $matches)) {
+            if ($count && preg_match('#^' . $pattern . '$#', $name, $matches)) {
                 array_shift($matches);
                 $function->setArguments($matches);
 
@@ -192,18 +304,6 @@ final class ExtensionSet
         $this->staging->addFilter($filter);
     }
 
-    /**
-     * @return TwigFilter[]
-     */
-    public function getFilters(): array
-    {
-        if (!$this->initialized) {
-            $this->initExtensions();
-        }
-
-        return $this->filters;
-    }
-
     public function getFilter(string $name): ?TwigFilter
     {
         if (!$this->initialized) {
@@ -217,7 +317,7 @@ final class ExtensionSet
         foreach ($this->filters as $pattern => $filter) {
             $pattern = str_replace('\\*', '(.*?)', preg_quote($pattern, '#'), $count);
 
-            if ($count && preg_match('#^'.$pattern.'$#', $name, $matches)) {
+            if ($count && preg_match('#^' . $pattern . '$#', $name, $matches)) {
                 array_shift($matches);
                 $filter->setArguments($matches);
 
@@ -248,18 +348,6 @@ final class ExtensionSet
         $this->staging->addNodeVisitor($visitor);
     }
 
-    /**
-     * @return NodeVisitorInterface[]
-     */
-    public function getNodeVisitors(): array
-    {
-        if (!$this->initialized) {
-            $this->initExtensions();
-        }
-
-        return $this->visitors;
-    }
-
     public function addTokenParser(TokenParserInterface $parser): void
     {
         if ($this->initialized) {
@@ -267,18 +355,6 @@ final class ExtensionSet
         }
 
         $this->staging->addTokenParser($parser);
-    }
-
-    /**
-     * @return TokenParserInterface[]
-     */
-    public function getTokenParsers(): array
-    {
-        if (!$this->initialized) {
-            $this->initExtensions();
-        }
-
-        return $this->parsers;
     }
 
     public function getTokenParser(string $name): ?TokenParserInterface
@@ -341,18 +417,6 @@ final class ExtensionSet
         $this->staging->addTest($test);
     }
 
-    /**
-     * @return TwigTest[]
-     */
-    public function getTests(): array
-    {
-        if (!$this->initialized) {
-            $this->initExtensions();
-        }
-
-        return $this->tests;
-    }
-
     public function getTest(string $name): ?TwigTest
     {
         if (!$this->initialized) {
@@ -367,7 +431,7 @@ final class ExtensionSet
             $pattern = str_replace('\\*', '(.*?)', preg_quote($pattern, '#'), $count);
 
             if ($count) {
-                if (preg_match('#^'.$pattern.'$#', $name, $matches)) {
+                if (preg_match('#^' . $pattern . '$#', $name, $matches)) {
                     array_shift($matches);
                     $test->setArguments($matches);
 
@@ -395,69 +459,5 @@ final class ExtensionSet
         }
 
         return $this->binaryOperators;
-    }
-
-    private function initExtensions(): void
-    {
-        $this->parsers = [];
-        $this->filters = [];
-        $this->functions = [];
-        $this->tests = [];
-        $this->visitors = [];
-        $this->unaryOperators = [];
-        $this->binaryOperators = [];
-
-        foreach ($this->extensions as $extension) {
-            $this->initExtension($extension);
-        }
-        $this->initExtension($this->staging);
-        // Done at the end only, so that an exception during initialization does not mark the environment as initialized when catching the exception
-        $this->initialized = true;
-    }
-
-    private function initExtension(ExtensionInterface $extension): void
-    {
-        // filters
-        foreach ($extension->getFilters() as $filter) {
-            $this->filters[$filter->getName()] = $filter;
-        }
-
-        // functions
-        foreach ($extension->getFunctions() as $function) {
-            $this->functions[$function->getName()] = $function;
-        }
-
-        // tests
-        foreach ($extension->getTests() as $test) {
-            $this->tests[$test->getName()] = $test;
-        }
-
-        // token parsers
-        foreach ($extension->getTokenParsers() as $parser) {
-            if (!$parser instanceof TokenParserInterface) {
-                throw new \LogicException('getTokenParsers() must return an array of \Twig\TokenParser\TokenParserInterface.');
-            }
-
-            $this->parsers[$parser->getTag()] = $parser;
-        }
-
-        // node visitors
-        foreach ($extension->getNodeVisitors() as $visitor) {
-            $this->visitors[] = $visitor;
-        }
-
-        // operators
-        if ($operators = $extension->getOperators()) {
-            if (!\is_array($operators)) {
-                throw new \InvalidArgumentException(sprintf('"%s::getOperators()" must return an array with operators, got "%s".', \get_class($extension), \is_object($operators) ? \get_class($operators) : \gettype($operators).(\is_resource($operators) ? '' : '#'.$operators)));
-            }
-
-            if (2 !== \count($operators)) {
-                throw new \InvalidArgumentException(sprintf('"%s::getOperators()" must return an array of 2 elements, got %d.', \get_class($extension), \count($operators)));
-            }
-
-            $this->unaryOperators = array_merge($this->unaryOperators, $operators[0]);
-            $this->binaryOperators = array_merge($this->binaryOperators, $operators[1]);
-        }
     }
 }

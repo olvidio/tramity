@@ -81,7 +81,7 @@ class DateTimeLocal extends DateTime
      * @param DateTimeZone|NULL $timezone
      * @return DateTime|false
      */
-    public static function createFromFormat(string $format='', string $datetime='', DateTimeZone $timezone = NULL): DateTime|false
+    public static function createFromFormat(string $format = '', string $datetime = '', DateTimeZone $timezone = NULL): DateTime|false
     {
         $extnd_dt = new static();
         $parent_dt = parent::createFromFormat($format, $datetime, $timezone);
@@ -91,6 +91,32 @@ class DateTimeLocal extends DateTime
         }
         $extnd_dt->setTimestamp($parent_dt->getTimestamp());
         return $extnd_dt;
+    }
+
+    public function format(string $format): string
+    {
+        $english = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
+        $local = array_values(self::arrayDiasSemana());
+        return str_replace($english, $local, parent::format($format));
+    }
+
+    /**
+     *
+     * creo un array con los dias de la semana
+     *    primero el id (en inglés), después el nombre
+     *
+     */
+    public static function arrayDiasSemana(): array
+    {
+        return [
+            "MO" => _("lunes"),
+            "TU" => _("martes"),
+            "WE" => _("miércoles"),
+            "TH" => _("jueves"),
+            "FR" => _("viernes"),
+            "SA" => _("sábado"),
+            "SU" => _("domingo"),
+        ];
     }
 
     public function getFechaLatin()
@@ -119,32 +145,6 @@ class DateTimeLocal extends DateTime
             '10' => 'octobri',
             '11' => 'novembri',
             '12' => 'decembri',
-        ];
-    }
-
-    public function format(string $format): string
-    {
-        $english = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
-        $local = array_values(self::arrayDiasSemana());
-        return str_replace($english, $local, parent::format($format));
-    }
-
-    /**
-     *
-     * creo un array con los dias de la semana
-     *    primero el id (en inglés), después el nombre
-     *
-     */
-    public static function arrayDiasSemana(): array
-    {
-        return [
-            "MO" => _("lunes"),
-            "TU" => _("martes"),
-            "WE" => _("miércoles"),
-            "TH" => _("jueves"),
-            "FR" => _("viernes"),
-            "SA" => _("sábado"),
-            "SU" => _("domingo"),
         ];
     }
 

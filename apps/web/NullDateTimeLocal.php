@@ -22,7 +22,7 @@ class NullDateTimeLocal extends DateTime
         return NULL;
     }
 
-    public static function createFromFormat(string $format='', string $datetime='', DateTimeZone $timezone = NULL): DateTime|false
+    public static function createFromFormat(string $format = '', string $datetime = '', DateTimeZone $timezone = NULL): DateTime|false
     {
         return FALSE;
     }

@@ -21,6 +21,18 @@ class Pid
     /**
      * @throws Exception
      */
+    public function crearPid(): void
+    {
+        if (!$this->existePid()) {
+            $ahora = date("Y/m/d H:i:s");
+            $mensaje = "$ahora \n";
+            file_put_contents($this->filename, $mensaje, LOCK_EX);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
     public function existePid(): bool
     {
         if (file_exists($this->filename)) {
@@ -62,18 +74,6 @@ class Pid
             }
         }
         return FALSE;
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function crearPid(): void
-    {
-        if (!$this->existePid()) {
-            $ahora = date("Y/m/d H:i:s");
-            $mensaje = "$ahora \n";
-            file_put_contents($this->filename, $mensaje, LOCK_EX);
-        }
     }
 
     public function borrarPid(): void

@@ -743,29 +743,6 @@ class Pendiente
         $this->f_inicio = $f_inicio;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getF_end()
-    {
-        if (!isset($this->f_end) && !$this->bLoaded) {
-            $this->Carregar();
-        }
-        if (empty($this->f_end)) {
-            return new NullDateTimeLocal();
-        }
-        $oConverter = new ConverterDate('date', $this->f_end);
-        return $oConverter->fromPg();
-    }
-
-    /**
-     * @param mixed $f_end
-     */
-    public function setF_end($f_end)
-    {
-        $this->f_end = $f_end;
-    }
-
     private function ins_pendiente($aDades)
     {
         $id_reg = empty($aDades['id_reg']) ? '' : $aDades['id_reg'];
@@ -980,7 +957,7 @@ class Pendiente
                 $reponse_code = (int)$out[1];
             }
             if (($matches = explode(':', $value, 2))) {
-                $headers[(string)$matches[0]] = !empty($matches[1])? trim($matches[1]) : '';
+                $headers[(string)$matches[0]] = !empty($matches[1]) ? trim($matches[1]) : '';
             }
         }
 
@@ -995,6 +972,29 @@ class Pendiente
         }
 
         return $aRespuesta;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getF_end()
+    {
+        if (!isset($this->f_end) && !$this->bLoaded) {
+            $this->Carregar();
+        }
+        if (empty($this->f_end)) {
+            return new NullDateTimeLocal();
+        }
+        $oConverter = new ConverterDate('date', $this->f_end);
+        return $oConverter->fromPg();
+    }
+
+    /**
+     * @param mixed $f_end
+     */
+    public function setF_end($f_end)
+    {
+        $this->f_end = $f_end;
     }
 
     public function marcar_excepcion($f_recur)

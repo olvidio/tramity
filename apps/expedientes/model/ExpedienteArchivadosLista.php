@@ -72,20 +72,6 @@ class ExpedienteArchivadosLista
         $oExpedienteLista->mostrarTabla();
     }
 
-    public function getNumero()
-    {
-        $this->setCondicion();
-        if (!empty($this->aWhere)) {
-            $gesExpedientes = new GestorExpediente();
-            $this->aWhere['_ordre'] = 'id_expediente';
-            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
-            $num = count($cExpedientes);
-        } else {
-            $num = '';
-        }
-        return $num;
-    }
-
     public function setCondicion(): void
     {
         $this->aWhere = [];
@@ -114,6 +100,28 @@ class ExpedienteArchivadosLista
             // para que no salga nada pongo
             $this->aWhere = [];
         }
+    }
+
+    /**
+     * @param array $condiciones_busqueda
+     */
+    public function setCondicionesBusqueda(array $condiciones_busqueda): void
+    {
+        $this->condiciones_busqueda = $condiciones_busqueda;
+    }
+
+    public function getNumero()
+    {
+        $this->setCondicion();
+        if (!empty($this->aWhere)) {
+            $gesExpedientes = new GestorExpediente();
+            $this->aWhere['_ordre'] = 'id_expediente';
+            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+            $num = count($cExpedientes);
+        } else {
+            $num = '';
+        }
+        return $num;
     }
 
     /**
@@ -146,14 +154,6 @@ class ExpedienteArchivadosLista
     public function setAOperadorADD(array $aOperadorADD): void
     {
         $this->aOperadorADD = $aOperadorADD;
-    }
-
-    /**
-     * @param array $condiciones_busqueda
-     */
-    public function setCondicionesBusqueda(array $condiciones_busqueda): void
-    {
-        $this->condiciones_busqueda = $condiciones_busqueda;
     }
 
 }

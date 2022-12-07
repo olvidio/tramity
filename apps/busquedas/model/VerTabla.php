@@ -253,7 +253,7 @@ class VerTabla
             array('name' => ucfirst(_("fecha entrada")), 'class' => 'fecha')
         );
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-           $a_cabeceras[] = _("encargado a") ;
+            $a_cabeceras[] = _("encargado a");
         }
 
         $oProtOrigen = new Protocolo();
@@ -306,7 +306,7 @@ class VerTabla
             $f_contestar = $oEntrada->getF_contestar();
 
             $id_encargado = $oEntrada->getEncargado();
-            $nom_encargado = $a_usuarios_oficina[$id_encargado]?? '';
+            $nom_encargado = $a_usuarios_oficina[$id_encargado] ?? '';
 
             $a_valores[$i]['sel'] = "$id_entrada";
             $a_valores[$i][1] = $protocolo;
@@ -454,7 +454,7 @@ class VerTabla
     {
         // salidas
         $CargoRepository = new CargoRepository();
-        $a_posibles_cargos = $CargoRepository ->getArrayCargos();
+        $a_posibles_cargos = $CargoRepository->getArrayCargos();
 
         $oCategoria = new \usuarios\domain\Categoria();
         $a_categorias = $oCategoria->getArrayCategoria();

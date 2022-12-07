@@ -4,7 +4,7 @@ namespace expedientes\model;
 
 class ExpedientesDeColor
 {
-   /**
+    /**
      *
      * @var array
      */

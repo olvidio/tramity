@@ -40,7 +40,7 @@ final class DeprecationCollector
         $iterator = new \RegexIterator(
             new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($dir), \RecursiveIteratorIterator::LEAVES_ONLY
-            ), '{'.preg_quote($ext).'$}'
+            ), '{' . preg_quote($ext) . '$}'
         );
 
         return $this->collect(new TemplateDirIterator($iterator));

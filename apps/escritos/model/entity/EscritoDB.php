@@ -742,7 +742,7 @@ class EscritoDB extends core\ClasePropiedades
         $this->sdescripcion = $sdescripcion;
     }
 
-    
+
     /**
      * Recupera las claus primàries de EscritoDB en un array
      *

@@ -351,7 +351,7 @@ class ExpedienteDB extends ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -614,7 +614,7 @@ class ExpedienteDB extends ClasePropiedades
         $this->ivisibilidad = $ivisibilidad;
     }
 
-    
+
     /**
      * Recupera las claus primàries de ExpedienteDB en un array
      *

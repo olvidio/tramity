@@ -152,6 +152,7 @@ class ConfigGlobal extends ServerConf
     {
         return $_SESSION['session_auth']['mail'];
     }
+
     // ----------- Entidad -------------------
     public static function nombreEntidad()
     {

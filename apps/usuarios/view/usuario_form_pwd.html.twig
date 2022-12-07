@@ -51,10 +51,10 @@
     {{ "confirma password"|trans|raw|capitalize }}:<input type="password" id="password1" name="password1">
     <br><br>
     <div>
-        <button class="btn btn-secondary" onclick="fnjs_cancelar();" >
+        <button class="btn btn-secondary" onclick="fnjs_cancelar();">
             {{ "Cancelar"|trans|raw }}
         </button>
-        <button class="btn btn-primary" onclick="fnjs_guardar(this.form);" >
+        <button class="btn btn-primary" onclick="fnjs_guardar(this.form);">
             {{ txt_guardar }}
         </button>
     </div>
@@ -62,7 +62,9 @@
 <br>
 {{ "Requerimientos del password"|trans|raw }}:<br>
 <ol>
-    <li>{{ "Los passwords no pueden contener el valor del \"login\" o de qualquiera de las palabras del \"nombre\". (no tiene en cuenta mayúsculas/minúsculas)"|trans|raw }}.</li>
+    <li>{{ "Los passwords no pueden contener el valor del \"login\" o de qualquiera de las palabras del \"nombre\". (no tiene en cuenta mayúsculas/minúsculas)"|trans|raw }}
+        .
+    </li>
     <li>{{ "El password ha de tener más de 8 carácteres"|trans|raw }}.</li>
     <li>{{ "El password ha de tener como mínimo 3 de los siguientes grupos de carácteres"|trans|raw }}:
         <ul>

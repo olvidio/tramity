@@ -56,32 +56,6 @@ class TransTag extends AbstractTokenParser
     }
 
     /**
-     * @param Token $token
-     * @return bool
-     */
-    public function decideForFork(Token $token): bool
-    {
-        return $token->test(['plural', 'notes', 'endtrans']);
-    }
-
-    /**
-     * @param Token $token
-     * @return bool
-     */
-    public function decideForEnd(Token $token): bool
-    {
-        return $token->test('endtrans');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTag(): string
-    {
-        return 'trans';
-    }
-
-    /**
      * @param Node $body
      * @param int $lineNo
      * @throws SyntaxError
@@ -100,5 +74,31 @@ class TransTag extends AbstractTokenParser
                 $lineNo
             );
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTag(): string
+    {
+        return 'trans';
+    }
+
+    /**
+     * @param Token $token
+     * @return bool
+     */
+    public function decideForFork(Token $token): bool
+    {
+        return $token->test(['plural', 'notes', 'endtrans']);
+    }
+
+    /**
+     * @param Token $token
+     * @return bool
+     */
+    public function decideForEnd(Token $token): bool
+    {
+        return $token->test('endtrans');
     }
 }

@@ -35,7 +35,7 @@ class CheckSecurityNode extends Node
     {
         $tags = $filters = $functions = [];
         foreach (['tags', 'filters', 'functions'] as $type) {
-            foreach ($this->{'used'.ucfirst($type)} as $name => $node) {
+            foreach ($this->{'used' . ucfirst($type)} as $name => $node) {
                 if ($node instanceof Node) {
                     ${$type}[$name] = $node->getTemplateLine();
                 } else {
@@ -56,9 +56,9 @@ class CheckSecurityNode extends Node
             ->indent()
             ->write("\$this->sandbox->checkSecurity(\n")
             ->indent()
-            ->write(!$tags ? "[],\n" : "['".implode("', '", array_keys($tags))."'],\n")
-            ->write(!$filters ? "[],\n" : "['".implode("', '", array_keys($filters))."'],\n")
-            ->write(!$functions ? "[]\n" : "['".implode("', '", array_keys($functions))."']\n")
+            ->write(!$tags ? "[],\n" : "['" . implode("', '", array_keys($tags)) . "'],\n")
+            ->write(!$filters ? "[],\n" : "['" . implode("', '", array_keys($filters)) . "'],\n")
+            ->write(!$functions ? "[]\n" : "['" . implode("', '", array_keys($functions)) . "']\n")
             ->outdent()
             ->write(");\n")
             ->outdent()
@@ -82,7 +82,6 @@ class CheckSecurityNode extends Node
             ->outdent()
             ->write("}\n\n")
             ->outdent()
-            ->write("}\n")
-        ;
+            ->write("}\n");
     }
 }

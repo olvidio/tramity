@@ -50,11 +50,6 @@ final class SandboxExtension extends AbstractExtension
         $this->sandboxed = false;
     }
 
-    public function isSandboxed(): bool
-    {
-        return $this->sandboxedGlobally || $this->sandboxed;
-    }
-
     public function isSandboxedGlobally(): bool
     {
         return $this->sandboxedGlobally;
@@ -77,18 +72,9 @@ final class SandboxExtension extends AbstractExtension
         }
     }
 
-    public function checkMethodAllowed($obj, $method, int $lineno = -1, Source $source = null): void
+    public function isSandboxed(): bool
     {
-        if ($this->isSandboxed()) {
-            try {
-                $this->policy->checkMethodAllowed($obj, $method);
-            } catch (SecurityNotAllowedMethodError $e) {
-                $e->setSourceContext($source);
-                $e->setTemplateLine($lineno);
-
-                throw $e;
-            }
-        }
+        return $this->sandboxedGlobally || $this->sandboxed;
     }
 
     public function checkPropertyAllowed($obj, $property, int $lineno = -1, Source $source = null): void
@@ -119,5 +105,19 @@ final class SandboxExtension extends AbstractExtension
         }
 
         return $obj;
+    }
+
+    public function checkMethodAllowed($obj, $method, int $lineno = -1, Source $source = null): void
+    {
+        if ($this->isSandboxed()) {
+            try {
+                $this->policy->checkMethodAllowed($obj, $method);
+            } catch (SecurityNotAllowedMethodError $e) {
+                $e->setSourceContext($source);
+                $e->setTemplateLine($lineno);
+
+                throw $e;
+            }
+        }
     }
 }

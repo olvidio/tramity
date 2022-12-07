@@ -551,41 +551,6 @@ class EntradaDB extends ClasePropiedades
         $this->iencargado = $iencargado;
     }
 
-
-    /**
-     * Recupera las claus primàries de EntradaDB en un array
-     *
-     * @return array aPrimary_key
-     */
-    public function getPrimary_key(): array
-    {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('id_entrada' => $this->iid_entrada);
-        }
-        return $this->aPrimary_key;
-    }
-
-    /**
-     * Estableix las claus primàries de EntradaDB en un array
-     *
-     */
-    public function setPrimary_key($a_id = null): void
-    {
-        if (is_array($a_id)) {
-            $this->aPrimary_key = $a_id;
-            foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id === 'id_entrada') && $val_id !== '') {
-                    $this->iid_entrada = (int)$val_id;
-                }
-            }
-        } else {
-            if (isset($a_id) && $a_id !== '') {
-                $this->iid_entrada = (int)$a_id;
-                $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
-            }
-        }
-    }
-
     /**
      * Recupera l'atribut a_resto_oficinas de EntradaDB
      *
@@ -731,6 +696,40 @@ class EntradaDB extends ClasePropiedades
         }
         $this->setAllAtributes($aDades);
         return TRUE;
+    }
+
+    /**
+     * Recupera las claus primàries de EntradaDB en un array
+     *
+     * @return array aPrimary_key
+     */
+    public function getPrimary_key(): array
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('id_entrada' => $this->iid_entrada);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
+     * Estableix las claus primàries de EntradaDB en un array
+     *
+     */
+    public function setPrimary_key($a_id = null): void
+    {
+        if (is_array($a_id)) {
+            $this->aPrimary_key = $a_id;
+            foreach ($a_id as $nom_id => $val_id) {
+                if (($nom_id === 'id_entrada') && $val_id !== '') {
+                    $this->iid_entrada = (int)$val_id;
+                }
+            }
+        } else {
+            if (isset($a_id) && $a_id !== '') {
+                $this->iid_entrada = (int)$a_id;
+                $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
+            }
+        }
     }
 
     /**

@@ -42,7 +42,6 @@ class EmbedNode extends IncludeNode
             ->repr($this->getTemplateLine())
             ->raw(', ')
             ->string($this->getAttribute('index'))
-            ->raw(')')
-        ;
+            ->raw(')');
     }
 }

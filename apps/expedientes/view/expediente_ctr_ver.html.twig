@@ -85,10 +85,11 @@
             <div class="p-2 bg-warning">
                 {{ estado_txt }}
             </div>
-                    <div class="p-2 bg-white">
-                    <label for="Vida" class="form-label"> {{ "Vida"|trans|raw }} {{ vida_txt }}, {{ "pasar a"|trans|raw }}</label>
-                    {{ oDesplVida.desplegable|raw }}
-                    </div>
+            <div class="p-2 bg-white">
+                <label for="Vida" class="form-label"> {{ "Vida"|trans|raw }} {{ vida_txt }}
+                    , {{ "pasar a"|trans|raw }}</label>
+                {{ oDesplVida.desplegable|raw }}
+            </div>
         </div>
         <div class="d-inline-flex float-end">
             <div class="p-2 bg-warning">
@@ -116,7 +117,8 @@
             {{ "Asunto"|trans|raw }}:
         </div>
         <div class="col-11 p-1 alert alert-primary">
-            <input tabindex="30" type="text" class="form-control" name="asunto" id="asunto" onchange="fnjs_cambio_asunto()"
+            <input tabindex="30" type="text" class="form-control" name="asunto" id="asunto"
+                   onchange="fnjs_cambio_asunto()"
                    value="{{ asunto }}">
         </div>
     </div>
@@ -129,7 +131,8 @@
                 {{ "Entradilla"|trans|raw }}:
             </div>
             <div class="col-0">
-                    <textarea tabindex="50" rows="5" class="form-control" name="entradilla" onchange="fnjs_cambio_entradilla()"
+                    <textarea tabindex="50" rows="5" class="form-control" name="entradilla"
+                              onchange="fnjs_cambio_entradilla()"
                               id="entradilla">{{ entradilla }}</textarea>
             </div>
             <!--  --------------- COMENTARIOS --------------- -->
@@ -346,7 +349,7 @@
         fnjs_update_div('#main', '{{ pagina_cambio|raw }}');
     }
 
-    fnjs_recircular = function (silent=0) {
+    fnjs_recircular = function (silent = 0) {
         if (silent !== 1) {
             alert("borrar todas las firmas");
         }

@@ -55,6 +55,50 @@ abstract class CallExpression extends AbstractExpression
         $this->compileArguments($compiler);
     }
 
+    private function reflectCallable($callable)
+    {
+        if (null !== $this->reflector) {
+            return $this->reflector;
+        }
+
+        if (\is_string($callable) && false !== $pos = strpos($callable, '::')) {
+            $callable = [substr($callable, 0, $pos), substr($callable, 2 + $pos)];
+        }
+
+        if (\is_array($callable) && method_exists($callable[0], $callable[1])) {
+            $r = new \ReflectionMethod($callable[0], $callable[1]);
+
+            return $this->reflector = [$r, $callable, $r->class . '::' . $r->name];
+        }
+
+        $checkVisibility = $callable instanceof \Closure;
+        try {
+            $closure = \Closure::fromCallable($callable);
+        } catch (\TypeError $e) {
+            throw new \LogicException(sprintf('Callback for %s "%s" is not callable in the current scope.', $this->getAttribute('type'), $this->getAttribute('name')), 0, $e);
+        }
+        $r = new \ReflectionFunction($closure);
+
+        if (false !== strpos($r->name, '{closure}')) {
+            return $this->reflector = [$r, $callable, 'Closure'];
+        }
+
+        if ($object = $r->getClosureThis()) {
+            $callable = [$object, $r->name];
+            $callableName = (\function_exists('get_debug_type') ? get_debug_type($object) : \get_class($object)) . '::' . $r->name;
+        } elseif ($class = $r->getClosureScopeClass()) {
+            $callableName = (\is_array($callable) ? $callable[0] : $class->name) . '::' . $r->name;
+        } else {
+            $callable = $callableName = $r->name;
+        }
+
+        if ($checkVisibility && \is_array($callable) && method_exists(...$callable) && !(new \ReflectionMethod(...$callable))->isPublic()) {
+            $callable = $r->getClosure();
+        }
+
+        return $this->reflector = [$r, $callable, $callableName];
+    }
+
     protected function compileArguments(Compiler $compiler, $isArray = false): void
     {
         $compiler->raw($isArray ? '[' : '(');
@@ -271,49 +315,5 @@ abstract class CallExpression extends AbstractExpression
         }
 
         return [$parameters, $isPhpVariadic];
-    }
-
-    private function reflectCallable($callable)
-    {
-        if (null !== $this->reflector) {
-            return $this->reflector;
-        }
-
-        if (\is_string($callable) && false !== $pos = strpos($callable, '::')) {
-            $callable = [substr($callable, 0, $pos), substr($callable, 2 + $pos)];
-        }
-
-        if (\is_array($callable) && method_exists($callable[0], $callable[1])) {
-            $r = new \ReflectionMethod($callable[0], $callable[1]);
-
-            return $this->reflector = [$r, $callable, $r->class.'::'.$r->name];
-        }
-
-        $checkVisibility = $callable instanceof \Closure;
-        try {
-            $closure = \Closure::fromCallable($callable);
-        } catch (\TypeError $e) {
-            throw new \LogicException(sprintf('Callback for %s "%s" is not callable in the current scope.', $this->getAttribute('type'), $this->getAttribute('name')), 0, $e);
-        }
-        $r = new \ReflectionFunction($closure);
-
-        if (false !== strpos($r->name, '{closure}')) {
-            return $this->reflector = [$r, $callable, 'Closure'];
-        }
-
-        if ($object = $r->getClosureThis()) {
-            $callable = [$object, $r->name];
-            $callableName = (\function_exists('get_debug_type') ? get_debug_type($object) : \get_class($object)).'::'.$r->name;
-        } elseif ($class = $r->getClosureScopeClass()) {
-            $callableName = (\is_array($callable) ? $callable[0] : $class->name).'::'.$r->name;
-        } else {
-            $callable = $callableName = $r->name;
-        }
-
-        if ($checkVisibility && \is_array($callable) && method_exists(...$callable) && !(new \ReflectionMethod(...$callable))->isPublic()) {
-            $callable = $r->getClosure();
-        }
-
-        return $this->reflector = [$r, $callable, $callableName];
     }
 }

@@ -16,5 +16,4 @@ return (new PhpCsFixer\Config())
         'native_function_invocation' => ['include' => ['@compiler_optimized'], 'scope' => 'all'],
     ])
     ->setRiskyAllowed(true)
-    ->setFinder((new PhpCsFixer\Finder())->in(__DIR__))
-;
+    ->setFinder((new PhpCsFixer\Finder())->in(__DIR__));

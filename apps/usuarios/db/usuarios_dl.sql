@@ -4,7 +4,8 @@ CREATE TABLE nombre_del_esquema.x_oficinas
     sigla      text NOT NULL,
     orden      smallint
 );
-ALTER TABLE nombre_del_esquema.x_oficinas OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.x_oficinas
+    OWNER TO tramity;
 
 CREATE TABLE nombre_del_esquema.cargos_grupos
 (
@@ -15,4 +16,5 @@ CREATE TABLE nombre_del_esquema.cargos_grupos
 );
 
 CREATE UNIQUE INDEX cargos_grupos_id_cargo_ref_ukey ON nombre_del_esquema.cargos_grupos (id_cargo_ref);
-ALTER TABLE nombre_del_esquema.cargos_grupos OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.cargos_grupos
+    OWNER TO tramity;

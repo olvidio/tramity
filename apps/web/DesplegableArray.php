@@ -1,4 +1,5 @@
 <?php
+
 namespace web;
 
 class DesplegableArray extends Desplegable

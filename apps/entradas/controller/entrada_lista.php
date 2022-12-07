@@ -7,7 +7,6 @@ use entradas\model\EntradaLista;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
 use web\Desplegable;
-use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 

@@ -31,10 +31,10 @@ class Node implements \Countable, \IteratorAggregate
     private $sourceContext;
 
     /**
-     * @param array  $nodes      An array of named nodes
-     * @param array  $attributes An array of attributes (should not be nodes)
-     * @param int    $lineno     The line number
-     * @param string $tag        The tag name associated with the Node
+     * @param array $nodes An array of named nodes
+     * @param array $attributes An array of attributes (should not be nodes)
+     * @param int $lineno The line number
+     * @param string $tag The tag name associated with the Node
      */
     public function __construct(array $nodes = [], array $attributes = [], int $lineno = 0, string $tag = null)
     {
@@ -56,14 +56,14 @@ class Node implements \Countable, \IteratorAggregate
             $attributes[] = sprintf('%s: %s', $name, str_replace("\n", '', var_export($value, true)));
         }
 
-        $repr = [static::class.'('.implode(', ', $attributes)];
+        $repr = [static::class . '(' . implode(', ', $attributes)];
 
         if (\count($this->nodes)) {
             foreach ($this->nodes as $name => $node) {
                 $len = \strlen($name) + 4;
                 $noderepr = [];
-                foreach (explode("\n", (string) $node) as $line) {
-                    $noderepr[] = str_repeat(' ', $len).$line;
+                foreach (explode("\n", (string)$node) as $line) {
+                    $noderepr[] = str_repeat(' ', $len) . $line;
                 }
 
                 $repr[] = sprintf('  %s: %s', $name, ltrim(implode("\n", $noderepr)));
@@ -164,16 +164,16 @@ class Node implements \Countable, \IteratorAggregate
         return $this->sourceContext ? $this->sourceContext->getName() : null;
     }
 
+    public function getSourceContext(): ?Source
+    {
+        return $this->sourceContext;
+    }
+
     public function setSourceContext(Source $source): void
     {
         $this->sourceContext = $source;
         foreach ($this->nodes as $node) {
             $node->setSourceContext($source);
         }
-    }
-
-    public function getSourceContext(): ?Source
-    {
-        return $this->sourceContext;
     }
 }

@@ -31,14 +31,14 @@ class FilesystemLoader implements LoaderInterface
     private $rootPath;
 
     /**
-     * @param string|array $paths    A path or an array of paths where to look for templates
-     * @param string|null  $rootPath The root path common to all relative paths (null for getcwd())
+     * @param string|array $paths A path or an array of paths where to look for templates
+     * @param string|null $rootPath The root path common to all relative paths (null for getcwd())
      */
     public function __construct($paths = [], string $rootPath = null)
     {
-        $this->rootPath = (null === $rootPath ? getcwd() : $rootPath).\DIRECTORY_SEPARATOR;
+        $this->rootPath = (null === $rootPath ? getcwd() : $rootPath) . \DIRECTORY_SEPARATOR;
         if (null !== $rootPath && false !== ($realPath = realpath($rootPath))) {
-            $this->rootPath = $realPath.\DIRECTORY_SEPARATOR;
+            $this->rootPath = $realPath . \DIRECTORY_SEPARATOR;
         }
 
         if ($paths) {
@@ -52,16 +52,6 @@ class FilesystemLoader implements LoaderInterface
     public function getPaths(string $namespace = self::MAIN_NAMESPACE): array
     {
         return $this->paths[$namespace] ?? [];
-    }
-
-    /**
-     * Returns the path namespaces.
-     *
-     * The main namespace is always defined.
-     */
-    public function getNamespaces(): array
-    {
-        return array_keys($this->paths);
     }
 
     /**
@@ -80,6 +70,16 @@ class FilesystemLoader implements LoaderInterface
     }
 
     /**
+     * Returns the path namespaces.
+     *
+     * The main namespace is always defined.
+     */
+    public function getNamespaces(): array
+    {
+        return array_keys($this->paths);
+    }
+
+    /**
      * @throws LoaderError
      */
     public function addPath(string $path, string $namespace = self::MAIN_NAMESPACE): void
@@ -87,7 +87,7 @@ class FilesystemLoader implements LoaderInterface
         // invalidate the cache
         $this->cache = $this->errorCache = [];
 
-        $checkPath = $this->isAbsolutePath($path) ? $path : $this->rootPath.$path;
+        $checkPath = $this->isAbsolutePath($path) ? $path : $this->rootPath . $path;
         if (!is_dir($checkPath)) {
             throw new LoaderError(sprintf('The "%s" directory does not exist ("%s").', $path, $checkPath));
         }
@@ -103,7 +103,7 @@ class FilesystemLoader implements LoaderInterface
         // invalidate the cache
         $this->cache = $this->errorCache = [];
 
-        $checkPath = $this->isAbsolutePath($path) ? $path : $this->rootPath.$path;
+        $checkPath = $this->isAbsolutePath($path) ? $path : $this->rootPath . $path;
         if (!is_dir($checkPath)) {
             throw new LoaderError(sprintf('The "%s" directory does not exist ("%s").', $path, $checkPath));
         }
@@ -117,6 +117,16 @@ class FilesystemLoader implements LoaderInterface
         }
     }
 
+    private function isAbsolutePath(string $file): bool
+    {
+        return strspn($file, '/\\', 0, 1)
+            || (\strlen($file) > 3 && ctype_alpha($file[0])
+                && ':' === $file[1]
+                && strspn($file, '/\\', 2, 1)
+            )
+            || null !== parse_url($file, \PHP_URL_SCHEME);
+    }
+
     public function getSourceContext(string $name): Source
     {
         if (null === $path = $this->findTemplate($name)) {
@@ -124,43 +134,6 @@ class FilesystemLoader implements LoaderInterface
         }
 
         return new Source(file_get_contents($path), $name, $path);
-    }
-
-    public function getCacheKey(string $name): string
-    {
-        if (null === $path = $this->findTemplate($name)) {
-            return '';
-        }
-        $len = \strlen($this->rootPath);
-        if (0 === strncmp($this->rootPath, $path, $len)) {
-            return substr($path, $len);
-        }
-
-        return $path;
-    }
-
-    /**
-     * @return bool
-     */
-    public function exists(string $name)
-    {
-        $name = $this->normalizeName($name);
-
-        if (isset($this->cache[$name])) {
-            return true;
-        }
-
-        return null !== $this->findTemplate($name, false);
-    }
-
-    public function isFresh(string $name, int $time): bool
-    {
-        // false support to be removed in 3.0
-        if (null === $path = $this->findTemplate($name)) {
-            return false;
-        }
-
-        return filemtime($path) < $time;
     }
 
     /**
@@ -206,15 +179,15 @@ class FilesystemLoader implements LoaderInterface
 
         foreach ($this->paths[$namespace] as $path) {
             if (!$this->isAbsolutePath($path)) {
-                $path = $this->rootPath.$path;
+                $path = $this->rootPath . $path;
             }
 
-            if (is_file($path.'/'.$shortname)) {
-                if (false !== $realpath = realpath($path.'/'.$shortname)) {
+            if (is_file($path . '/' . $shortname)) {
+                if (false !== $realpath = realpath($path . '/' . $shortname)) {
                     return $this->cache[$name] = $realpath;
                 }
 
-                return $this->cache[$name] = $path.'/'.$shortname;
+                return $this->cache[$name] = $path . '/' . $shortname;
             }
         }
 
@@ -270,14 +243,40 @@ class FilesystemLoader implements LoaderInterface
         }
     }
 
-    private function isAbsolutePath(string $file): bool
+    public function getCacheKey(string $name): string
     {
-        return strspn($file, '/\\', 0, 1)
-            || (\strlen($file) > 3 && ctype_alpha($file[0])
-                && ':' === $file[1]
-                && strspn($file, '/\\', 2, 1)
-            )
-            || null !== parse_url($file, \PHP_URL_SCHEME)
-        ;
+        if (null === $path = $this->findTemplate($name)) {
+            return '';
+        }
+        $len = \strlen($this->rootPath);
+        if (0 === strncmp($this->rootPath, $path, $len)) {
+            return substr($path, $len);
+        }
+
+        return $path;
+    }
+
+    /**
+     * @return bool
+     */
+    public function exists(string $name)
+    {
+        $name = $this->normalizeName($name);
+
+        if (isset($this->cache[$name])) {
+            return true;
+        }
+
+        return null !== $this->findTemplate($name, false);
+    }
+
+    public function isFresh(string $name, int $time): bool
+    {
+        // false support to be removed in 3.0
+        if (null === $path = $this->findTemplate($name)) {
+            return false;
+        }
+
+        return filemtime($path) < $time;
     }
 }

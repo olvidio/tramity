@@ -33,7 +33,7 @@ switch ($Q_que) {
             $hoy_iso = $oHoy->getIso();
 
             $oDocumento = new Documento($Q_id_doc);
-            if ($oDocumento->DBCargar() === FALSE ){
+            if ($oDocumento->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el documento en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -64,7 +64,7 @@ switch ($Q_que) {
     case 'guardar':
         if (!empty($Q_id_doc)) {
             $oDocumento = new Documento($Q_id_doc);
-            if ($oDocumento->DBCargar() === FALSE ){
+            if ($oDocumento->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el documento en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }

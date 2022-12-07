@@ -51,20 +51,6 @@ class ExpedienteCopiasLista
         $oExpedienteLista->mostrarTabla();
     }
 
-    public function getNumero()
-    {
-        $this->setCondicion();
-        if (!empty($this->aWhere)) {
-            $gesExpedientes = new GestorExpediente();
-            $this->aWhere['_ordre'] = 'id_expediente';
-            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
-            $num = count($cExpedientes);
-        } else {
-            $num = '';
-        }
-        return $num;
-    }
-
     public function setCondicion(): void
     {
         $this->aWhere = [];
@@ -87,6 +73,20 @@ class ExpedienteCopiasLista
             // para que no salga nada pongo
             $this->aWhere = [];
         }
+    }
+
+    public function getNumero()
+    {
+        $this->setCondicion();
+        if (!empty($this->aWhere)) {
+            $gesExpedientes = new GestorExpediente();
+            $this->aWhere['_ordre'] = 'id_expediente';
+            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+            $num = count($cExpedientes);
+        } else {
+            $num = '';
+        }
+        return $num;
     }
 
 }

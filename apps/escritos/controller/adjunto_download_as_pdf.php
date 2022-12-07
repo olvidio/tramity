@@ -34,7 +34,7 @@ if (!empty($Q_id_item)) {
         $oDocConverter->setFileExtension($file_extension);
         $oDocConverter->setDocIn($doc);
         $doc = $oDocConverter->convert();
-        $nombre_fichero = $file_name.'.pdf';
+        $nombre_fichero = $file_name . '.pdf';
         $file_extension = 'pdf';
     }
 

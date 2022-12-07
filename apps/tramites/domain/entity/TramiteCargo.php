@@ -76,29 +76,11 @@ class TramiteCargo
 
     /**
      *
-     * @return int $iid_item
-     */
-    public function getId_item(): int
-    {
-        return $this->iid_item;
-    }
-
-    /**
-     *
      * @param int $iid_item
      */
     public function setId_item(int $iid_item): void
     {
         $this->iid_item = $iid_item;
-    }
-
-    /**
-     *
-     * @return int $iid_tramite
-     */
-    public function getId_tramite(): int
-    {
-        return $this->iid_tramite;
     }
 
     /**
@@ -112,29 +94,11 @@ class TramiteCargo
 
     /**
      *
-     * @return int $iorden_tramite
-     */
-    public function getOrden_tramite(): int
-    {
-        return $this->iorden_tramite;
-    }
-
-    /**
-     *
      * @param int $iorden_tramite
      */
     public function setOrden_tramite(int $iorden_tramite): void
     {
         $this->iorden_tramite = $iorden_tramite;
-    }
-
-    /**
-     *
-     * @return int $iid_cargo
-     */
-    public function getId_cargo(): int
-    {
-        return $this->iid_cargo;
     }
 
     /**
@@ -148,19 +112,55 @@ class TramiteCargo
 
     /**
      *
-     * @return int|null $imultiple
-     */
-    public function getMultiple(): ?int
-    {
-        return $this->imultiple;
-    }
-
-    /**
-     *
      * @param int|null $imultiple
      */
     public function setMultiple(?int $imultiple = null): void
     {
         $this->imultiple = $imultiple;
+    }
+
+    /**
+     *
+     * @return int $iid_item
+     */
+    public function getId_item(): int
+    {
+        return $this->iid_item;
+    }
+
+    /**
+     *
+     * @return int $iid_tramite
+     */
+    public function getId_tramite(): int
+    {
+        return $this->iid_tramite;
+    }
+
+    /**
+     *
+     * @return int $iorden_tramite
+     */
+    public function getOrden_tramite(): int
+    {
+        return $this->iorden_tramite;
+    }
+
+    /**
+     *
+     * @return int $iid_cargo
+     */
+    public function getId_cargo(): int
+    {
+        return $this->iid_cargo;
+    }
+
+    /**
+     *
+     * @return int|null $imultiple
+     */
+    public function getMultiple(): ?int
+    {
+        return $this->imultiple;
     }
 }

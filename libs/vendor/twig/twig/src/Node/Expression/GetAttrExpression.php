@@ -39,9 +39,9 @@ class GetAttrExpression extends AbstractExpression
             && !$this->getAttribute('is_defined_test')
             && Template::ARRAY_CALL === $this->getAttribute('type')
         ) {
-            $var = '$'.$compiler->getVarName();
+            $var = '$' . $compiler->getVarName();
             $compiler
-                ->raw('(('.$var.' = ')
+                ->raw('((' . $var . ' = ')
                 ->subcompile($this->getNode('node'))
                 ->raw(') && is_array(')
                 ->raw($var)
@@ -51,8 +51,7 @@ class GetAttrExpression extends AbstractExpression
                 ->raw($var)
                 ->raw('[')
                 ->subcompile($this->getNode('attribute'))
-                ->raw('] ?? null) : null)')
-            ;
+                ->raw('] ?? null) : null)');
 
             return;
         }
@@ -66,8 +65,7 @@ class GetAttrExpression extends AbstractExpression
         $compiler
             ->subcompile($this->getNode('node'))
             ->raw(', ')
-            ->subcompile($this->getNode('attribute'))
-        ;
+            ->subcompile($this->getNode('attribute'));
 
         if ($this->hasNode('arguments')) {
             $compiler->raw(', ')->subcompile($this->getNode('arguments'));
@@ -81,7 +79,6 @@ class GetAttrExpression extends AbstractExpression
             ->raw(', ')->repr($this->getAttribute('ignore_strict_check'))
             ->raw(', ')->repr($env->hasExtension(SandboxExtension::class))
             ->raw(', ')->repr($this->getNode('node')->getTemplateLine())
-            ->raw(')')
-        ;
+            ->raw(')');
     }
 }

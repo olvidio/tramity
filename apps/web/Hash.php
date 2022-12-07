@@ -157,6 +157,77 @@ class Hash
     }
 
     /**
+     * Devuelve los parametros preparados para calcular el hash.
+     *
+     * Ordena los parametros para que al calcular el hash  estén siempre en el mismo orden.
+     * Quita los parametros que no se deben incluir en el hash.
+     * Elimina los valores de los parametros si hnov=1.
+     *
+     * @param array $aParam
+     * @return array
+     */
+    private static function ordenarArrayParam($aParam)
+    {
+        if (!empty($aParam)) {
+            $aPOST = $aParam;
+            // campos que se deben quitar del hash; separados por !.
+            $hno = empty($aPOST['hno']) ? '' : $aPOST['hno'];
+            if (!empty($hno)) {
+                $a_campos_no = explode('!', $hno);
+                foreach ($a_campos_no as $campo) {
+                    if (isset($aPOST[$campo])) {
+                        self::$aValoresCamposNo[$campo] = $aPOST[$campo];
+                        unset($aPOST[$campo]);
+                    }
+                }
+            }
+            // Indica que los campos deben estar sin valores en el hash;
+            $hnov = empty($aPOST['hnov']) ? '' : $aPOST['hnov'];
+            if ($hnov == 1) { // borro posibles los valores de los campos
+                foreach ($aPOST as $camp => $valor) {
+                    $aPOST[$camp] = '';
+                }
+            }
+            //var_dump($aPOST);
+            unset($aPOST['PHPSESSID']);
+            unset($aPOST['atras']);
+            unset($aPOST['h']);
+            unset($aPOST['hc']);
+            unset($aPOST['horig']);
+            unset($aPOST['hh']);
+            unset($aPOST['hhc']);
+            unset($aPOST['hhorig']);
+            unset($aPOST['hno']);
+            unset($aPOST['hchk']);
+            unset($aPOST['hnov']);
+            ksort($aPOST);
+            if (is_array($aPOST)) {
+                array_walk($aPOST, 'core\poner_empty_on_null');
+            }
+            return $aPOST;
+        } else {
+            return array();
+        }
+    }
+
+    /**
+     * Calcula el hash(md5) del string que se le pasa. Se añade el id_session y algún carácter más.
+     * Por lo que sólo sirve para la misma session.
+     *
+     * @param string $str
+     * @return string[]  'orig' => string original decoded y trimed
+     *                   'hash' => el md5
+     */
+    private static function md($str)
+    {
+        $rta = [];
+        $str = rawurldecode(trim($str));
+        $rta['orig'] = $str;
+        $rta['hash'] = md5($str . session_id() . "a+a+");
+        return $rta;
+    }
+
+    /**
      * Sólo la usa web\Posicion.
      *   => elimino hnov. (si existiera). Se cuenta todos los valores de los campos.
      *   => añado hpos (viene de web\Posicion y no un formulario normal)
@@ -429,6 +500,8 @@ class Hash
         }
     }
 
+    /* METODES GET AND SETTERS  -----------------------------------------------------------*/
+
     /**
      * @param array $aCampos
      * @param string $valor 'sin_valor' Para no tener en cuenta los valores de los campos en el hash
@@ -444,79 +517,6 @@ class Hash
         $sUrl_full = str_replace('%21', '!', $sUrl_full);
 
         $rta = self::md($sUrl_full);
-        return $rta;
-    }
-
-    /**
-     * Devuelve los parametros preparados para calcular el hash.
-     *
-     * Ordena los parametros para que al calcular el hash  estén siempre en el mismo orden.
-     * Quita los parametros que no se deben incluir en el hash.
-     * Elimina los valores de los parametros si hnov=1.
-     *
-     * @param array $aParam
-     * @return array
-     */
-    private static function ordenarArrayParam($aParam)
-    {
-        if (!empty($aParam)) {
-            $aPOST = $aParam;
-            // campos que se deben quitar del hash; separados por !.
-            $hno = empty($aPOST['hno']) ? '' : $aPOST['hno'];
-            if (!empty($hno)) {
-                $a_campos_no = explode('!', $hno);
-                foreach ($a_campos_no as $campo) {
-                    if (isset($aPOST[$campo])) {
-                        self::$aValoresCamposNo[$campo] = $aPOST[$campo];
-                        unset($aPOST[$campo]);
-                    }
-                }
-            }
-            // Indica que los campos deben estar sin valores en el hash;
-            $hnov = empty($aPOST['hnov']) ? '' : $aPOST['hnov'];
-            if ($hnov == 1) { // borro posibles los valores de los campos
-                foreach ($aPOST as $camp => $valor) {
-                    $aPOST[$camp] = '';
-                }
-            }
-            //var_dump($aPOST);
-            unset($aPOST['PHPSESSID']);
-            unset($aPOST['atras']);
-            unset($aPOST['h']);
-            unset($aPOST['hc']);
-            unset($aPOST['horig']);
-            unset($aPOST['hh']);
-            unset($aPOST['hhc']);
-            unset($aPOST['hhorig']);
-            unset($aPOST['hno']);
-            unset($aPOST['hchk']);
-            unset($aPOST['hnov']);
-            ksort($aPOST);
-            if (is_array($aPOST)) {
-                array_walk($aPOST, 'core\poner_empty_on_null');
-            }
-            return $aPOST;
-        } else {
-            return array();
-        }
-    }
-
-    /* METODES GET AND SETTERS  -----------------------------------------------------------*/
-
-    /**
-     * Calcula el hash(md5) del string que se le pasa. Se añade el id_session y algún carácter más.
-     * Por lo que sólo sirve para la misma session.
-     *
-     * @param string $str
-     * @return string[]  'orig' => string original decoded y trimed
-     *                   'hash' => el md5
-     */
-    private static function md($str)
-    {
-        $rta = [];
-        $str = rawurldecode(trim($str));
-        $rta['orig'] = $str;
-        $rta['hash'] = md5($str . session_id() . "a+a+");
         return $rta;
     }
 

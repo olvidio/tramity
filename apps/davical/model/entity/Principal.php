@@ -247,7 +247,7 @@ class Principal extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -330,7 +330,7 @@ class Principal extends core\ClasePropiedades
         $this->sdefault_privileges = $sdefault_privileges;
     }
 
-    
+
     /**
      * Recupera las claus primàries de Principal en un array
      *

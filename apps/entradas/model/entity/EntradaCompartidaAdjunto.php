@@ -240,7 +240,7 @@ class EntradaCompartidaAdjunto extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         }
@@ -314,7 +314,7 @@ class EntradaCompartidaAdjunto extends core\ClasePropiedades
         $this->adjunto = $adjunto;
     }
 
-    
+
     /**
      * Recupera las claus primàries de EntradaCompartidaAdjunto en un array
      *

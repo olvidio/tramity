@@ -21,9 +21,10 @@ CREATE TABLE nombre_del_esquema.expedientes
     visibilidad       smallint
 );
 
-ALTER TABLE nombre_del_esquema.expedientes OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.expedientes
+    OWNER TO tramity;
 
-CREATE INDEX IF NOT EXISTS expedientes_asunto_idx ON nombre_del_esquema.expedientes ((lower (asunto)));
+CREATE INDEX IF NOT EXISTS expedientes_asunto_idx ON nombre_del_esquema.expedientes ((lower(asunto)));
 CREATE INDEX IF NOT EXISTS expedientes_estado_idx ON nombre_del_esquema.expedientes (estado);
 CREATE INDEX IF NOT EXISTS expedientes_f_aprobacion ON nombre_del_esquema.expedientes (f_aprobacion);
 CREATE INDEX IF NOT EXISTS expedientes_f_contestar_idx ON nombre_del_esquema.expedientes (f_contestar);
@@ -42,7 +43,8 @@ CREATE TABLE nombre_del_esquema.acciones
     id_escrito    integer  NOT NULL
 );
 
-ALTER TABLE nombre_del_esquema.acciones OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.acciones
+    OWNER TO tramity;
 
 CREATE INDEX IF NOT EXISTS acciones_id_expediente ON nombre_del_esquema.acciones (id_expediente);
 CREATE INDEX IF NOT EXISTS acciones_id_escrito ON nombre_del_esquema.acciones (id_escrito);

@@ -23,7 +23,7 @@ class Markup implements \Countable, \JsonSerializable
 
     public function __construct($content, $charset)
     {
-        $this->content = (string) $content;
+        $this->content = (string)$content;
         $this->charset = $charset;
     }
 

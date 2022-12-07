@@ -296,7 +296,7 @@ class UserDB extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -503,7 +503,7 @@ class UserDB extends core\ClasePropiedades
         $this->slocale = $slocale;
     }
 
-    
+
     /**
      * Recupera las claus primàries de UserDB en un array
      *

@@ -307,7 +307,7 @@ class Entrada extends EntradaDB
      * Si df_doc es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_entrada debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param string|null $df_doc='' optional.
+     * @param string|null $df_doc ='' optional.
      * @param boolean $convert TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     public function setF_documento(?string $df_doc = '', bool $convert = TRUE): void

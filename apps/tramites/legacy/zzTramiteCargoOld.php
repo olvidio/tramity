@@ -225,7 +225,7 @@ class zzzTramiteCargoOld extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -233,21 +233,38 @@ class zzzTramiteCargoOld extends core\ClasePropiedades
         }
     }
 
-    
+
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * Recupera las claus primàries de TramiteCargo en un array
+     * Establece el valor de todos los atributos
      *
-     * @return array aPrimary_key
+     * @param array $aDades
      */
-    function getPrimary_key()
+    private function setAllAtributes($aDades)
     {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('id_item' => $this->iid_item);
+        if (!is_array($aDades)) {
+            return;
         }
-        return $this->aPrimary_key;
+        if (array_key_exists('id_schema', $aDades)) {
+            $this->setId_schema($aDades['id_schema']);
+        }
+        if (array_key_exists('id_item', $aDades)) {
+            $this->setId_item($aDades['id_item']);
+        }
+        if (array_key_exists('id_tramite', $aDades)) {
+            $this->setId_tramite($aDades['id_tramite']);
+        }
+        if (array_key_exists('orden_tramite', $aDades)) {
+            $this->setOrden_tramite($aDades['orden_tramite']);
+        }
+        if (array_key_exists('id_cargo', $aDades)) {
+            $this->setId_cargo($aDades['id_cargo']);
+        }
+        if (array_key_exists('multiple', $aDades)) {
+            $this->setMultiple($aDades['multiple']);
+        }
     }
 
     /**
@@ -293,6 +310,19 @@ class zzzTramiteCargoOld extends core\ClasePropiedades
     }
 
     /**
+     * Recupera las claus primàries de TramiteCargo en un array
+     *
+     * @return array aPrimary_key
+     */
+    function getPrimary_key()
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('id_item' => $this->iid_item);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
      * Estableix las claus primàries de TramiteCargo en un array
      *
      */
@@ -310,36 +340,6 @@ class zzzTramiteCargoOld extends core\ClasePropiedades
                 $this->iid_item = (int)$a_id;
                 $this->aPrimary_key = array('iid_item' => $this->iid_item);
             }
-        }
-    }
-
-    /**
-     * Establece el valor de todos los atributos
-     *
-     * @param array $aDades
-     */
-    private function setAllAtributes($aDades)
-    {
-        if (!is_array($aDades)) {
-            return;
-        }
-        if (array_key_exists('id_schema', $aDades)) {
-            $this->setId_schema($aDades['id_schema']);
-        }
-        if (array_key_exists('id_item', $aDades)) {
-            $this->setId_item($aDades['id_item']);
-        }
-        if (array_key_exists('id_tramite', $aDades)) {
-            $this->setId_tramite($aDades['id_tramite']);
-        }
-        if (array_key_exists('orden_tramite', $aDades)) {
-            $this->setOrden_tramite($aDades['orden_tramite']);
-        }
-        if (array_key_exists('id_cargo', $aDades)) {
-            $this->setId_cargo($aDades['id_cargo']);
-        }
-        if (array_key_exists('multiple', $aDades)) {
-            $this->setMultiple($aDades['multiple']);
         }
     }
 

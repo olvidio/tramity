@@ -249,7 +249,7 @@ class EntradaAdjunto extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -323,7 +323,7 @@ class EntradaAdjunto extends core\ClasePropiedades
         $this->adjunto = $adjunto;
     }
 
-    
+
     /**
      * Recupera las claus primàries de EntradaAdjunto en un array
      *

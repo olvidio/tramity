@@ -3,8 +3,6 @@
 namespace expedientes\model;
 
 use core\ConfigGlobal;
-use usuarios\domain\entity\Cargo;
-use web\Hash;
 
 
 class ExpedienteReunionFijarLista
@@ -54,6 +52,15 @@ class ExpedienteReunionFijarLista
         $oExpedienteLista->mostrarTabla();
     }
 
+    public function setCondicion(): void
+    {
+        $this->aWhere = [];
+        $this->aOperador = [];
+        $this->aWhere['estado'] = Expediente::ESTADO_FIJAR_REUNION;
+        $this->aWhere['f_reunion'] = 'x';
+        $this->aOperador['f_reunion'] = 'IS NULL';
+    }
+
     public function getNumero()
     {
         $this->setCondicion();
@@ -66,15 +73,6 @@ class ExpedienteReunionFijarLista
             $num = '';
         }
         return $num;
-    }
-
-    public function setCondicion(): void
-    {
-        $this->aWhere = [];
-        $this->aOperador = [];
-        $this->aWhere['estado'] = Expediente::ESTADO_FIJAR_REUNION;
-        $this->aWhere['f_reunion'] = 'x';
-        $this->aOperador['f_reunion'] = 'IS NULL';
     }
 
 }

@@ -19,7 +19,8 @@ Hay que cambiar la estructura de la base de datos:
  public | x_locales            | table | tramity
 ```
 
-- para cada nombre_entidad se debe crear un esquema con el nombre de la nombre_entidad (normalizado: existe una función para
+- para cada nombre_entidad se debe crear un esquema con el nombre de la nombre_entidad (normalizado: existe una función
+  para
   normalizar, quitar espacios, pasar a minúscula etc.)
 
 para una nombre_entidad tipo centro, las tablas son:
@@ -78,7 +79,8 @@ cambios en programa
 simplificación para los ctr
 ===========================
 
-- en los escritos, el destino sólo puede ser la nombre_entidad superior (dl) y las referencias pueden ser: al propio ctr, a la
+- en los escritos, el destino sólo puede ser la nombre_entidad superior (dl) y las referencias pueden ser: al propio
+  ctr, a la
   dl, a cr.
 
 

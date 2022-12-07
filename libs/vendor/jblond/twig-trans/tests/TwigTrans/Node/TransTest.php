@@ -10,7 +10,6 @@ use Twig\Node\Node;
 use Twig\Node\PrintNode;
 use Twig\Node\TextNode;
 use Twig\Test\NodeTestCase;
-
 use function sprintf;
 
 /**

@@ -36,6 +36,16 @@ final class SecurityPolicy implements SecurityPolicyInterface
         $this->allowedFunctions = $allowedFunctions;
     }
 
+    public function setAllowedMethods(array $methods): void
+    {
+        $this->allowedMethods = [];
+        foreach ($methods as $class => $m) {
+            $this->allowedMethods[$class] = array_map(function ($value) {
+                return strtr($value, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz');
+            }, \is_array($m) ? $m : [$m]);
+        }
+    }
+
     public function setAllowedTags(array $tags): void
     {
         $this->allowedTags = $tags;
@@ -44,14 +54,6 @@ final class SecurityPolicy implements SecurityPolicyInterface
     public function setAllowedFilters(array $filters): void
     {
         $this->allowedFilters = $filters;
-    }
-
-    public function setAllowedMethods(array $methods): void
-    {
-        $this->allowedMethods = [];
-        foreach ($methods as $class => $m) {
-            $this->allowedMethods[$class] = array_map(function ($value) { return strtr($value, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'); }, \is_array($m) ? $m : [$m]);
-        }
     }
 
     public function setAllowedProperties(array $properties): void

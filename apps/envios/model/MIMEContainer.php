@@ -39,7 +39,7 @@ class MIMEContainer
             "Content-Transfer-Encoding: $this->content_enc\r\n";
 
         $addheaders = (is_array($this->add_header)) ?
-        implode("\r\n", $this->add_header) : '';
+            implode("\r\n", $this->add_header) : '';
 
         /* If there is a subcontainer */
         if (is_array($this->subcontainers) &&

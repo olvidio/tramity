@@ -85,29 +85,11 @@ class Usuario
 
     /**
      *
-     * @return int $iid_usuario
-     */
-    public function getId_usuario(): int
-    {
-        return $this->iid_usuario;
-    }
-
-    /**
-     *
      * @param int $iid_usuario
      */
     public function setId_usuario(int $iid_usuario): void
     {
         $this->iid_usuario = $iid_usuario;
-    }
-
-    /**
-     *
-     * @return string $susuario
-     */
-    public function getUsuario(): string
-    {
-        return $this->susuario;
     }
 
     /**
@@ -121,29 +103,11 @@ class Usuario
 
     /**
      *
-     * @return int $iid_cargo_preferido
-     */
-    public function getId_cargo_preferido(): int
-    {
-        return $this->iid_cargo_preferido;
-    }
-
-    /**
-     *
      * @param int $iid_cargo_preferido
      */
     public function setId_cargo_preferido(int $iid_cargo_preferido): void
     {
         $this->iid_cargo_preferido = $iid_cargo_preferido;
-    }
-
-    /**
-     *
-     * @return string|null $spassword
-     */
-    public function getPassword(): ?string
-    {
-        return $this->spassword;
     }
 
     /**
@@ -157,15 +121,6 @@ class Usuario
 
     /**
      *
-     * @return string|null $semail
-     */
-    public function getEmail(): ?string
-    {
-        return $this->semail;
-    }
-
-    /**
-     *
      * @param string|null $semail
      */
     public function setEmail(?string $semail = null): void
@@ -175,19 +130,64 @@ class Usuario
 
     /**
      *
-     * @return string|null $snom_usuario
-     */
-    public function getNom_usuario(): ?string
-    {
-        return $this->snom_usuario;
-    }
-
-    /**
-     *
      * @param string|null $snom_usuario
      */
     public function setNom_usuario(?string $snom_usuario = null): void
     {
         $this->snom_usuario = $snom_usuario;
+    }
+
+    /**
+     *
+     * @return int $iid_usuario
+     */
+    public function getId_usuario(): int
+    {
+        return $this->iid_usuario;
+    }
+
+    /**
+     *
+     * @return string $susuario
+     */
+    public function getUsuario(): string
+    {
+        return $this->susuario;
+    }
+
+    /**
+     *
+     * @return int $iid_cargo_preferido
+     */
+    public function getId_cargo_preferido(): int
+    {
+        return $this->iid_cargo_preferido;
+    }
+
+    /**
+     *
+     * @return string|null $spassword
+     */
+    public function getPassword(): ?string
+    {
+        return $this->spassword;
+    }
+
+    /**
+     *
+     * @return string|null $semail
+     */
+    public function getEmail(): ?string
+    {
+        return $this->semail;
+    }
+
+    /**
+     *
+     * @return string|null $snom_usuario
+     */
+    public function getNom_usuario(): ?string
+    {
+        return $this->snom_usuario;
     }
 }

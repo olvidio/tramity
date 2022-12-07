@@ -9,7 +9,6 @@ use expedientes\model\ExpedienteBorradorLista;
 use expedientes\model\ExpedienteCirculandoLista;
 use expedientes\model\ExpedienteParaFirmarLista;
 use expedientes\model\ExpedientepermanentesClLista;
-use usuarios\domain\entity\Usuario;
 use usuarios\domain\repositories\UsuarioRepository;
 use function core\is_true;
 

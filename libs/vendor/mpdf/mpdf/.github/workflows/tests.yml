@@ -30,7 +30,7 @@ jobs:
           - "7.4"
           - "8.0"
           - "8.1"
-        operating-system: [ubuntu-latest, windows-latest]
+        operating-system: [ ubuntu-latest, windows-latest ]
 
     steps:
       - name: "Checkout"

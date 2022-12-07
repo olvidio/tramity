@@ -1,6 +1,6 @@
 -- OJO; Para los indices array integer ---
 CREATE
-EXTENSION IF NOT EXISTS intarray;
+    EXTENSION IF NOT EXISTS intarray;
 CREATE TABLE nombre_del_esquema.entradas_compartidas
 (
     id_entrada_compartida SERIAL PRIMARY KEY,
@@ -16,7 +16,8 @@ CREATE TABLE nombre_del_esquema.entradas_compartidas
     anulado               text
 );
 
-ALTER TABLE nombre_del_esquema.entradas_compartidas OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.entradas_compartidas
+    OWNER TO tramity;
 
 CREATE UNIQUE INDEX IF NOT EXISTS entradas_compartidas_id_entrada_idx ON nombre_del_esquema.entradas_compartidas (id_entrada_compartida);
 CREATE INDEX IF NOT EXISTS entradas_compartidas_destinos_idx ON nombre_del_esquema.entradas_compartidas USING GIN (destinos gin__int_ops);
@@ -35,7 +36,8 @@ CREATE TABLE nombre_del_esquema.entrada_compartida_adjuntos
     adjunto               bytea   NOT NULL
 );
 
-ALTER TABLE nombre_del_esquema.entrada_compartida_adjuntos OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.entrada_compartida_adjuntos
+    OWNER TO tramity;
 
 CREATE INDEX IF NOT EXISTS entrada_compartida_adjuntos_id_entrada_idx ON nombre_del_esquema.entrada_compartida_adjuntos (id_entrada_compartida);
 ALTER TABLE nombre_del_esquema.entrada_compartida_adjuntos

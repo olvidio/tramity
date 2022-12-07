@@ -2,7 +2,6 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use usuarios\domain\entity\Usuario;
 use usuarios\domain\repositories\UsuarioRepository;
 use web\Hash;
 

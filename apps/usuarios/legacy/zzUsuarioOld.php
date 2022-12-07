@@ -110,7 +110,7 @@ class zzzUsuarioOld extends ClasePropiedades
      */
     public function __construct(int $iid_usuario = null)
     {
-         $oDbl = $GLOBALS['oDBT'];
+        $oDbl = $GLOBALS['oDBT'];
         if ($iid_usuario !== null) {
             $this->iid_usuario = $iid_usuario;
             $this->aPrimary_key = array('iid_usuario' => $this->iid_usuario);
@@ -227,7 +227,7 @@ class zzzUsuarioOld extends ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         }
@@ -235,21 +235,35 @@ class zzzUsuarioOld extends ClasePropiedades
         return FALSE;
     }
 
-    
+
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * Recupera las claus primàries de Usuario en un array
+     * Establece el valor de todos los atributos
      *
-     * @return array aPrimary_key
+     * @param array $aDades
      */
-    public function getPrimary_key(): array
+    private function setAllAtributes(array $aDades): void
     {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('id_usuario' => $this->iid_usuario);
+        if (array_key_exists('id_usuario', $aDades)) {
+            $this->setId_usuario($aDades['id_usuario']);
         }
-        return $this->aPrimary_key;
+        if (array_key_exists('usuario', $aDades)) {
+            $this->setUsuario($aDades['usuario']);
+        }
+        if (array_key_exists('id_cargo_preferido', $aDades)) {
+            $this->setId_cargo_preferido($aDades['id_cargo_preferido']);
+        }
+        if (array_key_exists('password', $aDades)) {
+            $this->setPassword($aDades['password']);
+        }
+        if (array_key_exists('email', $aDades)) {
+            $this->setEmail($aDades['email']);
+        }
+        if (array_key_exists('nom_usuario', $aDades)) {
+            $this->setNom_usuario($aDades['nom_usuario']);
+        }
     }
 
     /**
@@ -303,6 +317,19 @@ class zzzUsuarioOld extends ClasePropiedades
     }
 
     /**
+     * Recupera las claus primàries de Usuario en un array
+     *
+     * @return array aPrimary_key
+     */
+    public function getPrimary_key(): array
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('id_usuario' => $this->iid_usuario);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
      * Estableix las claus primàries de Usuario en un array
      *
      */
@@ -310,33 +337,6 @@ class zzzUsuarioOld extends ClasePropiedades
     {
         $this->iid_usuario = $iid_usuario;
         $this->aPrimary_key = array('iid_usuario' => $this->iid_usuario);
-    }
-
-    /**
-     * Establece el valor de todos los atributos
-     *
-     * @param array $aDades
-     */
-    private function setAllAtributes(array $aDades): void
-    {
-        if (array_key_exists('id_usuario', $aDades)) {
-            $this->setId_usuario($aDades['id_usuario']);
-        }
-        if (array_key_exists('usuario', $aDades)) {
-            $this->setUsuario($aDades['usuario']);
-        }
-        if (array_key_exists('id_cargo_preferido', $aDades)) {
-            $this->setId_cargo_preferido($aDades['id_cargo_preferido']);
-        }
-        if (array_key_exists('password', $aDades)) {
-            $this->setPassword($aDades['password']);
-        }
-        if (array_key_exists('email', $aDades)) {
-            $this->setEmail($aDades['email']);
-        }
-        if (array_key_exists('nom_usuario', $aDades)) {
-            $this->setNom_usuario($aDades['nom_usuario']);
-        }
     }
 
     /**

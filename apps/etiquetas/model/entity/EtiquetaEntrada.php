@@ -198,7 +198,7 @@ class EtiquetaEntrada extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -248,7 +248,7 @@ class EtiquetaEntrada extends core\ClasePropiedades
 
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
-    
+
     /**
      * Recupera las claus primàries de EtiquetaEntrada en un array
      *

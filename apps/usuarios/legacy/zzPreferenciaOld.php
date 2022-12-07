@@ -211,7 +211,7 @@ class zzzPreferenciaOld extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -219,21 +219,32 @@ class zzzPreferenciaOld extends core\ClasePropiedades
         }
     }
 
-    
+
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * Recupera las claus primàries de Preferencia en un array
+     * Establece el valor de todos los atributos
      *
-     * @return array aPrimary_key
+     * @param array $aDades
      */
-    function getPrimary_key()
+    private function setAllAtributes($aDades)
     {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('id_item' => $this->iid_item);
+        if (!is_array($aDades)) {
+            return;
         }
-        return $this->aPrimary_key;
+        if (array_key_exists('id_item', $aDades)) {
+            $this->setId_item($aDades['id_item']);
+        }
+        if (array_key_exists('id_usuario', $aDades)) {
+            $this->setId_usuario($aDades['id_usuario']);
+        }
+        if (array_key_exists('tipo', $aDades)) {
+            $this->setTipo($aDades['tipo']);
+        }
+        if (array_key_exists('preferencia', $aDades)) {
+            $this->setPreferencia($aDades['preferencia']);
+        }
     }
 
     /**
@@ -271,6 +282,19 @@ class zzzPreferenciaOld extends core\ClasePropiedades
     }
 
     /**
+     * Recupera las claus primàries de Preferencia en un array
+     *
+     * @return array aPrimary_key
+     */
+    function getPrimary_key()
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('id_item' => $this->iid_item);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
      * Estableix las claus primàries de Preferencia en un array
      *
      */
@@ -288,30 +312,6 @@ class zzzPreferenciaOld extends core\ClasePropiedades
                 $this->iid_item = (int)$a_id;
                 $this->aPrimary_key = array('iid_item' => $this->iid_item);
             }
-        }
-    }
-
-    /**
-     * Establece el valor de todos los atributos
-     *
-     * @param array $aDades
-     */
-    private function setAllAtributes($aDades)
-    {
-        if (!is_array($aDades)) {
-            return;
-        }
-        if (array_key_exists('id_item', $aDades)) {
-            $this->setId_item($aDades['id_item']);
-        }
-        if (array_key_exists('id_usuario', $aDades)) {
-            $this->setId_usuario($aDades['id_usuario']);
-        }
-        if (array_key_exists('tipo', $aDades)) {
-            $this->setTipo($aDades['tipo']);
-        }
-        if (array_key_exists('preferencia', $aDades)) {
-            $this->setPreferencia($aDades['preferencia']);
         }
     }
 

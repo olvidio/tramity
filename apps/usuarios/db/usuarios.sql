@@ -12,17 +12,18 @@ CREATE TABLE nombre_del_esquema.aux_cargos
 );
 
 COMMENT
-ON COLUMN nombre_del_esquema.aux_cargos.id_cargo IS 'corresponde al cargo';
+    ON COLUMN nombre_del_esquema.aux_cargos.id_cargo IS 'corresponde al cargo';
 COMMENT
-ON COLUMN nombre_del_esquema.aux_cargos.id_ambito IS 'corresponde al tipo de instalacion: 1=cg, 2=cr, 3=dl, 4=ctr';
+    ON COLUMN nombre_del_esquema.aux_cargos.id_ambito IS 'corresponde al tipo de instalacion: 1=cg, 2=cr, 3=dl, 4=ctr';
 COMMENT
-ON COLUMN nombre_del_esquema.aux_cargos.director IS 'director u oficial';
-ALTER TABLE nombre_del_esquema.aux_cargos OWNER TO tramity;
+    ON COLUMN nombre_del_esquema.aux_cargos.director IS 'director u oficial';
+ALTER TABLE nombre_del_esquema.aux_cargos
+    OWNER TO tramity;
 
 CREATE TABLE nombre_del_esquema.aux_usuarios
 (
-    id_auto         SERIAL PRIMARY KEY,
-    id_usuario         integer NOT NULL DEFAULT idglobal('nombre_del_esquema'::text),
+    id_auto            SERIAL PRIMARY KEY,
+    id_usuario         integer               NOT NULL DEFAULT idglobal('nombre_del_esquema'::text),
     usuario            character varying(20) NOT NULL,
     id_cargo_preferido integer               NOT NULL,
     password           bytea,
@@ -30,10 +31,11 @@ CREATE TABLE nombre_del_esquema.aux_usuarios
     nom_usuario        text
 );
 COMMENT
-ON COLUMN nombre_del_esquema.aux_usuarios.id_cargo_preferido IS 'corresponde al cargo por defecto o preferido';
-CREATE INDEX ON nombre_del_esquema.aux_usuarios ((lower (usuario)));
+    ON COLUMN nombre_del_esquema.aux_usuarios.id_cargo_preferido IS 'corresponde al cargo por defecto o preferido';
+CREATE INDEX ON nombre_del_esquema.aux_usuarios ((lower(usuario)));
 CREATE UNIQUE INDEX IF NOT EXISTS aux_usuarios_id_usuario_idx ON nombre_del_esquema.aux_usuarios (id_usuario);
-ALTER TABLE nombre_del_esquema.aux_usuarios OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.aux_usuarios
+    OWNER TO tramity;
 
 
 INSERT INTO nombre_del_esquema.aux_usuarios (usuario, id_cargo_preferido, password, nom_usuario)
@@ -58,4 +60,5 @@ CREATE TABLE nombre_del_esquema.usuario_preferencias
 );
 
 CREATE UNIQUE INDEX usuario_preferencias_id_usuario_tipo_ukey ON nombre_del_esquema.usuario_preferencias (id_usuario, tipo);
-ALTER TABLE nombre_del_esquema.usuario_preferencias OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.usuario_preferencias
+    OWNER TO tramity;

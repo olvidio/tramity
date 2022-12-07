@@ -1,6 +1,7 @@
 <?php
 
 namespace core;
+
 use PDO;
 
 abstract class ClaseRepository
@@ -16,7 +17,7 @@ abstract class ClaseRepository
      *
      * @var string
      */
-    protected string $sNomTabla='';
+    protected string $sNomTabla = '';
     /**
      * ErrorTxt de ClasePropiedades
      *
@@ -25,16 +26,6 @@ abstract class ClaseRepository
     protected string $sErrorTxt;
 
     protected int $iid_schema;
-
-    /**
-     * Recupera el atributo iid_schema
-     *
-     * @return integer $iid_schema
-     */
-    protected function getId_schema(): int
-    {
-        return $this->iid_schema;
-    }
 
     /**
      *
@@ -75,6 +66,15 @@ abstract class ClaseRepository
         return $this->sNomTabla;
     }
 
+    /**
+     * sErrorTxt
+     * @return string
+     */
+    public function getErrorTxt(): string
+    {
+        return $this->sErrorTxt;
+    }
+
     /*
     public function __get($nombre)
     {
@@ -94,12 +94,13 @@ abstract class ClaseRepository
     */
 
     /**
-     * sErrorTxt
-     * @return string
+     * Recupera el atributo iid_schema
+     *
+     * @return integer $iid_schema
      */
-    public function getErrorTxt(): string
+    protected function getId_schema(): int
     {
-        return $this->sErrorTxt;
+        return $this->iid_schema;
     }
 
     /**

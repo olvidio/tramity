@@ -285,7 +285,7 @@ class Lugar extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -293,20 +293,55 @@ class Lugar extends core\ClasePropiedades
         }
     }
 
-    
+
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
 
     /**
-     * Recupera las claus primàries de Lugar en un array
+     * Establece el valor de todos los atributos
      *
-     * @return array aPrimary_key
+     * @param array $aDades
      */
-    function getPrimary_key()
+    private function setAllAtributes($aDades)
     {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('id_lugar' => $this->iid_lugar);
+        if (!is_array($aDades)) {
+            return;
         }
-        return $this->aPrimary_key;
+        if (array_key_exists('id_schema', $aDades)) {
+            $this->setId_schema($aDades['id_schema']);
+        }
+        if (array_key_exists('id_lugar', $aDades)) {
+            $this->setId_lugar($aDades['id_lugar']);
+        }
+        if (array_key_exists('sigla', $aDades)) {
+            $this->setSigla($aDades['sigla']);
+        }
+        if (array_key_exists('dl', $aDades)) {
+            $this->setDl($aDades['dl']);
+        }
+        if (array_key_exists('region', $aDades)) {
+            $this->setRegion($aDades['region']);
+        }
+        if (array_key_exists('nombre', $aDades)) {
+            $this->setNombre($aDades['nombre']);
+        }
+        if (array_key_exists('tipo_ctr', $aDades)) {
+            $this->setTipo_ctr($aDades['tipo_ctr']);
+        }
+        if (array_key_exists('modo_envio', $aDades)) {
+            $this->setModo_envio($aDades['modo_envio']);
+        }
+        if (array_key_exists('plataforma', $aDades)) {
+            $this->setPlataforma($aDades['plataforma']);
+        }
+        if (array_key_exists('pub_key', $aDades)) {
+            $this->setPub_key($aDades['pub_key']);
+        }
+        if (array_key_exists('e_mail', $aDades)) {
+            $this->setE_mail($aDades['e_mail']);
+        }
+        if (array_key_exists('anulado', $aDades)) {
+            $this->setAnulado($aDades['anulado']);
+        }
     }
 
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
@@ -402,6 +437,19 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
+     * Recupera las claus primàries de Lugar en un array
+     *
+     * @return array aPrimary_key
+     */
+    function getPrimary_key()
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('id_lugar' => $this->iid_lugar);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
      * Estableix las claus primàries de Lugar en un array
      *
      */
@@ -419,54 +467,6 @@ class Lugar extends core\ClasePropiedades
                 $this->iid_lugar = (int)$a_id;
                 $this->aPrimary_key = array('iid_lugar' => $this->iid_lugar);
             }
-        }
-    }
-
-    /**
-     * Establece el valor de todos los atributos
-     *
-     * @param array $aDades
-     */
-    private function setAllAtributes($aDades)
-    {
-        if (!is_array($aDades)) {
-            return;
-        }
-        if (array_key_exists('id_schema', $aDades)) {
-            $this->setId_schema($aDades['id_schema']);
-        }
-        if (array_key_exists('id_lugar', $aDades)) {
-            $this->setId_lugar($aDades['id_lugar']);
-        }
-        if (array_key_exists('sigla', $aDades)) {
-            $this->setSigla($aDades['sigla']);
-        }
-        if (array_key_exists('dl', $aDades)) {
-            $this->setDl($aDades['dl']);
-        }
-        if (array_key_exists('region', $aDades)) {
-            $this->setRegion($aDades['region']);
-        }
-        if (array_key_exists('nombre', $aDades)) {
-            $this->setNombre($aDades['nombre']);
-        }
-        if (array_key_exists('tipo_ctr', $aDades)) {
-            $this->setTipo_ctr($aDades['tipo_ctr']);
-        }
-        if (array_key_exists('modo_envio', $aDades)) {
-            $this->setModo_envio($aDades['modo_envio']);
-        }
-        if (array_key_exists('plataforma', $aDades)) {
-            $this->setPlataforma($aDades['plataforma']);
-        }
-        if (array_key_exists('pub_key', $aDades)) {
-            $this->setPub_key($aDades['pub_key']);
-        }
-        if (array_key_exists('e_mail', $aDades)) {
-            $this->setE_mail($aDades['e_mail']);
-        }
-        if (array_key_exists('anulado', $aDades)) {
-            $this->setAnulado($aDades['anulado']);
         }
     }
 

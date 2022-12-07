@@ -328,7 +328,7 @@ class PendienteDB extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -570,7 +570,7 @@ class PendienteDB extends core\ClasePropiedades
         }
     }
 
-    
+
     /**
      * Recupera las claus primàries de PendienteDB en un array
      *

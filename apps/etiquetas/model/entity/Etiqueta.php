@@ -216,7 +216,7 @@ class Etiqueta extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -288,7 +288,7 @@ class Etiqueta extends core\ClasePropiedades
         $this->boficina = $boficina;
     }
 
-    
+
     /**
      * Recupera las claus primàries de Etiqueta en un array
      *

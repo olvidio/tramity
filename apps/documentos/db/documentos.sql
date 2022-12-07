@@ -11,7 +11,8 @@ CREATE TABLE nombre_del_esquema.documentos
 );
 
 
-ALTER TABLE nombre_del_esquema.documentos OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.documentos
+    OWNER TO tramity;
 
 CREATE INDEX IF NOT EXISTS documentos_f_upload_idx ON nombre_del_esquema.documentos (f_upload);
 CREATE INDEX IF NOT EXISTS documentos_nom_idx ON nombre_del_esquema.documentos (nom);
@@ -26,7 +27,8 @@ CREATE TABLE nombre_del_esquema.etiquetas_documento
     PRIMARY KEY (id_etiqueta, id_doc)
 );
 
-ALTER TABLE nombre_del_esquema.etiquetas_documento OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.etiquetas_documento
+    OWNER TO tramity;
 
 ALTER TABLE nombre_del_esquema.etiquetas_documento
     ADD CONSTRAINT etiquetas_documento_fk_exp FOREIGN KEY (id_doc) REFERENCES nombre_del_esquema.documentos (id_doc) ON DELETE CASCADE;

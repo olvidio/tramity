@@ -200,6 +200,18 @@ class PgTramiteCargoRepository extends ClaseRepository implements TramiteCargoRe
     }
 
     /**
+     * Busca la clase con id_item en la base de datos .
+     */
+    public function findById(int $id_item): ?TramiteCargo
+    {
+        $aDatos = $this->datosById($id_item);
+        if (empty($aDatos)) {
+            return null;
+        }
+        return (new TramiteCargo())->setAllAttributes($aDatos);
+    }
+
+    /**
      * Devuelve los campos de la base de datos en un array asociativo.
      * Devuelve false si no existe la fila en la base de datos
      *
@@ -216,19 +228,6 @@ class PgTramiteCargoRepository extends ClaseRepository implements TramiteCargoRe
             return FALSE;
         }
         return $oDblSt->fetch(PDO::FETCH_ASSOC);
-    }
-
-
-    /**
-     * Busca la clase con id_item en la base de datos .
-     */
-    public function findById(int $id_item): ?TramiteCargo
-    {
-        $aDatos = $this->datosById($id_item);
-        if (empty($aDatos)) {
-            return null;
-        }
-        return (new TramiteCargo())->setAllAttributes($aDatos);
     }
 
     public function getNewId_item()

@@ -31,6 +31,6 @@ class TemplateDirIterator extends \IteratorIterator
     #[\ReturnTypeWillChange]
     public function key()
     {
-        return (string) parent::key();
+        return (string)parent::key();
     }
 }

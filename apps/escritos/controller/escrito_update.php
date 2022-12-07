@@ -66,7 +66,7 @@ switch ($Q_que) {
     case 'conmutar':
         $error_txt = '';
         $oEscrito = new Escrito($Q_id_escrito);
-        $accion = ($oEscrito->getAccion() === 1)? 2 : 1;
+        $accion = ($oEscrito->getAccion() === 1) ? 2 : 1;
         $oEscrito->setAccion($accion);
         if ($oEscrito->DBGuardar() === FALSE) {
             $error_txt .= $oEscrito->getErrorTxt();
@@ -75,7 +75,7 @@ switch ($Q_que) {
         $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Q_id_expediente, 'id_escrito' => $Q_id_escrito]);
         // solamente debería haber uno
         $oAccion = $cAcciones[0];
-        if ($oAccion->DBCargar() === FALSE ){
+        if ($oAccion->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe la acción en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -100,7 +100,7 @@ switch ($Q_que) {
         $error_txt = '';
         $oEscrito = new Escrito($Q_id_escrito);
         $Q_detalle = (string)filter_input(INPUT_POST, 'text');
-        if ($oEscrito->DBCargar() === FALSE ){
+        if ($oEscrito->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -410,7 +410,7 @@ switch ($Q_que) {
         exit();
     case 'escrito_a_secretaria':
         $oEscrito = new Escrito($Q_id_escrito);
-        if ($oEscrito->DBCargar() === FALSE ){
+        if ($oEscrito->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -423,7 +423,7 @@ switch ($Q_que) {
     case 'escrito_a_oficina':
         $Q_comentario = (string)filter_input(INPUT_POST, 'comentario');
         $oEscrito = new Escrito($Q_id_escrito);
-        if ($oEscrito->DBCargar() === FALSE ){
+        if ($oEscrito->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -436,7 +436,7 @@ switch ($Q_que) {
     case 'tipo_doc':
         $Q_tipo_doc = (integer)filter_input(INPUT_POST, 'tipo_doc');
         $oEscrito = new Escrito($Q_id_escrito);
-        if ($oEscrito->DBCargar() === FALSE ){
+        if ($oEscrito->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -452,7 +452,7 @@ switch ($Q_que) {
             $Q_f_escrito = $oHoy->getFromLocal();
         }
         $oEscrito = new Escrito($Q_id_escrito);
-        if ($oEscrito->DBCargar() === FALSE ){
+        if ($oEscrito->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -465,7 +465,7 @@ switch ($Q_que) {
         $txt_err = '';
         if (!empty($Q_id_escrito)) {
             $oEscrito = new Escrito($Q_id_escrito);
-            if ($oEscrito->DBCargar() === FALSE ){
+            if ($oEscrito->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -504,7 +504,7 @@ switch ($Q_que) {
         $nuevo = FALSE;
         if (!empty($Q_id_escrito)) {
             $oEscrito = new Escrito($Q_id_escrito);
-            if ($oEscrito->DBCargar() === FALSE ){
+            if ($oEscrito->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -670,7 +670,7 @@ switch ($Q_que) {
         $txt_err = '';
         if (!empty($Q_id_escrito)) {
             $oEscrito = new Escrito($Q_id_escrito);
-            if ($oEscrito->DBCargar() === FALSE ){
+            if ($oEscrito->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -700,7 +700,7 @@ switch ($Q_que) {
         $Q_f_aprobacion = (string)filter_input(INPUT_POST, 'f_aprobacion');
         if (!empty($Q_id_escrito)) {
             $oEscrito = new Escrito($Q_id_escrito);
-            if ($oEscrito->DBCargar() === FALSE ){
+            if ($oEscrito->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }

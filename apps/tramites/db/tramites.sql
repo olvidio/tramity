@@ -7,7 +7,8 @@ CREATE TABLE nombre_del_esquema.x_tramites
 );
 
 
-ALTER TABLE nombre_del_esquema.x_tramites OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.x_tramites
+    OWNER TO tramity;
 
 CREATE TABLE nombre_del_esquema.tramite_cargo
 (
@@ -18,7 +19,8 @@ CREATE TABLE nombre_del_esquema.tramite_cargo
     multiple      smallint
 );
 
-ALTER TABLE nombre_del_esquema.tramite_cargo OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.tramite_cargo
+    OWNER TO tramity;
 
 CREATE INDEX tramite_cargo_id_tramite_idx ON nombre_del_esquema.tramite_cargo (id_tramite);
 CREATE INDEX tramite_cargo_id_cargo_idx ON nombre_del_esquema.tramite_cargo (id_cargo);
@@ -45,7 +47,8 @@ CREATE TABLE nombre_del_esquema.expediente_firmas
 );
 
 
-ALTER TABLE nombre_del_esquema.expediente_firmas OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.expediente_firmas
+    OWNER TO tramity;
 
 CREATE INDEX expediente_firmas_id_expediente_idx ON nombre_del_esquema.expediente_firmas (id_expediente);
 CREATE INDEX expediente_firmas_id_tramite_idx ON nombre_del_esquema.expediente_firmas (id_tramite);

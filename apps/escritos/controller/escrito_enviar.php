@@ -56,7 +56,7 @@ $a_rta = $oEnviar->enviar();
 
 if ($a_rta['marcar'] === TRUE) {
     $oEscrito = new Escrito($Q_id_escrito);
-    if ($oEscrito->DBCargar() === FALSE ){
+    if ($oEscrito->DBCargar() === FALSE) {
         $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_cargar);
     }

@@ -25,12 +25,6 @@ abstract class BaseDumper
         return $this->dumpProfile($profile);
     }
 
-    abstract protected function formatTemplate(Profile $profile, $prefix): string;
-
-    abstract protected function formatNonTemplate(Profile $profile, $prefix): string;
-
-    abstract protected function formatTime(Profile $profile, $percent): string;
-
     private function dumpProfile(Profile $profile, $prefix = '', $sibling = false): string
     {
         if ($profile->isRoot()) {
@@ -48,7 +42,7 @@ abstract class BaseDumper
         $percent = $this->root ? $profile->getDuration() / $this->root * 100 : 0;
 
         if ($profile->getDuration() * 1000 < 1) {
-            $str = $start."\n";
+            $str = $start . "\n";
         } else {
             $str = sprintf("%s %s\n", $start, $this->formatTime($profile, $percent));
         }
@@ -60,4 +54,10 @@ abstract class BaseDumper
 
         return $str;
     }
+
+    abstract protected function formatTemplate(Profile $profile, $prefix): string;
+
+    abstract protected function formatNonTemplate(Profile $profile, $prefix): string;
+
+    abstract protected function formatTime(Profile $profile, $percent): string;
 }

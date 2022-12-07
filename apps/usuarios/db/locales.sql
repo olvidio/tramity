@@ -6,30 +6,30 @@
 -- Dumped by pg_dump version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
 
 SET
-statement_timeout = 0;
+    statement_timeout = 0;
 SET
-lock_timeout = 0;
+    lock_timeout = 0;
 SET
-idle_in_transaction_session_timeout = 0;
+    idle_in_transaction_session_timeout = 0;
 SET
-client_encoding = 'UTF8';
+    client_encoding = 'UTF8';
 SET
-standard_conforming_strings = on;
+    standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET
-check_function_bodies = false;
+    check_function_bodies = false;
 SET
-xmloption = content;
+    xmloption = content;
 SET
-client_min_messages = warning;
+    client_min_messages = warning;
 SET
-row_security = off;
+    row_security = off;
 
 SET
-default_tablespace = '';
+    default_tablespace = '';
 
 SET
-default_with_oids = false;
+    default_with_oids = false;
 
 --
 -- Name: x_locales; Type: TABLE; Schema: nombre_del_esquema. Owner: tramity
@@ -45,7 +45,8 @@ CREATE TABLE nombre_del_esquema.x_locales
 );
 
 
-ALTER TABLE nombre_del_esquema.x_locales OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.x_locales
+    OWNER TO tramity;
 
 --
 -- Data for Name: x_locales; Type: TABLE DATA; Schema: nombre_del_esquema. Owner: tramity

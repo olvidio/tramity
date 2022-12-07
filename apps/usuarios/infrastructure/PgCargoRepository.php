@@ -221,43 +221,12 @@ class PgCargoRepository extends ClaseRepository implements CargoRepositoryInterf
         return FALSE;
     }
 
-    /**
-     * Carga los campos de la base de datos como ATRIBUTOS de la clase.
-     */
-    public function datosById(int $id_cargo): array|bool
-    {
-        $oDbl = $this->getoDbl();
-        $nom_tabla = $this->getNomTabla();
-        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_cargo = $id_cargo")) === FALSE) {
-            $sClaveError = 'Cargo.getDatosById';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        $aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);
-        return $aDatos;
-    }
-
-
-    /**
-     * Carga los campos de la base de datos como ATRIBUTOS de la clase.
-     */
-    public function findById(int $id_cargo): ?Cargo
-    {
-        $aDatos = $this->datosById($id_cargo);
-        if (empty($aDatos)) {
-            return null;
-        }
-        return (new Cargo())->setAllAttributes($aDatos);
-    }
-
     public function getNewId_cargo()
     {
         $oDbl = $this->getoDbl();
         $sQuery = "select nextval('aux_cargos_id_cargo_seq'::regclass)";
         return $oDbl->query($sQuery)->fetchColumn();
     }
-
-    /* -------------------- GESTOR EXTRA ---------------------------------------- */
 
     /**
      * @param int $id_oficina
@@ -321,6 +290,36 @@ class PgCargoRepository extends ClaseRepository implements CargoRepositoryInterf
             }
         }
         return $a_usuarios_oficina;
+    }
+
+    /* -------------------- GESTOR EXTRA ---------------------------------------- */
+
+    /**
+     * Carga los campos de la base de datos como ATRIBUTOS de la clase.
+     */
+    public function findById(int $id_cargo): ?Cargo
+    {
+        $aDatos = $this->datosById($id_cargo);
+        if (empty($aDatos)) {
+            return null;
+        }
+        return (new Cargo())->setAllAttributes($aDatos);
+    }
+
+    /**
+     * Carga los campos de la base de datos como ATRIBUTOS de la clase.
+     */
+    public function datosById(int $id_cargo): array|bool
+    {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_cargo = $id_cargo")) === FALSE) {
+            $sClaveError = 'Cargo.getDatosById';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        $aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);
+        return $aDatos;
     }
 
     function getArrayCargosOficina($id_oficina = '')

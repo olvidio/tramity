@@ -67,14 +67,14 @@ final class TwigFunction
         return $this->options['node_class'];
     }
 
-    public function setArguments(array $arguments): void
-    {
-        $this->arguments = $arguments;
-    }
-
     public function getArguments(): array
     {
         return $this->arguments;
+    }
+
+    public function setArguments(array $arguments): void
+    {
+        $this->arguments = $arguments;
     }
 
     public function needsEnvironment(): bool
@@ -102,12 +102,12 @@ final class TwigFunction
 
     public function isVariadic(): bool
     {
-        return (bool) $this->options['is_variadic'];
+        return (bool)$this->options['is_variadic'];
     }
 
     public function isDeprecated(): bool
     {
-        return (bool) $this->options['deprecated'];
+        return (bool)$this->options['deprecated'];
     }
 
     public function getDeprecatedVersion(): string

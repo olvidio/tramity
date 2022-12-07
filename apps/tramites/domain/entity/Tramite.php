@@ -67,29 +67,11 @@ class Tramite
 
     /**
      *
-     * @return int $iid_tramite
-     */
-    public function getId_tramite(): int
-    {
-        return $this->iid_tramite;
-    }
-
-    /**
-     *
      * @param int $iid_tramite
      */
     public function setId_tramite(int $iid_tramite): void
     {
         $this->iid_tramite = $iid_tramite;
-    }
-
-    /**
-     *
-     * @return string $stramite
-     */
-    public function getTramite(): string
-    {
-        return $this->stramite;
     }
 
     /**
@@ -103,15 +85,6 @@ class Tramite
 
     /**
      *
-     * @return int|null $iorden
-     */
-    public function getOrden(): ?int
-    {
-        return $this->iorden;
-    }
-
-    /**
-     *
      * @param int|null $iorden
      */
     public function setOrden(?int $iorden = null): void
@@ -121,19 +94,46 @@ class Tramite
 
     /**
      *
-     * @return string|null $sbreve
-     */
-    public function getBreve(): ?string
-    {
-        return $this->sbreve;
-    }
-
-    /**
-     *
      * @param string|null $sbreve
      */
     public function setBreve(?string $sbreve = null): void
     {
         $this->sbreve = $sbreve;
+    }
+
+    /**
+     *
+     * @return int $iid_tramite
+     */
+    public function getId_tramite(): int
+    {
+        return $this->iid_tramite;
+    }
+
+    /**
+     *
+     * @return string $stramite
+     */
+    public function getTramite(): string
+    {
+        return $this->stramite;
+    }
+
+    /**
+     *
+     * @return int|null $iorden
+     */
+    public function getOrden(): ?int
+    {
+        return $this->iorden;
+    }
+
+    /**
+     *
+     * @return string|null $sbreve
+     */
+    public function getBreve(): ?string
+    {
+        return $this->sbreve;
     }
 }

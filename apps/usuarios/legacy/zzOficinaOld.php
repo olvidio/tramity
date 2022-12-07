@@ -209,7 +209,7 @@ class zzzOficinaOld extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -217,21 +217,32 @@ class zzzOficinaOld extends core\ClasePropiedades
         }
     }
 
-    
+
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * Recupera las claus primàries de Oficina en un array
+     * Establece el valor de todos los atributos
      *
-     * @return array aPrimary_key
+     * @param array $aDades
      */
-    function getPrimary_key()
+    private function setAllAtributes($aDades)
     {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('id_oficina' => $this->iid_oficina);
+        if (!is_array($aDades)) {
+            return;
         }
-        return $this->aPrimary_key;
+        if (array_key_exists('id_schema', $aDades)) {
+            $this->setId_schema($aDades['id_schema']);
+        }
+        if (array_key_exists('id_oficina', $aDades)) {
+            $this->setId_oficina($aDades['id_oficina']);
+        }
+        if (array_key_exists('sigla', $aDades)) {
+            $this->setSigla($aDades['sigla']);
+        }
+        if (array_key_exists('orden', $aDades)) {
+            $this->setOrden($aDades['orden']);
+        }
     }
 
     /**
@@ -261,6 +272,19 @@ class zzzOficinaOld extends core\ClasePropiedades
     }
 
     /**
+     * Recupera las claus primàries de Oficina en un array
+     *
+     * @return array aPrimary_key
+     */
+    function getPrimary_key()
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('id_oficina' => $this->iid_oficina);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
      * Estableix las claus primàries de Oficina en un array
      *
      */
@@ -278,30 +302,6 @@ class zzzOficinaOld extends core\ClasePropiedades
                 $this->iid_oficina = (int)$a_id;
                 $this->aPrimary_key = array('iid_oficina' => $this->iid_oficina);
             }
-        }
-    }
-
-    /**
-     * Establece el valor de todos los atributos
-     *
-     * @param array $aDades
-     */
-    private function setAllAtributes($aDades)
-    {
-        if (!is_array($aDades)) {
-            return;
-        }
-        if (array_key_exists('id_schema', $aDades)) {
-            $this->setId_schema($aDades['id_schema']);
-        }
-        if (array_key_exists('id_oficina', $aDades)) {
-            $this->setId_oficina($aDades['id_oficina']);
-        }
-        if (array_key_exists('sigla', $aDades)) {
-            $this->setSigla($aDades['sigla']);
-        }
-        if (array_key_exists('orden', $aDades)) {
-            $this->setOrden($aDades['orden']);
         }
     }
 

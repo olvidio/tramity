@@ -199,6 +199,18 @@ class PgTramiteRepository extends ClaseRepository implements TramiteRepositoryIn
     }
 
     /**
+     * Busca la clase con id_tramite en la base de datos .
+     */
+    public function findById(int $id_tramite): ?Tramite
+    {
+        $aDatos = $this->datosById($id_tramite);
+        if (empty($aDatos)) {
+            return null;
+        }
+        return (new Tramite())->setAllAttributes($aDatos);
+    }
+
+    /**
      * Devuelve los campos de la base de datos en un array asociativo.
      * Devuelve false si no existe la fila en la base de datos
      *
@@ -215,19 +227,6 @@ class PgTramiteRepository extends ClaseRepository implements TramiteRepositoryIn
             return FALSE;
         }
         return $oDblSt->fetch(PDO::FETCH_ASSOC);
-    }
-
-
-    /**
-     * Busca la clase con id_tramite en la base de datos .
-     */
-    public function findById(int $id_tramite): ?Tramite
-    {
-        $aDatos = $this->datosById($id_tramite);
-        if (empty($aDatos)) {
-            return null;
-        }
-        return (new Tramite())->setAllAttributes($aDatos);
     }
 
     public function getNewId_tramite()

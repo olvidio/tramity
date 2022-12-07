@@ -40,6 +40,14 @@ class Extract
     }
 
     /**
+     * @return void
+     */
+    protected function reset(): void
+    {
+        $this->parameters = [];
+    }
+
+    /**
      * @param mixed $executable
      * @return void
      */
@@ -49,19 +57,11 @@ class Extract
     }
 
     /**
-     * @return void
-     */
-    protected function reset(): void
-    {
-        $this->parameters = [];
-    }
-
-    /**
      * @param string $path
-     * @throws SyntaxError
+     * @return void
      * @throws LoaderError
      * @throws RuntimeError
-     * @return void
+     * @throws SyntaxError
      */
     public function addTemplate(string $path): void
     {
@@ -96,7 +96,7 @@ class Extract
         if ($cacheDirectory === false) {
             throw new RuntimeException('No cache directory is set');
         }
-        $command = $this->executable ? : 'xgettext';
+        $command = $this->executable ?: 'xgettext';
         $command .= ' ' . implode(' ', $this->parameters);
         $command .= ' ' . $cacheDirectory . '/*/*.php';
         echo $command;

@@ -7,7 +7,6 @@ use core\ConverterDate;
 use core\DatosCampo;
 use PDO;
 use PDOException;
-use web;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 
@@ -91,7 +90,7 @@ class DocumentoDB extends core\ClasePropiedades
      *
      * @var integer|null
      */
-    protected ?int $ivisibilidad =null;
+    protected ?int $ivisibilidad = null;
     /**
      * Tipo_doc de Documento
      *
@@ -414,7 +413,7 @@ class DocumentoDB extends core\ClasePropiedades
      * Si convert es FALSE, df_upload debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
      * @param string|DateTimeLocal $df_upload ='' optional.
-     * @param boolean $convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
+     * @param boolean $convert =TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     public function setF_upload(DateTimeLocal|string $df_upload = '', bool $convert = TRUE): void
     {
@@ -429,7 +428,7 @@ class DocumentoDB extends core\ClasePropiedades
     /**
      * per usar amb els valors directes de la DB.
      *
-     * @param string|null $documento='' optional (ja convertit a hexadecimal)
+     * @param string|null $documento ='' optional (ja convertit a hexadecimal)
      */
     private function setDocumentoEscaped(?string $documento = null): void
     {
@@ -593,7 +592,7 @@ class DocumentoDB extends core\ClasePropiedades
     }
 
     /**
-     * @param string|null $documento='' optional
+     * @param string|null $documento ='' optional
      */
     public function setDocumento(?string $documento = ''): void
     {

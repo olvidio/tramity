@@ -51,7 +51,7 @@ function upload()
             $contenido_doc = fread($fp, filesize($tmpFilePath));
 
             $oEscritoAdjunto = new EscritoAdjunto($Q_id_item);
-            if ($oEscritoAdjunto->DBCargar() === FALSE ){
+            if ($oEscritoAdjunto->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito adjunto en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }

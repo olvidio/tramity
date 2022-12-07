@@ -122,7 +122,7 @@ if (!empty($Q_periodo)) {
             $limite = date("Ymd", mktime(0, 0, 0, date("m"), date("d"), date("Y")));
             break;
         case "semana":
-            $limite = date("Ymd", mktime(0, 0, 0, date("m"), (int) date("d") + 7, date("Y")));
+            $limite = date("Ymd", mktime(0, 0, 0, date("m"), (int)date("d") + 7, date("Y")));
             break;
         case "mes":
             $limite = date("Ymd", mktime(0, 0, 0, (int)date("m") + 1, date("d"), date("Y")));

@@ -1,7 +1,7 @@
 --- escritos locales
 -- OJO; Para los indices array integer ---
 CREATE
-EXTENSION IF NOT EXISTS intarray;
+    EXTENSION IF NOT EXISTS intarray;
 CREATE TABLE nombre_del_esquema.escritos
 (
     id_escrito        SERIAL PRIMARY KEY,
@@ -30,9 +30,10 @@ CREATE TABLE nombre_del_esquema.escritos
     descripcion       text
 );
 
-ALTER TABLE nombre_del_esquema.escritos OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.escritos
+    OWNER TO tramity;
 
-CREATE INDEX IF NOT EXISTS escritos_asunto_idx ON nombre_del_esquema.escritos ((lower (asunto)));
+CREATE INDEX IF NOT EXISTS escritos_asunto_idx ON nombre_del_esquema.escritos ((lower(asunto)));
 CREATE INDEX IF NOT EXISTS escritos_f_aprobacion_idx ON nombre_del_esquema.escritos (f_aprobacion);
 CREATE INDEX IF NOT EXISTS escritos_f_contestar_idx ON nombre_del_esquema.escritos (f_contestar);
 CREATE INDEX IF NOT EXISTS escritos_f_escrito_idx ON nombre_del_esquema.escritos (f_escrito);
@@ -53,7 +54,8 @@ CREATE TABLE nombre_del_esquema.escrito_adjuntos
     tipo_doc   smallint
 );
 
-ALTER TABLE nombre_del_esquema.escrito_adjuntos OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.escrito_adjuntos
+    OWNER TO tramity;
 
 CREATE INDEX IF NOT EXISTS escrito_adjuntos_id_escrito_idx ON nombre_del_esquema.escrito_adjuntos (id_escrito);
 ALTER TABLE nombre_del_esquema.escrito_adjuntos

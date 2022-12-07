@@ -25,7 +25,7 @@ class FilesystemCache implements CacheInterface
 
     public function __construct(string $directory, int $options = 0)
     {
-        $this->directory = rtrim($directory, '\/').'/';
+        $this->directory = rtrim($directory, '\/') . '/';
         $this->options = $options;
     }
 
@@ -33,7 +33,7 @@ class FilesystemCache implements CacheInterface
     {
         $hash = hash(\PHP_VERSION_ID < 80100 ? 'sha256' : 'xxh128', $className);
 
-        return $this->directory.$hash[0].$hash[1].'/'.$hash.'.php';
+        return $this->directory . $hash[0] . $hash[1] . '/' . $hash . '.php';
     }
 
     public function load(string $key): void
@@ -82,6 +82,6 @@ class FilesystemCache implements CacheInterface
             return 0;
         }
 
-        return (int) @filemtime($key);
+        return (int)@filemtime($key);
     }
 }

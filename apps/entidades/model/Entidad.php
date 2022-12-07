@@ -258,7 +258,7 @@ class Entidad extends EntidadDB
 
         $sql_txt_nou = str_replace('nombre_del_esquema.', $nom_schema, $sql_txt);
         // para la función idglobal
-        $idglobal_txt_nou = "idglobal('". $this->getSchema();
+        $idglobal_txt_nou = "idglobal('" . $this->getSchema();
         $sql_txt_nou = str_replace('idglobal(\'nombre_del_esquema', $idglobal_txt_nou, $sql_txt_nou);
 
         $command = "/usr/bin/psql -U tramity -d tramity -c << EOF \" $sql_txt_nou \" ";

@@ -63,7 +63,7 @@ class zzzGestorPreferenciaOld extends core\ClaseGestor
         $cPreferencias = $gesPreferencias->getPreferencias(['id_usuario' => $id_usuario, 'tipo' => $tipo]);
         if (count($cPreferencias) > 0) {
             $oPref = $cPreferencias[0]; // solo debería haber uno.
-            if ($oPref->DBCargar() === FALSE ){
+            if ($oPref->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe la Preferencia en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }

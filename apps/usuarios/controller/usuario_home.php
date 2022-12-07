@@ -11,7 +11,6 @@ use expedientes\model\ExpedienteCirculandoLista;
 use expedientes\model\ExpedienteCopiasLista;
 use expedientes\model\ExpedienteParaFirmarLista;
 use expedientes\model\ExpedienteReunionLista;
-use usuarios\domain\entity\Usuario;
 use usuarios\domain\repositories\UsuarioRepository;
 use function core\is_true;
 

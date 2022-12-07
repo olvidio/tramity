@@ -1,4 +1,5 @@
 <?php
+
 namespace usuarios\legacy;
 
 use core;
@@ -224,7 +225,7 @@ class zzzLocaleOld extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return true;
         } else {
@@ -232,21 +233,35 @@ class zzzLocaleOld extends core\ClasePropiedades
         }
     }
 
-    
+
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * Recupera las claus primàries de Locale en un array
+     * Establece el valor de todos los atributos
      *
-     * @return array aPrimary_key
+     * @param array $aDades
      */
-    function getPrimary_key()
+    private function setAllAtributes($aDades)
     {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('id_locale' => $this->sid_locale);
+        if (!is_array($aDades)) {
+            return;
         }
-        return $this->aPrimary_key;
+        if (array_key_exists('id_locale', $aDades)) {
+            $this->setId_locale($aDades['id_locale']);
+        }
+        if (array_key_exists('nom_locale', $aDades)) {
+            $this->setNom_locale($aDades['nom_locale']);
+        }
+        if (array_key_exists('idioma', $aDades)) {
+            $this->setIdioma($aDades['idioma']);
+        }
+        if (array_key_exists('nom_idioma', $aDades)) {
+            $this->setNom_idioma($aDades['nom_idioma']);
+        }
+        if (array_key_exists('activo', $aDades)) {
+            $this->setActivo($aDades['activo']);
+        }
     }
 
     /**
@@ -293,6 +308,19 @@ class zzzLocaleOld extends core\ClasePropiedades
     }
 
     /**
+     * Recupera las claus primàries de Locale en un array
+     *
+     * @return array aPrimary_key
+     */
+    function getPrimary_key()
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('id_locale' => $this->sid_locale);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
      * Estableix las claus primàries de Locale en un array
      *
      * @return array aPrimary_key
@@ -304,33 +332,6 @@ class zzzLocaleOld extends core\ClasePropiedades
             foreach ($a_id as $nom_id => $val_id) {
                 if (($nom_id === 'id_locale') && $val_id !== '') $this->slocale = $val_id;
             }
-        }
-    }
-
-    /**
-     * Establece el valor de todos los atributos
-     *
-     * @param array $aDades
-     */
-    private function setAllAtributes($aDades)
-    {
-        if (!is_array($aDades)) {
-            return;
-        }
-        if (array_key_exists('id_locale', $aDades)) {
-            $this->setId_locale($aDades['id_locale']);
-        }
-        if (array_key_exists('nom_locale', $aDades)) {
-            $this->setNom_locale($aDades['nom_locale']);
-        }
-        if (array_key_exists('idioma', $aDades)) {
-            $this->setIdioma($aDades['idioma']);
-        }
-        if (array_key_exists('nom_idioma', $aDades)) {
-            $this->setNom_idioma($aDades['nom_idioma']);
-        }
-        if (array_key_exists('activo', $aDades)) {
-            $this->setActivo($aDades['activo']);
         }
     }
 

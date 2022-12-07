@@ -210,7 +210,7 @@ class RoleMember extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -260,7 +260,7 @@ class RoleMember extends core\ClasePropiedades
 
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
-    
+
     /**
      * Recupera las claus primàries de RoleMember en un array
      *

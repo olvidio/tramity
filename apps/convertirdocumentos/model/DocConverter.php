@@ -28,7 +28,7 @@ final class DocConverter
         //$command = escapeshellcmd("libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to pdf --outdir $path_temp \"$filename_local\"  2>&1");
         $command = escapeshellcmd("libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to pdf --outdir $path_temp $filename_local_sin_espacios 2>&1");
 
-        exec($command, $output,  $retval);
+        exec($command, $output, $retval);
 
         $filename_sin_espacios = str_replace(' ', '_', $this->file_name);
         $filename_pdf = $path_temp . $filename_sin_espacios . '.pdf';

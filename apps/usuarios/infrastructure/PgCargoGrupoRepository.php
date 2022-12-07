@@ -203,6 +203,18 @@ class PgCargoGrupoRepository extends ClaseRepository implements CargoGrupoReposi
     }
 
     /**
+     * Busca la clase con id_grupo en la base de datos .
+     */
+    public function findById(int $id_grupo): ?CargoGrupo
+    {
+        $aDatos = $this->datosById($id_grupo);
+        if (empty($aDatos)) {
+            return null;
+        }
+        return (new CargoGrupo())->setAllAttributes($aDatos);
+    }
+
+    /**
      * Devuelve los campos de la base de datos en un array asociativo.
      * Devuelve false si no existe la fila en la base de datos
      *
@@ -224,19 +236,6 @@ class PgCargoGrupoRepository extends ClaseRepository implements CargoGrupoReposi
             $aDatos['miembros'] = array_pg2php($aDatos['miembros']);
         }
         return $aDatos;
-    }
-
-
-    /**
-     * Busca la clase con id_grupo en la base de datos .
-     */
-    public function findById(int $id_grupo): ?CargoGrupo
-    {
-        $aDatos = $this->datosById($id_grupo);
-        if (empty($aDatos)) {
-            return null;
-        }
-        return (new CargoGrupo())->setAllAttributes($aDatos);
     }
 
     public function getNewId_grupo()

@@ -108,7 +108,7 @@ class EntidadDB extends ClasePropiedades
         } else {
             // No sirve el 0, null, ''
             if (!empty($a_id)) {
-                $this->iid_entidad = (int) $a_id;
+                $this->iid_entidad = (int)$a_id;
                 $this->aPrimary_key = array('iid_entidad' => $this->iid_entidad);
             }
         }
@@ -223,7 +223,7 @@ class EntidadDB extends ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {

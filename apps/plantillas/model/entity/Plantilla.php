@@ -201,7 +201,7 @@ class Plantilla extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -251,7 +251,7 @@ class Plantilla extends core\ClasePropiedades
 
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
-    
+
     /**
      * Recupera las claus primàries de Plantilla en un array
      *

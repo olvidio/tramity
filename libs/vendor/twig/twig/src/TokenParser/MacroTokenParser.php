@@ -54,13 +54,13 @@ final class MacroTokenParser extends AbstractTokenParser
         return new Node();
     }
 
-    public function decideBlockEnd(Token $token): bool
-    {
-        return $token->test('endmacro');
-    }
-
     public function getTag(): string
     {
         return 'macro';
+    }
+
+    public function decideBlockEnd(Token $token): bool
+    {
+        return $token->test('endmacro');
     }
 }

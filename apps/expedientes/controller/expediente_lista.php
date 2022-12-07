@@ -9,7 +9,6 @@ use expedientes\model\ExpedienteBorradorLista;
 use expedientes\model\ExpedienteCirculandoLista;
 use expedientes\model\ExpedienteCopiasLista;
 use expedientes\model\ExpedienteDistribuirLista;
-use expedientes\model\ExpedienteLista;
 use expedientes\model\ExpedienteParaFirmarLista;
 use expedientes\model\ExpedientepermanentesClLista;
 use expedientes\model\ExpedienteReunionFijarLista;
@@ -88,7 +87,7 @@ switch ($Q_filtro) {
         $a_etiquetas_filtered = array_filter($Q_a_etiquetas);
 
         // para evitar que salgan todos, por defecto poner periodo un mes.
-        $Q_periodo = empty($Q_periodo)? 'mes' : $Q_periodo;
+        $Q_periodo = empty($Q_periodo) ? 'mes' : $Q_periodo;
         $oDialogoBusqueda = new DialogoBusquedaArchivados($Q_asunto, $Q_andOr, $Q_a_etiquetas, $Q_filtro, $Q_periodo);
         $aCondicion = $oDialogoBusqueda->generarCondicion();
         $aWhereADD = $aCondicion['aWhereADD'];

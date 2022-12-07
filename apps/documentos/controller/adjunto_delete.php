@@ -18,7 +18,7 @@ $Q_id_doc = (integer)filter_input(INPUT_POST, 'key');
 
 if (!empty($Q_id_doc)) {
     $oDocumento = new Documento($Q_id_doc);
-    if ($oDocumento->DBCargar() === FALSE ){
+    if ($oDocumento->DBCargar() === FALSE) {
         $err_cargar = sprintf(_("OJO! no existe el documento en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_cargar);
     }

@@ -210,6 +210,18 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
     }
 
     /**
+     * Busca la clase con $id_usuario en la base de datos.
+     */
+    public function findById(int $id_usuario): ?Usuario
+    {
+        $aDatos = $this->datosById($id_usuario);
+        if (empty($aDatos)) {
+            return null;
+        }
+        return (new Usuario())->setAllAttributes($aDatos);
+    }
+
+    /**
      * Carga los campos de la base de datos como ATRIBUTOS de la clase.
      */
     public function datosById(int $id_usuario): array|bool
@@ -227,19 +239,6 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
         $aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);
         $aDatos['password'] = $spassword;
         return $aDatos;
-    }
-
-
-    /**
-     * Busca la clase con $id_usuario en la base de datos.
-     */
-    public function findById(int $id_usuario): ?Usuario
-    {
-        $aDatos = $this->datosById($id_usuario);
-          if (empty($aDatos)) {
-            return null;
-        }
-        return (new Usuario())->setAllAttributes($aDatos);
     }
 
     public function getNewId_usuario()

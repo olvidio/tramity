@@ -226,7 +226,7 @@ class EntradaDocDB extends ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         }
@@ -234,21 +234,33 @@ class EntradaDocDB extends ClasePropiedades
         return FALSE;
     }
 
-    
+
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
     /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
 
     /**
-     * Recupera las claus primàries de EntradaDocDB en un array
+     * Establece el valor de todos los atributos
      *
-     * @return array aPrimary_key
+     * @param array $aDades
      */
-    function getPrimary_key()
+    private function setAllAtributes($aDades, $convert = FALSE)
     {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('id_entrada' => $this->iid_entrada);
+        if (!is_array($aDades)) {
+            return;
         }
-        return $this->aPrimary_key;
+        if (array_key_exists('id_schema', $aDades)) {
+            $this->setId_schema($aDades['id_schema']);
+        }
+        if (array_key_exists('id_entrada', $aDades)) {
+            $this->setId_entrada($aDades['id_entrada']);
+        }
+        if (array_key_exists('tipo_doc', $aDades)) {
+            $this->setTipo_doc($aDades['tipo_doc']);
+        }
+        if (array_key_exists('f_doc', $aDades)) {
+            $f_doc = $aDades['f_doc'] ?? '';
+            $this->setF_doc($f_doc, $convert);
+        }
     }
 
     /**
@@ -287,6 +299,19 @@ class EntradaDocDB extends ClasePropiedades
     }
 
     /**
+     * Recupera las claus primàries de EntradaDocDB en un array
+     *
+     * @return array aPrimary_key
+     */
+    function getPrimary_key()
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('id_entrada' => $this->iid_entrada);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
      * Estableix las claus primàries de EntradaDocDB en un array
      *
      */
@@ -304,31 +329,6 @@ class EntradaDocDB extends ClasePropiedades
                 $this->iid_entrada = (int)$a_id;
                 $this->aPrimary_key = array('iid_entrada' => $this->iid_entrada);
             }
-        }
-    }
-
-    /**
-     * Establece el valor de todos los atributos
-     *
-     * @param array $aDades
-     */
-    private function setAllAtributes($aDades, $convert = FALSE)
-    {
-        if (!is_array($aDades)) {
-            return;
-        }
-        if (array_key_exists('id_schema', $aDades)) {
-            $this->setId_schema($aDades['id_schema']);
-        }
-        if (array_key_exists('id_entrada', $aDades)) {
-            $this->setId_entrada($aDades['id_entrada']);
-        }
-        if (array_key_exists('tipo_doc', $aDades)) {
-            $this->setTipo_doc($aDades['tipo_doc']);
-        }
-        if (array_key_exists('f_doc', $aDades)) {
-            $f_doc =$aDades['f_doc']?? '';
-            $this->setF_doc($f_doc, $convert);
         }
     }
 

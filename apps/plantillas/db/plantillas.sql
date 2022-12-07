@@ -5,5 +5,6 @@ CREATE TABLE nombre_del_esquema.plantillas
 );
 
 
-ALTER TABLE nombre_del_esquema.plantillas OWNER TO tramity;
+ALTER TABLE nombre_del_esquema.plantillas
+    OWNER TO tramity;
 

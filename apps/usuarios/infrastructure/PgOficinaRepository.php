@@ -199,6 +199,18 @@ class PgOficinaRepository extends ClaseRepository implements OficinaRepositoryIn
     }
 
     /**
+     * Busca la clase con id_oficina en la base de datos .
+     */
+    public function findById(int $id_oficina): ?Oficina
+    {
+        $aDatos = $this->datosById($id_oficina);
+        if (empty($aDatos)) {
+            return null;
+        }
+        return (new Oficina())->setAllAttributes($aDatos);
+    }
+
+    /**
      * Carga los campos de la base de datos como ATRIBUTOS de la clase.
      */
     public function datosById(int $id_oficina): array|bool
@@ -212,19 +224,6 @@ class PgOficinaRepository extends ClaseRepository implements OficinaRepositoryIn
         }
         $aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);
         return $aDatos;
-    }
-
-
-    /**
-     * Busca la clase con id_oficina en la base de datos .
-     */
-    public function findById(int $id_oficina): ?Oficina
-    {
-        $aDatos = $this->datosById($id_oficina);
-        if (empty($aDatos)) {
-            return null;
-        }
-        return (new Oficina())->setAllAttributes($aDatos);
     }
 
     public function getNewId_oficina()

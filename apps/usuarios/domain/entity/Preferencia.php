@@ -67,29 +67,11 @@ class Preferencia
 
     /**
      *
-     * @return int $iid_item
-     */
-    public function getId_item(): int
-    {
-        return $this->iid_item;
-    }
-
-    /**
-     *
      * @param int $iid_item
      */
     public function setId_item(int $iid_item): void
     {
         $this->iid_item = $iid_item;
-    }
-
-    /**
-     *
-     * @return int $iid_usuario
-     */
-    public function getId_usuario(): int
-    {
-        return $this->iid_usuario;
     }
 
     /**
@@ -103,15 +85,6 @@ class Preferencia
 
     /**
      *
-     * @return string $stipo
-     */
-    public function getTipo(): string
-    {
-        return $this->stipo;
-    }
-
-    /**
-     *
      * @param string $stipo
      */
     public function setTipo(string $stipo): void
@@ -121,19 +94,46 @@ class Preferencia
 
     /**
      *
-     * @return string|null $spreferencia
-     */
-    public function getPreferencia(): ?string
-    {
-        return $this->spreferencia;
-    }
-
-    /**
-     *
      * @param string|null $spreferencia
      */
     public function setPreferencia(?string $spreferencia = null): void
     {
         $this->spreferencia = $spreferencia;
+    }
+
+    /**
+     *
+     * @return int $iid_item
+     */
+    public function getId_item(): int
+    {
+        return $this->iid_item;
+    }
+
+    /**
+     *
+     * @return int $iid_usuario
+     */
+    public function getId_usuario(): int
+    {
+        return $this->iid_usuario;
+    }
+
+    /**
+     *
+     * @return string $stipo
+     */
+    public function getTipo(): string
+    {
+        return $this->stipo;
+    }
+
+    /**
+     *
+     * @return string|null $spreferencia
+     */
+    public function getPreferencia(): ?string
+    {
+        return $this->spreferencia;
     }
 }

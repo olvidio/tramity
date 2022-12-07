@@ -132,29 +132,11 @@ class Cargo
 
     /**
      *
-     * @return int $iid_cargo
-     */
-    public function getId_cargo(): int
-    {
-        return $this->iid_cargo;
-    }
-
-    /**
-     *
      * @param int $iid_cargo
      */
     public function setId_cargo(int $iid_cargo): void
     {
         $this->iid_cargo = $iid_cargo;
-    }
-
-    /**
-     *
-     * @return int $iid_ambito
-     */
-    public function getId_ambito(): int
-    {
-        return $this->iid_ambito;
     }
 
     /**
@@ -168,29 +150,11 @@ class Cargo
 
     /**
      *
-     * @return string $scargo
-     */
-    public function getCargo(): string
-    {
-        return $this->scargo;
-    }
-
-    /**
-     *
      * @param string $scargo
      */
     public function setCargo(string $scargo): void
     {
         $this->scargo = $scargo;
-    }
-
-    /**
-     *
-     * @return string|null $sdescripcion
-     */
-    public function getDescripcion(): ?string
-    {
-        return $this->sdescripcion;
     }
 
     /**
@@ -204,29 +168,11 @@ class Cargo
 
     /**
      *
-     * @return int $iid_oficina
-     */
-    public function getId_oficina(): int
-    {
-        return $this->iid_oficina;
-    }
-
-    /**
-     *
      * @param int $iid_oficina
      */
     public function setId_oficina(int $iid_oficina): void
     {
         $this->iid_oficina = $iid_oficina;
-    }
-
-    /**
-     *
-     * @return bool $bdirector
-     */
-    public function isDirector(): bool
-    {
-        return $this->bdirector;
     }
 
     /**
@@ -240,29 +186,11 @@ class Cargo
 
     /**
      *
-     * @return int|null $iid_usuario
-     */
-    public function getId_usuario(): ?int
-    {
-        return $this->iid_usuario;
-    }
-
-    /**
-     *
      * @param int|null $iid_usuario
      */
     public function setId_usuario(?int $iid_usuario = null): void
     {
         $this->iid_usuario = $iid_usuario;
-    }
-
-    /**
-     *
-     * @return int|null $iid_suplente
-     */
-    public function getId_suplente(): ?int
-    {
-        return $this->iid_suplente;
     }
 
     /**
@@ -276,19 +204,91 @@ class Cargo
 
     /**
      *
-     * @return bool $bsacd
-     */
-    public function isSacd(): bool
-    {
-        return $this->bsacd;
-    }
-
-    /**
-     *
      * @param bool $bsacd
      */
     public function setSacd(bool $bsacd): void
     {
         $this->bsacd = $bsacd;
+    }
+
+    /**
+     *
+     * @return int $iid_cargo
+     */
+    public function getId_cargo(): int
+    {
+        return $this->iid_cargo;
+    }
+
+    /**
+     *
+     * @return int $iid_ambito
+     */
+    public function getId_ambito(): int
+    {
+        return $this->iid_ambito;
+    }
+
+    /**
+     *
+     * @return string $scargo
+     */
+    public function getCargo(): string
+    {
+        return $this->scargo;
+    }
+
+    /**
+     *
+     * @return string|null $sdescripcion
+     */
+    public function getDescripcion(): ?string
+    {
+        return $this->sdescripcion;
+    }
+
+    /**
+     *
+     * @return int $iid_oficina
+     */
+    public function getId_oficina(): int
+    {
+        return $this->iid_oficina;
+    }
+
+    /**
+     *
+     * @return bool $bdirector
+     */
+    public function isDirector(): bool
+    {
+        return $this->bdirector;
+    }
+
+    /**
+     *
+     * @return int|null $iid_usuario
+     */
+    public function getId_usuario(): ?int
+    {
+        return $this->iid_usuario;
+    }
+
+    /**
+     *
+     * @return int|null $iid_suplente
+     */
+    public function getId_suplente(): ?int
+    {
+        return $this->iid_suplente;
+    }
+
+    /**
+     *
+     * @return bool $bsacd
+     */
+    public function isSacd(): bool
+    {
+        return $this->bsacd;
     }
 }

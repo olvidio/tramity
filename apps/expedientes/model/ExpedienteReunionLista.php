@@ -53,20 +53,6 @@ class ExpedienteReunionLista
         $oExpedienteLista->mostrarTabla();
     }
 
-    public function getNumero()
-    {
-        $this->setCondicion();
-        if (!empty($this->aWhere)) {
-            $gesExpedientes = new GestorExpediente();
-            $this->aWhere['_ordre'] = 'id_expediente';
-            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
-            $num = count($cExpedientes);
-        } else {
-            $num = '';
-        }
-        return $num;
-    }
-
     public function setCondicion(): ExpedientesDeColor
     {
         $this->aWhere = [];
@@ -157,6 +143,20 @@ class ExpedienteReunionLista
         $oExpedientesDeColor->setExpReunionFaltaMiFirma($a_exp_reunion_falta_mi_firma);
 
         return $oExpedientesDeColor;
+    }
+
+    public function getNumero()
+    {
+        $this->setCondicion();
+        if (!empty($this->aWhere)) {
+            $gesExpedientes = new GestorExpediente();
+            $this->aWhere['_ordre'] = 'id_expediente';
+            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+            $num = count($cExpedientes);
+        } else {
+            $num = '';
+        }
+        return $num;
     }
 
 }

@@ -58,29 +58,11 @@ class Oficina
 
     /**
      *
-     * @return int $iid_oficina
-     */
-    public function getId_oficina(): int
-    {
-        return $this->iid_oficina;
-    }
-
-    /**
-     *
      * @param int $iid_oficina
      */
     public function setId_oficina(int $iid_oficina): void
     {
         $this->iid_oficina = $iid_oficina;
-    }
-
-    /**
-     *
-     * @return string $ssigla
-     */
-    public function getSigla(): string
-    {
-        return $this->ssigla;
     }
 
     /**
@@ -94,19 +76,37 @@ class Oficina
 
     /**
      *
-     * @return int|null $iorden
-     */
-    public function getOrden(): ?int
-    {
-        return $this->iorden;
-    }
-
-    /**
-     *
      * @param int|null $iorden
      */
     public function setOrden(?int $iorden = null): void
     {
         $this->iorden = $iorden;
+    }
+
+    /**
+     *
+     * @return int $iid_oficina
+     */
+    public function getId_oficina(): int
+    {
+        return $this->iid_oficina;
+    }
+
+    /**
+     *
+     * @return string $ssigla
+     */
+    public function getSigla(): string
+    {
+        return $this->ssigla;
+    }
+
+    /**
+     *
+     * @return int|null $iorden
+     */
+    public function getOrden(): ?int
+    {
+        return $this->iorden;
     }
 }

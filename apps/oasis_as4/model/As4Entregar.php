@@ -249,6 +249,14 @@ class As4Entregar extends As4CollaborationInfo
         $this->setAccion((string)$this->xmldata->CollaborationInfo->Action);
     }
 
+    /**
+     * @param string $service
+     */
+    private function setService(string $service): void
+    {
+        $this->service = strtolower($service);
+    }
+
     private function getPayload(): void
     {
         $payload = $this->xmldata->PayloadInfo;
@@ -267,6 +275,14 @@ class As4Entregar extends As4CollaborationInfo
             default:
                 $this->getEscritoFromFileName($xmlFileName);
         }
+    }
+
+    /**
+     * @param string $location
+     */
+    private function setLocation(string $location): void
+    {
+        $this->location = $location;
     }
 
     private function getEscritoAnularFromFileName($xmlFileName): void
@@ -638,14 +654,6 @@ class As4Entregar extends As4CollaborationInfo
     }
 
     /**
-     * @param string $service
-     */
-    private function setService(string $service): void
-    {
-        $this->service = strtolower($service);
-    }
-
-    /**
      * @return mixed
      */
     private function getSiglaDestino()
@@ -909,7 +917,7 @@ class As4Entregar extends As4CollaborationInfo
         if ($avisoIndividual) {
             foreach ($this->a_destinos as $id_destino) {
                 // puede ser que no exista el ctr en la lista (o esté anulado)...
-                $siglaDestino = empty($this->aLugares[$id_destino])? '' : $this->aLugares[$id_destino];
+                $siglaDestino = empty($this->aLugares[$id_destino]) ? '' : $this->aLugares[$id_destino];
                 // comprobar que el destino está en la plataforma, sino, no se crea la entrada
                 if (in_array($siglaDestino, $this->getEntidadesPlataforma(), true)) {
                     $id_entrada = $this->nuevaEntrada($siglaDestino, $id_entrada_compartida);
@@ -1009,14 +1017,6 @@ class As4Entregar extends As4CollaborationInfo
     public function getLocation(): string
     {
         return $this->location;
-    }
-
-    /**
-     * @param string $location
-     */
-    private function setLocation(string $location): void
-    {
-        $this->location = $location;
     }
 
     /**

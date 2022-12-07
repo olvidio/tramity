@@ -5,7 +5,6 @@ namespace oasis_as4\model;
 use DateTimeInterface;
 use DOMAttr;
 use DOMDocument;
-use escritos\model\Escrito;
 use lugares\model\entity\GestorLugar;
 use web\Protocolo;
 
@@ -41,7 +40,7 @@ class As4 extends As4CollaborationInfo
      * para PHP8.0
      * @var object Escrito|EntradaBypass
      */
-    private  $oEscrito;
+    private $oEscrito;
 
 
     public function __construct()

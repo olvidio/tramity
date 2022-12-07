@@ -63,20 +63,6 @@ class ExpedienteBorradorLista
         $oExpedienteLista->mostrarTabla();
     }
 
-    public function getNumero()
-    {
-        $this->setCondicion();
-        if (!empty($this->aWhere)) {
-            $gesExpedientes = new GestorExpediente();
-            $this->aWhere['_ordre'] = 'id_expediente';
-            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
-            $num = count($cExpedientes);
-        } else {
-            $num = '';
-        }
-        return $num;
-    }
-
     public function setCondicion(): void
     {
         $this->aWhere = [];
@@ -104,7 +90,7 @@ class ExpedienteBorradorLista
             if (!empty($a_expedientes)) {
                 // OJO Puedo tener ya una selección de id_expediente por el filtro de etiquetas:
                 if (!empty($this->aWhere['id_expediente']) && ($this->aOperador['id_expediente'] === 'IN')) {
-                    $a_expedientes_por_filtro = explode(',',$this->aWhere['id_expediente']);
+                    $a_expedientes_por_filtro = explode(',', $this->aWhere['id_expediente']);
                     $a_interseccion = array_intersect($a_expedientes_por_filtro, $a_expedientes);
                     if (empty($a_interseccion)) {
                         // para que no salga nada pongo
@@ -124,6 +110,20 @@ class ExpedienteBorradorLista
     public function setPrioridad_sel(string $prioridad_sel): void
     {
         $this->prioridad_sel = $prioridad_sel;
+    }
+
+    public function getNumero()
+    {
+        $this->setCondicion();
+        if (!empty($this->aWhere)) {
+            $gesExpedientes = new GestorExpediente();
+            $this->aWhere['_ordre'] = 'id_expediente';
+            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+            $num = count($cExpedientes);
+        } else {
+            $num = '';
+        }
+        return $num;
     }
 
     public function getAWhereADD(): array

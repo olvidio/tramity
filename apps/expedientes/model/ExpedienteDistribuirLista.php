@@ -3,8 +3,6 @@
 namespace expedientes\model;
 
 use core\ConfigGlobal;
-use usuarios\domain\entity\Cargo;
-use web\Hash;
 
 
 class ExpedienteDistribuirLista
@@ -52,20 +50,6 @@ class ExpedienteDistribuirLista
         $oExpedienteLista->mostrarTabla();
     }
 
-    public function getNumero()
-    {
-        $this->setCondicion();
-        if (!empty($this->aWhere)) {
-            $gesExpedientes = new GestorExpediente();
-            $this->aWhere['_ordre'] = 'id_expediente';
-            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
-            $num = count($cExpedientes);
-        } else {
-            $num = '';
-        }
-        return $num;
-    }
-
     public function setCondicion(): void
     {
         $this->aWhere = [];
@@ -78,6 +62,20 @@ class ExpedienteDistribuirLista
         $this->aWhere['estado'] = implode(',', $a_tipos_acabado);
         $this->aOperador['estado'] = 'IN';
         // todavía sin marcar por scdl con ok.
+    }
+
+    public function getNumero()
+    {
+        $this->setCondicion();
+        if (!empty($this->aWhere)) {
+            $gesExpedientes = new GestorExpediente();
+            $this->aWhere['_ordre'] = 'id_expediente';
+            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+            $num = count($cExpedientes);
+        } else {
+            $num = '';
+        }
+        return $num;
     }
 
 }

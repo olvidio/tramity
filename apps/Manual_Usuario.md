@@ -78,9 +78,10 @@ El cargo que pone a circular un expediente, automáticamente se llena la primera
 
 Bajo la pestaña de "para firmar" aparecen los expedientes que hay que firamr. Para firmar basta dar al botón de firmar y
 aparecera una ventana con varias opciones:
+
 - Se puede poner un comentario y hacer click en "Pedir aclaración"
 - Se puede poner un comentario (o no) y emitir un voto: ok, no, visto, espera. El voto emitido quedará registrado en la
-lista de firmas.
+  lista de firmas.
 
 Si se pone un comentario quedará registrado en el cuadro de texto que hay debajo de la entradilla, visible para todos.
 

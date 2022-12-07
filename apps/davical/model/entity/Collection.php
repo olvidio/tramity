@@ -379,7 +379,7 @@ class Collection extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -612,7 +612,7 @@ class Collection extends core\ClasePropiedades
         $this->sdescription = $sdescription;
     }
 
-    
+
     /**
      * Recupera las claus primàries de Collection en un array
      *
