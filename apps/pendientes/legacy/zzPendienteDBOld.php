@@ -1,6 +1,6 @@
 <?php
 
-namespace pendientes\model\entity;
+namespace pendientes\legacy;
 
 use core;
 use PDO;
@@ -26,7 +26,7 @@ use web;
  * @version 1.0
  * @created 4/2/2021
  */
-class PendienteDB extends core\ClasePropiedades
+class zzzPendienteDBOld extends core\ClasePropiedades
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 

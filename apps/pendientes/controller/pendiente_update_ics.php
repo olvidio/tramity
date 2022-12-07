@@ -3,7 +3,8 @@
 use core\ConfigGlobal;
 use davical\model\Davical;
 use lugares\model\entity\Lugar;
-use pendientes\model\entity\PendienteDB;
+use pendientes\domain\entity\PendienteDB;
+use pendientes\domain\repositories\PendienteDBRepository;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
 use web\DateTimeLocal;
@@ -11,7 +12,7 @@ use web\DateTimeLocal;
 /**
  * Esta página actualiza la base de datos del registro.
  *
- * Se le puede pasar la varaible $nueva.
+ * Se le puede pasar la variable $nueva.
  *    Si es 1 >> inserta una nueva entrada.
  *    Si es 2 >> modifica un pendiente.
  *    Si es 3 >> elimina un pendiente.
@@ -71,6 +72,10 @@ $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FI
 $Q_a_oficinas = (array)filter_input(INPUT_POST, 'oficinas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $Q_a_exdates = (array)filter_input(INPUT_POST, 'exdates', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
+/* convertir las fechas a DateTimeLocal */
+$oF_ini = DateTimeLocal::createFromLocal($Q_f_inicio);
+$oF_acabado = DateTimeLocal::createFromLocal($Q_f_acabado);
+$oF_plazo = DateTimeLocal::createFromLocal($Q_f_plazo);
 
 /* Para mantener las comillas en el asunto */
 $trans = get_html_translation_table(HTML_ENTITIES);
@@ -131,7 +136,6 @@ if (!empty($Q_simple_per)) { // sólo para los periodicos.
             switch ($Q_tipo_dia) {
                 case "num_ini":
                     // cojo el dia de la fecha inicio
-                    $oF_ini = DateTimeLocal::createFromLocal($Q_f_inicio);
                     $dia = $oF_ini->format('j');
                     $request['dias'] = $dia;
                     break;
@@ -171,16 +175,19 @@ switch ($Q_nuevo) {
     case "1": //nuevo pendiente
         // si vengo de entradas, primero lo guardo en una tabla temporal hasta que sepa el id_reg
         if ($Q_go === "entradas") {
-            if (empty($Q_f_plazo)) {
-                $Q_f_plazo = $Q_f_inicio;
-            } // En el caso de periodico, no tengo fecha plazo.
+            if (empty($oF_plazo)) {
+                $oF_plazo = $oF_ini;
+            } // En el caso de periódico, no tengo fecha plazo.
 
+            $PendienteDBRepository = new PendienteDBRepository();
+            $id_pendiente = $PendienteDBRepository->getNewId_pendiente();
             $oPendienteDB = new PendienteDB();
+            $oPendienteDB->setId_pendiente($id_pendiente);
             $oPendienteDB->setAsunto($asunto);
             $oPendienteDB->setStatus($Q_status);
-            $oPendienteDB->setF_inicio($Q_f_inicio);
-            $oPendienteDB->setF_acabado($Q_f_acabado);
-            $oPendienteDB->setF_plazo($Q_f_plazo);
+            $oPendienteDB->setF_inicio($oF_ini);
+            $oPendienteDB->setF_acabado($oF_acabado);
+            $oPendienteDB->setF_plazo($oF_plazo);
             $oPendienteDB->setRef_mas($Q_ref_prot_mas);
             $oPendienteDB->setObserv($Q_observ);
             $oPendienteDB->setvisibilidad($Q_visibilidad);
@@ -193,8 +200,8 @@ switch ($Q_nuevo) {
             $oPendienteDB->setOficinasArray($Q_a_oficinas);
             // las etiquetas:
             $oPendienteDB->setEtiquetasArray($Q_a_etiquetas);
-            if ($oPendienteDB->DBGuardar() === FALSE) {
-                $txt_err .= $oPendienteDB->getErrorTxt();
+            if ($PendienteDBRepository->Guardar($oPendienteDB) === FALSE) {
+                $txt_err .= $PendienteDBRepository->getErrorTxt();
             }
 
             $id_pendiente = $oPendienteDB->getId_pendiente();

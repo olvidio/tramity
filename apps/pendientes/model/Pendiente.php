@@ -10,7 +10,7 @@ use davical\model\CalDAVClient;
 use entradas\model\GestorEntrada;
 use iCalComponent;
 use iCalProp;
-use pendientes\model\entity\PendienteDB;
+use pendientes\domain\repositories\PendienteDBRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\OficinaRepository;
 use usuarios\domain\Visibilidad;
@@ -442,7 +442,8 @@ class Pendiente
     public function crear_de_pendienteDB($id_reg, $id_pendiente)
     {
 
-        $oPendienteDB = new PendienteDB($id_pendiente);
+        $PendienteDBRepository = new PendienteDBRepository();
+        $oPendienteDB = $PendienteDBRepository->findById($id_pendiente);
 
         $aDades['asunto'] = $oPendienteDB->getAsunto();
         $aDades['status'] = $oPendienteDB->getStatus();
@@ -464,7 +465,7 @@ class Pendiente
 
         $this->ins_pendiente($aDades);
 
-        $oPendienteDB->DBEliminar();
+        $PendienteDBRepository->Eliminar($oPendienteDB);
     }
 
     /**
@@ -743,7 +744,7 @@ class Pendiente
         $this->f_inicio = $f_inicio;
     }
 
-    private function ins_pendiente($aDades)
+    private function ins_pendiente($aDades): array
     {
         $id_reg = empty($aDades['id_reg']) ? '' : $aDades['id_reg'];
         $asunto = empty($aDades['asunto']) ? '' : $aDades['asunto'];

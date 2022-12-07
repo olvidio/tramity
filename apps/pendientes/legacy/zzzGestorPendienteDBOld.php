@@ -1,6 +1,6 @@
 <?php
 
-namespace pendientes\model\entity;
+namespace pendientes\legacy;
 
 use core;
 
@@ -15,7 +15,7 @@ use core;
  * @version 1.0
  * @created 4/2/2021
  */
-class GestorPendienteDB extends core\ClaseGestor
+class zzzGestorPendienteDBOld extends core\ClaseGestor
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 

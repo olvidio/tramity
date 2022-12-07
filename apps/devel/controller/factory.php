@@ -563,7 +563,7 @@ foreach ($oDbl->query($sql) as $row) {
         case 'timestamptz';
             $exists .= "\n\t\t" . 'if (array_key_exists(\'' . $nomcamp . '\',$aDatos))';
             $exists .= "\n\t\t{";
-            $exists .= "\n\t\t\t" . '$this->set' . $NomCamp . '($aDatos[\'' . $nomcamp . '\'], FALSE);';
+            $exists .= "\n\t\t\t" . '$this->set' . $NomCamp . '($aDatos[\'' . $nomcamp . '\']);';
             $exists .= "\n\t\t}";
             $ToEmpty .= "\n\t\t" . '$this->set' . $NomCamp . '(\'\');';
             break;
