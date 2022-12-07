@@ -12,7 +12,7 @@ use lugares\model\entity\GestorGrupo;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
-use usuarios\model\PermRegistro;
+use usuarios\domain\PermRegistro;
 use web\DateTimeLocal;
 use web\Lista;
 use web\Protocolo;

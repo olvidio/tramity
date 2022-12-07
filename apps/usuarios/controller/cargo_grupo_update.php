@@ -1,6 +1,7 @@
 <?php
 
-use usuarios\model\entity\CargoGrupo;
+use usuarios\domain\entity\CargoGrupo;
+use usuarios\domain\repositories\CargoGrupoRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -20,10 +21,11 @@ switch ($Q_que) {
         $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
             $Q_id_grupo = (integer)strtok($a_sel[0], "#");
-            $oGrupo = new CargoGrupo($Q_id_grupo);
-            if ($oGrupo->DBEliminar() === FALSE) {
+            $CargoGrupoRepository = new CargoGrupoRepository();
+            $oCargoGrupo = $CargoGrupoRepository->findById($Q_id_grupo);
+            if ($CargoGrupoRepository->Eliminar($oCargoGrupo) === FALSE) {
                 $error_txt .= _("hay un error, no se ha eliminado");
-                $error_txt .= "\n" . $oGrupo->getErrorTxt();
+                $error_txt .= "\n" . $CargoGrupoRepository->getErrorTxt();
             }
         }
         break;
@@ -38,14 +40,19 @@ switch ($Q_que) {
             echo _("debe poner un nombre");
         }
 
-        $oGrupo = new CargoGrupo($Q_id_grupo);
-        $oGrupo->DBCargar();
-        $oGrupo->setId_cargo_ref($Q_id_cargo_ref);
-        $oGrupo->setDescripcion($Q_descripcion);
-        $oGrupo->setMiembros($Q_a_cargos);
-        if ($oGrupo->DBGuardar() === FALSE) {
+        $CargoGrupoRepository = new CargoGrupoRepository();
+        $oCargoGrupo = $CargoGrupoRepository->findById($Q_id_grupo);
+        if ($oCargoGrupo === null) {
+            $Q_id_grupo = $CargoGrupoRepository->getNewId_grupo();
+            $oCargoGrupo = new CargoGrupo();
+            $oCargoGrupo->setId_grupo($Q_id_grupo);
+        }
+        $oCargoGrupo->setId_cargo_ref($Q_id_cargo_ref);
+        $oCargoGrupo->setDescripcion($Q_descripcion);
+        $oCargoGrupo->setMiembros($Q_a_cargos);
+        if ($CargoGrupoRepository->Guardar($oCargoGrupo) === FALSE) {
             $error_txt .= _("hay un error, no se ha guardado");
-            $error_txt .= "\n" . $oGrupo->getErrorTxt();
+            $error_txt .= "\n" . $CargoGrupoRepository->getErrorTxt();
         }
         break;
     default:

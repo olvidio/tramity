@@ -1,7 +1,7 @@
 <?php
 
 use core\ViewTwig;
-use usuarios\model\entity\GestorOficina;
+use usuarios\domain\repositories\OficinaRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -33,8 +33,8 @@ if (isset($_POST['stack'])) {
 $aWhere = array();
 $aOperador = array();
 
-$oGesOficinas = new GestorOficina();
-$cOficinas = $oGesOficinas->getOficinas($aWhere, $aOperador);
+$OficinaRepository = new OficinaRepository();
+$cOficinas = $OficinaRepository->getOficinas($aWhere, $aOperador);
 
 //default:
 $id_oficina = '';

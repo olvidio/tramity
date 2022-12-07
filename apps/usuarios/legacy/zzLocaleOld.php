@@ -1,5 +1,5 @@
 <?php
-namespace usuarios\model\entity;
+namespace usuarios\legacy;
 
 use core;
 use PDO;
@@ -24,7 +24,7 @@ use PDOException;
  * @version 1.0
  * @created 26/11/2014
  */
-class Locale extends core\ClasePropiedades
+class zzzLocaleOld extends core\ClasePropiedades
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 

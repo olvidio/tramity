@@ -11,6 +11,8 @@ use core\ConfigGlobal;
 use core\ServerConf;
 use core\ViewTwig;
 use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\repositories\OficinaRepository;
 use web\Hash;
 
 require_once("apps/core/global_header.inc");
@@ -54,13 +56,13 @@ $oConfigSchema = new ConfigSchema('ambito');
 $valor_ambito = (int)$oConfigSchema->getValor();
 $id_ambito_dl = FALSE;
 $a_roles_posibles = [];
-/*
+
 if ($valor_ambito === Cargo::AMBITO_DL) {
     $id_ambito_dl = TRUE;
     // role de 'secretaria' para los oficiales de secretaria:
     $id_oficina_secretaria = '';
-    $gesOficinas = new GestorOficina();
-    $cOficinas = $gesOficinas->getOficinas(['sigla' => 'scdl']);
+    $OficinaRepository = new OficinaRepository();
+    $cOficinas = $OficinaRepository->getOficinas(['sigla' => 'scdl']);
     if (!empty($cOficinas)) {
         $id_oficina_secretaria = $cOficinas[0]->getId_oficina();
     }
@@ -73,11 +75,12 @@ if ($valor_ambito === Cargo::AMBITO_DL) {
 //oficinas adicionales (suplencias..)
 if ($role_actual !== 'admin') {
     $aPosiblesCargos = $_SESSION['session_auth']['aPosiblesCargos'];
+    $CargoRepository = new CargoRepository();
     foreach ($aPosiblesCargos as $id_cargo => $cargo) {
         $a_roles_posibles[] = $cargo;
         // si es de secretaria, lo añado
         if ($valor_ambito === Cargo::AMBITO_DL) {
-            $oCargo = new Cargo($id_cargo);
+            $oCargo = $CargoRepository->findById($id_cargo);
             $id_oficina_cargo = $oCargo->getId_oficina();
             if ($id_oficina_cargo === $id_oficina_secretaria) {
                 $a_roles_posibles[] = 'secretaria';
@@ -87,7 +90,7 @@ if ($role_actual !== 'admin') {
 }
 
 $_SESSION['session_auth']['a_roles'] = array_unique($a_roles_posibles);
-*/
+
 ?>
 <!DOCTYPE html>
 <head>

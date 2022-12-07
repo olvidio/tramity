@@ -7,13 +7,14 @@ use core\Condicion;
 use core\Set;
 use PDO;
 use PDOException;
-use usuarios\domain\entity\Usuario;
-use usuarios\domain\repositories\UsuarioRepositoryInterface;
+use usuarios\domain\entity\Locale;
+use usuarios\domain\repositories\LocaleRepositoryInterface;
 use web\Desplegable;
+use function core\is_true;
 
 
 /**
- * Clase que adapta la tabla aux_usuarios a la interfaz del repositorio
+ * Clase que adapta la tabla x_locales a la interfaz del repositorio
  *
  * @package tramity
  * @subpackage model
@@ -21,29 +22,29 @@ use web\Desplegable;
  * @version 2.0
  * @created 6/12/2022
  */
-class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryInterface
+class PgLocaleRepository extends ClaseRepository implements LocaleRepositoryInterface
 {
     public function __construct()
     {
-        $oDbl = $GLOBALS['oDBT'];
+        $oDbl = $GLOBALS['oDBP'];
         $this->setoDbl($oDbl);
-        $this->setNomTabla('aux_usuarios');
+        $this->setNomTabla('x_locales');
     }
 
     /* -------------------- GESTOR BASE ---------------------------------------- */
 
     /**
-     * devuelve una colección (array) de objetos de tipo Usuario
+     * devuelve una colección (array) de objetos de tipo Locale
      *
      * @param array $aWhere asociativo con los valores para cada campo de la BD.
      * @param array $aOperators asociativo con los operadores que hay que aplicar a cada campo
-     * @return array|FALSE Una colección de objetos de tipo Usuario
+     * @return array|FALSE Una colección de objetos de tipo Locale
      */
-    public function getUsuarios(array $aWhere = [], array $aOperators = []): array|false
+    public function getLocales(array $aWhere = [], array $aOperators = []): array|false
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $UsuarioSet = new Set();
+        $LocaleSet = new Set();
         $oCondicion = new Condicion();
         $aCondicion = array();
         foreach ($aWhere as $camp => $val) {
@@ -88,41 +89,34 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
         }
         $sQry = "SELECT * FROM $nom_tabla " . $sCondicion . $sOrdre . $sLimit;
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClaveError = 'PgUsuarioRepository.listar.prepare';
+            $sClaveError = 'PgLocaleRepository.listar.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClaveError = 'PgUsuarioRepository.listar.execute';
+            $sClaveError = 'PgLocaleRepository.listar.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
 
         $filas = $oDblSt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($filas as $aDatos) {// para los bytea: (resources)
-            $handle = $aDatos['password'];
-            if ($handle !== null) {
-                $contents = stream_get_contents($handle);
-                fclose($handle);
-                $password = $contents;
-                $aDatos['password'] = $password;
-            }
-            $Usuario = new Usuario();
-            $Usuario->setAllAttributes($aDatos);
-            $UsuarioSet->add($Usuario);
+        foreach ($filas as $aDatos) {
+            $Locale = new Locale();
+            $Locale->setAllAttributes($aDatos);
+            $LocaleSet->add($Locale);
         }
-        return $UsuarioSet->getTot();
+        return $LocaleSet->getTot();
     }
 
     /* -------------------- ENTIDAD --------------------------------------------- */
 
-    public function Eliminar(Usuario $Usuario): bool
+    public function Eliminar(Locale $Locale): bool
     {
-        $id_usuario = $Usuario->getId_usuario();
+        $id_locale = $Locale->getId_locale();
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_usuario = $id_usuario")) === FALSE) {
-            $sClaveError = 'Usuario.eliminar';
+        if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_locale = '$id_locale'")) === FALSE) {
+            $sClaveError = 'Locale.eliminar';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -133,31 +127,35 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
     /**
      * Si no existe el registro, hace un insert, si existe, se hace el update.
      */
-    public function Guardar(Usuario $Usuario): bool
+    public function Guardar(Locale $Locale): bool
     {
-        $id_usuario = $Usuario->getId_usuario();
+        $id_locale = $Locale->getId_locale();
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $bInsert = $this->isNew($id_usuario);
+        $bInsert = $this->isNew($id_locale);
 
         $aDatos = [];
-        $aDatos['usuario'] = $Usuario->getUsuario();
-        $aDatos['id_cargo_preferido'] = $Usuario->getId_cargo_preferido();
-        $aDatos['password'] = $Usuario->getPassword();
-        $aDatos['email'] = $Usuario->getEmail();
-        $aDatos['nom_usuario'] = $Usuario->getNom_usuario();
+        $aDatos['nom_locale'] = $Locale->getNom_locale();
+        $aDatos['idioma'] = $Locale->getIdioma();
+        $aDatos['nom_idioma'] = $Locale->getNom_idioma();
+        $aDatos['activo'] = $Locale->isActivo();
         array_walk($aDatos, 'core\poner_null');
+        //para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
+        if (is_true($aDatos['activo'])) {
+            $aDatos['activo'] = 'true';
+        } else {
+            $aDatos['activo'] = 'false';
+        }
 
         if ($bInsert === FALSE) {
             //UPDATE
             $update = "
-					usuario                  = :usuario,
-					id_cargo_preferido       = :id_cargo_preferido,
-					password                 = :password,
-					email                    = :email,
-					nom_usuario              = :nom_usuario";
-            if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_usuario = $id_usuario")) === FALSE) {
-                $sClaveError = 'Usuario.update.prepare';
+					nom_locale               = :nom_locale,
+					idioma                   = :idioma,
+					nom_idioma               = :nom_idioma,
+					activo                   = :activo";
+            if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_locale = '$id_locale'")) === FALSE) {
+                $sClaveError = 'Locale.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -167,17 +165,17 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
             } catch (PDOException $e) {
                 $err_txt = $e->errorInfo[2];
                 $this->setErrorTxt($err_txt);
-                $sClaveError = 'Usuario.update.execute';
+                $sClaveError = 'Locale.update.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
         } else {
             // INSERT
-            $aDatos['id_usuario'] = $Usuario->getId_usuario();
-            $campos = "(id_usuario,usuario,id_cargo_preferido,password,email,nom_usuario)";
-            $valores = "(:id_usuario,:usuario,:id_cargo_preferido,:password,:email,:nom_usuario)";
+            $aDatos['id_locale'] = $Locale->getId_locale();
+            $campos = "(id_locale,nom_locale,idioma,nom_idioma,activo)";
+            $valores = "(:id_locale,:nom_locale,:idioma,:nom_idioma,:activo)";
             if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
-                $sClaveError = 'Usuario.insertar.prepare';
+                $sClaveError = 'Locale.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -186,7 +184,7 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
             } catch (PDOException $e) {
                 $err_txt = $e->errorInfo[2];
                 $this->setErrorTxt($err_txt);
-                $sClaveError = 'Usuario.insertar.execute';
+                $sClaveError = 'Locale.insertar.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -194,12 +192,12 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
         return TRUE;
     }
 
-    private function isNew(?string $id_usuario): bool
+    private function isNew(bool $id_locale): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_usuario = $id_usuario")) === FALSE) {
-            $sClaveError = 'Usuario.isNew';
+        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_locale = '$id_locale'")) === FALSE) {
+            $sClaveError = 'Locale.isNew';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -212,85 +210,63 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
     /**
      * Carga los campos de la base de datos como ATRIBUTOS de la clase.
      */
-    public function datosById(int $id_usuario): array|bool
+    public function datosById(string $id_locale): array|bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_usuario = $id_usuario")) === FALSE) {
-            $sClaveError = 'Usuario.getDatosById';
+        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_locale = '$id_locale'")) === FALSE) {
+            $sClaveError = 'Locale.getDatosById';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
-        // para los bytea, sobre escribo los valores:
-        $spassword = '';
-        $oDblSt->bindColumn('password', $spassword, PDO::PARAM_STR);
         $aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);
-        $aDatos['password'] = $spassword;
         return $aDatos;
     }
 
 
     /**
-     * Busca la clase con $id_usuario en la base de datos.
+     * Busca la clase con id_locale en la base de datos .
      */
-    public function findById(int $id_usuario): ?Usuario
+    public function findById(string $id_locale): ?Locale
     {
-        $aDatos = $this->datosById($id_usuario);
-          if (empty($aDatos)) {
+        $aDatos = $this->datosById($id_locale);
+        if (empty($aDatos)) {
             return null;
         }
-        return (new Usuario())->setAllAttributes($aDatos);
-    }
-
-    public function getNewId_usuario()
-    {
-        $oDbl = $this->getoDbl();
-        $sQuery = "select nextval('aux_usuarios_id_usuario_seq'::regclass)";
-        return $oDbl->query($sQuery)->fetchColumn();
+        return (new Locale())->setAllAttributes($aDatos);
     }
 
     /* -------------------- GESTOR EXTRA ---------------------------------------- */
-    public function getArrayUsuarios(): array|false
+
+    function getListaIdiomas(string $sWhere = ''): Desplegable|false
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-
-        $Where = '';
-        $sQuery = "SELECT id_usuario, usuario FROM $nom_tabla
-                $Where ORDER BY usuario";
-        if (($oDbl->query($sQuery)) === false) {
-            $sClauError = 'GestorAsignaturaTipo.lista';
+        $sQuery = "SELECT DISTINCT idioma, nom_idioma
+				FROM $nom_tabla $sWhere
+				ORDER BY nom_idioma";
+        if (($oDblSt = $oDbl->query($sQuery)) === false) {
+            $sClauError = 'GestorLocale.lista';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return false;
         }
-        $aOpciones = [];
-        foreach ($oDbl->query($sQuery) as $aClave) {
-            $clave = $aClave[0];
-            $val = $aClave[1];
-            $aOpciones[$clave] = $val;
-        }
-        return $aOpciones;
+        return new Desplegable('', $oDblSt, '', true);
     }
 
-    public function getDesplUsuarios(): Desplegable|false
+    function getListaLocales(string $sWhere = ''): Desplegable|false
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $Where = '';
-        $sQuery = "SELECT id_usuario, usuario FROM $nom_tabla
-                $Where ORDER BY usuario";
-        if (($oDbl->query($sQuery)) === false) {
-            $sClauError = 'GestorAsignaturaTipo.lista';
+        if (empty($sWhere)) $sWhere = "WHERE activo = 't'";
+        $sQuery = "SELECT id_locale, nom_locale
+				FROM $nom_tabla $sWhere
+				ORDER BY nom_locale";
+        if (($oDblSt = $oDbl->query($sQuery)) === false) {
+            $sClauError = 'GestorLocale.lista';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return false;
         }
-        $aOpciones = [];
-        foreach ($oDbl->query($sQuery) as $aClave) {
-            $clave = $aClave[0];
-            $val = $aClave[1];
-            $aOpciones[$clave] = $val;
-        }
-        return new Desplegable('', $aOpciones, '', true);
+        return new Desplegable('', $oDblSt, '', true);
     }
 
 }

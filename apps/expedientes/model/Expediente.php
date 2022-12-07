@@ -16,8 +16,8 @@ use expedientes\model\entity\GestorAccion;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorTramiteCargo;
 use usuarios\domain\entity\Cargo;
+use usuarios\domain\repositories\CargoGrupoRepository;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\entity\GestorCargoGrupo;
 
 
 class Expediente extends expedienteDB
@@ -647,8 +647,8 @@ class Expediente extends expedienteDB
                         }
                         break;
                     case Cargo::CARGO_TODOS_DIR:  // si es para todos los dir menos vcd
-                        $gesCargoGrupo = new GestorCargoGrupo();
-                        $cGrupos = $gesCargoGrupo->getCargoGrupos(['id_cargo_ref' => Cargo::CARGO_TODOS_DIR]);
+                        $CargoGrupoRepository = new CargoGrupoRepository();
+                        $cGrupos = $CargoGrupoRepository->getCargoGrupos(['id_cargo_ref' => Cargo::CARGO_TODOS_DIR]);
                         $aMiembros = $cGrupos[0]->getMiembros();
                         $orden_oficina = 0;
                         foreach ($aMiembros as $id_cargo) {

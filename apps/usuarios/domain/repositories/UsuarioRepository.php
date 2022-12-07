@@ -5,10 +5,11 @@ namespace usuarios\domain\repositories;
 use PDO;
 use usuarios\domain\entity\Usuario;
 use usuarios\infrastructure\PgUsuarioRepository;
+use web\Desplegable;
 
 /**
  *
- * Clase para gestionar la llista de objectos tipo Usuario
+ * Clase para gestionar la lista de objetos tipo Usuario
  *
  * @package tramity
  * @subpackage model
@@ -98,12 +99,12 @@ class UsuarioRepository implements UsuarioRepositoryInterface
 
     /* -------------------- GESTOR EXTRA ---------------------------------------- */
 
-    public function getArrayUsuarios()
+    public function getArrayUsuarios(): array|false
     {
         return $this->repository->getArrayUsuarios();
     }
 
-    public function getDesplUsuarios()
+    public function getDesplUsuarios(): Desplegable|false
     {
         return $this->repository->getDesplUsuarios();
     }

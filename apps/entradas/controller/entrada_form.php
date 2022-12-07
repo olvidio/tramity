@@ -5,10 +5,10 @@ use entradas\model\entity\EntradaBypass;
 use entradas\model\Entrada;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
-use usuarios\model\Categoria;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\PermRegistro;
-use usuarios\model\Visibilidad;
+use usuarios\domain\Categoria;
+use usuarios\domain\PermRegistro;
+use usuarios\domain\repositories\OficinaRepository;
+use usuarios\domain\Visibilidad;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
@@ -61,9 +61,9 @@ $oProtRef->setOpciones($a_posibles_lugares);
 $oProtRef->setBlanco(TRUE);
 
 
-$gesOficinas = new GestorOficina();
-$a_posibles_oficinas = $gesOficinas->getArrayOficinas();
-$oDesplPonenteOficina = $gesOficinas->getListaOficinas();
+$OficinaRepository = new OficinaRepository();
+$a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
+$oDesplPonenteOficina = $OficinaRepository->getListaOficinas();
 $oDesplPonenteOficina->setNombre('of_ponente');
 $oDesplPonenteOficina->setTabIndex(80);
 

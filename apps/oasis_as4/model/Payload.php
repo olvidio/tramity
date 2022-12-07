@@ -11,7 +11,7 @@ use envios\model\MIMEContainer;
 use escritos\model\entity\EscritoAdjunto;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
-use usuarios\model\Visibilidad;
+use usuarios\domain\Visibilidad;
 use function core\is_true;
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace usuarios\model;
+namespace usuarios\domain;
 
 use core\ConfigGlobal;
 use entradas\model\Entrada;
@@ -30,14 +30,12 @@ class PermRegistro
      4: cambiar la visibilidad. (dtor of responsable.)
      */
 
-    const PERM_NADA = 0;
-    const PERM_VER = 1;
-    const PERM_MODIFICAR = 2;
-    const PERM_CAMBIAR = 4;
+    public const PERM_NADA = 0;
+    public const PERM_VER = 1;
+    public const PERM_MODIFICAR = 2;
+    public const PERM_CAMBIAR = 4;
 
-
-    private $array_registro_perm = [];
-    private $soy_ctr = FALSE;
+    private array $array_registro_perm = [];
 
     public function __construct()
     {
@@ -48,7 +46,7 @@ class PermRegistro
         }
     }
 
-    private function init_ctr()
+    private function init_ctr(): void
     {
         $todos = [];
         $director = [];
@@ -115,11 +113,9 @@ class PermRegistro
         $this->array_registro_perm[Visibilidad::V_CTR_TODOS] = $todos;
         $this->array_registro_perm[Visibilidad::V_CTR_DTOR] = $director;
         $this->array_registro_perm[Visibilidad::V_CTR_DTOR_SACD] = $director_sacd;
-
-        return $this->array_registro_perm;
     }
 
-    private function init()
+    private function init(): void
     {
         $todos = [];
         $personal = [];
@@ -379,12 +375,11 @@ class PermRegistro
         $this->array_registro_perm[Visibilidad::V_DIRECTORES] = $directores;
         $this->array_registro_perm[Visibilidad::V_RESERVADO] = $reservado;
         $this->array_registro_perm[Visibilidad::V_RESERVADO_VCD] = $vcd;
-
-        return $this->array_registro_perm;
     }
 
-    public function isVisibleDtor($visibilidad)
+    public function isVisibleDtor(int $visibilidad): bool
     {
+        $rta = FALSE;
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $soy_dtor = ConfigGlobal::soy_dtor();
             if (($visibilidad === Visibilidad::V_DIRECTORES ||
@@ -396,7 +391,6 @@ class PermRegistro
             } else {
                 $rta = TRUE;
             }
-            return $rta;
         }
 
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
@@ -412,8 +406,8 @@ class PermRegistro
             if ($visibilidad === Visibilidad::V_CTR_TODOS) {
                 $rta = TRUE;
             }
-            return $rta;
         }
+        return $rta;
     }
 
 
@@ -421,11 +415,12 @@ class PermRegistro
      * Función para buscar el permiso para ver el asunto, detalle o escrito
      * de una entrada o escrito o pendiente según quien sea yo.
      *
-     * @param object $oEntrada |$oEscrito|$oPendiente|oExpediente
+     * @param Entrada|Escrito|Expediente|Pendiente $objeto
      * @param string $que (asunto|detalle|escrito|cambio)
      * @return number
+     * @throws JsonException
      */
-    public function permiso_detalle($objeto, $que)
+    public function permiso_detalle(Pendiente|Expediente|Escrito|Entrada $objeto, string $que): int
     {
 
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
@@ -445,10 +440,10 @@ class PermRegistro
      *
      * @param Entrada|Escrito|Expediente|Pendiente $objeto
      * @param string $que (asunto|detalle|escrito|cambio)
-     * @return number
+     * @return int
      * @throws JsonException
      */
-    private function permiso_detalle_ctr(Pendiente|Expediente|Escrito|Entrada $objeto, string $que)
+    private function permiso_detalle_ctr(Pendiente|Expediente|Escrito|Entrada $objeto, string $que): int
     {
 
         $id_cargo_role = ConfigGlobal::role_id_cargo();
@@ -478,11 +473,12 @@ class PermRegistro
      * Función para buscar el permiso para ver el asunto, detalle o escrito
      * de una entrada o escrito o pendiente según quien sea yo.
      *
-     * @param Entrada|Escrito|Pendiente|Expediente $objeto
+     * @param Entrada|Escrito|Expediente|Pendiente $objeto
      * @param string $que (asunto|detalle|escrito|cambio)
-     * @return number
+     * @return int
+     * @throws JsonException
      */
-    private function permiso_detalle_dl($objeto, string $que): int
+    private function permiso_detalle_dl(Pendiente|Expediente|Escrito|Entrada $objeto, string $que): int
     {
         $role_actual = ConfigGlobal::role_actual();
         $id_oficina_pral = '';

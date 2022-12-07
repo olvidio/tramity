@@ -7,8 +7,6 @@ use core\ViewTwig;
 use tramites\model\entity\GestorTramite;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\PermRegistro;
-use usuarios\model\Visibilidad;
 use web\Hash;
 
 
@@ -44,9 +42,9 @@ class ExpedienteLista
             $gesTramites = new GestorTramite();
             $a_tramites = $gesTramites->getArrayAbrevTramites();
             // array visibilidades
-            $oVisibilidad = new Visibilidad();
+            $oVisibilidad = new \usuarios\domain\Visibilidad();
             $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
-            $oPermiso = new PermRegistro();
+            $oPermiso = new \usuarios\domain\PermRegistro();
             foreach ($this->cExpedientes as $oExpediente) {
                 $row = [];
                 $tramite_txt = '';

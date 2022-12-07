@@ -1,6 +1,6 @@
 <?php
 
-namespace usuarios\model\entity;
+namespace usuarios\legacy;
 
 use core;
 use core\ConfigGlobal;
@@ -18,7 +18,7 @@ use web\Desplegable;
  * @version 1.0
  * @created 16/6/2020
  */
-class GestorOficina extends core\ClaseGestor
+class zzzGestorOficinaOld extends core\ClaseGestor
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 

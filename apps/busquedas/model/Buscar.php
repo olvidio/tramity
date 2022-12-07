@@ -12,9 +12,9 @@ use entradas\model\GestorEntrada;
 use escritos\model\GestorEscrito;
 use etiquetas\model\entity\GestorEtiquetaEntrada;
 use lugares\model\entity\GestorLugar;
+use usuarios\domain\Categoria;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\Categoria;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 
@@ -157,7 +157,7 @@ class Buscar
                         $aOperadorEntrada['asunto_entrada'] = 'sin_acentos';
                     }
 
-                    $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+                    $aWhereEntrada['categoria'] = \usuarios\domain\Categoria::CAT_PERMANENTE;
                     $aProt_origen = ['id_lugar' => $this->id_lugar,
                         'num' => $this->prot_num,
                         'any' => $this->prot_any,
@@ -180,7 +180,7 @@ class Buscar
 
                     $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                     $aOperadorEntrada['estado'] = '>=';
-                    $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+                    $aWhereEntrada['categoria'] = Categoria::CAT_PERMANENTE;
                     $aWhereEntrada['_ordre'] = 'f_entrada';
                     $aOperadorEntrada['f_entrada'] = 'IS NOT NULL';
                     $aProt_origen = ['id_lugar' => $this->id_lugar,
@@ -202,7 +202,7 @@ class Buscar
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $aWhereEntrada = [];
                     $aOperadorEntrada = [];
-                    $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+                    $aWhereEntrada['categoria'] = \usuarios\domain\Categoria::CAT_PERMANENTE;
                     $aProt_origen = ['id_lugar' => $this->id_lugar,
                         'num' => $this->prot_num,
                         'any' => $this->prot_any,
@@ -219,7 +219,7 @@ class Buscar
                 } else {
                     $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                     $aOperadorEntrada['estado'] = '>=';
-                    $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+                    $aWhereEntrada['categoria'] = \usuarios\domain\Categoria::CAT_PERMANENTE;
                     $aProt_origen = ['id_lugar' => $this->id_lugar,
                         'num' => $this->prot_num,
                         'any' => $this->prot_any,
@@ -238,7 +238,7 @@ class Buscar
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $aWhereEntrada = [];
                     $aOperadorEntrada = [];
-                    $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+                    $aWhereEntrada['categoria'] = \usuarios\domain\Categoria::CAT_PERMANENTE;
                     $aProt_origen = ['id_lugar' => $this->id_lugar,
                         'num' => $this->prot_num,
                         'any' => $this->prot_any,
@@ -257,7 +257,7 @@ class Buscar
             case 'oficina':
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';
-                $aWhereEntrada['categoria'] = Categoria::CAT_PERMANATE;
+                $aWhereEntrada['categoria'] = \usuarios\domain\Categoria::CAT_PERMANENTE;
                 $aWhereEntrada['ponente'] = $this->ponente;
                 $aProt_origen = ['id_lugar' => $this->id_lugar,
                     'num' => $this->prot_num,

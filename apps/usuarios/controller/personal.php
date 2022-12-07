@@ -3,9 +3,9 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\repositories\LocaleRepository;
+use usuarios\domain\repositories\PreferenciaRepository;
 use usuarios\domain\repositories\UsuarioRepository;
-use usuarios\model\entity\GestorLocale;
-use usuarios\model\entity\GestorPreferencia;
 use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -19,7 +19,7 @@ require_once("apps/core/global_object.inc");
 
 $oPosicion->recordar();
 
-$oGesPref = new GestorPreferencia();
+$PreferenciaRepository = new PreferenciaRepository();
 
 $id_usuario = ConfigGlobal::mi_id_usuario();
 $role_actual = $_SESSION['session_auth']['role_actual'];
@@ -29,7 +29,7 @@ if ($role_actual === 'admin') {
 }
 
 // ----------- Color -------------------
-$aPref = $oGesPref->getPreferencias(array('id_usuario' => $id_usuario, 'tipo' => 'color'));
+$aPref = $PreferenciaRepository->getPreferencias(array('id_usuario' => $id_usuario, 'tipo' => 'color'));
 if (is_array($aPref) && !empty($aPref)) {
     $oPreferencia = $aPref[0];
     $color = $oPreferencia->getPreferencia();
@@ -39,15 +39,15 @@ if (is_array($aPref) && !empty($aPref)) {
 
 // ----------- Idioma -------------------
 //Tengo la variable $idioma en ConfigGlobal, pero vuelvo a consultarla 
-$aPref = $oGesPref->getPreferencias(array('id_usuario' => $id_usuario, 'tipo' => 'idioma'));
+$aPref = $PreferenciaRepository->getPreferencias(array('id_usuario' => $id_usuario, 'tipo' => 'idioma'));
 if (is_array($aPref) && !empty($aPref)) {
     $oPreferencia = $aPref[0];
     $idioma = $oPreferencia->getPreferencia();
 } else {
     $idioma = '';
 }
-$oGesLocales = new GestorLocale();
-$oDesplLocales = $oGesLocales->getListaLocales();
+$LocaleRepository = new LocaleRepository();
+$oDesplLocales = $LocaleRepository->getListaLocales();
 $oDesplLocales->setNombre('idioma_nou');
 $oDesplLocales->setOpcion_sel($idioma);
 

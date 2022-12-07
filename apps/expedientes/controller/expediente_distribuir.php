@@ -9,7 +9,7 @@ use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\Visibilidad;
+use usuarios\domain\Visibilidad;
 use web\Desplegable;
 use function core\is_true;
 

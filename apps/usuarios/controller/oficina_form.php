@@ -1,7 +1,7 @@
 <?php
 
 use core\ViewTwig;
-use usuarios\model\entity\Oficina;
+use usuarios\domain\repositories\OficinaRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -25,7 +25,7 @@ $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_A
 // Si vengo por medio de Posicion, borro la última
 if (isset($_POST['stack'])) {
     $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
-    if ($stack != '') {
+    if ($stack !== '') {
         // No me sirve el de global_object, sino el de la session
         $oPosicion2 = new web\Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
@@ -54,8 +54,9 @@ $oPosicion->setParametros(array('id_oficina' => $Q_id_oficina), 1);
 
 
 $txt_guardar = _("guardar datos oficina");
-$oOficina = new Oficina($Q_id_oficina);
-if ($oOficina->DBCargar()) {
+$OficinaRepository = new OficinaRepository();
+$oOficina = $OficinaRepository->findById($Q_id_oficina);
+if ($oOficina !== null) {
     $que = 'guardar';
     $sigla = $oOficina->getSigla();
     $orden = $oOficina->getOrden();

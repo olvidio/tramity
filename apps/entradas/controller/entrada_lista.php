@@ -4,6 +4,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\EntradaLista;
+use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
 use web\Desplegable;
 use function core\is_true;
@@ -36,7 +37,7 @@ if ($Q_filtro === 'en_aceptado') {
     }
 
     // para los ctr no hace falta
-    if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
+    if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
         $chk_of_propia = ($Q_oficina === 'propia') ? 'checked' : '';
         $chk_of_resto = ($Q_oficina === 'resto') ? 'checked' : '';
 

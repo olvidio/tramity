@@ -3,7 +3,8 @@
 use core\ConfigGlobal;
 use davical\model\Davical;
 use usuarios\domain\entity\Cargo;
-use usuarios\model\entity\Oficina;
+use usuarios\domain\entity\Oficina;
+use usuarios\domain\repositories\OficinaRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -31,16 +32,16 @@ switch ($Q_que) {
             $Q_id_oficina = (integer)filter_input(INPUT_POST, 'id_oficina');
         }
 
-        $oOficina = new Oficina (array('id_oficina' => $Q_id_oficina));
+        $OficinaRepository = new OficinaRepository();
+        $oOficina = $OficinaRepository->findById($Q_id_oficina);
         // hay que coger la información antes de borrar:
-        if ($oOficina->DBEliminar() === false) {
+        if ($OficinaRepository->Eliminar($oOficina) === false) {
             $error_txt .= _("hay un error, no se ha eliminado");
-            $error_txt .= "\n" . $oOficina->getErrorTxt();
+            $error_txt .= "\n" . $OficinaRepository->getErrorTxt();
         } else {
             // Eliminar el usuario en davical.
             // Para dl, Hace falta el nombre de la oficina:
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-                $oOficina = new Oficina($Q_id_oficina);
                 $oficina = $oOficina->getSigla();
             } else {
                 $oficina = ConfigGlobal::nombreEntidad();
@@ -60,13 +61,14 @@ switch ($Q_que) {
         $Q_id_oficina = (integer)filter_input(INPUT_POST, 'id_oficina');
         $Q_orden = (string)filter_input(INPUT_POST, 'orden');
 
-        $oOficina = new Oficina ($Q_id_oficina);
+        $OficinaRepository = new OficinaRepository();
+        $oOficina = $OficinaRepository->findById($Q_id_oficina);
         $sigla_old = $oOficina->getSigla();
         $oOficina->setSigla($Q_sigla);
         $oOficina->setOrden($Q_orden);
-        if ($oOficina->DBGuardar() === FALSE) {
+        if ($OficinaRepository->Guardar($oOficina) === FALSE) {
             $error_txt .= _("hay un error, no se ha guardado");
-            $error_txt .= "\n" . $oOficina->getErrorTxt();
+            $error_txt .= "\n" . $OficinaRepository->getErrorTxt();
         } else {
             if ($sigla_old !== $Q_sigla) {
                 // Cambiar el nombre en davical.
@@ -83,12 +85,13 @@ switch ($Q_que) {
         $Q_sigla = (string)filter_input(INPUT_POST, 'sigla');
         $Q_orden = (string)filter_input(INPUT_POST, 'orden');
 
+        $OficinaRepository = new OficinaRepository();
         $oOficina = new Oficina();
         $oOficina->setSigla($Q_sigla);
         $oOficina->setOrden($Q_orden);
-        if ($oOficina->DBGuardar() === FALSE) {
+        if ($OficinaRepository->Guardar($oOficina) === FALSE) {
             $error_txt .= _("hay un error, no se ha guardado");
-            $error_txt .= "\n" . $oOficina->getErrorTxt();
+            $error_txt .= "\n" . $OficinaRepository->getErrorTxt();
         } else {
             // Crear la oficina en davical.
             $oDavical = new Davical($_SESSION['oConfig']->getAmbito());

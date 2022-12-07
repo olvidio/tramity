@@ -3,8 +3,8 @@
 use core\ViewTwig;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\repositories\OficinaRepository;
 use usuarios\domain\repositories\UsuarioRepository;
-use usuarios\model\entity\GestorOficina;
 use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -85,8 +85,8 @@ if ($oCargo !== null) {
 
 if ($id_ambito === Cargo::AMBITO_DL) {
     $hay_oficina = TRUE;
-    $oGOficinas = new GestorOficina();
-    $oDesplOficinas = $oGOficinas->getListaOficinas();
+    $OficinaRepository = new OficinaRepository();
+    $oDesplOficinas = $OficinaRepository->getListaOficinas();
     $oDesplOficinas->setOpcion_sel($id_oficina);
     $oDesplOficinas->setNombre('id_oficina');
 } else {

@@ -1,5 +1,5 @@
 <?php
-namespace usuarios\model\entity;
+namespace usuarios\legacy;
 
 use core;
 use web;
@@ -15,7 +15,7 @@ use web;
  * @version 1.0
  * @created 26/11/2014
  */
-class GestorLocale extends core\ClaseGestor
+class zzzGestorLocaleOld extends core\ClaseGestor
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 

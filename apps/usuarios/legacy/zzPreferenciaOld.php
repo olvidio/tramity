@@ -1,95 +1,89 @@
 <?php
 
-namespace usuarios\model\entity;
+namespace usuarios\legacy;
 
 use core;
 use PDO;
 use PDOException;
 
 /**
- * Fitxer amb la Classe que accedeix a la taula cargos_grupos
+ * Fitxer amb la Classe que accedeix a la taula usuario_preferencias
  *
  * @package tramity
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @created 24/12/2020
+ * @created 8/6/2020
  */
 
 /**
- * Classe que implementa l'entitat cargos_grupos
+ * Classe que implementa l'entitat usuario_preferencias
  *
  * @package tramity
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @created 24/12/2020
+ * @created 8/6/2020
  */
-class CargoGrupo extends core\ClasePropiedades
+class zzzPreferenciaOld extends core\ClasePropiedades
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 
     /**
-     * oDbl de CargoGrupo
+     * oDbl de Preferencia
      *
      * @var object
      */
     protected $oDbl;
     /**
-     * NomTabla de CargoGrupo
+     * NomTabla de Preferencia
      *
      * @var string
      */
     protected $sNomTabla;
     /**
-     * aPrimary_key de CargoGrupo
+     * aPrimary_key de Preferencia
      *
      * @var array
      */
     private $aPrimary_key;
     /**
-     * aDades de CargoGrupo
+     * aDades de Preferencia
      *
      * @var array
      */
     private $aDades;
     /**
-     * bLoaded de CargoGrupo
+     * bLoaded
      *
      * @var boolean
      */
     private $bLoaded = FALSE;
     /**
-     * Id_schema de CargoGrupo
+     * Id_item de Preferencia
      *
      * @var integer
      */
-    private $iid_schema;
+    private $iid_item;
     /**
-     * Id_grupo de CargoGrupo
+     * Id_usuario de Preferencia
      *
      * @var integer
      */
-    private $iid_grupo;
-    /**
-     * Id_cargo_ref de CargoGrupo
-     *
-     * @var integer
-     */
-    private $iid_cargo_ref;
+    private $iid_usuario;
     /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
-     * Descripcion de CargoGrupo
+     * Tipo de Preferencia
      *
      * @var string
      */
-    private $sdescripcion;
+    private $stipo;
     /**
-     * Miembros de CargoGrupo
+     * Preferencia de Preferencia
      *
-     * @var array
+     * @var string
      */
-    private $a_miembros;
+    private $spreferencia;
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
@@ -97,7 +91,7 @@ class CargoGrupo extends core\ClasePropiedades
      * Si només necessita un valor, se li pot passar un integer.
      * En general se li passa un array amb les claus primàries.
      *
-     * @param integer|array iid_grupo
+     * @param integer|array iid_item
      *                        $a_id. Un array con los nombres=>valores de las claves primarias.
      */
     function __construct($a_id = null)
@@ -106,18 +100,18 @@ class CargoGrupo extends core\ClasePropiedades
         if (is_array($a_id)) {
             $this->aPrimary_key = $a_id;
             foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id === 'id_grupo') && $val_id !== '') {
-                    $this->iid_grupo = (int)$val_id;
+                if (($nom_id === 'id_item') && $val_id !== '') {
+                    $this->iid_item = (int)$val_id;
                 }
             }
         } else {
             if (isset($a_id) && $a_id !== '') {
-                $this->iid_grupo = (int)$a_id;
-                $this->aPrimary_key = array('iid_grupo' => $this->iid_grupo);
+                $this->iid_item = (int)$a_id;
+                $this->aPrimary_key = array('iid_item' => $this->iid_item);
             }
         }
         $this->setoDbl($oDbl);
-        $this->setNomTabla('cargos_grupos');
+        $this->setNomTabla('usuario_preferencias');
     }
 
     /* MÉTODOS PÚBLICOS ----------------------------------------------------------*/
@@ -137,19 +131,19 @@ class CargoGrupo extends core\ClasePropiedades
             $bInsert = FALSE;
         }
         $aDades = array();
-        $aDades['id_cargo_ref'] = $this->iid_cargo_ref;
-        $aDades['descripcion'] = $this->sdescripcion;
-        $aDades['miembros'] = $this->a_miembros;
+        $aDades['id_usuario'] = $this->iid_usuario;
+        $aDades['tipo'] = $this->stipo;
+        $aDades['preferencia'] = $this->spreferencia;
         array_walk($aDades, 'core\poner_null');
 
         if ($bInsert === FALSE) {
             //UPDATE
             $update = "
-					id_cargo_ref             = :id_cargo_ref,
-					descripcion              = :descripcion,
-					miembros                 = :miembros";
-            if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_grupo='$this->iid_grupo'")) === FALSE) {
-                $sClauError = 'CargoGrupo.update.prepare';
+					id_usuario               = :id_usuario,
+					tipo                     = :tipo,
+					preferencia              = :preferencia";
+            if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_item='$this->iid_item'")) === FALSE) {
+                $sClauError = 'Preferencia.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
             } else {
@@ -158,17 +152,17 @@ class CargoGrupo extends core\ClasePropiedades
                 } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
-                    $sClauError = 'CargoGrupo.update.execute';
+                    $sClauError = 'Preferencia.update.execute';
                     $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
                     return FALSE;
                 }
             }
         } else {
             // INSERT
-            $campos = "(id_cargo_ref,descripcion,miembros)";
-            $valores = "(:id_cargo_ref,:descripcion,:miembros)";
+            $campos = "(id_usuario,tipo,preferencia)";
+            $valores = "(:id_usuario,:tipo,:preferencia)";
             if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
-                $sClauError = 'CargoGrupo.insertar.prepare';
+                $sClauError = 'Preferencia.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
             } else {
@@ -177,12 +171,12 @@ class CargoGrupo extends core\ClasePropiedades
                 } catch (PDOException $e) {
                     $err_txt = $e->errorInfo[2];
                     $this->setErrorTxt($err_txt);
-                    $sClauError = 'CargoGrupo.insertar.execute';
+                    $sClauError = 'Preferencia.insertar.execute';
                     $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
                     return FALSE;
                 }
             }
-            $this->iid_grupo = $oDbl->lastInsertId('cargos_grupos_id_grupo_seq');
+            $this->iid_item = $oDbl->lastInsertId('usuario_preferencias_id_item_seq');
         }
         $this->setAllAtributes($aDades);
         return TRUE;
@@ -196,9 +190,9 @@ class CargoGrupo extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if (isset($this->iid_grupo)) {
-            if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_grupo='$this->iid_grupo'")) === FALSE) {
-                $sClauError = 'CargoGrupo.carregar';
+        if (isset($this->iid_item)) {
+            if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_item='$this->iid_item'")) === FALSE) {
+                $sClauError = 'Preferencia.carregar';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -207,7 +201,7 @@ class CargoGrupo extends core\ClasePropiedades
             $this->bLoaded = TRUE;
             switch ($que) {
                 case 'tot':
-                    $this->setAllAtributes($aDades);
+                    $this->aDades = $aDades;
                     break;
                 case 'guardar':
                     if (!$oDblSt->rowCount()) return FALSE;
@@ -225,6 +219,78 @@ class CargoGrupo extends core\ClasePropiedades
         }
     }
 
+    
+    /* OTOS MÉTODOS  ----------------------------------------------------------*/
+    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
+
+    /**
+     * Recupera las claus primàries de Preferencia en un array
+     *
+     * @return array aPrimary_key
+     */
+    function getPrimary_key()
+    {
+        if (!isset($this->aPrimary_key)) {
+            $this->aPrimary_key = array('id_item' => $this->iid_item);
+        }
+        return $this->aPrimary_key;
+    }
+
+    /**
+     * @param integer iid_item
+     */
+    function setId_item($iid_item)
+    {
+        $this->iid_item = $iid_item;
+    }
+
+    /* MÉTODOS GET y SET --------------------------------------------------------*/
+
+    /**
+     * @param integer iid_usuario='' optional
+     */
+    function setId_usuario($iid_usuario = '')
+    {
+        $this->iid_usuario = $iid_usuario;
+    }
+
+    /**
+     * @param string stipo='' optional
+     */
+    function setTipo($stipo = '')
+    {
+        $this->stipo = $stipo;
+    }
+
+    /**
+     * @param string spreferencia='' optional
+     */
+    function setPreferencia($spreferencia = '')
+    {
+        $this->spreferencia = $spreferencia;
+    }
+
+    /**
+     * Estableix las claus primàries de Preferencia en un array
+     *
+     */
+    public function setPrimary_key($a_id = null)
+    {
+        if (is_array($a_id)) {
+            $this->aPrimary_key = $a_id;
+            foreach ($a_id as $nom_id => $val_id) {
+                if (($nom_id === 'id_item') && $val_id !== '') {
+                    $this->iid_item = (int)$val_id;
+                }
+            }
+        } else {
+            if (isset($a_id) && $a_id !== '') {
+                $this->iid_item = (int)$a_id;
+                $this->aPrimary_key = array('iid_item' => $this->iid_item);
+            }
+        }
+    }
+
     /**
      * Establece el valor de todos los atributos
      *
@@ -235,99 +301,17 @@ class CargoGrupo extends core\ClasePropiedades
         if (!is_array($aDades)) {
             return;
         }
-        if (array_key_exists('id_schema', $aDades)) {
-            $this->setId_schema($aDades['id_schema']);
+        if (array_key_exists('id_item', $aDades)) {
+            $this->setId_item($aDades['id_item']);
         }
-        if (array_key_exists('id_grupo', $aDades)) {
-            $this->setId_grupo($aDades['id_grupo']);
+        if (array_key_exists('id_usuario', $aDades)) {
+            $this->setId_usuario($aDades['id_usuario']);
         }
-        if (array_key_exists('id_cargo_ref', $aDades)) {
-            $this->setId_cargo_ref($aDades['id_cargo_ref']);
+        if (array_key_exists('tipo', $aDades)) {
+            $this->setTipo($aDades['tipo']);
         }
-        if (array_key_exists('descripcion', $aDades)) {
-            $this->setDescripcion($aDades['descripcion']);
-        }
-        if (array_key_exists('miembros', $aDades)) {
-            $this->setMiembros($aDades['miembros'], TRUE);
-        }
-    }
-
-    /* OTOS MÉTODOS  ----------------------------------------------------------*/
-    /* MÉTODOS PRIVADOS ----------------------------------------------------------*/
-
-    /**
-     * @param integer iid_grupo
-     */
-    function setId_grupo($iid_grupo)
-    {
-        $this->iid_grupo = $iid_grupo;
-    }
-
-    /**
-     * @param integer iid_cargo_ref='' optional
-     */
-    function setId_cargo_ref($iid_cargo_ref = '')
-    {
-        $this->iid_cargo_ref = $iid_cargo_ref;
-    }
-
-    /* MÉTODOS GET y SET --------------------------------------------------------*/
-
-    /**
-     * @param string sdescripcion='' optional
-     */
-    function setDescripcion($sdescripcion = '')
-    {
-        $this->sdescripcion = $sdescripcion;
-    }
-
-    /**
-     * @param array a_miembros
-     * @param boolean $db =FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
-     *  o es una variable de php hay que convertirlo.
-     */
-    function setMiembros($a_miembros = '', $db = FALSE)
-    {
-        if ($db === FALSE) {
-            $postgresArray = core\array_php2pg($a_miembros);
-        } else {
-            $postgresArray = $a_miembros;
-        }
-        $this->a_miembros = $postgresArray;
-    }
-
-    
-    /**
-     * Recupera las claus primàries de CargoGrupo en un array
-     *
-     * @return array aPrimary_key
-     */
-    function getPrimary_key()
-    {
-        if (!isset($this->aPrimary_key)) {
-            $this->aPrimary_key = array('id_grupo' => $this->iid_grupo);
-        }
-        return $this->aPrimary_key;
-    }
-
-    /**
-     * Estableix las claus primàries de CargoGrupo en un array
-     *
-     */
-    public function setPrimary_key($a_id = null)
-    {
-        if (is_array($a_id)) {
-            $this->aPrimary_key = $a_id;
-            foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id === 'id_grupo') && $val_id !== '') {
-                    $this->iid_grupo = (int)$val_id;
-                }
-            }
-        } else {
-            if (isset($a_id) && $a_id !== '') {
-                $this->iid_grupo = (int)$a_id;
-                $this->aPrimary_key = array('iid_grupo' => $this->iid_grupo);
-            }
+        if (array_key_exists('preferencia', $aDades)) {
+            $this->setPreferencia($aDades['preferencia']);
         }
     }
 
@@ -339,8 +323,8 @@ class CargoGrupo extends core\ClasePropiedades
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_grupo='$this->iid_grupo'")) === FALSE) {
-            $sClauError = 'CargoGrupo.eliminar';
+        if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_item='$this->iid_item'")) === FALSE) {
+            $sClauError = 'Preferencia.eliminar';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -348,55 +332,55 @@ class CargoGrupo extends core\ClasePropiedades
     }
 
     /**
-     * Recupera l'atribut iid_grupo de CargoGrupo
+     * Recupera l'atribut iid_item de Preferencia
      *
-     * @return integer iid_grupo
+     * @return integer iid_item
      */
-    function getId_grupo()
+    function getId_item()
     {
-        if (!isset($this->iid_grupo) && !$this->bLoaded) {
+        if (!isset($this->iid_item) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return $this->iid_grupo;
+        return $this->iid_item;
     }
 
     /**
-     * Recupera l'atribut iid_cargo_ref de CargoGrupo
+     * Recupera l'atribut iid_usuario de Preferencia
      *
-     * @return integer iid_cargo_ref
+     * @return integer iid_usuario
      */
-    function getId_cargo_ref()
+    function getId_usuario()
     {
-        if (!isset($this->iid_cargo_ref) && !$this->bLoaded) {
+        if (!isset($this->iid_usuario) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return $this->iid_cargo_ref;
+        return $this->iid_usuario;
     }
 
     /**
-     * Recupera l'atribut sdescripcion de CargoGrupo
+     * Recupera l'atribut stipo de Preferencia
      *
-     * @return string sdescripcion
+     * @return string stipo
      */
-    function getDescripcion()
+    function getTipo()
     {
-        if (!isset($this->sdescripcion) && !$this->bLoaded) {
+        if (!isset($this->stipo) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return $this->sdescripcion;
+        return $this->stipo;
     }
 
     /**
-     * Recupera l'atribut a_miembros de CargoGrupo
+     * Recupera l'atribut spreferencia de Preferencia
      *
-     * @return array a_miembros
+     * @return string spreferencia
      */
-    function getMiembros()
+    function getPreferencia()
     {
-        if (!isset($this->a_miembros) && !$this->bLoaded) {
+        if (!isset($this->spreferencia) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return core\array_pg2php($this->a_miembros);
+        return $this->spreferencia;
     }
 
     /**
@@ -405,59 +389,59 @@ class CargoGrupo extends core\ClasePropiedades
      */
     function getDatosCampos()
     {
-        $oCargoGrupoSet = new core\Set();
+        $oPreferenciaSet = new core\Set();
 
-        $oCargoGrupoSet->add($this->getDatosId_cargo_ref());
-        $oCargoGrupoSet->add($this->getDatosDescripcion());
-        $oCargoGrupoSet->add($this->getDatosMiembros());
-        return $oCargoGrupoSet->getTot();
+        $oPreferenciaSet->add($this->getDatosId_usuario());
+        $oPreferenciaSet->add($this->getDatosTipo());
+        $oPreferenciaSet->add($this->getDatosPreferencia());
+        return $oPreferenciaSet->getTot();
     }
     /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
 
     /**
-     * Recupera les propietats de l'atribut iid_cargo_ref de CargoGrupo
+     * Recupera les propietats de l'atribut iid_usuario de Preferencia
      * en una clase del tipus DatosCampo
      *
      * @return core\DatosCampo
      */
-    function getDatosId_cargo_ref()
+    function getDatosId_usuario()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_cargo_ref'));
-        $oDatosCampo->setEtiqueta(_("id_cargo_ref"));
+        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'id_usuario'));
+        $oDatosCampo->setEtiqueta(_("id_usuario"));
         return $oDatosCampo;
     }
 
     /**
-     * Recupera les propietats de l'atribut sdescripcion de CargoGrupo
+     * Recupera les propietats de l'atribut stipo de Preferencia
      * en una clase del tipus DatosCampo
      *
      * @return core\DatosCampo
      */
-    function getDatosDescripcion()
+    function getDatosTipo()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'descripcion'));
-        $oDatosCampo->setEtiqueta(_("descripcion"));
+        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'tipo'));
+        $oDatosCampo->setEtiqueta(_("tipo"));
         return $oDatosCampo;
     }
 
     /**
-     * Recupera les propietats de l'atribut a_miembros de CargoGrupo
+     * Recupera les propietats de l'atribut spreferencia de Preferencia
      * en una clase del tipus DatosCampo
      *
      * @return core\DatosCampo
      */
-    function getDatosMiembros()
+    function getDatosPreferencia()
     {
         $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'miembros'));
-        $oDatosCampo->setEtiqueta(_("miembros"));
+        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'preferencia'));
+        $oDatosCampo->setEtiqueta(_("preferencia"));
         return $oDatosCampo;
     }
 
     /**
-     * Recupera tots els ATRIBUTOS de CargoGrupo en un array
+     * Recupera tots els ATRIBUTOS de Preferencia en un array
      *
      * @return array aDades
      */

@@ -1,9 +1,10 @@
 <?php
 
 use core\ViewTwig;
+use usuarios\domain\repositories\CargoGrupoRepository;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\entity\CargoGrupo;
 use web\Desplegable;
+use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -61,11 +62,12 @@ $a_posibles_cargos_ref = $CargoRepository->getArrayCargosRef();
 
 if (!empty($Q_id_grupo)) {
     $que_user = 'guardar';
-    $oGrupo = new CargoGrupo(array('id_grupo' => $Q_id_grupo));
+    $CargoGrupoRepository = new CargoGrupoRepository();
+    $oCargoGrupo = $CargoGrupoRepository->findById($Q_id_grupo);
 
-    $id_cargo_ref = $oGrupo->getId_cargo_ref();
-    $descripcion = $oGrupo->getDescripcion();
-    $a_miembros = $oGrupo->getMiembros();
+    $id_cargo_ref = $oCargoGrupo->getId_cargo_ref();
+    $descripcion = $oCargoGrupo->getDescripcion();
+    $a_miembros = $oCargoGrupo->getMiembros();
 } else {
     $que_user = 'nuevo';
     $descripcion = '';
@@ -77,7 +79,7 @@ $oDesplCargosRef = new Desplegable('id_cargo_ref', $a_posibles_cargos_ref, $id_c
 $oDesplCargos = new Desplegable('cargos', $a_posibles_cargos, $a_miembros);
 
 $camposForm = 'que!nombre';
-$oHash = new web\Hash();
+$oHash = new Hash();
 $oHash->setcamposForm($camposForm);
 $oHash->setCamposChk('anulado');
 $a_camposHidden = array(

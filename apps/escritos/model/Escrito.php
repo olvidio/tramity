@@ -14,8 +14,8 @@ use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
 use tramites\model\entity\GestorFirma;
 use usuarios\domain\entity\Cargo;
-use usuarios\model\PermRegistro;
-use usuarios\model\Visibilidad;
+use usuarios\domain\PermRegistro;
+use usuarios\domain\Visibilidad;
 use web\Protocolo;
 use web\ProtocoloArray;
 
@@ -333,7 +333,7 @@ class Escrito extends EscritoDB
             $origen_txt = $oProtOrigen->ver_txt();
 
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                $oVisibilidad = new Visibilidad();
+                $oVisibilidad = new \usuarios\domain\Visibilidad();
                 $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
                 $visibilidad = $this->getVisibilidad();
                 if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
@@ -417,7 +417,7 @@ class Escrito extends EscritoDB
                 $destinos_txt = $oArrayProtDestino->ListaTxtBr();
 
                 $visibilidad_dst = $this->getVisibilidad_dst();
-                if (!empty($visibilidad_dst) && $visibilidad_dst != Visibilidad::V_CTR_TODOS) {
+                if (!empty($visibilidad_dst) && $visibilidad_dst != \usuarios\domain\Visibilidad::V_CTR_TODOS) {
                     $visibilidad_txt = $a_visibilidad_dst[$visibilidad_dst];
                     $destinos_txt .= " ($visibilidad_txt)";
                 }

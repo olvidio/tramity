@@ -4,9 +4,9 @@ use core\ViewTwig;
 use entradas\model\entity\EntradaBypass;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
-use usuarios\model\Categoria;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\Visibilidad;
+use usuarios\domain\Categoria;
+use usuarios\domain\repositories\OficinaRepository;
+use usuarios\domain\Visibilidad;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
@@ -24,8 +24,8 @@ require_once("apps/core/global_object.inc");
 
 $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
 
-$gesOficinas = new GestorOficina();
-$a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+$OficinaRepository = new OficinaRepository();
+$a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();

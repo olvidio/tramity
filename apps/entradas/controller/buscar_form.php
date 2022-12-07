@@ -4,8 +4,8 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\GestorEntrada;
 use lugares\model\entity\GestorLugar;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\PermRegistro;
+use usuarios\domain\PermRegistro;
+use usuarios\domain\repositories\OficinaRepository;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
@@ -35,8 +35,8 @@ $Qchk_anulados = (bool)filter_input(INPUT_POST, 'chk_anulados');
 
 $Qoficina_buscar = ConfigGlobal::role_id_oficina();
 
-$gesOficinas = new GestorOficina();
-$a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+$OficinaRepository = new OficinaRepository();
+$a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 $gesEntradas = new GestorEntrada();
 $aWhere = [];
 $aOperador = [];
@@ -136,8 +136,8 @@ $oLista = new Lista();
 $oLista->setCabeceras($a_cabeceras);
 $oLista->setDatos($a_valores);
 
-$gesOficinas = new GestorOficina();
-$a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+$OficinaRepository = new OficinaRepository();
+$a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 $oDesplOficinas = new web\Desplegable('oficina_buscar', $a_posibles_oficinas, $Qoficina_buscar, TRUE);
 
 $gesLugares = new GestorLugar();
@@ -188,8 +188,8 @@ $Q_filtro = (string) filter_input(INPUT_POST, 'filtro');
 
 $id_oficina = ConfigGlobal::role_id_oficina();
 
-$gesOficinas = new GestorOficina();
-$oDesplOficinas = $gesOficinas->getListaOficinas();
+$OficinaRepository = new OficinaRepository();
+$oDesplOficinas = $OficinaRepository->getListaOficinas();
 $oDesplOficinas->setNombre('id_oficina');
 $oDesplOficinas->setOpcion_sel($id_oficina);
 

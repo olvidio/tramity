@@ -16,8 +16,7 @@ use JsonException;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
 use usuarios\domain\entity\Cargo;
-use usuarios\model\PermRegistro;
-use usuarios\model\Visibilidad;
+use usuarios\domain\Visibilidad;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
@@ -219,7 +218,7 @@ class Entrada extends EntradaDB
      */
     public function getAsunto(): string
     {
-        $oPermiso = new PermRegistro();
+        $oPermiso = new \usuarios\domain\PermRegistro();
         $perm = $oPermiso->permiso_detalle($this, 'asunto');
 
         $asunto = _("reservado");
@@ -242,7 +241,7 @@ class Entrada extends EntradaDB
      */
     public function getDetalle(): ?string
     {
-        $oPermiso = new PermRegistro();
+        $oPermiso = new \usuarios\domain\PermRegistro();
         $perm = $oPermiso->permiso_detalle($this, 'detalle');
 
         $detalle = _("reservado");

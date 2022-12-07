@@ -4,7 +4,7 @@ use core\ViewTwig;
 use etiquetas\model\entity\GestorEtiqueta;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\entity\GestorOficina;
+use usuarios\domain\repositories\OficinaRepository;
 use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -53,8 +53,8 @@ $a_botones = [['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
 
 $CargoRepository = new CargoRepository();
 $a_cargos = $CargoRepository->getArrayCargos(TRUE);
-$gesOficinas = new GestorOficina();
-$a_oficinas = $gesOficinas->getArrayOficinas();
+$OficinaRepository = new OficinaRepository();
+$a_oficinas = $OficinaRepository->getArrayOficinas();
 $a_valores = array();
 $i = 0;
 foreach ($cEtiquetas as $oEtiqueta) {

@@ -5,9 +5,9 @@ use core\ViewTwig;
 use escritos\model\Escrito;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
+use usuarios\domain\Categoria;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\Categoria;
-use usuarios\model\Visibilidad;
+use usuarios\domain\Visibilidad;
 use web\Desplegable;
 use web\Protocolo;
 

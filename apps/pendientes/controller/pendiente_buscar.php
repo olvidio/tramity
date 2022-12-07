@@ -9,9 +9,9 @@ use lugares\model\entity\GestorLugar;
 use pendientes\model\BuscarPendiente;
 use pendientes\model\Pendiente;
 use usuarios\domain\entity\Cargo;
+use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\PermRegistro;
+use usuarios\domain\repositories\OficinaRepository;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
@@ -66,8 +66,8 @@ $oDesplStatus->setNombre('status');
 $oDesplStatus->setOpciones($a_opciones_status);
 $oDesplStatus->setOpcion_sel($Q_status);
 
-$gesOficinas = new GestorOficina();
-$a_oficinas = $gesOficinas->getArrayOficinas();
+$OficinaRepository = new OficinaRepository();
+$a_oficinas = $OficinaRepository->getArrayOficinas();
 // solo secretaría puede ver/crear pendientes de otras oficinas
 $role_actual = ConfigGlobal::role_actual();
 if ($role_actual === 'secretaria') {

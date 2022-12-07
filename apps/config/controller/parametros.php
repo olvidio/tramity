@@ -2,7 +2,7 @@
 
 use config\model\entity\ConfigSchema;
 use usuarios\domain\entity\Cargo;
-use usuarios\model\entity\GestorLocale;
+use usuarios\domain\repositories\LocaleRepository;
 use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -32,11 +32,11 @@ $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
 $val_chat_true = 'TRUE';
-$chk_chat_true = ($valor == $val_chat_true) ? 'checked' : '';
+$chk_chat_true = ($valor === $val_chat_true) ? 'checked' : '';
 $val_chat_false = 'FALSE';
-$chk_chat_false = ($valor == $val_chat_false) ? 'checked' : '';
+$chk_chat_false = ($valor === $val_chat_false) ? 'checked' : '';
 $val_chat_none = 'NONE';
-$chk_chat_none = ($valor == $val_chat_none) ? 'checked' : '';
+$chk_chat_none = ($valor === $val_chat_none) ? 'checked' : '';
 
 $oHashChat = new Hash();
 $oHashChat->setUrl($url);
@@ -521,8 +521,8 @@ $parametro = 'idioma_default';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
-$gesIdiomas = new GestorLocale();
-$oDeplIdiomas = $gesIdiomas->getListaLocales();
+$LocaleRepository = new LocaleRepository();
+$oDeplIdiomas = $LocaleRepository->getListaLocales();
 $oDeplIdiomas->setNombre('valor');
 $oDeplIdiomas->setOpcion_sel($valor);
 

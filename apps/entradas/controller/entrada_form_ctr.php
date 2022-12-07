@@ -3,8 +3,8 @@
 use core\ViewTwig;
 use entradas\model\Entrada;
 use lugares\model\entity\GestorLugar;
-use usuarios\model\Categoria;
-use usuarios\model\Visibilidad;
+use usuarios\domain\Categoria;
+use usuarios\domain\Visibilidad;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;

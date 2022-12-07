@@ -14,8 +14,8 @@ use oasis_as4\model\As4;
 use oasis_as4\model\As4CollaborationInfo;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\PermRegistro;
+use usuarios\domain\PermRegistro;
+use usuarios\domain\repositories\OficinaRepository;
 use web\DateTimeLocal;
 use web\Lista;
 use web\Protocolo;
@@ -465,8 +465,8 @@ switch ($Q_que) {
         $a_cabeceras = ['', _("protocolo"), _("fecha"), _("asunto"), _("oficina ponente"), ''];
         $a_valores = [];
         $a = 0;
-        $gesOficinas = new GestorOficina();
-        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+        $OficinaRepository = new OficinaRepository();
+        $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
         $oProtOrigen = new Protocolo();
         $oPermRegistro = new PermRegistro();
         foreach ($cEntradas as $oEntrada) {

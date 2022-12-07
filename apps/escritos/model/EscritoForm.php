@@ -19,9 +19,6 @@ use lugares\model\entity\GestorLugar;
 use stdClass;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\Categoria;
-use usuarios\model\PermRegistro;
-use usuarios\model\Visibilidad;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\DesplegableArray;
@@ -113,7 +110,7 @@ class EscritoForm
 
         $estado = 0;
         $visibilidad = 0;
-        $visibilidad_dst = Visibilidad::V_CTR_TODOS;
+        $visibilidad_dst = \usuarios\domain\Visibilidad::V_CTR_TODOS;
         if (!empty($this->Q_id_expediente)) {
             $oExpediente = new Expediente($this->Q_id_expediente);
             $visibilidad = $oExpediente->getVisibilidad();
@@ -122,7 +119,7 @@ class EscritoForm
 
         $oEscrito = new Escrito($this->Q_id_escrito);
         // categoría
-        $oCategoria = new Categoria();
+        $oCategoria = new \usuarios\domain\Categoria();
         $aOpcionesVisibilidad = $oCategoria->getArrayCategoria();
         $oDesplCategoria = new Desplegable();
         $oDesplCategoria->setNombre('categoria');
@@ -136,7 +133,7 @@ class EscritoForm
         $anulado_txt = '';
 
         // visibilidad
-        $oVisibilidad = new Visibilidad();
+        $oVisibilidad = new \usuarios\domain\Visibilidad();
         $aOpcionesVisibilidad = $oVisibilidad->getArrayVisibilidad(TRUE);
         $oDesplVisibilidad = new Desplegable();
         $oDesplVisibilidad->setNombre('visibilidad');
@@ -254,14 +251,14 @@ class EscritoForm
                     $titulo = _("modificar entrada");
             }
 
-            $oPermisoregistro = new PermRegistro();
+            $oPermisoregistro = new \usuarios\domain\PermRegistro();
             $perm_asunto = $oPermisoregistro->permiso_detalle($oEscrito, 'asunto');
             $perm_detalle = $oPermisoregistro->permiso_detalle($oEscrito, 'detalle');
-            $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR) ? 'readonly' : '';
-            $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR) ? 'readonly' : '';
+            $asunto_readonly = ($perm_asunto < \usuarios\domain\PermRegistro::PERM_MODIFICAR) ? 'readonly' : '';
+            $detalle_readonly = ($perm_detalle < \usuarios\domain\PermRegistro::PERM_MODIFICAR) ? 'readonly' : '';
 
             $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEscrito, 'cambio');
-            if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
+            if ($perm_cambio_visibilidad < \usuarios\domain\PermRegistro::PERM_MODIFICAR) {
                 $oDesplVisibilidad->setDisabled(TRUE);
             }
 

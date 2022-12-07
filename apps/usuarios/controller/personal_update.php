@@ -1,8 +1,7 @@
 ﻿<?php
 //namespace usuarios\controller;
-use usuarios\domain\entity\Usuario;
+use usuarios\domain\repositories\PreferenciaRepository;
 use usuarios\domain\repositories\UsuarioRepository;
-use usuarios\model\entity\GestorPreferencia;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -15,17 +14,17 @@ require_once("apps/core/global_object.inc");
 
 $Q_que = (string)filter_input(INPUT_POST, 'que');
 
-$gesPreferencias = new GestorPreferencia();
+$PreferenciaRepository = new PreferenciaRepository();
 switch ($Q_que) {
     case "slickGrid":
         $Q_tabla = (string)filter_input(INPUT_POST, 'tabla');
         $Q_sPrefs = (string)filter_input(INPUT_POST, 'sPrefs');
         $idioma = core\ConfigGlobal::mi_Idioma();
         $tipo = 'slickGrid_' . $Q_tabla . '_' . $idioma;
-        $oPref = $gesPreferencias->getMiPreferencia($tipo);
+        $oPref = $PreferenciaRepository->getMiPreferencia($tipo);
         // si no se han cambiado las columnas visibles, pongo las actuales (sino las borra).
         $aPrefs = json_decode($Q_sPrefs, true);
-        if ($aPrefs['colVisible'] == 'noCambia') {
+        if ($aPrefs['colVisible'] === 'noCambia') {
             $sPrefs_old = $oPref->getMiPreferencia();
             $aPrefs_old = json_decode($sPrefs_old, true);
             $aPrefs['colVisible'] = empty($aPrefs_old['colVisible']) ? '' : $aPrefs_old['colVisible'];
@@ -41,7 +40,7 @@ switch ($Q_que) {
     default:
         // Guardar idioma:
         $Q_idioma_nou = (string)filter_input(INPUT_POST, 'idioma_nou');
-        $oPref = $gesPreferencias->getMiPreferencia('idioma');
+        $oPref = $PreferenciaRepository->getMiPreferencia('idioma');
         $oPref->setPreferencia($Q_idioma_nou);
         if ($oPref->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado idioma");

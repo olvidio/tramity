@@ -3,8 +3,8 @@
 use core\ViewTwig;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\repositories\OficinaRepository;
 use usuarios\domain\repositories\UsuarioRepository;
-use usuarios\model\entity\Oficina;
 use web\Posicion;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -60,6 +60,7 @@ $a_valores = array();
 $i = 0;
 $UsuarioRepository = new UsuarioRepository();
 $aUsuarios = $UsuarioRepository->getArrayUsuarios();
+$OficinaRepository = new OficinaRepository();
 foreach ($cCargos as $oCargo) {
     $i++;
     $id_cargo = $oCargo->getId_cargo();
@@ -74,8 +75,12 @@ foreach ($cCargos as $oCargo) {
     $suplente = empty($aUsuarios[$id_suplente]) ? '' : $aUsuarios[$id_suplente];
 
     if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-        $oOficina = new Oficina($id_oficina);
-        $sigla = $oOficina->getSigla();
+        $oOficina = $OficinaRepository->findById($id_oficina);
+        if ($oOficina !== null) {
+            $sigla = $oOficina->getSigla();
+        } else {
+            $sigla = '?';
+        }
     } else {
         $sigla = $_SESSION['oConfig']->getSigla();
     }

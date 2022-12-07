@@ -1,11 +1,10 @@
 <?php
 
-namespace usuarios\model;
+namespace usuarios\domain;
 
 use core\ConfigGlobal;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
-use function core\is_true;
 
 class Visibilidad
 {
@@ -14,21 +13,21 @@ class Visibilidad
     /* CONST -------------------------------------------------------------- */
 
     // visibilidad
-    const V_TODOS = 1;  // cualquiera
-    const V_PERSONAL = 2;  // oficina y directores
-    const V_DIRECTORES = 3;  // sólo directores
-    const V_RESERVADO = 4;  // sólo directores, añade no ver a los directores de otras oficinas no implicadas
-    const V_RESERVADO_VCD = 5;  // sólo vcd + quien señale
+    public const V_TODOS = 1;  // cualquiera
+    public const V_PERSONAL = 2;  // oficina y directores
+    public const V_DIRECTORES = 3;  // sólo directores
+    public const V_RESERVADO = 4;  // sólo directores, añade no ver a los directores de otras oficinas no implicadas
+    public const V_RESERVADO_VCD = 5;  // sólo vcd + quien señale
 
     // visibilidad_ctr
-    const V_CTR_TODOS = 1; // cualquiera
-    const V_CTR_DTOR = 7; // d
-    const V_CTR_DTOR_SACD = 8; // d y sacd
+    public const V_CTR_TODOS = 1; // cualquiera
+    public const V_CTR_DTOR = 7; // d
+    public const V_CTR_DTOR_SACD = 8; // d y sacd
 
 
     /* MÉTODOS PÚBLICOS ----------------------------------------------------------*/
 
-    public function getArrayCondVisibilidad()
+    public function getArrayCondVisibilidad(): array
     {
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             // visibilidad:
@@ -36,6 +35,9 @@ class Visibilidad
             $id_cargo = ConfigGlobal::role_id_cargo();
             $CargoRepository = new CargoRepository();
             $oCargo = $CargoRepository->findById($id_cargo);
+            if ($oCargo === null) {
+                exit(_("No Existe!!!"));
+            }
             if ($oCargo->isDirector()) {
                 $a_visibilidad[] = self::V_CTR_DTOR;
                 $a_visibilidad[] = self::V_CTR_DTOR_SACD;
@@ -49,7 +51,7 @@ class Visibilidad
         return $a_visibilidad;
     }
 
-    public function getArrayVisibilidad($limitar_por_usuario=FALSE): array
+    public function getArrayVisibilidad($limitar_por_usuario = FALSE): array
     {
         $a_visibilidad = [];
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
@@ -62,9 +64,9 @@ class Visibilidad
         return $a_visibilidad;
     }
 
-    public function getArrayVisibilidadCtr($limitar_por_usuario=FALSE):array
+    public function getArrayVisibilidadCtr($limitar_por_usuario = FALSE): array
     {
-        $a_visibilidad[ self::V_CTR_TODOS] = _("todos");
+        $a_visibilidad[self::V_CTR_TODOS] = _("todos");
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             if ($limitar_por_usuario) {
                 if (ConfigGlobal::soy_dtor()) {
@@ -85,7 +87,7 @@ class Visibilidad
         return $a_visibilidad;
     }
 
-    public function getArrayVisibilidadDl()
+    public function getArrayVisibilidadDl(): array
     {
         return [
             self::V_TODOS => _("todos"),

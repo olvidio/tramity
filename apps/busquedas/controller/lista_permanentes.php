@@ -9,7 +9,7 @@ use entradas\model\entity\GestorEntradaCompartida;
 use entradas\model\GestorEntrada;
 use lugares\model\entity\GestorLugar;
 use usuarios\domain\entity\Cargo;
-use usuarios\model\entity\GestorOficina;
+use usuarios\domain\repositories\OficinaRepository;
 use web\Desplegable;
 use function core\any_2;
 
@@ -39,7 +39,7 @@ switch ($Q_tipo_lista) {
         $oBuscar = new Buscar();
         // En los centros, no busco en entradas, sino en entradas_compartidas y
         // veo si el centro está en los destinos.
-        if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
             // Busco el id_lugar de cr.
             $gesLugares = new GestorLugar();
             $id_cr = $gesLugares->getId_cr();
@@ -87,7 +87,7 @@ switch ($Q_tipo_lista) {
             $Q_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
             $Q_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
             $Q_any = (integer)filter_input(INPUT_POST, 'any');
-            $Q_prot_any2 = core\any_2($Q_prot_any);
+            $Q_prot_any2 = core\any_2($Q_prot_any); //es un string
 
             if (!empty($Q_prot_num)) {
                 $oBuscar->setProt_num($Q_prot_num);
@@ -95,7 +95,7 @@ switch ($Q_tipo_lista) {
             } else {
                 $Q_prot_num = '';
             }
-            if ($Q_prot_any2 != '') { // para aceptar el 00
+            if ($Q_prot_any2 !== '') { // para aceptar el 00
                 $oBuscar->setProt_any($Q_prot_any2);
                 $flag = 1;
             }
@@ -109,7 +109,7 @@ switch ($Q_tipo_lista) {
             $oBuscar->setAsunto($Q_asunto);
             $flag = 1;
         }
-        if ($flag == 0) {
+        if ($flag === 0) {
             $lista = _("Debe indicar el protocolo o el asunto");
         } else {
             $aCollection = $oBuscar->getCollection($Q_tipo_lista);
@@ -124,8 +124,8 @@ switch ($Q_tipo_lista) {
         break;
     case 'lst_oficinas':
         //oficinas posibles:
-        $gesOficinas = new GestorOficina();
-        $cOficinas = $gesOficinas->getArrayOficinas();
+        $OficinaRepository = new OficinaRepository();
+        $cOficinas = $OficinaRepository->getArrayOficinas();
 
         $titulo = _("AVISOS DE CR DE NÚMERO BAJO: por oficinas");
         $lista = '';
@@ -142,7 +142,7 @@ switch ($Q_tipo_lista) {
         $oBuscar = new Buscar();
         // En los centros, no busco en entradas, sino en entradas_compartidas y
         // veo si el centro está en los destinos.
-        if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
             // Busco el id_lugar de cr.
             $gesLugares = new GestorLugar();
             $id_cr = $gesLugares->getId_cr();
@@ -189,7 +189,7 @@ switch ($Q_tipo_lista) {
         $lista = '';
         for ($fila = 0; $fila < 10; $fila++) {
             $lista .= '<div class="row">';
-            for ($decena = $decena_min; $decena <= $decena_max; $decena = $decena + 10) {
+            for ($decena = $decena_min; $decena <= $decena_max; $decena += 10) {
                 $any_lista = (int)$decena + $fila;
                 if (!empty($lista_any[$any_lista])) {
                     $txt = $lista_any[$any_lista];

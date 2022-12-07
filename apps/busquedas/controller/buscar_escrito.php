@@ -6,7 +6,7 @@ use core\ViewTwig;
 use etiquetas\model\entity\GestorEtiqueta;
 use lugares\model\entity\GestorLugar;
 use usuarios\domain\entity\Cargo;
-use usuarios\model\entity\GestorOficina;
+use usuarios\domain\repositories\OficinaRepository;
 use web\DateTimeLocal;
 use web\Desplegable;
 use function core\is_true;
@@ -52,9 +52,9 @@ $Q_andOr = (string)filter_input(INPUT_POST, 'andOr');
 $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $a_etiquetas_filtered = array_filter($Q_a_etiquetas);
 
-$chk_or = ($Q_andOr == 'OR') ? 'checked' : '';
+$chk_or = ($Q_andOr === 'OR') ? 'checked' : '';
 // por defecto 'AND':
-$chk_and = (($Q_andOr == 'AND') || empty($Q_andOr)) ? 'checked' : '';
+$chk_and = (($Q_andOr === 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
 
 $chk_lo_1 = '';
@@ -125,8 +125,8 @@ $oDesplOrigen2->setOpciones($a_lugares);
 $oDesplOrigen2->setAction("fnjs_sel_periodo('#origen_id_lugar_2')");
 $oDesplOrigen2->setOpcion_sel($Q_origen_id_lugar);
 
-$gesOficinas = new GestorOficina();
-$a_oficinas = $gesOficinas->getArrayOficinas();
+$OficinaRepository = new OficinaRepository();
+$a_oficinas = $OficinaRepository->getArrayOficinas();
 $oDesplOficinas2 = new Desplegable();
 $oDesplOficinas2->setNombre('oficina');
 $oDesplOficinas2->setId('oficina_2');

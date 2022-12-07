@@ -5,11 +5,9 @@ namespace busquedas\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use usuarios\domain\entity\Cargo;
+use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\Categoria;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\PermRegistro;
-use usuarios\model\Visibilidad;
+use usuarios\domain\repositories\OficinaRepository;
 use web\Lista;
 use web\Protocolo;
 use web\ProtocoloArray;
@@ -236,12 +234,12 @@ class VerTabla
 
     public function tabla_entradas($aCollection)
     {
-        $gesOficinas = new GestorOficina();
-        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+        $OficinaRepository = new OficinaRepository();
+        $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 
-        $oCategoria = new Categoria();
+        $oCategoria = new \usuarios\domain\Categoria();
         $a_categorias = $oCategoria->getArrayCategoria();
-        $oVisibilidad = new Visibilidad();
+        $oVisibilidad = new \usuarios\domain\Visibilidad();
         $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
 
         $a_cabeceras = array(array('name' => ucfirst(_("protocolo origen")), 'formatter' => 'clickFormatter'),
@@ -261,7 +259,7 @@ class VerTabla
         $oProtOrigen = new Protocolo();
         $a_valores = [];
         $i = 0;
-        $oPermRegistro = new PermRegistro();
+        $oPermRegistro = new \usuarios\domain\PermRegistro();
         $CargoRepository = new CargoRepository();
         $a_usuarios_oficina = $CargoRepository->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina(), TRUE);
         foreach ($aCollection as $oEntrada) {
@@ -270,7 +268,7 @@ class VerTabla
             $visibilidad_txt = empty($a_visibilidad[$visibilidad]) ? '?' : $a_visibilidad[$visibilidad];
 
             $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEntrada, 'escrito');
-            if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+            if ($perm_ver_escrito < \usuarios\domain\PermRegistro::PERM_VER) {
                 continue;
             }
             $i++;
@@ -380,7 +378,7 @@ class VerTabla
 
     public function tabla_entradas_compartidas($aCollection)
     {
-        $oCategoria = new Categoria();
+        $oCategoria = new \usuarios\domain\Categoria();
         $a_categorias = $oCategoria->getArrayCategoria();
 
         $a_cabeceras = array(array('name' => ucfirst(_("protocolo origen")), 'formatter' => 'clickFormatter'),
@@ -458,9 +456,9 @@ class VerTabla
         $CargoRepository = new CargoRepository();
         $a_posibles_cargos = $CargoRepository ->getArrayCargos();
 
-        $oCategoria = new Categoria();
+        $oCategoria = new \usuarios\domain\Categoria();
         $a_categorias = $oCategoria->getArrayCategoria();
-        $oVisibilidad = new Visibilidad();
+        $oVisibilidad = new \usuarios\domain\Visibilidad();
         $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
 
         $a_cabeceras = array(array('name' => ucfirst(_("protocolo origen")), 'formatter' => 'clickFormatter'),
@@ -484,7 +482,7 @@ class VerTabla
             $visibilidad_txt = empty($a_visibilidad[$visibilidad]) ? '?' : $a_visibilidad[$visibilidad];
 
             $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEscrito, 'escrito');
-            if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+            if ($perm_ver_escrito < \usuarios\domain\PermRegistro::PERM_VER) {
                 continue;
             }
             $i++;

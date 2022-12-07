@@ -17,7 +17,7 @@ use oasis_as4\model\As4;
 use oasis_as4\model\As4CollaborationInfo;
 use PHPMailer\PHPMailer\Exception;
 use stdClass;
-use usuarios\model\Categoria;
+use usuarios\domain\Categoria;
 use usuarios\domain\entity\Cargo;
 use web\Protocolo;
 use function core\is_true;

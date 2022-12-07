@@ -14,7 +14,7 @@ use davical\model\entity\Principal;
 use davical\model\entity\RoleMember;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\entity\Oficina;
+use usuarios\domain\repositories\OficinaRepository;
 use web\DateTimeLocal;
 use web\StringLocal;
 
@@ -147,7 +147,8 @@ class Davical
         $sigla = $_SESSION['oConfig']->getSigla();
         $sigla_norm = StringLocal::lowerNormalized($sigla);
         if (!empty($id_oficina) && $id_oficina > 0) {
-            $oOficina = new Oficina($id_oficina);
+            $OficinaRepository = new OficinaRepository();
+            $oOficina = $OficinaRepository->findById($id_oficina);
             $oficina = $oOficina->getSigla();
             $nom_recurso = $this->getNombreRecursoPorNombre($oficina);
         } else {

@@ -13,9 +13,9 @@ use etiquetas\model\entity\GestorEtiquetaExpediente;
 use expedientes\model\Expediente;
 use expedientes\model\GestorExpediente;
 use lugares\model\entity\GestorLugar;
+use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\PermRegistro;
+use usuarios\domain\repositories\OficinaRepository;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
@@ -86,8 +86,8 @@ switch ($Q_que) {
         $Q_origen_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
         $Q_chk_anulados = (bool)filter_input(INPUT_POST, 'chk_anulados');
 
-        $gesOficinas = new GestorOficina();
-        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+        $OficinaRepository = new OficinaRepository();
+        $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
         $gesEntradas = new GestorEntrada();
         $aWhere = [];
         $aOperador = [];
@@ -187,8 +187,8 @@ switch ($Q_que) {
         $oLista->setCabeceras($a_cabeceras);
         $oLista->setDatos($a_valores);
 
-        $gesOficinas = new GestorOficina();
-        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+        $OficinaRepository = new OficinaRepository();
+        $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
         $oDesplOficinas = new web\Desplegable('oficina_buscar', $a_posibles_oficinas, $Q_oficina_buscar, TRUE);
 
         $gesLugares = new GestorLugar();

@@ -4,16 +4,18 @@ namespace usuarios\infrastructure;
 
 use core\ClaseRepository;
 use core\Condicion;
+use core\ConfigGlobal;
 use core\Set;
 use PDO;
 use PDOException;
-use usuarios\domain\entity\Usuario;
-use usuarios\domain\repositories\UsuarioRepositoryInterface;
+use usuarios\domain\entity\Cargo;
+use usuarios\domain\entity\Oficina;
+use usuarios\domain\repositories\OficinaRepositoryInterface;
 use web\Desplegable;
 
 
 /**
- * Clase que adapta la tabla aux_usuarios a la interfaz del repositorio
+ * Clase que adapta la tabla x_oficinas a la interfaz del repositorio
  *
  * @package tramity
  * @subpackage model
@@ -21,29 +23,29 @@ use web\Desplegable;
  * @version 2.0
  * @created 6/12/2022
  */
-class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryInterface
+class PgOficinaRepository extends ClaseRepository implements OficinaRepositoryInterface
 {
     public function __construct()
     {
         $oDbl = $GLOBALS['oDBT'];
         $this->setoDbl($oDbl);
-        $this->setNomTabla('aux_usuarios');
+        $this->setNomTabla('x_oficinas');
     }
 
     /* -------------------- GESTOR BASE ---------------------------------------- */
 
     /**
-     * devuelve una colección (array) de objetos de tipo Usuario
+     * devuelve una colección (array) de objetos de tipo Oficina
      *
      * @param array $aWhere asociativo con los valores para cada campo de la BD.
      * @param array $aOperators asociativo con los operadores que hay que aplicar a cada campo
-     * @return array|FALSE Una colección de objetos de tipo Usuario
+     * @return array|FALSE Una colección de objetos de tipo Oficina
      */
-    public function getUsuarios(array $aWhere = [], array $aOperators = []): array|false
+    public function getOficinas(array $aWhere = [], array $aOperators = []): array|false
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $UsuarioSet = new Set();
+        $OficinaSet = new Set();
         $oCondicion = new Condicion();
         $aCondicion = array();
         foreach ($aWhere as $camp => $val) {
@@ -88,41 +90,34 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
         }
         $sQry = "SELECT * FROM $nom_tabla " . $sCondicion . $sOrdre . $sLimit;
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClaveError = 'PgUsuarioRepository.listar.prepare';
+            $sClaveError = 'PgOficinaRepository.listar.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClaveError = 'PgUsuarioRepository.listar.execute';
+            $sClaveError = 'PgOficinaRepository.listar.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
 
         $filas = $oDblSt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($filas as $aDatos) {// para los bytea: (resources)
-            $handle = $aDatos['password'];
-            if ($handle !== null) {
-                $contents = stream_get_contents($handle);
-                fclose($handle);
-                $password = $contents;
-                $aDatos['password'] = $password;
-            }
-            $Usuario = new Usuario();
-            $Usuario->setAllAttributes($aDatos);
-            $UsuarioSet->add($Usuario);
+        foreach ($filas as $aDatos) {
+            $Oficina = new Oficina();
+            $Oficina->setAllAttributes($aDatos);
+            $OficinaSet->add($Oficina);
         }
-        return $UsuarioSet->getTot();
+        return $OficinaSet->getTot();
     }
 
     /* -------------------- ENTIDAD --------------------------------------------- */
 
-    public function Eliminar(Usuario $Usuario): bool
+    public function Eliminar(Oficina $Oficina): bool
     {
-        $id_usuario = $Usuario->getId_usuario();
+        $id_oficina = $Oficina->getId_oficina();
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_usuario = $id_usuario")) === FALSE) {
-            $sClaveError = 'Usuario.eliminar';
+        if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_oficina = $id_oficina")) === FALSE) {
+            $sClaveError = 'Oficina.eliminar';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -133,31 +128,25 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
     /**
      * Si no existe el registro, hace un insert, si existe, se hace el update.
      */
-    public function Guardar(Usuario $Usuario): bool
+    public function Guardar(Oficina $Oficina): bool
     {
-        $id_usuario = $Usuario->getId_usuario();
+        $id_oficina = $Oficina->getId_oficina();
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $bInsert = $this->isNew($id_usuario);
+        $bInsert = $this->isNew($id_oficina);
 
         $aDatos = [];
-        $aDatos['usuario'] = $Usuario->getUsuario();
-        $aDatos['id_cargo_preferido'] = $Usuario->getId_cargo_preferido();
-        $aDatos['password'] = $Usuario->getPassword();
-        $aDatos['email'] = $Usuario->getEmail();
-        $aDatos['nom_usuario'] = $Usuario->getNom_usuario();
+        $aDatos['sigla'] = $Oficina->getSigla();
+        $aDatos['orden'] = $Oficina->getOrden();
         array_walk($aDatos, 'core\poner_null');
 
         if ($bInsert === FALSE) {
             //UPDATE
             $update = "
-					usuario                  = :usuario,
-					id_cargo_preferido       = :id_cargo_preferido,
-					password                 = :password,
-					email                    = :email,
-					nom_usuario              = :nom_usuario";
-            if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_usuario = $id_usuario")) === FALSE) {
-                $sClaveError = 'Usuario.update.prepare';
+					sigla                    = :sigla,
+					orden                    = :orden";
+            if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_oficina = $id_oficina")) === FALSE) {
+                $sClaveError = 'Oficina.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -167,17 +156,17 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
             } catch (PDOException $e) {
                 $err_txt = $e->errorInfo[2];
                 $this->setErrorTxt($err_txt);
-                $sClaveError = 'Usuario.update.execute';
+                $sClaveError = 'Oficina.update.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
         } else {
             // INSERT
-            $aDatos['id_usuario'] = $Usuario->getId_usuario();
-            $campos = "(id_usuario,usuario,id_cargo_preferido,password,email,nom_usuario)";
-            $valores = "(:id_usuario,:usuario,:id_cargo_preferido,:password,:email,:nom_usuario)";
+            $aDatos['id_oficina'] = $Oficina->getId_oficina();
+            $campos = "(id_oficina,sigla,orden)";
+            $valores = "(:id_oficina,:sigla,:orden)";
             if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
-                $sClaveError = 'Usuario.insertar.prepare';
+                $sClaveError = 'Oficina.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -186,7 +175,7 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
             } catch (PDOException $e) {
                 $err_txt = $e->errorInfo[2];
                 $this->setErrorTxt($err_txt);
-                $sClaveError = 'Usuario.insertar.execute';
+                $sClaveError = 'Oficina.insertar.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -194,12 +183,12 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
         return TRUE;
     }
 
-    private function isNew(?string $id_usuario): bool
+    private function isNew(?int $id_oficina): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_usuario = $id_usuario")) === FALSE) {
-            $sClaveError = 'Usuario.isNew';
+        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_oficina = $id_oficina")) === FALSE) {
+            $sClaveError = 'Oficina.isNew';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -212,83 +201,97 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
     /**
      * Carga los campos de la base de datos como ATRIBUTOS de la clase.
      */
-    public function datosById(int $id_usuario): array|bool
+    public function datosById(int $id_oficina): array|bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_usuario = $id_usuario")) === FALSE) {
-            $sClaveError = 'Usuario.getDatosById';
+        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_oficina = $id_oficina")) === FALSE) {
+            $sClaveError = 'Oficina.getDatosById';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
-        // para los bytea, sobre escribo los valores:
-        $spassword = '';
-        $oDblSt->bindColumn('password', $spassword, PDO::PARAM_STR);
         $aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);
-        $aDatos['password'] = $spassword;
         return $aDatos;
     }
 
 
     /**
-     * Busca la clase con $id_usuario en la base de datos.
+     * Busca la clase con id_oficina en la base de datos .
      */
-    public function findById(int $id_usuario): ?Usuario
+    public function findById(int $id_oficina): ?Oficina
     {
-        $aDatos = $this->datosById($id_usuario);
-          if (empty($aDatos)) {
+        $aDatos = $this->datosById($id_oficina);
+        if (empty($aDatos)) {
             return null;
         }
-        return (new Usuario())->setAllAttributes($aDatos);
+        return (new Oficina())->setAllAttributes($aDatos);
     }
 
-    public function getNewId_usuario()
+    public function getNewId_oficina()
     {
         $oDbl = $this->getoDbl();
-        $sQuery = "select nextval('aux_usuarios_id_usuario_seq'::regclass)";
+        $sQuery = "select nextval('x_oficinas_id_oficina_seq'::regclass)";
         return $oDbl->query($sQuery)->fetchColumn();
     }
 
     /* -------------------- GESTOR EXTRA ---------------------------------------- */
-    public function getArrayUsuarios(): array|false
-    {
-        $oDbl = $this->getoDbl();
-        $nom_tabla = $this->getNomTabla();
 
-        $Where = '';
-        $sQuery = "SELECT id_usuario, usuario FROM $nom_tabla
-                $Where ORDER BY usuario";
-        if (($oDbl->query($sQuery)) === false) {
-            $sClauError = 'GestorAsignaturaTipo.lista';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return false;
-        }
-        $aOpciones = [];
-        foreach ($oDbl->query($sQuery) as $aClave) {
-            $clave = $aClave[0];
-            $val = $aClave[1];
+    /**
+     * @return array|false
+     */
+    public function getArrayOficinas(): array|false
+    {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+            $clave = Cargo::OFICINA_ESQUEMA;
+            $val = ConfigGlobal::nombreEntidad();
             $aOpciones[$clave] = $val;
+        } else {
+            $oDbl = $this->getoDbl();
+            $nom_tabla = $this->getNomTabla();
+
+            $sQuery = "SELECT id_oficina, sigla FROM $nom_tabla
+                 ORDER BY orden";
+            if (($oDbl->query($sQuery)) === false) {
+                $sClauError = 'GestorAsignaturaTipo.lista';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                return false;
+            }
+            $aOpciones = array();
+            foreach ($oDbl->query($sQuery) as $aClave) {
+                $clave = $aClave[0];
+                $val = $aClave[1];
+                $aOpciones[$clave] = $val;
+            }
         }
         return $aOpciones;
     }
 
-    public function getDesplUsuarios(): Desplegable|false
+    /**
+     * @return Desplegable|false
+     */
+    public function getListaOficinas(): Desplegable|false
     {
-        $oDbl = $this->getoDbl();
-        $nom_tabla = $this->getNomTabla();
-        $Where = '';
-        $sQuery = "SELECT id_usuario, usuario FROM $nom_tabla
-                $Where ORDER BY usuario";
-        if (($oDbl->query($sQuery)) === false) {
-            $sClauError = 'GestorAsignaturaTipo.lista';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return false;
-        }
-        $aOpciones = [];
-        foreach ($oDbl->query($sQuery) as $aClave) {
-            $clave = $aClave[0];
-            $val = $aClave[1];
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+            $clave = Cargo::OFICINA_ESQUEMA;
+            $val = ConfigGlobal::nombreEntidad();
             $aOpciones[$clave] = $val;
+        } else {
+            $oDbl = $this->getoDbl();
+            $nom_tabla = $this->getNomTabla();
+
+            $sQuery = "SELECT id_oficina, sigla FROM $nom_tabla
+                     ORDER BY orden";
+            if (($oDbl->query($sQuery)) === false) {
+                $sClauError = 'GestorAsignaturaTipo.lista';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+                return false;
+            }
+            $aOpciones = array();
+            foreach ($oDbl->query($sQuery) as $aClave) {
+                $clave = $aClave[0];
+                $val = $aClave[1];
+                $aOpciones[$clave] = $val;
+            }
         }
         return new Desplegable('', $aOpciones, '', true);
     }

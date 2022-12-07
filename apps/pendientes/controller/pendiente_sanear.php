@@ -4,7 +4,7 @@ use core\ViewTwig;
 use davical\model\entity\GestorCalendarItem;
 use entradas\model\Entrada;
 use pendientes\model\BuscarPendiente;
-use usuarios\model\entity\GestorOficina;
+use usuarios\domain\repositories\OficinaRepository;
 use web\Protocolo;
 use web\ProtocoloArray;
 
@@ -64,8 +64,8 @@ foreach ($a_id_entrada as $id_entrada) {
     }
 }
 
-$gesOficinas = new GestorOficina();
-$a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+$OficinaRepository = new OficinaRepository();
+$a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 
 $oBuscarPendiente = new BuscarPendiente();
 $oBuscarPendiente->setCalendario('registro');

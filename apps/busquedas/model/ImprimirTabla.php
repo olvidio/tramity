@@ -5,7 +5,7 @@ namespace busquedas\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\entity\GestorOficina;
+use usuarios\domain\repositories\OficinaRepository;
 use web\Lista;
 use web\Protocolo;
 use web\ProtocoloArray;
@@ -54,8 +54,8 @@ class ImprimirTabla
 
         $a_botones = [];
 
-        $gesOficinas = new GestorOficina();
-        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+        $OficinaRepository = new OficinaRepository();
+        $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 
         $i = 0;
         $a_valores = [];

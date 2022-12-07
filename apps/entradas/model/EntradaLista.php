@@ -5,11 +5,9 @@ namespace entradas\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\entity\GestorEntradaBypass;
-use usuarios\model\Categoria;
 use usuarios\domain\entity\Cargo;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\PermRegistro;
-use usuarios\model\Visibilidad;
+use usuarios\domain\repositories\OficinaRepository;
+use usuarios\domain\Visibilidad;
 use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
@@ -66,13 +64,13 @@ class EntradaLista
         $pagina_nueva = '';
         $filtro = $this->getFiltro();
 
-        $oCategoria = new Categoria();
+        $oCategoria = new \usuarios\domain\Categoria();
         $a_categorias = $oCategoria->getArrayCategoria();
         $oVisibilidad = new Visibilidad();
         $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
 
-        $gesOficinas = new GestorOficina();
-        $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+        $OficinaRepository = new OficinaRepository();
+        $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 
 
         $ver_oficina = TRUE;
@@ -123,7 +121,7 @@ class EntradaLista
         $a_entradas = [];
         $id_entrada = '';
         if (!empty($this->aWhere)) {
-            $oPermRegistro = new PermRegistro();
+            $oPermRegistro = new \usuarios\domain\PermRegistro();
             $gesEntradas = new GestorEntrada();
             $cEntradas = $gesEntradas->getEntradas($this->aWhere, $this->aOperador);
             foreach ($cEntradas as $oEntrada) {
@@ -156,7 +154,7 @@ class EntradaLista
                 }
                 $link_accion = Hash::link($pagina_accion . '?' . http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod . '?' . http_build_query($a_cosas));
-                if ($perm_ver_escrito >= PermRegistro::PERM_VER) {
+                if ($perm_ver_escrito >= \usuarios\domain\PermRegistro::PERM_VER) {
                     $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada_compartida',$compartida);\" >" . _("ver") . "</span>";
                     $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_accion');\" >" . _("acción") . "</span>";
                 }

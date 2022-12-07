@@ -3,11 +3,11 @@
 namespace usuarios\domain\repositories;
 
 use PDO;
-use usuarios\domain\entity\Usuario;
+use usuarios\domain\entity\Oficina;
 use web\Desplegable;
 
 /**
- * Interfaz de la clase Usuario y su Repositorio
+ * Interfaz de la clase Oficina y su Repositorio
  *
  * @package tramity
  * @subpackage model
@@ -15,25 +15,25 @@ use web\Desplegable;
  * @version 2.0
  * @created 6/12/2022
  */
-interface UsuarioRepositoryInterface
+interface OficinaRepositoryInterface
 {
 
     /* -------------------- GESTOR BASE ---------------------------------------- */
 
     /**
-     * devuelve una colección (array) de objetos de tipo Usuario
+     * devuelve una colección (array) de objetos de tipo Oficina
      *
      * @param array $aWhere asociativo con los valores para cada campo de la BD.
      * @param array $aOperators asociativo con los operadores que hay que aplicar a cada campo
-     * @return array|FALSE Una colección de objetos de tipo Usuario
+     * @return array|FALSE Una colección de objetos de tipo Oficina
      */
-    public function getUsuarios(array $aWhere = [], array $aOperators = []): array|false;
+    public function getOficinas(array $aWhere = [], array $aOperators = []): array|false;
 
     /* -------------------- ENTIDAD --------------------------------------------- */
 
-    public function Eliminar(Usuario $Usuario): bool;
+    public function Eliminar(Oficina $Oficina): bool;
 
-    public function Guardar(Usuario $Usuario): bool;
+    public function Guardar(Oficina $Oficina): bool;
 
     public function getErrorTxt(): string;
 
@@ -46,18 +46,18 @@ interface UsuarioRepositoryInterface
     /**
      * Carga los campos de la base de datos como ATRIBUTOS de la clase.
      */
-    public function datosById(int $id_usuario): array|bool;
+    public function datosById(int $id_oficina): array|bool;
 
     /**
-     * Busca la clase con $id_usuario en el repositorio.
+     * Busca la clase con id_oficina en el repositorio.
      */
-    public function findById(int $id_usuario): ?Usuario;
+    public function findById(int $id_oficina): ?Oficina;
 
-    public function getNewId_usuario();
+    public function getNewId_oficina();
 
     /* -------------------- GESTOR EXTRA ---------------------------------------- */
 
-    public function getArrayUsuarios(): array|false;
+    public function getArrayOficinas(): array|false;
 
-    public function getDesplUsuarios(): Desplegable|false;
+    public function getListaOficinas(): Desplegable|false;
 }

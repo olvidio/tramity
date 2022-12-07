@@ -3,7 +3,7 @@
 namespace web;
 
 use core\ConfigGlobal;
-use usuarios\model\entity\GestorPreferencia;
+use usuarios\domain\repositories\PreferenciaRepository;
 
 /**
  * Listas
@@ -281,11 +281,11 @@ class Lista
     public function mostrar_tabla(): string
     {
         $sPrefs = '';
-        $gesPreferencias = new GestorPreferencia();
+        $PreferenciaRepository = new PreferenciaRepository();
         $tipo = 'tabla_presentacion';
         if (empty($this->formato_tabla)) {
-            $oPref = $gesPreferencias->getMiPreferencia($tipo);
-            $sPrefs = $oPref->getPreferencia();
+            $oPreferencia = $PreferenciaRepository->getMiPreferencia($tipo);
+            $sPrefs = $oPreferencia->getPreferencia();
         } else {
             $sPrefs = $this->formato_tabla;
         }
@@ -850,7 +850,7 @@ class Lista
             }
         }
 
-        $gesPreferencias = new GestorPreferencia();
+        $PreferenciaRepository = new PreferenciaRepository();
         $id_usuario = ConfigGlobal::mi_id_usuario();
         $idioma = ConfigGlobal::mi_Idioma();
         $tipo = 'slickGrid_' . $id_tabla . '_' . $idioma;
@@ -859,9 +859,9 @@ class Lista
         $bPanelVis = false;
         for ($i = 0, $iMax = count($aUser); $i < $iMax; $i++) {
             $user = $aUser[$i];
-            $oPref = $gesPreferencias->getPreferenciaUsuario($user, $tipo);
+            $oPreferencia = $PreferenciaRepository->getPreferenciaUsuario($user, $tipo);
 
-            if ($sPrefs = $oPref->getPreferencia()) {
+            if ($sPrefs = $oPreferencia->getPreferencia()) {
                 $aPrefs = json_decode($sPrefs, true);
                 if (!empty($aPrefs['colVisible'])) {
                     $aColsVisible = $aPrefs['colVisible'];
@@ -938,7 +938,7 @@ class Lista
                 $sDefCol .= "}";
                 $aFields[] = $name_idx;
             }
-            if ((is_array($aColsVisible) && !empty($aColsVisible[$name_idx]) && ($aColsVisible[$name_idx] == "true")) || !is_array($aColsVisible)) {
+            if ((is_array($aColsVisible) && !empty($aColsVisible[$name_idx]) && ($aColsVisible[$name_idx] === 'true')) || !is_array($aColsVisible)) {
                 if (!$visible) continue;
                 if ($cv > 0) {
                     $sColumnsVisible .= ',';

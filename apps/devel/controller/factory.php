@@ -152,14 +152,9 @@ $sql = "SELECT
 			ORDER BY a.attnum
 ";
 
-$ATRIBUTOS = '
-	/**
-	 * aPrimary_key de ' . $clase . '
-	 *
-	 * @var array
-	 */
-	 private array $aPrimary_key;
-';
+
+$ATRIBUTOS = '';
+
 $a_use_txt = [];
 $c = 0;
 $cl = 0;
@@ -175,13 +170,15 @@ $exists = "";
 $ToEmpty = "";
 $bytea_bind = '';
 $bytea_dades = '';
+$array_dades = '';
 $gets = "";
 $altres_gets = "";
 $altres_gets_set = "";
 $query_if = "";
+$guardar_array = "";
 $err_bool = "";
 $a_auto = array();
-// una primera vuelta para cargar exceciopnes...
+// una primera vuelta para cargar excepciones...
 foreach ($oDbl->query($sql) as $row) {
     $nomcamp = $row['field'];
     if ($nomcamp === 'id_schema') {
@@ -282,6 +279,8 @@ foreach ($oDbl->query($sql) as $row) {
             $tipo_db = 'array';
             $tip = 'a_';
             $tip_val = '';
+            $array_dades .= "\n\t\t\t";
+            $array_dades .= '$aDatos[\''.$nomcamp.'\'] = array_pg2php($aDatos[\''.$nomcamp.'\']);';
             break;
         case 'int8':
         case 'int4':
@@ -401,10 +400,7 @@ foreach ($oDbl->query($sql) as $row) {
 	$gets .= "\n\t".' */
 	public function get' . $NomCamp . '(): '.$tipo_db_txt.'
 	{
-		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
-			$this->DBCargar();
-		}
-        return array_pg2php($this->' . $tip . $nomcamp . ');
+        return $this->' . $tip . $nomcamp . ';
 	}';
             break;
         case 'json':
@@ -466,7 +462,7 @@ foreach ($oDbl->query($sql) as $row) {
 
     if (in_array($nomcamp, $aClaus)) {
         $a_add_campos[$nomcamp] = '$aDatos[\'' . $nomcamp . '\'] = $' . $Q_clase . '->' . $metodo_get . ';';
-        $aClaus2[$nomcamp] = $tip . $nomcamp;
+        $aClaus2[$nomcamp] = ['tip_nomcamp' =>  $tip . $nomcamp, 'tip_txt' => $tip_txt];
         $gets .= '
 	/**
 	 *
@@ -484,18 +480,11 @@ foreach ($oDbl->query($sql) as $row) {
                 $gets .= '
 	/**
 	 * 
-	 * @param array|string|null $' . $tip . $nomcamp . '
-     * @param bool $db=FALSE optional. Para determinar la variable que se le pasa es ya un array postgresql,
-	 *  o es una variable de php hay que convertirlo.
+	 * @param array|null $' . $tip . $nomcamp . '
 	 */
-	public function set' . $NomCamp . '(array|string $' . $tip . $nomcamp . '= null , bool $db=FALSE): void
+	public function set' . $NomCamp . '(array $' . $tip . $nomcamp . '= null): void
 	{
-        if ($db === FALSE) {
-	        $postgresArray = array_php2pg($' . $tip . $nomcamp . ');
-	    } else {
-	        $postgresArray = $' . $tip . $nomcamp . ';
-	    }
-        $this->' . $tip . $nomcamp . ' = $postgresArray;
+        $this->' . $tip . $nomcamp . ' = $' . $tip . $nomcamp . ';
 	}';
                 break;
             case 'json':
@@ -578,7 +567,7 @@ foreach ($oDbl->query($sql) as $row) {
         case 'jsonb':
             $exists .= "\n\t\t" . 'if (array_key_exists(\'' . $nomcamp . '\',$aDatos))';
             $exists .= "\n\t\t{";
-            $exists .= "\n\t\t\t" . '$this->set' . $NomCamp . '($aDatos[\'' . $nomcamp . '\'],TRUE);';
+            $exists .= "\n\t\t\t" . '$this->set' . $NomCamp . '($aDatos[\'' . $nomcamp . '\']);';
             $exists .= "\n\t\t}";
             $ToEmpty .= "\n\t\t" . '$this->set' . $NomCamp . '(\'\');';
             break;
@@ -604,7 +593,12 @@ foreach ($oDbl->query($sql) as $row) {
             if ($tip === 'b') {
                 $err_bool .= "\n\t\t" . 'if ( is_true($aDatos[\'' . $nomcamp . '\']) ) { $aDatos[\'' . $nomcamp . '\']=\'true\'; } else { $aDatos[\'' . $nomcamp . '\']=\'false\'; }';
             }
-            $guardar .= "\n\t\t" . '$aDatos[\'' . $nomcamp . '\'] = $'.$Q_clase.'->' . $metodo_get . ';';
+            if ($tipo_db === 'array') {
+                $guardar_array = "\n\t\t" . '$aDatos[\'' . $nomcamp . '\'] = array_php2pg($' . $Q_clase . '->' . $metodo_get . ');';
+            } else {
+                $guardar .= "\n\t\t" . '$aDatos[\'' . $nomcamp . '\'] = $' . $Q_clase . '->' . $metodo_get . ';';
+            }
+
             if ($cl > 0) $update .= ",\n";
             $update .= "\t\t\t\t\t" . $nomcamp;
             // para intentar que los = salgan en la misma columna
@@ -701,7 +695,9 @@ $getClau = '';
 $claus_txt = '';
 $claus_txt2 = '';
 if (count($aClaus2) === 1) {
-    $nom_clau = current($aClaus2);
+    $a_nom_clau = current($aClaus2);
+    $nom_clau = $a_nom_clau['tip_nomcamp'];
+    $clau_tip_txt = $a_nom_clau['tip_txt'];
     $clau = key($aClaus2);
     // si es integer quito las comillas del where
     if ($nom_clau[0] === 'i') {
@@ -746,7 +742,7 @@ use web\Desplegable;
 
 /**
  *
- * Clase para gestionar la llista de objectos tipo $Q_clase
+ * Clase para gestionar la lista de objetos tipo $Q_clase
  * 
  * @package $aplicacion
  * @subpackage model
@@ -923,6 +919,11 @@ if (!empty($bytea_dades)) {
     $txt_pgRepositorio .= $bytea_dades;
 }
 
+if (!empty($array_dades)) {
+    $txt_pgRepositorio .= "\n\t\t\t// para los array del postgres";
+    $txt_pgRepositorio .= $array_dades;
+}
+
 $txt_pgRepositorio .= '
             $' . $Q_clase . ' = new ' . $Q_clase . '();
             $' . $Q_clase . '->setAllAttributes($aDatos);
@@ -1037,6 +1038,10 @@ $txt_pgRepositorio .= '
 		$aDatos = [];';
 
 $txt_pgRepositorio .= $guardar;
+if ($guardar_array) {
+    $txt_pgRepositorio .= "\n\t\t// para los array";
+    $txt_pgRepositorio .= $guardar_array;
+}
 $txt_pgRepositorio .= '
 		array_walk($aDatos, \'core\\poner_null\');';
 if ($err_bool) {
@@ -1094,7 +1099,7 @@ $txt_pgRepositorio .= "\n\t\t" . '}
 
 $txt_pgRepositorio .= "\n\t";
 $txt_pgRepositorio .='
-    private function isNew('.$tip_txt.' $' . $clau.'): bool
+    private function isNew(' . $clau_tip_txt . ' $' . $clau.'): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -1117,9 +1122,13 @@ if ($nom_clau[0] === 'i') {
 $txt_repository .= "\n\t";
 $txt_repository .= '
     /**
-     * Carga los campos de la base de datos como ATRIBUTOS de la clase.
+     * Devuelve los campos de la base de datos en un array asociativo.
+     * Devuelve false si no existe la fila en la base de datos
+     * 
+     * @param ' . $clau_tip_txt . ' $'.$clau.'
+     * @return array|bool
      */
-    public function datosById('.$tip_txt.' $' . $clau.'): array|bool
+    public function datosById(' . $clau_tip_txt.' $' . $clau.'): array|bool
     {
         return $this->repository->datosById($' . $clau . ');
     }';
@@ -1127,16 +1136,24 @@ $txt_repository .= '
 $txt_interface .= "\n\t";
 $txt_interface .= '
     /**
-     * Carga los campos de la base de datos como ATRIBUTOS de la clase.
+     * Devuelve los campos de la base de datos en un array asociativo.
+     * Devuelve false si no existe la fila en la base de datos
+     * 
+     * @param ' . $clau_tip_txt . ' $'.$clau.'
+     * @return array|bool
      */
-    public function datosById('.$tip_txt.' $' . $clau.'): array|bool;';
+    public function datosById(' . $clau_tip_txt.' $' . $clau.'): array|bool;';
 
 $txt_pgRepositorio .= "\n\t";
 $txt_pgRepositorio .='
     /**
-     * Carga los campos de la base de datos como ATRIBUTOS de la clase.
+     * Devuelve los campos de la base de datos en un array asociativo.
+     * Devuelve false si no existe la fila en la base de datos
+     * 
+     * @param ' . $clau_tip_txt . ' $'.$clau.'
+     * @return array|bool
      */
-    public function datosById('.$tip_txt.' $' . $clau.'): array|bool
+    public function datosById(' . $clau_tip_txt.' $' . $clau.'): array|bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -1152,6 +1169,15 @@ if (!empty($bytea_bind)) {
 } else {
     $txt_pgRepositorio .= "\n\t\t" . '$aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);';
 }
+
+if (!empty($array_dades)) {
+    $txt_pgRepositorio .= "\n\t\t\t// para los array del postgres";
+    $txt_pgRepositorio .= "\n\t\t\t" . 'if ($aDatos !== FALSE) {';
+    $txt_pgRepositorio .= $array_dades;
+    $txt_pgRepositorio .= "\n\t\t\t}";
+}
+
+
 $txt_pgRepositorio .='
         return $aDatos;
     }
@@ -1162,7 +1188,7 @@ $txt_repository .='
     /**
      * Busca la clase con ' . $clau . ' en el repositorio.
      */
-    public function findById('.$tip_txt.' $' . $clau.'): ?' . $Q_clase . '
+    public function findById(' . $clau_tip_txt . ' $' . $clau.'): ?' . $Q_clase . '
     {
         return $this->repository->findById($' . $clau . ');
     }';
@@ -1172,14 +1198,14 @@ $txt_interface .='
     /**
      * Busca la clase con ' . $clau . ' en el repositorio.
      */
-    public function findById('.$tip_txt.' $' . $clau.'): ?' . $Q_clase;
+    public function findById('.$clau_tip_txt.' $' . $clau.'): ?' . $Q_clase.';';
 
 $txt_pgRepositorio .= "\n\t";
 $txt_pgRepositorio .='
     /**
      * Busca la clase con ' . $clau . ' en la base de datos .
      */
-    public function findById('.$tip_txt.' $' . $clau.'): ?' . $Q_clase . '
+    public function findById('.$clau_tip_txt.' $' . $clau.'): ?' . $Q_clase . '
     {
         $aDatos = $this->datosById($' . $clau . ');
         if (empty($aDatos)) {

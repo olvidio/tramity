@@ -2,7 +2,7 @@
 
 use config\model\entity\ConfigSchema;
 use usuarios\domain\entity\Cargo;
-use usuarios\model\entity\GestorLocale;
+use usuarios\domain\repositories\LocaleRepository;
 use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -222,8 +222,8 @@ $parametro = 'idioma_default';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
-$gesIdiomas = new GestorLocale();
-$oDeplIdiomas = $gesIdiomas->getListaLocales();
+$LocaleRepository = new LocaleRepository();
+$oDeplIdiomas = $LocaleRepository->getListaLocales();
 $oDeplIdiomas->setNombre('valor');
 $oDeplIdiomas->setOpcion_sel($valor);
 
@@ -249,11 +249,11 @@ if (empty($valor)) {
     $valor = Cargo::AMBITO_DL;  // "dl"
 }
 $val_ctr = Cargo::AMBITO_CTR;
-$chk_ctr = ($valor == $val_ctr) ? 'checked' : '';
+$chk_ctr = ($valor === $val_ctr) ? 'checked' : '';
 $val_dl = Cargo::AMBITO_DL;
-$chk_dl = ($valor == $val_dl) ? 'checked' : '';
+$chk_dl = ($valor === $val_dl) ? 'checked' : '';
 $val_cr = Cargo::AMBITO_CR;
-$chk_cr = ($valor == $val_cr) ? 'checked' : '';
+$chk_cr = ($valor === $val_cr) ? 'checked' : '';
 
 $oHashDLR = new Hash();
 $oHashDLR->setUrl($url);
@@ -274,9 +274,9 @@ $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
 $val_tls = 'tls'; // PHPMailer::ENCRYPTION_STARTTLS
-$chk_tls = ($valor == $val_tls) ? 'checked' : '';
+$chk_tls = ($valor === $val_tls) ? 'checked' : '';
 $val_ssl = 'ssl'; // PHPMailer::ENCRYPTION_SMTPS
-$chk_ssl = ($valor == $val_ssl) ? 'checked' : '';
+$chk_ssl = ($valor === $val_ssl) ? 'checked' : '';
 
 $oHashSMTP_secure = new Hash();
 $oHashSMTP_secure->setUrl($url);
@@ -318,7 +318,7 @@ $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
 $val_auth = 'true';
-$chk_auth = ($valor == $val_auth) ? 'checked' : '';
+$chk_auth = ($valor === $val_auth) ? 'checked' : '';
 
 $oHashSMTP_auth = new Hash();
 $oHashSMTP_auth->setUrl($url);

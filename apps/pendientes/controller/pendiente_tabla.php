@@ -7,9 +7,9 @@ use etiquetas\model\entity\GestorEtiqueta;
 use pendientes\model\GestorPendiente;
 use pendientes\model\Rrule;
 use usuarios\domain\entity\Cargo;
+use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\PermRegistro;
+use usuarios\domain\repositories\OficinaRepository;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
@@ -67,8 +67,8 @@ if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
     if ($role_actual === 'secretaria') {
         $secretaria = 1; // NO TRUE, para eljavascript;
         $perm_periodico = 1; // NO TRUE, para eljavascript;
-        $gesOficinas = new GestorOficina();
-        $oDesplOficinas = $gesOficinas->getListaOficinas();
+        $OficinaRepository = new OficinaRepository();
+        $oDesplOficinas = $OficinaRepository->getListaOficinas();
         $oDesplOficinas->setOpcion_sel($Q_id_oficina);
         $oDesplOficinas->setNombre('id_oficina');
         $id_oficina = '';

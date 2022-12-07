@@ -5,7 +5,6 @@ namespace entradas\model;
 use core\Condicion;
 use core\Set;
 use entradas\model\entity\GestorEntradaDB;
-use usuarios\model\Categoria;
 
 
 class GestorEntrada extends GestorEntradaDB
@@ -25,7 +24,7 @@ class GestorEntrada extends GestorEntradaDB
         $nom_tabla = $this->getNomTabla();
         // Quitar esquema al $nom_tabla
         preg_replace('/(\w+)\.(\w+)/i', '$2', $nom_tabla);
-        $categoria = Categoria::CAT_NORMAL;
+        $categoria = \usuarios\domain\Categoria::CAT_NORMAL;
 
         foreach ($aEntidades as $schema) {
             $nom_tabla_entidad = '"' . $schema . '".' . $nom_tabla;

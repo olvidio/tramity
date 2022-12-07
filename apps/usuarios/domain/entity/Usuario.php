@@ -16,13 +16,6 @@ class Usuario
     /* ATRIBUTOS ----------------------------------------------------------------- */
 
     /**
-     * aPrimary_key de Usuario
-     *
-     * @var array
-     */
-    private array $aPrimary_key;
-
-    /**
      * Id_usuario de Usuario
      *
      * @var int

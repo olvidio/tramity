@@ -1,8 +1,8 @@
 <?php
 
 use core\ViewTwig;
+use usuarios\domain\repositories\CargoGrupoRepository;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\entity\GestorCargoGrupo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -35,8 +35,8 @@ if (isset($_POST['stack'])) {
 $aWhere['_ordre'] = 'descripcion';
 $aOperador = [];
 
-$gesGrupos = new GestorCargoGrupo();
-$cGrupos = $gesGrupos->getCargoGrupos($aWhere, $aOperador);
+$CargoGrupoRepository = new CargoGrupoRepository();
+$cGrupos = $CargoGrupoRepository->getCargoGrupos($aWhere, $aOperador);
 
 //default:
 $descripcion = '';

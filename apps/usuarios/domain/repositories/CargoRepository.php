@@ -9,7 +9,7 @@ use web\Desplegable;
 
 /**
  *
- * Clase para gestionar la llista de objectos tipo Cargo
+ * Clase para gestionar la lista de objetos tipo Cargo
  *
  * @package tramity
  * @subpackage model

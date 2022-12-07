@@ -1,6 +1,6 @@
 <?php
 
-namespace usuarios\model\entity;
+namespace usuarios\legacy;
 
 use core;
 use PDO;
@@ -25,7 +25,7 @@ use PDOException;
  * @version 1.0
  * @created 16/6/2020
  */
-class Oficina extends core\ClasePropiedades
+class zzzOficinaOld extends core\ClasePropiedades
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 

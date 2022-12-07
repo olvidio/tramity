@@ -1,21 +1,21 @@
 <?php
 
-namespace usuarios\model\entity;
+namespace usuarios\legacy;
 
 use core;
 
 /**
- * GestorCargoGrupo
+ * GestorPreferencia
  *
- * Classe per gestionar la llista d'objectes de la clase CargoGrupo
+ * Classe per gestionar la llista d'objectes de la clase Preferencia
  *
  * @package tramity
  * @subpackage model
  * @author Daniel Serrabou
  * @version 1.0
- * @created 24/12/2020
+ * @created 8/6/2020
  */
-class GestorCargoGrupo extends core\ClaseGestor
+class zzzGestorPreferenciaOld extends core\ClaseGestor
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 
@@ -32,47 +32,61 @@ class GestorCargoGrupo extends core\ClaseGestor
     {
         $oDbl = $GLOBALS['oDBT'];
         $this->setoDbl($oDbl);
-        $this->setNomTabla('cargos_grupos');
+        $this->setNomTabla('usuario_preferencias');
     }
 
 
     /* MÉTODOS PÚBLICOS -----------------------------------------------------------*/
 
     /**
-     * retorna l'array d'objectes de tipus CargoGrupo
+     * retorna un objecte Preferencia
      *
-     * @param string sQuery la query a executar.
-     * @return array Una col·lecció d'objectes de tipus CargoGrupo
+     * @param string $tipo
+     * @return Preferencia
      */
-    function getCargoGruposQuery($sQuery = '')
+    function getMiPreferencia($tipo)
     {
-        $oDbl = $this->getoDbl();
-        $oCargoGrupoSet = new core\Set();
-        if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'GestorCargoGrupo.query';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_grupo' => $aDades['id_grupo']);
-            $oCargoGrupo = new CargoGrupo($a_pkey);
-            $oCargoGrupoSet->add($oCargoGrupo);
-        }
-        return $oCargoGrupoSet->getTot();
+        $id_usuario = core\ConfigGlobal::mi_id_usuario();
+        return $this->getPreferenciaUsuario($id_usuario, $tipo);
     }
 
     /**
-     * retorna l'array d'objectes de tipus CargoGrupo
+     * retorna un objecte Preferencia
+     *
+     * @param integer $id_usuario
+     * @param string $tipo
+     * @return Preferencia
+     */
+    function getPreferenciaUsuario($id_usuario, $tipo)
+    {
+        $gesPreferencias = new GestorPreferencia();
+        $cPreferencias = $gesPreferencias->getPreferencias(['id_usuario' => $id_usuario, 'tipo' => $tipo]);
+        if (count($cPreferencias) > 0) {
+            $oPref = $cPreferencias[0]; // solo debería haber uno.
+            if ($oPref->DBCargar() === FALSE ){
+                $err_cargar = sprintf(_("OJO! no existe la Preferencia en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
+        } else {
+            $oPref = new Preferencia();
+            $oPref->setId_usuario($id_usuario);
+            $oPref->setTipo($tipo);
+        }
+        return $oPref;
+    }
+
+    /**
+     * retorna l'array d'objectes de tipus Preferencia
      *
      * @param array aWhere associatiu amb els valors de les variables amb les quals farem la query
      * @param array aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
-     * @return array Una col·lecció d'objectes de tipus CargoGrupo
+     * @return array Una col·lecció d'objectes de tipus Preferencia
      */
-    function getCargoGrupos($aWhere = array(), $aOperators = array())
+    function getPreferencias($aWhere = array(), $aOperators = array())
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $oCargoGrupoSet = new core\Set();
+        $oPreferenciaSet = new core\Set();
         $oCondicion = new core\Condicion();
         $aCondi = array();
         foreach ($aWhere as $camp => $val) {
@@ -117,21 +131,44 @@ class GestorCargoGrupo extends core\ClaseGestor
         }
         $sQry = "SELECT * FROM $nom_tabla " . $sCondi . $sOrdre . $sLimit;
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorCargoGrupo.llistar.prepare';
+            $sClauError = 'GestorPreferencia.llistar.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorCargoGrupo.llistar.execute';
+            $sClauError = 'GestorPreferencia.llistar.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_grupo' => $aDades['id_grupo']);
-            $oCargoGrupo = new CargoGrupo($a_pkey);
-            $oCargoGrupoSet->add($oCargoGrupo);
+            $a_pkey = array('id_item' => $aDades['id_item']);
+            $oPreferencia = new Preferencia($a_pkey);
+            $oPreferenciaSet->add($oPreferencia);
         }
-        return $oCargoGrupoSet->getTot();
+        return $oPreferenciaSet->getTot();
+    }
+
+    /**
+     * retorna l'array d'objectes de tipus Preferencia
+     *
+     * @param string sQuery la query a executar.
+     * @return array Una col·lecció d'objectes de tipus Preferencia
+     */
+    function getPreferenciasQuery($sQuery = '')
+    {
+        $oDbl = $this->getoDbl();
+        $oPreferenciaSet = new core\Set();
+        if (($oDbl->query($sQuery)) === FALSE) {
+            $sClauError = 'GestorPreferencia.query';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        foreach ($oDbl->query($sQuery) as $aDades) {
+            $a_pkey = array('id_item' => $aDades['id_item']);
+            $oPreferencia = new Preferencia($a_pkey);
+            $oPreferenciaSet->add($oPreferencia);
+        }
+        return $oPreferenciaSet->getTot();
     }
 
     /* MÉTODOS PROTECTED --------------------------------------------------------*/

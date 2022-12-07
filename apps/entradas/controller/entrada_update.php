@@ -8,7 +8,7 @@ use entradas\model\Entrada;
 use lugares\model\entity\GestorGrupo;
 use pendientes\model\Pendiente;
 use usuarios\domain\entity\Cargo;
-use usuarios\model\PermRegistro;
+use usuarios\domain\PermRegistro;
 use web\DateTimeLocal;
 use web\Protocolo;
 use function core\is_true;

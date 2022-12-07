@@ -8,10 +8,10 @@ use lugares\model\entity\GestorLugar;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
 use usuarios\domain\entity\Cargo;
+use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\CargoRepository;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\PermRegistro;
-use usuarios\model\Visibilidad;
+use usuarios\domain\repositories\OficinaRepository;
+use usuarios\domain\Visibilidad;
 use web\DateTimeLocal;
 use web\Desplegable;
 
@@ -57,14 +57,14 @@ if ($go === "entradas" || $go === "salidas" || $go === "mov_iese") {
     $Q_calendario = empty($Q_calendario) ? 'oficina' : $Q_calendario;
 }
 
-$gesOficinas = new GestorOficina();
-$a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+$OficinaRepository = new OficinaRepository();
+$a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 
 // solo secretaría puede ver/crear pendientes de otras oficinas
 $role_actual = ConfigGlobal::role_actual();
 if ($role_actual === 'secretaria') {
     $secretaria = TRUE;
-    $oDesplOficinas = $gesOficinas->getListaOficinas();
+    $oDesplOficinas = $OficinaRepository->getListaOficinas();
     $oDesplOficinas->setNombre('id_oficina');
     $id_oficina = $Q_id_oficina;
 

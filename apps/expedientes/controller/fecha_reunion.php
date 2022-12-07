@@ -4,7 +4,7 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use expedientes\model\Expediente;
 use lugares\model\entity\GestorLugar;
-use usuarios\model\entity\GestorOficina;
+use usuarios\domain\repositories\OficinaRepository;
 use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -23,8 +23,8 @@ $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
 $id_oficina = ConfigGlobal::role_id_oficina();
 
-$gesOficinas = new GestorOficina();
-$oDesplOficinas = $gesOficinas->getListaOficinas();
+$OficinaRepository = new OficinaRepository();
+$oDesplOficinas = $OficinaRepository->getListaOficinas();
 $oDesplOficinas->setNombre('id_oficina');
 $oDesplOficinas->setOpcion_sel($id_oficina);
 

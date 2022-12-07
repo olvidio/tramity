@@ -12,9 +12,8 @@ use iCalComponent;
 use iCalProp;
 use pendientes\model\entity\PendienteDB;
 use usuarios\domain\entity\Cargo;
-use usuarios\model\entity\GestorOficina;
-use usuarios\model\PermRegistro;
-use usuarios\model\Visibilidad;
+use usuarios\domain\repositories\OficinaRepository;
+use usuarios\domain\Visibilidad;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
@@ -329,27 +328,27 @@ class Pendiente
         switch ($class) {
             case 'PUBLIC':
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                    $visibilidad = Visibilidad::V_CTR_TODOS;
+                    $visibilidad = \usuarios\domain\Visibilidad::V_CTR_TODOS;
                 } else {
-                    $visibilidad = Visibilidad::V_TODOS;
+                    $visibilidad = \usuarios\domain\Visibilidad::V_TODOS;
                 }
                 break;
             case 'PRIVATE':
-                $visibilidad = Visibilidad::V_PERSONAL;
+                $visibilidad = \usuarios\domain\Visibilidad::V_PERSONAL;
                 break;
             case 'CONFIDENTIAL':
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $visibilidad = Visibilidad::V_CTR_DTOR;
                 } else {
-                    $visibilidad = Visibilidad::V_DIRECTORES;
+                    $visibilidad = \usuarios\domain\Visibilidad::V_DIRECTORES;
                 }
                 //$visibilidad = Visibilidad::V_RESERVADO; // solo añade no ver a los directores de otras oficinas no implicadas
                 break;
             case 'VCD':
-                $visibilidad = Visibilidad::V_RESERVADO_VCD;
+                $visibilidad = \usuarios\domain\Visibilidad::V_RESERVADO_VCD;
                 break;
             default:
-                $visibilidad = Visibilidad::V_TODOS;
+                $visibilidad = \usuarios\domain\Visibilidad::V_TODOS;
         }
         return $visibilidad;
     }
@@ -475,7 +474,7 @@ class Pendiente
      */
     public function getAsunto()
     {
-        $oPermiso = new PermRegistro();
+        $oPermiso = new \usuarios\domain\PermRegistro();
         $perm = $oPermiso->permiso_detalle($this, 'asunto');
 
         $local_asunto = _("reservado");
@@ -616,7 +615,7 @@ class Pendiente
      */
     function getDetalle()
     {
-        $oPermiso = new PermRegistro();
+        $oPermiso = new \usuarios\domain\PermRegistro();
         $perm = $oPermiso->permiso_detalle($this, 'detalle');
 
         $local_detalle = _("reservado");
@@ -943,25 +942,25 @@ class Pendiente
     private function visibilidad_to_Class($visibilidad)
     {
         switch ($visibilidad) {
-            case Visibilidad::V_TODOS:
+            case \usuarios\domain\Visibilidad::V_TODOS:
                 $class = 'PUBLIC';
                 break;
-            case Visibilidad::V_PERSONAL:
+            case \usuarios\domain\Visibilidad::V_PERSONAL:
                 $class = 'PRIVATE';
                 break;
             case Visibilidad::V_DIRECTORES:
-            case Visibilidad::V_RESERVADO:
+            case \usuarios\domain\Visibilidad::V_RESERVADO:
                 $class = 'CONFIDENTIAL';
                 break;
-            case Visibilidad::V_RESERVADO_VCD;
+            case \usuarios\domain\Visibilidad::V_RESERVADO_VCD;
                 $class = 'VCD';
                 break;
             // para los ctr
-            case Visibilidad::V_CTR_TODOS;
+            case \usuarios\domain\Visibilidad::V_CTR_TODOS;
                 $class = 'PUBLIC';
                 break;
-            case Visibilidad::V_CTR_DTOR;
-            case Visibilidad::V_CTR_DTOR_SACD;
+            case \usuarios\domain\Visibilidad::V_CTR_DTOR;
+            case \usuarios\domain\Visibilidad::V_CTR_DTOR_SACD;
                 $class = 'CONFIDENTIAL';
                 break;
             default:
@@ -1414,8 +1413,8 @@ class Pendiente
         if (count($a_container) > 2) {
             // es una dl
             $nom_oficina = $a_container[2];
-            $gesOficinas = new GestorOficina();
-            $cOficinas = $gesOficinas->getOficinas(['sigla' => $nom_oficina]);
+            $OficinaRepository = new OficinaRepository();
+            $cOficinas = $OficinaRepository->getOficinas(['sigla' => $nom_oficina]);
             $id_of_ponente = $cOficinas[0]->getId_oficina();
         } else {
             // es un ctr
@@ -1604,8 +1603,8 @@ class Pendiente
         $a_container = explode('_', $this->getParent_container());
         if (count($a_container) > 2) {
             // es una dl
-            $gesOficinas = new GestorOficina();
-            $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
+            $OficinaRepository = new OficinaRepository();
+            $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 
             $aOficinas = $this->getOficinasArray();
             $oficinas_txt = '';

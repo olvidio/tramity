@@ -36,13 +36,6 @@ class Cargo
     /* ATRIBUTOS ----------------------------------------------------------------- */
 
     /**
-     * aPrimary_key de Cargo
-     *
-     * @var array
-     */
-    private array $aPrimary_key;
-
-    /**
      * Id_cargo de Cargo
      *
      * @var int
