@@ -4,7 +4,8 @@ use core\ConfigGlobal;
 use escritos\model\Escrito;
 use etherpad\model\Etherpad;
 use expedientes\model\entity\Accion;
-use plantillas\model\entity\Plantilla;
+use plantillas\domain\entity\Plantilla;
+use plantillas\domain\repositories\PlantillaRepository;
 use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -26,7 +27,8 @@ switch ($Q_que) {
         $Q_id_plantilla = (integer)filter_input(INPUT_POST, 'id_plantilla');
         $Q_filtro = (integer)filter_input(INPUT_POST, 'filtro');
         // Para saber el nombre de la plantilla:
-        $oPlantilla = new Plantilla($Q_id_plantilla);
+        $PlantillaRepository = new PlantillaRepository();
+        $oPlantilla = $PlantillaRepository->findById($Q_id_plantilla);
         $asunto = $oPlantilla->getNombre();
 
         // crear un nuevo escrito:
@@ -103,9 +105,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-
-
-        break;
     case "guardar_escrito":
         $Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
         $Q_id_plantilla = (integer)filter_input(INPUT_POST, 'id_plantilla');
@@ -134,10 +133,11 @@ switch ($Q_que) {
         $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
             $Q_id_plantilla = (integer)strtok($a_sel[0], "#");
-            $oPlantilla = new Plantilla($Q_id_plantilla);
-            if ($oPlantilla->DBEliminar() === FALSE) {
+            $PlantillaRepository = new PlantillaRepository();
+            $oPlantilla = $PlantillaRepository->findById($Q_id_plantilla);
+            if ($PlantillaRepository->Eliminar($oPlantilla) === FALSE) {
                 echo _("hay un error, no se ha eliminado");
-                echo "\n" . $oPlantilla->getErrorTxt();
+                echo "\n" . $PlantillaRepository->getErrorTxt();
             }
         }
         break;
@@ -150,12 +150,17 @@ switch ($Q_que) {
             echo _("debe poner un nombre");
         }
 
-        $oPlantilla = new Plantilla($Q_id_plantilla);
-        $oPlantilla->DBCargar();
+        $PlantillaRepository = new PlantillaRepository();
+        $oPlantilla = $PlantillaRepository->findById($Q_id_plantilla);
+        if ($oPlantilla === null) {
+            $Q_id_plantilla = $PlantillaRepository->getNewId_plantilla();
+            $oPlantilla = new Plantilla();
+            $oPlantilla->setId_plantilla($Q_id_plantilla);
+        }
         $oPlantilla->setNombre($Q_nombre);
-        if ($oPlantilla->DBGuardar() === FALSE) {
+        if ($PlantillaRepository->Guardar($oPlantilla) === FALSE) {
             echo _("hay un error, no se ha guardado");
-            echo "\n" . $oPlantilla->getErrorTxt();
+            echo "\n" . $PlantillaRepository->getErrorTxt();
         }
         break;
     default:

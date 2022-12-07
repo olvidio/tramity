@@ -2,7 +2,8 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use plantillas\model\entity\GestorPlantilla;
+use plantillas\domain\repositories\PlantillaRepository;
+use web\Hash;
 use web\Lista;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -16,9 +17,9 @@ require_once("apps/core/global_object.inc");
 
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
-$gesPlantillas = new GestorPlantilla();
+$PlantillaRepository = new PlantillaRepository();
 $aWhere = [];
-$cPlantillas = $gesPlantillas->getPlantillas($aWhere);
+$cPlantillas = $PlantillaRepository->getPlantillas($aWhere);
 
 $a_botones = [['txt' => _('cambiar nombre'), 'click' => "fnjs_datos_plantilla()"],
     ['txt' => _('eliminar'), 'click' => "fnjs_eliminar_plantilla()"],
@@ -48,10 +49,10 @@ $oTabla->setBotones($a_botones);
 $oTabla->setDatos($a_valores);
 
 $aQuery = ['nuevo' => 1, 'quien' => 'plantilla'];
-$url_nuevo = web\Hash::link(core\ConfigGlobal::getWeb() . '/apps/plantillas/controller/plantilla_form.php?' . http_build_query($aQuery));
-$url_form = web\Hash::link(core\ConfigGlobal::getWeb() . '/apps/plantillas/controller/plantilla_form.php');
-$url_eliminar = web\Hash::link(core\ConfigGlobal::getWeb() . '/apps/plantillas/controller/plantilla_update.php');
-$url_actualizar = web\Hash::link(core\ConfigGlobal::getWeb() . '/apps/plantillas/controller/plantilla_lista.php');
+$url_nuevo = Hash::link(ConfigGlobal::getWeb() . '/apps/plantillas/controller/plantilla_form.php?' . http_build_query($aQuery));
+$url_form = Hash::link(ConfigGlobal::getWeb() . '/apps/plantillas/controller/plantilla_form.php');
+$url_eliminar = Hash::link(ConfigGlobal::getWeb() . '/apps/plantillas/controller/plantilla_update.php');
+$url_actualizar = Hash::link(ConfigGlobal::getWeb() . '/apps/plantillas/controller/plantilla_lista.php');
 
 $titulo = _("Plantillas de la Delegación");
 $server = ConfigGlobal::getWeb(); //http://tramity.local

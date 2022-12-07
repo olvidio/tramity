@@ -3,7 +3,8 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use escritos\model\Escrito;
-use plantillas\model\entity\GestorPlantilla;
+use plantillas\domain\repositories\PlantillaRepository;
+use web\Hash;
 use web\Lista;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -20,9 +21,9 @@ $Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 $Q_modo = (string)filter_input(INPUT_POST, 'modo');
 
-$gesPlantillas = new GestorPlantilla();
+$PlantillaRepository = new PlantillaRepository();
 $aWhere = [];
-$cPlantillas = $gesPlantillas->getPlantillas($aWhere);
+$cPlantillas = $PlantillaRepository->getPlantillas($aWhere);
 
 $a_botones = [];
 $a_cabeceras = [_("ver"), _("nombre"), _("adjuntar")];
@@ -56,7 +57,7 @@ $a_cosas = [
     'filtro' => $Q_filtro,
     'modo' => $Q_modo,
 ];
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
+$pagina_cancel = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
 $url_update = 'apps/plantillas/controller/plantilla_update.php';
 
 $titulo = _("Plantillas de la Delegación");

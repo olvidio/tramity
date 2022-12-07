@@ -1,7 +1,9 @@
 <?php
 
+use core\ConfigGlobal;
 use core\ViewTwig;
-use plantillas\model\entity\Plantilla;
+use plantillas\domain\repositories\PlantillaRepository;
+use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -50,7 +52,8 @@ $oPosicion->setParametros(array('id_plantilla' => $Q_id_plantilla), 1);
 
 if (!empty($Q_id_plantilla)) {
     $que = 'guardar';
-    $oPlantilla = new Plantilla(array('id_plantilla' => $Q_id_plantilla));
+    $PlantillaRepository = new PlantillaRepository();
+    $oPlantilla = $PlantillaRepository->findById($Q_id_plantilla);
 
     $nombre = $oPlantilla->getNombre();
 } else {
@@ -59,7 +62,7 @@ if (!empty($Q_id_plantilla)) {
 }
 
 $camposForm = 'que';
-$oHash = new web\Hash();
+$oHash = new Hash();
 $oHash->setcamposForm($camposForm);
 $a_camposHidden = array(
     'id_plantilla' => $Q_id_plantilla,
@@ -67,8 +70,8 @@ $a_camposHidden = array(
 );
 $oHash->setArraycamposHidden($a_camposHidden);
 
-$base_url = core\ConfigGlobal::getWeb();
-$pagina_cancel = web\Hash::link('apps/plantillas/controller/plantilla_lista.php');
+$base_url = ConfigGlobal::getWeb();
+$pagina_cancel = Hash::link('apps/plantillas/controller/plantilla_lista.php');
 
 $a_campos = [
     'oPosicion' => $oPosicion,
