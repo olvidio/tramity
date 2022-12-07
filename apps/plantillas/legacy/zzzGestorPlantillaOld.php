@@ -1,6 +1,6 @@
 <?php
 
-namespace plantillas\model\entity;
+namespace plantillas\legacy;
 
 use core;
 
@@ -15,7 +15,7 @@ use core;
  * @version 1.0
  * @created 9/4/2021
  */
-class GestorPlantilla extends core\ClaseGestor
+class zzzGestorPlantillaOld extends core\ClaseGestor
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 

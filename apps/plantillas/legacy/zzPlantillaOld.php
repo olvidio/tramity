@@ -1,6 +1,6 @@
 <?php
 
-namespace plantillas\model\entity;
+namespace plantillas\legacy;
 
 use core;
 use PDO;
@@ -25,7 +25,7 @@ use PDOException;
  * @version 1.0
  * @created 9/4/2021
  */
-class Plantilla extends core\ClasePropiedades
+class zzzPlantillaOld extends core\ClasePropiedades
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 
