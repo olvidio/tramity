@@ -1,7 +1,7 @@
 <?php
 
 use core\ViewTwig;
-use tramites\model\entity\GestorTramite;
+use tramites\domain\repositories\TramiteRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -33,8 +33,8 @@ if (isset($_POST['stack'])) {
 $aWhere = ['_ordre' => 'orden'];
 $aOperador = array();
 
-$oGesTramites = new GestorTramite();
-$cTramites = $oGesTramites->getTramites($aWhere, $aOperador);
+$TramiteRepository = new TramiteRepository();
+$cTramites = $TramiteRepository->getTramites($aWhere, $aOperador);
 
 //default:
 $id_tramite = '';

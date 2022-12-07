@@ -1,6 +1,6 @@
 <?php
 
-namespace tramites\model\entity;
+namespace tramites\legacy;
 
 use core;
 use PDO;
@@ -25,7 +25,7 @@ use PDOException;
  * @version 1.0
  * @created 19/6/2020
  */
-class Tramite extends core\ClasePropiedades
+class zzzTramiteOld extends core\ClasePropiedades
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 

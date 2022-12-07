@@ -3,8 +3,8 @@
 namespace expedientes\model;
 
 use core\ConfigGlobal;
-use tramites\model\entity\Firma;
-use tramites\model\entity\GestorFirma;
+use tramites\domain\entity\Firma;
+use tramites\domain\repositories\FirmaRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
 
@@ -99,12 +99,12 @@ class ExpedienteParaFirmarLista
         $aWhereFirma['tipo'] = Firma::TIPO_VOTO;
         $aWhereFirma['valor'] = 'x';
         $aOperadorFirma['valor'] = 'IS NULL';
-        $gesFirmas = new GestorFirma();
-        $cFirmasNull = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+        $FirmaRepository = new FirmaRepository();
+        $cFirmasNull = $FirmaRepository->getFirmas($aWhereFirma, $aOperadorFirma);
         // Sumar los firmados, pero no OK
         $aWhereFirma['valor'] = Firma::V_VISTO . ',' . Firma::V_ESPERA . ',' . Firma::V_D_ESPERA;
         $aOperadorFirma['valor'] = 'IN';
-        $cFirmasVisto = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+        $cFirmasVisto = $FirmaRepository->getFirmas($aWhereFirma, $aOperadorFirma);
         $cFirmas = array_merge($cFirmasNull, $cFirmasVisto);
         $a_expedientes = [];
         $a_expedientes_nuevos = [];
@@ -115,7 +115,7 @@ class ExpedienteParaFirmarLista
             if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR ) {
                 // Para los ctr NO. Puede ser que el d no haya firmado (nivel ponente) y
                 // no se debe impedir firmar a otros (nivel oficiales).
-                if (!$gesFirmas->getAnteriorOK($id_expediente, $orden_tramite)) {
+                if (!$FirmaRepository->isAnteriorOK($id_expediente, $orden_tramite)) {
                     continue;
                 }
             }
@@ -134,7 +134,7 @@ class ExpedienteParaFirmarLista
             'id_cargo' => ConfigGlobal::role_id_cargo(),
         ];
         $aOperadorFirma2 = ['observ_creador' => 'IS NULL'];
-        $cFirmas2 = $gesFirmas->getFirmas($aWhereFirma2, $aOperadorFirma2);
+        $cFirmas2 = $FirmaRepository->getFirmas($aWhereFirma2, $aOperadorFirma2);
         $a_exp_peticion = [];
         foreach ($cFirmas2 as $oFirma) {
             $id_expediente = $oFirma->getId_expediente();
@@ -147,7 +147,7 @@ class ExpedienteParaFirmarLista
             'id_cargo' => ConfigGlobal::role_id_cargo(),
         ];
         $aOperadorFirma2 = ['observ_creador' => 'IS NOT NULL'];
-        $cFirmas2 = $gesFirmas->getFirmas($aWhereFirma2, $aOperadorFirma2);
+        $cFirmas2 = $FirmaRepository->getFirmas($aWhereFirma2, $aOperadorFirma2);
         $a_exp_respuesta = [];
         foreach ($cFirmas2 as $oFirma) {
             $id_expediente = $oFirma->getId_expediente();
@@ -172,7 +172,7 @@ class ExpedienteParaFirmarLista
             }
         }
 
-        $cFirmas = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+        $cFirmas = $FirmaRepository->getFirmas($aWhereFirma, $aOperadorFirma);
         $a_exp_aclaracion = [];
         foreach ($cFirmas as $oFirma) {
             $id_expediente = $oFirma->getId_expediente();

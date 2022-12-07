@@ -1,7 +1,7 @@
 <?php
 
-use tramites\model\entity\Tramite;
-use tramites\model\entity\TramiteCargo;
+use tramites\domain\repositories\TramiteCargoRepository;
+use tramites\domain\repositories\TramiteRepository;
 use usuarios\domain\repositories\CargoRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -18,7 +18,8 @@ $Q_mod = (string)filter_input(INPUT_POST, 'mod');
 $Q_id_item = (integer)filter_input(INPUT_POST, 'id_item');
 $Q_id_tramite = (integer)filter_input(INPUT_POST, 'id_tramite');
 
-$oTramite = new Tramite($Q_id_tramite);
+$TramiteRepository = new TramiteRepository();
+$oTramite = $TramiteRepository->findById($Q_id_tramite);
 $tramite = $oTramite->getTramite();
 
 $CargoRepository = new CargoRepository();
@@ -27,7 +28,8 @@ $oDesplCargos->setNombre('id_cargo');
 $oDesplCargos->setBlanco(true);
 // para el form
 if ($Q_mod === 'editar') {
-    $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
+    $TramiteCargoRepository = new TramiteCargoRepository();
+    $oTramiteCargo = $TramiteCargoRepository->findById($Q_id_item);
 
     $orden_tramite = $oTramiteCargo->getOrden_tramite();
     $id_cargo = $oTramiteCargo->getId_cargo();

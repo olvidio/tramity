@@ -9,9 +9,9 @@ use expedientes\model\Expediente;
 use expedientes\model\GestorExpediente;
 use lugares\model\entity\GestorLugar;
 use pendientes\model\Pendiente;
-use tramites\model\entity\Firma;
-use tramites\model\entity\GestorFirma;
-use tramites\model\entity\GestorTramiteCargo;
+use tramites\domain\entity\Firma;
+use tramites\domain\repositories\FirmaRepository;
+use tramites\domain\repositories\TramiteCargoRepository;
 use usuarios\domain\Categoria;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
@@ -71,7 +71,7 @@ switch ($Q_que) {
         foreach ($aVisto as $key => $oVisto) {
             $oficina = $oVisto['oficina'];
             $cargo = $oVisto['cargo'];
-            if ($oficina == $Q_id_oficina && $cargo == $Q_id_cargo) {
+            if ($oficina === $Q_id_oficina && $cargo === $Q_id_cargo) {
                 $oVisto['visto'] = TRUE;
                 $aVisto[$key] = $oVisto;
                 $flag = TRUE;
@@ -260,8 +260,8 @@ switch ($Q_que) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
-        $gesFirmas = new  GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente]);
+        $FirmaRepository = new  FirmaRepository();
+        $cFirmas = $FirmaRepository->getFirmas(['id_expediente' => $Q_id_expediente]);
         foreach ($cFirmas as $oFirma) {
             $oFirma->DBCargar();
             $oFirma->setValor(NULL);
@@ -302,8 +302,8 @@ switch ($Q_que) {
         }
         // firmar el paso de fijar reunion:
         $f_hoy_iso = date(DateTimeInterface::ATOM);
-        $gesFirmas = new  GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_REUNION]);
+        $FirmaRepository = new  FirmaRepository();
+        $cFirmas = $FirmaRepository->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_REUNION]);
         foreach ($cFirmas as $oFirma) {
             $oFirma->DBCargar();
             if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
@@ -369,8 +369,8 @@ switch ($Q_que) {
         }
         // firmar el paso de distribuir:
         $f_hoy_iso = date(DateTimeInterface::ATOM);
-        $gesFirmas = new  GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_DISTRIBUIR]);
+        $FirmaRepository = new  FirmaRepository();
+        $cFirmas = $FirmaRepository->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_DISTRIBUIR]);
         foreach ($cFirmas as $oFirma) {
             $oFirma->DBCargar();
             if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
@@ -485,8 +485,8 @@ switch ($Q_que) {
     case 'exp_a_borrador':
         $error_txt = '';
         // Hay que borrar: las firmas.
-        $gesFirmas = new  GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente]);
+        $FirmaRepository = new  FirmaRepository();
+        $cFirmas = $FirmaRepository->getFirmas(['id_expediente' => $Q_id_expediente]);
         foreach ($cFirmas as $oFirma) {
             if ($oFirma->DBEliminar() === FALSE) {
                 $error_txt .= _("No se ha eliminado la firma");
@@ -575,8 +575,8 @@ switch ($Q_que) {
             }
         }
         // firmas:
-        $gesFirmas = new  GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $Q_id_expediente]);
+        $FirmaRepository = new  FirmaRepository();
+        $cFirmas = $FirmaRepository->getFirmas(['id_expediente' => $Q_id_expediente]);
         foreach ($cFirmas as $oFirma) {
             if ($oFirma->DBEliminar() === FALSE) {
                 $error_txt .= _("No se ha eliminado la firma");
@@ -728,14 +728,14 @@ switch ($Q_que) {
         // según el trámite mirar si hay que grabar oficiales y/o varios cargos.
         $oficiales = FALSE;
         $aWhere = ['id_tramite' => $Q_tramite, 'id_cargo' => Cargo::CARGO_OFICIALES];
-        $gesTramiteCargo = new GestorTramiteCargo();
-        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
+        $TramiteCargoRepository = new TramiteCargoRepository();
+        $cTramiteCargos = $TramiteCargoRepository->getTramiteCargos($aWhere);
         if (count($cTramiteCargos) > 0) {
             $oficiales = TRUE;
         }
         $varias = FALSE;
         $aWhere = ['id_tramite' => $Q_tramite, 'id_cargo' => Cargo::CARGO_VARIAS];
-        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
+        $cTramiteCargos = $TramiteCargoRepository->getTramiteCargos($aWhere);
         if (count($cTramiteCargos) > 0) {
             $varias = TRUE;
         }
@@ -786,6 +786,7 @@ switch ($Q_que) {
 
         // CIRCULAR
         if ($Q_que === 'circular') {
+            $oF_hoy = new DateTimeLocal();
             $f_hoy_iso = date(DateTimeInterface::ATOM);
             // se pone la fecha del escrito como hoy:
             $oExpediente->setF_escritos($f_hoy_iso, FALSE);
@@ -798,16 +799,15 @@ switch ($Q_que) {
             // generar firmas
             $role_id_cargo = ConfigGlobal::role_id_cargo();
             $oExpediente->generarFirmas();
-            $gesFirmas = new GestorFirma();
+            $FirmaRepository = new FirmaRepository();
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                 // Para los centros, firmo sea quien sea
-                $cFirmas = $gesFirmas->getFirmas(['id_expediente' => $id_expediente, 'id_cargo' => $role_id_cargo, 'tipo' => Firma::TIPO_VOTO]);
+                $cFirmas = $FirmaRepository->getFirmas(['id_expediente' => $id_expediente, 'id_cargo' => $role_id_cargo, 'tipo' => Firma::TIPO_VOTO]);
                 $oFirmaPrimera = $cFirmas[0];
-                $oFirmaPrimera->DBCargar();
                 $oFirmaPrimera->setValor(Firma::V_OK);
             } else {
                 // Si soy el primero, Ya firmo.
-                $oFirmaPrimera = $gesFirmas->getPrimeraFirma($id_expediente);
+                $oFirmaPrimera = $FirmaRepository->getPrimeraFirma($id_expediente);
                 $id_primer_cargo = $oFirmaPrimera->getId_cargo();
                 if ($id_primer_cargo === $role_id_cargo) {
                     if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
@@ -819,15 +819,15 @@ switch ($Q_que) {
             }
             $oFirmaPrimera->setId_usuario(ConfigGlobal::mi_id_usuario());
             $oFirmaPrimera->setObserv('');
-            $oFirmaPrimera->setF_valor($f_hoy_iso, FALSE);
-            if ($oFirmaPrimera->DBGuardar() === FALSE) {
-                $error_txt .= $oFirmaPrimera->getErrorTxt();
+            $oFirmaPrimera->setF_valor($oF_hoy);
+            if ($FirmaRepository->Guardar($oFirmaPrimera) === FALSE) {
+                $error_txt .= $FirmaRepository->getErrorTxt();
             }
             // comprobar que ya han firmado todos, para:
             //  - en caso dl: pasarlo a scdl para distribuir (ok_scdl)
             //  - en caso ctr: marcar como circulando
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-                $bParaDistribuir = $gesFirmas->isParaDistribuir($Q_id_expediente);
+                $bParaDistribuir = $FirmaRepository->isParaDistribuir($Q_id_expediente);
                 if ($bParaDistribuir) {
                     // guardar la firma de Cargo::CARGO_DISTRIBUIR;
                     if ($oExpediente->DBCargar() === FALSE) {
@@ -885,11 +885,11 @@ switch ($Q_que) {
         }
         // generar firmas
         $oExpediente->generarFirmas();
-        $gesFirmas = new GestorFirma();
+        $FirmaRepository = new FirmaRepository();
         // copiar las firmas:
-        $gesFirmas->copiarFirmas($Q_id_expediente, $Q_tramite, $id_tramite_old);
+        $FirmaRepository->copiarFirmas($Q_id_expediente, $Q_tramite, $id_tramite_old);
         // borrar el recorrido del tramite anterior.
-        $gesFirmas->borrarFirmas($Q_id_expediente, $id_tramite_old);
+        $FirmaRepository->borrarFirmas($Q_id_expediente, $id_tramite_old);
 
 
         if (!empty($error_txt)) {

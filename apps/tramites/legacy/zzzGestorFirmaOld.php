@@ -1,6 +1,6 @@
 <?php
 
-namespace tramites\model\entity;
+namespace tramites\legacy;
 
 use core;
 use core\ConfigGlobal;
@@ -21,7 +21,7 @@ use usuarios\domain\repositories\UsuarioRepository;
  * @version 1.0
  * @created 14/11/2020
  */
-class GestorFirma extends core\ClaseGestor
+class zzzGestorFirmaOld extends core\ClaseGestor
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 

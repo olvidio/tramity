@@ -1,7 +1,6 @@
 <?php
 
-use tramites\model\entity\GestorTramiteCargo;
-use tramites\model\entity\TramiteCargo;
+use tramites\domain\repositories\TramiteCargoRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
 
@@ -21,14 +20,14 @@ switch ($Q_que) {
         $Q_id_tramite = (integer)filter_input(INPUT_POST, 'id_tramite');
         $oficiales = FALSE;
         $aWhere = ['id_tramite' => $Q_id_tramite, 'id_cargo' => Cargo::CARGO_OFICIALES];
-        $gesTramiteCargo = new GestorTramiteCargo();
-        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
+        $TramiteCargoRepository = new TramiteCargoRepository();
+        $cTramiteCargos = $TramiteCargoRepository->getTramiteCargos($aWhere);
         if (count($cTramiteCargos) > 0) {
             $oficiales = TRUE;
         }
         $varias = FALSE;
         $aWhere = ['id_tramite' => $Q_id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS];
-        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
+        $cTramiteCargos = $TramiteCargoRepository->getTramiteCargos($aWhere);
         if (count($cTramiteCargos) > 0) {
             $varias = TRUE;
         }
@@ -45,7 +44,9 @@ switch ($Q_que) {
         $oDesplCargos = $CargoRepository->getDesplCargos();
         $oDesplCargos->setNombre('id_cargo');
         $oDesplCargos->setBlanco(true);
-        $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
+
+        $TramiteCargoRepository = new TramiteCargoRepository();
+        $oTramiteCargo = $TramiteCargoRepository->findById($Q_id_item);
         $orden_tramite = $oTramiteCargo->getOrden_tramite();
         $id_cargo = $oTramiteCargo->getId_cargo();
         $oDesplCargos->setOpcion_sel($id_cargo);
@@ -63,8 +64,8 @@ switch ($Q_que) {
     case 'get_listado':
         $Q_id_tramite = (integer)filter_input(INPUT_POST, 'id_tramite');
 
-        $gesTramiteCargo = new GestorTramiteCargo();
-        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $Q_id_tramite, '_ordre' => 'orden_tramite']);
+        $TramiteCargoRepository = new TramiteCargoRepository();
+        $cTramiteCargos = $TramiteCargoRepository->getTramiteCargos(['id_tramite' => $Q_id_tramite, '_ordre' => 'orden_tramite']);
         $txt = '<table class="table table-striped" >';
         $txt .= '<tr><th>' . _("orden") . '</th><th>' . _("cargo") . '</th><th>' . _("multiple") . '</th></tr>';
         $i = 0;

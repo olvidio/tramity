@@ -311,7 +311,7 @@ $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 $oFecha = new DateTimeLocal();
 $format = $oFecha::getFormat();
 $yearStart = date('Y');
-$yearEnd = $yearStart + 2;
+$yearEnd = (int)$yearStart + 2;
 
 $vista = ConfigGlobal::getVista();
 

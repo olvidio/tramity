@@ -3,9 +3,7 @@
 namespace expedientes\model;
 
 use core\ConfigGlobal;
-use tramites\model\entity\GestorFirma;
-use usuarios\domain\entity\Cargo;
-use web\Hash;
+use tramites\domain\repositories\FirmaRepository;
 
 
 class ExpedienteReunionSeguimientoLista
@@ -86,17 +84,17 @@ class ExpedienteReunionSeguimientoLista
         $this->aOperador['f_reunion'] = 'IS NOT NULL';
 
         //////// mirar los que falta alguna firma para marcarlos en color /////////
-        $gesFirmas = new GestorFirma();
-        $a_exp_reunion_falta_firma = $gesFirmas->faltaFirmarReunion();
+        $FirmaRepository = new FirmaRepository();
+        $a_exp_reunion_falta_firma = $FirmaRepository->faltaFirmarReunion();
 
         //que tengan de mi firma, independiente de firmado o no
-        $cFirmas = $gesFirmas->getFirmasReunion(ConfigGlobal::role_id_cargo());
+        $cFirmas = $FirmaRepository->getFirmasReunion(ConfigGlobal::role_id_cargo());
         $a_expedientes = [];
         foreach ($cFirmas as $oFirma) {
             $id_expediente = $oFirma->getId_expediente();
             $orden_tramite = $oFirma->getOrden_tramite();
             // Sólo a partir de que el orden_tramite anterior ya lo hayan firmado todos
-            if (!$gesFirmas->getAnteriorOK($id_expediente, $orden_tramite)) {
+            if (!$FirmaRepository->isAnteriorOK($id_expediente, $orden_tramite)) {
                 continue;
             }
             $a_expedientes[] = $id_expediente;

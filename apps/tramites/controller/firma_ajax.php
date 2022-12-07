@@ -2,11 +2,12 @@
 
 use core\ConfigGlobal;
 use expedientes\model\Expediente;
-use tramites\model\entity\Firma;
-use tramites\model\entity\GestorFirma;
-use tramites\model\entity\GestorTramiteCargo;
+use tramites\domain\entity\Firma;
+use tramites\domain\repositories\FirmaRepository;
+use tramites\domain\repositories\TramiteCargoRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
+use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -33,8 +34,8 @@ $error_txt = '';
 $jsondata = [];
 switch ($Q_que) {
     case 'recorrido':
-        $gesFirmas = new GestorFirma();
-        $aRecorrido = $gesFirmas->getRecorrido($Q_id_expediente);
+        $FirmaRepository = new FirmaRepository();
+        $aRecorrido = $FirmaRepository->getRecorrido($Q_id_expediente);
         $a_recorrido = $aRecorrido['recorrido'];
 
         $jsondata['recorrido'] = json_encode($a_recorrido);
@@ -43,12 +44,12 @@ switch ($Q_que) {
     case 'add':
         $Q_a_cargos = (array)filter_input(INPUT_POST, 'a_cargos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // buscar el orden del último:
-        $gesTramiteCargo = new GestorTramiteCargo();
+        $TramiteCargoRepository = new TramiteCargoRepository();
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-            $cTramiteCargos = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS]);
+            $cTramiteCargos = $TramiteCargoRepository->getTramiteCargos(['id_tramite' => $id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS]);
         } else {
             // Para los centros
-            $cTramiteCargos = $gesTramiteCargo->getTramiteCargos(['id_tramite' => $id_tramite, '_ordre' => 'orden_tramite DESC']);
+            $cTramiteCargos = $TramiteCargoRepository->getTramiteCargos(['id_tramite' => $id_tramite, '_ordre' => 'orden_tramite DESC']);
         }
         $oTramiteCargo = $cTramiteCargos[0];
         $orden_tramite = $oTramiteCargo->getOrden_tramite();
@@ -57,8 +58,8 @@ switch ($Q_que) {
             'orden_tramite' => $orden_tramite,
             '_ordre' => 'orden_oficina DESC',
         ];
-        $gesFirmas = new GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas($aWhere);
+        $FirmaRepository = new FirmaRepository();
+        $cFirmas = $FirmaRepository->getFirmas($aWhere);
         if (empty($cFirmas)) {
             $orden_oficina = 0;
         } else {
@@ -67,7 +68,9 @@ switch ($Q_que) {
         }
         foreach ($Q_a_cargos as $id_cargo) {
             $orden_oficina++;
+            $id_item = $FirmaRepository->getNewId_item();
             $oFirma = new Firma();
+            $oFirma->setId_item($id_item);
             $oFirma->setId_expediente($Q_id_expediente);
             $oFirma->setId_tramite($id_tramite);
             $oFirma->setId_cargo_creador($id_ponente);
@@ -77,8 +80,8 @@ switch ($Q_que) {
             $oFirma->setOrden_oficina($orden_oficina);
             // Al inicializar, sólo pongo los votos.
             $oFirma->setTipo(Firma::TIPO_VOTO);
-            if ($oFirma->DBGuardar() === FALSE) {
-                $error_txt .= $oFirma->getErrorTxt();
+            if ($FirmaRepository->Guardar($oFirma) === FALSE) {
+                $error_txt .= $FirmaRepository->getErrorTxt();
             }
         }
         break;
@@ -89,11 +92,11 @@ switch ($Q_que) {
                 'cargo_tipo' => Cargo::CARGO_TODOS_DIR,
                 'id_cargo' => $id_cargo,
             ];
-            $gesFirmas = new GestorFirma();
-            $cFirmas = $gesFirmas->getFirmas($aWhere);
+            $FirmaRepository = new FirmaRepository();
+            $cFirmas = $FirmaRepository->getFirmas($aWhere);
             foreach ($cFirmas as $oFirma) {
-                if ($oFirma->DBEliminar() === FALSE) {
-                    $error_txt .= $oFirma->getErrorTxt();
+                if ($FirmaRepository->Eliminar($oFirma) === FALSE) {
+                    $error_txt .= $FirmaRepository->getErrorTxt();
                 }
             }
         }
@@ -103,8 +106,8 @@ switch ($Q_que) {
         $CargoRepository = new CargoRepository();
         $a_cargos = $CargoRepository->getArrayCargos();
 
-        $gesFirmas = new GestorFirma();
-        $aCargosFaltan = $gesFirmas->faltaFirmarReunionExpediente($Q_id_expediente);
+        $FirmaRepository = new FirmaRepository();
+        $aCargosFaltan = $FirmaRepository->faltaFirmarReunionExpediente($Q_id_expediente);
         $a_posibles_cargos = [];
         foreach ($aCargosFaltan as $id_cargo) {
             // Sólo los cargos de personas, no los genéricos (sin oficina):
@@ -124,8 +127,8 @@ switch ($Q_que) {
 
         $aWhere = ['id_expediente' => $Q_id_expediente,
         ];
-        $gesFirmas = new GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas($aWhere);
+        $FirmaRepository = new FirmaRepository();
+        $cFirmas = $FirmaRepository->getFirmas($aWhere);
         $a_posibles_cargos = [];
         $a_cargos_repetidos = [];
         $a_cargos_repetir = [];
@@ -151,14 +154,14 @@ switch ($Q_que) {
             'tipo' => Firma::TIPO_VOTO,
             '_ordre' => 'orden_tramite',
         ];
-        $gesFirmas = new GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas($aWhere);
+        $FirmaRepository = new FirmaRepository();
+        $cFirmas = $FirmaRepository->getFirmas($aWhere);
         if (is_array($cFirmas) && empty($cFirmas)) {
             $error_txt .= _("No puede Firmar");
         } else {
             $oExpediente = new Expediente($Q_id_expediente);
             $estado = $oExpediente->getEstado();
-            $f_hoy_iso = date(DateTimeInterface::ATOM);
+            $oF_hoy = new DateTimeLocal();
             // Habrá que ver como se cambia un voto.
             // De momento sólo se firma el primero que no tenga valor.
             foreach ($cFirmas as $oFirma) {
@@ -170,25 +173,24 @@ switch ($Q_que) {
                 }
             }
             $oFirma->setValor($Q_voto);
-            $oFirma->setValor($Q_voto);
             $oFirma->setObserv($Q_comentario);
             $oFirma->setId_usuario(ConfigGlobal::mi_id_usuario());
-            $oFirma->setF_valor($f_hoy_iso, FALSE);
-            if ($oFirma->DBGuardar() === FALSE) {
-                $error_txt .= $oFirma->getErrorTxt();
+            $oFirma->setF_valor($oF_hoy);
+            if ($FirmaRepository->Guardar($oFirma) === FALSE) {
+                $error_txt .= $FirmaRepository->getErrorTxt();
             }
             // comprobar que ya han firmado todos, para:
             //  - en caso dl: pasarlo a scdl para distribuir (ok_scdl)
             //  - en caso ctr: marcar como acabado
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-                $bParaDistribuir = $gesFirmas->isParaDistribuir($Q_id_expediente);
+                $bParaDistribuir = $FirmaRepository->isParaDistribuir($Q_id_expediente);
                 if ($bParaDistribuir) {
                     // guardar la firma de Cargo::CARGO_DISTRIBUIR;
                     $aWhere = ['id_expediente' => $Q_id_expediente,
                         'cargo_tipo' => Cargo::CARGO_DISTRIBUIR,
                         'tipo' => Firma::TIPO_VOTO,
                     ];
-                    $cFirmaDistribuir = $gesFirmas->getFirmas($aWhere);
+                    $cFirmaDistribuir = $FirmaRepository->getFirmas($aWhere);
                     if (is_array($cFirmaDistribuir) && !empty($cFirmaDistribuir)) {
                         $oFirmaDistribuir = $cFirmaDistribuir[0];
                         if ($oFirmaDistribuir->DBCargar() === FALSE ){
@@ -197,9 +199,9 @@ switch ($Q_que) {
                         }
                         $oFirmaDistribuir->setId_usuario(ConfigGlobal::mi_id_usuario());
                         $oFirmaDistribuir->setValor($Q_voto);
-                        $oFirmaDistribuir->setF_valor($f_hoy_iso, FALSE);
-                        if ($oFirmaDistribuir->DBGuardar() === FALSE) {
-                            $error_txt .= $oFirmaDistribuir->getErrorTxt();
+                        $oFirmaDistribuir->setF_valor($oF_hoy);
+                        if ($FirmaRepository->Guardar($oFirmaDistribuir) === FALSE) {
+                            $error_txt .= $FirmaRepository->getErrorTxt();
                         }
                     } else {
                         $error_txt .= _("No se puede firmar el cargo_tipo distribuir");
@@ -227,6 +229,7 @@ switch ($Q_que) {
                             $estado = Expediente::ESTADO_ACABADO;
                     }
                     $oExpediente->setEstado($estado);
+                    $f_hoy_iso = date(DateTimeInterface::ATOM);
                     $oExpediente->setF_aprobacion($f_hoy_iso, FALSE);
                     $oExpediente->setF_aprobacion_escritos($f_hoy_iso, FALSE);
                     if ($oExpediente->DBGuardar() === FALSE) {
@@ -234,7 +237,7 @@ switch ($Q_que) {
                     }
                 }
                 // 22/2/21. Amplio a cambiar el estado para todos los casos.
-                $bParaReunion = $gesFirmas->isParaReunion($Q_id_expediente);
+                $bParaReunion = $FirmaRepository->isParaReunion($Q_id_expediente);
                 if ($bParaReunion) {
                     switch ($Q_voto) {
                         case Firma::V_D_VISTO_BUENO:
@@ -263,12 +266,13 @@ switch ($Q_que) {
                 }
             }
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                if ($gesFirmas->hasTodasLasFirmas($Q_id_expediente)) {
+                if ($FirmaRepository->hasTodasLasFirmas($Q_id_expediente)) {
                     // cambio el estado del expediente.
                     $oExpediente = new Expediente($Q_id_expediente);
                     $oExpediente->DBCargar();
                     $estado = Expediente::ESTADO_ACABADO;
                     $oExpediente->setEstado($estado);
+                    $f_hoy_iso = date(DateTimeInterface::ATOM);
                     $oExpediente->setF_aprobacion($f_hoy_iso, FALSE);
                     $oExpediente->setF_aprobacion_escritos($f_hoy_iso, FALSE);
                     if ($oExpediente->DBGuardar() === FALSE) {
@@ -289,8 +293,8 @@ switch ($Q_que) {
         $aOperador = [
             'observ_creador' => 'IS NULL',
         ];
-        $gesFirmas = new GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas($aWhere, $aOperador);
+        $FirmaRepository = new FirmaRepository();
+        $cFirmas = $FirmaRepository->getFirmas($aWhere, $aOperador);
         if (is_array($cFirmas) && !empty($cFirmas)) {
             // Ya existe una aclaración. Busco la última, para saber el orden.
             $oFirmaAclaracion = $cFirmas[0];
@@ -313,8 +317,8 @@ switch ($Q_que) {
             'tipo' => Firma::TIPO_ACLARACION,
             '_ordre' => 'orden_tramite'
         ];
-        $gesFirmas = new GestorFirma();
-        $cFirmasA = $gesFirmas->getFirmas($aWhere);
+        $FirmaRepository = new FirmaRepository();
+        $cFirmasA = $FirmaRepository->getFirmas($aWhere);
         if (is_array($cFirmasA) && !empty($cFirmasA)) {
             // Ya existe una aclaración. Busco la última, para saber el orden.
             $oFirmaAclaracion = $cFirmasA[0];
@@ -333,8 +337,8 @@ switch ($Q_que) {
             '_ordre' => 'orden_tramite DESC, orden_oficina DESC'
         ];
         $aOperador = ['valor' => 'NOT IN'];
-        $gesFirmas = new GestorFirma();
-        $cFirmas = $gesFirmas->getFirmas($aWhere, $aOperador);
+        $FirmaRepository = new FirmaRepository();
+        $cFirmas = $FirmaRepository->getFirmas($aWhere, $aOperador);
         if (is_array($cFirmas) && empty($cFirmas)) {
             $error_txt .= _("No puede Firmar");
         } else {
@@ -349,8 +353,10 @@ switch ($Q_que) {
                 ++$orden_oficina;
             }
 
-            $f_hoy_iso = date(DateTimeInterface::ATOM);
+            $oF_hoy = new DateTimeLocal();
+            $id_item = $FirmaRepository->getNewId_item();
             $oFirma = new Firma();
+            $oFirma->setId_item($id_item);
             $oFirma->setTipo(Firma::TIPO_ACLARACION);
             $oFirma->setId_expediente($Q_id_expediente);
             $oFirma->setCargo_tipo($cargo_tipo);
@@ -362,9 +368,9 @@ switch ($Q_que) {
             $oFirma->setOrden_oficina($orden_oficina);
             $oFirma->setValor($valor);
             $oFirma->setObserv($Q_comentario);
-            $oFirma->setF_valor($f_hoy_iso, FALSE);
-            if ($oFirma->DBGuardar() === FALSE) {
-                $error_txt .= $oFirma->getErrorTxt();
+            $oFirma->setF_valor($oF_hoy);
+            if ($FirmaRepository->Guardar($oFirma) === FALSE) {
+                $error_txt .= $FirmaRepository->getErrorTxt();
             }
         }
         break;

@@ -5,9 +5,9 @@ use core\ViewTwig;
 use escritos\model\Escrito;
 use escritos\model\EscritoLista;
 use expedientes\model\Expediente;
-use tramites\model\entity\Firma;
-use tramites\model\entity\GestorFirma;
-use tramites\model\entity\Tramite;
+use tramites\domain\entity\Firma;
+use tramites\domain\repositories\FirmaRepository;
+use tramites\domain\repositories\TramiteRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
 use web\Desplegable;
@@ -53,7 +53,8 @@ $id_ponente = $oExpediente->getPonente();
 $ponente_txt = $aCargos[$id_ponente];
 
 $id_tramite = $oExpediente->getId_tramite();
-$oTramite = new Tramite($id_tramite);
+$TramiteRepository = new TramiteRepository();
+$oTramite = $TramiteRepository->findById($id_tramite);
 $tramite_txt = $oTramite->getTramite();
 
 $estado = $oExpediente->getEstado();
@@ -61,8 +62,7 @@ $a_estado = $oExpediente->getArrayEstado();
 $estado_txt = $a_estado[$estado];
 
 // Valores posibles para la firma
-$gesFirmas = new GestorFirma();
-$oFirma = new Firma();
+$FirmaRepository = new FirmaRepository();
 $a_firmas = [];
 $rango = 'voto';
 if (ConfigGlobal::role_actual() === 'vcd') {
@@ -71,7 +71,7 @@ if (ConfigGlobal::role_actual() === 'vcd') {
         'id_cargo' => ConfigGlobal::role_id_cargo(),
         '_ordre' => 'orden_tramite',
     ];
-    $cFirmasVcd = $gesFirmas->getFirmas($aWhere);
+    $cFirmasVcd = $FirmaRepository->getFirmas($aWhere);
     foreach ($cFirmasVcd as $oFirma) {
         $valor = $oFirma->getValor();
         $cargo_tipo = $oFirma->getCargo_tipo();
@@ -87,6 +87,7 @@ if (ConfigGlobal::role_actual() === 'vcd') {
     }
 }
 
+$oFirma = new Firma();
 foreach ($oFirma->getArrayValor($rango) as $key => $valor) {
     $a_voto['id'] = $key;
     $a_voto['valor'] = $valor;
@@ -122,7 +123,7 @@ $oEscritoLista->setFiltro($Q_filtro);
 $oEscritoLista->setModo('mod');
 
 // Comentarios y Aclaraciones
-$aRecorrido = $gesFirmas->getRecorrido($Q_id_expediente);
+$aRecorrido = $FirmaRepository->getRecorrido($Q_id_expediente);
 $a_recorrido = $aRecorrido['recorrido'];
 $comentarios = $aRecorrido['comentarios'];
 $responder = $aRecorrido['responder'];

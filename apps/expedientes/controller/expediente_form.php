@@ -6,7 +6,7 @@ use escritos\model\Escrito;
 use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\entity\GestorAccion;
 use expedientes\model\Expediente;
-use tramites\model\entity\GestorTramite;
+use tramites\domain\repositories\TramiteRepository;
 use usuarios\domain\Categoria;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\PermRegistro;
@@ -65,8 +65,8 @@ foreach ($a_cargos_oficina as $id_cargo => $cargo) {
     $a_preparar[] = ['id' => $id_cargo, 'text' => $cargo, 'chk' => '', 'visto' => 0];
 }
 
-$gesTramites = new GestorTramite();
-$oDesplTramites = $gesTramites->getListaTramites();
+$TramiteRepository = new TramiteRepository();
+$oDesplTramites = $TramiteRepository->getListaTramites();
 $oDesplTramites->setNombre('tramite');
 $oDesplTramites->setAction('fnjs_tramite()');
 // para los centros selecciono el primer trámite (quito la opción blanco)

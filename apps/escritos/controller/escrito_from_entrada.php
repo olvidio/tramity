@@ -6,7 +6,7 @@ use escritos\model\Escrito;
 use escritos\model\EscritoForm;
 use expedientes\model\entity\Accion;
 use expedientes\model\Expediente;
-use tramites\model\entity\GestorTramite;
+use tramites\domain\repositories\TramiteRepository;
 use usuarios\domain\repositories\CargoRepository;
 use web\DateTimeLocal;
 
@@ -42,8 +42,8 @@ $categoria = $oEntrada->getCategoria();
 $visibilidad = $oEntrada->getVisibilidad();
 
 // Trámite: Escoger el primero de la lista (por orden) seguramente será el más corto
-$gesTrammites = new GestorTramite();
-$cTramites = $gesTrammites->getTramites(['_ordre' => 'orden']);
+$TramiteRepository = new TramiteRepository();
+$cTramites = $TramiteRepository->getTramites(['_ordre' => 'orden']);
 $oTramite = $cTramites[0];
 $tramite = $oTramite->getId_tramite();
 
@@ -78,7 +78,7 @@ foreach (array_keys($a_cargos_oficina) as $id_cargo) {
 $oExpediente->setJson_preparar($new_preparar);
 
 if ($oExpediente->DBGuardar() === FALSE) {
-    $error_txt .= $oExpediente->getErrorTxt();
+    $error_txt = $oExpediente->getErrorTxt();
 } else {
     $oExpediente->DBCargar();
     $id_expediente = $oExpediente->getId_expediente();

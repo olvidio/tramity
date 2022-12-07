@@ -1,6 +1,6 @@
 <?php
 
-use tramites\model\entity\GestorTramite;
+use tramites\domain\repositories\TramiteRepository;
 use usuarios\domain\repositories\CargoRepository;
 use web\Hash;
 
@@ -40,8 +40,8 @@ if (isset($_POST['stack'])) {
     }
 }
 
-$oLista = new GestorTramite();
-$oDespl = $oLista->getListaTramites();
+$TramiteRepository = new TramiteRepository();
+$oDespl = $TramiteRepository->getListaTramites();
 
 $url_ajax = "apps/tramites/controller/tramitecargo_ajax.php";
 $url_ver = "apps/tramites/controller/tramitecargo_ver.php";

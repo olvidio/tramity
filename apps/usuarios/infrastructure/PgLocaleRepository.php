@@ -246,7 +246,7 @@ class PgLocaleRepository extends ClaseRepository implements LocaleRepositoryInte
 				FROM $nom_tabla $sWhere
 				ORDER BY nom_idioma";
         if (($oDblSt = $oDbl->query($sQuery)) === false) {
-            $sClauError = 'GestorLocale.lista';
+            $sClauError = 'LocaleRepository.listaIdiomas';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return false;
         }
@@ -262,7 +262,7 @@ class PgLocaleRepository extends ClaseRepository implements LocaleRepositoryInte
 				FROM $nom_tabla $sWhere
 				ORDER BY nom_locale";
         if (($oDblSt = $oDbl->query($sQuery)) === false) {
-            $sClauError = 'GestorLocale.lista';
+            $sClauError = 'LocaleRepository.listaLocales';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return false;
         }
