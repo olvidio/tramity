@@ -122,7 +122,7 @@ $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . 
 $oFecha = new DateTimeLocal();
 $format = $oFecha::getFormat();
 $yearStart = date('Y');
-$yearEnd = $yearStart + 2;
+$yearEnd = (int)$yearStart + 2;
 
 $a_campos = [
     //'oHash' => $oHash,

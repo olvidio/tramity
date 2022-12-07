@@ -5,8 +5,8 @@ use core\ViewTwig;
 use escritos\model\EscritoLista;
 use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\Expediente;
-use tramites\model\entity\GestorFirma;
-use tramites\model\entity\Tramite;
+use tramites\domain\repositories\FirmaRepository;
+use tramites\domain\repositories\TramiteRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
 use usuarios\domain\Visibilidad;
@@ -51,7 +51,8 @@ $aCargos = $CargoRepository->getArrayCargos();
 $ponente_txt = $aCargos[$id_ponente];
 
 $id_tramite = $oExpediente->getId_tramite();
-$oTramite = new Tramite($id_tramite);
+$TramiteRepository = new TramiteRepository();
+$oTramite = $TramiteRepository->findById($id_tramite);
 $tramite_txt = $oTramite->getTramite();
 
 $estado = $oExpediente->getEstado();
@@ -85,8 +86,8 @@ $oEscritoLista->setModo($Q_modo);
 $oEscritoLista->setShow_tabs($show_tabs);
 
 // Comentarios y Aclaraciones
-$gesFirmas = new GestorFirma();
-$aRecorrido = $gesFirmas->getRecorrido($Q_id_expediente);
+$FirmaRepository = new FirmaRepository();
+$aRecorrido = $FirmaRepository->getRecorrido($Q_id_expediente);
 $a_recorrido = $aRecorrido['recorrido'];
 $comentarios = $aRecorrido['comentarios'];
 

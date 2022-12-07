@@ -2,7 +2,8 @@
 
 use core\ViewTwig;
 use expedientes\model\Expediente;
-use tramites\model\entity\GestorTramite;
+use tramites\domain\repositories\TramiteRepository;
+use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -18,15 +19,15 @@ require_once("apps/core/global_object.inc");
 $Q_id_expediente = (string)filter_input(INPUT_POST, 'id_expediente');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
-$gesTramites = new GestorTramite();
-$oDesplTramites = $gesTramites->getListaTramites();
+$TramiteRepository = new TramiteRepository();
+$oDesplTramites = $TramiteRepository->getListaTramites();
 $oDesplTramites->setNombre('tramite');
 
 $a_cosas = ['id_expediente' => $Q_id_expediente,
     'filtro' => $Q_filtro,
 ];
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($a_cosas));
-$pagina_update = web\Hash::link('apps/expedientes/controller/expediente_update.php?' . http_build_query([]));
+$pagina_cancel = Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($a_cosas));
+$pagina_update = Hash::link('apps/expedientes/controller/expediente_update.php?' . http_build_query([]));
 
 $oExpediente = new Expediente($Q_id_expediente);
 $id_tramite = $oExpediente->getId_tramite();

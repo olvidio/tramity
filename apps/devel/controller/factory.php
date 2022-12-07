@@ -171,11 +171,13 @@ $ToEmpty = "";
 $bytea_bind = '';
 $bytea_dades = '';
 $array_dades = '';
+$fechas_dades = '';
 $gets = "";
 $altres_gets = "";
 $altres_gets_set = "";
 $query_if = "";
 $guardar_array = "";
+$guardar_fechas = "";
 $err_bool = "";
 $a_auto = array();
 // una primera vuelta para cargar excepciones...
@@ -308,6 +310,8 @@ foreach ($oDbl->query($sql) as $row) {
             $tipo_db = 'DateTimeLocal';
             $tip = 'd';
             $tip_val = '';
+            $fechas_dades .= "\n\t\t\t";
+            $fechas_dades .= '$aDatos[\''.$nomcamp.'\'] = (new ConverterDate(\'' . $tipo . '\', $aDatos[\''.$nomcamp.'\']))->fromPg();';
             break;
         case 'time':
             $tipo_db = 'string time';
@@ -428,20 +432,11 @@ foreach ($oDbl->query($sql) as $row) {
             $gets .= '
 	/**
 	 *
-	 * @return DateTimeLocal|NullDateTimeLocal' . ' $' . $tip . $nomcamp;
-    if (!empty($a_use_txt['JsonException'])) {
-        $gets .= "\n\t".' * @throws JsonException';
-    }
+	 * @return DateTimeLocal|null' . ' $' . $tip . $nomcamp;
 	$gets .= "\n\t".' */
-	public function get' . $NomCamp . '(): DateTimeLocal|NullDateTimeLocal
+	public function get' . $NomCamp . '(): DateTimeLocal|null
 	{
-		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
-			$this->DBCargar();
-		}
-		if (empty($this->' . $tip . $nomcamp . ')) {
-			return new NullDateTimeLocal();
-		}
-        return (new ConverterDate(\'' . $tipo . '\', $this->' . $tip . $nomcamp . '))->fromPg();
+        return $this->' . $tip . $nomcamp . ';
 	}';
             break;
         default:
@@ -507,20 +502,12 @@ foreach ($oDbl->query($sql) as $row) {
             case 'timestamptz';
                 $gets .= '
 	/**
-	 * Si $' . $tip . $nomcamp . ' es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
-	 * Si convert es FALSE, $' . $tip . $nomcamp . ' debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
 	 * 
-	 * @param DateTimeLocal|string|null $' . $tip . $nomcamp.'
-     * @param bool $convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
+	 * @param DateTimeLocal|null $' . $tip . $nomcamp.'
 	 */
-	public function set' . $NomCamp . '(DateTimeLocal|string|null $' . $tip . $nomcamp . '=\'\', bool $convert=TRUE): void
+	public function set' . $NomCamp . '(DateTimeLocal|null $' . $tip . $nomcamp . ' = null): void
 	{
-        if ($convert === TRUE  && !empty($' . $tip . $nomcamp . ')) {
-            $oConverter = new ConverterDate(\'' . $tipo . '\', $' . $tip . $nomcamp . ');
-            $this->' . $tip . $nomcamp . ' = $oConverter->toPg();
-	    } else {
-            $this->' . $tip . $nomcamp . ' = $' . $tip . $nomcamp . ';
-	    }
+        $this->' . $tip . $nomcamp . ' = $' . $tip . $nomcamp . ';
 	}';
                 break;
             default:
@@ -595,7 +582,12 @@ foreach ($oDbl->query($sql) as $row) {
             }
             if ($tipo_db === 'array') {
                 $guardar_array = "\n\t\t" . '$aDatos[\'' . $nomcamp . '\'] = array_php2pg($' . $Q_clase . '->' . $metodo_get . ');';
-            } else {
+            }
+            if ($tipo_db === 'DateTimeLocal') {
+                $guardar_fechas = "\n\t\t" . '$aDatos[\'' . $nomcamp . '\'] = (new ConverterDate(\'' . $tipo . '\', $' . $Q_clase . '->' . $metodo_get . '))->toPg();';
+            }
+
+            if ($tipo_db !== 'array' && $tipo_db !== 'DateTimeLocal') {
                 $guardar .= "\n\t\t" . '$aDatos[\'' . $nomcamp . '\'] = $' . $Q_clase . '->' . $metodo_get . ';';
             }
 
@@ -625,6 +617,9 @@ $txt_entidad = "<?php
 namespace $grupo\\domain\\entity;";
 if (!empty($a_use_txt['is_true'])) {
     $txt_entidad .= "\n\t".'use function core\is_true;';
+}
+if (!empty($a_use_txt['DateTimeLocal'])) {
+    $txt_entidad .= "\n\t".'use web\DateTimeLocal;';
 }
 
 $txt_entidad .= "
@@ -668,7 +663,9 @@ $txt_entidad .= "\n" . '}';
 // crear el directorio domain/entity si no existe
 $dir_entity = ServerConf::DIR . '/apps/' . $grupo . '/domain/entity';
 if (!is_dir($dir_entity)) {
-    mkdir($dir_entity);
+    if (!mkdir($dir_entity, 0774, TRUE) && !is_dir($dir_entity)) {
+        throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir_entity));
+    }
 }
 $filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/domain/entity/' . $Q_clase . '.php';
 if (!$handle = fopen($filename, 'w')) {
@@ -924,6 +921,11 @@ if (!empty($array_dades)) {
     $txt_pgRepositorio .= $array_dades;
 }
 
+if (!empty($fechas_dades)) {
+    $txt_pgRepositorio .= "\n\t\t\t// para las fechas del postgres (texto iso)";
+    $txt_pgRepositorio .= $fechas_dades;
+}
+
 $txt_pgRepositorio .= '
             $' . $Q_clase . ' = new ' . $Q_clase . '();
             $' . $Q_clase . '->setAllAttributes($aDatos);
@@ -1041,6 +1043,10 @@ $txt_pgRepositorio .= $guardar;
 if ($guardar_array) {
     $txt_pgRepositorio .= "\n\t\t// para los array";
     $txt_pgRepositorio .= $guardar_array;
+}
+if ($guardar_fechas) {
+    $txt_pgRepositorio .= "\n\t\t// para las fechas";
+    $txt_pgRepositorio .= $guardar_fechas;
 }
 $txt_pgRepositorio .= '
 		array_walk($aDatos, \'core\\poner_null\');';
@@ -1174,6 +1180,13 @@ if (!empty($array_dades)) {
     $txt_pgRepositorio .= "\n\t\t\t// para los array del postgres";
     $txt_pgRepositorio .= "\n\t\t\t" . 'if ($aDatos !== FALSE) {';
     $txt_pgRepositorio .= $array_dades;
+    $txt_pgRepositorio .= "\n\t\t\t}";
+}
+
+if (!empty($fechas_dades)) {
+    $txt_pgRepositorio .= "\n\t\t\t// para las fechas del postgres (texto iso)";
+    $txt_pgRepositorio .= "\n\t\t\t" . 'if ($aDatos !== FALSE) {';
+    $txt_pgRepositorio .= $fechas_dades;
     $txt_pgRepositorio .= "\n\t\t\t}";
 }
 

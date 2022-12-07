@@ -12,7 +12,7 @@ use expedientes\model\entity\GestorAccion;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
-use tramites\model\entity\GestorFirma;
+use tramites\domain\repositories\FirmaRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\PermRegistro;
 use usuarios\domain\Visibilidad;
@@ -675,8 +675,8 @@ class Escrito extends EscritoDB
         $oProtOrigen->setMas($json_prot_local->mas);
         $protocol_txt = $oProtOrigen->ver_txt();
 
-        $gesFirmas = new GestorFirma();
-        $aRecorrido = $gesFirmas->getFirmasConforme($id_expediente);
+        $FirmaRepository = new FirmaRepository();
+        $aRecorrido = $FirmaRepository->getFirmasConforme($id_expediente);
 
         $conforme_txt = '<br>';
         $conforme_txt .= _("Conforme") . ':';

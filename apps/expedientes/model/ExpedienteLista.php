@@ -4,7 +4,7 @@ namespace expedientes\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use tramites\model\entity\GestorTramite;
+use tramites\domain\repositories\TramiteRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
 use web\Hash;
@@ -39,8 +39,8 @@ class ExpedienteLista
         $a_expedientes = [];
         if (!empty($this->cExpedientes)) {
             //lista de tramites
-            $gesTramites = new GestorTramite();
-            $a_tramites = $gesTramites->getArrayAbrevTramites();
+            $TramiteRepository = new TramiteRepository();
+            $a_tramites = $TramiteRepository->getArrayAbrevTramites();
             // array visibilidades
             $oVisibilidad = new \usuarios\domain\Visibilidad();
             $a_visibilidad = $oVisibilidad->getArrayVisibilidad();

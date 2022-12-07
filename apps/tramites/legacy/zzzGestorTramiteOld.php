@@ -1,13 +1,14 @@
 <?php
 
-namespace tramites\model\entity;
+namespace tramites\legacy;
 
 use core;
+use web\Desplegable;
 
 /**
- * GestorTramiteCargo
+ * GestorTramite
  *
- * Classe per gestionar la llista d'objectes de la clase TramiteCargo
+ * Classe per gestionar la llista d'objectes de la clase Tramite
  *
  * @package tramity
  * @subpackage model
@@ -15,7 +16,7 @@ use core;
  * @version 1.0
  * @created 19/6/2020
  */
-class GestorTramiteCargo extends core\ClaseGestor
+class zzzGestorTramiteOld extends core\ClaseGestor
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 
@@ -32,47 +33,101 @@ class GestorTramiteCargo extends core\ClaseGestor
     {
         $oDbl = $GLOBALS['oDBT'];
         $this->setoDbl($oDbl);
-        $this->setNomTabla('tramite_cargo');
+        $this->setNomTabla('x_tramites');
     }
 
 
     /* MÉTODOS PÚBLICOS -----------------------------------------------------------*/
 
     /**
-     * retorna l'array d'objectes de tipus TramiteCargo
+     * retorna un Array
+     * Els posibles tramites, en abreviatures
      *
-     * @param string sQuery la query a executar.
-     * @return array Una col·lecció d'objectes de tipus TramiteCargo
+     * @param integer $id_ambito
+     * @return Array
      */
-    function getTramiteCargosQuery($sQuery = '')
+    function getArrayAbrevTramites()
     {
         $oDbl = $this->getoDbl();
-        $oTramiteCargoSet = new core\Set();
+        $nom_tabla = $this->getNomTabla();
+
+        $sQuery = "SELECT id_tramite, breve FROM $nom_tabla ORDER BY orden";
+        if (($oDbl->query($sQuery)) === false) {
+            $sClauError = 'GestorTramites.lista';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return false;
+        }
+        $aOpciones = array();
+        foreach ($oDbl->query($sQuery) as $aClave) {
+            $clave = $aClave[0];
+            $val = $aClave[1];
+            $aOpciones[$clave] = $val;
+        }
+        return $aOpciones;
+    }
+
+    /**
+     * retorna un objecte del tipus Desplegable
+     * Els posibles tramites
+     *
+     * @param integer $id_ambito
+     * @return Desplegable
+     */
+    function getListaTramites()
+    {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+
+        $sQuery = "SELECT id_tramite, tramite FROM $nom_tabla ORDER BY tramite";
+        if (($oDbl->query($sQuery)) === false) {
+            $sClauError = 'GestorTramites.lista';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return false;
+        }
+        $aOpciones = array();
+        foreach ($oDbl->query($sQuery) as $aClave) {
+            $clave = $aClave[0];
+            $val = $aClave[1];
+            $aOpciones[$clave] = $val;
+        }
+        return new Desplegable('', $aOpciones, '', true);
+    }
+
+    /**
+     * retorna l'array d'objectes de tipus Tramite
+     *
+     * @param string sQuery la query a executar.
+     * @return array Una col·lecció d'objectes de tipus Tramite
+     */
+    function getTramitesQuery($sQuery = '')
+    {
+        $oDbl = $this->getoDbl();
+        $oTramiteSet = new core\Set();
         if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'GestorTramiteCargo.query';
+            $sClauError = 'GestorTramite.query';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oTramiteCargo = new TramiteCargo($a_pkey);
-            $oTramiteCargoSet->add($oTramiteCargo);
+            $a_pkey = array('id_tramite' => $aDades['id_tramite']);
+            $oTramite = new Tramite($a_pkey);
+            $oTramiteSet->add($oTramite);
         }
-        return $oTramiteCargoSet->getTot();
+        return $oTramiteSet->getTot();
     }
 
     /**
-     * retorna l'array d'objectes de tipus TramiteCargo
+     * retorna l'array d'objectes de tipus Tramite
      *
      * @param array aWhere associatiu amb els valors de les variables amb les quals farem la query
      * @param array aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
-     * @return array Una col·lecció d'objectes de tipus TramiteCargo
+     * @return array Una col·lecció d'objectes de tipus Tramite
      */
-    function getTramiteCargos($aWhere = array(), $aOperators = array())
+    function getTramites($aWhere = array(), $aOperators = array())
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $oTramiteCargoSet = new core\Set();
+        $oTramiteSet = new core\Set();
         $oCondicion = new core\Condicion();
         $aCondi = array();
         foreach ($aWhere as $camp => $val) {
@@ -117,21 +172,21 @@ class GestorTramiteCargo extends core\ClaseGestor
         }
         $sQry = "SELECT * FROM $nom_tabla " . $sCondi . $sOrdre . $sLimit;
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorTramiteCargo.llistar.prepare';
+            $sClauError = 'GestorTramite.llistar.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorTramiteCargo.llistar.execute';
+            $sClauError = 'GestorTramite.llistar.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oTramiteCargo = new TramiteCargo($a_pkey);
-            $oTramiteCargoSet->add($oTramiteCargo);
+            $a_pkey = array('id_tramite' => $aDades['id_tramite']);
+            $oTramite = new Tramite($a_pkey);
+            $oTramiteSet->add($oTramite);
         }
-        return $oTramiteCargoSet->getTot();
+        return $oTramiteSet->getTot();
     }
 
     /* MÉTODOS PROTECTED --------------------------------------------------------*/

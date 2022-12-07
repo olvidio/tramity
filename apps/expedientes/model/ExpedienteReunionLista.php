@@ -3,11 +3,8 @@
 namespace expedientes\model;
 
 use core\ConfigGlobal;
-use tramites\model\entity\Firma;
-use tramites\model\entity\GestorFirma;
-use usuarios\domain\entity\Cargo;
-use web\Hash;
-
+use tramites\domain\entity\Firma;
+use tramites\domain\repositories\FirmaRepository;
 
 class ExpedienteReunionLista
 {
@@ -90,8 +87,8 @@ class ExpedienteReunionLista
         $aOperadorFirma = [
             'valor' => 'IS NULL',
         ];
-        $gesFirmas = new GestorFirma();
-        $cFirmasNull = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+        $FirmaRepository = new FirmaRepository();
+        $cFirmasNull = $FirmaRepository->getFirmas($aWhereFirma, $aOperadorFirma);
 
         // Sumar los firmados, pero no OK
         $aWhereFirma = [
@@ -102,7 +99,7 @@ class ExpedienteReunionLista
         $aOperadorFirma = [
             'valor' => 'IN',
         ];
-        $cFirmasVisto = $gesFirmas->getFirmas($aWhereFirma, $aOperadorFirma);
+        $cFirmasVisto = $FirmaRepository->getFirmas($aWhereFirma, $aOperadorFirma);
         $cFirmas = array_merge($cFirmasNull, $cFirmasVisto);
         $a_expedientes = [];
         $a_expedientes_espera = [];
@@ -111,7 +108,7 @@ class ExpedienteReunionLista
             $id_expediente = $oFirma->getId_expediente();
             $orden_tramite = $oFirma->getOrden_tramite();
             // Sólo a partir de que el orden_tramite anterior ya lo hayan firmado todos
-            if (!$gesFirmas->getAnteriorOK($id_expediente, $orden_tramite)) {
+            if (!$FirmaRepository->isAnteriorOK($id_expediente, $orden_tramite)) {
                 continue;
             }
 
@@ -131,17 +128,17 @@ class ExpedienteReunionLista
         }
 
         //////// mirar los que falta alguna firma para marcarlos en color /////////
-        $gesFirmas = new GestorFirma();
-        $a_exp_reunion_falta_firma = $gesFirmas->faltaFirmarReunion();
+        $FirmaRepository = new FirmaRepository();
+        $a_exp_reunion_falta_firma = $FirmaRepository->faltaFirmarReunion();
 
         //que tengan de mi firma, independiente de firmado o no
-        $cFirmas = $gesFirmas->getFirmasReunion(ConfigGlobal::role_id_cargo());
+        $cFirmas = $FirmaRepository->getFirmasReunion(ConfigGlobal::role_id_cargo());
         $a_expedientes = [];
         foreach ($cFirmas as $oFirma) {
             $id_expediente = $oFirma->getId_expediente();
             $orden_tramite = $oFirma->getOrden_tramite();
             // Sólo a partir de que el orden_tramite anterior ya lo hayan firmado todos
-            if (!$gesFirmas->getAnteriorOK($id_expediente, $orden_tramite)) {
+            if (!$FirmaRepository->isAnteriorOK($id_expediente, $orden_tramite)) {
                 continue;
             }
 

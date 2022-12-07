@@ -8,7 +8,7 @@ class MIMESubcontainer extends MIMEContainer
     public function create()
     {
         $addheaders = (is_array($this->add_header)) ?
-            implode($this->add_header, "\r\n") : "";
+            implode("\r\n", $this->add_header) : "";
         $headers = "Content-Type: $this->content_type; boundary=" .
             "$this->boundary\r\n";
         $headers .= "Content-Transfer-Encoding: $this->content_enc" .

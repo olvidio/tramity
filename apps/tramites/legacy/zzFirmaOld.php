@@ -1,6 +1,6 @@
 <?php
 
-namespace tramites\model\entity;
+namespace tramites\legacy;
 
 use core;
 use PDO;
@@ -27,7 +27,7 @@ use web\NullDateTimeLocal;
  * @version 1.0
  * @created 14/11/2020
  */
-class Firma extends core\ClasePropiedades
+class zzzFirmaOld extends core\ClasePropiedades
 {
 
     /* CONST -------------------------------------------------------------- */

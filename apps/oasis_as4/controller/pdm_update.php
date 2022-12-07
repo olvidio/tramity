@@ -32,7 +32,7 @@ if (!empty($a_sel)) { //vengo de un checkbox
 
 
 $error_txt = '';
-if ($Q_que == 'nuevo') {
+if ($Q_que === 'nuevo') {
     // init
     $oPmode = new Pmode();
     $oPmode->setPlataforma_Destino($Q_plataforma);
@@ -46,7 +46,7 @@ if ($Q_que == 'nuevo') {
     $oPmode->setHolo_server_dst($Q_servidor);
     $error_txt .= $oPmode->saveResp();
 }
-if ($Q_que == 'eliminar') {
+if ($Q_que === 'eliminar') {
     $dir = $_SESSION['oConfig']->getDock();
     // si es una resp. sólo hay que eliminar este fichero
     $matches = [];
