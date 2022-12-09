@@ -10,7 +10,7 @@ use envios\model\MIMEAttachment;
 use envios\model\MIMEContainer;
 use escritos\model\entity\EscritoAdjunto;
 use etherpad\model\Etherpad;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\Visibilidad;
 use function core\is_true;
 
@@ -55,8 +55,8 @@ class Payload
 
     public function __construct()
     {
-        $gesLugares = new GestorLugar();
-        $this->aLugares = $gesLugares->getArrayLugares();
+        $LugarRepository = new LugarRepository();
+        $this->aLugares = $LugarRepository->getArrayLugares();
 
         $this->dom = new DOMDocument('1.0', 'utf-8');
     }

@@ -7,8 +7,7 @@ use core\ConfigGlobal;
 use etiquetas\model\entity\Etiqueta;
 use etiquetas\model\entity\GestorEtiqueta;
 use etiquetas\model\entity\GestorEtiquetaEntrada;
-use lugares\model\entity\GestorLugar;
-use lugares\model\entity\Lugar;
+use lugares\domain\repositories\LugarRepository;
 use PDO;
 use PDOException;
 use stdClass;
@@ -569,9 +568,10 @@ class EntradaCompartida extends core\ClasePropiedades
         if (!empty($descripcion)) {
             $destinos_txt = $descripcion;
         } else {
+            $LugarRepository = new LugarRepository();
             $a_json_prot_dst = $this->getJson_prot_destino();
             foreach ($a_json_prot_dst as $json_prot_dst) {
-                $oLugar = new Lugar($json_prot_dst->id_lugar);
+                $oLugar = $LugarRepository->findById($json_prot_dst->id_lugar);
                 $destinos_txt .= empty($destinos_txt) ? '' : ', ';
                 $destinos_txt .= $oLugar->getNombre();
             }
@@ -636,8 +636,8 @@ class EntradaCompartida extends core\ClasePropiedades
         $sigla = $_SESSION['oConfig']->getSigla();
         $destinos_txt = $sigla;
 
-        $gesLugares = new GestorLugar();
-        $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
+        $LugarRepository = new LugarRepository();
+        $cLugares = $LugarRepository->getLugares(['sigla' => $sigla]);
         if (!empty($cLugares)) {
             $id_sigla = $cLugares[0]->getId_lugar();
 

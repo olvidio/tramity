@@ -8,7 +8,7 @@ use escritos\model\Escrito;
 use etherpad\model\Etherpad;
 use expedientes\model\entity\Accion;
 use expedientes\model\entity\GestorAccion;
-use lugares\model\entity\GestorGrupo;
+use lugares\domain\repositories\GrupoRepository;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
@@ -525,8 +525,8 @@ switch ($Q_que) {
             if (core\is_true($Q_grupo_dst)) {
                 $descripcion = '';
                 $saltar = FALSE;
-                $gesGrupo = new GestorGrupo();
-                $a_grupos = $gesGrupo->getArrayGrupos();
+                $GrupoRepository = new GrupoRepository();
+                $a_grupos = $GrupoRepository->getArrayGrupos();
                 foreach ($Q_a_grupos as $id_grupo) {
                     // si es personalizado, no cambio nada porque ya se ha guardado al personalizar
                     if ($id_grupo === 'custom') {
@@ -720,8 +720,8 @@ switch ($Q_que) {
         if (core\is_true($Q_grupo_dst)) {
             $descripcion = '';
             $saltar = FALSE;
-            $gesGrupo = new GestorGrupo();
-            $a_grupos = $gesGrupo->getArrayGrupos();
+            $GrupoRepository = new GrupoRepository();
+            $a_grupos = $GrupoRepository->getArrayGrupos();
             foreach ($Q_a_grupos as $id_grupo) {
                 // si es personalizado, no cambio nada porque ya se ha guardado al personalizar
                 if ($id_grupo === 'custom') {

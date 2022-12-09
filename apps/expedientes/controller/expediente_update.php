@@ -7,7 +7,7 @@ use escritos\model\Escrito;
 use expedientes\model\entity\GestorAccion;
 use expedientes\model\Expediente;
 use expedientes\model\GestorExpediente;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use pendientes\model\Pendiente;
 use tramites\domain\entity\Firma;
 use tramites\domain\repositories\FirmaRepository;
@@ -387,18 +387,16 @@ switch ($Q_que) {
         // crear los números de protocolo local de los escritos.
         // busco aquí el id_lugar para no tener que hacerlo dentro del bucle.
         $sigla = $_SESSION['oConfig']->getSigla();
-        $gesLugares = new GestorLugar();
-        $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
+        $LugarRepository = new LugarRepository();
+        $cLugares = $LugarRepository->getLugares(['sigla' => $sigla]);
         $oLugar = $cLugares[0];
         $id_lugar = $oLugar->getId_lugar();
         $sigla = 'cr';
-        $gesLugares = new GestorLugar();
-        $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
+        $cLugares = $LugarRepository->getLugares(['sigla' => $sigla]);
         $oLugar = $cLugares[0];
         $id_lugar_cr = $oLugar->getId_lugar();
         $sigla = 'IESE';
-        $gesLugares = new GestorLugar();
-        $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
+        $cLugares = $LugarRepository->getLugares(['sigla' => $sigla]);
         $oLugar = $cLugares[0];
         $id_lugar_iese = $oLugar->getId_lugar();
         // escritos del expediente: acciones tipo escrito

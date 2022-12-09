@@ -1,48 +1,50 @@
 <?php
 
-namespace plantillas\infrastructure;
+namespace lugares\infrastructure;
 
 use core\ClaseRepository;
 use core\Condicion;
 use core\Set;
+use lugares\domain\entity\Grupo;
+use lugares\domain\repositories\GrupoRepositoryInterface;
 use PDO;
 use PDOException;
-use plantillas\domain\entity\Plantilla;
-use plantillas\domain\repositories\PlantillaRepositoryInterface;
+use function core\array_pg2php;
+use function core\array_php2pg;
 
 
 /**
- * Clase que adapta la tabla plantillas a la interfaz del repositorio
+ * Clase que adapta la tabla lugares_grupos a la interfaz del repositorio
  *
  * @package tramity
  * @subpackage model
  * @author Daniel Serrabou
  * @version 2.0
- * @created 7/12/2022
+ * @created 9/12/2022
  */
-class PgPlantillaRepository extends ClaseRepository implements PlantillaRepositoryInterface
+class PgGrupoRepository extends ClaseRepository implements GrupoRepositoryInterface
 {
     public function __construct()
     {
         $oDbl = $GLOBALS['oDBT'];
         $this->setoDbl($oDbl);
-        $this->setNomTabla('plantillas');
+        $this->setNomTabla('lugares_grupos');
     }
 
     /* -------------------- GESTOR BASE ---------------------------------------- */
 
     /**
-     * devuelve una colección (array) de objetos de tipo Plantilla
+     * devuelve una colección (array) de objetos de tipo Grupo
      *
      * @param array $aWhere asociativo con los valores para cada campo de la BD.
      * @param array $aOperators asociativo con los operadores que hay que aplicar a cada campo
-     * @return array|FALSE Una colección de objetos de tipo Plantilla
+     * @return array|FALSE Una colección de objetos de tipo Grupo
      */
-    public function getPlantillas(array $aWhere = [], array $aOperators = []): array|false
+    public function getGrupos(array $aWhere = [], array $aOperators = []): array|false
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $PlantillaSet = new Set();
+        $GrupoSet = new Set();
         $oCondicion = new Condicion();
         $aCondicion = array();
         foreach ($aWhere as $camp => $val) {
@@ -87,34 +89,36 @@ class PgPlantillaRepository extends ClaseRepository implements PlantillaReposito
         }
         $sQry = "SELECT * FROM $nom_tabla " . $sCondicion . $sOrdre . $sLimit;
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClaveError = 'PgPlantillaRepository.listar.prepare';
+            $sClaveError = 'PgGrupoRepository.listar.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClaveError = 'PgPlantillaRepository.listar.execute';
+            $sClaveError = 'PgGrupoRepository.listar.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
 
         $filas = $oDblSt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($filas as $aDatos) {
-            $Plantilla = new Plantilla();
-            $Plantilla->setAllAttributes($aDatos);
-            $PlantillaSet->add($Plantilla);
+            // para los array del postgres
+            $aDatos['miembros'] = array_pg2php($aDatos['miembros']);
+            $Grupo = new Grupo();
+            $Grupo->setAllAttributes($aDatos);
+            $GrupoSet->add($Grupo);
         }
-        return $PlantillaSet->getTot();
+        return $GrupoSet->getTot();
     }
 
     /* -------------------- ENTIDAD --------------------------------------------- */
 
-    public function Eliminar(Plantilla $Plantilla): bool
+    public function Eliminar(Grupo $Grupo): bool
     {
-        $id_plantilla = $Plantilla->getId_plantilla();
+        $id_grupo = $Grupo->getId_grupo();
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_plantilla = $id_plantilla")) === FALSE) {
-            $sClaveError = 'Plantilla.eliminar';
+        if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_grupo = $id_grupo")) === FALSE) {
+            $sClaveError = 'Grupo.eliminar';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -125,23 +129,26 @@ class PgPlantillaRepository extends ClaseRepository implements PlantillaReposito
     /**
      * Si no existe el registro, hace un insert, si existe, se hace el update.
      */
-    public function Guardar(Plantilla $Plantilla): bool
+    public function Guardar(Grupo $Grupo): bool
     {
-        $id_plantilla = $Plantilla->getId_plantilla();
+        $id_grupo = $Grupo->getId_grupo();
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $bInsert = $this->isNew($id_plantilla);
+        $bInsert = $this->isNew($id_grupo);
 
         $aDatos = [];
-        $aDatos['nombre'] = $Plantilla->getNombre();
+        $aDatos['descripcion'] = $Grupo->getDescripcion();
+        // para los array
+        $aDatos['miembros'] = array_php2pg($Grupo->getMiembros());
         array_walk($aDatos, 'core\poner_null');
 
         if ($bInsert === FALSE) {
             //UPDATE
             $update = "
-					nombre                   = :nombre";
-            if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_plantilla = $id_plantilla")) === FALSE) {
-                $sClaveError = 'Plantilla.update.prepare';
+					descripcion              = :descripcion,
+					miembros                 = :miembros";
+            if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_grupo = $id_grupo")) === FALSE) {
+                $sClaveError = 'Grupo.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -151,17 +158,17 @@ class PgPlantillaRepository extends ClaseRepository implements PlantillaReposito
             } catch (PDOException $e) {
                 $err_txt = $e->errorInfo[2];
                 $this->setErrorTxt($err_txt);
-                $sClaveError = 'Plantilla.update.execute';
+                $sClaveError = 'Grupo.update.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
         } else {
             // INSERT
-            $aDatos['id_plantilla'] = $Plantilla->getId_plantilla();
-            $campos = "(id_plantilla,nombre)";
-            $valores = "(:id_plantilla,:nombre)";
+            $aDatos['id_grupo'] = $Grupo->getId_grupo();
+            $campos = "(id_grupo,descripcion,miembros)";
+            $valores = "(:id_grupo,:descripcion,:miembros)";
             if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
-                $sClaveError = 'Plantilla.insertar.prepare';
+                $sClaveError = 'Grupo.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -170,7 +177,7 @@ class PgPlantillaRepository extends ClaseRepository implements PlantillaReposito
             } catch (PDOException $e) {
                 $err_txt = $e->errorInfo[2];
                 $this->setErrorTxt($err_txt);
-                $sClaveError = 'Plantilla.insertar.execute';
+                $sClaveError = 'Grupo.insertar.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -178,12 +185,12 @@ class PgPlantillaRepository extends ClaseRepository implements PlantillaReposito
         return TRUE;
     }
 
-    private function isNew(int $id_plantilla): bool
+    private function isNew(int $id_grupo): bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_plantilla = $id_plantilla")) === FALSE) {
-            $sClaveError = 'Plantilla.isNew';
+        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_grupo = $id_grupo")) === FALSE) {
+            $sClaveError = 'Grupo.isNew';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -197,41 +204,71 @@ class PgPlantillaRepository extends ClaseRepository implements PlantillaReposito
      * Devuelve los campos de la base de datos en un array asociativo.
      * Devuelve false si no existe la fila en la base de datos
      *
-     * @param int $id_plantilla
+     * @param int $id_grupo
      * @return array|bool
      */
-    public function datosById(int $id_plantilla): array|bool
+    public function datosById(int $id_grupo): array|bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_plantilla = $id_plantilla")) === FALSE) {
-            $sClaveError = 'Plantilla.getDatosById';
+        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_grupo = $id_grupo")) === FALSE) {
+            $sClaveError = 'Grupo.getDatosById';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
         $aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);
+        // para los array del postgres
+        if ($aDatos !== FALSE) {
+            $aDatos['miembros'] = array_pg2php($aDatos['miembros']);
+        }
         return $aDatos;
     }
 
 
     /**
-     * Busca la clase con id_plantilla en la base de datos .
+     * Busca la clase con id_grupo en la base de datos .
      */
-    public function findById(int $id_plantilla): ?Plantilla
+    public function findById(int $id_grupo): ?Grupo
     {
-        $aDatos = $this->datosById($id_plantilla);
+        $aDatos = $this->datosById($id_grupo);
         if (empty($aDatos)) {
             return null;
         }
-        return (new Plantilla())->setAllAttributes($aDatos);
+        return (new Grupo())->setAllAttributes($aDatos);
     }
 
-    public function getNewId_plantilla()
+    public function getNewId_grupo():int
     {
         $oDbl = $this->getoDbl();
-        $sQuery = "select nextval('plantillas_id_plantilla_seq'::regclass)";
+        $sQuery = "select nextval('lugares_grupos_id_grupo_seq'::regclass)";
         return $oDbl->query($sQuery)->fetchColumn();
     }
 
     /* -------------------- GESTOR EXTRA ---------------------------------------- */
+
+    /**
+     * Los posibles Grupos
+     *
+     * @return bool|array
+     */
+    public function getArrayGrupos(): bool|array
+    {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+
+        $sQuery = "SELECT id_grupo, descripcion FROM $nom_tabla
+                 ORDER BY descripcion";
+        if (($oDbl->query($sQuery)) === false) {
+            $sClauError = 'PgGrupoRepository.Array';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return false;
+        }
+        $aOpciones = array();
+        foreach ($oDbl->query($sQuery) as $aClave) {
+            $clave = $aClave[0];
+            $val = $aClave[1];
+            $aOpciones[$clave] = $val;
+        }
+        return $aOpciones;
+    }
 }

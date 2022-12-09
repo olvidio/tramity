@@ -5,7 +5,7 @@ use davical\model\Davical;
 use entradas\model\entity\EntradaBypass;
 use entradas\model\entity\EntradaDB;
 use entradas\model\Entrada;
-use lugares\model\entity\GestorGrupo;
+use lugares\domain\repositories\GrupoRepository;
 use pendientes\model\Pendiente;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\PermRegistro;
@@ -252,8 +252,8 @@ switch ($Q_que) {
         // Si esta marcado como grupo de destinos, o destinos individuales.
         if (is_true($Q_grupo_dst)) {
             $descripcion = '';
-            $gesGrupo = new GestorGrupo();
-            $a_grupos = $gesGrupo->getArrayGrupos();
+            $GrupoRepository = new GrupoRepository();
+            $a_grupos = $GrupoRepository->getArrayGrupos();
             foreach ($Qa_grupos as $id_grupo) {
                 $descripcion .= empty($descripcion) ? '' : ' + ';
                 $descripcion .= $a_grupos[$id_grupo];
@@ -576,8 +576,8 @@ switch ($Q_que) {
                 // Si esta marcado como grupo de destinos, o destinos individuales.
                 if (is_true($Q_grupo_dst)) {
                     $descripcion = '';
-                    $gesGrupo = new GestorGrupo();
-                    $a_grupos = $gesGrupo->getArrayGrupos();
+                    $GrupoRepository = new GrupoRepository();
+                    $a_grupos = $GrupoRepository->getArrayGrupos();
                     foreach ($Qa_grupos as $id_grupo) {
                         $descripcion .= empty($descripcion) ? '' : ' + ';
                         $descripcion .= $a_grupos[$id_grupo];

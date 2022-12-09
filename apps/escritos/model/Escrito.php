@@ -9,9 +9,8 @@ use escritos\model\entity\GestorEscritoAdjunto;
 use etherpad\model\Etherpad;
 use expedientes\model\entity\Accion;
 use expedientes\model\entity\GestorAccion;
-use lugares\model\entity\GestorLugar;
-use lugares\model\entity\Grupo;
-use lugares\model\entity\Lugar;
+use lugares\domain\repositories\GrupoRepository;
+use lugares\domain\repositories\LugarRepository;
 use tramites\domain\repositories\FirmaRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\PermRegistro;
@@ -126,22 +125,22 @@ class Escrito extends EscritoDB
             return TRUE;
         }
 
-        $gesLugares = new GestorLugar();
+        $LugarRepository = new LugarRepository();
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             if (empty($id_lugar)) {
-                $id_lugar = $gesLugares->getId_sigla_local();
+                $id_lugar = $LugarRepository->getId_sigla_local();
             }
             // según si el destino es cr, iese o resto:
             $lugar_contador = '';
         } else {
             if (empty($id_lugar_iese)) {
-                $id_lugar_iese = $gesLugares->getId_iese();
+                $id_lugar_iese = $LugarRepository->getId_iese();
             }
             if (empty($id_lugar_cr)) {
-                $id_lugar_cr = $gesLugares->getId_cr();
+                $id_lugar_cr = $LugarRepository->getId_cr();
             }
             if (empty($id_lugar)) {
-                $id_lugar = $gesLugares->getId_sigla_local();
+                $id_lugar = $LugarRepository->getId_sigla_local();
             }
             // según si el destino es cr, iese o resto:
             $lugar_contador = '';
@@ -282,8 +281,9 @@ class Escrito extends EscritoDB
         $a_grupos = $this->getId_grupos();
         if (!empty($a_grupos)) {
             //(según los grupos seleccionados)
+            $GrupoRepository = new GrupoRepository();
             foreach ($a_grupos as $id_grupo) {
-                $oGrupo = new Grupo($id_grupo);
+                $oGrupo = $GrupoRepository->findById($id_grupo);
                 $descripcion_g = $oGrupo->getDescripcion();
                 $destinos_txt .= empty($destinos_txt) ? '' : ', ';
                 $destinos_txt .= $descripcion_g;
@@ -369,6 +369,7 @@ class Escrito extends EscritoDB
      */
     public function cabeceraIzquierda($id_lugar_de_grupo = ''): string
     {
+        $LugarRepository = new LugarRepository();
         $oVisibilidad = new Visibilidad();
         $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
         $destinos_txt = '';
@@ -378,15 +379,18 @@ class Escrito extends EscritoDB
         // si es un grupo:
         if (!empty($a_grupos)) {
             if (!empty($id_lugar_de_grupo)) { // individual: solo añado el nombre del destino
-                $oLugar = new Lugar($id_lugar_de_grupo);
+                $oLugar = $LugarRepository->findById($id_lugar_de_grupo);
                 $destinos_txt .= $oLugar->getSigla();
             } else {
                 //(según los grupos seleccionados)
+                $GrupoRepository = new GrupoRepository();
                 foreach ($a_grupos as $id_grupo) {
-                    $oGrupo = new Grupo($id_grupo);
-                    $descripcion_g = $oGrupo->getDescripcion();
-                    $destinos_txt .= empty($destinos_txt) ? '' : ', ';
-                    $destinos_txt .= $descripcion_g;
+                    $oGrupo = $GrupoRepository->findById($id_grupo);
+                    if ($oGrupo !== null) {
+                        $descripcion_g = $oGrupo->getDescripcion();
+                        $destinos_txt .= empty($destinos_txt) ? '' : ', ';
+                        $destinos_txt .= $descripcion_g;
+                    }
                 }
             }
         } else { // si no es un grupo
@@ -397,7 +401,7 @@ class Escrito extends EscritoDB
                         continue;
                     }
                     $id_dst = $json_prot_dst->id_lugar;
-                    if ($id_dst == $id_lugar_de_grupo) {
+                    if ($id_dst === $id_lugar_de_grupo) {
                         $oProtDestino = new Protocolo();
                         $oProtDestino->setJson($json_prot_dst);
                         $destinos_txt = $oProtDestino->ver_txt();
@@ -427,16 +431,20 @@ class Escrito extends EscritoDB
         // Si no hay ni grupos ni json, miro ids
         if (empty($destinos_txt)) {
             if (!empty($id_lugar_de_grupo)) {
-                $oLugar = new Lugar($id_lugar_de_grupo);
-                $destinos_txt .= $oLugar->getSigla();
+                $oLugar = $LugarRepository->findById($id_lugar_de_grupo);
+                if ($oLugar !== null) {
+                    $destinos_txt .= $oLugar->getSigla();
+                }
             } else {
                 $descripcion_g = $this->getDescripcion();
                 if (empty($descripcion_g)) {
                     $a_id_lugar = $this->getDestinos();
                     foreach ($a_id_lugar as $id_lugar) {
-                        $oLugar = new Lugar($id_lugar);
-                        $destinos_txt .= empty($destinos_txt) ? '' : ', ';
-                        $destinos_txt .= $oLugar->getSigla();
+                        $oLugar = $LugarRepository->findById($id_lugar);
+                        if ($oLugar !== null) {
+                            $destinos_txt .= empty($destinos_txt) ? '' : ', ';
+                            $destinos_txt .= $oLugar->getSigla();
+                        }
                     }
                 } else {
                     $destinos_txt .= $descripcion_g;
@@ -605,10 +613,13 @@ class Escrito extends EscritoDB
         $aMiembros = [];
         if (!empty($a_grupos)) {
             //(según los grupos seleccionados)
+            $GrupoRepository = new GrupoRepository();
             $a_miembros_g = [];
             foreach ($a_grupos as $id_grupo) {
-                $oGrupo = new Grupo($id_grupo);
-                $a_miembros_g[] = $oGrupo->getMiembros();
+                $oGrupo = $GrupoRepository->findById($id_grupo);
+                if ($oGrupo !== null) {
+                    $a_miembros_g[] = $oGrupo->getMiembros();
+                }
                 //$aMiembros = array_merge($aMiembros, $a_miembros_g);
             }
             $aMiembros = array_merge([], ...$a_miembros_g);

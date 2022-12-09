@@ -3,7 +3,7 @@
 // INICIO Cabecera global de URL de controlador *********************************
 use core\ConfigGlobal;
 use core\ViewTwig;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use web\Desplegable;
 
 require_once("apps/core/global_header.inc");
@@ -26,14 +26,14 @@ $Q_prot_num = empty($Q_prot_num) ? '' : $Q_prot_num;
 $Q_prot_any = empty($Q_prot_any) ? '' : $Q_prot_any;
 
 
-$gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayBusquedas($Q_ctr_anulados);
+$LugarRepository = new LugarRepository();
+$a_lugares = $LugarRepository->getArrayBusquedas($Q_ctr_anulados);
 
 // Busco el id_lugar de la dl.
-$id_siga_local = $gesLugares->getId_sigla_local();
+$id_siga_local = $LugarRepository->getId_sigla_local();
 $sigla = $_SESSION['oConfig']->getSigla();
 // Busco el id_lugar de cr.
-$id_cr = $gesLugares->getId_cr();
+$id_cr = $LugarRepository->getId_cr();
 
 
 $oDesplLugar = new Desplegable();

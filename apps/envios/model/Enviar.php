@@ -10,8 +10,8 @@ use entradas\model\Entrada;
 use escritos\model\entity\EscritoAdjunto;
 use escritos\model\Escrito;
 use etherpad\model\Etherpad;
-use lugares\model\entity\GestorLugar;
-use lugares\model\entity\Lugar;
+use lugares\domain\entity\Lugar;
+use lugares\domain\repositories\LugarRepository;
 use Mpdf\MpdfException;
 use oasis_as4\model\As4;
 use oasis_as4\model\As4CollaborationInfo;
@@ -277,11 +277,12 @@ class Enviar
 
         $num_enviados = 0;
         $a_lista_dst_as4 = [];
+        $LugarRepository = new LugarRepository();
         foreach ($aDestinos as $id_lugar) {
             ini_set('display_errors', 1);
             error_reporting(E_ALL);
 
-            $oLugar = new Lugar($id_lugar);
+            $oLugar = $LugarRepository->findById($id_lugar);
             $this->sigla_destino = $oLugar->getSigla();
 
             $modo_envio = $oLugar->getModo_envio();
@@ -456,8 +457,8 @@ class Enviar
             // fabrico uno con sólo el lugar:
             if ($this->oEscrito->getCategoria() === Categoria::CAT_E12) {
                 // Busco el id_lugar de la dl.
-                $gesLugares = new GestorLugar();
-                $id_siga_local = $gesLugares->getId_sigla_local();
+                $LugarRepository = new LugarRepository();
+                $id_siga_local = $LugarRepository->getId_sigla_local();
                 $json_prot_org = new stdClass;
                 $json_prot_org->id_lugar = $id_siga_local;
                 $json_prot_org->num = '';
@@ -534,8 +535,8 @@ class Enviar
             // fabrico uno con sólo el lugar:
             if ($this->oEscrito->getCategoria() === Categoria::CAT_E12) {
                 // Busco el id_lugar de la dl.
-                $gesLugares = new GestorLugar();
-                $id_siga_local = $gesLugares->getId_sigla_local();
+                $LugarRepository = new LugarRepository();
+                $id_siga_local = $LugarRepository->getId_sigla_local();
                 $json_prot_org = new stdClass;
                 $json_prot_org->id_lugar = $id_siga_local;
                 $json_prot_org->num = '';

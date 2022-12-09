@@ -5,7 +5,7 @@ namespace oasis_as4\model;
 use DateTimeInterface;
 use DOMAttr;
 use DOMDocument;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use web\Protocolo;
 
 /*
@@ -162,8 +162,8 @@ class As4 extends As4CollaborationInfo
     private function getDestino_txt()
     {
         // tabla de siglas:
-        $gesLugares = new GestorLugar();
-        $aLugares = $gesLugares->getArrayLugares();
+        $LugarRepository = new LugarRepository();
+        $aLugares = $LugarRepository->getArrayLugares();
 
         $lugar_dst = As4CollaborationInfo::ACCION_COMPARTIR;
         if (!empty((array)$this->json_prot_dst)) {
@@ -241,8 +241,8 @@ class As4 extends As4CollaborationInfo
     private function createMessageProperties()
     {
         // tabla de siglas:
-        $gesLugares = new GestorLugar();
-        $aLugares = $gesLugares->getArrayLugares();
+        $LugarRepository = new LugarRepository();
+        $aLugares = $LugarRepository->getArrayLugares();
         // crear el nodo:
         $message_properties = $this->dom->createElement("MessageProperties");
 

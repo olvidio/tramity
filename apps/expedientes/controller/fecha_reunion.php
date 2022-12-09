@@ -3,7 +3,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use expedientes\model\Expediente;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\repositories\OficinaRepository;
 use web\Desplegable;
 
@@ -28,8 +28,8 @@ $oDesplOficinas = $OficinaRepository->getListaOficinas();
 $oDesplOficinas->setNombre('id_oficina');
 $oDesplOficinas->setOpcion_sel($id_oficina);
 
-$gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$LugarRepository = new LugarRepository();
+$a_posibles_lugares = $LugarRepository->getArrayLugares();
 
 $oDesplLugares = new Desplegable();
 $oDesplLugares->setNombre('id_origen');

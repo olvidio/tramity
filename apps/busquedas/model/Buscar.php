@@ -11,7 +11,7 @@ use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
 use escritos\model\GestorEscrito;
 use etiquetas\model\entity\GestorEtiquetaEntrada;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\Categoria;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
@@ -157,14 +157,14 @@ class Buscar
                         $aOperadorEntrada['asunto_entrada'] = 'sin_acentos';
                     }
 
-                    $aWhereEntrada['categoria'] = \usuarios\domain\Categoria::CAT_PERMANENTE;
+                    $aWhereEntrada['categoria'] = Categoria::CAT_PERMANENTE;
                     $aProt_origen = ['id_lugar' => $this->id_lugar,
                         'num' => $this->prot_num,
                         'any' => $this->prot_any,
                         'mas' => $this->prot_mas,
                     ];
-                    $gesLugares = new GestorLugar();
-                    $id_sigla_local = $gesLugares->getId_sigla_local();
+                    $LugarRepository = new LugarRepository();
+                    $id_sigla_local = $LugarRepository->getId_sigla_local();
                     $id_destino = $id_sigla_local;
 
                     $aWhereEntrada['_ordre'] = 'f_entrada';
@@ -202,14 +202,14 @@ class Buscar
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $aWhereEntrada = [];
                     $aOperadorEntrada = [];
-                    $aWhereEntrada['categoria'] = \usuarios\domain\Categoria::CAT_PERMANENTE;
+                    $aWhereEntrada['categoria'] = Categoria::CAT_PERMANENTE;
                     $aProt_origen = ['id_lugar' => $this->id_lugar,
                         'num' => $this->prot_num,
                         'any' => $this->prot_any,
                         'mas' => $this->prot_mas,
                     ];
-                    $gesLugares = new GestorLugar();
-                    $id_sigla_local = $gesLugares->getId_sigla_local();
+                    $LugarRepository = new LugarRepository();
+                    $id_sigla_local = $LugarRepository->getId_sigla_local();
                     $id_destino = $id_sigla_local;
 
                     $aWhereEntrada['_ordre'] = 'f_entrada';
@@ -219,7 +219,7 @@ class Buscar
                 } else {
                     $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                     $aOperadorEntrada['estado'] = '>=';
-                    $aWhereEntrada['categoria'] = \usuarios\domain\Categoria::CAT_PERMANENTE;
+                    $aWhereEntrada['categoria'] = Categoria::CAT_PERMANENTE;
                     $aProt_origen = ['id_lugar' => $this->id_lugar,
                         'num' => $this->prot_num,
                         'any' => $this->prot_any,
@@ -238,14 +238,14 @@ class Buscar
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $aWhereEntrada = [];
                     $aOperadorEntrada = [];
-                    $aWhereEntrada['categoria'] = \usuarios\domain\Categoria::CAT_PERMANENTE;
+                    $aWhereEntrada['categoria'] = Categoria::CAT_PERMANENTE;
                     $aProt_origen = ['id_lugar' => $this->id_lugar,
                         'num' => $this->prot_num,
                         'any' => $this->prot_any,
                         'mas' => $this->prot_mas,
                     ];
-                    $gesLugares = new GestorLugar();
-                    $id_sigla_local = $gesLugares->getId_sigla_local();
+                    $LugarRepository = new LugarRepository();
+                    $id_sigla_local = $LugarRepository->getId_sigla_local();
                     $id_destino = $id_sigla_local;
 
                     $aWhereEntrada['_ordre'] = 'f_entrada DESC';
@@ -257,7 +257,7 @@ class Buscar
             case 'oficina':
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';
-                $aWhereEntrada['categoria'] = \usuarios\domain\Categoria::CAT_PERMANENTE;
+                $aWhereEntrada['categoria'] = Categoria::CAT_PERMANENTE;
                 $aWhereEntrada['ponente'] = $this->ponente;
                 $aProt_origen = ['id_lugar' => $this->id_lugar,
                     'num' => $this->prot_num,
@@ -724,7 +724,7 @@ class Buscar
     }
 
     /**
-     * @param number $id_sigla
+     * @param integer $id_sigla
      */
     public function setId_sigla($id_sigla)
     {

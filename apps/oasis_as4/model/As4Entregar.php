@@ -17,7 +17,7 @@ use entradas\model\EntradaEntidadDoc;
 use entradas\model\GestorEntrada;
 use etherpad\model\Etherpad;
 use Exception;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use pendientes\model\Pendiente;
 use SimpleXMLElement;
 use stdClass;
@@ -150,8 +150,8 @@ class As4Entregar extends As4CollaborationInfo
      */
     public function __construct(SimpleXMLElement $xmldata)
     {
-        $gesLugares = new GestorLugar();
-        $this->aLugares = $gesLugares->getArrayLugares();
+        $LugarRepository = new LugarRepository();
+        $this->aLugares = $LugarRepository->getArrayLugares();
 
         $this->xmldata = $xmldata;
         $this->explotar_xml();

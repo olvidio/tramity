@@ -1,6 +1,7 @@
 <?php
 
-use lugares\model\entity\Lugar;
+use lugares\domain\entity\Lugar;
+use lugares\domain\repositories\LugarRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -20,10 +21,11 @@ switch ($Q_que) {
         $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
             $Q_id_lugar = (integer)strtok($a_sel[0], "#");
-            $oLugar = new Lugar($Q_id_lugar);
-            if ($oLugar->DBEliminar() === FALSE) {
+            $LugarRepository = new LugarRepository();
+            $oLugar = $LugarRepository->findById($Q_id_lugar);
+            if ($LugarRepository->Eliminar($oLugar) === FALSE) {
                 $error_txt .= _("hay un error, no se ha eliminado");
-                $error_txt .= "\n" . $oLugar->getErrorTxt();
+                $error_txt .= "\n" . $LugarRepository->getErrorTxt();
             }
         }
 
@@ -45,8 +47,8 @@ switch ($Q_que) {
         $Q_modo_envio = (integer)filter_input(INPUT_POST, 'modo_envio');
         $Q_anulado = (bool)filter_input(INPUT_POST, 'anulado');
 
-        $oLugar = new Lugar($Q_id_lugar);
-        $oLugar->DBCargar();
+        $LugarRepository = new LugarRepository();
+        $oLugar = $LugarRepository->findById($Q_id_lugar);
         $oLugar->setSigla($Q_sigla);
         $oLugar->setDl($Q_dl);
         $oLugar->setRegion($Q_region);
@@ -56,9 +58,9 @@ switch ($Q_que) {
         $oLugar->setE_mail($Q_e_mail);
         $oLugar->setModo_envio($Q_modo_envio);
         $oLugar->setAnulado($Q_anulado);
-        if ($oLugar->DBGuardar() === FALSE) {
+        if ($LugarRepository->Guardar($oLugar) === FALSE) {
             $error_txt .= _("hay un error, no se ha guardado");
-            $error_txt .= "\n" . $oLugar->getErrorTxt();
+            $error_txt .= "\n" . $LugarRepository->getErrorTxt();
         }
         break;
     case "nuevo":
@@ -75,8 +77,10 @@ switch ($Q_que) {
         $Q_e_mail = (string)filter_input(INPUT_POST, 'e_mail');
         $Q_modo_envio = (integer)filter_input(INPUT_POST, 'modo_envio');
 
-        $oLugar = new Lugar($Q_id_lugar);
-        $oLugar->DBCargar();
+        $LugarRepository = new LugarRepository();
+        $id_lugar = $LugarRepository->getNewId_lugar();
+        $oLugar = new Lugar();
+        $oLugar->setId_lugar($id_lugar);
         $oLugar->setSigla($Q_sigla);
         $oLugar->setDl($Q_dl);
         $oLugar->setRegion($Q_region);
@@ -85,9 +89,9 @@ switch ($Q_que) {
         $oLugar->setPlataforma($Q_plataforma);
         $oLugar->setE_mail($Q_e_mail);
         $oLugar->setModo_envio($Q_modo_envio);
-        if ($oLugar->DBGuardar() === FALSE) {
+        if ($LugarRepository->Guardar($oLugar) === FALSE) {
             $error_txt .= _("hay un error, no se ha guardado");
-            $error_txt .= "\n" . $oLugar->getErrorTxt();
+            $error_txt .= "\n" . $LugarRepository->getErrorTxt();
         }
         break;
 }

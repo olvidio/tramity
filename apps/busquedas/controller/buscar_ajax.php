@@ -3,7 +3,7 @@
 // INICIO Cabecera global de URL de controlador *********************************
 use entradas\model\GestorEntrada;
 use escritos\model\GestorEscrito;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\repositories\CargoRepository;
 
 require_once("apps/core/global_header.inc");
@@ -64,11 +64,10 @@ switch ($Q_que) {
         $Q_prot_any = core\any_2($Q_prot_any);
 
         // Si es de la dl busco en escritos, sino en entradas:
-        $gesLugares = new GestorLugar();
-        $id_sigla_local = $gesLugares->getId_sigla_local();
+        $LugarRepository = new LugarRepository();
+        $id_sigla_local = $LugarRepository->getId_sigla_local();
         if ($Q_id_lugar === $id_sigla_local) {
             // Escritos
-            $gesLugares = new GestorLugar();
             $aProt_local = ['id_lugar' => $Q_id_lugar,
                 'num' => $Q_prot_num,
                 'any' => $Q_prot_any,

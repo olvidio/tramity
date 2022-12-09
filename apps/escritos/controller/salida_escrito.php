@@ -5,8 +5,8 @@ use core\ViewTwig;
 use entradas\model\Entrada;
 use escritos\model\Escrito;
 use escritos\model\GestorEscrito;
-use lugares\model\entity\GestorGrupo;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\GrupoRepository;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\Categoria;
 use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\CargoRepository;
@@ -36,8 +36,8 @@ $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 $Q_prot_num = (integer)filter_input(INPUT_POST, 'buscar_prot_num');
 $Q_prot_any = (integer)filter_input(INPUT_POST, 'buscar_prot_any');
 if (!empty($Q_prot_num) && !empty($Q_prot_any)) {
-    $gesLugares = new GestorLugar();
-    $id_lugar_local = $gesLugares->getId_sigla_local();
+    $LugarRepository = new LugarRepository();
+    $id_lugar_local = $LugarRepository->getId_sigla_local();
     $aProt_local = ['id_lugar' => $id_lugar_local,
         'num' => $Q_prot_num,
         'any' => $Q_prot_any,
@@ -55,8 +55,8 @@ if (!empty($Q_prot_num) && !empty($Q_prot_any)) {
 }
 ////////////
 
-$gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$LugarRepository = new LugarRepository();
+$a_posibles_lugares = $LugarRepository->getArrayLugares();
 /*
 $txt_option_ref = '';
 foreach ($a_posibles_lugares as $id_lugar => $sigla) {
@@ -90,8 +90,8 @@ $oDesplCategoria->setOpciones($aOpciones);
 $oDesplCategoria->setTabIndex(150);
 
 
-$gesGrupo = new GestorGrupo();
-$a_posibles_grupos = $gesGrupo->getArrayGrupos();
+$GrupoRepository = new GrupoRepository();
+$a_posibles_grupos = $GrupoRepository->getArrayGrupos();
 
 $chk_grupo_dst = '';
 $descripcion = '';

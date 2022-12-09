@@ -4,7 +4,7 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use escritos\model\Escrito;
 use etherpad\model\Etherpad;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\Categoria;
 use usuarios\domain\repositories\CargoRepository;
 use usuarios\domain\Visibilidad;
@@ -30,8 +30,8 @@ $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 // ----------- Sigla local -------------------
 $sigla_local = $_SESSION['oConfig']->getSigla();
 $id_lugar_local = '';
-$gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$LugarRepository = new LugarRepository();
+$a_posibles_lugares = $LugarRepository->getArrayLugares();
 
 //$txt_option_ref = '';
 foreach ($a_posibles_lugares as $id_lugar => $sigla) {

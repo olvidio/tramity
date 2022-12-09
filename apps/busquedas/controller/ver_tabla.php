@@ -3,7 +3,7 @@
 use busquedas\model\Buscar;
 use busquedas\model\VerTabla;
 use escritos\model\Escrito;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -19,8 +19,8 @@ $Q_opcion = (integer)filter_input(INPUT_POST, 'opcion');
 $Q_mas = (integer)filter_input(INPUT_POST, 'mas');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
-$gesLugares = new GestorLugar();
-$id_sigla_local = $gesLugares->getId_sigla_local();
+$LugarRepository = new LugarRepository();
+$id_sigla_local = $LugarRepository->getId_sigla_local();
 
 $filtro = empty($Q_filtro) ? 'en_buscar' : $Q_filtro;
 $Q_mas = '';
@@ -318,8 +318,8 @@ switch ($Q_opcion) {
                 break;
             case "cr_dl":
                 $opcion = 43;
-                $gesLugares = new GestorLugar();
-                $id_cr = $gesLugares->getId_cr();
+                $LugarRepository = new LugarRepository();
+                $id_cr = $LugarRepository->getId_cr();
 
                 // son todos los que tienen protocolo local
                 $oBuscar = new Buscar();
@@ -341,8 +341,8 @@ switch ($Q_opcion) {
                 break;
             case "cr_ctr":
                 $opcion = 44;
-                $gesLugares = new GestorLugar();
-                $id_cr = $gesLugares->getId_cr();
+                $LugarRepository = new LugarRepository();
+                $id_cr = $LugarRepository->getId_cr();
 
                 // son todos los que tienen protocolo local
                 $oBuscar = new Buscar();
@@ -408,8 +408,8 @@ switch ($Q_opcion) {
         $oIni = new DateTimeLocal();
         $oIni->sub(new DateInterval('P7D'));
 
-        $gesLugares = new GestorLugar();
-        $id_cr = $gesLugares->getId_cr();
+        $LugarRepository = new LugarRepository();
+        $id_cr = $LugarRepository->getId_cr();
 
         $a_condicion['lista_lugar'] = $id_cr;
         $str_condicion = http_build_query($a_condicion);

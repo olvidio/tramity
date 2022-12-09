@@ -2,7 +2,7 @@
 
 namespace web;
 
-use lugares\model\entity\Lugar;
+use lugares\domain\repositories\LugarRepository;
 use stdClass;
 use function core\any_2;
 
@@ -110,8 +110,13 @@ class Protocolo
         $id_lugar = empty($this->ilugar) ? '' : $this->ilugar;
         $nom_lugar = _("sin numerar (E12)");
         if (!empty($id_lugar)) {
-            $oLugar = new Lugar($this->ilugar);
-            $nom_lugar = $oLugar->getSigla();
+            $LugarRepository = new LugarRepository();
+            $oLugar = $LugarRepository->findById($this->ilugar);
+            if ($oLugar === null) {
+                $nom_lugar = _("?: no está en la tabla");
+            } else {
+                $nom_lugar = $oLugar->getSigla();
+            }
         }
 
         $prot_num = empty($this->iprot_num) ? '' : $this->iprot_num;
@@ -139,8 +144,13 @@ class Protocolo
         $txt = '';
         $id_lugar = empty($this->ilugar) ? '' : $this->ilugar;
         if (!empty($id_lugar)) {
-            $oLugar = new Lugar($this->ilugar);
-            $nom_lugar = $oLugar->getSigla();
+            $LugarRepository = new LugarRepository();
+            $oLugar = $LugarRepository->findById($this->ilugar);
+            if ($oLugar === null) {
+                $nom_lugar = _("?: no está en la tabla");
+            } else {
+                $nom_lugar = $oLugar->getSigla();
+            }
 
             $prot_num = empty($this->iprot_num) ? '' : $this->iprot_num;
             $prot_any = empty($this->sprot_any) ? '' : $this->sprot_any;

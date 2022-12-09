@@ -2,8 +2,8 @@
 
 use core\ViewTwig;
 use escritos\model\Escrito;
-use lugares\model\entity\GestorLugar;
-use lugares\model\entity\Grupo;
+use lugares\domain\repositories\GrupoRepository;
+use lugares\domain\repositories\LugarRepository;
 use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -39,7 +39,7 @@ $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_A
 // Si vengo por medio de Posicion, borro la última
 if (isset($_POST['stack'])) {
     $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
-    if ($stack != '') {
+    if ($stack !== '') {
         // No me sirve el de global_object, sino el de la session
         $oPosicion2 = new web\Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
@@ -66,14 +66,15 @@ if (isset($_POST['stack'])) {
 }
 $oPosicion->setParametros(array('id_grupo' => $Q_id_grupo), 1);
 
-$gesLugares = new GestorLugar();
-$a_posibles_lugares_ctr = $gesLugares->getArrayLugaresCtr();
-$a_posibles_lugares_dl = $gesLugares->getArrayLugaresTipo('dl');
-$a_posibles_lugares_cr = $gesLugares->getArrayLugaresTipo('cr');
+$LugarRepository = new LugarRepository();
+$a_posibles_lugares_ctr = $LugarRepository->getArrayLugaresCtr();
+$a_posibles_lugares_dl = $LugarRepository->getArrayLugaresTipo('dl');
+$a_posibles_lugares_cr = $LugarRepository->getArrayLugaresTipo('cr');
 
 if (!empty($Q_id_grupo)) {
     $que = 'guardar';
-    $oGrupo = new Grupo(array('id_grupo' => $Q_id_grupo));
+    $GrupoRepository = new GrupoRepository();
+    $oGrupo = $GrupoRepository->findById($Q_id_grupo);
 
     $descripcion = $oGrupo->getDescripcion();
     $a_miembros = $oGrupo->getMiembros();
@@ -95,7 +96,8 @@ if (!empty($Q_id_escrito)) {
             $a_miembros = $oEscrito->getDestinosIds();
             $descripcion = $oEscrito->getDescripcion();
         } else {
-            $oGrupo = new Grupo(array('id_grupo' => $id_grupo));
+            $GrupoRepository = new GrupoRepository();
+            $oGrupo = $GrupoRepository->findById($id_grupo);
 
             $descripcion .= empty($descripcion) ? '' : ', ';
             $descripcion .= $oGrupo->getDescripcion();

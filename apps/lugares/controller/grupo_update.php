@@ -1,7 +1,8 @@
 <?php
 
 use escritos\model\Escrito;
-use lugares\model\entity\Grupo;
+use lugares\domain\entity\Grupo;
+use lugares\domain\repositories\GrupoRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -47,10 +48,11 @@ switch ($Q_que) {
         $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
             $Q_id_grupo = (integer)strtok($a_sel[0], "#");
-            $oGrupo = new Grupo($Q_id_grupo);
-            if ($oGrupo->DBEliminar() === FALSE) {
+            $GrupoRepository = new GrupoRepository();
+            $oGrupo = $GrupoRepository->findById($Q_id_grupo);
+            if ($GrupoRepository->Eliminar($oGrupo) === FALSE) {
                 echo _("hay un error, no se ha eliminado");
-                echo "\n" . $oGrupo->getErrorTxt();
+                echo "\n" . $GrupoRepository->getErrorTxt();
             }
         }
         break;
@@ -64,13 +66,19 @@ switch ($Q_que) {
             echo _("debe poner un nombre");
         }
 
-        $oGrupo = new Grupo($Q_id_grupo);
-        $oGrupo->DBCargar();
+        $GrupoRepository = new GrupoRepository();
+        $oGrupo = $GrupoRepository->findById($Q_id_grupo);
+        if ($oGrupo === null) {
+            $id_grupo = $GrupoRepository->getNewId_grupo();
+            $oGrupo = new Grupo();
+            $oGrupo->setId_grupo($id_grupo);
+
+        }
         $oGrupo->setDescripcion($Q_descripcion);
         $oGrupo->setMiembros($Q_a_lugares);
-        if ($oGrupo->DBGuardar() === FALSE) {
+        if ($GrupoRepository->Guardar($oGrupo) === FALSE) {
             echo _("hay un error, no se ha guardado");
-            echo "\n" . $oGrupo->getErrorTxt();
+            echo "\n" . $GrupoRepository->getErrorTxt();
         }
         break;
 }

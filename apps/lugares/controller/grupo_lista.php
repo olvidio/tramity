@@ -1,8 +1,8 @@
 <?php
 
 use core\ViewTwig;
-use lugares\model\entity\GestorGrupo;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\GrupoRepository;
+use lugares\domain\repositories\LugarRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -22,7 +22,7 @@ $Q_scroll_id = (string)filter_input(INPUT_POST, 'scroll_id');
 //Si vengo por medio de Posicion, borro la última
 if (isset($_POST['stack'])) {
     $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
-    if ($stack != '') {
+    if ($stack !== '') {
         $oPosicion2 = new web\Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
             $Q_id_sel = $oPosicion2->getParametro('id_sel');
@@ -38,8 +38,8 @@ if (isset($_POST['stack'])) {
 $aWhere['_ordre'] = 'descripcion';
 $aOperador = [];
 
-$gesGrupos = new GestorGrupo();
-$cGrupos = $gesGrupos->getGrupos($aWhere, $aOperador);
+$GrupoRepository = new GrupoRepository();
+$cGrupos = $GrupoRepository->getGrupos($aWhere, $aOperador);
 
 //default:
 $id_grupo = '';
@@ -51,8 +51,8 @@ $a_botones = [['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
     ['txt' => _("modificar"), 'click' => "fnjs_editar()"],
 ];
 
-$gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$LugarRepository = new LugarRepository();
+$a_posibles_lugares = $LugarRepository->getArrayLugares();
 $a_valores = array();
 $i = 0;
 foreach ($cGrupos as $oGrupo) {

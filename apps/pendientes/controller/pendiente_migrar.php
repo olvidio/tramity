@@ -1,7 +1,7 @@
 <?php
 
 use core\ViewTwig;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -17,8 +17,8 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayLugares();
+$LugarRepository = new LugarRepository();
+$a_lugares = $LugarRepository->getArrayLugares();
 
 $oDesplLugar_org = new Desplegable();
 $oDesplLugar_org->setNombre('id_lugar_org');

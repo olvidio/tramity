@@ -1,54 +1,283 @@
 <?php
 
-namespace lugares\model\entity;
+namespace lugares\infrastructure;
 
-use core;
+use core\ClaseRepository;
+use core\Condicion;
+use core\Set;
+use lugares\domain\entity\Lugar;
+use lugares\domain\repositories\LugarRepositoryInterface;
+use PDO;
+use PDOException;
 use usuarios\domain\entity\Cargo;
 use function core\is_true;
 
+
 /**
- * GestorLugar
- *
- * Classe per gestionar la llista d'objectes de la clase Lugar
+ * Clase que adapta la tabla lugares a la interfaz del repositorio
  *
  * @package tramity
  * @subpackage model
  * @author Daniel Serrabou
- * @version 1.0
- * @created 16/6/2020
+ * @version 2.0
+ * @created 9/12/2022
  */
-class GestorLugar extends core\ClaseGestor
+class PgLugarRepository extends ClaseRepository implements LugarRepositoryInterface
 {
-    /* ATRIBUTOS ----------------------------------------------------------------- */
+    /* CONSTANTES ----------------------------------------------------------------- */
 
-    const SEPARADOR = '-------------';
-
-    /* CONSTRUCTOR -------------------------------------------------------------- */
+    private const SEPARADOR = '-------------';
 
 
-    /**
-     * Constructor de la classe.
-     *
-     * @return $gestor
-     *
-     */
-    function __construct()
+    public function __construct()
     {
         $oDbl = $GLOBALS['oDBP'];
         $this->setoDbl($oDbl);
         $this->setNomTabla('lugares');
     }
 
-
-    /* MÉTODOS PÚBLICOS -----------------------------------------------------------*/
+    /* -------------------- GESTOR BASE ---------------------------------------- */
 
     /**
-     * Devuelve el nombre de las posibles plataformas as4
+     * devuelve una colección (array) de objetos de tipo Lugar
      *
-     * @param boolean propia. Si debe aparecer la propia plataforma en la lista o no.
-     * @return array []
+     * @param array $aWhere asociativo con los valores para cada campo de la BD.
+     * @param array $aOperators asociativo con los operadores que hay que aplicar a cada campo
+     * @return array|FALSE Una colección de objetos de tipo Lugar
      */
-    public function getPlataformas($propia = FALSE)
+    public function getLugares(array $aWhere = [], array $aOperators = []): array|false
+    {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        $LugarSet = new Set();
+        $oCondicion = new Condicion();
+        $aCondicion = array();
+        foreach ($aWhere as $camp => $val) {
+            if ($camp === '_ordre') {
+                continue;
+            }
+            if ($camp === '_limit') {
+                continue;
+            }
+            $sOperador = $aOperators[$camp] ?? '';
+            if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
+                $aCondicion[] = $a;
+            }
+            // operadores que no requieren valores
+            if ($sOperador === 'BETWEEN' || $sOperador === 'IS NULL' || $sOperador === 'IS NOT NULL' || $sOperador === 'OR') {
+                unset($aWhere[$camp]);
+            }
+            if ($sOperador === 'IN' || $sOperador === 'NOT IN') {
+                unset($aWhere[$camp]);
+            }
+            if ($sOperador === 'TXT') {
+                unset($aWhere[$camp]);
+            }
+        }
+        $sCondicion = implode(' AND ', $aCondicion);
+        if ($sCondicion !== '') {
+            $sCondicion = " WHERE " . $sCondicion;
+        }
+        $sOrdre = '';
+        $sLimit = '';
+        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] !== '') {
+            $sOrdre = ' ORDER BY ' . $aWhere['_ordre'];
+        }
+        if (isset($aWhere['_ordre'])) {
+            unset($aWhere['_ordre']);
+        }
+        if (isset($aWhere['_limit']) && $aWhere['_limit'] !== '') {
+            $sLimit = ' LIMIT ' . $aWhere['_limit'];
+        }
+        if (isset($aWhere['_limit'])) {
+            unset($aWhere['_limit']);
+        }
+        $sQry = "SELECT * FROM $nom_tabla " . $sCondicion . $sOrdre . $sLimit;
+        if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
+            $sClaveError = 'PgLugarRepository.listar.prepare';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        if (($oDblSt->execute($aWhere)) === FALSE) {
+            $sClaveError = 'PgLugarRepository.listar.execute';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
+            return FALSE;
+        }
+
+        $filas = $oDblSt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($filas as $aDatos) {// para los bytea: (resources)
+            $handle = $aDatos['pub_key'];
+            if ($handle !== null) {
+                $contents = stream_get_contents($handle);
+                fclose($handle);
+                $pub_key = $contents;
+                $aDatos['pub_key'] = $pub_key;
+            }
+            $Lugar = new Lugar();
+            $Lugar->setAllAttributes($aDatos);
+            $LugarSet->add($Lugar);
+        }
+        return $LugarSet->getTot();
+    }
+
+    /* -------------------- ENTIDAD --------------------------------------------- */
+
+    public function Eliminar(Lugar $Lugar): bool
+    {
+        $id_lugar = $Lugar->getId_lugar();
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_lugar = $id_lugar")) === FALSE) {
+            $sClaveError = 'Lugar.eliminar';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+
+    /**
+     * Si no existe el registro, hace un insert, si existe, se hace el update.
+     */
+    public function Guardar(Lugar $Lugar): bool
+    {
+        $id_lugar = $Lugar->getId_lugar();
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        $bInsert = $this->isNew($id_lugar);
+
+        $aDatos = [];
+        $aDatos['sigla'] = $Lugar->getSigla();
+        $aDatos['dl'] = $Lugar->getDl();
+        $aDatos['region'] = $Lugar->getRegion();
+        $aDatos['nombre'] = $Lugar->getNombre();
+        $aDatos['tipo_ctr'] = $Lugar->getTipo_ctr();
+        $aDatos['modo_envio'] = $Lugar->getModo_envio();
+        $aDatos['pub_key'] = $Lugar->getPub_key();
+        $aDatos['e_mail'] = $Lugar->getE_mail();
+        $aDatos['anulado'] = $Lugar->isAnulado();
+        $aDatos['plataforma'] = $Lugar->getPlataforma();
+        array_walk($aDatos, 'core\poner_null');
+        //para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
+        if (is_true($aDatos['anulado'])) {
+            $aDatos['anulado'] = 'true';
+        } else {
+            $aDatos['anulado'] = 'false';
+        }
+
+        if ($bInsert === FALSE) {
+            //UPDATE
+            $update = "
+					sigla                    = :sigla,
+					dl                       = :dl,
+					region                   = :region,
+					nombre                   = :nombre,
+					tipo_ctr                 = :tipo_ctr,
+					modo_envio               = :modo_envio,
+					pub_key                  = :pub_key,
+					e_mail                   = :e_mail,
+					anulado                  = :anulado,
+					plataforma               = :plataforma";
+            if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_lugar = $id_lugar")) === FALSE) {
+                $sClaveError = 'Lugar.update.prepare';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
+                return FALSE;
+            }
+
+            try {
+                $oDblSt->execute($aDatos);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClaveError = 'Lugar.update.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
+                return FALSE;
+            }
+        } else {
+            // INSERT
+            $aDatos['id_lugar'] = $Lugar->getId_lugar();
+            $campos = "(id_lugar,sigla,dl,region,nombre,tipo_ctr,modo_envio,pub_key,e_mail,anulado,plataforma)";
+            $valores = "(:id_lugar,:sigla,:dl,:region,:nombre,:tipo_ctr,:modo_envio,:pub_key,:e_mail,:anulado,:plataforma)";
+            if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
+                $sClaveError = 'Lugar.insertar.prepare';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
+                return FALSE;
+            }
+            try {
+                $oDblSt->execute($aDatos);
+            } catch (PDOException $e) {
+                $err_txt = $e->errorInfo[2];
+                $this->setErrorTxt($err_txt);
+                $sClaveError = 'Lugar.insertar.execute';
+                $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
+                return FALSE;
+            }
+        }
+        return TRUE;
+    }
+
+    private function isNew(int $id_lugar): bool
+    {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_lugar = $id_lugar")) === FALSE) {
+            $sClaveError = 'Lugar.isNew';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        if (!$oDblSt->rowCount()) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    /**
+     * Devuelve los campos de la base de datos en un array asociativo.
+     * Devuelve false si no existe la fila en la base de datos
+     *
+     * @param int $id_lugar
+     * @return array|bool
+     */
+    public function datosById(int $id_lugar): array|bool
+    {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+        if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE id_lugar = $id_lugar")) === FALSE) {
+            $sClaveError = 'Lugar.getDatosById';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        // para los bytea, sobre escribo los valores:
+        $spub_key = '';
+        $oDblSt->bindColumn('pub_key', $spub_key, PDO::PARAM_STR);
+        $aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);
+        $aDatos['pub_key'] = $spub_key;
+        return $aDatos;
+    }
+
+
+    /**
+     * Busca la clase con id_lugar en la base de datos .
+     */
+    public function findById(int $id_lugar): ?Lugar
+    {
+        $aDatos = $this->datosById($id_lugar);
+        if (empty($aDatos)) {
+            return null;
+        }
+        return (new Lugar())->setAllAttributes($aDatos);
+    }
+
+    public function getNewId_lugar()
+    {
+        $oDbl = $this->getoDbl();
+        $sQuery = "select nextval('lugares_id_lugar_seq'::regclass)";
+        return $oDbl->query($sQuery)->fetchColumn();
+    }
+
+    /* -------------------- GESTOR EXTRA ---------------------------------------- */
+
+    public function getPlataformas(bool $propia = FALSE): array
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -70,19 +299,14 @@ class GestorLugar extends core\ClaseGestor
             $a_plataformas[$clave] = $clave;
         }
 
-        if (is_array($a_plataformas)) {
-            return $a_plataformas;
-        } else {
+        if (!is_array($a_plataformas)) {
             exit (_("Error al buscar las plataformas posibles"));
         }
 
         return $a_plataformas;
     }
 
-    /**
-     * devuelve el id del IESE
-     */
-    public function getId_iese(): int
+    public function getId_iese(): ?int
     {
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             exit (_("Error al buscar el id del IESE"));
@@ -90,87 +314,11 @@ class GestorLugar extends core\ClaseGestor
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $sigla = 'IESE';
             $cLugares = $this->getLugares(['sigla' => $sigla]);
-            $oLugar = $cLugares[0];
-            return $oLugar->getId_lugar();
+            return $cLugares[0]->getId_lugar();
         }
+        return null;
     }
 
-    /**
-     * retorna l'array d'objectes de tipus Lugar
-     *
-     * @param array aWhere associatiu amb els valors de les variables amb les quals farem la query
-     * @param array aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
-     * @return array Una col·lecció d'objectes de tipus Lugar
-     */
-    function getLugares($aWhere = array(), $aOperators = array())
-    {
-        $oDbl = $this->getoDbl();
-        $nom_tabla = $this->getNomTabla();
-        $oLugarSet = new core\Set();
-        $oCondicion = new core\Condicion();
-        $aCondi = array();
-        foreach ($aWhere as $camp => $val) {
-            if ($camp === '_ordre') {
-                continue;
-            }
-            if ($camp === '_limit') {
-                continue;
-            }
-            $sOperador = $aOperators[$camp] ?? '';
-            if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
-                $aCondi[] = $a;
-            }
-            // operadores que no requieren valores
-            if ($sOperador === 'BETWEEN' || $sOperador === 'IS NULL' || $sOperador === 'IS NOT NULL' || $sOperador === 'OR') {
-                unset($aWhere[$camp]);
-            }
-            if ($sOperador === 'IN' || $sOperador === 'NOT IN') {
-                unset($aWhere[$camp]);
-            }
-            if ($sOperador === 'TXT') {
-                unset($aWhere[$camp]);
-            }
-        }
-        $sCondi = implode(' AND ', $aCondi);
-        if ($sCondi != '') {
-            $sCondi = " WHERE " . $sCondi;
-        }
-        $sOrdre = '';
-        $sLimit = '';
-        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] !== '') {
-            $sOrdre = ' ORDER BY ' . $aWhere['_ordre'];
-        }
-        if (isset($aWhere['_ordre'])) {
-            unset($aWhere['_ordre']);
-        }
-        if (isset($aWhere['_limit']) && $aWhere['_limit'] !== '') {
-            $sLimit = ' LIMIT ' . $aWhere['_limit'];
-        }
-        if (isset($aWhere['_limit'])) {
-            unset($aWhere['_limit']);
-        }
-        $sQry = "SELECT * FROM $nom_tabla " . $sCondi . $sOrdre . $sLimit;
-        if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorLugar.llistar.prepare';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorLugar.llistar.execute';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_lugar' => $aDades['id_lugar']);
-            $oLugar = new Lugar($a_pkey);
-            $oLugarSet->add($oLugar);
-        }
-        return $oLugarSet->getTot();
-    }
-
-    /**
-     * devuelve el id de la cr (cr)
-     */
     public function getId_cr(): int
     {
         $oDbl = $this->getoDbl();
@@ -198,18 +346,12 @@ class GestorLugar extends core\ClaseGestor
 
         if (is_array($lugares) && count($lugares) === 1) {
             return $lugares[0];
-        } else {
-            exit (_("Error al buscar el id de cr"));
         }
+
+        exit (_("Error al buscar el id de cr"));
     }
 
-    /**
-     * devuelve la sigla (o el id) de la nombre_entidad superior (dl para los centros, cr para las dl)
-     *
-     * @param boolean $id Si quero el id o la sigla.
-     * @return string|integer
-     */
-    public function getSigla_superior($sigla_base, $id = FALSE)
+    public function getSigla_superior(string $sigla_base, bool $return_id = FALSE): string|int
     {
         $rta = '';
         $cLugares = $this->getLugares(['sigla' => $sigla_base]);
@@ -253,10 +395,10 @@ class GestorLugar extends core\ClaseGestor
 
             $cLugarSup = $this->getLugares($aWhere);
             if (!empty($cLugarSup)) {
-                if ($id) {
+                if ($return_id) {
                     $rta = $cLugarSup[0]->getId_lugar();
                 } else {
-                    $rta = ($tipo_sup == 'cr') ? $tipo_sup : $cLugarSup[0]->getSigla();
+                    $rta = ($tipo_sup === 'cr') ? $tipo_sup : $cLugarSup[0]->getSigla();
                 }
             }
 
@@ -264,16 +406,14 @@ class GestorLugar extends core\ClaseGestor
 
         if (empty($rta)) {
             return '?';
-        } else {
-            return $rta;
         }
+
+        return $rta;
     }
 
-    /**
-     * devuelve el id de la sigla (dlb)
-     */
-    public function getId_sigla_local()
+    public function getId_sigla_local(): ?int
     {
+        $id_sigla = null;
         $sigla = $_SESSION['oConfig']->getSigla();
         $cLugares = $this->getLugares(['sigla' => $sigla]);
         if (!empty($cLugares)) {
@@ -282,29 +422,16 @@ class GestorLugar extends core\ClaseGestor
         return $id_sigla;
     }
 
-    /**
-     * retorna un array
-     * Els posibles llocs per buscar: també els anulados
-     *
-     * @param boolean $ctr_anulados
-     * @return array   id_lugar => sigla
-     */
-    function getArrayBusquedas($ctr_anulados = FALSE)
+    public function getArrayBusquedas(bool $ctr_anulados = FALSE): array
     {
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             return $this->getArrayBusquedasCtr();
-        } else {
-            return $this->getArrayBusquedasDl($ctr_anulados);
         }
+
+        return $this->getArrayBusquedasDl($ctr_anulados);
     }
 
-    /**
-     * retorna un array
-     * Els posibles llocs per buscar en el cas del ctr
-     *
-     * @return array   id_lugar => sigla
-     */
-    function getArrayBusquedasCtr()
+    private function getArrayBusquedasCtr(): array
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -326,14 +453,7 @@ class GestorLugar extends core\ClaseGestor
         return $lugares;
     }
 
-    /**
-     * retorna un array
-     * Els posibles llocs per buscar: també els anulados
-     *
-     * @param boolean $ctr_anulados
-     * @return array   id_lugar => sigla
-     */
-    function getArrayBusquedasDl($ctr_anulados = FALSE)
+    private function getArrayBusquedasDl(bool $ctr_anulados = FALSE): array
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -419,14 +539,7 @@ class GestorLugar extends core\ClaseGestor
         return $lugares;
     }
 
-    /**
-     * retorna un array
-     * Els posibles ctr de la dl
-     *
-     * @param boolean $ctr_anulados
-     * @return array   id_lugar => sigla
-     */
-    function getArrayLugaresCtr($ctr_anulados = FALSE)
+    public function getArrayLugaresCtr(bool $ctr_anulados = FALSE): bool|array
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -438,7 +551,7 @@ class GestorLugar extends core\ClaseGestor
                  WHERE dl = '$mi_dl' $Where_anulados
                  ORDER BY sigla";
         if (($oDbl->query($sQuery)) === false) {
-            $sClauError = 'GestorLugares.Array';
+            $sClauError = 'PgLugarRepository.Array';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return false;
         }
@@ -451,15 +564,7 @@ class GestorLugar extends core\ClaseGestor
         return $aOpciones;
     }
 
-    /**
-     * retorna un array
-     * Els posibles dl
-     *
-     * @param string $tipo_ctr ('dl', 'cr')
-     * @param boolean $ctr_anulados
-     * @return array   id_lugar => sigla
-     */
-    function getArrayLugaresTipo($tipo_ctr, $ctr_anulados = FALSE)
+    public function getArrayLugaresTipo(string $tipo_ctr, bool $ctr_anulados = FALSE): bool|array
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -470,7 +575,7 @@ class GestorLugar extends core\ClaseGestor
                  WHERE tipo_ctr = '$tipo_ctr' $Where_anulados
                  ORDER BY sigla";
         if (($oDbl->query($sQuery)) === false) {
-            $sClauError = 'GestorLugares.Array';
+            $sClauError = 'PgLugarRepository.Array';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return false;
         }
@@ -483,13 +588,7 @@ class GestorLugar extends core\ClaseGestor
         return $aOpciones;
     }
 
-    /**
-     * Devuelve un array con los lugares
-     *
-     * @param boolean $ctr_anulados
-     * @return array   id_lugar => sigla
-     */
-    function getArrayLugares($ctr_anulados = FALSE)
+    public function getArrayLugares(bool $ctr_anulados = FALSE): bool|array
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -500,7 +599,7 @@ class GestorLugar extends core\ClaseGestor
                  $Where_anulados
                  ORDER BY sigla";
         if (($oDbl->query($sQuery)) === false) {
-            $sClauError = 'GestorLugares.Array';
+            $sClauError = 'PgLugarRepository.Array';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return false;
         }
@@ -513,30 +612,4 @@ class GestorLugar extends core\ClaseGestor
         return $aOpciones;
     }
 
-    /**
-     * retorna l'array d'objectes de tipus Lugar
-     *
-     * @param string sQuery la query a executar.
-     * @return array Una col·lecció d'objectes de tipus Lugar
-     */
-    function getLugaresQuery($sQuery = '')
-    {
-        $oDbl = $this->getoDbl();
-        $oLugarSet = new core\Set();
-        if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'GestorLugar.query';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_lugar' => $aDades['id_lugar']);
-            $oLugar = new Lugar($a_pkey);
-            $oLugarSet->add($oLugar);
-        }
-        return $oLugarSet->getTot();
-    }
-
-    /* MÉTODOS PROTECTED --------------------------------------------------------*/
-
-    /* MÉTODOS GET y SET --------------------------------------------------------*/
 }

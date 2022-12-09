@@ -2,7 +2,7 @@
 
 use busquedas\model\Buscar;
 use busquedas\model\VerTabla;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use oasis_as4\model\As4CollaborationInfo;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -18,8 +18,8 @@ $Q_accion = (string)filter_input(INPUT_POST, 'accion');
 $Q_mas = (integer)filter_input(INPUT_POST, 'mas');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
-$gesLugares = new GestorLugar();
-$id_sigla_local = $gesLugares->getId_sigla_local();
+$LugarRepository = new LugarRepository();
+$id_sigla_local = $LugarRepository->getId_sigla_local();
 
 $filtro = empty($Q_filtro) ? 'mantenimiento' : $Q_filtro;
 $Q_mas = '';
@@ -48,12 +48,12 @@ $oBuscar->setProt_any($Q_prot_any);
 
 $aCollection = $oBuscar->getCollection($Q_opcion, $Q_mas);
 foreach ($aCollection as $key => $cCollection) {
-    if ($Q_accion == As4CollaborationInfo::ACCION_ORDEN_ANULAR) {
+    if ($Q_accion === As4CollaborationInfo::ACCION_ORDEN_ANULAR) {
         $a_botones = [
             ['txt' => _('enviar orden anular'), 'click' => "fnjs_orden_a_plataforma(\"#$key\",\"$Q_accion\")"],
         ];
     }
-    if ($Q_accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
+    if ($Q_accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
         $a_botones = [
             ['txt' => _('enviar orden reemplazar'), 'click' => "fnjs_orden_a_plataforma(\"#$key\",\"$Q_accion\")"],
         ];
@@ -67,5 +67,5 @@ foreach ($aCollection as $key => $cCollection) {
     $oTabla->setBotones($a_botones);
     $oTabla->setDataTable_options_dom('rt');
 
-    echo $oTabla->mostrarTabla();
+    $oTabla->mostrarTabla();
 }

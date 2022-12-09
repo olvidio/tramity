@@ -1,7 +1,8 @@
 <?php
 
 use core\ViewTwig;
-use lugares\model\entity\Lugar;
+use lugares\domain\entity\Lugar;
+use lugares\infrastructure\PgLugarRepository;
 use web\Desplegable;
 use function core\is_true;
 
@@ -28,7 +29,7 @@ $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_A
 // Si vengo por medio de Posición, borro la última
 if (isset($_POST['stack'])) {
     $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
-    if ($stack != '') {
+    if ($stack !== '') {
         // No me sirve el de global_object, sino el de la session
         $oPosicion2 = new web\Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
@@ -65,7 +66,8 @@ $oDesplModoEnvio->setOpciones($aOpciones);
 if (!empty($Q_id_lugar)) {
     $que_user = 'guardar';
 
-    $oLugar = new Lugar($Q_id_lugar);
+    $LugarRepository = new PgLugarRepository();
+    $oLugar = $LugarRepository->findById($Q_id_lugar);
     $sigla = $oLugar->getSigla();
     $dl = $oLugar->getDl();
     $region = $oLugar->getRegion();
@@ -73,7 +75,7 @@ if (!empty($Q_id_lugar)) {
     $tipo_ctr = $oLugar->getTipo_ctr();
     $e_mail = $oLugar->getE_mail();
     $plataforma = $oLugar->getPlataforma();
-    $anulado = $oLugar->getAnulado();
+    $anulado = $oLugar->isAnulado();
     // modo envío
     $modo_envio = $oLugar->getModo_envio();
     $oDesplModoEnvio->setOpcion_sel($modo_envio);

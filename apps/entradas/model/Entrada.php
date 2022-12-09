@@ -13,8 +13,7 @@ use etiquetas\model\entity\EtiquetaEntrada;
 use etiquetas\model\entity\GestorEtiqueta;
 use etiquetas\model\entity\GestorEtiquetaEntrada;
 use JsonException;
-use lugares\model\entity\GestorLugar;
-use lugares\model\entity\Lugar;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\Visibilidad;
 use web\DateTimeLocal;
@@ -90,8 +89,8 @@ class Entrada extends EntradaDB
             }
         }
 
-        $gesLugares = new GestorLugar();
-        $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
+        $LugarRepository = new LugarRepository();
+        $cLugares = $LugarRepository->getLugares(['sigla' => $sigla]);
         if (!empty($cLugares)) {
             $id_sigla = $cLugares[0]->getId_lugar();
 
@@ -195,10 +194,13 @@ class Entrada extends EntradaDB
                     $destinos_txt = $descripcion;
                 } else {
                     $a_json_prot_dst = $oEntradaBypass->getJson_prot_destino();
+                    $LugarRepository = new LugarRepository();
                     foreach ($a_json_prot_dst as $json_prot_dst) {
-                        $oLugar = new Lugar($json_prot_dst->id_lugar);
-                        $destinos_txt .= empty($destinos_txt) ? '' : ', ';
-                        $destinos_txt .= $oLugar->getNombre();
+                        $oLugar = $LugarRepository->findById($json_prot_dst->id_lugar);
+                        if ($oLugar !== null) {
+                            $destinos_txt .= empty($destinos_txt) ? '' : ', ';
+                            $destinos_txt .= $oLugar->getNombre();
+                        }
                     }
                 }
             }

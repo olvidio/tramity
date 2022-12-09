@@ -14,8 +14,8 @@ use DateInterval;
 use documentos\model\Documento;
 use entradas\model\Entrada;
 use expedientes\model\Expediente;
-use lugares\model\entity\GestorGrupo;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\GrupoRepository;
+use lugares\domain\repositories\LugarRepository;
 use stdClass;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
@@ -63,25 +63,25 @@ class EscritoForm
     {
         $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
-        $gesLugares = new GestorLugar();
+        $LugarRepository = new LugarRepository();
         if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
-            $a_posibles_lugares = $gesLugares->getArrayLugares();
-            $a_posibles_lugares_ref = $gesLugares->getArrayLugares();
+            $a_posibles_lugares = $LugarRepository->getArrayLugares();
+            $a_posibles_lugares_ref = $LugarRepository->getArrayLugares();
 
-            $gesGrupo = new GestorGrupo();
-            $a_posibles_grupos = $gesGrupo->getArrayGrupos();
+            $GrupoRepository = new GrupoRepository();
+            $a_posibles_grupos = $GrupoRepository->getArrayGrupos();
             $json_prot_dst = [];
         } else {
             $a_posibles_grupos = [];
 
             $sigla_local = $_SESSION['oConfig']->getSigla();
-            $id_sigla_local = $gesLugares->getId_sigla_local();
+            $id_sigla_local = $LugarRepository->getId_sigla_local();
 
-            $id_sup = $gesLugares->getSigla_superior($sigla_local, TRUE);
-            $sigla_sup = $gesLugares->getSigla_superior($sigla_local);
+            $id_sup = $LugarRepository->getSigla_superior($sigla_local, TRUE);
+            $sigla_sup = $LugarRepository->getSigla_superior($sigla_local);
 
-            $id_sup2 = $gesLugares->getSigla_superior($sigla_sup, TRUE);
-            $sigla_sup2 = $gesLugares->getSigla_superior($sigla_sup);
+            $id_sup2 = $LugarRepository->getSigla_superior($sigla_sup, TRUE);
+            $sigla_sup2 = $LugarRepository->getSigla_superior($sigla_sup);
 
             $a_posibles_lugares = [$id_sup => $sigla_sup];
 

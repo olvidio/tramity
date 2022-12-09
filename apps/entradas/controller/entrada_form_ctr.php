@@ -2,7 +2,7 @@
 
 use core\ViewTwig;
 use entradas\model\Entrada;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\Categoria;
 use usuarios\domain\Visibilidad;
 use web\DateTimeLocal;
@@ -35,8 +35,8 @@ $plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 
-$gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$LugarRepository = new LugarRepository();
+$a_posibles_lugares = $LugarRepository->getArrayLugares();
 
 $oProtOrigen = new Protocolo();
 $oProtOrigen->setEtiqueta('De');

@@ -3,8 +3,8 @@
 use core\ViewTwig;
 use entradas\model\entity\EntradaBypass;
 use entradas\model\Entrada;
-use lugares\model\entity\GestorGrupo;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\GrupoRepository;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\Categoria;
 use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\OficinaRepository;
@@ -40,8 +40,8 @@ $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
-$gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$LugarRepository = new LugarRepository();
+$a_posibles_lugares = $LugarRepository->getArrayLugares();
 
 $oArrayProtDestino = new web\ProtocoloArray('', $a_posibles_lugares, 'destinos');
 $oArrayProtDestino->setBlanco('t');
@@ -122,8 +122,8 @@ if ($Q_filtro === 'en_admitido') {
 }
 $oDesplAdmitido->setOpcion_sel($badmitido);
 
-$gesGrupo = new GestorGrupo();
-$a_posibles_grupos = $gesGrupo->getArrayGrupos();
+$GrupoRepository = new GrupoRepository();
+$a_posibles_grupos = $GrupoRepository->getArrayGrupos();
 
 if (!empty($Q_id_entrada)) {
     $json_prot_origen = $oEntrada->getJson_prot_origen();

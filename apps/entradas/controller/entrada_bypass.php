@@ -2,8 +2,8 @@
 
 use core\ViewTwig;
 use entradas\model\entity\EntradaBypass;
-use lugares\model\entity\GestorGrupo;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\GrupoRepository;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\Categoria;
 use usuarios\domain\repositories\OficinaRepository;
 use usuarios\domain\Visibilidad;
@@ -27,8 +27,8 @@ $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
 $OficinaRepository = new OficinaRepository();
 $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 
-$gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$LugarRepository = new LugarRepository();
+$a_posibles_lugares = $LugarRepository->getArrayLugares();
 
 $oEntradaBypass = new EntradaBypass($Q_id_entrada);
 // categoria
@@ -52,8 +52,8 @@ $chk_grupo_dst = 'checked';
 $id_grupo = 0;
 $f_salida = '';
 
-$gesGrupo = new GestorGrupo();
-$a_posibles_grupos = $gesGrupo->getArrayGrupos();
+$GrupoRepository = new GrupoRepository();
+$a_posibles_grupos = $GrupoRepository->getArrayGrupos();
 
 $json_prot_origen = $oEntradaBypass->getJson_prot_origen();
 $oProtOrigen = new Protocolo();

@@ -2,7 +2,7 @@
 
 use core\ConfigGlobal;
 use davical\model\Davical;
-use lugares\model\entity\Lugar;
+use lugares\domain\repositories\LugarRepository;
 use pendientes\domain\entity\PendienteDB;
 use pendientes\domain\repositories\PendienteDBRepository;
 use pendientes\model\Pendiente;
@@ -84,8 +84,13 @@ $asunto = strtr($Q_asunto, $trans);
 
 // meter el protocolo en el campo LOCATION (text)
 if (!empty($Q_ref_id_lugar)) {
-    $oLugar = new Lugar($Q_ref_id_lugar);
-    $location = $oLugar->getSigla();
+    $LugarRepository = new LugarRepository();
+    $oLugar = $LugarRepository->findById($this->ilugar);
+    if ($oLugar === null) {
+        $location = _("?: no está en la tabla");
+    } else {
+        $location = $oLugar->getSigla();
+    }
     $location .= empty($Q_ref_prot_num) ? '' : ' ' . $Q_ref_prot_num;
     $location .= empty($Q_ref_prot_any) ? '' : '/' . $Q_ref_prot_any;
 } else {
@@ -98,7 +103,7 @@ $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
 $user_davical = $oDavical->getUsernameDavical($id_cargo_role);
 
 $txt_err = '';
-if (!empty($Q_simple_per)) { // sólo para los periodicos.
+if (!empty($Q_simple_per)) { // sólo para los periódicos.
     $Q_until = (string)filter_input(INPUT_POST, 'until');
     if (!empty($Q_until)) {
         $request['until'] = $Q_until;

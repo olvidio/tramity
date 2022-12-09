@@ -1,7 +1,7 @@
 <?php
 
 use core\ViewTwig;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use oasis_as4\model\As4CollaborationInfo;
 use web\Desplegable;
 
@@ -57,8 +57,8 @@ $pill = ['orden' => $num_orden,
     'explicacion' => $explicacion];
 $a_pills[$num_orden] = $pill;
 
-$gesLugares = new GestorLugar();
-$a_plataformas = $gesLugares->getPlataformas();
+$LugarRepository = new LugarRepository();
+$a_plataformas = $LugarRepository->getPlataformas();
 
 $plataforma_mantenimiento = $_SESSION['oConfig']->getPlataformaMantenimiento();
 

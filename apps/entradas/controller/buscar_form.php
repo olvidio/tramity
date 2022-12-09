@@ -3,7 +3,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\GestorEntrada;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\OficinaRepository;
 use web\DateTimeLocal;
@@ -140,8 +140,8 @@ $OficinaRepository = new OficinaRepository();
 $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 $oDesplOficinas = new web\Desplegable('oficina_buscar', $a_posibles_oficinas, $Qoficina_buscar, TRUE);
 
-$gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayBusquedas($Qchk_anulados);
+$LugarRepository = new LugarRepository();
+$a_lugares = $LugarRepository->getArrayBusquedas($Qchk_anulados);
 
 $oDesplOrigen = new Desplegable();
 $oDesplOrigen->setNombre('origen_id_lugar');
@@ -181,48 +181,3 @@ $a_campos = [
 ];
 $oView = new ViewTwig('entradas/controller');
 $oView->renderizar('buscar_form.html.twig', $a_campos);
-
-/*
-$Qid_expediente = (string) filter_input(INPUT_POST, 'id_expediente');
-$Q_filtro = (string) filter_input(INPUT_POST, 'filtro');
-
-$id_oficina = ConfigGlobal::role_id_oficina();
-
-$OficinaRepository = new OficinaRepository();
-$oDesplOficinas = $OficinaRepository->getListaOficinas();
-$oDesplOficinas->setNombre('id_oficina');
-$oDesplOficinas->setOpcion_sel($id_oficina);
-
-$gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
-
-$oDesplLugares = new Desplegable();
-$oDesplLugares->setNombre('id_origen');
-$oDesplLugares->setOpciones($a_posibles_lugares);
-$oDesplLugares->setBlanco(TRUE);
-
-$a_cosas = [ 'id_expediente' => $Qid_expediente,
-            'filtro' => $Q_filtro,
-            ];
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_form.php?'.http_build_query($a_cosas));
-$pagina_buscar = web\Hash::link('apps/entradas/controller/entrada_ajax.php?'.http_build_query([$a_cosas]));
-$pagina_escrito = web\Hash::link('apps/escritos/controller/escrito_form.php?'.http_build_query(['id_expediente' => $Qid_expediente, 'accion' => Escrito::ACCION_ESCRITO]));
-$url_escrito = 'apps/escritos/controller/escrito_form.php';
-
-$titulo = _("Buscar en entradas:");
-
-$a_campos = [
-    'id_expediente' => $Qid_expediente,
-    'filtro' => $Q_filtro,
-    'titulo' => $titulo,
-    'oDesplOficinas' => $oDesplOficinas,
-    'oDesplLugares' => $oDesplLugares,
-    'pagina_cancel' => $pagina_cancel,
-    'pagina_buscar' => $pagina_buscar,
-    'url_escrito' => $url_escrito,
-];
-
-$oView = new ViewTwig('entradas/controller');
-$oView->renderizar('buscar_form.html.twig',$a_campos);
-
-*/

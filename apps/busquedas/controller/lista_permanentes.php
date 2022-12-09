@@ -7,7 +7,7 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\entity\GestorEntradaCompartida;
 use entradas\model\GestorEntrada;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\OficinaRepository;
 use web\Desplegable;
@@ -41,8 +41,8 @@ switch ($Q_tipo_lista) {
         // veo si el centro está en los destinos.
         if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
             // Busco el id_lugar de cr.
-            $gesLugares = new GestorLugar();
-            $id_cr = $gesLugares->getId_cr();
+            $LugarRepository = new LugarRepository();
+            $id_cr = $LugarRepository->getId_cr();
             $oBuscar->setId_lugar($id_cr);
         }
         $Q_any = (integer)filter_input(INPUT_POST, 'any');
@@ -61,8 +61,8 @@ switch ($Q_tipo_lista) {
     case 'oficina':
         // por oficina
         // Busco el id_lugar de cr.
-        $gesLugares = new GestorLugar();
-        $id_cr = $gesLugares->getId_cr();
+        $LugarRepository = new LugarRepository();
+        $id_cr = $LugarRepository->getId_cr();
         $Q_id_oficina = (integer)filter_input(INPUT_POST, 'id_oficina');
 
         $oBuscar = new Buscar();
@@ -144,8 +144,8 @@ switch ($Q_tipo_lista) {
         // veo si el centro está en los destinos.
         if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
             // Busco el id_lugar de cr.
-            $gesLugares = new GestorLugar();
-            $id_cr = $gesLugares->getId_cr();
+            $LugarRepository = new LugarRepository();
+            $id_cr = $LugarRepository->getId_cr();
             $oBuscar->setId_lugar($id_cr);
         }
 
@@ -205,20 +205,20 @@ switch ($Q_tipo_lista) {
         }
 }
 
-$gesLugares = new GestorLugar();
+$LugarRepository = new LugarRepository();
 // Busco el id_lugar de cr.
-$id_cr = $gesLugares->getId_cr();
+$id_cr = $LugarRepository->getId_cr();
 // sigla local:
 // Busco el id_lugar de la dl.
 $sigla_local = $_SESSION['oConfig']->getSigla();
-$sigla_dl = $gesLugares->getSigla_superior($sigla_local);
-$cLugares = $gesLugares->getLugares(['sigla' => $sigla_dl]);
+$sigla_dl = $LugarRepository->getSigla_superior($sigla_local);
+$cLugares = $LugarRepository->getLugares(['sigla' => $sigla_dl]);
 if (!empty($cLugares)) {
     $id_sigla_dl = $cLugares[0]->getId_lugar();
 }
 
 $a_lugares = [$id_cr => 'cr', $id_sigla_dl => $sigla_dl];
-// por defecto cr, en el caso de dl. vacio en caso de ctr.
+// por defecto cr, en el caso de dl. vacío en caso de ctr.
 $ambito_dl = FALSE;
 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
     $Q_id_lugar = empty($Q_id_lugar) ? $id_cr : $Q_id_lugar;

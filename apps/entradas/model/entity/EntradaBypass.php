@@ -8,8 +8,8 @@ use core\DatosCampo;
 use core\Set;
 use entradas\model\Entrada;
 use JsonException;
-use lugares\model\entity\Grupo;
-use lugares\model\entity\Lugar;
+use lugares\domain\repositories\GrupoRepository;
+use lugares\domain\repositories\LugarRepository;
 use PDO;
 use PDOException;
 use stdClass;
@@ -349,9 +349,12 @@ class EntradaBypass extends Entrada
             $destinos_txt = $this->getDescripcion();
             //(según los grupos seleccionados)
             $a_miembros_g = [];
+            $GrupoRepository = new GrupoRepository();
             foreach ($a_grupos as $id_grupo) {
-                $oGrupo = new Grupo($id_grupo);
-                $a_miembros_g[] = $oGrupo->getMiembros();
+                $oGrupo = $GrupoRepository->findById($id_grupo);
+                if ($oGrupo !== null) {
+                    $a_miembros_g[] = $oGrupo->getMiembros();
+                }
                 //$aMiembros = array_merge($aMiembros, $a_miembros_g);
             }
             $aMiembros = array_merge([], ...$a_miembros_g);
@@ -363,12 +366,17 @@ class EntradaBypass extends Entrada
             }
         } else {
             //(según individuales)
+            $LugarRepository = new LugarRepository();
             $a_json_prot_dst = $this->getJson_prot_destino();
             foreach ($a_json_prot_dst as $json_prot_dst) {
                 $aMiembros[] = $json_prot_dst->id_lugar;
-                $oLugar = new Lugar($json_prot_dst->id_lugar);
-                $destinos_txt .= empty($destinos_txt) ? '' : ', ';
-                $destinos_txt .= $oLugar->getNombre();
+                $oLugar = $LugarRepository->findById($json_prot_dst->id_lugar);
+                if ($oLugar === null) {
+                    $destinos_txt .= _("No encuentro el Lugar");
+                } else {
+                    $destinos_txt .= empty($destinos_txt) ? '' : ', ';
+                    $destinos_txt .= $oLugar->getNombre();
+                }
             }
         }
 

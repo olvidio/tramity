@@ -17,7 +17,6 @@ namespace tramity\apps\core {
         $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
         $base_dir = $_SERVER['DOCUMENT_ROOT'] . $dir_apps;
         $fileName = $base_dir . DIRECTORY_SEPARATOR . $fileName;
-
         //Aclararse que pasa con apc, include/require vs spl_autoload.
         if (file_exists($fileName) && include($fileName)) {
             return TRUE;

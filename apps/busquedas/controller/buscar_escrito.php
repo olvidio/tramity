@@ -4,7 +4,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use etiquetas\model\entity\GestorEtiqueta;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\OficinaRepository;
 use web\DateTimeLocal;
@@ -84,14 +84,14 @@ if (is_true($Q_ctr_anulados)) {
     $chk_ctr_anulados = '';
 }
 
-$gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayBusquedas($Q_ctr_anulados);
+$LugarRepository = new LugarRepository();
+$a_lugares = $LugarRepository->getArrayBusquedas($Q_ctr_anulados);
 
 // Busco el id_lugar de la dl.
-$id_siga_local = $gesLugares->getId_sigla_local();
+$id_siga_local = $LugarRepository->getId_sigla_local();
 $sigla = $_SESSION['oConfig']->getSigla();
 // Busco el id_lugar de cr.
-$id_cr = $gesLugares->getId_cr();
+$id_cr = $LugarRepository->getId_cr();
 
 
 $oDesplLugar = new Desplegable();

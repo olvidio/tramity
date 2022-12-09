@@ -4,7 +4,7 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use davical\model\Davical;
 use etiquetas\model\entity\GestorEtiqueta;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
 use usuarios\domain\entity\Cargo;
@@ -115,8 +115,8 @@ $CargoRepository = new CargoRepository();
 $a_usuarios_oficina = $CargoRepository->getArrayUsuariosOficina($id_oficina);
 $oDesplEncargados = new Desplegable('encargado', $a_usuarios_oficina, '', TRUE);
 
-$gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayLugares();
+$LugarRepository = new LugarRepository();
+$a_lugares = $LugarRepository->getArrayLugares();
 
 
 $oDesplLugar = new Desplegable();

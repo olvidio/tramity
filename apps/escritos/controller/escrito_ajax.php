@@ -1,7 +1,7 @@
 <?php
 
 use escritos\model\Escrito;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -19,8 +19,8 @@ switch ($Q_que) {
         $Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
         $oEscrito = new Escrito($Q_id_escrito);
         $a_miembros = $oEscrito->getDestinosIds();
-        $gesLugares = new GestorLugar();
-        $aLugares = $gesLugares->getArrayLugares();
+        $LugarRepository = new LugarRepository();
+        $aLugares = $LugarRepository->getArrayLugares();
         $destinos_txt = '';
         foreach ($a_miembros as $id_lugar) {
             if (empty($aLugares[$id_lugar])) {

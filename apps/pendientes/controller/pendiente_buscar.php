@@ -5,7 +5,7 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\Entrada;
 use etiquetas\model\entity\GestorEtiqueta;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use pendientes\model\BuscarPendiente;
 use pendientes\model\Pendiente;
 use usuarios\domain\entity\Cargo;
@@ -47,8 +47,8 @@ $Q_f_min = urldecode($Q_f_min_enc);
 $Q_f_max_enc = (string)filter_input(INPUT_POST, 'f_max');
 $Q_f_max = urldecode($Q_f_max_enc);
 
-$gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayBusquedas();
+$LugarRepository = new LugarRepository();
+$a_lugares = $LugarRepository->getArrayBusquedas();
 
 $oDesplLugar = new Desplegable();
 $oDesplLugar->setNombre('id_lugar');

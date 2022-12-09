@@ -12,7 +12,7 @@ use etiquetas\model\entity\GestorEtiqueta;
 use etiquetas\model\entity\GestorEtiquetaExpediente;
 use expedientes\model\Expediente;
 use expedientes\model\GestorExpediente;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\CargoRepository;
 use usuarios\domain\repositories\OficinaRepository;
@@ -191,8 +191,8 @@ switch ($Q_que) {
         $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
         $oDesplOficinas = new web\Desplegable('oficina_buscar', $a_posibles_oficinas, $Q_oficina_buscar, TRUE);
 
-        $gesLugares = new GestorLugar();
-        $a_lugares = $gesLugares->getArrayBusquedas($Q_chk_anulados);
+        $LugarRepository = new LugarRepository();
+        $a_lugares = $LugarRepository->getArrayBusquedas($Q_chk_anulados);
 
         $oDesplOrigen = new Desplegable();
         $oDesplOrigen->setNombre('origen_id_lugar');
@@ -458,8 +458,8 @@ switch ($Q_que) {
 
         // No tengo en cuenta las otras condiciones de la búsqueda
         if (!empty($Q_local_prot_num) && !empty($Q_local_prot_any)) {
-            $gesLugares = new GestorLugar();
-            $id_sigla_local = $gesLugares->getId_sigla_local();
+            $LugarRepository = new LugarRepository();
+            $id_sigla_local = $LugarRepository->getId_sigla_local();
             $aProt_local = ['id_lugar' => $id_sigla_local,
                 'num' => $Q_local_prot_num,
                 'any' => $Q_local_prot_any,
@@ -511,8 +511,8 @@ switch ($Q_que) {
 
         $oDesplCargos = new web\Desplegable('oficina_buscar', $a_posibles_cargos, $Q_oficina_buscar, TRUE);
 
-        $gesLugares = new GestorLugar();
-        $a_lugares = $gesLugares->getArrayBusquedas($Q_chk_anulados);
+        $LugarRepository = new LugarRepository();
+        $a_lugares = $LugarRepository->getArrayBusquedas($Q_chk_anulados);
         $oDesplDestino = new Desplegable();
         $oDesplDestino->setNombre('dest_id_lugar');
         $oDesplDestino->setBlanco(TRUE);

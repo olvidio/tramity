@@ -1,8 +1,8 @@
 <?php
 
 use core\ViewTwig;
-use lugares\model\entity\GestorLugar;
-use lugares\model\entity\Lugar;
+use lugares\domain\entity\Lugar;
+use lugares\domain\repositories\LugarRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -22,7 +22,7 @@ $Q_scroll_id = (string)filter_input(INPUT_POST, 'scroll_id');
 //Si vengo por medio de Posicion, borro la última
 if (isset($_POST['stack'])) {
     $stack = filter_input(INPUT_POST, 'stack', FILTER_SANITIZE_NUMBER_INT);
-    if ($stack != '') {
+    if ($stack !== '') {
         $oPosicion2 = new web\Posicion();
         if ($oPosicion2->goStack($stack)) { // devuelve false si no puede ir
             $Q_id_sel = $oPosicion2->getParametro('id_sel');
@@ -38,8 +38,8 @@ if (isset($_POST['stack'])) {
 $aWhere['_ordre'] = 'sigla';
 $aOperador = [];
 
-$oGesLugares = new GestorLugar();
-$cLugares = $oGesLugares->getLugares($aWhere, $aOperador);
+$LugarRepository = new LugarRepository();
+$cLugares = $LugarRepository->getLugares($aWhere, $aOperador);
 
 //default:
 $id_lugar = '';
@@ -81,7 +81,7 @@ foreach ($cLugares as $oLugar) {
     $plataforma = $oLugar->getPlataforma();
     $e_mail = $oLugar->getE_mail();
     $modo_envio = $oLugar->getModo_envio();
-    $anulado = $oLugar->getAnulado();
+    $anulado = $oLugar->isAnulado();
 
     $a_valores[$i]['sel'] = "$id_lugar#";
     $a_valores[$i][1] = $sigla;

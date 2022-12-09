@@ -9,7 +9,7 @@ use entradas\model\GestorEntrada;
 use escritos\model\Escrito;
 use ethercalc\model\Ethercalc;
 use etherpad\model\Etherpad;
-use lugares\model\entity\GestorLugar;
+use lugares\domain\repositories\LugarRepository;
 use oasis_as4\model\As4;
 use oasis_as4\model\As4CollaborationInfo;
 use pendientes\model\GestorPendienteEntrada;
@@ -272,8 +272,8 @@ switch ($Q_que) {
         $oEntradaBypass = new EntradaBypass($Q_id_entrada);
         $a_destinos = $oEntradaBypass->getDestinosByPass();
         $a_miembros = $a_destinos['miembros'];
-        $gesLugares = new GestorLugar();
-        $aLugares = $gesLugares->getArrayLugares();
+        $LugarRepository = new LugarRepository();
+        $aLugares = $LugarRepository->getArrayLugares();
         $destinos_txt = '';
         foreach ($a_miembros as $id_lugar) {
             $destinos_txt .= empty($destinos_txt) ? '' : "\n";

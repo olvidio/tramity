@@ -2,7 +2,8 @@
 
 namespace web;
 
-use lugares\model\entity\Lugar;
+
+use lugares\domain\repositories\LugarRepository;
 
 class ProtocoloArray extends Protocolo
 {
@@ -77,6 +78,7 @@ class ProtocoloArray extends Protocolo
 
         $ref = ($this->bRef) ? 'ref. ' : '';
         if (!empty($aSeleccionados)) {
+            $LugarRepository = new LugarRepository();
             foreach ($aSeleccionados as $oProt) {
                 $oProt = json_decode(json_encode($oProt));
                 if (!property_exists($oProt, 'id_lugar')) {
@@ -87,8 +89,12 @@ class ProtocoloArray extends Protocolo
                 $prot_any = $oProt->any;
                 $prot_mas = $oProt->mas;
 
-                $oLugar = new Lugar($id_lugar);
-                $nom_lugar = $oLugar->getSigla();
+                $oLugar = $LugarRepository->findById($this->ilugar);
+                if ($oLugar === null) {
+                    $nom_lugar = _("?: no está en la tabla");
+                } else {
+                    $nom_lugar = $oLugar->getSigla();
+                }
                 $txt = "$nom_lugar";
                 if (!empty($prot_num)) {
                     $txt .= " $prot_num/$prot_any";
@@ -117,6 +123,7 @@ class ProtocoloArray extends Protocolo
         $sLista = "";
         $ref = ($this->bRef) ? 'ref. ' : '';
         if (!empty($aSeleccionados)) {
+            $LugarRepository = new LugarRepository();
             foreach ($aSeleccionados as $oProt) {
                 $oProt = json_decode(json_encode($oProt));
                 if (!property_exists($oProt, 'id_lugar')) {
@@ -128,8 +135,12 @@ class ProtocoloArray extends Protocolo
                 $prot_mas = $oProt->mas;
 
                 if (!empty($id_lugar)) {
-                    $oLugar = new Lugar($id_lugar);
-                    $nom_lugar = $oLugar->getSigla();
+                    $oLugar = $LugarRepository->findById($this->ilugar);
+                    if ($oLugar === null) {
+                        $nom_lugar = _("?: no está en la tabla");
+                    } else {
+                        $nom_lugar = $oLugar->getSigla();
+                    }
                 } else {
                     //Puede el id lugar no encontrar la sigla...
                     $nom_lugar = '?sigla';
@@ -162,6 +173,7 @@ class ProtocoloArray extends Protocolo
         $ref = ($this->bRef) ? 'ref. ' : '';
         $sLista = "<div class=\"row\" >";
         if (!empty($aSeleccionados)) {
+            $LugarRepository = new LugarRepository();
             foreach ($aSeleccionados as $oProt) {
                 $oProt = json_decode(json_encode($oProt));
                 if (!property_exists($oProt, 'id_lugar')) {
@@ -173,8 +185,12 @@ class ProtocoloArray extends Protocolo
                 $prot_mas = $oProt->mas;
 
                 if (!empty($id_lugar)) {
-                    $oLugar = new Lugar($id_lugar);
-                    $nom_lugar = $oLugar->getSigla();
+                    $oLugar = $LugarRepository->findById($this->ilugar);
+                    if ($oLugar === null) {
+                        $nom_lugar = _("?: no está en la tabla");
+                    } else {
+                        $nom_lugar = $oLugar->getSigla();
+                    }
                 }
 
                 $txt = "$nom_lugar";
