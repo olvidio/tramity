@@ -1,8 +1,11 @@
 <?php
 
+use core\ConfigGlobal;
 use core\ViewTwig;
-use entidades\model\Entidad;
-use entidades\model\entity\GestorEntidadesDB;
+use entidades\domain\repositories\EntidadDBRepository;
+use entidades\domain\repositories\EntidadRepository;
+use web\Hash;
+use web\Lista;
 use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -36,8 +39,8 @@ if (isset($_POST['stack'])) {
 $aWhere['_ordre'] = 'nombre';
 $aOperador = [];
 
-$oGesEntidadesDB = new GestorEntidadesDB();
-$cEntidadDBes = $oGesEntidadesDB->getEntidadesDB($aWhere, $aOperador);
+$EntidadRepository = new EntidadRepository();
+$cEntidades = $EntidadRepository->getEntidadesDB($aWhere, $aOperador);
 
 //default:
 $id_entidad = '';
@@ -51,11 +54,10 @@ $a_botones = [['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
     ['txt' => _("modificar"), 'click' => "fnjs_editar()"],
 ];
 
-$oEntidad = new Entidad();
-$a_opciones_tipo = $oEntidad->getArrayTipo();
+$a_opciones_tipo = $EntidadRepository->getArrayTipo();
 $a_valores = array();
 $i = 0;
-foreach ($cEntidadDBes as $oEntidadDB) {
+foreach ($cEntidades as $oEntidadDB) {
     $i++;
     $id_entidad = $oEntidadDB->getId_entidad();
     $nombre = $oEntidadDB->getNombre();
@@ -78,22 +80,22 @@ if (isset($Q_scroll_id) && !empty($Q_scroll_id)) {
     $a_valores['scroll_id'] = $Q_scroll_id;
 }
 
-$oTabla = new web\Lista();
+$oTabla = new Lista();
 $oTabla->setId_tabla('entidad_lista');
 $oTabla->setCabeceras($a_cabeceras);
 $oTabla->setBotones($a_botones);
 $oTabla->setDatos($a_valores);
 
-$oHash = new web\Hash();
+$oHash = new Hash();
 $oHash->setcamposForm('sel');
 $oHash->setcamposNo('que!scroll_id');
 $oHash->setArraycamposHidden(array('que' => ''));
 
 $aQuery = ['nuevo' => 1];
-$url_nuevo = web\Hash::link(core\ConfigGlobal::getWeb() . '/apps/entidades/controller/entidad_form.php?' . http_build_query($aQuery));
+$url_nuevo = Hash::link(ConfigGlobal::getWeb() . '/apps/entidades/controller/entidad_form.php?' . http_build_query($aQuery));
 
-$url_form = web\Hash::link(core\ConfigGlobal::getWeb() . '/apps/entidades/controller/entidad_form.php');
-$url_eliminar = web\Hash::link(core\ConfigGlobal::getWeb() . '/apps/entidades/controller/entidad_update.php');
+$url_form = Hash::link(ConfigGlobal::getWeb() . '/apps/entidades/controller/entidad_form.php');
+$url_eliminar = Hash::link(ConfigGlobal::getWeb() . '/apps/entidades/controller/entidad_update.php');
 $url_actualizar = web\Hash::link(core\ConfigGlobal::getWeb() . '/apps/entidades/controller/entidad_lista.php');
 
 $a_campos = [

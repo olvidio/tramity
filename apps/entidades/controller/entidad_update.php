@@ -1,7 +1,8 @@
 <?php
 
-use entidades\model\Entidad;
-use entidades\model\entity\EntidadDB;
+use entidades\domain\entity\EntidadDB;
+use entidades\domain\repositories\EntidadDBRepository;
+use entidades\domain\repositories\EntidadRepository;
 use web\StringLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -22,16 +23,17 @@ switch ($Q_que) {
         $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
             $Q_id_entidad = (integer)strtok($a_sel[0], "#");
-            $oEntidad = new Entidad (array('id_entidad' => $Q_id_entidad));
+            $EntidadRepository = new EntidadRepository();
+            $oEntidadDB = $EntidadRepository->findById($Q_id_entidad);
             // antes de eliminar la entidaddb, hay que eliminar el schema, etherpad i davical.
             // después perderé el nombre del esquema.
-            $error_txt .= $oEntidad->eliminarEsquema();
+            $error_txt .= $EntidadRepository->eliminarEsquema($oEntidadDB);
             // etherpad?
             // davical?
 
-            if (empty($error_txt) && $oEntidad->DBEliminar() === FALSE) {
+            if (empty($error_txt) && $EntidadRepository->Eliminar($oEntidadDB) === FALSE) {
                 $error_txt .= _("hay un error, no se ha eliminado");
-                $error_txt .= "\n" . $oEntidad->getErrorTxt();
+                $error_txt .= "\n" . $EntidadRepository->getErrorTxt();
             }
         }
         break;
@@ -47,8 +49,13 @@ switch ($Q_que) {
             $Q_tipo_entidad = (integer)filter_input(INPUT_POST, 'tipo_entidad');
             $Q_anulado = (bool)filter_input(INPUT_POST, 'anulado');
 
-            $oEntidadDB = new EntidadDB ($Q_id_entidad);
-            $oEntidadDB->DBCargar();
+            $EntidadRepository = new EntidadRepository();
+            $oEntidadDB = $EntidadRepository->findById($Q_id_entidad);
+            if ($oEntidadDB === null) {
+                $id_new_entidad = $EntidadRepository->getNewId_entidad();
+                $oEntidadDB = new EntidadDB();
+                $oEntidadDB->setId_entidad($id_new_entidad);
+            }
 
             $Q_schema = empty($Q_schema) ? $Q_nombre : $Q_schema;
             // El nombre del esquema es en minúsculas porque si se accede via nombre del 
@@ -62,17 +69,14 @@ switch ($Q_que) {
             $oEntidadDB->setSchema($schema);
             $oEntidadDB->setTipo($Q_tipo_entidad);
             $oEntidadDB->setAnulado($Q_anulado);
-            if ($oEntidadDB->DBGuardar() === FALSE) {
+            if ($EntidadRepository->Guardar($oEntidadDB) === FALSE) {
                 $error_txt .= _("hay un error al guardar");
-                $error_txt .= "\n" . $oEntidadDB->getErrorTxt();
+                $error_txt .= "\n" . $EntidadRepository->getErrorTxt();
             } else {
                 // En el caso de nuevo, crear el esquema:
                 // Crear el calendario davical ??¿?¿:
                 if ($Q_que === 'nuevo') {
-                    $id = $oEntidadDB->getId_entidad();
-                    $oEntidad = new Entidad($id);
-                    $oEntidad->DBCargar();
-                    $error_txt = $oEntidad->nuevoEsquema();
+                    $error_txt = $EntidadRepository->nuevoEsquema($oEntidadDB);
                 }
             }
         }
@@ -94,4 +98,3 @@ if (empty($error_txt)) {
 header('Content-type: application/json; charset=utf-8');
 echo json_encode($jsondata, JSON_THROW_ON_ERROR);
 exit();
-        

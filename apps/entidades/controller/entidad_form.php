@@ -2,9 +2,9 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use entidades\model\Entidad;
-use entidades\model\entity\EntidadDB;
+use entidades\domain\repositories\EntidadRepository;
 use web\Desplegable;
+use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -54,15 +54,15 @@ if (isset($_POST['stack'])) {
 }
 $oPosicion->setParametros(array('id_entidad' => $Q_id_entidad), 1);
 
-$oEntidad = new Entidad(); // para los tipos
-$a_opciones_tipos = $oEntidad->getArrayTipo();
+$EntidadRepository = new EntidadRepository(); // para los tipos
+$a_opciones_tipos = $EntidadRepository->getArrayTipo();
 $oDesplTipos = new Desplegable();
 $oDesplTipos->setNombre('tipo_entidad');
 $oDesplTipos->setOpciones($a_opciones_tipos);
 
 if (!empty($Q_id_entidad)) {
     $que_user = 'guardar';
-    $oEntidadDB = new EntidadDB(array('id_entidad' => $Q_id_entidad));
+    $oEntidadDB = $EntidadRepository->findById($Q_id_entidad);
 
     $nombre = $oEntidadDB->getnombre();
     $schema = $oEntidadDB->getSchema();
@@ -82,7 +82,7 @@ if (!empty($Q_id_entidad)) {
 
 
 $camposForm = 'que!nombre!schema!tipo_entidad!anulado';
-$oHash = new web\Hash();
+$oHash = new Hash();
 $oHash->setcamposForm($camposForm);
 $a_camposHidden = array(
     'id_entidad' => $Q_id_entidad,
@@ -94,7 +94,7 @@ $url_update = ConfigGlobal::getWeb() . '/apps/entidades/controller/entidad_updat
 
 $txt_guardar = _("guardar datos nombre_entidad");
 
-$pagina_cancel = web\Hash::link('apps/entidades/controller/entidad_lista.php?' . http_build_query([]));
+$pagina_cancel = Hash::link('apps/entidades/controller/entidad_lista.php?' . http_build_query([]));
 
 $a_campos = [
     'oPosicion' => $oPosicion,

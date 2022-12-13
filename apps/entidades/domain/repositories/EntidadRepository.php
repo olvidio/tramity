@@ -1,13 +1,13 @@
 <?php
 
-namespace entidades\model;
+namespace entidades\domain\repositories;
 
 use core\ConfigGlobal;
-use entidades\model\entity\EntidadDB;
+use entidades\domain\entity\EntidadDB;
 use usuarios\domain\entity\Cargo;
 
 
-class Entidad extends EntidadDB
+class EntidadRepository extends EntidadDBRepository
 {
 
     /* CONST -------------------------------------------------------------- */
@@ -19,44 +19,19 @@ class Entidad extends EntidadDB
     const AMBITO_CTR = 4;
     */
 
-    private $sdir;
-    private $sfileLog;
-    private $snameFileLog;
-    private $ssql_txt;
+    private string $sdir;
+    private string $sfileLog;
+    private string $snameFileLog;
+    private string $ssql_txt;
+
+    private string $nom_schema;
 
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
-    /**
-     * Constructor de la classe.
-     * Si només necessita un valor, se li pot passar un integer.
-     * En general se li passa un array amb les claus primàries.
-     *
-     * @param integer|array iid_entrada
-     *                        $a_id. Un array con los nombres=>valores de las claves primarias.
-     */
-    function __construct($a_id = null)
-    {
-        $oDbl = $GLOBALS['oDBT'];
-        if (is_array($a_id)) {
-            $this->aPrimary_key = $a_id;
-            foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id === 'id_entidad') && $val_id !== '') {
-                    $this->iid_entidad = (int)$val_id;
-                }
-            }
-        } else {
-            if (isset($a_id) && $a_id !== '') {
-                $this->iid_entidad = (int)$a_id;
-                $this->aPrimary_key = array('iid_entidad' => $this->iid_entidad);
-            }
-        }
-        $this->setoDbl($oDbl);
-        $this->setNomTabla('entidades');
-    }
 
     /* MÉTODOS PÚBLICOS ----------------------------------------------------------*/
 
-    public function getArrayTipo()
+    public function getArrayTipo(): array
     {
         return [
             Cargo::AMBITO_CTR => _("ctr"),
@@ -67,59 +42,56 @@ class Entidad extends EntidadDB
     }
 
 
-    public function eliminarEsquema()
+    public function eliminarEsquema(EntidadDB $EntidadDB): string
     {
-        $err = '';
-        $err .= $this->dropEsquema();
-
-        return $err;
+        return $this->dropEsquema($EntidadDB);
     }
 
-    private function dropEsquema()
+    private function dropEsquema(EntidadDB $EntidadDB): string
     {
         $oDbl = $this->getoDbl();
-        $nom_schema = $this->getSchema();
+        $nom_schema = $EntidadDB->getSchema();
         $err_txt = '';
         $sql = "DROP SCHEMA IF EXISTS \"$nom_schema\" CASCADE ";
 
         if (($oDblSt = $oDbl->prepare($sql)) === false) {
             $sClauError = 'Entidad.eliminarSchema.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            $err_txt .= sprintf("ERROR AL ELIMINAR EL ESQUEMA: $sClauError");
+            $err_txt .= sprintf(_("ERROR AL ELIMINAR EL ESQUEMA: %s"),$sClauError);
         } else {
             if ($oDblSt->execute() === false) {
                 $sClauError = 'Entidad.eliminarSchema.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                $err_txt .= sprintf("ERROR AL ELIMINAR EL ESQUEMA: $sClauError");
+                $err_txt .= sprintf(_("ERROR AL ELIMINAR EL ESQUEMA: %s"),$sClauError);
             }
         }
         return $err_txt;
     }
 
-    public function nuevoEsquema()
+    public function nuevoEsquema(EntidadDB $EntidadDB): string
     {
-        $err = $this->crearEsquema();
-        $err .= $this->crearTablas();
+        $err = $this->crearEsquema($EntidadDB);
+        $err .= $this->crearTablas($EntidadDB);
 
         return $err;
     }
 
-    private function crearEsquema()
+    private function crearEsquema(EntidadDB $EntidadDB): string
     {
         $oDbl = $this->getoDbl();
-        $nom_schema = $this->getSchema();
+        $nom_schema = $EntidadDB->getSchema();
         $err_txt = '';
         $sql = "CREATE SCHEMA IF NOT EXISTS \"$nom_schema\" ";
 
         if (($oDblSt = $oDbl->prepare($sql)) === false) {
             $sClauError = 'Entidad.crearSchema.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            $err_txt .= sprintf("ERROR AL CREAR EL ESQUEMA: $sClauError");
+            $err_txt .= sprintf(_("ERROR AL CREAR EL ESQUEMA: %s"), $sClauError);
         } else {
             if ($oDblSt->execute() === false) {
                 $sClauError = 'Entidad.crearSchema.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                $err_txt .= sprintf("ERROR AL CREAR EL ESQUEMA: $sClauError");
+                $err_txt .= sprintf(_("ERROR AL CREAR EL ESQUEMA: %s"), $sClauError);
             }
         }
         return $err_txt;
@@ -164,13 +136,14 @@ class Entidad extends EntidadDB
      *    x_oficinas
      *
      */
-    private function crearTablas()
+    private function crearTablas(EntidadDB $EntidadDB): string
     {
+        $this->nom_schema = $EntidadDB->getSchema();
         $err = '';
         // entradas:
         $err .= $this->ejecutarPsqlCrear('entradas');
         // para las dl:
-        $tipo_entidad = $this->getTipo();
+        $tipo_entidad = $EntidadDB->getTipo();
         if ($tipo_entidad === Cargo::AMBITO_DL) {
             // entradas_bypass
             $err .= $this->ejecutarPsqlCrear('entradas', TRUE);
@@ -202,7 +175,7 @@ class Entidad extends EntidadDB
             $err .= $this->ejecutarPsqlCrear('lugares', TRUE);
         }
         // INSERTS
-        if ($this->getTipo() === Cargo::AMBITO_DL) {
+        if ($EntidadDB->getTipo() === Cargo::AMBITO_DL) {
             // insert cargos mínimos usuarios:
             $err .= $this->ejecutarPsqlInsert('usuarios', TRUE);
             $err .= $this->ejecutarPsqlInsert('tramites', TRUE);
@@ -214,24 +187,25 @@ class Entidad extends EntidadDB
             $err .= $this->ejecutarPsqlInsert('config');
         }
         // añadir la sigla en config:
-        $err .= $this->ejecutarSql("INSERT INTO nombre_del_esquema.x_config (parametro, valor) VALUES ('sigla', '$this->snombre')");
+        $sigla = $EntidadDB->getNombre();
+        $err .= $this->ejecutarSql("INSERT INTO nombre_del_esquema.x_config (parametro, valor) VALUES ('sigla', '$sigla')");
 
         return $err;
     }
 
-    private function ejecutarPsqlCrear($app, $dl = FALSE)
+    private function ejecutarPsqlCrear(string $app, bool $dl = FALSE): string
     {
         if ($dl) {
             $this->ssql_txt = file_get_contents("../../$app/db/$app" . "_dl.sql");
         } else {
             $this->ssql_txt = file_get_contents("../../$app/db/$app.sql");
         }
-        $this->snameFileLog = $this->getFileLog("$app");
+        $this->snameFileLog = $this->getFileLog($app);
 
         return $this->ejecutarPsql();
     }
 
-    private function getFileLog($filename = 'tramity')
+    private function getFileLog(string $filename = 'tramity'): string
     {
         $this->sfileLog = $this->getDir() . '/' . $filename . '.pg_error.sql';
 
@@ -241,24 +215,24 @@ class Entidad extends EntidadDB
         return $this->sfileLog;
     }
 
-    private function getDir()
+    private function getDir(): string
     {
         $this->sdir = empty($this->sdir) ? ConfigGlobal::$directorio . '/log/db' : $this->sdir;
         return $this->sdir;
     }
 
-    private function ejecutarPsql()
+    private function ejecutarPsql(): string
     {
         $err_txt = '';
         $sql_txt = $this->ssql_txt;
         $file_log = $this->snameFileLog;
 
         // cambiar nombre esquema
-        $nom_schema = "\\\"" . $this->getSchema() . "\\\"" . '.';
+        $nom_schema = "\\\"" . $this->nom_schema . "\\\"" . '.';
 
         $sql_txt_nou = str_replace('nombre_del_esquema.', $nom_schema, $sql_txt);
         // para la función idglobal
-        $idglobal_txt_nou = "idglobal('" . $this->getSchema();
+        $idglobal_txt_nou = "idglobal('" . $this->nom_schema;
         $sql_txt_nou = str_replace('idglobal(\'nombre_del_esquema', $idglobal_txt_nou, $sql_txt_nou);
 
         $command = "/usr/bin/psql -U tramity -d tramity -c << EOF \" $sql_txt_nou \" ";
@@ -277,36 +251,36 @@ class Entidad extends EntidadDB
         return $err_txt;
     }
 
-    private function ejecutarPsqlInsert($app, $dl = FALSE)
+    private function ejecutarPsqlInsert(string $app, bool $dl = FALSE): string
     {
         if ($dl) {
             $this->ssql_txt = file_get_contents("../../$app/db/insert_$app" . "_dl.sql");
         } else {
             $this->ssql_txt = file_get_contents("../../$app/db/insert_$app.sql");
         }
-        $this->snameFileLog = $this->getFileLog("$app");
+        $this->snameFileLog = $this->getFileLog($app);
 
         return $this->ejecutarPsql();
     }
 
-    private function ejecutarSql($sql)
+    private function ejecutarSql(string $sql): string
     {
         $oDbl = $this->getoDbl();
         $err_txt = '';
 
         // cambiar nombre esquema
-        $nom_schema = "\"" . $this->getSchema() . "\"" . '.';
+        $nom_schema = "\"" . $this->nom_schema . "\"" . '.';
         $sql_txt_nou = str_replace('nombre_del_esquema.', $nom_schema, $sql);
 
         if (($oDblSt = $oDbl->prepare($sql_txt_nou)) === false) {
             $sClauError = 'Entidad.sql.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            $err_txt .= sprintf("ERROR AL EJECUTAR SQL: $sClauError");
+            $err_txt .= sprintf(_("ERROR AL EJECUTAR SQL: %s"), $sClauError);
         } else {
             if ($oDblSt->execute() === false) {
                 $sClauError = 'Entidad.sql.execute';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-                $err_txt .= sprintf("ERROR AL EJECUTAR SQL: $sClauError");
+                $err_txt .= sprintf(_("ERROR AL EJECUTAR SQL: %s"), $sClauError);
             }
         }
         return $err_txt;
