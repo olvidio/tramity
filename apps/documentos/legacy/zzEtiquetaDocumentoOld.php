@@ -1,6 +1,6 @@
 <?php
 
-namespace documentos\model\entity;
+namespace documentos\legacy;
 
 use core;
 use PDO;
@@ -25,7 +25,7 @@ use PDOException;
  * @version 1.0
  * @created 9/6/2021
  */
-class EtiquetaDocumento extends core\ClasePropiedades
+class zzzEtiquetaDocumentoOld extends core\ClasePropiedades
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 

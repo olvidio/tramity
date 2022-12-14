@@ -1,6 +1,6 @@
 <?php
 
-use documentos\model\Documento;
+use documentos\domain\repositories\DocumentoRepository;
 use envios\model\MIMETypeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -18,7 +18,8 @@ require_once("apps/core/global_object.inc");
 $Q_id_doc = (integer)filter_input(INPUT_GET, 'key');
 
 if (!empty($Q_id_doc)) {
-    $oDocumento = new Documento($Q_id_doc);
+    $documentoRepository = new DocumentoRepository();
+    $oDocumento = $documentoRepository->findById($Q_id_doc);
     $nombre_fichero = $oDocumento->getNombre_fichero();
     $doc = $oDocumento->getDocumento();
 

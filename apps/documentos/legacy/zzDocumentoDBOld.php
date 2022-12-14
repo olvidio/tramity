@@ -1,6 +1,6 @@
 <?php
 
-namespace documentos\model\entity;
+namespace documentos\legacy;
 
 use core;
 use core\ConverterDate;
@@ -29,7 +29,7 @@ use web\NullDateTimeLocal;
  * @version 1.0
  * @created 9/6/2021
  */
-class DocumentoDB extends core\ClasePropiedades
+class zzzDocumentoDBOld extends core\ClasePropiedades
 {
     /* ATRIBUTOS ----------------------------------------------------------------- */
 

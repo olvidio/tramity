@@ -1,6 +1,7 @@
 <?php
 
-use documentos\model\Documento;
+use documentos\domain\entity\Documento;
+use documentos\domain\repositories\DocumentoRepository;
 use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -44,25 +45,25 @@ function upload()
             }
 
             //Make sure we have a file path
-            if ($tmpFilePath != "") {
+            if ($tmpFilePath !== '') {
 
                 $fp = fopen($tmpFilePath, 'rb');
                 $contenido_doc = fread($fp, filesize($tmpFilePath));
 
                 $oHoy = new DateTimeLocal();
-                $hoy_iso = $oHoy->getIso();
 
-                $oDocumento = new Documento($Q_id_doc);
-                if ($oDocumento->DBCargar() === FALSE) {
+                $documentoRepository = new DocumentoRepository();
+                $oDocumento = $documentoRepository->findById($Q_id_doc);
+                if ($oDocumento === null) {
                     $err_cargar = sprintf(_("OJO! no existe el documento en %s, linea %s"), __FILE__, __LINE__);
                     exit ($err_cargar);
                 }
                 $oDocumento->setNombre_fichero($fileName);
                 $oDocumento->setTipo_doc(Documento::DOC_UPLOAD);
                 $oDocumento->setDocumento($contenido_doc);
-                $oDocumento->setF_upload($hoy_iso, FALSE);
+                $oDocumento->setF_upload($oHoy);
 
-                if ($oDocumento->DBGuardar() !== FALSE) {
+                if ($documentoRepository->Guardar($oDocumento) !== FALSE) {
                     $preview[] = "'$fileName'";
                     $config[] = [
                         'key' => $Q_id_doc,

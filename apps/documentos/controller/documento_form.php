@@ -1,9 +1,12 @@
 <?php
 
 use core\ViewTwig;
-use documentos\model\Documento;
-use etiquetas\model\entity\GestorEtiqueta;
+use documentos\domain\entity\Documento;
+use documentos\domain\repositories\DocumentoRepository;
+use etiquetas\domain\repositories\EtiquetaRepository;
 use web\Desplegable;
+use web\DesplegableArray;
+use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -25,11 +28,10 @@ $Q_que = (string)filter_input(INPUT_POST, 'que');
 
 $visibilidad = 0;
 
-$oDocumento = new Documento($Q_id_doc);
 $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
 // visibilidad (usar las mismas opciones que en entradas)
-$aOpciones = $oDocumento->getArrayVisibilidad();
+$aOpciones = (new Documento())->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
@@ -37,8 +39,8 @@ $oDesplVisibilidad->setOpcion_sel($visibilidad);
 
 // Etiquetas
 $etiquetas = []; // No hay ninguna porque en archivar es cuando se añaden.
-$gesEtiquetas = new GestorEtiqueta();
-$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$EtiquetaRepository = new EtiquetaRepository();
+$cEtiquetas = $EtiquetaRepository->getMisEtiquetas();
 $a_posibles_etiquetas = [];
 foreach ($cEtiquetas as $oEtiqueta) {
     $id_etiqueta = $oEtiqueta->getId_etiqueta();
@@ -49,13 +51,15 @@ foreach ($cEtiquetas as $oEtiqueta) {
 $preview = [];
 $config = [];
 $tipo_doc = '';
+$documentoRepository = new DocumentoRepository();
 if (!empty($Q_id_doc)) {
+    $oDocumento = $documentoRepository->findById($Q_id_doc);
     // destinos individuales
     $nom = $oDocumento->getNom();
     $nombre_fichero = $oDocumento->getNombre_fichero();
     $documento_txt = $oDocumento->getDocumento();
 
-    if (!empty($oDocumento->getVisibilidad())) {
+    if ($oDocumento->getVisibilidad() !== null) {
         $visibilidad = $oDocumento->getVisibilidad();
         $oDesplVisibilidad->setOpcion_sel($visibilidad);
     }
@@ -64,7 +68,7 @@ if (!empty($Q_id_doc)) {
     $tipo_doc = $oDocumento->getTipo_doc();
 
     $etiquetas = $oDocumento->getEtiquetasVisiblesArray();
-    $oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas, $a_posibles_etiquetas, 'etiquetas');
+    $oArrayDesplEtiquetas = new DesplegableArray($etiquetas, $a_posibles_etiquetas, 'etiquetas');
     $oArrayDesplEtiquetas->setBlanco('t');
     $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
@@ -89,7 +93,7 @@ if (!empty($Q_id_doc)) {
     $f_mod = '';
     $titulo = _("nuevo documento");
 
-    $oArrayDesplEtiquetas = new web\DesplegableArray([], $a_posibles_etiquetas, 'etiquetas');
+    $oArrayDesplEtiquetas = new DesplegableArray([], $a_posibles_etiquetas, 'etiquetas');
     $oArrayDesplEtiquetas->setBlanco('t');
     $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
@@ -108,7 +112,7 @@ $a_cosas = [
     'que' => $Q_que,
 ];
 
-$pagina_cancel = web\Hash::link('apps/documentos/controller/documentos_lista.php?' . http_build_query($a_cosas));
+$pagina_cancel = Hash::link('apps/documentos/controller/documentos_lista.php?' . http_build_query($a_cosas));
 
 $a_campos = [
     //'oHash' => $oHash,

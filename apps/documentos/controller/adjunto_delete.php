@@ -1,8 +1,8 @@
 <?php
 
-// INICIO Cabecera global de URL de controlador *********************************
-use documentos\model\Documento;
+use documentos\domain\repositories\DocumentoRepository;
 
+// INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
 // Archivos requeridos por esta url **********************************************
 
@@ -17,15 +17,16 @@ require_once("apps/core/global_object.inc");
 $Q_id_doc = (integer)filter_input(INPUT_POST, 'key');
 
 if (!empty($Q_id_doc)) {
-    $oDocumento = new Documento($Q_id_doc);
-    if ($oDocumento->DBCargar() === FALSE) {
+    $documentoRepository = new DocumentoRepository();
+    $oDocumento = $documentoRepository->findById($Q_id_doc);
+    if ($oDocumento === null) {
         $err_cargar = sprintf(_("OJO! no existe el documento en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_cargar);
     }
     /* The deleteUrl server action must send data via AJAX request as a JSON response {error: BOOLEAN_VALUE} */
     $error = FALSE;
     $oDocumento->setDocumento();
-    if ($oDocumento->DBGuardar() === FALSE) {
+    if ($documentoRepository->Guardar($oDocumento) === FALSE) {
         $error = TRUE;
     }
 } else {

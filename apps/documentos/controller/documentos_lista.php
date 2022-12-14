@@ -1,9 +1,10 @@
 <?php
 
 use core\ViewTwig;
+use documentos\domain\repositories\EtiquetaDocumentoRepository;
 use documentos\model\DocumentoLista;
-use documentos\model\entity\GestorEtiquetaDocumento;
-use etiquetas\model\entity\GestorEtiqueta;
+use etiquetas\domain\repositories\EtiquetaRepository;
+use web\DesplegableArray;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -31,28 +32,27 @@ $aWhere = [];
 $aOperador = [];
 
 $cDocumentos = [];
-if ($Q_que == 'todos') {
-    $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
-    $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentosTodos();
+$EtiquetaDocumentoRepository = new EtiquetaDocumentoRepository();
+if ($Q_que === 'todos') {
+    $cDocumentos = $EtiquetaDocumentoRepository->getArrayDocumentosTodos();
     // borro las etiquetas seleccionadas
     $a_etiquetas_filtered = [];
     $Q_andOr = 'AND';
 } elseif (!empty($a_etiquetas_filtered)) {
-    $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
-    $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($a_etiquetas_filtered, $Q_andOr);
+    $cDocumentos = $EtiquetaDocumentoRepository->getArrayDocumentos($a_etiquetas_filtered, $Q_andOr);
 }
 
-$chk_or = ($Q_andOr == 'OR') ? 'checked' : '';
+$chk_or = ($Q_andOr === 'OR') ? 'checked' : '';
 // por defecto 'AND':
-$chk_and = (($Q_andOr == 'AND') || empty($Q_andOr)) ? 'checked' : '';
+$chk_and = (($Q_andOr === 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
 if (!empty($cDocumentos)) {
     $aWhere['id_doc'] = implode(',', $cDocumentos);
     $aOperador['id_doc'] = 'IN';
 }
 
-$gesEtiquetas = new GestorEtiqueta();
-$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$EtiquetaRepository = new EtiquetaRepository();
+$cEtiquetas = $EtiquetaRepository->getMisEtiquetas();
 $a_posibles_etiquetas = [];
 foreach ($cEtiquetas as $oEtiqueta) {
     $id_etiqueta = $oEtiqueta->getId_etiqueta();
@@ -60,7 +60,7 @@ foreach ($cEtiquetas as $oEtiqueta) {
     $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
 }
 
-$oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas_filtered, $a_posibles_etiquetas, 'etiquetas');
+$oArrayDesplEtiquetas = new DesplegableArray($a_etiquetas_filtered, $a_posibles_etiquetas, 'etiquetas');
 $oArrayDesplEtiquetas->setBlanco('t');
 $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
@@ -82,4 +82,4 @@ $oTabla->setEtiquetas($a_etiquetas_filtered);
 $oTabla->setAWhere($aWhere);
 $oTabla->setAOperador($aOperador);
 
-echo $oTabla->mostrarTabla();
+$oTabla->mostrarTabla();

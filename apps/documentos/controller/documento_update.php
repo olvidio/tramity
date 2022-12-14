@@ -1,8 +1,8 @@
 <?php
 
 use core\ConfigGlobal;
-use documentos\model\Documento;
-use documentos\model\entity\DocumentoDB;
+use documentos\domain\entity\Documento;
+use documentos\domain\repositories\DocumentoRepository;
 use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -30,25 +30,26 @@ switch ($Q_que) {
     case 'tipo_doc':
         if (!empty($Q_id_doc)) {
             $oHoy = new DateTimeLocal();
-            $hoy_iso = $oHoy->getIso();
 
-            $oDocumento = new Documento($Q_id_doc);
-            if ($oDocumento->DBCargar() === FALSE) {
+            $documentoRepository = new DocumentoRepository();
+            $oDocumento = $documentoRepository->findById($Q_id_doc);
+            if ($oDocumento === null) {
                 $err_cargar = sprintf(_("OJO! no existe el documento en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
             $oDocumento->setTipo_doc($Q_tipo_doc);
-            $oDocumento->setF_upload($hoy_iso, FALSE);
+            $oDocumento->setF_upload($oHoy);
 
-            if ($oDocumento->DBGuardar() === FALSE) {
-                $error_txt .= $oDocumento->getErrorTxt();
+            if ($documentoRepository->Guardar($oDocumento) === FALSE) {
+                $error_txt .= $documentoRepository->getErrorTxt();
             }
         }
         break;
     case 'eliminar':
-        $oDocumento = new DocumentoDB($Q_id_doc);
-        if ($oDocumento->DBEliminar() === FALSE) {
-            $error_txt .= $oDocumento->getErrorTxt();
+        $documentoRepository = new DocumentoRepository();
+        $oDocumento = $documentoRepository->findById($Q_id_doc);
+        if ($documentoRepository->Eliminar($oDocumento) === FALSE) {
+            $error_txt .= $documentoRepository->getErrorTxt();
         }
         if (!empty($error_txt)) {
             $jsondata['success'] = FALSE;
@@ -60,16 +61,18 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'guardar':
+        $documentoRepository = new DocumentoRepository();
         if (!empty($Q_id_doc)) {
-            $oDocumento = new Documento($Q_id_doc);
-            if ($oDocumento->DBCargar() === FALSE) {
+            $oDocumento = $documentoRepository->findById($Q_id_doc);
+            if ($oDocumento === null) {
                 $err_cargar = sprintf(_("OJO! no existe el documento en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
         } else {
+            $id_documento = $documentoRepository->getNewId_doc();
             $oDocumento = new Documento();
+            $oDocumento->setId_doc($id_documento);
             $id_creador = ConfigGlobal::role_id_cargo();
             $oDocumento->setCreador($id_creador);
         }
@@ -79,14 +82,14 @@ switch ($Q_que) {
         $oDocumento->setTipo_doc($Q_tipo_doc);
 
 
-        if ($oDocumento->DBGuardar() === FALSE) {
-            $error_txt .= $oDocumento->getErrorTxt();
+        if ($documentoRepository->Guardar($oDocumento) === FALSE) {
+            $error_txt .= $documentoRepository->getErrorTxt();
         }
         $id_doc = $oDocumento->getId_doc();
         $tipo_doc = $oDocumento->getTipo_doc();
 
-        // las etiquetas despues de guardar el documento:
-        if (!empty($Q_a_etiquetas)) { // No puede haber un docuemento sin etiquetas
+        // las etiquetas después de guardar el documento:
+        if (!empty($Q_a_etiquetas)) { // No puede haber un documento sin etiquetas
             $oDocumento->setEtiquetas($Q_a_etiquetas);
         }
 
@@ -105,7 +108,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);

@@ -1,7 +1,8 @@
 <?php
 
 use core\ViewTwig;
-use documentos\model\Documento;
+use documentos\domain\entity\Documento;
+use documentos\domain\repositories\DocumentoRepository;
 use etherpad\model\Etherpad;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -24,9 +25,10 @@ if ($Q_method === 'GET') {
     $Q_id_doc = (integer)filter_input(INPUT_GET, 'id_doc');
 }
 
-$oDocumento = new Documento($Q_id_doc);
-if (!empty($Q_id_doc)) {
 
+$documentoRepository = new DocumentoRepository();
+if (!empty($Q_id_doc)) {
+    $oDocumento = $documentoRepository->findById($Q_id_doc);
     $nom = $oDocumento->getNom();
     $f_upload = $oDocumento->getF_upload()->getFromLocal();
     $tipo_doc = $oDocumento->getTipo_doc();

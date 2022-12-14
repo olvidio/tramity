@@ -4,6 +4,8 @@ namespace documentos\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use documentos\domain\entity\Documento;
+use documentos\domain\repositories\DocumentoRepository;
 use usuarios\domain\repositories\CargoRepository;
 use web\Hash;
 
@@ -14,42 +16,41 @@ class DocumentoLista
      *
      * @var string
      */
-    private $filtro;
+    private string $filtro;
     /**
      *
      * @var integer
      */
-    private $id_doc;
+    private int $id_doc;
     /**
      *
      * @var array
      */
-    private $aWhere;
+    private array $aWhere;
     /**
      *
      * @var array
      */
-    private $aOperador;
+    private array $aOperador;
     /**
      *
      * @var array
      */
-    private $aEtiquetas;
+    private array $aEtiquetas;
     /**
      *
      * @var string
      */
-    private $andOr;
+    private string $andOr;
     /**
      *
      * @var string
      */
-    private $que;
+    private string $que;
 
 
-    public function mostrarTabla()
+    public function mostrarTabla(): void
     {
-        $pagina_nueva = '';
         $filtro = $this->getFiltro();
 
         $oDocumentoGenerico = new Documento();
@@ -61,11 +62,10 @@ class DocumentoLista
         $a_cargos = $CargoRepository->getArrayCargos();
 
         $a_documentos = [];
-        $id_doc = '';
         if (!empty($this->aWhere)) {
             $aTipoDoc = $oDocumentoGenerico->getArrayTipos();
-            $gesDocumentos = new GestorDocumento();
-            $cDocumentos = $gesDocumentos->getDocumentos($this->aWhere, $this->aOperador);
+            $DocumentoRepository = new DocumentoRepository();
+            $cDocumentos = $DocumentoRepository->getDocumentos($this->aWhere, $this->aOperador);
             foreach ($cDocumentos as $oDocumento) {
                 $row = [];
                 // mirar permisos...
@@ -73,8 +73,8 @@ class DocumentoLista
                 $creador = $oDocumento->getCreador();
 
                 if (ConfigGlobal::soy_dtor() === FALSE &&
-                    $creador != ConfigGlobal::role_id_cargo() &&
-                    $visibilidad == Documento::V_PERSONAL) {
+                    $creador !== ConfigGlobal::role_id_cargo() &&
+                    $visibilidad === Documento::V_PERSONAL) {
                     continue;
                 }
 
@@ -94,10 +94,9 @@ class DocumentoLista
                 $tipo_doc = $oDocumento->getTipo_doc();
                 $documento_txt = $oDocumento->getDocumento();
 
-                if ($tipo_doc == Documento::DOC_ETHERPAD) {
-                    $url_download = '';
+                if ($tipo_doc === Documento::DOC_ETHERPAD) {
                     $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_revisar_documento('$id_doc');\" >" . _("editar") . "</span>";
-                } elseif ($tipo_doc == Documento::DOC_UPLOAD && !empty($documento_txt)) {
+                } elseif ($tipo_doc === Documento::DOC_UPLOAD && !empty($documento_txt)) {
                     $url_download = Hash::link('apps/documentos/controller/adjunto_download.php?' . http_build_query(['key' => $id_doc]));
                     $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"window.open('$url_download');\" >" . _("descargar") . "</span>";
                 }
@@ -159,13 +158,13 @@ class DocumentoLista
         ];
 
         $oView = new ViewTwig('documentos/controller');
-        return $oView->renderizar('documentos_lista.html.twig', $a_campos);
+        $oView->renderizar('documentos_lista.html.twig', $a_campos);
     }
 
     /**
      * @return string
      */
-    public function getFiltro()
+    public function getFiltro(): string
     {
         return $this->filtro;
     }
@@ -173,36 +172,35 @@ class DocumentoLista
     /**
      * @param string $filtro
      */
-    public function setFiltro($filtro)
+    public function setFiltro(string $filtro): void
     {
         $this->filtro = $filtro;
     }
 
     /**
-     * @return number
+     * @return int
      */
-    public function getId_doc()
+    public function getId_doc(): int
     {
         return $this->id_doc;
     }
 
-    public function getNumero()
+    public function getNumero(): ?int
     {
-        $this->setCondicion();
         if (!empty($this->aWhere)) {
-            $gesDocumentos = new GestorDocumento();
-            $cDocumentos = $gesDocumentos->getDocumentos($this->aWhere, $this->aOperador);
+            $DocumentoRepository = new DocumentoRepository();
+            $cDocumentos = $DocumentoRepository->getDocumentos($this->aWhere, $this->aOperador);
             $num = count($cDocumentos);
         } else {
-            $num = '';
+            $num = null;
         }
         return $num;
     }
 
     /**
-     * @param number $id_doc
+     * @param int $id_doc
      */
-    public function setId_documento($id_doc)
+    public function setId_documento(int $id_doc): void
     {
         $this->id_doc = $id_doc;
     }
@@ -210,7 +208,7 @@ class DocumentoLista
     /**
      * @return array
      */
-    public function getAWhere()
+    public function getAWhere(): array
     {
         return $this->aWhere;
     }
@@ -218,7 +216,7 @@ class DocumentoLista
     /**
      * @param array $aWhere
      */
-    public function setAWhere($aWhere)
+    public function setAWhere(array $aWhere): void
     {
         $this->aWhere = $aWhere;
     }
@@ -226,7 +224,7 @@ class DocumentoLista
     /**
      * @return array
      */
-    public function getAOperador()
+    public function getAOperador(): array
     {
         return $this->aOperador;
     }
@@ -234,7 +232,7 @@ class DocumentoLista
     /**
      * @param array $aOperador
      */
-    public function setAOperador($aOperador)
+    public function setAOperador(array $aOperador): void
     {
         $this->aOperador = $aOperador;
     }
@@ -242,7 +240,7 @@ class DocumentoLista
     /**
      * @return array
      */
-    public function getEtiquetas()
+    public function getEtiquetas(): array
     {
         return $this->aEtiquetas;
     }
@@ -250,7 +248,7 @@ class DocumentoLista
     /**
      * @param array $aEtiquetas
      */
-    public function setEtiquetas($aEtiquetas)
+    public function setEtiquetas(array $aEtiquetas): void
     {
         $this->aEtiquetas = $aEtiquetas;
     }
@@ -258,7 +256,7 @@ class DocumentoLista
     /**
      * @return string
      */
-    public function getAndOr()
+    public function getAndOr(): string
     {
         return $this->andOr;
     }
@@ -266,7 +264,7 @@ class DocumentoLista
     /**
      * @param string $andOr
      */
-    public function setAndOr($andOr)
+    public function setAndOr(string $andOr): void
     {
         $this->andOr = $andOr;
     }
@@ -274,7 +272,7 @@ class DocumentoLista
     /**
      * @return string
      */
-    public function getQue()
+    public function getQue(): string
     {
         return $this->que;
     }
@@ -282,7 +280,7 @@ class DocumentoLista
     /**
      * @param string $que
      */
-    public function setQue($que)
+    public function setQue(string $que): void
     {
         $this->que = $que;
     }
