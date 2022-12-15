@@ -3,7 +3,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use davical\model\Davical;
-use etiquetas\model\entity\GestorEtiqueta;
+use etiquetas\domain\repositories\EtiquetaRepository;
 use lugares\domain\repositories\LugarRepository;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
@@ -97,8 +97,8 @@ $oArrayDesplOficinas = new web\DesplegableArray($a_oficinas_actuales, $a_posible
 $oArrayDesplOficinas->setBlanco('t');
 $oArrayDesplOficinas->setAccionConjunto('fnjs_mas_oficinas()');
 
-$gesEtiquetas = new GestorEtiqueta();
-$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$etiquetaRepository = new EtiquetaRepository();
+$cEtiquetas = $etiquetaRepository->getMisEtiquetas();
 $a_etiquetas = [];
 $a_posibles_etiquetas = [];
 foreach ($cEtiquetas as $oEtiqueta) {

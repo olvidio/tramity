@@ -4,11 +4,10 @@ namespace core;
 class MyCrypt
 {
     /*
-     * Funcion para encriptar password
-     *
+     * Función para encriptar password
      *
      */
-    function encode($clear, $hashed = NULL)
+    public function encode($clear, $hashed = NULL): string
     {
         $salt_len = 100;
         if (empty($hashed)) {

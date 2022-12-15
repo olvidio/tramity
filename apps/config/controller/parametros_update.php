@@ -1,8 +1,11 @@
 <?php
 
-use config\model\entity\ConfigSchema;
 
 // INICIO Cabecera global de URL de controlador *********************************
+
+use config\domain\entity\ConfigSchema;
+use config\domain\repositories\ConfigSchemaPublicRepository;
+use config\domain\repositories\ConfigSchemaRepository;
 
 require_once("apps/core/global_header.inc");
 // Archivos requeridos por esta url **********************************************
@@ -15,12 +18,21 @@ require_once("apps/core/global_object.inc");
 $Q_parametro = (string)filter_input(INPUT_POST, 'parametro');
 $Q_valor = (string)filter_input(INPUT_POST, 'valor');
 
-$oConfigSchema = new ConfigSchema($Q_parametro);
+if ($esquema === 'admin') {
+    $ConfigSchemaRepository = new ConfigSchemaPublicRepository();
+} else {
+    $ConfigSchemaRepository = new ConfigSchemaRepository();
+}
+$oConfigSchema = $ConfigSchemaRepository->findById($Q_parametro);
+if ($oConfigSchema === null) {
+    $oConfigSchema = new ConfigSchema();
+    $oConfigSchema->setParametro($Q_parametro);
+}
 $oConfigSchema->setValor($Q_valor);
 
 $error_txt = '';
-if ($oConfigSchema->DBGuardar() === FALSE) {
-    $error_txt = $oConfigSchema->getErrorTxt();
+if ($ConfigSchemaRepository->Guardar($oConfigSchema) === FALSE) {
+    $error_txt = $ConfigSchemaRepository->getErrorTxt();
 }
 
 if (empty($error_txt)) {

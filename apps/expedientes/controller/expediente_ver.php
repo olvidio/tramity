@@ -4,7 +4,8 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use escritos\model\Escrito;
 use escritos\model\EscritoLista;
-use expedientes\model\Expediente;
+use expedientes\domain\entity\Expediente;
+use expedientes\domain\repositories\ExpedienteRepository;
 use tramites\domain\entity\Firma;
 use tramites\domain\repositories\FirmaRepository;
 use tramites\domain\repositories\TramiteRepository;
@@ -42,8 +43,9 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
     $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
 }
 
-$oExpediente = new Expediente($Q_id_expediente);
-if ($oExpediente->DBCargar() === FALSE) {
+$ExpedienteRepository = new ExpedienteRepository();
+$oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+if ($oExpediente === null) {
     $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
     exit ($err_cargar);
 }

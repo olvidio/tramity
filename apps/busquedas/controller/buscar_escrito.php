@@ -3,12 +3,14 @@
 // INICIO Cabecera global de URL de controlador *********************************
 use core\ConfigGlobal;
 use core\ViewTwig;
+use etiquetas\domain\repositories\EtiquetaRepository;
 use etiquetas\model\entity\GestorEtiqueta;
 use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\OficinaRepository;
 use web\DateTimeLocal;
 use web\Desplegable;
+use web\DesplegableArray;
 use function core\is_true;
 
 require_once("apps/core/global_header.inc");
@@ -184,8 +186,8 @@ $oDesplAntiguedad->setOpciones($a_antiguedad);
 $oDesplAntiguedad->setOpcion_sel($Q_antiguedad);
 
 // Opción 8: etiquetas
-$gesEtiquetas = new GestorEtiqueta();
-$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$EtiquetaRepository = new EtiquetaRepository();
+$cEtiquetas = $EtiquetaRepository->getMisEtiquetas();
 $a_posibles_etiquetas = [];
 foreach ($cEtiquetas as $oEtiqueta) {
     $id_etiqueta = $oEtiqueta->getId_etiqueta();
@@ -193,7 +195,7 @@ foreach ($cEtiquetas as $oEtiqueta) {
     $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
 }
 
-$oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas_filtered, $a_posibles_etiquetas, 'etiquetas');
+$oArrayDesplEtiquetas = new DesplegableArray($a_etiquetas_filtered, $a_posibles_etiquetas, 'etiquetas');
 $oArrayDesplEtiquetas->setBlanco('t');
 $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 

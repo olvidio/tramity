@@ -149,6 +149,10 @@ switch ($Q_opcion) {
         $Q_f_min = (string)filter_input(INPUT_POST, 'f_min');
         $Q_oficina = (integer)filter_input(INPUT_POST, 'oficina');
 
+        /* convertir las fechas a DateTimeLocal */
+        $oF_max = DateTimeLocal::createFromLocal($Q_f_max);
+        $oF_min = DateTimeLocal::createFromLocal($Q_f_min);
+
         $a_condicion['asunto'] = $Q_asunto;
         $a_condicion['f_max'] = $Q_f_max;
         $a_condicion['f_min'] = $Q_f_min;
@@ -157,8 +161,8 @@ switch ($Q_opcion) {
 
         $oBuscar = new Buscar();
         $oBuscar->setAsunto($Q_asunto);
-        $oBuscar->setF_max($Q_f_max);
-        $oBuscar->setF_min($Q_f_min);
+        $oBuscar->setF_max($oF_max);
+        $oBuscar->setF_min($oF_min);
         $oBuscar->setOficina($Q_oficina);
 
         $aCollection = $oBuscar->getCollection($Q_opcion, $Q_mas);
@@ -180,6 +184,10 @@ switch ($Q_opcion) {
         $Q_f_min = (string)filter_input(INPUT_POST, 'f_min');
         $Q_oficina = (integer)filter_input(INPUT_POST, 'oficina');
 
+        /* convertir las fechas a DateTimeLocal */
+        $oF_max = DateTimeLocal::createFromLocal($Q_f_max);
+        $oF_min = DateTimeLocal::createFromLocal($Q_f_min);
+
         $a_condicion['dest_id_lugar_2'] = $Q_dest_id_lugar;
         $a_condicion['f_max'] = $Q_f_max;
         $a_condicion['f_min'] = $Q_f_min;
@@ -187,18 +195,18 @@ switch ($Q_opcion) {
         $str_condicion = http_build_query($a_condicion);
 
         // para el caso de la dl, son todas las entradas
-        if ($Q_dest_id_lugar == $id_sigla_local) {
+        if ($Q_dest_id_lugar === $id_sigla_local) {
             $oBuscar = new Buscar();
             $oBuscar->setId_sigla($id_sigla_local);
             $oBuscar->setLocal_id_lugar($id_sigla_local);
-            $oBuscar->setF_max($Q_f_max);
-            $oBuscar->setF_min($Q_f_min);
+            $oBuscar->setF_max($oF_max);
+            $oBuscar->setF_min($oF_min);
             $oBuscar->setOficina($Q_oficina);
         } else {
             $oBuscar = new Buscar();
             $oBuscar->setDest_id_lugar($Q_dest_id_lugar);
-            $oBuscar->setF_max($Q_f_max);
-            $oBuscar->setF_min($Q_f_min);
+            $oBuscar->setF_max($oF_max);
+            $oBuscar->setF_min($oF_min);
             $oBuscar->setOficina($Q_oficina);
         }
 
@@ -221,6 +229,10 @@ switch ($Q_opcion) {
         $Q_f_min = (string)filter_input(INPUT_POST, 'f_min');
         $Q_oficina = (integer)filter_input(INPUT_POST, 'oficina');
 
+        /* convertir las fechas a DateTimeLocal */
+        $oF_max = DateTimeLocal::createFromLocal($Q_f_max);
+        $oF_min = DateTimeLocal::createFromLocal($Q_f_min);
+
         $a_condicion['origen_id_lugar'] = $Q_origen_id_lugar;
         $a_condicion['f_max'] = $Q_f_max;
         $a_condicion['f_min'] = $Q_f_min;
@@ -233,14 +245,14 @@ switch ($Q_opcion) {
             $oBuscar = new Buscar();
             $oBuscar->setLocal_id_lugar($id_sigla_local);
             $oBuscar->setOrigen_id_lugar($Q_origen_id_lugar);
-            $oBuscar->setF_max($Q_f_max);
-            $oBuscar->setF_min($Q_f_min);
+            $oBuscar->setF_max($oF_max);
+            $oBuscar->setF_min($oF_min);
             $oBuscar->setOficina($Q_oficina);
         } else {
             $oBuscar = new Buscar();
             $oBuscar->setOrigen_id_lugar($Q_origen_id_lugar);
-            $oBuscar->setF_max($Q_f_max);
-            $oBuscar->setF_min($Q_f_min);
+            $oBuscar->setF_max($oF_max);
+            $oBuscar->setF_min($oF_min);
             $oBuscar->setOficina($Q_oficina);
         }
 
@@ -263,6 +275,10 @@ switch ($Q_opcion) {
         $Q_f_min = (string)filter_input(INPUT_POST, 'f_min');
         $Q_oficina = (integer)filter_input(INPUT_POST, 'oficina');
 
+        /* convertir las fechas a DateTimeLocal */
+        $oF_max = DateTimeLocal::createFromLocal($Q_f_max);
+        $oF_min = DateTimeLocal::createFromLocal($Q_f_min);
+
         $a_condicion['lista_origen'] = $Q_lista_origen;
         $a_condicion['lista_lugar'] = $Q_lista_lugar;
         $a_condicion['f_max'] = $Q_f_max;
@@ -277,8 +293,8 @@ switch ($Q_opcion) {
                 // son todos los que tienen protocolo local
                 $oBuscar = new Buscar();
                 $oBuscar->setLocal_id_lugar($id_sigla_local);
-                $oBuscar->setF_max($Q_f_max);
-                $oBuscar->setF_min($Q_f_min);
+                $oBuscar->setF_max($oF_max);
+                $oBuscar->setF_min($oF_min);
                 $oBuscar->setOficina($Q_oficina);
 
                 $aCollection = $oBuscar->getCollection($opcion, $Q_mas);
@@ -301,8 +317,8 @@ switch ($Q_opcion) {
 
                 $oBuscar = new Buscar();
                 $oBuscar->setOrigen_id_lugar($Q_lista_lugar);
-                $oBuscar->setF_max($Q_f_max);
-                $oBuscar->setF_min($Q_f_min);
+                $oBuscar->setF_max($oF_max);
+                $oBuscar->setF_min($oF_min);
                 $oBuscar->setOficina($Q_oficina);
 
                 $aCollection = $oBuscar->getCollection($opcion, $Q_mas);
@@ -324,8 +340,8 @@ switch ($Q_opcion) {
                 // son todos los que tienen protocolo local
                 $oBuscar = new Buscar();
                 $oBuscar->setOrigen_id_lugar($id_cr);
-                $oBuscar->setF_max($Q_f_max);
-                $oBuscar->setF_min($Q_f_min);
+                $oBuscar->setF_max($oF_max);
+                $oBuscar->setF_min($oF_min);
                 $oBuscar->setOficina($Q_oficina);
 
                 $aCollection = $oBuscar->getCollection($opcion, $Q_mas);
@@ -348,8 +364,8 @@ switch ($Q_opcion) {
                 $oBuscar = new Buscar();
                 $oBuscar->setByPass(TRUE);
                 $oBuscar->setOrigen_id_lugar($id_cr);
-                $oBuscar->setF_max($Q_f_max);
-                $oBuscar->setF_min($Q_f_min);
+                $oBuscar->setF_max($oF_max);
+                $oBuscar->setF_min($oF_min);
                 $oBuscar->setOficina($Q_oficina);
 
                 $aCollection = $oBuscar->getCollection($opcion, $Q_mas);
@@ -377,6 +393,10 @@ switch ($Q_opcion) {
         $Q_f_min = (string)filter_input(INPUT_POST, 'f_min');
         $Q_oficina = (integer)filter_input(INPUT_POST, 'oficina');
 
+        /* convertir las fechas a DateTimeLocal */
+        $oF_max = DateTimeLocal::createFromLocal($Q_f_max);
+        $oF_min = DateTimeLocal::createFromLocal($Q_f_min);
+
         $a_condicion['asunto'] = $Q_asunto;
         $a_condicion['f_max'] = $Q_f_max;
         $a_condicion['f_min'] = $Q_f_min;
@@ -386,8 +406,8 @@ switch ($Q_opcion) {
         $oBuscar = new Buscar();
         $oBuscar->setAccion(Escrito::ACCION_PLANTILLA);
         $oBuscar->setAsunto($Q_asunto);
-        $oBuscar->setF_max($Q_f_max);
-        $oBuscar->setF_min($Q_f_min);
+        $oBuscar->setF_max($oF_max);
+        $oBuscar->setF_min($oF_min);
         $oBuscar->setOficina($Q_oficina);
 
         $aCollection = $oBuscar->getCollection($Q_opcion, $Q_mas);
@@ -417,8 +437,8 @@ switch ($Q_opcion) {
         // son todos los que tienen protocolo local
         $oBuscar = new Buscar();
         $oBuscar->setOrigen_id_lugar($id_cr);
-        $oBuscar->setF_max($oHoy->getIso(), FALSE);
-        $oBuscar->setF_min($oIni->getIso(), FALSE);
+        $oBuscar->setF_max($oHoy);
+        $oBuscar->setF_min($oIni);
 
         $aCollection = $oBuscar->getCollection(5);
         foreach ($aCollection as $key => $cCollection) {

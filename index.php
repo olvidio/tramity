@@ -6,7 +6,7 @@ die();
 */
 
 // INICIO Cabecera global de URL de controlador *********************************
-use config\model\entity\ConfigSchema;
+use config\domain\entity\ConfigSchema;
 use core\ConfigGlobal;
 use core\ServerConf;
 use core\ViewTwig;

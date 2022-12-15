@@ -2,16 +2,18 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use documentos\model\Documento;
-use documentos\model\entity\GestorEtiquetaDocumento;
-use documentos\model\GestorDocumento;
-use escritos\model\entity\EscritoAdjunto;
-use escritos\model\Escrito;
+use documentos\domain\entity\Documento;
+use documentos\domain\repositories\DocumentoRepository;
+use documentos\domain\repositories\EtiquetaDocumentoRepository;
+use escritos\domain\entity\EscritoAdjunto;
+use escritos\domain\repositories\EscritoAdjuntoRepository;
+use escritos\domain\repositories\EscritoRepository;
 use etherpad\model\Etherpad;
 use etherpad\model\GestorEtherpad;
-use etiquetas\model\entity\GestorEtiqueta;
+use etiquetas\domain\repositories\EtiquetaRepository;
 use usuarios\domain\repositories\CargoRepository;
 use web\DateTimeLocal;
+use web\DesplegableArray;
 use web\Lista;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -36,7 +38,8 @@ switch ($Q_que) {
         $Q_id_doc = (integer)filter_input(INPUT_POST, 'id_doc');
         $Q_force = (string)filter_input(INPUT_POST, 'force');
 
-        $oDocumento = new Documento($Q_id_doc);
+        $DocumentoRepository = new DocumentoRepository();
+        $oDocumento = $DocumentoRepository->findById($Q_id_doc);
         if ($Q_force === 'false') {
             // Avisar si está como antecedente en algún sitio:
             $error_txt .= $oDocumento->comprobarEliminar($Q_id_doc);
@@ -52,19 +55,19 @@ switch ($Q_que) {
             } elseif ($Q_que === 'insertar') {
                 $error_txt .= $gesEtherpad->moveDocToEscrito($Q_id_doc, $Q_id_escrito, 'true');
                 // borrar el documento:
-                $oDocumento = new Documento($Q_id_doc);
-                if ($oDocumento->DBEliminar() === FALSE) {
-                    $error_txt .= ($oDocumento->getErrorTxt());
+                if ($DocumentoRepository->Eliminar($oDocumento) === FALSE) {
+                    $error_txt .= ($DocumentoRepository->getErrorTxt());
                 }
             }
-            $oEscrito = new Escrito($Q_id_escrito);
-            if ($oEscrito->DBCargar() === FALSE) {
+            $EscritoRepository = new EscritoRepository();
+            $oEscrito = $EscritoRepository->findById($Q_id_escrito);
+            if ($oEscrito === null) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
             $oEscrito->setTipo_doc(Documento::DOC_ETHERPAD);
-            if ($oEscrito->DBGuardar() === FALSE) {
-                $error_txt .= ($oEscrito->getErrorTxt());
+            if ($EscritoRepository->Guardar($oEscrito) === FALSE) {
+                $error_txt .= ($EscritoRepository->getErrorTxt());
             }
         }
 
@@ -80,14 +83,14 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     case 'quitar':
         $Q_id_adjunto = (integer)filter_input(INPUT_POST, 'id_adjunto');
 
-        $oEscritoAdjunto = new EscritoAdjunto($Q_id_adjunto);
+        $EscritoAdjuntoRepository = new EscritoAdjuntoRepository();
+        $oEscritoAdjunto = $EscritoAdjuntoRepository->findById($Q_id_adjunto);
         // borrar de adjuntos
-        if ($oEscritoAdjunto->DBEliminar() === FALSE) {
-            $error_txt .= $oEscritoAdjunto->getErrorTxt();
+        if ($EscritoAdjuntoRepository->Eliminar($oEscritoAdjunto) === FALSE) {
+            $error_txt .= $EscritoAdjuntoRepository->getErrorTxt();
         }
         // eliminar el pad:
         $oEtherpad = new Etherpad();
@@ -104,7 +107,8 @@ switch ($Q_que) {
             echo $oEtherpad->mostrar_error($rta);
         }
 
-        $oEscrito = new Escrito($Q_id_escrito);
+        $EscritoRepository = new EscritoRepository();
+        $oEscrito = $EscritoRepository->findById($Q_id_escrito);
         echo $oEscrito->getHtmlAdjuntos();
         break;
     case 'adjuntar_copia':
@@ -112,7 +116,8 @@ switch ($Q_que) {
         $Q_id_doc = (integer)filter_input(INPUT_POST, 'id_doc');
         $Q_force = (string)filter_input(INPUT_POST, 'force');
         // recuperar el documento
-        $oDocumento = new Documento($Q_id_doc);
+        $DocumentoRepository = new DocumentoRepository();
+        $oDocumento = $DocumentoRepository->findById($Q_id_doc);
         $tipo_doc = $oDocumento->getTipo_doc();
 
         if ($Q_force === 'false') {
@@ -128,13 +133,16 @@ switch ($Q_que) {
                     $fileName = $oDocumento->getNom();
                     // gravar en adjuntos escrito
                     // new
+                    $EscritoAdjuntoRepository = new EscritoAdjuntoRepository();
+                    $id_item = $EscritoAdjuntoRepository->getNewId_item();
                     $oEscritoAdjunto = new EscritoAdjunto();
+                    $oEscritoAdjunto->setId_item($id_item);
                     $oEscritoAdjunto->setId_escrito($Q_id_escrito);
                     $oEscritoAdjunto->setNom($fileName);
                     $oEscritoAdjunto->setTipo_doc(Documento::DOC_ETHERPAD);
 
-                    if ($oEscritoAdjunto->DBGuardar() === FALSE) {
-                        $error_txt .= $oEscritoAdjunto->getErrorTxt();
+                    if ($EscritoAdjuntoRepository->Guardar($oEscritoAdjunto) === FALSE) {
+                        $error_txt .= $EscritoAdjuntoRepository->getErrorTxt();
                     }
                     $id_item = $oEscritoAdjunto->getId_item();
 
@@ -144,7 +152,7 @@ switch ($Q_que) {
                     } elseif ($Q_que === 'adjuntar') {
                         $error_txt .= $gesEtherpad->moveDocToAdjunto($Q_id_doc, $id_item, 'true');
                         // borra de la lista de documentos:
-                        $oDocumento->DBEliminar();
+                        $DocumentoRepository->Eliminar($oDocumento);
                     }
                     break;
                 case Documento::DOC_UPLOAD:
@@ -153,21 +161,26 @@ switch ($Q_que) {
 
                     // gravar en adjuntos escrito
                     // new
+                    $EscritoAdjuntoRepository = new EscritoAdjuntoRepository();
+                    $id_item = $EscritoAdjuntoRepository->getNewId_item();
                     $oEscritoAdjunto = new EscritoAdjunto();
+                    $oEscritoAdjunto->setId_item($id_item);
                     $oEscritoAdjunto->setId_escrito($Q_id_escrito);
                     $oEscritoAdjunto->setNom($nombre_fichero);
                     $oEscritoAdjunto->setAdjunto($contenido_doc);
                     $oEscritoAdjunto->setTipo_doc(Documento::DOC_UPLOAD);
 
-                    if ($oEscritoAdjunto->DBGuardar() === FALSE) {
-                        $error_txt .= $oEscritoAdjunto->getErrorTxt();
+                    if ($EscritoAdjuntoRepository->Guardar($oEscritoAdjunto) === FALSE) {
+                        $error_txt .= $EscritoAdjuntoRepository->getErrorTxt();
                     }
-                    // NO sirve el metodo 'refresh' del fileinput parar cambiar la lista de docuemntos.
+                    // NO sirve el método 'refresh' del fileinput parar cambiar la lista de documentos.
                     // habrá que refrescar toda la página
 
                     // borrar de documentos
-                    if ($Q_que === 'adjuntar' && $oDocumento->DBEliminar() === FALSE) {
-                        $error_txt .= $oDocumento->getErrorTxt();
+                    if ($Q_que === 'adjuntar') {
+                        if ($DocumentoRepository->Eliminar($oDocumento) === FALSE) {
+                            $error_txt .= $DocumentoRepository->getErrorTxt();
+                        }
                     }
                     break;
                 default:
@@ -188,8 +201,8 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
-    case 'buscar_documento':
+    case
+    'buscar_documento':
     case 'buscar_4':
     case 'buscar_5':
         //n = 4 -> Documento Upload y Etherpad (adjuntar)
@@ -217,9 +230,9 @@ switch ($Q_que) {
             $aOperador['creador'] = 'IN';
         }
 
-        $gesEtiquetas = new GestorEtiqueta();
-        $a_posibles_etiquetas = $gesEtiquetas->getArrayMisEtiquetas();
-        $oArrayDesplEtiquetas = new web\DesplegableArray($a_etiquetas_filtered, $a_posibles_etiquetas, 'etiquetas');
+        $EtiquetaRepository = new EtiquetaRepository();
+        $a_posibles_etiquetas = $EtiquetaRepository->getArrayMisEtiquetas();
+        $oArrayDesplEtiquetas = new DesplegableArray($a_etiquetas_filtered, $a_posibles_etiquetas, 'etiquetas');
         $oArrayDesplEtiquetas->setBlanco('t');
         $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 
@@ -228,8 +241,8 @@ switch ($Q_que) {
         $chk_and = (($Q_andOr === 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
         if (!empty($Q_a_etiquetas)) {
-            $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
-            $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($Q_a_etiquetas, $Q_andOr);
+            $EtiquetaDocumentoRepository = new EtiquetaDocumentoRepository();
+            $cDocumentos = $EtiquetaDocumentoRepository->getArrayDocumentos($Q_a_etiquetas, $Q_andOr);
             if (!empty($cDocumentos)) {
                 $aWhere['id_doc'] = implode(',', $cDocumentos);
                 $aOperador['id_doc'] = 'IN';
@@ -283,8 +296,8 @@ switch ($Q_que) {
         }
         $aWhere['_ordre'] = 'f_upload DESC';
 
-        $gesDocumento = new GestorDocumento();
-        $cDocumentos = $gesDocumento->getDocumentos($aWhere, $aOperador);
+        $DocumentoRepository = new DocumentoRepository();
+        $cDocumentos = $DocumentoRepository->getDocumentos($aWhere, $aOperador);
 
         $a_cabeceras = [['width' => 70, 'name' => _("fecha")],
             ['width' => 500, 'name' => _("nombre")],

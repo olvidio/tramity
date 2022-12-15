@@ -4,6 +4,7 @@ namespace devel\controller;
 
 use core\ConfigGlobal;
 use core\ServerConf;
+use RuntimeException;
 use web\DateTimeLocal;
 use function core\is_true;
 
@@ -172,12 +173,14 @@ $bytea_bind = '';
 $bytea_dades = '';
 $array_dades = '';
 $fechas_dades = '';
+$json_dades = '';
 $gets = "";
 $altres_gets = "";
 $altres_gets_set = "";
 $query_if = "";
 $guardar_array = "";
 $guardar_fechas = "";
+$guardar_json = "";
 $err_bool = "";
 $a_auto = array();
 // una primera vuelta para cargar excepciones...
@@ -325,10 +328,12 @@ foreach ($oDbl->query($sql) as $row) {
             break;
         case 'json':
         case 'jsonb':
-            $tipo_db = 'string';
+            $tipo_db = 'array|stdClass';
             $tip = '';
             $tip_val = '';
-            break;
+            $json_dades .= "\n\t\t\t";
+            $json_dades .= '$aDatos[\'' . $nomcamp . '\'] = (new ConverterJson($aDatos[\'' . $nomcamp . '\']))->fromPg();';
+        break;
         case 'bytea':
             $tipo_db = 'string';
             $tip = 's';
@@ -354,7 +359,11 @@ foreach ($oDbl->query($sql) as $row) {
             $bytea_bind .= "\n\t\t";
             $bytea_bind .= '$aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);';
             $bytea_bind .= "\n\t\t";
+            $bytea_bind .= 'if (!empty($aDatos)) {';
+            $bytea_bind .= "\n\t\t\t";
             $bytea_bind .= '$aDatos[\'' . $nomcamp . '\'] = $' . $tip . $nomcamp . ';';
+            $bytea_bind .= "\n\t\t";
+            $bytea_bind .= '}';
             break;
     }
     if (empty($null)) {
@@ -372,7 +381,7 @@ foreach ($oDbl->query($sql) as $row) {
 	 *
 	 * @var ' . $tipo_db_txt . '
 	 */
-	 private ' . $tip_txt . ' $' . $tip . $nomcamp . $val_default . ';';
+	 private ' . $tipo_db_txt . ' $' . $tip . $nomcamp . $val_default . ';';
 
     switch ($tipo) {
         case 'bool':
@@ -381,9 +390,6 @@ foreach ($oDbl->query($sql) as $row) {
 	/**
 	 *
 	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp;
-            if (!empty($a_use_txt['JsonException'])) {
-                $gets .= "\n\t" . ' * @throws JsonException';
-            }
             $gets .= "\n\t" . ' */
 	public function is' . $NomCamp . '(): ' . $tip_txt . '
 	{
@@ -398,9 +404,6 @@ foreach ($oDbl->query($sql) as $row) {
 	/**
 	 *
 	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp;
-            if (!empty($a_use_txt['JsonException'])) {
-                $gets .= "\n\t" . ' * @throws JsonException';
-            }
             $gets .= "\n\t" . ' */
 	public function get' . $NomCamp . '(): ' . $tipo_db_txt . '
 	{
@@ -413,16 +416,11 @@ foreach ($oDbl->query($sql) as $row) {
             $gets .= '
 	/**
 	 *
-	 * @param bool $bArray si hay que devolver un array en vez de un objeto.
 	 * @return array|stdClass|null $' . $tip . $nomcamp . '
-	 * @throws JsonException
 	 */
-	public function get' . $NomCamp . '(bool $bArray=FALSE): array|stdClass|null
+	public function get' . $NomCamp . '(): array|stdClass|null
 	{
-		if (!isset($this->' . $tip . $nomcamp . ') && !$this->bLoaded) {
-			$this->DBCargar();
-		}
-		return (new ConverterJson($this->' . $tip . $nomcamp . ', $bArray))->fromPg();
+		return $this->' . $tip . $nomcamp . ';
 	}';
             break;
         case 'date':
@@ -432,11 +430,11 @@ foreach ($oDbl->query($sql) as $row) {
             $gets .= '
 	/**
 	 *
-	 * @return DateTimeLocal|null' . ' $' . $tip . $nomcamp;
+	 * @return DateTimeLocal|NullDateTimeLocal|null' . ' $' . $tip . $nomcamp;
             $gets .= "\n\t" . ' */
-	public function get' . $NomCamp . '(): DateTimeLocal|null
+	public function get' . $NomCamp . '(): DateTimeLocal|NullDateTimeLocal|null
 	{
-        return $this->' . $tip . $nomcamp . ';
+        return $this->' . $tip . $nomcamp . '?? new NullDateTimeLocal;
 	}';
             break;
         default:
@@ -445,9 +443,6 @@ foreach ($oDbl->query($sql) as $row) {
 	/**
 	 *
 	 * @return ' . $tipo_db_txt . ' $' . $tip . $nomcamp;
-            if (!empty($a_use_txt['JsonException'])) {
-                $gets .= "\n\t" . ' * @throws JsonException';
-            }
             $gets .= "\n\t" . ' */
 	public function get' . $NomCamp . '(): ' . $tip_txt . '
 	{
@@ -487,14 +482,11 @@ foreach ($oDbl->query($sql) as $row) {
                 $gets .= '
 	/**
 	 * 
-	 * @param string|array|null $' . $tip . $nomcamp . '
-     * @param bool $db=FALSE optional. Para determinar la variable que se le pasa es ya un objeto json,
-	 *  o es una variable de php hay que convertirlo. En la base de datos ya es json.
-	 * @throws JsonException
+	 * @param stdClass|array|null $' . $tip . $nomcamp . '
 	 */
-	public function set' . $NomCamp . '(string|array|null $' . $tip . $nomcamp . ', bool $db=FALSE): void
+	public function set' . $NomCamp . '(stdClass|array|null $' . $tip . $nomcamp . ' = null): void
 	{
-        $this->' . $tip . $nomcamp . ' = (new ConverterJson($' . $tip . $nomcamp . ', FALSE))->toPg($db);
+        $this->' . $tip . $nomcamp . ' = $' . $tip . $nomcamp . ';
 	}';
                 break;
             case 'date':
@@ -581,13 +573,17 @@ foreach ($oDbl->query($sql) as $row) {
                 $err_bool .= "\n\t\t" . 'if ( is_true($aDatos[\'' . $nomcamp . '\']) ) { $aDatos[\'' . $nomcamp . '\']=\'true\'; } else { $aDatos[\'' . $nomcamp . '\']=\'false\'; }';
             }
             if ($tipo_db === 'array') {
-                $guardar_array = "\n\t\t" . '$aDatos[\'' . $nomcamp . '\'] = array_php2pg($' . $Q_clase . '->' . $metodo_get . ');';
+                $guardar_array .= "\n\t\t" . '$aDatos[\'' . $nomcamp . '\'] = array_php2pg($' . $Q_clase . '->' . $metodo_get . ');';
             }
             if ($tipo_db === 'DateTimeLocal') {
-                $guardar_fechas = "\n\t\t" . '$aDatos[\'' . $nomcamp . '\'] = (new ConverterDate(\'' . $tipo . '\', $' . $Q_clase . '->' . $metodo_get . '))->toPg();';
+                $guardar_fechas .= "\n\t\t" . '$aDatos[\'' . $nomcamp . '\'] = (new ConverterDate(\'' . $tipo . '\', $' . $Q_clase . '->' . $metodo_get . '))->toPg();';
             }
 
-            if ($tipo_db !== 'array' && $tipo_db !== 'DateTimeLocal') {
+            if ($tipo === 'jsonb' || $tipo === 'json') {
+                $guardar_json .= "\n\t\t" . '$aDatos[\'' . $nomcamp . '\'] = (new ConverterJson($' . $Q_clase . '->' . $metodo_get . '))->toPg();';
+            }
+
+            if ($tipo_db !== 'array' && $tipo_db !== 'DateTimeLocal' && $tipo !== 'jsonb' && $tipo !== 'json') {
                 $guardar .= "\n\t\t" . '$aDatos[\'' . $nomcamp . '\'] = $' . $Q_clase . '->' . $metodo_get . ';';
             }
 
@@ -621,6 +617,12 @@ if (!empty($a_use_txt['is_true'])) {
 if (!empty($a_use_txt['DateTimeLocal'])) {
     $txt_entidad .= "\n\t" . 'use web\DateTimeLocal;';
 }
+if (!empty($a_use_txt['NullDateTimeLocal'])) {
+    $txt_entidad .= "\n\t" . 'use web\NullDateTimeLocal;';
+}
+if (!empty($a_use_txt['stdClass'])) {
+    $txt_entidad .= "\n\t" . 'use stdClass;';
+}
 
 $txt_entidad .= "
 /**
@@ -645,10 +647,7 @@ $txt_entidad .= '/* MÉTODOS PÚBLICOS -----------------------------------------
 	 * Establece el valor de todos los atributos
 	 *
 	 * @param array $aDatos';
-if (!empty($a_use_txt['JsonException'])) {
-    $txt_entidad .= "\n\t" . ' * @throws JsonException';
-}
-$txt_entidad .= "\n\t" . ' * return ' . $Q_clase;
+$txt_entidad .= "\n\t" . ' * @return ' . $Q_clase;
 $txt_entidad .= "\n\t" . ' */';
 $txt_entidad .= "\n\t" . 'public function setAllAttributes(array $aDatos): ' . $Q_clase . "\n\t" . '{';
 
@@ -658,13 +657,13 @@ $txt_entidad .= "\n\t" . '}';
 $txt_entidad .= $gets;
 $txt_entidad .= "\n" . '}';
 
-// ESCRIURE LA CLASSSE ---------  ENTIDAD
+// ESCRIBIR LA CLASE ---------  ENTIDAD
 
 // crear el directorio domain/entity si no existe
 $dir_entity = ServerConf::DIR . '/apps/' . $grupo . '/domain/entity';
 if (!is_dir($dir_entity)) {
     if (!mkdir($dir_entity, 0774, TRUE) && !is_dir($dir_entity)) {
-        throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir_entity));
+        throw new RuntimeException(sprintf('Directory "%s" was not created', $dir_entity));
     }
 }
 $filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/domain/entity/' . $Q_clase . '.php';
@@ -730,6 +729,10 @@ if (count($aClaus2) === 1) {
     }
 }
 
+$use_txt = '';
+foreach ($a_use_txt as $use) {
+    $use_txt .= "\n" . $use . ";";
+}
 $txt_repository = "<?php
 
 namespace $grupo\\domain\\repositories;
@@ -738,7 +741,9 @@ use PDO;
 use $grupo\\domain\\entity\\$Q_clase;
 use $grupo\\infrastructure\\$pg_clase;
 use web\Desplegable;
-
+";
+$txt_repository .= "\n" . $use_txt;
+$txt_repository.= "
 /**
  *
  * Clase para gestionar la lista de objetos tipo $Q_clase
@@ -770,7 +775,9 @@ namespace $grupo\\domain\\repositories;
 use PDO;
 use $grupo\\domain\\entity\\$Q_clase;
 use web\\Desplegable;
-
+";
+$txt_interface .= "\n" . $use_txt;
+$txt_interface .= "
 /**
  * Interfaz de la clase $Q_clase y su Repositorio
  *
@@ -838,7 +845,11 @@ $txt_repository .= '
 	 *
 	 * @param array $aWhere asociativo con los valores para cada campo de la BD.
 	 * @param array $aOperators asociativo con los operadores que hay que aplicar a cada campo
-	 * @return array|FALSE Una colección de objetos de tipo ' . $Q_clase . '
+	 * @return array|FALSE Una colección de objetos de tipo ' . $Q_clase ;
+if (!empty($a_use_txt['JsonException'])) {
+    $txt_repository .= "\n\t" . ' * @throws JsonException';
+}
+$txt_repository .= "\n\t" . '
 	 */
 	public function get' . $clase_plural . '(array $aWhere=[], array $aOperators=[]): array|FALSE
 	{
@@ -855,7 +866,11 @@ $txt_interface .= '
 	 *
 	 * @param array $aWhere asociativo con los valores para cada campo de la BD.
 	 * @param array $aOperators asociativo con los operadores que hay que aplicar a cada campo
-	 * @return array|FALSE Una colección de objetos de tipo ' . $Q_clase . '
+	 * @return array|FALSE Una colección de objetos de tipo ' . $Q_clase ;
+if (!empty($a_use_txt['JsonException'])) {
+    $txt_interface .= "\n\t" . ' * @throws JsonException';
+}
+$txt_interface .= "\n\t" . '
 	 */
 	public function get' . $clase_plural . '(array $aWhere=[], array $aOperators=[]): array|FALSE;
 	';
@@ -870,7 +885,11 @@ $txt_pgRepositorio .= '
 	 *
 	 * @param array $aWhere asociativo con los valores para cada campo de la BD.
 	 * @param array $aOperators asociativo con los operadores que hay que aplicar a cada campo
-	 * @return array|FALSE Una colección de objetos de tipo ' . $Q_clase . '
+	 * @return array|FALSE Una colección de objetos de tipo ' . $Q_clase;
+    if (!empty($a_use_txt['JsonException'])) {
+    $txt_pgRepositorio .= "\n\t" . ' * @throws JsonException';
+    }
+    $txt_pgRepositorio .= "\n\t" . '
 	 */
 	public function get' . $clase_plural . '(array $aWhere=[], array $aOperators=[]): array|FALSE
 	{
@@ -922,10 +941,13 @@ if (!empty($array_dades)) {
     $txt_pgRepositorio .= "\n\t\t\t// para los array del postgres";
     $txt_pgRepositorio .= $array_dades;
 }
-
 if (!empty($fechas_dades)) {
     $txt_pgRepositorio .= "\n\t\t\t// para las fechas del postgres (texto iso)";
     $txt_pgRepositorio .= $fechas_dades;
+}
+if (!empty($json_dades)) {
+    $txt_pgRepositorio .= "\n\t\t\t// para los json";
+    $txt_pgRepositorio .= $json_dades;
 }
 
 $txt_pgRepositorio .= '
@@ -964,7 +986,7 @@ $txt_pgRepositorio .= 'public function Eliminar(' . $Q_clase . ' $' . $Q_clase .
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         if (($oDbl->exec("DELETE FROM $nom_tabla WHERE ' . $where . '")) === FALSE) {
-            $sClaveError = \'' . $clase . '.eliminar\';
+            $sClaveError = \'' . $pg_clase . '.eliminar\';
 			$_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -1030,7 +1052,12 @@ $txt_interface .= 'public function getNomTabla(): string;';
 $txt_pgRepositorio .= "\n\t";
 $txt_pgRepositorio .= '
 	/**
-	 * Si no existe el registro, hace un insert, si existe, se hace el update.
+	 * Si no existe el registro, hace un insert, si existe, se hace el update.';
+if (!empty($a_use_txt['JsonException'])) {
+    $txt_pgRepositorio .= "\n\t" . ' * @throws JsonException';
+}
+$txt_pgRepositorio .= "\n\t";
+$txt_pgRepositorio .= '
 	 */
 	public function Guardar(' . $Q_clase . ' $' . $Q_clase . '): bool
     {
@@ -1050,6 +1077,10 @@ if ($guardar_fechas) {
     $txt_pgRepositorio .= "\n\t\t// para las fechas";
     $txt_pgRepositorio .= $guardar_fechas;
 }
+if ($guardar_json) {
+    $txt_pgRepositorio .= "\n\t\t// para los json";
+    $txt_pgRepositorio .= $guardar_json;
+}
 $txt_pgRepositorio .= '
 		array_walk($aDatos, \'core\\poner_null\');';
 if ($err_bool) {
@@ -1063,7 +1094,7 @@ $txt_pgRepositorio .= "\n\n\t\t" . 'if ($bInsert === FALSE) {
 $txt_pgRepositorio .= $update . '";';
 $txt_pgRepositorio .= '
 			if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE ' . $where . '")) === FALSE) {
-				$sClaveError = \'' . $clase . '.update.prepare\';
+				$sClaveError = \'' . $pg_clase . '.update.prepare\';
 				$_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
 				return FALSE;
 			}
@@ -1073,7 +1104,7 @@ $txt_pgRepositorio .= '
             } catch ( PDOException $e) {
                 $err_txt=$e->errorInfo[2];
                 $this->setErrorTxt($err_txt);
-                $sClaveError = \'' . $clase . '.update.execute\';
+                $sClaveError = \'' . $pg_clase . '.update.execute\';
                 $_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
             }
@@ -1088,7 +1119,7 @@ $txt_pgRepositorio .= "\t\t\t" . '$valores="(';
 $txt_pgRepositorio .= $valores . ')";';
 $txt_pgRepositorio .= '		
 			if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
-				$sClaveError = \'' . $clase . '.insertar.prepare\';
+				$sClaveError = \'' . $pg_clase . '.insertar.prepare\';
 				$_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
 				return FALSE;
 			}
@@ -1097,7 +1128,7 @@ $txt_pgRepositorio .= '
             } catch ( PDOException $e) {
                 $err_txt=$e->errorInfo[2];
                 $this->setErrorTxt($err_txt);
-                $sClaveError = \'' . $clase . '.insertar.execute\';
+                $sClaveError = \'' . $pg_clase . '.insertar.execute\';
                 $_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDblSt, $sClaveError, __LINE__, __FILE__);
                 return FALSE;
 			}';
@@ -1112,7 +1143,7 @@ $txt_pgRepositorio .= '
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE ' . $where . '")) === FALSE) {
-			$sClaveError = \'' . $clase . '.isNew\';
+			$sClaveError = \'' . $pg_clase . '.isNew\';
 			$_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -1134,7 +1165,11 @@ $txt_repository .= '
      * Devuelve false si no existe la fila en la base de datos
      * 
      * @param ' . $clau_tip_txt . ' $' . $clau . '
-     * @return array|bool
+     * @return array|bool';
+if (!empty($a_use_txt['JsonException'])) {
+    $txt_repository .= "\n\t" . ' * @throws JsonException';
+}
+$txt_repository .= "\n\t" . '
      */
     public function datosById(' . $clau_tip_txt . ' $' . $clau . '): array|bool
     {
@@ -1148,7 +1183,11 @@ $txt_interface .= '
      * Devuelve false si no existe la fila en la base de datos
      * 
      * @param ' . $clau_tip_txt . ' $' . $clau . '
-     * @return array|bool
+     * @return array|bool';
+if (!empty($a_use_txt['JsonException'])) {
+    $txt_interface .= "\n\t" . ' * @throws JsonException';
+}
+$txt_interface .= "\n\t" . '
      */
     public function datosById(' . $clau_tip_txt . ' $' . $clau . '): array|bool;';
 
@@ -1159,14 +1198,18 @@ $txt_pgRepositorio .= '
      * Devuelve false si no existe la fila en la base de datos
      * 
      * @param ' . $clau_tip_txt . ' $' . $clau . '
-     * @return array|bool
+     * @return array|bool';
+if (!empty($a_use_txt['JsonException'])) {
+    $txt_pgRepositorio .= "\n\t" . ' * @throws JsonException';
+}
+$txt_pgRepositorio .= "\n\t" . '
      */
     public function datosById(' . $clau_tip_txt . ' $' . $clau . '): array|bool
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         if (($oDblSt = $oDbl->query("SELECT * FROM $nom_tabla WHERE ' . $where . '")) === FALSE) {
-			$sClaveError = \'' . $clase . '.getDatosById\';
+			$sClaveError = \'' . $pg_clase . '.getDatosById\';
 			$_SESSION[\'oGestorErrores\']->addErrorAppLastError($oDbl, $sClaveError, __LINE__, __FILE__);
             return FALSE;
         }';
@@ -1192,6 +1235,13 @@ if (!empty($fechas_dades)) {
     $txt_pgRepositorio .= "\n\t\t\t}";
 }
 
+if (!empty($json_dades)) {
+    $txt_pgRepositorio .= "\n\t\t\t// para los json";
+    $txt_pgRepositorio .= "\n\t\t\t" . 'if ($aDatos !== FALSE) {';
+    $txt_pgRepositorio .= $json_dades;
+    $txt_pgRepositorio .= "\n\t\t\t}";
+}
+
 
 $txt_pgRepositorio .= '
         return $aDatos;
@@ -1201,7 +1251,11 @@ $txt_pgRepositorio .= '
 $txt_repository .= "\n\t";
 $txt_repository .= '
     /**
-     * Busca la clase con ' . $clau . ' en el repositorio.
+     * Busca la clase con ' . $clau . ' en el repositorio.';
+if (!empty($a_use_txt['JsonException'])) {
+    $txt_repository .= "\n\t" . ' * @throws JsonException';
+}
+$txt_repository .= "\n\t" . '
      */
     public function findById(' . $clau_tip_txt . ' $' . $clau . '): ?' . $Q_clase . '
     {
@@ -1211,14 +1265,22 @@ $txt_repository .= '
 $txt_interface .= "\n\t";
 $txt_interface .= '
     /**
-     * Busca la clase con ' . $clau . ' en el repositorio.
+     * Busca la clase con ' . $clau . ' en el repositorio.';
+if (!empty($a_use_txt['JsonException'])) {
+    $txt_interface .= "\n\t" . ' * @throws JsonException';
+}
+$txt_interface .= "\n\t" . '
      */
     public function findById(' . $clau_tip_txt . ' $' . $clau . '): ?' . $Q_clase . ';';
 
 $txt_pgRepositorio .= "\n\t";
 $txt_pgRepositorio .= '
     /**
-     * Busca la clase con ' . $clau . ' en la base de datos .
+     * Busca la clase con ' . $clau . ' en la base de datos .';
+if (!empty($a_use_txt['JsonException'])) {
+    $txt_pgRepositorio .= "\n\t" . ' * @throws JsonException';
+}
+$txt_pgRepositorio .= "\n\t" . '
      */
     public function findById(' . $clau_tip_txt . ' $' . $clau . '): ?' . $Q_clase . '
     {

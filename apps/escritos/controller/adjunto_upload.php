@@ -1,7 +1,8 @@
 <?php
 
-use documentos\model\Documento;
-use escritos\model\entity\EscritoAdjunto;
+use documentos\domain\entity\Documento;
+use escritos\domain\entity\EscritoAdjunto;
+use escritos\domain\repositories\EscritoAdjuntoRepository;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -37,6 +38,7 @@ function upload()
     }
 
     $total = count($_FILES[$input]['name']); // multiple files
+    $escritoAdjuntoRepository = new EscritoAdjuntoRepository();
     for ($i = 0; $i < $total; $i++) {
         $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
         $fileName = $_FILES[$input]['name'][$i]; // the file name
@@ -50,17 +52,18 @@ function upload()
             $fp = fopen($tmpFilePath, 'rb');
             $contenido_doc = fread($fp, filesize($tmpFilePath));
 
-            $oEscritoAdjunto = new EscritoAdjunto($Q_id_item);
-            if ($oEscritoAdjunto->DBCargar() === FALSE) {
-                $err_cargar = sprintf(_("OJO! no existe el escrito adjunto en %s, linea %s"), __FILE__, __LINE__);
-                exit ($err_cargar);
+            $oEscritoAdjunto = $escritoAdjuntoRepository->findById($Q_id_item);
+            if ($oEscritoAdjunto === null) {
+                $id_item = $escritoAdjuntoRepository->getNewId_item();
+                $oEscritoAdjunto = new EscritoAdjunto();
+                $oEscritoAdjunto->setId_item($id_item);
             }
             $oEscritoAdjunto->setId_escrito($Q_id_escrito);
             $oEscritoAdjunto->setNom($fileName);
             $oEscritoAdjunto->setTipo_doc(Documento::DOC_UPLOAD);
             $oEscritoAdjunto->setAdjunto($contenido_doc);
 
-            if ($oEscritoAdjunto->DBGuardar() !== FALSE) {
+            if ($escritoAdjuntoRepository->Guardar($oEscritoAdjunto) !== FALSE) {
                 $id_item = $oEscritoAdjunto->getId_item();
                 $preview[] = "'$fileName'";
                 $config[] = [

@@ -5,6 +5,7 @@ namespace core;
 use DateTimeInterface;
 use Exception;
 use web\DateTimeLocal;
+use web\NullDateTimeLocal;
 
 /**
  * @author dani
@@ -60,6 +61,9 @@ class PgTimestamp
     {
         $rta = null;
         if ($this->data !== null) {
+            if ($this->data instanceof NullDateTimeLocal) {
+                return '';
+            }
             switch ($type) {
                 case 'timestamp':
                 case 'timestamptz':

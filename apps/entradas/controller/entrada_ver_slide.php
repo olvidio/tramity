@@ -1,8 +1,8 @@
 <?php
 
 use core\ViewTwig;
-use entradas\model\Entrada;
-use entradas\model\GestorEntrada;
+use entradas\domain\entity\Entrada;
+use entradas\domain\entity\EntradaRepository;
 use etherpad\model\Etherpad;
 use web\DateTimeLocal;
 
@@ -37,8 +37,8 @@ if (!empty($Qid_entrada)) {
     $aWhere = ['estado' => Entrada::ESTADO_INGRESADO,
         '_ordre' => 'f_entrada, id_entrada',
     ];
-    $gesEntradas = new GestorEntrada();
-    $cEntradas = $gesEntradas->getEntradas($aWhere);
+    $EntradaRepository = new EntradaRepository();
+    $cEntradas = $EntradaRepository->getEntradas($aWhere);
     $a_lst_entradas = [];
     $i = 0;
     foreach ($cEntradas as $oEntrada) {
@@ -72,7 +72,8 @@ if (!empty($Qid_entrada)) {
     $a_cosas = ['id_entrada' => $id_next, 'slide_mode' => 'TRUE', 'filtro' => $Qfiltro];
     $pagina_next = web\Hash::link($pagina . '?' . http_build_query($a_cosas));
 
-    $oEntrada = new Entrada($Qid_entrada);
+    $EntradaRepository = new EntradaRepository();
+    $oEntrada = $EntradaRepository->findById($Qid_entrada);
 
     $cabeceraIzqd = $oEntrada->cabeceraIzquierda();
     $cabeceraDcha = $oEntrada->cabeceraDerecha();

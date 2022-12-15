@@ -1302,7 +1302,7 @@ msgstr ""
 #: entradas/model/entity/entradadb.class.php:1126
 #: escritos/model/entity/escritodb.class.php:1316
 #: expedientes/model/entity/expedientedb.class.php:1091
-msgid "f_contestar"
+msgid "oF_contestar"
 msgstr ""
 
 #: entradas/model/entity/entradadb.class.php:1138

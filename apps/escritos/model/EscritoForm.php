@@ -11,14 +11,20 @@ namespace escritos\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use DateInterval;
-use documentos\model\Documento;
-use entradas\model\Entrada;
-use expedientes\model\Expediente;
+use documentos\domain\entity\Documento;
+use entradas\domain\entity\EntradaRepository;
+use escritos\domain\entity\Escrito;
+use escritos\domain\repositories\EscritoRepository;
+use expedientes\domain\entity\Expediente;
+use expedientes\domain\repositories\ExpedienteRepository;
 use lugares\domain\repositories\GrupoRepository;
 use lugares\domain\repositories\LugarRepository;
 use stdClass;
+use usuarios\domain\Categoria;
 use usuarios\domain\entity\Cargo;
+use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\Visibilidad;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\DesplegableArray;
@@ -59,7 +65,7 @@ class EscritoForm
         $this->Q_volver_a = $Q_volver_a;
     }
 
-    public function render()
+    public function render(): void
     {
         $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
@@ -110,22 +116,25 @@ class EscritoForm
 
         $estado = 0;
         $visibilidad = 0;
-        $visibilidad_dst = \usuarios\domain\Visibilidad::V_CTR_TODOS;
+        $visibilidad_dst = Visibilidad::V_CTR_TODOS;
         if (!empty($this->Q_id_expediente)) {
-            $oExpediente = new Expediente($this->Q_id_expediente);
+            $ExpecienteRepository = new ExpedienteRepository();
+            $oExpediente = $ExpecienteRepository->findById($this->Q_id_expediente);
+            if ($oExpediente === null) {
+                $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
             $visibilidad = $oExpediente->getVisibilidad();
             $estado = $oExpediente->getEstado();
         }
 
-        $oEscrito = new Escrito($this->Q_id_escrito);
         // categoría
-        $oCategoria = new \usuarios\domain\Categoria();
+        $oCategoria = new Categoria();
         $aOpcionesVisibilidad = $oCategoria->getArrayCategoria();
         $oDesplCategoria = new Desplegable();
         $oDesplCategoria->setNombre('categoria');
         $oDesplCategoria->setOpciones($aOpcionesVisibilidad);
         $oDesplCategoria->setTabIndex(80);
-
 
         $chk_grupo_dst = '';
         $descripcion = '';
@@ -133,7 +142,7 @@ class EscritoForm
         $anulado_txt = '';
 
         // visibilidad
-        $oVisibilidad = new \usuarios\domain\Visibilidad();
+        $oVisibilidad = new Visibilidad();
         $aOpcionesVisibilidad = $oVisibilidad->getArrayVisibilidad(TRUE);
         $oDesplVisibilidad = new Desplegable();
         $oDesplVisibilidad->setNombre('visibilidad');
@@ -150,7 +159,6 @@ class EscritoForm
         $plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
         $plazo_urgente = $_SESSION['oConfig']->getPlazoUrgente();
         $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
-        $error_fecha = $_SESSION['oConfig']->getPlazoError();
         // Plazo
         $aOpcionesPlazo = [
             'hoy' => ucfirst(_("no")),
@@ -166,6 +174,12 @@ class EscritoForm
 
         if (!empty($this->Q_id_escrito)) {
             // destinos individuales
+            $escritoRepository = new EscritoRepository();
+            $oEscrito = $escritoRepository->findById($this->Q_id_escrito);
+            if ($oEscrito === null) {
+                $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
+                exit ($err_cargar);
+            }
             $json_prot_dst = $oEscrito->getJson_prot_destino(TRUE);
             $oArrayProtDestino = new ProtocoloArray($json_prot_dst, $a_posibles_lugares, 'destinos');
             $oArrayProtDestino->setBlanco('t');
@@ -194,7 +208,7 @@ class EscritoForm
             $oArrayProtRef->setAccionConjunto('fnjs_mas_referencias()');
 
             $asunto = $oEscrito->getAsunto();
-            $anulado = $oEscrito->getAnulado();
+            $anulado = $oEscrito->isAnulado();
             if ($anulado === TRUE) {
                 $anulado_txt = _("ANULADO");
             }
@@ -204,11 +218,11 @@ class EscritoForm
             $id_ponente = $oEscrito->getCreador();
             $categoria = $oEscrito->getCategoria();
             $oDesplCategoria->setOpcion_sel($categoria);
-            if (!empty($oEscrito->getVisibilidad())) {
+            if ($oEscrito->getVisibilidad() !== null) {
                 $visibilidad = $oEscrito->getVisibilidad();
                 $oDesplVisibilidad->setOpcion_sel($visibilidad);
             }
-            if (!empty($oEscrito->getVisibilidad_dst())) {
+            if ($oEscrito->getVisibilidad_dst() !== null) {
                 $visibilidad_dst = $oEscrito->getVisibilidad_dst();
                 $oDesplVisibilidad_dst->setOpcion_sel($visibilidad_dst);
             }
@@ -236,38 +250,37 @@ class EscritoForm
             $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
             $tipo_doc = $oEscrito->getTipo_doc();
 
-            $titulo = _("modificar");
-            switch ($this->Q_accion) {
-                case Escrito::ACCION_ESCRITO:
-                    $titulo = _("modificar escrito");
-                    break;
-                case Escrito::ACCION_PROPUESTA:
-                    $titulo = _("modificar propuesta");
-                    break;
-                case Escrito::ACCION_PLANTILLA:
-                    $titulo = _("modificar plantilla");
-                    break;
-                default:
-                    $titulo = _("modificar entrada");
-            }
+            $titulo = match ($this->Q_accion) {
+                Escrito::ACCION_ESCRITO => _("modificar escrito"),
+                Escrito::ACCION_PROPUESTA => _("modificar propuesta"),
+                Escrito::ACCION_PLANTILLA => _("modificar plantilla"),
+                default => _("modificar entrada"),
+            };
 
-            $oPermisoregistro = new \usuarios\domain\PermRegistro();
+            $oPermisoregistro = new PermRegistro();
             $perm_asunto = $oPermisoregistro->permiso_detalle($oEscrito, 'asunto');
             $perm_detalle = $oPermisoregistro->permiso_detalle($oEscrito, 'detalle');
-            $asunto_readonly = ($perm_asunto < \usuarios\domain\PermRegistro::PERM_MODIFICAR) ? 'readonly' : '';
-            $detalle_readonly = ($perm_detalle < \usuarios\domain\PermRegistro::PERM_MODIFICAR) ? 'readonly' : '';
+            $asunto_readonly = ($perm_asunto < PermRegistro::PERM_MODIFICAR) ? 'readonly' : '';
+            $detalle_readonly = ($perm_detalle < PermRegistro::PERM_MODIFICAR) ? 'readonly' : '';
 
             $perm_cambio_visibilidad = $oPermisoregistro->permiso_detalle($oEscrito, 'cambio');
-            if ($perm_cambio_visibilidad < \usuarios\domain\PermRegistro::PERM_MODIFICAR) {
+            if ($perm_cambio_visibilidad < PermRegistro::PERM_MODIFICAR) {
                 $oDesplVisibilidad->setDisabled(TRUE);
             }
 
             $comentario = $oEscrito->getComentarios();
+            // Adjuntos Etherpad
+            $lista_adjuntos_etherpad = $oEscrito->getHtmlAdjuntos();
         } else {
             // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
             if (!empty($this->id_entrada)) {
                 $this->Q_accion = Escrito::ACCION_ESCRITO;
-                $oEntrada = new Entrada($this->id_entrada);
+                $EntradaRepository = new EntradaRepository();
+                $oEntrada = $EntradaRepository->findById($this->id_entrada);
+                if ($oEntrada === null) {
+                    $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
+                    exit ($err_cargar);
+                }
                 $asunto = $oEntrada->getAsunto();
                 $detalle = $oEntrada->getDetalle();
                 // ProtocoloArray espera un array.
@@ -277,7 +290,7 @@ class EscritoForm
                 $oArrayProtDestino->setBlanco('t');
                 $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
 
-                $visibilidad = empty($oEntrada->getVisibilidad()) ? $oExpediente->getVisibilidad() : $oEntrada->getVisibilidad();
+                $visibilidad = $oEntrada->getVisibilidad() ?? $oExpediente->getVisibilidad();
                 $oDesplVisibilidad->setOpcion_sel($visibilidad);
 
                 $f_contestar = '';
@@ -286,17 +299,17 @@ class EscritoForm
                 $json_config = '{}';
                 $tipo_doc = '';
             } else {
-                // Valors por defecto: los del expediente:
+                // Valores por defecto: los del expediente:
                 if (!empty($this->Q_id_expediente)) {
-                    $oExpediente = new Expediente($this->Q_id_expediente);
+                    $ExpecienteRepository = new ExpedienteRepository();
+                    $oExpediente = $ExpecienteRepository->findById($this->Q_id_expediente);
                     $asunto = $oExpediente->getAsunto();
                     $visibilidad = $oExpediente->getVisibilidad();
-                    $oDesplVisibilidad->setOpcion_sel($visibilidad);
                 } else {
                     $asunto = '';
                     $visibilidad = '';
-                    $oDesplVisibilidad->setOpcion_sel($visibilidad);
                 }
+                $oDesplVisibilidad->setOpcion_sel($visibilidad);
                 $detalle = '';
                 $f_contestar = '';
                 $f_escrito = '';
@@ -312,7 +325,7 @@ class EscritoForm
                 }
 
             }
-            $titulo = _("nuevo");
+
             switch ($this->Q_accion) {
                 case Escrito::ACCION_ESCRITO:
                     $titulo = _("nuevo escrito");
@@ -340,10 +353,9 @@ class EscritoForm
 
             $asunto_readonly = '';
             $detalle_readonly = '';
+            // Adjuntos Etherpad
+            $lista_adjuntos_etherpad = '';
         }
-
-        // Adjuntos Etherpad
-        $lista_adjuntos_etherpad = $oEscrito->getHtmlAdjuntos();
 
         $url_update = 'apps/escritos/controller/escrito_update.php';
         $a_cosas = ['id_expediente' => $this->Q_id_expediente,
@@ -396,7 +408,7 @@ class EscritoForm
         $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query(['filtro' => $this->Q_filtro]));
         $url_escrito = 'apps/escritos/controller/escrito_form.php';
 
-        $esEscrito = $this->Q_accion == Escrito::ACCION_ESCRITO;
+        $esEscrito = $this->Q_accion === Escrito::ACCION_ESCRITO;
 
         // para cambiar destinos en nueva ventana.
         $a_cosas = [

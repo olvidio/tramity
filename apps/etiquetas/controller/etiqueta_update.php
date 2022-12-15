@@ -1,7 +1,8 @@
 <?php
 
 use core\ConfigGlobal;
-use etiquetas\model\entity\Etiqueta;
+use etiquetas\domain\entity\Etiqueta;
+use etiquetas\domain\repositories\EtiquetaRepository;
 use usuarios\domain\repositories\CargoRepository;
 use function core\is_true;
 
@@ -22,10 +23,11 @@ switch ($Q_que) {
         $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
             $Q_id_etiqueta = (integer)strtok($a_sel[0], "#");
-            $oEtiqueta = new Etiqueta($Q_id_etiqueta);
-            if ($oEtiqueta->DBEliminar() === FALSE) {
+            $etiquetaRepository = new EtiquetaRepository();
+            $oEtiqueta = $etiquetaRepository->findById($Q_id_etiqueta);
+            if ($etiquetaRepository->Eliminar($oEtiqueta) === FALSE) {
                 echo _("hay un error, no se ha eliminado");
-                echo "\n" . $oEtiqueta->getErrorTxt();
+                echo "\n" . $etiquetaRepository->getErrorTxt();
             }
         }
         break;
@@ -50,14 +52,19 @@ switch ($Q_que) {
             echo _("debe poner un nombre");
         }
 
-        $oEtiqueta = new Etiqueta($Q_id_etiqueta);
-        $oEtiqueta->DBCargar();
+        $etiquetaRepository = new EtiquetaRepository();
+        $oEtiqueta = $etiquetaRepository->findById($Q_id_etiqueta);
+        if ($oEtiqueta === null) {
+            $id_etiqueta = $etiquetaRepository->getNewId_etiqueta();
+            $oEtiqueta = new Etiqueta();
+            $oEtiqueta->setId_etiqueta($id_etiqueta);
+        }
         $oEtiqueta->setNom_etiqueta($Q_nom_etiqueta);
         $oEtiqueta->setOficina($oficina);
         $oEtiqueta->setId_cargo($id_cargo);
-        if ($oEtiqueta->DBGuardar() === FALSE) {
+        if ($etiquetaRepository->Guardar($oEtiqueta) === FALSE) {
             echo _("hay un error, no se ha guardado");
-            echo "\n" . $oEtiqueta->getErrorTxt();
+            echo "\n" . $etiquetaRepository->getErrorTxt();
         }
         break;
     default:

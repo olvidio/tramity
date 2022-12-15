@@ -98,15 +98,13 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
             return FALSE;
         }
 
+        $spassword = '';
+        $oDblSt->bindColumn('password', $spassword, PDO::PARAM_STR);
         $filas = $oDblSt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($filas as $aDatos) {// para los bytea: (resources)
-            $handle = $aDatos['password'];
-            if ($handle !== null) {
-                $contents = stream_get_contents($handle);
-                fclose($handle);
-                $password = $contents;
-                $aDatos['password'] = $password;
-            }
+        foreach ($filas as $aDatos) {
+            // para los bytea, sobre escribo los valores:
+            $aDatos['password'] = $spassword;
+
             $Usuario = new Usuario();
             $Usuario->setAllAttributes($aDatos);
             $UsuarioSet->add($Usuario);
@@ -237,7 +235,9 @@ class PgUsuarioRepository extends ClaseRepository implements UsuarioRepositoryIn
         $spassword = '';
         $oDblSt->bindColumn('password', $spassword, PDO::PARAM_STR);
         $aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);
-        $aDatos['password'] = $spassword;
+        if (!empty($aDatos)) {
+            $aDatos['password'] = $spassword;
+        }
         return $aDatos;
     }
 

@@ -32,9 +32,9 @@ switch ($Q_que) {
         }
 
         $oPref->setPreferencia($Q_sPrefs);
-        if ($oPref->DBGuardar() === FALSE) {
+        if ($PreferenciaRepository->Guardar($oPref) === FALSE) {
             echo _("hay un error, no se ha guardado");
-            echo "\n" . $oPref->getErrorTxt();
+            echo "\n" . $PreferenciaRepository->getErrorTxt();
         }
         break;
     default:
@@ -42,9 +42,9 @@ switch ($Q_que) {
         $Q_idioma_nou = (string)filter_input(INPUT_POST, 'idioma_nou');
         $oPref = $PreferenciaRepository->getMiPreferencia('idioma');
         $oPref->setPreferencia($Q_idioma_nou);
-        if ($oPref->DBGuardar() === FALSE) {
+        if ($PreferenciaRepository->Guardar($oPref) === FALSE) {
             echo _("hay un error, no se ha guardado idioma");
-            echo "\n" . $oPref->getErrorTxt();
+            echo "\n" . $PreferenciaRepository->getErrorTxt();
         }
 
         // Guardar Nombre a Mostrar, mail, cargo preferido

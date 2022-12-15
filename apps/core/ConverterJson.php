@@ -23,7 +23,7 @@ class ConverterJson
     private string|array|stdClass|null $json;
     private bool $bArray;
 
-    public function __construct($json, $bArray)
+    public function __construct($json, $bArray=FALSE)
     {
         $this->json = $json;
         $this->bArray = $bArray;
@@ -34,18 +34,10 @@ class ConverterJson
      */
     public function fromPg(): stdClass|array|null
     {
-        if ($this->json !== NULL) {
-            $oJSON = json_decode($this->json, $this->bArray, 512, JSON_THROW_ON_ERROR);
+        if ($this->json !== NULL && $this->json !== '[]') {
+            $oJSON = json_decode($this->json, FALSE, 512, JSON_THROW_ON_ERROR);
         } else {
-            $oJSON = '';
-        }
-
-        if (empty($oJSON) || $oJSON === '[]') {
-            if ($this->bArray) {
-                $oJSON = [];
-            } else {
-                $oJSON = new stdClass;
-            }
+            $oJSON = new stdClass;
         }
 
         return $oJSON;
@@ -54,15 +46,9 @@ class ConverterJson
     /**
      * @throws JsonException
      */
-    public function toPg($db): bool|array|string|stdClass|null
+    public function toPg(): string
     {
-        if ($db === FALSE) {
-            $json = json_encode($this->json, JSON_THROW_ON_ERROR);
-        } else {
-            $json = $this->json;
-        }
-
-        return $json;
+        return json_encode($this->json, JSON_THROW_ON_ERROR);
     }
 
 }

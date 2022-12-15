@@ -2,11 +2,12 @@
 
 use core\ConfigGlobal;
 use davical\model\Davical;
-use entradas\model\Entrada;
-use escritos\model\Escrito;
-use expedientes\model\entity\GestorAccion;
-use expedientes\model\Expediente;
-use expedientes\model\GestorExpediente;
+use entradas\domain\entity\EntradaRepository;
+use escritos\domain\entity\Escrito;
+use escritos\domain\repositories\EscritoRepository;
+use expedientes\domain\repositories\AccionRepository;
+use expedientes\domain\repositories\ExpedienteRepository;
+use expedientes\domain\entity\Expediente;
 use lugares\domain\repositories\LugarRepository;
 use pendientes\model\Pendiente;
 use tramites\domain\entity\Firma;
@@ -16,6 +17,7 @@ use usuarios\domain\Categoria;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
 use web\DateTimeLocal;
+use web\NullDateTimeLocal;
 use web\Protocolo;
 use function core\is_true;
 
@@ -39,8 +41,11 @@ $Q_estado = (integer)filter_input(INPUT_POST, 'estado');
 $Q_prioridad = (integer)filter_input(INPUT_POST, 'prioridad');
 
 $Q_f_reunion = (string)filter_input(INPUT_POST, 'f_reunion');
+$oF_reunion = DateTimeLocal::createFromLocal($Q_f_reunion, 'date');
 $Q_f_aprobacion = (string)filter_input(INPUT_POST, 'f_aprobacion');
+$oF_aprobacion = DateTimeLocal::createFromLocal($Q_f_aprobacion, 'date');
 $Q_f_contestar = (string)filter_input(INPUT_POST, 'f_contestar');
+$oF_contestar = DateTimeLocal::createFromLocal($Q_f_contestar, 'date');
 
 $Q_asunto = (string)filter_input(INPUT_POST, 'asunto');
 $Q_entradilla = (string)filter_input(INPUT_POST, 'entradilla');
@@ -59,13 +64,14 @@ switch ($Q_que) {
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Q_id_oficina = ConfigGlobal::role_id_oficina();
         $Q_id_cargo = ConfigGlobal::role_id_cargo();
-        $oEntrada = new Entrada($Q_id_entrada);
-        if ($oEntrada->DBCargar() === FALSE) {
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+        if ($oEntrada === null) {
             $err_cargar = sprintf(_("OJO! no existe el entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
 
-        $aVisto = $oEntrada->getJson_visto(TRUE);
+        $aVisto = $oEntrada->getJson_visto();
         // Si ya está no hay que añadirlo, sino modificarlo:
         $flag = FALSE;
         foreach ($aVisto as $key => $oVisto) {
@@ -86,8 +92,8 @@ switch ($Q_que) {
         }
 
         $oEntrada->setJson_visto($aVisto);
-        if ($oEntrada->DBGuardar() === FALSE) {
-            $error_txt .= $oEntrada->getErrorTxt();
+        if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
+            $error_txt .= $EntradaRepository->getErrorTxt();
         }
 
         $oEntrada->comprobarVisto();
@@ -119,10 +125,15 @@ switch ($Q_que) {
         $calendario = 'oficina';
         $oHoy = new DateTimeLocal();
         $Q_f_plazo = empty($Q_f_plazo) ? $oHoy->getFromLocal() : $Q_f_plazo;
-        // datos de la entrada 
+        $oF_plazo = DateTimeLocal::createFromLocal($Q_f_plazo, 'date');
+        // datos de la entrada
         $id_reg = 'EN' . $Q_id_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': EN)
-        $oEntrada = new Entrada($Q_id_entrada);
 
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+        if ($oEntrada === null) {
+            $error_txt .= _("No se ha enconttrado la entrada");
+        }
         $oPendiente = new Pendiente($parent_container, $calendario, $user_davical);
         $oPendiente->setId_reg($id_reg);
         $oPendiente->setAsunto($oEntrada->getAsunto());
@@ -142,9 +153,8 @@ switch ($Q_que) {
         $oPendiente->setRef_prot_mas($oProtOrigen->ver_txt_mas());
         // las oficinas implicadas:
         $oPendiente->setOficinasArray($oEntrada->getResto_oficinas());
-        if ($oPendiente->Guardar() === FALSE) {
-            $error_txt .= _("No se han podido guardar el nuevo pendiente");
-        }
+        $oPendiente->Guardar();
+
         if (empty($error_txt)) {
             $jsondata['success'] = true;
             $jsondata['mensaje'] = 'ok';
@@ -162,7 +172,8 @@ switch ($Q_que) {
     case 'en_expediente':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         // Hay que crear un nuevo expediente, con un adjunto (entrada).
-        $oEntrada = new Entrada($Q_id_entrada);
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
         $Q_asunto = $oEntrada->getAsunto_entrada();
 
         $Q_estado = Expediente::ESTADO_BORRADOR;
@@ -170,7 +181,10 @@ switch ($Q_que) {
         $Q_tramite = 2; // Ordinario, no puede ser null.
         $Q_prioridad = Expediente::PRIORIDAD_NORMAL; // no puede ser null.
 
+        $ExpedienteRepository = new ExpedienteRepository();
+        $id_expediente = $ExpedienteRepository->getNewId_expediente();
         $oExpediente = new Expediente();
+        $oExpediente->setId_expediente($id_expediente);
         $oExpediente->setPonente($Q_ponente);
         $oExpediente->setEstado($Q_estado);
         $oExpediente->setId_tramite($Q_tramite);
@@ -178,15 +192,17 @@ switch ($Q_que) {
         $oExpediente->setAsunto($Q_asunto);
         $oExpediente->setVisibilidad($Q_visibilidad);
 
-        if ($oExpediente->DBGuardar() === FALSE) {
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
             $error_txt .= _("No se han podido crear el nuevo expediente");
             $error_txt .= "\n";
-            $error_txt .= $oExpediente->getErrorTxt();
+            $error_txt .= $ExpedienteRepository->getErrorTxt();
         }
 
-        $a_antecedente = ['tipo' => 'entrada', 'id' => $Q_id_entrada];
-        $oExpediente->addAntecedente($a_antecedente);
-        if ($oExpediente->DBGuardar() === FALSE) {
+        $Antecedente = new stdClass();
+        $Antecedente->tipo = 'entrada';
+        $Antecedente->id = $Q_id_entrada;
+        $oExpediente->addAntecedente($Antecedente);
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
             $error_txt .= _("No se han podido adjuntar la entrada");
         }
 
@@ -205,14 +221,15 @@ switch ($Q_que) {
     case 'encargar_a':
         $Q_id_oficial = (integer)filter_input(INPUT_POST, 'id_oficial');
         // Se pone cuando se han enviado...
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE) {
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oExpediente->setEstado(Expediente::ESTADO_ACABADO_ENCARGADO);
         $oExpediente->setPonente($Q_id_oficial);
-        if ($oExpediente->DBGuardar() === FALSE) {
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
             $error_txt .= _("No se han podido asignar el nuevo encargado");
         }
         if (empty($error_txt)) {
@@ -230,15 +247,16 @@ switch ($Q_que) {
     case 'guardar_etiquetas':
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE) {
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         // las etiquetas:
         $oExpediente->setEtiquetas($Q_a_etiquetas);
         $oExpediente->setVisibilidad($Q_visibilidad);
-        if ($oExpediente->DBGuardar() === FALSE) {
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
             $error_txt .= _("No se han podido guardar las etiquetas");
         }
         if (empty($error_txt)) {
@@ -255,25 +273,26 @@ switch ($Q_que) {
         exit();
     case 'recircular':
         // borrar todas la firmas
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE) {
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
-        $FirmaRepository = new  FirmaRepository();
-        $cFirmas = $FirmaRepository->getFirmas(['id_expediente' => $Q_id_expediente]);
+        $firmaRepository = new  FirmaRepository();
+        $cFirmas = $firmaRepository->getFirmas(['id_expediente' => $Q_id_expediente]);
         foreach ($cFirmas as $oFirma) {
             $oFirma->DBCargar();
             $oFirma->setValor(NULL);
             $oFirma->setF_valor(NULL);
-            if ($oFirma->DBGuardar() === FALSE) {
-                $error_txt .= $oFirma->getErrorTxt();
+            if ($firmaRepository->Guardar($oFirma) === FALSE) {
+                $error_txt .= $firmaRepository->getErrorTxt();
             }
         }
         // Es posible que esté como acabad, hay que cambiar el estado:
         $oExpediente->setEstado(Expediente::ESTADO_CIRCULANDO);
-        if ($oExpediente->DBGuardar() === FALSE) {
-            $error_txt .= $oExpediente->getErrorTxt();
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+            $error_txt .= $ExpedienteRepository->getErrorTxt();
         }
 
         if (empty($error_txt)) {
@@ -289,21 +308,22 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'reunion':
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE) {
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         // Si pongo la fecha con datetimepicker, ya esta en ISO (hay que poner FALSE a la conversión).
-        $oExpediente->setF_reunion($Q_f_reunion);
-        if ($oExpediente->DBGuardar() === FALSE) {
+        $oExpediente->setF_reunion($oF_reunion);
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
             $error_txt .= _("No se ha podido guarda la fecha de reunión");
             $error_txt .= "<br>";
         }
         // firmar el paso de fijar reunion:
-        $f_hoy_iso = date(DateTimeInterface::ATOM);
-        $FirmaRepository = new  FirmaRepository();
-        $cFirmas = $FirmaRepository->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_REUNION]);
+        $oF_hoy = date(DateTimeInterface::ATOM);
+        $firmaRepository = new  FirmaRepository();
+        $cFirmas = $firmaRepository->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_REUNION]);
         foreach ($cFirmas as $oFirma) {
             $oFirma->DBCargar();
             if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
@@ -312,9 +332,9 @@ switch ($Q_que) {
                 $oFirma->setValor(Firma::V_OK);
             }
             $oFirma->setId_usuario(ConfigGlobal::mi_id_usuario());
-            $oFirma->setF_valor($f_hoy_iso, FALSE);
-            if ($oFirma->DBGuardar() === FALSE) {
-                $error_txt .= $oFirma->getErrorTxt();
+            $oFirma->setF_valor($oF_hoy, FALSE);
+            if ($firmaRepository->Guardar($oFirma) === FALSE) {
+                $error_txt .= $firmaRepository->getErrorTxt();
             }
         }
 
@@ -333,15 +353,16 @@ switch ($Q_que) {
     case 'archivar':
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE) {
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         // las etiquetas:
         $oExpediente->setEtiquetas($Q_a_etiquetas);
         $oExpediente->setEstado(Expediente::ESTADO_ARCHIVADO);
-        if ($oExpediente->DBGuardar() === FALSE) {
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
             $error_txt .= _("No se ha podido cambiar el estado del expediente");
             $error_txt .= "<br>";
         }
@@ -359,18 +380,23 @@ switch ($Q_que) {
         exit();
     case 'distribuir':
         $html = '';
-        $oExpediente = new Expediente($Q_id_expediente);
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
+            $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         $estado_original = $oExpediente->getEstado();
         $oExpediente->setEstado(Expediente::ESTADO_ACABADO_SECRETARIA);
-        if ($oExpediente->DBGuardar() === FALSE) {
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
             $error_txt .= _("No se ha podido cambiar el estado del expediente");
             $error_txt .= "<br>";
-            $error_txt .= $oExpediente->getErrorTxt();
+            $error_txt .= $ExpedienteRepository->getErrorTxt();
         }
         // firmar el paso de distribuir:
-        $f_hoy_iso = date(DateTimeInterface::ATOM);
-        $FirmaRepository = new  FirmaRepository();
-        $cFirmas = $FirmaRepository->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_DISTRIBUIR]);
+        $oF_hoy = new DateTimeLocal();
+        $firmaRepository = new  FirmaRepository();
+        $cFirmas = $firmaRepository->getFirmas(['id_expediente' => $Q_id_expediente, 'cargo_tipo' => Cargo::CARGO_DISTRIBUIR]);
         foreach ($cFirmas as $oFirma) {
             $oFirma->DBCargar();
             if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
@@ -379,9 +405,9 @@ switch ($Q_que) {
                 $oFirma->setValor(Firma::V_OK);
             }
             $oFirma->setId_usuario(ConfigGlobal::mi_id_usuario());
-            $oFirma->setF_valor($f_hoy_iso, FALSE);
-            if ($oFirma->DBGuardar() === FALSE) {
-                $error_txt .= $oFirma->getErrorTxt();
+            $oFirma->setF_valor($oF_hoy);
+            if ($firmaRepository->Guardar($oFirma) === FALSE) {
+                $error_txt .= $firmaRepository->getErrorTxt();
             }
         }
         // crear los números de protocolo local de los escritos.
@@ -401,8 +427,8 @@ switch ($Q_que) {
         $id_lugar_iese = $oLugar->getId_lugar();
         // escritos del expediente: acciones tipo escrito
         $aWhereAccion = ['id_expediente' => $Q_id_expediente, '_ordre' => 'tipo_accion'];
-        $gesAcciones = new GestorAccion();
-        $cAcciones = $gesAcciones->getAcciones($aWhereAccion);
+        $AccionRepository = new AccionRepository();
+        $cAcciones = $AccionRepository->getAcciones($aWhereAccion);
         $json_prot_local = [];
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
@@ -410,13 +436,14 @@ switch ($Q_que) {
             // si es propuesta, o plantilla no genero protocolo:
             if ($tipo_accion === Escrito::ACCION_ESCRITO) {
                 $proto = TRUE;
-                $oEscrito = new Escrito($id_escrito);
+                $escritoRepository = new EscritoRepository();
+                $oEscrito = $escritoRepository->findById($id_escrito);
                 // si es un e12, no hay que numerar.
                 if ($oEscrito->getCategoria() === Categoria::CAT_E12) {
                     $proto = FALSE;
                 }
                 // comprobar que no está anulado:
-                if (is_true($oEscrito->getAnulado()) || $estado_original == Expediente::ESTADO_DILATA) {
+                if (is_true($oEscrito->isAnulado()) || $estado_original === Expediente::ESTADO_DILATA) {
                     $proto = FALSE;
                 }
                 if ($proto) {
@@ -428,7 +455,8 @@ switch ($Q_que) {
             // si proviene de una plantilla, insertar el conforme en el texto:
             // cojo el protocolo del ultimo escrito. No tiene porque ser siempre cierto.
             if ($tipo_accion === Escrito::ACCION_PLANTILLA) {
-                $oEscritoP = new Escrito($id_escrito);
+                $escritoRepository = new EscritoRepository();
+                $oEscritoP = $escritoRepository->findById($id_escrito);
                 $html = $oEscritoP->addConforme($Q_id_expediente, $json_prot_local);
             }
         }
@@ -461,10 +489,15 @@ switch ($Q_que) {
                 $of_destino = ConfigGlobal::role_id_cargo();
             }
         }
-        // copiar expdiente: poner los escritos como antecedentes.
-        $oExpediente = new Expediente($Q_id_expediente);
+        // copiar expediente: poner los escritos como antecedentes.
+          $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
+            $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
         if ($oExpediente->copiar($of_destino) === FALSE) {
-            $error_txt .= $oExpediente->getErrorTxt();
+            $error_txt .= "Error";
         }
 
         if (empty($error_txt)) {
@@ -483,18 +516,18 @@ switch ($Q_que) {
     case 'exp_a_borrador':
         $error_txt = '';
         // Hay que borrar: las firmas.
-        $FirmaRepository = new  FirmaRepository();
-        $cFirmas = $FirmaRepository->getFirmas(['id_expediente' => $Q_id_expediente]);
+        $firmaRepository = new  FirmaRepository();
+        $cFirmas = $firmaRepository->getFirmas(['id_expediente' => $Q_id_expediente]);
         foreach ($cFirmas as $oFirma) {
-            if ($oFirma->DBEliminar() === FALSE) {
+            if ($firmaRepository->Eliminar($oFirma) === FALSE) {
                 $error_txt .= _("No se ha eliminado la firma");
                 $error_txt .= "<br>";
             }
         }
 
-        $oExpediente = new Expediente($Q_id_expediente);
-        $oExpediente->DBCargar();
-        if ($oExpediente->DBCargar() === FALSE) {
+          $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -502,39 +535,40 @@ switch ($Q_que) {
         $asunto = $oExpediente->getAsunto();
         $asunto_retirado = _("RETIRADO") . " $asunto";
         $oExpediente->setAsunto($asunto_retirado);
-        $oExpediente->setF_contestar('');
-        $oExpediente->setF_ini_circulacion('');
-        $oExpediente->setF_aprobacion('');
-        $oExpediente->setF_reunion('');
+        $oExpediente->setF_contestar(null);
+        $oExpediente->setF_ini_circulacion(null);
+        $oExpediente->setF_aprobacion(null);
+        $oExpediente->setF_reunion(null);
 
         if ($Q_que === 'exp_a_borrador_cmb_creador') {
             $nuevo_creador = ConfigGlobal::role_id_cargo();
             $oExpediente->setPonente($nuevo_creador);
         }
-        if ($oExpediente->DBGuardar() === FALSE) {
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
             $error_txt .= _("No se ha podido cambiar el estado del expediente");
             $error_txt .= "<br>";
-            $error_txt .= $oExpediente->getErrorTxt();
+            $error_txt .= $ExpedienteRepository->getErrorTxt();
         }
         // Si hay escritos anulados, quitar el 'anulado'
         // cambiar también el creador de todos los escritos:
-        $gesAccion = new GestorAccion();
-        $cAcciones = $gesAccion->getAcciones(['id_expediente' => $Q_id_expediente]);
+        $AccionRepository = new AccionRepository();
+        $cAcciones = $AccionRepository->getAcciones(['id_expediente' => $Q_id_expediente]);
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
-            $oEscrito = new Escrito($id_escrito);
-            if ($oEscrito->DBCargar() === FALSE) {
+            $escritoRepository = new EscritoRepository();
+            $oEscrito = $escritoRepository->findById($id_escrito);
+            if ($oEscrito === null) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
-            $oEscrito->setAnulado('f');
+            $oEscrito->setAnulado(FALSE);
             if ($Q_que === 'exp_a_borrador_cmb_creador') {
                 $oEscrito->setCreador($nuevo_creador);
             }
-            if ($oEscrito->DBGuardar() === FALSE) {
+            if ($escritoRepository->Guardar($oEscrito) === FALSE) {
                 $error_txt .= _("No se ha guardado el escrito");
                 $error_txt .= "<br>";
-                $error_txt .= $oAccion->getErrorTxt();
+                $error_txt .= $escritoRepository->getErrorTxt();
             }
         }
 
@@ -554,35 +588,40 @@ switch ($Q_que) {
         // Si hay escritos enviados, no se borran.
         $error_txt = '';
         // Hay que borrar: el expediente, las firmas, las acciones, los escritos y los adjuntos de los escritos.
-        $gesAccion = new GestorAccion();
-        $cAcciones = $gesAccion->getAcciones(['id_expediente' => $Q_id_expediente]);
+        $AccionRepository = new AccionRepository();
+        $cAcciones = $AccionRepository->getAcciones(['id_expediente' => $Q_id_expediente]);
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $oEscrito = new Escrito($id_escrito);
             // Si hay escritos enviados, no se borran.
-            $f_salida = $oEscrito->getF_salida();
-            if (empty($f_salida)) {
+            $oF_salida = $oEscrito->getF_salida();
+            if ($oF_salida instanceof NullDateTimeLocal) {
                 $rta = $oEscrito->eliminarTodo();
                 if (!empty($rta)) {
                     $error_txt .= $rta;
                 }
-                if ($oAccion->DBEliminar() === FALSE) {
-                    $error_txt .= _("No se ha eliminado la accion");
+                if ($AccionRepository->Eliminar($oAccion) === FALSE) {
+                    $error_txt .= _("No se ha eliminado la acción");
                     $error_txt .= "<br>";
                 }
             }
         }
         // firmas:
-        $FirmaRepository = new  FirmaRepository();
-        $cFirmas = $FirmaRepository->getFirmas(['id_expediente' => $Q_id_expediente]);
+        $firmaRepository = new  FirmaRepository();
+        $cFirmas = $firmaRepository->getFirmas(['id_expediente' => $Q_id_expediente]);
         foreach ($cFirmas as $oFirma) {
-            if ($oFirma->DBEliminar() === FALSE) {
+            if ($firmaRepository->Eliminar($oFirma) === FALSE) {
                 $error_txt .= _("No se ha eliminado la firma");
                 $error_txt .= "<br>";
             }
         }
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBEliminar() === FALSE) {
+          $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
+            $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_cargar);
+        }
+        if ($ExpedienteRepository->Eliminar($oExpediente) === FALSE) {
             $error_txt .= _("No se ha eliminado el expediente");
             $error_txt .= "<br>";
         }
@@ -606,8 +645,9 @@ switch ($Q_que) {
         $oCargo = $CargoRepository->findById($mi_id_cargo);
         $mi_id_oficina = $oCargo->getId_oficina();
 
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE) {
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -618,9 +658,9 @@ switch ($Q_que) {
             $visto = strtok('#');
             $oJSON = new stdClass;
             $oJSON->id = (int)$id;
-            if ($mi_id_cargo == $id) {
+            if ($mi_id_cargo === $id) {
                 // es un toggle: si esta 1 pongo 0 y al revés.
-                $oJSON->visto = is_true($visto) ? FALSE : TRUE;
+                $oJSON->visto = !is_true($visto);
             } else {
                 $oJSON->visto = $visto;
             }
@@ -628,8 +668,8 @@ switch ($Q_que) {
             $new_preparar[] = $oJSON;
         }
         $oExpediente->setJson_preparar($new_preparar);
-        if ($oExpediente->DBGuardar() === FALSE) {
-            $error_txt .= $oExpediente->getErrorTxt();
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+            $error_txt .= $ExpedienteRepository->getErrorTxt();
         }
 
         //para regenerar la linea de oficiales
@@ -682,9 +722,10 @@ switch ($Q_que) {
     case 'circular':
         // primero se guarda, y al final se guarda la fecha de hoy y se crean las firmas para el trámite
     case 'guardar':
+        $ExpedienteRepository = new ExpedienteRepository();
         if (!empty($Q_id_expediente)) {
-            $oExpediente = new Expediente($Q_id_expediente);
-            if ($oExpediente->DBCargar() === FALSE) {
+            $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+            if ($oExpediente === null) {
                 $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -692,7 +733,7 @@ switch ($Q_que) {
         } else {
             // si falla el javascript, puede ser que se hagan varios click a 'Guardar' 
             // y se dupliquen los expedientes. Me aseguro de que no exista uno igual:
-            $gesExpedientes = new GestorExpediente();
+            $ExpedienteRepository = new ExpedienteRepository();
             $aWhere = ['id_tramite' => $Q_tramite,
                 'estado' => $Q_estado,
                 'prioridad' => $Q_prioridad,
@@ -704,12 +745,14 @@ switch ($Q_que) {
                 $f_contestar_iso = $oConverter->toPg();
                 $aWhere['f_contestar'] = $f_contestar_iso;
             }
-            $cExpedientes = $gesExpedientes->getExpedientes($aWhere);
+            $cExpedientes = $ExpedienteRepository->getExpedientes($aWhere);
             if (count($cExpedientes) > 0) {
                 exit (_("Creo que ya se ha creado"));
             }
             // nuevo.
+            $id_expediente = $ExpedienteRepository->getNewId_expediente();
             $oExpediente = new Expediente();
+            $oExpediente->setId_expediente($id_expediente);
             $Q_estado = Expediente::ESTADO_BORRADOR;
             $oExpediente->setPonente($Q_ponente);
         }
@@ -717,9 +760,9 @@ switch ($Q_que) {
         $oExpediente->setId_tramite($Q_tramite);
         $oExpediente->setEstado($Q_estado);
         $oExpediente->setPrioridad($Q_prioridad);
-        $oExpediente->setF_reunion($Q_f_reunion);
-        $oExpediente->setF_aprobacion($Q_f_aprobacion);
-        $oExpediente->setF_contestar($Q_f_contestar);
+        $oExpediente->setF_reunion($oF_reunion);
+        $oExpediente->setF_aprobacion($oF_aprobacion);
+        $oExpediente->setF_contestar($oF_contestar);
         $oExpediente->setAsunto($Q_asunto);
         $oExpediente->setEntradilla($Q_entradilla);
 
@@ -742,7 +785,7 @@ switch ($Q_que) {
             $a_filter_firmas_oficina = array_filter($Q_a_firmas_oficina); // Quita los elementos vacíos y nulos.
             $oExpediente->setFirmas_oficina($a_filter_firmas_oficina);
         } else {
-            $oExpediente->setFirmas_oficina('');
+            $oExpediente->setFirmas_oficina();
         }
 
         // pasar a array para postgresql
@@ -750,7 +793,7 @@ switch ($Q_que) {
             $a_filter_firmas = array_filter($Q_a_firmas); // Quita los elementos vacíos y nulos.
             $oExpediente->setResto_oficinas($a_filter_firmas);
         } else {
-            $oExpediente->setResto_oficinas('');
+            $oExpediente->setResto_oficinas();
         }
 
         $oExpediente->setVida($Q_vida);
@@ -770,42 +813,41 @@ switch ($Q_que) {
         }
         $oExpediente->setJson_preparar($new_preparar);
 
-        if ($oExpediente->DBGuardar() === FALSE) {
-            $error_txt .= $oExpediente->getErrorTxt();
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+            $error_txt .= $ExpedienteRepository->getErrorTxt();
         } else {
             $id_expediente = $oExpediente->getId_expediente();
             // las etiquetas, después de tener el id_expediente (si es nuevo):
             $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
             $oExpediente->setEtiquetas($Q_a_etiquetas);
-            if ($oExpediente->DBGuardar() === FALSE) {
-                $error_txt .= $oExpediente->getErrorTxt();
+            if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+                $error_txt .= $ExpedienteRepository->getErrorTxt();
             }
         }
 
         // CIRCULAR
         if ($Q_que === 'circular') {
             $oF_hoy = new DateTimeLocal();
-            $f_hoy_iso = date(DateTimeInterface::ATOM);
             // se pone la fecha del escrito como hoy:
-            $oExpediente->setF_escritos($f_hoy_iso, FALSE);
+            $oExpediente->setF_escritos($oF_hoy);
             // Guardar fecha y cambiar estado
-            $oExpediente->setF_ini_circulacion($f_hoy_iso, FALSE);
+            $oExpediente->setF_ini_circulacion($oF_hoy, FALSE);
             $oExpediente->setEstado(Expediente::ESTADO_CIRCULANDO);
-            if ($oExpediente->DBGuardar() === FALSE) {
-                $error_txt .= $oExpediente->getErrorTxt();
+            if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+                $error_txt .= $ExpedienteRepository->getErrorTxt();
             }
             // generar firmas
             $role_id_cargo = ConfigGlobal::role_id_cargo();
             $oExpediente->generarFirmas();
-            $FirmaRepository = new FirmaRepository();
+            $firmaRepository = new FirmaRepository();
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                 // Para los centros, firmo sea quien sea
-                $cFirmas = $FirmaRepository->getFirmas(['id_expediente' => $id_expediente, 'id_cargo' => $role_id_cargo, 'tipo' => Firma::TIPO_VOTO]);
+                $cFirmas = $firmaRepository->getFirmas(['id_expediente' => $id_expediente, 'id_cargo' => $role_id_cargo, 'tipo' => Firma::TIPO_VOTO]);
                 $oFirmaPrimera = $cFirmas[0];
                 $oFirmaPrimera->setValor(Firma::V_OK);
             } else {
                 // Si soy el primero, Ya firmo.
-                $oFirmaPrimera = $FirmaRepository->getPrimeraFirma($id_expediente);
+                $oFirmaPrimera = $firmaRepository->getPrimeraFirma($id_expediente);
                 $id_primer_cargo = $oFirmaPrimera->getId_cargo();
                 if ($id_primer_cargo === $role_id_cargo) {
                     if (ConfigGlobal::role_actual() === 'vcd') { // No sé si hace falta??
@@ -818,38 +860,30 @@ switch ($Q_que) {
             $oFirmaPrimera->setId_usuario(ConfigGlobal::mi_id_usuario());
             $oFirmaPrimera->setObserv('');
             $oFirmaPrimera->setF_valor($oF_hoy);
-            if ($FirmaRepository->Guardar($oFirmaPrimera) === FALSE) {
-                $error_txt .= $FirmaRepository->getErrorTxt();
+            if ($firmaRepository->Guardar($oFirmaPrimera) === FALSE) {
+                $error_txt .= $firmaRepository->getErrorTxt();
             }
             // comprobar que ya han firmado todos, para:
             //  - en caso dl: pasarlo a scdl para distribuir (ok_scdl)
             //  - en caso ctr: marcar como circulando
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-                $bParaDistribuir = $FirmaRepository->isParaDistribuir($Q_id_expediente);
+                $bParaDistribuir = $firmaRepository->isParaDistribuir($Q_id_expediente);
                 if ($bParaDistribuir) {
                     // guardar la firma de Cargo::CARGO_DISTRIBUIR;
-                    if ($oExpediente->DBCargar() === FALSE) {
-                        $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
-                        exit ($err_cargar);
-                    }
                     $oExpediente->setEstado(Expediente::ESTADO_ACABADO);
-                    $oExpediente->setF_aprobacion($f_hoy_iso, FALSE);
-                    $oExpediente->setF_aprobacion_escritos($f_hoy_iso, FALSE);
-                    if ($oExpediente->DBGuardar() === FALSE) {
-                        $error_txt .= $oExpediente->getErrorTxt();
+                    $oExpediente->setF_aprobacion($oF_hoy);
+                    $oExpediente->setF_aprobacion_escritos($oF_hoy);
+                    if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+                        $error_txt .= $ExpedienteRepository->getErrorTxt();
                     }
                 }
             }
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                 // cambio el estado del expediente.
-                if ($oExpediente->DBCargar() === FALSE) {
-                    $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
-                    exit ($err_cargar);
-                }
                 $estado = Expediente::ESTADO_CIRCULANDO;
                 $oExpediente->setEstado($estado);
-                if ($oExpediente->DBGuardar() === FALSE) {
-                    $error_txt .= $oExpediente->getErrorTxt();
+                if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+                    $error_txt .= $ExpedienteRepository->getErrorTxt();
                 }
             }
 
@@ -871,23 +905,24 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'cambio_tramite':
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE) {
+          $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $id_tramite_old = $oExpediente->getId_tramite();
         $oExpediente->setId_tramite($Q_tramite);
-        if ($oExpediente->DBGuardar() === FALSE) {
-            $error_txt .= $oExpediente->getErrorTxt();
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+            $error_txt .= $ExpedienteRepository->getErrorTxt();
         }
         // generar firmas
         $oExpediente->generarFirmas();
-        $FirmaRepository = new FirmaRepository();
+        $firmaRepository = new FirmaRepository();
         // copiar las firmas:
-        $FirmaRepository->copiarFirmas($Q_id_expediente, $Q_tramite, $id_tramite_old);
+        $firmaRepository->copiarFirmas($Q_id_expediente, $Q_tramite, $id_tramite_old);
         // borrar el recorrido del tramite anterior.
-        $FirmaRepository->borrarFirmas($Q_id_expediente, $id_tramite_old);
+        $firmaRepository->borrarFirmas($Q_id_expediente, $id_tramite_old);
 
 
         if (!empty($error_txt)) {
@@ -905,14 +940,15 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'cambio_vida':
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE) {
+          $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oExpediente->setVida($Q_vida);
-        if ($oExpediente->DBGuardar() === FALSE) {
-            $error_txt .= $oExpediente->getErrorTxt();
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+            $error_txt .= $ExpedienteRepository->getErrorTxt();
         }
 
         if (!empty($error_txt)) {
@@ -930,14 +966,15 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'cambio_asunto':
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE) {
+          $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oExpediente->setAsunto($Q_asunto);
-        if ($oExpediente->DBGuardar() === FALSE) {
-            $error_txt .= $oExpediente->getErrorTxt();
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+            $error_txt .= $ExpedienteRepository->getErrorTxt();
         }
 
         if (!empty($error_txt)) {
@@ -955,14 +992,15 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'cambio_entradilla':
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE) {
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oExpediente->setEntradilla($Q_entradilla);
-        if ($oExpediente->DBGuardar() === FALSE) {
-            $error_txt .= $oExpediente->getErrorTxt();
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+            $error_txt .= $ExpedienteRepository->getErrorTxt();
         }
 
         if (!empty($error_txt)) {

@@ -3,9 +3,9 @@
 namespace usuarios\domain;
 
 use core\ConfigGlobal;
-use entradas\model\Entrada;
-use escritos\model\Escrito;
-use expedientes\model\Expediente;
+use entradas\domain\entity\Entrada;
+use escritos\domain\entity\Escrito;
+use expedientes\domain\entity\Expediente;
 use JsonException;
 use pendientes\model\Pendiente;
 use usuarios\domain\entity\Cargo;

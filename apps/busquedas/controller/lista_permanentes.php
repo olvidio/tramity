@@ -5,8 +5,9 @@ use busquedas\model\Buscar;
 use busquedas\model\VerTabla;
 use core\ConfigGlobal;
 use core\ViewTwig;
+use entradas\domain\entity\EntradaRepository;
+use entradas\domain\repositories\EntradaCompartidaRepository;
 use entradas\model\entity\GestorEntradaCompartida;
-use entradas\model\GestorEntrada;
 use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\OficinaRepository;
@@ -162,11 +163,11 @@ switch ($Q_tipo_lista) {
     default:
         //anys posibles:
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            $gesEntradas = new GestorEntradaCompartida();
+            $EntradaRepository = new EntradaCompartidaRepository();
         } else {
-            $gesEntradas = new GestorEntrada();
+            $EntradaRepository = new EntradaRepository();
         }
-        $a_anys = $gesEntradas->posiblesYear();
+        $a_anys = $EntradaRepository->posiblesYear();
 
         $a_any_min = current($a_anys);
         $any_min = $a_any_min;

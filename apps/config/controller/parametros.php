@@ -1,6 +1,6 @@
 <?php
 
-use config\model\entity\ConfigSchema;
+use config\domain\repositories\ConfigSchemaRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\LocaleRepository;
 use web\Hash;
@@ -26,9 +26,14 @@ if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
 
 $a_campos['ambito_dl'] = $ambito_dl;
 
+$ConfigSchemaRepository = new ConfigSchemaRepository();
+
+// ----------- permiso para el botón distribuir al oficial -------------------
+//$parametro = 'perm_distribuir';
+
 // ----------- Chat del etherpad -------------------
 $parametro = 'chat';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 
 $val_chat_true = 'TRUE';
@@ -56,12 +61,12 @@ $a_campos['chk_chat_none'] = $chk_chat_none;
  */
 
 $parametro = 'periodo_entradas';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-if (empty($valor)) {
-    $valor = "30";
+$valor = "30";
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
+if ($oConfigSchema !== null) {
+    $valor = $oConfigSchema->getValor();
 }
+
 $val_sigla = $valor;
 
 $oHashPEntradas = new Hash();
@@ -91,7 +96,7 @@ $a_campos['periodo_entradas'] = $val_sigla;
  */
 
 $parametro = 'vida_permanente_registro';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 if (empty($valor)) {
     $valor = "3";
@@ -105,7 +110,7 @@ $a_campos['oHashVIDA_permanente_r'] = $oHashVIDA_permanente_r;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'vida_permanente_contenido';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 if (empty($valor)) {
     $valor = "3";
@@ -119,7 +124,7 @@ $a_campos['oHashVIDA_permanente_c'] = $oHashVIDA_permanente_c;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'vida_experiencia_registro';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 if (empty($valor)) {
     $valor = "3";
@@ -133,7 +138,7 @@ $a_campos['oHashVIDA_experiencia_r'] = $oHashVIDA_experiencia_r;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'vida_experiencia_contenido';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 if (empty($valor)) {
     $valor = "3";
@@ -147,7 +152,7 @@ $a_campos['oHashVIDA_experiencia_c'] = $oHashVIDA_experiencia_c;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'vida_normal_registro';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 if (empty($valor)) {
     $valor = "3";
@@ -161,7 +166,7 @@ $a_campos['oHashVIDA_normal_r'] = $oHashVIDA_normal_r;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'vida_normal_contenido';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 if (empty($valor)) {
     $valor = "3";
@@ -175,7 +180,7 @@ $a_campos['oHashVIDA_normal_c'] = $oHashVIDA_normal_c;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'vida_temporal_registro';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 if (empty($valor)) {
     $valor = "3";
@@ -189,7 +194,7 @@ $a_campos['oHashVIDA_temporal_r'] = $oHashVIDA_temporal_r;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'vida_temporal_contenido';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 if (empty($valor)) {
     $valor = "3";
@@ -203,7 +208,7 @@ $a_campos['oHashVIDA_temporal_c'] = $oHashVIDA_temporal_c;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'vida_borrable_registro';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 if (empty($valor)) {
     $valor = "3";
@@ -217,7 +222,7 @@ $a_campos['oHashVIDA_borrable_r'] = $oHashVIDA_borrable_r;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'vida_borrable_contenido';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 if (empty($valor)) {
     $valor = "3";
@@ -239,12 +244,13 @@ $a_campos[$parametro] = $val_sigla;
  */
 
 $parametro = 'cat_e12_registro';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-if (empty($valor)) {
-    $valor = "3";
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
+$valor = "3";
+if ($oConfigSchema !== null) {
+    $valor = $oConfigSchema->getValor();
 }
 $val_sigla = $valor;
+
 $oHashCAT_12_r = new Hash();
 $oHashCAT_12_r->setUrl($url);
 $oHashCAT_12_r->setcamposForm('valor');
@@ -253,10 +259,10 @@ $a_campos['oHashCAT_12_r'] = $oHashCAT_12_r;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'cat_e12_contenido';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-if (empty($valor)) {
-    $valor = "3";
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
+$valor = "3";
+if ($oConfigSchema !== null) {
+    $valor = $oConfigSchema->getValor();
 }
 $val_sigla = $valor;
 $oHashCAT_12_c = new Hash();
@@ -267,10 +273,10 @@ $a_campos['oHashCAT_12_c'] = $oHashCAT_12_c;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'cat_normal_registro';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-if (empty($valor)) {
-    $valor = "3";
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
+$valor = "3";
+if ($oConfigSchema !== null) {
+    $valor = $oConfigSchema->getValor();
 }
 $val_sigla = $valor;
 $oHashCAT_normal_r = new Hash();
@@ -281,10 +287,10 @@ $a_campos['oHashCAT_normal_r'] = $oHashCAT_normal_r;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'cat_normal_contenido';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-if (empty($valor)) {
-    $valor = "3";
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
+$valor = "3";
+if ($oConfigSchema !== null) {
+    $valor = $oConfigSchema->getValor();
 }
 $val_sigla = $valor;
 $oHashCAT_normal_c = new Hash();
@@ -295,10 +301,10 @@ $a_campos['oHashCAT_normal_c'] = $oHashCAT_normal_c;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'cat_permanente_registro';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-if (empty($valor)) {
-    $valor = "3";
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
+$valor = "3";
+if ($oConfigSchema !== null) {
+    $valor = $oConfigSchema->getValor();
 }
 $val_sigla = $valor;
 $oHashCAT_permanente_r = new Hash();
@@ -309,10 +315,10 @@ $a_campos['oHashCAT_permanente_r'] = $oHashCAT_permanente_r;
 $a_campos[$parametro] = $val_sigla;
 
 $parametro = 'cat_permanente_contenido';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-if (empty($valor)) {
-    $valor = "3";
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
+$valor = "3";
+if ($oConfigSchema !== null) {
+    $valor = $oConfigSchema->getValor();
 }
 $val_sigla = $valor;
 $oHashCAT_permanente_c = new Hash();
@@ -331,11 +337,10 @@ $a_campos[$parametro] = $val_sigla;
  */
 
 $parametro = 'plazo_urgente';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-if (empty($valor)) {
-    $valor = "3";
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
+$valor = "3";
+if ($oConfigSchema !== null) {
+    $valor = $oConfigSchema->getValor();
 }
 $val_sigla = $valor;
 
@@ -348,11 +353,10 @@ $a_campos['oHashPU'] = $oHashPU;
 $a_campos['plazo_urgente'] = $val_sigla;
 
 $parametro = 'plazo_rapido';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-if (empty($valor)) {
-    $valor = "7";
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
+$valor = "7";
+if ($oConfigSchema !== null) {
+    $valor = $oConfigSchema->getValor();
 }
 $val_sigla = $valor;
 
@@ -365,11 +369,10 @@ $a_campos['oHashPR'] = $oHashPR;
 $a_campos['plazo_rapido'] = $val_sigla;
 
 $parametro = 'plazo_normal';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-if (empty($valor)) {
-    $valor = "14";
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
+$valor = "14";
+if ($oConfigSchema !== null) {
+    $valor = $oConfigSchema->getValor();
 }
 $val_sigla = $valor;
 
@@ -383,11 +386,10 @@ $a_campos['plazo_normal'] = $val_sigla;
 
 // Error en fecha
 $parametro = 'plazo_error';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-if (empty($valor)) {
-    $valor = "15";
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
+$valor = "15";
+if ($oConfigSchema !== null) {
+    $valor = $oConfigSchema->getValor();
 }
 $val_sigla = $valor;
 
@@ -401,7 +403,7 @@ $a_campos['plazo_error'] = $val_sigla;
 
 // ----------- Inicio Contador cr -------------------
 $parametro = 'ini_contador_cr';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 
 $oHashC = new Hash();
@@ -414,7 +416,7 @@ $a_campos['ini_contador_cr'] = $valor;
 
 // ----------- Inicio Contador resto -------------------
 $parametro = 'ini_contador';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 
 $oHashC1 = new Hash();
@@ -427,7 +429,7 @@ $a_campos['ini_contador'] = $valor;
 
 // ----------- Inicio Contador IESE -------------------
 $parametro = 'ini_contador_iese';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 
 $oHashC2 = new Hash();
@@ -440,11 +442,10 @@ $a_campos['ini_contador_iese'] = $valor;
 
 // ----------- Nombre Sigla -------------------
 $parametro = 'sigla';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-if (empty($valor)) {
-    $valor = "dlb";
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
+$valor = "dlb";
+if ($oConfigSchema !== null) {
+    $valor = $oConfigSchema->getValor();
 }
 $val_sigla = $valor;
 
@@ -458,7 +459,7 @@ $a_campos['sigla'] = $val_sigla;
 
 // ----------- Nombre Localidad -------------------
 $parametro = 'localidad';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 
 $val_sigla = $valor;
@@ -471,54 +472,9 @@ $oHashL->setArrayCamposHidden(['parametro' => $parametro]);
 $a_campos['oHashL'] = $oHashL;
 $a_campos['localidad'] = $val_sigla;
 
-// ----------- body del mail -------------------
-$parametro = 'bodyMail';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-$val_sigla = $valor;
-
-$oHashBM = new Hash();
-$oHashBM->setUrl($url);
-$oHashBM->setcamposForm('valor');
-$oHashBM->setArrayCamposHidden(['parametro' => $parametro]);
-
-$a_campos['oHashBM'] = $oHashBM;
-$a_campos[$parametro] = $val_sigla;
-
-// ----------- Servidor de Etherpad -------------------
-$parametro = 'server_etherpad';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-$val_server = $valor;
-
-$oHashSE = new Hash();
-$oHashSE->setUrl($url);
-$oHashSE->setcamposForm('valor');
-$oHashSE->setArrayCamposHidden(['parametro' => $parametro]);
-
-$a_campos['oHashSE'] = $oHashSE;
-$a_campos['server_etherpad'] = $val_server;
-
-// ----------- Servidor de Ethercalc -------------------
-$parametro = 'server_ethercalc';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-$val_server = $valor;
-
-$oHashSEC = new Hash();
-$oHashSEC->setUrl($url);
-$oHashSEC->setcamposForm('valor');
-$oHashSEC->setArrayCamposHidden(['parametro' => $parametro]);
-
-$a_campos['oHashSEC'] = $oHashSEC;
-$a_campos['server_ethercalc'] = $val_server;
-
 // ----------- Idioma por defecto de la dl -------------------
 $parametro = 'idioma_default';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 
 $LocaleRepository = new LocaleRepository();
@@ -541,7 +497,7 @@ $a_campos['idioma_default'] = $val_idioma_default;
 
 // ----------- Ámbito: ctr, delegación o región -------------------
 $parametro = 'ambito';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 
 if (empty($valor)) {
@@ -570,7 +526,7 @@ $a_campos['chk_cr'] = $chk_cr;
 // ----------- Servidor SMTP -------------------
 
 $parametro = 'from';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 
 $oHashFrom = new Hash();
@@ -582,7 +538,7 @@ $a_campos['oHashFrom'] = $oHashFrom;
 $a_campos[$parametro] = $valor;
 
 $parametro = 'reply_to';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 
 $oHashReply = new Hash();
@@ -592,21 +548,6 @@ $oHashReply->setArrayCamposHidden(['parametro' => $parametro]);
 
 $a_campos['oHashReply'] = $oHashReply;
 $a_campos[$parametro] = $valor;
-
-// ----------- Servidor de Davical -------------------
-$parametro = 'server_davical';
-$oConfigSchema = new ConfigSchema($parametro);
-$valor = $oConfigSchema->getValor();
-
-$val_server_davical = $valor;
-
-$oHashDavical = new Hash();
-$oHashDavical->setUrl($url);
-$oHashDavical->setcamposForm('valor');
-$oHashDavical->setArrayCamposHidden(['parametro' => $parametro]);
-
-$a_campos['oHashDavical'] = $oHashDavical;
-$a_campos['server_davical'] = $val_server_davical;
 
 
 $oView = new core\ViewTwig('config/controller');

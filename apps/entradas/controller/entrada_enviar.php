@@ -1,10 +1,12 @@
 <?php
 
 use core\ViewTwig;
-use entradas\model\entity\EntradaBypass;
-use entradas\model\Entrada;
+use entradas\domain\entity\Entrada;
+use entradas\domain\entity\EntradaRepository;
+use entradas\domain\repositories\EntradaBypassRepository;
 use envios\model\Enviar;
 use oasis_as4\model\As4Remove;
+use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -35,6 +37,7 @@ $Qf_salida = (string)filter_input(INPUT_POST, 'f_salida');
 if (empty($Qf_salida)) {
     $Qf_salida = date(DateTimeInterface::ATOM);
 }
+$oF_salida = DateTimeLocal::createFromLocal($Qf_salida, 'date');
 
 // borrar los ya enviados:
 $oAS4Remove = new As4Remove();
@@ -58,19 +61,20 @@ $oEnviar = new Enviar($Q_id_entrada, 'entrada');
 $a_rta = $oEnviar->enviar();
 
 if ($a_rta['success'] === TRUE) {
-    $oEntradaBypass = new EntradaBypass($Q_id_entrada);
-    $oEntradaBypass->DBCargar();
-    $oEntradaBypass->setF_salida($Qf_salida, FALSE);
-    if ($oEntradaBypass->DBGuardar() === FALSE) {
-        $error_txt = $oEntradaBypass->getErrorTxt();
+    $EntradaBypassRepository = new EntradaBypassRepository();
+    $oEntradaBypass = $EntradaBypassRepository->findById($Q_id_entrada);
+    $oEntradaBypass->setF_salida($oF_salida);
+    if ($EntradaBypassRepository->Guardar($oEntradaBypass) === FALSE) {
+        $error_txt = $EntradaBypassRepository->getErrorTxt();
         echo "<script type=\"text/javascript\">
 				alert('$error_txt');
 			  </script>";
     }
-    $oEntrada = new Entrada($Q_id_entrada);
+    $EntradaRepository = new EntradaRepository();
+    $oEntrada = $EntradaRepository->findById($Q_id_entrada);
     $oEntrada->setEstado(Entrada::ESTADO_ENVIADO_CR);
-    if ($oEntrada->DBGuardar() === FALSE) {
-        $error_txt = $oEntrada->getErrorTxt();
+    if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
+        $error_txt = $EntradaRepository->getErrorTxt();
         echo "<script type=\"text/javascript\">
 				alert('$error_txt');
 			  </script>";

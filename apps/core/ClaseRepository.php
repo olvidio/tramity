@@ -67,6 +67,14 @@ abstract class ClaseRepository
     }
 
     /**
+     * @param string $sNomTabla
+     */
+    public function setNomTabla(string $sNomTabla): void
+    {
+        $this->sNomTabla = $sNomTabla;
+    }
+
+    /**
      * sErrorTxt
      * @return string
      */
@@ -112,14 +120,6 @@ abstract class ClaseRepository
     {
         $this->sErrorTxt = $sErrorTxt;
         return $this;
-    }
-
-    /**
-     * @param string $sNomTabla
-     */
-    protected function setNomTabla(string $sNomTabla): void
-    {
-        $this->sNomTabla = $sNomTabla;
     }
 
     /**

@@ -1,7 +1,8 @@
 <?php
 
 // INICIO Cabecera global de URL de controlador *********************************
-use escritos\model\entity\EscritoAdjunto;
+
+use escritos\domain\repositories\EscritoAdjuntoRepository;
 
 require_once("apps/core/global_header.inc");
 // Archivos requeridos por esta url **********************************************
@@ -17,11 +18,12 @@ require_once("apps/core/global_object.inc");
 $Q_id_item = (integer)filter_input(INPUT_POST, 'key');
 
 if (!empty($Q_id_item)) {
-    $oEscritoAdjunto = new EscritoAdjunto($Q_id_item);
+    $escritoAdjuntoRepository = new EscritoAdjuntoRepository();
+    $oEscritoAdjunto = $escritoAdjuntoRepository->findById($Q_id_item);
 
     /* The deleteUrl server action must send data via AJAX request as a JSON response {error: BOOLEAN_VALUE} */
     $error = FALSE;
-    if ($oEscritoAdjunto->DBEliminar() === FALSE) {
+    if ($escritoAdjuntoRepository->Eliminar($oEscritoAdjunto) === FALSE) {
         $error = TRUE;
     }
 } else {

@@ -67,7 +67,7 @@ class ProtocoloArray extends Protocolo
 
     /* MÉTODOS PÚBLICOS ----------------------------------------------------------*/
 
-    public function ArrayListaTxtBr($id_lugar_dst_org)
+    public function ArrayListaTxtBr(int $id_lugar_dst_org)
     {
         $aRef['dst_org'] = '';
         $aRef['local'] = '';
@@ -135,7 +135,7 @@ class ProtocoloArray extends Protocolo
                 $prot_mas = $oProt->mas;
 
                 if (!empty($id_lugar)) {
-                    $oLugar = $LugarRepository->findById($this->ilugar);
+                    $oLugar = $LugarRepository->findById($id_lugar);
                     if ($oLugar === null) {
                         $nom_lugar = _("?: no está en la tabla");
                     } else {

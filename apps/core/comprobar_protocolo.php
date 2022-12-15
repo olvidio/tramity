@@ -1,6 +1,6 @@
 <?php
 
-use entradas\model\GestorEntrada;
+use entradas\domain\entity\EntradaRepository;
 use function core\any_2;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -46,7 +46,7 @@ if ($Q_que == 's4') {
     $Q_id_lugar = (integer)filter_input(INPUT_POST, 'id_lugar');
     // compruebo si existe el escrito de referencia (sólo el primero, ordeno por anulado).
     // en entradas:
-    $gesEntradas = new GestorEntrada();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
+    $EntradaRepository = new EntradaRepository();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
     $aProt_origen = ['id_lugar' => $Q_id_lugar,
         'num' => $Q_prot_num,
         'any' => $Q_prot_any,
@@ -55,7 +55,7 @@ if ($Q_que == 's4') {
     // No buscar los anulados:
     $aWhere = ['bypass' => 'f', 'anulado' => 'x'];
     $aOperador = ['anulado' => 'IS NULL'];
-    $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen, $aWhere, $aOperador);
+    $cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt_origen, $aWhere, $aOperador);
 
     foreach ($cEntradas as $oEntrada) {
         $id_entrada = $oEntrada->getId_entrada();

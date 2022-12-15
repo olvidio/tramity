@@ -3,8 +3,9 @@
 namespace expedientes\model;
 
 use core\ViewTwig;
-use etiquetas\model\entity\GestorEtiqueta;
-use etiquetas\model\entity\GestorEtiquetaExpediente;
+use etiquetas\domain\repositories\EtiquetaExpedienteRepository;
+use etiquetas\domain\repositories\EtiquetaRepository;
+use expedientes\domain\entity\Expediente;
 use web\DesplegableArray;
 
 class DialogoBusquedaBorrador
@@ -36,7 +37,7 @@ class DialogoBusquedaBorrador
     }
 
 
-    public function generarCondicion()
+    public function generarCondicion(): array
     {
         $aWhereADD = [];
         $aOperadorADD = [];
@@ -56,8 +57,8 @@ class DialogoBusquedaBorrador
         $this->chk_and = (($this->andOr === 'AND') || empty($this->andOr)) ? 'checked' : '';
 
         if (!empty($this->a_etiquetas_filtered)) {
-            $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
-            $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($this->a_etiquetas_filtered, $this->andOr);
+            $etiquetaExpedienteRepository = new EtiquetaExpedienteRepository();
+            $cExpedientes = $etiquetaExpedienteRepository->getArrayExpedientes($this->a_etiquetas_filtered, $this->andOr);
             if (!empty($cExpedientes)) {
                 $aWhereADD['id_expediente'] = implode(',', $cExpedientes);
                 $aOperadorADD['id_expediente'] = 'IN';
@@ -74,8 +75,8 @@ class DialogoBusquedaBorrador
     public function mostrarDialogo(): void
     {
 
-        $gesEtiquetas = new GestorEtiqueta();
-        $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+        $etiquetaRepository = new EtiquetaRepository();
+        $cEtiquetas = $etiquetaRepository->getMisEtiquetas();
         $a_posibles_etiquetas = [];
         foreach ($cEtiquetas as $oEtiqueta) {
             $id_etiqueta = $oEtiqueta->getId_etiqueta();

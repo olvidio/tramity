@@ -4,8 +4,12 @@ namespace entradas\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use entradas\model\entity\GestorEntradaBypass;
+use entradas\domain\entity\Entrada;
+use entradas\domain\entity\EntradaRepository;
+use entradas\domain\repositories\EntradaBypassRepository;
+use usuarios\domain\Categoria;
 use usuarios\domain\entity\Cargo;
+use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\OficinaRepository;
 use usuarios\domain\Visibilidad;
 use web\Hash;
@@ -61,10 +65,9 @@ class EntradaLista
     public function mostrarTabla(): void
     {
         $this->setCondicion();
-        $pagina_nueva = '';
         $filtro = $this->getFiltro();
 
-        $oCategoria = new \usuarios\domain\Categoria();
+        $oCategoria = new Categoria();
         $a_categorias = $oCategoria->getArrayCategoria();
         $oVisibilidad = new Visibilidad();
         $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
@@ -72,14 +75,13 @@ class EntradaLista
         $OficinaRepository = new OficinaRepository();
         $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 
-
+        $pagina_nueva = '';
         $ver_oficina = TRUE;
         $pagina_accion = ConfigGlobal::getWeb() . '/apps/expedientes/controller/expediente_accion.php';
         switch ($filtro) {
             case 'en_encargado':
                 $encargado = $this->aWhereADD['encargado'];
                 $pagina_mod = ConfigGlobal::getWeb() . '/apps/entradas/controller/entrada_ver.php';
-                $pagina_nueva = '';
                 break;
             case 'en_aceptado':
                 $oficina = $this->aWhereADD['ponente'];
@@ -90,9 +92,7 @@ class EntradaLista
                     $ver_oficina = FALSE;
                 } else {
                     $pagina_mod = ConfigGlobal::getWeb() . '/apps/entradas/controller/entrada_ver.php';
-                    $ver_oficina = TRUE;
                 }
-                $pagina_nueva = '';
                 break;
             case 'en_ingresado':
                 $ver_oficina = FALSE;
@@ -121,9 +121,9 @@ class EntradaLista
         $a_entradas = [];
         $id_entrada = '';
         if (!empty($this->aWhere)) {
-            $oPermRegistro = new \usuarios\domain\PermRegistro();
-            $gesEntradas = new GestorEntrada();
-            $cEntradas = $gesEntradas->getEntradas($this->aWhere, $this->aOperador);
+            $oPermRegistro = new PermRegistro();
+            $EntradaRepository = new EntradaRepository();
+            $cEntradas = $EntradaRepository->getEntradas($this->aWhere, $this->aOperador);
             foreach ($cEntradas as $oEntrada) {
                 $row = [];
                 // mirar permisos...
@@ -154,7 +154,7 @@ class EntradaLista
                 }
                 $link_accion = Hash::link($pagina_accion . '?' . http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod . '?' . http_build_query($a_cosas));
-                if ($perm_ver_escrito >= \usuarios\domain\PermRegistro::PERM_VER) {
+                if ($perm_ver_escrito >= PermRegistro::PERM_VER) {
                     $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada_compartida',$compartida);\" >" . _("ver") . "</span>";
                     $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_accion');\" >" . _("acción") . "</span>";
                 }
@@ -286,7 +286,7 @@ class EntradaLista
     /**
      *
      */
-    private function setCondicion()
+    private function setCondicion(): void
     {
         $aWhere = [];
         $aOperador = [];
@@ -313,8 +313,8 @@ class EntradaLista
                 $oVisibilidad = new Visibilidad();
                 $a_visibilidad = $oVisibilidad->getArrayCondVisibilidad();
                 // No marcado como visto:
-                $gesEntradas = new GestorEntrada();
-                $cEntradas = $gesEntradas->getEntradasNoVistoDB($encargado, 'encargado', $a_visibilidad);
+                $EntradaRepository = new EntradaRepository();
+                $cEntradas = $EntradaRepository->getEntradasNoVistoDB($encargado, 'encargado', $a_visibilidad);
                 $a_entradas_encargado = [];
                 foreach ($cEntradas as $oEntrada) {
                     $id_entrada = $oEntrada->getId_entrada();
@@ -340,8 +340,8 @@ class EntradaLista
                     $a_visibilidad = $oVisibilidad->getArrayCondVisibilidad();
 
                     // No marcado como visto:
-                    $gesEntradas = new GestorEntrada();
-                    $cEntradas = $gesEntradas->getEntradasNoVistoDB('', 'centro', $a_visibilidad);
+                    $EntradaRepository = new EntradaRepository();
+                    $cEntradas = $EntradaRepository->getEntradasNoVistoDB('', 'centro', $a_visibilidad);
                     $a_entradas_ponente = [];
                     foreach ($cEntradas as $oEntrada) {
                         $id_entrada = $oEntrada->getId_entrada();
@@ -353,8 +353,8 @@ class EntradaLista
                         $id_oficina = ConfigGlobal::role_id_oficina();
 
                         // No marcado como visto:
-                        $gesEntradas = new GestorEntrada();
-                        $cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina, 'ponente');
+                        $EntradaRepository = new EntradaRepository();
+                        $cEntradas = $EntradaRepository->getEntradasNoVistoDB($id_oficina, 'ponente');
                         $a_entradas_ponente = [];
                         foreach ($cEntradas as $oEntrada) {
                             $id_entrada = $oEntrada->getId_entrada();
@@ -369,8 +369,8 @@ class EntradaLista
                     $id_oficina_role = ConfigGlobal::role_id_oficina();
                     if (!empty($id_oficina_role)) {
                         $id_oficina = ConfigGlobal::role_id_oficina();
-                        $gesEntradas = new GestorEntrada();
-                        $cEntradas = $gesEntradas->getEntradasNoVistoDB($id_oficina, 'resto');
+                        $EntradaRepository = new EntradaRepository();
+                        $cEntradas = $EntradaRepository->getEntradasNoVistoDB($id_oficina, 'resto');
                         foreach ($cEntradas as $oEntrada) {
                             $id_entrada = $oEntrada->getId_entrada();
                             $a_entradas_resto[] = $id_entrada;
@@ -394,8 +394,8 @@ class EntradaLista
                 // que no estén enviados
                 $aWhereBypass = ['f_salida' => 'x'];
                 $aOperadorBypass = ['f_salida' => 'IS NULL'];
-                $gesEntradaBypass = new GestorEntradaBypass();
-                $cEntradasBypass = $gesEntradaBypass->getEntradasBypass($aWhereBypass, $aOperadorBypass);
+                $EntradaBypassRepository = new EntradaBypassRepository();
+                $cEntradasBypass = $EntradaBypassRepository->getEntradasBypass($aWhereBypass, $aOperadorBypass);
                 $a_bypass = [];
                 foreach ($cEntradasBypass as $oEntradaBypass) {
                     $a_bypass[] = $oEntradaBypass->getId_entrada();
@@ -448,15 +448,15 @@ class EntradaLista
         $this->filtro = $filtro;
     }
 
-    public function getNumero(): int|string
+    public function getNumero(): ?int
     {
         $this->setCondicion();
         if (!empty($this->aWhere)) {
-            $gesEntradas = new GestorEntrada();
-            $cEntradas = $gesEntradas->getEntradas($this->aWhere, $this->aOperador);
+            $EntradaRepository = new EntradaRepository();
+            $cEntradas = $EntradaRepository->getEntradas($this->aWhere, $this->aOperador);
             $num = count($cEntradas);
         } else {
-            $num = '';
+            $num = null;
         }
         return $num;
     }
@@ -464,7 +464,7 @@ class EntradaLista
     /**
      * @param string $slide_mode
      */
-    public function setSlide_mode($slide_mode)
+    public function setSlide_mode($slide_mode): void
     {
         $this->slide_mode = $slide_mode;
     }

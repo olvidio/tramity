@@ -2,13 +2,16 @@
 
 namespace envios\model;
 
-use documentos\model\Documento;
-use entradas\model\entity\EntradaAdjunto;
-use entradas\model\entity\EntradaBypass;
-use entradas\model\entity\EntradaCompartida;
-use entradas\model\Entrada;
-use escritos\model\entity\EscritoAdjunto;
-use escritos\model\Escrito;
+use documentos\domain\entity\Documento;
+use entradas\domain\entity\Entrada;
+use entradas\domain\entity\EntradaBypass;
+use entradas\domain\entity\EntradaCompartida;
+use entradas\domain\entity\EntradaRepository;
+use entradas\domain\repositories\EntradaAdjuntoRepository;
+use entradas\domain\repositories\EntradaBypassRepository;
+use escritos\domain\entity\Escrito;
+use escritos\domain\repositories\EscritoAdjuntoRepository;
+use escritos\domain\repositories\EscritoRepository;
 use etherpad\model\Etherpad;
 use lugares\domain\entity\Lugar;
 use lugares\domain\repositories\LugarRepository;
@@ -29,11 +32,11 @@ class Enviar
     /**
      * @var Entrada|EntradaCompartida
      */
-    private $oEntrada;
+    private EntradaCompartida|Entrada $oEntrada;
     /**
-     * @var EntradaBypass|Entrada
+     * @var Entrada|EntradaBypass
      */
-    private $oEntradaBypass;
+    private EntradaBypass|Entrada $oEntradaBypass;
     private Etherpad $oEtherpad;
     private bool $bLoaded = FALSE;
     private bool $is_Bypass;
@@ -51,22 +54,25 @@ class Enviar
 
     private string $accion;
 
-    public function __construct($id, $tipo)
+    public function __construct(int $id, string $tipo)
     {
         $this->setId($id);
         $this->setTipo($tipo);
 
         if ($this->tipo === 'escrito') {
-            $this->oEscrito = new Escrito($this->iid);
+            $escritoRepository = new EscritoRepository();
+            $this->oEscrito = $escritoRepository->findById($this->iid);
         }
         if ($this->tipo === 'entrada') {
             // Los centros no tienen bypass
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                $this->oEntradaBypass = new Entrada($this->iid);
+                $EntradaRepository = new EntradaRepository();
+                $this->oEntradaBypass = $EntradaRepository->findById($this->iid);
             } else {
-                $this->oEntradaBypass = new EntradaBypass($this->iid);
+                $entradaBypassRepository = new EntradaBypassRepository();
+                $this->oEntradaBypass = $entradaBypassRepository->findById($this->iid);
             }
-            $this->is_Bypass = $this->oEntradaBypass->getBypass();
+            $this->is_Bypass = $this->oEntradaBypass->isBypass();
         }
     }
 
@@ -180,8 +186,9 @@ class Enviar
         // Attachments
         $this->a_adjuntos = [];
         $a_id_adjuntos = $this->oEntradaBypass->getArrayIdAdjuntos();
+        $entradaAdjuntoRepository = new EntradaAdjuntoRepository();
         foreach ($a_id_adjuntos as $item => $adjunto_filename) {
-            $oEntradaAdjunto = new EntradaAdjunto($item);
+            $oEntradaAdjunto = $entradaAdjuntoRepository->findById($item);
             $escrito_txt = $oEntradaAdjunto->getAdjunto();
             $this->a_adjuntos[$adjunto_filename] = $escrito_txt;
         }
@@ -189,7 +196,8 @@ class Enviar
 
     private function getDatosEntrada(): void
     {
-        $this->oEntrada = new Entrada($this->iid);
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($this->iid);
         $this->f_salida = $this->oEntrada->getF_documento()->getFromLocal('.');
         $this->asunto = empty($this->oEntrada->getAsunto()) ? $this->oEntrada->getAsunto_entrada() : $this->oEntrada->getAsunto();
 
@@ -206,8 +214,9 @@ class Enviar
         // Attachments
         $this->a_adjuntos = [];
         $a_id_adjuntos = $this->oEntrada->getArrayIdAdjuntos();
+        $entradaAdjuntoRepository = new EntradaAdjuntoRepository();
         foreach ($a_id_adjuntos as $item => $adjunto_filename) {
-            $oEntradaAdjunto = new EntradaAdjunto($item);
+            $oEntradaAdjunto = $entradaAdjuntoRepository->findById($item);
             $escrito_txt = $oEntradaAdjunto->getAdjunto();
             $this->a_adjuntos[$adjunto_filename] = $escrito_txt;
         }
@@ -227,7 +236,7 @@ class Enviar
             // número de protocolo.
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && empty((array)$json_prot_local)) {
                 $this->oEscrito->generarProtocolo();
-                if ($this->oEscrito->DBCargar() === FALSE) {
+                if ($this->oEscrito === null) {
                     $err_cargar = sprintf(_("OJO! no existe el escrito a enviar en %s, linea %s"), __FILE__, __LINE__);
                     exit ($err_cargar);
                 }
@@ -238,8 +247,9 @@ class Enviar
             // Attachments
             $this->a_adjuntos = [];
             $a_id_adjuntos = $this->oEscrito->getArrayIdAdjuntos();
+            $escritoAdjuntoRepository = new EscritoAdjuntoRepository();
             foreach ($a_id_adjuntos as $item => $adjunto_filename) {
-                $oEscritoAdjunto = new EscritoAdjunto($item);
+                $oEscritoAdjunto = $escritoAdjuntoRepository->findById($item);
                 $tipo_doc = $oEscritoAdjunto->getTipo_doc();
                 switch ($tipo_doc) {
                     case Documento::DOC_UPLOAD:

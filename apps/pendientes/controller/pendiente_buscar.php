@@ -3,8 +3,8 @@
 use busquedas\model\Buscar;
 use core\ConfigGlobal;
 use core\ViewTwig;
-use entradas\model\Entrada;
-use etiquetas\model\entity\GestorEtiqueta;
+use entradas\domain\entity\EntradaRepository;
+use etiquetas\domain\repositories\EtiquetaRepository;
 use lugares\domain\repositories\LugarRepository;
 use pendientes\model\BuscarPendiente;
 use pendientes\model\Pendiente;
@@ -131,8 +131,8 @@ if ($Q_que === 'buscar') {
         $oBuscarPendiente->setStatus($Q_status);
     }
 
-    $gesEtiquetas = new GestorEtiqueta();
-    $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+    $etiquetaRepository = new EtiquetaRepository();
+    $cEtiquetas = $etiquetaRepository->getMisEtiquetas();
     $a_posibles_etiquetas = [];
     foreach ($cEtiquetas as $oEtiqueta) {
         $id_etiqueta = $oEtiqueta->getId_etiqueta();
@@ -165,8 +165,9 @@ if ($Q_que === 'buscar') {
         preg_match('/REN(\d*?)-.*/', $uid, $matches);
         $id_entrada = empty($matches[1]) ? '' : $matches[1];
         if (!empty($id_entrada)) {
-            $oEntrada = new Entrada($id_entrada);
-            $bypass = $oEntrada->getBypass();
+            $EntradaRepository = new EntradaRepository();
+            $oEntrada = $EntradaRepository->findById($id_entrada);
+            $bypass = $oEntrada->isBypass();
             if ($bypass) {
                 $asunto = "<span class=\"text-danger\" title=\"$explicacion_bypass\">BYPASS</span> " . $asunto;
             }

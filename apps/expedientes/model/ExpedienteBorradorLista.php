@@ -3,6 +3,8 @@
 namespace expedientes\model;
 
 use core\ConfigGlobal;
+use expedientes\domain\entity\Expediente;
+use expedientes\domain\repositories\ExpedienteRepository;
 use web\Hash;
 use function core\is_true;
 
@@ -50,9 +52,9 @@ class ExpedienteBorradorLista
         $oFormatoLista->setPaginaVer($pagina_ver);
 
         if (!empty($this->aWhere)) {
-            $gesExpedientes = new GestorExpediente();
+            $ExpedienteRepository = new ExpedienteRepository();
             $this->aWhere['_ordre'] = 'id_expediente';
-            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+            $cExpedientes = $ExpedienteRepository->getExpedientes($this->aWhere, $this->aOperador);
         } else {
             $cExpedientes = [];
         }
@@ -85,8 +87,8 @@ class ExpedienteBorradorLista
             } else {
                 $visto = 'no_visto';
             }
-            $gesExpedientes = new GestorExpediente();
-            $a_expedientes = $gesExpedientes->getIdExpedientesPreparar($mi_cargo, $visto);
+            $ExpedienteRepository = new ExpedienteRepository();
+            $a_expedientes = $ExpedienteRepository->getIdExpedientesPreparar($mi_cargo, $visto);
             if (!empty($a_expedientes)) {
                 // OJO Puedo tener ya una selección de id_expediente por el filtro de etiquetas:
                 if (!empty($this->aWhere['id_expediente']) && ($this->aOperador['id_expediente'] === 'IN')) {
@@ -112,16 +114,16 @@ class ExpedienteBorradorLista
         $this->prioridad_sel = $prioridad_sel;
     }
 
-    public function getNumero()
+    public function getNumero(): ?int
     {
         $this->setCondicion();
         if (!empty($this->aWhere)) {
-            $gesExpedientes = new GestorExpediente();
+            $ExpedienteRepository = new ExpedienteRepository();
             $this->aWhere['_ordre'] = 'id_expediente';
-            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+            $cExpedientes = $ExpedienteRepository->getExpedientes($this->aWhere, $this->aOperador);
             $num = count($cExpedientes);
         } else {
-            $num = '';
+            $num = null;
         }
         return $num;
     }

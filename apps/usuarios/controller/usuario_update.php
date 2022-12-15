@@ -164,5 +164,5 @@ if (!empty($error_txt)) {
 }
 //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
 header('Content-type: application/json; charset=utf-8');
-echo json_encode($jsondata);
+echo json_encode($jsondata, JSON_THROW_ON_ERROR);
 exit();

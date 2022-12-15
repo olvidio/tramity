@@ -2,20 +2,22 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use documentos\model\Documento;
-use documentos\model\entity\GestorEtiquetaDocumento;
-use documentos\model\GestorDocumento;
-use entradas\model\GestorEntrada;
-use escritos\model\Escrito;
+use documentos\domain\entity\Documento;
+use documentos\domain\repositories\DocumentoRepository;
+use documentos\domain\repositories\EtiquetaDocumentoRepository;
+use entradas\domain\entity\EntradaRepository;
+use escritos\domain\entity\Escrito;
+use escritos\domain\repositories\EscritoRepository;
 use escritos\model\GestorEscrito;
-use etiquetas\model\entity\GestorEtiqueta;
-use etiquetas\model\entity\GestorEtiquetaExpediente;
-use expedientes\model\Expediente;
-use expedientes\model\GestorExpediente;
+use etiquetas\domain\repositories\EtiquetaExpedienteRepository;
+use etiquetas\domain\repositories\EtiquetaRepository;
+use expedientes\domain\entity\Expediente;
+use expedientes\domain\repositories\ExpedienteRepository;
 use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\CargoRepository;
 use usuarios\domain\repositories\OficinaRepository;
+use usuarios\domain\Visibilidad;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Lista;
@@ -48,14 +50,15 @@ switch ($Q_que) {
         $Q_tipo_antecedente = (string)filter_input(INPUT_POST, 'tipo_doc');
 
         $a_antecedente = ['tipo' => $Q_tipo_antecedente, 'id' => $Q_id_escrito];
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE) {
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oExpediente->delAntecedente($a_antecedente);
-        if ($oExpediente->DBGuardar() === FALSE) {
-            exit($oExpediente->getErrorTxt());
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+            exit($ExpedienteRepository->getErrorTxt());
         }
         echo $oExpediente->getHtmlAntecedentes();
         break;
@@ -63,15 +66,18 @@ switch ($Q_que) {
         $Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
         $Q_tipo_antecedente = (string)filter_input(INPUT_POST, 'tipo_doc');
 
-        $a_antecedente = ['tipo' => $Q_tipo_antecedente, 'id' => $Q_id_escrito];
-        $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE) {
+        $Antecedente = new stdClass();
+        $Antecedente->tipo = $Q_tipo_antecedente;
+        $Antecedente->id = $Q_id_escrito;
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+        if ($oExpediente === null) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
-        $oExpediente->addAntecedente($a_antecedente);
-        if ($oExpediente->DBGuardar() === FALSE) {
-            exit($oExpediente->getErrorTxt());
+        $oExpediente->addAntecedente($Antecedente);
+        if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+            exit($ExpedienteRepository->getErrorTxt());
         }
         echo $oExpediente->getHtmlAntecedentes();
         break;
@@ -88,7 +94,7 @@ switch ($Q_que) {
 
         $OficinaRepository = new OficinaRepository();
         $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
-        $gesEntradas = new GestorEntrada();
+        $EntradaRepository = new EntradaRepository();
         $aWhere = [];
         $aOperador = [];
         if (!empty($Q_oficina_buscar)) {
@@ -132,7 +138,7 @@ switch ($Q_que) {
         $aWhere['_ordre'] = 'f_entrada DESC';
 
         if (!empty($Q_origen_id_lugar)) {
-            $gesEntradas = new GestorEntrada();
+            $EntradaRepository = new EntradaRepository();
             $id_lugar = $Q_origen_id_lugar;
             if (!empty($Q_origen_prot_num) && !empty($Q_origen_prot_any)) {
                 // No tengo en cuenta las otras condiciones de la búsqueda
@@ -140,12 +146,12 @@ switch ($Q_que) {
                     'num' => $Q_origen_prot_num,
                     'any' => $Q_origen_prot_any,
                 ];
-                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
+                $cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt_origen);
             } else {
-                $cEntradas = $gesEntradas->getEntradasByLugarDB($id_lugar, $aWhere, $aOperador);
+                $cEntradas = $EntradaRepository->getEntradasByLugarDB($id_lugar, $aWhere, $aOperador);
             }
         } else {
-            $cEntradas = $gesEntradas->getEntradas($aWhere, $aOperador);
+            $cEntradas = $EntradaRepository->getEntradas($aWhere, $aOperador);
         }
 
         $a_cabeceras = ['', ['width' => 200, 'name' => _("protocolo")],
@@ -189,7 +195,7 @@ switch ($Q_que) {
 
         $OficinaRepository = new OficinaRepository();
         $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
-        $oDesplOficinas = new web\Desplegable('oficina_buscar', $a_posibles_oficinas, $Q_oficina_buscar, TRUE);
+        $oDesplOficinas = new Desplegable('oficina_buscar', $a_posibles_oficinas, $Q_oficina_buscar, TRUE);
 
         $LugarRepository = new LugarRepository();
         $a_lugares = $LugarRepository->getArrayBusquedas($Q_chk_anulados);
@@ -230,7 +236,7 @@ switch ($Q_que) {
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         $Q_periodo = (string)filter_input(INPUT_POST, 'periodo');
 
-        $gesExpediente = new GestorExpediente();
+        $ExpedienteRepository = new ExpedienteRepository();
         $aWhere = [];
         $aOperador = [];
         // sólo los de mi oficina:
@@ -246,8 +252,8 @@ switch ($Q_que) {
             $aOperador['ponente'] = 'IN';
         }
 
-        $gesEtiquetas = new GestorEtiqueta();
-        $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+        $EtiquetaRepository = new EtiquetaRepository();
+        $cEtiquetas = $EtiquetaRepository->getMisEtiquetas();
         $a_posibles_etiquetas = [];
         foreach ($cEtiquetas as $oEtiqueta) {
             $id_etiqueta = $oEtiqueta->getId_etiqueta();
@@ -264,8 +270,8 @@ switch ($Q_que) {
         $chk_and = (($Q_andOr === 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
         if (!empty($Q_a_etiquetas)) {
-            $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
-            $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($Q_a_etiquetas, $Q_andOr);
+            $EtiquetaExpedienteRepository = new EtiquetaExpedienteRepository();
+            $cExpedientes = $EtiquetaExpedienteRepository->getArrayExpedientes($Q_a_etiquetas, $Q_andOr);
             if (!empty($cExpedientes)) {
                 $aWhere['id_expediente'] = implode(',', $cExpedientes);
                 $aOperador['id_expediente'] = 'IN';
@@ -319,7 +325,7 @@ switch ($Q_que) {
         }
         $aWhere['_ordre'] = 'f_aprobacion DESC';
 
-        $cExpedientes = $gesExpediente->getExpedientes($aWhere, $aOperador);
+        $cExpedientes = $ExpedienteRepository->getExpedientes($aWhere, $aOperador);
 
         $a_cabeceras = ['', ['width' => 70, 'name' => _("fecha")],
             ['width' => 500, 'name' => _("asunto")],
@@ -332,7 +338,8 @@ switch ($Q_que) {
         foreach ($cExpedientes as $oExpediente) {
             $a++;
             // mirar permisos...
-            $visibilidad = $oExpediente->getVisibilidad();
+            // No debería ser nulo, pero pasa
+            $visibilidad = $oExpediente->getVisibilidad() ?? Visibilidad::V_TODOS;
             if (!$oPermiso->isVisibleDtor($visibilidad)) {
                 continue;
             }
@@ -386,7 +393,7 @@ switch ($Q_que) {
         $Q_local_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
         $Q_chk_anulados = (bool)filter_input(INPUT_POST, 'chk_anulados');
 
-        $gesEscrito = new GestorEscrito();
+        $escritoRepository = new EscritoRepository();
         $aWhere = [];
         $aOperador = [];
         // Sólo los escritos que ya se han enviado
@@ -441,18 +448,18 @@ switch ($Q_que) {
         $aWhere['_ordre'] = 'f_aprobacion DESC';
 
         if (!empty($Q_dest_id_lugar)) {
-            $gesEscritos = new GestorEscrito();
+            $EscritoRepository = new EscritoRepository();
             $id_lugar = $Q_dest_id_lugar;
-            $cEscritos = $gesEscritos->getEscritosByLugarDB($id_lugar, $aWhere, $aOperador);
+            $cEscritos = $EscritoRepository->getEscritosByLugar($id_lugar, $aWhere, $aOperador);
         } else {
-            $cEscritos1 = $gesEscrito->getEscritos($aWhere, $aOperador);
+            $cEscritos1 = $escritoRepository->getEscritos($aWhere, $aOperador);
             // añadir los modelos jurídicos (tipo_doc=3) y sin f_salida
             $aWhereModeloJ = $aWhere;
             $aOperadorModeloJ = $aOperador;
             unset($aWhereModeloJ['f_salida']);
             unset($aOperadorModeloJ['f_salida']);
             $aWhereModeloJ['accion'] = Escrito::ACCION_PLANTILLA;
-            $cEscritosJ = $gesEscrito->getEscritos($aWhereModeloJ, $aOperadorModeloJ);
+            $cEscritosJ = $escritoRepository->getEscritos($aWhereModeloJ, $aOperadorModeloJ);
             $cEscritos = array_merge($cEscritos1, $cEscritosJ);
         }
 
@@ -464,8 +471,8 @@ switch ($Q_que) {
                 'num' => $Q_local_prot_num,
                 'any' => $Q_local_prot_any,
             ];
-            $gesEscritos = new GestorEscrito();
-            $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
+            $EscritoRepository = new EscritoRepository();
+            $cEscritos = $EscritoRepository->getEscritosByProtLocal($aProt_local);
         }
 
         $a_cabeceras = ['', ['width' => 150, 'name' => _("protocolo")],
@@ -558,7 +565,7 @@ switch ($Q_que) {
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         $Q_periodo = (string)filter_input(INPUT_POST, 'periodo');
 
-        $gesDocumento = new GestorDocumento();
+        $DocumentoRepository = new DocumentoRepository();
         $aWhere = [];
         $aOperador = [];
         // sólo los de mi oficina:
@@ -574,8 +581,8 @@ switch ($Q_que) {
             $aOperador['creador'] = 'IN';
         }
 
-        $gesEtiquetas = new GestorEtiqueta();
-        $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+        $EtiquetaRepository = new EtiquetaRepository();
+        $cEtiquetas = $EtiquetaRepository->getMisEtiquetas();
         $a_posibles_etiquetas = [];
         foreach ($cEtiquetas as $oEtiqueta) {
             $id_etiqueta = $oEtiqueta->getId_etiqueta();
@@ -592,8 +599,8 @@ switch ($Q_que) {
         $chk_and = (($Q_andOr === 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
         if (!empty($Q_a_etiquetas)) {
-            $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
-            $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($Q_a_etiquetas, $Q_andOr);
+            $EtiquetaDocumentoRepository = new EtiquetaDocumentoRepository();
+            $cDocumentos = $EtiquetaDocumentoRepository->getArrayDocumentos($Q_a_etiquetas, $Q_andOr);
             if (!empty($cDocumentos)) {
                 $aWhere['id_doc'] = implode(',', $cDocumentos);
                 $aOperador['id_doc'] = 'IN';
@@ -647,7 +654,7 @@ switch ($Q_que) {
         }
         $aWhere['_ordre'] = 'f_upload DESC';
 
-        $cDocumentos = $gesDocumento->getDocumentos($aWhere, $aOperador);
+        $cDocumentos = $DocumentoRepository->getDocumentos($aWhere, $aOperador);
 
         $a_cabeceras = [['width' => 70, 'name' => _("fecha")],
             ['width' => 500, 'name' => _("nombre")],
@@ -658,15 +665,15 @@ switch ($Q_que) {
         $a = 0;
         foreach ($cDocumentos as $oDocumento) {
             // Si sólo quiero los etherpad, quitar el resto:
-            if ($Q_tipo_n === 5 && $oDocumento->getTipo_doc() != Documento::DOC_ETHERPAD) {
+            if ($Q_tipo_n === 5 && $oDocumento->getTipo_doc() !== Documento::DOC_ETHERPAD) {
                 continue;
             }
             // mirar permisos...
             $visibilidad = $oDocumento->getVisibilidad();
 
             if (ConfigGlobal::soy_dtor() === FALSE
-                && $visibilidad == Documento::V_PERSONAL
-                && $oDocumento->getCreador() != ConfigGlobal::role_id_cargo()
+                && $visibilidad === Documento::V_PERSONAL
+                && $oDocumento->getCreador() !== ConfigGlobal::role_id_cargo()
             ) {
                 continue;
             }
@@ -712,7 +719,7 @@ switch ($Q_que) {
         $Q_asunto_buscar = (string)filter_input(INPUT_POST, 'asunto_buscar');
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         // Expediente de mi oficina en borrador
-        $gesExpediente = new GestorExpediente();
+        $ExpedienteRepository = new ExpedienteRepository();
         $aWhere = [];
         $aOperador = [];
         $aWhere['estado'] = Expediente::ESTADO_BORRADOR;
@@ -735,7 +742,7 @@ switch ($Q_que) {
         }
         $aWhere['_ordre'] = 'f_aprobacion DESC';
 
-        $cExpedientes = $gesExpediente->getExpedientes($aWhere, $aOperador);
+        $cExpedientes = $ExpedienteRepository->getExpedientes($aWhere, $aOperador);
 
         $a_cabeceras = ['', ['width' => 70, 'name' => _("fecha")],
             ['width' => 500, 'name' => _("asunto")],

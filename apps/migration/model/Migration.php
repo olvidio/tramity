@@ -27,7 +27,7 @@ class Migration
     {
         // aprobaciones: id_salida 	id_reg 	f_aprobacion 	f_salida 	id_modo_envio
         // escritos: id_escrito	json_prot_local json_prot_destino json_prot_ref id_grupos destinos entradilla
-        //      asunto detalle creador resto_oficinas comentarios f_aprobacion f_escrito f_contestar categoria visibilidad
+        //      asunto detalle creador resto_oficinas comentarios f_aprobacion f_escrito oF_contestar categoria visibilidad
         //      accion modo_envio f_salida ok tipo_doc anulado
 
         // añadir columna
@@ -226,10 +226,10 @@ class Migration
 
         // duplicar entrada para el caso de los ctr:
         $sql = "INSERT INTO entradas ( modo_entrada, json_prot_origen, asunto_entrada, json_prot_ref, ponente, resto_oficinas,
-                        asunto, f_entrada, detalle, categoria, visibilidad, f_contestar, bypass, estado, anulado, id_reg, id_entrada_old)
+                        asunto, f_entrada, detalle, categoria, visibilidad, oF_contestar, bypass, estado, anulado, id_reg, id_entrada_old)
                 (
                 SELECT DISTINCT e.modo_entrada, e.json_prot_origen, e.asunto_entrada, e.json_prot_ref, e.ponente, e.resto_oficinas,
-                        e.asunto, e.f_entrada, e.detalle, e.categoria, e.visibilidad, e.f_contestar, TRUE, e.estado, e.anulado, e.id_reg, e.id_entrada_old
+                        e.asunto, e.f_entrada, e.detalle, e.categoria, e.visibilidad, e.oF_contestar, TRUE, e.estado, e.anulado, e.id_reg, e.id_entrada_old
                 FROM entradas e, entrada_adjuntos ad 
                 WHERE e.id_entrada = ad.id_entrada AND ad.dl_ctr=2 AND e.anulado IS NULL
                 ) ";

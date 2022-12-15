@@ -7,10 +7,12 @@ use core\Condicion;
 use core\ConfigGlobal;
 use core\ConverterDate;
 use core\Set;
-use expedientes\model\Expediente;
+use expedientes\domain\entity\Expediente;
+use expedientes\domain\repositories\ExpedienteRepository;
 use PDO;
 use PDOException;
 use tramites\domain\entity\Firma;
+use tramites\domain\repositories\FirmaRepository;
 use tramites\domain\repositories\FirmaRepositoryInterface;
 use tramites\domain\repositories\TramiteCargoRepository;
 use usuarios\domain\entity\Cargo;
@@ -67,7 +69,8 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
 
         $estado = Expediente::ESTADO_FIJAR_REUNION;
         //orden_tramite para las firmas de reunion (corresponde a 'todos_d' del tramite);
-        $oExpediente = new Expediente($id_expediente);
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($id_expediente);
         $id_tramite = $oExpediente->getId_tramite();
         $TramiteCargoRepository = new TramiteCargoRepository();
         $cTramiteCargo = $TramiteCargoRepository->getTramiteCargos(['id_tramite' => $id_tramite, 'id_cargo' => Cargo::CARGO_TODOS_DIR]);
@@ -89,7 +92,7 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
                         AND (f.valor IS NULL OR (f.valor != $valor_ok AND f.valor != $valor_no))
                     ";
         if ($oDbl->query($sQuery) === FALSE) {
-            $sClauError = 'FirmaRepository.query';
+            $sClauError = 'firmaRepository.query';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -119,7 +122,7 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
                         AND f.tipo = $tipo_voto
                     ";
         if (($oDblSt = $oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'FirmaRepository.query';
+            $sClauError = 'firmaRepository.query';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -152,7 +155,7 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
                         AND (f.valor IS NULL OR (f.valor != $valor_ok AND f.valor != $valor_no))
                     ";
         if ($oDbl->query($sQuery) === FALSE) {
-            $sClauError = 'FirmaRepository.query';
+            $sClauError = 'firmaRepository.query';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -182,7 +185,7 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
                         AND (valor = $valor_ok OR valor = $valor_no OR valor = $valor_vb)
                     ORDER BY orden_tramite DESC, orden_oficina DESC LIMIT 1";
         if (($stmt = $oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'FirmaRepository.query';
+            $sClauError = 'firmaRepository.query';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -430,7 +433,8 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
                         // sólo el siguiente en orden tramite si están todos completos.
                         if ($this->isAnteriorOK($id_expediente, $orden_tramite_ref)) {
                             $oFirma->setValor(Firma::V_VISTO);
-                            $oFirma->DBGuardar();
+                            $firmaRepository = new FirmaRepository();
+                            $firmaRepository->Guardar($oFirma);
 
                             $voto = $a_valores[Firma::V_VISTO];
                             $a_rec['class'] = "list-group-item-info";
@@ -478,7 +482,7 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
                     WHERE id_expediente = $id_expediente AND tipo = $tipo_voto AND orden_tramite = $orden_anterior
                     ";
         if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'FirmaRepository.query';
+            $sClauError = 'firmaRepository.query';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -523,7 +527,7 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
         return TRUE;
     }
 
-    private function arrayOrdenTramite(int $id_expediente): array
+    private function arrayOrdenTramite(int $id_expediente): bool|array
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -595,7 +599,7 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
                         AND valor IN ($valors_posibles)
                     ORDER BY orden_tramite DESC, orden_oficina DESC LIMIT 1";
         if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'FirmaRepository.query';
+            $sClauError = 'firmaRepository.query';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -618,7 +622,7 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
                     WHERE id_expediente = $id_expediente AND tipo = $tipo_voto AND (valor IS NULL OR (valor != $valor_ok AND valor != $valor_no))
                   ";
         if (($stmt = $oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'FirmaRepository.query';
+            $sClauError = 'firmaRepository.query';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -639,7 +643,7 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
                     WHERE id_expediente = $id_expediente AND cargo_tipo = $cargo_tipo_distribuir AND valor IS NULL
                     ORDER BY orden_tramite, orden_oficina LIMIT 1";
         if (($stmt = $oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'FirmaRepository.query';
+            $sClauError = 'firmaRepository.query';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -670,7 +674,7 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
                     WHERE id_expediente = $id_expediente
                     ORDER BY orden_tramite, orden_oficina LIMIT 1";
         if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'FirmaRepository.query';
+            $sClauError = 'firmaRepository.query';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -703,7 +707,7 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
                 WHERE new.id_expediente=sub.id_expediente AND new.id_tramite=$id_tramite AND new.cargo_tipo=sub.cargo_tipo AND new.id_cargo=sub.id_cargo ;
         ";
         if (($oDbl->exec($sql_update)) === FALSE) {
-            $sClauError = 'FirmaRepository.copiarFirmas1';
+            $sClauError = 'firmaRepository.copiarFirmas1';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -723,7 +727,8 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
         $cTramiteCargo = $TramiteCargoRepository->getTramiteCargos(['id_tramite' => $id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS]);
         if (!empty($cTramiteCargo)) {
             $orden_tramite = $cTramiteCargo[0]->getOrden_tramite();
-            $oExpediente = new Expediente($id_expediente);
+            $ExpedienteRepository = new ExpedienteRepository();
+            $oExpediente = $ExpedienteRepository->findById($id_expediente);
             $a_resto_oficinas = $oExpediente->getResto_oficinas();
             foreach ($cFirmasVarias as $oFirma) {
                 $id_cargo = $oFirma->getId_cargo();
@@ -871,7 +876,7 @@ class PgFirmaRepository extends ClaseRepository implements FirmaRepositoryInterf
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
         if (($oDbl->exec("DELETE FROM $nom_tabla WHERE id_expediente=$id_expediente AND id_tramite = $id_tramite")) === FALSE) {
-            $sClauError = 'FirmaRepository.borrarFirmas';
+            $sClauError = 'firmaRepository.borrarFirmas';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }

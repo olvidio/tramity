@@ -5,10 +5,12 @@ namespace escritos\model;
 use core\ConfigGlobal;
 use core\ViewTwig;
 use DateTimeInterface;
-use escritos\model\entity\EscritoDB;
-use escritos\model\entity\GestorEscritoDB;
-use expedientes\model\entity\GestorAccion;
-use expedientes\model\Expediente;
+use escritos\domain\entity\Escrito;
+use escritos\domain\entity\EscritoDB;
+use escritos\domain\repositories\EscritoRepository;
+use expedientes\domain\repositories\AccionRepository;
+use expedientes\domain\entity\Expediente;
+use expedientes\domain\repositories\ExpedienteRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\CargoRepository;
@@ -107,7 +109,7 @@ class EscritoLista
                 $a_accion['enviar'] = _("enviado") . " ($f_salida)";
             } else {
                 // si es anulado NO enviar!
-                if (is_true($oEscrito->getAnulado())) {
+                if (is_true($oEscrito->isAnulado())) {
                     $a_accion['enviar'] = "-";
                 } else {
                     $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito('$id_escrito');\" >" . _("enviar") . "</span>";
@@ -150,7 +152,7 @@ class EscritoLista
             }
 
             $asunto_detalle = $oEscrito->getAsuntoDetalle();
-            if (is_true($oEscrito->getAnulado())) {
+            if (is_true($oEscrito->isAnulado())) {
                 $anulado_txt = _("ANULADO");
                 $asunto_detalle = $anulado_txt . ' ' . $asunto_detalle;
             }
@@ -193,23 +195,23 @@ class EscritoLista
         if (empty($fecha)) {
             $fecha = date(DateTimeInterface::ATOM);
         }
-        $gesEscritos = new GestorEscrito();
+        $escritoRepository = new EscritoRepository();
         // No enviados
         $aWhere = ['accion' => Escrito::ACCION_ESCRITO,
             'f_salida' => 'x',
-            'ok' => entity\EscritoDB::OK_OFICINA,
+            'ok' => EscritoDB::OK_OFICINA,
         ];
         $aOperador = ['f_salida' => 'IS NULL',
         ];
-        $cEscritosNoEnviados = $gesEscritos->getEscritos($aWhere, $aOperador);
+        $cEscritosNoEnviados = $escritoRepository->getEscritos($aWhere, $aOperador);
         // Enviados a partir de $fecha
         $aWhere = ['accion' => Escrito::ACCION_ESCRITO,
             'f_salida' => $fecha,
-            'ok' => entity\EscritoDB::OK_OFICINA,
+            'ok' => EscritoDB::OK_OFICINA,
         ];
         $aOperador = ['f_salida' => '>=',
         ];
-        $cEscritosEnviadosFecha = $gesEscritos->getEscritos($aWhere, $aOperador);
+        $cEscritosEnviadosFecha = $escritoRepository->getEscritos($aWhere, $aOperador);
 
         return array_merge($cEscritosNoEnviados, $cEscritosEnviadosFecha);
     }
@@ -252,7 +254,8 @@ class EscritoLista
         $oVisibilidad = new Visibilidad();
         $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
 
-        $oExpediente = new Expediente($this->id_expediente);
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($this->id_expediente);
         $estado = $oExpediente->getEstado();
 
         $this->setCondicion();
@@ -261,8 +264,8 @@ class EscritoLista
         $oEscrito = new Escrito();
         $aAcciones = $oEscrito->getArrayAccion();
 
-        $gesAcciones = new GestorAccion();
-        $cAcciones = $gesAcciones->getAcciones($this->aWhere);
+        $AccionRepository = new AccionRepository();
+        $cAcciones = $AccionRepository->getAcciones($this->aWhere);
 
         $oProtLocal = new Protocolo();
         $oProtLocal->setNombre('local');
@@ -270,6 +273,7 @@ class EscritoLista
         $prot_local_header = _("rev.texto");
         $a_acciones = [];
         $todos_escritos_enviados = TRUE;
+        $escritoRepository = new EscritoRepository();
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $tipo_accion = $oAccion->getTipo_accion();
@@ -278,7 +282,7 @@ class EscritoLista
             $todos_escritos .= (empty($todos_escritos)) ? '' : ',';
             $todos_escritos .= $id_escrito;
 
-            $oEscrito = new Escrito($id_escrito);
+            $oEscrito = $escritoRepository->findById($id_escrito);
             $f_salida = $oEscrito->getF_salida()->getFromLocal();
             $tipo_accion = $oEscrito->getAccion();
 
@@ -289,7 +293,7 @@ class EscritoLista
             } else {
                 if ($tipo_accion === Escrito::ACCION_ESCRITO) {
                     // si es anulado NO enviar!
-                    if (is_true($oEscrito->getAnulado())) {
+                    if (is_true($oEscrito->isAnulado())) {
                         $a_accion['enviar'] = "-";
                     } else {
                         // Se pasa a secretaria
@@ -396,7 +400,7 @@ class EscritoLista
             }
 
             $asunto_detalle = $oEscrito->getAsuntoDetalle();
-            if (is_true($oEscrito->getAnulado())) {
+            if (is_true($oEscrito->isAnulado())) {
                 $anulado_txt = _("ANULADO");
                 $asunto_detalle = $anulado_txt . ' ' . $asunto_detalle;
             }
@@ -465,7 +469,8 @@ class EscritoLista
 
     private function isDistribuir(): bool
     {
-        $oExpediente = new Expediente($this->id_expediente);
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($this->id_expediente);
         $estado = $oExpediente->getEstado();
         return $estado === Expediente::ESTADO_ACABADO;
     }
@@ -503,8 +508,8 @@ class EscritoLista
     public function getNumero(): int
     {
         $this->setCondicion();
-        $gesEscritos = new GestorEscritoDB();
-        $cEscritos = $gesEscritos->getEscritosDB($this->aWhere, $this->aOperador);
+        $escritoRepository = new EscritoRepository();
+        $cEscritos = $escritoRepository->getEscritos($this->aWhere, $this->aOperador);
         return count($cEscritos);
     }
 

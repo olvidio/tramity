@@ -23,7 +23,7 @@ poner entrdas
  	
     id_entrada 	modo_entrada 	json_prot_origen 	f_entrada 	
     
-    asunto_entrada 	json_prot_ref 	ponente 	resto_oficinas 	asunto 	detalle 	categoria 	visibilidad 	f_contestar 	bypass 	estado 	anulado
+    asunto_entrada 	json_prot_ref 	ponente 	resto_oficinas 	asunto 	detalle 	categoria 	visibilidad 	oF_contestar 	bypass 	estado 	anulado
 */
 
 

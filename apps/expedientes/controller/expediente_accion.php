@@ -2,14 +2,15 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use entradas\model\entity\EntradaCompartida;
-use entradas\model\Entrada;
-use etiquetas\model\entity\GestorEtiqueta;
-use expedientes\model\Expediente;
+use entradas\domain\entity\EntradaCompartida;
+use entradas\domain\entity\EntradaRepository;
+use etiquetas\domain\repositories\EtiquetaRepository;
+use expedientes\domain\repositories\ExpedienteRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
 use web\DateTimeLocal;
 use web\Desplegable;
+use web\DesplegableArray;
 use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -35,7 +36,8 @@ switch ($Q_filtro) {
     case 'escritos_cr':
     case 'permanentes_cr':
     case 'en_buscar':
-        $oEntrada = new Entrada($Q_id_entrada);
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
         $asunto = $oEntrada->getAsunto();
 
         $a_condicion = [];
@@ -69,7 +71,8 @@ switch ($Q_filtro) {
         break;
     case 'en_aceptado':
         $Q_oficina = (string)filter_input(INPUT_POST, 'oficina');
-        $oEntrada = new Entrada($Q_id_entrada);
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
         $asunto = $oEntrada->getAsunto();
 
         $url_cancel = 'apps/entradas/controller/entrada_lista.php';
@@ -84,7 +87,8 @@ switch ($Q_filtro) {
         break;
     case 'en_encargado':
         $Q_encargado = (integer)filter_input(INPUT_POST, 'encargado');
-        $oEntrada = new Entrada($Q_id_entrada);
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
         $asunto = $oEntrada->getAsunto();
 
         $url_cancel = 'apps/entradas/controller/entrada_lista.php';
@@ -102,8 +106,8 @@ switch ($Q_filtro) {
             exit ("Error, no existe el expediente");
         }
 
-        $oExpediente = new Expediente();
-        $oExpediente->setId_expediente($Q_id_expediente);
+        $ExpedienteRepository = new ExpedienteRepository();
+        $oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
         $asunto = $oExpediente->getAsunto();
         $id_ponente = $oExpediente->getPonente();
 
@@ -291,8 +295,8 @@ if (empty($a_botones)) {
 
 // Etiquetas
 $etiquetas = []; // No hay ninguna porque en archivar es cuando se añaden.
-$gesEtiquetas = new GestorEtiqueta();
-$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$etiquetaRepository = new EtiquetaRepository();
+$cEtiquetas = $etiquetaRepository->getMisEtiquetas();
 $a_posibles_etiquetas = [];
 foreach ($cEtiquetas as $oEtiqueta) {
     $id_etiqueta = $oEtiqueta->getId_etiqueta();
@@ -303,7 +307,7 @@ foreach ($cEtiquetas as $oEtiqueta) {
 if (!empty($oEntrada)) {
     $etiquetas = $oEntrada->getEtiquetasVisiblesArray();
 }
-$oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas, $a_posibles_etiquetas, 'etiquetas');
+$oArrayDesplEtiquetas = new DesplegableArray($etiquetas, $a_posibles_etiquetas, 'etiquetas');
 $oArrayDesplEtiquetas->setBlanco('t');
 $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
 

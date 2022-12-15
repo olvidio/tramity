@@ -1,7 +1,8 @@
 <?php
 
 // INICIO Cabecera global de URL de controlador *********************************
-use entradas\model\GestorEntrada;
+use entradas\domain\entity\EntradaRepository;
+use escritos\domain\repositories\EscritoRepository;
 use escritos\model\GestorEscrito;
 use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\repositories\CargoRepository;
@@ -31,10 +32,10 @@ switch ($Q_que) {
         ];
 
         $id_entrada = '';
-        $gesEntradas = new GestorEntrada();
-        $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
+        $EntradaRepository = new EntradaRepository();
+        $cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt_origen);
         foreach ($cEntradas as $oEntrada) {
-            $bypass = $oEntrada->getBypass();
+            $bypass = $oEntrada->isBypass();
             $anulado = $oEntrada->getAnulado();
             if ($bypass) {
                 continue;
@@ -73,9 +74,9 @@ switch ($Q_que) {
                 'any' => $Q_prot_any,
             ];
             $id_escrito = '';
-            $gesEscritos = new GestorEscrito();
+            $EscritoRepository = new EscritoRepository();
             $CargoRepository = new CargoRepository();
-            $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
+            $cEscritos = $EscritoRepository->getEscritosByProtLocal($aProt_local);
             foreach ($cEscritos as $oEscrito) {
                 $id_escrito = $oEscrito->getId_escrito();
                 $jsondata['asunto'] = $oEscrito->getAsunto();
@@ -111,10 +112,10 @@ switch ($Q_que) {
             ];
 
             $id_entrada = '';
-            $gesEntradas = new GestorEntrada();
-            $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
+            $EntradaRepository = new EntradaRepository();
+            $cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt_origen);
             foreach ($cEntradas as $oEntrada) {
-                $bypass = $oEntrada->getBypass();
+                $bypass = $oEntrada->isBypass();
                 if ($bypass) {
                     continue;
                 }

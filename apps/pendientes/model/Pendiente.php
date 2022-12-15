@@ -7,11 +7,12 @@ require_once("/usr/share/awl/inc/iCalendar.php");
 
 use core\ConverterDate;
 use davical\model\CalDAVClient;
-use entradas\model\GestorEntrada;
+use entradas\domain\entity\EntradaRepository;
 use iCalComponent;
 use iCalProp;
 use pendientes\domain\repositories\PendienteDBRepository;
 use usuarios\domain\entity\Cargo;
+use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\OficinaRepository;
 use usuarios\domain\Visibilidad;
 use web\DateTimeLocal;
@@ -154,9 +155,9 @@ class Pendiente
             //echo "ref: $id_reg<br>";
             // Buscar en entradas
             $oProtOrigen = new Protocolo();
-            $gesEntradas = new GestorEntrada();
+            $EntradaRepository = new EntradaRepository();
             $aWhere = ['id_entrada' => $id_reg];
-            $cEntradas = $gesEntradas->getEntradas($aWhere);
+            $cEntradas = $EntradaRepository->getEntradas($aWhere);
             if (!empty($cEntradas)) {
                 $oEntrada = $cEntradas[0];
                 $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
@@ -328,27 +329,27 @@ class Pendiente
         switch ($class) {
             case 'PUBLIC':
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                    $visibilidad = \usuarios\domain\Visibilidad::V_CTR_TODOS;
+                    $visibilidad = Visibilidad::V_CTR_TODOS;
                 } else {
-                    $visibilidad = \usuarios\domain\Visibilidad::V_TODOS;
+                    $visibilidad = Visibilidad::V_TODOS;
                 }
                 break;
             case 'PRIVATE':
-                $visibilidad = \usuarios\domain\Visibilidad::V_PERSONAL;
+                $visibilidad = Visibilidad::V_PERSONAL;
                 break;
             case 'CONFIDENTIAL':
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $visibilidad = Visibilidad::V_CTR_DTOR;
                 } else {
-                    $visibilidad = \usuarios\domain\Visibilidad::V_DIRECTORES;
+                    $visibilidad = Visibilidad::V_DIRECTORES;
                 }
                 //$visibilidad = Visibilidad::V_RESERVADO; // solo añade no ver a los directores de otras oficinas no implicadas
                 break;
             case 'VCD':
-                $visibilidad = \usuarios\domain\Visibilidad::V_RESERVADO_VCD;
+                $visibilidad = Visibilidad::V_RESERVADO_VCD;
                 break;
             default:
-                $visibilidad = \usuarios\domain\Visibilidad::V_TODOS;
+                $visibilidad = Visibilidad::V_TODOS;
         }
         return $visibilidad;
     }
@@ -434,7 +435,7 @@ class Pendiente
 
     /**
      * crea un pendiente en davical con  los datos existentes en la tabla (PendienteDB)
-     * y despues lo elimina de la DB.
+     * y después lo elimina de la DB.
      *
      * @param string $id_reg
      * @param integer $id_pendiente
@@ -475,7 +476,7 @@ class Pendiente
      */
     public function getAsunto()
     {
-        $oPermiso = new \usuarios\domain\PermRegistro();
+        $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this, 'asunto');
 
         $local_asunto = _("reservado");
@@ -616,7 +617,7 @@ class Pendiente
      */
     function getDetalle()
     {
-        $oPermiso = new \usuarios\domain\PermRegistro();
+        $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($this, 'detalle');
 
         $local_detalle = _("reservado");
@@ -920,25 +921,25 @@ class Pendiente
     private function visibilidad_to_Class($visibilidad)
     {
         switch ($visibilidad) {
-            case \usuarios\domain\Visibilidad::V_TODOS:
+            case Visibilidad::V_TODOS:
                 $class = 'PUBLIC';
                 break;
-            case \usuarios\domain\Visibilidad::V_PERSONAL:
+            case Visibilidad::V_PERSONAL:
                 $class = 'PRIVATE';
                 break;
             case Visibilidad::V_DIRECTORES:
-            case \usuarios\domain\Visibilidad::V_RESERVADO:
+            case Visibilidad::V_RESERVADO:
                 $class = 'CONFIDENTIAL';
                 break;
-            case \usuarios\domain\Visibilidad::V_RESERVADO_VCD;
+            case Visibilidad::V_RESERVADO_VCD;
                 $class = 'VCD';
                 break;
             // para los ctr
-            case \usuarios\domain\Visibilidad::V_CTR_TODOS;
+            case Visibilidad::V_CTR_TODOS;
                 $class = 'PUBLIC';
                 break;
-            case \usuarios\domain\Visibilidad::V_CTR_DTOR;
-            case \usuarios\domain\Visibilidad::V_CTR_DTOR_SACD;
+            case Visibilidad::V_CTR_DTOR;
+            case Visibilidad::V_CTR_DTOR_SACD;
                 $class = 'CONFIDENTIAL';
                 break;
             default:

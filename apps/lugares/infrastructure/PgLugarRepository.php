@@ -251,7 +251,9 @@ class PgLugarRepository extends ClaseRepository implements LugarRepositoryInterf
         $spub_key = '';
         $oDblSt->bindColumn('pub_key', $spub_key, PDO::PARAM_STR);
         $aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);
-        $aDatos['pub_key'] = $spub_key;
+        if (!empty($aDatos)) {
+            $aDatos['pub_key'] = $spub_key;
+        }
         return $aDatos;
     }
 

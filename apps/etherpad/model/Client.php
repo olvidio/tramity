@@ -195,7 +195,7 @@ class Client
         return $padID;
     }
 
-    public function mostrar_error($rta)
+    public function mostrar_error($rta): string
     {
         $a_codes = [
             0 => 'everything ok',

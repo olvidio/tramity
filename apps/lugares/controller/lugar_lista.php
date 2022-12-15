@@ -39,7 +39,7 @@ $aWhere['_ordre'] = 'sigla';
 $aOperador = [];
 
 $LugarRepository = new LugarRepository();
-$cLugares = $LugarRepository->getLugares($aWhere, $aOperador);
+$cLugares = $LugarRepository->getLugares($aWhere);
 
 //default:
 $id_lugar = '';

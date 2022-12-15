@@ -106,20 +106,22 @@ switch ($Q_que) {
         $Q_orden_tramite = (integer)filter_input(INPUT_POST, 'orden_tramite');
         $Q_multiple = (integer)filter_input(INPUT_POST, 'multiple');
 
-        $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
+        $tramiteCargoRepository = new TramiteCargoRepository();
+        $oTramiteCargo = $tramiteCargoRepository->findById($Q_id_item);
         $oTramiteCargo->setId_tramite($Q_id_tramite);
         $oTramiteCargo->setId_cargo($Q_id_cargo);
         $oTramiteCargo->setOrden_tramite($Q_orden_tramite);
         $oTramiteCargo->setMultiple($Q_multiple);
-        if ($oTramiteCargo->DBGuardar() === FALSE) {
-            $error_txt .= $oTramiteCargo->getErrorTxt();
+        if ($tramiteCargoRepository->Guardar($oTramiteCargo) === FALSE) {
+            $error_txt .= $tramiteCargoRepository->getErrorTxt();
         }
         break;
     case 'eliminar':
         $Q_id_item = (integer)filter_input(INPUT_POST, 'id_item');
-        $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
-        if ($oTramiteCargo->DBEliminar() === FALSE) {
-            $error_txt .= $oTramiteCargo->getErrorTxt();
+        $tramiteCargoRepository = new TramiteCargoRepository();
+        $oTramiteCargo = $tramiteCargoRepository->findById($Q_id_item);
+        if ($tramiteCargoRepository->Eliminar($oTramiteCargo) === FALSE) {
+            $error_txt .= $tramiteCargoRepository->getErrorTxt();
         }
         break;
     default:

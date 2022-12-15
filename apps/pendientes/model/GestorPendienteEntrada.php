@@ -4,7 +4,7 @@ namespace pendientes\model;
 
 use davical\model\Davical;
 use davical\model\entity\GestorCalendarItem;
-use entradas\model\GestorEntrada;
+use entradas\domain\entity\EntradaRepository;
 
 // Archivos requeridos por esta url **********************************************
 require_once("/usr/share/awl/inc/iCalendar.php");
@@ -49,7 +49,7 @@ class GestorPendienteEntrada
         $this->a_lista_pendientes = [];
         $this->pendientes_uid = '';
 
-        $gesEntradas = new GestorEntrada();
+        $EntradaRepository = new EntradaRepository();
         foreach ($a_prot as $aProt) {
             // buscar la entrada con esta ref. No tengo en cuenta el 'mas' para buscar la entrada.
             unset ($aProt['mas']);
@@ -60,7 +60,7 @@ class GestorPendienteEntrada
             if (empty($aProt['any'])) {
                 continue;
             }
-            $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt);
+            $cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt);
             $this->getInfoPendientes($cEntradas);
         }
 
@@ -91,7 +91,7 @@ class GestorPendienteEntrada
                     $uid_container = "$uid#$parent_container";
                     $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
                     $status = $oPendiente->getStatus();
-                    if (empty($status) || $status == 'COMPLETED' || $status == 'CANCELLED') {
+                    if (empty($status) || $status === 'COMPLETED' || $status === 'CANCELLED') {
                         continue;
                     }
                     $rrule = $oPendiente->getRrule();

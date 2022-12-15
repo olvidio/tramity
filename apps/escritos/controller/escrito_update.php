@@ -4,16 +4,19 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use davical\model\Davical;
-use escritos\model\Escrito;
+use escritos\domain\entity\Escrito;
+use escritos\domain\entity\EscritoDB;
+use escritos\domain\repositories\EscritoRepository;
 use etherpad\model\Etherpad;
-use expedientes\model\entity\Accion;
-use expedientes\model\entity\GestorAccion;
+use expedientes\domain\entity\Accion;
+use expedientes\domain\repositories\AccionRepository;
 use lugares\domain\repositories\GrupoRepository;
 use pendientes\model\GestorPendienteEntrada;
 use pendientes\model\Pendiente;
 use pendientes\model\Rrule;
 use usuarios\domain\PermRegistro;
 use web\DateTimeLocal;
+use web\Hash;
 use web\Lista;
 use web\Protocolo;
 use function core\is_true;
@@ -47,6 +50,10 @@ $Q_plazo = (string)filter_input(INPUT_POST, 'plazo');
 $Q_f_plazo = (string)filter_input(INPUT_POST, 'f_plazo');
 $Q_ok = (string)filter_input(INPUT_POST, 'ok');
 
+/* convertir las fechas a DateTimeLocal */
+$oF_escrito = DateTimeLocal::createFromLocal($Q_f_escrito);
+$oF_plazo = DateTimeLocal::createFromLocal($Q_f_plazo);
+
 $Q_grupo_dst = (string)filter_input(INPUT_POST, 'grupo_dst');
 // genero un vector con todos los grupos.
 $Q_a_grupos = (array)filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -65,23 +72,24 @@ $Q_a_prot_mas_referencias = (array)filter_input(INPUT_POST, 'prot_mas_referencia
 switch ($Q_que) {
     case 'conmutar':
         $error_txt = '';
-        $oEscrito = new Escrito($Q_id_escrito);
+        $escritoRepository = new EscritoRepository();
+        $oEscrito = $escritoRepository->findById($Q_id_escrito);
         $accion = ($oEscrito->getAccion() === 1) ? 2 : 1;
         $oEscrito->setAccion($accion);
-        if ($oEscrito->DBGuardar() === FALSE) {
+        if ($escritoRepository->Guardar($oEscrito) === FALSE) {
             $error_txt .= $oEscrito->getErrorTxt();
         }
-        $gesAcciones = new GestorAccion();
-        $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Q_id_expediente, 'id_escrito' => $Q_id_escrito]);
+        $AccionRepository = new AccionRepository();
+        $cAcciones = $AccionRepository->getAcciones(['id_expediente' => $Q_id_expediente, 'id_escrito' => $Q_id_escrito]);
         // solamente debería haber uno
         $oAccion = $cAcciones[0];
-        if ($oAccion->DBCargar() === FALSE) {
+        if ($oAccion === null) {
             $err_cargar = sprintf(_("OJO! no existe la acción en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oAccion->setTipo_accion($accion);
-        if ($oAccion->DBGuardar() === FALSE) {
-            $error_txt .= $oAccion->getErrorTxt();
+        if ($AccionRepository->Guardar($oAccion) === FALSE) {
+            $error_txt .= $AccionRepository->getErrorTxt();
         }
 
         if (empty($error_txt)) {
@@ -98,15 +106,17 @@ switch ($Q_que) {
         exit();
     case 'modificar_detalle':
         $error_txt = '';
-        $oEscrito = new Escrito($Q_id_escrito);
         $Q_detalle = (string)filter_input(INPUT_POST, 'text');
-        if ($oEscrito->DBCargar() === FALSE) {
+
+        $escritoRepository = new EscritoRepository();
+        $oEscrito = $escritoRepository->findById($Q_id_escrito);
+        if ($oEscrito === null) {
             $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oEscrito->setDetalle($Q_detalle);
-        if ($oEscrito->DBGuardar() === FALSE) {
-            $error_txt = $oEscrito->getErrorTxt();
+        if ($escritoRepository->Guardar($oEscrito) === FALSE) {
+            $error_txt = $escritoRepository->getErrorTxt();
         }
         if (empty($error_txt)) {
             $jsondata['success'] = true;
@@ -121,11 +131,13 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'get_detalle':
-        $oEscrito = new Escrito($Q_id_escrito);
+        $escritoRepository = new EscritoRepository();
+        $oEscrito = $escritoRepository->findById($Q_id_escrito);
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($oEscrito, 'detalle');
         if ($perm < PermRegistro::PERM_MODIFICAR) {
             $mensaje = _("No tiene permiso para modificar el detalle");
+            $detalle = '';
         } else {
             $detalle = $oEscrito->getDetalle();
             $mensaje = '';
@@ -144,7 +156,8 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'perm_ver':
-        $oEscrito = new Escrito($Q_id_escrito);
+        $escritoRepository = new EscritoRepository();
+        $oEscrito = $escritoRepository->findById($Q_id_escrito);
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($oEscrito, 'escrito');
         if ($perm < PermRegistro::PERM_VER) {
@@ -259,7 +272,7 @@ switch ($Q_que) {
         $oTabla->setBotones($a_botones);
         $oTabla->setDatos($a_valores);
 
-        $base_url = core\ConfigGlobal::getWeb();
+        $base_url = ConfigGlobal::getWeb();
 
         $a_campos = [
             'base_url' => $base_url,
@@ -295,7 +308,7 @@ switch ($Q_que) {
                     $txt_err .= $aRespuesta['mensaje'];
                 }
             } else {
-                // los periodicos
+                // los periódicos
                 $txt_err .= _("falta definir fecha para periodico");
             }
         }
@@ -315,7 +328,8 @@ switch ($Q_que) {
     case 'comprobar_pendientes':
         $txt_err = '';
         $mensaje = '';
-        $oEscrito = new Escrito($Q_id_escrito);
+        $escritoRepository = new EscritoRepository();
+        $oEscrito = $escritoRepository->findById($Q_id_escrito);
         // buscar en los destinos.
         $a_prot_dst = $oEscrito->getJson_prot_destino(TRUE);
         $gesPendientesEntrada = new GestorPendienteEntrada();
@@ -339,7 +353,7 @@ switch ($Q_que) {
             $lista_pendientes .= implode('</li><li>', $a_lista_pendientes);
             $lista_pendientes .= '</li></ol>';
         }
-        if ($num_pendientes == 1) {
+        if ($num_pendientes === 1) {
             $mensaje = sprintf(_("Tiene %s pendiente asociado"), $num_pendientes);
         }
 
@@ -362,34 +376,35 @@ switch ($Q_que) {
     case 'eliminar':
         $txt_err = '';
         if (!empty($Q_id_escrito)) {
-            $oEscrito = new Escrito($Q_id_escrito);
-            // Sólo se puede eliminar si no se ha enviado, o si es secretaría 
+            $escritoRepository = new EscritoRepository();
+            $oEscrito = $escritoRepository->findById($Q_id_escrito);
+            // Sólo se puede eliminar si no se ha enviado, o si es secretaría
             // Si se ha enviado se puede quitar del expediente:
             $f_salida = $oEscrito->getF_salida()->getIso();
             if (empty($f_salida) || ConfigGlobal::role_actual() === 'secretaria') {
                 $tipo_doc = $oEscrito->getTipo_doc();
                 // borrar el Etherpad
-                if ($tipo_doc == Escrito::TIPO_ETHERPAD) {
+                if ($tipo_doc === EscritoDB::TIPO_ETHERPAD) {
                     $oNewEtherpad = new Etherpad();
                     $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $Q_id_escrito);
                     $oNewEtherpad->eliminarPad();
                 }
 
-                if ($oEscrito->DBEliminar() === FALSE) {
+                if ($escritoRepository->Eliminar($oEscrito) === FALSE) {
                     $txt_err .= _("Hay un error al eliminar el escrito");
                     $txt_err .= "<br>";
                 }
             } else {
                 // Si está dentro de un expediente, lo quito:
                 if (!empty($Q_id_expediente)) {
-                    $gesAcciones = new GestorAccion();
-                    $cAcciones = $gesAcciones->getAcciones(['id_expediente' => $Q_id_expediente, 'id_escrito' => $Q_id_escrito]);
+                    $AccionRepository = new AccionRepository();
+                    $cAcciones = $AccionRepository->getAcciones(['id_expediente' => $Q_id_expediente, 'id_escrito' => $Q_id_escrito]);
                     // debería existir sólo uno
                     $oAccion = $cAcciones[0];
-                    if ($oAccion->DBEliminar() === FALSE) {
+                    if ($AccionRepository->Eliminar($oAccion) === FALSE) {
                         $txt_err .= _("Hay un error al quitar el escrito de expediente");
                         $txt_err .= "<br>";
-                        $txt_err .= $oAccion->getErrorTxt();
+                        $txt_err .= $AccionRepository->getErrorTxt();
                     }
                 }
             }
@@ -409,63 +424,67 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'escrito_a_secretaria':
-        $oEscrito = new Escrito($Q_id_escrito);
-        if ($oEscrito->DBCargar() === FALSE) {
+        $escritoRepository = new EscritoRepository();
+        $oEscrito = $escritoRepository->findById($Q_id_escrito);
+        if ($oEscrito === null) {
             $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oEscrito->setComentarios('');
-        $oEscrito->setOK(Escrito::OK_OFICINA);
-        if ($oEscrito->DBGuardar() === FALSE) {
+        $oEscrito->setOK(EscritoDB::OK_OFICINA);
+        if ($escritoRepository->Guardar($oEscrito) === FALSE) {
             exit($oEscrito->getErrorTxt());
         }
         break;
     case 'escrito_a_oficina':
         $Q_comentario = (string)filter_input(INPUT_POST, 'comentario');
-        $oEscrito = new Escrito($Q_id_escrito);
-        if ($oEscrito->DBCargar() === FALSE) {
+        $escritoRepository = new EscritoRepository();
+        $oEscrito = $escritoRepository->findById($Q_id_escrito);
+        if ($oEscrito === null) {
             $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oEscrito->setComentarios($Q_comentario);
-        $oEscrito->setOK(Escrito::OK_NO);
-        if ($oEscrito->DBGuardar() === FALSE) {
-            exit($oEscrito->getErrorTxt());
+        $oEscrito->setOK(EscritoDB::OK_NO);
+        if ($escritoRepository->Guardar($oEscrito) === FALSE) {
+            exit($escritoRepository->getErrorTxt());
         }
         break;
     case 'tipo_doc':
         $Q_tipo_doc = (integer)filter_input(INPUT_POST, 'tipo_doc');
-        $oEscrito = new Escrito($Q_id_escrito);
-        if ($oEscrito->DBCargar() === FALSE) {
+        $escritoRepository = new EscritoRepository();
+        $oEscrito = $escritoRepository->findById($Q_id_escrito);
+        if ($oEscrito === null) {
             $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oEscrito->setTipo_doc($Q_tipo_doc);
-        if ($oEscrito->DBGuardar() === FALSE) {
-            exit($oEscrito->getErrorTxt());
+        if ($escritoRepository->Guardar($oEscrito) === FALSE) {
+            exit($escritoRepository->getErrorTxt());
         }
 
         break;
     case 'f_escrito':
         if ($Q_f_escrito === 'hoy') {
-            $oHoy = new DateTimeLocal();
-            $Q_f_escrito = $oHoy->getFromLocal();
+            $oF_escrito = new DateTimeLocal();
         }
-        $oEscrito = new Escrito($Q_id_escrito);
-        if ($oEscrito->DBCargar() === FALSE) {
+        $escritoRepository = new EscritoRepository();
+        $oEscrito = $escritoRepository->findById($Q_id_escrito);
+        if ($oEscrito === null) {
             $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
-        $oEscrito->setF_escrito($Q_f_escrito);
-        if ($oEscrito->DBGuardar() === FALSE) {
-            exit($oEscrito->getErrorTxt());
+        $oEscrito->setF_escrito($oF_escrito);
+        if ($escritoRepository->Guardar($oEscrito) === FALSE) {
+            exit($escritoRepository->getErrorTxt());
         }
         break;
     case 'guardar_asunto':
         $txt_err = '';
         if (!empty($Q_id_escrito)) {
-            $oEscrito = new Escrito($Q_id_escrito);
-            if ($oEscrito->DBCargar() === FALSE) {
+            $escritoRepository = new EscritoRepository();
+            $oEscrito = $escritoRepository->findById($Q_id_escrito);
+            if ($oEscrito === null) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -478,10 +497,10 @@ switch ($Q_que) {
             }
             $oEscrito->setAsunto($Q_asunto);
             $oEscrito->setDetalle($Q_detalle);
-            if ($oEscrito->DBGuardar() === FALSE) {
+            if ($escritoRepository->Guardar($oEscrito) === FALSE) {
                 $txt_err .= _("Hay un error al guardar el escrito");
                 $txt_err .= "<br>";
-                $txt_err .= $oEscrito->getErrorTxt();
+                $txt_err .= $escritoRepository->getErrorTxt();
             }
         } else {
             $txt_err = _("No existe el escrito");
@@ -503,8 +522,9 @@ switch ($Q_que) {
         $error_txt = '';
         $nuevo = FALSE;
         if (!empty($Q_id_escrito)) {
-            $oEscrito = new Escrito($Q_id_escrito);
-            if ($oEscrito->DBCargar() === FALSE) {
+            $escritoRepository = new EscritoRepository();
+            $oEscrito = $escritoRepository->findById($Q_id_escrito);
+            if ($oEscrito === null) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -512,7 +532,10 @@ switch ($Q_que) {
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEscrito, 'asunto');
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEscrito, 'detalle');
         } else {
+            $escritoRepository = new EscritoRepository();
+            $id_escrito = $escritoRepository->getNewId_escrito();
             $oEscrito = new Escrito();
+            $oEscrito->setId_escrito($id_escrito);
             $oEscrito->setAccion($Q_accion);
             $oEscrito->setModo_envio(Escrito::MODO_MANUAL);
             $nuevo = TRUE;
@@ -522,7 +545,7 @@ switch ($Q_que) {
 
         if ($Q_accion === Escrito::ACCION_ESCRITO) {
             // Si esta marcado como grupo de destinos, o destinos individuales. 
-            if (core\is_true($Q_grupo_dst)) {
+            if (is_true($Q_grupo_dst)) {
                 $descripcion = '';
                 $saltar = FALSE;
                 $GrupoRepository = new GrupoRepository();
@@ -539,7 +562,7 @@ switch ($Q_que) {
                 if ($saltar === FALSE) {
                     $oEscrito->setId_grupos($Q_a_grupos);
                     // borro las posibles personalizaciones:
-                    $oEscrito->setDestinos('');
+                    $oEscrito->setDestinos();
                     $oEscrito->setDescripcion('');
                 }
                 // borro los individuales
@@ -559,7 +582,7 @@ switch ($Q_que) {
                 $oEscrito->setJson_prot_destino($aProtDst);
                 $oEscrito->setId_grupos();
                 // borro las posibles personalizaciones:
-                $oEscrito->setDestinos('');
+                $oEscrito->setDestinos();
                 $oEscrito->setDescripcion('');
             }
 
@@ -577,7 +600,7 @@ switch ($Q_que) {
             $oEscrito->setJson_prot_ref($aProtRef);
         }
 
-        $oEscrito->setF_escrito($Q_f_escrito);
+        $oEscrito->setF_escrito($oF_escrito);
         if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
             $oEscrito->setAsunto($Q_asunto);
         }
@@ -598,7 +621,7 @@ switch ($Q_que) {
 
         switch ($Q_plazo) {
             case 'hoy':
-                $oEscrito->setF_contestar('');
+                $oEscrito->setF_contestar(null);
                 break;
             case 'normal':
                 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
@@ -622,7 +645,7 @@ switch ($Q_que) {
                 $oEscrito->setF_contestar($oF);
                 break;
             case 'fecha':
-                $oEscrito->setF_contestar($Q_f_plazo);
+                $oEscrito->setF_contestar($oF_plazo);
                 break;
             default:
                 // Si no hay $Q_plazo, No pongo ninguna fecha a contestar
@@ -630,24 +653,27 @@ switch ($Q_que) {
 
         if (is_true($Q_ok)) {
             $oEscrito->setComentarios('');
-            $oEscrito->setOK(Escrito::OK_OFICINA);
+            $oEscrito->setOK(EscritoDB::OK_OFICINA);
         } else {
-            $oEscrito->setOK(Escrito::OK_NO);
+            $oEscrito->setOK(EscritoDB::OK_NO);
         }
 
-        if ($oEscrito->DBGuardar() === FALSE) {
-            $error_txt .= $oEscrito->getErrorTxt();
+        if ($escritoRepository->Guardar($oEscrito) === FALSE) {
+            $error_txt .= $escritoRepository->getErrorTxt();
         }
 
         $id_escrito = $oEscrito->getId_escrito();
 
         if ($nuevo === TRUE) {
+            $AccionRepository = new AccionRepository();
+            $id_item = $AccionRepository->getNewId_item();
             $oAccion = new Accion();
+            $oAccion->setId_item($id_item);
             $oAccion->setId_expediente($Q_id_expediente);
             $oAccion->setId_escrito($id_escrito);
             $oAccion->setTipo_accion($Q_accion);
-            if ($oAccion->DBGuardar() === FALSE) {
-                $error_txt .= $oAccion->getErrorTxt();
+            if ($AccionRepository->Guardar($oAccion) === FALSE) {
+                $error_txt .= $AccionRepository->getErrorTxt();
             }
         }
 
@@ -655,7 +681,7 @@ switch ($Q_que) {
             $jsondata['success'] = true;
             $jsondata['id_escrito'] = $id_escrito;
             $a_cosas = ['id_escrito' => $id_escrito, 'filtro' => $Q_filtro, 'id_expediente' => $Q_id_expediente];
-            $pagina_mod = web\Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
+            $pagina_mod = Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
             $jsondata['pagina_mod'] = $pagina_mod;
         } else {
             $jsondata['success'] = false;
@@ -669,18 +695,18 @@ switch ($Q_que) {
     case 'explotar':
         $txt_err = '';
         if (!empty($Q_id_escrito)) {
-            $oEscrito = new Escrito($Q_id_escrito);
-            if ($oEscrito->DBCargar() === FALSE) {
+            $escritoRepository = new EscritoRepository();
+            $oEscrito = $escritoRepository->findById($Q_id_escrito);
+            if ($oEscrito === null) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
+            // por cada destino
+            if ($oEscrito->explotar() !== TRUE) {
+                $txt_err .= _("Algún error al explotar");
+            }
         } else {
             $txt_err .= _("No puede ser");
-        }
-
-        // por cada destino
-        if ($oEscrito->explotar() !== TRUE) {
-            $txt_err .= _("Algún error al explotar");
         }
 
         if (empty($txt_err)) {
@@ -698,9 +724,11 @@ switch ($Q_que) {
     case 'guardar_manual':
         $nuevo = FALSE;
         $Q_f_aprobacion = (string)filter_input(INPUT_POST, 'f_aprobacion');
+        $oF_aprobacion = DateTimeLocal::createFromLocal($Q_f_aprobacion);
+        $escritoRepository = new EscritoRepository();
         if (!empty($Q_id_escrito)) {
-            $oEscrito = new Escrito($Q_id_escrito);
-            if ($oEscrito->DBCargar() === FALSE) {
+            $oEscrito = $escritoRepository->findById($Q_id_escrito);
+            if ($oEscrito === null) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -709,7 +737,9 @@ switch ($Q_que) {
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEscrito, 'detalle');
         } else {
             $nuevo = TRUE;
+            $id_escrito = $escritoRepository->getNewId_escrito();
             $oEscrito = new Escrito();
+            $oEscrito->setId_escrito($id_escrito);
             $oEscrito->setAccion(Escrito::ACCION_ESCRITO);
             $oEscrito->setModo_envio(Escrito::MODO_MANUAL);
             $perm_asunto = PermRegistro::PERM_MODIFICAR;
@@ -717,7 +747,7 @@ switch ($Q_que) {
         }
 
         // Si esta marcado como grupo de destinos, o destinos individuales. 
-        if (core\is_true($Q_grupo_dst)) {
+        if (is_true($Q_grupo_dst)) {
             $descripcion = '';
             $saltar = FALSE;
             $GrupoRepository = new GrupoRepository();
@@ -734,7 +764,7 @@ switch ($Q_que) {
             if ($saltar === FALSE) {
                 $oEscrito->setId_grupos($Q_a_grupos);
                 // borro las posibles personalizaciones:
-                $oEscrito->setDestinos('');
+                $oEscrito->setDestinos();
                 $oEscrito->setDescripcion('');
             }
         } else {
@@ -766,8 +796,8 @@ switch ($Q_que) {
         }
         $oEscrito->setJson_prot_ref($aProtRef);
 
-        $oEscrito->setF_escrito($Q_f_escrito);
-        $oEscrito->setF_aprobacion($Q_f_aprobacion);
+        $oEscrito->setF_escrito($oF_escrito);
+        $oEscrito->setF_aprobacion($oF_aprobacion);
         if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
             $oEscrito->setAsunto($Q_asunto);
         }
@@ -782,17 +812,16 @@ switch ($Q_que) {
         $oEscrito->setVisibilidad($Q_visibilidad);
 
         if ($nuevo === TRUE) {
-            $oEscrito->setOK(Escrito::OK_NO);
+            $oEscrito->setOK(EscritoDB::OK_NO);
         } else {
-            $oEscrito->setOK(Escrito::OK_OFICINA);
+            $oEscrito->setOK(EscritoDB::OK_OFICINA);
         }
 
-        // OJO hay que guardar antes de generar el protocolo
-        if ($oEscrito->DBGuardar() === FALSE) {
-            exit($oEscrito->getErrorTxt());
-        }
         if ($nuevo === TRUE) {
             $oEscrito->generarProtocolo();
+        }
+        if ($escritoRepository->Guardar($oEscrito) === FALSE) {
+            exit($escritoRepository->getErrorTxt());
         }
 
         $id_escrito = $oEscrito->getId_escrito();

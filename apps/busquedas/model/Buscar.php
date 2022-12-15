@@ -4,13 +4,12 @@ namespace busquedas\model;
 
 use core\ConverterDate;
 use DateInterval;
-use entradas\model\entity\GestorEntradaBypass;
-use entradas\model\entity\GestorEntradaCompartida;
-use entradas\model\entity\GestorEntradaDB;
-use entradas\model\Entrada;
-use entradas\model\GestorEntrada;
-use escritos\model\GestorEscrito;
-use etiquetas\model\entity\GestorEtiquetaEntrada;
+use entradas\domain\entity\Entrada;
+use entradas\domain\entity\EntradaRepository;
+use entradas\domain\repositories\EntradaBypassRepository;
+use entradas\domain\repositories\EntradaCompartidaRepository;
+use escritos\domain\repositories\EscritoRepository;
+use etiquetas\domain\repositories\EtiquetaEntradaRepository;
 use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\Categoria;
 use usuarios\domain\entity\Cargo;
@@ -102,12 +101,12 @@ class Buscar
 
     /**
      *
-     * @var DateTimeLocal
+     * @var DateTimeLocal|null
      */
     private $df_min;
     /**
      *
-     * @var DateTimeLocal
+     * @var DateTimeLocal|null
      */
     private $df_max;
 
@@ -168,8 +167,8 @@ class Buscar
                     $id_destino = $id_sigla_local;
 
                     $aWhereEntrada['_ordre'] = 'f_entrada';
-                    $gesEntradasCompartidas = new GestorEntradaCompartida();
-                    $cEntradas = $gesEntradasCompartidas->getEntradasByProtOrigenDestino($aProt_origen, $id_destino, $aWhereEntrada, $aOperadorEntrada);
+                    $EntradaCompartidaRepository = new EntradaCompartidaRepository();
+                    $cEntradas = $EntradaCompartidaRepository->getEntradasByProtOrigenDestino($aProt_origen, $id_destino, $aWhereEntrada, $aOperadorEntrada);
                     $aCollections['entradas_compartidas'] = $cEntradas;
                 } else {
                     // por asunto
@@ -190,8 +189,8 @@ class Buscar
                     ];
 
                     $aWhereEntrada['f_entrada'] = 'x';
-                    $gesEntradas = new GestorEntradaDB();
-                    $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen, $aWhereEntrada, $aOperadorEntrada);
+                    $EntradaRepository = new EntradaRepository();
+                    $cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt_origen, $aWhereEntrada, $aOperadorEntrada);
                     $aCollections['entradas'] = $cEntradas;
                 }
                 return $aCollections;
@@ -213,8 +212,8 @@ class Buscar
                     $id_destino = $id_sigla_local;
 
                     $aWhereEntrada['_ordre'] = 'f_entrada';
-                    $gesEntradasCompartidas = new GestorEntradaCompartida();
-                    $cEntradas = $gesEntradasCompartidas->getEntradasByProtOrigenDestino($aProt_origen, $id_destino, $aWhereEntrada, $aOperadorEntrada);
+                    $entradaCompartidaRepository = new EntradaCompartidaRepository();
+                    $cEntradas = $entradaCompartidaRepository->getEntradasByProtOrigenDestino($aProt_origen, $id_destino, $aWhereEntrada, $aOperadorEntrada);
                     $aCollections['entradas_compartidas'] = $cEntradas;
                 } else {
                     $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
@@ -227,8 +226,8 @@ class Buscar
                     ];
 
                     $aWhereEntrada['_ordre'] = 'f_entrada';
-                    $gesEntradas = new GestorEntradaDB();
-                    $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen, $aWhereEntrada, $aOperadorEntrada);
+                    $EntradaRepository = new EntradaRepository();
+                    $cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt_origen, $aWhereEntrada, $aOperadorEntrada);
                     $aCollections['entradas'] = $cEntradas;
                 }
                 return $aCollections;
@@ -249,8 +248,8 @@ class Buscar
                     $id_destino = $id_sigla_local;
 
                     $aWhereEntrada['_ordre'] = 'f_entrada DESC';
-                    $gesEntradasCompartidas = new GestorEntradaCompartida();
-                    $cEntradas = $gesEntradasCompartidas->getEntradasByProtOrigenDestino($aProt_origen, $id_destino, $aWhereEntrada, $aOperadorEntrada);
+                    $entradaCompartidaRepository = new EntradaCompartidaRepository();
+                    $cEntradas = $entradaCompartidaRepository->getEntradasByProtOrigenDestino($aProt_origen, $id_destino, $aWhereEntrada, $aOperadorEntrada);
                     $aCollections['entradas_compartidas'] = $cEntradas;
                 }
                 return $aCollections;
@@ -266,16 +265,17 @@ class Buscar
                 ];
 
                 $aWhereEntrada['_ordre'] = 'f_entrada';
-                $gesEntradas = new GestorEntradaDB();
-                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen, $aWhereEntrada, $aOperadorEntrada);
+                $EntradaRepository = new EntradaRepository();
+                $cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt_origen, $aWhereEntrada, $aOperadorEntrada);
                 $aCollections['entradas'] = $cEntradas;
                 return $aCollections;
             case 8: // por etiquetas
-                $gesEtiquetasEntrada = new GestorEtiquetaEntrada();
-                $a_Id_entradas = $gesEtiquetasEntrada->getArrayEntradas($this->a_etiquetas, $this->andOr);
+                $etiquetaEntradaRepository = new EtiquetaEntradaRepository();
+                $a_Id_entradas = $etiquetaEntradaRepository->getArrayEntradas($this->a_etiquetas, $this->andOr);
                 $cEntradas = [];
+                $EntradaRepository = new EntradaRepository();
                 foreach ($a_Id_entradas as $id_entrada) {
-                    $oEntrada = new Entrada($id_entrada);
+                    $oEntrada = $EntradaRepository->findById($id_entrada);
                     $cEntradas[] = $oEntrada;
                 }
 
@@ -295,16 +295,16 @@ class Buscar
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';
                 $aWhereEntrada['_ordre'] = 'f_entrada';
-                $gesEntradas = new GestorEntradaDB();
-                $cEntradas = $gesEntradas->getEntradasByRefDB($aProt_ref, $aWhereEntrada, $aOperadorEntrada);
+                $EntradaRepository = new EntradaRepository();
+                $cEntradas = $EntradaRepository->getEntradasByRefDB($aProt_ref, $aWhereEntrada, $aOperadorEntrada);
                 $aCollections['entradas_ref'] = $cEntradas;
 
                 // Escritos (salidas):
                 $aWhereEscrito['f_aprobacion'] = 'x';
                 $aOperadorEscrito['f_aprobacion'] = 'IS NOT NULL';
                 $aWhereEscrito['_ordre'] = 'f_aprobacion';
-                $gesEscritos = new GestorEscrito();
-                $cEscritos = $gesEscritos->getEscritosByRefDB($aProt_ref, $aWhereEscrito, $aOperadorEscrito);
+                $escritoRepository = new EscritoRepository();
+                $cEscritos = $escritoRepository->getEscritosByRef($aProt_ref, $aWhereEscrito, $aOperadorEscrito);
                 $aCollections['escritos_ref'] = $cEscritos;
 
             case 7: // un protocolo concreto:
@@ -320,8 +320,8 @@ class Buscar
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';
                 $aWhereEntrada['_ordre'] = 'f_entrada';
-                $gesEntradas = new GestorEntradaDB();
-                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen, $aWhereEntrada, $aOperadorEntrada);
+                $EntradaRepository = new EntradaRepository();
+                $cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt_origen, $aWhereEntrada, $aOperadorEntrada);
                 $aCollections['entradas'] = $cEntradas;
 
                 // Escritos (salidas):
@@ -335,8 +335,8 @@ class Buscar
                         'mas' => $this->prot_mas,
                     ];
                     $aWhereEscrito['_ordre'] = 'f_aprobacion';
-                    $gesEscritos = new GestorEscrito();
-                    $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_destino, $aWhereEscrito, $aOperadorEscrito);
+                    $escritoRepository = new EscritoRepository();
+                    $cEscritos = $escritoRepository->getEscritosByProtLocal($aProt_destino, $aWhereEscrito, $aOperadorEscrito);
                     $aCollections['escritos'] = $cEscritos;
                 } else {
                     $aWhereEscrito['f_aprobacion'] = 'x';
@@ -347,8 +347,8 @@ class Buscar
                         'mas' => $this->prot_mas,
                     ];
                     $aWhereEscrito['_ordre'] = 'f_aprobacion';
-                    $gesEscritos = new GestorEscrito();
-                    $cEscritos = $gesEscritos->getEscritosByProtDestinoDB($aProt_destino, $aWhereEscrito, $aOperadorEscrito);
+                    $escritoRepository = new EscritoRepository();
+                    $cEscritos = $escritoRepository->getEscritosByProtDestino($aProt_destino, $aWhereEscrito, $aOperadorEscrito);
                     $aCollections['escritos'] = $cEscritos;
                 }
 
@@ -364,30 +364,34 @@ class Buscar
                 $aWhereEntrada['estado'] = Entrada::ESTADO_ACEPTADO;
                 $aOperadorEntrada['estado'] = '>=';
                 if (!empty($Q_antiguedad)) {
+                    $oF_limite = new DateTimeLocal();
                     switch ($Q_antiguedad) {
                         case "1m":
-                            $limite = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, date("d"), date("Y")));
+                            $oF_limite->sub(new DateInterval('P1M'));
                             break;
                         case "3m":
-                            $limite = date("Y-m-d", mktime(0, 0, 0, date("m") - 3, date("d"), date("Y")));
+                            $oF_limite->sub(new DateInterval('P3M'));
                             break;
                         case "6m":
-                            $limite = date("Y-m-d", mktime(0, 0, 0, date("m") - 6, date("d"), date("Y")));
+                            $oF_limite->sub(new DateInterval('P6M'));
                             break;
                         case "1a":
-                            $limite = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d"), date("Y") - 1));
+                            $oF_limite->sub(new DateInterval('P1Y'));
                             break;
                         case "2a":
+                            $oF_limite->sub(new DateInterval('P2Y'));
                             $limite = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d"), date("Y") - 2));
                             break;
                         case "aa":
                             // más de 2 años.
-                            $limite = '1928-10-02';
+                            //$limite = '1928-10-02';
+                            $oF_limite = new DateTimeLocal('1928-10-02');
                             break;
                         default:
                             $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
                             exit ($err_switch);
                     }
+                    $limite = $oF_limite->getIso();
                     $aWhereEntrada['f_entrada'] = $limite;
                     $aWhereEntrada['_ordre'] = 'f_entrada';
                     $aOperadorEntrada['f_entrada'] = '>';
@@ -405,19 +409,19 @@ class Buscar
                     // Caso especial de querer ver los escritos de la dl. No se consulta en las entradas, sino salidas.
                     // se omiten los de distribución de cr.
                     if ($Q_origen_id_lugar === $this->local_id_lugar) {
-                        $this->setF_min($limite, FALSE);
+                        $this->setF_min($oF_limite);
                         $cEscritos = $this->buscarEscritos();
                         $aCollections['escritos'] = $cEscritos;
                     } else {
                         $aWhereEntrada['_ordre'] = 'f_entrada';
-                        $gesEntradas = new GestorEntradaDB();
-                        $cEntradas = $gesEntradas->getEntradasByLugarDB($Q_origen_id_lugar, $aWhereEntrada, $aOperadorEntrada);
+                        $EntradaRepository = new EntradaRepository();
+                        $cEntradas = $EntradaRepository->getEntradasByLugarDB($Q_origen_id_lugar, $aWhereEntrada, $aOperadorEntrada);
                         $aCollections['entradas'] = $cEntradas;
                     }
                 } else {
                     $aWhereEntrada['_ordre'] = 'f_entrada';
-                    $gesEntradas = new GestorEntrada();
-                    $cEntradas = $gesEntradas->getEntradas($aWhereEntrada, $aOperadorEntrada);
+                    $EntradaRepository = new EntradaRepository();
+                    $cEntradas = $EntradaRepository->getEntradas($aWhereEntrada, $aOperadorEntrada);
                     $aCollections['entradas'] = $cEntradas;
                 }
                 return $aCollections;
@@ -488,24 +492,18 @@ class Buscar
      * Si df_valor es string, y convert=true se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es false, df_valor debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param DateTimeLocal|string df_min='' optional.
-     * @param boolean convert=true optional. Si es false, df_valor debe ser un string en formato ISO (Y-m-d).
+     * @param DateTimeLocal|null $df_min
      */
-    function setF_min($df_min = '', $convert = true)
+    function setF_min(DateTimeLocal $df_min = null)
     {
-        if ($convert === true && !empty($df_min)) {
-            $oConverter = new ConverterDate('date', $df_min);
-            $this->df_min = $oConverter->toPg();
-        } else {
-            $this->df_min = $df_min;
-        }
+        $this->df_min = $df_min;
     }
 
     private function buscarEscritos()
     {
         $aWhere = [];
         $aOperador = [];
-        $gesEscritos = new GestorEscrito();
+        $escritoRepository = new EscritoRepository();
         // buscar en origen, destino, o ambos. + periodo + oficina
         // las fechas.
         $f_min = '';
@@ -559,14 +557,14 @@ class Buscar
                 $aOperador['creador'] = 'IN';
                 // A Quien se envia el escrito (escritos)
                 if (!empty($this->dest_id_lugar)) {
-                    $cEscritosPonenteJson = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar, $aWhere, $aOperador);
+                    $cEscritosPonenteJson = $escritoRepository->getEscritosByLugarDB($this->dest_id_lugar, $aWhere, $aOperador);
                     // añadir los envios a grupos:
-                    $cEscritosPonenteGrupos = $gesEscritos->getEscritosByLugarDeGrupo($this->dest_id_lugar, $aWhere, $aOperador);
+                    $cEscritosPonenteGrupos = $escritoRepository->getEscritosByLugarDeGrupo($this->dest_id_lugar, $aWhere, $aOperador);
                     $cEscritosPonente = array_merge($cEscritosPonenteJson, $cEscritosPonenteGrupos);
                 } elseif (!empty($this->local_id_lugar)) {
-                    $cEscritosPonente = $gesEscritos->getEscritosByLocal($this->local_id_lugar, $aWhere, $aOperador);
+                    $cEscritosPonente = $escritoRepository->getEscritosByLocal($this->local_id_lugar, $aWhere, $aOperador);
                 } else {
-                    $cEscritosPonente = $gesEscritos->getEscritos($aWhere, $aOperador);
+                    $cEscritosPonente = $escritoRepository->getEscritos($aWhere, $aOperador);
                 }
                 unset($aWhere['creador']);
                 unset($aOperador['creador']);
@@ -575,14 +573,14 @@ class Buscar
                 $aOperador['resto_oficinas'] = 'OVERLAP';
                 // A quien envia el escrito (escritos)
                 if (!empty($this->dest_id_lugar)) {
-                    $cEscritosRestoJson = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar, $aWhere, $aOperador);
+                    $cEscritosRestoJson = $escritoRepository->getEscritosByLugarDB($this->dest_id_lugar, $aWhere, $aOperador);
                     // añadir los envios a grupos:
-                    $cEscritosRestoGrupos = $gesEscritos->getEscritosByLugarDeGrupo($this->dest_id_lugar, $aWhere, $aOperador);
+                    $cEscritosRestoGrupos = $escritoRepository->getEscritosByLugarDeGrupo($this->dest_id_lugar, $aWhere, $aOperador);
                     $cEscritosResto = array_merge($cEscritosRestoJson, $cEscritosRestoGrupos);
                 } elseif (!empty($this->local_id_lugar)) {
-                    $cEscritosResto = $gesEscritos->getEscritosByLocal($this->local_id_lugar, $aWhere, $aOperador);
+                    $cEscritosResto = $escritoRepository->getEscritosByLocal($this->local_id_lugar, $aWhere, $aOperador);
                 } else {
-                    $cEscritosResto = $gesEscritos->getEscritos($aWhere, $aOperador);
+                    $cEscritosResto = $escritoRepository->getEscritos($aWhere, $aOperador);
                 }
 
                 $cEscritos = array_merge($cEscritosPonente, $cEscritosResto);
@@ -593,50 +591,42 @@ class Buscar
         } else {
             // A quien se envia el escrito (escritos)
             if (!empty($this->dest_id_lugar)) {
-                $cEscritosJson = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar, $aWhere, $aOperador);
+                $cEscritosJson = $escritoRepository->getEscritosByLugarDB($this->dest_id_lugar, $aWhere, $aOperador);
                 // añadir los envios a grupos:
-                $cEscritosGrupos = $gesEscritos->getEscritosByLugarDeGrupo($this->dest_id_lugar, $aWhere, $aOperador);
+                $cEscritosGrupos = $escritoRepository->getEscritosByLugarDeGrupo($this->dest_id_lugar, $aWhere, $aOperador);
                 $cEscritos = array_merge($cEscritosJson, $cEscritosGrupos);
             } elseif (!empty($this->local_id_lugar)) {
-                $cEscritos = $gesEscritos->getEscritosByLocal($this->local_id_lugar, $aWhere, $aOperador);
+                $cEscritos = $escritoRepository->getEscritosByLocal($this->local_id_lugar, $aWhere, $aOperador);
             } else {
-                $cEscritos = $gesEscritos->getEscritos($aWhere, $aOperador);
+                $cEscritos = $escritoRepository->getEscritos($aWhere, $aOperador);
             }
         }
         return $cEscritos;
     }
 
     /**
-     * Recupera l'atribut df_min
      *
-     * @return DateTimeLocal|NullDateTimeLocal df_min
+     * @return DateTimeLocal|NullDateTimeLocal|null $df_min
      */
-    function getF_min()
+    public function getF_min(): DateTimeLocal|NullDateTimeLocal|null
     {
-        if (empty($this->df_min)) {
-            return new NullDateTimeLocal();
-        }
-        return (new ConverterDate('date', $this->df_min))->fromPg();
+        return $this->df_min ?? new NullDateTimeLocal;
     }
 
     /**
-     * Recupera l'atribut df_max
      *
-     * @return DateTimeLocal|NullDateTimeLocal df_max
+     * @return DateTimeLocal|NullDateTimeLocal|null $df_entrada
      */
-    function getF_max()
+    public function getF_max(): DateTimeLocal|NullDateTimeLocal|null
     {
-        if (empty($this->df_max)) {
-            return new NullDateTimeLocal();
-        }
-        return (new ConverterDate('date', $this->df_max))->fromPg();
+        return $this->df_max ?? new NullDateTimeLocal;
     }
 
     private function buscarEntradas()
     {
         $aWhere = [];
         $aOperador = [];
-        $gesEntradas = new GestorEntrada();
+        $EntradaRepository = new EntradaRepository();
         // buscar en origen, destino, o ambos. + periodo + oficina
         // las fechas.
         $f_min = '';
@@ -687,9 +677,9 @@ class Buscar
             $aWhere['ponente'] = $this->oficina;
             // Quien envia el escrito (entradas)
             if (!empty($this->origen_id_lugar)) {
-                $cEntradasPonente = $gesEntradas->getEntradasByLugarDB($this->origen_id_lugar, $aWhere, $aOperador);
+                $cEntradasPonente = $EntradaRepository->getEntradasByLugarDB($this->origen_id_lugar, $aWhere, $aOperador);
             } else {
-                $cEntradasPonente = $gesEntradas->getEntradas($aWhere, $aOperador);
+                $cEntradasPonente = $EntradaRepository->getEntradas($aWhere, $aOperador);
             }
             unset($aWhere['ponente']);
             unset($aOperador['ponente']);
@@ -698,18 +688,18 @@ class Buscar
             $aOperador['resto_oficinas'] = 'OVERLAP';
             // Quien envia el escrito (entradas)
             if (!empty($this->origen_id_lugar)) {
-                $cEntradasResto = $gesEntradas->getEntradasByLugarDB($this->origen_id_lugar, $aWhere, $aOperador);
+                $cEntradasResto = $EntradaRepository->getEntradasByLugarDB($this->origen_id_lugar, $aWhere, $aOperador);
             } else {
-                $cEntradasResto = $gesEntradas->getEntradas($aWhere, $aOperador);
+                $cEntradasResto = $EntradaRepository->getEntradas($aWhere, $aOperador);
             }
 
             $cEntradas = array_merge($cEntradasPonente, $cEntradasResto);
         } else {
             // Quien envia el escrito (entradas)
             if (!empty($this->origen_id_lugar)) {
-                $cEntradas = $gesEntradas->getEntradasByLugarDB($this->origen_id_lugar, $aWhere, $aOperador);
+                $cEntradas = $EntradaRepository->getEntradasByLugarDB($this->origen_id_lugar, $aWhere, $aOperador);
             } else {
-                $cEntradas = $gesEntradas->getEntradas($aWhere, $aOperador);
+                $cEntradas = $EntradaRepository->getEntradas($aWhere, $aOperador);
             }
         }
         return $cEntradas;
@@ -735,7 +725,7 @@ class Buscar
     {
         $aWhere = [];
         $aOperador = [];
-        $gesEntradas = new GestorEntradaBypass();
+        $EntradaBypassRepository = new EntradaBypassRepository();
         // buscar en origen, destino, o ambos. + periodo + oficina
         // las fechas.
         $f_min = '';
@@ -782,7 +772,7 @@ class Buscar
             if (!empty($this->origen_id_lugar)) {
                 exit("Función no implementada!!!");
             } else {
-                $cEntradasPonente = $gesEntradas->getEntradasBypass($aWhere, $aOperador);
+                $cEntradasPonente = $EntradaBypassRepository->getEntradasBypass($aWhere, $aOperador);
             }
             unset($aWhere['ponente']);
             unset($aOperador['ponente']);
@@ -791,18 +781,18 @@ class Buscar
             $aOperador['resto_oficinas'] = 'OVERLAP';
             // Destino del Bypass (entradas)
             if (!empty($this->dest_id_lugar)) {
-                $cEntradasResto = $gesEntradas->getEntradasBypassByDestino($this->dest_id_lugar, $aWhere, $aOperador);
+                $cEntradasResto = $EntradaBypassRepository->getEntradasBypassByDestino($this->dest_id_lugar, $aWhere, $aOperador);
             } else {
-                $cEntradasResto = $gesEntradas->getEntradasBypass($aWhere, $aOperador);
+                $cEntradasResto = $EntradaBypassRepository->getEntradasBypass($aWhere, $aOperador);
             }
 
             $cEntradas = array_merge($cEntradasPonente, $cEntradasResto);
         } else {
             // Destino del Bypass (entradas)
             if (!empty($this->dest_id_lugar)) {
-                $cEntradas = $gesEntradas->getEntradasBypassByDestino($this->dest_id_lugar, $aWhere, $aOperador);
+                $cEntradas = $EntradaBypassRepository->getEntradasBypassByDestino($this->dest_id_lugar, $aWhere, $aOperador);
             } else {
-                $cEntradas = $gesEntradas->getEntradasBypass($aWhere, $aOperador);
+                $cEntradas = $EntradaBypassRepository->getEntradasBypass($aWhere, $aOperador);
             }
         }
         return $cEntradas;
@@ -930,23 +920,16 @@ class Buscar
 
     /**
      * Si df_valor es string, y convert=true se convierte usando el formato web\DateTimeLocal->getFormat().
-     * Si convert es false, df_valor debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param DateTimeLocal|string df_max='' optional.
-     * @param boolean convert=true optional. Si es false, df_valor debe ser un string en formato ISO (Y-m-d).
+     * @param DateTimeLocal|null $df_max
      */
-    function setF_max($df_max = '', $convert = true)
+    function setF_max(DateTimeLocal $df_max = null)
     {
-        if ($convert === true && !empty($df_max)) {
-            $oConverter = new ConverterDate('date', $df_max);
-            $this->df_max = $oConverter->toPg();
-        } else {
-            $this->df_max = $df_max;
-        }
+        $this->df_max = $df_max;
     }
 
     /**
-     * @return number
+     * @return int
      */
     public function getAccion()
     {
@@ -954,7 +937,7 @@ class Buscar
     }
 
     /**
-     * @param number $accion
+     * @param int $accion
      */
     public function setAccion($accion)
     {

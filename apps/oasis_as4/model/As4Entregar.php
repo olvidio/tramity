@@ -5,16 +5,16 @@ namespace oasis_as4\model;
 use core\ConfigGlobal;
 use davical\model\Davical;
 use DOMDocument;
-use entidades\model\entity\GestorEntidadesDB;
-use entradas\model\entity\EntradaCompartida;
-use entradas\model\entity\EntradaCompartidaAdjunto;
-use entradas\model\entity\EntradaDocDB;
-use entradas\model\entity\GestorEntradaCompartida;
-use entradas\model\Entrada;
-use entradas\model\EntradaEntidad;
-use entradas\model\EntradaEntidadAdjunto;
-use entradas\model\EntradaEntidadDoc;
-use entradas\model\GestorEntrada;
+use entidades\domain\repositories\EntidadRepository;
+use entradas\domain\entity\Entrada;
+use entradas\domain\entity\EntradaAdjunto;
+use entradas\domain\entity\EntradaCompartida;
+use entradas\domain\entity\EntradaDocDB;
+use entradas\domain\entity\EntradaEntidadRepository;
+use entradas\domain\repositories\EntradaCompartidaRepository;
+use entradas\domain\repositories\EntradaDBRepository;
+use entradas\domain\repositories\EntradaEntidadAdjuntoRepository;
+use entradas\model\EntradaEntidadDocRepository;
 use etherpad\model\Etherpad;
 use Exception;
 use lugares\domain\repositories\LugarRepository;
@@ -23,7 +23,9 @@ use SimpleXMLElement;
 use stdClass;
 use usuarios\domain\Categoria;
 use usuarios\domain\entity\Cargo;
+use usuarios\domain\entity\EntradaCompartidaAdjunto;
 use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\repositories\EntradaCompartidaAdjuntoRepository;
 use web\DateTimeLocal;
 use web\Protocolo;
 use web\StringLocal;
@@ -451,7 +453,7 @@ class As4Entregar extends As4CollaborationInfo
      */
     private function getF_contestar()
     {
-        $f_contestar_iso = $this->getValorTag('f_contestar');
+        $f_contestar_iso = $this->getValorTag('oF_contestar');
         if (!empty($f_contestar_iso)) {
             return new DateTimeLocal($f_contestar_iso);
         }
@@ -664,8 +666,8 @@ class As4Entregar extends As4CollaborationInfo
     private function getEntidadesPlataforma(): array
     {
         if (!isset($this->aEntidades)) {
-            $gesEntidades = new GestorEntidadesDB();
-            $cEntidades = $gesEntidades->getEntidadesDB(['anulado' => 'false']);
+            $entidadRepository = new EntidadRepository();
+            $cEntidades = $entidadRepository->getEntidadesDB(['anulado' => 'false']);
             $aEntidades = [];
             foreach ($cEntidades as $oEntidad) {
                 $id = $oEntidad->getId_entidad();
@@ -700,8 +702,11 @@ class As4Entregar extends As4CollaborationInfo
 
     private function nuevaEntrada($siglaDestino, $id_entrada_compartida = null): int
     {
-        $oEntrada = new EntradaEntidad($siglaDestino);
-        $oEntrada->DBCargar();
+        $entradaEntidadRepository = new EntradaEntidadRepository($siglaDestino);
+        $id_entrada = $entradaEntidadRepository->getNewId_entrada();
+
+        $oEntrada = new Entrada();
+        $oEntrada->setId_entrada($id_entrada);
         $oEntrada->setModo_entrada(Entrada::MODO_MANUAL);
         $oEntrada->setJson_prot_origen($this->oProt_org);
         $oEntrada->setJson_prot_ref($this->a_Prot_ref);
@@ -723,8 +728,8 @@ class As4Entregar extends As4CollaborationInfo
         $oEntrada->setEstado($estado);
         $oEntrada->setBypass($this->bypass);
 
-        if ($oEntrada->DBGuardar() === FALSE) {
-            $error_txt = $oEntrada->getErrorTxt();
+        if ($entradaEntidadRepository->Guardar($oEntrada) === FALSE) {
+            $error_txt = $entradaEntidadRepository->getErrorTxt();
             exit ($error_txt);
         }
 
@@ -747,16 +752,18 @@ class As4Entregar extends As4CollaborationInfo
                     $oEtherpad->setText($this->content);
                     $oEtherpad->getPadId(); // Aquí crea el pad y utiliza el $this->content
                     // la relación con la entrada y la fecha
-                    $oEntradaDocDB = new EntradaEntidadDoc($id_entrada, $siglaDestino);
+                    $entradaEntidadDocRepository = new EntradaEntidadDocRepository($id_entrada, $siglaDestino);
+                    $oEntradaDocDB = new EntradaDocDB();
+                    $oEntradaDocDB->setId_entrada($id_entrada);
                     // no hace falta DBCargar, porque es nuevo y todavía no está en la DB.
                     if (!empty($this->oF_escrito)) {
-                        $oEntradaDocDB->setF_doc($this->oF_escrito->getIso(), FALSE);
+                        $oEntradaDocDB->setF_doc($this->oF_escrito);
                     } else {
                         // No puede ser NULL
                         $oEntradaDocDB->setF_doc($oHoy);
                     }
                     $oEntradaDocDB->setTipo_doc(EntradaDocDB::TIPO_ETHERPAD);
-                    $oEntradaDocDB->DBGuardar();
+                    $entradaEntidadDocRepository->Guardar($oEntradaDocDB);
                 }
                 break;
             case Payload::TYPE_ETHERAD_HTML:
@@ -772,16 +779,16 @@ class As4Entregar extends As4CollaborationInfo
                     $pad_id = $oEtherpad->getPadId(); // Aquí crea el pad
                     $oEtherpad->setHTML($pad_id, $this->content);
                     // la relación con la entrada y la fecha
-                    $oEntradaDocDB = new EntradaEntidadDoc($id_entrada, $siglaDestino);
-                    // no hace falta DBCargar, porque es nuevo y todavía no está en la DB.
+                    $entradaEntidadDocRepository = new EntradaEntidadDocRepository($id_entrada, $siglaDestino);
+                    $oEntradaDocDB = new EntradaDocDB();
                     if (!empty($this->oF_escrito)) {
-                        $oEntradaDocDB->setF_doc($this->oF_escrito->getIso(), FALSE);
+                        $oEntradaDocDB->setF_doc($this->oF_escrito);
                     } else {
                         // No puede ser NULL
                         $oEntradaDocDB->setF_doc($oHoy);
                     }
                     $oEntradaDocDB->setTipo_doc(EntradaDocDB::TIPO_ETHERPAD);
-                    $oEntradaDocDB->DBGuardar();
+                    $entradaEntidadDocRepository->Guardar($oEntradaDocDB);
                 }
                 break;
             default:
@@ -794,17 +801,18 @@ class As4Entregar extends As4CollaborationInfo
     private function cargarAdjunto($a_adjuntos, $id_entrada): void
     {
 
+        $entradaAdjuntoRepository = new EntradaEntidadAdjuntoRepository($this->getSiglaDestino());
         foreach ($a_adjuntos as $adjunto) {
             $filename = $adjunto['filename'];
             $doc_encoded = $adjunto['contenido'];
             $doc = base64_decode($doc_encoded);
 
-            $oEntradaAdjunto = new EntradaEntidadAdjunto($this->getSiglaDestino());
+            $oEntradaAdjunto = new EntradaAdjunto();
             $oEntradaAdjunto->setId_entrada($id_entrada);
             $oEntradaAdjunto->setNom($filename);
             $oEntradaAdjunto->setAdjunto($doc);
 
-            $oEntradaAdjunto->DBGuardar();
+            $entradaAdjuntoRepository->Guardar($oEntradaAdjunto);
         }
     }
 
@@ -831,8 +839,8 @@ class As4Entregar extends As4CollaborationInfo
         }
         $calendario = 'oficina';
 
-        $f_entrada = $oHoy->getFromLocal();
-        $f_plazo = $this->oF_contestar->getFromLocal();
+        $oF_entrada = $oHoy;
+        $oF_plazo = $this->oF_contestar;
 
         $id_origen = $this->oProt_org->id_lugar;
         $prot_num = $this->oProt_org->num;
@@ -849,8 +857,8 @@ class As4Entregar extends As4CollaborationInfo
         $oPendiente->setId_reg($id_reg);
         $oPendiente->setAsunto($this->asunto);
         $oPendiente->setStatus("NEEDS-ACTION");
-        $oPendiente->setF_inicio($f_entrada);
-        $oPendiente->setF_plazo($f_plazo);
+        $oPendiente->setF_inicio($oF_entrada);
+        $oPendiente->setF_plazo($oF_plazo);
         $oPendiente->setVisibilidad($this->visibilidad);
         $oPendiente->setPendiente_con($id_origen);
         $oPendiente->setLocation($pendiente_location);
@@ -879,7 +887,10 @@ class As4Entregar extends As4CollaborationInfo
             $this->msg = _("La entrada no tiene asunto");
         }
 
+        $entradaCompartidaRepository = new EntradaCompartidaRepository();
+        $id_entrada_compartida = $entradaCompartidaRepository->getNewId_entrada_compartida();
         $oEntradaCompartida = new EntradaCompartida();
+        $oEntradaCompartida->setId_entrada_compartida($id_entrada_compartida);
         $oEntradaCompartida->setDescripcion($this->descripcion);
         $oEntradaCompartida->setDestinos($this->a_destinos);
         $oEntradaCompartida->setF_documento($this->oF_escrito);
@@ -898,7 +909,7 @@ class As4Entregar extends As4CollaborationInfo
         $oEntradaCompartida->setAnulado('');
 
 
-        if ($oEntradaCompartida->DBGuardar() === FALSE) {
+        if ($entradaCompartidaRepository->Guardar($oEntradaCompartida) === FALSE) {
             return FALSE;
         }
 
@@ -933,17 +944,20 @@ class As4Entregar extends As4CollaborationInfo
 
     private function cargarAdjuntoCompartido($a_adjuntos, $id_entrada): void
     {
+        $entradaCompartidaAdjuntoRepository = new EntradaCompartidaAdjuntoRepository();
         foreach ($a_adjuntos as $adjunto) {
             $filename = $adjunto['filename'];
             $doc_encoded = $adjunto['contenido'];
             $doc = base64_decode($doc_encoded);
 
+            $id_item = $entradaCompartidaAdjuntoRepository->getNewId_item();
             $oEntradaAdjunto = new EntradaCompartidaAdjunto();
+            $oEntradaAdjunto->setId_item($id_item);
             $oEntradaAdjunto->setId_entrada_compartida($id_entrada);
             $oEntradaAdjunto->setNom($filename);
             $oEntradaAdjunto->setAdjunto($doc);
 
-            $oEntradaAdjunto->DBGuardar();
+            $entradaCompartidaAdjuntoRepository->Guardar($oEntradaAdjunto);
         }
     }
 
@@ -970,8 +984,8 @@ class As4Entregar extends As4CollaborationInfo
             'mas' => '',
         ];
 
-        $gesEntradasCompartidas = new GestorEntradaCompartida();
-        $cEntradasCompartidas = $gesEntradasCompartidas->getEntradasByProtOrigenDB($aProt_org);
+        $entradaCompartidaRepository = new EntradaCompartidaRepository();
+        $cEntradasCompartidas = $entradaCompartidaRepository->getEntradasByProtOrigenDB($aProt_org);
         foreach ($cEntradasCompartidas as $oEntradaCompartida) {
             $anulado = $oEntradaCompartida->getAnulado();
             if (!empty($anulado)) {
@@ -980,14 +994,14 @@ class As4Entregar extends As4CollaborationInfo
 
             $oEntradaCompartida->setAnulado($this->anular_txt);
             $oEntradaCompartida->setCategoria(Categoria::CAT_NORMAL);
-            if ($oEntradaCompartida->DBGuardar() === FALSE) {
-                $error_txt = $oEntradaCompartida->getErrorTxt();
+            if ($entradaCompartidaRepository->Guardar($oEntradaCompartida) === FALSE) {
+                $error_txt = $entradaCompartidaRepository->getErrorTxt();
                 exit ($error_txt);
             }
             $id_entrada_compartida = $oEntradaCompartida->getId_entrada_compartida();
             // Anular también las entradas normales:
-            $gesEntradas = new GestorEntrada();
-            $gesEntradas->anularCompartidas($id_entrada_compartida, $this->anular_txt, $this->getSchemaEntidadesPlataforma());
+            $EntradaRepository = new EntradaDBRepository();
+            $EntradaRepository->anularCompartidas($id_entrada_compartida, $this->anular_txt, $this->getSchemaEntidadesPlataforma());
             $success = TRUE;
         }
         return $success;
@@ -996,8 +1010,8 @@ class As4Entregar extends As4CollaborationInfo
     private function getSchemaEntidadesPlataforma(): array
     {
         if (!isset($this->aEntidades)) {
-            $gesEntidades = new GestorEntidadesDB();
-            $cEntidades = $gesEntidades->getEntidadesDB(['anulado' => 'false']);
+            $entidadRepository = new EntidadRepository();
+            $cEntidades = $entidadRepository->getEntidadesDB(['anulado' => 'false']);
             $aEntidades = [];
             foreach ($cEntidades as $oEntidad) {
                 $id = $oEntidad->getId_entidad();

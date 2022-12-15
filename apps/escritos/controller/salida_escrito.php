@@ -2,9 +2,8 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use entradas\model\Entrada;
-use escritos\model\Escrito;
-use escritos\model\GestorEscrito;
+use entradas\domain\entity\EntradaRepository;
+use escritos\domain\repositories\EscritoRepository;
 use lugares\domain\repositories\GrupoRepository;
 use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\Categoria;
@@ -14,6 +13,7 @@ use usuarios\domain\Visibilidad;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
+use web\ProtocoloArray;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -42,8 +42,8 @@ if (!empty($Q_prot_num) && !empty($Q_prot_any)) {
         'num' => $Q_prot_num,
         'any' => $Q_prot_any,
     ];
-    $gesEscritos = new GestorEscrito();
-    $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
+    $escritoRepository = new EscritoRepository();
+    $cEscritos = $escritoRepository->getEscritosByProtLocal($aProt_local);
     if (!empty($cEscritos)) {
         $oEscrito = $cEscritos[0];
         $oEscrito->DBCargar();
@@ -80,7 +80,11 @@ $oArrayDesplFirmas->setBlanco('t');
 $oArrayDesplFirmas->setAccionConjunto('fnjs_mas_firmas()');
 $oArrayDesplFirmas->setTabIndex(140);
 
-$oEscrito = new Escrito($Q_id_escrito);
+$escritoRepository = new EscritoRepository();
+$oEscrito = $escritoRepository->findById($Q_id_escrito);
+if ($oEscrito === null) {
+    exit(_("NO existe el escrito!!!!"));
+}
 // categoria
 $oCategoria = new Categoria();
 $aOpciones = $oCategoria->getArrayCategoria();
@@ -185,19 +189,20 @@ if (!empty($Q_id_escrito)) {
     // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
     $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
     if (!empty($Q_id_entrada)) {
-        $oEntrada = new Entrada($Q_id_entrada);
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
         $asunto = $oEntrada->getAsunto();
         $detalle = $oEntrada->getDetalle();
         // ProtocoloArray espera un array.
         $json_prot_dst[] = $oEntrada->getJson_prot_origen();
-        $oArrayProtDestino = new web\ProtocoloArray($json_prot_dst, $a_posibles_lugares, 'destinos');
+        $oArrayProtDestino = new ProtocoloArray($json_prot_dst, $a_posibles_lugares, 'destinos');
         $oArrayProtDestino->setBlanco('t');
         $oArrayProtDestino->setTabIndex(50);
 
         // los escritos van por cargos, las entradas por oficinas: pongo al director de la oficina:
         // Ponente
         $id_of_ponente = $oEntrada->getPonente();
-        if (!empty($id_of_ponente)) {
+        if ($id_of_ponente !== null) {
             $id_ponente = $CargoRepository->getDirectorOficina($id_of_ponente);
             $oDesplPonente->setOpcion_sel($id_ponente);
         }

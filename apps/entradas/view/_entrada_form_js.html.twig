@@ -221,8 +221,8 @@
                         }
 
                     ,
-                        somethingElse: {
-                            text: '{{ "otra entrada"|trans|raw }}',
+                        {
+                            '{{ "otra entrada"|trans|raw }}',
                                 btnClass
                         :
                             'btn-blue',
@@ -236,7 +236,7 @@
                         }
                     }
                     })
-                        ;
+
                     } else {
                         alert("{{ "datos guardados"|trans|raw }}");
                         // Volver a la lista...

@@ -1,5 +1,10 @@
 <script>
     fnjs_guardar = function (formulario) {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
         // si es 0, no se cambia el password.
         var pwd = $("#password").val();
         var pwd1 = $("#password1").val();
@@ -25,6 +30,7 @@
             dataType: 'json'
         });
         request.done(function (json) {
+            debugger;
             if (json.success != true) {
                 alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
             } else {

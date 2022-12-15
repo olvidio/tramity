@@ -2,7 +2,7 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use entradas\model\GestorEntrada;
+use entradas\domain\entity\EntradaRepository;
 use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\OficinaRepository;
@@ -37,7 +37,7 @@ $Qoficina_buscar = ConfigGlobal::role_id_oficina();
 
 $OficinaRepository = new OficinaRepository();
 $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
-$gesEntradas = new GestorEntrada();
+$EntradaRepository = new EntradaRepository();
 $aWhere = [];
 $aOperador = [];
 if (!empty($Qoficina_buscar)) {
@@ -81,20 +81,20 @@ if (empty($Q_asunto && empty($Qoficina_buscar))) {
 $aWhere['_ordre'] = 'f_entrada DESC';
 
 if (!empty($Qorigen_id_lugar)) {
-    $gesEntradas = new GestorEntrada();
+    $EntradaRepository = new EntradaRepository();
     $id_lugar = $Qorigen_id_lugar;
     if (!empty($Qorigen_prot_num) && !empty($Qorigen_prot_any)) {
-        // No tengo en quenta las otras condiciones de la búsqueda
+        // No tengo en cuenta las otras condiciones de la búsqueda
         $aProt_origen = ['id_lugar' => $Qorigen_id_lugar,
             'num' => $Qorigen_prot_num,
             'any' => $Qorigen_prot_any,
         ];
-        $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
+        $cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt_origen);
     } else {
-        $cEntradas = $gesEntradas->getEntradasByLugarDB($id_lugar, $aWhere, $aOperador);
+        $cEntradas = $EntradaRepository->getEntradasByLugarDB($id_lugar, $aWhere, $aOperador);
     }
 } else {
-    $cEntradas = $gesEntradas->getEntradas($aWhere, $aOperador);
+    $cEntradas = $EntradaRepository->getEntradas($aWhere, $aOperador);
 }
 
 $a_cabeceras = ['', ['width' => 200, 'name' => _("protocolo")],

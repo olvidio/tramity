@@ -3,6 +3,8 @@
 namespace expedientes\model;
 
 use core\ConfigGlobal;
+use expedientes\domain\entity\Expediente;
+use expedientes\domain\repositories\ExpedienteRepository;
 
 
 class ExpedienteReunionFijarLista
@@ -40,9 +42,9 @@ class ExpedienteReunionFijarLista
         */
 
         if (!empty($this->aWhere)) {
-            $gesExpedientes = new GestorExpediente();
+            $ExpedienteRepository = new ExpedienteRepository();
             $this->aWhere['_ordre'] = 'id_expediente';
-            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+            $cExpedientes = $ExpedienteRepository->getExpedientes($this->aWhere, $this->aOperador);
         } else {
             $cExpedientes = [];
         }
@@ -61,16 +63,16 @@ class ExpedienteReunionFijarLista
         $this->aOperador['f_reunion'] = 'IS NULL';
     }
 
-    public function getNumero()
+    public function getNumero(): ?int
     {
         $this->setCondicion();
         if (!empty($this->aWhere)) {
-            $gesExpedientes = new GestorExpediente();
+            $ExpedienteRepository = new ExpedienteRepository();
             $this->aWhere['_ordre'] = 'id_expediente';
-            $cExpedientes = $gesExpedientes->getExpedientes($this->aWhere, $this->aOperador);
+            $cExpedientes = $ExpedienteRepository->getExpedientes($this->aWhere, $this->aOperador);
             $num = count($cExpedientes);
         } else {
-            $num = '';
+            $num = null;
         }
         return $num;
     }

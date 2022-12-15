@@ -4,9 +4,12 @@ namespace expedientes\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use expedientes\domain\entity\Expediente;
 use tramites\domain\repositories\TramiteRepository;
 use usuarios\domain\entity\Cargo;
+use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\Visibilidad;
 use web\Hash;
 
 
@@ -42,9 +45,9 @@ class ExpedienteLista
             $TramiteRepository = new TramiteRepository();
             $a_tramites = $TramiteRepository->getArrayAbrevTramites();
             // array visibilidades
-            $oVisibilidad = new \usuarios\domain\Visibilidad();
+            $oVisibilidad = new Visibilidad();
             $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
-            $oPermiso = new \usuarios\domain\PermRegistro();
+            $oPermiso = new PermRegistro();
             foreach ($this->cExpedientes as $oExpediente) {
                 $row = [];
                 $tramite_txt = '';

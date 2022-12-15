@@ -4,10 +4,12 @@ namespace busquedas\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use usuarios\domain\Categoria;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\PermRegistro;
 use usuarios\domain\repositories\CargoRepository;
 use usuarios\domain\repositories\OficinaRepository;
+use usuarios\domain\Visibilidad;
 use web\Lista;
 use web\Protocolo;
 use web\ProtocoloArray;
@@ -20,126 +22,129 @@ class VerTabla
      *
      * @var integer
      */
-    private $id_sigla;
+    private int $id_sigla;
 
     /**
      * Id_lugar
      *
      * @var integer
      */
-    private $id_lugar;
+    private int $id_lugar;
 
     /**
      * Prot_num
      *
      * @var integer
      */
-    private $prot_num;
+    private int $prot_num;
 
     /**
      * Prot_any
      *
-     * @var integer
+     * @var string
      */
-    private $prot_any;
+    private string $prot_any;
 
     /**
      * Collection
      *
      * @var array
      */
-    private $aCollection;
+    private array $aCollection;
 
     /**
      * Key (entradas | escritos)
      *
      * @var string
      */
-    private $sKey;
+    private string $sKey;
 
     /**
      * condicion de la búsqueda
      *
      * @var string
      */
-    private $sCondicion;
+    private string $sCondicion;
 
     /**
      *
      * @var string
      */
-    private $sTitulo;
+    private string $sTitulo;
 
     /**
      * Botones
      *
      * @var array
      */
-    private $aBotones;
-
-    private $dt_op_dom;
-    private $dt_op_buttons;
+    private array $aBotones;
 
     /**
-     * @return number
+     * Opciones para la DataTable de jQuery
      */
-    public function getId_sigla()
+    private string $dt_op_dom;
+    private string $dt_op_buttons;
+
+    /**
+     * @return int
+     */
+    public function getId_sigla(): int
     {
         return $this->id_sigla;
     }
 
     /**
-     * @param number $id_sigla
+     * @param int $id_sigla
      */
-    public function setId_sigla($id_sigla)
+    public function setId_sigla(int $id_sigla): void
     {
         $this->id_sigla = $id_sigla;
     }
 
     /**
-     * @return number
+     * @return int
      */
-    public function getId_lugar()
+    public function getId_lugar(): int
     {
         return $this->id_lugar;
     }
 
     /**
-     * @param number $id_lugar
+     * @param int $id_lugar
      */
-    public function setId_lugar($id_lugar)
+    public function setId_lugar(int $id_lugar): void
     {
         $this->id_lugar = $id_lugar;
     }
 
     /**
-     * @return number
+     * @return int
      */
-    public function getProt_num()
+    public function getProt_num(): int
     {
         return $this->prot_num;
     }
 
     /**
-     * @param number $prot_num
+     * @param int $prot_num
      */
-    public function setProt_num($prot_num)
+    public function setProt_num(int $prot_num): void
     {
         $this->prot_num = $prot_num;
     }
 
     /**
-     * @return number
+     * @return string
      */
-    public function getProt_any()
+    public function getProt_any(): string
     {
         return $this->prot_any;
     }
 
     /**
-     * @param number $prot_any
+     * @param string $prot_any
      */
-    public function setProt_any($prot_any)
+    public function setProt_any(string $prot_any): void
     {
         $this->prot_any = $prot_any;
     }
@@ -147,37 +152,37 @@ class VerTabla
     /**
      * @param array $aCollection
      */
-    public function setCollection($Collection)
+    public function setCollection(array $aCollection): void
     {
-        $this->aCollection = $Collection;
+        $this->aCollection = $aCollection;
     }
 
     /**
      * @param string $sKey
      */
-    public function setKey($key)
+    public function setKey(string $sKey): void
     {
-        $this->sKey = $key;
+        $this->sKey = $sKey;
     }
 
     /**
      * @param string $sCondicion
      */
-    public function setCondicion($condicion)
+    public function setCondicion(string $sCondicion): void
     {
-        $this->sCondicion = $condicion;
+        $this->sCondicion = $sCondicion;
     }
 
     /**
      * @param string $sFiltro
      */
-    public function setFiltro($filtro)
+    public function setFiltro(string $sFiltro): void
     {
-        $this->sFiltro = $filtro;
+        $this->sFiltro = $sFiltro;
     }
 
 
-    public function mostrarTabla()
+    public function mostrarTabla(): void
     {
         switch ($this->sKey) {
             case 'entradas_ref':
@@ -232,14 +237,14 @@ class VerTabla
 
     // ---------------------------------- tablas ----------------------------
 
-    public function tabla_entradas($aCollection)
+    public function tabla_entradas(array $aCollection): void
     {
         $OficinaRepository = new OficinaRepository();
         $a_posibles_oficinas = $OficinaRepository->getArrayOficinas();
 
-        $oCategoria = new \usuarios\domain\Categoria();
+        $oCategoria = new Categoria();
         $a_categorias = $oCategoria->getArrayCategoria();
-        $oVisibilidad = new \usuarios\domain\Visibilidad();
+        $oVisibilidad = new Visibilidad();
         $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
 
         $a_cabeceras = array(array('name' => ucfirst(_("protocolo origen")), 'formatter' => 'clickFormatter'),
@@ -259,7 +264,7 @@ class VerTabla
         $oProtOrigen = new Protocolo();
         $a_valores = [];
         $i = 0;
-        $oPermRegistro = new \usuarios\domain\PermRegistro();
+        $oPermRegistro = new PermRegistro();
         $CargoRepository = new CargoRepository();
         $a_usuarios_oficina = $CargoRepository->getArrayUsuariosOficina(ConfigGlobal::role_id_oficina(), TRUE);
         foreach ($aCollection as $oEntrada) {
@@ -268,7 +273,7 @@ class VerTabla
             $visibilidad_txt = empty($a_visibilidad[$visibilidad]) ? '?' : $a_visibilidad[$visibilidad];
 
             $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEntrada, 'escrito');
-            if ($perm_ver_escrito < \usuarios\domain\PermRegistro::PERM_VER) {
+            if ($perm_ver_escrito < PermRegistro::PERM_VER) {
                 continue;
             }
             $i++;
@@ -308,7 +313,7 @@ class VerTabla
             $id_encargado = $oEntrada->getEncargado();
             $nom_encargado = $a_usuarios_oficina[$id_encargado] ?? '';
 
-            $a_valores[$i]['sel'] = "$id_entrada";
+            $a_valores[$i]['sel'] = $id_entrada;
             $a_valores[$i][1] = $protocolo;
             $a_valores[$i][2] = $referencias;
             $a_valores[$i][3] = $categoria_txt;
@@ -353,15 +358,15 @@ class VerTabla
         $oView->renderizar('ver_tabla.html.twig', $a_campos);
     }
 
-    public function setBotones($a_botones)
+    public function setBotones(array $a_botones): void
     {
         $this->aBotones = $a_botones;
     }
 
     /**
-     * @param mixed $dt_op_dom
+     * @param string $dt_op_dom
      */
-    public function setDataTable_options_dom($dt_op_dom)
+    public function setDataTable_options_dom(string $dt_op_dom): void
     {
         $this->dt_op_dom = $dt_op_dom;
     }
@@ -369,16 +374,16 @@ class VerTabla
     // ---------------------------------- botones ----------------------------
 
     /**
-     * @param mixed $dt_op_buttons
+     * @param string $dt_op_buttons
      */
-    public function setDataTable_options_buttons($dt_op_buttons)
+    public function setDataTable_options_buttons(string $dt_op_buttons): void
     {
         $this->dt_op_buttons = $dt_op_buttons;
     }
 
-    public function tabla_entradas_compartidas($aCollection)
+    public function tabla_entradas_compartidas(array $aCollection): void
     {
-        $oCategoria = new \usuarios\domain\Categoria();
+        $oCategoria = new Categoria();
         $a_categorias = $oCategoria->getArrayCategoria();
 
         $a_cabeceras = array(array('name' => ucfirst(_("protocolo origen")), 'formatter' => 'clickFormatter'),
@@ -413,7 +418,7 @@ class VerTabla
             $categoria_txt = empty($a_categorias[$categoria]) ? '' : $a_categorias[$categoria];
             $f_doc = $oEntrada->getF_documento();
 
-            $a_valores[$i]['sel'] = "$id_entrada";
+            $a_valores[$i]['sel'] = $id_entrada;
             $a_valores[$i][1] = $protocolo;
             $a_valores[$i][2] = $referencias;
             $a_valores[$i][3] = $categoria_txt;
@@ -450,15 +455,15 @@ class VerTabla
         $oView->renderizar('ver_tabla.html.twig', $a_campos);
     }
 
-    public function tabla_escritos($cCollection)
+    public function tabla_escritos(array $cCollection): void
     {
         // salidas
         $CargoRepository = new CargoRepository();
         $a_posibles_cargos = $CargoRepository->getArrayCargos();
 
-        $oCategoria = new \usuarios\domain\Categoria();
+        $oCategoria = new Categoria();
         $a_categorias = $oCategoria->getArrayCategoria();
-        $oVisibilidad = new \usuarios\domain\Visibilidad();
+        $oVisibilidad = new Visibilidad();
         $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
 
         $a_cabeceras = array(array('name' => ucfirst(_("protocolo origen")), 'formatter' => 'clickFormatter'),
@@ -482,12 +487,12 @@ class VerTabla
             $visibilidad_txt = empty($a_visibilidad[$visibilidad]) ? '?' : $a_visibilidad[$visibilidad];
 
             $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEscrito, 'escrito');
-            if ($perm_ver_escrito < \usuarios\domain\PermRegistro::PERM_VER) {
+            if ($perm_ver_escrito < PermRegistro::PERM_VER) {
                 continue;
             }
             $i++;
             $asunto = $oEscrito->getAsuntoDetalle();
-            $anulado = $oEscrito->getAnulado();
+            $anulado = $oEscrito->isAnulado();
 
             // protocolo local
             $protocolo_local = $oEscrito->getProt_local_txt();
@@ -509,8 +514,7 @@ class VerTabla
             $id_ponente = $oEscrito->getCreador();
             $a_resto_oficinas = $oEscrito->getResto_oficinas();
             $oficina_txt = empty($a_posibles_cargos[$id_ponente]) ? '?' : $a_posibles_cargos[$id_ponente];
-            $oficinas_txt = '';
-            $oficinas_txt .= '<span class="text-danger">' . $oficina_txt . '</span>';
+            $oficinas_txt = '<span class="text-danger">' . $oficina_txt . '</span>';
             foreach ($a_resto_oficinas as $id_oficina) {
                 $oficinas_txt .= empty($oficinas_txt) ? '' : ', ';
                 $oficinas_txt .= empty($a_posibles_cargos[$id_oficina]) ? '' : $a_posibles_cargos[$id_oficina];
@@ -568,7 +572,7 @@ class VerTabla
         $oView->renderizar('ver_tabla.html.twig', $a_campos);
     }
 
-    public function setBotonesDefault()
+    public function setBotonesDefault(): void
     {
 
         switch ($this->sKey) {
@@ -618,17 +622,17 @@ class VerTabla
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getDataTable_options_dom()
+    public function getDataTable_options_dom(): string
     {
         return $this->dt_op_dom;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getDataTable_options_buttons()
+    public function getDataTable_options_buttons(): string
     {
         return $this->dt_op_buttons;
     }

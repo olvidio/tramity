@@ -1,6 +1,7 @@
 <?php
 
 use core\ViewTwig;
+use entradas\domain\entity\EntradaRepository;
 use entradas\model\Entrada;
 use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\Categoria;
@@ -51,7 +52,8 @@ $oProtRef->setNombre('ref');
 $oProtRef->setOpciones($a_posibles_lugares);
 $oProtRef->setBlanco(TRUE);
 
-$oEntrada = new Entrada($Q_id_entrada);
+$EntradaRepository = new EntradaRepository();
+$oEntrada = $EntradaRepository->findById($Q_id_entrada);
 // tipo
 $oCategoria = new Categoria();
 $aOpciones = $oCategoria->getArrayCategoria();
@@ -112,7 +114,7 @@ if (!empty($Q_id_entrada)) {
     if (!empty($f_contestar)) {
         $oDesplPlazo->setOpcion_sel('fecha');
     }
-    $bypass = $oEntrada->getBypass();
+    $bypass = $oEntrada->isBypass();
     if (core\is_true($bypass)) {
         $bypass = 't';
     } else {

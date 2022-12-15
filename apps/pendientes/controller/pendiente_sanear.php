@@ -2,6 +2,7 @@
 
 use core\ViewTwig;
 use davical\model\entity\GestorCalendarItem;
+use entradas\domain\entity\EntradaRepository;
 use entradas\model\Entrada;
 use pendientes\model\BuscarPendiente;
 use usuarios\domain\repositories\OficinaRepository;
@@ -55,9 +56,10 @@ foreach ($cCalendarItems as $oCalendarItem) {
 
 
 // Buscar en entradas a ver si están anulados
+$EntradaRepository = new EntradaRepository();
 $cEntradasAnuladas = [];
 foreach ($a_id_entrada as $id_entrada) {
-    $oEntrada = new Entrada($id_entrada);
+    $oEntrada = $EntradaRepository->findById($id_entrada);
     $anulado = $oEntrada->getAnulado();
     if (!empty($anulado)) {
         $cEntradasAnuladas[] = $oEntrada;
@@ -99,7 +101,7 @@ foreach ($cEntradasAnuladas as $oEntrada) {
     $row['oficinas'] = $oficinas_txt;
 
     $row['f_entrada'] = $oEntrada->getF_entrada()->getFromLocal();
-    $row['f_contestar'] = $oEntrada->getF_contestar()->getFromLocal();
+    $row['oF_contestar'] = $oEntrada->getF_contestar()->getFromLocal();
 
     // Pendientes de la entrada:
     $oBuscarPendiente->setId_reg([$id_entrada]);

@@ -13,7 +13,7 @@
 
 // INICIO Cabecera global de URL de controlador *********************************
 use davical\model\DavicalMigrar;
-use entradas\model\GestorEntrada;
+use entradas\domain\entity\EntradaRepository;
 use web\Protocolo;
 
 require_once("apps/core/global_header.inc");
@@ -36,7 +36,7 @@ $Q_id_lugar_dst = (string)filter_input(INPUT_POST, 'id_lugar_dst');
 $Q_prot_num_dst = (string)filter_input(INPUT_POST, 'prot_num_dst');
 $Q_prot_any_dst = (string)filter_input(INPUT_POST, 'prot_any_dst');
 
-$gesEntradas = new GestorEntrada();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
+$EntradaRepository = new EntradaRepository();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
 
 // busacr id_entrada del prot origen
 $aProt_origen = ['id_lugar' => $Q_id_lugar_org,
@@ -46,7 +46,7 @@ $aProt_origen = ['id_lugar' => $Q_id_lugar_org,
 ];
 $aWhere = ['bypass' => 'f', 'anulado' => 'x'];
 $aOperador = ['anulado' => 'IS NULL'];
-$cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen, $aWhere, $aOperador);
+$cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt_origen, $aWhere, $aOperador);
 
 $msg = '';
 if (is_array($cEntradas)) {
@@ -88,7 +88,7 @@ $aProt_dst = ['id_lugar' => $Q_id_lugar_dst,
 ];
 $aWhere = ['bypass' => 'f', 'anulado' => 'x'];
 $aOperador = ['anulado' => 'IS NULL'];
-$cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_dst, $aWhere, $aOperador);
+$cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt_dst, $aWhere, $aOperador);
 
 if (is_array($cEntradas)) {
     if (empty($cEntradas)) {

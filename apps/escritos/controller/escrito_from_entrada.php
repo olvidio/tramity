@@ -1,11 +1,14 @@
 <?php
 
 use core\ConfigGlobal;
-use entradas\model\Entrada;
-use escritos\model\Escrito;
+use entradas\domain\entity\EntradaRepository;
+use escritos\domain\entity\Escrito;
+use escritos\domain\repositories\EscritoRepository;
 use escritos\model\EscritoForm;
-use expedientes\model\entity\Accion;
-use expedientes\model\Expediente;
+use expedientes\domain\entity\Accion;
+use expedientes\domain\repositories\AccionRepository;
+use expedientes\domain\entity\Expediente;
+use expedientes\domain\repositories\ExpedienteRepository;
 use tramites\domain\repositories\TramiteRepository;
 use usuarios\domain\repositories\CargoRepository;
 use web\DateTimeLocal;
@@ -27,8 +30,9 @@ $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
 $filtro = 'borrador_propio';
 $modo = 'mod';
 
-$oEntrada = new Entrada($Q_id_entrada);
-$f_contestar = $oEntrada->getF_contestar();
+$EntradaRepository = new EntradaRepository();
+$oEntrada = $EntradaRepository->findById($Q_id_entrada);
+$oF_contestar = $oEntrada->getF_contestar();
 
 // crear el expediente
 // valores por defecto:
@@ -48,9 +52,11 @@ $oTramite = $cTramites[0];
 $tramite = $oTramite->getId_tramite();
 
 // nuevo.
+$ExpedienteRepository = new ExpedienteRepository();
+$id_expediente = $ExpedienteRepository->getNewId_expediente();
 $oExpediente = new Expediente();
+$oExpediente->setId_expediente($id_expediente);
 $oExpediente->setPonente($ponente);
-
 $oExpediente->setId_tramite($tramite);
 $oExpediente->setEstado($estado);
 $oExpediente->setPrioridad($prioridad);
@@ -60,7 +66,7 @@ $oExpediente->setVida($vida);
 $oExpediente->setVisibilidad($visibilidad);
 $oExpediente->setFirmas_oficina('');
 $oExpediente->setResto_oficinas('');
-$oExpediente->setF_contestar($f_contestar);
+$oExpediente->setF_contestar($oF_contestar);
 
 // que lo vea todos los oficiales de mi oficina:
 $id_oficina = ConfigGlobal::role_id_oficina();
@@ -77,26 +83,27 @@ foreach (array_keys($a_cargos_oficina) as $id_cargo) {
 }
 $oExpediente->setJson_preparar($new_preparar);
 
-if ($oExpediente->DBGuardar() === FALSE) {
-    $error_txt = $oExpediente->getErrorTxt();
-} else {
-    $oExpediente->DBCargar();
-    $id_expediente = $oExpediente->getId_expediente();
+if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+    $error_txt = $ExpedienteRepository->getErrorTxt();
 }
 
 // adjuntar entrada como antecedente
-$a_antecedente = ['tipo' => 'entrada', 'id' => $Q_id_entrada];
-$oExpediente->addAntecedente($a_antecedente);
-if ($oExpediente->DBGuardar() === FALSE) {
-    $error_txt .= $oExpediente->getErrorTxt();
+$Antecedente = new stdClass();
+$Antecedente->tipo = 'entrada';
+$Antecedente->id = $Q_id_entrada;
+$oExpediente->addAntecedente($Antecedente);
+if ($ExpedienteRepository->Guardar($oExpediente) === FALSE) {
+    $error_txt .= $ExpedienteRepository->getErrorTxt();
 }
 
 // crear el escrito
 $accion = Escrito::ACCION_ESCRITO;
 $oHoy = new DateTimeLocal();
-$f_escrito = $oHoy->getFromLocal();
 
+$escritoRepository = new EscritoRepository();
+$id_escrito = $escritoRepository->getNewId_escrito();
 $oEscrito = new Escrito();
+$oEscrito->setId_escrito($id_escrito);
 $oEscrito->setAccion($accion);
 $oEscrito->setModo_envio(Escrito::MODO_MANUAL);
 $nuevo = TRUE;
@@ -110,29 +117,30 @@ $oEscrito->setId_grupos();
 $oEscrito->setDestinos('');
 $oEscrito->setDescripcion('');
 $oEscrito->setJson_prot_ref('');
-$oEscrito->setF_escrito($f_escrito);
+$oEscrito->setF_escrito($oHoy);
 $oEscrito->setAsunto($asunto);
 $oEscrito->setCreador($ponente);
 $oEscrito->setResto_oficinas('');
 
 $oEscrito->setCategoria($categoria);
 $oEscrito->setVisibilidad($visibilidad);
-$oEscrito->setF_contestar($f_contestar);
+$oEscrito->setF_contestar($oF_contestar);
 
-if ($oEscrito->DBGuardar() === FALSE) {
-    $error_txt .= $oEscrito->getErrorTxt();
+if ($escritoRepository->Guardar($oEscrito) === FALSE) {
+    $error_txt .= $escritoRepository->getErrorTxt();
 }
-
-$id_escrito = $oEscrito->getId_escrito();
 
 // añadirlo al expediente
 if ($nuevo === TRUE) {
+    $AccionRepository = new AccionRepository();
+    $id_item = $AccionRepository->getNewId_item();
     $oAccion = new Accion();
+    $oAccion->setId_item($id_item);
     $oAccion->setId_expediente($id_expediente);
     $oAccion->setId_escrito($id_escrito);
     $oAccion->setTipo_accion($accion);
-    if ($oAccion->DBGuardar() === FALSE) {
-        $error_txt .= $oAccion->getErrorTxt();
+    if ($AccionRepository->Guardar($oAccion) === FALSE) {
+        $error_txt .= $AccionRepository->getErrorTxt();
     }
 }
 

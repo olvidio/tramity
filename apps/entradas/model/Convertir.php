@@ -4,6 +4,7 @@ namespace entradas\model;
 
 use core\ClaseGestor;
 use core\Set;
+use entradas\domain\entity\EntradaRepository;
 use entradas\model\entity\EntradaDB;
 use escritos\model\entity\EscritoDB;
 use expedientes\model\entity\ExpedienteDB;
@@ -41,7 +42,7 @@ class Convertir extends ClaseGestor
 
             foreach ($cExpedientes as $oExpediente) {
                 // antecedentes
-                $aAntecedente_db = $oExpediente->getJson_antecedentes(TRUE);
+                $aAntecedente_db = $oExpediente->getJson_antecedentes();
                 if (!empty($aAntecedente_db)) {
                     $aAntecedentes = [];
                     foreach ($aAntecedente_db as $a_antecedente) {
@@ -361,9 +362,10 @@ class Convertir extends ClaseGestor
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
+        $EntradaRepository = new EntradaRepository();
         foreach ($oDblSt as $aDades) {
-            $oEntradaDB = new EntradaDB($aDades['id_entrada']);
-            $oEntradaDBSet->add($oEntradaDB);
+            $oEntrada = $EntradaRepository->findById($aDades['id_entrada']);
+            $oEntradaDBSet->add($oEntrada);
         }
         return $oEntradaDBSet->getTot();
     }

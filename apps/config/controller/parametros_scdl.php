@@ -1,6 +1,7 @@
 <?php
 
-use config\model\entity\ConfigSchema;
+use config\domain\entity\ConfigSchema;
+use config\domain\repositories\ConfigSchemaRepository;
 use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -17,10 +18,11 @@ $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 $url = 'apps/config/controller/parametros_update.php';
 $a_campos = ['url' => $url];
 
+$ConfigSchemaRepository = new ConfigSchemaRepository();
 
 // ----------- permiso para el botón distribuir al oficial -------------------
 $parametro = 'perm_distribuir';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 
 $val_perm_distribuir = 't';
@@ -37,7 +39,7 @@ $a_campos['chk_perm_distribuir'] = $chk_perm_distribuir;
 
 // ----------- permiso para el poder aceptar entradas el oficial -------------------
 $parametro = 'perm_aceptar';
-$oConfigSchema = new ConfigSchema($parametro);
+$oConfigSchema = $ConfigSchemaRepository->findById($parametro);
 $valor = $oConfigSchema->getValor();
 
 $val_perm_aceptar = 't';

@@ -28,7 +28,7 @@ class DateTimeLocal extends DateTime
         $parent_dt = parent::createFromFormat($format, $data);
 
         if (!$parent_dt) {
-            return false;
+            return null;
         }
 
         $extnd_dt->setTimestamp($parent_dt->getTimestamp());

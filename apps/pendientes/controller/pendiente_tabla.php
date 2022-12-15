@@ -3,7 +3,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use davical\model\Davical;
-use etiquetas\model\entity\GestorEtiqueta;
+use etiquetas\domain\repositories\EtiquetaRepository;
 use pendientes\model\GestorPendiente;
 use pendientes\model\Rrule;
 use usuarios\domain\entity\Cargo;
@@ -100,8 +100,8 @@ $cal_oficina = $oDavical->getNombreRecurso($id_oficina);
 $oDesplEncargados = new Desplegable('encargado', $a_usuarios_oficina, $Q_encargado, TRUE);
 
 
-$gesEtiquetas = new GestorEtiqueta();
-$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$EtiquetaRepository = new EtiquetaRepository();
+$cEtiquetas = $EtiquetaRepository->getMisEtiquetas();
 $a_posibles_etiquetas = [];
 foreach ($cEtiquetas as $oEtiqueta) {
     $id_etiqueta = $oEtiqueta->getId_etiqueta();

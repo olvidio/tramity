@@ -64,7 +64,7 @@ class Ethercalc
                 $prefix = 'ent';
                 break;
             case self::ID_ESCRITO:
-                $prefix = 'esc';
+                $prefix = 'escritoRepository';
                 break;
             case self::ID_EXPEDIENTE:
                 $prefix = 'exp';

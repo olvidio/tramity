@@ -1,10 +1,11 @@
 <?php
 
 use core\ViewTwig;
-use entradas\model\entity\EntradaCompartida;
-use entradas\model\entity\GestorEntradaCompartidaAdjunto;
-use entradas\model\Entrada;
+use entradas\domain\entity\Entrada;
+use entradas\domain\entity\EntradaRepository;
+use entradas\domain\repositories\EntradaCompartidaRepository;
 use etherpad\model\Etherpad;
+use usuarios\domain\repositories\EntradaCompartidaAdjuntoRepository;
 use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -20,11 +21,11 @@ require_once("apps/core/global_object.inc");
 
 // porque también se puede abrir en una ventana nueva, y entonces se llama por GET
 $Qmethod = (string)filter_input(INPUT_SERVER, 'REQUEST_METHOD');
-if ($Qmethod == 'POST') {
+if ($Qmethod === 'POST') {
     $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
     $Qcompartida = (string)filter_input(INPUT_POST, 'compartida');
 }
-if ($Qmethod == 'GET') {
+if ($Qmethod === 'GET') {
     $Qid_entrada = (integer)filter_input(INPUT_GET, 'id_entrada');
     $Qcompartida = (string)filter_input(INPUT_GET, 'compartida');
 }
@@ -32,10 +33,12 @@ if ($Qmethod == 'GET') {
 $sigla = $_SESSION['oConfig']->getSigla();
 
 if (is_true($Qcompartida)) {
-    $oEntrada = new EntradaCompartida($Qid_entrada);
+    $EntradaCompartidaRepository = new EntradaCompartidaRepository();
+    $oEntrada = $EntradaCompartidaRepository->findById($Qid_entrada);
     $id_entrada_compartida = $Qid_entrada;
 } else {
-    $oEntrada = new Entrada($Qid_entrada);
+    $EntradaRepository = new EntradaRepository();
+    $oEntrada = $EntradaRepository->findById($Qid_entrada);
     $id_entrada_compartida = $oEntrada->getId_entrada_compartida();
 }
 
@@ -51,8 +54,8 @@ if (!empty($Qid_entrada)) {
         $cabeceraIzqd = $oEntrada->cabeceraIzquierda();
         $cabeceraDcha = $oEntrada->cabeceraDerecha();
 
-        $gesEntradaAdjuntos = new GestorEntradaCompartidaAdjunto();
-        $a_adjuntos = $gesEntradaAdjuntos->getArrayIdAdjuntos($id_entrada_compartida);
+        $entradaComparidaAdjuntoRepository = new EntradaCompartidaAdjuntoRepository();
+        $a_adjuntos = $entradaComparidaAdjuntoRepository->getArrayIdAdjuntos($id_entrada_compartida);
 
         $oEtherpad = new Etherpad();
         $oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada_compartida);
@@ -61,8 +64,8 @@ if (!empty($Qid_entrada)) {
         // En el caso de distribución cr, si ya está aceptado, el ver es ya para enviar
         // y por tanto las cabeceras van al revés, y el destino se coge del bypass.
         $estado = $oEntrada->getEstado();
-        $bypass = $oEntrada->getBypass();
-        if (is_true($bypass) && $estado == Entrada::ESTADO_ACEPTADO) {
+        $bypass = $oEntrada->isBypass();
+        if (is_true($bypass) && $estado === Entrada::ESTADO_ACEPTADO) {
             $cabeceraIzqd = $oEntrada->cabeceraDistribucion_cr();
             $cabeceraDcha = $oEntrada->cabeceraDerecha();
         } else {

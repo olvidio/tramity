@@ -1,11 +1,10 @@
 <?php
 
 use davical\model\Davical;
-use entradas\model\entity\EntradaBypass;
-use entradas\model\entity\EntradaDocDB;
-use entradas\model\entity\GestorEntradaBypass;
-use entradas\model\Entrada;
-use entradas\model\GestorEntrada;
+use entradas\domain\entity\EntradaDocDB;
+use entradas\domain\entity\EntradaRepository;
+use entradas\domain\repositories\EntradaBypassRepository;
+use entradas\domain\repositories\EntradaDocDBRepository;
 use escritos\model\Escrito;
 use ethercalc\model\Ethercalc;
 use etherpad\model\Etherpad;
@@ -51,9 +50,10 @@ switch ($Q_que) {
             $oEscrito = new Escrito($id_entrada);
         }
         if ($tipo_escrito === 'entrada') {
-            $oEscrito = new EntradaBypass($id_entrada);
+            $EntradaBypassRepository = new EntradaBypassRepository();
+            $oEscrito = $EntradaBypassRepository->findById($id_entrada);
             // comprobar que es bypass. Por el click podría ser una entrada normal
-            $bypass = $oEscrito->getBypass();
+            $bypass = $oEscrito->isBypass();
             if (!is_true($bypass)) {
                 $error_txt = _("Sólo se pueden reemplazar las entradas bypass");
             }
@@ -103,9 +103,10 @@ switch ($Q_que) {
             $oEscrito = new Escrito($id_entrada);
         }
         if ($tipo_escrito === 'entrada') {
-            $oEscrito = new EntradaBypass($id_entrada);
+            $EntradaBypassRepository = new EntradaBypassRepository();
+            $oEscrito = $EntradaBypassRepository->findById($id_entrada);
             // comprobar que es bypass. Por el click podria ser una entrada normal
-            $bypass = $oEscrito->getBypass();
+            $bypass = $oEscrito->isBypass();
             if (!is_true($bypass)) {
                 $error_txt = _("Sólo se pueden anular las entradas bypass");
             }
@@ -140,7 +141,8 @@ switch ($Q_que) {
         exit();
     case 'perm_ver':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        $oEntrada = new Entrada($Q_id_entrada);
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($oEntrada, 'escrito');
         if ($perm < PermRegistro::PERM_VER) {
@@ -167,14 +169,15 @@ switch ($Q_que) {
         $Qtext = (string)filter_input(INPUT_POST, 'text');
         $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
 
-        $oEntrada = new Entrada($Q_id_entrada);
-        if ($oEntrada->DBCargar() === FALSE) {
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+        if ($oEntrada === null) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oEntrada->setAnulado($Qtext);
-        if ($oEntrada->DBGuardar() === FALSE) {
-            $error_txt = $oEntrada->getErrorTxt();
+        if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
+            $error_txt = $EntradaRepository->getErrorTxt();
         }
         // Mirar si hay pendientes
         if (!empty($Qelim_pendientes)) {
@@ -206,14 +209,16 @@ switch ($Q_que) {
         $error_txt = '';
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qdetalle = (string)filter_input(INPUT_POST, 'text');
-        $oEntrada = new Entrada($Q_id_entrada);
-        if ($oEntrada->DBCargar() === FALSE) {
+
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+        if ($oEntrada === null) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oEntrada->setDetalle($Qdetalle);
-        if ($oEntrada->DBGuardar() === FALSE) {
-            $error_txt = $oEntrada->getErrorTxt();
+        if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
+            $error_txt = $EntradaRepository->getErrorTxt();
         }
         if (empty($error_txt)) {
             $jsondata['success'] = true;
@@ -229,7 +234,8 @@ switch ($Q_que) {
         exit();
     case 'get_anular':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        $oEntrada = new Entrada($Q_id_entrada);
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
         $anulado = $oEntrada->getAnulado();
         $mensaje = '';
 
@@ -247,7 +253,8 @@ switch ($Q_que) {
         exit();
     case 'get_detalle':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        $oEntrada = new Entrada($Q_id_entrada);
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
         $mensaje = '';
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($oEntrada, 'detalle');
@@ -269,7 +276,8 @@ switch ($Q_que) {
         exit();
     case 'get_destinos':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        $oEntradaBypass = new EntradaBypass($Q_id_entrada);
+        $EntradaBypassRepository = new EntradaBypassRepository();
+        $oEntradaBypass = $EntradaBypassRepository->findById($Q_id_entrada);
         $a_destinos = $oEntradaBypass->getDestinosByPass();
         $a_miembros = $a_destinos['miembros'];
         $LugarRepository = new LugarRepository();
@@ -333,8 +341,8 @@ switch ($Q_que) {
             $pendientes_txt = sprintf(_("Esta entrada tiene %s pendientes asociados."), $c);
         }
         // comprobar si tiene bypass
-        $gesByPass = new GestorEntradaBypass();
-        $cByPass = $gesByPass->getEntradasBypass(['id_entrada' => $Q_id_entrada]);
+        $EntradaBypassRepository = new EntradaBypassRepository();
+        $cByPass = $EntradaBypassRepository->getEntradasBypass(['id_entrada' => $Q_id_entrada]);
         if (is_array($cByPass) && !empty($cByPass)) {
             $c = count($cByPass);
             $bypass_txt = sprintf(_("Esta entrada tiene %s envios a ctr."), $c);
@@ -360,7 +368,8 @@ switch ($Q_que) {
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $error_txt = '';
         if (!empty($Q_id_entrada)) {
-            $oEntrada = new Entrada($Q_id_entrada);
+            $EntradaRepository = new EntradaRepository();
+            $oEntrada = $EntradaRepository->findById($Q_id_entrada);
             // eliminar los pendientes
             $gesPendientes = new GestorPendienteEntrada();
             $cUids = $gesPendientes->getArrayUidById_entrada($Q_id_entrada);
@@ -374,8 +383,8 @@ switch ($Q_que) {
                 }
             }
             // eliminar la entrada y bypass
-            if ($oEntrada->DBEliminar() === FALSE) {
-                $error_txt .= $oEntrada->getErrorTxt();
+            if ($EntradaRepository->Eliminar($oEntrada) === FALSE) {
+                $error_txt .= $EntradaRepository->getErrorTxt();
             }
         } else {
             $error_txt = _("No existe la entrada");
@@ -403,7 +412,7 @@ switch ($Q_que) {
         $Qorigen_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
         $Qorigen_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
 
-        $gesEntradas = new GestorEntrada();
+        $EntradaRepository = new EntradaRepository();
         $aWhere = [];
         $aOperador = [];
 
@@ -446,7 +455,7 @@ switch ($Q_que) {
         $aWhere['_ordre'] = 'f_entrada DESC';
 
         if (!empty($Qorigen_id_lugar)) {
-            $gesEntradas = new GestorEntrada();
+            $EntradaRepository = new EntradaRepository();
             $id_lugar = $Qorigen_id_lugar;
             if (!empty($Qorigen_prot_num) && !empty($Qorigen_prot_any)) {
                 // No tengo en quenta las otras condiciones de la búsqueda
@@ -454,12 +463,12 @@ switch ($Q_que) {
                     'num' => $Qorigen_prot_num,
                     'any' => $Qorigen_prot_any,
                 ];
-                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
+                $cEntradas = $EntradaRepository->getEntradasByProtOrigenDB($aProt_origen);
             } else {
-                $cEntradas = $gesEntradas->getEntradasByLugarDB($id_lugar, $aWhere, $aOperador);
+                $cEntradas = $EntradaRepository->getEntradasByLugarDB($id_lugar, $aWhere, $aOperador);
             }
         } else {
-            $cEntradas = $gesEntradas->getEntradas($aWhere, $aOperador);
+            $cEntradas = $EntradaRepository->getEntradas($aWhere, $aOperador);
         }
 
         $a_cabeceras = ['', _("protocolo"), _("fecha"), _("asunto"), _("oficina ponente"), ''];
@@ -502,17 +511,19 @@ switch ($Q_que) {
         break;
     case 'guardar':
         $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        $Qf_escrito = (string)filter_input(INPUT_POST, 'f_escrito');
         $Qtipo_doc = (integer)filter_input(INPUT_POST, 'tipo_doc');
+        $Qf_escrito = (string)filter_input(INPUT_POST, 'f_escrito');
+        $oF_escrito = DateTimeLocal::createFromLocal($Qf_escrito, 'date');
 
         if (!empty($Q_id_entrada)) {
-            $oEntradaDocBD = new EntradaDocDB($Q_id_entrada);
-            $oEntradaDocBD->setF_doc($Qf_escrito);
+            $EntradaDocDBRepository = new EntradaDocDBRepository();
+            $oEntradaDocBD = $EntradaDocDBRepository->findById($Q_id_entrada);
+            $oEntradaDocBD->setF_doc($oF_escrito);
             $oEntradaDocBD->setTipo_doc($Qtipo_doc);
 
             $error = FALSE;
-            if ($oEntradaDocBD->DBGuardar() === FALSE) {
-                $error_txt = $oEntradaDocBD->getErrorTxt();
+            if ($EntradaDocDBRepository->Guardar($oEntradaDocBD) === FALSE) {
+                $error_txt = $EntradaDocDBRepository->getErrorTxt();
                 $error = TRUE;
             }
         } else {

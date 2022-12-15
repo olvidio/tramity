@@ -237,9 +237,9 @@ class PgDocumentoRepository extends ClaseRepository implements DocumentoReposito
         $sdocumento = '';
         $oDblSt->bindColumn('documento', $sdocumento);
         $aDatos = $oDblSt->fetch(PDO::FETCH_ASSOC);
-        $aDatos['documento'] = hex2bin($sdocumento);
-        // para las fechas del postgres (texto iso)
-        if ($aDatos !== FALSE) {
+        if (!empty($aDatos)) {
+            $aDatos['documento'] = hex2bin($sdocumento);
+            // para las fechas del postgres (texto iso)
             $aDatos['f_upload'] = (new ConverterDate('date', $aDatos['f_upload']))->fromPg();
         }
         return $aDatos;

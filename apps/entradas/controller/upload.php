@@ -1,8 +1,11 @@
 <?php
 
-use entradas\model\entity\EntradaAdjunto;
 
 // INICIO Cabecera global de URL de controlador *********************************
+use entradas\domain\entity\EntradaAdjunto;
+use entradas\domain\repositories\EntradaAdjuntoRepository;
+use usuarios\domain\repositories\EntradaCompartidaAdjuntoRepository;
+
 require_once("apps/core/global_header.inc");
 // Archivos requeridos por esta url **********************************************
 
@@ -36,6 +39,7 @@ function upload(): array
     }
 
     $total = count($_FILES[$input]['name']); // multiple files
+    $entradaAdjuntoRepository = new EntradaAdjuntoRepository();
     for ($i = 0; $i < $total; $i++) {
         $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
         $fileName = $_FILES[$input]['name'][$i]; // the file name
@@ -48,17 +52,19 @@ function upload(): array
 
             if (!empty($Qid_item)) {
                 // update
-                $oEntradaAdjunto = new EntradaAdjunto($Qid_item);
+                $oEntradaAdjunto = $entradaAdjuntoRepository->findById($Qid_item);
             } else {
                 // new
+                $id_item = $entradaAdjuntoRepository->getNewId_item();
                 $oEntradaAdjunto = new EntradaAdjunto();
+                $oEntradaAdjunto->setId_item($id_item);
             }
 
             $oEntradaAdjunto->setId_entrada($Qid_entrada);
             $oEntradaAdjunto->setNom($fileName);
             $oEntradaAdjunto->setAdjunto($contenido_doc);
 
-            if ($oEntradaAdjunto->DBGuardar() !== FALSE) {
+            if ($entradaAdjuntoRepository->Guardar($oEntradaAdjunto) !== FALSE) {
                 $id_item = $oEntradaAdjunto->getId_item();
                 $preview[] = "'$fileName'";
                 $config[] = [

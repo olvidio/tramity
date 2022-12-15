@@ -3,8 +3,9 @@
 use core\ViewTwig;
 use escritos\model\Escrito;
 use etherpad\model\Etherpad;
-use expedientes\model\entity\GestorAccion;
-use expedientes\model\Expediente;
+use expedientes\domain\repositories\AccionRepository;
+use expedientes\domain\entity\Expediente;
+use expedientes\domain\repositories\ExpedienteRepository;
 use web\Protocolo;
 use function core\is_true;
 
@@ -32,10 +33,11 @@ $oProtRef->setNombre('ref');
 $oProtRef->setBlanco(TRUE);
 
 if (!empty($Q_id_escrito)) {
-    $gesAcciones = new GestorAccion();
-    $cAccion = $gesAcciones->getAcciones(['id_escrito' => $Q_id_escrito]);
+    $AccionRepository = new AccionRepository();
+    $cAccion = $AccionRepository->getAcciones(['id_escrito' => $Q_id_escrito]);
     $id_expediente = $cAccion[0]->getId_expediente();
-    $oExpediente = new Expediente($id_expediente);
+    $ExpedienteRepository = new ExpedienteRepository();
+    $oExpediente = $ExpedienteRepository->findById($id_expediente);
     $estado = $oExpediente->getEstado();
 
     $base_url = core\ConfigGlobal::getWeb();
@@ -52,7 +54,7 @@ if (!empty($Q_id_escrito)) {
         $asunto = $oEscrito->getAsunto();
         $detalle = $oEscrito->getDetalle();
         // está anulado?
-        $anulado = $oEscrito->getAnulado();
+        $anulado = $oEscrito->isAnulado();
         if (is_true($anulado)) {
             $chk_anulado = 'checked';
         } else {

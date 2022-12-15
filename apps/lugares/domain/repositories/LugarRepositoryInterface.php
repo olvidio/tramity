@@ -26,7 +26,7 @@ interface LugarRepositoryInterface
      * @param array $aOperators asociativo con los operadores que hay que aplicar a cada campo
      * @return array|FALSE Una colección de objetos de tipo Lugar
      */
-    public function getLugares(array $aWhere = [], array $aOperators = []): array|false;
+    public function getLugares(array $aWhere, array $aOperators): array|false;
 
     /* -------------------- ENTIDAD --------------------------------------------- */
 

@@ -2,7 +2,7 @@
 
 namespace core;
 
-use config\model\Config;
+use config\domain\Config;
 use web\Hash;
 use web\Posicion;
 

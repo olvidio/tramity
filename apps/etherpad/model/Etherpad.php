@@ -100,7 +100,7 @@ class Etherpad extends Client
                     $prefix = 'ent';
                     break;
                 case self::ID_ESCRITO:
-                    $prefix = 'esc';
+                    $prefix = 'escritoRepository';
                     break;
                 case self::ID_EXPEDIENTE:
                     $prefix = 'exp';
@@ -669,7 +669,7 @@ class Etherpad extends Client
         }
     }
 
-    public function eliminarPad()
+    public function eliminarPad(): string
     {
         $padID = $this->getPadID();
         /*
@@ -680,7 +680,7 @@ class Etherpad extends Client
          */
         $rta = $this->deletePad($padID);
         if ($rta->getCode() == 1) {
-            $this->mostrar_error($rta);
+            return $this->mostrar_error($rta);
         }
 
     }

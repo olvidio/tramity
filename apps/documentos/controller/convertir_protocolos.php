@@ -15,17 +15,17 @@ require_once("apps/core/global_object.inc");
 
 $Q_que = (string)filter_input(INPUT_POST, 'que');
 
-if ($Q_que == 'entradas') {
+if ($Q_que === 'entradas') {
     $oConvertir = new Convertir('entradas');
     $oConvertir->ref();
 }
 
-if ($Q_que == 'escritos') {
+if ($Q_que === 'escritos') {
     $oConvertir = new Convertir('escritos');
     $oConvertir->destino();
 }
 
-if ($Q_que == 'expedientes') {
+if ($Q_que === 'expedientes') {
     $oConvertir = new Convertir('expedientes');
     $oConvertir->expedientes();
 }

@@ -1,7 +1,7 @@
 <?php
 
 use core\ViewTwig;
-use etiquetas\model\entity\GestorEtiqueta;
+use etiquetas\domain\repositories\EtiquetaRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
 use usuarios\domain\repositories\OficinaRepository;
@@ -35,9 +35,9 @@ if (isset($_POST['stack'])) {
     }
 }
 
-$gesEtiquetas = new GestorEtiqueta();
+$etiquetaRepository = new EtiquetaRepository();
 // Etiquetas personales + Etiquetas de la oficina
-$cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+$cEtiquetas = $etiquetaRepository->getMisEtiquetas();
 
 //default:
 $id_etiqueta = '';

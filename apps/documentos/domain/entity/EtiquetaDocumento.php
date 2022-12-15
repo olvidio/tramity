@@ -64,7 +64,7 @@ class EtiquetaDocumento
     }
 
     /**
-     * Recupera l'atribut iid_etiqueta de EtiquetaDocumento
+     * Recupera el atributo iid_etiqueta de EtiquetaDocumento
      *
      * @return integer $iid_etiqueta
      */
@@ -74,7 +74,7 @@ class EtiquetaDocumento
     }
 
     /**
-     * Recupera l'atribut iid_doc de EtiquetaDocumento
+     * Recupera el atributo iid_doc de EtiquetaDocumento
      *
      * @return integer $iid_doc
      */

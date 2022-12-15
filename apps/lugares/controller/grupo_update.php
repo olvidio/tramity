@@ -1,5 +1,6 @@
 <?php
 
+use escritos\domain\repositories\EscritoRepository;
 use escritos\model\Escrito;
 use lugares\domain\entity\Grupo;
 use lugares\domain\repositories\GrupoRepository;
@@ -26,9 +27,9 @@ switch ($Q_que) {
         if (empty($Q_descripcion)) {
             echo _("debe poner un nombre");
         }
-
-        $oEscrito = new Escrito($Q_id_escrito);
-        if ($oEscrito->DBCargar() === FALSE) {
+        $escritoRepository = new EscritoRepository();
+        $oEscrito = $escritoRepository->findById($Q_id_escrito);
+        if ($oEscrito === null) {
             $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -39,9 +40,9 @@ switch ($Q_que) {
         $oEscrito->setDestinos($Q_a_lugares);
         $oEscrito->setDescripcion($Q_descripcion);
 
-        if ($oEscrito->DBGuardar() === FALSE) {
+        if ($escritoRepository->Guardar($oEscrito) === FALSE) {
             echo _("hay un error, no se ha guardado");
-            echo "\n" . $oEscrito->getErrorTxt();
+            echo "\n" . $escritoRepository->getErrorTxt();
         }
         break;
     case "eliminar":

@@ -20,6 +20,7 @@ function logout($idioma, $esquema, $error)
     $a_campos['url'] = ConfigGlobal::getWeb();
     $oView = new ViewTwig(__NAMESPACE__);
     $oView->renderizar('login_form.html.twig', $a_campos);
+    die();
 }
 
 function posibles_esquemas()
@@ -68,7 +69,6 @@ if (!isset($_SESSION['session_auth'])) {
         if (!in_array($esquema_web, $a_esquemas, true)) {
             $error = sprintf(_("Todavía NO se ha creado la nombre_entidad: %s"), $esquema_web);
             logout($idioma, $esquema_web, $error);
-            die();
         }
 
         $aWhere = array('usuario' => $_POST['username']);
@@ -234,12 +234,10 @@ if (!isset($_SESSION['session_auth'])) {
             } else {
                 $error = _("Password incorrecto");
                 logout($idioma, $esquema, $error);
-                die();
             }
         } else {
             $error = _("este usuario no existe");
             logout($idioma, $esquema, $error);
-            die();
         }
     } else { // el primer cop o temps expirat
         $error = '';
@@ -253,7 +251,6 @@ if (!isset($_SESSION['session_auth'])) {
         }
 
         logout($idioma, $esquema_web, $error);
-        die();
     }
 } else {
     // ya esta registrado;

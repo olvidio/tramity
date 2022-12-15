@@ -2,9 +2,10 @@
 
 use core\ConfigGlobal;
 use davical\model\Davical;
-use entradas\model\entity\EntradaBypass;
-use entradas\model\entity\EntradaDB;
-use entradas\model\Entrada;
+use entradas\domain\entity\Entrada;
+use entradas\domain\entity\EntradaBypass;
+use entradas\domain\entity\EntradaRepository;
+use entradas\domain\repositories\EntradaBypassRepository;
 use lugares\domain\repositories\GrupoRepository;
 use pendientes\model\Pendiente;
 use usuarios\domain\entity\Cargo;
@@ -50,6 +51,11 @@ $Q_f_plazo = (string)filter_input(INPUT_POST, 'f_plazo');
 $Q_bypass = (string)filter_input(INPUT_POST, 'bypass');
 $Q_admitir_hidden = (string)filter_input(INPUT_POST, 'admitir_hidden');
 
+/* convertir las fechas a DateTimeLocal */
+$oF_escrito = DateTimeLocal::createFromLocal($Q_f_escrito);
+$oF_entrada = DateTimeLocal::createFromLocal($Q_f_entrada);
+$oF_plazo = DateTimeLocal::createFromLocal($Q_f_plazo);
+
 /* genero un vector con todas las referencias. Antes ya llegaba así, pero al quitar [] de los nombres, legan uno a uno.  */
 $Qa_referencias = (array)filter_input(INPUT_POST, 'referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $Qa_prot_num_referencias = (array)filter_input(INPUT_POST, 'prot_num_referencias', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -71,14 +77,15 @@ switch ($Q_que) {
             }
         }
         // Se ponen cuando se han enviado...
-        $oEntrada = new Entrada($Q_id_entrada);
-        if ($oEntrada->DBCargar() === FALSE) {
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+        if ($oEntrada === null) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         // las etiquetas:
         $oEntrada->setEtiquetas($a_etiquetas);
-        if ($oEntrada->DBGuardar() === FALSE) {
+        if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
             $error_txt .= _("No se han podido guardar las etiquetas");
         }
         if (empty($error_txt)) {
@@ -96,8 +103,9 @@ switch ($Q_que) {
     case 'en_asignar':
         $Qid_oficina = ConfigGlobal::role_id_oficina();
         $Qid_cargo_encargado = (integer)filter_input(INPUT_POST, 'id_cargo_encargado');
-        $oEntrada = new EntradaDB($Q_id_entrada);
-        if ($oEntrada->DBCargar() === FALSE) {
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+        if ($oEntrada === null) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -109,7 +117,7 @@ switch ($Q_que) {
             $oEntrada->setEstado(Entrada::ESTADO_ACEPTADO);
         }
         $oEntrada->setEncargado($Qid_cargo_encargado);
-        if ($oEntrada->DBGuardar() === FALSE) {
+        if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
         }
 
@@ -132,7 +140,7 @@ switch ($Q_que) {
                 $aVisto[] = $oVisto;
             }
             $oEntrada->setJson_visto($aVisto);
-            if ($oEntrada->DBGuardar() === FALSE) {
+            if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
                 $error_txt .= $oEntrada->getErrorTxt();
             }
         }
@@ -156,8 +164,8 @@ switch ($Q_que) {
             }
 
             $oEntrada->setJson_visto($aVisto);
-            if ($oEntrada->DBGuardar() === FALSE) {
-                $error_txt .= $oEntrada->getErrorTxt();
+            if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
+                $error_txt .= $EntradaRepository->getErrorTxt();
             }
         }
         // y en cualquier caso: desmarcar al nuevo (podria estar marcado previamente)
@@ -169,8 +177,8 @@ switch ($Q_que) {
         }
 
         $oEntrada->setJson_visto($aVisto);
-        if ($oEntrada->DBGuardar() === FALSE) {
-            $error_txt .= $oEntrada->getErrorTxt();
+        if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
+            $error_txt .= $EntradaRepository->getErrorTxt();
         }
 
         if (!empty($error_txt)) {
@@ -186,13 +194,14 @@ switch ($Q_que) {
     case 'en_visto':
         $Qid_oficina = ConfigGlobal::role_id_oficina();
         $Qid_cargo = ConfigGlobal::role_id_cargo();
-        $oEntrada = new EntradaDB($Q_id_entrada);
-        if ($oEntrada->DBCargar() === FALSE) {
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+        if ($oEntrada === null) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
 
-        $aVisto = $oEntrada->getJson_visto(TRUE);
+        $aVisto = $oEntrada->getJson_visto();
         $oVisto = [];
         $oVisto['oficina'] = $Qid_oficina;
         $oVisto['cargo'] = $Qid_cargo;
@@ -200,8 +209,8 @@ switch ($Q_que) {
         $aVisto[] = $oVisto;
 
         $oEntrada->setJson_visto($aVisto);
-        if ($oEntrada->DBGuardar() === FALSE) {
-            $error_txt .= $oEntrada->getErrorTxt();
+        if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
+            $error_txt .= $EntradaRepository->getErrorTxt();
         }
 
         $oEntrada->comprobarVisto();
@@ -217,29 +226,34 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'eliminar':
-        $oEntrada = new EntradaDB($Q_id_entrada);
-        if ($oEntrada->DBEliminar() === FALSE) {
-            $error_txt .= $oEntrada->getErrorTxt();
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+        if ($EntradaRepository->Eliminar($oEntrada) === FALSE) {
+            $error_txt .= $EntradaRepository->getErrorTxt();
             exit($error_txt);
         }
         break;
     case 'guardar_destinos':
-        $oEntradaBypass = new EntradaBypass($Q_id_entrada);
-        $oEntradaBypass->DBCargar();
+        $entradaBypassRepository = new EntradaBypassRepository();
+        $oEntradaBypass = $entradaBypassRepository->findById($Q_id_entrada);
         // Al cargar si no existe, también borra el id_entrada, y hay que volver a asignarlo.
-        $oEntradaBypass->setId_entrada($Q_id_entrada);
+        if ($oEntradaBypass === null) {
+            $oEntradaBypass = new EntradaBypass();
+            $oEntradaBypass->setId_entrada($Q_id_entrada);
+        }
         //Q_asunto.
         $oPermisoRegistro = new PermRegistro();
         $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntradaBypass, 'asunto');
         if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
             $oEntradaBypass->setAsunto($Q_asunto);
-            if ($oEntradaBypass->DBGuardar() === FALSE) {
-                $error_txt .= $oEntradaBypass->getErrorTxt();
+            if ($entradaBypassRepository->Guardar($oEntradaBypass) === FALSE) {
+                $error_txt .= $entradaBypassRepository->getErrorTxt();
             }
         }
         // destinos
         $Q_grupo_dst = (string)filter_input(INPUT_POST, 'grupo_dst');
         $Q_f_salida = (string)filter_input(INPUT_POST, 'f_salida');
+        $oF_salida = DateTimeLocal::createFromLocal($Q_f_salida);
 
         // genero un vector con todos los grupos.
         $Qa_grupos = (array)filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -278,9 +292,9 @@ switch ($Q_que) {
                 $oEntradaBypass->setDescripcion('x'); // no puede ser null.
             }
         }
-        $oEntradaBypass->setF_salida($Q_f_salida);
-        if ($oEntradaBypass->DBGuardar() === FALSE) {
-            $error_txt .= $oEntradaBypass->getErrorTxt();
+        $oEntradaBypass->setF_salida($oF_salida);
+        if ($entradaBypassRepository->Guardar($oEntradaBypass) === FALSE) {
+            $error_txt .= $entradaBypassRepository->getErrorTxt();
         }
 
         if (!empty($error_txt)) {
@@ -295,40 +309,42 @@ switch ($Q_que) {
         exit();
     case 'f_entrada':
         if ($Q_f_entrada === 'hoy') {
-            $oHoy = new DateTimeLocal();
-            $Q_f_entrada = $oHoy->getFromLocal();
+            $oF_entrada = new DateTimeLocal();
         }
-        $oEntrada = new Entrada($Q_id_entrada);
-        if ($oEntrada->DBCargar() === FALSE) {
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+        if ($oEntrada === null) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
-        $oEntrada->setF_entrada($Q_f_entrada);
+        $oEntrada->setF_entrada($oF_entrada);
         if (empty($Q_f_entrada)) {
             $oEntrada->setEstado(Entrada::ESTADO_INGRESADO);
         } else {
             $oEntrada->setEstado(Entrada::ESTADO_ADMITIDO);
         }
-        if ($oEntrada->DBGuardar() === FALSE) {
-            $error_txt = $oEntrada->getErrorTxt();
+        if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
+            $error_txt = $EntradaRepository->getErrorTxt();
             exit($error_txt);
         }
         break;
     case 'detalle':
-        $oEntrada = new Entrada($Q_id_entrada);
-        if ($oEntrada->DBCargar() === FALSE) {
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+        if ($oEntrada === null) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
         $oEntrada->setDetalle($Q_detalle);
-        if ($oEntrada->DBGuardar() === FALSE) {
-            $error_txt = $oEntrada->getErrorTxt();
+        if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
+            $error_txt = $EntradaRepository->getErrorTxt();
             exit($error_txt);
         }
         break;
     case 'guardar_ctr':
-        $oEntrada = new Entrada($Q_id_entrada);
-        if ($oEntrada->DBCargar() === FALSE) {
+        $EntradaRepository = new EntradaRepository();
+        $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+        if ($oEntrada === null) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -338,7 +354,7 @@ switch ($Q_que) {
         $oEntrada->setVisibilidad($Q_visibilidad);
         switch ($Q_plazo) {
             case 'hoy':
-                $oEntrada->setF_contestar('');
+                $oEntrada->setF_contestar(null);
                 break;
             case 'normal':
                 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
@@ -362,13 +378,13 @@ switch ($Q_que) {
                 $oEntrada->setF_contestar($oF);
                 break;
             case 'fecha':
-                $oEntrada->setF_contestar($Q_f_plazo);
+                $oEntrada->setF_contestar($oF_plazo);
                 break;
             default:
                 // Si no hay $Q_plazo, No pongo ninguna fecha a contestar
         }
-        if ($oEntrada->DBGuardar() === FALSE) {
-            $error_txt = $oEntrada->getErrorTxt();
+        if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
+            $error_txt = $EntradaRepository->getErrorTxt();
             exit($error_txt);
         }
         if (!empty($error_txt)) {
@@ -386,9 +402,10 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'guardar':
+        $EntradaRepository = new EntradaRepository();
         if (!empty($Q_id_entrada)) {
-            $oEntrada = new Entrada($Q_id_entrada);
-            if ($oEntrada->DBCargar() === FALSE) {
+            $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+            if ($oEntrada === null) {
                 $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -396,7 +413,9 @@ switch ($Q_que) {
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntrada, 'asunto');
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEntrada, 'detalle');
         } else {
+            $id_entrada = $EntradaRepository->getNewId_entrada();
             $oEntrada = new Entrada();
+            $oEntrada->setId_entrada($id_entrada);
             $perm_asunto = PermRegistro::PERM_MODIFICAR;
             $perm_detalle = PermRegistro::PERM_MODIFICAR;
         }
@@ -420,8 +439,8 @@ switch ($Q_que) {
         $oEntrada->setJson_prot_ref($aProtRef);
 
         $oEntrada->setAsunto_entrada($Q_asunto_e);
-        $oEntrada->setF_documento($Q_f_escrito, TRUE);
-        $oEntrada->setF_entrada($Q_f_entrada);
+        $oEntrada->setF_documento($oF_escrito);
+        $oEntrada->setF_entrada($oF_entrada);
         if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
             $oEntrada->setAsunto($Q_asunto);
         }
@@ -442,7 +461,7 @@ switch ($Q_que) {
         // 5º Compruebo si hay que generar un pendiente
         switch ($Q_plazo) {
             case 'hoy':
-                $oEntrada->setF_contestar('');
+                $oEntrada->setF_contestar(null);
                 break;
             case 'normal':
                 $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
@@ -466,7 +485,7 @@ switch ($Q_que) {
                 $oEntrada->setF_contestar($oF);
                 break;
             case 'fecha':
-                $oEntrada->setF_contestar($Q_f_plazo);
+                $oEntrada->setF_contestar($oF_plazo);
                 break;
             default:
                 // Si no hay $Q_plazo, No pongo ninguna fecha a contestar
@@ -491,8 +510,8 @@ switch ($Q_que) {
         $oEntrada->setEstado($estado);
 
         $oEntrada->setBypass(isTrue($Q_bypass));
-        if ($oEntrada->DBGuardar() === FALSE) {
-            $error_txt .= $oEntrada->getErrorTxt();
+        if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
+            $error_txt .= $EntradaRepository->getErrorTxt();
         }
 
         if (empty($error_txt) && $Q_filtro !== 'en_buscar') {
@@ -518,7 +537,7 @@ switch ($Q_que) {
                         $oPendiente->setId_reg($id_reg);
                         $oPendiente->setAsunto($Q_asunto);
                         $oPendiente->setStatus("NEEDS-ACTION");
-                        $oPendiente->setF_inicio($Q_f_entrada);
+                        $oPendiente->setF_inicio($oF_entrada);
                         $oPendiente->setF_plazo($f_plazo);
                         $oPendiente->setVisibilidad($Q_visibilidad);
                         $oPendiente->setDetalle($Q_detalle);
@@ -547,23 +566,29 @@ switch ($Q_que) {
 
             //////// BY PASS //////
             if (is_true($Q_bypass) && !empty($Q_id_entrada)) {
-                $oEntradaBypass = new EntradaBypass($Q_id_entrada);
-                $oEntradaBypass->DBCargar(); // Mo pasa nada si no existe, ya se insertará
+                $entradaBypassRepository = new EntradaBypassRepository();
+                $oEntradaBypass = $entradaBypassRepository->findById($Q_id_entrada);
+                if ($oEntradaBypass === null) { // si no existe
+                    $id_item = $entradaBypassRepository->getNewId_item();
+                    $oEntradaBypass = new EntradaBypass();
+                    $oEntradaBypass->setId_item($id_item);
+                }
                 //Q_asunto.
                 if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
-                    $oEntrada = new EntradaDB($Q_id_entrada);
-                    if ($oEntrada->DBCargar() === FALSE) {
+                    $EntradaRepository = new EntradaRepository();
+                    $oEntrada = $EntradaRepository->findById($Q_id_entrada);
+                    if ($oEntrada === null) {
                         $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
                         exit ($err_cargar);
                     }
                     $oEntrada->setAsunto($Q_asunto);
-                    if ($oEntrada->DBGuardar() === FALSE) {
-                        $error_txt .= $oEntrada->getErrorTxt();
+                    if ($EntradaRepository->Guardar($oEntrada) === FALSE) {
+                        $error_txt .= $EntradaRepository->getErrorTxt();
                     }
                 }
                 // destinos
                 $Q_grupo_dst = (string)filter_input(INPUT_POST, 'grupo_dst');
-                $Q_f_salida = (string)filter_input(INPUT_POST, 'f_salida');
+                //$Q_f_salida = (string)filter_input(INPUT_POST, 'f_salida');
 
                 // genero un vector con todos los grupos.
                 $Qa_grupos = (array)filter_input(INPUT_POST, 'grupos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -600,8 +625,8 @@ switch ($Q_que) {
                     $oEntradaBypass->setId_grupos();
                     $oEntradaBypass->setDescripcion('x'); // no puede ser null.
                 }
-                if ($oEntradaBypass->DBGuardar() === FALSE) {
-                    $error_txt .= $oEntradaBypass->getErrorTxt();
+                if ($entradaBypassRepository->Guardar($oEntradaBypass) === FALSE) {
+                    $error_txt .= $entradaBypassRepository->getErrorTxt();
                 }
 
                 if (!empty($error_txt)) {

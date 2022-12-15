@@ -1,8 +1,9 @@
 <?php
 
-use config\model\entity\ConfigSchema;
 
 // INICIO Cabecera global de URL de controlador *********************************
+use config\domain\repositories\ConfigSchemaRepository;
+
 require_once("apps/core/global_header.inc");
 // Archivos requeridos por esta url **********************************************
 
@@ -17,12 +18,13 @@ switch ($Q_que) {
     case 'update_plataforma':
         $Q_plataforma = (string)filter_input(INPUT_POST, 'plataforma');
 
-        $oConfigSchema = new ConfigSchema('plataforma_mantenimiento');
+        $configSchemaRepository = new ConfigSchemaRepository();
+        $oConfigSchema = $configSchemaRepository->findById('plataforma_mantenimiento');
         $oConfigSchema->setValor($Q_plataforma);
 
         $error_txt = '';
-        if ($oConfigSchema->DBGuardar() === FALSE) {
-            $error_txt = $oConfigSchema->getErrorTxt();
+        if ($configSchemaRepository->Guardar($oConfigSchema) === FALSE) {
+            $error_txt = $configSchemaRepository->getErrorTxt();
         }
 
         if (empty($error_txt)) {
@@ -37,7 +39,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata);
         exit();
-        break;
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);

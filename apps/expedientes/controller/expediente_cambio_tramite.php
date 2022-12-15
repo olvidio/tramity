@@ -1,7 +1,8 @@
 <?php
 
 use core\ViewTwig;
-use expedientes\model\Expediente;
+use expedientes\domain\entity\Expediente;
+use expedientes\domain\repositories\ExpedienteRepository;
 use tramites\domain\repositories\TramiteRepository;
 use web\Hash;
 
@@ -29,7 +30,8 @@ $a_cosas = ['id_expediente' => $Q_id_expediente,
 $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($a_cosas));
 $pagina_update = Hash::link('apps/expedientes/controller/expediente_update.php?' . http_build_query([]));
 
-$oExpediente = new Expediente($Q_id_expediente);
+$ExpedienteRepository = new ExpedienteRepository();
+$oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
 $id_tramite = $oExpediente->getId_tramite();
 $oDesplTramites->setOpcion_sel($id_tramite);
 

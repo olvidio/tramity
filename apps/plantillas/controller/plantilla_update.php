@@ -1,9 +1,11 @@
 <?php
 
 use core\ConfigGlobal;
-use escritos\model\Escrito;
+use escritos\domain\entity\Escrito;
+use escritos\domain\repositories\EscritoRepository;
 use etherpad\model\Etherpad;
-use expedientes\model\entity\Accion;
+use expedientes\domain\entity\Accion;
+use expedientes\domain\repositories\AccionRepository;
 use plantillas\domain\entity\Plantilla;
 use plantillas\domain\repositories\PlantillaRepository;
 use web\DateTimeLocal;
@@ -32,7 +34,10 @@ switch ($Q_que) {
         $asunto = $oPlantilla->getNombre();
 
         // crear un nuevo escrito:
+        $escritoRepository = new EscritoRepository();
+        $id_escrito = $escritoRepository->getNewId_escrito();
         $oEscrito = new Escrito();
+        $oEscrito->setId_escrito($id_escrito);
         $oEscrito->setAccion(Escrito::ACCION_PLANTILLA);
         $oEscrito->setModo_envio(Escrito::MODO_MANUAL);
         $oEscrito->setTipo_doc(Escrito::TIPO_ETHERPAD);
@@ -45,23 +50,26 @@ switch ($Q_que) {
         $oEscrito->setCreador($id_ponente);
         $oEscrito->setOK(Escrito::OK_NO);
 
-        // El sunto no puede ser nulo (cojo el nombre de la plantilla)
+        // El asunto no puede ser nulo (cojo el nombre de la plantilla)
         $oEscrito->setAsunto($asunto);
 
-        if ($oEscrito->DBGuardar() === FALSE) {
+        if ($escritoRepository->Guardar($oEscrito) === FALSE) {
             echo _("hay un error, no se ha guardado");
-            echo "\n" . $oEscrito->getErrorTxt();
+            echo "\n" . $escritoRepository->getErrorTxt();
         }
 
         $id_escrito = $oEscrito->getId_escrito();
 
+        $AccionRepository = new AccionRepository();
+        $id_item = $AccionRepository->getNewId_item();
         $oAccion = new Accion();
+        $oAccion->setId_item($id_item);
         $oAccion->setId_expediente($Q_id_expediente);
         $oAccion->setId_escrito($id_escrito);
         $oAccion->setTipo_accion(Escrito::ACCION_PLANTILLA);
-        if ($oAccion->DBGuardar() === FALSE) {
+        if ($AccionRepository->Guardar($oAccion) === FALSE) {
             echo _("hay un error, no se ha guardado");
-            echo "\n" . $oAccion->getErrorTxt();
+            echo "\n" . $AccionRepository->getErrorTxt();
         }
 
 
@@ -115,8 +123,8 @@ switch ($Q_que) {
             echo _("debe poner un nombre");
         }
 
-        $oEscrito = new Escrito($Q_id_escrito);
-        $oEscrito->DBCargar();
+        $escritoRepository = new EscritoRepository();
+        $oEscrito = $escritoRepository->findById($Q_id_escrito);
         // borrar destinos existentes
         $oEscrito->setJson_prot_destino([]);
         $oEscrito->setId_grupos();
@@ -124,9 +132,9 @@ switch ($Q_que) {
         $oEscrito->setDestinos($Q_a_lugares);
         $oEscrito->setDescripcion($Q_nombre);
 
-        if ($oEscrito->DBGuardar() === FALSE) {
+        if ($escritoRepository->Guardar($oEscrito) === FALSE) {
             echo _("hay un error, no se ha guardado");
-            echo "\n" . $oEscrito->getErrorTxt();
+            echo "\n" . $escritoRepository->getErrorTxt();
         }
         break;
     case "eliminar":

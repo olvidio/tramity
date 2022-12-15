@@ -2,7 +2,8 @@
 
 use busquedas\model\ImprimirTabla;
 use core\ConverterDate;
-use entradas\model\GestorEntrada;
+use entradas\domain\entity\EntradaRepository;
+use escritos\domain\repositories\EscritoRepository;
 use escritos\model\GestorEscrito;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -46,8 +47,8 @@ if (!empty($f_min) && !empty($f_max)) {
     $aWhere['f_entrada'] = 'x';
     $aOperador['f_entrada'] = 'IS NOT NULL';
 }
-$gesEntradas = new GestorEntrada();
-$cEntradas = $gesEntradas->getEntradasNumeradas($aWhere, $aOperador);
+$EntradaRepository = new EntradaRepository();
+$cEntradas = $EntradaRepository->getEntradasNumeradas($aWhere, $aOperador);
 $aCollection['entradas'] = $cEntradas;
 // EntradasBypass
 
@@ -61,8 +62,8 @@ if (!empty($f_min) && !empty($f_max)) {
     $aWhere['f_salida'] = 'x';
     $aOperador['f_salida'] = 'IS NOT NULL';
 }
-$gesEscritos = new GestorEscrito();
-$cEscritos = $gesEscritos->getEscritosNumerados($aWhere, $aOperador);
+$escritoRepository = new EscritoRepository();
+$cEscritos = $escritoRepository->getEscritosNumerados($aWhere, $aOperador);
 $aCollection['escritos'] = $cEscritos;
 
 

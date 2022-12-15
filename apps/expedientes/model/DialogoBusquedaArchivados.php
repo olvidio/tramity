@@ -4,8 +4,8 @@ namespace expedientes\model;
 
 use core\ViewTwig;
 use DateInterval;
-use etiquetas\model\entity\GestorEtiqueta;
-use etiquetas\model\entity\GestorEtiquetaExpediente;
+use etiquetas\domain\repositories\EtiquetaExpedienteRepository;
+use etiquetas\domain\repositories\EtiquetaRepository;
 use web\DateTimeLocal;
 use web\DesplegableArray;
 
@@ -44,13 +44,13 @@ class DialogoBusquedaArchivados
     }
 
 
-    public function generarCondicion()
+    public function generarCondicion(): array
     {
         $aWhereADD = [];
         $aOperadorADD = [];
 
-        $gesEtiquetas = new GestorEtiqueta();
-        $a_posibles_etiquetas = $gesEtiquetas->getArrayMisEtiquetas();
+        $etiquetaRepository = new EtiquetaRepository();
+        $a_posibles_etiquetas = $etiquetaRepository->getArrayMisEtiquetas();
         $oArrayDesplEtiquetas = new DesplegableArray($this->a_etiquetas_filtered, $a_posibles_etiquetas, 'etiquetas');
         $oArrayDesplEtiquetas->setBlanco('t');
         $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
@@ -60,14 +60,13 @@ class DialogoBusquedaArchivados
         $this->chk_and = (($this->andOr === 'AND') || empty($this->andOr)) ? 'checked' : '';
 
         if (!empty($this->a_etiquetas_filtered)) {
-            $gesEtiquetasExpediente = new GestorEtiquetaExpediente();
-            $cExpedientes = $gesEtiquetasExpediente->getArrayExpedientes($this->a_etiquetas_filtered, $this->andOr);
+            $etiquetaExpedienteRepository = new EtiquetaExpedienteRepository();
+            $cExpedientes = $etiquetaExpedienteRepository->getArrayExpedientes($this->a_etiquetas_filtered, $this->andOr);
             if (!empty($cExpedientes)) {
                 $aWhereADD['id_expediente'] = implode(',', $cExpedientes);
                 $aOperadorADD['id_expediente'] = 'IN';
             } else {
                 // No hay ninguno. No importa el resto de condiciones
-                $msg = _("No hay ningún expediente con estas etiquetas");
             }
         }
 
@@ -113,8 +112,8 @@ class DialogoBusquedaArchivados
     public function mostrarDialogo(): void
     {
 
-        $gesEtiquetas = new GestorEtiqueta();
-        $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+        $etiquetaRepository = new EtiquetaRepository();
+        $cEtiquetas = $etiquetaRepository->getMisEtiquetas();
         $a_posibles_etiquetas = [];
         foreach ($cEtiquetas as $oEtiqueta) {
             $id_etiqueta = $oEtiqueta->getId_etiqueta();

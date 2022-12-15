@@ -2,10 +2,12 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use expedientes\model\Expediente;
+use expedientes\domain\entity\Expediente;
+use expedientes\domain\repositories\ExpedienteRepository;
 use lugares\domain\repositories\LugarRepository;
 use usuarios\domain\repositories\OficinaRepository;
 use web\Desplegable;
+use web\Hash;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -39,13 +41,14 @@ $oDesplLugares->setBlanco(TRUE);
 $a_cosas = ['id_expediente' => $Q_id_expediente,
     'filtro' => $Q_filtro,
 ];
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($a_cosas));
-$pagina_reunion = web\Hash::link('apps/expedientes/controller/expediente_update.php?' . http_build_query([]));
+$pagina_cancel = Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($a_cosas));
+$pagina_reunion = Hash::link('apps/expedientes/controller/expediente_update.php?' . http_build_query([]));
 
-$oExpediente = new Expediente($Q_id_expediente);
+$ExpedienteRepository = new ExpedienteRepository();
+$oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
 $f_reunion = $oExpediente->getF_reunion()->getFromLocalHora();
 $yearStart = date('Y');
-$yearEnd = $yearStart + 2;
+$yearEnd = (int)$yearStart + 2;
 $hoyIso = date('Y-m-d');
 
 $titulo = _("Fijar fecha reunión:");

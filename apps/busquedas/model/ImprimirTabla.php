@@ -122,7 +122,7 @@ class ImprimirTabla
                 $a_posibles_cargos = $CargoRepository->getArrayCargos();
                 foreach ($cCollection as $oEscrito) {
                     $asunto = $oEscrito->getAsunto();
-                    $anulado = $oEscrito->getAnulado();
+                    $anulado = $oEscrito->isAnulado();
 
                     // protocolo local
                     $protocolo_local = $oEscrito->getProt_local_txt();

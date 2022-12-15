@@ -3,14 +3,16 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use escritos\model\EscritoLista;
-use etiquetas\model\entity\GestorEtiqueta;
-use expedientes\model\Expediente;
+use etiquetas\domain\repositories\EtiquetaRepository;
+use expedientes\domain\repositories\ExpedienteRepository;
 use tramites\domain\repositories\FirmaRepository;
 use tramites\domain\repositories\TramiteRepository;
 use usuarios\domain\entity\Cargo;
 use usuarios\domain\repositories\CargoRepository;
 use usuarios\domain\Visibilidad;
 use web\Desplegable;
+use web\DesplegableArray;
+use web\Hash;
 use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -39,8 +41,9 @@ if (empty($Q_id_expediente)) {
     $Q_filtro = 'archivados';
 }
 
-$oExpediente = new Expediente($Q_id_expediente);
-if ($oExpediente->DBCargar() === FALSE) {
+$ExpedienteRepository = new ExpedienteRepository();
+$oExpediente = $ExpedienteRepository->findById($Q_id_expediente);
+if ($oExpediente === null) {
     $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
     exit ($err_cargar);
 }
@@ -103,20 +106,20 @@ $oDesplVisibilidad->setOpcion_sel($visibilidad);
 $ver_etiquetas = FALSE;
 $etiquetas = $oExpediente->getEtiquetasVisiblesArray();
 if (ConfigGlobal::role_actual() !== 'secretaria') {
-    $gesEtiquetas = new GestorEtiqueta();
-    $cEtiquetas = $gesEtiquetas->getMisEtiquetas();
+    $etiquetaRepository = new EtiquetaRepository();
+    $cEtiquetas = $etiquetaRepository->getMisEtiquetas();
     $a_posibles_etiquetas = [];
     foreach ($cEtiquetas as $oEtiqueta) {
         $id_etiqueta = $oEtiqueta->getId_etiqueta();
         $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
         $a_posibles_etiquetas[$id_etiqueta] = $nom_etiqueta;
     }
-    $oArrayDesplEtiquetas = new web\DesplegableArray($etiquetas, $a_posibles_etiquetas, 'etiquetas');
+    $oArrayDesplEtiquetas = new DesplegableArray($etiquetas, $a_posibles_etiquetas, 'etiquetas');
     $oArrayDesplEtiquetas->setBlanco('t');
     $oArrayDesplEtiquetas->setAccionConjunto('fnjs_mas_etiquetas()');
     $ver_etiquetas = TRUE;
 } else {
-    $oArrayDesplEtiquetas = new web\DesplegableArray('', [], 'etiquetas');
+    $oArrayDesplEtiquetas = new DesplegableArray('', [], 'etiquetas');
 }
 $txt_btn_etiquetas = _("Guardar etiquetas");
 
@@ -128,8 +131,8 @@ if ($Q_filtro === 'archivados') {
     $Q_a_condiciones = (array)filter_input(INPUT_POST, 'condiciones', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $cosas = array_merge($cosas, $Q_a_condiciones);
 }
-$pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($cosas));
-$pagina_actualizar = web\Hash::link('apps/expedientes/controller/expediente_distribuir.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'modo' => $Q_modo]));
+$pagina_cancel = Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($cosas));
+$pagina_actualizar = Hash::link('apps/expedientes/controller/expediente_distribuir.php?' . http_build_query(['id_expediente' => $Q_id_expediente, 'filtro' => $Q_filtro, 'modo' => $Q_modo]));
 $base_url = ConfigGlobal::getWeb(); //http://tramity.local
 
 $disable_archivar = '';

@@ -2,9 +2,11 @@
 
 use core\ViewTwig;
 use envios\model\Enviar;
-use escritos\model\Escrito;
+use escritos\domain\entity\EscritoDB;
+use escritos\domain\repositories\EscritoRepository;
 use oasis_as4\model\As4Remove;
 use usuarios\domain\entity\Cargo;
+use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -29,7 +31,7 @@ echo "</div>";
 */
 
 $Q_id_escrito = (integer)filter_input(INPUT_GET, 'id');
-$f_salida = date(DateTimeInterface::ATOM);
+$oF_salida = new DateTimeLocal();
 // Comprobar si tiene clave para enviar un xml, o hay que generar un pdf.
 
 $rta_txt = '';
@@ -55,20 +57,22 @@ $oEnviar = new Enviar($Q_id_escrito, 'escrito');
 $a_rta = $oEnviar->enviar();
 
 if ($a_rta['marcar'] === TRUE) {
-    $oEscrito = new Escrito($Q_id_escrito);
+    $escritoRepository = new EscritoRepository();
+    $oEscrito = $escritoRepository->findById($Q_id_escrito);
     if ($oEscrito->DBCargar() === FALSE) {
         $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_cargar);
     }
-    $oEscrito->setF_salida($f_salida, FALSE);
+    $oEscrito->setF_salida($oF_salida);
     if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-        $oEscrito->setF_aprobacion($f_salida, FALSE);
+        $oEscrito->setF_aprobacion($oF_salida);
     }
-    $oEscrito->setOk(Escrito::OK_SECRETARIA);
-    if ($oEscrito->DBGuardar() === FALSE) {
-        exit($oEscrito->getErrorTxt());
+    $oEscrito->setOk(EscritoDB::OK_SECRETARIA);
+    if ($escritoRepository->Guardar($oEscrito) === FALSE) {
+        exit($escritoRepository->getErrorTxt());
     }
 }
+
 if ($a_rta['success'] === TRUE) {
     // para que se cierre la ventana que se ha abierto:
     echo "<script type=\"text/javascript\">

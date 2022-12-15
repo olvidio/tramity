@@ -985,7 +985,7 @@ final class MimeType
         'tpl' => 'application/vnd.groove-tool-template',
         'tpt' => 'application/vnd.trid.tpt',
         'tr' => 'text/troff',
-        'tra' => 'application/vnd.trueapp',
+        'tramiteCargoRepository' => 'application/vnd.trueapp',
         'trig' => 'application/trig',
         'trm' => 'application/x-msterminal',
         'ts' => 'video/mp2t',
