@@ -1,0 +1,279 @@
+<!-- load the CSS files in the right order -->
+<link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
+<link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
+<!-- para hacer lineas más pequeñas en el file input -->
+<link href="css/custom_file_input.css" rel="stylesheet" type="text/css">
+
+<!-- load the JS files in the right order -->
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalBuscar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    {{ "Buscar (máximo 50 filas)"|trans|raw }}
+                </h5>
+                <button type="button" id="btn-close" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div id="modal-body" class="modal-body">
+                {# se carga via ajax. 3 formularios distintos: para entradas, para expedientes y para escritos #}
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<h1>{{ titulo }}:</h1>
+
+{% if comentario %}
+    <div class='p-2'></div>
+    <div class="container p-3 my-3 bg-danger text-white fw-bold">
+        {{ comentario|raw }}
+    </div>
+{% endif %}
+
+<form id="form_escrito">
+    <input type=hidden name='que' id='que' value=0>
+    <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }}>
+    <input type=hidden name='filtro' id='filtro' value={{ filtro }}>
+    <input type=hidden name='modo' id='modo' value={{ modo }}>
+    <input type=hidden name='id_escrito' id='id_escrito' value={{ id_escrito }}>
+    <input type=hidden name='accion' id='accion' value={{ accion }}>
+    <input type=hidden name='id_ponente' id='id_ponente' value={{ id_ponente }}>
+    <input type=hidden name='hidden_visibilidad' id='hidden_visibilidad' value={{ hidden_visibilidad }}>
+    <!-- si vengo de buscar, para poder volver -->
+    <input type=hidden name='str_condicion' id='str_condicion' value={{ str_condicion }}>
+
+    <div class="row">
+        <!--  col Izda -->
+        <div class="col-8">
+            {# No las propuestas #}
+            {% if esEscrito %}
+                <!--  --------------- PROTOCOLO LOCAL --------------- -->
+                <div class="mb-3 row align-items-center">
+                    <div class="col-2 form-label">
+                        <label for="prot_num" class="col-2 form-label">
+                            {{ "Destinos"|trans|raw }}
+                        </label>
+                    </div>
+                    <div id="dst_array" class="col-10">
+                        {{ oArrayProtDestino.ListaSelects|raw }}
+                    </div>
+                </div>
+
+                <!--  --------------- REFERENCIAS --------------- -->
+                <div class="mb-3 row">
+                    <label for="prot_num" class="col-2 form-label">
+                        {{ "Referencias"|trans|raw }}
+                    </label>
+                    <div class="col-10">
+                        {{ oArrayProtRef.ListaSelects|raw }}
+                    </div>
+                </div>
+            {% endif %}
+            <!--  --------------- ASUNTO --------------- -->
+            <div class="mb-3 row">
+                <label for="asunto" class="col-2 form-label">{{ "Asunto"|trans|raw }}</label>
+                <div class="col">
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">{{ anulado_txt }}</span>
+                        <input {{ asunto_readonly }} tabindex='30' type="text" class="form-control" name='asunto'
+                                                     id="asunto" value="{{ asunto }}">
+                    </div>
+                </div>
+            </div>
+            <!--  --------------- DETALLE --------------- -->
+            <div class="mb-3 row">
+                <label for="detalle" class="col-2 form-label">{{ "Detalle"|trans|raw }}</label>
+                <div class='col-6'>
+                    <input {{ detalle_readonly }} tabindex='50' type="text" class="form-control" name='detalle'
+                                                  id="detalle" value="{{ detalle }}">
+                </div>
+            </div>
+            <!--  --------------- ENTRADILLA --------------- -->
+            {#
+            <div class="mb-3 row">
+              <label for="entradilla" class="col-2 form-label">{{ "Entradilla"|trans|raw }}</label>
+              <div class='col-10'>
+                <textarea tabindex='50' rows="5" class="form-control" name='entradilla' id="entradilla">{{ entradilla }}</textarea>
+              </div>
+            </div>
+            #}
+            <!--  --------------- CATEGORIA --------------- -->
+            <div class="row">
+                <div class="mb-3 col-md-2">
+                    <label for="categoria" class="form-label">{{ "Categoría"|trans|raw }}</label>
+                    {{ oDesplCategoria.desplegable|raw }}
+                </div>
+                <div class="mb-3 col-md-2">
+                    <label for="visibilidad" class="form-label">{{ "Visibilidad"|trans|raw }}</label>
+                    {{ oDesplVisibilidad.desplegable|raw }}
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="f_escrito" class="form-label">{{ "Fecha del escrito"|trans|raw }}</label>
+                    <div class="col-8 date">
+                        <input tabindex='31' name='f_escrito' id='f_escrito' type='text' class="form-control"
+                               value="{{ f_escrito }}"/>
+                    </div>
+                </div>
+            </div>
+
+            <!--  --------------- Image cargando , para cuando se copian etherpads, que es lento --------------- -->
+            <div id="slow_load"
+                 style="display: flex; justify-content: center; align-items: center; text-align: center;">
+                <img class="mb-4" src="../images/loading.gif" alt="cargando" width="32" height="32">
+            </div>
+
+            <div>
+                <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();">
+                    {{ "Cancelar"|trans|raw }}
+                </button>
+                <button tabindex='90' class="btn btn-primary" onClick="fnjs_guardar_escrito();">
+                    {{ "Guardar"|trans|raw }}
+                </button>
+            </div>
+            <div class="mt-5">
+                <button tabindex='94' class="btn btn-info" onClick="fnjs_conmutar();">
+                    {{ conmutar_txt }}
+                </button>
+            </div>
+            {% if explotar %}
+                <div class="col-3">
+                    <button tabindex='90' class="btn btn-danger" onClick="fnjs_explotar();">
+                        {{ "Explotar en un escrito para cada ctr"|trans|raw }}
+                    </button>
+                </div>
+            {% endif %}
+            {% if devolver %}
+                <div class="mt-3 col-3">
+                    <button tabindex='90' class="btn btn-success" onClick="fnjs_enviar_a_oficina();">
+                        {{ "Devolver a la oficina"|trans|raw }}
+                    </button>
+                    {# Afecta al guardar, pero solo en el caso del listado para enviar. por eso lo pongo con el if de devolver #}
+                    <input type="hidden" id="ok" name="ok" value="true">
+                </div>
+            {% endif %}
+        </div> <!-- Fin Col Izda -->
+
+        <!--  Col Dcha -->
+        <div class="col-4">
+            <!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
+            {% if id_escrito %}
+                {% if tipo_doc == 1 or tipo_doc == 4 %}
+                    <div class="mb-2">
+                        <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
+                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep();">
+                            {{ "Etherpad"|trans|raw }}
+                        </button>
+                    </div>
+                {% endif %}
+                {% if tipo_doc == 2 %}
+                    <p>etherCalc</p>
+                {% endif %}
+                {% if tipo_doc == 3 %}
+                    <p>incrustado</p>
+                {% endif %}
+                {% if tipo_doc is empty %}
+                    <div class="row mb-3">
+                        <label class="col-4 form-label">{{ "Insertar Etherpad"|trans|raw }}:</label>
+                        <button tabindex='100' class="col-2 btn btn-info" onClick="fnjs_add_escrito(1);">
+                            {{ "Nuevo"|trans|raw }}
+                        </button>
+                        <button tabindex='101' type="button" class="col-4 btn btn-info ms-3 me-1" data-bs-toggle="modal"
+                                data-bs-target="#ModalBuscar" onClick="fnjs_buscar_antecedentes_para_escrito(5);">
+                            {{ "Buscar en Documentos"|trans|raw }}
+                        </button>
+                    </div>
+                {% endif %}
+                <hr class="mt-1">
+                <div class="mb-3">
+                    <div class="clearfix mb-3">
+                        <div class="d-inline-flex float-start align-self-center">
+                            <label for="escrito_adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}:</label>
+                        </div>
+                        <div class="d-inline-flex float-end align-self-center">
+                            <button type="button" class="btn btn-info me-1" data-bs-toggle="modal"
+                                    data-bs-target="#ModalBuscar" onClick="fnjs_buscar_antecedentes_para_escrito(4);">
+                                {{ "Buscar en Documentos"|trans|raw }}
+                            </button>
+                        </div>
+                    </div>
+                    <div id="lista_adjuntos_etherpad">
+                        {{ lista_adjuntos_etherpad|raw }}
+                    </div>
+                    <div class="file-loading">
+                        <input id="escrito_adjunto" name="adjuntos[]" type="file" multiple>
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-warning" role="alert">
+                    {{ "Para añadir el texto, primero debe guardar los datos del escrito"|trans|raw }}
+                </div>
+            {% endif %}
+        </div> <!-- Fin Col Dcha -->
+    </div>
+</form>
+{# Per ficar l'escrit, si cal #}
+<div id="prova">
+</div>
+
+{{ include ('_escrito_form_js.html.twig') }}
+{{ include ('_escritos_js.html.twig') }}
+<script>
+    $(document).ready(function () {
+        $('#slow_load').hide();  // hide it initially
+    });
+
+    fnjs_grupo = function () {
+        var ok = $('#grupo_dst').prop('checked');
+        if (ok) {
+            $("#dst_array").hide();
+            $("#dst_grupo").show();
+            $("#btn_grupo").attr('disabled', false);
+        } else {
+            $("#dst_array").show();
+            $("#dst_grupo").hide();
+            $("#btn_grupo").attr('disabled', true);
+        }
+    }
+
+    $(document).ready(function () {
+        fnjs_grupo();
+        var el1 = $("#escrito_adjunto");
+        el1.fileinput({
+            theme: "explorer-fas",
+            uploadUrl: "src/escritos/controller/adjunto_upload.php",
+            dropZoneEnabled: true,
+            dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans|raw }}",
+            browseOnZoneClick: true,
+            dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans|raw }}",
+            maxFileCount: 5,
+            showUpload: false, // upload button
+            showBrowse: true,
+            showRemove: false,
+            showClose: false,
+            allowedPreviewTypes: false,
+            hideThumbnailContent: true,
+            // this is where the magic happens
+            uploadAsync: false,
+            uploadExtraData: {id_escrito: "{{ id_escrito }}"},
+            removeFromPreviewOnError: true,
+            overwriteInitial: false,
+            initialPreviewAsData: false,
+            initialPreview: [ {{ initialPreview|raw }} ],
+            initialPreviewConfig: {{ json_config|raw }},
+            initialPreviewDownloadUrl: "src/escritos/controller/adjunto_download.php",
+            fileActionSettings: {showZoom: false, showDrag: false},
+            maxFileSize: {{ post_max_size }},
+        });
+        el1.on("filebatchselected", function (files) {
+            el1.fileinput("upload");
+        });
+    });
+</script>

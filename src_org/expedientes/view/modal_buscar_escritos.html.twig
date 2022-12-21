@@ -1,0 +1,101 @@
+<div id="busqueda">
+    <!--  --------------- BUSQUEDAS --------------- -->
+    <form id=condiciones>
+        <input type="hidden" name="que" value='buscar_escrito'/>
+        <input type="hidden" name="id_expediente" value='{{ id_expediente }}'/>
+        <!--  --------------- ASUNTO --------------- -->
+        <div class="mb-3 row">
+            <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans|raw }}</label>
+            <div class="col-10">
+                <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar"
+                       value="{{ asunto }}">
+            </div>
+        </div>
+        <!--  --------------------  Periodo --------------------------  -->
+        <div id="div_periodo" class="mb-3 row">
+            <label for="periodo" class="col-1 form-label">{{ "periodo"|trans|raw }}:</label>
+            <div class="col-4">
+                <select tabindex=111 id=periodo name=periodo>
+                    <option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans|raw }}</option>
+                    <option value="mes_6" {{ sel_mes_6 }}>{{ "hace 6 meses"|trans|raw }}</option>
+                    <option value="any_1" {{ sel_any_1 }} >{{ "hace 1 año"|trans|raw }}</option>
+                    <option value="any_2" {{ sel_any_2 }} >{{ "hace 2 año"|trans|raw }}</option>
+                    <option value="siempre" {{ sel_siempre }} >{{ "siempre"|trans|raw }}</option>
+                </select>
+            </div>
+            <!--  --------------------  origen --------------------------  -->
+            <label for="periodo" class="col-2 form-label">{{ "¿A quién iba dirigido?"|trans|raw }}:</label>
+            <div class="col-5">
+                {{ oDesplDestino.desplegable|raw }}
+            </div>
+        </div>
+        <!--  --------------- OFICINA --------------- -->
+        <div id="div_oficinas" class="mb-3 row">
+            <label for="oficinas" class="col-1 form-label">{{ "Cargo"|trans|raw }}</label>
+            <div class="col-2">
+        <span id="span_cargos">
+            {{ oDesplCargos.Desplegable|raw }}
+        </span>
+            </div>
+            <!--  --------------------  origen --------------------------  -->
+            <div class="col-5">
+                {{ sigla|raw }}
+                <input id="prot_num" name="prot_num" size="12" class=contenido
+                       title="{{ "protocolo origen"|trans|raw }}"
+                       onchange="fnjs_proto('#prot_num','#prot_any','#btn_1')" value="{{ prot_num }}">
+                /
+                <input id="prot_any" name="prot_any" size="5" class=contenido
+                       title="{{ "año protocolo origen"|trans|raw }}" value="{{ prot_any }}">
+            </div>
+            <div class="col-2">
+                <button id="btn_1" type="button" class="btn btn-primary"
+                        onClick="fnjs_antecedente_escrito();">{{ "Buscar"|trans|raw }}</button>
+            </div>
+            <div class="col-2 ps-3 pt-1">
+                <input id="chk_anulados" name="chk_anulados" type="checkbox"
+                       onChange='fnjs_ctr_anulados()' {{ chk_ctr_anulados }}>
+                {{ "ver ctr anulados"|trans|raw }}
+            </div>
+        </div>
+    </form>
+</div>
+<hr>
+<div id="lista">
+    {{ oLista.mostrar_tabla|raw }}
+</div>
+<script>
+    fnjs_ctr_anulados = function () {
+        anulado = $('#chk_anulados').prop("checked");
+        if (anulado == true) { //volver a cargar la página
+            fnjs_update_div('#modal-body', 'src/expedientes/controller/antecedentes_ajax.php?que=buscar_escrito&id_expediente={{ id_expediente }}&chk_anulados=1');
+        } else {
+            fnjs_update_div('#modal-body', 'src/expedientes/controller/antecedentes_ajax.php?que=buscar_escrito&id_expediente={{ id_expediente }}&chk_anulados=0');
+        }
+    }
+    fnjs_antecedente_escrito = function () {
+        var data = $('#condiciones').serialize();
+        var url_ajax = 'src/expedientes/controller/antecedentes_ajax.php';
+        request = $.ajax({
+            data: data,
+            url: url_ajax,
+            method: 'POST'
+        });
+        request.done(function (rta) {
+            if (rta == undefined) {
+                rta = '';
+            }
+            $('#modal-body').html(rta);
+        });
+    }
+
+    fnjs_proto = function (num, any, siguiente) {
+        var numero;
+        var prot_num = $(num).val();
+        numero = prot_num.split("/");
+        if (numero[1]) {
+            $(num).val(numero[0]);
+            $(any).val(numero[1]);
+            $(siguiente).focus();
+        }
+    }
+</script>

@@ -1,0 +1,77 @@
+<script>
+    fnjs_guardar = function (formulario) {
+        datos = $(formulario).serialize();
+        request = $.ajax({
+            data: datos,
+            url: 'src/lugares/controller/lugar_update.php',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done(function (json) {
+            if (json.success != true) {
+                alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+            } else {
+                {{ oPosicion.js_atras(1)|raw }}
+            }
+        });
+    }
+</script>
+<div class="card" style="width: 35rem;">
+    <div class="card-header">
+        <h5 class="card-title">{{ "Datos del Lugar"|trans|raw }}</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <form class="user" id="frm_lugar" name="frm_lugar" action="" method="post">
+                    {{ oHash.getCamposHtml|raw }}
+                    <div class="mb-3">
+                        <label for="example" class="form-label">{{ "Sigla"|trans|raw }}</label>
+                        <input type="text" class="form-control col-6" id="sigla" name="sigla" placeholder="sigla"
+                               value="{{ sigla }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="example" class="form-label">{{ "Nombre"|trans|raw }}</label>
+                        <input type="text" class="form-control" id="nom_usuario" name="nombre" placeholder="Nombre"
+                               value="{{ nombre }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="example" class="form-label">{{ "dl"|trans|raw }}</label>
+                        <input type="text" class="form-control" id="dl" name="dl" placeholder="dl" value="{{ dl }}">
+                        <label for="example" class="form-label">{{ "region"|trans|raw }}</label>
+                        <input type="text" class="form-control" id="region" name="region" placeholder="region"
+                               value="{{ region }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="example" class="form-label">{{ "tipo de centro"|trans|raw }}</label>
+                        <input type="text" class="form-control" id="tipo_ctr" name="tipo_ctr" placeholder="tipo_ctr"
+                               value="{{ tipo_ctr }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="example" class="form-label">{{ "e-mail"|trans|raw }}</label>
+                        <input type="text" class="form-control" id="e_mail" name="e_mail" placeholder="e-mail"
+                               value="{{ e_mail }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="example" class="form-label">{{ "modo envío"|trans|raw }}</label>
+                        {{ oDesplModoEnvio.desplegable|raw }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="example" class="form-label">{{ "plataforma"|trans|raw }}</label>
+                        <input type="text" class="form-control" id="plataforma" name="plataforma"
+                               placeholder="plataforma" value="{{ plataforma }}">
+                    </div>
+                    <div class="ms-3 btn form-check">
+                        <input type="checkbox" class="form-check-input" id="anulado" name="anulado" {{ chk_anulado }}>
+                        <label class="form-check-label" for="anulado">{{ "anulado"|trans|raw }}</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <button onclick="fnjs_guardar(this.form);" type="button"
+                                class="btn btn-primary w-100">{{ "Guardar"|trans|raw }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

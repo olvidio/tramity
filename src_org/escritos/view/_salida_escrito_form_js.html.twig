@@ -1,0 +1,497 @@
+<script type="text/javascript">
+    var global_flag = 1;
+
+    $(function () {
+        $("#destinos_mas").on('change focusout', fnjs_mas_destinos);
+    });
+    $(function () {
+        $("#referencias_mas").on('change focusout', fnjs_mas_referencias);
+    });
+
+    $(function () {
+        $("#f_escrito").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            yearStart: {{ yearStart }},
+            yearEnd: {{ yearEnd }},
+            dayOfWeekStart: globaljsVarDayStart,
+            onShow: function (ct) {
+                this.setOptions({
+                    minDate: '{{ minIso }}'
+                })
+            }
+        });
+    });
+
+    $(function () {
+        $("#f_aprobacion").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            yearStart: {{ yearStart }},
+            yearEnd: {{ yearEnd }},
+            dayOfWeekStart: globaljsVarDayStart,
+            onShow: function (ct) {
+                this.setOptions({
+                    minDate: '{{ minIso }}'
+                })
+            }
+        });
+    });
+
+    fnjs_actualizar = function () {
+        fnjs_update_div('#main', '{{ pagina_actualizar|raw }}');
+    }
+
+    fnjs_ver_dst = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+        var id_escrito = $('#id_escrito').val();
+        if (!id_escrito || id_escrito == false) {
+            alert("{{ "Primero debe encontrar un escrito"|trans|raw }}");
+            return true;
+        }
+        var form = 'form_escrito';
+        var lista_grupos = '';
+        /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+        /* var sel=$('#'+formulario+' table .sel'); */
+        $('select[name^=grupos]').each(function (i) {
+            lista_grupos += ',' + $(this).val();
+        });
+        url = 'src/lugares/controller/grupo_form.php?id_escrito=' + id_escrito + '&lista_grupos=' + lista_grupos;
+        var winPrefs = "dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+        win = window.open(url, "", winPrefs);
+        win.focus();
+    }
+
+    fnjs_cancelar = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
+        }
+        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+    }
+
+    fnjs_guardar_salida = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
+        }
+
+        var err = 0;
+        //var destino=$('#destino').val();
+        var prot_num_destino = $('#prot_num_destino').val();
+        var asunto = $('#asunto').val();
+        var entradilla = $('#entradilla').val();
+        var ponente = $('#id_ponente').val();
+        var id_escrito = $('#id_escrito').val();
+        var f_escrito = $('#f_escrito').val();
+        var f_aprobacion = $('#f_aprobacion').val();
+
+        //if (!destino) { alert("{{ "Debe llenar el campo de destino"|trans|raw }}"); err=1; }
+        //if (!prot_num_destino) { alert("{{ "Debe llenar el campo de protocolo destino"|trans|raw }}"); err=1; }
+        if (!asunto) {
+            alert("{{ "Debe llenar el campo de asunto"|trans|raw }}");
+            err = 1;
+        }
+        //if (!entradilla) { alert("{{ "Debe llenar el campo entradilla"|trans|raw }}"); err=1; }
+        if (!ponente) {
+            alert("{{ "Debe llenar el campo del ponente"|trans|raw }}");
+            err = 1;
+        }
+        if (!f_aprobacion) {
+            alert("{{ "Debe llenar el campo de fecha aprobación"|trans|raw }}");
+            err = 1;
+        }
+
+        if (err != 1) {
+            $('#que').val('guardar_manual');
+            datos = $('#form_escrito').serialize();
+            request = $.ajax({
+                data: datos,
+                url: '{{ url_update }}',
+                method: 'POST',
+                dataType: 'json'
+            });
+            request.done(function (json) {
+                if (json.success != true) {
+                    alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+                } else {
+                    id = json.id_escrito;
+                    if (id != id_escrito) {
+                        txt = "{{ "número de protocolo"|trans|raw }}: " + json.protocolo;
+                        alert(txt);
+                        // Volver a la lista...
+                        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+                    } else {
+                        alert("{{ "pasa a la pestaña enviar"|trans|raw }}");
+                        // Volver a la lista...
+                        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+                    }
+                }
+            });
+        }
+    }
+
+    fnjs_guardar_escrito = function (quiet = 0) {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
+        }
+
+        var err = 0;
+        var asunto = $('#asunto').val();
+        var entradilla = $('#entradilla').val();
+        var ponente = $('#id_ponente').val();
+        var id_expediente = $('#id_expediente').val();
+        var id_escrito = $('#id_escrito').val();
+        var f_escrito = $('#f_escrito').val();
+
+        {% if esEscrito %}
+        // grupo_dst + grupos[0]
+        if ($('#grupo_dst').is(':checked')) {
+            var form = 'form_escrito';
+            var lista_grupos = '';
+            /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+            /* var sel=$('#'+formulario+' table .sel'); */
+            $('select[name^=grupos]').each(function (i) {
+                if ($(this).val() !== '') {
+                    if (lista_grupos !== '') {
+                        lista_grupos += ',';
+                    }
+                    lista_grupos += $(this).val();
+                }
+            });
+            if (lista_grupos === '') {
+                alert("{{ "Debe poner al menos un grupo de destinos"|trans|raw }}");
+                err = 1;
+            }
+        } else {
+            // destinos[0]
+            var form = 'form_escrito';
+            var lista_destinos = '';
+            /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+            /* var sel=$('#'+formulario+' table .sel'); */
+            $('select[name^=destinos]').each(function (i) {
+                if ($(this).val() !== '') {
+                    if (lista_destinos !== '') {
+                        lista_destinos += ',';
+                    }
+                    lista_destinos += $(this).val();
+                }
+            });
+            if (lista_destinos === '') {
+                alert("{{ "Debe poner al menos un destino"|trans|raw }}");
+                err = 1;
+            }
+
+        }
+        {% endif %}
+
+        if (!asunto) {
+            alert("{{ "Debe llenar el campo de asunto"|trans|raw }}");
+            err = 1;
+        }
+        //if (!entradilla) { alert("{{ "Debe llenar el campo entradilla"|trans|raw }}"); err=1; }
+        if (!ponente) {
+            alert("{{ "Debe llenar el campo del ponente"|trans|raw }}");
+            err = 1;
+        }
+        //if (!f_escrito) { alert("{{ "Debe llenar el campo de fecha del escrito"|trans|raw }}"); err=1; }
+        //if (!fnjs_fecha_en_intervalo('#f_escrito')) { err=1; }
+
+        if (err != 1) {
+            $('#que').val('guardar');
+            datos = $('#form_escrito').serialize();
+            request = $.ajax({
+                data: datos,
+                url: '{{ url_update }}',
+                method: 'POST',
+                dataType: 'json'
+            });
+            request.done(function (json) {
+                if (json.success != true) {
+                    alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+                } else {
+                    if (quiet != 1) {
+                        id = json.id_escrito;
+                        if (id != id_escrito) {
+                            // caso de nuevo escrito
+                            $.confirm({
+                                title: '{{ "datos guardados"|trans|raw }}',
+                                content: '{{ "¿añadir escrito o adjuntos?"|trans|raw }}',
+                                buttons: {
+                            {{ "Sí"|trans|raw }}:
+
+                            function () {
+                                // ir al form expediente.
+                                fnjs_update_div('#main', json.pagina_mod);
+                            }
+
+                        ,
+                            {{ "No"|trans|raw }}:
+
+                            function () {
+                                //$.alert('Canceled!');
+                                alert("{{ "datos guardados"|trans|raw }}");
+                                // Volver a la lista...
+                                fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+                            }
+                        }
+                        })
+
+                        } else {
+                            alert("{{ "datos guardados"|trans|raw }}");
+                            // Volver a la lista...
+                            fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    fnjs_focus_a = function (camp) {
+        $(camp).focus();
+    }
+
+    {{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
+    fnjs_mas_grupos = function () {
+        var code = (event.keyCode ? event.keyCode : event.which);
+        var valor = 1;
+        var id_campo = '#' + event.currentTarget.id;
+        var valor = $(id_campo).val();
+        if (code != 9 && typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        if (code == 9 || event.type == "change") {
+            if (valor != 0) {
+                {{ oArrayDesplGrupo.ListaSelectsJs|raw }}
+            }
+        }
+    }
+    fnjs_quitar_grupos = function () {
+        $('#span_grupos').html("");
+        $('#grupos_num').val(0);
+    }
+
+    {{ oArrayProtDestino.ComprobarSelectJs|raw }}
+    fnjs_mas_destinos = function () {
+        event.stopImmediatePropagation();
+        var id_campo = '#' + event.currentTarget.id;
+        var valor = $(id_campo).val();
+        if (event.type == 'change') {
+            global_flag = 2;
+            if (valor != 0) {
+                {{ oArrayProtDestino.ListaSelectsJs|raw }}
+            } else {
+                $('#referencias_mas').focus();
+            }
+        }
+        if (event.type == 'blur') {
+            if (global_flag == 1 && valor == 0) {
+                $('#referencias_mas').focus();
+            }
+            global_flag = 1;
+        }
+    }
+    fnjs_quitar_destinos = function () {
+        $('#span_dst').html("");
+        $('#dst_num').val(0);
+    }
+
+
+    {{ oArrayProtRef.ComprobarSelectJs|raw }}
+    fnjs_mas_referencias = function () {
+        event.stopImmediatePropagation();
+        var id_campo = '#' + event.currentTarget.id;
+        var valor = $(id_campo).val();
+        if (event.type == 'change') {
+            global_flag = 2;
+            if (valor != 0) {
+                {{ oArrayProtRef.ListaSelectsJs|raw }}
+            } else {
+                $('#asunto').focus();
+            }
+        }
+        if (event.type == 'blur') {
+            if (global_flag == 1 && valor == 0) {
+                $('#asunto').focus();
+            }
+            global_flag = 1;
+        }
+    }
+    fnjs_quitar_referencias = function () {
+        $('#span_ref').html("");
+        $('#ref_num').val(0);
+    }
+
+    {{ oArrayDesplFirmas.ComprobarSelectJs|raw }}
+    fnjs_mas_firmas = function () {
+        if (event == undefined) {
+            // cuando lo disparo por javascript
+            {{ oArrayDesplFirmas.ListaSelectsJs|raw }}
+        } else {
+            var code = (event.keyCode ? event.keyCode : event.which);
+            var valor = 1;
+            var id_campo = '#' + event.currentTarget.id;
+            var valor = $(id_campo).val();
+            if (code != 9 && typeof event !== 'undefined') {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            if (code == 9 || event.type == "change") {
+                if (valor != 0) {
+                    {{ oArrayDesplFirmas.ListaSelectsJs|raw }}
+                }
+            }
+        }
+    }
+    fnjs_quitar_firmas = function () {
+        $('#span_firmas').html("");
+        $('#firmas_num').val(0);
+    }
+
+    fnjs_proto = function (num, any) {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+        var s = 0;
+        var numero;
+        var siguiente = "";
+        siguiente = num.replace(/_num_/g, "_mas_");
+        num_escaped = num.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+        any_escaped = any.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+        var prot_num = $(num_escaped).val();
+        var prot_any = $(any_escaped).val();
+        if (prot_num === undefined) {
+            return;
+        }
+        numero = prot_num.split("/");
+        if (numero[1]) {
+            $(num_escaped).val(numero[0]);
+            $(any_escaped).val(numero[1]);
+            prot_any = $(any).val();
+        } else {
+            if (!prot_any) {
+                var calDate = new Date();
+                var year = calDate.getFullYear();
+                var year2 = year.toString().substr(-2);
+                $(any).val(year2);
+                prot_any = year;
+            }
+        }
+
+        /* Para el número de buscar */
+        if (num == '#buscar_prot_num') {
+            siguiente = "#b_buscar";
+        }
+        /* Para el número de origen */
+        var url_buscar_ajax = 'src/busquedas/controller/buscar_ajax.php';
+        if (num == '#prot_num_destinos[0]') {
+            que = "e2";
+            id_lugar = $('#destinos\\[0\\]').val();
+            prot_num = $('#prot_num_destinos\\[0\\]').val();
+            prot_any = $('#prot_any_destinos\\[0\\]').val();
+
+            var param_json = {
+                que: 'buscar_entrada_correspondiente',
+                id_lugar: id_lugar,
+                prot_num: prot_num,
+                prot_any: prot_any
+            };
+            request = $.ajax({
+                data: param_json,
+                url: url_buscar_ajax,
+                method: 'POST',
+                dataType: 'json'
+            });
+            request.done(function (json) {
+                id = json.id_entrada;
+                if (json.success != true) {
+                    alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+                } else {
+                    url = "{{ pagina_cancel|raw }}" + "&id_entrada=" + json.id_entrada;
+                    // Actualizar
+                    fnjs_update_div('#main', url);
+                }
+            });
+        }
+        /* Para el número de refereccias (si no hay numero en destino) */
+        if (num == '#prot_num_referencias[0]') {
+            prot_num_dst = $('#prot_num_destinos\\[0\\]').val();
+            if (prot_num_dst == '' || prot_num_dst == undefined) {
+                id_lugar = $('#referencias\\[0\\]').val();
+                prot_num = $('#prot_num_referencias\\[0\\]').val();
+                prot_any = $('#prot_any_referencias\\[0\\]').val();
+
+
+                var param_json = {
+                    para: 'escrito',
+                    que: 'buscar_referencia_correspondiente',
+                    id_lugar: id_lugar,
+                    prot_num: prot_num,
+                    prot_any: prot_any
+                };
+                request = $.ajax({
+                    data: param_json,
+                    url: url_buscar_ajax,
+                    method: 'POST',
+                    dataType: 'json'
+                });
+                request.done(function (json) {
+                    id = json.id_entrada;
+                    if (json.success != true) {
+                        alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+                    } else {
+                        $('#asunto').val(json.asunto);
+                        $('#detalle').val(json.detalle);
+                        $('#categoria').val(json.categoria);
+                        $('#visibilidad').val(json.visibilidad);
+                        $('#id_ponente').val(json.id_ponente);
+                        // varias:
+                        for (const id_firma of json.firmas) {
+                            $('#oficinas_mas').val(id_firma);
+                            $('#oficinas_mas').trigger("change");
+                        }
+                    }
+                });
+            }
+        }
+
+        siguiente_escaped = siguiente.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+        $(siguiente_escaped).focus();
+
+        return false;
+    }
+
+
+</script>

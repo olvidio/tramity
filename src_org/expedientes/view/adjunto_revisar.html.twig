@@ -1,0 +1,83 @@
+<!-- load the CSS files in the right order -->
+<link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
+<link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
+<!-- para hacer lineas más pequeñas en el file input -->
+<link href="css/custom_file_input.css" rel="stylesheet" type="text/css">
+
+<!-- load the JS files in the right order -->
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
+
+<h1>{{ titulo }}:</h1>
+<form id="form_escrito">
+    <input type=hidden name='que' id='que' value=0>
+    <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }}>
+    <input type=hidden name='filtro' id='filtro' value={{ filtro }}>
+    <input type=hidden name='id_escrito' id='id_escrito' value={{ id_escrito }}>
+
+    <div class="col-4">
+        <hr>
+        <div class="mb-3">
+            <label for="escrito_adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}</label>
+            <div class="file-loading">
+                <input id="escrito_adjunto" name="adjuntos[]" type="file" multiple>
+            </div>
+        </div>
+    </div>
+    <!--  --------------------  BOTONES --------------------------  -->
+    <div class="row col-2">
+        <button id='btn_volver' class="btn btn-secondary" onClick="fnjs_cancelar();">
+            {{ "Volver"|trans|raw }}
+        </button>
+    </div>
+</form>
+
+<script>
+    fnjs_cancelar = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
+        }
+        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+    }
+
+    $(document).ready(function () {
+        var el1 = $("#escrito_adjunto");
+        el1.fileinput({
+            theme: "explorer-fas",
+            uploadUrl: "src/escritos/controller/adjunto_upload.php",
+            dropZoneEnabled: true,
+            dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans|raw }}",
+            browseOnZoneClick: true,
+            dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans|raw }}",
+            maxFileCount: 5,
+            showUpload: false, // upload button
+            showBrowse: true,
+            showRemove: false,
+            showClose: false,
+            allowedPreviewTypes: false,
+            hideThumbnailContent: true,
+            // this is where the magic happens
+            uploadAsync: false,
+            uploadExtraData: {id_escrito: "{{ id_escrito }}"},
+            removeFromPreviewOnError: true,
+            overwriteInitial: false,
+            initialPreviewAsData: false,
+            initialPreview: [ {{ initialPreview|raw }} ],
+            initialPreviewConfig: {{ json_config|raw }},
+            initialPreviewDownloadUrl: "src/escritos/controller/adjunto_download.php",
+            fileActionSettings: {showZoom: false, showDrag: false},
+            maxFileSize: {{ post_max_size }},
+        });
+        el1.on("filebatchselected", function (files) {
+            el1.fileinput("upload");
+        });
+    });
+</script>

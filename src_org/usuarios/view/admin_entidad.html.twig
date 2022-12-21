@@ -1,0 +1,206 @@
+<link href="node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+<!-- Custom styles for this template-->
+<link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-2"> {{ "Admin"|trans|raw }} <br> {{ nombre_entidad }} </div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" href="">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>{{ "Dashboard"|trans|raw }}</span></a>
+        </li>
+        <!-- Nav Item - Preferencias -->
+        <li class="nav-item">
+            <a class="nav-link" href="#" onclick="fnjs_update_div('#main','{{ pagina_profile|raw }}')">
+                <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>
+                <span>{{ "Preferencias"|trans|raw }}</span></a>
+        </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            {{ "Configuración"|trans|raw }}
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item active">
+            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="true"
+               aria-controls="collapsePages">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>{{ "usuarios"|trans|raw }}</span>
+            </a>
+            <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
+                 data-bs-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item"
+                       onclick="fnjs_update_div('#main','src/usuarios/controller/usuario_lista.php')" href="#">
+                        {{ "Buscar / modificar"|trans|raw }}
+                    </a>
+                    {% if is_ambito_dl %}
+                        <a class="collapse-item active"
+                           onclick="fnjs_update_div('#main','src/usuarios/controller/suplente_lista.php')" href="#">
+                            {{ "Suplentes"|trans|raw }}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Cargos -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCargos"
+               aria-expanded="true" aria-controls="collapseCargos">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>{{ "Cargos"|trans|raw }}</span>
+            </a>
+            <div id="collapseCargos" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    {% if is_ambito_dl %}
+                        <a class="collapse-item"
+                           onclick="fnjs_update_div('#main','src/usuarios/controller/cargo_grupo_lista.php')" href="#">
+                            {{ "lista grupos firmas"|trans|raw }}
+                        </a>
+                    {% endif %}
+                    <a class="collapse-item"
+                       onclick="fnjs_update_div('#main','src/usuarios/controller/cargo_lista.php')" href="#">
+                        {{ "Buscar / modificar"|trans|raw }}
+                    </a>
+                </div>
+            </div>
+        </li>
+        <!-- Nav Item - Oficinas -->
+        {% if is_ambito_dl %}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOficinas"
+                   aria-expanded="true" aria-controls="collapseCargos">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>{{ "Oficinas y centros"|trans|raw }}</span>
+                </a>
+                <div id="collapseOficinas" class="collapse" aria-labelledby="headingPages"
+                     data-bs-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item"
+                           onclick="fnjs_update_div('#main','src/lugares/controller/grupo_lista.php')" href="#">
+                            {{ "Grupos de distribución"|trans|raw }}</a>
+                        <a class="collapse-item"
+                           onclick="fnjs_update_div('#main','src/usuarios/controller/oficina_lista.php')" href="#">
+                            {{ "Oficinas"|trans|raw }}</a>
+                    </div>
+                </div>
+            </li>
+        {% endif %}
+        <!-- Nav Item - Tramites -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTramites"
+               aria-expanded="true" aria-controls="collapseTramites">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>{{ "Trámites"|trans|raw }}</span>
+            </a>
+            <div id="collapseTramites" class="collapse" aria-labelledby="headingPages"
+                 data-bs-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item"
+                       onclick="fnjs_update_div('#main','src/tramites/controller/tramite_lista.php')" href="#">
+                        {{ "Trámites (nombres)"|trans|raw }}</a>
+                    <a class="collapse-item"
+                       onclick="fnjs_update_div('#main','src/tramites/controller/tramitecargo_select.php')" href="#">
+                        {{ "Trámites (recorrido)"|trans|raw }}</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Parametros -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseParam"
+               aria-expanded="true" aria-controls="collapseParam">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>{{ "Parámetros"|trans|raw }}</span>
+            </a>
+            <div id="collapseParam" class="collapse" aria-labelledby="headingPages" data-bs-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" onclick="fnjs_update_div('#main','src/config/controller/parametros.php')"
+                       href="#">
+                        {{ "Parámetros"|trans|raw }}</a>
+                </div>
+            </div>
+
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item">
+            <a class="nav-link" href="#" onclick="fnjs_logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>{{ "Salir"|trans|raw }}</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Page content -->
+    <div id="main" style="margin: 1cm;">
+        <!-- End of Page content -->
+    </div>
+    <!-- End of Page Wrapper -->
+</div>
+
+<div id="cargando">{{ "Cargando..."|trans|raw }}</div>
+<div id="left_slide" class="left-slide">
+    <span class=handle onClick="fnjs_ir_a('#ir_atras');"></span>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- jQuery CSS -->
+<link type="text/css" rel='stylesheet' href='node_modules/jquery-ui/themes/base/all.css'/>
+
+<!-- CSS jQuery DateTimePicker -->
+<link type="text/css" rel="stylesheet" href="node_modules/jquery-datetimepicker/jquery.datetimepicker.css"
+      crossorigin="anonymous">
+<script type="text/javascript" src='node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.js'></script>
+
+<!-- sprintf -->
+<script type="text/javascript" src="node_modules/sprintf-js/dist/sprintf.min.js"></script>
+<!-- jQuery -->
+<script type="text/javascript" src="node_modules/jquery-ui-sortable/jquery-ui.min.js"></script>
+<script type="text/javascript" src='node_modules/jquery-ui-dist/jquery-ui.min.js'></script>
+
+<!-- Custom scripts for all pages-->
+<!-- vars: mi_idioma, error_fecha -->
+{% include '_scripts_default.html.twig' %}
+{% include '@global_js/slickgrid.js.twig' %}
+<script src="js/sb-admin-2.js"></script>
+
+<!-- DataTables -->
+<link type="text/css" rel="stylesheet" href='node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css'/>
+<script type="text/javascript" src='node_modules/datatables.net/js/jquery.dataTables.min.js'></script>
+<script type="text/javascript" src='node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js'></script>

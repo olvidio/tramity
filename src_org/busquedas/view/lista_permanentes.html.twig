@@ -1,0 +1,87 @@
+<div id='condiciones'>
+    <form id="modifica3" name="modifica3" action="">
+        <input type="hidden" id="tipo_lista" name="tipo_lista" value="xxx" form="modifica3">
+        <table class="table table-warning p-2 col-8">
+            <tr class="table-danger">
+                <th colspan=5 class=titulo_inv>{{ "Buscar un escrito concreto"|trans|raw }}
+                    <input id="protocolo" name="protocolo" size="30" class=contenido
+                           title="{{ "protocolo origen"|trans|raw }}"
+                           onchange="fnjs_protocolo('#id_lugar','#prot_num','#prot_any','#b_buscar')" value="">
+                </th>
+            </tr>
+            <tr>
+                <td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans|raw }}:
+                    {{ oDesplLugar.desplegable|raw }}
+                    <input id="prot_num" name="prot_num" size="12" class=contenido
+                           title="{{ "protocolo origen"|trans|raw }}"
+                           onchange="fnjs_proto('#prot_num','#prot_any','#b_buscar')" value="{{ prot_num }}">
+                    /
+                    <input id="prot_any" name="prot_any" size="5" class=contenido
+                           title="{{ "año protocolo origen"|trans|raw }}" value="{{ prot_any }}">
+                </td>
+                <td>
+                <td class=etiqueta>{{ "Escribir una palabra clave del asunto"|trans|raw }}:</td>
+                <td colspan=2><input type="Text" id="asunto" name="asunto" size="40" value="{{ asunto }}"></td>
+            </tr>
+            <tr>
+                <td>
+                    {% if ambito_dl %}
+                        <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button"
+                                onclick="fnjs_buscar('lst_oficinas')">{{ "lista por oficinas"|trans|raw }}</button>
+                    {% else %}
+                        <button class="btn btn-success" id="b_buscar_3" name="b_buscar" TYPE="button"
+                                onclick="fnjs_buscar('lst_todos')">{{ "listar todos"|trans|raw }}</button>
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="btn btn-success" id="b_buscar_2" name="b_buscar" TYPE="button"
+                            onclick="fnjs_buscar('lst_years')">{{ "lista por años"|trans|raw }}</button>
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                    <button class="btn btn-success" id="b_buscar" name="b_buscar" TYPE="button"
+                            onclick="fnjs_buscar('proto')">{{ "buscar"|trans|raw }}</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<br>
+<div id='resultados'>
+    <h2>{{ titulo }}</h2>
+    {{ lista|raw }}
+    {{ oVerTabla.mostrarTabla|raw }}
+</div>
+
+<script>
+    $(document).ready(function () {
+        tabs_show('{{ vista }}', '{{ filtro }}');
+    });
+    fnjs_ver_mas = function (n) {
+        var des = ["descripcion_" + n, "dl_" + n, "ctr_" + n, "oficinas_" + n];
+        jQuery.each(des, function (i, el) {
+            if ($('#' + el).length) {
+                $('#' + el).toggle();
+            }
+        });
+
+    }
+    fnjs_buscar = function (n) {
+        $('#modifica3').attr('action', 'src/busquedas/controller/lista_permanentes.php');
+        $('#tipo_lista').val(n);
+        fnjs_enviar_formulario('#modifica3');
+    }
+
+    fnjs_proto = function (num, any, siguiente) {
+        var numero;
+        var prot_num = $(num).val();
+        numero = prot_num.split("/");
+        if (numero[1]) {
+            $(num).val(numero[0]);
+            $(any).val(numero[1]);
+            $(siguiente).focus();
+        }
+    }
+</script>

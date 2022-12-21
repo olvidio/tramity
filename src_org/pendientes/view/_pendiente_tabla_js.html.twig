@@ -1,0 +1,209 @@
+<script>
+    fnjs_ver_btn_nuevo = function () {
+        cal = $('#despl_calendario').val();
+        if ({{ secretaria }}) {
+            if (cal == 'registro') {
+                $('#btn_nuevo').show();
+            } else {
+                $('#btn_nuevo').hide();
+            }
+        } else {
+            if (cal == 'registro') {
+                $('#btn_nuevo').hide();
+            } else {
+                $('#btn_nuevo').show();
+            }
+        }
+    }
+
+    fnjs_calendario = function () {
+        cal = $('#despl_calendario').val();
+        $('#calendario').val(cal);
+        $('#btn_nuevo').hide(); // para evitar que se pueda hacer nuevo antes de listar.
+    }
+
+    fnjs_buscar_lista_pendientes = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+        // comprobar que se ha selecionado una oficina (en el caso de secretaria)
+        of = $('#id_oficina').val();
+        if (!of) {
+            alert("{{ "Debe seleccionar una oficina para ver sus pendientes"|trans|raw }}");
+        } else {
+            $('#frm_que').attr('action', 'src/pendientes/controller/pendiente_tabla.php');
+            //fnjs_enviar_formulario('#que','#resultados');
+            fnjs_enviar_formulario('#frm_que', '#main');
+        }
+    }
+
+    fnjs_sanear_pendiente = function (formulario) {
+        cal = $('#despl_calendario').val();
+        $('#calendario').val(cal);
+        of = $('#id_oficina').val();
+        $('#id_oficina2').val(of);
+        $(formulario).attr('action', "src/pendientes/controller/pendiente_sanear.php");
+        fnjs_enviar_formulario(formulario, '#main');
+    }
+
+    fnjs_migrar_pendiente = function (formulario) {
+        cal = $('#despl_calendario').val();
+        $('#calendario').val(cal);
+        of = $('#id_oficina').val();
+        $('#id_oficina2').val(of);
+        $(formulario).attr('action', "src/pendientes/controller/pendiente_migrar.php");
+        fnjs_enviar_formulario(formulario, '#main');
+    }
+
+    fnjs_buscar_pendiente = function (formulario) {
+        cal = $('#despl_calendario').val();
+        $('#calendario').val(cal);
+        of = $('#id_oficina').val();
+        $('#id_oficina2').val(of);
+        $(formulario).attr('action', "src/pendientes/controller/pendiente_buscar.php");
+        fnjs_enviar_formulario(formulario, '#main');
+    }
+
+    fnjs_nuevo_pendiente = function (formulario) {
+        of = $('#id_oficina').val();
+        $('#id_oficina2').val(of);
+        $('#nuevo').val(1);
+        $(formulario).attr('action', "src/pendientes/controller/pendiente_form.php");
+        fnjs_enviar_formulario(formulario, '#main');
+    }
+
+    fnjs_marcar = function (formulario) {
+        var s = 0; // el numero de selecionados
+        var r = 0; // no tiene permisos para el detalle (reservado)
+        var p = 0; // para los periodicos
+        /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+        $(formulario + ' input.sel').each(function (i) {
+            if ($(this).prop('checked') == true) {
+                s++;
+                if ($(this).attr('id') == "ax") r = 1;
+                a = $(this).attr('id').split("#");
+                if (a[2]) p = 1;
+            }
+        });
+        {# no se. Ahora dicen que si se puede...
+	if (!$GLOBALS['oPerm']->have_perm("scl")) {
+		if ( p == 1 ) {
+			alert ("{{ "No puede modificar un pendiente periódico. Hable con secretaría."|trans|raw }}");
+			return false;
+		}
+	}
+        #}
+        if (s == 1 && r == 1) {
+            alert("{{ "No puede modificar este pendiente"|trans|raw }}");
+            return false;
+        }
+        $('#nuevo').val(4);
+        var url = 'src/pendientes/controller/pendiente_update_ics.php';
+        var datos = $(formulario).serialize(),
+            request = $.ajax({
+                url: url,
+                data: datos,
+                method: 'POST',
+                dataType: 'text'
+            });
+        request.done(function (jsonStr) {
+            try {
+                const json = JSON.parse(jsonStr);
+                if (json.success != true) {
+                    alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+                } else {
+                    fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+                }
+            } catch (e) {
+                alert(jsonStr);
+            }
+        });
+        request.fail(function (JqXHR, textStatus, errorThrown) {
+            txt = '{{ "probablemente no tenga permiso en el calendario"|trans|raw }}' + '\n';
+            alert(txt + 'An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+            console.error("Hi ha un error: " + textStatus, errorThrown);
+        });
+    }
+
+    fnjs_modificar = function (formulario) {
+        var s = 0; // el numero de selecionados
+        var r = 0; // si es reservado (por lo menos no tiene permisos para el asunto)
+        var p = 0; // para los periodicos
+        /* selecciono los elementos con class="sel" de las tablas del id=formulario */
+        /* var sel=$('#'+formulario+' table .sel'); */
+        $(formulario + ' input.sel').each(function (i) {
+            if ($(this).prop('checked') == true) {
+                s++;
+                if ($(this).attr('id') == "ax") r = 1;
+                a = $(this).attr('id').split("#");
+                // a los calendarios de oficina si dejo modificar
+                if (!a[1].includes('oficina')) {
+                    if (a[2]) p = 1;
+                }
+            }
+        });
+
+        {% if not perm_periodico %}
+        if (p == 1) {
+            alert("{{ "No puede modificar un pendiente periódico. Hable con secretaría."| trans }}");
+            return false;
+        }
+        {% endif %}
+
+        if (s == 1 && r == 1) {
+            alert("{{ "No puede modificar este pendiente"|trans|raw }}");
+            return false;
+        }
+        if (s > 1) {
+            alert("{{ "Sólo puede seleccionar un elemento. Ha selecionado"|trans|raw }} " + s);
+            return false;
+        }
+        if (s == 0) {
+            alert("{{ "No ha seleccionado ninguna fila. Debe hacer click en algún chekbox de la izquierda"|trans|raw }}");
+            return false;
+        }
+
+        $('#nuevo').val(2);
+        $(formulario).attr('action', "src/pendientes/controller/pendiente_form.php");
+        fnjs_enviar_formulario(formulario, '#main');
+    }
+
+    fnjs_borrar = function (formulario) {
+        var seguro;
+        seguro = confirm("{{ "¿Está Seguro que desea borrar este pendiente?"|trans|raw }}");
+        if (seguro) {
+            $('#nuevo').val(3);
+            var url = 'src/pendientes/controller/pendiente_update_ics.php';
+            var datos = $(formulario).serialize();
+            request = $.ajax({
+                url: url,
+                data: datos,
+                method: 'POST',
+                dataType: 'text'
+            });
+            request.done(function (jsonStr) {
+                try {
+                    const json = JSON.parse(jsonStr);
+                    if (json.success != true) {
+                        alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+                    } else {
+                        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+                    }
+                } catch (e) {
+                    alert(jsonStr);
+                }
+            });
+            request.fail(function (JqXHR, textStatus, errorThrown) {
+                txt = '{{ "222probablemente no tenga permiso en el calendario"|trans|raw }}' + '\n';
+                alert(txt + 'An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+                console.error("Hi ha un error: " + textStatus, errorThrown);
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        fnjs_ver_btn_nuevo();
+    })
+</script>

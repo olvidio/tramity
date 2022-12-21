@@ -1,0 +1,82 @@
+<script>
+    fnjs_guardar = function (formulario) {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+        // si es 0, no se cambia el password.
+        var pwd = $("#password").val();
+        var pwd1 = $("#password1").val();
+
+        if (!pwd) {
+            alert("{{ "error: password no válido"|trans|raw }}");
+            return false;
+        }
+        if (!pwd1) {
+            alert("{{ "error: debes confirmar el password"|trans|raw }}");
+            return false;
+        }
+        if (pwd != pwd1) {
+            alert("{{ "error: passwords no coincidentes"|trans|raw }}");
+            return false;
+        }
+        id_usuario = $('#id_usuario').val();
+        datos = $(formulario).serialize();
+        request = $.ajax({
+            data: datos,
+            url: 'src/usuarios/controller/usuario_update.php',
+            method: 'POST',
+            dataType: 'json'
+        });
+        request.done(function (json) {
+            debugger;
+            if (json.success != true) {
+                alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+            } else {
+                alert("{{ txt_ok }}");
+            }
+            fnjs_cancelar();
+        });
+    }
+
+    fnjs_cancelar = function () {
+        fnjs_update_div('#main', '{{ pagina_cancel }}');
+    }
+</script>
+
+<h3>{{ usuario }}</h3>
+{% if (expire == 1) %}
+    <?= _("deberías cambiar el password") ?>
+{% endif %}
+<br>
+<form id=frm_usuario name=frm_usuario action='' method="post">
+    {{ oHash.getCamposHtml|raw }}
+    {{ "password"|trans|raw|capitalize }}:<input type="password" id="password" name="password">
+    <br><br>
+    {{ "confirma password"|trans|raw|capitalize }}:<input type="password" id="password1" name="password1">
+    <br><br>
+    <div>
+        <button class="btn btn-secondary" onclick="fnjs_cancelar();">
+            {{ "Cancelar"|trans|raw }}
+        </button>
+        <button class="btn btn-primary" onclick="fnjs_guardar(this.form);">
+            {{ txt_guardar }}
+        </button>
+    </div>
+</form>
+<br>
+{{ "Requerimientos del password"|trans|raw }}:<br>
+<ol>
+    <li>{{ "Los passwords no pueden contener el valor del \"login\" o de qualquiera de las palabras del \"nombre\". (no tiene en cuenta mayúsculas/minúsculas)"|trans|raw }}
+        .
+    </li>
+    <li>{{ "El password ha de tener más de 8 carácteres"|trans|raw }}.</li>
+    <li>{{ "El password ha de tener como mínimo 3 de los siguientes grupos de carácteres"|trans|raw }}:
+        <ul>
+            <li>{{ "Mayúsculas ('A' a 'Z')"|trans|raw }}</li>
+            <li>{{ "Minúsculas ('a' a 'z')"|trans|raw }}</li>
+            <li>{{ "Números ('0' a '9')"|trans|raw }}</li>
+            <li>{{ "(No pueden ser comillas dobles!!) Carácteres: ~!@#$%^&*_-+=`|(){}[]:;<>,.?/"|trans|raw }}</li>
+        </ul>
+</ol>

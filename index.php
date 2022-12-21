@@ -15,11 +15,11 @@ use usuarios\domain\repositories\CargoRepository;
 use usuarios\domain\repositories\OficinaRepository;
 use web\Hash;
 
-require_once("apps/core/global_header.inc");
+require_once("src_org/core/global_header.inc");
 // Archivos requeridos por esta url **********************************************
 
 // Crea los objetos de uso global **********************************************
-require_once("apps/core/global_object.inc");
+require_once("src_org/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
@@ -96,7 +96,7 @@ $_SESSION['session_auth']['a_roles'] = array_unique($a_roles_posibles);
 <head>
     <script>
         fnjs_is_active = function () {
-            url = 'apps/usuarios/controller/test_status_phpsession.php';
+            url = 'src/usuarios/controller/test_status_phpsession.php';
             let xmlHttp = new XMLHttpRequest();
             // a pelo, porque todavía no he cargado el jQuery.
             xmlHttp.onreadystatechange = function () {
@@ -198,7 +198,7 @@ switch ($role_actual) {
         $server .= '/index.php';
         // hay que enviar algún valor, sino el javascript da un error:
         $error_fecha = empty($_SESSION['oConfig']->getPlazoError()) ? 15 : $_SESSION['oConfig']->getPlazoError();
-        $pagina_profile = Hash::link('apps/usuarios/controller/personal.php?' . http_build_query([]));
+        $pagina_profile = Hash::link('src/usuarios/controller/personal.php?' . http_build_query([]));
         $a_campos = [
             'pagina_profile' => $pagina_profile,
             'error_fecha' => $error_fecha,
@@ -217,14 +217,14 @@ switch ($role_actual) {
         }
         break;
     case 'secretaria';
-        include_once 'apps/usuarios/controller/usuario_secretaria.php';
+        include_once 'src_org/usuarios/controller/usuario_secretaria.php';
         break;
     default:
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-            include_once 'apps/usuarios/controller/usuario_home.php';
+            include_once 'src_org/usuarios/controller/usuario_home.php';
         }
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            include_once 'apps/usuarios/controller/usuario_ctr.php';
+            include_once 'src_org/usuarios/controller/usuario_ctr.php';
         }
 }
 ?>

@@ -1,0 +1,227 @@
+<?php
+
+use core\ConfigGlobal;
+use core\ViewTwig;
+use escritos\model\Escrito;
+use etherpad\model\Etherpad;
+use lugares\domain\repositories\LugarRepository;
+use usuarios\domain\Categoria;
+use usuarios\domain\repositories\CargoRepository;
+use usuarios\domain\Visibilidad;
+use web\Desplegable;
+use web\Protocolo;
+
+// INICIO Cabecera global de URL de controlador *********************************
+
+require_once("src_org/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
+
+// Crea los objetos de uso global **********************************************
+require_once("src_org/core/global_object.inc");
+// Crea los objetos para esta url  **********************************************
+
+// FIN de  Cabecera global de URL de controlador ********************************
+
+$Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
+$Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
+$Q_accion = (integer)filter_input(INPUT_POST, 'accion');
+$Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+
+// ----------- Sigla local -------------------
+$sigla_local = $_SESSION['oConfig']->getSigla();
+$id_lugar_local = '';
+$LugarRepository = new LugarRepository();
+$a_posibles_lugares = $LugarRepository->getArrayLugares();
+
+//$txt_option_ref = '';
+foreach ($a_posibles_lugares as $id_lugar => $sigla) {
+    //$txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
+    if ($sigla === $sigla_local) {
+        $id_lugar_local = $id_lugar;
+    }
+}
+
+$oProtLocal = new Protocolo();
+$oProtLocal->setEtiqueta('De');
+$oProtLocal->setNombre('origen');
+$oProtLocal->setOpciones($a_posibles_lugares);
+$oProtLocal->setBlanco(TRUE);
+$oProtLocal->setTabIndex(10);
+
+$oProtRef = new Protocolo();
+$oProtRef->setEtiqueta('Ref');
+$oProtRef->setNombre('ref');
+$oProtRef->setOpciones($a_posibles_lugares);
+$oProtRef->setBlanco(TRUE);
+
+$txt_option_cargos = '';
+$CargoRepository = new CargoRepository();
+$a_posibles_cargos = $CargoRepository->getArrayCargos();
+foreach ($a_posibles_cargos as $id_cargo => $cargo) {
+    $txt_option_cargos .= "<option value=$id_cargo >$cargo</option>";
+}
+
+$oEscrito = new Escrito($Q_id_escrito);
+// categoria
+$oCategoria = new Categoria();
+$aOpciones = $oCategoria->getArrayCategoria();
+$oDesplCategoria = new Desplegable();
+$oDesplCategoria->setNombre('categoria');
+$oDesplCategoria->setOpciones($aOpciones);
+$oDesplCategoria->setTabIndex(80);
+
+// visibilidad
+$oVisibilidad = new Visibilidad();
+$aOpciones = $oVisibilidad->getArrayVisibilidad();
+
+if (!empty($Q_id_escrito)) {
+
+    $f_aprobacion = $oEscrito->getF_aprobacion();
+    if (!empty($f_aprobacion)) {
+        $tipo_documento = '';
+        // si es un escrito, hay que generar el protocolo local:
+        if ($tipo_documento === Escrito::ACCION_ESCRITO) {
+            $json_prot_origen = $oEscrito->getJson_prot_local();
+            if (!empty(get_object_vars($json_prot_origen))) {
+                $oProtLocal->setLugar($json_prot_origen->id_lugar);
+                $oProtLocal->setProt_num($json_prot_origen->num);
+                $oProtLocal->setProt_any($json_prot_origen->any);
+                if (property_exists($json_prot_origen, 'mas')) {
+                    $oProtLocal->setMas($json_prot_origen->mas);
+                }
+            } else {
+                $any = date('y');
+                $oProtLocal->setLugar($id_lugar_local);
+                $oProtLocal->setProt_num('345');
+                $oProtLocal->setProt_any($any);
+                $oProtLocal->setMas('res');
+            }
+        }
+    }
+
+    $cabeceraIzqd = $oEscrito->cabeceraIzquierda();
+    $cabeceraDcha = $oEscrito->cabeceraDerecha();
+
+    $asunto_detalle = $oEscrito->getAsuntoDetalle();
+
+    // Ponente
+    $id_ponente = $oEscrito->getCreador();
+
+    $a_resto_of = $oEscrito->getResto_oficinas();
+    $oArrayDesplFirmas = new web\DesplegableArray($a_resto_of, $a_posibles_cargos, 'oficinas');
+    $oArrayDesplFirmas->setBlanco('t');
+    $oArrayDesplFirmas->setAccionConjunto('fnjs_mas_oficinas()');
+
+    $categoria = $oEscrito->getCategoria();
+    $oDesplCategoria->setOpcion_sel($categoria);
+
+    $a_adjuntos = [];
+    $preview = [];
+    $config = [];
+    foreach ($a_adjuntos as $id_item => $nom) {
+        $preview[] = "'$nom'";
+        $config[] = [
+            'key' => $id_item,
+            'caption' => $nom,
+            'url' => 'src/entradas/controller/delete.php', // server api to delete the file based on key
+        ];
+    }
+    $initialPreview = implode(',', $preview);
+    $json_config = json_encode($config);
+
+    // mirar si tienen escrito
+    $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
+
+    $titulo = _("revisar");
+    switch ($Q_accion) {
+        case Escrito::ACCION_ESCRITO:
+            $titulo = _("revisar escrito");
+            break;
+        case Escrito::ACCION_PROPUESTA:
+            $titulo = _("revisar propuesta");
+            break;
+        case Escrito::ACCION_PLANTILLA:
+            $titulo = _("revisar plantilla");
+            break;
+        default:
+            $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_switch);
+    }
+
+
+    $oEtherpad = new Etherpad();
+    $oEtherpad->setId(Etherpad::ID_ESCRITO, $Q_id_escrito);
+    $padID = $oEtherpad->getPadId();
+    $url = $oEtherpad->getUrl();
+
+    $showChat = '';
+    if ($_SESSION['oConfig']->getChat() === 'TRUE') {
+        $showChat = '&showChat=true';
+    }
+    if ($_SESSION['oConfig']->getChat() === 'FALSE') {
+        $showChat = '&showChat=false';
+    }
+    $iframe = "<iframe src='$url/p/$padID?showLineNumbers=false$showChat' width=1300 height=500></iframe>";
+
+} else {
+    $asunto_detalle = '';
+    $f_escrito = '';
+    $initialPreview = '';
+    $json_config = '{}';
+    $titulo = _("nuevo");
+    switch ($Q_accion) {
+        case Escrito::ACCION_ESCRITO:
+            $titulo = _("nuevo escrito");
+            break;
+        case Escrito::ACCION_PROPUESTA:
+            $titulo = _("nueva propuesta");
+            break;
+        case Escrito::ACCION_PLANTILLA:
+            $titulo = _("nueva plantilla");
+            break;
+        default:
+            $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+            exit ($err_switch);
+    }
+
+    $cabeceraIzqd = '';
+    $cabeceraDcha = '';
+
+    $oArrayDesplFirmas = new web\DesplegableArray('', $a_posibles_cargos, 'oficinas');
+    $oArrayDesplFirmas->setBlanco('t');
+    $oArrayDesplFirmas->setAccionConjunto('fnjs_mas_oficinas()');
+
+    $id_ponente = ConfigGlobal::role_id_cargo();
+    $iframe = '';
+}
+
+
+$a_cosas = ['id_expediente' => $Q_id_expediente,
+    'filtro' => $Q_filtro
+];
+$pagina_cancel = web\Hash::link('src/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
+
+$a_campos = [
+    'titulo' => $titulo,
+    'id_expediente' => $Q_id_expediente,
+    'id_escrito' => $Q_id_escrito,
+    'accion' => $Q_accion,
+    'id_ponente' => $id_ponente,
+    //'oHash' => $oHash,
+    'cabeceraIzqd' => $cabeceraIzqd,
+    'cabeceraDcha' => $cabeceraDcha,
+
+    'f_escrito' => $f_escrito,
+    'asunto_detalle' => $asunto_detalle,
+    'iframe' => $iframe,
+    //'a_adjuntos' => $a_adjuntos,
+    'initialPreview' => $initialPreview,
+    'json_config' => $json_config,
+    'txt_option_cargos' => $txt_option_cargos,
+    //'txt_option_ref' => $txt_option_ref,
+
+    'pagina_cancel' => $pagina_cancel,
+];
+
+$oView = new ViewTwig('escritos/controller');
+$oView->renderizar('escrito_rev.html.twig', $a_campos);

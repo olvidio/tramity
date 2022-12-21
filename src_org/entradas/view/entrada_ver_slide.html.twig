@@ -1,0 +1,196 @@
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-6 mb-2 bg-warning text-white text-center fw-bold">
+        {{ txt_alert|raw }}
+    </div>
+</div>
+{% if id_entrada %}
+    <div class="row col-12 mb-4">
+        <div class="col-1">
+            <i id="prev" class="align-self-center fa fa-chevron-left fa-3x" aria-hidden="true"
+               onclick="fnjs_prev()"></i>
+        </div>
+        <div class="col-10">
+            <div class="clearfix ">
+                <div class="d-inline-flex float-start">
+                    <div class="p-2 text-dark fw-bold">
+                        {{ cabeceraIzqd|raw }}
+                    </div>
+                </div>
+                <div class="d-inline-flex w-75">
+                    <div class="ps-5 input-group mb-3">
+                        <span class="input-group-text"
+                              id="inputGroup-sizing-default">{{ "Nota (detalle)"|trans|raw }}:</span>
+                        <input type="text" class="form-control" name='detalle' id="detalle" value="{{ detalle }}"
+                               onChange="fnjs_detalle()" aria-label="Sizing example input"
+                               aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div>
+                <div class="d-inline-flex float-end">
+                    <div class="p-2 text-dark fw-bold align-top text-end">
+                        {{ cabeceraDcha|raw }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-1">
+            <i id="next" class="align-self-center fa fa-chevron-right fa-3x" aria-hidden="true"
+               onclick="fnjs_next()"></i>
+        </div>
+    </div>
+
+    <!--  --------------- ASUNTO --------------- -->
+    <div class="row">
+        <div class="ms-3 col-11 alert alert-primary">
+            <label for="asunto_e" class="form-label">{{ "Asunto entrada"|trans|raw }}:</label>
+            {{ asunto_e }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="ms-3 col-11 d-flex flex-row justify-content-between">
+            <div class="p-2">
+                {{ "Fecha documento"|trans|raw }}: {{ f_escrito }}
+            </div>
+            <div class="row text-end mb-3 justify-content-end">
+                <div class="col-3 p-2 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="customSwitches"
+                           onChange="fnjs_read()" {{ chk_leido }}>
+                    <label class="form-check-label" for="customSwitches">{{ "Leido el"|trans|raw }}</label>
+                </div>
+                <div class="col-5">
+                    <input class="form-control col-2" name='f_entrada' id='f_entrada' type='text'
+                           value="{{ f_entrada }}" {{ f_entrada_disabled }}/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  --------------------  ESCRITO  --------------------------  -->
+    <div class="row">
+        <div class="ms-3 col-11 border rounded overflow-auto" id="txt" style="height:300px;">
+            {{ escrito_html|raw }}
+        </div>
+    </div>
+
+    <hr>
+    <!--  --------------------  ADJUNTOS  --------------------------  -->
+    <div class="mb-3 col-md-12">
+        <label for="input-adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}:</label>
+        {% for item,nom in a_adjuntos %}
+            <button type="button" class="btn btn-outline-secondary"
+                    onClick="fnjs_download({{ item }})">{{ nom }}</button>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<script>
+    fnjs_cancelar = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
+        }
+        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+    }
+
+    fnjs_prev = function () {
+        fnjs_update_div('#main', '{{ pagina_prev|raw }}');
+    }
+
+    fnjs_next = function () {
+        fnjs_update_div('#main', '{{ pagina_next|raw }}');
+    }
+
+    $(function () {
+        $("#f_entrada").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            yearStart: {{ yearStart }},
+            yearEnd: {{ yearEnd }},
+            dayOfWeekStart: globaljsVarDayStart,
+        });
+
+    });
+
+    fnjs_read = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+
+        var ok = $("#customSwitches").prop('checked')
+        var f_entrada = $("#f_entrada").val();
+        if (ok) {
+            $("#f_entrada").prop('disabled', true);
+        } else {
+            $("#f_entrada").prop('disabled', false);
+        }
+        fnjs_guardar_f_entrada();
+    };
+
+    fnjs_guardar_f_entrada = function () {
+        var id_entrada = "{{ id_entrada }}";
+        var f_entrada = $("#f_entrada").val();
+
+        // obligo a cambiarla, porque la pueden poner los de secretaria provisionalmente
+        f_entrada = 'hoy';
+
+        var url_update = 'src/entradas/controller/entrada_update.php';
+        var param_json = {que: 'f_entrada', id_entrada: id_entrada, f_entrada: f_entrada};
+        request = $.ajax({
+            data: param_json,
+            url: url_update,
+            method: 'POST'
+        });
+        request.done(function (rta) {
+            rta_txt = rta.responseText;
+            if (rta_txt == undefined) {
+                rta_txt = '';
+            }
+            if (rta_txt != '' && rta_txt != '\n') {
+                alert('error: ' + rta_txt);
+            }
+        });
+    }
+
+    fnjs_detalle = function () {
+        var id_entrada = "{{ id_entrada }}";
+        var detalle = $("#detalle").val();
+
+        var url_update = 'src/entradas/controller/entrada_update.php';
+        var param_json = {que: 'detalle', id_entrada: id_entrada, detalle: detalle};
+        request = $.ajax({
+            data: param_json,
+            url: url_update,
+            method: 'POST'
+        });
+        request.done(function (rta) {
+            rta_txt = rta.responseText;
+            if (rta_txt == undefined) {
+                rta_txt = '';
+            }
+            if (rta_txt != '' && rta_txt != '\n') {
+                alert('error: ' + rta_txt);
+            }
+        });
+
+    }
+
+    fnjs_download = function (item) {
+        url = "{{ url_download }}" + "?key=" + item;
+        window.open(url);
+    }
+
+    $(document).ready(function () {
+        //tabs_hide();
+    });
+</script>

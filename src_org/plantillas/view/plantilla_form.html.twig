@@ -1,0 +1,64 @@
+<div class="card col-8">
+    <div class="card-header">
+        <h5 class="card-title">{{ "Datos de la plantilla"|trans|raw }}</h5>
+    </div>
+    <div class="card-body">
+        <form class="user" id="frm_plantilla" name="frm_plantilla" action="" method="post">
+            {{ oHash.getCamposHtml|raw }}
+            <div class="mb-3">
+                <label for="nombre" class="form-label">{{ "nombre"|trans|raw }}</label>
+                <input type="text" class="form-control col-10" id="nombre" name="nombre" placeholder="nombre"
+                       value="{{ nombre }}">
+            </div>
+
+
+            <div class="row">
+                <button type="button" tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();">
+                    {{ "Cancelar"|trans|raw }}
+                </button>
+                <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary"
+                        onClick="fnjs_guardar(this.form);">
+                    {{ "Guardar"|trans|raw }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    fnjs_guardar = function (formulario) {
+
+        var url = "{{ base_url }}/src/plantillas/controller/plantilla_update.php";
+        var data = $(formulario).serialize();
+
+        request = $.ajax({
+            url: url,
+            method: 'POST',
+            data: data
+        });
+        request.done(function (rta) {
+            if (rta != '' && rta != '\\n') {
+                alert('{{ "respuesta"|trans|raw }}: ' + rta);
+            } else {
+                alert("{{ "datos guardados"|trans|raw }}");
+                // Volver a la lista...
+                fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+            }
+        });
+    }
+
+    fnjs_cancelar = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
+        }
+        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+    }
+</script>

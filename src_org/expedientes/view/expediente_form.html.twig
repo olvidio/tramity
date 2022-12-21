@@ -1,0 +1,329 @@
+<!-- load the CSS files in the right order -->
+<link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
+<link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
+<!-- para hacer lineas más pequeñas en el file input -->
+<link href="css/custom_file_input.css" rel="stylesheet" type="text/css">
+
+<!-- load the JS files in the right order -->
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalBuscar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar (máximo 50 filas)"|trans|raw }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div id="modal-body" class="modal-body">
+                {# se carga via ajax. 3 formularios distintos: para entradas, para expedientes y para escritos #}
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<h1>{{ titulo }} ({{ ponente_txt }})</h1>
+<form id="form_expediente">
+    <input type=hidden name='que' id='frm_exp_que' value=0>
+    <input type=hidden name='id_n' id='id_n' value=0>
+    <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }}>
+    <input type=hidden name='estado' id='estado' value={{ estado }}>
+    <input type=hidden name='ponente' id='ponente' value={{ id_ponente }}>
+    <input type=hidden name='filtro' id='filtro' value={{ filtro }}>
+
+
+    <div class="row">
+        <!--  Col Izda -->
+        <div class="col-9">
+            <!--  --------------- TRAMITE --------------- -->
+            <div class="row mb-0">
+                <label for="tramite" class="mb-0 col-1 form-label">{{ "Trámite"|trans|raw }}</label>
+                <div class="mb-0 col-3">
+                    {{ oDesplTramites.desplegable|raw }}
+                </div>
+                <!--  --------------- VIDA --------------- -->
+                <div class="mb-0 col-md-3">
+                    <label for="Vida" class="form-label">{{ "Vida"|trans|raw }}</label>
+                    {{ oDesplVida.desplegable|raw }}
+                </div>
+                <!--  --------------- VISIBILIDAD --------------- -->
+                <div class="mb-0 col-md-3">
+                    <label for="Visibilidad" class="form-label">{{ "Visibilidad"|trans|raw }}</label>
+                    {{ oDesplVisibilidad.desplegable|raw }}
+                </div>
+            </div>
+            <div class="mb-0 row">
+                <!--
+    <label for="estado" class="col-1 form-label">{{ "Estado"|trans|raw }}</label>
+    <div class="col-2" >
+    	{{ oDesplEstado.desplegable|raw }}
+    </div>
+  -->
+                <label for="prioridad" class="mb-0 col-1 form-label">{{ "Prioridad"|trans|raw }}</label>
+                <div class="mb-0 col-2">
+                    {{ oDesplPrioridad.desplegable|raw }}
+                </div>
+                <label for="f_contestar" class="col col-3 form-label text-end">{{ "resolver antes de"|trans|raw }}
+                    :</label>
+                <div class='mb-0 col-3 date'>
+                    <input tabindex='41' name='f_contestar' id='f_contestar' type='text' class="form-control"
+                           value="{{ f_contestar }}"/>
+                </div>
+            </div>
+            <div id="div_etiquetas" class="mb-0 row align-items-center">
+                <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans|raw }}:</label>
+                <div class="mb-0 col-6">
+      <span id="span_etiquetas">
+      	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
+      </span>
+                </div>
+            </div>
+            <!--  --------------- ASUNTO --------------- -->
+            <div class="mb-3 row">
+                <label for="asunto" class="col-2 form-label">{{ "Asunto expediente"|trans|raw }}</label>
+                <div class="col-10">
+                    <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto"
+                           value="{{ asunto }}">
+                </div>
+            </div>
+            <!--  --------------- ENTRADILLA --------------- -->
+            <div class="mb-3 row">
+                <label for="entradilla" class="col-2 form-label">{{ "Entradilla"|trans|raw }}</label>
+                <div class='col-10'>
+                    <textarea tabindex='50' rows="5" class="form-control" name='entradilla'
+                              id="entradilla">{{ entradilla }}</textarea>
+                </div>
+            </div>
+        </div>
+        <!-- Fin Col Izda -->
+        <!--  Col Dcha -->
+        <div class="col-3">
+            <!--  --------------------  ANTECEDENTES  --------------------------  -->
+            {% if id_expediente %}
+                {# lista de antecedentes #}
+                <div class="mb-1 col-md-12">
+                    <label class="form-label">{{ "Antecedentes"|trans|raw }}:</label>
+                </div>
+                <div class="col-md-12">
+                    <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar"
+                            onClick="fnjs_buscar_antecedente(1);">
+                        {{ "Entrada"|trans|raw }}
+                    </button>
+                    <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar"
+                            onClick="fnjs_buscar_antecedente(2);">
+                        {{ "Expediente"|trans|raw }}
+                    </button>
+                    <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar"
+                            onClick="fnjs_buscar_antecedente(3);">
+                        {{ "Escrito"|trans|raw }}
+                    </button>
+                    <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar"
+                            onClick="fnjs_buscar_antecedente(4);">
+                        {{ "Documento"|trans|raw }}
+                    </button>
+                </div>
+                <hr class="mt-1">
+            {% else %}
+                <div class="alert alert-warning" role="alert">
+                    {{ "Para añadir un antecedente, primero debe guardar el expediente"|trans|raw }}
+                </div>
+            {% endif %}
+            <div id="lista_antecedentes">
+                {{ lista_antecedentes|raw }}
+            </div>
+        </div>
+        <!-- Fin Col Dcha -->
+    </div>
+    <!-- Fin row -->
+
+    <!--  --------------- Image cargando , para cuando se copian etherpads, que es lento --------------- -->
+    <div id="slow_load" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+        <img class="mb-4" src="../images/loading.gif" alt="cargando" width="32" height="32">
+    </div>
+
+
+    <!--  --------------- ACCIONES --------------- -->
+
+    {% if id_expediente %}
+        <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_propuesta|raw }}');">
+            {{ "nueva propuesta"|trans|raw }}
+        </button>
+        {% if vista_dl %}
+            <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_plantilla|raw }}');">
+                {{ "plantilla"|trans|raw }}
+            </button>
+        {% endif %}
+        <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_nuevo_escrito|raw }}');">
+            {{ "nuevo escrito"|trans|raw }}
+        </button>
+        <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pag_respuesta|raw }}');">
+            {{ "contestar entrada"|trans|raw }}
+        </button>
+        <table class="table table-sm table-bordered">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">##</th>
+                <th scope="col">{{ "tipo"|trans|raw }}</th>
+                <th scope="col">{{ "destino"|trans|raw }}</th>
+                <th scope="col">{{ "ref."|trans|raw }}</th>
+                <th scope="col">{{ "categoria"|trans|raw }}</th>
+                <th scope="col">{{ "asunto"|trans|raw }}</th>
+                <th scope="col">{{ "adj."|trans|raw }}</th>
+                <th scope="col">{{ "accion"|trans|raw }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in a_acciones %}
+                <tr>
+                    <th scope="row">{{ row.link_mod|raw }}</th>
+                    <td>{{ row.link_rev|raw }}</td>
+                    <td>{{ row.tipo }}</td>
+                    <td>{{ row.destino|raw }}</td>
+                    <td>{{ row.referencias|raw }}</td>
+                    <td>{{ row.categoria }}</td>
+                    <td>{{ row.asunto }}</td>
+                    <td>{{ row.adjuntos|raw }}</td>
+                    <td>{{ row.link_del|raw }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="col-8 alert alert-warning" role="alert">
+            {{ "Para añadir escritos, primero debe guardar el expediente"|trans|raw }}
+        </div>
+    {% endif %}
+
+    {% if vista_dl %}
+        <div class="mb-2 row align-items-center">
+            <!--  --------------- OFICIALES --------------- -->
+            <label for="mt-3" class="col-1 form-label">{{ "Preparar"|trans|raw }}:</label>
+            <div id="div_preparar" class="col"> {# la funcion fnjs_visto remplaza el contenido de este div. #}
+                {% for row in a_preparar %}
+                    <div class="form-check custom-checkbox form-check-inline">
+                        <input type="checkbox" class="" name="a_preparar[]" id="{{ row.id }}"
+                               value="{{ row.id }}#{{ row.visto }}" {{ row.chk }}>
+                        {% if row.visto %}
+                            <label class="mt-2 ms-2 text-success form-label">{{ row.text }} ({{ "visto"|trans|raw }}
+                                )</label>
+                        {% else %}
+                            <label class="mt-2 ms-2 form-label">{{ row.text }}</label>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button tabindex='' class="col-2 btn btn-outline-secondary" onClick="fnjs_visto();">
+                    {{ "marcar como visto"|trans|raw }}
+                </button>
+            </div>
+        </div>
+    {% endif %}
+
+    <!--  --------------- FIRMAS OFICINA --------------- -->
+    <div id="div_firmas_oficina" class="mb-2 row">
+        <label for="firmas_oficina" class="col-md-1 form-label">{{ "Firmas oficina"|trans|raw }}:</label>
+        <div class="col-6">
+      <span id="span_firmas_oficina">
+        {{ oArrayDesplFirmasOficina.ListaSelects|raw }}
+      </span>
+        </div>
+    </div>
+    {% if vista_dl %}
+        <!--  --------------- OTRAS FIRMAS --------------- -->
+        <div id="div_firmas" class="mb-3 row">
+            <label for="firmas" class="col-md-1 form-label">{{ "Otras Firmas"|trans|raw }}:</label>
+            <div class="col-6">
+          <span id="span_firmas">
+            {{ oArrayDesplFirmas.ListaSelects|raw }}
+          </span>
+            </div>
+        </div>
+    {% endif %}
+
+    <!--  --------------------  BOTONES --------------------------  -->
+    <button tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar_expediente();">
+        {{ "Cancelar"|trans|raw }}
+    </button>
+    <button tabindex='90' class="btn btn-primary" onClick="fnjs_guardar_expediente();">
+        {{ "Guardar"|trans|raw }}
+    </button>
+    {% if id_expediente %}
+        <button tabindex='90' class="btn btn-success" onClick="fnjs_circular();">
+            {{ "Circular"|trans|raw }}
+        </button>
+    {% endif %}
+    {% if not vista_dl and mostrar_archivar and id_expediente %}
+        <button tabindex='90' class="btn btn-success" onClick="fnjs_archivar();">
+            {{ "Archivar"|trans|raw }}
+        </button>
+    {% endif %}
+</form>
+
+
+{{ include ('_expediente_form_js.html.twig') }}
+{{ include ('_antecedentes_js.html.twig') }}
+<script type="text/javascript">
+    $(document).ready(function () {
+        tabs_hide();
+        fnjs_tramite(); // oculta a los oficiales, dependiendo del tramite
+        $('#slow_load').hide();  // hide it initially
+    });
+    fnjs_revisar_adjunto_en_expediente = function (id_escrito, modo) {
+        id_expediente = $('#id_expediente').val();
+        filtro = $('#filtro').val();
+
+        var url_ajax = 'src/escritos/controller/adjunto_revisar.php';
+        var param_json = {id_expediente: id_expediente, filtro: filtro, modo: modo, id_escrito: id_escrito};
+
+        request = $.ajax({
+            data: param_json,
+            url: url_ajax,
+            method: 'POST'
+        });
+
+        request.done(function (rta) {
+            $('#main').html(rta);
+        });
+    }
+    fnjs_revisar_escrito = function (id_escrito) {
+        var winPrefs = "dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+        var url_ajax = 'src/etherpad/controller/getUrlEscrito.php';
+        var param_json = {tipo_id: 'escrito', id: id_escrito};
+
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+
+        request = $.ajax({
+            data: param_json,
+            url: url_ajax,
+            method: 'POST'
+        });
+
+        request.done(function (rta) {
+            // antes, dentro del ajax, hacia falta el responseText
+            //url=rta.responseText;
+            url = rta;
+            w = window.open(url, "", winPrefs);
+            if (w === null) {
+                alert("{{ "No se puede abrir una nueva ventana. Puede tener bloqueados los popup"|trans|raw }}");
+            } else {
+                w.focus();
+            }
+        });
+        request.fail(function (JqXHR, textStatus, errorThrown) {
+            alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+            console.error("Hi ha un error: " + textStatus, errorThrown);
+        });
+
+        return false;
+    }
+</script>

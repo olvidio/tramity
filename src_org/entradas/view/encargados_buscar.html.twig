@@ -1,0 +1,22 @@
+<div id="condiciones">
+    <form id="que" name="que" action="" method="post">
+        <input type="hidden" id="filtro" name="filtro" value="{{ filtro }}">
+        <input type="hidden" id="que" name="que" value="buscar">
+        <!--  --------------------  Encargados --------------------------  -->
+        <div class="mb-3 row">
+            <div class="fs-4 mb-3 row">
+                <label class="col-4 form-label">{{ "listar entradas encargadas a"|trans|raw }}:</label>
+                <div class="fs-5 col-3 mt-1">
+                    {{ oDesplEncargados.desplegable|raw }}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    fnjs_buscar = function (formulario) {
+        $(formulario).attr('action', "src/entradas/controller/entrada_lista.php");
+        fnjs_enviar_formulario(formulario, '#main');
+    }
+</script>

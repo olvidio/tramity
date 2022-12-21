@@ -1,0 +1,83 @@
+<h2 class=subtitulo>{{ titulo }}</h2>
+<form id='seleccionados' name='seleccionados' action='' method='post'>
+    <input type="hidden" id="que" name="que" value=''/>
+    {{ oTabla.mostrar_tabla|raw }}
+</form>
+<br>
+
+<button type="button" class="btn btn-primary btn w-100" onclick="fnjs_update_div('#main','{{ url_nuevo }}');">
+    {{ "nueva plantilla"|trans }}
+</button>
+<script>
+    $(document).ready(function () {
+        tabs_show('{{ vista }}', '{{ filtro }}');
+    });
+
+    fnjs_datos_plantilla = function () {
+        $('#seleccionados').attr('action', "{{ url_form }}");
+        fnjs_enviar_formulario('#seleccionados');
+    }
+
+    fnjs_eliminar_plantilla = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+        }
+        rta = fnjs_solo_uno('#seleccionados');
+        if (rta == 1) {
+            if (confirm("{{ "¿Está seguro que desea borrar esta plantilla?"|trans|raw }}")) {
+                $('#que').val('eliminar');
+                datos = $('#seleccionados').serialize();
+                request = $.ajax({
+                    data: datos,
+                    url: '{{ url_eliminar }}',
+                    method: 'POST',
+                    dataType: 'json'
+                });
+                request.done(function (json) {
+                    if (json.success != true) {
+                        alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+                    } else {
+                        fnjs_actualizar();
+                    }
+                });
+            }
+        }
+    }
+    fnjs_actualizar = function () {
+        var url = '{{ url_actualizar }}';
+        fnjs_update_div('#main', url);
+    }
+
+    fnjs_revisar_plantilla = function (id_plantilla) {
+        var winPrefs = "dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+        var url_ajax = 'src/etherpad/controller/getUrlEscrito.php';
+        var param_json = {tipo_id: 'plantilla', id: id_plantilla};
+
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+
+        request = $.ajax({
+            data: param_json,
+            url: url_ajax,
+            method: 'POST'
+        });
+
+        request.done(function (rta) {
+            // antes, dentro del ajax, hacia falta el responseText
+            //url=rta.responseText;
+            url = rta;
+            w = window.open(url, "", winPrefs);
+            w.focus();
+        });
+        request.fail(function (JqXHR, textStatus, errorThrown) {
+            alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+            console.error("Hi ha un error: " + textStatus, errorThrown);
+        });
+
+        return false;
+    }
+
+</script>

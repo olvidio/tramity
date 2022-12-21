@@ -1,0 +1,99 @@
+<div id="busqueda">
+    <!--  --------------- BUSQUEDAS --------------- -->
+    <form id=condiciones>
+        <input type="hidden" name="que" value='buscar_expediente'/>
+        <input type="hidden" name="id_expediente" value='{{ id_expediente }}'/>
+        <!--  --------------- ASUNTO --------------- -->
+        <div class="mb-3 row">
+            <label for="asunto" class="col-1 form-label">{{ "Asunto"|trans|raw }}</label>
+            <div class="col-10">
+                <input tabindex='30' type="text" class="form-control" name="asunto" id="asunto_buscar"
+                       value="{{ asunto }}">
+            </div>
+        </div>
+        <!--  --------------------  Periodo --------------------------  -->
+        <div id="div_periodo" class="mb-3 row">
+            <label for="periodo" class="col-1 form-label">{{ "periodo"|trans|raw }}:</label>
+            <div class="col-6">
+                <select tabindex=111 id=periodo name=periodo>
+                    <option value="mes" {{ sel_mes }}>{{ "hace un mes"|trans|raw }}</option>
+                    <option value="mes_6" {{ sel_mes_6 }}>{{ "hace 6 meses"|trans|raw }}</option>
+                    <option value="any_1" {{ sel_any_1 }} >{{ "hace 1 año"|trans|raw }}</option>
+                    <option value="any_2" {{ sel_any_2 }} >{{ "hace 2 año"|trans|raw }}</option>
+                    <option value="siempre" {{ sel_siempre }} >{{ "siempre"|trans|raw }}</option>
+                </select>
+            </div>
+        </div>
+        <!--  --------------- Etiquetas --------------- -->
+        <div id="div_etiquetas" class="row align-items-center bg-light">
+            <label for="etiquetas" class="col-1 form-label">{{ "Etiquetas"|trans|raw }}:</label>
+            <div class="col-2">
+                <div class="col-6">
+                    <input type="radio" class="form-check-input" name="andOr" value="OR" {{ chk_or }} >
+                    <label class="form-check-label">
+                        {{ "alguna"|trans|raw }}
+                    </label>
+                </div>
+                <div class="col-6">
+                    <input type="radio" class="form-check-input" name="andOr" value="AND" {{ chk_and }} >
+                    <label class="form-check-label">
+                        {{ "todas"|trans|raw }}
+                    </label>
+                </div>
+            </div>
+            <div class="col-7">
+      <span id="span_etiquetas">
+      	{{ oArrayDesplEtiquetas.ListaSelects|raw }}
+      </span>
+            </div>
+            <!--  --------------- BOTON --------------- -->
+            <div class="col-2">
+                <button type="button" class="btn btn-primary"
+                        onClick="fnjs_antecedente_expediente();">{{ "Buscar"|trans|raw }}</button>
+            </div>
+        </div>
+    </form>
+</div>
+<hr>
+<div id="lista">
+    {{ oLista.mostrar_tabla|raw }}
+</div>
+<script>
+    fnjs_antecedente_expediente = function () {
+        var data = $('#condiciones').serialize();
+        var url_ajax = 'src/expedientes/controller/antecedentes_ajax.php';
+        request = $.ajax({
+            data: data,
+            url: url_ajax,
+            method: 'POST'
+        });
+        request.done(function (rta) {
+            if (rta == undefined) {
+                rta = '';
+            }
+            $('#modal-body').html(rta);
+        });
+    }
+
+    {{ oArrayDesplEtiquetas.ComprobarSelectJs|raw }}
+    fnjs_mas_etiquetas = function () {
+        var code = (event.keyCode ? event.keyCode : event.which);
+        var valor = 1;
+        var id_campo = '#' + event.currentTarget.id;
+        var valor = $(id_campo).val();
+        if (code != 9 && typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        if (code == 9 || event.type == "change") {
+            if (valor != 0) {
+                {{ oArrayDesplEtiquetas.ListaSelectsJs|raw }}
+            }
+        }
+    }
+
+    fnjs_quitar_etiquetas = function () {
+        $('#span_etiquetas').html("");
+        $('#etiquetas_num').val(0);
+    }
+</script>

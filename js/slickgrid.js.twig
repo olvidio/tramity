@@ -93,7 +93,7 @@
 
     oPrefs = {"panelVis": panelVis, "colVisible": colsVisible, "colWidths": colsWidth, "widthGrid": widthGrid, "heightGrid": heightGrid};
     sPrefs = JSON.stringify(oPrefs);
-    url="apps/usuarios/controller/personal_update.php";
+    url="src/usuarios/controller/personal_update.php";
     parametros='que=slickGrid&tabla='+tabla+'&sPrefs='+sPrefs;
     $.ajax({
     url: url,

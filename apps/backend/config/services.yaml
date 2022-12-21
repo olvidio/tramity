@@ -1,0 +1,14 @@
+services:
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
+  # Configure
+  Tramity\Apps\Backend\controller\:
+    resource: '../src/controller/'
+    tags: ['controller.service_arguments']
+
+  # Wire
+  Tramity\:
+    resource: '../../../src/'
+

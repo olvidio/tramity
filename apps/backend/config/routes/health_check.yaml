@@ -1,0 +1,4 @@
+otro_get:
+  path: /otro
+  controller: 'Tramity\Apps\Backend\controller\otro\OtroController'
+  methods: [ GET ]
