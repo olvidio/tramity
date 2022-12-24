@@ -110,8 +110,7 @@ class GestorUsuario extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_usuario' => $aDades['id_usuario']);
-            $oUsuario = new Usuario($a_pkey);
+            $oUsuario = new Usuario( $aDades['id_usuario']);
             $oUsuarioSet->add($oUsuario);
         }
         return $oUsuarioSet->getTot();
@@ -183,8 +182,7 @@ class GestorUsuario extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_usuario' => $aDades['id_usuario']);
-            $oUsuario = new Usuario($a_pkey);
+            $oUsuario = new Usuario($aDades['id_usuario']);
             $oUsuarioSet->add($oUsuario);
         }
         return $oUsuarioSet->getTot();

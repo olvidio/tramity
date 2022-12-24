@@ -61,7 +61,7 @@ $a_posibles_cargos_ref = $gesCargos->getArrayCargosRef();
 
 if (!empty($Q_id_grupo)) {
     $que_user = 'guardar';
-    $oGrupo = new CargoGrupo(array('id_grupo' => $Q_id_grupo));
+    $oGrupo = new CargoGrupo($Q_id_grupo);
 
     $id_cargo_ref = $oGrupo->getId_cargo_ref();
     $descripcion = $oGrupo->getDescripcion();

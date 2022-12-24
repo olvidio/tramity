@@ -73,7 +73,7 @@ $a_posibles_lugares_cr = $gesLugares->getArrayLugaresTipo('cr');
 
 if (!empty($Q_id_grupo)) {
     $que = 'guardar';
-    $oGrupo = new Grupo(array('id_grupo' => $Q_id_grupo));
+    $oGrupo = new Grupo($Q_id_grupo);
 
     $descripcion = $oGrupo->getDescripcion();
     $a_miembros = $oGrupo->getMiembros();
@@ -95,7 +95,7 @@ if (!empty($Q_id_escrito)) {
             $a_miembros = $oEscrito->getDestinosIds();
             $descripcion = $oEscrito->getDescripcion();
         } else {
-            $oGrupo = new Grupo(array('id_grupo' => $id_grupo));
+            $oGrupo = new Grupo($id_grupo);
 
             $descripcion .= empty($descripcion) ? '' : ', ';
             $descripcion .= $oGrupo->getDescripcion();

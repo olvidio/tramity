@@ -59,7 +59,7 @@ $chk_oficina = 'checked';
 $chk_personal = '';
 if (!empty($Q_id_etiqueta)) {
     $que_user = 'guardar';
-    $oEtiqueta = new Etiqueta(array('id_etiqueta' => $Q_id_etiqueta));
+    $oEtiqueta = new Etiqueta($Q_id_etiqueta);
 
     $nom_etiqueta = $oEtiqueta->getNom_etiqueta();
     $oficina = $oEtiqueta->getOficina();

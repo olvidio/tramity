@@ -27,7 +27,7 @@ $oDesplCargos->setNombre('id_cargo');
 $oDesplCargos->setBlanco(true);
 // para el form
 if ($Q_mod == 'editar') {
-    $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
+    $oTramiteCargo = new TramiteCargo($Q_id_item);
 
     $orden_tramite = $oTramiteCargo->getOrden_tramite();
     $id_cargo = $oTramiteCargo->getId_cargo();

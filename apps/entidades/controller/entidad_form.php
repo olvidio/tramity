@@ -62,7 +62,7 @@ $oDesplTipos->setOpciones($a_opciones_tipos);
 
 if (!empty($Q_id_entidad)) {
     $que_user = 'guardar';
-    $oEntidadDB = new EntidadDB(array('id_entidad' => $Q_id_entidad));
+    $oEntidadDB = new EntidadDB($Q_id_entidad);
 
     $nombre = $oEntidadDB->getnombre();
     $schema = $oEntidadDB->getSchema();

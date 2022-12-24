@@ -61,7 +61,7 @@ $oDesplCargos->setNombre('id_cargo_preferido');
 
 if (!empty($Q_id_usuario)) {
     $que_user = 'guardar';
-    $oUsuario = new Usuario(array('id_usuario' => $Q_id_usuario));
+    $oUsuario = new Usuario($Q_id_usuario);
 
     $usuario = $oUsuario->getUsuario();
     $nom_usuario = $oUsuario->getNom_usuario();

@@ -50,7 +50,7 @@ $oPosicion->setParametros(array('id_plantilla' => $Q_id_plantilla), 1);
 
 if (!empty($Q_id_plantilla)) {
     $que = 'guardar';
-    $oPlantilla = new Plantilla(array('id_plantilla' => $Q_id_plantilla));
+    $oPlantilla = new Plantilla($Q_id_plantilla);
 
     $nombre = $oPlantilla->getNombre();
 } else {

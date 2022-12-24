@@ -45,7 +45,7 @@ switch ($Q_que) {
         $oDesplCargos = $oGesCargo->getDesplCargos();
         $oDesplCargos->setNombre('id_cargo');
         $oDesplCargos->setBlanco(true);
-        $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
+        $oTramiteCargo = new TramiteCargo($Q_id_item);
         $orden_tramite = $oTramiteCargo->getOrden_tramite();
         $id_cargo = $oTramiteCargo->getId_cargo();
         $oDesplCargos->setOpcion_sel($id_cargo);
@@ -104,7 +104,7 @@ switch ($Q_que) {
         $Q_orden_tramite = (integer)filter_input(INPUT_POST, 'orden_tramite');
         $Q_multiple = (integer)filter_input(INPUT_POST, 'multiple');
 
-        $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
+        $oTramiteCargo = new TramiteCargo($Q_id_item);
         $oTramiteCargo->setId_tramite($Q_id_tramite);
         $oTramiteCargo->setId_cargo($Q_id_cargo);
         $oTramiteCargo->setOrden_tramite($Q_orden_tramite);
@@ -115,7 +115,7 @@ switch ($Q_que) {
         break;
     case 'eliminar':
         $Q_id_item = (integer)filter_input(INPUT_POST, 'id_item');
-        $oTramiteCargo = new TramiteCargo(array('id_item' => $Q_id_item));
+        $oTramiteCargo = new TramiteCargo($Q_id_item);
         if ($oTramiteCargo->DBEliminar() === FALSE) {
             $error_txt .= $oTramiteCargo->getErrorTxt();
         }
