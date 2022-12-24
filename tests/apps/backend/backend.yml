@@ -1,0 +1,23 @@
+backend:
+  extensions:
+    FriendsOfBehat\SymfonyExtension:
+      kernel:
+        class: Tramity\Apps\Backend\BackendKernel
+      bootstrap: apps/bootstrap.php
+    Behat\MinkExtension:
+      sessions:
+        symfony:
+          symfony: ~
+      base_url: ''
+
+  suites:
+    default:
+      paths:
+        - %paths.base%/../features
+    contexts:
+        - FeatureContext
+    otro:
+      paths: [ tests/apps/backend/features/otro ]
+      contexts:
+        - Tramity\Tests\shared\infrastructure\Behat\ApiRequestContext
+        - Tramity\Tests\shared\infrastructure\Behat\ApiResponseContext

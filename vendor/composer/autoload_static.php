@@ -14,9 +14,9 @@ class ComposerStaticInit23c211ce304a6c6249a3454e78ad1e08
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
+        'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
@@ -63,11 +63,13 @@ class ComposerStaticInit23c211ce304a6c6249a3454e78ad1e08
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\ErrorHandler\\' => 31,
             'Symfony\\Component\\Dotenv\\' => 25,
+            'Symfony\\Component\\DomCrawler\\' => 29,
             'Symfony\\Component\\DependencyInjection\\' => 38,
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
             'Symfony\\Component\\Config\\' => 25,
             'Symfony\\Component\\Cache\\' => 24,
+            'Symfony\\Component\\BrowserKit\\' => 29,
             'Symfony\\Bundle\\TwigBundle\\' => 26,
             'Symfony\\Bundle\\FrameworkBundle\\' => 31,
             'Symfony\\Bridge\\Twig\\' => 20,
@@ -88,6 +90,7 @@ class ComposerStaticInit23c211ce304a6c6249a3454e78ad1e08
         'M' => 
         array (
             'Mpdf\\' => 5,
+            'Masterminds\\' => 12,
         ),
         'L' => 
         array (
@@ -117,6 +120,7 @@ class ComposerStaticInit23c211ce304a6c6249a3454e78ad1e08
             'Behat\\Transliterator\\' => 21,
             'Behat\\Testwork\\' => 15,
             'Behat\\Step\\' => 11,
+            'Behat\\Mink\\Driver\\' => 18,
             'Behat\\Mink\\' => 11,
             'Behat\\Hook\\' => 11,
             'Behat\\Behat\\' => 12,
@@ -240,6 +244,10 @@ class ComposerStaticInit23c211ce304a6c6249a3454e78ad1e08
         array (
             0 => __DIR__ . '/..' . '/symfony/dotenv',
         ),
+        'Symfony\\Component\\DomCrawler\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/dom-crawler',
+        ),
         'Symfony\\Component\\DependencyInjection\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/dependency-injection',
@@ -259,6 +267,10 @@ class ComposerStaticInit23c211ce304a6c6249a3454e78ad1e08
         'Symfony\\Component\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/cache',
+        ),
+        'Symfony\\Component\\BrowserKit\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/browser-kit',
         ),
         'Symfony\\Bundle\\TwigBundle\\' => 
         array (
@@ -317,6 +329,10 @@ class ComposerStaticInit23c211ce304a6c6249a3454e78ad1e08
         array (
             0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
         ),
+        'Masterminds\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/masterminds/html5/src',
+        ),
         'Laminas\\Code\\' => 
         array (
             0 => __DIR__ . '/..' . '/laminas/laminas-code/src',
@@ -361,6 +377,10 @@ class ComposerStaticInit23c211ce304a6c6249a3454e78ad1e08
         array (
             0 => __DIR__ . '/..' . '/behat/behat/src/Behat/Step',
         ),
+        'Behat\\Mink\\Driver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/friends-of-behat/mink-browserkit-driver/src',
+        ),
         'Behat\\Mink\\' => 
         array (
             0 => __DIR__ . '/..' . '/behat/mink/src',
@@ -378,6 +398,10 @@ class ComposerStaticInit23c211ce304a6c6249a3454e78ad1e08
     public static $prefixesPsr0 = array (
         'B' => 
         array (
+            'Behat\\MinkExtension' => 
+            array (
+                0 => __DIR__ . '/..' . '/friends-of-behat/mink-extension/src',
+            ),
             'Behat\\Gherkin' => 
             array (
                 0 => __DIR__ . '/..' . '/behat/gherkin/src',

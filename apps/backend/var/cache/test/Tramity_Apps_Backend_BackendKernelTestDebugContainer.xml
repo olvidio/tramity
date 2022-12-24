@@ -10,11 +10,16 @@
     <parameter key="kernel.logs_dir">/home/dani/tramity_local/tramity/apps/backend/var/log</parameter>
     <parameter key="kernel.bundles" type="collection">
       <parameter key="FrameworkBundle">Symfony\Bundle\FrameworkBundle\FrameworkBundle</parameter>
+      <parameter key="FriendsOfBehatSymfonyExtensionBundle">FriendsOfBehat\SymfonyExtension\Bundle\FriendsOfBehatSymfonyExtensionBundle</parameter>
     </parameter>
     <parameter key="kernel.bundles_metadata" type="collection">
       <parameter key="FrameworkBundle" type="collection">
         <parameter key="path">/home/dani/tramity_local/tramity/vendor/symfony/framework-bundle</parameter>
         <parameter key="namespace">Symfony\Bundle\FrameworkBundle</parameter>
+      </parameter>
+      <parameter key="FriendsOfBehatSymfonyExtensionBundle" type="collection">
+        <parameter key="path">/home/dani/tramity_local/tramity/vendor/friends-of-behat/symfony-extension/src/Bundle</parameter>
+        <parameter key="namespace">FriendsOfBehat\SymfonyExtension\Bundle</parameter>
       </parameter>
     </parameter>
     <parameter key="kernel.charset">UTF-8</parameter>
@@ -42,6 +47,7 @@
     <parameter key="kernel.enabled_locales" type="collection"/>
     <parameter key="kernel.error_controller">error_controller</parameter>
     <parameter key="debug.file_link_format">%env(default::SYMFONY_IDE)%</parameter>
+    <parameter key="test.client.parameters" type="collection"/>
     <parameter key="debug.error_handler.throw_at">-1</parameter>
     <parameter key="debug.container.dump">/home/dani/tramity_local/tramity/apps/backend/var/cache/test/Tramity_Apps_Backend_BackendKernelTestDebugContainer.xml</parameter>
     <parameter key="router.request_context.host">localhost</parameter>
@@ -63,11 +69,21 @@
       <tag name="controller.service_arguments"/>
       <tag name="routing.route_loader"/>
     </service>
-    <service id="Tramity\Apps\Backend\controller\otro\OtroController" class="Tramity\Apps\Backend\controller\otro\OtroController" public="true" autowire="true" autoconfigure="true">
+    <service id="Tramity\Apps\Backend\controller\otro\OtroGetController" class="Tramity\Apps\Backend\controller\otro\OtroGetController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <argument type="service" id="Tramity\shared\infrastructure\PhpRandomNumberGenerator"/>
     </service>
     <service id="Tramity\shared\infrastructure\PhpRandomNumberGenerator" class="Tramity\shared\infrastructure\PhpRandomNumberGenerator" autowire="true" autoconfigure="true"/>
+    <service id="Tramity\Tests\shared\infrastructure\Behat\ApiRequestContext" class="Tramity\Tests\shared\infrastructure\Behat\ApiRequestContext" public="true" autowire="true" autoconfigure="true">
+      <argument type="service" id="behat.mink.default_session"/>
+    </service>
+    <service id="Tramity\Tests\shared\infrastructure\Behat\ApiResponseContext" class="Tramity\Tests\shared\infrastructure\Behat\ApiResponseContext" public="true" autowire="true" autoconfigure="true">
+      <argument type="service" id="behat.mink.default_session"/>
+    </service>
+    <service id="Tramity\Tests\shared\infrastructure\mink\MinkHelper" class="Tramity\Tests\shared\infrastructure\mink\MinkHelper" autowire="true" autoconfigure="true">
+      <argument type="service" id="behat.mink.default_session"/>
+    </service>
+    <service id="Tramity\Tests\shared\infrastructure\mink\MinkSessionRequestHelper" class="Tramity\Tests\shared\infrastructure\mink\MinkSessionRequestHelper" autowire="true" autoconfigure="true"/>
     <service id="controller_resolver" class="Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver">
       <tag name="monolog.logger" channel="request"/>
       <argument type="service" id="service_container"/>
@@ -258,22 +274,6 @@
           <argument>onKernelResponse</argument>
         </argument>
         <argument>-10</argument>
-      </call>
-      <call method="addListener">
-        <argument>kernel.request</argument>
-        <argument type="collection">
-          <argument type="service_closure" id="locale_aware_listener"/>
-          <argument>onKernelRequest</argument>
-        </argument>
-        <argument>15</argument>
-      </call>
-      <call method="addListener">
-        <argument>kernel.finish_request</argument>
-        <argument type="collection">
-          <argument type="service_closure" id="locale_aware_listener"/>
-          <argument>onKernelFinishRequest</argument>
-        </argument>
-        <argument>-15</argument>
       </call>
       <call method="addListener">
         <argument>console.error</argument>
@@ -509,24 +509,12 @@
       <argument type="service" id="service_container"/>
       <argument type="service" id=".service_locator.XXv1IfR"/>
     </service>
-    <service id="locale_aware_listener" class="Symfony\Component\HttpKernel\EventListener\LocaleAwareListener">
-      <tag name="kernel.event_subscriber"/>
-      <tag name="container.hot_path"/>
-      <tag name="container.hot_path"/>
-      <argument type="iterator">
-        <argument type="service" id="slugger"/>
-      </argument>
-      <argument type="service" id="request_stack"/>
-    </service>
     <service id="container.env_var_processor" class="Symfony\Component\DependencyInjection\EnvVarProcessor">
       <tag name="container.env_var_processor"/>
       <argument type="service" id="service_container"/>
       <argument type="tagged_iterator" tag="container.env_var_loader"/>
     </service>
-    <service id="slugger" class="Symfony\Component\String\Slugger\AsciiSlugger">
-      <tag name="kernel.locale_aware"/>
-      <argument>en</argument>
-    </service>
+    <service id="slugger" class="stdClass"/>
     <service id="container.getenv" class="Closure">
       <tag name="routing.expression_language_function" function="env"/>
       <argument type="collection">
@@ -919,6 +907,16 @@
         <argument>Display validation constraints for classes</argument>
       </call>
     </service>
+    <service id="console.command.xliff_lint" class="Symfony\Component\Translation\Command\XliffLintCommand">
+      <tag name="console.command"/>
+      <tag name="container.no_preload"/>
+      <call method="setName">
+        <argument>lint:xliff</argument>
+      </call>
+      <call method="setDescription">
+        <argument>Lint an XLIFF file and outputs encountered errors</argument>
+      </call>
+    </service>
     <service id="console.command.yaml_lint" class="Symfony\Bundle\FrameworkBundle\Command\YamlLintCommand">
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
@@ -1215,6 +1213,204 @@
         <argument key="cache.validator_expression_language" type="service" id="cache.validator_expression_language" on-invalid="ignore_uninitialized"/>
       </argument>
     </service>
+    <service id="translator" class="Symfony\Component\Translation\IdentityTranslator"/>
+    <service id="identity_translator" class="Symfony\Component\Translation\IdentityTranslator"/>
+    <service id="test.client" class="Symfony\Bundle\FrameworkBundle\KernelBrowser" shared="false" public="true">
+      <argument type="service" id="kernel"/>
+      <argument type="collection"/>
+      <argument type="service" id="test.client.history"/>
+      <argument type="service" id="test.client.cookiejar"/>
+    </service>
+    <service id="test.client.history" class="Symfony\Component\BrowserKit\History" shared="false"/>
+    <service id="test.client.cookiejar" class="Symfony\Component\BrowserKit\CookieJar" shared="false"/>
+    <service id="test.service_container" class="Symfony\Bundle\FrameworkBundle\Test\TestContainer" public="true">
+      <argument type="service" id="kernel"/>
+      <argument>test.private_services_locator</argument>
+    </service>
+    <service id="test.private_services_locator" class="Symfony\Component\DependencyInjection\ServiceLocator" public="true">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="Tramity\shared\infrastructure\PhpRandomNumberGenerator" type="service_closure" id="Tramity\shared\infrastructure\PhpRandomNumberGenerator" on-invalid="ignore_uninitialized"/>
+        <argument key="Tramity\Tests\shared\infrastructure\mink\MinkHelper" type="service_closure" id="Tramity\Tests\shared\infrastructure\mink\MinkHelper" on-invalid="ignore_uninitialized"/>
+        <argument key="controller_resolver" type="service_closure" id="controller_resolver" on-invalid="ignore_uninitialized"/>
+        <argument key="argument_metadata_factory" type="service_closure" id="argument_metadata_factory" on-invalid="ignore_uninitialized"/>
+        <argument key="argument_resolver" type="service_closure" id="argument_resolver" on-invalid="ignore_uninitialized"/>
+        <argument key="argument_resolver.backed_enum_resolver" type="service_closure" id="argument_resolver.backed_enum_resolver" on-invalid="ignore_uninitialized"/>
+        <argument key="argument_resolver.datetime" type="service_closure" id="argument_resolver.datetime" on-invalid="ignore_uninitialized"/>
+        <argument key="argument_resolver.request_attribute" type="service_closure" id="argument_resolver.request_attribute" on-invalid="ignore_uninitialized"/>
+        <argument key="argument_resolver.request" type="service_closure" id="argument_resolver.request" on-invalid="ignore_uninitialized"/>
+        <argument key="argument_resolver.session" type="service_closure" id="argument_resolver.session" on-invalid="ignore_uninitialized"/>
+        <argument key="argument_resolver.service" type="service_closure" id="argument_resolver.service" on-invalid="ignore_uninitialized"/>
+        <argument key="argument_resolver.default" type="service_closure" id="argument_resolver.default" on-invalid="ignore_uninitialized"/>
+        <argument key="argument_resolver.variadic" type="service_closure" id="argument_resolver.variadic" on-invalid="ignore_uninitialized"/>
+        <argument key="response_listener" type="service_closure" id="response_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="locale_listener" type="service_closure" id="locale_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="validate_request_listener" type="service_closure" id="validate_request_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="disallow_search_engine_index_response_listener" type="service_closure" id="disallow_search_engine_index_response_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="exception_listener" type="service_closure" id="exception_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="controller.cache_attribute_listener" type="service_closure" id="controller.cache_attribute_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="parameter_bag" type="service_closure" id="parameter_bag" on-invalid="ignore_uninitialized"/>
+        <argument key="http_cache" type="service_closure" id="http_cache" on-invalid="ignore_uninitialized"/>
+        <argument key="http_cache.store" type="service_closure" id="http_cache.store" on-invalid="ignore_uninitialized"/>
+        <argument key="url_helper" type="service_closure" id="url_helper" on-invalid="ignore_uninitialized"/>
+        <argument key="cache_clearer" type="service_closure" id="cache_clearer" on-invalid="ignore_uninitialized"/>
+        <argument key="filesystem" type="service_closure" id="filesystem" on-invalid="ignore_uninitialized"/>
+        <argument key="file_locator" type="service_closure" id="file_locator" on-invalid="ignore_uninitialized"/>
+        <argument key="config_cache_factory" type="service_closure" id="config_cache_factory" on-invalid="ignore_uninitialized"/>
+        <argument key="dependency_injection.config.container_parameters_resource_checker" type="service_closure" id="dependency_injection.config.container_parameters_resource_checker" on-invalid="ignore_uninitialized"/>
+        <argument key="config.resource.self_checking_resource_checker" type="service_closure" id="config.resource.self_checking_resource_checker" on-invalid="ignore_uninitialized"/>
+        <argument key="reverse_container" type="service_closure" id="reverse_container" on-invalid="ignore_uninitialized"/>
+        <argument key="container.env_var_processor" type="service_closure" id="container.env_var_processor" on-invalid="ignore_uninitialized"/>
+        <argument key="container.getenv" type="service_closure" id="container.getenv" on-invalid="ignore_uninitialized"/>
+        <argument key="config_builder.warmer" type="service_closure" id="config_builder.warmer" on-invalid="ignore_uninitialized"/>
+        <argument key="fragment.handler" type="service_closure" id="fragment.handler" on-invalid="ignore_uninitialized"/>
+        <argument key="fragment.uri_generator" type="service_closure" id="fragment.uri_generator" on-invalid="ignore_uninitialized"/>
+        <argument key="fragment.renderer.inline" type="service_closure" id="fragment.renderer.inline" on-invalid="ignore_uninitialized"/>
+        <argument key="error_handler.error_renderer.html" type="service_closure" id="error_handler.error_renderer.html" on-invalid="ignore_uninitialized"/>
+        <argument key="console.error_listener" type="service_closure" id="console.error_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="console.suggest_missing_package_subscriber" type="service_closure" id="console.suggest_missing_package_subscriber" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.about" type="service_closure" id="console.command.about" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.assets_install" type="service_closure" id="console.command.assets_install" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.cache_clear" type="service_closure" id="console.command.cache_clear" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.cache_pool_clear" type="service_closure" id="console.command.cache_pool_clear" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.cache_pool_prune" type="service_closure" id="console.command.cache_pool_prune" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.cache_pool_invalidate_tags" type="service_closure" id="console.command.cache_pool_invalidate_tags" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.cache_pool_delete" type="service_closure" id="console.command.cache_pool_delete" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.cache_pool_list" type="service_closure" id="console.command.cache_pool_list" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.cache_warmup" type="service_closure" id="console.command.cache_warmup" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.config_debug" type="service_closure" id="console.command.config_debug" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.config_dump_reference" type="service_closure" id="console.command.config_dump_reference" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.container_debug" type="service_closure" id="console.command.container_debug" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.container_lint" type="service_closure" id="console.command.container_lint" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.debug_autowiring" type="service_closure" id="console.command.debug_autowiring" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.dotenv_debug" type="service_closure" id="console.command.dotenv_debug" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.event_dispatcher_debug" type="service_closure" id="console.command.event_dispatcher_debug" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.messenger_consume_messages" type="service_closure" id="console.command.messenger_consume_messages" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.messenger_setup_transports" type="service_closure" id="console.command.messenger_setup_transports" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.messenger_debug" type="service_closure" id="console.command.messenger_debug" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.messenger_stop_workers" type="service_closure" id="console.command.messenger_stop_workers" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.messenger_stats" type="service_closure" id="console.command.messenger_stats" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.router_debug" type="service_closure" id="console.command.router_debug" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.router_match" type="service_closure" id="console.command.router_match" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.validator_debug" type="service_closure" id="console.command.validator_debug" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.xliff_lint" type="service_closure" id="console.command.xliff_lint" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.yaml_lint" type="service_closure" id="console.command.yaml_lint" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.secrets_set" type="service_closure" id="console.command.secrets_set" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.secrets_remove" type="service_closure" id="console.command.secrets_remove" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.secrets_generate_key" type="service_closure" id="console.command.secrets_generate_key" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.secrets_list" type="service_closure" id="console.command.secrets_list" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.secrets_decrypt_to_local" type="service_closure" id="console.command.secrets_decrypt_to_local" on-invalid="ignore_uninitialized"/>
+        <argument key="console.command.secrets_encrypt_from_local" type="service_closure" id="console.command.secrets_encrypt_from_local" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.app.taggable" type="service_closure" id="cache.app.taggable" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.validator" type="service_closure" id="cache.validator" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.serializer" type="service_closure" id="cache.serializer" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.annotations" type="service_closure" id="cache.annotations" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.property_info" type="service_closure" id="cache.property_info" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.messenger.restart_workers_signal" type="service_closure" id="cache.messenger.restart_workers_signal" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.default_marshaller" type="service_closure" id="cache.default_marshaller" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.default_clearer" type="service_closure" id="cache.default_clearer" on-invalid="ignore_uninitialized"/>
+        <argument key="translator" type="service_closure" id="translator" on-invalid="ignore_uninitialized"/>
+        <argument key="identity_translator" type="service_closure" id="identity_translator" on-invalid="ignore_uninitialized"/>
+        <argument key="test.client.history" type="service_closure" id="test.client.history" on-invalid="ignore_uninitialized"/>
+        <argument key="test.client.cookiejar" type="service_closure" id="test.client.cookiejar" on-invalid="ignore_uninitialized"/>
+        <argument key="debug.debug_handlers_listener" type="service_closure" id="debug.debug_handlers_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="debug.file_link_formatter" type="service_closure" id="debug.file_link_formatter" on-invalid="ignore_uninitialized"/>
+        <argument key="routing.resolver" type="service_closure" id="routing.resolver" on-invalid="ignore_uninitialized"/>
+        <argument key="routing.loader.xml" type="service_closure" id="routing.loader.xml" on-invalid="ignore_uninitialized"/>
+        <argument key="routing.loader.yml" type="service_closure" id="routing.loader.yml" on-invalid="ignore_uninitialized"/>
+        <argument key="routing.loader.php" type="service_closure" id="routing.loader.php" on-invalid="ignore_uninitialized"/>
+        <argument key="routing.loader.glob" type="service_closure" id="routing.loader.glob" on-invalid="ignore_uninitialized"/>
+        <argument key="routing.loader.directory" type="service_closure" id="routing.loader.directory" on-invalid="ignore_uninitialized"/>
+        <argument key="routing.loader.container" type="service_closure" id="routing.loader.container" on-invalid="ignore_uninitialized"/>
+        <argument key="routing.loader.annotation" type="service_closure" id="routing.loader.annotation" on-invalid="ignore_uninitialized"/>
+        <argument key="routing.loader.annotation.directory" type="service_closure" id="routing.loader.annotation.directory" on-invalid="ignore_uninitialized"/>
+        <argument key="routing.loader.annotation.file" type="service_closure" id="routing.loader.annotation.file" on-invalid="ignore_uninitialized"/>
+        <argument key="routing.loader.psr4" type="service_closure" id="routing.loader.psr4" on-invalid="ignore_uninitialized"/>
+        <argument key="router.default" type="service_closure" id="router.default" on-invalid="ignore_uninitialized"/>
+        <argument key="router.request_context" type="service_closure" id="router.request_context" on-invalid="ignore_uninitialized"/>
+        <argument key="router.cache_warmer" type="service_closure" id="router.cache_warmer" on-invalid="ignore_uninitialized"/>
+        <argument key="router_listener" type="service_closure" id="router_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="secrets.vault" type="service_closure" id="secrets.vault" on-invalid="ignore_uninitialized"/>
+        <argument key="secrets.decryption_key" type="service_closure" id="secrets.decryption_key" on-invalid="ignore_uninitialized"/>
+        <argument key="secrets.local_vault" type="service_closure" id="secrets.local_vault" on-invalid="ignore_uninitialized"/>
+        <argument key="validator" type="service_closure" id="validator" on-invalid="ignore_uninitialized"/>
+        <argument key="validator.builder" type="service_closure" id="validator.builder" on-invalid="ignore_uninitialized"/>
+        <argument key="validator.mapping.cache_warmer" type="service_closure" id="validator.mapping.cache_warmer" on-invalid="ignore_uninitialized"/>
+        <argument key="validator.mapping.cache.adapter" type="service_closure" id="validator.mapping.cache.adapter" on-invalid="ignore_uninitialized"/>
+        <argument key="validator.validator_factory" type="service_closure" id="validator.validator_factory" on-invalid="ignore_uninitialized"/>
+        <argument key="validator.expression" type="service_closure" id="validator.expression" on-invalid="ignore_uninitialized"/>
+        <argument key="validator.email" type="service_closure" id="validator.email" on-invalid="ignore_uninitialized"/>
+        <argument key="validator.not_compromised_password" type="service_closure" id="validator.not_compromised_password" on-invalid="ignore_uninitialized"/>
+        <argument key="validator.when" type="service_closure" id="validator.when" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.senders_locator" type="service_closure" id="messenger.senders_locator" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.transport.native_php_serializer" type="service_closure" id="messenger.transport.native_php_serializer" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.middleware.dispatch_after_current_bus" type="service_closure" id="messenger.middleware.dispatch_after_current_bus" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.middleware.validation" type="service_closure" id="messenger.middleware.validation" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.middleware.reject_redelivered_message_middleware" type="service_closure" id="messenger.middleware.reject_redelivered_message_middleware" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.middleware.failed_message_processing_middleware" type="service_closure" id="messenger.middleware.failed_message_processing_middleware" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.middleware.router_context" type="service_closure" id="messenger.middleware.router_context" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.receiver_locator" type="service_closure" id="messenger.receiver_locator" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.transport_factory" type="service_closure" id="messenger.transport_factory" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.transport.sync.factory" type="service_closure" id="messenger.transport.sync.factory" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.transport.in_memory.factory" type="service_closure" id="messenger.transport.in_memory.factory" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.retry_strategy_locator" type="service_closure" id="messenger.retry_strategy_locator" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.retry.send_failed_message_for_retry_listener" type="service_closure" id="messenger.retry.send_failed_message_for_retry_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.failure.add_error_details_stamp_listener" type="service_closure" id="messenger.failure.add_error_details_stamp_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.listener.dispatch_pcntl_signal_listener" type="service_closure" id="messenger.listener.dispatch_pcntl_signal_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.listener.stop_worker_on_restart_signal_listener" type="service_closure" id="messenger.listener.stop_worker_on_restart_signal_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.listener.stop_worker_on_sigterm_signal_listener" type="service_closure" id="messenger.listener.stop_worker_on_sigterm_signal_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.listener.stop_worker_on_stop_exception_listener" type="service_closure" id="messenger.listener.stop_worker_on_stop_exception_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.listener.reset_services" type="service_closure" id="messenger.listener.reset_services" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.routable_message_bus" type="service_closure" id="messenger.routable_message_bus" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.bus.default" type="service_closure" id="messenger.bus.default" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.bus.default.middleware.add_bus_name_stamp_middleware" type="service_closure" id="messenger.bus.default.middleware.add_bus_name_stamp_middleware" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.bus.default.middleware.send_message" type="service_closure" id="messenger.bus.default.middleware.send_message" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.bus.default.middleware.handle_message" type="service_closure" id="messenger.bus.default.middleware.handle_message" on-invalid="ignore_uninitialized"/>
+        <argument key="messenger.bus.default.messenger.handlers_locator" type="service_closure" id="messenger.bus.default.messenger.handlers_locator" on-invalid="ignore_uninitialized"/>
+        <argument key="logger" type="service_closure" id="logger" on-invalid="ignore_uninitialized"/>
+        <argument key="Tramity\shared\domain\RandomNumberGenerator" type="service_closure" id="Tramity\shared\infrastructure\PhpRandomNumberGenerator" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface" type="service_closure" id="parameter_bag" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface" type="service_closure" id="parameter_bag" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\EventDispatcher\EventDispatcherInterface" type="service_closure" id="event_dispatcher" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Contracts\EventDispatcher\EventDispatcherInterface" type="service_closure" id="event_dispatcher" on-invalid="ignore_uninitialized"/>
+        <argument key="Psr\EventDispatcher\EventDispatcherInterface" type="service_closure" id="event_dispatcher" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\HttpKernel\HttpKernelInterface" type="service_closure" id="http_kernel" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\HttpFoundation\RequestStack" type="service_closure" id="request_stack" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\HttpKernel\HttpCache\StoreInterface" type="service_closure" id="http_cache.store" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\HttpFoundation\UrlHelper" type="service_closure" id="url_helper" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\HttpKernel\KernelInterface" type="service_closure" id="kernel" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\Filesystem\Filesystem" type="service_closure" id="filesystem" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\HttpKernel\Config\FileLocator" type="service_closure" id="file_locator" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\DependencyInjection\ReverseContainer" type="service_closure" id="reverse_container" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\HttpKernel\Fragment\FragmentUriGeneratorInterface" type="service_closure" id="fragment.uri_generator" on-invalid="ignore_uninitialized"/>
+        <argument key="error_renderer.html" type="service_closure" id="error_handler.error_renderer.html" on-invalid="ignore_uninitialized"/>
+        <argument key="error_renderer" type="service_closure" id="error_handler.error_renderer.html" on-invalid="ignore_uninitialized"/>
+        <argument key="Psr\Container\ContainerInterface $parameterBag" type="service_closure" id="parameter_bag" on-invalid="ignore_uninitialized"/>
+        <argument key="Psr\Cache\CacheItemPoolInterface" type="service_closure" id="cache.app" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Contracts\Cache\CacheInterface" type="service_closure" id="cache.app" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Contracts\Cache\TagAwareCacheInterface" type="service_closure" id="cache.app.taggable" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Contracts\Translation\TranslatorInterface" type="service_closure" id="translator" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\HttpKernel\Debug\FileLinkFormatter" type="service_closure" id="debug.file_link_formatter" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\Routing\RouterInterface" type="service_closure" id="router.default" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\Routing\Generator\UrlGeneratorInterface" type="service_closure" id="router.default" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\Routing\Matcher\UrlMatcherInterface" type="service_closure" id="router.default" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\Routing\RequestContextAwareInterface" type="service_closure" id="router.default" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\Routing\RequestContext" type="service_closure" id="router.request_context" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.default_redis_provider" type="service_closure" id=".cache_connection.GD_MSZC" on-invalid="ignore_uninitialized"/>
+        <argument key="cache.default_memcached_provider" type="service_closure" id=".cache_connection.JKE6keX" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\Validator\Validator\ValidatorInterface" type="service_closure" id="validator" on-invalid="ignore_uninitialized"/>
+        <argument key="validator.mapping.class_metadata_factory" type="service_closure" id="validator" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\Messenger\MessageBusInterface" type="service_closure" id="messenger.bus.default" on-invalid="ignore_uninitialized"/>
+        <argument key="Behat\Mink\Mink" type="service_closure" id="behat.mink" on-invalid="ignore_uninitialized"/>
+        <argument key="Behat\Mink\Session" type="service_closure" id="behat.mink.default_session" on-invalid="ignore_uninitialized"/>
+        <argument key="FriendsOfBehat\SymfonyExtension\Mink\MinkParameters" type="service_closure" id="behat.mink.parameters" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\DependencyInjection\ContainerInterface $driverContainer" type="service_closure" id="behat.driver.service_container" on-invalid="ignore_uninitialized"/>
+        <argument key="argument_resolver.controller_locator" type="service_closure" id=".service_locator.TGeGvuk" on-invalid="ignore_uninitialized"/>
+        <argument key="Psr\Log\LoggerInterface" type="service_closure" id="logger" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Bundle\FrameworkBundle\KernelBrowser" type="service_closure" id="test.client" on-invalid="ignore_uninitialized"/>
+        <argument key="Symfony\Component\HttpKernel\HttpKernelBrowser" type="service_closure" id="test.client" on-invalid="ignore_uninitialized"/>
+      </argument>
+    </service>
     <service id="debug.debug_handlers_listener" class="Symfony\Component\HttpKernel\EventListener\DebugHandlersListener">
       <tag name="kernel.event_subscriber"/>
       <tag name="monolog.logger" channel="php"/>
@@ -1416,6 +1612,9 @@
       <call method="setConstraintValidatorFactory">
         <argument type="service" id="validator.validator_factory"/>
       </call>
+      <call method="setTranslator">
+        <argument type="service" id="translator" on-invalid="ignore"/>
+      </call>
       <call method="setTranslationDomain">
         <argument>validators</argument>
       </call>
@@ -1575,6 +1774,35 @@
         <argument type="service" id="messenger.bus.default.middleware.handle_message"/>
       </argument>
     </service>
+    <service id="behat.mink" class="Behat\Mink\Mink" public="true" lazy="true">
+      <argument>fob_symfony.mink</argument>
+      <factory service="behat.service_container" method="get"/>
+    </service>
+    <service id="behat.mink.default_session" class="Behat\Mink\Session" public="true" lazy="true">
+      <factory service="behat.mink" method="getSession"/>
+    </service>
+    <service id="behat.mink.parameters" class="FriendsOfBehat\SymfonyExtension\Mink\MinkParameters" public="true" lazy="true">
+      <argument>fob_symfony.mink.parameters</argument>
+      <factory service="behat.service_container" method="get"/>
+    </service>
+    <service id="behat.service_container" class="Symfony\Component\DependencyInjection\ContainerInterface" public="true" synthetic="true"/>
+    <service id="behat.driver.service_container" class="Symfony\Component\DependencyInjection\ContainerInterface" public="true" lazy="true">
+      <argument>test.service_container</argument>
+      <factory method="get">
+        <service class="Symfony\Component\DependencyInjection\ContainerInterface" public="true" lazy="true">
+          <factory method="getContainer">
+            <service class="Symfony\Component\HttpKernel\KernelInterface" public="true" lazy="true">
+              <argument>fob_symfony.driver_kernel</argument>
+              <factory service="behat.service_container" method="get"/>
+            </service>
+          </factory>
+        </service>
+      </factory>
+    </service>
+    <service id=".instanceof.Behat\Behat\Context\Context.0.Tramity\Tests\shared\infrastructure\Behat\ApiRequestContext" class="Tramity\Tests\shared\infrastructure\Behat\ApiRequestContext" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.Tramity\Tests\shared\infrastructure\Behat\ApiRequestContext" class="Tramity\Tests\shared\infrastructure\Behat\ApiRequestContext" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Behat\Behat\Context\Context.0.Tramity\Tests\shared\infrastructure\Behat\ApiResponseContext" class="Tramity\Tests\shared\infrastructure\Behat\ApiResponseContext" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.Tramity\Tests\shared\infrastructure\Behat\ApiResponseContext" class="Tramity\Tests\shared\infrastructure\Behat\ApiResponseContext" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.7nzbL4K" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -1882,6 +2110,13 @@
       <argument>false</argument>
       <argument type="service_closure" id="console.command.validator_debug"/>
     </service>
+    <service id=".console.command.xliff_lint.lazy" class="Symfony\Component\Console\Command\LazyCommand">
+      <argument>lint:xliff</argument>
+      <argument type="collection"/>
+      <argument>Lint an XLIFF file and outputs encountered errors</argument>
+      <argument>false</argument>
+      <argument type="service_closure" id="console.command.xliff_lint"/>
+    </service>
     <service id=".console.command.yaml_lint.lazy" class="Symfony\Component\Console\Command\LazyCommand">
       <argument>lint:yaml</argument>
       <argument type="collection"/>
@@ -1933,7 +2168,7 @@
     </service>
     <service id="console.command_loader" class="Symfony\Component\Console\CommandLoader\ContainerCommandLoader" public="true">
       <tag name="container.no_preload"/>
-      <argument type="service" id=".service_locator.Ir17k2g"/>
+      <argument type="service" id=".service_locator.stjXcJ0"/>
       <argument type="collection">
         <argument key="about">console.command.about</argument>
         <argument key="assets:install">console.command.assets_install</argument>
@@ -1959,6 +2194,7 @@
         <argument key="debug:router">console.command.router_debug</argument>
         <argument key="router:match">console.command.router_match</argument>
         <argument key="debug:validator">console.command.validator_debug</argument>
+        <argument key="lint:xliff">console.command.xliff_lint</argument>
         <argument key="lint:yaml">console.command.yaml_lint</argument>
         <argument key="secrets:set">console.command.secrets_set</argument>
         <argument key="secrets:remove">console.command.secrets_remove</argument>
@@ -1968,7 +2204,7 @@
         <argument key="secrets:encrypt-from-local">console.command.secrets_encrypt_from_local</argument>
       </argument>
     </service>
-    <service id=".service_locator.Ir17k2g" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.stjXcJ0" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="console.command.about" type="service_closure" id=".console.command.about.lazy"/>
@@ -1995,6 +2231,7 @@
         <argument key="console.command.router_debug" type="service_closure" id=".console.command.router_debug.lazy"/>
         <argument key="console.command.router_match" type="service_closure" id=".console.command.router_match.lazy"/>
         <argument key="console.command.validator_debug" type="service_closure" id=".console.command.validator_debug.lazy"/>
+        <argument key="console.command.xliff_lint" type="service_closure" id=".console.command.xliff_lint.lazy"/>
         <argument key="console.command.yaml_lint" type="service_closure" id=".console.command.yaml_lint.lazy"/>
         <argument key="console.command.secrets_set" type="service_closure" id=".console.command.secrets_set.lazy"/>
         <argument key="console.command.secrets_remove" type="service_closure" id=".console.command.secrets_remove.lazy"/>
@@ -2029,6 +2266,7 @@
     <service id="Psr\Cache\CacheItemPoolInterface" alias="cache.app"/>
     <service id="Symfony\Contracts\Cache\CacheInterface" alias="cache.app"/>
     <service id="Symfony\Contracts\Cache\TagAwareCacheInterface" alias="cache.app.taggable"/>
+    <service id="Symfony\Contracts\Translation\TranslatorInterface" alias="translator"/>
     <service id="Symfony\Component\HttpKernel\Debug\FileLinkFormatter" alias="debug.file_link_formatter"/>
     <service id="router" alias="router.default" public="true"/>
     <service id="Symfony\Component\Routing\RouterInterface" alias="router.default"/>
@@ -2043,9 +2281,15 @@
     <service id="validator.mapping.class_metadata_factory" alias="validator"/>
     <service id="messenger.default_bus" alias="messenger.bus.default" public="true"/>
     <service id="Symfony\Component\Messenger\MessageBusInterface" alias="messenger.bus.default"/>
+    <service id="Behat\Mink\Mink" alias="behat.mink"/>
+    <service id="Behat\Mink\Session" alias="behat.mink.default_session"/>
+    <service id="FriendsOfBehat\SymfonyExtension\Mink\MinkParameters" alias="behat.mink.parameters"/>
+    <service id="Symfony\Component\DependencyInjection\ContainerInterface $driverContainer" alias="behat.driver.service_container"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.7nzbL4K" public="true"/>
     <service id="argument_resolver.controller_locator" alias=".service_locator.TGeGvuk"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
+    <service id="Symfony\Bundle\FrameworkBundle\KernelBrowser" alias="test.client"/>
+    <service id="Symfony\Component\HttpKernel\HttpKernelBrowser" alias="test.client"/>
     <service id=".service_locator.Xbsa8iG" alias="messenger.retry_strategy_locator"/>
     <service id=".service_locator.o.uf2zi" alias=".service_locator.7nzbL4K"/>
     <service id=".service_locator.7Ij3dGr" alias=".service_locator.TGeGvuk"/>

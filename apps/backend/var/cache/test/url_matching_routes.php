@@ -8,7 +8,7 @@
 return [
     false, // $matchHost
     [ // $staticRoutes
-        '/otro' => [[['_route' => 'otro_get', '_controller' => 'Tramity\\Apps\\Backend\\controller\\otro\\OtroController'], null, ['GET' => 0], null, false, false, null]],
+        '/otro' => [[['_route' => 'otro_get', '_controller' => 'Tramity\\Apps\\Backend\\controller\\otro\\OtroGetController'], null, ['GET' => 0], null, false, false, null]],
     ],
     [ // $regexpList
     ],
