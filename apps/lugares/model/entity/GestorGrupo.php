@@ -81,8 +81,7 @@ class GestorGrupo extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_grupo' => $aDades['id_grupo']);
-            $oGrupo = new Grupo($a_pkey);
+            $oGrupo = new Grupo($aDades['id_grupo']);
             $oGrupoSet->add($oGrupo);
         }
         return $oGrupoSet->getTot();
@@ -154,8 +153,7 @@ class GestorGrupo extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_grupo' => $aDades['id_grupo']);
-            $oGrupo = new Grupo($a_pkey);
+            $oGrupo = new Grupo($aDades['id_grupo']);
             $oGrupoSet->add($oGrupo);
         }
         return $oGrupoSet->getTot();

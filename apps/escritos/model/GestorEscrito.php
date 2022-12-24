@@ -95,8 +95,7 @@ class GestorEscrito extends GestorEscritoDB
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new Escrito($a_pkey);
+            $oEscritoDB = new Escrito($aDades['id_escrito']);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();

@@ -138,8 +138,7 @@ class GestorEntradaBypass extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaBypass = new EntradaBypass($a_pkey);
+            $oEntradaBypass = new EntradaBypass($aDades['id_entrada']);
             $oEntradaBypassSet->add($oEntradaBypass);
         }
         return $oEntradaBypassSet->getTot();
@@ -162,8 +161,7 @@ class GestorEntradaBypass extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaBypass = new EntradaBypass($a_pkey);
+            $oEntradaBypass = new EntradaBypass($aDades['id_entrada']);
             $oEntradaBypassSet->add($oEntradaBypass);
         }
         return $oEntradaBypassSet->getTot();

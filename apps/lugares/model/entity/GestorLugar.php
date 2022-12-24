@@ -161,8 +161,7 @@ class GestorLugar extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_lugar' => $aDades['id_lugar']);
-            $oLugar = new Lugar($a_pkey);
+            $oLugar = new Lugar($aDades['id_lugar']);
             $oLugarSet->add($oLugar);
         }
         return $oLugarSet->getTot();
@@ -529,8 +528,7 @@ class GestorLugar extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_lugar' => $aDades['id_lugar']);
-            $oLugar = new Lugar($a_pkey);
+            $oLugar = new Lugar($aDades['id_lugar']);
             $oLugarSet->add($oLugar);
         }
         return $oLugarSet->getTot();

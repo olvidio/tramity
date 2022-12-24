@@ -133,8 +133,7 @@ class GestorExpedienteDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_expediente' => $aDades['id_expediente']);
-            $oExpedienteDB = new ExpedienteDB($a_pkey);
+            $oExpedienteDB = new ExpedienteDB($aDades['id_expediente']);
             $oExpedienteDBSet->add($oExpedienteDB);
         }
         return $oExpedienteDBSet->getTot();
@@ -206,11 +205,10 @@ class GestorExpedienteDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_expediente' => $aDades['id_expediente']);
             if ($parent) {
-                $oExpedienteDB = new Expediente($a_pkey);
+                $oExpedienteDB = new Expediente($aDades['id_expediente']);
             } else {
-                $oExpedienteDB = new ExpedienteDB($a_pkey);
+                $oExpedienteDB = new ExpedienteDB($aDades['id_expediente']);
             }
             $oExpedienteDBSet->add($oExpedienteDB);
         }

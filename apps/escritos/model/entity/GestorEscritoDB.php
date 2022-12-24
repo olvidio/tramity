@@ -153,8 +153,7 @@ class GestorEscritoDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new Escrito($a_pkey);
+            $oEscritoDB = new Escrito($aDades['id_escrito']);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();
@@ -277,8 +276,7 @@ class GestorEscritoDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new Escrito($a_pkey);
+            $oEscritoDB = new Escrito($aDades['id_escrito']);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();
@@ -388,8 +386,7 @@ class GestorEscritoDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new Escrito($a_pkey);
+            $oEscritoDB = new Escrito($aDades['id_escrito']);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();
@@ -477,8 +474,7 @@ class GestorEscritoDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new Escrito($a_pkey);
+            $oEscritoDB = new Escrito($aDades['id_escrito']);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();
@@ -568,8 +564,7 @@ class GestorEscritoDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new Escrito($a_pkey);
+            $oEscritoDB = new Escrito($aDades['id_escrito']);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();
@@ -648,8 +643,7 @@ class GestorEscritoDB extends core\ClaseGestor
         // Se usa la utilidad CURSOR del Postgresql para evitar colapsar la memoria del servidor
         // cuando se busca un número muy grande de registros (más de 20.000)
         foreach ($this->fetchCursor($sQry, $aWhere) as $row) {
-            $a_pkey = array('id_escrito' => $row['id_escrito']);
-            $oEscritoDB = new Escrito($a_pkey);
+            $oEscritoDB = new Escrito($row['id_escrito']);
             $oEscritoDBSet->add($oEscritoDB);
 
         }
@@ -772,8 +766,7 @@ class GestorEscritoDB extends core\ClaseGestor
         // Se usa la utilidad CURSOR del Postgresql para evitar colapsar la memoria del servidor
         // cuando se busca un número muy grande de registros (más de 20.000)
         foreach ($this->fetchCursor($sQry, $aWhere) as $row) {
-            $a_pkey = array('id_escrito' => $row['id_escrito']);
-            $oEscritoDB = new Escrito($a_pkey);
+            $oEscritoDB = new Escrito($row['id_escrito']);
             $oEscritoDBSet->add($oEscritoDB);
 
         }
@@ -797,8 +790,7 @@ class GestorEscritoDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new EscritoDB($a_pkey);
+            $oEscritoDB = new EscritoDB($aDades['id_escrito']);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();
@@ -870,8 +862,7 @@ class GestorEscritoDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_escrito' => $aDades['id_escrito']);
-            $oEscritoDB = new EscritoDB($a_pkey);
+            $oEscritoDB = new EscritoDB($aDades['id_escrito']);
             $oEscritoDBSet->add($oEscritoDB);
         }
         return $oEscritoDBSet->getTot();

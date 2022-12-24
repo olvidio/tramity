@@ -99,8 +99,7 @@ class GestorLocale extends core\ClaseGestor
             return false;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_locale' => $aDades['id_locale']);
-            $oLocale = new Locale($a_pkey);
+            $oLocale = new Locale($aDades['id_locale']);
             $oLocaleSet->add($oLocale);
         }
         return $oLocaleSet->getTot();
@@ -172,8 +171,7 @@ class GestorLocale extends core\ClaseGestor
             return false;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_locale' => $aDades['id_locale']);
-            $oLocale = new Locale($a_pkey);
+            $oLocale = new Locale($aDades['id_locale']);
             $oLocaleSet->add($oLocale);
         }
         return $oLocaleSet->getTot();

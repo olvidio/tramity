@@ -117,8 +117,7 @@ class GestorFirma extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oFirma = new Firma($a_pkey);
+            $oFirma = new Firma($aDades['id_item']);
             $oFirmaSet->add($oFirma);
         }
         return $oFirmaSet->getTot();
@@ -293,8 +292,7 @@ class GestorFirma extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oFirma = new Firma($a_pkey);
+            $oFirma = new Firma($aDades['id_item']);
             $oFirmaSet->add($oFirma);
         }
         return $oFirmaSet->getTot();
@@ -570,8 +568,7 @@ class GestorFirma extends core\ClaseGestor
         }
         // el primero es el actual, el segundo (si existe) es el anterior.
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oFirma = new Firma($a_pkey);
+            $oFirma = new Firma($aDades['id_item']);
         }
         return $oFirma;
     }
@@ -671,8 +668,7 @@ class GestorFirma extends core\ClaseGestor
         }
         // el primero es el actual, el segundo (si existe) es el anterior.
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oFirma = new Firma($a_pkey);
+            $oFirma = new Firma($aDades['id_item']);
         }
         return $oFirma;
     }
@@ -799,8 +795,7 @@ class GestorFirma extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oFirma = new Firma($a_pkey);
+            $oFirma = new Firma($aDades['id_item']);
             $oFirmaSet->add($oFirma);
         }
         return $oFirmaSet->getTot();

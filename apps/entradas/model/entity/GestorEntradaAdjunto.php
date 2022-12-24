@@ -80,8 +80,7 @@ class GestorEntradaAdjunto extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oEntradaAdjunto = new EntradaAdjunto($a_pkey);
+            $oEntradaAdjunto = new EntradaAdjunto($aDades['id_item']);
             $oEntradaAdjuntoSet->add($oEntradaAdjunto);
         }
         return $oEntradaAdjuntoSet->getTot();
@@ -153,8 +152,7 @@ class GestorEntradaAdjunto extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oEntradaAdjunto = new EntradaAdjunto($a_pkey);
+            $oEntradaAdjunto = new EntradaAdjunto($aDades['id_item']);
             $oEntradaAdjuntoSet->add($oEntradaAdjunto);
         }
         return $oEntradaAdjuntoSet->getTot();

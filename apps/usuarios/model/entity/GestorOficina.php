@@ -123,8 +123,7 @@ class GestorOficina extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_oficina' => $aDades['id_oficina']);
-            $oOficina = new Oficina($a_pkey);
+            $oOficina = new Oficina($aDades['id_oficina']);
             $oOficinaSet->add($oOficina);
         }
         return $oOficinaSet->getTot();
@@ -196,8 +195,7 @@ class GestorOficina extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_oficina' => $aDades['id_oficina']);
-            $oOficina = new Oficina($a_pkey);
+            $oOficina = new Oficina($aDades['id_oficina']);
             $oOficinaSet->add($oOficina);
         }
         return $oOficinaSet->getTot();

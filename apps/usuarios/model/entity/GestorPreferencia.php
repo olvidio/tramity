@@ -141,8 +141,7 @@ class GestorPreferencia extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oPreferencia = new Preferencia($a_pkey);
+            $oPreferencia = new Preferencia($aDades['id_item']);
             $oPreferenciaSet->add($oPreferencia);
         }
         return $oPreferenciaSet->getTot();
@@ -164,8 +163,7 @@ class GestorPreferencia extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oPreferencia = new Preferencia($a_pkey);
+            $oPreferencia = new Preferencia($aDades['id_item']);
             $oPreferenciaSet->add($oPreferencia);
         }
         return $oPreferenciaSet->getTot();

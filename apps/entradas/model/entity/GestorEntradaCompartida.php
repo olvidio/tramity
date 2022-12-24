@@ -204,8 +204,7 @@ class GestorEntradaCompartida extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada_compartida' => $aDades['id_entrada_compartida']);
-            $oEntradaCompartida = new EntradaCompartida($a_pkey);
+            $oEntradaCompartida = new EntradaCompartida($aDades['id_entrada_compartida']);
             $oEntradaCompartidaSet->add($oEntradaCompartida);
         }
         return $oEntradaCompartidaSet->getTot();
@@ -337,8 +336,7 @@ class GestorEntradaCompartida extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada_compartida' => $aDades['id_entrada_compartida']);
-            $oEntradaCompartida = new EntradaCompartida($a_pkey);
+            $oEntradaCompartida = new EntradaCompartida($aDades['id_entrada_compartida']);
             $oEntradaCompartidaSet->add($oEntradaCompartida);
         }
         return $oEntradaCompartidaSet->getTot();
@@ -360,8 +358,7 @@ class GestorEntradaCompartida extends ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_entrada_compartida' => $aDades['id_entrada_compartida']);
-            $oEntradaCompartida = new EntradaCompartida($a_pkey);
+            $oEntradaCompartida = new EntradaCompartida($aDades['id_entrada_compartida']);
             $oEntradaCompartidaSet->add($oEntradaCompartida);
         }
         return $oEntradaCompartidaSet->getTot();
@@ -433,8 +430,7 @@ class GestorEntradaCompartida extends ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada_compartida' => $aDades['id_entrada_compartida']);
-            $oEntradaCompartida = new EntradaCompartida($a_pkey);
+            $oEntradaCompartida = new EntradaCompartida($aDades['id_entrada_compartida']);
             $oEntradaCompartidaSet->add($oEntradaCompartida);
         }
         return $oEntradaCompartidaSet->getTot();

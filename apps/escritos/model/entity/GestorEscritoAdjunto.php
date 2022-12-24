@@ -81,8 +81,7 @@ class GestorEscritoAdjunto extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oEscritoAdjunto = new EscritoAdjunto($a_pkey);
+            $oEscritoAdjunto = new EscritoAdjunto($aDades['id_item']);
             $oEscritoAdjuntoSet->add($oEscritoAdjunto);
         }
         return $oEscritoAdjuntoSet->getTot();
@@ -154,8 +153,7 @@ class GestorEscritoAdjunto extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oEscritoAdjunto = new EscritoAdjunto($a_pkey);
+            $oEscritoAdjunto = new EscritoAdjunto($aDades['id_item']);
             $oEscritoAdjuntoSet->add($oEscritoAdjunto);
         }
         return $oEscritoAdjuntoSet->getTot();

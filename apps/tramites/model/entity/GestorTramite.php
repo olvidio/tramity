@@ -109,8 +109,7 @@ class GestorTramite extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_tramite' => $aDades['id_tramite']);
-            $oTramite = new Tramite($a_pkey);
+            $oTramite = new Tramite($aDades['id_tramite']);
             $oTramiteSet->add($oTramite);
         }
         return $oTramiteSet->getTot();
@@ -182,8 +181,7 @@ class GestorTramite extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_tramite' => $aDades['id_tramite']);
-            $oTramite = new Tramite($a_pkey);
+            $oTramite = new Tramite($aDades['id_tramite']);
             $oTramiteSet->add($oTramite);
         }
         return $oTramiteSet->getTot();

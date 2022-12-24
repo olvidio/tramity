@@ -54,8 +54,7 @@ class GestorTramiteCargo extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oTramiteCargo = new TramiteCargo($a_pkey);
+            $oTramiteCargo = new TramiteCargo($aDades['id_item']);
             $oTramiteCargoSet->add($oTramiteCargo);
         }
         return $oTramiteCargoSet->getTot();
@@ -127,8 +126,7 @@ class GestorTramiteCargo extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oTramiteCargo = new TramiteCargo($a_pkey);
+            $oTramiteCargo = new TramiteCargo($aDades['id_item']);
             $oTramiteCargoSet->add($oTramiteCargo);
         }
         return $oTramiteCargoSet->getTot();

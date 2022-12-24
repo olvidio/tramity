@@ -80,8 +80,7 @@ class GestorEntradaCompartidaAdjunto extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oEntradaCompartidaAdjunto = new EntradaCompartidaAdjunto($a_pkey);
+            $oEntradaCompartidaAdjunto = new EntradaCompartidaAdjunto($aDades['id_item']);
             $oEntradaCompartidaAdjuntoSet->add($oEntradaCompartidaAdjunto);
         }
         return $oEntradaCompartidaAdjuntoSet->getTot();
@@ -153,8 +152,7 @@ class GestorEntradaCompartidaAdjunto extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_item' => $aDades['id_item']);
-            $oEntradaCompartidaAdjunto = new EntradaCompartidaAdjunto($a_pkey);
+            $oEntradaCompartidaAdjunto = new EntradaCompartidaAdjunto($aDades['id_item']);
             $oEntradaCompartidaAdjuntoSet->add($oEntradaCompartidaAdjunto);
         }
         return $oEntradaCompartidaAdjuntoSet->getTot();

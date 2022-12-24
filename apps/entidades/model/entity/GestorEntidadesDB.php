@@ -52,8 +52,7 @@ class GestorEntidadesDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_entidad' => $aDades['id_entidad']);
-            $oEntidadDB = new EntidadDB($a_pkey);
+            $oEntidadDB = new EntidadDB($aDades['id_entidad']);
             $oEntidadesDBSet->add($oEntidadDB);
         }
         return $oEntidadesDBSet->getTot();
@@ -125,8 +124,7 @@ class GestorEntidadesDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entidad' => $aDades['id_entidad']);
-            $oEntidadDB = new EntidadDB($a_pkey);
+            $oEntidadDB = new EntidadDB($aDades['id_entidad']);
             $oEntidadesDBSet->add($oEntidadDB);
         }
         return $oEntidadesDBSet->getTot();

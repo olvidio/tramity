@@ -54,8 +54,7 @@ class GestorEntradaDocDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDbl->query($sQuery) as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDocDB = new EntradaDocDB($a_pkey);
+            $oEntradaDocDB = new EntradaDocDB($aDades['id_entrada']);
             $oEntradaDocDBSet->add($oEntradaDocDB);
         }
         return $oEntradaDocDBSet->getTot();
@@ -127,8 +126,7 @@ class GestorEntradaDocDB extends core\ClaseGestor
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $a_pkey = array('id_entrada' => $aDades['id_entrada']);
-            $oEntradaDocDB = new EntradaDocDB($a_pkey);
+            $oEntradaDocDB = new EntradaDocDB($aDades['id_entrada']);
             $oEntradaDocDBSet->add($oEntradaDocDB);
         }
         return $oEntradaDocDBSet->getTot();
