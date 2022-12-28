@@ -167,6 +167,8 @@ class Entidad extends EntidadDB
     private function crearTablas()
     {
         $err = '';
+        // config:
+        $err .= $this->ejecutarPsqlCrear('config');
         // entradas:
         $err .= $this->ejecutarPsqlCrear('entradas');
         // para las dl:
@@ -187,8 +189,6 @@ class Entidad extends EntidadDB
         $err .= $this->ejecutarPsqlCrear('pendientes');
         // plantillas:
         $err .= $this->ejecutarPsqlCrear('plantillas');
-        // config:
-        $err .= $this->ejecutarPsqlCrear('config');
         // usuarios:
         $err .= $this->ejecutarPsqlCrear('usuarios');
         // tramites (tiene que estar después de usuarios, porque depende de la tabla aux_cargos):

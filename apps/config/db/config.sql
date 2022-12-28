@@ -1,11 +1,7 @@
 CREATE TABLE IF NOT EXISTS nombre_del_esquema.x_config
 (
-    parametro
-    text
-    NOT
-    NULL,
-    valor
-    text
+    parametro text NOT NULL,
+    valor text
 );
 
 ALTER TABLE nombre_del_esquema.x_config OWNER TO tramity;
