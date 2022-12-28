@@ -69,7 +69,7 @@ foreach ($cEntidadDBes as $oEntidadDB) {
     $a_valores[$i][1] = $nombre;
     $a_valores[$i][2] = $schema;
     $a_valores[$i][3] = $tipo_txt;
-    $a_valores[$i][5] = $anulado_txt;
+    $a_valores[$i][4] = $anulado_txt;
 }
 if (isset($Q_id_sel) && !empty($Q_id_sel)) {
     $a_valores['select'] = $Q_id_sel;
