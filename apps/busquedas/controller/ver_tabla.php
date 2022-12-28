@@ -437,7 +437,7 @@ switch ($Q_opcion) {
         $oHoy = new DateTimeLocal();
         $oIni = new DateTimeLocal();
         $dias = $_SESSION['oConfig']->getPeriodoEntradas();
-        $oIni->sub(new DateInterval("P${dias}D"));
+        $oIni->sub(new DateInterval("P{$dias}D"));
 
         // no filtro por origen: todos (dl y cr)
         $oBuscar = new Buscar();

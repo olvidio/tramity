@@ -346,10 +346,10 @@ class Lista
             if (is_array($Cabecera)) {
                 $name = $Cabecera['name']; // esta tiene que existir siempre
                 if (!empty($Cabecera['class'])) {
-                    $class = "class=\"${Cabecera['class']}\"";
+                    $class = "class=\"{$Cabecera['class']}\"";
                 }
                 if (!empty($Cabecera['width'])) {
-                    $width = "width=\"${Cabecera['width']}\"";
+                    $width = "width=\"{$Cabecera['width']}\"";
                 }
 
             } else {
@@ -545,10 +545,10 @@ class Lista
             if (is_array($Cabecera)) {
                 $name = $Cabecera['name']; // esta tiene que existir siempre
                 if (!empty($Cabecera['class'])) {
-                    $class = "class=\"${Cabecera['class']}\"";
+                    $class = "class=\"{$Cabecera['class']}\"";
                 }
                 if (!empty($Cabecera['width'])) {
-                    $width = "width=\"${Cabecera['width']}\"";
+                    $width = "width=\"{$Cabecera['width']}\"";
                 }
 
             } else {
@@ -903,8 +903,8 @@ class Lista
                 $name_idx = str_replace(' ', '', $name); // quito posibles espacios en el indice
                 $id = !empty($Cabecera['id']) ? $Cabecera['id'] : str_replace(' ', '', $name); // quito posibles espacios en el indice
                 $field = !empty($Cabecera['field']) ? $Cabecera['field'] : str_replace(' ', '', $name); // quito posibles espacios en el indice
-                $toolTip = !empty($Cabecera['title']) ? ", toolTip: \"${Cabecera['title']}\"" : ", toolTip: \"${Cabecera['name']}\"";
-                $class = !empty($Cabecera['class']) ? ", cssClass: \"${Cabecera['class']}\"" : '';
+                $toolTip = !empty($Cabecera['title']) ? ", toolTip: \"{$Cabecera['title']}\"" : ", toolTip: \"{$Cabecera['name']}\"";
+                $class = !empty($Cabecera['class']) ? ", cssClass: \"{$Cabecera['class']}\"" : '';
                 $sortable = !empty($Cabecera['sortable']) ? $Cabecera['sortable'] : 'true';
                 $width = !empty($Cabecera['width']) ? $Cabecera['width'] : '';
                 // asegurar que es sólo número (en pixels) no debe haber unidades (da error el javascript)

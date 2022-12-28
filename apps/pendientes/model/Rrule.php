@@ -393,7 +393,7 @@ class Rrule
                     case "num":
                         $meses = $request['meses'];
                         if ($request['dias'] && $meses) {
-                            $rrule = "FREQ=YEARLY;BYMONTHDAY=${request['dias']};BYMONTH=$meses";
+                            $rrule = "FREQ=YEARLY;BYMONTHDAY={$request['dias']};BYMONTH=$meses";
                         } else {
                             $rrule = "";
                         }
@@ -415,7 +415,7 @@ class Rrule
                         break;
                     case "num_dm":
                         if (!empty($request['interval'])) {
-                            $rrule = "FREQ=YEARLY;INTERVAL=${request['interval']}";
+                            $rrule = "FREQ=YEARLY;INTERVAL={$request['interval']}";
                         } else {
                             $rrule = "FREQ=YEARLY";
                         }
@@ -437,7 +437,7 @@ class Rrule
                     case "num_ini":
                     case "num":
                         if (!empty($request['dias'])) {
-                            $rrule = "FREQ=MONTHLY;BYMONTHDAY=${request['dias']}";
+                            $rrule = "FREQ=MONTHLY;BYMONTHDAY={$request['dias']}";
                         } else {
                             $rrule = "";
                         }
