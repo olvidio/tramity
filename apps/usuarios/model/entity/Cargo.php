@@ -98,9 +98,9 @@ class Cargo extends ClasePropiedades
     /**
      * Id_oficina de Cargo
      *
-     * @var integer
+     * @var integer|null
      */
-    private int $iid_oficina;
+    private ?int $iid_oficina = null;
     /**
      * Director de Cargo
      *
@@ -359,9 +359,9 @@ class Cargo extends ClasePropiedades
     }
 
     /**
-     * @param integer $iid_oficina
+     * @param integer|null $iid_oficina
      */
-    public function setId_oficina(int $iid_oficina): void
+    public function setId_oficina(int $iid_oficina=null): void
     {
         $this->iid_oficina = $iid_oficina;
     }
@@ -503,9 +503,9 @@ class Cargo extends ClasePropiedades
     /**
      * Recupera l'atribut iid_oficina de Cargo
      *
-     * @return integer
+     * @return integer|null
      */
-    public function getId_oficina(): int
+    public function getId_oficina(): ?int
     {
         if (!isset($this->iid_oficina) && !$this->bLoaded) {
             $this->DBCargar();

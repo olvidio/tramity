@@ -192,7 +192,9 @@ foreach ($cPendientes as $oPendiente) {
     if (!empty($Q_encargado) && $id_encargado !== $Q_encargado) {
         continue;
     }
-    $encargado = !empty($id_encargado) ? $a_usuarios_oficina[$id_encargado] : '';
+    if (!empty($id_encargado)) {
+        $encargado = $a_usuarios_oficina[$id_encargado]?? '';
+    }
     $t++;
     $protocolo = $oPendiente->getProtocolo();
     $rrule = $oPendiente->getRrule();

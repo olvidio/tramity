@@ -184,7 +184,12 @@ class Usuario extends ClasePropiedades
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
                 return FALSE;
             }
-            $this->iid_usuario = $oDbl->lastInsertId('aux_usuarios_id_usuario_seq');
+            $iid_auto = $oDbl->lastInsertId('aux_usuarios_id_auto_seq');
+            foreach ($oDbl->query("SELECT * FROM $nom_tabla WHERE id_auto=$iid_auto") as $row) {
+                $this->iid_usuario = $row['id_usuario'];
+                $aDades['id_usuario'] = $row['id_usuario'];
+            }
+
         }
         $this->setAllAtributes($aDades);
         return TRUE;

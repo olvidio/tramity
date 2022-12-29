@@ -53,35 +53,35 @@ INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripci
 VALUES (9, 3, 'convocar_reunion', 'scdl reunion', 0, 'f', 'f');
 --- cargos tipicos 
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (10, 3, 'vsg', 'Vocal de San Gabriel', 6, 'f', 'f');
+VALUES (10, 3, 'vsg', 'Vocal de San Gabriel', 6, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (11, 3, 'vsm', 'Vocal de San Miguel', 5, 'f', 'f');
+VALUES (11, 3, 'vsm', 'Vocal de San Miguel', 5, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (12, 3, 'vsr', 'Vocal de San Rafael', 7, 'f', 'f');
+VALUES (12, 3, 'vsr', 'Vocal de San Rafael', 7, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (13, 3, 'vstgr', 'Vicedecano stgr', 9, 'f', 'f');
+VALUES (13, 3, 'vstgr', 'Vicedecano stgr', 9, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (14, 3, 'vcd', 'Vicario de la Delegación', 1, 'f', 'f');
+VALUES (14, 3, 'vcd', 'Vicario de la Delegación', 1, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (15, 3, 'scdl', 'scdl', 4, 'f', 'f');
+VALUES (15, 3, 'scdl', 'scdl', 4, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (16, 3, 'sd', 'Subdirector de la Delegación', 2, 'f', 'f');
+VALUES (16, 3, 'sd', 'Subdirector de la Delegación', 2, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (17, 3, 'soi', 'Oficina de soi', 14, 'f', 'f');
+VALUES (17, 3, 'soi', 'Oficina de soi', 14, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (18, 3, 'adl', 'Administrador', 10, 'f', 'f');
+VALUES (18, 3, 'adl', 'Administrador', 10, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (19, 3, 'aop', 'Oficina aop', 13, 'f', 'f');
+VALUES (19, 3, 'aop', 'Oficina aop', 13, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (20, 3, 'dagd', 'dagd', 8, 'f', 'f');
+VALUES (20, 3, 'dagd', 'dagd', 8, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (21, 3, 'dre', 'Director espritiual', 11, 'f', 'f');
+VALUES (21, 3, 'dre', 'Director espritiual', 11, 't', 't');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (22, 3, 'ocs', 'Causas de los santos', 15, 'f', 'f');
+VALUES (22, 3, 'ocs', 'Causas de los santos', 15, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (23, 3, 'vcsd', 'Vicario Secretario', 3, 'f', 'f');
+VALUES (23, 3, 'vcsd', 'Vicario Secretario', 3, 't', 't');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (24, 3, 'vest', 'Vocal de estudios', 9, 'f', 'f');
+VALUES (24, 3, 'vest', 'Vocal de estudios', 9, 't', 'f');
 --- oficiales
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
 VALUES (25, 3, 'of1scdl', 'Oficial de Secretaria', 4, 'f', 'f');
