@@ -24,7 +24,7 @@ VALUES (2, 1, 10, 1, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
 VALUES (3, 1, 20, 3, 2);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
-VALUES (4, 1, 30, 8, 1);
+VALUES (4, 1, 30, 6, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
 VALUES (5, 2, 5, 2, 0);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
@@ -34,7 +34,7 @@ VALUES (7, 2, 20, 3, 2);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
 VALUES (8, 2, 30, 15, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
-VALUES (9, 2, 40, 8, 1);
+VALUES (9, 2, 40, 6, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
 VALUES (10, 4, 10, 1, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
@@ -52,7 +52,7 @@ VALUES (16, 4, 70, 4, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
 VALUES (17, 4, 80, 14, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
-VALUES (18, 4, 90, 8, 1);
+VALUES (18, 4, 90, 6, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
 VALUES (19, 3, 5, 2, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
@@ -66,7 +66,7 @@ VALUES (23, 3, 40, 16, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
 VALUES (24, 3, 50, 14, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
-VALUES (25, 3, 60, 8, 1);
+VALUES (25, 3, 60, 6, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
 VALUES (26, 5, 5, 2, 0);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
@@ -82,7 +82,7 @@ VALUES (32, 5, 40, 16, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
 VALUES (33, 5, 50, 14, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
-VALUES (34, 5, 60, 8, 1);
+VALUES (34, 5, 60, 6, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
 VALUES (35, 6, 5, 2, 0);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
@@ -102,7 +102,6 @@ VALUES (42, 6, 60, 4, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
 VALUES (43, 6, 70, 14, 1);
 INSERT INTO nombre_del_esquema.tramite_cargo (id_item, id_tramite, orden_tramite, id_cargo, multiple)
-VALUES (44, 6, 80, 8, 1);
+VALUES (44, 6, 80, 6, 1);
 --- empezar a contar en 30.
 SELECT pg_catalog.setval('nombre_del_esquema.tramite_cargo_id_item_seq', 45, true);
-

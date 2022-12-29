@@ -33,6 +33,15 @@ VALUES (15, 'ocs', 150);
 SELECT pg_catalog.setval('nombre_del_esquema.x_oficinas_id_oficina_seq', 20, true);
 ---
 --- Para la tabla aux_cargos de la dl
+--- Valores en Cargo
+---     const CARGO_PONENTE = 1;
+---     const CARGO_OFICIALES = 2;
+---     const CARGO_VARIAS = 3;
+---     const CARGO_TODOS_DIR = 4;
+---     const CARGO_VB_VCD = 5;
+---     const CARGO_DISTRIBUIR = 6;
+---     const CARGO_REUNION = 7;
+---
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
 VALUES (1, 3, 'ponente', 'ponente', 0, 'f', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
@@ -44,14 +53,12 @@ VALUES (4, 3, 'todos_d', 'todos d', 0, 'f', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
 VALUES (5, 3, 'vºbº vcd', 'listo para reunión', 0, 'f', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (6, 3, 'secretaria', 'secretaria', 0, 'f', 'f');
+VALUES (6, 3, 'distribuir', 'scdl secretaria', 0, 'f', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (7, 3, 'reunion', 'reunion', 0, 'f', 'f');
+VALUES (7, 3, 'convocar_reunion', 'scdl reunion', 0, 'f', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (8, 3, 'distribuir', 'scdl secretaria', 0, 'f', 'f');
-INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (9, 3, 'convocar_reunion', 'scdl reunion', 0, 'f', 'f');
---- cargos tipicos 
+VALUES (9, 3, 'secretaria', 'secretaria', 0, 'f', 'f');
+--- cargos tipicos
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
 VALUES (10, 3, 'vsg', 'Vocal de San Gabriel', 6, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
