@@ -378,11 +378,14 @@ class Lista
             $clase = ($f % 2) ? "imp" : "par";
             $f++;
             $id_fila = $f . $ahora;
+            /* A partir de php 8.2, las claves numéricas van antes que las string,
+             hay que poner primero la columna 'sel' */
             ksort($fila);
             if (!empty($fila['clase'])) {
                 $clase .= " " . $fila['clase'];
             }
-            $tbody .= "<tr id='$id_fila' class='$clase'>";
+            $t_row = '';
+            $t_sel = '';
             foreach ($fila as $col => $valor) {
                 if ($col === "clase") {
                     continue;
@@ -414,54 +417,57 @@ class Lista
                         } else {
                             $chk = '';
                         }
-                        $tbody .= "<td tipo='sel' title='" . _("clic para seleccionar") . "'>";
-                        $tbody .= "<input class='sel' type='checkbox' $chk  name='sel[]' id='a$id' value='$id'>";
-                        $tbody .= "</td>";
+                        $t_sel .= "<td tipo='sel' title='" . _("clic para seleccionar") . "'>";
+                        $t_sel .= "<input class='sel' type='checkbox' $chk  name='sel[]' id='a$id' value='$id'>";
+                        $t_sel .= "</td>";
                     } else { // no hay que dibujar el checkbox, pero si la columna
-                        $tbody .= "<td></td>";
+                        $t_sel .= "<td></td>";
                     }
                 } elseif (is_array($valor)) {
                     $val = $valor['valor'];
                     if (!empty($valor['ira'])) {
                         $ira = $valor['ira'];
-                        $tbody .= "<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
+                        $t_row .= "<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
                     } else {
-                        $tbody .= "<td>$val</td>";
+                        $t_row .= "<td>$val</td>";
                     }
                     if (!empty($valor['ira2'])) {
                         $ira = $valor['ira2'];
-                        $tbody .= "<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
+                        $t_row .= "<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
                     }
                     if (!empty($valor['ira3'])) {
                         $ira = $valor['ira3'];
-                        $tbody .= "<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
+                        $t_row .= "<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
                     }
                     if (!empty($valor['script'])) {
                         $ira = $valor['script'];
-                        $tbody .= "<td><span class=\"link\" onclick='$ira' >$val</span></td>";
+                        $t_row .= "<td><span class=\"link\" onclick='$ira' >$val</span></td>";
                     }
                     if (!empty($valor['script2'])) {
                         $ira = $valor['script2'];
-                        $tbody .= "<td><span class=\"link\" onclick='$ira' >$val</span></td>";
+                        $t_row .= "<td><span class=\"link\" onclick='$ira' >$val</span></td>";
                     }
                     if (!empty($valor['script3'])) {
                         $ira = $valor['script3'];
-                        $tbody .= "<td><span class=\"link\" onclick='$ira' >$val</span></td>";
+                        $t_row .= "<td><span class=\"link\" onclick='$ira' >$val</span></td>";
                     }
                     if (!empty($valor['span'])) {
-                        $tbody .= "<td colspan='" . $valor['span'] . "'>$val</td>";
+                        $t_row .= "<td colspan='" . $valor['span'] . "'>$val</td>";
                     }
                 } else {
                     // si es una fecha, pongo la clase fecha, para exportar a excel...
                     if (preg_match("/^(\d)+[\/-]\d\d[\/-](\d\d)+$/", $valor)) {
                         list($d, $m, $y) = preg_split('/[:\/\.-]/', $valor);
                         $fecha_iso = date("Y-m-d", mktime(0, 0, 0, $m, $d, $y));
-                        $tbody .= "<td class='fecha' fecha_iso='$fecha_iso'>$valor</td>";
+                        $t_row .= "<td class='fecha' fecha_iso='$fecha_iso'>$valor</td>";
                     } else {
-                        $tbody .= "<td>$valor</td>";
+                        $t_row .= "<td>$valor</td>";
                     }
                 }
             }
+            $tbody .= "<tr id='$id_fila' class='$clase'>";
+            $tbody .= $t_sel;
+            $tbody .= $t_row;
             $tbody .= "</tr>\n";
         }
 
@@ -577,11 +583,14 @@ class Lista
             $clase = ($f % 2) ? "imp" : "par";
             $f++;
             $id_fila = $f . $ahora;
+            /* A partir de php 8.2, las claves numéricas van antes que las string,
+             hay que poner primero la columna 'sel' */
             ksort($fila);
             if (!empty($fila['clase'])) {
                 $clase .= " " . $fila['clase'];
             }
-            $tbody .= "<tr id='$id_fila' class='$clase'>";
+            $t_row = '';
+            $t_sel = '';
             foreach ($fila as $col => $valor) {
                 if ($col === "clase") {
                     continue;
@@ -613,42 +622,42 @@ class Lista
                         } else {
                             $chk = '';
                         }
-                        $tbody .= "<td tipo='sel' title='" . _("clic para seleccionar") . "'>";
-                        $tbody .= "<input class='sel' type='checkbox' $chk  name='sel[]' id='a$id' value='$id'>";
-                        $tbody .= "</td>";
+                        $t_sel = "<td tipo='sel' title='" . _("clic para seleccionar") . "'>";
+                        $t_sel .= "<input class='sel' type='checkbox' $chk  name='sel[]' id='a$id' value='$id'>";
+                        $t_sel .= "</td>";
                     } else { // no hay que dibujar el checkbox, pero si la columna
-                        $tbody .= "<td></td>";
+                        $t_sel = "<td></td>";
                     }
                 } elseif (is_array($valor)) {
                     $val = $valor['valor'];
                     if (!empty($valor['ira'])) {
                         $ira = $valor['ira'];
-                        $tbody .= "<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
+                        $t_row .= "<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
                     } else {
-                        $tbody .= "<td>$val</td>";
+                        $t_row .= "<td>$val</td>";
                     }
                     if (!empty($valor['ira2'])) {
                         $ira = $valor['ira2'];
-                        $tbody .= "<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
+                        $t_row .= "<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
                     }
                     if (!empty($valor['ira3'])) {
                         $ira = $valor['ira3'];
-                        $tbody .= "<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
+                        $t_row .= "<td><span class=\"link\" onclick=\"fnjs_update_div('#main','$ira')\" >$val</span></td>";
                     }
                     if (!empty($valor['script'])) {
                         $ira = $valor['script'];
-                        $tbody .= "<td><span class=\"link\" onclick='$ira' >$val</span></td>";
+                        $t_row .= "<td><span class=\"link\" onclick='$ira' >$val</span></td>";
                     }
                     if (!empty($valor['script2'])) {
                         $ira = $valor['script2'];
-                        $tbody .= "<td><span class=\"link\" onclick='$ira' >$val</span></td>";
+                        $t_row .= "<td><span class=\"link\" onclick='$ira' >$val</span></td>";
                     }
                     if (!empty($valor['script3'])) {
                         $ira = $valor['script3'];
-                        $tbody .= "<td><span class=\"link\" onclick='$ira' >$val</span></td>";
+                        $t_row .= "<td><span class=\"link\" onclick='$ira' >$val</span></td>";
                     }
                     if (!empty($valor['span'])) {
-                        $tbody .= "<td colspan='" . $valor['span'] . "'>$val</td>";
+                        $t_row .= "<td colspan='" . $valor['span'] . "'>$val</td>";
                     }
                 } else {
                     // si es una fecha, pongo la clase fecha, para exportar a excel...
@@ -659,19 +668,21 @@ class Lista
                         } else {
                             $fecha_iso = date("Y-m-d", mktime(0, 0, 0, $m, $d, $y));
                         }
-                        $tbody .= "<td class='fecha' data-sort='$fecha_iso' fecha_iso='$fecha_iso'>$valor</td>";
+                        $t_row .= "<td class='fecha' data-sort='$fecha_iso' fecha_iso='$fecha_iso'>$valor</td>";
                     } else {
-                        $tbody .= "<td>$valor</td>";
+                        $t_row .= "<td>$valor</td>";
                     }
                 }
             }
+            $tbody .= "<tr id='$id_fila' class='$clase'>";
+            $tbody .= $t_sel;
+            $tbody .= $t_row;
             $tbody .= "</tr>\n";
         }
 
         if (!empty($b) && $b !== 'x') {
             $botones = "<tr class=botones><td colspan='$cab'>" . $botones;
         }
-
 
         $dt_com = $this->getDataTable_options_dom();
         $dt_order = $this->getDataTable_options_order();
@@ -965,6 +976,8 @@ class Lista
         foreach ($a_valores as $num_fila => $fila) {
             $f++;
             $id_fila = $f . $ahora;
+            /* A partir de php 8.2, las claves numéricas van antes que las string,
+             hay que poner primero la columna 'sel' */
             ksort($fila);
             $icol = 0;
             $aFilas[$num_fila]["id"] = $id_fila;
@@ -1690,4 +1703,5 @@ class Lista
     {
         $this->dt_op_order = $dt_op_order;
     }
+
 }
