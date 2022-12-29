@@ -2,6 +2,7 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use entradas\model\Entrada;
 use escritos\model\Escrito;
 use escritos\model\EscritoLista;
 use expedientes\model\Expediente;
@@ -10,6 +11,7 @@ use tramites\model\entity\GestorFirma;
 use tramites\model\entity\Tramite;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
+use usuarios\model\Visibilidad;
 use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -97,6 +99,15 @@ foreach ($oFirma->getArrayValor($rango) as $key => $valor) {
 $prioridad = $oExpediente->getPrioridad();
 $a_prioridad = $oExpediente->getArrayPrioridad();
 $prioridad_txt = $a_prioridad[$prioridad];
+
+$visibilidad = $oExpediente->getVisibilidad();
+$oVisibilidad = new Visibilidad();
+if ($vista_dl) {
+    $a_visibilidad = $oVisibilidad->getArrayVisibilidadDl();
+} else {
+    $a_visibilidad = $oVisibilidad->getArrayVisibilidadCtr();
+}
+$visibilidad_txt = $a_visibilidad[$visibilidad];
 
 $a_vida = $oExpediente->getArrayVida();
 $vida = $oExpediente->getVida();
@@ -211,6 +222,7 @@ $a_campos = [
     'tramite_txt' => $tramite_txt,
     'estado_txt' => $estado_txt,
     'prioridad_txt' => $prioridad_txt,
+    'visibilidad_txt' => $visibilidad_txt,
     'vida_txt' => $vida_txt,
     'oDesplVida' => $oDesplVida,
 
