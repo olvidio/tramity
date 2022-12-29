@@ -1,0 +1,33 @@
+<div id="condiciones">
+    <form id="que" name="que" action="" method="post">
+        <input type="hidden" id="filtro" name="filtro" value="{{ filtro }}">
+        <input type="hidden" id="que" name="que" value="buscar">
+
+        <div class="fs-4 col-10 mb-3 row">{{ "listar expedientes circulando"|trans|raw }}:
+            <!--  --------------- OFICINA PROPIA/RESTO --------------- -->
+            <div class="col-8">
+                <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input fs-5 mt-2" name="resto_sel"
+                           value="off" {{ chk_propio }} onClick="fnjs_buscar('#que');">
+                    <label class="form-check-label">
+                        {{ "propios"|trans|raw }}
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input fs-5 mt-2" name="resto_sel"
+                           value="on" {{ chk_resto }} onClick="fnjs_buscar('#que');">
+                    <label class="form-check-label">
+                        {{ "resto (como oficina implicada)"|trans|raw }}
+                    </label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    fnjs_buscar = function (formulario) {
+        $(formulario).attr('action', "apps/expedientes/controller/expediente_lista.php");
+        fnjs_enviar_formulario(formulario, '#main');
+    }
+</script>

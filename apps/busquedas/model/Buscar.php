@@ -573,10 +573,10 @@ class Buscar
 
                 $aWhere['resto_oficinas'] = '{' . implode(', ', $a_cargos) . '}';
                 $aOperador['resto_oficinas'] = 'OVERLAP';
-                // A quien envia el escrito (escritos)
+                // A quien envía el escrito (escritos)
                 if (!empty($this->dest_id_lugar)) {
                     $cEscritosRestoJson = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar, $aWhere, $aOperador);
-                    // añadir los envios a grupos:
+                    // añadir los envíos a grupos:
                     $cEscritosRestoGrupos = $gesEscritos->getEscritosByLugarDeGrupo($this->dest_id_lugar, $aWhere, $aOperador);
                     $cEscritosResto = array_merge($cEscritosRestoJson, $cEscritosRestoGrupos);
                 } elseif (!empty($this->local_id_lugar)) {

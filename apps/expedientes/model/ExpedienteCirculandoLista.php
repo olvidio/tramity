@@ -5,7 +5,6 @@ namespace expedientes\model;
 use core\ConfigGlobal;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
-use web\Hash;
 use function core\is_true;
 
 
@@ -14,6 +13,8 @@ class ExpedienteCirculandoLista
     private string $filtro;
     private array $aWhere;
     private array $aOperador;
+
+    private bool $resto_sel = FALSE;
 
     public function __construct(string $filtro)
     {
@@ -35,13 +36,6 @@ class ExpedienteCirculandoLista
         $oFormatoLista->setPaginaMod($pagina_mod);
         $oFormatoLista->setPaginaVer($pagina_ver);
 
-        /*
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            $a_cosas = ['filtro' => $this->filtro];
-            $pagina_nueva = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
-            $oFormatoLista->setPaginaNueva($pagina_nueva);
-        }
-    */
         if (!empty($this->aWhere)) {
             $gesExpedientes = new GestorExpediente();
             $this->aWhere['_ordre'] = 'id_expediente';
@@ -74,7 +68,7 @@ class ExpedienteCirculandoLista
         $this->aWhere = [];
         $this->aOperador = [];
         // Quito los permanentes_cl (de momento para los ctr)
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR ) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $this->aWhere['vida'] = Expediente::VIDA_PERMANENTE;
             $this->aOperador['vida'] = '!=';
         }
@@ -90,7 +84,7 @@ class ExpedienteCirculandoLista
         }
         // Si es el director los ve todos, no sólo los pendientes de poner 'visto'.
         // para los centros, todos ven igual que el director
-        if (is_true(ConfigGlobal::soy_dtor()) || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR ) {
+        if (is_true(ConfigGlobal::soy_dtor()) || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             // posibles oficiales de la oficina:
             $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
             $id_oficina = $oCargo->getId_oficina();
@@ -100,18 +94,33 @@ class ExpedienteCirculandoLista
             foreach (array_keys($a_cargos_oficina) as $id_cargo) {
                 $a_cargos[] = $id_cargo;
             }
+            // Para los propios de la oficina
             if (!empty($a_cargos)) {
-                $this->aWhere['ponente'] = implode(',', $a_cargos);
-                $this->aOperador['ponente'] = 'IN';
+                $cargos_csv = implode(',', $a_cargos);
+                if ($this->resto_sel === FALSE) {
+                    $this->aWhere['ponente'] = $cargos_csv;
+                    $this->aOperador['ponente'] = 'IN';
+                } else {
+                    $this->aWhere['resto_oficinas'] = '{' . $cargos_csv . '}';
+                    $this->aOperador['resto_oficinas'] = 'OVERLAP';
+                }
             } else {
                 // para que no salga nada pongo
                 $this->aWhere = [];
             }
         } else {
-            // solo los propios:
-            $this->aWhere['ponente'] = ConfigGlobal::role_id_cargo();
+            // Si soy oficina implicada
+            if ($this->resto_sel) {
+                $this->aWhere['resto_oficinas'] = '{' . ConfigGlobal::role_id_cargo() . '}';
+                $this->aOperador['resto_oficinas'] = 'OVERLAP';
+            } else {
+                $this->aWhere['ponente'] = ConfigGlobal::role_id_cargo();
+            }
         }
-
     }
 
+    public function setResto_sel(string $resto_sel): void
+    {
+        $this->resto_sel = $resto_sel;
+    }
 }

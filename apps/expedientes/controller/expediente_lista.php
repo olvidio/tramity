@@ -2,6 +2,7 @@
 
 use expedientes\model\DialogoBusquedaArchivados;
 use expedientes\model\DialogoBusquedaBorrador;
+use expedientes\model\DialogoBusquedaCirculando;
 use expedientes\model\ExpedienteAcabadosEncargadosLista;
 use expedientes\model\ExpedienteAcabadosLista;
 use expedientes\model\ExpedienteArchivadosLista;
@@ -15,6 +16,7 @@ use expedientes\model\ExpedientepermanentesClLista;
 use expedientes\model\ExpedienteReunionFijarLista;
 use expedientes\model\ExpedienteReunionLista;
 use expedientes\model\ExpedienteReunionSeguimientoLista;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -56,6 +58,22 @@ switch ($Q_filtro) {
         break;
     case 'circulando':
         $oExpedienteLista = new ExpedienteCirculandoLista($Q_filtro);
+        // añadir dialogo de búsquedas
+        $Q_resto_sel = (string)filter_input(INPUT_POST, 'resto_sel');
+        if (is_true($Q_resto_sel)) {
+            $Q_resto_sel = TRUE;
+        } else {
+            $Q_resto_sel = FALSE;
+        }
+
+        $oDialogoBusqueda = new DialogoBusquedaCirculando($Q_resto_sel, $Q_filtro);
+        $aCondicion = $oDialogoBusqueda->generarCondicion();
+        if ($aCondicion['success'] === FALSE) {
+            $msg = $aCondicion['message'];
+        } else {
+            $oExpedienteLista->setResto_sel($Q_resto_sel);
+            $oDialogoBusqueda->mostrarDialogo();
+        }
         break;
     case 'permanentes_cl':
         $oExpedienteLista = new ExpedientepermanentesClLista($Q_filtro);
