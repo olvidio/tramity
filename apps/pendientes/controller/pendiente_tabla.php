@@ -194,6 +194,8 @@ foreach ($cPendientes as $oPendiente) {
     }
     if (!empty($id_encargado)) {
         $encargado = $a_usuarios_oficina[$id_encargado]?? '';
+    } else {
+        $encargado = '';
     }
     $t++;
     $protocolo = $oPendiente->getProtocolo();
@@ -325,7 +327,7 @@ $a_campos = [
     'id_oficina' => $id_oficina,
     'oDesplCalendarios' => $oDesplCalendarios,
     'oDesplEncargados' => $oDesplEncargados,
-    'oTabla' => $oTabla,
+    'oEntradaLista' => $oTabla,
     'filtro' => $Q_filtro,
     'periodo' => $Q_periodo,
     'op_calendario_default' => $op_calendario_default,

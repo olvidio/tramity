@@ -214,6 +214,7 @@ class EntradaLista
         $pagina_cancel = Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($a_cosas));
 
         $txt_btn_new = '';
+        $txt_btn_directorio = '';
         $btn_new = FALSE;
         $txt_btn_dock = '';
         $btn_dock = FALSE;
@@ -230,6 +231,7 @@ class EntradaLista
             $secretaria = TRUE;
             $btn_new = TRUE;
             $txt_btn_new = _("nueva entrada");
+            $txt_btn_directorio = _("entradas por directorio");
         }
         if (ConfigGlobal::role_actual() === 'vcd') {
             $btn_new = TRUE;
@@ -251,6 +253,8 @@ class EntradaLista
         $txt_btn_dock = _("revisar dock");
         $pagina_cargar_dock = Hash::link('apps/entradas/controller/entrada_dock.php?' . http_build_query(['filtro' => $filtro]));
 
+        $pagina_nueva_directorio = Hash::link('apps/entradas/controller/entrada_directorio.php?' . http_build_query(['filtro' => $filtro]));
+
 
         $a_campos = [
             //'id_entrada' => $id_entrada,
@@ -263,6 +267,8 @@ class EntradaLista
             'secretaria' => $secretaria,
             'btn_new' => $btn_new,
             'txt_btn_new' => $txt_btn_new,
+            'txt_btn_directorio' => $txt_btn_directorio,
+            'pagina_nueva_directorio' => $pagina_nueva_directorio,
             'pagina_cancel' => $pagina_cancel,
             'ver_accion' => $ver_accion,
             'ver_oficina' => $ver_oficina,

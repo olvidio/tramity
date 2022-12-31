@@ -23,9 +23,9 @@ require_once("apps/core/global_object.inc");
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 $Q_slide_mode = (string)filter_input(INPUT_POST, 'slide_mode');
 
-$oTabla = new EntradaLista();
-$oTabla->setFiltro($Q_filtro);
-$oTabla->setSlide_mode($Q_slide_mode);
+$oEntradaLista = new EntradaLista();
+$oEntradaLista->setFiltro($Q_filtro);
+$oEntradaLista->setSlide_mode($Q_slide_mode);
 
 $msg = '';
 // añadir dialogo de búsquedas
@@ -54,8 +54,8 @@ if ($Q_filtro === 'en_aceptado') {
     $aWhereADD = [];
     $aOperadorADD = [];
     $aWhereADD['ponente'] = $Q_oficina;
-    $oTabla->setAWhereADD($aWhereADD);
-    $oTabla->setAOperadorADD($aOperadorADD);
+    $oEntradaLista->setAWhereADD($aWhereADD);
+    $oEntradaLista->setAOperadorADD($aOperadorADD);
 }
 
 if ($Q_filtro === 'en_encargado') {
@@ -95,12 +95,12 @@ if ($Q_filtro === 'en_encargado') {
     $oView = new ViewTwig('entradas/controller');
     $oView->renderizar('encargados_buscar.html.twig', $a_campos);
 
-    $oTabla->setAWhereADD($aWhereADD);
-    $oTabla->setAOperadorADD($aOperadorADD);
+    $oEntradaLista->setAWhereADD($aWhereADD);
+    $oEntradaLista->setAOperadorADD($aOperadorADD);
 }
 
 if (empty($msg)) {
-    echo $oTabla->mostrarTabla();
+    echo $oEntradaLista->mostrarTabla();
 } else {
     echo $msg;
 }

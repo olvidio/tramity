@@ -195,7 +195,7 @@ class ImprimirTabla
         $condicion = '';
         $a_campos = [
             'titulo' => $this->sTitulo,
-            'oTabla' => $oTabla,
+            'oEntradaLista' => $oTabla,
             'key' => $this->sKey,
             'condicion' => $condicion,
             //'oHash' => $oHash,

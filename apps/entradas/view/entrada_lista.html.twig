@@ -2,6 +2,9 @@
     <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
         {{ txt_btn_new }}
     </button>
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva_directorio|raw }}');">
+        {{ txt_btn_directorio }}
+    </button>
 {% endif %}
 {% if btn_dock %}
     {% if vista == 'ctr' %}
