@@ -42,6 +42,8 @@ $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
 $gesLugares = new GestorLugar();
 $a_posibles_lugares = $gesLugares->getArrayLugares();
+$id_unav = $gesLugares->getId_unav();
+$id_cancilleria = $gesLugares->getId_cancilleria();
 
 $oArrayProtDestino = new web\ProtocoloArray('', $a_posibles_lugares, 'destinos');
 $oArrayProtDestino->setBlanco('t');
@@ -354,6 +356,8 @@ $a_campos = [
     'id_grupo' => $id_grupo,
     'oArrayDesplGrupo' => $oArrayDesplGrupo,
     'oArrayProtDestino' => $oArrayProtDestino,
+    'id_unav' => $id_unav,
+    'id_cancilleria' =>$id_cancilleria,
     // datepicker
     'format' => $format,
     'yearStart' => $yearStart,

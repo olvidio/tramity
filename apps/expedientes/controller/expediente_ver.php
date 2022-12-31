@@ -178,6 +178,7 @@ if ($estado === Expediente::ESTADO_ACABADO) {
     $ver_etiquetas = TRUE;
 }
 
+
 $oficinas = $oExpediente->getResto_oficinas();
 
 $oArrayDesplFirmas = new web\DesplegableArray($oficinas, $a_posibles_cargos, 'oficinas');
@@ -185,6 +186,7 @@ $oArrayDesplFirmas->setBlanco('t');
 $oArrayDesplFirmas->setAccionConjunto('fnjs_mas_oficinas()');
 
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
+$ver_todos_antecedentes = 'ver todo';
 
 $url_update = 'apps/expedientes/controller/expediente_update.php';
 $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query(['filtro' => $Q_filtro, 'prioridad_sel' => $Q_prioridad_sel]));
@@ -240,6 +242,7 @@ $a_campos = [
     'oArrayDesplFirmas' => $oArrayDesplFirmas,
     'txt_option_cargos' => $txt_option_cargos,
     'lista_antecedentes' => $lista_antecedentes,
+    'ver_todos_antecedentes' => $ver_todos_antecedentes,
     'oArrayDesplEtiquetas' => $oArrayDesplEtiquetas,
     'ver_etiquetas' => $ver_etiquetas,
 

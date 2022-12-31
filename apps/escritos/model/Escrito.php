@@ -118,7 +118,7 @@ class Escrito extends EscritoDB
     /**
      * genera el número de protocolo local. y lo guarda.
      */
-    public function generarProtocolo($id_lugar = null, $id_lugar_cr = null, $id_lugar_iese = null)
+    public function generarProtocolo($id_lugar = null)
     {
         // si ya tiene no se toca:
         $prot_local = $this->getJson_prot_local();
@@ -134,12 +134,10 @@ class Escrito extends EscritoDB
             // según si el destino es cr, iese o resto:
             $lugar_contador = '';
         } else {
-            if (empty($id_lugar_iese)) {
-                $id_lugar_iese = $gesLugares->getId_iese();
-            }
-            if (empty($id_lugar_cr)) {
-                $id_lugar_cr = $gesLugares->getId_cr();
-            }
+            $id_lugar_unav = $gesLugares->getId_unav();
+            $id_lugar_cancilleria = $gesLugares->getId_cancilleria();
+            $id_lugar_cr = $gesLugares->getId_cr();
+
             if (empty($id_lugar)) {
                 $id_lugar = $gesLugares->getId_sigla_local();
             }
@@ -151,21 +149,12 @@ class Escrito extends EscritoDB
                 if (empty((array)$json_prot_destino)) {
                     exit (_("Error no hay destino"));
                 } else {
-                    $id_lugar_n = $json_prot_destino['id_lugar'];
-                    switch ($id_lugar_n) {
-                        case $id_lugar_cr:
-                            $lugar_contador = 'cr';
-                            break;
-                        case $id_lugar_iese:
-                            $lugar_contador = 'iese';
-                            break;
-                        default:
-                            $lugar_contador = '';
-                    }
+                    $id_lugar_contador = $json_prot_destino['id_lugar'];
+
                 }
             }
         }
-        $prot_num = $_SESSION['oConfig']->getContador($lugar_contador);
+        $prot_num = $_SESSION['oConfig']->getContador($id_lugar_contador);
         $prot_any = date('y');
         $prot_mas = '';
 

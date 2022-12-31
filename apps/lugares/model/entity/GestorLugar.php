@@ -2,6 +2,7 @@
 
 namespace lugares\model\entity;
 
+use config\model\entity\ConfigSchema;
 use core;
 use usuarios\model\entity\Cargo;
 use function core\is_true;
@@ -80,19 +81,35 @@ class GestorLugar extends core\ClaseGestor
     }
 
     /**
-     * devuelve el id del IESE
+     * devuelve el id de Cancillería
      */
-    public function getId_iese(): int
+    public function getId_cancilleria(): int
     {
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            exit (_("Error al buscar el id del IESE"));
+            exit (_("Error al buscar el id del Cancillería"));
         }
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-            $sigla = 'IESE';
-            $cLugares = $this->getLugares(['sigla' => $sigla]);
-            $oLugar = $cLugares[0];
-            return $oLugar->getId_lugar();
+            $oConfigSchema = new ConfigSchema('id_lugar_cancilleria');
+            $id_cancilleria = $oConfigSchema->getValor();
+            return $id_cancilleria;
         }
+        return 0;
+    }
+
+    /**
+     * devuelve el id del IESE/UNAV
+     */
+    public function getId_unav(): int
+    {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+            exit (_("Error al buscar el id del IESE/UNAV"));
+        }
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+            $oConfigSchema = new ConfigSchema('id_lugar_unav');
+            $id_unav = $oConfigSchema->getValor();
+            return $id_unav;
+        }
+        return 0;
     }
 
     /**

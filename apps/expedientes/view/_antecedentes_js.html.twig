@@ -38,6 +38,14 @@
         w.focus();
     }
 
+    fnjs_ver_antecedentes = function (id_expediente) {
+        var winPrefs = "dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+        var server = '{{ server }}';
+        var url = server + '/apps/expedientes/controller/expediente_ver_antecedentes.php?id_expediente=' + id_expediente;
+        w = window.open(url, "", winPrefs);
+        w.focus();
+    }
+
     fnjs_del_antecedente = function (tipo, id_escrito) {
         var que = 'quitar';
         var id_expediente = $('#id_expediente').val();

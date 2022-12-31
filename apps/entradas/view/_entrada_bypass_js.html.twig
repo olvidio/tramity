@@ -2,14 +2,24 @@
     {{ oArrayDesplGrupo.ComprobarSelectJs|raw }}
 
     $(document).ready(function () {
-        fnjs_distr_cr();
+        fnjs_distr_cr(true);
         fnjs_grupo();
     });
 
-    fnjs_distr_cr = function () {
+    fnjs_distr_cr = function (quiet=false) {
+        // si envía Cancillería Madrid, solamente puede ir al IESE
         var ok = $('#bypass').val();
         if (ok == 't') {
+            id_origen = $('#origen').val();
             $("#dst_cr").show();
+            if (id_origen == {{ id_cancilleria }}) {
+                $("#dst_grupo").hide();
+                $("#dst_grupo_chk").hide();
+                if (!quiet) {
+                    $('#destinos_mas').val({{ id_unav }});
+                    fnjs_mas_destinos();
+                }
+            }
         } else {
             $("#dst_cr").hide();
         }
@@ -48,6 +58,9 @@
 
     {{ oArrayProtDestino.ComprobarSelectJs|raw }}
     fnjs_mas_destinos = function () {
+        if (event === undefined) {
+            return true;
+        }
         event.stopImmediatePropagation();
         var id_campo = '#' + event.currentTarget.id;
         var valor = $(id_campo).val();

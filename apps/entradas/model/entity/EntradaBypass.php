@@ -497,7 +497,7 @@ class EntradaBypass extends Entrada
      */
     public function setJson_prot_destino(string|array|null $oJSON, bool $db = FALSE): void
     {
-        $this->json_prot_ref = (new ConverterJson($oJSON, FALSE))->toPg($db);
+        $this->json_prot_destino = (new ConverterJson($oJSON, FALSE))->toPg($db);
     }
 
     /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/

@@ -98,7 +98,6 @@ $oDesplLugar = new Desplegable();
 $oDesplLugar->setNombre('id_lugar');
 $oDesplLugar->setBlanco(TRUE);
 $oDesplLugar->setOpciones($a_lugares);
-$oDesplLugar->setAction("fnjs_aviso_IESE('#id_lugar')");
 $oDesplLugar->setOpcion_sel($Q_id_lugar);
 
 //select id='lista_lugar' name='lista_lugar' class=contenido onchange="fnjs_activar_lugar(2)">
@@ -116,7 +115,6 @@ $oDesplOrigen->setOpciones($a_lugares);
 $oDesplOrigen->setAction("fnjs_sel_periodo('#origen_id_lugar')");
 $oDesplOrigen->setOpcion_sel($Q_origen_id_lugar);
 
-//<select id="origen_id_lugar_2" name="origen_id_lugar" class=contenido onchange="fnjs_aviso_IESE('#origen_id_lugar_2')">
 $oDesplOrigen2 = new Desplegable();
 $oDesplOrigen2->setNombre('origen_id_lugar');
 $oDesplOrigen2->setId('origen_id_lugar_2');
@@ -162,7 +160,6 @@ $oDesplOficinas9->setBlanco(TRUE);
 $oDesplOficinas9->setOpciones($a_oficinas);
 $oDesplOficinas9->setOpcion_sel($Q_oficina);
 
-//<select id="dest_id_lugar_2" name="dest_id_lugar" class=contenido onchange="fnjs_aviso_IESE('#dest_id_lugar_2')">
 $oDesplDestino2 = new Desplegable();
 $oDesplDestino2->setNombre('dest_id_lugar_2');
 $oDesplDestino2->setBlanco(TRUE);

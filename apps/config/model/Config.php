@@ -75,14 +75,26 @@ class Config
         return (integer)$oConfigSchema->getValor();
     }
 
-    public function getContador($sigla = '')
+    public function getContador($id_lugar = '')
     {
-        if ($sigla == 'cr') {
-            return $this->getContador_cr();
-        } elseif ($sigla == 'iese') {
-            return $this->getContador_iese();
-        } else {
-            return $this->getContador_resto();
+        $oConfigSchema = new ConfigSchema('id_lugar_cr');
+        $id_lugar_cr = $oConfigSchema->getValor();
+
+        $oConfigSchema = new ConfigSchema('id_lugar_cancilleria');
+        $id_cancilleria = $oConfigSchema->getValor();
+
+
+        $oConfigSchema = new ConfigSchema('id_lugar_unav');
+        $id_unav = $oConfigSchema->getValor();
+
+        switch ($id_lugar) {
+            case $id_lugar_cr:
+                return $this->getContador_cr();
+            case $id_cancilleria:
+            case $id_unav:
+                return $this->getContador_cancilleria();
+            default:
+                return $this->getContador_resto();
         }
     }
 
@@ -111,8 +123,8 @@ class Config
             $oConfigSchema->setValor($any_actual);
             $oConfigSchema->DBGuardar();
             // poner al inicio
-            $valor = $this->getIni_contador_iese();
-            $oConfigSchemaContador = new ConfigSchema('contador_iese');
+            $valor = $this->getIni_contador_cancilleria();
+            $oConfigSchemaContador = new ConfigSchema('contador_cancilleria');
             $oConfigSchemaContador->setValor($valor);
             $oConfigSchemaContador->DBGuardar();
             $valor = $this->getIni_contador_cr();
@@ -130,9 +142,9 @@ class Config
         }
     }
 
-    public function getIni_contador_iese()
+    public function getIni_contador_cancilleria()
     {
-        $parametro = 'ini_contador_iese';
+        $parametro = 'ini_contador_cancilleria';
         $oConfigSchema = new ConfigSchema($parametro);
         return $oConfigSchema->getValor();
     }
@@ -151,13 +163,13 @@ class Config
         return $oConfigSchema->getValor();
     }
 
-    public function getContador_iese()
+    public function getContador_cancilleria()
     {
         $this->resetContador();
-        $parametro = 'contador_iese';
+        $parametro = 'contador_cancilleria';
         $oConfigSchema = new ConfigSchema($parametro);
         $valor_actual = $oConfigSchema->getValor();
-        $valor_actual = empty($valor_actual) ? $this->getIni_contador_iese() : $valor_actual;
+        $valor_actual = empty($valor_actual) ? $this->getIni_contador_cancilleria() : $valor_actual;
         $valor_nuevo = $valor_actual + 1;
 
         $oConfigSchema->setValor($valor_nuevo);

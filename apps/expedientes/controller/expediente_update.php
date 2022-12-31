@@ -390,16 +390,6 @@ switch ($Q_que) {
         $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
         $oLugar = $cLugares[0];
         $id_lugar = $oLugar->getId_lugar();
-        $sigla = 'cr';
-        $gesLugares = new GestorLugar();
-        $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
-        $oLugar = $cLugares[0];
-        $id_lugar_cr = $oLugar->getId_lugar();
-        $sigla = 'IESE';
-        $gesLugares = new GestorLugar();
-        $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
-        $oLugar = $cLugares[0];
-        $id_lugar_iese = $oLugar->getId_lugar();
         // escritos del expediente: acciones tipo escrito
         $aWhereAccion = ['id_expediente' => $Q_id_expediente, '_ordre' => 'tipo_accion'];
         $gesAcciones = new GestorAccion();
@@ -421,7 +411,7 @@ switch ($Q_que) {
                     $proto = FALSE;
                 }
                 if ($proto) {
-                    $oEscrito->generarProtocolo($id_lugar, $id_lugar_cr, $id_lugar_iese);
+                    $oEscrito->generarProtocolo($id_lugar);
                     // para poder insertar en la plantilla.
                     $json_prot_local = $oEscrito->getJson_prot_local();
                 }

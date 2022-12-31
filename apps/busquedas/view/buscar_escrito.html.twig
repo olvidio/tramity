@@ -480,10 +480,6 @@
         });
     });
 
-    fnjs_aviso_IESE = function (id) {
-        var nom = $(id).val();
-        if (nom == "610") alert("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans|raw }}");
-    }
     /* intentar explotar el protocolo en lugar, num y año */
     fnjs_protocolo = function (nom_lugar, num, any, siguiente) {
         var protocolo = $('#protocolo').val();
@@ -521,9 +517,6 @@
         var nom = $(id + ' :selected').text();
 
         switch (nom) {
-            case "IESE":
-                alert("{{ "ATENCIÓN: Se puede consultar también el registro exclusivo del IESE"|trans|raw }}");
-                break;
             case "cr":
                 $('#antiguedad').val('1m');
                 break;

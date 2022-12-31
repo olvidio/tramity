@@ -166,7 +166,9 @@
             <!--  --------------------  ANTECEDENTES  --------------------------  -->
             {# lista de antecedentes #}
             <div class="mb-3 col-md-12">
-                <label class="form-label">{{ "Antecedentes"|trans|raw }}:</label>
+                <label class="form-label">{{ "Antecedentes"|trans|raw }}:
+                    <span class="btn btn-link" onclick="fnjs_ver_antecedentes({{ id_expediente }});"> {{ "ver todos"|trans }} </span>
+                </label>
                 <div id="lista_antecedentes">
                     {{ lista_antecedentes|raw }}
                 </div>

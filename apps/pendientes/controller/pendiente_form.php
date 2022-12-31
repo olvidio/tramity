@@ -47,7 +47,7 @@ $go = (string)filter_input(INPUT_GET, 'go');
 if (empty($go)) {
     $go = (string)filter_input(INPUT_POST, 'go');
 }
-if ($go === "entradas" || $go === "salidas" || $go === "mov_iese") {
+if ($go === "entradas" || $go === "salidas" ) {
     $id_reg = (integer)filter_input(INPUT_GET, 'id_reg');
     $Q_id_oficina = (integer)filter_input(INPUT_GET, 'of_ponente');
     $Q_calendario = 'registro';

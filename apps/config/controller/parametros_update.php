@@ -15,6 +15,32 @@ require_once("apps/core/global_object.inc");
 $Q_parametro = (string)filter_input(INPUT_POST, 'parametro');
 $Q_valor = (string)filter_input(INPUT_POST, 'valor');
 
+$error_txt = '';
+if ($Q_parametro === 'ini_contador_cr') {
+    $Q_id_cr = (int)filter_input(INPUT_POST, 'id_lugar_cr');
+    $oConfigSchema = new ConfigSchema('id_lugar_cr');
+    $oConfigSchema->setValor($Q_id_cr);
+    if ($oConfigSchema->DBGuardar() === FALSE) {
+        $error_txt = $oConfigSchema->getErrorTxt();
+    }
+}
+if ($Q_parametro === 'ini_contador_cancilleria') {
+    $Q_id_cancilleria = (int)filter_input(INPUT_POST, 'id_lugar_cancilleria');
+    $oConfigSchema = new ConfigSchema('id_lugar_cancilleria');
+    $oConfigSchema->setValor($Q_id_cancilleria);
+    if ($oConfigSchema->DBGuardar() === FALSE) {
+        $error_txt = $oConfigSchema->getErrorTxt();
+    }
+
+    $Q_id_unav = (int)filter_input(INPUT_POST, 'id_lugar_unav');
+    $oConfigSchema = new ConfigSchema('id_lugar_unav');
+    $oConfigSchema->setValor($Q_id_unav);
+    if ($oConfigSchema->DBGuardar() === FALSE) {
+        $error_txt = $oConfigSchema->getErrorTxt();
+    }
+}
+
+
 $oConfigSchema = new ConfigSchema($Q_parametro);
 $oConfigSchema->setValor($Q_valor);
 
