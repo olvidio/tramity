@@ -78,14 +78,14 @@ class Config
     public function getContador($id_lugar = '')
     {
         $oConfigSchema = new ConfigSchema('id_lugar_cr');
-        $id_lugar_cr = $oConfigSchema->getValor();
+        $id_lugar_cr = (int)$oConfigSchema->getValor();
 
         $oConfigSchema = new ConfigSchema('id_lugar_cancilleria');
-        $id_cancilleria = $oConfigSchema->getValor();
+        $id_cancilleria = (int)$oConfigSchema->getValor();
 
 
         $oConfigSchema = new ConfigSchema('id_lugar_unav');
-        $id_unav = $oConfigSchema->getValor();
+        $id_unav = (int)$oConfigSchema->getValor();
 
         switch ($id_lugar) {
             case $id_lugar_cr:

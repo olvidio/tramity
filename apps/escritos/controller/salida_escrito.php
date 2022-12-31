@@ -61,19 +61,15 @@ if (!empty($Q_prot_num) && !empty($Q_prot_any)) {
 // Para los posibles lugares locales (dlb, iese, cancillería)
 $id_local = $gesLugares->getId_sigla_local();
 $id_cancilleria = $gesLugares->getId_cancilleria();
-$id_unav = $gesLugares->getId_unav();
 
 $oLugar = new Lugar($id_local);
 $sigla_local = $oLugar->getSigla();
 $oLugar = new Lugar($id_cancilleria);
 $sigla_cancilleria = $oLugar->getSigla();
-$oLugar = new Lugar($id_unav);
-$sigla_unav = $oLugar->getSigla();
 
 $a_posibles_lugar_local = [
     $id_local => $sigla_local,
     $id_cancilleria => $sigla_cancilleria,
-    $id_unav => $sigla_unav,
 ];
 
 $a_posibles_lugares = $gesLugares->getArrayLugares();

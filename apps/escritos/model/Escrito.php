@@ -2,6 +2,7 @@
 
 namespace escritos\model;
 
+use config\model\entity\ConfigSchema;
 use documentos\model\Documento;
 use escritos\model\entity\EscritoAdjunto;
 use escritos\model\entity\EscritoDB;
@@ -126,39 +127,44 @@ class Escrito extends EscritoDB
             return TRUE;
         }
 
+        $id_lugar_contador = $id_lugar;
         $gesLugares = new GestorLugar();
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             if (empty($id_lugar)) {
-                $id_lugar = $gesLugares->getId_sigla_local();
+                $id_lugar_contador = $gesLugares->getId_sigla_local();
             }
-            // según si el destino es cr, iese o resto:
-            $lugar_contador = '';
         } else {
-            $id_lugar_unav = $gesLugares->getId_unav();
-            $id_lugar_cancilleria = $gesLugares->getId_cancilleria();
-            $id_lugar_cr = $gesLugares->getId_cr();
-
             if (empty($id_lugar)) {
-                $id_lugar = $gesLugares->getId_sigla_local();
+                $id_lugar_contador = $gesLugares->getId_sigla_local();
             }
             // según si el destino es cr, iese o resto:
-            $lugar_contador = '';
             $aProtDst = $this->getJson_prot_destino(TRUE);
             // es un array, pero sólo debería haber uno...
             foreach ($aProtDst as $json_prot_destino) {
                 if (empty((array)$json_prot_destino)) {
                     exit (_("Error no hay destino"));
-                } else {
-                    $id_lugar_contador = $json_prot_destino['id_lugar'];
-
                 }
+
+                $id_lugar_contador = $json_prot_destino['id_lugar'];
             }
         }
         $prot_num = $_SESSION['oConfig']->getContador($id_lugar_contador);
         $prot_any = date('y');
         $prot_mas = '';
 
-        $oProtLocal = new Protocolo($id_lugar, $prot_num, $prot_any, $prot_mas);
+        $oConfigSchema = new ConfigSchema('id_lugar_cancilleria');
+        $id_cancilleria = (int)$oConfigSchema->getValor();
+
+        $oConfigSchema = new ConfigSchema('id_lugar_unav');
+        $id_unav = (int)$oConfigSchema->getValor();
+
+        if ($id_lugar_contador === $id_unav || $id_lugar_contador === $id_cancilleria) {
+            $id_lugar_local = $id_cancilleria;
+        } else {
+            $id_lugar_local = $gesLugares->getId_sigla_local();
+        }
+
+        $oProtLocal = new Protocolo($id_lugar_local, $prot_num, $prot_any, $prot_mas);
         $prot_local = $oProtLocal->getProt();
 
         $this->DBCargar();

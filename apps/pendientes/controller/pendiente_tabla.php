@@ -194,6 +194,8 @@ foreach ($cPendientes as $oPendiente) {
     }
     if (!empty($id_encargado)) {
         $encargado = $a_usuarios_oficina[$id_encargado]?? '';
+    } else {
+        $encargado = '';
     }
     $t++;
     $protocolo = $oPendiente->getProtocolo();
