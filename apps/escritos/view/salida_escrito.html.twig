@@ -33,6 +33,9 @@
         <tr>
             <td class=etiqueta>{{ "¿Qué protocolo tiene?"|trans|raw }}:
             <td>
+                {{ oDesplBuscar.desplegable|raw }}
+            </td>
+            <td>
                 <input id="buscar_prot_num" name="buscar_prot_num" size="12"
                        onchange="fnjs_proto('#buscar_prot_num','#buscar_prot_any')" value="">
                 /

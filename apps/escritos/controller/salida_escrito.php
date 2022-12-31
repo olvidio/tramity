@@ -7,6 +7,7 @@ use escritos\model\Escrito;
 use escritos\model\GestorEscrito;
 use lugares\model\entity\GestorGrupo;
 use lugares\model\entity\GestorLugar;
+use lugares\model\entity\Lugar;
 use usuarios\model\Categoria;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\PermRegistro;
@@ -33,11 +34,13 @@ $Q_modo = (string)filter_input(INPUT_POST, 'modo');
 $msg = '';
 $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 ////////////////////  buscar si ya existe  ////////////////////////////////
+$Q_id_lugar = (integer)filter_input(INPUT_POST, 'buscar_id_lugar');
 $Q_prot_num = (integer)filter_input(INPUT_POST, 'buscar_prot_num');
 $Q_prot_any = (integer)filter_input(INPUT_POST, 'buscar_prot_any');
+
+$gesLugares = new GestorLugar();
+$id_lugar_local = empty($Q_id_lugar)? $gesLugares->getId_sigla_local() : $Q_id_lugar;
 if (!empty($Q_prot_num) && !empty($Q_prot_any)) {
-    $gesLugares = new GestorLugar();
-    $id_lugar_local = $gesLugares->getId_sigla_local();
     $aProt_local = ['id_lugar' => $id_lugar_local,
         'num' => $Q_prot_num,
         'any' => $Q_prot_any,
@@ -55,14 +58,28 @@ if (!empty($Q_prot_num) && !empty($Q_prot_any)) {
 }
 ////////////
 
-$gesLugares = new GestorLugar();
+// Para los posibles lugares locales (dlb, iese, cancillería)
+$id_local = $gesLugares->getId_sigla_local();
+$id_cancilleria = $gesLugares->getId_cancilleria();
+$id_unav = $gesLugares->getId_unav();
+
+$oLugar = new Lugar($id_local);
+$sigla_local = $oLugar->getSigla();
+$oLugar = new Lugar($id_cancilleria);
+$sigla_cancilleria = $oLugar->getSigla();
+$oLugar = new Lugar($id_unav);
+$sigla_unav = $oLugar->getSigla();
+
+$a_posibles_lugar_local = [
+    $id_local => $sigla_local,
+    $id_cancilleria => $sigla_cancilleria,
+    $id_unav => $sigla_unav,
+];
+
 $a_posibles_lugares = $gesLugares->getArrayLugares();
-/*
-$txt_option_ref = '';
-foreach ($a_posibles_lugares as $id_lugar => $sigla) {
-    $txt_option_ref .= "<option value=$id_lugar >$sigla</option>";
-}
-*/
+$oDesplBuscar = new web\Desplegable('buscar_id_lugar', $a_posibles_lugar_local);
+$oDesplBuscar->setBlanco(false);
+$oDesplBuscar->setOpcion_sel($id_lugar_local);
 
 $txt_option_cargos = '';
 $gesCargos = new GestorCargo();
@@ -281,7 +298,7 @@ $pagina_actualizar = web\Hash::link('apps/escritos/controller/salida_escrito.php
 $oFecha = new DateTimeLocal();
 $format = $oFecha::getFormat();
 $yearStart = date('Y');
-$yearEnd = $yearStart + 2;
+$yearEnd = (int) $yearStart + 2;
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 $error_fecha_txt = 'P' . $error_fecha . 'D';
 $oHoy = new DateTimeLocal();
@@ -296,6 +313,7 @@ $a_campos = [
     'modo' => $Q_modo,
     'id_ponente' => $id_ponente,
     //'oHash' => $oHash,
+    'oDesplBuscar' => $oDesplBuscar,
     'chk_grupo_dst' => $chk_grupo_dst,
     'oArrayDesplGrupo' => $oArrayDesplGrupo,
     'oArrayProtDestino' => $oArrayProtDestino,
