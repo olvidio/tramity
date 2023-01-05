@@ -263,7 +263,7 @@ switch ($Q_que) {
 
         $a_campos = [
             'base_url' => $base_url,
-            'oEntradaLista' => $oTabla,
+            'oTabla' => $oTabla,
             'id_escrito' => $Q_id_escrito,
             'pendientes_uid' => $Q_pendientes_uid,
         ];

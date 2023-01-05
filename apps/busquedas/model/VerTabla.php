@@ -341,7 +341,7 @@ class VerTabla
 
         $a_campos = [
             'titulo' => $this->sTitulo,
-            'oEntradaLista' => $oTabla,
+            'oTabla' => $oTabla,
             'key' => $this->sKey,
             'condicion' => $this->sCondicion,
             //'oHash' => $oHash,
@@ -438,7 +438,7 @@ class VerTabla
 
         $a_campos = [
             'titulo' => $this->sTitulo,
-            'oEntradaLista' => $oTabla,
+            'oTabla' => $oTabla,
             'key' => $this->sKey,
             'condicion' => $this->sCondicion,
             //'oHash' => $oHash,
@@ -558,7 +558,7 @@ class VerTabla
 
         $a_campos = [
             'titulo' => $this->sTitulo,
-            'oEntradaLista' => $oTabla,
+            'oTabla' => $oTabla,
             'key' => $this->sKey,
             'condicion' => $this->sCondicion,
             //'oHash' => $oHash,
