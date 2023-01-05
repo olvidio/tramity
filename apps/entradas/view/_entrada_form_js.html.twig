@@ -390,6 +390,17 @@
 
         /* Para el número de referencias */
         if (num == '#prot_num_referencias[0]') {
+            fnjs_buscar_datos_en_ref();
+        }
+
+        siguiente_escaped = siguiente.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
+        $(siguiente_escaped).focus();
+
+        return false;
+    }
+
+    fnjs_buscar_datos_en_ref = function() {
+        /* Para el número de referencias */
             prot_num_dst = $('#prot_num_destinos\\[0\\]').val();
             if (prot_num_dst == '' || prot_num_dst == undefined) {
                 id_lugar = $('#referencias\\[0\\]').val();
@@ -428,12 +439,6 @@
                     }
                 });
             }
-        }
 
-        siguiente_escaped = siguiente.replace(/[-[\]{}()*+?.,\\^$|\s]/g, "\\$&");
-        $(siguiente_escaped).focus();
-
-        return false;
     }
-
 </script>

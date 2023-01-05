@@ -38,8 +38,8 @@ if (isset($_POST['stack'])) {
 $aWhere['_ordre'] = 'sigla';
 $aOperador = [];
 
-$oGesLugares = new GestorLugar();
-$cLugares = $oGesLugares->getLugares($aWhere, $aOperador);
+$oLugar = new Lugar();
+$a_modos_envio = $oLugar->getArrayModoEnvio();
 
 //default:
 $id_lugar = '';
@@ -66,10 +66,10 @@ $a_botones = [['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
     ['txt' => _("modificar"), 'click' => "fnjs_editar()"],
 ];
 
-$a_valores = array();
+$oGesLugares = new GestorLugar();
+$cLugares = $oGesLugares->getLugares($aWhere, $aOperador);
+$a_valores = [];
 $i = 0;
-$oLugar = new Lugar();
-$a_modos_envio = $oLugar->getArrayModoEnvio();
 foreach ($cLugares as $oLugar) {
     $i++;
     $id_lugar = $oLugar->getId_lugar();
@@ -122,7 +122,7 @@ $url_actualizar = web\Hash::link(core\ConfigGlobal::getWeb() . '/apps/lugares/co
 $a_campos = [
     'oPosicion' => $oPosicion,
     'oHash' => $oHash,
-    'oEntradaLista' => $oTabla,
+    'oTabla' => $oTabla,
     'url_nuevo' => $url_nuevo,
     'url_form' => $url_form,
     'url_eliminar' => $url_eliminar,

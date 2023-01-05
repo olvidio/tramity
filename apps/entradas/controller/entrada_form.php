@@ -305,6 +305,8 @@ $format = $oFecha::getFormat();
 $yearStart = (int)date('Y');
 $yearEnd = $yearStart + 2;
 
+$filename_pdf = '/log/entradas/entrada_'.$Q_id_entrada.'.pdf';
+
 $a_campos = [
     'titulo' => $titulo,
     'id_entrada' => $Q_id_entrada,
@@ -364,6 +366,8 @@ $a_campos = [
     'yearEnd' => $yearEnd,
     // si vengo de buscar
     'str_condicion' => $str_condicion,
+    // para ver pdf
+    'file_pdf' => $filename_pdf,
 ];
 
 $oView = new ViewTwig('entradas/controller');

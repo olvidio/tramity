@@ -36,7 +36,7 @@ class ServerConf
 
     public static $dir_web = self::DIR;
     public static $directorio = self::DIR;
-    public static $dir_libs = self::DIR . '/libs';
+    public static $dir_libs = self::DIR;
     public static $dir_estilos = self::DIR . '/css';
     public static $dir_scripts = self::DIR . '/scripts';
     public static $dir_icons = self::DIR . '/images';

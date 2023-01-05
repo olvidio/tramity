@@ -33,6 +33,7 @@ class Entrada extends EntradaDB
     // modo entrada
     public const MODO_MANUAL = 1;
     public const MODO_XML = 2;
+    public const MODO_PROVISIONAL = 10;
 
     // estado
     /*

@@ -23,7 +23,7 @@
 
     <div class="row">
         <!--  col Izda -->
-        <div class="col-8">
+        <div class="col-7">
             <!--  --------------- ORIGEN --------------- -->
             <div class="mb-3 row">
                 {{ oProtOrigen.ver_desplegable|raw }}
@@ -123,10 +123,47 @@
                     </button>
                 </div>
             {% endif %}
+
+            <!--  --------------- DISTRIBUCION CR --------------- -->
+            <div class="mb-3 row col-12">
+                <div class="col-md-2">
+                    <label class="form-label">{{ "Distribución cr"|trans|raw }}</label>
+                    {{ oDesplByPass.desplegable|raw }}
+                </div>
+                <!--  --------------- Destinos --------------- -->
+                <div id="dst_cr" class="align-items-center col-10">
+                    <div class="col-2 form-label">
+                        <label for="prot_num" class="col-2 form-label">
+                            {{ "Destinos"|trans|raw }}
+                        </label>
+                        <div id="dst_grupo_chk" class="form-check form-switch align-middle">
+                            <input type="checkbox" class="form-check-input" name="grupo_dst"
+                                   id="grupo_dst" {{ chk_grupo_dst }} onChange="fnjs_grupo()"/>
+                            <label class="form-check-label" for="grupo_dst">Grupo</label>
+                        </div>
+                    </div>
+                    <div id="dst_array" class="col-10">
+                        {{ oArrayProtDestino.ListaSelects|raw }}
+                    </div>
+                    <div id="dst_grupo" class="col-10">
+                        {{ oArrayDesplGrupo.ListaSelects|raw }}
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" tabindex='1' class="btn btn-secondary" onClick="fnjs_cancelar();">
+                    {{ "Cancelar"|trans|raw }}
+                </button>
+                <button id="btn_guardar" type="button" tabindex='220' class="btn btn-primary"
+                        onClick="fnjs_guardar_entrada();">
+                    {{ txt_btn_guardar }}
+                </button>
+            </div>
             <!-- Fin Col Izda -->
         </div>
         <!--  Col Dcha -->
-        <div class="col-4">
+        <div class="col-5">
             <!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
             {% if id_entrada %}
                 {% if tipo_documento %}
@@ -149,15 +186,24 @@
                         <button type="button" tabindex='300' class="btn btn-danger" onClick="fnjs_escrito(1);">
                             {{ "Etherpad"|trans|raw }}
                         </button>
+                        {#
                         <button type="button" tabindex='301' class="btn btn-danger" onClick="fnjs_escrito(2);">
                             {{ "EtherCalc"|trans|raw }}
                         </button>
                         <button type="button" tabindex='302' class="btn btn-danger" onClick="fnjs_escrito(3);">
                             {{ "Incrustado"|trans|raw }}
                         </button>
+                        #}
                     </div>
                 {% endif %}
                 <hr>
+                {% if filtro == 'en_provisional' %}
+                    <div style="height:400px;">
+                        <iframe src="{{ file_pdf }}"  width='100%' height='100%' >
+                        </iframe>
+                    </div>
+                    <hr>
+                {% endif %}
                 <div class="mb-3">
                     <label for="entrada-adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}</label>
                     <div class="file-loading">
@@ -169,43 +215,6 @@
                     {{ "Para añadir escrito, primero debe guardar la entrada"|trans|raw }}
                 </div>
             {% endif %}
-        </div>
-
-        <!--  --------------- DISTRIBUCION CR --------------- -->
-        <div class="mb-3 row col-12">
-            <div class="col-md-2">
-                <label class="form-label">{{ "Distribución cr"|trans|raw }}</label>
-                {{ oDesplByPass.desplegable|raw }}
-            </div>
-            <!--  --------------- Destinos --------------- -->
-            <div id="dst_cr" class="align-items-center col-10">
-                <div class="col-2 form-label">
-                    <label for="prot_num" class="col-2 form-label">
-                        {{ "Destinos"|trans|raw }}
-                    </label>
-                    <div id="dst_grupo_chk" class="form-check form-switch align-middle">
-                        <input type="checkbox" class="form-check-input" name="grupo_dst"
-                               id="grupo_dst" {{ chk_grupo_dst }} onChange="fnjs_grupo()"/>
-                        <label class="form-check-label" for="grupo_dst">Grupo</label>
-                    </div>
-                </div>
-                <div id="dst_array" class="col-10">
-                    {{ oArrayProtDestino.ListaSelects|raw }}
-                </div>
-                <div id="dst_grupo" class="col-10">
-                    {{ oArrayDesplGrupo.ListaSelects|raw }}
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <button type="button" tabindex='1' class="btn btn-secondary" onClick="fnjs_cancelar();">
-                {{ "Cancelar"|trans|raw }}
-            </button>
-            <button id="btn_guardar" type="button" tabindex='220' class="btn btn-primary"
-                    onClick="fnjs_guardar_entrada();">
-                {{ txt_btn_guardar }}
-            </button>
         </div>
     </div>
 </form>
@@ -249,5 +258,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         tabs_hide();
+        {% if filtro == 'en_provisional' %}
+            fnjs_buscar_datos_en_ref();
+        {% endif %}
     });
 </script>

@@ -18,7 +18,7 @@ final class DocConverter
     private $base_name = '';
 
 
-    public function convert()
+    public function convert($borrarTemporales = TRUE)
     {
         $path_temp = '/tmp/';
         $filename_local = $path_temp . $this->base_name;
@@ -30,13 +30,16 @@ final class DocConverter
 
         exec($command, $output,  $retval);
 
-        $filename_sin_espacios = str_replace(' ', '_', $this->file_name);
-        $filename_pdf = $path_temp . $filename_sin_espacios . '.pdf';
+        $filename_pdf = $filename_local_sin_espacios . '.pdf';
         $doc_converted = file_get_contents($filename_pdf);
 
         // borrar los ficheros temporales
         unlink($filename_local_sin_espacios);
-        unlink($filename_pdf);
+        if ($borrarTemporales) {
+            unlink($filename_pdf);
+        } else {
+            $this->file_name = $filename_pdf;
+        }
         return $doc_converted;
     }
 
@@ -59,6 +62,11 @@ final class DocConverter
     public function setFileName(string $file_name): void
     {
         $this->file_name = $file_name;
+    }
+
+    public function getFileName(): string
+    {
+        return $this->file_name;
     }
 
     public function setDocIn(string $doc): void

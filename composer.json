@@ -1,5 +1,21 @@
 {
-    "require": {
-        "smalot/pdfparser": "^2.3"
-    }
+  "require": {
+    "twig/twig": "^3.0",
+    "psr/log": "^1.1",
+    "psr/container": "^1.0",
+    "jblond/twig-trans": "^1.0",
+    "guzzlehttp/guzzle": "^7.0",
+    "mpdf/mpdf": "^8.1",
+    "phpmailer/phpmailer": "^6.1",
+    "ext-gettext": "*",
+    "ext-pdo": "*",
+    "ext-json": "*",
+    "ext-simplexml": "*",
+    "ext-dom": "*",
+    "ext-libxml": "*",
+    "ext-mailparse": "*",
+    "smalot/pdfparser": "^2.3"
+  },
+  "require-dev": {
+  }
 }

@@ -395,6 +395,11 @@ switch ($Q_que) {
             $oPermisoRegistro = new PermRegistro();
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntrada, 'asunto');
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEntrada, 'detalle');
+            if ($oEntrada->getModo_entrada() === Entrada::MODO_PROVISIONAL) {
+                // borro el fichero pdf provisional
+                $filename_pdf = ConfigGlobal::DIR.'/log/entradas/entrada_' . $Q_id_entrada . '.pdf';
+                unlink($filename_pdf);
+            }
         } else {
             $oEntrada = new Entrada();
             $perm_asunto = PermRegistro::PERM_MODIFICAR;

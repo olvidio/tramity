@@ -1,5 +1,6 @@
 <?php
 
+use core\ConfigGlobal;
 use davical\model\Davical;
 use entradas\model\entity\EntradaBypass;
 use entradas\model\entity\EntradaDocDB;
@@ -372,6 +373,12 @@ switch ($Q_que) {
                     $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
                     $oPendiente->eliminar();
                 }
+            }
+            // si es provisional, borrar el pdf
+            if ($oEntrada->getModo_entrada() === Entrada::MODO_PROVISIONAL) {
+                // borro el fichero pdf provisional
+                $filename_pdf = ConfigGlobal::DIR.'/log/entradas/entrada_' . $Q_id_entrada . '.pdf';
+                unlink($filename_pdf);
             }
             // eliminar la entrada y bypass
             if ($oEntrada->DBEliminar() === FALSE) {

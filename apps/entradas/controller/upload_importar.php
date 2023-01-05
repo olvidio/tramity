@@ -1,0 +1,96 @@
+<?php
+
+// INICIO Cabecera global de URL de controlador *********************************
+use convertirdocumentos\model\DocConverter;
+use core\ConfigGlobal;
+use entradas\model\entity\EntradaAdjunto;
+use entradas\model\EntradaProvisionalFromPdf;
+
+require_once("apps/core/global_header.inc");
+// Archivos requeridos por esta url **********************************************
+
+// Crea los objetos de uso global **********************************************
+require_once("apps/core/global_object.inc");
+// Crea los objetos por esta url  **********************************************
+
+// FIN de  Cabecera global de URL de controlador ********************************
+
+// example of a PHP server code that is called in `uploadUrl` above
+// file-upload-batch script
+header('Content-Type: application/json'); // set json response headers
+$outData = upload(); // a function to upload the bootstrap-fileinput files
+echo json_encode($outData, JSON_THROW_ON_ERROR); // return json data
+exit(); // terminate
+
+// main upload function used above
+// upload the bootstrap-fileinput files
+// returns associative array
+function upload(): array
+{
+    $preview = [];
+    $config = [];
+    $errors = [];
+    $input = 'entradas'; // the input name for the fileinput plugin
+    if (empty($_FILES[$input])) {
+        return [];
+    }
+
+    $total = count($_FILES[$input]['name']); // multiple files
+    for ($i = 0; $i < $total; $i++) {
+        $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
+        $fileName = $_FILES[$input]['name'][$i]; // the file name
+        $type = $_FILES[$input]['type'][$i]; // the type file
+        $base_name = 'entradas_' . $i;
+
+        //Make sure we have a file path
+        if ($tmpFilePath !== '') {
+
+            $fp = fopen($tmpFilePath, 'rb');
+            $contenido_doc = fread($fp, filesize($tmpFilePath));
+
+            if ($type !== 'application/pdf') {
+                $oDocConverter = new DocConverter();
+                $oDocConverter->setBaseName($base_name);
+                $oDocConverter->setFileName($fileName);
+                $oDocConverter->setDocIn($contenido_doc);
+                $contenido_en_pdf = $oDocConverter->convert(FALSE);
+            } else {
+                $contenido_en_pdf = $contenido_doc;
+            }
+
+            $EntradaProvisional = new EntradaProvisionalFromPdf($contenido_en_pdf);
+            $id_entrada = $EntradaProvisional->crear_entrada_provisional($fileName);
+
+            // añadir fichero como adjunto
+            $oEntradaAdjunto = new EntradaAdjunto();
+            $oEntradaAdjunto->setId_entrada($id_entrada);
+            $oEntradaAdjunto->setNom($fileName);
+            $oEntradaAdjunto->setAdjunto($contenido_doc);
+
+            if ($oEntradaAdjunto->DBGuardar() !== FALSE) {
+                $id_item = $oEntradaAdjunto->getId_item();
+            }
+            //unlink($fileName);
+            // conservar la versión pdf para poder mostrar en el formulario de entrada
+            $filename_pdf = $oDocConverter->getFileName();
+            $path_temp = ConfigGlobal::$directorio.'/log/entradas/';
+            if (!file_exists($path_temp)) {
+                if (!mkdir($path_temp, 0777, true) && !is_dir($path_temp)) {
+                    throw new RuntimeException(sprintf('Directory "%s" was not created', $path_temp));
+                }
+            }
+            // rename
+            $newName = $path_temp . 'entrada_' . $id_entrada . '.pdf';
+            rename($filename_pdf, $newName);
+
+        } else {
+            $errors[] = $fileName;
+        }
+    }
+    $out = ['initialPreview' => $preview, 'initialPreviewConfig' => $config];
+    if (!empty($errors)) {
+        $img = count($errors) === 1 ? 'file "' . $errors[0] . '" ' : 'files: "' . implode('", "', $errors) . '" ';
+        $out['error'] = 'Oh snap! We could not upload the ' . $img . 'now. Please try again later.';
+    }
+    return $out;
+}

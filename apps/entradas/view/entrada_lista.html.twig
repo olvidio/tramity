@@ -2,8 +2,11 @@
     <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
         {{ txt_btn_new }}
     </button>
-    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva_directorio|raw }}');">
-        {{ txt_btn_directorio }}
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_importar|raw }}');">
+        {{ txt_btn_importar }}
+    </button>
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_revisar|raw }}');">
+        {{ txt_btn_revisar }}
     </button>
 {% endif %}
 {% if btn_dock %}
@@ -81,5 +84,25 @@
         var url = server + '/apps/entradas/controller/entrada_ver.php?id_entrada=' + id_entrada + '&compartida=' + compartida;
         w = window.open(url, "", winPrefs);
         w.focus();
+    }
+    fnjs_borrar_entrada = function (id_reg) {
+         seguro = confirm("{{ "¿Está Seguro que desea borrar este registro?"|trans|raw }}");
+            if (seguro) {
+                var url_doc = 'apps/entradas/controller/entrada_ajax.php';
+                var param_json = {que: 'eliminar', id_entrada: id_reg};
+                request = $.ajax({
+                    data: param_json,
+                    url: url_doc,
+                    method: 'POST',
+                    dataType: 'json'
+                });
+                request.done(function (json) {
+                    if (json.success != true) {
+                        alert(json.mensaje);
+                    } else {
+                        fnjs_update_div('#main','{{ pagina_revisar|raw }}');
+                    }
+                });
+            }
     }
 </script>

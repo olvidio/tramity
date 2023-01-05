@@ -50,6 +50,7 @@ class EntradaLista
 
     /*
      * filtros posibles: 
+    'en_provisional':
     'en_ingresado':
     'en_admitido':
     'en_asignado':
@@ -95,6 +96,11 @@ class EntradaLista
                     $ver_oficina = TRUE;
                 }
                 $pagina_nueva = '';
+                break;
+            case 'en_provisional':
+                $ver_oficina = FALSE;
+                $pagina_mod = ConfigGlobal::getWeb() . '/apps/entradas/controller/entrada_form.php';
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query(['filtro' => $filtro]));
                 break;
             case 'en_ingresado':
                 $ver_oficina = FALSE;
@@ -162,6 +168,10 @@ class EntradaLista
                 }
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >mod</span>";
 
+                if ($filtro === 'en_provisional') {
+                    $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_borrar_entrada('$id_entrada');\" >" . _("eliminar") . "</span>";
+                }
+
                 $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
                 $row['protocolo'] = $oProtOrigen->ver_txt();
 
@@ -214,7 +224,8 @@ class EntradaLista
         $pagina_cancel = Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($a_cosas));
 
         $txt_btn_new = '';
-        $txt_btn_directorio = '';
+        $txt_btn_importar = '';
+        $txt_btn_revisar = '';
         $btn_new = FALSE;
         $txt_btn_dock = '';
         $btn_dock = FALSE;
@@ -231,7 +242,8 @@ class EntradaLista
             $secretaria = TRUE;
             $btn_new = TRUE;
             $txt_btn_new = _("nueva entrada");
-            $txt_btn_directorio = _("entradas por directorio");
+            $txt_btn_importar = _("importar entradas");
+            $txt_btn_revisar = _("revisar entradas importadas");
         }
         if (ConfigGlobal::role_actual() === 'vcd') {
             $btn_new = TRUE;
@@ -253,7 +265,8 @@ class EntradaLista
         $txt_btn_dock = _("revisar dock");
         $pagina_cargar_dock = Hash::link('apps/entradas/controller/entrada_dock.php?' . http_build_query(['filtro' => $filtro]));
 
-        $pagina_nueva_directorio = Hash::link('apps/entradas/controller/entrada_directorio.php?' . http_build_query(['filtro' => $filtro]));
+        $pagina_importar = Hash::link('apps/entradas/controller/entrada_importar.php?' . http_build_query(['filtro' => $filtro]));
+        $pagina_revisar = Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => 'en_provisional']));
 
 
         $a_campos = [
@@ -267,8 +280,10 @@ class EntradaLista
             'secretaria' => $secretaria,
             'btn_new' => $btn_new,
             'txt_btn_new' => $txt_btn_new,
-            'txt_btn_directorio' => $txt_btn_directorio,
-            'pagina_nueva_directorio' => $pagina_nueva_directorio,
+            'txt_btn_importar' => $txt_btn_importar,
+            'pagina_importar' => $pagina_importar,
+            'txt_btn_revisar' => $txt_btn_revisar,
+            'pagina_revisar' => $pagina_revisar,
             'pagina_cancel' => $pagina_cancel,
             'ver_accion' => $ver_accion,
             'ver_oficina' => $ver_oficina,
@@ -300,7 +315,14 @@ class EntradaLista
         $aOperador = [];
 
         $aWhere['_ordre'] = 'f_entrada DESC';
+        $aWhere['modo_entrada'] = Entrada::MODO_PROVISIONAL;
+        $aOperador['modo_entrada'] = '!=';
         switch ($this->filtro) {
+            case 'en_provisional':
+                $aWhere['modo_entrada'] = Entrada::MODO_PROVISIONAL;
+                $aOperador['modo_entrada'] = '=';
+                $aWhere['estado'] = Entrada::ESTADO_INGRESADO;
+                break;
             case 'en_ingresado':
                 $aWhere['estado'] = Entrada::ESTADO_INGRESADO;
                 break;

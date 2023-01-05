@@ -1,0 +1,56 @@
+<!-- load the CSS files in the right order -->
+<link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
+<link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
+<!-- para hacer lineas más pequeñas en el file input -->
+<link href="css/custom_file_input.css" rel="stylesheet" type="text/css">
+
+<!-- load the JS files in the right order -->
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
+
+<h1>{{ titulo }}</h1>
+
+<div class="mb-3">
+    <label for="entrada-directorio" class="form-label">{{ "ctrl + click para seleccionar varias"|trans|raw }}</label>
+    <div class="file-loading">
+        <input id="entrada-directorio" name="entradas[]" type="file" multiple>
+    </div>
+</div>
+
+
+<div>
+    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_revisar|raw }}');">
+        {{ txt_btn_revisar }}
+    </button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var el1 = $("#entrada-directorio");
+        el1.fileinput({
+            theme: "explorer-fas",
+            uploadUrl: "apps/entradas/controller/upload_importar.php",
+            dropZoneEnabled: true,
+            dropZoneTitle: "{{ "Arrastrar ficheros aquí"|trans|raw }}",
+            browseOnZoneClick: true,
+            dropZoneClickTitle: "{{ "(o hacer click para seleccionar ficheros)"|trans|raw }}",
+            maxFileCount: 5,
+            showUpload: false, // upload button
+            showBrowse: true,
+            showRemove: false,
+            showClose: false,
+            allowedPreviewTypes: false,
+            hideThumbnailContent: true,
+            // this is where the magic happens
+            uploadAsync: false,
+            removeFromPreviewOnError: true,
+            overwriteInitial: false,
+            initialPreviewAsData: false,
+            initialPreviewDownloadUrl: "",
+            fileActionSettings: {showZoom: false, showDrag: false},
+            maxFileSize: {{ post_max_size }},
+        }).on("filebatchselected", function (files) {
+            el1.fileinput("upload");
+        });
+    });
+</script>
