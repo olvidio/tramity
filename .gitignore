@@ -1,4 +1,5 @@
 # Dani #
+core/ServerConf.php
 apps/web/Hash.php
 *.sh
 *.pid
