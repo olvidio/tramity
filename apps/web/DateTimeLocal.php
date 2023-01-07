@@ -177,6 +177,42 @@ class DateTimeLocal extends DateTime
         ];
     }
 
+    public static function Meses_es(): array
+    {
+        return [
+            '1' => "enero",
+            '2' => "febrero",
+            '3' => "marzo",
+            '4' => "abril",
+            '5' => "mayo",
+            '6' => "junio",
+            '7' => "julio",
+            '8' => "agosto",
+            '9' => "septiembre",
+            '10' => "octubre",
+            '11' => "noviembre",
+            '12' => "diciembre"
+        ];
+    }
+
+    public static function Meses_cat(): array
+    {
+        return [
+            '1' => "gener",
+            '2' => "febrer",
+            '3' => "març",
+            '4' => "abril",
+            '5' => "maig",
+            '6' => "juny",
+            '7' => "juliol",
+            '8' => "agost",
+            '9' => "septembre",
+            '10' => "octubre",
+            '11' => "novembre",
+            '12' => "desembre"
+        ];
+    }
+
     public function getIsoTime(): string
     {
         return parent::format('Y-m-d H:i:s');
@@ -213,14 +249,14 @@ class DateTimeLocal extends DateTime
     public function duracion($oDateDiff): float
     {
         $interval = $this->diff($oDateDiff);
-        $horas = $interval->format('%a') * 24 + $interval->format('%h') + $interval->format('%i') / 60 + $interval->format('%s') / 3600;
+        $horas = (int)$interval->format('%a') * 24 + (int)$interval->format('%h') + (int)$interval->format('%i') / 60 + (int)$interval->format('%s') / 3600;
         return round($horas / 24, 2);
     }
 
     public function duracionAjustada($oDateDiff)
     {
         $interval = $this->diff($oDateDiff);
-        $horas = $interval->format('%a') * 24 + $interval->format('%h') + $interval->format('%i') / 60 + $interval->format('%s') / 3600 + 12;
+        $horas = (int)$interval->format('%a') * 24 + (int)$interval->format('%h') + (int)$interval->format('%i') / 60 + (int)$interval->format('%s') / 3600 + 12;
         $dias = $horas / 24;
         $e_dias = ($dias % $horas);
         $dec = round(($dias - $e_dias), 1);

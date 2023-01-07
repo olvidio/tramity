@@ -77,10 +77,22 @@ class EntradaProvisionalFromPdf
             if ($coincide_fecha === 1) {
                 $ciudad = $matches[1];
                 $dia = (int)trim($matches[2]);
-                $mes_txt = trim($matches[3]);
+                $mes_txt = strtolower(trim($matches[3]));
                 $any = (int)trim($matches[4]);
                 $a_Meses = DateTimeLocal::Meses();
                 $mes_numero = array_search($mes_txt, $a_Meses);
+                // probar con otro idioma
+                if (empty($mes_numero)) {
+                    $a_Meses = DateTimeLocal::Meses_cat();
+                    $mes_numero = array_search($mes_txt, $a_Meses);
+                }
+                if (empty($mes_numero)) {
+                    $a_Meses = DateTimeLocal::Meses_es();
+                    $mes_numero = array_search($mes_txt, $a_Meses);
+                }
+                if (empty($mes_numero) || empty ($dia) || empty($any))  {
+                    return $oFecha;
+                }
                 $oFecha = new DateTimeLocal("$any-$mes_numero-$dia");
             }
         }
