@@ -29,12 +29,10 @@ if (!empty($Q_id_item)) {
 
     if ($file_extension !== 'pdf') {
         $oDocConverter = new DocConverter();
-        $oDocConverter->setBaseName($nombre_fichero);
-        $oDocConverter->setFileName($file_name);
-        $oDocConverter->setFileExtension($file_extension);
+        $oDocConverter->setNombreFicheroOriginalConExtension($nombre_fichero);
         $oDocConverter->setDocIn($doc);
         $doc = $oDocConverter->convert();
-        $nombre_fichero = $file_name.'.pdf';
+        $nombre_fichero_pdf = $file_name.'.pdf';
         $file_extension = 'pdf';
     }
 
@@ -51,7 +49,7 @@ if (!empty($Q_id_item)) {
     header('Content-Type: application/force-download');
     header('Content-Type: application/download', false);
     header('Content-Type: ' . $ctype);
-    header('Content-disposition: attachment; filename="' . $nombre_fichero . '"');
+    header('Content-disposition: attachment; filename="' . $nombre_fichero_pdf . '"');
     ob_clean();
     flush();
     echo $doc;

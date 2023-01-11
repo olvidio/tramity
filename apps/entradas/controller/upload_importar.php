@@ -50,8 +50,8 @@ function upload(): array
 
             if ($type !== 'application/pdf') {
                 $oDocConverter = new DocConverter();
-                $oDocConverter->setBaseName($base_name);
-                $oDocConverter->setFileName($fileName);
+                $oDocConverter->setNombreFicheroOriginalConExtension($base_name);
+                $oDocConverter->setNombreFicheroNuevoSinExtension($fileName);
                 $oDocConverter->setDocIn($contenido_doc);
                 $contenido_en_pdf = $oDocConverter->convert(FALSE);
             } else {
@@ -72,7 +72,7 @@ function upload(): array
             }
             //unlink($fileName);
             // conservar la versión pdf para poder mostrar en el formulario de entrada
-            $filename_pdf = $oDocConverter->getFileName();
+            $filename_pdf = $oDocConverter->getNombreFicheroNuevoSinExtension();
             $path_temp = ConfigGlobal::$directorio.'/log/entradas/';
             if (!file_exists($path_temp)) {
                 if (!mkdir($path_temp, 0777, true) && !is_dir($path_temp)) {

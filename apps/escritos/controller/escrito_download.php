@@ -23,7 +23,7 @@ if (!empty($Q_id_escrito)) {
     if (($File = $oEnviar->getPdf()) === FALSE) {
         $txt_alert = $_SESSION['oGestorErrores']->ver();
         if (empty($txt_alert)) {
-            $txt_alert = _("Algún error al genrar el pdf. Es posible que no tenga el protocolo.");
+            $txt_alert = _("Algún error al generar el pdf. Es posible que no tenga el protocolo.");
         }
         $a_campos = ['txt_alert' => $txt_alert, 'btn_cerrar' => TRUE];
         $oView = new ViewTwig('expedientes/controller');
