@@ -66,7 +66,7 @@ class Etherpad extends Client
         $this->setId_usuario($id_usuario);
         $this->setNom_usuario($nom_usuario);
 
-        // depende si es en el portatil o en la dl.
+        // depende si es en el portátil o en la dl.
         if (ConfigGlobal::SERVIDOR === 'tramity.local') {
             $apikey = $this->apikey;
         } else {

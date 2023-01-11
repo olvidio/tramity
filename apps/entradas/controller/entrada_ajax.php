@@ -378,7 +378,11 @@ switch ($Q_que) {
             if ($oEntrada->getModo_entrada() === Entrada::MODO_PROVISIONAL) {
                 // borro el fichero pdf provisional
                 $filename_pdf = ConfigGlobal::DIR.'/log/entradas/entrada_' . $Q_id_entrada . '.pdf';
-                unlink($filename_pdf);
+                if(file_exists($filename_pdf)){
+                    unlink($filename_pdf);
+                }else{
+                    $error_txt .= sprintf(_("No se encuentra el fichero %s"), $filename_pdf);
+                }
             }
             // eliminar la entrada y bypass
             if ($oEntrada->DBEliminar() === FALSE) {

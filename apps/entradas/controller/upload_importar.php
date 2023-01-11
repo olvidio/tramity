@@ -4,7 +4,10 @@
 use convertirdocumentos\model\DocConverter;
 use core\ConfigGlobal;
 use entradas\model\entity\EntradaAdjunto;
+use entradas\model\entity\EntradaDocDB;
 use entradas\model\EntradaProvisionalFromPdf;
+use etherpad\model\Etherpad;
+use web\DateTimeLocal;
 
 require_once("apps/core/global_header.inc");
 // Archivos requeridos por esta url **********************************************
@@ -40,7 +43,6 @@ function upload(): array
         $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
         $fileName = $_FILES[$input]['name'][$i]; // the file name
         $type = $_FILES[$input]['type'][$i]; // the type file
-        $base_name = 'entradas_' . $i;
 
         //Make sure we have a file path
         if ($tmpFilePath !== '') {
@@ -49,17 +51,48 @@ function upload(): array
             $contenido_doc = fread($fp, filesize($tmpFilePath));
 
             if ($type !== 'application/pdf') {
-                $oDocConverter = new DocConverter();
-                $oDocConverter->setNombreFicheroOriginalConExtension($base_name);
-                $oDocConverter->setNombreFicheroNuevoSinExtension($fileName);
-                $oDocConverter->setDocIn($contenido_doc);
-                $contenido_en_pdf = $oDocConverter->convert(FALSE);
+                $path_parts = pathinfo($fileName);
+                $fileName_sin_extension = $path_parts['filename'];
+                $oDocConverterPdf = new DocConverter();
+//                $oDocConverter->setPathFicheroOriginal($tmpFilePath);
+                $oDocConverterPdf->setNombreFicheroOriginalConExtension($fileName);
+                $oDocConverterPdf->setNombreFicheroNuevoSinExtension($fileName_sin_extension);
+                $oDocConverterPdf->setDocIn($contenido_doc);
+                $contenido_en_pdf = $oDocConverterPdf->convert('pdf', FALSE);
             } else {
                 $contenido_en_pdf = $contenido_doc;
             }
 
+            if ($type !== 'application/html') {
+                $path_parts = pathinfo($fileName);
+                $fileName_sin_extension = $path_parts['filename'];
+                $oDocConverterHtml = new DocConverter();
+                $oDocConverterHtml->setNombreFicheroOriginalConExtension($fileName);
+                $oDocConverterHtml->setNombreFicheroNuevoSinExtension($fileName_sin_extension);
+                $oDocConverterHtml->setDocIn($contenido_doc);
+                $contenido_en_html = $oDocConverterHtml->convert('html', FALSE);
+            } else {
+                $contenido_en_html = $contenido_doc;
+            }
+
             $EntradaProvisional = new EntradaProvisionalFromPdf($contenido_en_pdf);
             $id_entrada = $EntradaProvisional->crear_entrada_provisional($fileName);
+
+            // añadir el contenido convertido en html en el etherpad
+            $oEtherpad = new Etherpad();
+            $oEtherpad->setId(Etherpad::ID_ENTRADA, $id_entrada);
+            $pad_id = $oEtherpad->getPadId(); // Aquí crea el pad
+            $oEtherpad->setHTML($pad_id, $contenido_en_html);
+            // la relación con la entrada y la fecha
+            $oEntradaDocDB = new EntradaDocDB($id_entrada);
+            $oFecha = $oEntradaDocDB->getF_doc();
+            if ($oFecha === null || !$oFecha instanceof DateTimeLocal) {
+                // No puede ser NULL
+                $oHoy = new DateTimeLocal();
+                $oEntradaDocDB->setF_doc($oHoy);
+            }
+            $oEntradaDocDB->setTipo_doc(EntradaDocDB::TIPO_ETHERPAD);
+            $oEntradaDocDB->DBGuardar();
 
             // añadir fichero como adjunto
             $oEntradaAdjunto = new EntradaAdjunto();
@@ -72,8 +105,8 @@ function upload(): array
             }
             //unlink($fileName);
             // conservar la versión pdf para poder mostrar en el formulario de entrada
-            $filename_pdf = $oDocConverter->getNombreFicheroNuevoSinExtension();
-            $path_temp = ConfigGlobal::$directorio.'/log/entradas/';
+            $filename_pdf = $oDocConverterPdf->getNombreFicheroNuevoSinExtension();
+            $path_temp = ConfigGlobal::$directorio . '/log/entradas/';
             if (!file_exists($path_temp)) {
                 if (!mkdir($path_temp, 0777, true) && !is_dir($path_temp)) {
                     throw new RuntimeException(sprintf('Directory "%s" was not created', $path_temp));

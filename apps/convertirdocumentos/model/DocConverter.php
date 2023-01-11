@@ -13,13 +13,14 @@ final class DocConverter
     /**
      * @var string
      */
+    private $pathFicheroOriginal = '';
     private $file_extension_original = '';
     private $nombreFicheroOriginalConExtension = '';
     private $nombreFicheroOriginalSinExtension = '';
     private $nombreFicheroNuevoSinExtension = '';
 
 
-    public function convert($borrarTemporales = TRUE)
+    public function convert($nuevo_tipo, $borrarTemporales = TRUE)
     {
         $path_parts = pathinfo($this->nombreFicheroOriginalConExtension);
         $this->file_extension_original = $path_parts['extension'];
@@ -32,25 +33,25 @@ final class DocConverter
         $filename_original_sin_espacios = $filename_local_sin_espacios_sin_extension . '.' .$this->file_extension_original;
 
         file_put_contents($filename_original_sin_espacios, $this->documento);
-        $command = escapeshellcmd("libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to pdf --outdir $path_temp $filename_original_sin_espacios 2>&1");
+        $command = escapeshellcmd("libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir $path_temp $filename_original_sin_espacios 2>&1");
 
         exec($command, $output,  $retval);
 
         if (empty($this->nombreFicheroNuevoSinExtension)) {
-            $filename_nuevo_sin_extension = $path_temp . $this->nombreFicheroOriginalSinExtension;
+            $filename_nuevo_sin_extension = $path_temp . $this->nombreFicheroNuevoSinExtension;
         } else {
             $filename_nuevo_sin_extension = $path_temp . $this->nombreFicheroNuevoSinExtension;
         }
         $filename_nuevo_sin_espacios_sin_extension = str_replace(' ', '_', $filename_nuevo_sin_extension);
-        $filename_pdf = $filename_nuevo_sin_espacios_sin_extension . '.pdf';
-        $doc_converted = file_get_contents($filename_pdf);
+        $filename_nuevo_con_extension = $filename_nuevo_sin_espacios_sin_extension . '.'. $nuevo_tipo;
+        $doc_converted = file_get_contents($filename_nuevo_con_extension);
 
         // borrar los ficheros temporales
-        unlink($filename_local_sin_espacios_sin_extension);
+        unlink($filename_original_sin_espacios);
         if ($borrarTemporales) {
-            unlink($filename_pdf);
+            unlink($filename_nuevo_con_extension);
         } else {
-            $this->nombreFicheroNuevoSinExtension = $filename_pdf;
+            $this->nombreFicheroNuevoSinExtension = $filename_nuevo_con_extension;
         }
         return $doc_converted;
     }
@@ -84,6 +85,14 @@ final class DocConverter
     public function setDocIn(string $doc): void
     {
         $this->documento = $doc;
+    }
+
+    /**
+     * @param string $pathFicheroOriginal
+     */
+    public function setPathFicheroOriginal(string $pathFicheroOriginal): void
+    {
+        $this->pathFicheroOriginal = $pathFicheroOriginal;
     }
 
 }
