@@ -32,9 +32,9 @@ if ($Q_parametro === 'ini_contador_cancilleria') {
         $error_txt = $oConfigSchema->getErrorTxt();
     }
 
-    $Q_id_unav = (int)filter_input(INPUT_POST, 'id_lugar_unav');
-    $oConfigSchema = new ConfigSchema('id_lugar_unav');
-    $oConfigSchema->setValor($Q_id_unav);
+    $Q_id_uden = (int)filter_input(INPUT_POST, 'id_lugar_uden');
+    $oConfigSchema = new ConfigSchema('id_lugar_uden');
+    $oConfigSchema->setValor($Q_id_uden);
     if ($oConfigSchema->DBGuardar() === FALSE) {
         $error_txt = $oConfigSchema->getErrorTxt();
     }

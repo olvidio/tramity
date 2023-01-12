@@ -455,23 +455,23 @@ $oDesplLugar_cancilleria->setBlanco(TRUE);
 $oDesplLugar_cancilleria->setOpciones($a_lugares);
 $oDesplLugar_cancilleria->setOpcion_sel($id_cancilleria);
 
-$oConfigSchema = new ConfigSchema('id_lugar_unav');
-$id_unav = $oConfigSchema->getValor();
-$oDesplLugar_unav = new Desplegable();
-$oDesplLugar_unav->setNombre('id_lugar_unav');
-$oDesplLugar_unav->setBlanco(TRUE);
-$oDesplLugar_unav->setOpciones($a_lugares);
-$oDesplLugar_unav->setOpcion_sel($id_unav);
+$oConfigSchema = new ConfigSchema('id_lugar_uden');
+$id_uden = $oConfigSchema->getValor();
+$oDesplLugar_uden = new Desplegable();
+$oDesplLugar_uden->setNombre('id_lugar_uden');
+$oDesplLugar_uden->setBlanco(TRUE);
+$oDesplLugar_uden->setOpciones($a_lugares);
+$oDesplLugar_uden->setOpcion_sel($id_uden);
 
 $oHashC2 = new Hash();
 $oHashC2->setUrl($url);
-$oHashC2->setcamposForm('valor!id_lugar_cancilleria|id_lugar_unav');
+$oHashC2->setcamposForm('valor!id_lugar_cancilleria|id_lugar_uden');
 $oHashC2->setArrayCamposHidden(['parametro' => $parametro]);
 
 $a_campos['oHashC2'] = $oHashC2;
 $a_campos['ini_contador_cancilleria'] = $valor;
 $a_campos['despl_cancilleria'] = $oDesplLugar_cancilleria;
-$a_campos['despl_unav'] = $oDesplLugar_unav;
+$a_campos['despl_uden'] = $oDesplLugar_uden;
 
 // ----------- Nombre Sigla -------------------
 $parametro = 'sigla';

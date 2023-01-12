@@ -84,14 +84,14 @@ class Config
         $id_cancilleria = (int)$oConfigSchema->getValor();
 
 
-        $oConfigSchema = new ConfigSchema('id_lugar_unav');
-        $id_unav = (int)$oConfigSchema->getValor();
+        $oConfigSchema = new ConfigSchema('id_lugar_uden');
+        $id_uden = (int)$oConfigSchema->getValor();
 
         switch ($id_lugar) {
             case $id_lugar_cr:
                 return $this->getContador_cr();
             case $id_cancilleria:
-            case $id_unav:
+            case $id_uden:
                 return $this->getContador_cancilleria();
             default:
                 return $this->getContador_resto();

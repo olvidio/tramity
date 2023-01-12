@@ -155,10 +155,10 @@ class Escrito extends EscritoDB
         $oConfigSchema = new ConfigSchema('id_lugar_cancilleria');
         $id_cancilleria = (int)$oConfigSchema->getValor();
 
-        $oConfigSchema = new ConfigSchema('id_lugar_unav');
-        $id_unav = (int)$oConfigSchema->getValor();
+        $oConfigSchema = new ConfigSchema('id_lugar_uden');
+        $id_uden = (int)$oConfigSchema->getValor();
 
-        if ($id_lugar_contador === $id_unav || $id_lugar_contador === $id_cancilleria) {
+        if ($id_lugar_contador === $id_uden || $id_lugar_contador === $id_cancilleria) {
             $id_lugar_local = $id_cancilleria;
         } else {
             $id_lugar_local = $gesLugares->getId_sigla_local();

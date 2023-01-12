@@ -97,17 +97,17 @@ class GestorLugar extends core\ClaseGestor
     }
 
     /**
-     * devuelve el id del IESE/UNAV
+     * devuelve el id del IESE/UDEN
      */
-    public function getId_unav(): int
+    public function getId_uden(): int
     {
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            exit (_("Error al buscar el id del IESE/UNAV"));
+            exit (_("Error al buscar el id del IESE/UDEN"));
         }
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-            $oConfigSchema = new ConfigSchema('id_lugar_unav');
-            $id_unav = $oConfigSchema->getValor();
-            return $id_unav;
+            $oConfigSchema = new ConfigSchema('id_lugar_uden');
+            $id_uden = $oConfigSchema->getValor();
+            return $id_uden;
         }
         return 0;
     }
