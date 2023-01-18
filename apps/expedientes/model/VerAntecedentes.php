@@ -159,7 +159,10 @@ class VerAntecedentes
                     $aAntecedentes = $oExpediente->getJson_antecedentes(TRUE);
 
                     $VerAntecedentes = new self($this->path_temp);
-                    $aFiles[] = $VerAntecedentes->verEnPdf($aAntecedentes);
+                    $aFiles_exp = $VerAntecedentes->verEnPdf($aAntecedentes);
+                    if (!empty($aFiles_exp)) {
+                        $aFiles = array_merge($aFiles, $aFiles_exp);
+                    }
                     break;
                 default:
                     $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
