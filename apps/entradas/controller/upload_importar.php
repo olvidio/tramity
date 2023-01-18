@@ -105,7 +105,7 @@ function upload(): array
             }
             //unlink($fileName);
             // conservar la versión pdf para poder mostrar en el formulario de entrada
-            $filename_pdf = $oDocConverterPdf->getNombreFicheroNuevoSinExtension();
+            $filename_pdf = $oDocConverterPdf->getNombreFicheroNuevoConExtension();
             $path_temp = ConfigGlobal::$directorio . '/log/entradas/';
             if (!file_exists($path_temp)) {
                 if (!mkdir($path_temp, 0777, true) && !is_dir($path_temp)) {

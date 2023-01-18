@@ -56,11 +56,6 @@ final class DocConverter
         return $doc_converted;
     }
 
-    public function getNombreFicheroNuevoSinExtension (): string
-    {
-        return $this->nombreFicheroNuevoSinExtension;
-    }
-
     /**
      * @param string $nombreFicheroOriginalConExtension
      */
