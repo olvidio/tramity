@@ -90,7 +90,7 @@ class EntradaProvisionalFromPdf
                     $a_Meses = DateTimeLocal::Meses_es();
                     $mes_numero = array_search($mes_txt, $a_Meses);
                 }
-                if (empty($mes_numero) || empty ($dia) || empty($any))  {
+                if (empty($mes_numero) || empty ($dia) || empty($any)) {
                     return $oFecha;
                 }
                 $oFecha = new DateTimeLocal("$any-$mes_numero-$dia");
@@ -110,8 +110,8 @@ class EntradaProvisionalFromPdf
         // or extract the text of a specific page (in this case the first page)
         $this->page_frist = $pdf->getPages()[0]->getText();
 
-        $num_pages = count ($pdf->getPages()) - 1;
-        $this->page_last =  $pdf->getPages()[$num_pages]->getText();
+        $num_pages = count($pdf->getPages()) - 1;
+        $this->page_last = $pdf->getPages()[$num_pages]->getText();
         $this->num_pages = $num_pages;
     }
 
@@ -220,13 +220,15 @@ class EntradaProvisionalFromPdf
             } else {
                 $oLugar = $cLugares[0];
                 $id_lugar = $oLugar->getId_lugar();
-            }
 
-            $a_destino = explode('/', $origen_prot);
-            $prot_num_origen = trim($a_destino[0]);
-            $prot_any_origen = trim($a_destino[1]);
-            $oProtOrigen = new Protocolo($id_lugar, $prot_num_origen, $prot_any_origen, '');
-            $oEntrada->setJson_prot_origen($oProtOrigen->getProt());
+                if (!empty($origen_prot)) {
+                    $a_destino = explode('/', $origen_prot);
+                    $prot_num_origen = empty($a_destino[0])? '' : trim($a_destino[0]);
+                    $prot_any_origen = empty($a_destino[1])? '' : trim($a_destino[1]);
+                    $oProtOrigen = new Protocolo($id_lugar, $prot_num_origen, $prot_any_origen, '');
+                    $oEntrada->setJson_prot_origen($oProtOrigen->getProt());
+                }
+            }
         }
 
         // Si destino tiene número de protocolo se pone como referencia
@@ -237,6 +239,7 @@ class EntradaProvisionalFromPdf
             if (empty($cLugares)) {
                 exit (_("No sé el destino"));
             }
+
             $oLugar = $cLugares[0];
             $id_lugar = $oLugar->getId_lugar();
 
@@ -283,11 +286,11 @@ class EntradaProvisionalFromPdf
             $error_txt = $oEntrada->getErrorTxt();
         }
 
-        // una vez obtenido el id_entrada, puedo crear el doc
+// una vez obtenido el id_entrada, puedo crear el doc
         if (!empty($oFecha) && $oFecha instanceof DateTimeLocal) {
             $f_iso = $oFecha->getIso();
             $oEntradaDocDB = new EntradaDocDB($oEntrada->getId_entrada());
-            $oEntradaDocDB->setF_doc($f_iso,FALSE);
+            $oEntradaDocDB->setF_doc($f_iso, FALSE);
             $oEntradaDocDB->setTipo_doc($oEntrada->getTipo_documento());
             if ($oEntradaDocDB->DBGuardar() === FALSE) {
                 return FALSE;
