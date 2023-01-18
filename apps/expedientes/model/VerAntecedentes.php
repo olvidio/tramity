@@ -44,6 +44,8 @@ class VerAntecedentes
             $nombre_fichero_pdf = $this->path_temp . $file_name . '.pdf';
             if ($file_extension !== 'pdf') {
                 $nombre_fichero_pdf = $this->convertirDocEnPdf($nombre_fichero, $doc);
+            } else {
+                file_put_contents($nombre_fichero_pdf, $doc);
             }
             $aFiles[] = $nombre_fichero_pdf;
         }
@@ -149,6 +151,8 @@ class VerAntecedentes
                             $nombre_fichero_pdf = $this->path_temp . $file_name . '.pdf';
                             if ($file_extension !== 'pdf') {
                                 $nombre_fichero_pdf = $this->convertirDocEnPdf($nombre_fichero, $doc);
+                            } else {
+                               file_put_contents($nombre_fichero_pdf, $doc);
                             }
                             $aFiles[] = $nombre_fichero_pdf;
                             break;
