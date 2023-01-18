@@ -443,6 +443,6 @@ class EntradaAdjunto extends core\ClasePropiedades
         $escaped = bin2hex($adjunto);
         $this->adjunto = $escaped;
     }
-    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
+    /* MÉTODOS GET y SET DE ATRIBUTOS QUE NO SÓN CAMPOS -----------------------------*/
 
 }

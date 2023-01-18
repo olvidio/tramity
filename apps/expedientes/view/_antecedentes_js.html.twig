@@ -39,11 +39,21 @@
     }
 
     fnjs_ver_antecedentes = function (id_expediente) {
-        var winPrefs = "dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+        //var winPrefs = "dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
         var server = '{{ server }}';
         var url = server + '/apps/expedientes/controller/expediente_ver_antecedentes.php?id_expediente=' + id_expediente;
-        w = window.open(url, "", winPrefs);
-        w.focus();
+        //w = window.open(url, "", winPrefs);
+        // Para poder mostrar un mensaje, abro un nuevo Tab emulando el 'Ctrl + click'
+        // openNewBackgroundTab(){
+        var a = document.createElement("a");
+        a.href = url;
+        var evt = document.createEvent("MouseEvents");
+        //the tenth parameter of initMouseEvent sets ctrl key
+        evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0,
+                                    true, false, false, false, 0, null);
+        a.dispatchEvent(evt);
+
+        alert ("{{ "Convirtiendo los documentos en pdf en una nuava pestaña. Si hay varios antecedentes puede tardar un rato"|trans|raw }}");
     }
 
     fnjs_del_antecedente = function (tipo, id_escrito) {

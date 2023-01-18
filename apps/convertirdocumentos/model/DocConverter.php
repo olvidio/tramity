@@ -13,11 +13,11 @@ final class DocConverter
     /**
      * @var string
      */
-    private $pathFicheroOriginal = '';
-    private $file_extension_original = '';
-    private $nombreFicheroOriginalConExtension = '';
-    private $nombreFicheroOriginalSinExtension = '';
-    private $nombreFicheroNuevoSinExtension = '';
+    private string $file_extension_original = '';
+    private string $nombreFicheroOriginalConExtension = '';
+    private string $nombreFicheroOriginalSinExtension = '';
+    private string $nombreFicheroNuevoConExtension = '';
+    private string $nombreFicheroNuevoSinExtension = '';
 
 
     public function convert($nuevo_tipo, $borrarTemporales = TRUE)
@@ -38,7 +38,7 @@ final class DocConverter
         exec($command, $output,  $retval);
 
         if (empty($this->nombreFicheroNuevoSinExtension)) {
-            $filename_nuevo_sin_extension = $path_temp . $this->nombreFicheroNuevoSinExtension;
+            $filename_nuevo_sin_extension = $filename_local_sin_espacios_sin_extension;
         } else {
             $filename_nuevo_sin_extension = $path_temp . $this->nombreFicheroNuevoSinExtension;
         }
@@ -51,9 +51,14 @@ final class DocConverter
         if ($borrarTemporales) {
             unlink($filename_nuevo_con_extension);
         } else {
-            $this->nombreFicheroNuevoSinExtension = $filename_nuevo_con_extension;
+            $this->nombreFicheroNuevoConExtension = $filename_nuevo_con_extension;
         }
         return $doc_converted;
+    }
+
+    public function getNombreFicheroNuevoSinExtension (): string
+    {
+        return $this->nombreFicheroNuevoSinExtension;
     }
 
     /**
@@ -77,22 +82,14 @@ final class DocConverter
         $this->nombreFicheroNuevoSinExtension = $nombreFicheroNuevoSinExtension;
     }
 
-    public function getNombreFicheroNuevoSinExtension(): string
+    public function getNombreFicheroNuevoConExtension(): string
     {
-        return $this->nombreFicheroNuevoSinExtension;
+        return $this->nombreFicheroNuevoConExtension;
     }
 
     public function setDocIn(string $doc): void
     {
         $this->documento = $doc;
-    }
-
-    /**
-     * @param string $pathFicheroOriginal
-     */
-    public function setPathFicheroOriginal(string $pathFicheroOriginal): void
-    {
-        $this->pathFicheroOriginal = $pathFicheroOriginal;
     }
 
 }
