@@ -2,12 +2,14 @@
     <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_nueva|raw }}');">
         {{ txt_btn_new }}
     </button>
-    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_importar|raw }}');">
-        {{ txt_btn_importar }}
-    </button>
-    <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_revisar|raw }}');">
-        {{ txt_btn_revisar }}
-    </button>
+    {% if  txt_btn_importar %}
+        <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_importar|raw }}');">
+            {{ txt_btn_importar }}
+        </button>
+        <button type="button" class="btn btn-info" onClick="fnjs_update_div('#main','{{ pagina_revisar|raw }}');">
+            {{ txt_btn_revisar }}
+        </button>
+    {% endif %}
 {% endif %}
 {% if btn_dock %}
     {% if vista == 'ctr' %}
