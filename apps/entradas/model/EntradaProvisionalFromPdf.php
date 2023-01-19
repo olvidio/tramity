@@ -132,7 +132,7 @@ class EntradaProvisionalFromPdf
             $l++;
             $tramo_inicio = ($l - 5 < 0);
             $tramo_fin = ($num_lineas - $l < 2);
-            if ((!$tramo_inicio && !$tramo_fin) || empty($line) || ctype_space($line) ) {
+            if ((!$tramo_inicio && !$tramo_fin) || empty($line) || ctype_space($line)) {
                 continue;
             }
 
@@ -145,18 +145,45 @@ class EntradaProvisionalFromPdf
                     $destino_prot = empty($matches[2]) ? '' : $matches[2];
                     $origen = $matches[3];
                     $origen_prot = empty($matches[4]) ? '' : $matches[4];
-                }
-                // Ceb-r 3/22
-                $pattern = '/^\s*(\P{N}+)(\s+\d+\/\d{2})*-(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
-                $coincide = preg_match($pattern, $line, $matches);
-                if ($coincide === 1) {
-                    $origen = $matches[1];
-                    $origen_prot = empty($matches[2]) ? '' : $matches[2];
-                    $destino = $matches[3];
-                    if ($destino === 'r') {
-                        $destino = 'cr';
+
+                    // si tiene un guión, puede ser de una región (Gal-dlb)
+                    if (strpos($destino, '-')) {
+                        $a_sigla = explode('-', $destino);
+                        $origen1 = $a_sigla[0];
+                        $destino1 = $a_sigla[1];
+                        if ($destino1 !== 'sr' && $destino1 !== 'sr' && $origen1 !== 'sm' && $origen1 !== 'sr') {
+                            $coincide = 0;
+                        }
                     }
-                    $destino_prot = empty($matches[4]) ? '' : $matches[4];
+                }
+                if ($coincide !== 1) {
+                    // Ceb-r 3/22
+                    //$pattern = '/^\s*(\P{N}+)(\s+\d+\/\d{2})*-(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
+                    $pattern = '/^\s*(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
+                    $coincide = preg_match($pattern, $line, $matches);
+                    if ($coincide === 1) {
+                        $origen = $matches[4];
+                        $origen_prot = empty($matches[6]) ? '' : $matches[6];
+                        $destino = $matches[5];
+                        if ($destino === 'r') {
+                            $destino = 'cr';
+                        }
+                        $destino_prot = empty($matches[3]) ? '' : $matches[3];
+                    }
+                }
+                if ($coincide !== 1) {
+                    //Cam-dlb 8/23
+                    $pattern = '/^\s*(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
+                    $coincide = preg_match($pattern, $line, $matches);
+                    if ($coincide === 1) {
+                        $origen = $matches[1];
+                        $origen_prot = empty($matches[3]) ? '' : $matches[3];
+                        $destino = $matches[2];
+                        if ($destino === 'r') {
+                            $destino = 'cr';
+                        }
+                        $destino_prot = '';
+                    }
                 }
 
             } elseif ($tramo_inicio) {
@@ -164,17 +191,56 @@ class EntradaProvisionalFromPdf
                 $pattern = '/(ref\.?)\s+(\P{N}+)(\s+\d+\/\d{2})$/ui';
                 $coincide = preg_match($pattern, $line, $matches);
                 if ($coincide === 1) {
-                    $a_ref[] = $matches[1];
-                    $a_referencias[] = $matches[2];
-                    $a_ref_prot[] = $matches[3];
+                    // si tiene un guión, puede ser de una región (Gal-dlb)
+                    if (strpos($matches[2], '-')) {
+                        $a_sigla = explode('-', $matches[2]);
+                        $origen1 = $a_sigla[0];
+                        $destino1 = $a_sigla[1];
+                        if ($destino1 !== 'sr' && $destino1 !== 'sr' && $origen1 !== 'sm' && $origen1 !== 'sr') {
+                            $coincide = 0;
+                        }
+                    }
+                    // Sigue igual
+                    if ($coincide === 1) {
+                        $a_ref[] = $matches[1];
+                        $a_referencias[] = $matches[2];
+                        $a_ref_prot[] = $matches[3];
+                    }
+                }
+                if ($coincide !== 1) {
+                    $pattern = '/(ref\.?)\s+(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*(ref\.?)\s+(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*$/ui';
+                    $coincide = preg_match($pattern, $line, $matches);
+                    if ($coincide === 1) {
+                        $a_ref[] = $matches[5];
+                        $a_referencias[] = $matches[6];
+                        $a_ref_prot[] = $matches[8];
+
+                        $a_ref[] = $matches[1];
+                        $a_referencias[] = $matches[2];
+                        $a_ref_prot[] = $matches[4];
+                    }
                 }
                 // cfr
-                $pattern = '/(cfr\.?)\s+(\P{N}+)(\s+\d+\/\d{2})$/ui';
-                $coincide = preg_match($pattern, $line, $matches);
-                if ($coincide === 1) {
-                    $a_ref[] = $matches[1];
-                    $a_referencias[] = $matches[2];
-                    $a_ref_prot[] = $matches[3];
+                if ($coincide !== 1) {
+                    $pattern = '/(cfr\.?)\s+(\P{N}+)(\s+\d+\/\d{2})$/ui';
+                    $coincide = preg_match($pattern, $line, $matches);
+                    if ($coincide === 1) {
+                        // si tiene un guión, puede ser de una región (Gal-dlb)
+                        if (strpos($matches[2], '-')) {
+                            $a_sigla = explode('-', $destino);
+                            $origen1 = $a_sigla[0];
+                            $destino1 = $a_sigla[1];
+                            if ($destino1 !== 'sr' && $destino1 !== 'sr' && $origen1 !== 'sm' && $origen1 !== 'sr') {
+                                $coincide = 0;
+                            }
+                        }
+                        // Sigue igual
+                        if ($coincide === 1) {
+                            $a_ref[] = $matches[1];
+                            $a_referencias[] = $matches[2];
+                            $a_ref_prot[] = $matches[3];
+                        }
+                    }
                 }
 
             }
@@ -216,15 +282,14 @@ class EntradaProvisionalFromPdf
             $cLugares = $gesLugares->getLugares(['sigla' => $origen]);
             if (empty($cLugares)) {
                 //exit (_("No sé de dónde viene"));
-                $id_lugar = 0;
             } else {
                 $oLugar = $cLugares[0];
                 $id_lugar = $oLugar->getId_lugar();
 
                 if (!empty($origen_prot)) {
                     $a_destino = explode('/', $origen_prot);
-                    $prot_num_origen = empty($a_destino[0])? '' : trim($a_destino[0]);
-                    $prot_any_origen = empty($a_destino[1])? '' : trim($a_destino[1]);
+                    $prot_num_origen = empty($a_destino[0]) ? '' : trim($a_destino[0]);
+                    $prot_any_origen = empty($a_destino[1]) ? '' : trim($a_destino[1]);
                     $oProtOrigen = new Protocolo($id_lugar, $prot_num_origen, $prot_any_origen, '');
                     $oEntrada->setJson_prot_origen($oProtOrigen->getProt());
                 }
@@ -237,18 +302,17 @@ class EntradaProvisionalFromPdf
             $gesLugares = new GestorLugar();
             $cLugares = $gesLugares->getLugares(['sigla' => $destino]);
             if (empty($cLugares)) {
-                exit (_("No sé el destino"));
+                //exit (_("No sé el destino"));
+            } else {
+                $oLugar = $cLugares[0];
+                $id_lugar = $oLugar->getId_lugar();
+
+                $a_destino = explode('/', $destino_prot);
+                $prot_num_destino = trim($a_destino[0]);
+                $prot_any_destino = trim($a_destino[1]);
+                $oProtDestino = new Protocolo($id_lugar, $prot_num_destino, $prot_any_destino, '');
+                $aProtRef[] = $oProtDestino->getProt();
             }
-
-            $oLugar = $cLugares[0];
-            $id_lugar = $oLugar->getId_lugar();
-
-            $a_destino = explode('/', $destino_prot);
-            $prot_num_destino = trim($a_destino[0]);
-            $prot_any_destino = trim($a_destino[1]);
-            $oProtDestino = new Protocolo($id_lugar, $prot_num_destino, $prot_any_destino, '');
-            $aProtRef[] = $oProtDestino->getProt();
-
         }
 
         if (!empty($a_ref)) {
@@ -259,17 +323,19 @@ class EntradaProvisionalFromPdf
                 $gesLugares = new GestorLugar();
                 $cLugares = $gesLugares->getLugares(['sigla' => $lugar_ref]);
                 if (empty($cLugares)) {
-                    exit (_("No sé la referencia"));
-                }
-                $oLugar = $cLugares[0];
-                $id_lugar = $oLugar->getId_lugar();
+                    //exit (_("No sé la referencia"));
+                    $id_lugar = 0;
+                } else {
+                    $oLugar = $cLugares[0];
+                    $id_lugar = $oLugar->getId_lugar();
 
-                $a_ref_n = explode('/', $prot_ref);
-                $prot_num_ref = trim($a_ref_n[0]);
-                $prot_any_ref = trim($a_ref_n[1]);
-                if (!empty($id_lugar)) {
-                    $oProtRef = new Protocolo($id_lugar, $prot_num_ref, $prot_any_ref, '');
-                    $aProtRef[] = $oProtRef->getProt();
+                    $a_ref_n = explode('/', $prot_ref);
+                    $prot_num_ref = trim($a_ref_n[0]);
+                    $prot_any_ref = trim($a_ref_n[1]);
+                    if (!empty($id_lugar)) {
+                        $oProtRef = new Protocolo($id_lugar, $prot_num_ref, $prot_any_ref, '');
+                        $aProtRef[] = $oProtRef->getProt();
+                    }
                 }
             }
         }
