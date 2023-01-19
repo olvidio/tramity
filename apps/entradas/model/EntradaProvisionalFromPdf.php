@@ -132,12 +132,12 @@ class EntradaProvisionalFromPdf
             $l++;
             $tramo_inicio = ($l - 5 < 0);
             $tramo_fin = ($num_lineas - $l < 2);
-            if (empty($line) && !$tramo_inicio && !$tramo_fin) {
+            if ((!$tramo_inicio && !$tramo_fin) || empty($line) || ctype_space($line) ) {
                 continue;
             }
 
             if ($l === 1) {
-                // agdmontagut 12/22      dllb 3/22
+                // agdmontagut 12/22      dlb 3/22
                 $pattern = '/^\s*(\P{N}+)(\s+\d+\/\d{2})*\s+(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
                 $coincide = preg_match($pattern, $line, $matches);
                 if ($coincide === 1) {
