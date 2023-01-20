@@ -106,46 +106,48 @@ switch ($Q_que) {
             }
         } else {
             // Entradas
-            $aProt_origen = ['id_lugar' => $Q_id_lugar,
-                'num' => $Q_prot_num,
-                'any' => $Q_prot_any,
-            ];
+            if (!empty($Q_id_lugar)) {
+                $aProt_origen = ['id_lugar' => $Q_id_lugar,
+                    'num' => $Q_prot_num,
+                    'any' => $Q_prot_any,
+                ];
 
-            $id_entrada = '';
-            $gesEntradas = new GestorEntrada();
-            $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
-            foreach ($cEntradas as $oEntrada) {
-                $bypass = $oEntrada->getBypass();
-                if ($bypass) {
-                    continue;
-                }
-                $id_entrada = $oEntrada->getId_entrada();
-                $jsondata['asunto'] = $oEntrada->getAsunto();
-                $jsondata['detalle'] = $oEntrada->getDetalle();
-                $jsondata['categoria'] = $oEntrada->getCategoria();
-                $jsondata['visibilidad'] = $oEntrada->getVisibilidad();
-                // los escritos van por cargos, las entradas por oficinas: pongo al director de la oficina:
-                //Ponente;
-                $id_of_ponente = $oEntrada->getPonente();
-                // oficinas
-                $a_oficinas = $oEntrada->getResto_oficinas();
-
-                if ($Q_para == 'entrada') {
-                    $jsondata['id_ponente'] = $id_of_ponente;
-                    $jsondata['oficinas'] = $a_oficinas;
-                }
-                if ($Q_para == 'escrito') {
-                    $gesCargos = new GestorCargo();
-                    // Ponente
-                    $id_ponente = $gesCargos->getDirectorOficina($id_of_ponente);
+                $id_entrada = '';
+                $gesEntradas = new GestorEntrada();
+                $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen);
+                foreach ($cEntradas as $oEntrada) {
+                    $bypass = $oEntrada->getBypass();
+                    if ($bypass) {
+                        continue;
+                    }
+                    $id_entrada = $oEntrada->getId_entrada();
+                    $jsondata['asunto'] = $oEntrada->getAsunto();
+                    $jsondata['detalle'] = $oEntrada->getDetalle();
+                    $jsondata['categoria'] = $oEntrada->getCategoria();
+                    $jsondata['visibilidad'] = $oEntrada->getVisibilidad();
+                    // los escritos van por cargos, las entradas por oficinas: pongo al director de la oficina:
+                    //Ponente;
+                    $id_of_ponente = $oEntrada->getPonente();
                     // oficinas
                     $a_oficinas = $oEntrada->getResto_oficinas();
-                    $a_resto_cargos = [];
-                    foreach ($a_oficinas as $id_oficina) {
-                        $a_resto_cargos[] = $gesCargos->getDirectorOficina($id_oficina);
+
+                    if ($Q_para == 'entrada') {
+                        $jsondata['id_ponente'] = $id_of_ponente;
+                        $jsondata['oficinas'] = $a_oficinas;
                     }
-                    $jsondata['id_ponente'] = $id_ponente;
-                    $jsondata['firmas'] = $a_resto_cargos;
+                    if ($Q_para == 'escrito') {
+                        $gesCargos = new GestorCargo();
+                        // Ponente
+                        $id_ponente = $gesCargos->getDirectorOficina($id_of_ponente);
+                        // oficinas
+                        $a_oficinas = $oEntrada->getResto_oficinas();
+                        $a_resto_cargos = [];
+                        foreach ($a_oficinas as $id_oficina) {
+                            $a_resto_cargos[] = $gesCargos->getDirectorOficina($id_oficina);
+                        }
+                        $jsondata['id_ponente'] = $id_ponente;
+                        $jsondata['firmas'] = $a_resto_cargos;
+                    }
                 }
             }
         }
