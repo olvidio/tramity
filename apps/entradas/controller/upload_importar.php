@@ -62,7 +62,7 @@ function upload(): array
                 $filename_pdf = $oDocConverterPdf->getNombreFicheroNuevoConExtension();
             } else {
                 $contenido_en_pdf = $contenido_doc;
-                $filename_pdf = $fileName;
+                $filename_pdf = $tmpFilePath;
             }
 
             if ($type !== 'application/html') {
