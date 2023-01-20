@@ -187,12 +187,13 @@ class EntradaProvisionalFromPdf
                     }
                 }
                 if ($coincide === 1) {
-                    $linea_protocolo = 1;
+                    $linea_protocolo = $l;
                 }
 
             } elseif ($tramo_inicio) {
-                // si solamente hay un número sin nombre lugar, puede ser de la linea anterior
-                if (empty($origen_prot)) {
+                // si no hay protocolo origen, y en la linea siguiente a la uqe se encuentra el protocolo
+                // solamente hay un número sin nombre lugar, puede ser de la linea anterior
+                if ( empty($origen_prot) && ($l === $linea_protocolo + 1) ) {
                     $pattern = '/\s*(\d+\/\d{2})\s*$/i';
                     $coincide = preg_match($pattern, $line, $matches);
                     if ($coincide === 1) {
@@ -322,9 +323,14 @@ class EntradaProvisionalFromPdf
                 $oLugar = $cLugares[0];
                 $id_lugar = $oLugar->getId_lugar();
 
-                $a_destino = explode('/', $destino_prot);
-                $prot_num_destino = trim($a_destino[0]);
-                $prot_any_destino = trim($a_destino[1]);
+                if (!empty($destino_prot)) {
+                    $a_destino = explode('/', $destino_prot);
+                    $prot_num_destino = empty($a_destino[0])? '' : trim($a_destino[0]);
+                    $prot_any_destino = empty($a_destino[1])? '' : trim($a_destino[1]);
+                } else {
+                    $prot_num_destino = '';
+                    $prot_any_destino = '';
+                }
                 $oProtDestino = new Protocolo($id_lugar, $prot_num_destino, $prot_any_destino, '');
                 $aProtRef[] = $oProtDestino->getProt();
             }
