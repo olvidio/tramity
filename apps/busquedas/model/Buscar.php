@@ -441,7 +441,7 @@ class Buscar
                     if (!empty($this->dest_id_lugar)) {
                         $cEscritos = $this->buscarEscritos();
                         $aCollections['escritos'] = $cEscritos;
-                        // añadir los de cr a ctr (bypas)
+                        // añadir los de cr a ctr (bypass)
                         $cEntradasBypass = $this->buscarEntradasBypass();
                         $aCollections['entradas_bypass'] = $cEntradasBypass;
                     }

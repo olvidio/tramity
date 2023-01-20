@@ -83,9 +83,9 @@ class GestorEntradaBypass extends core\ClaseGestor
         $sCondi = implode(' AND ', $aCondi);
         // Buscar en prot_destino
         if (empty($sCondi)) {
-            $sCondi1 = " WHERE json_prot_destino @> '{\"id_lugar\":$id_lugar}'";
+            $sCondi1 = " WHERE json_prot_destino @> '[{\"id_lugar\":$id_lugar}]'";
         } else {
-            $sCondi1 = " WHERE json_prot_destino @> '{\"id_lugar\":$id_lugar}' AND " . $sCondi;
+            $sCondi1 = " WHERE json_prot_destino @> '[{\"id_lugar\":$id_lugar}]' AND " . $sCondi;
         }
         if ($COND_OR != '') {
             if ($sCondi1 != '') {
