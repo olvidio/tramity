@@ -128,6 +128,7 @@ class EntradaProvisionalFromPdf
         $a_txt = explode("\n", $text);
         $num_lineas = count($a_txt);
         $l = 0;
+        $linea_protocolo = 0;
         foreach ($a_txt as $line) {
             $l++;
             $tramo_inicio = ($l - 5 < 0);
@@ -136,14 +137,14 @@ class EntradaProvisionalFromPdf
                 continue;
             }
 
-            if ($l === 1) {
+            if ($tramo_inicio && $linea_protocolo === 0 ) {
                 // agdmontagut 12/22      dlb 3/22
                 $pattern = '/^\s*(\P{N}+)(\s+\d+\/\d{2})*\s+(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
                 $coincide = preg_match($pattern, $line, $matches);
                 if ($coincide === 1) {
-                    $destino = $matches[1];
+                    $destino = trim($matches[1]);
                     $destino_prot = empty($matches[2]) ? '' : $matches[2];
-                    $origen = $matches[3];
+                    $origen = trim($matches[3]);
                     $origen_prot = empty($matches[4]) ? '' : $matches[4];
 
                     // si tiene un guión, puede ser de una región (Gal-dlb)
@@ -162,9 +163,9 @@ class EntradaProvisionalFromPdf
                     $pattern = '/^\s*(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
                     $coincide = preg_match($pattern, $line, $matches);
                     if ($coincide === 1) {
-                        $origen = $matches[4];
+                        $origen = trim($matches[4]);
                         $origen_prot = empty($matches[6]) ? '' : $matches[6];
-                        $destino = $matches[5];
+                        $destino = trim($matches[5]);
                         if ($destino === 'r') {
                             $destino = 'cr';
                         }
@@ -176,17 +177,28 @@ class EntradaProvisionalFromPdf
                     $pattern = '/^\s*(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
                     $coincide = preg_match($pattern, $line, $matches);
                     if ($coincide === 1) {
-                        $origen = $matches[1];
+                        $origen = trim($matches[1]);
                         $origen_prot = empty($matches[3]) ? '' : $matches[3];
-                        $destino = $matches[2];
+                        $destino = trim($matches[2]);
                         if ($destino === 'r') {
                             $destino = 'cr';
                         }
                         $destino_prot = '';
                     }
                 }
+                if ($coincide === 1) {
+                    $linea_protocolo = 1;
+                }
 
             } elseif ($tramo_inicio) {
+                // si solamente hay un número sin nombre lugar, puede ser de la linea anterior
+                if (empty($origen_prot)) {
+                    $pattern = '/\s*(\d+\/\d{2})\s*$/i';
+                    $coincide = preg_match($pattern, $line, $matches);
+                    if ($coincide === 1) {
+                        $origen_prot = empty($matches[1]) ? '' : $matches[1];
+                    }
+                }
                 // ref
                 $pattern = '/(ref\.?)\s+(\P{N}+)(\s+\d+\/\d{2})$/ui';
                 $coincide = preg_match($pattern, $line, $matches);
@@ -287,12 +299,15 @@ class EntradaProvisionalFromPdf
                 $id_lugar = $oLugar->getId_lugar();
 
                 if (!empty($origen_prot)) {
-                    $a_destino = explode('/', $origen_prot);
-                    $prot_num_origen = empty($a_destino[0]) ? '' : trim($a_destino[0]);
-                    $prot_any_origen = empty($a_destino[1]) ? '' : trim($a_destino[1]);
+                    $a_origen = explode('/', $origen_prot);
+                    $prot_num_origen = empty($a_origen[0]) ? '' : trim($a_origen[0]);
+                    $prot_any_origen = empty($a_origen[1]) ? '' : trim($a_origen[1]);
+                } else {
+                    $prot_num_origen = '';
+                    $prot_any_origen = '';
+                }
                     $oProtOrigen = new Protocolo($id_lugar, $prot_num_origen, $prot_any_origen, '');
                     $oEntrada->setJson_prot_origen($oProtOrigen->getProt());
-                }
             }
         }
 

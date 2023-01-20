@@ -59,8 +59,10 @@ function upload(): array
                 $oDocConverterPdf->setNombreFicheroNuevoSinExtension($fileName_sin_extension);
                 $oDocConverterPdf->setDocIn($contenido_doc);
                 $contenido_en_pdf = $oDocConverterPdf->convert('pdf', FALSE);
+                $filename_pdf = $oDocConverterPdf->getNombreFicheroNuevoConExtension();
             } else {
                 $contenido_en_pdf = $contenido_doc;
+                $filename_pdf = $fileName;
             }
 
             if ($type !== 'application/html') {
@@ -103,9 +105,6 @@ function upload(): array
             if ($oEntradaAdjunto->DBGuardar() !== FALSE) {
                 $id_item = $oEntradaAdjunto->getId_item();
             }
-            //unlink($fileName);
-            // conservar la versión pdf para poder mostrar en el formulario de entrada
-            $filename_pdf = $oDocConverterPdf->getNombreFicheroNuevoConExtension();
             $path_temp = ConfigGlobal::$directorio . '/log/entradas/';
             if (!file_exists($path_temp)) {
                 if (!mkdir($path_temp, 0777, true) && !is_dir($path_temp)) {
