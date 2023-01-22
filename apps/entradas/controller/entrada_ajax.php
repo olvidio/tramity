@@ -44,19 +44,22 @@ switch ($Q_que) {
         $Qtext = _("por n.v.");
 
         $tipo_escritos = strtok($Q_id_entrada, '#');
+        $id_entrada = strtok('#');
         // hay que quitar la 's' del final
         $tipo_escrito = rtrim($tipo_escritos, 's');
-        $id_entrada = strtok('#');
 
         if ($tipo_escrito === 'escrito') {
             $oEscrito = new Escrito($id_entrada);
         }
         if ($tipo_escrito === 'entrada') {
             $oEscrito = new EntradaBypass($id_entrada);
+            $oEscrito->DBCargar();
             // comprobar que es bypass. Por el click podría ser una entrada normal
             $bypass = $oEscrito->getBypass();
             if (!is_true($bypass)) {
-                $error_txt = _("Sólo se pueden reemplazar las entradas bypass");
+                $error_txt = _("No es bypass. Sólo se pueden reemplazar las entradas bypass");
+                $error_txt .= "\n";
+                $error_txt .= _("No se va a enviar nada");
             }
         }
 
@@ -96,19 +99,22 @@ switch ($Q_que) {
         $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
 
         $tipo_escritos = strtok($Q_id_entrada, '#');
+        $id_entrada = strtok('#');
         // hay que quitar la 's' del final
         $tipo_escrito = rtrim($tipo_escritos, 's');
-        $id_entrada = strtok('#');
 
         if ($tipo_escrito === 'escrito') {
             $oEscrito = new Escrito($id_entrada);
         }
         if ($tipo_escrito === 'entrada') {
             $oEscrito = new EntradaBypass($id_entrada);
-            // comprobar que es bypass. Por el click podria ser una entrada normal
+            $oEscrito->DBCargar();
+            // comprobar que es bypass. Por el click podría ser una entrada normal
             $bypass = $oEscrito->getBypass();
             if (!is_true($bypass)) {
-                $error_txt = _("Sólo se pueden anular las entradas bypass");
+                $error_txt = _("No es bypass. Sólo se pueden anular las entradas bypass");
+                $error_txt .= "\n";
+                $error_txt .= _("No se va a enviar nada");
             }
         }
 

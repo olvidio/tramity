@@ -21,7 +21,7 @@ $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 // Anular escrito
 $num_orden = 10;
 $text = _("anular en otras plataformas");
-$explicacion = _("Envia una orden de anulación para un escrito en otra plataforma");
+$explicacion = _("Envía una orden de anulación para un escrito en otra plataforma");
 
 $active = ''; // no sé si tiene sentido que sea 'active'
 $aQuery = ['filtro' => $Q_filtro,
@@ -41,7 +41,7 @@ $a_pills[$num_orden] = $pill;
 // nueva versión escrito
 $num_orden = 20;
 $text = _("reemplazar en otras plataformas");
-$explicacion = _("Envia un escrito que reemplaza a otro en otra plataforma");
+$explicacion = _("Envía un escrito que reemplaza a otro en otra plataforma");
 
 $active = ''; // no sé si tiene sentido que sea 'active'
 $aQuery = ['filtro' => $Q_filtro,
