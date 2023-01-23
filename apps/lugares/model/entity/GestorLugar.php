@@ -27,13 +27,7 @@ class GestorLugar extends core\ClaseGestor
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
 
-    /**
-     * Constructor de la classe.
-     *
-     * @return $gestor
-     *
-     */
-    function __construct()
+    public function __construct()
     {
         $oDbl = $GLOBALS['oDBP'];
         $this->setoDbl($oDbl);
@@ -123,6 +117,8 @@ class GestorLugar extends core\ClaseGestor
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
+        $mi_dl = $_SESSION['oConfig']->getSigla();
+
         $oLugarSet = new core\Set();
         $oCondicion = new core\Condicion();
         $aCondi = array();
@@ -148,9 +144,11 @@ class GestorLugar extends core\ClaseGestor
                 unset($aWhere[$camp]);
             }
         }
+
+        $cond_de_la_dl = " WHERE dl = '$mi_dl' ";
         $sCondi = implode(' AND ', $aCondi);
         if ($sCondi != '') {
-            $sCondi = " WHERE " . $sCondi;
+            $sCondi = $cond_de_la_dl . " AND " . $sCondi;
         }
         $sOrdre = '';
         $sLimit = '';
@@ -168,12 +166,12 @@ class GestorLugar extends core\ClaseGestor
         }
         $sQry = "SELECT * FROM $nom_tabla " . $sCondi . $sOrdre . $sLimit;
         if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorLugar.llistar.prepare';
+            $sClauError = 'GestorLugar.listar.prepare';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
         if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorLugar.llistar.execute';
+            $sClauError = 'GestorLugar.listar.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -272,7 +270,7 @@ class GestorLugar extends core\ClaseGestor
                 if ($id) {
                     $rta = $cLugarSup[0]->getId_lugar();
                 } else {
-                    $rta = ($tipo_sup == 'cr') ? $tipo_sup : $cLugarSup[0]->getSigla();
+                    $rta = ($tipo_sup === 'cr') ? $tipo_sup : $cLugarSup[0]->getSigla();
                 }
             }
 
@@ -509,8 +507,10 @@ class GestorLugar extends core\ClaseGestor
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
+        $mi_dl = $_SESSION['oConfig']->getSigla();
 
-        $Where_anulados = is_true($ctr_anulados) ? '' : ' WHERE anulado=FALSE';
+        $Where_anulados = "WHERE dl = '$mi_dl'";
+        $Where_anulados .= is_true($ctr_anulados) ? '' : ' AND anulado=FALSE';
 
         $sQuery = "SELECT id_lugar, sigla FROM $nom_tabla
                  $Where_anulados
@@ -529,27 +529,6 @@ class GestorLugar extends core\ClaseGestor
         return $aOpciones;
     }
 
-    /**
-     * retorna l'array d'objectes de tipus Lugar
-     *
-     * @param string sQuery la query a executar.
-     * @return array Una col·lecció d'objectes de tipus Lugar
-     */
-    function getLugaresQuery($sQuery = '')
-    {
-        $oDbl = $this->getoDbl();
-        $oLugarSet = new core\Set();
-        if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'GestorLugar.query';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        foreach ($oDbl->query($sQuery) as $aDades) {
-            $oLugar = new Lugar($aDades['id_lugar']);
-            $oLugarSet->add($oLugar);
-        }
-        return $oLugarSet->getTot();
-    }
 
     /* MÉTODOS PROTECTED --------------------------------------------------------*/
 
