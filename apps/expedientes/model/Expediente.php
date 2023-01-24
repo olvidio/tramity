@@ -521,6 +521,7 @@ class Expediente extends expedienteDB
                         $cDocumentos = $gesDocumentos->getDocumentos(['id_doc' => $id]);
                         if (empty($cDocumentos)) {
                             $nom = _("este documento se ha eliminado");
+                            $tipo_doc = 0;
                         } else {
                             $tipo_doc = $cDocumentos[0]->getTipo_doc();
                             $nom = $oDocumento->getNom();
