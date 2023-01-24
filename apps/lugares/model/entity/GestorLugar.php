@@ -580,7 +580,7 @@ class GestorLugar extends core\ClaseGestor
         // TODO
         //$Where_anulados = "WHERE dl = '$mi_dl'";
         //$Where_anulados .= is_true($ctr_anulados) ? '' : ' AND anulado=FALSE';
-        $Where_anulados .= is_true($ctr_anulados) ? '' : ' WHERE anulado=FALSE';
+        $Where_anulados = is_true($ctr_anulados) ? '' : ' WHERE anulado=FALSE';
 
         $sQuery = "SELECT id_lugar, sigla FROM $nom_tabla
                  $Where_anulados
