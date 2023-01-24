@@ -396,9 +396,11 @@ switch ($Q_que) {
             $perm_asunto = $oPermisoRegistro->permiso_detalle($oEntrada, 'asunto');
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEntrada, 'detalle');
             if ($oEntrada->getModo_entrada() === Entrada::MODO_PROVISIONAL) {
-                // borro el fichero pdf provisional
+                // borro el fichero pdf provisional, si existe
                 $filename_pdf = ConfigGlobal::DIR.'/log/entradas/entrada_' . $Q_id_entrada . '.pdf';
-                unlink($filename_pdf);
+                if (file_exists($filename_pdf)) {
+                    unlink($filename_pdf);
+                }
             }
         } else {
             $oEntrada = new Entrada();
@@ -478,7 +480,7 @@ switch ($Q_que) {
         }
 
         if (is_true($Q_admitir_hidden)) {
-            // pasa directamente a asigado. Se supone que el admitido lo ha puesto el vcd.
+            // pasa directamente a asignado. Se supone que el admitido lo ha puesto el vcd.
             // en caso de ponerlo secretaria, al guardar pasa igualmente a asignado.
             $estado = Entrada::ESTADO_ASIGNADO;
         } else {

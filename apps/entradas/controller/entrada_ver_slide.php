@@ -35,10 +35,12 @@ if (!empty($Qid_entrada)) {
     // Paso los id siguiente y previo, porque si sólo paso los movimientos,
     // al haber guardado la entrada como admitida, ya no está en la lista y no puedo saber la siguiente.
     $aWhere = ['estado' => Entrada::ESTADO_INGRESADO,
+        'modo_entrada' => Entrada::MODO_PROVISIONAL,
         '_ordre' => 'f_entrada, id_entrada',
     ];
+    $aOperador['modo_entrada'] = '!=';
     $gesEntradas = new GestorEntrada();
-    $cEntradas = $gesEntradas->getEntradas($aWhere);
+    $cEntradas = $gesEntradas->getEntradas($aWhere,$aOperador);
     $a_lst_entradas = [];
     $i = 0;
     foreach ($cEntradas as $oEntrada) {
