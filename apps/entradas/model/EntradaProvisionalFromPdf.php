@@ -292,7 +292,7 @@ class EntradaProvisionalFromPdf
 
         if (!empty($origen)) {
             $gesLugares = new GestorLugar();
-            $cLugares = $gesLugares->getLugares(['sigla' => $origen]);
+            $cLugares = $gesLugares->getLugares(['sigla' => $origen],['sigla' => 'sin_acentos']);
             if (empty($cLugares)) {
                 //exit (_("No sé de dónde viene"));
             } else {
@@ -316,7 +316,7 @@ class EntradaProvisionalFromPdf
         $aProtRef = [];
         if (!empty($destino) && !empty($destino_prot)) {
             $gesLugares = new GestorLugar();
-            $cLugares = $gesLugares->getLugares(['sigla' => $destino]);
+            $cLugares = $gesLugares->getLugares(['sigla' => $destino],['sigla' => 'sin_acentos']);
             if (empty($cLugares)) {
                 //exit (_("No sé el destino"));
             } else {
@@ -342,7 +342,7 @@ class EntradaProvisionalFromPdf
                 $prot_ref = $a_ref_prot[$key];
 
                 $gesLugares = new GestorLugar();
-                $cLugares = $gesLugares->getLugares(['sigla' => $lugar_ref]);
+                $cLugares = $gesLugares->getLugares(['sigla' => $lugar_ref],['sigla' => 'sin_acentos']);
                 if (empty($cLugares)) {
                     //exit (_("No sé la referencia"));
                     $id_lugar = 0;
