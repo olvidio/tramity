@@ -4,6 +4,7 @@ namespace expedientes\model;
 
 use core\ConfigGlobal;
 use documentos\model\Documento;
+use documentos\model\GestorDocumento;
 use entradas\model\Entrada;
 use escritos\model\entity\EscritoDB;
 use escritos\model\Escrito;
@@ -516,9 +517,14 @@ class Expediente extends expedienteDB
                         break;
                     case 'documento':
                         $oDocumento = new Documento($id);
-                        $tipo_doc = $oDocumento->getTipo_doc();
-                        $nom = $oDocumento->getNom();
-                        $nom = empty($nom) ? _("este documento se ha eliminado") : $nom;
+                        $gesDocumentos = new GestorDocumento();
+                        $cDocumentos = $gesDocumentos->getDocumentos(['id_doc' => $id]);
+                        if (empty($cDocumentos)) {
+                            $nom = _("este documento se ha eliminado");
+                        } else {
+                            $tipo_doc = $cDocumentos[0]->getTipo_doc();
+                            $nom = $oDocumento->getNom();
+                        }
                         $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_documento($id,$tipo_doc);\" >$nom</span>";
                         $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >" . _("quitar") . "</span>";
                         break;
