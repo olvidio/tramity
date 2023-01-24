@@ -577,8 +577,10 @@ class GestorLugar extends core\ClaseGestor
         $nom_tabla = $this->getNomTabla();
         $mi_dl = $_SESSION['oConfig']->getSigla();
 
-        $Where_anulados = "WHERE dl = '$mi_dl'";
-        $Where_anulados .= is_true($ctr_anulados) ? '' : ' AND anulado=FALSE';
+        // TODO
+        //$Where_anulados = "WHERE dl = '$mi_dl'";
+        //$Where_anulados .= is_true($ctr_anulados) ? '' : ' AND anulado=FALSE';
+        $Where_anulados .= is_true($ctr_anulados) ? '' : ' WHERE anulado=FALSE';
 
         $sQuery = "SELECT id_lugar, sigla FROM $nom_tabla
                  $Where_anulados
