@@ -188,8 +188,9 @@ class As4Entregar extends As4CollaborationInfo
         $num_dst = '';
         $any_dst = '';
         $mas_dst = '';
-        // para evitar el mensaje: "Node no longer exists"
-        if (@count($messageProperties->children())) {
+        // para evitar el mensaje: "Node no longer exists" poner '@'
+        // a partir de php 8:
+        if (is_countable($messageProperties->children())) {
             foreach ($messageProperties->children() as $node_property) {
                 $name = (string)$node_property->attributes()->name;
                 $value = (string)$node_property;
@@ -296,7 +297,7 @@ class As4Entregar extends As4CollaborationInfo
         $any = '';
         $mas = '';
         // para evitar el mensaje: "Node no longer exists"
-        if ($xml !== null && !is_null($xml->childNodes) && @count($xml->childNodes)) {
+        if ($xml !== null && !is_null($xml->childNodes) && is_countable($xml->childNodes)) {
             foreach ($xml->childNodes as $node) {
                 $name = $node->nodeName;
                 $value = $node->nodeValue;
@@ -395,7 +396,7 @@ class As4Entregar extends As4CollaborationInfo
     {
         $a_json_prot = [];
         // para evitar el mensaje: "Node no longer exists"
-        if ($xml !== null && !is_null($xml->childNodes) && @count($xml->childNodes)) {
+        if ($xml !== null && !is_null($xml->childNodes) && is_countable($xml->childNodes)) {
             foreach ($xml->childNodes as $node) {
                 $a_json_prot[] = $this->xml2prot_simple($node, $sufijo);
             }
