@@ -18,17 +18,17 @@ require_once("apps/core/global_object.inc");
 
 
 $gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayLugares();
+$a_posibles_lugares = $gesLugares->getArrayBusquedas();
 
 $oDesplLugar_org = new Desplegable();
 $oDesplLugar_org->setNombre('id_lugar_org');
 $oDesplLugar_org->setBlanco(TRUE);
-$oDesplLugar_org->setOpciones($a_lugares);
+$oDesplLugar_org->setOpciones($a_posibles_lugares);
 
 $oDesplLugar_dst = new Desplegable();
 $oDesplLugar_dst->setNombre('id_lugar_dst');
 $oDesplLugar_dst->setBlanco(TRUE);
-$oDesplLugar_dst->setOpciones($a_lugares);
+$oDesplLugar_dst->setOpciones($a_posibles_lugares);
 
 $prot_num_org = '';
 $prot_any_org = '';

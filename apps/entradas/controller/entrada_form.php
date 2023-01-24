@@ -41,7 +41,7 @@ $error_fecha = $_SESSION['oConfig']->getPlazoError();
 $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
 $gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$a_posibles_lugares = $gesLugares->getArrayBusquedas();
 $id_uden = $gesLugares->getId_uden();
 $id_cancilleria = $gesLugares->getId_cancilleria();
 

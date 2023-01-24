@@ -28,7 +28,7 @@ $gesOficinas = new GestorOficina();
 $a_posibles_oficinas = $gesOficinas->getArrayOficinas();
 
 $gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$a_posibles_lugares = $gesLugares->getArrayBusquedas();
 
 $oEntradaBypass = new EntradaBypass($Q_id_entrada);
 // categoria

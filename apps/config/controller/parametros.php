@@ -407,7 +407,7 @@ $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
 $gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayLugares();
+$a_lugares = $gesLugares->getArrayBusquedas();
 
 $oConfigSchema = new ConfigSchema('id_lugar_cr');
 $id_cr = $oConfigSchema->getValor();
@@ -445,7 +445,7 @@ $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();
 
 $gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayLugares();
+$a_lugares = $gesLugares->getArrayBusquedas();
 
 $oConfigSchema = new ConfigSchema('id_lugar_cancilleria');
 $id_cancilleria = $oConfigSchema->getValor();

@@ -106,14 +106,7 @@ class GestorLugar extends core\ClaseGestor
         return 0;
     }
 
-    /**
-     * retorna l'array d'objectes de tipus Lugar
-     *
-     * @param array aWhere associatiu amb els valors de les variables amb les quals farem la query
-     * @param array aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
-     * @return array Una col·lecció d'objectes de tipus Lugar
-     */
-    function getLugaresAll($aWhere = array(), $aOperators = array())
+    function getLugares($aWhere = array(), $aOperators = array())
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
@@ -148,75 +141,6 @@ class GestorLugar extends core\ClaseGestor
         $sCondi = implode(' AND ', $aCondi);
         if ($sCondi != '') {
             $sCondi = " WHERE " . $sCondi;
-        }
-        $sOrdre = '';
-        $sLimit = '';
-        if (isset($aWhere['_ordre']) && $aWhere['_ordre'] !== '') {
-            $sOrdre = ' ORDER BY ' . $aWhere['_ordre'];
-        }
-        if (isset($aWhere['_ordre'])) {
-            unset($aWhere['_ordre']);
-        }
-        if (isset($aWhere['_limit']) && $aWhere['_limit'] !== '') {
-            $sLimit = ' LIMIT ' . $aWhere['_limit'];
-        }
-        if (isset($aWhere['_limit'])) {
-            unset($aWhere['_limit']);
-        }
-        $sQry = "SELECT * FROM $nom_tabla " . $sCondi . $sOrdre . $sLimit;
-        if (($oDblSt = $oDbl->prepare($sQry)) === FALSE) {
-            $sClauError = 'GestorLugar.listar.prepare';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        if (($oDblSt->execute($aWhere)) === FALSE) {
-            $sClauError = 'GestorLugar.listar.execute';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDblSt, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        foreach ($oDblSt as $aDades) {
-            $oLugar = new Lugar($aDades['id_lugar']);
-            $oLugarSet->add($oLugar);
-        }
-        return $oLugarSet->getTot();
-    }
-
-    function getLugares($aWhere = array(), $aOperators = array())
-    {
-        $oDbl = $this->getoDbl();
-        $nom_tabla = $this->getNomTabla();
-        $mi_dl = $_SESSION['oConfig']->getSigla();
-
-        $oLugarSet = new core\Set();
-        $oCondicion = new core\Condicion();
-        $aCondi = array();
-        foreach ($aWhere as $camp => $val) {
-            if ($camp === '_ordre') {
-                continue;
-            }
-            if ($camp === '_limit') {
-                continue;
-            }
-            $sOperador = $aOperators[$camp] ?? '';
-            if ($a = $oCondicion->getCondicion($camp, $sOperador, $val)) {
-                $aCondi[] = $a;
-            }
-            // operadores que no requieren valores
-            if ($sOperador === 'BETWEEN' || $sOperador === 'IS NULL' || $sOperador === 'IS NOT NULL' || $sOperador === 'OR') {
-                unset($aWhere[$camp]);
-            }
-            if ($sOperador === 'IN' || $sOperador === 'NOT IN') {
-                unset($aWhere[$camp]);
-            }
-            if ($sOperador === 'TXT') {
-                unset($aWhere[$camp]);
-            }
-        }
-
-        $cond_de_la_dl = " WHERE dl = '$mi_dl' ";
-        $sCondi = implode(' AND ', $aCondi);
-        if ($sCondi != '') {
-            $sCondi = $cond_de_la_dl . " AND " . $sCondi;
         }
         $sOrdre = '';
         $sLimit = '';
@@ -333,7 +257,7 @@ class GestorLugar extends core\ClaseGestor
 
             }
 
-            $cLugarSup = $this->getLugaresAll($aWhere);
+            $cLugarSup = $this->getLugares($aWhere);
             if (!empty($cLugarSup)) {
                 if ($id) {
                     $rta = $cLugarSup[0]->getId_lugar();
@@ -575,11 +499,6 @@ class GestorLugar extends core\ClaseGestor
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $mi_dl = $_SESSION['oConfig']->getSigla();
-
-        // TODO
-        //$Where_anulados = "WHERE dl = '$mi_dl'";
-        //$Where_anulados .= is_true($ctr_anulados) ? '' : ' AND anulado=FALSE';
         $Where_anulados = is_true($ctr_anulados) ? '' : ' WHERE anulado=FALSE';
 
         $sQuery = "SELECT id_lugar, sigla FROM $nom_tabla

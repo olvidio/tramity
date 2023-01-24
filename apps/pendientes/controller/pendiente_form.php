@@ -115,18 +115,18 @@ $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
 $oDesplEncargados = new Desplegable('encargado', $a_usuarios_oficina, '', TRUE);
 
 $gesLugares = new GestorLugar();
-$a_lugares = $gesLugares->getArrayLugares();
+$a_posibles_lugares = $gesLugares->getArrayBusquedas();
 
 
 $oDesplLugar = new Desplegable();
 $oDesplLugar->setNombre('ref_id_lugar');
 $oDesplLugar->setBlanco(TRUE);
-$oDesplLugar->setOpciones($a_lugares);
+$oDesplLugar->setOpciones($a_posibles_lugares);
 
 $oDesplLugar1 = new Desplegable();
 $oDesplLugar1->setNombre('pendiente_con');
 $oDesplLugar1->setBlanco(TRUE);
-$oDesplLugar1->setOpciones($a_lugares);
+$oDesplLugar1->setOpciones($a_posibles_lugares);
 
 $a_status = Pendiente::getArrayStatus();
 $oDesplStatus = new Desplegable();

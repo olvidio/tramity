@@ -29,7 +29,7 @@ $oDesplOficinas->setNombre('id_oficina');
 $oDesplOficinas->setOpcion_sel($id_oficina);
 
 $gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$a_posibles_lugares = $gesLugares->getArrayBusquedas();
 
 $oDesplLugares = new Desplegable();
 $oDesplLugares->setNombre('id_origen');

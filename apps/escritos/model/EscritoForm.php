@@ -68,8 +68,8 @@ class EscritoForm
 
         $gesLugares = new GestorLugar();
         if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
-            $a_posibles_lugares = $gesLugares->getArrayLugares();
-            $a_posibles_lugares_ref = $gesLugares->getArrayLugares();
+            $a_posibles_lugares = $gesLugares->getArrayBusquedas();
+            $a_posibles_lugares_ref = $gesLugares->getArrayBusquedas();
 
             $gesGrupo = new GestorGrupo();
             $a_posibles_grupos = $gesGrupo->getArrayGrupos();

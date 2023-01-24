@@ -72,7 +72,7 @@ $a_posibles_lugar_local = [
     $id_cancilleria => $sigla_cancilleria,
 ];
 
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$a_posibles_lugares = $gesLugares->getArrayBusquedas();
 $oDesplBuscar = new web\Desplegable('buscar_id_lugar', $a_posibles_lugar_local);
 $oDesplBuscar->setBlanco(false);
 $oDesplBuscar->setOpcion_sel($id_lugar_local);

@@ -36,7 +36,7 @@ $plazo_normal = $_SESSION['oConfig']->getPlazoNormal();
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 
 $gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$a_posibles_lugares = $gesLugares->getArrayBusquedas();
 
 $oProtOrigen = new Protocolo();
 $oProtOrigen->setEtiqueta('De');

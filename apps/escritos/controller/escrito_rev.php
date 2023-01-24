@@ -31,7 +31,7 @@ $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 $sigla_local = $_SESSION['oConfig']->getSigla();
 $id_lugar_local = '';
 $gesLugares = new GestorLugar();
-$a_posibles_lugares = $gesLugares->getArrayLugares();
+$a_posibles_lugares = $gesLugares->getArrayBusquedas();
 
 //$txt_option_ref = '';
 foreach ($a_posibles_lugares as $id_lugar => $sigla) {
