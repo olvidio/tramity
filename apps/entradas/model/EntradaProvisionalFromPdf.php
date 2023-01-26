@@ -6,6 +6,7 @@ namespace entradas\model;
 use core\ConfigGlobal;
 use entradas\model\entity\EntradaDocDB;
 use lugares\model\entity\GestorLugar;
+use Smalot\PdfParser\Config;
 use Smalot\PdfParser\Parser;
 use usuarios\model\Categoria;
 use web\DateTimeLocal;
@@ -102,8 +103,12 @@ class EntradaProvisionalFromPdf
 
     private function leer_pdf()
     {
-        // Parse PDF file and build necessary objects.
-        $parser = new Parser();
+        // Sirve para que ponga '*' en vez de espacio cuando hay caracteres raros.
+        // sucede en el caso de los acentos (se complica la expresión regular)
+        $config = new Config();
+        $config->setHorizontalOffset('*');
+
+        $parser = new Parser([],$config);
         $pdf = $parser->parseContent($this->content_pdf);
         // extract text of the whole PDF
         //$text = $pdf->getText();
@@ -139,13 +144,18 @@ class EntradaProvisionalFromPdf
 
             if ($tramo_inicio && $linea_protocolo === 0 ) {
                 // agdmontagut 12/22      dlb 3/22
-                $pattern = '/^\s*(\P{N}+)(\s+\d+\/\d{2})*\s+(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
+                $pattern = "/^\s*([^\*\p{N}]+)*((\*|\s)+\d+\/\d{2})*(\*|\s)+(((\*\P{N}\*)|\P{N})+)(\s+\d+\/\d{2})*\s*$/u";
                 $coincide = preg_match($pattern, $line, $matches);
                 if ($coincide === 1) {
+                    // quitar los '*' si tiene
                     $destino = trim($matches[1]);
                     $destino_prot = empty($matches[2]) ? '' : $matches[2];
-                    $origen = trim($matches[3]);
-                    $origen_prot = empty($matches[4]) ? '' : $matches[4];
+                    $destino_prot = str_replace('*','',$destino_prot);
+
+                    $origen = trim($matches[5]);
+                    $origen = str_replace('*','',$origen);
+                    $origen_prot = empty($matches[8]) ? '' : $matches[8];
+                    $origen_prot = str_replace('*','',$origen_prot);
 
                     // si tiene un guión, puede ser de una región (Gal-dlb)
                     if (strpos($destino, '-')) {
@@ -186,7 +196,8 @@ class EntradaProvisionalFromPdf
                         $destino_prot = '';
                     }
                 }
-                if ($coincide === 1) {
+                // si no coincide, pero no está vacío, también salto de linea para que coja las referencias
+                if ($coincide === 1 || !empty($line)) {
                     $linea_protocolo = $l;
                 }
 
@@ -216,7 +227,8 @@ class EntradaProvisionalFromPdf
                     // Sigue igual
                     if ($coincide === 1) {
                         $a_ref[] = $matches[1];
-                        $a_referencias[] = $matches[2];
+                        // quitar los '*' si tiene
+                        $a_referencias[] = str_replace('*','',$matches[2]);
                         $a_ref_prot[] = $matches[3];
                     }
                 }
@@ -292,7 +304,7 @@ class EntradaProvisionalFromPdf
 
         if (!empty($origen)) {
             $gesLugares = new GestorLugar();
-            $cLugares = $gesLugares->getLugares(['sigla' => $origen],['sigla' => 'sin_acentos']);
+            $cLugares = $gesLugares->getLugares(['sigla' => "^$origen\$"],['sigla' => 'sin_acentos']);
             if (empty($cLugares)) {
                 //exit (_("No sé de dónde viene"));
             } else {
@@ -316,7 +328,7 @@ class EntradaProvisionalFromPdf
         $aProtRef = [];
         if (!empty($destino) && !empty($destino_prot)) {
             $gesLugares = new GestorLugar();
-            $cLugares = $gesLugares->getLugares(['sigla' => $destino],['sigla' => 'sin_acentos']);
+            $cLugares = $gesLugares->getLugares(['sigla' => "^$destino\$"],['sigla' => 'sin_acentos']);
             if (empty($cLugares)) {
                 //exit (_("No sé el destino"));
             } else {
@@ -342,7 +354,7 @@ class EntradaProvisionalFromPdf
                 $prot_ref = $a_ref_prot[$key];
 
                 $gesLugares = new GestorLugar();
-                $cLugares = $gesLugares->getLugares(['sigla' => $lugar_ref],['sigla' => 'sin_acentos']);
+                $cLugares = $gesLugares->getLugares(['sigla' => "^$lugar_ref\$"],['sigla' => 'sin_acentos']);
                 if (empty($cLugares)) {
                     //exit (_("No sé la referencia"));
                     $id_lugar = 0;
