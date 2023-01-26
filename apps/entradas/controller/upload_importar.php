@@ -30,6 +30,8 @@ exit(); // terminate
 // returns associative array
 function upload(): array
 {
+    $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+
     $preview = [];
     $config = [];
     $errors = [];
@@ -78,6 +80,7 @@ function upload(): array
             }
 
             $EntradaProvisional = new EntradaProvisionalFromPdf($contenido_en_pdf);
+            $EntradaProvisional->setFiltro($Q_filtro);
             $id_entrada = $EntradaProvisional->crear_entrada_provisional($fileName);
 
             // añadir el contenido convertido en html en el etherpad

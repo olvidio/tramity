@@ -21,11 +21,13 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_importar = (bool)filter_input(INPUT_POST, 'importar');
 $Q_slide_mode = (string)filter_input(INPUT_POST, 'slide_mode');
 
 $oEntradaLista = new EntradaLista();
 $oEntradaLista->setFiltro($Q_filtro);
 $oEntradaLista->setSlide_mode($Q_slide_mode);
+$oEntradaLista->setImportar($Q_importar);
 
 $msg = '';
 // añadir dialogo de búsquedas

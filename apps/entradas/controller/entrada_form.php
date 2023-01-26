@@ -27,6 +27,7 @@ require_once("apps/core/global_object.inc");
 
 $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
+$Q_importar = (bool)filter_input(INPUT_POST, 'importar');
 
 if ($Q_filtro === 'en_buscar' && empty($Q_id_entrada)) {
     $Q_a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -368,6 +369,7 @@ $a_campos = [
     'str_condicion' => $str_condicion,
     // para ver pdf
     'file_pdf' => $filename_pdf,
+    'importar' => $Q_importar,
 ];
 
 $oView = new ViewTwig('entradas/controller');

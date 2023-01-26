@@ -11,6 +11,7 @@ use Smalot\PdfParser\Parser;
 use usuarios\model\Categoria;
 use web\DateTimeLocal;
 use web\Protocolo;
+use function core\is_true;
 
 require_once(ConfigGlobal::$dir_libs . '/vendor/autoload.php');
 
@@ -21,6 +22,8 @@ class EntradaProvisionalFromPdf
     private string $page_frist;
     private string $page_last;
     private int $num_pages;
+
+    private string $filtro;
 
     public function __construct($content_pdf)
     {
@@ -129,6 +132,8 @@ class EntradaProvisionalFromPdf
         $oFecha = '';
         $destino = '';
         $a_ref = [];
+        $a_referencias = [];
+        $a_ref_prot = [];
 
         $a_txt = explode("\n", $text);
         $num_lineas = count($a_txt);
@@ -169,17 +174,36 @@ class EntradaProvisionalFromPdf
                 }
                 if ($coincide !== 1) {
                     // Ceb-r 3/22
-                    //$pattern = '/^\s*(\P{N}+)(\s+\d+\/\d{2})*-(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
-                    $pattern = '/^\s*(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
+                    //$pattern = '/^(\s*(\P{N}+)(\s+\d+\/\d{2})*\s*-\s*([^\s\p{N}]+)(\s+\d+\/\d{2})*\s*)*\s*(\P{N}+)(\s+\d+\/\d{2})*\s*-\s*(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
+                    $pattern = '/^(\s*(\P{N}+)\s*-\s*([^\s\p{N}]+)(\s+\d+\/\d{2})*\s*)*\s*(\P{N}+)\s*-\s*(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
                     $coincide = preg_match($pattern, $line, $matches);
                     if ($coincide === 1) {
-                        $origen = trim($matches[4]);
-                        $origen_prot = empty($matches[6]) ? '' : $matches[6];
-                        $destino = trim($matches[5]);
+                        // quitar los '*' si tiene
+                        $origen_ref = trim($matches[2]);
+                        $origen_ref = str_replace('*','',$origen_ref);
+                        $origen_ref_prot = empty($matches[4]) ? '' : $matches[4];
+                        $origen_ref_prot = str_replace('*','',$origen_ref_prot);
+
+                        $destino_ref = trim($matches[3]);
+
+                        if (!empty($origen_ref)) {
+                            $a_ref[] = 'ref';
+                            $a_referencias[] = $origen_ref;
+                            $a_ref_prot[] = $origen_ref_prot;
+                        }
+                        //-------------------
+
+                        $origen = trim($matches[5]);
+                        $origen = str_replace('*','',$origen);
+                        $origen_prot = empty($matches[7]) ? '' : $matches[7];
+                        $origen_prot = str_replace('*','',$origen_prot);
+
+                        $destino = trim($matches[6]);
+                        $destino = str_replace('*','',$destino);
                         if ($destino === 'r') {
                             $destino = 'cr';
                         }
-                        $destino_prot = empty($matches[3]) ? '' : $matches[3];
+                        $destino_prot = '';
                     }
                 }
                 if ($coincide !== 1) {
@@ -379,7 +403,12 @@ class EntradaProvisionalFromPdf
 
         $oEntrada->setCategoria(Categoria::CAT_NORMAL);
 
-        $oEntrada->setEstado(Entrada::ESTADO_INGRESADO);
+        if ($this->filtro === 'en_admitido') {
+            // Si estoy en la pestaña de admitir:
+            $oEntrada->setEstado(Entrada::ESTADO_ADMITIDO);
+        } else {
+            $oEntrada->setEstado(Entrada::ESTADO_INGRESADO);
+        }
 
         if ($oEntrada->DBGuardar() === FALSE) {
             $error_txt = $oEntrada->getErrorTxt();
@@ -398,5 +427,13 @@ class EntradaProvisionalFromPdf
 
         return $oEntrada->getId_entrada();
 
+    }
+
+    /**
+     * @param string $filtro
+     */
+    public function setFiltro(string $filtro): void
+    {
+        $this->filtro = $filtro;
     }
 }

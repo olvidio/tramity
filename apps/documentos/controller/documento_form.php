@@ -81,7 +81,7 @@ if (!empty($Q_id_doc)) {
     }
 
 } else {
-    // Valors por defecto:
+    // Valores por defecto:
     $nom = '';
     $visibilidad = '';
     $oDesplVisibilidad->setOpcion_sel($visibilidad);

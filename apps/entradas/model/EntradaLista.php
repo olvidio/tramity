@@ -13,10 +13,16 @@ use usuarios\model\Visibilidad;
 use web\Hash;
 use web\Protocolo;
 use web\ProtocoloArray;
+use function core\is_true;
 
 
 class EntradaLista
 {
+    /**
+     *
+     * @var string
+     */
+    private bool $importar = FALSE;
     /**
      *
      * @var string
@@ -49,8 +55,9 @@ class EntradaLista
     private array $aOperadorADD = [];
 
     /*
-     * filtros posibles: 
+     * filtro importar:
     'en_provisional':
+     * filtros posibles:
     'en_ingresado':
     'en_admitido':
     'en_asignado':
@@ -97,17 +104,12 @@ class EntradaLista
                 }
                 $pagina_nueva = '';
                 break;
-            case 'en_provisional':
-                $ver_oficina = FALSE;
-                $pagina_mod = ConfigGlobal::getWeb() . '/apps/entradas/controller/entrada_form.php';
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query(['filtro' => $filtro]));
-                break;
             case 'en_ingresado':
                 $ver_oficina = FALSE;
                 $pagina_mod = ConfigGlobal::getWeb() . '/apps/entradas/controller/entrada_form.php';
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query(['filtro' => $filtro]));
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query(['filtro' => $filtro, 'importar' => $this->importar]));
                 if (ConfigGlobal::role_actual() === 'vcd') {
-                    $aQuery = ['filtro' => $filtro, 'slide_mode' => 't'];
+                    $aQuery = ['filtro' => $filtro, 'slide_mode' => 't', 'importar' => $this->importar];
                     $pagina_nueva = Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($aQuery));
                 }
                 break;
@@ -115,7 +117,7 @@ class EntradaLista
             case 'en_asignado':
             case 'entrada':
                 $pagina_mod = ConfigGlobal::getWeb() . '/apps/entradas/controller/entrada_form.php';
-                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query(['filtro' => $filtro]));
+                $pagina_nueva = Hash::link('apps/entradas/controller/entrada_form.php?' . http_build_query(['filtro' => $filtro, 'importar' => $this->importar]));
                 break;
             case 'bypass':
                 $pagina_mod = ConfigGlobal::getWeb() . '/apps/entradas/controller/entrada_bypass.php';
@@ -145,6 +147,7 @@ class EntradaLista
                 $a_cosas = ['id_entrada' => $id_entrada,
                     'filtro' => $filtro,
                     'slide_mode' => $this->slide_mode,
+                    'importar' => $this->importar,
                 ];
                 if ($filtro === 'en_aceptado') {
                     $a_cosas['oficina'] = $oficina;
@@ -168,7 +171,7 @@ class EntradaLista
                 }
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >mod</span>";
 
-                if ($filtro === 'en_provisional') {
+                if (is_true($this->importar)) {
                     $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_borrar_entrada('$id_entrada');\" >" . _("eliminar") . "</span>";
                 }
 
@@ -265,8 +268,8 @@ class EntradaLista
         $txt_btn_dock = _("revisar dock");
         $pagina_cargar_dock = Hash::link('apps/entradas/controller/entrada_dock.php?' . http_build_query(['filtro' => $filtro]));
 
-        $pagina_importar = Hash::link('apps/entradas/controller/entrada_importar.php?' . http_build_query(['filtro' => $filtro]));
-        $pagina_revisar = Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => 'en_provisional']));
+        $pagina_importar = Hash::link('apps/entradas/controller/entrada_importar.php?' . http_build_query(['filtro' => $filtro, 'importar' => TRUE]));
+        $pagina_revisar = Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => $filtro, 'importar' => TRUE]));
 
 
         $a_campos = [
@@ -318,15 +321,18 @@ class EntradaLista
         $aWhere['modo_entrada'] = Entrada::MODO_PROVISIONAL;
         $aOperador['modo_entrada'] = '!=';
         switch ($this->filtro) {
-            case 'en_provisional':
-                $aWhere['modo_entrada'] = Entrada::MODO_PROVISIONAL;
-                $aOperador['modo_entrada'] = '=';
-                $aWhere['estado'] = Entrada::ESTADO_INGRESADO;
-                break;
             case 'en_ingresado':
+                if (is_true($this->importar)) {
+                    $aWhere['modo_entrada'] = Entrada::MODO_PROVISIONAL;
+                    $aOperador['modo_entrada'] = '=';
+                }
                 $aWhere['estado'] = Entrada::ESTADO_INGRESADO;
                 break;
             case 'en_admitido':
+                if (is_true($this->importar)) {
+                    $aWhere['modo_entrada'] = Entrada::MODO_PROVISIONAL;
+                    $aOperador['modo_entrada'] = '=';
+                }
                 $aWhere['estado'] = Entrada::ESTADO_ADMITIDO;
                 break;
             case 'en_asignado':
@@ -529,6 +535,22 @@ class EntradaLista
     public function setAOperadorADD(array $aOperadorADD): void
     {
         $this->aOperadorADD = $aOperadorADD;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImportar(): string
+    {
+        return $this->importar;
+    }
+
+    /**
+     * @param string $importar
+     */
+    public function setImportar(string $importar): void
+    {
+        $this->importar = $importar;
     }
 
 }
