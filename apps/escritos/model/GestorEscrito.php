@@ -23,7 +23,7 @@ class GestorEscrito extends GestorEscritoDB
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $oEscritoDBSet = new Set();
+        $oEscritoSet = new Set();
         $oCondicion = new Condicion();
         $aCondi = array();
         $COND_OR = '';
@@ -95,9 +95,9 @@ class GestorEscrito extends GestorEscritoDB
             return FALSE;
         }
         foreach ($oDblSt as $aDades) {
-            $oEscritoDB = new Escrito($aDades['id_escrito']);
-            $oEscritoDBSet->add($oEscritoDB);
+            $oEscrito = new Escrito($aDades['id_escrito']);
+            $oEscritoSet->add($oEscrito);
         }
-        return $oEscritoDBSet->getTot();
+        return $oEscritoSet->getTot();
     }
 }

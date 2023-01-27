@@ -678,7 +678,9 @@ class Expediente extends expedienteDB
                         }
                         break;
                     default:
-                        $err_switch = sprintf(_("opción id_cargo: %s. no definida en switch en %s, linea %s"), $id_cargo, __FILE__, __LINE__);
+                        $oCargo = new Cargo($id_cargo);
+                        $nom_cargo = $oCargo->getCargo();
+                        $err_switch = sprintf(_("opción cargo: %s. no definida en switch en %s, linea %s"), $nom_cargo, __FILE__, __LINE__);
                         exit ($err_switch);
                 }
             } else {

@@ -399,6 +399,7 @@ switch ($Q_opcion) {
             $oTabla->setCollection($cCollection);
             $oTabla->setFiltro($filtro);
             $oTabla->setBotonesDefault();
+            $oTabla->mostrarTabla();
         }
         break;
     case 51:

@@ -591,10 +591,10 @@ class Buscar
                 unset($aWhere['creador']);
             }
         } else {
-            // A quien se envia el escrito (escritos)
+            // A quien se envía el escrito (escritos)
             if (!empty($this->dest_id_lugar)) {
                 $cEscritosJson = $gesEscritos->getEscritosByLugarDB($this->dest_id_lugar, $aWhere, $aOperador);
-                // añadir los envios a grupos:
+                // añadir los envíos a grupos:
                 $cEscritosGrupos = $gesEscritos->getEscritosByLugarDeGrupo($this->dest_id_lugar, $aWhere, $aOperador);
                 $cEscritos = array_merge($cEscritosJson, $cEscritosGrupos);
             } elseif (!empty($this->local_id_lugar)) {
