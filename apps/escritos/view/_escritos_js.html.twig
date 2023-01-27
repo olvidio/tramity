@@ -11,45 +11,32 @@
             content: msg,
             columnClass: 'col-md-6',
             buttons: {
-        {{ "Cancel"|trans|raw }}:
-
-        function () {
-            fnjs_actualizar();
-        }
-
-    ,
-        adjuntar: {
-            text: '{{ "Insertar"|trans|raw }}',
-                btnClass
-        :
-            'btn-blue',
-                action
-        :
-
-            function () {
-                fnjs_insertar_documento(tipo, id_doc, id_escrito);
+                cancel: {
+                    text: '{{ "Cancel"|trans|raw }}',
+                    action: function () {
+                        fnjs_actualizar();
+                    }
+                },
+                adjuntar: {
+                    text: '{{ "Insertar"|trans|raw }}',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        fnjs_insertar_documento(tipo, id_doc, id_escrito);
+                    }
+                },
+                somethingElse: {
+                    text: '{{ "insertar una copia"|trans|raw }}',
+                    btnClass: 'btn-secondary',
+                    // Nueva entrada.
+                    action: function () {
+                        fnjs_insertar_copia_documento(tipo, id_doc, id_escrito);
+                    }
+                }
+            },
+            onContentReady: function () {
+                $('.jconfirm-buttons').find('button:contains("{{ "Insertar"|trans|raw }}")').focus()
             }
-        }
-    ,
-        somethingElse: {
-            text: '{{ "insertar una copia"|trans|raw }}',
-                btnClass
-        :
-            'btn-secondary',
-                // Nueva entrada.
-                action
-        :
-
-            function () {
-                fnjs_insertar_copia_documento(tipo, id_doc, id_escrito);
-            }
-        }
-    },
-        onContentReady: function () {
-            $('.jconfirm-buttons').find('button:contains("{{ "Insertar"|trans|raw }}")').focus()
-        }
-    })
-        ;
+        });
     }
 
     fnjs_confirm_adjuntar_documento = function (tipo, id_doc, id_escrito) {
@@ -61,45 +48,32 @@
             content: msg,
             columnClass: 'col-md-6',
             buttons: {
-        {{ "Cancel"|trans|raw }}:
-
-        function () {
-            fnjs_actualizar();
-        }
-
-    ,
-        adjuntar: {
-            text: '{{ "Adjuntar"|trans|raw }}',
-                btnClass
-        :
-            'btn-blue',
-                action
-        :
-
-            function () {
-                fnjs_adjuntar_documento(tipo, id_doc, id_escrito);
+                cancel: {
+                    text: '{{ "Cancel"|trans|raw }}',
+                    action: function () {
+                        fnjs_actualizar();
+                    }
+                },
+                adjuntar: {
+                    text: '{{ "Adjuntar"|trans|raw }}',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        fnjs_adjuntar_documento(tipo, id_doc, id_escrito);
+                    }
+                },
+                somethingElse: {
+                    text: '{{ "adjuntar una copia"|trans|raw }}',
+                    btnClass: 'btn-secondary',
+                    // Nueva entrada.
+                    action: function () {
+                        fnjs_adjuntar_copia_documento(tipo, id_doc, id_escrito);
+                    }
+                }
+            },
+            onContentReady: function () {
+                $('.jconfirm-buttons').find('button:contains("{{ "Adjuntar"|trans|raw }}")').focus()
             }
-        }
-    ,
-        somethingElse: {
-            text: '{{ "adjuntar una copia"|trans|raw }}',
-                btnClass
-        :
-            'btn-secondary',
-                // Nueva entrada.
-                action
-        :
-
-            function () {
-                fnjs_adjuntar_copia_documento(tipo, id_doc, id_escrito);
-            }
-        }
-    },
-        onContentReady: function () {
-            $('.jconfirm-buttons').find('button:contains("{{ "Adjuntar"|trans|raw }}")').focus()
-        }
-    })
-        ;
+        });
     }
 
 
@@ -131,32 +105,24 @@
                         content: msg,
                         columnClass: 'col-md-6',
                         buttons: {
-                    {{ "Cancel"|trans|raw }}:
-
-                    function () {
-                        fnjs_actualizar();
-                    }
-
-                ,
-                    copia: {
-                        text: '{{ "adjuntar una copia"|trans|raw }}',
-                            btnClass
-                    :
-                        'btn-secondary',
-                            action
-                    :
-
-                        function () {
-                            // alertar de que el proceso de copiar el etherpad puede ser lento
-                            $('#slow_load').show();
-                            // al forzar, es obligatorio poner copia, pues ya existe como antecedente.
-                            fnjs_insertar_documento(tipo, id_doc, id_escrito, que = 'insertar_copia', force = 'true');
+                            cancel: {
+                                text: '{{ "Cancel"|trans|raw }}',
+                                action: function () {
+                                    fnjs_actualizar();
+                                }
+                            },
+                            copia: {
+                                text: '{{ "adjuntar una copia"|trans|raw }}',
+                                btnClass: 'btn-secondary',
+                                action: function () {
+                                    // alertar de que el proceso de copiar el etherpad puede ser lento
+                                    $('#slow_load').show();
+                                    // al forzar, es obligatorio poner copia, pues ya existe como antecedente.
+                                    fnjs_insertar_documento(tipo, id_doc, id_escrito, que = 'insertar_copia', force = 'true');
+                                }
+                            }
                         }
-                    }
-                }
-                })
-                    ;
-
+                    });
                 } else {
                     alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
                 }
@@ -198,32 +164,24 @@
                         content: msg,
                         columnClass: 'col-md-6',
                         buttons: {
-                    {{ "Cancel"|trans|raw }}:
-
-                    function () {
-                        fnjs_actualizar();
-                    }
-
-                ,
-                    copia: {
-                        text: '{{ "adjuntar una copia"|trans|raw }}',
-                            btnClass
-                    :
-                        'btn-secondary',
-                            action
-                    :
-
-                        function () {
-                            // alertar de que el proceso de copiar el etherpad puede ser lento
-                            $('#slow_load').show();
-                            // al forzar, es obligatorio poner copia, pues ya existe como antecedente.
-                            fnjs_adjuntar_documento(tipo, id_doc, id_escrito, que = 'adjuntar_copia', force = 'true');
+                            cancel: {
+                                text: '{{ "Cancel"|trans|raw }}',
+                                action: function () {
+                                    fnjs_actualizar();
+                                }
+                            },
+                            copia: {
+                                text: '{{ "adjuntar una copia"|trans|raw }}',
+                                btnClass: 'btn-secondary',
+                                action: function () {
+                                    // alertar de que el proceso de copiar el etherpad puede ser lento
+                                    $('#slow_load').show();
+                                    // al forzar, es obligatorio poner copia, pues ya existe como antecedente.
+                                    fnjs_adjuntar_documento(tipo, id_doc, id_escrito, que = 'adjuntar_copia', force = 'true');
+                                }
+                            }
                         }
-                    }
-                }
-                })
-                    ;
-
+                    });
                 } else {
                     alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
                 }

@@ -235,44 +235,45 @@
                 dataType: 'json'
             });
             request.done(function (json) {
-                if (json.success != true) {
-                    alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
-                } else {
-                    if (quiet != 1) {
-                        id = json.id_escrito;
-                        if (id != id_escrito) {
-                            // caso de nuevo escrito
-                            $.confirm({
-                                title: '{{ "datos guardados"|trans|raw }}',
-                                content: '{{ "¿añadir escrito o adjuntos?"|trans|raw }}',
-                                buttons: {
-                            {{ "Sí"|trans|raw }}:
-
-                            function () {
-                                // ir al form expediente.
-                                fnjs_update_div('#main', json.pagina_mod);
-                            }
-
-                        ,
-                            {{ "No"|trans|raw }}:
-
-                            function () {
-                                //$.alert('Canceled!');
+                    if (json.success != true) {
+                        alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+                    } else {
+                        if (quiet != 1) {
+                            id = json.id_escrito;
+                            if (id != id_escrito) {
+                                // caso de nuevo escrito
+                                $.confirm({
+                                    title: '{{ "datos guardados"|trans|raw }}',
+                                    content: '{{ "¿añadir escrito o adjuntos?"|trans|raw }}',
+                                    buttons: {
+                                        si: {
+                                            text: '{{ "Sí"|trans|raw }}',
+                                            action: function () {
+                                                // ir al form expediente.
+                                                fnjs_update_div('#main', json.pagina_mod);
+                                            }
+                                        },
+                                        no: {
+                                            text: '{{ "No"|trans|raw }}',
+                                            action: function () {
+                                                //$.alert('Canceled!');
+                                                alert("{{ "datos guardados"|trans|raw }}");
+                                                // Volver a la lista...
+                                                fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+                                            }
+                                        }
+                                    }
+                                });
+                            } else {
                                 alert("{{ "datos guardados"|trans|raw }}");
                                 // Volver a la lista...
                                 fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
                             }
                         }
-                        })
-                            ;
-                        } else {
-                            alert("{{ "datos guardados"|trans|raw }}");
-                            // Volver a la lista...
-                            fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
-                        }
                     }
                 }
-            });
+            )
+            ;
         }
     }
 

@@ -324,23 +324,22 @@
                             title: '{{ "datos guardados"|trans|raw }}',
                             content: '{{ "¿añadir escrito o adjuntos?"|trans|raw }}',
                             buttons: {
-                        {{ "Sí"|trans|raw }}:
-
-                        function () {
-                            // ir al form expediente.
-                            pagina_mod = 'apps'
-                            fnjs_update_div('#main', json.pagina_mod);
-                        }
-
-                    ,
-                        {{ "No"|trans|raw }}:
-
-                        function () {
-                            fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
-                        }
-                    }
-                    })
-                        ;
+                                si: {
+                                    text: '{{ "Sí"|trans|raw }}',
+                                    action: function () {
+                                        // ir al form expediente.
+                                        pagina_mod = 'apps'
+                                        fnjs_update_div('#main', json.pagina_mod);
+                                    }
+                                },
+                                no: {
+                                    text: '{{ "No"|trans|raw }}',
+                                    action: function () {
+                                        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+                                    }
+                                }
+                            }
+                        });
                     } else {
                         alert("{{ "datos guardados"|trans|raw }}");
                         // Volver a la lista...
