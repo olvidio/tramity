@@ -91,10 +91,11 @@
                     {{ "Oficinas"|trans|raw }}: {{ oArrayDesplFirmas.Lista|raw }}
                 </div>
             {% else %}
-                    <div class="p-2 bg-white">
-                    <label for="Vida" class="form-label"> {{ "Vida"|trans|raw }} {{ vida_txt }}, {{ "pasar a"|trans|raw }}</label>
+                <div class="p-2 bg-white">
+                    <label for="Vida" class="form-label"> {{ "Vida"|trans|raw }} {{ vida_txt }}
+                        , {{ "pasar a"|trans|raw }}</label>
                     {{ oDesplVida.desplegable|raw }}
-                    </div>
+                </div>
             {% endif %}
 
         </div>
@@ -167,7 +168,8 @@
             {# lista de antecedentes #}
             <div class="mb-3 col-md-12">
                 <label class="form-label">{{ "Antecedentes"|trans|raw }}:
-                    <span class="btn btn-link" onclick="fnjs_ver_antecedentes({{ id_expediente }});"> {{ "ver todos"|trans }} </span>
+                    <span class="btn btn-link"
+                          onclick="fnjs_ver_antecedentes({{ id_expediente }});"> {{ "ver todos"|trans }} </span>
                 </label>
                 <div id="lista_antecedentes">
                     {{ lista_antecedentes|raw }}
@@ -262,7 +264,10 @@
     }
 
     fnjs_recircular = function () {
-        alert ("borrar todas las firmas");
+        seguro = confirm("{{ "Esto borrará todas las firmas"|trans|raw }}");
+        if (!seguro) {
+            return true;
+        }
 
         if (typeof event !== 'undefined') {
             event.preventDefault();

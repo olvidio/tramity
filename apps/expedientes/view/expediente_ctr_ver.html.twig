@@ -348,7 +348,10 @@
 
     fnjs_recircular = function (silent=0) {
         if (silent !== 1) {
-            alert("borrar todas las firmas");
+            seguro = confirm("{{ "Esto borrará todas las firmas"|trans|raw }}");
+            if (!seguro) {
+                return true;
+            }
         }
 
         if (typeof event !== 'undefined') {
