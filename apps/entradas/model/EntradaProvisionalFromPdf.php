@@ -327,6 +327,9 @@ class EntradaProvisionalFromPdf
         $oEntrada->setTipo_documento(EntradaDocDB::TIPO_ETHERPAD);
 
         if (!empty($origen)) {
+            // al buscar sin acentos se usan las expresiones regulares.
+            // Para los centros tipo: sss+Barcelona, hay que escapar:
+            $origen = str_replace('+','\+',$origen);
             $gesLugares = new GestorLugar();
             $cLugares = $gesLugares->getLugares(['sigla' => "^$origen\$"],['sigla' => 'sin_acentos']);
             if (empty($cLugares)) {
@@ -351,6 +354,9 @@ class EntradaProvisionalFromPdf
         // Si destino tiene número de protocolo se pone como referencia
         $aProtRef = [];
         if (!empty($destino) && !empty($destino_prot)) {
+            // al buscar sin acentos se usan las expresiones regulares.
+            // Para los centros tipo: sss+Barcelona, hay que escapar:
+            $destino = str_replace('+','\+',$destino);
             $gesLugares = new GestorLugar();
             $cLugares = $gesLugares->getLugares(['sigla' => "^$destino\$"],['sigla' => 'sin_acentos']);
             if (empty($cLugares)) {
@@ -377,6 +383,9 @@ class EntradaProvisionalFromPdf
                 $lugar_ref = $a_referencias[$key];
                 $prot_ref = $a_ref_prot[$key];
 
+                // al buscar sin acentos se usan las expresiones regulares.
+                // Para los centros tipo: sss+Barcelona, hay que escapar:
+                $lugar_ref = str_replace('+','\+',$lugar_ref);
                 $gesLugares = new GestorLugar();
                 $cLugares = $gesLugares->getLugares(['sigla' => "^$lugar_ref\$"],['sigla' => 'sin_acentos']);
                 if (empty($cLugares)) {
