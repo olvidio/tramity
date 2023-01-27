@@ -296,7 +296,7 @@ if ($Q_filtro === 'en_buscar') {
     $a_condicion['filtro'] = $Q_filtro;
     $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));
 } else {
-    $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => $Q_filtro]));
+    $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => $Q_filtro, 'importar' => $Q_importar]));
     $str_condicion = '';
 }
 
