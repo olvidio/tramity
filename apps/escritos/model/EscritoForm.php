@@ -384,7 +384,7 @@ class EscritoForm
                 $pagina_cancel = Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));
                 break;
             default:
-                if ($this->Q_volver_a === 'expediente_ver') {
+                if ($this->Q_volver_a === 'expediente_ver' || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
                 } else {
                     $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
@@ -415,7 +415,7 @@ class EscritoForm
         $oFecha = new DateTimeLocal();
         $format = $oFecha::getFormat();
         $yearStart = date('Y');
-        $yearEnd = $yearStart + 2;
+        $yearEnd = (int)$yearStart + 2;
         $error_fecha = $_SESSION['oConfig']->getPlazoError();
         $error_fecha_txt = 'P' . $error_fecha . 'D';
         $oHoy = new DateTimeLocal();
