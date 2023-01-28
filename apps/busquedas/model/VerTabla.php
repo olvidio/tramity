@@ -270,9 +270,12 @@ class VerTabla
             $visibilidad_txt = empty($a_visibilidad[$visibilidad]) ? '?' : $a_visibilidad[$visibilidad];
 
             $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEntrada, 'escrito');
+            // enero-23. Antes no se dejaba ver nada. Ahora se deja ver el protocolo y oficinas implicadas.
+            /*
             if ($perm_ver_escrito < PermRegistro::PERM_VER) {
                 continue;
             }
+            */
             $i++;
 
             $id_entrada = $oEntrada->getId_entrada();
@@ -301,16 +304,26 @@ class VerTabla
             }
             $oficinas = $oficinas_txt;
 
-            $asunto = $oEntrada->getAsuntoDetalle();
-            $categoria = $oEntrada->getCategoria();
-            $categoria_txt = empty($a_categorias[$categoria]) ? '' : $a_categorias[$categoria];
-            $f_doc = $oEntrada->getF_documento();
-            $f_contestar = $oEntrada->getF_contestar();
+            if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+                $id_sel = '';
+                $asunto = '-';
+                $categoria = $oEntrada->getCategoria();
+                $categoria_txt = empty($a_categorias[$categoria]) ? '' : $a_categorias[$categoria];
+                $f_doc = '-';
+                $f_contestar = '-';
+            } else {
+                $id_sel = $id_entrada;
+                $asunto = $oEntrada->getAsuntoDetalle();
+                $categoria = $oEntrada->getCategoria();
+                $categoria_txt = empty($a_categorias[$categoria]) ? '' : $a_categorias[$categoria];
+                $f_doc = $oEntrada->getF_documento();
+                $f_contestar = $oEntrada->getF_contestar();
+            }
 
             $id_encargado = $oEntrada->getEncargado();
             $nom_encargado = $a_usuarios_oficina[$id_encargado]?? '';
 
-            $a_valores[$i]['sel'] = "$id_entrada";
+            $a_valores[$i]['sel'] = "$id_sel";
             $a_valores[$i][1] = $protocolo;
             $a_valores[$i][2] = $referencias;
             $a_valores[$i][3] = $categoria_txt;
