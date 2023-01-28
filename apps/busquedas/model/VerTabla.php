@@ -279,7 +279,6 @@ class VerTabla
             $i++;
 
             $id_entrada = $oEntrada->getId_entrada();
-            $f_entrada = $oEntrada->getF_entrada();
 
             $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
             $protocolo = $oProtOrigen->ver_txt();
@@ -311,13 +310,15 @@ class VerTabla
                 $categoria_txt = empty($a_categorias[$categoria]) ? '' : $a_categorias[$categoria];
                 $f_doc = '-';
                 $f_contestar = '-';
+                $f_entrada = '-';
             } else {
                 $id_sel = $id_entrada;
                 $asunto = $oEntrada->getAsuntoDetalle();
                 $categoria = $oEntrada->getCategoria();
                 $categoria_txt = empty($a_categorias[$categoria]) ? '' : $a_categorias[$categoria];
-                $f_doc = $oEntrada->getF_documento();
-                $f_contestar = $oEntrada->getF_contestar();
+                $f_doc = $oEntrada->getF_documento()->getFromLocal();
+                $f_contestar = $oEntrada->getF_contestar()->getFromLocal();
+                $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
             }
 
             $id_encargado = $oEntrada->getEncargado();
@@ -330,9 +331,9 @@ class VerTabla
             $a_valores[$i][4] = $visibilidad_txt;
             $a_valores[$i][5] = $asunto;
             $a_valores[$i][6] = $oficinas;
-            $a_valores[$i][7] = $f_doc->getFromLocal();
-            $a_valores[$i][8] = $f_contestar->getFromLocal();
-            $a_valores[$i][9] = $f_entrada->getFromLocal();
+            $a_valores[$i][7] = $f_doc;
+            $a_valores[$i][8] = $f_contestar;
+            $a_valores[$i][9] = $f_entrada;
 
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                 $a_valores[$i][10] = $nom_encargado;
