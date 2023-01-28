@@ -11,7 +11,6 @@ use Smalot\PdfParser\Parser;
 use usuarios\model\Categoria;
 use web\DateTimeLocal;
 use web\Protocolo;
-use function core\is_true;
 
 require_once(ConfigGlobal::$dir_libs . '/vendor/autoload.php');
 
@@ -111,7 +110,7 @@ class EntradaProvisionalFromPdf
         $config = new Config();
         $config->setHorizontalOffset('*');
 
-        $parser = new Parser([],$config);
+        $parser = new Parser([], $config);
         $pdf = $parser->parseContent($this->content_pdf);
         // extract text of the whole PDF
         //$text = $pdf->getText();
@@ -147,7 +146,7 @@ class EntradaProvisionalFromPdf
                 continue;
             }
 
-            if ($tramo_inicio && $linea_protocolo === 0 ) {
+            if ($tramo_inicio && $linea_protocolo === 0) {
                 // agdmontagut 12/22      dlb 3/22
                 $pattern = "/^\s*([^\*\p{N}]+)*((\*|\s)+\d+\/\d{2})*(\*|\s)+(((\*\P{N}\*)|\P{N})+)(\s+\d+\/\d{2})*\s*$/u";
                 $coincide = preg_match($pattern, $line, $matches);
@@ -155,12 +154,12 @@ class EntradaProvisionalFromPdf
                     // quitar los '*' si tiene
                     $destino = trim($matches[1]);
                     $destino_prot = empty($matches[2]) ? '' : $matches[2];
-                    $destino_prot = str_replace('*','',$destino_prot);
+                    $destino_prot = str_replace('*', '', $destino_prot);
 
                     $origen = trim($matches[5]);
-                    $origen = str_replace('*','',$origen);
+                    $origen = str_replace('*', '', $origen);
                     $origen_prot = empty($matches[8]) ? '' : $matches[8];
-                    $origen_prot = str_replace('*','',$origen_prot);
+                    $origen_prot = str_replace('*', '', $origen_prot);
 
                     // si tiene un guión, puede ser de una región (Gal-dlb)
                     if (strpos($destino, '-')) {
@@ -180,9 +179,9 @@ class EntradaProvisionalFromPdf
                     if ($coincide === 1) {
                         // quitar los '*' si tiene
                         $origen_ref = trim($matches[2]);
-                        $origen_ref = str_replace('*','',$origen_ref);
+                        $origen_ref = str_replace('*', '', $origen_ref);
                         $origen_ref_prot = empty($matches[4]) ? '' : $matches[4];
-                        $origen_ref_prot = str_replace('*','',$origen_ref_prot);
+                        $origen_ref_prot = str_replace('*', '', $origen_ref_prot);
 
                         $destino_ref = trim($matches[3]);
 
@@ -194,12 +193,12 @@ class EntradaProvisionalFromPdf
                         //-------------------
 
                         $origen = trim($matches[5]);
-                        $origen = str_replace('*','',$origen);
+                        $origen = str_replace('*', '', $origen);
                         $origen_prot = empty($matches[7]) ? '' : $matches[7];
-                        $origen_prot = str_replace('*','',$origen_prot);
+                        $origen_prot = str_replace('*', '', $origen_prot);
 
                         $destino = trim($matches[6]);
-                        $destino = str_replace('*','',$destino);
+                        $destino = str_replace('*', '', $destino);
                         if ($destino === 'r') {
                             $destino = 'cr';
                         }
@@ -228,11 +227,27 @@ class EntradaProvisionalFromPdf
             } elseif ($tramo_inicio) {
                 // si no hay protocolo origen, y en la linea siguiente a la uqe se encuentra el protocolo
                 // solamente hay un número sin nombre lugar, puede ser de la linea anterior
-                if ( empty($origen_prot) && ($l === $linea_protocolo + 1) ) {
-                    $pattern = '/\s*(\d+\/\d{2})\s*$/i';
-                    $coincide = preg_match($pattern, $line, $matches);
-                    if ($coincide === 1) {
-                        $origen_prot = empty($matches[1]) ? '' : $matches[1];
+                if (empty($origen_prot) && ($l === $linea_protocolo + 1)) {
+                    // asegurar que no tenga 'ref' o 'cfr'
+                    $pos = mb_stripos($line, 'ref');
+                    if (empty($pos)) {
+                        $pos = mb_stripos($line, 'cfr');
+                    }
+                    if (empty($pos)) {
+                        $pattern = '/^\s*(((\*\P{N}\*)|\P{N})*\s*)(\d+\/\d{2})\s*$/i';
+                        $coincide = preg_match($pattern, $line, $matches);
+                        if ($coincide === 1) {
+                            // quitar los '*' si tiene
+                            // Si en la segunda linea hay algo, lo que ha tomado de la primera línea como
+                            //
+                            // origen podría estar en la primera linea
+                            if (empty($origen)) {
+                                $origen = trim($matches[1]);
+                                $origen = str_replace('*', '', $origen);
+                            }
+                            $origen_prot = empty($matches[4]) ? '' : $matches[4];
+                            $origen_prot = str_replace('*', '', $origen_prot);
+                        }
                     }
                 }
                 // ref
@@ -252,7 +267,7 @@ class EntradaProvisionalFromPdf
                     if ($coincide === 1) {
                         $a_ref[] = $matches[1];
                         // quitar los '*' si tiene
-                        $a_referencias[] = str_replace('*','',$matches[2]);
+                        $a_referencias[] = str_replace('*', '', $matches[2]);
                         $a_ref_prot[] = $matches[3];
                     }
                 }
@@ -329,9 +344,9 @@ class EntradaProvisionalFromPdf
         if (!empty($origen)) {
             // al buscar sin acentos se usan las expresiones regulares.
             // Para los centros tipo: sss+Barcelona, hay que escapar:
-            $origen = str_replace('+','\+',$origen);
+            $origen = str_replace('+', '\+', $origen);
             $gesLugares = new GestorLugar();
-            $cLugares = $gesLugares->getLugares(['sigla' => "^$origen\$"],['sigla' => 'sin_acentos']);
+            $cLugares = $gesLugares->getLugares(['sigla' => "^$origen\$"], ['sigla' => 'sin_acentos']);
             if (empty($cLugares)) {
                 //exit (_("No sé de dónde viene"));
             } else {
@@ -346,8 +361,8 @@ class EntradaProvisionalFromPdf
                     $prot_num_origen = '';
                     $prot_any_origen = '';
                 }
-                    $oProtOrigen = new Protocolo($id_lugar, $prot_num_origen, $prot_any_origen, '');
-                    $oEntrada->setJson_prot_origen($oProtOrigen->getProt());
+                $oProtOrigen = new Protocolo($id_lugar, $prot_num_origen, $prot_any_origen, '');
+                $oEntrada->setJson_prot_origen($oProtOrigen->getProt());
             }
         }
 
@@ -356,9 +371,9 @@ class EntradaProvisionalFromPdf
         if (!empty($destino) && !empty($destino_prot)) {
             // al buscar sin acentos se usan las expresiones regulares.
             // Para los centros tipo: sss+Barcelona, hay que escapar:
-            $destino = str_replace('+','\+',$destino);
+            $destino = str_replace('+', '\+', $destino);
             $gesLugares = new GestorLugar();
-            $cLugares = $gesLugares->getLugares(['sigla' => "^$destino\$"],['sigla' => 'sin_acentos']);
+            $cLugares = $gesLugares->getLugares(['sigla' => "^$destino\$"], ['sigla' => 'sin_acentos']);
             if (empty($cLugares)) {
                 //exit (_("No sé el destino"));
             } else {
@@ -367,8 +382,8 @@ class EntradaProvisionalFromPdf
 
                 if (!empty($destino_prot)) {
                     $a_destino = explode('/', $destino_prot);
-                    $prot_num_destino = empty($a_destino[0])? '' : trim($a_destino[0]);
-                    $prot_any_destino = empty($a_destino[1])? '' : trim($a_destino[1]);
+                    $prot_num_destino = empty($a_destino[0]) ? '' : trim($a_destino[0]);
+                    $prot_any_destino = empty($a_destino[1]) ? '' : trim($a_destino[1]);
                 } else {
                     $prot_num_destino = '';
                     $prot_any_destino = '';
@@ -385,9 +400,9 @@ class EntradaProvisionalFromPdf
 
                 // al buscar sin acentos se usan las expresiones regulares.
                 // Para los centros tipo: sss+Barcelona, hay que escapar:
-                $lugar_ref = str_replace('+','\+',$lugar_ref);
+                $lugar_ref = str_replace('+', '\+', $lugar_ref);
                 $gesLugares = new GestorLugar();
-                $cLugares = $gesLugares->getLugares(['sigla' => "^$lugar_ref\$"],['sigla' => 'sin_acentos']);
+                $cLugares = $gesLugares->getLugares(['sigla' => "^$lugar_ref\$"], ['sigla' => 'sin_acentos']);
                 if (empty($cLugares)) {
                     //exit (_("No sé la referencia"));
                     $id_lugar = 0;
