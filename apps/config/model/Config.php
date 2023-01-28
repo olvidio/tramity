@@ -127,14 +127,17 @@ class Config
             $oConfigSchemaContador = new ConfigSchema('contador_cancilleria');
             $oConfigSchemaContador->setValor($valor);
             $oConfigSchemaContador->DBGuardar();
+
             $valor = $this->getIni_contador_cr();
             $oConfigSchemaContador = new ConfigSchema('contador_cr');
             $oConfigSchemaContador->setValor($valor);
             $oConfigSchemaContador->DBGuardar();
+
             $valor = $this->getIni_contador();
             $oConfigSchemaContador = new ConfigSchema('contador');
             $oConfigSchemaContador->setValor($valor);
             $oConfigSchemaContador->DBGuardar();
+
             // actualizar el contador_any
             $oConfigSchemaContador = new ConfigSchema('contador_any');
             $oConfigSchemaContador->setValor($any_actual);

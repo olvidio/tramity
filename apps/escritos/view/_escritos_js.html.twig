@@ -233,20 +233,23 @@
         var id_escrito = $('#id_escrito').val();
         var url_ajax = 'apps/escritos/controller/escrito_adjuntos_ajax.php';
 
-        //alert("Borrar entrada: "+id_entrada);
-        var param_json = {que: que, id_adjunto: id_adjunto, id_escrito: id_escrito};
-        request = $.ajax({
-            data: param_json,
-            url: url_ajax,
-            method: 'POST'
-        });
-        request.done(function (rta) {
-            rta_txt = rta;
-            if (rta_txt == undefined) {
-                rta_txt = '';
+        seguro = confirm("{{ "¿Está Seguro que desea quitar este adjunto?"|trans|raw }}");
+            if (seguro) {
+                //alert("Borrar entrada: "+id_entrada);
+                var param_json = {que: que, id_adjunto: id_adjunto, id_escrito: id_escrito};
+                request = $.ajax({
+                    data: param_json,
+                    url: url_ajax,
+                    method: 'POST'
+                });
+                request.done(function (rta) {
+                    rta_txt = rta;
+                    if (rta_txt == undefined) {
+                        rta_txt = '';
+                    }
+                    $('#lista_adjuntos_etherpad').html(rta);
+                });
             }
-            $('#lista_adjuntos_etherpad').html(rta);
-        });
     }
 
     fnjs_ver_adjunto = function (id_adjunto) {

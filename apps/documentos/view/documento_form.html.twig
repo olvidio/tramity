@@ -115,7 +115,7 @@
                 {{ "Guardar"|trans|raw }}
             </button>
         </div>
-
+    </div>
 </form>
 {{ include ('_documentos_js.html.twig') }}
 <script>
@@ -156,6 +156,13 @@
         });
         el1.on('filebatchpreupload', function (event, data, jqXHR) {
             data.formdata.append('id_doc', $("#id_doc").val());
+        });
+        el1.on("filepredelete", function (jqXHR) {
+            var abort = true;
+            if (confirm("¿Está seguro que desea quitar este adjunto?")) {
+                abort = false;
+            }
+            return abort; // you can also send any data/object that you can receive on `filecustomerror` event
         });
     });
 </script>
