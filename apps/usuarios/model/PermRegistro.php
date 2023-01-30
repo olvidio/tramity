@@ -313,8 +313,8 @@ class PermRegistro
         ];
         $personal['of_imp'] = [
             'asunto' => 1,
-            'detalle' => 0,
-            'escrito' => 0,
+            'detalle' => 1,
+            'escrito' => 1,
             'cambio' => 0,
         ];
         $directores['of_imp'] = [
