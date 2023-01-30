@@ -255,7 +255,7 @@ class VerTabla
             array('name' => ucfirst(_("fecha entrada")), 'class' => 'fecha')
         );
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-           $a_cabeceras[] = _("encargado a") ;
+            $a_cabeceras[] = _("encargado a");
         }
 
         $oProtOrigen = new Protocolo();
@@ -304,8 +304,16 @@ class VerTabla
             $oficinas = $oficinas_txt;
 
             if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+                $perm_ver_asunto = $oPermRegistro->permiso_detalle($oEntrada, 'asunto');
+                $perm_ver_detalle = $oPermRegistro->permiso_detalle($oEntrada, 'detalle');
                 $id_sel = '';
                 $asunto = '-';
+                if ($perm_ver_asunto < PermRegistro::PERM_VER) {
+                    $asunto = $oEntrada->getAsunto();
+                    if ($perm_ver_detalle < PermRegistro::PERM_VER) {
+                        $asunto .= ' [' . $oEntrada->getDetalle() . ']';
+                    }
+                }
                 $categoria = $oEntrada->getCategoria();
                 $categoria_txt = empty($a_categorias[$categoria]) ? '' : $a_categorias[$categoria];
                 $f_doc = '-';
@@ -322,7 +330,7 @@ class VerTabla
             }
 
             $id_encargado = $oEntrada->getEncargado();
-            $nom_encargado = $a_usuarios_oficina[$id_encargado]?? '';
+            $nom_encargado = $a_usuarios_oficina[$id_encargado] ?? '';
 
             $a_valores[$i]['sel'] = "$id_sel";
             $a_valores[$i][1] = $protocolo;

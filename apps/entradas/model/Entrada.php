@@ -167,11 +167,11 @@ class Entrada extends EntradaDB
         }
         $asunto = $this->getAsunto();
         $detalle = $this->getDetalle();
-        $asunto_detelle = empty($detalle) ? $asunto : $asunto . " [$detalle]";
+        $asunto_detalle = empty($detalle) ? $asunto : $asunto . " [$detalle]";
 
-        $asunto_detelle .= $txt_grupos;
+        $asunto_detalle .= $txt_grupos;
 
-        return $asunto_detelle;
+        return $asunto_detalle;
     }
 
     public function cabeceraDistribucion_cr(): string

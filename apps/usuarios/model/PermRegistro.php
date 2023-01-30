@@ -25,14 +25,13 @@ class PermRegistro
      4: cambiar la visibilidad. (dtor of responsable.)
      */
 
-    const PERM_NADA = 0;
-    const PERM_VER = 1;
-    const PERM_MODIFICAR = 2;
-    const PERM_CAMBIAR = 4;
+    public const PERM_NADA = 0;
+    public const PERM_VER = 1;
+    public const PERM_MODIFICAR = 2;
+    public const PERM_CAMBIAR = 4;
 
 
-    private $array_registro_perm = [];
-    private $soy_ctr = FALSE;
+    private array $array_registro_perm = [];
 
     public function __construct()
     {
@@ -43,7 +42,7 @@ class PermRegistro
         }
     }
 
-    private function init_ctr()
+    private function init_ctr(): void
     {
         $todos = [];
         $director = [];
@@ -111,10 +110,9 @@ class PermRegistro
         $this->array_registro_perm[Visibilidad::V_CTR_DTOR] = $director;
         $this->array_registro_perm[Visibilidad::V_CTR_DTOR_SACD] = $director_sacd;
 
-        return $this->array_registro_perm;
     }
 
-    private function init()
+    private function init(): void
     {
         $todos = [];
         $personal = [];
@@ -375,11 +373,11 @@ class PermRegistro
         $this->array_registro_perm[Visibilidad::V_RESERVADO] = $reservado;
         $this->array_registro_perm[Visibilidad::V_RESERVADO_VCD] = $vcd;
 
-        return $this->array_registro_perm;
     }
 
-    public function isVisibleDtor($visibilidad)
+    public function isVisibleDtor(int $visibilidad): bool
     {
+        $rta = FALSE;
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $soy_dtor = ConfigGlobal::soy_dtor();
             if (($visibilidad === Visibilidad::V_DIRECTORES ||
@@ -391,13 +389,11 @@ class PermRegistro
             } else {
                 $rta = TRUE;
             }
-            return $rta;
         }
 
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $soy_dtor = ConfigGlobal::soy_dtor();
             $soy_sacd = ConfigGlobal::soy_sacd();
-            $rta = FALSE;
             if ($visibilidad === Visibilidad::V_CTR_DTOR && $soy_dtor) {
                 $rta = TRUE;
             }
@@ -407,8 +403,9 @@ class PermRegistro
             if ($visibilidad === Visibilidad::V_CTR_TODOS) {
                 $rta = TRUE;
             }
-            return $rta;
         }
+
+        return $rta;
     }
 
 
@@ -416,11 +413,11 @@ class PermRegistro
      * Función para buscar el permiso para ver el asunto, detalle o escrito
      * de una entrada o escrito o pendiente según quien sea yo.
      *
-     * @param object $oEntrada |$oEscrito|$oPendiente|oExpediente
+     * @param object $objeto (oEntrada|oEscrito|oPendiente|oExpediente)
      * @param string $que (asunto|detalle|escrito|cambio)
-     * @return number
+     * @return integer
      */
-    public function permiso_detalle($objeto, $que)
+    public function permiso_detalle($objeto, string $que): int
     {
 
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
@@ -438,11 +435,11 @@ class PermRegistro
      * Función para buscar el permiso para ver el asunto, detalle o escrito
      * de una entrada o escrito o pendiente según quien sea yo.
      *
-     * @param oEscrito|oPendiente|oExpediente|oEntrada $objeto
+     * @param  object $objeto (oEscrito|oPendiente|oExpediente|oEntrada)
      * @param string $que (asunto|detalle|escrito|cambio)
-     * @return number
+     * @return integer
      */
-    private function permiso_detalle_ctr($objeto, $que)
+    private function permiso_detalle_ctr($objeto, string $que): int
     {
 
         $id_cargo_role = ConfigGlobal::role_id_cargo();
@@ -469,11 +466,11 @@ class PermRegistro
      * Función para buscar el permiso para ver el asunto, detalle o escrito
      * de una entrada o escrito o pendiente según quien sea yo.
      *
-     * @param object $oEntrada |$oEscrito|$oPendiente|oExpediente
+     * @param object $object (oEntrada|oEscrito|oPendiente|oExpediente)
      * @param string $que (asunto|detalle|escrito|cambio)
-     * @return number
+     * @return integer
      */
-    private function permiso_detalle_dl($objeto, $que)
+    private function permiso_detalle_dl($objeto, string $que): int
     {
         $role_actual = ConfigGlobal::role_actual();
         $id_oficina_pral = '';
@@ -509,21 +506,21 @@ class PermRegistro
             // Sólo afecta a los que tengan fecha de aprobación:
             if (empty($objeto->getF_aprobacion()->getIso())) {
                 return self::PERM_MODIFICAR;
-            } else {
-                $resto_cargos = $objeto->getResto_oficinas();
-                // pasar cargos a oficinas:
-                $id_ponente = $objeto->getPonente();
-                $oCargoP = new Cargo($id_ponente);
-                if ($oCargoP->DBCargar()) {
+            }
+
+            $resto_cargos = $objeto->getResto_oficinas();
+            // pasar cargos a oficinas:
+            $id_ponente = $objeto->getPonente();
+            $oCargoP = new Cargo($id_ponente);
+            if ($oCargoP->DBCargar()) {
+                // asegurar que existe el cargo
+                $id_oficina_pral = $oCargoP->getId_oficina();
+            }
+            foreach ($resto_cargos as $id_cargo) {
+                $oCargo = new Cargo($id_cargo);
+                if ($oCargo->DBCargar()) {
                     // asegurar que existe el cargo
-                    $id_oficina_pral = $oCargoP->getId_oficina();
-                }
-                foreach ($resto_cargos as $id_cargo) {
-                    $oCargo = new Cargo($id_cargo);
-                    if ($oCargo->DBCargar()) {
-                        // asegurar que existe el cargo
-                        $a_oficinas[] = $oCargo->getId_oficina();
-                    }
+                    $a_oficinas[] = $oCargo->getId_oficina();
                 }
             }
         }
@@ -537,20 +534,20 @@ class PermRegistro
                 $soy = 'dtor_pral';
                 break;
             default:
-                if (in_array($id_oficina_role, $a_oficinas)) {
+                if (in_array($id_oficina_role, $a_oficinas, true)) {
                     $soy = empty($soy_dtor) ? 'of_imp' : 'dtor_imp';
                 }
-                if ($id_oficina_role == $id_oficina_pral) {
+                if ($id_oficina_role === $id_oficina_pral) {
                     $soy = empty($soy_dtor) ? 'of_pral' : 'dtor_pral';
                 }
         }
         // para el sd, como vcd excepto si la oficina es vcd.
         // Lo pongo fuera de switch para aprovechar el default.
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && $role_actual == 'sd') {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && $role_actual === 'sd') {
             $gesCargo = new GestorCargo();
             $cCargos = $gesCargo->getCargos(['cargo' => 'vcd']);
             $id_oficina_vcd = $cCargos[0]->getId_oficina();
-            if ($id_oficina_pral != $id_oficina_vcd) {
+            if ($id_oficina_pral !== $id_oficina_vcd) {
                 $soy = 'dtor_pral';
             }
         }
