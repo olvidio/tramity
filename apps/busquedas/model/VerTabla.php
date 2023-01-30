@@ -279,6 +279,7 @@ class VerTabla
             $i++;
 
             $id_entrada = $oEntrada->getId_entrada();
+            $asunto = $oEntrada->getAsuntoDetalle();
 
             $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
             $protocolo = $oProtOrigen->ver_txt();
@@ -302,28 +303,16 @@ class VerTabla
                 $oficinas_txt .= empty($a_posibles_oficinas[$id_oficina]) ? '?' : $a_posibles_oficinas[$id_oficina];
             }
             $oficinas = $oficinas_txt;
+            $categoria = $oEntrada->getCategoria();
+            $categoria_txt = empty($a_categorias[$categoria]) ? '' : $a_categorias[$categoria];
 
             if ($perm_ver_escrito < PermRegistro::PERM_VER) {
-                $perm_ver_asunto = $oPermRegistro->permiso_detalle($oEntrada, 'asunto');
-                $perm_ver_detalle = $oPermRegistro->permiso_detalle($oEntrada, 'detalle');
                 $id_sel = '';
-                $asunto = '-';
-                if ($perm_ver_asunto < PermRegistro::PERM_VER) {
-                    $asunto = $oEntrada->getAsunto();
-                    if ($perm_ver_detalle < PermRegistro::PERM_VER) {
-                        $asunto .= ' [' . $oEntrada->getDetalle() . ']';
-                    }
-                }
-                $categoria = $oEntrada->getCategoria();
-                $categoria_txt = empty($a_categorias[$categoria]) ? '' : $a_categorias[$categoria];
                 $f_doc = '-';
                 $f_contestar = '-';
                 $f_entrada = '-';
             } else {
                 $id_sel = $id_entrada;
-                $asunto = $oEntrada->getAsuntoDetalle();
-                $categoria = $oEntrada->getCategoria();
-                $categoria_txt = empty($a_categorias[$categoria]) ? '' : $a_categorias[$categoria];
                 $f_doc = $oEntrada->getF_documento()->getFromLocal();
                 $f_contestar = $oEntrada->getF_contestar()->getFromLocal();
                 $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
@@ -506,9 +495,12 @@ class VerTabla
             $visibilidad_txt = empty($a_visibilidad[$visibilidad]) ? '?' : $a_visibilidad[$visibilidad];
 
             $perm_ver_escrito = $oPermRegistro->permiso_detalle($oEscrito, 'escrito');
+            // enero-23. Antes no se dejaba ver nada. Ahora se deja ver el protocolo y oficinas implicadas.
+            /*
             if ($perm_ver_escrito < PermRegistro::PERM_VER) {
                 continue;
             }
+            */
             $i++;
             $asunto = $oEscrito->getAsuntoDetalle();
             $anulado = $oEscrito->getAnulado();
@@ -519,9 +511,6 @@ class VerTabla
             $destino_txt = $oEscrito->getDestinosEscrito();
 
             $id_escrito = $oEscrito->getId_escrito();
-            $f_aprobacion = $oEscrito->getF_aprobacion();
-            $f_escrito = $oEscrito->getF_escrito();
-            $f_salida = $oEscrito->getF_salida();
 
             // referencias
             $json_ref = $oEscrito->getJson_prot_ref();
@@ -541,6 +530,18 @@ class VerTabla
             }
             $oficinas = $oficinas_txt;
 
+            if ($perm_ver_escrito < PermRegistro::PERM_VER) {
+                $id_sel = '';
+                $f_escrito = '-';
+                $f_aprobacion = '-';
+                $f_salida = '-';
+            } else {
+                $id_sel = $id_escrito;
+                $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
+                $f_aprobacion = $oEscrito->getF_aprobacion()->getFromLocal();
+                $f_salida = $oEscrito->getF_salida()->getFromLocal();
+            }
+
             if (!empty($anulado)) {
                 $asunto = _("ANULADO") . " ($anulado) $asunto";
             }
@@ -554,7 +555,7 @@ class VerTabla
                 $categoria_txt = $a_categorias[$categoria];
             }
 
-            $a_valores[$i]['sel'] = "$id_escrito";
+            $a_valores[$i]['sel'] = "$id_sel";
             $a_valores[$i][1] = $protocolo_local;
             $a_valores[$i][2] = $destino_txt;
             $a_valores[$i][3] = $referencias;
@@ -562,9 +563,9 @@ class VerTabla
             $a_valores[$i][5] = $visibilidad_txt;
             $a_valores[$i][6] = $asunto;
             $a_valores[$i][7] = $oficinas;
-            $a_valores[$i][8] = $f_escrito->getFromLocal();
-            $a_valores[$i][9] = $f_aprobacion->getFromLocal();
-            $a_valores[$i][10] = $f_salida->getFromLocal();
+            $a_valores[$i][8] = $f_escrito;
+            $a_valores[$i][9] = $f_aprobacion;
+            $a_valores[$i][10] = $f_salida;
         }
 
         $oTabla = new Lista();
