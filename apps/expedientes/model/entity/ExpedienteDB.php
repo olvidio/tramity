@@ -714,7 +714,7 @@ class ExpedienteDB extends ClasePropiedades
         if (!isset($this->a_resto_oficinas) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return core\array_pg2php($this->a_resto_oficinas);
+        return core\array_pgInteger2php($this->a_resto_oficinas);
     }
 
     /**
@@ -989,7 +989,7 @@ class ExpedienteDB extends ClasePropiedades
         if (!isset($this->a_firmas_oficina) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return core\array_pg2php($this->a_firmas_oficina);
+        return core\array_pgInteger2php($this->a_firmas_oficina);
     }
 
     /**

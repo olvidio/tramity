@@ -396,7 +396,7 @@ class CargoGrupo extends core\ClasePropiedades
         if (!isset($this->a_miembros) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return core\array_pg2php($this->a_miembros);
+        return core\array_pgInteger2php($this->a_miembros);
     }
 
     /**

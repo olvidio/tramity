@@ -15,7 +15,7 @@ use PDOException;
 use stdClass;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
-use function core\array_pg2php;
+use function core\array_pgInteger2php;
 use function core\array_php2pg;
 
 /**
@@ -319,7 +319,7 @@ class EntradaBypass extends Entrada
         if (!isset($this->a_destinos) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return array_pg2php($this->a_destinos);
+        return array_pgInteger2php($this->a_destinos);
     }
 
     /**
@@ -385,7 +385,7 @@ class EntradaBypass extends Entrada
         if (!isset($this->a_id_grupos) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return array_pg2php($this->a_id_grupos);
+        return array_pgInteger2php($this->a_id_grupos);
     }
 
     /**

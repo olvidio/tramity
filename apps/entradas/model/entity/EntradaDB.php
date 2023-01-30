@@ -14,7 +14,7 @@ use PDOException;
 use stdClass;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
-use function core\array_pg2php;
+use function core\array_pgInteger2php;
 use function core\array_php2pg;
 use function core\is_true;
 
@@ -597,7 +597,7 @@ class EntradaDB extends ClasePropiedades
         if (!isset($this->a_resto_oficinas) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return array_pg2php($this->a_resto_oficinas);
+        return array_pgInteger2php($this->a_resto_oficinas);
     }
 
     /**

@@ -34,17 +34,19 @@ function array_php2pg($phpArray = [])
 
 /**
  * para convertir los arrays que provienen del postgresql a php.
+ * En este caso, el array es integer[]
  *
- * @param pg_array
+ * @param string $postgresArray
  * @return array
  */
-function array_pg2php($postgresArray): array
+function array_pgInteger2php($postgresArray): array
 {
     $str_csv = trim($postgresArray, "{}");
     if (empty($str_csv)) {
         $phpArray = [];
     } else {
-        $phpArray = explode(',', $str_csv);
+        $phpArrayString = explode(',', $str_csv);
+        $phpArray = array_map('intval', $phpArrayString);
     }
     return $phpArray;
 }
@@ -185,18 +187,18 @@ function cambiar_idioma($idioma = '')
                 $a_idiomas = explode(",", $_SERVER["HTTP_ACCEPT_LANGUAGE"]); # Convertimos HTTP_ACCEPT_LANGUAGE en array
                 /* Recorremos el array hasta que encontramos un idioma del visitante que coincida con los idiomas
                  en que está disponible nuestra web */
-                for ($i = 0; $i < count($a_idiomas); $i++) {
+                foreach ($a_idiomas as $iValue) {
                     if (!isset($idioma)) {
-                        if (substr($a_idiomas[$i], 0, 2) === "ca") {
+                        if (substr($iValue, 0, 2) === "ca") {
                             $idioma = "ca_ES.UTF-8";
                         }
-                        if (substr($a_idiomas[$i], 0, 2) === "es") {
+                        if (substr($iValue, 0, 2) === "es") {
                             $idioma = "es_ES.UTF-8";
                         }
-                        if (substr($a_idiomas[$i], 0, 2) === "en") {
+                        if (substr($iValue, 0, 2) === "en") {
                             $idioma = "en_US.UTF-8";
                         }
-                        if (substr($a_idiomas[$i], 0, 2) === "de") {
+                        if (substr($iValue, 0, 2) === "de") {
                             $idioma = "de_DE.UTF-8";
                         }
                     }

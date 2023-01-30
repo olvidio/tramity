@@ -9,7 +9,7 @@ use PDO;
 use PDOException;
 use stdClass;
 use web;
-use function core\array_pg2php;
+use function core\array_pgInteger2php;
 use function core\array_php2pg;
 use function core\is_true;
 
@@ -913,7 +913,7 @@ class EscritoDB extends core\ClasePropiedades
         if (!isset($this->a_id_grupos) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return array_pg2php($this->a_id_grupos);
+        return array_pgInteger2php($this->a_id_grupos);
     }
 
     /**
@@ -926,7 +926,7 @@ class EscritoDB extends core\ClasePropiedades
         if (!isset($this->a_destinos) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return array_pg2php($this->a_destinos);
+        return array_pgInteger2php($this->a_destinos);
     }
 
     /**
@@ -978,7 +978,7 @@ class EscritoDB extends core\ClasePropiedades
         if (!isset($this->a_resto_oficinas) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return array_pg2php($this->a_resto_oficinas);
+        return array_pgInteger2php($this->a_resto_oficinas);
     }
 
     /**

@@ -785,7 +785,7 @@ class EntradaCompartida extends core\ClasePropiedades
         if (!isset($this->a_destinos) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return core\array_pg2php($this->a_destinos);
+        return core\array_pgInteger2php($this->a_destinos);
     }
 
     /**
