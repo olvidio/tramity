@@ -106,13 +106,13 @@ class Cargo extends ClasePropiedades
      *
      * @var boolean
      */
-    private bool $bdirector;
+    private bool $bdirector = FALSE;
     /**
      * Sacd de Cargo
      *
      * @var boolean
      */
-    private bool $bsacd;
+    private bool $bsacd = FALSE;
     /**
      * Id_usuario de Cargo
      *
