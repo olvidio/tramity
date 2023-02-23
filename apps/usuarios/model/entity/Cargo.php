@@ -520,7 +520,7 @@ class Cargo extends ClasePropiedades
      */
     public function getDirector(): bool
     {
-        if (!isset($this->bdirector) && !$this->bLoaded) {
+        if (!$this->bLoaded) {
             $this->DBCargar();
         }
         return $this->bdirector;

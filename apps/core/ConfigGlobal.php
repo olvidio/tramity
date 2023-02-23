@@ -77,7 +77,20 @@ class ConfigGlobal extends ServerConf
      */
     public static function role_id_cargo()
     {
-        return (int)$_SESSION['session_auth']['id_cargo'];
+        $id_cargo = (int)$_SESSION['session_auth']['id_cargo'];
+        if (empty($id_cargo)) {
+            $msg = _("No tiene asignado un cargo válido");
+            $msg .= ".<br><br>";
+            $msg .= '<script>fnjs_logout = function () {
+                var parametros = "logout=si";
+                top.location.href = "index.php?" + parametros;
+            }</script>';
+            $msg .= '<a class="nav-link" href="#" onclick="fnjs_logout()">';
+            $msg .= _("Salir");
+            $msg .= '</a>';
+            exit ($msg);
+        }
+        return $id_cargo;
     }
 
     /**

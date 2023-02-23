@@ -26,7 +26,7 @@ class GestorCargo extends core\ClaseGestor
     /**
      * Constructor de la classe.
      *
-     * @return $gestor
+     * @return void
      *
      */
     function __construct()
@@ -62,7 +62,7 @@ class GestorCargo extends core\ClaseGestor
      * retorna un Array
      * Els posibles cargos directors (per entrades)
      *
-     * @return Array
+     * @return array|false
      */
     function zzgetArrayCargosDirector()
     {
@@ -124,6 +124,9 @@ class GestorCargo extends core\ClaseGestor
             } // el titular puede estar en blanco.
             $oUsuario = new Usuario($id_usuario);
             $nom_usuario = $oUsuario->getNom_usuario();
+            if (empty($nom_usuario)) {
+                $nom_usuario = $oUsuario->getUsuario();
+            }
             if ($sin_cargo) {
                 $a_usuarios_oficina[$id_cargo] = "$nom_usuario";
             } else {
@@ -138,7 +141,7 @@ class GestorCargo extends core\ClaseGestor
      * Els posibles cargos de una oficina
      *
      * @param integer $id_oficina
-     * @return Array
+     * @return array|false
      */
     function getArrayCargosOficina($id_oficina = '')
     {
@@ -174,7 +177,7 @@ class GestorCargo extends core\ClaseGestor
      * Els posibles cargos(nom usuario)
      *
      * @param boolean $conOficina default=TRUE: sólo las que tienen oficina. FALSE: todas.
-     * @return Array [ id_cargo => sigla(nombre usuario) ]
+     * @return array [ id_cargo => sigla(nombre usuario) ]
      */
     function getArrayCargosConUsuario($conOficina = TRUE)
     {
@@ -198,7 +201,7 @@ class GestorCargo extends core\ClaseGestor
      * Els posibles cargos
      *
      * @param boolean $conOficina default=TRUE: sólo los cargos que tienen oficina. FALSE: todos.
-     * @return Array
+     * @return array|false
      */
     function getArrayCargos($conOficina = TRUE)
     {
@@ -234,7 +237,7 @@ class GestorCargo extends core\ClaseGestor
      * retorna un Array
      * Els posibles cargos de ref al tramite
      *
-     * @return Array
+     * @return array|false
      */
     function getArrayCargosRef()
     {
@@ -264,7 +267,7 @@ class GestorCargo extends core\ClaseGestor
      * Els posibles cargos d'un usuari
      *
      * @param integer $id_usuario
-     * @return Desplegable
+     * @return Desplegable|false
      */
     function getDesplCargosUsuario($id_usuario)
     {
@@ -299,7 +302,7 @@ class GestorCargo extends core\ClaseGestor
      *
      * @param integer|string $id_oficina si es 'x' se omiten los que no tienen oficina
      * @param boolean $bdirector : true = sólo directores
-     * @return Desplegable
+     * @return Desplegable|false
      */
     function getDesplCargos($id_oficina = '', $bdirector = FALSE)
     {
@@ -311,7 +314,7 @@ class GestorCargo extends core\ClaseGestor
         if (!empty($id_ambito)) {
             $Where = "WHERE id_ambito = $id_ambito";
             if (!empty($id_oficina)) {
-                if ($id_oficina == 'x') {
+                if ($id_oficina === 'x') {
                     $Where .= " AND (id_oficina IS NOT NULL AND id_oficina != 0)";
                 } else {
                     $Where .= " AND id_oficina = $id_oficina";
@@ -319,7 +322,7 @@ class GestorCargo extends core\ClaseGestor
             }
         } else {
             if (!empty($id_oficina)) {
-                if ($id_oficina == 'x') {
+                if ($id_oficina === 'x') {
                     $Where .= "WHERE (id_oficina IS NOT NULL AND id_oficina != 0)";
                 } else {
                     $Where .= "WHERE id_oficina = $id_oficina";
@@ -350,7 +353,7 @@ class GestorCargo extends core\ClaseGestor
      * retorna l'array d'objectes de tipus Cargo
      *
      * @param string sQuery la query a executar.
-     * @return array Una col·lecció d'objectes de tipus Cargo
+     * @return array|false Una col·lecció d'objectes de tipus Cargo
      */
     function getCargosQuery($sQuery = '')
     {
@@ -373,7 +376,7 @@ class GestorCargo extends core\ClaseGestor
      *
      * @param array aWhere associatiu amb els valors de les variables amb les quals farem la query
      * @param array aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
-     * @return array Una col·lecció d'objectes de tipus Cargo
+     * @return array|false Una col·lecció d'objectes de tipus Cargo
      */
     function getCargos($aWhere = array(), $aOperators = array())
     {
