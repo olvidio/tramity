@@ -160,7 +160,7 @@ class GestorEscritoDB extends core\ClaseGestor
     }
 
     /**
-     * Devuelve la colección de escritos, segun las condiciones del protcolo local, más las normales
+     * Devuelve la colección de escritos, según las condiciones del protocolo local, más las normales
      *
      * @param array $aProt_local = ['id_lugar', 'num', 'any', 'mas']
      * @param array $aWhere

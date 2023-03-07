@@ -2,6 +2,7 @@
 
 namespace busquedas\model;
 
+use config\model\entity\ConfigSchema;
 use core\ConverterDate;
 use DateInterval;
 use entradas\model\entity\GestorEntradaBypass;
@@ -325,8 +326,14 @@ class Buscar
                 $aCollections['entradas'] = $cEntradas;
 
                 // Escritos (salidas):
-                //si el lugar es la dl, hay que buscar en el protocolo local
-                if ($this->id_lugar == $this->id_sigla) {
+                //si el lugar es la dl (o de Cancillería), hay que buscar en el protocolo local
+                $oConfigSchema = new ConfigSchema('id_lugar_cancilleria');
+                $id_cancilleria = (int)$oConfigSchema->getValor();
+
+                $oConfigSchema = new ConfigSchema('id_lugar_uden');
+                $id_uden = (int)$oConfigSchema->getValor();
+
+                if ($this->id_lugar === $this->id_sigla || $this->id_lugar === $id_cancilleria || $this->id_lugar === $id_uden) {
                     $aWhereEscrito['f_aprobacion'] = 'x';
                     $aOperadorEscrito['f_aprobacion'] = 'IS NOT NULL';
                     $aProt_destino = ['id_lugar' => $this->id_lugar,
