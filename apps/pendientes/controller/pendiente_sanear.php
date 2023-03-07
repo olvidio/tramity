@@ -23,7 +23,7 @@ require_once("apps/core/global_object.inc");
 
 /*
  Buscar pendientes activos de escritos anulados:
-Como estan en dos bases de datos distintas, busco primero los pendientes (serán menos), miro los id_entrada
+Como están en dos bases de datos distintas, busco primero los pendientes (serán menos), miro los id_entrada
 y los busco en entradas para saber si están anulados
 */
 
@@ -48,7 +48,7 @@ foreach ($cCalendarItems as $oCalendarItem) {
     $uid = $oCalendarItem->getUid();
     $status = $oCalendarItem->getStatus();
     preg_match($patron, $uid, $matches);
-    if (!empty($matches[1]) && ($status == 'NEEDS-ACTION' || $status == 'IN-PROCESS')) {
+    if (!empty($matches[1]) && ($status === 'NEEDS-ACTION' || $status === 'IN-PROCESS')) {
         $a_id_entrada[] = $matches[1];
     }
 }

@@ -38,7 +38,7 @@ $Q_prot_any_dst = (string)filter_input(INPUT_POST, 'prot_any_dst');
 
 $gesEntradas = new GestorEntrada();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
 
-// busacr id_entrada del prot origen
+// buscar id_entrada del prot origen
 $aProt_origen = ['id_lugar' => $Q_id_lugar_org,
     'num' => $Q_prot_num_org,
     'any' => $Q_prot_any_org,
@@ -65,7 +65,7 @@ if (is_array($cEntradas)) {
 if (empty($msg)) {
     $oEntrada = $cEntradas[0];
     $id_entrada_org = $oEntrada->getId_entrada();
-    $id_reg_org = 'REN' . $id_entrada_org; // REN = Regitro Entrada
+    $id_reg_org = 'REN' . $id_entrada_org; // REN = Registro Entrada
     $id_of_ponente_org = $oEntrada->getPonente();
     // location
     $location_org = '';
@@ -103,11 +103,13 @@ if (is_array($cEntradas)) {
     $msg .= "\n";
 }
 // Sólo debe haber una entrada:
+$a_resto_oficinas = [];
 if (empty($msg)) {
     $oEntrada = $cEntradas[0];
     $id_entrada_dst = $oEntrada->getId_entrada();
     $id_reg_dst = 'REN' . $id_entrada_dst; // REN = Regitro Entrada
     $id_of_ponente_dst = $oEntrada->getPonente();
+    $a_resto_oficinas = $oEntrada->getResto_oficinas();
     // location
     $location_dst = '';
     $oProtLocal = new Protocolo();
@@ -139,10 +141,23 @@ if (empty($msg)) {
     $oDavicalMigrar->setLocation_org($location_org);
     $oDavicalMigrar->setLocation_dst($location_dst);
     if ($oDavicalMigrar->migrar() === FALSE) {
-        $msg .= _("No se ha podido trasladar...");
+        $msg .= _("No se ha podido trasladar para la oficina del ponente");
+        $msg .= "\n";
     }
 }
-
+// para el resto de oficinas:
+foreach ($a_resto_oficinas as $id_oficina) {
+    $oDavicalMigrar = new DavicalMigrar();
+    $oDavicalMigrar->setId_oficina($id_oficina);
+    $oDavicalMigrar->setId_reg_org($id_reg_org);
+    $oDavicalMigrar->setId_reg_dst($id_reg_dst);
+    $oDavicalMigrar->setLocation_org($location_org);
+    $oDavicalMigrar->setLocation_dst($location_dst);
+    if ($oDavicalMigrar->migrar() === FALSE) {
+        $msg .= sprintf(_("No se ha podido trasladar para la oficina: %s"),$id_oficina);
+        $msg .= "\n";
+    }
+}
 
 if (empty($msg)) {
     $jsondata['success'] = true;
