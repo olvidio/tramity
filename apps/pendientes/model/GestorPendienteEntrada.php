@@ -53,7 +53,7 @@ class GestorPendienteEntrada
         foreach ($a_prot as $aProt) {
             // buscar la entrada con esta ref. No tengo en cuenta el 'mas' para buscar la entrada.
             unset ($aProt['mas']);
-            // No buscar si no hay número de protocoloa (solo nombre)
+            // No buscar si no hay número de protocolo (solo nombre)
             if (empty($aProt['num'])) {
                 continue;
             }
@@ -73,7 +73,7 @@ class GestorPendienteEntrada
     }
 
     /**
-     * No devuelve nada porque actua directamente en las propiedades
+     * No devuelve nada porque actúa directamente en las propiedades
      *
      * @param array $cEntradas
      */
@@ -91,7 +91,7 @@ class GestorPendienteEntrada
                     $uid_container = "$uid#$parent_container";
                     $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
                     $status = $oPendiente->getStatus();
-                    if (empty($status) || $status == 'COMPLETED' || $status == 'CANCELLED') {
+                    if (empty($status) || $status === 'COMPLETED' || $status === 'CANCELLED') {
                         continue;
                     }
                     $rrule = $oPendiente->getRrule();

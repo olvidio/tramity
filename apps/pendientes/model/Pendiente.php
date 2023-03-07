@@ -232,7 +232,7 @@ class Pendiente
         $todo = $this->getTodoByUid();
         if (empty($todo)) {
             $err_txt = _("No encuentro el todo");
-            $sClauError = 'Pendiente.carregar';
+            $sClauError = 'Pendiente.cargar';
             $_SESSION['oGestorErrores']->addError($err_txt, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -243,7 +243,14 @@ class Pendiente
             $base_url = $this->getBaseUrl();
             $cargo = $this->getCargo();
             $id = $this->getUid();
-            exit ("ERROR: id: $id, cargo: $cargo, url: $base_url");
+
+            $err_txt = _("TODO mal configurado:");
+            $err_txt .= $todo[0]['data'];
+            $err_txt .= "\n";
+            $err_txt .= "ERROR: id: $id, cargo: $cargo, url: $base_url";
+            $sClauError = 'Pendiente.cargar';
+            $_SESSION['oGestorErrores']->addError($err_txt, $sClauError, __LINE__, __FILE__);
+            return FALSE;
         }
         $icalComp = $icalComp[0];  // If you know there's only 1 of them...
 
