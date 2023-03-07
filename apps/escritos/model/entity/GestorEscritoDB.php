@@ -347,7 +347,7 @@ class GestorEscritoDB extends core\ClaseGestor
         }
 
         if (!empty($json)) {
-            $Where_json = "json_prot_ref @> '[{" . $json . "}]'";
+            $Where_json = "json_prot_destino @> '[{" . $json . "}]'";
         }
 
         if (empty($sCondi)) {
