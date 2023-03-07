@@ -2,6 +2,7 @@
 
 use core\ConfigGlobal;
 use davical\model\Davical;
+use davical\model\DavicalMigrar;
 use entradas\model\entity\EntradaBypass;
 use entradas\model\entity\EntradaDocDB;
 use entradas\model\entity\GestorEntradaBypass;
@@ -188,12 +189,96 @@ switch ($Q_que) {
             $gesPendientes = new GestorPendienteEntrada();
             $cUids = $gesPendientes->getArrayUidById_entrada($Q_id_entrada);
             if (!empty($cUids)) {
-                $calendario = 'registro';
-                $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-                $user_davical = $oDavical->getUsernameDavicalSecretaria();
-                foreach ($cUids as $uid => $parent_container) {
-                    $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
-                    $oPendiente->eliminar();
+                if ($Qelim_pendientes === 1) {
+                    $calendario = 'registro';
+                    $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
+                    $user_davical = $oDavical->getUsernameDavicalSecretaria();
+                    foreach ($cUids as $uid => $parent_container) {
+                        $oPendiente = new Pendiente($parent_container, $calendario, $user_davical, $uid);
+                        $oPendiente->eliminar();
+                    }
+                }
+                // Mover a la nueva versión
+                if ($Qelim_pendientes === 2) {
+                    $id_entrada_org = $oEntrada->getId_entrada();
+                    $id_reg_org = 'REN' . $id_entrada_org; // REN = Registro Entrada
+                    $id_of_ponente_org = $oEntrada->getPonente();
+                    // location
+                    $location_org = '';
+                    $oProtLocal = new Protocolo();
+                    $json_prot_origen = $oEntrada->getJson_prot_origen();
+                    if (!empty(get_object_vars($json_prot_origen))) {
+                        $oProtLocal->setLugar($json_prot_origen->id_lugar);
+                        $oProtLocal->setProt_num($json_prot_origen->num);
+                        $oProtLocal->setProt_any($json_prot_origen->any);
+                        //mas: No cojo el del registro, el pendiente puede tener su propio 'mas'
+                        $location_org = $oProtLocal->ver_txt();
+                    }
+                    // Buscar la entrada n.v.
+                    $aProt_dst = $oEntrada->getJson_prot_origen(TRUE);
+                    $aWhere = ['bypass' => 'f', 'anulado' => 'x'];
+                    $aOperador = ['anulado' => 'IS NULL'];
+                    $gesEntradas = new GestorEntrada();
+                    $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_dst, $aWhere, $aOperador);
+
+                    $msg = '';
+                    if (is_array($cEntradas)) {
+                        if (empty($cEntradas)) {
+                            $msg .= _("No se encuentra ninguna entrada con el protocolo destino");
+                            $msg .= "\n";
+                        } elseif (count($cEntradas) > 1) {
+                            $msg .= _("Existen más de una entrada con el protocolo destino");
+                            $msg .= "\n";
+                        }
+                    } else {
+                        $msg .= _("Error en la búsqueda del destino");
+                        $msg .= "\n";
+                    }
+                    // Sólo debe haber una entrada:
+                    $a_resto_oficinas = [];
+                    if (empty($msg)) {
+                        $oEntrada = $cEntradas[0];
+                        $id_entrada_dst = $oEntrada->getId_entrada();
+                        $id_reg_dst = 'REN' . $id_entrada_dst; // REN = Registro Entrada
+                        $id_of_ponente_dst = $oEntrada->getPonente();
+                        $a_resto_oficinas = $oEntrada->getResto_oficinas();
+                        // location
+                        $location_dst = '';
+                        $oProtLocal = new Protocolo();
+                        $json_prot_origen = $oEntrada->getJson_prot_origen();
+                        if (!empty(get_object_vars($json_prot_origen))) {
+                            $oProtLocal->setLugar($json_prot_origen->id_lugar);
+                            $oProtLocal->setProt_num($json_prot_origen->num);
+                            $oProtLocal->setProt_any($json_prot_origen->any);
+                            //mas: No cojo el del registro, el pendiente puede tener su propio 'mas'
+                            $location_dst = $oProtLocal->ver_txt();
+                        }
+
+                        $oDavicalMigrar = new DavicalMigrar();
+                        $oDavicalMigrar->setId_oficina($id_of_ponente_org);
+                        $oDavicalMigrar->setId_reg_org($id_reg_org);
+                        $oDavicalMigrar->setId_reg_dst($id_reg_dst);
+                        $oDavicalMigrar->setLocation_org($location_org);
+                        $oDavicalMigrar->setLocation_dst($location_dst);
+                        if ($oDavicalMigrar->migrar() === FALSE) {
+                            $msg .= _("No se ha podido trasladar para la oficina del ponente");
+                            $msg .= "\n";
+                        }
+                        // para el resto de oficinas:
+                        foreach ($a_resto_oficinas as $id_oficina) {
+                            $oDavicalMigrar = new DavicalMigrar();
+                            $oDavicalMigrar->setId_oficina($id_oficina);
+                            $oDavicalMigrar->setId_reg_org($id_reg_org);
+                            $oDavicalMigrar->setId_reg_dst($id_reg_dst);
+                            $oDavicalMigrar->setLocation_org($location_org);
+                            $oDavicalMigrar->setLocation_dst($location_dst);
+                            if ($oDavicalMigrar->migrar() === FALSE) {
+                                $msg .= sprintf(_("No se ha podido trasladar para la oficina: %s"), $id_oficina);
+                                $msg .= "\n";
+                            }
+                        }
+                        $error_txt .= $msg;
+                    }
                 }
             }
         }
@@ -383,10 +468,10 @@ switch ($Q_que) {
             // si es provisional, borrar el pdf
             if ($oEntrada->getModo_entrada() === Entrada::MODO_PROVISIONAL) {
                 // borro el fichero pdf provisional
-                $filename_pdf = ConfigGlobal::DIR.'/log/entradas/entrada_' . $Q_id_entrada . '.pdf';
-                if(file_exists($filename_pdf)){
+                $filename_pdf = ConfigGlobal::DIR . '/log/entradas/entrada_' . $Q_id_entrada . '.pdf';
+                if (file_exists($filename_pdf)) {
                     unlink($filename_pdf);
-                }else{
+                } else {
                     $error_txt .= sprintf(_("No se encuentra el fichero %s"), $filename_pdf);
                 }
             }

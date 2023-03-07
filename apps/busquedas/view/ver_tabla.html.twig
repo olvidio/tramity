@@ -289,6 +289,11 @@
                                 '{{ "No hacer nada"|trans|raw }}': function () {
                                     elim_pendientes = 0;
                                     fnjs_guardar_comentario2(que_tipo, id_reg, comentario, elim_pendientes);
+                                },
+                                '{{ "Trasladarlos a la nueva versión)"|trans|raw }}': function () {
+                                    alert ("{{ "Si no existe un escrito con igual protocolo, sin anular, no hace nada)"|trans|raw }}");
+                                    elim_pendientes = 2;
+                                    fnjs_guardar_comentario2(que_tipo, id_reg, comentario, elim_pendientes);
                                 }
                             }
                         });
