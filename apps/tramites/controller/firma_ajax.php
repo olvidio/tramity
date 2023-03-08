@@ -81,6 +81,8 @@ switch ($Q_que) {
                 $error_txt .= $oFirma->getErrorTxt();
             }
         }
+        // Si el que añade la firma es el vcd o sd, hay que cambiar el estado al anterior
+        // TODO
         break;
     case 'del':
         $Q_a_cargos = (array)filter_input(INPUT_POST, 'a_cargos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);

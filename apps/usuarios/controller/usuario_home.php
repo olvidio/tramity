@@ -421,6 +421,8 @@ $url_ajax = web\Hash::link('apps/usuarios/controller/usuario_update.php');
 
 $mi_idioma = ConfigGlobal::mi_Idioma_short();
 $nombre_entidad = ConfigGlobal::nombreEntidad();
+$doc_help = 'apps/ayuda/ManualTramity.html';
+
 $a_campos = [
     'nombre_entidad' => $nombre_entidad,
     'role_actual' => ConfigGlobal::role_actual(),
@@ -436,6 +438,7 @@ $a_campos = [
     'a_roles' => $_SESSION['session_auth']['a_roles'],
     'peticion_ajax' => $peticion_ajax,
     'pagina_inicio' => $pagina_inicio,
+    'doc_help' => $doc_help,
     // problemas con https
     'url_ajax' => $url_ajax,
 ];

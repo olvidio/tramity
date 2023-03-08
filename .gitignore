@@ -3,6 +3,7 @@ apps/core/ServerConf.php
 apps/web/Hash.php
 *.sh
 *.pid
+log/db/*.sql
 
 # Compiled source #
 ###################

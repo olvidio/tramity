@@ -10,8 +10,12 @@
 </style>
 <!-- Topbar -->
 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow">
+    <span class="ms-5 col-1" onClick="window.open('{{ doc_help }}', 'help', 'left=800,top=200,height=800,width=800');">
+    <i class="fas fa-question-circle fa-2x fa-fw" aria-hidden="true"></i>
+    {{ "Ayuda"|trans|raw }}
+  </span>
     <!-- OJO! NO hay que poner el onclick en <a href> porque envia por GET, y no POST (XHR) -->
-    <span class="ms-5 col-2" onClick="fnjs_update_div('body', '');">
+    <span class="ms-3 col-2" onClick="fnjs_update_div('body', '');">
     <i class="fas fa-home fa-2x fa-fw" aria-hidden="true"></i>
     {{ role_actual }}
   </span>
