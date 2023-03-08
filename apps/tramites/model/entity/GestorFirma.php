@@ -402,10 +402,34 @@ class GestorFirma extends core\ClaseGestor
     }
 
     /**
-     * Comprobar si el bloque de orden_tramite anterior està todo firmado.
+     * Quitar las firmas (también el visto) de los bloques posteriores.
      *
      * @param integer $id_expediente
-     * @param integer $orden_tramite
+     * @param integer $orden_tramite_ref
+     * @return boolean
+     */
+    public function borrarPosterior($id_expediente, $orden_tramite_ref)
+    {
+        $oDbl = $this->getoDbl();
+        $nom_tabla = $this->getNomTabla();
+
+        $sQuery = "UPDATE $nom_tabla
+                    SET id_usuario=NULL, valor=NULL, f_valor=NULL
+                    WHERE id_expediente=$id_expediente AND orden_tramite > $orden_tramite_ref;
+                    ";
+        if (($oDbl->query($sQuery)) === FALSE) {
+            $sClauError = 'GestorFirma.query';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+    /**
+     * Comprobar si el bloque de orden_tramite anterior está todo firmado.
+     *
+     * @param integer $id_expediente
+     * @param integer $orden_tramite_ref
      * @return boolean
      */
     public function getAnteriorOK($id_expediente, $orden_tramite_ref)

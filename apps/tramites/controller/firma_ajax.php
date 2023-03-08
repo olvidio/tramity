@@ -81,8 +81,12 @@ switch ($Q_que) {
                 $error_txt .= $oFirma->getErrorTxt();
             }
         }
-        // Si el que añade la firma es el vcd o sd, hay que cambiar el estado al anterior
-        // TODO
+        // Si el que añade la firma es el vcd o sd, hay que quitar el visto, para que
+        // desaparezca de la lista hasta que lo firmen todos.
+        if (ConfigGlobal::role_actual() === 'vcd' || ConfigGlobal::role_actual() === 'sd') {
+            $gesFirmas->borrarPosterior($Q_id_expediente,$orden_tramite);
+
+        }
         break;
     case 'del':
         $Q_a_cargos = (array)filter_input(INPUT_POST, 'a_cargos', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -193,7 +197,7 @@ switch ($Q_que) {
                     $cFirmaDistribuir = $gesFirmas->getFirmas($aWhere);
                     if (is_array($cFirmaDistribuir) && !empty($cFirmaDistribuir)) {
                         $oFirmaDistribuir = $cFirmaDistribuir[0];
-                        if ($oFirmaDistribuir->DBCargar() === FALSE ){
+                        if ($oFirmaDistribuir->DBCargar() === FALSE) {
                             $err_cargar = sprintf(_("OJO! no existe la firma en %s, linea %s"), __FILE__, __LINE__);
                             exit ($err_cargar);
                         }
@@ -280,9 +284,9 @@ switch ($Q_que) {
             }
         }
         break;
-    case 'respuesta':   // aclaracion_respuesta
+    case 'respuesta':   // aclaración_respuesta
         $valor = Firma::V_A_RESPUESTA; //Respuesta aclaración.
-        // buscar la primera peticion vacia:
+        // buscar la primera petición vacía:
         $aWhere = ['id_expediente' => $Q_id_expediente,
             'tipo' => Firma::TIPO_ACLARACION,
             'observ_creador' => 'x',
@@ -296,7 +300,7 @@ switch ($Q_que) {
         if (is_array($cFirmas) && !empty($cFirmas)) {
             // Ya existe una aclaración. Busco la última, para saber el orden.
             $oFirmaAclaracion = $cFirmas[0];
-            if ($oFirmaAclaracion->DBCargar() === FALSE ){
+            if ($oFirmaAclaracion->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito a enviar en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
