@@ -15,6 +15,7 @@ use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
+use usuarios\model\Visibilidad;
 use web\DateTimeLocal;
 use web\Protocolo;
 use function core\is_true;
@@ -51,6 +52,7 @@ $Q_a_preparar = (array)filter_input(INPUT_POST, 'a_preparar', FILTER_DEFAULT, FI
 
 $Q_vida = (integer)filter_input(INPUT_POST, 'vida');
 $Q_visibilidad = (integer)filter_input(INPUT_POST, 'visibilidad');
+$Q_visibilidad = $Q_visibilidad ?? Visibilidad::V_TODOS;
 
 $error_txt = '';
 $nuevo_creador = '';

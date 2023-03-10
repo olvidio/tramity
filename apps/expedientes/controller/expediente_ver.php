@@ -101,6 +101,7 @@ $a_prioridad = $oExpediente->getArrayPrioridad();
 $prioridad_txt = $a_prioridad[$prioridad];
 
 $visibilidad = $oExpediente->getVisibilidad();
+$visibilidad = $visibilidad ?? Visibilidad::V_TODOS;
 $oVisibilidad = new Visibilidad();
 if ($vista_dl) {
     $a_visibilidad = $oVisibilidad->getArrayVisibilidadDl();
