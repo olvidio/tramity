@@ -1,0 +1,2965 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title></title>
+    <meta content="Bluefish 2.2.12" name="generator">
+    <meta content="00:00:00" name="created">
+    <meta content="2023-04-06T18:31:44.513889339" name="changed">
+    <style type="text/css">
+
+        p {
+            line-height: normal;
+            margin-bottom: 0.25cm;
+            background: transparent;
+            background: transparent
+        }
+
+        h1 {
+            margin-bottom: 0.21cm;
+            background: transparent;
+            background: transparent;
+            page-break-after: avoid
+        }
+
+        h1.western {
+            font-family: serif;
+            font-size: 24pt;
+            font-weight: bold
+        }
+
+        h1.cjk {
+            font-family: serif;
+            font-size: 24pt;
+            font-weight: bold
+        }
+
+        h1.ctl {
+            font-family: "Noto Sans Devanagari";
+            font-size: 24pt;
+            font-weight: bold
+        }
+
+        h2 {
+            margin-top: 0.35cm;
+            margin-bottom: 0.21cm;
+            background: transparent;
+            background: transparent;
+            page-break-after: avoid
+        }
+
+        h2.western {
+            font-family: serif;
+            font-size: 18pt;
+            font-weight: bold
+        }
+
+        h2.cjk {
+            font-family: "Noto Serif CJK SC";
+            font-size: 18pt;
+            font-weight: bold
+        }
+
+        h2.ctl {
+            font-family: "Noto Sans Devanagari";
+            font-size: 18pt;
+            font-weight: bold
+        }
+
+        h3 {
+            margin-top: 0.25cm;
+            margin-bottom: 0.21cm;
+            background: transparent;
+            background: transparent;
+            page-break-after: avoid
+        }
+
+        h3.western {
+            font-family: "Liberation Sans", sans-serif;
+            font-size: 14pt;
+            font-weight: bold
+        }
+
+        h3.cjk {
+            font-family: "Noto Sans CJK SC";
+            font-size: 14pt;
+            font-weight: bold
+        }
+
+        h3.ctl {
+            font-family: "Lohit Devanagari";
+            font-size: 14pt;
+            font-weight: bold
+        }
+
+        td p {
+            orphans: 0;
+            widows: 0;
+            background: transparent;
+            background: transparent
+        }
+
+        a:link {
+            color: #000080;
+            so-language: zxx;
+            text-decoration: underline
+        }
+
+        a:visited {
+            color: #800000;
+            text-decoration: underline
+        }
+    </style>
+  </head>
+  <body dir="ltr" style="    margin:0;padding:50px" vlink="#800000" link="#000080"
+    lang="ca-ES">
+    <h1 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"
+      align="center"> Manual de Tramity</h1>
+    <p style="text-align: center; font-style: italic;">Se deja el papel y todo pasa a gestionarse en
+      soporte informático.</p>
+    <h2 class="western">Índice</h2>
+    <p style="margin-bottom: 0cm"><a href="#Glosario_de_Tramity">0.- Glosario</a></p>
+    <p style="margin-bottom: 0cm"><a href="#Introduccion">1.- Introducción</a></p>
+    <p style="margin-bottom: 0cm"><a href="#Acceso">2.- Acceso</a></p>
+    <p style="margin-bottom: 0cm"><a href="#Preferencias">3.- Preferencias</a></p>
+    <p style="margin-bottom: 0cm"><a href="#Pestanyas">4.- Pestañas</a></p>
+    <p style="margin-bottom: 0cm"><a href="#Gestion_de_expedientes">5.- Gestión
+        de expedientes </a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Borrador">A.- Borrador</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Para_firmar">B.- Para firmar</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Para_reunion">C.- Para reunión</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Circulando">D.- Circulando</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Acabados">E.- Acabados</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Acabados_encargados">F. Acabados
+        encargados</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Archivados">G.- Archivados</a></p>
+    <p style="margin-bottom: 0cm"><a href="#Gestion_de_escritos">6. Gestión de
+        escritos</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Entradas">A.- Entradas</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Entradas_encargadas">B.- Entradas
+        encargadas</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Archivo_de_escritos">C.- Archivo
+        de escritos</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Escritos_de_cr">D.- Escritos de
+        cr</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Permanentes_de_cr">E.-
+        Permanentes de cr</a></p>
+    <p style="margin-bottom: 0cm"><a href="#Pendientes">7.- Pendientes</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Pendientes_del_registro">A.-
+        Pendientes del registro</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Pendientes_de_la_oficina">B.-
+        Pendientes de la oficina</a></p>
+    <p style="margin-bottom: 0cm"><a href="#Documentos">8.- Documentos</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Documentos_etherpad">A.-
+        Documentos “etherpad”</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Documentos_incrustados">B.-
+        Documentos “incrustados”</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Nuevo_documento">C.- Nuevo
+        documento</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Gestion_de_los_documentos">D.-
+        Gestión de los documentos</a></p>
+    <p style="margin-bottom: 0cm"><a href="#Guia-resumen_para_elaborar_un_expediente">9.-
+        Guía-resumen para elaborar un expediente</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Antecedentes">A.- Antecedentes</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Propuestas">B.- Propuestas</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Escritos">C.- Escritos</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Adjuntos">D.- Adjuntos</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Preparar">E.- Preparar</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Circular">F.- Circular</a></p>
+    <p style="margin-bottom: 0cm"><a href="#Proceso_final_de_un_expediente">10.-
+        Proceso final de un expediente</a></p>
+    <p style="margin-bottom: 0cm"><a href="#Etherpad">11.- Etherpad</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Vista_general">A.- Vista general</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Sangrado">B.- Sangrado</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Color_de_autoria">C.- Color de
+        autoría</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Tabla">D.- Tabla</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Comentarios_y_cambios">E.-
+        Comentarios y cambios</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Importar/Exportar">F.-
+        Importar/Exportar</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Linea_temporal">G.- Línea
+        temporal</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Marcar_y_guardar_una_version">H.-
+        Marcar y guardar una versión</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Configuracion">I.- Configuración</a></p>
+    <p style="margin-bottom: 0cm">- <a href="#Revision_ortografica">J.-
+        Revisión ortográfica</a></p>
+    <p style="margin-bottom: 0cm"><a href="#Glosario_de_Tramity">12.- Glosario
+        de Tramity</a></p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">0.-
+      Glosario</h2>
+    <p style="margin-bottom: 0cm">Diccionario de términos básicos empleados en
+      el manual. <a href="#Glosario_de_Tramity">(Ir)</a></p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Introduccion"></a><a name="h.dl89tye7qae7"></a> 1.- Introducción</h2>
+    <p style="margin-bottom: 0cm">Es una aplicación web que gestiona:</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Trámite y archivo de expedientes en la
+          Delegación </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Correo:</p>
+        <p style="margin-bottom: 0cm">&nbsp;-dentro &nbsp;de la Delegación:
+          entradas y salidas &nbsp; </p>
+        <p style="margin-bottom: 0cm">&nbsp;-de la Delegación con los Centros
+          (en fase de activación).</p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Estructurada según:</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Oficinas: las de la Delegación </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Cargos: cada cargo corresponde a una
+          oficina, que tiene un titular o un suplente. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Usuarios: un usuario puede tener varios
+          cargos; uno de ellos es el preferente. </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Los
+      criterios de privacidad&nbsp;definen a qué tiene acceso cada usuario,
+      según cargos u oficinas)</p>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <br>
+    </h2>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Acceso"></a> 2.- Acceso</h2>
+    <p style="margin-bottom: 0cm">Ir&nbsp;a <a href="https://dlb.tramity.lan.moneders.net/index.php">https://dlb.tramity.lan.moneders.net/index.php</a>
+      con usuario y contraseña (el mismo de la intranet):</p>
+    <br>
+    <p style="margin-bottom: 0cm"><img name="Imatge1" src="ManualTramity_html_b6ffff0186c8cc78.png"
+        width="100%" align="middle"></p>
+    <br>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Preferencias"></a><a name="h.il9jo3msgpvx"></a> 3.- Preferencias</h2>
+    <p style="margin-bottom: 0cm">Clicando sobre el nombre de usuario (arriba a
+      la derecha) se despliega un menú:</p>
+    <p style="margin-bottom: 0cm"><img name="Imatge2" src="ManualTramity_html_6fde9e439307ab47.png"
+        width="100%" align="middle"> <br>
+    </p>
+    <p style="margin-bottom: 0cm">En “Preferencias” se puede definir el color,
+      el idioma, el mail y cambiar el password:</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><img name="Imatge3" src="ManualTramity_html_2138074f6ba6dd8c.png"
+        width="50%" align="middle"> <br clear="left">
+      <br>
+    </p>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Pestanyas"></a><a name="h.4sbzddvcq5we"></a> 4.- Pestañas</h2>
+    <p style="margin-bottom: 0cm">Cada pestaña permite gestionar un paso&nbsp;de
+      un expediente que circula, o bien la entrada&nbsp;o salida&nbsp;de un
+      escrito; u otras prestaciones. Se resalta en color más intenso la pestaña
+      que se muestra su contenido. Junto al nombre de algunas pestañas aparece,
+      en rojo, el número de elementos&nbsp;que tiene, pendientes de alguna
+      acción.</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image4" src="image19.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Relacionadas con “expedientes” (fondo gris):</p>
+    <dl>
+      <dd>
+        <table style="width: 840px; height: 430px;" cellspacing="0" cellpadding="0">
+          <colgroup> <col width="148"> <col width="492"> </colgroup>
+          <tbody>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Borrador (propio):</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="492">
+                <p>expedientes propios en fase de elaboración. <u>Iniciar</u>
+                  un nuevo expediente.</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Borrador (oficina): </p>
+              </td>
+              <td style="border: none; padding: 0cm" width="492">
+                <p>expedientes compartidos de/con otros de la propia oficina. <u>Iniciar</u>
+                  nuevo.</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Para firmar: </p>
+              </td>
+              <td style="border: none; padding: 0cm" width="492">
+                <p>expedientes, de otros usuarios, pendientes de firmar</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Para reunión:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="492">
+                <p>expedientes, <u>decretados</u> para una próxima reunión</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Circulando:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="492">
+                <p>expedientes propios o relacionados con la oficina que están
+                  circulando</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Acabados:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="492">
+                <p>expedientes que han regresado a la propia oficina después de
+                  circular</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Acabados encargados:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="492">
+                <p>expedientes acabados, encargados a uno de la oficina para
+                  gestionar</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Archivados: </p>
+              </td>
+              <td style="border: none; padding: 0cm" width="492">
+                <p>expedientes guardados una vez hechas todas las acciones
+                  (enviar, etc.)</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Copias:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="492">
+                <p>copias de expedientes de otras oficinas, que son de interés</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </dd>
+    </dl>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Relacionadas con “escritos” (entradas y
+      salidas) (fondo amarillo):</p>
+    <dl>
+      <dd>
+        <table style="width: 842px; height: 185px;" cellspacing="0" cellpadding="0">
+          <colgroup> <col width="144"> <col width="494"> </colgroup>
+          <tbody>
+            <tr valign="top">
+              <td style="border: medium none; padding: 0cm; width: 190px; background-color: white;"
+                width="144">
+                <p>-Entradas:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="494">
+                <p>Nuevos escritos recibidos y <u>asignados</u> a la oficina
+                  (pendientes de gestión)</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="144">
+                <p>-Entradas encargadas:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="494">
+                <p>Entradas asignadas a alguien de la oficina.</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="144">
+                <p>-Archivo de escritos:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="494">
+                <p>búsqueda de escritos a/de la dl</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="144">
+                <p>-Escritos de cr:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="494">
+                <p>correo de cr de los últimos 7 días (solo para los directores)</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="144">
+                <p>-Permanentes de cr: </p>
+              </td>
+              <td style="border: none; padding: 0cm" width="494">
+                <p>consulta de escritos permanentes (numeración baja)</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </dd>
+    </dl>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Otros (fondo blanco):</p>
+    <dl>
+      <dd>
+        <table style="width: 843px; height: 88px;" cellspacing="0" cellpadding="0">
+          <colgroup> <col width="109"> <col width="525"> </colgroup>
+          <tbody>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="109">
+                <p>-Pendientes:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="525">
+                <p>gestión de asuntos del registro o de la propia oficina que
+                  requieren respuesta en fecha determinada.</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="109">
+                <p>-Documentos:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="525">
+                <p>Introducción de documentos externos a la aplicación.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </dd>
+    </dl>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Pasando el cursor sobre cada pestaña aparece
+      un “globo” explicativo del contenido.</p>
+    <p style="margin-bottom: 0cm"><b>La presentación de todas las pestañas, como
+        se ve a continuación, es similar:</b></p>
+    <p style="margin-bottom: 0cm"><b>-”mod”: modificar&nbsp;el expediente</b></p>
+    <p style="margin-bottom: 0cm"><b>-”ver”: ver&nbsp;el expediente</b></p>
+    <p style="margin-bottom: 0cm"><b>-”acción”: eliminar&nbsp;un expediente,
+        copiarlo, etc.</b></p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Gestion_de_expedientes"></a><a name="h.xw7mq1jecsp6"></a> 5.-
+      Gestión de expedientes </h2>
+    <p style="margin-bottom: 0cm">(Borrador -&gt; Para firmar -&gt; Para reunión
+      -&gt; Circulando -&gt; Acabados -&gt; Archivados)</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Borrador"></a><a name="h.o1arb9p3gjn0"></a> A.- Borrador</h3>
+    <p style="margin-bottom: 0cm">En las pestañas “Borrador” (propio o de
+      oficina) se muestran los expedientes que se están trabajando.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image5" src="image37.png" width="100%"> </span></p>
+    <p style="margin-bottom: 0cm">Por defecto aparecen a la vista los
+      expedientes “normales” (los de trabajo propiamente); seleccionando “en
+      espera” enseña los expedientes borradores que están pendientes de trabajar
+      más adelante.</p>
+    <p style="margin-bottom: 0cm">La vista, si hay muchos expedientes, se puede
+      filtrar por “etiquetas”</p>
+    <p style="margin-bottom: 0cm"><u>Para iniciar un nuevo expediente,</u> en
+      “Borrador (propio)” hay que clicar el botón “nuevo expediente”. Se accede
+      entonces a la siguiente pantalla (similar a la de “mod” o “ver” un
+      expediente ya creado):</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image6" src="image68.png" width="101%" border="0" align="bottom">
+      </span></p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Hay que seleccionar:</p>
+    <dl>
+      <dd>
+        <table style="background: transparent none repeat scroll 0% 0%; width: 840px; height: 421px;"
+          cellspacing="0" cellpadding="0">
+          <colgroup> <col width="140"> <col width="471"> </colgroup>
+          <tbody>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="140">
+                <p>“Trámite”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="471">
+                <p>determina las personas que firmarán: ordinario, de despacho,
+                  deliberativo, etc. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="140">
+                <p>“Vida”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="471">
+                <p>plazo en que se borrará: normal, permanente, experiencia,
+                  temporal o borrable. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="140">
+                <p>“Visibilidad”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="471">
+                <p>quién tiene acceso: todos, personal, directores, reservado,
+                  vcd. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="140">
+                <p>“Prioridad”: </p>
+              </td>
+              <td style="border: none; padding: 0cm" width="471">
+                <p>urgencia en el recorrido: normal, rápido, urgente, otro, en
+                  espera. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="140">
+                <p>“Etiquetas”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="471">
+                <p>Catalogación para facilitar el archivo y búsquedas. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="140">
+                <p>“Asunto expediente”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="471">
+                <p><u>identifica el expediente</u>. Es un campo obligatorio y
+                  clave para búsquedas. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="140">
+                <p>“Entradilla”</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="471">
+                <p>[opcional: breve explicación, o para diálogo dentro de la
+                  oficina]. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="140">
+                <p>“Preparar”</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="471">
+                <p>[opcional: para señalar quienes en la oficina deben
+                  preparar/ver el expediente]. </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </dd>
+    </dl>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">El “Trámite” escogido determina la selección
+      de firmas y el recorrido del expediente. Es importante seleccionarlo bien:</p>
+    <dl>
+      <dd>
+        <table style="width: 843px; height: 421px;" cellspacing="0" cellpadding="0">
+          <colgroup> <col width="132"> <col width="516"> </colgroup>
+          <tbody>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="132">
+                <p>“simple ‘E-12’”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="516">
+                <p>para reclamar, sin número de protocolo,...: lo firma el d y 2
+                  personas más. </p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="132">
+                <p>“ordinarios”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="516">
+                <p>trámites sencillos: los firma el d y otros dos, y pasa a
+                  Secretaría (al menos, dos d). </p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="132">
+                <p>“de despacho”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="516">
+                <p>asuntos que pasan a estudio del vcd. Llega al vcd con tres
+                  firmas&nbsp;(dos de ellos d) </p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="132">
+                <p>“extraordinarios”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="516">
+                <p>asuntos que pasan a estudio del vcd con la firma de todos los
+                  d. </p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="132">
+                <p>“voto consultivo”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="516">
+                <p>pasa a estudio de la Permanente firmado por el ponente y los
+                  d afectados. </p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="132">
+                <p>“voto deliberativo”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="516">
+                <p>para el Pleno de la dl; se circula con la firma del ponente y
+                  los otros d afectados. </p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="132">
+                <p>“comisión de trabajo”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="516">
+                <p>para estudio de un grupo de directores. Se suele seguir el
+                  mismo trámite del pleno de la dl.</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="132">
+                <p>“estudio previo”:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="516">
+                <p>para pre-circular entre varios d, antes de circular la
+                  versión definitiva. </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </dd>
+    </dl>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">La “vida” está pensada para facilitar el
+      borrado de los expedientes y evitar que se acumulen innecesariamente: al
+      cabo de pocos días, cuando periódicamente se borren todos los “borrables”,
+      etc. Secretaría determina la duración de las opciones predefinidas. <font
+        color="#c9211e">Está en fase de implementación.</font></p>
+    <p style="margin-bottom: 0cm">Se han definido los diferentes grados de
+      “visibilidad”, que afectan tanto a los expedientes como a los escritos
+      (entradas y salidas):</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">todos: cualquier ve todo. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">personal: todo accesible a los d y of de
+          las oficinas implicadas. El resto de of solo ven el “asunto” </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">directores: solo ven los directores. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">reservado: solo visible para los
+          directores afectados y la permanente. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">vcd: reservados del vcd. </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm">La “prioridad” señala la rapidez con que
+      interesa circular el expediente, señalando la fecha deseada de ejecución.
+      Los expedientes “urgentes” aparecen en rojo en los listados.</p>
+    <p style="margin-bottom: 0cm">En “otras firmas” no hay que incluir al scdl,
+      vcsd, sd y vcd cuando ya les corresponden por el trámite, pues se les
+      asigna automáticamente. De lo contrario se les obliga a firmar dos veces.</p>
+    <p style="margin-bottom: 0cm"><u>“Guardar”</u>: pregunta si se quiere añadir
+      escritos o adjuntos. En caso afirmativo, presenta la siguiente pantalla:</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><img name="Imatge4" src="ManualTramity_html_33b04c1e2f10a21f.png"
+        width="100%" align="middle"> </p>
+    <p style="margin-bottom: 0cm"> Hay varias zonas diferenciadas:</p>
+    <ol>
+      <li>
+        <p style="margin-bottom: 0cm">Parte superior izquierda: los datos
+          básicos del expediente </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Parte superior derecha: Antecedentes: aquí
+          estarán todos los antecedentes del expediente. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Parte inferior: listado de todas las
+          acciones que contiene el expediente: propuestas, escritos, etc. </p>
+      </li>
+    </ol>
+    <p style="margin-bottom: 0cm">Haciendo click en los botones correspondientes
+      podrán añadirse Antecedentes:</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Entradas: escritos recibidos (que estén en
+          el registro del Tramity) </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Expedientes de la oficina </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Escritos enviados (seleccionados desde el
+          registro del Tramity) </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Documentos: documentos externos al Tramity
+          (Word, Excel, PDF, fotografía, etc). </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm">Y además:</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">nueva propuesta: la propuesta propiamente
+          dicha (textos explicativos, ...). </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">plantilla: formularios predefinidos por
+          Secretaría para determinados trámites (conceder una o, ...).</p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">nuevo escrito: <u>generar un escrito</u>&nbsp;para
+          enviar. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">contestar entrada: <u>generar un escrito</u>&nbsp;en
+          respuesta a otro. </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm">Tanto para “nueva propuesta” como para “nuevo
+      escrito” o “contestar entrada” se abre una página así (en el primer caso
+      no aparecen “Destinos” ni “Referencias”):</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><img name="Imatge5" src="ManualTramity_html_b02dba841343236f.png"
+        width="100%" align="middle"> <br clear="left">
+    </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">“ Asunto” (obligatorio) y “Detalle”
+          (opcional)&nbsp;identifican la propuesta o el escrito. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">En el caso de escritos&nbsp;se debe
+          seleccionar el <i>Destino&nbsp;</i>(o grupo de envío)&nbsp;y las <i>Referencias&nbsp;</i>(si
+          las hay). </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">También cabe especificar la <i>Categoría&nbsp;</i>(normal
+          / sin numerar / permanente) y la <i>Visibilidad&nbsp;</i>(todos /
+          personal / reservado...). </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">“Visibilidad en destino”: para señalar si
+          el escrito va dirigido a todo el cl o solo al d, o al d y sacd. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">“¿El centro debe contestar?”: para indicar
+          el pendiente que Tramity generará en el ctr de destino. </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">“<u>Guardar</u>”: pregunta si se quiere añadir
+      escritos&nbsp;o adjuntos. En caso afirmativo, presenta la siguiente
+      pantalla (similar tanto para propuestas&nbsp;como para escritos):</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><img name="Imatge6" src="ManualTramity_html_3438342366e5b16b.png"
+        width="100%" align="middle"> <br clear="left">
+      <br>
+    </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">“Fecha del escrito”: aunque no es
+          obligatorio, si no se introduce, lo recuerda un mensaje. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">“Insertar escrito”: para introducir <u>el
+            contenido</u>&nbsp;propio del escrito&nbsp;o propuesta&nbsp;mediante
+          el editor de texto colaborativo “Etherpad”. Con “Nuevo Etherpad” abre
+          un documento en blanco; con “Buscar en Documentos” presenta los
+          etherpad guardados para seleccionar el deseado (el “Etherpad” se
+          explica más abajo). </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Los adjuntos: para introducir documentos
+          externos a la aplicación. Con “Buscar en Documentos” para adjuntar los
+          introducidos previamente. Si no se han introducido antes basta con <i>arrrastrarlos</i>
+          o seleccionarlos con el botón “Browse…”. </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Hay que circular cada escrito con los destinos
+      concretos a los que irá. Hay tres tipos de destinos:</p>
+    <ol>
+      <li>
+        <p style="margin-bottom: 0cm">Destinos individuales: se seleccionan a
+          través del menú desplegable, cuantos se quiera. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Grupos predeterminados: grupos más
+          habituales ya predefinidos por secretaría. Se seleccionan marcando
+          “Grupo” en “Destinos”, y seleccionando el correspondiente. [Si alguno,
+          de uso habitual, no está definido por secretaría se puede avisar para
+          que lo incluya]. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Grupos especiales: definidos por la
+          oficina ad casum. Se marca “Grupo” en “Destinos”, se selecciona el
+          grupo que más se ajuste ajustar (o ninguno) y se marca “Guardar”.
+          Vuelve a abrirse el escrito -”mod.datos”- y se clica “modificar
+          selección”, que abre un listado completo para marcar o desmarcar los
+          destinos que corresponda. </p>
+      </li>
+    </ol>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image10" src="image53.png" width="100%" align="middle"> </span>
+    </p>
+    <ol start="4">
+      <li>
+        <p style="margin-bottom: 0cm">Antes de “Guardar” interesa anotar una
+          “Descripción” del grupo que facilite su identificación en los
+          diferentes listados. </p>
+      </li>
+    </ol>
+    <p style="margin-bottom: 0cm">Plantilla: El proceso para añadir una
+      plantilla a un expediente es el siguiente:</p>
+    <ol>
+      <li>
+        <p style="margin-bottom: 0cm">Se selecciona “plantilla” en el
+          expediente: </p>
+      </li>
+    </ol>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image11" src="image55.png" width="100%" align="middle"> </span>
+    </p>
+    <ol start="2">
+      <li>
+        <p style="margin-bottom: 0cm">Se escoge la plantilla deseada con
+          “adjuntar” (si se duda, antes de “adjuntar”, se puede “ver”): </p>
+      </li>
+    </ol>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image12" src="image52.png" width="100%" align="middle"> </span>
+    </p>
+    <ol start="3">
+      <li>
+        <p style="margin-bottom: 0cm">Se completan los datos: </p>
+      </li>
+    </ol>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image13" src="image54.png" width="100%" align="middle"> </span>
+    </p>
+    <ol start="4">
+      <li>
+        <p style="margin-bottom: 0cm">Y se cierra el Etherpad para circular: </p>
+      </li>
+    </ol>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image14" src="image69.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">UN EXPEDIENTE CON UNA PROPUESTA Y VARIOS
+      ESCRITOS SE VERÁ DEL SIGUIENTE MODO:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image15" src="image48.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Para cada una de las propuestas o escritos
+      pueden modificarse todos los datos (mod.datos), revisar el texto
+      (rev.texto), manipular los adjuntos (doble clic en el clip), o “eliminar”
+      ese escrito o propuesta.</p>
+    <p style="margin-bottom: 0cm">“<u>Preparar</u>”: sirve para que un
+      expediente puedan trabajarlo, antes de circular, otros de la oficina. Si
+      se marca, el expediente aparecerá en la lista de “<i>borrador (oficina)</i>”
+      de los d y of de la oficina que se hayan marcado. La marca (“checkbox”)
+      indica que el oficial o director debe mirarlo, NO que lo ha visto. </p>
+    <ul>
+      <li>
+        <p> Cuando un expediente ya se ha visto, hay que hacer click en “<i>marcar
+            como visto</i>” (si se vuelve a clicar se desmarca): aparecerá
+          entonces, junto al cargo y entre paréntesis “<i>visto</i>”&nbsp;en
+          color verde. El expediente desaparece de la lista de “Borrador
+          (oficina)”.</p>
+      </li>
+      <p></p>
+      <li>
+        <p>Cuando todos los que deberían ver un expediente ya lo han visto
+          (marcado “visto”), en la ventana “Borrador” del ponente aparecerá
+          resaltado en color amarillo, para indicar que ya puede proceder a
+          circularlo.</p>
+      </li>
+      <li>
+        <p>Tiene interés utilizar la opción de “preparar” cuando se prevé que el
+          expediente tendrá variaciones en la propia la oficina antes de
+          circular. Cuando el expediente ya está circulando es más limitada la
+          posibilidad de hacer cambios.</p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm">“<u>Circular</u>”: Para pasar a firmas cuando
+      el expediente ya está listo. Seguirá el recorrido según el trámite&nbsp;y
+      la selección de <i>firmas</i>.</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">“<i>preparar</i>” y “<i>firmar</i>”&nbsp;son
+          cosas diferentes. Si se quiere que un oficial, además de preparar un
+          expediente, lo firme, habrá que marcarlo en “preparar” y seleccionarlo
+          también en “firmas oficina”. Esto será lo habitual. En “firmas
+          oficina” no aparece el director, porque a este, por defecto, ya le
+          llegan para firmar todos los expedientes de la oficina. No es
+          necesario añadirlo como firma. </p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Al añadir los cargos que deben firmar, se
+          distingue entre los de la oficina, primero, y el resto, después. Hasta
+          que no han firmado todos los de la oficina (además del director de la
+          oficina), no pasan a verlo los demás a firmar. </p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">El cargo que pone a circular&nbsp;un
+          expediente, firma automáticamente con su nombre. El expediente
+          desaparece de la lista de “borrador” y aparece en la de
+          “circulando”.&nbsp; </p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">(más adelante se explica cómo queda
+          &nbsp;la plantilla de un expediente tras circular y aprobar) </p>
+      </li>
+    </ul>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <a name="Para_firmar">B.- Para firmar</a></h3>
+    <p style="margin-bottom: 0cm">En esa pestaña aparece el listado de
+      expedientes a firmar. En rojo se indica el número de expedientes. En
+      negrita se señalan los que todavía no se han visto. Una vez firmados,
+      desaparecen de la lista.&nbsp;</p>
+    <p style="margin-bottom: 0cm"><img name="Imatge7" src="ManualTramity_html_9f5c5a0b246d78e4.png"
+        width="100%" align="middle"> <br clear="left">
+      <br>
+    </p>
+    <p style="margin-bottom: 0cm">Pulsando “revisar” se accede al
+      correspondiente expediente:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image17" src="image43.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">-En la parte superior aparecen los detalles
+      del expediente:&nbsp;</p>
+    <dl>
+      <dd>
+        <table style="width: 840px; height: 120px;" cellspacing="0" cellpadding="0">
+          <colgroup> <col width="117"> <col width="509"> </colgroup>
+          <tbody>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="117">
+                <p>(izquierda):</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="509">
+                <p>ponente, tipo de trámite, estado, oficinas </p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="117">
+                <p>(derecha):</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="509">
+                <p>prioridad, fecha de resolución </p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="117">
+                <p>(a continuación):</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="509">
+                <p>Asunto, Entradilla, comentarios </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </dd>
+    </dl>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">-En la parte inferior aparecen las diferentes
+      propuestas/escritos que se pueden ver/revisar(*), y los adjuntos, que se
+      pueden descargar para ver y modificar, haciendo doble clic en el clip
+      (**).</p>
+    <p style="margin-bottom: 0cm">-En la parte derecha aparecen:</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Antecedentes, que se pueden ver y
+          descargar. (***) </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Firmas (Firmar / Añadir firmas: se pueden
+          “Añadir firmas” si así se considera oportuno). (****) </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Recorrido seguido hasta el momento. </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm">(*) Con el link de “revisar” se tiene acceso
+      al texto del escrito, que se puede modificar, hacer comentarios etc. Lo
+      que se anota, queda registrado al instante; no hace falta guardar. (Para
+      más información ver la explicación de uso del “Etherpad”).</p>
+    <p style="margin-bottom: 0cm">(**) Para ver un adjunto, hay que descargarlo
+      y abrirlo.</p>
+    <p style="margin-bottom: 0cm">También se puede modificar. En este caso, como
+      el archivo se habrá guardado en el disco duro del ordenador (en principio,
+      en la carpeta “descargas”), al final hay que “arrastrarlo” de nuevo a la
+      ventana de los adjuntos y eliminar la versión anterior.</p>
+    <br>
+    <p style="margin-bottom: 0cm"><img name="Imatge8" src="ManualTramity_html_9ea6dd6a78ea8ae9.png"
+        width="50%" align="middle"> <br clear="left">
+      (***) Con “ver todos” se genera un pdf con todos los antecedentes que
+      están a la vista y los incluidos dentro de los expedientes puestos como
+      antecedentes.</p>
+    <p style="margin-bottom: 0cm">(****) También se puede “Re-circular” el
+      expediente. Se borrarán todas las firmas y comentarios, y volverá a la
+      pestaña “Para firmar” del ponente.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Al pulsar “firmar” el expediente (botón verde)
+      se abre la siguiente ventana:</p>
+    <p style="margin-bottom: 0cm"><img name="Imatge9" src="ManualTramity_html_3e655c66cf496dc4.png"
+        width="50%" align="middle"> <br>
+    </p>
+    <p style="margin-bottom: 0cm">-Escoger el voto (ok-no-espera) y marcar
+      “Guardar”</p>
+    <p style="margin-bottom: 0cm">(Votando ok/no el expediente sigue su
+      recorrido. Votando “espera”, sigue en la lista “para firmar”).</p>
+    <p style="margin-bottom: 0cm">-Antes de votar puede añadirse un comentario o
+      pedir una aclaración al ponente (anotando la duda en “comentario”). </p>
+    <p style="margin-bottom: 0cm">Si se pide aclaración, también sigue en la
+      lista “para firmar” pero con color <u>amarillo</u>, y aparece de nuevo en
+      la vista “para firmar” del ponente; también en color amarillo. </p>
+    <p style="margin-bottom: 0cm">Cuando éste responde la aclaración, el
+      expediente cambia a color <u>verde</u>, señalando que &nbsp;ya ha
+      respondido; de manera que ya se puede volver a abrir para firmar.</p>
+    <p style="margin-bottom: 0cm">Para responder a una petición de aclaración
+      hay que pulsar el botón “responder aclaración”; no al “OK” y “Guardar”,
+      porque en este caso quien pregunta no advertirá que se le ha respondido.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">“<u>Cerrar</u>”: sale del cuadro de diálogo
+      sin hacer nada.</p>
+    <p style="margin-bottom: 0cm">El voto emitido quedará registrado en la lista
+      de firmas, así como los comentarios y aclaraciones, que serán visibles
+      para todos.</p>
+    <p style="margin-bottom: 0cm">Vista al pedir aclaración al ponente
+      (amarillo):</p>
+    <p style="margin-bottom: 0cm"><img name="Imatge10" src="ManualTramity_html_502837a1c55d52ba.png"
+        width="100%" align="middle"> <br clear="left">
+      Vista tras la respuesta del ponente (verde):</p>
+    <p style="margin-bottom: 0cm"><img name="Imatge11" src="ManualTramity_html_19cee2a7fddaaa63.png"
+        width="100%" align="middle"> <br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <a name="Para_reunion"></a></h3>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Para_reunion"></a></h3>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><br>
+    </h3>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Para_reunion">C.- Para reunión</a></h3>
+    <p style="margin-bottom: 0cm">En esa pestaña aparecen los expedientes que
+      cuentan con el VºBº del vcd para una próxima reunión: reunión del Pleno,
+      comisión de trabajo, etc. Los que están pendientes de firmar aparecen
+      resaltados en amarillo.</p>
+    <p style="margin-bottom: 0cm">Para firmar se sigue el mismo procedimiento
+      que en la pestaña “Para firmar”. Una vez firmados pasan a estar con fondo
+      blanco.</p>
+    <p style="margin-bottom: 0cm">El programa exige la firma también de los
+      expedientes que uno ha sido el ponente y que ya firmó al iniciar el
+      trámite. Es un modo de advertir los comentarios que pueda haber y tenerlos
+      en cuenta en la reunión del Pleno.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <a name="Circulando">D.- Circulando</a></h3>
+    <p style="margin-bottom: 0cm">En esa pestaña se puede hacer un seguimiento
+      de los expedientes que se han puesto a circular o se han firmado como
+      oficina implicada,, hasta que terminan su recorrido: quiénes han firmado,
+      comentarios, etc.</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image22" src="image66.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">En el listado de los oficiales aparecen los
+      expedientes que ha circulado cada uno. En el del director todos los de la
+      oficina; no solo los suyos.</p>
+    <p style="margin-bottom: 0cm">Hay un “agujero negro”: los expedientes dejan
+      de verse cuando ya han terminado el recorrido de firmas y pasan a
+      Secretaría para distribuir. Por tanto, si el expediente “desaparece” es
+      señal de que ya ha pasado a Secretaría y lo distribuirá en breve.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <a name="Acabados">E.- Acabados</a></h3>
+    <p style="margin-bottom: 0cm">En el listado “Acabados” <u>del director</u>&nbsp;aparecen
+      todos los expedientes de la oficina que ya han terminado su trámite
+      (aprobados por el vcd, etc).</p>
+    <p style="margin-bottom: 0cm">Corresponde a la oficina preparar y enviar los
+      escritos aprobados, ejecutar lo que se ha propuesto, etc.</p>
+    <p style="margin-bottom: 0cm"><img name="Imatge12" src="ManualTramity_html_b1b5012be484260.png"
+        width="100%" align="middle"> <br clear="left">
+      <br>
+    </p>
+    <p style="margin-bottom: 0cm">El color amarillo de algunos expedientes
+      indican que ha habido alguna anomalía: que se ha rechazado, se dilata la
+      decisión, etc.</p>
+    <p style="margin-bottom: 0cm">Con “mod” (o “ver”) se accede al contenido del
+      expediente; con “acción” se puede mover el expediente a “borrador”, o
+      pasar a “borrador” una copia del mismo.</p>
+    <p style="margin-bottom: 0cm">Pulsando “mod” en un expediente se accede a la
+      siguiente vista:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #5b9bd5; padding: 0.05cm"><img
+          alt="https://lh5.googleusercontent.com/2ygBPesx74YtgMb5RQG_9DleIxwRdrasOGJOHr3XwMwlrT0xAXNRLCIpVqGyBVxZE4X6QAxS3SGBx2Yt_XLTmZtO2BB1EL4I92p9veG_0gd_uNYdZIyhY9mwyw508nJ90d_AhRX1"
+          name="Image24" src="image73.png" width="100%" align="middle"> </span></p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Con “<i>ver</i>” se puede ver cada texto y
+          con “revisar” modificarlo, ver las anotaciones y correcciones, etc. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">En “<i><u>mod.datos</u></i>” se ajustan
+          los datos del escrito que se ha de enviar, según se detalla a
+          continuación. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Una vez preparado el escrito a enviar, se
+          pulsa “<i>pasar a secretaria</i>” en la columna “<i>enviar</i>”. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Una vez enviado a secretaría ya no se
+          pueden modificar los datos, y en la columna “<i>enviar</i>” aparece el
+          texto “<i>en secretaría</i>”. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Cuando secretaría lo envía, el mensaje que
+          se puede leer es del estilo: “enviado el 4/01/2021”. Hasta que no
+          consta que secretaría ha enviado el escrito, el expediente no se puede
+          “archivar”; es una medida de seguridad para evitar que un escrito
+          quede perdido, sin enviar al destinatario. </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Las diferentes opciones de envío de escritos
+      determinan el modo de ajustar los datos del escrito: </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Escrito con destinatario único: se revisa
+          el escrito (“revisar”) y se envía a secretaría (“pasar a secretaría”)
+        </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Mismo escrito para los diferentes
+          destinatarios (que se han anotados individualmente o como grupo):
+          también se revisa el escrito (“revisar”) y se envía a secretaría
+          (“pasar a secretaría”); a cada ctr se enviará el mismo escrito con el
+          encabezado del propio ctr. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Modelo de escrito que se ha de ajustar a
+          cada destinatario: </p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Pulsando en “<u>mod.datos</u>” aparece la
+          siguiente pantalla: </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><img name="Imatge13" src="ManualTramity_html_94f5db549f7da0df.png"
+        width="100%" align="middle"> <br clear="left">
+      <br>
+    </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Clicar el botón rojo “Explotar en un
+          escrito para cada ctr” </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Automáticamente, en la ventana del
+          expediente, se multiplicará el escrito, uno por cada destino, con el
+          mismo número de protocolo. Clicando “revisar” en cada uno, se ajusta
+          el contenido del escrito para cada destino. Para simplificar este
+          trabajo, antes de “explotar en un escrito para cada ctr” interesa
+          ajustar el texto lo más que se pueda para evitar los múltiples ajustes
+          en cada “copia”. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">a continuación ya se puede “pasar a
+          secretaría” cada uno, según interese. </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Acabados_encargados">F. Acabados encargados</a></h3>
+    <p style="margin-bottom: 0cm">Se puede encargar el acabado final del
+      expediente a algún oficial (selección en “<u>Encargar </u>a” y botón “<u>Encargar!</u>”.
+      Una vez encargado, el oficial señalado pasa a ser el ponente del
+      expediente, y le aparecerá en la lista de la pestaña “acabados
+      encargados”: así sabe que tiene que gestionarlo él.</p>
+    <p style="margin-bottom: 0cm">Un expediente que ya está “encargado” se puede
+      “encargar” a otro de la oficina, pero no “desencargar” a nadie.</p>
+    <p style="margin-bottom: 0cm">En los escritos, junto al botón “Guardar”
+      aparece un checkbox “revisado”, para poder marcar si ya se ha revisado, y
+      que aparecerá marcado en la primera columna (“ok”) del listado de escritos
+      y propuestas del expediente. Así se facilita archivar el expediente sin
+      que queden acciones pendientes.</p>
+    <p style="margin-bottom: 0cm">Cuando se ha revisado un escrito y se clica la
+      casilla “<u>enviar</u>”, el escrito pasa a la pestaña “Enviar” de
+      Secretaría para proceder a su envío; así queda señalado en esta misma
+      casilla.</p>
+    <p style="margin-bottom: 0cm">Si no se ha hecho antes, en esta fase también
+      se pueden asignar unas <u>etiquetas</u> al expediente para facilitar
+      posteriores búsquedas una vez esté ya archivado. Se recomienda hacerlo,
+      pues es la clave para localizar después los expedientes. Las etiquetas
+      pueden ser personales o de la oficina. Se definen en el menú de
+      preferencias del usuario (arriba a la derecha):</p>
+    <p style="margin-bottom: 0cm"><img name="Imatge14" src="ManualTramity_html_1a40f082705a23d6.png"
+        width="100%" align="middle"> <br>
+    </p>
+    <p style="margin-bottom: 0cm"><img name="Imatge15" src="ManualTramity_html_6730747f05b5e1a0.png"
+        width="70%" align="middle"> <br clear="left">
+      <br>
+    </p>
+    <p style="margin-bottom: 0cm"><img name="Imatge16" src="ManualTramity_html_8c2f960f4836e249.png"
+        width="50%" align="middle"> <br>
+    </p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Como ya se ha dicho, no se permite “Archivar”
+      un expediente hasta que todos los escritos han sido “enviados” (no que
+      están “en secretaría”), pues cabe que no se envíe por algún motivo y se
+      devuelve a la oficina. En este caso, el expediente en “Acabados” aparece
+      en amarillo, e indica que ha habido alguna incidencia:</p>
+    <p style="margin-bottom: 0cm"><img name="Imatge17" src="ManualTramity_html_2735f578f317798c.png"
+        width="100%" align="middle"> <br>
+    </p>
+    <br>
+    <p style="margin-bottom: 0cm">Haciendo “mod” en el expediente se verá en el
+      escrito correspondiente “devuelto” en rojo:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image30" src="image38.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Al abrirlo -”mod.datos”- se leerá un mensaje
+      en rojo indicando el motivo de la devolución:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image31" src="image64.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Después de corregirlo, se ha de volver a pasar
+      a Secretaría para enviar.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <a name="Archivados">G.- Archivados</a></h3>
+    <p style="margin-bottom: 0cm">Pulsando “Archivar”, el expediente pasa a la
+      pestaña “archivados”:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image32" src="image6.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Ahí se ven todos los expedientes de la
+      oficina. Cada uno ve los que le corresponden según los permisos que tenga
+      (reservado, etc).</p>
+    <p style="margin-bottom: 0cm">-Quedan clasificados por las etiquetas, tanto
+      personales como de la oficina.</p>
+    <p style="margin-bottom: 0cm">-La selección se acota escogiendo etiquetas
+      (una o varias, y/o), por un período de tiempo o por alguna palabra clave
+      del Asunto.</p>
+    <p style="margin-bottom: 0cm">-Se recomienda no usar etiquetas personales
+      para el archivo de expedientes de la oficina, pues no las podrían ver las
+      otras personas de la oficina.</p>
+    <p style="margin-bottom: 0cm">-Las etiquetas pueden cambiarse siempre que se
+      quiera.</p>
+    <p style="margin-bottom: 0cm">A través de “acción”, los expedientes se
+      pueden pasar/copiar a la carpeta “borrador” o también a la de otro cargo.
+      Todas las propuestas y escritos del expediente pasarán a ser antecedentes.</p>
+    <p style="margin-bottom: 0cm">Para borrar un expediente en “Acabados” o
+      “Acabados encargados”, primero hay que pasarlo a “Archivados” y de ahí a
+      “Borrador” para eliminar. Antes de eliminarlo, pedirá confirmación. Se ha
+      pensado así para evitar eliminar expedientes de modo involuntario.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Expedientes con “plantillas”</p>
+    <ol>
+      <li>
+        <p style="margin-bottom: 0cm">Un expediente con plantillas que ha
+          circulado acaba así: </p>
+      </li>
+    </ol>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image33" src="image9.png" width="100%" align="middle"> </span>
+    </p>
+    <ol start="2">
+      <li>
+        <p style="margin-bottom: 0cm">Al aprobarse se ha asignado un número de
+          protocolo al escrito, que también se anota en la plantilla. Para hay
+          que hacer “revisar” o “ver”. Si hace “ver” se abre una nueva ventana
+          con el contenido: </p>
+      </li>
+    </ol>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image34" src="image50.png" width="100%" align="middle"> </span>
+    </p>
+    <ol start="3">
+      <li>
+        <p style="margin-bottom: 0cm">Aparecen todas las firmas y el número de
+          protocolo. </p>
+      </li>
+    </ol>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <a name="Gestion_de_escritos"></a></h3>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><br>
+    </h3>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Gestion_de_escritos">6. Gestión de escritos</a></h3>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <a name="Entradas">A.- Entradas</a></h3>
+    <p style="margin-bottom: 0cm">En esta pestaña, que solo ven los Directores,
+      aparecen las nuevas entradas de escritos asignados a la oficina pendientes
+      de gestión.</p>
+    <p style="margin-bottom: 0cm"><img name="Imatge18" src="ManualTramity_html_fd4288e603993e7.png"
+        width="100%" align="middle"> <br clear="left">
+      <br>
+    </p>
+    <p style="margin-bottom: 0cm">Se distinguen en dos pantallas los escritos
+      “propios” del resto en los que no se es oficina principal.</p>
+    <p style="margin-bottom: 0cm">Pulsando en&nbsp;“<u>ver</u>” se abre una
+      ventana con una vista rápida del escrito. Puede descargarse en pdf; o
+      bajar el propio escrito o los adjuntos que tenga en su formato original.</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image36" src="image11.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">La opción “<u>acción</u>”, tanto en la
+      pantalla de “escritos propios” como en “resto” muestra esta vista:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image37" src="image27.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Esto permite:</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm"><i>Encargar</i> la entrada a alguien de la
+          oficina, que pasará a su pestaña “entradas encargadas”: </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image38" src="image42.png" width="100%" align="middle"> </span>
+    </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm"><i>Marcar como visto</i>: la entrada
+          desaparecerá del listado </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm"><i>Añadir</i> la entrada a un expediente
+          existente en “borrador” </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm"><i>Crear</i> un nuevo expediente en
+          “borrador” con esta entrada de antecedente. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Crear un pendiente de la oficina y
+          encargarlo a alguien de la oficina: </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image39" src="image18.png" width="100%" align="middle"> </span>
+    </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Poner <i>Etiquetas</i> a la
+          &nbsp;entrada, para facilitar la búsqueda posterior del escrito. </p>
+      </li>
+    </ul>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <br>
+    </h3>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <a name="Entradas_encargadas">B.- Entradas encargadas</a></h3>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">En esta pestaña se ven las entradas que el d
+      correspondiente ha encargado a alguien de la oficina.</p>
+    <p style="margin-bottom: 0cm">El d de la oficina tiene un desplegable para
+      ver el listado correspondiente a cada of. Son las entradas que ha de
+      gestionar cada uno.</p>
+    <p style="margin-bottom: 0cm"><img name="Imatge19" src="ManualTramity_html_385bf33190825b92.png"
+        width="100%" align="middle"> <br clear="left">
+      <br>
+    </p>
+    <p style="margin-bottom: 0cm">Los botones “ver” y “acción” son los mismos
+      que para la vista de “Entradas”.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <img name="Imatge20" src="ManualTramity_html_2668ac65b57a6ffd.png" width="100%"
+      align="middle"> <br clear="left">
+    <p style="margin-bottom: 0cm">El botón <i>Encargar a</i> permite cambiar la
+      persona encargada.</p>
+    <p style="margin-bottom: 0cm">Las pestañas “Entradas” y “Entradas
+      encargadas” con sus opciones correspondientes se han pensado para
+      facilitar la gestión de las entradas y distribución del trabajo, de manera
+      que no quede indefinida la gestión de ninguna entrada:</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Determinando quién se encarga de gestionar
+          lo que corresponda </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Generando expedientes de trabajo con esa
+          entrada </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Creando pendientes que faciliten
+          determinar plazos y el seguimiento de la tarea. </p>
+      </li>
+    </ul>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <a name="Archivo_de_escritos"></a></h3>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><br>
+    </h3>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><br>
+    </h3>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Archivo_de_escritos">C.- Archivo de escritos</a></h3>
+    <p style="margin-bottom: 0cm"><img name="Imatge21" src="ManualTramity_html_5d05653ca705575a.png"
+        width="100%" align="middle"> <br clear="left">
+      La presentación inicial de esta página sirve para <u>buscar un escrito
+        (entrada/salida)</u>&nbsp;o un <u>formulario</u>:</p>
+    <p style="margin-bottom: 0cm">Para “buscar un escrito concreto”, basta con
+      escribirlo en la ventana correspondiente (o escogiendo el protocolo,
+      número y año) y pulsar “buscar”.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Pulsando en “ver todas las opciones” se abren
+      todas las posibilidades de búsqueda:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image43" src="image29.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image44" src="image41.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Permite la búsqueda de:</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Los escritos de un Centro / dl / r </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Por una palabra del Asunto o Detalle </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Búsqueda de escritos por origen o destino
+        </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Búsqueda de entradas por “etiquetas” </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Otras búsquedas más habituales </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Modelos jurídicos firmados por el vcd (de
+          incorporaciones, traslados, etc) </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Por defecto busca escritos de los ctr
+      “activos”. Si se quiere que busque en los “anulados”, hay que marcar el
+      recuadro correspondiente.</p>
+    <p style="margin-bottom: 0cm">El resultado de una búsqueda tiene una
+      presentación del tipo:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image46" src="image13.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Las opciones para cada escrito que se
+      selecciona, son:</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">“detalle”: modificar o introducir el
+          “detalle” del escrito, según el interés de la oficina. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">“ver” el escrito </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm"><span style="background: transparent">“acción”:
+            Para añadir/crear un expediente, crear un pendiente o marcar con
+            “etiquetas”: </span></p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image47" src="image22.png" width="100%" align="middle"> </span>
+    </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">“ver destinos” para ver los destinos
+          concretos de escritos enviados a un grupo (p.e., “ctr de n”) </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Para la tabla en su conjunto, las opciones
+      son:</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">“Copy”: copia la tabla, para poder pegar
+          en un documento. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">“Excel” / “PDF”: Exporta la tabla en un
+          excel / pdf. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">“Column visibility”: Selecciona las
+          columnas que quieren verse en la tabla. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">“Print”: Imprime la tabla </p>
+      </li>
+    </ul>
+    <h3 class="western"><a name="Escritos_de_cr"></a></h3>
+    <h3 class="western"><br>
+    </h3>
+    <h3 class="western"><a name="Escritos_de_cr">D.- Escritos de cr</a></h3>
+    <p style="margin-bottom: 0cm">Presenta a los Directores los escritos de cr
+      recibidos los últimos días, similar a pestaña “Entradas”.</p>
+    <p style="margin-bottom: 0cm"><img name="Image48" src="image72.png" width="100%"
+        align="middle"> <br>
+    </p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><img name="Image49" src="image1.png" width="100%"
+        align="middle"> <br>
+    </p>
+    Para cada escrito, permite:
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">“detalle”: modificar o introducir el
+          “detalle” del escrito, según el interés de la oficina. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">“ver” el escrito </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">“acción”: Para añadir/crear un expediente,
+          crear un pendiente o marcar con “etiquetas”: </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image50" src="image22.png" width="100%" align="middle"> </span>
+    </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">“ver destinos” para ver los destinos
+          concretos de escritos enviados a un grupo (p.e., “ctr de n”) </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Para la tabla en su conjunto, las opciones, ya
+      comentadas en el apartado anterior, son: “Copy”, “Excel”, “PDF”, “Column
+      visibility” y “Print”.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Permanentes_de_cr">E.- Permanentes de cr</a></h3>
+    <p style="margin-bottom: 0cm">Presenta todos los escritos de cr de
+      numeración baja (u otros permanentes) de modo similar a las pestaña
+      “Escritos de cr”.</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image51" src="image2.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Permite la búsqueda de un escrito, por
+      oficinas, años o por palabras claves.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Pendientes">7.- Pendientes</a></h3>
+    <p style="margin-bottom: 0cm">Gestiona los pendientes del
+      registro&nbsp;(asignados por Secretaría en relación con escritos) y de la
+      oficina&nbsp;(tareas a cargo de la propia oficina).</p>
+    <p style="margin-bottom: 0cm">Es la pestaña que presenta Tramity cuando se
+      accede:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image52" src="image8.png" width="100%" align="middle"> </span>
+    </p>
+    <h3 class="western"><a name="Pendientes_del_registro">A.- Pendientes del
+        registro</a></h3>
+    <p style="margin-bottom: 0cm">En la presentación inicial de pendientes se
+      selecciona “registro” en el desplegable “De:”. Es la opción por defecto.</p>
+    <p style="margin-bottom: 0cm">Mostrará los pendientes de contestar según el
+      registro <u>a fecha de hoy</u>. [Un pendiente con fecha de vencimiento
+      “hoy”, se considera pendiente a partir de “mañana”; por eso no aparece
+      “hoy” en este listado].</p>
+    <p style="margin-bottom: 0cm">Se puede filtrar el listado por el período y
+      por asignación. Y hacer una búsqueda más selectiva en la casilla “Search:”</p>
+    <p style="margin-bottom: 0cm">Cada pendiente se puede “marcar como
+      contestado” y “modificar”.</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image53" src="image34.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">De cada pendiente puede verse:
+      Protocolo&nbsp;de origen, si es <i>periódico</i> o no, Asunto, <i>Fecha
+        de plazo</i>, Oficinas implicadas y Calendario. También las columnas que
+      asigna la propia oficina: Etiquetas&nbsp;y Encargado.</p>
+    <p style="margin-bottom: 0cm">Los pendientes se dan por contestados
+      automáticamente cuando se envía la respuesta.</p>
+    <p style="margin-bottom: 0cm">No es extraño que&nbsp;Tramity no sea capaz de
+      identificar que se ha contestado&nbsp;un asunto (o porque no se contesta
+      exactamente con esa referencia, o se contesta dentro de otro escrito, o de
+      palabra o, simplemente, porque no se ha de contestar). <u>Para estos
+        casos</u>: cada oficina marca la casilla correspondiente y, al hacer
+      click en “marcar como contestado”, se da por contestado.</p>
+    <p style="margin-bottom: 0cm">Si se pulsa “modificar” un pendiente no
+      periódico aparece la siguiente ventana:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image54" src="image36.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Cada oficina puede introducir modificaciones:</p>
+    <p style="margin-bottom: 0cm">-etiquetarlo</p>
+    <p style="margin-bottom: 0cm">-cambiar la fecha de plazo</p>
+    <p style="margin-bottom: 0cm">-asignarlo a alguien en concreto</p>
+    <p style="margin-bottom: 0cm">-poner en el campo Observaciones&nbsp;los
+      comentarios que sean de interés para la propia oficina. </p>
+    <p style="margin-bottom: 0cm">Los pendientes del registro, aunque los
+      gestiona Secretaría, son de interés exclusivo para el trabajo de la propia
+      oficina.</p>
+    <p style="margin-bottom: 0cm">Se recomienda vivamente ver, por lo menos al
+      principio de cada semana, los pendientes. Es el modo de dar por
+      contestados alguno que no ha advertido la aplicación y, fundamentalmente,
+      prever las tareas pendientes para cumplir con los plazos establecidos en
+      los diferentes envíos.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Pendientes_de_la_oficina">B.- Pendientes de la
+        oficina</a></h3>
+    <p style="margin-bottom: 0cm">En la presentación inicial de pendientes se
+      selecciona “oficina” en el desplegable “De:”</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image55" src="image16.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Como en los del registro, se puede filtrar el
+      listado por el <i>período</i> y por <i>asignación</i>. Y hacer una
+      búsqueda más selectiva en la casilla “Search:”</p>
+    <p style="margin-bottom: 0cm">Cada pendiente se puede “marcar como
+      contestado” y “modificar”. También eliminar.</p>
+    <p style="margin-bottom: 0cm">Al clicar “<u>nuevo</u>” aparece la ventana
+      que permite crear un nuevo pendiente&nbsp;(si no aparece el botón “nuevo”,
+      hay que pulsar en “listar” para que refresque la pantalla):</p>
+    <p style="margin-bottom: 0cm"><img name="Image56" src="image20.png" width="100%"
+        align="middle"> Presenta los parámetros básicos para definir un
+      pendiente. Rellenando estos campos y pulsando “<u>Guardar</u>” se crea el
+      pendiente para la oficina correspondiente. </p>
+    <p style="margin-bottom: 0cm">Si se quiere generar el pendiente con más <i>opciones</i>
+      (p.ej., con ref. a un escrito, añadir otros comentarios, etc) pulsar en “<u>ver
+        ficha completa</u>”. Aparece la siguiente pantalla:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image57" src="image57.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <table style="width: 842px; height: 468px;" cellspacing="0" cellpadding="0">
+      <colgroup> <col width="216"> <col width="465"> </colgroup>
+      <tbody>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="216">
+            <ul>
+              <li>
+                <p>“protocolo o referencia”: </p>
+              </li>
+            </ul>
+          </td>
+          <td style="border: none; padding: 0cm" width="465">
+            <ul>
+              <p>permite seleccionar el escrito que está relacionado con el
+                pendiente. Al identificar el escrito, se añaden automáticamente
+                los datos del pendiente: asunto, oficinas,...</p>
+            </ul>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="216">
+            <ul>
+              <li>
+                <p>“¿con quién es el pendiente?”:</p>
+              </li>
+            </ul>
+          </td>
+          <td style="border: none; padding: 0cm" width="465">
+            <ul>
+              <p>se selecciona el afectado (no tiene porqué ser el mismo del
+                protocolo)</p>
+            </ul>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="216">
+            <ul>
+              <li>
+                <p>“Observaciones”:</p>
+              </li>
+            </ul>
+          </td>
+          <td style="border: none; padding: 0cm" width="465">
+            <ul>
+              <p>para anotar detalles de interés para la oficina </p>
+            </ul>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="216">
+            <ul>
+              <li>
+                <p>“Visibilidad”:</p>
+              </li>
+            </ul>
+          </td>
+          <td style="border: none; padding: 0cm" width="465">
+            <ul>
+              <p>define quién puede verlo (todos / personal / reservado / vcd) </p>
+            </ul>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="216">
+            <ul>
+              <li>
+                <p>“estado”: </p>
+              </li>
+            </ul>
+          </td>
+          <td style="border: none; padding: 0cm" width="465">
+            <ul>
+              <p>la situación del pendiente (iniciado / acabado / en proceso /
+                cancelado)</p>
+            </ul>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="216">
+            <ul>
+              <li>
+                <p>“fecha acabado”: </p>
+              </li>
+            </ul>
+          </td>
+          <td style="border: none; padding: 0cm" width="465">
+            <ul>
+              <p>aquella en la que termina el pendiente </p>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Finalmente, pulsando el “<u>ver ficha sencilla</u>”
+      se vuelve a la presentación reducida del pendiente.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">REPETICIONES PERIÓDICAS:</p>
+    <p style="margin-bottom: 0cm">Si se quiere generar un pendiente periódico
+      (que se repita cada “x” tiempo) hay que pulsar en “<u>ver periodicidad</u>”
+      (mostrará un aspecto similar a “ver ficha completa” con el añadido de la
+      periodicidad):</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #5b9bd5; padding: 0.05cm"><img
+          alt="https://lh3.googleusercontent.com/asQpgxz-ytqSovgPZKpFLvYJsGjOIF6eFWPrWQNHKt6jPnx9UoneznwklLguLMgY3hLgjrUvax9sL_8wERNdo_PsN7Lesshfu8lIng45HbrE85ILSaotmNCD_E0OPYAE0lSClaSc"
+          name="Image58" src="image70.png" width="100%" align="middle"> </span></p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Si se selecciona Repetición “<u>anual</u>”
+          aparece: </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image59" src="image4.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Permite fijar el período de <i>vigencia</i>
+      del pendiente (“desde” - “hasta”) y concretar la repetición:</p>
+    <p style="margin-bottom: 0cm">-anualmente: una sola vez al año (empezando
+      por el día del inicio)</p>
+    <p style="margin-bottom: 0cm">-Un(os) día(s) concreto(s) de un mes
+      seleccionado</p>
+    <p style="margin-bottom: 0cm">-Un día de la <i>semana</i> de determinado
+      mes</p>
+    <p style="margin-bottom: 0cm">-Hacer la selección por días de <i>meses</i>
+      cada “x” años</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Si se selecciona Repetición <i>mensual</i>
+          aparece: </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #5b9bd5; padding: 0.05cm"><img
+          alt="https://lh5.googleusercontent.com/fczW6cTcFM0FEETB16skir3NAXKRWLeRoAgzB4dU8RRo4kClIhfyoeUQaxMJVNn-9H97328HOsvVOTRq0mDiO1V-7lsQe7myMyf6MTRw8GMbbErYfnx7ArdMZEA6Q5wZNUzA-Goo"
+          name="Image60" src="image35.png" width="100%" align="middle"> </span></p>
+    <p style="margin-bottom: 0cm">Se puede seleccionar el período de vigencia
+      (“desde” - “hasta”)</p>
+    <p style="margin-bottom: 0cm">-<i>mensualmente</i>: cada mes a partir del
+      día del inicio.</p>
+    <p style="margin-bottom: 0cm">-<i>Días</i> fijos de cada mes</p>
+    <p style="margin-bottom: 0cm">-Un día concreto de la semana.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Si se selecciona Repetición <u>semanal</u>
+          aparece: </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #5b9bd5; padding: 0.05cm"><img
+          alt="https://lh3.googleusercontent.com/wgMvxfC0QGqkbXvsWmil7L049u4PAadIxAPKgGpxkby59TgTcKv1nuYzrp79Au1kIZA9kGiD5TucNd5_iw3x4gJfzlPVqhrR2wubR4519yUjcBvGu42EWKeamw-OT_3ND9nRK0wb"
+          name="Image61" src="image60.png" width="100%" align="middle"> </span></p>
+    <p style="margin-bottom: 0cm">Además del período de vigencia (“desde” -
+      “hasta”) se puede seleccionar:</p>
+    <p style="margin-bottom: 0cm">-<i>semanalmente</i>, a partir del día del
+      inicio.</p>
+    <p style="margin-bottom: 0cm">-Un(os) día(s) concreto(s) de la semana.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">Si se selecciona Repetición <u>diaria</u>
+          aparece: </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #5b9bd5; padding: 0.05cm"><img
+          alt="https://lh3.googleusercontent.com/i7Pgj1ZH_p7lXUod-QqPT86_7CK0epseBUTxPP4-ePoK9aVgaHoPnQDX242t3e6_k_M_WLXE3Fz4djTUmI_K7SXH6t_282qKFpg00ncBldoNfYsz8_HudBf-mHBRmt5YRXYFc03G"
+          name="Image62" src="image62.png" width="100%" align="middle"> </span></p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Documentos">8.- Documentos</a></h3>
+    <p style="margin-bottom: 0cm">Esta pestaña presenta la herramienta para
+      gestionar la introducción de documentos en Tramity, tanto para archivo
+      como para uso inmediato en un expediente. Su función es la equivalente a
+      las carpetas de archivos de documentos. Está pensada para sustituir las
+      tradicionales carpetas de archivo y tener la documentación en un único
+      entorno de trabajo: tramity.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Una vista de la pestaña es:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image63" src="image7.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Para que muestre el listado hay que
+      seleccionar alguna etiqueta y pulsar el botón “ver lista”. Si no se
+      recuerdan las etiquetas, puede pulsarse el botón “ver todas” y presentará
+      el listado de todos los documentos. La selección se puede ajustar con la
+      ayuda de diferentes etiquetas, “y/o”.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Documentos_etherpad">A.- Documentos “etherpad”</a></h3>
+    <p style="margin-bottom: 0cm">Los documentos que son “etherpad” se pueden
+      “editar” o “ver datos”, para cambiar los detalles: </p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><img name="Image64" src="image3.png" width="100%"
+        align="middle"></p>
+    <p style="margin-bottom: 0cm">Puede modificarse el nombre, cambiar las
+      etiquetas (una o varias), o la visibilidad.</p>
+    <p style="margin-bottom: 0cm">La visibilidad es oficina/personal, según
+      puedan verlo todos los de la oficina o solo el d.</p>
+    <p style="margin-bottom: 0cm">Al pulsar el botón “etherpad” en “Ver
+      escrito”, se abre el etherpad para modificar.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Documentos_incrustados">B.- Documentos
+        “incrustados”</a></h3>
+    <p style="margin-bottom: 0cm">Son los documentos que no son etherpad, y que,
+      propiamente, se “incrustan” en la base de datos para archivo y
+      tratamiento.</p>
+    <p style="margin-bottom: 0cm">Del listado correspondiente se pueden
+      “descargar” o “ver datos”. La vista, en este caso, es:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image65" src="image33.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">En la ventana de la parte derecha se
+      “incrusta” el documento arrastrándolo o buscándolo con el botón “Browse…”.
+      También puede descargarse o borrarse.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Nuevo_documento">C.- Nuevo documento</a></h3>
+    <p style="margin-bottom: 0cm">Al pulsar “Nuevo documento” en la pestaña
+      “Documentos” se abre la siguiente ventana:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image66" src="image75.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Los campos son los ya explicados.<br>
+      En insertar escrito hay que escoger entre “Etherpad” o “Incrustado”. En el
+      primer caso abre un etherpad; en el segundo la ventana de diálogo para
+      incrustar el documento.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Gestion_de_los_documentos">D.- Gestión de los
+        documentos</a></h3>
+    <p style="margin-bottom: 0cm">Los documentos de la pestaña “40.- Documentos”
+      se pueden colocar en los expedientes:</p>
+    <ol>
+      <li>
+        <p style="margin-bottom: 0cm">como “antecedentes” del expediente (botón
+          “Documentos” en Antecedentes): documentos para información, y por
+          tanto no modificables al circular; </p>
+      </li>
+    </ol>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image67" src="image25.png" width="100%" align="middle"> </span>
+    </p>
+    <ol start="2">
+      <li>
+        <p style="margin-bottom: 0cm">como texto propiamente de la propuesta o
+          escrito(s), en “Insertar etherpad” (botón “Buscar en documentos”); </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">como “adjuntos” a las propuestas o
+          escritos -botones “nueva propuesta”, “nuevo escrito”, “contestar
+          entrada”-, que se podrán modificar y anotar, antes de enviar, si
+          procede (botón “Buscar en documentos”) </p>
+      </li>
+    </ol>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image68" src="image15.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Los documentos que se adjuntan como
+      “antecedentes” en un expediente, siempre siguen en la pestaña de “40.-
+      Documentos” independientemente de la evolución que tenga el expediente. Si
+      éste, al final del proceso, se elimina, el documento seguirá en la pestaña
+      de “40.- Documentos”.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">En cambio, los documentos que se añaden en las
+      propuestas o escritos de un expediente, pueden conservarse en la pestaña
+      “40.- Documentos” o no. Al marcar “adjuntar” en el documento seleccionado,
+      se abre un cuadro de diálogo que pregunta si se quiere “Adjuntar una
+      copia” del documento (en “40.- Documentos” seguirá el documento original)
+      o “Adjuntar” el documento (se quita de “40.- Documentos” y pasa a la
+      propuesta o escrito). </p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image69" src="image17.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Si el documento se copia, serán documentos
+      distintos; o sea, que si se modifica o elimina el documento de la
+      propuesta o escrito, la copia en “40.- Documentos” sigue igual.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Guia-resumen_para_elaborar_un_expediente">9.-
+        Guía-resumen para elaborar un expediente</a></h3>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Para elaborar un expediente hay que ir a la
+      pestaña “Borrador” y abrir “nuevo expediente”.</p>
+    <p style="margin-bottom: 0cm">Hay que definir el <i>trámite</i> que seguirá
+      el expediente, la <i>vida</i> que tendrá, su <i>visibilidad</i> a
+      terceros, la urgencia (<i>prioridad</i>), darle un nombre que lo
+      identifique (<i>asunto</i>) y señalar otros detalles de interés para la
+      oficina (<i>entradilla</i>).</p>
+    <p style="margin-bottom: 0cm">-Solo es necesario, al inicio, darle un nombre
+      (<i>asunto</i>). El resto de características se pueden completar más
+      adelante en el proceso de elaboración.</p>
+    <p style="margin-bottom: 0cm">La <i>entradilla</i> del expediente está
+      pensada para comentarios en la propia oficina (que se pueden borrar antes
+      de circular). O para una explicación sencilla visible cuando circule.</p>
+    <p style="margin-bottom: 0cm">(Hasta aquí solo se han preparado las “tapas”
+      del expediente, que está vacío).</p>
+    <p style="margin-bottom: 0cm">Al pulsar “<u>Guardar</u>” preguntará si se
+      quieren añadir escritos o adjuntos. Estos serán, propiamente, el contenido
+      del expediente (propuestas, escritos, antecedentes, etc.)</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3><a name="Antecedentes">A.- Antecedentes:</a></h3>
+    <p style="margin-bottom: 0cm"> Aquí se colocan <u>todos los antecedentes</u>,
+      ya sean entradas de escritos, otros expedientes, escritos de salida o
+      documentos incorporados al tramity (un word, excel, pdf, etc). Para ello
+      hay que utilizar los botones correspondientes.</p>
+    <p style="margin-bottom: 0cm">Como los antecedentes van quedando en el orden
+      en que se han introducido, interesa pensar bien por cuál se empieza, para
+      que queden en un orden lógico.</p>
+    <p style="margin-bottom: 0cm">Los antecedentes “acompañan” al expediente,
+      solo para información. Como tales ni se pueden modificar ni enviar.</p>
+    <p style="margin-bottom: 0cm">Se aconseja vivamente colocar como
+      antecedentes el expediente anterior sobre el mismo asunto, para mantener
+      todo el itinerario que habrá seguido el asunto. Es el modo de tener
+      fácilmente &nbsp;accesibles todos &nbsp;los escritos enviados y recibidos
+      sobre el particular.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3><a name="Propuestas">B.- Propuestas:</a></h3>
+    <p style="margin-bottom: 0cm"> Para una propuesta&nbsp;que se quiere
+      circular, lo habitual será crear una “nueva propuesta”, pues permite mayor
+      extensión, comentarios y anotaciones de terceros, etc., a diferencia de la
+      “entradilla”.</p>
+    <p style="margin-bottom: 0cm">Pueden introducirse tantas propuestas como se
+      quiera. Habitualmente bastará con una sola, separando los diferentes
+      apartados del texto.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3><a name="Escritos">C.- Escritos:</a></h3>
+    <p style="margin-bottom: 0cm"> A continuación se introducen los escritos que
+      se quieren enviar (“nuevo escrito”). Si se está contestando a uno concreto
+      es mejor utilizar “contestar entrada”, que recoge directamente los datos
+      del escrito origen y lo coloca como antecedente.</p>
+    <p style="margin-bottom: 0cm">Tan solo hay que redactar el cuerpo del
+      escrito. Los encabezados (destinos y referencias) y la fecha final se
+      añaden automáticamente. Esta es una diferencia de concepto respecto al
+      trámite de expedientes en papel, en los que había que escribir a quién iba
+      dirigido, quién lo enviaba, las referencias, etc.</p>
+    <p style="margin-bottom: 0cm">Cada escrito circula con los destinos precisos
+      y los adjuntos que se enviarán a ese centro; no otros. Por eso, no hay que
+      colgar aquí antecedentes que son de interés solo para el trámite del
+      expediente, pero que no se enviarán. Se han de colocar como “antecedentes”
+      en el expediente. Si no se hace así, a pesar de la revisión de secretaría,
+      se acaban enviando cosas que no corresponde.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3><a name="Adjuntos">D.- Adjuntos:</a></h3>
+    <p style="margin-bottom: 0cm"> Tanto las “propuestas” como los “escritos”
+      pueden tener documentos adjuntos, que pueden modificarse, y que, en su
+      caso, se enviarán con el escrito correspondiente.</p>
+    <p style="margin-bottom: 0cm">Los adjuntos quedan asociados a la propuesta o
+      escrito donde se han colocado, y siguen la misma vida que este. En
+      concreto, los que proceden de “Documentos”, cuando se “adjuntan” dejan de
+      estar archivados y pasan a esa propuesta o escrito. Así lo advierte
+      tramity cuando se adjunta. Si quiere conservarse ese documento hay que
+      hacer previamente una copia antes de adjuntar.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3><a name="Preparar">E.- Preparar:</a></h3>
+    <p style="margin-bottom: 0cm"> Cuando se considera que el expediente ya está
+      preparado para que lo vean otros of o el d de la oficina, se les marca en
+      “<u>preparar</u>”. En ese momento aparecerá en su pestaña de “Borrador
+      (oficina)”. Podrán hacer todos los cambios sin ninguna restricción. Se
+      sabrá que ya lo dan por bueno cuando lo marquen como “visto”, que
+      aparecerá señalado en color verde. Cuando todos los señalados de la
+      oficina para preparar ya lo han marcado como “visto”, el ponente verá el
+      expediente resaltado en amarillo. Es la señal de que ya está visto por
+      todos y se puede circular.</p>
+    <p style="margin-bottom: 0cm">De todas maneras, el expediente puede ponerse
+      a circular en cualquier momento, sin esperar a que se haya dado por visto
+      por el resto de la oficina.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3><a name="Circular">F.- Circular:</a></h3>
+    <p style="margin-bottom: 0cm">Es importante, antes de poner a circular,
+      asegurar que el trámite es el adecuado, pues marca el recorrido del
+      expediente. La experiencia indica que es uno de los puntos de error común.</p>
+    <p style="margin-bottom: 0cm">Una vez puesto a circular un expediente, si
+      por cualquier motivo se quiere retirar, basta con ir a la pestaña
+      “circulando”, pulsar en “acción” y después “mover a borrador”.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <a name="Proceso_final_de_un_expediente">10.- Proceso final de un
+        expediente</a></h3>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Una vez termina su recorrido, el expediente
+      aparece en la pestaña “acabados” del director de la oficina. Ya está
+      aprobado o descartado [si está descartado, se verá resaltado en color
+      amarillo].</p>
+    <p style="margin-bottom: 0cm">Si se encarga su ejecución a un of, el
+      expediente aparecerá en la pestaña “acabados encargados” del of <u>correspondiente</u>,
+      lo que le indicará que debe encargarse de todas las acciones: preparar los
+      escritos, pasar a secretaría, etc.</p>
+    <p style="margin-bottom: 0cm">Es preciso <u>repasar</u> las observaciones y
+      sugerencias de cambios para introducir lo que corresponda en los escritos,
+      si no lo ha hecho el vicario. Algunos escritos, o el propio expediente,
+      pueden estar descartados por el vicario. En este caso, se verá resaltado
+      en amarillo, y se devolverán con el añadido de “NO” en el asunto, además
+      de que la firma del vicario será “NO” y estará en color rojo y no verde,
+      como es habitual con la firma positiva.</p>
+    <p style="margin-bottom: 0cm">Lógicamente, los adjuntos (Anexos al escrito,
+      etc), quizás deberán retocarse: p.ej., volver a cargarlos añadiendo la
+      ref. al escrito de salida y cambiando el nombre con esa misma ref., pues
+      ahora ya se sabe el protocolo de salida, etc.</p>
+    <p style="margin-bottom: 0cm">Para saber cómo se verá el escrito que se
+      envía, basta con clicar en “ver”, que hace una primera presentación web, y
+      pedir “descargar en pdf” que mostrará lo que, concretamente, se recibe en
+      el ctr.</p>
+    <p style="margin-bottom: 0cm">Los envíos a cr, dlbf y otras dl y r se siguen
+      haciendo en formato docx. El procedimiento que se sugiere seguir (muy
+      similar, con alguna pequeña variación al actual, es):</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm">una vez preparado el texto en el Etherpad,
+          descargar en formato odt o docx y abrir el documento </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Después han de ajustarse los parámetros
+          habituales: márgenes de hoja, espacio encabezado para escribir el
+          origen y destino, doble marginado del texto, tabulador inicial al
+          comienzo de cada párrafo, fecha final, etc. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Guardar el documento en docx con la
+          nomenclatura habitual: dlb XXXX_23.docx (se sugiere añadir el “_23” (o
+          el año correspondiente) para facilitar su identificación en el
+          archivo). </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0cm">Cargarlo como adjunto en el escrito y
+          “pasar a secretaría” para enviar. </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">Como se ha dicho,&nbsp;la aplicación impide
+      “Archivar” el expediente hasta que todos los escritos aparezcan como
+      “enviado el DD/MM/AAAA”. Si Secretaría devuelve algún escrito, el
+      expediente en “Acabados” se verá resaltado en color amarillo, y al abrir
+      el expediente, se verá “devuelto” en rojo al inicio del registro del
+      escrito, que estará de nuevo para “enviar a secretaría”, en lugar de “en
+      secretaría”. Al abrirlo, aparecerá en rojo el mensaje de secretaría
+      señalando el motivo de la devolución. Habrá que reelaborarlo y retornar de
+      nuevo a Secretaría.</p>
+    <p style="margin-bottom: 0cm">Una vez terminadas todas las acciones del
+      expediente se pasa a “archivados”. Se recomienda clasificar por etiquetas,
+      para facilitar su localización y reutilitzarlo en posteriores expedientes.</p>
+    <p style="margin-bottom: 0cm">-Lógicamente, también cabe
+      eliminarlo&nbsp;pasándolo a “borrador”, o simplemente borrarlo&nbsp;si la
+      caducidad que se le ha asignado así lo requiere.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Etherpad">11.- Etherpad</a></h3>
+    <h3 class="western"><a name="Vista_general"></a></h3>
+    <h3 class="western"><br>
+    </h3>
+    <h3 class="western"><a name="Vista_general">A.- Vista general</a></h3>
+    <p style="margin-bottom: 0cm">Se trata de un editor de texto colaborativo:
+      diferentes usuarios pueden modificar a la vez el mismo texto (pad). Estos
+      se identifican por su nombre de usuario y color de edición propio.</p>
+    <p style="margin-bottom: 0cm">Las funciones normales de edición son las
+      habituales de cualquier editor.</p>
+    <p style="margin-bottom: 0cm">La vista de este editor de texto es:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image70" src="image59.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Los iconos de la barra superior representan:</p>
+    <table style="width: 908px; height: 393px;" cellspacing="2" cellpadding="2">
+      <tbody>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p>1, 2, 3, 4: formato de letra: <b>negrita</b>, cursiva, <u>subrayado</u>,
+              <strike>tachado</strike></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>14: tamaño de letra</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p>5: párrafos numerados</p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>15: estilos de párrafo predefinidos</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p>6: párrafos marcados con un punto al inicio </p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>16: para añadir comentarios o sugerir cambios</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p>7: añade sangrado a todo el párrafo</p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>17: imprimir</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p>8: quita sangrado a todo el párrafo</p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>18: importar/exportar de/a otros formatos</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p>9: deshacer o rehacer cambios</p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>19: línea temporal de cambios en el texto</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p>10: borra el color de autoría&nbsp;del texto</p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>20: marcar versión</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p>11: añade una tabla</p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>21: configuración</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p>12: tipo de letra (“fuente”)</p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>22: compartir enlace</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p>13: tipo de justificación de párrafo</p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>23: usuarios de este texto que vemos (pad) </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 class="western"><a name="Sangrado"></a></h3>
+    <h3 class="western"><br>
+    </h3>
+    <h3 class="western"><a name="Sangrado">B.- Sangrado</a></h3>
+    <p style="margin-bottom: 0cm">El tabulador inicial de comienzo de párrafo
+      como tal no&nbsp;está habilitado. Aunque se ha definido una macro que
+      introduce cuatro espacios cuando se pulsa un tabulador, se recomienda
+      redactar sin tabular, pues la doble justificación deforma esos espacios.
+      Las macros habilitadas en el Word y LibreOffice ya adaptarán el texto, una
+      vez exportado, según los parámetros habituales para enviar escritos a cr,
+      dlbf, r y otras dl.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Color_de_autoria">C.- Color de autoría</a></h3>
+    <p style="margin-bottom: 0cm">-Las aportaciones de los distintos usuarios se
+      distinguen por el color con el que quedan resaltadas.</p>
+    <p style="margin-bottom: 0cm">-La acción de “borrar el color de autoría” (<font
+        color="#c9211e">10</font>) borra todos los colores, de manera que, a
+      partir de ese momento, no queda a la vista quién ha hecho cada aportación.</p>
+    <p style="margin-bottom: 0cm">-“Borrar el color de autoría” tiene sentido
+      hacerlo cuando se empieza a circular el expediente, pues interesa que
+      comience a circular “limpio” (no tiene interés saber quién de la oficina
+      ha introducido cada frase). O quizás cuando el expediente ha acabado de
+      circular, al archivar.</p>
+    <p style="margin-bottom: 0cm">-En cualquier caso, conviene saber que al
+      enviar un escrito de salida, se envía el texto en formato pdf (o se
+      descarga en word), desapareciendo estos colores.</p>
+    <p style="margin-bottom: 0cm">-Para trabajar más cómodamente, en
+      preferencias&nbsp;puede decirse que “oculte” los colores de autoría a la
+      &nbsp;vista, aunque se mantienen en el texto (porque no los “borra”).</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Tabla">D.- Tabla</a></h3>
+    <p style="margin-bottom: 0cm">Ahora mismo, la exportación e impresión de
+      tabla no está bien resuelta. Si quiere acompañarse un cuadro que pueda
+      imprimirse, procesarse, etc., es preferible adjuntarlo como hoja de
+      cálculo&nbsp;normal (Excel, o LibreOfficeCalc).</p>
+    <p style="margin-bottom: 0cm">O, si la tabla es sencilla, adjuntarla
+      convertida en texto, separada por espacios.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Comentarios_y_cambios">E.- Comentarios y
+        cambios</a></h3>
+    <p style="margin-bottom: 0cm">Interesa utilizar esta herramienta para hacer
+      comentarios o sugerir cambios en el texto, a no ser que se trate de
+      detalles insignificantes.</p>
+    <p style="margin-bottom: 0cm">-Primero hay que seleccionar el texto&nbsp;que
+      se quiere comentar o cambiar, y después hay que clicar el botón (<font color="#c9211e">16</font>)
+      de “<u>comentario</u>”:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image71" src="image10.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">En la caja que aparece (“Comment”) se escribe
+      el comentario.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm">-Si se quiere sugerir un cambio, hay que mover
+      el deslizante de “<i>Include suggested change</i>”:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image72" src="image5.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">-Finalmente, hay que clicar “Comment”: el
+      comentario (y sugerencia de cambio) quedará incorporado.</p>
+    <p style="margin-bottom: 0cm">La frase comentada quedará resaltada con otro
+      color (amarillo), además de añadirse una llamada en el lateral derecho. Al
+      pasar el cursor por encima aparecerá el detalle del comentario y cambio.</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image73" src="image24.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">-Otro autor puede añadir una réplica, aceptar
+      o rechazar la anterior, etc. Siempre son revertibles. Y solo el autor del
+      comentario puede eliminarla. </p>
+    <p style="margin-bottom: 0cm">En el texto que se exporta o envía, los
+      comentarios no aparecen. Solo lo que ha quedado escrito finalmente.</p>
+    <p style="margin-bottom: 0cm">Interesa, por lo tanto, que antes de enviar un
+      escrito nos aseguraremos de que se han recogido todos los cambios
+      aprobados.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Importar/Exportar">F.- Importar/Exportar</a></h3>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image74" src="image71.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Permite importar cualquier texto en Word, odt
+      y otros formatos. Hay que seleccionarlo y después clicar “<u>Importar
+        ahora</u>”.</p>
+    <p style="margin-bottom: 0cm">También puede exportar el texto en cualquiera
+      de los formatos señalados. Basta con seleccionar el deseado.</p>
+    <p style="margin-bottom: 0cm">Como ya se ha dicho, ahora mismo no exporta
+      bien las tablas. </p>
+    <p style="margin-bottom: 0cm">Al exportar lo hace en un tipo de papel y
+      márgenes de página y entre párrafos que no son los habituales. Con la
+      macro etherpad que se incorporará a los editores de texto Word y
+      LibreOffice, el texto se ajustará automáticamente a los parámetros
+      habituales.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Linea_temporal">G.- Línea temporal</a></h3>
+    <p style="margin-bottom: 0cm">Permite ver la evolución del texto en el
+      tiempo desde su creación.</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image75" src="image61.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Clicando las flechas “<u>importar/exportar</u>”
+      permite exportar la versión de un momento concreto.</p>
+    <p style="margin-bottom: 0cm">Clicando&nbsp;el botón “<u>VOLVER AL PAD</u>”
+      se regresa a la ventana normal de edición del texto.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Marcar_y_guardar_una_version">H.- Marcar y
+        guardar una versión</a></h3>
+    <p style="margin-bottom: 0cm">Clicando la estrella (<font color="#c9211e">20</font>),
+      esa versión queda guardada para posterior consulta. Pueden guardarse
+      tantas versiones como se quiera. Las versiones guardadas quedan señaladas
+      en la línea de tiempo.</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image76" src="image76.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">Por ejemplo (cada estrella&nbsp;en la línea de
+      tiempo es una versión guardada):</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image77" src="image65.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <br>
+    <h3 class="western"><a name="Configuracion">I.- Configuración</a></h3>
+    <p style="margin-bottom: 0cm">Permite definir las características de
+      presentación y trabajo:</p>
+    <p style="margin-bottom: 0cm"><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image78" src="image14.png" width="100%" align="middle"> </span>
+    </p>
+    <p style="margin-bottom: 0cm">-Mostrar el <i>chat</i> y los <i>usuarios</i>
+      que están escribiendo en ese momento</p>
+    <p style="margin-bottom: 0cm">-Mostrar u ocultar los colores de autoría</p>
+    <p style="margin-bottom: 0cm">-Mostrar los números de <i>línea</i>: no se
+      recomienda para un texto normal</p>
+    <p style="margin-bottom: 0cm">-¿<i>Leer</i> contenido de derecha a
+      izquierda?: para algunos idiomas exóticos</p>
+    <p style="margin-bottom: 0cm">-¿Comprobación <i>ortográfica</i>?: para que
+      compruebe la <i>ortografía</i></p>
+    <p style="margin-bottom: 0cm">-Mostrar el autor al <i>pasar por encima</i>:
+      muestra quien ha escrito ese texto</p>
+    <p style="margin-bottom: 0cm">-Mostrar o no los <i>comentarios</i>.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Revision_ortografica">J.- Revisión ortográfica</a></h3>
+    <p style="margin-bottom: 0cm">El Etherpad no tiene una herramienta de
+      revisión ortográfica propia, utiliza la del navegador con el que estemos
+      trabajando.</p>
+    <p style="margin-bottom: 0cm">-Para asegurarnos de que el navegador tiene
+      definida la corrección ortográfica del idioma que nos interese, haremos lo
+      siguiente:</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm"><span style="font-variant: normal"><span style="font-style: normal"><u>Firefox</u></span></span>:
+          clicamos en las tres rayas horizontales de la parte superior derecha
+          (“<i>Menú</i>”). Clicamos sobre “<i>Opciones</i>”. Se abrirá una nueva
+          pestaña con un recuadro de búsqueda. Ahí escribimos “ortografía”:
+          aparecerá la posibilidad de cambiar de idioma. Si lo cambiamos, será
+          necesario “Reiniciar el Firefox”: lo hacemos y ya está. </p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0cm"><span style="font-variant: normal"><span style="font-style: normal"><u>Chrome</u></span></span>:
+          clicamos en los tres puntos de la parte superior derecha (“<i>Personaliza
+            y controla</i>”). Clicamos sobre “<i>Configuración</i>”. Se abrirá
+          una nueva pestaña con un recuadro de búsqueda. Ahí escribimos
+          “idioma”: aparecerá la posibilidad de escoger los idiomas a los que se
+          aplicará la corrección ortográfica. Cuando lo hayamos hecho, ya
+          podemos cerrar la pestaña de Configuración. </p>
+      </li>
+    </ul>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3 class="western"><a name="Glosario_de_Tramity">11.- Glosario de Tramity</a></h3>
+    <p><br>
+      <br>
+    </p>
+    <p style="margin-bottom: 0cm"><a href="#kix.9xn4rdp96xhm">Ir a </a><a href="#kix.9xn4rdp96xhm">GLOSARIO
+        ALFABÉTICO</a></p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><b>Expediente (concepto genérico):</b>
+      Documentación correspondiente a un asunto.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><u><b>Expedientes (fondo gris):</b></u></p>
+    <p style="margin-bottom: 0cm"><b>Borrador (propio)</b>:&nbsp;expedientes
+      propios en fase de elaboración. </p>
+    <p style="margin-bottom: 0cm"><b>Borrador (oficina)</b>:&nbsp;expedientes
+      compartidos de/con otros de la propia oficina. </p>
+    <p style="margin-bottom: 0cm"><b>Para firmar</b>: expedientes, de otros
+      usuarios, pendientes de firmar</p>
+    <p style="margin-bottom: 0cm"><b>Para reunión</b>: expedientes,
+      decretados&nbsp;para una próxima reunión <font color="#c9211e">(solo para
+        los directores)</font></p>
+    <p style="margin-bottom: 0cm"><b>Circulando</b>: permite seguir los
+      expedientes de la propia oficina o relacionados con la oficina que están
+      circulando.</p>
+    <p style="margin-bottom: 0cm"><b>Acabados</b>:&nbsp;expedientes que han
+      regresado a la propia oficina después de circular <font color="#c9211e">(solo
+        para los directores)</font></p>
+    <p style="margin-bottom: 0cm"><b>Acabados encargados</b>:&nbsp;expedientes
+      acabados, encargados por el director a uno de la oficina para gestionar</p>
+    <p style="margin-bottom: 0cm"><b>Archivados</b>: expedientes guardados una
+      vez hechas todas las acciones (enviar, etc.)</p>
+    <p style="margin-bottom: 0cm"><b>Copias</b>: copias de expedientes de otras
+      oficinas, que son de interés</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><u><b>Escritos (fondo amarillo):</b></u></p>
+    <p style="margin-bottom: 0cm"><b>Entradas</b>:&nbsp;Nuevos escritos
+      recibidos y asignados&nbsp;a la oficina (pendientes de gestión) <font color="#c9211e">(solo
+        para los directores)</font></p>
+    <p style="margin-bottom: 0cm"><b>Entradas encargadas</b>:&nbsp;Escritos
+      recibidos y asignados a alguien de la oficina.</p>
+    <p style="margin-bottom: 0cm"><b>Archivo de escritos</b>:&nbsp;búsqueda de
+      escritos a/de la dl</p>
+    <p style="margin-bottom: 0cm"><b>Escritos de cr</b>:&nbsp;correo de cr de
+      los últimos 7 días <font color="#c9211e">(solo para los directores)</font></p>
+    <p style="margin-bottom: 0cm"><b>Permanentes de cr</b>: consulta de escritos
+      permanentes (numeración baja)</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><u><b>Otros (fondo blanco):</b></u></p>
+    <p style="margin-bottom: 0cm"><b>Pendientes</b>: gestión de asuntos del
+      registro o de la propia oficina que requieren respuesta en fecha
+      determinada.</p>
+    <p style="margin-bottom: 0cm"><b>Documentos</b>: Introducción de documentos
+      externos a la aplicación.</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><u><b>Campos que hay que completar para un
+          nuevo expediente (borrador):</b></u></p>
+    <p style="margin-bottom: 0cm"><b>Trámite</b>: Determina las personas que
+      firmarán el expediente: ordinario, de despacho, deliberativo, etc.</p>
+    <p style="margin-bottom: 0cm"><b>Vida</b>: Plazo en que se borrará el
+      expediente: normal, permanente, experiencia, temporal o borrable.</p>
+    <p style="margin-bottom: 0cm"><b>Visibilidad</b>: Quién tiene acceso a un
+      escrito o expediente: todos, personal, directores, reservado, vcd</p>
+    <p style="margin-bottom: 0cm"><b>Visibilidad</b> <b>todos</b>: cualquiera
+      ve todo</p>
+    <p style="margin-bottom: 0cm"><b>Visibilidad personal</b>: todo accesible a
+      los d y a los of de la oficina principal. El resto solo ven el “asunto”</p>
+    <p style="margin-bottom: 0cm"><b>Visibilidad directores</b>: solo ven los
+      directores.</p>
+    <p style="margin-bottom: 0cm"><b>Visibilidad reservado</b>: solo visible
+      para los directores afectados y la permanente.</p>
+    <p style="margin-bottom: 0cm"><b>Visibilidad vcd</b>: reservados del vcd.</p>
+    <p style="margin-bottom: 0cm"><b>Prioridad</b>: Urgencia en el recorrido:
+      normal, rápido, urgente, otro, en espera.</p>
+    <p style="margin-bottom: 0cm"><b>Etiquetas</b>: Catalogación del expediente
+      o escrito para facilitar el archivo y búsquedas: a escoger entre las
+      definidas por la oficina o personales.</p>
+    <p style="margin-bottom: 0cm"><b>Asunto expediente</b>:&nbsp;identifica el
+      expediente. Es un campo obligatorio y clave para búsquedas</p>
+    <p style="margin-bottom: 0cm"><b>Entradilla</b>: [opcional: breve
+      explicación, o para diálogo dentro de la oficina]</p>
+    <p style="margin-bottom: 0cm"><b>Preparar</b>: [opcional: para señalar
+      quienes en la oficina deben preparar/ver el expediente antes de circular]</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><u><b>Selección de firmas para la circulación
+          del expediente:</b></u></p>
+    <p style="margin-bottom: 0cm"><b>Simple E-12</b>: para reclamar, sin número
+      de protocolo...: lo firma el d y 2 personas más</p>
+    <p style="margin-bottom: 0cm"><b>Ordinarios</b>: trámites sencillos: los
+      firma el d y otros dos, y pasa a Secretaría (al menos, dos d)</p>
+    <p style="margin-bottom: 0cm"><b>De despacho</b>:&nbsp;asuntos que pasan a
+      estudio del vcd. Llega al vcd con tres firmas (dos de ellos d)</p>
+    <p style="margin-bottom: 0cm"><b>Extraordinarios</b>:&nbsp;asuntos que pasan
+      a estudio del vcd con la firma de todos los d</p>
+    <p style="margin-bottom: 0cm"><b>Voto consultivo</b>:&nbsp;pasa a estudio de
+      la Permanente firmado por el ponente y los d afectados; no lo firman los
+      of.</p>
+    <p style="margin-bottom: 0cm"><b>Voto deliberativo</b>:&nbsp;para el Pleno
+      de la dl; se circula con la firma del ponente y los otros d afectados. No
+      lo firman los of.</p>
+    <p style="margin-bottom: 0cm"><b>Comisión de trabajo</b>:&nbsp;para estudio
+      de un grupo de directores; generalmente después del Pleno. Se suele seguir
+      el mismo trámite del pleno de la dl.</p>
+    <p style="margin-bottom: 0cm"><b>Estudio previo</b>:&nbsp;para pre-circular
+      entre varios d, antes de circular la versión definitiva </p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><u><b>Escritos o adjuntos que se pueden añadir
+          a un borrador de expediente:</b></u></p>
+    <p style="margin-bottom: 0cm"><b>Nueva propuesta</b>: la propuesta
+      propiamente dicha (textos explicativos, ...)</p>
+    <p style="margin-bottom: 0cm"><b>Plantilla</b>: formularios predefinidos por
+      secretaría para determinados trámites (conceder una o, ...)</p>
+    <p style="margin-bottom: 0cm"><b>Nuevo escrito</b>: generar un escrito para
+      enviar</p>
+    <p style="margin-bottom: 0cm"><b>Contestar entrada</b>: generar un escrito
+      en respuesta a otro</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <p style="margin-bottom: 0cm"><u><b>Escritos que se pueden añadir a un
+          borrador de expediente como antecedentes:</b></u></p>
+    <p style="margin-bottom: 0cm"><b>Entrada</b>: escritos recibidos (que estén
+      en el registro de Tramity)</p>
+    <p style="margin-bottom: 0cm"><b>Expediente</b>: Expedientes de la oficina</p>
+    <p style="margin-bottom: 0cm"><b>Escrito</b>: escritos enviados
+      (seleccionados desde el registro de Tramity)</p>
+    <p style="margin-bottom: 0cm"><b>Documento</b>: documentos externos a
+      Tramity (Word, Excel, PDF, fotografía, etc).</p>
+    <p style="margin-bottom: 0cm"><br>
+    </p>
+    <h3><a name="kix.9xn4rdp96xhm">GLOSARIO ALFABÉTICO</a></h3>
+    <table cellspacing="2" cellpadding="2">
+      <tbody>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p>TÉRMINO</p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>ÁMBITO</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.z33s2oq3njn7">Acabados</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.t6rvnkeaygkw">Acabados encargados</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.poxkm6ulwrj9">Archivados</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.cwglygesw1n6">Archivo de escritos</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de escritos]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.vba06bjxbce0">Asunto expediente</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.ybz8mwy7gpez">Borrador (oficina</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.sxkhq4sgl5tt">Borrador (propio)</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.lgp62x2w7ixa">Circulando</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.o712qgwl7iwf">Comisión de trabajo</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[selección firmas]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.sev1gd5ydolh">Contestar entrada</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[añadir a borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.af9arg4aofe8">Copias</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.ec40sekw0z1j">De despacho</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[selección firmas]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.kbyg6ily6vne">Documento </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[antecedentes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.niqd5pdgm5ez">Documentos </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de otros]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.40eesowe51ru">Entrada </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[antecedentes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.vtl0de7npo6r">Entradas</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de escritos]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.w5mhnp6kfqw">Entradas encargadas </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de escritos]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.p9xrnuvoioxo">Entradilla </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.popikhtaculq">Escrito </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[antecedentes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.lbwjzx5ocj3y">Escritos de cr</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de escritos]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.rjn5zkk9c82h">Estudio previo</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[selección firmas]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.fexypjhqeap2">Etiquetas </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.jcb43ova2i92">Expediente </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[antecedentes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.9kowsbq1ruat">Expediente (concepto genérico)</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[concepto genérico]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.ja9ko8tr8c6m">Extraordinarios </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[selección firmas]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.fxjhkkwtkokr">Nueva propuesta </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[añadir a borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.zgko99hq4sl">Nuevo escrito</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[añadir a borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.yq1fz5xkamox">Ordinarios </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[selección firmas]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.r9v9efb84zd1">Para firmar</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.dznnfme2v86w">Para reunión</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.dphvtx9ixt6z">Pendientes</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de otros]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.uzf9q4ab1k2k">Permanentes de cr</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[trámite de escritos]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.uoifo1vbawfr">Plantilla </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[añadir a borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.nu94yzqb8hw5">Preparar </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.u4dmo9tds11i">Prioridad </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.9j0khs1wpcib">Simple E-12</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[selección firmas]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.sump3pe71vhr">Trámite </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.k20azvecd52w">Vida </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.eoe3v0ru0hpd">Visibilidad </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.1ap013agamm">Visibilidad directores</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.cw3y1ima60gq">Visibilidad personal</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.jwdpg62jujui">Visibilidad reservado</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.ljnl489c62k7">Visibilidad</a><a href="#kix.ljnl489c62k7">&nbsp;</a><a
+                href="#kix.ljnl489c62k7">todos </a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.ew361w5q6fcn">Visibilidad vcd</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.ow40ho3tfleh">Voto consultivo</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[selección firmas]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.ehj80iamtdne">Voto deliberativo</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p>[selección firmas]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm">
+            <p><a href="#kix.9xn4rdp96xhm">Volver al inicio</a></p>
+          </td>
+          <td style="border: none; padding: 0cm">
+            <p><br>
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-bottom: 0cm">&nbsp;</p>
+    <p style="margin-bottom: 0cm">Barcelona, 6 de abril de 2023</p>
+  </body>
+</html>

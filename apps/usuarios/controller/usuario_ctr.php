@@ -326,7 +326,7 @@ $url_ajax = web\Hash::link('apps/usuarios/controller/usuario_update.php');
 
 $mi_idioma = ConfigGlobal::mi_Idioma_short();
 $nombre_entidad = ConfigGlobal::nombreEntidad();
-$doc_help = 'apps/ayuda/ManualTramityCtr.html';
+$doc_help = 'apps/ayuda/ctr/ManualTramityCtr.html';
 
 $a_campos = [
     'nombre_entidad' => $nombre_entidad,
