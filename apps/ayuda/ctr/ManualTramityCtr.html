@@ -1,0 +1,2606 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title></title>
+    <meta content="LibreOffice 7.3.7.2 (Linux)" name="generator">
+    <meta content="00:00:00" name="created">
+    <meta content="2023-04-06T13:11:09.217678816" name="changed">
+    <style type="text/css">
+  p {
+            line-height: normal;
+            margin-bottom: 0.25cm;
+            background: transparent;
+            background: transparent
+        }
+
+        h1 {
+            margin-bottom: 0.21cm;
+            background: transparent;
+            background: transparent;
+            page-break-after: avoid
+        }
+
+        h1.western {
+            font-family: serif;
+            font-size: 24pt;
+            font-weight: bold
+        }
+
+        h1.cjk {
+            font-family: "Noto Serif CJK SC";
+            font-size: 24pt;
+            font-weight: bold
+        }
+
+        h1.ctl {
+            font-family: "Noto Sans Devanagari";
+            font-size: 24pt;
+            font-weight: bold
+        }
+
+        h2 {
+            margin-top: 0.35cm;
+            margin-bottom: 0.21cm;
+            background: transparent;
+            background: transparent;
+            page-break-after: avoid
+        }
+
+        h2.western {
+            font-family: serif;
+            font-size: 18pt;
+            font-weight: bold
+        }
+
+        h2.cjk {
+            font-family: "Noto Serif CJK SC";
+            font-size: 18pt;
+            font-weight: bold
+        }
+
+        h2.ctl {
+            font-family: "Noto Sans Devanagari";
+            font-size: 18pt;
+            font-weight: bold
+        }
+
+        h3 {
+            margin-top: 0.25cm;
+            margin-bottom: 0.21cm;
+            background: transparent;
+            background: transparent;
+            page-break-after: avoid
+        }
+
+        h3.western {
+            font-family: sans-serif;
+            font-size: 14pt;
+            font-weight: bold
+        }
+
+        h3.cjk {
+            font-family: "Noto Sans CJK SC";
+            font-size: 14pt;
+            font-weight: bold
+        }
+
+        h3.ctl {
+            font-family: "Lohit Devanagari";
+            font-size: 14pt;
+            font-weight: bold
+        }
+
+        td p {
+            orphans: 0;
+            widows: 0;
+            background: transparent;
+            background: transparent
+        }
+
+        a:link {
+            color: #000080;
+            so-language: zxx;
+            text-decoration: underline
+        }
+
+        a:visited {
+            color: #800000;
+            text-decoration: underline
+        }
+    </style>
+  </head>
+  <body dir="ltr" style="  margin:0;padding:50px" vlink="#800000" link="#000080"
+    lang="ca-ES">
+    <h1 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"
+      align="center"> Manual de Tramity de centros</h1>
+    <p style="text-align: center; font-style: italic">Se deja el papel y todo
+      pasa a gestionarse en soporte informático.</p>
+    <p><br>
+    </p>
+    <h2 class="western">Índice</h2>
+    <p><a href="#Glosario">0.- Glosario</a></p>
+    <p><a href="#Introduccion">1.- Información básica</a></p>
+    <p><a href="#Acceso">2.- Acceso</a></p>
+    <p><a href="#Preferencias">3.- Preferencias</a></p>
+    <p><a href="#Pestanyas">4.- Pestañas</a></p>
+    <p><a href="#Gestion_de_expedientes">5.- Gestión de expedientes </a></p>
+    <p>- <a href="#Personal_borrador">A.- Personal borrador</a></p>
+    <p>- <a href="#Para_firmar">B.- Para firmar</a></p>
+    <p>- <a href="#Circulando">C.- Circulando</a></p>
+    <p>- <a href="#Acabados">D.- Acabados</a></p>
+    <p>- <a href="#Archivados">E.- Archivados</a></p>
+    <p><a href="#Gestion_de_escritos">6.- Gestión de escritos</a></p>
+    <p>- <a href="#Entradas">A.- Entradas</a></p>
+    <p>- - <a href="#Correo_de_entrada">A1.- Correo de entrada</a></p>
+    <p>- - <a href="#Correo_encargado">A2.- Correo encargado</a></p>
+    <p>- - <a href="#Entradas_recientes">A3.- Entradas recientes</a></p>
+    <p>- <a href="#Archivo_de_escritos">B.- Archivo de escritos</a></p>
+    <p>- <a href="#Permanentes_de_cl">C.- Permanentes de cl</a></p>
+    <p>- <a href="#Permanentes">D.- Permanentes</a></p>
+    <p><a href="#Pendientes">7.- Pendientes</a></p>
+    <p><a href="#Documentos">8.- Documentos</a></p>
+    <p>- <a href="#Documentos_etherpad">A.- Documentos “etherpad”</a></p>
+    <p>- <a href="#Documentos_incrustados">B.- Documentos “incrustados”</a></p>
+    <p>- <a href="#Nuevo_documento">C.- Nuevo documento</a></p>
+    <p>- <a href="#Gestion_de_los_documentos">D.- Gestión de los documentos</a></p>
+    <p><a href="#Guia-resumen_para_elaborar_un_expediente">9.- Guía-resumen para
+        elaborar un expediente</a></p>
+    <p>- <a href="#Antecedentes">A.- Antecedentes</a></p>
+    <p>- <a href="#Propuestas">B.- Propuestas</a></p>
+    <p>- <a href="#Escritos">C.- Escritos</a></p>
+    <p>- <a href="#Adjuntos">D.- Adjuntos</a></p>
+    <p>- <a href="#Circular">E.- Circular</a></p>
+    <p><a href="#Proceso_final_de_un_expediente">10.- Proceso final de un
+        expediente</a></p>
+    <p><a href="#Etherpad">11.- Etherpad</a></p>
+    <p>- <a href="#Vista_general">A.- Vista general</a></p>
+    <p>- <a href="#Sangrado">B.- Sangrado </a></p>
+    <p>- <a href="#Color_de_autoria">C.- Color de autoría</a></p>
+    <p>- <a href="#Tabla">D.- Tabla</a></p>
+    <p>- <a href="#Comentarios_y_cambios">E.- Comentarios y cambios</a></p>
+    <p>- <a href="#Importar/Exportar">F.- Importar/Exportar</a></p>
+    <p>- <a href="#Linea_temporal">G.- Línea temporal</a></p>
+    <p>- <a href="#Marcar_y_guardar_una_version">H.- Marcar y guardar una
+        versión</a></p>
+    <p>- <a href="#Configuracion">I.- Configuración</a></p>
+    <p>- <a href="#Revision_ortografica">J.- Revisión ortográfica</a></p>
+    <p><a href="#Administracion">11.- Administración</a></p>
+    <p><a href="#Glosario_de_Tramity">12.- Glosario de Tramity</a></p>
+    <br>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Glosario"></a> 0.- Glosario</h2>
+    <p>Diccionario de términos básicos empleados en el manual. <a href="#Glosario_de_Tramity">(Ir)</a></p>
+    <br>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Introduccion"></a> 1.- Información básica</h2>
+    <p style="margin-nbottom: 0cm;"> Tramity es la plataforma web que gestiona
+      tanto el trámite y archivo de expedientes (documento de trabajo) en el
+      centro como el correo con la Delegación.</p>
+    <p style="margin-nbottom: 0cm;">Para acceder hay que copiar en la barra de
+      direcciones del navegador (Firefox) la dirección </p>
+    <p style="margin-nbottom: 0cm;">https://CENTRO.tramity.ctr.local/index.php </p>
+    <p style="margin-nbottom: 0cm;">sustituyendo CENTRO por el nombre que
+      corresponda en minúsculas y sin acentos (sgpallerols, patagonia,
+      agdcondal) </p>
+    <p style="margin-nbottom: 0cm;">Y, posteriormente, iniciar la sesión con el
+      usuario y contraseña.</p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;"><font face="Times New Roman, serif"><font style="font-size: 12pt"
+          size="3"><b>Cómo saber si ha llegado correo de la Delegación</b></font></font></p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;">El director (o quien hace sus veces) ha de
+      clicar en la pestaña de "Entradas" y seleccionar en la lista desplegable
+      “Correo de entrada”. </p>
+    <p style="margin-nbottom: 0cm;">Con el botón azul "Revisar dock" se
+      descargan las entradas dirigidas al Centro, que se añadirán a la lista de
+      las actuales.</p>
+    <p style="margin-nbottom: 0cm;">La pestaña "Correo de entrada" solo es
+      visible para el director (o su suplente); hasta que este no abra el correo
+      recibido y le dé entrada (marcándolo como visto o encargándolo a alguien),
+      no estará accesible al resto del consejo local.</p>
+    <p style="margin-nbottom: 0cm;">En el desplegable de "Entradas" encontramos
+      también “Entradas recientes”, que son los escritos recibidos los últimos
+      días, y “Correo encargado”, que son los escritos que el director determina
+      que se responsabilice alguien en concreto.</p>
+    <p style="margin-nbottom: 0cm;">Una vez que el director (o quien hace sus
+      veces) da entrada al correo, pasa a la pestaña "Entradas recientes" y,
+      además, si está encargado a alguien, a la pestaña "Correo encargado", que
+      ya es visible para el resto del consejo local, en función de los permisos
+      de visibilidad (todos / d / d y sacd).</p>
+    <p style="margin-nbottom: 0cm;">El director gestiona cada entrada con las
+      opciones que ofrece Tramity (vid. infra): crear un pendiente (de
+      responder, informar...), encargarlo a alguien del consejo local, etc.</p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;"><font face="Times New Roman, serif"><font style="font-size: 12pt"
+          size="3"><b>Cómo se encuentra un escrito enviado o recibido</b></font></font></p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;">Clicando en “Archivo de escritos” se permite
+      la búsqueda de escritos del ctr/dl/cr. Y en “Ver todas las opciones” se
+      puede buscar por una palabra del “Asunto” o “Detalle” del escrito, o
+      buscar escritos según su origen o destino, o por etiquetas, etc.</p>
+    <p style="margin-nbottom: 0cm;">Después de poner el tic al escrito que se
+      quiere ver, habrá que asegurarse que se da permiso al navegador para que
+      abra ventanas emergentes (aparecerá en la parte superior del navegador).
+      Con el permiso concedido, el escrito se podrá ver en una nueva ventana
+      emergente. </p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;"><font face="Times New Roman, serif"><font style="font-size: 12pt"
+          size="3"><b>Cómo mantener expedientes fácilmente accesibles </b></font></font>
+    </p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;">Tal vez, se quiera tener fácilmente visible
+      o accesible algún documento de trabajo del consejo local. Para ello, se
+      dispone de la pestaña “Permanentes de cl”.</p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;"><font face="Times New Roman, serif"><font style="font-size: 12pt"
+          size="3"><b>Cómo acceder a escritos de cr de numeración baja u otros
+            escritos permanentes </b></font></font> </p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;">Con la pestaña “Permanentes” se pueden
+      consultar todos los escritos de cr de numeración baja u otros escritos
+      permanentes.</p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;"><font face="Times New Roman, serif"><font style="font-size: 12pt"
+          size="3"><b>Cómo saber si hay algún escrito pendiente de contestar </b></font></font>
+    </p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;">Con la pestaña “Pendientes” se gestionan
+      tanto los pendientes que van asignados automáticamente a un escrito que se
+      recibe de Delegación como los generados por el propio consejo local.</p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;"><font face="Times New Roman, serif"><font style="font-size: 12pt"
+          size="3"><b>Cómo conservar y acceder fácilmente a documentos de
+            trabajo</b></font></font></p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;">Tal vez interese tener a mano documentos que
+      el consejo local ha trabajado en ocasiones anteriores. Para ello se cuenta
+      con la pestaña “Documentos”. Es la funcionalidad que posibilita guardar
+      para su uso futuro listados, hojas de cálculo, instrucciones,
+      experiencias, etc.</p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;"><font face="Times New Roman, serif"><font style="font-size: 12pt"
+          size="3"><b>Cómo elaborar un expediente</b></font></font></p>
+    <p><br>
+    </p>
+    <p style="margin-nbottom: 0cm;">Un expediente es un embrión de una propuesta
+      para el propio consejo local o un escrito a la Delegación. En la lista
+      desplegable de la pestaña “Expedientes” hay que clicar en “Personal
+      borrador” y abrir “nuevo expediente”</p>
+    <p style="margin-nbottom: 0cm;">Solo es necesario, al inicio, darle un
+      nombre (asunto). El resto de características se pueden completar más
+      adelante en el proceso de elaboración.</p>
+    <p style="margin-nbottom: 0cm;">La entradilla del expediente está pensada
+      para un comentario breve, o como propuesta, propiamente, si se trata de
+      algo muy simple.</p>
+    <p style="margin-nbottom: 0cm;">Al pulsar “Guardar” preguntará si se quieren
+      añadir escritos o adjuntos. Estos serán, propiamente, el contenido del
+      expediente (propuestas, escritos, antecedentes, etc.).</p>
+    <p style="margin-nbottom: 0cm;">Los “antecedentes” son la información
+      necesaria para valorar y entender el por qué del expediente (por ej., el
+      mismo expediente del año anterior con la petición de cursos anuales o
+      convivencias, el escrito de Delegación al que se responde...).</p>
+    <p style="margin-nbottom: 0cm;">Un expediente puede consistir en una
+      “propuesta” al resto del consejo local o también en la elaboración de un
+      “escrito” que responde o no a otro escrito que se ha recibido de
+      Delegación. Para este último caso, se dispone del botón “contestar
+      entrada”. </p>
+    <p>Cuando se guarda el borrador de escrito, una ventana emergente se abrirá
+      para preguntar “¿añadir escrito o adjuntos?”</p>
+    <p>Si se responde que "sí" se abrirá una pantalla con un espacio a la
+      derecha donde se permite “arrastrar ficheros”. Este espacio está previsto
+      para los adjuntos que se quieren enviar junto con el texto del escrito; no
+      para los “antecedentes” que se acompañan para hacerse cargo de la
+      propuesta. </p>
+    <p style="margin-nbottom: 0cm;">Una vez acabada la confección del escrito o
+      propuesta, se hace “circular” el "expediente" para que lo vea quien
+      corresponda. También se puede retirar. </p>
+    <p style="margin-nbottom: 0cm;">Si el escrito ya está aprobado para enviar,
+      es prudente repasarlo (utilizando “ver”). Una vez enviado a Delegación, ya
+      se puede “archivar”; no antes.</p>
+    <p style="line-height: 100%; margin-bottom: 0cm" align="center"><br>
+    </p>
+    <p><br>
+    </p>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Acceso"></a> 2.- Acceso</h2>
+    <p>En el navegador del escritorio remoto hay que ir a <a href="https://www.google.com/url?q=https://dlb.tramity.lan.moneders.net/index.php&amp;sa=D&amp;source=editors&amp;ust=1678214613172456&amp;usg=AOvVaw37yOkdEcTdDccHKkXHsJ8x">https://CENTRO.tramity.ctr.local/index.php</a></p>
+    <p><a href="https://www.google.com/url?q=https://dlb.tramity.lan.moneders.net/index.php&amp;sa=D&amp;source=editors&amp;ust=1678214613172456&amp;usg=AOvVaw37yOkdEcTdDccHKkXHsJ8x"><br>
+      </a> </p>
+    <p><img name="Imatge22" src="ManualTramityCtr_html_628546304c9ab222.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Interesa guardar como "dirección de interés" para no tener que escribir
+      cada vez:</p>
+    <p>- Marcar en la "estrella" del navegador</p>
+    <p>- En la ventana que aparece ponerle el nombre del ctr: p.ej.
+      "sgPatagonia"</p>
+    <p>-Y en el desplegable de "Ubicación" escoger "Barra de las direcciones de
+      interés"</p>
+    <p>Quien esté en varios cl deberá predefinir el acceso para cada centro.</p>
+    <p><br>
+    </p>
+    <p>Se accede con el usuario y contraseña personal.</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge23" src="ManualTramityCtr_html_e8a98459a31bc40.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Cuando se accede por primera vez, pregunta si quiere guardarse o no el
+      inicio de sesión, para no tener que escribir cada vez el usuario y
+      contraseña.</p>
+    <p><br>
+    </p>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <br>
+    </h2>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Preferencias"></a> 3.- Preferencias</h2>
+    <p>Clicando sobre el nombre de usuario (arriba a la derecha) se despliega un
+      menú:</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge1" src="ManualTramityCtr_html_cb3874540ecc679.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>En “Preferencias” se puede definir el idioma, el nombre a mostrar, el
+      mail, el cargo preferido y cambiar el password:</p>
+    <p><img name="Imatge2" src="ManualTramityCtr_html_12039052e7f3d488.png" width="50%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p><br>
+    </p>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Pestanyas"></a> 4.- Pestañas</h2>
+    <p>Las pestañas y subpestañas permiten gestionar los diferentes pasos de los
+      expedientes y de los escritos que entran o salen, y otras prestaciones. Se
+      resalta en color más intenso la pestaña que se muestra su contenido. Junto
+      al nombre de algunas pestañas aparece, en rojo, el número de elementos que
+      tiene, pendientes de alguna acción.</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge3" src="ManualTramityCtr_html_e8a98459a31bc40.png" width="100%"
+        align="middle"> <br>
+      <br clear="left">
+    </p>
+    <p>Aparecen siete pestañas:</p>
+    <dl>
+      <dd>
+        <table style="width: 840px; height: 408px;" cellspacing="0" cellpadding="0">
+          <colgroup><col width="148"> <col width="486"> </colgroup>
+          <tbody>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Expedientes:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="486">
+                <p>Documentos que se trabajan en el consejo local</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Entradas:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="486">
+                <p>Escritos recibidos en el centro</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Archivo de escritos:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="486">
+                <p>Búsqueda de escritos al/del centro</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Permanentes cl:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="486">
+                <p>Expedientes del cl que se destacan para tener un acceso más
+                  fácil</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Permanentes:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="486">
+                <p>Escritos permanentes recibidos (de numeración baja de cr,
+                  etc)</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Pendientes:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="486">
+                <p>Gestión de asuntos que requieren respuesta en fecha
+                  determinada.</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="148">
+                <p>-Documentos:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="486">
+                <p>Introducción de documentos externos a la aplicación.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </dd>
+    </dl>
+    <p style="line-height: 100%; margin-bottom: 0cm; background: transparent"> <br>
+    </p>
+    <p><span style="background: transparent">Pasando el cursor sobre cada
+        pestaña aparece un “globo” explicativo del contenido.</span></p>
+    <p><br>
+    </p>
+    <p><b><span style="background: transparent">La presentación de todas las
+          pestañas, como se ve a continuación, es similar:</span></b></p>
+    <p><b><span style="background: transparent">-”mod”: modificar&nbsp;el
+          expediente</span></b></p>
+    <p><b><span style="background: transparent">-”ver”: ver&nbsp;el expediente</span></b></p>
+    <p><b><span style="background: transparent">-”acción”: eliminar&nbsp;un
+          expediente, copiarlo, etc.</span></b></p>
+    <p><br>
+    </p>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Gestion_de_expedientes"></a> 5.- Gestión de expedientes </h2>
+    <p><br>
+    </p>
+    <p>La pestaña "Expedientes" tiene 5 subpestañas y gestiona los Documentos
+      que se trabajan en el consejo local:</p>
+    <p><img name="Imatge24" src="ManualTramityCtr_html_313e073932743db4.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p><span style="background: transparent">Relacionadas con “expedientes”
+        (fondo gris):</span></p>
+    <dl>
+      <dd>
+        <table style="width: 838px; height: 311px;" cellspacing="0" cellpadding="0">
+          <colgroup><col width="149"> <col width="491"> </colgroup>
+          <tbody>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="149">
+                <p><span style="background: transparent">-Personal borrador:</span></p>
+              </td>
+              <td style="border: none; padding: 0cm" width="491">
+                <p><span style="background: transparent">expedientes propios en
+                    fase de elaboración. <u>Iniciar</u> un nuevo expediente.</span></p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="149">
+                <p><span style="background: transparent">-Para firmar: </span>
+                </p>
+              </td>
+              <td style="border: none; padding: 0cm" width="491">
+                <p><span style="background: transparent">expedientes de otros
+                    pendientes de firmar</span></p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="149">
+                <p><span style="background: transparent">-Circulando:</span></p>
+              </td>
+              <td style="border: none; padding: 0cm" width="491">
+                <p><span style="background: transparent">expedientes, propios o
+                    de otros, que están pendientes de alguna firma</span></p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="149">
+                <p><span style="background: transparent">-Acabados:</span></p>
+              </td>
+              <td style="border: none; padding: 0cm" width="491">
+                <p><span style="background: transparent">expedientes que ya han
+                    firmado todos</span></p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="149">
+                <p><span style="background: transparent">-Archivados: </span> </p>
+              </td>
+              <td style="border: none; padding: 0cm" width="491">
+                <p><span style="background: transparent">expedientes guardados
+                    una vez hechas todas las acciones (enviar, etc.)</span></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </dd>
+    </dl>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Personal_borrador"></a> A.- Personal borrador</h3>
+    <p>La pestaña “Personal borrador” muestran los expedientes que se están
+      trabajando.</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge25" src="ManualTramityCtr_html_d8f1a89c1ac5c61b.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p><br>
+    </p>
+    <p>Por defecto aparecen a la vista los expedientes “normales” (los de
+      trabajo propiamente); seleccionando “en espera” enseña los expedientes que
+      están pendientes de trabajar más adelante.</p>
+    <p>La vista, si hay muchos expedientes, se puede filtrar por “etiquetas”</p>
+    <p>El botón "acción" permite, en esta ventana, eliminar el expediente.</p>
+    <p><u>Para iniciar un nuevo expediente,</u> en “Personal borrador” hay que
+      clicar el botón “nuevo expediente”. Se accede entonces a la siguiente
+      pantalla (similar a la de “mod” o “ver” un expediente ya creado):</p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <p><img name="Imatge26" src="ManualTramityCtr_html_48a28b018bbe821b.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Hay que seleccionar:</p>
+    <dl>
+      <dd>
+        <table style="background: transparent none repeat scroll 0% 0%; width: 841px; height: 551px;"
+          cellspacing="0" cellpadding="0">
+          <colgroup><col width="141"> <col width="470"> </colgroup>
+          <tbody>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="141">
+                <p>Trámite:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="470">
+                <p>Actualmente no admite opciones. Previsto para posibles
+                  recorridos distintos del expediente. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="141">
+                <p>Vida:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="470">
+                <p>plazo en que se borrará: normal, permanente, experiencia,
+                  temporal o borrable. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="141">
+                <p>Visibilidad:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="470">
+                <p>quién tiene acceso: todos, d y sacd, d. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="141">
+                <p>Prioridad: </p>
+              </td>
+              <td style="border: none; padding: 0cm" width="470">
+                <p>urgencia en el recorrido: normal, rápido, urgente, otro, en
+                  espera. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="141">
+                <p>Resolver antes de:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="470">
+                <p>Señalar una fecha de resolución</p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="141">
+                <p>Etiquetas:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="470">
+                <p>Catalogación para facilitar el archivo y búsquedas. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="141">
+                <p>Asunto expediente:</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="470">
+                <p><u>identifica el expediente</u>. Es un campo obligatorio y
+                  clave para búsquedas. </p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="141">
+                <p>Entradilla</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="470">
+                <p>breve explicación del contenido [opcional]</p>
+              </td>
+            </tr>
+            <tr style="background: transparent" valign="top">
+              <td style="border: none; padding: 0cm" width="141">
+                <p>Firmas oficina</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="470">
+                <p>[opcional: para señalar quienes en la oficina deben
+                  preparar/ver el expediente]. </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </dd>
+    </dl>
+    <p><br>
+    </p>
+    <p>La “vida” está pensada para facilitar el borrado de los expedientes y
+      evitar que se acumulen innecesariamente: al cabo de pocos días, cuando
+      periódicamente se borren todos los “borrables”, etc. Cada Centro determina
+      la duración de las opciones predefinidas. <font color="#c9211e">Está en
+        fase de implementación.</font></p>
+    <p><br>
+    </p>
+    <p>Se han definido los diferentes grados de “visibilidad”, que afectan tanto
+      a los expedientes como a los escritos (entradas y salidas):</p>
+    <ul>
+      <li>
+        <p>todos: cualquier ve todo. </p>
+      </li>
+      <li>
+        <p>d: solo visible para el director</p>
+      </li>
+      <li>
+        <p>d y sacd: visible para el d y el sacd exclusivamente</p>
+      </li>
+    </ul>
+    <p>La “prioridad” señala la rapidez con que interesa circular el expediente,
+      señalando la fecha deseada de ejecución. Los expedientes “urgentes”
+      aparecen en rojo en los listados.</p>
+    <p><br>
+    </p>
+    <p>En “firmas oficina” se indica quienes han de ver el expediente.</p>
+    <p><br>
+    </p>
+    <p><u>“Guardar”</u>: pregunta si se quiere añadir escritos o adjuntos. En
+      caso afirmativo, presenta la siguiente pantalla:</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge27" src="ManualTramityCtr_html_74c164d60e8c69a4.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Hay varias zonas diferenciadas:</p>
+    <ol>
+      <li>
+        <p>Parte superior izquierda: los datos básicos del expediente </p>
+      </li>
+      <li>
+        <p>Parte superior derecha: Antecedentes: aquí estarán todos los
+          antecedentes del expediente. </p>
+      </li>
+      <li>
+        <p>Parte inferior: listado de todas las acciones que contiene el
+          expediente: propuestas, escritos, etc. </p>
+      </li>
+    </ol>
+    <p><br>
+    </p>
+    <p>Haciendo click en los botones correspondientes podrán añadirse
+      Antecedentes:</p>
+    <ul>
+      <li>
+        <p>Entradas: escritos recibidos (que estén en el registro del Tramity) </p>
+      </li>
+      <li>
+        <p>Otros Expedientes</p>
+      </li>
+      <li>
+        <p>Escritos enviados (seleccionados desde el registro del Tramity) </p>
+      </li>
+      <li>
+        <p>Documentos: documentos externos al Tramity (Word, Excel, PDF,
+          fotografía, etc). </p>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <p>Y además:</p>
+    <ul>
+      <li>
+        <p>nueva propuesta: la propuesta propiamente dicha (textos explicativos,
+          ...). </p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p>nuevo escrito: <u>generar un escrito</u>&nbsp;para enviar. </p>
+      </li>
+      <li>
+        <p>contestar entrada: <u>generar un escrito</u>&nbsp;en respuesta a
+          otro. </p>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <p>Tanto para “nueva propuesta” como para “nuevo escrito” o “contestar
+      entrada” se abre una página así (en el primer caso no aparecen “Destinos”
+      ni “Referencias”): </p>
+    <p><br>
+    </p>
+    <p><img name="Imatge4" src="ManualTramityCtr_html_684498069c0596b7.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p><br>
+    </p>
+    <ul>
+      <li>
+        <p>“ Asunto” (obligatorio) y “Detalle” (opcional) identifican la
+          propuesta o el escrito. </p>
+      </li>
+      <li>
+        <p>En el caso de escritos se debe seleccionar el <i>Destino</i> y las <i>Referencias</i>
+          (si las hay). </p>
+      </li>
+      <li>
+        <p>También cabe especificar la <i>Categoría</i> (normal / sin numerar /
+          permanente) y la <i>Visibilidad</i> (todos / d / d y sacd). </p>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <p>El botón "Pasar a propuesta" permite convertir un escrito en propuesta;
+      es decir, quitarle los encabezados de origen y destino para enviar.</p>
+    <p><br>
+    </p>
+    <p>“<u>Guardar</u>”: pregunta si se quiere añadir <i>escritos</i> o
+      adjuntos. En caso afirmativo, presenta la siguiente pantalla (similar
+      tanto para <i>propuestas</i> como para escritos):</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge5" src="ManualTramityCtr_html_2945e02207feb063.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p><br>
+    </p>
+    <ul>
+      <li>
+        <p>“Fecha del escrito”: aunque no es obligatorio, si no se introduce, lo
+          recuerda un mensaje. </p>
+      </li>
+      <li>
+        <p>“Insertar Etherpad”: para introducir <u>el contenido</u> propio del
+          escrito o propuesta mediante el editor de texto colaborativo
+          “Etherpad”. Con “Nuevo” abre un documento en blanco; con “Buscar en
+          Documentos” presenta los etherpad guardados para seleccionar el
+          deseado (el “Etherpad” se explica más abajo). </p>
+      </li>
+      <li>
+        <p><span style="background: transparent">Adjuntos: para introducir
+            documentos qu<font color="#000000">e acompañen al escrito o
+              propuesta:</font></span></p>
+        <ul>
+          <li>
+            <p><font color="#000000"><span style="background: transparent">Con
+                  “Buscar en Documentos” para los que ya están guardados en
+                  Tramity</span></font></p>
+          </li>
+          <li>
+            <p><font color="#000000"><span style="background: transparent">Si no
+                  lo están, basta con <i>arrrastrarlos</i> o seleccionarlos con
+                  el botón “Browse…”. </span></font> </p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <p>UN EXPEDIENTE CON UNA PROPUESTA Y VARIOS ESCRITOS SE VERÁ DEL SIGUIENTE
+      MODO:</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge6" src="ManualTramityCtr_html_dd9ed06162f4029b.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Para cada una de las propuestas o escritos pueden modificarse todos los
+      datos (mod.datos), revisar el texto (revisar), manipular los adjuntos
+      (doble clic en el clip), “eliminar” ese escrito o propuesta y, en el caso
+      de los escritos, "enviar".</p>
+    <p><br>
+    </p>
+    <p>La sección "Firmar - Añadir Firmas - Recircular" gestiona quiénes han de
+      revisar el expediente:</p>
+    <p>- Firmar: para firmar el expedientes</p>
+    <p>- Añadir firmas: añade quiénes han de revisar el expedientes</p>
+    <p>- Recircular: borra todas las firmas y vuelve a pasar para firmar a todos
+      los afectados</p>
+    <p><br>
+    </p>
+    <p>Si se añaden las firmas de los que han de revisar el expediente, al
+      pulsar "Volver" el expediente pasa a la pestaña "Firmar"</p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Para_firmar"></a> B.- Para firmar</h3>
+    <p><br>
+    </p>
+    <p>En esa pestaña aparece el listado de expedientes a firmar. Es similar a
+      la "Personal Borrador". En rojo se indica el número de expedientes. En
+      negrita se señalan los que todavía no se han visto. Una vez firmados,
+      desaparecen de la lista.</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge7" src="ManualTramityCtr_html_57fa78dbae47a068.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Pulsando “revisar” se accede al correspondiente expediente:</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge29" src="ManualTramityCtr_html_8517e5f450ee14a2.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>-En la parte superior aparecen los detalles del expediente:</p>
+    <dl>
+      <dd>
+        <table width="626" cellspacing="0" cellpadding="0">
+          <colgroup><col width="117"> <col width="509"> </colgroup>
+          <tbody>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="117">
+                <p>(izquierda):</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="509">
+                <p>ponente, tipo de trámite, estado, vida,...</p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="117">
+                <p>(derecha):</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="509">
+                <p>prioridad, fecha de resolución </p>
+              </td>
+            </tr>
+            <tr valign="top">
+              <td style="border: none; padding: 0cm" width="117">
+                <p>(a continuación):</p>
+              </td>
+              <td style="border: none; padding: 0cm" width="509">
+                <p>Asunto, Entradilla, comentarios </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </dd>
+    </dl>
+    <p><br>
+    </p>
+    <p>-En la parte inferior aparecen las diferentes propuestas/escritos que se
+      pueden ver/revisar(*), y los adjuntos, que se pueden descargar para ver y
+      modificar, haciendo doble clic en el clip (**).</p>
+    <p>-En la parte derecha aparecen:</p>
+    <ul>
+      <li>
+        <p>Antecedentes, que se pueden ver y descargar. (***) </p>
+      </li>
+      <li>
+        <p>Firmas (Firmar / Añadir firmas: se pueden “Añadir firmas” si así se
+          considera oportuno). (****) </p>
+      </li>
+      <li>
+        <p>Recorrido seguido hasta el momento. </p>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <p>(*) Con el link de “revisar” se tiene acceso al texto del escrito, que se
+      puede modificar, hacer comentarios etc. Lo que se anota, queda registrado
+      al instante; no hace falta guardar. (Para más información ver la
+      explicación de uso del “Etherpad”).</p>
+    <p>(**) Para ver un adjunto, hay que descargarlo y abrirlo.</p>
+    <p>También se puede modificar. En este caso, como el archivo se habrá
+      guardado en el disco duro del escritorio remoto (en principio, en la
+      carpeta “descargas”), al final hay que “arrastrarlo” de nuevo a la ventana
+      de los adjuntos y eliminar la versión anterior.</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge8" src="ManualTramity_html_9ea6dd6a78ea8ae9.png" width="0%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>(***) Con “ver todos” se genera un pdf con todos los antecedentes que
+      están a la vista y los incluidos dentro de los expedientes puestos como
+      antecedentes.</p>
+    <p><br>
+    </p>
+    <p>(****) También se puede “Re-circular” el expediente. Se borrarán todas
+      las firmas y comentarios, y volverá a la pestaña “Para firmar”.</p>
+    <p><br>
+    </p>
+    <p>Al pulsar “firmar” el expediente (botón verde) se abre la siguiente
+      ventana:</p>
+    <p><img name="Imatge9" src="ManualTramity_html_3e655c66cf496dc4.png" width="100%"
+        align="middle"> <br>
+    </p>
+    <p>-Escoger el voto (ok-no-espera) y marcar “Guardar”</p>
+    <p>(Votando ok/no el expediente sigue su recorrido. Votando “espera”, sigue
+      en la lista “para firmar”).</p>
+    <p><br>
+    </p>
+    <p>-Antes de votar puede añadirse un comentario o pedir una aclaración al
+      ponente (anotando la duda en “comentario”). </p>
+    <p>Si se pide aclaración, también sigue en la lista “para firmar” pero con
+      color <u>amarillo</u>, y aparece de nuevo en la vista “para firmar” del
+      ponente; también en color amarillo. </p>
+    <p>Cuando éste responde la aclaración, el expediente cambia a color <u>verde</u>,
+      señalando que ya ha respondido; de manera que ya se puede volver a abrir
+      para firmar.</p>
+    <p>Para responder a una petición de aclaración hay que pulsar el botón
+      “responder aclaración”; no al “OK” y “Guardar”, porque en este caso quien
+      pregunta no advertirá que se le ha respondido.</p>
+    <p><br>
+    </p>
+    <p>“<u>Cerrar</u>”: sale del cuadro de diálogo sin hacer nada.</p>
+    <p><br>
+    </p>
+    <p>El voto emitido quedará registrado en la lista de firmas, así como los
+      comentarios y aclaraciones, que serán visibles para todos.</p>
+    <p><br>
+    </p>
+    <p>Vista al pedir aclaración al ponente (amarillo):</p>
+    <p><img name="Imatge10" src="ManualTramityCtr_html_8a1f4091da7bd9a5.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Vista tras la respuesta del ponente (verde):</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge11" src="ManualTramityCtr_html_b5514aeb2104279a.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>En este listado de expedientes, el botón "acción" permite:</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge30" src="ManualTramityCtr_html_a8c1f5ea7f0284b5.png" width="100%"
+        align="left"> <br clear="left">
+      * Mover a borrador: y deja de circular</p>
+    <p>* Copiar a borrador: se hace una copia en borrador, pero sigue circulando</p>
+    <p>* Copiar a copias: se copia el expediente en la pestaña "Copias" [<font color="#c9211e">pendiente
+        de activar</font>]</p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Circulando"></a> C.- Circulando</h3>
+    <p>En esa pestaña se puede hacer un seguimiento de los expedientes que se
+      han puesto a circular o se han firmado a propuesta de otro, hasta que
+      terminan su recorrido: quiénes han firmado, comentarios, etc.</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge28" src="ManualTramityCtr_html_c41cf29baa372232.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>En "revisar" puede verse de nuevo el expediente, volver a firmar, etc.</p>
+    <p><br>
+    </p>
+    <p>El botón "acción", al igual que en "Para firmar", permite Mover a
+      borrador - Copiar a borrador - Copiar a copias.</p>
+    <p><br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Acabados"></a> D.- Acabados</h3>
+    <p>En el listado “Acabados” aparecen todos los expedientes que ya han
+      terminado su trámite (firmados por todos).</p>
+    <p>Corresponde ahora preparar y enviar los escritos aprobados, ejecutar lo
+      que se ha propuesto, etc.</p>
+    <p><img name="Imatge12" src="ManualTramityCtr_html_54a172b46b3228c3.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Con “mod” (o “ver”) se accede al contenido del expediente; con “acción”
+      se puede mover el expediente a “borrador”, o pasar a “borrador” una copia
+      del mismo.</p>
+    <p>Pulsando “mod” en un expediente se accede a la siguiente vista:</p>
+    <p><img name="Imatge31" src="ManualTramityCtr_html_a612f6c271d3901.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <ul>
+      <li>
+        <p>En "Recorrido" se ven las firmas (en verde quienes han firmado
+          favorablemente y en rojo si el voto ha sido negativo).</p>
+      </li>
+      <li>
+        <p>Aparecen también los comentarios, si los ha habido, al firmar.</p>
+      </li>
+      <li>
+        <p>Con “<i>ver</i>” se puede ver cada texto y con “revisar” modificarlo,
+          ver las anotaciones y correcciones, etc. </p>
+      </li>
+      <li>
+        <p>En “<i><u>mod.datos</u></i>” se ajustan los datos del escrito que se
+          ha de enviar.</p>
+      </li>
+      <li>
+        <p>En "revisar" se abre el contenido del escrito para corregir lo que
+          corresponda. </p>
+      </li>
+      <li>
+        <p>Una vez preparado el escrito a enviar, se pulsa “enviar” en la
+          columna “<i>enviar</i>”. </p>
+      </li>
+      <li>
+        <p>Una vez enviado el escrito, en la columna "enviar" aparecerá un texto
+          del estilo: “enviado el 4/01/2021”. Hasta que no consta como "enviado"
+          cada escrito, el expediente no se puede "archivar”; es una medida de
+          seguridad para evitar que un escrito quede perdido, sin enviar. </p>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <p>Si no se ha hecho antes, en esta fase también se pueden asignar unas <u>etiquetas</u>
+      al expediente para facilitar posteriores búsquedas una vez esté ya
+      archivado. Se recomienda hacerlo, pues es la clave para localizar después
+      los expedientes. Las etiquetas pueden ser personales o del consejo local.
+      Se definen en el menú de preferencias del usuario (arriba a la derecha):</p>
+    <p><img name="Imatge13" src="ManualTramityCtr_html_5136b1d6508598fc.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Al pulsar "Etiquetas" aparece el listado:</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge15" src="ManualTramityCtr_html_6a5b1e44975156cf.png" width="100%"
+        align="middle"> <br>
+      <br clear="left">
+    </p>
+    <p>Se puede modificar, borrar, o crear una "nueva etiqueta" (personal o del
+      centro):</p>
+    <p><img name="Imatge14" src="ManualTramityCtr_html_fc63e3cfe190d7ec.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Archivados"></a> E.- Archivados</h3>
+    <p><br>
+    </p>
+    <p>Pulsando “Archivar”, el expediente pasa a la pestaña “archivados”:</p>
+    <p><img name="Imatge16" src="ManualTramityCtr_html_3b2896967a8ca7c4.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Ahí se ven todos los expedientes de la oficina. Cada uno ve los que le
+      corresponden según los permisos que tenga (todos, d y sacd, d).</p>
+    <p><br>
+    </p>
+    <p>-Quedan clasificados por las etiquetas, tanto personales como de la
+      oficina.</p>
+    <p><br>
+    </p>
+    <p>-La selección se acota escogiendo etiquetas (una o varias, y/o), por un
+      período de tiempo o por alguna palabra clave del Asunto.</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge17" src="ManualTramityCtr_html_32003c4d387ac0d6.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>-Las etiquetas pueden cambiarse siempre que se quiera.</p>
+    <p><br>
+    </p>
+    <p>A través de “acción”, los expedientes se pueden pasar/copiar a la carpeta
+      “borrador” o también a la de otro cargo. Todas las propuestas y escritos
+      del expediente pasarán a ser antecedentes.</p>
+    <p>Para borrar un expediente en “Acabados”, primero hay que pasarlo a
+      “Archivados” y de ahí a “Borrador” para eliminar. Antes de eliminarlo,
+      pedirá confirmación. Se ha pensado así para evitar eliminar expedientes de
+      modo involuntario.</p>
+    <p><br>
+    </p>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Gestion_de_escritos"></a> 6.- Gestión de escritos</h2>
+    <p><br>
+    </p>
+    <p>Tramity gestiona los escritos que se reciben en el centro, la búsqueda de
+      escritos (entrantes o salientes) y el acceso ordenado a los de tipo
+      permanente.</p>
+    <p><br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Entradas"></a> A.- Entradas</h3>
+    <p><br>
+    </p>
+    <p>La pestaña "Entradas" tiene tres subpestañas que gestiona los escritos
+      que llegan al cl:</p>
+    <p>- Correo de entrada</p>
+    <p>- Correo encargado</p>
+    <p>- Entradas recientes</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge32" src="ManualTramityCtr_html_6fca3374e211338e.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Correo_de_entrada"></a>A1.- Correo de entrada</h3>
+    <p>En esta pestaña, que solo ve el Director (o quien le sustituye), aparecen
+      las nuevas entradas de escritos pendientes de gestión.</p>
+    <p><img name="Imatge33" src="ManualTramityCtr_html_5cef182b44232082.png" width="100%"
+        align="left"> <br clear="left">
+      El botón "revisar dock" descarga las entradas dirigidas al ctr, que se
+      añadirán a la lista de las actuales.</p>
+    <p><br>
+    </p>
+    <p>Cada entrada tiene tres opciones:</p>
+    <p>- "mod": para modificar datos de la entrada</p>
+    <p>- "ver": para ver el escrito</p>
+    <p>- "acción": para ejecutar diferentes acciones con el escrito.</p>
+    <p><br>
+    </p>
+    <p>Pulsando en "mod" de una entrada se abre la siguiente ventana:</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge18" src="ManualTramityCtr_html_27ea879ac79e32a8.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Además del protocolo de entrada del escrito, aparecen los siguientes
+      campos:</p>
+    <table style="width: 838px; height: 388px;" cellspacing="0" cellpadding="0">
+      <colgroup><col width="182"> <col width="498"> </colgroup>
+      <tbody>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="182">
+            <p>- Asunto entrada:</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="498">
+            <p>Asunto definido por la dl</p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="182">
+            <p>- Asunto del centro: </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="498">
+            <p>En principio, el mismo; modificable según interese al propio ctr</p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="182">
+            <p>- Detalle:</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="498">
+            <p>Para anotar un comentario</p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="182">
+            <p>- Fechas:</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="498">
+            <p>de recepción en el centro y del escrito</p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="182">
+            <p>- Categoría:</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="498">
+            <p>Puede ser normal, permanente y sin numerar</p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="182">
+            <p>- Visibilidad:</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="498">
+            <p>todos / d / d y sacd: El d puede cambiarla, según vea oportuno</p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="182">
+            <p>- Contestar antes de:</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="498">
+            <p>fuera de uso aquí</p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="182">
+            <p>- Modificar pendiente:</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="498">
+            <p>fuera de uso aquí</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <p>Con "Cancelar" y "Guardar" se vuelve al listado de entradas.</p>
+    <p><br>
+    </p>
+    <p>Pulsando en “<u>ver</u>” se abre una ventana con una vista rápida del
+      escrito. Puede descargarse en pdf; o bajar el propio escrito o los
+      adjuntos que tenga en su formato original.</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge35" src="ManualTramityCtr_html_b1edf25d2b5ed8e0.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>El botón "Descargar en pdf", convierte el escrito en un pdf para
+      imprimir.</p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <p>La opción “<u>acción</u>” de las entradas, muestra esta vista:</p>
+    <p><img name="Imatge36" src="ManualTramityCtr_html_3281ce65a446b72a.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Esto permite:</p>
+    <ul>
+      <li>
+        <p><i>Encargar</i> la entrada a alguien de la oficina, que pasará a la
+          pestaña “correo encargado”: </p>
+      </li>
+    </ul>
+    <p><img name="Imatge37" src="ManualTramityCtr_html_691574bc1752ef0c.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p><br>
+    </p>
+    <ul>
+      <li>
+        <p><i>Marcar como visto</i>: la entrada desaparecerá del listado </p>
+      </li>
+      <li>
+        <p><i>Añadir</i> la entrada a un expediente existente en “borrador” </p>
+      </li>
+    </ul>
+    <p><img name="Imatge38" src="ManualTramityCtr_html_17500cb83bff942b.png" width="100%"
+        align="middle"> <br>
+      <br clear="left">
+    </p>
+    <ul>
+      <li>
+        <p><i>Crear</i> un nuevo expediente en “borrador” con esta entrada de
+          antecedente. </p>
+      </li>
+      <li>
+        <p>Crear un pendiente y encargarlo a alguien del consejo local: </p>
+      </li>
+    </ul>
+    <p><img name="Imatge39" src="ManualTramityCtr_html_cd8e5b01c47abd6f.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <ul>
+      <li>
+        <p>Poner <i>Etiquetas</i> a la entrada, para facilitar la búsqueda
+          posterior del escrito. </p>
+        <p><img name="Imatge40" src="ManualTramityCtr_html_8ac3ab61e1c1af6f.png"
+            width="100%" align="left"> <br clear="left">
+        </p>
+      </li>
+    </ul>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <br>
+    </h3>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Correo_encargado"></a> A2.- Correo encargado</h3>
+    <p><br>
+    </p>
+    <p>Una vez el Director (o quien hace sus veces) da entrada al correo, pasa a
+      la pestaña "Correo encargado", que ya es visible para el resto del consejo
+      local, en función de los permisos de visibilidad (todos / d / d y sacd):</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge34" src="ManualTramityCtr_html_7d7e8eb8125063ef.png" width="100%"
+        align="left"> <br clear="left">
+      La vista es similar a la pestaña "Correo de entrada" y puede verse a quién
+      están encargadas las entradas, mediante el desplegable de "listar entradas
+      encargadas a".</p>
+    <p>Los botones “ver” y “acción” son los mismos que para la vista de “Correo
+      de entrada”.</p>
+    <p>El botón <i>Encargar a</i> permite cambiar la persona encargada.</p>
+    <p>Las pestañas “Correo de entrada” y “Correo encargado” se han pensado para
+      facilitar la gestión de las entradas y distribución del trabajo, de manera
+      que no quede indefinida la gestión de ninguna entrada:</p>
+    <ul>
+      <li>
+        <p>Determinando quién se encarga de gestionar lo que corresponda </p>
+      </li>
+      <li>
+        <p>Generando expedientes de trabajo con esa entrada </p>
+      </li>
+      <li>
+        <p>Creando pendientes que faciliten determinar plazos y el seguimiento
+          de la tarea. </p>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Entradas_recientes"></a>A3.- Entradas recientes</h3>
+    <p>Presenta los escritos recibidos los últimos días (el período se define en
+      las preferencias de la aplicación):</p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <p><img name="Imatge19" src="ManualTramityCtr_html_caaff3910b49c168.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Para cada escrito, permite:</p>
+    <ul>
+      <li>
+        <p>“detalle”: modificar o introducir el “detalle” del escrito, según el
+          interese</p>
+      </li>
+      <li>
+        <p><font color="#000000"><span style="background: transparent">“ver” el
+              escrito </span></font> </p>
+      </li>
+      <li>
+        <p><font color="#000000"><span style="background: transparent">“acción”:
+              Para añadir/crear un expediente, crear un pendiente o marcar con
+              “etiquetas”, etc. según las opciones ya vistas.</span></font></p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p>“ver destinos” botón sin uso actual</p>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <p>Para la tabla en su conjunto, las opciones son:</p>
+    <ul>
+      <li>
+        <p>“Copy”: copia la tabla, para poder pegar en un documento. </p>
+      </li>
+      <li>
+        <p>“Excel” / “PDF”: Exporta la tabla en un excel / pdf. </p>
+      </li>
+      <li>
+        <p>“Col<font color="#000000"><span style="background: transparent">umn
+              visibility”: Selecciona las columnas que quieren verse en la
+              tabla. </span></font> </p>
+      </li>
+      <li>
+        <p><font color="#000000"><span style="background: transparent">“Print”:
+              Imprime la tabla</span></font></p>
+      </li>
+    </ul>
+    <p><br>
+      <br>
+    </p>
+    <h3 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Archivo_de_escritos"></a> B.- Archivo de escritos</h3>
+    <p><br>
+    </p>
+    <p><img name="Imatge20" src="ManualTramityCtr_html_45fc3b762b0b25d9.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>La presentación inicial de esta página sirve para <u>buscar un escrito
+        (entrada/salida)</u>:</p>
+    <p>Para “buscar un escrito concreto”, basta con escribirlo en la ventana
+      correspondiente (o escogiendo el protocolo, número y año) y pulsar
+      “buscar”.</p>
+    <p>Pulsando en “ver todas las opciones” se abren todas las posibilidades de
+      búsqueda:</p>
+    <p><img name="Imatge21" src="ManualTramityCtr_html_12b53180a11f6b74.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p><br>
+    </p>
+    <p>Permite la búsqueda de:</p>
+    <ul>
+      <li>
+        <p>Los escritos del Centro / dl / cr </p>
+      </li>
+      <li>
+        <p>Por una palabra del Asunto o Detalle </p>
+      </li>
+      <li>
+        <p>Búsqueda de escritos por origen o destino </p>
+      </li>
+      <li>
+        <p>Búsqueda de entradas por “etiquetas” </p>
+      </li>
+      <li>
+        <p>Otras búsquedas más habituales </p>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <p>El resultado de una búsqueda tiene una presentación del tipo:</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge41" src="ManualTramityCtr_html_c018f8324e368901.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p><br>
+    </p>
+    <p>Las opciones para cada escrito que se selecciona, como ya se ha señalado
+      anteriormente, son:</p>
+    <ul>
+      <li>
+        <p>“detalle”: modificar o introducir el “detalle” del escrito, según el
+          interés de la oficina. </p>
+      </li>
+      <li>
+        <p>“ver” el escrito </p>
+      </li>
+      <li>
+        <p><span style="background: transparent">“acción”: Para añadir/crear un
+            expediente, crear un pendiente o marcar con “etiquetas”: </span> </p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p>“ver destinos”: sin utilidad. </p>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <p>Para la tabla en su conjunto, las opciones son:</p>
+    <ul>
+      <li>
+        <p>“Copy”: copia la tabla, para poder pegar en un documento. </p>
+      </li>
+      <li>
+        <p>“Excel” / “PDF”: Exporta la tabla en un excel / pdf. </p>
+      </li>
+      <li>
+        <p>“Column visibility”: Selecciona las columnas que quieren verse en la
+          tabla. </p>
+      </li>
+      <li>
+        <p>“Print”: Imprime la tabla </p>
+      </li>
+    </ul>
+    <p><br>
+      <br>
+    </p>
+    <h3 class="western"><a name="Permanentes_de_cl"></a>C.- Permanentes de cl</h3>
+    <p>Relación de expedientes que tienen como "vida" la opción "permanente", de
+      manera que estén más accesibles para su uso posterior, aunque también
+      podrían estar en "archivados" con otra clasificación de "vida": </p>
+    <p><img name="Imatge42" src="ManualTramityCtr_html_d915f32f6da3be07.png" width="100%"
+        align="left"> <br clear="left">
+      Tienen las opciones habituales de "ver" y "acción"</p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Permanentes"></a>D.- Permanentes</h3>
+    <p>Presenta todos los escritos de cr de numeración baja (u otros
+      permanentes) de modo similar a las pestaña “Entradas recientes”:</p>
+    <p><img name="Imatge43" src="ManualTramityCtr_html_bb1ecf5bd98fdadb.png" width="100%"
+        align="left"> <br clear="left">
+    </p>
+    <p>Permite la búsqueda de un escrito por protocolo, por años o por palabras
+      claves.</p>
+    <p><br>
+    </p>
+    <h2 class="western"><a name="Pendientes"></a>7.- Pendientes</h2>
+    <p>Gestiona los pendientes asignados automáticamente por la entrada de
+      escritos o generados por el propio consejo local.</p>
+    <p>Es la primera pantalla que presenta la aplicación cuando se accede a
+      Tramity:</p>
+    <p><img name="Imatge44" src="ManualTramityCtr_html_e8a98459a31bc40.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Mostrará los pendientes de contestar <u>a fecha de hoy</u>. [Un
+      pendiente con fecha de vencimiento “hoy”, se considera pendiente a partir
+      de “mañana”; por eso no aparece “hoy” en este listado].</p>
+    <p>Se puede filtrar el listado por el período y por asignación. Y hacer una
+      búsqueda más selectiva en la casilla “Search:”</p>
+    <p>Cada pendiente se puede “marcar como contestado” y “modificar”.</p>
+    <p>De cada pendiente puede verse: Protocolo de origen, Etiqueta, si es <i>periódico</i>
+      o no, Asunto, <i>Fecha de plazo</i> y Encargado.</p>
+    <p>Los pendientes se dan por contestados automáticamente cuando se envía la
+      respuesta.</p>
+    <p>Puede suceder que Tramity no identifique que se ha contestado un asunto,
+      o porque no se contesta exactamente con esa referencia, o se contesta
+      dentro de otro escrito, o de palabra o, simplemente, porque no se ha de
+      contestar. <u>Para estos casos</u>: basta con marcar la casilla
+      correspondiente y hacer click en “marcar como contestado”.</p>
+    <p>Si se pulsa “modificar” un pendiente aparece la siguiente ventana:</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge45" src="ManualTramityCtr_html_8f81c45fb3bb05ad.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Pueden introducirse modificaciones:</p>
+    <p>-etiquetar</p>
+    <p>-cambiar la fecha de plazo</p>
+    <p>-asignar a alguien en concreto</p>
+    <p><br>
+    </p>
+    <p>Es similar a la de "nuevo pendiente":</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge46" src="ManualTramityCtr_html_863ae2ff243447e5.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p><br>
+    </p>
+    <p>Si se marca "ver ficha completa" aparece la siguiente ventana:</p>
+    <p><img name="Imatge47" src="ManualTramityCtr_html_2b3c9c439be25d52.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>A los campos ya señalados, se añade:</p>
+    <p><br>
+    </p>
+    <table style="width: 846px; height: 388px;" cellspacing="0" cellpadding="0">
+      <colgroup><col width="216"> <col width="464"> </colgroup>
+      <tbody>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="216">
+            <p>“protocolo o referencia”: </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="464">
+            <p>permite seleccionar el escrito que está relacionado con el
+              pendiente. Al identificar el escrito, se añaden automáticamente
+              los datos del pendiente: asunto, oficinas,...</p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="216">
+            <p>“¿con quién es el pendiente?”:</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="464">
+            <p>se selecciona el afectado (no tiene porqué ser el mismo del
+              protocolo)</p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="216">
+            <p>“Observaciones”:</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="464">
+            <p>para anotar detalles de interés para el cl</p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="216">
+            <p>“Visibilidad”:</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="464">
+            <p>define quién puede verlo (todos / d / d y sacd) </p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="216">
+            <p>“estado”: </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="464">
+            <p>la situación del pendiente (iniciado / acabado / en proceso /
+              cancelado)</p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td style="border: none; padding: 0cm" width="216" height="54">
+            <p>“fecha acabado”: </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="464">
+            <p>aquella en la que termina el pendiente </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <p>Finalmente, pulsando el “<u>ver ficha sencilla</u>” se vuelve a la
+      presentación reducida del pendiente.</p>
+    <p><br>
+    </p>
+    <p>REPETICIONES PERIÓDICAS:</p>
+    <p><br>
+    </p>
+    <p>Si se quiere generar un pendiente periódico (que se repita cada “x”
+      tiempo) hay que pulsar en “<u>ver periodicidad</u>” (mostrará un aspecto
+      similar a “ver ficha completa” con el añadido de la periodicidad):</p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <p><img name="Imatge48" src="ManualTramityCtr_html_74371f97d2f37539.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p><br>
+    </p>
+    <ul>
+      <li>
+        <p>Si se selecciona Repetición “<u>anual</u>” aparece: </p>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <p><img name="Imatge49" src="ManualTramityCtr_html_e1e62b6762cd890a.png" width="80%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Permite fijar el período de <i>vigencia</i> del pendiente (“desde” -
+      “hasta”) y concretar la repetición:</p>
+    <p>-anualmente: una sola vez al año (empezando por el día del inicio), o
+      cada varios años</p>
+    <p>-Un(os) día(s) concreto(s) de un mes seleccionado</p>
+    <p>-Un día de la <i>semana</i> de determinado mes</p>
+    <p>-Hacer la selección por días de <i>meses</i> cada “x” años</p>
+    <p><br>
+    </p>
+    <ul>
+      <li>
+        <p>Si se selecciona Repetición <i>mensual</i> aparece: </p>
+      </li>
+    </ul>
+    <p><img name="Imatge50" src="ManualTramityCtr_html_222b6881adbdb065.png" width="50%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Se puede seleccionar el período de vigencia (“desde” - “hasta”)</p>
+    <p>-<i>mensualmente</i>: cada mes a partir del día del inicio.</p>
+    <p>-<i>Días</i> fijos de cada mes</p>
+    <p>-Un día concreto de la semana.</p>
+    <p><br>
+    </p>
+    <ul>
+      <li>
+        <p>Si se selecciona Repetición <u>semanal</u> aparece: </p>
+      </li>
+    </ul>
+    <p><img name="Imatge51" src="ManualTramityCtr_html_8e1f2fa628d49f3.png" width="50%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Además del período de vigencia (“desde” - “hasta”) se puede seleccionar:</p>
+    <p>-<i>semanalmente</i>, a partir del día del inicio.</p>
+    <p>-Un(os) día(s) concreto(s) de la semana.</p>
+    <p><br>
+    </p>
+    <ul>
+      <li>
+        <p>Si se selecciona Repetición <u>diaria</u> aparece: </p>
+      </li>
+    </ul>
+    <p><img name="Imatge52" src="ManualTramityCtr_html_787c2a6b1bc5d0c8.png" width="50%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <h2 class="western"><a name="Documentos"></a>8.- Documentos</h2>
+    <p>Esta pestaña presenta la herramienta para gestionar la introducción de
+      documentos en Tramity, tanto para archivo como para uso inmediato en un
+      expediente. Su función es la equivalente a las carpetas de archivos de
+      documentos. Está pensada para sustituir las tradicionales carpetas de
+      archivo y tener la documentación en un único entorno de trabajo: tramity.</p>
+    <p><br>
+    </p>
+    <p>Una vista de la pestaña es:</p>
+    <p><img name="Imatge53" src="ManualTramityCtr_html_276576f5b5a85630.png" width="100%"
+        align="left"> <br clear="left">
+      Para que muestre el listado hay que seleccionar alguna etiqueta y pulsar
+      el botón “ver lista”. Si no se recuerdan las etiquetas, puede pulsarse el
+      botón “ver todas” y presentará el listado de todos los documentos. La
+      selección se puede ajustar con la ayuda de diferentes etiquetas, “y/o”.</p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Documentos_etherpad"></a>A.- Documentos
+      “etherpad”</h3>
+    <p>Los documentos que son “etherpad” se pueden “editar” o “ver datos”, para
+      cambiar los detalles: </p>
+    <p><br>
+    </p>
+    <p><img name="Imatge54" src="ManualTramityCtr_html_a19d3c73c7b84f46.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Puede modificarse el nombre, cambiar las etiquetas (una o varias), o la
+      visibilidad.</p>
+    <p>La visibilidad es oficina/personal, según puedan verlo todos los del cl o
+      solo el interesado.</p>
+    <p>Al pulsar el botón “etherpad” en “Ver escrito”, se abre el etherpad para
+      modificar.</p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Documentos_incrustados"></a>B.- Documentos
+      “incrustados”</h3>
+    <p>Son los documentos que no son etherpad, y que, propiamente, se
+      “incrustan” en la base de datos para archivo y tratamiento.</p>
+    <p><br>
+    </p>
+    <p>Del listado correspondiente se pueden “descargar” o “ver datos”. La
+      vista, en este caso, es:</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge55" src="ManualTramityCtr_html_b324075c86c751fa.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>En la ventana de la parte derecha se “incrusta” el documento
+      arrastrándolo o buscándolo con el botón “Browse…”. También puede
+      descargarse o borrarse.</p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Nuevo_documento"></a>C.- Nuevo documento</h3>
+    <p>Al pulsar “Nuevo documento” en la pestaña “Documentos” se abre la
+      siguiente ventana:</p>
+    <p><br>
+    </p>
+    <p><img name="Imatge56" src="ManualTramityCtr_html_39731c4e5dd427a0.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Los campos son los ya explicados.<br>
+      En insertar escrito hay que escoger entre “Etherpad” o “Incrustado”. En el
+      primer caso abre un etherpad; en el segundo la ventana de diálogo para
+      incrustar el documento.</p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Gestion_de_los_documentos"></a>D.- Gestión de
+      los documentos</h3>
+    <p>Los documentos de la pestaña “Documentos” se pueden colocar en los
+      expedientes:</p>
+    <ol>
+      <li>
+        <p>como “antecedentes” del expediente (botón “Documentos” en
+          Antecedentes): documentos para información, y por tanto no
+          modificables al circular; </p>
+      </li>
+    </ol>
+    <ol start="2">
+      <li>
+        <p><img name="Imatge57" src="ManualTramityCtr_html_74c164d60e8c69a4.png"
+            width="100%" align="left"> <br clear="left">
+          como texto propiamente de la propuesta o escrito(s), en “Insertar
+          etherpad” (botón “Buscar en documentos”); </p>
+      </li>
+      <li>
+        <p><img name="Imatge58" src="ManualTramityCtr_html_2945e02207feb063.png"
+            width="100%" align="left"> <br clear="left">
+          como “adjuntos” a las propuestas o escritos -botones “nueva
+          propuesta”, “nuevo escrito”, “contestar entrada”-, que se podrán
+          modificar y anotar, antes de enviar, si procede (botón “Buscar en
+          documentos”) </p>
+      </li>
+    </ol>
+    <p><br>
+    </p>
+    <p><img name="Imatge60" src="ManualTramityCtr_html_2945e02207feb063.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p>Los documentos que se adjuntan como “antecedentes” en un expediente,
+      siempre siguen en la pestaña de “Documentos” independientemente de la
+      evolución que tenga el expediente. Si éste, al final del proceso, se
+      elimina, el documento seguirá en la pestaña de “Documentos”.</p>
+    <p><br>
+    </p>
+    <p>En cambio, los documentos que se añaden en las propuestas o escritos de
+      un expediente, pueden conservarse en la pestaña “Documentos” o no. Al
+      marcar “adjuntar” en el documento seleccionado, se abre un cuadro de
+      diálogo que pregunta si se quiere “Adjuntar una copia” del documento (en
+      “Documentos” seguirá el documento original) o “Adjuntar” el documento (se
+      quita de “Documentos” y pasa a la propuesta o escrito). </p>
+    <p><br>
+    </p>
+    <p><img name="Imatge59" src="ManualTramityCtr_html_6a014d29d05d8238.png" width="100%"
+        align="left"> <br clear="left">
+      <br>
+    </p>
+    <p><br>
+    </p>
+    <p><font color="#000000"><span style="background: transparent">Si el
+          documento se copia, serán documentos distintos; o sea, que si se
+          modifica o elimina el documento de la propuesta o escrito, la copia en
+          “40.- Documentos” sigue igual.</span></font></p>
+    <p><br>
+    </p>
+    <h2 class="western"><a name="Guia-resumen_para_elaborar_un_expediente"></a>
+      9.- Guía-resumen para elaborar un expediente</h2>
+    <p><br>
+    </p>
+    <p>Para elaborar un expediente hay que ir a la pestaña “Personal borrador” y
+      abrir “nuevo expediente”.</p>
+    <p>Hay que definir la <i>vida</i> que tendrá el expediente, su <i>visibilidad</i>
+      a terceros, la urgencia (<i>prioridad</i>), darle un nombre que lo
+      identifique (<i>asunto</i>) y señalar otros detalles de interés para el
+      consejo local (<i>entradilla</i>).</p>
+    <p>-Solo es necesario, al inicio, darle un nombre (<i>asunto</i>). El resto
+      de características se pueden completar más adelante en el proceso de
+      elaboración.</p>
+    <p>La <i>entradilla</i> del expediente está pensada para un comentario
+      breve, o como propuesta, propiamente, si se trata de algo muy simple.</p>
+    <p>(Hasta aquí solo se han preparado las “tapas” del expediente, que está
+      vacío).</p>
+    <p>Al pulsar “<u>Guardar</u>” preguntará si se quieren añadir escritos o
+      adjuntos. Estos serán, propiamente, el contenido del expediente
+      (propuestas, escritos, antecedentes, etc.)</p>
+    <p><br>
+    </p>
+    <p><a name="Antecedentes"></a> <b>A.- Antecedentes:</b> Aquí se colocan <u>todos
+        los antecedentes</u>, ya sean entradas de escritos, otros expedientes,
+      escritos de salida o documentos incorporados al tramity (un word, excel,
+      pdf, etc). Para ello hay que utilizar los botones correspondientes.</p>
+    <p>Como los antecedentes van quedando en el orden en que se han introducido,
+      interesa pensar bien por cuál se empieza, para que queden en un orden
+      lógico.</p>
+    <p>Los antecedentes “acompañan” al expediente, solo para información. Como
+      tales ni se pueden modificar ni enviar.</p>
+    <p>Se aconseja colocar como antecedente el expediente anterior sobre el
+      mismo asunto, para mantener todo el itinerario que habrá seguido el
+      asunto. Es el modo de tener fácilmente accesibles todos los escritos
+      enviados y recibidos sobre el particular.</p>
+    <p><br>
+    </p>
+    <p><a name="Propuestas"></a> <b>B.- Propuestas: </b>Para una <i>propuesta</i>
+      que se quiere circular, lo habitual será crear una “nueva propuesta”, pues
+      permite mayor extensión, comentarios y anotaciones de terceros, etc., a
+      diferencia de la “entradilla”.</p>
+    <p>Pueden introducirse tantas propuestas como se quiera. Habitualmente
+      bastará con una sola, separando los diferentes apartados del texto.</p>
+    <p><br>
+    </p>
+    <p><a name="Escritos"></a> <b>C.- Escritos:</b> A continuación se
+      introducen los <i>escritos</i> que se quieren enviar (“nuevo escrito”).
+      Si se está contestando a uno concreto es mejor utilizar “contestar
+      entrada”, que recoge directamente los datos del escrito origen y lo coloca
+      como antecedente.</p>
+    <p>Tan solo hay que redactar el cuerpo del escrito. Los encabezados
+      (destinos y referencias) y la fecha final se añaden automáticamente. Esta
+      es una diferencia de concepto respecto a la elaboración de un escrito en
+      papel, en el que había que escribir a quién iba dirigido, quién lo
+      enviaba, las referencias, etc.</p>
+    <p>Cada escrito circula con el destino preciso y los adjuntos que se
+      enviarán; no otros. Por eso, no hay que colgar aquí antecedentes que son
+      de interés solo para el trámite del expediente, pero que no se enviarán a
+      la dl. Estos se han de colocar como “antecedentes” en el expediente. Es la
+      manera de asegurar que no se envían cosas que no corresponde.</p>
+    <p><br>
+    </p>
+    <p><a name="Adjuntos"></a> <b>D.- Adjuntos: </b>Tanto las “propuestas”
+      como los “escritos” pueden tener <i>documentos adjuntos</i>, que pueden
+      modificarse, y que, en su caso, se enviarán con el escrito
+      correspondiente.</p>
+    <p>Los <i>adjuntos</i> quedan asociados a la propuesta o escrito donde se
+      han colocado, y siguen la misma vida que este. En concreto, los que
+      proceden de “Documentos”, cuando se “adjuntan” dejan de estar archivados y
+      pasan a esa propuesta o escrito. Así lo advierte tramity cuando se
+      adjunta. Si quiere conservarse ese documento hay que hacer previamente una
+      copia antes de adjuntar.</p>
+    <p><br>
+    </p>
+    <p><a name="Circular"></a> <b>E.- Circular:</b> Cuando el expediente ya
+      está completo, se pone a circular. A partir de ese momento queda a la
+      vista de los que han de firmar.</p>
+    <p>Una vez puesto a circular un expediente, si por cualquier motivo se
+      quiere retirar, basta con ir a la pestaña “circulando”, pulsar en “acción”
+      y después “mover a borrador”.</p>
+    <p><br>
+    </p>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm"><a
+        name="Proceso_final_de_un_expediente"></a> 10.- Proceso final de un
+      expediente</h2>
+    <p><br>
+    </p>
+    <p>Una vez termina su recorrido, el expediente aparece en la pestaña
+      “acabados” del consejo local. Ya está aprobado o descartado [si está
+      descartado, se verá resaltado en color amarillo].</p>
+    <p>Es preciso <u>repasar</u> las observaciones y sugerencias de cambios
+      para introducir lo que corresponda en los escritos. Si algún escrito, o el
+      propio expediente, está descartado, se verá resaltado en amarillo, y
+      aparecerá con el añadido de “NO” en el asunto, además de que la firma será
+      “NO” y estará en color rojo y no verde, como es habitual con la firma
+      positiva.</p>
+    <p>Lógicamente, los adjuntos (Anexos al escrito, etc), quizás deberán
+      retocarse: p.ej., volver a cargarlos añadiendo la ref. al escrito de
+      salida y cambiando el nombre, etc.</p>
+    <p>Para saber cómo se verá el escrito que se envía, basta con clicar en
+      “ver”, que hace una primera presentación web, y pedir “descargar en pdf”
+      que mostrará lo que, concretamente, se recibe en la dl.</p>
+    <p>Como se ha dicho, la aplicación impide “Archivar” el expediente hasta que
+      todos los escritos aparezcan como “enviado el DD/MM/AAAA”.</p>
+    <p>Una vez terminadas todas las acciones del expediente se pasa a
+      “archivados”. Se recomienda clasificar por etiquetas, para facilitar su
+      localización y reutilitzarlo en posteriores expedientes.</p>
+    <p>-Lógicamente, también cabe eliminarlo pasándolo a “Personal borrador”, o
+      simplemente borrarlo si la caducidad que se le ha asignado así lo
+      requiere.</p>
+    <p><br>
+    </p>
+    <h2 class="western"><a name="Etherpad"></a>11.- Etherpad</h2>
+    <h3 class="western"><a name="Vista_general"></a>A.- Vista general</h3>
+    <p>Se trata de un editor de texto colaborativo: diferentes usuarios pueden
+      modificar a la vez el mismo texto (pad). Estos se identifican por su
+      nombre de usuario y color de edición propio.</p>
+    <p>Las funciones normales de edición son las habituales de cualquier editor.</p>
+    <p>La vista de este editor de texto es:</p>
+    <p><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image70" src="image59.png" width="100%" align="middle"> </span>
+    </p>
+    <p>Los iconos de la barra superior representan:</p>
+    <table style="width: 850px; height: 600px;" cellspacing="0" cellpadding="0">
+      <colgroup><col width="374"> <col width="306"> </colgroup>
+      <tbody>
+        <tr>
+          <td style="border: none; padding: 0cm" width="374">
+            <p>1, 2, 3, 4: formato de letra: <b>negrita</b>, cursiva, <u>subrayado</u>,
+              <strike>tachado</strike></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="306">
+            <p>14: tamaño de letra</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="374">
+            <p>5: párrafos numerados</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="306">
+            <p>15: estilos de párrafo predefinidos</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="374">
+            <p>6: párrafos marcados con un punto al inicio </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="306">
+            <p>16: para añadir comentarios o sugerir cambios</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="374">
+            <p>7: añade sangrado a todo el párrafo</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="306">
+            <p>17: imprimir</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="374">
+            <p>8: quita sangrado a todo el párrafo</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="306">
+            <p>18: importar/exportar de/a otros formatos</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="374">
+            <p>9: deshacer o rehacer cambios</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="306">
+            <p>19: línea temporal de cambios en el texto</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="374">
+            <p>10: borra el color de autoría&nbsp;del texto</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="306">
+            <p>20: marcar versión</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="374">
+            <p>11: añade una tabla</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="306">
+            <p>21: configuración</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="374">
+            <p>12: tipo de letra (“fuente”)</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="306">
+            <p>22: compartir enlace</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="374">
+            <p>13: tipo de justificación de párrafo</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="306">
+            <p>23: usuarios de este texto que vemos (pad) </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 class="western" style="line-height: 100%; margin-top: 0cm; margin-bottom: 0cm">
+      <br>
+    </h2>
+    <h3 class="western"><a name="Sangrado"></a>B.- Sangrado </h3>
+    <p>El tabulador inicial de comienzo de párrafo como tal no está habilitado.
+      Aunque se ha definido una macro que introduce cuatro espacios cuando se
+      pulsa un tabulador, se recomienda redactar sin tabular, pues la doble
+      justificación deforma esos espacios.</p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Color_de_autoria"></a>C.- Color de autoría</h3>
+    <p>-Las aportaciones de los distintos usuarios se distinguen por el color
+      con el que quedan resaltadas.</p>
+    <p>-La acción de “borrar el color de autoría” (<font color="#c9211e">10</font>)
+      borra todos los colores, de manera que, a partir de ese momento, no queda
+      a la vista quién ha hecho cada aportación.</p>
+    <p>-“Borrar el color de autoría” tiene sentido hacerlo cuando se empieza a
+      circular el expediente, pues interesa que comience a circular “limpio” (no
+      tiene interés saber quién de la oficina ha introducido cada frase). O
+      quizás cuando el expediente ha acabado de circular, al archivar.</p>
+    <p>-En cualquier caso, conviene saber que al enviar un escrito de salida, se
+      envía el texto en formato pdf (o se descarga en word), desapareciendo
+      estos colores.</p>
+    <p>-Para trabajar más cómodamente, en preferencias puede decirse que
+      “oculte” los colores de autoría a la &nbsp;vista, aunque se mantienen en
+      el texto (porque no los “borra”).</p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Tabla"></a>D.- Tabla (<font color="#c9211e">11</font>)
+    </h3>
+    <p>Ahora mismo, la exportación e impresión de tabla no está bien resuelta.
+      Si quiere acompañarse un cuadro que pueda imprimirse, procesarse, etc., es
+      preferible adjuntarlo como hoja de cálculo&nbsp;normal (Excel, o
+      LibreOfficeCalc).</p>
+    <p>O, si la tabla es sencilla, adjuntarla convertida en texto, separada por
+      espacios.</p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Comentarios_y_cambios"></a>E.- Comentarios y
+      cambios</h3>
+    <p>Interesa utilizar esta herramienta para hacer comentarios o sugerir
+      cambios en el texto, a no ser que se trate de detalles insignificantes.</p>
+    <p>-Primero hay que seleccionar el texto que se quiere comentar o cambiar, y
+      después hay que clicar el botón (<font color="#c9211e">16</font>) de “<u>comentario</u>”:</p>
+    <p><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image71" src="image10.png" width="100%" align="middle"> </span>
+    </p>
+    <p>En la caja que aparece (“Comment”) se escribe el comentario.</p>
+    <p><br>
+    </p>
+    <p>-Si se quiere sugerir un cambio, hay que mover el deslizante de “<i>Include
+        suggested change</i>”:</p>
+    <p><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image72" src="image5.png" width="100%" align="middle"> </span>
+    </p>
+    <p>-Finalmente, hay que clicar “Comment”: el comentario (y sugerencia de
+      cambio) quedará incorporado.</p>
+    <p><br>
+    </p>
+    <p>La frase comentada quedará resaltada con otro color (amarillo), además de
+      añadirse una llamada en el lateral derecho. Al pasar el cursor por encima
+      aparecerá el detalle del comentario y cambio.</p>
+    <p><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image73" src="image24.png" width="100%" align="middle"> </span>
+    </p>
+    <p>-Otro autor puede añadir una réplica, aceptar o rechazar la anterior,
+      etc. Siempre son revertibles. Y solo el autor del comentario puede
+      eliminarla. </p>
+    <p>En el texto que se exporta o envía, los comentarios no aparecen. Solo lo
+      que ha quedado escrito finalmente.</p>
+    <p>Interesa, por lo tanto, que antes de enviar un escrito nos aseguraremos
+      de que se han recogido todos los cambios acordados.</p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Importar/Exportar"></a>F.- Importar/Exportar (<font
+        color="#c9211e">18</font>)</h3>
+    <p><br>
+    </p>
+    <p><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image74" src="image71.png" width="100%" align="middle"> </span>
+    </p>
+    <p>Permite importar cualquier texto en Word, odt y otros formatos. Hay que
+      seleccionarlo y después clicar “<u>Importar ahora</u>”.</p>
+    <p>También puede exportar el texto en cualquiera de los formatos señalados.
+      Basta con seleccionar el deseado.</p>
+    <p>Como ya se ha dicho, ahora mismo no exporta bien las tablas. </p>
+    <p>Al exportar lo hace en un tipo de papel y márgenes de página y entre
+      párrafos que no son los habituales. Con la macro etherpad que se
+      incorporará a los editores de texto Word y LibreOffice, el texto se
+      ajustará automáticamente a los parámetros habituales.</p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Linea_temporal"></a>G.- Línea temporal (<font color="#c9211e">19</font>)</h3>
+    <p>Permite ver la evolución del texto en el tiempo desde su creación.</p>
+    <p><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image75" src="image61.png" width="100%" align="middle"> </span>
+    </p>
+    <p>Clicando las flechas “<u>importar/exportar</u>” permite exportar la
+      versión de un momento concreto.</p>
+    <p><br>
+    </p>
+    <p>Clicando&nbsp;el botón “<u>VOLVER AL PAD</u>” se regresa a la ventana
+      normal de edición del texto.</p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Marcar_y_guardar_una_version"></a> H.- Marcar y
+      guardar una versión (<font color="#c9211e">20</font>)</h3>
+    <p>Clicando la estrella (<font color="#c9211e">20</font>), esa versión queda
+      guardada para posterior consulta. Pueden guardarse tantas versiones como
+      se quiera. Las versiones guardadas quedan señaladas en la línea de tiempo.</p>
+    <p><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image76" src="image76.png" width="100%" align="middle"> </span>
+    </p>
+    <p>Por ejemplo (cada estrella en la línea de tiempo es una versión
+      guardada):</p>
+    <p><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image77" src="image65.png" width="100%" align="middle"> </span>
+    </p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Configuracion"></a>I.- Configuración (<font color="#c9211e">21</font>)</h3>
+    <p>Permite definir las características de presentación y trabajo:</p>
+    <p><span style="display: inline-block; border: 1px solid #000000; padding: 0.05cm"><img
+          name="Image78" src="image14.png" width="100%" align="middle"> </span>
+    </p>
+    <p>-Mostrar el <i>chat</i> y los <i>usuarios</i> que están escribiendo en
+      ese momento</p>
+    <p>-Mostrar u ocultar los colores de autoría</p>
+    <p>-Mostrar los números de <i>línea</i>: no se recomienda para un texto
+      normal</p>
+    <p>-¿<i>Leer</i> contenido de derecha a izquierda?: para algunos idiomas
+      exóticos</p>
+    <p>-¿Comprobación <i>ortográfica</i>?: para que compruebe la <i>ortografía</i></p>
+    <p>-Mostrar el autor al <i>pasar por encima</i>: muestra quien ha escrito
+      ese texto</p>
+    <p>-Mostrar o no los <i>comentarios</i>.</p>
+    <p><br>
+    </p>
+    <h3 class="western"><a name="Revision_ortografica"></a>J.- Revisión
+      ortográfica</h3>
+    <p>El Etherpad no tiene una herramienta de revisión ortográfica propia,
+      utiliza la del navegador con el que estemos trabajando.</p>
+    <p><br>
+    </p>
+    <p>-Para asegurarnos de que el navegador tiene definida la corrección
+      ortográfica del idioma que nos interese, haremos lo siguiente:</p>
+    <ul>
+      <li>
+        <p><span style="font-variant: normal"><span style="font-style: normal"><u>Firefox</u></span></span>:
+          clicamos en las tres rayas horizontales de la parte superior derecha
+          (“<i>Menú</i>”). Clicamos sobre “<i>Opciones</i>”. Se abrirá una nueva
+          pestaña con un recuadro de búsqueda. Ahí escribimos “ortografía”:
+          aparecerá la posibilidad de cambiar de idioma. Si lo cambiamos, será
+          necesario “Reiniciar el Firefox”: lo hacemos y ya está. </p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p><span style="font-variant: normal"><span style="font-style: normal"><u>Chrome</u></span></span>:
+          clicamos en los tres puntos de la parte superior derecha (“<i>Personaliza
+            y controla</i>”). Clicamos sobre “<i>Configuración</i>”. Se abrirá
+          una nueva pestaña con un recuadro de búsqueda. Ahí escribimos
+          “idioma”: aparecerá la posibilidad de escoger los idiomas a los que se
+          aplicará la corrección ortográfica. Cuando lo hayamos hecho, ya
+          podemos cerrar la pestaña de Configuración. </p>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <h2 class="western"><a name="Administracion"></a>11.- Administración</h2>
+    <p><br>
+    </p>
+    <p>Los usuarios, cargos, contraseñas y otras características del Tramity del
+      centro vienen predefinidas por la Delegación.</p>
+    <p>De todas maneras, desde cada centro, se pueden modificar los diferentes
+      parámetros del Tramity accediendo con el usuario "admin", aunque se
+      recomienda ser muy prudente al efectuar cambios.</p>
+    <p>La ventana del Administrador consta de las siguientes pestañas:</p>
+    <p>- "Preferencias": selección del idioma y cambio de password de "admin".</p>
+    <p>- Usuarios: para crear, modificar o borrar usuarios, y cambiar suw
+      passwords</p>
+    <p>- Cargos: permite crear, modificar o borrar cargos</p>
+    <p>- Trámites: prestación fuera de uso [se recomienda no cambiar nada]</p>
+    <p>- Parámetros: para modificar opciones por defecto [se recomienda no
+      modificar]</p>
+    <p><br>
+    </p>
+    <p>Cada "usuario" tiene un "nombre a mostrar" que lo identifica, un "login"
+      con el que se accede a la aplicación, y un "cargo preferido". También
+      tiene asociado un "password" que se puede cambiar.</p>
+    <p>Cada "cargo" se identifica por una "sigla" y una "descripción"; puede
+      marcarse como "director" y "sacerdote". Hay que seleccionar un "Titular"
+      de entre los usuarios. Y puede tener un "suplente" (p.ej., para cuando se
+      ausenta el director) </p>
+    <p>Hay unos "usuarios" de sistema [dani, default] que no deben modificarse
+      (son para gestión de incidencias y apoyo desde la Delegación).</p>
+    <br>
+    <h2 class="western"><a name="Glosario_de_Tramity"></a>12.- Glosario de
+      Tramity</h2>
+    <p><br>
+      <a href="#Glosario+alfab%C3%A9tico">Ir a GLOSARIO ALFABÉTICO</a></p>
+    <p><br>
+    </p>
+    <p><a name="Expediente (concepto genérico)"></a> <b>Expediente (concepto
+        genérico):</b> Documentación correspondiente a un asunto.</p>
+    <p><br>
+    </p>
+    <p><u><b>Relacionados con expedientes:</b></u></p>
+    <p><a name="Personal borrador"></a> <b>Personal borrador</b>: expedientes
+      propios en fase de elaboración. </p>
+    <p><a name="Para firmar"></a> <b>Para firmar</b>: expedientes, de otros,
+      pendientes de firmar</p>
+    <p><a name="Circulando"></a> <b>Circulando</b>: permite seguir los
+      expedientes que están circulando.</p>
+    <p><a name="Acabados"></a> <b>Acabados</b>: expedientes vistos por todos,
+      pendientes de gestionar</p>
+    <p><a name="Archivados"></a> <b>Archivados</b>: expedientes guardados una
+      vez hechas todas las acciones (enviar, etc.)</p>
+    <p><br>
+    </p>
+    <p><u><b>Relacionados con scritos:</b></u></p>
+    <p><a name="Entradas"></a> <b>Entradas</b>: Escritos recibidos, pendientes
+      de ver por el d y darles curso.</p>
+    <p><a name="Correo de entrada"></a> <b>Correo de entrada:</b> Nuevos
+      escritos recibidos a los que el d ya ha dado curso.</p>
+    <p><a name="Entradas recientes"></a> <b>Entradas recientes:</b> Correo
+      recibido los últimos 10 días.</p>
+    <p><a name="Archivo de escritos"></a> <b>Archivo de escritos</b>: búsqueda
+      de escritos a/de la dl</p>
+    <p><a name="Permanentes cl"></a> <b>Permanentes cl</b>: expedientes del cl
+      que se destacan para tener un acceso más fácil</p>
+    <p><a name="Permanentes"></a> <b>Permanentes</b>: consulta de escritos
+      permanentes (numeración baja de cr, etc)</p>
+    <p><br>
+    </p>
+    <p><u><b>Otros:</b></u></p>
+    <p><a name="Pendientes"></a> <b>Pendientes</b>: gestión de asuntos del
+      registro o del propio consejo local que requieren respuesta en fecha
+      determinada.</p>
+    <p><a name="Documentos"></a> <b>Documentos</b>: Introducción de documentos
+      externos a la aplicación.</p>
+    <p><br>
+    </p>
+    <p><u><b>Campos que hay que completar para un nuevo expediente (borrador):</b></u></p>
+    <p><a name="Trámite"></a> <b>Trámite</b>: De momento está fijo como
+      "ordinario"</p>
+    <p><a name="Vida"></a><b>Vida</b>: Plazo en que se borrará el expediente:
+      normal, permanente, experiencia, temporal o borrable.</p>
+    <p><a name="Visibilidad"></a> <b>Visibilidad</b>: Quién tiene acceso a un
+      escrito o expediente: todos, d y sacd, d</p>
+    <p><a name="Visibilidad todos"></a> <b>Visibilidad</b> <b>todos</b>:
+      cualquiera ve todo</p>
+    <p><a name="Visibilidad d y sacd"></a> <b>Visibilidad d y sacd</b>:
+      accesible solo al d y sacd</p>
+    <p><a name="Visibilidad d"></a> <b>Visibilidad d</b>: solo es visible para
+      el d del cl</p>
+    <p><a name="Prioridad"></a> <b>Prioridad</b>: Urgencia en el recorrido:
+      normal, rápido, urgente, otro, en espera.</p>
+    <p><a name="Etiquetas"></a> <b>Etiquetas</b>: Catalogación del expediente o
+      escrito para facilitar el archivo y búsquedas: a escoger entre las
+      definidas por el consejo local o personales.</p>
+    <p><a name="Asunto expediente"></a> <b>Asunto expediente</b>: identifica el
+      expediente. Es un campo obligatorio y clave para búsquedas</p>
+    <p><a name="Entradilla"></a> <b>Entradilla</b>: [opcional: breve
+      explicación, o para diálogo al tramitar]</p>
+    <p><br>
+    </p>
+    <p><u><b>Selección de firmas para la circulación del expediente:</b></u></p>
+    <p><a name="Firmas oficina"></a> <b>Firmas oficina</b>: selección de
+      quiénes han de ver ese expediente cuando se ponga a circular.</p>
+    <p><br>
+    </p>
+    <p><u><b>Escritos o adjuntos que se pueden añadir a un borrador de
+          expediente:</b></u></p>
+    <p><a name="Nueva propuesta"></a> <b>Nueva propuesta</b>: la propuesta
+      propiamente dicha (textos explicativos, ...)</p>
+    <p><a name="Nuevo escrito"></a> <b>Nuevo escrito</b>: generar un escrito
+      para enviar</p>
+    <p><a name="Contestar entrada"></a> <b>Contestar entrada</b>: generar un
+      escrito en respuesta a otro</p>
+    <p><br>
+    </p>
+    <p><u><b>Escritos que se pueden añadir a un borrador de expediente como
+          antecedentes:</b></u></p>
+    <p><a name="Entrada"></a> <b>Entrada</b>: escritos recibidos (que estén en
+      el registro de Tramity)</p>
+    <p><a name="Expediente"></a> <b>Expediente</b>: Expedientes de la oficina</p>
+    <p><a name="Escrito"></a> <b>Escrito</b>: escritos enviados (seleccionados
+      desde el registro de Tramity)</p>
+    <p><a name="Documento"></a><a name="Marcador 1"></a> <b>Documento</b>:
+      documentos externos a Tramity (Word, Excel, PDF, fotografía, etc).</p>
+    <p><br>
+    </p>
+    <p><a name="Glosario alfabético"></a> GLOSARIO ALFABÉTICO</p>
+    <table width="409" cellspacing="0" cellpadding="0">
+      <colgroup><col width="208"> <col width="201"> </colgroup>
+      <tbody>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p>TÉRMINO</p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>ÁMBITO</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Acabados">Acabados</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Archivados">Archivados</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Archivo%20de%20escritos">Archivo de escritos</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[trámite de escritos]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Asunto%20expediente">Asunto expediente</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Personal%20borrador">Personal borrador</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Circulando">Circulando</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Contestar%20entrada">Contestar entrada</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[añadir a borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Documento">Documento </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[antecedentes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Documentos">Documentos </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[trámite de otros]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Entrada">Entrada </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[antecedentes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Entradas">Entradas</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[trámite de escritos]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Entradilla">Entradilla </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Escrito">Escrito </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[antecedentes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Etiquetas">Etiquetas </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Expediente">Expediente </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[antecedentes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Expediente+%28concepto+gen%C3%A9rico%29">Expediente
+                (concepto genérico)</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[concepto genérico]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Firmas%20oficina">Firmas oficina </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[selección firmas]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Nueva%20propuesta">Nueva propuesta </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[añadir a borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Nuevo%20escrito">Nuevo escrito</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[añadir a borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Para%20firmar">Para firmar</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[trámite de expedientes]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Pendientes">Pendientes</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[trámite de otros]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Permanentes">Permanentes</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[trámite de escritos]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Prioridad">Prioridad </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Tr%C3%A1mite">Trámite </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Vida">Vida </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Visibilidad">Visibilidad </a> </p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Visibilidad%20d">Visibilidad d</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Visibilidad%20d%20y%20sacd">Visibilidad d y sacd</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#Visibilidad%20todos">Visibilidad todos</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p>[campos borrador expediente]</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none; padding: 0cm" width="208">
+            <p><a href="#12.-%20Glosario%20de%20Tramity">Volver al inicio del
+                glosario</a></p>
+          </td>
+          <td style="border: none; padding: 0cm" width="201">
+            <p><br>
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <p>Barcelona, 6 de abril de 2023</p>
+  </body>
+</html>
