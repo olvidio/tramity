@@ -44,7 +44,12 @@ if (isset($_REQUEST['logout']) && $_REQUEST['logout'] === 'si') {
 $username = $_SESSION['session_auth']['username'];
 
 if (empty($_SESSION['session_auth']['role_actual'])) {
-    $_SESSION['session_auth']['role_actual'] = $username;
+    // para el usuario admin, y system
+    if ($username === 'manager' || $username === 'admin') {
+        $_SESSION['session_auth']['role_actual'] = 'admin';
+    } else {
+        $_SESSION['session_auth']['role_actual'] = $username;
+    }
 }
 $role_actual = $_SESSION['session_auth']['role_actual'];
 
