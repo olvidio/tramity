@@ -50,6 +50,10 @@ switch ($Q_que) {
         $a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         if (!empty($a_sel)) { //vengo de un checkbox
             $Q_id_usuario = (integer)strtok($a_sel[0], "#");
+            if ($Q_id_usuario < 5){
+                $err_cargar = _("Este usuario no se puede modificar");
+                exit ($err_cargar);
+            }
             $oUsuario = new Usuario($Q_id_usuario);
             if ($oUsuario->DBEliminar() === FALSE) {
                 $error_txt = _("hay un error, no se ha eliminado");
@@ -100,6 +104,10 @@ switch ($Q_que) {
         $Q_password = (string)filter_input(INPUT_POST, 'password');
         $Q_pass = (string)filter_input(INPUT_POST, 'pass');
 
+        if ($Q_id_usuario < 5){
+            $err_cargar = _("Este usuario no se puede modificar");
+            exit ($err_cargar);
+        }
         $oUsuario = new Usuario($Q_id_usuario);
         if ($oUsuario->DBCargar() === FALSE ){
             $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
