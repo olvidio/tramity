@@ -1,0 +1,94 @@
+<!-- load the CSS files in the right order -->
+<link href="node_modules/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css">
+<link href="node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.css" rel="stylesheet" type="text/css">
+<!-- para hacer lineas más pequeñas en el file input -->
+<link href="css/custom_file_input.css" rel="stylesheet" type="text/css">
+
+<!-- load the JS files in the right order -->
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/js/fileinput.min.js'></script>
+<script type='text/javascript' src='node_modules/bootstrap-fileinput/themes/explorer-fas/theme.min.js'></script>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalBuscar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar (máximo 50 filas)"|trans|raw }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div id="modal-body" class="modal-body">
+                {# se carga via ajax. 3 formularios distintos: para entradas, para expedientes y para escritos #}
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<h1>{{ titulo }}:</h1>
+<form id="form_expediente">
+    <input type=hidden name='que' id='frm_exp_que' value=0>
+    <input type=hidden name='id_n' id='id_n' value=0>
+    <input type=hidden name='id_expediente' id='id_expediente' value={{ id_expediente }}>
+    <input type=hidden name='estado' id='estado' value={{ estado }}>
+    <input type=hidden name='ponente' id='ponente' value={{ id_ponente }}>
+    <input type=hidden name='filtro' id='filtro' value={{ filtro }}>
+
+    <div class="col-4">
+        <hr>
+        <div class="mb-1 col-md-12">
+            <label class="form-label">{{ "Antecedentes"|trans|raw }}:</label>
+        </div>
+        <div class="col-md-12">
+            <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar"
+                    onClick="fnjs_buscar_antecedente(1);">
+                {{ "Entrada"|trans|raw }}
+            </button>
+            <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar"
+                    onClick="fnjs_buscar_antecedente(2);">
+                {{ "Expediente"|trans|raw }}
+            </button>
+            <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar"
+                    onClick="fnjs_buscar_antecedente(3);">
+                {{ "Escrito"|trans|raw }}
+            </button>
+            <button type="button" class="mb-2 btn btn-info" data-bs-toggle="modal" data-bs-target="#ModalBuscar"
+                    onClick="fnjs_buscar_antecedente(4);">
+                {{ "Documento"|trans|raw }}
+            </button>
+        </div>
+
+        <div id="lista_antecedentes">
+            {{ lista_antecedentes|raw }}
+        </div>
+    </div>
+
+
+    <hr>
+    <!--  --------------------  BOTONES --------------------------  -->
+    <div class="row col-2">
+        <button id='btn_volver' class="btn btn-secondary" onClick="fnjs_cancelar();">
+            {{ "Volver"|trans|raw }}
+        </button>
+    </div>
+</form>
+
+<script>
+    fnjs_cancelar = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            // Asegurarme que es por click y no por return (posicion: 0,0)
+            var x = event.x || event.clientX;
+            var y = event.y || event.clientY;
+            if (!x && !y) {
+                return false;
+            }
+        }
+        fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
+    }
+
+</script>

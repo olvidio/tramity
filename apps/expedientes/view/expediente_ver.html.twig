@@ -171,6 +171,10 @@
                     <span class="btn btn-link"
                           onclick="fnjs_ver_antecedentes({{ id_expediente }});"> {{ "ver todos"|trans }} </span>
                 </label>
+                {% if antecedentes_txt %}
+                    <button type="button" class="btn btn-outline-secondary"
+                            onClick="fnjs_antecedentes_revisar('{{ id_expediente }}');">{{ antecedentes_txt }}</button>
+                {% endif %}
                 <div id="lista_antecedentes">
                     {{ lista_antecedentes|raw }}
                 </div>

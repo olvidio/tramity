@@ -2,7 +2,6 @@
 
 use core\ConfigGlobal;
 use core\ViewTwig;
-use entradas\model\Entrada;
 use escritos\model\Escrito;
 use escritos\model\EscritoLista;
 use expedientes\model\Expediente;
@@ -46,7 +45,7 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
 }
 
 $oExpediente = new Expediente($Q_id_expediente);
-if ($oExpediente->DBCargar() === FALSE ){
+if ($oExpediente->DBCargar() === FALSE) {
     $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
     exit ($err_cargar);
 }
@@ -145,10 +144,10 @@ $firma_txt = _("Firmar");
 $aclaracion = '';
 $aclaracion_event = '';
 $bool_aclaracion = FALSE;
+$a_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
 if ($responder) {
-    $a_cargos_oficina = [];
-    if (ConfigGlobal::soy_dtor()) {
-        $a_cargos_oficina = $gesCargos->getArrayCargosOficina(ConfigGlobal::role_id_oficina());
+    if (!ConfigGlobal::soy_dtor()) {
+        $a_cargos_oficina = [];
     }
 
     if (array_key_exists($id_ponente, $a_cargos_oficina) || ($id_ponente === ConfigGlobal::role_id_cargo())) {
@@ -213,6 +212,12 @@ if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && (ConfigGlobal::rol
 } else {
     $cmb_tramite = FALSE;
 }
+// Sólo puede cambiar los antecedentes el ponente
+if (array_key_exists($id_ponente, $a_cargos_oficina) || ($id_ponente === ConfigGlobal::role_id_cargo())) {
+    $antecedentes_txt = _("modificar");
+} else {
+    $antecedentes_txt = '';
+}
 
 $a_campos = [
     'vista_dl' => $vista_dl,
@@ -263,6 +268,8 @@ $a_campos = [
     'reset_txt' => $reset_txt,
     'cmb_tramite' => $cmb_tramite,
     'pagina_cambio' => $pagina_cambio,
+    // cambiar antecedentes
+    'antecedentes_txt' => $antecedentes_txt,
 ];
 
 $oView = new ViewTwig('expedientes/controller');
