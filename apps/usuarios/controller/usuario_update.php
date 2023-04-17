@@ -52,7 +52,7 @@ switch ($Q_que) {
             $Q_id_usuario = (integer)strtok($a_sel[0], "#");
             $oUsuario = new Usuario($Q_id_usuario);
             $usuario = $oUsuario->getUsuario();
-            if ($usuario === 'admin' || $usuario === 'default' || $usuario === 'manger' ){
+            if ($usuario === 'admin' || $usuario === 'default' || $usuario === 'manager' ){
                 $err_cargar = _("Este usuario no se puede modificar");
                 exit ($err_cargar);
             }
@@ -107,7 +107,7 @@ switch ($Q_que) {
 
         $oUsuario = new Usuario($Q_id_usuario);
         $usuario = $oUsuario->getUsuario();
-        if ($usuario === 'admin' || $usuario === 'default' || $usuario === 'manger' ){
+        if ($usuario === 'admin' || $usuario === 'default' || $usuario === 'manager' ){
             $err_cargar = _("Este usuario no se puede modificar");
             exit ($err_cargar);
         }
