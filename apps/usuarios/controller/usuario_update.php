@@ -53,8 +53,8 @@ switch ($Q_que) {
             $oUsuario = new Usuario($Q_id_usuario);
             $usuario = $oUsuario->getUsuario();
             if ($usuario === 'admin' || $usuario === 'default' || $usuario === 'manager' ){
-                $err_cargar = _("Este usuario no se puede modificar");
-                exit ($err_cargar);
+                $error_txt = _("Este usuario no se puede modificar");
+                break;
             }
             if ($oUsuario->DBEliminar() === FALSE) {
                 $error_txt = _("hay un error, no se ha eliminado");
@@ -76,8 +76,8 @@ switch ($Q_que) {
 
         $oUsuario = new Usuario($Q_id_usuario);
         if ($oUsuario->DBCargar() === FALSE ){
-            $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
-            exit ($err_cargar);
+            $error_txt = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
+            break;
         }
         if (!empty($Q_password)) {
             $oCrypt = new MyCrypt();
@@ -108,12 +108,12 @@ switch ($Q_que) {
         $oUsuario = new Usuario($Q_id_usuario);
         $usuario = $oUsuario->getUsuario();
         if ($usuario === 'admin' || $usuario === 'default' || $usuario === 'manager' ){
-            $err_cargar = _("Este usuario no se puede modificar");
-            exit ($err_cargar);
+            $error_txt = _("Este usuario no se puede modificar");
+            break;
         }
         if ($oUsuario->DBCargar() === FALSE ){
-            $err_cargar = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
-            exit ($err_cargar);
+            $error_txt = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
+            break;
         }
         $oUsuario->setUsuario($Q_usuario);
         $oUsuario->setId_cargo_preferido($Q_id_cargo_preferido);
