@@ -365,7 +365,9 @@ class EscritoLista
             $adjuntos = '';
             $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
             if (!empty($a_id_adjuntos)) {
-                $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" onclick=\"fnjs_revisar_adjunto('$id_escrito');\"  ></i>";
+                $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" style=\"cursor: pointer;\" onclick=\"fnjs_revisar_adjunto('$id_escrito');\"  ></i>";
+            } else {
+                $adjuntos = "<i class=\"far fa-sticky-note fa-fw\" style=\"cursor: pointer;\" onclick=\"fnjs_revisar_adjunto('$id_escrito');\"  ></i>";
             }
 
             $json_ref = $oEscrito->getJson_prot_ref();
