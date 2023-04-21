@@ -102,7 +102,6 @@ $a_campos = [
     'id_entidad' => $Q_id_entidad,
     'nombre' => $nombre,
     'oHash' => $oHash,
-    'schema' => $schema,
     'oDesplTipos' => $oDesplTipos,
     'chk_anulado' => $chk_anulado,
     'txt_guardar' => $txt_guardar,
