@@ -2,7 +2,7 @@
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
 VALUES (1, 4, 'ponente', 'ponente', 0, 'f', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (4, 4, 'todos', 'todos', 0, 'f', 'f');
+VALUES (2, 4, 'todo el cl', 'todo el cl', 0, 'f', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
 VALUES (7, 4, 'reunion', 'reunion', 0, 'f', 'f');
 --- empezar a contar en 10.
