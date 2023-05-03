@@ -157,8 +157,8 @@ if (is_true(ConfigGlobal::soy_dtor())) {
     $aQuery = ['filtro' => $filtro];
     $pag_lst = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query($aQuery));
     $num_orden = '2#1';
-    $text = _("correo de entrada"); //_("entradas");
-    $explicacion = _("Gestionar el correo de entrada");
+    $text = _("para distribuir"); //_("entradas");
+    $explicacion = _("Gestionar el correo de entrada. Solamente lo ve el d");
     $oEntradaLista = new EntradaLista();
     $oEntradaLista->setFiltro($filtro);
     $num = $oEntradaLista->getNumero();
