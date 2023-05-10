@@ -87,7 +87,7 @@ class Etherpad extends Client
             if (empty($sigla)) {
                 $sigla = $_SESSION['oConfig']->getSigla();
             }
-            $nom_ctr = StringLocal::lowerNormalized($sigla);
+            $nom_ctr = StringLocal::toRFC952($sigla);
 
             switch ($tipo_id) {
                 case self::ID_ADJUNTO:

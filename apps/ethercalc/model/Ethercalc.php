@@ -57,7 +57,7 @@ class Ethercalc
     {
         // Añado el nombre del centro. De forma normalizada, pues a saber que puede tener el nombre:
         $sigla = $_SESSION['oConfig']->getSigla();
-        $nom_ctr = StringLocal::lowerNormalized($sigla);
+        $nom_ctr = StringLocal::toRFC952($sigla);
 
         switch ($tipo_id) {
             case self::ID_ENTRADA:

@@ -14,7 +14,8 @@
     "ext-dom": "*",
     "ext-libxml": "*",
     "ext-mailparse": "*",
-    "smalot/pdfparser": "^2.3"
+    "smalot/pdfparser": "^2.3",
+    "ext-intl": "*"
   },
   "require-dev": {
   }

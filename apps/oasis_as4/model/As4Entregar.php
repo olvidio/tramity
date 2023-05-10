@@ -815,7 +815,7 @@ class As4Entregar extends As4CollaborationInfo
         // hay que saber para que ctr. (no sirve el esquema que siempre es el mismo).
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $id_oficina = Cargo::OFICINA_ESQUEMA;
-            $sigla_norm = StringLocal::lowerNormalized($siglaDestino);
+            $sigla_norm = StringLocal::toRFC952($siglaDestino);
             $cal_oficina = $sigla_norm . "_oficina";
         } else {
             $cal_oficina = $oDavical->getNombreRecurso($id_oficina);
