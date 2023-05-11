@@ -146,7 +146,7 @@ class Etherpad extends Client
      */
     private function cleanHtml()
     {
-        $contenido = $this->getHHTML();
+        $contenido = $this->getHHtml();
 
         $dom = new DOMDocument;
         /* la '@' sirve para evita los errores:  Warning: DOMDocument::loadHTML()
