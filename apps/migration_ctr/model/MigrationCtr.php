@@ -731,8 +731,8 @@ class MigrationCtr
 
         $sql = "INSERT INTO public.entradas_compartidas (descripcion, asunto_entrada, json_prot_destino, destinos,
                                          f_documento, json_prot_origen, json_prot_ref, categoria, f_entrada, anulado 
-        ) VALUES ( '$descripcion', '$asunto_entrada', NULLIF('$json_prot_destino',''), NULLIF('$destinos',''), NULLIF('$f_documento',''),
-          NULLIF('$json_prot_local',''), NULLIF('$json_prot_ref',''), NULLIF('$categoria',''), NULLIF('$f_entrada',''), NULLIF('$anulado',''))";
+        ) VALUES ( '$descripcion', '$asunto_entrada', NULLIF('$json_prot_destino','')::jsonb, NULLIF('$destinos',''), NULLIF('$f_documento',''),
+          NULLIF('$json_prot_local','')::jsonb, NULLIF('$json_prot_ref','')::jsonb, NULLIF('$categoria',''), NULLIF('$f_entrada',''), NULLIF('$anulado',''))";
 
         if ($this->oDBCtr->query($sql) === FALSE) {
             $sClauError = 'ctr: insert public.entradas_compartidas';
