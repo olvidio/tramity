@@ -390,8 +390,8 @@ class MigrationCtr
         $sql_insert = "INSERT INTO escritos ( json_prot_local, json_prot_destino, json_prot_ref, id_grupos, destinos, asunto, detalle, creador,
                       resto_oficinas, comentarios, f_aprobacion, f_escrito, f_contestar, categoria, visibilidad, visibilidad_dst, accion, modo_envio,
                       f_salida, ok, tipo_doc, anulado, descripcion )
-                VALUES ( NULLIF('$json_prot_origen',''), NULLIF('$destino',''), NULLIF('$json_ref',''), '{}', '{}', '$asunto', NULLIF('$detalle',''), 10, '{}', '', NULLIF('$f_entrada',''), NULLIF('$f_entrada',''), NULL, NULLIF('$categoria',''),
-                        1, 0, 2, 1, NULLIF('$f_entrada',''), 3, 1, 'f', '' )";
+                VALUES ( NULLIF('$json_prot_origen','')::jsonb, NULLIF('$destino','')::jsonb, NULLIF('$json_ref','')::jsonb, '{}', '{}', '$asunto', NULLIF('$detalle','')::text, 10, '{}', '', NULLIF('$f_entrada','')::date, NULLIF('$f_entrada','')::date, NULL, NULLIF('$categoria','')::smallint,
+                        1, 0, 2, 1, NULLIF('$f_entrada','')::date, 3, 1, 'f', '' )";
         if ($this->oDBCtr->query($sql_insert) === FALSE) {
             $sClauError = 'ctr: insertar escrito';
             $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBDl, $sClauError, __LINE__, __FILE__);
@@ -536,7 +536,7 @@ class MigrationCtr
         $sClauError = '';
         $sql = "INSERT INTO entradas ( modo_entrada, json_prot_origen, asunto_entrada, json_prot_ref, asunto, f_entrada, detalle, categoria,
                       visibilidad, bypass, estado)
-                    VALUES ( 1, NULLIF('$json_prot_local',''), '$asunto', NULLIF('$json_prot_ref',''), '$asunto', NULLIF('$f_salida',''), NULLIF('$detalle',''), 2, 1, 'f', 6)";
+                    VALUES ( 1, NULLIF('$json_prot_local','')::jsonb, '$asunto', NULLIF('$json_prot_ref','')::jsonb, '$asunto', NULLIF('$f_salida','')::date, NULLIF('$detalle','')::text, 2, 1, 'f', 6)";
         if ($this->oDBCtr->query($sql) === FALSE) {
             $sClauError = 'ctr: insert entradas';
             $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBDl, $sClauError, __LINE__, __FILE__);
@@ -731,8 +731,8 @@ class MigrationCtr
 
         $sql = "INSERT INTO public.entradas_compartidas (descripcion, asunto_entrada, json_prot_destino, destinos,
                                          f_documento, json_prot_origen, json_prot_ref, categoria, f_entrada, anulado 
-        ) VALUES ( '$descripcion', '$asunto_entrada', NULLIF('$json_prot_destino','')::jsonb, NULLIF('$destinos',''), NULLIF('$f_documento',''),
-          NULLIF('$json_prot_local','')::jsonb, NULLIF('$json_prot_ref','')::jsonb, NULLIF('$categoria',''), NULLIF('$f_entrada',''), NULLIF('$anulado',''))";
+        ) VALUES ( '$descripcion', '$asunto_entrada', NULLIF('$json_prot_destino','')::jsonb, NULLIF('$destinos','')::integer[], NULLIF('$f_documento','')::date,
+          NULLIF('$json_prot_local','')::jsonb, NULLIF('$json_prot_ref','')::jsonb, NULLIF('$categoria','')::smallint, NULLIF('$f_entrada','')::date, NULLIF('$anulado','')::text)";
 
         if ($this->oDBCtr->query($sql) === FALSE) {
             $sClauError = 'ctr: insert public.entradas_compartidas';
