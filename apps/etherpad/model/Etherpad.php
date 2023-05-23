@@ -46,7 +46,7 @@ class Etherpad extends Client
     private $nom_usuario = null;
 
     private $id_escrito = null;
-    private $text = null;
+    private $textContent = null;
     private $multiple = FALSE;
 
     /**
@@ -334,7 +334,7 @@ class Etherpad extends Client
         $padName = $this->id_escrito;
         $padId = $groupID . "$" . $this->id_escrito;
         // para el caso de clonar
-        $text_clone = empty($this->text) ? null : $this->text;
+        $text_clone = empty($this->textContent) ? null : $this->textContent;
 
         $rta = $this->createGroupPad($groupID, $padName, $text_clone);
         if ($rta->getCode() == 0) {
@@ -520,30 +520,24 @@ class Etherpad extends Client
     {
         $padId = $this->getPadID();
 
-        // comprobar que no existe:
-        // returns all pads of this group
-        $rev = null;
-        $rta = $this->setText($padId, $rev);
+        $rta = $this->setText($padId, $txt);
+        /* Example returns:
+         *  {code: 0, message:"ok", data: null}
+         *  {code: 1, message:"padID does not exist", data: null}
+         *  {code: 1, message:"text too long", data: null}
+         */
         $code = $rta->getCode();
-        if ($code == 0) {
-            $data = $rta->getData();
-            /* Example returns:
-             * {code: 0, message:"ok", data: {text:"Welcome Text"}}
-             * {code: 1, message:"padID does not exist", data: null}
-             */
-            $text = $data['text'];
-            return $text;
-        } else {
+        if ($code == 1) {
             $this->mostrar_error($rta);
         }
     }
 
     /**
-     * @param string $text
+     * @param string $text_content
      */
-    public function setText($text)
+    public function setTextContent($text_content)
     {
-        $this->text = $text;
+        $this->textContent = $text_content;
     }
 
     /* Crear session (link usuario-grupo)

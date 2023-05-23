@@ -43,6 +43,21 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLugares"
+               aria-expanded="true" aria-controls="collapseLugares">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>{{ "Lugares (ctr, dl)"|trans|raw }}</span>
+            </a>
+            <div id="collapseLugares" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item"
+                       onclick="fnjs_update_div('#main','apps/lugares/controller/lugar_lista.php')" href="#">
+                        {{ "Buscar / modificar"|trans|raw }}</a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-cog"></i>
@@ -50,13 +65,6 @@
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">{{ "Lugares (ctr, dl)"|trans|raw }}:</h6>
-                    <a class="collapse-item"
-                       onclick="fnjs_update_div('#main','apps/lugares/controller/lugar_lista.php')" href="#">
-                        {{ "Buscar / modificar"|trans|raw }}</a>
-                    <a class="collapse-item"
-                       onclick="fnjs_update_div('#main','apps/lugares/controller/lugar_mantenimiento.php')" href="#">
-                        {{ "Enviar cambios"|trans|raw }}</a>
                     <h6 class="collapse-header">{{ "de la aplicación"|trans|raw }}:</h6>
                     <a class="collapse-item"
                        onclick="fnjs_update_div('#main','apps/config/controller/parametros_servidor.php')" href="#">
@@ -84,6 +92,8 @@
                     <a class="collapse-item" onclick="fnjs_update_div('#main','apps/devel/controller/factory_form.php')"
                        href="#">factory</a>
                     <a class="collapse-item" href="#">{{ "generar claves"|trans|raw }}</a>
+                    <a class="collapse-item" onclick="fnjs_update_div('#main','apps/migration_ctr/controller/lista_ctr_as4.php')"
+                       href="#">Pasar escritos a ctr</a>
                 </div>
             </div>
         </li>
@@ -164,11 +174,15 @@
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDavical"
                aria-expanded="true" aria-controls="collapseDavical">
                 <i class="fas fa-fw fa-folder"></i>
-                <span>{{ "Davical"|trans|raw }}</span>
+                <span>{{ "Davical / Migration"|trans|raw }}</span>
             </a>
             <div id="collapseDavical" class="collapse" aria-labelledby="headingPages"
                  data-bs-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item"
+                       onclick="fnjs_update_div('#main','apps/migration/controller/migration_dlp_index.php')" href="#">
+                        {{ "mitration bonita"|trans|raw }}
+                    </a>
                     <a class="collapse-item"
                        onclick="fnjs_update_div('#main','apps/migration/controller/migration_index.php')" href="#">
                         {{ "mitration reg"|trans|raw }}

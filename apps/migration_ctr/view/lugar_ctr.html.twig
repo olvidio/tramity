@@ -1,0 +1,16 @@
+<script>
+    fnjs_seleccionar = function () {
+        $('#seleccionados').attr('action', "{{ url_form }}");
+        $('#que').val('editar');
+        fnjs_enviar_formulario('#seleccionados');
+    }
+
+    fnjs_left_side_hide();
+</script>
+<h3>{{ "Seleccionar los ctr a los que se quieren enviar los escritos antiguos"|trans|raw }}</h3>
+<br>
+<form id="seleccionados" name="seleccionados" action="" method="post">
+    {{ oHash.getCamposHtml|raw }}
+    {{ oTabla.mostrar_tabla|raw }}
+</form>
+<br>

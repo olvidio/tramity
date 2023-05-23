@@ -732,11 +732,11 @@ class As4Entregar extends As4CollaborationInfo
                 $oEtherpad = new Etherpad();
                 if ($compartido) {
                     $oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada, $siglaDestino);
-                    $oEtherpad->setText($this->content);
+                    $oEtherpad->setTextContent($this->content);
                     $oEtherpad->getPadId(); // Aquí crea el pad y utiliza el $this->content
                 } else {
                     $oEtherpad->setId(Etherpad::ID_ENTRADA, $id_entrada, $siglaDestino);
-                    $oEtherpad->setText($this->content);
+                    $oEtherpad->setTextContent($this->content);
                     $oEtherpad->getPadId(); // Aquí crea el pad y utiliza el $this->content
                     // la relación con la entrada y la fecha
                     $oEntradaDocDB = new EntradaEntidadDoc($id_entrada, $siglaDestino);
