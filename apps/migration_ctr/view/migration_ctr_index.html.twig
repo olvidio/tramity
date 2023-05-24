@@ -93,9 +93,10 @@ Para esto hay que crear manualmente la tabla en el servidor de ctr: public.entra
         });
         request.done(function (json) {
             $('#slow_load').hide();
-            if (json.success == true) {
+            if (json.success != true) {
                 alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
             } else {
+                alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
             }
         });
     }

@@ -64,7 +64,7 @@ switch ($Q_que) {
         foreach ($a_schema as $id_ctr => $schema) {
             $oMigration = new MigrationCtr($schema);
             $oMigration->crear_etherpad_como_entrada();
-            $mensaje .= "OK escritos de la dl pasados a entradas etherpad para $schema  \n";
+            $mensaje .= "OK escritos de la dl pasados a entradas etherpad para $schema \n";
         }
         break;
     case 'leer_entradas_compartidas':
@@ -72,13 +72,13 @@ switch ($Q_que) {
         $schema = current($a_schema);
         $oMigration = new MigrationCtr($schema);
         $oMigration->crear_etherpad_como_entrada_compartida();
-        $mensaje .= "OK escritos de la dl pasados a entradas etherpad para $schema  \n";
+        $mensaje .= "OK entradas_compartidas pasadas etherpad \n";
         break;
     case 'crear_entradas_individuales':
         foreach ($a_schema as $id_ctr => $schema) {
             $oMigration = new MigrationCtr($schema);
             $oMigration->crear_entradas_individuales($id_ctr);
-            $mensaje .= "OK entradas individuales de compartidas para $schema  \n";
+            $mensaje .= "OK entradas individuales de compartidas para $schema \n";
         }
         break;
 }
@@ -88,6 +88,7 @@ if (!empty($mensaje)) {
     $jsondata['mensaje'] = $mensaje;
 } else {
     $jsondata['success'] = FALSE;
+    $jsondata['mensaje'] = _("Algo falló");
 }
 //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
 header('Content-type: application/json; charset=utf-8');
