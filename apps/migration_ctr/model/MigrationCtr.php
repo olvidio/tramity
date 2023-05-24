@@ -49,7 +49,7 @@ class MigrationCtr
     public function entradas_compartidas()
     {
         // SALIDAS CON DESTINOS MÚLTIPLES
-        $sql = "SELECT * FROM escritos WHERE f_salida > '$this->f_limite' AND destinos != '{}' ORDER BY f_salida";
+        $sql = "SELECT * FROM escritos WHERE f_salida > '$this->f_limite' AND anulado = 'f' AND destinos != '{}' ORDER BY f_salida";
         if ($this->oDBDl->query($sql) === FALSE) {
             $sClauError = 'dl: select escritos multiples destinos';
             $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBDl, $sClauError, __LINE__, __FILE__);
@@ -313,9 +313,8 @@ class MigrationCtr
             $oDblSt->fetch(PDO::FETCH_BOUND);
 
 
-            $siglaDestino = $this->schema; // creo que al final es lo mismo
             $oEtherpad = new Etherpad();
-            $oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada, $siglaDestino);
+            $oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada);
             $pad_id = $oEtherpad->getPadId(); // Aquí crea el pad
             //$oEtherpad->grabarMD($txt);
             $oEtherpad->setHTML($pad_id, $txt);

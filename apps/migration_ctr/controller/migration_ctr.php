@@ -33,7 +33,7 @@ foreach ($a_id_ctr as $id_ctr) {
 $mensaje = '';
 switch ($Q_que) {
     case 'entradas_compartidas':
-        // por lo mennos un schema para pillar la configuración de conexión a la DB
+        // por lo menos un schema para pillar la configuración de conexión a la DB
         $schema = current($a_schema);
         $oMigration = new MigrationCtr($schema);
         $oMigration->entradas_compartidas();
@@ -68,11 +68,11 @@ switch ($Q_que) {
         }
         break;
     case 'leer_entradas_compartidas':
-        foreach ($a_schema as $id_ctr => $schema) {
-            $oMigration = new MigrationCtr($schema);
-            $oMigration->crear_etherpad_como_entrada_compartida();
-            $mensaje .= "OK escritos de la dl pasados a entradas etherpad para $schema  \n";
-        }
+        // por lo menos un schema para pillar la configuración de conexión a la DB
+        $schema = current($a_schema);
+        $oMigration = new MigrationCtr($schema);
+        $oMigration->crear_etherpad_como_entrada_compartida();
+        $mensaje .= "OK escritos de la dl pasados a entradas etherpad para $schema  \n";
         break;
     case 'crear_entradas_individuales':
         foreach ($a_schema as $id_ctr => $schema) {
@@ -84,10 +84,10 @@ switch ($Q_que) {
 }
 
 if (!empty($mensaje)) {
-    $jsondata['success'] = FALSE;
+    $jsondata['success'] = TRUE;
     $jsondata['mensaje'] = $mensaje;
 } else {
-    $jsondata['success'] = TRUE;
+    $jsondata['success'] = FALSE;
 }
 //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
 header('Content-type: application/json; charset=utf-8');

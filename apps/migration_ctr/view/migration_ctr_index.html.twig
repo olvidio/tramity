@@ -1,8 +1,12 @@
-<h2>Para migrar los escritos que se tienen en la dl a los ctr:</h2>
+<h1>B.- Para migrar los escritos que se tienen en la dl a los ctr:</h1>
+(realizar después de las macros del apartado A indicadas más abajo)
+<br>
+Hay que realizarlo por cada centro que se añade a tramity
+<br>
 
 <h4>Centros seleccionados: {{ lista_id_ctr }}</h4>
 
-<h1>Desde el servidor de la dl</h1>
+<h2>Desde el servidor de la dl</h2>
 <ol>
     <li>exportar entradas (las entradas a la dl, se ponen como escritos en el ctr)
         <button class="btn btn-secondary" onclick="fnjs_go('entradas')">go</button>
@@ -19,7 +23,7 @@
 </div>
 
 
-<h1>Desde el servidor de los ctr</h1>
+<h2>Desde el servidor de los ctr</h2>
 <ol>
     <li>leer los escritos DB y grabar los etherpads
         <button class="btn btn-secondary" onclick="fnjs_go('leer_escritos')">go</button>
@@ -34,7 +38,7 @@
 </ol>
 
 <hr>
-<h3>Para las entradas compartidas</h3>
+<h1>A.- Para las entradas compartidas</h1>
 (sólo hay que hacerlo una vez)
 <br>
 Para esto hay que crear manualmente la tabla en el servidor de ctr: public.entrada_doc_txt
@@ -89,7 +93,7 @@ Para esto hay que crear manualmente la tabla en el servidor de ctr: public.entra
         });
         request.done(function (json) {
             $('#slow_load').hide();
-            if (json.success != true) {
+            if (json.success == true) {
                 alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
             } else {
             }
