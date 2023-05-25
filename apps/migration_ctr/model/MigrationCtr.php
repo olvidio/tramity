@@ -95,7 +95,9 @@ class MigrationCtr
 
         foreach ($this->oDBCtr->query($sql) as $a_row_entrada_compartida) {
             $json_prot_origen = $a_row_entrada_compartida['json_prot_origen'];
-
+            if (empty($json_prot_origen)) {
+                continue;
+            }
             // test si ya existe?¿
             list($existe, $sClauError) = $this->comprobar_si_existe_entrada($json_prot_origen);
             $this->exit_si_hay_error($sClauError);
@@ -166,6 +168,9 @@ class MigrationCtr
 
         foreach ($this->oDBDl->query($sql) as $a_row_escrito) {
             $json_prot_local = $a_row_escrito['json_prot_local'];
+            if (empty($json_prot_local)) {
+                continue;
+            }
             // Saltar si ya existe la entrada en el ctr
             list($existe, $sClauError) = $this->comprobar_si_existe_entrada($json_prot_local);
             $this->exit_si_hay_error($sClauError);
