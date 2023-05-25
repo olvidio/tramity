@@ -24,7 +24,7 @@ if (!empty($a_sel)) { //vengo de un checkbox
     }
 }
 
-
+/*
 $oConfigSchema = new ConfigSchema('ambito');
 $valor_ambito = (int)$oConfigSchema->getValor();
 $id_ambito_dl = FALSE;
@@ -32,6 +32,12 @@ $a_roles_posibles = [];
 if ($valor_ambito === Cargo::AMBITO_DL) {
     $id_ambito_dl = TRUE;
 
+}
+*/
+
+$id_ambito_dl = FALSE;
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+    $id_ambito_dl = TRUE;
 }
 
 $a_campos = [
