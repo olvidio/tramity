@@ -384,7 +384,7 @@ class EscritoForm
                 $pagina_cancel = Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));
                 break;
             default:
-                if ($this->Q_volver_a === 'expediente_ver' || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                if ($this->Q_volver_a === 'expediente_ver') {
                     $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
                 } else {
                     $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));

@@ -10,12 +10,12 @@ use expedientes\model\ExpedienteBorradorLista;
 use expedientes\model\ExpedienteCirculandoLista;
 use expedientes\model\ExpedienteCopiasLista;
 use expedientes\model\ExpedienteDistribuirLista;
-use expedientes\model\ExpedienteLista;
 use expedientes\model\ExpedienteParaFirmarLista;
 use expedientes\model\ExpedientepermanentesClLista;
 use expedientes\model\ExpedienteReunionFijarLista;
 use expedientes\model\ExpedienteReunionLista;
 use expedientes\model\ExpedienteReunionSeguimientoLista;
+use usuarios\model\entity\Cargo;
 use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -65,14 +65,15 @@ switch ($Q_filtro) {
         } else {
             $Q_resto_sel = FALSE;
         }
-
-        $oDialogoBusqueda = new DialogoBusquedaCirculando($Q_resto_sel, $Q_filtro);
-        $aCondicion = $oDialogoBusqueda->generarCondicion();
-        if ($aCondicion['success'] === FALSE) {
-            $msg = $aCondicion['message'];
-        } else {
-            $oExpedienteLista->setResto_sel($Q_resto_sel);
-            $oDialogoBusqueda->mostrarDialogo();
+        if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
+            $oDialogoBusqueda = new DialogoBusquedaCirculando($Q_resto_sel, $Q_filtro);
+            $aCondicion = $oDialogoBusqueda->generarCondicion();
+            if ($aCondicion['success'] === FALSE) {
+                $msg = $aCondicion['message'];
+            } else {
+                $oExpedienteLista->setResto_sel($Q_resto_sel);
+                $oDialogoBusqueda->mostrarDialogo();
+            }
         }
         break;
     case 'permanentes_cl':
@@ -106,7 +107,7 @@ switch ($Q_filtro) {
         $a_etiquetas_filtered = array_filter($Q_a_etiquetas);
 
         // para evitar que salgan todos, por defecto poner periodo un mes.
-        $Q_periodo = empty($Q_periodo)? 'mes' : $Q_periodo;
+        $Q_periodo = empty($Q_periodo) ? 'mes' : $Q_periodo;
         $oDialogoBusqueda = new DialogoBusquedaArchivados($Q_asunto, $Q_andOr, $Q_a_etiquetas, $Q_filtro, $Q_periodo);
         $aCondicion = $oDialogoBusqueda->generarCondicion();
         $aWhereADD = $aCondicion['aWhereADD'];

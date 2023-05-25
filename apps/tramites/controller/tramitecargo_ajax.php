@@ -18,21 +18,25 @@ $Q_que = (string)filter_input(INPUT_POST, 'que');
 $error_txt = '';
 switch ($Q_que) {
     case 'info_firmas':
-        $Q_id_tramite = (integer)filter_input(INPUT_POST, 'id_tramite');
-        $oficiales = FALSE;
-        $aWhere = ['id_tramite' => $Q_id_tramite, 'id_cargo' => Cargo::CARGO_OFICIALES];
-        $gesTramiteCargo = new GestorTramiteCargo();
-        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
-        if (count($cTramiteCargos) > 0) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $oficiales = TRUE;
+            $varias = FALSE;
+        } else {
+            $Q_id_tramite = (integer)filter_input(INPUT_POST, 'id_tramite');
+            $oficiales = FALSE;
+            $aWhere = ['id_tramite' => $Q_id_tramite, 'id_cargo' => Cargo::CARGO_OFICIALES];
+            $gesTramiteCargo = new GestorTramiteCargo();
+            $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
+            if (count($cTramiteCargos) > 0) {
+                $oficiales = TRUE;
+            }
+            $varias = FALSE;
+            $aWhere = ['id_tramite' => $Q_id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS];
+            $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
+            if (count($cTramiteCargos) > 0) {
+                $varias = TRUE;
+            }
         }
-        $varias = FALSE;
-        $aWhere = ['id_tramite' => $Q_id_tramite, 'id_cargo' => Cargo::CARGO_VARIAS];
-        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
-        if (count($cTramiteCargos) > 0) {
-            $varias = TRUE;
-        }
-
         $a_info = ['oficiales' => $oficiales,
             'varias' => $varias,
         ];
@@ -44,7 +48,7 @@ switch ($Q_que) {
         $oGesCargo = new GestorCargo();
         $oDesplCargos = $oGesCargo->getDesplCargos();
         $oDesplCargos->setNombre('id_cargo');
-        $oDesplCargos->setBlanco(true);
+        $oDesplCargos->setBlanco(TRUE);
         $oTramiteCargo = new TramiteCargo($Q_id_item);
         $orden_tramite = $oTramiteCargo->getOrden_tramite();
         $id_cargo = $oTramiteCargo->getId_cargo();
@@ -96,7 +100,6 @@ switch ($Q_que) {
         $txt .= '</button>';
         echo $txt;
         exit();
-        break;
     case 'update':
         $Q_id_item = (integer)filter_input(INPUT_POST, 'id_item');
         $Q_id_tramite = (integer)filter_input(INPUT_POST, 'id_tramite');
@@ -126,10 +129,10 @@ switch ($Q_que) {
 }
 
 if (empty($error_txt)) {
-    $jsondata['success'] = true;
+    $jsondata['success'] = TRUE;
     $jsondata['mensaje'] = 'ok';
 } else {
-    $jsondata['success'] = false;
+    $jsondata['success'] = FALSE;
     $jsondata['mensaje'] = $error_txt;
 }
 

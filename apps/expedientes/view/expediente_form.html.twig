@@ -227,7 +227,11 @@
 
     <!--  --------------- FIRMAS OFICINA --------------- -->
     <div id="div_firmas_oficina" class="mb-2 row">
-        <label for="firmas_oficina" class="col-md-1 form-label">{{ "Firmas oficina"|trans|raw }}:</label>
+        {% if vista_dl %}
+            <label for="firmas_oficina" class="col-md-1 form-label">{{ "Firmas oficina"|trans|raw }}:</label>
+        {% else %}
+            <label for="firmas_oficina" class="col-md-1 form-label">{{ "Firmas"|trans|raw }}:</label>
+        {% endif %}
         <div class="col-6">
       <span id="span_firmas_oficina">
         {{ oArrayDesplFirmasOficina.ListaSelects|raw }}

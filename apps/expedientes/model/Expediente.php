@@ -19,6 +19,7 @@ use tramites\model\entity\GestorTramiteCargo;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorCargo;
 use usuarios\model\entity\GestorCargoGrupo;
+use web\DateTimeLocal;
 
 
 class Expediente extends expedienteDB
@@ -265,7 +266,7 @@ class Expediente extends expedienteDB
         return $a_etiquetas;
     }
 
-    public function getEtiquetasVisibles($id_cargo = '')
+    public function getEtiquetasVisibles($id_cargo = NULL)
     {
         if (empty($id_cargo)) {
             $id_cargo = ConfigGlobal::role_id_cargo();
@@ -337,7 +338,7 @@ class Expediente extends expedienteDB
     /**
      * pone la fecha de aprobación en todos los escritos del expediente.
      *
-     * @param web\DateTimeLocal|string df_escrito.
+     * @param DateTimeLocal|string df_escrito.
      * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     public function setF_aprobacion_escritos($df_aprobacion, $convert = TRUE)
@@ -357,7 +358,7 @@ class Expediente extends expedienteDB
     /**
      * pone la fecha en todos los escritos del expediente.
      *
-     * @param web\DateTimeLocal|string df_escrito.
+     * @param DateTimeLocal|string df_escrito.
      * @param boolean convert=TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     public function setF_escritos($df_escrito, $convert = TRUE)
@@ -554,6 +555,16 @@ class Expediente extends expedienteDB
         foreach ($cTramiteCargos as $oTramiteCargo) {
             $id_cargo = $oTramiteCargo->getId_cargo();
             $orden_tramite = $oTramiteCargo->getOrden_tramite();
+
+            // Para los ctr, comprobar que el cargo esta como oficial
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                $a_firmas_oficina = $this->getFirmas_oficina();
+                // añadir la del dtor.
+                array_unshift($a_firmas_oficina, $id_ponente);
+                if (!in_array($id_cargo, $a_firmas_oficina)) {
+                    continue;
+                }
+            }
 
             // comprobar la oficina para los cargos especiales:
             // 1 => ponente

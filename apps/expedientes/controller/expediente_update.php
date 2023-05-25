@@ -62,7 +62,7 @@ switch ($Q_que) {
         $Q_id_oficina = ConfigGlobal::role_id_oficina();
         $Q_id_cargo = ConfigGlobal::role_id_cargo();
         $oEntrada = new Entrada($Q_id_entrada);
-        if ($oEntrada->DBCargar() === FALSE ){
+        if ($oEntrada->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -147,10 +147,10 @@ switch ($Q_que) {
             $error_txt .= _("No se han podido guardar el nuevo pendiente");
         }
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -192,10 +192,10 @@ switch ($Q_que) {
         }
 
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -207,7 +207,7 @@ switch ($Q_que) {
         $Q_id_oficial = (integer)filter_input(INPUT_POST, 'id_oficial');
         // Se pone cuando se han enviado...
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -217,10 +217,10 @@ switch ($Q_que) {
             $error_txt .= _("No se han podido asignar el nuevo encargado");
         }
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -232,7 +232,7 @@ switch ($Q_que) {
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -243,10 +243,10 @@ switch ($Q_que) {
             $error_txt .= _("No se han podido guardar las etiquetas");
         }
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -257,7 +257,7 @@ switch ($Q_que) {
     case 'recircular':
         // borrar todas la firmas
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -278,10 +278,10 @@ switch ($Q_que) {
         }
 
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -291,7 +291,7 @@ switch ($Q_que) {
         exit();
     case 'reunion':
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -320,10 +320,10 @@ switch ($Q_que) {
         }
 
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -335,7 +335,7 @@ switch ($Q_que) {
         $Q_a_etiquetas = (array)filter_input(INPUT_POST, 'etiquetas', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         // Se pone cuando se han enviado...
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -347,10 +347,10 @@ switch ($Q_que) {
             $error_txt .= "<br>";
         }
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -427,11 +427,11 @@ switch ($Q_que) {
         }
 
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
             $jsondata['rta'] = $html;
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -461,10 +461,10 @@ switch ($Q_que) {
         }
 
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -487,7 +487,7 @@ switch ($Q_que) {
 
         $oExpediente = new Expediente($Q_id_expediente);
         $oExpediente->DBCargar();
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -516,7 +516,7 @@ switch ($Q_que) {
         foreach ($cAcciones as $oAccion) {
             $id_escrito = $oAccion->getId_escrito();
             $oEscrito = new Escrito($id_escrito);
-            if ($oEscrito->DBCargar() === FALSE ){
+            if ($oEscrito->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -532,10 +532,10 @@ switch ($Q_que) {
         }
 
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -581,10 +581,10 @@ switch ($Q_que) {
         }
 
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -599,7 +599,7 @@ switch ($Q_que) {
         $mi_id_oficina = $oCargo->getId_oficina();
 
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -660,11 +660,11 @@ switch ($Q_que) {
         }
 
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['id_expediente'] = $Q_id_expediente;
             $jsondata['html'] = $html;
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -677,7 +677,7 @@ switch ($Q_que) {
     case 'guardar':
         if (!empty($Q_id_expediente)) {
             $oExpediente = new Expediente($Q_id_expediente);
-            if ($oExpediente->DBCargar() === FALSE ){
+            if ($oExpediente->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
@@ -717,18 +717,24 @@ switch ($Q_que) {
         $oExpediente->setEntradilla($Q_entradilla);
 
         // según el trámite mirar si hay que grabar oficiales y/o varios cargos.
-        $oficiales = FALSE;
-        $aWhere = ['id_tramite' => $Q_tramite, 'id_cargo' => Cargo::CARGO_OFICIALES];
-        $gesTramiteCargo = new GestorTramiteCargo();
-        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
-        if (count($cTramiteCargos) > 0) {
+        // para los crt siempre hay oficiales:
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             $oficiales = TRUE;
-        }
-        $varias = FALSE;
-        $aWhere = ['id_tramite' => $Q_tramite, 'id_cargo' => Cargo::CARGO_VARIAS];
-        $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
-        if (count($cTramiteCargos) > 0) {
-            $varias = TRUE;
+            $varias = FALSE;
+        } else {
+            $oficiales = FALSE;
+            $aWhere = ['id_tramite' => $Q_tramite, 'id_cargo' => Cargo::CARGO_OFICIALES];
+            $gesTramiteCargo = new GestorTramiteCargo();
+            $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
+            if (count($cTramiteCargos) > 0) {
+                $oficiales = TRUE;
+            }
+            $varias = FALSE;
+            $aWhere = ['id_tramite' => $Q_tramite, 'id_cargo' => Cargo::CARGO_VARIAS];
+            $cTramiteCargos = $gesTramiteCargo->getTramiteCargos($aWhere);
+            if (count($cTramiteCargos) > 0) {
+                $varias = TRUE;
+            }
         }
         // pasar a array para postgresql
         if ($oficiales) {
@@ -821,7 +827,7 @@ switch ($Q_que) {
                 $bParaDistribuir = $gesFirmas->isParaDistribuir($Q_id_expediente);
                 if ($bParaDistribuir) {
                     // guardar la firma de Cargo::CARGO_DISTRIBUIR;
-                    if ($oExpediente->DBCargar() === FALSE ){
+                    if ($oExpediente->DBCargar() === FALSE) {
                         $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
                         exit ($err_cargar);
                     }
@@ -835,7 +841,7 @@ switch ($Q_que) {
             }
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                 // cambio el estado del expediente.
-                if ($oExpediente->DBCargar() === FALSE ){
+                if ($oExpediente->DBCargar() === FALSE) {
                     $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
                     exit ($err_cargar);
                 }
@@ -850,10 +856,10 @@ switch ($Q_que) {
         // FIN CIRCULAR
 
         if (!empty($error_txt)) {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         } else {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['id_expediente'] = $id_expediente;
             $a_cosas = ['id_expediente' => $id_expediente, 'filtro' => $Q_filtro];
             $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
@@ -865,7 +871,7 @@ switch ($Q_que) {
         exit();
     case 'cambio_tramite':
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -884,10 +890,10 @@ switch ($Q_que) {
 
 
         if (!empty($error_txt)) {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         } else {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['id_expediente'] = $Q_id_expediente;
             $a_cosas = ['id_expediente' => $Q_id_expediente];
             $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
@@ -899,7 +905,7 @@ switch ($Q_que) {
         exit();
     case 'cambio_vida':
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -909,10 +915,10 @@ switch ($Q_que) {
         }
 
         if (!empty($error_txt)) {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         } else {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['id_expediente'] = $Q_id_expediente;
             $a_cosas = ['id_expediente' => $Q_id_expediente];
             $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
@@ -924,7 +930,7 @@ switch ($Q_que) {
         exit();
     case 'cambio_asunto':
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -934,10 +940,10 @@ switch ($Q_que) {
         }
 
         if (!empty($error_txt)) {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         } else {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['id_expediente'] = $Q_id_expediente;
             $a_cosas = ['id_expediente' => $Q_id_expediente];
             $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
@@ -949,7 +955,7 @@ switch ($Q_que) {
         exit();
     case 'cambio_entradilla':
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -959,10 +965,10 @@ switch ($Q_que) {
         }
 
         if (!empty($error_txt)) {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         } else {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['id_expediente'] = $Q_id_expediente;
             $a_cosas = ['id_expediente' => $Q_id_expediente];
             $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
