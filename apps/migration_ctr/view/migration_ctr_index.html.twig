@@ -6,36 +6,38 @@ Hay que realizarlo por cada centro que se añade a tramity
 
 <h4>Centros seleccionados: {{ lista_id_ctr }}</h4>
 
-<h2>Desde el servidor de la dl</h2>
-<ol>
-    <li>exportar entradas (las entradas a la dl, se ponen como escritos en el ctr)
-        <button class="btn btn-secondary" onclick="fnjs_go('entradas')">go</button>
-    </li>
-    <li>exportar salidas individuales de la dl al ctr, como entradas en el ctr
-        <button class="btn btn-secondary" onclick="fnjs_go('salidas')">go</button>
-    </li>
-</ol>
-
-<hr>
 <!--  --------------- Image cargando , para cuando se activa el leer dock, que es lento --------------- -->
 <div id="slow_load" style="display: flex; justify-content: center; align-items: center; text-align: center;">
     <img class="mb-4" src="../images/loading.gif" alt="cargando" width="32" height="32">
 </div>
 
+{% if ambito_dl %}
+    <h2>Desde el servidor de la dl</h2>
+    <ol>
+        <li>exportar entradas (las entradas a la dl, se ponen como escritos en el ctr)
+            <button class="btn btn-secondary" onclick="fnjs_go('entradas')">go</button>
+        </li>
+        <li>exportar salidas individuales de la dl al ctr, como entradas en el ctr
+            <button class="btn btn-secondary" onclick="fnjs_go('salidas')">go</button>
+        </li>
+    </ol>
+{% else %}
+    <hr>
 
-<h2>Desde el servidor de los ctr</h2>
-<ol>
-    <li>leer los escritos DB y grabar los etherpads
-        <button class="btn btn-secondary" onclick="fnjs_go('leer_escritos')">go</button>
-    </li>
-    <li>leer las entradas DB y grabar los etherpads
-        <button class="btn btn-secondary" onclick="fnjs_go('leer_entradas')">go</button>
-    </li>
-    <li>Crear entradas individuales para los ctr de las entradas compartidas
-        <button class="btn btn-secondary" onclick="fnjs_go('crear_entradas_individuales')">go</button>
-    </li>
+    <h2>Desde el servidor de los ctr</h2>
+    <ol>
+        <li>leer los escritos DB y grabar los etherpads
+            <button class="btn btn-secondary" onclick="fnjs_go('leer_escritos')">go</button>
+        </li>
+        <li>leer las entradas DB y grabar los etherpads
+            <button class="btn btn-secondary" onclick="fnjs_go('leer_entradas')">go</button>
+        </li>
+        <li>Crear entradas individuales para los ctr de las entradas compartidas
+            <button class="btn btn-secondary" onclick="fnjs_go('crear_entradas_individuales')">go</button>
+        </li>
 
-</ol>
+    </ol>
+{% endif %}
 
 <hr>
 <h1>A.- Para las entradas compartidas</h1>
@@ -51,18 +53,21 @@ Para esto hay que crear manualmente la tabla en el servidor de ctr: public.entra
     </pre>
 
 
-<h2>Desde el servidor de la dl</h2>
-<ul>
-<li>exportar entradas comparitdas de la dl. validas para todos los ctr
-    <button class="btn btn-secondary" onclick="fnjs_go('entradas_compartidas')">go</button>
-</li>
-</ul>
-<h2>Desde el servidor de los ctr</h2>
-<ul>
-    <li>Leer las entradas compartidas DB y grabar los etherpads
-        <button class="btn btn-secondary" onclick="fnjs_go('leer_entradas_compartidas')">go</button>
-    </li>
-</ul>
+{% if ambito_dl %}
+    <h2>Desde el servidor de la dl</h2>
+    <ul>
+        <li>exportar entradas comparitdas de la dl. validas para todos los ctr
+            <button class="btn btn-secondary" onclick="fnjs_go('entradas_compartidas')">go</button>
+        </li>
+    </ul>
+{% else %}
+    <h2>Desde el servidor de los ctr</h2>
+    <ul>
+        <li>Leer las entradas compartidas DB y grabar los etherpads
+            <button class="btn btn-secondary" onclick="fnjs_go('leer_entradas_compartidas')">go</button>
+        </li>
+    </ul>
+{% endif %}
 
 <form id="form_migracion">
     <input type=hidden name='que' id='que' value=0>
