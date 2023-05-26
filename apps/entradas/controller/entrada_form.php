@@ -25,17 +25,14 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-// si vengo de las tablas, el formato es: 4n string: id_entrada#compartida
-$Q_id_sel = (string)filter_input(INPUT_POST, 'id_entrada');
-$Q_id_entrada = (integer)strtok($Q_id_sel, "#");
-
+$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 $Q_importar = (bool)filter_input(INPUT_POST, 'importar');
 
 if ($Q_filtro === 'en_buscar' && empty($Q_id_entrada)) {
     $Q_a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
-    $Q_id_entrada = $Q_a_sel[0];
+    $Q_id_entrada = (integer)strtok($Q_a_sel[0], "#");
 }
 
 $plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
