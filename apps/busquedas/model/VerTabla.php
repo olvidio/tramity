@@ -280,6 +280,7 @@ class VerTabla
             $i++;
 
             $id_entrada = $oEntrada->getId_entrada();
+            $id_entrada_compartida = $oEntrada->getId_entrada_compartida();
             $asunto = $oEntrada->getAsuntoDetalle();
 
             $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
@@ -313,7 +314,12 @@ class VerTabla
                 $f_contestar = '-';
                 $f_entrada = '-';
             } else {
-                $id_sel = $id_entrada;
+                if (!empty($id_entrada_compartida)) {
+                    $id_sel = "$id_entrada_compartida#true";
+                } else {
+                    $id_sel = "$id_entrada#false";
+                }
+
                 $f_doc = $oEntrada->getF_documento()->getFromLocal();
                 $f_contestar = $oEntrada->getF_contestar()->getFromLocal();
                 $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
@@ -322,7 +328,7 @@ class VerTabla
             $id_encargado = $oEntrada->getEncargado();
             $nom_encargado = $a_usuarios_oficina[$id_encargado] ?? '';
 
-            $a_valores[$i]['sel'] = "$id_sel#false";
+            $a_valores[$i]['sel'] = "$id_sel";
             $a_valores[$i][1] = $protocolo;
             $a_valores[$i][2] = $referencias;
             $a_valores[$i][3] = $categoria_txt;
