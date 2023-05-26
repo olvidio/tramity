@@ -113,6 +113,13 @@ foreach ($cEntradas as $oEntrada) {
     }
     $a++;
     $id_entrada = $oEntrada->getId_entrada();
+    $id_entrada_compartida = $oEntrada->getId_entrada_compartida();
+    if (!empty($id_entrada_compartida)) {
+        $compartida = 'true';
+    } else {
+        $id_entrada_compartida = $id_entrada;
+        $compartida = 'false';
+    }
     $fecha_txt = $oEntrada->getF_entrada()->getFromLocal();
     $id_of_ponente = $oEntrada->getPonente();
     $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
@@ -120,7 +127,7 @@ foreach ($cEntradas as $oEntrada) {
 
     $ponente_txt = empty($a_posibles_oficinas[$id_of_ponente]) ? '?' : $a_posibles_oficinas[$id_of_ponente];
 
-    $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >ver</span>";
+    $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada_compartida',$compartida);\" >ver</span>";
     $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_entrada('$id_entrada','$Qid_expediente','$Q_filtro');\" >adjuntar</span>";
 
     $a_valores[$a][1] = $ver;

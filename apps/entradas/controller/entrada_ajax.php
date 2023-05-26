@@ -80,10 +80,10 @@ switch ($Q_que) {
 
 
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -135,10 +135,10 @@ switch ($Q_que) {
 
 
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -158,10 +158,10 @@ switch ($Q_que) {
         }
 
         if (empty($mensaje)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $mensaje;
         }
 
@@ -283,10 +283,10 @@ switch ($Q_que) {
             }
         }
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -308,10 +308,10 @@ switch ($Q_que) {
             $error_txt = $oEntrada->getErrorTxt();
         }
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -326,10 +326,10 @@ switch ($Q_que) {
         $mensaje = '';
 
         if (empty($mensaje)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['detalle'] = $anulado;
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $mensaje;
         }
 
@@ -348,10 +348,10 @@ switch ($Q_que) {
         }
 
         if (empty($mensaje)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['detalle'] = $oEntrada->getDetalle();
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $mensaje;
         }
 
@@ -374,10 +374,10 @@ switch ($Q_que) {
         $mensaje = '';
 
         if (empty($mensaje)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['destinos'] = $destinos_txt;
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $mensaje;
         }
 
@@ -406,7 +406,7 @@ switch ($Q_que) {
             $mensaje .= $pendientes_txt;
         }
 
-        $jsondata['success'] = true;
+        $jsondata['success'] = TRUE;
         $jsondata['mensaje'] = $mensaje;
 
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -441,7 +441,7 @@ switch ($Q_que) {
             $mensaje .= $pendientes_txt;
         }
 
-        $jsondata['success'] = true;
+        $jsondata['success'] = TRUE;
         $jsondata['mensaje'] = $mensaje;
 
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
@@ -483,10 +483,10 @@ switch ($Q_que) {
             $error_txt = _("No existe la entrada");
         }
         if (empty($error_txt)) {
-            $jsondata['success'] = true;
+            $jsondata['success'] = TRUE;
             $jsondata['mensaje'] = 'ok';
         } else {
-            $jsondata['success'] = false;
+            $jsondata['success'] = FALSE;
             $jsondata['mensaje'] = $error_txt;
         }
 
@@ -578,6 +578,13 @@ switch ($Q_que) {
             }
             $a++;
             $id_entrada = $oEntrada->getId_entrada();
+            $id_entrada_compartida = $oEntrada->getId_entrada_compartida();
+            if (!empty($id_entrada_compartida)) {
+                $compartida = 'true';
+            } else {
+                $id_entrada_compartida = $id_entrada;
+                $compartida = 'false';
+            }
             $fecha_txt = $oEntrada->getF_entrada()->getFromLocal();
             $id_of_ponente = $oEntrada->getPonente();
 
@@ -585,7 +592,7 @@ switch ($Q_que) {
 
             $oProtOrigen->setJson($oEntrada->getJson_prot_origen());
 
-            $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada');\" >" . _("ver") . "</span>";
+            $ver = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada_compartida',$compartida);\" >" . _("ver") . "</span>";
             $add = "<span class=\"btn btn-link\" onclick=\"fnjs_adjuntar_entrada('$id_entrada','$Qid_expediente','$Qfiltro');\" >" . _("adjuntar") . "</span>";
 
             $a_valores[$a][1] = $ver;
@@ -623,7 +630,7 @@ switch ($Q_que) {
 
         $jsondata = [];
         if ($error === TRUE) {
-            $jsondata['error'] = true;
+            $jsondata['error'] = TRUE;
         } else {
             switch ($Qtipo_doc) {
                 case EntradaDocDB::TIPO_ETHERCALC :
@@ -634,7 +641,7 @@ switch ($Q_que) {
 
                     $fullUrl = "$url/$padID";
 
-                    $jsondata['error'] = false;
+                    $jsondata['error'] = FALSE;
                     $jsondata['url'] = $fullUrl;
                     break;
                 case EntradaDocDB::TIPO_ETHERPAD :
@@ -647,7 +654,7 @@ switch ($Q_que) {
 
                     $fullUrl = "$url/p/$padID?showChat=false&showLineNumbers=false";
 
-                    $jsondata['error'] = false;
+                    $jsondata['error'] = FALSE;
                     $jsondata['url'] = $fullUrl;
                     break;
                 default:
