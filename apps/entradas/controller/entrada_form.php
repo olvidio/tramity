@@ -25,7 +25,10 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+// si vengo de las tablas, el formato es: 4n string: id_entrada#compartida
+$Q_id_sel = (string)filter_input(INPUT_POST, 'id_entrada');
+$Q_id_entrada = (integer)strtok($Q_id_sel, "#");
+
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 $Q_importar = (bool)filter_input(INPUT_POST, 'importar');
 
