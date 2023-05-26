@@ -322,7 +322,7 @@ class VerTabla
             $id_encargado = $oEntrada->getEncargado();
             $nom_encargado = $a_usuarios_oficina[$id_encargado] ?? '';
 
-            $a_valores[$i]['sel'] = "$id_sel";
+            $a_valores[$i]['sel'] = "$id_sel#false";
             $a_valores[$i][1] = $protocolo;
             $a_valores[$i][2] = $referencias;
             $a_valores[$i][3] = $categoria_txt;
@@ -427,7 +427,7 @@ class VerTabla
             $categoria_txt = empty($a_categorias[$categoria]) ? '' : $a_categorias[$categoria];
             $f_doc = $oEntrada->getF_documento();
 
-            $a_valores[$i]['sel'] = "$id_entrada";
+            $a_valores[$i]['sel'] = "$id_entrada#true";
             $a_valores[$i][1] = $protocolo;
             $a_valores[$i][2] = $referencias;
             $a_valores[$i][3] = $categoria_txt;

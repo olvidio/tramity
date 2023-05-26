@@ -220,6 +220,7 @@
         if (rta == 1) {
             var form = $(formulario).attr('id');
             var id_reg;
+            var compartida;
             /* selecciono los elementos con class="sel" de las tablas del id=formulario */
             /* var sel=$('#'+formulario+' table .sel'); */
             $('#' + form + ' input.sel').each(function (i) {
@@ -227,6 +228,12 @@
                     // como ya he comprobado que sólo está uno seleccionado, es este.
                     var array_dir = $(this).val().split('#');
                     id_reg = array_dir[0];
+                    if (array_dir[1] === 'true') {
+                        compartida = true;
+                    } else {
+                        compartida = false;
+                    }
+                    debugger;
                 }
             });
             var url_doc = 'apps/entradas/controller/entrada_ajax.php';
@@ -241,7 +248,7 @@
                 if (json.success != true) {
                     alert(json.mensaje);
                 } else {
-                    fnjs_ver_entrada(id_reg);
+                    fnjs_ver_entrada(id_reg,compartida);
                 }
             });
         }
