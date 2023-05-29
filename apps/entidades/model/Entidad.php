@@ -214,7 +214,10 @@ class Entidad extends EntidadDB
             $err .= $this->ejecutarPsqlInsert('config');
         }
         // añadir la sigla en config:
-        $err .= $this->ejecutarSql("INSERT INTO nombre_del_esquema.x_config (parametro, valor) VALUES ('sigla', '$this->snombre')");
+        // OJO apóstrofes
+        // escapar los apóstrofes con doble ('') cosas del postgresql.
+        $nombre = str_replace("'", "''", $this->snombre);
+        $err .= $this->ejecutarSql("INSERT INTO nombre_del_esquema.x_config (parametro, valor) VALUES ('sigla', '$nombre')");
 
         return $err;
     }
