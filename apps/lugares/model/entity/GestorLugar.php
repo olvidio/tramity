@@ -193,6 +193,9 @@ class GestorLugar extends core\ClaseGestor
         }
 
         // 0º dlb y cr y el propio ctr
+        // OJO apóstrofes
+        // escapar los apóstrofes con doble ('') cosas del postgresql.
+        $mi_cr = str_replace("'", "''", $mi_cr);
         $lugares = [];
         $query_ctr = "SELECT id_lugar, sigla, nombre FROM $nom_tabla
                             WHERE sigla='$mi_cr' AND anulado = FALSE
@@ -320,6 +323,11 @@ class GestorLugar extends core\ClaseGestor
 
         $lugares = [];
         // 0º dlb y cr y el propio ctr
+         // OJO apóstrofes
+        // escapar los apóstrofes con doble ('') cosas del postgresql.
+        $mi_ctr = str_replace("'", "''", $mi_ctr);
+        $mi_dl = str_replace("'", "''", $mi_dl);
+        $mi_cr = str_replace("'", "''", $mi_cr);
         $query_ctr = "SELECT id_lugar, sigla, nombre FROM $nom_tabla
                             WHERE (sigla='$mi_cr' OR sigla='$mi_dl' OR sigla='$mi_ctr') AND anulado = FALSE
                             ORDER BY sigla";
