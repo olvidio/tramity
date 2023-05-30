@@ -1,6 +1,7 @@
 <?php
 
-use migration\model\Migration;
+use migration\model\ImportarBonita;
+use migration\model\MigrationDlp;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -32,70 +33,112 @@ $Q_que = (string)filter_input(INPUT_POST, 'que');
 
 switch ($Q_que) {
     case 'aprobaciones_oficinas':
-        $oMigration = new Migration();
-        $oMigration->oficinas_aprobaciones();
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->oficinas_aprobaciones();
         echo "OK aprobaciones oficinas";
         break;
-    case 'aprobaciones_referencias':
-        $oMigration = new Migration();
-        $oMigration->referencias_aprobaciones();
-        echo "OK aprobaciones referencias";
-        break;
-    case 'aprobaciones_destinos':
-        $oMigration = new Migration();
-        $oMigration->destinos_aprobaciones();
-        echo "OK aprobaciones destinos";
-        break;
-    case 'aprobaciones':
-        $oMigration = new Migration();
-        $oMigration->copiar_aprobaciones();
-        echo "OK aprobaciones";
-        break;
     case 'entradas_docs':
-        $oMigration = new Migration();
-        $oMigration->docs_entradas();
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->docs_entradas();
         echo "OK entradas docs";
         break;
     case 'entradas_bypass':
-        $oMigration = new Migration();
-        $oMigration->bypass_entradas();
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->bypass_entradas();
         echo "OK entradas bypass";
         break;
     case 'entradas_permanentes':
-        $oMigration = new Migration();
-        $oMigration->permanentes_entradas();
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->permanentes_entradas();
         echo "OK entradas permanentes";
         break;
-    case 'entradas_ref':
-        $oMigration = new Migration();
-        $oMigration->referencias_entradas();
-        echo "OK entradas referenias";
-        break;
     case 'entradas_of':
-        $oMigration = new Migration();
-        $oMigration->oficinas_entradas();
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->oficinas_entradas();
         echo "OK entradas oficinas";
         break;
     case 'entradas2':
-        $oMigration = new Migration();
-        $oMigration->completar_entradas();
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->completar_entradas();
         echo "OK entradas 2";
         break;
-    case 'entradas':
-        $oMigration = new Migration();
-        $oMigration->copiar_entradas();
-        echo "OK entradas";
-        break;
-    case 'lugares':
-        $oMigration = new Migration();
-        $oMigration->crear_equivalencias_lugares();
-        echo "OK lugares";
-        break;
     case 'oficinas':
-        $oMigration = new Migration();
-        $oMigration->crear_equivalencias_oficinas();
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->crear_equivalencias_oficinas();
         echo "OK oficinas";
         break;
-
-
+// --------------------
+    case 'pasar_a_dlp_anexos':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->pasar_a_dlp_anexos();
+        echo "OK pasado a dlp";
+        break;
+    case 'pasar_a_dlp':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->pasar_a_dlp();
+        echo "OK pasado a dlp";
+        break;
+    case 'escritos_cancilleria':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->escritos_cancilleria();
+        echo "OK modificar asunto escritos cancillería";
+        break;
+    case 'aprobaciones_ref':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->referencias_aprobaciones();
+        echo "OK aprobaciones referencias";
+        break;
+    case 'aprobaciones_anexos':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->aprobaciones_anexos();
+        echo "OK entradas anexos";
+        break;
+    case 'aprobaciones_destinos':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->destinos_aprobaciones();
+        echo "OK aprobaciones destinos";
+        break;
+    case 'aprobaciones':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->copiar_aprobaciones();
+        echo "OK aprobaciones";
+        break;
+    case 'entradas_cancilleria':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->entradas_cancilleria();
+        echo "OK  modificar asunto entradas cancillería";
+        break;
+    case 'entradas_ref':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->entradas_ref();
+        echo "OK entradas anexos";
+        break;
+    case 'entradas_anexos':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->entradas_anexos();
+        echo "OK entradas anexos";
+        break;
+    case 'entradas':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->copiar_entradas();
+        echo "OK entradas";
+        break;
+    case 'lugares_a_prod':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->pasar_lugares_a_produccion();
+        echo "OK lugares a producción";
+        break;
+    case 'lugares':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->crear_equivalencias_lugares();
+        echo "OK lugares";
+        break;
+    case 'crear_tablas':
+        $oImportarBonita = new ImportarBonita();
+        $oImportarBonita->crear_inicio();
+        echo "OK lugares";
+        break;
+    default:
+        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
+        exit ($err_switch);
 }

@@ -237,7 +237,7 @@ $a_campos[$parametro] = $val_sigla;
 /*
  *  const CAT_E12          = 1;
  *	const CAT_NORMAL       = 2;
- *	const CAT_PERMANATE    = 3;
+ *	const CAT_PERMANENTE    = 3;
  */
 
 $parametro = 'cat_e12_registro';

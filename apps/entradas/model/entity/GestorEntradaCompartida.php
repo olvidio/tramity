@@ -47,7 +47,7 @@ class GestorEntradaCompartida extends ClaseGestor
 
         $sql_anys = "SELECT json_prot_origen -> 'any' as a
                     FROM $nom_tabla
-                    WHERE categoria = " . Categoria::CAT_PERMANATE . "
+                    WHERE categoria = " . Categoria::CAT_PERMANENTE . "
                     GROUP BY a ORDER BY a";
 
         if (($oDblSt = $oDbl->Query($sql_anys)) === FALSE) {
