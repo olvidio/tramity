@@ -561,9 +561,6 @@ class Expediente extends expedienteDB
                 $a_firmas_oficina = $this->getFirmas_oficina();
                 // añadir la del dtor.
                 array_unshift($a_firmas_oficina, $id_ponente);
-                if (!in_array($id_cargo, $a_firmas_oficina)) {
-                    continue;
-                }
             }
 
             // comprobar la oficina para los cargos especiales:
