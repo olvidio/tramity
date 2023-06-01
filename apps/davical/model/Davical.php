@@ -72,9 +72,15 @@ class Davical
     {
         $cargo = $aDatosCargo['cargo'];
         $descripcion = $aDatosCargo['descripcion'];
-        $oficina = $aDatosCargo['oficina'];
-        // $password = $aDatosCargo['password']
-        $oficina_mod = $this->getNombreRecurso($oficina);
+        $id_oficina = $aDatosCargo['id_oficina'];
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+            $oficina = $_SESSION['oConfig']->getSigla();
+            $oficina_mod = $this->getNombreRecursoPorNombreOficina($oficina);
+        } else {
+            $oOficina = new Oficina($id_oficina);
+            $oficina = $oOficina->getSigla();
+            $oficina_mod = $this->getNombreRecursoPorIdOficina($id_oficina);
+        }
         $nom_grupo = $this->getNombreGrupo($oficina);
         $username = $this->getNombreUsuario($cargo);
 
@@ -141,31 +147,36 @@ class Davical
         return $error_txt;
     }
 
-    public function getNombreRecurso($id_oficina = '')
+    public function getNombreRecursoPorIdOficina($id_oficina = '')
     {
         $sigla = $_SESSION['oConfig']->getSigla();
         $sigla_norm = StringLocal::lowerNormalized($sigla);
+        // para los ctr, id_oficina = -10. No la pongo en el nombre
         if (!empty($id_oficina) && $id_oficina > 0) {
             $oOficina = new Oficina($id_oficina);
             $oficina = $oOficina->getSigla();
-            $nom_recurso = $this->getNombreRecursoPorNombre($oficina);
+            $nom_recurso = $this->getNombreRecursoPorNombreOficina($oficina);
         } else {
             $nom_recurso = $sigla_norm . "_oficina";
         }
         return $nom_recurso;
     }
 
-    public function getNombreRecursoPorNombre($oficina)
+    public function getNombreRecursoPorNombreOficina($oficina)
     {
         $sigla = $_SESSION['oConfig']->getSigla();
         $sigla_norm = StringLocal::lowerNormalized($sigla);
-        if (empty($oficina)) {
-            $msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
-            exit($msg);
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+            $oficina_norm = '';
+        } else {
+            if (empty($oficina)) {
+                $msg = _("No se puede determinar la ruta del calendario para añadir el pendiente");
+                exit($msg);
+            }
+            $oficina_norm = '_' . StringLocal::lowerNormalized($oficina);
         }
-        $oficina_norm = StringLocal::lowerNormalized($oficina);
 
-        return $sigla_norm . "_oficina_" . $oficina_norm;
+        return $sigla_norm . "_oficina" . $oficina_norm;
     }
 
     private function getNombreGrupo($oficina = '')
@@ -228,11 +239,11 @@ class Davical
         $joined = $str_ahora;
 
         $active = empty($aData['active']) ? 't' : $aData['active'];
-        $email_ok = empty($aData['email_ok']) ? null : $aData['email_ok'];
+        $email_ok = empty($aData['email_ok']) ? NULL : $aData['email_ok'];
         $updated = empty($aData['updated']) ? $str_ahora : $aData['updated'];
         $last_used = empty($aData['last_used']) ? $str_ahora : $aData['last_used'];
         $username = empty($aData['username']) ? '?' : $aData['username'];
-        $password = empty($aData['password']) ? null : $aData['password'];
+        $password = empty($aData['password']) ? NULL : $aData['password'];
         $fullname = empty($aData['fullname']) ? $username : $aData['fullname'];
         $email = empty($aData['email']) ? '' : $aData['email'];
         $config_data = empty($aData['config_data']) ? '' : $aData['config_data'];
@@ -295,38 +306,39 @@ class Davical
     public function crearOficina($oficina)
     {
         $error_txt = '';
-        $nom_oficina = $this->getNombreRecurso($oficina);
+        $nom_oficina = $this->getNombreRecursoPorNombreOficina($oficina);
         $nom_grupo = $this->getNombreGrupo($oficina);
 
         // si ya existe, no hacer nada.
         if ($this->existeUser($nom_oficina) !== FALSE) {
-            return TRUE;
+            return '';
         }
         // crear resource tipo: oficina_vsm
         $a_ids_oficina = $this->crearResource($nom_oficina);
         $user_no = $a_ids_oficina['user_no'];
         // crear grupo tipo: grupo_vsm
         $a_ids_grupo = $this->crearGrupo($nom_grupo);
-        // crear collecciones: registro y oficina
+        // crear colecciones: registro y oficina
         $aCollection_id = $this->crearColecciones($user_no, $nom_oficina);
 
-        // Dar al grupo, permiso distinto para cada coleccion. (el registro no borrar...)
-        // Resulta que para los evetos con CLASS= PRIVATE, si no tiene todos los privilegios no va.
-        // para registro:
-        $aData['by_principal'] = '';
-        $aData['to_principal'] = $a_ids_grupo['principal_id'];
-        $aData['by_collection'] = $aCollection_id['registro'];
-        $aData['privileges'] = "111111111111111111111111";
-        $aData['is_group'] = '';
-        $this->grant($aData);
-        // Añadir permisos para el grupo de secretaria
-        if (($principal_id_secretaria = $this->getPincipalSecretaria()) !== FALSE) {
+        // Dar al grupo, permiso distinto para cada colección. (el registro no borrar...)
+        // Resulta que para los eventos con CLASS= PRIVATE, si no tiene todos los privilegios no va.
+        if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
+            // para registro:
             $aData['by_principal'] = '';
-            $aData['to_principal'] = $principal_id_secretaria;
+            $aData['to_principal'] = $a_ids_grupo['principal_id'];
             $aData['by_collection'] = $aCollection_id['registro'];
             $aData['privileges'] = "111111111111111111111111";
             $aData['is_group'] = '';
             $this->grant($aData);
+            // Añadir permisos para el grupo de secretaria
+            if (($principal_id_secretaria = $this->getPincipalSecretaria()) !== FALSE) {
+                $aData['to_principal'] = $principal_id_secretaria;
+                $aData['by_collection'] = $aCollection_id['registro'];
+                $aData['privileges'] = "111111111111111111111111";
+                $aData['is_group'] = '';
+                $this->grant($aData);
+            }
         }
         // Oficina
         $aData['by_principal'] = '';
@@ -360,10 +372,10 @@ class Davical
         $joined = $str_ahora;
 
         $active = 't';
-        $email_ok = null;
+        $email_ok = NULL;
         $updated = $str_ahora;
         $last_used = $str_ahora;
-        $password = null;
+        $password = NULL;
         $fullname = $username;
         $email = '';
         $config_data = '';
@@ -430,10 +442,10 @@ class Davical
         $joined = $str_ahora;
 
         $active = 't';
-        $email_ok = null;
+        $email_ok = NULL;
         $updated = $str_ahora;
         $last_used = $str_ahora;
-        $password = null;
+        $password = NULL;
         $fullname = sprintf(_("grupo de %s"), $username);
         $email = '';
         $config_data = '';
@@ -506,11 +518,11 @@ class Davical
         $aData['modified'] = $str_ahora;
         $aData['public_events_only'] = 'f';
         $aData['publicly_readable'] = 'f';
-        $aData['default_privileges'] = null;
+        $aData['default_privileges'] = NULL;
         $aData['is_addressbook'] = 'f';
         $aData['resourcetypes'] = '<DAV::collection/><urn:ietf:params:xml:ns:caldav:calendar/>';
         $aData['schedule_transp'] = 'opaque';
-        $aData['timezone'] = null;
+        $aData['timezone'] = NULL;
 
         // registro
         if ($this->ambito == Cargo::AMBITO_DL) {
@@ -692,8 +704,8 @@ class Davical
 
     public function cambioNombreOficina($of_new, $of_old)
     {
-        $of_new_mod = $this->getNombreRecursoPorNombre($of_new);
-        $of_old_mod = $this->getNombreRecurso($of_old);
+        $of_new_mod = $this->getNombreRecursoPorNombreOficina($of_new);
+        $of_old_mod = $this->getNombreRecursoPorNombreOficina($of_old);
         // modificar el usr correspondiente a la oficina:
         $oUserDavical = new User();
         $user_no = $oUserDavical->cambiarNombre($of_new_mod, $of_old_mod);
@@ -726,7 +738,7 @@ class Davical
     public function eliminarOficina($oficina)
     {
         $error_txt = '';
-        $nom_oficina = $this->getNombreRecurso($oficina);
+        $nom_oficina = $this->getNombreRecursoPorNombreOficina($oficina);
         $nom_grupo = $this->getNombreGrupo($oficina);
         // si No existe, no hacer nada.
         if ($this->existeUser($nom_oficina) === FALSE) {

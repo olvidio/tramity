@@ -115,7 +115,7 @@ switch ($Q_que) {
         // nombre normalizado del usuario y oficina:
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
         $user_davical = $oDavical->getUsernameDavical($Q_id_cargo_pendiente);
-        $parent_container = $oDavical->getNombreRecurso($id_oficina);
+        $parent_container = $oDavical->getNombreRecursoPorIdOficina($id_oficina);
 
         $calendario = 'oficina';
         $oHoy = new DateTimeLocal();

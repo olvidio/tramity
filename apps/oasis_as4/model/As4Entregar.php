@@ -818,7 +818,7 @@ class As4Entregar extends As4CollaborationInfo
             $sigla_norm = StringLocal::toRFC952($siglaDestino);
             $cal_oficina = $sigla_norm . "_oficina";
         } else {
-            $cal_oficina = $oDavical->getNombreRecurso($id_oficina);
+            $cal_oficina = $oDavical->getNombreRecursoPorIdOficina($id_oficina);
         }
         $calendario = 'oficina';
 

@@ -81,7 +81,7 @@ class BuscarPendiente
         }
 
         // dav_name = /oficina_agd/oficina/20210211T123510.ics
-        $parent_container = $oDavical->getNombreRecurso($this->id_oficina);
+        $parent_container = $oDavical->getNombreRecursoPorIdOficina($this->id_oficina);
         if (!empty($this->id_oficina)) {
             $dav_name = '^\/' . $parent_container . '\/' . $this->calendario . '\/';
         } else {

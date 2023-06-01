@@ -93,7 +93,7 @@ switch ($Q_que) {
         // Crear el usuario en davical.
         $aDatosCargo = ['cargo' => $Q_cargo,
             'descripcion' => $Q_descripcion,
-            'oficina' => $Q_id_oficina,
+            'id_oficina' => $Q_id_oficina,
         ];
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
         $txt_err .= $oDavical->crearUser($aDatosCargo);

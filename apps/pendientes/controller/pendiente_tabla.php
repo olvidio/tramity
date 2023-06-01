@@ -93,7 +93,7 @@ $gesCargos = new GestorCargo();
 $a_usuarios_oficina = $gesCargos->getArrayUsuariosOficina($id_oficina);
 
 $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-$cal_oficina = $oDavical->getNombreRecurso($id_oficina);
+$cal_oficina = $oDavical->getNombreRecursoPorIdOficina($id_oficina);
 
 
 // para el dialogo de búsquedas:

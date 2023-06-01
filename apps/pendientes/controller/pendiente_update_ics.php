@@ -50,7 +50,7 @@ $Q_cal_oficina = (string)filter_input(INPUT_POST, 'cal_oficina');
 $Q_id_oficina = (string)filter_input(INPUT_POST, 'id_oficina');
 if (empty($Q_cal_oficina) && !empty($Q_id_oficina)) { // si soy secretaria puede ser que haya definido la oficina posteriormente
     $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-    $Q_cal_oficina = $oDavical->getNombreRecurso($Q_id_oficina);
+    $Q_cal_oficina = $oDavical->getNombreRecursoPorIdOficina($Q_id_oficina);
 }
 
 $Q_ref_id_lugar = (string)filter_input(INPUT_POST, 'ref_id_lugar');

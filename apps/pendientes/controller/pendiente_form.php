@@ -150,7 +150,7 @@ if ($nuevo == 1) {
     $uid = '';
     if (!empty($id_oficina)) { // En el caso de secretaria puede estar vacío
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-        $cal_oficina = $oDavical->getNombreRecurso($Q_id_oficina);
+        $cal_oficina = $oDavical->getNombreRecursoPorIdOficina($Q_id_oficina);
     } else {
         $cal_oficina = '';
     }

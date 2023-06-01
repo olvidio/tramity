@@ -517,7 +517,7 @@ switch ($Q_que) {
 
                         $id_reg = 'REN' . $id_entrada; // REN = Registro Entrada
                         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-                        $parent_container = $oDavical->getNombreRecurso($Q_id_of_ponente);
+                        $parent_container = $oDavical->getNombreRecursoPorIdOficina($Q_id_of_ponente);
                         $calendario = 'registro';
                         $user_davical = $oDavical->getUsernameDavicalSecretaria();
                         $uid = '';
@@ -542,7 +542,7 @@ switch ($Q_que) {
                         // meter el pendienteDB en davical con el id_reg que toque y borrarlo de pendienteDB.
                         $id_reg = 'REN' . $id_entrada; // REN = Registro Entrada
                         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-                        $parent_container = $oDavical->getNombreRecurso($Q_id_of_ponente);
+                        $parent_container = $oDavical->getNombreRecursoPorIdOficina($Q_id_of_ponente);
                         $calendario = 'registro';
                         $user_davical = $oDavical->getUsernameDavicalSecretaria();
                         $uid = '';

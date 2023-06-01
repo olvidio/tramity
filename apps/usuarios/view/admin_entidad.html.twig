@@ -144,6 +144,23 @@
 
         </li>
 
+        <!-- Nav Item - Davical -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDavical"
+               aria-expanded="true" aria-controls="collapseDavical">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>{{ "Davical"|trans|raw }}</span>
+            </a>
+            <div id="collapseDavical" class="collapse" aria-labelledby="headingPages"
+                 data-bs-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item"
+                       onclick="fnjs_update_div('#main','apps/davical/controller/revisar_oficinas_y_usuarios.php')" href="#">
+                        {{ "revisar oficinas y usuarios"|trans|raw }}
+                    </a>
+                </div>
+            </div>
+        </li>
         <!-- Divider -->
         <hr class="sidebar-divider">
 

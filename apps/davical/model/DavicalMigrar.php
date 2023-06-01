@@ -204,7 +204,7 @@ class DavicalMigrar
     private function getDavNameOrg()
     {
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-        $parent_container = $oDavical->getNombreRecurso($this->id_oficina);
+        $parent_container = $oDavical->getNombreRecursoPorIdOficina($this->id_oficina);
         $dav_name = '/' . $parent_container . '/registro/' . $this->getId_reg_org() . "-";
 
         return $dav_name;
@@ -229,7 +229,7 @@ class DavicalMigrar
     private function getDavNameDst()
     {
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
-        $parent_container = $oDavical->getNombreRecurso($this->id_oficina);
+        $parent_container = $oDavical->getNombreRecursoPorIdOficina($this->id_oficina);
         $dav_name = '/' . $parent_container . '/registro/' . $this->getId_reg_dst() . "-";
 
         return $dav_name;
