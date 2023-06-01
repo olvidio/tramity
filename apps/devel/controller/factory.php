@@ -204,6 +204,7 @@ foreach ($oDbl->query($sql) as $row) {
             break;
         case 'text':
         case 'varchar':
+        case 'bpchar':
             $tipo_db = 'string';
             $tip = 's';
             $tip_val = '';
