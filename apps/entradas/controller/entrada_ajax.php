@@ -184,11 +184,23 @@ switch ($Q_que) {
         exit();
     case 'modificar_anular':
         $error_txt = '';
-        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        // nuevo formato: id_entrada#comparida (compartida = boolean)
+        //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $a_entrada = explode('#', $Qid_entrada);
+        $Q_id_entrada = $a_entrada[0];
+        $compartida = (bool)is_true($a_entrada[1]);
         $Qtext = (string)filter_input(INPUT_POST, 'text');
         $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
 
-        $oEntrada = new Entrada($Q_id_entrada);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
+
         if ($oEntrada->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
@@ -309,9 +321,21 @@ switch ($Q_que) {
         exit();
     case 'modificar_detalle':
         $error_txt = '';
-        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        // nuevo formato: id_entrada#comparida (compartida = boolean)
+        //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $a_entrada = explode('#', $Qid_entrada);
+        $Q_id_entrada = $a_entrada[0];
+        $compartida = (bool)is_true($a_entrada[1]);
         $Qdetalle = (string)filter_input(INPUT_POST, 'text');
-        $oEntrada = new Entrada($Q_id_entrada);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
+
         if ($oEntrada->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
@@ -333,8 +357,20 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'get_anular':
-        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        $oEntrada = new Entrada($Q_id_entrada);
+        // nuevo formato: id_entrada#comparida (compartida = boolean)
+        //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $a_entrada = explode('#', $Qid_entrada);
+        $Q_id_entrada = $a_entrada[0];
+        $compartida = (bool)is_true($a_entrada[1]);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
+
         $anulado = $oEntrada->getAnulado();
         $mensaje = '';
 
@@ -351,8 +387,20 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'get_detalle':
-        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        $oEntrada = new Entrada($Q_id_entrada);
+        // nuevo formato: id_entrada#comparida (compartida = boolean)
+        //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $a_entrada = explode('#', $Qid_entrada);
+        $Q_id_entrada = $a_entrada[0];
+        $compartida = (bool)is_true($a_entrada[1]);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
+
         $mensaje = '';
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($oEntrada, 'detalle');
@@ -462,10 +510,22 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'eliminar':
-        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        // nuevo formato: id_entrada#comparida (compartida = boolean)
+        //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $a_entrada = explode('#', $Qid_entrada);
+        $Q_id_entrada = $a_entrada[0];
+        $compartida = (bool)is_true($a_entrada[1]);
         $error_txt = '';
         if (!empty($Q_id_entrada)) {
-            $oEntrada = new Entrada($Q_id_entrada);
+            if ($compartida) {
+                $gesEntradas = new GestorEntrada();
+                $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+                $oEntrada = $cEntradas[0];
+            } else {
+                $oEntrada = new Entrada($Q_id_entrada);
+            }
+
             // eliminar los pendientes
             $gesPendientes = new GestorPendienteEntrada();
             $cUids = $gesPendientes->getArrayUidById_entrada($Q_id_entrada);
@@ -623,12 +683,25 @@ switch ($Q_que) {
         echo $oLista->mostrar_tabla();
         break;
     case 'guardar':
-        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        // nuevo formato: id_entrada#comparida (compartida = boolean)
+        //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $a_entrada = explode('#', $Qid_entrada);
+        $Q_id_entrada = $a_entrada[0];
+        $compartida = (bool)is_true($a_entrada[1]);
         $Qf_escrito = (string)filter_input(INPUT_POST, 'f_escrito');
         $Qtipo_doc = (integer)filter_input(INPUT_POST, 'tipo_doc');
 
         if (!empty($Q_id_entrada)) {
-            $oEntradaDocBD = new EntradaDocDB($Q_id_entrada);
+            if ($compartida) {
+                $gesEntradas = new GestorEntrada();
+                $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+                $oEntrada = $cEntradas[0];
+                $id_entrada = $oEntrada->getId_entrada();
+                $oEntradaDocBD = new EntradaDocDB($id_entrada);
+            } else {
+                $oEntradaDocBD = new EntradaDocDB($Q_id_entrada);
+            }
             $oEntradaDocBD->setF_doc($Qf_escrito);
             $oEntradaDocBD->setTipo_doc($Qtipo_doc);
 

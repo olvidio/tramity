@@ -5,6 +5,7 @@ use davical\model\Davical;
 use entradas\model\entity\EntradaBypass;
 use entradas\model\entity\EntradaDB;
 use entradas\model\Entrada;
+use entradas\model\GestorEntrada;
 use lugares\model\entity\GestorGrupo;
 use pendientes\model\Pendiente;
 use usuarios\model\entity\Cargo;
@@ -25,7 +26,13 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 $Q_que = (string)filter_input(INPUT_POST, 'que');
-$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+// nuevo formato: id_entrada#comparida (compartida = boolean)
+//$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+$Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+$a_entrada = explode('#', $Qid_entrada);
+$Q_id_entrada = $a_entrada[0];
+$compartida = (bool)is_true($a_entrada[1]);
+
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
 $Q_origen = (integer)filter_input(INPUT_POST, 'origen');
@@ -71,7 +78,14 @@ switch ($Q_que) {
             }
         }
         // Se ponen cuando se han enviado...
-        $oEntrada = new Entrada($Q_id_entrada);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
+
         if ($oEntrada->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
@@ -96,7 +110,14 @@ switch ($Q_que) {
     case 'en_asignar':
         $Qid_oficina = ConfigGlobal::role_id_oficina();
         $Qid_cargo_encargado = (integer)filter_input(INPUT_POST, 'id_cargo_encargado');
-        $oEntrada = new EntradaDB($Q_id_entrada);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
+
         if ($oEntrada->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
@@ -186,7 +207,14 @@ switch ($Q_que) {
     case 'en_visto':
         $Qid_oficina = ConfigGlobal::role_id_oficina();
         $Qid_cargo = ConfigGlobal::role_id_cargo();
-        $oEntrada = new EntradaDB($Q_id_entrada);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
+
         if ($oEntrada->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
@@ -217,7 +245,14 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'eliminar':
-        $oEntrada = new EntradaDB($Q_id_entrada);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
+
         if ($oEntrada->DBEliminar() === FALSE) {
             $error_txt .= $oEntrada->getErrorTxt();
             exit($error_txt);
@@ -298,7 +333,14 @@ switch ($Q_que) {
             $oHoy = new DateTimeLocal();
             $Q_f_entrada = $oHoy->getFromLocal();
         }
-        $oEntrada = new Entrada($Q_id_entrada);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
+
         if ($oEntrada->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
@@ -315,7 +357,14 @@ switch ($Q_que) {
         }
         break;
     case 'detalle':
-        $oEntrada = new Entrada($Q_id_entrada);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
+
         if ($oEntrada->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
@@ -327,7 +376,14 @@ switch ($Q_que) {
         }
         break;
     case 'guardar_ctr':
-        $oEntrada = new Entrada($Q_id_entrada);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
+
         if ($oEntrada->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
@@ -387,7 +443,14 @@ switch ($Q_que) {
         exit();
     case 'guardar':
         if (!empty($Q_id_entrada)) {
-            $oEntrada = new Entrada($Q_id_entrada);
+            if ($compartida) {
+                $gesEntradas = new GestorEntrada();
+                $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+                $oEntrada = $cEntradas[0];
+            } else {
+                $oEntrada = new Entrada($Q_id_entrada);
+            }
+
             if ($oEntrada->DBCargar() === FALSE) {
                 $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
@@ -558,7 +621,14 @@ switch ($Q_que) {
                 $oEntradaBypass->DBCargar(); // Mo pasa nada si no existe, ya se insertará
                 //Q_asunto.
                 if ($perm_asunto >= PermRegistro::PERM_MODIFICAR) {
-                    $oEntrada = new EntradaDB($Q_id_entrada);
+                    if ($compartida) {
+                        $gesEntradas = new GestorEntrada();
+                        $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+                        $oEntrada = $cEntradas[0];
+                    } else {
+                        $oEntrada = new Entrada($Q_id_entrada);
+                    }
+
                     if ($oEntrada->DBCargar() === FALSE) {
                         $err_cargar = sprintf(_("OJO! no existe la entrada en %s, linea %s"), __FILE__, __LINE__);
                         exit ($err_cargar);
