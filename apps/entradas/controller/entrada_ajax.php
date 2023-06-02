@@ -4,6 +4,7 @@ use core\ConfigGlobal;
 use davical\model\Davical;
 use davical\model\DavicalMigrar;
 use entradas\model\entity\EntradaBypass;
+use entradas\model\entity\EntradaCompartida;
 use entradas\model\entity\EntradaDocDB;
 use entradas\model\entity\GestorEntradaBypass;
 use entradas\model\Entrada;
@@ -147,8 +148,18 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'perm_ver':
-        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-        $oEntrada = new Entrada($Q_id_entrada);
+        // nuevo formato: id_entrada#comparida (compartida = boolean)
+        //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $a_entrada = explode('#', $Qid_entrada);
+        $Q_id_entrada = $a_entrada[0];
+        $compartida = (bool)is_true($a_entrada[1]);
+
+        if ($compartida) {
+            $oEntrada = new EntradaCompartida($Q_id_entrada);
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
         $oPermiso = new PermRegistro();
         $perm = $oPermiso->permiso_detalle($oEntrada, 'escrito');
         if ($perm < PermRegistro::PERM_VER) {

@@ -148,14 +148,15 @@
             $('#' + form + ' input.sel').each(function (i) {
                 if ($(this).prop('checked') == true) {
                     // como ya he comprobado que sólo está uno seleccionado, es este.
-                    var array_dir = $(this).val().split('#');
-                    id_reg = array_dir[0];
+                    //var array_dir = $(this).val().split('#');
+                    //id_reg = array_dir[0];
+                    id_reg =$(this).val();
                 }
             });
             var filtro = $('#filtro').val();
 
             var url_doc = 'apps/entradas/controller/entrada_ajax.php';
-            var param_json = {que: 'perm_ver', id_entrada: id_reg};
+            var param_json = {que: 'perm_ver', id_entrada: id_reg };
             request = $.ajax({
                 data: param_json,
                 url: url_doc,

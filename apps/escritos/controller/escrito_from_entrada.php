@@ -1,6 +1,7 @@
 <?php
 
 use core\ConfigGlobal;
+use entradas\model\entity\EntradaCompartida;
 use entradas\model\Entrada;
 use escritos\model\Escrito;
 use escritos\model\EscritoForm;
@@ -9,6 +10,7 @@ use expedientes\model\Expediente;
 use tramites\model\entity\GestorTramite;
 use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -21,14 +23,23 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+// nuevo formato: id_entrada#comparida (compartida = boolean)
+//$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+$Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+$a_entrada = explode('#', $Qid_entrada);
+$Q_id_entrada = $a_entrada[0];
+$compartida = (bool)is_true($a_entrada[1]);
+
 //$Q_filtro = (string) filter_input(INPUT_POST, 'filtro');
 // cambio el filtro para ver los borradores:
 $filtro = 'borrador_propio';
 $modo = 'mod';
 
-$oEntrada = new Entrada($Q_id_entrada);
-$oEntrada->DBCargar();
+if ($compartida) {
+    $oEntrada = new EntradaCompartida($Q_id_entrada);
+} else {
+    $oEntrada = new Entrada($Q_id_entrada);
+}
 $f_contestar = $oEntrada->getF_contestar();
 
 // crear el expediente

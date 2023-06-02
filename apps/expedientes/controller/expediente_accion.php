@@ -11,6 +11,7 @@ use usuarios\model\entity\GestorCargo;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Hash;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -26,7 +27,12 @@ require_once("apps/core/global_object.inc");
 
 $Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
-$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+// nuevo formato: id_entrada#comparida (compartida = boolean)
+//$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+$Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+$a_entrada = explode('#', $Qid_entrada);
+$Q_id_entrada = $a_entrada[0];
+$compartida = (bool)is_true($a_entrada[1]);
 
 $pagina_contestar = '';
 // Añado la opción crear un expediente desde entradas
@@ -35,7 +41,11 @@ switch ($Q_filtro) {
     case 'escritos_cr':
     case 'permanentes_cr':
     case 'en_buscar':
-        $oEntrada = new Entrada($Q_id_entrada);
+        if ($compartida) {
+            $oEntrada = new EntradaCompartida($Q_id_entrada);
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
         $asunto = $oEntrada->getAsunto();
 
         $a_condicion = [];
@@ -69,7 +79,7 @@ switch ($Q_filtro) {
                 // En los ctr, ir directo a contestar:
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
-                    $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Q_id_entrada]));
+                    $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Qid_entrada]));
                 }
                 break;
             default:
