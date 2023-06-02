@@ -98,7 +98,7 @@ class EntradaDB extends ClasePropiedades
      *
      * @var string
      */
-    protected string $sasunto_entrada;
+    protected ?string $sasunto_entrada = null;
     /**
      * Json_prot_ref de EntradaDB
      *
