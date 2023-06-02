@@ -29,7 +29,7 @@ require_once("apps/core/global_object.inc");
 $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
 $a_entrada = explode('#', $Qid_entrada);
 $Q_id_entrada = $a_entrada[0];
-$compartida = (bool)is_true($a_entrada[1]);
+$compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 
 //$Q_filtro = (string) filter_input(INPUT_POST, 'filtro');
 // cambio el filtro para ver los borradores:

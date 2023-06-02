@@ -153,7 +153,7 @@ switch ($Q_que) {
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
         $Q_id_entrada = $a_entrada[0];
-        $compartida = (bool)is_true($a_entrada[1]);
+        $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 
         if ($compartida) {
             $gesEntradas = new GestorEntrada();
@@ -189,7 +189,7 @@ switch ($Q_que) {
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
         $Q_id_entrada = $a_entrada[0];
-        $compartida = (bool)is_true($a_entrada[1]);
+        $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         $Qtext = (string)filter_input(INPUT_POST, 'text');
         $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
 
@@ -326,7 +326,7 @@ switch ($Q_que) {
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
         $Q_id_entrada = $a_entrada[0];
-        $compartida = (bool)is_true($a_entrada[1]);
+        $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         $Qdetalle = (string)filter_input(INPUT_POST, 'text');
         if ($compartida) {
             $gesEntradas = new GestorEntrada();
@@ -362,7 +362,7 @@ switch ($Q_que) {
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
         $Q_id_entrada = $a_entrada[0];
-        $compartida = (bool)is_true($a_entrada[1]);
+        $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         if ($compartida) {
             $gesEntradas = new GestorEntrada();
             $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
@@ -392,7 +392,7 @@ switch ($Q_que) {
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
         $Q_id_entrada = $a_entrada[0];
-        $compartida = (bool)is_true($a_entrada[1]);
+        $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         if ($compartida) {
             $gesEntradas = new GestorEntrada();
             $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
@@ -515,7 +515,7 @@ switch ($Q_que) {
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
         $Q_id_entrada = $a_entrada[0];
-        $compartida = (bool)is_true($a_entrada[1]);
+        $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         $error_txt = '';
         if (!empty($Q_id_entrada)) {
             if ($compartida) {
@@ -688,7 +688,7 @@ switch ($Q_que) {
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
         $Q_id_entrada = $a_entrada[0];
-        $compartida = (bool)is_true($a_entrada[1]);
+        $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         $Qf_escrito = (string)filter_input(INPUT_POST, 'f_escrito');
         $Qtipo_doc = (integer)filter_input(INPUT_POST, 'tipo_doc');
 
