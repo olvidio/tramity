@@ -24,12 +24,14 @@ if ($Qmethod === 'POST') {
     // nuevo formato: id_entrada#comparida (compartida = boolean)
     $QQid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
     $a_entrada = explode('#', $QQid_entrada);
-    $id_entrada = $a_entrada[0];
+    $Qid_entrada = $a_entrada[0];
     $Qcompartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 }
 if ($Qmethod === 'GET') {
-    $Qid_entrada = (integer)filter_input(INPUT_GET, 'id_entrada');
-    $Qcompartida = (string)filter_input(INPUT_GET, 'compartida');
+    $QQid_entrada = (string)filter_input(INPUT_GET, 'id_entrada');
+    $a_entrada = explode('#', $QQid_entrada);
+    $Qid_entrada = $a_entrada[0];
+    $Qcompartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 }
 
 $sigla = $_SESSION['oConfig']->getSigla();
