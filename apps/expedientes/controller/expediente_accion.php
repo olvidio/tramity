@@ -4,6 +4,7 @@ use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\entity\EntradaCompartida;
 use entradas\model\Entrada;
+use entradas\model\GestorEntrada;
 use etiquetas\model\entity\GestorEtiqueta;
 use expedientes\model\Expediente;
 use usuarios\model\entity\Cargo;
@@ -42,7 +43,9 @@ switch ($Q_filtro) {
     case 'permanentes_cr':
     case 'en_buscar':
         if ($compartida) {
-            $oEntrada = new EntradaCompartida($Q_id_entrada);
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
         } else {
             $oEntrada = new Entrada($Q_id_entrada);
         }

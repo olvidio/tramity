@@ -156,7 +156,9 @@ switch ($Q_que) {
         $compartida = (bool)is_true($a_entrada[1]);
 
         if ($compartida) {
-            $oEntrada = new EntradaCompartida($Q_id_entrada);
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
         } else {
             $oEntrada = new Entrada($Q_id_entrada);
         }

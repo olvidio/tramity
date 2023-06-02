@@ -3,6 +3,7 @@
 use core\ConfigGlobal;
 use entradas\model\entity\EntradaCompartida;
 use entradas\model\Entrada;
+use entradas\model\GestorEntrada;
 use escritos\model\Escrito;
 use escritos\model\EscritoForm;
 use expedientes\model\entity\Accion;
@@ -36,7 +37,9 @@ $filtro = 'borrador_propio';
 $modo = 'mod';
 
 if ($compartida) {
-    $oEntrada = new EntradaCompartida($Q_id_entrada);
+    $gesEntradas = new GestorEntrada();
+    $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+    $oEntrada = $cEntradas[0];
 } else {
     $oEntrada = new Entrada($Q_id_entrada);
 }
