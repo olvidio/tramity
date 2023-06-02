@@ -63,7 +63,7 @@ switch ($Q_que) {
         //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
-        $Q_id_entrada = $a_entrada[0];
+        $Q_id_entrada = (int)$a_entrada[0];
         $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 
         $Q_id_oficina = ConfigGlobal::role_id_oficina();
@@ -123,7 +123,7 @@ switch ($Q_que) {
         //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
-        $Q_id_entrada = $a_entrada[0];
+        $Q_id_entrada = (int)$a_entrada[0];
         $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 
         $Q_id_cargo_pendiente = (integer)filter_input(INPUT_POST, 'id_cargo_pendiente');
@@ -191,7 +191,7 @@ switch ($Q_que) {
         //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
-        $Q_id_entrada = $a_entrada[0];
+        $Q_id_entrada = (int)$a_entrada[0];
         $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 
         if ($compartida) {

@@ -4,7 +4,6 @@ use core\ConfigGlobal;
 use davical\model\Davical;
 use davical\model\DavicalMigrar;
 use entradas\model\entity\EntradaBypass;
-use entradas\model\entity\EntradaCompartida;
 use entradas\model\entity\EntradaDocDB;
 use entradas\model\entity\GestorEntradaBypass;
 use entradas\model\Entrada;
@@ -152,7 +151,7 @@ switch ($Q_que) {
         //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
-        $Q_id_entrada = $a_entrada[0];
+        $Q_id_entrada = (int)$a_entrada[0];
         $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 
         if ($compartida) {
@@ -188,7 +187,7 @@ switch ($Q_que) {
         //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
-        $Q_id_entrada = $a_entrada[0];
+        $Q_id_entrada = (int)$a_entrada[0];
         $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         $Qtext = (string)filter_input(INPUT_POST, 'text');
         $Qelim_pendientes = (integer)filter_input(INPUT_POST, 'elim_pendientes');
@@ -325,7 +324,7 @@ switch ($Q_que) {
         //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
-        $Q_id_entrada = $a_entrada[0];
+        $Q_id_entrada = (int)$a_entrada[0];
         $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         $Qdetalle = (string)filter_input(INPUT_POST, 'text');
         if ($compartida) {
@@ -361,7 +360,7 @@ switch ($Q_que) {
         //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
-        $Q_id_entrada = $a_entrada[0];
+        $Q_id_entrada = (int)$a_entrada[0];
         $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         if ($compartida) {
             $gesEntradas = new GestorEntrada();
@@ -391,7 +390,7 @@ switch ($Q_que) {
         //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
-        $Q_id_entrada = $a_entrada[0];
+        $Q_id_entrada = (int)$a_entrada[0];
         $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         if ($compartida) {
             $gesEntradas = new GestorEntrada();
@@ -514,7 +513,7 @@ switch ($Q_que) {
         //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
-        $Q_id_entrada = $a_entrada[0];
+        $Q_id_entrada = (int)$a_entrada[0];
         $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         $error_txt = '';
         if (!empty($Q_id_entrada)) {
@@ -687,7 +686,7 @@ switch ($Q_que) {
         //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $a_entrada = explode('#', $Qid_entrada);
-        $Q_id_entrada = $a_entrada[0];
+        $Q_id_entrada = (int)$a_entrada[0];
         $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         $Qf_escrito = (string)filter_input(INPUT_POST, 'f_escrito');
         $Qtipo_doc = (integer)filter_input(INPUT_POST, 'tipo_doc');

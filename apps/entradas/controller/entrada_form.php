@@ -34,7 +34,7 @@ if ($Q_filtro === 'en_buscar' && empty($Q_id_entrada)) {
     $Q_a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
     $a_entrada = explode('#', $Q_a_sel[0]);
-    $Q_id_entrada = $a_entrada[0];
+    $Q_id_entrada = (int)$a_entrada[0];
     $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 }
 
