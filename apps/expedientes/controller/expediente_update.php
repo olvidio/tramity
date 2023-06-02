@@ -3,6 +3,7 @@
 use core\ConfigGlobal;
 use davical\model\Davical;
 use entradas\model\Entrada;
+use entradas\model\GestorEntrada;
 use escritos\model\Escrito;
 use expedientes\model\entity\GestorAccion;
 use expedientes\model\Expediente;
@@ -58,10 +59,23 @@ $error_txt = '';
 $nuevo_creador = '';
 switch ($Q_que) {
     case 'en_visto': // Copiado de entradas_update.
-        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        // nuevo formato: id_entrada#comparida (compartida = boolean)
+        //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $a_entrada = explode('#', $Qid_entrada);
+        $Q_id_entrada = $a_entrada[0];
+        $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
+
         $Q_id_oficina = ConfigGlobal::role_id_oficina();
         $Q_id_cargo = ConfigGlobal::role_id_cargo();
-        $oEntrada = new Entrada($Q_id_entrada);
+
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
         if ($oEntrada->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el entrada en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
@@ -105,7 +119,13 @@ switch ($Q_que) {
         echo json_encode($jsondata);
         exit();
     case 'en_pendiente':
-        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        // nuevo formato: id_entrada#comparida (compartida = boolean)
+        //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $a_entrada = explode('#', $Qid_entrada);
+        $Q_id_entrada = $a_entrada[0];
+        $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
+
         $Q_id_cargo_pendiente = (integer)filter_input(INPUT_POST, 'id_cargo_pendiente');
         $Q_f_plazo = (string)filter_input(INPUT_POST, 'f_plazo');
 
@@ -122,7 +142,13 @@ switch ($Q_que) {
         $Q_f_plazo = empty($Q_f_plazo) ? $oHoy->getFromLocal() : $Q_f_plazo;
         // datos de la entrada 
         $id_reg = 'EN' . $Q_id_entrada; // (para calendario='registro': REN = Regitro Entrada, para 'oficina': EN)
-        $oEntrada = new Entrada($Q_id_entrada);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
 
         $oPendiente = new Pendiente($parent_container, $calendario, $user_davical);
         $oPendiente->setId_reg($id_reg);
@@ -161,9 +187,21 @@ switch ($Q_que) {
         // nada
         break;
     case 'en_expediente':
-        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        // nuevo formato: id_entrada#comparida (compartida = boolean)
+        //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $a_entrada = explode('#', $Qid_entrada);
+        $Q_id_entrada = $a_entrada[0];
+        $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
+
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
         // Hay que crear un nuevo expediente, con un adjunto (entrada).
-        $oEntrada = new Entrada($Q_id_entrada);
         $Q_asunto = $oEntrada->getAsunto_entrada();
 
         $Q_estado = Expediente::ESTADO_BORRADOR;

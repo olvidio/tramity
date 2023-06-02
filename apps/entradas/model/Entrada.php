@@ -55,9 +55,9 @@ class Entrada extends EntradaDB
 
     /* PROPIEDADES -------------------------------------------------------------- */
 
-    protected string|DateTimeLocal|NullDateTimeLocal|null $df_doc = null;
+    protected string|DateTimeLocal|NullDateTimeLocal|null $df_doc = NULL;
     protected bool $convert = FALSE;
-    protected ?int $itipo_doc = null;
+    protected ?int $itipo_doc = NULL;
 
     protected string $nombre_escrito;
 
@@ -78,13 +78,13 @@ class Entrada extends EntradaDB
             $visibilidad = $this->getVisibilidad();
             // si soy dl o ctr
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                if ($visibilidad !== null && $visibilidad !== Visibilidad::V_CTR_TODOS) {
+                if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
                     $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
                     $visibilidad_txt = $a_visibilidad_dst[$visibilidad];
                     $destinos_txt .= " ($visibilidad_txt)";
                 }
             } else {
-                if ($visibilidad !== null && $visibilidad !== Visibilidad::V_CTR_TODOS) {
+                if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
                     $a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
                     $visibilidad_txt = $a_visibilidad_dl[$visibilidad];
                     $destinos_txt .= " ($visibilidad_txt)";
@@ -266,7 +266,7 @@ class Entrada extends EntradaDB
         }
         // El tipo y fecha documento:
         if (!empty($this->iid_entrada)) {
-            if ($this->getId_entrada_compartida() !== null) {
+            if ($this->getId_entrada_compartida() !== NULL) {
                 $oEntradaCompartida = new EntradaCompartida($this->iid_entrada_compartida);
                 $oFdoc = $oEntradaCompartida->getF_documento();
                 $this->df_doc = $oFdoc;
@@ -289,7 +289,7 @@ class Entrada extends EntradaDB
     public function getF_documento(): DateTimeLocal|NullDateTimeLocal
     {
         if (!isset($this->df_doc) && !empty($this->iid_entrada)) {
-            if ($this->getId_entrada_compartida() !== null) {
+            if ($this->getId_entrada_compartida() !== NULL) {
                 $oEntradaCompartida = new EntradaCompartida($this->iid_entrada_compartida);
                 $oFdoc = $oEntradaCompartida->getF_documento();
                 $this->df_doc = $oFdoc;
@@ -309,7 +309,7 @@ class Entrada extends EntradaDB
      * Si df_doc es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_entrada debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param string|null $df_doc='' optional.
+     * @param string|null $df_doc ='' optional.
      * @param boolean $convert TRUE optional. Si es FALSE, df_ini debe ser un string en formato ISO (Y-m-d).
      */
     public function setF_documento(?string $df_doc = '', bool $convert = TRUE): void
@@ -374,7 +374,7 @@ class Entrada extends EntradaDB
         return str_replace(array(' ', '/'), '_', $string);
     }
 
-    public function getEtiquetasVisiblesArray(?int $id_cargo = null): array
+    public function getEtiquetasVisiblesArray(?int $id_cargo = NULL): array
     {
         $cEtiquetas = $this->getEtiquetasVisibles($id_cargo);
         $a_etiquetas = [];
@@ -384,9 +384,9 @@ class Entrada extends EntradaDB
         return $a_etiquetas;
     }
 
-    public function getEtiquetasVisibles(?int $id_cargo = null): array
+    public function getEtiquetasVisibles(?int $id_cargo = NULL): array
     {
-        if ($id_cargo === null) {
+        if ($id_cargo === NULL) {
             $id_cargo = ConfigGlobal::role_id_cargo();
         }
         $gesEtiquetas = new GestorEtiqueta();
@@ -401,7 +401,7 @@ class Entrada extends EntradaDB
         $cEtiquetas = [];
         foreach ($cEtiquetasEnt as $oEtiquetaEnt) {
             $id_etiqueta = $oEtiquetaEnt->getId_etiqueta();
-            if (in_array($id_etiqueta, $a_mis_etiquetas, true)) {
+            if (in_array($id_etiqueta, $a_mis_etiquetas, TRUE)) {
                 $cEtiquetas[] = new Etiqueta($id_etiqueta);
             }
         }
@@ -463,8 +463,10 @@ class Entrada extends EntradaDB
             $oEntradaDocDB->setF_doc($this->df_doc, TRUE);
             $oEntradaDocDB->setTipo_doc($this->itipo_doc);
             if ($oEntradaDocDB->DBGuardar() === FALSE) {
+                $this->setErrorTxt($oEntradaDocDB->getErrorTxt());
                 return FALSE;
             }
+
         }
         // El objeto padre:
         return parent::DBGuardar();

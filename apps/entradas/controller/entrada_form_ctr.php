@@ -8,6 +8,7 @@ use usuarios\model\Visibilidad;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -27,7 +28,9 @@ $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 if ($Q_filtro === 'en_buscar' && empty($Q_id_entrada)) {
     $Q_a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
-    $Q_id_entrada = $Q_a_sel[0];
+    $a_entrada = explode('#', $Q_a_sel[0]);
+    $Q_id_entrada = $a_entrada[0];
+    $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 }
 
 $plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
@@ -165,7 +168,7 @@ if ($Q_filtro === 'en_buscar') {
 $oFecha = new DateTimeLocal();
 $format = $oFecha::getFormat();
 $yearStart = date('Y');
-$yearEnd = $yearStart + 2;
+$yearEnd = (int)$yearStart + 2;
 
 $a_campos = [
     'titulo' => $titulo,

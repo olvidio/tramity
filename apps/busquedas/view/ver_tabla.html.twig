@@ -64,6 +64,7 @@
             $('#' + form + ' input.sel').each(function (i) {
                 if ($(this).prop('checked') == true) {
                     // como ya he comprobado que sólo está uno seleccionado, es este.
+                    // nuevo formato: id_entrada#comparida (compartida = boolean)
                     var array_dir = $(this).val().split('#');
                     id_reg = array_dir[0];
                 }
@@ -129,11 +130,11 @@
 
     ////////////////  Entradas /////////////////////
     // Aunque ya está defindo en más sitios, pero si lo primero es mirar aqui, no la encuentra.
-    fnjs_ver_entrada = function (id_entrada, compartida = false) {
+    fnjs_ver_entrada = function (id_entrada) {
         var ssfsv = 'sv';
         var winPrefs = "dependent=yes,width=950,height=700,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
         var server = '{{ server }}';
-        var url = server + '/apps/entradas/controller/entrada_ver.php?id_entrada=' + id_entrada + '&compartida=' + compartida;
+        var url = server + '/apps/entradas/controller/entrada_ver.php?id_entrada=' + id_entrada;
         w = window.open(url, "", winPrefs);
         w.focus();
     }
@@ -148,8 +149,6 @@
             $('#' + form + ' input.sel').each(function (i) {
                 if ($(this).prop('checked') == true) {
                     // como ya he comprobado que sólo está uno seleccionado, es este.
-                    //var array_dir = $(this).val().split('#');
-                    //id_reg = array_dir[0];
                     id_reg =$(this).val();
                 }
             });
@@ -191,8 +190,7 @@
             $('#' + form + ' input.sel').each(function (i) {
                 if ($(this).prop('checked') == true) {
                     // como ya he comprobado que sólo está uno seleccionado, es este.
-                    var array_dir = $(this).val().split('#');
-                    id_reg = array_dir[0];
+                    id_reg =$(this).val();
                 }
             });
             fnjs_ver_entrada(id_reg, true);
@@ -210,13 +208,7 @@
             $('#' + form + ' input.sel').each(function (i) {
                 if ($(this).prop('checked') == true) {
                     // como ya he comprobado que sólo está uno seleccionado, es este.
-                    var array_dir = $(this).val().split('#');
-                    id_reg = array_dir[0];
-                    if (array_dir[1] === 'true') {
-                        compartida = true;
-                    } else {
-                        compartida = false;
-                    }
+                    id_reg =$(this).val();
                 }
             });
             var url_doc = 'apps/entradas/controller/entrada_ajax.php';
@@ -231,7 +223,7 @@
                 if (json.success != true) {
                     alert(json.mensaje);
                 } else {
-                    fnjs_ver_entrada(id_reg,compartida);
+                    fnjs_ver_entrada(id_reg);
                 }
             });
         }
@@ -410,8 +402,9 @@
             $('#' + form + ' input.sel').each(function (i) {
                 if ($(this).prop('checked') == true) {
                     // como ya he comprobado que sólo está uno seleccionado, es este.
-                    var array_dir = $(this).val().split('#');
-                    id_reg = array_dir[0];
+                    //var array_dir = $(this).val().split('#');
+                    //id_reg = array_dir[0];
+                    id_reg = $(this).val();
                 }
             });
 
@@ -633,8 +626,8 @@
             $('#' + form + ' input.sel').each(function (i) {
                 if ($(this).prop('checked') == true) {
                     // como ya he comprobado que sólo está uno seleccionado, es este.
-                    var array_dir = $(this).val().split('#');
-                    id_reg = array_dir[0];
+                    //var array_dir = $(this).val().split('#');
+                    id_reg = $(this).val();
                 }
             });
             var url_doc = 'apps/escritos/controller/escrito_update.php';
@@ -743,7 +736,7 @@
             method: 'POST'
         });
         request.done(function (resposta) {
-            fnjs_mostra_resposta(resposta, "#resultados");
+            fnjs_mostra_resposta(resposta, "#main");
         });
         request.fail(function (JqXHR, textStatus, errorThrown) {
             alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');

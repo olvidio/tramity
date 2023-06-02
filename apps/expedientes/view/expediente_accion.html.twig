@@ -160,7 +160,7 @@
         // grabar
         var url_ajax = 'apps/expedientes/controller/expediente_update.php';
         if (accion == 'en_expediente' || accion == 'en_pendiente' || accion == 'en_visto') {
-            var param_json = {que: accion, id_expediente: {{ id_expediente }}, id_entrada: {{ id_entrada }} };
+            var param_json = {que: accion, id_expediente: {{ id_expediente }}, id_entrada: '{{ id_entrada }}' };
         } else {
             var param_json = {que: accion, id_expediente: {{ id_expediente }} };
         }
@@ -192,7 +192,7 @@
 
     fnjs_guardar_etiquetas = function () {
         var que = 'guardar_etiquetas';
-        var id_entrada ={{ id_entrada }};
+        var id_entrada ='{{ id_entrada }}';
         var etiquetas = $("select[name^='etiquetas\\[']").serializeArray();
 
         var url_ajax = 'apps/entradas/controller/entrada_update.php';
@@ -287,7 +287,7 @@
 
     fnjs_encargar = function () {
         var que = 'en_asignar';
-        var id_entrada ={{ id_entrada }};
+        var id_entrada = '{{ id_entrada }}';
         var id_cargo_encargado = $('#id_cargo_encargado').val();
 
         var url_ajax = 'apps/entradas/controller/entrada_update.php';
@@ -311,7 +311,7 @@
 
     fnjs_crear_pendiente = function () {
         var que = 'en_pendiente';
-        var id_entrada ={{ id_entrada }};
+        var id_entrada = '{{ id_entrada }}';
         var id_cargo_pendiente = $('#id_cargo_pendiente').val();
         var f_plazo = $('#f_plazo').val();
 
@@ -338,7 +338,7 @@
     fnjs_buscar_expediente = function () {
         var err = 0;
         var que = 'buscar_expediente_borrador';
-        var id_entrada ={{ id_entrada }};
+        var id_entrada = '{{ id_entrada }}';
         var asunto_buscar = $('#asunto_buscar').val();
 
         if (err != 1) {

@@ -12,6 +12,7 @@ use usuarios\model\Visibilidad;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -32,7 +33,9 @@ $Q_importar = (bool)filter_input(INPUT_POST, 'importar');
 if ($Q_filtro === 'en_buscar' && empty($Q_id_entrada)) {
     $Q_a_sel = (array)filter_input(INPUT_POST, 'sel', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     // sólo debería seleccionar uno.
-    $Q_id_entrada = (integer)strtok($Q_a_sel[0], "#");
+    $a_entrada = explode('#', $Q_a_sel[0]);
+    $Q_id_entrada = $a_entrada[0];
+    $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 }
 
 $plazo_rapido = $_SESSION['oConfig']->getPlazoRapido();
@@ -131,10 +134,10 @@ $a_posibles_grupos = $gesGrupo->getArrayGrupos();
 if (!empty($Q_id_entrada)) {
     $json_prot_origen = $oEntrada->getJson_prot_origen();
     if (empty((array)$json_prot_origen)) {
-        $oProtOrigen->setLugar(null);
-        $oProtOrigen->setProt_num(null);
-        $oProtOrigen->setProt_any(null);
-        $oProtOrigen->setMas(null);
+        $oProtOrigen->setLugar(NULL);
+        $oProtOrigen->setProt_num(NULL);
+        $oProtOrigen->setProt_any(NULL);
+        $oProtOrigen->setMas(NULL);
     } else {
         $oProtOrigen->setLugar($json_prot_origen->id_lugar);
         $oProtOrigen->setProt_num($json_prot_origen->num);
@@ -306,7 +309,7 @@ $format = $oFecha::getFormat();
 $yearStart = (int)date('Y');
 $yearEnd = $yearStart + 2;
 
-$filename_pdf = '/log/entradas/entrada_'.$Q_id_entrada.'.pdf';
+$filename_pdf = '/log/entradas/entrada_' . $Q_id_entrada . '.pdf';
 
 $a_campos = [
     'titulo' => $titulo,
@@ -360,7 +363,7 @@ $a_campos = [
     'oArrayDesplGrupo' => $oArrayDesplGrupo,
     'oArrayProtDestino' => $oArrayProtDestino,
     'id_uden' => $id_uden,
-    'id_cancilleria' =>$id_cancilleria,
+    'id_cancilleria' => $id_cancilleria,
     // datepicker
     'format' => $format,
     'yearStart' => $yearStart,

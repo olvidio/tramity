@@ -26,6 +26,7 @@ $filtro = empty($Q_filtro) ? 'en_buscar' : $Q_filtro;
 $Q_mas = '';
 $a_condicion = []; // para poner los parámetros de la búsqueda y poder actualizar la página.
 $a_condicion['opcion'] = $Q_opcion;
+$a_condicion['filtro'] = $Q_filtro;
 switch ($Q_opcion) {
     case 8:
         // buscar por etiquetas
@@ -445,11 +446,15 @@ switch ($Q_opcion) {
         $oBuscar->setF_max($oHoy->getIso(), FALSE);
         $oBuscar->setF_min($oIni->getIso(), FALSE);
 
+        //$a_condicion['lista_lugar'] = $id_cr;
+        $str_condicion = http_build_query($a_condicion);
+
         $aCollection = $oBuscar->getCollection(5);
         foreach ($aCollection as $key => $cCollection) {
             $oTabla = new VerTabla();
             $oTabla->setKey($key);
             $oTabla->setCollection($cCollection);
+            $oTabla->setCondicion($str_condicion);
             $oTabla->setFiltro($filtro);
             $oTabla->setBotonesDefault();
             $oTabla->mostrarTabla();

@@ -3,6 +3,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use entradas\model\Entrada;
+use entradas\model\GestorEntrada;
 use escritos\model\Escrito;
 use escritos\model\GestorEscrito;
 use lugares\model\entity\GestorGrupo;
@@ -15,6 +16,7 @@ use usuarios\model\Visibilidad;
 use web\DateTimeLocal;
 use web\Desplegable;
 use web\Protocolo;
+use function core\is_true;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -39,7 +41,7 @@ $Q_prot_num = (integer)filter_input(INPUT_POST, 'buscar_prot_num');
 $Q_prot_any = (integer)filter_input(INPUT_POST, 'buscar_prot_any');
 
 $gesLugares = new GestorLugar();
-$id_lugar_local = empty($Q_id_lugar)? $gesLugares->getId_sigla_local() : $Q_id_lugar;
+$id_lugar_local = empty($Q_id_lugar) ? $gesLugares->getId_sigla_local() : $Q_id_lugar;
 if (!empty($Q_prot_num) && !empty($Q_prot_any)) {
     $aProt_local = ['id_lugar' => $id_lugar_local,
         'num' => $Q_prot_num,
@@ -74,7 +76,7 @@ $a_posibles_lugar_local = [
 
 $a_posibles_lugares = $gesLugares->getArrayBusquedas();
 $oDesplBuscar = new web\Desplegable('buscar_id_lugar', $a_posibles_lugar_local);
-$oDesplBuscar->setBlanco(false);
+$oDesplBuscar->setBlanco(FALSE);
 $oDesplBuscar->setOpcion_sel($id_lugar_local);
 
 $txt_option_cargos = '';
@@ -196,9 +198,21 @@ if (!empty($Q_id_escrito)) {
     }
 } else {
     // Puedo venir como respuesta a una entrada. Hay que copiar algunos datos de la entrada
-    $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+    // nuevo formato: id_entrada#comparida (compartida = boolean)
+    //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+    $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+    $a_entrada = explode('#', $Qid_entrada);
+    $Q_id_entrada = $a_entrada[0];
+    $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
+
     if (!empty($Q_id_entrada)) {
-        $oEntrada = new Entrada($Q_id_entrada);
+        if ($compartida) {
+            $gesEntradas = new GestorEntrada();
+            $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+            $oEntrada = $cEntradas[0];
+        } else {
+            $oEntrada = new Entrada($Q_id_entrada);
+        }
         $asunto = $oEntrada->getAsunto();
         $detalle = $oEntrada->getDetalle();
         // ProtocoloArray espera un array.
@@ -294,7 +308,7 @@ $pagina_actualizar = web\Hash::link('apps/escritos/controller/salida_escrito.php
 $oFecha = new DateTimeLocal();
 $format = $oFecha::getFormat();
 $yearStart = date('Y');
-$yearEnd = (int) $yearStart + 2;
+$yearEnd = (int)$yearStart + 2;
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 $error_fecha_txt = 'P' . $error_fecha . 'D';
 $oHoy = new DateTimeLocal();

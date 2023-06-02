@@ -21,8 +21,11 @@ require_once("apps/core/global_object.inc");
 // porque también se puede abrir en una ventana nueva, y entonces se llama por GET
 $Qmethod = (string)filter_input(INPUT_SERVER, 'REQUEST_METHOD');
 if ($Qmethod === 'POST') {
-    $Qid_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-    $Qcompartida = (string)filter_input(INPUT_POST, 'compartida');
+    // nuevo formato: id_entrada#comparida (compartida = boolean)
+    $QQid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+    $a_entrada = explode('#', $QQid_entrada);
+    $id_entrada = $a_entrada[0];
+    $Qcompartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 }
 if ($Qmethod === 'GET') {
     $Qid_entrada = (integer)filter_input(INPUT_GET, 'id_entrada');
@@ -114,7 +117,7 @@ $a_campos = [
     'escrito_html' => $escrito_html,
     'url_download_pdf' => $url_download_pdf,
     'bCompartida' => $bCompartida,
-    'url_download_pdf_adjunto' => $url_download_pdf_adjunto ,
+    'url_download_pdf_adjunto' => $url_download_pdf_adjunto,
 ];
 
 $oView = new ViewTwig('entradas/controller');
