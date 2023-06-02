@@ -28,7 +28,7 @@ if ($Qmethod === 'POST') {
     $Qcompartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 }
 if ($Qmethod === 'GET') {
-    $QQid_entrada = (string)filter_input(INPUT_GET, 'id_entrada');
+    $QQid_entrada = rawurlencode( (string)filter_input(INPUT_GET, 'id_entrada'));
     $a_entrada = explode('#', $QQid_entrada);
     $Qid_entrada = $a_entrada[0];
     $Qcompartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
