@@ -50,7 +50,7 @@ switch ($Q_que) {
 
         $a_antecedente = ['tipo' => $Q_tipo_antecedente, 'id' => $Q_id_escrito];
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -66,7 +66,7 @@ switch ($Q_que) {
 
         $a_antecedente = ['tipo' => $Q_tipo_antecedente, 'id' => $Q_id_escrito];
         $oExpediente = new Expediente($Q_id_expediente);
-        if ($oExpediente->DBCargar() === FALSE ){
+        if ($oExpediente->DBCargar() === FALSE) {
             $err_cargar = sprintf(_("OJO! no existe el expediente en %s, linea %s"), __FILE__, __LINE__);
             exit ($err_cargar);
         }
@@ -711,7 +711,12 @@ switch ($Q_que) {
         break;
     case 'buscar_expediente_borrador':
         $Q_asunto_buscar = (string)filter_input(INPUT_POST, 'asunto_buscar');
-        $Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        // nuevo formato: id_entrada#comparida (compartida = boolean)
+        //$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+        $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+        $a_entrada = explode('#', $Qid_entrada);
+        $Q_id_entrada = $a_entrada[0];
+        $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
         // Expediente de mi oficina en borrador
         $gesExpediente = new GestorExpediente();
         $aWhere = [];

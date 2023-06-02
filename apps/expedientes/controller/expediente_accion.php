@@ -338,7 +338,7 @@ $yearEnd = $yearStart + 2;
 $vista = ConfigGlobal::getVista();
 
 $a_campos = [
-    'id_entrada' => $Q_id_entrada,
+    'id_entrada' => $Qid_entrada, // id_entrada#compartida
     'id_expediente' => $Q_id_expediente,
     'filtro' => $Q_filtro,
     //'oHash' => $oHash,
