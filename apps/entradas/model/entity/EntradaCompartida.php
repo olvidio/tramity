@@ -12,6 +12,7 @@ use lugares\model\entity\Lugar;
 use PDO;
 use PDOException;
 use stdClass;
+use usuarios\model\Visibilidad;
 use web;
 use web\Protocolo;
 use web\ProtocoloArray;
@@ -342,6 +343,14 @@ class EntradaCompartida extends core\ClasePropiedades
     }
 
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
+
+    /**
+     * Par ser compatible con entradas
+     */
+    function getVisibilidad()
+    {
+        return Visibilidad::V_CTR_TODOS;
+    }
 
     /**
      * @param integer iid_entrada_compartida
