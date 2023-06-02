@@ -28,6 +28,7 @@ $filtro = 'borrador_propio';
 $modo = 'mod';
 
 $oEntrada = new Entrada($Q_id_entrada);
+$oEntrada->DBCargar();
 $f_contestar = $oEntrada->getF_contestar();
 
 // crear el expediente
@@ -67,6 +68,7 @@ $id_oficina = ConfigGlobal::role_id_oficina();
 $gesCargos = new GestorCargo();
 $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
 
+$error_txt = '';
 $new_preparar = [];
 foreach (array_keys($a_cargos_oficina) as $id_cargo) {
     $oJSON = new stdClass;

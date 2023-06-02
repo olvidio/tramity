@@ -98,7 +98,7 @@ class EntradaDB extends ClasePropiedades
      *
      * @var string
      */
-    protected ?string $sasunto_entrada = null;
+    protected string $sasunto_entrada;
     /**
      * Json_prot_ref de EntradaDB
      *
@@ -807,7 +807,7 @@ class EntradaDB extends ClasePropiedades
      * @return string $sasunto_entrada
      * @throws JsonException
      */
-    public function getAsunto_entrada(): ?string
+    public function getAsunto_entrada(): string
     {
         if (!isset($this->sasunto_entrada) && !$this->bLoaded) {
             $this->DBCargar();
