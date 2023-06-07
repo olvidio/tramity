@@ -43,7 +43,7 @@ class Enviar
     private string $f_salida;
 
     private string $asunto;
-    private string $filename;
+    private string $filename='';
     private string $filename_ext;
     private string $contentFile;
     private array $a_adjuntos;
@@ -323,8 +323,8 @@ class Enviar
 
 
         if (empty($aDestinos)) {
-            $err_mail = _("No hay destinos para este escrito") . ':<br>' . $this->filename;
-            $err_mail .= isset($this->filename)? '' : $this->filename;
+            $err_mail = _("No hay destinos para este escrito") . ':<br>';
+            $err_mail .= empty($this->filename)? '' : $this->filename;
             $this->a_rta['success'] = FALSE;
             $this->a_rta['mensaje'] = $err_mail;
             $this->a_rta['marcar'] = FALSE;
