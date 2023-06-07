@@ -324,6 +324,7 @@ class Enviar
 
         if (empty($aDestinos)) {
             $err_mail = _("No hay destinos para este escrito") . ':<br>' . $this->filename;
+            $err_mail .= isset($this->filename)? '' : $this->filename;
             $this->a_rta['success'] = FALSE;
             $this->a_rta['mensaje'] = $err_mail;
             $this->a_rta['marcar'] = FALSE;
