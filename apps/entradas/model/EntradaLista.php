@@ -95,7 +95,6 @@ class EntradaLista
                 break;
             case 'en_aceptado':
                 $oficina = $this->aWhereADD['ponente'];
-                //$pagina_accion =  ConfigGlobal::getWeb().'/apps/entradas/controller/entrada_accion.php';
                 $pagina_accion = ConfigGlobal::getWeb() . '/apps/expedientes/controller/expediente_accion.php';
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $pagina_mod = ConfigGlobal::getWeb() . '/apps/entradas/controller/entrada_form_ctr.php';
@@ -146,7 +145,14 @@ class EntradaLista
                 $id_entrada = $oEntrada->getId_entrada();
                 $row['id_entrada'] = $id_entrada;
 
-                $a_cosas = ['id_entrada' => $id_entrada,
+                $id_entrada_compartida = $oEntrada->getId_entrada_compartida();
+                if (!empty($id_entrada_compartida)) {
+                    $id_entrada_compuesta = $id_entrada_compartida . '#true';
+                } else {
+                    $id_entrada_compuesta = $id_entrada .'#false';
+                }
+
+                $a_cosas = ['id_entrada' => $id_entrada_compuesta,
                     'filtro' => $filtro,
                     'slide_mode' => $this->slide_mode,
                     'importar' => $this->importar,
@@ -158,17 +164,10 @@ class EntradaLista
                     $a_cosas['encargado'] = $encargado;
                 }
 
-                $id_entrada_compartida = $oEntrada->getId_entrada_compartida();
-                if (!empty($id_entrada_compartida)) {
-                    $id_entrada_compartida .= '#true';
-                } else {
-                    $id_entrada_compartida = $id_entrada .'#false';
-                }
-
                 $link_accion = Hash::link($pagina_accion . '?' . http_build_query($a_cosas));
                 $link_mod = Hash::link($pagina_mod . '?' . http_build_query($a_cosas));
                 if ($perm_ver_escrito >= PermRegistro::PERM_VER) {
-                    $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada_compartida');\" >" . _("ver") . "</span>";
+                    $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_ver_entrada('$id_entrada_compuesta');\" >" . _("ver") . "</span>";
                     $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_accion');\" >" . _("acción") . "</span>";
                 }
                 $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >mod</span>";

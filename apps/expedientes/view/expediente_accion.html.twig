@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar"|trans|raw }}</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">{{ "Buscar dd"|trans|raw }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -341,6 +341,7 @@
         var id_entrada = '{{ id_entrada }}';
         var asunto_buscar = $('#asunto_buscar').val();
 
+        alert("{{ "solamanete busca en los expedientes que están en borrador"|trans|raw }}");
         if (err != 1) {
             var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
             var param_json = {que: que, id_entrada: id_entrada, asunto_buscar: asunto_buscar};

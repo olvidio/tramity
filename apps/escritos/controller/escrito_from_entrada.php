@@ -25,9 +25,8 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 // nuevo formato: id_entrada#comparida (compartida = boolean)
-//$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-$Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
-$a_entrada = explode('#', $Qid_entrada);
+$Qid_entrada_compuesta = (string)filter_input(INPUT_POST, 'id_entrada');
+$a_entrada = explode('#', $Qid_entrada_compuesta);
 $Q_id_entrada = (int)$a_entrada[0];
 $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 

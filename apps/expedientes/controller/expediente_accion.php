@@ -29,9 +29,8 @@ require_once("apps/core/global_object.inc");
 $Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 // nuevo formato: id_entrada#comparida (compartida = boolean)
-//$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
-$Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
-$a_entrada = explode('#', $Qid_entrada);
+$Qid_entrada_compuesta = (string)filter_input(INPUT_POST, 'id_entrada');
+$a_entrada = explode('#', $Qid_entrada_compuesta);
 $Q_id_entrada = (int)$a_entrada[0];
 $compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 
@@ -82,7 +81,7 @@ switch ($Q_filtro) {
                 // En los ctr, ir directo a contestar:
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
-                    $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Qid_entrada]));
+                    $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Qid_entrada_compuesta]));
                 }
                 break;
             default:
@@ -338,7 +337,7 @@ $yearEnd = $yearStart + 2;
 $vista = ConfigGlobal::getVista();
 
 $a_campos = [
-    'id_entrada' => $Qid_entrada, // id_entrada#compartida
+    'id_entrada' => $Qid_entrada_compuesta, // id_entrada#compartida
     'id_expediente' => $Q_id_expediente,
     'filtro' => $Q_filtro,
     //'oHash' => $oHash,
