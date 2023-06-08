@@ -1097,13 +1097,23 @@ class MigrationDlp
             return FALSE;
         }
 
+        $sql = "TRUNCATE TABLE prodel.lugares_tmp RESTART IDENTITY CASCADE";
+        if ($this->oDBT->query($sql) === FALSE) {
+            $sClauError = 'migartion';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        // actualizar la secuencia
+        $sql_update_sequence = "SELECT setval('lugares_id_lugar_seq', (SELECT MAX(id_lugar) FROM public.lugares));";
+        $this->oDBT->exec($sql_update_sequence);
+
         // copiar los ctr
         $sql = "INSERT INTO prodel.lugares_tmp (sigla, dl, region, nombre, autorizacion, codigo, persistenceid)
                 SELECT nombre, 'dlp', 'H', nombre, autorizacion, codigo, persistenceid 
                 FROM prodel.lugares 
                 WHERE 
-                tipo!='ctr-grupo' and 
-                tipo!='cr' and 
+                tipo != 'ctr-grupo' and 
+                tipo != 'cr' and 
                 substring(tipo,1,2) !=  'dl' and 
                 tipo!='com' ";
         if ($this->oDBT->query($sql) === FALSE) {
@@ -1112,8 +1122,10 @@ class MigrationDlp
             return FALSE;
         }
         // update tipo ctr
-        $sql = "UPDATE prodel.lugares_tmp SET tipo = regexp_replace(tipo, 'ctr-(.*)','\1')
-                    WHERE tipo IN('ctr-am','ctr-aj','ctr-a', 'ctr-nm', 'ctr-nj', 'ctr-sg', 'ctr-sss+', 'ctr-oc' )";
+        $sql = "UPDATE prodel.lugares_tmp SET tipo_ctr = regexp_replace(p.tipo, 'ctr-(.*)','\\1')
+                    FROM prodel.lugares p 
+                    WHERE prodel.lugares_tmp.persistenceid = p.persistenceid 
+                    AND p.tipo IN ('ctr-am','ctr-aj','ctr-a', 'ctr-nm', 'ctr-nj', 'ctr-sg', 'ctr-sss+', 'ctr-oc' )";
         if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
             $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
