@@ -60,7 +60,7 @@ switch ($Q_filtro) {
                 // En los ctr, ir directo a contestar:
                 if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                     $url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
-                    $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Q_id_entrada]));
+                    $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Qid_entrada_compuesta]));
                 }
                 break;
             case 'permanentes_cr':
@@ -102,7 +102,7 @@ switch ($Q_filtro) {
         } else {
             $url_contestar = $url_cancel;
         }
-        $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Q_id_entrada]));
+        $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Qid_entrada_compuesta]));
         break;
     case 'en_encargado':
         $Q_encargado = (integer)filter_input(INPUT_POST, 'encargado');
@@ -117,7 +117,7 @@ switch ($Q_filtro) {
         } else {
             $url_contestar = $url_cancel;
         }
-        $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Q_id_entrada]));
+        $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Qid_entrada_compuesta]));
         break;
     default:
         if (empty($Q_id_expediente)) {
