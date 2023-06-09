@@ -61,6 +61,13 @@ class Config
         return $oConfigSchema->getValor();
     }
 
+    public function getDistribuirTodos(): ?string
+    {
+        $parametro = 'distribuir_todos';
+        $oConfigSchema = new ConfigSchema($parametro);
+        return $oConfigSchema->getValor();
+    }
+
     public function getChat(): ?string
     {
         $parametro = 'chat';

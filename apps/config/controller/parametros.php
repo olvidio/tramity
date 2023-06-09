@@ -28,6 +28,27 @@ if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
 
 $a_campos['ambito_dl'] = $ambito_dl;
 
+// ----------- ctr. Correo de entrada. distribuir el d o cualquiera -------------------
+$parametro = 'distribuir_todos';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$val_distribuir_true = 'TRUE';
+$chk_distribuir_true = ($valor == $val_distribuir_true) ? 'checked' : '';
+$val_distribuir_false = 'FALSE';
+$chk_distribuir_false = ($valor == $val_distribuir_false) ? 'checked' : '';
+
+$oHashDistribuir = new Hash();
+$oHashDistribuir->setUrl($url);
+$oHashDistribuir->setcamposForm('valor');
+$oHashDistribuir->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashDistribuir'] = $oHashDistribuir;
+$a_campos['val_distribuir_true'] = $val_distribuir_true;
+$a_campos['chk_distribuir_true'] = $chk_distribuir_true;
+$a_campos['val_distribuir_false'] = $val_distribuir_false;
+$a_campos['chk_distribuir_false'] = $chk_distribuir_false;
+
 // ----------- Chat del etherpad -------------------
 $parametro = 'chat';
 $oConfigSchema = new ConfigSchema($parametro);

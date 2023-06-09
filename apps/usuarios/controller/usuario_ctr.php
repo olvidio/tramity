@@ -151,7 +151,8 @@ $a_pills[$num_orden] = $pill;
 
 
 // entradas = 12
-if (is_true(ConfigGlobal::soy_dtor())) {
+$distribuir_todos = $_SESSION['oConfig']->getDistribuirTodos();
+if (is_true($distribuir_todos) || is_true(ConfigGlobal::soy_dtor())) {
     $filtro = 'en_aceptado';
     $active = ($filtro === $Q_filtro) ? 'active' : '';
     $aQuery = ['filtro' => $filtro];

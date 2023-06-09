@@ -1,3 +1,12 @@
+<h3>{{ "ver el menu de distribuir entradas (ctr)"|trans|raw }}:</h3>
+<form id="frm_distribuir" name="frm_distribuir" action="">
+    {{ oHashDistribuir.getCamposHtml|raw }}
+    <input type="radio" name="valor" value="{{ val_distribuir_true }}" {{ chk_distribuir_true }} > {{ "todos"|trans|raw }}
+    <input type="radio" name="valor" value="{{ val_distribuir_false }}" {{ chk_distribuir_false }} > {{ "solamente el d"|trans|raw }}
+    <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);">
+</form>
+<hr>
+
 <h3>{{ "ver el chat en etherpad"|trans|raw }}:</h3>
 <form id="frm_chat" name="frm_chat" action="">
     {{ oHashChat.getCamposHtml|raw }}
