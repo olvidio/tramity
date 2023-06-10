@@ -113,11 +113,11 @@ class ImportarBonita
         }
 
         // Index: protocolo,  registroind
-        $sql_index = "CREATE INDEX protocolo
+        $sql_index = "CREATE INDEX IF NOT EXISTS protocolo
               ON prodel.registro
               USING btree
               (numprotocolo, anno);
-                CREATE INDEX registroind ON prodel.registro
+                CREATE INDEX IF NOT EXISTS registroind ON prodel.registro
               USING btree
               (numregistro, annoregistro);
             ";
