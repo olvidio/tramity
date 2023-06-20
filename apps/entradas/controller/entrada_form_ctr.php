@@ -2,6 +2,7 @@
 
 use core\ViewTwig;
 use entradas\model\Entrada;
+use entradas\model\GestorEntrada;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\Categoria;
 use usuarios\model\Visibilidad;
@@ -22,7 +23,11 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 
-$Q_id_entrada = (integer)filter_input(INPUT_POST, 'id_entrada');
+$Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
+$a_entrada = explode('#', $Qid_entrada);
+$Q_id_entrada = (int)$a_entrada[0];
+$compartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
+
 $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
 if ($Q_filtro === 'en_buscar' && empty($Q_id_entrada)) {
@@ -54,7 +59,6 @@ $oProtRef->setNombre('ref');
 $oProtRef->setOpciones($a_posibles_lugares);
 $oProtRef->setBlanco(TRUE);
 
-$oEntrada = new Entrada($Q_id_entrada);
 // tipo
 $oCategoria = new Categoria();
 $aOpciones = $oCategoria->getArrayCategoria();
@@ -86,6 +90,14 @@ $oDesplPlazo->setAction("fnjs_comprobar_plazo('select')");
 $oDesplPlazo->setTabIndex(82);
 
 if (!empty($Q_id_entrada)) {
+    if ($compartida) {
+        $gesEntradas = new GestorEntrada();
+        $cEntradas = $gesEntradas->getEntradas(['id_entrada_compartida' => $Q_id_entrada]);
+        $oEntrada = $cEntradas[0];
+    } else {
+        $oEntrada = new Entrada($Q_id_entrada);
+    }
+
     $json_prot_origen = $oEntrada->getJson_prot_origen();
     $oProtOrigen->setLugar($json_prot_origen->id_lugar);
     $oProtOrigen->setProt_num($json_prot_origen->num);
