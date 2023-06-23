@@ -492,12 +492,23 @@ class MigrationDlp
         $a_files = array_diff($a_scan, ['.', '..']);
 
         $pattern = "/(.*)\.okm/";
+        $i = 0;
         foreach ($a_files as $filename) {
+            $i++;
+            set_time_limit(0);
+            ob_start();
             if (!empty($err_txt)) {
                 $err_txt_tot .= $err_txt;
                 echo "$err_txt<br>";
                 $err_txt = '';
+            } else {
+                $count = $i % 10;
+                for($c = 0 ; $c < $count; $c++) {
+                    echo "x";
+                }
+                echo "<br>";
             }
+            ob_end_flush();
             $matches = [];
             if (preg_match($pattern, $filename, $matches)) {
                 $fullfilename = $directorio . '/' . $filename;
