@@ -1,6 +1,6 @@
 <?php
 
-use migration\model\ImportarBonita;
+use migration\model\BonitaCrearTablas;
 use migration\model\MigrationDlp;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -27,47 +27,10 @@ poner entrdas
     asunto_entrada 	json_prot_ref 	ponente 	resto_oficinas 	asunto 	detalle 	categoria 	visibilidad 	f_contestar 	bypass 	estado 	anulado
 */
 
-
 // Equivalencias
 $Q_que = (string)filter_input(INPUT_POST, 'que');
 
 switch ($Q_que) {
-    case 'aprobaciones_oficinas':
-        $oMigrationDlp = new MigrationDlp();
-        $oMigrationDlp->oficinas_aprobaciones();
-        echo "OK aprobaciones oficinas";
-        break;
-    case 'entradas_docs':
-        $oMigrationDlp = new MigrationDlp();
-        $oMigrationDlp->docs_entradas();
-        echo "OK entradas docs";
-        break;
-    case 'entradas_bypass':
-        $oMigrationDlp = new MigrationDlp();
-        $oMigrationDlp->bypass_entradas();
-        echo "OK entradas bypass";
-        break;
-    case 'entradas_permanentes':
-        $oMigrationDlp = new MigrationDlp();
-        $oMigrationDlp->permanentes_entradas();
-        echo "OK entradas permanentes";
-        break;
-    case 'entradas_of':
-        $oMigrationDlp = new MigrationDlp();
-        $oMigrationDlp->oficinas_entradas();
-        echo "OK entradas oficinas";
-        break;
-    case 'entradas2':
-        $oMigrationDlp = new MigrationDlp();
-        $oMigrationDlp->completar_entradas();
-        echo "OK entradas 2";
-        break;
-    case 'oficinas':
-        $oMigrationDlp = new MigrationDlp();
-        $oMigrationDlp->crear_equivalencias_oficinas();
-        echo "OK oficinas";
-        break;
-// --------------------
     case 'pasar_a_dlp_anexos':
         $oMigrationDlp = new MigrationDlp();
         $oMigrationDlp->pasar_a_dlp_anexos();
@@ -77,6 +40,11 @@ switch ($Q_que) {
         $oMigrationDlp = new MigrationDlp();
         $oMigrationDlp->pasar_a_dlp();
         echo "OK pasado a dlp";
+        break;
+    case 'entradas_docs':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->docs_entradas();
+        echo "OK entradas docs";
         break;
     case 'escritos_cancilleria':
         $oMigrationDlp = new MigrationDlp();
@@ -134,8 +102,8 @@ switch ($Q_que) {
         echo "OK lugares";
         break;
     case 'crear_tablas':
-        $oImportarBonita = new ImportarBonita();
-        $oImportarBonita->crear_inicio();
+        $oBonitaCrearTablas = new BonitaCrearTablas();
+        $oBonitaCrearTablas->crear_inicio();
         echo "OK lugares";
         break;
     default:

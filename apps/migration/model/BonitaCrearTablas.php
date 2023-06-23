@@ -4,7 +4,7 @@ namespace migration\model;
 
 use PDOException;
 
-class ImportarBonita
+class BonitaCrearTablas
 {
 
 
@@ -31,8 +31,6 @@ class ImportarBonita
          GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA prodel TO tramity;
          GRANT USAGE ON SCHEMA prodel TO tramity;
         ALTER SCHEMA prodel OWNER TO tramity;";
-//         REASSIGN OWNED BY dani TO tramity;
-
 
         try {
             $this->oDBT->exec($sql);

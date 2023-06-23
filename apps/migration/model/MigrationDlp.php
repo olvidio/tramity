@@ -5,8 +5,12 @@ namespace migration\model;
 
 // Archivos requeridos por esta url **********************************************
 use core\ConverterJson;
+use PDO;
+use PDOException;
 use web\Protocolo;
+use function core\any_2;
 use function core\array_php2pg;
+use function core\is_true;
 
 require_once("/usr/share/awl/inc/iCalendar.php");
 
@@ -315,43 +319,7 @@ class MigrationDlp
         }
     }
 
-    public function oficinas_aprobaciones()
-    {
-        // id_item 	id_reg 	id_e_s 	id_oficina 	responsable 	asunto_of 	cancilleria
-        // cambio las oficinas por el cargo del director de la oficina
-        // ponente
-        $sql = "UPDATE escritos es SET (creador) =
-                (SELECT c.id_cargo 
-                 FROM reg.oficinas of JOIN reg.aprobaciones a ON (a.id_salida = of.id_e_s AND a.id_reg = of.id_reg),
-                 reg.x_oficinas x, aux_cargos c
-                 WHERE of.responsable = 't' AND x.id_oficina = of.id_oficina AND x.id_oficina_new IS NOT NULL
-                AND of.cancilleria = 'f' AND es.id_reg = of.id_reg AND es.id_salida = of.id_e_s 
-                AND c.id_oficina = x.id_oficina_new AND director = TRUE
-                )";
 
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-
-        // resto
-        $sql = "UPDATE escritos es SET (resto_oficinas) =
-                (
-                SELECT array( SELECT c.id_cargo 
-                FROM reg.oficinas of JOIN reg.aprobaciones a ON (a.id_salida = of.id_e_s AND a.id_reg = of.id_reg),
-                 reg.x_oficinas x, aux_cargos c
-                 WHERE of.responsable = 'f' AND x.id_oficina = of.id_oficina AND x.id_oficina_new IS NOT NULL
-                AND of.cancilleria = 'f' AND es.id_reg = of.id_reg AND es.id_salida = of.id_e_s
-                AND c.id_oficina = x.id_oficina_new AND director = TRUE )
-                )";
-
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-    }
 
     public function referencias_aprobaciones()
     {
@@ -456,10 +424,10 @@ class MigrationDlp
             return FALSE;
         }
 
-        // rellenar
+        // rellenar. También el propio escrito, que entra como adjunto. Quito: AND esanexo='t'
         $sql = "INSERT INTO prodel.escritos_anexos_tmp (id_escrito, nom, adjunto, tipo_doc, uuid, persistenceid )
                 (SELECT 1, nombdocumento||tipomime, 'xxxx', 3, uuid, persistenceid 
-                FROM prodel.registro WHERE (origen='dlp' OR destino='Rectorado') AND esanexo='t') ";
+                FROM prodel.registro WHERE origen='dlp' OR destino='Rectorado' ) ";
 
         if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
@@ -506,169 +474,212 @@ class MigrationDlp
 
     /*------------------------- METODES ENTRADAS ----------------------------- */
 
+    /**
+     * realmente es para todos los docs  exportados del openkm
+     * @return false|void
+     */
     public function docs_entradas()
     {
-        // id_escrito 	id_reg 	dl_ctr 	tipo 	num 	escrito 	nom 	extension 	activo
-        // id_doc txt
-        // id_item 	id_entrada 	nom 	adjunto
+        // leer directorio: ficheros .okm
+        // buscar uuid y esanexo en json
+        // introducir en DB
+        $directorio = '/home/dani/tramity_local/dlp/exrepository';
+        $log_file = $directorio . '/errores.log';
+        $err_txt_tot = '';
+        $err_txt = '';
 
+        $a_scan = scandir($directorio);
+        $a_files = array_diff($a_scan, ['.', '..']);
 
-        // Añado campo para distinguir dl_ctr hasta que duplique la entrada
-        $sql = "ALTER TABLE entrada_adjuntos ADD COLUMN IF NOT EXISTS dl_ctr integer ";
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
+        $pattern = "/(.*)\.okm/";
+        foreach ($a_files as $filename) {
+            if (!empty($err_txt)) {
+                $err_txt_tot .= $err_txt;
+                echo "$err_txt<br>";
+                $err_txt = '';
+            }
+            $matches = [];
+            if (preg_match($pattern, $filename, $matches)) {
+                $fullfilename = $directorio . '/' . $filename;
+                $json_object = file_get_contents($fullfilename);
+                $json_data = json_decode($json_object, true);
+
+                $uuid = $json_data['uuid'];
+                $name = $json_data['name'];
+                $path_parts = pathinfo($name);
+                $extension_filename = $path_parts['extension'];
+
+                $destino = '';
+                $dst_prot_num = '';
+                $dst_prot_any = '';
+                $esanexo = FALSE;
+                $origen = '';
+                $org_prot_num = '';
+                $org_prot_any = '';
+
+                $properties = $json_data['propertyGroups'][0]['properties'];
+                foreach ($properties as $property) {
+                    $property_name = $property['name'];
+                    $property_val = $property['value'] ?? '';
+
+                    switch ($property_name) {
+                        case 'okp:registro.destino':
+                            $destino = $property_val;
+                            break;
+                        case 'okp:registro.registro':
+                            $dst_prot_num = $property_val;
+                            break;
+                        case 'okp:registro.annoregistro':
+                            $dst_prot_any = any_2($property_val);
+                            break;
+                        case 'okp:registro.esanexo':
+                            $esanexo = is_true($property_val);
+                            break;
+                        case 'okp:registro.origen':
+                            $origen = $property_val;
+                            break;
+                        case 'okp:registro.numprotocolo':
+                            $org_prot_num = $property_val;
+                            break;
+                        case 'okp:registro.anno':
+                            $org_prot_any = any_2($property_val);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                /*
+                echo "uuid: $uuid<br>";
+                echo "name: $name<br>";
+                echo "esanexo: $esanexo<br>";
+                echo "origen: $origen<br>";
+                */
+
+                // por el uuid buscar que és.
+                // entradas:
+                if ($destino === 'dlp' || $destino === 'Cancilleria') {
+                    // generar nombre file
+                    $str_anexo = '';
+                    if ($esanexo) {
+                        $str_anexo = 'a1';
+                    }
+                    $nombre_doc = $origen . $org_prot_num . $str_anexo . '_' . $org_prot_any . '.' . $extension_filename;
+
+                    $sql = "SELECT id_item FROM prodel.entradas_anexos_tmp WHERE uuid = '$uuid' ";
+                    if (($oDblSt = $this->oDBT->query($sql)) === FALSE) {
+                        $err_txt .= "Error select entrada adjuntos\n";
+                        continue;
+                    }
+                    $aDades = $oDblSt->fetch(PDO::FETCH_ASSOC);
+                    if ($aDades === FALSE) {
+                        $err_txt .= "No se encuentra el anexo para entrada con uuid: $uuid\n";
+                        continue;
+                    }
+                    $id_item = $aDades['id_item'];
+
+                    $nombre_fichero = $directorio . '/' . $name;
+                    if (!file_exists($nombre_fichero)) {
+                        $err_txt .= "No se existe el fichero: $nombre_fichero\n";
+                        continue;
+                    }
+                    $fp = fopen($nombre_fichero, 'rb');
+                    $contenido_doc = fread($fp, filesize($nombre_fichero));
+                    // Escape the binary data
+                    $adjunto_escaped = bin2hex($contenido_doc);
+
+                    $update = "
+					nom                   = :nom,
+					adjunto               = :adjunto";
+                    if (($oDblSt = $this->oDBT->prepare("UPDATE prodel.entradas_anexos_tmp SET $update WHERE id_item='$id_item'")) === FALSE) {
+                        $err_txt .= "Error prepare update entrada adjuntos\n";
+                        continue;
+                    } else {
+                        $oDblSt->bindParam(1, $nombre_doc, PDO::PARAM_STR);
+                        $oDblSt->bindParam(2, $adjunto_escaped, PDO::PARAM_STR);
+                        try {
+                            $oDblSt->execute();
+                        } catch (PDOException $e) {
+                            $err_txt .= $e->errorInfo[2] . "\n";
+                            continue;
+                        }
+                    }
+
+                }
+
+                // salidas
+                if ($origen === 'dlp' || $destino === 'Rectorado') {
+                    // generar nombre file
+                    if ($origen === 'dlp') {
+                        $matches1 = [];
+                        $pattern1 = "/^\d+-dlp-(.*)-/";
+                        if (preg_match($pattern1, $filename, $matches1)) {
+                            $org_prot_num = $matches1[1];
+                        }
+                        $nombre_doc = $origen . $org_prot_num . '_' . $org_prot_any . '.' . $extension_filename;
+                    }
+                    if ($destino === 'Rectorado') {
+                        $str_anexo = '';
+                        if ($esanexo) {
+                            $str_anexo = 'a1';
+                        }
+                        $nombre_doc = $origen . $org_prot_num . $str_anexo . '_' . $org_prot_any . '.' . $extension_filename;
+                    }
+
+                    $sql = "SELECT id_item FROM prodel.escritos_anexos_tmp WHERE uuid = '$uuid' ";
+                    if (($oDblSt = $this->oDBT->query($sql)) === FALSE) {
+                        $err_txt .= "Error select escrito adjunto\n";
+                        continue;
+                    }
+                    $aDades = $oDblSt->fetch(PDO::FETCH_ASSOC);
+                    if ($aDades === FALSE) {
+                        $err_txt .= "No se encuentra el anexo para escrito con uuid: $uuid\n";
+                        continue;
+                    }
+                    $id_item = $aDades['id_item'];
+
+                    $nombre_fichero = $directorio . '/' . $name;
+                    if (!file_exists($nombre_fichero)) {
+                        $err_txt .= "No se existe el fichero: $nombre_fichero\n";
+                        continue;
+                    }
+                    $fp = fopen($nombre_fichero, 'rb');
+                    $contenido_doc = fread($fp, filesize($nombre_fichero));
+                    // Escape the binary data
+                    $adjunto_escaped = bin2hex($contenido_doc);
+
+                    $update = "
+					nom                   = :nom,
+					adjunto               = :adjunto";
+                    if (($oDblSt = $this->oDBT->prepare("UPDATE prodel.escritos_anexos_tmp SET $update WHERE id_item='$id_item'")) === FALSE) {
+                        $err_txt .= "Error prepare update escrito adjunto\n";
+                        continue;
+                    } else {
+                        $oDblSt->bindParam(1, $nombre_doc, PDO::PARAM_STR);
+                        $oDblSt->bindParam(2, $adjunto_escaped, PDO::PARAM_STR);
+                        try {
+                            $oDblSt->execute();
+                        } catch (PDOException $e) {
+                            $err_txt .= $e->errorInfo[2] . "\n";
+                            continue;
+                        }
+                    }
+
+                }
+                // si todo va bien borrar los dos archivos: el doc y el okm
+                // si hay algún error se escribe arriba, porque hay el continue.
+                unlink($fullfilename); // okm
+                unlink($nombre_fichero); // el doc
+            }
         }
-        $sql = "ALTER TABLE entrada_adjuntos ADD COLUMN IF NOT EXISTS id_reg integer ";
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-
-        // copiar los adjuntos para dl y ctr
-        $sql = "INSERT INTO entrada_adjuntos (id_entrada, adjunto, nom, dl_ctr, id_reg) 
-                (SELECT e.id_entrada, d.escrito, (CASE tipo WHEN 1 THEN 'escrito' ELSE 'anexo_'||num END)||'.'||extension, dl_ctr, d.id_reg
-                FROM reg.documentos d, entradas e  
-                WHERE e.id_reg = d.id_reg AND activo='t'
-                ) ";
-
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-
-        // duplicar entrada para el caso de los ctr:
-        $sql = "INSERT INTO entradas ( modo_entrada, json_prot_origen, asunto_entrada, json_prot_ref, ponente, resto_oficinas,
-                        asunto, f_entrada, detalle, categoria, visibilidad, f_contestar, bypass, estado, anulado, id_reg, id_entrada_old)
-                (
-                SELECT DISTINCT e.modo_entrada, e.json_prot_origen, e.asunto_entrada, e.json_prot_ref, e.ponente, e.resto_oficinas,
-                        e.asunto, e.f_entrada, e.detalle, e.categoria, e.visibilidad, e.f_contestar, TRUE, e.estado, e.anulado, e.id_reg, e.id_entrada_old
-                FROM entradas e, entrada_adjuntos ad 
-                WHERE e.id_entrada = ad.id_entrada AND ad.dl_ctr=2 AND e.anulado IS NULL
-                ) ";
-
-
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-
-        // cambiar el id_entrada por el nuevo (caso ctr)
-        $sql = "UPDATE entrada_adjuntos ad SET id_entrada = sub.id_entrada FROM
-                (SELECT DISTINCT e.id_entrada, e.id_reg FROM entradas e, entrada_adjuntos ad2
-                    WHERE e.bypass=TRUE AND e.anulado IS NULL AND e.id_reg = ad2.id_reg AND ad2.dl_ctr=2
-                    ) AS sub WHERE ad.dl_ctr=2 AND sub.id_reg=ad.id_reg;
-               ";
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-
-        // Poner bypass=FALSE para los de dl
-        $sql = "UPDATE entradas e SET bypass = FALSE  FROM
-                (SELECT DISTINCT e2.id_entrada, e2.id_reg, e2.asunto FROM entradas e2, entrada_adjuntos ad2
-                 WHERE e2.anulado IS NULL AND e2.id_entrada = ad2.id_entrada AND ad2.dl_ctr=1
-                 ) AS sub WHERE e.id_entrada = sub.id_entrada;
-               ";
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
+        // escribir todos los errores en el log
+        if (!empty($err_txt_tot)) {
+            file_put_contents($log_file, $err_txt_tot);
         }
 
     }
 
-    public function bypass_entradas()
-    {
-        //id_item 	id_entrada 	descripcion 	json_prot_destino 	id_grupos 	destinos 	f_salida
-        //id_salida 	id_reg 	descripcion 	tipo_ctr 	tipo_labor
-
-        $sql = "INSERT INTO entradas_bypass (id_entrada, descripcion) 
-                (SELECT e.id_entrada, m.descripcion
-                FROM entradas e, reg.destino_multiple m 
-                WHERE e.id_reg = m.id_reg
-                ) ";
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-
-        // la fecha:
-        $sql = "UPDATE entradas_bypass en SET (f_salida) =
-                (SELECT a.f_salida
-                FROM entradas e, reg.destino_multiple m, reg.aprobaciones a 
-                WHERE e.id_reg = m.id_reg AND m.id_salida=a.id_salida
-                    AND en.id_entrada = e.id_entrada
-                ) ";
-
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-
-
-    }
-
-    public function permanentes_entradas()
-    {
-        //id_reg 	activo
-        // categoria permanente = 3
-        $sql = "UPDATE entradas en SET categoria = 3
-                FROM reg.cr_num_bajo cr WHERE cr.id_reg = en.id_reg AND cr.activo='t' ";
-
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-
-    }
-
-    public function oficinas_entradas()
-    {
-        // id_item 	id_reg 	id_e_s 	id_oficina 	responsable 	asunto_of 	cancilleria
-
-        // ponente
-        $sql = "UPDATE entradas en SET (ponente) =
-                (SELECT x.id_oficina_new 
-                 FROM reg.oficinas of JOIN reg.entradas e ON (e.id_entrada = of.id_e_s AND e.id_reg = of.id_reg),
-                 reg.x_oficinas x
-                 WHERE of.responsable = 't' AND x.id_oficina = of.id_oficina AND x.id_oficina_new IS NOT NULL
-                AND of.cancilleria = 'f' AND en.id_reg = of.id_reg AND en.id_entrada_old = of.id_e_s
-                )";
-
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-
-        // resto
-        $sql = "UPDATE entradas en SET (resto_oficinas) =
-                (
-                SELECT array( SELECT x.id_oficina_new 
-                FROM reg.oficinas of JOIN reg.entradas e ON (e.id_entrada = of.id_e_s AND e.id_reg = of.id_reg),
-                 reg.x_oficinas x
-                 WHERE of.responsable = 'f' AND x.id_oficina = of.id_oficina AND x.id_oficina_new IS NOT NULL
-                AND of.cancilleria = 'f' AND en.id_reg = of.id_reg AND en.id_entrada_old = of.id_e_s)
-                )";
-
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-    }
-
-
-    public function entradas_ref()
+    public
+    function entradas_ref()
     {
         // buscar lugares
         $a_lugares = $this->buscarLugares();
@@ -742,7 +753,8 @@ class MigrationDlp
     }
 
 
-    public function entradas_anexos()
+    public
+    function entradas_anexos()
     {
         // crear tabla
         $sql = "CREATE TABLE IF NOT EXISTS prodel.entradas_anexos_tmp (LIKE dlp.entrada_adjuntos INCLUDING ALL)";
@@ -772,10 +784,11 @@ class MigrationDlp
             return FALSE;
         }
 
-        // rellenar
+        // rellenar. Como el escrito se va a poner como un adjunto, hay que introducir todos, no
+        // solo las: AND esanexo='t' (como hacía inicialmente).
         $sql = "INSERT INTO prodel.entradas_anexos_tmp (id_entrada, nom, adjunto, uuid, persistenceid )
                 (SELECT 1, nombdocumento||tipomime, 'xxxx', uuid, persistenceid 
-                FROM prodel.registro WHERE (destino='dlp' OR destino='Cancilleria') AND esanexo='t') ";
+                FROM prodel.registro WHERE destino='dlp' OR destino='Cancilleria' ) ";
 
         if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
@@ -822,23 +835,8 @@ class MigrationDlp
 
     }
 
-    public function completar_entradas()
-    {
-        // id_reg 	f_doc 	asunto 	escrito entrada aprobacion  anulado reservado detalle distribucion_cr
-
-        $sql = "UPDATE entradas e SET (asunto, detalle, anulado, bypass, categoria, estado, visibilidad) =
-                (SELECT asunto, detalle, anulado, distribucion_cr, 2, 5, CASE reservado WHEN 't' THEN 3 ELSE 1 END
-                FROM reg.escritos re 
-                WHERE re.id_reg = e.id_reg)";
-
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-    }
-
-    public function entradas_cancilleria()
+    public
+    function entradas_cancilleria()
     {
         // sobreescribir el detalle:
         // '['+substring (prodel.registro.numregistro,2,4)+’/’+substring(prodel.registro.anno,3,2) +’]’+ asuntooficinas
@@ -859,7 +857,8 @@ class MigrationDlp
 
     }
 
-    public function copiar_entradas()
+    public
+    function copiar_entradas()
     {
         // crear tabla
         $sql = "CREATE TABLE IF NOT EXISTS prodel.entradas_tmp (LIKE dlp.entradas INCLUDING ALL)";
@@ -1039,44 +1038,8 @@ class MigrationDlp
 
     }
 
-    public function crear_equivalencias_oficinas()
-    {
-        // añadir columna
-        $sql = "ALTER TABLE reg.x_oficinas ADD COLUMN IF NOT EXISTS id_oficina_new integer ";
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        // relacionar
-        $sql = "UPDATE reg.x_oficinas SET id_oficina_new = public.x_oficinas.id_oficina
-                    FROM public.x_oficinas WHERE reg.x_oficinas.sigla = public.x_oficinas.sigla ";
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-
-        // mirar si queda alguna oficina suelta
-        $sql = "SELECT * FROM reg.x_oficinas WHERE id_oficina_new IS NULL";
-        if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        $msg = '';
-        foreach ($this->oDBT->query($sql) as $row) {
-            $msg .= "sigla: " . $row['sigla'] . "<br>";
-        }
-
-        if (!empty($msg)) {
-            echo "Revisar la correspondencia para las oficinas:<br>";
-            echo $msg;
-        }
-
-    }
-
-    public function crear_equivalencias_lugares()
+    public
+    function crear_equivalencias_lugares()
     {
         // crear tabla  lugares_tmp
         // con el like, la sequencia del id_lugar sigue siendo la misma,
@@ -1181,7 +1144,8 @@ class MigrationDlp
         }
     }
 
-    public function pasar_lugares_a_produccion()
+    public
+    function pasar_lugares_a_produccion()
     {
         // añadir a producción los de la tabla temporal:
         $sql = "INSERT INTO public.lugares SELECT id_lugar, sigla, dl, region, nombre, tipo_ctr, modo_envio, pub_key, e_mail, anulado, plataforma
@@ -1201,7 +1165,8 @@ class MigrationDlp
     /**
      * @return array
      */
-    public function buscarLugares(): array
+    public
+    function buscarLugares(): array
     {
         $sql = "SELECT sigla, id_lugar 
             FROM public.lugares 
@@ -1216,7 +1181,8 @@ class MigrationDlp
         return $a_lugares;
     }
 
-    public function escritos_cancilleria()
+    public
+    function escritos_cancilleria()
     {
         // sobreescribir el detalle:
         // '['+substring (prodel.registro.numregistro,2,4)+’/’+substring(prodel.registro.anno,3,2) +’]’+ asuntooficinas
@@ -1236,7 +1202,8 @@ class MigrationDlp
 
     }
 
-    public function pasar_a_dlp()
+    public
+    function pasar_a_dlp()
     {
         // lugares grupos
         $sql = "TRUNCATE TABLE dlp.lugares_grupos RESTART IDENTITY CASCADE";
@@ -1310,9 +1277,9 @@ class MigrationDlp
         $this->oDBT->exec($sql_update_sequence);
     }
 
-    public function pasar_a_dlp_anexos()
+    public
+    function pasar_a_dlp_anexos()
     {
-
         // anexos:
         // entradas
         // vaciar ya debe existir
