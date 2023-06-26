@@ -31,6 +31,29 @@ class MigrationDlp
         // REASSIGN OWNED BY dani TO tramity;
     }
 
+    public function update_cancilleria(){
+        // cambiar a origen Cancillería
+        $sql = "UPDATE prodel.registro e 
+                SET origen = 'Cancillería'
+                WHERE e.origen = 'Cancilleria'";
+        if ($this->oDBT->query($sql) === FALSE) {
+            $sClauError = 'migartion';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+
+        // cambiar a destino Cancillería
+        $sql = "UPDATE prodel.registro e 
+                SET destino = 'Cancillería'
+                WHERE e.destino = 'Cancilleria'";
+        if ($this->oDBT->query($sql) === FALSE) {
+            $sClauError = 'migartion';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+
+    }
+
     public function copiar_aprobaciones()
     {
         // aprobaciones: id_salida 	id_reg 	f_aprobacion 	f_salida 	id_modo_envio
@@ -131,7 +154,7 @@ class MigrationDlp
             return FALSE;
         }
 
-        //-----------  Para Cancilleria
+        //-----------  Para Cancillería
         // buscar id_lugar_dl
         $sql = "SELECT id_lugar
             FROM public.lugares 
@@ -799,7 +822,7 @@ class MigrationDlp
         // solo las: AND esanexo='t' (como hacía inicialmente).
         $sql = "INSERT INTO prodel.entradas_anexos_tmp (id_entrada, nom, adjunto, uuid, persistenceid )
                 (SELECT 1, nombdocumento||tipomime, 'xxxx', uuid, persistenceid 
-                FROM prodel.registro WHERE destino='dlp' OR destino='Cancilleria' ) ";
+                FROM prodel.registro WHERE destino='dlp' OR destino='Cancillería' ) ";
 
         if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
@@ -858,7 +881,7 @@ class MigrationDlp
             , asunto_entrada = asunto_entrada || ' (Ref. Reg. '||substring (r.numregistro::text,2,4)||'/'||substring(r.anno::text,3,2)||')'
             FROM prodel.registro r
             WHERE r.persistenceid = e.persistenceid
-            AND r.destino='Cancilleria' AND r.esanexo='f'";
+            AND r.destino='Cancillería' AND r.esanexo='f'";
 
         if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
@@ -925,7 +948,7 @@ class MigrationDlp
                          categoria, visibilidad, f_contestar, bypass, estado, referencias, uuid, persistenceid )
                 (SELECT 5, fechacreacion, asunto, asunto, asuntooficinas, 
                         2, 1, fechatopecontestacion, 'f', 6, referencias, uuid, persistenceid 
-                FROM prodel.registro WHERE (destino='dlp' OR destino='Cancilleria') AND esanexo='f') ";
+                FROM prodel.registro WHERE (destino='dlp' OR destino='Cancillería') AND esanexo='f') ";
 
         if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
@@ -1203,7 +1226,7 @@ class MigrationDlp
             SET asunto = r.asunto || ' (Ref. Reg. '||substring (r.numregistro::text,2,4)||'/'||substring(r.anno::text,3,2)||')'
             FROM prodel.registro r
             WHERE r.persistenceid = e.persistenceid
-            AND r.destino='Cancilleria' AND r.esanexo='f'";
+            AND r.destino='Cancillería' AND r.esanexo='f'";
 
         if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';

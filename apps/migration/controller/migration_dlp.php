@@ -31,6 +31,11 @@ poner entrdas
 $Q_que = (string)filter_input(INPUT_POST, 'que');
 
 switch ($Q_que) {
+    case 'cancilleria':
+        $oMigrationDlp = new MigrationDlp();
+        $oMigrationDlp->update_cancilleria();
+        echo "OK modificar cancillería";
+        break;
     case 'pasar_a_dlp_anexos':
         $oMigrationDlp = new MigrationDlp();
         $oMigrationDlp->pasar_a_dlp_anexos();
