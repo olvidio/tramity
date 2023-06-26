@@ -483,7 +483,7 @@ class MigrationDlp
         // leer directorio: ficheros .okm
         // buscar uuid y esanexo en json
         // introducir en DB
-        $directorio = '/home/dani/tramity_local/dlp/exrepository';
+        $directorio = '/home/dani/dlp/exrepository';
         $log_file = $directorio . '/errores.log';
         $err_txt_tot = '';
         $err_txt = '';
