@@ -108,7 +108,7 @@ foreach ($a_posibles_cargos as $id_cargo => $cargo) {
 }
 
 $txt_option_cargos_oficina = '';
-$cCargos_oficina = $gesCargos->getCargos(['id_oficina' => $id_oficina, '_ordre' => 'director DESC, cargo DESC']);
+$cCargos_oficina = $gesCargos->getCargos(['id_oficina' => $id_oficina, 'activo' => 't', '_ordre' => 'director DESC, cargo DESC']);
 $a_posibles_cargos_oficina = [];
 foreach ($cCargos_oficina as $oCargo) {
     // No pongo al director, ya está con el resto de firmas.
@@ -314,7 +314,7 @@ $pag_actualizar = web\Hash::link('apps/expedientes/controller/expediente_form.ph
 $oHoy = new DateTimeLocal();
 $format = $oHoy::getFormat();
 $yearStart = date('Y');
-$yearEnd = $yearStart + 2;
+$yearEnd = (int)$yearStart + 2;
 $error_fecha = $_SESSION['oConfig']->getPlazoError();
 $error_fecha_txt = 'P' . $error_fecha . 'D';
 $oHoy->sub(new DateInterval($error_fecha_txt));

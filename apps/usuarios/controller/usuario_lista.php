@@ -43,6 +43,7 @@ $oUsuarioColeccion = $oGesUsuarios->getUsuarios($aWhere, $aOperador);
 $id_usuario = '';
 $usuario = '';
 $nom_usuario = '';
+$activo = '';
 $email = '';
 $cargo = '';
 $permiso = 1;
@@ -50,6 +51,7 @@ $permiso = 1;
 $a_cabeceras = ['usuario',
     'nombre a mostrar',
     'cargo preferido',
+    'activo',
     'email',
     //array('name'=>'accion','formatter'=>'clickFormatter'),
 ];
@@ -65,6 +67,8 @@ foreach ($oUsuarioColeccion as $oUsuario) {
     $id_usuario = $oUsuario->getId_usuario();
     $usuario = $oUsuario->getUsuario();
     $nom_usuario = $oUsuario->getNom_usuario();
+    $activo = $oUsuario->getActivo();
+    $activo_txt = ($activo === TRUE) ? _("Sí") : _("No");
     $email = $oUsuario->getEmail();
     $id_cargo_preferido = $oUsuario->getId_cargo_preferido();
 
@@ -81,7 +85,8 @@ foreach ($oUsuarioColeccion as $oUsuario) {
     $a_valores[$i][1] = $usuario;
     $a_valores[$i][2] = $nom_usuario;
     $a_valores[$i][3] = $cargo;
-    $a_valores[$i][5] = $email;
+    $a_valores[$i][5] = $activo_txt;
+    $a_valores[$i][6] = $email;
     //$a_valores[$i][6]= array( 'ira'=>$pagina, 'valor'=>'editar');
 }
 if (isset($Q_id_sel) && !empty($Q_id_sel)) {

@@ -9,6 +9,8 @@
         fnjs_enviar_formulario('#seleccionados');
     }
     fnjs_eliminar = function () {
+        alert("{{ "Debería marcarlo como inactivo"|trans }}");
+        return true;
         rta = fnjs_solo_uno('#seleccionados');
         if (rta == 1) {
             if (confirm("{{ "¿Está seguro que desea borrar este cargo?"|trans|raw }}")) {

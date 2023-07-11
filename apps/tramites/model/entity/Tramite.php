@@ -5,6 +5,7 @@ namespace tramites\model\entity;
 use core;
 use PDO;
 use PDOException;
+use function core\is_true;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula x_tramites
@@ -77,6 +78,14 @@ class Tramite extends core\ClasePropiedades
      * @var string
      */
     private $stramite;
+    /**
+     * activo de Tramite
+     *
+     * @var boolean
+     */
+    private bool $bactivo = FALSE;
+
+
     /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
      * Orden de Tramite
@@ -140,14 +149,22 @@ class Tramite extends core\ClasePropiedades
         $aDades['tramite'] = $this->stramite;
         $aDades['orden'] = $this->iorden;
         $aDades['breve'] = $this->sbreve;
+        $aDades['activo'] = $this->bactivo;
         array_walk($aDades, 'core\poner_null');
+        //para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
+        if (is_true($aDades['activo'])) {
+            $aDades['activo'] = 'true';
+        } else {
+            $aDades['activo'] = 'false';
+        }
 
         if ($bInsert === FALSE) {
             //UPDATE
             $update = "
 					tramite                  = :tramite,
 					orden                    = :orden,
-					breve                    = :breve";
+					breve                    = :breve,
+                    activo                   = :activo";
             if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_tramite='$this->iid_tramite'")) === FALSE) {
                 $sClauError = 'Tramite.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -165,8 +182,8 @@ class Tramite extends core\ClasePropiedades
             }
         } else {
             // INSERT
-            $campos = "(tramite,orden,breve)";
-            $valores = "(:tramite,:orden,:breve)";
+            $campos = "(tramite,orden,breve,activo)";
+            $valores = "(:tramite,:orden,:breve,:activo)";
             if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
                 $sClauError = 'Tramite.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -275,6 +292,13 @@ class Tramite extends core\ClasePropiedades
     {
         $this->sbreve = $sbreve;
     }
+   /**
+     * @param boolean $bactivo ='t'
+     */
+    public function setActivo(bool $bactivo = TRUE): void
+    {
+        $this->bactivo = $bactivo;
+    }
 
     /**
      * Estableix las claus primàries de Tramite en un array
@@ -321,6 +345,9 @@ class Tramite extends core\ClasePropiedades
         }
         if (array_key_exists('breve', $aDades)) {
             $this->setBreve($aDades['breve']);
+        }
+        if (array_key_exists('activo', $aDades)) {
+            $this->setActivo(is_true($aDades['activo']));
         }
     }
 
@@ -391,7 +418,18 @@ class Tramite extends core\ClasePropiedades
         }
         return $this->sbreve;
     }
-
+    /**
+     * Recupera l'atribut bactivo de Tramite
+     *
+     * @return boolean
+     */
+    public function getActivo(): bool
+    {
+        if (!isset($this->bactivo) && !$this->bLoaded) {
+            $this->DBCargar();
+        }
+        return $this->bactivo;
+    }
     /**
      * Retorna una col·lecció d'objectes del tipus DatosCampo
      *
@@ -402,7 +440,7 @@ class Tramite extends core\ClasePropiedades
 
         $oTramiteSet->add($this->getDatosTramite());
         $oTramiteSet->add($this->getDatosOrden());
-        $oTramiteSet->add($this->getDatosBerve());
+        $oTramiteSet->add($this->getDatosBreve());
         return $oTramiteSet->getTot();
     }
     /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/

@@ -8,7 +8,8 @@ CREATE TABLE nombre_del_esquema.aux_cargos
     director    boolean               NOT NULL DEFAULT 't',
     sacd        boolean               NOT NULL DEFAULT 'f',
     id_usuario  integer,
-    id_suplente integer
+    id_suplente integer,
+    activo      boolean               NOT NULL DEFAULT 't'
 );
 
 COMMENT
@@ -27,7 +28,8 @@ CREATE TABLE nombre_del_esquema.aux_usuarios
     id_cargo_preferido integer               NOT NULL,
     password           bytea,
     email              text,
-    nom_usuario        text
+    nom_usuario        text,
+    activo             boolean               NOT NULL DEFAULT 't'
 );
 COMMENT
 ON COLUMN nombre_del_esquema.aux_usuarios.id_cargo_preferido IS 'corresponde al cargo por defecto o preferido';

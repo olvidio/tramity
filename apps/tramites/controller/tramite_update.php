@@ -36,12 +36,14 @@ switch ($Q_que) {
         $Q_id_tramite = (integer)filter_input(INPUT_POST, 'id_tramite');
         $Q_orden = (string)filter_input(INPUT_POST, 'orden');
         $Q_breve = (string)filter_input(INPUT_POST, 'breve');
+        $Q_activo = (bool)filter_input(INPUT_POST, 'activo');
 
         $oTramite = new Tramite ($Q_id_tramite);
         $oTramite->DBCargar();
         $oTramite->setTramite($Q_tramite);
         $oTramite->setOrden($Q_orden);
         $oTramite->setBreve($Q_breve);
+        $oTramite->setActivo($Q_activo);
         if ($oTramite->DBGuardar() === FALSE) {
             $error_txt .= $oTramite->getErrorTxt();
         }

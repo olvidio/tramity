@@ -42,8 +42,11 @@ $tramite = '';
 $orden = '';
 $permiso = 1;
 
-$a_cabeceras = array('tramite', 'orden', 'abrev.', array('name' => 'accion', 'formatter' => 'clickFormatter'));
-$a_botones[] = array('txt' => _("borrar"), 'click' => "fnjs_eliminar()");
+$a_cabeceras = array('tramite', 'orden', 'abrev.', array('name' => 'accion', 'formatter' => 'clickFormatter'), 'activo');
+$a_botones = [
+    ['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
+    ['txt' => _("modificar"), 'click' => "fnjs_editar()"],
+];
 
 $a_valores = array();
 $i = 0;
@@ -53,6 +56,8 @@ foreach ($cTramites as $oTramite) {
     $tramite = $oTramite->getTramite();
     $orden = $oTramite->getOrden();
     $breve = $oTramite->getBreve();
+    $activo = $oTramite->getActivo();
+    $activo_txt = ($activo === TRUE) ? _("Sí") : _("No");
 
     $pagina = web\Hash::link(core\ConfigGlobal::getWeb() . '/apps/tramites/controller/tramite_form.php?' . http_build_query(array('quien' => 'tramite', 'id_tramite' => $id_tramite)));
 
@@ -61,6 +66,7 @@ foreach ($cTramites as $oTramite) {
     $a_valores[$i][2] = $orden;
     $a_valores[$i][3] = $breve;
     $a_valores[$i][4] = array('ira' => $pagina, 'valor' => 'editar');
+    $a_valores[$i][5] = $activo_txt;
 }
 if (isset($Q_id_sel) && !empty($Q_id_sel)) {
     $a_valores['select'] = $Q_id_sel;

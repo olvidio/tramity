@@ -45,7 +45,7 @@ class GestorCargo extends core\ClaseGestor
         $nom_tabla = $this->getNomTabla();
 
         $sQuery = "SELECT id_cargo, cargo FROM $nom_tabla
-                WHERE id_oficina=$id_oficina AND director = 't'
+                WHERE id_oficina=$id_oficina AND director = 't' AND activo = 't'
                 ";
         if (($oDbl->query($sQuery)) === false) {
             $sClauError = 'GestorAsignaturaTipo.lista';
@@ -56,34 +56,6 @@ class GestorCargo extends core\ClaseGestor
             $clave = $aClave[0];
         }
         return $clave;
-    }
-
-    /**
-     * retorna un Array
-     * Els posibles cargos directors (per entrades)
-     *
-     * @return array|false
-     */
-    function zzgetArrayCargosDirector()
-    {
-        $oDbl = $this->getoDbl();
-        $nom_tabla = $this->getNomTabla();
-
-        $sQuery = "SELECT id_cargo, cargo FROM $nom_tabla
-                WHERE id_oficina > 0 AND director = 't'
-                ORDER BY cargo";
-        if (($oDbl->query($sQuery)) === false) {
-            $sClauError = 'GestorAsignaturaTipo.lista';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return false;
-        }
-        $aOpciones = array();
-        foreach ($oDbl->query($sQuery) as $aClave) {
-            $clave = $aClave[0];
-            $val = $aClave[1];
-            $aOpciones[$clave] = $val;
-        }
-        return $aOpciones;
     }
 
     /**
@@ -99,9 +71,9 @@ class GestorCargo extends core\ClaseGestor
         $nom_tabla = $this->getNomTabla();
 
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            $Where = "WHERE id_oficina = $id_oficina";
+            $Where = "WHERE activo = 't' AND id_oficina = $id_oficina";
         } else {
-            $Where = "WHERE id_oficina > 0";
+            $Where = "WHERE activo = 't' AND id_oficina > 0";
             if (!empty($id_oficina)) {
                 $Where .= " AND id_oficina = $id_oficina";
             }
@@ -149,9 +121,9 @@ class GestorCargo extends core\ClaseGestor
         $nom_tabla = $this->getNomTabla();
 
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            $Where = "WHERE id_oficina = " . Cargo::OFICINA_ESQUEMA;
+            $Where = "WHERE activo = 't' AND id_oficina = " . Cargo::OFICINA_ESQUEMA;
         } else {
-            $Where = "WHERE id_oficina > 0";
+            $Where = "WHERE activo = 't' AND id_oficina > 0";
             if (!empty($id_oficina)) {
                 $Where .= " AND id_oficina = $id_oficina";
             }
@@ -209,7 +181,7 @@ class GestorCargo extends core\ClaseGestor
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
 
-        $Where = "WHERE id_ambito = $id_ambito";
+        $Where = "WHERE activo = 't' AND id_ambito = $id_ambito";
         if ($conOficina) {
             if ($id_ambito == Cargo::AMBITO_CTR) {
                 $Where .= " AND id_oficina = " . Cargo::OFICINA_ESQUEMA;
@@ -245,7 +217,7 @@ class GestorCargo extends core\ClaseGestor
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
 
-        $Where = "WHERE id_ambito = $id_ambito AND (id_oficina = 0 OR id_oficina IS NULL)";
+        $Where = "WHERE activo = 't' AND id_ambito = $id_ambito AND (id_oficina = 0 OR id_oficina IS NULL)";
         $sQuery = "SELECT id_cargo, cargo FROM $nom_tabla
                 $Where ORDER BY director DESC, cargo";
         if (($oDbl->query($sQuery)) === false) {
@@ -275,9 +247,9 @@ class GestorCargo extends core\ClaseGestor
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
 
-        $Where = '';
+        $Where = "WHERE activo = 't' ";
         if (!empty($id_ambito)) {
-            $Where = "WHERE id_ambito = $id_ambito
+            $Where = " AND id_ambito = $id_ambito
                          AND (id_usuario = $id_usuario OR id_suplente = $id_usuario)";
         }
         $sQuery = "SELECT id_cargo, cargo FROM $nom_tabla
@@ -312,7 +284,7 @@ class GestorCargo extends core\ClaseGestor
 
         $Where = '';
         if (!empty($id_ambito)) {
-            $Where = "WHERE id_ambito = $id_ambito";
+            $Where = "WHERE activo = 't' AND id_ambito = $id_ambito";
             if (!empty($id_oficina)) {
                 if ($id_oficina === 'x') {
                     $Where .= " AND (id_oficina IS NOT NULL AND id_oficina != 0)";
@@ -323,9 +295,9 @@ class GestorCargo extends core\ClaseGestor
         } else {
             if (!empty($id_oficina)) {
                 if ($id_oficina === 'x') {
-                    $Where .= "WHERE (id_oficina IS NOT NULL AND id_oficina != 0)";
+                    $Where .= "WHERE activo = 't' AND (id_oficina IS NOT NULL AND id_oficina != 0)";
                 } else {
-                    $Where .= "WHERE id_oficina = $id_oficina";
+                    $Where .= "WHERE  activo = 't' AND id_oficina = $id_oficina";
                 }
             }
 
@@ -347,28 +319,6 @@ class GestorCargo extends core\ClaseGestor
             $aOpciones[$clave] = $val;
         }
         return new Desplegable('', $aOpciones, '', true);
-    }
-
-    /**
-     * retorna l'array d'objectes de tipus Cargo
-     *
-     * @param string sQuery la query a executar.
-     * @return array|false Una col·lecció d'objectes de tipus Cargo
-     */
-    function getCargosQuery($sQuery = '')
-    {
-        $oDbl = $this->getoDbl();
-        $oCargoSet = new core\Set();
-        if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'GestorCargo.query';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        foreach ($oDbl->query($sQuery) as $aDades) {
-            $oCargo = new Cargo($aDades['id_cargo']);
-            $oCargoSet->add($oCargo);
-        }
-        return $oCargoSet->getTot();
     }
 
     /**

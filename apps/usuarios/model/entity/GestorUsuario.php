@@ -77,9 +77,8 @@ class GestorUsuario extends core\ClaseGestor
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
-        $Where = '';
         $sQuery = "SELECT id_usuario, usuario FROM $nom_tabla
-                $Where ORDER BY usuario";
+                WHERE activo = 't' ORDER BY usuario";
         if (($oDbl->query($sQuery)) === false) {
             $sClauError = 'GestorAsignaturaTipo.lista';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -92,28 +91,6 @@ class GestorUsuario extends core\ClaseGestor
             $aOpciones[$clave] = $val;
         }
         return new Desplegable('', $aOpciones, '', true);
-    }
-
-    /**
-     * retorna l'array d'objectes de tipus Usuario
-     *
-     * @param string sQuery la query a executar.
-     * @return array Una col·lecció d'objectes de tipus Usuario
-     */
-    function getUsuariosQuery($sQuery = '')
-    {
-        $oDbl = $this->getoDbl();
-        $oUsuarioSet = new core\Set();
-        if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'GestorUsuario.query';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        foreach ($oDbl->query($sQuery) as $aDades) {
-            $oUsuario = new Usuario( $aDades['id_usuario']);
-            $oUsuarioSet->add($oUsuario);
-        }
-        return $oUsuarioSet->getTot();
     }
 
     /**

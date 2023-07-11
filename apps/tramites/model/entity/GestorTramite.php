@@ -78,7 +78,7 @@ class GestorTramite extends core\ClaseGestor
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
 
-        $sQuery = "SELECT id_tramite, tramite FROM $nom_tabla ORDER BY tramite";
+        $sQuery = "SELECT id_tramite, tramite FROM $nom_tabla WHERE activo = 't' ORDER BY tramite";
         if (($oDbl->query($sQuery)) === false) {
             $sClauError = 'GestorTramites.lista';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);

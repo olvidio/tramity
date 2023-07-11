@@ -125,6 +125,12 @@ class Cargo extends ClasePropiedades
      * @var integer|null
      */
     private ?int $iid_suplente;
+    /**
+     * activo de Cargo
+     *
+     * @var boolean
+     */
+    private bool $bactivo = TRUE;
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
@@ -178,6 +184,7 @@ class Cargo extends ClasePropiedades
         $aDades['sacd'] = $this->bsacd;
         $aDades['id_usuario'] = $this->iid_usuario;
         $aDades['id_suplente'] = $this->iid_suplente;
+        $aDades['activo'] = $this->bactivo;
         array_walk($aDades, 'core\poner_null');
         //para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
         if (is_true($aDades['director'])) {
@@ -190,6 +197,11 @@ class Cargo extends ClasePropiedades
         } else {
             $aDades['sacd'] = 'false';
         }
+        if (is_true($aDades['activo'])) {
+            $aDades['activo'] = 'true';
+        } else {
+            $aDades['activo'] = 'false';
+        }
 
         if ($bInsert === FALSE) {
             //UPDATE
@@ -201,7 +213,8 @@ class Cargo extends ClasePropiedades
 					director                 = :director,
 					sacd                 	 = :sacd,
 					id_usuario               = :id_usuario,
-					id_suplente              = :id_suplente";
+					id_suplente              = :id_suplente,
+                    activo                   = :activo";
             if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_cargo='$this->iid_cargo'")) === FALSE) {
                 $sClauError = 'Cargo.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -219,8 +232,8 @@ class Cargo extends ClasePropiedades
             }
         } else {
             // INSERT
-            $campos = "(id_ambito,cargo,descripcion,id_oficina,director,sacd,id_usuario,id_suplente)";
-            $valores = "(:id_ambito,:cargo,:descripcion,:id_oficina,:director,:sacd,:id_usuario,:id_suplente)";
+            $campos = "(id_ambito,cargo,descripcion,id_oficina,director,sacd,id_usuario,id_suplente,activo)";
+            $valores = "(:id_ambito,:cargo,:descripcion,:id_oficina,:director,:sacd,:id_usuario,:id_suplente,:activo)";
             if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
                 $sClauError = 'Cargo.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -319,6 +332,9 @@ class Cargo extends ClasePropiedades
         if (array_key_exists('id_suplente', $aDades)) {
             $this->setId_suplente($aDades['id_suplente']);
         }
+        if (array_key_exists('activo', $aDades)) {
+            $this->setActivo(is_true($aDades['activo']));
+        }
     }
 
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
@@ -396,6 +412,14 @@ class Cargo extends ClasePropiedades
     public function setId_suplente(?int $iid_suplente = null): void
     {
         $this->iid_suplente = $iid_suplente;
+    }
+
+    /**
+     * @param boolean $bactivo ='t'
+     */
+    public function setActivo(bool $bactivo = TRUE): void
+    {
+        $this->bactivo = $bactivo;
     }
 
     /**
@@ -563,6 +587,19 @@ class Cargo extends ClasePropiedades
             $this->DBCargar();
         }
         return $this->iid_suplente;
+    }
+
+    /**
+     * Recupera l'atribut bactivo de Cargo
+     *
+     * @return boolean
+     */
+    public function getActivo(): bool
+    {
+        if (!isset($this->bactivo) && !$this->bLoaded) {
+            $this->DBCargar();
+        }
+        return $this->bactivo;
     }
 
     /**

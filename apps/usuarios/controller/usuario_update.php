@@ -104,6 +104,7 @@ switch ($Q_que) {
         $Q_nom_usuario = (string)filter_input(INPUT_POST, 'nom_usuario');
         $Q_password = (string)filter_input(INPUT_POST, 'password');
         $Q_pass = (string)filter_input(INPUT_POST, 'pass');
+        $Q_activo = (bool)filter_input(INPUT_POST, 'activo');
 
         $oUsuario = new Usuario($Q_id_usuario);
         $usuario = $oUsuario->getUsuario();
@@ -117,6 +118,7 @@ switch ($Q_que) {
         }
         $oUsuario->setUsuario($Q_usuario);
         $oUsuario->setId_cargo_preferido($Q_id_cargo_preferido);
+        $oUsuario->setActivo($Q_activo);
         $oUsuario->setEmail($Q_email);
         $oUsuario->setNom_usuario($Q_nom_usuario);
         if (!empty($Q_password)) {

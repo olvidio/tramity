@@ -28,6 +28,12 @@
                         <label for="example" class="form-label">{{ "Cargo Preferido"|trans|raw }}</label>
                         {{ oDesplCargos.desplegable|raw }}
                     </div>
+                     <div class="row mb-3">
+                        <div class="col-4">
+                            <input type="checkbox" class="col-form-check-input" id="activo" name="activo" {{ chk_activo }}>
+                            <label class="col-form-label" for="activo">{{ "activo"|trans|raw }}</label>
+                        </div>
+                    </div>
 
                     <div class="row mb-3">
                         <button onclick="fnjs_guardar(this.form);" type="button"

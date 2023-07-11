@@ -7,6 +7,7 @@ use core\DatosCampo;
 use core\Set;
 use PDO;
 use PDOException;
+use function core\is_true;
 
 /**
  * Fitxer amb la Classe que accedeix a la taula aux_usuarios
@@ -97,6 +98,14 @@ class Usuario extends ClasePropiedades
      * @var string|null
      */
     private ?string $snom_usuario = null;
+
+    /**
+     * activo de Usuario
+     *
+     * @var boolean
+     */
+    private bool $bactivo = TRUE;
+
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
@@ -140,7 +149,14 @@ class Usuario extends ClasePropiedades
         $aDades['password'] = $this->spassword;
         $aDades['email'] = $this->semail;
         $aDades['nom_usuario'] = $this->snom_usuario;
+        $aDades['activo'] = $this->bactivo;
         array_walk($aDades, 'core\poner_null');
+        //para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
+        if (is_true($aDades['activo'])) {
+            $aDades['activo'] = 'true';
+        } else {
+            $aDades['activo'] = 'false';
+        }
 
         if ($bInsert === FALSE) {
             //UPDATE
@@ -149,7 +165,8 @@ class Usuario extends ClasePropiedades
 					id_cargo_preferido       = :id_cargo_preferido,
 					password                 = :password,
 					email                    = :email,
-					nom_usuario              = :nom_usuario";
+					nom_usuario              = :nom_usuario,
+                    activo                   = :activo";
             if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_usuario='$this->iid_usuario'")) === FALSE) {
                 $sClauError = 'Usuario.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -167,8 +184,8 @@ class Usuario extends ClasePropiedades
             }
         } else {
             // INSERT
-            $campos = "(usuario,id_cargo_preferido,password,email,nom_usuario)";
-            $valores = "(:usuario,:id_cargo_preferido,:password,:email,:nom_usuario)";
+            $campos = "(usuario,id_cargo_preferido,password,email,nom_usuario,activo)";
+            $valores = "(:usuario,:id_cargo_preferido,:password,:email,:nom_usuario,:activo)";
             if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
                 $sClauError = 'Usuario.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -306,6 +323,15 @@ class Usuario extends ClasePropiedades
     }
 
     /**
+     * @param boolean $bactivo ='t'
+     */
+    public function setActivo(bool $bactivo = TRUE): void
+    {
+        $this->bactivo = $bactivo;
+    }
+
+
+    /**
      * Estableix las claus primàries de Usuario en un array
      *
      */
@@ -339,6 +365,9 @@ class Usuario extends ClasePropiedades
         }
         if (array_key_exists('nom_usuario', $aDades)) {
             $this->setNom_usuario($aDades['nom_usuario']);
+        }
+        if (array_key_exists('activo', $aDades)) {
+            $this->setActivo(is_true($aDades['activo']));
         }
     }
 
@@ -434,6 +463,18 @@ class Usuario extends ClasePropiedades
             $this->DBCargar();
         }
         return $this->snom_usuario;
+    }
+    /**
+     * Recupera l'atribut bactivo de Usuario
+     *
+     * @return boolean
+     */
+    public function getActivo(): bool
+    {
+        if (!isset($this->bactivo) && !$this->bLoaded) {
+            $this->DBCargar();
+        }
+        return $this->bactivo;
     }
 
     /**

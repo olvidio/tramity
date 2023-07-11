@@ -65,6 +65,8 @@ if ($oCargo->DBCargar()) {
     $chk_director = ($director === TRUE) ? 'checked' : '';
     $sacd = $oCargo->getSacd();
     $chk_sacd = ($sacd === TRUE) ? 'checked' : '';
+    $activo = $oCargo->getActivo();
+    $chk_activo = ($activo === TRUE) ? 'checked' : '';
     $id_usuario = $oCargo->getId_usuario();
     $id_suplente = $oCargo->getId_suplente();
 } else {
@@ -76,6 +78,7 @@ if ($oCargo->DBCargar()) {
     $id_oficina = '';
     $chk_director = '';
     $chk_sacd = '';
+    $chk_activo = '';
     $id_usuario = '';
     $id_suplente = '';
 }
@@ -124,6 +127,7 @@ $a_campos = [
     'oDesplSuplentes' => $oDesplSuplentes,
     'chk_director' => $chk_director,
     'chk_sacd' => $chk_sacd,
+    'chk_activo' => $chk_activo,
     'url_update' => $url_update,
     'txt_guardar' => $txt_guardar,
     'txt_eliminar' => $txt_eliminar,

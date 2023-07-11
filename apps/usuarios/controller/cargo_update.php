@@ -69,6 +69,7 @@ switch ($Q_que) {
         $Q_id_oficina = (integer)filter_input(INPUT_POST, 'id_oficina');
         $Q_director = (bool)filter_input(INPUT_POST, 'director');
         $Q_sacd = (bool)filter_input(INPUT_POST, 'sacd');
+        $Q_activo = (bool)filter_input(INPUT_POST, 'activo');
         $Q_id_usuario = (integer)filter_input(INPUT_POST, 'id_usuario');
         $Q_id_suplente = (integer)filter_input(INPUT_POST, 'id_suplente');
 
@@ -84,6 +85,7 @@ switch ($Q_que) {
         $oCargo->setId_oficina($Q_id_oficina);
         $oCargo->setDirector($Q_director);
         $oCargo->setSacd($Q_sacd);
+        $oCargo->setActivo($Q_activo);
         $oCargo->setId_usuario($Q_id_usuario);
         $oCargo->setId_suplente($Q_id_suplente);
         if ($oCargo->DBGuardar() === false) {

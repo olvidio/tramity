@@ -50,7 +50,7 @@ $cargo = '';
 $descripcion = '';
 $permiso = 1;
 
-$a_cabeceras = array('cargo', 'descripcion', 'director', 'oficina', 'titular', 'suplente');
+$a_cabeceras = array('cargo', 'descripcion', 'director', 'oficina', 'titular', 'suplente','activo');
 $a_botones = [['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
     ['txt' => _("modificar"), 'click' => "fnjs_editar()"],
 ];
@@ -67,6 +67,8 @@ foreach ($cCargos as $oCargo) {
     $id_oficina = $oCargo->getId_oficina();
     $director = $oCargo->getDirector();
     $director_txt = ($director === TRUE) ? _("Sí") : _("No");
+    $activo = $oCargo->getActivo();
+    $activo_txt = ($activo === TRUE) ? _("Sí") : _("No");
     $id_usuario = $oCargo->getId_usuario();
     $id_suplente = $oCargo->getId_suplente();
     $usuario = empty($aUsuarios[$id_usuario]) ? '' : $aUsuarios[$id_usuario];
@@ -86,6 +88,7 @@ foreach ($cCargos as $oCargo) {
     $a_valores[$i][4] = $sigla;
     $a_valores[$i][5] = $usuario;
     $a_valores[$i][6] = $suplente;
+    $a_valores[$i][7] = $activo_txt;
 }
 if (isset($Q_id_sel) && !empty($Q_id_sel)) {
     $a_valores['select'] = $Q_id_sel;

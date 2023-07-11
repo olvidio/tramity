@@ -3,7 +3,8 @@ CREATE TABLE nombre_del_esquema.x_tramites
     id_tramite SERIAL PRIMARY KEY,
     tramite    text NOT NULL,
     orden      smallint,
-    breve      varchar(10)
+    breve      varchar(10),
+    activo     boolean               NOT NULL DEFAULT 't'
 );
 
 

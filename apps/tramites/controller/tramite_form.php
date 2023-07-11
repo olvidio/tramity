@@ -62,11 +62,14 @@ if ($oTramite->DBCargar()) {
     $tramite = $oTramite->getTramite();
     $orden = $oTramite->getOrden();
     $breve = $oTramite->getBreve();
+    $activo = $oTramite->getActivo();
+    $chk_activo = ($activo === TRUE) ? 'checked' : '';
 } else {
     $que = 'nuevo';
     $tramite = '';
     $orden = '';
     $breve = '';
+    $chk_activo = '';
 }
 
 $camposForm = 'que!tramite!descripcion';
@@ -89,6 +92,7 @@ $a_campos = [
     'tramite' => $tramite,
     'orden' => $orden,
     'breve' => $breve,
+    'chk_activo' => $chk_activo,
     'url_update' => $url_update,
     'txt_guardar' => $txt_guardar,
     'txt_eliminar' => $txt_eliminar,

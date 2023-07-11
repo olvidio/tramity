@@ -44,14 +44,18 @@
                         </div>
                         {% endif %}
                     <div class="row mb-3">
-                        <div class="col-6">
+                        <div class="col-4">
                             <input type="checkbox" class="col-form-check-input" id="director"
                                    name="director" {{ chk_director }}>
                             <label class="col-form-label" for="director">{{ "director"|trans|raw }}</label>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <input type="checkbox" class="col-form-check-input" id="sacd" name="sacd" {{ chk_sacd }}>
                             <label class="col-form-label" for="sacd">{{ "sacd"|trans|raw }}</label>
+                        </div>
+                        <div class="col-4">
+                            <input type="checkbox" class="col-form-check-input" id="activo" name="activo" {{ chk_activo }}>
+                            <label class="col-form-label" for="activo">{{ "activo"|trans|raw }}</label>
                         </div>
                     </div>
 

@@ -68,7 +68,8 @@ if (!empty($Q_id_usuario)) {
     $pass = $oUsuario->getPassword();
     $email = $oUsuario->getEmail();
     $id_cargo_preferido = $oUsuario->getId_cargo_preferido();
-
+    $activo = $oUsuario->getActivo();
+    $chk_activo = ($activo === TRUE) ? 'checked' : '';
     $oDesplCargos->setOpcion_sel($id_cargo_preferido);
 } else {
     $que_user = 'nuevo';
@@ -76,6 +77,7 @@ if (!empty($Q_id_usuario)) {
     $Q_id_usuario = '';
     $usuario = '';
     $nom_usuario = '';
+    $chk_activo = '';
     $pass = '';
     $email = '';
 }
@@ -113,6 +115,7 @@ $a_campos = [
     'pass' => $pass,
     'nom_usuario' => $nom_usuario,
     'oDesplCargos' => $oDesplCargos,
+    'chk_activo' => $chk_activo,
     'email' => $email,
     'txt_guardar' => $txt_guardar,
     'txt_eliminar' => $txt_eliminar,
