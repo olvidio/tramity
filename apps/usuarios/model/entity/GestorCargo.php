@@ -249,7 +249,7 @@ class GestorCargo extends core\ClaseGestor
 
         $Where = "WHERE activo = 't' ";
         if (!empty($id_ambito)) {
-            $Where = " AND id_ambito = $id_ambito
+            $Where .= " AND id_ambito = $id_ambito
                          AND (id_usuario = $id_usuario OR id_suplente = $id_usuario)";
         }
         $sQuery = "SELECT id_cargo, cargo FROM $nom_tabla
