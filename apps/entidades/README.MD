@@ -17,6 +17,7 @@ Hay que cambiar la estructura de la base de datos:
  public | usuario_preferencias | table | tramity
  public | x_config             | table | tramity
  public | x_locales            | table | tramity
+ public | x_timezones            | table | tramity
 ```
 
 - para cada nombre_entidad se debe crear un esquema con el nombre de la nombre_entidad (normalizado: existe una función para

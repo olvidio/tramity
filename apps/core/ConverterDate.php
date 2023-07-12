@@ -26,6 +26,7 @@ class ConverterDate
         switch ($type) {
             case 'date':
             case 'datetime':
+            case 'datetime_utc':
                 $this->Converter = new PgTimestamp($data, $type);
                 break;
             case 'timestamp':

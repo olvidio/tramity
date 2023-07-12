@@ -288,6 +288,12 @@
     {{ idioma_default.desplegable|raw }}
     <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);">
 </form>
+<h3>{{ "Zona horaria"|trans|raw }}:</h3>
+<form id="frm_timezone" name="frm_timezone" action="">
+    {{ oHashTZ.getCamposHtml|raw }}
+    {{ timezone.desplegable|raw }}
+    <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);">
+</form>
 <hr>
 <h3>{{ "Ámbito de la nombre_entidad: centro, delegación, comisión regional"|trans|raw }}:</h3>
 <form id="frm_dl_r" name="frm_dl_r" action="">

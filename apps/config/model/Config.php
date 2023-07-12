@@ -61,6 +61,17 @@ class Config
         return $oConfigSchema->getValor();
     }
 
+    public function getTimeZone()
+    {
+        $parametro = 'timezone';
+        $oConfigSchema = new ConfigSchema($parametro);
+        $valor = $oConfigSchema->getValor();
+        if (empty($valor)) {
+            $valor = "Europe/Madrid";
+        }
+        return $valor;
+    }
+
     public function getDistribuirTodos(): ?string
     {
         $parametro = 'distribuir_todos';

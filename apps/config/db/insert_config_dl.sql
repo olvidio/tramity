@@ -3,6 +3,8 @@ VALUES ('ambito', 3);
 INSERT INTO nombre_del_esquema.x_config (parametro, valor)
 VALUES ('idioma_default', 'es_ES.UTF-8');
 INSERT INTO nombre_del_esquema.x_config (parametro, valor)
+VALUES ('timezone', 'Europe/Madrid');
+INSERT INTO nombre_del_esquema.x_config (parametro, valor)
 VALUES ('plazo_urgente', 1);
 INSERT INTO nombre_del_esquema.x_config (parametro, valor)
 VALUES ('plazo_rapido', 7);

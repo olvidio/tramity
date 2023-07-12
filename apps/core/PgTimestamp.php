@@ -3,6 +3,7 @@
 namespace core;
 
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use web\DateTimeLocal;
 
@@ -41,7 +42,13 @@ class PgTimestamp
     {
         $data = trim($this->data);
         if ($data !== '') {
-            $oFecha = new DateTimeLocal($data);
+            if ($this->type === 'datetime_utc') { // pasar de utc a local
+                $timeZone = $_SESSION['oConfig']->getTimeZone();
+                $oDate = new DateTimeLocal($data);
+                $oFecha = $oDate->setTimezone(new DateTimeZone($timeZone));
+            } else {
+                $oFecha = new DateTimeLocal($data);
+            }
         } else {
             $oFecha = null;
         }
@@ -111,6 +118,8 @@ class PgTimestamp
                     $rta = sprintf("%s", $this->checkData($timestamp_with_seconds)->format(static::TS_FORMAT));
                     break;
                 case 'date':
+                case 'datetime':
+                case 'datetime_utc':
                     $rta = sprintf("%s", $this->checkData($this->data)->format(static::DATE_FORMAT));
                     break;
                 case 'time':

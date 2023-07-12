@@ -4,6 +4,7 @@ use config\model\entity\ConfigSchema;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\entity\Cargo;
 use usuarios\model\entity\GestorLocale;
+use usuarios\model\entity\GestorTimeZone;
 use web\Desplegable;
 use web\Hash;
 
@@ -594,6 +595,28 @@ $oHashI->setArrayCamposHidden(['parametro' => $parametro]);
 
 $a_campos['oHashI'] = $oHashI;
 $a_campos['idioma_default'] = $val_idioma_default;
+
+// ----------- Time Zone de la dl -------------------
+$parametro = 'timezone';
+$oConfigSchema = new ConfigSchema($parametro);
+$valor = $oConfigSchema->getValor();
+
+$gesTimeZones = new GestorTimeZone();
+$oDeplTZ = $gesTimeZones->getListaTZ();
+$oDeplTZ->setNombre('valor');
+$oDeplTZ->setOpcion_sel($valor);
+
+if (empty($valor)) {
+    $oDeplTZ->setOpcion_sel('es_ES.UTF-8');
+}
+
+$oHashTZ = new Hash();
+$oHashTZ->setUrl($url);
+$oHashTZ->setcamposForm('valor');
+$oHashTZ->setArrayCamposHidden(['parametro' => $parametro]);
+
+$a_campos['oHashTZ'] = $oHashTZ;
+$a_campos['timezone'] = $oDeplTZ;
 
 // ----------- Ámbito: ctr, delegación o región -------------------
 $parametro = 'ambito';

@@ -561,7 +561,7 @@ class Firma extends core\ClasePropiedades
     public function setF_valor($df_valor = '', $convert = true)
     {
         if ($convert === true && !empty($df_valor)) {
-            $oConverter = new core\ConverterDate('date', $df_valor);
+            $oConverter = new core\ConverterDate('datetime_utc', $df_valor);
             $this->df_valor = $oConverter->toPg();
         } else {
             $this->df_valor = $df_valor;
@@ -800,7 +800,7 @@ class Firma extends core\ClasePropiedades
         if (empty($this->df_valor)) {
             return new NullDateTimeLocal();
         }
-        $oConverter = new core\ConverterDate('date', $this->df_valor);
+        $oConverter = new core\ConverterDate('datetime_utc', $this->df_valor);
         return $oConverter->fromPg();
     }
 
