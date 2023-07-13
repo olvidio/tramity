@@ -383,15 +383,18 @@ class Etherpad extends Client
         $lista = $this->listSessionsOfAuthor($authorID);
         if ($lista->getCode() == 0) {
             $data = $lista->getData();
-            foreach ($data as $sessionID => $aData) {
-                $group = $aData['groupID'];
-                $author = $aData['authorID'];
-                $valid = $aData['validUntil'];
-                if ($group == $groupID && $author == $authorID) {
-                    $ahora = date("U");
-                    // Además hay que asegurar que está también la cookie
-                    if ($valid > $ahora && isset($_COOKIE["sessionID"])) {
-                        return TRUE;
+            // Cuando el usuario entra por primera vez da NULL
+            if (!empty($data)) {
+                foreach ($data as $sessionID => $aData) {
+                    $group = $aData['groupID'];
+                    $author = $aData['authorID'];
+                    $valid = $aData['validUntil'];
+                    if ($group == $groupID && $author == $authorID) {
+                        $ahora = date("U");
+                        // Además hay que asegurar que está también la cookie
+                        if ($valid > $ahora && isset($_COOKIE["sessionID"])) {
+                            return TRUE;
+                        }
                     }
                 }
             }
