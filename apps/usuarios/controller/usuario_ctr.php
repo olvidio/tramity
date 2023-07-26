@@ -71,8 +71,8 @@ $active = ($filtro === $Q_filtro) ? 'active' : '';
 $aQuery = ['filtro' => $filtro];
 $pag_lst = web\Hash::link('apps/expedientes/controller/expediente_lista.php?' . http_build_query($aQuery));
 $num_orden = "1#2";
-$text = _("para firmar");
-$explicacion = _("Expedientes para revisión del consejo local");
+$text = _("falta mi firma");
+$explicacion = _("Expedientes pendientes de mi firma");
 $num = $oExpedienteLista->getNumero();
 $pill = ['orden' => $num_orden,
     'text' => $text,
