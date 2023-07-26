@@ -81,7 +81,7 @@ class GestorEntradaCompartida extends ClaseGestor
      * @param array $aOperators
      * @return boolean|array
      */
-    function getEntradasByProtOrigenDestino($aProt_origen = [], $id_destino, $aWhere = [], $aOperators = [])
+    function getEntradasByProtOrigenDestino($aProt_origen, $id_destino, $aWhere = [], $aOperators = [])
     {
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();

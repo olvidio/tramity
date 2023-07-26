@@ -67,6 +67,18 @@ class CalDAVClient
     //dani
     protected $xmlnodes;
     protected $xmltags;
+    /**
+     * @var mixed|string|null
+     */
+    protected mixed $request_url;
+    /**
+     * @var mixed|string
+     */
+    protected mixed $httpResponseHeaders;
+    /**
+     * @var mixed|string
+     */
+    protected mixed $httpResponseBody;
 
     /**
      * Constructor, initialises the class
@@ -912,11 +924,12 @@ EOXML;
      */
     function GetTodos($start, $finish, $completed = false, $cancelled = false, $relative_url = "")
     {
-        if (!empty($start) && !empty($finish)) {
-            // Warning!  May contain traces of double negatives...
-            $neg_cancelled = ($cancelled === true ? "no" : "yes");
-            $neg_completed = ($completed === true ? "no" : "yes");
+        // Warning!  May contain traces of double negatives...
+        $neg_cancelled = ($cancelled === true ? "no" : "yes");
+        $neg_completed = ($completed === true ? "no" : "yes");
 
+        if (!empty($start) && !empty($finish)) {
+            /* No sé cual es el bueno
             $filter = <<<EOFILTER
 <C:filter>
 <C:comp-filter name="VCALENDAR">
@@ -930,6 +943,7 @@ EOXML;
 </C:comp-filter>
 </C:filter>
 EOFILTER;
+            */
             $filter = <<<EOFILTER
 <C:filter>
 <C:comp-filter name="VCALENDAR">

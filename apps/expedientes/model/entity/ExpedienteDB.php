@@ -351,7 +351,7 @@ class ExpedienteDB extends ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -614,7 +614,7 @@ class ExpedienteDB extends ClasePropiedades
         $this->ivisibilidad = $ivisibilidad;
     }
 
-    
+
     /**
      * Recupera las claus primàries de ExpedienteDB en un array
      *
@@ -780,8 +780,12 @@ class ExpedienteDB extends ClasePropiedades
         if (!isset($this->json_antecedentes) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_antecedentes, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+
+        $oJSON = '';
+        if (!empty($this->json_antecedentes)) {
+            $oJSON = json_decode($this->json_antecedentes, $bArray);
+        }
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {

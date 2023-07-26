@@ -41,6 +41,9 @@ function array_php2pg($phpArray = [])
  */
 function array_pgInteger2php($postgresArray): array
 {
+    if (empty($postgresArray)) {
+        return [];
+    }
     $str_csv = trim($postgresArray, "{}");
     if (empty($str_csv)) {
         $phpArray = [];

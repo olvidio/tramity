@@ -24,7 +24,7 @@ class GestorErrores
     private $aDades;
 
 
-    private $filename;
+    private $filename = '';
 
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
@@ -143,7 +143,7 @@ class GestorErrores
         }
     }
 
-    function addErrorSec($err = '', $sClauError, $line, $file)
+    function addErrorSec($err, $sClauError, $line, $file)
     {
         $filename = $this->filename;
         $this->filename = ConfigGlobal::$directorio . '/log/security.log';
@@ -151,7 +151,7 @@ class GestorErrores
         $this->filename = $filename;
     }
 
-    function addError($err = '', $sClauError, $line, $file)
+    function addError($err, $sClauError, $line, $file)
     {
         // Cuando ejecuto algun controlador desde la linea de comandos, no existe la ip:
         $ip = empty($_SERVER['REMOTE_ADDR']) ? 'localhost' : $_SERVER['REMOTE_ADDR'];

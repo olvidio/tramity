@@ -528,7 +528,10 @@ class EntradaCompartida extends core\ClasePropiedades
         if (!isset($this->json_prot_origen) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_prot_origen, $bArray);
+        $oJSON = '';
+        if (!empty($this->json_prot_origen)) {
+            $oJSON = json_decode($this->json_prot_origen, $bArray);
+        }
         if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
@@ -605,7 +608,11 @@ class EntradaCompartida extends core\ClasePropiedades
         if (!isset($this->json_prot_destino) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_prot_destino, $bArray);
+
+        $oJSON = '';
+        if (!empty($this->json_prot_destino)) {
+            $oJSON = json_decode($this->json_prot_destino, $bArray);
+        }
         if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
@@ -669,7 +676,10 @@ class EntradaCompartida extends core\ClasePropiedades
         if (!isset($this->json_prot_ref) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_prot_ref, $bArray);
+        $oJSON = '';
+        if (!empty($this->json_prot_ref)) {
+            $oJSON = json_decode($this->json_prot_ref, $bArray);
+        }
         if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
