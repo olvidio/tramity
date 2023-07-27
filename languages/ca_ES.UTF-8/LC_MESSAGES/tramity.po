@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tramity\n"
-"POT-Creation-Date: 2023-07-17 12:07+0200\n"
-"PO-Revision-Date: 2023-07-17 12:18+0200\n"
+"POT-Creation-Date: 2023-07-27 13:12+0200\n"
+"PO-Revision-Date: 2023-07-27 13:14+0200\n"
 "Last-Translator: Daniel Serrabou <dani@moneders.net>\n"
 "Language-Team: \n"
 "Language: ca_ES\n"
@@ -157,7 +157,7 @@ msgstr "protocol"
 
 #: busquedas/model/ImprimirTabla.php:46 busquedas/model/VerTabla.php:485
 #: entradas/model/entity/EntradaBypass.php:588
-#: entradas/model/entity/EntradaCompartida.php:926
+#: entradas/model/entity/EntradaCompartida.php:936
 #: escritos/model/entity/EscritoDB.php:1282
 #: expedientes/controller/antecedentes_ajax.php:476
 msgid "destinos"
@@ -184,7 +184,7 @@ msgstr "ref."
 #: expedientes/controller/antecedentes_ajax.php:326
 #: expedientes/controller/antecedentes_ajax.php:474
 #: expedientes/controller/antecedentes_ajax.php:747
-#: expedientes/model/entity/ExpedienteDB.php:1090
+#: expedientes/model/entity/ExpedienteDB.php:1099
 #: pendientes/controller/pendiente_buscar.php:229
 #: pendientes/controller/pendiente_tabla.php:151
 #: pendientes/model/entity/PendienteDB.php:913
@@ -284,7 +284,7 @@ msgstr "protocol d'origen"
 
 #: busquedas/model/VerTabla.php:250 busquedas/model/VerTabla.php:406
 #: busquedas/model/VerTabla.php:487
-#: entradas/model/entity/EntradaCompartida.php:982
+#: entradas/model/entity/EntradaCompartida.php:992
 #: entradas/model/entity/EntradaDB.php:1176
 #: escritos/model/entity/EscritoDB.php:1408
 #: entradas/view/entrada_lista.html.twig:37
@@ -296,7 +296,7 @@ msgstr "categoria"
 #: documentos/model/entity/DocumentoDB.php:661
 #: entradas/model/entity/EntradaDB.php:1190
 #: escritos/model/entity/EscritoDB.php:1422
-#: expedientes/model/entity/ExpedienteDB.php:1286
+#: expedientes/model/entity/ExpedienteDB.php:1295
 #: pendientes/model/entity/PendienteDB.php:1025
 #: documentos/view/documentos_lista.html.twig:22
 #: entradas/view/entrada_lista.html.twig:40
@@ -1048,7 +1048,7 @@ msgid "tipo"
 msgstr "tipus"
 
 #: entidades/model/entity/EntidadDB.php:493
-#: entradas/model/entity/EntradaCompartida.php:1024
+#: entradas/model/entity/EntradaCompartida.php:1034
 #: entradas/model/entity/EntradaDB.php:1246
 #: escritos/model/entity/EscritoDB.php:1506
 #: lugares/controller/lugar_lista.php:63 lugares/model/entity/Lugar.php:787
@@ -1081,7 +1081,7 @@ msgstr "data"
 #: expedientes/controller/antecedentes_ajax.php:327
 #: expedientes/controller/antecedentes_ajax.php:475
 #: expedientes/controller/antecedentes_ajax.php:748
-#: expedientes/model/entity/ExpedienteDB.php:1062
+#: expedientes/model/entity/ExpedienteDB.php:1071
 #: pendientes/controller/pendiente_buscar.php:233
 #: escritos/view/escrito_lst_enviar.html.twig:12
 msgid "ponente"
@@ -1407,14 +1407,14 @@ msgid "id_entrada"
 msgstr "id_entrada"
 
 #: entradas/model/entity/EntradaBypass.php:546
-#: entradas/model/entity/EntradaCompartida.php:898
+#: entradas/model/entity/EntradaCompartida.php:908
 #: escritos/model/entity/EscritoDB.php:1520 lugares/model/entity/Grupo.php:394
 #: usuarios/model/entity/Cargo.php:662 usuarios/model/entity/CargoGrupo.php:441
 msgid "descripcion"
 msgstr "descripció"
 
 #: entradas/model/entity/EntradaBypass.php:560
-#: entradas/model/entity/EntradaCompartida.php:912
+#: entradas/model/entity/EntradaCompartida.php:922
 #: escritos/model/entity/EscritoDB.php:1240
 msgid "json_prot_destino"
 msgstr "json_prot_destino"
@@ -1429,27 +1429,27 @@ msgstr "id_grupos"
 msgid "f_salida"
 msgstr "f_salida"
 
-#: entradas/model/entity/EntradaCompartida.php:940
+#: entradas/model/entity/EntradaCompartida.php:950
 msgid "f_documento"
 msgstr "f_document"
 
-#: entradas/model/entity/EntradaCompartida.php:954
+#: entradas/model/entity/EntradaCompartida.php:964
 #: entradas/model/entity/EntradaDB.php:1064
 msgid "json_prot_origen"
 msgstr "json_prot_origen"
 
-#: entradas/model/entity/EntradaCompartida.php:968
+#: entradas/model/entity/EntradaCompartida.php:978
 #: entradas/model/entity/EntradaDB.php:1092
 #: escritos/model/entity/EscritoDB.php:1254
 msgid "json_prot_ref"
 msgstr "json_prot_ref"
 
-#: entradas/model/entity/EntradaCompartida.php:996
+#: entradas/model/entity/EntradaCompartida.php:1006
 #: entradas/model/entity/EntradaDB.php:1078
 msgid "asunto_entrada"
 msgstr "assumpte_entrada"
 
-#: entradas/model/entity/EntradaCompartida.php:1010
+#: entradas/model/entity/EntradaCompartida.php:1020
 #: entradas/model/entity/EntradaDB.php:1148
 msgid "f_entrada"
 msgstr "f_entrada"
@@ -1470,13 +1470,13 @@ msgstr "modo_entrada"
 
 #: entradas/model/entity/EntradaDB.php:1120
 #: escritos/model/entity/EscritoDB.php:1338
-#: expedientes/model/entity/ExpedienteDB.php:1076
+#: expedientes/model/entity/ExpedienteDB.php:1085
 msgid "resto_oficinas"
 msgstr "reste d'oficinas"
 
 #: entradas/model/entity/EntradaDB.php:1204
 #: escritos/model/entity/EscritoDB.php:1394
-#: expedientes/model/entity/ExpedienteDB.php:1174
+#: expedientes/model/entity/ExpedienteDB.php:1183
 msgid "f_contestar"
 msgstr "f_contestar"
 
@@ -1485,7 +1485,7 @@ msgid "bypass"
 msgstr "bypass"
 
 #: entradas/model/entity/EntradaDB.php:1232
-#: expedientes/model/entity/ExpedienteDB.php:1188
+#: expedientes/model/entity/ExpedienteDB.php:1197
 #: pendientes/controller/pendiente_buscar.php:236
 #: pendientes/view/pendiente_form.html.twig:194
 msgid "estado"
@@ -1892,12 +1892,12 @@ msgid "json_prot_local"
 msgstr "json_prot_local"
 
 #: escritos/model/entity/EscritoDB.php:1352
-#: expedientes/model/entity/ExpedienteDB.php:1118
+#: expedientes/model/entity/ExpedienteDB.php:1127
 msgid "comentarios"
 msgstr "comentaris"
 
 #: escritos/model/entity/EscritoDB.php:1366
-#: expedientes/model/entity/ExpedienteDB.php:1230
+#: expedientes/model/entity/ExpedienteDB.php:1239
 msgid "f_aprobacion"
 msgstr "f_aprobacio"
 
@@ -2347,8 +2347,6 @@ msgid "mod"
 msgstr "mod"
 
 #: expedientes/model/ExpedienteLista.php:238
-#: usuarios/controller/usuario_ctr.php:74
-#: usuarios/controller/usuario_home.php:94
 msgid "para firmar"
 msgstr "per a signar"
 
@@ -2376,45 +2374,45 @@ msgstr "id_expediente"
 msgid "tipo_accion"
 msgstr "tipo_accion"
 
-#: expedientes/model/entity/ExpedienteDB.php:1048
+#: expedientes/model/entity/ExpedienteDB.php:1057
 #: tramites/model/entity/Firma.php:856
 #: tramites/model/entity/TramiteCargo.php:453
 msgid "id_tramite"
 msgstr "id_tramite"
 
-#: expedientes/model/entity/ExpedienteDB.php:1104
+#: expedientes/model/entity/ExpedienteDB.php:1113
 msgid "entradilla"
 msgstr "entradilla"
 
-#: expedientes/model/entity/ExpedienteDB.php:1132
+#: expedientes/model/entity/ExpedienteDB.php:1141
 msgid "prioridad"
 msgstr "prioritat"
 
-#: expedientes/model/entity/ExpedienteDB.php:1146
+#: expedientes/model/entity/ExpedienteDB.php:1155
 msgid "json_antecedentes"
 msgstr "json_antecedentes"
 
-#: expedientes/model/entity/ExpedienteDB.php:1160
+#: expedientes/model/entity/ExpedienteDB.php:1169
 msgid "json_acciones"
 msgstr "json_acciones"
 
-#: expedientes/model/entity/ExpedienteDB.php:1202
+#: expedientes/model/entity/ExpedienteDB.php:1211
 msgid "f_ini_circulacion"
 msgstr "f_ini_circulacion"
 
-#: expedientes/model/entity/ExpedienteDB.php:1216
+#: expedientes/model/entity/ExpedienteDB.php:1225
 msgid "f_reunion"
 msgstr "f_reunion"
 
-#: expedientes/model/entity/ExpedienteDB.php:1244
+#: expedientes/model/entity/ExpedienteDB.php:1253
 msgid "vida"
 msgstr "vida"
 
-#: expedientes/model/entity/ExpedienteDB.php:1258
+#: expedientes/model/entity/ExpedienteDB.php:1267
 msgid "json_preparar"
 msgstr "json_preparar"
 
-#: expedientes/model/entity/ExpedienteDB.php:1272
+#: expedientes/model/entity/ExpedienteDB.php:1281
 msgid "firmas_oficina"
 msgstr "firmas_oficina"
 
@@ -3031,7 +3029,15 @@ msgstr "personal esborrany"
 msgid "Expedientes de trabajo propio"
 msgstr "Expedients de treball propis"
 
+#: usuarios/controller/usuario_ctr.php:74
+#: usuarios/controller/usuario_home.php:94
+msgid "falta mi firma"
+msgstr "falta la meva signatura"
+
 #: usuarios/controller/usuario_ctr.php:75
+msgid "Expedientes pendientes de mi firma"
+msgstr "Expedients pendents de la meva firma"
+
 #: usuarios/controller/usuario_ctr.php:96
 msgid "Expedientes para revisión del consejo local"
 msgstr "Expedients per a revisió del consell local"
@@ -3149,8 +3155,8 @@ msgid "Expedientes para revisión de la propia oficina"
 msgstr "Expedients per revisar de la pròpia oficina"
 
 #: usuarios/controller/usuario_home.php:95
-msgid "Expedientes pendientes de firmar"
-msgstr "Expedients pendents de firmar"
+msgid "Expedientes pendientes de firmar por mi"
+msgstr "Expedients pendents de firmar per mi"
 
 #: usuarios/controller/usuario_home.php:115
 msgid "para reunión"
