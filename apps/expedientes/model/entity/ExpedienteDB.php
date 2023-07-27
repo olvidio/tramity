@@ -822,16 +822,19 @@ class ExpedienteDB extends ClasePropiedades
         if (!isset($this->json_acciones) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_acciones, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+
+        $oJSON = '';
+        if (!empty($this->json_acciones)) {
+            $oJSON = json_decode($this->json_acciones, $bArray);
+        }
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {
                 $oJSON = new stdClass;
             }
         }
-        //$this->json_acciones = $oJSON;
-        //return $this->json_acciones;
+
         return $oJSON;
     }
 
@@ -955,16 +958,18 @@ class ExpedienteDB extends ClasePropiedades
         if (!isset($this->json_preparar) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        $oJSON = json_decode($this->json_preparar, $bArray);
-        if (empty($oJSON) || $oJSON == '[]') {
+        $oJSON = '';
+        if (!empty($this->json_preparar)) {
+            $oJSON = json_decode($this->json_preparar, $bArray);
+        }
+        if (empty($oJSON) || $oJSON === '[]') {
             if ($bArray) {
                 $oJSON = [];
             } else {
                 $oJSON = new stdClass;
             }
         }
-        //$this->json_preparar = $oJSON;
-        //return $this->json_preparar;
+
         return $oJSON;
     }
 
