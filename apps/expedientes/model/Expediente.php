@@ -195,10 +195,10 @@ class Expediente extends expedienteDB
         $oNewExpediente->DBGuardar();
     }
 
-    public function addAntecedente($a_antecedente)
+    public function addAntecedente(array $a_antecedente)
     {
         // obtener los antecedentes actuales:
-        $aAntecedentes = $this->getJson_antecedentes(TRUE);
+        $aAntecedentes = (array) $this->getJson_antecedentes(TRUE);
         $aAntecedentes[] = $a_antecedente;
 
         // evitar repeticiones:
@@ -499,7 +499,7 @@ class Expediente extends expedienteDB
                         $prot_local = $oEntrada->cabeceraDerecha();
                         $nom = empty($prot_local) ? '' : $prot_local;
                         $nom .= empty($nom) ? $asunto : ": $asunto";
-                        $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada($id, TRUE);\" >$nom</span>";
+                        $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada($id, 'true');\" >$nom</span>";
                         $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >" . _("quitar") . "</span>";
                         break;
                     case 'entrada':
