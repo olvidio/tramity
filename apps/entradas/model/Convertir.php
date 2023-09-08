@@ -55,7 +55,7 @@ class Convertir extends ClaseGestor
                     $oExpediente->setJson_antecedentes($aAntecedentes);
                 }
 
-                // tambien json_preparar
+                // también json_preparar
                 $aPreparar_db = $oExpediente->getJson_preparar(TRUE);
                 if (!empty($aPreparar_db)) {
                     $aPreparar = [];

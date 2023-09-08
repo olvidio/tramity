@@ -100,7 +100,11 @@ if ($oExpediente->DBGuardar() === FALSE) {
 }
 
 // adjuntar entrada como antecedente
-$a_antecedente = ['tipo' => 'entrada', 'id' => $Q_id_entrada];
+if ($compartida) {
+    $a_antecedente = ['tipo' => 'entrada_compartida', 'id' => $Q_id_entrada];
+} else {
+    $a_antecedente = ['tipo' => 'entrada', 'id' => $Q_id_entrada];
+}
 $oExpediente->addAntecedente($a_antecedente);
 if ($oExpediente->DBGuardar() === FALSE) {
     $error_txt .= $oExpediente->getErrorTxt();

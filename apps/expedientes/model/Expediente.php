@@ -5,6 +5,7 @@ namespace expedientes\model;
 use core\ConfigGlobal;
 use documentos\model\Documento;
 use documentos\model\GestorDocumento;
+use entradas\model\entity\EntradaCompartida;
 use entradas\model\Entrada;
 use escritos\model\entity\EscritoDB;
 use escritos\model\Escrito;
@@ -492,12 +493,21 @@ class Expediente extends expedienteDB
                 $id = $antecedente['id'];
                 $tipo = $antecedente['tipo'];
                 switch ($tipo) {
+                    case 'entrada_compartida':
+                        $oEntrada = new EntradaCompartida($id);
+                        $asunto = $oEntrada->getAsunto_entrada();
+                        $prot_local = $oEntrada->cabeceraDerecha();
+                        $nom = empty($prot_local) ? '' : $prot_local;
+                        $nom .= empty($nom) ? $asunto : ": $asunto";
+                        $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada($id, TRUE);\" >$nom</span>";
+                        $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >" . _("quitar") . "</span>";
+                        break;
                     case 'entrada':
                         $oEntrada = new Entrada($id);
                         $asunto = $oEntrada->getAsuntoDetalle();
                         $prot_local = $oEntrada->cabeceraDerecha();
                         $nom = empty($prot_local) ? '' : $prot_local;
-                        $nom .= empty($nom) ? "$asunto" : ": $asunto";
+                        $nom .= empty($nom) ? $asunto : ": $asunto";
                         $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_entrada($id);\" >$nom</span>";
                         $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >" . _("quitar") . "</span>";
                         break;
@@ -512,7 +522,7 @@ class Expediente extends expedienteDB
                         $asunto = $oEscrito->getAsuntoDetalle();
                         $prot_local = $oEscrito->cabeceraDerecha();
                         $nom = empty($prot_local) ? '' : $prot_local;
-                        $nom .= empty($nom) ? "$asunto" : ": $asunto";
+                        $nom .= empty($nom) ? $asunto : ": $asunto";
                         $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito($id);\" >$nom</span>";
                         $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >" . _("quitar") . "</span>";
                         break;
