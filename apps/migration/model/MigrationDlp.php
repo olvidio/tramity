@@ -1146,6 +1146,13 @@ class MigrationDlp
             $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
+        $sql = "TRUNCATE TABLE prodel.lugares_grupos_tmp RESTART IDENTITY CASCADE";
+        if ($this->oDBT->query($sql) === FALSE) {
+            $sClauError = 'migartion';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+
         // copiar los nombres de grupos
         $sql = "INSERT INTO prodel.lugares_grupos_tmp ( descripcion, autorizacion, codigo, persistenceid)
                 SELECT nombre, autorizacion, codigo, persistenceid FROM prodel.lugares WHERE 
