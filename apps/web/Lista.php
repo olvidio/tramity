@@ -150,6 +150,7 @@ class Lista
 
 
     /* CONSTRUCTOR -------------------------------------------------------------- */
+    private string $btn_jsTable;
 
 
     /**

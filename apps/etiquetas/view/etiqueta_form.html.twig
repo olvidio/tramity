@@ -52,7 +52,7 @@
                 return false;
             }
         }
-        fnjs_update_div('#main', "apps/etiquetas/controller/etiqueta_lista.php");
+        fnjs_update_div('#preferencias', "apps/etiquetas/controller/etiqueta_lista.php");
     }
 
     fnjs_guardar = function () {
@@ -73,7 +73,7 @@
             if (rta_txt != '' && rta_txt != '\\n') {
                 alert('{{ "respuesta"|trans|raw }}: ' + rta_txt);
             } else {
-                fnjs_update_div('#main', "apps/etiquetas/controller/etiqueta_lista.php");
+                fnjs_update_div('#preferencias', "apps/etiquetas/controller/etiqueta_lista.php");
             }
         });
     }
