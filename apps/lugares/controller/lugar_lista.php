@@ -51,15 +51,15 @@ $tipo_ctr = '';
 $plataforma = '';
 $e_mail = '';
 $anulado = '';
+$autorizacion = '';
 
 $a_cabeceras = [_("sigla"),
     _("dl"),
     _("región"),
     _("nombre"),
     _("tipo_ctr"),
-    _("e_mail"),
     _("modo envío"),
-    _("plataforma"),
+    _("plataforma/e-mail/autorización"),
     _("anulado")
 ];
 $a_botones = [['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
@@ -82,16 +82,29 @@ foreach ($cLugares as $oLugar) {
     $e_mail = $oLugar->getE_mail();
     $modo_envio = $oLugar->getModo_envio();
     $anulado = $oLugar->getAnulado();
+    $autorizacion = $oLugar->getAutorizacion();
 
+    switch ($modo_envio) {
+        case Lugar::MODO_AS4:
+            $donde = $plataforma;
+            break;
+        case Lugar::MODO_PDF:
+            $donde = $e_mail;
+            break;
+        case Lugar::MODO_RDP:
+            $donde = $autorizacion;
+            break;
+        default:
+            $donde = '?';
+    }
     $a_valores[$i]['sel'] = "$id_lugar#";
     $a_valores[$i][1] = $sigla;
     $a_valores[$i][2] = $dl;
     $a_valores[$i][3] = $region;
     $a_valores[$i][4] = $nombre;
     $a_valores[$i][5] = $tipo_ctr;
-    $a_valores[$i][6] = $e_mail;
     $a_valores[$i][7] = $a_modos_envio[$modo_envio];
-    $a_valores[$i][8] = $plataforma;
+    $a_valores[$i][8] = $donde;
     $a_valores[$i][9] = $anulado;
 }
 if (isset($Q_id_sel) && !empty($Q_id_sel)) {

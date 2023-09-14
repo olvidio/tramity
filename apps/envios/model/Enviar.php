@@ -11,6 +11,7 @@ use escritos\model\entity\EscritoAdjunto;
 use escritos\model\Escrito;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
+use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
 use Mpdf\MpdfException;
 use oasis_as4\model\As4;
@@ -43,7 +44,7 @@ class Enviar
     private string $f_salida;
 
     private string $asunto;
-    private string $filename='';
+    private string $filename = '';
     private string $filename_ext;
     private string $contentFile;
     private array $a_adjuntos;
@@ -227,7 +228,7 @@ class Enviar
             // número de protocolo.
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && empty((array)$json_prot_local)) {
                 $this->oEscrito->generarProtocolo();
-                if ($this->oEscrito->DBCargar() === FALSE ){
+                if ($this->oEscrito->DBCargar() === FALSE) {
                     $err_cargar = sprintf(_("OJO! no existe el escrito a enviar en %s, linea %s"), __FILE__, __LINE__);
                     exit ($err_cargar);
                 }
@@ -273,10 +274,23 @@ class Enviar
 
     public function enviar(): array
     {
+        // Inicialmente se consiguen todos los destinos, y para cada uno
+        // se mira el modo de envío y se envía.
+        // Para el caso de enviar a grupos en RDP hay que hacer una excepción.
+        // si existe el campo autorización, sirve para discriminar.
+        if ($this->soyGrupoRDP()) {
+            return $this->enviar_rdp();
+        }
+
         $aDestinos = $this->getDestinatarios();
+        $sigla = $_SESSION['oConfig']->getSigla();
 
         $num_enviados = 0;
         $a_lista_dst_as4 = [];
+        $a_lista_auth_rdp = [];
+        $flag_AS4 = FALSE;
+        $flag_rdp = FALSE;
+        $autorizacion_dl = '';
         foreach ($aDestinos as $id_lugar) {
             ini_set('display_errors', 1);
             error_reporting(E_ALL);
@@ -286,6 +300,21 @@ class Enviar
 
             $modo_envio = $oLugar->getModo_envio();
             switch ($modo_envio) {
+                case Lugar::MODO_RDP:
+                    $autorizacion_dl = '0-' . $sigla . '|';
+                    $autorizacion = $oLugar->getAutorizacion();
+                    // si la acción es compartir, se usa el mismo escrito para un conjunto de ctr.
+                    // aquí genero el array de autorizaciones:
+                    if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR) {
+                        $flag_rdp = TRUE;
+                        if (!in_array($autorizacion, $a_lista_auth_rdp, true)) {
+                            $a_lista_auth_rdp[] = $autorizacion;
+                        }
+                    } else {
+                        $autorizacion_lst = $autorizacion_dl . $autorizacion;
+                        $err_mail = $this->enviarRdp($autorizacion_lst);
+                    }
+                    break;
                 case Lugar::MODO_PDF:
                     $email = $oLugar->getE_mail();
                     $err_mail = $this->enviarPdf($id_lugar, $email);
@@ -296,6 +325,7 @@ class Enviar
                     // aquí genero el array de plataformas destino:
                     if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR
                         || $this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
+                        $flag_AS4 = TRUE;
                         if (!in_array($plataforma, $a_lista_dst_as4, true)) {
                             $a_lista_dst_as4[] = $plataforma;
                         }
@@ -311,20 +341,33 @@ class Enviar
             }
         }
 
-        // si es compartir, enviar en bloque por plataformas.
-        if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR
-            || $this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
-            foreach ($a_lista_dst_as4 as $plataforma) {
-                // Finalmente los destinos se añaden en el payload. No se tienen en cuenta a la hora de enviar.
-                // Al recoger, se mira si están en la plataforma y se les añade.
-                $err_mail = $this->enviarAS4Compartido($plataforma);
+        // si es compartir, enviar en bloque
+        // por permisos
+        if ($flag_rdp) {
+            if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR) {
+                $autorizacion_lst = $autorizacion_dl . implode('|', $a_lista_auth_rdp);
+                $err_mail = $this->enviarRdp($autorizacion_lst);
+            }
+        }
+        // por plataformas.
+        if ($flag_AS4) {
+            if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR
+                || $this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
+                foreach ($a_lista_dst_as4 as $plataforma) {
+                    // Finalmente los destinos se añaden en el payload. No se tienen en cuenta a la hora de enviar.
+                    // Al recoger, se mira si están en la plataforma y se les añade.
+                    $err_mail = $this->enviarAS4Compartido($plataforma);
+                }
             }
         }
 
-
+        // by default
+        $this->a_rta['success'] = TRUE;
+        $this->a_rta['mensaje'] = $err_mail;
+        $this->a_rta['marcar'] = TRUE;
         if (empty($aDestinos)) {
             $err_mail = _("No hay destinos para este escrito") . ':<br>';
-            $err_mail .= empty($this->filename)? '' : $this->filename;
+            $err_mail .= empty($this->filename) ? '' : $this->filename;
             $this->a_rta['success'] = FALSE;
             $this->a_rta['mensaje'] = $err_mail;
             $this->a_rta['marcar'] = FALSE;
@@ -340,6 +383,73 @@ class Enviar
             }
         }
         return $this->a_rta;
+    }
+
+    public function enviar_rdp(): array
+    {
+        $sigla = $_SESSION['oConfig']->getSigla();
+        $num_enviados = 0;
+        $a_lista_auth_rdp = [];
+        $autorizacion_dl = '';
+
+        if ($this->tipo === 'entrada') {
+            $id_grupos = $this->oEntradaBypass->getId_grupos();
+        }
+        if ($this->tipo === 'escrito') {
+            $id_grupos = $this->oEscrito->getId_grupos();
+        }
+        if (!empty($id_grupos)) {
+            foreach ($id_grupos as $id_grupo) {
+                $autorizacion_dl = '0-' . $sigla . '|';
+                $oGrupo = new Grupo($id_grupo);
+                $autorizacion = $oGrupo->getAutorizacion();
+                // aquí genero el array de autorizaciones:
+                if (!in_array($autorizacion, $a_lista_auth_rdp, true)) {
+                    $a_lista_auth_rdp[] = $autorizacion;
+                }
+                $num_enviados++;
+            }
+        }
+
+        $autorizacion_lst = $autorizacion_dl . implode('|', $a_lista_auth_rdp);
+        $err_mail = $this->enviarRdp($autorizacion_lst);
+
+        // by default
+        $this->a_rta['success'] = TRUE;
+        $this->a_rta['mensaje'] = $err_mail;
+        $this->a_rta['marcar'] = TRUE;
+        if (!empty($err_mail)) {
+            $err_mail = _("mail no válido para") . ':<br>' . $err_mail;
+            $this->a_rta['success'] = FALSE;
+            $this->a_rta['mensaje'] = $err_mail;
+            $this->a_rta['marcar'] = FALSE;
+            if ($num_enviados > 1) {
+                $this->a_rta['marcar'] = TRUE;
+            }
+        }
+        return $this->a_rta;
+    }
+
+    private function soyGrupoRDP()
+    {
+        $id_grupos = '';
+        $soyGrupoRDP = FALSE;
+        if ($this->tipo === 'entrada') {
+            $id_grupos = $this->oEntradaBypass->getId_grupos();
+        }
+        if ($this->tipo === 'escrito') {
+            $id_grupos = $this->oEscrito->getId_grupos();
+        }
+        if (!empty($id_grupos)) {
+            foreach ($id_grupos as $id_grupo) {
+                $oGrupo = new Grupo($id_grupo);
+                $auth = $oGrupo->getAutorizacion();
+                if ($auth !== NULL) {
+                    $soyGrupoRDP = TRUE;
+                }
+            }
+        }
+        return $soyGrupoRDP;
     }
 
     private function getDestinatarios()
@@ -360,6 +470,54 @@ class Enviar
         }
     }
 
+    private function enviarRdp($autorizacion_lst)
+    {
+        $DIR_BONITA = '/home/bonita';
+        $err_mail = '';
+        $fecha_hora = date('ymd');
+
+        // generar un nuevo content, con la cabecera al ctr concreto.
+        $this->getDocumento();
+
+        if ($this->tipo === 'escrito') {
+            // nombre del archivo
+            $filename = $this->oEscrito->getNombreEscrito($this->sigla_destino);
+            $asunto = $this->oEscrito->getAsunto();
+        }
+
+        if ($this->tipo === 'entrada') {
+            $filename = $this->oEntradaBypass->getNombreEscrito('');
+            $asunto = $this->oEntradaBypass->getAsunto();
+        }
+        $this->filename = $fecha_hora . '-' . $filename . '-' . $asunto;
+        // escribir en el directorio para bonita
+        $a_header = $this->getHeader();
+        $omPdf = $this->oEtherpad->generarPDF($a_header, $this->f_salida);
+
+        $filename_ext = $this->filename . '.pdf';
+        $full_filename = $DIR_BONITA . '/' . $filename_ext;
+        $omPdf->Output($full_filename, 'F');
+
+        $oWin = new FicherosPSWin($DIR_BONITA);
+        $oWin->inicializar();
+
+        //anotar lineas en ps1 (power shell de windows)
+        $oWin->permisos($filename_ext, $autorizacion_lst);
+        $oWin->mover($filename_ext);
+
+        // adjuntos:
+        foreach ($this->a_adjuntos as $adjunto_filename => $escrito_txt) {
+            $filename_ext = $this->filename . '-' . $adjunto_filename;
+            $full_filename = $DIR_BONITA . '/' . $filename_ext;
+            file_put_contents($full_filename, $escrito_txt);
+            //anotar lineas en ps1 (power shell de windows)
+            $oWin->permisos($filename_ext, $autorizacion_lst);
+            $oWin->mover($filename_ext);
+        }
+
+        return $err_mail;
+    }
+
     private function enviarPdf($id_lugar, $email)
     {
         $err_mail = '';
@@ -368,7 +526,7 @@ class Enviar
         $message = empty($message) ? _("Ver archivos adjuntos") : $message;
 
         $oMail = new TramityMail(TRUE); //passing 'true' enables exceptions
-        // Activo condificacción utf-8
+        // Activo codificación utf-8
         $oMail->CharSet = 'UTF-8';
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -481,7 +639,7 @@ class Enviar
             if (!property_exists($json_prot_dst, 'id_lugar')) {
                 continue;
             }
-            $id_dst = (int) $json_prot_dst->id_lugar;
+            $id_dst = (int)$json_prot_dst->id_lugar;
             if ($id_dst === $id_lugar) {
                 break;
             }

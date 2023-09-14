@@ -76,10 +76,12 @@ if (!empty($Q_id_grupo)) {
     $oGrupo = new Grupo($Q_id_grupo);
 
     $descripcion = $oGrupo->getDescripcion();
+    $autorizacion = $oGrupo->getAutorizacion();
     $a_miembros = $oGrupo->getMiembros();
 } else {
     $que = 'nuevo';
     $descripcion = '';
+    $autorizacion = '';
     $a_miembros = [];
 }
 $nueva_ventana = FALSE;
@@ -92,16 +94,17 @@ if (!empty($Q_id_escrito)) {
     foreach ($a_grupos_filtered as $id_grupo) {
         if ($id_grupo === 'custom') {
             $oEscrito = new Escrito($Q_id_escrito);
-            $a_miembros = $oEscrito->getDestinosIds();
+            $a_miembros[] = $oEscrito->getDestinosIds();
             $descripcion = $oEscrito->getDescripcion();
         } else {
             $oGrupo = new Grupo($id_grupo);
 
             $descripcion .= empty($descripcion) ? '' : ', ';
             $descripcion .= $oGrupo->getDescripcion();
-            $a_miembros = array_merge($a_miembros, $oGrupo->getMiembros());
+            $a_miembros[] = $oGrupo->getMiembros();
         }
     }
+    $a_miembros = array_merge([], ...$a_miembros);
 }
 
 $oDesplLugaresCtr = new Desplegable('lugares', $a_posibles_lugares_ctr, $a_miembros);
@@ -123,6 +126,9 @@ $oHash->setArraycamposHidden($a_camposHidden);
 
 $base_url = core\ConfigGlobal::getWeb();
 
+$mostrar_autorizacion = ($_SESSION['oConfig']->getSigla() === 'dlp');
+$pagina_cancel = web\Hash::link('apps/lugares/controller/grupo_lista.php?' . http_build_query([]));
+
 $a_campos = [
     'oPosicion' => $oPosicion,
     'id_grupo' => $Q_id_grupo,
@@ -134,6 +140,9 @@ $a_campos = [
     'oDesplLugaresCr' => $oDesplLugaresCr,
     'nueva_ventana' => $nueva_ventana,
     'base_url' => $base_url,
+    'autorizacion' => $autorizacion,
+    'mostrar_autorizacion' => $mostrar_autorizacion,
+    'pagina_cancel' => $pagina_cancel,
 ];
 
 $oView = new ViewTwig('lugares/controller');

@@ -74,6 +74,7 @@ if (!empty($Q_id_lugar)) {
     $e_mail = $oLugar->getE_mail();
     $plataforma = $oLugar->getPlataforma();
     $anulado = $oLugar->getAnulado();
+    $autorizacion = $oLugar->getAutorizacion();
     // modo envío
     $modo_envio = $oLugar->getModo_envio();
     $oDesplModoEnvio->setOpcion_sel($modo_envio);
@@ -88,11 +89,12 @@ if (!empty($Q_id_lugar)) {
     $e_mail = '';
     $plataforma = '';
     $anulado = '';
+    $autorizacion = '';
 
 }
 $chk_anulado = is_true($anulado) ? 'checked' : '';
 
-$camposForm = 'que!sigla!dl!region!nombre!tipo_ctr!e_mail!plataforma';
+$camposForm = 'que!sigla!dl!region!nombre!tipo_ctr!e_mail!plataforma!autorizacion';
 $oHash = new web\Hash();
 $oHash->setcamposForm($camposForm);
 $oHash->setCamposChk('anulado');
@@ -105,6 +107,8 @@ $oHash->setArraycamposHidden($a_camposHidden);
 
 $txt_guardar = _("guardar datos lugar");
 $txt_eliminar = _("¿Está seguro que desea quitar este permiso?");
+
+$pagina_cancel = web\Hash::link('apps/lugares/controller/lugar_lista.php?' . http_build_query([]));
 
 $a_campos = [
     'oPosicion' => $oPosicion,
@@ -119,10 +123,12 @@ $a_campos = [
     'tipo_ctr' => $tipo_ctr,
     'plataforma' => $plataforma,
     'e_mail' => $e_mail,
+    'autorizacion' => $autorizacion,
     'oDesplModoEnvio' => $oDesplModoEnvio,
     'chk_anulado' => $chk_anulado,
     'txt_guardar' => $txt_guardar,
     'txt_eliminar' => $txt_eliminar,
+    'pagina_cancel' => $pagina_cancel,
 ];
 
 $oView = new ViewTwig('lugares/controller');

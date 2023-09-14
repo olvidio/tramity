@@ -1076,11 +1076,11 @@ class MigrationDlp
     function crear_equivalencias_lugares()
     {
         // crear tabla  lugares_tmp
-        // con el like, la sequencia del id_lugar sigue siendo la misma,
+        // con el like, la secuencia del id_lugar sigue siendo la misma,
         // y empieza a contar desde donde está el public. Al pasar a producción no hay que modificar la secuencia
         $sql = "CREATE TABLE IF NOT EXISTS prodel.lugares_tmp (LIKE public.lugares INCLUDING ALL)";
         if ($this->oDBT->query($sql) === FALSE) {
-            $sClauError = 'migartion';
+            $sClauError = 'migration';
             $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
             return FALSE;
         }
@@ -1361,6 +1361,47 @@ class MigrationDlp
         // ajustar secuencia:
         $sql_update_sequence = "SELECT setval('dlp.escrito_adjuntos_id_item_seq', (SELECT MAX(id_item) FROM dlp.escrito_adjuntos));";
         $this->oDBT->exec($sql_update_sequence);
+
+    }
+
+    public function autorizaciones()
+    {
+        // añadir columna autorizacion a la tala lugares.
+        $sql = "ALTER TABLE public.lugares ADD COLUMN IF NOT EXISTS autorizacion character varying(255);";
+        if ($this->oDBT->query($sql) === FALSE) {
+            $sClauError = 'migartion';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+
+        // copiar los valores:
+        $sql = "UPDATE public.lugares SET autorizacion = p.autorizacion
+                    FROM prodel.lugares_tmp p 
+                    WHERE public.lugares.sigla = p.sigla 
+                    ";
+        if ($this->oDBT->query($sql) === FALSE) {
+            $sClauError = 'migartion';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+        // Idem para los grupos:
+        $sql = "ALTER TABLE dlp.lugares_grupos ADD COLUMN IF NOT EXISTS autorizacion character varying(255);";
+        if ($this->oDBT->query($sql) === FALSE) {
+            $sClauError = 'migartion';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
+
+        // copiar los valores:
+        $sql = "UPDATE dlp.lugares_grupos SET autorizacion = p.autorizacion
+                    FROM prodel.lugares_grupos_tmp p 
+                    WHERE public.lugares_grupos.id_grupo = p.id_grupo 
+                    ";
+        if ($this->oDBT->query($sql) === FALSE) {
+            $sClauError = 'migartion';
+            $_SESSION['oGestorErrores']->addErrorAppLastError($this->oDBT, $sClauError, __LINE__, __FILE__);
+            return FALSE;
+        }
 
     }
 

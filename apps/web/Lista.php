@@ -662,7 +662,7 @@ class Lista
                     }
                 } else {
                     // si es una fecha, pongo la clase fecha, para exportar a excel...
-                    if (preg_match("/^(\d+)[\/-](\d+)[\/-](\d{2,4})$/", $valor)) {
+                    if (!empty($valor) && preg_match("/^(\d+)[\/-](\d+)[\/-](\d{2,4})$/", $valor)) {
                         list($d, $m, $y) = preg_split('/[:\/\.-]/', $valor);
                         if ($fecha_format_en) {
                             $fecha_iso = date("Y-m-d", mktime(0, 0, 0, $d, $m, $y));
@@ -950,7 +950,7 @@ class Lista
                 $sDefCol .= "}";
                 $aFields[] = $name_idx;
             }
-            if ((is_array($aColsVisible) && !empty($aColsVisible[$name_idx]) && ($aColsVisible[$name_idx] == "true")) || !is_array($aColsVisible)) {
+            if ((is_array($aColsVisible) && !empty($aColsVisible[$name_idx]) && ($aColsVisible[$name_idx] === 'true')) || !is_array($aColsVisible)) {
                 if (!$visible) continue;
                 if ($cv > 0) {
                     $sColumnsVisible .= ',';
@@ -1653,9 +1653,9 @@ class Lista
         $this->bColVis = $bColVis;
     }
 
-    public function setRecordar($bRecordar)
+    public function setRecordar($brecordar)
     {
-        $this->bRecordar = $bRecordar;
+        $this->brecordar = $brecordar;
     }
 
     public function setFormatoTabla($formatoTabla)

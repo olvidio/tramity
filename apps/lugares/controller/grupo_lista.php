@@ -47,6 +47,9 @@ $descripcion = '';
 $a_miembros = [];
 
 $a_cabeceras = [['name' => _("descripción"), 'width' => 30], _("miembros")];
+if  ($_SESSION['oConfig']->getSigla() === 'dlp'){
+    $a_cabeceras[] = _("Autorización");
+}
 $a_botones = [['txt' => _("borrar"), 'click' => "fnjs_eliminar()"],
     ['txt' => _("modificar"), 'click' => "fnjs_editar()"],
 ];
@@ -59,6 +62,7 @@ foreach ($cGrupos as $oGrupo) {
     $i++;
     $id_grupo = $oGrupo->getId_grupo();
     $descripcion = $oGrupo->getDescripcion();
+    $autorizacion = $oGrupo->getAutorizacion();
     $a_miembros = $oGrupo->getMiembros();
     $miembros_txt = '';
     foreach ($a_miembros as $id_lugar) {
@@ -69,6 +73,9 @@ foreach ($cGrupos as $oGrupo) {
     $a_valores[$i]['sel'] = "$id_grupo#";
     $a_valores[$i][1] = $descripcion;
     $a_valores[$i][2] = $miembros_txt;
+    if  ($_SESSION['oConfig']->getSigla() === 'dlp'){
+        $a_valores[$i][3] = $autorizacion;
+    }
 }
 if (isset($Q_id_sel) && !empty($Q_id_sel)) {
     $a_valores['select'] = $Q_id_sel;

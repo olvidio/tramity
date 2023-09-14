@@ -48,12 +48,6 @@ class Grupo extends core\ClasePropiedades
      */
     private $aPrimary_key;
     /**
-     * aDades de Grupo
-     *
-     * @var array
-     */
-    private $aDades;
-    /**
      * bLoaded de Grupo
      *
      * @var boolean
@@ -71,7 +65,6 @@ class Grupo extends core\ClasePropiedades
      * @var integer
      */
     private $iid_grupo;
-    /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
      * Descripcion de Grupo
      *
@@ -84,8 +77,12 @@ class Grupo extends core\ClasePropiedades
      * @var array
      */
     private $a_miembros;
-    /* CONSTRUCTOR -------------------------------------------------------------- */
+    /**
+     * @var string
+     */
+    private $sautorizacion;
 
+    /* CONSTRUCTOR -------------------------------------------------------------- */
     /**
      * Constructor de la classe.
      * Si només necessita un valor, se li pot passar un integer.
@@ -133,6 +130,9 @@ class Grupo extends core\ClasePropiedades
         $aDades = array();
         $aDades['descripcion'] = $this->sdescripcion;
         $aDades['miembros'] = $this->a_miembros;
+        if ($_SESSION['oConfig']->getSigla() === 'dlp') {
+            $aDades['autorizacion'] = $this->sautorizacion;
+        }
         array_walk($aDades, 'core\poner_null');
 
         if ($bInsert === FALSE) {
@@ -140,6 +140,12 @@ class Grupo extends core\ClasePropiedades
             $update = "
 					descripcion              = :descripcion,
 					miembros                 = :miembros";
+            if ($_SESSION['oConfig']->getSigla() === 'dlp'){
+                $update = "
+					descripcion              = :descripcion,
+					miembros                 = :miembros,
+                    autorizacion             = :autorizacion";
+            }
             if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_grupo='$this->iid_grupo'")) === FALSE) {
                 $sClauError = 'Grupo.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -159,6 +165,10 @@ class Grupo extends core\ClasePropiedades
             // INSERT
             $campos = "(descripcion,miembros)";
             $valores = "(:descripcion,:miembros)";
+            if ($_SESSION['oConfig']->getSigla() === 'dlp'){
+                $campos = "(descripcion,miembros,autorizacion)";
+                $valores = "(:descripcion,:miembros,:autorizacion)";
+            }
             if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
                 $sClauError = 'Grupo.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -239,6 +249,9 @@ class Grupo extends core\ClasePropiedades
         if (array_key_exists('miembros', $aDades)) {
             $this->setMiembros($aDades['miembros'], TRUE);
         }
+        if (array_key_exists('autorizacion', $aDades)) {
+            $this->setAutorizacion($aDades['autorizacion']);
+        }
     }
 
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
@@ -258,6 +271,14 @@ class Grupo extends core\ClasePropiedades
     function setDescripcion($sdescripcion = '')
     {
         $this->sdescripcion = $sdescripcion;
+    }
+
+    /**
+     * @param string sautorizacion='' optional
+     */
+    function setAutorizacion($sautorizacion = '')
+    {
+        $this->sautorizacion = $sautorizacion;
     }
 
     /* MÉTODOS GET y SET --------------------------------------------------------*/
@@ -354,6 +375,14 @@ class Grupo extends core\ClasePropiedades
         return $this->sdescripcion;
     }
 
+    public function getAutorizacion()
+    {
+        if (!isset($this->sautorizacion) && !$this->bLoaded) {
+            $this->DBCargar();
+        }
+        return $this->sautorizacion;
+    }
+
     /**
      * Recupera l'atribut a_miembros de Grupo
      *
@@ -367,58 +396,4 @@ class Grupo extends core\ClasePropiedades
         return core\array_pgInteger2php($this->a_miembros);
     }
 
-    /**
-     * Retorna una col·lecció d'objectes del tipus DatosCampo
-     *
-     */
-    function getDatosCampos()
-    {
-        $oGrupoSet = new core\Set();
-
-        $oGrupoSet->add($this->getDatosDescripcion());
-        $oGrupoSet->add($this->getDatosMiembros());
-        return $oGrupoSet->getTot();
-    }
-    /* MÉTODOS GET y SET D'ATRIBUTOS QUE NO SÓN CAMPS -----------------------------*/
-
-    /**
-     * Recupera les propietats de l'atribut sdescripcion de Grupo
-     * en una clase del tipus DatosCampo
-     *
-     * @return core\DatosCampo
-     */
-    function getDatosDescripcion()
-    {
-        $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'descripcion'));
-        $oDatosCampo->setEtiqueta(_("descripcion"));
-        return $oDatosCampo;
-    }
-
-    /**
-     * Recupera les propietats de l'atribut a_miembros de Grupo
-     * en una clase del tipus DatosCampo
-     *
-     * @return core\DatosCampo
-     */
-    function getDatosMiembros()
-    {
-        $nom_tabla = $this->getNomTabla();
-        $oDatosCampo = new core\DatosCampo(array('nom_tabla' => $nom_tabla, 'nom_camp' => 'miembros'));
-        $oDatosCampo->setEtiqueta(_("miembros"));
-        return $oDatosCampo;
-    }
-
-    /**
-     * Recupera tots els ATRIBUTOS de Grupo en un array
-     *
-     * @return array aDades
-     */
-    function getTot()
-    {
-        if (!is_array($this->aDades)) {
-            $this->DBCargar('tot');
-        }
-        return $this->aDades;
-    }
 }

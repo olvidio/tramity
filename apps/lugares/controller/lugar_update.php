@@ -44,6 +44,7 @@ switch ($Q_que) {
         $Q_e_mail = (string)filter_input(INPUT_POST, 'e_mail');
         $Q_modo_envio = (integer)filter_input(INPUT_POST, 'modo_envio');
         $Q_anulado = (bool)filter_input(INPUT_POST, 'anulado');
+        $Q_autorizacion = (string)filter_input(INPUT_POST, 'autorizacion');
 
         $oLugar = new Lugar($Q_id_lugar);
         $oLugar->DBCargar();
@@ -56,6 +57,7 @@ switch ($Q_que) {
         $oLugar->setE_mail($Q_e_mail);
         $oLugar->setModo_envio($Q_modo_envio);
         $oLugar->setAnulado($Q_anulado);
+        $oLugar->setAutorizacion($Q_autorizacion);
         if ($oLugar->DBGuardar() === FALSE) {
             $error_txt .= _("hay un error, no se ha guardado");
             $error_txt .= "\n" . $oLugar->getErrorTxt();
@@ -74,6 +76,7 @@ switch ($Q_que) {
         $Q_plataforma = (string)filter_input(INPUT_POST, 'plataforma');
         $Q_e_mail = (string)filter_input(INPUT_POST, 'e_mail');
         $Q_modo_envio = (integer)filter_input(INPUT_POST, 'modo_envio');
+        $Q_autorizacion = (string)filter_input(INPUT_POST, 'autorizacion');
 
         $oLugar = new Lugar($Q_id_lugar);
         $oLugar->DBCargar();
@@ -85,6 +88,7 @@ switch ($Q_que) {
         $oLugar->setPlataforma($Q_plataforma);
         $oLugar->setE_mail($Q_e_mail);
         $oLugar->setModo_envio($Q_modo_envio);
+        $oLugar->setAutorizacion($Q_autorizacion);
         if ($oLugar->DBGuardar() === FALSE) {
             $error_txt .= _("hay un error, no se ha guardado");
             $error_txt .= "\n" . $oLugar->getErrorTxt();

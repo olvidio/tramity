@@ -10,7 +10,7 @@ Para migrar la base de datos de bonita a Tramity:
     </pre>
     <li> tabla tmp lugares
         <a href="apps/migration/controller/migration_dlp.php?que=lugares">go</a></li>
-    <li> Pasar los lugares a producción. Conviene los ids correctos para el resot de operaciones.
+    <li> Pasar los lugares a producción. Conviene los ids correctos para el resto de operaciones.
         <a href="apps/migration/controller/migration_dlp.php?que=lugares_a_prod">go</a></li>
     <li> repasar tema cargos. Añadir 'vest uden'. Equivalencias hardcoded:
          ['osvsm' >= 'ofsvsm','dre' => 'des','dagd'=> 'agd'];
@@ -52,5 +52,8 @@ Para migrar la base de datos de bonita a Tramity:
         <a href="apps/migration/controller/migration_dlp.php?que=pasar_a_dlp">go</a></li>
     <li> Queda los anexos. Prinero hay que introducirlos en tmp para luego pasarlos
         <a href="apps/migration/controller/migration_dlp.php?que=pasar_a_dlp_anexos">go</a></li>
+    <hr>
+    <li> Autorizaciones a dlp
+        <a href="apps/migration/controller/migration_dlp.php?que=autorizaciones">go</a></li>
 </ol>
   

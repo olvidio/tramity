@@ -10,7 +10,8 @@ CREATE TABLE nombre_del_esquema.lugares
     plataforma text,
     pub_key    bytea,
     e_mail     text,
-    anulado    boolean DEFAULT false NOT NULL
+    anulado    boolean DEFAULT false NOT NULL,
+    autorizacion character varying(255)
 );
 
 

@@ -15,11 +15,11 @@ class As4Remove
     private $bLoaded = FALSE;
     private $xmldata;
 
-    private $dor_dock;
     private $location;
 
     private $a_files_accepted;
     private $a_files_rejected;
+    private string $dir_dock;
 
 
     public function __construct()
@@ -91,7 +91,7 @@ class As4Remove
         $matches = [];
         if (preg_match($pattern, $err, $matches)) {
             $txt = _("Fichero") . ": $file_err<br>";
-            $txt = $matches[1];
+            $txt .= $matches[1];
         }
         return $txt;
     }

@@ -607,7 +607,6 @@ class Escrito extends EscritoDB
             foreach ($a_grupos as $id_grupo) {
                 $oGrupo = new Grupo($id_grupo);
                 $a_miembros_g[] = $oGrupo->getMiembros();
-                //$aMiembros = array_merge($aMiembros, $a_miembros_g);
             }
             $aMiembros = array_merge([], ...$a_miembros_g);
             $aMiembros = array_unique($aMiembros);

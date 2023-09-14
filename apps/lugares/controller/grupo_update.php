@@ -15,6 +15,7 @@ require_once("apps/core/global_object.inc");
 
 $Q_que = (string)filter_input(INPUT_POST, 'que');
 
+$error_txt = '';
 switch ($Q_que) {
     case "guardar_escrito":
         $Q_id_escrito = (integer)filter_input(INPUT_POST, 'id_escrito');
@@ -23,7 +24,7 @@ switch ($Q_que) {
         $Q_a_lugares = (array)filter_input(INPUT_POST, 'lugares', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
         if (empty($Q_descripcion)) {
-            echo _("debe poner un nombre");
+            $error_txt .= _("debe poner un nombre");
         }
 
         $oEscrito = new Escrito($Q_id_escrito);
@@ -39,8 +40,8 @@ switch ($Q_que) {
         $oEscrito->setDescripcion($Q_descripcion);
 
         if ($oEscrito->DBGuardar() === FALSE) {
-            echo _("hay un error, no se ha guardado");
-            echo "\n" . $oEscrito->getErrorTxt();
+            $error_txt .= _("hay un error, no se ha guardado");
+            $error_txt .= "\n" . $oEscrito->getErrorTxt();
         }
         break;
     case "eliminar":
@@ -49,8 +50,8 @@ switch ($Q_que) {
             $Q_id_grupo = (integer)strtok($a_sel[0], "#");
             $oGrupo = new Grupo($Q_id_grupo);
             if ($oGrupo->DBEliminar() === FALSE) {
-                echo _("hay un error, no se ha eliminado");
-                echo "\n" . $oGrupo->getErrorTxt();
+                $error_txt .= _("hay un error, no se ha eliminado");
+                $error_txt .= "\n" . $oGrupo->getErrorTxt();
             }
         }
         break;
@@ -58,19 +59,34 @@ switch ($Q_que) {
     case "guardar":
         $Q_id_grupo = (integer)filter_input(INPUT_POST, 'id_grupo');
         $Q_descripcion = (string)filter_input(INPUT_POST, 'descripcion');
+        $Q_autorizacion = (string)filter_input(INPUT_POST, 'autorizacion');
         $Q_a_lugares = (array)filter_input(INPUT_POST, 'lugares', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
         if (empty($Q_descripcion)) {
-            echo _("debe poner un nombre");
+            $error_txt .= _("debe poner un nombre");
         }
 
         $oGrupo = new Grupo($Q_id_grupo);
         $oGrupo->DBCargar();
         $oGrupo->setDescripcion($Q_descripcion);
+        $oGrupo->setAutorizacion($Q_autorizacion);
         $oGrupo->setMiembros($Q_a_lugares);
         if ($oGrupo->DBGuardar() === FALSE) {
-            echo _("hay un error, no se ha guardado");
-            echo "\n" . $oGrupo->getErrorTxt();
+            $error_txt .= _("hay un error, no se ha guardado");
+            $error_txt .= "\n" . $oGrupo->getErrorTxt();
         }
         break;
 }
+
+if (empty($error_txt)) {
+    $jsondata['success'] = true;
+    $jsondata['mensaje'] = 'ok';
+} else {
+    $jsondata['success'] = false;
+    $jsondata['mensaje'] = $error_txt;
+}
+
+//Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+header('Content-type: application/json; charset=utf-8');
+echo json_encode($jsondata);
+exit();

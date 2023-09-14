@@ -128,6 +128,4 @@ class BonitaCrearTablas
             exit($error);
         }
     }
-
-
 }

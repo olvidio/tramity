@@ -61,6 +61,24 @@ class TramityMail extends PHPMailer
         $replyTo = $_SESSION['oConfig']->getReplyTo();
         $sigla = $_SESSION['oConfig']->getSigla();
 
+        $msg_err = '';
+        if (empty($from)) {
+            $msg_err .= empty($msg_err)? '' : "<br>";
+            $msg_err .= _("Falta definir el 'From' en los parámetros del servidor");
+        }
+        if (empty($replyTo)) {
+            $msg_err .= empty($msg_err)? '' : "<br>";
+            $msg_err .= _("Falta definir el 'replyTo' en los parámetros del servidor");
+        }
+        if (empty($sigla)) {
+            $msg_err .= empty($msg_err)? '' : "<br>";
+            $msg_err .= _("Falta definir la 'sigla' en los parámetros del servidor");
+        }
+        if (!empty($msg_err)) {
+            $msg_err = _("ERROR:") ."<br>".$msg_err;
+            exit ($msg_err);
+        }
+
         $tramity = "Tramity - $sigla";
         $this->setFrom($from, $tramity);
         $this->addReplyTo($replyTo, $tramity);

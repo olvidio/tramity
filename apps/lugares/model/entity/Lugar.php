@@ -32,7 +32,7 @@ class Lugar extends core\ClasePropiedades
     /* CONST -------------------------------------------------------------- */
     // modo envio
     const MODO_PDF = 1;
-    const MODO_XML = 2;
+    const MODO_RDP = 2;
     const MODO_AS4 = 3;
 
     /* ATRIBUTOS ----------------------------------------------------------------- */
@@ -126,7 +126,6 @@ class Lugar extends core\ClasePropiedades
      * @var integer
      */
     private $ipub_key;
-    /* ATRIBUTOS QUE NO SÓN CAMPS------------------------------------------------- */
     /**
      * e_mail de Lugar
      *
@@ -139,6 +138,12 @@ class Lugar extends core\ClasePropiedades
      * @var boolean
      */
     private $banulado;
+    /**
+     * autorizacion de Lugar
+     *
+     * @var string
+     */
+    private $sautorizacion;
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
     /**
@@ -196,6 +201,7 @@ class Lugar extends core\ClasePropiedades
         $aDades['pub_key'] = $this->ipub_key;
         $aDades['e_mail'] = $this->se_mail;
         $aDades['anulado'] = $this->banulado;
+        $aDades['autorizacion'] = $this->sautorizacion;
         array_walk($aDades, 'core\poner_null');
         //para el caso de los boolean FALSE, el pdo(+postgresql) pone string '' en vez de 0. Lo arreglo:
         if (core\is_true($aDades['anulado'])) {
@@ -216,7 +222,8 @@ class Lugar extends core\ClasePropiedades
 					plataforma               = :plataforma,
 					pub_key                  = :pub_key,
 					e_mail                   = :e_mail,
-					anulado                  = :anulado";
+					anulado                  = :anulado,
+                    autorizacion             = :autorizacion";
             if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_lugar='$this->iid_lugar'")) === FALSE) {
                 $sClauError = 'Lugar.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -234,8 +241,8 @@ class Lugar extends core\ClasePropiedades
             }
         } else {
             // INSERT
-            $campos = "(sigla,dl,region,nombre,tipo_ctr,modo_envio,plataforma,pub_key,e_mail,anulado)";
-            $valores = "(:sigla,:dl,:region,:nombre,:tipo_ctr,:modo_envio,:plataforma,:pub_key,:e_mail,:anulado)";
+            $campos = "(sigla,dl,region,nombre,tipo_ctr,modo_envio,plataforma,pub_key,e_mail,anulado,autorizacion)";
+            $valores = "(:sigla,:dl,:region,:nombre,:tipo_ctr,:modo_envio,:plataforma,:pub_key,:e_mail,:anulado,:autorizacion)";
             if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
                 $sClauError = 'Lugar.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -403,6 +410,14 @@ class Lugar extends core\ClasePropiedades
     }
 
     /**
+     * @param string sautorizacion='' optional
+     */
+    function setAutorizacion($sautorizacion = '')
+    {
+        $this->sautorizacion = $sautorizacion;
+    }
+
+    /**
      * Estableix las claus primàries de Lugar en un array
      *
      */
@@ -469,6 +484,9 @@ class Lugar extends core\ClasePropiedades
         if (array_key_exists('anulado', $aDades)) {
             $this->setAnulado(is_true($aDades['anulado']));
         }
+        if (array_key_exists('autorizacion', $aDades)) {
+            $this->setAutorizacion($aDades['autorizacion']);
+        }
     }
 
     /**
@@ -492,7 +510,7 @@ class Lugar extends core\ClasePropiedades
         $a_tipos = [
             self::MODO_AS4 => _("as4"),
             self::MODO_PDF => _("pdf"),
-            self::MODO_XML => _("xml"),
+            self::MODO_RDP => _("rdp"),
         ];
 
         return $a_tipos;
@@ -639,6 +657,19 @@ class Lugar extends core\ClasePropiedades
             $this->DBCargar();
         }
         return $this->banulado;
+    }
+
+    /**
+     * Recupera l'atribut sautorizacion de Lugar
+     *
+     * @return string sautorizacion
+     */
+    function getAutorizacion()
+    {
+        if (!isset($this->sautorizacion) && !$this->bLoaded) {
+            $this->DBCargar();
+        }
+        return $this->sautorizacion;
     }
 
     /**
