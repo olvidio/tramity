@@ -11,7 +11,8 @@ class FicherosPSWin
     private string $fullFileLog;
     private string $DIR_BONITA;
 
-    public function __construct($DIR_BONITA) {
+    public function __construct($DIR_BONITA)
+    {
 
         $this->DIR_BONITA = $DIR_BONITA;
     }
@@ -20,7 +21,7 @@ class FicherosPSWin
      * poner a parte de construct, para poder cambiar las rutas con;
      *      setDirBaseWin
      *      setDirRdpWin
-     * 
+     *
      * @return void
      */
     public function inicializar(): void
@@ -28,13 +29,14 @@ class FicherosPSWin
         $this->inicializar_rutas();
         $this->inicializar_ficheros();
     }
+
     private function inicializar_rutas(): void
     {
         $fecha = date('Ymd');
 
         $fileLog = $fecha . ".log";
-        $fileBat =  "enviar_rdp.ps1";
-        $this->file_ps1 = $this->DIR_BONITA.'/'.$fileBat;
+        $fileBat = "enviar_rdp.ps1";
+        $this->file_ps1 = $this->DIR_BONITA . '/' . $fileBat;
 
         // valores por defecto
         if (empty($this->dir_base_win)) {
@@ -49,8 +51,10 @@ class FicherosPSWin
 
     private function inicializar_ficheros(): void
     {
-        $txt = '$' . 'cls =New-Object -com Fsrm.FsrmClassificationManager';
-        file_put_contents($this->file_ps1, $txt);
+        if (!file_exists($this->file_ps1)) {
+            $txt = '$' . 'cls =New-Object -com Fsrm.FsrmClassificationManager';
+            file_put_contents($this->file_ps1, $txt);
+        }
     }
 
     public function permisos($filename, $permisos)
@@ -63,12 +67,13 @@ class FicherosPSWin
         file_put_contents($this->file_ps1, $cmd_ps1, FILE_APPEND);
 
         $cmd_ps1 = "\r\n";
-        $cmd_ps1 .= '$' . "p= " . '$' . "cls.SetFileProperty(\"$fullFilename\", \"Destino_88d2f0439f068627\", \"$permisos\") 2 >&1";
+        $cmd_ps1 .= '$' . "p= " . '$' . "cls.SetFileProperty(\"$fullFilename\", \"Destino_88d2f0439f068627\", \"$permisos\") 2>&1";
         $cmd_ps1 = mb_convert_encoding($cmd_ps1, 'ISO-8859-1', 'UTF-8');
         file_put_contents($this->file_ps1, $cmd_ps1, FILE_APPEND);
     }
 
-    public function mover($filename) {
+    public function mover($filename)
+    {
 
         $fullFilename = $this->dir_base_win . '\\' . $filename;
 
