@@ -1395,7 +1395,7 @@ class MigrationDlp
         // copiar los valores:
         $sql = "UPDATE dlp.lugares_grupos SET autorizacion = p.autorizacion
                     FROM prodel.lugares_grupos_tmp p 
-                    WHERE public.lugares_grupos.id_grupo = p.id_grupo 
+                    WHERE dlp.lugares_grupos.id_grupo = p.id_grupo 
                     ";
         if ($this->oDBT->query($sql) === FALSE) {
             $sClauError = 'migartion';
