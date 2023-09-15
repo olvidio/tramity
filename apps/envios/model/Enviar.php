@@ -489,7 +489,7 @@ class Enviar
             $filename = $this->oEntradaBypass->getNombreEscrito('');
             $asunto = $this->oEntradaBypass->getAsunto();
         }
-        $this->filename = $fecha_hora . '-' . $filename . '-' . $asunto;
+        $this->filename = $fecha_hora . '-' . $filename . '-' . trim($asunto);
         // escribir en el directorio para bonita
         $a_header = $this->getHeader();
         $omPdf = $this->oEtherpad->generarPDF($a_header, $this->f_salida);

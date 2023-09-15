@@ -10,7 +10,6 @@ class FicherosPSWin
     private string $file_ps1;
     private string $fullFileLog;
     private string $DIR_BONITA;
-    private string $file_log;
 
     public function __construct($DIR_BONITA) {
 
@@ -31,12 +30,11 @@ class FicherosPSWin
     }
     private function inicializar_rutas(): void
     {
-        $fecha_hora = date('Ymd-His');
+        $fecha = date('Ymd');
 
-        $fileLog = $fecha_hora . ".txt";
-        $fileBat = $fecha_hora . ".ps1";
+        $fileLog = $fecha . ".log";
+        $fileBat =  "enviar_rdp.ps1";
         $this->file_ps1 = $this->DIR_BONITA.'/'.$fileBat;
-        $this->file_log = $this->DIR_BONITA.'/'.$fileLog;
 
         // valores por defecto
         if (empty($this->dir_base_win)) {
@@ -53,7 +51,6 @@ class FicherosPSWin
     {
         $txt = '$' . 'cls =New-Object -com Fsrm.FsrmClassificationManager';
         file_put_contents($this->file_ps1, $txt);
-        file_put_contents($this->file_log, '');
     }
 
     public function permisos($filename, $permisos)

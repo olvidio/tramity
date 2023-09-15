@@ -103,7 +103,7 @@ foreach ($cLugares as $oLugar) {
     $a_valores[$i][3] = $region;
     $a_valores[$i][4] = $nombre;
     $a_valores[$i][5] = $tipo_ctr;
-    $a_valores[$i][7] = $a_modos_envio[$modo_envio];
+    $a_valores[$i][7] = empty($a_modos_envio[$modo_envio])? '?' :$a_modos_envio[$modo_envio];
     $a_valores[$i][8] = $donde;
     $a_valores[$i][9] = $anulado;
 }
