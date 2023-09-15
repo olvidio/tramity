@@ -252,6 +252,18 @@
         $('#slow_load').hide();  // hide it initially
     });
 
+    $(function () {
+        $("#f_plazo").prop('autocomplete', 'off').datetimepicker({
+            timepicker: false,
+            datepicker: true,
+            format: '{{ format }}',
+            yearStart: {{ yearStart }},
+            yearEnd: {{ yearEnd }},
+            dayOfWeekStart: globaljsVarDayStart,
+        });
+
+    });
+
     fnjs_grupo = function () {
         var ok = $('#grupo_dst').prop('checked');
         if (ok) {
