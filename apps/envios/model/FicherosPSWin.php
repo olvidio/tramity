@@ -54,7 +54,24 @@ class FicherosPSWin
         if (!file_exists($this->file_ps1)) {
             $txt = '$' . 'cls =New-Object -com Fsrm.FsrmClassificationManager';
             file_put_contents($this->file_ps1, $txt);
+        } else {
+            $this->remove_pause();
         }
+    }
+
+    private function remove_pause()
+    {
+        $content = file_get_contents($this->file_ps1);
+        $newcontent = str_replace("pause", "", $content);
+        file_put_contents($this->file_ps1, $newcontent);
+    }
+
+    public function add_pause(): void
+    {
+        $cmd_ps1 = "\r\n";
+        $cmd_ps1 .= 'pause';
+        $cmd_ps1 = mb_convert_encoding($cmd_ps1, 'ISO-8859-1', 'UTF-8');
+        file_put_contents($this->file_ps1, $cmd_ps1, FILE_APPEND);
     }
 
     public function permisos($filename, $permisos)

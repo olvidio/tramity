@@ -514,6 +514,7 @@ class Enviar
             $oWin->permisos($filename_ext, $autorizacion_lst);
             $oWin->mover($filename_ext);
         }
+        $oWin->add_pause();
 
         return $err_mail;
     }
