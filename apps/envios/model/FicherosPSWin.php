@@ -62,7 +62,7 @@ class FicherosPSWin
     private function remove_pause()
     {
         $content = file_get_contents($this->file_ps1);
-        $newcontent = str_replace("pause", "", $content);
+        $newcontent = str_replace("\r\n"."pause"."\r\n", "", $content);
         file_put_contents($this->file_ps1, $newcontent);
     }
 
@@ -70,6 +70,7 @@ class FicherosPSWin
     {
         $cmd_ps1 = "\r\n";
         $cmd_ps1 .= 'pause';
+        $cmd_ps1 .= "\r\n";
         $cmd_ps1 = mb_convert_encoding($cmd_ps1, 'ISO-8859-1', 'UTF-8');
         file_put_contents($this->file_ps1, $cmd_ps1, FILE_APPEND);
     }
