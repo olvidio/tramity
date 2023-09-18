@@ -43,7 +43,8 @@ class FicherosPSWin
             $this->dir_base_win = "m:\\z-trasvase\\SalidaBonita";
         }
         if (empty($this->dir_rdp_win)) {
-            $this->dir_rdp_win = "m:\\De_dlp_2023\\";
+            $any = date('Y');
+            $this->dir_rdp_win = "m:\\De_dlp_".$any."\\";
         }
 
         $this->fullFileLog = $this->dir_base_win . '\\' . $fileLog;
