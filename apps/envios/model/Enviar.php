@@ -489,7 +489,8 @@ class Enviar
             $filename = $this->oEntradaBypass->getNombreEscrito('');
             $asunto = $this->oEntradaBypass->getAsunto();
         }
-        $this->filename = $fecha_hora . '-' . $filename . '-' . trim($asunto);
+        $filename_utf8 = $fecha_hora . '-' . $filename . '-' . trim($asunto);
+        $this->filename = mb_convert_encoding($filename_utf8, 'ISO-8859-1', 'UTF-8');
         // escribir en el directorio para bonita
         $a_header = $this->getHeader();
         $omPdf = $this->oEtherpad->generarPDF($a_header, $this->f_salida);
@@ -507,7 +508,8 @@ class Enviar
 
         // adjuntos:
         foreach ($this->a_adjuntos as $adjunto_filename => $escrito_txt) {
-            $filename_ext = $this->filename . '-' . $adjunto_filename;
+            $adjunto_filename_iso = mb_convert_encoding($adjunto_filename, 'ISO-8859-1', 'UTF-8');
+            $filename_ext = $this->filename . '-' . $adjunto_filename_iso;
             $full_filename = $DIR_BONITA . '/' . $filename_ext;
             file_put_contents($full_filename, $escrito_txt);
             //anotar lineas en ps1 (power shell de windows)
