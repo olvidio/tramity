@@ -56,7 +56,7 @@ $oDesplLugar->setOpciones($a_lugares);
 $oDesplLugar->setOpcion_sel($Q_id_lugar);
 
 $a_opciones_status = Pendiente::getArrayStatus();
-// añadr la opción de 'caulquiera' al inicio
+// añadir la opción de 'cualquiera' al inicio
 $all_traducido = _("cualquiera");
 $Q_status = empty($Q_status) ? 'all' : $Q_status;
 $a_opciones_status = array_merge(array("all" => $all_traducido), $a_opciones_status);
@@ -70,7 +70,7 @@ $a_oficinas = $gesOficinas->getArrayOficinas();
 // solo secretaría puede ver/crear pendientes de otras oficinas
 $role_actual = ConfigGlobal::role_actual();
 if ($role_actual === 'secretaria') {
-    $secretaria = 1; // NO TRUE, para eljavascript;
+    $secretaria = 1; // NO TRUE, para el javascript;
     $oDesplOficinas = new Desplegable();
     $oDesplOficinas->setNombre('id_oficina');
     $oDesplOficinas->setOpciones($a_oficinas);
@@ -79,7 +79,7 @@ if ($role_actual === 'secretaria') {
     $id_oficina = '';
 } else {
     $oDesplOficinas = []; // para evitar errores
-    $secretaria = 0; // NO FALSE, para eljavascript;
+    $secretaria = 0; // NO FALSE, para el javascript;
     $oCargo = new Cargo(ConfigGlobal::role_id_cargo());
     $id_oficina = $oCargo->getId_oficina();
 }

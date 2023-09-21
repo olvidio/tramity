@@ -1002,7 +1002,7 @@ abstract class BlockTag extends Tag
 					$objattr = [];
 					$objattr['type'] = 'toc';
 					$objattr['toclevel'] = $this->mpdf->h2toc[$tag];
-					$objattr['CONTENT'] = htmlspecialchars($content);
+					$objattr['CONTENT'] = htmlspecialchars($content ?? '');
 					$e = "\xbb\xa4\xactype=toc,objattr=" . serialize($objattr) . "\xbb\xa4\xac";
 					array_unshift($this->mpdf->textbuffer, [$e]);
 				}

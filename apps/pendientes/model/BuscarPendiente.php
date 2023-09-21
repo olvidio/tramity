@@ -60,12 +60,8 @@ class BuscarPendiente
      */
     private $df_max;
 
-    /**
-     * @return string
-     */
 
-
-    public function getPendientes()
+    public function getPendientes(): array
     {
         $oDavical = new Davical($_SESSION['oConfig']->getAmbito());
         $cond = '';
@@ -96,7 +92,7 @@ class BuscarPendiente
             $cond .= "summary ~* '.*" . $this->asunto . "'";
         }
 
-        if (!empty($this->status) && ($this->status != 'all')) {
+        if (!empty($this->status) && ($this->status !== 'all')) {
             $cond .= empty($cond) ? '' : ' AND ';
             $cond .= "status = '$this->status'";
         }
@@ -144,13 +140,10 @@ class BuscarPendiente
     /**
      * Recupera l'atribut df_min de ExpedienteDB
      *
-     * @return DateTimeLocal df_min
+     * @return DateTimeLocal|NullDateTimeLocal
      */
     function getF_min()
     {
-        if (!isset($this->df_min) && !$this->bLoaded) {
-            $this->DBCargar();
-        }
         if (empty($this->df_min)) {
             return new NullDateTimeLocal();
         }
@@ -161,13 +154,10 @@ class BuscarPendiente
     /**
      * Recupera l'atribut df_max de ExpedienteDB
      *
-     * @return DateTimeLocal df_max
+     * @return DateTimeLocal|NullDateTimeLocal
      */
     function getF_max()
     {
-        if (!isset($this->df_max) && !$this->bLoaded) {
-            $this->DBCargar();
-        }
         if (empty($this->df_max)) {
             return new NullDateTimeLocal();
         }
@@ -240,10 +230,10 @@ class BuscarPendiente
      * Si df_min es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_min debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param web\DateTimeLocal|string df_min='' optional.
-     * @param boolean convert=TRUE optional. Si es FALSE, df_min debe ser un string en formato ISO (Y-m-d).
+     * @param string $df_min.
+     * @param boolean $convert =TRUE optional. Si es FALSE, df_min debe ser un string en formato ISO (Y-m-d).
      */
-    function setF_min($df_min = '', $convert = TRUE)
+    public function setF_min(string $df_min, bool $convert = TRUE): void
     {
         if ($convert === TRUE && !empty($df_min)) {
             $oConverter = new ConverterDate('date', $df_min);
@@ -257,10 +247,10 @@ class BuscarPendiente
      * Si df_max es string, y convert=TRUE se convierte usando el formato web\DateTimeLocal->getFormat().
      * Si convert es FALSE, df_max debe ser un string en formato ISO (Y-m-d). Corresponde al pgstyle de la base de datos.
      *
-     * @param web\DateTimeLocal|string df_max='' optional.
-     * @param boolean convert=TRUE optional. Si es FALSE, df_max debe ser un string en formato ISO (Y-m-d).
+     * @param string $df_max.
+     * @param boolean $convert =TRUE optional. Si es FALSE, df_max debe ser un string en formato ISO (Y-m-d).
      */
-    function setF_max($df_max = '', $convert = TRUE)
+    public function setF_max(string $df_max, bool $convert = TRUE): void
     {
         if ($convert === TRUE && !empty($df_max)) {
             $oConverter = new ConverterDate('date', $df_max);
