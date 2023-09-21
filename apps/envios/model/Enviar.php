@@ -294,6 +294,7 @@ class Enviar
         $a_lista_auth_rdp = [];
         $flag_AS4 = FALSE;
         $flag_rdp = FALSE;
+        $flag_rdp_en_cola = FALSE;
         $autorizacion_dl = '';
         foreach ($aDestinos as $id_lugar) {
             ini_set('display_errors', 1);
@@ -315,8 +316,8 @@ class Enviar
                             $a_lista_auth_rdp[] = $autorizacion;
                         }
                     } else {
-                        $autorizacion_lst = $autorizacion_dl . $autorizacion;
-                        $err_mail = $this->enviarRdp($autorizacion_lst);
+                        $flag_rdp_en_cola = TRUE;
+                        $a_lista_auth_rdp[] = $autorizacion;
                     }
                     break;
                 case Lugar::MODO_PDF:
@@ -347,6 +348,10 @@ class Enviar
 
         // si es compartir, enviar en bloque
         // por permisos
+        if ($flag_rdp_en_cola) {
+            $autorizacion_lst = $autorizacion_dl . implode('|', $a_lista_auth_rdp);
+            $err_mail = $this->enviarRdp($autorizacion_lst);
+        }
         if ($flag_rdp) {
             if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR) {
                 $autorizacion_lst = $autorizacion_dl . implode('|', $a_lista_auth_rdp);
