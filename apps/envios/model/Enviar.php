@@ -51,6 +51,10 @@ class Enviar
     private array $a_rta = [];
 
     private string $accion;
+    /**
+     * @var array|false|string|string[]|null
+     */
+    private string|array|null|false $filename_iso;
 
     public function __construct($id, $tipo)
     {
@@ -490,14 +494,16 @@ class Enviar
             $asunto = $this->oEntradaBypass->getAsunto();
         }
         $filename_utf8 = $fecha_hora . '-' . $filename . '-' . trim($asunto);
-        $this->filename = mb_convert_encoding($filename_utf8, 'ISO-8859-1', 'UTF-8');
+        $this->filename = $filename_utf8;
+        $this->filename_iso = mb_convert_encoding($filename_utf8, 'ISO-8859-1', 'UTF-8');
         // escribir en el directorio para bonita
         $a_header = $this->getHeader();
         $omPdf = $this->oEtherpad->generarPDF($a_header, $this->f_salida);
 
         $filename_ext = $this->filename . '.pdf';
-        $full_filename = $DIR_BONITA . '/' . $filename_ext;
-        $omPdf->Output($full_filename, 'F');
+        $filename_iso_ext = $this->filename_iso . '.pdf';
+        $full_filename_iso = $DIR_BONITA . '/' . $filename_iso_ext;
+        $omPdf->Output($full_filename_iso, 'F');
 
         $oWin = new FicherosPSWin($DIR_BONITA);
         $oWin->inicializar();
@@ -509,9 +515,10 @@ class Enviar
         // adjuntos:
         foreach ($this->a_adjuntos as $adjunto_filename => $escrito_txt) {
             $adjunto_filename_iso = mb_convert_encoding($adjunto_filename, 'ISO-8859-1', 'UTF-8');
-            $filename_ext = $this->filename . '-' . $adjunto_filename_iso;
-            $full_filename = $DIR_BONITA . '/' . $filename_ext;
-            file_put_contents($full_filename, $escrito_txt);
+            $filename_ext = $this->filename . '-' . $adjunto_filename;
+            $filename_iso_ext = $this->filename . '-' . $adjunto_filename_iso;
+            $full_filename_iso = $DIR_BONITA . '/' . $filename_iso_ext;
+            file_put_contents($full_filename_iso, $escrito_txt);
             //anotar lineas en ps1 (power shell de windows)
             $oWin->permisos($filename_ext, $autorizacion_lst);
             $oWin->mover($filename_ext);
