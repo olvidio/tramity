@@ -851,6 +851,7 @@ class Pendiente
         $args['UID'] = "$uid";
         $args['SUMMARY'] = "$asunto";
         $args['STATUS'] = "$status";
+
         if (!empty($f_cal_acabado)) {
             $args['COMPLETED'] = $f_cal_acabado;
             $args['STATUS'] = "COMPLETED";
@@ -866,8 +867,6 @@ class Pendiente
         }
         if (!empty($f_cal_end)) {
             $args['DTEND'] = $f_cal_end;
-        } else {
-            $args['DTEND'] = '';
         }
         if (!empty($rrule)) {
             $args['RRULE'] = "$rrule";
@@ -877,7 +876,7 @@ class Pendiente
         }
         if (!empty($class)) {
             $args['CLASS'] = "$class";
-        } // property name - case independt
+        } // property name - case independent
         if (!empty($detalle)) {
             $args['COMMENT'] = "$detalle";
         }
