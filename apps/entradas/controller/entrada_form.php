@@ -169,7 +169,7 @@ if (!empty($Q_id_entrada)) {
 
     $categoria = $oEntrada->getCategoria();
     $oDesplCategoria->setOpcion_sel($categoria);
-    $visibilidad = $oEntrada->getVisibilidad();
+    $visibilidad = $oEntrada->getVisibilidad() ?? Visibilidad::V_PERSONAL;
     $oDesplVisibilidad->setOpcion_sel($visibilidad);
     $f_contestar = $oEntrada->getF_contestar()->getFromLocal();
     if (!empty($f_contestar)) {

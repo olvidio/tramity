@@ -137,7 +137,7 @@ if ($Q_id_expediente) {
 
     $vida = $oExpediente->getVida();
     $oDesplVida->setOpcion_sel($vida);
-    $visibilidad = $oExpediente->getVisibilidad();
+    $visibilidad = $oExpediente->getVisibilidad()?? Visibilidad::V_PERSONAL;
     $oDesplVisibilidad->setOpcion_sel($visibilidad);
     $oPermisoregistro = new PermRegistro();
 
@@ -218,7 +218,7 @@ if ($Q_id_expediente) {
         }
         // Categoría
         $categoria = $oEscrito->getCategoria();
-        $categoria_txt = $aCategorias[$categoria];
+        $categoria_txt = $aCategorias[$categoria] ?? '?';
 
         $a_accion['destino'] = $dst_txt;
         $a_accion['link_ver'] = 'v';

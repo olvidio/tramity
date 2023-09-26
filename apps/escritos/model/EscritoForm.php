@@ -203,14 +203,11 @@ class EscritoForm
             }
             $detalle = $oEscrito->getDetalle();
 
-            // Ponente
             $id_ponente = $oEscrito->getCreador();
             $categoria = $oEscrito->getCategoria();
             $oDesplCategoria->setOpcion_sel($categoria);
-            if (!empty($oEscrito->getVisibilidad())) {
-                $visibilidad = $oEscrito->getVisibilidad();
-                $oDesplVisibilidad->setOpcion_sel($visibilidad);
-            }
+            $visibilidad = $oEscrito->getVisibilidad()?? Visibilidad::V_PERSONAL;
+            $oDesplVisibilidad->setOpcion_sel($visibilidad);
             if (!empty($oEscrito->getVisibilidad_dst())) {
                 $visibilidad_dst = $oEscrito->getVisibilidad_dst();
                 $oDesplVisibilidad_dst->setOpcion_sel($visibilidad_dst);
