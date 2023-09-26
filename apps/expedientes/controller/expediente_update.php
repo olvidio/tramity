@@ -223,7 +223,12 @@ switch ($Q_que) {
             $error_txt .= $oExpediente->getErrorTxt();
         }
 
-        $a_antecedente = ['tipo' => 'entrada', 'id' => $Q_id_entrada];
+        // adjuntar entrada como antecedente
+        if ($compartida) {
+            $a_antecedente = ['tipo' => 'entrada_compartida', 'id' => $Q_id_entrada];
+        } else {
+            $a_antecedente = ['tipo' => 'entrada', 'id' => $Q_id_entrada];
+        }
         $oExpediente->addAntecedente($a_antecedente);
         if ($oExpediente->DBGuardar() === FALSE) {
             $error_txt .= _("No se han podido adjuntar la entrada");

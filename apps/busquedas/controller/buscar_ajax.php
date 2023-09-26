@@ -56,7 +56,7 @@ switch ($Q_que) {
 
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
-        echo json_encode($jsondata);
+        echo json_encode($jsondata, JSON_THROW_ON_ERROR);
         exit();
 
         break;
@@ -87,11 +87,11 @@ switch ($Q_que) {
                 $id_ponente = $oEscrito->getPonente();
                 $a_firmas = $oEscrito->getResto_oficinas();
 
-                if ($Q_para == 'escrito') {
+                if ($Q_para === 'escrito') {
                     $jsondata['id_ponente'] = $id_ponente;
                     $jsondata['firmas'] = $a_firmas;
                 }
-                if ($Q_para == 'entrada') {
+                if ($Q_para === 'entrada') {
                     $oCargo = new Cargo($id_ponente);
                     $id_of_ponente = $oCargo->getId_oficina();
                     $jsondata['id_ponente'] = $id_of_ponente;
@@ -131,11 +131,11 @@ switch ($Q_que) {
                     // oficinas
                     $a_oficinas = $oEntrada->getResto_oficinas();
 
-                    if ($Q_para == 'entrada') {
+                    if ($Q_para === 'entrada') {
                         $jsondata['id_ponente'] = $id_of_ponente;
                         $jsondata['oficinas'] = $a_oficinas;
                     }
-                    if ($Q_para == 'escrito') {
+                    if ($Q_para === 'escrito') {
                         $gesCargos = new GestorCargo();
                         // Ponente
                         $id_ponente = $gesCargos->getDirectorOficina($id_of_ponente);
@@ -161,7 +161,7 @@ switch ($Q_que) {
 
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
-        echo json_encode($jsondata);
+        echo json_encode($jsondata, JSON_THROW_ON_ERROR);
         exit();
         break;
     default:
