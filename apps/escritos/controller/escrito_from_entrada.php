@@ -136,7 +136,6 @@ $oEscrito->setResto_oficinas('');
 
 $oEscrito->setCategoria($categoria);
 $oEscrito->setVisibilidad($visibilidad);
-$oEscrito->setF_contestar($f_contestar);
 
 if ($oEscrito->DBGuardar() === FALSE) {
     $error_txt .= $oEscrito->getErrorTxt();

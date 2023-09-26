@@ -286,7 +286,7 @@ class EscritoForm
                 $json_config = '{}';
                 $tipo_doc = '';
             } else {
-                // Valors por defecto: los del expediente:
+                // Valores por defecto: los del expediente:
                 if (!empty($this->Q_id_expediente)) {
                     $oExpediente = new Expediente($this->Q_id_expediente);
                     $asunto = $oExpediente->getAsunto();
