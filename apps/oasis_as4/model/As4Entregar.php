@@ -15,6 +15,7 @@ use entradas\model\EntradaEntidad;
 use entradas\model\EntradaEntidadAdjunto;
 use entradas\model\EntradaEntidadDoc;
 use entradas\model\GestorEntrada;
+use escritos\model\GestorEscrito;
 use etherpad\model\Etherpad;
 use Exception;
 use lugares\model\entity\GestorLugar;
@@ -37,112 +38,44 @@ use function core\is_true;
 class As4Entregar extends As4CollaborationInfo
 {
 
-    /**
-     * @var string
-     */
-    private $msg;
-    /**
-     * @var  SimpleXMLElement
-     */
-    private $xmldata;
+    private string $msg;
+    private SimpleXMLElement $xmldata;
 
-    /**
-     * @var string
-     */
-    private $location;
-    private $sigla_destino;
+    private string $location;
+    private string $sigla_destino;
 
     private $service;
     private $dom;
 
-    /**
-     * oProt_dst
-     * @var stdClass
-     */
-    private $oProt_dst;
-    /**
-     * oProt_org
-     * @var stdClass
-     */
-    private $oProt_org;
-    /**
-     * a_Prot_ref
-     * @var array
-     */
-    private $a_Prot_ref;
-    /**
-     * oF_entrada
-     * @var DateTimeLocal
-     */
-    private $oF_entrada;
-    /**
-     * oF_escrito
-     * @var DateTimeLocal
-     */
-    private $oF_escrito;
-    /**
-     * oF_contestar
-     * @var DateTimeLocal
-     */
-    private $oF_contestar;
+    private stdClass $oProt_dst;
+    private stdClass $oProt_org;
+    private array $a_Prot_ref;
+    private DateTimeLocal $oF_entrada;
+    private DateTimeLocal $oF_escrito;
+    private DateTimeLocal $oF_contestar;
 
-    /**
-     *
-     * @var string
-     */
-    private $asunto;
-    /**
-     *
-     * @var string
-     */
-    private $content;
+    private string $asunto;
+    private string $content;
     /**
      * type del content. No lo llamo content-type para no confundir con el MIME
-     *
-     * @var string
      */
-    private $type;
-    /**
-     *
-     * @var integer
-     */
-    private $visibilidad;
-    /**
-     * @var boolean
-     */
-    private $bypass;
-    /**
-     *
-     * @var array
-     */
-    private $a_adjuntos;
-    /**
-     *
-     * @var array
-     */
-    private $a_destinos;
-    /**
-     * @var string
-     */
-    private $descripcion;
-    /**
-     * @var integer
-     */
-    private $categoria;
+    private string $type;
+    private int $visibilidad;
+    private bool $bypass;
+    private array $a_adjuntos;
+    private array $a_destinos;
+    private string $descripcion;
+    private int $categoria;
 
-    /**
-     * tabla de siglas:
-     * @var array
-     */
-    private $aLugares;
-    private $aEntidades;
+    private array $aLugares;
+    private array $aEntidades;
 
-    /**
-     *
-     * @var string
-     */
     private $anular_txt;
 
+    private string $asunto_secretaria;
+    private string $detalle;
+    private ?int $id_ponente;
+    private array $oficinas;
 
     /**
      * @param $xmldata  SimpleXMLElement
@@ -368,11 +301,57 @@ class As4Entregar extends As4CollaborationInfo
         $this->visibilidad = $this->getVisibilidad();
         $this->a_adjuntos = $this->getAdjuntos();
         $this->bypass = $this->getByPass();
+        // Si hay referencias, recuperar los valores de: asunto, detalle, oficinas
+        if (!empty((array)$this->a_Prot_ref)) {
+            $this->buscar_ref();
+        }
 
         // compartido
         if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR
             || $this->accion === As4CollaborationInfo::ACCION_REEMPLAZAR) {
             $this->getCompartido();
+        }
+    }
+
+    private function buscar_ref(): void
+    {
+        // Copiado de buscar_ajax.php
+        // 'buscar_referencia_correspondiente':
+
+        // solamente la primera referencia
+        $oProtDst = $this->a_Prot_ref[0];
+        $id_lugar = $oProtDst->id_lugar;
+
+        // Si es de la dl busco en escritos, sino en entradas:
+        $gesLugares = new GestorLugar();
+        $id_sigla_local = $gesLugares->getId_sigla_local();
+        if ($id_lugar === $id_sigla_local) {
+            // Escritos
+            $aProt_local = ['id_lugar' => $id_lugar,
+                'num' => $oProtDst->prot_num,
+                'any' => $oProtDst->prot_any,
+            ];
+            $gesEscritos = new GestorEscrito();
+            $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
+            foreach ($cEscritos as $oEscrito) {
+                $this->asunto_secretaria = $oEscrito->getAsunto();
+                $this->detalle = $oEscrito->getDetalle();
+                $this->categoria = $oEscrito->getCategoria();
+                // los escritos van por cargos, las entradas por oficinas: pongo al director de la oficina:
+                $id_ponente = $oEscrito->getPonente();
+                $a_firmas = $oEscrito->getResto_oficinas();
+
+                $oCargo = new Cargo($id_ponente);
+                $id_of_ponente = $oCargo->getId_oficina();
+                $this->id_ponente = $id_of_ponente;
+                $a_oficinas = [];
+                foreach ($a_firmas as $id_cargo) {
+                    $oCargo = new Cargo($id_cargo);
+                    $id_oficina = $oCargo->getId_oficina();
+                    $a_oficinas[] = $id_oficina;
+                }
+                $this->oficinas = $a_oficinas;
+            }
         }
     }
 
@@ -709,7 +688,19 @@ class As4Entregar extends As4CollaborationInfo
         } else {
             $oEntrada->setCategoria($this->categoria);
         }
-        // dejo la oficina en blanco
+        // añadidos al buscar en referencias
+        if (!empty($this->asunto_secretaria)) {
+            $oEntrada->setAsunto($this->asunto_secretaria);
+        }
+        if (!empty($this->detalle)) {
+            $oEntrada->setDetalle($this->detalle);
+        }
+        if (!empty($this->id_ponente)) {
+            $oEntrada->setPonente($this->id_ponente);
+        }
+        if (!empty($this->oficinas)) {
+            $oEntrada->setResto_oficinas($this->oficinas);
+        }
 
         $estado = Entrada::ESTADO_INGRESADO;
         $oEntrada->setEstado($estado);
@@ -908,7 +899,7 @@ class As4Entregar extends As4CollaborationInfo
         if ($avisoIndividual) {
             foreach ($this->a_destinos as $id_destino) {
                 // puede ser que no exista el ctr en la lista (o esté anulado)...
-                $siglaDestino = empty($this->aLugares[$id_destino])? '' : $this->aLugares[$id_destino];
+                $siglaDestino = empty($this->aLugares[$id_destino]) ? '' : $this->aLugares[$id_destino];
                 // comprobar que el destino está en la plataforma, sino, no se crea la entrada
                 if (in_array($siglaDestino, $this->getEntidadesPlataforma(), true)) {
                     $id_entrada = $this->nuevaEntrada($siglaDestino, $id_entrada_compartida);
