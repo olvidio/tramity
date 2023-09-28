@@ -15,6 +15,7 @@ use entradas\model\EntradaEntidad;
 use entradas\model\EntradaEntidadAdjunto;
 use entradas\model\EntradaEntidadDoc;
 use entradas\model\GestorEntrada;
+use escritos\model\entity\GestorEscritoEntidad;
 use escritos\model\GestorEscrito;
 use etherpad\model\Etherpad;
 use Exception;
@@ -22,6 +23,7 @@ use lugares\model\entity\GestorLugar;
 use pendientes\model\Pendiente;
 use SimpleXMLElement;
 use stdClass;
+use usuarios\model\CargoEntidad;
 use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
@@ -301,10 +303,6 @@ class As4Entregar extends As4CollaborationInfo
         $this->visibilidad = $this->getVisibilidad();
         $this->a_adjuntos = $this->getAdjuntos();
         $this->bypass = $this->getByPass();
-        // Si hay referencias, recuperar los valores de: asunto, detalle, oficinas
-        if (!empty((array)$this->a_Prot_ref)) {
-            $this->buscar_ref();
-        }
 
         // compartido
         if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR
@@ -313,7 +311,7 @@ class As4Entregar extends As4CollaborationInfo
         }
     }
 
-    private function buscar_ref(): void
+    private function buscar_ref($siglaDestino): void
     {
         // Copiado de buscar_ajax.php
         // 'buscar_referencia_correspondiente':
@@ -321,27 +319,22 @@ class As4Entregar extends As4CollaborationInfo
         // solamente la primera referencia
         $oProtDst = $this->a_Prot_ref[0];
         $id_lugar = $oProtDst->id_lugar;
+        $num = null;
+        $any = '';
         if (property_exists($oProtDst, 'prot_num')) {
-            $num = $oProtDst->prot_num ?? null;
-        } else {
-            $num = null;
+            $num = $oProtDst->prot_num;
         }
         if (property_exists($oProtDst, 'prot_any')) {
-            $any = $oProtDst->prot_num ?? '';
-        } else {
-            $any = '';
+            $any = empty($oProtDst->prot_num)? '' : $oProtDst->prot_num;
         }
 
-        // Si es de la dl busco en escritos, sino en entradas:
-        $gesLugares = new GestorLugar();
-        $id_sigla_local = $gesLugares->getId_sigla_local();
-        if (($id_lugar === $id_sigla_local) && !empty($num) && !empty($any)) {
+        if (!empty($id_lugar) && !empty($num) && !empty($any)) {
             // Escritos
             $aProt_local = ['id_lugar' => $id_lugar,
                 'num' => $num,
                 'any' => $any,
             ];
-            $gesEscritos = new GestorEscrito();
+            $gesEscritos = new GestorEscritoEntidad($siglaDestino);
             $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
             foreach ($cEscritos as $oEscrito) {
                 $this->asunto_secretaria = $oEscrito->getAsunto();
@@ -351,12 +344,14 @@ class As4Entregar extends As4CollaborationInfo
                 $id_ponente = $oEscrito->getPonente();
                 $a_firmas = $oEscrito->getResto_oficinas();
 
-                $oCargo = new Cargo($id_ponente);
+                $oCargo = new CargoEntidad($siglaDestino);
+                $oCargo->setId_cargo($id_ponente);
                 $id_of_ponente = $oCargo->getId_oficina();
                 $this->id_ponente = $id_of_ponente;
                 $a_oficinas = [];
                 foreach ($a_firmas as $id_cargo) {
-                    $oCargo = new Cargo($id_cargo);
+                    $oCargo = new CargoEntidad($siglaDestino);
+                    $oCargo->setId_cargo($id_cargo);
                     $id_oficina = $oCargo->getId_oficina();
                     $a_oficinas[] = $id_oficina;
                 }
@@ -699,6 +694,9 @@ class As4Entregar extends As4CollaborationInfo
             $oEntrada->setCategoria($this->categoria);
         }
         // añadidos al buscar en referencias
+        if (!empty($this->a_Prot_ref)) {
+            $this->buscar_ref($siglaDestino);
+        }
         if (!empty($this->asunto_secretaria)) {
             $oEntrada->setAsunto($this->asunto_secretaria);
         }
