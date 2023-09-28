@@ -51,9 +51,9 @@ class As4Entregar extends As4CollaborationInfo
     private stdClass $oProt_dst;
     private stdClass $oProt_org;
     private array $a_Prot_ref;
-    private DateTimeLocal $oF_entrada;
-    private DateTimeLocal $oF_escrito;
-    private DateTimeLocal $oF_contestar;
+    private DateTimeLocal|NullDateTimeLocal $oF_entrada;
+    private DateTimeLocal|NullDateTimeLocal $oF_escrito;
+    private DateTimeLocal|NullDateTimeLocal $oF_contestar;
 
     private string $asunto;
     private string $content;
