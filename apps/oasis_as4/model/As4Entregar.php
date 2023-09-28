@@ -73,7 +73,7 @@ class As4Entregar extends As4CollaborationInfo
     private $anular_txt;
 
     private string $asunto_secretaria;
-    private string $detalle;
+    private ?string $detalle;
     private ?int $id_ponente;
     private array $oficinas;
 
@@ -321,6 +321,16 @@ class As4Entregar extends As4CollaborationInfo
         // solamente la primera referencia
         $oProtDst = $this->a_Prot_ref[0];
         $id_lugar = $oProtDst->id_lugar;
+        if (property_exists($oProtDst, 'prot_num')) {
+            $num = $oProtDst->prot_num ?? null;
+        } else {
+            $num = null;
+        }
+        if (property_exists($oProtDst, 'prot_any')) {
+            $any = $oProtDst->prot_num ?? null;
+        } else {
+            $any = null;
+        }
 
         // Si es de la dl busco en escritos, sino en entradas:
         $gesLugares = new GestorLugar();
@@ -328,8 +338,8 @@ class As4Entregar extends As4CollaborationInfo
         if ($id_lugar === $id_sigla_local) {
             // Escritos
             $aProt_local = ['id_lugar' => $id_lugar,
-                'num' => $oProtDst->prot_num,
-                'any' => $oProtDst->prot_any,
+                'num' => $num,
+                'any' => $any,
             ];
             $gesEscritos = new GestorEscrito();
             $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
