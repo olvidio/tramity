@@ -25,6 +25,7 @@ use stdClass;
 use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use web\DateTimeLocal;
+use web\NullDateTimeLocal;
 use web\Protocolo;
 use web\StringLocal;
 use function core\is_true;
@@ -393,7 +394,7 @@ class As4Entregar extends As4CollaborationInfo
             return new DateTimeLocal($f_entrada_iso);
         }
 
-        return '';
+        return new NullDateTimeLocal();
     }
 
     /**
@@ -406,7 +407,7 @@ class As4Entregar extends As4CollaborationInfo
             return new DateTimeLocal($f_escrito_iso);
         }
 
-        return '';
+        return new NullDateTimeLocal();
     }
 
     /**
@@ -419,7 +420,7 @@ class As4Entregar extends As4CollaborationInfo
             return new DateTimeLocal($f_contestar_iso);
         }
 
-        return '';
+        return new NullDateTimeLocal();
     }
 
     private function getAsunto(): string
