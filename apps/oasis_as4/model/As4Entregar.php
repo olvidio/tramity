@@ -327,15 +327,15 @@ class As4Entregar extends As4CollaborationInfo
             $num = null;
         }
         if (property_exists($oProtDst, 'prot_any')) {
-            $any = $oProtDst->prot_num ?? null;
+            $any = $oProtDst->prot_num ?? '';
         } else {
-            $any = null;
+            $any = '';
         }
 
         // Si es de la dl busco en escritos, sino en entradas:
         $gesLugares = new GestorLugar();
         $id_sigla_local = $gesLugares->getId_sigla_local();
-        if ($id_lugar === $id_sigla_local && !empty($num) && !empty($any)) {
+        if (($id_lugar === $id_sigla_local) && !empty($num) && !empty($any)) {
             // Escritos
             $aProt_local = ['id_lugar' => $id_lugar,
                 'num' => $num,
