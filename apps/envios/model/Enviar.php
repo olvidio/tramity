@@ -481,7 +481,7 @@ class Enviar
 
     private function enviarRdp($autorizacion_lst)
     {
-        $DIR_BONITA = '/home/bonita';
+        $DIR_CORREO = '/home/correodlp';
         $err_mail = '';
         $fecha_hora = date('ymd');
 
@@ -507,10 +507,10 @@ class Enviar
 
         $filename_ext = $this->filename . '.pdf';
         $filename_iso_ext = $this->filename_iso . '.pdf';
-        $full_filename_iso = $DIR_BONITA . '/' . $filename_iso_ext;
+        $full_filename_iso = $DIR_CORREO . '/' . $filename_iso_ext;
         $omPdf->Output($full_filename_iso, 'F');
 
-        $oWin = new FicherosPSWin($DIR_BONITA);
+        $oWin = new FicherosPSWin($DIR_CORREO);
         $oWin->inicializar();
 
         //anotar lineas en ps1 (power shell de windows)
@@ -522,7 +522,7 @@ class Enviar
             $adjunto_filename_iso = mb_convert_encoding($adjunto_filename, 'ISO-8859-1', 'UTF-8');
             $filename_ext = $this->filename . '-' . $adjunto_filename;
             $filename_iso_ext = $this->filename . '-' . $adjunto_filename_iso;
-            $full_filename_iso = $DIR_BONITA . '/' . $filename_iso_ext;
+            $full_filename_iso = $DIR_CORREO . '/' . $filename_iso_ext;
             file_put_contents($full_filename_iso, $escrito_txt);
             //anotar lineas en ps1 (power shell de windows)
             $oWin->permisos($filename_ext, $autorizacion_lst);

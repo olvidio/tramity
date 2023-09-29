@@ -9,12 +9,12 @@ class FicherosPSWin
     private string $dir_rdp_win;
     private string $file_ps1;
     private string $fullFileLog;
-    private string $DIR_BONITA;
+    private string $DIR_CORREO;
 
-    public function __construct($DIR_BONITA)
+    public function __construct($DIR_CORREO)
     {
 
-        $this->DIR_BONITA = $DIR_BONITA;
+        $this->DIR_CORREO = $DIR_CORREO;
     }
 
     /**
@@ -36,11 +36,11 @@ class FicherosPSWin
 
         $fileLog = $fecha . ".log";
         $fileBat = "enviar_rdp.ps1";
-        $this->file_ps1 = $this->DIR_BONITA . '/' . $fileBat;
+        $this->file_ps1 = $this->DIR_CORREO . '/' . $fileBat;
 
         // valores por defecto
         if (empty($this->dir_base_win)) {
-            $this->dir_base_win = "m:\\z-trasvase\\SalidaBonita";
+            $this->dir_base_win = "m:\\z-trasvase\\tramity";
         }
         if (empty($this->dir_rdp_win)) {
             $any = date('Y');
