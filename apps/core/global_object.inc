@@ -29,6 +29,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     // Also set the session cookie timeout
     ini_set("session.cookie_lifetime", $timeout);
 
+    $domain = ConfigGlobal::getDomain();
     // Now start the session
     session_set_cookie_params([
         'lifetime' => $maxlifetime,

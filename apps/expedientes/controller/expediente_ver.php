@@ -107,7 +107,7 @@ if ($vista_dl) {
 } else {
     $a_visibilidad = $oVisibilidad->getArrayVisibilidadCtr();
 }
-$visibilidad_txt = $a_visibilidad[$visibilidad];
+$visibilidad_txt = $a_visibilidad[$visibilidad]?? _("No tiene visibilidad definida");
 
 $a_vida = $oExpediente->getArrayVida();
 $vida = $oExpediente->getVida();

@@ -97,7 +97,7 @@ if (!isset($_SESSION['session_auth'])) {
         }
 
         if (($oDBSt->execute($aWhere)) === false) {
-            $sClauError = 'loguin_obj.execute';
+            $sClauError = 'login_obj.execute';
             $_SESSION['oGestorErrores']->addErrorAppLastError($oDB, $sClauError, __LINE__, __FILE__);
             return false;
         }
@@ -246,7 +246,7 @@ if (!isset($_SESSION['session_auth'])) {
             logout($idioma, $esquema, $error);
             die();
         }
-    } else { // el primer cop o temps expirat
+    } else { // la primera vez o tiempo agotado
         $error = '';
         $idioma = 'ca';
         cambiar_idioma($idioma);
@@ -263,7 +263,7 @@ if (!isset($_SESSION['session_auth'])) {
 } else {
     // ya esta registrado;
     /**
-     *  parece que los cambios con setlocale son para el proceso,
+     *  parece que los cambios con setLocale son para el proceso,
      *  no para session ni multithreaded, por tanto hay que hacerlo cada vez
      *  para la traducción
      */

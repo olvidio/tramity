@@ -502,6 +502,10 @@ class Etherpad extends Client
             preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $host, $regs);
             $domain = $regs['domain'];
 
+            $secure = true;
+            if (str_contains(ServerConf::SERVIDOR, 'docker')) {
+                $secure = false;
+            }
             setcookie("sessionID", $lista_sesiones, [
                 'expires' => time() + 8000,
                 'path' => '/',
