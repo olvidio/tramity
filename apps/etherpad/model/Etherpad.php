@@ -55,6 +55,7 @@ class Etherpad extends Client
 
         // depende si es en el portátil o en la dl.
         $this->api_version = $this->api_version_dlb;
+        $this->apikey = $this->apikey_dlb;
         if (str_contains(ServerConf::SERVIDOR, 'docker')) {
             $this->apikey = $this->apikey_local;
             $this->api_version = $this->api_version_docker;
