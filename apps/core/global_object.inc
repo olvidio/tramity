@@ -21,6 +21,7 @@ function logout($idioma, $esquema, $error)
 if (session_status() !== PHP_SESSION_ACTIVE) {
     // Configure timeout to 30 minutes
     $timeout = 1800;
+    $maxlifetime = time() + $timeout;
 
     // Set the maxlifetime of session
     ini_set("session.gc_maxlifetime", $timeout);
@@ -29,22 +30,39 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     ini_set("session.cookie_lifetime", $timeout);
 
     // Now start the session
+    session_set_cookie_params([
+        'lifetime' => $maxlifetime,
+        'Secure' => false,
+        'HttpOnly' => true,
+        'SameSite' => 'Lax',
+        'Domain' => $domain
+        ]);
     session_start();
 
-    // Update the timeout of session cookie
-    $sessionName = session_name();
-    //$domain = ConfigGlobal::getDomain();
-    $domain = ConfigGlobal::getHost();
 
-    if (isset($_COOKIE[$sessionName])) {
-        setcookie($sessionName, $_COOKIE[$sessionName], [
-            'expires' => time() + $timeout,
-            'path' => '/',
-            'sameSite' => 'Strict',
-            'Secure' => 'Secure',
-            'domain' => $domain,
-        ]);
+    /*
+// Update the timeout of session cookie
+$sessionName = session_name();
+$domain = ConfigGlobal::getDomain();
+//$domain = ConfigGlobal::getHost();
+
+if (isset($_COOKIE[$sessionName])) {
+    $rta = setcookie($sessionName, $_COOKIE[$sessionName], [
+        'expires' => time() + $timeout,
+        'path' => '/',
+        'SameSite' => 'Strict',
+        'Secure' => 'false',
+        'domain' => $domain,
+    ]);
+        $rta = setcookie($sessionName, $_COOKIE[$sessionName], [
+            'expires' => time() + $timeout
+                ]
+        );
+        if ($rta === FALSE ){
+            exit ("Nopuedo cambiar la cookie");
+        }
     }
+    */
 }
 
 require_once('func_tablas.php');

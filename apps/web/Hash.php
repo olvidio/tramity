@@ -125,7 +125,7 @@ class Hash
             if (strpos($sPath, ConfigGlobal::$web_path) === false) {
                 $sPath = ConfigGlobal::getWeb() . $sPath;
             } else {
-                $sPath = ConfigGlobal::getWeb() . ConfigGlobal::getWebPort() . $sPath;
+                $sPath = ConfigGlobal::getWeb() . $sPath;
             }
         }
         return $sPath;

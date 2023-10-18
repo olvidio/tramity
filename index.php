@@ -29,10 +29,15 @@ if (isset($_REQUEST['logout']) && $_REQUEST['logout'] === 'si') {
     // Nota: ¡Esto destruirá la sesión, y no la información de la sesión!
     if (ini_get("session.use_cookies")) {
         $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000,
-            $params["path"], $params["domain"],
-            $params["secure"], $params["httponly"]
+        $arr_cookie_options = array(
+            'Expires' => time() - 42000,
+            'Path' => $params["path"],
+            'Domain' => $params["domain"],
+            'Secure' => $params["secure"],
+            'HttpOnly' => true,
+            'SameSite' => 'None' // None || Lax  || Strict
         );
+        setcookie(session_name(), '', $arr_cookie_options);
     }
     // Finalmente, destruir la sesión.
     session_regenerate_id();
@@ -114,7 +119,7 @@ $_SESSION['session_auth']['a_roles'] = array_unique($a_roles_posibles);
         // Cada 5 seg. Comprobar que la sesión php no ha finalizado, para volver al login de entrada
         // Si es en el portátil no lo compruebo, para que haya menos cosas en los logs.
         <?php
-        if (ConfigGlobal::SERVIDOR !== 'tramity.local') {
+        if (!(str_contains(ServerConf::SERVIDOR, 'docker') || ServerConf::SERVIDOR === 'tramity.local')) {
             echo "setInterval( fnjs_is_active, 5000);";
         }
         ?>

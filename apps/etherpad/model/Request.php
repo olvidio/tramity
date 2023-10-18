@@ -11,14 +11,6 @@ require_once(ConfigGlobal::$dir_libs . '/vendor/autoload.php');
 class Request
 {
     /**
-     * @var string|null
-     */
-    private $apiKey = null;
-    /**
-     * @var string|null
-     */
-    private $url = null;
-    /**
      * @var string
      */
     private $method;
@@ -26,6 +18,8 @@ class Request
      * @var array
      */
     private $args;
+    private string $url;
+    private string $apiKey;
 
     /**
      * @param string $url
@@ -80,9 +74,12 @@ class Request
     {
         $existingPath = parse_url($this->url, PHP_URL_PATH);
 
+        $oEtherpadClient = new Etherpad();
+        $api_version = $oEtherpadClient->getApiVersion();
+
         return $existingPath . sprintf(
                 '/api/%s/%s',
-                Client::API_VERSION,
+                $api_version,
                 $this->method
             );
     }

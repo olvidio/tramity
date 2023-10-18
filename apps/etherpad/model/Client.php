@@ -3,6 +3,8 @@
 namespace etherpad\model;
 
 
+use core\ConfigGlobal;
+
 /**
  * Class Client
  *
@@ -60,22 +62,37 @@ namespace etherpad\model;
  */
 class Client
 {
-    const API_VERSION = '1.2.15';
+    /**
+     * Para saber la versión que está corriendo en el servidor, consultar:
+     *      http://etherpad.docker:9001/api
+     *
+     * @var string|null
+     */
+    protected $api_version = null;
+    protected $api_version_docker =  '1.3.0';
+    protected $api_version_local = '1.2.15';
+    protected $api_version_dlb = '1.2.15';
+
+    /**
+     * Se encuentra en el servidor etherpad en;
+     * tramity:/opt/etherpad/etherpad-lite/APIKEY.txt
+     *
+     * @var string|null
+     */
+    protected $apikey = null;
+    protected $apikey_local = '255a27fbe84ca4f15720a75ed58c603f2f325146eda850741bec357b0942e546';
+    protected $apikey_dlb = '7114153c4b981f57380f3bdb65444daed5e15efca3ec54ffa48f66270f927b50';
 
     /**
      * @var string|null
      */
-    private $apikey = null;
-    /**
-     * @var string|null
-     */
-    private $url = null;
+    protected $url = null;
 
     /**
      * @param string $apikey
      * @param string $url
      */
-    public function __construct(string $apikey, string $url = 'http://localhost:9001')
+    public function __construct(string $apikey, string $url)
     {
         $this->apikey = $apikey;
         $this->url = $url;

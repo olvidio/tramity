@@ -52,6 +52,11 @@ if (empty($esquema_web)) {
     $servername = $_SERVER['HTTP_HOST'];
     $host = '.' . ServerConf::SERVIDOR;
     $esquema_web = str_replace($host, '', $servername);
+    // Para el docker, quito el puerto (:8000)
+    $pos = strpos($esquema_web, ':');
+    if ($pos !== false) {
+        $esquema_web = substr($esquema_web, 0, $pos);
+    }
 }
 
 

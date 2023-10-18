@@ -21,7 +21,11 @@ class ConfigGlobal extends ServerConf
         $host = $_SERVER['HTTP_HOST'];
         preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $host, $regs);
 
-        //return $regs['domain'];
+        // Para el docker, quito el puerto (:8000)
+        $pos = strpos($host, ':');
+        if ($pos !== false) {
+            $host = substr($host, 0, $pos);
+        }
         return $host;
     }
 
@@ -29,7 +33,13 @@ class ConfigGlobal extends ServerConf
     {
         $servername = $_SERVER['HTTP_HOST'];
         $host = '.' . self::SERVIDOR;
-        return str_replace($host, '', $servername);
+        $esquema_web = str_replace($host, '', $servername);
+        // Para el docker, quito el puerto (:8000)
+        $pos = strpos($esquema_web, ':');
+        if ($pos !== false) {
+            $esquema_web = substr($esquema_web, 0, $pos);
+        }
+        return $esquema_web;
     }
 
     public static function getWeb_NodeScripts()
@@ -39,13 +49,17 @@ class ConfigGlobal extends ServerConf
 
     public static function getWeb()
     {
-        return '//' . $_SERVER['HTTP_HOST'] . self::getWebPort() . self::getWebPath();
+        // parece que el host ya lleva el puerto
+        //return '//' . $_SERVER['HTTP_HOST'] . self::getWebPort() . self::getWebPath();
+        return '//' . $_SERVER['HTTP_HOST'] . self::getWebPath();
     }
 
+    /*
     public static function getWebPort()
     {
         return self::$web_port;
     }
+    */
 
     public static function getWebPath()
     {
@@ -165,6 +179,7 @@ class ConfigGlobal extends ServerConf
     {
         return $_SESSION['session_auth']['mail'];
     }
+
     // ----------- Entidad -------------------
     public static function nombreEntidad()
     {

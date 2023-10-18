@@ -3,6 +3,7 @@
 namespace etherpad\model;
 
 use core\ConfigGlobal;
+use core\ServerConf;
 use DOMDocument;
 use DOMXPath;
 use Mpdf\HTMLParserMode;
@@ -27,20 +28,6 @@ class Etherpad extends Client
     public const ID_ESCRITO = 'escrito';
     public const ID_EXPEDIENTE = 'expediente';
     public const ID_PLANTILLA = 'plantilla';
-
-    /**
-     * Se encuentra en el servidor etherpad en;
-     * tramity:/opt/etherpad/etherpad-lite/APIKEY.txt
-     *
-     * @var string|null
-     */
-    private $apikey = '255a27fbe84ca4f15720a75ed58c603f2f325146eda850741bec357b0942e546';
-    private $apikey_dlb = '7114153c4b981f57380f3bdb65444daed5e15efca3ec54ffa48f66270f927b50';
-
-    /**
-     * @var string|null
-     */
-    private $url = null;
 
     private $id_usuario = null;
     private $nom_usuario = null;
@@ -67,13 +54,17 @@ class Etherpad extends Client
         $this->setNom_usuario($nom_usuario);
 
         // depende si es en el portátil o en la dl.
-        if (ConfigGlobal::SERVIDOR === 'tramity.local') {
-            $apikey = $this->apikey;
-        } else {
-            $apikey = $this->apikey_dlb;
+        $this->api_version = $this->api_version_dlb;
+        if (str_contains(ServerConf::SERVIDOR, 'docker')) {
+            $this->apikey = $this->apikey_local;
+            $this->api_version = $this->api_version_docker;
+        }
+        if ( ServerConf::SERVIDOR === 'tramity.local') {
+            $this->apikey = $this->apikey_local;
+            $this->api_version = $this->api_version_dlb;
         }
 
-        parent::__construct($apikey, $this->url);
+        parent::__construct($this->apikey, $this->url);
     }
 
     public function setId($tipo_id, $id, $sigla = '')
@@ -386,6 +377,9 @@ class Etherpad extends Client
             // Cuando el usuario entra por primera vez da NULL
             if (!empty($data)) {
                 foreach ($data as $sessionID => $aData) {
+                    if ($aData === NULL) {
+                        continue;
+                    }
                     $group = $aData['groupID'];
                     $author = $aData['authorID'];
                     $valid = $aData['validUntil'];
@@ -404,7 +398,7 @@ class Etherpad extends Client
             //$this->mostrar_error($lista);
         }
 
-        // Si no está borrón y cuenta neuva.
+        // Si no está borrón y cuenta nueva.
         $this->deleteAllSessions($authorID);
 
         /* Example returns:
@@ -471,7 +465,7 @@ class Etherpad extends Client
         $authorID = $this->getAuthorId();
 
         //$sessionID = (!isset($_COOKIE["sessionID"]))? "" : $_COOKIE["sessionID"];
-        // sessiones abiertas:
+        // sesiones abiertas:
         $lista_sesiones = '';
         $rta = $this->listSessionsOfAuthor($authorID);
         if ($rta->getCode() == 0) {
@@ -509,12 +503,12 @@ class Etherpad extends Client
             $domain = $regs['domain'];
 
             setcookie("sessionID", $lista_sesiones, [
-                //'expires' => time() + (86400 * 30),
-                'expires' => time() + (3600),
+                'expires' => time() + 8000,
                 'path' => '/',
-                'sameSite' => 'Strict',
-                'Secure' => 'Secure',
-                'domain' => $domain,
+                'Secure' => $secure, // solo si es https (en docker es http)
+                'HttpOnly' => false, // OJO tiene que ser false, sino no abre las ventanas del pad
+                'SameSite' => 'Strict',
+                'Domain' => $domain
             ]);
         }
     }
@@ -682,6 +676,11 @@ class Etherpad extends Client
 
     }
     /*----------------------------------------------------------------------------------------*/
+
+    public function getApiVersion(): string
+    {
+        return $this->api_version;
+    }
 
     /**
      * @return string $url
