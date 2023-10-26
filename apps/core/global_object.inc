@@ -66,6 +66,7 @@ if (isset($_COOKIE[$sessionName])) {
     */
 }
 
+
 require_once('func_tablas.php');
 require_once('func_reg.php');
 

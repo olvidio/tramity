@@ -12,7 +12,7 @@ use usuarios\model\Categoria;
 use web\DateTimeLocal;
 use web\Protocolo;
 
-require_once(ConfigGlobal::$dir_libs . '/vendor/autoload.php');
+require_once(ConfigGlobal::dir_libs() . '/vendor/autoload.php');
 
 class EntradaProvisionalFromPdf
 {

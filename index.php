@@ -120,7 +120,7 @@ $_SESSION['session_auth']['a_roles'] = array_unique($a_roles_posibles);
         // Cada 5 seg. Comprobar que la sesión php no ha finalizado, para volver al login de entrada
         // Si es en el portátil no lo compruebo, para que haya menos cosas en los logs.
         <?php
-        if (!(str_contains(ServerConf::SERVIDOR, 'docker') || ServerConf::SERVIDOR === 'tramity.local')) {
+        if (!(str_contains(ServerConf::getSERVIDOR(), 'docker') || ServerConf::getSERVIDOR() === 'tramity.local')) {
             echo "setInterval( fnjs_is_active, 5000);";
         }
         ?>
@@ -163,12 +163,12 @@ $_SESSION['session_auth']['a_roles'] = array_unique($a_roles_posibles);
             // De la base. Puede ser un directorio o una web:
             //   - cambio el directorio físico por su correspondiente web.
             //   - quito el documento.
-            if (base.match(/^<?= addcslashes(ConfigGlobal::$directorio, "/") ?>/)) { // si es un directorio
-                base = base.replace('<?= ConfigGlobal::$directorio ?>', '');
+            if (base.match(/^<?= addcslashes(ConfigGlobal::directorio(), "/") ?>/)) { // si es un directorio
+                base = base.replace('<?= ConfigGlobal::directorio() ?>', '');
                 inicio = protocol + '<?= ConfigGlobal::getWeb() ?>';
             } else {
-                if (base.match(/^<?= addcslashes(ConfigGlobal::$dir_web, "/") ?>/)) {
-                    base = base.replace('<?= ConfigGlobal::$dir_web ?>', '');
+                if (base.match(/^<?= addcslashes(ConfigGlobal::dir_web(), "/") ?>/)) {
+                    base = base.replace('<?= ConfigGlobal::dir_web() ?>', '');
                     inicio = protocol + '<?= ConfigGlobal::getWeb() ?>';
                 }
             }

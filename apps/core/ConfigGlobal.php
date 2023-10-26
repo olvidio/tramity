@@ -32,7 +32,7 @@ class ConfigGlobal extends ServerConf
     public static function getEsquema()
     {
         $servername = $_SERVER['HTTP_HOST'];
-        $host = '.' . self::SERVIDOR;
+        $host = '.' . self::getSERVIDOR();
         $esquema_web = str_replace($host, '', $servername);
         // Para el docker, quito el puerto (:8000)
         $pos = strpos($esquema_web, ':');
@@ -78,11 +78,6 @@ class ConfigGlobal extends ServerConf
     public static function getWeb_icons()
     {
         return self::getWeb() . '/images';
-    }
-
-    public static function is_debug_mode()
-    {
-        return self::$debug;
     }
 
     /**

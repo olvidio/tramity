@@ -34,7 +34,7 @@ class GestorErrores
      */
     function __construct()
     {
-        $this->filename = ConfigGlobal::$directorio . '/log/errores.log';
+        $this->filename = ConfigGlobal::directorio() . '/log/errores.log';
     }
 
     /* MÉTODOS PÚBLICOS ----------------------------------------------------------*/
@@ -146,7 +146,7 @@ class GestorErrores
     function addErrorSec($err, $sClauError, $line, $file)
     {
         $filename = $this->filename;
-        $this->filename = ConfigGlobal::$directorio . '/log/security.log';
+        $this->filename = ConfigGlobal::directorio() . '/log/security.log';
         $this->addError($err, $sClauError, $line, $file);
         $this->filename = $filename;
     }

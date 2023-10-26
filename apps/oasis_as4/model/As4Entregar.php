@@ -321,11 +321,11 @@ class As4Entregar extends As4CollaborationInfo
         $id_lugar = $oProtDst->id_lugar;
         $num = null;
         $any = '';
-        if (property_exists($oProtDst, 'prot_num')) {
-            $num = $oProtDst->prot_num;
+        if (property_exists($oProtDst, 'num')) {
+            $num = $oProtDst->num;
         }
-        if (property_exists($oProtDst, 'prot_any')) {
-            $any = empty($oProtDst->prot_num)? '' : $oProtDst->prot_num;
+        if (property_exists($oProtDst, 'any')) {
+            $any = empty($oProtDst->num)? '' : $oProtDst->any;
         }
 
         if (!empty($id_lugar) && !empty($num) && !empty($any)) {

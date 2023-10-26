@@ -65,7 +65,7 @@ $estado_txt = $a_estado[$estado];
 // Valores posibles para la firma
 $gesFirmas = new GestorFirma();
 $oFirma = new Firma();
-$a_firmas = [];
+$a_posibles_valores_firma = [];
 $rango = 'voto';
 if (ConfigGlobal::role_actual() === 'vcd') {
     // Ver cual toca
@@ -92,7 +92,7 @@ if (ConfigGlobal::role_actual() === 'vcd') {
 foreach ($oFirma->getArrayValor($rango) as $key => $valor) {
     $a_voto['id'] = $key;
     $a_voto['valor'] = $valor;
-    $a_firmas[] = $a_voto;
+    $a_posibles_valores_firma[] = $a_voto;
 }
 
 $prioridad = $oExpediente->getPrioridad();
@@ -258,7 +258,7 @@ $a_campos = [
     'oEscritoLista' => $oEscritoLista,
     //'a_acciones' => $a_acciones,
     'firma_txt' => $firma_txt,
-    'a_firmas' => $a_firmas,
+    'a_posibles_valores_firma' => $a_posibles_valores_firma,
     'base_url' => $base_url,
     'aclaracion' => $aclaracion,
     'aclaracion_event' => $aclaracion_event,

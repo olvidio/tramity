@@ -19,10 +19,10 @@ class ConfigDB
 
     public function setDataBase($database)
     {
-        if (ConfigGlobal::WEBDIR == 'pruebas') {
+        if (ConfigGlobal::getWEBDIR() === 'pruebas') {
             $database = 'pruebas-' . $database;
         }
-        $this->data = include ConfigGlobal::DIR_PWD . '/' . $database . '.inc';
+        $this->data = include ConfigGlobal::getDIR_PWD() . '/' . $database . '.inc';
     }
 
     public function getEsquema($esquema)
@@ -50,22 +50,22 @@ class ConfigDB
 
     public function addEsquemaProduccion($database, $esquema, $esquema_pwd)
     {
-        $this->data = include ConfigGlobal::DIR_PWD . '/' . $database . '.inc';
+        $this->data = include ConfigGlobal::getDIR_PWD() . '/' . $database . '.inc';
 
         $this->data[$esquema] = ['user' => $esquema, 'password' => $esquema_pwd];
 
-        $filename = ConfigGlobal::DIR_PWD . '/' . $database . '.inc';
+        $filename = ConfigGlobal::getDIR_PWD() . '/' . $database . '.inc';
         file_put_contents($filename, '<?php return ' . var_export($this->data, true) . ' ;');
     }
 
     public function addEsquemaPruebas($database, $esquema, $esquema_pwd)
     {
         $database = 'pruebas-' . $database;
-        $this->data = include ConfigGlobal::DIR_PWD . '/' . $database . '.inc';
+        $this->data = include ConfigGlobal::getDIR_PWD() . '/' . $database . '.inc';
 
         $this->data[$esquema] = ['user' => $esquema, 'password' => $esquema_pwd];
 
-        $filename_pruebas = ConfigGlobal::DIR_PWD . '/pruebas-' . $database . '.inc';
+        $filename_pruebas = ConfigGlobal::getDIR_PWD() . '/pruebas-' . $database . '.inc';
         file_put_contents($filename_pruebas, '<?php return ' . var_export($this->data, true) . ' ;');
     }
 }

@@ -14,7 +14,7 @@ class Pid
     {
         // Si he lanzado el proceso automáticamente, escribo el id del proceso.
         // si ya existe un proceso en marcha, salgo del proceso.
-        $this->filename = ConfigGlobal::$directorio . "/log/descargas.pid";
+        $this->filename = ConfigGlobal::getDIR() . "/log/descargas.pid";
 
     }
 

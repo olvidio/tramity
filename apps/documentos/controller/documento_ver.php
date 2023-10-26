@@ -16,11 +16,10 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 // porque también se puede abrir en una ventana nueva, y entonces se llama por GET
-$Q_method = (string)filter_input(INPUT_SERVER, 'REQUEST_METHOD');
-if ($Q_method === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $Q_id_doc = (integer)filter_input(INPUT_POST, 'id_doc');
 }
-if ($Q_method === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $Q_id_doc = (integer)filter_input(INPUT_GET, 'id_doc');
 }
 

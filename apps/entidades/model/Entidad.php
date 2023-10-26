@@ -250,7 +250,7 @@ class Entidad extends EntidadDB
 
     private function getDir()
     {
-        $this->sdir = empty($this->sdir) ? ConfigGlobal::$directorio . '/log/db' : $this->sdir;
+        $this->sdir = empty($this->sdir) ? ConfigGlobal::directorio() . '/log/db' : $this->sdir;
         return $this->sdir;
     }
 

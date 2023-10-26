@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 require_once("apps/core/global_header.inc");
 require_once("apps/core/global_object.inc");
-require_once(ConfigGlobal::$dir_libs . '/vendor/autoload.php');
+require_once(ConfigGlobal::dir_libs() . '/vendor/autoload.php');
 
 class TramityMail extends PHPMailer
 {

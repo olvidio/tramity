@@ -375,7 +375,7 @@ class GestorFirma extends core\ClaseGestor
                     $oUsuario = new Usuario(ConfigGlobal::mi_id_usuario());
                     $nom_usuario = $oUsuario->getNom_usuario();
                     $id_cargo = $oFirma->getId_cargo();
-                    $cargo = $aCargos[$id_cargo];
+                    $cargo = $aCargos[$id_cargo]?? sprintf(_("No encuentro el cargo id: %s"), $id_cargo);
                     $a_rec['class'] = "";
                     $a_rec['valor'] = $cargo;
                     if ($id_cargo === ConfigGlobal::role_id_cargo()) {

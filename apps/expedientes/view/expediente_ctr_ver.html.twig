@@ -45,7 +45,7 @@
                     <div class="mr">
                         <label class="form-label">{{ "voto"|trans|raw }}: </label>
                         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                            {% for row in a_firmas %}
+                            {% for row in a_posibles_valores_firma %}
                                 <input type="radio" class="btn-check" id="voto_{{ loop.index }}" name="voto_options"
                                        autocomplete="off" value="{{ row.id }}">
                                 <label class="btn btn-outline-primary"

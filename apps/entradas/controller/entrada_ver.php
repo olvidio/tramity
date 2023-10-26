@@ -19,15 +19,14 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 // porque también se puede abrir en una ventana nueva, y entonces se llama por GET
-$Qmethod = (string)filter_input(INPUT_SERVER, 'REQUEST_METHOD');
-if ($Qmethod === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // nuevo formato: id_entrada#comparida (compartida = boolean)
     $QQid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
     $a_entrada = explode('#', $QQid_entrada);
     $Qid_entrada = (int)$a_entrada[0];
     $Qcompartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 }
-if ($Qmethod === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $QQid_entrada = rawurldecode( (string)filter_input(INPUT_GET, 'id_entrada'));
     $a_entrada = explode('#', $QQid_entrada);
     $Qid_entrada = (int)$a_entrada[0];

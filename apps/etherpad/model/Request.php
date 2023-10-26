@@ -6,7 +6,7 @@ use core\ConfigGlobal;
 use GuzzleHttp\Client as HttpClient;
 use Psr\Http\Message\ResponseInterface;
 
-require_once(ConfigGlobal::$dir_libs . '/vendor/autoload.php');
+require_once(ConfigGlobal::dir_libs() . '/vendor/autoload.php');
 
 class Request
 {

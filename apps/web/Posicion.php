@@ -520,7 +520,7 @@ class Posicion
             $_error_txt .= "pagina2: $pagina<br>";
             $dire = getcwd();
             $_error_txt .= "dire: $dire<br>";
-            $path = str_replace(core\ConfigGlobal::$directorio, "", $dire);
+            $path = str_replace(core\ConfigGlobal::directorio(), "", $dire);
             $_error_txt .= "path: $path<br>";
             if (substr($path, -1) != '/') {
                 $path .= '/';
@@ -595,7 +595,7 @@ class Posicion
 
         $pagina = str_replace(core\ConfigGlobal::getWeb(), "", $pagina); //si la dirección ya es absoluta, la quito
         $dire = getcwd();
-        $path = str_replace(core\ConfigGlobal::$directorio, "", $dire);
+        $path = str_replace(core\ConfigGlobal::directorio(), "", $dire);
         if (substr($path, -1) != '/') {
             $path .= '/';
         } // me aseguro de que acabe en "/"

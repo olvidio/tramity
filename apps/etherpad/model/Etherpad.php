@@ -56,11 +56,11 @@ class Etherpad extends Client
         // depende si es en el portátil o en la dl.
         $this->api_version = $this->api_version_dlb;
         $this->apikey = $this->apikey_dlb;
-        if (str_contains(ServerConf::SERVIDOR, 'docker')) {
+        if (str_contains(ServerConf::getSERVIDOR(), 'docker')) {
             $this->apikey = $this->apikey_local;
             $this->api_version = $this->api_version_docker;
         }
-        if ( ServerConf::SERVIDOR === 'tramity.local') {
+        if ( ServerConf::getSERVIDOR() === 'tramity.local') {
             $this->apikey = $this->apikey_local;
             $this->api_version = $this->api_version_dlb;
         }
@@ -499,12 +499,12 @@ class Etherpad extends Client
             // Coger el nombre del dominio para que sirva para tramity.red.local y etherpad.red.local
             //const SERVIDOR = 'tramity.red.local';
             $regs = [];
-            $host = ConfigGlobal::SERVIDOR;
+            $host = ConfigGlobal::getSERVIDOR();
             preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $host, $regs);
             $domain = $regs['domain'];
 
             $secure = true;
-            if (str_contains(ServerConf::SERVIDOR, 'docker')) {
+            if (str_contains(ServerConf::getSERVIDOR(), 'docker')) {
                 $secure = false;
             }
             setcookie("sessionID", $lista_sesiones, [
@@ -598,7 +598,7 @@ class Etherpad extends Client
         $html = str_replace("</tbody>", "", $txt2);
 
         // convert to PDF
-        require_once(ConfigGlobal::$dir_libs . '/vendor/autoload.php');
+        require_once(ConfigGlobal::dir_libs() . '/vendor/autoload.php');
 
         if (!empty($a_header)) {
             $header_html = '<table class="header" width="100%">';

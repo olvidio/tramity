@@ -9,7 +9,7 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 
 
-require_once(ConfigGlobal::$dir_libs . '/vendor/autoload.php');
+require_once(ConfigGlobal::dir_libs() . '/vendor/autoload.php');
 
 /**
  *

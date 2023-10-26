@@ -46,11 +46,12 @@ function posibles_esquemas()
 }
 
 $esquema_web = getenv('ESQUEMA');
+
 // Si el esquema no se pasa por directorio de la URL,
 // está en el nombre del servidor:
 if (empty($esquema_web)) {
     $servername = $_SERVER['HTTP_HOST'];
-    $host = '.' . ServerConf::SERVIDOR;
+    $host = '.' . ServerConf::getSERVIDOR();
     $esquema_web = str_replace($host, '', $servername);
     // Para el docker, quito el puerto (:8000)
     $pos = strpos($esquema_web, ':');

@@ -225,7 +225,7 @@ function cambiar_idioma($idioma = '')
     putenv("LC_ALL=$idioma");
     putenv("LANG=$idioma");
 
-    bindtextdomain($domain, ConfigGlobal::$dir_languages);
+    bindtextdomain($domain, ConfigGlobal::dir_languages());
     textdomain($domain);
     bind_textdomain_codeset($domain, 'UTF-8');
 }

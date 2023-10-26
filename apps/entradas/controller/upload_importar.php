@@ -108,7 +108,7 @@ function upload(): array
             if ($oEntradaAdjunto->DBGuardar() !== FALSE) {
                 $id_item = $oEntradaAdjunto->getId_item();
             }
-            $path_temp = ConfigGlobal::$directorio . '/log/entradas/';
+            $path_temp = ConfigGlobal::directorio() . '/log/entradas/';
             if (!file_exists($path_temp)) {
                 if (!mkdir($path_temp, 0777, true) && !is_dir($path_temp)) {
                     throw new RuntimeException(sprintf('Directory "%s" was not created', $path_temp));

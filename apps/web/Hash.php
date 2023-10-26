@@ -3,6 +3,7 @@
 namespace web;
 
 use core\ConfigGlobal;
+use core\ServerConf;
 
 class Hash
 {
@@ -122,7 +123,7 @@ class Hash
     {
         $sPath = (substr($sPath, 0, 1) == '/') ? $sPath : '/' . $sPath;
         if (strpos($sPath, $_SERVER["SERVER_NAME"]) === false) {
-            if (strpos($sPath, ConfigGlobal::$web_path) === false) {
+            if (strpos($sPath, ServerConf::web_path()) === false) {
                 $sPath = ConfigGlobal::getWeb() . $sPath;
             } else {
                 $sPath = ConfigGlobal::getWeb() . $sPath;
@@ -405,7 +406,7 @@ class Hash
                     // Finalmente, destruir la sesión.
                     session_regenerate_id();
                     session_destroy();
-                    $pagina_exit = "/" . ConfigGlobal::WEBDIR . "/index.php";
+                    $pagina_exit = "/" . ConfigGlobal::getWEBDIR() . "/index.php";
                     header("Location: $pagina_exit");
                     die();
                 }
