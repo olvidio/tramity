@@ -460,7 +460,7 @@ switch ($Q_que) {
             $perm_detalle = $oPermisoRegistro->permiso_detalle($oEntrada, 'detalle');
             if ($oEntrada->getModo_entrada() === Entrada::MODO_PROVISIONAL) {
                 // borro el fichero pdf provisional, si existe
-                $filename_pdf = ConfigGlobal::DIR.'/log/entradas/entrada_' . $Q_id_entrada . '.pdf';
+                $filename_pdf = ConfigGlobal::getDIR().'/log/entradas/entrada_' . $Q_id_entrada . '.pdf';
                 if (file_exists($filename_pdf)) {
                     unlink($filename_pdf);
                 }

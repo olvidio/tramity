@@ -540,7 +540,7 @@ switch ($Q_que) {
             // si es provisional, borrar el pdf
             if ($oEntrada->getModo_entrada() === Entrada::MODO_PROVISIONAL) {
                 // borro el fichero pdf provisional
-                $filename_pdf = ConfigGlobal::DIR . '/log/entradas/entrada_' . $Q_id_entrada . '.pdf';
+                $filename_pdf = ConfigGlobal::getDIR() . '/log/entradas/entrada_' . $Q_id_entrada . '.pdf';
                 if (file_exists($filename_pdf)) {
                     unlink($filename_pdf);
                 } else {

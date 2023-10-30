@@ -865,7 +865,7 @@ $txt .= '
 ';
 
 /* ESCRIURE LA CLASSSE ------------------------------------------------ */
-$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/' . $Q_clase . '.php';
+$filename = ConfigGlobal::getDIR() . '/apps/' . $grupo . '/model/entity/' . $Q_clase . '.php';
 
 if (!$handle = fopen($filename, 'w')) {
     echo "Cannot open file ($filename)";
@@ -1023,7 +1023,7 @@ $txt2 .= '
 }
 ';
 /* ESCRIURE LA CLASSSE ------------------------------------------------ */
-$filename = ConfigGlobal::DIR . '/apps/' . $grupo . '/model/entity/Gestor' . $Q_clase . '.php';
+$filename = ConfigGlobal::getDIR() . '/apps/' . $grupo . '/model/entity/Gestor' . $Q_clase . '.php';
 
 
 if (!$handle = fopen($filename, 'w')) {
