@@ -521,7 +521,7 @@ class Enviar
         foreach ($this->a_adjuntos as $adjunto_filename => $escrito_txt) {
             $adjunto_filename_iso = mb_convert_encoding($adjunto_filename, 'ISO-8859-1', 'UTF-8');
             $filename_ext = $this->filename . '-' . $adjunto_filename;
-            $filename_iso_ext = $this->filename . '-' . $adjunto_filename_iso;
+            $filename_iso_ext = $this->filename_iso . '-' . $adjunto_filename_iso;
             $full_filename_iso = $DIR_CORREO . '/' . $filename_iso_ext;
             file_put_contents($full_filename_iso, $escrito_txt);
             //anotar lineas en ps1 (power shell de windows)
