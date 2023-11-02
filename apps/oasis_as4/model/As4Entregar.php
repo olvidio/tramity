@@ -337,6 +337,7 @@ class As4Entregar extends As4CollaborationInfo
             $gesEscritos = new GestorEscritoEntidad($siglaDestino);
             $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
             foreach ($cEscritos as $oEscrito) {
+                if ($oEscrito->DBCargar() === FALSE) { continue; }
                 $this->asunto_secretaria = $oEscrito->getAsunto();
                 $this->detalle = $oEscrito->getDetalle();
                 $this->categoria = $oEscrito->getCategoria();

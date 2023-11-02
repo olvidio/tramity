@@ -523,15 +523,21 @@ class Hash
 
     private function realFullUrl()
     {
-        if (empty($_SERVER["SERVER_PORT"])) {
-            $port = '';
+        /*
+         *  El HTTP_HOST ya lleva el puerto, Pero si el nameserver es la ip NO
+         *
+         */
+        if ($_SERVER['SERVER_ADDR'] === $_SERVER['SERVER_NAME'] ) {
+            if (empty($_SERVER["SERVER_PORT"])) {
+                $port = '';
+            } else {
+                $port = ':' . $_SERVER["SERVER_PORT"];
+            }
+
+            $sUrl = '//' . $_SERVER["SERVER_NAME"] . $port . $_SERVER["SCRIPT_NAME"];
         } else {
-            $port = ':' . $_SERVER["SERVER_PORT"];
+            $sUrl = '//' . $_SERVER["HTTP_HOST"] . $_SERVER["SCRIPT_NAME"];
         }
-
-        $sUrl = '//' . $_SERVER["SERVER_NAME"] . $port . $_SERVER["SCRIPT_NAME"];
-
-        return $sUrl;
     }
 
     /**
