@@ -910,8 +910,13 @@ switch ($Q_que) {
         }
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
-        echo json_encode($jsondata, JSON_THROW_ON_ERROR);
-        exit();
+        try {
+            echo json_encode($jsondata, JSON_THROW_ON_ERROR |JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+        } catch (JsonException $e) {
+            $msg = $e->getMessage(); // like json_last_error_msg()
+            exit ($msg);
+        }
+    exit();
     case 'cambio_tramite':
         $oExpediente = new Expediente($Q_id_expediente);
         if ($oExpediente->DBCargar() === FALSE) {
