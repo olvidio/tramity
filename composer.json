@@ -15,8 +15,7 @@
     "ext-libxml": "*",
     "ext-mailparse": "*",
     "smalot/pdfparser": "^2.3",
-    "ext-intl": "*"
-  },
-  "require-dev": {
+    "ext-intl": "*",
+    "symfony/http-foundation": "^6.3"
   }
 }

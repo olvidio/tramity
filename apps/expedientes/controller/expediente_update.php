@@ -10,6 +10,8 @@ use expedientes\model\Expediente;
 use expedientes\model\GestorExpediente;
 use lugares\model\entity\GestorLugar;
 use pendientes\model\Pendiente;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use tramites\model\entity\GestorTramiteCargo;
@@ -903,13 +905,25 @@ switch ($Q_que) {
             $jsondata['mensaje'] = $error_txt;
         } else {
             $jsondata['success'] = TRUE;
+            $jsondata['mensaje'] = 'hola';
             $jsondata['id_expediente'] = $id_expediente;
             $a_cosas = ['id_expediente' => $id_expediente, 'filtro' => $Q_filtro];
             $pagina_mod = web\Hash::link('apps/expedientes/controller/expediente_form.php?' . http_build_query($a_cosas));
             $jsondata['pagina_mod'] = $pagina_mod;
         }
+        $resonse = new JsonResponse(
+            $jsondata,
+            status: Response::HTTP_CREATED
+        );
+        $resonse->send();
+        die();
+/*
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');
+           while (ob_get_level()) {
+                ob_end_clean();
+            }
+            flush();
         try {
             echo json_encode($jsondata, JSON_THROW_ON_ERROR |JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
         } catch (JsonException $e) {
@@ -917,6 +931,7 @@ switch ($Q_que) {
             exit ($msg);
         }
     exit();
+*/
     case 'cambio_tramite':
         $oExpediente = new Expediente($Q_id_expediente);
         if ($oExpediente->DBCargar() === FALSE) {

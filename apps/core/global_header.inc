@@ -34,3 +34,7 @@ namespace tramity\apps {
     //permisos/login_inc
 
 }
+
+namespace tramity {
+    require(__DIR__ . "/../../vendor/autoload.php");
+}
