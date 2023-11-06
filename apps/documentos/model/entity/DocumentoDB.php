@@ -589,7 +589,7 @@ class DocumentoDB extends core\ClasePropiedades
         if (!isset($this->documento) && !$this->bLoaded) {
             $this->DBCargar();
         }
-        return hex2bin($this->documento);
+        return hex2bin($this->documento?? '');
     }
 
     /**
@@ -598,7 +598,7 @@ class DocumentoDB extends core\ClasePropiedades
     public function setDocumento(?string $documento = ''): void
     {
         // Escape the binary data
-        $escaped = bin2hex($documento);
+        $escaped = bin2hex($documento?? '');
         $this->documento = $escaped;
     }
 

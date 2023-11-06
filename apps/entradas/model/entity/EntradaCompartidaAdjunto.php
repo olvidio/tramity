@@ -423,7 +423,7 @@ class EntradaCompartidaAdjunto extends core\ClasePropiedades
     function setAdjunto($adjunto = '')
     {
         // Escape the binary data
-        $escaped = bin2hex($adjunto);
+        $escaped = bin2hex($adjunto?? '');
         $this->adjunto = $escaped;
     }
 

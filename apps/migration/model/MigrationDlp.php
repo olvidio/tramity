@@ -619,7 +619,7 @@ class MigrationDlp
                     $fp = fopen($nombre_fichero, 'rb');
                     $contenido_doc = fread($fp, filesize($nombre_fichero));
                     // Escape the binary data
-                    $adjunto_escaped = bin2hex($contenido_doc);
+                    $adjunto_escaped = bin2hex($contenido_doc?? '');
 
                     $update = "
 					nom                   = :nom,
@@ -679,7 +679,7 @@ class MigrationDlp
                     $fp = fopen($nombre_fichero, 'rb');
                     $contenido_doc = fread($fp, filesize($nombre_fichero));
                     // Escape the binary data
-                    $adjunto_escaped = bin2hex($contenido_doc);
+                    $adjunto_escaped = bin2hex($contenido_doc?? '');
 
                     $update = "
 					nom                   = :nom,

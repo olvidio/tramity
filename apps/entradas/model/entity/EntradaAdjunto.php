@@ -440,7 +440,7 @@ class EntradaAdjunto extends core\ClasePropiedades
     function setAdjunto($adjunto = '')
     {
         // Escape the binary data
-        $escaped = bin2hex($adjunto);
+        $escaped = bin2hex($adjunto?? '');
         $this->adjunto = $escaped;
     }
     /* MÉTODOS GET y SET DE ATRIBUTOS QUE NO SÓN CAMPOS -----------------------------*/
