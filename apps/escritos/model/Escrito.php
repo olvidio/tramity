@@ -478,7 +478,10 @@ class Escrito extends EscritoDB
             $is_anulado = $this->getAnulado();
             if(!$is_plantilla && !$is_anulado) {
                 $err_txt = "No hay protocolo local";
-                $_SESSION['oGestorErrores']->addError($err_txt, 'generar cabecera derecha', __LINE__, __FILE__);
+                // sacar mas info para ver de donde sale el error
+                $json_prot_dst = json_encode($this->getJson_prot_destino(FALSE));
+                $mas_info = $this->iid_escrito . ':::' . $json_prot_dst;
+                $_SESSION['oGestorErrores']->addError($err_txt, "generar cabecera derecha: $mas_info", __LINE__, __FILE__);
                 $_SESSION['oGestorErrores']->recordar($err_txt);
             }
             $origen_txt = $_SESSION['oConfig']->getSigla();
